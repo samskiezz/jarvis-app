@@ -1222,14 +1222,14 @@ export default function JarvisTerminal() {
       </div>
 
       {/* ── STATUS BAR ────────────────────────────────────────────────────── */}
-      <div style={{ position:"fixed",bottom:0,left:0,right:0,height:22,display:"flex",alignItems:"center",gap:10,padding:"0 12px",background:"rgba(2,5,8,0.97)",borderTop:`1px solid ${C.border}`,zIndex:9998,fontSize:7,color:"#2a3d4d",fontFamily:"Courier New" }}>
-        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PIPELINE","119 runs/day",C.neon],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/9",C.text]].map(([k,v,col],i)=>(
-          <span key={k} style={{ display:"flex",gap:4 }}>
+      <div style={{ position:"fixed",bottom:0,left:54,right:0,height:22,display:"flex",alignItems:"center",gap:10,padding:"0 12px",background:"rgba(2,5,8,0.99)",borderTop:`1px solid ${C.border}`,zIndex:9998,fontSize:7,color:"#2a3d4d",fontFamily:"Courier New" }}>
+        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/9",C.text]].map(([k,v,col],i)=>(
+          <span key={k} style={{ display:"flex",gap:4,alignItems:"center" }}>
             {i>0&&<span style={{ color:"#0d1a22" }}>◆</span>}
-            <span>{k}</span><span style={{ color:col }}>{v}</span>
+            <span>{k}</span><span style={{ color:col,fontWeight:"bold" }}>{v}</span>
           </span>
         ))}
-        <span style={{ marginLeft:"auto",color:"#0d1a22" }}>JARVIS v6.0 · PALANTIR-GOTHAM/GRIDLINE ARCHITECTURE · OMEGA DAEMON ACTIVE · REAL CORPUS LOADED</span>
+        <span style={{ marginLeft:"auto",color:"#0d1a22" }}>JARVIS v6.0 · PALANTIR-GOTHAM/GRIDLINE · REAL CORPUS LOADED</span>
       </div>
     </div>
   );
