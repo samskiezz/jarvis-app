@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// JARVIS GLOBAL INTELLIGENCE TERMINAL v6.0
-// Palantir Gotham + Gridline architecture
-// Real data: getLiveIntel backend (USGS live, Yahoo Finance, full corpus)
-// Features: Window manager · Vertex graph · Object Explorer · Timeline ·
-//           Globe/Map · Risk scoring · Email corpus · Watchlist · AI Analyst
-// ─────────────────────────────────────────────────────────────────────────────
+import Globe3D from "../components/Globe3D";
 
 const API = "https://jarvis-6bc54ec6.base44.app/functions/getLiveIntel";
 
@@ -1150,7 +1143,7 @@ export default function JarvisTerminal() {
           <DraggablePanel id="MAP" title="🌍 GLOBE / MAP" state={panels.MAP} onMove={movePanel} onResize={resizePanel}
             onClose={()=>closePanel("MAP")} onMinimize={()=>minimizePanel("MAP")} zIndex={panels.MAP.z}
             onClick={()=>bringToFront("MAP")} minimized={panels.MAP.minimized}>
-            <GlobeMap selectedCountry={selectedCountry} onSelect={setSelectedCountry} earthquakes={earthquakes} liveData={liveData}/>
+            <Globe3D selectedCountry={selectedCountry} onSelect={setSelectedCountry} earthquakes={earthquakes}/>
           </DraggablePanel>
         )}
 
