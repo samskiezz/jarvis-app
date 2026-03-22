@@ -20,55 +20,24 @@ export default function PageNotFound({}) {
     });
     
     return (
-        <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
-            <div className="max-w-md w-full">
-                <div className="text-center space-y-6">
-                    {/* 404 Error Code */}
-                    <div className="space-y-2">
-                        <h1 className="text-7xl font-light text-slate-300">404</h1>
-                        <div className="h-0.5 w-16 bg-slate-200 mx-auto"></div>
+        <div style={{ minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',padding:24,background:'#020509',fontFamily:"'JetBrains Mono',Courier New,monospace" }}>
+            <div style={{ maxWidth:400,width:'100%',textAlign:'center' }}>
+                <div style={{ fontSize:64,fontWeight:200,color:'rgba(0,200,120,0.15)',letterSpacing:8,marginBottom:16 }}>404</div>
+                <div style={{ height:1,width:48,background:'rgba(0,200,120,0.2)',margin:'0 auto 24px' }}/>
+                <h2 style={{ fontSize:16,color:'#a8bcc8',fontWeight:500,marginBottom:12,letterSpacing:2 }}>PAGE NOT FOUND</h2>
+                <p style={{ fontSize:11,color:'#566878',lineHeight:1.8,marginBottom:24 }}>
+                    The page <span style={{ color:'#00c878' }}>"{pageName}"</span> could not be found.
+                </p>
+                {isFetched && authData.isAuthenticated && authData.user?.role === 'admin' && (
+                    <div style={{ padding:'12px 16px',background:'rgba(0,200,120,0.04)',border:'1px solid rgba(0,200,120,0.14)',borderRadius:4,marginBottom:24,textAlign:'left' }}>
+                        <p style={{ fontSize:9,color:'#00c878',letterSpacing:2,marginBottom:6 }}>ADMIN NOTE</p>
+                        <p style={{ fontSize:10,color:'#566878',lineHeight:1.6 }}>This page hasn't been implemented yet. Ask the AI to build it in the chat.</p>
                     </div>
-                    
-                    {/* Main Message */}
-                    <div className="space-y-3">
-                        <h2 className="text-2xl font-medium text-slate-800">
-                            Page Not Found
-                        </h2>
-                        <p className="text-slate-600 leading-relaxed">
-                            The page <span className="font-medium text-slate-700">"{pageName}"</span> could not be found in this application.
-                        </p>
-                    </div>
-                    
-                    {/* Admin Note */}
-                    {isFetched && authData.isAuthenticated && authData.user?.role === 'admin' && (
-                        <div className="mt-8 p-4 bg-slate-100 rounded-lg border border-slate-200">
-                            <div className="flex items-start space-x-3">
-                                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">
-                                    <div className="w-2 h-2 rounded-full bg-orange-400"></div>
-                                </div>
-                                <div className="text-left space-y-1">
-                                    <p className="text-sm font-medium text-slate-700">Admin Note</p>
-                                    <p className="text-sm text-slate-600 leading-relaxed">
-                                        This could mean that the AI hasn't implemented this page yet. Ask it to implement it in the chat.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {/* Action Button */}
-                    <div className="pt-6">
-                        <button 
-                            onClick={() => window.location.href = '/'} 
-                            className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-                        >
-                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                            Go Home
-                        </button>
-                    </div>
-                </div>
+                )}
+                <button onClick={() => window.location.href = '/'}
+                    style={{ background:'rgba(0,200,120,0.08)',border:'1px solid rgba(0,200,120,0.25)',color:'#00c878',padding:'8px 20px',borderRadius:4,cursor:'pointer',fontSize:10,letterSpacing:2,fontFamily:'inherit' }}>
+                    ← RETURN TO TERMINAL
+                </button>
             </div>
         </div>
     )

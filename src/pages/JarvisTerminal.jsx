@@ -1014,16 +1014,21 @@ export default function JarvisTerminal() {
   const [topZIndex, setTopZIndex] = useState(10);
 
   // Panel state: position, size, visible, minimized, z
-  const [panels, setPanels] = useState({
-    MAP:       { x:0,    y:50,  w:640, h:420, visible:true,  minimized:false, z:10 },
-    VERTEX:    { x:645,  y:50,  w:600, h:420, visible:true,  minimized:false, z:10 },
-    EXPLORER:  { x:0,    y:475, w:520, h:380, visible:true,  minimized:false, z:10 },
-    TIMELINE:  { x:525,  y:475, w:460, h:320, visible:true,  minimized:false, z:10 },
-    RISK:      { x:990,  y:50,  w:400, h:420, visible:true,  minimized:false, z:10 },
-    EMAILS:    { x:0,    y:860, w:500, h:360, visible:true,  minimized:false, z:10 },
-    WATCHLIST: { x:505,  y:800, w:380, h:300, visible:true,  minimized:false, z:10 },
-    MARKETS:   { x:890,  y:475, w:360, h:320, visible:true,  minimized:false, z:10 },
-    ANALYST:   { x:1255, y:50,  w:420, h:440, visible:true,  minimized:false, z:10 },
+  const [panels, setPanels] = useState(() => {
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1400;
+    const col1 = 0, col2 = Math.floor(vw * 0.44), col3 = Math.floor(vw * 0.72);
+    const pw1 = Math.floor(vw * 0.43), pw2 = Math.floor(vw * 0.27), pw3 = Math.floor(vw * 0.27);
+    return {
+      MAP:       { x:col1, y:50,  w:pw1,  h:400, visible:true,  minimized:false, z:10 },
+      VERTEX:    { x:col2, y:50,  w:pw2,  h:400, visible:true,  minimized:false, z:10 },
+      RISK:      { x:col3, y:50,  w:pw3,  h:400, visible:true,  minimized:false, z:10 },
+      EXPLORER:  { x:col1, y:455, w:pw1,  h:370, visible:true,  minimized:false, z:10 },
+      TIMELINE:  { x:col2, y:455, w:pw2,  h:370, visible:true,  minimized:false, z:10 },
+      MARKETS:   { x:col3, y:455, w:pw3,  h:370, visible:true,  minimized:false, z:10 },
+      EMAILS:    { x:col1, y:830, w:pw1,  h:350, visible:true,  minimized:false, z:10 },
+      WATCHLIST: { x:col2, y:830, w:pw2,  h:350, visible:true,  minimized:false, z:10 },
+      ANALYST:   { x:col3, y:830, w:pw3,  h:350, visible:true,  minimized:false, z:10 },
+    };
   });
 
   const bringToFront = (id) => {
@@ -1060,7 +1065,7 @@ export default function JarvisTerminal() {
   const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
 
   return (
-    <div style={{ background:C.bg, minHeight:"100vh", position:"relative", overflow:"hidden", fontFamily:"'SF Mono',Courier New,monospace" }}>
+    <div style={{ background:C.bg, minHeight:"100vh", position:"relative", overflow:"hidden", fontFamily:"'JetBrains Mono','SF Mono',Courier New,monospace" }}>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0;}
         ::-webkit-scrollbar{width:2px;height:2px;}
@@ -1077,7 +1082,7 @@ export default function JarvisTerminal() {
 
       {/* ── CLASSIFICATION BANNER ──────────────────────────────────────── */}
       <div style={{ position:"fixed",top:0,left:0,right:0,height:18,background:"rgba(232,32,60,0.85)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:9999,backdropFilter:"blur(8px)" }}>
-        <span style={{ fontSize:8,color:"#fff",letterSpacing:4,fontWeight:"bold",fontFamily:"Courier New" }}>
+        <span style={{ fontSize:8,color:"#fff",letterSpacing:4,fontWeight:"bold",fontFamily:"'JetBrains Mono',Courier New,monospace" }}>
           ◆ JARVIS_INTERNAL_ONLY · CLASSIFICATION: RESTRICTED · NOT FOR EXTERNAL DISTRIBUTION ◆
         </span>
       </div>
@@ -1128,8 +1133,7 @@ export default function JarvisTerminal() {
           <span style={{ fontSize:7,color:C.neon,letterSpacing:2 }}>MARKETS</span>
         </div>
         <div style={{ display:"flex",paddingLeft:80,animation:"scroll 45s linear infinite",whiteSpace:"nowrap",gap:0 }}>
-          {[...["XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","119 PIPELINE RUNS TODAY","11,299 VECTORS","8,939 FACTS","15,822 WA MESSAGES","$100M TARGET 2033"],
-            ..."XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%"].map((item,i)=>(
+          {["XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","119 PIPELINE RUNS TODAY","11,299 VECTORS","8,939 FACTS","15,822 WA MESSAGES","$100M TARGET 2033","XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","119 PIPELINE RUNS TODAY","11,299 VECTORS","8,939 FACTS","15,822 WA MESSAGES","$100M TARGET 2033"].map((item,i)=>(
             <span key={i} style={{ display:"inline-flex",marginRight:24,fontSize:8,color:item.includes("▼")?C.red:item.includes("▲")?C.neon:C.textB,fontFamily:"Courier New" }}>{item}</span>
           ))}
         </div>
@@ -1223,7 +1227,7 @@ export default function JarvisTerminal() {
         )}
 
         {/* Spacer for scrolling */}
-        <div style={{ height:1400 }}/>
+        <div style={{ height:1250 }}/>
       </div>
 
       {/* ── STATUS BAR ────────────────────────────────────────────────────── */}
