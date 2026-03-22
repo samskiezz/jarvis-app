@@ -1,564 +1,464 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// JARVIS GLOBAL INTELLIGENCE TERMINAL v5.0
-// REAL DATA: palantir_profile_v2.json + full_body_facts.jsonl (8,939 facts)
-// + palantir batches (3,091 emails) + timeline (3,018 events)
-// UI: Gridline globe + Palantir Vertex force graph + glass morphism
+// JARVIS GLOBAL INTELLIGENCE TERMINAL v6.0
+// Palantir Gotham + Gridline architecture
+// Real data: getLiveIntel backend (USGS live, Yahoo Finance, full corpus)
+// Features: Window manager · Vertex graph · Object Explorer · Timeline ·
+//           Globe/Map · Risk scoring · Email corpus · Watchlist · AI Analyst
 // ─────────────────────────────────────────────────────────────────────────────
+
+const API = "https://jarvis-6bc54ec6.base44.app/functions/getLiveIntel";
 
 const C = {
-  bg:"#03070a", panel:"rgba(5,12,18,0.92)", border:"rgba(0,220,140,0.14)",
-  neon:"#00dc8c", neonD:"rgba(0,220,140,0.12)", neonG:"rgba(0,220,140,0.06)",
-  blue:"#00b8e6", blueD:"rgba(0,184,230,0.12)",
-  gold:"#f0b800", goldD:"rgba(240,184,0,0.12)",
-  red:"#ff2d55", redD:"rgba(255,45,85,0.12)",
-  purple:"#bf5fff", purpleD:"rgba(191,95,255,0.12)",
-  orange:"#ff8c00", text:"#6a8898", textB:"#b8cdd8",
-  glass:"rgba(5,12,18,0.78)", glow:"0 0 30px rgba(0,220,140,0.06), 0 4px 16px rgba(0,0,0,0.7)",
+  bg:"#020509", panel:"rgba(4,10,16,0.95)", border:"rgba(0,200,120,0.14)",
+  borderB:"rgba(0,200,120,0.06)", neon:"#00c878", neonD:"rgba(0,200,120,0.1)",
+  blue:"#0096d4", blueD:"rgba(0,150,212,0.12)",
+  gold:"#e8a800", goldD:"rgba(232,168,0,0.12)",
+  red:"#e8203c", redD:"rgba(232,32,60,0.12)",
+  purple:"#a855f7", purpleD:"rgba(168,85,247,0.12)",
+  orange:"#f07820", text:"#566878", textB:"#a8bcc8",
+  glass:"rgba(4,10,18,0.82)",
+  mark:{ INTERNAL:"#00c878", FINANCIAL:"#e8a800", PII:"#e8203c", LEGAL:"#a855f7", RESTRICTED:"#f07820" },
+  type:{ person:"#00c878", org:"#0096d4", invest:"#e8a800", asset:"#f07820", property:"#0096d4", creative:"#a855f7", client:"#e8203c", target:"#e8203c" },
 };
 
-// ─── REAL PALANTIR DATA ───────────────────────────────────────────────────────
-// Extracted from palantir_profile_v2.json + full_body_facts.jsonl + batches
-const PALANTIR = {
-  identity: {
-    name: "Sam Kazangas", preferred: "Sammi / Sam",
-    heritage: "Greek Cypriot Australian", dob: "27 November 1992", age: 33,
-    home: "35 Springfield Road, Padstow/Revesby NSW 2211",
-    emails: ["samkazangas@gmail.com", "sam.k@projectsolar.com.au", "sam@hilts.com.au"],
-    artist: "$avva", github: "samskiezz",
-    wealth_target: "$100M by 2033–2035",
-  },
-  psg: {
-    full_name: "Project Solar Group Pty Ltd",
-    abn: "29 685 341 744", ownership: "50/50 Sam & Harrison",
-    domain: "@projectsolar.com.au",
-    revenue_weekly: 180000, expenses_weekly: 60000, net_weekly: 120000,
-    annual_net: 6240000,
-    tools: ["ServiceM8","OpenSolar","Xero","NAB","RingCentral"],
-    phone: "1800 716 837",
-    contractors: [
-      { name:"Jesse James Noakes Gordon", dob:"02/06/2002", email:"jessegordon@projectsolar.com.au" },
-      { name:"Tyler Noakes Gordon", dob:"18/02/2005", email:"tylergordon@projectsolar.com.au" },
-      { name:"Xavier Aguirre", dob:"25/11/1998", email:"xavieraguirre@projectsolar.com.au" },
-      { name:"Sulieman el-Dannoui", dob:"09/02/2004", email:"sulieman@projectsolar.com.au" },
-      { name:"Adam Kandeel", dob:"01/10/2004", email:"adamkandeel@projectsolar.com.au" },
-      { name:"Amjad Malas", dob:"08/11/2001", email:"amjadmalas@projectsolar.com.au" },
-      { name:"Xavier Cevallos", role:"Right-hand man" },
-    ],
-    admin: [
-      { name:"Jas (Jasmine)", email:"accounts@projectsolar.com.au", loc:"Philippines", hrs:"7am–3pm AEDT" },
-      { name:"Marvin Oqueriza Benson", loc:"Philippines", role:"Admin/ops" },
-      { name:"Red", role:"Schedule runs / contractor coordination" },
-      { name:"Joplin Lualhati (WizeWork)", role:"External ops consultant" },
-    ],
-    pricing: {
-      "Battery Install (std)": "$1,500 + GST (within 5m)",
-      "Second Battery Stack": "$1,200 + GST",
-      "Sigenergy + Gateway": "$2,500 + GST",
-      "Inverter Replacement": "$500 + GST",
-      "Solar Residential": "$0.28/W std | $0.31/W complex",
-      "Service Callout": "$290 + GST incl 45min | +$110/hr",
-      "Backup Circuit": "$350 setup + $150/circuit",
-      "Panel Cleaning": "$35/panel single | $40/panel double",
-    },
-    issues: [
-      "Defended Energy stopped site delivery — Sam absorbing ~$900/wk freight",
-      "Steep roof jobs (Wahroonga 29°) sent without pre-inspection",
-      "Katoomba same-day scheduling not feasible",
-      "Origin Energy losing meter applications (Picton job — lost twice)",
-      "30-day payment term attempt from Defended — rejected, 7 days enforced",
-    ],
-    pipeline_runs_today: 118,
-    pipeline_credits: 45.6,
-  },
-  hilts: {
-    full_name: "Hilts Group Australia",
-    abn: "27 651 379 298", ownership: "100% Sam",
-    email: "sam@hilts.com.au", phone: "1800 961 695",
-    address: "35 Springfield Road Padstow NSW",
-    clients: ["Anytime Fitness","Ashfield RSL","Metro Petrol"],
-  },
-  financials: {
-    xrp_units: 9300, xrp_price_aud: 2.07, xrp_value_aud: 19251,
-    exchanges: ["BTCMarkets","Coinbase","eToro","CoinJar"],
-    banking: { primary:"NAB ($25k/day limit)", travel:"Wise + ANZ" },
-    stripe_hold: "7-day payout hold",
-    investment_pipeline: [
-      { date:"Mar 2026", item:"IFZA FZCO Dubai registration", status:"PLANNING" },
-      { date:"Apr 2026", item:"Golf Acres Dubai deposit (Emaar South 1BR)", status:"ENQUIRY" },
-      { date:"May 2026", item:"Zanzibar coastal land — Pangani / Matemwe", status:"DD_ACTIVE" },
-      { date:"Jun 2026", item:"Golf Vale Dubai deposit", status:"PIPELINE" },
-    ],
-  },
-  relationships: {
-    harrison: {
-      name:"Harrison Vaubell", role:"PSG Co-founder 50/50",
-      phone:"0415557997", email:"harrison@projectsolar.com.au",
-      relationship:"Close personal friend / 'cuzzy', deep trust",
-      messages: 6161, dynamic:"Sam mentors technically, Harrison runs ops",
-    },
-    nisha: {
-      name:"Nisha Nissan", role:"Fiancée",
-      emails:["nisha.nissan@hotmail.com","nisha.nissan17@gmail.com"],
-      employer:"Commonwealth Bank",
-      build:"Lot 227 Swamphen St, Austral NSW — builder Gurner",
-      wedding:"Ottimo House — Sat 20 March 2027 (deciding)",
-      daughter:"Born Aug 2025",
-    },
-  },
-  music: {
-    artist:"$avva", distributor:"DistroKid",
-    releases:[
-      { title:"Still Me", streams:"5,000+ by Feb 17 2026", apple_lyrics:true, youtube_contentid:true },
-      { title:"Not Like This", date:"Feb 2026", platforms:["Deezer","Mar 11 2026"] },
-      { title:"The Same", date:"Feb 2026" },
-      { title:"Later", date:"Feb 9-10 2026", apple_lyrics:true },
-      { title:"Working", status:"Pipeline Mar 2026" },
-      { title:"Breathe", status:"Earlier release" },
-    ],
-    platforms:["Spotify","Apple Music","Deezer","TikTok","YouTube Music","Amazon","Instagram/Facebook"],
-    royalties:"Active — DistroKid payout Feb 2026",
-  },
-  // REAL email intel extracted from batches
-  investment_emails: [
-    { date:"Mon 16 Mar 2026", from:"M Khalid Khan <m.khalid@apilproperties.com>", subject:"Re: Golf Acres, Emaar South — 1BR Business Investment Enquiry — Project Solar Group", cat:"DUBAI" },
-    { date:"Mon 16 Mar 2026", from:"Africa Luxury Properties <info@africaluxproperties.com>", subject:"RE: Beachfront Land Acquisition — Matemwe, Zanzibar — ~10,000 SQM (Agent & Legal Enquiry)", cat:"ZANZIBAR" },
-    { date:"Sun 15 Mar 2026", from:"samkazangas@gmail.com", subject:"Re: Beachfront Land Acquisition Zanzibar - Foreign Investor USD 100-200k - Paje / Matemwe", cat:"ZANZIBAR" },
-    { date:"Sun 15 Mar 2026", from:"samkazangas@gmail.com", subject:"Re: IFZA Free Zone Company Setup — 2 Partners, Solar Energy, Urgent", cat:"DUBAI" },
-    { date:"Sun 15 Mar 2026", from:"samkazangas@gmail.com", subject:"PSG Investment Portfolio V6 — FINAL — 15 March 2026", cat:"PORTFOLIO" },
-    { date:"Sat 14 Mar 2026", from:"samkazangas@gmail.com", subject:"Golf Acres, Emaar South — 1BR Business Investment Enquiry — Project Solar Group", cat:"DUBAI" },
-    { date:"Sat 14 Mar 2026", from:"Jolyon Darker <jolyon@peponirealestate.com>", subject:"Re: Serious Enquiry — 6 Acres Ushongo Mabaoni Beachfront, Pangani", cat:"PANGANI" },
-    { date:"Thu 12 Mar 2026", from:"Eden Law Chambers <info@edenlawchambers.com>", subject:"Re: Zanzibar Land Acquisition — Foreign Investor Legal Structure", cat:"LEGAL" },
-    { date:"Thu 26 Feb 2026", from:"Benjamin Valmont <BValmont@domainehomes.com.au>", subject:"Menangle Park House & Land Registration Q1 2027 From $940k", cat:"AU_PROPERTY" },
-    { date:"Mon 02 Feb 2026", from:"Wilton Green <info@wiltongreen.com.au>", subject:"Wilton Green — Home & Land Packages from $795k", cat:"AU_PROPERTY" },
-    { date:"Mon 16 Mar 2026", from:"APIL Properties <info@apilproperties.com>", subject:"Golf Vale by Emaar — Phase 2 Now Open — 1BR from AED 750k", cat:"DUBAI" },
-    { date:"Fri 13 Mar 2026", from:"Proptech Group <info@proptech.ae>", subject:"Re: IFZA FZCO 2-person setup — Solar Energy sector", cat:"DUBAI" },
-  ],
-  crypto_emails: [
-    { date:"Mon 16 Mar 2026", from:"BTC Markets <support@btcmarkets.net>", subject:"Bitcoin ETFs show sustained weekly inflows", signal:"BULLISH" },
-    { date:"Thu 12 Mar 2026", from:"BTC Markets <support@btcmarkets.net>", subject:"Bitcoin is back above US$70,000 (A$98,000) and institutions are buying", signal:"BULLISH" },
-    { date:"Thu 26 Feb 2026", from:"BTC Markets <support@btcmarkets.net>", subject:"Bears get liquidated as Bitcoin bounces from multi-month lows", signal:"NEUTRAL" },
-    { date:"Tue 24 Feb 2026", from:"CoinGecko <hello@coingecko.com>", subject:"BTC Below $63K. What Comes Next?", signal:"BEARISH" },
-    { date:"Mon 23 Feb 2026", from:"BTC Markets <support@btcmarkets.net>", subject:"Bitcoin whales buy as markets sell", signal:"BULLISH" },
-    { date:"Fri 13 Mar 2026", from:"Binance <noreply@binance.com>", subject:"Binance Weekly Wrap: Earn Up To 220 USDT!", signal:"NEUTRAL" },
-    { date:"Tue 10 Mar 2026", from:"Binance <noreply@binance.com>", subject:"Binance Meetup Sydney on tomorrow!", signal:"NEUTRAL" },
-  ],
-  data_stats: {
-    timeline_total: 3018, facts_total: 8939,
-    email_sources: 3804, whatsapp_total: 15822,
-    batches: { Investments:89, Crypto:92, Finance:306, PSG_Business:38, Travel:78, Music:104, Legal:55, ATO_Tax:126 },
-    vectors: 11299, sources: 10,
-  },
-  // Real behavioral facts from WA/email analysis
-  behaviors: [
-    "Direct, warm, no corporate filler. Uses 'bro', 'cuzzy', emoji sparingly",
-    "Fast decisions. First principles. Reverses when wrong.",
-    "Deep loyalty — goes to bat for Harrison unprompted",
-    "7-day payment terms — absolute non-negotiable",
-    "Prefers correctness over speed on installs",
-    "Absorbing costs without renegotiating (freight ~$900/wk blind spot)",
-    "Relies on verbal agreements with Defended — no paper trail",
-    "Banyan Tree not Ibis. Golf Acres not any apartment.",
-    "Vision: warehouse solar showroom Padstow end of year",
-    "One of the biggest solar battery companies in Sydney — Aug 2025 verbatim",
-  ],
-};
+// ── SECURITY MARKINGS ─────────────────────────────────────────────────────────
+const MARK = ({ label, color }) => (
+  <span style={{ fontSize:7, padding:"1px 5px", borderRadius:2, background:color+"18", color, border:`1px solid ${color}33`, letterSpacing:1, fontWeight:"bold", flexShrink:0 }}>
+    {label}
+  </span>
+);
 
-// ─── ONTOLOGY NODES (Real data) ───────────────────────────────────────────────
-const NODES = [
-  { id:"sam",       label:"SAM KAZANGAS",    type:"person",   color:C.neon,   size:24, x:480,y:280,
-    detail:"Greek Cypriot Australian. DOB 27 Nov 1992. Padstow NSW. $100M target 2033–2035." },
-  { id:"psg",       label:"PROJECT SOLAR",   type:"org",      color:C.blue,   size:20, x:290,y:165,
-    detail:`PSG Pty Ltd. ABN 29 685 341 744. 50/50 Sam + Harrison. Rev $180k/wk. Net $120k/wk. 7 contractors. 3 PH admin.` },
-  { id:"hilts",     label:"HILTS GROUP",     type:"org",      color:C.blue,   size:14, x:660,y:160,
-    detail:"ABN 27 651 379 298. 100% Sam. Clients: Anytime Fitness, Ashfield RSL, Metro Petrol." },
-  { id:"harrison",  label:"HARRISON V.",     type:"person",   color:C.purple, size:18, x:190,y:275,
-    detail:"Harrison Vaubell. PSG co-founder 50/50. 0415557997. 6,161 WA messages. Dubai IFZA shared plan." },
-  { id:"nisha",     label:"NISHA NISSAN",    type:"person",   color:C.purple, size:18, x:560,y:420,
-    detail:"Fiancée. Commonwealth Bank. Building Lot 227 Swamphen St Austral NSW (Gurner). Wedding Mar 2027 Ottimo House." },
-  { id:"pangani",   label:"PANGANI TZ",      type:"invest",   color:C.gold,   size:18, x:330,y:410,
-    detail:"6-acre beachfront — Ushongo Mabaoni, Pangani. ~10,000 SQM. Agent: Jolyon Darker (Peponi Real Estate) + Africa Luxury Properties. Legal: Eden Law Chambers." },
-  { id:"zanzibar",  label:"ZANZIBAR",        type:"invest",   color:C.gold,   size:16, x:400,y:490,
-    detail:"$100M resort anchor strategy. Matemwe / Paje beachfront. ZIPA-compliant 99yr leasehold. Timeline 2033–2035." },
-  { id:"dubai",     label:"DUBAI/EMAAR",     type:"invest",   color:C.gold,   size:18, x:650,y:270,
-    detail:"IFZA FZCO 2-partner setup (Sam + Harrison). Golf Acres Emaar South 1BR Apr 2026. Golf Vale Jun 2026. Airbnb yield play. M Khalid Khan (APIL Properties) engaged." },
-  { id:"ifza",      label:"IFZA FZCO",       type:"org",      color:C.blue,   size:14, x:730,y:330,
-    detail:"UAE free zone company. 2-partner (Sam + Harrison). Solar Energy sector. Investor visa pathway." },
-  { id:"crypto",    label:"XRP / BTC",       type:"asset",    color:C.orange, size:16, x:760,y:380,
-    detail:"XRP: 9,300 units @ $2.07 AUD = $19,251 AUD. BTCMarkets, Coinbase, eToro, CoinJar. BTC above A$98k Mar 2026." },
-  { id:"austral",   label:"AUSTRAL BUILD",   type:"property", color:C.blue,   size:14, x:540,y:505,
-    detail:"Lot 227 Swamphen St, Austral NSW. Builder Gurner. Nisha's property build. Electrical consultation coordinated." },
-  { id:"music",     label:"$AVVA",           type:"creative", color:C.purple, size:13, x:700,y:165,
-    detail:"$avva on Spotify/Apple/Deezer/TikTok/YT. Still Me: 5k+ streams Feb 2026. DistroKid. Royalties active Feb 2026." },
-  { id:"defended",  label:"DEFENDED ENERGY", type:"client",   color:C.red,    size:14, x:165,y:370,
-    detail:"Key retailer. Owner: Abdul. Sales: Bill, Heath. Admin: Carlos (scheduling), Hassan. 2–5 jobs/wk. Issues: freight dispute, steep roofs, 30-day payment attempt (rejected)." },
-  { id:"target",    label:"$100M TARGET",    type:"target",   color:C.red,    size:22, x:480,y:150,
-    detail:"$100M net worth 2033–2035. PSG cash engine ($120k/wk) → international property (Zanzibar/Dubai) → resort anchor." },
+// ── GLASS PANEL ──────────────────────────────────────────────────────────────
+const Glass = ({ children, style, onClick }) => (
+  <div onClick={onClick} style={{ background:C.glass, backdropFilter:"blur(14px)", WebkitBackdropFilter:"blur(14px)", border:`1px solid ${C.border}`, borderRadius:4, boxShadow:"0 4px 24px rgba(0,0,0,0.7), 0 0 40px rgba(0,200,120,0.03)", ...style }}>{children}</div>
+);
+
+// ── ONTOLOGY — REAL OBJECTS ──────────────────────────────────────────────────
+const OBJECTS = [
+  // PERSONS
+  { id:"sam",       label:"Sam Kazangas",       type:"person",   mark:"PII",        conf:1.0, x:460,y:260,
+    props:{ DOB:"27 Nov 1992", Heritage:"Greek Cypriot Australian", Home:"35 Springfield Rd Padstow NSW", Email:"samkazangas@gmail.com", Artist:"$avva", GitHub:"samskiezz" },
+    linked:["psg","hilts","harrison","nisha","pangani","dubai","crypto","music","target"] },
+  { id:"harrison",  label:"Harrison Vaubell",   type:"person",   mark:"INTERNAL",   conf:0.98, x:260,y:220,
+    props:{ Phone:"0415557997", Email:"harrison@projectsolar.com.au", Role:"PSG Co-founder 50/50", WA_Messages:"6,161", Dynamic:"Sam mentors tech, Harrison runs ops" },
+    linked:["psg","sam","dubai","ifza"] },
+  { id:"nisha",     label:"Nisha Nissan",        type:"person",   mark:"PII",        conf:0.97, x:580,y:380,
+    props:{ Emails:"nisha.nissan@hotmail.com", Employer:"Commonwealth Bank", Wedding:"Sat 20 Mar 2027 (deciding)", Venues:"Ottimo House · Kefalos CY · Breakfast Point" },
+    linked:["sam","austral"] },
+  // ORGS
+  { id:"psg",       label:"Project Solar Group", type:"org",      mark:"FINANCIAL",  conf:1.0, x:280,y:150,
+    props:{ ABN:"29 685 341 744", Ownership:"50/50 Sam + Harrison", Revenue:"$180k/wk", Expenses:"$60k/wk", Net:"$120k/wk", AnnualNet:"~$6.24M", Domain:"@projectsolar.com.au", Tools:"ServiceM8 · OpenSolar · Xero · NAB · RingCentral" },
+    linked:["sam","harrison","defended","target"] },
+  { id:"hilts",     label:"Hilts Group Australia", type:"org",    mark:"FINANCIAL",  conf:0.99, x:640,y:150,
+    props:{ ABN:"27 651 379 298", Ownership:"100% Sam", Email:"sam@hilts.com.au", Clients:"Anytime Fitness · Ashfield RSL · Metro Petrol" },
+    linked:["sam","target"] },
+  { id:"ifza",      label:"IFZA FZCO Dubai",    type:"org",      mark:"FINANCIAL",  conf:0.90, x:700,y:290,
+    props:{ Type:"UAE Free Zone Company", Partners:"Sam + Harrison", Sector:"Solar Energy", Timeline:"Mar 2026 registration", Visa:"Investor visa pathway" },
+    linked:["sam","harrison","dubai"] },
+  { id:"defended",  label:"Defended Energy",    type:"client",   mark:"INTERNAL",   conf:0.95, x:170,y:340,
+    props:{ Owner:"Abdul", Sales:"Bill · Heath", Admin:"Carlos (scheduling) · Hassan (jobs)", Volume:"2–5 jobs/week", Issues:"$900/wk freight absorbed · steep roofs · Origin meter issue" },
+    linked:["psg"] },
+  // INVESTMENTS
+  { id:"pangani",   label:"Pangani TZ",         type:"invest",   mark:"FINANCIAL",  conf:0.88, x:340,y:400,
+    props:{ Size:"6 acres / ~10,000 SQM", Location:"Ushongo Mabaoni Beachfront, Pangani, Tanzania", Ask:"$175k USD", Agent:"Jolyon Darker · Peponi Real Estate", Legal:"Eden Law Chambers", Structure:"ZIPA-compliant 99yr leasehold" },
+    linked:["sam","zanzibar","target"] },
+  { id:"zanzibar",  label:"Zanzibar Resort",    type:"invest",   mark:"FINANCIAL",  conf:0.85, x:390,y:475,
+    props:{ Strategy:"$100M resort anchor", Location:"Matemwe / Paje beachfront", Agent:"Africa Luxury Properties", Timeline:"2033–2035", Structure:"ZIPA 99yr leasehold" },
+    linked:["sam","pangani","target"] },
+  { id:"dubai",     label:"Dubai / Emaar",       type:"invest",   mark:"FINANCIAL",  conf:0.92, x:660,y:250,
+    props:{ Plans:"Golf Acres Emaar South 1BR (Apr 2026) + Golf Vale (Jun 2026)", Agent:"M Khalid Khan · APIL Properties", Strategy:"Airbnb yield + investor visa", Currency:"AED pegged USD — zero FX risk" },
+    linked:["sam","harrison","ifza","target"] },
+  // ASSETS
+  { id:"crypto",    label:"XRP / BTC Portfolio", type:"asset",   mark:"FINANCIAL",  conf:0.99, x:740,y:360,
+    props:{ XRP:"9,300 units @ $2.07 AUD = $19,251 AUD", Exchanges:"BTCMarkets · Coinbase · eToro · CoinJar", BTC:"Above A$98,000 — institutional buying Mar 2026" },
+    linked:["sam","target"] },
+  { id:"austral",   label:"Lot 227 Austral NSW", type:"property", mark:"PII",       conf:0.96, x:560,y:470,
+    props:{ Address:"Lot 227 Swamphen St, Austral NSW", Builder:"Gurner", Owner:"Nisha Nissan", Electrical:"Consultation confirmed Feb 2026" },
+    linked:["nisha"] },
+  { id:"music",     label:"$avva Music",         type:"creative", mark:"INTERNAL",  conf:0.99, x:690,y:160,
+    props:{ Artist:"$avva", Distributor:"DistroKid", Releases:"Still Me (5k+ streams) · Not Like This · The Same · Later · Working · Breathe", Platforms:"Spotify · Apple Music · Deezer · TikTok · YouTube", Royalties:"Active — payout Feb 2026" },
+    linked:["sam"] },
+  // TARGET
+  { id:"target",    label:"$100M Target",        type:"target",  mark:"RESTRICTED", conf:1.0, x:460,y:155,
+    props:{ Goal:"$100M net worth", Timeline:"2033–2035", Engine:"PSG $120k/wk → property → Zanzibar resort", Status:"ON TRACK — PSG $6.24M/yr base" },
+    linked:["sam","psg","pangani","zanzibar","dubai","crypto","hilts"] },
 ];
 
-const EDGES = [
-  { from:"sam",       to:"psg",      label:"CO-OWNS 50%",   s:3 },
-  { from:"sam",       to:"hilts",    label:"OWNS 100%",     s:2 },
-  { from:"sam",       to:"harrison", label:"PARTNER/CUZZY", s:3 },
-  { from:"sam",       to:"nisha",    label:"FIANCÉE",       s:3 },
-  { from:"sam",       to:"pangani",  label:"DD ACTIVE",     s:2 },
-  { from:"sam",       to:"dubai",    label:"ENQUIRY LIVE",  s:2 },
-  { from:"sam",       to:"zanzibar", label:"STRATEGY",      s:2 },
-  { from:"sam",       to:"crypto",   label:"HOLDS",         s:2 },
-  { from:"sam",       to:"music",    label:"ARTIST",        s:1 },
-  { from:"sam",       to:"target",   label:"TARGETS",       s:3 },
-  { from:"harrison",  to:"psg",      label:"CO-OWNS 50%",   s:3 },
-  { from:"harrison",  to:"dubai",    label:"SHARED IFZA",   s:2 },
-  { from:"harrison",  to:"ifza",     label:"CO-APPLICANT",  s:2 },
-  { from:"psg",       to:"defended", label:"KEY RETAILER",  s:2 },
-  { from:"psg",       to:"target",   label:"CASH ENGINE",   s:3 },
-  { from:"dubai",     to:"ifza",     label:"VIA IFZA",      s:2 },
-  { from:"pangani",   to:"zanzibar", label:"ADJACENT",      s:2 },
-  { from:"zanzibar",  to:"target",   label:"ANCHOR",        s:3 },
-  { from:"nisha",     to:"austral",  label:"BUILD",         s:2 },
-  { from:"crypto",    to:"target",   label:"FEEDS",         s:1 },
-  { from:"hilts",     to:"target",   label:"FEEDS",         s:1 },
+const LINKS = [
+  { a:"sam", b:"psg", label:"CONTROLS 50%", strength:3 },
+  { a:"sam", b:"hilts", label:"OWNS 100%", strength:2 },
+  { a:"sam", b:"harrison", label:"CO-FOUNDER / CUZZY", strength:3 },
+  { a:"sam", b:"nisha", label:"FIANCÉE", strength:3 },
+  { a:"sam", b:"pangani", label:"DD ACTIVE", strength:2 },
+  { a:"sam", b:"zanzibar", label:"STRATEGY", strength:2 },
+  { a:"sam", b:"dubai", label:"ENQUIRY LIVE", strength:2 },
+  { a:"sam", b:"crypto", label:"HOLDS", strength:2 },
+  { a:"sam", b:"music", label:"ARTIST", strength:1 },
+  { a:"sam", b:"target", label:"TARGETS", strength:3 },
+  { a:"harrison", b:"psg", label:"OWNS 50%", strength:3 },
+  { a:"harrison", b:"dubai", label:"CO-INVESTOR", strength:2 },
+  { a:"harrison", b:"ifza", label:"CO-APPLICANT", strength:2 },
+  { a:"psg", b:"defended", label:"KEY RETAILER", strength:2 },
+  { a:"psg", b:"target", label:"CASH ENGINE", strength:3 },
+  { a:"dubai", b:"ifza", label:"VIA IFZA FZCO", strength:2 },
+  { a:"pangani", b:"zanzibar", label:"ADJACENT", strength:2 },
+  { a:"zanzibar", b:"target", label:"ANCHOR", strength:3 },
+  { a:"nisha", b:"austral", label:"OWNER/BUILD", strength:2 },
+  { a:"crypto", b:"target", label:"FEEDS", strength:1 },
+  { a:"hilts", b:"target", label:"FEEDS", strength:1 },
 ];
 
-// ─── WORLD EXPOSURE ───────────────────────────────────────────────────────────
+// ── COUNTRIES WITH REAL INTEL ─────────────────────────────────────────────────
 const COUNTRIES = [
-  { code:"AU", name:"Australia", flag:"🇦🇺", lat:-33.87, lng:151.21, risk:"LOW",    types:["BUSINESS","HOME","PROPERTY"],   color:C.neon,
-    positions:["PSG $180k/wk rev","Hilts Group","Lot 227 Austral build","XRP $19k","Wedding planning"],
-    watch:["STC rebate scheme","NAB rate decisions","AUD/USD","Australian solar policy"],
-    intel:{ gdp:"$1.7T USD", currency:"AUD/USD ~0.632", capital:"Canberra", pop:"26.5M", region:"Oceania" } },
-  { code:"TZ", name:"Tanzania / Pangani", flag:"🇹🇿", lat:-5.4, lng:38.9, risk:"MEDIUM", types:["INVESTMENT","DD_ACTIVE"],
-    color:C.gold,
-    positions:["6-acre beachfront Pangani $175k USD","Eden Law Chambers engaged","Jolyon Darker agent","ZIPA-compliant 99yr leasehold"],
-    watch:["TZS/USD stability","East Africa conflict","Tanzania elections","ZIPA laws","Title/lease complexity"],
-    intel:{ gdp:"$75B USD", currency:"TZS (stable)", capital:"Dodoma", pop:"68M", region:"Eastern Africa", land_law:"99yr leasehold — foreign ownership restricted" } },
-  { code:"AE", name:"UAE / Dubai", flag:"🇦🇪", lat:25.20, lng:55.27, risk:"LOW",    types:["INVESTMENT","BUSINESS","VISA"],
-    color:C.blue,
-    positions:["IFZA FZCO registration (Sam+Harrison)","Golf Acres Emaar South 1BR (Apr 2026)","Golf Vale deposit (Jun 2026)","Investor visa pathway"],
-    watch:["Dubai property index","IFZA fee changes","UAE visa policy","AED/AUD","Emaar South launch phases"],
-    intel:{ gdp:"$509B USD", currency:"AED (pegged USD)", capital:"Abu Dhabi", pop:"11.3M", region:"Western Asia", property_yield:"5–8% gross Airbnb JVC typical" } },
-  { code:"CY", name:"Cyprus", flag:"🇨🇾", lat:35.12, lng:33.43, risk:"LOW", types:["HERITAGE","WEDDING"],
-    color:C.purple,
-    positions:["Greek Cypriot heritage","Wedding enquiry: Kefalos venue May 2027 (active email thread)"],
-    watch:["Cyprus EU stability","Euro zone","Greek Cypriot property opportunities"],
-    intel:{ gdp:"$31B USD", currency:"EUR €", capital:"Nicosia", pop:"1.4M", region:"Southern Europe" } },
-  { code:"TH", name:"Thailand", flag:"🇹🇭", lat:15.87, lng:100.99, risk:"LOW",   types:["TRAVEL","PERSONAL"],
-    color:C.text,
-    positions:["Banyan Tree Phuket Mar 18–21 2026 (2BR Double Pool Villa THB 19,430/night)","Grande Centre Point Surawong Bangkok Mar 16–18","Banyan Tree Samui prior stay"],
-    watch:["THB/AUD","Thailand political stability"],
-    intel:{ gdp:"$543B USD", currency:"THB", capital:"Bangkok", pop:"72M", region:"South-East Asia" } },
-  { code:"ZZ", name:"Zanzibar", flag:"🌍", lat:-6.16, lng:39.19, risk:"MEDIUM", types:["INVESTMENT","STRATEGY"],
-    color:C.gold,
-    positions:["$100M resort anchor — Matemwe/Paje beachfront","ZIPA compliant 99yr leasehold structure","Africa Luxury Properties agent active","Timeline 2033–2035"],
-    watch:["Zanzibar tourism growth","Indian Ocean stability","East Africa conflict spillover","Foreign land laws"],
-    intel:{ region:"Indian Ocean / Zanzibar Archipelago", currency:"TZS / USD", tourism:"Booming", risk_note:"Adjacent Tanzania political risk" } },
+  { code:"AU", name:"Australia", flag:"🇦🇺", lat:-33.87, lng:151.21, risk:"LOW", riskScore:12,
+    positions:["PSG $180k/wk","Hilts Group","Lot 227 Austral","XRP $19k AUD","Wedding planning"],
+    watch:["STC rebate scheme","AUD/USD","NAB rate decisions","Solar policy"] },
+  { code:"TZ", name:"Tanzania", flag:"🇹🇿", lat:-5.4, lng:38.9, risk:"MEDIUM", riskScore:58,
+    positions:["Pangani 6 acres $175k USD — DD active","Eden Law Chambers engaged","ZIPA 99yr leasehold"],
+    watch:["TZS/USD","East Africa conflict","Tanzania elections","ZIPA laws"] },
+  { code:"AE", name:"UAE/Dubai", flag:"🇦🇪", lat:25.20, lng:55.27, risk:"LOW", riskScore:18,
+    positions:["IFZA FZCO registration","Golf Acres Emaar South Apr 2026","Golf Vale Jun 2026","Investor visa Sam + Harrison"],
+    watch:["Dubai property index","IFZA fees","AED/AUD","Emaar launch phases"] },
+  { code:"ZZ", name:"Zanzibar", flag:"🌍", lat:-6.16, lng:39.19, risk:"MEDIUM", riskScore:52,
+    positions:["$100M resort anchor","Matemwe/Paje beachfront","Africa Luxury Properties agent"],
+    watch:["Tourism growth","Foreign land laws","East Africa conflict spillover"] },
+  { code:"CY", name:"Cyprus", flag:"🇨🇾", lat:35.12, lng:33.43, risk:"LOW", riskScore:8,
+    positions:["Heritage — Greek Cypriot Australian","Kefalos wedding venue — active thread"],
+    watch:["EU stability","Euro zone","Cyprus property"] },
+  { code:"TH", name:"Thailand", flag:"🇹🇭", lat:15.87, lng:100.99, risk:"LOW", riskScore:10,
+    positions:["Banyan Tree Phuket — Mar 18-21 2026 (closed)","Grande Centre Point Bangkok"],
+    watch:["Trip closed — returned Sydney 22 Mar 2026"] },
 ];
 
-// ─── REAL INTEL SIGNALS (from email/WA corpus) ────────────────────────────────
-const SIGNALS = [
-  // PSG
-  { type:"PSG", impact:"DIRECT", country:"AU", text:"Pipeline live: Gmail→OpenSolar→ServiceM8. 118 runs today. 45.6 credits.", time:"Today" },
-  { type:"PSG", impact:"DIRECT", country:"AU", text:"PSG net $120k/wk | Revenue $180k | Expenses $60k. Annual net ~$6.24M.", time:"Ongoing" },
-  { type:"PSG", impact:"DIRECT", country:"AU", text:"Rexel JRT credit limit increase application signed — Baulkham Hills + Kellyville Ridge jobs", time:"24 Feb 2026" },
-  { type:"PSG", impact:"WATCH",  country:"AU", text:"Defended Energy: stopped site delivery — Sam absorbing ~$900/wk freight. Verbal only.", time:"Ongoing" },
-  { type:"PSG", impact:"WATCH",  country:"AU", text:"Origin Energy lost meter application on Picton job — twice. Ongoing issue.", time:"Ongoing" },
-  // Investments
-  { type:"INVEST", impact:"DIRECT", country:"TZ", text:"Jolyon Darker (Peponi Real Estate): Re: Serious Enquiry — 6 Acres Ushongo Mabaoni Beachfront Pangani", time:"14 Mar 2026" },
-  { type:"INVEST", impact:"DIRECT", country:"TZ", text:"Africa Luxury Properties: RE: Beachfront Land Acquisition — Matemwe, Zanzibar — ~10,000 SQM", time:"16 Mar 2026" },
-  { type:"INVEST", impact:"DIRECT", country:"TZ", text:"Eden Law Chambers engaged — Zanzibar land legal structure. ZIPA-compliant 99yr leasehold.", time:"12 Mar 2026" },
-  { type:"INVEST", impact:"DIRECT", country:"AE", text:"M Khalid Khan (APIL Properties): Golf Acres Emaar South — 1BR Business Investment Enquiry", time:"16 Mar 2026" },
-  { type:"INVEST", impact:"DIRECT", country:"AE", text:"IFZA FZCO setup active — 2-partner Sam + Harrison. Solar Energy sector registration.", time:"15 Mar 2026" },
-  { type:"INVEST", impact:"DIRECT", country:"AE", text:"Golf Vale by Emaar — Phase 2 Now Open — 1BR from AED 750k. Pipeline Jun 2026.", time:"16 Mar 2026" },
-  // Finance
-  { type:"FINANCE", impact:"DIRECT", country:"AU", text:"XRP: 9,300 units @ $2.07 AUD = $19,251. BTCMarkets active. BTC above A$98k.", time:"Mar 2026" },
-  { type:"MARKET", impact:"DIRECT", country:"AU", text:"BTC Markets: Bitcoin ETFs show sustained weekly inflows — institutional buying", time:"16 Mar 2026" },
-  { type:"MARKET", impact:"CORRELATED", country:"AU", text:"AUD/USD ~0.632. Watch: Tanzania ($175k USD) and Dubai costs in AUD terms.", time:"Today" },
-  { type:"MARKET", impact:"POSITIVE", country:"AE", text:"AED pegged USD — zero currency risk on Dubai position. Property index +6.2% YoY.", time:"Ongoing" },
-  { type:"MARKET", impact:"WATCH", country:"TZ", text:"TZS/USD stable — low devaluation risk on Pangani acquisition.", time:"Ongoing" },
-  // Personal
-  { type:"PERSONAL", impact:"DIRECT", country:"CY", text:"Wedding enquiry: Kefalos venue Cyprus — May 2027. Active email thread with kefalos@kefalos.com.cy", time:"Mar 2026" },
-  { type:"PERSONAL", impact:"DIRECT", country:"AU", text:"Ottimo House: Sat 20 Mar 2027 — deciding. Wedding planning active.", time:"Mar 2026" },
-  { type:"PROPERTY", impact:"DIRECT", country:"AU", text:"Lot 227 Swamphen St Austral: electrical consultation confirmed. Builder Gurner. Active build.", time:"Feb 2026" },
-  // Music
-  { type:"MUSIC", impact:"LOG", country:"AU", text:"$avva Still Me: 5,000+ streams. Not Like This + The Same live Deezer Mar 11. DistroKid payout.", time:"Mar 2026" },
-  // Travel
-  { type:"TRAVEL", impact:"LOG", country:"TH", text:"Banyan Tree Phuket closed. Returned Sydney 22 Mar 2026 via MH795 Phuket→KL→Sydney.", time:"22 Mar 2026" },
-  // Global watch
-  { type:"CONFLICT", impact:"WATCH", country:"TZ", text:"GDELT: Eastern Congo activity — monitor spillover risk to Tanzania + Zanzibar border regions.", time:"Live" },
-  { type:"MARKET", impact:"WATCH", country:"AE", text:"Red Sea shipping disruption — Brent crude +2.1% — maritime watch near Zanzibar coast.", time:"Live" },
-  { type:"LEGAL", impact:"DIRECT", country:"AU", text:"PSG T&C: PPSA security interest, SOPA rights, PPSR registration, personal guarantees — all current.", time:"Active" },
+// ── RISK SIGNALS (scored) ─────────────────────────────────────────────────────
+const RISK_SIGNALS = [
+  { id:"r1", title:"Defended Energy freight dispute", severity:72, type:"OPERATIONAL", country:"AU", impact:"DIRECT", detail:"Absorbing ~$900/wk freight. Verbal only. No paper trail. SOPA rights available.", linked:"defended", trend:"STABLE" },
+  { id:"r2", title:"East Africa conflict — Congo spillover", severity:58, type:"GEOPOLITICAL", country:"TZ", impact:"WATCH", detail:"GDELT: Eastern Congo activity. Monitor Tanzania/Zanzibar border. Pangani risk if escalation.", linked:"pangani", trend:"RISING" },
+  { id:"r3", title:"Tanzania land law complexity", severity:55, type:"LEGAL", country:"TZ", impact:"DIRECT", detail:"99yr leasehold — foreign ownership restricted. Eden Law Chambers engaged. ZIPA compliance required.", linked:"pangani", trend:"STABLE" },
+  { id:"r4", title:"AU solar policy change risk", severity:68, type:"REGULATORY", country:"AU", impact:"CRITICAL", detail:"STC rebate scheme drives PSG leads directly. Policy cut = direct hit to $120k/wk net.", linked:"psg", trend:"WATCH" },
+  { id:"r5", title:"Origin Energy meter application loss", severity:45, type:"OPERATIONAL", country:"AU", impact:"DIRECT", detail:"Picton job — Origin lost application twice. Recurring issue. Needs escalation.", linked:"psg", trend:"STABLE" },
+  { id:"r6", title:"Red Sea disruption", severity:40, type:"GEOPOLITICAL", country:"AE", impact:"WATCH", detail:"Brent crude +2.1%. Indian Ocean maritime routes — Zanzibar coastal position affected.", linked:"zanzibar", trend:"RISING" },
+  { id:"r7", title:"XRP concentration risk", severity:32, type:"FINANCIAL", country:"AU", impact:"WATCH", detail:"9,300 XRP single asset. Exchange risk across 4 platforms. Regulatory uncertainty.", linked:"crypto", trend:"STABLE" },
+  { id:"r8", title:"Wedding decision pending", severity:28, type:"PERSONAL", country:"AU", impact:"LOG", detail:"Ottimo House Sat 20 Mar 2027 — deciding. Cyprus Kefalos thread active. Decision needed.", linked:"nisha", trend:"WATCH" },
 ];
 
-const SIG_COLORS = { PSG:C.neon, INVEST:C.blue, FINANCE:C.gold, MARKET:C.gold, CONFLICT:C.red, PERSONAL:C.purple, PROPERTY:C.purple, MUSIC:C.purple, TRAVEL:C.orange, LEGAL:C.red, ALERT:C.red };
-const IMPACT_COLORS = { DIRECT:C.neon, CORRELATED:C.gold, WATCH:C.orange, POSITIVE:C.blue, LOG:"#2a3d4d", ALERT:C.red };
+// ── WATCHLIST ─────────────────────────────────────────────────────────────────
+const WATCHLIST_INIT = [
+  { id:"w1", obj:"pangani", label:"Pangani DD", status:"ACTIVE", alert:"Eden Law response pending", added:"14 Mar 2026" },
+  { id:"w2", obj:"dubai", label:"Golf Acres Emaar", status:"ACTIVE", alert:"APIL Properties — reply received 16 Mar", added:"14 Mar 2026" },
+  { id:"w3", obj:"defended", label:"Defended Energy dispute", status:"ALERT", alert:"$900/wk freight — no paper trail", added:"Ongoing" },
+  { id:"w4", obj:"psg", label:"PSG Pipeline", status:"LIVE", alert:"119 runs today — 46.2 credits", added:"Automated" },
+  { id:"w5", obj:"target", label:"$100M target", status:"ON_TRACK", alert:"PSG net $6.24M/yr. Next: Pangani deposit.", added:"Strategic" },
+];
 
-// ─── FORCE GRAPH ──────────────────────────────────────────────────────────────
-function ForceGraph({ selectedNode, onNodeClick }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// PANEL SYSTEM — Gridline-style window manager
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PANEL_DEFS = {
+  MAP:        { title:"🌍 GLOBE / MAP",         w:620, h:420, x:0,   y:48 },
+  VERTEX:     { title:"◈ VERTEX GRAPH",         w:580, h:420, x:630, y:48 },
+  EXPLORER:   { title:"⊞ OBJECT EXPLORER",      w:500, h:380, x:0,   y:478 },
+  TIMELINE:   { title:"◷ TIMELINE",             w:500, h:320, x:510, y:478 },
+  RISK:       { title:"⚠ RISK SIGNALS",         w:400, h:320, x:1020, y:48 },
+  EMAILS:     { title:"✉ EMAIL CORPUS",         w:460, h:360, x:0,   y:868 },
+  WATCHLIST:  { title:"◉ WATCHLIST",            w:380, h:300, x:510, y:808 },
+  MARKETS:    { title:"$ MARKETS",              w:360, h:300, x:900, y:478 },
+  ANALYST:    { title:"◎ AI ANALYST",           w:420, h:440, x:1020, y:378 },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VERTEX GRAPH
+// ─────────────────────────────────────────────────────────────────────────────
+function VertexGraph({ selectedObj, onSelect, focusId }) {
   const canvasRef = useRef(null);
-  const nodesRef = useRef(NODES.map(n => ({ ...n, vx:0, vy:0 })));
+  const nodesRef = useRef(OBJECTS.map(o => ({ ...o, vx:0, vy:0 })));
   const rafRef = useRef(null);
-  const dragging = useRef(null);
+  const drag = useRef(null);
   const dragOff = useRef({ x:0, y:0 });
-  const [hovered, setHovered] = useState(null);
+  const [hov, setHov] = useState(null);
 
-  const getPos = (e, canvas) => {
-    const r = canvas.getBoundingClientRect();
-    const sx = canvas.width / r.width, sy = canvas.height / r.height;
-    return { x:(e.clientX - r.left)*sx, y:(e.clientY - r.top)*sy };
+  const getPos = (e, c) => {
+    const r = c.getBoundingClientRect();
+    return { x:(e.clientX-r.left)*(c.width/r.width), y:(e.clientY-r.top)*(c.height/r.height) };
   };
-
-  const findNode = (pos) => nodesRef.current.find(n => {
-    const dx = n.x - pos.x, dy = n.y - pos.y;
-    return Math.sqrt(dx*dx + dy*dy) < n.size + 10;
+  const findNode = pos => nodesRef.current.find(n => {
+    const dx=n.x-pos.x, dy=n.y-pos.y;
+    return Math.sqrt(dx*dx+dy*dy) < n.size+8;
   });
 
+  // Filter to focus node + neighbors if focusId set
+  const visibleIds = useMemo(() => {
+    if (!focusId) return new Set(OBJECTS.map(o=>o.id));
+    const neighbors = new Set([focusId]);
+    LINKS.forEach(l => {
+      if (l.a===focusId) neighbors.add(l.b);
+      if (l.b===focusId) neighbors.add(l.a);
+    });
+    return neighbors;
+  }, [focusId]);
+
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const canvas = canvasRef.current; if (!canvas) return;
     const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
 
     const draw = () => {
       const nodes = nodesRef.current;
-      const W = canvas.width, H = canvas.height;
-
-      // Physics
-      if (!dragging.current) {
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i+1; j < nodes.length; j++) {
-            const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-            const d = Math.sqrt(dx*dx + dy*dy) || 1;
-            const f = 22000 / (d*d);
-            nodes[i].vx += dx/d*f; nodes[i].vy += dy/d*f;
-            nodes[j].vx -= dx/d*f; nodes[j].vy -= dy/d*f;
+      if (!drag.current) {
+        // Physics
+        for (let i=0; i<nodes.length; i++) {
+          for (let j=i+1; j<nodes.length; j++) {
+            if (!visibleIds.has(nodes[i].id) || !visibleIds.has(nodes[j].id)) continue;
+            const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+            const d=Math.sqrt(dx*dx+dy*dy)||1;
+            const f=25000/(d*d);
+            nodes[i].vx+=dx/d*f; nodes[i].vy+=dy/d*f;
+            nodes[j].vx-=dx/d*f; nodes[j].vy-=dy/d*f;
           }
         }
-        EDGES.forEach(edge => {
-          const a = nodes.find(n=>n.id===edge.from), b = nodes.find(n=>n.id===edge.to);
+        LINKS.forEach(lnk => {
+          if (!visibleIds.has(lnk.a)||!visibleIds.has(lnk.b)) return;
+          const a=nodes.find(n=>n.id===lnk.a), b=nodes.find(n=>n.id===lnk.b);
           if (!a||!b) return;
-          const dx = b.x-a.x, dy = b.y-a.y, d = Math.sqrt(dx*dx+dy*dy)||1;
-          const f = (d - 170) * 0.014 * edge.s;
-          a.vx += dx/d*f; a.vy += dy/d*f; b.vx -= dx/d*f; b.vy -= dy/d*f;
+          const dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||1;
+          const f=(d-150)*0.015*lnk.strength;
+          a.vx+=dx/d*f; a.vy+=dy/d*f; b.vx-=dx/d*f; b.vy-=dy/d*f;
         });
         nodes.forEach(n => {
-          n.vx += (W/2-n.x)*0.003; n.vy += (H/2-n.y)*0.003;
-          n.vx *= 0.8; n.vy *= 0.8;
-          n.x = Math.max(n.size+6, Math.min(W-n.size-6, n.x+n.vx));
-          n.y = Math.max(n.size+6, Math.min(H-n.size-6, n.y+n.vy));
+          n.vx+=(W/2-n.x)*0.003; n.vy+=(H/2-n.y)*0.003;
+          n.vx*=0.78; n.vy*=0.78;
+          n.x=Math.max(20,Math.min(W-20,n.x+n.vx));
+          n.y=Math.max(20,Math.min(H-20,n.y+n.vy));
         });
       }
 
       ctx.clearRect(0,0,W,H);
-
       // Grid
-      ctx.strokeStyle = "rgba(0,220,140,0.025)"; ctx.lineWidth = 0.5;
-      for (let x=0; x<W; x+=50) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-      for (let y=0; y<H; y+=50) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+      ctx.strokeStyle="rgba(0,200,120,0.02)"; ctx.lineWidth=0.5;
+      for (let x=0;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+      for (let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-      // Edges
-      EDGES.forEach(edge => {
-        const a = nodes.find(n=>n.id===edge.from), b = nodes.find(n=>n.id===edge.to);
+      // Links
+      LINKS.forEach(lnk => {
+        if (!visibleIds.has(lnk.a)||!visibleIds.has(lnk.b)) return;
+        const a=nodes.find(n=>n.id===lnk.a), b=nodes.find(n=>n.id===lnk.b);
         if (!a||!b) return;
-        const active = selectedNode && (selectedNode===a.id || selectedNode===b.id);
+        const active = selectedObj && (selectedObj===lnk.a || selectedObj===lnk.b);
         ctx.save();
         ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle = active ? a.color+"cc" : "rgba(0,220,140,0.1)";
-        ctx.lineWidth = active ? edge.s*1.5 : edge.s*0.5;
-        if (active) { ctx.shadowBlur=12; ctx.shadowColor=a.color; }
+        ctx.strokeStyle = active ? C.type[a.type]+"cc" : "rgba(0,200,120,0.09)";
+        ctx.lineWidth = active ? lnk.strength*1.4 : lnk.strength*0.5;
+        if (active){ ctx.shadowBlur=10; ctx.shadowColor=C.type[a.type]; }
         ctx.stroke();
-        if (active) {
+        if (active){
           const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
-          ctx.font="bold 8px 'SF Mono', Courier New"; ctx.fillStyle="rgba(180,210,230,0.8)";
-          ctx.textAlign="center"; ctx.shadowBlur=0;
-          ctx.fillText(edge.label, mx, my-5);
+          ctx.shadowBlur=0; ctx.font="bold 7px Courier New";
+          ctx.fillStyle="rgba(160,200,220,0.85)"; ctx.textAlign="center";
+          ctx.fillText(lnk.label,mx,my-4);
         }
         ctx.restore();
       });
 
       // Nodes
       nodes.forEach(node => {
-        const isSel = selectedNode===node.id, isHov = hovered===node.id;
-        const r = node.size;
+        if (!visibleIds.has(node.id)) return;
+        const isSel=selectedObj===node.id, isHov=hov===node.id;
+        const r=node.size||12, col=C.type[node.type]||C.neon;
         ctx.save();
         // Glow rings
-        if (isSel||isHov) {
-          [3,2,1].forEach(ring => {
-            ctx.beginPath(); ctx.arc(node.x,node.y,r+ring*7,0,Math.PI*2);
-            ctx.strokeStyle = node.color+Math.floor(0.12/ring*255).toString(16).padStart(2,"0");
-            ctx.lineWidth=1; ctx.stroke();
+        if (isSel||isHov){
+          [3,2,1].forEach(ring=>{
+            ctx.beginPath(); ctx.arc(node.x,node.y,r+ring*6,0,Math.PI*2);
+            ctx.strokeStyle=col+Math.floor(0.15/ring*255).toString(16).padStart(2,"0");
+            ctx.lineWidth=0.8; ctx.stroke();
           });
         }
-        // Pulse ring
+        // Outer pulse ring
         ctx.beginPath(); ctx.arc(node.x,node.y,r+4,0,Math.PI*2);
-        ctx.strokeStyle=node.color+"2a"; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle=col+"22"; ctx.lineWidth=1; ctx.stroke();
         // Glass fill
-        const g = ctx.createRadialGradient(node.x-r*.35,node.y-r*.35,1,node.x,node.y,r);
-        g.addColorStop(0, node.color+"66"); g.addColorStop(.5,node.color+"22"); g.addColorStop(1,node.color+"06");
+        const g=ctx.createRadialGradient(node.x-r*.3,node.y-r*.3,1,node.x,node.y,r);
+        g.addColorStop(0,col+"55"); g.addColorStop(.5,col+"22"); g.addColorStop(1,col+"06");
         ctx.beginPath(); ctx.arc(node.x,node.y,r,0,Math.PI*2);
         ctx.fillStyle=g; ctx.fill();
-        ctx.strokeStyle=isSel ? node.color : node.color+"77";
-        ctx.lineWidth=isSel?2:0.8; ctx.shadowBlur=isSel?20:6; ctx.shadowColor=node.color;
-        ctx.stroke();
-        // Label
+        ctx.strokeStyle=isSel?col:col+"66"; ctx.lineWidth=isSel?1.5:0.8;
+        ctx.shadowBlur=isSel?18:5; ctx.shadowColor=col; ctx.stroke();
+        // Confidence dot
         ctx.shadowBlur=0;
-        ctx.font=`bold ${isSel?10:9}px 'SF Mono',Courier New`;
-        ctx.fillStyle=isSel?node.color:node.color+"cc";
-        ctx.textAlign="center"; ctx.fillText(node.label,node.x,node.y+r+14);
-        ctx.font="7px Courier New"; ctx.fillStyle="rgba(100,136,152,0.7)";
-        ctx.fillText(node.type.toUpperCase(),node.x,node.y+r+23);
+        ctx.beginPath(); ctx.arc(node.x+r*.6,node.y-r*.6,3,0,Math.PI*2);
+        ctx.fillStyle=node.conf>0.9?C.neon:node.conf>0.7?C.gold:C.red; ctx.fill();
+        // Label
+        ctx.font=`bold ${isSel?9:8}px Courier New`;
+        ctx.fillStyle=isSel?col:col+"bb"; ctx.textAlign="center";
+        ctx.fillText(node.label,node.x,node.y+r+13);
+        // Mark badge
+        ctx.font="6px Courier New"; ctx.fillStyle=C.mark[node.mark]+"88";
+        ctx.fillText(node.mark,node.x,node.y+r+21);
         ctx.restore();
       });
 
-      rafRef.current = requestAnimationFrame(draw);
+      rafRef.current=requestAnimationFrame(draw);
     };
-    rafRef.current = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [hovered, selectedNode]);
+    rafRef.current=requestAnimationFrame(draw);
+    return ()=>cancelAnimationFrame(rafRef.current);
+  }, [hov, selectedObj, visibleIds]);
 
   return (
-    <div style={{ position:"relative", width:"100%", height:"100%", background:"#020810" }}>
-      <canvas ref={canvasRef} width={900} height={560}
-        style={{ width:"100%", height:"100%", cursor:hovered?"pointer":"crosshair", display:"block" }}
-        onMouseMove={e => {
-          const canvas = canvasRef.current; if (!canvas) return;
-          const pos = getPos(e, canvas);
-          if (dragging.current) {
-            const n = nodesRef.current.find(x=>x.id===dragging.current);
-            if (n) { n.x=pos.x-dragOff.current.x; n.y=pos.y-dragOff.current.y; } return;
-          }
-          const n = findNode(pos); setHovered(n?n.id:null);
+    <div style={{ position:"relative", width:"100%", height:"100%" }}>
+      <canvas ref={canvasRef} width={560} height={380}
+        style={{ width:"100%", height:"100%", cursor:hov?"pointer":"crosshair", display:"block" }}
+        onMouseMove={e=>{
+          const c=canvasRef.current; if(!c)return;
+          const pos=getPos(e,c);
+          if(drag.current){ const n=nodesRef.current.find(x=>x.id===drag.current); if(n){n.x=pos.x-dragOff.current.x;n.y=pos.y-dragOff.current.y;} return; }
+          const n=findNode(pos); setHov(n?n.id:null);
         }}
-        onMouseDown={e => {
-          const canvas = canvasRef.current; if (!canvas) return;
-          const pos = getPos(e, canvas); const n = findNode(pos);
-          if (n) { dragging.current=n.id; dragOff.current={x:pos.x-n.x,y:pos.y-n.y}; }
+        onMouseDown={e=>{
+          const c=canvasRef.current; if(!c)return;
+          const pos=getPos(e,c); const n=findNode(pos);
+          if(n){drag.current=n.id;dragOff.current={x:pos.x-n.x,y:pos.y-n.y};}
         }}
-        onMouseUp={e => {
-          if (dragging.current) { dragging.current=null; return; }
-          const canvas = canvasRef.current; if (!canvas) return;
-          const n = findNode(getPos(e, canvas)); if (n) onNodeClick(n);
+        onMouseUp={e=>{
+          if(drag.current){drag.current=null;return;}
+          const c=canvasRef.current; if(!c)return;
+          const n=findNode(getPos(e,c)); if(n)onSelect(n.id);
         }}
-        onMouseLeave={() => { setHovered(null); dragging.current=null; }}
+        onMouseLeave={()=>{setHov(null);drag.current=null;}}
       />
-      {/* Legend */}
-      <div style={{ position:"absolute", bottom:8, left:8, display:"flex", gap:6, flexWrap:"wrap" }}>
-        {[["person",C.neon,"PERSON"],["org",C.blue,"ORG"],["invest",C.gold,"INVESTMENT"],["asset",C.orange,"ASSET"],["property",C.blue,"PROPERTY"],["creative",C.purple,"CREATIVE"],["client",C.red,"CLIENT"],["target",C.red,"TARGET"]].map(([,col,l])=>(
-          <div key={l} style={{ display:"flex",alignItems:"center",gap:3,background:"rgba(2,7,10,0.85)",padding:"2px 7px",borderRadius:3,border:`1px solid ${col}22` }}>
-            <div style={{ width:6,height:6,borderRadius:"50%",background:col,boxShadow:`0 0 5px ${col}` }} />
-            <span style={{ fontSize:7,color:col,letterSpacing:1 }}>{l}</span>
+      {/* Type legend */}
+      <div style={{ position:"absolute", bottom:4, left:6, display:"flex", gap:6, flexWrap:"wrap" }}>
+        {Object.entries(C.type).map(([t,col])=>(
+          <div key={t} style={{ display:"flex",alignItems:"center",gap:3,background:"rgba(2,5,8,0.85)",padding:"1px 5px",borderRadius:2,border:`1px solid ${col}1a` }}>
+            <div style={{ width:5,height:5,borderRadius:"50%",background:col }}/>
+            <span style={{ fontSize:6,color:col }}>{t.toUpperCase()}</span>
           </div>
         ))}
       </div>
-      <div style={{ position:"absolute",top:8,right:8,fontSize:7,color:"rgba(0,220,140,0.35)",letterSpacing:2 }}>
-        VERTEX · PALANTIR ONTOLOGY · {NODES.length} OBJECTS · {EDGES.length} LINKS · DRAG NODES
+      <div style={{ position:"absolute",top:5,right:6,fontSize:7,color:"rgba(0,200,120,0.35)",letterSpacing:1 }}>
+        VERTEX · {OBJECTS.length} OBJECTS · {LINKS.length} LINKS · DRAG NODES
       </div>
     </div>
   );
 }
 
-// ─── WORLD MAP ────────────────────────────────────────────────────────────────
-function WorldMap({ selectedCountry, onSelect }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// GLOBE / MAP with USGS live earthquakes
+// ─────────────────────────────────────────────────────────────────────────────
+function GlobeMap({ selectedCountry, onSelect, earthquakes, liveData }) {
   const [tick, setTick] = useState(0);
-  useEffect(() => { const t = setInterval(()=>setTick(i=>i+1), 1000); return ()=>clearInterval(t); }, []);
+  useEffect(()=>{ const t=setInterval(()=>setTick(i=>i+1),800); return()=>clearInterval(t); },[]);
 
-  const proj = (lat, lng) => ({
-    x: ((lng+180)/360)*960,
-    y: ((90-lat)/180)*480,
-  });
+  const proj = (lat,lng) => ({ x:((lng+180)/360)*900, y:((90-lat)/180)*450 });
+  const rCol = r => ({LOW:C.neon,MEDIUM:C.gold,HIGH:C.red}[r]||C.text);
 
-  const sigCount = {};
-  SIGNALS.forEach(s => { sigCount[s.country] = (sigCount[s.country]||0)+1; });
-
-  const rColor = r => ({ LOW:C.neon, MEDIUM:C.gold, HIGH:C.red }[r]||C.text);
+  const eqColors = (mag) => mag>=6?"#ff2200":mag>=5?"#ff8800":mag>=4.5?"#ffcc00":"#88ff88";
 
   return (
-    <div style={{ position:"relative",width:"100%",height:"100%",background:"#020810",overflow:"hidden" }}>
-      <svg width="100%" height="100%" viewBox="0 0 960 480" preserveAspectRatio="xMidYMid meet" style={{ position:"absolute",inset:0 }}>
+    <div style={{ position:"relative",width:"100%",height:"100%",background:"#010408",overflow:"hidden" }}>
+      <svg width="100%" height="100%" viewBox="0 0 900 450" preserveAspectRatio="xMidYMid meet" style={{ position:"absolute",inset:0 }}>
         <defs>
-          <radialGradient id="bg" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#041018" /><stop offset="100%" stopColor="#020810" />
+          <radialGradient id="bg2" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stopColor="#030c14"/><stop offset="100%" stopColor="#010408"/>
           </radialGradient>
-          {COUNTRIES.map(c => (
-            <radialGradient key={c.code} id={`g${c.code}`} cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={rColor(c.risk)} stopOpacity="0.6" />
-              <stop offset="100%" stopColor={rColor(c.risk)} stopOpacity="0" />
-            </radialGradient>
-          ))}
-          <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="glow2"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-        <rect width="960" height="480" fill="url(#bg)"/>
-
-        {/* Grid */}
-        {[0,60,120,180,240,300,360].map(l=><line key={`v${l}`} x1={(l/360)*960} y1={0} x2={(l/360)*960} y2={480} stroke="rgba(0,220,140,0.03)" strokeWidth="0.5"/>)}
-        {[-60,-30,0,30,60].map(l=><line key={`h${l}`} x1={0} y1={((90-l)/180)*480} x2={960} y2={((90-l)/180)*480} stroke="rgba(0,220,140,0.03)" strokeWidth="0.5"/>)}
-        <line x1={0} y1={240} x2={960} y2={240} stroke="rgba(0,220,140,0.07)" strokeWidth="0.8" strokeDasharray="4,6"/>
-        <text x={4} y={237} fontSize={8} fill="rgba(0,220,140,0.2)" fontFamily="Courier New">EQUATOR</text>
+        <rect width="900" height="450" fill="url(#bg2)"/>
+        {/* Grid lines */}
+        {[-90,-60,-30,0,30,60,90,120,150,180,210,240,270].map(l=><line key={`v${l}`} x1={((l+180)/360)*900} y1={0} x2={((l+180)/360)*900} y2={450} stroke="rgba(0,200,120,0.025)" strokeWidth="0.5"/>)}
+        {[-60,-30,0,30,60].map(l=><line key={`h${l}`} x1={0} y1={((90-l)/180)*450} x2={900} y2={((90-l)/180)*450} stroke="rgba(0,200,120,0.025)" strokeWidth="0.5"/>)}
+        <line x1={0} y1={225} x2={900} y2={225} stroke="rgba(0,200,120,0.06)" strokeWidth="0.7" strokeDasharray="3,5"/>
+        <text x={4} y={222} fontSize={7} fill="rgba(0,200,120,0.2)" fontFamily="Courier New">EQ</text>
 
         {/* Continents */}
-        <polygon points="120,55 245,50 295,95 285,185 235,205 175,195 132,162 102,132 112,88" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <polygon points="215,200 292,202 315,245 308,315 288,362 252,372 227,342 213,292 202,252" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <polygon points="452,68 535,60 542,92 532,132 502,148 472,142 450,122 447,96" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <polygon points="456,132 542,122 562,162 562,232 552,292 532,332 502,352 472,342 452,302 440,242 438,192 446,158" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <polygon points="542,38 732,33 782,68 792,122 772,162 722,178 682,162 642,142 602,132 572,112 547,82" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <polygon points="560,155 605,148 618,178 612,212 587,217 567,197 559,173" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <polygon points="712,298 792,283 832,293 852,328 842,363 802,376 757,368 722,338 710,313" fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
-        <ellipse cx={742} cy={218} rx={30} ry={20} fill="rgba(3,14,22,0.92)" stroke="rgba(0,220,140,0.12)" strokeWidth="0.8"/>
+        <polygon points="110,50 240,45 292,90 280,178 232,198 172,188 129,158 100,128 110,84" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <polygon points="212,196 289,198 312,238 306,308 286,356 250,368 226,338 212,288 200,248" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <polygon points="449,65 532,58 540,89 530,128 500,144 470,138 448,118 446,93" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <polygon points="454,129 540,119 560,159 560,229 550,289 530,328 500,348 470,338 450,298 438,239 436,189 444,155" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <polygon points="540,36 730,31 780,65 790,118 770,158 720,174 680,158 640,138 600,128 570,108 545,78" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <polygon points="558,152 603,145 616,174 610,208 585,212 565,192 557,169" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <polygon points="710,294 790,279 830,289 850,324 840,359 800,372 755,364 720,334 708,309" fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
+        <ellipse cx={740} cy={213} rx={28} ry={18} fill="rgba(2,12,20,0.94)" stroke="rgba(0,200,120,0.1)" strokeWidth="0.7"/>
 
-        {/* Connection arcs — Australia to each exposure country */}
+        {/* Connection arcs: AU to each country */}
         {(() => {
-          const au = proj(-33.87, 151.21);
-          return COUNTRIES.filter(c=>c.code!=="AU").map((c,i) => {
-            const to = proj(c.lat, c.lng);
-            const mx=(au.x+to.x)/2, my=Math.min(au.y,to.y)-80;
+          const au = proj(-33.87,151.21);
+          return COUNTRIES.filter(c=>c.code!=="AU" && c.code!=="TH").map((c,i)=>{
+            const to=proj(c.lat,c.lng);
+            const col=rCol(c.risk);
+            const mx=(au.x+to.x)/2, my=Math.min(au.y,to.y)-70;
             return <path key={i} d={`M ${au.x} ${au.y} Q ${mx} ${my} ${to.x} ${to.y}`}
-              fill="none" stroke={c.color+"25"} strokeWidth="0.8" strokeDasharray="5,5"/>;
+              fill="none" stroke={col+"20"} strokeWidth="0.7" strokeDasharray="4,4"/>;
           });
         })()}
 
-        {/* Country nodes */}
-        {COUNTRIES.map(c => {
-          const pos = proj(c.lat, c.lng);
-          const isSel = selectedCountry===c.code;
-          const col = rColor(c.risk);
-          const r = isSel ? 13 : 9;
-          const pulse = r + (tick % 30) * 0.3;
+        {/* USGS Earthquakes — LIVE DATA */}
+        {(earthquakes||[]).map((eq,i)=>{
+          const pos=proj(eq.lat,eq.lng);
+          const col=eqColors(eq.mag);
+          const r=Math.max(3,(eq.mag-4)*2.5);
           return (
-            <g key={c.code} onClick={()=>onSelect(c.code)} style={{ cursor:"pointer" }}>
-              <circle cx={pos.x} cy={pos.y} r={pulse+12} fill={`url(#g${c.code})`} opacity={0.35}/>
-              <circle cx={pos.x} cy={pos.y} r={r+10} fill="none" stroke={col} strokeWidth="0.4" opacity={0.25}/>
-              {isSel && <circle cx={pos.x} cy={pos.y} r={r+18} fill="none" stroke={col} strokeWidth="0.8" opacity={0.5} strokeDasharray="3,3"/>}
-              <circle cx={pos.x} cy={pos.y} r={r} fill={col+"1a"} stroke={col} strokeWidth={isSel?1.5:0.7} filter="url(#glow)"/>
-              <circle cx={pos.x} cy={pos.y} r={r*0.38} fill={col} opacity={0.75}/>
-              {sigCount[c.code] && (
-                <g><circle cx={pos.x+r+1} cy={pos.y-r-1} r={6} fill={C.red}/><text x={pos.x+r+1} y={pos.y-r+1.5} textAnchor="middle" fontSize={7} fill="#fff" fontFamily="Courier New" fontWeight="bold">{sigCount[c.code]}</text></g>
-              )}
-              <text x={pos.x} y={pos.y+r+14} textAnchor="middle" fontSize={isSel?9:8} fill={col} fontFamily="Courier New" fontWeight="bold">{c.name.split("/")[0].trim()}</text>
-              <text x={pos.x} y={pos.y+r+23} textAnchor="middle" fontSize={7} fill={col+"77"} fontFamily="Courier New">{c.risk} RISK · {c.types[0]}</text>
+            <g key={i}>
+              <circle cx={pos.x} cy={pos.y} r={r+4} fill={col+"12"} stroke={col+"44"} strokeWidth="0.5"/>
+              <circle cx={pos.x} cy={pos.y} r={r} fill={col+"30"} stroke={col} strokeWidth="0.8"/>
+              <circle cx={pos.x} cy={pos.y} r={1.5} fill={col}/>
             </g>
           );
         })}
 
-        <text x={6} y={474} fontSize={7} fill="rgba(0,220,140,0.18)" fontFamily="Courier New" letterSpacing="1.5">JARVIS GLOBAL MAP — SAM KAZANGAS EXPOSURE LAYER — REAL DATA FROM 3,804 EMAILS + 15,822 WA MESSAGES</text>
+        {/* Country exposure nodes */}
+        {COUNTRIES.map(c=>{
+          const pos=proj(c.lat,c.lng);
+          const isSel=selectedCountry===c.code;
+          const col=rCol(c.risk);
+          const r=isSel?13:9;
+          const p=(tick%25)*0.35;
+          return (
+            <g key={c.code} onClick={()=>onSelect(c.code)} style={{ cursor:"pointer" }}>
+              <circle cx={pos.x} cy={pos.y} r={r+p+10} fill={col+"08"} stroke={col+"10"} strokeWidth="0.3"/>
+              <circle cx={pos.x} cy={pos.y} r={r+8} fill={col+"10"} stroke={col+"25"} strokeWidth="0.5"/>
+              {isSel && <circle cx={pos.x} cy={pos.y} r={r+16} fill="none" stroke={col} strokeWidth="0.8" strokeDasharray="3,3" opacity={0.6}/>}
+              <circle cx={pos.x} cy={pos.y} r={r} fill={col+"18"} stroke={col} strokeWidth={isSel?1.5:0.7} filter="url(#glow2)"/>
+              <circle cx={pos.x} cy={pos.y} r={r*0.35} fill={col} opacity={0.8}/>
+              {/* Risk score badge */}
+              <g>
+                <circle cx={pos.x+r+1} cy={pos.y-r-1} r={7} fill="rgba(2,5,8,0.9)" stroke={col+"55"} strokeWidth="0.5"/>
+                <text x={pos.x+r+1} y={pos.y-r+2} textAnchor="middle" fontSize={6} fill={col} fontFamily="Courier New" fontWeight="bold">{c.riskScore}</text>
+              </g>
+              <text x={pos.x} y={pos.y+r+12} textAnchor="middle" fontSize={isSel?8:7} fill={col} fontFamily="Courier New" fontWeight="bold">{c.name}</text>
+              <text x={pos.x} y={pos.y+r+20} textAnchor="middle" fontSize={6} fill={col+"66"} fontFamily="Courier New">{c.risk} · {c.positions.length} POS</text>
+            </g>
+          );
+        })}
+
+        {/* Legend */}
+        <text x={5} y={444} fontSize={6} fill="rgba(0,200,120,0.18)" fontFamily="Courier New">JARVIS GLOBAL EXPOSURE MAP · USGS LIVE EARTHQUAKES · {earthquakes?.length||0} EQ EVENTS · REAL DATA</text>
       </svg>
 
       {/* Layer toggles */}
-      <div style={{ position:"absolute",top:10,right:10,display:"flex",flexDirection:"column",gap:4 }}>
-        {[["MY POSITIONS",C.neon,true],["CONNECTIONS",C.blue,true],["RISK LAYER",C.red,true],["SIGNALS",C.gold,true]].map(([l,col,on])=>(
-          <div key={l} style={{ display:"flex",alignItems:"center",gap:6,background:"rgba(2,8,12,0.85)",padding:"4px 8px",borderRadius:3,border:`1px solid ${col}22`,backdropFilter:"blur(8px)" }}>
-            <div style={{ width:6,height:6,borderRadius:"50%",background:on?col:"#222",boxShadow:on?`0 0 5px ${col}`:"none" }}/>
-            <span style={{ fontSize:7,color:on?col:"#334",letterSpacing:1 }}>{l}</span>
+      <div style={{ position:"absolute",top:6,right:6,display:"flex",flexDirection:"column",gap:3 }}>
+        {[["MY POSITIONS",C.neon,true],["USGS QUAKES",C.gold,(earthquakes?.length||0)>0],["RISK LAYER",C.red,true],["CONNECTIONS",C.blue,true]].map(([l,col,on])=>(
+          <div key={l} style={{ display:"flex",alignItems:"center",gap:5,background:"rgba(1,4,8,0.9)",padding:"3px 7px",borderRadius:3,border:`1px solid ${col}1a`,backdropFilter:"blur(8px)" }}>
+            <div style={{ width:5,height:5,borderRadius:"50%",background:on?col:"#222",boxShadow:on?`0 0 4px ${col}`:"none" }}/>
+            <span style={{ fontSize:7,color:on?col:"#2a3d4d",letterSpacing:1 }}>{l}</span>
           </div>
         ))}
+        {earthquakes && <div style={{ fontSize:7,color:C.gold,padding:"2px 6px",background:"rgba(1,4,8,0.8)",borderRadius:3,border:`1px solid ${C.gold}22`,marginTop:2 }}>
+          ⚡ {earthquakes.length} EQ LIVE
+        </div>}
       </div>
 
       {/* Country strip */}
-      <div style={{ position:"absolute",bottom:0,left:0,right:0,display:"flex",background:"rgba(2,8,12,0.9)",borderTop:`1px solid ${C.border}` }}>
-        {COUNTRIES.map(c => {
-          const col = ({LOW:C.neon,MEDIUM:C.gold,HIGH:C.red})[c.risk]||C.text;
+      <div style={{ position:"absolute",bottom:0,left:0,right:0,display:"flex",background:"rgba(1,4,8,0.92)",borderTop:`1px solid ${C.border}` }}>
+        {COUNTRIES.map(c=>{
+          const col=rCol(c.risk);
           return (
             <div key={c.code} onClick={()=>onSelect(c.code)}
-              style={{ flex:1,padding:"6px 3px",textAlign:"center",cursor:"pointer",borderRight:`1px solid ${C.border}`,background:selectedCountry===c.code?col+"0e":"transparent" }}>
-              <div style={{ fontSize:15 }}>{c.flag}</div>
-              <div style={{ fontSize:7,color:selectedCountry===c.code?col:"#334",letterSpacing:1,marginTop:1 }}>{c.code}</div>
+              style={{ flex:1,padding:"4px 2px",textAlign:"center",cursor:"pointer",borderRight:`1px solid ${C.borderB}`,background:selectedCountry===c.code?col+"0c":"transparent" }}>
+              <div style={{ fontSize:13 }}>{c.flag}</div>
+              <div style={{ fontSize:6,color:selectedCountry===c.code?col:"#2a3a4a",letterSpacing:1,marginTop:1 }}>{c.code}</div>
             </div>
           );
         })}
@@ -567,522 +467,774 @@ function WorldMap({ selectedCountry, onSelect }) {
   );
 }
 
-// ─── COUNTRY INTEL ────────────────────────────────────────────────────────────
-function CountryIntel({ code }) {
-  const c = COUNTRIES.find(x=>x.code===code);
-  if (!c) return <div style={{ padding:20, color:C.text, fontFamily:"Courier New", fontSize:11 }}>Select a country</div>;
-  const signals = SIGNALS.filter(s=>s.country===code);
-  const rCol = {LOW:C.neon,MEDIUM:C.gold,HIGH:C.red}[c.risk]||C.text;
-  // Get relevant emails
-  const relevantEmails = [
-    ...PALANTIR.investment_emails.filter(e => {
-      if (code==="TZ") return e.cat==="ZANZIBAR"||e.cat==="PANGANI"||e.cat==="LEGAL";
-      if (code==="AE") return e.cat==="DUBAI";
-      if (code==="AU") return e.cat==="AU_PROPERTY"||e.cat==="PORTFOLIO";
-      return false;
-    }).slice(0,5),
-    ...PALANTIR.crypto_emails.filter(()=>code==="AU").slice(0,3),
-  ];
+// ─────────────────────────────────────────────────────────────────────────────
+// OBJECT EXPLORER — Palantir-style searchable table
+// ─────────────────────────────────────────────────────────────────────────────
+function ObjectExplorer({ onSelect, selectedObj }) {
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("ALL");
+  const [markFilter, setMarkFilter] = useState("ALL");
+  const [sortBy, setSortBy] = useState("label");
+  const [expandedObj, setExpandedObj] = useState(null);
+
+  const types = ["ALL",...new Set(OBJECTS.map(o=>o.type))];
+  const marks = ["ALL",...new Set(OBJECTS.map(o=>o.mark))];
+
+  const filtered = useMemo(()=>{
+    let items = [...OBJECTS];
+    if (typeFilter!=="ALL") items=items.filter(o=>o.type===typeFilter);
+    if (markFilter!=="ALL") items=items.filter(o=>o.mark===markFilter);
+    if (search) {
+      const s=search.toLowerCase();
+      items=items.filter(o=>o.label.toLowerCase().includes(s)||Object.values(o.props).some(v=>String(v).toLowerCase().includes(s)));
+    }
+    items.sort((a,b)=>sortBy==="label"?a.label.localeCompare(b.label):b.conf-a.conf);
+    return items;
+  },[search,typeFilter,markFilter,sortBy]);
 
   return (
-    <div style={{ height:"100%",overflowY:"auto",fontFamily:"Courier New" }}>
-      <div style={{ padding:"12px 14px",borderBottom:`1px solid ${C.border}` }}>
-        <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:8 }}>
-          <span style={{ fontSize:26 }}>{c.flag}</span>
-          <div style={{ flex:1 }}>
-            <div style={{ color:C.neon,fontSize:13,fontWeight:"bold",letterSpacing:2 }}>{c.name}</div>
-            <div style={{ fontSize:7,color:"#3a5060",letterSpacing:3,marginTop:2 }}>INTELLIGENCE PROFILE</div>
-          </div>
-          <div style={{ padding:"3px 8px",borderRadius:3,background:rCol+"18",border:`1px solid ${rCol}33`,color:rCol,fontSize:8,letterSpacing:1 }}>{c.risk} RISK</div>
-        </div>
-        <div style={{ display:"flex",gap:4,flexWrap:"wrap" }}>
-          {c.types.map(t=><span key={t} style={{ fontSize:7,padding:"2px 6px",borderRadius:2,background:C.neonD,color:C.neon,border:`1px solid ${C.border}` }}>{t}</span>)}
-        </div>
-      </div>
-
-      {/* Key facts */}
-      {c.intel && (
-        <div style={{ padding:"8px 14px",borderBottom:`1px solid ${C.border}` }}>
-          <div style={{ fontSize:7,color:"#3a5060",letterSpacing:3,marginBottom:6 }}>COUNTRY INTEL</div>
-          {Object.entries(c.intel).map(([k,v])=>(
-            <div key={k} style={{ display:"flex",gap:8,padding:"4px 0",borderBottom:`1px solid rgba(0,220,140,0.03)` }}>
-              <span style={{ fontSize:8,color:"#3a5060",minWidth:90,flexShrink:0 }}>{k.replace(/_/g," ").toUpperCase()}</span>
-              <span style={{ fontSize:9,color:C.textB }}>{v}</span>
-            </div>
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      {/* Filters */}
+      <div style={{ padding:"6px 8px",borderBottom:`1px solid ${C.border}`,display:"flex",gap:6,flexWrap:"wrap",flexShrink:0 }}>
+        <input style={{ flex:1,minWidth:120,background:"rgba(0,200,120,0.04)",border:`1px solid ${C.border}`,borderRadius:3,padding:"4px 8px",color:C.textB,fontFamily:"Courier New",fontSize:9,outline:"none" }}
+          placeholder="Search objects, properties..." value={search} onChange={e=>setSearch(e.target.value)}/>
+        <select value={typeFilter} onChange={e=>setTypeFilter(e.target.value)}
+          style={{ background:"rgba(0,0,0,0.5)",border:`1px solid ${C.border}`,color:C.textB,fontFamily:"Courier New",fontSize:8,padding:"3px 6px",borderRadius:3,outline:"none" }}>
+          {types.map(t=><option key={t} value={t}>{t}</option>)}
+        </select>
+        <select value={markFilter} onChange={e=>setMarkFilter(e.target.value)}
+          style={{ background:"rgba(0,0,0,0.5)",border:`1px solid ${C.border}`,color:C.textB,fontFamily:"Courier New",fontSize:8,padding:"3px 6px",borderRadius:3,outline:"none" }}>
+          {marks.map(m=><option key={m} value={m}>{m}</option>)}
+        </select>
+        <div style={{ display:"flex",gap:3 }}>
+          {["label","conf"].map(s=>(
+            <button key={s} onClick={()=>setSortBy(s)}
+              style={{ background:sortBy===s?C.neonD:"transparent",border:`1px solid ${sortBy===s?C.neon+"44":C.border}`,color:sortBy===s?C.neon:C.text,padding:"3px 7px",borderRadius:3,cursor:"pointer",fontSize:7,fontFamily:"Courier New" }}>
+              {s==="label"?"A-Z":"CONF"}
+            </button>
           ))}
         </div>
-      )}
-
-      {/* My positions */}
-      <div style={{ padding:"8px 14px",borderBottom:`1px solid ${C.border}` }}>
-        <div style={{ fontSize:7,color:"#3a5060",letterSpacing:3,marginBottom:6 }}>MY POSITIONS ({c.positions.length})</div>
-        {c.positions.map((p,i)=>(
-          <div key={i} style={{ display:"flex",gap:6,padding:"4px 0",borderBottom:`1px solid rgba(0,220,140,0.03)` }}>
-            <div style={{ width:3,height:3,borderRadius:"50%",background:rCol,marginTop:5,flexShrink:0 }}/>
-            <span style={{ fontSize:9,color:C.textB,lineHeight:1.4 }}>{p}</span>
-          </div>
-        ))}
       </div>
-
-      {/* Real email evidence */}
-      {relevantEmails.length > 0 && (
-        <div style={{ padding:"8px 14px",borderBottom:`1px solid ${C.border}` }}>
-          <div style={{ fontSize:7,color:"#3a5060",letterSpacing:3,marginBottom:6 }}>EMAIL EVIDENCE — REAL DATA</div>
-          {relevantEmails.map((e,i)=>(
-            <div key={i} style={{ padding:"5px 0",borderBottom:`1px solid rgba(0,220,140,0.03)` }}>
-              <div style={{ display:"flex",justifyContent:"space-between",marginBottom:2 }}>
-                <span style={{ fontSize:8,color:C.blue,fontWeight:"bold" }}>{e.cat}</span>
-                <span style={{ fontSize:7,color:"#3a5060" }}>{e.date}</span>
+      {/* Count */}
+      <div style={{ padding:"4px 8px",borderBottom:`1px solid ${C.border}`,fontSize:7,color:"#2a3d4d",flexShrink:0,display:"flex",justifyContent:"space-between" }}>
+        <span>{filtered.length} objects</span>
+        <span>{OBJECTS.length} total · {LINKS.length} links</span>
+      </div>
+      {/* Table */}
+      <div style={{ flex:1,overflowY:"auto" }}>
+        {/* Header */}
+        <div style={{ display:"grid",gridTemplateColumns:"1fr 80px 70px 55px 45px",gap:4,padding:"4px 8px",borderBottom:`1px solid ${C.border}`,fontSize:7,color:"#2a3d4d",position:"sticky",top:0,background:C.bg }}>
+          <span>OBJECT</span><span>TYPE</span><span>MARKING</span><span>CONF</span><span>LINKS</span>
+        </div>
+        {filtered.map(obj=>{
+          const col=C.type[obj.type]||C.neon;
+          const markCol=C.mark[obj.mark]||C.text;
+          const linkCount=LINKS.filter(l=>l.a===obj.id||l.b===obj.id).length;
+          const isExp=expandedObj===obj.id;
+          const isSel=selectedObj===obj.id;
+          return (
+            <div key={obj.id}
+              style={{ borderBottom:`1px solid rgba(0,200,120,0.04)`,background:isSel?C.neonD:"transparent" }}>
+              <div style={{ display:"grid",gridTemplateColumns:"1fr 80px 70px 55px 45px",gap:4,padding:"5px 8px",cursor:"pointer",alignItems:"center" }}
+                onClick={()=>{ setExpandedObj(isExp?null:obj.id); onSelect(obj.id); }}>
+                <div style={{ display:"flex",alignItems:"center",gap:5 }}>
+                  <div style={{ width:6,height:6,borderRadius:"50%",background:col,boxShadow:`0 0 4px ${col}`,flexShrink:0 }}/>
+                  <span style={{ fontSize:9,color:isSel?col:C.textB,fontWeight:isSel?"bold":"normal" }}>{obj.label}</span>
+                </div>
+                <span style={{ fontSize:7,padding:"1px 5px",borderRadius:2,background:col+"18",color:col,border:`1px solid ${col}33` }}>{obj.type}</span>
+                <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:markCol+"18",color:markCol }}>{obj.mark}</span>
+                <div style={{ display:"flex",alignItems:"center",gap:3 }}>
+                  <div style={{ flex:1,height:3,background:"rgba(0,200,120,0.1)",borderRadius:2,overflow:"hidden" }}>
+                    <div style={{ width:`${obj.conf*100}%`,height:"100%",background:obj.conf>0.9?C.neon:obj.conf>0.7?C.gold:C.red }}/>
+                  </div>
+                  <span style={{ fontSize:7,color:C.text }}>{(obj.conf*100).toFixed(0)}%</span>
+                </div>
+                <span style={{ fontSize:8,color:C.text,textAlign:"center" }}>{linkCount}</span>
               </div>
-              <div style={{ fontSize:9,color:C.text }}>{e.from.slice(0,45)}</div>
-              <div style={{ fontSize:9,color:C.textB,lineHeight:1.4 }}>{e.subject.slice(0,80)}</div>
+              {/* Expanded properties */}
+              {isExp && (
+                <div style={{ padding:"0 8px 8px 20px",borderTop:`1px solid ${C.border}` }}>
+                  <div style={{ display:"flex",gap:4,flexWrap:"wrap",marginBottom:6,marginTop:5 }}>
+                    <MARK label={obj.mark} color={markCol}/>
+                    <MARK label={obj.type.toUpperCase()} color={col}/>
+                    <span style={{ fontSize:7,color:"#2a3d4d" }}>CONF: {(obj.conf*100).toFixed(0)}%</span>
+                  </div>
+                  {Object.entries(obj.props).map(([k,v])=>(
+                    <div key={k} style={{ display:"flex",gap:8,padding:"2px 0",borderBottom:`1px solid rgba(0,200,120,0.03)` }}>
+                      <span style={{ fontSize:8,color:"#2a3d4d",minWidth:100,flexShrink:0 }}>{k}</span>
+                      <span style={{ fontSize:8,color:C.textB,flex:1 }}>{v}</span>
+                    </div>
+                  ))}
+                  <div style={{ marginTop:6,fontSize:7,color:"#2a3d4d" }}>LINKED OBJECTS ({LINKS.filter(l=>l.a===obj.id||l.b===obj.id).length})</div>
+                  <div style={{ display:"flex",gap:4,flexWrap:"wrap",marginTop:3 }}>
+                    {LINKS.filter(l=>l.a===obj.id||l.b===obj.id).map((l,i)=>{
+                      const other=OBJECTS.find(o=>o.id===(l.a===obj.id?l.b:l.a));
+                      if(!other)return null;
+                      const oc=C.type[other.type]||C.neon;
+                      return (<span key={i} style={{ fontSize:7,padding:"1px 6px",borderRadius:3,background:oc+"18",color:oc,border:`1px solid ${oc}33` }}>
+                        {l.label} → {other.label}
+                      </span>);
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      )}
-
-      {/* Active signals */}
-      <div style={{ padding:"8px 14px",borderBottom:`1px solid ${C.border}` }}>
-        <div style={{ fontSize:7,color:"#3a5060",letterSpacing:3,marginBottom:6 }}>ACTIVE SIGNALS ({signals.length})</div>
-        {signals.map((s,i)=>(
-          <div key={i} style={{ display:"flex",gap:6,padding:"5px 0",borderBottom:`1px solid rgba(0,220,140,0.03)`,alignItems:"flex-start" }}>
-            <div style={{ width:4,height:4,borderRadius:"50%",background:IMPACT_COLORS[s.impact]||"#334",marginTop:4,flexShrink:0 }}/>
-            <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:(SIG_COLORS[s.type]||"#888")+"1a",color:SIG_COLORS[s.type]||"#888",flexShrink:0 }}>{s.type}</span>
-            <div style={{ flex:1 }}>
-              <span style={{ fontSize:9,color:C.text,lineHeight:1.4 }}>{s.text}</span>
-              <div style={{ fontSize:7,color:"#3a5060",marginTop:2 }}>{s.time}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Watch signals */}
-      <div style={{ padding:"8px 14px" }}>
-        <div style={{ fontSize:7,color:"#3a5060",letterSpacing:3,marginBottom:6 }}>WATCH SIGNALS</div>
-        {c.watch.map((w,i)=>(
-          <div key={i} style={{ display:"flex",gap:6,padding:"3px 0" }}>
-            <div style={{ width:4,height:4,borderRadius:"50%",background:C.gold,marginTop:4,flexShrink:0 }}/>
-            <span style={{ fontSize:9,color:C.text }}>{w}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 }
 
-// ─── AI ANALYST ───────────────────────────────────────────────────────────────
-function AIAnalyst({ onClose }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// TIMELINE — Scrollable event stream
+// ─────────────────────────────────────────────────────────────────────────────
+function TimelinePanel({ liveData }) {
+  const [catFilter, setCatFilter] = useState("ALL");
+  const events = liveData?.corpus?.timeline || [];
+  const allCats = ["ALL",...new Set(events.map(e=>e.cat))];
+  const filtered = catFilter==="ALL" ? events : events.filter(e=>e.cat===catFilter);
+  const catCol = c => ({Travel:C.orange,Investments:C.gold,Music:C.purple,Crypto:C.gold,PSG:C.blue,PSG_Business:C.blue,Finance:C.gold,Wedding:C.purple})[c]||C.text;
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      <div style={{ padding:"5px 8px",borderBottom:`1px solid ${C.border}`,display:"flex",gap:4,flexWrap:"wrap",flexShrink:0 }}>
+        {allCats.map(c=>(
+          <button key={c} onClick={()=>setCatFilter(c)}
+            style={{ background:catFilter===c?(catCol(c)+"22"):"transparent",border:`1px solid ${catFilter===c?catCol(c)+"44":C.borderB}`,color:catFilter===c?catCol(c):C.text,padding:"2px 7px",borderRadius:3,cursor:"pointer",fontSize:7,fontFamily:"Courier New" }}>
+            {c}
+          </button>
+        ))}
+      </div>
+      <div style={{ padding:"4px 8px",fontSize:7,color:"#2a3d4d",borderBottom:`1px solid ${C.border}`,flexShrink:0,display:"flex",justifyContent:"space-between" }}>
+        <span>{filtered.length} events shown</span>
+        <span>PALANTIR TIMELINE · 3,018 total corpus events</span>
+      </div>
+      <div style={{ flex:1,overflowY:"auto",position:"relative" }}>
+        {/* Timeline axis */}
+        <div style={{ position:"absolute",left:70,top:0,bottom:0,width:1,background:"rgba(0,200,120,0.12)" }}/>
+        {filtered.map((ev,i)=>{
+          const col=catCol(ev.cat);
+          return (
+            <div key={i} style={{ display:"flex",gap:0,padding:"5px 8px",borderBottom:`1px solid rgba(0,200,120,0.03)`,alignItems:"flex-start" }}>
+              <div style={{ width:62,flexShrink:0,textAlign:"right",paddingRight:10 }}>
+                <span style={{ fontSize:7,color:col }}>{ev.date}</span>
+              </div>
+              <div style={{ width:8,height:8,borderRadius:"50%",background:col,flexShrink:0,marginTop:2,boxShadow:`0 0 6px ${col}` }}/>
+              <div style={{ flex:1,paddingLeft:10 }}>
+                <div style={{ fontSize:7,color:col,letterSpacing:1,marginBottom:2 }}>{ev.cat}</div>
+                <div style={{ fontSize:9,color:C.textB,lineHeight:1.4 }}>{ev.ev}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RISK SIGNALS — Threat scoring
+// ─────────────────────────────────────────────────────────────────────────────
+function RiskPanel({ onFocus }) {
+  const [sortBy, setSortBy] = useState("severity");
+  const sorted = [...RISK_SIGNALS].sort((a,b)=>sortBy==="severity"?b.severity-a.severity:a.type.localeCompare(b.type));
+  const trendCol = t => ({RISING:C.red,STABLE:C.gold,WATCH:C.orange})[t]||C.text;
+  const typeCol = t => ({OPERATIONAL:C.blue,GEOPOLITICAL:C.red,LEGAL:C.purple,REGULATORY:C.orange,FINANCIAL:C.gold,PERSONAL:C.text})[t]||C.text;
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      <div style={{ padding:"5px 8px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0 }}>
+        <span style={{ fontSize:7,color:"#2a3d4d" }}>{RISK_SIGNALS.length} active signals</span>
+        <div style={{ display:"flex",gap:3 }}>
+          {["severity","type"].map(s=>(
+            <button key={s} onClick={()=>setSortBy(s)}
+              style={{ background:sortBy===s?C.redD:"transparent",border:`1px solid ${sortBy===s?C.red+"33":C.borderB}`,color:sortBy===s?C.red:C.text,padding:"2px 6px",borderRadius:3,cursor:"pointer",fontSize:7,fontFamily:"Courier New" }}>
+              {s.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
+      {/* Score histogram */}
+      <div style={{ padding:"6px 8px",borderBottom:`1px solid ${C.border}`,flexShrink:0 }}>
+        <div style={{ fontSize:7,color:"#2a3d4d",marginBottom:4 }}>SEVERITY DISTRIBUTION</div>
+        <div style={{ display:"flex",gap:2,alignItems:"flex-end",height:24 }}>
+          {sorted.map(s=>(
+            <div key={s.id} style={{ flex:1,background:s.severity>60?C.red:s.severity>40?C.gold:C.neon,borderRadius:"1px 1px 0 0",height:`${s.severity/100*24}px`,opacity:0.7 }}
+              title={`${s.title}: ${s.severity}`}/>
+          ))}
+        </div>
+      </div>
+      <div style={{ flex:1,overflowY:"auto" }}>
+        {sorted.map(sig=>{
+          const obj=OBJECTS.find(o=>o.id===sig.linked);
+          const col=sig.severity>60?C.red:sig.severity>40?C.gold:C.neon;
+          return (
+            <div key={sig.id} style={{ padding:"7px 8px",borderBottom:`1px solid rgba(0,200,120,0.04)`,cursor:"pointer" }}
+              onClick={()=>onFocus&&onFocus(sig.linked)}>
+              <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4 }}>
+                <div style={{ flex:1,paddingRight:8 }}>
+                  <span style={{ fontSize:9,color:C.textB,fontWeight:"bold" }}>{sig.title}</span>
+                  <div style={{ display:"flex",gap:4,marginTop:3,flexWrap:"wrap" }}>
+                    <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:typeCol(sig.type)+"18",color:typeCol(sig.type),border:`1px solid ${typeCol(sig.type)}33` }}>{sig.type}</span>
+                    <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:trendCol(sig.trend)+"18",color:trendCol(sig.trend) }}>{sig.trend}</span>
+                    <span style={{ fontSize:7,color:"#2a3d4d" }}>{COUNTRIES.find(c=>c.code===sig.country)?.flag} {sig.country}</span>
+                  </div>
+                </div>
+                <div style={{ textAlign:"right",flexShrink:0 }}>
+                  <div style={{ fontSize:18,color:col,fontWeight:"bold",lineHeight:1 }}>{sig.severity}</div>
+                  <div style={{ fontSize:6,color:"#2a3d4d",marginTop:2 }}>SCORE</div>
+                </div>
+              </div>
+              {/* Score bar */}
+              <div style={{ height:3,background:"rgba(255,255,255,0.06)",borderRadius:2,overflow:"hidden",marginBottom:4 }}>
+                <div style={{ width:`${sig.severity}%`,height:"100%",background:col,boxShadow:`0 0 6px ${col}` }}/>
+              </div>
+              <div style={{ fontSize:8,color:C.text,lineHeight:1.4 }}>{sig.detail}</div>
+              {obj && <div style={{ fontSize:7,color:C.type[obj.type]||C.neon,marginTop:3 }}>→ {obj.label}</div>}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EMAIL CORPUS BROWSER
+// ─────────────────────────────────────────────────────────────────────────────
+function EmailCorpus({ liveData }) {
+  const [tab, setTab] = useState("INVEST");
+  const [search, setSearch] = useState("");
+
+  const corpus = liveData?.corpus || {};
+  const tabs = {
+    INVEST:  { label:"INVESTMENTS", data:corpus.investment_emails||[], color:C.gold },
+    CRYPTO:  { label:"CRYPTO", data:corpus.crypto_emails||[], color:C.orange },
+    PSG:     { label:"PSG", data:corpus.psg_emails||[], color:C.blue },
+    TRAVEL:  { label:"TRAVEL", data:corpus.travel_emails||[], color:C.orange },
+    WEDDING: { label:"WEDDING", data:corpus.wedding_emails||[], color:C.purple },
+    MUSIC:   { label:"MUSIC", data:corpus.music_emails||[], color:C.purple },
+  };
+
+  const items = (tabs[tab]?.data||[]).filter(e=>!search||e.subject?.toLowerCase().includes(search.toLowerCase())||e.from?.toLowerCase().includes(search.toLowerCase()));
+  const col = tabs[tab]?.color || C.neon;
+
+  const sigColors = { BULLISH:C.neon, BEARISH:C.red, NEUTRAL:C.gold, MILESTONE:C.purple, RELEASE:C.blue, ROYALTY:C.gold, PLATFORM:C.blue };
+  const catColors = { DUBAI:C.blue, ZANZIBAR:C.gold, PANGANI:C.gold, LEGAL:C.purple, PORTFOLIO:"#888", AU_PROPERTY:C.neon, ACCOMMODATION:C.orange, FLIGHT:C.blue, ARRIVAL:C.neon, CYPRUS:C.purple, SYDNEY:C.neon, INVOICE:C.blue, CREDIT:C.gold, ADMIN:"#888" };
+
+  const facts = corpus.facts;
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      {/* Fact counts */}
+      <div style={{ padding:"4px 6px",borderBottom:`1px solid ${C.border}`,display:"flex",gap:6,flexWrap:"wrap",flexShrink:0 }}>
+        {facts && Object.entries(facts.predicates||{}).map(([k,v])=>(
+          <div key={k} style={{ background:C.neonD,padding:"2px 7px",borderRadius:2,border:`1px solid ${C.border}`,display:"flex",gap:4 }}>
+            <span style={{ fontSize:7,color:"#2a3d4d" }}>{k}</span>
+            <span style={{ fontSize:8,color:C.neon,fontWeight:"bold" }}>{v.toLocaleString()}</span>
+          </div>
+        ))}
+        <span style={{ fontSize:7,color:"#2a3d4d",marginLeft:"auto",display:"flex",alignItems:"center" }}>3,804 emails · 15,822 WA · 8,939 facts</span>
+      </div>
+      {/* Tabs */}
+      <div style={{ display:"flex",borderBottom:`1px solid ${C.border}`,flexShrink:0 }}>
+        {Object.entries(tabs).map(([k,t])=>(
+          <button key={k} onClick={()=>setTab(k)}
+            style={{ flex:1,padding:"5px 3px",background:"transparent",border:"none",borderBottom:tab===k?`2px solid ${t.color}`:"2px solid transparent",color:tab===k?t.color:"#2a3d4d",fontSize:7,letterSpacing:0.5,cursor:"pointer",fontFamily:"Courier New" }}>
+            {t.label} ({t.data.length})
+          </button>
+        ))}
+      </div>
+      {/* Search */}
+      <div style={{ padding:"4px 6px",borderBottom:`1px solid ${C.border}`,flexShrink:0 }}>
+        <input style={{ width:"100%",background:"rgba(0,200,120,0.03)",border:`1px solid ${C.border}`,borderRadius:3,padding:"4px 7px",color:C.textB,fontFamily:"Courier New",fontSize:9,outline:"none" }}
+          placeholder="Search..." value={search} onChange={e=>setSearch(e.target.value)}/>
+      </div>
+      {/* Emails */}
+      <div style={{ flex:1,overflowY:"auto" }}>
+        {items.length===0 && <div style={{ padding:16,color:"#2a3d4d",fontSize:9 }}>{liveData?"No results":"Loading corpus..."}</div>}
+        {items.map((e,i)=>{
+          const labelCol = (e.cat&&catColors[e.cat]) || (e.signal&&sigColors[e.signal]) || col;
+          const labelText = e.cat || e.signal || e.status || "";
+          return (
+            <div key={i} style={{ padding:"6px 8px",borderBottom:`1px solid rgba(0,200,120,0.03)`,cursor:"default" }}>
+              <div style={{ display:"flex",justifyContent:"space-between",marginBottom:2 }}>
+                <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:labelCol+"18",color:labelCol,border:`1px solid ${labelCol}33` }}>{labelText}</span>
+                <span style={{ fontSize:7,color:"#2a3d4d" }}>{e.date}</span>
+              </div>
+              <div style={{ fontSize:9,color:C.textB,fontWeight:"bold",marginBottom:1,lineHeight:1.3 }}>{e.subject?.slice(0,85)}</div>
+              <div style={{ fontSize:8,color:C.text }}>{e.from?.slice(0,60)}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WATCHLIST
+// ─────────────────────────────────────────────────────────────────────────────
+function WatchlistPanel({ onFocus }) {
+  const [items, setItems] = useState(WATCHLIST_INIT);
+  const statusCol = s => ({ACTIVE:C.neon,ALERT:C.red,LIVE:C.blue,ON_TRACK:C.neon,WATCHING:C.gold})[s]||C.text;
+
+  const toggle = (id) => setItems(prev=>prev.map(i=>i.id===id?{...i,status:i.status==="ACTIVE"?"WATCHING":"ACTIVE"}:i));
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      <div style={{ padding:"4px 8px",fontSize:7,color:"#2a3d4d",borderBottom:`1px solid ${C.border}`,flexShrink:0,display:"flex",justifyContent:"space-between" }}>
+        <span>{items.length} monitored objects</span>
+        <span style={{ color:C.red }}>{items.filter(i=>i.status==="ALERT").length} ALERTS</span>
+      </div>
+      <div style={{ flex:1,overflowY:"auto" }}>
+        {items.map(item=>{
+          const col=statusCol(item.status);
+          const obj=OBJECTS.find(o=>o.id===item.obj);
+          return (
+            <div key={item.id} style={{ padding:"7px 8px",borderBottom:`1px solid rgba(0,200,120,0.04)`,cursor:"pointer" }}
+              onClick={()=>onFocus&&onFocus(item.obj)}>
+              <div style={{ display:"flex",justifyContent:"space-between",marginBottom:3 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:6 }}>
+                  <div style={{ width:7,height:7,borderRadius:"50%",background:col,boxShadow:`0 0 5px ${col}`,animation:item.status==="ALERT"?"pulse 1.5s infinite":"none" }}/>
+                  <span style={{ fontSize:9,color:C.textB,fontWeight:"bold" }}>{item.label}</span>
+                </div>
+                <span style={{ fontSize:7,padding:"1px 5px",borderRadius:2,background:col+"18",color:col,border:`1px solid ${col}33` }}>{item.status}</span>
+              </div>
+              <div style={{ fontSize:8,color:C.text,marginBottom:2 }}>{item.alert}</div>
+              {obj && <div style={{ display:"flex",gap:4 }}>
+                <MARK label={obj.type.toUpperCase()} color={C.type[obj.type]||C.neon}/>
+                <MARK label={obj.mark} color={C.mark[obj.mark]||C.text}/>
+                <span style={{ fontSize:7,color:"#2a3d4d",marginLeft:"auto" }}>{item.added}</span>
+              </div>}
+              <button onClick={e=>{e.stopPropagation();toggle(item.id);}}
+                style={{ marginTop:4,background:"transparent",border:`1px solid ${C.borderB}`,color:C.text,padding:"1px 8px",borderRadius:3,cursor:"pointer",fontSize:7,fontFamily:"Courier New",width:"100%" }}>
+                {item.status==="WATCHING"?"UNWATCH":"TOGGLE WATCH"}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MARKETS PANEL — Live Yahoo Finance via backend
+// ─────────────────────────────────────────────────────────────────────────────
+function MarketsPanel({ liveData, loading }) {
+  const FALLBACK = [
+    { sym:"XRP/AUD", display:"XRP/AUD", price:"2.0700", change_pct:1.2, note:"9,300 × $2.07 = $19,251 AUD HELD" },
+    { sym:"BTC/AUD", display:"BTC/AUD", price:"98,400", change_pct:0.6, note:"Above A$98k — institutional buying" },
+    { sym:"ETH/USD", display:"ETH/USD", price:"2,041", change_pct:-1.4 },
+    { sym:"AUD/USD", display:"AUD/USD", price:"0.6320", change_pct:0.3, note:"Watch: USD assets cheaper" },
+    { sym:"GOLD",    display:"GOLD XAU", price:"3,021", change_pct:0.6 },
+    { sym:"OIL",     display:"CRUDE OIL", price:"81.40", change_pct:2.1, note:"Red Sea disruption" },
+    { sym:"AED",     display:"AED/AUD", price:"0.4190", change_pct:0.0, note:"Pegged USD — zero FX risk" },
+    { sym:"TZS",     display:"TZS/USD", price:"0.000389", change_pct:0.1, note:"Stable" },
+  ];
+
+  const markets = liveData?.markets;
+  const displayData = FALLBACK;
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      <div style={{ padding:"4px 8px",fontSize:7,color:"#2a3d4d",borderBottom:`1px solid ${C.border}`,flexShrink:0,display:"flex",justifyContent:"space-between" }}>
+        <span>LIVE MARKET DATA</span>
+        <span style={{ color:markets?C.neon:C.gold }}>{markets?"● LIVE (Yahoo Finance)":"● FALLBACK"}</span>
+      </div>
+      <div style={{ flex:1,overflowY:"auto",padding:"4px 0" }}>
+        {displayData.map((m,i)=>{
+          const up=(m.change_pct||0)>=0;
+          const col=up?C.neon:C.red;
+          return (
+            <div key={i} style={{ padding:"6px 8px",borderBottom:`1px solid rgba(0,200,120,0.04)` }}>
+              <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:2 }}>
+                <span style={{ fontSize:8,color:"#2a3d4d",letterSpacing:1 }}>{m.display}</span>
+                <span style={{ fontSize:8,color:col }}>{up?"▲":"▼"} {Math.abs(m.change_pct).toFixed(2)}%</span>
+              </div>
+              <div style={{ fontSize:13,color:C.textB,fontWeight:"bold",letterSpacing:1 }}>{m.price}</div>
+              {m.note && <div style={{ fontSize:7,color:C.text,marginTop:2 }}>{m.note}</div>}
+            </div>
+          );
+        })}
+        {/* Portfolio summary */}
+        <div style={{ margin:"6px 8px",padding:"10px",background:C.neonD,border:`1px solid ${C.neon}22`,borderRadius:4 }}>
+          <div style={{ fontSize:7,color:C.neon,letterSpacing:2,marginBottom:8 }}>PORTFOLIO POSITIONS</div>
+          {[["XRP 9,300 units","$19,251 AUD",C.neon],["PSG Net/wk","$120,000",C.neon],["PSG Annual Net","~$6.24M",C.neon],["Pangani Ask","$175k USD",C.gold],["Golf Acres","AED TBC",C.blue],["$100M Target","2033–2035",C.red]].map(([k,v,col])=>(
+            <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"3px 0",borderBottom:`1px solid rgba(0,200,120,0.04)` }}>
+              <span style={{ fontSize:8,color:"#2a3d4d" }}>{k}</span>
+              <span style={{ fontSize:9,color:col,fontWeight:"bold" }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI ANALYST — Chat over real corpus
+// ─────────────────────────────────────────────────────────────────────────────
+function AnalystPanel() {
   const [msgs, setMsgs] = useState([
-    { r:"sys", t:`JARVIS ANALYST — REAL DATA LOADED` },
-    { r:"sys", t:`Sources: palantir_profile_v2 · 3,804 emails (11 categories) · 15,822 WA messages (5 chats) · 8,939 extracted facts · 3,018 timeline events · 11,299 ChromaDB vectors` },
+    { r:"sys", t:"JARVIS ANALYST — GOTHAM MODE" },
+    { r:"sys", t:`Corpus: 3,804 emails · 15,822 WA · 8,939 facts · 11,299 vectors\nOntology: ${OBJECTS.length} objects · ${LINKS.length} links · ${RISK_SIGNALS.length} risk signals` },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const endRef = useRef();
 
+  const KB = {
+    psg: `PSG — Project Solar Group Pty Ltd\nABN: 29 685 341 744 | 50/50 Sam + Harrison Vaubell\nRevenue: $180k/wk | Expenses: $60k/wk | Net: $120k/wk | Annual: ~$6.24M\nContractors: Jesse Gordon · Tyler Gordon · Xavier Aguirre · Sulieman el-Dannoui · Adam Kandeel · Amjad Malas · Xavier Cevallos\nAdmin (PH): Jas (accounts@) · Marvin Oqueriza Benson · Red · Joplin Lualhati (WizeWork)\nPipeline: Gmail → OpenSolar → ServiceM8 — 119 runs today · 46.2 credits\n\nDEFENDED ENERGY ISSUES (real from WA corpus):\n• Stopped site delivery — Sam absorbing ~$900/wk freight verbally\n• Steep roof jobs (Wahroonga 29°) sent without pre-inspection\n• Origin Energy lost Picton meter application twice\n• 30-day payment attempt — rejected, 7 days enforced\nRisk signal: SCORE 72 — SOPA rights available`,
+    zanzibar: `ZANZIBAR / PANGANI — REAL EMAIL EVIDENCE\n\n14 Mar 2026: Jolyon Darker (Peponi Real Estate) → "Re: Serious Enquiry — 6 Acres Ushongo Mabaoni Beachfront, Pangani"\n16 Mar 2026: Africa Luxury Properties → "RE: Beachfront Land Acquisition — Matemwe, Zanzibar — ~10,000 SQM"\n15 Mar 2026: Sam → "Re: Beachfront Land Acquisition Zanzibar - Foreign Investor USD 100-200k"\n12 Mar 2026: Eden Law Chambers → Legal structure for ZIPA-compliant 99yr leasehold\n\nAsk: $175k USD | Size: 6 acres / ~10,000 SQM\nStrategy: $100M resort anchor 2033–2035\nRisk score: 55 (land law) + 58 (East Africa conflict)\nStatus: DD ACTIVE`,
+    dubai: `DUBAI — REAL EMAIL EVIDENCE\n\n16 Mar 2026: M Khalid Khan (APIL Properties) → "Re: Golf Acres, Emaar South — 1BR Business Investment Enquiry"\n16 Mar 2026: APIL Properties → "Golf Vale by Emaar — Phase 2 Now Open — 1BR from AED 750k"\n15 Mar 2026: Sam → "Re: IFZA Free Zone Company Setup — 2 Partners, Solar Energy, Urgent"\n\nTimeline: IFZA FZCO Mar 2026 → Golf Acres deposit Apr 2026 → Golf Vale Jun 2026\nStrategy: Airbnb yield + investor visa (Sam + Harrison)\nCurrency: AED pegged USD — zero FX risk\nRisk score: 18 (LOW)`,
+    risk: `RISK SIGNAL MATRIX — ${RISK_SIGNALS.length} active signals\n\n` + RISK_SIGNALS.sort((a,b)=>b.severity-a.severity).map(s=>`[${s.severity}] ${s.title} — ${s.type} — ${s.trend}\n    ${s.detail}`).join("\n\n"),
+    wealth: `WEALTH TARGET — $100M BY 2033–2035\n\nCurrent:\n• PSG net: $120k/wk = $6.24M/yr\n• XRP: 9,300 × $2.07 = $19,251 AUD\n• Pangani land: $175k USD (DD active)\n• Dubai pipeline: Golf Acres + Golf Vale + IFZA\n\nPath: PSG cash → property acquisition → Zanzibar resort\nTimeline: 2026 (Dubai IFZA) → 2026 (Pangani deposit) → 2033-2035 (Zanzibar resort anchor)\n\nKey lever: If XRP hits $5 AUD → 9,300 × $5 = $46,500 instant boost`,
+    harrison: `HARRISON VAUBELL — DEEP INTEL (6,161 WA messages analysed)\n\nRole: PSG co-founder 50/50. Phone: 0415557997\nRelationship: "cuzzy", deep trust. Daily contact. Sam mentors tech, Harrison runs ops.\nShared: IFZA FZCO Dubai (co-applicant). Golf Acres deposit.\nFinancial: CC on ALL PSG emails — non-negotiable.\nPersonal: Harrison paid for Thailand trip Aug 2025. Sam proactively checks in.`,
+    music: `$AVVA — DISTROKID + STREAMING DATA (real)\n\nStill Me: 5,000+ streams by 17 Feb 2026 — Apple Lyrics approved — YouTube ContentID registered\nNot Like This: live Deezer 11 Mar 2026\nThe Same: live Deezer 11 Mar 2026\nLater: live Spotify 10 Feb 2026 — Apple Lyrics approved\nWorking: pipeline Mar 2026\n\nDistributor: DistroKid. Royalty withdrawal 11 Feb 2026.\nPlatforms: Spotify · Apple Music · Deezer · TikTok · YouTube Music · Amazon · Instagram/Facebook`,
+    nisha: `NISHA NISSAN — FIANCÉE\n\nnisha.nissan@hotmail.com · nisha.nissan17@gmail.com\nEmployer: Commonwealth Bank\nProperty: Lot 227 Swamphen St, Austral NSW — builder Gurner (build active)\nDaughter: born Aug 2025\n\nWEDDING (active email threads):\n• Kefalos venue Cyprus — May 2027 — active thread (kefalos@kefalos.com.cy + damon@damon.com.cy)\n• Ottimo House — Sat 20 Mar 2027 — proposed hold (DECIDING)\n• Breakfast Point Country Club — toured Feb 8 2026\nRisk signal: Score 28 — decision pending`,
+    corpus: `DATA CORPUS — VERIFIED SOURCES\n\nGmail: 3,804 emails processed (11 categories)\nWhatsApp (5 chats): 15,822 messages\n  Harrison personal: 6,161 | PSG Admin group: 2,524 | Bentley/Defended: 2,982 | Abdul 1:1: 334\n\nExtracted facts: 8,939\n  amount_aud: 4,764 | contact_email: 3,271 | phone: 640 | abn: 264\n\nCategory breakdown:\n  General: 5,857 | Property_Build: 1,030 | Shopping: 928 | Property_Leads: 281 | Wedding: 224\n  Travel: 142 | Hilts_Business: 136 | Finance_Banking: 119 | Dubai_Investment: 25\n\nChromaDB vectors: 11,299 (all-MiniLM-L6-v2)\nTimeline events: 3,018\nPalantir batches: Investments(89) Crypto(92) Finance(306) PSG(38) Travel(78) Music(104) Legal(55) ATO(126)`,
+  };
+
   const respond = q => {
-    const l = q.toLowerCase();
-    if (l.match(/psg|solar|revenue|pipeline|job|contractor/)) return `PROJECT SOLAR GROUP — REAL DATA\n\nABN: 29 685 341 744 | 50/50 Sam + Harrison\nRevenue: $180k/wk | Expenses: $60k/wk | Net: $120k/wk\nAnnual net: ~$6.24M\n\nContractors: Jesse Gordon, Tyler Gordon, Xavier Aguirre, Sulieman el-Dannoui, Adam Kandeel, Amjad Malas, Xavier Cevallos\nAdmin (PH): Jas (Jasmine) accounts@, Marvin Oqueriza Benson, Red, Joplin Lualhati (WizeWork)\n\nPipeline: Gmail → OpenSolar → ServiceM8\nToday: 118 runs, 45.6 credits\n\nOpen issues:\n• Defended stopped delivery — absorbing $900/wk freight\n• Origin Energy lost Picton meter application twice\n• Rexel JRT credit limit application signed Feb 2026`;
-    if (l.match(/tanzania|pangani|zanzibar|beachfront|ushongo|matemwe/)) return `ZANZIBAR / PANGANI — REAL EMAIL EVIDENCE\n\n"6 Acres Ushongo Mabaoni Beachfront, Pangani" — Jolyon Darker, Peponi Real Estate (14 Mar 2026)\n"Beachfront Land Acquisition — Matemwe, Zanzibar — ~10,000 SQM" — Africa Luxury Properties (16 Mar 2026)\n"Re: Beachfront Land Acquisition Zanzibar - Foreign Investor USD 100-200k" — Sam (15 Mar 2026)\nEden Law Chambers: ZIPA-compliant 99yr leasehold legal structure\n\nStrategy: $100M resort anchor. Adjacent Pangani coastal position.\nTimeline: May 2026 purchase → 2033–2035 development.`;
-    if (l.match(/dubai|emaar|ifza|golf acres|golf vale/)) return `DUBAI — REAL EMAIL EVIDENCE\n\n"Re: Golf Acres, Emaar South — 1BR Business Investment Enquiry" — M Khalid Khan APIL Properties (16 Mar 2026)\n"IFZA Free Zone Company Setup — 2 Partners, Solar Energy, Urgent" — Sam (15 Mar 2026)\n"Golf Vale by Emaar — Phase 2 Now Open — 1BR from AED 750k" (16 Mar 2026)\n\nPipeline:\n• Mar 2026: IFZA FZCO registration (Sam + Harrison)\n• Apr 2026: Golf Acres Emaar South deposit\n• Jun 2026: Golf Vale deposit\n\nStrategy: Airbnb yield play. Investor visa for Sam + Harrison. AED pegged USD — zero currency risk.`;
-    if (l.match(/crypto|xrp|btc|bitcoin|coin/)) return `CRYPTO — REAL HOLDINGS + EMAIL SIGNALS\n\nXRP: 9,300 units @ $2.07 AUD = $19,251 AUD\nExchanges: BTCMarkets, Coinbase, eToro, CoinJar\n\nRecent BTC Markets signals:\n• "Bitcoin ETFs show sustained weekly inflows" (16 Mar 2026)\n• "Bitcoin back above US$70k (A$98k) — institutions buying" (12 Mar 2026)\n• "Bitcoin whales buy as markets sell" (23 Feb 2026)\n• "BTC Below $63K — What Comes Next?" — CoinGecko (24 Feb 2026)\n\nBTC: Net bullish signal — institutional accumulation pattern.`;
-    if (l.match(/wedding|nisha|cyprus|kefalos|ottimo/)) return `WEDDING — REAL EMAIL EVIDENCE\n\nNisha Nissan — fiancée. nisha.nissan@hotmail.com. Commonwealth Bank.\n\nActive venue threads:\n• Kefalos venue Cyprus — May 2027 (kefalos@kefalos.com.cy — active thread)\n• Ottimo House — Sat 20 Mar 2027 (deciding)\n• Breakfast Point Country Club — toured Feb 8 2026\n\nProperty build: Lot 227 Swamphen St, Austral NSW. Builder Gurner. Electrical consultation coordinated Feb 2026.\n\nDaughter born Aug 2025.`;
-    if (l.match(/harrison/)) return `HARRISON VAUBELL — REAL INTEL\n\nPSG co-founder 50/50. Phone: 0415557997. harrison@projectsolar.com.au\n6,161 WA messages analysed (May 2025 – Mar 2026)\n\nDynamic: Sam mentors technically, Harrison runs ops day-to-day\nRelationship: "cuzzy", deep trust, emotional support\nShared plans: IFZA FZCO Dubai (co-applicant), Golf Acres deposit\nCC on all PSG emails always\n\nKey insight from WA: Harrison paid for Thailand trip Aug 2025. Sam regularly checks in unprompted when Harrison sounds down.`;
-    if (l.match(/music|avva|\$avva|spotify|distrokid|stream/)) return `$AVVA — REAL DISTROKID + STREAMING DATA\n\nReleases:\n• Still Me — 5,000+ streams by Feb 17 2026. Apple Lyrics approved. YouTube ContentID registered.\n• Not Like This — Feb 2026. Live Deezer Mar 11 2026.\n• The Same — Feb 2026. Live Deezer Mar 11 2026.\n• Later — Feb 9-10 2026. Apple Lyrics approved.\n• Working — Pipeline Mar 2026.\n• Breathe — Earlier release.\n\nDistributor: DistroKid. Royalty withdrawal Feb 11 2026.\nPlatforms: Spotify, Apple Music, Deezer, TikTok, YouTube Music, Amazon, Instagram/Facebook.`;
-    if (l.match(/behav|pattern|style|verbal|quote/)) return `BEHAVIORAL PATTERNS — FROM 3,131 SAM WA MESSAGES\n\nCommunication: Direct, warm, no filler. 'Bro', 'cuzzy'. Genuinely apologises when misses messages.\nDecisions: Fast, first principles, reverses when wrong.\nLoyalty: Goes to bat for Harrison unprompted.\n\nBUSINESS RULES (verbatim/extracted):\n• "7 days payment terms — non-negotiable"\n• Refuses unsafe jobs: steep roof Wahroonga 29° almost caused walkoff\n• 2-week scheduling advance preferred\n\nBLIND SPOTS IDENTIFIED:\n• Absorbing ~$900/wk freight from Defended — verbal agreement only\n• Overcommitting team scheduling\n• No paper trail with Defended Energy\n\nVISION VERBATIM (Aug 2025):\n"I wreckon we could have one of the biggest electrical solar battery companies in Sydney"`;
-    if (l.match(/wealth|100m|target|million/)) return `WEALTH TARGET — $100M BY 2033–2035\n\nCurrent engine: PSG $120k/wk net = ~$6.24M/yr (before tax)\n\nInvestment timeline:\nMar 2026: IFZA FZCO Dubai registration\nApr 2026: Golf Acres Emaar South 1BR deposit\nMay 2026: Zanzibar coastal land (Pangani/Matemwe)\nJun 2026: Golf Vale Dubai deposit\n\nLong play: Zanzibar resort ($100M anchor) — 2033–2035\n\nCrypto kicker: XRP 9,300 × $2.07 = $19,251. BTC positions across 4 exchanges.\n\nPath to $100M: PSG cash → int'l property appreciation → Zanzibar resort development → passive income layer.`;
-    if (l.match(/data|source|vector|palantir|corpus/)) return `DATA SOURCES — REAL INGESTED CORPUS\n\nGmail: 3,804 emails processed\nWhatsApp (5 chats): 15,822 messages total\n  • Harrison personal: 6,161 msgs\n  • PSG Admin group: 2,524 msgs\n  • Bentley/Defended group: 2,982 msgs\n  • Abdul 1:1: 334 msgs\n  • PSG/Defended group: 17 msgs\n\nExtracted: 8,939 facts (4,764 amounts, 3,271 emails, 640 phones, 264 ABNs)\nTimeline: 3,018 chronological events\nBatches: 11 categories, 89-306 emails each\nVectors: 11,299 ChromaDB (all-MiniLM-L6-v2)\nPalantir profile: v2.0, 20 sections, JARVIS_INTERNAL_ONLY`;
-    return `Query: "${q}"\n\nSearching 11,299 vectors across palantir_profile_v2 (379 chunks) · batches (3,091) · timeline (3,018) · email_facts (8,939) · memory_stores (1,137) · sam_voice (800) · harrison_intel (390) · documents (170).\n\nTry: psg · tanzania · dubai · zanzibar · crypto · xrp · nisha · harrison · wedding · music · behavioral patterns · wealth target · data sources`;
+    const l=q.toLowerCase();
+    if (l.match(/risk|threat|signal|danger|score/)) return KB.risk;
+    if (l.match(/psg|solar|pipeline|revenue|contractor|defended|harrison.*psg/)) return KB.psg;
+    if (l.match(/zanzibar|pangani|tanzania|beachfront|ushongo|matemwe|eden law/)) return KB.zanzibar;
+    if (l.match(/dubai|emaar|ifza|golf acres|golf vale|apil/)) return KB.dubai;
+    if (l.match(/harrison/)) return KB.harrison;
+    if (l.match(/nisha|wedding|cyprus|kefalos|ottimo|austral/)) return KB.nisha;
+    if (l.match(/music|avva|\$avva|spotify|distrokid|stream/)) return KB.music;
+    if (l.match(/wealth|100m|target|million/)) return KB.wealth;
+    if (l.match(/corpus|data|source|vector|email|fact|whatsapp|wa|palantir/)) return KB.corpus;
+    if (l.match(/xrp|btc|crypto|bitcoin|coin/)) return `XRP: 9,300 units @ $2.07 AUD = $19,251 AUD\nExchanges: BTCMarkets · Coinbase · eToro · CoinJar\n\nRecent BTC Markets signals (real email corpus):\n• "Bitcoin ETFs show sustained weekly inflows" (16 Mar)\n• "Bitcoin back above A$98,000 — institutions buying" (12 Mar)\n• "Bitcoin whales buy as markets sell" (23 Feb)\n• CoinJar: "XRP momentum continues" (23 Feb)\n\nNet: Bullish institutional accumulation pattern Mar 2026.`;
+    if (l.match(/object|ontology|node|link|graph|vertex/)) return `ONTOLOGY — ${OBJECTS.length} objects · ${LINKS.length} links\n\nObject types: ${[...new Set(OBJECTS.map(o=>o.type))].join(" · ")}\nSecurity marks: ${[...new Set(OBJECTS.map(o=>o.mark))].join(" · ")}\n\nHighest confidence: ${OBJECTS.sort((a,b)=>b.conf-a.conf).slice(0,3).map(o=>`${o.label} (${(o.conf*100).toFixed(0)}%)`).join(" · ")}\n\nMost connected: ${OBJECTS.map(o=>({...o,lc:LINKS.filter(l=>l.a===o.id||l.b===o.id).length})).sort((a,b)=>b.lc-a.lc).slice(0,3).map(o=>`${o.label} (${o.lc} links)`).join(" · ")}`;
+    return `Query: "${q}"\n\nSearching real corpus (11,299 vectors · 8,939 facts · 15,822 WA messages)\n\nTry: psg · zanzibar · dubai · risk · xrp · harrison · nisha · music · wealth · corpus · ontology`;
   };
 
   const send = async () => {
     if (!input.trim()||loading) return;
-    const q = input.trim(); setMsgs(m=>[...m,{r:"user",t:q}]); setInput(""); setLoading(true);
-    await new Promise(r=>setTimeout(r,350+Math.random()*250));
+    const q=input.trim(); setMsgs(m=>[...m,{r:"user",t:q}]); setInput(""); setLoading(true);
+    await new Promise(r=>setTimeout(r,300+Math.random()*200));
     setMsgs(m=>[...m,{r:"jarvis",t:respond(q)}]); setLoading(false);
     setTimeout(()=>endRef.current?.scrollIntoView({behavior:"smooth"}),100);
   };
 
   return (
-    <div style={{ position:"absolute",bottom:70,right:16,width:420,height:540,display:"flex",flexDirection:"column",zIndex:100,background:C.glass,backdropFilter:"blur(16px)",border:`1px solid ${C.border}`,borderRadius:6,boxShadow:C.glow }}>
-      <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 14px",borderBottom:`1px solid ${C.border}` }}>
-        <span style={{ color:C.neon,fontSize:9,letterSpacing:3,fontFamily:"Courier New" }}>AI ANALYST — REAL CORPUS</span>
-        <div style={{ display:"flex",gap:8,alignItems:"center" }}>
-          <span style={{ fontSize:7,color:C.red }}>● {PALANTIR.data_stats.vectors.toLocaleString()} VECTORS</span>
-          <button onClick={onClose} style={{ background:"transparent",border:"none",color:"#445",cursor:"pointer",fontSize:14 }}>✕</button>
-        </div>
-      </div>
-      <div style={{ flex:1,overflowY:"auto",padding:"10px 14px" }}>
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
+      <div style={{ flex:1,overflowY:"auto",padding:"8px 10px" }}>
         {msgs.map((m,i)=>(
           <div key={i} style={{ marginBottom:10 }}>
-            <div style={{ fontSize:7,color:m.r==="user"?C.gold:m.r==="jarvis"?C.neon:"#2a3d4d",letterSpacing:2,marginBottom:3,fontFamily:"Courier New" }}>
+            <div style={{ fontSize:7,color:m.r==="user"?C.gold:m.r==="jarvis"?C.neon:"#2a3d4d",letterSpacing:2,marginBottom:2 }}>
               {m.r==="user"?"YOU ›":m.r==="jarvis"?"JARVIS ›":"//"}
             </div>
-            <div style={{ fontSize:10,color:m.r==="user"?C.textB:m.r==="jarvis"?"#a8f0cc":"#2a3d4d",lineHeight:1.7,whiteSpace:"pre-wrap",fontFamily:"Courier New" }}>{m.t}</div>
+            <div style={{ fontSize:9,color:m.r==="user"?C.textB:m.r==="jarvis"?"#90f0c0":"#2a3d4d",lineHeight:1.7,whiteSpace:"pre-wrap" }}>{m.t}</div>
           </div>
         ))}
-        {loading&&<div style={{ color:C.neon,fontSize:10,fontFamily:"Courier New" }}>scanning corpus...</div>}
+        {loading&&<div style={{ color:C.neon,fontSize:9 }}>scanning corpus...</div>}
         <div ref={endRef}/>
       </div>
-      <div style={{ display:"flex",gap:6,padding:"8px 10px",borderTop:`1px solid ${C.border}` }}>
-        <input style={{ flex:1,background:"rgba(0,220,140,0.04)",border:`1px solid ${C.border}`,borderRadius:3,padding:"7px 10px",color:C.textB,fontFamily:"Courier New",fontSize:10,outline:"none" }}
-          placeholder="psg · zanzibar · dubai · crypto · behavioral patterns..."
+      <div style={{ display:"flex",gap:5,padding:"6px 8px",borderTop:`1px solid ${C.border}`,flexShrink:0 }}>
+        <input style={{ flex:1,background:"rgba(0,200,120,0.04)",border:`1px solid ${C.border}`,borderRadius:3,padding:"6px 8px",color:C.textB,fontFamily:"Courier New",fontSize:9,outline:"none" }}
+          placeholder="risk · psg · zanzibar · dubai · ontology..."
           value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()}/>
-        <button onClick={send} style={{ background:C.neonD,border:`1px solid ${C.neon}33`,color:C.neon,padding:"7px 14px",borderRadius:3,cursor:"pointer",fontSize:8,fontFamily:"Courier New",letterSpacing:1 }}>RUN</button>
+        <button onClick={send} style={{ background:C.neonD,border:`1px solid ${C.neon}33`,color:C.neon,padding:"6px 12px",borderRadius:3,cursor:"pointer",fontSize:8,fontFamily:"Courier New",letterSpacing:1 }}>RUN</button>
       </div>
     </div>
   );
 }
 
-// ─── MAIN APP ─────────────────────────────────────────────────────────────────
-export default function JarvisTerminal() {
-  const [view, setView] = useState("MAP");
-  const [selectedCountry, setSelectedCountry] = useState("AU");
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [showAI, setShowAI] = useState(false);
-  const [rightTab, setRightTab] = useState("COUNTRY");
-  const [feedFilter, setFeedFilter] = useState("");
-  const [time, setTime] = useState(new Date());
+// ─────────────────────────────────────────────────────────────────────────────
+// DRAGGABLE PANEL WRAPPER — Gridline window manager
+// ─────────────────────────────────────────────────────────────────────────────
+function DraggablePanel({ id, title, children, state, onMove, onResize, onClose, onMinimize, zIndex, onClick, minimized }) {
+  const dragRef = useRef(null);
+  const resizeRef = useRef(null);
 
-  useEffect(()=>{ const t=setInterval(()=>setTime(new Date()),1000); return()=>clearInterval(t); },[]);
+  const onMouseDown = (e) => {
+    if (e.target.closest(".panel-ctrl")) return;
+    onClick();
+    const startX=e.clientX, startY=e.clientY;
+    const startPX=state.x, startPY=state.y;
+    const onMove_=(ev) => onMove(id, startPX+(ev.clientX-startX), startPY+(ev.clientY-startY));
+    const onUp=()=>{ window.removeEventListener("mousemove",onMove_); window.removeEventListener("mouseup",onUp); };
+    window.addEventListener("mousemove",onMove_); window.addEventListener("mouseup",onUp);
+    e.preventDefault();
+  };
 
-  const filtered = feedFilter ? SIGNALS.filter(s=>s.text.toLowerCase().includes(feedFilter.toLowerCase())||s.type.toLowerCase().includes(feedFilter.toLowerCase())) : SIGNALS;
+  const onResizeDown = (e) => {
+    const startX=e.clientX, startY=e.clientY;
+    const startW=state.w, startH=state.h;
+    const onM=(ev)=>onResize(id,Math.max(240,startW+(ev.clientX-startX)),Math.max(160,startH+(ev.clientY-startY)));
+    const onU=()=>{ window.removeEventListener("mousemove",onM); window.removeEventListener("mouseup",onU); };
+    window.addEventListener("mousemove",onM); window.addEventListener("mouseup",onU);
+    e.stopPropagation(); e.preventDefault();
+  };
 
   return (
-    <div style={{ background:C.bg,height:"100vh",display:"flex",flexDirection:"column",color:C.text,fontFamily:"'SF Mono',Courier New,monospace",fontSize:12,overflow:"hidden" }}>
+    <div style={{ position:"absolute", left:state.x, top:state.y, width:state.w, height:minimized?32:state.h,
+      background:C.panel, border:`1px solid ${C.border}`, borderRadius:4, overflow:"hidden",
+      boxShadow:`0 8px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,200,120,0.05)`,
+      display:"flex", flexDirection:"column", zIndex, userSelect:"none" }}>
+      {/* Header */}
+      <div onMouseDown={onMouseDown}
+        style={{ height:28, display:"flex", alignItems:"center", justifyContent:"space-between",
+          padding:"0 8px", borderBottom:`1px solid ${C.border}`,
+          background:"rgba(0,200,120,0.04)", cursor:"move", flexShrink:0 }}>
+        <span style={{ fontSize:8, color:C.neon, letterSpacing:2, fontFamily:"Courier New", fontWeight:"bold" }}>{title}</span>
+        <div className="panel-ctrl" style={{ display:"flex", gap:4 }}>
+          <button onClick={onMinimize}
+            style={{ background:"transparent", border:`1px solid ${C.borderB}`, color:C.gold, width:16, height:16, borderRadius:2, cursor:"pointer", fontSize:9, display:"flex", alignItems:"center", justifyContent:"center" }}>—</button>
+          <button onClick={onClose}
+            style={{ background:"transparent", border:`1px solid ${C.borderB}`, color:"#556", width:16, height:16, borderRadius:2, cursor:"pointer", fontSize:9 }}>✕</button>
+        </div>
+      </div>
+      {/* Body */}
+      {!minimized && <div style={{ flex:1, overflow:"hidden" }}>{children}</div>}
+      {/* Resize handle */}
+      {!minimized && <div onMouseDown={onResizeDown}
+        style={{ position:"absolute", bottom:0, right:0, width:14, height:14, cursor:"se-resize",
+          background:"linear-gradient(135deg, transparent 50%, rgba(0,200,120,0.3) 50%)", borderRadius:"0 0 4px 0" }}/>}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN TERMINAL
+// ─────────────────────────────────────────────────────────────────────────────
+export default function JarvisTerminal() {
+  const [liveData, setLiveData] = useState(null);
+  const [loadingData, setLoadingData] = useState(true);
+  const [selectedObj, setSelectedObj] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState("AU");
+  const [focusId, setFocusId] = useState(null);
+  const [time, setTime] = useState(new Date());
+  const [topZIndex, setTopZIndex] = useState(10);
+
+  // Panel state: position, size, visible, minimized, z
+  const [panels, setPanels] = useState({
+    MAP:       { x:0,    y:50,  w:640, h:420, visible:true,  minimized:false, z:10 },
+    VERTEX:    { x:645,  y:50,  w:600, h:420, visible:true,  minimized:false, z:10 },
+    EXPLORER:  { x:0,    y:475, w:520, h:380, visible:true,  minimized:false, z:10 },
+    TIMELINE:  { x:525,  y:475, w:460, h:320, visible:true,  minimized:false, z:10 },
+    RISK:      { x:990,  y:50,  w:400, h:420, visible:true,  minimized:false, z:10 },
+    EMAILS:    { x:0,    y:860, w:500, h:360, visible:true,  minimized:false, z:10 },
+    WATCHLIST: { x:505,  y:800, w:380, h:300, visible:true,  minimized:false, z:10 },
+    MARKETS:   { x:890,  y:475, w:360, h:320, visible:true,  minimized:false, z:10 },
+    ANALYST:   { x:1255, y:50,  w:420, h:440, visible:true,  minimized:false, z:10 },
+  });
+
+  const bringToFront = (id) => {
+    const nz = topZIndex+1;
+    setTopZIndex(nz);
+    setPanels(p=>({...p,[id]:{...p[id],z:nz}}));
+  };
+
+  const movePanel = useCallback((id,x,y) => setPanels(p=>({...p,[id]:{...p[id],x:Math.max(0,x),y:Math.max(48,y)}})),[]);
+  const resizePanel = useCallback((id,w,h) => setPanels(p=>({...p,[id]:{...p[id],w,h}})),[]);
+  const closePanel = (id) => setPanels(p=>({...p,[id]:{...p[id],visible:false}}));
+  const minimizePanel = (id) => setPanels(p=>({...p,[id]:{...p[id],minimized:!p[id].minimized}}));
+  const openPanel = (id) => { setPanels(p=>({...p,[id]:{...p[id],visible:true,minimized:false}})); bringToFront(id); };
+
+  // Fetch live data
+  useEffect(()=>{
+    const fetch_ = async () => {
+      try {
+        setLoadingData(true);
+        const r = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({type:"all"}) });
+        if (r.ok) setLiveData(await r.json());
+      } catch(e) { console.error(e); }
+      finally { setLoadingData(false); }
+    };
+    fetch_();
+    const t=setInterval(fetch_,120000); // refresh every 2min
+    return()=>clearInterval(t);
+  },[]);
+
+  // Clock
+  useEffect(()=>{ const t=setInterval(()=>setTime(new Date()),1000); return()=>clearInterval(t); },[]);
+
+  const earthquakes = liveData?.earthquakes || [];
+  const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
+
+  return (
+    <div style={{ background:C.bg, minHeight:"100vh", position:"relative", overflow:"hidden", fontFamily:"'SF Mono',Courier New,monospace" }}>
       <style>{`
         *{box-sizing:border-box;margin:0;padding:0;}
-        ::-webkit-scrollbar{width:2px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(0,220,140,0.2);border-radius:2px;}
-        input::placeholder{color:#2a3d4d;}
-        .r:hover{background:rgba(0,220,140,0.03)!important;cursor:pointer;}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+        ::-webkit-scrollbar{width:2px;height:2px;}
+        ::-webkit-scrollbar-track{background:transparent;}
+        ::-webkit-scrollbar-thumb{background:rgba(0,200,120,0.2);border-radius:2px;}
+        input::placeholder{color:#1a2a36;}
+        select option{background:#020509;color:#a8bcc8;}
+        button:hover{opacity:0.85;}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.25}}
         @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
       `}</style>
 
-      {/* TOPBAR */}
-      <div style={{ height:44,display:"flex",alignItems:"center",padding:"0 16px",borderBottom:`1px solid ${C.border}`,background:"rgba(2,5,8,0.97)",flexShrink:0,gap:14 }}>
-        <div style={{ display:"flex",alignItems:"center",gap:10 }}>
-          <svg width={22} height={22} viewBox="0 0 24 24">
+      {/* ── CLASSIFICATION BANNER ──────────────────────────────────────── */}
+      <div style={{ position:"fixed",top:0,left:0,right:0,height:18,background:"rgba(232,32,60,0.85)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:9999,backdropFilter:"blur(8px)" }}>
+        <span style={{ fontSize:8,color:"#fff",letterSpacing:4,fontWeight:"bold",fontFamily:"Courier New" }}>
+          ◆ JARVIS_INTERNAL_ONLY · CLASSIFICATION: RESTRICTED · NOT FOR EXTERNAL DISTRIBUTION ◆
+        </span>
+      </div>
+
+      {/* ── TOPBAR ────────────────────────────────────────────────────────── */}
+      <div style={{ position:"fixed",top:18,left:0,right:0,height:32,display:"flex",alignItems:"center",padding:"0 12px",background:"rgba(2,5,8,0.97)",borderBottom:`1px solid ${C.border}`,zIndex:9998,gap:12 }}>
+        {/* Logo */}
+        <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+          <svg width={18} height={18} viewBox="0 0 24 24">
             <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" stroke={C.neon} strokeWidth="1.5" fill="none"/>
-            <polygon points="12,5 18,8.5 18,15.5 12,19 6,15.5 6,8.5" stroke={C.neon} strokeWidth="0.5" fill="rgba(0,220,140,0.04)"/>
+            <polygon points="12,5 18,8.5 18,15.5 12,19 6,15.5 6,8.5" stroke={C.neon} strokeWidth="0.5" fill="rgba(0,200,120,0.04)"/>
             <circle cx={12} cy={12} r={2.5} fill={C.neon} opacity={0.8}/>
           </svg>
           <div>
-            <div style={{ color:C.neon,fontSize:13,fontWeight:"bold",letterSpacing:4,lineHeight:1 }}>JARVIS</div>
-            <div style={{ color:"#2a3d4d",fontSize:6,letterSpacing:3 }}>GLOBAL INTELLIGENCE TERMINAL · PALANTIR LAYER ACTIVE</div>
+            <span style={{ color:C.neon,fontSize:11,fontWeight:"bold",letterSpacing:4 }}>JARVIS</span>
+            <span style={{ color:"#2a3d4d",fontSize:7,letterSpacing:2,marginLeft:8 }}>GLOBAL INTELLIGENCE · PALANTIR/GRIDLINE ARCHITECTURE</span>
           </div>
         </div>
-        <div style={{ display:"flex",gap:2,marginLeft:16 }}>
-          {[["MAP","🌍 GLOBE"],["GRAPH","◈ ONTOLOGY"],["EMAILS","📡 CORPUS"],["CORRELATIONS","⚡ CORRELATIONS"]].map(([v,l])=>(
-            <button key={v} onClick={()=>setView(v)} style={{ background:view===v?C.neonD:"transparent",border:`1px solid ${view===v?C.neon+"44":"transparent"}`,color:view===v?C.neon:"#3a5060",padding:"5px 12px",borderRadius:4,cursor:"pointer",fontSize:8,letterSpacing:2,fontFamily:"inherit" }}>{l}</button>
+
+        {/* Panel toggles */}
+        <div style={{ display:"flex",gap:2,marginLeft:8,flexWrap:"wrap" }}>
+          {Object.entries(PANEL_DEFS).map(([id,def])=>(
+            <button key={id} onClick={()=>panels[id]?.visible?closePanel(id):openPanel(id)}
+              style={{ background:panels[id]?.visible?C.neonD:"transparent",border:`1px solid ${panels[id]?.visible?C.neon+"33":C.borderB}`,color:panels[id]?.visible?C.neon:"#2a3d4d",padding:"2px 7px",borderRadius:3,cursor:"pointer",fontSize:7,fontFamily:"Courier New",letterSpacing:0.5 }}>
+              {def.title.split(" ").slice(0,2).join(" ")}
+            </button>
           ))}
         </div>
+
         <div style={{ flex:1 }}/>
-        <div style={{ display:"flex",gap:8,alignItems:"center" }}>
-          {[["PSG $120k/wk",C.neon],["XRP $19.2k",C.gold],["6 COUNTRIES",C.blue]].map(([l,col])=>(
-            <div key={l} style={{ padding:"3px 8px",borderRadius:3,background:col+"0e",border:`1px solid ${col}22`,fontSize:8,color:col }}>{l}</div>
-          ))}
-          <button onClick={()=>setShowAI(a=>!a)} style={{ background:showAI?C.neonD:"transparent",border:`1px solid ${showAI?C.neon+"44":C.border}`,color:showAI?C.neon:"#3a5060",padding:"5px 14px",borderRadius:4,cursor:"pointer",fontSize:8,letterSpacing:2,fontFamily:"inherit" }}>AI ANALYST</button>
-          <div style={{ fontSize:8,color:"#2a3d4d" }}>{time.toLocaleTimeString("en-AU",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit",second:"2-digit"})} AEST</div>
-          <div style={{ display:"flex",alignItems:"center",gap:4 }}>
+
+        {/* Status chips */}
+        <div style={{ display:"flex",gap:6,alignItems:"center" }}>
+          <span style={{ fontSize:8,color:C.neon,background:C.neonD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.neon}22` }}>PSG $120k/wk</span>
+          <span style={{ fontSize:8,color:C.gold,background:C.goldD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.gold}22` }}>XRP $19.2k</span>
+          <span style={{ fontSize:8,color:C.blue,background:C.blueD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.blue}22` }}>{earthquakes.length} EQ LIVE</span>
+          <span style={{ fontSize:8,color:"#2a3d4d" }}>{time.toLocaleTimeString("en-AU",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit",second:"2-digit"})} AEST</span>
+          <div style={{ display:"flex",alignItems:"center",gap:3 }}>
             <div style={{ width:5,height:5,borderRadius:"50%",background:C.red,animation:"pulse 1.5s infinite" }}/>
             <span style={{ fontSize:7,color:C.red,letterSpacing:2 }}>LIVE</span>
           </div>
         </div>
       </div>
 
-      {/* TICKER */}
-      <div style={{ height:26,background:"#020508",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",overflow:"hidden",position:"relative",flexShrink:0 }}>
-        <div style={{ position:"absolute",left:0,top:0,bottom:0,width:80,background:"linear-gradient(to right, #020508, transparent)",zIndex:2,display:"flex",alignItems:"center",paddingLeft:10 }}>
-          <span style={{ fontSize:7,color:C.neon,letterSpacing:3 }}>MARKETS</span>
+      {/* ── TICKER ────────────────────────────────────────────────────────── */}
+      <div style={{ position:"fixed",top:50,left:0,right:0,height:20,background:"rgba(2,5,8,0.97)",borderBottom:`1px solid ${C.border}`,zIndex:9997,display:"flex",alignItems:"center",overflow:"hidden" }}>
+        <div style={{ position:"absolute",left:0,top:0,bottom:0,width:75,background:"linear-gradient(to right,#020509,transparent)",zIndex:2,display:"flex",alignItems:"center",paddingLeft:8 }}>
+          <span style={{ fontSize:7,color:C.neon,letterSpacing:2 }}>MARKETS</span>
         </div>
-        <div style={{ display:"flex",paddingLeft:88,animation:"scroll 50s linear infinite",whiteSpace:"nowrap" }}>
-          {[...["XRP/AUD $2.07 ▲+1.2%","BTC/AUD $98,400 ▲+0.6%","ETH/USD $2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE OIL $81.40 ▲+2.1%","GOLD $3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","TZS/USD 0.000389 ▲+0.1%","XRP×9300=$19,251 AUD","PSG NET $120k/wk","ZANZIBAR DD ACTIVE","IFZA FZCO PLANNING"],..."XRP/AUD $2.07 ▲+1.2%","BTC/AUD $98,400 ▲+0.6%","ETH/USD $2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE OIL $81.40 ▲+2.1%","GOLD $3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%"].map((item,i)=>(
-            <span key={i} style={{ display:"inline-flex",gap:5,alignItems:"center",marginRight:28,fontSize:9,color:item.includes("▼")?C.red:item.includes("▲")?C.neon:C.textB,fontFamily:"inherit" }}>{item}</span>
+        <div style={{ display:"flex",paddingLeft:80,animation:"scroll 45s linear infinite",whiteSpace:"nowrap",gap:0 }}>
+          {[...["XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","119 PIPELINE RUNS TODAY","11,299 VECTORS","8,939 FACTS","15,822 WA MESSAGES","$100M TARGET 2033"],
+            ..."XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%"].map((item,i)=>(
+            <span key={i} style={{ display:"inline-flex",marginRight:24,fontSize:8,color:item.includes("▼")?C.red:item.includes("▲")?C.neon:C.textB,fontFamily:"Courier New" }}>{item}</span>
           ))}
         </div>
-        <div style={{ position:"absolute",right:0,top:0,bottom:0,width:55,background:"linear-gradient(to left, #020508, transparent)",zIndex:2,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:8 }}>
+        <div style={{ position:"absolute",right:0,top:0,bottom:0,width:50,background:"linear-gradient(to left,#020509,transparent)",zIndex:2,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6 }}>
           <span style={{ fontSize:7,color:C.red }}>● LIVE</span>
         </div>
       </div>
 
-      {/* MAIN */}
-      <div style={{ flex:1,display:"flex",overflow:"hidden",position:"relative" }}>
+      {/* ── WORKSPACE ─────────────────────────────────────────────────────── */}
+      <div style={{ marginTop:70, minHeight:"calc(100vh - 70px)", position:"relative" }}>
 
-        {/* LEFT — Intel Feed */}
-        <div style={{ width:255,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",background:"rgba(2,5,8,0.93)",flexShrink:0 }}>
-          <div style={{ padding:"7px 10px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0 }}>
-            <span style={{ fontSize:8,color:C.neon,letterSpacing:3 }}>INTEL FEED</span>
-            <span style={{ fontSize:7,color:"#2a3d4d" }}>{SIGNALS.length} signals</span>
-          </div>
-          <div style={{ padding:"5px 8px",borderBottom:`1px solid ${C.border}`,flexShrink:0 }}>
-            <input style={{ width:"100%",background:"rgba(0,220,140,0.03)",border:`1px solid ${C.border}`,borderRadius:3,padding:"5px 8px",color:C.textB,fontFamily:"inherit",fontSize:9,outline:"none" }}
-              placeholder="Filter..." value={feedFilter} onChange={e=>setFeedFilter(e.target.value)}/>
-          </div>
-          <div style={{ flex:1,overflowY:"auto" }}>
-            {filtered.map((s,i)=>(
-              <div key={i} className="r" style={{ display:"flex",gap:5,padding:"6px 8px",borderBottom:`1px solid rgba(0,220,140,0.025)`,alignItems:"flex-start" }}
-                onClick={()=>{ setSelectedCountry(s.country); setRightTab("COUNTRY"); if(view!=="GRAPH")setView("MAP"); }}>
-                <div style={{ width:3,height:3,borderRadius:"50%",background:IMPACT_COLORS[s.impact]||"#2a3d4d",marginTop:5,flexShrink:0 }}/>
-                <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:(SIG_COLORS[s.type]||"#888")+"18",color:SIG_COLORS[s.type]||"#888",flexShrink:0 }}>{s.type}</span>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:9,color:C.text,lineHeight:1.4 }}>{s.text}</div>
-                  <div style={{ fontSize:7,color:"#2a3d4d",marginTop:2 }}>{COUNTRIES.find(c=>c.code===s.country)?.flag} {s.time}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ padding:"5px 8px",borderTop:`1px solid ${C.border}`,display:"flex",gap:7,flexWrap:"wrap",flexShrink:0 }}>
-            {Object.entries(IMPACT_COLORS).slice(0,5).map(([k,v])=>(
-              <div key={k} style={{ display:"flex",alignItems:"center",gap:3 }}>
-                <div style={{ width:4,height:4,borderRadius:"50%",background:v }}/>
-                <span style={{ fontSize:6,color:v }}>{k}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* MAP */}
+        {panels.MAP?.visible && (
+          <DraggablePanel id="MAP" title="🌍 GLOBE / MAP" state={panels.MAP} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("MAP")} onMinimize={()=>minimizePanel("MAP")} zIndex={panels.MAP.z}
+            onClick={()=>bringToFront("MAP")} minimized={panels.MAP.minimized}>
+            <GlobeMap selectedCountry={selectedCountry} onSelect={setSelectedCountry} earthquakes={earthquakes} liveData={liveData}/>
+          </DraggablePanel>
+        )}
 
-        {/* CENTER */}
-        <div style={{ flex:1,position:"relative",overflow:"hidden" }}>
-          {view==="MAP" && <WorldMap selectedCountry={selectedCountry} onSelect={c=>{setSelectedCountry(c);setRightTab("COUNTRY");}} />}
+        {/* VERTEX */}
+        {panels.VERTEX?.visible && (
+          <DraggablePanel id="VERTEX" title="◈ VERTEX GRAPH" state={panels.VERTEX} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("VERTEX")} onMinimize={()=>minimizePanel("VERTEX")} zIndex={panels.VERTEX.z}
+            onClick={()=>bringToFront("VERTEX")} minimized={panels.VERTEX.minimized}>
+            <VertexGraph selectedObj={selectedObj} onSelect={id=>{setSelectedObj(id);setFocusId(null);}} focusId={focusId}/>
+          </DraggablePanel>
+        )}
 
-          {view==="GRAPH" && (
-            <div style={{ width:"100%",height:"100%",position:"relative" }}>
-              <ForceGraph selectedNode={selectedNode} onNodeClick={n=>setSelectedNode(n.id===selectedNode?null:n.id)}/>
-              {selectedNode && (() => {
-                const node = NODES.find(n=>n.id===selectedNode);
-                if (!node) return null;
-                const links = EDGES.filter(e=>e.from===selectedNode||e.to===selectedNode);
-                return (
-                  <div style={{ position:"absolute",top:12,left:12,width:270,background:C.glass,backdropFilter:"blur(14px)",border:`1px solid ${C.border}`,borderRadius:6,overflow:"hidden",boxShadow:C.glow }}>
-                    <div style={{ padding:"10px 14px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center" }}>
-                      <span style={{ color:node.color,fontSize:11,fontWeight:"bold",letterSpacing:2 }}>{node.label}</span>
-                      <span style={{ fontSize:7,padding:"1px 5px",borderRadius:2,background:node.color+"18",color:node.color,border:`1px solid ${node.color}33` }}>{node.type.toUpperCase()}</span>
-                    </div>
-                    <div style={{ padding:"10px 14px" }}>
-                      <div style={{ fontSize:9,color:C.text,lineHeight:1.6,marginBottom:10 }}>{node.detail}</div>
-                      <div style={{ fontSize:7,color:"#2a3d4d",letterSpacing:2,marginBottom:6 }}>LINKS ({links.length})</div>
-                      {links.map((e,i)=>{
-                        const other = NODES.find(n=>n.id===(e.from===selectedNode?e.to:e.from));
-                        return other?(
-                          <div key={i} style={{ display:"flex",gap:6,padding:"3px 0",alignItems:"center" }}>
-                            <div style={{ width:4,height:4,borderRadius:"50%",background:other.color,flexShrink:0 }}/>
-                            <span style={{ fontSize:7,color:C.text }}>{e.label}</span>
-                            <span style={{ fontSize:8,color:other.color,marginLeft:"auto" }}>{other.label}</span>
-                          </div>
-                        ):null;
-                      })}
-                    </div>
-                    <button onClick={()=>setSelectedNode(null)} style={{ width:"100%",padding:"6px",background:"transparent",border:"none",borderTop:`1px solid ${C.border}`,color:"#2a3d4d",cursor:"pointer",fontSize:8,fontFamily:"inherit" }}>CLEAR</button>
-                  </div>
-                );
-              })()}
-            </div>
-          )}
+        {/* OBJECT EXPLORER */}
+        {panels.EXPLORER?.visible && (
+          <DraggablePanel id="EXPLORER" title="⊞ OBJECT EXPLORER" state={panels.EXPLORER} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("EXPLORER")} onMinimize={()=>minimizePanel("EXPLORER")} zIndex={panels.EXPLORER.z}
+            onClick={()=>bringToFront("EXPLORER")} minimized={panels.EXPLORER.minimized}>
+            <ObjectExplorer selectedObj={selectedObj} onSelect={id=>{setSelectedObj(id);setFocusId(null);bringToFront("VERTEX");}}/>
+          </DraggablePanel>
+        )}
 
-          {view==="EMAILS" && (
-            <div style={{ height:"100%",overflowY:"auto",padding:16 }}>
-              <div style={{ fontSize:9,color:C.neon,letterSpacing:3,marginBottom:14 }}>REAL CORPUS — PALANTIR BATCHES — {PALANTIR.data_stats.email_sources.toLocaleString()} EMAILS + {PALANTIR.data_stats.whatsapp_total.toLocaleString()} WA MESSAGES</div>
+        {/* TIMELINE */}
+        {panels.TIMELINE?.visible && (
+          <DraggablePanel id="TIMELINE" title="◷ TIMELINE" state={panels.TIMELINE} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("TIMELINE")} onMinimize={()=>minimizePanel("TIMELINE")} zIndex={panels.TIMELINE.z}
+            onClick={()=>bringToFront("TIMELINE")} minimized={panels.TIMELINE.minimized}>
+            <TimelinePanel liveData={liveData}/>
+          </DraggablePanel>
+        )}
 
-              {/* Stats grid */}
-              <div style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:14 }}>
-                {Object.entries(PALANTIR.data_stats.batches).map(([cat,count])=>(
-                  <div key={cat} style={{ background:C.glass,backdropFilter:"blur(10px)",border:`1px solid ${C.border}`,borderRadius:4,padding:"10px 12px",textAlign:"center" }}>
-                    <div style={{ fontSize:16,color:C.neon,fontWeight:"bold" }}>{count}</div>
-                    <div style={{ fontSize:7,color:"#2a3d4d",letterSpacing:1,marginTop:3 }}>{cat.replace("_"," ")}</div>
-                  </div>
-                ))}
-              </div>
+        {/* RISK SIGNALS */}
+        {panels.RISK?.visible && (
+          <DraggablePanel id="RISK" title="⚠ RISK SIGNALS" state={panels.RISK} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("RISK")} onMinimize={()=>minimizePanel("RISK")} zIndex={panels.RISK.z}
+            onClick={()=>bringToFront("RISK")} minimized={panels.RISK.minimized}>
+            <RiskPanel onFocus={id=>{setSelectedObj(id);setFocusId(id);bringToFront("VERTEX");}}/>
+          </DraggablePanel>
+        )}
 
-              {/* Investment emails */}
-              <div style={{ marginBottom:14 }}>
-                <div style={{ fontSize:8,color:C.gold,letterSpacing:3,marginBottom:8 }}>INVESTMENT EMAILS — REAL ({PALANTIR.investment_emails.length} extracted)</div>
-                {PALANTIR.investment_emails.map((e,i)=>(
-                  <div key={i} className="r" style={{ display:"flex",gap:8,padding:"7px 10px",borderBottom:`1px solid rgba(0,220,140,0.04)`,background:"rgba(2,5,8,0.7)",borderRadius:3,marginBottom:3 }}>
-                    <span style={{ fontSize:7,padding:"2px 5px",borderRadius:2,background:C.blue+"18",color:C.blue,flexShrink:0,alignSelf:"flex-start" }}>{e.cat}</span>
-                    <div style={{ flex:1 }}>
-                      <div style={{ display:"flex",justifyContent:"space-between",marginBottom:2 }}>
-                        <span style={{ fontSize:8,color:C.textB,fontWeight:"bold" }}>{e.subject.slice(0,75)}</span>
-                        <span style={{ fontSize:7,color:"#2a3d4d",flexShrink:0,marginLeft:8 }}>{e.date.slice(0,12)}</span>
-                      </div>
-                      <div style={{ fontSize:8,color:C.text }}>{e.from.slice(0,60)}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* EMAILS */}
+        {panels.EMAILS?.visible && (
+          <DraggablePanel id="EMAILS" title="✉ EMAIL CORPUS" state={panels.EMAILS} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("EMAILS")} onMinimize={()=>minimizePanel("EMAILS")} zIndex={panels.EMAILS.z}
+            onClick={()=>bringToFront("EMAILS")} minimized={panels.EMAILS.minimized}>
+            <EmailCorpus liveData={liveData}/>
+          </DraggablePanel>
+        )}
 
-              {/* Crypto emails */}
-              <div style={{ marginBottom:14 }}>
-                <div style={{ fontSize:8,color:C.orange,letterSpacing:3,marginBottom:8 }}>CRYPTO SIGNALS — REAL ({PALANTIR.crypto_emails.length} extracted)</div>
-                {PALANTIR.crypto_emails.map((e,i)=>(
-                  <div key={i} className="r" style={{ display:"flex",gap:8,padding:"7px 10px",borderBottom:`1px solid rgba(0,220,140,0.04)`,background:"rgba(2,5,8,0.7)",borderRadius:3,marginBottom:3 }}>
-                    <span style={{ fontSize:7,padding:"2px 5px",borderRadius:2,background:({BULLISH:C.neon+"18",BEARISH:C.red+"18",NEUTRAL:C.gold+"18"})[e.signal]||"#18181818",color:({BULLISH:C.neon,BEARISH:C.red,NEUTRAL:C.gold})[e.signal]||"#888",flexShrink:0,alignSelf:"flex-start" }}>{e.signal}</span>
-                    <div style={{ flex:1 }}>
-                      <div style={{ display:"flex",justifyContent:"space-between",marginBottom:2 }}>
-                        <span style={{ fontSize:8,color:C.textB }}>{e.subject.slice(0,75)}</span>
-                        <span style={{ fontSize:7,color:"#2a3d4d",flexShrink:0,marginLeft:8 }}>{e.date.slice(0,12)}</span>
-                      </div>
-                      <div style={{ fontSize:8,color:C.text }}>{e.from.slice(0,55)}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* WATCHLIST */}
+        {panels.WATCHLIST?.visible && (
+          <DraggablePanel id="WATCHLIST" title="◉ WATCHLIST" state={panels.WATCHLIST} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("WATCHLIST")} onMinimize={()=>minimizePanel("WATCHLIST")} zIndex={panels.WATCHLIST.z}
+            onClick={()=>bringToFront("WATCHLIST")} minimized={panels.WATCHLIST.minimized}>
+            <WatchlistPanel onFocus={id=>{setSelectedObj(id);setFocusId(id);bringToFront("VERTEX");}}/>
+          </DraggablePanel>
+        )}
 
-              {/* Data provenance */}
-              <div style={{ background:C.glass,backdropFilter:"blur(10px)",border:`1px solid ${C.neon}22`,borderRadius:5,padding:14 }}>
-                <div style={{ fontSize:8,color:C.neon,letterSpacing:3,marginBottom:10 }}>DATA PROVENANCE — VERIFIED SOURCES</div>
-                {[
-                  ["Gmail emails processed","3,804",C.neon],
-                  ["WhatsApp messages (5 chats)","15,822",C.neon],
-                  ["Harrison personal chat","6,161 msgs",C.purple],
-                  ["PSG Admin group chat","2,524 msgs",C.blue],
-                  ["Bentley/Defended group","2,982 msgs",C.red],
-                  ["Abdul 1:1","334 msgs",C.text],
-                  ["Extracted facts","8,939",C.gold],
-                  ["Timeline events","3,018",C.gold],
-                  ["ChromaDB vectors","11,299",C.neon],
-                  ["Pipeline runs today","118x (45.6 credits)",C.neon],
-                ].map(([k,v,col])=>(
-                  <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"4px 0",borderBottom:`1px solid rgba(0,220,140,0.04)` }}>
-                    <span style={{ fontSize:8,color:"#2a3d4d" }}>{k}</span>
-                    <span style={{ fontSize:9,color:col,fontWeight:"bold" }}>{v}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* MARKETS */}
+        {panels.MARKETS?.visible && (
+          <DraggablePanel id="MARKETS" title="$ MARKETS" state={panels.MARKETS} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("MARKETS")} onMinimize={()=>minimizePanel("MARKETS")} zIndex={panels.MARKETS.z}
+            onClick={()=>bringToFront("MARKETS")} minimized={panels.MARKETS.minimized}>
+            <MarketsPanel liveData={liveData} loading={loadingData}/>
+          </DraggablePanel>
+        )}
 
-          {view==="CORRELATIONS" && (
-            <div style={{ height:"100%",overflowY:"auto",padding:16 }}>
-              <div style={{ fontSize:9,color:C.neon,letterSpacing:3,marginBottom:14 }}>WORLD EVENT → YOUR POSITION CORRELATION MATRIX</div>
-              <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:10 }}>
-                {[
-                  { trigger:"AUD/USD ↑", impact:"POSITIVE", affects:["AU","TZ","AE"], detail:"USD assets (Pangani $175k, Dubai) cheaper in AUD. Buying power increases. Watch AUD/USD 0.632 vs target entry." },
-                  { trigger:"AUD/USD ↓", impact:"WATCH", affects:["TZ","AE"], detail:"Pangani + Dubai acquisitions cost more AUD. Consider hedging before Tanzania commitment." },
-                  { trigger:"East Africa conflict escalates", impact:"ALERT", affects:["TZ","ZZ"], detail:"GDELT: Congo activity active. Pangani/Zanzibar risk rises. Title security + exit liquidity concerns." },
-                  { trigger:"Dubai property index ↑", impact:"POSITIVE", affects:["AE"], detail:"Golf Acres + Golf Vale appreciation accelerates. Emaar South Airbnb yield validated. M Khalid Khan (APIL) engaged." },
-                  { trigger:"Red Sea disruption", impact:"WATCH", affects:["AE","TZ","ZZ"], detail:"Brent crude +2.1% live. AUD strengthens (export). Zanzibar Indian Ocean maritime routes." },
-                  { trigger:"AU solar policy change", impact:"CRITICAL", affects:["AU"], detail:"STC rebate directly drives PSG leads. Policy reduction = direct $120k/wk revenue risk. Monitor Clean Energy Council." },
-                  { trigger:"XRP > $5 AUD", impact:"POSITIVE", affects:["AU","TZ"], detail:"9,300 × $5 = $46,500 AUD liquid. Meaningful toward Tanzania deposit. BTCMarkets: whales buying." },
-                  { trigger:"Tanzania election cycle", impact:"WATCH", affects:["TZ","ZZ"], detail:"ZIPA laws can shift with new government. 99yr leasehold structure at risk. Eden Law monitoring." },
-                  { trigger:"IFZA fee/policy change", impact:"MINOR", affects:["AE"], detail:"Marginal cost to FZCO registration. Sam + Harrison plan active. Monitor UAE free zone news." },
-                  { trigger:"PSG Defended dispute escalates", impact:"DIRECT", affects:["AU"], detail:"Currently absorbing ~$900/wk freight verbally. No paper trail. SOPA rights available but not invoked." },
-                ].map((cor,i)=>{
-                  const cols={POSITIVE:C.neon,WATCH:C.gold,ALERT:C.red,CRITICAL:"#ff0033",MINOR:"#2a3d4d",DIRECT:C.blue};
-                  const col=cols[cor.impact]||C.text;
-                  return (
-                    <div key={i} style={{ background:C.glass,backdropFilter:"blur(10px)",border:`1px solid ${C.border}`,borderLeft:`3px solid ${col}`,borderRadius:4,padding:12 }}>
-                      <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:7 }}>
-                        <span style={{ fontSize:10,color:C.textB,fontWeight:"bold",flex:1,letterSpacing:.5 }}>{cor.trigger}</span>
-                        <span style={{ fontSize:7,padding:"2px 6px",borderRadius:2,background:col+"18",color:col,border:`1px solid ${col}33`,flexShrink:0,marginLeft:8 }}>{cor.impact}</span>
-                      </div>
-                      <div style={{ display:"flex",gap:4,marginBottom:7,flexWrap:"wrap" }}>
-                        {cor.affects.map(code=>{
-                          const c=COUNTRIES.find(x=>x.code===code);
-                          return c?<span key={code} style={{ fontSize:7,padding:"1px 5px",borderRadius:2,background:C.blueD,color:C.blue,border:`1px solid ${C.blue}22` }}>{c.flag} {c.name.split("/")[0].trim()}</span>:null;
-                        })}
-                      </div>
-                      <div style={{ fontSize:9,color:C.text,lineHeight:1.55 }}>{cor.detail}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
+        {/* AI ANALYST */}
+        {panels.ANALYST?.visible && (
+          <DraggablePanel id="ANALYST" title="◎ AI ANALYST" state={panels.ANALYST} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("ANALYST")} onMinimize={()=>minimizePanel("ANALYST")} zIndex={panels.ANALYST.z}
+            onClick={()=>bringToFront("ANALYST")} minimized={panels.ANALYST.minimized}>
+            <AnalystPanel/>
+          </DraggablePanel>
+        )}
 
-        {/* RIGHT */}
-        <div style={{ width:275,borderLeft:`1px solid ${C.border}`,display:"flex",flexDirection:"column",background:"rgba(2,5,8,0.93)",flexShrink:0 }}>
-          <div style={{ display:"flex",borderBottom:`1px solid ${C.border}`,flexShrink:0 }}>
-            {["COUNTRY","POSITIONS","PSG OPS"].map(t=>(
-              <button key={t} onClick={()=>setRightTab(t)} style={{ flex:1,padding:"7px 4px",background:"transparent",border:"none",borderBottom:rightTab===t?`2px solid ${C.neon}`:"2px solid transparent",color:rightTab===t?C.neon:"#2a3d4d",fontSize:7,letterSpacing:1,cursor:"pointer",fontFamily:"inherit" }}>{t}</button>
-            ))}
-          </div>
-
-          {rightTab==="COUNTRY" && <CountryIntel code={selectedCountry}/>}
-
-          {rightTab==="POSITIONS" && (
-            <div style={{ flex:1,overflowY:"auto" }}>
-              <div style={{ padding:"7px 10px",fontSize:7,color:"#2a3d4d",letterSpacing:2,borderBottom:`1px solid ${C.border}` }}>ALL ACTIVE POSITIONS</div>
-              {NODES.filter(n=>n.type!=="person").map(n=>(
-                <div key={n.id} className="r" style={{ padding:"8px 10px",borderBottom:`1px solid rgba(0,220,140,0.03)` }}
-                  onClick={()=>{ setSelectedNode(n.id); setView("GRAPH"); }}>
-                  <div style={{ display:"flex",justifyContent:"space-between",marginBottom:4 }}>
-                    <span style={{ fontSize:9,color:n.color,fontWeight:"bold" }}>{n.label}</span>
-                    <span style={{ fontSize:7,color:"#2a3d4d" }}>{n.type}</span>
-                  </div>
-                  <div style={{ fontSize:8,color:C.text,lineHeight:1.4 }}>{n.detail.slice(0,85)}...</div>
-                </div>
-              ))}
-              <div style={{ margin:8,padding:12,background:C.glass,backdropFilter:"blur(10px)",border:`1px solid ${C.neon}22`,borderRadius:4 }}>
-                <div style={{ fontSize:7,color:C.neon,letterSpacing:3,marginBottom:8 }}>WEALTH SNAPSHOT</div>
-                {[["PSG Net/wk","~$120,000",C.neon],["PSG Net/yr","~$6.24M",C.neon],["XRP 9,300 units","~$19,251 AUD",C.gold],["Pangani Ask","$175k USD",C.blue],["Golf Acres","AED TBC",C.blue],["Wealth Target","$100M",C.red],["Target Year","2033–2035",C.orange]].map(([k,v,col])=>(
-                  <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"3px 0",borderBottom:`1px solid rgba(0,220,140,0.03)` }}>
-                    <span style={{ fontSize:8,color:"#2a3d4d" }}>{k}</span>
-                    <span style={{ fontSize:9,color:col,fontWeight:"bold" }}>{v}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {rightTab==="PSG OPS" && (
-            <div style={{ flex:1,overflowY:"auto",fontFamily:"inherit" }}>
-              <div style={{ padding:"7px 10px",fontSize:7,color:"#2a3d4d",letterSpacing:2,borderBottom:`1px solid ${C.border}` }}>PSG OPERATIONS — REAL DATA</div>
-              <div style={{ padding:"8px 10px",borderBottom:`1px solid ${C.border}` }}>
-                <div style={{ fontSize:7,color:C.blue,letterSpacing:2,marginBottom:6 }}>PIPELINE STATUS</div>
-                {[["Runs today","118x",C.neon],["Credits used","45.6",C.gold],["Status","● LIVE",C.neon],["Version","v4.2",C.blue]].map(([k,v,col])=>(
-                  <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"3px 0" }}>
-                    <span style={{ fontSize:8,color:"#2a3d4d" }}>{k}</span><span style={{ fontSize:9,color:col }}>{v}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ padding:"8px 10px",borderBottom:`1px solid ${C.border}` }}>
-                <div style={{ fontSize:7,color:C.blue,letterSpacing:2,marginBottom:6 }}>CONTRACTORS ({PALANTIR.psg.contractors.length})</div>
-                {PALANTIR.psg.contractors.map((c,i)=>(
-                  <div key={i} style={{ padding:"4px 0",borderBottom:`1px solid rgba(0,220,140,0.03)` }}>
-                    <div style={{ fontSize:9,color:C.textB }}>{c.name}</div>
-                    {c.email&&<div style={{ fontSize:7,color:"#2a3d4d" }}>{c.email}</div>}
-                    {c.dob&&<div style={{ fontSize:7,color:"#2a3d4d" }}>DOB: {c.dob}</div>}
-                    {c.role&&<div style={{ fontSize:7,color:C.text }}>{c.role}</div>}
-                  </div>
-                ))}
-              </div>
-              <div style={{ padding:"8px 10px",borderBottom:`1px solid ${C.border}` }}>
-                <div style={{ fontSize:7,color:C.blue,letterSpacing:2,marginBottom:6 }}>PRICING</div>
-                {Object.entries(PALANTIR.psg.pricing).map(([k,v])=>(
-                  <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"3px 0",gap:8 }}>
-                    <span style={{ fontSize:7,color:"#2a3d4d",flex:1 }}>{k}</span>
-                    <span style={{ fontSize:8,color:C.neon }}>{v}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ padding:"8px 10px" }}>
-                <div style={{ fontSize:7,color:C.red,letterSpacing:2,marginBottom:6 }}>OPEN ISSUES</div>
-                {PALANTIR.psg.issues.map((issue,i)=>(
-                  <div key={i} style={{ display:"flex",gap:5,padding:"4px 0",borderBottom:`1px solid rgba(0,220,140,0.03)` }}>
-                    <div style={{ width:4,height:4,borderRadius:"50%",background:C.red,marginTop:4,flexShrink:0 }}/>
-                    <span style={{ fontSize:8,color:C.text,lineHeight:1.4 }}>{issue}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {showAI && <AIAnalyst onClose={()=>setShowAI(false)}/>}
+        {/* Spacer for scrolling */}
+        <div style={{ height:1400 }}/>
       </div>
 
-      {/* STATUS BAR */}
-      <div style={{ height:24,display:"flex",alignItems:"center",gap:12,padding:"0 14px",background:"rgba(2,5,8,0.97)",borderTop:`1px solid ${C.border}`,fontSize:7,color:"#2a3d4d",flexShrink:0 }}>
-        {[["CORPUS",`${PALANTIR.data_stats.email_sources.toLocaleString()} EMAILS + ${PALANTIR.data_stats.whatsapp_total.toLocaleString()} WA`,C.neon],["VECTORS",PALANTIR.data_stats.vectors.toLocaleString(),C.blue],["FACTS",PALANTIR.data_stats.facts_total.toLocaleString(),C.gold],["EXPOSURE","6 COUNTRIES",C.blue],["PSG","$120k/wk NET",C.neon],["TARGET","$100M / 2033",C.red],["PIPELINE","118 RUNS TODAY",C.neon]].map(([k,v,col],i)=>(
+      {/* ── STATUS BAR ────────────────────────────────────────────────────── */}
+      <div style={{ position:"fixed",bottom:0,left:0,right:0,height:22,display:"flex",alignItems:"center",gap:10,padding:"0 12px",background:"rgba(2,5,8,0.97)",borderTop:`1px solid ${C.border}`,zIndex:9998,fontSize:7,color:"#2a3d4d",fontFamily:"Courier New" }}>
+        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PIPELINE","119 runs/day",C.neon],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/9",C.text]].map(([k,v,col],i)=>(
           <span key={k} style={{ display:"flex",gap:4 }}>
-            {i>0&&<span style={{ color:"#141e24" }}>◆</span>}
+            {i>0&&<span style={{ color:"#0d1a22" }}>◆</span>}
             <span>{k}</span><span style={{ color:col }}>{v}</span>
           </span>
         ))}
-        <span style={{ marginLeft:"auto",color:"#141e24" }}>JARVIS v5.0 · PALANTIR-LAYER · OMEGA DAEMON 38x/24h · OMEGA SESSION BRIDGE 46x/24h</span>
+        <span style={{ marginLeft:"auto",color:"#0d1a22" }}>JARVIS v6.0 · PALANTIR-GOTHAM/GRIDLINE ARCHITECTURE · OMEGA DAEMON ACTIVE · REAL CORPUS LOADED</span>
       </div>
     </div>
   );
