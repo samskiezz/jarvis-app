@@ -25,7 +25,7 @@ const MARK = ({ label, color }) => (
 
 // ── GLASS PANEL ──────────────────────────────────────────────────────────────
 const Glass = ({ children, style, onClick }) => (
-  <div onClick={onClick} style={{ background:C.glass, backdropFilter:"blur(14px)", WebkitBackdropFilter:"blur(14px)", border:`1px solid ${C.border}`, borderRadius:4, boxShadow:"0 4px 24px rgba(0,0,0,0.7), 0 0 40px rgba(0,200,120,0.03)", ...style }}>{children}</div>
+  <div onClick={onClick} style={{ background:"rgba(4,10,16,0.98)", border:`1px solid ${C.border}`, borderRadius:4, boxShadow:"0 4px 24px rgba(0,0,0,0.7)", ...style }}>{children}</div>
 );
 
 // ── ONTOLOGY — REAL OBJECTS ──────────────────────────────────────────────────
@@ -968,14 +968,14 @@ function DraggablePanel({ id, title, children, state, onMove, onResize, onClose,
 
   return (
     <div style={{ position:"absolute", left:state.x, top:state.y, width:state.w, height:minimized?32:state.h,
-      background:C.panel, border:`1px solid ${C.border}`, borderRadius:4, overflow:"hidden",
-      boxShadow:`0 8px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,200,120,0.05)`,
+      background:"rgba(2,7,13,0.98)", border:`1px solid ${C.border}`, borderRadius:4, overflow:"hidden",
+      boxShadow:"0 8px 40px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,200,120,0.08)",
       display:"flex", flexDirection:"column", zIndex, userSelect:"none" }}>
       {/* Header */}
       <div onMouseDown={onMouseDown}
         style={{ height:28, display:"flex", alignItems:"center", justifyContent:"space-between",
           padding:"0 8px", borderBottom:`1px solid ${C.border}`,
-          background:"rgba(0,200,120,0.04)", cursor:"move", flexShrink:0 }}>
+          background:"rgba(0,200,120,0.03)", cursor:"move", flexShrink:0 }}>
         <span style={{ fontSize:8, color:C.neon, letterSpacing:2, fontFamily:"Courier New", fontWeight:"bold" }}>{title}</span>
         <div className="panel-ctrl" style={{ display:"flex", gap:4 }}>
           <button onClick={onMinimize}
@@ -1057,22 +1057,20 @@ export default function JarvisTerminal() {
   const earthquakes = liveData?.earthquakes || [];
   const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
 
-  return (
-    <div style={{ background:C.bg, minHeight:"100vh", position:"relative", overflow:"hidden", fontFamily:"'JetBrains Mono','SF Mono',Courier New,monospace" }}>
-      <style>{`
-        *{box-sizing:border-box;margin:0;padding:0;}
-        ::-webkit-scrollbar{width:2px;height:2px;}
-        ::-webkit-scrollbar-track{background:transparent;}
-        ::-webkit-scrollbar-thumb{background:rgba(0,200,120,0.2);border-radius:2px;}
-        input::placeholder{color:#1a2a36;}
-        select option{background:#020509;color:#a8bcc8;}
-        button:hover{opacity:0.85;}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.25}}
-        @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-      `}</style>
+  const SIDEBAR_PANELS = [
+    { id:"MAP",      icon:"🌍", label:"GLOBE" },
+    { id:"VERTEX",   icon:"◈",  label:"VERTEX" },
+    { id:"RISK",     icon:"⚠",  label:"RISK" },
+    { id:"EXPLORER", icon:"⊞",  label:"OBJECTS" },
+    { id:"TIMELINE", icon:"◷",  label:"TIMELINE" },
+    { id:"MARKETS",  icon:"$",  label:"MARKETS" },
+    { id:"EMAILS",   icon:"✉",  label:"EMAILS" },
+    { id:"WATCHLIST",icon:"◉",  label:"WATCH" },
+    { id:"ANALYST",  icon:"◎",  label:"ANALYST" },
+  ];
 
+  return (
+    <div style={{ background:C.bg, minHeight:"100vh", position:"relative", overflow:"hidden", fontFamily:"'JetBrains Mono','SF Mono',Courier New,monospace", display:"flex" }}>
       {/* ── CLASSIFICATION BANNER ──────────────────────────────────────── */}
       <div style={{ position:"fixed",top:0,left:0,right:0,height:18,background:"rgba(232,32,60,0.85)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:9999,backdropFilter:"blur(8px)" }}>
         <span style={{ fontSize:8,color:"#fff",letterSpacing:4,fontWeight:"bold",fontFamily:"'JetBrains Mono',Courier New,monospace" }}>
@@ -1080,64 +1078,64 @@ export default function JarvisTerminal() {
         </span>
       </div>
 
-      {/* ── TOPBAR ────────────────────────────────────────────────────────── */}
-      <div style={{ position:"fixed",top:18,left:0,right:0,height:32,display:"flex",alignItems:"center",padding:"0 12px",background:"rgba(2,5,8,0.97)",borderBottom:`1px solid ${C.border}`,zIndex:9998,gap:12 }}>
+      {/* ── SIDEBAR NAV ───────────────────────────────────────────────────── */}
+      <div style={{ position:"fixed", left:0, top:18, bottom:0, width:54, background:"rgba(2,6,10,0.99)", borderRight:`1px solid ${C.border}`, zIndex:9990, display:"flex", flexDirection:"column", alignItems:"center", paddingTop:36, gap:2 }}>
         {/* Logo */}
-        <div style={{ display:"flex",alignItems:"center",gap:8 }}>
-          <svg width={18} height={18} viewBox="0 0 24 24">
+        <div style={{ marginBottom:12, paddingBottom:10, borderBottom:`1px solid ${C.border}`, width:"100%", display:"flex", justifyContent:"center" }}>
+          <svg width={20} height={20} viewBox="0 0 24 24">
             <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" stroke={C.neon} strokeWidth="1.5" fill="none"/>
-            <polygon points="12,5 18,8.5 18,15.5 12,19 6,15.5 6,8.5" stroke={C.neon} strokeWidth="0.5" fill="rgba(0,200,120,0.04)"/>
             <circle cx={12} cy={12} r={2.5} fill={C.neon} opacity={0.8}/>
           </svg>
-          <div>
-            <span style={{ color:C.neon,fontSize:11,fontWeight:"bold",letterSpacing:4 }}>JARVIS</span>
-            <span style={{ color:"#2a3d4d",fontSize:7,letterSpacing:2,marginLeft:8 }}>GLOBAL INTELLIGENCE · PALANTIR/GRIDLINE ARCHITECTURE</span>
-          </div>
         </div>
-
-        {/* Panel toggles */}
-        <div style={{ display:"flex",gap:2,marginLeft:8,flexWrap:"wrap" }}>
-          {Object.entries(PANEL_DEFS).map(([id,def])=>(
-            <button key={id} onClick={()=>panels[id]?.visible?closePanel(id):openPanel(id)}
-              style={{ background:panels[id]?.visible?C.neonD:"transparent",border:`1px solid ${panels[id]?.visible?C.neon+"33":C.borderB}`,color:panels[id]?.visible?C.neon:"#2a3d4d",padding:"2px 7px",borderRadius:3,cursor:"pointer",fontSize:7,fontFamily:"Courier New",letterSpacing:0.5 }}>
-              {def.title.split(" ").slice(0,2).join(" ")}
+        {SIDEBAR_PANELS.map(p => {
+          const active = panels[p.id]?.visible;
+          return (
+            <button key={p.id} onClick={()=>active?closePanel(p.id):openPanel(p.id)}
+              title={p.label}
+              style={{ width:42, height:42, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:2, background:active?"rgba(0,200,120,0.1)":"transparent", border:`1px solid ${active?C.neon+"44":"rgba(0,200,120,0.08)"}`, borderRadius:4, cursor:"pointer", transition:"all 0.15s" }}>
+              <span style={{ fontSize:12 }}>{p.icon}</span>
+              <span style={{ fontSize:5, color:active?C.neon:"#2a3d4d", letterSpacing:0.5, fontFamily:"Courier New" }}>{p.label}</span>
             </button>
-          ))}
+          );
+        })}
+        {/* Status dot */}
+        <div style={{ marginTop:"auto", marginBottom:12, display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
+          <div style={{ width:6, height:6, borderRadius:"50%", background:C.red, animation:"pulse 1.5s infinite" }}/>
+          <span style={{ fontSize:5, color:C.red, letterSpacing:1, fontFamily:"Courier New" }}>LIVE</span>
         </div>
+      </div>
 
+      {/* ── TOPBAR ────────────────────────────────────────────────────────── */}
+      <div style={{ position:"fixed",top:18,left:54,right:0,height:32
+        ,display:"flex",alignItems:"center",padding:"0 12px",background:"rgba(2,5,8,0.99)",borderBottom:`1px solid ${C.border}`,zIndex:9998,gap:12 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+          <span style={{ color:C.neon,fontSize:11,fontWeight:"bold",letterSpacing:4 }}>JARVIS</span>
+          <span style={{ color:"#2a3d4d",fontSize:7,letterSpacing:2 }}>GLOBAL INTELLIGENCE TERMINAL</span>
+        </div>
         <div style={{ flex:1 }}/>
-
-        {/* Status chips */}
-        <div style={{ display:"flex",gap:6,alignItems:"center" }}>
+        <div style={{ display:"flex", gap:6, alignItems:"center" }}>
           <span style={{ fontSize:8,color:C.neon,background:C.neonD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.neon}22` }}>PSG $120k/wk</span>
           <span style={{ fontSize:8,color:C.gold,background:C.goldD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.gold}22` }}>XRP $19.2k</span>
           <span style={{ fontSize:8,color:C.blue,background:C.blueD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.blue}22` }}>{earthquakes.length} EQ LIVE</span>
           <span style={{ fontSize:8,color:"#2a3d4d" }}>{time.toLocaleTimeString("en-AU",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit",second:"2-digit"})} AEST</span>
-          <div style={{ display:"flex",alignItems:"center",gap:3 }}>
-            <div style={{ width:5,height:5,borderRadius:"50%",background:C.red,animation:"pulse 1.5s infinite" }}/>
-            <span style={{ fontSize:7,color:C.red,letterSpacing:2 }}>LIVE</span>
-          </div>
         </div>
       </div>
 
       {/* ── TICKER ────────────────────────────────────────────────────────── */}
-      <div style={{ position:"fixed",top:50,left:0,right:0,height:20,background:"rgba(2,5,8,0.97)",borderBottom:`1px solid ${C.border}`,zIndex:9997,display:"flex",alignItems:"center",overflow:"hidden" }}>
-        <div style={{ position:"absolute",left:0,top:0,bottom:0,width:75,background:"linear-gradient(to right,#020509,transparent)",zIndex:2,display:"flex",alignItems:"center",paddingLeft:8 }}>
-          <span style={{ fontSize:7,color:C.neon,letterSpacing:2 }}>MARKETS</span>
+      <div style={{ position:"fixed",top:50,left:54,right:0
+        ,height:20,background:"rgba(2,5,8,0.99)",borderBottom:`1px solid ${C.border}`,zIndex:9997,display:"flex",alignItems:"center",overflow:"hidden" }}>
+        <div style={{ position:"absolute",left:0,top:0,bottom:0,width:60,background:"linear-gradient(to right,#020509,transparent)",zIndex:2,display:"flex",alignItems:"center",paddingLeft:6 }}>
+          <span style={{ fontSize:7,color:C.neon,letterSpacing:1 }}>MKT</span>
         </div>
-        <div style={{ display:"flex",paddingLeft:80,animation:"scroll 45s linear infinite",whiteSpace:"nowrap",gap:0 }}>
-          {["XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","119 PIPELINE RUNS TODAY","11,299 VECTORS","8,939 FACTS","15,822 WA MESSAGES","$100M TARGET 2033","XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","AED/AUD 0.4190 →0.0%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","119 PIPELINE RUNS TODAY","11,299 VECTORS","8,939 FACTS","15,822 WA MESSAGES","$100M TARGET 2033"].map((item,i)=>(
+        <div style={{ display:"flex",paddingLeft:70,animation:"scroll 45s linear infinite",whiteSpace:"nowrap",gap:0 }}>
+          {["XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","$100M TARGET 2033","XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","$100M TARGET 2033"].map((item,i)=>(
             <span key={i} style={{ display:"inline-flex",marginRight:24,fontSize:8,color:item.includes("▼")?C.red:item.includes("▲")?C.neon:C.textB,fontFamily:"Courier New" }}>{item}</span>
           ))}
-        </div>
-        <div style={{ position:"absolute",right:0,top:0,bottom:0,width:50,background:"linear-gradient(to left,#020509,transparent)",zIndex:2,display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6 }}>
-          <span style={{ fontSize:7,color:C.red }}>● LIVE</span>
         </div>
       </div>
 
       {/* ── WORKSPACE ─────────────────────────────────────────────────────── */}
-      <div style={{ marginTop:70, minHeight:"calc(100vh - 70px)", position:"relative" }}>
-
+      <div style={{ marginTop:70, marginLeft:54, minHeight:"calc(100vh - 70px)", position:"relative" }}>
         {/* MAP */}
         {panels.MAP?.visible && (
           <DraggablePanel id="MAP" title="🌍 GLOBE / MAP" state={panels.MAP} onMove={movePanel} onResize={resizePanel}
