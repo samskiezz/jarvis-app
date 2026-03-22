@@ -22,8 +22,8 @@
     --accent-foreground: 180 15% 75%;
     --destructive: 355 80% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 157 100% 39% / 0.14;
-    --input: 157 100% 39% / 0.14;
+    --border: 160 30% 12%;
+    --input: 160 30% 12%;
     --ring: 157 100% 39%;
     --chart-1: 157 100% 39%;
     --chart-2: 197 100% 42%;
@@ -37,7 +37,7 @@
     --sidebar-primary-foreground: 210 40% 2%;
     --sidebar-accent: 210 20% 8%;
     --sidebar-accent-foreground: 180 15% 75%;
-    --sidebar-border: 157 100% 39% / 0.14;
+    --sidebar-border: 160 30% 12%;
     --sidebar-ring: 157 100% 39%;
     --font-mono: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
   }
@@ -59,8 +59,8 @@
     --accent-foreground: 180 15% 75%;
     --destructive: 355 80% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 157 100% 39% / 0.14;
-    --input: 157 100% 39% / 0.14;
+    --border: 160 30% 12%;
+    --input: 160 30% 12%;
     --ring: 157 100% 39%;
     --chart-1: 157 100% 39%;
     --chart-2: 197 100% 42%;
@@ -73,7 +73,7 @@
     --sidebar-primary-foreground: 210 40% 2%;
     --sidebar-accent: 210 20% 8%;
     --sidebar-accent-foreground: 180 15% 75%;
-    --sidebar-border: 157 100% 39% / 0.14;
+    --sidebar-border: 160 30% 12%;
     --sidebar-ring: 157 100% 39%;
   }
 }
