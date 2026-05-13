@@ -55,6 +55,8 @@ export default [
         { ignore: ["cmdk-input-wrapper", "toast-close"] },
       ],
       "react-hooks/rules-of-hooks": "error",
+      "complexity": ["warn", 18],
+      "max-lines": ["warn", { max: 450, skipBlankLines: true, skipComments: true }],
     },
   },
 ];
