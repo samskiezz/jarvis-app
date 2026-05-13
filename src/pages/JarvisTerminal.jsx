@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Globe3D from "../components/Globe3D";
 
-const API = "https://jarvis-6bc54ec6.base44.app/functions/getLiveIntel";
+const API = `${import.meta.env.VITE_KIMI_K26_API_BASE_URL || "https://api.moonshot.ai/v1"}/functions/getLiveIntel`;
 
 const C = {
   bg:"#020509", panel:"rgba(4,10,16,0.95)", border:"rgba(0,200,120,0.14)",
