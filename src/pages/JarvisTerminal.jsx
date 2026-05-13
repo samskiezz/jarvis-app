@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Globe3D from "../components/Globe3D";
-
-const API = `${import.meta.env.VITE_KIMI_K26_API_BASE_URL || "https://api.moonshot.ai/v1"}/functions/getLiveIntel`;
+import { kimiClient } from "@/api/kimiClient";
 
 const C = {
   bg:"#020509", panel:"rgba(4,10,16,0.95)", border:"rgba(0,200,120,0.14)",
@@ -1041,8 +1040,8 @@ export default function JarvisTerminal() {
     const fetch_ = async () => {
       try {
         setLoadingData(true);
-        const r = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({type:"all"}) });
-        if (r.ok) setLiveData(await r.json());
+        const data = await kimiClient.functions.getLiveIntel({ type:"all" });
+        setLiveData(data);
       } catch(e) { console.error(e); }
       finally { setLoadingData(false); }
     };
