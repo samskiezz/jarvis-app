@@ -1,17 +1,17 @@
-import { base44 } from './base44Client';
+import { kimiClient } from './kimiClient';
 
-export const SolarProduct = base44.entities.SolarProduct;
-export const ProductRecall = base44.entities.ProductRecall;
-export const Investment = base44.entities.Investment;
-export const WealthSnapshot = base44.entities.WealthSnapshot;
-export const Task = base44.entities.Task;
-export const Contact = base44.entities.Contact;
-export const OmegaScanProgress = base44.entities.OmegaScanProgress;
-export const SwarmJob = base44.entities.SwarmJob;
-export const IntelProfile = base44.entities.IntelProfile;
-export const RiskSignal = base44.entities.RiskSignal;
-export const GmailSyncState = base44.entities.GmailSyncState;
-export const WorkflowMapping = base44.entities.WorkflowMapping;
+export const SolarProduct = kimiClient.entities.SolarProduct;
+export const ProductRecall = kimiClient.entities.ProductRecall;
+export const Investment = kimiClient.entities.Investment;
+export const WealthSnapshot = kimiClient.entities.WealthSnapshot;
+export const Task = kimiClient.entities.Task;
+export const Contact = kimiClient.entities.Contact;
+export const OmegaScanProgress = kimiClient.entities.OmegaScanProgress;
+export const SwarmJob = kimiClient.entities.SwarmJob;
+export const IntelProfile = kimiClient.entities.IntelProfile;
+export const RiskSignal = kimiClient.entities.RiskSignal;
+export const GmailSyncState = kimiClient.entities.GmailSyncState;
+export const WorkflowMapping = kimiClient.entities.WorkflowMapping;
 
 // auth sdk:
-export const User = base44.auth;
+export const User = kimiClient.auth;

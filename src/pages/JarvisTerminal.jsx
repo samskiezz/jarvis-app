@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Globe3D from "../components/Globe3D";
+import LiveTactical3D from "../components/LiveTactical3D";
 
-const API = "https://jarvis-6bc54ec6.base44.app/functions/getLiveIntel";
+const API = `${import.meta.env.VITE_KIMI_K26_API_BASE_URL || "https://api.moonshot.ai/v1"}/functions/getLiveIntel`;
 
 const C = {
   bg:"#020509", panel:"rgba(4,10,16,0.95)", border:"rgba(0,200,120,0.14)",
@@ -939,6 +940,226 @@ function AnalystPanel() {
   );
 }
 
+function StreamStatusPanel({ title, streamUrlEnv, channels = [] }) {
+  const [lastTick, setLastTick] = useState(null);
+  const [events, setEvents] = useState(0);
+  const [connected, setConnected] = useState(false);
+  const streamUrl = import.meta.env[streamUrlEnv];
+
+  useEffect(() => {
+    if (!streamUrl) return;
+    const es = new EventSource(streamUrl);
+    es.onopen = () => setConnected(true);
+    es.onmessage = () => {
+      setEvents((v) => v + 1);
+      setLastTick(new Date());
+    };
+    es.onerror = () => setConnected(false);
+    return () => es.close();
+  }, [streamUrl]);
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New",padding:10,gap:8 }}>
+      <div style={{ fontSize:9,color:C.textB }}>{title}</div>
+      <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
+        <span style={{ fontSize:7,padding:"2px 6px",border:`1px solid ${C.border}`,borderRadius:3,color:connected?C.neon:C.red }}>
+          {connected ? "STREAM CONNECTED" : "STREAM OFFLINE"}
+        </span>
+        <span style={{ fontSize:7,padding:"2px 6px",border:`1px solid ${C.border}`,borderRadius:3,color:C.gold }}>
+          EVENTS: {events}
+        </span>
+      </div>
+      <div style={{ fontSize:8,color:C.text }}>
+        Endpoint: {streamUrl || `${streamUrlEnv} not set`}
+      </div>
+      <div style={{ fontSize:8,color:C.text }}>
+        Last tick: {lastTick ? lastTick.toISOString() : "No live events yet"}
+      </div>
+      <div style={{ marginTop:6,fontSize:8,color:C.textB }}>Channels</div>
+      <div style={{ display:"flex",gap:4,flexWrap:"wrap" }}>
+        {channels.map((ch) => (
+          <span key={ch} style={{ fontSize:7,padding:"1px 6px",border:`1px solid ${C.borderB}`,borderRadius:3,color:C.blue }}>{ch}</span>
+        ))}
+      </div>
+      {!streamUrl && (
+        <div style={{ marginTop:6,fontSize:8,color:C.gold }}>
+          Configure env and backend streams to enable live Panopticon/Counterstrike simulation rendering.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LiveGameRenderPanel({ title, streamUrlEnv, channels = [], defaultMaps = [], initialState }) {
+  const [selectedMap, setSelectedMap] = useState(defaultMaps[0] || "default");
+  const [connected, setConnected] = useState(false);
+  const [events, setEvents] = useState(0);
+  const [stale, setStale] = useState(false);
+  const [viewMode, setViewMode] = useState("3D");
+  const [gameState, setGameState] = useState(initialState || { map: defaultMaps[0] || "default", units: [] });
+  const canvasRef = useRef(null);
+  const streamUrl = import.meta.env[streamUrlEnv];
+  const mapList = defaultMaps.length ? defaultMaps : ["de_dust2", "de_inferno", "de_mirage", "city_grid"];
+  const mapBounds = {
+    de_dust2: { minX: -2500, maxX: 2500, minY: -2000, maxY: 2000 },
+    de_mirage: { minX: -3200, maxX: 2100, minY: -3300, maxY: 1600 },
+    de_inferno: { minX: -2200, maxX: 2900, minY: -2200, maxY: 2200 },
+    de_nuke: { minX: -3450, maxX: 1800, minY: -3400, maxY: 1900 },
+    city_grid: { minX: 0, maxX: 100, minY: 0, maxY: 100 },
+    industrial_zone: { minX: 0, maxX: 100, minY: 0, maxY: 100 },
+    dockyard: { minX: 0, maxX: 100, minY: 0, maxY: 100 },
+  };
+  const normalizeFrame = (payload = {}) => {
+    const rawUnits = payload.units || payload.players || payload.agents || payload.entities || [];
+    const units = rawUnits.map((u, idx) => ({
+      id: u.id || u.playerId || u.agentId || `u${idx}`,
+      team: u.team || u.side || (u.faction === "counter" ? "CT" : undefined),
+      worldX: u.worldX ?? u.posX ?? u.position?.x ?? u.x ?? 0,
+      worldY: u.worldY ?? u.posY ?? u.position?.y ?? u.y ?? 0,
+      hp: u.hp ?? u.health ?? null,
+    }));
+    return {
+      map: payload.map || payload.mapName || payload.level || selectedMap,
+      tick: payload.tick ?? payload.frame ?? payload.roundTick ?? null,
+      round: payload.round ?? payload.roundNumber ?? null,
+      units,
+    };
+  };
+
+  useEffect(() => {
+    setGameState((s) => ({ ...s, ...normalizeFrame(initialState || {}) }));
+  }, [initialState]);
+
+  useEffect(() => {
+    if (!streamUrl) return;
+    let es;
+    let reconnectTimer;
+    let staleTimer;
+    let tries = 0;
+
+    const connect = () => {
+      es = new EventSource(streamUrl);
+      es.onopen = () => {
+        tries = 0;
+        setConnected(true);
+        setStale(false);
+      };
+      es.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          const frame = normalizeFrame(data);
+          setEvents((v) => v + 1);
+          if (frame?.map) setSelectedMap(frame.map);
+          setGameState(frame);
+          setStale(false);
+          clearTimeout(staleTimer);
+          staleTimer = setTimeout(() => setStale(true), 15000);
+        } catch {
+          // ignore malformed events
+        }
+      };
+      es.onerror = () => {
+        setConnected(false);
+        es?.close();
+        clearTimeout(reconnectTimer);
+        const delay = Math.min(10000, 1000 * (2 ** Math.min(tries, 4)));
+        reconnectTimer = setTimeout(connect, delay);
+        tries += 1;
+      };
+    };
+
+    connect();
+    return () => {
+      clearTimeout(reconnectTimer);
+      clearTimeout(staleTimer);
+      es?.close();
+    };
+  }, [streamUrl]);
+
+  useEffect(() => {
+    const c = canvasRef.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    const w = c.width, h = c.height;
+    ctx.fillStyle = "#060b11";
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "rgba(0,200,120,0.12)";
+    for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let y = 0; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    ctx.fillStyle = "rgba(0,200,120,0.35)";
+    ctx.font = "10px Courier New";
+    ctx.fillText(`MAP: ${selectedMap}`, 8, 14);
+    ctx.fillStyle = "rgba(150,180,200,0.8)";
+    ctx.fillText(`ROUND: ${gameState?.round ?? "-"}`, 180, 14);
+    ctx.fillText(`TICK: ${gameState?.tick ?? "-"}`, 280, 14);
+    const units = gameState?.units || [];
+    const bounds = mapBounds[selectedMap] || mapBounds.city_grid;
+    const toCanvas = (u) => {
+      const ux = u.worldX ?? u.posX ?? u.x ?? 0;
+      const uy = u.worldY ?? u.posY ?? u.y ?? 0;
+      const nx = (ux - bounds.minX) / Math.max(1, (bounds.maxX - bounds.minX));
+      const ny = (uy - bounds.minY) / Math.max(1, (bounds.maxY - bounds.minY));
+      return {
+        x: Math.max(6, Math.min(w - 6, Math.round(nx * w))),
+        y: Math.max(20, Math.min(h - 6, Math.round((1 - ny) * h))),
+      };
+    };
+
+    ctx.strokeStyle = "rgba(0,150,212,0.22)";
+    ctx.strokeRect(8, 20, w - 16, h - 28);
+    ctx.fillStyle = "rgba(0,150,212,0.26)";
+    ctx.fillRect(w * 0.5 - 1, 20, 2, h - 28);
+    ctx.fillRect(8, h * 0.5, w - 16, 1);
+
+    units.forEach((u, i) => {
+      const { x, y } = toCanvas(u);
+      const col = u.team === "T" ? "#f07820" : u.team === "CT" ? "#0096d4" : "#00c878";
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(200,220,230,0.85)";
+      ctx.fillText(u.id || u.name || `u${i}`, x + 6, y + 3);
+    });
+  }, [gameState, selectedMap]);
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New",padding:8,gap:6 }}>
+      <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+        <span style={{ fontSize:9,color:C.textB }}>{title}</span>
+        <span style={{ fontSize:7,color:connected?(stale?C.gold:C.neon):C.red }}>
+          {connected?(stale?"STALE":"LIVE"):"OFFLINE"} · EVT {events}
+        </span>
+      </div>
+      <div style={{ display:"flex",gap:6,alignItems:"center",flexWrap:"wrap" }}>
+        <span style={{ fontSize:7,color:C.text }}>MAP</span>
+        <select value={selectedMap} onChange={(e)=>setSelectedMap(e.target.value)}
+          style={{ background:"rgba(0,0,0,0.5)",border:`1px solid ${C.border}`,color:C.textB,fontFamily:"Courier New",fontSize:8,padding:"2px 6px",borderRadius:3 }}>
+          {mapList.map(m=><option key={m} value={m}>{m}</option>)}
+        </select>
+        <button onClick={()=>setViewMode(v=>v==="3D"?"2D":"3D")} style={{ background:"rgba(0,0,0,0.4)",border:`1px solid ${C.border}`,color:C.neon,fontSize:7,padding:"2px 6px",borderRadius:3,cursor:"pointer" }}>
+          {viewMode} VIEW
+        </button>
+        {channels.map((ch)=><span key={ch} style={{ fontSize:6,color:C.blue }}>{ch}</span>)}
+      </div>
+      {viewMode==="3D" ? (
+        <div style={{ width:"100%",height:"100%",border:`1px solid ${C.border}`,borderRadius:4,overflow:"hidden" }}>
+          <LiveTactical3D
+            gameKey={title.toLowerCase().includes("counterstrike") ? "counterstrike" : "panopticon"}
+            mapName={selectedMap}
+            mapModelUrl={gameState?.mapModelUrl || gameState?.mapModel?.url}
+            units={gameState?.units || []}
+            manifest={gameState?.assets || gameState?.manifest || {}}
+          />
+        </div>
+      ) : (
+        <canvas ref={canvasRef} width={520} height={180} style={{ width:"100%",height:"100%",border:`1px solid ${C.border}`,borderRadius:4 }} />
+      )}
+      {!streamUrl && <div style={{ fontSize:8,color:C.gold }}>{streamUrlEnv} not set. Rendering simulated frame from available state.</div>}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // DRAGGABLE PANEL WRAPPER — Gridline window manager
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1021,6 +1242,8 @@ export default function JarvisTerminal() {
       EMAILS:    { x:col1, y:830, w:pw1,  h:350, visible:true,  minimized:false, z:10 },
       WATCHLIST: { x:col2, y:830, w:pw2,  h:350, visible:true,  minimized:false, z:10 },
       ANALYST:   { x:col3, y:830, w:pw3,  h:350, visible:true,  minimized:false, z:10 },
+      PANOPTICON:{ x:col1, y:1185,w:pw2,  h:280, visible:false, minimized:false, z:10 },
+      CS3D:      { x:col2, y:1185,w:pw2,  h:280, visible:false, minimized:false, z:10 },
     };
   });
 
@@ -1067,6 +1290,8 @@ export default function JarvisTerminal() {
     { id:"EMAILS",   icon:"✉",  label:"EMAILS" },
     { id:"WATCHLIST",icon:"◉",  label:"WATCH" },
     { id:"ANALYST",  icon:"◎",  label:"ANALYST" },
+    { id:"PANOPTICON", icon:"⌬", label:"PANO" },
+    { id:"CS3D", icon:"🎯", label:"CS3D" },
   ];
 
   return (
@@ -1217,13 +1442,35 @@ export default function JarvisTerminal() {
           </DraggablePanel>
         )}
 
+        {panels.PANOPTICON?.visible && (
+          <DraggablePanel id="PANOPTICON" title="⌬ PANOPTICON LIVE" state={panels.PANOPTICON} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("PANOPTICON")} onMinimize={()=>minimizePanel("PANOPTICON")} zIndex={panels.PANOPTICON.z}
+            onClick={()=>bringToFront("PANOPTICON")} minimized={panels.PANOPTICON.minimized}>
+            <LiveGameRenderPanel title="Panopticon stream monitor" streamUrlEnv="VITE_PANOPTICON_STREAM_URL"
+              channels={["agents.position","agents.intent","panopticon.alerts","ml.training.progress"]}
+              defaultMaps={liveData?.panopticon?.maps || ["city_grid","dockyard","industrial_zone"]}
+              initialState={liveData?.panopticon}/>
+          </DraggablePanel>
+        )}
+
+        {panels.CS3D?.visible && (
+          <DraggablePanel id="CS3D" title="🎯 COUNTERSTRIKE 3D LIVE" state={panels.CS3D} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("CS3D")} onMinimize={()=>minimizePanel("CS3D")} zIndex={panels.CS3D.z}
+            onClick={()=>bringToFront("CS3D")} minimized={panels.CS3D.minimized}>
+            <LiveGameRenderPanel title="Counterstrike 3D simulation stream" streamUrlEnv="VITE_COUNTERSTRIKE3D_STREAM_URL"
+              channels={["sim.tick","players.state","round.events","ml.policy.actions"]}
+              defaultMaps={liveData?.counterstrike?.maps || ["de_dust2","de_mirage","de_inferno","de_nuke"]}
+              initialState={liveData?.counterstrike}/>
+          </DraggablePanel>
+        )}
+
         {/* Spacer for scrolling */}
         <div style={{ height:1250 }}/>
       </div>
 
       {/* ── STATUS BAR ────────────────────────────────────────────────────── */}
       <div style={{ position:"fixed",bottom:0,left:54,right:0,height:22,display:"flex",alignItems:"center",gap:10,padding:"0 12px",background:"rgba(2,5,8,0.99)",borderTop:`1px solid ${C.border}`,zIndex:9998,fontSize:7,color:"#2a3d4d",fontFamily:"Courier New" }}>
-        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/9",C.text]].map(([k,v,col],i)=>(
+        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/11",C.text]].map(([k,v,col],i)=>(
           <span key={k} style={{ display:"flex",gap:4,alignItems:"center" }}>
             {i>0&&<span style={{ color:"#0d1a22" }}>◆</span>}
             <span>{k}</span><span style={{ color:col,fontWeight:"bold" }}>{v}</span>
