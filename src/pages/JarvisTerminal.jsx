@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Globe3D from "../components/Globe3D";
 
 const API = "https://jarvis-6bc54ec6.base44.app/functions/getLiveIntel";
+const STALE_AFTER_MS = 5 * 60 * 1000;
 
 const C = {
   bg:"#020509", panel:"rgba(4,10,16,0.95)", border:"rgba(0,200,120,0.14)",
@@ -14,6 +15,34 @@ const C = {
   glass:"rgba(4,10,18,0.82)",
   mark:{ INTERNAL:"#00c878", FINANCIAL:"#e8a800", PII:"#e8203c", LEGAL:"#a855f7", RESTRICTED:"#f07820" },
   type:{ person:"#00c878", org:"#0096d4", invest:"#e8a800", asset:"#f07820", property:"#0096d4", creative:"#a855f7", client:"#e8203c", target:"#e8203c" },
+};
+
+const asObject = (value) => (value && typeof value === "object" && !Array.isArray(value) ? value : {});
+const asArray = (value) => (Array.isArray(value) ? value : []);
+const asString = (value, fallback = "") => (typeof value === "string" ? value : fallback);
+const isEarthquakeEntry = (entry) => (
+  entry &&
+  typeof entry === "object" &&
+  typeof entry.id === "string" &&
+  typeof entry.place === "string" &&
+  Number.isFinite(entry.mag) &&
+  Number.isFinite(entry.lat) &&
+  Number.isFinite(entry.lng)
+);
+
+const normalizeLiveData = (payload) => {
+  const data = asObject(payload);
+  const corpus = asObject(data.corpus);
+  const timeline = asArray(corpus.timeline).filter((item) => item && typeof item === "object");
+  const earthquakes = asArray(data.earthquakes).filter(isEarthquakeEntry);
+  return {
+    ...data,
+    corpus: {
+      ...corpus,
+      timeline,
+    },
+    earthquakes,
+  };
 };
 
 // ── SECURITY MARKINGS ─────────────────────────────────────────────────────────
@@ -999,7 +1028,10 @@ function DraggablePanel({ id, title, children, state, onMove, onResize, onClose,
 // ─────────────────────────────────────────────────────────────────────────────
 export default function JarvisTerminal() {
   const [liveData, setLiveData] = useState(null);
-  const [loadingData, setLoadingData] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [selectedObj, setSelectedObj] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState("AU");
   const [focusId, setFocusId] = useState(null);
@@ -1037,24 +1069,38 @@ export default function JarvisTerminal() {
   const openPanel = (id) => { setPanels(p=>({...p,[id]:{...p[id],visible:true,minimized:false}})); bringToFront(id); };
 
   // Fetch live data
+  const fetchLiveData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setIsError(false);
+      setErrorMessage("");
+      const r = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({type:"all"}) });
+      if (!r.ok) throw new Error(`Request failed (${r.status})`);
+      const payload = await r.json();
+      const normalized = normalizeLiveData(payload);
+      setLiveData(normalized);
+      setLastUpdated(new Date());
+    } catch (e) {
+      console.error(e);
+      setIsError(true);
+      setErrorMessage(e instanceof Error ? e.message : "Unable to refresh live intelligence feed.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(()=>{
-    const fetch_ = async () => {
-      try {
-        setLoadingData(true);
-        const r = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({type:"all"}) });
-        if (r.ok) setLiveData(await r.json());
-      } catch(e) { console.error(e); }
-      finally { setLoadingData(false); }
-    };
-    fetch_();
-    const t=setInterval(fetch_,120000); // refresh every 2min
+    fetchLiveData();
+    const t=setInterval(fetchLiveData,120000); // refresh every 2min
     return()=>clearInterval(t);
-  },[]);
+  },[fetchLiveData]);
 
   // Clock
   useEffect(()=>{ const t=setInterval(()=>setTime(new Date()),1000); return()=>clearInterval(t); },[]);
 
-  const earthquakes = liveData?.earthquakes || [];
+  const liveDataSafe = asObject(liveData);
+  const earthquakes = asArray(liveDataSafe.earthquakes);
+  const isStale = lastUpdated ? (Date.now() - lastUpdated.getTime()) > STALE_AFTER_MS : false;
   const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
 
   const SIDEBAR_PANELS = [
@@ -1121,6 +1167,17 @@ export default function JarvisTerminal() {
         </div>
       </div>
 
+      {(isError || isStale) && (
+        <div style={{ position:"fixed", top:50, left:54, right:0, minHeight:24, padding:"4px 10px", zIndex:9999, display:"flex", alignItems:"center", gap:10, background:isError?"rgba(232,32,60,0.15)":"rgba(232,168,0,0.13)", borderBottom:`1px solid ${isError?C.red:C.gold}44` }}>
+          <span style={{ fontSize:8, color:isError?C.red:C.gold, fontWeight:"bold" }}>
+            {isError ? `OFFLINE · ${asString(errorMessage, "Live feed unavailable")}` : `STALE DATA · Last refresh ${lastUpdated ? lastUpdated.toLocaleTimeString() : "unknown"}`}
+          </span>
+          <button onClick={fetchLiveData} style={{ marginLeft:"auto", fontSize:8, color:C.neon, border:`1px solid ${C.neon}44`, background:"rgba(0,200,120,0.08)", borderRadius:3, padding:"2px 8px", cursor:"pointer" }}>
+            RETRY
+          </button>
+        </div>
+      )}
+
       {/* ── TICKER ────────────────────────────────────────────────────────── */}
       <div style={{ position:"fixed",top:50,left:54,right:0
         ,height:20,background:"rgba(2,5,8,0.99)",borderBottom:`1px solid ${C.border}`,zIndex:9997,display:"flex",alignItems:"center",overflow:"hidden" }}>
@@ -1168,7 +1225,7 @@ export default function JarvisTerminal() {
           <DraggablePanel id="TIMELINE" title="◷ TIMELINE" state={panels.TIMELINE} onMove={movePanel} onResize={resizePanel}
             onClose={()=>closePanel("TIMELINE")} onMinimize={()=>minimizePanel("TIMELINE")} zIndex={panels.TIMELINE.z}
             onClick={()=>bringToFront("TIMELINE")} minimized={panels.TIMELINE.minimized}>
-            <TimelinePanel liveData={liveData}/>
+            <TimelinePanel liveData={liveDataSafe}/>
           </DraggablePanel>
         )}
 
@@ -1186,7 +1243,7 @@ export default function JarvisTerminal() {
           <DraggablePanel id="EMAILS" title="✉ EMAIL CORPUS" state={panels.EMAILS} onMove={movePanel} onResize={resizePanel}
             onClose={()=>closePanel("EMAILS")} onMinimize={()=>minimizePanel("EMAILS")} zIndex={panels.EMAILS.z}
             onClick={()=>bringToFront("EMAILS")} minimized={panels.EMAILS.minimized}>
-            <EmailCorpus liveData={liveData}/>
+            <EmailCorpus liveData={liveDataSafe}/>
           </DraggablePanel>
         )}
 
@@ -1204,7 +1261,7 @@ export default function JarvisTerminal() {
           <DraggablePanel id="MARKETS" title="$ MARKETS" state={panels.MARKETS} onMove={movePanel} onResize={resizePanel}
             onClose={()=>closePanel("MARKETS")} onMinimize={()=>minimizePanel("MARKETS")} zIndex={panels.MARKETS.z}
             onClick={()=>bringToFront("MARKETS")} minimized={panels.MARKETS.minimized}>
-            <MarketsPanel liveData={liveData} loading={loadingData}/>
+            <MarketsPanel liveData={liveDataSafe} loading={isLoading}/>
           </DraggablePanel>
         )}
 
