@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Globe3D from "../components/Globe3D";
+import { loadJarvisTerminalData } from "../api/jarvisIntel";
 
 const API = "https://jarvis-6bc54ec6.base44.app/functions/getLiveIntel";
 
@@ -31,36 +32,36 @@ const Glass = ({ children, style, onClick }) => (
 // ── ONTOLOGY — REAL OBJECTS ──────────────────────────────────────────────────
 const OBJECTS = [
   // PERSONS
-  { id:"sam",       label:"Sam Kazangas",       type:"person",   mark:"PII",        conf:1.0, x:460,y:260,
-    props:{ DOB:"27 Nov 1992", Heritage:"Greek Cypriot Australian", Home:"35 Springfield Rd Padstow NSW", Email:"samkazangas@gmail.com", Artist:"$avva", GitHub:"samskiezz" },
+  { id:"sam",       label:"PERSON_001",       type:"person",   mark:"PII",        conf:1.0, x:460,y:260,
+    props:{ DOB:"27 Nov 1992", Heritage:"Greek Cypriot Australian", Home:"ADDRESS_001", Email:"EMAIL_001", Artist:"$avva", GitHub:"samskiezz" },
     linked:["psg","hilts","harrison","nisha","pangani","dubai","crypto","music","target"] },
-  { id:"harrison",  label:"Harrison Vaubell",   type:"person",   mark:"INTERNAL",   conf:0.98, x:260,y:220,
-    props:{ Phone:"0415557997", Email:"harrison@projectsolar.com.au", Role:"PSG Co-founder 50/50", WA_Messages:"6,161", Dynamic:"Sam mentors tech, Harrison runs ops" },
+  { id:"harrison",  label:"PERSON_002",   type:"person",   mark:"INTERNAL",   conf:0.98, x:260,y:220,
+    props:{ Phone:"PHONE_001", Email:"EMAIL_002", Role:"PSG Co-founder 50/50", WA_Messages:"6,161", Dynamic:"Sam mentors tech, Harrison runs ops" },
     linked:["psg","sam","dubai","ifza"] },
-  { id:"nisha",     label:"Nisha Nissan",        type:"person",   mark:"PII",        conf:0.97, x:580,y:380,
-    props:{ Emails:"nisha.nissan@hotmail.com", Employer:"Commonwealth Bank", Wedding:"Sat 20 Mar 2027 (deciding)", Venues:"Ottimo House · Kefalos CY · Breakfast Point" },
+  { id:"nisha",     label:"PERSON_003",        type:"person",   mark:"PII",        conf:0.97, x:580,y:380,
+    props:{ Emails:"EMAIL_003", Employer:"Commonwealth Bank", Wedding:"Sat 20 Mar 2027 (deciding)", Venues:"Ottimo House · Kefalos CY · Breakfast Point" },
     linked:["sam","austral"] },
   // ORGS
-  { id:"psg",       label:"Project Solar Group", type:"org",      mark:"FINANCIAL",  conf:1.0, x:280,y:150,
-    props:{ ABN:"29 685 341 744", Ownership:"50/50 Sam + Harrison", Revenue:"$180k/wk", Expenses:"$60k/wk", Net:"$120k/wk", AnnualNet:"~$6.24M", Domain:"@projectsolar.com.au", Tools:"ServiceM8 · OpenSolar · Xero · NAB · RingCentral" },
+  { id:"psg",       label:"PROJECT_SOLAR_GROUP", type:"org",      mark:"FINANCIAL",  conf:1.0, x:280,y:150,
+    props:{ ABN:"ORG_REG_001", Ownership:"50/50 Sam + Harrison", Revenue:"$180k/wk", Expenses:"$60k/wk", Net:"$120k/wk", AnnualNet:"~$6.24M", Domain:"@projectsolar.com.au", Tools:"ServiceM8 · OpenSolar · Xero · NAB · RingCentral" },
     linked:["sam","harrison","defended","target"] },
-  { id:"hilts",     label:"Hilts Group Australia", type:"org",    mark:"FINANCIAL",  conf:0.99, x:640,y:150,
-    props:{ ABN:"27 651 379 298", Ownership:"100% Sam", Email:"sam@hilts.com.au", Clients:"Anytime Fitness · Ashfield RSL · Metro Petrol" },
+  { id:"hilts",     label:"HILTS_GROUP_AUSTRALIA", type:"org",    mark:"FINANCIAL",  conf:0.99, x:640,y:150,
+    props:{ ABN:"ORG_REG_002", Ownership:"100% Sam", Email:"sam@hilts.com.au", Clients:"Anytime Fitness · Ashfield RSL · Metro Petrol" },
     linked:["sam","target"] },
-  { id:"ifza",      label:"IFZA FZCO Dubai",    type:"org",      mark:"FINANCIAL",  conf:0.90, x:700,y:290,
+  { id:"ifza",      label:"IFZA_FZCO_DUBAI",    type:"org",      mark:"FINANCIAL",  conf:0.90, x:700,y:290,
     props:{ Type:"UAE Free Zone Company", Partners:"Sam + Harrison", Sector:"Solar Energy", Timeline:"Mar 2026 registration", Visa:"Investor visa pathway" },
     linked:["sam","harrison","dubai"] },
-  { id:"defended",  label:"Defended Energy",    type:"client",   mark:"INTERNAL",   conf:0.95, x:170,y:340,
+  { id:"defended",  label:"DEFENDED_ENERGY",    type:"client",   mark:"INTERNAL",   conf:0.95, x:170,y:340,
     props:{ Owner:"Abdul", Sales:"Bill · Heath", Admin:"Carlos (scheduling) · Hassan (jobs)", Volume:"2–5 jobs/week", Issues:"$900/wk freight absorbed · steep roofs · Origin meter issue" },
     linked:["psg"] },
   // INVESTMENTS
-  { id:"pangani",   label:"Pangani TZ",         type:"invest",   mark:"FINANCIAL",  conf:0.88, x:340,y:400,
+  { id:"pangani",   label:"PANGANI_TZ",         type:"invest",   mark:"FINANCIAL",  conf:0.88, x:340,y:400,
     props:{ Size:"6 acres / ~10,000 SQM", Location:"Ushongo Mabaoni Beachfront, Pangani, Tanzania", Ask:"$175k USD", Agent:"Jolyon Darker · Peponi Real Estate", Legal:"Eden Law Chambers", Structure:"ZIPA-compliant 99yr leasehold" },
     linked:["sam","zanzibar","target"] },
-  { id:"zanzibar",  label:"Zanzibar Resort",    type:"invest",   mark:"FINANCIAL",  conf:0.85, x:390,y:475,
+  { id:"zanzibar",  label:"ZANZIBAR_RESORT",    type:"invest",   mark:"FINANCIAL",  conf:0.85, x:390,y:475,
     props:{ Strategy:"$100M resort anchor", Location:"Matemwe / Paje beachfront", Agent:"Africa Luxury Properties", Timeline:"2033–2035", Structure:"ZIPA 99yr leasehold" },
     linked:["sam","pangani","target"] },
-  { id:"dubai",     label:"Dubai / Emaar",       type:"invest",   mark:"FINANCIAL",  conf:0.92, x:660,y:250,
+  { id:"dubai",     label:"DUBAI_/_EMAAR",       type:"invest",   mark:"FINANCIAL",  conf:0.92, x:660,y:250,
     props:{ Plans:"Golf Acres Emaar South 1BR (Apr 2026) + Golf Vale (Jun 2026)", Agent:"M Khalid Khan · APIL Properties", Strategy:"Airbnb yield + investor visa", Currency:"AED pegged USD — zero FX risk" },
     linked:["sam","harrison","ifza","target"] },
   // ASSETS
@@ -68,13 +69,13 @@ const OBJECTS = [
     props:{ XRP:"9,300 units @ $2.07 AUD = $19,251 AUD", Exchanges:"BTCMarkets · Coinbase · eToro · CoinJar", BTC:"Above A$98,000 — institutional buying Mar 2026" },
     linked:["sam","target"] },
   { id:"austral",   label:"Lot 227 Austral NSW", type:"property", mark:"PII",       conf:0.96, x:560,y:470,
-    props:{ Address:"Lot 227 Swamphen St, Austral NSW", Builder:"Gurner", Owner:"Nisha Nissan", Electrical:"Consultation confirmed Feb 2026" },
+    props:{ Address:"ADDRESS_002", Builder:"Gurner", Owner:"PERSON_003", Electrical:"Consultation confirmed Feb 2026" },
     linked:["nisha"] },
-  { id:"music",     label:"$avva Music",         type:"creative", mark:"INTERNAL",  conf:0.99, x:690,y:160,
+  { id:"music",     label:"$AVVA_MUSIC",         type:"creative", mark:"INTERNAL",  conf:0.99, x:690,y:160,
     props:{ Artist:"$avva", Distributor:"DistroKid", Releases:"Still Me (5k+ streams) · Not Like This · The Same · Later · Working · Breathe", Platforms:"Spotify · Apple Music · Deezer · TikTok · YouTube", Royalties:"Active — payout Feb 2026" },
     linked:["sam"] },
   // TARGET
-  { id:"target",    label:"$100M Target",        type:"target",  mark:"RESTRICTED", conf:1.0, x:460,y:155,
+  { id:"target",    label:"$100M_TARGET",        type:"target",  mark:"RESTRICTED", conf:1.0, x:460,y:155,
     props:{ Goal:"$100M net worth", Timeline:"2033–2035", Engine:"PSG $120k/wk → property → Zanzibar resort", Status:"ON TRACK — PSG $6.24M/yr base" },
     linked:["sam","psg","pangani","zanzibar","dubai","crypto","hilts"] },
 ];
@@ -127,23 +128,23 @@ const COUNTRIES = [
 
 // ── RISK SIGNALS (scored) ─────────────────────────────────────────────────────
 const RISK_SIGNALS = [
-  { id:"r1", title:"Defended Energy freight dispute", severity:72, type:"OPERATIONAL", country:"AU", impact:"DIRECT", detail:"Absorbing ~$900/wk freight. Verbal only. No paper trail. SOPA rights available.", linked:"defended", trend:"STABLE" },
-  { id:"r2", title:"East Africa conflict — Congo spillover", severity:58, type:"GEOPOLITICAL", country:"TZ", impact:"WATCH", detail:"GDELT: Eastern Congo activity. Monitor Tanzania/Zanzibar border. Pangani risk if escalation.", linked:"pangani", trend:"RISING" },
-  { id:"r3", title:"Tanzania land law complexity", severity:55, type:"LEGAL", country:"TZ", impact:"DIRECT", detail:"99yr leasehold — foreign ownership restricted. Eden Law Chambers engaged. ZIPA compliance required.", linked:"pangani", trend:"STABLE" },
-  { id:"r4", title:"AU solar policy change risk", severity:68, type:"REGULATORY", country:"AU", impact:"CRITICAL", detail:"STC rebate scheme drives PSG leads directly. Policy cut = direct hit to $120k/wk net.", linked:"psg", trend:"WATCH" },
-  { id:"r5", title:"Origin Energy meter application loss", severity:45, type:"OPERATIONAL", country:"AU", impact:"DIRECT", detail:"Picton job — Origin lost application twice. Recurring issue. Needs escalation.", linked:"psg", trend:"STABLE" },
-  { id:"r6", title:"Red Sea disruption", severity:40, type:"GEOPOLITICAL", country:"AE", impact:"WATCH", detail:"Brent crude +2.1%. Indian Ocean maritime routes — Zanzibar coastal position affected.", linked:"zanzibar", trend:"RISING" },
-  { id:"r7", title:"XRP concentration risk", severity:32, type:"FINANCIAL", country:"AU", impact:"WATCH", detail:"9,300 XRP single asset. Exchange risk across 4 platforms. Regulatory uncertainty.", linked:"crypto", trend:"STABLE" },
-  { id:"r8", title:"Wedding decision pending", severity:28, type:"PERSONAL", country:"AU", impact:"LOG", detail:"Ottimo House Sat 20 Mar 2027 — deciding. Cyprus Kefalos thread active. Decision needed.", linked:"nisha", trend:"WATCH" },
+  { id:"r1", title:"DEFENDED_ENERGY freight dispute", severity:72, type:"OPERATIONAL", country:"AU", impact:"DIRECT", detail:"DETAIL_REDACTED", linked:"defended", trend:"STABLE" },
+  { id:"r2", title:"East Africa conflict — Congo spillover", severity:58, type:"GEOPOLITICAL", country:"TZ", impact:"WATCH", detail:"DETAIL_REDACTED", linked:"pangani", trend:"RISING" },
+  { id:"r3", title:"Tanzania land law complexity", severity:55, type:"LEGAL", country:"TZ", impact:"DIRECT", detail:"DETAIL_REDACTED", linked:"pangani", trend:"STABLE" },
+  { id:"r4", title:"AU solar policy change risk", severity:68, type:"REGULATORY", country:"AU", impact:"CRITICAL", detail:"DETAIL_REDACTED", linked:"psg", trend:"WATCH" },
+  { id:"r5", title:"Origin Energy meter application loss", severity:45, type:"OPERATIONAL", country:"AU", impact:"DIRECT", detail:"DETAIL_REDACTED", linked:"psg", trend:"STABLE" },
+  { id:"r6", title:"Red Sea disruption", severity:40, type:"GEOPOLITICAL", country:"AE", impact:"WATCH", detail:"DETAIL_REDACTED", linked:"zanzibar", trend:"RISING" },
+  { id:"r7", title:"XRP concentration risk", severity:32, type:"FINANCIAL", country:"AU", impact:"WATCH", detail:"DETAIL_REDACTED", linked:"crypto", trend:"STABLE" },
+  { id:"r8", title:"Wedding decision pending", severity:28, type:"PERSONAL", country:"AU", impact:"LOG", detail:"DETAIL_REDACTED", linked:"nisha", trend:"WATCH" },
 ];
 
 // ── WATCHLIST ─────────────────────────────────────────────────────────────────
 const WATCHLIST_INIT = [
-  { id:"w1", obj:"pangani", label:"Pangani DD", status:"ACTIVE", alert:"Eden Law response pending", added:"14 Mar 2026" },
-  { id:"w2", obj:"dubai", label:"Golf Acres Emaar", status:"ACTIVE", alert:"APIL Properties — reply received 16 Mar", added:"14 Mar 2026" },
-  { id:"w3", obj:"defended", label:"Defended Energy dispute", status:"ALERT", alert:"$900/wk freight — no paper trail", added:"Ongoing" },
-  { id:"w4", obj:"psg", label:"PSG Pipeline", status:"LIVE", alert:"119 runs today — 46.2 credits", added:"Automated" },
-  { id:"w5", obj:"target", label:"$100M target", status:"ON_TRACK", alert:"PSG net $6.24M/yr. Next: Pangani deposit.", added:"Strategic" },
+  { id:"w1", obj:"pangani", label:"Pangani DD", status:"ACTIVE", alert:"ALERT_REDACTED", added:"14 Mar 2026" },
+  { id:"w2", obj:"dubai", label:"Golf Acres Emaar", status:"ACTIVE", alert:"ALERT_REDACTED", added:"14 Mar 2026" },
+  { id:"w3", obj:"defended", label:"DEFENDED_ENERGY dispute", status:"ALERT", alert:"ALERT_REDACTED", added:"Ongoing" },
+  { id:"w4", obj:"psg", label:"PSG Pipeline", status:"LIVE", alert:"ALERT_REDACTED", added:"Automated" },
+  { id:"w5", obj:"target", label:"$100M target", status:"ON_TRACK", alert:"ALERT_REDACTED", added:"Strategic" },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -771,6 +772,14 @@ function EmailCorpus({ liveData }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function WatchlistPanel({ onFocus }) {
   const [items, setItems] = useState(WATCHLIST_INIT);
+
+  useEffect(() => {
+    loadJarvisTerminalData({ role: "viewer", clearance: "standard", tenant: "default" })
+      .then((data) => {
+        if (Array.isArray(data?.watchlist)) setItems(data.watchlist);
+      })
+      .catch(() => {});
+  }, []);
   const statusCol = s => ({ACTIVE:C.neon,ALERT:C.red,LIVE:C.blue,ON_TRACK:C.neon,WATCHING:C.gold})[s]||C.text;
 
   const toggle = (id) => setItems(prev=>prev.map(i=>i.id===id?{...i,status:i.status==="ACTIVE"?"WATCHING":"ACTIVE"}:i));
@@ -855,7 +864,7 @@ function MarketsPanel({ liveData, loading }) {
         {/* Portfolio summary */}
         <div style={{ margin:"6px 8px",padding:"10px",background:C.neonD,border:`1px solid ${C.neon}22`,borderRadius:4 }}>
           <div style={{ fontSize:7,color:C.neon,letterSpacing:2,marginBottom:8 }}>PORTFOLIO POSITIONS</div>
-          {[["XRP 9,300 units","$19,251 AUD",C.neon],["PSG Net/wk","$120,000",C.neon],["PSG Annual Net","~$6.24M",C.neon],["Pangani Ask","$175k USD",C.gold],["Golf Acres","AED TBC",C.blue],["$100M Target","2033–2035",C.red]].map(([k,v,col])=>(
+          {[["XRP 9,300 units","$19,251 AUD",C.neon],["PSG Net/wk","$120,000",C.neon],["PSG Annual Net","~$6.24M",C.neon],["Pangani Ask","$175k USD",C.gold],["Golf Acres","AED TBC",C.blue],["$100M_TARGET","2033–2035",C.red]].map(([k,v,col])=>(
             <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"3px 0",borderBottom:`1px solid rgba(0,200,120,0.04)` }}>
               <span style={{ fontSize:8,color:"#2a3d4d" }}>{k}</span>
               <span style={{ fontSize:9,color:col,fontWeight:"bold" }}>{v}</span>
@@ -880,14 +889,14 @@ function AnalystPanel() {
   const endRef = useRef();
 
   const KB = {
-    psg: `PSG — Project Solar Group Pty Ltd\nABN: 29 685 341 744 | 50/50 Sam + Harrison Vaubell\nRevenue: $180k/wk | Expenses: $60k/wk | Net: $120k/wk | Annual: ~$6.24M\nContractors: Jesse Gordon · Tyler Gordon · Xavier Aguirre · Sulieman el-Dannoui · Adam Kandeel · Amjad Malas · Xavier Cevallos\nAdmin (PH): Jas (accounts@) · Marvin Oqueriza Benson · Red · Joplin Lualhati (WizeWork)\nPipeline: Gmail → OpenSolar → ServiceM8 — 119 runs today · 46.2 credits\n\nDEFENDED ENERGY ISSUES (real from WA corpus):\n• Stopped site delivery — Sam absorbing ~$900/wk freight verbally\n• Steep roof jobs (Wahroonga 29°) sent without pre-inspection\n• Origin Energy lost Picton meter application twice\n• 30-day payment attempt — rejected, 7 days enforced\nRisk signal: SCORE 72 — SOPA rights available`,
+    psg: `PSG — PROJECT_SOLAR_GROUP Pty Ltd\nABN: ORG_REG_001 | 50/50 Sam + PERSON_002\nRevenue: $180k/wk | Expenses: $60k/wk | Net: $120k/wk | Annual: ~$6.24M\nContractors: Jesse Gordon · Tyler Gordon · Xavier Aguirre · Sulieman el-Dannoui · Adam Kandeel · Amjad Malas · Xavier Cevallos\nAdmin (PH): Jas (accounts@) · Marvin Oqueriza Benson · Red · Joplin Lualhati (WizeWork)\nPipeline: Gmail → OpenSolar → ServiceM8 — 119 runs today · 46.2 credits\n\nDEFENDED ENERGY ISSUES (real from WA corpus):\n• Stopped site delivery — Sam absorbing ~$900/wk freight verbally\n• Steep roof jobs (Wahroonga 29°) sent without pre-inspection\n• Origin Energy lost Picton meter application twice\n• 30-day payment attempt — rejected, 7 days enforced\nRisk signal: SCORE 72 — SOPA rights available`,
     zanzibar: `ZANZIBAR / PANGANI — REAL EMAIL EVIDENCE\n\n14 Mar 2026: Jolyon Darker (Peponi Real Estate) → "Re: Serious Enquiry — 6 Acres Ushongo Mabaoni Beachfront, Pangani"\n16 Mar 2026: Africa Luxury Properties → "RE: Beachfront Land Acquisition — Matemwe, Zanzibar — ~10,000 SQM"\n15 Mar 2026: Sam → "Re: Beachfront Land Acquisition Zanzibar - Foreign Investor USD 100-200k"\n12 Mar 2026: Eden Law Chambers → Legal structure for ZIPA-compliant 99yr leasehold\n\nAsk: $175k USD | Size: 6 acres / ~10,000 SQM\nStrategy: $100M resort anchor 2033–2035\nRisk score: 55 (land law) + 58 (East Africa conflict)\nStatus: DD ACTIVE`,
     dubai: `DUBAI — REAL EMAIL EVIDENCE\n\n16 Mar 2026: M Khalid Khan (APIL Properties) → "Re: Golf Acres, Emaar South — 1BR Business Investment Enquiry"\n16 Mar 2026: APIL Properties → "Golf Vale by Emaar — Phase 2 Now Open — 1BR from AED 750k"\n15 Mar 2026: Sam → "Re: IFZA Free Zone Company Setup — 2 Partners, Solar Energy, Urgent"\n\nTimeline: IFZA FZCO Mar 2026 → Golf Acres deposit Apr 2026 → Golf Vale Jun 2026\nStrategy: Airbnb yield + investor visa (Sam + Harrison)\nCurrency: AED pegged USD — zero FX risk\nRisk score: 18 (LOW)`,
     risk: `RISK SIGNAL MATRIX — ${RISK_SIGNALS.length} active signals\n\n` + RISK_SIGNALS.sort((a,b)=>b.severity-a.severity).map(s=>`[${s.severity}] ${s.title} — ${s.type} — ${s.trend}\n    ${s.detail}`).join("\n\n"),
     wealth: `WEALTH TARGET — $100M BY 2033–2035\n\nCurrent:\n• PSG net: $120k/wk = $6.24M/yr\n• XRP: 9,300 × $2.07 = $19,251 AUD\n• Pangani land: $175k USD (DD active)\n• Dubai pipeline: Golf Acres + Golf Vale + IFZA\n\nPath: PSG cash → property acquisition → Zanzibar resort\nTimeline: 2026 (Dubai IFZA) → 2026 (Pangani deposit) → 2033-2035 (Zanzibar resort anchor)\n\nKey lever: If XRP hits $5 AUD → 9,300 × $5 = $46,500 instant boost`,
-    harrison: `HARRISON VAUBELL — DEEP INTEL (6,161 WA messages analysed)\n\nRole: PSG co-founder 50/50. Phone: 0415557997\nRelationship: "cuzzy", deep trust. Daily contact. Sam mentors tech, Harrison runs ops.\nShared: IFZA FZCO Dubai (co-applicant). Golf Acres deposit.\nFinancial: CC on ALL PSG emails — non-negotiable.\nPersonal: Harrison paid for Thailand trip Aug 2025. Sam proactively checks in.`,
+    harrison: `HARRISON VAUBELL — DEEP INTEL (6,161 WA messages analysed)\n\nRole: PSG co-founder 50/50. Phone: PHONE_001\nRelationship: "cuzzy", deep trust. Daily contact. Sam mentors tech, Harrison runs ops.\nShared: IFZA_FZCO_DUBAI (co-applicant). Golf Acres deposit.\nFinancial: CC on ALL PSG emails — non-negotiable.\nPersonal: Harrison paid for Thailand trip Aug 2025. Sam proactively checks in.`,
     music: `$AVVA — DISTROKID + STREAMING DATA (real)\n\nStill Me: 5,000+ streams by 17 Feb 2026 — Apple Lyrics approved — YouTube ContentID registered\nNot Like This: live Deezer 11 Mar 2026\nThe Same: live Deezer 11 Mar 2026\nLater: live Spotify 10 Feb 2026 — Apple Lyrics approved\nWorking: pipeline Mar 2026\n\nDistributor: DistroKid. Royalty withdrawal 11 Feb 2026.\nPlatforms: Spotify · Apple Music · Deezer · TikTok · YouTube Music · Amazon · Instagram/Facebook`,
-    nisha: `NISHA NISSAN — FIANCÉE\n\nnisha.nissan@hotmail.com · nisha.nissan17@gmail.com\nEmployer: Commonwealth Bank\nProperty: Lot 227 Swamphen St, Austral NSW — builder Gurner (build active)\nDaughter: born Aug 2025\n\nWEDDING (active email threads):\n• Kefalos venue Cyprus — May 2027 — active thread (kefalos@kefalos.com.cy + damon@damon.com.cy)\n• Ottimo House — Sat 20 Mar 2027 — proposed hold (DECIDING)\n• Breakfast Point Country Club — toured Feb 8 2026\nRisk signal: Score 28 — decision pending`,
+    nisha: `NISHA NISSAN — FIANCÉE\n\nEMAIL_003 · nisha.nissan17@gmail.com\nEmployer: Commonwealth Bank\nProperty: ADDRESS_002 — builder Gurner (build active)\nDaughter: born Aug 2025\n\nWEDDING (active email threads):\n• Kefalos venue Cyprus — May 2027 — active thread (kefalos@kefalos.com.cy + damon@damon.com.cy)\n• Ottimo House — Sat 20 Mar 2027 — proposed hold (DECIDING)\n• Breakfast Point Country Club — toured Feb 8 2026\nRisk signal: Score 28 — decision pending`,
     corpus: `DATA CORPUS — VERIFIED SOURCES\n\nGmail: 3,804 emails processed (11 categories)\nWhatsApp (5 chats): 15,822 messages\n  Harrison personal: 6,161 | PSG Admin group: 2,524 | Bentley/Defended: 2,982 | Abdul 1:1: 334\n\nExtracted facts: 8,939\n  amount_aud: 4,764 | contact_email: 3,271 | phone: 640 | abn: 264\n\nCategory breakdown:\n  General: 5,857 | Property_Build: 1,030 | Shopping: 928 | Property_Leads: 281 | Wedding: 224\n  Travel: 142 | Hilts_Business: 136 | Finance_Banking: 119 | Dubai_Investment: 25\n\nChromaDB vectors: 11,299 (all-MiniLM-L6-v2)\nTimeline events: 3,018\nPalantir batches: Investments(89) Crypto(92) Finance(306) PSG(38) Travel(78) Music(104) Legal(55) ATO(126)`,
   };
 

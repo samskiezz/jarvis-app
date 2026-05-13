@@ -12,3 +12,5 @@ export const psgPipelineHandler = base44.functions.psgPipelineHandler;
 export const loadOmegaContext = base44.functions.loadOmegaContext;
 export const getJarvisIntel = base44.functions.getJarvisIntel;
 export const getLiveIntel = base44.functions.getLiveIntel;
+
+export const getJarvisTerminalData = base44.functions.getJarvisTerminalData;
