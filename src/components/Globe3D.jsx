@@ -22,12 +22,13 @@ function latLngToVec3(lat, lng, radius) {
 
 export default function Globe3D({ selectedCountry, onSelect, earthquakes }) {
   const mountRef = useRef(null);
-  const sceneRef = useRef(null);
+  const runtimeRef = useRef(null);
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
-    const W = mount.clientWidth, H = mount.clientHeight;
+    const W = Math.max(320, mount.clientWidth || 0);
+    const H = Math.max(220, mount.clientHeight || 0);
 
     // Scene
     const scene = new THREE.Scene();
@@ -36,7 +37,7 @@ export default function Globe3D({ selectedCountry, onSelect, earthquakes }) {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(W, H);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, 0);
     mount.appendChild(renderer.domElement);
 
@@ -163,10 +164,25 @@ export default function Globe3D({ selectedCountry, onSelect, earthquakes }) {
       renderer.render(scene, camera);
     };
     animate();
-    sceneRef.current = { renderer, animId };
+    runtimeRef.current = { renderer, camera, mount };
+
+    const onResize = () => {
+      if (!mount || !runtimeRef.current) return;
+      const nextW = Math.max(320, mount.clientWidth || 0);
+      const nextH = Math.max(220, mount.clientHeight || 0);
+      runtimeRef.current.camera.aspect = nextW / nextH;
+      runtimeRef.current.camera.updateProjectionMatrix();
+      runtimeRef.current.renderer.setSize(nextW, nextH);
+    };
+
+    const observer = new ResizeObserver(onResize);
+    observer.observe(mount);
+    window.addEventListener("resize", onResize);
 
     return () => {
       cancelAnimationFrame(animId);
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
       mount.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("mousemove", onMouseMove);
