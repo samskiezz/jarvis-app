@@ -16,6 +16,10 @@ const C = {
   type:{ person:"#00c878", org:"#0096d4", invest:"#e8a800", asset:"#f07820", property:"#0096d4", creative:"#a855f7", client:"#e8203c", target:"#e8203c" },
 };
 
+const ROW_GRID_TEMPLATE = "1fr 80px 70px 55px 45px";
+const ROW_DOT_STYLE = { width:6, height:6, borderRadius:"50%", flexShrink:0 };
+const ROW_CONF_BAR_STYLE = { flex:1, height:3, background:"rgba(0,200,120,0.1)", borderRadius:2, overflow:"hidden" };
+
 // ── SECURITY MARKINGS ─────────────────────────────────────────────────────────
 const MARK = ({ label, color }) => (
   <span style={{ fontSize:7, padding:"1px 5px", borderRadius:2, background:color+"18", color, border:`1px solid ${color}33`, letterSpacing:1, fontWeight:"bold", flexShrink:0 }}>
@@ -165,7 +169,7 @@ const PANEL_DEFS = {
 // ─────────────────────────────────────────────────────────────────────────────
 // VERTEX GRAPH
 // ─────────────────────────────────────────────────────────────────────────────
-function VertexGraph({ selectedObj, onSelect, focusId }) {
+function VertexGraph({ selectedObj, onSelect, focusId, isActive = true }) {
   const canvasRef = useRef(null);
   const nodesRef = useRef(OBJECTS.map(o => ({ ...o, vx:0, vy:0 })));
   const rafRef = useRef(null);
@@ -193,6 +197,18 @@ function VertexGraph({ selectedObj, onSelect, focusId }) {
     return neighbors;
   }, [focusId]);
 
+  const nodeById = useMemo(() => new Map(nodesRef.current.map((n) => [n.id, n])), []);
+  const linkAdjacency = useMemo(() => {
+    const map = new Map();
+    LINKS.forEach((l) => {
+      if (!map.has(l.a)) map.set(l.a, []);
+      if (!map.has(l.b)) map.set(l.b, []);
+      map.get(l.a).push(l);
+      map.get(l.b).push(l);
+    });
+    return map;
+  }, []);
+
   useEffect(() => {
     const canvas = canvasRef.current; if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -214,7 +230,7 @@ function VertexGraph({ selectedObj, onSelect, focusId }) {
         }
         LINKS.forEach(lnk => {
           if (!visibleIds.has(lnk.a)||!visibleIds.has(lnk.b)) return;
-          const a=nodes.find(n=>n.id===lnk.a), b=nodes.find(n=>n.id===lnk.b);
+          const a=nodeById.get(lnk.a), b=nodeById.get(lnk.b);
           if (!a||!b) return;
           const dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||1;
           const f=(d-150)*0.015*lnk.strength;
@@ -237,7 +253,7 @@ function VertexGraph({ selectedObj, onSelect, focusId }) {
       // Links
       LINKS.forEach(lnk => {
         if (!visibleIds.has(lnk.a)||!visibleIds.has(lnk.b)) return;
-        const a=nodes.find(n=>n.id===lnk.a), b=nodes.find(n=>n.id===lnk.b);
+        const a=nodeById.get(lnk.a), b=nodeById.get(lnk.b);
         if (!a||!b) return;
         const active = selectedObj && (selectedObj===lnk.a || selectedObj===lnk.b);
         ctx.save();
@@ -295,9 +311,28 @@ function VertexGraph({ selectedObj, onSelect, focusId }) {
 
       rafRef.current=requestAnimationFrame(draw);
     };
-    rafRef.current=requestAnimationFrame(draw);
-    return ()=>cancelAnimationFrame(rafRef.current);
-  }, [hov, selectedObj, visibleIds]);
+
+    const start = () => {
+      if (rafRef.current || !isActive || document.visibilityState !== "visible") return;
+      rafRef.current = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      if (!rafRef.current) return;
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") start();
+      else stop();
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+    start();
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
+    };
+  }, [hov, selectedObj, visibleIds, nodeById, isActive]);
 
   return (
     <div style={{ position:"relative", width:"100%", height:"100%" }}>
@@ -472,6 +507,14 @@ function ObjectExplorer({ onSelect, selectedObj }) {
 
   const types = ["ALL",...new Set(OBJECTS.map(o=>o.type))];
   const marks = ["ALL",...new Set(OBJECTS.map(o=>o.mark))];
+  const linkCounts = useMemo(() => {
+    const counts = new Map();
+    LINKS.forEach((l) => {
+      counts.set(l.a, (counts.get(l.a) || 0) + 1);
+      counts.set(l.b, (counts.get(l.b) || 0) + 1);
+    });
+    return counts;
+  }, []);
 
   const filtered = useMemo(()=>{
     let items = [...OBJECTS];
@@ -516,28 +559,28 @@ function ObjectExplorer({ onSelect, selectedObj }) {
       {/* Table */}
       <div style={{ flex:1,overflowY:"auto" }}>
         {/* Header */}
-        <div style={{ display:"grid",gridTemplateColumns:"1fr 80px 70px 55px 45px",gap:4,padding:"4px 8px",borderBottom:`1px solid ${C.border}`,fontSize:7,color:"#2a3d4d",position:"sticky",top:0,background:C.bg }}>
+        <div style={{ display:"grid",gridTemplateColumns:ROW_GRID_TEMPLATE,gap:4,padding:"4px 8px",borderBottom:`1px solid ${C.border}`,fontSize:7,color:"#2a3d4d",position:"sticky",top:0,background:C.bg }}>
           <span>OBJECT</span><span>TYPE</span><span>MARKING</span><span>CONF</span><span>LINKS</span>
         </div>
         {filtered.map(obj=>{
           const col=C.type[obj.type]||C.neon;
           const markCol=C.mark[obj.mark]||C.text;
-          const linkCount=LINKS.filter(l=>l.a===obj.id||l.b===obj.id).length;
+          const linkCount=linkCounts.get(obj.id) || 0;
           const isExp=expandedObj===obj.id;
           const isSel=selectedObj===obj.id;
           return (
             <div key={obj.id}
               style={{ borderBottom:`1px solid rgba(0,200,120,0.04)`,background:isSel?C.neonD:"transparent" }}>
-              <div style={{ display:"grid",gridTemplateColumns:"1fr 80px 70px 55px 45px",gap:4,padding:"5px 8px",cursor:"pointer",alignItems:"center" }}
+              <div style={{ display:"grid",gridTemplateColumns:ROW_GRID_TEMPLATE,gap:4,padding:"5px 8px",cursor:"pointer",alignItems:"center" }}
                 onClick={()=>{ setExpandedObj(isExp?null:obj.id); onSelect(obj.id); }}>
                 <div style={{ display:"flex",alignItems:"center",gap:5 }}>
-                  <div style={{ width:6,height:6,borderRadius:"50%",background:col,boxShadow:`0 0 4px ${col}`,flexShrink:0 }}/>
+                  <div style={{ ...ROW_DOT_STYLE, background:col, boxShadow:`0 0 4px ${col}` }}/>
                   <span style={{ fontSize:9,color:isSel?col:C.textB,fontWeight:isSel?"bold":"normal" }}>{obj.label}</span>
                 </div>
                 <span style={{ fontSize:7,padding:"1px 5px",borderRadius:2,background:col+"18",color:col,border:`1px solid ${col}33` }}>{obj.type}</span>
                 <span style={{ fontSize:7,padding:"1px 4px",borderRadius:2,background:markCol+"18",color:markCol }}>{obj.mark}</span>
                 <div style={{ display:"flex",alignItems:"center",gap:3 }}>
-                  <div style={{ flex:1,height:3,background:"rgba(0,200,120,0.1)",borderRadius:2,overflow:"hidden" }}>
+                  <div style={ROW_CONF_BAR_STYLE}>
                     <div style={{ width:`${obj.conf*100}%`,height:"100%",background:obj.conf>0.9?C.neon:obj.conf>0.7?C.gold:C.red }}/>
                   </div>
                   <span style={{ fontSize:7,color:C.text }}>{(obj.conf*100).toFixed(0)}%</span>
@@ -1150,7 +1193,7 @@ export default function JarvisTerminal() {
           <DraggablePanel id="VERTEX" title="◈ VERTEX GRAPH" state={panels.VERTEX} onMove={movePanel} onResize={resizePanel}
             onClose={()=>closePanel("VERTEX")} onMinimize={()=>minimizePanel("VERTEX")} zIndex={panels.VERTEX.z}
             onClick={()=>bringToFront("VERTEX")} minimized={panels.VERTEX.minimized}>
-            <VertexGraph selectedObj={selectedObj} onSelect={id=>{setSelectedObj(id);setFocusId(null);}} focusId={focusId}/>
+            <VertexGraph selectedObj={selectedObj} onSelect={id=>{setSelectedObj(id);setFocusId(null);}} focusId={focusId} isActive={!panels.VERTEX.minimized}/>
           </DraggablePanel>
         )}
 
