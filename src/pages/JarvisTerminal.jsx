@@ -939,6 +939,56 @@ function AnalystPanel() {
   );
 }
 
+function StreamStatusPanel({ title, streamUrlEnv, channels = [] }) {
+  const [lastTick, setLastTick] = useState(null);
+  const [events, setEvents] = useState(0);
+  const [connected, setConnected] = useState(false);
+  const streamUrl = import.meta.env[streamUrlEnv];
+
+  useEffect(() => {
+    if (!streamUrl) return;
+    const es = new EventSource(streamUrl);
+    es.onopen = () => setConnected(true);
+    es.onmessage = () => {
+      setEvents((v) => v + 1);
+      setLastTick(new Date());
+    };
+    es.onerror = () => setConnected(false);
+    return () => es.close();
+  }, [streamUrl]);
+
+  return (
+    <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New",padding:10,gap:8 }}>
+      <div style={{ fontSize:9,color:C.textB }}>{title}</div>
+      <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
+        <span style={{ fontSize:7,padding:"2px 6px",border:`1px solid ${C.border}`,borderRadius:3,color:connected?C.neon:C.red }}>
+          {connected ? "STREAM CONNECTED" : "STREAM OFFLINE"}
+        </span>
+        <span style={{ fontSize:7,padding:"2px 6px",border:`1px solid ${C.border}`,borderRadius:3,color:C.gold }}>
+          EVENTS: {events}
+        </span>
+      </div>
+      <div style={{ fontSize:8,color:C.text }}>
+        Endpoint: {streamUrl || `${streamUrlEnv} not set`}
+      </div>
+      <div style={{ fontSize:8,color:C.text }}>
+        Last tick: {lastTick ? lastTick.toISOString() : "No live events yet"}
+      </div>
+      <div style={{ marginTop:6,fontSize:8,color:C.textB }}>Channels</div>
+      <div style={{ display:"flex",gap:4,flexWrap:"wrap" }}>
+        {channels.map((ch) => (
+          <span key={ch} style={{ fontSize:7,padding:"1px 6px",border:`1px solid ${C.borderB}`,borderRadius:3,color:C.blue }}>{ch}</span>
+        ))}
+      </div>
+      {!streamUrl && (
+        <div style={{ marginTop:6,fontSize:8,color:C.gold }}>
+          Configure env and backend streams to enable live Panopticon/Counterstrike simulation rendering.
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // DRAGGABLE PANEL WRAPPER — Gridline window manager
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1021,6 +1071,8 @@ export default function JarvisTerminal() {
       EMAILS:    { x:col1, y:830, w:pw1,  h:350, visible:true,  minimized:false, z:10 },
       WATCHLIST: { x:col2, y:830, w:pw2,  h:350, visible:true,  minimized:false, z:10 },
       ANALYST:   { x:col3, y:830, w:pw3,  h:350, visible:true,  minimized:false, z:10 },
+      PANOPTICON:{ x:col1, y:1185,w:pw2,  h:280, visible:false, minimized:false, z:10 },
+      CS3D:      { x:col2, y:1185,w:pw2,  h:280, visible:false, minimized:false, z:10 },
     };
   });
 
@@ -1067,6 +1119,8 @@ export default function JarvisTerminal() {
     { id:"EMAILS",   icon:"✉",  label:"EMAILS" },
     { id:"WATCHLIST",icon:"◉",  label:"WATCH" },
     { id:"ANALYST",  icon:"◎",  label:"ANALYST" },
+    { id:"PANOPTICON", icon:"⌬", label:"PANO" },
+    { id:"CS3D", icon:"🎯", label:"CS3D" },
   ];
 
   return (
@@ -1217,13 +1271,31 @@ export default function JarvisTerminal() {
           </DraggablePanel>
         )}
 
+        {panels.PANOPTICON?.visible && (
+          <DraggablePanel id="PANOPTICON" title="⌬ PANOPTICON LIVE" state={panels.PANOPTICON} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("PANOPTICON")} onMinimize={()=>minimizePanel("PANOPTICON")} zIndex={panels.PANOPTICON.z}
+            onClick={()=>bringToFront("PANOPTICON")} minimized={panels.PANOPTICON.minimized}>
+            <StreamStatusPanel title="Panopticon stream monitor" streamUrlEnv="VITE_PANOPTICON_STREAM_URL"
+              channels={["agents.position","agents.intent","panopticon.alerts","ml.training.progress"]}/>
+          </DraggablePanel>
+        )}
+
+        {panels.CS3D?.visible && (
+          <DraggablePanel id="CS3D" title="🎯 COUNTERSTRIKE 3D LIVE" state={panels.CS3D} onMove={movePanel} onResize={resizePanel}
+            onClose={()=>closePanel("CS3D")} onMinimize={()=>minimizePanel("CS3D")} zIndex={panels.CS3D.z}
+            onClick={()=>bringToFront("CS3D")} minimized={panels.CS3D.minimized}>
+            <StreamStatusPanel title="Counterstrike 3D simulation stream" streamUrlEnv="VITE_COUNTERSTRIKE3D_STREAM_URL"
+              channels={["sim.tick","players.state","round.events","ml.policy.actions"]}/>
+          </DraggablePanel>
+        )}
+
         {/* Spacer for scrolling */}
         <div style={{ height:1250 }}/>
       </div>
 
       {/* ── STATUS BAR ────────────────────────────────────────────────────── */}
       <div style={{ position:"fixed",bottom:0,left:54,right:0,height:22,display:"flex",alignItems:"center",gap:10,padding:"0 12px",background:"rgba(2,5,8,0.99)",borderTop:`1px solid ${C.border}`,zIndex:9998,fontSize:7,color:"#2a3d4d",fontFamily:"Courier New" }}>
-        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/9",C.text]].map(([k,v,col],i)=>(
+        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/11",C.text]].map(([k,v,col],i)=>(
           <span key={k} style={{ display:"flex",gap:4,alignItems:"center" }}>
             {i>0&&<span style={{ color:"#0d1a22" }}>◆</span>}
             <span>{k}</span><span style={{ color:col,fontWeight:"bold" }}>{v}</span>
