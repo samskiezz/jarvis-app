@@ -11,6 +11,8 @@ import WatchlistPanel from "../features/jarvis/components/WatchlistPanel";
 import WindowManager from "../features/jarvis/components/WindowManager";
 import { API, C } from "../features/jarvis/data/constants";
 
+const LIVE_REFRESH_MS = 30000;
+
 export default function JarvisTerminal() {
   const [liveData, setLiveData] = useState(null);
   const [selectedObj, setSelectedObj] = useState(null);
@@ -20,12 +22,16 @@ export default function JarvisTerminal() {
   useEffect(() => {
     let mounted = true;
     const fetchData = async () => {
-      const response = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "all" }) });
-      if (mounted && response.ok) setLiveData(await response.json());
+      try {
+        const response = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "all" }) });
+        if (mounted && response.ok) setLiveData(await response.json());
+      } catch {
+        // Keep the last successful payload and rely on periodic retries.
+      }
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 30000);
+    const intervalId = setInterval(fetchData, LIVE_REFRESH_MS);
 
     return () => {
       mounted = false;
