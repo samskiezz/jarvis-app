@@ -31,8 +31,8 @@ const getAppParams = () => {
     storage.removeItem('kimi_api_key');
   }
   return {
-    apiKey: getAppParamValue('api_key', { defaultValue: import.meta.env.VITE_KIMI_K26_API_KEY, removeFromUrl: true }),
-    apiBaseUrl: getAppParamValue('api_base_url', { defaultValue: import.meta.env.VITE_KIMI_K26_API_BASE_URL || 'https://api.moonshot.ai/v1' }),
+    apiKey: getAppParamValue('api_key', { removeFromUrl: true }),
+    apiBaseUrl: getAppParamValue('api_base_url', { defaultValue: import.meta.env.VITE_KIMI_K26_API_BASE_URL || (isNode ? '' : window.location.origin) }),
     fromUrl: getAppParamValue('from_url', { defaultValue: isNode ? '' : window.location.href }),
   };
 };
