@@ -5,6 +5,9 @@ import ObjectExplorer from "../features/jarvis/components/ObjectExplorer";
 import TimelinePanel from "../features/jarvis/components/TimelinePanel";
 import RiskPanel from "../features/jarvis/components/RiskPanel";
 import AnalystPanel from "../features/jarvis/components/AnalystPanel";
+import MarketsPanel from "../features/jarvis/components/MarketsPanel";
+import EmailsPanel from "../features/jarvis/components/EmailsPanel";
+import WatchlistPanel from "../features/jarvis/components/WatchlistPanel";
 import WindowManager from "../features/jarvis/components/WindowManager";
 import { API, C } from "../features/jarvis/data/constants";
 
@@ -15,11 +18,19 @@ export default function JarvisTerminal() {
   const [focusId, setFocusId] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
     const fetchData = async () => {
       const response = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "all" }) });
-      if (response.ok) setLiveData(await response.json());
+      if (mounted && response.ok) setLiveData(await response.json());
     };
+
     fetchData();
+    const intervalId = setInterval(fetchData, 30000);
+
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   const earthquakes = liveData?.earthquakes || [];
@@ -31,6 +42,9 @@ export default function JarvisTerminal() {
       { id: "EXPLORER", title: "ObjectExplorer" },
       { id: "TIMELINE", title: "TimelinePanel" },
       { id: "RISK", title: "RiskPanel" },
+      { id: "EMAILS", title: "EmailsPanel" },
+      { id: "WATCHLIST", title: "WatchlistPanel" },
+      { id: "MARKETS", title: "MarketsPanel" },
       { id: "ANALYST", title: "AnalystPanel" },
     ],
     []
@@ -38,10 +52,13 @@ export default function JarvisTerminal() {
 
   const renderers = {
     MAP: () => <MapPanel selectedCountry={selectedCountry} onSelect={setSelectedCountry} earthquakes={earthquakes} />,
-    VERTEX: () => <VertexGraph selectedObj={selectedObj} focusId={focusId} />,
+    VERTEX: () => <VertexGraph selectedObj={selectedObj} focusId={focusId} onSelect={(id) => { setSelectedObj(id); setFocusId(id); }} />,
     EXPLORER: () => <ObjectExplorer selectedObj={selectedObj} onSelect={(id) => { setSelectedObj(id); setFocusId(null); }} />,
     TIMELINE: () => <TimelinePanel liveData={liveData} />,
     RISK: () => <RiskPanel onFocus={(id) => { setSelectedObj(id); setFocusId(id); }} />,
+    EMAILS: () => <EmailsPanel liveData={liveData} />,
+    WATCHLIST: () => <WatchlistPanel selectedObj={selectedObj} onFocus={(id) => { setSelectedObj(id); setFocusId(id); }} />,
+    MARKETS: () => <MarketsPanel liveData={liveData} />,
     ANALYST: () => <AnalystPanel />,
   };
 
