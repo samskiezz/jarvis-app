@@ -24,7 +24,10 @@ let failed = false;
 for (const file of files) {
   const text = fs.readFileSync(file, 'utf8');
   for (const p of patterns) {
-    const m = [...text.matchAll(p.re)].map(x=>x[0]).filter(v => (v.replace(/\D/g,'').length >= 10));
+    const matches = [...text.matchAll(p.re)].map((x) => x[0]);
+    const m = p.name === 'phone'
+      ? matches.filter((v) => v.replace(/\D/g, '').length >= 10)
+      : matches;
     if (m?.length) {
       failed = true;
       console.error(`${file}: found ${p.name}-like pattern (${m[0]})`);
