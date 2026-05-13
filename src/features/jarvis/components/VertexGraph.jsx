@@ -8,6 +8,7 @@ export default function VertexGraph({ selectedObj, focusId, onSelect }) {
   return (
     <div style={{ padding: 8, color: "#9fb" }}>
       <div style={{ marginBottom: 8 }}>Vertex graph · {visibleNodes.length} visible nodes · {LINKS.length} links</div>
+      <div style={{ marginBottom: 8, fontSize: 12, opacity: 0.8 }}>Select a node to focus the explorer, risk signals, and watchlist on related entities.</div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 6 }}>
         {visibleNodes.map((node) => (
           <button

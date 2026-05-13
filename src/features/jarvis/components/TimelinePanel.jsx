@@ -1,5 +1,9 @@
 export default function TimelinePanel({ liveData }) {
-  const events = liveData?.corpus?.timeline || [];
+  const events = [...(liveData?.corpus?.timeline || [])].sort((a, b) => {
+    const aTime = new Date(a.ts || a.time || 0).getTime();
+    const bTime = new Date(b.ts || b.time || 0).getTime();
+    return Number.isNaN(bTime - aTime) ? 0 : bTime - aTime;
+  });
 
   if (!events.length) {
     return <div style={{ padding: 8, color: "#9fb" }}>No timeline events available.</div>;
