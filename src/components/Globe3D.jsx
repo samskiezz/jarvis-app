@@ -1,14 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-
-const COUNTRIES = [
-  { code:"AU", name:"Australia", flag:"🇦🇺", lat:-33.87, lng:151.21, risk:"LOW", color:"#00c878", riskScore:12, positions:["PSG $180k/wk","Hilts Group","XRP $19k AUD"] },
-  { code:"TZ", name:"Tanzania", flag:"🇹🇿", lat:-5.4, lng:38.9, risk:"MEDIUM", color:"#e8a800", riskScore:58, positions:["Pangani 6 acres DD active"] },
-  { code:"AE", name:"UAE/Dubai", flag:"🇦🇪", lat:25.20, lng:55.27, risk:"LOW", color:"#00c878", riskScore:18, positions:["IFZA FZCO","Golf Acres Emaar"] },
-  { code:"ZZ", name:"Zanzibar", flag:"🌍", lat:-6.16, lng:39.19, risk:"MEDIUM", color:"#e8a800", riskScore:52, positions:["$100M resort anchor"] },
-  { code:"CY", name:"Cyprus", flag:"🇨🇾", lat:35.12, lng:33.43, risk:"LOW", color:"#00c878", riskScore:8, positions:["Heritage","Kefalos wedding"] },
-  { code:"TH", name:"Thailand", flag:"🇹🇭", lat:15.87, lng:100.99, risk:"LOW", color:"#0096d4", riskScore:10, positions:["Banyan Tree Mar 2026"] },
-];
+import { COUNTRIES } from "@/domain/countries";
 
 function latLngToVec3(lat, lng, radius) {
   const phi = (90 - lat) * (Math.PI / 180);

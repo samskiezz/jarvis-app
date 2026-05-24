@@ -10,7 +10,9 @@ const request = async (path, options = {}) => {
   const res = await fetch(url, { ...options, headers });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`API ${res.status}: ${text || res.statusText}`);
+    const err = new Error(`API ${res.status}: ${text || res.statusText}`);
+    err.status = res.status;
+    throw err;
   }
   if (res.status === 204) return null;
   return res.json();
@@ -35,7 +37,8 @@ export const kimiClient = {
   auth: {
     async me() {
       if (!appParams.apiKey) throw new Error('No API key configured');
-      return { role: 'admin', provider: 'kimi-k2.6', authenticated: true };
+      // Real auth check against the backend — no more "trust the key exists".
+      return request('/auth/me');
     },
     logout() {
       localStorage.removeItem('kimi_api_key');
@@ -45,4 +48,3 @@ export const kimiClient = {
     },
   },
 };
-
