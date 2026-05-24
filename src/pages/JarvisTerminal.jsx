@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Globe3D from "../components/Globe3D";
 import LiveTactical3D from "../components/LiveTactical3D";
+import DraggablePanel from "../components/DraggablePanel";
 import { COLORS as C } from "@/domain/colors";
 import { OBJECTS, LINKS } from "@/domain/ontology";
 import { COUNTRIES } from "@/domain/countries";
@@ -8,6 +9,7 @@ import { RISK_SIGNALS } from "@/domain/risk";
 import { WATCHLIST_INIT } from "@/domain/watchlist";
 import { MARKETS_FALLBACK } from "@/domain/markets";
 import { appParams } from "@/lib/app-params";
+import { PANELS as PANEL_REGISTRY, buildDefaultPanelState } from "@/panels/registry";
 
 const API = `${appParams.apiBaseUrl}/functions/getLiveIntel`;
 
@@ -30,18 +32,6 @@ const Glass = ({ children, style, onClick }) => (
 // ─────────────────────────────────────────────────────────────────────────────
 // PANEL SYSTEM — Gridline-style window manager
 // ─────────────────────────────────────────────────────────────────────────────
-
-const PANEL_DEFS = {
-  MAP:        { title:"🌍 GLOBE / MAP",         w:620, h:420, x:0,   y:48 },
-  VERTEX:     { title:"◈ VERTEX GRAPH",         w:580, h:420, x:630, y:48 },
-  EXPLORER:   { title:"⊞ OBJECT EXPLORER",      w:500, h:380, x:0,   y:478 },
-  TIMELINE:   { title:"◷ TIMELINE",             w:500, h:320, x:510, y:478 },
-  RISK:       { title:"⚠ RISK SIGNALS",         w:400, h:320, x:1020, y:48 },
-  EMAILS:     { title:"✉ EMAIL CORPUS",         w:460, h:360, x:0,   y:868 },
-  WATCHLIST:  { title:"◉ WATCHLIST",            w:380, h:300, x:510, y:808 },
-  MARKETS:    { title:"$ MARKETS",              w:360, h:300, x:900, y:478 },
-  ANALYST:    { title:"◎ AI ANALYST",           w:420, h:440, x:1020, y:378 },
-};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // VERTEX GRAPH
@@ -1094,61 +1084,6 @@ function LiveGameRenderPanel({ title, streamUrlEnv, channels = [], defaultMaps =
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// DRAGGABLE PANEL WRAPPER — Gridline window manager
-// ─────────────────────────────────────────────────────────────────────────────
-function DraggablePanel({ id, title, children, state, onMove, onResize, onClose, onMinimize, zIndex, onClick, minimized }) {
-  const dragRef = useRef(null);
-  const resizeRef = useRef(null);
-
-  const onMouseDown = (e) => {
-    if (e.target.closest(".panel-ctrl")) return;
-    onClick();
-    const startX=e.clientX, startY=e.clientY;
-    const startPX=state.x, startPY=state.y;
-    const onMove_=(ev) => onMove(id, startPX+(ev.clientX-startX), startPY+(ev.clientY-startY));
-    const onUp=()=>{ window.removeEventListener("mousemove",onMove_); window.removeEventListener("mouseup",onUp); };
-    window.addEventListener("mousemove",onMove_); window.addEventListener("mouseup",onUp);
-    e.preventDefault();
-  };
-
-  const onResizeDown = (e) => {
-    const startX=e.clientX, startY=e.clientY;
-    const startW=state.w, startH=state.h;
-    const onM=(ev)=>onResize(id,Math.max(240,startW+(ev.clientX-startX)),Math.max(160,startH+(ev.clientY-startY)));
-    const onU=()=>{ window.removeEventListener("mousemove",onM); window.removeEventListener("mouseup",onU); };
-    window.addEventListener("mousemove",onM); window.addEventListener("mouseup",onU);
-    e.stopPropagation(); e.preventDefault();
-  };
-
-  return (
-    <div style={{ position:"absolute", left:state.x, top:state.y, width:state.w, height:minimized?32:state.h,
-      background:"rgba(2,7,13,0.98)", border:`1px solid ${C.border}`, borderRadius:4, overflow:"hidden",
-      boxShadow:"0 8px 40px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,200,120,0.08)",
-      display:"flex", flexDirection:"column", zIndex, userSelect:"none" }}>
-      {/* Header */}
-      <div onMouseDown={onMouseDown}
-        style={{ height:28, display:"flex", alignItems:"center", justifyContent:"space-between",
-          padding:"0 8px", borderBottom:`1px solid ${C.border}`,
-          background:"rgba(0,200,120,0.03)", cursor:"move", flexShrink:0 }}>
-        <span style={{ fontSize:8, color:C.neon, letterSpacing:2, fontFamily:"Courier New", fontWeight:"bold" }}>{title}</span>
-        <div className="panel-ctrl" style={{ display:"flex", gap:4 }}>
-          <button onClick={onMinimize}
-            style={{ background:"transparent", border:`1px solid ${C.borderB}`, color:C.gold, width:16, height:16, borderRadius:2, cursor:"pointer", fontSize:9, display:"flex", alignItems:"center", justifyContent:"center" }}>—</button>
-          <button onClick={onClose}
-            style={{ background:"transparent", border:`1px solid ${C.borderB}`, color:"#556", width:16, height:16, borderRadius:2, cursor:"pointer", fontSize:9 }}>✕</button>
-        </div>
-      </div>
-      {/* Body */}
-      {!minimized && <div style={{ flex:1, overflow:"hidden" }}>{children}</div>}
-      {/* Resize handle */}
-      {!minimized && <div onMouseDown={onResizeDown}
-        style={{ position:"absolute", bottom:0, right:0, width:14, height:14, cursor:"se-resize",
-          background:"linear-gradient(135deg, transparent 50%, rgba(0,200,120,0.3) 50%)", borderRadius:"0 0 4px 0" }}/>}
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // MAIN TERMINAL
 // ─────────────────────────────────────────────────────────────────────────────
 export default function JarvisTerminal() {
@@ -1163,21 +1098,7 @@ export default function JarvisTerminal() {
   // Panel state: position, size, visible, minimized, z
   const [panels, setPanels] = useState(() => {
     const vw = typeof window !== 'undefined' ? window.innerWidth : 1400;
-    const col1 = 0, col2 = Math.floor(vw * 0.44), col3 = Math.floor(vw * 0.72);
-    const pw1 = Math.floor(vw * 0.43), pw2 = Math.floor(vw * 0.27), pw3 = Math.floor(vw * 0.27);
-    return {
-      MAP:       { x:col1, y:50,  w:pw1,  h:400, visible:true,  minimized:false, z:10 },
-      VERTEX:    { x:col2, y:50,  w:pw2,  h:400, visible:true,  minimized:false, z:10 },
-      RISK:      { x:col3, y:50,  w:pw3,  h:400, visible:true,  minimized:false, z:10 },
-      EXPLORER:  { x:col1, y:455, w:pw1,  h:370, visible:true,  minimized:false, z:10 },
-      TIMELINE:  { x:col2, y:455, w:pw2,  h:370, visible:true,  minimized:false, z:10 },
-      MARKETS:   { x:col3, y:455, w:pw3,  h:370, visible:true,  minimized:false, z:10 },
-      EMAILS:    { x:col1, y:830, w:pw1,  h:350, visible:true,  minimized:false, z:10 },
-      WATCHLIST: { x:col2, y:830, w:pw2,  h:350, visible:true,  minimized:false, z:10 },
-      ANALYST:   { x:col3, y:830, w:pw3,  h:350, visible:true,  minimized:false, z:10 },
-      PANOPTICON:{ x:col1, y:1185,w:pw2,  h:280, visible:false, minimized:false, z:10 },
-      CS3D:      { x:col2, y:1185,w:pw2,  h:280, visible:false, minimized:false, z:10 },
-    };
+    return buildDefaultPanelState(vw);
   });
 
   const bringToFront = (id) => {
@@ -1213,19 +1134,7 @@ export default function JarvisTerminal() {
   const earthquakes = liveData?.earthquakes || [];
   const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
 
-  const SIDEBAR_PANELS = [
-    { id:"MAP",      icon:"🌍", label:"GLOBE" },
-    { id:"VERTEX",   icon:"◈",  label:"VERTEX" },
-    { id:"RISK",     icon:"⚠",  label:"RISK" },
-    { id:"EXPLORER", icon:"⊞",  label:"OBJECTS" },
-    { id:"TIMELINE", icon:"◷",  label:"TIMELINE" },
-    { id:"MARKETS",  icon:"$",  label:"MARKETS" },
-    { id:"EMAILS",   icon:"✉",  label:"EMAILS" },
-    { id:"WATCHLIST",icon:"◉",  label:"WATCH" },
-    { id:"ANALYST",  icon:"◎",  label:"ANALYST" },
-    { id:"PANOPTICON", icon:"⌬", label:"PANO" },
-    { id:"CS3D", icon:"🎯", label:"CS3D" },
-  ];
+  const SIDEBAR_PANELS = PANEL_REGISTRY;
 
   return (
     <div style={{ background:C.bg, minHeight:"100vh", position:"relative", overflow:"hidden", fontFamily:"'JetBrains Mono','SF Mono',Courier New,monospace", display:"flex" }}>
