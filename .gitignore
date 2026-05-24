@@ -29,3 +29,13 @@ dist-ssr
 
 .env
 .vite
+
+# Backend
+server/__pycache__/
+server/**/__pycache__/
+server/*.db
+server/.pytest_cache/
+.pytest_cache/
+
+# Local dev env (committed via .env.example)
+.env.local

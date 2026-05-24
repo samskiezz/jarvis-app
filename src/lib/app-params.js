@@ -26,13 +26,24 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
   return storedValue || null;
 };
 
+const env = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : {};
+
+// Prefer the new unified VITE_API_BASE_URL (points at the Jarvis backend).
+// Fall back to the legacy VITE_KIMI_K26_API_BASE_URL or localhost:8000 for dev.
+const defaultApiBaseUrl =
+  env.VITE_API_BASE_URL ||
+  env.VITE_KIMI_K26_API_BASE_URL ||
+  'http://localhost:8000';
+
+const defaultApiKey = env.VITE_API_KEY || env.VITE_KIMI_K26_API_KEY;
+
 const getAppParams = () => {
   if (getAppParamValue('clear_api_key') === 'true') {
     storage.removeItem('kimi_api_key');
   }
   return {
-    apiKey: getAppParamValue('api_key', { defaultValue: import.meta.env.VITE_KIMI_K26_API_KEY, removeFromUrl: true }),
-    apiBaseUrl: getAppParamValue('api_base_url', { defaultValue: import.meta.env.VITE_KIMI_K26_API_BASE_URL || 'https://api.moonshot.ai/v1' }),
+    apiKey: getAppParamValue('api_key', { defaultValue: defaultApiKey, removeFromUrl: true }),
+    apiBaseUrl: getAppParamValue('api_base_url', { defaultValue: defaultApiBaseUrl }),
     fromUrl: getAppParamValue('from_url', { defaultValue: isNode ? '' : window.location.href }),
   };
 };
