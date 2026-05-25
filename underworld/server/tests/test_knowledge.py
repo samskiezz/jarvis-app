@@ -33,10 +33,42 @@ def test_knowledge_summary_route(client, headers):
     res = client.get("/knowledge/summary", headers=headers)
     assert res.status_code == 200
     body = res.json()
-    assert body["formulas"] > 1000
+    assert body["formulas"] > 4000  # V2 (2,401) + V4 physics (~2,241)
     assert body["swarm_roles"] >= 9
     assert body["guardrails"] >= 5
     assert "mathematics" in body["formulas_by_discipline"]
+    # both sources are loaded
+    assert "master_reference_v2" in body["sources"]
+    assert "physics_laws_v4" in body["sources"]
+    assert body["sources"]["physics_laws_v4"] > 1000
+
+
+def test_physics_v4_entries_have_name_and_description(client, headers):
+    """Random sample physics entries surface their richer fields."""
+    res = client.get(
+        "/knowledge/formulas?source=physics_laws_v4&q=Newton&limit=5",
+        headers=headers,
+    )
+    assert res.status_code == 200
+    items = res.json()["items"]
+    assert len(items) >= 1
+    # All physics_laws_v4 entries should carry a name + description.
+    for f in items:
+        assert f["source"] == "physics_laws_v4"
+        assert f["name"], f"missing name on {f['id']}"
+        assert f["description"], f"missing description on {f['id']}"
+
+
+def test_knowledge_source_filter(client, headers):
+    """Source filter works as a partition."""
+    physics = client.get(
+        "/knowledge/formulas?source=physics_laws_v4&limit=1", headers=headers,
+    ).json()["total"]
+    legacy = client.get(
+        "/knowledge/formulas?source=master_reference_v2&limit=1", headers=headers,
+    ).json()["total"]
+    total = client.get("/knowledge/formulas?limit=1", headers=headers).json()["total"]
+    assert physics + legacy == total
 
 
 def test_knowledge_formula_search(client, headers):

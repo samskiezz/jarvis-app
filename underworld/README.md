@@ -44,10 +44,14 @@ After every Minion has acted, the tick resolves:
 The whole loop can run unattended via the **background scheduler** — toggle
 `auto_advance` on a world and it ticks every N seconds (default 5s).
 
-## Master Reference integration (V2 Expanded)
+## Master Reference integration
 
-`docs/AI_Swarms_Master_Reference.docx` is the project's structured knowledge
-base. The build step `python -m underworld.server.knowledge.extract_kb`
+Two structured reference documents feed the knowledge base:
+
+### 1. AI Swarms Master Reference (V2 Expanded)
+
+`docs/AI_Swarms_Master_Reference.docx`. The build step
+`python -m underworld.server.knowledge.extract_kb`
 parses 2,553 paragraphs into `data/knowledge_base.json`:
 
 - **2,401 formulas** across 8 disciplines (math 1,574; chemistry 206; bio
@@ -61,12 +65,31 @@ parses 2,553 paragraphs into `data/knowledge_base.json`:
 - **6 pipeline guardrails** (in-silico, bench, preclinical, clinical,
   regulatory, red-lines).
 
-The seeder ingests this JSON into SQLite on first startup. Routes under
-`/knowledge/*` expose it (concepts, paginated formula search, roles,
-guardrails). Minions issue `kb_lookup` actions every tick — Formula
-Oracles and Literature Scouts hit it hardest, Chemistry Generators /
-Genome Analysts / Protein Modellers pull discipline-specific formulas
-into their reasoning context.
+### 2. Physics Laws & Equations Master Compendium (V4, 96 pages)
+
+`docs/Physics_Laws_Equations_Master_Compendium_V4.pdf`. The build step
+`python -m underworld.server.knowledge.extract_physics_pdf`
+parses the PDF into `data/knowledge_physics.json`:
+
+- **2,241 named-law entries** across 25 sections (classical mechanics,
+  gravitation, thermodynamics, EM, optics, fluids, relativity, quantum,
+  nuclear, plasma, astrophysics, condensed-matter, physical chemistry,
+  mathematical theorems used in physics).
+- Each entry carries a **name** (e.g. "Newton first law"), an **equation**
+  (e.g. `sum F = 0 -> v = constant`), and a **law/use explanation**.
+- Tagged with `source: "physics_laws_v4"` so the UI can filter and the
+  agent can prefer richer entries when answering.
+
+### Runtime use
+
+The seeder ingests both JSONs into SQLite on first startup. Routes under
+`/knowledge/*` expose it (concepts, paginated formula search with
+discipline/source/text filters, roles, guardrails). Minions issue
+`kb_lookup` actions every tick — Formula Oracles and Literature Scouts
+hit it hardest, Chemistry Generators / Genome Analysts / Protein
+Modellers pull discipline-specific formulas into their reasoning
+context. When a Physics V4 entry matches, the Minion's memory captures
+the **named law + explanation** rather than just the bare expression.
 
 When an invention's text mentions clinical, genetic, or chemical-synthesis
 terms, it escalates to a **Research Project** that walks the doc's

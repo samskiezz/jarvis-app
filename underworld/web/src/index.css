@@ -1,34 +1,227 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html, body, #root {
+  html,
+  body,
+  #root {
     @apply h-full bg-ink-0 text-zinc-200;
   }
+
   body {
     font-family: "JetBrains Mono", "SF Mono", "Menlo", monospace;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168, 85, 247, 0.10), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(14, 165, 233, 0.05), transparent 60%),
+      linear-gradient(180deg, #04040a 0%, #060612 100%);
+    background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.18);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.36);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(168, 85, 247, 0.35);
+    color: #fff;
   }
 }
 
 @layer components {
+  /* --- Panels --- */
   .panel {
-    @apply rounded-md border border-glow-purple/15 bg-ink-1/95 shadow-[0_8px_32px_rgba(0,0,0,0.6)];
+    @apply relative rounded-lg border border-glow-purple/15 bg-ink-1/80 backdrop-blur-sm shadow-panel;
+  }
+  .panel-elevated {
+    @apply relative rounded-lg border border-glow-purple/25 bg-gradient-to-b from-ink-1 to-ink-2/60 shadow-glow backdrop-blur-sm;
   }
   .panel-header {
-    @apply flex items-center justify-between border-b border-glow-purple/10 px-3 py-2 text-[10px] uppercase tracking-[0.2em] text-glow-purple/70;
+    @apply flex items-center justify-between border-b border-glow-purple/10 px-4 py-2.5 text-[10px] uppercase tracking-[0.25em] text-glow-purple/80;
   }
-  .badge {
-    @apply inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[9px] uppercase tracking-widest;
+  .panel-header > span:last-child {
+    @apply text-[9px] normal-case tracking-widest text-zinc-500;
   }
+
+  /* --- Stat card --- */
+  .stat-card {
+    @apply relative overflow-hidden rounded-lg border border-glow-purple/15 bg-gradient-to-br from-ink-1/90 to-ink-2/40 px-4 py-3 shadow-panel transition;
+  }
+  .stat-card:hover {
+    @apply border-glow-purple/30;
+  }
+  .stat-label {
+    @apply flex items-center justify-between text-[9px] font-medium uppercase tracking-[0.22em] text-zinc-500;
+  }
+  .stat-value {
+    @apply mt-1 text-3xl font-light tracking-tight;
+    font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  }
+
+  /* --- Buttons --- */
   .btn {
-    @apply inline-flex items-center gap-1.5 rounded border border-glow-purple/40 bg-glow-purple/10 px-3 py-1.5 text-[10px] uppercase tracking-widest text-glow-purple transition hover:bg-glow-purple/20 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-glow-purple/40 bg-glow-purple/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-glow-purple shadow-sm transition;
+  }
+  .btn:hover:not(:disabled) {
+    @apply border-glow-purple/60 bg-glow-purple/20 shadow-glow;
+  }
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+  .btn-primary {
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-glow-purple bg-gradient-to-br from-glow-purple to-glow-violet px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-white shadow-glow transition;
+  }
+  .btn-primary:hover:not(:disabled) {
+    @apply shadow-glow-strong brightness-110;
+  }
+  .btn-primary:disabled {
+    @apply cursor-not-allowed opacity-50;
   }
   .btn-ghost {
-    @apply inline-flex items-center gap-1.5 rounded border border-zinc-700/60 bg-transparent px-3 py-1.5 text-[10px] uppercase tracking-widest text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-zinc-700/60 bg-transparent px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 transition;
   }
+  .btn-ghost:hover:not(:disabled) {
+    @apply border-glow-purple/40 bg-glow-purple/5 text-zinc-100;
+  }
+  .btn-danger {
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-glow-rose/40 bg-glow-rose/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-glow-rose transition;
+  }
+  .btn-danger:hover:not(:disabled) {
+    @apply border-glow-rose bg-glow-rose/20;
+  }
+  .btn-icon {
+    @apply inline-flex h-8 w-8 select-none items-center justify-center rounded-md border border-zinc-700/60 bg-transparent text-zinc-400 transition;
+  }
+  .btn-icon:hover:not(:disabled) {
+    @apply border-glow-purple/40 bg-glow-purple/5 text-zinc-100;
+  }
+
+  /* --- Badges --- */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-[0.16em];
+  }
+  .badge-purple {
+    @apply border-glow-purple/40 bg-glow-purple/10 text-glow-purple;
+  }
+  .badge-amber {
+    @apply border-glow-amber/40 bg-glow-amber/10 text-glow-amber;
+  }
+  .badge-jade {
+    @apply border-glow-jade/40 bg-glow-jade/10 text-glow-jade;
+  }
+  .badge-sky {
+    @apply border-glow-sky/40 bg-glow-sky/10 text-glow-sky;
+  }
+  .badge-rose {
+    @apply border-glow-rose/40 bg-glow-rose/10 text-glow-rose;
+  }
+  .badge-zinc {
+    @apply border-zinc-700/60 bg-zinc-700/10 text-zinc-400;
+  }
+
+  /* --- Inputs --- */
   .input {
-    @apply w-full rounded border border-glow-purple/20 bg-ink-2 px-2 py-1.5 text-[11px] text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-glow-purple/60;
+    @apply w-full rounded-md border border-glow-purple/20 bg-ink-2/60 px-3 py-2 text-[11px] text-zinc-100 outline-none transition placeholder:text-zinc-600;
+  }
+  .input:focus {
+    @apply border-glow-purple/60 bg-ink-2 shadow-glow;
+  }
+  .input-sm {
+    @apply px-2 py-1.5 text-[10px];
+  }
+
+  /* --- Section headers --- */
+  .section-title {
+    @apply text-[10px] font-medium uppercase tracking-[0.28em] text-glow-purple/80;
+  }
+  .page-title {
+    @apply text-2xl font-light tracking-tight text-zinc-100;
+    font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  }
+  .page-eyebrow {
+    @apply text-[10px] font-semibold uppercase tracking-[0.32em] text-glow-purple;
+  }
+
+  /* --- Tabs --- */
+  .tab {
+    @apply relative rounded-t-md px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500 transition;
+  }
+  .tab:hover {
+    @apply text-zinc-200;
+  }
+  .tab-active {
+    @apply text-glow-purple;
+  }
+  .tab-active::after {
+    content: "";
+    @apply absolute inset-x-0 bottom-0 h-0.5 rounded-t bg-gradient-to-r from-glow-purple to-glow-violet;
+  }
+
+  /* --- Skeleton / shimmer --- */
+  .skeleton {
+    @apply animate-shimmer rounded;
+    background: linear-gradient(
+      90deg,
+      rgba(168, 85, 247, 0.04) 0%,
+      rgba(168, 85, 247, 0.12) 50%,
+      rgba(168, 85, 247, 0.04) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* --- Live indicator dot --- */
+  .live-dot {
+    @apply inline-block h-2 w-2 rounded-full animate-pulse-glow;
+    background: radial-gradient(circle, #10b981, #047857);
+  }
+
+  /* --- Tooltip --- */
+  .tooltip {
+    @apply pointer-events-none absolute z-50 rounded-md border border-glow-purple/30 bg-ink-2 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-200 opacity-0 shadow-lg transition;
+  }
+  .has-tooltip:hover .tooltip {
+    @apply opacity-100;
+  }
+
+  /* --- Kbd --- */
+  .kbd {
+    @apply inline-flex items-center rounded border border-zinc-700 bg-ink-2 px-1.5 py-0.5 font-mono text-[9px] text-zinc-300 shadow-sm;
+  }
+
+  /* --- Section divider --- */
+  .divider {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-glow-purple/20 to-transparent;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .text-glow {
+    text-shadow: 0 0 12px currentColor;
+  }
+  .ring-glow {
+    box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 0 20px rgba(168, 85, 247, 0.25);
   }
 }

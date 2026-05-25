@@ -135,11 +135,12 @@ export const api = {
   kbConcepts: () => request<KbConcept[]>("/knowledge/concepts"),
   kbConcept: (id: string) => request<KbConcept>(`/knowledge/concepts/${id}`),
   kbFormulas: (
-    opts: { discipline?: string; catalogue?: string; q?: string; limit?: number; offset?: number } = {},
+    opts: { discipline?: string; catalogue?: string; source?: string; q?: string; limit?: number; offset?: number } = {},
   ) => {
     const q = new URLSearchParams();
     if (opts.discipline) q.set("discipline", opts.discipline);
     if (opts.catalogue) q.set("catalogue", opts.catalogue);
+    if (opts.source) q.set("source", opts.source);
     if (opts.q) q.set("q", opts.q);
     if (opts.limit) q.set("limit", String(opts.limit));
     if (opts.offset) q.set("offset", String(opts.offset));

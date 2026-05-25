@@ -390,19 +390,30 @@ class KnowledgeConcept(Base):
 
 
 class KnowledgeFormula(Base):
-    """A single formula line from the master compendium."""
+    """A single formula / named law from one of the master compendia.
+
+    Multiple sources feed this table:
+      - `AI Swarms Master Reference (V2 Expanded)` — bare formula lines.
+      - `Physics Laws & Equations Master Compendium (V4)` — named laws
+        with explanation prose stored in `name` + `description`.
+    """
 
     __tablename__ = "kb_formulas"
     __table_args__ = (
         Index("ix_kb_formula_discipline", "discipline"),
         Index("ix_kb_formula_catalogue", "catalogue"),
+        Index("ix_kb_formula_source", "source"),
     )
 
-    id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    id: Mapped[str] = mapped_column(String(48), primary_key=True)
     discipline: Mapped[str] = mapped_column(String(40), nullable=False)
-    catalogue: Mapped[str] = mapped_column(String(160), nullable=False)
+    catalogue: Mapped[str] = mapped_column(String(200), nullable=False)
     expression: Mapped[str] = mapped_column(Text, nullable=False)
     keywords: Mapped[list[str]] = mapped_column(JSON, default=list)
+    # Richer fields (nullable — older docx-sourced rows leave them blank).
+    name: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source: Mapped[str] = mapped_column(String(80), default="master_reference_v2")
 
 
 class KnowledgeSwarmRole(Base):

@@ -44,6 +44,12 @@ async def summary(
         .order_by(KnowledgeFormula.catalogue)
     )
     counts["catalogues"] = [{"name": n, "count": c} for n, c in by_catalogue.all()]
+
+    by_source = await session.execute(
+        select(KnowledgeFormula.source, func.count(KnowledgeFormula.id))
+        .group_by(KnowledgeFormula.source)
+    )
+    counts["sources"] = {s: c for s, c in by_source.all()}
     return counts
 
 
@@ -81,6 +87,7 @@ async def get_concept(
 async def list_formulas(
     discipline: str | None = Query(default=None),
     catalogue: str | None = Query(default=None),
+    source: str | None = Query(default=None),
     q: str | None = Query(default=None),
     limit: int = Query(default=100, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
@@ -92,12 +99,16 @@ async def list_formulas(
         stmt = stmt.where(KnowledgeFormula.discipline == discipline)
     if catalogue:
         stmt = stmt.where(KnowledgeFormula.catalogue == catalogue)
+    if source:
+        stmt = stmt.where(KnowledgeFormula.source == source)
     if q:
         pattern = f"%{q}%"
         stmt = stmt.where(
             or_(
                 KnowledgeFormula.expression.ilike(pattern),
                 KnowledgeFormula.catalogue.ilike(pattern),
+                KnowledgeFormula.name.ilike(pattern),
+                KnowledgeFormula.description.ilike(pattern),
             )
         )
     total = await session.scalar(select(func.count()).select_from(stmt.subquery()))
@@ -110,6 +121,9 @@ async def list_formulas(
             "catalogue": f.catalogue,
             "expression": f.expression,
             "keywords": f.keywords or [],
+            "name": f.name,
+            "description": f.description,
+            "source": f.source,
         }
         for f in res.scalars().all()
     ]

@@ -398,22 +398,43 @@ async def _do_study(session: AsyncSession, minion: Minion, world: World, args: d
 
 
 async def _do_kb_lookup(session: AsyncSession, minion: Minion, world: World, args: dict[str, Any]) -> str:
-    """Query the knowledge base. Returns a short summary appended to memory."""
+    """Query the knowledge base. Returns a short summary appended to memory.
+
+    Prefers Physics V4 entries when available — they carry an explanation
+    in addition to the equation, which makes for a richer memory.
+    """
     discipline = (
         str(args.get("discipline") or "").strip().lower()
         or _ROLE_DEFAULT_DISCIPLINE.get(minion.swarm_role.value, "ai")
     )
     query = str(args.get("q") or args.get("query") or "").strip()
-    stmt = select(KnowledgeFormula).where(KnowledgeFormula.discipline == discipline)
-    if query:
-        pattern = f"%{query}%"
-        stmt = stmt.where(KnowledgeFormula.expression.ilike(pattern))
-    stmt = stmt.limit(3)
-    res = await session.execute(stmt)
-    rows = list(res.scalars().all())
+
+    async def _fetch(source: str | None) -> list[KnowledgeFormula]:
+        stmt = select(KnowledgeFormula).where(KnowledgeFormula.discipline == discipline)
+        if source is not None:
+            stmt = stmt.where(KnowledgeFormula.source == source)
+        if query:
+            pattern = f"%{query}%"
+            from sqlalchemy import or_ as _or
+            stmt = stmt.where(_or(
+                KnowledgeFormula.expression.ilike(pattern),
+                KnowledgeFormula.name.ilike(pattern),
+                KnowledgeFormula.description.ilike(pattern),
+            ))
+        return list((await session.execute(stmt.limit(6))).scalars().all())
+
+    rows = await _fetch("physics_laws_v4")
+    if not rows:
+        rows = await _fetch(None)
     if not rows:
         return f"No formulas found for discipline={discipline} q={query!r}."
+
     picked = rows[hash(minion.id + str(world.tick)) % len(rows)]
+    if picked.name and picked.description:
+        return (
+            f"Looked up [{picked.discipline}] {picked.name} — "
+            f"{picked.description[:140]}"
+        )
     return f"Looked up [{picked.discipline}] {picked.expression[:140]}"
 
 

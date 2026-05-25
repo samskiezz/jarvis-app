@@ -88,6 +88,9 @@ export interface KbFormula {
   catalogue: string;
   expression: string;
   keywords: string[];
+  name: string | null;
+  description: string | null;
+  source: string;
 }
 
 export interface KbSwarmRole {
@@ -110,6 +113,7 @@ export interface KbSummary {
   guardrails: number;
   formulas_by_discipline: Record<string, number>;
   catalogues: { name: string; count: number }[];
+  sources: Record<string, number>;
 }
 
 export interface ResearchProjectT {

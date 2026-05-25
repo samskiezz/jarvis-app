@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, ChevronRight, Radio } from "lucide-react";
+import {
+  Activity, Atom, Battery, Brain, Cpu, FileSearch, Hammer, Leaf, Plus,
+  Radio, Skull, Sparkles, Wind, Zap,
+} from "lucide-react";
 import { api } from "@/lib/api";
+import EmptyState from "@/components/ui/EmptyState";
+import StatCard from "@/components/ui/StatCard";
 
 const CPC_SUGGESTIONS = [
-  { code: "H02J", label: "Power grids / batteries" },
-  { code: "G06F", label: "Computing / data processing" },
-  { code: "F03D", label: "Wind turbines" },
-  { code: "E04F", label: "Building finishings" },
-  { code: "B62D", label: "Vehicles" },
-  { code: "F24S", label: "Solar collectors" },
+  { code: "H02J", label: "Power grids", icon: Zap, hint: "Batteries · inverters · grid stability" },
+  { code: "G06F", label: "Computing", icon: Cpu, hint: "Data processing · ML systems" },
+  { code: "F03D", label: "Wind", icon: Wind, hint: "Wind turbines · rotor design" },
+  { code: "E04F", label: "Buildings", icon: Hammer, hint: "Building finishings · materials" },
+  { code: "B62D", label: "Vehicles", icon: Activity, hint: "Motor vehicles · chassis" },
+  { code: "F24S", label: "Solar", icon: Atom, hint: "Solar collectors · thermal" },
+  { code: "A01H", label: "Agriculture", icon: Leaf, hint: "Plant breeding · crops" },
+  { code: "H01M", label: "Cells", icon: Battery, hint: "Batteries · fuel cells" },
 ];
 
 export default function CommandCentre() {
@@ -26,142 +33,321 @@ export default function CommandCentre() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["worlds"] }),
   });
 
+  const stats = useMemo(() => {
+    const list = worlds.data ?? [];
+    return {
+      worlds: list.length,
+      live: list.filter((w) => w.auto_advance).length,
+      alive: list.reduce((s, w) => s + w.alive_count, 0),
+      total: list.reduce((s, w) => s + w.minion_count, 0),
+      ticks: list.reduce((s, w) => s + w.tick, 0),
+    };
+  }, [worlds.data]);
+
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <header>
-        <h1 className="text-xl uppercase tracking-[0.3em] text-glow-purple">Command Centre</h1>
-        <p className="mt-1 text-[11px] text-zinc-500">
-          Spin up a world seeded by a patent classification code. The CPC class drives terrain,
-          aptitude weighting, and the initial guild distribution. After creation, toggle{" "}
-          <span className="text-glow-jade">auto-advance</span> to let the simulation evolve on its own.
-        </p>
+    <div className="mx-auto max-w-6xl space-y-8">
+      {/* HERO */}
+      <header className="relative overflow-hidden rounded-xl border border-glow-purple/20 bg-gradient-to-br from-ink-1 via-ink-1 to-ink-2 p-8 shadow-panel">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(ellipse at top right, rgba(168,85,247,0.18), transparent 50%), radial-gradient(ellipse at bottom left, rgba(14,165,233,0.10), transparent 50%)",
+          }}
+        />
+        <div className="relative flex items-start gap-5">
+          <div className="relative h-14 w-14 shrink-0">
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-glow-purple via-glow-violet to-glow-sky shadow-glow-strong" />
+            <div className="absolute inset-[2px] flex items-center justify-center rounded-md bg-ink-0">
+              <Skull size={26} className="text-glow-purple" />
+            </div>
+          </div>
+          <div className="flex-1">
+            <div className="page-eyebrow">Command Centre</div>
+            <h1 className="mt-1 font-display text-3xl font-light tracking-tight text-zinc-100">
+              Forge a world. Watch swarms evolve.
+            </h1>
+            <p className="mt-2 max-w-2xl text-[11px] leading-relaxed text-zinc-400">
+              Each <span className="text-glow-purple">world</span> is seeded by a CPC patent class
+              that biases its terrain, aptitude weighting, and guild distribution. Minions are
+              born with{" "}
+              <span className="text-glow-sky">swarm roles</span> drawn from the Master Reference;
+              they cite expired patents, propose inventions, and escalate regulated ideas to{" "}
+              <span className="text-glow-amber">multi-stage research projects</span>.
+            </p>
+          </div>
+        </div>
       </header>
 
-      <section className="panel">
+      {/* AGGREGATE STATS */}
+      <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatCard
+          label="Worlds"
+          value={stats.worlds}
+          icon={<FileSearch size={14} />}
+          hint={`${stats.live} live · ${stats.worlds - stats.live} paused`}
+          accent="purple"
+        />
+        <StatCard
+          label="Alive"
+          value={stats.alive.toLocaleString()}
+          icon={<Brain size={14} />}
+          hint={`of ${stats.total.toLocaleString()} total`}
+          accent="jade"
+        />
+        <StatCard
+          label="Σ ticks"
+          value={stats.ticks.toLocaleString()}
+          icon={<Activity size={14} />}
+          hint="across all worlds"
+          accent="amber"
+        />
+        <StatCard
+          label="Density"
+          value={
+            stats.worlds > 0 ? (stats.alive / Math.max(1, stats.worlds)).toFixed(0) : "—"
+          }
+          icon={<Sparkles size={14} />}
+          hint="avg alive per world"
+          accent="sky"
+        />
+      </section>
+
+      {/* FORGE FORM */}
+      <section className="panel-elevated">
         <div className="panel-header">
-          <span>Create world</span>
-          <span className="text-zinc-600">100-300 starting Minions recommended for demos</span>
+          <span className="flex items-center gap-2">
+            <Plus size={11} />
+            Forge a new world
+          </span>
+          <span>100–300 starting Minions recommended</span>
         </div>
         <form
-          className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-[1fr_140px_120px_120px_auto]"
+          className="space-y-4 p-5"
           onSubmit={(e) => {
             e.preventDefault();
             createWorld.mutate();
           }}
         >
-          <input
-            className="input"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="World name"
-            required
-          />
-          <input
-            className="input"
-            value={cpc}
-            onChange={(e) => setCpc(e.target.value.toUpperCase())}
-            placeholder="CPC class"
-            required
-          />
-          <input
-            type="number"
-            className="input"
-            value={startingPop}
-            min={10}
-            max={300}
-            onChange={(e) => setStartingPop(Number(e.target.value) || 128)}
-            title="Starting population"
-          />
-          <input
-            type="number"
-            className="input"
-            value={populationCap}
-            min={50}
-            max={1000}
-            onChange={(e) => setPopulationCap(Number(e.target.value) || 400)}
-            title="Population cap"
-          />
-          <button type="submit" className="btn" disabled={createWorld.isPending}>
-            <Plus size={12} />
-            {createWorld.isPending ? "Forging…" : "Forge"}
-          </button>
-          <div className="col-span-full flex flex-wrap gap-1 text-[10px] text-zinc-500">
-            <span>CPC:</span>
-            {CPC_SUGGESTIONS.map((s) => (
-              <button
-                key={s.code}
-                type="button"
-                onClick={() => setCpc(s.code)}
-                className="rounded border border-zinc-800 px-2 py-0.5 hover:border-glow-purple/40 hover:text-glow-purple"
-              >
-                {s.code} · {s.label}
-              </button>
-            ))}
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1.4fr_1fr_0.8fr_0.8fr]">
+            <label className="block">
+              <span className="page-eyebrow text-[9px]">Name</span>
+              <input
+                className="input mt-1.5"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Quantum Forge"
+                required
+              />
+            </label>
+            <label className="block">
+              <span className="page-eyebrow text-[9px]">CPC class</span>
+              <input
+                className="input mt-1.5 font-mono uppercase"
+                value={cpc}
+                onChange={(e) => setCpc(e.target.value.toUpperCase())}
+                placeholder="H02J"
+                required
+              />
+            </label>
+            <label className="block">
+              <span className="page-eyebrow text-[9px]">Starting pop</span>
+              <input
+                type="number"
+                className="input mt-1.5"
+                value={startingPop}
+                min={10}
+                max={300}
+                onChange={(e) => setStartingPop(Number(e.target.value) || 128)}
+              />
+            </label>
+            <label className="block">
+              <span className="page-eyebrow text-[9px]">Cap</span>
+              <input
+                type="number"
+                className="input mt-1.5"
+                value={populationCap}
+                min={50}
+                max={1000}
+                onChange={(e) => setPopulationCap(Number(e.target.value) || 400)}
+              />
+            </label>
           </div>
+
+          {/* CPC suggestion chips */}
+          <div>
+            <div className="page-eyebrow text-[9px] mb-2">Pick a seed</div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {CPC_SUGGESTIONS.map((s) => {
+                const Icon = s.icon;
+                const active = cpc === s.code;
+                return (
+                  <button
+                    key={s.code}
+                    type="button"
+                    onClick={() => setCpc(s.code)}
+                    className={`group flex items-center gap-2 rounded-md border px-3 py-2 text-left transition ${
+                      active
+                        ? "border-glow-purple bg-glow-purple/10 shadow-glow"
+                        : "border-zinc-800 hover:border-glow-purple/40 hover:bg-glow-purple/5"
+                    }`}
+                  >
+                    <Icon
+                      size={14}
+                      className={active ? "text-glow-purple" : "text-zinc-500 group-hover:text-glow-purple"}
+                    />
+                    <div className="min-w-0">
+                      <div className={`text-[10px] font-medium uppercase tracking-widest ${active ? "text-glow-purple" : "text-zinc-300"}`}>
+                        {s.code} · {s.label}
+                      </div>
+                      <div className="truncate text-[9px] text-zinc-500">{s.hint}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between border-t border-glow-purple/10 pt-4">
+            <div className="text-[10px] text-zinc-500">
+              Forging takes ~2s · creates {startingPop} minions + initial heightmap
+            </div>
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={createWorld.isPending}
+            >
+              {createWorld.isPending ? (
+                <>
+                  <Activity className="animate-spin" size={11} />
+                  Forging…
+                </>
+              ) : (
+                <>
+                  <Plus size={11} />
+                  Forge world
+                </>
+              )}
+            </button>
+          </div>
+
           {createWorld.isError ? (
-            <div className="col-span-full text-[10px] text-glow-rose">
+            <div className="rounded border border-glow-rose/30 bg-glow-rose/5 px-3 py-2 text-[10px] text-glow-rose">
               {(createWorld.error as Error).message}
             </div>
           ) : null}
         </form>
       </section>
 
-      <section className="panel">
-        <div className="panel-header">
-          <span>Worlds</span>
-          <span className="text-zinc-600">{worlds.data?.length ?? 0} active</span>
+      {/* WORLDS LIST */}
+      <section>
+        <div className="mb-3 flex items-baseline justify-between">
+          <h2 className="page-eyebrow">Active worlds</h2>
+          <span className="text-[10px] text-zinc-500">
+            {worlds.data?.length ?? 0} world{(worlds.data?.length ?? 0) === 1 ? "" : "s"}
+          </span>
         </div>
+
         {worlds.isLoading ? (
-          <div className="p-6 text-center text-[11px] text-zinc-500">Loading…</div>
-        ) : worlds.data && worlds.data.length > 0 ? (
-          <ul className="divide-y divide-glow-purple/10">
-            {worlds.data.map((w) => (
-              <li key={w.id}>
-                <Link
-                  to={`/worlds/${w.id}`}
-                  className="grid grid-cols-[1fr_60px_80px_80px_80px_80px_24px] items-center gap-4 px-4 py-3 transition hover:bg-glow-purple/5"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[12px] text-zinc-100">{w.name}</span>
-                      {w.auto_advance ? (
-                        <Radio size={11} className="animate-pulse text-glow-jade" />
-                      ) : null}
-                    </div>
-                    <div className="text-[9px] uppercase tracking-widest text-zinc-500">
-                      seed={w.seed_class} · cap {w.population_cap}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] text-zinc-500">tick</div>
-                    <div className="font-bold text-glow-amber">{w.tick}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] text-zinc-500">alive</div>
-                    <div className="font-bold text-glow-jade">{w.alive_count}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] text-zinc-500">total</div>
-                    <div className="text-zinc-300">{w.minion_count}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] text-zinc-500">interval</div>
-                    <div className="text-[10px] text-zinc-300">{w.auto_advance_interval_s.toFixed(1)}s</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] text-zinc-500">created</div>
-                    <div className="text-[10px] text-zinc-300">
-                      {new Date(w.created_at).toLocaleString()}
-                    </div>
-                  </div>
-                  <ChevronRight size={14} className="text-glow-purple/60" />
-                </Link>
-              </li>
+          <div className="grid gap-3 md:grid-cols-2">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="skeleton h-32 rounded-lg" />
             ))}
-          </ul>
+          </div>
+        ) : worlds.data && worlds.data.length > 0 ? (
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {worlds.data.map((w) => {
+              const aliveFraction = w.alive_count / Math.max(1, w.minion_count);
+              return (
+                <Link
+                  key={w.id}
+                  to={`/worlds/${w.id}`}
+                  className="group relative overflow-hidden rounded-lg border border-glow-purple/15 bg-gradient-to-br from-ink-1/95 to-ink-2/50 p-4 shadow-panel transition hover:border-glow-purple/50 hover:shadow-glow"
+                >
+                  <div
+                    className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full opacity-30 transition group-hover:opacity-60"
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(168,85,247,0.4), transparent 70%)",
+                    }}
+                  />
+                  <div className="relative flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-display text-base font-medium text-zinc-100">
+                        {w.name}
+                      </div>
+                      <div className="mt-0.5 flex items-center gap-1.5 text-[9px] uppercase tracking-widest text-zinc-500">
+                        <span className="font-mono text-glow-purple">{w.seed_class}</span>
+                        <span>·</span>
+                        <span>cap {w.population_cap}</span>
+                      </div>
+                    </div>
+                    <span
+                      className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[8px] uppercase tracking-widest ${
+                        w.auto_advance
+                          ? "border-glow-jade/40 bg-glow-jade/5 text-glow-jade"
+                          : "border-zinc-700 bg-zinc-800/40 text-zinc-500"
+                      }`}
+                    >
+                      <Radio
+                        size={9}
+                        className={w.auto_advance ? "animate-pulse" : ""}
+                      />
+                      {w.auto_advance ? "live" : "paused"}
+                    </span>
+                  </div>
+
+                  {/* metrics row */}
+                  <div className="relative mt-4 grid grid-cols-3 gap-2">
+                    <div>
+                      <div className="text-[8px] uppercase tracking-widest text-zinc-500">Tick</div>
+                      <div className="font-display text-lg font-light text-glow-amber">
+                        {w.tick.toLocaleString()}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[8px] uppercase tracking-widest text-zinc-500">Alive</div>
+                      <div className="font-display text-lg font-light text-glow-jade">
+                        {w.alive_count}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[8px] uppercase tracking-widest text-zinc-500">Total</div>
+                      <div className="font-display text-lg font-light text-zinc-300">
+                        {w.minion_count}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* alive progress */}
+                  <div className="relative mt-3">
+                    <div className="flex justify-between text-[8px] uppercase tracking-widest text-zinc-500">
+                      <span>Population</span>
+                      <span>{Math.round(aliveFraction * 100)}%</span>
+                    </div>
+                    <div className="mt-1 h-1 overflow-hidden rounded-full bg-ink-3">
+                      <div
+                        className="h-full bg-gradient-to-r from-glow-jade to-glow-teal transition-all"
+                        style={{ width: `${Math.round(aliveFraction * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="relative mt-3 flex justify-between text-[9px] text-zinc-500">
+                    <span>{w.auto_advance_interval_s.toFixed(1)}s / tick</span>
+                    <span>{new Date(w.created_at).toLocaleDateString()}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         ) : (
-          <div className="p-6 text-center text-[11px] text-zinc-500">
-            No worlds yet. Forge one above to begin.
+          <div className="panel">
+            <EmptyState
+              icon={<Sparkles size={20} />}
+              title="No worlds forged yet"
+              hint="Pick a CPC class above and forge your first world. The simulation will start paused — toggle auto-advance to evolve it."
+            />
           </div>
         )}
       </section>
