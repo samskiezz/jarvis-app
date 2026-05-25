@@ -1,0 +1,128 @@
+import { API_BASE_URL, getApiKey } from "./config";
+import type {
+  AdvanceResponse,
+  DnaInfo,
+  GuildSpec,
+  Invention,
+  Lineage,
+  Memory,
+  Minion,
+  MinionListItem,
+  Patent,
+  PeerReview,
+  PopulationStats,
+  RelationshipRow,
+  SafetyReview,
+  Skill,
+  SoulInfo,
+  World,
+  WorldEvent,
+  WorldMap,
+} from "./types";
+
+export class ApiError extends Error {
+  status: number;
+  body: string;
+  constructor(status: number, body: string) {
+    super(`API ${status}: ${body || "request failed"}`);
+    this.status = status;
+    this.body = body;
+  }
+}
+
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const headers = new Headers(init.headers);
+  if (!headers.has("Content-Type") && init.body) {
+    headers.set("Content-Type", "application/json");
+  }
+  const key = getApiKey();
+  if (key && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${key}`);
+  }
+  const res = await fetch(`${API_BASE_URL}${path}`, { ...init, headers });
+  if (!res.ok) {
+    throw new ApiError(res.status, await res.text());
+  }
+  if (res.status === 204) return undefined as T;
+  return (await res.json()) as T;
+}
+
+export const api = {
+  me: () => request<{ authenticated: boolean }>("/auth/me"),
+  guilds: () => request<GuildSpec[]>("/guilds"),
+
+  // worlds
+  listWorlds: () => request<World[]>("/worlds"),
+  createWorld: (name: string, cpc_class: string, starting_population = 128, population_cap = 400) =>
+    request<World>("/worlds", {
+      method: "POST",
+      body: JSON.stringify({ name, cpc_class, starting_population, population_cap }),
+    }),
+  getWorld: (id: string) => request<World>(`/worlds/${id}`),
+  getWorldMap: (id: string) => request<WorldMap>(`/worlds/${id}/map`),
+  listMinions: (id: string, opts: { alive?: boolean; guild?: string; limit?: number } = {}) => {
+    const q = new URLSearchParams();
+    if (opts.alive !== undefined) q.set("alive", String(opts.alive));
+    if (opts.guild) q.set("guild", opts.guild);
+    if (opts.limit) q.set("limit", String(opts.limit));
+    return request<MinionListItem[]>(`/worlds/${id}/minions${q.size ? `?${q}` : ""}`);
+  },
+  listEvents: (id: string, limit = 50) =>
+    request<WorldEvent[]>(`/worlds/${id}/events?limit=${limit}`),
+  listInventions: (id: string) => request<Invention[]>(`/worlds/${id}/inventions`),
+  population: (id: string, history = 60) =>
+    request<PopulationStats>(`/worlds/${id}/population?history=${history}`),
+  advance: (id: string, ticks: number) =>
+    request<AdvanceResponse>(`/worlds/${id}/advance`, {
+      method: "POST",
+      body: JSON.stringify({ ticks }),
+    }),
+  setAutoAdvance: (id: string, auto_advance: boolean, interval_s?: number) =>
+    request<World>(`/worlds/${id}/auto-advance`, {
+      method: "PATCH",
+      body: JSON.stringify({ auto_advance, interval_s }),
+    }),
+
+  // minions
+  getMinion: (id: string) => request<Minion>(`/minions/${id}`),
+  listSkills: (id: string) => request<Skill[]>(`/minions/${id}/skills`),
+  listMemories: (id: string, limit = 30) =>
+    request<Memory[]>(`/minions/${id}/memories?limit=${limit}`),
+  listRelationships: (id: string) => request<RelationshipRow[]>(`/minions/${id}/relationships`),
+  getDna: (id: string) => request<DnaInfo>(`/minions/${id}/dna`),
+  getSoul: (id: string) => request<SoulInfo>(`/minions/${id}/soul`),
+  getLineage: (id: string, depth = 3) => request<Lineage>(`/minions/${id}/lineage?depth=${depth}`),
+  breed: (parent_a_id: string, parent_b_id: string) =>
+    request<Minion>("/minions/breed", {
+      method: "POST",
+      body: JSON.stringify({ parent_a_id, parent_b_id }),
+    }),
+  fork: (minion_id: string) =>
+    request<Minion>("/minions/fork", {
+      method: "POST",
+      body: JSON.stringify({ minion_id }),
+    }),
+
+  // patents
+  searchPatents: (query: string, limit = 10, only_expired = true) =>
+    request<Patent[]>("/patents/search", {
+      method: "POST",
+      body: JSON.stringify({ query, limit, only_expired }),
+    }),
+
+  // inventions
+  getInvention: (id: string) => request<Invention>(`/inventions/${id}`),
+  listReviews: (id: string) => request<PeerReview[]>(`/inventions/${id}/reviews`),
+
+  // safety
+  listSafetyReviews: (limit = 50) =>
+    request<SafetyReview[]>(`/safety/reviews?limit=${limit}`),
+  safetyCheck: (text?: string, cpc?: string) =>
+    request<{ blocked: boolean; rules: { rule: string; detail: string }[] }>(
+      "/safety/check",
+      { method: "POST", body: JSON.stringify({ text, cpc }) },
+    ),
+
+  // event stream
+  streamUrl: (worldId: string) => `${API_BASE_URL}/worlds/${worldId}/stream`,
+};
