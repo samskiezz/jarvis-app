@@ -122,7 +122,14 @@ def _heuristic_review(guild_kind: GuildKind, inv: Invention) -> dict[str, Any]:
     if inv.hypothesis:
         text_score += min(0.3, len(inv.hypothesis) / 400.0)
 
-    citation_score = min(0.3, len(inv.related_patents) * 0.10)
+    # Citation scoring: a non-empty citation list gets a meaningful floor;
+    # each extra citation adds a small bump. Mirrors how real reviewers
+    # treat the presence of ANY grounded prior art as a basic threshold.
+    n_cite = len(inv.related_patents)
+    if n_cite == 0:
+        citation_score = 0.0
+    else:
+        citation_score = 0.18 + min(0.20, (n_cite - 1) * 0.06)
 
     safety_text = safety.check_text(
         " ".join([inv.title, inv.problem, inv.hypothesis])
@@ -142,8 +149,8 @@ def _heuristic_review(guild_kind: GuildKind, inv: Invention) -> dict[str, Any]:
     jitter_b = ((int.from_bytes(digest[4:8], "big") % 1000) / 1000.0 - 0.5) * 0.4  # ±0.20
     jitter_c = ((int.from_bytes(digest[8:12], "big") % 1000) / 1000.0 - 0.5) * 0.2  # ±0.10
 
-    feasibility = max(0.0, min(1.0, 0.25 + text_score + jitter_a))
-    novelty = max(0.0, min(1.0, 0.20 + citation_score + jitter_b))
+    feasibility = max(0.0, min(1.0, 0.30 + text_score + jitter_a))
+    novelty = max(0.0, min(1.0, 0.30 + citation_score + jitter_b))
     safety_score = max(0.0, min(1.0, 0.80 + jitter_c))
 
     if guild_kind == GuildKind.PATENT and len(inv.related_patents) == 0:

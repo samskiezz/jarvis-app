@@ -5,8 +5,10 @@ import CommandCentre from "@/pages/CommandCentre";
 import WorldDetail from "@/pages/WorldDetail";
 import InventionDetail from "@/pages/InventionDetail";
 import InventionList from "@/pages/InventionList";
+import KnowledgeLibrary from "@/pages/KnowledgeLibrary";
 import PatentScanner from "@/pages/PatentScanner";
 import Population from "@/pages/Population";
+import Projects from "@/pages/Projects";
 import Guilds from "@/pages/Guilds";
 import Safety from "@/pages/Safety";
 
@@ -18,6 +20,8 @@ export default function App() {
           <Route path="/" element={<CommandCentre />} />
           <Route path="/worlds/:id" element={<WorldDetail />} />
           <Route path="/population" element={<Population />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/knowledge" element={<KnowledgeLibrary />} />
           <Route path="/inventions" element={<InventionList />} />
           <Route path="/inventions/:id" element={<InventionDetail />} />
           <Route path="/patents" element={<PatentScanner />} />

@@ -105,19 +105,46 @@ export default function Population() {
             </div>
           </section>
 
-          <section className="panel">
-            <div className="panel-header">
-              <span>Guild distribution</span>
-              <span className="text-zinc-500">11 guilds tracked</span>
+          <section className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <div className="panel">
+              <div className="panel-header">
+                <span>Guild distribution</span>
+                <span className="text-zinc-500">11 guilds</span>
+              </div>
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-1 p-4 text-[11px] sm:grid-cols-3">
+                {Object.entries(stats.data.guild_breakdown).map(([g, n]) => (
+                  <li key={g} className="flex justify-between">
+                    <span className="text-zinc-300">{g}</span>
+                    <span className="text-glow-purple">{n}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="grid grid-cols-2 gap-x-4 gap-y-1 p-4 text-[11px] sm:grid-cols-3 lg:grid-cols-4">
-              {Object.entries(stats.data.guild_breakdown).map(([g, n]) => (
-                <li key={g} className="flex justify-between">
-                  <span className="text-zinc-300">{g}</span>
-                  <span className="text-glow-purple">{n}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="panel">
+              <div className="panel-header">
+                <span>Swarm role distribution</span>
+                <span className="text-zinc-500">10 roles</span>
+              </div>
+              <ul className="grid grid-cols-1 gap-x-3 gap-y-1 p-4 text-[11px] sm:grid-cols-2">
+                {Object.entries(stats.data.role_breakdown ?? {}).map(([r, n]) => (
+                  <li key={r} className="flex justify-between">
+                    <span className="truncate text-zinc-300">{r.replace(/_/g, " ")}</span>
+                    <span className="text-glow-sky">{n}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section className="grid grid-cols-2 gap-3">
+            <div className="panel p-4">
+              <div className="text-[10px] uppercase tracking-widest text-zinc-500">Active research projects</div>
+              <div className="text-2xl text-glow-amber">{stats.data.active_projects}</div>
+            </div>
+            <div className="panel p-4">
+              <div className="text-[10px] uppercase tracking-widest text-zinc-500">Approved projects</div>
+              <div className="text-2xl text-glow-jade">{stats.data.approved_projects}</div>
+            </div>
           </section>
         </>
       ) : (

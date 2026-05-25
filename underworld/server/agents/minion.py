@@ -27,6 +27,7 @@ from sqlalchemy import select
 from ..db.models import (
     Event,
     Invention,
+    KnowledgeFormula,
     Memory,
     Minion,
     Patent,
@@ -56,6 +57,23 @@ _ACTIONS = {
     "meditate",
     "fork_self",
     "teach",
+    "kb_lookup",
+}
+
+
+# Map swarm role → discipline to look up by default. Lets a Minion's kb_lookup
+# action default to its specialty when the args don't specify one.
+_ROLE_DEFAULT_DISCIPLINE = {
+    "formula_oracle": "mathematics",
+    "genome_analyst": "bioinformatics",
+    "protein_modeller": "biology",
+    "chemistry_generator": "chemistry",
+    "toxicity_checker": "biology",
+    "trial_simulator": "ai",
+    "regulatory_reasoner": "biology",
+    "experimental_designer": "physics",
+    "literature_scout": "ai",
+    "generalist": "ai",
 }
 
 
@@ -75,6 +93,7 @@ def _build_system_prompt(minion: Minion, world: World, biome: str) -> str:
         name=minion.name,
         surname=minion.surname or "",
         guild=minion.guild.value,
+        swarm_role=minion.swarm_role.value,
         openness=minion.openness,
         conscientiousness=minion.conscientiousness,
         extraversion=minion.extraversion,
@@ -147,6 +166,25 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
         return {"thought": "Need stillness.", "action": "meditate", "args": {}, "memory_to_store": ""}
 
     r = rng.random()
+
+    # Role-driven research drive — knowledge-base lookups bias toward formula
+    # oracles and literature scouts. Strengthened during the first 100 ticks
+    # of life to build a research footprint.
+    role = minion.swarm_role.value
+    if role in {"formula_oracle", "literature_scout"} and r < 0.35:
+        return {
+            "thought": f"As {role}, querying the knowledge base.",
+            "action": "kb_lookup",
+            "args": {"discipline": _ROLE_DEFAULT_DISCIPLINE.get(role, "ai")},
+            "memory_to_store": "",
+        }
+    if role in {"genome_analyst", "chemistry_generator", "protein_modeller"} and r < 0.18:
+        return {
+            "thought": f"Refreshing {role} priors.",
+            "action": "kb_lookup",
+            "args": {"discipline": _ROLE_DEFAULT_DISCIPLINE.get(role, "ai")},
+            "memory_to_store": "",
+        }
 
     # Reproduction drive — kicks in once adult and not from a reviewer guild.
     # Patent + Safety guilds are functional roles; they breed less.
@@ -359,6 +397,26 @@ async def _do_study(session: AsyncSession, minion: Minion, world: World, args: d
     return f"Studied {skill_name!r}; level now {skill.level:.2f}"
 
 
+async def _do_kb_lookup(session: AsyncSession, minion: Minion, world: World, args: dict[str, Any]) -> str:
+    """Query the knowledge base. Returns a short summary appended to memory."""
+    discipline = (
+        str(args.get("discipline") or "").strip().lower()
+        or _ROLE_DEFAULT_DISCIPLINE.get(minion.swarm_role.value, "ai")
+    )
+    query = str(args.get("q") or args.get("query") or "").strip()
+    stmt = select(KnowledgeFormula).where(KnowledgeFormula.discipline == discipline)
+    if query:
+        pattern = f"%{query}%"
+        stmt = stmt.where(KnowledgeFormula.expression.ilike(pattern))
+    stmt = stmt.limit(3)
+    res = await session.execute(stmt)
+    rows = list(res.scalars().all())
+    if not rows:
+        return f"No formulas found for discipline={discipline} q={query!r}."
+    picked = rows[hash(minion.id + str(world.tick)) % len(rows)]
+    return f"Looked up [{picked.discipline}] {picked.expression[:140]}"
+
+
 async def _do_teach(session: AsyncSession, teacher: Minion, world: World, args: dict[str, Any]) -> str:
     """Teach a same-guild Minion. Both gain — teacher reputation, student skill."""
     skill_name = str(args.get("skill") or teacher.guild.value).strip()[:80]
@@ -468,6 +526,8 @@ async def run_tick(
         summary = await _do_study(session, minion, world, args)
     elif action == "teach":
         summary = await _do_teach(session, minion, world, args)
+    elif action == "kb_lookup":
+        summary = await _do_kb_lookup(session, minion, world, args)
     elif action == "eat":
         lifecycle.replenish(minion, food=0.45)
         summary = "Ate and replenished."

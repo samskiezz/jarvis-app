@@ -38,7 +38,7 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import lifecycle
+from . import lifecycle, projects, roles
 
 
 @dataclass
@@ -51,6 +51,10 @@ class TickReport:
     deaths: int = 0
     forks: int = 0
     alive: int = 0
+    projects_created: int = 0
+    project_contributions: int = 0
+    project_stages_advanced: int = 0
+    projects_approved: int = 0
 
 
 def _payload(rep: TickReport) -> dict:
@@ -63,6 +67,10 @@ def _payload(rep: TickReport) -> dict:
         "deaths": rep.deaths,
         "forks": rep.forks,
         "alive": rep.alive,
+        "projects_created": rep.projects_created,
+        "project_contributions": rep.project_contributions,
+        "project_stages_advanced": rep.project_stages_advanced,
+        "projects_approved": rep.projects_approved,
     }
 
 
@@ -177,12 +185,14 @@ async def _write_snapshot(
 
     mood_breakdown = Counter(m.mood.value for m in alive)
     guild_breakdown = Counter(m.guild.value for m in alive)
+    role_breakdown = Counter(m.swarm_role.value for m in alive)
     avg_age = (
         sum(world.tick - m.born_tick for m in alive) / len(alive) if alive else 0.0
     )
     avg_reputation = sum(m.reputation for m in alive) / len(alive) if alive else 0.0
     avg_sanity = sum(m.sanity for m in alive) / len(alive) if alive else 0.0
     generations = max((m.generation for m in alive), default=0)
+    active_projects, approved_projects = await projects.world_project_counts(session, world.id)
 
     session.add(
         PopulationSnapshot(
@@ -200,6 +210,9 @@ async def _write_snapshot(
             avg_sanity=round(avg_sanity, 3),
             mood_breakdown=dict(mood_breakdown),
             guild_breakdown=dict(guild_breakdown),
+            role_breakdown=dict(role_breakdown),
+            active_projects=active_projects,
+            approved_projects=approved_projects,
         )
     )
 
@@ -292,6 +305,18 @@ async def advance_world(
             report.inventions_reviewed += 1
             if inv.status == TaskStatus.APPROVED:
                 report.inventions_approved += 1
+                # Inventions that touch regulated domains escalate to projects.
+                flags = roles.detect_domain(inv.title, inv.problem, inv.hypothesis)
+                if flags.any:
+                    created = await projects.maybe_create_project(session, world, inv, flags)
+                    if created is not None:
+                        report.projects_created += 1
+
+        # 3b. Tick the active research projects.
+        proj_report = await projects.tick_projects(session, world, rng)
+        report.project_contributions = proj_report.contributions
+        report.project_stages_advanced = proj_report.stages_advanced
+        report.projects_approved = proj_report.approved
 
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)

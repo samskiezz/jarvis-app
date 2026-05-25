@@ -51,6 +51,101 @@ export type RelationshipKindT =
   | "sibling"
   | "soul_bond";
 
+export type SwarmRole =
+  | "literature_scout"
+  | "genome_analyst"
+  | "protein_modeller"
+  | "chemistry_generator"
+  | "toxicity_checker"
+  | "trial_simulator"
+  | "regulatory_reasoner"
+  | "experimental_designer"
+  | "formula_oracle"
+  | "generalist";
+
+export type ProjectStage =
+  | "hypothesis"
+  | "in_silico"
+  | "bench_plan"
+  | "preclinical_plan"
+  | "clinical_plan"
+  | "regulatory_review"
+  | "approved"
+  | "blocked"
+  | "abandoned";
+
+export interface KbConcept {
+  id: string;
+  section: string;
+  title: string;
+  body: string;
+  tags: string[];
+}
+
+export interface KbFormula {
+  id: string;
+  discipline: string;
+  catalogue: string;
+  expression: string;
+  keywords: string[];
+}
+
+export interface KbSwarmRole {
+  id: string;
+  name: string;
+  description: string;
+  guild_hint: string;
+}
+
+export interface KbGuardrail {
+  id: string;
+  stage: string;
+  detail: string;
+}
+
+export interface KbSummary {
+  concepts: number;
+  formulas: number;
+  swarm_roles: number;
+  guardrails: number;
+  formulas_by_discipline: Record<string, number>;
+  catalogues: { name: string; count: number }[];
+}
+
+export interface ResearchProjectT {
+  id: string;
+  world_id: string;
+  invention_id: string | null;
+  title: string;
+  summary: string;
+  stage: ProjectStage;
+  needs_role: SwarmRole | null;
+  confidence: number;
+  flagged_clinical: boolean;
+  flagged_genetic: boolean;
+  flagged_chem_synth: boolean;
+  created_tick: number;
+  updated_tick: number;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface ProjectContributionT {
+  id: string;
+  stage: ProjectStage;
+  role: SwarmRole;
+  note: string;
+  delta_confidence: number;
+  tick: number;
+  contributor: {
+    id: string;
+    name: string;
+    surname: string;
+    guild: Guild;
+    swarm_role: SwarmRole;
+  };
+}
+
 export interface World {
   id: string;
   name: string;
@@ -70,6 +165,7 @@ export interface MinionListItem {
   name: string;
   surname: string;
   guild: Guild;
+  swarm_role: SwarmRole;
   generation: number;
   alive: boolean;
   reputation: number;
@@ -87,6 +183,7 @@ export interface MinionListItem {
 export interface Minion extends MinionListItem {
   world_id: string;
   soul_id: string | null;
+  swarm_role: SwarmRole;
   parent_a_id: string | null;
   parent_b_id: string | null;
   forked_from_id: string | null;
@@ -238,6 +335,9 @@ export interface PopulationSnapshot {
   avg_sanity: number;
   mood_breakdown: Record<string, number>;
   guild_breakdown: Record<string, number>;
+  role_breakdown: Record<string, number>;
+  active_projects: number;
+  approved_projects: number;
 }
 
 export interface PopulationStats {
@@ -251,6 +351,9 @@ export interface PopulationStats {
   avg_sanity: number;
   mood_breakdown: Record<string, number>;
   guild_breakdown: Record<string, number>;
+  role_breakdown: Record<string, number>;
+  active_projects: number;
+  approved_projects: number;
   history: PopulationSnapshot[];
 }
 

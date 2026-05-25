@@ -35,6 +35,7 @@ from ..db.models import (
     World,
 )
 from ..genetics import dna as dna_mod
+from . import roles as roles_mod
 
 
 # --- naming -----------------------------------------------------------------
@@ -314,6 +315,7 @@ async def _make_minion(
         born_tick=world.tick,
         karma=soul.karma * 0.5,  # carry forward
         reputation=1.0,
+        swarm_role=roles_mod.assign_role(guild, dna),
     )
     session.add(m)
     await session.flush()

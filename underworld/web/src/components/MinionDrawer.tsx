@@ -74,10 +74,13 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             {m.guild} · gen {m.generation}
           </div>
           <div className="text-sm text-zinc-100">{m.name} {m.surname}</div>
-          <div className="mt-0.5 text-[10px] text-zinc-500">
-            age {m.age} · rep {m.reputation.toFixed(2)} · karma {m.karma.toFixed(2)} ·{" "}
-            <span className={MOOD_COLOR[m.mood]}>{m.mood}</span>
-            {m.alive ? null : <span className="text-glow-rose"> · DECEASED</span>}
+          <div className="mt-0.5 flex flex-wrap items-center gap-1 text-[10px] text-zinc-500">
+            <span className="badge border-glow-sky/40 text-glow-sky">{m.swarm_role.replace(/_/g, " ")}</span>
+            <span>age {m.age}</span>
+            <span>· rep {m.reputation.toFixed(2)}</span>
+            <span>· karma {m.karma.toFixed(2)}</span>
+            <span className={MOOD_COLOR[m.mood]}>· {m.mood}</span>
+            {m.alive ? null : <span className="text-glow-rose">· DECEASED</span>}
           </div>
         </div>
         <button type="button" className="text-zinc-500 hover:text-zinc-100" onClick={onClose}>

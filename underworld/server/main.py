@@ -9,12 +9,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
 from .db.session import dispose, init_db
+from .knowledge.seed import seed_knowledge_base
 from .logging_setup import configure_logging
 from .routes import auth as auth_routes
 from .routes import guilds as guild_routes
 from .routes import inventions as invention_routes
+from .routes import knowledge as knowledge_routes
 from .routes import minions as minion_routes
 from .routes import patents as patent_routes
+from .routes import projects as project_routes
 from .routes import safety as safety_routes
 from .routes import worlds as world_routes
 from .services import scheduler
@@ -24,6 +27,7 @@ from .services import scheduler
 async def lifespan(_app: FastAPI):
     configure_logging()
     await init_db()
+    await seed_knowledge_base()
     scheduler.start()
     yield
     await scheduler.stop()
@@ -54,6 +58,8 @@ def create_app() -> FastAPI:
     app.include_router(invention_routes.router)
     app.include_router(guild_routes.router)
     app.include_router(safety_routes.router)
+    app.include_router(knowledge_routes.router)
+    app.include_router(project_routes.router)
 
     @app.get("/")
     async def root():

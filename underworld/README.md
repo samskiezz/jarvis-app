@@ -44,6 +44,47 @@ After every Minion has acted, the tick resolves:
 The whole loop can run unattended via the **background scheduler** — toggle
 `auto_advance` on a world and it ticks every N seconds (default 5s).
 
+## Master Reference integration (V2 Expanded)
+
+`docs/AI_Swarms_Master_Reference.docx` is the project's structured knowledge
+base. The build step `python -m underworld.server.knowledge.extract_kb`
+parses 2,553 paragraphs into `data/knowledge_base.json`:
+
+- **2,401 formulas** across 8 disciplines (math 1,574; chemistry 206; bio
+  200; physics 193; biology 110; ai 57; electrical 44; engineering 17).
+- **11 prose concepts** (AI for cures, swarm architecture, CRISPR / omics,
+  chemistry & medicines, A-Z field map, physics laws, pipeline guardrails,
+  per-field AI usage, glossary).
+- **9 swarm roles** (Literature Scout, Genome Analyst, Protein Modeller,
+  Chemistry Generator, Toxicity Checker, Trial Simulator, Regulatory
+  Reasoner, Experimental Designer, Formula Oracle).
+- **6 pipeline guardrails** (in-silico, bench, preclinical, clinical,
+  regulatory, red-lines).
+
+The seeder ingests this JSON into SQLite on first startup. Routes under
+`/knowledge/*` expose it (concepts, paginated formula search, roles,
+guardrails). Minions issue `kb_lookup` actions every tick — Formula
+Oracles and Literature Scouts hit it hardest, Chemistry Generators /
+Genome Analysts / Protein Modellers pull discipline-specific formulas
+into their reasoning context.
+
+When an invention's text mentions clinical, genetic, or chemical-synthesis
+terms, it escalates to a **Research Project** that walks the doc's
+Section 8 validation pipeline:
+
+```
+hypothesis → in_silico → bench_plan → preclinical_plan → clinical_plan
+           → regulatory_review → approved
+```
+
+Each stage advances only when a Minion whose **swarm role** matches the
+stage's need contributes during a tick. Confidence accumulates until the
+project clears the stage or gets blocked. Approval is the terminal state.
+
+The conservative CPC allow-list, red-line phrase scanner, and Safety
+Guild veto still apply to every artifact — the project pipeline runs
+ON TOP of those gates, not in place of them.
+
 ## Architecture
 
 ```

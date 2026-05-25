@@ -98,6 +98,40 @@ class RelationshipKind(str, enum.Enum):
     SOUL_BOND = "soul_bond"  # doc II.72-73
 
 
+class SwarmRoleKind(str, enum.Enum):
+    """Specialised research roles from the Master Reference Section 2.
+
+    Each Minion gets exactly one role at birth, derived from their DNA
+    aptitudes + guild. Roles shape what kinds of actions they prefer and
+    which projects they can join.
+    """
+
+    LITERATURE_SCOUT = "literature_scout"
+    GENOME_ANALYST = "genome_analyst"
+    PROTEIN_MODELLER = "protein_modeller"
+    CHEMISTRY_GENERATOR = "chemistry_generator"
+    TOXICITY_CHECKER = "toxicity_checker"
+    TRIAL_SIMULATOR = "trial_simulator"
+    REGULATORY_REASONER = "regulatory_reasoner"
+    EXPERIMENTAL_DESIGNER = "experimental_designer"
+    FORMULA_ORACLE = "formula_oracle"
+    GENERALIST = "generalist"  # default when no role fits
+
+
+class ProjectStage(str, enum.Enum):
+    """Validation pipeline stages from Section 8 of the Master Reference."""
+
+    HYPOTHESIS = "hypothesis"
+    IN_SILICO = "in_silico"
+    BENCH_PLAN = "bench_plan"
+    PRECLINICAL_PLAN = "preclinical_plan"
+    CLINICAL_PLAN = "clinical_plan"
+    REGULATORY_REVIEW = "regulatory_review"
+    APPROVED = "approved"
+    BLOCKED = "blocked"
+    ABANDONED = "abandoned"
+
+
 class MoodKind(str, enum.Enum):
     """Derived each tick from needs + recent events.
 
@@ -201,6 +235,12 @@ class Minion(Base):
     # Mood + stress — derived each tick from needs and recent events.
     mood: Mapped[MoodKind] = mapped_column(Enum(MoodKind), default=MoodKind.CONTENT)
     stress: Mapped[float] = mapped_column(Float, default=0.2)
+
+    # Swarm role — derived from DNA + guild at birth. Drives action bias and
+    # project eligibility. See Master Reference Section 2.
+    swarm_role: Mapped[SwarmRoleKind] = mapped_column(
+        Enum(SwarmRoleKind), default=SwarmRoleKind.GENERALIST, index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
@@ -334,6 +374,106 @@ class Event(Base):
     world: Mapped["World"] = relationship(back_populates="events")
 
 
+# --- knowledge base (ingested from docs/AI_Swarms_Master_Reference.docx) ---
+
+
+class KnowledgeConcept(Base):
+    """Prose section from the Master Reference (e.g. 'Genomics, CRISPR…')."""
+
+    __tablename__ = "kb_concepts"
+
+    id: Mapped[str] = mapped_column(String(120), primary_key=True)
+    section: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    tags: Mapped[list[str]] = mapped_column(JSON, default=list)
+
+
+class KnowledgeFormula(Base):
+    """A single formula line from the master compendium."""
+
+    __tablename__ = "kb_formulas"
+    __table_args__ = (
+        Index("ix_kb_formula_discipline", "discipline"),
+        Index("ix_kb_formula_catalogue", "catalogue"),
+    )
+
+    id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    discipline: Mapped[str] = mapped_column(String(40), nullable=False)
+    catalogue: Mapped[str] = mapped_column(String(160), nullable=False)
+    expression: Mapped[str] = mapped_column(Text, nullable=False)
+    keywords: Mapped[list[str]] = mapped_column(JSON, default=list)
+
+
+class KnowledgeSwarmRole(Base):
+    """Swarm-role taxonomy from Master Reference Section 2."""
+
+    __tablename__ = "kb_swarm_roles"
+
+    id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    guild_hint: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class KnowledgeGuardrail(Base):
+    """Validation-pipeline guardrail from Master Reference Section 8."""
+
+    __tablename__ = "kb_guardrails"
+
+    id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    stage: Mapped[str] = mapped_column(String(40), nullable=False)
+    detail: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+# --- research projects (Section 8 validation pipeline) ---
+
+
+class ResearchProject(Base):
+    """A multi-stage research project. Created when an invention crosses into a
+    domain that requires the doc's full validation pipeline (medical, gene,
+    chemical-synthesis), or when explicitly chartered.
+    """
+
+    __tablename__ = "research_projects"
+    __table_args__ = (Index("ix_research_world_stage", "world_id", "stage"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False)
+    invention_id: Mapped[str | None] = mapped_column(ForeignKey("inventions.id"), nullable=True)
+    title: Mapped[str] = mapped_column(String(280), nullable=False)
+    summary: Mapped[str] = mapped_column(Text, default="")
+    stage: Mapped[ProjectStage] = mapped_column(
+        Enum(ProjectStage), default=ProjectStage.HYPOTHESIS, index=True,
+    )
+    needs_role: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    confidence: Mapped[float] = mapped_column(Float, default=0.5)
+    flagged_clinical: Mapped[bool] = mapped_column(Boolean, default=False)
+    flagged_genetic: Mapped[bool] = mapped_column(Boolean, default=False)
+    flagged_chem_synth: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_tick: Mapped[int] = mapped_column(Integer, default=0)
+    updated_tick: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+    updated_at: Mapped[datetime] = mapped_column(default=_now, onupdate=_now)
+
+
+class ProjectContribution(Base):
+    """One Minion's contribution to a project at a given stage."""
+
+    __tablename__ = "project_contributions"
+    __table_args__ = (Index("ix_proj_contrib", "project_id", "tick"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    project_id: Mapped[str] = mapped_column(ForeignKey("research_projects.id"), nullable=False)
+    minion_id: Mapped[str] = mapped_column(ForeignKey("minions.id"), nullable=False)
+    stage: Mapped[ProjectStage] = mapped_column(Enum(ProjectStage), nullable=False)
+    role: Mapped[SwarmRoleKind] = mapped_column(Enum(SwarmRoleKind), nullable=False)
+    note: Mapped[str] = mapped_column(Text, default="")
+    delta_confidence: Mapped[float] = mapped_column(Float, default=0.0)
+    tick: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+
+
 class PopulationSnapshot(Base):
     """One row per world per tick — used for dashboards + research replay."""
 
@@ -355,4 +495,7 @@ class PopulationSnapshot(Base):
     avg_sanity: Mapped[float] = mapped_column(Float, default=0.0)
     mood_breakdown: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     guild_breakdown: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    role_breakdown: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    active_projects: Mapped[int] = mapped_column(Integer, default=0)
+    approved_projects: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(default=_now)

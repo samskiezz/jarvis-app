@@ -17,7 +17,7 @@ from ..agents import guilds
 from ..db.models import GuildKind, Minion, Skill, Soul, World
 from ..genetics import dna as dna_mod
 from ..world.seed import derive_seed
-from . import lifecycle
+from . import lifecycle, roles
 
 
 _DEFAULT_PATENT_SEATS = 6
@@ -120,6 +120,7 @@ async def _spawn_founder(
         creativity=traits["creativity"],
         born_tick=0,
         reputation=1.0,
+        swarm_role=roles.assign_role(guild_kind, dna),
     )
     session.add(m)
     await session.flush()

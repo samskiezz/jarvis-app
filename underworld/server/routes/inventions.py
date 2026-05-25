@@ -1,15 +1,85 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth import require_bearer
-from ..db.models import Invention, PeerReview
+from ..db.models import Invention, Minion, PeerReview, TaskStatus, World
 from ..db.session import get_session
+from ..tools import safety
 from .schemas import InventionOut, PeerReviewOut
 
 router = APIRouter(prefix="/inventions", tags=["inventions"])
+
+
+class CharterInvention(BaseModel):
+    """Human-chartered invention. Doc Section IV.169 ('Patent Pilot AI').
+
+    Lets a user (or external agent) seed an idea into a world without going
+    through the per-minion decision loop. The invention still passes through
+    every safety + peer-review gate, so this is not an escape hatch.
+    """
+
+    world_id: str
+    minion_id: str | None = None
+    title: str = Field(..., min_length=1, max_length=280)
+    problem: str = Field(..., min_length=1)
+    hypothesis: str = ""
+    related_patents: list[str] = Field(default_factory=list)
+
+
+@router.post("/charter", response_model=InventionOut, status_code=201)
+async def charter_invention(
+    body: CharterInvention,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    world = await session.get(World, body.world_id)
+    if not world:
+        raise HTTPException(status_code=404, detail="world not found")
+    minion_id = body.minion_id
+    if minion_id is not None:
+        m = await session.get(Minion, minion_id)
+        if not m:
+            raise HTTPException(status_code=404, detail="minion not found")
+        if m.world_id != world.id:
+            raise HTTPException(status_code=400, detail="minion belongs to a different world")
+
+    combined = " ".join([body.title, body.problem, body.hypothesis])
+    safety_result = safety.check_text(combined)
+    status = TaskStatus.NEEDS_SAFETY_REVIEW if safety_result.blocked else TaskStatus.NEEDS_PEER_REVIEW
+
+    inv = Invention(
+        world_id=world.id,
+        minion_id=minion_id,
+        tick=world.tick,
+        title=body.title[:280],
+        problem=body.problem,
+        hypothesis=body.hypothesis,
+        related_patents=body.related_patents,
+        status=status,
+        inputs={"chartered": True},
+    )
+    session.add(inv)
+    await session.flush()
+
+    return InventionOut(
+        id=inv.id,
+        world_id=inv.world_id,
+        minion_id=inv.minion_id,
+        tick=inv.tick,
+        title=inv.title,
+        problem=inv.problem,
+        hypothesis=inv.hypothesis or "",
+        feasibility_score=inv.feasibility_score,
+        novelty_score=inv.novelty_score,
+        safety_score=inv.safety_score,
+        status=inv.status,
+        related_patents=inv.related_patents or [],
+        created_at=inv.created_at,
+    )
 
 
 @router.get("/{invention_id}", response_model=InventionOut)

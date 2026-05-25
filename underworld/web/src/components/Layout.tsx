@@ -1,10 +1,12 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Globe2, Shield, FileSearch, Sparkles, FlaskConical, LogOut, Users } from "lucide-react";
+import { Globe2, Shield, FileSearch, Sparkles, FlaskConical, LogOut, Users, BookOpen, GitBranch } from "lucide-react";
 import { clearApiKey } from "@/lib/config";
 
 const tabs = [
   { to: "/", label: "Command", icon: Globe2 },
   { to: "/population", label: "Population", icon: Users },
+  { to: "/projects", label: "Projects", icon: GitBranch },
+  { to: "/knowledge", label: "Knowledge", icon: BookOpen },
   { to: "/patents", label: "Patents", icon: FileSearch },
   { to: "/inventions", label: "Inventions", icon: Sparkles },
   { to: "/guilds", label: "Guilds", icon: FlaskConical },

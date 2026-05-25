@@ -33,6 +33,7 @@ def _to_minion_out(m: Minion, skill_count: int) -> MinionOut:
         name=m.name,
         surname=m.surname or "",
         guild=m.guild,
+        swarm_role=m.swarm_role,
         generation=m.generation,
         parent_a_id=m.parent_a_id,
         parent_b_id=m.parent_b_id,

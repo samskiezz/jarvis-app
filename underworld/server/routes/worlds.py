@@ -159,6 +159,7 @@ async def list_minions(
             name=m.name,
             surname=m.surname,
             guild=m.guild,
+            swarm_role=m.swarm_role,
             generation=m.generation,
             alive=m.alive,
             reputation=m.reputation,
@@ -271,6 +272,9 @@ async def population_stats(
                 avg_sanity=s.avg_sanity,
                 mood_breakdown=s.mood_breakdown or {},
                 guild_breakdown=s.guild_breakdown or {},
+                role_breakdown=s.role_breakdown or {},
+                active_projects=s.active_projects,
+                approved_projects=s.approved_projects,
             )
             for s in snaps
         ]
@@ -285,6 +289,9 @@ async def population_stats(
             avg_sanity=latest.avg_sanity,
             mood_breakdown=latest.mood_breakdown or {},
             guild_breakdown=latest.guild_breakdown or {},
+            role_breakdown=latest.role_breakdown or {},
+            active_projects=latest.active_projects,
+            approved_projects=latest.approved_projects,
             history=history_payload,
         )
     # No snapshots yet — compute from current state.
@@ -331,6 +338,10 @@ async def advance(
                 "deaths": r.deaths,
                 "forks": r.forks,
                 "alive": r.alive,
+                "projects_created": r.projects_created,
+                "project_contributions": r.project_contributions,
+                "project_stages_advanced": r.project_stages_advanced,
+                "projects_approved": r.projects_approved,
             }
             for r in reports
         ],

@@ -11,8 +11,10 @@ from ..db.models import (
     CauseOfDeath,
     GuildKind,
     MoodKind,
+    ProjectStage,
     RelationshipKind,
     ReviewVerdict,
+    SwarmRoleKind,
     TaskStatus,
 )
 
@@ -50,6 +52,7 @@ class MinionOut(BaseModel):
     name: str
     surname: str
     guild: GuildKind
+    swarm_role: SwarmRoleKind
     generation: int
     parent_a_id: str | None
     parent_b_id: str | None
@@ -83,6 +86,7 @@ class MinionListItem(BaseModel):
     name: str
     surname: str
     guild: GuildKind
+    swarm_role: SwarmRoleKind
     generation: int
     alive: bool
     reputation: float
@@ -196,6 +200,9 @@ class PopulationSnapshotOut(BaseModel):
     avg_sanity: float
     mood_breakdown: dict[str, int]
     guild_breakdown: dict[str, int]
+    role_breakdown: dict[str, int] = {}
+    active_projects: int = 0
+    approved_projects: int = 0
 
 
 class PopulationStatsOut(BaseModel):
@@ -209,6 +216,9 @@ class PopulationStatsOut(BaseModel):
     avg_sanity: float
     mood_breakdown: dict[str, int]
     guild_breakdown: dict[str, int]
+    role_breakdown: dict[str, int] = {}
+    active_projects: int = 0
+    approved_projects: int = 0
     history: list[PopulationSnapshotOut]
 
 

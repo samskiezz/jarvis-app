@@ -4,6 +4,11 @@ import type {
   DnaInfo,
   GuildSpec,
   Invention,
+  KbConcept,
+  KbFormula,
+  KbGuardrail,
+  KbSummary,
+  KbSwarmRole,
   Lineage,
   Memory,
   Minion,
@@ -11,7 +16,9 @@ import type {
   Patent,
   PeerReview,
   PopulationStats,
+  ProjectContributionT,
   RelationshipRow,
+  ResearchProjectT,
   SafetyReview,
   Skill,
   SoulInfo,
@@ -122,6 +129,46 @@ export const api = {
       "/safety/check",
       { method: "POST", body: JSON.stringify({ text, cpc }) },
     ),
+
+  // knowledge base
+  kbSummary: () => request<KbSummary>("/knowledge/summary"),
+  kbConcepts: () => request<KbConcept[]>("/knowledge/concepts"),
+  kbConcept: (id: string) => request<KbConcept>(`/knowledge/concepts/${id}`),
+  kbFormulas: (
+    opts: { discipline?: string; catalogue?: string; q?: string; limit?: number; offset?: number } = {},
+  ) => {
+    const q = new URLSearchParams();
+    if (opts.discipline) q.set("discipline", opts.discipline);
+    if (opts.catalogue) q.set("catalogue", opts.catalogue);
+    if (opts.q) q.set("q", opts.q);
+    if (opts.limit) q.set("limit", String(opts.limit));
+    if (opts.offset) q.set("offset", String(opts.offset));
+    return request<{ total: number; items: KbFormula[]; offset: number; limit: number }>(
+      `/knowledge/formulas${q.size ? `?${q}` : ""}`,
+    );
+  },
+  kbRoles: () => request<KbSwarmRole[]>("/knowledge/swarm-roles"),
+  kbGuardrails: () => request<KbGuardrail[]>("/knowledge/guardrails"),
+
+  // research projects
+  listProjects: (opts: { world_id?: string; stage?: string; limit?: number } = {}) => {
+    const q = new URLSearchParams();
+    if (opts.world_id) q.set("world_id", opts.world_id);
+    if (opts.stage) q.set("stage", opts.stage);
+    if (opts.limit) q.set("limit", String(opts.limit));
+    return request<ResearchProjectT[]>(`/projects${q.size ? `?${q}` : ""}`);
+  },
+  getProject: (id: string) => request<ResearchProjectT>(`/projects/${id}`),
+  listProjectContributions: (id: string) =>
+    request<ProjectContributionT[]>(`/projects/${id}/contributions`),
+  projectWorldSummary: (worldId: string) =>
+    request<{
+      world_id: string;
+      by_stage: Record<string, number>;
+      flagged_clinical: number;
+      flagged_genetic: number;
+      flagged_chem_synth: number;
+    }>(`/projects/summary/world/${worldId}`),
 
   // event stream
   streamUrl: (worldId: string) => `${API_BASE_URL}/worlds/${worldId}/stream`,
