@@ -9,13 +9,13 @@ import { api } from "@/lib/api";
 import Avatar from "@/components/ui/Avatar";
 import EmptyState from "@/components/ui/EmptyState";
 import GuildBadge from "@/components/ui/GuildBadge";
-import Heightmap from "@/components/Heightmap";
 import MinionDrawer from "@/components/MinionDrawer";
 import MoodBar from "@/components/MoodBar";
 import RoleBadge from "@/components/ui/RoleBadge";
 import Sparkline from "@/components/Sparkline";
 import StatCard from "@/components/ui/StatCard";
 import Tabs from "@/components/ui/Tabs";
+import WorldScene from "@/components/WorldScene";
 import { useWorldStream } from "@/lib/hooks";
 import type { Guild, Mood, SwarmRole, TaskStatus } from "@/lib/types";
 
@@ -265,22 +265,38 @@ export default function WorldDetail() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[auto_1fr]">
           <section className="panel">
             <div className="panel-header">
-              <span>World map</span>
-              <span>{map.data?.heightmap.length ?? 0}×{map.data?.heightmap.length ?? 0}</span>
+              <span>World</span>
+              <span>
+                {map.data?.heightmap.length ?? 0}×{map.data?.heightmap.length ?? 0} · {filteredMinions.filter((m) => m.alive).length} alive
+              </span>
             </div>
             <div className="p-4">
               {map.data ? (
-                <Heightmap grid={map.data.heightmap} size={320} />
+                <WorldScene
+                  grid={map.data.heightmap}
+                  minions={minions.data ?? []}
+                  tick={world.data.tick}
+                  width={520}
+                  height={360}
+                  onSelect={(mid) => setSelectedMinion(mid)}
+                />
               ) : (
-                <div className="skeleton h-80 w-80 rounded" />
+                <div className="skeleton h-[360px] w-[520px] rounded" />
               )}
-              <div className="mt-3 flex items-center gap-2 text-[9px] text-zinc-500">
-                <span className="inline-block h-3 w-3 rounded-sm bg-[#050510]" />
-                <span>deep</span>
-                <span className="ml-2 inline-block h-3 w-3 rounded-sm bg-[#3a3a99]" />
-                <span>mid</span>
-                <span className="ml-2 inline-block h-3 w-3 rounded-sm bg-[#dccaff]" />
-                <span>peak</span>
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[9px] text-zinc-500">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#182a6e]" />
+                <span>ocean</span>
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#c4b27a]" />
+                <span>sand</span>
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#4c864e]" />
+                <span>grass</span>
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#265838]" />
+                <span>forest</span>
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#6e6660]" />
+                <span>rock</span>
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#e8eaf4]" />
+                <span>snow</span>
+                <span className="ml-2 text-zinc-600">dot = minion · glow = mood · click to inspect</span>
               </div>
             </div>
           </section>

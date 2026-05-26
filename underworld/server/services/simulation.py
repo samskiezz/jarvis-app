@@ -50,6 +50,7 @@ class TickReport:
     births: int = 0
     deaths: int = 0
     forks: int = 0
+    reincarnations: int = 0
     alive: int = 0
     projects_created: int = 0
     project_contributions: int = 0
@@ -66,12 +67,18 @@ def _payload(rep: TickReport) -> dict:
         "births": rep.births,
         "deaths": rep.deaths,
         "forks": rep.forks,
+        "reincarnations": rep.reincarnations,
         "alive": rep.alive,
         "projects_created": rep.projects_created,
         "project_contributions": rep.project_contributions,
         "project_stages_advanced": rep.project_stages_advanced,
         "projects_approved": rep.projects_approved,
     }
+
+
+def _population_floor(world: World, settings) -> int:
+    pct = max(0.0, min(1.0, settings.sim_population_floor_pct))
+    return max(8, int(world.population_cap * pct))
 
 
 async def _gather_neighbours(
@@ -329,6 +336,15 @@ async def advance_world(
         )
         report.deaths = await _process_deaths(session, world, alive_minions, rng)
 
+        # 4b. Population floor — if the world is collapsing, recycle free
+        # souls (or mint new ones) back into gen-0 Minions. Implements doc
+        # II.5-6 reincarnation as an autonomic process, not just an
+        # opportunistic carry-over inside births.
+        floor = _population_floor(world, settings)
+        report.reincarnations = await lifecycle.reincarnate_to_floor(
+            session, world, floor=floor, rng=rng,
+        )
+
         # 5. Snapshot.
         await _write_snapshot(
             session,
@@ -363,6 +379,20 @@ async def advance_world(
                     kind="population:deaths",
                     actor_id=None,
                     payload={"deaths": report.deaths, "alive_after": report.alive},
+                )
+            )
+        if report.reincarnations > 0:
+            session.add(
+                Event(
+                    world_id=world.id,
+                    tick=world.tick,
+                    kind="population:floor_restored",
+                    actor_id=None,
+                    payload={
+                        "reincarnated": report.reincarnations,
+                        "alive_after": report.alive,
+                        "floor": floor,
+                    },
                 )
             )
 

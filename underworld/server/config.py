@@ -74,6 +74,14 @@ class Settings(BaseSettings):
     sim_max_ticks_per_request: int = 100
     sim_default_tick_seconds: float = 0.0
     sim_max_minions: int = 64
+    sim_population_floor_pct: float = Field(
+        default=0.10,
+        description=(
+            "Fraction of population_cap to maintain as a hard floor. When alive "
+            "drops below floor = max(8, cap * pct), free souls are reincarnated "
+            "(or new ones created) to keep the world from collapsing to extinction."
+        ),
+    )
 
     @property
     def database_url(self) -> str:

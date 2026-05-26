@@ -521,3 +521,70 @@ async def alive_count(session: AsyncSession, world_id: str) -> int:
     return int(await session.scalar(
         select(func.count(Minion.id)).where(Minion.world_id == world_id, Minion.alive.is_(True))
     ) or 0)
+
+
+# --- population floor / rescue reincarnation -------------------------------
+
+
+async def reincarnate_to_floor(
+    session: AsyncSession,
+    world: World,
+    *,
+    floor: int,
+    rng: random.Random,
+) -> int:
+    """Doc II.5-6 — when the world's alive count falls below `floor`, recycle
+    free soul tokens (or mint fresh ones) back into new gen-0 Minions so the
+    world doesn't death-spiral to extinction between breeding rounds.
+
+    Returns the number of Minions reincarnated this call.
+    """
+    current = await alive_count(session, world.id)
+    deficit = floor - current
+    if deficit <= 0:
+        return 0
+    deficit = min(deficit, world.population_cap - current)
+    if deficit <= 0:
+        return 0
+
+    # Pull all free souls in one go so we don't issue N queries.
+    free_stmt = (
+        select(Soul)
+        .outerjoin(Minion, (Minion.soul_id == Soul.id) & (Minion.alive.is_(True)))
+        .where(Soul.world_id == world.id, Minion.id.is_(None), Soul.ascended.is_(False))
+        .limit(deficit)
+    )
+    free_souls = list((await session.execute(free_stmt)).scalars().all())
+
+    reincarnated = 0
+    for i in range(deficit):
+        soul = free_souls[i] if i < len(free_souls) else None
+        dna = dna_mod.random_dna(rng)
+        guild = guild_from_dna(dna)
+        given, surname = random_name(rng)
+        await _make_minion(
+            session,
+            world=world,
+            name=given,
+            surname=surname,
+            guild=guild,
+            dna=dna,
+            generation=0,
+            soul=soul,
+        )
+        session.add(
+            Event(
+                world_id=world.id,
+                tick=world.tick,
+                kind="population:reincarnation",
+                actor_id=None,
+                payload={
+                    "name": f"{given} {surname}",
+                    "guild": guild.value,
+                    "from_free_soul": soul is not None,
+                    "soul_incarnation": (soul.incarnation if soul is not None else 1),
+                },
+            )
+        )
+        reincarnated += 1
+    return reincarnated
