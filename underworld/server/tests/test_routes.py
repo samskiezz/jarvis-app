@@ -41,6 +41,28 @@ def test_world_map(client, headers):
     assert len(body["heightmap"]) == 32
 
 
+def test_latest_actions_returns_minion_id_to_action_map(client, headers):
+    create = client.post(
+        "/worlds",
+        json={"name": "ActionsRoute", "cpc_class": "G06F", "starting_population": 24, "population_cap": 80},
+        headers=headers,
+    )
+    wid = create.json()["id"]
+    client.post(f"/worlds/{wid}/advance", headers=headers, json={"ticks": 2})
+
+    res = client.get(f"/worlds/{wid}/latest-actions", headers=headers)
+    assert res.status_code == 200
+    body = res.json()
+    assert body["world_id"] == wid
+    assert body["tick"] == 2
+    assert isinstance(body["actions"], dict)
+    # Every alive minion took at least one action across the 2 ticks.
+    assert len(body["actions"]) > 0
+    # Action names are bare verbs (not the bracketed memory format).
+    sample = next(iter(body["actions"].values()))
+    assert "[" not in sample and "]" not in sample
+
+
 def test_auto_advance_toggle(client, headers):
     create = client.post(
         "/worlds",

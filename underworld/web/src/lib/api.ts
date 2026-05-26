@@ -67,6 +67,10 @@ export const api = {
     }),
   getWorld: (id: string) => request<World>(`/worlds/${id}`),
   getWorldMap: (id: string) => request<WorldMap>(`/worlds/${id}/map`),
+  latestActions: (id: string, window = 3) =>
+    request<{ world_id: string; tick: number; actions: Record<string, string> }>(
+      `/worlds/${id}/latest-actions?window=${window}`,
+    ),
   listMinions: (id: string, opts: { alive?: boolean; guild?: string; limit?: number } = {}) => {
     const q = new URLSearchParams();
     if (opts.alive !== undefined) q.set("alive", String(opts.alive));

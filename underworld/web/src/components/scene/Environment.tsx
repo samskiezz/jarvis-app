@@ -1,31 +1,10 @@
-import { useMemo } from "react";
 import * as THREE from "three";
-import { elevationAt } from "./Terrain";
+import type { Pois } from "./pois";
 
 interface Props {
-  grid: number[][];
+  pois: Pois;
   size: number;
-  amplitude: number;
-  seed: number;
   tick: number;
-}
-
-// A tiny deterministic PRNG so the same world always plants the same trees.
-function mulberry32(seed: number) {
-  let s = seed | 0;
-  return () => {
-    s = (s + 0x6d2b79f5) | 0;
-    let t = s;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function worldHeight(grid: number[][], nx: number, ny: number, amplitude: number): number {
-  const e = elevationAt(grid, nx, ny);
-  if (e < 0.42) return 0;
-  return (e - 0.42) * amplitude;
 }
 
 // Cone-roofed mud hut, low-poly.
@@ -118,79 +97,23 @@ function Obelisk({ position, tick }: { position: [number, number, number]; tick:
   );
 }
 
-export default function WorldEnvironment({ grid, size, amplitude, seed, tick }: Props) {
-  const half = size / 2;
-
-  const features = useMemo(() => {
-    const rng = mulberry32(seed);
-    const huts: { pos: [number, number, number]; rot: number }[] = [];
-    const trees: { pos: [number, number, number]; scale: number }[] = [];
-    const rocks: { pos: [number, number, number]; scale: number; rot: number }[] = [];
-
-    const tries = 240;
-    for (let i = 0; i < tries; i++) {
-      const nx = rng();
-      const ny = rng();
-      const e = elevationAt(grid, nx, ny);
-      if (e < 0.43) continue; // skip water/shore
-      const x = (nx - 0.5) * size;
-      const z = (ny - 0.5) * size;
-      const y = worldHeight(grid, nx, ny, amplitude);
-      const kind = rng();
-      if (e < 0.58 && kind < 0.15 && huts.length < 14) {
-        // huts on grass
-        huts.push({ pos: [x, y, z], rot: rng() * Math.PI * 2 });
-      } else if (e > 0.50 && e < 0.78 && kind < 0.7 && trees.length < 90) {
-        trees.push({ pos: [x, y, z], scale: 0.7 + rng() * 0.6 });
-      } else if (e > 0.7 && rocks.length < 40) {
-        rocks.push({ pos: [x, y, z], scale: 0.6 + rng() * 0.9, rot: rng() * Math.PI });
-      }
-    }
-    return { huts, trees, rocks };
-  }, [grid, size, amplitude, seed]);
-
-  // Obelisk at world centre (or as close as we can get to dry land).
-  const obeliskPos = useMemo<[number, number, number]>(() => {
-    // search outward from centre for a dry cell
-    for (let r = 0; r < 12; r++) {
-      for (let dx = -r; dx <= r; dx++) {
-        for (let dy = -r; dy <= r; dy++) {
-          if (r !== 0 && Math.abs(dx) !== r && Math.abs(dy) !== r) continue;
-          const nx = 0.5 + dx * 0.04;
-          const ny = 0.5 + dy * 0.04;
-          if (nx < 0 || nx > 1 || ny < 0 || ny > 1) continue;
-          if (elevationAt(grid, nx, ny) >= 0.5) {
-            return [
-              (nx - 0.5) * size,
-              worldHeight(grid, nx, ny, amplitude),
-              (ny - 0.5) * size,
-            ];
-          }
-        }
-      }
-    }
-    return [0, 0, 0];
-  }, [grid, size, amplitude]);
-
+export default function WorldEnvironment({ pois, size, tick }: Props) {
   return (
     <group>
-      <Obelisk position={obeliskPos} tick={tick} />
-      {features.huts.map((h, i) => (
+      <Obelisk position={pois.obelisk} tick={tick} />
+      {pois.huts.map((h, i) => (
         <Hut key={`h${i}`} position={h.pos} rotation={h.rot} />
       ))}
-      {features.trees.map((t, i) => (
+      {pois.trees.map((t, i) => (
         <Tree key={`t${i}`} position={t.pos} scale={t.scale} />
       ))}
-      {features.rocks.map((r, i) => (
+      {pois.rocks.map((r, i) => (
         <Rock key={`r${i}`} position={r.pos} scale={r.scale} rotation={r.rot} />
       ))}
-      {/* skirt to fade off-world edges */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
         <planeGeometry args={[size * 4, size * 4]} />
         <meshStandardMaterial color="#0a0f1a" roughness={1} />
       </mesh>
-      {/* keep `half` in scope for parent lighting math without an unused-vars warning */}
-      <group userData={{ half }} />
     </group>
   );
 }

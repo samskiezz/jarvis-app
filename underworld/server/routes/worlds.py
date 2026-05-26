@@ -10,7 +10,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth import require_bearer
-from ..db.models import Event, Invention, Minion, PopulationSnapshot, World
+from ..db.models import Event, Invention, Memory, Minion, PopulationSnapshot, World
 from ..db.session import get_session
 from ..services import scheduler
 from ..services.factory import SeedingPlan, create_world
@@ -133,6 +133,47 @@ async def get_world_map(
         "elevation_bias": seed.elevation_bias,
         "heightmap": heightmap(seed, size=32),
     }
+
+
+@router.get("/{world_id}/latest-actions")
+async def get_latest_actions(
+    world_id: str,
+    window: int = Query(default=3, ge=1, le=20),
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Map of `minion_id -> last action name` from the most recent ticks.
+
+    The 3D scene uses this to drive avatar destinations (an avatar that
+    invented this tick walks to the obelisk; one that ate walks to a hut).
+    Reads the existing `Memory(kind='action', content='[name] summary')`
+    rows the agent already writes — no extra storage required.
+    """
+    world = await _world_or_404(session, world_id)
+    if window > world.tick + 1:
+        window = world.tick + 1
+    min_tick = max(0, world.tick - window + 1)
+    stmt = (
+        select(Memory.minion_id, Memory.content, Memory.tick)
+        .join(Minion, Minion.id == Memory.minion_id)
+        .where(
+            Minion.world_id == world_id,
+            Memory.kind == "action",
+            Memory.tick >= min_tick,
+        )
+        .order_by(Memory.tick.desc())
+    )
+    res = await session.execute(stmt)
+    latest: dict[str, str] = {}
+    for minion_id, content, _tick in res.all():
+        if minion_id in latest:
+            continue
+        # Memory content format: "[action_name] summary"
+        if content.startswith("[") and "]" in content:
+            name = content[1 : content.index("]")].strip()
+            if name:
+                latest[minion_id] = name
+    return {"world_id": world_id, "tick": world.tick, "actions": latest}
 
 
 @router.get("/{world_id}/minions", response_model=list[MinionListItem])

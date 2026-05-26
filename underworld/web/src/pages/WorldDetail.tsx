@@ -76,6 +76,11 @@ export default function WorldDetail() {
     queryFn: () => api.population(id, 60),
     refetchInterval: 4000,
   });
+  const actions = useQuery({
+    queryKey: ["world", id, "latest-actions"],
+    queryFn: () => api.latestActions(id, 3),
+    refetchInterval: 3000,
+  });
 
   const stream = useWorldStream(id, !!world.data?.auto_advance);
 
@@ -281,6 +286,8 @@ export default function WorldDetail() {
                   onSelect={(mid) => setSelectedMinion(mid || null)}
                   width={720}
                   height={480}
+                  actionByMinion={actions.data?.actions}
+                  biomeHint={map.data.biome_hint}
                 />
               ) : (
                 <div className="skeleton h-[480px] w-[720px] rounded" />

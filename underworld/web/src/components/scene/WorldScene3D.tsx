@@ -1,11 +1,14 @@
 import { Suspense, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Html, OrbitControls } from "@react-three/drei";
+import { Html, OrbitControls, Sky } from "@react-three/drei";
+import * as THREE from "three";
 import type { MinionListItem } from "@/lib/types";
 import Lights, { diurnal } from "./Lights";
 import Terrain, { elevationAt } from "./Terrain";
 import WorldEnvironment from "./Environment";
 import MinionAvatar from "./MinionAvatar";
+import { computePois, destinationForAction } from "./pois";
+import Weather, { weatherFor, type WeatherKind } from "./Weather";
 
 interface Props {
   grid: number[][];
@@ -16,12 +19,15 @@ interface Props {
   selectedId?: string | null;
   width?: number;
   height?: number;
-  /** Map of minion_id → last action name from the latest tick report. */
+  /** Map of minion_id → last action name from the latest tick(s). */
   actionByMinion?: Record<string, string>;
+  /** Biome hint from the world map (mountains, forest, plains, etc). */
+  biomeHint?: string;
 }
 
-const WORLD_SIZE = 40;       // world units across (X and Z)
-const AMPLITUDE = 3.5;       // peak elevation in world units
+const WORLD_SIZE = 40;
+const AMPLITUDE = 3.5;
+const ARRIVAL_RADIUS = 2.5;
 
 function hash(s: string): number {
   let h = 2166136261 >>> 0;
@@ -32,8 +38,6 @@ function hash(s: string): number {
   return h >>> 0;
 }
 
-// Deterministic on-land position from minion id. Walks outward on the
-// heightmap if the first sample is in water.
 function placeMinion(
   id: string,
   grid: number[][],
@@ -71,7 +75,6 @@ function placeMinion(
   return [x, y, z];
 }
 
-// Short label for the speech bubble — the verb form of the action.
 const ACTION_LABEL: Record<string, string> = {
   rest: "💤 resting",
   meditate: "🧘 meditating",
@@ -97,19 +100,41 @@ export default function WorldScene3D({
   width = 720,
   height = 480,
   actionByMinion,
+  biomeHint,
 }: Props) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
+  const pois = useMemo(
+    () => computePois(grid, WORLD_SIZE, AMPLITUDE, seed),
+    [grid, seed],
+  );
+
   const placements = useMemo(
-    () => minions.map((m) => ({ minion: m, pos: placeMinion(m.id, grid, WORLD_SIZE, AMPLITUDE) })),
-    [minions, grid],
+    () => minions.map((m) => {
+      const home = placeMinion(m.id, grid, WORLD_SIZE, AMPLITUDE);
+      const action = actionByMinion?.[m.id];
+      const { target } = destinationForAction(m.id, action, pois, home);
+      return { minion: m, home, target };
+    }),
+    [minions, grid, pois, actionByMinion],
   );
 
   const tint = diurnal(tick, WORLD_SIZE);
+  const weather: WeatherKind = useMemo(
+    () => weatherFor(biomeHint ?? "plains", tick),
+    [biomeHint, tick],
+  );
+
   const selected = useMemo(
     () => placements.find((p) => p.minion.id === selectedId) ?? null,
     [placements, selectedId],
   );
+
+  // For drei <Sky>, the sun direction matters more than absolute position.
+  const sunNorm = useMemo(() => {
+    const v = new THREE.Vector3(tint.sun.x, Math.max(0.05, tint.sun.y), tint.sun.z).normalize();
+    return [v.x, v.y, v.z] as [number, number, number];
+  }, [tint]);
 
   return (
     <div style={{ position: "relative", width, height }}>
@@ -121,26 +146,50 @@ export default function WorldScene3D({
         onPointerMissed={() => onSelect("")}
       >
         <Suspense fallback={null}>
+          {/* Sky only renders during day/dawn/dusk — at night we fall back to
+              the fog colour set by <Lights>. */}
+          {tint.label !== "night" ? (
+            <Sky
+              distance={WORLD_SIZE * 12}
+              sunPosition={sunNorm}
+              inclination={0.5}
+              azimuth={0.25}
+              turbidity={tint.label === "dusk" || tint.label === "dawn" ? 8 : 3}
+              rayleigh={tint.label === "dusk" || tint.label === "dawn" ? 4 : 1.2}
+              mieCoefficient={0.005}
+              mieDirectionalG={0.9}
+            />
+          ) : null}
           <Lights tick={tick} size={WORLD_SIZE} />
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
-          <WorldEnvironment grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} seed={seed} tick={tick} />
-          {placements.map((p) => (
-            <MinionAvatar
-              key={p.minion.id}
-              minion={p.minion}
-              basePosition={p.pos}
-              actionName={actionByMinion?.[p.minion.id]}
-              selected={p.minion.id === selectedId}
-              onClick={(id) => {
-                onSelect(id);
-                setHoveredId(id);
-              }}
-            />
-          ))}
-          {/* Speech bubble for the selected minion. */}
+          <WorldEnvironment pois={pois} size={WORLD_SIZE} tick={tick} />
+          <Weather kind={weather} size={WORLD_SIZE} />
+          {placements.map((p) => {
+            const dx = p.target ? p.target[0] - p.home[0] : 0;
+            const dz = p.target ? p.target[2] - p.home[2] : 0;
+            const at = !p.target || Math.hypot(dx, dz) < ARRIVAL_RADIUS;
+            // The avatar drives its own walk; we only pass the destination
+            // and an "arrived" flag derived from straight-line distance from
+            // its home position. The avatar lerps from home toward target.
+            return (
+              <MinionAvatar
+                key={p.minion.id}
+                minion={p.minion}
+                basePosition={p.home}
+                targetPosition={p.target}
+                atDestination={at}
+                actionName={actionByMinion?.[p.minion.id]}
+                selected={p.minion.id === selectedId}
+                onClick={(id) => {
+                  onSelect(id);
+                  setHoveredId(id);
+                }}
+              />
+            );
+          })}
           {selected ? (
             <Html
-              position={[selected.pos[0], selected.pos[1] + 2.2, selected.pos[2]]}
+              position={[selected.home[0], selected.home[1] + 2.6, selected.home[2]]}
               center
               distanceFactor={18}
               style={{ pointerEvents: "none" }}
@@ -169,9 +218,9 @@ export default function WorldScene3D({
           />
         </Suspense>
       </Canvas>
-      {/* HUD overlays */}
       <div className="pointer-events-none absolute right-3 top-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-300 backdrop-blur">
         {tint.label} · t{tick}
+        {weather !== "clear" ? ` · ${weather}` : ""}
       </div>
       <div className="pointer-events-none absolute bottom-3 left-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
         drag to orbit · scroll to zoom · click a minion to inspect

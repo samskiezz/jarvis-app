@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { clone as cloneSkeleton } from "three/examples/jsm/utils/SkeletonUtils.js";
 import type { Guild, MinionListItem, Mood } from "@/lib/types";
 import { CHARACTER_MODEL_URL } from "./assets";
+import GuildAccessory from "./GuildAccessory";
 
 const GUILD_COLOR: Record<Guild, string> = {
   maths:       "#a78bfa",
@@ -49,6 +50,10 @@ const ACTION_ANIM: Record<string, string> = {
 interface Props {
   minion: MinionListItem;
   basePosition: [number, number, number];
+  /** Action-driven destination. If null, the avatar wanders near base. */
+  targetPosition: [number, number, number] | null;
+  /** Whether the avatar has arrived at the target (within walk radius). */
+  atDestination: boolean;
   actionName?: string;
   selected: boolean;
   onClick: (id: string) => void;
@@ -56,7 +61,15 @@ interface Props {
 
 useGLTF.preload(CHARACTER_MODEL_URL);
 
-export default function MinionAvatar({ minion, basePosition, actionName, selected, onClick }: Props) {
+export default function MinionAvatar({
+  minion,
+  basePosition,
+  targetPosition,
+  atDestination,
+  actionName,
+  selected,
+  onClick,
+}: Props) {
   const { scene: src, animations } = useGLTF(CHARACTER_MODEL_URL) as unknown as {
     scene: THREE.Group;
     animations: THREE.AnimationClip[];
@@ -72,8 +85,6 @@ export default function MinionAvatar({ minion, basePosition, actionName, selecte
         const mesh = obj as THREE.Mesh;
         mesh.castShadow = true;
         mesh.receiveShadow = false;
-        // Materials in RobotExpressive are MeshStandardMaterial. Clone the
-        // material on each instance so per-minion guild tint doesn't leak.
         if (Array.isArray(mesh.material)) {
           mesh.material = mesh.material.map((m) => m.clone());
         } else {
@@ -84,7 +95,6 @@ export default function MinionAvatar({ minion, basePosition, actionName, selecte
     return g;
   }, [src]);
 
-  // Tint by guild — multiply the base colour, keeping the lit shading.
   useEffect(() => {
     const tint = new THREE.Color(GUILD_COLOR[minion.guild] ?? "#aaaaaa");
     clone.traverse((obj) => {
@@ -102,18 +112,19 @@ export default function MinionAvatar({ minion, basePosition, actionName, selecte
   const groupRef = useRef<THREE.Group>(null);
   const { actions, names } = useAnimations(animations, groupRef);
 
+  // Pick the animation clip. While walking (i.e. not at destination and we have
+  // a target), play Walking. Once arrived, play the action's animation.
+  const isWalking = !!targetPosition && !atDestination && minion.alive;
   const desiredClip = useMemo(() => {
     if (!minion.alive) return findClip(names, ["Death"]) ?? findClip(names, ["Idle"]);
+    if (isWalking) return findClip(names, ["Walking", "Idle"]);
     const mapped = actionName ? ACTION_ANIM[actionName] : null;
     if (mapped) {
       const found = findClip(names, [mapped]);
       if (found) return found;
     }
-    // Walking idle if the minion looks active (high energy), else idle.
-    return minion.fatigue > 0.5 && minion.hunger > 0.4
-      ? findClip(names, ["Walking", "Idle"])
-      : findClip(names, ["Idle"]);
-  }, [minion.alive, minion.fatigue, minion.hunger, actionName, names]);
+    return findClip(names, ["Idle"]);
+  }, [minion.alive, isWalking, actionName, names]);
 
   useEffect(() => {
     if (!desiredClip) return;
@@ -123,39 +134,68 @@ export default function MinionAvatar({ minion, basePosition, actionName, selecte
     return () => { action.fadeOut(0.3); };
   }, [actions, desiredClip]);
 
-  // Drift around the base position so the swarm feels alive — bounded random
-  // walk derived from the minion id, no per-frame allocation.
-  const drift = useRef({
+  // Movement state — persisted between frames.
+  const state = useRef({
     px: basePosition[0],
+    py: basePosition[1],
     pz: basePosition[2],
-    vx: 0,
-    vz: 0,
+    yaw: 0,
+    wanderAngle: 0,
     seed: hash(minion.id),
-    angle: 0,
-  }).current;
-  drift.px = basePosition[0]; // re-anchor if base changes
-  drift.pz = basePosition[2];
+    inited: false,
+  });
+  if (!state.current.inited) {
+    state.current.inited = true;
+    if (groupRef.current) {
+      groupRef.current.position.set(basePosition[0], basePosition[1], basePosition[2]);
+    }
+  }
 
   useFrame((_, dt) => {
     const g = groupRef.current;
     if (!g) return;
-    if (minion.alive) {
-      // gentle wander within a 2.5-unit radius of base
-      drift.angle += dt * (0.4 + ((drift.seed % 100) / 200));
-      const r = 2.0 + 0.5 * Math.sin(drift.seed + drift.angle * 0.6);
-      const tx = drift.px + Math.cos(drift.angle) * r;
-      const tz = drift.pz + Math.sin(drift.angle * 0.7) * r;
-      const dx = tx - g.position.x;
-      const dz = tz - g.position.z;
-      const speed = 1.2;
-      g.position.x += dx * Math.min(1, dt * speed);
-      g.position.z += dz * Math.min(1, dt * speed);
-      g.position.y = basePosition[1];
-      // face the direction of motion
-      const targetAngle = Math.atan2(dx, dz);
-      g.rotation.y += (targetAngle - g.rotation.y) * Math.min(1, dt * 4);
-    } else {
+    const s = state.current;
+
+    if (!minion.alive) {
       g.position.set(basePosition[0], basePosition[1], basePosition[2]);
+      return;
+    }
+
+    // Pick the moment-to-moment target:
+    //   - If we have an action target and we're not there yet → walk to it.
+    //   - Otherwise wander in a small radius around base.
+    let tx: number, tz: number;
+    if (targetPosition && !atDestination) {
+      tx = targetPosition[0];
+      tz = targetPosition[2];
+    } else {
+      s.wanderAngle += dt * (0.35 + ((s.seed % 100) / 250));
+      const r = 1.6 + 0.4 * Math.sin(s.seed + s.wanderAngle * 0.6);
+      tx = basePosition[0] + Math.cos(s.wanderAngle) * r;
+      tz = basePosition[2] + Math.sin(s.wanderAngle * 0.7) * r;
+    }
+
+    const dx = tx - g.position.x;
+    const dz = tz - g.position.z;
+    const dist = Math.hypot(dx, dz);
+    // Walking speed depends on hunger/fatigue/mood — exhausted minions plod.
+    const energy = Math.max(0.25, Math.min(1, (minion.hunger + minion.fatigue) * 0.5 + 0.2));
+    const speed = (isWalking ? 3.0 : 1.2) * energy;
+    if (dist > 0.01) {
+      const step = Math.min(dist, speed * dt);
+      g.position.x += (dx / dist) * step;
+      g.position.z += (dz / dist) * step;
+    }
+    g.position.y = basePosition[1];
+
+    // Face direction of motion.
+    if (dist > 0.05) {
+      const targetAngle = Math.atan2(dx, dz);
+      // shortest-arc lerp
+      let diff = targetAngle - g.rotation.y;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      g.rotation.y += diff * Math.min(1, dt * 6);
     }
   });
 
@@ -168,7 +208,7 @@ export default function MinionAvatar({ minion, basePosition, actionName, selecte
       onClick={(e) => { e.stopPropagation(); onClick(minion.id); }}
     >
       <primitive object={clone} scale={0.42} />
-      {/* Selected → orange ground ring; alive → faint mood ring. */}
+      <GuildAccessory guild={minion.guild} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
         <ringGeometry args={[selected ? 0.85 : 0.55, selected ? 1.0 : 0.65, 32]} />
         <meshBasicMaterial
