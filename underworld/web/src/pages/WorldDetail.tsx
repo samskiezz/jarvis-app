@@ -15,7 +15,7 @@ import RoleBadge from "@/components/ui/RoleBadge";
 import Sparkline from "@/components/Sparkline";
 import StatCard from "@/components/ui/StatCard";
 import Tabs from "@/components/ui/Tabs";
-import WorldScene from "@/components/WorldScene";
+import WorldScene3D from "@/components/scene/WorldScene3D";
 import { useWorldStream } from "@/lib/hooks";
 import type { Guild, Mood, SwarmRole, TaskStatus } from "@/lib/types";
 
@@ -267,37 +267,24 @@ export default function WorldDetail() {
             <div className="panel-header">
               <span>World</span>
               <span>
-                {map.data?.heightmap.length ?? 0}×{map.data?.heightmap.length ?? 0} · {filteredMinions.filter((m) => m.alive).length} alive
+                {filteredMinions.filter((m) => m.alive).length} alive · {world.data.seed_class}
               </span>
             </div>
             <div className="p-4">
               {map.data ? (
-                <WorldScene
+                <WorldScene3D
                   grid={map.data.heightmap}
                   minions={minions.data ?? []}
                   tick={world.data.tick}
-                  width={520}
-                  height={360}
-                  onSelect={(mid) => setSelectedMinion(mid)}
+                  seed={world.data.seed_value}
+                  selectedId={selectedMinion}
+                  onSelect={(mid) => setSelectedMinion(mid || null)}
+                  width={720}
+                  height={480}
                 />
               ) : (
-                <div className="skeleton h-[360px] w-[520px] rounded" />
+                <div className="skeleton h-[480px] w-[720px] rounded" />
               )}
-              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[9px] text-zinc-500">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#182a6e]" />
-                <span>ocean</span>
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#c4b27a]" />
-                <span>sand</span>
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#4c864e]" />
-                <span>grass</span>
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#265838]" />
-                <span>forest</span>
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#6e6660]" />
-                <span>rock</span>
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#e8eaf4]" />
-                <span>snow</span>
-                <span className="ml-2 text-zinc-600">dot = minion · glow = mood · click to inspect</span>
-              </div>
             </div>
           </section>
 
