@@ -1,6 +1,8 @@
 import { Suspense, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Html, OrbitControls, Sky } from "@react-three/drei";
+import { Environment as DreiEnvironment, Html, OrbitControls } from "@react-three/drei";
+import { Bloom, EffectComposer, ToneMapping } from "@react-three/postprocessing";
+import { BlendFunction, ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
 import type { MinionListItem } from "@/lib/types";
 import Lights, { diurnal } from "./Lights";
@@ -9,6 +11,7 @@ import WorldEnvironment from "./Environment";
 import MinionAvatar from "./MinionAvatar";
 import { computePois, destinationForAction } from "./pois";
 import Weather, { weatherFor, type WeatherKind } from "./Weather";
+import { HDRI_SKY } from "./assets";
 
 interface Props {
   grid: number[][];
@@ -19,15 +22,13 @@ interface Props {
   selectedId?: string | null;
   width?: number;
   height?: number;
-  /** Map of minion_id → last action name from the latest tick(s). */
   actionByMinion?: Record<string, string>;
-  /** Biome hint from the world map (mountains, forest, plains, etc). */
   biomeHint?: string;
 }
 
-const WORLD_SIZE = 40;
-const AMPLITUDE = 3.5;
-const ARRIVAL_RADIUS = 2.5;
+const WORLD_SIZE = 120;      // world units across — was 40; tripled
+const AMPLITUDE = 9.0;       // taller hills now that the world is bigger
+const ARRIVAL_RADIUS = 4.0;
 
 function hash(s: string): number {
   let h = 2166136261 >>> 0;
@@ -130,47 +131,51 @@ export default function WorldScene3D({
     [placements, selectedId],
   );
 
-  // For drei <Sky>, the sun direction matters more than absolute position.
-  const sunNorm = useMemo(() => {
-    const v = new THREE.Vector3(tint.sun.x, Math.max(0.05, tint.sun.y), tint.sun.z).normalize();
-    return [v.x, v.y, v.z] as [number, number, number];
-  }, [tint]);
+  // Tint the HDRI background to reflect day/night — multiplies the env tex.
+  const isNight = tint.label === "night";
+  const isDayish = tint.label === "day";
 
   return (
     <div style={{ position: "relative", width, height }}>
       <Canvas
         shadows
         dpr={[1, 2]}
-        camera={{ position: [WORLD_SIZE * 0.35, WORLD_SIZE * 0.30, WORLD_SIZE * 0.45], fov: 42, near: 0.1, far: WORLD_SIZE * 8 }}
+        gl={{
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: isNight ? 0.6 : isDayish ? 1.05 : 0.85,
+          outputColorSpace: THREE.SRGBColorSpace,
+          preserveDrawingBuffer: true,
+        }}
+        camera={{
+          position: [WORLD_SIZE * 0.55, WORLD_SIZE * 0.38, WORLD_SIZE * 0.70],
+          fov: 52,
+          near: 0.1,
+          far: WORLD_SIZE * 12,
+        }}
         style={{ width, height, borderRadius: 8, display: "block" }}
         onPointerMissed={() => onSelect("")}
       >
         <Suspense fallback={null}>
-          {/* Sky only renders during day/dawn/dusk — at night we fall back to
-              the fog colour set by <Lights>. */}
-          {tint.label !== "night" ? (
-            <Sky
-              distance={WORLD_SIZE * 12}
-              sunPosition={sunNorm}
-              inclination={0.5}
-              azimuth={0.25}
-              turbidity={tint.label === "dusk" || tint.label === "dawn" ? 8 : 3}
-              rayleigh={tint.label === "dusk" || tint.label === "dawn" ? 4 : 1.2}
-              mieCoefficient={0.005}
-              mieDirectionalG={0.9}
-            />
-          ) : null}
+          {/* HDRI environment — provides skybox + image-based lighting for
+              PBR materials. We dim the background at night via tone-mapping
+              exposure rather than swapping textures, which would re-stream. */}
+          <DreiEnvironment
+            files={HDRI_SKY}
+            background
+            backgroundIntensity={isNight ? 0.15 : isDayish ? 1.0 : 0.55}
+            environmentIntensity={isNight ? 0.2 : isDayish ? 1.0 : 0.7}
+            backgroundRotation={[0, (tick % 80) / 80 * Math.PI * 2, 0]}
+            environmentRotation={[0, (tick % 80) / 80 * Math.PI * 2, 0]}
+          />
           <Lights tick={tick} size={WORLD_SIZE} />
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
-          <WorldEnvironment pois={pois} size={WORLD_SIZE} tick={tick} />
+          <WorldEnvironment pois={pois} size={WORLD_SIZE} seed={seed} tick={tick} />
           <Weather kind={weather} size={WORLD_SIZE} />
           {placements.map((p) => {
             const dx = p.target ? p.target[0] - p.home[0] : 0;
             const dz = p.target ? p.target[2] - p.home[2] : 0;
             const at = !p.target || Math.hypot(dx, dz) < ARRIVAL_RADIUS;
-            // The avatar drives its own walk; we only pass the destination
-            // and an "arrived" flag derived from straight-line distance from
-            // its home position. The avatar lerps from home toward target.
             return (
               <MinionAvatar
                 key={p.minion.id}
@@ -189,9 +194,9 @@ export default function WorldScene3D({
           })}
           {selected ? (
             <Html
-              position={[selected.home[0], selected.home[1] + 2.6, selected.home[2]]}
+              position={[selected.home[0], selected.home[1] + 3.6, selected.home[2]]}
               center
-              distanceFactor={18}
+              distanceFactor={26}
               style={{ pointerEvents: "none" }}
             >
               <div className="rounded-lg border border-white/15 bg-ink-1/95 px-2 py-1 text-[10px] text-zinc-100 shadow-xl backdrop-blur">
@@ -208,14 +213,23 @@ export default function WorldScene3D({
             </Html>
           ) : null}
           <OrbitControls
-            target={[0, 1, 0]}
+            target={[0, 2, 0]}
             enablePan
             enableDamping
             dampingFactor={0.08}
-            minDistance={WORLD_SIZE * 0.25}
+            minDistance={WORLD_SIZE * 0.15}
             maxDistance={WORLD_SIZE * 1.6}
             maxPolarAngle={Math.PI * 0.48}
           />
+          <EffectComposer multisampling={4}>
+            <Bloom
+              luminanceThreshold={0.6}
+              luminanceSmoothing={0.4}
+              intensity={isNight ? 1.6 : 0.55}
+              radius={0.85}
+            />
+            <ToneMapping mode={ToneMappingMode.ACES_FILMIC} blendFunction={BlendFunction.NORMAL} />
+          </EffectComposer>
         </Suspense>
       </Canvas>
       <div className="pointer-events-none absolute right-3 top-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-300 backdrop-blur">

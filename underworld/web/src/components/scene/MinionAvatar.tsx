@@ -4,7 +4,7 @@ import { useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { clone as cloneSkeleton } from "three/examples/jsm/utils/SkeletonUtils.js";
 import type { Guild, MinionListItem, Mood } from "@/lib/types";
-import { CHARACTER_MODEL_URL } from "./assets";
+import { ALL_CHARACTER_MODELS, characterModelFor } from "./assets";
 import GuildAccessory from "./GuildAccessory";
 
 const GUILD_COLOR: Record<Guild, string> = {
@@ -31,20 +31,34 @@ const MOOD_RING: Record<Mood, string> = {
   despairing: "#fb7185",
 };
 
-// RobotExpressive ships with these clip names — verified at load time.
-const ACTION_ANIM: Record<string, string> = {
-  rest: "Sitting",
-  meditate: "Sitting",
-  eat: "ThumbsUp",
-  drink: "ThumbsUp",
-  socialise: "Wave",
-  teach: "Wave",
-  study: "Yes",
-  search_patents: "Yes",
-  kb_lookup: "Yes",
-  propose_invention: "Dance",
-  seek_partner: "Wave",
-  fork_self: "Jump",
+// Action → ordered preference list of clip names. Different GLBs ship with
+// different anim libraries (RobotExpressive has the full set; Michelle/Xbot
+// only have Idle/Walking/Running), so we fall back gracefully.
+const ACTION_CLIP_CANDIDATES: Record<string, string[]> = {
+  rest:               ["Sitting", "Sit", "Idle", "Stand"],
+  meditate:           ["Sitting", "Sit", "Idle"],
+  eat:                ["ThumbsUp", "Yes", "Idle"],
+  drink:              ["ThumbsUp", "Yes", "Idle"],
+  socialise:          ["Wave", "Yes", "Idle"],
+  teach:              ["Wave", "Yes", "Idle"],
+  study:              ["Yes", "Idle"],
+  search_patents:     ["Yes", "Idle"],
+  kb_lookup:          ["Yes", "Idle"],
+  propose_invention:  ["Dance", "Wave", "Idle"],
+  seek_partner:       ["Wave", "Yes", "Idle"],
+  fork_self:          ["Jump", "Dance", "Idle"],
+};
+
+const WALK_CLIPS = ["Walking", "Walk", "walking", "walk", "Run", "Running"];
+const IDLE_CLIPS = ["Idle", "idle", "Standing", "Stand", "stand"];
+const DEATH_CLIPS = ["Death", "Dying", "die", "Idle"];
+
+// Per-model scale — calibrated so every avatar lands at ~3 world units tall
+// against the 120u world (i.e. visibly humanoid from camera distance).
+const MODEL_SCALE: Record<string, number> = {
+  "/models/Michelle.glb":         0.035,
+  "/models/Xbot.glb":             0.035,
+  "/models/RobotExpressive.glb":  1.35,
 };
 
 interface Props {
@@ -59,7 +73,7 @@ interface Props {
   onClick: (id: string) => void;
 }
 
-useGLTF.preload(CHARACTER_MODEL_URL);
+ALL_CHARACTER_MODELS.forEach((url) => useGLTF.preload(url));
 
 export default function MinionAvatar({
   minion,
@@ -70,7 +84,8 @@ export default function MinionAvatar({
   selected,
   onClick,
 }: Props) {
-  const { scene: src, animations } = useGLTF(CHARACTER_MODEL_URL) as unknown as {
+  const modelUrl = characterModelFor(minion.guild);
+  const { scene: src, animations } = useGLTF(modelUrl) as unknown as {
     scene: THREE.Group;
     animations: THREE.AnimationClip[];
   };
@@ -116,14 +131,14 @@ export default function MinionAvatar({
   // a target), play Walking. Once arrived, play the action's animation.
   const isWalking = !!targetPosition && !atDestination && minion.alive;
   const desiredClip = useMemo(() => {
-    if (!minion.alive) return findClip(names, ["Death"]) ?? findClip(names, ["Idle"]);
-    if (isWalking) return findClip(names, ["Walking", "Idle"]);
-    const mapped = actionName ? ACTION_ANIM[actionName] : null;
-    if (mapped) {
-      const found = findClip(names, [mapped]);
+    if (!minion.alive) return findClip(names, DEATH_CLIPS);
+    if (isWalking) return findClip(names, WALK_CLIPS) ?? findClip(names, IDLE_CLIPS);
+    const candidates = actionName ? ACTION_CLIP_CANDIDATES[actionName] : null;
+    if (candidates) {
+      const found = findClip(names, candidates);
       if (found) return found;
     }
-    return findClip(names, ["Idle"]);
+    return findClip(names, IDLE_CLIPS);
   }, [minion.alive, isWalking, actionName, names]);
 
   useEffect(() => {
@@ -170,7 +185,7 @@ export default function MinionAvatar({
       tz = targetPosition[2];
     } else {
       s.wanderAngle += dt * (0.35 + ((s.seed % 100) / 250));
-      const r = 1.6 + 0.4 * Math.sin(s.seed + s.wanderAngle * 0.6);
+      const r = 4.0 + 1.5 * Math.sin(s.seed + s.wanderAngle * 0.6);
       tx = basePosition[0] + Math.cos(s.wanderAngle) * r;
       tz = basePosition[2] + Math.sin(s.wanderAngle * 0.7) * r;
     }
@@ -180,7 +195,9 @@ export default function MinionAvatar({
     const dist = Math.hypot(dx, dz);
     // Walking speed depends on hunger/fatigue/mood — exhausted minions plod.
     const energy = Math.max(0.25, Math.min(1, (minion.hunger + minion.fatigue) * 0.5 + 0.2));
-    const speed = (isWalking ? 3.0 : 1.2) * energy;
+    // World is ~120u across — bump walk speed so a minion can traverse it
+    // in a sensible amount of time. Wander speed stays gentle.
+    const speed = (isWalking ? 8.0 : 2.5) * energy;
     if (dist > 0.01) {
       const step = Math.min(dist, speed * dt);
       g.position.x += (dx / dist) * step;
@@ -207,10 +224,10 @@ export default function MinionAvatar({
       position={basePosition}
       onClick={(e) => { e.stopPropagation(); onClick(minion.id); }}
     >
-      <primitive object={clone} scale={0.42} />
+      <primitive object={clone} scale={MODEL_SCALE[modelUrl] ?? 0.42} />
       <GuildAccessory guild={minion.guild} />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-        <ringGeometry args={[selected ? 0.85 : 0.55, selected ? 1.0 : 0.65, 32]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+        <ringGeometry args={[selected ? 2.0 : 1.4, selected ? 2.5 : 1.6, 32]} />
         <meshBasicMaterial
           color={selected ? "#ff9a3c" : ringColor}
           transparent

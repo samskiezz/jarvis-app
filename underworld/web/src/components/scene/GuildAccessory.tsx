@@ -16,9 +16,10 @@ export default function GuildAccessory({ guild }: Props) {
     ref.current.rotation.y += dt * 0.8;
   });
 
-  const baseY = 2.0;
+  // Float a small prop above the avatar's head. Scale it up to ~2.5x so it
+  // reads at scene distance, and position it above the world-space head.
   return (
-    <group ref={ref} position={[0, baseY, 0]}>
+    <group ref={ref} position={[0, 4.5, 0]} scale={2.4}>
       {renderProp(guild)}
     </group>
   );

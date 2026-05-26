@@ -43,7 +43,7 @@ export function computePois(
   const rocks: Pois["rocks"] = [];
   const plazas: Pois["plazas"] = [];
 
-  const tries = 320;
+  const tries = 600;
   for (let i = 0; i < tries; i++) {
     const nx = rng();
     const ny = rng();
@@ -53,13 +53,16 @@ export function computePois(
     const z = (ny - 0.5) * size;
     const y = worldHeight(grid, nx, ny, amplitude);
     const kind = rng();
-    if (e < 0.58 && kind < 0.15 && huts.length < 14) {
+    // Reserve a 14u "skirt" around the central monument for it to breathe.
+    const inCentre = Math.hypot(x, z) < 14;
+    if (!inCentre && e >= 0.45 && e < 0.72 && kind < 0.35 && huts.length < 30) {
+      // Houses span grass through to light-forest elevations.
       huts.push({ pos: [x, y, z], rot: rng() * Math.PI * 2 });
-    } else if (e > 0.50 && e < 0.78 && kind < 0.7 && trees.length < 90) {
+    } else if (e > 0.50 && e < 0.86 && kind < 0.78 && trees.length < 140) {
       trees.push({ pos: [x, y, z], scale: 0.7 + rng() * 0.6 });
-    } else if (e > 0.7 && rocks.length < 40) {
+    } else if (e > 0.7 && rocks.length < 60) {
       rocks.push({ pos: [x, y, z], scale: 0.6 + rng() * 0.9, rot: rng() * Math.PI });
-    } else if (e > 0.46 && e < 0.6 && plazas.length < 8) {
+    } else if (e > 0.46 && e < 0.6 && plazas.length < 10) {
       plazas.push([x, y, z]);
     }
   }

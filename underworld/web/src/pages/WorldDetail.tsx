@@ -284,13 +284,13 @@ export default function WorldDetail() {
                   seed={world.data.seed_value}
                   selectedId={selectedMinion}
                   onSelect={(mid) => setSelectedMinion(mid || null)}
-                  width={720}
-                  height={480}
+                  width={900}
+                  height={560}
                   actionByMinion={actions.data?.actions}
                   biomeHint={map.data.biome_hint}
                 />
               ) : (
-                <div className="skeleton h-[480px] w-[720px] rounded" />
+                <div className="skeleton h-[560px] w-[900px] rounded" />
               )}
             </div>
           </section>
