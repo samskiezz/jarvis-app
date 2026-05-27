@@ -1,30 +1,12 @@
 import { useMemo } from "react";
 import * as THREE from "three";
-import { usePbrTexture } from "./usePbrTexture";
+import { useLoader } from "@react-three/fiber";
+import { TEXTURE_SETS } from "./assets";
 
 interface Props {
   grid: number[][];
   size: number;
   amplitude: number;
-}
-
-// Per-biome tint multiplied with the grass PBR texture. Keeps the surface
-// detail (normal map + roughness) consistent but colours each cell so the
-// world reads as a varied landscape rather than a uniform lawn.
-const BIOMES: { max: number; color: [number, number, number] }[] = [
-  { max: 0.28, color: [0.04, 0.08, 0.20] }, // deep water — barely visible under water plane
-  { max: 0.36, color: [0.08, 0.18, 0.42] }, // ocean
-  { max: 0.42, color: [0.30, 0.50, 0.65] }, // shore
-  { max: 0.46, color: [1.50, 1.30, 0.80] }, // sand — bright yellow tint over green
-  { max: 0.58, color: [1.00, 1.00, 0.95] }, // grass — natural
-  { max: 0.72, color: [0.70, 0.85, 0.65] }, // forest — slightly deeper
-  { max: 0.86, color: [0.85, 0.80, 0.75] }, // rock — desaturate
-  { max: 1.01, color: [1.40, 1.45, 1.55] }, // snow — washes texture white
-];
-
-function biomeColor(e: number): [number, number, number] {
-  for (const b of BIOMES) if (e <= b.max) return b.color;
-  return BIOMES[BIOMES.length - 1].color;
 }
 
 export function elevationAt(grid: number[][], nx: number, ny: number): number {
@@ -47,63 +29,197 @@ export function elevationAt(grid: number[][], nx: number, ny: number): number {
   );
 }
 
+function configureTiled(t: THREE.Texture, repeat: number, isColor: boolean): THREE.Texture {
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(repeat, repeat);
+  t.anisotropy = 8;
+  t.colorSpace = isColor ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  t.needsUpdate = true;
+  return t;
+}
+
+// Splat-mapped multi-texture material — blends 4 PBR layers (sand / grass /
+// dirt / rock) using a per-vertex weight attribute. Built on
+// MeshStandardMaterial via onBeforeCompile so we keep PBR + shadows + IBL.
+function useSplatMaterial(repeat: number) {
+  const [sandD, sandN, sandR, grassD, grassN, grassR, dirtD, dirtN, dirtR, rockD, rockN, rockR] =
+    useLoader(THREE.TextureLoader, [
+      TEXTURE_SETS.sand.diff, TEXTURE_SETS.sand.norm, TEXTURE_SETS.sand.rough,
+      TEXTURE_SETS.grass.diff, TEXTURE_SETS.grass.norm, TEXTURE_SETS.grass.rough,
+      TEXTURE_SETS.dirt.diff, TEXTURE_SETS.dirt.norm, TEXTURE_SETS.dirt.rough,
+      TEXTURE_SETS.rock.diff, TEXTURE_SETS.rock.norm, TEXTURE_SETS.rock.rough,
+    ]);
+
+  return useMemo(() => {
+    const all = [sandD, sandN, sandR, grassD, grassN, grassR, dirtD, dirtN, dirtR, rockD, rockN, rockR];
+    all.forEach((t, i) => configureTiled(t, repeat, i % 3 === 0));
+
+    const mat = new THREE.MeshStandardMaterial({
+      // We feed the GPU through the standard map slot so r3f's shader chunks
+      // (normal mapping, IBL, shadows) wire up correctly. The map itself is
+      // ignored in favour of the splat blend in our injected fragment code.
+      map: grassD,
+      normalMap: grassN,
+      roughnessMap: grassR,
+      roughness: 1.0,
+      metalness: 0.0,
+      envMapIntensity: 0.7,
+    });
+
+    const uniforms: Record<string, { value: unknown }> = {
+      uSand:    { value: sandD }, uSandN:    { value: sandN }, uSandR:    { value: sandR },
+      uGrass:   { value: grassD }, uGrassN:  { value: grassN }, uGrassR:  { value: grassR },
+      uDirt:    { value: dirtD }, uDirtN:    { value: dirtN }, uDirtR:    { value: dirtR },
+      uRock:    { value: rockD }, uRockN:    { value: rockN }, uRockR:    { value: rockR },
+    };
+
+    mat.onBeforeCompile = (shader) => {
+      // Make our splat attribute available to the fragment shader.
+      shader.vertexShader = shader.vertexShader
+        .replace(
+          "#include <common>",
+          "#include <common>\nattribute vec4 splat;\nvarying vec4 vSplat;",
+        )
+        .replace(
+          "#include <begin_vertex>",
+          "#include <begin_vertex>\nvSplat = splat;",
+        );
+
+      // Replace the default map sample with a 4-way blend.
+      Object.assign(shader.uniforms, uniforms);
+
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          "#include <common>",
+          `#include <common>
+            uniform sampler2D uSand;   uniform sampler2D uSandN;   uniform sampler2D uSandR;
+            uniform sampler2D uGrass;  uniform sampler2D uGrassN;  uniform sampler2D uGrassR;
+            uniform sampler2D uDirt;   uniform sampler2D uDirtN;   uniform sampler2D uDirtR;
+            uniform sampler2D uRock;   uniform sampler2D uRockN;   uniform sampler2D uRockR;
+            varying vec4 vSplat;`,
+        )
+        .replace(
+          "#include <map_fragment>",
+          `vec4 sandC  = texture2D(uSand,  vMapUv);
+           vec4 grassC = texture2D(uGrass, vMapUv);
+           vec4 dirtC  = texture2D(uDirt,  vMapUv);
+           vec4 rockC  = texture2D(uRock,  vMapUv);
+           vec4 splatColor =
+              sandC  * vSplat.x +
+              grassC * vSplat.y +
+              dirtC  * vSplat.z +
+              rockC  * vSplat.w;
+           diffuseColor *= splatColor;`,
+        )
+        .replace(
+          "#include <normal_fragment_maps>",
+          `vec3 sandNS  = texture2D(uSandN,  vNormalMapUv).xyz * 2.0 - 1.0;
+           vec3 grassNS = texture2D(uGrassN, vNormalMapUv).xyz * 2.0 - 1.0;
+           vec3 dirtNS  = texture2D(uDirtN,  vNormalMapUv).xyz * 2.0 - 1.0;
+           vec3 rockNS  = texture2D(uRockN,  vNormalMapUv).xyz * 2.0 - 1.0;
+           vec3 mapN =
+             sandNS  * vSplat.x +
+             grassNS * vSplat.y +
+             dirtNS  * vSplat.z +
+             rockNS  * vSplat.w;
+           mapN.xy *= normalScale;
+           normal = normalize(tbn * mapN);`,
+        )
+        .replace(
+          "#include <roughnessmap_fragment>",
+          // The default chunk would also declare `float roughnessFactor = roughness;`
+          // so we open our own scope to avoid a GLSL redefinition error and
+          // multiply the base roughness by the blended layer roughness.
+          `float roughnessFactor = roughness;
+           {
+             float rSand  = texture2D(uSandR,  vRoughnessMapUv).g;
+             float rGrass = texture2D(uGrassR, vRoughnessMapUv).g;
+             float rDirt  = texture2D(uDirtR,  vRoughnessMapUv).g;
+             float rRock  = texture2D(uRockR,  vRoughnessMapUv).g;
+             roughnessFactor *=
+               rSand  * vSplat.x +
+               rGrass * vSplat.y +
+               rDirt  * vSplat.z +
+               rRock  * vSplat.w;
+           }`,
+        );
+    };
+    mat.needsUpdate = true;
+    return mat;
+  }, [sandD, sandN, sandR, grassD, grassN, grassR, dirtD, dirtN, dirtR, rockD, rockN, rockR, repeat]);
+}
+
+// Per-vertex splat weight from elevation. Slope influences rock mix at steeper
+// faces, so cliffs read as rock regardless of altitude. Below sand level the
+// seabed reads as sand so submerged terrain stays visible under the water.
+function splatFor(e: number, slope: number): [number, number, number, number] {
+  // Sand only on the water/shore band; everywhere submerged (e<0.42) falls
+  // back to full sand so the seabed isn't black when multiplied by the splat
+  // colour, but above shore level sand fades quickly to let grass dominate.
+  let sand: number;
+  if (e < 0.42) sand = 1;
+  else if (e < 0.47) sand = (0.47 - e) / 0.05;
+  else sand = 0;
+  const grass = smoothBand(e, 0.46, 0.66, 0.04);
+  const dirt = smoothBand(e, 0.60, 0.80, 0.06);
+  let rock = smoothBand(e, 0.74, 1.04, 0.08) + Math.max(0, slope - 0.55) * 1.4;
+  rock = Math.min(1.0, rock);
+  const sum = sand + grass + dirt + rock + 1e-5;
+  return [sand / sum, grass / sum, dirt / sum, rock / sum];
+}
+
+function smoothBand(x: number, a: number, b: number, k: number): number {
+  // Trapezoidal window — full strength between a+k and b-k, falling off
+  // linearly into the k-wide tails.
+  if (x < a - k || x > b + k) return 0;
+  if (x < a + k) return Math.max(0, (x - (a - k)) / (2 * k));
+  if (x > b - k) return Math.max(0, ((b + k) - x) / (2 * k));
+  return 1;
+}
+
 export default function Terrain({ grid, size, amplitude }: Props) {
-  const grass = usePbrTexture("grass", Math.max(8, Math.round(size / 5)));
+  const mat = useSplatMaterial(Math.max(8, Math.round(size / 5)));
 
   const geom = useMemo(() => {
     const cells = grid.length;
-    const segs = (cells - 1) * 2; // double the geometry density for smoother shadows
+    const segs = (cells - 1) * 2;
     const g = new THREE.PlaneGeometry(size, size, segs, segs);
     g.rotateX(-Math.PI / 2);
 
     const pos = g.attributes.position as THREE.BufferAttribute;
-    const colors = new Float32Array(pos.count * 3);
+    const splat = new Float32Array(pos.count * 4);
+
+    // Pass 1: displace each vertex.
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const z = pos.getZ(i);
       const nx = (x / size) + 0.5;
       const ny = (z / size) + 0.5;
       const e = elevationAt(grid, nx, ny);
-      const waterFlat = e < 0.42;
-      const yWorld = waterFlat ? 0 : (e - 0.42) * amplitude;
+      const yWorld = e < 0.42 ? 0 : (e - 0.42) * amplitude;
       pos.setY(i, yWorld);
-      const c = biomeColor(e);
-      colors[i * 3] = c[0];
-      colors[i * 3 + 1] = c[1];
-      colors[i * 3 + 2] = c[2];
     }
-    g.setAttribute("color", new THREE.BufferAttribute(colors, 3));
     g.computeVertexNormals();
+
+    // Pass 2: write the splat weights using both elevation and slope (from
+    // the computed normal — flatter ↑ y, steeper ↓ y).
+    const nrm = g.attributes.normal as THREE.BufferAttribute;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      const nx = (x / size) + 0.5;
+      const ny = (z / size) + 0.5;
+      const e = elevationAt(grid, nx, ny);
+      const slope = 1.0 - Math.abs(nrm.getY(i));
+      const [s, gr, d, r] = splatFor(e, slope);
+      splat[i * 4 + 0] = s;
+      splat[i * 4 + 1] = gr;
+      splat[i * 4 + 2] = d;
+      splat[i * 4 + 3] = r;
+    }
+    g.setAttribute("splat", new THREE.BufferAttribute(splat, 4));
     return g;
   }, [grid, size, amplitude]);
 
-  return (
-    <group>
-      <mesh geometry={geom} receiveShadow>
-        <meshStandardMaterial
-          map={grass.diff}
-          normalMap={grass.norm}
-          roughnessMap={grass.rough}
-          vertexColors
-          envMapIntensity={0.6}
-          roughness={1.0}
-          metalness={0.0}
-        />
-      </mesh>
-      {/* Sea-level water — a separate plane with its own glossy material. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, 0]} receiveShadow>
-        <planeGeometry args={[size * 1.4, size * 1.4]} />
-        <meshPhysicalMaterial
-          color="#1a3a72"
-          transparent
-          opacity={0.78}
-          roughness={0.12}
-          metalness={0.05}
-          transmission={0.4}
-          ior={1.33}
-          envMapIntensity={1.2}
-        />
-      </mesh>
-    </group>
-  );
+  return <mesh geometry={geom} material={mat} receiveShadow />;
 }

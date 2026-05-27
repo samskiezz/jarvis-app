@@ -4,7 +4,8 @@ import { useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import GlbModel from "./GlbModel";
 import {
-  CASTLE_BUILDINGS, CITY_BUILDINGS, NATURE_ROCKS, NATURE_TREES, NATURE_DECOR, TEXTURE_SETS,
+  CASTLE_BUILDINGS, CITY_BUILDINGS, FENCES, FOUNTAIN, HEDGES, LANTERN,
+  NATURE_ROCKS, NATURE_TREES, NATURE_DECOR, TEXTURE_SETS,
 } from "./assets";
 import type { Pois } from "./pois";
 
@@ -77,14 +78,22 @@ function Road({ from, to, width = 1.8 }: { from: [number, number, number]; to: [
   const cz = (from[2] + to[2]) / 2;
   const ty = Math.max(from[1], to[1]) + 0.06;
 
-  // Tile the dirt texture along the road's length.
-  const [diff, norm, rough] = tex;
-  for (const t of [diff, norm, rough]) {
-    t.wrapS = t.wrapT = THREE.RepeatWrapping;
-    t.repeat.set(Math.max(1, len / 3), 1);
-    t.needsUpdate = true;
-  }
-  diff.colorSpace = THREE.SRGBColorSpace;
+  // Clone the dirt textures per Road so each instance has its own repeat /
+  // colorSpace settings. Without this, every Road and the splat-mapped
+  // terrain (which loads the same URLs via the useLoader cache) would all
+  // stomp on each other's tiling on every render.
+  const local = useMemo(() => {
+    const repeat = Math.max(1, len / 3);
+    const clones = tex.map((t, i) => {
+      const c = t.clone();
+      c.wrapS = c.wrapT = THREE.RepeatWrapping;
+      c.repeat.set(repeat, 1);
+      c.colorSpace = i === 0 ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      c.needsUpdate = true;
+      return c;
+    });
+    return { diff: clones[0], norm: clones[1], rough: clones[2] };
+  }, [tex, len]);
 
   return (
     <mesh
@@ -93,7 +102,7 @@ function Road({ from, to, width = 1.8 }: { from: [number, number, number]; to: [
       receiveShadow
     >
       <planeGeometry args={[width, len]} />
-      <meshStandardMaterial map={diff} normalMap={norm} roughnessMap={rough} roughness={1.0} />
+      <meshStandardMaterial map={local.diff} normalMap={local.norm} roughnessMap={local.rough} roughness={1.0} />
     </mesh>
   );
 }
@@ -162,6 +171,65 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
     return out;
   }, [pois, buildings]);
 
+  // Fences + hedges around each building, fountains in plazas, lanterns along
+  // the road network at fixed intervals.
+  const yards = useMemo(() => {
+    const fences: { url: string; pos: [number, number, number]; rot: number }[] = [];
+    const hedges: typeof fences = [];
+    buildings.forEach((b, i) => {
+      const baseRot = b.rot;
+      // Four corner pegs per building.
+      for (let k = 0; k < 4; k++) {
+        const ang = baseRot + (k * Math.PI) / 2;
+        const r = 5.5;
+        const fx = b.pos[0] + Math.cos(ang) * r;
+        const fz = b.pos[2] + Math.sin(ang) * r;
+        const variant = (hashSeed(seed, i * 23 + k) % FENCES.length);
+        fences.push({ url: FENCES[variant], pos: [fx, b.pos[1], fz], rot: ang + Math.PI / 2 });
+      }
+      // One hedge cluster per garden.
+      const hedgeVariant = HEDGES[hashSeed(seed, i * 29) % HEDGES.length];
+      hedges.push({
+        url: hedgeVariant,
+        pos: [b.pos[0] + 4.5, b.pos[1], b.pos[2] - 4.5],
+        rot: baseRot,
+      });
+    });
+    return { fences, hedges };
+  }, [buildings, seed]);
+
+  const lanterns = useMemo(() => {
+    // Distribute lanterns along every road segment at ~10u spacing, offset
+    // to alternating sides. Each road gets a hashed parity so the first
+    // lantern of each spoke doesn't always cluster on the same side of the
+    // central obelisk where every road starts.
+    const out: [number, number, number][] = [];
+    roads.forEach((r, ri) => {
+      const len = Math.hypot(r.to[0] - r.from[0], r.to[2] - r.from[2]);
+      const count = Math.max(2, Math.floor(len / 10));
+      const parity = hashSeed(seed, ri * 17 + 5) & 1;
+      const dx = r.to[0] - r.from[0];
+      const dz = r.to[2] - r.from[2];
+      const nx = -dz / Math.max(1e-3, len);
+      const nz = dx / Math.max(1e-3, len);
+      for (let i = 1; i < count; i++) {
+        const t = i / count;
+        const side = ((i + parity) % 2 === 0 ? 1.6 : -1.6);
+        out.push([
+          r.from[0] + dx * t + nx * side,
+          Math.max(r.from[1], r.to[1]),
+          r.from[2] + dz * t + nz * side,
+        ]);
+      }
+    });
+    return out;
+  }, [roads, seed]);
+
+  const fountains = useMemo(
+    () => pois.plazas.map((p, i) => ({ pos: p, rot: (hashSeed(seed, i * 31) % 360) * Math.PI / 180 })),
+    [pois.plazas, seed],
+  );
+
   return (
     <group>
       <CentralTower position={pois.obelisk} tick={tick} />
@@ -171,6 +239,27 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
         ))}
         {buildings.map((b, i) => (
           <GlbModel key={`b${i}`} url={b.url} position={b.pos} rotation={b.rot} scale={b.scale} />
+        ))}
+        {yards.fences.map((f, i) => (
+          <GlbModel key={`fc${i}`} url={f.url} position={f.pos} rotation={f.rot} scale={3.0} />
+        ))}
+        {yards.hedges.map((h, i) => (
+          <GlbModel key={`hd${i}`} url={h.url} position={h.pos} rotation={h.rot} scale={3.0} />
+        ))}
+        {fountains.map((f, i) => (
+          <GlbModel key={`fn${i}`} url={FOUNTAIN} position={f.pos} rotation={f.rot} scale={3.5} />
+        ))}
+        {lanterns.map((p, i) => (
+          <group key={`ln${i}`} position={p}>
+            <GlbModel url={LANTERN} position={[0, 0, 0]} scale={3.2} />
+            {/* Only the first 8 lanterns get a real point light — most GPUs
+                tank past ~16 simultaneous dynamic lights. The remainder rely
+                on the bloom pass + the lantern's own emissive material to
+                read as lit at night. */}
+            {i < 8 ? (
+              <pointLight color="#ffd58a" intensity={3.0} distance={14} position={[0, 4.5, 0]} />
+            ) : null}
+          </group>
         ))}
         {trees.map((t, i) => (
           <GlbModel key={`t${i}`} url={t.url} position={t.pos} scale={t.scale} />
@@ -182,7 +271,6 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
           <GlbModel key={`d${i}`} url={d.url} position={d.pos} scale={d.scale} rotation={d.rot} castShadow={false} />
         ))}
       </Suspense>
-      {/* Skirt for off-world fade */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
         <planeGeometry args={[size * 4, size * 4]} />
         <meshStandardMaterial color="#0a0f1a" roughness={1} />

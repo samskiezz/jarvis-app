@@ -11,6 +11,7 @@ import WorldEnvironment from "./Environment";
 import MinionAvatar from "./MinionAvatar";
 import { computePois, destinationForAction } from "./pois";
 import Weather, { weatherFor, type WeatherKind } from "./Weather";
+import Water from "./Water";
 import { HDRI_SKY } from "./assets";
 
 interface Props {
@@ -135,6 +136,13 @@ export default function WorldScene3D({
   const isNight = tint.label === "night";
   const isDayish = tint.label === "day";
 
+  // Normalised sun direction — Water's reflection shader wants a unit vector
+  // pointing from the surface toward the light.
+  const sunNorm: [number, number, number] = useMemo(() => {
+    const len = Math.hypot(tint.sun.x, tint.sun.y, tint.sun.z) || 1;
+    return [tint.sun.x / len, Math.max(0.05, tint.sun.y / len), tint.sun.z / len];
+  }, [tint.sun.x, tint.sun.y, tint.sun.z]);
+
   return (
     <div style={{ position: "relative", width, height }}>
       <Canvas
@@ -170,6 +178,7 @@ export default function WorldScene3D({
           />
           <Lights tick={tick} size={WORLD_SIZE} />
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
+          <Water size={WORLD_SIZE} sunDirection={sunNorm} />
           <WorldEnvironment pois={pois} size={WORLD_SIZE} seed={seed} tick={tick} />
           <Weather kind={weather} size={WORLD_SIZE} />
           {placements.map((p) => {

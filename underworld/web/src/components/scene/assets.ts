@@ -1,45 +1,41 @@
 // Catalog of CC0 GLB assets shipped in /public/models. Centralised so the
 // scene can reference assets by symbolic name instead of brittle path strings.
 //
-// Sources:
-//   /models/Robot/Michelle/Xbot       — Three.js examples (CC0, Mixamo)
-//   /models/kenney/city-kit-suburban  — Kenney CC0 suburban building kit
-//   /models/kenney/castle-kit         — Kenney CC0 castle/fortress kit
-//   /models/kenney/nature-kit         — Kenney CC0 nature kit (trees, rocks, fences)
-//   /models/polyhaven                 — Polyhaven CC0 PBR textures + HDRI
+// Sources (all CC0):
+//   /models/kenney/blocky-characters  — 18 distinct rigid-hierarchy
+//                                       characters (a..r) with shared anim
+//                                       library (idle/walk/sit/die/emote-...).
+//   /models/kenney/city-kit-suburban  — suburban building variants A..U.
+//   /models/kenney/castle-kit         — tower segments / gates / walls / flags.
+//   /models/kenney/fantasy-town       — fences, hedges, lanterns, fountains.
+//   /models/kenney/nature-kit         — trees, rocks, flowers, mushrooms.
+//   /models/polyhaven                 — PBR texture sets + HDRI.
 
 import type { Guild } from "@/lib/types";
 
-// Per-guild character GLB. We have 3 animated humanoids → spread them
-// across guilds by domain (research / engineering / field+reviewer).
+// One distinct blocky-character per guild. 18 characters available; we pick
+// 11 visually different ones (skipping near-duplicates).
 const CHARACTER_BY_GUILD: Record<Guild, string> = {
-  // Research → Michelle (Mixamo, female humanoid, multiple anims)
-  maths:       "/models/Michelle.glb",
-  physics:     "/models/Michelle.glb",
-  computing:   "/models/Michelle.glb",
-  // Engineering / construction → Xbot (Mixamo, mechanical humanoid)
-  mechanical:  "/models/Xbot.glb",
-  electrical:  "/models/Xbot.glb",
-  civil:       "/models/Xbot.glb",
-  energy:      "/models/Xbot.glb",
-  // Field / governance → RobotExpressive (cute styled robot, full anim set)
-  agriculture: "/models/RobotExpressive.glb",
-  materials:   "/models/RobotExpressive.glb",
-  patent:      "/models/RobotExpressive.glb",
-  safety:      "/models/RobotExpressive.glb",
+  maths:       "/models/kenney/blocky-characters/character-a.glb",
+  physics:     "/models/kenney/blocky-characters/character-b.glb",
+  electrical:  "/models/kenney/blocky-characters/character-c.glb",
+  mechanical:  "/models/kenney/blocky-characters/character-d.glb",
+  civil:       "/models/kenney/blocky-characters/character-e.glb",
+  materials:   "/models/kenney/blocky-characters/character-f.glb",
+  computing:   "/models/kenney/blocky-characters/character-g.glb",
+  energy:      "/models/kenney/blocky-characters/character-h.glb",
+  agriculture: "/models/kenney/blocky-characters/character-i.glb",
+  patent:      "/models/kenney/blocky-characters/character-j.glb",
+  safety:      "/models/kenney/blocky-characters/character-k.glb",
 };
 
 export function characterModelFor(guild: Guild): string {
-  return CHARACTER_BY_GUILD[guild] ?? "/models/RobotExpressive.glb";
+  return CHARACTER_BY_GUILD[guild] ?? CHARACTER_BY_GUILD.computing;
 }
 
-export const ALL_CHARACTER_MODELS: readonly string[] = [
-  "/models/Michelle.glb",
-  "/models/Xbot.glb",
-  "/models/RobotExpressive.glb",
-];
+export const ALL_CHARACTER_MODELS: readonly string[] = Object.values(CHARACTER_BY_GUILD);
 
-// Suburban houses A..U from Kenney.
+// Suburban houses A..P from Kenney.
 export const CITY_BUILDINGS: readonly string[] = [
   "/models/kenney/city-kit-suburban/building-type-a.glb",
   "/models/kenney/city-kit-suburban/building-type-b.glb",
@@ -102,6 +98,24 @@ export const NATURE_DECOR: readonly string[] = [
   "/models/kenney/nature-kit/mushroom_redGroup.glb",
   "/models/kenney/nature-kit/log.glb",
 ];
+
+// Garden details from the fantasy-town kit.
+export const FENCES: readonly string[] = [
+  "/models/kenney/fantasy-town/fence.glb",
+  "/models/kenney/fantasy-town/fence-curved.glb",
+  "/models/kenney/fantasy-town/fence-gate.glb",
+  "/models/kenney/fantasy-town/fence-broken.glb",
+];
+
+export const HEDGES: readonly string[] = [
+  "/models/kenney/fantasy-town/hedge.glb",
+  "/models/kenney/fantasy-town/hedge-curved.glb",
+  "/models/kenney/fantasy-town/hedge-large.glb",
+  "/models/kenney/fantasy-town/hedge-gate.glb",
+];
+
+export const LANTERN  = "/models/kenney/fantasy-town/lantern.glb";
+export const FOUNTAIN = "/models/kenney/fantasy-town/fountain-round-detail.glb";
 
 // Polyhaven textures (1k) — diffuse / normal / roughness triplets.
 export const TEXTURE_SETS = {

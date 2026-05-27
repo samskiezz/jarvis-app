@@ -31,35 +31,32 @@ const MOOD_RING: Record<Mood, string> = {
   despairing: "#fb7185",
 };
 
-// Action → ordered preference list of clip names. Different GLBs ship with
-// different anim libraries (RobotExpressive has the full set; Michelle/Xbot
-// only have Idle/Walking/Running), so we fall back gracefully.
+// Action → ordered preference list of clip names. The Kenney blocky-character
+// kit ships with: static, idle, walk, sprint, sit, drive, die, pick-up,
+// emote-yes, emote-no, holding-*, attack-*, interact-*. We map our verbs to
+// the closest match.
 const ACTION_CLIP_CANDIDATES: Record<string, string[]> = {
-  rest:               ["Sitting", "Sit", "Idle", "Stand"],
-  meditate:           ["Sitting", "Sit", "Idle"],
-  eat:                ["ThumbsUp", "Yes", "Idle"],
-  drink:              ["ThumbsUp", "Yes", "Idle"],
-  socialise:          ["Wave", "Yes", "Idle"],
-  teach:              ["Wave", "Yes", "Idle"],
-  study:              ["Yes", "Idle"],
-  search_patents:     ["Yes", "Idle"],
-  kb_lookup:          ["Yes", "Idle"],
-  propose_invention:  ["Dance", "Wave", "Idle"],
-  seek_partner:       ["Wave", "Yes", "Idle"],
-  fork_self:          ["Jump", "Dance", "Idle"],
+  rest:               ["sit", "idle"],
+  meditate:           ["sit", "idle"],
+  eat:                ["pick-up", "emote-yes", "idle"],
+  drink:              ["pick-up", "emote-yes", "idle"],
+  socialise:          ["emote-yes", "idle"],
+  teach:              ["interact-right", "emote-yes", "idle"],
+  study:              ["interact-right", "idle"],
+  search_patents:     ["interact-right", "idle"],
+  kb_lookup:          ["interact-right", "idle"],
+  propose_invention:  ["emote-yes", "interact-right", "idle"],
+  seek_partner:       ["emote-yes", "idle"],
+  fork_self:          ["emote-yes", "idle"],
 };
 
-const WALK_CLIPS = ["Walking", "Walk", "walking", "walk", "Run", "Running"];
-const IDLE_CLIPS = ["Idle", "idle", "Standing", "Stand", "stand"];
-const DEATH_CLIPS = ["Death", "Dying", "die", "Idle"];
+const WALK_CLIPS = ["walk", "sprint", "Walking", "Walk", "Run", "Running"];
+const IDLE_CLIPS = ["idle", "static", "Idle", "Standing", "Stand"];
+const DEATH_CLIPS = ["die", "Death", "Dying", "idle"];
 
-// Per-model scale — calibrated so every avatar lands at ~3 world units tall
-// against the 120u world (i.e. visibly humanoid from camera distance).
-const MODEL_SCALE: Record<string, number> = {
-  "/models/Michelle.glb":         0.035,
-  "/models/Xbot.glb":             0.035,
-  "/models/RobotExpressive.glb":  1.35,
-};
+// Kenney blocky characters are ~1.8 units tall in source; scale 2.0 yields
+// a ~3.5u-tall avatar in the 120u world.
+const BLOCKY_SCALE = 2.0;
 
 interface Props {
   minion: MinionListItem;
@@ -90,9 +87,11 @@ export default function MinionAvatar({
     animations: THREE.AnimationClip[];
   };
 
-  // SkeletonUtils.clone is the canonical way to instance a skinned mesh —
-  // a plain .clone() shares the skeleton across instances and they all
-  // animate in lockstep.
+  // Use SkeletonUtils.clone for every model — it handles skinned meshes
+  // correctly AND deep-clones non-skinned hierarchies, so each instance gets
+  // its own node tree for the animation mixer to target. Plain Object3D.clone
+  // would let multiple Kenney blocky avatars share node references and step on
+  // each other's animation state.
   const clone = useMemo(() => {
     const g = cloneSkeleton(src) as THREE.Group;
     g.traverse((obj) => {
@@ -110,8 +109,12 @@ export default function MinionAvatar({
     return g;
   }, [src]);
 
+  // Tint each cloned material by the guild colour. Because the Kenney blocky
+  // characters use baseColorTexture maps, MeshStandardMaterial multiplies the
+  // sampled texel by `color` — setting color = guild colour pulls the whole
+  // costume into the guild's hue while keeping the texture detail readable.
   useEffect(() => {
-    const tint = new THREE.Color(GUILD_COLOR[minion.guild] ?? "#aaaaaa");
+    const tint = new THREE.Color(GUILD_COLOR[minion.guild] ?? "#cccccc");
     clone.traverse((obj) => {
       const mesh = obj as THREE.Mesh;
       if (!mesh.isMesh) return;
@@ -224,7 +227,7 @@ export default function MinionAvatar({
       position={basePosition}
       onClick={(e) => { e.stopPropagation(); onClick(minion.id); }}
     >
-      <primitive object={clone} scale={MODEL_SCALE[modelUrl] ?? 0.42} />
+      <primitive object={clone} scale={BLOCKY_SCALE} />
       <GuildAccessory guild={minion.guild} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <ringGeometry args={[selected ? 2.0 : 1.4, selected ? 2.5 : 1.6, 32]} />
