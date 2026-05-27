@@ -13,20 +13,23 @@
 
 import type { Guild } from "@/lib/types";
 
-// One distinct blocky-character per guild. 18 characters available; we pick
-// 11 visually different ones (skipping near-duplicates).
+// One distinct mini-character per guild. The Kenney mini-characters kit
+// ships 12 skinned humanoid GLBs (6 male + 6 female) with stylized costumes
+// and the same anim library as the blocky kit, so each guild gets a real
+// human silhouette instead of a cube. Pairs alternate gender so the
+// population reads as varied.
 const CHARACTER_BY_GUILD: Record<Guild, string> = {
-  maths:       "/models/kenney/blocky-characters/character-a.glb",
-  physics:     "/models/kenney/blocky-characters/character-b.glb",
-  electrical:  "/models/kenney/blocky-characters/character-c.glb",
-  mechanical:  "/models/kenney/blocky-characters/character-d.glb",
-  civil:       "/models/kenney/blocky-characters/character-e.glb",
-  materials:   "/models/kenney/blocky-characters/character-f.glb",
-  computing:   "/models/kenney/blocky-characters/character-g.glb",
-  energy:      "/models/kenney/blocky-characters/character-h.glb",
-  agriculture: "/models/kenney/blocky-characters/character-i.glb",
-  patent:      "/models/kenney/blocky-characters/character-j.glb",
-  safety:      "/models/kenney/blocky-characters/character-k.glb",
+  maths:       "/models/kenney/mini-characters/character-female-a.glb",
+  physics:     "/models/kenney/mini-characters/character-male-a.glb",
+  electrical:  "/models/kenney/mini-characters/character-female-b.glb",
+  mechanical:  "/models/kenney/mini-characters/character-male-b.glb",
+  civil:       "/models/kenney/mini-characters/character-female-c.glb",
+  materials:   "/models/kenney/mini-characters/character-male-c.glb",
+  computing:   "/models/kenney/mini-characters/character-female-d.glb",
+  energy:      "/models/kenney/mini-characters/character-male-d.glb",
+  agriculture: "/models/kenney/mini-characters/character-female-e.glb",
+  patent:      "/models/kenney/mini-characters/character-male-e.glb",
+  safety:      "/models/kenney/mini-characters/character-male-f.glb",
 };
 
 export function characterModelFor(guild: Guild): string {

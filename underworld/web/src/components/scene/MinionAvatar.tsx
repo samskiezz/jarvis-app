@@ -54,9 +54,10 @@ const WALK_CLIPS = ["walk", "sprint", "Walking", "Walk", "Run", "Running"];
 const IDLE_CLIPS = ["idle", "static", "Idle", "Standing", "Stand"];
 const DEATH_CLIPS = ["die", "Death", "Dying", "idle"];
 
-// Kenney blocky characters are ~1.8 units tall in source; scale 2.0 yields
-// a ~3.5u-tall avatar in the 120u world.
-const BLOCKY_SCALE = 2.0;
+// Kenney mini-characters are ~0.5 units tall in source; scale 12 yields
+// a ~6u-tall humanoid — visible from the default camera distance in the
+// 120u world, comparable to the suburban houses (~5.5u).
+const AVATAR_SCALE = 12;
 
 interface Props {
   minion: MinionListItem;
@@ -241,7 +242,7 @@ export default function MinionAvatar({
       position={basePosition}
       onClick={(e) => { e.stopPropagation(); onClick(minion.id); }}
     >
-      <primitive object={clone} scale={BLOCKY_SCALE} />
+      <primitive object={clone} scale={AVATAR_SCALE} />
       <GuildAccessory guild={minion.guild} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <ringGeometry args={[selected ? 2.0 : 1.4, selected ? 2.5 : 1.6, 32]} />
