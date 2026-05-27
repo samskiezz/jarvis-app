@@ -1,0 +1,38 @@
+# Caddy reverse proxy — single port, serves the React bundle at /
+# and forwards /api/* + /worlds/* + /knowledge/* + /worlds/*/stream
+# to the FastAPI backend on port 8000.
+#
+# For HTTPS replace the `:80` site address with your domain — Caddy
+# auto-provisions Let's Encrypt certs:
+#   underworld.example.com {
+#     ...same body...
+#   }
+
+:80 {
+    encode gzip zstd
+
+    # SPA assets served straight from the built bundle inside the
+    # underworld container (mounted at /app/underworld/web/dist).
+    handle /assets/* {
+        reverse_proxy underworld:8000
+    }
+    handle /models/* {
+        reverse_proxy underworld:8000
+    }
+
+    # API surface — every backend route mounted under /api/.
+    @api path /api/* /worlds/* /knowledge/*
+    handle @api {
+        # Strip the /api/ prefix if present so internal routes match.
+        uri strip_prefix /api
+        reverse_proxy underworld:8000 {
+            # SSE-friendly buffering off.
+            flush_interval -1
+        }
+    }
+
+    # SPA fallback — everything else loads the React shell.
+    handle {
+        reverse_proxy underworld:8000
+    }
+}

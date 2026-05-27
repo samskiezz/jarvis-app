@@ -142,10 +142,10 @@ export function computePois(
     }
   }
 
-  // 1. Buildings — generous spacing so houses don't pile on each other.
-  //    Reserve a ~15u skirt around the obelisk for the plaza.
-  const hutsXZ = poissonSample(rng, size, 14, 30, 30, (x, z) => {
-    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 15) return false;
+  // 1. Buildings — comfortable spacing (~15u gap, room for fences/gardens).
+  //    Reserve a ~16u skirt around the obelisk for the plaza.
+  const hutsXZ = poissonSample(rng, size, 15, 35, 30, (x, z) => {
+    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 16) return false;
     const e = elevAt(x, z);
     return e >= 0.46 && e < 0.72;
   });
@@ -157,16 +157,13 @@ export function computePois(
     return e >= 0.46 && e < 0.62;
   }, hutsForExclusion);
 
-  // 3. Trees — tight spacing for a forested feel, but excluded from a small
-  //    radius around every building & plaza so they don't grow through walls.
-  const buildingsExclude: [number, number][] = hutsXZ.concat(plazasXZ).map((p) => [p[0], p[1]]);
-  // Also exclude near the obelisk.
-  buildingsExclude.push([obelisk[0], obelisk[2]]);
-  const treesXZ = poissonSample(rng, size, 5.5, 200, 20, (x, z) => {
-    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 18) return false;
-    // Keep clear of building footprints (8u).
-    for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 8) return false;
-    for (const p of plazasXZ) if (Math.hypot(x - p[0], z - p[1]) < 8) return false;
+  // 3. Trees — wide spacing for a parkland feel (not a dense forest), and
+  //    excluded from a generous radius around every building/plaza so they
+  //    don't visually swallow the buildings.
+  const treesXZ = poissonSample(rng, size, 9, 75, 20, (x, z) => {
+    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 22) return false;
+    for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 11) return false;
+    for (const p of plazasXZ) if (Math.hypot(x - p[0], z - p[1]) < 9) return false;
     const e = elevAt(x, z);
     return e > 0.50 && e < 0.86;
   });

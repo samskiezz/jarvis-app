@@ -1,0 +1,36 @@
+services:
+  underworld:
+    build: .
+    image: underworld:latest
+    container_name: underworld
+    restart: unless-stopped
+    environment:
+      # Replace with a secret key in production. The web client must send
+      # this in `Authorization: Bearer <key>` for protected routes.
+      UNDERWORLD_API_KEY: "${UNDERWORLD_API_KEY:-dev-key}"
+      UNDERWORLD_DB_PATH: /data/underworld.db
+      # Set to enable real LLM cognition for Minions + reviewers.
+      UNDERWORLD_KIMI_API_KEY: "${UNDERWORLD_KIMI_API_KEY:-}"
+      UNDERWORLD_CORS_ORIGINS: '["*"]'
+    ports:
+      - "8000:8000"
+    volumes:
+      - underworld_data:/data
+
+  # Reverse proxy that serves the React bundle at / and the API at /api,
+  # both behind a single port — drop into Cloudflare or your VPS firewall
+  # in front of port 80/443.
+  proxy:
+    image: caddy:2-alpine
+    container_name: underworld_proxy
+    restart: unless-stopped
+    depends_on: [underworld]
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+
+volumes:
+  underworld_data:
+  caddy_data:
