@@ -1,7 +1,9 @@
 import { Suspense, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment as DreiEnvironment, Html, OrbitControls } from "@react-three/drei";
-import { Bloom, EffectComposer, ToneMapping } from "@react-three/postprocessing";
+import {
+  Bloom, EffectComposer, N8AO, SMAA, ToneMapping, Vignette,
+} from "@react-three/postprocessing";
 import { BlendFunction, ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
 import type { MinionListItem } from "@/lib/types";
@@ -146,18 +148,21 @@ export default function WorldScene3D({
   return (
     <div style={{ position: "relative", width, height }}>
       <Canvas
-        shadows
+        shadows={{ type: THREE.PCFSoftShadowMap, enabled: true }}
         dpr={[1, 2]}
         gl={{
-          antialias: true,
+          antialias: false, // SMAA in post does this better
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: isNight ? 0.6 : isDayish ? 1.05 : 0.85,
+          toneMappingExposure: isNight ? 0.55 : isDayish ? 1.1 : 0.85,
           outputColorSpace: THREE.SRGBColorSpace,
           preserveDrawingBuffer: true,
+          powerPreference: "high-performance",
+          stencil: false,
         }}
         camera={{
-          position: [WORLD_SIZE * 0.55, WORLD_SIZE * 0.38, WORLD_SIZE * 0.70],
-          fov: 52,
+          // Lower, more cinematic angle. Closer to the ground = better SSAO read.
+          position: [WORLD_SIZE * 0.45, WORLD_SIZE * 0.22, WORLD_SIZE * 0.55],
+          fov: 48,
           near: 0.1,
           far: WORLD_SIZE * 12,
         }}
@@ -230,13 +235,28 @@ export default function WorldScene3D({
             maxDistance={WORLD_SIZE * 1.6}
             maxPolarAngle={Math.PI * 0.48}
           />
-          <EffectComposer multisampling={4}>
-            <Bloom
-              luminanceThreshold={0.6}
-              luminanceSmoothing={0.4}
-              intensity={isNight ? 1.6 : 0.55}
-              radius={0.85}
+          {/* Post-processing stack: N8AO grounds objects in their shadows,
+              SMAA cleans aliased edges (better than MSAA at this distance),
+              bloom blooms the obelisk + emissives, vignette + ACES gives the
+              cinematic finish. */}
+          <EffectComposer multisampling={0} enableNormalPass>
+            <N8AO
+              aoRadius={2.5}
+              intensity={isNight ? 3 : 2.2}
+              distanceFalloff={1}
+              quality="high"
+              halfRes={false}
+              color="black"
             />
+            <Bloom
+              luminanceThreshold={isNight ? 0.4 : 0.7}
+              luminanceSmoothing={0.5}
+              intensity={isNight ? 2.0 : 0.65}
+              radius={0.9}
+              mipmapBlur
+            />
+            <Vignette eskil={false} offset={0.15} darkness={isNight ? 0.55 : 0.35} />
+            <SMAA />
             <ToneMapping mode={ToneMappingMode.ACES_FILMIC} blendFunction={BlendFunction.NORMAL} />
           </EffectComposer>
         </Suspense>

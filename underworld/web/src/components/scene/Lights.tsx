@@ -95,19 +95,24 @@ export default function Lights({ tick, size }: Props) {
       <directionalLight
         position={[d.sun.x, d.sun.y, d.sun.z]}
         color={d.sunColor}
-        intensity={d.sunIntensity}
+        intensity={d.sunIntensity * 1.4}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-left={-size}
-        shadow-camera-right={size}
-        shadow-camera-top={size}
-        shadow-camera-bottom={-size}
+        shadow-mapSize-width={4096}
+        shadow-mapSize-height={4096}
+        shadow-camera-left={-size * 0.6}
+        shadow-camera-right={size * 0.6}
+        shadow-camera-top={size * 0.6}
+        shadow-camera-bottom={-size * 0.6}
         shadow-camera-near={0.5}
         shadow-camera-far={size * 4}
-        shadow-bias={-0.0005}
+        shadow-bias={-0.00015}
+        shadow-normalBias={0.04}
+        shadow-radius={4}
+        shadow-blurSamples={16}
       />
-      <fog attach="fog" args={[d.fogColor, size * 0.6, size * 2.5]} />
+      {/* Linear fog with a closer near-plane for depth perception in busy
+          scenes — buildings far from camera fade into the sky colour. */}
+      <fog attach="fog" args={[d.fogColor, size * 0.5, size * 1.8]} />
       <color attach="background" args={[d.fogColor]} />
     </>
   );
