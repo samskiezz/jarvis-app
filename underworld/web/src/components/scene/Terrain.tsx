@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { TEXTURE_SETS } from "./assets";
@@ -220,6 +220,14 @@ export default function Terrain({ grid, size, amplitude }: Props) {
     g.setAttribute("splat", new THREE.BufferAttribute(splat, 4));
     return g;
   }, [grid, size, amplitude]);
+
+  // Free the geometry's GPU buffers when grid/size/amplitude changes (or the
+  // component unmounts). Without this, every reseed leaks a PlaneGeometry's
+  // worth of VBOs.
+  useEffect(() => () => { geom.dispose(); }, [geom]);
+  // The splat material is recreated whenever its useMemo deps change; release
+  // the compiled shader program + uniform refs of the previous one.
+  useEffect(() => () => { mat.dispose(); }, [mat]);
 
   return <mesh geometry={geom} material={mat} receiveShadow />;
 }

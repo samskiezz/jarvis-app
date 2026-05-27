@@ -109,6 +109,20 @@ export default function MinionAvatar({
     return g;
   }, [src]);
 
+  // Dispose the per-instance material clones when this avatar unmounts or its
+  // model swaps. Without this, every dead minion (and every guild change)
+  // leaks a few MeshStandardMaterial instances — adds up fast with churn.
+  useEffect(() => {
+    return () => {
+      clone.traverse((obj) => {
+        const mesh = obj as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        if (Array.isArray(mesh.material)) mesh.material.forEach((m) => m.dispose());
+        else (mesh.material as THREE.Material).dispose();
+      });
+    };
+  }, [clone]);
+
   // Tint each cloned material by the guild colour. Because the Kenney blocky
   // characters use baseColorTexture maps, MeshStandardMaterial multiplies the
   // sampled texel by `color` — setting color = guild colour pulls the whole

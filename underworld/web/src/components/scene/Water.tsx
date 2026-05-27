@@ -1,21 +1,11 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useFrame, useLoader, useThree, extend } from "@react-three/fiber";
+import { useEffect, useMemo } from "react";
+import { useFrame, useLoader, extend } from "@react-three/fiber";
 import * as THREE from "three";
 // `Water` from the three.js examples is a Reflector-backed mesh with a
 // vertex-displacement + sun-strike fragment program — same one most demos use.
 import { Water as ThreeWater } from "three/examples/jsm/objects/Water.js";
 
 extend({ Water: ThreeWater });
-
-// React doesn't know about the <water> intrinsic, so declare it once.
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      water: any;
-    }
-  }
-}
 
 interface Props {
   size: number;
@@ -27,8 +17,6 @@ interface Props {
 const WATER_NORMAL_URL = "/models/polyhaven/waternormals.jpg";
 
 export default function Water({ size, sunDirection }: Props) {
-  const ref = useRef<ThreeWater>(null);
-  const gl = useThree((s) => s.gl);
   const normalMap = useLoader(THREE.TextureLoader, WATER_NORMAL_URL);
 
   useEffect(() => {
@@ -52,6 +40,20 @@ export default function Water({ size, sunDirection }: Props) {
     return w;
   }, [normalMap, size]);
 
+  // Release the reflection RenderTarget + ShaderMaterial + PlaneGeometry when
+  // this Water instance is replaced (size change) or the component unmounts.
+  // Without this, every world resize leaks a 512×512 reflection target.
+  useEffect(() => {
+    return () => {
+      water.geometry.dispose();
+      const mat = water.material as THREE.ShaderMaterial & {
+        uniforms: { tReflectionMap?: { value: THREE.Texture | null } };
+      };
+      mat.uniforms.tReflectionMap?.value?.dispose?.();
+      mat.dispose();
+    };
+  }, [water]);
+
   // Sync sun direction on diurnal changes.
   useEffect(() => {
     const u = (water.material as THREE.ShaderMaterial).uniforms;
@@ -63,9 +65,5 @@ export default function Water({ size, sunDirection }: Props) {
     u.time.value += dt * 1.0;
   });
 
-  // Mark gl as needing the renderer reference (Water uses it internally for
-  // its render-to-texture reflection pass).
-  void gl;
-
-  return <primitive ref={ref} object={water} />;
+  return <primitive object={water} />;
 }

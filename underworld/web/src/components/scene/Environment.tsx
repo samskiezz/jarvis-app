@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -94,6 +94,16 @@ function Road({ from, to, width = 1.8 }: { from: [number, number, number]; to: [
     });
     return { diff: clones[0], norm: clones[1], rough: clones[2] };
   }, [tex, len]);
+
+  // Release the cloned textures on unmount / dep change so re-seeding the
+  // world doesn't accumulate orphaned road textures.
+  useEffect(() => {
+    return () => {
+      local.diff.dispose();
+      local.norm.dispose();
+      local.rough.dispose();
+    };
+  }, [local]);
 
   return (
     <mesh
