@@ -39,3 +39,4 @@ server/.pytest_cache/
 
 # Local dev env (committed via .env.example)
 .env.local
+underworld/web/public/models/generated/_tmp/

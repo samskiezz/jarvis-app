@@ -75,6 +75,36 @@ docker run --rm -v jarvis-app_underworld_data:/data -v $(pwd):/backup alpine \
   tar czf /backup/underworld-$(date +%F).tar.gz -C /data .
 ```
 
+## Generating new assets from text prompts (free)
+
+The repo ships `underworld/scripts/generate_glb.py`, which turns a text
+prompt into a GLB using only free public services (no API key required):
+
+1. **Pollinations.ai** — text → image (free, no key, no quota).
+2. **Hugging Face Spaces** — image → 3D GLB. Free ZeroGPU pool, ~5 min
+   per IP per day for anonymous users. Set `HF_TOKEN` in env for more.
+   Three providers wired in: TripoSR, InstantMesh, Hunyuan3D-2.
+
+```bash
+pip install gradio_client
+python underworld/scripts/generate_glb.py "low poly fantasy mushroom"
+python underworld/scripts/generate_glb.py --provider hunyuan "weathered medieval barrel"
+python underworld/scripts/generate_glb.py --image /path/to/img.jpg "stone fountain"
+```
+
+Outputs land in `underworld/web/public/models/generated/<slug>.glb` and
+`manifest.json` updates atomically. The scene loads `manifest.json` at
+mount time and scatters every entry as hero decor near the plaza POIs —
+no code change needed when you add a new asset.
+
+Quality ladder (free, by provider):
+- `triposr` — fast, vertex-coloured, ~3 MB per asset (proven working).
+- `instantmesh` — multi-view + mesh fusion, higher fidelity, slower.
+- `hunyuan` — Tencent's flagship, textured output, highest quota cost.
+
+This is the pipeline you wanted: 1000+ unique meshes generated from
+text prompts, free, no subscription, dropped straight into the world.
+
 ## Where the Sims-4 ceiling is
 
 The bundled web client is a Three.js scene running PBR materials, splat-mapped

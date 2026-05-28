@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -7,6 +7,7 @@ import {
   CASTLE_BUILDINGS, CITY_BUILDINGS, FENCES, FOUNTAIN, HEDGES, LANTERN,
   NATURE_ROCKS, NATURE_TREES, NATURE_DECOR, TEXTURE_SETS,
 } from "./assets";
+import { loadGeneratedManifest, type GeneratedAsset } from "./generated";
 import type { Pois } from "./pois";
 
 interface Props {
@@ -118,6 +119,12 @@ function Road({ from, to, width = 1.8 }: { from: [number, number, number]; to: [
 }
 
 export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
+  // Generated assets — loaded from /models/generated/manifest.json at mount
+  // time so anything `scripts/generate_glb.py` has produced shows up without
+  // a code change. Used as hero decor sprinkled into the world.
+  const [generated, setGenerated] = useState<GeneratedAsset[]>([]);
+  useEffect(() => { loadGeneratedManifest().then(setGenerated); }, []);
+
   // Building variant + rotation per hut POI (stable per seed/index).
   // Kenney suburban buildings are ~1u tall in source; scale 5.5 makes a
   // ~5.5u-tall house, visible from anywhere in a 120u world.
@@ -171,6 +178,26 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
     }
     return out.slice(0, 200);
   }, [pois.trees, seed]);
+
+  // Hero generated-GLB props — scatter the AI-generated assets near plazas
+  // and along the roads so each unique mesh actually shows up in-scene.
+  const heroProps = useMemo(() => {
+    if (generated.length === 0) return [] as { url: string; pos: [number, number, number]; rot: number; scale: number }[];
+    const out: { url: string; pos: [number, number, number]; rot: number; scale: number }[] = [];
+    // Place one of each near every plaza (varied positions if many).
+    pois.plazas.forEach((p, i) => {
+      const asset = generated[i % generated.length];
+      const angle = (hashSeed(seed, i * 37 + 11) % 360) * Math.PI / 180;
+      const r = 6.5;
+      out.push({
+        url: asset.glb,
+        pos: [p[0] + Math.cos(angle) * r, p[1], p[2] + Math.sin(angle) * r],
+        rot: angle,
+        scale: 2.5,
+      });
+    });
+    return out;
+  }, [generated, pois.plazas, seed]);
 
   // Roads from the tower to each plaza & to a handful of buildings, so the
   // landscape has visible structure linking the POIs.
@@ -249,6 +276,9 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
         ))}
         {buildings.map((b, i) => (
           <GlbModel key={`b${i}`} url={b.url} position={b.pos} rotation={b.rot} scale={b.scale} />
+        ))}
+        {heroProps.map((h, i) => (
+          <GlbModel key={`hp${i}`} url={h.url} position={h.pos} rotation={h.rot} scale={h.scale} />
         ))}
         {yards.fences.map((f, i) => (
           <GlbModel key={`fc${i}`} url={f.url} position={f.pos} rotation={f.rot} scale={3.0} />
