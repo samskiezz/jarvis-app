@@ -16,6 +16,7 @@ import Sparkline from "@/components/Sparkline";
 import StatCard from "@/components/ui/StatCard";
 import Tabs from "@/components/ui/Tabs";
 import WorldScene3D from "@/components/scene/WorldScene3D";
+import PixelStreamingViewer from "@/components/scene/PixelStreamingViewer";
 import { useWorldStream } from "@/lib/hooks";
 import type { Guild, Mood, SwarmRole, TaskStatus } from "@/lib/types";
 
@@ -49,6 +50,13 @@ export default function WorldDetail() {
   const [guildFilter, setGuildFilter] = useState<Guild | "all">("all");
   const [roleFilter, setRoleFilter] = useState<SwarmRole | "all">("all");
   const [view, setView] = useState<View>("overview");
+  // Renderer tier: "webgl" runs the in-browser Three.js scene (free, low-spec).
+  // "pixelstream" embeds an Unreal Engine 5 stream from a GPU host — same
+  // technique Fortnite UEFN previews / GeForce Now / Roblox Studio web use.
+  // The streamer URL is configurable so different deployments can point at
+  // different GPU hosts (e.g. projectsolar.cloud once Pixel Streaming is up).
+  const [renderTier, setRenderTier] = useState<"webgl" | "pixelstream">("webgl");
+  const pixelStreamUrl = import.meta.env.VITE_UNDERWORLD_PIXELSTREAM_URL as string | undefined;
 
   const world = useQuery({
     queryKey: ["world", id],
@@ -271,12 +279,37 @@ export default function WorldDetail() {
           <section className="panel">
             <div className="panel-header">
               <span>World</span>
-              <span>
-                {filteredMinions.filter((m) => m.alive).length} alive · {world.data.seed_class}
+              <span className="flex items-center gap-3">
+                <span>{filteredMinions.filter((m) => m.alive).length} alive · {world.data.seed_class}</span>
+                <span className="flex items-center gap-1 rounded-md border border-white/10 bg-black/20 px-1 py-0.5 text-[9px] uppercase tracking-widest">
+                  <button
+                    type="button"
+                    onClick={() => setRenderTier("webgl")}
+                    className={`px-2 py-0.5 rounded ${renderTier === "webgl" ? "bg-glow-jade/30 text-glow-jade" : "text-zinc-500"}`}
+                  >
+                    webgl
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRenderTier("pixelstream")}
+                    disabled={!pixelStreamUrl}
+                    title={pixelStreamUrl ? "Stream UE5 from GPU host" : "Set VITE_UNDERWORLD_PIXELSTREAM_URL to enable"}
+                    className={`px-2 py-0.5 rounded ${renderTier === "pixelstream" ? "bg-glow-amber/30 text-glow-amber" : "text-zinc-500"} disabled:opacity-40 disabled:cursor-not-allowed`}
+                  >
+                    ue5 ▶
+                  </button>
+                </span>
               </span>
             </div>
             <div className="p-4">
-              {map.data ? (
+              {renderTier === "pixelstream" && pixelStreamUrl ? (
+                <PixelStreamingViewer
+                  signalingUrl={pixelStreamUrl}
+                  worldId={id}
+                  width={900}
+                  height={560}
+                />
+              ) : map.data ? (
                 <WorldScene3D
                   grid={map.data.heightmap}
                   minions={minions.data ?? []}

@@ -2,7 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment as DreiEnvironment, Html, OrbitControls } from "@react-three/drei";
 import {
-  Bloom, EffectComposer, N8AO, SMAA, ToneMapping, Vignette,
+  Bloom, DepthOfField, EffectComposer, N8AO, SMAA, SSR, ToneMapping, Vignette,
 } from "@react-three/postprocessing";
 import { BlendFunction, ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
@@ -282,10 +282,12 @@ export default function WorldScene3D({
               maxPolarAngle={Math.PI * 0.48}
             />
           )}
-          {/* Post-processing stack: N8AO grounds objects in their shadows,
-              SMAA cleans aliased edges (better than MSAA at this distance),
-              bloom blooms the obelisk + emissives, vignette + ACES gives the
-              cinematic finish. */}
+          {/* Post stack — modern WebGL ceiling. N8AO grounds objects in
+              their crevices, SSR adds screen-space reflections on the
+              shinier materials (wet road, glass, water), DepthOfField
+              gives the cinematic falloff Sims-style cameras have, SMAA
+              cleans edges, bloom haloes the obelisk + sun, vignette + ACES
+              finishes. */}
           <EffectComposer multisampling={0} enableNormalPass>
             <N8AO
               aoRadius={2.5}
@@ -294,6 +296,25 @@ export default function WorldScene3D({
               quality="high"
               halfRes={false}
               color="black"
+            />
+            <SSR
+              intensity={0.45}
+              maxRoughness={0.5}
+              thickness={0.5}
+              ior={1.45}
+              jitter={0.7}
+              jitterRoughness={0.5}
+              steps={20}
+              refineSteps={5}
+              missedRays={false}
+              useNormalMap
+              useRoughnessMap
+            />
+            <DepthOfField
+              focusDistance={0.02}
+              focalLength={0.04}
+              bokehScale={2.5}
+              height={480}
             />
             <Bloom
               luminanceThreshold={isNight ? 0.4 : 0.7}
