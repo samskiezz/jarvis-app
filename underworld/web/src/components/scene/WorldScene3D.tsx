@@ -310,12 +310,9 @@ export default function WorldScene3D({
               useNormalMap
               useRoughnessMap
             />
-            <DepthOfField
-              focusDistance={0.02}
-              focalLength={0.04}
-              bokehScale={2.5}
-              height={480}
-            />
+            {/* DoF reads as out-of-focus mush at orbit distance — only worth
+                running in character-follow mode where there's a clear
+                subject. Re-enable behind a flag if you want it. */}
             <Bloom
               luminanceThreshold={isNight ? 0.4 : 0.7}
               luminanceSmoothing={0.5}
