@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { appParams } from '@/lib/app-params';
 
-const C = { neon: '#00c878', red: '#e8203c', text: '#a8bcc8' };
+const C = { neon: '#00c878', red: '#e8203c', text: '#a8bcc8', gold: '#e8a800' };
+
+const authRequired = String(import.meta.env.VITE_REQUIRE_AUTH || '').toLowerCase() === 'true';
 
 const SubmitKey = ({ onSubmitted }) => {
   const [key, setKey] = useState('');
@@ -28,7 +30,7 @@ const SubmitKey = ({ onSubmitted }) => {
       <div style={{ width: 360, padding: 24, border: `1px solid ${C.neon}33`, borderRadius: 4, background: 'rgba(4,10,16,0.95)' }}>
         <div style={{ color: C.neon, fontSize: 11, letterSpacing: 4, marginBottom: 16, fontWeight: 'bold' }}>JARVIS · ACCESS</div>
         <div style={{ color: C.text, fontSize: 9, marginBottom: 18, lineHeight: 1.6 }}>
-          Enter your API key to unlock the terminal. The key is validated against the local backend at
+          Enter your API key to unlock the terminal. The key is validated against the configured backend at
           <code style={{ color: C.neon, marginLeft: 4 }}>{appParams.apiBaseUrl}/auth/me</code>.
         </div>
         <input
@@ -92,6 +94,10 @@ const Banner = ({ children, color }) => (
 
 export default function AuthGate({ children }) {
   const { isAuthenticated, isLoadingAuth, authError, checkAppState } = useAuth();
+
+  // Local/dev/playable mode must not be blocked by a backend/API key requirement.
+  // Set VITE_REQUIRE_AUTH=true only when the deployed build must force authentication.
+  if (!authRequired) return children;
 
   if (isLoadingAuth) return <Banner color={C.text}>· AUTH CHECK ·</Banner>;
   if (!appParams.apiKey) return <SubmitKey onSubmitted={checkAppState} />;
