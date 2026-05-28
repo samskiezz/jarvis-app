@@ -4,7 +4,8 @@ import { useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import GlbModel from "./GlbModel";
 import {
-  CASTLE_BUILDINGS, CITY_BUILDINGS, FENCES, FOUNTAIN, HEDGES, LANTERN,
+  CASTLE_BUILDINGS, CITY_BUILDINGS, COMMERCIAL_BUILDINGS, SKYSCRAPERS,
+  FENCES, FOUNTAIN, HEDGES, LANTERN,
   NATURE_ROCKS, NATURE_TREES, NATURE_DECOR, TEXTURE_SETS,
 } from "./assets";
 import { loadGeneratedManifest, type GeneratedAsset } from "./generated";
@@ -125,18 +126,34 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
   const [generated, setGenerated] = useState<GeneratedAsset[]>([]);
   useEffect(() => { loadGeneratedManifest().then(setGenerated); }, []);
 
-  // Building variant + rotation per hut POI (stable per seed/index).
-  // Kenney suburban buildings are ~1u tall in source; scale 5.5 makes a
-  // ~5.5u-tall house, visible from anywhere in a 120u world.
-  const buildings = useMemo(() =>
-    pois.huts.map((h, i) => {
+  // Building variant + rotation per hut POI, zoned by distance from the
+  // central obelisk so the town reads as concentric districts:
+  //   ring 0 (≤22u)  → tall skyscrapers (5 variants: guild HQs / university)
+  //   ring 1 (22–55) → commercial low-rise (markets, shops, schools)
+  //   ring 2 (>55)   → suburban residential houses
+  const buildings = useMemo(() => {
+    return pois.huts.map((h, i) => {
       const h0 = hashSeed(seed, i * 7 + 1);
-      const variant = CITY_BUILDINGS[h0 % CITY_BUILDINGS.length];
-      const scale = 5.5 + ((h0 >> 8) & 0x3f) / 60;
-      return { url: variant, pos: h.pos, rot: h.rot, scale };
-    }),
-    [pois.huts, seed],
-  );
+      const distFromCenter = Math.hypot(h.pos[0] - pois.obelisk[0], h.pos[2] - pois.obelisk[2]);
+      let pool: readonly string[];
+      let scale: number;
+      let zone: "residential" | "commercial" | "skyscraper";
+      if (distFromCenter < 24) {
+        pool = SKYSCRAPERS;
+        scale = 5.5 + ((h0 >> 8) & 0x3f) / 30; // tall
+        zone = "skyscraper";
+      } else if (distFromCenter < 55) {
+        pool = COMMERCIAL_BUILDINGS;
+        scale = 4.5 + ((h0 >> 8) & 0x3f) / 60;
+        zone = "commercial";
+      } else {
+        pool = CITY_BUILDINGS;
+        scale = 5.5 + ((h0 >> 8) & 0x3f) / 60;
+        zone = "residential";
+      }
+      return { url: pool[h0 % pool.length], pos: h.pos, rot: h.rot, scale, zone };
+    });
+  }, [pois.huts, pois.obelisk, seed]);
 
   const trees = useMemo(() =>
     pois.trees.map((t, i) => {

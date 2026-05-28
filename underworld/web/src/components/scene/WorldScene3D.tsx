@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment as DreiEnvironment, Html, OrbitControls } from "@react-three/drei";
 import {
@@ -14,6 +14,9 @@ import MinionAvatar from "./MinionAvatar";
 import { computePois, destinationForAction } from "./pois";
 import Weather, { weatherFor, type WeatherKind } from "./Weather";
 import Water from "./Water";
+import CelestialBodies from "./CelestialBodies";
+import Vehicles from "./Vehicles";
+import CharacterController from "./CharacterController";
 import { HDRI_SKY } from "./assets";
 
 interface Props {
@@ -29,9 +32,9 @@ interface Props {
   biomeHint?: string;
 }
 
-const WORLD_SIZE = 120;      // world units across — was 40; tripled
-const AMPLITUDE = 9.0;       // taller hills now that the world is bigger
-const ARRIVAL_RADIUS = 4.0;
+const WORLD_SIZE = 240;      // 6× the original 40u → city-scale, room for districts
+const AMPLITUDE = 14.0;      // taller hills + mountains in the outer ring
+const ARRIVAL_RADIUS = 5.0;
 
 function hash(s: string): number {
   let h = 2166136261 >>> 0;
@@ -107,6 +110,27 @@ export default function WorldScene3D({
   biomeHint,
 }: Props) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  // Shared refs the selected MinionAvatar mutates (its world position) and
+  // the WASD listener mutates (a unit-vector control input). Both live as
+  // refs because they update every frame and don't need React re-renders.
+  const selectedPosRef = useRef(new THREE.Vector3());
+  const controlInputRef = useRef(new THREE.Vector3());
+  // Track whether the user is actively driving the selected character; if
+  // not, OrbitControls is in charge of the camera.
+  const [controlMode, setControlMode] = useState(false);
+  // ESC releases control. Selecting a different minion or deselecting also
+  // exits the mode so the camera doesn't end up tracking nothing.
+  useEffect(() => {
+    if (!controlMode) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setControlMode(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [controlMode]);
+  useEffect(() => {
+    if (controlMode && !selectedId) setControlMode(false);
+  }, [controlMode, selectedId]);
 
   const pois = useMemo(
     () => computePois(grid, WORLD_SIZE, AMPLITUDE, seed),
@@ -182,14 +206,25 @@ export default function WorldScene3D({
             environmentRotation={[0, (tick % 80) / 80 * Math.PI * 2, 0]}
           />
           <Lights tick={tick} size={WORLD_SIZE} />
+          <CelestialBodies tick={tick} size={WORLD_SIZE} />
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
           <Water size={WORLD_SIZE} sunDirection={sunNorm} />
           <WorldEnvironment pois={pois} size={WORLD_SIZE} seed={seed} tick={tick} />
+          <Vehicles
+            size={WORLD_SIZE}
+            seed={seed}
+            loops={[
+              { center: [pois.obelisk[0], pois.obelisk[2]], radius: 26, clockwise: true },
+              { center: [pois.obelisk[0], pois.obelisk[2]], radius: 48, clockwise: false },
+              { center: [pois.obelisk[0], pois.obelisk[2]], radius: 72, clockwise: true },
+            ]}
+          />
           <Weather kind={weather} size={WORLD_SIZE} />
           {placements.map((p) => {
             const dx = p.target ? p.target[0] - p.home[0] : 0;
             const dz = p.target ? p.target[2] - p.home[2] : 0;
             const at = !p.target || Math.hypot(dx, dz) < ARRIVAL_RADIUS;
+            const isSelected = p.minion.id === selectedId;
             return (
               <MinionAvatar
                 key={p.minion.id}
@@ -198,7 +233,10 @@ export default function WorldScene3D({
                 targetPosition={p.target}
                 atDestination={at}
                 actionName={actionByMinion?.[p.minion.id]}
-                selected={p.minion.id === selectedId}
+                selected={isSelected}
+                controlled={isSelected && controlMode}
+                positionRef={isSelected ? selectedPosRef : undefined}
+                controlInputRef={isSelected && controlMode ? controlInputRef : undefined}
                 onClick={(id) => {
                   onSelect(id);
                   setHoveredId(id);
@@ -206,6 +244,13 @@ export default function WorldScene3D({
               />
             );
           })}
+          {controlMode && selectedId ? (
+            <CharacterController
+              selectedId={selectedId}
+              position={selectedPosRef.current}
+              controlInputRef={controlInputRef}
+            />
+          ) : null}
           {selected ? (
             <Html
               position={[selected.home[0], selected.home[1] + 3.6, selected.home[2]]}
@@ -226,15 +271,17 @@ export default function WorldScene3D({
               </div>
             </Html>
           ) : null}
-          <OrbitControls
-            target={[0, 2, 0]}
-            enablePan
-            enableDamping
-            dampingFactor={0.08}
-            minDistance={WORLD_SIZE * 0.15}
-            maxDistance={WORLD_SIZE * 1.6}
-            maxPolarAngle={Math.PI * 0.48}
-          />
+          {!controlMode && (
+            <OrbitControls
+              target={[0, 2, 0]}
+              enablePan
+              enableDamping
+              dampingFactor={0.08}
+              minDistance={WORLD_SIZE * 0.08}
+              maxDistance={WORLD_SIZE * 1.6}
+              maxPolarAngle={Math.PI * 0.48}
+            />
+          )}
           {/* Post-processing stack: N8AO grounds objects in their shadows,
               SMAA cleans aliased edges (better than MSAA at this distance),
               bloom blooms the obelisk + emissives, vignette + ACES gives the
@@ -266,8 +313,20 @@ export default function WorldScene3D({
         {weather !== "clear" ? ` · ${weather}` : ""}
       </div>
       <div className="pointer-events-none absolute bottom-3 left-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
-        drag to orbit · scroll to zoom · click a minion to inspect
+        {controlMode
+          ? "WASD/arrows move · Q/E rotate · ESC release"
+          : "drag to orbit · scroll to zoom · click a minion to inspect"}
       </div>
+      {/* Take-control button — enabled only when a minion is selected. */}
+      {selectedId ? (
+        <button
+          type="button"
+          onClick={() => setControlMode((v) => !v)}
+          className="absolute bottom-3 right-3 rounded-md border border-glow-amber/40 bg-glow-amber/15 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-glow-amber backdrop-blur hover:bg-glow-amber/25"
+        >
+          {controlMode ? "release control" : "take control"}
+        </button>
+      ) : null}
       {hoveredId && hoveredId !== selectedId ? (
         <div className="pointer-events-none absolute right-3 bottom-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
           selecting…

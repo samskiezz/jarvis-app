@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -68,6 +68,15 @@ interface Props {
   atDestination: boolean;
   actionName?: string;
   selected: boolean;
+  /** When true, this minion ignores its AI target and follows user WASD
+   * input from controlInputRef instead. */
+  controlled?: boolean;
+  /** If provided, the avatar writes its current world position into this
+   * ref each frame so the camera/HUD can track it. Only the selected
+   * minion gets one. */
+  positionRef?: MutableRefObject<THREE.Vector3>;
+  /** Unit XZ direction the user is pressing in control mode. */
+  controlInputRef?: MutableRefObject<THREE.Vector3>;
   onClick: (id: string) => void;
 }
 
@@ -80,6 +89,9 @@ export default function MinionAvatar({
   atDestination,
   actionName,
   selected,
+  controlled,
+  positionRef,
+  controlInputRef,
   onClick,
 }: Props) {
   const modelUrl = characterModelFor(minion.guild);
@@ -191,6 +203,26 @@ export default function MinionAvatar({
 
     if (!minion.alive) {
       g.position.set(basePosition[0], basePosition[1], basePosition[2]);
+      if (positionRef) positionRef.current.copy(g.position);
+      return;
+    }
+
+    // ── User-controlled mode: WASD overrides AI, walks the avatar directly. ──
+    if (controlled && controlInputRef) {
+      const input = controlInputRef.current;
+      const moving = input.lengthSq() > 0.01;
+      if (moving) {
+        const speed = 10;
+        g.position.x += input.x * speed * dt;
+        g.position.z += input.z * speed * dt;
+        const targetAngle = Math.atan2(input.x, input.z);
+        let diff = targetAngle - g.rotation.y;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        g.rotation.y += diff * Math.min(1, dt * 10);
+      }
+      g.position.y = basePosition[1];
+      if (positionRef) positionRef.current.copy(g.position);
       return;
     }
 
@@ -211,10 +243,7 @@ export default function MinionAvatar({
     const dx = tx - g.position.x;
     const dz = tz - g.position.z;
     const dist = Math.hypot(dx, dz);
-    // Walking speed depends on hunger/fatigue/mood — exhausted minions plod.
     const energy = Math.max(0.25, Math.min(1, (minion.hunger + minion.fatigue) * 0.5 + 0.2));
-    // World is ~120u across — bump walk speed so a minion can traverse it
-    // in a sensible amount of time. Wander speed stays gentle.
     const speed = (isWalking ? 8.0 : 2.5) * energy;
     if (dist > 0.01) {
       const step = Math.min(dist, speed * dt);
@@ -223,15 +252,15 @@ export default function MinionAvatar({
     }
     g.position.y = basePosition[1];
 
-    // Face direction of motion.
     if (dist > 0.05) {
       const targetAngle = Math.atan2(dx, dz);
-      // shortest-arc lerp
       let diff = targetAngle - g.rotation.y;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;
       g.rotation.y += diff * Math.min(1, dt * 6);
     }
+
+    if (positionRef) positionRef.current.copy(g.position);
   });
 
   const ringColor = MOOD_RING[minion.mood] ?? "#888888";

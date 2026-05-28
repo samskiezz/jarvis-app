@@ -38,7 +38,7 @@ export function characterModelFor(guild: Guild): string {
 
 export const ALL_CHARACTER_MODELS: readonly string[] = Object.values(CHARACTER_BY_GUILD);
 
-// Suburban houses A..P from Kenney.
+// Suburban houses A..P from Kenney — residential outer ring.
 export const CITY_BUILDINGS: readonly string[] = [
   "/models/kenney/city-kit-suburban/building-type-a.glb",
   "/models/kenney/city-kit-suburban/building-type-b.glb",
@@ -56,6 +56,60 @@ export const CITY_BUILDINGS: readonly string[] = [
   "/models/kenney/city-kit-suburban/building-type-n.glb",
   "/models/kenney/city-kit-suburban/building-type-o.glb",
   "/models/kenney/city-kit-suburban/building-type-p.glb",
+];
+
+// Commercial shops + offices A..N — middle ring (markets, schools, libraries).
+export const COMMERCIAL_BUILDINGS: readonly string[] = [
+  "/models/kenney/city-kit-commercial/building-a.glb",
+  "/models/kenney/city-kit-commercial/building-b.glb",
+  "/models/kenney/city-kit-commercial/building-c.glb",
+  "/models/kenney/city-kit-commercial/building-d.glb",
+  "/models/kenney/city-kit-commercial/building-e.glb",
+  "/models/kenney/city-kit-commercial/building-f.glb",
+  "/models/kenney/city-kit-commercial/building-g.glb",
+  "/models/kenney/city-kit-commercial/building-h.glb",
+  "/models/kenney/city-kit-commercial/building-i.glb",
+  "/models/kenney/city-kit-commercial/building-j.glb",
+  "/models/kenney/city-kit-commercial/building-k.glb",
+  "/models/kenney/city-kit-commercial/building-l.glb",
+  "/models/kenney/city-kit-commercial/building-m.glb",
+  "/models/kenney/city-kit-commercial/building-n.glb",
+];
+
+// Skyscrapers — inner ring around the obelisk. Universities, guild HQs.
+export const SKYSCRAPERS: readonly string[] = [
+  "/models/kenney/city-kit-commercial/building-skyscraper-a.glb",
+  "/models/kenney/city-kit-commercial/building-skyscraper-b.glb",
+  "/models/kenney/city-kit-commercial/building-skyscraper-c.glb",
+  "/models/kenney/city-kit-commercial/building-skyscraper-d.glb",
+  "/models/kenney/city-kit-commercial/building-skyscraper-e.glb",
+];
+
+// Road tiles for the street grid. All 4×4u in source; we lay them edge-to-edge.
+export const ROAD_TILES = {
+  straight:  "/models/kenney/city-kit-roads/road-straight.glb",
+  bend:      "/models/kenney/city-kit-roads/road-bend.glb",
+  crossroad: "/models/kenney/city-kit-roads/road-crossroad.glb",
+  tjunction: "/models/kenney/city-kit-roads/road-intersection.glb",
+  end:       "/models/kenney/city-kit-roads/road-end.glb",
+} as const;
+
+// Drivable vehicle GLBs — exclude debris/wheels/cones.
+export const CARS: readonly string[] = [
+  "/models/kenney/car-kit/sedan.glb",
+  "/models/kenney/car-kit/sedan-sports.glb",
+  "/models/kenney/car-kit/hatchback-sports.glb",
+  "/models/kenney/car-kit/suv.glb",
+  "/models/kenney/car-kit/suv-luxury.glb",
+  "/models/kenney/car-kit/taxi.glb",
+  "/models/kenney/car-kit/police.glb",
+  "/models/kenney/car-kit/ambulance.glb",
+  "/models/kenney/car-kit/firetruck.glb",
+  "/models/kenney/car-kit/garbage-truck.glb",
+  "/models/kenney/car-kit/van.glb",
+  "/models/kenney/car-kit/delivery.glb",
+  "/models/kenney/car-kit/truck.glb",
+  "/models/kenney/car-kit/tractor.glb",
 ];
 
 // Castle towers / monumental architecture for the centre.
