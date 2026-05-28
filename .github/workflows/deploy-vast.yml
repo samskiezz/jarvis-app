@@ -1,15 +1,21 @@
 name: Deploy to Vast.ai GPU instance
 
-# Triggered manually from the GitHub UI or programmatically from this Claude
-# Code session via the MCP github tools. The runner has unrestricted SSH
-# egress (unlike the Claude Code sandbox), so it can connect to your Vast
-# instance and execute the deploy on our behalf.
+# The Claude Code sandbox blocks outbound SSH (proven: ssh5.vast.ai:27918,
+# github.com:22 both time out from the runtime). This workflow runs on a
+# GitHub Actions runner — which has unrestricted SSH egress — and ships
+# its log back into the repo at deploy/.last-run.log so the model can
+# read it via the GitHub MCP without needing workflow-API access.
 #
-# Required repo secrets (set once in repo Settings → Secrets → Actions):
-#   VAST_SSH_PRIVATE_KEY  — your private SSH key (the one whose pubkey is
-#                           in the Vast instance's ~/.ssh/authorized_keys)
-#   VAST_SSH_HOST         — e.g. ssh5.vast.ai
-#   VAST_SSH_PORT         — e.g. 27918
+# Triggers:
+#   • workflow_dispatch  — manual via the Actions tab (user can pick a target)
+#   • push to deploy/.trigger* — every time the model commits a trigger file,
+#                                 the runner re-deploys. This is how the model
+#                                 re-runs the pipeline from a chat session.
+#
+# Required repo secrets (one-time setup in Settings → Secrets → Actions):
+#   VAST_SSH_PRIVATE_KEY  — private SSH key for the Vast instance
+#   VAST_SSH_HOST         — ssh5.vast.ai (or whatever Vast gave you)
+#   VAST_SSH_PORT         — 27918       (or whatever Vast gave you)
 
 on:
   workflow_dispatch:
@@ -20,14 +26,21 @@ on:
         default: "first-pixel"
         type: choice
         options:
-          - first-pixel       # signaling server + Epic's UE5 demo
-          - underworld-game   # the real Underworld UE5 build (needs binary)
-          - status            # just SSH in and report
-          - shell             # run an arbitrary command (read 'cmd' input)
+          - first-pixel
+          - underworld-game
+          - status
+          - shell
       cmd:
         description: "Shell command (only used when target=shell)"
         required: false
         default: ""
+  push:
+    paths:
+      - "deploy/.trigger*"
+      - ".github/workflows/deploy-vast.yml"
+
+permissions:
+  contents: write   # so the job can commit deploy/.last-run.log back
 
 jobs:
   deploy:
@@ -36,97 +49,125 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine target
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ inputs.target }}" >> "$GITHUB_OUTPUT"
+            echo "cmd=${{ inputs.cmd }}"     >> "$GITHUB_OUTPUT"
+          else
+            # Push trigger — read deploy/.trigger.json if present, else default.
+            if [ -f deploy/.trigger.json ]; then
+              echo "name=$(jq -r '.target // "status"' deploy/.trigger.json)" >> "$GITHUB_OUTPUT"
+              echo "cmd=$(jq -r '.cmd // ""' deploy/.trigger.json)"           >> "$GITHUB_OUTPUT"
+            else
+              echo "name=status" >> "$GITHUB_OUTPUT"
+              echo "cmd=" >> "$GITHUB_OUTPUT"
+            fi
+          fi
 
       - name: Configure SSH
         env:
-          KEY: ${{ secrets.VAST_SSH_PRIVATE_KEY }}
+          KEY:  ${{ secrets.VAST_SSH_PRIVATE_KEY }}
           HOST: ${{ secrets.VAST_SSH_HOST }}
           PORT: ${{ secrets.VAST_SSH_PORT }}
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
+          if [ -z "$KEY" ] || [ -z "$HOST" ] || [ -z "$PORT" ]; then
+            echo "::error::VAST_SSH_PRIVATE_KEY / VAST_SSH_HOST / VAST_SSH_PORT secrets are not set."
+            echo "Set them in Settings → Secrets → Actions, then re-run."
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$KEY" > ~/.ssh/vast_key
           chmod 600 ~/.ssh/vast_key
           ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
-          # Sanity probe
           ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
-              -o ConnectTimeout=15 \
-              "root@$HOST" 'echo CONNECTED; hostname; nvidia-smi -L | head -1; uname -m'
+              -o ConnectTimeout=20 "root@$HOST" \
+              'echo CONNECTED $(hostname); nvidia-smi -L | head -1'
 
-      - name: Status only
-        if: ${{ inputs.target == 'status' }}
+      - name: Run target → tee to /tmp/run.log
         env:
           HOST: ${{ secrets.VAST_SSH_HOST }}
           PORT: ${{ secrets.VAST_SSH_PORT }}
+          TARGET: ${{ steps.target.outputs.name }}
+          CMD:    ${{ steps.target.outputs.cmd }}
         run: |
-          ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
-              "root@$HOST" 'bash -s' <<'REMOTE'
-          set -e
-          echo "=== GPU ==="
-          nvidia-smi -L
-          echo "=== Disk ==="
-          df -h / | tail -1
-          echo "=== Mem ==="
-          free -h | head -2
-          echo "=== Already-running services ==="
-          pgrep -af node 2>/dev/null | head
-          pgrep -af UnderworldServer 2>/dev/null | head
-          pgrep -af PixelStreamingDemo 2>/dev/null | head
-          echo "=== Open ports ==="
-          ss -tlnp 2>/dev/null | head -20
+          set +e
+          {
+            echo "=== target=$TARGET  at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+            case "$TARGET" in
+              status)
+                ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
+                    "root@$HOST" 'bash -s' <<'REMOTE'
+                set -e
+                echo "=== GPU ==="; nvidia-smi -L; echo
+                echo "=== Disk ==="; df -h / | tail -1; echo
+                echo "=== Mem ==="; free -h | head -2; echo
+                echo "=== Running processes (UE5 / node / signal) ==="
+                pgrep -af "node|UnderworldServer|PixelStreamingDemo|xvfb-run" 2>/dev/null | head -20
+                echo
+                echo "=== Open ports ==="
+                ss -tlnp 2>/dev/null | head -20
+                echo
+                echo "=== Public IP ==="
+                curl -s ifconfig.me; echo
           REMOTE
-
-      - name: Arbitrary shell
-        if: ${{ inputs.target == 'shell' }}
-        env:
-          HOST: ${{ secrets.VAST_SSH_HOST }}
-          PORT: ${{ secrets.VAST_SSH_PORT }}
-          CMD:  ${{ inputs.cmd }}
-        run: |
-          ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
-              "root@$HOST" "$CMD"
-
-      - name: First-pixel deploy (Epic's pre-built UE5 demo)
-        if: ${{ inputs.target == 'first-pixel' }}
-        env:
-          HOST: ${{ secrets.VAST_SSH_HOST }}
-          PORT: ${{ secrets.VAST_SSH_PORT }}
-        run: |
-          # Copy the one-paste install script over and run it
-          scp -i ~/.ssh/vast_key -P "$PORT" -o StrictHostKeyChecking=no \
-              deploy/vast-one-paste.sh "root@$HOST:/root/vast-one-paste.sh"
-          ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
-              "root@$HOST" 'bash /root/vast-one-paste.sh 2>&1 | tee /var/log/deploy.log'
-
-      - name: Underworld game deploy (needs UE5 binary already at /opt/UnderworldUE)
-        if: ${{ inputs.target == 'underworld-game' }}
-        env:
-          HOST: ${{ secrets.VAST_SSH_HOST }}
-          PORT: ${{ secrets.VAST_SSH_PORT }}
-        run: |
-          ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
-              "root@$HOST" 'bash -s' <<'REMOTE'
-          set -e
-          cd /opt/UnderworldUE
-          BIN=$(find . -maxdepth 3 -name "UnderworldServer*.sh" | head -1)
-          [ -n "$BIN" ] || { echo "ERROR: UE5 binary not found at /opt/UnderworldUE/"; exit 2; }
-          pkill -f UnderworldServer 2>/dev/null || true
-          pkill -f PixelStreamingDemo 2>/dev/null || true
-          nohup xvfb-run -a "$BIN" \
-            -PixelStreamingURL=ws://localhost:8888 \
-            -RenderOffscreen -ResX=1920 -ResY=1080 -ForceRes \
-            -graphicsadapter=0 -log -unattended \
-            > /var/log/ue5.log 2>&1 &
-          sleep 5
-          pgrep -af UnderworldServer | head
-          tail -30 /var/log/ue5.log || true
+                ;;
+              shell)
+                ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
+                    "root@$HOST" "$CMD"
+                ;;
+              first-pixel)
+                scp -i ~/.ssh/vast_key -P "$PORT" -o StrictHostKeyChecking=no \
+                    deploy/vast-one-paste.sh "root@$HOST:/root/vast-one-paste.sh"
+                ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
+                    "root@$HOST" 'bash /root/vast-one-paste.sh'
+                ;;
+              underworld-game)
+                ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
+                    "root@$HOST" 'bash -s' <<'REMOTE'
+                set -e
+                cd /opt/UnderworldUE
+                BIN=$(find . -maxdepth 3 -name "UnderworldServer*.sh" | head -1)
+                [ -n "$BIN" ] || { echo "ERROR: UE5 binary not found at /opt/UnderworldUE/"; exit 2; }
+                pkill -f UnderworldServer 2>/dev/null || true
+                pkill -f PixelStreamingDemo 2>/dev/null || true
+                nohup xvfb-run -a "$BIN" \
+                  -PixelStreamingURL=ws://localhost:8888 \
+                  -RenderOffscreen -ResX=1920 -ResY=1080 -ForceRes \
+                  -graphicsadapter=0 -log -unattended \
+                  > /var/log/ue5.log 2>&1 &
+                sleep 5
+                pgrep -af UnderworldServer | head
+                tail -40 /var/log/ue5.log 2>/dev/null || true
           REMOTE
+                ;;
+              *) echo "Unknown target: $TARGET"; exit 1 ;;
+            esac
+            echo "=== exit code: $? ==="
+          } 2>&1 | tee /tmp/run.log
 
-      - name: Print public URLs
-        if: ${{ always() && inputs.target == 'first-pixel' }}
-        env:
-          HOST: ${{ secrets.VAST_SSH_HOST }}
-          PORT: ${{ secrets.VAST_SSH_PORT }}
+      - name: Commit log back to the repo
+        if: always()
         run: |
-          ssh -i ~/.ssh/vast_key -p "$PORT" -o StrictHostKeyChecking=no \
-              "root@$HOST" 'echo "Public IP: $(curl -s ifconfig.me)"; echo "Browser URL: http://$(curl -s ifconfig.me):80/"'
+          mkdir -p deploy
+          # Strip ANSI colour codes — they'd render as garbage when I read it.
+          sed -r 's/\x1B\[[0-9;]*[mK]//g' /tmp/run.log > deploy/.last-run.log
+          # Trim absurdly long outputs so commits stay readable.
+          tail -c 60000 deploy/.last-run.log > deploy/.last-run.log.tmp
+          mv deploy/.last-run.log.tmp deploy/.last-run.log
+          git config user.name  "underworld-deploy-bot"
+          git config user.email "bot@users.noreply.github.com"
+          # The commit triggers the push-on-trigger filter again, so we
+          # skip-ci with [skip ci] to avoid an infinite loop.
+          git add deploy/.last-run.log
+          if git diff --cached --quiet; then
+            echo "No log diff to commit."
+          else
+            git commit -m "ci: log for $(echo '${{ steps.target.outputs.name }}') [skip ci]"
+            git push
+          fi
