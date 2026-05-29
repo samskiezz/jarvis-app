@@ -44,7 +44,11 @@ class Settings(BaseSettings):
     # LLM (Kimi K2)
     kimi_base_url: str = "https://api.moonshot.ai/v1"
     kimi_api_key: str = ""
-    kimi_model: str = "kimi-k2-0905-preview"
+    # moonshot-v1-32k is a non-reasoning chat model that emits content
+    # directly (not via reasoning_content) and accepts the agent's prompt
+    # format + temperature=0.7. The k2.x reasoning models leave content
+    # empty until they finish reasoning, which blows our 512-token budget.
+    kimi_model: str = "moonshot-v1-32k"
     kimi_temperature: float = 0.7
     kimi_max_tokens: int = 1024
 
