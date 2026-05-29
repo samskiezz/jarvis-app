@@ -1,7 +1,20 @@
 def test_root_open(client):
+    # `/` either serves the React bundle (`text/html`) when present in
+    # underworld/web/dist or returns the service descriptor as JSON. Both
+    # paths are 200 + unauthenticated — that's what the test cares about.
     res = client.get("/")
     assert res.status_code == 200
-    assert res.json()["service"] == "underworld"
+    content_type = res.headers.get("content-type", "")
+    if "application/json" in content_type:
+        assert res.json()["service"] == "underworld"
+    else:
+        assert "html" in content_type.lower()
+
+
+def test_healthz_open(client):
+    res = client.get("/healthz")
+    assert res.status_code == 200
+    assert res.json() == {"ok": True}
 
 
 def test_auth_required(client):

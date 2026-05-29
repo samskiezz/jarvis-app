@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db.models import Event, Invention, Minion, Skill, Soul, World
+from ..db.models import CauseOfDeath, Event, Invention, Minion, Skill, Soul, TaskStatus, World
 
 
 # ── Era progression ──────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ async def update_era(session: AsyncSession, world: World) -> str | None:
         select(func.count(Minion.id)).where(Minion.world_id == world.id, Minion.alive.is_(True))
     ) or 0)
     approved = int(await session.scalar(
-        select(func.count(Invention.id)).where(Invention.world_id == world.id, Invention.status == "approved")
+        select(func.count(Invention.id)).where(Invention.world_id == world.id, Invention.status == TaskStatus.APPROVED)
     ) or 0)
     avg_skill = float(await session.scalar(
         select(func.coalesce(func.avg(Skill.level), 0.0))
@@ -139,7 +139,7 @@ async def can_ascend(session: AsyncSession, minion: Minion, world: World) -> tup
     inventor_inv = int(await session.scalar(
         select(func.count(Invention.id)).where(
             Invention.minion_id == minion.id,
-            Invention.status == "approved",
+            Invention.status == TaskStatus.APPROVED,
         )
     ) or 0)
     if inventor_inv < ASCEND_MIN_INVENTIONS_APPROVED:
@@ -170,6 +170,10 @@ async def try_ascend(session: AsyncSession, minion: Minion, world: World) -> tup
     )[-2000:]
     minion.alive = False
     minion.died_tick = world.tick
+    # Doc II.37-39: ascension is a flavour of death — the body dies but the
+    # soul ascends. Without this the genealogy / death-cause queries that
+    # filter on `cause_of_death is not None` silently drop ascended minions.
+    minion.cause_of_death = CauseOfDeath.ASCENDED
     session.add(Event(
         world_id=world.id,
         tick=world.tick,

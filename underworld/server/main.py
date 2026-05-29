@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from .config import get_settings
 from .db.session import dispose, init_db
@@ -21,6 +24,12 @@ from .routes import projects as project_routes
 from .routes import safety as safety_routes
 from .routes import worlds as world_routes
 from .services import scheduler
+
+# When the React bundle is co-located (Docker build copies it to
+# underworld/web/dist), serve it directly so a single port behind Caddy
+# is enough — Caddy's /assets/* and /models/* handlers reverse-proxy
+# here without a separate static server.
+_WEB_DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
 
 
 @asynccontextmanager
@@ -63,13 +72,44 @@ def create_app() -> FastAPI:
     app.include_router(knowledge_routes.router)
     app.include_router(project_routes.router)
 
-    @app.get("/")
-    async def root():
-        return {"service": "underworld", "status": "ok", "version": app.version}
-
     @app.get("/healthz")
     async def healthz():
         return {"ok": True}
+
+    # When the built React bundle is present, mount its /assets and /models
+    # directly + fall back to index.html on unknown paths so client-side
+    # routing works. Without the bundle (the usual `npm run dev` + uvicorn
+    # split), `/` returns the service descriptor as before.
+    if (_WEB_DIST / "index.html").exists():
+        if (_WEB_DIST / "assets").is_dir():
+            app.mount(
+                "/assets",
+                StaticFiles(directory=str(_WEB_DIST / "assets")),
+                name="web-assets",
+            )
+        if (_WEB_DIST / "models").is_dir():
+            app.mount(
+                "/models",
+                StaticFiles(directory=str(_WEB_DIST / "models")),
+                name="web-models",
+            )
+
+        @app.get("/", include_in_schema=False)
+        async def index():
+            return FileResponse(_WEB_DIST / "index.html")
+
+        @app.get("/{full_path:path}", include_in_schema=False)
+        async def spa_fallback(full_path: str):
+            # Static file under dist? Serve it. Otherwise hand back
+            # index.html so React Router can take over.
+            candidate = _WEB_DIST / full_path
+            if candidate.is_file():
+                return FileResponse(candidate)
+            return FileResponse(_WEB_DIST / "index.html")
+    else:
+        @app.get("/")
+        async def root():
+            return {"service": "underworld", "status": "ok", "version": app.version}
 
     return app
 

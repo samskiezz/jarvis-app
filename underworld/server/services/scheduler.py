@@ -61,7 +61,13 @@ def publish(world_id: str, event: dict) -> None:
                 q.get_nowait()
             except asyncio.QueueEmpty:
                 pass
-        q.put_nowait(event)
+        # Drop new event if the queue is still full — the qsize check + get
+        # race can leave us at maxsize, and a bare put_nowait would raise
+        # QueueFull which cascades into the simulation tick.
+        try:
+            q.put_nowait(event)
+        except asyncio.QueueFull:
+            log.debug("bus.dropped", world_id=world_id, kind=event.get("kind"))
 
 
 async def subscribe(world_id: str) -> AsyncIterator[dict]:
