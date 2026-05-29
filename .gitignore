@@ -1,6 +1,9 @@
 #env
 .env
 .env.*
+# Keep documentation templates checked in — they tell devs what to set.
+!.env.example
+!.env.*.example
 
 # Logs
 /logs

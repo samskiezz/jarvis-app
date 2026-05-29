@@ -78,6 +78,11 @@ class Settings(BaseSettings):
     sim_max_ticks_per_request: int = 100
     sim_default_tick_seconds: float = 0.0
     sim_max_minions: int = 64
+    # The background auto-advance scheduler holds a session and re-runs
+    # every tick_resolution_s. In tests we run it on a single shared sqlite
+    # file across many TestClients, which causes "database is locked"
+    # contention with the request handlers. Set False from conftest.
+    scheduler_enabled: bool = True
     sim_population_floor_pct: float = Field(
         default=0.10,
         description=(

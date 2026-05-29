@@ -98,13 +98,19 @@ export default function WorldDetail() {
   const stream = useWorldStream(id, !!world.data?.auto_advance);
 
   const [ticks, setTicks] = useState(5);
+  const invalidateAll = () => {
+    qc.invalidateQueries({ queryKey: ["world", id] });
+    // The sidebar + Population + CommandCentre all read ["worlds"]; without
+    // this they show stale tick / auto_advance until the next 5s poll.
+    qc.invalidateQueries({ queryKey: ["worlds"] });
+  };
   const advance = useMutation({
     mutationFn: () => api.advance(id, ticks),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["world", id] }),
+    onSuccess: invalidateAll,
   });
   const autoToggle = useMutation({
     mutationFn: (next: boolean) => api.setAutoAdvance(id, next),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["world", id] }),
+    onSuccess: invalidateAll,
   });
 
   const aliveSeries = useMemo(() => pop.data?.history.map((s) => s.alive) ?? [], [pop.data]);

@@ -28,9 +28,11 @@ async def lifespan(_app: FastAPI):
     configure_logging()
     await init_db()
     await seed_knowledge_base()
-    scheduler.start()
+    if get_settings().scheduler_enabled:
+        scheduler.start()
     yield
-    await scheduler.stop()
+    if get_settings().scheduler_enabled:
+        await scheduler.stop()
     await dispose()
 
 

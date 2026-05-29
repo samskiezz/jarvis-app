@@ -23,6 +23,9 @@ export default function Water({ size, sunDirection }: Props) {
     normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
   }, [normalMap]);
 
+  // sunDirection is intentionally not a dep — the diurnal cycle would
+  // recreate the Water mesh (and its 512×512 reflection target) every frame.
+  // The useEffect below syncs the sun uniform without a rebuild.
   const water = useMemo(() => {
     const geom = new THREE.PlaneGeometry(size * 1.6, size * 1.6);
     const w = new ThreeWater(geom, {
@@ -38,6 +41,7 @@ export default function Water({ size, sunDirection }: Props) {
     w.rotation.x = -Math.PI / 2;
     w.position.y = 0.05;
     return w;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [normalMap, size]);
 
   // Release the reflection RenderTarget + ShaderMaterial + PlaneGeometry when

@@ -19,6 +19,10 @@ _TMP.close()
 os.environ["UNDERWORLD_API_KEY"] = "test-key"
 os.environ["UNDERWORLD_DB_PATH"] = _TMP.name
 os.environ.pop("UNDERWORLD_KIMI_API_KEY", None)
+# The background scheduler holds a sqlite connection and ticks every second.
+# With many TestClients each spawning their own scheduler over the same db
+# file, we hit "database is locked" intermittently. Tests don't need it.
+os.environ["UNDERWORLD_SCHEDULER_ENABLED"] = "false"
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -30,15 +30,17 @@ export default function CharacterController({
 
   useEffect(() => {
     if (!selectedId) return;
-    const down = (e: KeyboardEvent) => { keysRef.current.add(e.key.toLowerCase()); };
-    const up   = (e: KeyboardEvent) => { keysRef.current.delete(e.key.toLowerCase()); };
+    const keys = keysRef.current;
+    const controlInput = controlInputRef.current;
+    const down = (e: KeyboardEvent) => { keys.add(e.key.toLowerCase()); };
+    const up   = (e: KeyboardEvent) => { keys.delete(e.key.toLowerCase()); };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
     return () => {
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
-      keysRef.current.clear();
-      controlInputRef.current.set(0, 0, 0);
+      keys.clear();
+      controlInput.set(0, 0, 0);
     };
   }, [selectedId, controlInputRef]);
 
