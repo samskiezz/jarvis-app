@@ -110,17 +110,35 @@ async def seed_knowledge_base(*, force: bool = False) -> dict[str, int]:
         if _PHYSICS_PATH.exists():
             phys = json.loads(_PHYSICS_PATH.read_text())
             existing_ids = await _existing_ids(session, KnowledgeFormula)
-            for e in phys.get("entries", []):
-                if e["id"] in existing_ids:
+            import hashlib
+            for idx, e in enumerate(phys.get("entries", [])):
+                # The V2 extractor doesn't ship pre-baked ids — derive a
+                # deterministic one from `section + name` so re-running the
+                # seed is idempotent.
+                name = (e.get("name") or "").strip()
+                section = (e.get("section") or "").strip()
+                if not name:
                     continue
+                # Include equation + description in the hash because the V4
+                # repeats some names with different equation variants across
+                # appendix sections — section+name alone collides.
+                # Index keeps each row unique even when the V4 PDF repeats
+                # the same heading on multiple appendix pages.
+                rid_key = f"{idx}|{section}|{name}|{(e.get('equation') or '')[:80]}"
+                rid = "phys_v4_" + hashlib.sha1(rid_key.encode()).hexdigest()[:18]
+                if rid in existing_ids:
+                    continue
+                expr = (e.get("equation") or e.get("expression") or "").strip()
+                if not expr and not e.get("description"):
+                    continue  # pure heading row with no content
                 session.add(KnowledgeFormula(
-                    id=e["id"],
-                    discipline=e["discipline"],
-                    catalogue=e["catalogue"],
-                    expression=e["expression"],
+                    id=rid,
+                    discipline=e.get("discipline", "physics"),
+                    catalogue=section or "physics_laws_v4",
+                    expression=expr or "(see description)",
                     keywords=e.get("keywords", []),
-                    name=e.get("name"),
-                    description=e.get("description"),
+                    name=name,
+                    description=e.get("description") or None,
                     source="physics_laws_v4",
                 ))
                 inserted["physics_entries"] += 1
