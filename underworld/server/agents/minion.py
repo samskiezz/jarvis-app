@@ -36,7 +36,7 @@ from ..db.models import (
     World,
 )
 from ..genetics import dna as dna_mod
-from ..services import lifecycle
+from ..services import lifecycle, progression
 from ..tools import llm, patent_search, safety
 
 
@@ -48,6 +48,9 @@ _SYSTEM_PROMPT = (Path(__file__).resolve().parent.parent / "prompts" / "minion_s
 _ACTIONS = {
     "search_patents",
     "propose_invention",
+    "propose_with_party",   # doc III.53-54: collaborative scanning party
+    "build_scanner",        # doc III.3-9: build the Patent Scanner device
+    "seek_ascension",       # doc II.37-40: enlightenment / ascension
     "study",
     "rest",
     "eat",
@@ -305,6 +308,12 @@ async def _record_event(
 async def _do_search_patents(
     session: AsyncSession, minion: Minion, world: World, args: dict[str, Any]
 ) -> tuple[str, list[str]]:
+    # Doc III.3-9: must have built the Patent Scanner before scanning.
+    if not progression.scanner_ready(world):
+        return (
+            f"Scanner not ready (progress {world.scanner_progress}/100). "
+            f"Build it first with the build_scanner action."
+        ), []
     query = str(args.get("query") or "").strip() or minion.guild.value
     limit = int(args.get("limit") or 5)
     records = await patent_search.search(query, limit=limit, only_expired=True)
@@ -470,6 +479,114 @@ async def _do_teach(session: AsyncSession, teacher: Minion, world: World, args: 
     return f"Taught {skill_name} to {student.name}."
 
 
+# ── Doc III.3-9: Patent Scanner build action ──────────────────────────────
+
+async def _do_build_scanner(
+    session: AsyncSession, minion: Minion, world: World, args: dict[str, Any]
+) -> str:
+    """Contribute intelligence × 4 to the Patent Scanner build meter (0..100).
+
+    Minions can keep calling this until the scanner is complete. Once it
+    is, `search_patents` becomes usable for everyone in the world.
+    """
+    if progression.scanner_ready(world):
+        return f"Scanner already complete (100/100)."
+    delta, done = progression.scanner_advance(world, builder_intelligence=minion.intelligence)
+    if done:
+        session.add(Event(
+            world_id=world.id, tick=world.tick, kind="scanner:completed",
+            actor_id=minion.id,
+            payload={"by": f"{minion.name} {minion.surname}", "guild": minion.guild.value},
+        ))
+        return f"Patent Scanner complete (100/100)! Built by {minion.name}."
+    return f"Worked on Patent Scanner (+{delta} → {world.scanner_progress}/100)."
+
+
+# ── Doc III.53-54: collaborative scanning party (multi-minion invention) ──
+
+async def _do_propose_with_party(
+    session: AsyncSession, leader: Minion, world: World, args: dict[str, Any]
+) -> tuple[str, str | None, bool]:
+    """Co-create an invention with up to two same-guild collaborators.
+
+    Returns (summary, invention_id, blocked_by_safety). The resulting
+    Invention has a 'party' field listing all contributors and starts
+    with a small feasibility/novelty bonus to model collaboration synergy.
+    """
+    title = str(args.get("title") or "").strip()
+    problem = str(args.get("problem") or "").strip()
+    if not title or not problem:
+        return "Party invention rejected — missing title or problem.", None, False
+    hypothesis = str(args.get("hypothesis") or "").strip()
+    related = [str(p).strip() for p in (args.get("related_patents") or []) if str(p).strip()]
+
+    # Find up to 2 nearby same-guild collaborators.
+    party_stmt = (
+        select(Minion)
+        .where(
+            Minion.world_id == world.id,
+            Minion.guild == leader.guild,
+            Minion.alive.is_(True),
+            Minion.id != leader.id,
+        )
+        .order_by(Minion.reputation.desc())
+        .limit(2)
+    )
+    party = list((await session.execute(party_stmt)).scalars().all())
+    contributor_ids = [leader.id] + [m.id for m in party]
+    contributor_names = [f"{leader.name} {leader.surname}"] + [f"{m.name} {m.surname}" for m in party]
+
+    combined = " ".join([title, problem, hypothesis])
+    safety_result = safety.check_text(combined)
+    blocked = safety_result.blocked
+
+    inv = Invention(
+        world_id=world.id,
+        minion_id=leader.id,
+        tick=world.tick,
+        title=title[:280],
+        problem=problem,
+        hypothesis=hypothesis,
+        related_patents=related,
+        status=TaskStatus.NEEDS_SAFETY_REVIEW if blocked else TaskStatus.NEEDS_PEER_REVIEW,
+        inputs={
+            "guild": leader.guild.value,
+            "generation": leader.generation,
+            "party_ids": contributor_ids,
+            "party_names": contributor_names,
+            "collaborative": True,
+            # Synergy bonus applied at review time — picked up by reviewer.
+            "synergy_bonus": 0.15 * len(party),
+        },
+    )
+    session.add(inv)
+    await session.flush()
+
+    # Reputation bump for the whole party.
+    for m in [leader] + party:
+        m.reputation = min(5.0, m.reputation + 0.02)
+
+    return (
+        f"Party-invented {inv.id} '{title}' with {len(party)} collaborator(s): "
+        f"{', '.join(contributor_names)}",
+        inv.id,
+        blocked,
+    )
+
+
+# ── Doc II.37-40: Ascension ────────────────────────────────────────────────
+
+async def _do_seek_ascension(
+    session: AsyncSession, minion: Minion, world: World, args: dict[str, Any]
+) -> str:
+    """Try to ascend. On success the Minion 'dies' (alive=False) but the
+    soul gets ascended=True and persists as a guide entity."""
+    ok, reason = await progression.try_ascend(session, minion, world)
+    if ok:
+        return f"{minion.name} ascended — soul {minion.soul_id} now operates as a guide entity."
+    return f"Ascension not yet possible: {reason}"
+
+
 def _candidates_for_partner(
     minion: Minion, neighbours: list[Minion], world_tick: int
 ) -> list[Minion]:
@@ -537,12 +654,30 @@ async def run_tick(
     request_fork = False
     summary = ""
 
+    # Era-gated actions: if the world hasn't unlocked this action yet,
+    # silently fall through to "rest" so a stale agent decision doesn't
+    # crash the tick.
+    if action not in progression.unlocked_actions(world.era):
+        await _store_memory(
+            session, minion, world.tick, "observation",
+            f"Action '{action}' is locked at era {world.era}; resting instead.", 0.3,
+        )
+        action = "rest"
+
     if action == "search_patents":
         summary, _ = await _do_search_patents(session, minion, world, args)
+    elif action == "build_scanner":
+        summary = await _do_build_scanner(session, minion, world, args)
     elif action == "propose_invention":
         summary, inv_id, blocked_by_safety = await _do_propose_invention(session, minion, world, args)
         if inv_id:
             inventions_created.append(inv_id)
+    elif action == "propose_with_party":
+        summary, inv_id, blocked_by_safety = await _do_propose_with_party(session, minion, world, args)
+        if inv_id:
+            inventions_created.append(inv_id)
+    elif action == "seek_ascension":
+        summary = await _do_seek_ascension(session, minion, world, args)
     elif action == "study":
         summary = await _do_study(session, minion, world, args)
     elif action == "teach":

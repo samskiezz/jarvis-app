@@ -71,6 +71,10 @@ export const api = {
     request<{ world_id: string; tick: number; actions: Record<string, string> }>(
       `/worlds/${id}/latest-actions?window=${window}`,
     ),
+  latestThoughts: (id: string, window = 3) =>
+    request<{ world_id: string; tick: number; thoughts: Record<string, string> }>(
+      `/worlds/${id}/latest-thoughts?window=${window}`,
+    ),
   listMinions: (id: string, opts: { alive?: boolean; guild?: string; limit?: number } = {}) => {
     const q = new URLSearchParams();
     if (opts.alive !== undefined) q.set("alive", String(opts.alive));

@@ -30,10 +30,27 @@ def _ensure_engine() -> tuple[AsyncEngine, async_sessionmaker[AsyncSession]]:
 
 
 async def init_db() -> None:
-    """Create tables. For real production use Alembic migrations; for v1 this is fine."""
+    """Create tables and apply tiny in-line migrations.
+
+    For production use Alembic; this lightweight `ADD COLUMN IF NOT EXISTS`
+    pattern keeps existing databases compatible when we extend the schema.
+    """
     engine, _ = _ensure_engine()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Backfill new columns added after table creation (SQLite-only path —
+        # PostgreSQL would use proper migrations).
+        await _ensure_column(conn, "worlds", "era", "VARCHAR(24) DEFAULT 'stone'")
+        await _ensure_column(conn, "worlds", "scanner_progress", "INTEGER DEFAULT 0")
+
+
+async def _ensure_column(conn, table: str, column: str, decl: str) -> None:
+    """Add `column` to `table` if it isn't there. SQLite-only convenience."""
+    from sqlalchemy import text
+    res = await conn.execute(text(f"PRAGMA table_info({table})"))
+    if column in {r[1] for r in res.fetchall()}:
+        return
+    await conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {decl}"))
 
 
 async def dispose() -> None:

@@ -53,6 +53,8 @@ async def _world_out(session: AsyncSession, world: World) -> WorldOut:
         population_cap=world.population_cap,
         auto_advance=world.auto_advance,
         auto_advance_interval_s=world.auto_advance_interval_s,
+        era=getattr(world, "era", "stone"),
+        scanner_progress=getattr(world, "scanner_progress", 0),
         created_at=world.created_at,
         minion_count=int(total or 0),
         alive_count=int(alive or 0),
@@ -174,6 +176,45 @@ async def get_latest_actions(
             if name:
                 latest[minion_id] = name
     return {"world_id": world_id, "tick": world.tick, "actions": latest}
+
+
+@router.get("/{world_id}/latest-thoughts")
+async def get_latest_thoughts(
+    world_id: str,
+    window: int = Query(default=3, ge=1, le=20),
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Map of `minion_id -> latest internal thought` (doc II.25).
+
+    Reads `Memory(kind='thought', ...)` rows the agent writes from LLM
+    output. The 3D scene renders these as thought-bubbles above each
+    Minion so the user can see what they're actually reasoning about.
+    """
+    world = await _world_or_404(session, world_id)
+    if window > world.tick + 1:
+        window = world.tick + 1
+    min_tick = max(0, world.tick - window + 1)
+    stmt = (
+        select(Memory.minion_id, Memory.content, Memory.tick)
+        .join(Minion, Minion.id == Memory.minion_id)
+        .where(
+            Minion.world_id == world_id,
+            Memory.kind == "thought",
+            Memory.tick >= min_tick,
+        )
+        .order_by(Memory.tick.desc())
+    )
+    res = await session.execute(stmt)
+    latest: dict[str, str] = {}
+    for minion_id, content, _tick in res.all():
+        if minion_id in latest:
+            continue
+        # Trim to a sentence — the full LLM thought is often 3-4 paragraphs;
+        # the bubble only has room for one line.
+        snippet = content.strip().split(". ", 1)[0]
+        latest[minion_id] = snippet[:120] + ("…" if len(snippet) > 120 else "")
+    return {"world_id": world_id, "tick": world.tick, "thoughts": latest}
 
 
 @router.get("/{world_id}/minions", response_model=list[MinionListItem])

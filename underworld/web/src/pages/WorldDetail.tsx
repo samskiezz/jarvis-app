@@ -89,6 +89,11 @@ export default function WorldDetail() {
     queryFn: () => api.latestActions(id, 3),
     refetchInterval: 3000,
   });
+  const thoughts = useQuery({
+    queryKey: ["world", id, "latest-thoughts"],
+    queryFn: () => api.latestThoughts(id, 3),
+    refetchInterval: 4000,
+  });
 
   const stream = useWorldStream(id, !!world.data?.auto_advance);
 
@@ -162,7 +167,7 @@ export default function WorldDetail() {
               <h1 className="mt-0.5 font-display text-2xl font-light tracking-tight text-zinc-100">
                 {world.data.name}
               </h1>
-              <div className="mt-1 flex items-center gap-2 text-[10px] text-zinc-500">
+              <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px] text-zinc-500">
                 <span className="font-mono text-glow-purple">{world.data.seed_class}</span>
                 <span>·</span>
                 <span>tick <span className="text-glow-amber">{world.data.tick}</span></span>
@@ -170,6 +175,17 @@ export default function WorldDetail() {
                 <span>cap {world.data.population_cap}</span>
                 <span>·</span>
                 <span>biome <span className="text-glow-sky">{map.data?.biome_hint ?? "…"}</span></span>
+                <span>·</span>
+                <span className="rounded-md border border-glow-jade/40 bg-glow-jade/10 px-1.5 py-0.5 text-glow-jade uppercase tracking-widest">
+                  {world.data.era ?? "stone"} age
+                </span>
+                <span>·</span>
+                <span>
+                  scanner{" "}
+                  <span className={world.data.scanner_progress >= 100 ? "text-glow-jade" : "text-glow-amber"}>
+                    {world.data.scanner_progress ?? 0}/100
+                  </span>
+                </span>
               </div>
             </div>
           </div>
@@ -320,6 +336,7 @@ export default function WorldDetail() {
                   width={900}
                   height={560}
                   actionByMinion={actions.data?.actions}
+                  thoughtByMinion={thoughts.data?.thoughts}
                   biomeHint={map.data.biome_hint}
                 />
               ) : (

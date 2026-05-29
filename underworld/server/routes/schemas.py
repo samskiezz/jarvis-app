@@ -28,6 +28,8 @@ class WorldOut(BaseModel):
     population_cap: int
     auto_advance: bool
     auto_advance_interval_s: float
+    era: str = "stone"
+    scanner_progress: int = 0
     created_at: datetime
     minion_count: int = 0
     alive_count: int = 0

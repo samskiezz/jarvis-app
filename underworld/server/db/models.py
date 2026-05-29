@@ -159,6 +159,15 @@ class World(Base):
     auto_advance: Mapped[bool] = mapped_column(Boolean, default=False)
     auto_advance_interval_s: Mapped[float] = mapped_column(Float, default=5.0)
     next_auto_tick_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    # Doc I.22-29 + III.5-9: civilisations progress through eras gated by
+    # cumulative invention approvals + total skill level. Tech eras unlock
+    # which actions are even available — e.g. patent scanning requires
+    # Industrial.
+    era: Mapped[str] = mapped_column(String(24), default="stone", index=True)
+    # Doc III.3: Minions must BUILD a Patent Scanner before they can use
+    # the action — tracked as an integer progress meter (0..100). When
+    # 100, scanner is operational.
+    scanner_progress: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")

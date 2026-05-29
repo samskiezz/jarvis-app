@@ -358,6 +358,11 @@ async def advance_world(
         # 6. Finalise alive count.
         report.alive = await lifecycle.alive_count(session, world.id)
 
+        # 6b. Era progression — promote the world if pop/inventions/skill
+        # thresholds have been met. Doc I.22, III.23-26.
+        from .progression import update_era as _update_era
+        await _update_era(session, world)
+
         # 7. Population health event if a generation milestone was reached.
         if report.births > 0:
             stmt = select(func.max(Minion.generation)).where(Minion.world_id == world.id)

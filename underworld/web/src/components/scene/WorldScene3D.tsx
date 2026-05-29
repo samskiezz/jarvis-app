@@ -30,6 +30,9 @@ interface Props {
   width?: number;
   height?: number;
   actionByMinion?: Record<string, string>;
+  /** Map of minion_id → latest internal thought. Rendered as bubbles
+   *  above each minion in the scene. Doc II.25 (visible monologue). */
+  thoughtByMinion?: Record<string, string>;
   biomeHint?: string;
 }
 
@@ -108,6 +111,7 @@ export default function WorldScene3D({
   width = 720,
   height = 480,
   actionByMinion,
+  thoughtByMinion,
   biomeHint,
 }: Props) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -283,9 +287,31 @@ export default function WorldScene3D({
                     {ACTION_LABEL[actionByMinion[selected.minion.id]] ?? actionByMinion[selected.minion.id]}
                   </div>
                 ) : null}
+                {thoughtByMinion?.[selected.minion.id] ? (
+                  <div className="mt-1 max-w-[260px] text-[9px] italic leading-snug text-zinc-300">
+                    “{thoughtByMinion[selected.minion.id]}”
+                  </div>
+                ) : null}
               </div>
             </Html>
           ) : null}
+          {/* Doc II.25 — internal monologue bubbles above every Minion with
+              a recent LLM thought. Distance-faded by drei's distanceFactor so
+              far-away crowds don't drown the scene in text. */}
+          {thoughtByMinion ? placements.filter((p) => p.minion.id !== selectedId && thoughtByMinion[p.minion.id] && p.minion.alive).slice(0, 16).map((p) => (
+            <Html
+              key={`thought-${p.minion.id}`}
+              position={[p.home[0], p.home[1] + 3.0, p.home[2]]}
+              center
+              distanceFactor={36}
+              style={{ pointerEvents: "none" }}
+              occlude
+            >
+              <div className="max-w-[220px] rounded-md border border-white/10 bg-black/60 px-1.5 py-1 text-[8px] italic leading-snug text-zinc-200 shadow-md backdrop-blur">
+                {thoughtByMinion[p.minion.id]}
+              </div>
+            </Html>
+          )) : null}
           {!controlMode && (
             <OrbitControls
               target={[0, 2, 0]}

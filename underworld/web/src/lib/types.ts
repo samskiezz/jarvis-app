@@ -159,6 +159,8 @@ export interface World {
   population_cap: number;
   auto_advance: boolean;
   auto_advance_interval_s: number;
+  era: "stone" | "bronze" | "iron" | "industrial" | "information" | "quantum";
+  scanner_progress: number;
   created_at: string;
   minion_count: number;
   alive_count: number;
