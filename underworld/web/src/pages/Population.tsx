@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  Activity, Brain, Cpu, GitBranch, Heart, Skull, Sparkles, TrendingUp, Users,
-  Zap,
+  Activity, Brain, Cpu, GitBranch, Heart, HeartHandshake, Skull, Sparkles,
+  TrendingUp, Users, Zap,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import EmptyState from "@/components/ui/EmptyState";
@@ -45,6 +45,27 @@ export default function Population() {
     mutationFn: (id: string) => api.fork(id),
     onSuccess: invalidateMinions,
   });
+  const breed = useMutation({
+    mutationFn: (pair: { a: string; b: string }) => api.breed(pair.a, pair.b),
+    onSuccess: invalidateMinions,
+  });
+
+  // Two-click pair-select for breeding. Click one minion's "Pair" button to
+  // mark it as parent A; click another to mark as parent B; the breed call
+  // fires automatically. Clear with another click on the active parent A.
+  const [pairA, setPairA] = useState<string | null>(null);
+  const onPair = (id: string) => {
+    if (pairA === id) {
+      setPairA(null);
+      return;
+    }
+    if (pairA === null) {
+      setPairA(id);
+      return;
+    }
+    breed.mutate({ a: pairA, b: id });
+    setPairA(null);
+  };
 
   const alive = stats.data?.history.map((s) => s.alive) ?? [];
   const births = stats.data?.history.map((s) => s.births) ?? [];
@@ -266,7 +287,10 @@ export default function Population() {
               }
             }}
             onFork={(id) => fork.mutate(id)}
-            busy={kill.isPending || fork.isPending}
+            onPair={onPair}
+            pairA={pairA}
+            busy={kill.isPending || fork.isPending || breed.isPending}
+            breedError={breed.isError ? (breed.error as Error).message : null}
           />
         </>
       ) : (
@@ -286,12 +310,18 @@ function MinionRoster({
   minions,
   onKill,
   onFork,
+  onPair,
+  pairA,
   busy,
+  breedError,
 }: {
   minions: MinionListItem[];
   onKill: (id: string) => void;
   onFork: (id: string) => void;
+  onPair: (id: string) => void;
+  pairA: string | null;
   busy: boolean;
+  breedError: string | null;
 }) {
   const sorted = useMemo(
     () =>
@@ -307,8 +337,21 @@ function MinionRoster({
           <Users size={11} />
           Living minions ({minions.length})
         </span>
-        <span className="text-zinc-500">sorted by reputation</span>
+        <span className="text-zinc-500">
+          {pairA ? (
+            <span className="text-glow-rose">
+              parent A locked — click another minion's Pair to breed
+            </span>
+          ) : (
+            "sorted by reputation"
+          )}
+        </span>
       </div>
+      {breedError ? (
+        <div className="m-3 rounded border border-glow-rose/30 bg-glow-rose/5 px-3 py-2 text-[10px] text-glow-rose">
+          Breed rejected: {breedError}
+        </div>
+      ) : null}
       {sorted.length === 0 ? (
         <EmptyState
           icon={<Users size={20} />}
@@ -365,6 +408,26 @@ function MinionRoster({
                 </div>
               </div>
               <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => onPair(m.id)}
+                  disabled={busy}
+                  title={
+                    pairA === m.id
+                      ? "Cancel parent A selection"
+                      : pairA
+                        ? "Set as parent B and breed"
+                        : "Set as parent A for breeding"
+                  }
+                  className={`inline-flex items-center gap-1 rounded border px-1.5 py-1 text-[9px] uppercase tracking-widest transition disabled:opacity-40 ${
+                    pairA === m.id
+                      ? "border-glow-rose bg-glow-rose/10 text-glow-rose"
+                      : "border-zinc-800 text-zinc-400 hover:border-glow-rose/40 hover:bg-glow-rose/5 hover:text-glow-rose"
+                  }`}
+                >
+                  <HeartHandshake size={9} />
+                  {pairA === m.id ? "Pair·A" : "Pair"}
+                </button>
                 <button
                   type="button"
                   onClick={() => onFork(m.id)}

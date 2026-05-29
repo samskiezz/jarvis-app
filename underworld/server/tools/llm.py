@@ -20,6 +20,13 @@ from typing import Any
 import httpx
 
 from ..config import get_settings
+from ..logging_setup import get_logger
+
+log = get_logger("llm")
+
+# Throttled stub warning — without this a long sim run with no key set
+# fills the log with the same "stub mode" line every tick.
+_stub_warned = False
 
 
 @dataclass
@@ -28,6 +35,16 @@ class ChatResponse:
     tool_calls: list[dict[str, Any]] = field(default_factory=list)
     finish_reason: str | None = None
     raw: dict[str, Any] | None = None
+
+
+def _warn_stub_once() -> None:
+    global _stub_warned
+    if not _stub_warned:
+        log.warning(
+            "llm.stub_mode",
+            reason="UNDERWORLD_KIMI_API_KEY is not set; minion decisions fall back to heuristics",
+        )
+        _stub_warned = True
 
 
 def _stub_response(messages: list[dict[str, Any]]) -> str:
@@ -50,6 +67,7 @@ async def chat(
 ) -> ChatResponse:
     settings = get_settings()
     if not settings.kimi_api_key:
+        _warn_stub_once()
         return ChatResponse(content=_stub_response(messages), finish_reason="stub")
 
     url = f"{settings.kimi_base_url.rstrip('/')}/chat/completions"
