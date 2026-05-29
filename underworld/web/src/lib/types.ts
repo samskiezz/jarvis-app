@@ -281,6 +281,18 @@ export interface GuildSpec {
   domain: string;
   checklist: string[];
   starting_skills: string[];
+  // Lore — present for every guild but optional so older clients keep working.
+  motto?: string;
+  founding_myth?: string;
+  mission?: string;
+  hero_name?: string;
+  hero_tale?: string;
+  rituals?: string[];
+  color_hex?: string;
+  glyph?: string;
+  nemesis?: string;
+  obsession?: string;
+  open_question?: string;
 }
 
 export interface TickReport {

@@ -66,6 +66,8 @@ export const api = {
       body: JSON.stringify({ name, cpc_class, starting_population, population_cap }),
     }),
   getWorld: (id: string) => request<World>(`/worlds/${id}`),
+  deleteWorld: (id: string) =>
+    request<void>(`/worlds/${id}`, { method: "DELETE" }),
   getWorldMap: (id: string) => request<WorldMap>(`/worlds/${id}/map`),
   latestActions: (id: string, window = 3) =>
     request<{ world_id: string; tick: number; actions: Record<string, string> }>(
@@ -117,6 +119,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ minion_id }),
     }),
+  killMinion: (minion_id: string) =>
+    request<Minion>(`/minions/${minion_id}/kill`, { method: "POST" }),
 
   // patents
   searchPatents: (query: string, limit = 10, only_expired = true) =>
@@ -128,6 +132,34 @@ export const api = {
   // inventions
   getInvention: (id: string) => request<Invention>(`/inventions/${id}`),
   listReviews: (id: string) => request<PeerReview[]>(`/inventions/${id}/reviews`),
+  decideInvention: (
+    id: string,
+    verdict: "approve" | "reject" | "block_safety",
+    rationale = "",
+  ) =>
+    request<Invention>(`/inventions/${id}/decide`, {
+      method: "POST",
+      body: JSON.stringify({ verdict, rationale }),
+    }),
+  charterInvention: (body: {
+    world_id: string;
+    minion_id?: string | null;
+    title: string;
+    problem: string;
+    hypothesis?: string;
+    related_patents?: string[];
+  }) =>
+    request<Invention>("/inventions/charter", {
+      method: "POST",
+      body: JSON.stringify({
+        world_id: body.world_id,
+        minion_id: body.minion_id ?? null,
+        title: body.title,
+        problem: body.problem,
+        hypothesis: body.hypothesis ?? "",
+        related_patents: body.related_patents ?? [],
+      }),
+    }),
 
   // safety
   listSafetyReviews: (limit = 50) =>

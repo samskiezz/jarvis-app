@@ -6,11 +6,24 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth import require_bearer
-from ..db.models import Event, Invention, Memory, Minion, PopulationSnapshot, World
+from ..db.models import (
+    Event,
+    Invention,
+    Memory,
+    Minion,
+    PeerReview,
+    PopulationSnapshot,
+    ProjectContribution,
+    Relationship,
+    ResearchProject,
+    Skill,
+    Soul,
+    World,
+)
 from ..db.session import get_session
 from ..services import scheduler
 from ..services.factory import SeedingPlan, create_world
@@ -103,6 +116,59 @@ async def get_world(
 ):
     world = await _world_or_404(session, world_id)
     return await _world_out(session, world)
+
+
+@router.delete("/{world_id}", status_code=204)
+async def delete_world(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Hard-delete a world and everything tied to it.
+
+    The cascade follows FK declarations: minions, events, memories,
+    inventions, peer reviews, population snapshots, projects all drop
+    with the world. No soft-delete — this is an operator action invoked
+    explicitly from the CommandCentre to clear sprawl.
+    """
+    world = await _world_or_404(session, world_id)
+
+    # SQLite doesn't enforce FK cascades by default — wipe dependents by
+    # hand so we don't leave orphaned inventions / souls / snapshots.
+    minion_ids_stmt = select(Minion.id).where(Minion.world_id == world_id)
+    minion_ids = [mid for (mid,) in (await session.execute(minion_ids_stmt)).all()]
+    if minion_ids:
+        inv_ids_stmt = select(Invention.id).where(Invention.minion_id.in_(minion_ids))
+        inv_ids = [iid for (iid,) in (await session.execute(inv_ids_stmt)).all()]
+        if inv_ids:
+            await session.execute(delete(PeerReview).where(PeerReview.invention_id.in_(inv_ids)))
+        await session.execute(delete(Skill).where(Skill.minion_id.in_(minion_ids)))
+        await session.execute(delete(Memory).where(Memory.minion_id.in_(minion_ids)))
+        await session.execute(
+            delete(Relationship).where(
+                (Relationship.from_id.in_(minion_ids)) | (Relationship.to_id.in_(minion_ids))
+            )
+        )
+
+    world_inv_ids_stmt = select(Invention.id).where(Invention.world_id == world_id)
+    world_inv_ids = [iid for (iid,) in (await session.execute(world_inv_ids_stmt)).all()]
+    if world_inv_ids:
+        await session.execute(delete(PeerReview).where(PeerReview.invention_id.in_(world_inv_ids)))
+
+    project_ids_stmt = select(ResearchProject.id).where(ResearchProject.world_id == world_id)
+    project_ids = [pid for (pid,) in (await session.execute(project_ids_stmt)).all()]
+    if project_ids:
+        await session.execute(
+            delete(ProjectContribution).where(ProjectContribution.project_id.in_(project_ids))
+        )
+    await session.execute(delete(ResearchProject).where(ResearchProject.world_id == world_id))
+    await session.execute(delete(Invention).where(Invention.world_id == world_id))
+    await session.execute(delete(PopulationSnapshot).where(PopulationSnapshot.world_id == world_id))
+    await session.execute(delete(Event).where(Event.world_id == world_id))
+    await session.execute(delete(Minion).where(Minion.world_id == world_id))
+    await session.execute(delete(Soul).where(Soul.world_id == world_id))
+    await session.delete(world)
+    return None
 
 
 @router.patch("/{world_id}/auto-advance", response_model=WorldOut)

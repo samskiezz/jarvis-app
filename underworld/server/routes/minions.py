@@ -7,7 +7,7 @@ from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth import require_bearer
-from ..db.models import Memory, Minion, Relationship, Skill, Soul, World
+from ..db.models import CauseOfDeath, Event, Memory, Minion, Relationship, Skill, Soul, World
 from ..db.session import get_session
 from ..genetics import dna as dna_mod
 from ..services import lifecycle
@@ -301,6 +301,49 @@ async def breed(
     rng = random.Random(world.seed_value ^ (world.tick * 0xBADD0BAD))
     child = await lifecycle.breed_pair(session, world=world, parent_a=a, parent_b=b, rng=rng)
     return _to_minion_out(child, len(child.skills) if "skills" in child.__dict__ else 0)
+
+
+@router.post("/{minion_id}/kill", response_model=MinionOut)
+async def kill_minion(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Prune a Minion. Doc II.106: operator-initiated reset.
+
+    Soft-kill: sets alive=False with cause=PRUNED so the soul persists
+    for reincarnation. Records a Memory + Event row so the audit trail
+    shows the kill came from the operator and not from natural lifecycle.
+    """
+    m = await _minion_or_404(session, minion_id)
+    if not m.alive:
+        raise HTTPException(status_code=409, detail="minion already dead")
+    world = await session.get(World, m.world_id)
+    if not world:
+        raise HTTPException(status_code=404, detail="world missing")
+    m.alive = False
+    m.died_tick = world.tick
+    m.cause_of_death = CauseOfDeath.PRUNED
+    session.add(
+        Memory(
+            minion_id=m.id,
+            tick=world.tick,
+            kind="death",
+            content=f"Pruned by operator at tick {world.tick}.",
+            importance=1.0,
+        )
+    )
+    session.add(
+        Event(
+            world_id=world.id,
+            tick=world.tick,
+            kind="minion:pruned",
+            actor_id=m.id,
+            payload={"name": f"{m.name} {m.surname}".strip(), "guild": m.guild.value},
+        )
+    )
+    skill_count = await session.scalar(select(Skill.id).where(Skill.minion_id == m.id).limit(1))
+    return _to_minion_out(m, 1 if skill_count else 0)
 
 
 @router.post("/fork", response_model=MinionOut, status_code=201)

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { Filter, Sparkles } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Filter, Plus, Sparkles } from "lucide-react";
 import { api } from "@/lib/api";
 import EmptyState from "@/components/ui/EmptyState";
 import StatCard from "@/components/ui/StatCard";
@@ -23,8 +23,10 @@ const ALL_STATUSES: TaskStatus[] = [
 ];
 
 export default function InventionList() {
+  const qc = useQueryClient();
   const worlds = useQuery({ queryKey: ["worlds"], queryFn: api.listWorlds });
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
+  const [charterOpen, setCharterOpen] = useState(false);
 
   const items = useQuery({
     queryKey: ["inventions", "all", worlds.data?.map((w) => w.id).join(",")],
@@ -55,15 +57,36 @@ export default function InventionList() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <header>
-        <div className="page-eyebrow">Inventions</div>
-        <h1 className="mt-1 page-title">Cross-world invention log</h1>
-        <p className="mt-2 max-w-3xl text-[11px] leading-relaxed text-zinc-500">
-          Every invention from every world, sorted by recency. Status reflects the peer + safety
-          review outcome. Approved inventions touching regulated domains auto-escalate to research
-          projects.
-        </p>
+      <header className="flex items-start justify-between gap-3">
+        <div>
+          <div className="page-eyebrow">Inventions</div>
+          <h1 className="mt-1 page-title">Cross-world invention log</h1>
+          <p className="mt-2 max-w-3xl text-[11px] leading-relaxed text-zinc-500">
+            Every invention from every world, sorted by recency. Status reflects the peer + safety
+            review outcome. Approved inventions touching regulated domains auto-escalate to research
+            projects.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setCharterOpen((v) => !v)}
+          className="btn-primary shrink-0"
+        >
+          <Plus size={11} />
+          Charter
+        </button>
       </header>
+
+      {charterOpen ? (
+        <CharterPanel
+          worlds={worlds.data ?? []}
+          onClose={() => setCharterOpen(false)}
+          onSubmitted={() => {
+            setCharterOpen(false);
+            qc.invalidateQueries({ queryKey: ["inventions"] });
+          }}
+        />
+      ) : null}
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Total" value={stats.total} accent="purple" icon={<Sparkles size={14} />} />
@@ -149,6 +172,98 @@ export default function InventionList() {
         )}
       </section>
     </div>
+  );
+}
+
+function CharterPanel({
+  worlds,
+  onClose,
+  onSubmitted,
+}: {
+  worlds: { id: string; name: string; seed_class: string }[];
+  onClose: () => void;
+  onSubmitted: () => void;
+}) {
+  const [worldId, setWorldId] = useState(worlds[0]?.id ?? "");
+  const [title, setTitle] = useState("");
+  const [problem, setProblem] = useState("");
+  const [hypothesis, setHypothesis] = useState("");
+
+  const charter = useMutation({
+    mutationFn: () =>
+      api.charterInvention({ world_id: worldId, title, problem, hypothesis }),
+    onSuccess: () => onSubmitted(),
+  });
+
+  const canSubmit = worldId && title.trim() && problem.trim() && !charter.isPending;
+
+  return (
+    <section className="panel-elevated">
+      <div className="panel-header">
+        <span className="flex items-center gap-1.5">
+          <Plus size={11} />
+          Charter an invention (operator)
+        </span>
+        <button type="button" onClick={onClose} className="text-zinc-500 hover:text-zinc-200">
+          ✕
+        </button>
+      </div>
+      <form
+        className="space-y-3 p-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (canSubmit) charter.mutate();
+        }}
+      >
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_2fr]">
+          <select
+            className="input"
+            value={worldId}
+            onChange={(e) => setWorldId(e.target.value)}
+            required
+          >
+            {worlds.length === 0 ? <option value="">— no worlds —</option> : null}
+            {worlds.map((w) => (
+              <option key={w.id} value={w.id}>
+                {w.name} · {w.seed_class}
+              </option>
+            ))}
+          </select>
+          <input
+            className="input"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            maxLength={280}
+          />
+        </div>
+        <textarea
+          className="input min-h-[60px] resize-y"
+          placeholder="Problem (required) — what does this solve?"
+          value={problem}
+          onChange={(e) => setProblem(e.target.value)}
+          required
+        />
+        <textarea
+          className="input min-h-[60px] resize-y"
+          placeholder="Hypothesis (optional) — how does it work?"
+          value={hypothesis}
+          onChange={(e) => setHypothesis(e.target.value)}
+        />
+        <div className="flex items-center justify-between text-[10px] text-zinc-500">
+          <span>Goes through safety + peer review like any minion-proposed invention.</span>
+          <button type="submit" className="btn-primary" disabled={!canSubmit}>
+            {charter.isPending ? "Submitting…" : "Submit charter"}
+          </button>
+        </div>
+        {charter.isError ? (
+          <div className="rounded border border-glow-rose/30 bg-glow-rose/5 px-3 py-2 text-[10px] text-glow-rose">
+            {(charter.error as Error).message}
+          </div>
+        ) : null}
+      </form>
+    </section>
   );
 }
 

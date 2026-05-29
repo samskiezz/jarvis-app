@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Activity, Brain, Cpu, GitBranch, Heart, Skull, Sparkles, TrendingUp, Users,
+  Zap,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import EmptyState from "@/components/ui/EmptyState";
@@ -10,9 +11,10 @@ import MoodBar from "@/components/MoodBar";
 import RoleBadge from "@/components/ui/RoleBadge";
 import Sparkline from "@/components/Sparkline";
 import StatCard from "@/components/ui/StatCard";
-import type { Guild, SwarmRole } from "@/lib/types";
+import type { Guild, MinionListItem, SwarmRole } from "@/lib/types";
 
 export default function Population() {
+  const qc = useQueryClient();
   const worlds = useQuery({ queryKey: ["worlds"], queryFn: api.listWorlds });
   const [worldId, setWorldId] = useState<string | null>(null);
   const selected = worldId ?? worlds.data?.[0]?.id ?? null;
@@ -22,6 +24,26 @@ export default function Population() {
     queryFn: () => api.population(selected!, 200),
     enabled: !!selected,
     refetchInterval: 4000,
+  });
+  const minions = useQuery({
+    queryKey: ["world", selected, "minions", "alive", 100],
+    queryFn: () => api.listMinions(selected!, { alive: true, limit: 100 }),
+    enabled: !!selected,
+    refetchInterval: 6000,
+  });
+
+  const invalidateMinions = () => {
+    qc.invalidateQueries({ queryKey: ["world", selected, "minions"] });
+    qc.invalidateQueries({ queryKey: ["world", selected, "population", 200] });
+    qc.invalidateQueries({ queryKey: ["worlds"] });
+  };
+  const kill = useMutation({
+    mutationFn: (id: string) => api.killMinion(id),
+    onSuccess: invalidateMinions,
+  });
+  const fork = useMutation({
+    mutationFn: (id: string) => api.fork(id),
+    onSuccess: invalidateMinions,
   });
 
   const alive = stats.data?.history.map((s) => s.alive) ?? [];
@@ -235,6 +257,17 @@ export default function Population() {
               accent="jade"
             />
           </section>
+
+          <MinionRoster
+            minions={minions.data ?? []}
+            onKill={(id) => {
+              if (window.confirm("Prune this minion? Soul persists for reincarnation.")) {
+                kill.mutate(id);
+              }
+            }}
+            onFork={(id) => fork.mutate(id)}
+            busy={kill.isPending || fork.isPending}
+          />
         </>
       ) : (
         <div className="panel">
@@ -246,5 +279,117 @@ export default function Population() {
         </div>
       )}
     </div>
+  );
+}
+
+function MinionRoster({
+  minions,
+  onKill,
+  onFork,
+  busy,
+}: {
+  minions: MinionListItem[];
+  onKill: (id: string) => void;
+  onFork: (id: string) => void;
+  busy: boolean;
+}) {
+  const sorted = useMemo(
+    () =>
+      [...minions].sort(
+        (a, b) => b.reputation - a.reputation || b.sanity - a.sanity,
+      ),
+    [minions],
+  );
+  return (
+    <section className="panel">
+      <div className="panel-header">
+        <span className="flex items-center gap-1.5">
+          <Users size={11} />
+          Living minions ({minions.length})
+        </span>
+        <span className="text-zinc-500">sorted by reputation</span>
+      </div>
+      {sorted.length === 0 ? (
+        <EmptyState
+          icon={<Users size={20} />}
+          title="No living minions"
+          hint="Advance the world from the Command Centre."
+        />
+      ) : (
+        <ul className="max-h-[420px] divide-y divide-glow-purple/5 overflow-y-auto">
+          {sorted.slice(0, 60).map((m) => (
+            <li
+              key={m.id}
+              className="grid grid-cols-[1fr_120px_70px_70px_auto] items-center gap-3 px-4 py-2 text-[11px] transition hover:bg-glow-purple/5"
+            >
+              <div className="min-w-0">
+                <div className="truncate text-zinc-100">
+                  {m.name} {m.surname}
+                </div>
+                <div className="mt-0.5 flex items-center gap-1.5 text-[9px]">
+                  <GuildBadge guild={m.guild} size="xs" />
+                  <RoleBadge role={m.swarm_role} size="xs" />
+                  <span className="text-zinc-500">gen {m.generation}</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-[10px] text-glow-purple">
+                  rep {m.reputation.toFixed(2)}
+                </div>
+                <div className="font-mono text-[9px] text-zinc-500">
+                  age {m.age}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[8px] uppercase tracking-widest text-zinc-500">
+                  Sanity
+                </div>
+                <div
+                  className={`font-mono text-[10px] ${
+                    m.sanity < 0.4
+                      ? "text-glow-rose"
+                      : m.sanity < 0.6
+                        ? "text-glow-amber"
+                        : "text-glow-jade"
+                  }`}
+                >
+                  {m.sanity.toFixed(2)}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[8px] uppercase tracking-widest text-zinc-500">
+                  Health
+                </div>
+                <div className="font-mono text-[10px] text-zinc-300">
+                  {m.health.toFixed(2)}
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => onFork(m.id)}
+                  disabled={busy}
+                  title="Fork digital clone"
+                  className="inline-flex items-center gap-1 rounded border border-zinc-800 px-1.5 py-1 text-[9px] uppercase tracking-widest text-zinc-400 transition hover:border-glow-sky/40 hover:bg-glow-sky/5 hover:text-glow-sky disabled:opacity-40"
+                >
+                  <Zap size={9} />
+                  Fork
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onKill(m.id)}
+                  disabled={busy}
+                  title="Prune (soul persists)"
+                  className="inline-flex items-center gap-1 rounded border border-zinc-800 px-1.5 py-1 text-[9px] uppercase tracking-widest text-zinc-400 transition hover:border-glow-rose/40 hover:bg-glow-rose/5 hover:text-glow-rose disabled:opacity-40"
+                >
+                  <Skull size={9} />
+                  Prune
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

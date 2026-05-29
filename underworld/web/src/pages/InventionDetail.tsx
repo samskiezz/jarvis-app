@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, ChevronLeft, FileText, GitBranch, MessageSquare, Shield, XCircle } from "lucide-react";
 import { api } from "@/lib/api";
 import CopyButton from "@/components/ui/CopyButton";
@@ -17,10 +18,23 @@ const VERDICT_META: Record<ReviewVerdict, { color: string; bg: string; icon: typ
 
 export default function InventionDetail() {
   const { id = "" } = useParams<{ id: string }>();
+  const qc = useQueryClient();
   const inv = useQuery({ queryKey: ["invention", id], queryFn: () => api.getInvention(id) });
   const reviews = useQuery({
     queryKey: ["invention", id, "reviews"],
     queryFn: () => api.listReviews(id),
+  });
+
+  const [rationale, setRationale] = useState("");
+  const decide = useMutation({
+    mutationFn: (verdict: "approve" | "reject" | "block_safety") =>
+      api.decideInvention(id, verdict, rationale),
+    onSuccess: () => {
+      setRationale("");
+      qc.invalidateQueries({ queryKey: ["invention", id] });
+      qc.invalidateQueries({ queryKey: ["invention", id, "reviews"] });
+      qc.invalidateQueries({ queryKey: ["inventions"] });
+    },
   });
 
   if (inv.isLoading) {
@@ -91,6 +105,58 @@ export default function InventionDetail() {
           <ScoreBlock label="Feasibility" value={i.feasibility_score} variant="sky" />
           <ScoreBlock label="Novelty" value={i.novelty_score} variant="amber" />
           <ScoreBlock label="Safety" value={i.safety_score} variant={i.safety_score >= 0.6 ? "jade" : "rose"} />
+        </div>
+      </section>
+
+      <section className="panel-elevated">
+        <div className="panel-header">
+          <span className="flex items-center gap-1.5">
+            <Shield size={11} />
+            Operator decision
+          </span>
+          <span className="text-zinc-500">writes a peer-review row</span>
+        </div>
+        <div className="space-y-3 p-4">
+          <textarea
+            className="input min-h-[60px] resize-y"
+            placeholder="Rationale (optional) — saved with the review row"
+            value={rationale}
+            onChange={(e) => setRationale(e.target.value)}
+          />
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => decide.mutate("approve")}
+              disabled={decide.isPending || i.status === "approved"}
+              className="inline-flex items-center gap-1.5 rounded-md border border-glow-jade/40 bg-glow-jade/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-glow-jade transition hover:bg-glow-jade/10 disabled:opacity-40"
+            >
+              <CheckCircle2 size={11} />
+              Approve
+            </button>
+            <button
+              type="button"
+              onClick={() => decide.mutate("reject")}
+              disabled={decide.isPending || i.status === "rejected"}
+              className="inline-flex items-center gap-1.5 rounded-md border border-glow-rose/40 bg-glow-rose/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-glow-rose transition hover:bg-glow-rose/10 disabled:opacity-40"
+            >
+              <XCircle size={11} />
+              Reject
+            </button>
+            <button
+              type="button"
+              onClick={() => decide.mutate("block_safety")}
+              disabled={decide.isPending}
+              className="inline-flex items-center gap-1.5 rounded-md border border-glow-amber/40 bg-glow-amber/5 px-3 py-1.5 text-[10px] uppercase tracking-widest text-glow-amber transition hover:bg-glow-amber/10 disabled:opacity-40"
+            >
+              <Shield size={11} />
+              Safety veto
+            </button>
+          </div>
+          {decide.isError ? (
+            <div className="rounded border border-glow-rose/30 bg-glow-rose/5 px-3 py-2 text-[10px] text-glow-rose">
+              {(decide.error as Error).message}
+            </div>
+          ) : null}
         </div>
       </section>
 

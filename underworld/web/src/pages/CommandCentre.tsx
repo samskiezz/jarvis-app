@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Activity, Atom, Battery, Brain, Cpu, FileSearch, Hammer, Leaf, Plus,
-  Radio, Skull, Sparkles, Wind, Zap,
+  Radio, Skull, Sparkles, Trash2, Wind, Zap,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import EmptyState from "@/components/ui/EmptyState";
@@ -30,6 +30,10 @@ export default function CommandCentre() {
   const [populationCap, setPopulationCap] = useState(400);
   const createWorld = useMutation({
     mutationFn: () => api.createWorld(name, cpc, startingPop, populationCap),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["worlds"] }),
+  });
+  const deleteWorld = useMutation({
+    mutationFn: (worldId: string) => api.deleteWorld(worldId),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["worlds"] }),
   });
 
@@ -259,11 +263,11 @@ export default function CommandCentre() {
             {worlds.data.map((w) => {
               const aliveFraction = w.alive_count / Math.max(1, w.minion_count);
               return (
-                <Link
+                <div
                   key={w.id}
-                  to={`/worlds/${w.id}`}
                   className="group relative overflow-hidden rounded-lg border border-glow-purple/15 bg-gradient-to-br from-ink-1/95 to-ink-2/50 p-4 shadow-panel transition hover:border-glow-purple/50 hover:shadow-glow"
                 >
+                  <Link to={`/worlds/${w.id}`} className="absolute inset-0 z-0" aria-label={w.name} />
                   <div
                     className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full opacity-30 transition group-hover:opacity-60"
                     style={{
@@ -337,7 +341,30 @@ export default function CommandCentre() {
                     <span>{w.auto_advance_interval_s.toFixed(1)}s / tick</span>
                     <span>{new Date(w.created_at).toLocaleDateString()}</span>
                   </div>
-                </Link>
+
+                  <div className="relative mt-3 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (
+                          window.confirm(
+                            `Delete world "${w.name}" and ${w.minion_count} minions? This cannot be undone.`,
+                          )
+                        ) {
+                          deleteWorld.mutate(w.id);
+                        }
+                      }}
+                      disabled={deleteWorld.isPending}
+                      className="relative z-10 inline-flex items-center gap-1 rounded border border-zinc-800 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-500 transition hover:border-glow-rose/40 hover:bg-glow-rose/5 hover:text-glow-rose disabled:opacity-40"
+                      title="Delete world"
+                    >
+                      <Trash2 size={10} />
+                      Delete
+                    </button>
+                  </div>
+                </div>
               );
             })}
           </div>

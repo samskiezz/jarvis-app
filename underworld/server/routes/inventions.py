@@ -1,12 +1,23 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth import require_bearer
-from ..db.models import Invention, Minion, PeerReview, TaskStatus, World
+from ..db.models import (
+    Event,
+    GuildKind,
+    Invention,
+    Minion,
+    PeerReview,
+    ReviewVerdict,
+    TaskStatus,
+    World,
+)
 from ..db.session import get_session
 from ..tools import safety
 from .schemas import InventionOut, PeerReviewOut
@@ -91,6 +102,79 @@ async def get_invention(
     inv = await session.get(Invention, invention_id)
     if not inv:
         raise HTTPException(status_code=404, detail="invention not found")
+    return InventionOut(
+        id=inv.id,
+        world_id=inv.world_id,
+        minion_id=inv.minion_id,
+        tick=inv.tick,
+        title=inv.title,
+        problem=inv.problem,
+        hypothesis=inv.hypothesis or "",
+        feasibility_score=inv.feasibility_score,
+        novelty_score=inv.novelty_score,
+        safety_score=inv.safety_score,
+        status=inv.status,
+        related_patents=inv.related_patents or [],
+        created_at=inv.created_at,
+    )
+
+
+class ManualDecision(BaseModel):
+    """Human override of the auto-review pipeline.
+
+    Lets the operator approve, reject, or safety-block an invention from
+    the UI without waiting for the next tick's review pass. The decision
+    is recorded as a PeerReview row attributed to the closing guild
+    (patent for approve/reject, safety for block), so the audit trail
+    matches the auto-pipeline shape.
+    """
+
+    verdict: Literal["approve", "reject", "block_safety"]
+    rationale: str = Field(default="", max_length=1000)
+
+
+@router.post("/{invention_id}/decide", response_model=InventionOut)
+async def decide_invention(
+    invention_id: str,
+    body: ManualDecision,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    inv = await session.get(Invention, invention_id)
+    if not inv:
+        raise HTTPException(status_code=404, detail="invention not found")
+
+    if body.verdict == "approve":
+        inv.status = TaskStatus.APPROVED
+        reviewer_guild = GuildKind.PATENT
+        verdict = ReviewVerdict.APPROVE
+    elif body.verdict == "reject":
+        inv.status = TaskStatus.REJECTED
+        reviewer_guild = GuildKind.PATENT
+        verdict = ReviewVerdict.REJECT
+    else:
+        inv.status = TaskStatus.REJECTED
+        reviewer_guild = GuildKind.SAFETY
+        verdict = ReviewVerdict.BLOCK_SAFETY
+
+    rationale = body.rationale or f"Operator override: {body.verdict}"
+    session.add(
+        PeerReview(
+            invention_id=inv.id,
+            reviewer_guild=reviewer_guild,
+            verdict=verdict,
+            rationale=rationale,
+        )
+    )
+    session.add(
+        Event(
+            world_id=inv.world_id,
+            tick=inv.tick,
+            kind=f"invention:operator_{body.verdict}",
+            actor_id=inv.minion_id,
+            payload={"invention_id": inv.id, "rationale": rationale[:200]},
+        )
+    )
     return InventionOut(
         id=inv.id,
         world_id=inv.world_id,

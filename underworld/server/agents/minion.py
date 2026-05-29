@@ -38,6 +38,7 @@ from ..db.models import (
 from ..genetics import dna as dna_mod
 from ..services import lifecycle, progression
 from ..tools import llm, patent_search, safety
+from .guild_lore import get_lore
 
 
 _SYSTEM_PROMPT = (Path(__file__).resolve().parent.parent / "prompts" / "minion_system.md").read_text(
@@ -92,6 +93,30 @@ class TickOutcome:
 
 
 def _build_system_prompt(minion: Minion, world: World, biome: str) -> str:
+    lore = get_lore(minion.guild)
+    if lore is not None:
+        rituals = "; ".join(lore.rituals)
+        lore_fields = {
+            "guild_motto": lore.motto,
+            "guild_mission": lore.mission,
+            "guild_hero": lore.hero_name,
+            "guild_hero_tale": lore.hero_tale,
+            "guild_rituals": rituals,
+            "guild_obsession": lore.obsession,
+            "guild_open_question": lore.open_question,
+            "guild_nemesis": lore.nemesis,
+        }
+    else:
+        lore_fields = {
+            "guild_motto": "(no motto)",
+            "guild_mission": "(no recorded mission)",
+            "guild_hero": "(no recorded hero)",
+            "guild_hero_tale": "",
+            "guild_rituals": "(none)",
+            "guild_obsession": "(unknown)",
+            "guild_open_question": "(unknown)",
+            "guild_nemesis": "(none)",
+        }
     return _SYSTEM_PROMPT.format(
         name=minion.name,
         surname=minion.surname or "",
@@ -119,6 +144,7 @@ def _build_system_prompt(minion: Minion, world: World, biome: str) -> str:
         health=minion.health,
         stress=minion.stress,
         mood=minion.mood.value,
+        **lore_fields,
     )
 
 
