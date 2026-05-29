@@ -2,7 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment as DreiEnvironment, Html, OrbitControls } from "@react-three/drei";
 import {
-  Bloom, DepthOfField, EffectComposer, N8AO, SMAA, SSR, ToneMapping, Vignette,
+  Bloom, EffectComposer, N8AO, SMAA, SSR, ToneMapping, Vignette,
 } from "@react-three/postprocessing";
 import { BlendFunction, ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
@@ -344,12 +344,12 @@ export default function WorldScene3D({
               thickness={0.5}
               ior={1.45}
               jitter={0.7}
-              jitterRoughness={0.5}
-              steps={20}
-              refineSteps={5}
-              missedRays={false}
-              useNormalMap
-              useRoughnessMap
+              jitterRough={0.5}
+              MAX_STEPS={20}
+              NUM_BINARY_SEARCH_STEPS={5}
+              STRETCH_MISSED_RAYS={false}
+              USE_NORMALMAP
+              USE_ROUGHNESSMAP
             />
             {/* DoF reads as out-of-focus mush at orbit distance — only worth
                 running in character-follow mode where there's a clear

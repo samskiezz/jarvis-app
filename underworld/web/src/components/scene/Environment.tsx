@@ -4,7 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import GlbModel from "./GlbModel";
 import {
-  CASTLE_BUILDINGS, CITY_BUILDINGS, COMMERCIAL_BUILDINGS, SKYSCRAPERS,
+  CITY_BUILDINGS, COMMERCIAL_BUILDINGS, SKYSCRAPERS,
   FENCES, FOUNTAIN, HEDGES, LANTERN,
   NATURE_ROCKS, NATURE_TREES, NATURE_DECOR, TEXTURE_SETS,
 } from "./assets";
