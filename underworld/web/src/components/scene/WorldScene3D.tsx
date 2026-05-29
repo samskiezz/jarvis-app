@@ -12,6 +12,7 @@ import Terrain, { elevationAt } from "./Terrain";
 import WorldEnvironment from "./Environment";
 import MinionAvatar from "./MinionAvatar";
 import { computePois, destinationForAction } from "./pois";
+import type { Collider } from "./colliders";
 import Weather, { weatherFor, type WeatherKind } from "./Weather";
 import Water from "./Water";
 import CelestialBodies from "./CelestialBodies";
@@ -137,6 +138,19 @@ export default function WorldScene3D({
     [grid, seed],
   );
 
+  // Static collider list — buildings, trees, rocks, central monument.
+  // Radii roughly match the geometry scale set in Environment.tsx so the
+  // avatar's clearance feels right (small buffer for "shoulder room").
+  const colliders = useMemo<Collider[]>(() => {
+    const out: Collider[] = [];
+    for (const h of pois.huts)  out.push({ x: h.pos[0], z: h.pos[2], r: 5.5 });
+    for (const t of pois.trees) out.push({ x: t.pos[0], z: t.pos[2], r: 1.8 });
+    for (const r of pois.rocks) out.push({ x: r.pos[0], z: r.pos[2], r: 2.4 });
+    // Central monument has the biggest footprint.
+    out.push({ x: pois.obelisk[0], z: pois.obelisk[2], r: 7.0 });
+    return out;
+  }, [pois]);
+
   const placements = useMemo(
     () => minions.map((m) => {
       const home = placeMinion(m.id, grid, WORLD_SIZE, AMPLITUDE);
@@ -234,6 +248,7 @@ export default function WorldScene3D({
                 atDestination={at}
                 actionName={actionByMinion?.[p.minion.id]}
                 selected={isSelected}
+                colliders={colliders}
                 controlled={isSelected && controlMode}
                 positionRef={isSelected ? selectedPosRef : undefined}
                 controlInputRef={isSelected && controlMode ? controlInputRef : undefined}

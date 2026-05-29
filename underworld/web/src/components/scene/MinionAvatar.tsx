@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { clone as cloneSkeleton } from "three/examples/jsm/utils/SkeletonUtils.js";
 import type { Guild, MinionListItem, Mood } from "@/lib/types";
 import { ALL_CHARACTER_MODELS, characterModelFor } from "./assets";
+import { clampToFree, type Collider } from "./colliders";
 import GuildAccessory from "./GuildAccessory";
 
 const GUILD_COLOR: Record<Guild, string> = {
@@ -58,6 +59,9 @@ const DEATH_CLIPS = ["die", "Death", "Dying", "idle"];
 // a ~6u-tall humanoid — visible from the default camera distance in the
 // 120u world, comparable to the suburban houses (~5.5u).
 const AVATAR_SCALE = 12;
+// Approx half-width of a Kenney mini-character at AVATAR_SCALE — used as
+// the collision radius so the avatar doesn't clip into building walls.
+const AVATAR_RADIUS = 1.0;
 
 interface Props {
   minion: MinionListItem;
@@ -71,6 +75,9 @@ interface Props {
   /** When true, this minion ignores its AI target and follows user WASD
    * input from controlInputRef instead. */
   controlled?: boolean;
+  /** Static obstacles the avatar must walk around (buildings, trees, rocks,
+   *  obelisk). Passed once per (pois, seed) from the scene. */
+  colliders?: readonly Collider[];
   /** If provided, the avatar writes its current world position into this
    * ref each frame so the camera/HUD can track it. Only the selected
    * minion gets one. */
@@ -90,6 +97,7 @@ export default function MinionAvatar({
   actionName,
   selected,
   controlled,
+  colliders,
   positionRef,
   controlInputRef,
   onClick,
@@ -213,8 +221,14 @@ export default function MinionAvatar({
       const moving = input.lengthSq() > 0.01;
       if (moving) {
         const speed = 10;
-        g.position.x += input.x * speed * dt;
-        g.position.z += input.z * speed * dt;
+        let nx = g.position.x + input.x * speed * dt;
+        let nz = g.position.z + input.z * speed * dt;
+        if (colliders && colliders.length) {
+          const out = clampToFree(nx, nz, AVATAR_RADIUS, colliders);
+          nx = out[0]; nz = out[1];
+        }
+        g.position.x = nx;
+        g.position.z = nz;
         const targetAngle = Math.atan2(input.x, input.z);
         let diff = targetAngle - g.rotation.y;
         while (diff > Math.PI) diff -= Math.PI * 2;
@@ -247,8 +261,14 @@ export default function MinionAvatar({
     const speed = (isWalking ? 8.0 : 2.5) * energy;
     if (dist > 0.01) {
       const step = Math.min(dist, speed * dt);
-      g.position.x += (dx / dist) * step;
-      g.position.z += (dz / dist) * step;
+      let nx = g.position.x + (dx / dist) * step;
+      let nz = g.position.z + (dz / dist) * step;
+      if (colliders && colliders.length) {
+        const out = clampToFree(nx, nz, AVATAR_RADIUS, colliders);
+        nx = out[0]; nz = out[1];
+      }
+      g.position.x = nx;
+      g.position.z = nz;
     }
     g.position.y = basePosition[1];
 
