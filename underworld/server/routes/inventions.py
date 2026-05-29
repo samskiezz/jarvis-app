@@ -15,6 +15,7 @@ from ..db.models import (
     Minion,
     PeerReview,
     ReviewVerdict,
+    SafetyReview,
     TaskStatus,
     World,
 )
@@ -166,6 +167,19 @@ async def decide_invention(
             rationale=rationale,
         )
     )
+    # Mirror the auto-pipeline: a safety block writes BOTH a PeerReview
+    # (with BLOCK_SAFETY) and a SafetyReview row so /safety/reviews
+    # surfaces the override alongside automatic blocks.
+    if body.verdict == "block_safety":
+        session.add(
+            SafetyReview(
+                subject_id=inv.id,
+                subject_kind="invention",
+                rule="operator_block_safety",
+                detail=rationale[:1000],
+                blocked=True,
+            )
+        )
     session.add(
         Event(
             world_id=inv.world_id,
