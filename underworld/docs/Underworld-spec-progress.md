@@ -71,7 +71,9 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 119 | Parenting quality affects capability | ✅ | `Minion.upbringing` set at birth |
 | 147 | Circadian rhythm (night work slower) | ✅ | `lifecycle.circadian_factor` |
 | 148/149 | Stimulants & addiction | ✅ | `services/substances.py`, `Minion.addiction` |
-| 101/126/127/138/140/144–146 | Per-minion NN, ToT/MCTS, meta-cognition, digital-assistant ascension, ghost medium, appearance/body-mod | ◑/⬜ |
+| 127 | Meta-cognition (reflect on mistakes) | ✅ | `reasoning.reflect` |
+| 144–146 | Appearance / body-mod, unlocked by tech | ✅ | `services/appearance.py` |
+| 101/126/138/140 | Per-minion NN, ToT/MCTS decisions, digital-assistant ascension, ghost medium | ◑/⬜ |
 
 ---
 

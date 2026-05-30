@@ -13,7 +13,7 @@ from __future__ import annotations
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db.models import CausalBelief, Minion
+from ..db.models import CausalBelief, Memory, Minion
 
 # A belief needs this many trials before it's trusted enough to act on.
 MIN_TRIALS_TO_ACT = 3
@@ -72,3 +72,24 @@ async def best_action(
         if b.cause in candidates and b.trials >= MIN_TRIALS_TO_ACT and b.confidence >= ACT_CONFIDENCE:
             return b.cause
     return None
+
+
+async def reflect(session: AsyncSession, minion: Minion, tick: int) -> str | None:
+    """Doc I.127 — meta-cognition: review beliefs for a reliably-unhelpful habit,
+    record the lesson, and grow a little more deliberate (conscientiousness).
+    Returns the action reflected upon, or None if there's nothing to learn yet."""
+    bad = next(
+        (b for b in await beliefs(session, minion.id)
+         if b.trials >= MIN_TRIALS_TO_ACT and b.confidence < 0.4),
+        None,
+    )
+    if bad is None:
+        return None
+    session.add(Memory(
+        minion_id=minion.id, tick=tick, kind="reflection",
+        content=(f"On reflection, '{bad.cause}' rarely helps me "
+                 f"({bad.confidence:.0%} of the time). I'll be more deliberate."),
+        importance=0.7,
+    ))
+    minion.conscientiousness = min(1.0, minion.conscientiousness + 0.02)
+    return bad.cause

@@ -193,6 +193,26 @@ async def train_model(
     return {"task": model.task, "samples": model.samples, "accuracy": model.accuracy}
 
 
+@router.get("/{minion_id}/appearance")
+async def get_appearance(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc II.144-146 — the Minion's look, drawn from its world's unlocked tech."""
+    from ..db.models import Discovery, World
+    from ..services import appearance
+
+    minion = await _minion_or_404(session, minion_id)
+    world = await session.get(World, minion.world_id)
+    discovered = {
+        r[0] for r in (await session.execute(
+            select(Discovery.tech).where(Discovery.world_id == minion.world_id)
+        )).all()
+    }
+    return appearance.for_minion(minion, world.era if world else "stone", discovered)
+
+
 @router.get("/{minion_id}/beliefs")
 async def list_beliefs(
     minion_id: str,

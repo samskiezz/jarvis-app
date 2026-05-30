@@ -987,6 +987,9 @@ async def run_tick(
     await reasoning.record(
         session, minion.id, action, confirmed=wb_after > wb_before, tick=world.tick,
     )
+    # Doc I.127 — periodic meta-cognition: reflect on mistakes and adjust.
+    if world.tick % 8 == 0:
+        await reasoning.reflect(session, minion, world.tick)
 
     extra_memory = str(parsed.get("memory_to_store") or "").strip()
     if extra_memory:
