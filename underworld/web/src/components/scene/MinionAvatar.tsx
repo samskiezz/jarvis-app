@@ -1,6 +1,6 @@
 import { MutableRefObject, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useAnimations, useGLTF } from "@react-three/drei";
+import { Html, useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { clone as cloneSkeleton } from "three/examples/jsm/utils/SkeletonUtils.js";
 import type { Guild, MinionListItem, Mood } from "@/lib/types";
@@ -89,6 +89,10 @@ interface Props {
   positionRef?: MutableRefObject<THREE.Vector3>;
   /** Unit XZ direction the user is pressing in control mode. */
   controlInputRef?: MutableRefObject<THREE.Vector3>;
+  /** Latest internal thought — shown as a bubble that tracks the avatar. */
+  thought?: string;
+  /** Human-readable label of the current action — shown when selected. */
+  actionLabel?: string;
   onClick: (id: string) => void;
 }
 
@@ -105,6 +109,8 @@ export default function MinionAvatar({
   colliders,
   positionRef,
   controlInputRef,
+  thought,
+  actionLabel,
   onClick,
 }: Props) {
   const modelUrl = characterModelFor(minion.guild);
@@ -298,6 +304,24 @@ export default function MinionAvatar({
     >
       <primitive object={clone} scale={AVATAR_SCALE} />
       <GuildAccessory guild={minion.guild} />
+      {selected ? (
+        <Html position={[0, 7.2, 0]} center distanceFactor={26} style={{ pointerEvents: "none" }}>
+          <div className="whitespace-nowrap rounded-lg border border-white/15 bg-ink-1/95 px-2 py-1 text-[10px] text-zinc-100 shadow-xl backdrop-blur">
+            <div className="font-mono text-glow-purple">
+              {minion.name}{minion.nickname ? ` “${minion.nickname}”` : ""} {minion.surname}
+            </div>
+            <div className="text-[9px] text-zinc-400">{minion.guild} · {minion.mood}</div>
+            {actionLabel ? <div className="text-[9px] text-glow-jade">{actionLabel}</div> : null}
+          </div>
+        </Html>
+      ) : null}
+      {!selected && thought ? (
+        <Html position={[0, 6.4, 0]} center distanceFactor={36} style={{ pointerEvents: "none" }} occlude>
+          <div className="max-w-[220px] rounded-md border border-white/10 bg-black/60 px-1.5 py-1 text-[8px] italic leading-snug text-zinc-200 shadow-md backdrop-blur">
+            {thought}
+          </div>
+        </Html>
+      ) : null}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <ringGeometry args={[selected ? 2.0 : 1.4, selected ? 2.5 : 1.6, 32]} />
         <meshBasicMaterial
