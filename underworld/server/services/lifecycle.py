@@ -252,6 +252,12 @@ async def kill(
         soul = await session.get(Soul, soul_id)
         if soul is not None:
             soul.karma = (soul.karma + m.karma) / 2.0
+            # Doc II.104 — bank this life's peak knowledge + emotional tone.
+            skill_sum = float(await session.scalar(
+                select(func.coalesce(func.sum(Skill.level), 0.0)).where(Skill.minion_id == m.id)
+            ) or 0.0)
+            soul.knowledge = max(soul.knowledge, skill_sum)
+            soul.temperament = m.mood.value
             summary = (
                 f"Life #{soul.incarnation} as {m.name} {m.surname} "
                 f"({m.guild.value}, gen {m.generation}): rep={m.reputation:.2f}, "
@@ -349,7 +355,10 @@ async def _make_minion(
     await session.flush()
 
     spec = guilds.get(guild)
-    base_level = 0.5 + 0.5 * dna_mod.trait(dna, "intelligence")
+    # Doc II.106 — talent skips generations: a soul that mastered much in a past
+    # life seeds its next body with a head-start, even with no parents.
+    talent_bonus = min(0.6, soul.knowledge / 60.0)
+    base_level = (0.5 + 0.5 * dna_mod.trait(dna, "intelligence")) * (1.0 + talent_bonus)
     skill_levels: dict[str, float] = {name: base_level for name in spec.starting_skills}
     # Doc II.117 — offspring inherit a fraction of their parents' skills (but
     # NOT their memories). A child of two masters starts ahead, not from zero.
@@ -522,6 +531,20 @@ async def pair_socialise(
     extraversion = (a.extraversion + b.extraversion) / 2.0
     agreeable = (a.agreeableness + b.agreeableness) / 2.0
     compatibility = 0.5 * agreeable + 0.3 * extraversion + (0.1 if same_guild else 0.0)
+
+    # Doc I.150 — gossip: reputation spreads; both drift toward their shared mean.
+    mean_rep = (a.reputation + b.reputation) / 2.0
+    a.reputation = max(0.0, min(5.0, a.reputation + (mean_rep - a.reputation) * 0.05))
+    b.reputation = max(0.0, min(5.0, b.reputation + (mean_rep - b.reputation) * 0.05))
+
+    # Ostracism: the community shuns the disgraced (reputation < 0.6).
+    if min(a.reputation, b.reputation) < 0.6:
+        await _ensure_relationship(session, a, b, RelationshipKind.RIVAL, tick, 0.5)
+        await _ensure_relationship(session, b, a, RelationshipKind.RIVAL, tick, 0.5)
+        outcast = a if a.reputation < b.reputation else b
+        outcast.sanity = max(0.0, outcast.sanity - 0.05)
+        outcast.stress = min(1.0, outcast.stress + 0.05)
+        return
 
     if compatibility > 0.55:
         await _ensure_relationship(session, a, b, RelationshipKind.FRIEND, tick, compatibility)
