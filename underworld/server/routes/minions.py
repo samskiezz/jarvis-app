@@ -152,6 +152,46 @@ async def list_skills(
     ]
 
 
+@router.get("/{minion_id}/models")
+async def list_models(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.58 — the ML models this Minion has trained."""
+    from ..services import mlmodels
+
+    await _minion_or_404(session, minion_id)
+    return [
+        {"task": m.task, "samples": m.samples, "accuracy": m.accuracy, "updated_tick": m.updated_tick}
+        for m in await mlmodels.models_for(session, minion_id)
+    ]
+
+
+@router.post("/{minion_id}/train-model")
+async def train_model(
+    minion_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Train (or extend) an ML model on `samples` of the Minion's own data."""
+    from ..db.models import Minion, Skill, World
+    from ..services import mlmodels
+
+    minion = await _minion_or_404(session, minion_id)
+    task = str(body.get("task") or "classifier")[:40]
+    samples = int(body.get("samples") or 100)
+    skill = (await session.execute(
+        select(Skill).where(Skill.minion_id == minion_id, Skill.name == "computing")
+    )).scalars().first()
+    skill_level = skill.level if skill else max(1.0, 5.0 * minion.intelligence)
+    world = await session.get(World, minion.world_id)
+    model = await mlmodels.train(session, minion_id, task, new_samples=samples,
+                                 skill_level=skill_level, tick=world.tick if world else 0)
+    return {"task": model.task, "samples": model.samples, "accuracy": model.accuracy}
+
+
 @router.get("/{minion_id}/beliefs")
 async def list_beliefs(
     minion_id: str,
