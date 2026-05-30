@@ -300,6 +300,28 @@ class Memory(Base):
     minion: Mapped["Minion"] = relationship(back_populates="memories")
 
 
+class CausalBelief(Base):
+    """Doc I.23 — a Minion's learned cause→effect hypotheses.
+
+    Each row is a hypothesis ("doing `cause` improves my `effect`") with a
+    running count of trials and confirmations. Confidence is a Laplace-smoothed
+    success rate the Minion can act on (intervene) and keep updating (Bayesian-
+    ish belief revision).
+    """
+
+    __tablename__ = "causal_beliefs"
+    __table_args__ = (UniqueConstraint("minion_id", "cause", "effect", name="uq_belief_per_minion"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    minion_id: Mapped[str] = mapped_column(ForeignKey("minions.id"), nullable=False, index=True)
+    cause: Mapped[str] = mapped_column(String(40), nullable=False)
+    effect: Mapped[str] = mapped_column(String(40), default="wellbeing")
+    trials: Mapped[int] = mapped_column(Integer, default=0)
+    confirmations: Mapped[int] = mapped_column(Integer, default=0)
+    confidence: Mapped[float] = mapped_column(Float, default=0.5)
+    updated_tick: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class Relationship(Base):
     """Directed bond from A → B. Bonds are usually mirrored but can be asymmetric.
 
