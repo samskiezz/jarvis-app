@@ -247,6 +247,9 @@ class Minion(Base):
     # Doc II.119 — quality of upbringing, set at birth from the parents' standing.
     # A lasting multiplier on how fast this Minion learns as it matures.
     upbringing: Mapped[float] = mapped_column(Float, default=1.0)
+    # Doc II.148-149 — dependency on stimulants (0 = clean). High addiction brings
+    # tolerance (less benefit) and withdrawal (stress/health cost) when abstaining.
+    addiction: Mapped[float] = mapped_column(Float, default=0.0)
 
     # Reputation, karma snapshot, age — Section II.4, II.51
     reputation: Mapped[float] = mapped_column(Float, default=1.0)
