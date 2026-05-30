@@ -244,6 +244,10 @@ class Minion(Base):
     intelligence: Mapped[float] = mapped_column(Float, default=0.5)
     creativity: Mapped[float] = mapped_column(Float, default=0.5)
 
+    # Doc II.119 — quality of upbringing, set at birth from the parents' standing.
+    # A lasting multiplier on how fast this Minion learns as it matures.
+    upbringing: Mapped[float] = mapped_column(Float, default=1.0)
+
     # Reputation, karma snapshot, age — Section II.4, II.51
     reputation: Mapped[float] = mapped_column(Float, default=1.0)
     karma: Mapped[float] = mapped_column(Float, default=0.0)
