@@ -174,3 +174,17 @@ async def skill_tree(
             for n in nodes
         ],
     }
+
+
+@router.post("/oracle")
+async def consult_oracle(
+    body: dict,
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.56-57 — ask the Oracle. It replies only with Socratic hints."""
+    from ..services import oracle
+
+    return await oracle.consult(
+        str(body.get("question") or ""),
+        discipline=body.get("discipline"),
+    )
