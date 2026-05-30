@@ -552,6 +552,27 @@ async def solve_gap(
     return await puzzles.solve(session, minion, gap, patent_ids)
 
 
+@router.get("/{world_id}/art")
+async def world_art(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.47 — the world's cultural corpus, most acclaimed first."""
+    from ..db.models import Artwork
+
+    await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(Artwork).where(Artwork.world_id == world_id)
+        .order_by(Artwork.acclaim.desc()).limit(40)
+    )).scalars().all()
+    return [
+        {"form": a.form, "style": a.style, "title": a.title,
+         "acclaim": round(a.acclaim, 3), "tick": a.tick}
+        for a in rows
+    ]
+
+
 @router.get("/{world_id}/fossils")
 async def world_fossils(
     world_id: str,
