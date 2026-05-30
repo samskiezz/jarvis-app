@@ -194,6 +194,9 @@ class World(Base):
     # which climate drives and which feeds the population alongside wildlife.
     soil_fertility: Mapped[float] = mapped_column(Float, default=0.7)
     crop_yield: Mapped[float] = mapped_column(Float, default=0.0)
+    # Doc I.28 — accumulating tectonic stress that releases as earthquakes; how
+    # fast it builds depends on the seed's geology (mountainous worlds are active).
+    tectonic_stress: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")

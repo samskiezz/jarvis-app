@@ -19,12 +19,13 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 8/9 | EM / optics | ◑ | `physics/engine.py` computable laws; not live fields |
 | 11 | Chemistry (reactions, smelting, combustion, pH) | ✅ | `services/chemistry.py`, `/substrate/chemistry/react` |
 | 13 | Agriculture (climate-driven soil + crops feed pop) | ✅ | `services/agriculture.py`, `/worlds/{id}/environment` |
+| 28 | Plate tectonics + earthquakes (hazard field) | ✅ | `services/tectonics.py` |
 | 7 | Structural integrity | ✅ | `physics/structures.py`, gates invention feasibility |
 | 16 | Dynamic time-scaling | ✅ | `services/timescale.py`, `World.sim_year` |
 | 28/29/30 | Weather / water cycle / climate zones | ✅ | `services/climate.py`, `/worlds/{id}/climate` |
 | 35 | Ecosystem feedback / overhunting | ✅ | `services/ecosystem.py`, `/worlds/{id}/environment` |
 | 36 | Pollution | ✅ | `services/pollution.py` |
-| 6/10/12/14/15/31–34 | Fluids, acoustics, biology, geological epochs, fossils, tectonics | ⬜ | future deep physical fields |
+| 6/10/12/14/15/31–33 | Fluids, acoustics, biology, geological epochs, fossils | ⬜ | future deep physical fields |
 
 ### Minds & discovery
 | # | Item | Status | Where |
