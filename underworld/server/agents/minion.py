@@ -39,7 +39,7 @@ from ..db.models import (
 )
 from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
-from ..services import lifecycle, mastery as mastery_mod, progression
+from ..services import lifecycle, mastery as mastery_mod, progression, reasoning
 from ..tools import llm, patent_search, safety
 from .guild_lore import get_lore
 
@@ -73,6 +73,10 @@ _MISSION_ACTIONS = {
     "search_patents", "propose_invention", "propose_with_party", "build_scanner",
     "study", "teach", "kb_lookup", "calculate",
 }
+
+# Doc I.23 — actions a Minion may switch to when a learned belief is strong.
+# Restricted to always-safe, self-contained actions so an override never fails.
+_LEARNABLE_ACTIONS = {"study", "calculate", "kb_lookup", "meditate", "socialise"}
 
 # Guilds whose minions naturally reach for real calculations.
 _CALC_GUILDS = {
@@ -872,6 +876,9 @@ async def run_tick(
     args = parsed.get("args") or {}
     thought = str(parsed.get("thought") or "").strip()
 
+    # Doc I.23 — snapshot wellbeing before the action so we can learn its effect.
+    wb_before = reasoning.wellbeing(minion)
+
     if thought:
         await _store_memory(session, minion, world.tick, "thought", thought[:600], 0.4)
 
@@ -890,6 +897,17 @@ async def run_tick(
             f"Action '{action}' is locked at era {world.era}; resting instead.", 0.3,
         )
         action = "rest"
+
+    # Doc I.23 — if about to idle, act on a learned cause→effect belief instead:
+    # do the thing experience says reliably improves wellbeing.
+    if action == "rest":
+        learned = await reasoning.best_action(session, minion.id, _LEARNABLE_ACTIONS)
+        if learned and learned in progression.unlocked_actions(world.era):
+            action = learned
+            await _store_memory(
+                session, minion, world.tick, "thought",
+                f"I've learned that {learned} reliably helps me — doing it on purpose.", 0.45,
+            )
 
     if action == "search_patents":
         summary, _ = await _do_search_patents(session, minion, world, args)
@@ -960,6 +978,12 @@ async def run_tick(
         mission=action in _MISSION_ACTIONS,
         idle=action in {"rest", "meditate"},
         mood_signal=sanity_delta,
+    )
+
+    # Doc I.23 — observe the action's effect on wellbeing and update the belief.
+    wb_after = reasoning.wellbeing(minion)
+    await reasoning.record(
+        session, minion.id, action, confirmed=wb_after > wb_before, tick=world.tick,
     )
 
     extra_memory = str(parsed.get("memory_to_store") or "").strip()

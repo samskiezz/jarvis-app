@@ -152,6 +152,26 @@ async def list_skills(
     ]
 
 
+@router.get("/{minion_id}/beliefs")
+async def list_beliefs(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.23 — the Minion's learned cause→effect hypotheses, most confident first."""
+    from ..services import reasoning
+
+    await _minion_or_404(session, minion_id)
+    return [
+        {
+            "cause": b.cause, "effect": b.effect, "trials": b.trials,
+            "confirmations": b.confirmations, "confidence": b.confidence,
+            "updated_tick": b.updated_tick,
+        }
+        for b in await reasoning.beliefs(session, minion_id)
+    ]
+
+
 @router.get("/{minion_id}/memories", response_model=list[MemoryOut])
 async def list_memories(
     minion_id: str,
