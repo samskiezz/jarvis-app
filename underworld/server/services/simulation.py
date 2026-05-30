@@ -39,8 +39,8 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    discovery, ecosystem, economy, education, governance, knowledge_decay, lifecycle, mastery,
-    memes, pollution, projects, religion, roles, substances, timescale,
+    climate, discovery, ecosystem, economy, education, governance, knowledge_decay, lifecycle,
+    mastery, memes, pollution, projects, religion, roles, substances, timescale,
 )
 
 
@@ -381,6 +381,9 @@ async def advance_world(
         # 3g5. Ecosystem dynamics — overhunting collapses the food supply (doc I.35).
         food = await ecosystem.tick_ecosystem(session, world, len(alive_minions))
         await ecosystem.apply_famine(session, world, food)
+
+        # 3g6. Live climate field — season/temperature/weather + thermal stress (doc I.5/28-30).
+        await climate.tick_climate(session, world, rng)
 
         # 3g. Periodic scarcity-driven market snapshot (doc I.39-40).
         if world.tick % 10 == 0:
