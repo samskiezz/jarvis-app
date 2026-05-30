@@ -346,6 +346,22 @@ class Meme(Base):
     alive: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
 
 
+class MLModel(Base):
+    """Doc I.58 — an in-world machine-learning model a Minion trains on its own
+    data. Accuracy climbs with training samples toward a ceiling set by the
+    trainer's computing skill; it is never free."""
+
+    __tablename__ = "ml_models"
+    __table_args__ = (UniqueConstraint("minion_id", "task", name="uq_model_per_minion_task"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    minion_id: Mapped[str] = mapped_column(ForeignKey("minions.id"), nullable=False, index=True)
+    task: Mapped[str] = mapped_column(String(40), nullable=False)
+    samples: Mapped[int] = mapped_column(Integer, default=0)
+    accuracy: Mapped[float] = mapped_column(Float, default=0.0)
+    updated_tick: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class CausalBelief(Base):
     """Doc I.23 — a Minion's learned cause→effect hypotheses.
 
