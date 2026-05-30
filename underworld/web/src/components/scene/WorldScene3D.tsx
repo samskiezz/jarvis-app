@@ -38,6 +38,9 @@ interface Props {
    *  the rendered weather so the scene matches the simulation, instead of a
    *  client-side guess. */
   weatherOverride?: string;
+  /** Live climate readout for the HUD. */
+  season?: string;
+  temperature?: number;
 }
 
 /** Map the backend's 5 weather states onto the 3 the renderer supports. */
@@ -130,6 +133,8 @@ export default function WorldScene3D({
   thoughtByMinion,
   biomeHint,
   weatherOverride,
+  season,
+  temperature,
 }: Props) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   // Shared refs the selected MinionAvatar mutates (its world position) and
@@ -386,9 +391,13 @@ export default function WorldScene3D({
           </EffectComposer>
         </Suspense>
       </Canvas>
-      <div className="pointer-events-none absolute right-3 top-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-300 backdrop-blur">
+      <div className="pointer-events-none absolute right-3 top-3 flex items-center gap-1.5 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-300 backdrop-blur">
+        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-glow-jade" title="live" />
         {tint.label} · t{tick}
-        {weather !== "clear" ? ` · ${weather}` : ""}
+        {season ? ` · ${season}` : ""}
+        {temperature != null ? ` · ${Math.round(temperature)}°C` : ""}
+        {weatherOverride && weatherOverride !== "clear" ? ` · ${weatherOverride}` : weather !== "clear" ? ` · ${weather}` : ""}
+        {` · ${minions.filter((m) => m.alive).length} alive`}
       </div>
       <div className="pointer-events-none absolute bottom-3 left-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
         {controlMode

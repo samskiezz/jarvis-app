@@ -388,6 +388,8 @@ export default function WorldDetail() {
                   thoughtByMinion={thoughts.data?.thoughts}
                   biomeHint={map.data.biome_hint}
                   weatherOverride={climate.data?.weather}
+                  season={climate.data?.season}
+                  temperature={climate.data?.temperature}
                 />
               ) : (
                 <div className="skeleton h-[560px] w-[900px] rounded" />
