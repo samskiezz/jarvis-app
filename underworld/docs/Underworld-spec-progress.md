@@ -40,7 +40,8 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 71 | Peer-review replication | ✅ | `agents/reviewer.py` |
 | 72 | Scientific fraud + reputation damage | ✅ | `agents/reviewer.py` (fraud:detected) |
 | 74/75/77/78/79/80/81 | Peak information + Internet Gateway (master-gated, real Crossref fetch, read-only) | ✅ | `services/gateway.py`, `POST /minions/{id}/gateway` |
-| 24/59/60/76/82–85 | Ruins, scripting sandbox, gateway puzzles/empty-datasets, patent-draft suggestion | ⬜ | — |
+| 82/83/84/85 | Empty-dataset puzzles → combine expired patents → in-world patent + draft | ✅ | `services/puzzles.py`, `/worlds/{id}/gaps` |
+| 24/59/60/76 | Ruins, scripting sandbox, gateway comprehension mini-test | ⬜ | — |
 
 ### Society & economy
 | # | Item | Status | Where |

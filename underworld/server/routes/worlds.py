@@ -512,6 +512,46 @@ async def world_society(
     }
 
 
+@router.get("/{world_id}/gaps")
+async def world_gaps(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.82-85 — open research puzzles (empty data sets) for this world."""
+    from ..services import puzzles
+
+    await _world_or_404(session, world_id)
+    return [
+        {"id": g.id, "discipline": g.discipline, "prompt": g.prompt,
+         "required_patents": g.required_patents, "created_tick": g.created_tick}
+        for g in await puzzles.open_gaps(session, world_id)
+    ]
+
+
+@router.post("/{world_id}/gaps/{gap_id}/solve")
+async def solve_gap(
+    world_id: str,
+    gap_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Solve a gap by combining expired patents → in-world patent + draft (#84/85)."""
+    from ..db.models import EmptyDataset, Minion
+    from ..services import puzzles
+
+    await _world_or_404(session, world_id)
+    gap = await session.get(EmptyDataset, gap_id)
+    if gap is None or gap.world_id != world_id:
+        raise HTTPException(status_code=404, detail="gap not found")
+    minion = await session.get(Minion, str(body.get("minion_id") or ""))
+    if minion is None or minion.world_id != world_id:
+        raise HTTPException(status_code=400, detail="valid minion_id required")
+    patent_ids = [str(p) for p in (body.get("patent_ids") or [])]
+    return await puzzles.solve(session, minion, gap, patent_ids)
+
+
 @router.get("/{world_id}/climate")
 async def world_climate(
     world_id: str,

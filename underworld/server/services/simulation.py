@@ -39,8 +39,8 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    climate, discovery, ecosystem, economy, education, governance, knowledge_decay, lifecycle,
-    mastery, memes, pollution, projects, religion, roles, substances, timescale,
+    climate, discovery, ecosystem, economy, education, governance, knowledge_decay,
+    lifecycle, mastery, memes, pollution, projects, puzzles, religion, roles, substances, timescale,
 )
 
 
@@ -384,6 +384,12 @@ async def advance_world(
 
         # 3g6. Live climate field — season/temperature/weather + thermal stress (doc I.5/28-30).
         await climate.tick_climate(session, world, rng)
+
+        # 3g7. Once at peak information, the gateway posts research puzzles (doc I.82-85).
+        if world.tick % 15 == 0:
+            from .gateway import world_gateway_open
+            if await world_gateway_open(session, world):
+                await puzzles.generate(session, world, rng)
 
         # 3g. Periodic scarcity-driven market snapshot (doc I.39-40).
         if world.tick % 10 == 0:
