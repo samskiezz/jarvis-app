@@ -12,7 +12,9 @@ from typing import Any
 
 import httpx
 
-from ..config import LIVE_INTEL_TTL_SECONDS, USGS_FEED
+from ..config import FX_FEED, LIVE_INTEL_TTL_SECONDS, USGS_FEED
+from .corpus import get_corpus
+from .simulation import snapshot
 
 # CoinGecko: free, no auth, returns price + 24h change per id.
 _COINGECKO = "https://api.coingecko.com/api/v3/simple/price"
@@ -23,12 +25,6 @@ _COINS = [
     ("ethereum", "usd", "ETH/USD"),
 ]
 
-# exchangerate.host: free, no auth, daily FX rates.
-_FX_HOST = "https://api.exchangerate.host/latest"
-_FX_PAIRS = [
-    ("AUD", "USD", "AUD/USD"),
-    ("AED", "AUD", "AED/AUD"),
-]
 
 
 _cache: dict[str, Any] = {"ts": 0.0, "value": None}
@@ -100,34 +96,29 @@ async def _crypto(client: httpx.AsyncClient) -> list[dict]:
 
 
 async def _fx(client: httpx.AsyncClient) -> list[dict]:
+    """Live FX via open.er-api.com (keyless). Base AUD → derive the pairs we show."""
+    try:
+        resp = await client.get(FX_FEED, timeout=15.0)
+        resp.raise_for_status()
+        data = resp.json()
+    except (httpx.HTTPError, ValueError):
+        return []
+    rates = data.get("rates") or {}
     out: list[dict] = []
-    for base, target, display in _FX_PAIRS:
-        try:
-            resp = await client.get(
-                _FX_HOST, params={"base": base, "symbols": target}, timeout=15.0
-            )
-            resp.raise_for_status()
-            data = resp.json()
-        except (httpx.HTTPError, ValueError):
-            continue
-        rate = data.get("rates", {}).get(target)
-        if rate is None:
-            continue
-        out.append(
-            {
-                "sym": display,
-                "display": display,
-                "price": _fmt_price(float(rate)),
-                "change_pct": 0.0,
-            }
-        )
+    usd = rates.get("USD")
+    if usd:
+        out.append({"sym": "AUD/USD", "display": "AUD/USD", "price": _fmt_price(float(usd)),
+                    "change_pct": 0.0, "note": "USD per 1 AUD"})
+    aed = rates.get("AED")
+    if aed:
+        out.append({"sym": "AED/AUD", "display": "AED/AUD", "price": _fmt_price(1.0 / float(aed)),
+                    "change_pct": 0.0, "note": "Pegged USD — zero FX risk"})
     return out
 
 
 async def _markets(client: httpx.AsyncClient) -> list[dict]:
-    # exchangerate.host now requires a paid key; we only ship the keyless feeds.
-    # FX can be added back when the user supplies an API key in the env.
-    return await _crypto(client)
+    crypto, fx = await asyncio.gather(_crypto(client), _fx(client))
+    return crypto + fx
 
 
 async def get_live_intel() -> dict[str, Any]:
@@ -145,18 +136,9 @@ async def get_live_intel() -> dict[str, Any]:
         value = {
             "earthquakes": earthquakes,
             "markets": markets,
-            "corpus": {
-                "timeline": [],
-                "investment_emails": [],
-                "crypto_emails": [],
-                "psg_emails": [],
-                "travel_emails": [],
-                "wedding_emails": [],
-                "music_emails": [],
-                "facts": {"predicates": {}},
-            },
-            "panopticon": {"maps": ["city_grid", "dockyard", "industrial_zone"]},
-            "counterstrike": {"maps": ["de_dust2", "de_mirage", "de_inferno", "de_nuke"]},
+            "corpus": get_corpus(),
+            "panopticon": snapshot("panopticon"),
+            "counterstrike": snapshot("counterstrike"),
             "generated_at": now,
         }
         _cache["value"] = value

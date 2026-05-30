@@ -511,7 +511,7 @@ function TimelinePanel({ liveData }) {
       </div>
       <div style={{ padding:"4px 8px",fontSize:7,color:"#2a3d4d",borderBottom:`1px solid ${C.border}`,flexShrink:0,display:"flex",justifyContent:"space-between" }}>
         <span>{filtered.length} events shown</span>
-        <span>PALANTIR TIMELINE · 3,018 total corpus events</span>
+        <span>JARVIS TIMELINE · {events.length} corpus events</span>
       </div>
       <div style={{ flex:1,overflowY:"auto",position:"relative" }}>
         {/* Timeline axis */}
@@ -627,6 +627,8 @@ function EmailCorpus({ liveData }) {
   const catColors = { DUBAI:C.blue, ZANZIBAR:C.gold, PANGANI:C.gold, LEGAL:C.purple, PORTFOLIO:"#888", AU_PROPERTY:C.neon, ACCOMMODATION:C.orange, FLIGHT:C.blue, ARRIVAL:C.neon, CYPRUS:C.purple, SYDNEY:C.neon, INVOICE:C.blue, CREDIT:C.gold, ADMIN:"#888" };
 
   const facts = corpus.facts;
+  const totals = corpus.totals || {};
+  const totalEmails = totals.emails ?? Object.values(tabs).reduce((n,t)=>n+t.data.length,0);
 
   return (
     <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
@@ -638,7 +640,7 @@ function EmailCorpus({ liveData }) {
             <span style={{ fontSize:8,color:C.neon,fontWeight:"bold" }}>{v.toLocaleString()}</span>
           </div>
         ))}
-        <span style={{ fontSize:7,color:"#2a3d4d",marginLeft:"auto",display:"flex",alignItems:"center" }}>3,804 emails · 15,822 WA · 8,939 facts</span>
+        <span style={{ fontSize:7,color:"#2a3d4d",marginLeft:"auto",display:"flex",alignItems:"center" }}>{totalEmails} emails · {totals.timeline ?? 0} events · {facts?.total ?? 0} facts</span>
       </div>
       {/* Tabs */}
       <div style={{ display:"flex",borderBottom:`1px solid ${C.border}`,flexShrink:0 }}>
@@ -729,12 +731,16 @@ function WatchlistPanel({ onFocus }) {
 function MarketsPanel({ liveData, loading }) {
   const markets = Array.isArray(liveData?.markets) && liveData.markets.length > 0 ? liveData.markets : null;
   const displayData = markets || MARKETS_FALLBACK;
+  const xrpQ = (markets || []).find(m => (m.display||"").includes("XRP"));
+  const xrpHeldStr = xrpQ
+    ? `$${(parseFloat(String(xrpQ.price).replace(/,/g,"")) * 9300).toLocaleString("en-AU",{maximumFractionDigits:0})} AUD`
+    : "$19,251 AUD";
 
   return (
     <div style={{ height:"100%",display:"flex",flexDirection:"column",fontFamily:"Courier New" }}>
       <div style={{ padding:"4px 8px",fontSize:7,color:"#2a3d4d",borderBottom:`1px solid ${C.border}`,flexShrink:0,display:"flex",justifyContent:"space-between" }}>
         <span>LIVE MARKET DATA</span>
-        <span style={{ color:markets?C.neon:C.gold }}>{markets?"● LIVE (Yahoo Finance)":"● FALLBACK"}</span>
+        <span style={{ color:markets?C.neon:C.gold }}>{markets?"● LIVE (CoinGecko + FX)":"● FALLBACK"}</span>
       </div>
       <div style={{ flex:1,overflowY:"auto",padding:"4px 0" }}>
         {displayData.map((m,i)=>{
@@ -754,7 +760,7 @@ function MarketsPanel({ liveData, loading }) {
         {/* Portfolio summary */}
         <div style={{ margin:"6px 8px",padding:"10px",background:C.neonD,border:`1px solid ${C.neon}22`,borderRadius:4 }}>
           <div style={{ fontSize:7,color:C.neon,letterSpacing:2,marginBottom:8 }}>PORTFOLIO POSITIONS</div>
-          {[["XRP 9,300 units","$19,251 AUD",C.neon],["PSG Net/wk","$120,000",C.neon],["PSG Annual Net","~$6.24M",C.neon],["Pangani Ask","$175k USD",C.gold],["Golf Acres","AED TBC",C.blue],["$100M Target","2033–2035",C.red]].map(([k,v,col])=>(
+          {[["XRP 9,300 units",xrpHeldStr,C.neon],["PSG Net/wk","$120,000",C.neon],["PSG Annual Net","~$6.24M",C.neon],["Pangani Ask","$175k USD",C.gold],["Golf Acres","AED TBC",C.blue],["$100M Target","2033–2035",C.red]].map(([k,v,col])=>(
             <div key={k} style={{ display:"flex",justifyContent:"space-between",padding:"3px 0",borderBottom:`1px solid rgba(0,200,120,0.04)` }}>
               <span style={{ fontSize:8,color:"#2a3d4d" }}>{k}</span>
               <span style={{ fontSize:9,color:col,fontWeight:"bold" }}>{v}</span>
@@ -913,7 +919,7 @@ function StreamStatusPanel({ title, streamUrlEnv, channels = [] }) {
   );
 }
 
-function LiveGameRenderPanel({ title, streamUrlEnv, channels = [], defaultMaps = [], initialState }) {
+function LiveGameRenderPanel({ title, streamUrlEnv, defaultStreamUrl, channels = [], defaultMaps = [], initialState }) {
   const [selectedMap, setSelectedMap] = useState(defaultMaps[0] || "default");
   const [connected, setConnected] = useState(false);
   const [events, setEvents] = useState(0);
@@ -921,7 +927,8 @@ function LiveGameRenderPanel({ title, streamUrlEnv, channels = [], defaultMaps =
   const [viewMode, setViewMode] = useState("3D");
   const [gameState, setGameState] = useState(initialState || { map: defaultMaps[0] || "default", units: [] });
   const canvasRef = useRef(null);
-  const streamUrl = import.meta.env[streamUrlEnv];
+  // Prefer an explicit env override; otherwise stream from the bundled backend.
+  const streamUrl = import.meta.env[streamUrlEnv] || defaultStreamUrl;
   const mapList = defaultMaps.length ? defaultMaps : ["de_dust2", "de_inferno", "de_mirage", "city_grid"];
   const mapBounds = {
     de_dust2: { minX: -2500, maxX: 2500, minY: -2000, maxY: 2000 },
@@ -945,6 +952,7 @@ function LiveGameRenderPanel({ title, streamUrlEnv, channels = [], defaultMaps =
       map: payload.map || payload.mapName || payload.level || selectedMap,
       tick: payload.tick ?? payload.frame ?? payload.roundTick ?? null,
       round: payload.round ?? payload.roundNumber ?? null,
+      bounds: payload.bounds || null,
       units,
     };
   };
@@ -1072,6 +1080,7 @@ function LiveGameRenderPanel({ title, streamUrlEnv, channels = [], defaultMaps =
             mapName={selectedMap}
             mapModelUrl={gameState?.mapModelUrl || gameState?.mapModel?.url}
             units={gameState?.units || []}
+            bounds={gameState?.bounds || null}
             manifest={gameState?.assets || gameState?.manifest || {}}
           />
         </div>
@@ -1118,7 +1127,9 @@ export default function JarvisTerminal() {
     const fetch_ = async () => {
       try {
         setLoadingData(true);
-        const r = await fetch(API, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({type:"all"}) });
+        const headers = { "Content-Type":"application/json" };
+        if (appParams.apiKey) headers["Authorization"] = `Bearer ${appParams.apiKey}`;
+        const r = await fetch(API, { method:"POST", headers, body:JSON.stringify({type:"all"}) });
         if (r.ok) setLiveData(await r.json());
       } catch(e) { console.error(e); }
       finally { setLoadingData(false); }
@@ -1132,6 +1143,19 @@ export default function JarvisTerminal() {
   useEffect(()=>{ const t=setInterval(()=>setTime(new Date()),1000); return()=>clearInterval(t); },[]);
 
   const earthquakes = liveData?.earthquakes || [];
+  const corpusTotals = liveData?.corpus?.totals || {};
+  const liveMarkets = Array.isArray(liveData?.markets) ? liveData.markets : [];
+  const xrpQuote = liveMarkets.find(m => (m.display||"").includes("XRP"));
+  const xrpHeld = xrpQuote ? `$${(parseFloat(String(xrpQuote.price).replace(/,/g,"")) * 9300).toLocaleString("en-AU",{maximumFractionDigits:0})}` : "$19.2k";
+  // Live ticker: real market quotes + standing portfolio facts (no fabricated prices).
+  const marketTicker = liveMarkets.map(m => {
+    const ch = Number(m.change_pct) || 0;
+    const arrow = ch > 0 ? "▲" : ch < 0 ? "▼" : "·";
+    return `${m.display} ${m.price} ${arrow}${ch>=0?"+":""}${ch.toFixed(2)}%`;
+  });
+  const factTicker = ["PSG NET $120k/wk", `XRP×9,300=${xrpHeld}`, "PANGANI DD ACTIVE", "IFZA FZCO PLANNING", "$100M TARGET 2033", `${earthquakes.length} USGS QUAKES LIVE`];
+  const tickerBase = marketTicker.length ? [...marketTicker, ...factTicker] : factTicker;
+  const tickerItems = [...tickerBase, ...tickerBase];
   const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
 
   const SIDEBAR_PANELS = PANEL_REGISTRY;
@@ -1182,7 +1206,7 @@ export default function JarvisTerminal() {
         <div style={{ flex:1 }}/>
         <div style={{ display:"flex", gap:6, alignItems:"center" }}>
           <span style={{ fontSize:8,color:C.neon,background:C.neonD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.neon}22` }}>PSG $120k/wk</span>
-          <span style={{ fontSize:8,color:C.gold,background:C.goldD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.gold}22` }}>XRP $19.2k</span>
+          <span style={{ fontSize:8,color:C.gold,background:C.goldD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.gold}22` }}>XRP {xrpHeld}</span>
           <span style={{ fontSize:8,color:C.blue,background:C.blueD,padding:"2px 7px",borderRadius:3,border:`1px solid ${C.blue}22` }}>{earthquakes.length} EQ LIVE</span>
           <span style={{ fontSize:8,color:"#2a3d4d" }}>{time.toLocaleTimeString("en-AU",{timeZone:"Australia/Sydney",hour:"2-digit",minute:"2-digit",second:"2-digit"})} AEST</span>
         </div>
@@ -1195,7 +1219,7 @@ export default function JarvisTerminal() {
           <span style={{ fontSize:7,color:C.neon,letterSpacing:1 }}>MKT</span>
         </div>
         <div style={{ display:"flex",paddingLeft:70,animation:"scroll 45s linear infinite",whiteSpace:"nowrap",gap:0 }}>
-          {["XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","$100M TARGET 2033","XRP/AUD 2.07 ▲+1.2%","BTC/AUD 98,400 ▲+0.6%","ETH/USD 2,041 ▼-1.4%","AUD/USD 0.6320 ▲+0.3%","CRUDE 81.40 ▲+2.1%","GOLD 3,021 ▲+0.6%","PSG NET $120k/wk","XRP×9,300=$19,251","PANGANI DD ACTIVE","IFZA FZCO PLANNING","$100M TARGET 2033"].map((item,i)=>(
+          {tickerItems.map((item,i)=>(
             <span key={i} style={{ display:"inline-flex",marginRight:24,fontSize:8,color:item.includes("▼")?C.red:item.includes("▲")?C.neon:C.textB,fontFamily:"Courier New" }}>{item}</span>
           ))}
         </div>
@@ -1289,6 +1313,7 @@ export default function JarvisTerminal() {
             onClose={()=>closePanel("PANOPTICON")} onMinimize={()=>minimizePanel("PANOPTICON")} zIndex={panels.PANOPTICON.z}
             onClick={()=>bringToFront("PANOPTICON")} minimized={panels.PANOPTICON.minimized}>
             <LiveGameRenderPanel title="Panopticon stream monitor" streamUrlEnv="VITE_PANOPTICON_STREAM_URL"
+              defaultStreamUrl={`${appParams.apiBaseUrl}/streams/panopticon`}
               channels={["agents.position","agents.intent","panopticon.alerts","ml.training.progress"]}
               defaultMaps={liveData?.panopticon?.maps || ["city_grid","dockyard","industrial_zone"]}
               initialState={liveData?.panopticon}/>
@@ -1300,6 +1325,7 @@ export default function JarvisTerminal() {
             onClose={()=>closePanel("CS3D")} onMinimize={()=>minimizePanel("CS3D")} zIndex={panels.CS3D.z}
             onClick={()=>bringToFront("CS3D")} minimized={panels.CS3D.minimized}>
             <LiveGameRenderPanel title="Counterstrike 3D simulation stream" streamUrlEnv="VITE_COUNTERSTRIKE3D_STREAM_URL"
+              defaultStreamUrl={`${appParams.apiBaseUrl}/streams/counterstrike`}
               channels={["sim.tick","players.state","round.events","ml.policy.actions"]}
               defaultMaps={liveData?.counterstrike?.maps || ["de_dust2","de_mirage","de_inferno","de_nuke"]}
               initialState={liveData?.counterstrike}/>
@@ -1312,7 +1338,7 @@ export default function JarvisTerminal() {
 
       {/* ── STATUS BAR ────────────────────────────────────────────────────── */}
       <div style={{ position:"fixed",bottom:0,left:54,right:0,height:22,display:"flex",alignItems:"center",gap:10,padding:"0 12px",background:"rgba(2,5,8,0.99)",borderTop:`1px solid ${C.border}`,zIndex:9998,fontSize:7,color:"#2a3d4d",fontFamily:"Courier New" }}>
-        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["CORPUS","3,804 emails",C.neon],["VECTORS","11,299",C.blue],["FACTS","8,939",C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/11",C.text]].map(([k,v,col],i)=>(
+        {[["OBJECTS",OBJECTS.length,C.neon],["LINKS",LINKS.length,C.blue],["RISK",RISK_SIGNALS.length,C.red],["EQ LIVE",earthquakes.length,C.gold],["EMAILS",corpusTotals.emails ?? 0,C.neon],["EVENTS",corpusTotals.timeline ?? 0,C.blue],["FACTS",corpusTotals.facts ?? 0,C.gold],["PANELS",Object.values(panels).filter(p=>p.visible).length+"/11",C.text]].map(([k,v,col],i)=>(
           <span key={k} style={{ display:"flex",gap:4,alignItems:"center" }}>
             {i>0&&<span style={{ color:"#0d1a22" }}>◆</span>}
             <span>{k}</span><span style={{ color:col,fontWeight:"bold" }}>{v}</span>
