@@ -472,6 +472,26 @@ async def population_stats(
     )
 
 
+@router.get("/{world_id}/culture")
+async def world_culture(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.46 — the world's emergent worldview + belief-stance distribution."""
+    from ..services import religion
+
+    world = await _world_or_404(session, world_id)
+    c = await religion.assess_culture(session, world)
+    return {
+        "worldview": c.worldview,
+        "avg_openness": c.avg_openness,
+        "avg_intelligence": c.avg_intelligence,
+        "knowledge_per_capita": c.knowledge_per_capita,
+        "stances": c.stances,
+    }
+
+
 @router.get("/{world_id}/discoveries")
 async def world_discoveries(
     world_id: str,

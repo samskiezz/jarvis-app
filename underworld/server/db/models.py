@@ -172,6 +172,9 @@ class World(Base):
     # later complex ages slow down, so sim_year advances by a complexity-scaled
     # amount each tick rather than linearly.
     sim_year: Mapped[float] = mapped_column(Float, default=0.0)
+    # Doc I.46/II.133-134 — the civilization's dominant worldview, which emerges
+    # from population traits + how much it understands the App Console.
+    worldview: Mapped[str] = mapped_column(String(28), default="animism")
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")
