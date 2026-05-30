@@ -1,0 +1,15 @@
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.local
+.env.*.local
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode/
+.idea/

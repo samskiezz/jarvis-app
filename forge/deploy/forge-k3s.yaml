@@ -1,0 +1,177 @@
+# APEX Forge on K3s — parallel, safety-gated app evolution.
+#
+# A StatefulSet (not a Deployment) so each replica gets a stable ordinal, which
+# becomes its FORGE_SHARD_INDEX — replicas then work on DISJOINT files and never
+# clobber each other. The agent exits cleanly every hour for a fresh model
+# context; restartPolicy Always brings it back ("restart itself every hour").
+#
+# Scale parallelism with:  kubectl scale statefulset/forge-agent --replicas=3
+# (and set FORGE_SHARD_COUNT to the same number below).
+#
+# Apply:  kubectl apply -f forge/deploy/forge-k3s.yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: forge-secrets
+  namespace: forge
+stringData:
+  GIT_REPO_URL: "https://github.com/samskiezz/jarvis-app.git"
+  GITHUB_TOKEN: ""            # needed for push + landing approved changes
+  # WhatsApp approval channel (Twilio shown; or use the Meta Cloud API keys).
+  FORGE_WHATSAPP_TO: "+61400000000"
+  TWILIO_ACCOUNT_SID: ""
+  TWILIO_AUTH_TOKEN: ""
+  TWILIO_WHATSAPP_FROM: "whatsapp:+14155238886"
+  WHATSAPP_VERIFY_TOKEN: "change-me"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forge-config
+  namespace: forge
+data:
+  FORGE_SHARD_COUNT: "3"        # keep equal to replica count
+  OLLAMA_URL: "http://ollama.forge.svc.cluster.local:11434"
+  FORGE_MODEL: "deepseek-coder:6.7b"
+  # Human-in-the-loop: propose on a forge/* branch, ask WhatsApp, merge to main
+  # only on APPROVE. Push branches so the webhook (its own clone) can land them.
+  FORGE_APPLY: "1"
+  FORGE_PUSH: "1"
+  FORGE_APPROVAL: "whatsapp"
+  FORGE_WHATSAPP_PROVIDER: "twilio"
+  FORGE_INTERVAL_S: "1800"
+  FORGE_MAX_RUNTIME_S: "3600"
+  # Run the real project gates before a change is even offered for approval.
+  FORGE_TEST_CMD: "npm run test --silent && python -m pytest server/tests -q"
+  FORGE_LINT_CMD: "npm run lint --silent"
+  FORGE_BASE_BRANCH: "main"
+  # Shared approval ledger (must be reachable by agents + webhook).
+  FORGE_APPROVALS_DB: "/state/approvals.db"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: forge-agent
+  namespace: forge
+spec:
+  serviceName: forge-agent
+  replicas: 3
+  selector:
+    matchLabels: { app: forge-agent }
+  template:
+    metadata:
+      labels: { app: forge-agent }
+    spec:
+      # Fresh checkout per pod start = fresh context every hour.
+      initContainers:
+        - name: clone
+          image: alpine/git:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              rm -rf /workspace/* /workspace/.git || true
+              git clone --depth 1 "$GIT_REPO_URL" /workspace
+          env:
+            - name: GIT_REPO_URL
+              valueFrom: { secretKeyRef: { name: forge-secrets, key: GIT_REPO_URL } }
+          volumeMounts:
+            - { name: workspace, mountPath: /workspace }
+      containers:
+        - name: forge
+          image: forge-agent:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef: { name: forge-config }
+            - secretRef: { name: forge-secrets }   # WhatsApp creds + GITHUB_TOKEN
+          env:
+            - name: APP_ROOT
+              value: /workspace
+            # Derive the shard index from the StatefulSet pod ordinal.
+            - name: POD_NAME
+              valueFrom: { fieldRef: { fieldPath: metadata.name } }
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              export FORGE_SHARD_INDEX="${POD_NAME##*-}"
+              echo "shard $FORGE_SHARD_INDEX of $FORGE_SHARD_COUNT"
+              exec python -m forge.forge_agent
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits: { cpu: "1", memory: "1Gi" }
+          volumeMounts:
+            - { name: workspace, mountPath: /workspace }
+            - { name: state, mountPath: /state }
+      volumes:
+        - name: workspace
+          emptyDir: {}
+        - name: state
+          persistentVolumeClaim: { claimName: forge-approvals }
+---
+# Shared approval ledger. Needs ReadWriteMany so every agent + the webhook see
+# the same queue (Longhorn/NFS on K3s). On a single node, swap for a hostPath.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forge-approvals
+  namespace: forge
+spec:
+  accessModes: ["ReadWriteMany"]
+  resources:
+    requests: { storage: 1Gi }
+---
+# Inbound WhatsApp webhook — turns "APPROVE <id>" into a merge to main.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forge-webhook
+  namespace: forge
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: forge-webhook }
+  template:
+    metadata:
+      labels: { app: forge-webhook }
+    spec:
+      initContainers:
+        - name: clone
+          image: alpine/git:latest
+          command: ["/bin/sh", "-c"]
+          args: ["rm -rf /workspace/* /workspace/.git || true; git clone \"$GIT_REPO_URL\" /workspace"]
+          env:
+            - name: GIT_REPO_URL
+              valueFrom: { secretKeyRef: { name: forge-secrets, key: GIT_REPO_URL } }
+          volumeMounts:
+            - { name: workspace, mountPath: /workspace }
+      containers:
+        - name: webhook
+          image: forge-agent:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef: { name: forge-config }
+            - secretRef: { name: forge-secrets }
+          env:
+            - name: APP_ROOT
+              value: /workspace
+          command: ["uvicorn", "forge.webhook:app", "--host", "0.0.0.0", "--port", "8088"]
+          ports:
+            - containerPort: 8088
+          volumeMounts:
+            - { name: workspace, mountPath: /workspace }
+            - { name: state, mountPath: /state }
+      volumes:
+        - name: workspace
+          emptyDir: {}
+        - name: state
+          persistentVolumeClaim: { claimName: forge-approvals }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forge-webhook
+  namespace: forge
+spec:
+  selector: { app: forge-webhook }
+  ports:
+    - { port: 80, targetPort: 8088 }
