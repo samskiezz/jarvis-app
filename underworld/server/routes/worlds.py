@@ -552,6 +552,34 @@ async def solve_gap(
     return await puzzles.solve(session, minion, gap, patent_ids)
 
 
+@router.get("/{world_id}/fossils")
+async def world_fossils(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.14/15 — the fossil record + which geological epochs are reachable."""
+    from ..db.models import Fossil
+    from ..services.paleontology import reach_for
+
+    world = await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(Fossil).where(Fossil.world_id == world_id).order_by(Fossil.depth.asc())
+    )).scalars().all()
+    reach = reach_for(world.era)
+    return {
+        "reach": reach,
+        "excavated": [
+            {"organism": f.organism, "epoch": f.epoch, "age_my": f.age_my, "depth": f.depth}
+            for f in rows if f.excavated
+        ],
+        "buried": [
+            {"epoch": f.epoch, "depth": f.depth, "reachable": f.depth <= reach}
+            for f in rows if not f.excavated
+        ],
+    }
+
+
 @router.get("/{world_id}/species")
 async def world_species(
     world_id: str,

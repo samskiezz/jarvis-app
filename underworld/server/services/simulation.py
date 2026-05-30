@@ -40,8 +40,8 @@ from ..db.models import (
 from ..world.seed import derive_seed
 from . import (
     agriculture, biology, climate, discovery, ecosystem, economy, education, governance, hydrology,
-    knowledge_decay, lifecycle, mastery, memes, pollution, projects, puzzles, religion, roles,
-    substances, tectonics, timescale,
+    knowledge_decay, lifecycle, mastery, memes, paleontology, pollution, projects, puzzles, religion,
+    roles, substances, tectonics, timescale,
 )
 
 
@@ -397,6 +397,10 @@ async def advance_world(
 
         # 3g6d. Multi-species biology evolves under climate selection (doc I.12/34).
         await biology.tick_biology(session, world, rng)
+
+        # 3g6e. Deep-time fossils get excavated as tech reaches deeper (doc I.14/15).
+        if world.tick % 12 == 0:
+            await paleontology.tick_paleontology(session, world, rng)
 
         # 3g7. Once at peak information, the gateway posts research puzzles (doc I.82-85).
         if world.tick % 15 == 0:
