@@ -39,9 +39,9 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    agriculture, biology, climate, discovery, ecosystem, economy, education, governance, hydrology,
-    knowledge_decay, lifecycle, mastery, memes, paleontology, pollution, projects, puzzles, religion,
-    roles, substances, tectonics, timescale,
+    agriculture, art, biology, climate, discovery, ecosystem, economy, education, governance,
+    hydrology, knowledge_decay, lifecycle, mastery, memes, paleontology, pollution, projects,
+    puzzles, religion, roles, substances, tectonics, timescale,
 )
 
 
@@ -401,6 +401,10 @@ async def advance_world(
         # 3g6e. Deep-time fossils get excavated as tech reaches deeper (doc I.14/15).
         if world.tick % 12 == 0:
             await paleontology.tick_paleontology(session, world, rng)
+
+        # 3g6f. Culture — minions create art whose style evolves with the era (doc I.47).
+        if world.tick % 6 == 0:
+            await art.tick_art(session, world, rng)
 
         # 3g7. Once at peak information, the gateway posts research puzzles (doc I.82-85).
         if world.tick % 15 == 0:

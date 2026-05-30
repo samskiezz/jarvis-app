@@ -63,7 +63,8 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 41 | Government structures (emergent) | ✅ | `services/governance.py`, `/worlds/{id}/society` |
 | 42 | Legal systems (emergent) | ✅ | `services/governance.py` |
 | 64/65 | Information loss + libraries | ✅ | `services/knowledge_decay.py` |
-| 43/44/47/48 | War, urban planning, art | ⬜ | — |
+| 47 | Art, music & literature (evolving styles) | ✅ | `services/art.py`, `/worlds/{id}/art` |
+| 43/44/48 | War, urban planning, entertainment | ⬜ | — |
 
 ---
 

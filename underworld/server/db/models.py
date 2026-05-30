@@ -404,6 +404,22 @@ class Species(Base):
     born_tick: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class Artwork(Base):
+    """Doc I.47 — a creative work (art/music/literature) a Minion produces. The
+    available forms and styles unlock and evolve with the civilization's era."""
+
+    __tablename__ = "artworks"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    minion_id: Mapped[str | None] = mapped_column(ForeignKey("minions.id"), nullable=True)
+    form: Mapped[str] = mapped_column(String(20), nullable=False)   # painting, music, poem, …
+    style: Mapped[str] = mapped_column(String(28), default="")
+    title: Mapped[str] = mapped_column(String(120), default="")
+    acclaim: Mapped[float] = mapped_column(Float, default=0.0)
+    tick: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class Fossil(Base):
     """Doc I.14/15 — a fossil laid down in a geological stratum. Older organisms
     sit deeper and need more advanced tech to excavate; finding one teaches the
