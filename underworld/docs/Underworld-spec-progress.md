@@ -50,7 +50,8 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 97 | Persistent, always-running | ✅ | scheduler |
 | 41 | Government structures (emergent) | ✅ | `services/governance.py`, `/worlds/{id}/society` |
 | 42 | Legal systems (emergent) | ✅ | `services/governance.py` |
-| 43/44/47/48/64/65 | War, urban planning, art, info-loss | ⬜ | — |
+| 64/65 | Information loss + libraries | ✅ | `services/knowledge_decay.py` |
+| 43/44/47/48 | War, urban planning, art | ⬜ | — |
 
 ---
 
