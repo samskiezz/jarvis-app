@@ -240,6 +240,9 @@ class Minion(Base):
     fatigue: Mapped[float] = mapped_column(Float, default=0.85)
     sanity: Mapped[float] = mapped_column(Float, default=0.85)
     health: Mapped[float] = mapped_column(Float, default=1.0)
+    # Doc I.32 — current wound severity (0 = unhurt). An untreated wound risks
+    # infection (erodes health); the heritable `immune` locus + rest heal it.
+    injury: Mapped[float] = mapped_column(Float, default=0.0)
 
     # Mood + stress — derived each tick from needs and recent events.
     mood: Mapped[MoodKind] = mapped_column(Enum(MoodKind), default=MoodKind.CONTENT)

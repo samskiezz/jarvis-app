@@ -316,6 +316,14 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
             "args": {"skill": minion.guild.value},
             "memory_to_store": "",
         }
+    # Curiosity (doc I.128): the highly open would rather investigate than idle.
+    if minion.openness > 0.65:
+        return {
+            "thought": "Curiosity over idleness — investigating the unknown.",
+            "action": "kb_lookup",
+            "args": {"discipline": _ROLE_DEFAULT_DISCIPLINE.get(minion.swarm_role.value, "ai")},
+            "memory_to_store": "",
+        }
     return {"thought": "Resting briefly.", "action": "rest", "args": {}, "memory_to_store": ""}
 
 

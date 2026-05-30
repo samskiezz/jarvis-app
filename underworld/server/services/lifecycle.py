@@ -146,6 +146,25 @@ def decay_needs(m: Minion, *, intensity: float = 1.0) -> None:
         m.health = max(0.0, m.health - 0.04)
 
 
+def tick_health(m: Minion, rng: random.Random) -> None:
+    """Doc I.32 — wounds + infection + healing, once per tick.
+
+    Low dexterity raises the chance of a fresh wound. An open wound risks
+    infection that erodes health (mitigated by the heritable `immune` locus);
+    immunity + rest heal the wound over time. A child of immune stock both
+    catches fewer infections and recovers faster — tying health to selection.
+    """
+    immune = dna_mod.trait(m.dna, "immune")
+    dex = dna_mod.trait(m.dna, "dexterity")
+    if m.injury <= 0.0 and rng.random() < 0.012 * (1.4 - dex):
+        m.injury = 0.3 + 0.4 * rng.random()
+    if m.injury > 0.0:
+        infection = m.injury * (1.0 - immune) * 0.06
+        m.health = max(0.0, m.health - infection)
+        heal = 0.04 + 0.06 * immune + (0.03 if m.fatigue > 0.6 else 0.0)
+        m.injury = max(0.0, m.injury - heal)
+
+
 def replenish(
     m: Minion,
     *,
@@ -540,6 +559,31 @@ def can_breed(a: Minion, b: Minion, *, world_tick: int) -> bool:
 
 
 # --- population stats -------------------------------------------------------
+
+
+async def ghost_guidance(session: AsyncSession, world: World) -> int:
+    """Doc II.139 — ascended souls linger as guides.
+
+    Each ascended soul in the world gives a faint, capped uplift to the living:
+    a little sanity (reassurance) and a touch of skill momentum on their most
+    practised skill. Returns the number of guiding ancestors.
+    """
+    guides = int(await session.scalar(
+        select(func.count(Soul.id)).where(Soul.world_id == world.id, Soul.ascended.is_(True))
+    ) or 0)
+    if guides <= 0:
+        return 0
+    boost = min(0.05, 0.01 * guides)
+    alive = (await session.execute(
+        select(Minion).where(Minion.world_id == world.id, Minion.alive.is_(True))
+    )).scalars().all()
+    for m in alive:
+        m.sanity = min(1.0, m.sanity + boost)
+    session.add(Event(
+        world_id=world.id, tick=world.tick, kind="population:guidance",
+        actor_id=None, payload={"guides": guides, "sanity_boost": round(boost, 3)},
+    ))
+    return guides
 
 
 async def alive_count(session: AsyncSession, world_id: str) -> int:
