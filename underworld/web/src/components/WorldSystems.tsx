@@ -16,6 +16,7 @@ export default function WorldSystems({ worldId, tick }: { worldId: string; tick:
   const discoveries = useQuery({ queryKey: k("discoveries"), queryFn: () => api.discoveries(worldId) });
   const gaps = useQuery({ queryKey: k("gaps"), queryFn: () => api.gaps(worldId) });
   const memes = useQuery({ queryKey: k("memes"), queryFn: () => api.memes(worldId) });
+  const species = useQuery({ queryKey: k("species"), queryFn: () => api.species(worldId) });
 
   const WEATHER_ICON: Record<string, string> = {
     clear: "☀️", cloudy: "⛅", rain: "🌧️", storm: "⛈️", snow: "❄️",
@@ -102,6 +103,28 @@ export default function WorldSystems({ worldId, tick }: { worldId: string; tick:
           {!gaps.data?.length ? (
             <div className="text-[10px] text-zinc-600">No gaps yet — opens at peak information.</div>
           ) : null}
+        </div>
+      </section>
+
+      {/* SPECIES — evolving biology */}
+      <section className="panel">
+        <div className="panel-header"><span>Species</span>
+          <span className="text-[9px] text-zinc-500">{species.data?.length ?? 0} alive</span>
+        </div>
+        <div className="space-y-1.5 p-3 text-[11px]">
+          {(species.data ?? []).slice(0, 6).map((sp) => (
+            <div key={sp.name} className="flex items-center gap-2">
+              <span className="w-20 truncate text-zinc-300">{sp.name}</span>
+              <span className="text-[9px] text-zinc-600">{sp.kind === "flora" ? "🌿" : "🦌"}</span>
+              <div className="h-1.5 flex-1 overflow-hidden rounded bg-black/40">
+                <div className="h-full bg-glow-jade" style={{ width: `${Math.round(sp.population * 100)}%` }} />
+              </div>
+              <span className="w-12 text-right text-[9px] text-zinc-500" title="cold tolerance">
+                ❄{Math.round(sp.cold_tolerance * 100)}%
+              </span>
+            </div>
+          ))}
+          {!species.data?.length ? <div className="text-[10px] text-zinc-600">Seeding…</div> : null}
         </div>
       </section>
 

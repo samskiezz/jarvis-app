@@ -552,6 +552,27 @@ async def solve_gap(
     return await puzzles.solve(session, minion, gap, patent_ids)
 
 
+@router.get("/{world_id}/species")
+async def world_species(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.12/34 — living species, their populations and evolved traits."""
+    from ..db.models import Species
+
+    await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(Species).where(Species.world_id == world_id, Species.alive.is_(True))
+        .order_by(Species.population.desc())
+    )).scalars().all()
+    return [
+        {"name": s.name, "kind": s.kind, "population": round(s.population, 3),
+         "cold_tolerance": round(s.cold_tolerance, 3), "generation": s.generation}
+        for s in rows
+    ]
+
+
 @router.get("/{world_id}/climate")
 async def world_climate(
     world_id: str,
