@@ -103,6 +103,23 @@ export const api = {
   listInventions: (id: string) => request<Invention[]>(`/worlds/${id}/inventions`),
   population: (id: string, history = 60) =>
     request<PopulationStats>(`/worlds/${id}/population?history=${history}`),
+  // world systems (not-done build-out)
+  discoveries: (id: string) =>
+    request<{ discovered: { tech: string; tick: number; sim_year: number }[]; remaining: string[] }>(
+      `/worlds/${id}/discoveries`,
+    ),
+  culture: (id: string) =>
+    request<{ worldview: string; knowledge_per_capita: number; stances: Record<string, number>; pollution: number }>(
+      `/worlds/${id}/culture`,
+    ),
+  environment: (id: string) =>
+    request<{ pollution: number; prey_pop: number; predator_pop: number; food_availability: number }>(
+      `/worlds/${id}/environment`,
+    ),
+  memes: (id: string) =>
+    request<{ name: string; kind: string; popularity: number; generation: number; is_variant: boolean }[]>(
+      `/worlds/${id}/memes`,
+    ),
   advance: (id: string, ticks: number) =>
     request<AdvanceResponse>(`/worlds/${id}/advance`, {
       method: "POST",

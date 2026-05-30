@@ -15,6 +15,7 @@ import RoleBadge from "@/components/ui/RoleBadge";
 import Sparkline from "@/components/Sparkline";
 import StatCard from "@/components/ui/StatCard";
 import Tabs from "@/components/ui/Tabs";
+import WorldSystems from "@/components/WorldSystems";
 import WorldScene3D from "@/components/scene/WorldScene3D";
 import PixelStreamingViewer from "@/components/scene/PixelStreamingViewer";
 import { useWorldStream } from "@/lib/hooks";
@@ -40,7 +41,7 @@ const MOOD_DOT: Record<Mood, string> = {
   despairing: "bg-glow-rose",
 };
 
-type View = "overview" | "population" | "events";
+type View = "overview" | "population" | "events" | "systems";
 
 export default function WorldDetail() {
   const { id = "" } = useParams<{ id: string }>();
@@ -323,9 +324,14 @@ export default function WorldDetail() {
         tabs={[
           { id: "overview", label: "Overview" },
           { id: "population", label: "Population", count: minions.data?.length },
+          { id: "systems", label: "Systems" },
           { id: "events", label: "Events", count: events.data?.length },
         ]}
       />
+
+      {view === "systems" ? (
+        <WorldSystems worldId={id} tick={world.data.tick} />
+      ) : null}
 
       {/* OVERVIEW VIEW */}
       {view === "overview" ? (
