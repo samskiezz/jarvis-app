@@ -43,6 +43,17 @@ try:  # requests is optional at import time so unit tests don't require it
 except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
+try:  # works under `python -m forge.forge_agent`
+    from . import approvals as approvals_mod
+    from . import notify
+except ImportError:  # running as a plain script: `python3 forge/forge_agent.py`
+    try:
+        import approvals as approvals_mod  # type: ignore
+        import notify  # type: ignore
+    except Exception:  # pragma: no cover
+        approvals_mod = None  # type: ignore
+        notify = None  # type: ignore
+
 
 PROTECTED_BRANCHES = {"main", "master", "release", "prod", "production"}
 
@@ -67,6 +78,9 @@ class Config:
     apply: bool = os.environ.get("FORGE_APPLY", "0") == "1"
     push: bool = os.environ.get("FORGE_PUSH", "0") == "1"
     open_pr: bool = os.environ.get("FORGE_OPEN_PR", "0") == "1"
+    # "whatsapp" → propose each change on its own branch + request phone approval
+    # (the webhook merges on APPROVE). "" → legacy batch-on-branch behaviour.
+    approval: str = os.environ.get("FORGE_APPROVAL", "").lower()
     research: bool = os.environ.get("FORGE_RESEARCH", "1") == "1"
     branch_prefix: str = os.environ.get("FORGE_BRANCH_PREFIX", "forge")
     base_branch: str = os.environ.get("FORGE_BASE_BRANCH", "")  # default: current branch
@@ -299,12 +313,67 @@ class FileLock:
             self._fh.close()
 
 
+def _propose_for_approval(cfg: Config, path: Path, new_content: str, base: str,
+                          store, notifier) -> dict | None:
+    """Put one change on its own branch and request WhatsApp approval.
+
+    Returns a record dict on success (branch committed + notified), else None.
+    The merge to `base` happens later, only when the human replies APPROVE
+    (handled by forge.webhook). `base` may be a protected branch — we never
+    commit on it here, only branch off it.
+    """
+    cid = store.new_id()
+    work = f"{cfg.branch_prefix}/auto-{time.strftime('%Y%m%d-%H%M%S')}-{cid}"
+    _git(cfg, "checkout", "-b", work, base)
+    backup_file(cfg, path)
+    path.write_text(new_content, encoding="utf-8")
+    if not run_checks(cfg):
+        _git(cfg, "checkout", "--", str(path), check=False)
+        _git(cfg, "checkout", base, check=False)
+        _git(cfg, "branch", "-D", work, check=False)
+        return None
+    _git(cfg, "add", str(path))
+    _git(cfg, "commit", "-m", f"APEX Forge: propose {cid} — {path.name}")
+    diff = _git(cfg, "diff", f"{base}...{work}", "--", check=False).stdout
+    if cfg.push:
+        _git(cfg, "push", "-u", "origin", work, check=False)
+    _git(cfg, "checkout", base, check=False)  # leave tree clean for the next change
+
+    change = store.create(branch=work, base=base, files=[str(path)],
+                          summary=f"Improve {path.name}", diff=diff, change_id=cid)
+    sent = notifier.send(notify.build_request_text(change))
+    cfg.log(f"proposed {cid} on {work}; whatsapp sent={sent}")
+    return {"id": cid, "branch": work, "file": str(path), "notified": sent}
+
+
 # ---------- CYCLE ----------
 def run_cycle(cfg: Config) -> dict:
     """One scan→research→improve→validate→test pass. Returns a report dict."""
     files = iter_source_files(cfg)[: cfg.max_files_per_cycle] if cfg.max_files_per_cycle else iter_source_files(cfg)
     report = {"scanned": len(files), "proposed": 0, "applied": 0, "rejected": [], "branch": None}
     cfg.log(f"scanned {len(files)} in-scope files")
+
+    # Approval mode: each change goes on its own branch + a WhatsApp sign-off
+    # request. The merge to base happens later via the webhook on APPROVE, so
+    # base may safely be a protected branch (main) — we never commit on it here.
+    if cfg.apply and cfg.approval == "whatsapp" and approvals_mod is not None:
+        store = approvals_mod.ApprovalStore(cfg.app_root / ".forge" / "approvals.db")
+        notifier = notify.from_env()
+        base = cfg.base_branch or current_branch(cfg)
+        report["base"] = base
+        report["pending"] = []
+        for path in files:
+            content = path.read_text(encoding="utf-8", errors="ignore")
+            candidate = ollama_improve(cfg, path, content, gather_research(cfg, path))
+            ok, reason = is_safe_replacement(content, candidate)
+            if not ok:
+                report["rejected"].append({"file": str(path), "reason": reason})
+                continue
+            report["proposed"] += 1
+            rec = _propose_for_approval(cfg, path, strip_fences(candidate), base, store, notifier)
+            if rec:
+                report["pending"].append(rec)
+        return report
 
     work_branch = None
     if cfg.apply:

@@ -35,6 +35,56 @@ replicas). Forge keeps the autonomy but adds hard guarantees:
   work on disjoint files.
 - **Dry-run by default.** Applying, pushing, and PRs are explicit opt-ins.
 
+## WhatsApp approval (the point: automated, but you tap APPROVE)
+
+`FORGE_APPROVAL=whatsapp` keeps the loop fully automated **without** blind
+pushes. Each cycle the agent:
+
+1. generates an improvement, puts it on its **own `forge/*` branch**, runs the
+   test/lint gates, commits, and (optionally) pushes that branch;
+2. records a PENDING change and **messages your WhatsApp** with the diff:
+   `🔥 APEX Forge change a1b2c3d4 … Reply: APPROVE a1b2c3d4 or REJECT a1b2c3d4`;
+3. moves on — it never merges to `main` itself.
+
+You reply **`APPROVE a1b2c3d4`** (or just `APPROVE`/`👍` if one is pending) from
+your phone. The inbound **webhook** (`forge.webhook`) then merges that branch
+into `main` and pushes it. `REJECT` discards the branch. So `main` only ever
+gets code you green-lit from your phone.
+
+```
+   agent ──propose branch──▶ git          agent ──"APPROVE a1b2"?──▶ 📱 WhatsApp
+        └──notify──▶ 📱                         📱 ──reply──▶ webhook ──merge+push──▶ main
+```
+
+### Configure the channel
+
+Pick a provider via `FORGE_WHATSAPP_PROVIDER` (`twilio` or `meta`); with neither
+set it logs to the console so you can dry-run the whole flow.
+
+| Provider | Env |
+|---|---|
+| Twilio | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM`, `FORGE_WHATSAPP_TO` |
+| Meta Cloud API | `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `FORGE_WHATSAPP_TO`, `WHATSAPP_VERIFY_TOKEN` |
+
+Run the webhook (point your Twilio/Meta inbound URL at it):
+
+```bash
+uvicorn forge.webhook:app --host 0.0.0.0 --port 8088
+# GET  /forge/whatsapp/webhook  → Meta verification handshake
+# POST /forge/whatsapp/webhook  → inbound replies (Twilio form or Meta JSON)
+# GET  /forge/approvals         → audit the queue
+```
+
+Enable on the agent:
+
+```bash
+APP_ROOT="$(pwd)" FORGE_APPLY=1 FORGE_PUSH=1 \
+FORGE_APPROVAL=whatsapp FORGE_WHATSAPP_PROVIDER=twilio \
+FORGE_WHATSAPP_TO="+61400000000" FORGE_BASE_BRANCH=main \
+FORGE_TEST_CMD="npm run test --silent && python -m pytest server/tests -q" \
+python3 -m forge.forge_agent
+```
+
 ## Run it locally
 
 ```bash
