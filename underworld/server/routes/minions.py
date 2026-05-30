@@ -62,6 +62,7 @@ def _to_minion_out(m: Minion, skill_count: int) -> MinionOut:
         morale=m.morale if m.morale is not None else 0.5,
         purpose=m.purpose if m.purpose is not None else 0.5,
         injury=m.injury if m.injury is not None else 0.0,
+        addiction=m.addiction if m.addiction is not None else 0.0,
         skill_count=skill_count,
     )
 

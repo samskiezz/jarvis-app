@@ -91,6 +91,7 @@ class MinionOut(BaseModel):
     morale: float = 0.5
     purpose: float = 0.5
     injury: float = 0.0
+    addiction: float = 0.0
     skill_count: int = 0
 
 

@@ -40,7 +40,7 @@ from ..db.models import (
 from ..world.seed import derive_seed
 from . import (
     discovery, ecosystem, economy, education, lifecycle, mastery, memes, pollution, projects,
-    religion, roles, timescale,
+    religion, roles, substances, timescale,
 )
 
 
@@ -300,6 +300,12 @@ async def advance_world(
             )
             lifecycle.decay_needs(m, intensity=intensity)
             lifecycle.tick_health(m, rng)  # wounds / infection / healing (doc I.32)
+            # Stimulants & addiction (doc II.148-149): the exhausted or already-
+            # hooked reach for a hit when chemistry exists; abstainers withdraw.
+            used_stim = substances.wants_stimulant(m, world.era)
+            if used_stim:
+                substances.use_stimulant(m)
+            substances.tick_addiction(m, used=used_stim)
             # Re-derive mood so it's persisted with the post-tick state.
             m.mood, m.stress = lifecycle.derive_mood(m)
 
