@@ -191,13 +191,20 @@ export function computePois(
   };
 }
 
+type DestKind = "obelisk" | "hut" | "tree" | "plaza" | "home" | "still";
+
 // Action → destination kind. The scene resolves the kind into a concrete POI.
-const ACTION_DEST: Record<string, "obelisk" | "hut" | "tree" | "plaza" | "home" | "still"> = {
+// Every action a minion can take has a destination so nobody wanders aimlessly.
+const ACTION_DEST: Record<string, DestKind> = {
   propose_invention: "obelisk",
+  propose_with_party: "plaza",
   fork_self: "obelisk",
   study: "obelisk",
   search_patents: "obelisk",
   kb_lookup: "obelisk",
+  calculate: "obelisk",
+  build_scanner: "obelisk",
+  seek_ascension: "obelisk",
   teach: "plaza",
   socialise: "plaza",
   seek_partner: "plaza",
@@ -205,6 +212,14 @@ const ACTION_DEST: Record<string, "obelisk" | "hut" | "tree" | "plaza" | "home" 
   drink: "hut",
   rest: "hut",
   meditate: "tree",
+};
+
+// When a minion has no surfaced action this tick, it still has somewhere to be:
+// a guild "workplace" so the crowd reads as a living town, not a random drift.
+const GUILD_DEST: Record<string, DestKind> = {
+  maths: "obelisk", physics: "obelisk", electrical: "obelisk", mechanical: "obelisk",
+  computing: "obelisk", civil: "obelisk", materials: "obelisk", energy: "obelisk",
+  patent: "obelisk", safety: "plaza", agriculture: "tree",
 };
 
 function hash(s: string): number {
@@ -221,13 +236,20 @@ export function destinationForAction(
   action: string | undefined,
   pois: Pois,
   homePos: [number, number, number],
+  guild?: string,
 ): { target: [number, number, number] | null; kind: string } {
-  const kind = action ? ACTION_DEST[action] : null;
+  const kind = (action ? ACTION_DEST[action] : null) ?? (guild ? GUILD_DEST[guild] : null);
   if (!kind || kind === "still") return { target: null, kind: "still" };
   if (kind === "home") return { target: homePos, kind: "home" };
 
   const h = hash(minionId);
-  if (kind === "obelisk") return { target: pois.obelisk, kind: "obelisk" };
+  if (kind === "obelisk") {
+    // Spread the crowd in a ring around the monument instead of stacking them
+    // all on the exact centre point.
+    const ang = (h % 360) * (Math.PI / 180);
+    const r = 9 + (h % 7);
+    return { target: [pois.obelisk[0] + Math.cos(ang) * r, pois.obelisk[1], pois.obelisk[2] + Math.sin(ang) * r], kind: "obelisk" };
+  }
   if (kind === "hut" && pois.huts.length) {
     return { target: pois.huts[h % pois.huts.length].pos, kind: "hut" };
   }

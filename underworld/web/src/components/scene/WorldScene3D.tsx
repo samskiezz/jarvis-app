@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Environment as DreiEnvironment, Html, OrbitControls } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Environment as DreiEnvironment, OrbitControls } from "@react-three/drei";
 import {
   Bloom, EffectComposer, N8AO, SMAA, SSR, ToneMapping, Vignette,
 } from "@react-three/postprocessing";
@@ -41,6 +41,33 @@ interface Props {
   /** Live climate readout for the HUD. */
   season?: string;
   temperature?: number;
+}
+
+/** Follow camera: when a minion is selected, smoothly track its live position so
+ *  the camera pans with it. We translate both the orbit target and the camera by
+ *  the same delta, so the user keeps full control of angle + zoom while the rig
+ *  follows the minion around the world. */
+function FollowRig({
+  posRef, orbitRef, active,
+}: {
+  posRef: React.MutableRefObject<THREE.Vector3>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  orbitRef: React.MutableRefObject<any>;
+  active: boolean;
+}) {
+  const { camera } = useThree();
+  useFrame(() => {
+    const controls = orbitRef.current;
+    if (!active || !controls) return;
+    const want = new THREE.Vector3(posRef.current.x, posRef.current.y + 2.5, posRef.current.z);
+    if (want.lengthSq() === 0) return;
+    const next = controls.target.clone().lerp(want, 0.08);
+    const delta = next.clone().sub(controls.target);
+    controls.target.copy(next);
+    camera.position.add(delta);
+    controls.update();
+  });
+  return null;
 }
 
 /** Map the backend's 5 weather states onto the 3 the renderer supports. */
@@ -142,6 +169,8 @@ export default function WorldScene3D({
   // refs because they update every frame and don't need React re-renders.
   const selectedPosRef = useRef(new THREE.Vector3());
   const controlInputRef = useRef(new THREE.Vector3());
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const orbitRef = useRef<any>(null);
   // Track whether the user is actively driving the selected character; if
   // not, OrbitControls is in charge of the camera.
   const [controlMode, setControlMode] = useState(false);
@@ -181,7 +210,7 @@ export default function WorldScene3D({
     () => minions.map((m) => {
       const home = placeMinion(m.id, grid, WORLD_SIZE, AMPLITUDE);
       const action = actionByMinion?.[m.id];
-      const { target } = destinationForAction(m.id, action, pois, home);
+      const { target } = destinationForAction(m.id, action, pois, home, m.guild);
       return { minion: m, home, target };
     }),
     [minions, grid, pois, actionByMinion],
@@ -191,11 +220,6 @@ export default function WorldScene3D({
   const weather: WeatherKind = useMemo(
     () => mapWeather(weatherOverride) ?? weatherFor(biomeHint ?? "plains", tick),
     [weatherOverride, biomeHint, tick],
-  );
-
-  const selected = useMemo(
-    () => placements.find((p) => p.minion.id === selectedId) ?? null,
-    [placements, selectedId],
   );
 
   // Tint the HDRI background to reflect day/night — multiplies the env tex.
@@ -245,6 +269,13 @@ export default function WorldScene3D({
             backgroundRotation={[0, (tick % 80) / 80 * Math.PI * 2, 0]}
             environmentRotation={[0, (tick % 80) / 80 * Math.PI * 2, 0]}
           />
+          {/* Atmospheric depth haze — tints to the sky and thickens at night /
+              in storms, grounding the world with real aerial perspective. */}
+          <fogExp2
+            attach="fog"
+            args={[isNight ? "#0a0e1a" : weather === "rain" ? "#9aa7b8" : "#b8c6dc",
+                   weather === "rain" ? 0.0026 : isNight ? 0.0020 : 0.0014]}
+          />
           <Lights tick={tick} size={WORLD_SIZE} />
           <CelestialBodies tick={tick} size={WORLD_SIZE} />
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
@@ -278,6 +309,12 @@ export default function WorldScene3D({
                 controlled={isSelected && controlMode}
                 positionRef={isSelected ? selectedPosRef : undefined}
                 controlInputRef={isSelected && controlMode ? controlInputRef : undefined}
+                thought={p.minion.alive ? thoughtByMinion?.[p.minion.id] : undefined}
+                actionLabel={
+                  isSelected && actionByMinion?.[p.minion.id]
+                    ? (ACTION_LABEL[actionByMinion[p.minion.id]] ?? actionByMinion[p.minion.id])
+                    : undefined
+                }
                 onClick={(id) => {
                   onSelect(id);
                   setHoveredId(id);
@@ -292,52 +329,12 @@ export default function WorldScene3D({
               controlInputRef={controlInputRef}
             />
           ) : null}
-          {selected ? (
-            <Html
-              position={[selected.home[0], selected.home[1] + 3.6, selected.home[2]]}
-              center
-              distanceFactor={26}
-              style={{ pointerEvents: "none" }}
-            >
-              <div className="rounded-lg border border-white/15 bg-ink-1/95 px-2 py-1 text-[10px] text-zinc-100 shadow-xl backdrop-blur">
-                <div className="font-mono text-glow-purple">
-                  {selected.minion.name}{selected.minion.nickname ? ` “${selected.minion.nickname}”` : ""} {selected.minion.surname}
-                </div>
-                <div className="text-[9px] text-zinc-400">
-                  {selected.minion.guild} · {selected.minion.mood}
-                </div>
-                {actionByMinion?.[selected.minion.id] ? (
-                  <div className="text-[9px] text-glow-jade">
-                    {ACTION_LABEL[actionByMinion[selected.minion.id]] ?? actionByMinion[selected.minion.id]}
-                  </div>
-                ) : null}
-                {thoughtByMinion?.[selected.minion.id] ? (
-                  <div className="mt-1 max-w-[260px] text-[9px] italic leading-snug text-zinc-300">
-                    “{thoughtByMinion[selected.minion.id]}”
-                  </div>
-                ) : null}
-              </div>
-            </Html>
-          ) : null}
-          {/* Doc II.25 — internal monologue bubbles above every Minion with
-              a recent LLM thought. Distance-faded by drei's distanceFactor so
-              far-away crowds don't drown the scene in text. */}
-          {thoughtByMinion ? placements.filter((p) => p.minion.id !== selectedId && thoughtByMinion[p.minion.id] && p.minion.alive).slice(0, 16).map((p) => (
-            <Html
-              key={`thought-${p.minion.id}`}
-              position={[p.home[0], p.home[1] + 3.0, p.home[2]]}
-              center
-              distanceFactor={36}
-              style={{ pointerEvents: "none" }}
-              occlude
-            >
-              <div className="max-w-[220px] rounded-md border border-white/10 bg-black/60 px-1.5 py-1 text-[8px] italic leading-snug text-zinc-200 shadow-md backdrop-blur">
-                {thoughtByMinion[p.minion.id]}
-              </div>
-            </Html>
-          )) : null}
+          {/* Selected-minion label + internal-monologue bubbles now render
+              inside each MinionAvatar, so they track the moving avatar live
+              (doc II.25) instead of floating over the minion's home. */}
           {!controlMode && (
             <OrbitControls
+              ref={orbitRef}
               target={[0, 2, 0]}
               enablePan
               enableDamping
@@ -347,6 +344,9 @@ export default function WorldScene3D({
               maxPolarAngle={Math.PI * 0.48}
             />
           )}
+          {/* Follow the selected minion (unless the user has taken WASD control,
+              which uses its own chase camera). */}
+          <FollowRig posRef={selectedPosRef} orbitRef={orbitRef} active={!!selectedId && !controlMode} />
           {/* Post stack — modern WebGL ceiling. N8AO grounds objects in
               their crevices, SSR adds screen-space reflections on the
               shinier materials (wet road, glass, water), DepthOfField
