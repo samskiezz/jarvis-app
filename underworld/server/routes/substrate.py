@@ -82,6 +82,26 @@ async def evaluate_structure(body: StructureRequest, _token: str = Depends(requi
     }
 
 
+@router.get("/economy")
+async def economy_snapshot(
+    cpc_class: str = Query(default="G06"),
+    population: int = Query(default=100, ge=0, le=100000),
+    size: int = Query(default=32, ge=8, le=64),
+    _token: str = Depends(require_bearer),
+):
+    """Scarcity-driven market prices for the world a CPC class would generate."""
+    from ..services import economy
+
+    seed = derive_seed(cpc_class)
+    mkt = economy.market(seed, population, size=size)
+    return {
+        "cpc_class": seed.cpc_class,
+        "population": population,
+        "price_index": economy.price_index(mkt),
+        "market": mkt,
+    }
+
+
 @router.get("/resources")
 async def resource_survey(
     cpc_class: str = Query(default="G06"),

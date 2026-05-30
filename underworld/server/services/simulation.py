@@ -38,7 +38,7 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import education, lifecycle, mastery, projects, roles
+from . import economy, education, lifecycle, mastery, projects, roles
 
 
 @dataclass
@@ -342,6 +342,17 @@ async def advance_world(
 
         # 3f. Formal education lifts the young (doc I.45).
         await education.apply_education(session, world)
+
+        # 3g. Periodic scarcity-driven market snapshot (doc I.39-40).
+        if world.tick % 10 == 0:
+            pop = len(alive_minions)
+            mkt = economy.market(derive_seed(world.seed_class), pop, size=24)
+            top = sorted(mkt.items(), key=lambda kv: kv[1]["price"], reverse=True)[:3]
+            session.add(Event(
+                world_id=world.id, tick=world.tick, kind="economy:prices", actor_id=None,
+                payload={"price_index": economy.price_index(mkt),
+                         "dearest": [{"good": g, "price": m["price"]} for g, m in top]},
+            ))
 
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)
