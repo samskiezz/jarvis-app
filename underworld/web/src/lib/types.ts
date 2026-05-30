@@ -206,6 +206,7 @@ export interface Minion extends MinionListItem {
   morale?: number;
   purpose?: number;
   injury?: number;
+  addiction?: number;
   cause_of_death: CauseOfDeath | null;
   skill_count: number;
 }

@@ -69,6 +69,9 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
   const dna = useQuery({ queryKey: ["minion", minionId, "dna"], queryFn: () => api.getDna(minionId) });
   const soul = useQuery({ queryKey: ["minion", minionId, "soul"], queryFn: () => api.getSoul(minionId) });
   const lineage = useQuery({ queryKey: ["minion", minionId, "lineage"], queryFn: () => api.getLineage(minionId) });
+  const beliefs = useQuery({ queryKey: ["minion", minionId, "beliefs"], queryFn: () => api.beliefs(minionId) });
+  const models = useQuery({ queryKey: ["minion", minionId, "models"], queryFn: () => api.models(minionId) });
+  const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId) });
 
   const fork = useMutation({
     mutationFn: () => api.fork(minionId),
@@ -142,8 +145,50 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             {m.morale != null ? <NeedBar label="Morale" value={m.morale} /> : null}
             {m.purpose != null ? <NeedBar label="Purpose" value={m.purpose} /> : null}
             {m.injury ? <NeedBar label="Wound" value={m.injury} /> : null}
+            {m.addiction ? <NeedBar label="Addiction" value={m.addiction} /> : null}
           </div>
+          {appearance.data ? (
+            <div className="mt-2 text-[10px] text-zinc-500">
+              {appearance.data.hair} hair · {appearance.data.garment}
+              {appearance.data.body_art.length ? ` · ${appearance.data.body_art.join(", ")}` : ""}
+              {appearance.data.modifications.length ? ` · ${appearance.data.modifications.join(", ")}` : ""}
+            </div>
+          ) : null}
         </section>
+
+        {/* COGNITION — learned beliefs + trained models */}
+        {(beliefs.data?.length || models.data?.length) ? (
+          <section className="panel">
+            <div className="panel-header"><span>Cognition</span></div>
+            <div className="space-y-2 p-3 text-[11px]">
+              {beliefs.data?.length ? (
+                <div>
+                  <div className="page-eyebrow text-[8px] mb-1">Learned beliefs (action → wellbeing)</div>
+                  {beliefs.data.slice(0, 4).map((b) => (
+                    <div key={b.cause} className="flex items-center gap-2">
+                      <span className="w-24 truncate text-zinc-300">{b.cause}</span>
+                      <div className="h-1.5 flex-1 overflow-hidden rounded bg-black/40">
+                        <div className="h-full bg-glow-purple" style={{ width: `${Math.round(b.confidence * 100)}%` }} />
+                      </div>
+                      <span className="w-8 text-right text-[9px] text-zinc-500">{Math.round(b.confidence * 100)}%</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+              {models.data?.length ? (
+                <div>
+                  <div className="page-eyebrow text-[8px] mb-1">Trained ML models</div>
+                  {models.data.slice(0, 3).map((mod) => (
+                    <div key={mod.task} className="flex justify-between text-zinc-400">
+                      <span>{mod.task}</span>
+                      <span className="font-mono">{Math.round(mod.accuracy * 100)}% · {mod.samples} samples</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
         {/* PERSONALITY */}
         <section className="panel">
