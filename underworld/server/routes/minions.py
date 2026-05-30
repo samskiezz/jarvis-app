@@ -193,6 +193,24 @@ async def train_model(
     return {"task": model.task, "samples": model.samples, "accuracy": model.accuracy}
 
 
+@router.post("/{minion_id}/gateway")
+async def consult_gateway(
+    minion_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.75-85 — attempt to pass the Internet Gateway and read a real dataset."""
+    from ..services import gateway
+
+    minion = await _minion_or_404(session, minion_id)
+    return await gateway.consult_gateway(
+        session, minion,
+        str(body.get("discipline") or minion.guild.value),
+        str(body.get("query") or "science"),
+    )
+
+
 @router.get("/{minion_id}/appearance")
 async def get_appearance(
     minion_id: str,
