@@ -68,6 +68,12 @@ _ACTIONS = {
     "calculate",            # run a real physics calculation + learn from it
 }
 
+# Doc II.131 — actions that advance the App's mission and so confer purpose.
+_MISSION_ACTIONS = {
+    "search_patents", "propose_invention", "propose_with_party", "build_scanner",
+    "study", "teach", "kb_lookup", "calculate",
+}
+
 # Guilds whose minions naturally reach for real calculations.
 _CALC_GUILDS = {
     "physics", "mechanical", "electrical", "civil",
@@ -945,6 +951,16 @@ async def run_tick(
     elif action == "fork_self":
         request_fork = True
         summary = "Requested self-fork."
+
+    # Doc II.130-132 — appraise the action: did it serve the mission? Update
+    # purpose + morale (mood_signal carries the emotional colour of recalled
+    # memories computed earlier this tick).
+    lifecycle.appraise(
+        minion,
+        mission=action in _MISSION_ACTIONS,
+        idle=action in {"rest", "meditate"},
+        mood_signal=sanity_delta,
+    )
 
     extra_memory = str(parsed.get("memory_to_store") or "").strip()
     if extra_memory:

@@ -133,6 +133,7 @@ async def _spawn_founder(
         born_tick=born_tick,
         reputation=1.0,
         swarm_role=roles.assign_role(guild_kind, dna),
+        nickname=lifecycle.maybe_nickname(dna, random.Random(hash(dna) & 0xFFFFFFFF)),
     )
     session.add(m)
     await session.flush()
