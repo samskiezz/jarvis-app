@@ -115,7 +115,7 @@ export const api = {
   environment: (id: string) =>
     request<{
       pollution: number; prey_pop: number; predator_pop: number; food_availability: number;
-      soil_fertility: number; crop_yield: number; tectonic_stress: number;
+      soil_fertility: number; crop_yield: number; tectonic_stress: number; water_table: number;
     }>(`/worlds/${id}/environment`),
   climate: (id: string) =>
     request<{ season: string; temperature: number; weather: string; thermal_stress: number }>(
