@@ -387,6 +387,23 @@ class MLModel(Base):
     updated_tick: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class Species(Base):
+    """Doc I.12/34 — a flora or fauna species with a heritable trait that evolves
+    under climate selection; populations rise, fall, speciate, and go extinct."""
+
+    __tablename__ = "species"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(48), nullable=False)
+    kind: Mapped[str] = mapped_column(String(12), default="fauna")   # flora | fauna
+    population: Mapped[float] = mapped_column(Float, default=0.5)     # 0..1 of capacity
+    cold_tolerance: Mapped[float] = mapped_column(Float, default=0.5)  # heritable trait 0..1
+    generation: Mapped[int] = mapped_column(Integer, default=0)
+    alive: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    born_tick: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class EmptyDataset(Base):
     """Doc I.82-85 — a generated 'empty data set': an open research question that
     mirrors a real unresolved problem. A Minion solves it by combining several

@@ -129,6 +129,10 @@ export const api = {
     request<{ id: string; discipline: string; prompt: string; required_patents: number }[]>(
       `/worlds/${id}/gaps`,
     ),
+  species: (id: string) =>
+    request<{ name: string; kind: string; population: number; cold_tolerance: number; generation: number }[]>(
+      `/worlds/${id}/species`,
+    ),
   memes: (id: string) =>
     request<{ name: string; kind: string; popularity: number; generation: number; is_variant: boolean }[]>(
       `/worlds/${id}/memes`,
