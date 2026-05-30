@@ -44,6 +44,7 @@ export default function WorldSystems({ worldId, tick }: { worldId: string; tick:
         <div className="panel-header"><span>Environment</span></div>
         <div className="space-y-1.5 p-3 text-[11px]">
           <Bar label="Food (prey)" value={env.data?.food_availability ?? 0} />
+          <Bar label="Water table" value={env.data?.water_table ?? 0} />
           <Bar label="Soil fertility" value={env.data?.soil_fertility ?? 0} />
           <Bar label="Crop yield" value={env.data?.crop_yield ?? 0} />
           <Bar label="Pollution" value={env.data?.pollution ?? 0} danger />

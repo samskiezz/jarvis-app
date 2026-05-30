@@ -39,9 +39,9 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    agriculture, climate, discovery, ecosystem, economy, education, governance, knowledge_decay,
-    lifecycle, mastery, memes, pollution, projects, puzzles, religion, roles, substances,
-    tectonics, timescale,
+    agriculture, climate, discovery, ecosystem, economy, education, governance, hydrology,
+    knowledge_decay, lifecycle, mastery, memes, pollution, projects, puzzles, religion, roles,
+    substances, tectonics, timescale,
 )
 
 
@@ -385,6 +385,9 @@ async def advance_world(
 
         # 3g6. Live climate field — season/temperature/weather + thermal stress (doc I.5/28-30).
         await climate.tick_climate(session, world, rng)
+
+        # 3g6a. Hydrology — the water cycle: drought + flood hazards (doc I.6/29).
+        await hydrology.tick_hydrology(session, world)
 
         # 3g6b. Agriculture — climate-driven crops feed the population (doc I.13).
         await agriculture.tick_agriculture(session, world)

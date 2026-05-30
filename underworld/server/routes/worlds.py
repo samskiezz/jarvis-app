@@ -586,6 +586,7 @@ async def world_environment(
         "soil_fertility": round(world.soil_fertility if world.soil_fertility is not None else 0.7, 3),
         "crop_yield": round(world.crop_yield or 0.0, 3),
         "tectonic_stress": round(world.tectonic_stress or 0.0, 3),
+        "water_table": round(world.water_table if world.water_table is not None else 0.6, 3),
     }
 
 

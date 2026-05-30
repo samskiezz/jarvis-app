@@ -197,6 +197,9 @@ class World(Base):
     # Doc I.28 — accumulating tectonic stress that releases as earthquakes; how
     # fast it builds depends on the seed's geology (mountainous worlds are active).
     tectonic_stress: Mapped[float] = mapped_column(Float, default=0.0)
+    # Doc I.6/29 — water table (0 dry … 1 saturated). Rain recharges it, heat
+    # evaporates it; droughts and floods are hazards.
+    water_table: Mapped[float] = mapped_column(Float, default=0.6)
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")
