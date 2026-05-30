@@ -39,8 +39,8 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    discovery, economy, education, lifecycle, mastery, memes, pollution, projects, religion,
-    roles, timescale,
+    discovery, ecosystem, economy, education, lifecycle, mastery, memes, pollution, projects,
+    religion, roles, timescale,
 )
 
 
@@ -365,6 +365,10 @@ async def advance_world(
 
         # 3g4. Industrial pollution accumulates + harms health (doc I.36).
         await pollution.tick_pollution(session, world, inventions_this_tick=report.inventions_approved)
+
+        # 3g5. Ecosystem dynamics — overhunting collapses the food supply (doc I.35).
+        food = await ecosystem.tick_ecosystem(session, world, len(alive_minions))
+        await ecosystem.apply_famine(session, world, food)
 
         # 3g. Periodic scarcity-driven market snapshot (doc I.39-40).
         if world.tick % 10 == 0:
