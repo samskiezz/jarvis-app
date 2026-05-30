@@ -22,12 +22,13 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 28 | Plate tectonics + earthquakes (hazard field) | ✅ | `services/tectonics.py` |
 | 6/29 | Fluids / water cycle (drought + flood) | ✅ | `services/hydrology.py` |
 | 12/34 | Multi-species biology + evolution | ✅ | `services/biology.py`, `/worlds/{id}/species` |
+| 14/15 | Geological epochs + fossil record | ✅ | `services/paleontology.py`, `/worlds/{id}/fossils` |
 | 7 | Structural integrity | ✅ | `physics/structures.py`, gates invention feasibility |
 | 16 | Dynamic time-scaling | ✅ | `services/timescale.py`, `World.sim_year` |
 | 28/29/30 | Weather / water cycle / climate zones | ✅ | `services/climate.py`, `/worlds/{id}/climate` |
 | 35 | Ecosystem feedback / overhunting | ✅ | `services/ecosystem.py`, `/worlds/{id}/environment` |
 | 36 | Pollution | ✅ | `services/pollution.py` |
-| 10/14/15/31–33 | Acoustics, geological epochs, fossils | ⬜ | future deep physical fields |
+| 10/31–33 | Acoustics + minor cosmetic physics | ⬜ | future deep physical fields |
 
 ### Minds & discovery
 | # | Item | Status | Where |

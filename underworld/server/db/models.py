@@ -404,6 +404,24 @@ class Species(Base):
     born_tick: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class Fossil(Base):
+    """Doc I.14/15 — a fossil laid down in a geological stratum. Older organisms
+    sit deeper and need more advanced tech to excavate; finding one teaches the
+    civilization about deep time and extinct life."""
+
+    __tablename__ = "fossils"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    organism: Mapped[str] = mapped_column(String(48), nullable=False)
+    epoch: Mapped[str] = mapped_column(String(24), nullable=False)
+    depth: Mapped[float] = mapped_column(Float, default=0.5)        # 0 surface … 1 deep
+    age_my: Mapped[float] = mapped_column(Float, default=0.0)       # millions of years
+    excavated: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
+    found_by: Mapped[str | None] = mapped_column(ForeignKey("minions.id"), nullable=True)
+    tick: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class EmptyDataset(Base):
     """Doc I.82-85 — a generated 'empty data set': an open research question that
     mirrors a real unresolved problem. A Minion solves it by combining several
