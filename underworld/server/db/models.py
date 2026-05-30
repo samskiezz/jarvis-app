@@ -175,6 +175,9 @@ class World(Base):
     # Doc I.46/II.133-134 — the civilization's dominant worldview, which emerges
     # from population traits + how much it understands the App Console.
     worldview: Mapped[str] = mapped_column(String(28), default="animism")
+    # Doc I.36 — accumulated environmental pollution (0 = pristine, 1 = toxic),
+    # driven by industrial activity and decaying with remediation.
+    pollution: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")
@@ -320,6 +323,23 @@ class Discovery(Base):
     tick: Mapped[int] = mapped_column(Integer, nullable=False)
     sim_year: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[datetime] = mapped_column(default=_now)
+
+
+class Meme(Base):
+    """Doc I.142-143 — a unit of culture (fad, fashion, idea) that replicates
+    through the social network, mutates into variants, and fades over time."""
+
+    __tablename__ = "memes"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(60), nullable=False)
+    kind: Mapped[str] = mapped_column(String(24), default="idea")  # idea | fashion | slang | ritual
+    popularity: Mapped[float] = mapped_column(Float, default=0.05)
+    generation: Mapped[int] = mapped_column(Integer, default=0)
+    variant_of: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    born_tick: Mapped[int] = mapped_column(Integer, default=0)
+    alive: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
 
 
 class CausalBelief(Base):

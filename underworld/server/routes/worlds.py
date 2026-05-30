@@ -489,7 +489,29 @@ async def world_culture(
         "avg_intelligence": c.avg_intelligence,
         "knowledge_per_capita": c.knowledge_per_capita,
         "stances": c.stances,
+        "pollution": round(world.pollution or 0.0, 3),
     }
+
+
+@router.get("/{world_id}/memes")
+async def world_memes(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.142-143 — living memes (fads/fashion/ideas), most popular first."""
+    from ..db.models import Meme
+
+    await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(Meme).where(Meme.world_id == world_id, Meme.alive.is_(True))
+        .order_by(Meme.popularity.desc()).limit(50)
+    )).scalars().all()
+    return [
+        {"name": m.name, "kind": m.kind, "popularity": round(m.popularity, 3),
+         "generation": m.generation, "is_variant": m.variant_of is not None}
+        for m in rows
+    ]
 
 
 @router.get("/{world_id}/discoveries")
