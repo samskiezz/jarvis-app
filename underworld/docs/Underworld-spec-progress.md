@@ -36,7 +36,8 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 62/63 | Skill growth; transfer needs proximity/time | ✅ | study/teach |
 | 68–70 | Mastery + knowledge tracking | ✅ | `services/mastery.py` |
 | 71 | Peer-review replication | ✅ | `agents/reviewer.py` |
-| 24/59/60/72–85 | Ruins, scripting sandbox, fraud, Internet Gateway | ⬜ | — |
+| 72 | Scientific fraud + reputation damage | ✅ | `agents/reviewer.py` (fraud:detected) |
+| 24/59/60/73–85 | Ruins, scripting sandbox, Internet Gateway | ⬜ | — |
 
 ### Society & economy
 | # | Item | Status | Where |

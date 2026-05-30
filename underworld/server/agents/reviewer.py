@@ -360,6 +360,20 @@ async def replicate_pending(session: AsyncSession, world, rng, *, limit: int = 8
                 payload={"invention": inv.id, "by": f"{replicator.name} {replicator.surname}".strip()},
             ))
             replicated += 1
+        else:
+            # Replication failed. Doc I.72 — if the result was fabricated, the
+            # failure exposes fraud and the inventor's reputation is damaged.
+            inv.replicated_by = None
+            if inv.inputs and inv.inputs.get("fabricated") and inv.minion_id:
+                inventor = await session.get(Minion, inv.minion_id)
+                if inventor:
+                    inventor.reputation = max(0.0, inventor.reputation - 0.4)
+                    session.add(Event(
+                        world_id=world.id, tick=world.tick, kind="fraud:detected",
+                        actor_id=inventor.id,
+                        payload={"invention": inv.id,
+                                 "inventor": f"{inventor.name} {inventor.surname}".strip()},
+                    ))
     return replicated
 
 
