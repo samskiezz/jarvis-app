@@ -471,6 +471,42 @@ async def population_stats(
     )
 
 
+@router.get("/{world_id}/timeline")
+async def world_timeline(
+    world_id: str,
+    since: int = Query(default=0, ge=0),
+    limit: int = Query(default=500, ge=1, le=5000),
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.91 — full per-tick history series for rewind/replay + plotting.
+
+    Returns snapshots in ascending tick order (including the knowledge/master
+    metrics), so the UI can scrub through a world's whole history.
+    """
+    await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(PopulationSnapshot)
+        .where(PopulationSnapshot.world_id == world_id, PopulationSnapshot.tick >= since)
+        .order_by(PopulationSnapshot.tick.asc())
+        .limit(limit)
+    )).scalars().all()
+    return {
+        "world_id": world_id,
+        "count": len(rows),
+        "series": [
+            {
+                "tick": s.tick, "alive": s.alive, "dead": s.dead,
+                "births": s.births, "deaths": s.deaths, "forks": s.forks,
+                "generations": s.generations, "inventions_approved": s.inventions_approved,
+                "avg_reputation": s.avg_reputation, "avg_sanity": s.avg_sanity,
+                "total_knowledge": s.total_knowledge, "masters": s.masters,
+            }
+            for s in rows
+        ],
+    }
+
+
 @router.post("/{world_id}/advance", response_model=AdvanceResponse)
 async def advance(
     world_id: str,

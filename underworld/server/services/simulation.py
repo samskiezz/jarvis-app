@@ -296,6 +296,7 @@ async def advance_world(
                 else 1.0
             )
             lifecycle.decay_needs(m, intensity=intensity)
+            lifecycle.tick_health(m, rng)  # wounds / infection / healing (doc I.32)
             # Re-derive mood so it's persisted with the post-tick state.
             m.mood, m.stress = lifecycle.derive_mood(m)
 
@@ -332,6 +333,9 @@ async def advance_world(
 
         # 3c. Independent replication of approved inventions (doc I.71).
         report.replications = await reviewer.replicate_pending(session, world, rng)
+
+        # 3d. Ascended souls guide the living (doc II.139).
+        await lifecycle.ghost_guidance(session, world)
 
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)
