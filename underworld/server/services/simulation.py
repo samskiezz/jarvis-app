@@ -38,7 +38,7 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import economy, education, lifecycle, mastery, projects, roles
+from . import discovery, economy, education, lifecycle, mastery, projects, roles, timescale
 
 
 @dataclass
@@ -342,6 +342,16 @@ async def advance_world(
 
         # 3f. Formal education lifts the young (doc I.45).
         await education.apply_education(session, world)
+
+        # 3g0. Foundational tech discovery from scratch (doc I.22).
+        await discovery.tick_discoveries(session, world)
+
+        # 3g1. Advance the in-world calendar by a complexity-scaled amount (doc I.16).
+        world.sim_year = round(world.sim_year + timescale.years_per_tick(
+            population=len(alive_minions),
+            inventions=report.inventions_approved,
+            era=world.era,
+        ), 3)
 
         # 3g. Periodic scarcity-driven market snapshot (doc I.39-40).
         if world.tick % 10 == 0:

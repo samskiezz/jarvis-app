@@ -472,6 +472,28 @@ async def population_stats(
     )
 
 
+@router.get("/{world_id}/discoveries")
+async def world_discoveries(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.22 — foundational technologies this world has discovered, in order."""
+    from ..db.models import Discovery
+    from ..services.discovery import LADDER
+
+    await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(Discovery).where(Discovery.world_id == world_id).order_by(Discovery.tick.asc())
+    )).scalars().all()
+    return {
+        "discovered": [
+            {"tech": d.tech, "tick": d.tick, "sim_year": round(d.sim_year, 1)} for d in rows
+        ],
+        "remaining": [t.name for t in LADDER if t.name not in {d.tech for d in rows}],
+    }
+
+
 @router.get("/{world_id}/timeline")
 async def world_timeline(
     world_id: str,
