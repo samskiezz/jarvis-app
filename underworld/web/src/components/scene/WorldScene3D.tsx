@@ -34,6 +34,22 @@ interface Props {
    *  above each minion in the scene. Doc II.25 (visible monologue). */
   thoughtByMinion?: Record<string, string>;
   biomeHint?: string;
+  /** Live backend weather (clear|cloudy|rain|storm|snow). When provided it drives
+   *  the rendered weather so the scene matches the simulation, instead of a
+   *  client-side guess. */
+  weatherOverride?: string;
+}
+
+/** Map the backend's 5 weather states onto the 3 the renderer supports. */
+function mapWeather(w: string | undefined): WeatherKind | null {
+  switch (w) {
+    case "rain":
+    case "storm": return "rain";
+    case "snow": return "snow";
+    case "clear":
+    case "cloudy": return "clear";
+    default: return null;
+  }
 }
 
 const WORLD_SIZE = 240;      // 6× the original 40u → city-scale, room for districts
@@ -113,6 +129,7 @@ export default function WorldScene3D({
   actionByMinion,
   thoughtByMinion,
   biomeHint,
+  weatherOverride,
 }: Props) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   // Shared refs the selected MinionAvatar mutates (its world position) and
@@ -167,8 +184,8 @@ export default function WorldScene3D({
 
   const tint = diurnal(tick, WORLD_SIZE);
   const weather: WeatherKind = useMemo(
-    () => weatherFor(biomeHint ?? "plains", tick),
-    [biomeHint, tick],
+    () => mapWeather(weatherOverride) ?? weatherFor(biomeHint ?? "plains", tick),
+    [weatherOverride, biomeHint, tick],
   );
 
   const selected = useMemo(
