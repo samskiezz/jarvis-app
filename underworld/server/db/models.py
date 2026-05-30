@@ -178,6 +178,10 @@ class World(Base):
     # Doc I.36 — accumulated environmental pollution (0 = pristine, 1 = toxic),
     # driven by industrial activity and decaying with remediation.
     pollution: Mapped[float] = mapped_column(Float, default=0.0)
+    # Doc I.35 — wildlife populations (fraction of carrying capacity) driving the
+    # food supply. Overhunting collapses prey → famine.
+    prey_pop: Mapped[float] = mapped_column(Float, default=1.0)
+    predator_pop: Mapped[float] = mapped_column(Float, default=0.25)
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")

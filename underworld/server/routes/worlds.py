@@ -493,6 +493,22 @@ async def world_culture(
     }
 
 
+@router.get("/{world_id}/environment")
+async def world_environment(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.35-36 — environmental state: pollution + wildlife / food supply."""
+    world = await _world_or_404(session, world_id)
+    return {
+        "pollution": round(world.pollution or 0.0, 3),
+        "prey_pop": round(world.prey_pop if world.prey_pop is not None else 1.0, 3),
+        "predator_pop": round(world.predator_pop if world.predator_pop is not None else 0.25, 3),
+        "food_availability": round(world.prey_pop if world.prey_pop is not None else 1.0, 3),
+    }
+
+
 @router.get("/{world_id}/memes")
 async def world_memes(
     world_id: str,
