@@ -24,6 +24,7 @@ from .routes import projects as project_routes
 from .routes import safety as safety_routes
 from .routes import worlds as world_routes
 from .services import scheduler
+from .tools import llm as _llm
 
 # When the React bundle is co-located (Docker build copies it to
 # underworld/web/dist), serve it directly so a single port behind Caddy
@@ -35,6 +36,7 @@ _WEB_DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     configure_logging()
+    _llm.warn_on_misconfig()
     await init_db()
     await seed_knowledge_base()
     if get_settings().scheduler_enabled:

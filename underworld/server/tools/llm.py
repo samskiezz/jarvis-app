@@ -47,6 +47,51 @@ def _warn_stub_once() -> None:
         _stub_warned = True
 
 
+# Moonshot's k2.x reasoning models reject any temperature != 1.0 with
+# `400 invalid temperature: only 1 is allowed for this model`. The agent
+# layer asks for 0.7 to get creative variation; we coerce here so the
+# operator can point UNDERWORLD_KIMI_MODEL at kimi-k2.6 without every
+# tick 400ing into the stub fallback.
+_FIXED_TEMPERATURE_MODELS = ("kimi-k2",)  # k2.5, k2.6, future k2.x
+# Reasoning models spend hidden tokens on `reasoning_content` before
+# emitting any visible `content`. Below this many max_tokens the agent's
+# strict-JSON contract usually finishes with `finish_reason='length'`
+# and an empty content — silently degrading every tick to the heuristic
+# fallback. Warn at startup so the misconfig is loud.
+_REASONING_MIN_MAX_TOKENS = 4096
+
+
+def _coerce_temperature(model: str, requested: float) -> float:
+    if any(model.startswith(prefix) for prefix in _FIXED_TEMPERATURE_MODELS):
+        return 1.0
+    return requested
+
+
+def _is_reasoning_model(model: str) -> bool:
+    return any(model.startswith(prefix) for prefix in _FIXED_TEMPERATURE_MODELS)
+
+
+def warn_on_misconfig() -> None:
+    """Call once at boot. Logs a WARN if UNDERWORLD_KIMI_MODEL is set to a
+    reasoning model but UNDERWORLD_KIMI_MAX_TOKENS is too low for it to
+    emit anything visible.
+    """
+    settings = get_settings()
+    if not settings.kimi_api_key:
+        return
+    if _is_reasoning_model(settings.kimi_model) and settings.kimi_max_tokens < _REASONING_MIN_MAX_TOKENS:
+        log.warning(
+            "llm.reasoning_model_starved",
+            model=settings.kimi_model,
+            max_tokens=settings.kimi_max_tokens,
+            advice=(
+                f"reasoning models exhaust max_tokens on hidden reasoning_content; "
+                f"raise UNDERWORLD_KIMI_MAX_TOKENS to >= {_REASONING_MIN_MAX_TOKENS} or "
+                f"switch UNDERWORLD_KIMI_MODEL to moonshot-v1-32k"
+            ),
+        )
+
+
 def _stub_response(messages: list[dict[str, Any]]) -> str:
     last_user = next(
         (m.get("content", "") for m in reversed(messages) if m.get("role") == "user"),
@@ -74,7 +119,10 @@ async def chat(
     payload: dict[str, Any] = {
         "model": settings.kimi_model,
         "messages": messages,
-        "temperature": temperature if temperature is not None else settings.kimi_temperature,
+        "temperature": _coerce_temperature(
+            settings.kimi_model,
+            temperature if temperature is not None else settings.kimi_temperature,
+        ),
         "max_tokens": max_tokens if max_tokens is not None else settings.kimi_max_tokens,
     }
     if tools:
@@ -119,7 +167,7 @@ async def chat_stream(messages: list[dict[str, Any]]) -> AsyncIterator[str]:
         "model": settings.kimi_model,
         "messages": messages,
         "stream": True,
-        "temperature": settings.kimi_temperature,
+        "temperature": _coerce_temperature(settings.kimi_model, settings.kimi_temperature),
         "max_tokens": settings.kimi_max_tokens,
     }
     headers = {
