@@ -101,6 +101,7 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
           <div className="min-w-0 flex-1">
             <div className="flex items-baseline gap-1.5">
               <span className="font-display text-base font-medium text-zinc-100">{m.name}</span>
+              {m.nickname ? <span className="text-[11px] italic text-glow-purple">“{m.nickname}”</span> : null}
               <span className="text-[11px] text-zinc-500">{m.surname}</span>
               {!m.alive ? <span className="text-[10px] text-glow-rose">· DECEASED</span> : null}
             </div>
@@ -138,6 +139,9 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             <NeedBar label="Sanity" value={m.sanity} />
             <NeedBar label="Health" value={m.health} />
             <NeedBar label="Calm" value={1 - m.stress} />
+            {m.morale != null ? <NeedBar label="Morale" value={m.morale} /> : null}
+            {m.purpose != null ? <NeedBar label="Purpose" value={m.purpose} /> : null}
+            {m.injury ? <NeedBar label="Wound" value={m.injury} /> : null}
           </div>
         </section>
 

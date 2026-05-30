@@ -32,6 +32,7 @@ def _to_minion_out(m: Minion, skill_count: int) -> MinionOut:
         soul_id=m.soul_id,
         name=m.name,
         surname=m.surname or "",
+        nickname=m.nickname or "",
         guild=m.guild,
         swarm_role=m.swarm_role,
         generation=m.generation,
@@ -58,6 +59,9 @@ def _to_minion_out(m: Minion, skill_count: int) -> MinionOut:
         health=m.health,
         mood=m.mood,
         stress=m.stress,
+        morale=m.morale if m.morale is not None else 0.5,
+        purpose=m.purpose if m.purpose is not None else 0.5,
+        injury=m.injury if m.injury is not None else 0.0,
         skill_count=skill_count,
     )
 

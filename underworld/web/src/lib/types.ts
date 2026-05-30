@@ -170,6 +170,7 @@ export interface MinionListItem {
   id: string;
   name: string;
   surname: string;
+  nickname?: string;
   guild: Guild;
   swarm_role: SwarmRole;
   generation: number;
@@ -202,6 +203,9 @@ export interface Minion extends MinionListItem {
   creativity: number;
   thirst: number;
   stress: number;
+  morale?: number;
+  purpose?: number;
+  injury?: number;
   cause_of_death: CauseOfDeath | null;
   skill_count: number;
 }

@@ -61,6 +61,7 @@ class MinionOut(BaseModel):
     soul_id: str | None
     name: str
     surname: str
+    nickname: str = ""
     guild: GuildKind
     swarm_role: SwarmRoleKind
     generation: int
@@ -87,6 +88,9 @@ class MinionOut(BaseModel):
     health: float
     mood: MoodKind
     stress: float
+    morale: float = 0.5
+    purpose: float = 0.5
+    injury: float = 0.0
     skill_count: int = 0
 
 
@@ -95,6 +99,7 @@ class MinionListItem(BaseModel):
     id: str
     name: str
     surname: str
+    nickname: str = ""
     guild: GuildKind
     swarm_role: SwarmRoleKind
     generation: int

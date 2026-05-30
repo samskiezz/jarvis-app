@@ -367,7 +367,7 @@ function MinionRoster({
             >
               <div className="min-w-0">
                 <div className="truncate text-zinc-100">
-                  {m.name} {m.surname}
+                  {m.name}{m.nickname ? ` “${m.nickname}”` : ""} {m.surname}
                 </div>
                 <div className="mt-0.5 flex items-center gap-1.5 text-[9px]">
                   <GuildBadge guild={m.guild} size="xs" />
