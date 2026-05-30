@@ -12,15 +12,17 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 ### Physical world
 | # | Item | Status | Where |
 |---|------|--------|-------|
-| 1 | 3D world, day/night, weather | ◑ | `web` scene (cosmetic render); not a physics field |
+| 1 | 3D world, day/night, weather | ◑ | `web` scene render + live climate now drives day/night temp |
 | 3 | Resource distribution (geology) | ✅ | `world/resources.py`, `/substrate/resources` |
 | 4 | Material properties | ✅ | `knowledge/materials.py`, `/substrate/materials` |
-| 5/8/9 | Thermo / EM / optics | ◑ | `physics/engine.py` computable laws; not live world fields |
+| 5 | Thermodynamics (live world field) | ✅ | `services/climate.py` temperature + thermal stress |
+| 8/9 | EM / optics | ◑ | `physics/engine.py` computable laws; not live fields |
 | 7 | Structural integrity | ✅ | `physics/structures.py`, gates invention feasibility |
 | 16 | Dynamic time-scaling | ✅ | `services/timescale.py`, `World.sim_year` |
+| 28/29/30 | Weather / water cycle / climate zones | ✅ | `services/climate.py`, `/worlds/{id}/climate` |
 | 35 | Ecosystem feedback / overhunting | ✅ | `services/ecosystem.py`, `/worlds/{id}/environment` |
 | 36 | Pollution | ✅ | `services/pollution.py` |
-| 6/10–15/28–34 | Fluids, acoustics, chemistry, biology, agriculture, tectonics, weather, climate, fossils | ⬜ | future deep physical fields |
+| 6/10–15/31–34 | Fluids, acoustics, chemistry, biology, agriculture, tectonics, fossils | ⬜ | future deep physical fields |
 
 ### Minds & discovery
 | # | Item | Status | Where |
@@ -37,7 +39,8 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 68–70 | Mastery + knowledge tracking | ✅ | `services/mastery.py` |
 | 71 | Peer-review replication | ✅ | `agents/reviewer.py` |
 | 72 | Scientific fraud + reputation damage | ✅ | `agents/reviewer.py` (fraud:detected) |
-| 24/59/60/73–85 | Ruins, scripting sandbox, Internet Gateway | ⬜ | — |
+| 74/75/77/78/79/80/81 | Peak information + Internet Gateway (master-gated, real Crossref fetch, read-only) | ✅ | `services/gateway.py`, `POST /minions/{id}/gateway` |
+| 24/59/60/76/82–85 | Ruins, scripting sandbox, gateway puzzles/empty-datasets, patent-draft suggestion | ⬜ | — |
 
 ### Society & economy
 | # | Item | Status | Where |
