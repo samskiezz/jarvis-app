@@ -40,6 +40,14 @@ class WorldCreate(BaseModel):
     cpc_class: str = Field(..., min_length=1, max_length=16)
     starting_population: int = Field(default=128, ge=10, le=300)
     population_cap: int = Field(default=400, ge=50, le=1000)
+    # When > 0, founders are "born" before tick 0 so breeding unlocks the
+    # moment the world starts ticking. 25 ticks is one generation lead-in;
+    # 0 keeps the old slow-start behaviour.
+    starting_age: int = Field(default=25, ge=0, le=200)
+    # Default-on: the prior False default left every new world paused at
+    # tick 0, blocking births / forks / project advancement until the
+    # operator hunted down the auto-advance toggle. Pause is one click.
+    auto_advance: bool = True
 
 
 class WorldAutoAdvanceUpdate(BaseModel):

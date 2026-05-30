@@ -154,6 +154,38 @@ export default function WorldDetail() {
 
   return (
     <div className={`space-y-6 transition-all ${selectedMinion ? "pr-[500px]" : ""}`}>
+      {/* PAUSED CTA — without auto_advance the simulation stays at tick 0
+          and minions never reach breeding age. Loud banner so it's the
+          first thing you notice on a fresh world. */}
+      {!world.data.auto_advance ? (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-glow-amber/40 bg-glow-amber/5 p-4 shadow-glow">
+          <div className="flex items-start gap-3">
+            <div className="rounded-md border border-glow-amber/50 bg-glow-amber/10 p-2 text-glow-amber">
+              <Pause size={14} />
+            </div>
+            <div>
+              <div className="font-display text-sm font-medium text-glow-amber">
+                World is paused at tick {world.data.tick}
+              </div>
+              <p className="mt-0.5 text-[11px] text-zinc-400">
+                Minions only breed, fork, and invent while the scheduler is running.
+                Press <span className="font-mono text-glow-amber">▶</span> to start ticking
+                (1 tick ≈ {world.data.auto_advance_interval_s.toFixed(1)}s).
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => autoToggle.mutate(true)}
+            disabled={autoToggle.isPending}
+          >
+            <Play size={12} />
+            Start ticking
+          </button>
+        </div>
+      ) : null}
+
       {/* HERO HEADER */}
       <header className="panel-elevated overflow-hidden">
         <div className="relative flex flex-col gap-4 p-5 lg:flex-row lg:items-center">

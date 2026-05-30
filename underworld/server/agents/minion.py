@@ -218,7 +218,10 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
     # Reproduction drive — kicks in once adult and not from a reviewer guild.
     # Patent + Safety guilds are functional roles; they breed less.
     reviewer_guild = minion.guild.value in {"patent", "safety"}
-    breeding_age = age > 50
+    # Lowered from 50 → 20 so fresh worlds (auto_advance starts immediately)
+    # actually produce a 2nd generation in the first ~30 ticks instead of
+    # idling for 50. Matches `lifecycle.can_breed` floor (15).
+    breeding_age = age > 20
     if breeding_age and not reviewer_guild and minion.health > 0.6 and minion.fatigue > 0.4:
         breeding_drive = (
             0.04

@@ -54,6 +54,8 @@ async def create_world(
     name: str,
     cpc_class: str,
     plan: SeedingPlan | None = None,
+    starting_age: int = 0,
+    auto_advance: bool = True,
 ) -> World:
     plan = plan or default_seeding()
     seed = derive_seed(cpc_class)
@@ -63,28 +65,32 @@ async def create_world(
         seed_value=seed.seed_int,
         tick=0,
         population_cap=plan.population_cap,
+        auto_advance=auto_advance,
     )
     session.add(world)
     await session.flush()
 
     rng = random.Random(seed.seed_int)
+    # born_tick set to -starting_age so age (= world.tick - born_tick) = starting_age
+    # at tick 0. Lets a freshly-forged world unlock breeding immediately.
+    founder_born_tick = -max(0, int(starting_age))
 
     # 1. Aptitude pool — random DNA, guild from strongest locus.
     for _ in range(plan.aptitude_pool):
         dna = dna_mod.random_dna(rng)
         guild_kind = lifecycle.guild_from_dna(dna)
         given, surname = lifecycle.random_name(rng)
-        await _spawn_founder(session, world, given, surname, guild_kind, dna)
+        await _spawn_founder(session, world, given, surname, guild_kind, dna, born_tick=founder_born_tick)
 
     # 2. Patent + Safety reviewers — fixed counts.
     for _ in range(plan.patent_guild_seats):
         dna = dna_mod.random_dna(rng)
         given, surname = lifecycle.random_name(rng)
-        await _spawn_founder(session, world, given, surname, GuildKind.PATENT, dna)
+        await _spawn_founder(session, world, given, surname, GuildKind.PATENT, dna, born_tick=founder_born_tick)
     for _ in range(plan.safety_guild_seats):
         dna = dna_mod.random_dna(rng)
         given, surname = lifecycle.random_name(rng)
-        await _spawn_founder(session, world, given, surname, GuildKind.SAFETY, dna)
+        await _spawn_founder(session, world, given, surname, GuildKind.SAFETY, dna, born_tick=founder_born_tick)
 
     return world
 
@@ -96,8 +102,14 @@ async def _spawn_founder(
     surname: str,
     guild_kind: GuildKind,
     dna: str,
+    *,
+    born_tick: int = 0,
 ) -> Minion:
-    """Generation-0 Minion. No parents, fresh soul."""
+    """Generation-0 Minion. No parents, fresh soul.
+
+    `born_tick` is negative when `starting_age > 0` so the founders are
+    'born' before tick 0 and reach breeding age immediately.
+    """
     soul = Soul(world_id=world.id)
     session.add(soul)
     await session.flush()
@@ -118,7 +130,7 @@ async def _spawn_founder(
         neuroticism=traits["neuroticism"],
         intelligence=traits["intelligence"],
         creativity=traits["creativity"],
-        born_tick=0,
+        born_tick=born_tick,
         reputation=1.0,
         swarm_role=roles.assign_role(guild_kind, dna),
     )

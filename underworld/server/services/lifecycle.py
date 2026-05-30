@@ -502,7 +502,10 @@ def can_breed(a: Minion, b: Minion, *, world_tick: int) -> bool:
         return False
     age_a = world_tick - a.born_tick
     age_b = world_tick - b.born_tick
-    if age_a < 40 or age_b < 40:
+    # Lowered from 40 → 15. Matches the lowered heuristic breeding-drive
+    # threshold of 20 (`agents/minion.py`); the agent flags intent at 20
+    # and `can_breed` confirms eligibility once both are at least 15.
+    if age_a < 15 or age_b < 15:
         return False
     if a.parent_a_id == b.id or a.parent_b_id == b.id:
         return False

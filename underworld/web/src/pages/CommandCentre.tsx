@@ -28,8 +28,13 @@ export default function CommandCentre() {
   const [cpc, setCpc] = useState("H02J");
   const [startingPop, setStartingPop] = useState(128);
   const [populationCap, setPopulationCap] = useState(400);
+  // starting_age pre-ages the founders so breeding unlocks on tick 0;
+  // auto_advance starts the tick scheduler on the new world immediately.
+  const [startingAge, setStartingAge] = useState(25);
+  const [autoStart, setAutoStart] = useState(true);
   const createWorld = useMutation({
-    mutationFn: () => api.createWorld(name, cpc, startingPop, populationCap),
+    mutationFn: () =>
+      api.createWorld(name, cpc, startingPop, populationCap, startingAge, autoStart),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["worlds"] }),
   });
   const deleteWorld = useMutation({
@@ -175,6 +180,41 @@ export default function CommandCentre() {
                 max={1000}
                 onChange={(e) => setPopulationCap(Number(e.target.value) || 400)}
               />
+            </label>
+          </div>
+
+          {/* Boot options: pre-age founders + auto-start the tick scheduler. */}
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_1fr] md:items-end">
+            <label className="block">
+              <span className="page-eyebrow text-[9px]">Starting age (ticks)</span>
+              <input
+                type="number"
+                className="input mt-1.5"
+                value={startingAge}
+                min={0}
+                max={200}
+                onChange={(e) => setStartingAge(Math.max(0, Number(e.target.value) || 0))}
+              />
+              <span className="mt-1 block text-[9px] text-zinc-500">
+                Pre-ages the founders so breeding unlocks the moment the world ticks
+                (≥20 = past the agent's breeding threshold).
+              </span>
+            </label>
+            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-glow-purple/15 bg-glow-purple/5 px-3 py-2.5">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-glow-purple"
+                checked={autoStart}
+                onChange={(e) => setAutoStart(e.target.checked)}
+              />
+              <span>
+                <span className="block text-[10px] font-medium uppercase tracking-widest text-glow-purple">
+                  Auto-start ticking
+                </span>
+                <span className="mt-0.5 block text-[9px] text-zinc-500">
+                  Run the world live the moment it's forged. Uncheck to start paused.
+                </span>
+              </span>
             </label>
           </div>
 

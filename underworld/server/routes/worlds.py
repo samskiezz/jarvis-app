@@ -103,7 +103,14 @@ async def create_world_route(
         safety_guild_seats=safety_seats,
         population_cap=body.population_cap,
     )
-    world = await create_world(session, name=body.name, cpc_class=body.cpc_class, plan=plan)
+    world = await create_world(
+        session,
+        name=body.name,
+        cpc_class=body.cpc_class,
+        plan=plan,
+        starting_age=body.starting_age,
+        auto_advance=body.auto_advance,
+    )
     await session.flush()
     return await _world_out(session, world)
 

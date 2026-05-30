@@ -60,10 +60,24 @@ export const api = {
 
   // worlds
   listWorlds: () => request<World[]>("/worlds"),
-  createWorld: (name: string, cpc_class: string, starting_population = 128, population_cap = 400) =>
+  createWorld: (
+    name: string,
+    cpc_class: string,
+    starting_population = 128,
+    population_cap = 400,
+    starting_age = 25,
+    auto_advance = true,
+  ) =>
     request<World>("/worlds", {
       method: "POST",
-      body: JSON.stringify({ name, cpc_class, starting_population, population_cap }),
+      body: JSON.stringify({
+        name,
+        cpc_class,
+        starting_population,
+        population_cap,
+        starting_age,
+        auto_advance,
+      }),
     }),
   getWorld: (id: string) => request<World>(`/worlds/${id}`),
   deleteWorld: (id: string) =>
