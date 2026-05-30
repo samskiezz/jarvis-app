@@ -341,6 +341,31 @@ _IMPOSSIBLE_PATTERNS: tuple[tuple[str, str], ...] = (
 )
 _QUANTITY = re.compile(r"\d+(\.\d+)?\s*(N|J|W|V|A|Pa|K|kg|m/s|m|s|Hz|mol|%|ohm)\b", re.I)
 
+# Doc I.7/I.54 — structural inventions are graded against material reality.
+_STRUCT_KW = ("bridge", "tower", "building", "skyscraper", "beam", "column", "frame",
+              "roof", "dam", "arch", "scaffold", "truss", "girder", "spire")
+_SCALE_KW = ("tall", "huge", "massive", "giant", "enormous", "colossal", "skyscraper",
+             "high-rise", "megastructure", "kilometre", "kilometer", "great")
+
+
+def _structural_modifier(blob: str) -> tuple[float, list[str]]:
+    """Reward material-appropriate structural designs, penalise unsound ones."""
+    from ..knowledge import materials as materials_db
+
+    if not any(kw in blob for kw in _STRUCT_KW):
+        return 0.0, []
+    found = next((m for m in materials_db.all_materials()
+                  if m.name.replace("_", " ") in blob or m.name in blob), None)
+    if found is None:
+        return 0.0, []
+    large = any(kw in blob for kw in _SCALE_KW)
+    if found.tensile_mpa < 100 and large:
+        return -0.20, [f"Structurally unsound — {found.name} is too weak for a large structure."]
+    if found.tensile_mpa >= 300:
+        return 0.10, [f"Sound structural choice — {found.name} (tensile {found.tensile_mpa:.0f} MPa)."]
+    return 0.0, []
+
+
 
 @dataclass
 class InventionAssessment:
@@ -374,6 +399,9 @@ def assess_invention(text: str) -> InventionAssessment:
         notes.append(f"Grounded with {n_quant} quantified term(s).")
     if len(blob) > 200:
         feasibility += 0.10
+    struct_delta, struct_notes = _structural_modifier(blob)
+    feasibility += struct_delta
+    notes.extend(struct_notes)
     feasibility = max(0.0, min(0.95, feasibility))
     return InventionAssessment(feasibility=round(feasibility, 3), violates_limit=False, notes=notes)
 

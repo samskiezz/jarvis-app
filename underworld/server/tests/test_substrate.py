@@ -100,3 +100,16 @@ def test_substrate_routes(client, headers):
 
     survey = client.get("/substrate/resources?cpc_class=E21B&size=16", headers=headers).json()
     assert survey["cpc_class"] == "E21B" and "iron_ore" in survey["resources"]
+
+
+# ── substrate wired into invention feasibility (#7/#54) ──────────────────────
+def test_structural_soundness_grades_inventions():
+    from underworld.server.physics import engine
+    weak = engine.assess_invention("A giant tall tower built from wood, 200 m high.")
+    strong = engine.assess_invention("A giant tall tower built from steel, 200 m high.")
+    assert strong.feasibility > weak.feasibility
+    assert any("unsound" in n.lower() for n in weak.notes)
+    assert any("sound structural" in n.lower() for n in strong.notes)
+    # a non-structural invention is unaffected by the structural rule
+    neutral = engine.assess_invention("A new statistical method for sorting data.")
+    assert all("structural" not in n.lower() for n in neutral.notes)
