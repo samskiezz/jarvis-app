@@ -377,6 +377,26 @@ class MLModel(Base):
     updated_tick: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class EmptyDataset(Base):
+    """Doc I.82-85 — a generated 'empty data set': an open research question that
+    mirrors a real unresolved problem. A Minion solves it by combining several
+    expired patents, which produces an in-world patent + a suggested real-world
+    patent-application draft."""
+
+    __tablename__ = "empty_datasets"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    discipline: Mapped[str] = mapped_column(String(24), nullable=False)
+    prompt: Mapped[str] = mapped_column(Text, nullable=False)
+    required_patents: Mapped[int] = mapped_column(Integer, default=2)
+    solved: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
+    solved_by: Mapped[str | None] = mapped_column(ForeignKey("minions.id"), nullable=True)
+    solution_invention_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    patent_draft: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    created_tick: Mapped[int] = mapped_column(Integer, default=0)
+
+
 class CausalBelief(Base):
     """Doc I.23 — a Minion's learned cause→effect hypotheses.
 
