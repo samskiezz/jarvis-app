@@ -56,6 +56,7 @@ class TickReport:
     project_contributions: int = 0
     project_stages_advanced: int = 0
     projects_approved: int = 0
+    replications: int = 0
 
 
 def _payload(rep: TickReport) -> dict:
@@ -73,6 +74,7 @@ def _payload(rep: TickReport) -> dict:
         "project_contributions": rep.project_contributions,
         "project_stages_advanced": rep.project_stages_advanced,
         "projects_approved": rep.projects_approved,
+        "replications": rep.replications,
     }
 
 
@@ -327,6 +329,9 @@ async def advance_world(
         report.project_contributions = proj_report.contributions
         report.project_stages_advanced = proj_report.stages_advanced
         report.projects_approved = proj_report.approved
+
+        # 3c. Independent replication of approved inventions (doc I.71).
+        report.replications = await reviewer.replicate_pending(session, world, rng)
 
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)
