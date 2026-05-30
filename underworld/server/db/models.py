@@ -182,6 +182,9 @@ class World(Base):
     # food supply. Overhunting collapses prey → famine.
     prey_pop: Mapped[float] = mapped_column(Float, default=1.0)
     predator_pop: Mapped[float] = mapped_column(Float, default=0.25)
+    # Doc I.41-42 — emergent political + legal institutions.
+    government: Mapped[str] = mapped_column(String(20), default="tribe")
+    legal_system: Mapped[str] = mapped_column(String(20), default="customary")
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")
