@@ -38,7 +38,9 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import discovery, economy, education, lifecycle, mastery, projects, roles, timescale
+from . import (
+    discovery, economy, education, lifecycle, mastery, projects, religion, roles, timescale,
+)
 
 
 @dataclass
@@ -352,6 +354,10 @@ async def advance_world(
             inventions=report.inventions_approved,
             era=world.era,
         ), 3)
+
+        # 3g2. Religion & philosophy emerge / reform (doc I.46, II.133-134).
+        if world.tick % 5 == 0:
+            await religion.tick_culture(session, world)
 
         # 3g. Periodic scarcity-driven market snapshot (doc I.39-40).
         if world.tick % 10 == 0:
