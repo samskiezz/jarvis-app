@@ -191,6 +191,10 @@ class Soul(Base):
     incarnation: Mapped[int] = mapped_column(Integer, default=1)
     karma: Mapped[float] = mapped_column(Float, default=0.0)
     ascended: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Doc II.104 — the soul accumulates knowledge (peak Σ skill levels reached)
+    # + an emotional tone across lives; II.106 lets talent skip generations.
+    knowledge: Mapped[float] = mapped_column(Float, default=0.0)
+    temperament: Mapped[str] = mapped_column(String(24), default="")
     # Faint ancestral memory — short text summaries of past lives.
     ancestral_summary: Mapped[str] = mapped_column(Text, default="")
     created_at: Mapped[datetime] = mapped_column(default=_now)
