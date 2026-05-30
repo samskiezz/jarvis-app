@@ -39,8 +39,8 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    discovery, ecosystem, economy, education, lifecycle, mastery, memes, pollution, projects,
-    religion, roles, substances, timescale,
+    discovery, ecosystem, economy, education, governance, lifecycle, mastery, memes, pollution,
+    projects, religion, roles, substances, timescale,
 )
 
 
@@ -365,6 +365,8 @@ async def advance_world(
         # 3g2. Religion & philosophy emerge / reform (doc I.46, II.133-134).
         if world.tick % 5 == 0:
             await religion.tick_culture(session, world)
+            # Government + legal institutions emerge / reform (doc I.41-42).
+            await governance.tick_governance(session, world)
 
         # 3g3. Memetic ecology — fads/fashion/ideas spread + evolve (doc I.142-143).
         await memes.tick_memes(session, world, rng)

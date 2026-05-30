@@ -48,7 +48,9 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 66/67 | Guilds + competition | ✅ | `agents/guilds.py`, guild standings |
 | 91 | History rewind/replay | ✅ | `/worlds/{id}/timeline` |
 | 97 | Persistent, always-running | ✅ | scheduler |
-| 41–44/47/48/64/65 | Government, law, war, urban planning, art, info-loss | ⬜ | — |
+| 41 | Government structures (emergent) | ✅ | `services/governance.py`, `/worlds/{id}/society` |
+| 42 | Legal systems (emergent) | ✅ | `services/governance.py` |
+| 43/44/47/48/64/65 | War, urban planning, art, info-loss | ⬜ | — |
 
 ---
 

@@ -493,6 +493,25 @@ async def world_culture(
     }
 
 
+@router.get("/{world_id}/society")
+async def world_society(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.41-42 — emergent government + legal system for this world."""
+    from ..services import governance
+
+    world = await _world_or_404(session, world_id)
+    soc = await governance.assess_society(session, world)
+    return {
+        "government": world.government,
+        "legal_system": world.legal_system,
+        "population": soc.population,
+        "avg_openness": soc.avg_openness,
+    }
+
+
 @router.get("/{world_id}/environment")
 async def world_environment(
     world_id: str,
