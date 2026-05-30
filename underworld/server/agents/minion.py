@@ -483,6 +483,12 @@ async def _do_propose_invention(
     # (no FTL, over-unity, or >100% efficiency). The reviewer reads this back.
     assessment = physics_engine.assess_invention(combined)
 
+    # Doc I.72 — an unscrupulous (low-conscientiousness, low-karma) Minion may
+    # fabricate results: inflate the claimed feasibility to slip past review.
+    # Replication later exposes it.
+    fabricated = minion.conscientiousness < 0.35 and minion.karma < 0.0 and \
+        (hash(inv_seed := f"{minion.id}:{world.tick}") % 100) < 25
+    claimed_feasibility = min(0.95, assessment.feasibility + 0.4) if fabricated else assessment.feasibility
     inv = Invention(
         world_id=world.id,
         minion_id=minion.id,
@@ -491,11 +497,12 @@ async def _do_propose_invention(
         problem=problem,
         hypothesis=hypothesis,
         related_patents=related,
-        feasibility_score=assessment.feasibility,
+        feasibility_score=claimed_feasibility,
         status=TaskStatus.NEEDS_SAFETY_REVIEW if blocked else TaskStatus.NEEDS_PEER_REVIEW,
         inputs={
             "guild": minion.guild.value,
             "generation": minion.generation,
+            "fabricated": fabricated,
             "physics": {
                 "feasibility": assessment.feasibility,
                 "violates_limit": assessment.violates_limit,
