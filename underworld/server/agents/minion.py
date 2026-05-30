@@ -31,13 +31,15 @@ from ..db.models import (
     Memory,
     Minion,
     Patent,
+    Relationship,
+    RelationshipKind,
     Skill,
     TaskStatus,
     World,
 )
 from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
-from ..services import lifecycle, progression
+from ..services import lifecycle, mastery as mastery_mod, progression
 from ..tools import llm, patent_search, safety
 from .guild_lore import get_lore
 
@@ -317,15 +319,57 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
     return {"thought": "Resting briefly.", "action": "rest", "args": {}, "memory_to_store": ""}
 
 
-async def _gather_recent_memories(session: AsyncSession, minion_id: str, limit: int = 6) -> list[Memory]:
-    stmt = (
-        select(Memory)
-        .where(Memory.minion_id == minion_id)
-        .order_by(Memory.tick.desc())
-        .limit(limit)
-    )
-    res = await session.execute(stmt)
-    return list(res.scalars().all())
+def _memory_emotion_delta(salient: list[Memory]) -> float:
+    """Doc I.94 — recalled memories colour mood. Returns a sanity delta:
+    salient distress (deaths/grim observations) erodes sanity; salient wins
+    (correct calculations, inspired thoughts, ancestral pride) lift it."""
+    distress = sum(m.importance for m in salient
+                   if m.kind in {"death", "observation"} and m.importance > 0.55)
+    uplift = sum(m.importance for m in salient
+                 if m.kind in {"calculation", "ancestral", "action"} and m.importance > 0.6)
+    return round(0.04 * uplift - 0.05 * distress, 4)
+
+
+async def _recall_salient(
+    session: AsyncSession, minion_id: str, world_tick: int, *, limit: int = 6, pool: int = 24,
+) -> list[Memory]:
+    """Doc I.93/95 — a personal memory store with salience.
+
+    Score each recent memory by importance × recency, return the most salient,
+    REINFORCE those (recall strengthens them) and DECAY the rest (forgetting).
+    """
+    rows = list((await session.execute(
+        select(Memory).where(Memory.minion_id == minion_id)
+        .order_by(Memory.tick.desc()).limit(pool)
+    )).scalars().all())
+    if not rows:
+        return []
+
+    def score(m: Memory) -> float:
+        return m.importance * (0.96 ** max(0, world_tick - m.tick))
+
+    ranked = sorted(rows, key=score, reverse=True)
+    top = ranked[:limit]
+    top_ids = {m.id for m in top}
+    for m in rows:
+        if m.id in top_ids:
+            m.importance = min(1.0, m.importance + 0.03)   # reinforcement
+        else:
+            m.importance = max(0.0, m.importance * 0.94)    # decay / forgetting
+    # Return in chronological order for a coherent prompt.
+    return sorted(top, key=lambda m: m.tick)
+
+
+async def _maybe_mastery_event(
+    session: AsyncSession, minion: Minion, world: World, skill: Skill, old_level: float,
+) -> None:
+    """Log a one-time mastery milestone when a skill crosses the threshold."""
+    if mastery_mod.crossed_mastery(old_level, skill.level):
+        minion.reputation = min(5.0, minion.reputation + 0.05)
+        await _record_event(session, world.id, world.tick, "minion:mastery", minion.id,
+                            {"skill": skill.name, "level": round(skill.level, 2)})
+        await _store_memory(session, minion, world.tick, "observation",
+                            f"Achieved mastery of {skill.name}.", importance=0.85)
 
 
 async def _store_memory(
@@ -461,9 +505,11 @@ async def _do_study(session: AsyncSession, minion: Minion, world: World, args: d
         session.add(skill)
         await session.flush()
     boost = 0.08 + 0.06 * minion.conscientiousness + 0.04 * minion.intelligence
+    old_level = skill.level
     skill.level = min(10.0, skill.level + boost)
     skill.last_practiced_tick = world.tick
     minion.fatigue = max(0.0, minion.fatigue - 0.04)
+    await _maybe_mastery_event(session, minion, world, skill, old_level)
     return f"Studied {skill_name!r}; level now {skill.level:.2f}"
 
 
@@ -549,11 +595,13 @@ async def _do_calculate(
         rng=rng,
     )
 
+    old_level = skill.level
     skill.level = min(10.0, skill.level + result.skill_delta)
     skill.last_practiced_tick = world.tick
     minion.reputation = max(0.0, min(5.0, minion.reputation + result.reputation_delta))
     minion.karma += result.karma_delta
     minion.fatigue = max(0.0, minion.fatigue - 0.05)
+    await _maybe_mastery_event(session, minion, world, skill, old_level)
 
     await _store_memory(
         session, minion, world.tick, "calculation", result.steps[:600],
@@ -573,36 +621,71 @@ async def _do_calculate(
     return f"Calculated {law.name} ({verdict}); {skill_name} now {skill.level:.2f}."
 
 
-async def _do_teach(session: AsyncSession, teacher: Minion, world: World, args: dict[str, Any]) -> str:
-    """Teach a same-guild Minion. Both gain — teacher reputation, student skill."""
+_BOND_KINDS = {
+    RelationshipKind.FRIEND, RelationshipKind.MENTOR,
+    RelationshipKind.ROMANCE, RelationshipKind.SOUL_BOND,
+}
+_TEACH_COOLDOWN = 3  # ticks — knowledge transfer takes time (doc I.63)
+
+
+async def _do_teach(
+    session: AsyncSession, teacher: Minion, world: World, args: dict[str, Any],
+    neighbours: list[Minion] | None = None,
+) -> str:
+    """Teach a nearby same-guild Minion.
+
+    Doc I.63 — transfer requires PROXIMITY (must be a neighbour in earshot),
+    a shared LANGUAGE (same guild), and TIME (a per-pair cooldown + effort cost).
+    Doc II.115 — LOVE/cooperation: a bonded student (friend/mentor/romance/
+    soul-bond) learns markedly faster, and teaching strengthens the bond.
+    """
     skill_name = str(args.get("skill") or teacher.guild.value).strip()[:80]
-    # Pick a random same-guild candidate younger or less-skilled.
-    stmt = (
-        select(Minion)
-        .where(
-            Minion.world_id == world.id,
-            Minion.guild == teacher.guild,
-            Minion.alive.is_(True),
-            Minion.id != teacher.id,
-        )
-        .order_by(Minion.born_tick.desc())
-        .limit(5)
-    )
-    res = await session.execute(stmt)
-    candidates = list(res.scalars().all())
-    if not candidates:
-        return "No one to teach right now."
-    student = candidates[0]
-    teacher.reputation = min(5.0, teacher.reputation + 0.02)
-    student_skill_stmt = select(Skill).where(Skill.minion_id == student.id, Skill.name == skill_name)
-    res = await session.execute(student_skill_stmt)
-    skill = res.scalars().first()
+    pool = [n for n in (neighbours or [])
+            if n.alive and n.id != teacher.id and n.guild == teacher.guild]
+    if not pool:
+        return "No one nearby to teach (need a same-guild neighbour)."
+
+    rels = {
+        r.to_id: r for r in (await session.execute(
+            select(Relationship).where(
+                Relationship.from_id == teacher.id,
+                Relationship.to_id.in_([n.id for n in pool]),
+            )
+        )).scalars().all()
+    }
+
+    def bond_strength(n: Minion) -> float:
+        r = rels.get(n.id)
+        return r.strength if (r and r.kind in _BOND_KINDS) else 0.0
+
+    student = max(pool, key=bond_strength)
+    bond = bond_strength(student)
+
+    # TIME: don't re-teach the same student within the cooldown window.
+    mentor_rel = rels.get(student.id)
+    if mentor_rel and mentor_rel.kind == RelationshipKind.MENTOR \
+            and world.tick - mentor_rel.last_interaction_tick < _TEACH_COOLDOWN:
+        return f"Taught {student.name} recently; letting the lesson settle."
+
+    transfer = 0.12 * (1.0 + bond)  # bonded students learn up to ~2x faster
+    skill = (await session.execute(
+        select(Skill).where(Skill.minion_id == student.id, Skill.name == skill_name)
+    )).scalars().first()
     if not skill:
         skill = Skill(minion_id=student.id, name=skill_name, level=0.3, last_practiced_tick=world.tick)
         session.add(skill)
         await session.flush()
-    skill.level = min(10.0, skill.level + 0.15)
-    return f"Taught {skill_name} to {student.name}."
+    old_level = skill.level
+    skill.level = min(10.0, skill.level + transfer)
+    skill.last_practiced_tick = world.tick
+
+    teacher.reputation = min(5.0, teacher.reputation + 0.02)
+    teacher.fatigue = max(0.0, teacher.fatigue - 0.03)  # effort/time cost
+    await lifecycle._ensure_relationship(
+        session, teacher, student, RelationshipKind.MENTOR, world.tick, 0.6)
+    await _maybe_mastery_event(session, student, world, skill, old_level)
+    extra = " (bonded — learned fast)" if bond > 0 else ""
+    return f"Taught {skill_name} to {student.name}{extra}; +{transfer:.2f}."
 
 
 # ── Doc III.3-9: Patent Scanner build action ──────────────────────────────
@@ -741,8 +824,12 @@ async def run_tick(
     rng = rng or random.Random()
     neighbours = neighbours or []
 
-    recent = await _gather_recent_memories(session, minion.id)
-    memory_block = "\n".join(f"[t={m.tick} {m.kind}] {m.content}" for m in reversed(recent))
+    recent = await _recall_salient(session, minion.id, world.tick)
+    # Doc I.94 — what a Minion recalls shifts its emotional state.
+    sanity_delta = _memory_emotion_delta(recent)
+    if sanity_delta:
+        minion.sanity = max(0.0, min(1.0, minion.sanity + sanity_delta))
+    memory_block = "\n".join(f"[t={m.tick} {m.kind}] {m.content}" for m in recent)
 
     parsed: dict[str, Any] | None = None
     if use_llm:
@@ -807,7 +894,7 @@ async def run_tick(
     elif action == "study":
         summary = await _do_study(session, minion, world, args)
     elif action == "teach":
-        summary = await _do_teach(session, minion, world, args)
+        summary = await _do_teach(session, minion, world, args, neighbours=neighbours)
     elif action == "kb_lookup":
         summary = await _do_kb_lookup(session, minion, world, args)
     elif action == "calculate":

@@ -518,4 +518,8 @@ class PopulationSnapshot(Base):
     role_breakdown: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     active_projects: Mapped[int] = mapped_column(Integer, default=0)
     approved_projects: Mapped[int] = mapped_column(Integer, default=0)
+    # Doc I.70 — community's total accumulated knowledge (Σ skill levels +
+    # approved inventions) and the count of domain masters (I.68-69).
+    total_knowledge: Mapped[float] = mapped_column(Float, default=0.0)
+    masters: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(default=_now)

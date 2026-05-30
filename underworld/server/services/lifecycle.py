@@ -199,7 +199,15 @@ def determine_death(m: Minion, *, world_tick: int, rng: random.Random) -> CauseO
         if rng.random() < min(0.4, 0.01 + excess * 0.005):
             return CauseOfDeath.OLD_AGE
 
-    # Accidents — rare, scale with low dexterity.
+    # Doc I.21 — endemic disease is a real selective pressure. Susceptibility
+    # falls with the heritable `immune` locus and current health, so over
+    # generations natural selection raises population immunity.
+    immune = dna_mod.trait(m.dna, "immune")
+    disease_p = 0.003 * (1.0 - immune) * (1.4 - m.health)
+    if rng.random() < max(0.0, disease_p):
+        return CauseOfDeath.DISEASE
+
+    # Accidents — rare, scale with low dexterity (also heritable).
     dex = dna_mod.trait(m.dna, "dexterity")
     accident_p = 0.0008 + 0.002 * (1.0 - dex)
     if rng.random() < accident_p:
@@ -291,6 +299,7 @@ async def _make_minion(
     parent_b_id: str | None = None,
     forked_from_id: str | None = None,
     soul: Soul | None = None,
+    inherit_skills: dict[str, float] | None = None,
 ) -> Minion:
     soul = soul or await _resurrect_soul(session, world.id) or await _new_soul(session, world.id)
     traits = dna_mod.trait_vector(dna)
@@ -321,9 +330,14 @@ async def _make_minion(
     await session.flush()
 
     spec = guilds.get(guild)
-    for skill_name in spec.starting_skills:
-        base_level = 0.5 + 0.5 * dna_mod.trait(dna, "intelligence")
-        session.add(Skill(minion_id=m.id, name=skill_name, level=base_level))
+    base_level = 0.5 + 0.5 * dna_mod.trait(dna, "intelligence")
+    skill_levels: dict[str, float] = {name: base_level for name in spec.starting_skills}
+    # Doc II.117 — offspring inherit a fraction of their parents' skills (but
+    # NOT their memories). A child of two masters starts ahead, not from zero.
+    for name, level in (inherit_skills or {}).items():
+        skill_levels[name] = min(10.0, max(skill_levels.get(name, 0.0), level))
+    for skill_name, level in skill_levels.items():
+        session.add(Skill(minion_id=m.id, name=skill_name, level=level))
 
     # Ancestral memory faintly seeds the new Minion's memory bank.
     if soul.ancestral_summary:
@@ -370,6 +384,13 @@ async def breed_pair(
     surname = parent_a.surname or parent_b.surname or surname_pick
     generation = max(parent_a.generation, parent_b.generation) + 1
     guild = guild_from_dna(child_dna, allowed=tuple(_GUILD_APTITUDE_LOCI.keys()))
+    # Inherit a quarter of each parent's skill in skills they were good at.
+    inherited: dict[str, float] = {}
+    parent_skills = (await session.execute(
+        select(Skill).where(Skill.minion_id.in_([parent_a.id, parent_b.id]), Skill.level >= 1.0)
+    )).scalars().all()
+    for sk in parent_skills:
+        inherited[sk.name] = min(2.5, inherited.get(sk.name, 0.0) + 0.25 * sk.level)
     child = await _make_minion(
         session,
         world=world,
@@ -380,6 +401,7 @@ async def breed_pair(
         generation=generation,
         parent_a_id=parent_a.id,
         parent_b_id=parent_b.id,
+        inherit_skills=inherited,
     )
     # Sibling relationships
     siblings_stmt = select(Minion).where(

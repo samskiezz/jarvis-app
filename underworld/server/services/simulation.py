@@ -38,7 +38,7 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import lifecycle, projects, roles
+from . import lifecycle, mastery, projects, roles
 
 
 @dataclass
@@ -200,6 +200,7 @@ async def _write_snapshot(
     avg_sanity = sum(m.sanity for m in alive) / len(alive) if alive else 0.0
     generations = max((m.generation for m in alive), default=0)
     active_projects, approved_projects = await projects.world_project_counts(session, world.id)
+    total_knowledge, masters = await mastery.world_knowledge(session, world.id)
 
     session.add(
         PopulationSnapshot(
@@ -220,6 +221,8 @@ async def _write_snapshot(
             role_breakdown=dict(role_breakdown),
             active_projects=active_projects,
             approved_projects=approved_projects,
+            total_knowledge=round(total_knowledge, 2),
+            masters=masters,
         )
     )
 
