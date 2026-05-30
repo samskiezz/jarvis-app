@@ -583,6 +583,8 @@ async def world_environment(
         "prey_pop": round(world.prey_pop if world.prey_pop is not None else 1.0, 3),
         "predator_pop": round(world.predator_pop if world.predator_pop is not None else 0.25, 3),
         "food_availability": round(world.prey_pop if world.prey_pop is not None else 1.0, 3),
+        "soil_fertility": round(world.soil_fertility if world.soil_fertility is not None else 0.7, 3),
+        "crop_yield": round(world.crop_yield or 0.0, 3),
     }
 
 

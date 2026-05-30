@@ -39,7 +39,7 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    climate, discovery, ecosystem, economy, education, governance, knowledge_decay,
+    agriculture, climate, discovery, ecosystem, economy, education, governance, knowledge_decay,
     lifecycle, mastery, memes, pollution, projects, puzzles, religion, roles, substances, timescale,
 )
 
@@ -384,6 +384,9 @@ async def advance_world(
 
         # 3g6. Live climate field — season/temperature/weather + thermal stress (doc I.5/28-30).
         await climate.tick_climate(session, world, rng)
+
+        # 3g6b. Agriculture — climate-driven crops feed the population (doc I.13).
+        await agriculture.tick_agriculture(session, world)
 
         # 3g7. Once at peak information, the gateway posts research puzzles (doc I.82-85).
         if world.tick % 15 == 0:
