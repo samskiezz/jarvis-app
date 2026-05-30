@@ -149,3 +149,28 @@ async def list_guardrails(
 ):
     res = await session.execute(select(KnowledgeGuardrail).order_by(KnowledgeGuardrail.stage))
     return [{"id": g.id, "stage": g.stage, "detail": g.detail} for g in res.scalars().all()]
+
+
+@router.get("/skill-tree")
+async def skill_tree(
+    domain: str | None = Query(default=None),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.61 — the structured, multi-hundred-node skill dependency graph."""
+    from ..knowledge import skill_tree as st
+
+    nodes = st.SKILL_TREE.values()
+    if domain:
+        nodes = [n for n in nodes if n.domain == domain]
+    return {
+        "stats": st.stats(),
+        "levels": list(st.LEVELS),
+        "nodes": [
+            {
+                "id": n.id, "name": n.name, "domain": n.domain,
+                "concept": n.concept, "level": n.level,
+                "prerequisites": list(n.prerequisites),
+            }
+            for n in nodes
+        ],
+    }

@@ -38,7 +38,7 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import lifecycle, mastery, projects, roles
+from . import education, lifecycle, mastery, projects, roles
 
 
 @dataclass
@@ -339,6 +339,9 @@ async def advance_world(
 
         # 3e. Guilds compete for prestige (doc I.67).
         await lifecycle.apply_guild_competition(session, world)
+
+        # 3f. Formal education lifts the young (doc I.45).
+        await education.apply_education(session, world)
 
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)
