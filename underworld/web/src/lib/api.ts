@@ -113,8 +113,21 @@ export const api = {
       `/worlds/${id}/culture`,
     ),
   environment: (id: string) =>
-    request<{ pollution: number; prey_pop: number; predator_pop: number; food_availability: number }>(
-      `/worlds/${id}/environment`,
+    request<{
+      pollution: number; prey_pop: number; predator_pop: number; food_availability: number;
+      soil_fertility: number; crop_yield: number; tectonic_stress: number;
+    }>(`/worlds/${id}/environment`),
+  climate: (id: string) =>
+    request<{ season: string; temperature: number; weather: string; thermal_stress: number }>(
+      `/worlds/${id}/climate`,
+    ),
+  society: (id: string) =>
+    request<{ government: string; legal_system: string; population: number; avg_openness: number }>(
+      `/worlds/${id}/society`,
+    ),
+  gaps: (id: string) =>
+    request<{ id: string; discipline: string; prompt: string; required_patents: number }[]>(
+      `/worlds/${id}/gaps`,
     ),
   memes: (id: string) =>
     request<{ name: string; kind: string; popularity: number; generation: number; is_variant: boolean }[]>(
@@ -140,6 +153,16 @@ export const api = {
   getDna: (id: string) => request<DnaInfo>(`/minions/${id}/dna`),
   getSoul: (id: string) => request<SoulInfo>(`/minions/${id}/soul`),
   getLineage: (id: string, depth = 3) => request<Lineage>(`/minions/${id}/lineage?depth=${depth}`),
+  beliefs: (id: string) =>
+    request<{ cause: string; effect: string; trials: number; confidence: number }[]>(
+      `/minions/${id}/beliefs`,
+    ),
+  models: (id: string) =>
+    request<{ task: string; samples: number; accuracy: number }[]>(`/minions/${id}/models`),
+  appearance: (id: string) =>
+    request<{ hair: string; garment: string; body_art: string[]; modifications: string[] }>(
+      `/minions/${id}/appearance`,
+    ),
   breed: (parent_a_id: string, parent_b_id: string) =>
     request<Minion>("/minions/breed", {
       method: "POST",
