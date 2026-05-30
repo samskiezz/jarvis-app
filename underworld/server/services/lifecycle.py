@@ -62,8 +62,23 @@ _SURNAMES = (
 )
 
 
+_NICKNAMES = (
+    "the Sharp", "the Kind", "Brightspark", "the Bold", "Quickhand", "the Wise",
+    "Ironwill", "the Curious", "Sunny", "the Quiet", "Trueheart", "the Restless",
+    "Goldtongue", "the Steady", "Farsight", "the Tinkerer", "Lucky", "the Patient",
+)
+
+
 def random_name(rng: random.Random) -> tuple[str, str]:
     return rng.choice(_GIVEN_NAMES), rng.choice(_SURNAMES)
+
+
+def maybe_nickname(dna: str, rng: random.Random) -> str:
+    """Doc II.122 — charismatic Minions tend to earn a nickname at birth."""
+    charisma = dna_mod.trait(dna, "charisma")
+    if rng.random() < 0.25 + 0.5 * charisma:
+        return rng.choice(_NICKNAMES)
+    return ""
 
 
 # --- DNA → guild assignment -------------------------------------------------
@@ -97,36 +112,65 @@ def guild_from_dna(dna: str, *, allowed: tuple[GuildKind, ...] | None = None) ->
 
 
 def derive_mood(m: Minion) -> tuple[MoodKind, float]:
-    """Return (mood, stress) based on needs + personality.
+    """Return (mood, stress) from needs + personality + appraisal.
 
-    Implements doc II.7-11 ('appraisal of events against personal goals')
-    plus II.10 (stress → burnout/creativity).
+    Doc II.107-111 — mood is an *appraisal*: morale (how recent events measured
+    up to goals) and purpose (mission fulfilment) shape it alongside raw needs.
+    High stress with high morale + creativity is a breakthrough (INSPIRED);
+    high stress with low morale is burnout (ANXIOUS); chronically low morale or
+    purpose is an existential crisis (DESPAIRING, doc II.132).
     """
     needs_floor = min(m.hunger, m.thirst, m.fatigue, m.sanity, m.health)
     needs_avg = (m.hunger + m.thirst + m.fatigue + m.sanity + m.health) / 5.0
-    # neuroticism amplifies stress, conscientiousness dampens it.
-    stress = max(
-        0.0,
-        min(
-            1.0,
-            (1.0 - needs_avg) * (0.6 + 0.6 * m.neuroticism)
-            - 0.2 * m.conscientiousness,
-        ),
-    )
+    morale = getattr(m, "morale", None)
+    purpose = getattr(m, "purpose", None)
+    morale = 0.5 if morale is None else morale
+    purpose = 0.5 if purpose is None else purpose
+    # neuroticism amplifies stress, conscientiousness dampens it; low morale and
+    # low purpose both add stress.
+    stress = max(0.0, min(1.0, (
+        (1.0 - needs_avg) * (0.6 + 0.6 * m.neuroticism)
+        - 0.2 * m.conscientiousness
+        + 0.2 * (0.5 - morale)
+        + 0.1 * (0.5 - purpose)
+    )))
 
     if m.health < 0.2 or m.sanity < 0.15:
         return MoodKind.DESPAIRING, stress
     if needs_floor < 0.2:
         return MoodKind.EXHAUSTED, stress
     if stress > 0.7:
-        return MoodKind.ANXIOUS, stress
-    if needs_avg > 0.75 and m.creativity > 0.65 and m.openness > 0.5:
+        if morale > 0.6 and m.creativity > 0.6:
+            return MoodKind.INSPIRED, stress   # stress → breakthrough
+        return MoodKind.ANXIOUS, stress         # stress → burnout
+    if morale < 0.3 or purpose < 0.25:
+        return MoodKind.DESPAIRING, stress      # existential crisis
+    if needs_avg > 0.7 and morale > 0.65 and m.creativity > 0.6:
         return MoodKind.FLOW, stress
-    if needs_avg > 0.6 and (m.creativity + m.openness) / 2.0 > 0.55:
+    if needs_avg > 0.6 and (morale > 0.6 or (m.creativity + m.openness) / 2.0 > 0.55):
         return MoodKind.INSPIRED, stress
-    if needs_avg < 0.45:
+    if needs_avg < 0.45 or purpose < 0.4:
         return MoodKind.BORED, stress
     return MoodKind.CONTENT, stress
+
+
+def appraise(m: Minion, *, mission: bool, idle: bool, mood_signal: float) -> None:
+    """Doc II.130-132 — update purpose from what the Minion just did, and morale
+    from the appraisal of recent events (mood_signal from recalled memories).
+
+    Mission-aligned work (scanning, inventing, calculating, teaching) fulfils;
+    idling erodes purpose. Fulfilment feeds sanity; a purpose vacuum drains it.
+    """
+    if mission:
+        m.purpose = min(1.0, m.purpose + 0.03)
+    elif idle:
+        m.purpose = max(0.0, m.purpose - 0.02)
+    target = 0.5 + 0.4 * (m.purpose - 0.5) + 5.0 * mood_signal
+    m.morale = max(0.0, min(1.0, m.morale + 0.1 * (target - m.morale)))
+    if m.purpose > 0.7:
+        m.sanity = min(1.0, m.sanity + 0.01)   # fulfilled (doc II.131)
+    elif m.purpose < 0.25:
+        m.sanity = max(0.0, m.sanity - 0.02)   # existential crisis (doc II.132)
 
 
 # --- needs decay ------------------------------------------------------------
@@ -350,6 +394,7 @@ async def _make_minion(
         karma=soul.karma * 0.5,  # carry forward
         reputation=1.0,
         swarm_role=roles_mod.assign_role(guild, dna),
+        nickname=maybe_nickname(dna, random.Random(hash(dna) & 0xFFFFFFFF)),
     )
     session.add(m)
     await session.flush()
@@ -582,6 +627,54 @@ def can_breed(a: Minion, b: Minion, *, world_tick: int) -> bool:
 
 
 # --- population stats -------------------------------------------------------
+
+
+async def guild_standings(session: AsyncSession, world_id: str) -> list[tuple[GuildKind, float]]:
+    """Doc I.67 — guilds compete. Rank guilds by a prestige score combining the
+    average reputation of their living members and their approved-invention
+    output. Returns (guild, score) descending."""
+    from ..db.models import Invention, TaskStatus  # local import avoids a cycle
+
+    rep_rows = (await session.execute(
+        select(Minion.guild, func.avg(Minion.reputation), func.count(Minion.id))
+        .where(Minion.world_id == world_id, Minion.alive.is_(True))
+        .group_by(Minion.guild)
+    )).all()
+    inv_rows = dict((await session.execute(
+        select(Invention.inputs["guild"].as_string(), func.count(Invention.id))
+        .where(Invention.world_id == world_id, Invention.status == TaskStatus.APPROVED)
+        .group_by(Invention.inputs["guild"].as_string())
+    )).all())
+    scores: list[tuple[GuildKind, float]] = []
+    for guild, avg_rep, _n in rep_rows:
+        approved = float(inv_rows.get(guild.value, 0) or 0)
+        scores.append((guild, float(avg_rep or 0.0) + 0.5 * approved))
+    scores.sort(key=lambda t: t[1], reverse=True)
+    return scores
+
+
+async def apply_guild_competition(session: AsyncSession, world: World) -> dict[str, float]:
+    """The leading guild gains prestige (a morale lift); the trailing guild feels
+    pressure (a little stress). Logs a `guild:standings` event."""
+    standings = await guild_standings(session, world.id)
+    if len(standings) < 2:
+        return {}
+    top_guild = standings[0][0]
+    bottom_guild = standings[-1][0]
+    members = (await session.execute(
+        select(Minion).where(Minion.world_id == world.id, Minion.alive.is_(True))
+    )).scalars().all()
+    for m in members:
+        if m.guild == top_guild:
+            m.morale = min(1.0, m.morale + 0.03)
+        elif m.guild == bottom_guild:
+            m.stress = min(1.0, m.stress + 0.02)
+    session.add(Event(
+        world_id=world.id, tick=world.tick, kind="guild:standings", actor_id=None,
+        payload={"leader": top_guild.value, "trailing": bottom_guild.value,
+                 "scores": {g.value: round(s, 2) for g, s in standings}},
+    ))
+    return {g.value: round(s, 2) for g, s in standings}
 
 
 async def ghost_guidance(session: AsyncSession, world: World) -> int:

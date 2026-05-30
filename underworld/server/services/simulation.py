@@ -337,6 +337,9 @@ async def advance_world(
         # 3d. Ascended souls guide the living (doc II.139).
         await lifecycle.ghost_guidance(session, world)
 
+        # 3e. Guilds compete for prestige (doc I.67).
+        await lifecycle.apply_guild_competition(session, world)
+
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)
         report.births = await _process_breeding(

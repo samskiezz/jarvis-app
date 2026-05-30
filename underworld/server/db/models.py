@@ -251,6 +251,13 @@ class Minion(Base):
     # Mood + stress — derived each tick from needs and recent events.
     mood: Mapped[MoodKind] = mapped_column(Enum(MoodKind), default=MoodKind.CONTENT)
     stress: Mapped[float] = mapped_column(Float, default=0.2)
+    # Doc II.107-111 — morale is an appraisal of how recent events measured up to
+    # goals (drives flow/inspiration vs burnout/despair). Doc II.130-132 — purpose
+    # is fulfilment from the App's mission; chronically low purpose → crisis.
+    morale: Mapped[float] = mapped_column(Float, default=0.5)
+    purpose: Mapped[float] = mapped_column(Float, default=0.5)
+    # Doc II.122 — an optional earned nickname.
+    nickname: Mapped[str] = mapped_column(String(40), default="")
 
     # Swarm role — derived from DNA + guild at birth. Drives action bias and
     # project eligibility. See Master Reference Section 2.
