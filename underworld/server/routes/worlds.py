@@ -313,6 +313,7 @@ async def list_minions(
             id=m.id,
             name=m.name,
             surname=m.surname,
+            nickname=m.nickname or "",
             guild=m.guild,
             swarm_role=m.swarm_role,
             generation=m.generation,

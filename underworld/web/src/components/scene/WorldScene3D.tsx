@@ -278,7 +278,9 @@ export default function WorldScene3D({
               style={{ pointerEvents: "none" }}
             >
               <div className="rounded-lg border border-white/15 bg-ink-1/95 px-2 py-1 text-[10px] text-zinc-100 shadow-xl backdrop-blur">
-                <div className="font-mono text-glow-purple">{selected.minion.name} {selected.minion.surname}</div>
+                <div className="font-mono text-glow-purple">
+                  {selected.minion.name}{selected.minion.nickname ? ` “${selected.minion.nickname}”` : ""} {selected.minion.surname}
+                </div>
                 <div className="text-[9px] text-zinc-400">
                   {selected.minion.guild} · {selected.minion.mood}
                 </div>
