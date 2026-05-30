@@ -1,0 +1,98 @@
+# APEX Forge on K3s — parallel, safety-gated app evolution.
+#
+# A StatefulSet (not a Deployment) so each replica gets a stable ordinal, which
+# becomes its FORGE_SHARD_INDEX — replicas then work on DISJOINT files and never
+# clobber each other. The agent exits cleanly every hour for a fresh model
+# context; restartPolicy Always brings it back ("restart itself every hour").
+#
+# Scale parallelism with:  kubectl scale statefulset/forge-agent --replicas=3
+# (and set FORGE_SHARD_COUNT to the same number below).
+#
+# Apply:  kubectl apply -f forge/deploy/forge-k3s.yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: forge-secrets
+  namespace: forge
+stringData:
+  GIT_REPO_URL: "https://github.com/samskiezz/jarvis-app.git"
+  GITHUB_TOKEN: ""            # optional — only needed for FORGE_OPEN_PR / push
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forge-config
+  namespace: forge
+data:
+  FORGE_SHARD_COUNT: "3"        # keep equal to replica count
+  OLLAMA_URL: "http://ollama.forge.svc.cluster.local:11434"
+  FORGE_MODEL: "deepseek-coder:6.7b"
+  # SAFETY: dry-run by default. Flip to "1" only once you trust the diffs,
+  # and even then it lands on a forge/* branch + PR, never main.
+  FORGE_APPLY: "0"
+  FORGE_PUSH: "0"
+  FORGE_OPEN_PR: "0"
+  FORGE_INTERVAL_S: "1800"
+  FORGE_MAX_RUNTIME_S: "3600"
+  # Run the real project gates before keeping any change.
+  FORGE_TEST_CMD: "npm run test --silent && python -m pytest server/tests -q"
+  FORGE_LINT_CMD: "npm run lint --silent"
+  FORGE_BASE_BRANCH: "main"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: forge-agent
+  namespace: forge
+spec:
+  serviceName: forge-agent
+  replicas: 3
+  selector:
+    matchLabels: { app: forge-agent }
+  template:
+    metadata:
+      labels: { app: forge-agent }
+    spec:
+      # Fresh checkout per pod start = fresh context every hour.
+      initContainers:
+        - name: clone
+          image: alpine/git:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              rm -rf /workspace/* /workspace/.git || true
+              git clone --depth 1 "$GIT_REPO_URL" /workspace
+          env:
+            - name: GIT_REPO_URL
+              valueFrom: { secretKeyRef: { name: forge-secrets, key: GIT_REPO_URL } }
+          volumeMounts:
+            - { name: workspace, mountPath: /workspace }
+      containers:
+        - name: forge
+          image: forge-agent:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef: { name: forge-config }
+          env:
+            - name: APP_ROOT
+              value: /workspace
+            # Derive the shard index from the StatefulSet pod ordinal.
+            - name: POD_NAME
+              valueFrom: { fieldRef: { fieldPath: metadata.name } }
+            - name: GITHUB_TOKEN
+              valueFrom: { secretKeyRef: { name: forge-secrets, key: GITHUB_TOKEN } }
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              export FORGE_SHARD_INDEX="${POD_NAME##*-}"
+              echo "shard $FORGE_SHARD_INDEX of $FORGE_SHARD_COUNT"
+              exec python -m forge.forge_agent
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits: { cpu: "1", memory: "1Gi" }
+          volumeMounts:
+            - { name: workspace, mountPath: /workspace }
+      volumes:
+        - name: workspace
+          emptyDir: {}

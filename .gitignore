@@ -40,3 +40,8 @@ server/.pytest_cache/
 
 # Local dev env (committed via .env.example)
 .env.local
+
+# APEX Forge runtime (locks + backups)
+.forge/
+__pycache__/
+*.pyc
