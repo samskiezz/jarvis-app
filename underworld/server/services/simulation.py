@@ -39,8 +39,8 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    discovery, ecosystem, economy, education, governance, lifecycle, mastery, memes, pollution,
-    projects, religion, roles, substances, timescale,
+    discovery, ecosystem, economy, education, governance, knowledge_decay, lifecycle, mastery,
+    memes, pollution, projects, religion, roles, substances, timescale,
 )
 
 
@@ -351,6 +351,10 @@ async def advance_world(
 
         # 3f. Formal education lifts the young (doc I.45).
         await education.apply_education(session, world)
+
+        # 3f2. Unpracticed skills atrophy; libraries slow the loss (doc I.64-65).
+        if world.tick % 10 == 0:
+            await knowledge_decay.tick_atrophy(session, world)
 
         # 3g0. Foundational tech discovery from scratch (doc I.22).
         await discovery.tick_discoveries(session, world)
