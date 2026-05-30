@@ -523,6 +523,8 @@ async def _do_study(session: AsyncSession, minion: Minion, world: World, args: d
         session.add(skill)
         await session.flush()
     boost = 0.08 + 0.06 * minion.conscientiousness + 0.04 * minion.intelligence
+    # Doc II.118-119 / I.147 — maturity, upbringing and time-of-day scale learning.
+    boost *= lifecycle.growth_multiplier(minion, world.tick)
     old_level = skill.level
     skill.level = min(10.0, skill.level + boost)
     skill.last_practiced_tick = world.tick
@@ -614,7 +616,7 @@ async def _do_calculate(
     )
 
     old_level = skill.level
-    skill.level = min(10.0, skill.level + result.skill_delta)
+    skill.level = min(10.0, skill.level + result.skill_delta * lifecycle.growth_multiplier(minion, world.tick))
     skill.last_practiced_tick = world.tick
     minion.reputation = max(0.0, min(5.0, minion.reputation + result.reputation_delta))
     minion.karma += result.karma_delta

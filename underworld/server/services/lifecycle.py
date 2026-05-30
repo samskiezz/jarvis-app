@@ -190,6 +190,41 @@ def decay_needs(m: Minion, *, intensity: float = 1.0) -> None:
         m.health = max(0.0, m.health - 0.04)
 
 
+# --- developmental stages, parenting, circadian (doc II.118-119, I.147) -------
+
+DAY_LENGTH = 10  # ticks per full day; the back half is night
+
+
+def life_stage(age_ticks: int) -> str:
+    if age_ticks < 3:
+        return "infant"
+    if age_ticks < 8:
+        return "child"
+    if age_ticks < 15:
+        return "adolescent"
+    return "adult"
+
+
+def capability(age_ticks: int) -> float:
+    """Doc II.118 — the young can't yet contribute at full strength."""
+    return {"infant": 0.0, "child": 0.3, "adolescent": 0.7, "adult": 1.0}[life_stage(age_ticks)]
+
+
+def is_night(world_tick: int, *, day_length: int = DAY_LENGTH) -> bool:
+    return (world_tick % day_length) >= day_length / 2
+
+
+def circadian_factor(world_tick: int, *, day_length: int = DAY_LENGTH) -> float:
+    """Doc I.147 — night work is less efficient."""
+    return 0.65 if is_night(world_tick, day_length=day_length) else 1.0
+
+
+def growth_multiplier(m: Minion, world_tick: int) -> float:
+    """Combined learning multiplier: maturity × upbringing × circadian."""
+    up = m.upbringing if m.upbringing is not None else 1.0
+    return round(capability(world_tick - m.born_tick) * up * circadian_factor(world_tick), 4)
+
+
 def tick_health(m: Minion, rng: random.Random) -> None:
     """Doc I.32 — wounds + infection + healing, once per tick.
 
@@ -487,6 +522,12 @@ async def breed_pair(
     for sibling in res.scalars().all():
         await _ensure_relationship(session, child, sibling, RelationshipKind.SIBLING, world.tick, 0.7)
         await _ensure_relationship(session, sibling, child, RelationshipKind.SIBLING, world.tick, 0.7)
+
+    # Doc II.119 — parenting quality: capable, well-regarded, low-stress parents
+    # raise children who learn faster as adults.
+    parent_quality = (parent_a.reputation + parent_b.reputation) / 4.0  # rep is 0..5
+    parent_calm = 1.0 - (parent_a.stress + parent_b.stress) / 2.0
+    child.upbringing = round(max(0.6, min(1.6, 0.7 + 0.4 * parent_quality + 0.2 * parent_calm)), 4)
 
     # Parent-child links
     await _ensure_relationship(session, parent_a, child, RelationshipKind.PARENT_CHILD, world.tick, 0.9)

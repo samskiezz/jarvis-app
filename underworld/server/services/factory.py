@@ -54,7 +54,9 @@ async def create_world(
     name: str,
     cpc_class: str,
     plan: SeedingPlan | None = None,
-    starting_age: int = 0,
+    # Founders begin as adults (doc II.118 — the young can't yet contribute, so a
+    # world seeded with infants couldn't learn or invent).
+    starting_age: int = 20,
     auto_advance: bool = True,
 ) -> World:
     plan = plan or default_seeding()

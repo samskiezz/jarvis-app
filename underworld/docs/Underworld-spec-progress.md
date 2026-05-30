@@ -67,7 +67,10 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 137/139 | Ascension + ghost guidance | ✅ |
 | 142/143 | Fads/fashion/memes | ✅ |
 | 150 | Gossip + ostracism | ✅ |
-| 101/108-edge/118/119/126/127/138/140/144–149 | Per-minion NN, pregnancy stages, parenting, ToT/MCTS, digital-assistant ascension, body-mod, circadian, addiction | ◑/⬜ |
+| 118 | Childhood developmental stages | ✅ | `lifecycle.life_stage/capability` |
+| 119 | Parenting quality affects capability | ✅ | `Minion.upbringing` set at birth |
+| 147 | Circadian rhythm (night work slower) | ✅ | `lifecycle.circadian_factor` |
+| 101/126/127/138/140/144–146/148/149 | Per-minion NN, ToT/MCTS, meta-cognition, digital-assistant ascension, ghost medium, appearance/body-mod, stimulants/addiction | ◑/⬜ |
 
 ---
 
