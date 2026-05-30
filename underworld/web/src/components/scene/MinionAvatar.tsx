@@ -63,6 +63,11 @@ const AVATAR_SCALE = 12;
 // the collision radius so the avatar doesn't clip into building walls.
 const AVATAR_RADIUS = 1.0;
 
+// The Kenney blocky characters model their visual front along -Z, so orienting
+// the group's +Z to the heading made them walk backwards. Add PI so the model
+// faces its direction of travel.
+const FACING_OFFSET = Math.PI;
+
 interface Props {
   minion: MinionListItem;
   basePosition: [number, number, number];
@@ -229,7 +234,7 @@ export default function MinionAvatar({
         }
         g.position.x = nx;
         g.position.z = nz;
-        const targetAngle = Math.atan2(input.x, input.z);
+        const targetAngle = Math.atan2(input.x, input.z) + FACING_OFFSET;
         let diff = targetAngle - g.rotation.y;
         while (diff > Math.PI) diff -= Math.PI * 2;
         while (diff < -Math.PI) diff += Math.PI * 2;
@@ -273,7 +278,7 @@ export default function MinionAvatar({
     g.position.y = basePosition[1];
 
     if (dist > 0.05) {
-      const targetAngle = Math.atan2(dx, dz);
+      const targetAngle = Math.atan2(dx, dz) + FACING_OFFSET;
       let diff = targetAngle - g.rotation.y;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;

@@ -90,6 +90,11 @@ export default function WorldDetail() {
     queryFn: () => api.latestActions(id, 3),
     refetchInterval: 3000,
   });
+  const climate = useQuery({
+    queryKey: ["world", id, "climate", world.data?.tick],
+    queryFn: () => api.climate(id),
+    enabled: !!world.data,
+  });
   const thoughts = useQuery({
     queryKey: ["world", id, "latest-thoughts"],
     queryFn: () => api.latestThoughts(id, 3),
@@ -382,6 +387,7 @@ export default function WorldDetail() {
                   actionByMinion={actions.data?.actions}
                   thoughtByMinion={thoughts.data?.thoughts}
                   biomeHint={map.data.biome_hint}
+                  weatherOverride={climate.data?.weather}
                 />
               ) : (
                 <div className="skeleton h-[560px] w-[900px] rounded" />
