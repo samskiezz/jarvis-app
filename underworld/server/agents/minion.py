@@ -694,7 +694,10 @@ async def _do_teach(
             and world.tick - mentor_rel.last_interaction_tick < _TEACH_COOLDOWN:
         return f"Taught {student.name} recently; letting the lesson settle."
 
-    transfer = 0.12 * (1.0 + bond)  # bonded students learn up to ~2x faster
+    # Doc I.10 — noisy weather (rain/storm) makes the lesson harder to hear.
+    from ..services import acoustics
+    clarity = acoustics.speech_clarity(world.weather)
+    transfer = 0.12 * (1.0 + bond) * clarity  # bonded students learn up to ~2x faster
     skill = (await session.execute(
         select(Skill).where(Skill.minion_id == student.id, Skill.name == skill_name)
     )).scalars().first()

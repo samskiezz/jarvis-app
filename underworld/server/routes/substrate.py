@@ -99,6 +99,27 @@ async def chemistry_react(body: ReactionRequest, _token: str = Depends(require_b
     }
 
 
+@router.get("/acoustics")
+async def acoustics_query(
+    source_db: float = Query(default=60.0),
+    distance_m: float = Query(default=10.0, ge=0.0),
+    weather: str = Query(default="clear"),
+    medium: str = Query(default="air"),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.10 — sound level, audibility, communication range, and travel time."""
+    from ..services import acoustics
+
+    return {
+        "level_db": acoustics.sound_level_at(source_db, distance_m),
+        "ambient_db": acoustics.ambient_for(weather),
+        "audible": acoustics.audible(source_db, distance_m, weather),
+        "comm_range_m": acoustics.comm_range(source_db, weather),
+        "travel_time_s": acoustics.travel_time(distance_m, medium),
+        "speech_clarity": acoustics.speech_clarity(weather),
+    }
+
+
 @router.get("/economy")
 async def economy_snapshot(
     cpc_class: str = Query(default="G06"),
