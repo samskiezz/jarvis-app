@@ -512,6 +512,24 @@ async def world_society(
     }
 
 
+@router.get("/{world_id}/climate")
+async def world_climate(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc I.5/28-30 — current live climate field for the world."""
+    from ..services.climate import thermal_stress
+
+    world = await _world_or_404(session, world_id)
+    return {
+        "season": world.season,
+        "temperature": world.temperature,
+        "weather": world.weather,
+        "thermal_stress": round(thermal_stress(world.temperature or 15.0), 3),
+    }
+
+
 @router.get("/{world_id}/environment")
 async def world_environment(
     world_id: str,

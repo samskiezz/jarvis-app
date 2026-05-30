@@ -185,6 +185,11 @@ class World(Base):
     # Doc I.41-42 — emergent political + legal institutions.
     government: Mapped[str] = mapped_column(String(20), default="tribe")
     legal_system: Mapped[str] = mapped_column(String(20), default="customary")
+    # Doc I.5/28-30 — live climate state, advanced every tick: ambient temperature
+    # (°C), season, and current weather. These affect Minion health + fatigue.
+    temperature: Mapped[float] = mapped_column(Float, default=15.0)
+    season: Mapped[str] = mapped_column(String(10), default="spring")
+    weather: Mapped[str] = mapped_column(String(12), default="clear")
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")
