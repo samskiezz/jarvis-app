@@ -168,6 +168,10 @@ class World(Base):
     # the action — tracked as an integer progress meter (0..100). When
     # 100, scanner is operational.
     scanner_progress: Mapped[int] = mapped_column(Integer, default=0)
+    # Doc I.16 — in-world calendar. Early ages run fast (many years per tick),
+    # later complex ages slow down, so sim_year advances by a complexity-scaled
+    # amount each tick rather than linearly.
+    sim_year: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minions: Mapped[list["Minion"]] = relationship(back_populates="world", cascade="all, delete-orphan")
@@ -298,6 +302,21 @@ class Memory(Base):
     created_at: Mapped[datetime] = mapped_column(default=_now)
 
     minion: Mapped["Minion"] = relationship(back_populates="memories")
+
+
+class Discovery(Base):
+    """Doc I.22 — a foundational technology a civilization has discovered from
+    scratch (fire, toolmaking, language, writing, …). One row per world+tech."""
+
+    __tablename__ = "discoveries"
+    __table_args__ = (UniqueConstraint("world_id", "tech", name="uq_discovery_per_world"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    tech: Mapped[str] = mapped_column(String(40), nullable=False)
+    tick: Mapped[int] = mapped_column(Integer, nullable=False)
+    sim_year: Mapped[float] = mapped_column(Float, default=0.0)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
 
 
 class CausalBelief(Base):
