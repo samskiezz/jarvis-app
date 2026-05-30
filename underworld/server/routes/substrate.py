@@ -82,6 +82,23 @@ async def evaluate_structure(body: StructureRequest, _token: str = Depends(requi
     }
 
 
+class ReactionRequest(BaseModel):
+    reactants: list[str]
+    temperature_c: float | None = None
+
+
+@router.post("/chemistry/react")
+async def chemistry_react(body: ReactionRequest, _token: str = Depends(require_bearer)):
+    """Doc I.11 — run a chemical reaction grounded in material physics."""
+    from ..services import chemistry
+
+    r = chemistry.react(body.reactants, temperature_c=body.temperature_c)
+    return {
+        "products": r.products, "energy_mj": r.energy_mj, "ph": r.ph,
+        "succeeded": r.succeeded, "notes": r.notes,
+    }
+
+
 @router.get("/economy")
 async def economy_snapshot(
     cpc_class: str = Query(default="G06"),
