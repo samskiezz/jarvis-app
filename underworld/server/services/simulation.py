@@ -38,7 +38,7 @@ from ..db.models import (
     World,
 )
 from ..world.seed import derive_seed
-from . import lifecycle, projects, roles
+from . import lifecycle, mastery, projects, roles
 
 
 @dataclass
@@ -56,6 +56,7 @@ class TickReport:
     project_contributions: int = 0
     project_stages_advanced: int = 0
     projects_approved: int = 0
+    replications: int = 0
 
 
 def _payload(rep: TickReport) -> dict:
@@ -73,6 +74,7 @@ def _payload(rep: TickReport) -> dict:
         "project_contributions": rep.project_contributions,
         "project_stages_advanced": rep.project_stages_advanced,
         "projects_approved": rep.projects_approved,
+        "replications": rep.replications,
     }
 
 
@@ -200,6 +202,7 @@ async def _write_snapshot(
     avg_sanity = sum(m.sanity for m in alive) / len(alive) if alive else 0.0
     generations = max((m.generation for m in alive), default=0)
     active_projects, approved_projects = await projects.world_project_counts(session, world.id)
+    total_knowledge, masters = await mastery.world_knowledge(session, world.id)
 
     session.add(
         PopulationSnapshot(
@@ -220,6 +223,8 @@ async def _write_snapshot(
             role_breakdown=dict(role_breakdown),
             active_projects=active_projects,
             approved_projects=approved_projects,
+            total_knowledge=round(total_knowledge, 2),
+            masters=masters,
         )
     )
 
@@ -324,6 +329,9 @@ async def advance_world(
         report.project_contributions = proj_report.contributions
         report.project_stages_advanced = proj_report.stages_advanced
         report.projects_approved = proj_report.approved
+
+        # 3c. Independent replication of approved inventions (doc I.71).
+        report.replications = await reviewer.replicate_pending(session, world, rng)
 
         # 4. Process births, forks, deaths.
         current_pop = len(alive_minions)

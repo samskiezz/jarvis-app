@@ -311,4 +311,56 @@ async def peer_review(session: AsyncSession, inv: Invention) -> list[PeerReview]
     return rows
 
 
-__all__ = ["safety_review", "peer_review"]
+async def replicate_pending(session: AsyncSession, world, rng, *, limit: int = 8) -> int:
+    """Doc I.71 — approved studies must be reproduced before they count.
+
+    For each APPROVED-but-unreplicated invention, find an independent Minion
+    (not the inventor, same guild preferred) to reproduce it. Success flips
+    `replicated=True`, nudges both reputations, and logs an event. Replication
+    can fail for thin proposals (low feasibility), which keeps an unverified
+    result from being treated as established knowledge.
+    """
+    from ..db.models import Event, World  # local import avoids cycles
+
+    stmt = select(Invention).where(
+        Invention.world_id == world.id,
+        Invention.status == TaskStatus.APPROVED,
+        Invention.replicated.is_(False),
+    ).limit(limit)
+    pending = list((await session.execute(stmt)).scalars().all())
+    replicated = 0
+    for inv in pending:
+        inventor_guild = GuildKind(inv.inputs.get("guild")) if (inv.inputs and inv.inputs.get("guild")) else None
+        base = select(Minion).where(
+            Minion.world_id == world.id, Minion.alive.is_(True), Minion.id != inv.minion_id,
+        )
+        replicator = None
+        if inventor_guild is not None:  # prefer an independent same-guild peer
+            replicator = (await session.execute(
+                base.where(Minion.guild == inventor_guild).limit(1)
+            )).scalars().first()
+        if replicator is None:  # fall back to any other alive Minion
+            replicator = (await session.execute(base.limit(1))).scalars().first()
+        if replicator is None:
+            continue
+        # Reproducibility scales with the result's feasibility; a fully feasible
+        # result is always reproducible, a thin one often fails.
+        p = 0.5 + 0.5 * inv.feasibility_score
+        if rng.random() <= p:
+            inv.replicated = True
+            inv.replicated_by = replicator.id
+            replicator.reputation = min(5.0, replicator.reputation + 0.02)
+            if inv.minion_id:
+                inventor = await session.get(Minion, inv.minion_id)
+                if inventor:
+                    inventor.reputation = min(5.0, inventor.reputation + 0.03)
+            session.add(Event(
+                world_id=world.id, tick=world.tick, kind="invention:replicated",
+                actor_id=replicator.id,
+                payload={"invention": inv.id, "by": f"{replicator.name} {replicator.surname}".strip()},
+            ))
+            replicated += 1
+    return replicated
+
+
+__all__ = ["safety_review", "peer_review", "replicate_pending"]
