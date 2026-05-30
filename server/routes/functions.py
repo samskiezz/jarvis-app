@@ -4,8 +4,10 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from ..auth import require_bearer
+from ..auth import optional_bearer, require_bearer
+from ..config import KIMI_API_KEY
 from ..llm.kimi import stream_chat
+from ..services.analyst import answer as local_answer
 from ..services.live_intel import get_live_intel
 
 router = APIRouter()
@@ -16,21 +18,33 @@ class ChatRequest(BaseModel):
 
 
 @router.post("/functions/getLiveIntel")
-async def get_live_intel_route(_token: str = Depends(require_bearer)):
+async def get_live_intel_route(_token: str | None = Depends(optional_bearer)):
     return await get_live_intel()
+
+
+async def _local_chat(message: str):
+    """Stream the local analyst answer word-by-word for a live typing effect."""
+    import asyncio
+
+    live = await get_live_intel()
+    text = local_answer(message, live)
+    for word in text.split(" "):
+        yield word + " "
+        await asyncio.sleep(0.012)
 
 
 async def _sse_chat(message: str):
     import json
 
-    async for chunk in stream_chat(message):
+    source = stream_chat(message) if KIMI_API_KEY else _local_chat(message)
+    async for chunk in source:
         # JSON-encode so embedded newlines / quotes don't break SSE framing.
         yield f"data: {json.dumps(chunk)}\n\n"
     yield "data: [DONE]\n\n"
 
 
 @router.post("/functions/analystChat")
-async def analyst_chat(req: ChatRequest, _token: str = Depends(require_bearer)):
+async def analyst_chat(req: ChatRequest, _token: str | None = Depends(optional_bearer)):
     return StreamingResponse(_sse_chat(req.message), media_type="text/event-stream")
 
 

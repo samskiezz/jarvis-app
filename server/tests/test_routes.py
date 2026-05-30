@@ -102,6 +102,54 @@ def test_stub_function_returns_not_implemented():
     assert res.json()["status"] == "not_implemented"
 
 
+def test_live_intel_open_without_auth(monkeypatch):
+    # getLiveIntel is a public read endpoint — works without a bearer token.
+    live_intel_mod._cache.update({"ts": 0.0, "value": None})
+
+    async def fake():
+        return {"earthquakes": [], "markets": [], "corpus": {}, "panopticon": {},
+                "counterstrike": {}, "generated_at": 0}
+
+    monkeypatch.setattr("server.routes.functions.get_live_intel", fake)
+    assert client.post("/functions/getLiveIntel").status_code == 200
+
+
+def test_corpus_is_populated_with_honest_counts():
+    from server.services.corpus import get_corpus
+
+    c = get_corpus()
+    emails = sum(len(c[k]) for k in c if k.endswith("_emails"))
+    assert emails > 0
+    assert c["totals"]["emails"] == emails
+    assert len(c["timeline"]) == c["totals"]["timeline"] > 0
+    assert c["facts"]["predicates"]["EMAILS"] == emails
+
+
+def test_simulation_streams_moving_units():
+    import time
+
+    from server.services.simulation import snapshot
+
+    f1 = snapshot("counterstrike")
+    assert len(f1["units"]) == 10
+    assert {u["team"] for u in f1["units"]} == {"CT", "T"}
+    time.sleep(0.4)
+    f2 = snapshot("counterstrike")
+    assert f2["tick"] > f1["tick"]  # the world advances over time
+
+
+def test_stream_endpoint_unknown_is_404():
+    assert client.get("/streams/bogus").status_code == 404
+
+
+def test_analyst_local_answer_uses_real_data():
+    from server.services.analyst import answer
+
+    assert "Pangani" in answer("tell me about pangani")
+    assert "RISK SIGNALS" in answer("what are the risks")
+    assert "CORPUS" in answer("how many emails")
+
+
 def test_analyst_chat_streams_without_kimi_key(monkeypatch):
     # No KIMI_API_KEY in env → wrapper emits a single diagnostic line + [DONE].
     monkeypatch.setattr("server.llm.kimi.KIMI_API_KEY", "")

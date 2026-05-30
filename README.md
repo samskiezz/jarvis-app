@@ -17,14 +17,15 @@ Personal intelligence terminal — global ontology, live risk, AI analyst over S
 ┌──────────────────────────────────────────────────────────┐
 │  FastAPI backend (server/)                                │
 │    /auth/me              — real bearer check              │
-│    /functions/getLiveIntel — USGS + CoinGecko aggregator  │
-│    /functions/analystChat  — Kimi K2 streaming SSE        │
+│    /functions/getLiveIntel — USGS + CoinGecko + FX + corpus│
+│    /functions/analystChat  — Kimi K2 SSE, local fallback  │
+│    /streams/{game}         — live tactical SSE simulation │
 │    /functions/*            — pipeline stubs (Phase C)     │
 │    /entities/{Name}        — generic CRUD (seeded)        │
 └──────────────────────────────────────────────────────────┘
                         │
                         ▼
-            USGS · CoinGecko · Moonshot Kimi K2
+       USGS · CoinGecko · open.er-api.com · Moonshot Kimi K2
 ```
 
 ## Quick start
@@ -51,7 +52,8 @@ Open http://localhost:5173, enter `dev-key` when prompted.
 | `VITE_API_BASE_URL` | frontend `.env.local` | Backend URL. Defaults to `http://localhost:8000`. |
 | `VITE_API_KEY` | frontend `.env.local` | Sent as `Authorization: Bearer …`. Must match `JARVIS_API_KEY`. |
 | `JARVIS_API_KEY` | backend env | Validated by `/auth/me`. |
-| `KIMI_API_KEY` | backend env | Moonshot Kimi K2 key. Without this the analyst returns an ontology-summary diagnostic instead of an LLM response. |
+| `KIMI_API_KEY` | backend env | Moonshot Kimi K2 key. Without this the analyst falls back to a real local retrieval engine over the ontology/corpus/markets (still answers — no LLM call). |
+| `JARVIS_REQUIRE_AUTH` | backend env | `true` locks the public read endpoints (getLiveIntel, analystChat, streams) behind the bearer key. Default `false` (playable). |
 | `KIMI_MODEL` | backend env | Default `kimi-k2-0905-preview`. |
 | `JARVIS_CORS_ORIGINS` | backend env | Comma-separated allowed origins. |
 

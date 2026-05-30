@@ -19,8 +19,8 @@ export const PANELS = [
   { id: "EMAILS",     icon: "✉",  label: "EMAILS",   title: "✉ EMAIL CORPUS",          defaultVisible: true,  defaultCol: 0, defaultRow: 2, h: 350 },
   { id: "WATCHLIST",  icon: "◉",  label: "WATCH",    title: "◉ WATCHLIST",             defaultVisible: true,  defaultCol: 1, defaultRow: 2, h: 350 },
   { id: "ANALYST",    icon: "◎",  label: "ANALYST",  title: "◎ AI ANALYST",            defaultVisible: true,  defaultCol: 2, defaultRow: 2, h: 350 },
-  { id: "PANOPTICON", icon: "⌬",  label: "PANO",     title: "⌬ PANOPTICON LIVE",       defaultVisible: false, defaultCol: 0, defaultRow: 3, h: 280 },
-  { id: "CS3D",       icon: "🎯", label: "CS3D",     title: "🎯 COUNTERSTRIKE 3D LIVE",defaultVisible: false, defaultCol: 1, defaultRow: 3, h: 280 },
+  { id: "PANOPTICON", icon: "⌬",  label: "PANO",     title: "⌬ PANOPTICON LIVE",       defaultVisible: true,  defaultCol: 0, defaultRow: 3, h: 300 },
+  { id: "CS3D",       icon: "🎯", label: "CS3D",     title: "🎯 COUNTERSTRIKE 3D LIVE",defaultVisible: true,  defaultCol: 1, defaultRow: 3, h: 300 },
 ];
 
 const ROW_Y = [50, 455, 830, 1185];

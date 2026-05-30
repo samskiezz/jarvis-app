@@ -20,7 +20,8 @@ describe('panel registry', () => {
       expect(s.w).toBeGreaterThan(100);
       expect(s.h).toBeGreaterThan(100);
     }
-    expect(state.PANOPTICON.visible).toBe(false);
+    expect(state.PANOPTICON.visible).toBe(true);
+    expect(state.CS3D.visible).toBe(true);
     expect(state.MAP.visible).toBe(true);
   });
 });
