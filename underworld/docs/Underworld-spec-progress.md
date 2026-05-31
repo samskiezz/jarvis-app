@@ -3,7 +3,7 @@
 Status of the 150-point design spec (`Sentient_800_prompts.txt`, Sections I & II)
 plus the "not-done" build-out that followed. Legend: ✅ done · ◑ partial · ⬜ not started.
 
-Backend test suite: **152 passing**. Everything below is committed to `main`.
+Backend test suite: **234 passing**. Everything below is committed to `main`.
 
 ---
 
@@ -97,16 +97,25 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 ---
 
 ## Per-tick simulation pipeline (current)
-1. Each Minion: decide (LLM/heuristic) → act → causal-belief update (#23)
-2. Needs decay + wounds/infection (#32) + mood appraisal (#107)
-3. Invention safety + peer review + replication (#71)
+1. Each Minion: decide (LLM/heuristic, or tree-of-thought planning #126) → act →
+   causal-belief update (#23) → periodic meta-cognition (#127)
+2. Needs decay + wounds/infection (#32) + stimulants/addiction (#148) + mood appraisal (#107)
+3. Invention safety + peer review + replication (#71) + fraud (#72)
 4. Projects pipeline
-5. Ghost guidance (#139) · guild competition (#67) · education (#45)
-6. Tech discovery (#22) · calendar advance (#16) · culture/religion (#46)
-7. Memes (#142) · pollution (#36) · ecosystem/famine (#35)
+5. Ghost guidance (#139) · guild competition (#67) · education (#45) · knowledge atrophy (#64)
+6. Tech discovery (#22) · calendar advance (#16) · culture/religion (#46) · government/law (#41/42)
+7. Climate (#5/28-30) · hydrology (#6/29) · agriculture (#13) · tectonics (#28) · biology (#12) ·
+   fossils (#14/15) · memes (#142) · pollution (#36) · ecosystem (#35) · art (#47) ·
+   civics: infra/conflict/festivals (#43/44/48)
 8. Market snapshot every 10 ticks (#39/40)
 9. Births / forks / deaths · population snapshot (knowledge, masters)
 
-## Notable gaps to surface in the UI
-Discoveries, economy/prices, worldview/culture, memes, environment (pollution +
-wildlife), beliefs, ML models — all have endpoints but limited frontend panels.
+## What remains
+- #8/#9 EM & optics as *live* world fields (exist today as computable laws)
+- #101 per-minion neural network (genuine architectural rewrite; minds currently
+  run on a shared LLM/heuristic + causal beliefs + planning)
+- #138/#140 ascended-as-digital-assistant, ghost medium device
+- #24/#59/#60/#76 ruins, scripting sandbox, gateway comprehension mini-test
+- #31–33 minor cosmetic physics nuances
+
+All world systems are surfaced in the web "Systems" dashboard + minion drawer.
