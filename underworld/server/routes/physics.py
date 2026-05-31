@@ -154,3 +154,19 @@ async def kernel_check_equation(body: EquationCheckRequest, _token: str = Depend
         "homogeneous": homogeneous,
         "term_signatures": [str(d) for d in resolved],
     }
+
+
+class CircuitRequest(BaseModel):
+    V: float | None = None
+    I: float | None = None
+    R: float | None = None
+
+
+@router.post("/electrical/ohm")
+async def electrical_ohm(body: CircuitRequest, _token: str = Depends(require_bearer)):
+    """Ohm's-law solver (#41) — fills in the missing one of V, I, R + power."""
+    from ..physics import electrical
+    try:
+        return electrical.ohm_solve(V=body.V, I=body.I, R=body.R)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
