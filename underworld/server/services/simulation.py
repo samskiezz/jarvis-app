@@ -245,7 +245,7 @@ async def advance_world(
     ticks = max(1, min(ticks, settings.sim_max_ticks_per_request))
     seed = derive_seed(world.seed_class)
     reports: list[TickReport] = []
-    use_llm = bool(settings.kimi_api_key) if use_llm is None else use_llm
+    use_llm = minion_agent.llm.has_llm() if use_llm is None else use_llm
 
     for _ in range(ticks):
         world.tick += 1
@@ -261,6 +261,17 @@ async def advance_world(
         res = await session.execute(stmt)
         alive_minions = list(res.scalars().all())
 
+        # Efficiency (doc: free-Llama autopilot): only a small rotating cohort of
+        # minions consult the LLM each tick; everyone else acts via the fast,
+        # free heuristic + per-minion neural policy. Keeps a free Llama tier
+        # snappy and inside its rate limits while the world still feels alive.
+        llm_cohort: set[str] = set()
+        if use_llm and alive_minions:
+            budget = max(1, settings.llm_max_minions_per_tick)
+            llm_cohort = {
+                m.id for m in rng.sample(alive_minions, min(budget, len(alive_minions)))
+            }
+
         # 2. Per-minion tick: decide an action, perform it, decay needs, derive mood.
         breeding_requests: list[tuple[Minion, str]] = []
         fork_requests: list[Minion] = []
@@ -274,7 +285,7 @@ async def advance_world(
             neighbours = await _gather_neighbours(session, m, world.id, rng)
             outcome = await minion_agent.run_tick(
                 session, m, world, seed.biome_hint,
-                neighbours=neighbours, rng=rng, use_llm=use_llm,
+                neighbours=neighbours, rng=rng, use_llm=(m.id in llm_cohort),
             )
 
             report.minion_outcomes.append(

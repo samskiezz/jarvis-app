@@ -67,6 +67,21 @@ def _coerce_temperature(model: str, requested: float) -> float:
     return requested
 
 
+def _provider() -> tuple[str, str, str]:
+    """Resolve (base_url, api_key, model). A configured generic provider
+    (UNDERWORLD_LLM_* — e.g. a free Groq/OpenRouter/Ollama Llama) overrides Kimi."""
+    s = get_settings()
+    if s.llm_api_key:
+        base = (s.llm_base_url or "https://api.groq.com/openai/v1").rstrip("/")
+        return base, s.llm_api_key, (s.llm_model or "llama-3.1-8b-instant")
+    return s.kimi_base_url.rstrip("/"), s.kimi_api_key, s.kimi_model
+
+
+def has_llm() -> bool:
+    """True when a real LLM is configured (else the heuristic+neural path runs)."""
+    return bool(_provider()[1])
+
+
 def _is_reasoning_model(model: str) -> bool:
     return any(model.startswith(prefix) for prefix in _FIXED_TEMPERATURE_MODELS)
 
@@ -111,16 +126,17 @@ async def chat(
     max_tokens: int | None = None,
 ) -> ChatResponse:
     settings = get_settings()
-    if not settings.kimi_api_key:
+    base_url, api_key, model = _provider()
+    if not api_key:
         _warn_stub_once()
         return ChatResponse(content=_stub_response(messages), finish_reason="stub")
 
-    url = f"{settings.kimi_base_url.rstrip('/')}/chat/completions"
+    url = f"{base_url}/chat/completions"
     payload: dict[str, Any] = {
-        "model": settings.kimi_model,
+        "model": model,
         "messages": messages,
         "temperature": _coerce_temperature(
-            settings.kimi_model,
+            model,
             temperature if temperature is not None else settings.kimi_temperature,
         ),
         "max_tokens": max_tokens if max_tokens is not None else settings.kimi_max_tokens,
@@ -130,7 +146,7 @@ async def chat(
         payload["tool_choice"] = "auto"
 
     headers = {
-        "Authorization": f"Bearer {settings.kimi_api_key}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
 
@@ -154,7 +170,8 @@ async def chat(
 
 async def chat_stream(messages: list[dict[str, Any]]) -> AsyncIterator[str]:
     settings = get_settings()
-    if not settings.kimi_api_key:
+    base_url, api_key, model = _provider()
+    if not api_key:
         # Emit the stub in three chunks so the UI's streaming code is exercised.
         stub = _stub_response(messages)
         for chunk in (stub[:60], stub[60:120], stub[120:]):
@@ -162,16 +179,16 @@ async def chat_stream(messages: list[dict[str, Any]]) -> AsyncIterator[str]:
                 yield chunk
         return
 
-    url = f"{settings.kimi_base_url.rstrip('/')}/chat/completions"
+    url = f"{base_url}/chat/completions"
     payload = {
-        "model": settings.kimi_model,
+        "model": model,
         "messages": messages,
         "stream": True,
-        "temperature": _coerce_temperature(settings.kimi_model, settings.kimi_temperature),
+        "temperature": _coerce_temperature(model, settings.kimi_temperature),
         "max_tokens": settings.kimi_max_tokens,
     }
     headers = {
-        "Authorization": f"Bearer {settings.kimi_api_key}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
         "Accept": "text/event-stream",
     }

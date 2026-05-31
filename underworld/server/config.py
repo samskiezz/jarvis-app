@@ -52,6 +52,20 @@ class Settings(BaseSettings):
     kimi_temperature: float = 0.7
     kimi_max_tokens: int = 1024
 
+    # Generic OpenAI-compatible LLM provider. Set these to run on a FREE Llama:
+    #   Groq      → base_url=https://api.groq.com/openai/v1, model=llama-3.1-8b-instant
+    #   OpenRouter→ base_url=https://openrouter.ai/api/v1, model=meta-llama/llama-3.1-8b-instruct:free
+    #   Ollama    → base_url=http://localhost:11434/v1, model=llama3.1 (api_key any non-empty)
+    # When llm_api_key is set these override the Kimi settings above. With NO key,
+    # minions still act every tick via the fast heuristic + per-minion neural net —
+    # the simulation runs fully automatically without any paid/online model.
+    llm_base_url: str = ""
+    llm_api_key: str = ""
+    llm_model: str = ""
+    # Efficiency: cap how many minions consult the LLM per tick (the rest use the
+    # free heuristic+neural path), so a free Llama tier stays fast + in rate limits.
+    llm_max_minions_per_tick: int = 6
+
     # Patent APIs
     patentsview_base_url: str = "https://search.patentsview.org/api/v1"
     patentsview_api_key: str = ""  # PatentsView now requires a free key
@@ -83,6 +97,9 @@ class Settings(BaseSettings):
     # file across many TestClients, which causes "database is locked"
     # contention with the request handlers. Set False from conftest.
     scheduler_enabled: bool = True
+    # On startup, flip every existing world to auto-advance so the whole system
+    # runs in the background with zero manual ticking.
+    scheduler_autostart_all: bool = True
     sim_population_floor_pct: float = Field(
         default=0.10,
         description=(

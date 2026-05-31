@@ -159,6 +159,19 @@ async def _scheduler_loop() -> None:
         log.info("scheduler.stop")
 
 
+async def autostart_all_worlds() -> int:
+    """Flip every world to auto-advance so the whole system runs hands-free.
+    Returns the number of worlds switched on."""
+    from sqlalchemy import update
+
+    async with session_scope() as session:
+        result = await session.execute(
+            update(World).where(World.auto_advance.is_(False)).values(auto_advance=True)
+        )
+    log.info("scheduler.autostart_all", switched_on=result.rowcount or 0)
+    return result.rowcount or 0
+
+
 def start() -> None:
     global _loop_task, _stop_event
     if _loop_task and not _loop_task.done():
