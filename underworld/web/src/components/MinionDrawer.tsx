@@ -72,6 +72,7 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
   const beliefs = useQuery({ queryKey: ["minion", minionId, "beliefs"], queryFn: () => api.beliefs(minionId) });
   const models = useQuery({ queryKey: ["minion", minionId, "models"], queryFn: () => api.models(minionId) });
   const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId) });
+  const brain = useQuery({ queryKey: ["minion", minionId, "brain"], queryFn: () => api.brain(minionId) });
 
   const fork = useMutation({
     mutationFn: () => api.fork(minionId),
@@ -156,11 +157,24 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
           ) : null}
         </section>
 
-        {/* COGNITION — learned beliefs + trained models */}
-        {(beliefs.data?.length || models.data?.length) ? (
+        {/* COGNITION — neural policy + learned beliefs + trained models */}
+        {(brain.data?.dispositions?.length || beliefs.data?.length || models.data?.length) ? (
           <section className="panel">
-            <div className="panel-header"><span>Cognition</span></div>
+            <div className="panel-header"><span>Cognition</span>
+              {brain.data?.trained ? <span className="text-[9px] text-glow-purple">neural net trained</span> : null}
+            </div>
             <div className="space-y-2 p-3 text-[11px]">
+              {brain.data?.dispositions?.length ? (
+                <div>
+                  <div className="page-eyebrow text-[8px] mb-1">Neural dispositions (#101)</div>
+                  {brain.data.dispositions.slice(0, 4).map((d) => (
+                    <div key={d.action} className="flex justify-between text-zinc-400">
+                      <span>{d.action}</span>
+                      <span className="font-mono">{d.score.toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
               {beliefs.data?.length ? (
                 <div>
                   <div className="page-eyebrow text-[8px] mb-1">Learned beliefs (action → wellbeing)</div>
