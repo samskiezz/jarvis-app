@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { Html, useGLTF } from "@react-three/drei";
 import GlbModel from "./GlbModel";
 import {
   CITY_BUILDINGS, COMMERCIAL_BUILDINGS, SKYSCRAPERS,
@@ -23,6 +23,26 @@ interface Props {
 useGLTF.preload("/models/kenney/castle-kit/tower-square-base-border.glb");
 useGLTF.preload("/models/kenney/castle-kit/tower-square-mid-windows.glb");
 useGLTF.preload("/models/kenney/castle-kit/tower-square-roof.glb");
+
+// The civic institutions of every world — mapped onto the buildings nearest the
+// monument, each labelled + beaconed so the city reads as a real civilisation.
+const CIVIC_ROSTER = [
+  { name: "Town Hall", icon: "🏛", color: "#fbbf24" },
+  { name: "University", icon: "🎓", color: "#38bdf8" },
+  { name: "Hospital", icon: "🏥", color: "#fb7185" },
+  { name: "Library", icon: "📚", color: "#a78bfa" },
+  { name: "Market", icon: "🏪", color: "#34d399" },
+  { name: "Observatory", icon: "🔭", color: "#818cf8" },
+  { name: "Power Plant", icon: "⚡", color: "#facc15" },
+  { name: "Physics Guild", icon: "⚛", color: "#38bdf8" },
+  { name: "Maths Guild", icon: "∑", color: "#a78bfa" },
+  { name: "Computing Guild", icon: "💻", color: "#34d399" },
+  { name: "Materials Guild", icon: "🧱", color: "#f472b6" },
+  { name: "Energy Guild", icon: "🔋", color: "#facc15" },
+  { name: "Patent Office", icon: "⚖", color: "#c084fc" },
+  { name: "Safety Board", icon: "🛡", color: "#fb7185" },
+] as const;
+
 
 function hashSeed(seed: number, salt: number): number {
   let s = (seed ^ salt) | 0;
@@ -132,15 +152,26 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
   //   ring 1 (22–55) → commercial low-rise (markets, shops, schools)
   //   ring 2 (>55)   → suburban residential houses
   const buildings = useMemo(() => {
+    // The buildings closest to the monument become the city's named civic
+    // institutions — so the world reads as a real civilisation (guild halls,
+    // university, hospital, market) rather than an anonymous suburb.
+    const civicMap = new Map<number, (typeof CIVIC_ROSTER)[number]>();
+    pois.huts
+      .map((h, i) => ({ i, d: Math.hypot(h.pos[0] - pois.obelisk[0], h.pos[2] - pois.obelisk[2]) }))
+      .sort((a, b) => a.d - b.d)
+      .slice(0, CIVIC_ROSTER.length)
+      .forEach((o, k) => civicMap.set(o.i, CIVIC_ROSTER[k]));
+
     return pois.huts.map((h, i) => {
       const h0 = hashSeed(seed, i * 7 + 1);
       const distFromCenter = Math.hypot(h.pos[0] - pois.obelisk[0], h.pos[2] - pois.obelisk[2]);
+      const civic = civicMap.get(i);
       let pool: readonly string[];
       let scale: number;
       let zone: "residential" | "commercial" | "skyscraper";
-      if (distFromCenter < 24) {
+      if (civic || distFromCenter < 24) {
         pool = SKYSCRAPERS;
-        scale = 5.5 + ((h0 >> 8) & 0x3f) / 30; // tall
+        scale = (civic ? 6.5 : 5.5) + ((h0 >> 8) & 0x3f) / 30; // civic landmarks are taller
         zone = "skyscraper";
       } else if (distFromCenter < 55) {
         pool = COMMERCIAL_BUILDINGS;
@@ -151,7 +182,7 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
         scale = 5.5 + ((h0 >> 8) & 0x3f) / 60;
         zone = "residential";
       }
-      return { url: pool[h0 % pool.length], pos: h.pos, rot: h.rot, scale, zone };
+      return { url: pool[h0 % pool.length], pos: h.pos, rot: h.rot, scale, zone, civic };
     });
   }, [pois.huts, pois.obelisk, seed]);
 
@@ -293,6 +324,22 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
         ))}
         {buildings.map((b, i) => (
           <GlbModel key={`b${i}`} url={b.url} position={b.pos} rotation={b.rot} scale={b.scale} />
+        ))}
+        {/* Civic institutions: a coloured beacon + a floating nameplate so the
+            city reads as a real civilisation (guild halls, university, hospital). */}
+        {buildings.filter((b) => b.civic).map((b, i) => (
+          <group key={`civic${i}`} position={[b.pos[0], b.pos[1], b.pos[2]]}>
+            <mesh position={[0, 22, 0]}>
+              <cylinderGeometry args={[0.4, 0.4, 44, 6]} />
+              <meshBasicMaterial color={b.civic!.color} transparent opacity={0.35} toneMapped={false} />
+            </mesh>
+            <Html position={[0, 30, 0]} center distanceFactor={90} style={{ pointerEvents: "none" }}>
+              <div className="whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-semibold shadow-xl backdrop-blur"
+                style={{ borderColor: b.civic!.color, color: b.civic!.color, background: "rgba(10,14,26,0.85)" }}>
+                {b.civic!.icon} {b.civic!.name}
+              </div>
+            </Html>
+          </group>
         ))}
         {heroProps.map((h, i) => (
           <GlbModel key={`hp${i}`} url={h.url} position={h.pos} rotation={h.rot} scale={h.scale} />
