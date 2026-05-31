@@ -49,13 +49,15 @@ def derive_seed(cpc_class: str) -> WorldSeed:
 
 
 def heightmap(seed: WorldSeed, *, size: int = 32) -> list[list[float]]:
-    """Generate a tiny seeded heightmap — fractal-summed sine waves, plus bias."""
+    """Seeded fractal heightmap — multi-octave sine waves + bias. More octaves at
+    higher resolution give continent-scale ranges down to local ridges/valleys."""
     rng = random.Random(seed.seed_int)
-    octaves = 4
+    octaves = 7 if size >= 96 else 4
     waves: list[tuple[float, float, float, float]] = []
-    for _ in range(octaves):
-        amp = rng.uniform(0.2, 1.0)
-        freq = rng.uniform(0.5, 4.0)
+    for o in range(octaves):
+        # higher octaves: smaller amplitude, higher frequency (fractal detail)
+        amp = rng.uniform(0.2, 1.0) / (1.0 + o * 0.6)
+        freq = rng.uniform(0.5, 4.0) * (1.0 + o * 0.8)
         phase_x = rng.uniform(0, math.tau)
         phase_y = rng.uniform(0, math.tau)
         waves.append((amp, freq, phase_x, phase_y))

@@ -91,6 +91,8 @@ interface Props {
   /** Static obstacles the avatar must walk around (buildings, trees, rocks,
    *  obelisk). Passed once per (pois, seed) from the scene. */
   colliders?: readonly Collider[];
+  /** World extent in units — the navmesh grid spans this. */
+  worldSize?: number;
   /** If provided, the avatar writes its current world position into this
    * ref each frame so the camera/HUD can track it. Only the selected
    * minion gets one. */
@@ -115,6 +117,7 @@ export default function MinionAvatar({
   selected,
   controlled,
   colliders,
+  worldSize = 1000,
   positionRef,
   controlInputRef,
   thought,
@@ -305,7 +308,7 @@ export default function MinionAvatar({
         const key = `${targetPosition[0].toFixed(1)},${targetPosition[2].toFixed(1)}`;
         if (s.pathKey !== key && colliders && colliders.length) {
           s.path = findPath([g.position.x, g.position.z],
-                            [targetPosition[0], targetPosition[2]], colliders, 240);
+                            [targetPosition[0], targetPosition[2]], colliders, worldSize);
           s.wp = 0;
           s.pathKey = key;
         }

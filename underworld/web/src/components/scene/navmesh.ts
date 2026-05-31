@@ -6,7 +6,7 @@
 
 import type { Collider } from "./colliders";
 
-const CELL = 6;          // world units per grid cell
+const CELL = 12;         // world units per grid cell (≈84² grid over a 1000u map)
 const AGENT_R = 1.4;     // minion clearance
 
 function buildGrid(size: number, colliders: readonly Collider[]) {
@@ -81,7 +81,7 @@ export function findPath(
   const f = new Map<number, number>([[sId, h(sId)]]);
 
   let guard = 0;
-  while (open.size && guard++ < 6000) {
+  while (open.size && guard++ < 30000) {
     let cur = -1, best = Infinity;
     for (const o of open) { const fv = f.get(o) ?? Infinity; if (fv < best) { best = fv; cur = o; } }
     if (cur === gId) break;

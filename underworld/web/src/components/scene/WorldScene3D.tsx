@@ -82,8 +82,8 @@ function mapWeather(w: string | undefined): WeatherKind | null {
   }
 }
 
-const WORLD_SIZE = 240;      // 6× the original 40u → city-scale, room for districts
-const AMPLITUDE = 14.0;      // taller hills + mountains in the outer ring
+const WORLD_SIZE = 1000;     // open-world scale: a dense city core in a large map
+const AMPLITUDE = 45.0;      // continent-scale ranges down to local ridges
 const ARRIVAL_RADIUS = 5.0;
 
 function hash(s: string): number {
@@ -219,7 +219,7 @@ export default function WorldScene3D({
   // Performance LOD: each avatar runs its own animation mixer, so cap how many
   // are rendered. Living + the selected minion come first; the rest are omitted
   // (a "+N more" badge shows the overflow). Keeps big populations smooth.
-  const MAX_AVATARS = 90;
+  const MAX_AVATARS = 130;
   const visiblePlacements = useMemo(() => {
     if (placements.length <= MAX_AVATARS) return placements;
     const ordered = [...placements].sort((a, b) => Number(b.minion.alive) - Number(a.minion.alive));
@@ -322,6 +322,7 @@ export default function WorldScene3D({
                 actionName={actionByMinion?.[p.minion.id]}
                 selected={isSelected}
                 colliders={colliders}
+                worldSize={WORLD_SIZE}
                 controlled={isSelected && controlMode}
                 positionRef={isSelected ? selectedPosRef : undefined}
                 controlInputRef={isSelected && controlMode ? controlInputRef : undefined}

@@ -142,36 +142,34 @@ export function computePois(
     }
   }
 
-  // 1. Buildings — comfortable spacing (~15u gap, room for fences/gardens).
-  //    Reserve a ~16u skirt around the obelisk for the plaza.
-  const hutsXZ = poissonSample(rng, size, 15, 35, 30, (x, z) => {
-    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 16) return false;
+  // 1. Buildings — a large city. ~16u spacing, up to ~240 structures spread
+  //    over the open-world map. A wider skirt keeps the central plaza clear.
+  const hutsXZ = poissonSample(rng, size, 16, 240, 30, (x, z) => {
+    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 34) return false;
     const e = elevAt(x, z);
-    return e >= 0.46 && e < 0.72;
+    return e >= 0.44 && e < 0.74;
   });
 
   // 2. Plazas — open meeting spots away from buildings.
   const hutsForExclusion = hutsXZ.map((p) => p as [number, number]);
-  const plazasXZ = poissonSample(rng, size, 18, 8, 25, (x, z) => {
+  const plazasXZ = poissonSample(rng, size, 40, 14, 25, (x, z) => {
     const e = elevAt(x, z);
     return e >= 0.46 && e < 0.62;
   }, hutsForExclusion);
 
-  // 3. Trees — wide spacing for a parkland feel (not a dense forest), and
-  //    excluded from a generous radius around every building/plaza so they
-  //    don't visually swallow the buildings.
-  const treesXZ = poissonSample(rng, size, 9, 75, 20, (x, z) => {
-    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 22) return false;
-    for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 11) return false;
-    for (const p of plazasXZ) if (Math.hypot(x - p[0], z - p[1]) < 9) return false;
+  // 3. Trees — parkland + forests filling the large map around the city.
+  const treesXZ = poissonSample(rng, size, 14, 280, 20, (x, z) => {
+    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 40) return false;
+    for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 12) return false;
+    for (const p of plazasXZ) if (Math.hypot(x - p[0], z - p[1]) < 12) return false;
     const e = elevAt(x, z);
-    return e > 0.50 && e < 0.86;
+    return e > 0.50 && e < 0.88;
   });
 
-  // 4. Rocks — sparse on the high ground.
-  const rocksXZ = poissonSample(rng, size, 6, 50, 20, (x, z) => {
-    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 20) return false;
-    for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 6) return false;
+  // 4. Rocks — strewn across the high ground / mountains.
+  const rocksXZ = poissonSample(rng, size, 14, 130, 20, (x, z) => {
+    if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 40) return false;
+    for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 8) return false;
     const e = elevAt(x, z);
     return e > 0.7;
   });
