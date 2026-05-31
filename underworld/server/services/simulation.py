@@ -39,7 +39,7 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    agriculture, art, biology, civics, climate, discovery, ecosystem, economy, education,
+    agriculture, art, biology, civics, climate, disease, discovery, ecosystem, economy, education,
     governance, hydrology, knowledge_decay, lifecycle, mastery, memes, paleontology, pollution,
     projects, puzzles, religion, roles, substances, tectonics, timescale,
 )
@@ -405,6 +405,9 @@ async def advance_world(
         # 3g6f. Culture — minions create art whose style evolves with the era (doc I.47).
         if world.tick % 6 == 0:
             await art.tick_art(session, world, rng)
+
+        # 3g6f2. Epidemics — the SIR law bites (doc I.67), modulated by pollution + infra.
+        await disease.tick_disease(session, world, rng)
 
         # 3g6g. Civic systems — urban planning, conflict/diplomacy, festivals (#43/44/48).
         await civics.tick_infrastructure(session, world)

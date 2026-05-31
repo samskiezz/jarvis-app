@@ -661,6 +661,9 @@ async def world_environment(
         "crop_yield": round(world.crop_yield or 0.0, 3),
         "tectonic_stress": round(world.tectonic_stress or 0.0, 3),
         "water_table": round(world.water_table if world.water_table is not None else 0.6, 3),
+        "epidemic_active": bool(world.epidemic_active),
+        "epidemic_infected": round(world.epidemic_infected or 0.0, 3),
+        "epidemic_recovered": round(world.epidemic_recovered or 0.0, 3),
     }
 
 
