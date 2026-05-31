@@ -92,7 +92,8 @@ Backend test suite: **294 passing**. Everything below is committed to `main`.
 | 148/149 | Stimulants & addiction | ✅ | `services/substances.py`, `Minion.addiction` |
 | 127 | Meta-cognition (reflect on mistakes) | ✅ | `reasoning.reflect` |
 | 144–146 | Appearance / body-mod, unlocked by tech | ✅ | `services/appearance.py` |
-| 101/138/140 | Per-minion neural net, digital-assistant ascension, ghost medium | ◑/⬜ |
+| 101 | Per-minion neural network (innate from DNA, learns from reward) | ✅ | `services/neural.py`, `/minions/{id}/brain` |
+| 138/140 | Digital-assistant ascension, ghost-medium device | ⬜ |
 
 ---
 
@@ -110,12 +111,27 @@ Backend test suite: **294 passing**. Everything below is committed to `main`.
 8. Market snapshot every 10 ticks (#39/40)
 9. Births / forks / deaths · population snapshot (knowledge, masters)
 
-## What remains
-- #8/#9 EM & optics as *live* world fields (exist today as computable laws)
-- #101 per-minion neural network (genuine architectural rewrite; minds currently
-  run on a shared LLM/heuristic + causal beliefs + planning)
-- #138/#140 ascended-as-digital-assistant, ghost medium device
-- #24/#59/#60/#76 ruins, scripting sandbox, gateway comprehension mini-test
-- #31–33 minor cosmetic physics nuances
+## Physics-governance expansion pack (100-feature) — complete
+- **Kernel/integrity:** Unit Ledger (#1), Conservation Auditor (#2), Law Registry
+  (#3), Solver Fidelity Ladder (#4), Dimensional Debugger (#5), Boundary validation
+  (#6), Numerical-error weathering (#7), Constant discovery (#8), Causal replay
+  (#9), Violation Alarm (#10), Feasibility Gate / Impossible-patent detector
+  (#74/76). `physics/dimensions·conservation·fidelity·violations.py`, `services/engineering.py`.
+- **Law bank: 82 computable laws** minions discover/calculate/master across
+  mechanics, thermo, EM (#41-50), optics (#51-56), fluids (#36-40), materials/
+  structures (#24-30), chemistry/biology/medicine (#61-70), astronautics/plasma/
+  quantum (#91-96), climate, acoustics & information.
+- **Science tooling (#71-80):** Bayesian update, calibration, replication, unit-
+  checked formula parser, prior-art physics graph, mastery-by-demonstration,
+  constrained gap optimiser. `services/science.py`, `/science/*`.
+- **Laws wired into live consequences:** SIR epidemics (#67), Joule-heating grid
+  fires (#42), structural fatigue → collapse (#25/#7). `services/disease·grid·structural_health.py`.
 
-All world systems are surfaced in the web "Systems" dashboard + minion drawer.
+## What remains (low value)
+- #8/#9 EM & optics as *live* world fields (exist as computable laws + the climate
+  field; full field simulation is out of scope)
+- #138/#140 ascended-as-digital-assistant, ghost-medium device
+- #24/#59/#60 ruins, scripting sandbox, #31–33 cosmetic physics nuances
+
+All world systems + the physics compendium are surfaced in the web "Systems"
+dashboard + minion drawer.
