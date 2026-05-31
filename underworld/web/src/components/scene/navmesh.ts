@@ -9,7 +9,20 @@ import type { Collider } from "./colliders";
 const CELL = 12;         // world units per grid cell (≈84² grid over a 1000u map)
 const AGENT_R = 1.4;     // minion clearance
 
-function buildGrid(size: number, colliders: readonly Collider[]) {
+// The occupancy grid is static per (collider set, world size), so cache it —
+// rebuilding it on every pathfind was the cost that didn't scale with density.
+const _gridCache = new WeakMap<readonly Collider[], Map<number, GridData>>();
+interface GridData { n: number; half: number; blocked: Uint8Array }
+
+function buildGrid(size: number, colliders: readonly Collider[]): GridData {
+  let bySize = _gridCache.get(colliders);
+  if (bySize) {
+    const hit = bySize.get(size);
+    if (hit) return hit;
+  } else {
+    bySize = new Map();
+    _gridCache.set(colliders, bySize);
+  }
   const half = size / 2;
   const n = Math.ceil(size / CELL);
   const blocked = new Uint8Array(n * n);
@@ -25,7 +38,9 @@ function buildGrid(size: number, colliders: readonly Collider[]) {
       }
     }
   }
-  return { n, half, blocked };
+  const grid: GridData = { n, half, blocked };
+  bySize.set(size, grid);
+  return grid;
 }
 
 function lineClear(

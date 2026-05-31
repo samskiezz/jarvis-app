@@ -35,8 +35,9 @@ function hash(x: number, z: number): number {
 
 export default function InstancedCity({ buildings, trees, rocks }: Props) {
   // Pre-compute per-building dimensions/colour so the instanced meshes can be
-  // laid out in one pass.
-  const built = useMemo(() => buildings.map((b) => {
+  // laid out in one pass. Civic landmarks are rendered as detailed GLBs by the
+  // Environment layer (hybrid), so they're excluded from the instanced bulk.
+  const built = useMemo(() => buildings.filter((b) => !b.civic).map((b) => {
     const z = ZONE[b.zone];
     const jitter = hash(b.pos[0], b.pos[2]);
     const h = z.h * (0.8 + jitter * 0.6) * (b.civic ? 1.4 : 1);

@@ -144,7 +144,7 @@ export function computePois(
 
   // 1. Buildings — a large city. ~16u spacing, up to ~240 structures spread
   //    over the open-world map. A wider skirt keeps the central plaza clear.
-  const hutsXZ = poissonSample(rng, size, 16, 240, 30, (x, z) => {
+  const hutsXZ = poissonSample(rng, size, 14, 380, 30, (x, z) => {
     if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 34) return false;
     const e = elevAt(x, z);
     return e >= 0.44 && e < 0.74;
@@ -158,7 +158,7 @@ export function computePois(
   }, hutsForExclusion);
 
   // 3. Trees — parkland + forests filling the large map around the city.
-  const treesXZ = poissonSample(rng, size, 14, 280, 20, (x, z) => {
+  const treesXZ = poissonSample(rng, size, 12, 520, 20, (x, z) => {
     if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 40) return false;
     for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 12) return false;
     for (const p of plazasXZ) if (Math.hypot(x - p[0], z - p[1]) < 12) return false;
@@ -167,7 +167,7 @@ export function computePois(
   });
 
   // 4. Rocks — strewn across the high ground / mountains.
-  const rocksXZ = poissonSample(rng, size, 14, 130, 20, (x, z) => {
+  const rocksXZ = poissonSample(rng, size, 12, 220, 20, (x, z) => {
     if (Math.hypot(x - obelisk[0], z - obelisk[2]) < 40) return false;
     for (const b of hutsXZ) if (Math.hypot(x - b[0], z - b[1]) < 8) return false;
     const e = elevAt(x, z);

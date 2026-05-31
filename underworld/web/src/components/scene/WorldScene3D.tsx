@@ -216,6 +216,15 @@ export default function WorldScene3D({
     return out;
   }, [pois]);
 
+  // Navmesh obstacles = only the big things worth routing around (buildings +
+  // monument). Trees/rocks are left to the avatar's per-frame push-out, keeping
+  // the cached A* grid small even with hundreds of trees.
+  const navColliders = useMemo<Collider[]>(() => {
+    const out: Collider[] = pois.huts.map((h) => ({ x: h.pos[0], z: h.pos[2], r: 6.0 }));
+    out.push({ x: pois.obelisk[0], z: pois.obelisk[2], r: 7.0 });
+    return out;
+  }, [pois]);
+
   const placements = useMemo(
     () => minions.map((m) => {
       const home = placeMinion(m.id, grid, WORLD_SIZE, AMPLITUDE);
@@ -332,6 +341,7 @@ export default function WorldScene3D({
                 actionName={actionByMinion?.[p.minion.id]}
                 selected={isSelected}
                 colliders={colliders}
+                navColliders={navColliders}
                 worldSize={WORLD_SIZE}
                 controlled={isSelected && controlMode}
                 positionRef={isSelected ? selectedPosRef : undefined}
