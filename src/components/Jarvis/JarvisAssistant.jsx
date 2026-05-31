@@ -64,7 +64,7 @@ function buildBriefing(liveData, topRisk) {
   return `Briefing, sir. ${bits.join("; ")}.`;
 }
 
-export default function JarvisAssistant({ actions = {}, liveData, entities = [], risks = [] }) {
+export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, entities = [], risks = [], pages = [] }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(false);   // audio unlocked + wake armed
   const [muted, setMuted] = useState(false);
@@ -73,6 +73,25 @@ export default function JarvisAssistant({ actions = {}, liveData, entities = [],
   const [messages, setMessages] = useState([]);   // {role:'sam'|'jarvis', text}
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
+  const [liveDataSelf, setLiveDataSelf] = useState(null);
+
+  // When the host page doesn't feed live intel (i.e. anywhere but the terminal),
+  // JARVIS pulls its own so briefings work on every page — including Apex.
+  const liveData = liveDataProp || liveDataSelf;
+  useEffect(() => {
+    if (liveDataProp) return;
+    let alive = true;
+    (async () => {
+      try {
+        const headers = { "Content-Type": "application/json" };
+        if (appParams.apiKey) headers.Authorization = `Bearer ${appParams.apiKey}`;
+        const r = await fetch(`${appParams.apiBaseUrl}/functions/getLiveIntel`,
+          { method: "POST", headers, body: JSON.stringify({ type: "all" }) });
+        if (alive && r.ok) setLiveDataSelf(await r.json());
+      } catch { /* offline — assistant still answers, just no briefing figures */ }
+    })();
+    return () => { alive = false; };
+  }, [liveDataProp]);
 
   const voiceRef = useRef(null);
   const abortRef = useRef(null);
@@ -114,7 +133,7 @@ export default function JarvisAssistant({ actions = {}, liveData, entities = [],
     if (!text) return;
     setMessages((m) => [...m, { role: "sam", text }]);
 
-    const plan = interpret(text, { entities });
+    const plan = interpret(text, { entities, pages });
     switch (plan.intent) {
       case "greeting":
         return say(pick(plan.warm ? LINES.greetingWarm : LINES.greeting));
@@ -123,10 +142,14 @@ export default function JarvisAssistant({ actions = {}, liveData, entities = [],
         abortRef.current?.abort();
         return say(pick(LINES.stop));
       case "help":
-        return say("I can open or close any panel, focus an entity on the graph, pull fresh intel, brief you on the day, or answer questions on your universe. Try: JARVIS, brief me.");
+        return say("I can take you to any page, open or close panels, focus an entity, pull fresh intel, brief you on the day, or answer questions on your universe. Try: JARVIS, take me to Apex Core.");
       case "refresh":
         actions.refresh?.();
         return say(pick(LINES.refresh));
+      case "navigate": {
+        actions.navigate?.(plan.page.name);
+        return say(LINES.navigated(plan.page.label));
+      }
       case "open_panel": {
         actions.openPanel?.(plan.panel);
         return say(LINES.opened(actions.panelLabel?.(plan.panel) || plan.panel));
@@ -147,7 +170,7 @@ export default function JarvisAssistant({ actions = {}, liveData, entities = [],
         return runQuery(plan.query || text);
       }
     }
-  }, [entities, liveData, topRisk, say, actions, runQuery]);
+  }, [entities, pages, liveData, topRisk, say, actions, runQuery]);
 
   // Keep a ref to the latest handler so the (once-created) voice engine always
   // dispatches into current state without being torn down and rebuilt.

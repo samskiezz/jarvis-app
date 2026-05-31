@@ -6,10 +6,12 @@
  * dock. JARVIS rides along on every page via the assistant orb.
  */
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { COLORS as C } from "@/domain/colors";
 import { GROUPS, PAGES, pagesByGroup } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
+import { OBJECTS } from "@/domain/ontology";
+import { RISK_SIGNALS } from "@/domain/risk";
 import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 
 const DOCK_W = 196;
@@ -22,9 +24,19 @@ export default function Layout() {
 export function AppLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const loc = useLocation();
+  const navigate = useNavigate();
   const groups = pagesByGroup();
   const current = PAGES.find((p) => createPageUrl(p.name) === loc.pathname);
   const w = collapsed ? DOCK_W_COLLAPSED : DOCK_W;
+
+  // JARVIS rides on every page with real agency: it can route to any of the 30
+  // pages by voice/text, and knows the full entity universe for focus/briefings.
+  const jarvisPages = PAGES.map((p) => ({ name: p.name, label: p.label }));
+  const jarvisEntities = OBJECTS.map((o) => ({ id: o.id, label: o.label }));
+  const jarvisActions = {
+    navigate: (name) => navigate(createPageUrl(name)),
+    refresh: () => navigate(0),
+  };
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: C.bg }}>
@@ -89,7 +101,7 @@ export function AppLayout({ children }) {
       </main>
 
       {/* JARVIS rides on every page */}
-      <JarvisAssistant />
+      <JarvisAssistant actions={jarvisActions} entities={jarvisEntities} pages={jarvisPages} risks={RISK_SIGNALS} />
     </div>
   );
 }

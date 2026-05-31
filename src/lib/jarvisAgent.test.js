@@ -58,4 +58,20 @@ describe("jarvisAgent.interpret", () => {
       expect(PANEL_ALIASES[id].length).toBeGreaterThan(0);
     }
   });
+
+  it("navigates to registry pages, preferring specific page labels over panels", () => {
+    const pages = [
+      { name: "ApexCore", label: "Apex Core" },
+      { name: "InvestmentTracker", label: "Investment Tracker" },
+      { name: "CommandCenter", label: "Command Center" },
+      { name: "GameArena", label: "Game Arena" },
+    ];
+    const c = { entities: ENTITIES, pages };
+    expect(interpret("take me to Apex Core", c)).toMatchObject({ intent: "navigate" });
+    expect(interpret("take me to Apex Core", c).page.name).toBe("ApexCore");
+    expect(interpret("go to investment tracker", c).page.name).toBe("InvestmentTracker");
+    expect(interpret("open command center", c).page.name).toBe("CommandCenter");
+    // A bare panel word with no page still hits the panel, not navigation.
+    expect(interpret("open markets", c)).toMatchObject({ intent: "open_panel", panel: "MARKETS" });
+  });
 });
