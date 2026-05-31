@@ -52,6 +52,13 @@ const ACTION_CLIP_CANDIDATES: Record<string, string[]> = {
   fork_self:          ["emote-yes", "idle"],
 };
 
+// Indoor activities — a minion doing one of these at its destination has gone
+// inside the building (rendered ghosted). Socialising/partner-seeking stay outdoors.
+const INDOOR_ACTIONS = new Set([
+  "rest", "eat", "drink", "meditate", "study", "teach", "search_patents",
+  "kb_lookup", "calculate", "propose_invention", "build_scanner",
+]);
+
 const WALK_CLIPS = ["walk", "sprint", "Walking", "Walk", "Run", "Running"];
 const IDLE_CLIPS = ["idle", "static", "Idle", "Standing", "Stand"];
 const DEATH_CLIPS = ["die", "Death", "Dying", "idle"];
@@ -188,6 +195,25 @@ export default function MinionAvatar({
   // Pick the animation clip. While walking (not yet arrived + we have a target),
   // play Walking. Once arrived, play the action's animation (sit, pick-up, …).
   const isWalking = !!targetPosition && !arrived && !atDestination && minion.alive;
+
+  // Doc (A) building interiors: when a minion has arrived and is doing an indoor
+  // activity, it has "gone inside" — render it ghosted so it reads as occupying
+  // the building rather than standing rigidly at the door. It re-materialises
+  // when it heads back out (target changes / starts walking).
+  const inside = arrived && !!actionName && INDOOR_ACTIONS.has(actionName);
+  useEffect(() => {
+    clone.traverse((obj) => {
+      const mesh = obj as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      const apply = (mat: THREE.Material) => {
+        mat.transparent = inside;
+        (mat as THREE.MeshStandardMaterial).opacity = inside ? 0.3 : 1.0;
+        mat.needsUpdate = true;
+      };
+      if (Array.isArray(mesh.material)) mesh.material.forEach(apply);
+      else apply(mesh.material as THREE.Material);
+    });
+  }, [clone, inside]);
   const desiredClip = useMemo(() => {
     if (!minion.alive) return findClip(names, DEATH_CLIPS);
     if (isWalking) return findClip(names, WALK_CLIPS) ?? findClip(names, IDLE_CLIPS);
