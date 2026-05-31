@@ -193,6 +193,16 @@ export default function WorldScene3D({
     [grid, seed],
   );
 
+  // Low-power (phone/tablet/weak GPU) detection → drop the expensive post-FX
+  // (SSR, N8AO) and cap pixel ratio so the scene runs on mobile.
+  const lowPower = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const coarse = window.matchMedia?.("(pointer: coarse)")?.matches;
+    const small = Math.min(window.innerWidth, window.innerHeight) < 720;
+    const fewCores = (navigator.hardwareConcurrency ?? 8) <= 4;
+    return Boolean(coarse || small || fewCores);
+  }, []);
+
   // Static collider list — buildings, trees, rocks, central monument.
   // Radii roughly match the geometry scale set in Environment.tsx so the
   // avatar's clearance feels right (small buffer for "shoulder room").
@@ -253,7 +263,7 @@ export default function WorldScene3D({
     <div style={{ position: "relative", width, height }}>
       <Canvas
         shadows={{ type: THREE.PCFSoftShadowMap, enabled: true }}
-        dpr={[1, 2]}
+        dpr={lowPower ? [1, 1.25] : [1, 2]}
         gl={{
           antialias: false, // SMAA in post does this better
           toneMapping: THREE.ACESFilmicToneMapping,
@@ -370,28 +380,32 @@ export default function WorldScene3D({
               gives the cinematic falloff Sims-style cameras have, SMAA
               cleans edges, bloom haloes the obelisk + sun, vignette + ACES
               finishes. */}
-          <EffectComposer multisampling={0} enableNormalPass>
-            <N8AO
-              aoRadius={2.5}
-              intensity={isNight ? 3 : 2.2}
-              distanceFalloff={1}
-              quality="high"
-              halfRes={false}
-              color="black"
-            />
-            <SSR
-              intensity={0.45}
-              maxRoughness={0.5}
-              thickness={0.5}
-              ior={1.45}
-              jitter={0.7}
-              jitterRough={0.5}
-              MAX_STEPS={20}
-              NUM_BINARY_SEARCH_STEPS={5}
-              STRETCH_MISSED_RAYS={false}
-              USE_NORMALMAP
-              USE_ROUGHNESSMAP
-            />
+          <EffectComposer multisampling={0} enableNormalPass={!lowPower}>
+            {!lowPower ? (
+              <N8AO
+                aoRadius={2.5}
+                intensity={isNight ? 3 : 2.2}
+                distanceFalloff={1}
+                quality="high"
+                halfRes={false}
+                color="black"
+              />
+            ) : <></>}
+            {!lowPower ? (
+              <SSR
+                intensity={0.45}
+                maxRoughness={0.5}
+                thickness={0.5}
+                ior={1.45}
+                jitter={0.7}
+                jitterRough={0.5}
+                MAX_STEPS={20}
+                NUM_BINARY_SEARCH_STEPS={5}
+                STRETCH_MISSED_RAYS={false}
+                USE_NORMALMAP
+                USE_ROUGHNESSMAP
+              />
+            ) : <></>}
             {/* DoF reads as out-of-focus mush at orbit distance — only worth
                 running in character-follow mode where there's a clear
                 subject. Re-enable behind a flag if you want it. */}

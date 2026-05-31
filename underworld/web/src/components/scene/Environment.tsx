@@ -1,14 +1,10 @@
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { Html, useGLTF } from "@react-three/drei";
 import GlbModel from "./GlbModel";
-import {
-  CITY_BUILDINGS, COMMERCIAL_BUILDINGS, SKYSCRAPERS,
-  FENCES, FOUNTAIN, HEDGES, LANTERN,
-  NATURE_ROCKS, NATURE_TREES, NATURE_DECOR, TEXTURE_SETS,
-} from "./assets";
-import { loadGeneratedManifest, type GeneratedAsset } from "./generated";
+import { FOUNTAIN, LANTERN, TEXTURE_SETS } from "./assets";
+import InstancedCity from "./InstancedCity";
 import type { Pois } from "./pois";
 
 interface Props {
@@ -140,21 +136,11 @@ function Road({ from, to, width = 1.8 }: { from: [number, number, number]; to: [
 }
 
 export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
-  // Generated assets — loaded from /models/generated/manifest.json at mount
-  // time so anything `scripts/generate_glb.py` has produced shows up without
-  // a code change. Used as hero decor sprinkled into the world.
-  const [generated, setGenerated] = useState<GeneratedAsset[]>([]);
-  useEffect(() => { loadGeneratedManifest().then(setGenerated); }, []);
-
-  // Building variant + rotation per hut POI, zoned by distance from the
-  // central obelisk so the town reads as concentric districts:
-  //   ring 0 (≤22u)  → tall skyscrapers (5 variants: guild HQs / university)
-  //   ring 1 (22–55) → commercial low-rise (markets, shops, schools)
-  //   ring 2 (>55)   → suburban residential houses
+  // Buildings, zoned by distance from the monument into civic core → commercial
+  // → residential. The nearest are the named civic institutions. Bodies are
+  // rendered by InstancedCity (one draw call each); here we only compute the
+  // layout + civic identities (labels/beacons rendered below).
   const buildings = useMemo(() => {
-    // The buildings closest to the monument become the city's named civic
-    // institutions — so the world reads as a real civilisation (guild halls,
-    // university, hospital, market) rather than an anonymous suburb.
     const civicMap = new Map<number, (typeof CIVIC_ROSTER)[number]>();
     pois.huts
       .map((h, i) => ({ i, d: Math.hypot(h.pos[0] - pois.obelisk[0], h.pos[2] - pois.obelisk[2]) }))
@@ -163,128 +149,23 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
       .forEach((o, k) => civicMap.set(o.i, CIVIC_ROSTER[k]));
 
     return pois.huts.map((h, i) => {
-      const h0 = hashSeed(seed, i * 7 + 1);
       const distFromCenter = Math.hypot(h.pos[0] - pois.obelisk[0], h.pos[2] - pois.obelisk[2]);
       const civic = civicMap.get(i);
-      let pool: readonly string[];
-      let scale: number;
-      let zone: "residential" | "commercial" | "skyscraper";
-      if (civic || distFromCenter < size * 0.12) {
-        pool = SKYSCRAPERS;
-        scale = (civic ? 6.5 : 5.5) + ((h0 >> 8) & 0x3f) / 30; // civic landmarks are taller
-        zone = "skyscraper";
-      } else if (distFromCenter < size * 0.32) {
-        pool = COMMERCIAL_BUILDINGS;
-        scale = 4.5 + ((h0 >> 8) & 0x3f) / 60;
-        zone = "commercial";
-      } else {
-        pool = CITY_BUILDINGS;
-        scale = 5.5 + ((h0 >> 8) & 0x3f) / 60;
-        zone = "residential";
-      }
-      return { url: pool[h0 % pool.length], pos: h.pos, rot: h.rot, scale, zone, civic };
+      const zone: "residential" | "commercial" | "skyscraper" =
+        civic || distFromCenter < size * 0.12 ? "skyscraper"
+        : distFromCenter < size * 0.32 ? "commercial"
+        : "residential";
+      return { pos: h.pos, rot: h.rot, zone, civic };
     });
   }, [pois.huts, pois.obelisk, seed, size]);
 
-  const trees = useMemo(() =>
-    pois.trees.map((t, i) => {
-      const h0 = hashSeed(seed, i * 11 + 2);
-      const variant = NATURE_TREES[h0 % NATURE_TREES.length];
-      return { url: variant, pos: t.pos, scale: t.scale * 4.5 };
-    }),
-    [pois.trees, seed],
-  );
-
-  const rocks = useMemo(() =>
-    pois.rocks.map((r, i) => {
-      const h0 = hashSeed(seed, i * 13 + 3);
-      const variant = NATURE_ROCKS[h0 % NATURE_ROCKS.length];
-      return { url: variant, pos: r.pos, scale: r.scale * 4.0, rot: r.rot };
-    }),
-    [pois.rocks, seed],
-  );
-
-  // Sprinkle small decor (flowers, grass tufts, mushrooms, logs) — purely
-  // decorative, much cheaper than full buildings so we lay down a lot.
-  const decor = useMemo(() => {
-    const out: { url: string; pos: [number, number, number]; rot: number; scale: number }[] = [];
-    const rng = (i: number) => ((Math.imul(hashSeed(seed, i * 41), 2654435761) >>> 0) / 4294967296);
-    let i = 0;
-    for (const t of pois.trees) {
-      const count = 2 + Math.floor(rng(i++) * 4);
-      for (let k = 0; k < count; k++) {
-        const angle = rng(i++) * Math.PI * 2;
-        const r = 3 + rng(i++) * 6;
-        const url = NATURE_DECOR[Math.floor(rng(i++) * NATURE_DECOR.length)];
-        out.push({
-          url,
-          pos: [t.pos[0] + Math.cos(angle) * r, t.pos[1], t.pos[2] + Math.sin(angle) * r],
-          rot: rng(i++) * Math.PI * 2,
-          scale: 2.5 + rng(i++) * 2.0,
-        });
-      }
-    }
-    return out.slice(0, 200);
-  }, [pois.trees, seed]);
-
-  // Hero generated-GLB props — scatter the AI-generated assets near plazas
-  // and along the roads so each unique mesh actually shows up in-scene.
-  const heroProps = useMemo(() => {
-    if (generated.length === 0) return [] as { url: string; pos: [number, number, number]; rot: number; scale: number }[];
-    const out: { url: string; pos: [number, number, number]; rot: number; scale: number }[] = [];
-    // Place one of each near every plaza (varied positions if many).
-    pois.plazas.forEach((p, i) => {
-      const asset = generated[i % generated.length];
-      const angle = (hashSeed(seed, i * 37 + 11) % 360) * Math.PI / 180;
-      const r = 6.5;
-      out.push({
-        url: asset.glb,
-        pos: [p[0] + Math.cos(angle) * r, p[1], p[2] + Math.sin(angle) * r],
-        rot: angle,
-        scale: 2.5,
-      });
-    });
-    return out;
-  }, [generated, pois.plazas, seed]);
-
-  // Roads from the tower to each plaza & to a handful of buildings, so the
-  // landscape has visible structure linking the POIs.
+  // Roads from the tower to each plaza & to a handful of buildings.
   const roads = useMemo(() => {
     const out: { from: [number, number, number]; to: [number, number, number] }[] = [];
     for (const p of pois.plazas) out.push({ from: pois.obelisk, to: p });
     for (const b of buildings.slice(0, 8)) out.push({ from: pois.obelisk, to: b.pos });
     return out;
   }, [pois, buildings]);
-
-  // Fences + hedges around each building, fountains in plazas, lanterns along
-  // the road network at fixed intervals.
-  const yards = useMemo(() => {
-    const fences: { url: string; pos: [number, number, number]; rot: number }[] = [];
-    const hedges: typeof fences = [];
-    // Only fence/hedge the civic landmarks + the inner ring — at city scale,
-    // fencing every one of 240 buildings would be ~1000 extra draw calls.
-    const fenced = buildings.filter((b) => b.civic).concat(buildings.slice(0, 24));
-    fenced.forEach((b, i) => {
-      const baseRot = b.rot;
-      // Four corner pegs per building.
-      for (let k = 0; k < 4; k++) {
-        const ang = baseRot + (k * Math.PI) / 2;
-        const r = 5.5;
-        const fx = b.pos[0] + Math.cos(ang) * r;
-        const fz = b.pos[2] + Math.sin(ang) * r;
-        const variant = (hashSeed(seed, i * 23 + k) % FENCES.length);
-        fences.push({ url: FENCES[variant], pos: [fx, b.pos[1], fz], rot: ang + Math.PI / 2 });
-      }
-      // One hedge cluster per garden.
-      const hedgeVariant = HEDGES[hashSeed(seed, i * 29) % HEDGES.length];
-      hedges.push({
-        url: hedgeVariant,
-        pos: [b.pos[0] + 4.5, b.pos[1], b.pos[2] - 4.5],
-        rot: baseRot,
-      });
-    });
-    return { fences, hedges };
-  }, [buildings, seed]);
 
   const lanterns = useMemo(() => {
     // Distribute lanterns along every road segment at ~10u spacing, offset
@@ -321,22 +202,21 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
   return (
     <group>
       <CentralTower position={pois.obelisk} tick={tick} />
+      {/* The whole city/forest in ~6 GPU-instanced draw calls (mobile-friendly). */}
+      <InstancedCity buildings={buildings} trees={pois.trees} rocks={pois.rocks} />
       <Suspense fallback={null}>
         {roads.map((r, i) => (
           <Road key={`r${i}`} from={r.from} to={r.to} />
-        ))}
-        {buildings.map((b, i) => (
-          <GlbModel key={`b${i}`} url={b.url} position={b.pos} rotation={b.rot} scale={b.scale} />
         ))}
         {/* Civic institutions: a coloured beacon + a floating nameplate so the
             city reads as a real civilisation (guild halls, university, hospital). */}
         {buildings.filter((b) => b.civic).map((b, i) => (
           <group key={`civic${i}`} position={[b.pos[0], b.pos[1], b.pos[2]]}>
-            <mesh position={[0, 22, 0]}>
-              <cylinderGeometry args={[0.4, 0.4, 44, 6]} />
+            <mesh position={[0, 28, 0]}>
+              <cylinderGeometry args={[0.5, 0.5, 56, 6]} />
               <meshBasicMaterial color={b.civic!.color} transparent opacity={0.35} toneMapped={false} />
             </mesh>
-            <Html position={[0, 30, 0]} center distanceFactor={90} style={{ pointerEvents: "none" }}>
+            <Html position={[0, 40, 0]} center distanceFactor={140} style={{ pointerEvents: "none" }}>
               <div className="whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-semibold shadow-xl backdrop-blur"
                 style={{ borderColor: b.civic!.color, color: b.civic!.color, background: "rgba(10,14,26,0.85)" }}>
                 {b.civic!.icon} {b.civic!.name}
@@ -344,38 +224,16 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
             </Html>
           </group>
         ))}
-        {heroProps.map((h, i) => (
-          <GlbModel key={`hp${i}`} url={h.url} position={h.pos} rotation={h.rot} scale={h.scale} />
-        ))}
-        {yards.fences.map((f, i) => (
-          <GlbModel key={`fc${i}`} url={f.url} position={f.pos} rotation={f.rot} scale={3.0} />
-        ))}
-        {yards.hedges.map((h, i) => (
-          <GlbModel key={`hd${i}`} url={h.url} position={h.pos} rotation={h.rot} scale={3.0} />
-        ))}
         {fountains.map((f, i) => (
           <GlbModel key={`fn${i}`} url={FOUNTAIN} position={f.pos} rotation={f.rot} scale={3.5} />
         ))}
-        {lanterns.map((p, i) => (
+        {lanterns.slice(0, 48).map((p, i) => (
           <group key={`ln${i}`} position={p}>
             <GlbModel url={LANTERN} position={[0, 0, 0]} scale={3.2} />
-            {/* Only the first 8 lanterns get a real point light — most GPUs
-                tank past ~16 simultaneous dynamic lights. The remainder rely
-                on the bloom pass + the lantern's own emissive material to
-                read as lit at night. */}
             {i < 8 ? (
               <pointLight color="#ffd58a" intensity={3.0} distance={14} position={[0, 4.5, 0]} />
             ) : null}
           </group>
-        ))}
-        {trees.map((t, i) => (
-          <GlbModel key={`t${i}`} url={t.url} position={t.pos} scale={t.scale} />
-        ))}
-        {rocks.map((r, i) => (
-          <GlbModel key={`rk${i}`} url={r.url} position={r.pos} scale={r.scale} rotation={r.rot} />
-        ))}
-        {decor.map((d, i) => (
-          <GlbModel key={`d${i}`} url={d.url} position={d.pos} scale={d.scale} rotation={d.rot} castShadow={false} />
         ))}
       </Suspense>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
