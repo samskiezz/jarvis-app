@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { Html, useGLTF } from "@react-three/drei";
 import GlbModel from "./GlbModel";
-import { FOUNTAIN, LANTERN, TEXTURE_SETS } from "./assets";
+import { FOUNTAIN, LANTERN, SKYSCRAPERS, TEXTURE_SETS } from "./assets";
 import InstancedCity from "./InstancedCity";
 import type { Pois } from "./pois";
 
@@ -212,6 +212,11 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
             city reads as a real civilisation (guild halls, university, hospital). */}
         {buildings.filter((b) => b.civic).map((b, i) => (
           <group key={`civic${i}`} position={[b.pos[0], b.pos[1], b.pos[2]]}>
+            {/* Hybrid: civic landmarks are detailed GLB buildings (not instanced),
+                so the city core has real geometry while the bulk stays instanced. */}
+            <GlbModel
+              url={SKYSCRAPERS[hashSeed(seed, i * 7 + 3) % SKYSCRAPERS.length]}
+              position={[0, 0, 0]} rotation={b.rot} scale={9} />
             <mesh position={[0, 28, 0]}>
               <cylinderGeometry args={[0.5, 0.5, 56, 6]} />
               <meshBasicMaterial color={b.civic!.color} transparent opacity={0.35} toneMapped={false} />

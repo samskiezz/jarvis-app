@@ -89,8 +89,13 @@ interface Props {
    * input from controlInputRef instead. */
   controlled?: boolean;
   /** Static obstacles the avatar must walk around (buildings, trees, rocks,
-   *  obelisk). Passed once per (pois, seed) from the scene. */
+   *  obelisk). Passed once per (pois, seed) from the scene. Used for the
+   *  per-frame push-out so the avatar never clips any geometry. */
   colliders?: readonly Collider[];
+  /** Coarser obstacle set used to PLAN routes (buildings + monument only).
+   *  Keeps the cached A* grid small even with hundreds of trees/rocks; the
+   *  fine `colliders` set still stops the avatar clipping the small props. */
+  navColliders?: readonly Collider[];
   /** World extent in units — the navmesh grid spans this. */
   worldSize?: number;
   /** If provided, the avatar writes its current world position into this
@@ -117,6 +122,7 @@ export default function MinionAvatar({
   selected,
   controlled,
   colliders,
+  navColliders,
   worldSize = 1000,
   positionRef,
   controlInputRef,
@@ -306,9 +312,10 @@ export default function MinionAvatar({
         // Navmesh A*: (re)plan when the target changes, then walk the waypoints
         // so we route AROUND buildings instead of pushing through them.
         const key = `${targetPosition[0].toFixed(1)},${targetPosition[2].toFixed(1)}`;
-        if (s.pathKey !== key && colliders && colliders.length) {
+        const planObstacles = navColliders ?? colliders;
+        if (s.pathKey !== key && planObstacles && planObstacles.length) {
           s.path = findPath([g.position.x, g.position.z],
-                            [targetPosition[0], targetPosition[2]], colliders, worldSize);
+                            [targetPosition[0], targetPosition[2]], planObstacles, worldSize);
           s.wp = 0;
           s.pathKey = key;
         }
