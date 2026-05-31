@@ -110,3 +110,47 @@ async def kernel_units(_token: str = Depends(require_bearer)):
         "base": list(BASE),
         "units": {name: {"signature": str(dim), "exps": list(dim.exps)} for name, dim in UNITS.items()},
     }
+
+
+class StabilityRequest(BaseModel):
+    velocity: float
+    dt: float
+    dx: float
+
+
+@router.post("/kernel/stability")
+async def kernel_stability(body: StabilityRequest, _token: str = Depends(require_bearer)):
+    """Solver Fidelity Ladder — Courant stability + largest stable timestep."""
+    from ..physics import fidelity
+    return {
+        "courant": round(fidelity.courant_number(body.velocity, body.dt, body.dx), 4),
+        "stable": fidelity.is_stable(body.velocity, body.dt, body.dx),
+        "max_stable_dt": fidelity.max_stable_dt(body.velocity, body.dx),
+    }
+
+
+class EquationCheckRequest(BaseModel):
+    # each term is a list of [unit_name, exponent] pairs multiplied together
+    terms: list[list[list]] = []
+
+
+@router.post("/kernel/check-equation")
+async def kernel_check_equation(body: EquationCheckRequest, _token: str = Depends(require_bearer)):
+    """Dimensional Debugger — verify every term of an equation shares dimensions."""
+    from ..physics.dimensions import DIMENSIONLESS, DimensionError, unit
+
+    resolved = []
+    for term in body.terms:
+        d = DIMENSIONLESS
+        try:
+            for pair in term:
+                name, exp = pair[0], int(pair[1])
+                d = d * (unit(name) ** exp)
+        except (DimensionError, IndexError, ValueError) as e:
+            raise HTTPException(status_code=400, detail=str(e))
+        resolved.append(d)
+    homogeneous = all(d == resolved[0] for d in resolved) if resolved else True
+    return {
+        "homogeneous": homogeneous,
+        "term_signatures": [str(d) for d in resolved],
+    }
