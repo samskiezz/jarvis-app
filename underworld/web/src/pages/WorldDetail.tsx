@@ -57,7 +57,13 @@ export default function WorldDetail() {
   // The streamer URL is configurable so different deployments can point at
   // different GPU hosts (e.g. projectsolar.cloud once Pixel Streaming is up).
   const [renderTier, setRenderTier] = useState<"webgl" | "pixelstream">("webgl");
-  const pixelStreamUrl = import.meta.env.VITE_UNDERWORLD_PIXELSTREAM_URL as string | undefined;
+  // Pre-wired to the existing GPU host (projectsolar.cloud). Override per-deploy
+  // with VITE_UNDERWORLD_PIXELSTREAM_URL. The "Stream UE5" toggle uses this; it
+  // connects the instant a Pixel-Streaming signaling server + UE5 client are
+  // live there, and shows a clear error if the GPU host is down.
+  const pixelStreamUrl =
+    (import.meta.env.VITE_UNDERWORLD_PIXELSTREAM_URL as string | undefined) ||
+    "https://projectsolar.cloud/pixelstream/";
 
   const world = useQuery({
     queryKey: ["world", id],
