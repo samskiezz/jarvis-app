@@ -17,6 +17,7 @@ export default function WorldSystems({ worldId, tick }: { worldId: string; tick:
   const gaps = useQuery({ queryKey: k("gaps"), queryFn: () => api.gaps(worldId) });
   const memes = useQuery({ queryKey: k("memes"), queryFn: () => api.memes(worldId) });
   const species = useQuery({ queryKey: k("species"), queryFn: () => api.species(worldId) });
+  const physics = useQuery({ queryKey: ["physics", "laws"], queryFn: () => api.physicsLaws() });
 
   const WEATHER_ICON: Record<string, string> = {
     clear: "☀️", cloudy: "⛅", rain: "🌧️", storm: "⛈️", snow: "❄️",
@@ -50,6 +51,27 @@ export default function WorldSystems({ worldId, tick }: { worldId: string; tick:
           <Bar label="Crop yield" value={env.data?.crop_yield ?? 0} />
           <Bar label="Pollution" value={env.data?.pollution ?? 0} danger />
           <Bar label="Tectonic stress" value={env.data?.tectonic_stress ?? 0} danger />
+          <Bar label="Structure fatigue" value={env.data?.structure_fatigue ?? 0} danger />
+          {env.data?.epidemic_active ? (
+            <Bar label="🦠 Epidemic" value={env.data?.epidemic_infected ?? 0} danger />
+          ) : null}
+        </div>
+      </section>
+
+      {/* PHYSICS */}
+      <section className="panel">
+        <div className="panel-header"><span>Physics compendium</span>
+          <span className="text-[9px] text-zinc-500">{physics.data?.count ?? 0} laws</span>
+        </div>
+        <div className="p-3 text-[11px]">
+          <div className="text-zinc-500 mb-1.5">Computable laws minions discover, calculate &amp; master:</div>
+          <div className="flex flex-wrap gap-1">
+            {Array.from(new Set((physics.data?.laws ?? []).map((l) => l.discipline))).slice(0, 12).map((d) => (
+              <span key={d} className="rounded border border-glow-jade/25 bg-glow-jade/5 px-1.5 py-0.5 text-[9px] text-glow-jade">
+                {d}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

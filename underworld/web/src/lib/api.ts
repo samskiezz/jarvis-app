@@ -116,6 +116,8 @@ export const api = {
     request<{
       pollution: number; prey_pop: number; predator_pop: number; food_availability: number;
       soil_fertility: number; crop_yield: number; tectonic_stress: number; water_table: number;
+      epidemic_active: boolean; epidemic_infected: number; epidemic_recovered: number;
+      structure_fatigue: number;
     }>(`/worlds/${id}/environment`),
   climate: (id: string) =>
     request<{ season: string; temperature: number; weather: string; thermal_stress: number }>(
@@ -166,6 +168,14 @@ export const api = {
   appearance: (id: string) =>
     request<{ hair: string; garment: string; body_art: string[]; modifications: string[] }>(
       `/minions/${id}/appearance`,
+    ),
+  brain: (id: string) =>
+    request<{ dispositions: { action: string; score: number }[]; trained: boolean }>(
+      `/minions/${id}/brain`,
+    ),
+  physicsLaws: () =>
+    request<{ count: number; laws: { id: string; name: string; discipline: string }[] }>(
+      `/physics/laws`,
     ),
   breed: (parent_a_id: string, parent_b_id: string) =>
     request<Minion>("/minions/breed", {
