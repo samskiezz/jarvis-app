@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useMemo, useRef } from "react";
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html, useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -176,9 +176,17 @@ export default function MinionAvatar({
   const groupRef = useRef<THREE.Group>(null);
   const { actions, names } = useAnimations(animations, groupRef);
 
-  // Pick the animation clip. While walking (i.e. not at destination and we have
-  // a target), play Walking. Once arrived, play the action's animation.
-  const isWalking = !!targetPosition && !atDestination && minion.alive;
+  // Arrival is judged from the avatar's LIVE position vs its target (not the
+  // parent's home→target guess), with a generous radius so reaching a building's
+  // edge — where its collider stops the avatar — counts as "arrived" and the
+  // minion sits/works there instead of jogging in place against the wall.
+  const ARRIVE_DIST = 7.5;
+  const [arrived, setArrived] = useState(false);
+  useEffect(() => { setArrived(false); }, [targetPosition?.[0], targetPosition?.[2]]);
+
+  // Pick the animation clip. While walking (not yet arrived + we have a target),
+  // play Walking. Once arrived, play the action's animation (sit, pick-up, …).
+  const isWalking = !!targetPosition && !arrived && !atDestination && minion.alive;
   const desiredClip = useMemo(() => {
     if (!minion.alive) return findClip(names, DEATH_CLIPS);
     if (isWalking) return findClip(names, WALK_CLIPS) ?? findClip(names, IDLE_CLIPS);
@@ -255,9 +263,12 @@ export default function MinionAvatar({
     //   - If we have an action target and we're not there yet → walk to it.
     //   - Otherwise wander in a small radius around base.
     let tx: number, tz: number;
-    if (targetPosition && !atDestination) {
+    if (targetPosition && !arrived) {
       tx = targetPosition[0];
       tz = targetPosition[2];
+      // Reached the destination (or its building edge)? Stop and do the action.
+      const td = Math.hypot(targetPosition[0] - g.position.x, targetPosition[2] - g.position.z);
+      if (td < ARRIVE_DIST) setArrived(true);
     } else {
       s.wanderAngle += dt * (0.35 + ((s.seed % 100) / 250));
       const r = 4.0 + 1.5 * Math.sin(s.seed + s.wanderAngle * 0.6);
