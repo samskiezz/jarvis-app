@@ -65,3 +65,48 @@ async def assess(payload: dict, _token: str = Depends(require_bearer)):
     text = str(payload.get("text") or "")
     a = physics_engine.assess_invention(text)
     return {"feasibility": a.feasibility, "violates_limit": a.violates_limit, "notes": a.notes}
+
+
+# ── Physics kernel (Unit Ledger / Conservation Auditor / Violation Alarm) ────
+
+class FeasibilityRequest(BaseModel):
+    claim: dict = {}
+    materials_available: bool = True
+
+
+@router.post("/kernel/feasibility")
+async def kernel_feasibility(body: FeasibilityRequest, _token: str = Depends(require_bearer)):
+    """Patent Feasibility Gate — physics + materials check on a structured claim."""
+    from ..physics import violations
+    return violations.feasibility_gate(body.claim, materials_available=body.materials_available)
+
+
+class ConserveRequest(BaseModel):
+    before: dict = {}
+    after: dict = {}
+    sources: dict = {}
+
+
+@router.post("/kernel/conserve")
+async def kernel_conserve(body: ConserveRequest, _token: str = Depends(require_bearer)):
+    """Conservation Auditor — does mass/energy/momentum/charge balance?"""
+    from ..physics import conservation
+    res = conservation.audit(body.before, body.after, sources=body.sources)
+    return {
+        "conserved": conservation.all_conserved(res),
+        "ledger": [
+            {"quantity": r.quantity, "before": r.before, "after": r.after,
+             "delta": r.delta, "conserved": r.conserved}
+            for r in res
+        ],
+    }
+
+
+@router.get("/kernel/units")
+async def kernel_units(_token: str = Depends(require_bearer)):
+    """The SI unit ledger — known dimensions and their base-unit signatures."""
+    from ..physics.dimensions import BASE, UNITS
+    return {
+        "base": list(BASE),
+        "units": {name: {"signature": str(dim), "exps": list(dim.exps)} for name, dim in UNITS.items()},
+    }
