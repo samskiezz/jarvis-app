@@ -10,7 +10,6 @@ import { WATCHLIST_INIT } from "@/domain/watchlist";
 import { MARKETS_FALLBACK } from "@/domain/markets";
 import { appParams } from "@/lib/app-params";
 import { PANELS as PANEL_REGISTRY, buildDefaultPanelState } from "@/panels/registry";
-import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 
 const API = `${appParams.apiBaseUrl}/functions/getLiveIntel`;
 
@@ -1140,16 +1139,6 @@ export default function JarvisTerminal() {
     return()=>clearInterval(t);
   },[refreshIntel]);
 
-  // Bridge JARVIS (voice/agent) → the terminal. Lets the assistant actually
-  // open/close panels, focus an entity on the graph, and pull fresh intel.
-  const jarvisActions = useMemo(() => ({
-    openPanel,
-    closePanel,
-    refresh: refreshIntel,
-    panelLabel: (id) => PANEL_REGISTRY.find((p) => p.id === id)?.title || id,
-    focusEntity: (id) => { setSelectedObj(id); setFocusId(id); openPanel("VERTEX"); },
-  }), [refreshIntel]);
-  const jarvisEntities = useMemo(() => OBJECTS.map((o) => ({ id: o.id, label: o.label })), []);
 
   // Clock
   useEffect(()=>{ const t=setInterval(()=>setTime(new Date()),1000); return()=>clearInterval(t); },[]);
@@ -1358,9 +1347,6 @@ export default function JarvisTerminal() {
         ))}
         <span style={{ marginLeft:"auto",color:"#0d1a22" }}>JARVIS v6.0 · PALANTIR-GOTHAM/GRIDLINE · REAL CORPUS LOADED</span>
       </div>
-
-      {/* ── JARVIS ASSISTANT (voice + agent) ──────────────────────────────── */}
-      <JarvisAssistant actions={jarvisActions} liveData={liveData} entities={jarvisEntities} risks={RISK_SIGNALS} />
     </div>
   );
 }
