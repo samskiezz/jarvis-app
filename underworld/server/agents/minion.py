@@ -39,7 +39,7 @@ from ..db.models import (
 )
 from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
-from ..services import lifecycle, mastery as mastery_mod, progression, reasoning
+from ..services import lifecycle, mastery as mastery_mod, planning, progression, reasoning
 from ..tools import llm, patent_search, safety
 from .guild_lore import get_lore
 
@@ -910,16 +910,28 @@ async def run_tick(
         )
         action = "rest"
 
-    # Doc I.23 — if about to idle, act on a learned cause→effect belief instead:
-    # do the thing experience says reliably improves wellbeing.
+    # Doc I.23/I.126 — if about to idle, don't: a thoughtful (high-intelligence)
+    # Minion deliberates with a tree-of-thought + Monte-Carlo rollout over its
+    # options; others fall back to acting on their strongest learned belief.
     if action == "rest":
-        learned = await reasoning.best_action(session, minion.id, _LEARNABLE_ACTIONS)
-        if learned and learned in progression.unlocked_actions(world.era):
-            action = learned
-            await _store_memory(
-                session, minion, world.tick, "thought",
-                f"I've learned that {learned} reliably helps me — doing it on purpose.", 0.45,
-            )
+        candidates = sorted(_LEARNABLE_ACTIONS & set(progression.unlocked_actions(world.era)))
+        if minion.intelligence > 0.6 and candidates:
+            beliefs = {b.cause: b.confidence for b in await reasoning.beliefs(session, minion.id)}
+            planned = planning.plan_action(minion, candidates, beliefs, rng=rng)
+            if planned and planned != "rest":
+                action = planned
+                await _store_memory(
+                    session, minion, world.tick, "thought",
+                    f"Weighing my options, {planned} looks like the best use of my time.", 0.45,
+                )
+        else:
+            learned = await reasoning.best_action(session, minion.id, _LEARNABLE_ACTIONS)
+            if learned and learned in progression.unlocked_actions(world.era):
+                action = learned
+                await _store_memory(
+                    session, minion, world.tick, "thought",
+                    f"I've learned that {learned} reliably helps me — doing it on purpose.", 0.45,
+                )
 
     if action == "search_patents":
         summary, _ = await _do_search_patents(session, minion, world, args)
