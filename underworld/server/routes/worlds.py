@@ -493,6 +493,30 @@ async def world_culture(
     }
 
 
+@router.get("/{world_id}/replay")
+async def world_replay(
+    world_id: str,
+    around_tick: int = Query(...),
+    window: int = Query(default=3, ge=0, le=20),
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc #9 — causal event replay: the ordered chain of events in a window around
+    a tick (reconstruct what led to a collapse, plague, blackout or crash)."""
+    await _world_or_404(session, world_id)
+    rows = (await session.execute(
+        select(Event).where(
+            Event.world_id == world_id,
+            Event.tick >= around_tick - window,
+            Event.tick <= around_tick + window,
+        ).order_by(Event.tick.asc(), Event.created_at.asc())
+    )).scalars().all()
+    return {
+        "around_tick": around_tick, "window": window,
+        "chain": [{"tick": e.tick, "kind": e.kind, "payload": e.payload} for e in rows],
+    }
+
+
 @router.get("/{world_id}/society")
 async def world_society(
     world_id: str,

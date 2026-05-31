@@ -73,3 +73,47 @@ class MasteryRequest(BaseModel):
 async def mastery(body: MasteryRequest, _token: str = Depends(require_bearer)):
     """#78 — mastery score = accuracy × repeatability × explanation quality."""
     return {"mastery": science.mastery_by_demonstration(body.accuracy, body.repeatability, body.explanation)}
+
+
+class BuildingCodeRequest(BaseModel):
+    capacity: float
+    demand: float
+    required: float = 1.5
+
+
+@router.post("/building-code")
+async def building_code(body: BuildingCodeRequest, _token: str = Depends(require_bearer)):
+    """#83 — structural safety factor + inspector verdict."""
+    from ..services import engineering
+    sf = engineering.safety_factor(body.capacity, body.demand)
+    return {"safety_factor": round(sf, 4) if sf != float("inf") else None,
+            "passes": engineering.building_code_ok(body.capacity, body.demand, required=body.required)}
+
+
+class EthicsRequest(BaseModel):
+    severity: float
+    likelihood: float
+    irreversibility: float
+    misuse: float
+    threshold: float = 0.3
+
+
+@router.post("/ethics-gate")
+async def ethics_gate(body: EthicsRequest, _token: str = Depends(require_bearer)):
+    """#90 — ethical-technology review gate."""
+    from ..services import engineering
+    return engineering.ethical_review(body.severity, body.likelihood, body.irreversibility,
+                                      body.misuse, threshold=body.threshold)
+
+
+class AnomalyRequest(BaseModel):
+    observed: float
+    predicted: float
+    uncertainty: float
+
+
+@router.post("/anomaly")
+async def anomaly(body: AnomalyRequest, _token: str = Depends(require_bearer)):
+    """#100 — meta physics-law debugger: residual + discovery flag."""
+    from ..services import engineering
+    return engineering.anomaly(body.observed, body.predicted, body.uncertainty)
