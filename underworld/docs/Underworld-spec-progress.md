@@ -64,7 +64,9 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 42 | Legal systems (emergent) | ✅ | `services/governance.py` |
 | 64/65 | Information loss + libraries | ✅ | `services/knowledge_decay.py` |
 | 47 | Art, music & literature (evolving styles) | ✅ | `services/art.py`, `/worlds/{id}/art` |
-| 43/44/48 | War, urban planning, entertainment | ⬜ | — |
+| 43 | War/strife + diplomacy (tension → conflict/treaty) | ✅ | `services/civics.py` |
+| 44 | Urban planning (infrastructure eases crowding) | ✅ | `services/civics.py` |
+| 48 | Entertainment (era-appropriate festivals) | ✅ | `services/civics.py` |
 
 ---
 
