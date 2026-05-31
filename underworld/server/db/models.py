@@ -272,6 +272,9 @@ class Minion(Base):
     # Doc II.148-149 — dependency on stimulants (0 = clean). High addiction brings
     # tolerance (less benefit) and withdrawal (stress/health cost) when abstaining.
     addiction: Mapped[float] = mapped_column(Float, default=0.0)
+    # Doc II.101 — this Minion's private neural policy: innate weights derive from
+    # its DNA; `brain` stores the output-layer biases it learns over its life.
+    brain: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
 
     # Reputation, karma snapshot, age — Section II.4, II.51
     reputation: Mapped[float] = mapped_column(Float, default=1.0)

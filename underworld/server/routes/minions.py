@@ -231,6 +231,24 @@ async def get_appearance(
     return appearance.for_minion(minion, world.era if world else "stone", discovered)
 
 
+@router.get("/{minion_id}/brain")
+async def get_brain(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Doc II.101 — this Minion's neural policy: its current action dispositions."""
+    from ..services import neural
+
+    minion = await _minion_or_404(session, minion_id)
+    scores = neural.policy(minion)
+    ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
+    return {
+        "dispositions": [{"action": a, "score": s} for a, s in ranked],
+        "trained": bool((minion.brain or {}).get("b2")),
+    }
+
+
 @router.get("/{minion_id}/beliefs")
 async def list_beliefs(
     minion_id: str,

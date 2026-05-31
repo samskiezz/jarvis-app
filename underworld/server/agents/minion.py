@@ -39,7 +39,7 @@ from ..db.models import (
 )
 from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
-from ..services import lifecycle, mastery as mastery_mod, planning, progression, reasoning
+from ..services import lifecycle, mastery as mastery_mod, neural, planning, progression, reasoning
 from ..tools import llm, patent_search, safety
 from .guild_lore import get_lore
 
@@ -924,7 +924,13 @@ async def run_tick(
                     session, minion, world.tick, "thought",
                     f"Weighing my options, {planned} looks like the best use of my time.", 0.45,
                 )
-        else:
+        elif candidates:
+            # Doc II.101 — an intuitive Minion consults its own neural policy
+            # (innate from DNA, tuned by lived reward) to pick what feels right.
+            picked = neural.choose(minion, candidates)
+            if picked and picked != "rest":
+                action = picked
+        if action == "rest":
             learned = await reasoning.best_action(session, minion.id, _LEARNABLE_ACTIONS)
             if learned and learned in progression.unlocked_actions(world.era):
                 action = learned
@@ -1009,6 +1015,8 @@ async def run_tick(
     await reasoning.record(
         session, minion.id, action, confirmed=wb_after > wb_before, tick=world.tick,
     )
+    # Doc II.101 — train this Minion's neural policy on the same reward signal.
+    neural.learn(minion, action, reward=(wb_after - wb_before))
     # Doc I.127 — periodic meta-cognition: reflect on mistakes and adjust.
     if world.tick % 8 == 0:
         await reasoning.reflect(session, minion, world.tick)
