@@ -23,6 +23,7 @@ from .routes import patents as patent_routes
 from .routes import physics as physics_routes
 from .routes import projects as project_routes
 from .routes import safety as safety_routes
+from .routes import science as science_routes
 from .routes import substrate as substrate_routes
 from .routes import worlds as world_routes
 from .services import scheduler
@@ -77,6 +78,7 @@ def create_app() -> FastAPI:
     app.include_router(physics_routes.router)
     app.include_router(project_routes.router)
     app.include_router(substrate_routes.router)
+    app.include_router(science_routes.router)
 
     @app.get("/healthz")
     async def healthz():
