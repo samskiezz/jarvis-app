@@ -78,6 +78,7 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 107–111 | Appraisal-based emotions (morale, burnout, flow) | ✅ |
 | 114–117 | Relationships, breeding, skill inheritance | ✅ |
 | 122 | Nicknames | ✅ |
+| 126 | Tree-of-thought + Monte-Carlo decision planning | ✅ | `services/planning.py` |
 | 124/125 | Thoughts + thought-bubble UI | ✅ |
 | 128 | Curiosity-driven exploration | ✅ |
 | 130–132 | Sense of purpose; fulfilment vs crisis | ✅ |
@@ -91,7 +92,7 @@ Backend test suite: **152 passing**. Everything below is committed to `main`.
 | 148/149 | Stimulants & addiction | ✅ | `services/substances.py`, `Minion.addiction` |
 | 127 | Meta-cognition (reflect on mistakes) | ✅ | `reasoning.reflect` |
 | 144–146 | Appearance / body-mod, unlocked by tech | ✅ | `services/appearance.py` |
-| 101/126/138/140 | Per-minion NN, ToT/MCTS decisions, digital-assistant ascension, ghost medium | ◑/⬜ |
+| 101/138/140 | Per-minion neural net, digital-assistant ascension, ghost medium | ◑/⬜ |
 
 ---
 
