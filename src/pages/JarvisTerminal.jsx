@@ -10,6 +10,7 @@ import { WATCHLIST_INIT } from "@/domain/watchlist";
 import { MARKETS_FALLBACK } from "@/domain/markets";
 import { appParams } from "@/lib/app-params";
 import { PANELS as PANEL_REGISTRY, buildDefaultPanelState } from "@/panels/registry";
+import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 
 const API = `${appParams.apiBaseUrl}/functions/getLiveIntel`;
 
@@ -1123,21 +1124,32 @@ export default function JarvisTerminal() {
   const openPanel = (id) => { setPanels(p=>({...p,[id]:{...p[id],visible:true,minimized:false}})); bringToFront(id); };
 
   // Fetch live data
+  const refreshIntel = useCallback(async () => {
+    try {
+      setLoadingData(true);
+      const headers = { "Content-Type":"application/json" };
+      if (appParams.apiKey) headers["Authorization"] = `Bearer ${appParams.apiKey}`;
+      const r = await fetch(API, { method:"POST", headers, body:JSON.stringify({type:"all"}) });
+      if (r.ok) setLiveData(await r.json());
+    } catch(e) { console.error(e); }
+    finally { setLoadingData(false); }
+  }, []);
   useEffect(()=>{
-    const fetch_ = async () => {
-      try {
-        setLoadingData(true);
-        const headers = { "Content-Type":"application/json" };
-        if (appParams.apiKey) headers["Authorization"] = `Bearer ${appParams.apiKey}`;
-        const r = await fetch(API, { method:"POST", headers, body:JSON.stringify({type:"all"}) });
-        if (r.ok) setLiveData(await r.json());
-      } catch(e) { console.error(e); }
-      finally { setLoadingData(false); }
-    };
-    fetch_();
-    const t=setInterval(fetch_,120000); // refresh every 2min
+    refreshIntel();
+    const t=setInterval(refreshIntel,120000); // refresh every 2min
     return()=>clearInterval(t);
-  },[]);
+  },[refreshIntel]);
+
+  // Bridge JARVIS (voice/agent) → the terminal. Lets the assistant actually
+  // open/close panels, focus an entity on the graph, and pull fresh intel.
+  const jarvisActions = useMemo(() => ({
+    openPanel,
+    closePanel,
+    refresh: refreshIntel,
+    panelLabel: (id) => PANEL_REGISTRY.find((p) => p.id === id)?.title || id,
+    focusEntity: (id) => { setSelectedObj(id); setFocusId(id); openPanel("VERTEX"); },
+  }), [refreshIntel]);
+  const jarvisEntities = useMemo(() => OBJECTS.map((o) => ({ id: o.id, label: o.label })), []);
 
   // Clock
   useEffect(()=>{ const t=setInterval(()=>setTime(new Date()),1000); return()=>clearInterval(t); },[]);
@@ -1346,6 +1358,9 @@ export default function JarvisTerminal() {
         ))}
         <span style={{ marginLeft:"auto",color:"#0d1a22" }}>JARVIS v6.0 · PALANTIR-GOTHAM/GRIDLINE · REAL CORPUS LOADED</span>
       </div>
+
+      {/* ── JARVIS ASSISTANT (voice + agent) ──────────────────────────────── */}
+      <JarvisAssistant actions={jarvisActions} liveData={liveData} entities={jarvisEntities} risks={RISK_SIGNALS} />
     </div>
   );
 }

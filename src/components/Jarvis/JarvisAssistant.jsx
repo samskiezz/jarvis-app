@@ -1,0 +1,287 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { COLORS as C } from "@/domain/colors";
+import { appParams } from "@/lib/app-params";
+import { interpret, LINES, pick } from "@/lib/jarvisAgent";
+import { createVoice } from "@/lib/jarvisVoice";
+
+/**
+ * JarvisAssistant — the omnipresent JARVIS HUD.
+ *
+ * Wires the three pieces together:
+ *   • voice (jarvisVoice)  — speaks replies, listens for the "JARVIS" wake word
+ *   • agency (jarvisAgent) — turns commands into terminal actions
+ *   • analysis (backend)   — streams open questions from /functions/analystChat
+ *
+ * It renders a collapsed arc-reactor orb that expands into a conversation panel.
+ * `actions` is the bridge the terminal hands in so JARVIS can actually drive it.
+ */
+
+// Stream the JARVIS analyst SSE endpoint, calling onToken(full) as text arrives.
+async function streamAnalyst(message, onToken, signal) {
+  const headers = { "Content-Type": "application/json" };
+  if (appParams.apiKey) headers.Authorization = `Bearer ${appParams.apiKey}`;
+  const res = await fetch(`${appParams.apiBaseUrl}/functions/analystChat`, {
+    method: "POST", headers, body: JSON.stringify({ message }), signal,
+  });
+  if (!res.ok || !res.body) throw new Error(`analystChat ${res.status}`);
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let full = "";
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const parts = buf.split("\n\n");
+    buf = parts.pop() || "";
+    for (const part of parts) {
+      const line = part.trim();
+      if (!line.startsWith("data:")) continue;
+      const data = line.slice(5).trim();
+      if (data === "[DONE]") return full;
+      try { full += JSON.parse(data); onToken(full); } catch { /* skip frame */ }
+    }
+  }
+  return full;
+}
+
+// Compose a short spoken briefing from the live intel snapshot — real figures
+// only, no invention (per the JARVIS contract).
+function buildBriefing(liveData, topRisk) {
+  const bits = [];
+  const markets = Array.isArray(liveData?.markets) ? liveData.markets : [];
+  const mover = markets
+    .filter((m) => Number.isFinite(Number(m.change_pct)))
+    .sort((a, b) => Math.abs(Number(b.change_pct)) - Math.abs(Number(a.change_pct)))[0];
+  if (mover) {
+    const ch = Number(mover.change_pct);
+    bits.push(`${mover.display} is ${ch >= 0 ? "up" : "down"} ${Math.abs(ch).toFixed(1)} percent at ${mover.price}`);
+  }
+  if (topRisk) bits.push(`highest open risk is ${topRisk.label} at severity ${topRisk.severity ?? topRisk.score ?? "—"}`);
+  const eq = liveData?.earthquakes?.length;
+  if (eq) bits.push(`${eq} significant quakes on the USGS feed`);
+  if (!bits.length) return "All systems nominal, sir. Nothing pressing on the feeds.";
+  return `Briefing, sir. ${bits.join("; ")}.`;
+}
+
+export default function JarvisAssistant({ actions = {}, liveData, entities = [], risks = [] }) {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(false);   // audio unlocked + wake armed
+  const [muted, setMuted] = useState(false);
+  const [listening, setListening] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [messages, setMessages] = useState([]);   // {role:'sam'|'jarvis', text}
+  const [draft, setDraft] = useState("");
+  const [streaming, setStreaming] = useState(false);
+
+  const voiceRef = useRef(null);
+  const abortRef = useRef(null);
+  const logRef = useRef(null);
+  const topRisk = useMemo(
+    () => [...(risks || [])].sort((a, b) => (b.severity ?? b.score ?? 0) - (a.severity ?? a.score ?? 0))[0],
+    [risks],
+  );
+
+  const say = useCallback((text) => {
+    setMessages((m) => [...m, { role: "jarvis", text }]);
+    voiceRef.current?.speak(text);
+  }, []);
+
+  const runQuery = useCallback(async (message) => {
+    abortRef.current?.abort();
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    setStreaming(true);
+    const idx = { current: -1 };
+    setMessages((m) => { idx.current = m.length; return [...m, { role: "jarvis", text: "" }]; });
+    try {
+      const full = await streamAnalyst(message, (text) => {
+        setMessages((m) => m.map((msg, i) => (i === idx.current ? { ...msg, text } : msg)));
+      }, ctrl.signal);
+      voiceRef.current?.speak(full);
+    } catch (e) {
+      if (e.name !== "AbortError") {
+        setMessages((m) => m.map((msg, i) => (i === idx.current ? { ...msg, text: "My apologies, sir — the analyst link is down." } : msg)));
+      }
+    } finally {
+      setStreaming(false);
+    }
+  }, []);
+
+  // ── core: handle one utterance (voice or typed) ──────────────────────────
+  const handleUtterance = useCallback(async (raw) => {
+    const text = String(raw || "").trim();
+    if (!text) return;
+    setMessages((m) => [...m, { role: "sam", text }]);
+
+    const plan = interpret(text, { entities });
+    switch (plan.intent) {
+      case "greeting":
+        return say(pick(plan.warm ? LINES.greetingWarm : LINES.greeting));
+      case "stop":
+        voiceRef.current?.cancelSpeech();
+        abortRef.current?.abort();
+        return say(pick(LINES.stop));
+      case "help":
+        return say("I can open or close any panel, focus an entity on the graph, pull fresh intel, brief you on the day, or answer questions on your universe. Try: JARVIS, brief me.");
+      case "refresh":
+        actions.refresh?.();
+        return say(pick(LINES.refresh));
+      case "open_panel": {
+        actions.openPanel?.(plan.panel);
+        return say(LINES.opened(actions.panelLabel?.(plan.panel) || plan.panel));
+      }
+      case "close_panel": {
+        actions.closePanel?.(plan.panel);
+        return say(LINES.closed(actions.panelLabel?.(plan.panel) || plan.panel));
+      }
+      case "focus_entity": {
+        actions.focusEntity?.(plan.entity.id);
+        return say(LINES.focused(plan.entity.label));
+      }
+      case "briefing":
+        return say(buildBriefing(liveData, topRisk));
+      case "query":
+      default: {
+        if (plan.entity) actions.focusEntity?.(plan.entity.id);
+        return runQuery(plan.query || text);
+      }
+    }
+  }, [entities, liveData, topRisk, say, actions, runQuery]);
+
+  // Keep a ref to the latest handler so the (once-created) voice engine always
+  // dispatches into current state without being torn down and rebuilt.
+  const handlerRef = useRef(handleUtterance);
+  useEffect(() => { handlerRef.current = handleUtterance; }, [handleUtterance]);
+
+  // ── voice engine lifecycle (created once) ────────────────────────────────
+  useEffect(() => {
+    const v = createVoice({
+      onWake: () => { setListening(true); say(pick(LINES.greeting)); },
+      onResult: (text) => handlerRef.current?.(text),
+      onListeningChange: setListening,
+      onSpeakingChange: setSpeaking,
+    });
+    voiceRef.current = v;
+    return () => v.dispose();
+  }, [say]);
+
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [messages]);
+
+  // First user gesture unlocks audio (browsers block speech before one) and
+  // arms the wake word.
+  const activate = useCallback(() => {
+    setOpen(true);
+    if (active) return;
+    setActive(true);
+    const v = voiceRef.current;
+    v?.setWake(true);
+    const greeting = pick(LINES.greeting);
+    setMessages((m) => (m.length ? m : [{ role: "jarvis", text: greeting }]));
+    v?.speak(greeting, { onend: () => { if (liveData) say(buildBriefing(liveData, topRisk)); } });
+  }, [active, liveData, topRisk, say]);
+
+  const toggleMute = () => {
+    const next = !muted;
+    setMuted(next);
+    voiceRef.current?.setMuted(next);
+  };
+
+  const supported = voiceRef.current?.supported || { speech: false, recognition: false };
+  const orbColor = speaking ? C.gold : listening ? C.red : active ? C.neon : C.blue;
+
+  return (
+    <>
+      {/* Arc-reactor orb — always present, bottom-right above the status bar. */}
+      <button
+        onClick={() => (open ? setOpen(false) : activate())}
+        title="JARVIS"
+        style={{
+          position: "fixed", right: 16, bottom: 32, width: 54, height: 54, borderRadius: "50%",
+          zIndex: 10000, cursor: "pointer", background: "rgba(2,8,12,0.95)",
+          border: `2px solid ${orbColor}`, boxShadow: `0 0 18px ${orbColor}, inset 0 0 12px ${orbColor}55`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "all 0.2s", animation: speaking || listening ? "pulse 1.1s infinite" : "none",
+        }}
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" fill="none" stroke={orbColor} strokeWidth="1.2" opacity="0.6" />
+          <circle cx="12" cy="12" r="4.5" fill={orbColor} opacity={speaking ? 0.95 : 0.7} />
+          {[0, 60, 120, 180, 240, 300].map((a) => (
+            <line key={a} x1="12" y1="12"
+              x2={12 + 8 * Math.cos((a * Math.PI) / 180)} y2={12 + 8 * Math.sin((a * Math.PI) / 180)}
+              stroke={orbColor} strokeWidth="0.8" opacity="0.5" />
+          ))}
+        </svg>
+      </button>
+
+      {open && (
+        <div style={{
+          position: "fixed", right: 16, bottom: 94, width: 340, maxHeight: "62vh", zIndex: 10000,
+          background: "rgba(2,8,12,0.98)", border: `1px solid ${C.neon}44`, borderRadius: 8,
+          boxShadow: "0 8px 40px rgba(0,0,0,0.8)", display: "flex", flexDirection: "column",
+          fontFamily: "'JetBrains Mono','SF Mono',monospace", overflow: "hidden",
+        }}>
+          {/* header */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", borderBottom: `1px solid ${C.border}`, background: "rgba(0,200,120,0.05)" }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: orbColor, boxShadow: `0 0 6px ${orbColor}` }} />
+            <span style={{ color: C.neon, fontSize: 11, letterSpacing: 3, fontWeight: "bold" }}>JARVIS</span>
+            <span style={{ color: C.text, fontSize: 7, letterSpacing: 1 }}>
+              {speaking ? "SPEAKING" : listening ? "LISTENING" : active ? "ARMED" : "STANDBY"}
+            </span>
+            <div style={{ flex: 1 }} />
+            <button onClick={toggleMute} title={muted ? "unmute" : "mute"}
+              style={{ background: "none", border: "none", cursor: "pointer", color: muted ? C.red : C.text, fontSize: 13 }}>
+              {muted ? "🔇" : "🔊"}
+            </button>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: C.text, fontSize: 13 }}>×</button>
+          </div>
+
+          {/* transcript */}
+          <div ref={logRef} style={{ flex: 1, overflowY: "auto", padding: 10, display: "flex", flexDirection: "column", gap: 8, minHeight: 120 }}>
+            {messages.length === 0 && (
+              <div style={{ color: C.text, fontSize: 9, lineHeight: 1.7 }}>
+                Say “JARVIS” or tap the mic. Try: “brief me”, “open markets”, “focus on PSG”.
+              </div>
+            )}
+            {messages.map((m, i) => (
+              <div key={i} style={{ alignSelf: m.role === "sam" ? "flex-end" : "flex-start", maxWidth: "86%" }}>
+                <div style={{
+                  fontSize: 10, lineHeight: 1.5, padding: "6px 9px", borderRadius: 7,
+                  background: m.role === "sam" ? "rgba(0,150,212,0.14)" : "rgba(0,200,120,0.08)",
+                  border: `1px solid ${m.role === "sam" ? C.blue + "33" : C.neon + "33"}`,
+                  color: m.role === "sam" ? C.textB : "#cfe9dc",
+                }}>{m.text || (streaming ? "…" : "")}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* input row */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: 8, borderTop: `1px solid ${C.border}` }}>
+            <button
+              onClick={() => { if (!active) activate(); voiceRef.current?.listenOnce(); }}
+              disabled={!supported.recognition}
+              title={supported.recognition ? "push to talk" : "speech recognition unavailable in this browser"}
+              style={{
+                width: 34, height: 34, borderRadius: "50%", flexShrink: 0, cursor: supported.recognition ? "pointer" : "not-allowed",
+                background: listening ? "rgba(232,32,60,0.18)" : "rgba(0,200,120,0.1)",
+                border: `1px solid ${listening ? C.red : C.neon}55`, color: listening ? C.red : C.neon, fontSize: 14,
+              }}>🎙</button>
+            <form style={{ flex: 1, display: "flex", gap: 6 }} onSubmit={(e) => { e.preventDefault(); if (!active) activate(); handleUtterance(draft); setDraft(""); }}>
+              <input
+                value={draft} onChange={(e) => setDraft(e.target.value)}
+                placeholder="Ask JARVIS…"
+                style={{ flex: 1, background: "rgba(0,0,0,0.4)", border: `1px solid ${C.border}`, borderRadius: 5, color: C.textB, fontSize: 10, padding: "7px 9px", outline: "none", fontFamily: "inherit" }}
+              />
+            </form>
+          </div>
+          {!supported.speech && (
+            <div style={{ padding: "4px 10px 8px", color: C.gold, fontSize: 8 }}>Voice output unavailable in this browser — text only.</div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}

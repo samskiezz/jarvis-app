@@ -10,4 +10,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // This is the Jarvis frontend's own test suite. `underworld/web` is a separate
+  // package with its own (jsdom) vitest config, so scope ours to ./src and don't
+  // glob into it — otherwise its DOM tests run under the wrong environment.
+  test: {
+    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+    environment: 'node',
+  },
 });
