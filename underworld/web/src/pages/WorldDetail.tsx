@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -118,6 +118,19 @@ export default function WorldDetail() {
     mutationFn: (next: boolean) => api.setAutoAdvance(id, next),
     onSuccess: invalidateAll,
   });
+
+  // Autopilot: a never-run world (tick 0) that's somehow paused gets started the
+  // moment you open it, so the simulation runs hands-free with no manual ticking.
+  // A world you deliberately paused mid-run (tick > 0) is left as you set it.
+  const autostarted = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    const w = world.data;
+    if (w && !w.auto_advance && w.tick === 0 && !autostarted.current.has(w.id)) {
+      autostarted.current.add(w.id);
+      autoToggle.mutate(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [world.data?.id, world.data?.auto_advance, world.data?.tick]);
 
   const aliveSeries = useMemo(() => pop.data?.history.map((s) => s.alive) ?? [], [pop.data]);
   const birthsSeries = useMemo(() => pop.data?.history.map((s) => s.births) ?? [], [pop.data]);

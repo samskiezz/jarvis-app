@@ -43,6 +43,8 @@ async def lifespan(_app: FastAPI):
     await init_db()
     await seed_knowledge_base()
     if get_settings().scheduler_enabled:
+        if get_settings().scheduler_autostart_all:
+            await scheduler.autostart_all_worlds()
         scheduler.start()
     yield
     if get_settings().scheduler_enabled:

@@ -157,7 +157,7 @@ class World(Base):
     tick: Mapped[int] = mapped_column(Integer, default=0)
     population_cap: Mapped[int] = mapped_column(Integer, default=400)
     auto_advance: Mapped[bool] = mapped_column(Boolean, default=False)
-    auto_advance_interval_s: Mapped[float] = mapped_column(Float, default=5.0)
+    auto_advance_interval_s: Mapped[float] = mapped_column(Float, default=3.0)
     next_auto_tick_at: Mapped[datetime | None] = mapped_column(nullable=True)
     # Doc I.22-29 + III.5-9: civilisations progress through eras gated by
     # cumulative invention approvals + total skill level. Tech eras unlock
