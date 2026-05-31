@@ -7,7 +7,7 @@
  * stream monitor that reuses the standalone LiveTactical3D renderer driven by an
  * EventSource feed at `${apiBaseUrl}/streams/counterstrike`.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { COLORS as C } from "@/domain/colors";
 import { SwarmJob } from "@/api/entities";
 import { appParams } from "@/lib/app-params";
