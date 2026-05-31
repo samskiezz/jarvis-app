@@ -82,6 +82,29 @@ function matchEntity(text, entities) {
   return best;
 }
 
+// Match a destination page from the registry. pages: [{ name, label, aliases? }].
+// Returns { page, len } so callers can compare specificity against a panel match.
+function matchPage(text, pages) {
+  const t = ` ${text} `;
+  let best = null;
+  let bestLen = 0;
+  for (const p of pages || []) {
+    const aliases = [
+      String(p.label || "").toLowerCase(),
+      String(p.name || "").replace(/([A-Z])/g, " $1").toLowerCase().trim(),
+      ...(p.aliases || []),
+    ];
+    for (const a of aliases) {
+      const n = a.replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+      if (n.length >= 3 && t.includes(` ${n} `) && n.length > bestLen) {
+        best = p;
+        bestLen = n.length;
+      }
+    }
+  }
+  return best ? { page: best, len: bestLen } : null;
+}
+
 /**
  * Interpret an utterance into a structured intent.
  *
@@ -104,8 +127,18 @@ export function interpret(utterance, ctx = {}) {
 
   // Panel open/close. "close/hide X" → close, otherwise open.
   const wantsClose = /\b(close|hide|dismiss|minimi[sz]e)\b/.test(raw);
-  const wantsOpen = /\b(open|show|bring up|pull up|display|go to|switch to|launch)\b/.test(raw);
+  const wantsOpen = /\b(open|show|bring up|pull up|display|go to|switch to|launch|navigate|take me to|jump to)\b/.test(raw);
   const panel = matchPanel(raw);
+  const panelLen = panel ? Math.max(...PANEL_ALIASES[panel].filter((a) => ` ${raw} `.includes(` ${a} `)).map((a) => a.length)) : 0;
+
+  // Navigate to a registry page ("open apex", "go to investment tracker").
+  // Pages win over panels when the page label match is more specific (longer),
+  // so "open markets" stays a panel but "open command center" navigates.
+  const pageHit = matchPage(raw, ctx.pages);
+  if (pageHit && pageHit.len >= panelLen && (wantsOpen || !panel)) {
+    return { intent: "navigate", page: pageHit.page };
+  }
+
   if (panel && wantsClose) return { intent: "close_panel", panel };
   if (panel && (wantsOpen || !matchEntity(raw, ctx.entities))) {
     return { intent: "open_panel", panel };
@@ -136,6 +169,7 @@ export const LINES = {
   greetingWarm: ["Welcome home, sir. Shall I run the usual diagnostics?"],
   opened: (label) => `Bringing up ${label}, sir.`,
   closed: (label) => `Closing ${label}, sir.`,
+  navigated: (label) => `Taking you to ${label}, sir.`,
   focused: (label) => `Focusing on ${label}, sir.`,
   refresh: ["Pulling fresh intel, sir.", "Refreshing the feeds, sir."],
   stop: ["As you wish, sir.", "Standing by, sir."],
