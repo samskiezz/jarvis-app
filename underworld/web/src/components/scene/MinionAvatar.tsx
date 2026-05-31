@@ -6,6 +6,7 @@ import { clone as cloneSkeleton } from "three/examples/jsm/utils/SkeletonUtils.j
 import type { Guild, MinionListItem, Mood } from "@/lib/types";
 import { ALL_CHARACTER_MODELS, characterModelFor } from "./assets";
 import { clampToFree, type Collider } from "./colliders";
+import { findPath } from "./navmesh";
 import GuildAccessory from "./GuildAccessory";
 
 const GUILD_COLOR: Record<Guild, string> = {
@@ -215,6 +216,9 @@ export default function MinionAvatar({
     wanderAngle: 0,
     seed: hash(minion.id),
     inited: false,
+    path: [] as [number, number][],   // navmesh waypoints to the current target
+    wp: 0,                            // index of the waypoint we're heading to
+    pathKey: "",                     // the target the path was computed for
   });
   if (!state.current.inited) {
     state.current.inited = true;
@@ -264,12 +268,34 @@ export default function MinionAvatar({
     //   - Otherwise wander in a small radius around base.
     let tx: number, tz: number;
     if (targetPosition && !arrived) {
-      tx = targetPosition[0];
-      tz = targetPosition[2];
       // Reached the destination (or its building edge)? Stop and do the action.
       const td = Math.hypot(targetPosition[0] - g.position.x, targetPosition[2] - g.position.z);
-      if (td < ARRIVE_DIST) setArrived(true);
+      if (td < ARRIVE_DIST) {
+        setArrived(true);
+        tx = targetPosition[0]; tz = targetPosition[2];
+      } else {
+        // Navmesh A*: (re)plan when the target changes, then walk the waypoints
+        // so we route AROUND buildings instead of pushing through them.
+        const key = `${targetPosition[0].toFixed(1)},${targetPosition[2].toFixed(1)}`;
+        if (s.pathKey !== key && colliders && colliders.length) {
+          s.path = findPath([g.position.x, g.position.z],
+                            [targetPosition[0], targetPosition[2]], colliders, 240);
+          s.wp = 0;
+          s.pathKey = key;
+        }
+        const wp = s.path[s.wp];
+        if (wp) {
+          if (Math.hypot(wp[0] - g.position.x, wp[1] - g.position.z) < 2.5 && s.wp < s.path.length - 1) {
+            s.wp += 1;
+          }
+          const cur = s.path[s.wp] ?? [targetPosition[0], targetPosition[2]];
+          tx = cur[0]; tz = cur[1];
+        } else {
+          tx = targetPosition[0]; tz = targetPosition[2];
+        }
+      }
     } else {
+      s.pathKey = "";
       s.wanderAngle += dt * (0.35 + ((s.seed % 100) / 250));
       const r = 4.0 + 1.5 * Math.sin(s.seed + s.wanderAngle * 0.6);
       tx = basePosition[0] + Math.cos(s.wanderAngle) * r;
