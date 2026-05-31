@@ -216,6 +216,22 @@ export default function WorldScene3D({
     [minions, grid, pois, actionByMinion],
   );
 
+  // Performance LOD: each avatar runs its own animation mixer, so cap how many
+  // are rendered. Living + the selected minion come first; the rest are omitted
+  // (a "+N more" badge shows the overflow). Keeps big populations smooth.
+  const MAX_AVATARS = 90;
+  const visiblePlacements = useMemo(() => {
+    if (placements.length <= MAX_AVATARS) return placements;
+    const ordered = [...placements].sort((a, b) => Number(b.minion.alive) - Number(a.minion.alive));
+    const sliced = ordered.slice(0, MAX_AVATARS);
+    if (selectedId && !sliced.some((p) => p.minion.id === selectedId)) {
+      const sel = ordered.find((p) => p.minion.id === selectedId);
+      if (sel) sliced[sliced.length - 1] = sel;
+    }
+    return sliced;
+  }, [placements, selectedId]);
+  const hiddenCount = placements.length - visiblePlacements.length;
+
   const tint = diurnal(tick, WORLD_SIZE);
   const weather: WeatherKind = useMemo(
     () => mapWeather(weatherOverride) ?? weatherFor(biomeHint ?? "plains", tick),
@@ -291,7 +307,7 @@ export default function WorldScene3D({
             ]}
           />
           <Weather kind={weather} size={WORLD_SIZE} />
-          {placements.map((p) => {
+          {visiblePlacements.map((p) => {
             const dx = p.target ? p.target[0] - p.home[0] : 0;
             const dz = p.target ? p.target[2] - p.home[2] : 0;
             const at = !p.target || Math.hypot(dx, dz) < ARRIVAL_RADIUS;
@@ -398,6 +414,7 @@ export default function WorldScene3D({
         {temperature != null ? ` · ${Math.round(temperature)}°C` : ""}
         {weatherOverride && weatherOverride !== "clear" ? ` · ${weatherOverride}` : weather !== "clear" ? ` · ${weather}` : ""}
         {` · ${minions.filter((m) => m.alive).length} alive`}
+        {hiddenCount > 0 ? ` · +${hiddenCount} off-screen (LOD)` : ""}
       </div>
       <div className="pointer-events-none absolute bottom-3 left-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
         {controlMode

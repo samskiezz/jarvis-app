@@ -62,17 +62,21 @@ function TraitBar({ label, value }: { label: string; value: number }) {
 
 export default function MinionDrawer({ minionId, onClose }: Props) {
   const qc = useQueryClient();
-  const minion = useQuery({ queryKey: ["minion", minionId], queryFn: () => api.getMinion(minionId) });
-  const skills = useQuery({ queryKey: ["minion", minionId, "skills"], queryFn: () => api.listSkills(minionId) });
-  const memories = useQuery({ queryKey: ["minion", minionId, "memories"], queryFn: () => api.listMemories(minionId, 12) });
-  const rels = useQuery({ queryKey: ["minion", minionId, "rels"], queryFn: () => api.listRelationships(minionId) });
+  // The world ticks in the background; the selected minion's live state must keep
+  // up, so the changing views poll every 3s. Static facts (DNA, soul, lineage,
+  // appearance) are fetched once.
+  const LIVE = 3000;
+  const minion = useQuery({ queryKey: ["minion", minionId], queryFn: () => api.getMinion(minionId), refetchInterval: LIVE });
+  const skills = useQuery({ queryKey: ["minion", minionId, "skills"], queryFn: () => api.listSkills(minionId), refetchInterval: LIVE });
+  const memories = useQuery({ queryKey: ["minion", minionId, "memories"], queryFn: () => api.listMemories(minionId, 12), refetchInterval: LIVE });
+  const rels = useQuery({ queryKey: ["minion", minionId, "rels"], queryFn: () => api.listRelationships(minionId), refetchInterval: LIVE });
   const dna = useQuery({ queryKey: ["minion", minionId, "dna"], queryFn: () => api.getDna(minionId) });
-  const soul = useQuery({ queryKey: ["minion", minionId, "soul"], queryFn: () => api.getSoul(minionId) });
+  const soul = useQuery({ queryKey: ["minion", minionId, "soul"], queryFn: () => api.getSoul(minionId), refetchInterval: LIVE });
   const lineage = useQuery({ queryKey: ["minion", minionId, "lineage"], queryFn: () => api.getLineage(minionId) });
-  const beliefs = useQuery({ queryKey: ["minion", minionId, "beliefs"], queryFn: () => api.beliefs(minionId) });
-  const models = useQuery({ queryKey: ["minion", minionId, "models"], queryFn: () => api.models(minionId) });
+  const beliefs = useQuery({ queryKey: ["minion", minionId, "beliefs"], queryFn: () => api.beliefs(minionId), refetchInterval: LIVE });
+  const models = useQuery({ queryKey: ["minion", minionId, "models"], queryFn: () => api.models(minionId), refetchInterval: LIVE });
   const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId) });
-  const brain = useQuery({ queryKey: ["minion", minionId, "brain"], queryFn: () => api.brain(minionId) });
+  const brain = useQuery({ queryKey: ["minion", minionId, "brain"], queryFn: () => api.brain(minionId), refetchInterval: LIVE });
 
   const fork = useMutation({
     mutationFn: () => api.fork(minionId),
