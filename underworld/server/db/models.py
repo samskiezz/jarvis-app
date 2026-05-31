@@ -193,6 +193,9 @@ class World(Base):
     epidemic_active: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     epidemic_infected: Mapped[float] = mapped_column(Float, default=0.0)
     epidemic_recovered: Mapped[float] = mapped_column(Float, default=0.0)
+    # Doc I.7/#25 — accumulated fatigue/crack growth in the great structures
+    # (0 = pristine, 1 = Griffith-critical → collapse unless maintained).
+    structure_fatigue: Mapped[float] = mapped_column(Float, default=0.0)
     # Doc I.5/28-30 — live climate state, advanced every tick: ambient temperature
     # (°C), season, and current weather. These affect Minion health + fatigue.
     temperature: Mapped[float] = mapped_column(Float, default=15.0)

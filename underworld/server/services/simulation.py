@@ -41,7 +41,7 @@ from ..world.seed import derive_seed
 from . import (
     agriculture, art, biology, civics, climate, disease, discovery, ecosystem, economy, education,
     governance, grid, hydrology, knowledge_decay, lifecycle, mastery, memes, paleontology, pollution,
-    projects, puzzles, religion, roles, substances, tectonics, timescale,
+    projects, puzzles, religion, roles, structural_health, substances, tectonics, timescale,
 )
 
 
@@ -394,6 +394,9 @@ async def advance_world(
 
         # 3g6c. Plate tectonics — stress builds, earthquakes strike (doc I.28).
         await tectonics.tick_tectonics(session, world, rng)
+
+        # 3g6c2. Structural fatigue — cracks grow, monuments collapse if unmaintained (#25/#7).
+        await structural_health.tick_structures(session, world, rng)
 
         # 3g6d. Multi-species biology evolves under climate selection (doc I.12/34).
         await biology.tick_biology(session, world, rng)
