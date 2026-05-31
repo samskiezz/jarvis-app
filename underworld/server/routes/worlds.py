@@ -664,6 +664,7 @@ async def world_environment(
         "epidemic_active": bool(world.epidemic_active),
         "epidemic_infected": round(world.epidemic_infected or 0.0, 3),
         "epidemic_recovered": round(world.epidemic_recovered or 0.0, 3),
+        "structure_fatigue": round(world.structure_fatigue or 0.0, 3),
     }
 
 
