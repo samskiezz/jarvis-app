@@ -206,7 +206,7 @@ async def get_world_map(
         "cpc_class": world.seed_class,
         "biome_hint": seed.biome_hint,
         "elevation_bias": seed.elevation_bias,
-        "heightmap": heightmap(seed, size=32),
+        "heightmap": heightmap(seed, size=128),
     }
 
 

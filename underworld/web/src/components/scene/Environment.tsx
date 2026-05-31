@@ -169,11 +169,11 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
       let pool: readonly string[];
       let scale: number;
       let zone: "residential" | "commercial" | "skyscraper";
-      if (civic || distFromCenter < 24) {
+      if (civic || distFromCenter < size * 0.12) {
         pool = SKYSCRAPERS;
         scale = (civic ? 6.5 : 5.5) + ((h0 >> 8) & 0x3f) / 30; // civic landmarks are taller
         zone = "skyscraper";
-      } else if (distFromCenter < 55) {
+      } else if (distFromCenter < size * 0.32) {
         pool = COMMERCIAL_BUILDINGS;
         scale = 4.5 + ((h0 >> 8) & 0x3f) / 60;
         zone = "commercial";
@@ -184,7 +184,7 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
       }
       return { url: pool[h0 % pool.length], pos: h.pos, rot: h.rot, scale, zone, civic };
     });
-  }, [pois.huts, pois.obelisk, seed]);
+  }, [pois.huts, pois.obelisk, seed, size]);
 
   const trees = useMemo(() =>
     pois.trees.map((t, i) => {
@@ -261,7 +261,10 @@ export default function WorldEnvironment({ pois, size, seed, tick }: Props) {
   const yards = useMemo(() => {
     const fences: { url: string; pos: [number, number, number]; rot: number }[] = [];
     const hedges: typeof fences = [];
-    buildings.forEach((b, i) => {
+    // Only fence/hedge the civic landmarks + the inner ring — at city scale,
+    // fencing every one of 240 buildings would be ~1000 extra draw calls.
+    const fenced = buildings.filter((b) => b.civic).concat(buildings.slice(0, 24));
+    fenced.forEach((b, i) => {
       const baseRot = b.rot;
       // Four corner pegs per building.
       for (let k = 0; k < 4; k++) {

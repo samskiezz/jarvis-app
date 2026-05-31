@@ -51,7 +51,7 @@ def test_world_map(client, headers):
     assert res.status_code == 200
     body = res.json()
     assert body["cpc_class"] == "F03D"
-    assert len(body["heightmap"]) == 32
+    assert len(body["heightmap"]) == 128   # higher-res terrain for the open-world map
 
 
 def test_latest_actions_returns_minion_id_to_action_map(client, headers):
