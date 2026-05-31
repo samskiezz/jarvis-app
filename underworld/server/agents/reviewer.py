@@ -214,6 +214,7 @@ async def _ask_reviewer(guild_kind: GuildKind, inv: Invention) -> dict[str, Any]
         [{"role": "user", "content": prompt}],
         temperature=0.2,
         max_tokens=400,
+        tier="high",   # peer review is a big task → prefer Kimi for quality
     )
     parsed = _parse_review(resp.content)
     if not parsed:

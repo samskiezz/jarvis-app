@@ -67,19 +67,37 @@ def _coerce_temperature(model: str, requested: float) -> float:
     return requested
 
 
-def _provider() -> tuple[str, str, str]:
-    """Resolve (base_url, api_key, model). A configured generic provider
-    (UNDERWORLD_LLM_* — e.g. a free Groq/OpenRouter/Ollama Llama) overrides Kimi."""
-    s = get_settings()
-    if s.llm_api_key:
-        base = (s.llm_base_url or "https://api.groq.com/openai/v1").rstrip("/")
-        return base, s.llm_api_key, (s.llm_model or "llama-3.1-8b-instant")
+def _kimi(s) -> tuple[str, str, str]:
     return s.kimi_base_url.rstrip("/"), s.kimi_api_key, s.kimi_model
 
 
-def has_llm() -> bool:
-    """True when a real LLM is configured (else the heuristic+neural path runs)."""
-    return bool(_provider()[1])
+def _llama(s) -> tuple[str, str, str]:
+    base = (s.llm_base_url or "https://api.groq.com/openai/v1").rstrip("/")
+    return base, s.llm_api_key, (s.llm_model or "llama-3.1-8b-instant")
+
+
+def _provider(tier: str = "standard") -> tuple[str, str, str]:
+    """Resolve (base_url, api_key, model) for a task tier.
+
+    - "high"  (guild reviews, oracle, hard reasoning) → prefer Kimi for quality,
+      falling back to a free Llama if that's all that's configured.
+    - "standard" (routine per-tick minion decisions) → prefer the cheap free
+      Llama, falling back to Kimi.
+    Returns an empty key when nothing is configured (→ heuristic+neural path).
+    """
+    s = get_settings()
+    if tier == "high":
+        if s.kimi_api_key:
+            return _kimi(s)
+        return _llama(s) if s.llm_api_key else ("", "", "")
+    if s.llm_api_key:           # standard tier prefers the cheap free model
+        return _llama(s)
+    return _kimi(s) if s.kimi_api_key else ("", "", "")
+
+
+def has_llm(tier: str = "standard") -> bool:
+    """True when a real LLM is configured for this tier."""
+    return bool(_provider(tier)[1])
 
 
 def _is_reasoning_model(model: str) -> bool:
@@ -124,9 +142,10 @@ async def chat(
     tools: list[dict[str, Any]] | None = None,
     temperature: float | None = None,
     max_tokens: int | None = None,
+    tier: str = "standard",
 ) -> ChatResponse:
     settings = get_settings()
-    base_url, api_key, model = _provider()
+    base_url, api_key, model = _provider(tier)
     if not api_key:
         _warn_stub_once()
         return ChatResponse(content=_stub_response(messages), finish_reason="stub")

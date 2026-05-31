@@ -54,11 +54,11 @@ def _ensure_socratic(text: str) -> str:
 async def consult(question: str, *, discipline: str | None = None) -> dict:
     """Return a Socratic hint for a question. Never a direct answer."""
     concept = (discipline or "").strip().lower() or _related_concept(question or "")
-    if get_settings().kimi_api_key:
+    if llm.has_llm("high"):
         resp = await llm.chat([
             {"role": "system", "content": SOCRATIC_SYSTEM},
             {"role": "user", "content": question.strip() or "I seek understanding."},
-        ])
+        ], tier="high")   # the oracle is a big task → prefer Kimi
         text = (resp.content or "").strip()
         if not text or text.startswith("[STUB"):
             text = _socratic_fallback(question, concept)
