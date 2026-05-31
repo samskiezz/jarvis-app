@@ -3,7 +3,7 @@
 Status of the 150-point design spec (`Sentient_800_prompts.txt`, Sections I & II)
 plus the "not-done" build-out that followed. Legend: ✅ done · ◑ partial · ⬜ not started.
 
-Backend test suite: **234 passing**. Everything below is committed to `main`.
+Backend test suite: **294 passing**. Everything below is committed to `main`.
 
 ---
 
