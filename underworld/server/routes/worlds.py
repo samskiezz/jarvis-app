@@ -504,11 +504,15 @@ async def world_society(
 
     world = await _world_or_404(session, world_id)
     soc = await governance.assess_society(session, world)
+    from ..services.civics import entertainment_for
     return {
         "government": world.government,
         "legal_system": world.legal_system,
         "population": soc.population,
         "avg_openness": soc.avg_openness,
+        "infrastructure": round(world.infrastructure if world.infrastructure is not None else 0.1, 3),
+        "tension": round(world.tension or 0.0, 3),
+        "entertainment": entertainment_for(world.era),
     }
 
 

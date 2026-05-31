@@ -39,9 +39,9 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    agriculture, art, biology, climate, discovery, ecosystem, economy, education, governance,
-    hydrology, knowledge_decay, lifecycle, mastery, memes, paleontology, pollution, projects,
-    puzzles, religion, roles, substances, tectonics, timescale,
+    agriculture, art, biology, civics, climate, discovery, ecosystem, economy, education,
+    governance, hydrology, knowledge_decay, lifecycle, mastery, memes, paleontology, pollution,
+    projects, puzzles, religion, roles, substances, tectonics, timescale,
 )
 
 
@@ -405,6 +405,12 @@ async def advance_world(
         # 3g6f. Culture — minions create art whose style evolves with the era (doc I.47).
         if world.tick % 6 == 0:
             await art.tick_art(session, world, rng)
+
+        # 3g6g. Civic systems — urban planning, conflict/diplomacy, festivals (#43/44/48).
+        await civics.tick_infrastructure(session, world)
+        await civics.tick_conflict(session, world, rng)
+        if world.tick % 8 == 0:
+            await civics.tick_entertainment(session, world)
 
         # 3g7. Once at peak information, the gateway posts research puzzles (doc I.82-85).
         if world.tick % 15 == 0:
