@@ -31,9 +31,11 @@ def test_genuinely_real_features_are_present():
 
 
 def test_hardware_only_features_are_not_overclaimed():
-    # features needing real external hardware must NOT be reported PRESENT
-    for fid, name in [(311, "Superconducting qubit model"),
-                      (131, "Robotic pipetting module")]:
+    # features needing real external hardware / external solvers must NOT be
+    # reported PRESENT — these are the honesty tripwires we genuinely don't fake
+    for fid, name in [(131, "Robotic pipetting module"),
+                      (248, "CFD job connector"),
+                      (253, "SPICE circuit connector")]:
         e = fa.audit_feature(fid, "X", name)
         assert e.status != "PRESENT", (fid, name, e.status)
 

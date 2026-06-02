@@ -35,6 +35,7 @@ from ..services import instruments_lab
 from ..services import knowledge_graph as kg_mod
 from ..services import manufacturing_capability
 from ..services import multiphysics
+from ..services import quantum_sim
 from ..services import real_materials
 from ..services import real_optimizer
 from ..services import simulation_quality
@@ -966,6 +967,39 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/quantum")
+async def run_quantum(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real quantum simulator (feature category P), live. Actions: 'circuit',
+    'bell', 'chsh', 'entanglement', 'platform', 'logical', 'mitigation'. Real
+    numpy state-vector quantum mechanics."""
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "bell")
+    q = quantum_sim
+    if a == "circuit":
+        ops = [tuple(o) for o in body.get("ops", [["H", 0], ["CNOT", 0, 1]])]
+        out = q.state_vector_simulator(int(body.get("n", 2)), ops, shots=int(body.get("shots", 1024)))
+    elif a == "chsh":
+        out = {"chsh_value": round(q.chsh_value(), 6), "classical_bound": 2.0,
+               "tsirelson_bound": round(2 * 2 ** 0.5, 6)}
+    elif a == "entanglement":
+        out = q.entanglement_detector(q.bell_state())
+    elif a == "platform":
+        out = q.qubit_platform(body.get("platform", "superconducting"))
+    elif a == "logical":
+        out = q.logical_qubit_error(float(body.get("physical_error", 0.01)),
+                                    distance=int(body.get("distance", 3)))
+    elif a == "mitigation":
+        out = q.error_mitigation(body["noisy_values"], body["scale_factors"])
+    else:
+        out = q.state_vector_simulator(2, [("H", 0), ("CNOT", 0, 1)], shots=int(body.get("shots", 1024)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/multiphysics")
