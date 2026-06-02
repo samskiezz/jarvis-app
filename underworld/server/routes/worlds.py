@@ -29,6 +29,7 @@ from ..db.models import (
 from ..db.session import get_session
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
+from ..services import feature_audit
 from ..services import knowledge_graph as kg_mod
 from ..services import real_materials
 from ..services import real_optimizer
@@ -124,6 +125,26 @@ async def create_world_route(
     )
     await session.flush()
     return await _world_out(session, world)
+
+
+@router.get("/feature-audit")
+async def get_feature_audit(
+    category: str | None = Query(default=None),
+    gaps_only: bool = Query(default=False),
+    _token: str = Depends(require_bearer),
+):
+    """Honest 500-feature reality census — what is actually backed by real code.
+
+    Introspects the live source tree (services/physics/routes/world/db) and
+    reports each feature as PRESENT / PARTIAL / ABSENT, overall and per category.
+    This is the truthful answer to 'is it all real, active and running?': a
+    conservative, reproducible audit rather than a marketing claim. Pass
+    ?gaps_only=true (optionally &category=M) for the build roadmap of ABSENT
+    features. Declared before /{world_id} so the literal path wins routing.
+    """
+    if gaps_only:
+        return {"gaps": feature_audit.gaps(category)}
+    return feature_audit.coverage_report()
 
 
 @router.get("/{world_id}", response_model=WorldOut)
