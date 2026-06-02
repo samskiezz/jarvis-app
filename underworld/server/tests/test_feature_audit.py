@@ -44,6 +44,8 @@ def test_gaps_lists_only_absent():
     assert all(statuses[item["id"]] == "ABSENT" for item in g)
 
 
-def test_british_spelling_normalises_to_code():
-    # 'optimiser' must match the American-spelled real module
-    assert "optimizer" in fa._keywords("Gaussian-process optimiser")
+def test_british_spelling_matches_american_code():
+    # 'optimiser' must produce the American-spelled variant the code uses
+    assert "optimizer" in fa._variants("optimiser")
+    # and gerund/plural variants are generated
+    assert "forecast" in fa._variants("forecasting")

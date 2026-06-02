@@ -37,6 +37,7 @@ from ..services import manufacturing_capability
 from ..services import real_materials
 from ..services import real_optimizer
 from ..services import simulation_quality
+from ..services import supply_chain
 from ..services import research_director
 from ..services import scheduler
 from ..services import self_driving_lab as lab_mod
@@ -964,6 +965,49 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/supply-chain")
+async def run_supply_chain(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real supply-chain / operations-research tools (feature category L), live.
+    Actions: 'eoq', 'dependency', 'bottleneck', 'concentration', 'depletion',
+    'forecast', 'reliability', 'recycling', 'disruption'. Real numpy/OR math.
+    """
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "eoq")
+    s = supply_chain
+    if a == "dependency":
+        out = s.supply_dependency(body.get("nodes", {}))
+    elif a == "bottleneck":
+        out = {"risks": s.bottleneck_risk(body.get("supply", {}), body.get("demand", {}))}
+    elif a == "concentration":
+        out = s.source_concentration(body.get("shares", [1.0]))
+    elif a == "depletion":
+        out = s.resource_depletion(reserve=float(body.get("reserve", 1000)),
+                                   annual_consumption=float(body.get("annual_consumption", 100)),
+                                   growth=float(body.get("growth", 0.0)))
+    elif a == "forecast":
+        out = s.inventory_forecast(body.get("history", []), horizon=int(body.get("horizon", 3)))
+    elif a == "reliability":
+        out = s.supplier_reliability(body.get("deliveries", []))
+    elif a == "recycling":
+        out = s.recycling_loop(initial=float(body.get("initial", 100)),
+                               recovery_rate=float(body.get("recovery_rate", 0.8)),
+                               cycles=int(body.get("cycles", 5)))
+    elif a == "disruption":
+        out = s.disruption_impact(baseline_supply=float(body.get("baseline_supply", 100)),
+                                  disruption_fraction=float(body.get("disruption_fraction", 0.5)),
+                                  demand=float(body.get("demand", 80)))
+    else:
+        out = s.economic_order_quantity(annual_demand=float(body.get("annual_demand", 1000)),
+                                        order_cost=float(body.get("order_cost", 50)),
+                                        holding_cost=float(body.get("holding_cost", 2)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/simulation-quality")

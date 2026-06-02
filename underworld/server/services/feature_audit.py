@@ -81,20 +81,33 @@ def _corpus() -> dict:
     }
 
 
-def _normalise(tok: str) -> str:
-    """Map British spelling (the feature list) to American (the code), so e.g.
-    'optimiser'->'optimizer', 'fibre'->'fiber' actually match real modules."""
-    t = tok
-    t = re.sub(r"is(e|er|ed|ing|ation)$", lambda m: "iz" + m.group(1), t)
-    repl = {"fibre": "fiber", "behaviour": "behavior", "colour": "color",
-            "analyser": "analyzer", "modelling": "modeling", "catalogue": "catalog",
-            "labour": "labor", "defence": "defense"}
-    return repl.get(t, t)
+def _variants(tok: str) -> set[str]:
+    """All spelling/morphology variants of a token to try when matching, so the
+    feature list ('optimiser', 'forecasting', 'analyses') matches the code
+    whether it is American or British, singular/plural, or a gerund."""
+    out = {tok}
+    out.add(re.sub(r"is(e|er|ed|ing|ation)$", lambda m: "iz" + m.group(1), tok))
+    out.add(re.sub(r"iz(e|er|ed|ing|ation)$", lambda m: "is" + m.group(1), tok))
+    repl = {"fibre": "fiber", "fiber": "fibre", "behaviour": "behavior",
+            "colour": "color", "labour": "labor", "labor": "labour",
+            "defence": "defense", "modelling": "modeling", "catalogue": "catalog"}
+    if tok in repl:
+        out.add(repl[tok])
+    if tok.endswith("ing") and len(tok) > 5:        # gerund -> stem
+        out.add(tok[:-3])
+        out.add(tok[:-3] + "e")
+    if tok.endswith("s") and len(tok) > 3:          # plural -> singular
+        out.add(tok[:-1])
+    else:
+        out.add(tok + "s")
+    if tok.endswith("is"):                          # hypothesis -> hypotheses
+        out.add(tok[:-2] + "es")
+    return {v for v in out if v}
 
 
 def _keywords(name: str) -> list[str]:
     toks = re.findall(r"[a-z]+", name.lower())
-    return [_normalise(t) for t in toks if t not in _STOP and len(t) > 2]
+    return [t for t in toks if t not in _STOP and len(t) > 2]
 
 
 def audit_feature(fid: int, category: str, name: str) -> Evidence:
@@ -104,12 +117,12 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
     hits = 0
 
     def _tok_match(kw: str, toks: set[str], full: str) -> bool:
-        # plural-insensitive token / substring match, incl. -is/-es irregulars
-        # (hypothesis/hypotheses, analysis/analyses)
-        irregular = kw[:-2] + "es" if kw.endswith("is") else None
-        return (kw in toks or kw + "s" in toks or (kw.endswith("s") and kw[:-1] in toks)
-                or (irregular and irregular in toks)
-                or kw == full or (len(kw) >= 5 and (kw in full or (irregular and irregular in full))))
+        # match any spelling/morphology variant of the keyword as a token, or as
+        # a substring of the identifier (for variants long enough to be specific)
+        for v in _variants(kw):
+            if v in toks or v == full or (len(v) >= 5 and v in full):
+                return True
+        return False
 
     # 1) dedicated module whose name contains a feature keyword
     for kw in kws:
