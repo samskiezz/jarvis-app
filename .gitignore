@@ -45,3 +45,4 @@ server/.pytest_cache/
 .forge/
 __pycache__/
 *.pyc
+sandbox-ca.crt

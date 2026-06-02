@@ -9,3 +9,4 @@ data/*.db
 .env
 tests
 **/test_*.py
+sandbox-ca.crt
