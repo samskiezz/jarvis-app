@@ -30,6 +30,7 @@ from ..db.session import get_session
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import knowledge_graph as kg_mod
+from ..services import real_optimizer
 from ..services import research_director
 from ..services import scheduler
 from ..services import self_driving_lab as lab_mod
@@ -906,6 +907,59 @@ async def get_knowledge_graph(
         "nodes": len(g),
         "validation_breakdown": g.validation_breakdown(),
         "real_fraction": g.real_fraction(),
+    }
+
+
+@router.post("/{world_id}/optimize")
+async def run_real_optimization(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """REAL Bayesian optimization — a genuine GP surrogate + Expected-Improvement
+    loop (scikit-learn), validated against benchmark functions with PUBLISHED
+    global optima. No hashes, no hardcoded answers.
+
+    Body: {"benchmark": "branin"|"hartmann6"|"ackley5", "n_iter": int,
+    "seeds": int, "compare_random": bool, "noise": float}.
+
+    Returns the real convergence result: best value found, regret against the
+    literature optimum, and (if compare_random) a head-to-head vs random search
+    over `seeds` runs — an externally reproducible claim. This is the engine the
+    self-driving lab should call for continuous problems; the categorical lab
+    campaign remains a simulation.
+    """
+    world = await _world_or_404(session, world_id)
+    name = body.get("benchmark", "branin")
+    if name not in real_optimizer.BENCHMARKS:
+        raise HTTPException(status_code=400,
+                            detail=f"unknown benchmark; choose from {list(real_optimizer.BENCHMARKS)}")
+    b = real_optimizer.BENCHMARKS[name]
+    n_iter = int(body.get("n_iter", 25))
+    noise = float(body.get("noise", 0.0))
+
+    if body.get("compare_random", True):
+        summary = real_optimizer.benchmark_vs_random(
+            name, seeds=int(body.get("seeds", 5)), n_iter=n_iter)
+    else:
+        summary = None
+
+    single = real_optimizer.bayes_optimize(
+        b.fn, b.bounds, n_init=int(body.get("n_init", 5)), n_iter=n_iter,
+        optimum=b.optimum, seed=int(body.get("seed", 0)), noise=noise)
+    return {
+        "world_id": world_id, "tick": world.tick,
+        "engine": "scikit-learn GaussianProcessRegressor + Expected Improvement",
+        "benchmark": name, "dim": b.dim, "published_optimum": b.optimum,
+        "best_value": round(single.best_y, 5),
+        "regret": round(single.regret, 5),
+        "converged": single.converged,
+        "evaluations": single.n_eval,
+        "kernel": single.extra.get("kernel"),
+        "vs_random": summary,
+        "note": "Real GP-BO. Regret is distance to the literature global optimum; "
+                "reproducible by re-running with the same seeds.",
     }
 
 

@@ -7,3 +7,7 @@ sqlalchemy[asyncio]>=2.0
 aiosqlite>=0.19
 httpx>=0.26
 structlog>=24.1
+# Real numerics for the Bayesian optimizer (GP surrogate + acquisition).
+numpy>=1.26
+scipy>=1.11
+scikit-learn>=1.4
