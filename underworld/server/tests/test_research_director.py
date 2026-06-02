@@ -94,6 +94,17 @@ def test_autonomous_program_climbs_and_improves_epistemics():
     assert report["trace"][0]["target"] is not None
 
 
+def test_program_advances_frontier_not_reloops_same_target():
+    # single-target graph: must establish the one missing prereq ONCE, then the
+    # frontier empties — not re-establish the same node every cycle.
+    g, known = _graph_with_frontier()
+    before = len(g)
+    report = autonomous_program(g, known, cycles=5)
+    assert report["discoveries"] == 1         # established once, not 5×
+    assert report["cycles_run"] <= 2          # discover, then no frontier left
+    assert len(g) == before + 1               # exactly one new node, no re-loop
+
+
 def test_program_never_fabricates_physics_grade_knowledge():
     g, known = _graph_with_frontier()
     autonomous_program(g, known, cycles=3)

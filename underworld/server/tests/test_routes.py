@@ -54,6 +54,30 @@ def test_world_map(client, headers):
     assert len(body["heightmap"]) == 128   # higher-res terrain for the open-world map
 
 
+def test_autonomous_research_compounds_and_persists(client, headers):
+    create = client.post(
+        "/worlds",
+        json={"name": "AutoLab", "cpc_class": "H01M", "starting_population": 12},
+        headers=headers,
+    )
+    world_id = create.json()["id"]
+    body = {"cycles": 2, "seed": {"target_invention": "cell"}}
+
+    r1 = client.post(f"/worlds/{world_id}/autonomous-research", json=body, headers=headers)
+    assert r1.status_code == 200, r1.text
+    rep1 = r1.json()["report"]
+    assert rep1["discoveries"] == 2
+    assert rep1["prior_established"] == []
+    assert sorted(rep1["persisted"]) == ["cell-0", "cell-1"]
+
+    # second call REMEMBERS the first and advances onto fresh frontier
+    rep2 = client.post(f"/worlds/{world_id}/autonomous-research",
+                       json=body, headers=headers).json()["report"]
+    assert sorted(rep2["prior_established"]) == ["cell-0", "cell-1"]
+    assert set(rep2["persisted"]).isdisjoint({"cell-0", "cell-1"})  # no duplicates
+    assert len(rep2["persisted"]) == 2
+
+
 def test_latest_actions_returns_minion_id_to_action_map(client, headers):
     create = client.post(
         "/worlds",

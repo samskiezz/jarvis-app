@@ -928,6 +928,11 @@ async def run_autonomous_research(
     Returns the programme report: discoveries, epistemic health before/after,
     and a per-cycle trace. Discovered nodes are in-silico candidates (B/C grade),
     never fabricated A/physics claims.
+
+    Persistent + compounding: prior autonomous discoveries (Discovery rows tagged
+    `auto:`) are reloaded as known knowledge so repeated calls across ticks climb
+    the world's own tech tree, and each new discovery is written back as a
+    Discovery row + Event. Idempotent against the (world_id, tech) constraint.
     """
     world = await _world_or_404(session, world_id)
     g = kg_mod.KnowledgeGraph()
@@ -948,17 +953,55 @@ async def run_autonomous_research(
         nid = f"instr:{ins}"
         g.add_node(kg_mod.Node(nid, kg_mod.NodeKind.INSTRUMENT, ins, kg_mod.ConfidenceClass.A_PHYSICS))
         known.append(nid)
-    # a frontier target one prerequisite away from being comprehensible
-    g.add_node(kg_mod.Node("prin:frontier", kg_mod.NodeKind.PRINCIPLE,
-                           "unestablished principle", kg_mod.ConfidenceClass.C_SIMULATION))
-    target_label = seed.get("target_invention", "novel device")
-    g.add_node(kg_mod.Node("inv:target", kg_mod.NodeKind.INVENTION, target_label,
-                           kg_mod.ConfidenceClass.D_SPECULATIVE))
-    g.add_edge(kg_mod.Edge("inv:target", known[0], kg_mod.EdgeKind.REQUIRES))
-    g.add_edge(kg_mod.Edge("inv:target", "prin:frontier", kg_mod.EdgeKind.REQUIRES))
 
-    report = research_director.autonomous_program(
-        g, known, cycles=int(body.get("cycles", 4)))
+    # Reload prior autonomous discoveries so research COMPOUNDS across ticks.
+    prior = (await session.execute(
+        select(Discovery.tech).where(Discovery.world_id == world_id,
+                                     Discovery.tech.like("auto:%")))).scalars().all()
+    established_before = {t[len("auto:"):] for t in prior}
+
+    # One independent research line per cycle: each is an invention one
+    # unestablished principle away. Already-established lines are pre-known, so
+    # the programme advances onto fresh frontier each call.
+    cycles = max(1, int(body.get("cycles", 4)))
+    base = seed.get("target_invention", "device")
+    for i in range(cycles + len(established_before)):
+        prin_id, inv_id = f"prin:line{i}", f"inv:line{i}"
+        label = f"{base}-{i}"
+        g.add_node(kg_mod.Node(prin_id, kg_mod.NodeKind.PRINCIPLE,
+                               f"principle for {label}", kg_mod.ConfidenceClass.C_SIMULATION))
+        g.add_node(kg_mod.Node(inv_id, kg_mod.NodeKind.INVENTION, label,
+                               kg_mod.ConfidenceClass.D_SPECULATIVE))
+        g.add_edge(kg_mod.Edge(inv_id, known[0], kg_mod.EdgeKind.REQUIRES))
+        g.add_edge(kg_mod.Edge(inv_id, prin_id, kg_mod.EdgeKind.REQUIRES))
+        if label in established_before:
+            known.extend([prin_id, f"discovered::{prin_id}"])  # already done
+
+    report = research_director.autonomous_program(g, known, cycles=cycles)
+
+    # Persist new discoveries (idempotent against the unique constraint).
+    persisted: list[str] = []
+    for n in g.nodes_of(kg_mod.NodeKind.METHOD):
+        if not n.id.startswith("discovered::"):
+            continue
+        label = n.label.replace("established: ", "")
+        tech = f"auto:{label}"[:40]
+        if label in established_before or tech[len("auto:"):] in established_before:
+            continue
+        exists = await session.scalar(
+            select(Discovery.id).where(Discovery.world_id == world_id, Discovery.tech == tech))
+        if exists:
+            continue
+        session.add(Discovery(world_id=world_id, tech=tech, tick=world.tick,
+                              sim_year=world.sim_year))
+        session.add(Event(world_id=world_id, tick=world.tick, kind="discovery:autonomous",
+                          actor_id=None,
+                          payload={"label": label, "confidence": n.confidence.value}))
+        persisted.append(label)
+    await session.commit()
+
+    report["persisted"] = persisted
+    report["prior_established"] = sorted(established_before)
     return {"world_id": world_id, "tick": world.tick, "report": report}
 
 

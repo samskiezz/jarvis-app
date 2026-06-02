@@ -195,6 +195,11 @@ def autonomous_program(
         if outcome.new_node is not None:
             discoveries += 1
             known.append(outcome.new_node.id)
+            # Mark the established prerequisite itself as known so the frontier
+            # ADVANCES — otherwise the target stays one prereq short forever and
+            # the loop re-establishes the same node every cycle.
+            if outcome.target is not None and outcome.target.missing_prereq:
+                known.append(outcome.target.missing_prereq)
         trace.append({
             "target": outcome.target.label if outcome.target else None,
             "result": outcome.note,
