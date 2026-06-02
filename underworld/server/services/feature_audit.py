@@ -133,12 +133,18 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
     #    several of the feature's keywords (e.g. `latin_hypercube`, `UCB1Bandit`)
     #    is strong evidence of a real, dedicated implementation.
     strong_def = False
+    longest_kw = max((len(k) for k in kws), default=0)
     for d in c["defs"]:
         toks = set(d.split("_"))
         matched = sum(1 for kw in kws if _tok_match(kw, toks, d))
         if matched:
             backing.append(f"def:{d}")
         if matched >= 2:
+            strong_def = True
+        # a single function that matches EVERY keyword of a specific feature
+        # (e.g. `combustion_model` for "Combustion model") is a real dedicated
+        # implementation even when the feature reduces to one keyword.
+        if kws and matched == len(kws) and longest_kw >= 6:
             strong_def = True
     # 3) live endpoint touching the area
     for kw in kws:

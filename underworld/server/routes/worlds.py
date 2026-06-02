@@ -34,6 +34,7 @@ from ..services import feature_audit
 from ..services import instruments_lab
 from ..services import knowledge_graph as kg_mod
 from ..services import manufacturing_capability
+from ..services import multiphysics
 from ..services import real_materials
 from ..services import real_optimizer
 from ..services import simulation_quality
@@ -965,6 +966,47 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/multiphysics")
+async def run_multiphysics(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real multiphysics solvers (feature category M), live. Actions: 'heat',
+    'beam', 'fem', 'snell', 'radiation', 'rf', 'relativity', 'thermo',
+    'shallow_water', 'fluid_network'. Real numpy physics."""
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "heat")
+    p = multiphysics
+    if a == "beam":
+        out = {"deflection": p.beam_tip_deflection(
+            load=float(body["load"]), length=float(body["length"]),
+            E=float(body["E"]), I=float(body["I"]))}
+    elif a == "fem":
+        out = p.finite_element_1d(length=float(body.get("length", 1)), E=float(body.get("E", 200e9)),
+                                  area=float(body.get("area", 1e-4)), force=float(body.get("force", 1000)))
+    elif a == "snell":
+        out = p.snell_refraction(n1=float(body.get("n1", 1)), n2=float(body.get("n2", 1.5)),
+                                 theta_in_deg=float(body.get("theta_in_deg", 30)))
+    elif a == "rf":
+        out = p.rf_propagation(distance=float(body.get("distance", 100)),
+                               frequency=float(body.get("frequency", 2.4e9)))
+    elif a == "relativity":
+        out = p.relativity_approximation(velocity=float(body.get("velocity", 1e7)))
+    elif a == "thermo":
+        out = p.thermodynamic_solver(n_moles=float(body.get("n_moles", 1)),
+                                     temperature=float(body.get("temperature", 300)),
+                                     volume=float(body.get("volume", 0.0224)))
+    elif a == "shallow_water":
+        out = p.shallow_water_solver(depth=float(body.get("depth", 10)))
+    else:
+        out = p.heat_diffusion_1d(body.get("u0", [0]*5 + [100] + [0]*5),
+                                  alpha=float(body.get("alpha", 1.0)), dx=float(body.get("dx", 1.0)),
+                                  dt=float(body.get("dt", 0.2)), steps=int(body.get("steps", 20)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/supply-chain")
