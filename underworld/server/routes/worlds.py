@@ -29,6 +29,7 @@ from ..db.models import (
 from ..db.session import get_session
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
+from ..services import experiment_design
 from ..services import feature_audit
 from ..services import knowledge_graph as kg_mod
 from ..services import real_materials
@@ -960,6 +961,51 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/experiment-design")
+async def run_experiment_design(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real design-of-experiments & lab-analysis tools (feature category F),
+    live and callable. Body: {"action": ...}.
+
+    Actions: 'lhs' (Latin-hypercube plan), 'factorial', 'response_surface' (fit +
+    optimum), 'control_check' (Welch t-test), 'replication', 'deviation',
+    'cost'. All are real numpy/scipy implementations.
+    """
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "lhs")
+    ed = experiment_design
+    if a == "factorial":
+        out = {"design": ed.full_factorial(body.get("levels", {"x": [0, 1]}))}
+    elif a == "response_surface":
+        import numpy as np
+        X = np.array(body["X"], dtype=float)
+        y = np.array(body["y"], dtype=float)
+        rs = ed.response_surface_fit(X, y)
+        bounds = body.get("bounds") or [[float(X[:, i].min()), float(X[:, i].max())]
+                                        for i in range(X.shape[1])]
+        out = {"r2": rs.r2, "optimum": ed.response_surface_optimum(rs, bounds)}
+    elif a == "control_check":
+        out = ed.control_check(body["control"], body["treatment"])
+    elif a == "replication":
+        out = ed.replication_manager(body["readings"])
+    elif a == "deviation":
+        out = {"outlier_indices": ed.deviation_logger(body["readings"])}
+    elif a == "cost":
+        out = {"cost": ed.experiment_cost(
+            n_runs=int(body.get("n_runs", 10)), unit_cost=float(body.get("unit_cost", 1.0)),
+            fixed=float(body.get("fixed", 0.0)), replication=int(body.get("replication", 1)))}
+    else:
+        out = {"plan": ed.latin_hypercube(
+            int(body.get("n", 10)),
+            [tuple(b) for b in body.get("bounds", [[0, 1], [0, 1]])],
+            seed=int(body.get("seed", 0))).tolist()}
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/optimize")

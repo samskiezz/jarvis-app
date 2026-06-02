@@ -108,12 +108,20 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
         for mod in c["modules"]:
             if kw == mod or kw in mod.split("_"):
                 backing.append(f"module:{mod}")
-    # 2) function/class named after a keyword
-    for kw in kws:
-        for d in c["defs"]:
-            if kw in d.split("_") or kw == d:
-                backing.append(f"def:{d}")
-                break
+    # 2) function/class named after the feature. A single def/class that matches
+    #    several of the feature's keywords (e.g. `latin_hypercube`, `UCB1Bandit`)
+    #    is strong evidence of a real, dedicated implementation.
+    strong_def = False
+    for d in c["defs"]:
+        toks = set(d.split("_"))
+        matched = 0
+        for kw in kws:
+            if kw in toks or kw == d or (len(kw) >= 5 and kw in d):
+                matched += 1
+        if matched:
+            backing.append(f"def:{d}")
+        if matched >= 2:
+            strong_def = True
     # 3) live endpoint touching the area
     for kw in kws:
         for ep in c["endpoints"]:
@@ -129,7 +137,7 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
     has_def = any(b.startswith("def:") for b in backing)
     has_ep = any(b.startswith("endpoint:") for b in backing)
 
-    if (has_module and (has_def or has_ep)) or (has_ep and has_def):
+    if (has_module and (has_def or has_ep)) or (has_ep and has_def) or strong_def:
         status = "PRESENT"
     elif has_module or has_def or hits >= 8:
         status = "PARTIAL"
