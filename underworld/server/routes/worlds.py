@@ -36,6 +36,7 @@ from ..services import knowledge_graph as kg_mod
 from ..services import manufacturing_capability
 from ..services import real_materials
 from ..services import real_optimizer
+from ..services import simulation_quality
 from ..services import research_director
 from ..services import scheduler
 from ..services import self_driving_lab as lab_mod
@@ -963,6 +964,39 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/simulation-quality")
+async def run_simulation_quality(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real simulation V&V / uncertainty-quantification (feature category D), live.
+    Actions: 'convergence', 'uncertainty', 'credibility', 'cost', 'artifacts',
+    'richardson'. Real numpy implementations.
+    """
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "uncertainty")
+    sq = simulation_quality
+    if a == "convergence":
+        out = sq.convergence_tracker(body.get("history", []), tol=float(body.get("tol", 1e-3)))
+    elif a == "credibility":
+        out = sq.solver_credibility(body["predicted"], body["reference"])
+    elif a == "cost":
+        out = sq.simulation_cost(n_dof=int(body.get("n_dof", 1000)),
+                                 dimensions=int(body.get("dimensions", 3)),
+                                 solver_order=float(body.get("solver_order", 1.0)))
+    elif a == "artifacts":
+        out = sq.artifact_detector(body.get("series", []))
+    elif a == "richardson":
+        out = {"estimate": sq.richardson_extrapolation(
+            float(body["coarse"]), float(body["fine"]),
+            ratio=float(body.get("ratio", 2.0)), order=float(body.get("order", 2.0)))}
+    else:
+        out = sq.ensemble_uncertainty(body.get("samples", []))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/instruments-lab")
