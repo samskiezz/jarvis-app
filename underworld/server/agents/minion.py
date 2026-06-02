@@ -337,14 +337,17 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
     # metallurgy, mathematics…). Without a strong, focused learning drive the
     # civilisation stalls at the foundational techs. This deliberately outranks
     # idle socialising so capable Minions actually climb.
-    learn_drive = 0.30 + 0.35 * minion.conscientiousness + 0.25 * minion.intelligence
-    if r < learn_drive:
-        return {
-            "thought": f"Deepening my mastery of {minion.guild.value}.",
-            "action": "study",
-            "args": {"skill": minion.guild.value},
-            "memory_to_store": "",
-        }
+    # Only the diligent or the bright are driven to deliberate practice; the lazy
+    # and incurious won't grind (preserving personality differentiation).
+    if minion.conscientiousness >= 0.35 or minion.intelligence >= 0.45:
+        learn_drive = 0.30 + 0.35 * minion.conscientiousness + 0.25 * minion.intelligence
+        if r < learn_drive:
+            return {
+                "thought": f"Deepening my mastery of {minion.guild.value}.",
+                "action": "study",
+                "args": {"skill": minion.guild.value},
+                "memory_to_store": "",
+            }
 
     # Teaching: high-reputation conscientious minions spread mastery to others.
     if minion.conscientiousness > 0.6 and minion.reputation > 1.1 and r < 0.80:
@@ -366,13 +369,14 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
             "args": {"discipline": _ROLE_DEFAULT_DISCIPLINE.get(minion.swarm_role.value, "ai")},
             "memory_to_store": "",
         }
-    # Productive idle: rather than idly resting (which lets the specialty skill
-    # fade), a Minion with energy to spare practises its craft. Genuine
-    # exhaustion is already caught by the fatigue<0.25 survival branch above, so
-    # this is safe — and it turns otherwise-wasted ticks into the steady practice
-    # that carries a Minion across the mastery threshold.
-    return {"thought": "Idle hands — practising my craft.", "action": "study",
-            "args": {"skill": minion.guild.value}, "memory_to_store": ""}
+    # Productive idle: a Minion with the diligence or intellect for it practises
+    # its craft rather than idling (genuine exhaustion is already caught by the
+    # fatigue<0.25 survival branch), turning wasted ticks into the steady practice
+    # that carries it across the mastery threshold. The truly low-drive still rest.
+    if minion.conscientiousness >= 0.35 or minion.intelligence >= 0.45:
+        return {"thought": "Idle hands — practising my craft.", "action": "study",
+                "args": {"skill": minion.guild.value}, "memory_to_store": ""}
+    return {"thought": "Resting briefly.", "action": "rest", "args": {}, "memory_to_store": ""}
 
 
 def _memory_emotion_delta(salient: list[Memory]) -> float:
