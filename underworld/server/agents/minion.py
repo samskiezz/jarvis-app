@@ -39,6 +39,7 @@ from ..db.models import (
 )
 from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
+from ..services import goals as goals_mod
 from ..services import lifecycle, mastery as mastery_mod, neural, planning, progression, reasoning
 from ..tools import llm, patent_search, safety
 from .guild_lore import get_lore
@@ -190,6 +191,28 @@ def _safe_parse_json(text: str) -> dict[str, Any] | None:
                 except json.JSONDecodeError:
                     return None
     return None
+
+
+def _minion_goals(minion: Minion, world_tick: int) -> list:
+    """Build the Minion's current goal stack from its live state.
+
+    Bridges the DB-backed Minion onto the pure goals engine (services.goals),
+    which reasons over a plain dict. Survival needs + Big-Five personality +
+    standing (karma/reputation) produce a prioritised, conflict-aware stack the
+    planner consumes via action_bias.
+    """
+    state = {
+        "hunger": minion.hunger, "thirst": minion.thirst, "fatigue": minion.fatigue,
+        "sanity": minion.sanity, "health": minion.health,
+        "openness": minion.openness, "conscientiousness": minion.conscientiousness,
+        "extraversion": minion.extraversion, "agreeableness": minion.agreeableness,
+        "neuroticism": minion.neuroticism, "creativity": minion.creativity,
+        "intelligence": minion.intelligence,
+        "karma": minion.karma, "reputation": minion.reputation,
+        "age": world_tick - minion.born_tick,
+        "mood": getattr(minion.mood, "value", minion.mood),
+    }
+    return goals_mod.derive_goals(state)
 
 
 def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0) -> dict[str, Any]:
@@ -917,7 +940,10 @@ async def run_tick(
         candidates = sorted(_LEARNABLE_ACTIONS & set(progression.unlocked_actions(world.era)))
         if minion.intelligence > 0.6 and candidates:
             beliefs = {b.cause: b.confidence for b in await reasoning.beliefs(session, minion.id)}
-            planned = planning.plan_action(minion, candidates, beliefs, rng=rng)
+            # Layered cognition: the Minion's goal stack (derived from body state
+            # + personality) biases the planner toward its standing motivations.
+            goal_bias = goals_mod.action_bias(_minion_goals(minion, world.tick))
+            planned = planning.plan_action(minion, candidates, beliefs, rng=rng, goal_bias=goal_bias)
             if planned and planned != "rest":
                 action = planned
                 await _store_memory(

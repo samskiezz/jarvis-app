@@ -79,12 +79,21 @@ def plan_action(
     rng: random.Random | None = None,
     samples: int = 6,
     depth: int = 2,
+    goal_bias: dict[str, float] | None = None,
 ) -> str | None:
-    """Return the candidate action with the best Monte-Carlo-estimated value."""
+    """Return the candidate action with the best Monte-Carlo-estimated value.
+
+    `goal_bias` (from services.goals.action_bias) nudges the value of each
+    candidate toward whatever the Minion's current goal stack favours, so the
+    planner serves the agent's standing motivations — not just immediate
+    need-relief. It is additive and modest so survival math still dominates
+    when needs are critical.
+    """
     if not candidates:
         return None
     rng = rng or random.Random()
     belief_conf = belief_conf or {}
+    goal_bias = goal_bias or {}
     s0 = State(minion.hunger, minion.thirst, minion.fatigue, minion.sanity, minion.stress)
     best_action, best_val = candidates[0], -1e9
     for a in candidates:
@@ -94,6 +103,7 @@ def plan_action(
             v += 0.7 * _rollout(_apply(s0, a), depth - 1, candidates, belief_conf, rng)
             total += v
         avg = total / samples
+        avg += 0.15 * goal_bias.get(a, 0.0)  # standing-motivation nudge
         if avg > best_val:
             best_val, best_action = avg, a
     return best_action
