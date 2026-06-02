@@ -30,6 +30,7 @@ from ..db.session import get_session
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import knowledge_graph as kg_mod
+from ..services import real_materials
 from ..services import real_optimizer
 from ..services import research_director
 from ..services import scheduler
@@ -908,6 +909,36 @@ async def get_knowledge_graph(
         "validation_breakdown": g.validation_breakdown(),
         "real_fraction": g.real_fraction(),
     }
+
+
+@router.post("/{world_id}/materials")
+async def run_real_materials(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """REAL materials modelling on REAL measured data (no simulation).
+
+    Loads the Concrete Compressive Strength dataset (Yeh 1998, 1030 lab-measured
+    samples), fits a real model, reports honest k-fold cross-validated error
+    (R²/RMSE comparable to the literature ~0.90 / ~5 MPa), and uses the real
+    Bayesian optimizer to design a mix maximising predicted strength inside the
+    data envelope.
+
+    Body: {"action": "performance"|"importance"|"design", "model": "rf"|"gp"}.
+    Every number is reproducible from the bundled CSV.
+    """
+    world = await _world_or_404(session, world_id)
+    action = body.get("action", "performance")
+    if action == "design":
+        result = real_materials.design_optimal_mix(n_iter=int(body.get("n_iter", 25)))
+    elif action == "importance":
+        result = real_materials.feature_importance()
+    else:
+        result = real_materials.cross_validated_performance(
+            model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
+    return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
 
 
 @router.post("/{world_id}/optimize")
