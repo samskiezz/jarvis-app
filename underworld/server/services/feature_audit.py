@@ -111,13 +111,15 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
     # 2) function/class named after the feature. A single def/class that matches
     #    several of the feature's keywords (e.g. `latin_hypercube`, `UCB1Bandit`)
     #    is strong evidence of a real, dedicated implementation.
+    def _tok_match(kw: str, toks: set[str], full: str) -> bool:
+        # plural-insensitive token / substring match
+        return (kw in toks or kw + "s" in toks or (kw.endswith("s") and kw[:-1] in toks)
+                or kw == full or (len(kw) >= 5 and kw in full))
+
     strong_def = False
     for d in c["defs"]:
         toks = set(d.split("_"))
-        matched = 0
-        for kw in kws:
-            if kw in toks or kw == d or (len(kw) >= 5 and kw in d):
-                matched += 1
+        matched = sum(1 for kw in kws if _tok_match(kw, toks, d))
         if matched:
             backing.append(f"def:{d}")
         if matched >= 2:

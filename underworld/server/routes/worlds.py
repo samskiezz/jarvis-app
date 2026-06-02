@@ -32,6 +32,7 @@ from ..services import invention_pipeline as invention_mod
 from ..services import experiment_design
 from ..services import feature_audit
 from ..services import knowledge_graph as kg_mod
+from ..services import manufacturing_capability
 from ..services import real_materials
 from ..services import real_optimizer
 from ..services import research_director
@@ -961,6 +962,45 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/manufacturing")
+async def run_manufacturing(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real manufacturing process-capability & yield tools (feature category K),
+    live. Actions: 'spc', 'quality', 'yield', 'cleanroom', 'capability',
+    'scaleup', 'bottleneck', 'substitution', 'tooling'. Real numpy implementations.
+    """
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "spc")
+    m = manufacturing_capability
+    if a == "quality":
+        out = m.quality_control(body["measurements"], usl=float(body["usl"]), lsl=float(body["lsl"]))
+    elif a == "yield":
+        out = m.yield_prediction(float(body.get("defect_density", 0.1)),
+                                 float(body.get("die_area", 0.5)),
+                                 dies_per_wafer=int(body.get("dies_per_wafer", 100)))
+    elif a == "cleanroom":
+        out = m.cleanroom_gate(float(body["particles_per_m3"]),
+                               required_class=int(body.get("required_class", 5)))
+    elif a == "capability":
+        out = m.process_capable(body.get("process", "machining"),
+                                float(body.get("required_tolerance_mm", 0.1)))
+    elif a == "scaleup":
+        out = m.scale_up_risk(lab_cpk=float(body.get("lab_cpk", 1.5)))
+    elif a == "bottleneck":
+        out = m.bottleneck(body.get("stages", {}))
+    elif a == "substitution":
+        out = {"substitutes": m.supply_substitution(body["material"], body.get("compatibility", {}))}
+    elif a == "tooling":
+        out = m.tooling_requirements(body.get("process_steps", []))
+    else:
+        out = m.statistical_process_control(body.get("samples", [1.0, 1.1, 0.9, 1.0]))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/experiment-design")
