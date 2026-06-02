@@ -1,0 +1,9 @@
+# Underworld backend — production runtime dependencies.
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.6
+pydantic-settings>=2.1
+sqlalchemy[asyncio]>=2.0
+aiosqlite>=0.19
+httpx>=0.26
+structlog>=24.1

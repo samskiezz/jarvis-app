@@ -1,0 +1,11 @@
+# Keep the image lean and never ship a local DB or dev junk.
+web/node_modules
+web/dist
+**/__pycache__
+**/*.pyc
+.pytest_cache
+data/*.db
+*.db
+.env
+tests
+**/test_*.py

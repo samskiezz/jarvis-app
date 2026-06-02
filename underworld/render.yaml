@@ -1,0 +1,34 @@
+# One-click deploy to Render (https://render.com). The backend serves the API
+# AND the built 3D web app on one URL, with a persistent disk for the SQLite DB
+# so worlds survive restarts and keep ticking.
+#
+# Deploy: push to GitHub → Render → New → Blueprint → pick this repo. Render
+# reads this file, builds the Dockerfile, attaches the disk, and starts it.
+services:
+  - type: web
+    name: underworld
+    runtime: docker
+    dockerfilePath: ./underworld/Dockerfile
+    dockerContext: ./underworld
+    plan: starter            # has persistent disk; "free" works but sleeps + no disk
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: UNDERWORLD_API_KEY
+        generateValue: true         # a secure bearer key, shown in the dashboard
+      - key: UNDERWORLD_SCHEDULER_ENABLED
+        value: "true"
+      - key: UNDERWORLD_DB_PATH
+        value: /data/underworld.db
+      # Optional — set these in the Render dashboard to give minions real LLM minds.
+      # Without them, minions run on the offline heuristic and still live/learn.
+      - key: UNDERWORLD_KIMI_API_KEY
+        sync: false
+      - key: UNDERWORLD_KIMI_BASE_URL
+        value: https://api.moonshot.ai/v1
+      - key: UNDERWORLD_KIMI_MODEL
+        value: moonshot-v1-32k
+    disk:
+      name: underworld-data
+      mountPath: /data
+      sizeGB: 1
