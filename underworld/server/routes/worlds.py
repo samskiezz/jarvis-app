@@ -31,6 +31,7 @@ from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import knowledge_graph as kg_mod
 from ..services import scheduler
+from ..services import virtual_cell as vc_mod
 from ..services import world_model as world_model_mod
 from ..services.factory import SeedingPlan, create_world
 from ..services.simulation import advance_world
@@ -967,3 +968,29 @@ async def run_counterfactual(
     )
     return {"world_id": world_id, "tick": world.tick,
             "summary": res.summary, "divergence": res.divergence}
+
+
+@router.post("/{world_id}/discover-cure")
+async def run_cure_discovery(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Virtual Cell discovery (AI-for-science wedge).
+
+    Body: {"disease": str, "evidence": [{kind,id,name,source,strength,...}]}.
+    Walks genome→protein→pathway→target→intervention→validation and returns the
+    reviewable package: mechanism graph (confidence-classed), perturbation
+    hypotheses, target shortlist, intervention candidates + toxicity flags, a
+    staged validation plan, a prior-art map over the world's patents, and an
+    invention-disclosure skeleton. Candidate-only — requires human + wet-lab +
+    attorney review (services.ethics enforced).
+    """
+    world = await _world_or_404(session, world_id)
+    disease = body.get("disease", "unspecified dysfunction")
+    evidence = body.get("evidence", [])
+    patents = (await session.execute(select(Patent).limit(200))).scalars().all()
+    pool = [{"id": p.id, "title": p.title, "abstract": p.abstract} for p in patents]
+    package = vc_mod.discover(disease, evidence, pool)
+    return {"world_id": world_id, "tick": world.tick, "package": package}
