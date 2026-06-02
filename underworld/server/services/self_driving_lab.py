@@ -260,3 +260,49 @@ def campaign_report(camp: Campaign) -> dict:
         "disclaimer": "Simulated autonomous campaign. Results are in-silico "
                       "candidates requiring physical wet-lab replication.",
     }
+
+
+# ── REAL continuous campaign: delegate to the genuine GP optimizer ───────────
+def real_continuous_campaign(
+    objective: "Callable[[list[float]], float]",
+    bounds: list[tuple[float, float]],
+    *,
+    n_init: int = 5,
+    n_iter: int = 25,
+    minimize: bool = True,
+    noise: float = 0.0,
+    seed: int = 0,
+) -> dict:
+    """Run a campaign over a *continuous* design space with the REAL Bayesian
+    optimizer (scikit-learn GP + Expected Improvement) instead of the categorical
+    hash surrogate. This is the honest engine for real continuous problems:
+    process parameters, alloy fractions, reaction conditions.
+
+    `objective` maps a parameter vector to a measured scalar. Set `minimize`
+    False to maximise (a success metric). Returns a provenance-complete report
+    with the real GP kernel and convergence history.
+    """
+    import numpy as np
+
+    from . import real_optimizer
+
+    b = np.array(bounds, dtype=float)
+    sign = 1.0 if minimize else -1.0
+
+    def obj(x: np.ndarray) -> float:
+        return sign * float(objective([float(v) for v in x]))
+
+    res = real_optimizer.bayes_optimize(
+        obj, b, n_init=n_init, n_iter=n_iter, seed=seed, noise=noise)
+    best_value = sign * res.best_y
+    return {
+        "mode": "real-continuous",
+        "engine": "scikit-learn GaussianProcessRegressor + Expected Improvement",
+        "best_point": [round(float(v), 5) for v in res.best_x],
+        "best_value": round(best_value, 5),
+        "evaluations": res.n_eval,
+        "history": [round(sign * h, 5) for h in res.history],
+        "kernel": res.extra.get("kernel"),
+        "disclaimer": "Real GP optimization over a continuous design space. "
+                      "Physical candidates still require wet-lab replication.",
+    }

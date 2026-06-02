@@ -111,6 +111,22 @@ def test_autonomy_levels_ordered():
     assert AutonomyLevel.HUMAN_PLANNED < AutonomyLevel.CIVILISATION_SCALE
 
 
+def test_real_continuous_campaign_optimizes_a_real_surface():
+    import math
+
+    from underworld.server.services.self_driving_lab import real_continuous_campaign
+    # smooth yield surface with a known maximum at (0.6, 0.3) -> 1.0
+    def yield_fn(p):
+        t, c = p
+        return math.exp(-((t - 0.6) ** 2 + (c - 0.3) ** 2) * 4)
+    r = real_continuous_campaign(yield_fn, [(0.0, 1.0), (0.0, 1.0)],
+                                 minimize=False, n_iter=20, seed=0)
+    assert r["mode"] == "real-continuous"
+    assert r["best_value"] > 0.9              # found near the true max of 1.0
+    assert abs(r["best_point"][0] - 0.6) < 0.2
+    assert "Matern" in r["kernel"]            # a real GP kernel, not a hash
+
+
 def test_noisy_instrument_widens_uncertainty():
     obj, _ = _hidden_objective()
     clean = execute({"metal": "Li", "halide": "I"}, obj, instrument_precision=0.01,
