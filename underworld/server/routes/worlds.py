@@ -30,6 +30,7 @@ from ..db.session import get_session
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import knowledge_graph as kg_mod
+from ..services import research_director
 from ..services import scheduler
 from ..services import self_driving_lab as lab_mod
 from ..services import virtual_cell as vc_mod
@@ -906,6 +907,59 @@ async def get_knowledge_graph(
         "validation_breakdown": g.validation_breakdown(),
         "real_fraction": g.real_fraction(),
     }
+
+
+@router.post("/{world_id}/autonomous-research")
+async def run_autonomous_research(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Self-directing R&D programme (spec §21.4, autonomy ≥5).
+
+    Hydrates the world's knowledge graph, then lets the Research Director set its
+    own agenda: each cycle it picks the highest-value frontier target, compiles
+    it into a Self-Driving Lab experiment, runs the active-learning campaign, and
+    folds the validated result back as a new confidence-classed knowledge node —
+    no human picking targets. Body: {"cycles": int, "known": [node_id], "seed":
+    {materials:[...], methods:[...], instruments:[...], target_invention: str}}.
+
+    Returns the programme report: discoveries, epistemic health before/after,
+    and a per-cycle trace. Discovered nodes are in-silico candidates (B/C grade),
+    never fabricated A/physics claims.
+    """
+    world = await _world_or_404(session, world_id)
+    g = kg_mod.KnowledgeGraph()
+    g.add_node(kg_mod.Node("inst-autonomous-lab", kg_mod.NodeKind.INSTITUTION,
+                           "Autonomous Lab", kg_mod.ConfidenceClass.B_LITERATURE))
+
+    seed = body.get("seed") or {}
+    known: list[str] = list(body.get("known") or [])
+    for m in (seed.get("materials") or ["Li", "I", "Mg"]):
+        nid = f"mat:{m}"
+        g.add_node(kg_mod.Node(nid, kg_mod.NodeKind.MATERIAL, m, kg_mod.ConfidenceClass.B_LITERATURE))
+        known.append(nid)
+    for m in (seed.get("methods") or ["sinter", "anneal"]):
+        nid = f"meth:{m}"
+        g.add_node(kg_mod.Node(nid, kg_mod.NodeKind.METHOD, m, kg_mod.ConfidenceClass.B_LITERATURE))
+        known.append(nid)
+    for ins in (seed.get("instruments") or ["xrd"]):
+        nid = f"instr:{ins}"
+        g.add_node(kg_mod.Node(nid, kg_mod.NodeKind.INSTRUMENT, ins, kg_mod.ConfidenceClass.A_PHYSICS))
+        known.append(nid)
+    # a frontier target one prerequisite away from being comprehensible
+    g.add_node(kg_mod.Node("prin:frontier", kg_mod.NodeKind.PRINCIPLE,
+                           "unestablished principle", kg_mod.ConfidenceClass.C_SIMULATION))
+    target_label = seed.get("target_invention", "novel device")
+    g.add_node(kg_mod.Node("inv:target", kg_mod.NodeKind.INVENTION, target_label,
+                           kg_mod.ConfidenceClass.D_SPECULATIVE))
+    g.add_edge(kg_mod.Edge("inv:target", known[0], kg_mod.EdgeKind.REQUIRES))
+    g.add_edge(kg_mod.Edge("inv:target", "prin:frontier", kg_mod.EdgeKind.REQUIRES))
+
+    report = research_director.autonomous_program(
+        g, known, cycles=int(body.get("cycles", 4)))
+    return {"world_id": world_id, "tick": world.tick, "report": report}
 
 
 @router.post("/{world_id}/invent")
