@@ -31,6 +31,7 @@ from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import knowledge_graph as kg_mod
 from ..services import scheduler
+from ..services import self_driving_lab as lab_mod
 from ..services import virtual_cell as vc_mod
 from ..services import world_model as world_model_mod
 from ..services.factory import SeedingPlan, create_world
@@ -994,3 +995,43 @@ async def run_cure_discovery(
     pool = [{"id": p.id, "title": p.title, "abstract": p.abstract} for p in patents]
     package = vc_mod.discover(disease, evidence, pool)
     return {"world_id": world_id, "tick": world.tick, "package": package}
+
+
+@router.post("/{world_id}/lab-campaign")
+async def run_lab_campaign(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Self-Driving Lab closed-loop campaign (A-Lab / Toronto comparable).
+
+    Body (experiment-as-code): {"objective", "sample_space": {factor:[levels]},
+    "success_metric", "target", "instruments":[...], "favoured": {factor:level}}.
+    Runs active-learning (UCB acquisition over a surrogate) to find the optimum
+    in fewer experiments than exhaustive search, then returns a provenance-
+    complete campaign report. The hidden objective rewards proximity to
+    `favoured` (stand-in for the world's true synthesis outcome).
+    """
+    world = await _world_or_404(session, world_id)
+    space = body.get("sample_space") or {"x": ["a", "b", "c"]}
+    favoured = body.get("favoured") or {k: v[0] for k, v in space.items()}
+    protocol = lab_mod.Protocol(
+        objective=body.get("objective", "optimise target metric"),
+        sample_space=space,
+        success_metric=body.get("success_metric", "metric"),
+        target=float(body.get("target", 0.9)),
+        instruments=body.get("instruments", []),
+        max_runs=int(body.get("max_runs", 12)),
+        replication=int(body.get("replication", 2)),
+    )
+
+    def objective(point: dict) -> float:
+        score = 0.4
+        match = sum(1 for k, v in favoured.items() if point.get(k) == v)
+        return score + 0.6 * (match / max(1, len(favoured)))
+
+    camp = lab_mod.run_campaign(protocol, objective,
+                                instrument_precision=float(body.get("precision", 0.03)))
+    return {"world_id": world_id, "tick": world.tick,
+            "report": lab_mod.campaign_report(camp)}
