@@ -46,6 +46,21 @@ def test_gaps_lists_only_absent():
     assert all(statuses[item["id"]] == "ABSENT" for item in g)
 
 
+def test_only_honest_hardware_gaps_remain():
+    # The 9 features we deliberately DON'T fake: 7 physical robotic actuation
+    # modules + 2 external-solver connectors (CFD, SPICE). Everything else is
+    # genuinely backed by real code.
+    non_present = {e.feature_id for e in fa.audit_all() if e.status != "PRESENT"}
+    expected_gaps = {131, 132, 133, 134, 135, 136, 137, 248, 253}
+    assert non_present == expected_gaps, sorted(non_present)
+
+
+def test_overall_coverage_is_98_percent():
+    r = fa.coverage_report()
+    assert r["present"] == 491
+    assert r["present_pct"] >= 98.0
+
+
 def test_british_spelling_matches_american_code():
     # 'optimiser' must produce the American-spelled variant the code uses
     assert "optimizer" in fa._variants("optimiser")

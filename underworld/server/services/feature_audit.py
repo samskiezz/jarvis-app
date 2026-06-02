@@ -150,6 +150,10 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
         # implementation even when the feature reduces to one keyword.
         if kws and matched == len(kws) and longest_kw >= 5:
             strong_def = True
+        # a class/function whose whole identifier IS a feature keyword (e.g. the
+        # `LIMS` class for "LIMS system") is a dedicated implementation
+        if any(d == kw and len(kw) >= 3 for kw in kws):
+            strong_def = True
     # 3) live endpoint touching the area
     for kw in kws:
         for ep in c["endpoints"]:

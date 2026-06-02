@@ -147,3 +147,10 @@ def hidden_truth_layer(true_value: float, *, observer_resolution: float) -> dict
     return {"observed": round(observed, 9), "resolution": step,
             "interval": [round(observed - step / 2, 9), round(observed + step / 2, 9)],
             "contains_truth": observed - step / 2 <= true_value <= observed + step / 2}
+
+
+def civilisation_reality_index(*, fidelity: float, validated: bool, resolution: float) -> dict:
+    """Civilisation reality-index: backend data for the reality-index UI (the
+    real number the UI would render)."""
+    return {"reality_index": reality_depth_index(fidelity=fidelity, validated=validated,
+                                                 resolution=resolution)}

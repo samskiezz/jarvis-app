@@ -192,3 +192,8 @@ def tooling_requirements(process_steps: list[str]) -> dict:
     req = {s: tools.get(s, ["generic-tool"]) for s in process_steps}
     unique = sorted({t for ts in req.values() for t in ts})
     return {"by_step": req, "unique_tools": unique, "tool_count": len(unique)}
+
+
+def process_recipe_compiler(steps: list[dict]) -> dict:
+    """Process-recipe compiler (canonical name)."""
+    return recipe_compile(steps)

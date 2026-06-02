@@ -192,3 +192,13 @@ def diode_path(*, voltage: float) -> dict:
 def transistor_path(*, base_current: float, beta: float = 100.0) -> dict:
     """Transistor characteristic path (BJT active region)."""
     return {"collector_current": bjt_collector_current(base_current=base_current, beta=beta)}
+
+
+def fuse_behaviour_model(*, current: float, time: float, rating_i2t: float) -> dict:
+    """Fuse-behaviour model (I2t melting)."""
+    return fuse_i2t(current=current, time=time, rating_i2t=rating_i2t)
+
+
+def circuit_breaker_model(*, current: float, pickup: float) -> dict:
+    """Circuit-breaker model (inverse-time trip)."""
+    return {"trip_time_s": breaker_trip_time(current=current, pickup=pickup)}

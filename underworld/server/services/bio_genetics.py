@@ -168,3 +168,8 @@ def promoter_enhancer(*, basal: float, enhancer_strength: float, bound: bool) ->
     bound by its transcription factor."""
     rate = basal * (1 + enhancer_strength) if bound else basal
     return {"transcription_rate": round(rate, 4), "enhancer_active": bound}
+
+
+def gene_object_registry(genes: dict[str, dict]) -> dict:
+    """Gene object registry (canonical name)."""
+    return gene_registry(genes)

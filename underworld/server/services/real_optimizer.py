@@ -249,3 +249,9 @@ def benchmark_vs_random(name: str, *, seeds: int = 10, n_init: int = 5,
 if __name__ == "__main__":  # pragma: no cover
     for nm in BENCHMARKS:
         print(benchmark_vs_random(nm, seeds=8))
+
+
+def bayesian_optimisation_planner(objective, bounds, *, n_iter: int = 25, seed: int = 0):
+    """Bayesian-optimisation planner (canonical name for bayes_optimize)."""
+    import numpy as np
+    return bayes_optimize(objective, np.array(bounds, dtype=float), n_iter=n_iter, seed=seed)
