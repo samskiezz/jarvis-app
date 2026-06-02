@@ -331,12 +331,23 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
             "memory_to_store": f"Drafted a {domain} proposal at tick {world_tick}.",
         }
 
-    # Social drive
-    if minion.extraversion > 0.55 and r < 0.65:
-        return {"thought": "Want company.", "action": "socialise", "args": {}, "memory_to_store": ""}
+    # Learning drive — THE ENGINE OF ADVANCEMENT (doc I.68 mastery).
+    # Concentrating practice on one's specialty is what carries a Minion to
+    # mastery, which is what unlocks the master-gated tech tiers (writing,
+    # metallurgy, mathematics…). Without a strong, focused learning drive the
+    # civilisation stalls at the foundational techs. This deliberately outranks
+    # idle socialising so capable Minions actually climb.
+    learn_drive = 0.30 + 0.35 * minion.conscientiousness + 0.25 * minion.intelligence
+    if r < learn_drive:
+        return {
+            "thought": f"Deepening my mastery of {minion.guild.value}.",
+            "action": "study",
+            "args": {"skill": minion.guild.value},
+            "memory_to_store": "",
+        }
 
-    # Teaching: high-reputation conscientious minions
-    if minion.conscientiousness > 0.6 and minion.reputation > 1.1 and r < 0.75:
+    # Teaching: high-reputation conscientious minions spread mastery to others.
+    if minion.conscientiousness > 0.6 and minion.reputation > 1.1 and r < 0.80:
         return {
             "thought": "I should share what I know.",
             "action": "teach",
@@ -344,13 +355,9 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
             "memory_to_store": "",
         }
 
-    if minion.conscientiousness > 0.5 and r < 0.88:
-        return {
-            "thought": "Practising.",
-            "action": "study",
-            "args": {"skill": minion.guild.value},
-            "memory_to_store": "",
-        }
+    # Social drive
+    if minion.extraversion > 0.55 and r < 0.92:
+        return {"thought": "Want company.", "action": "socialise", "args": {}, "memory_to_store": ""}
     # Curiosity (doc I.128): the highly open would rather investigate than idle.
     if minion.openness > 0.65:
         return {
@@ -359,7 +366,13 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
             "args": {"discipline": _ROLE_DEFAULT_DISCIPLINE.get(minion.swarm_role.value, "ai")},
             "memory_to_store": "",
         }
-    return {"thought": "Resting briefly.", "action": "rest", "args": {}, "memory_to_store": ""}
+    # Productive idle: rather than idly resting (which lets the specialty skill
+    # fade), a Minion with energy to spare practises its craft. Genuine
+    # exhaustion is already caught by the fatigue<0.25 survival branch above, so
+    # this is safe — and it turns otherwise-wasted ticks into the steady practice
+    # that carries a Minion across the mastery threshold.
+    return {"thought": "Idle hands — practising my craft.", "action": "study",
+            "args": {"skill": minion.guild.value}, "memory_to_store": ""}
 
 
 def _memory_emotion_delta(salient: list[Memory]) -> float:
@@ -568,7 +581,11 @@ async def _do_propose_invention(
 
 
 async def _do_study(session: AsyncSession, minion: Minion, world: World, args: dict[str, Any]) -> str:
-    skill_name = str(args.get("skill") or "general").strip()[:80] or "general"
+    # Default to the Minion's own specialty (guild) rather than a scattered
+    # "general" skill — concentrating practice is what carries it to mastery and
+    # lets the civilisation climb. Without this, study from the neural policy
+    # (which passes no skill) diluted into "general" and never mastered anything.
+    skill_name = str(args.get("skill") or minion.guild.value or "general").strip()[:80] or "general"
     stmt = select(Skill).where(Skill.minion_id == minion.id, Skill.name == skill_name)
     res = await session.execute(stmt)
     skill = res.scalars().first()
@@ -576,7 +593,9 @@ async def _do_study(session: AsyncSession, minion: Minion, world: World, args: d
         skill = Skill(minion_id=minion.id, name=skill_name, level=0.0, last_practiced_tick=world.tick)
         session.add(skill)
         await session.flush()
-    boost = 0.08 + 0.06 * minion.conscientiousness + 0.04 * minion.intelligence
+    # Learning rate tuned so focused practice reaches mastery (6.0) in a
+    # reasonable lifetime — otherwise no masters form and the tech tree freezes.
+    boost = 0.20 + 0.12 * minion.conscientiousness + 0.10 * minion.intelligence
     # Doc II.118-119 / I.147 — maturity, upbringing and time-of-day scale learning.
     boost *= lifecycle.growth_multiplier(minion, world.tick)
     old_level = skill.level
