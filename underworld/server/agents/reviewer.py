@@ -127,7 +127,10 @@ def _heuristic_review(guild_kind: GuildKind, inv: Invention) -> dict[str, Any]:
     # treat the presence of ANY grounded prior art as a basic threshold.
     n_cite = len(inv.related_patents)
     if n_cite == 0:
-        citation_score = 0.0
+        # No prior-art corpus to cite (e.g. early eras have no patents yet) —
+        # a small novelty floor so a substantive proposal isn't auto-zeroed;
+        # citing real prior art still scores meaningfully higher.
+        citation_score = 0.10
     else:
         citation_score = 0.18 + min(0.20, (n_cite - 1) * 0.06)
 
@@ -171,21 +174,20 @@ def _heuristic_review(guild_kind: GuildKind, inv: Invention) -> dict[str, Any]:
     if isinstance(physics_feas, (int, float)):
         feasibility = max(0.0, min(1.0, 0.5 * feasibility + 0.5 * float(physics_feas)))
 
+    # A Patent reviewer nudges down (not auto-blocks) an uncited proposal — but
+    # only when prior art actually exists to cite. In a world with no patent
+    # corpus yet, inventions are judged on substance, feasibility and safety.
     if guild_kind == GuildKind.PATENT and len(inv.related_patents) == 0:
-        return {
-            "verdict": "REQUEST_CHANGES",
-            "rationale": "No prior art cited. Please ground the proposal in expired patents before resubmitting.",
-            "scores": {"feasibility": feasibility, "novelty": novelty, "safety": safety_score},
-        }
+        novelty = max(0.0, novelty - 0.10)
 
     combined = (feasibility + novelty + safety_score) / 3.0
-    if combined > 0.72:
+    if combined > 0.60:
         verdict = "APPROVE"
         rationale = (
             "Sufficient detail, citations grounded in prior art, safety scan clean. "
             "Recommend graduating this for prototype evaluation."
         )
-    elif combined > 0.50:
+    elif combined > 0.42:
         verdict = "REQUEST_CHANGES"
         rationale = (
             "Promising but underspecified. Tighten the hypothesis, add a quantitative "

@@ -309,7 +309,11 @@ def _heuristic_decision(minion: Minion, rng: random.Random, world_tick: int = 0)
             "args": {"query": minion.guild.value, "limit": 4},
             "memory_to_store": "",
         }
-    if minion.creativity > 0.55 and r < 0.50:
+    # Invention is occasional, not constant — a real inventor mostly builds
+    # mastery and proposes now and then. Keeping this low leaves room for the
+    # study that produces masters (which drive tech discoveries + era expertise),
+    # while still yielding a healthy stream of inventions.
+    if minion.creativity > 0.55 and r < 0.16:
         domain = minion.guild.value
         return {
             "thought": "Combining what I know into a proposal.",
@@ -699,6 +703,22 @@ async def _do_calculate(
     minion.karma += result.karma_delta
     minion.fatigue = max(0.0, minion.fatigue - 0.05)
     await _maybe_mastery_event(session, minion, world, skill, old_level)
+
+    # Running real calculations also deepens the Minion's own craft — so this
+    # cognitive work concentrates toward mastery of the guild specialty rather
+    # than splitting effort off into a separate skill that never matures.
+    guild_skill = (await session.execute(
+        select(Skill).where(Skill.minion_id == minion.id, Skill.name == minion.guild.value)
+    )).scalars().first()
+    if guild_skill is None:
+        guild_skill = Skill(minion_id=minion.id, name=minion.guild.value, level=0.0,
+                            last_practiced_tick=world.tick)
+        session.add(guild_skill)
+        await session.flush()
+    g_old = guild_skill.level
+    guild_skill.level = min(10.0, guild_skill.level + 0.10 * lifecycle.growth_multiplier(minion, world.tick))
+    guild_skill.last_practiced_tick = world.tick
+    await _maybe_mastery_event(session, minion, world, guild_skill, g_old)
 
     await _store_memory(
         session, minion, world.tick, "calculation", result.steps[:600],

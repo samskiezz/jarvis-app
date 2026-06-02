@@ -37,11 +37,11 @@ class Era:
 
 
 ERAS: list[Era] = [
-    Era("stone",       "Stone Age",       min_pop=0,  min_inventions=0,   min_avg_skill=0.0, unlocks=("eat","drink","rest","meditate","socialise","study","teach","seek_partner","fork_self")),
-    Era("bronze",      "Bronze Age",      min_pop=15, min_inventions=2,   min_avg_skill=1.2, unlocks=("kb_lookup","calculate")),
-    Era("iron",        "Iron Age",        min_pop=30, min_inventions=8,   min_avg_skill=2.0, unlocks=("propose_invention","build_scanner")),
-    Era("industrial",  "Industrial Age",  min_pop=60, min_inventions=20,  min_avg_skill=3.0, unlocks=("search_patents",)),
-    Era("information", "Information Age", min_pop=100, min_inventions=50, min_avg_skill=4.0, unlocks=("propose_with_party","seek_ascension")),
+    Era("stone",       "Stone Age",       min_pop=0,  min_inventions=0,   min_avg_skill=0.0, unlocks=("eat","drink","rest","meditate","socialise","study","teach","seek_partner","fork_self","kb_lookup","calculate","propose_invention")),
+    Era("bronze",      "Bronze Age",      min_pop=15, min_inventions=2,   min_avg_skill=1.2, unlocks=("build_scanner",)),
+    Era("iron",        "Iron Age",        min_pop=30, min_inventions=8,   min_avg_skill=2.0, unlocks=("search_patents",)),
+    Era("industrial",  "Industrial Age",  min_pop=60, min_inventions=20,  min_avg_skill=3.0, unlocks=("propose_with_party",)),
+    Era("information", "Information Age", min_pop=100, min_inventions=50, min_avg_skill=4.0, unlocks=("seek_ascension",)),
     Era("quantum",     "Quantum Age",     min_pop=160, min_inventions=120, min_avg_skill=5.5, unlocks=()),
 ]
 
@@ -73,10 +73,19 @@ async def update_era(session: AsyncSession, world: World) -> str | None:
     approved = int(await session.scalar(
         select(func.count(Invention.id)).where(Invention.world_id == world.id, Invention.status == TaskStatus.APPROVED)
     ) or 0)
-    avg_skill = float(await session.scalar(
-        select(func.coalesce(func.avg(Skill.level), 0.0))
+    # Average *expertise* — each Minion's best skill, averaged across the
+    # population. Using avg over ALL skill rows diluted this with every
+    # incidental low-level skill (so a society of genuine specialists never
+    # cleared the bar). Per-Minion-max reflects real accumulated mastery.
+    _best = (
+        select(Skill.minion_id, func.max(Skill.level).label("best"))
         .join(Minion, Minion.id == Skill.minion_id)
         .where(Minion.world_id == world.id, Minion.alive.is_(True))
+        .group_by(Skill.minion_id)
+        .subquery()
+    )
+    avg_skill = float(await session.scalar(
+        select(func.coalesce(func.avg(_best.c.best), 0.0))
     ) or 0.0)
 
     current_idx = _era_index(world.era)
