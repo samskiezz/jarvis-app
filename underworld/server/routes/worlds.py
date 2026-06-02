@@ -11,10 +11,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..auth import require_bearer
 from ..db.models import (
+    Discovery,
     Event,
     Invention,
     Memory,
     Minion,
+    Patent,
     PeerReview,
     PopulationSnapshot,
     ProjectContribution,
@@ -25,6 +27,8 @@ from ..db.models import (
     World,
 )
 from ..db.session import get_session
+from ..services import civos as civos_mod
+from ..services import knowledge_graph as kg_mod
 from ..services import scheduler
 from ..services.factory import SeedingPlan, create_world
 from ..services.simulation import advance_world
@@ -819,3 +823,82 @@ async def stream_events(
             await asyncio.sleep(0)  # cooperative yield
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
+# ── Cutting-edge analytic layers exposed over the live world ─────────────────
+@router.get("/{world_id}/civos")
+async def get_civos_dashboard(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """CivOS (#7) — the civilisation-health dashboard for this live world.
+
+    Builds a plain-dict snapshot from real counts (population, inventions,
+    research, fraud) and runs the six OS modules + composite health score.
+    """
+    world = await _world_or_404(session, world_id)
+    alive = (await session.execute(
+        select(func.count()).select_from(Minion)
+        .where(Minion.world_id == world_id, Minion.alive.is_(True)))).scalar_one()
+    inv_total = (await session.execute(
+        select(func.count()).select_from(Invention)
+        .where(Invention.world_id == world_id))).scalar_one()
+    projects = (await session.execute(
+        select(func.count()).select_from(ResearchProject)
+        .where(ResearchProject.world_id == world_id))).scalar_one()
+    reviews = (await session.execute(select(func.count()).select_from(PeerReview))).scalar_one()
+    snapshot = {
+        "population": alive,
+        "research": {"hypotheses": projects, "experiments": reviews,
+                     "invention_candidates": inv_total},
+        "knowledge": {"patented": inv_total},
+    }
+    return {"world_id": world_id, "tick": world.tick,
+            "dashboard": civos_mod.civ_dashboard(snapshot)}
+
+
+@router.get("/{world_id}/knowledge-graph")
+async def get_knowledge_graph(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Civilisation Knowledge Graph (#3) + Reality Validation (#6) for this world.
+
+    Hydrates the typed graph from the world's real Patent / Invention / Discovery
+    rows, stamps each node with its A–E confidence class, and returns the
+    validation breakdown + the world's `real_fraction` (epistemic health).
+    """
+    world = await _world_or_404(session, world_id)
+    g = kg_mod.KnowledgeGraph()
+
+    patents = (await session.execute(
+        select(Patent).limit(500))).scalars().all()
+    for p in patents:
+        g.add_node(kg_mod.Node(id=f"patent:{p.id}", kind=kg_mod.NodeKind.PATENT,
+                               label=p.title or p.id,
+                               confidence=kg_mod.classify_patent(), source="patent"))
+    invs = (await session.execute(
+        select(Invention).where(Invention.world_id == world_id))).scalars().all()
+    for iv in invs:
+        replicated = (iv.status.value if hasattr(iv.status, "value") else str(iv.status)) == "accepted"
+        physics_ok = not (iv.inputs or {}).get("physics", {}).get("violates_limit", False)
+        g.add_node(kg_mod.Node(
+            id=f"invention:{iv.id}", kind=kg_mod.NodeKind.INVENTION,
+            label=iv.title or iv.id,
+            confidence=kg_mod.classify_invention(replicated=replicated, physics_ok=physics_ok),
+            source="invention"))
+    discs = (await session.execute(
+        select(Discovery).where(Discovery.world_id == world_id))).scalars().all()
+    for d in discs:
+        g.add_node(kg_mod.Node(id=f"tech:{d.tech}", kind=kg_mod.NodeKind.PRINCIPLE,
+                               label=d.tech,
+                               confidence=kg_mod.ConfidenceClass.A_PHYSICS, source="discovery"))
+
+    return {
+        "world_id": world_id, "tick": world.tick,
+        "nodes": len(g),
+        "validation_breakdown": g.validation_breakdown(),
+        "real_fraction": g.real_fraction(),
+    }
