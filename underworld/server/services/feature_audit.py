@@ -104,9 +104,12 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
     hits = 0
 
     def _tok_match(kw: str, toks: set[str], full: str) -> bool:
-        # plural-insensitive token / substring match
+        # plural-insensitive token / substring match, incl. -is/-es irregulars
+        # (hypothesis/hypotheses, analysis/analyses)
+        irregular = kw[:-2] + "es" if kw.endswith("is") else None
         return (kw in toks or kw + "s" in toks or (kw.endswith("s") and kw[:-1] in toks)
-                or kw == full or (len(kw) >= 5 and kw in full))
+                or (irregular and irregular in toks)
+                or kw == full or (len(kw) >= 5 and (kw in full or (irregular and irregular in full))))
 
     # 1) dedicated module whose name contains a feature keyword
     for kw in kws:
