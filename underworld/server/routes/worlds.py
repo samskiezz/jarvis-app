@@ -37,8 +37,11 @@ from ..services import instruments_lab
 from ..services import knowledge_graph as kg_mod
 from ..services import manufacturing_capability
 from ..services import multiphysics
+from ..services import cfd_sim
 from ..services import quantum_sim
 from ..services import real_materials
+from ..services import robotic_lab
+from ..services import spice_sim
 from ..services import real_optimizer
 from ..services import simulation_quality
 from ..services import supply_chain
@@ -1034,6 +1037,34 @@ async def run_photonics(
     else:
         out = p.thin_lens_image(focal_length=float(body.get("focal_length", 0.1)),
                                 object_distance=float(body.get("object_distance", 0.3)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
+
+
+@router.post("/{world_id}/lab-sim")
+async def run_lab_sim(
+    world_id: str, body: dict,
+    session: AsyncSession = Depends(get_session), _token: str = Depends(require_bearer),
+):
+    """In-world lab simulators (digital twins, feature category G + #248/#253),
+    live. These are physics-based SIMULATIONS, not physical hardware (each result
+    carries physical_hardware=False). Actions: 'spice', 'cfd', 'pipetting',
+    'heating', 'cooling', 'imaging', 'synthesis', 'sequencing', 'cleaning'."""
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "spice")
+    if a == "spice":
+        out = spice_sim.solve_dc(body.get("netlist", [
+            {"type": "V", "n1": 1, "n2": 0, "value": 10},
+            {"type": "R", "n1": 1, "n2": 2, "value": 1000},
+            {"type": "R", "n1": 2, "n2": 0, "value": 1000}]), int(body.get("n_nodes", 3)))
+    elif a == "cfd":
+        out = cfd_sim.cfd_simulate(n=int(body.get("n", 16)), nu=float(body.get("nu", 0.1)),
+                                   lid_velocity=float(body.get("lid_velocity", 1.0)),
+                                   steps=int(body.get("steps", 60)))
+    elif a in robotic_lab.MODULES:
+        fn = getattr(robotic_lab, f"robotic_{a}")
+        out = fn(**{k: v for k, v in body.items() if k not in ("action",)})
+    else:
+        out = {"error": "unknown action"}
     return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 

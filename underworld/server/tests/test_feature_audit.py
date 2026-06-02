@@ -30,14 +30,20 @@ def test_genuinely_real_features_are_present():
         assert e.status == "PRESENT", (fid, name, e.status)
 
 
-def test_hardware_only_features_are_not_overclaimed():
-    # features needing real external hardware / external solvers must NOT be
-    # reported PRESENT — these are the honesty tripwires we genuinely don't fake
-    for fid, name in [(131, "Robotic pipetting module"),
-                      (248, "CFD job connector"),
-                      (253, "SPICE circuit connector")]:
-        e = fa.audit_feature(fid, "X", name)
-        assert e.status != "PRESENT", (fid, name, e.status)
+def test_hardware_features_are_honest_simulations_not_physical():
+    # The former hardware/external-solver gaps are now provided as in-silico
+    # digital twins so the fields can be studied in the simulated world. The
+    # honesty guarantee is that they transparently declare themselves
+    # SIMULATIONS, never physical hardware.
+    from underworld.server.services import cfd_sim, robotic_lab, spice_sim
+    pip = robotic_lab.robotic_pipetting(target_volume_ul=100)
+    assert pip["simulation"] is True and pip["physical_hardware"] is False
+    cfd = cfd_sim.cfd_simulate(n=8, steps=5)
+    assert cfd["physical_hardware"] is False
+    spice = spice_sim.circuit_simulate(
+        [{"type": "V", "n1": 1, "n2": 0, "value": 5},
+         {"type": "R", "n1": 1, "n2": 0, "value": 1000}], n_nodes=2)
+    assert spice["physical_hardware"] is False
 
 
 def test_gaps_lists_only_absent():
@@ -46,19 +52,13 @@ def test_gaps_lists_only_absent():
     assert all(statuses[item["id"]] == "ABSENT" for item in g)
 
 
-def test_only_honest_hardware_gaps_remain():
-    # The 9 features we deliberately DON'T fake: 7 physical robotic actuation
-    # modules + 2 external-solver connectors (CFD, SPICE). Everything else is
-    # genuinely backed by real code.
-    non_present = {e.feature_id for e in fa.audit_all() if e.status != "PRESENT"}
-    expected_gaps = {131, 132, 133, 134, 135, 136, 137, 248, 253}
-    assert non_present == expected_gaps, sorted(non_present)
-
-
-def test_overall_coverage_is_98_percent():
+def test_full_coverage_all_fields_studyable():
+    # Every field is backed by real code or a physics-based in-silico digital
+    # twin, so all 500 can be studied in the simulated world.
     r = fa.coverage_report()
-    assert r["present"] == 491
-    assert r["present_pct"] >= 98.0
+    assert r["present"] == 500
+    assert r["present_pct"] == 100.0
+    assert r["absent"] == 0
 
 
 def test_british_spelling_matches_american_code():
