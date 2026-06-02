@@ -31,6 +31,7 @@ from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import experiment_design
 from ..services import feature_audit
+from ..services import instruments_lab
 from ..services import knowledge_graph as kg_mod
 from ..services import manufacturing_capability
 from ..services import real_materials
@@ -962,6 +963,44 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/instruments-lab")
+async def run_instruments_lab(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Real instrument/measurement models (feature category E), live. Actions:
+    'drift', 'noise', 'reproducibility', 'comparison', 'misuse', 'resolution',
+    'standardise'. Real measurement-science implementations.
+    """
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "noise")
+    il = instruments_lab
+    if a == "drift":
+        out = {"drift": il.calibration_drift(float(body.get("t", 1.0)),
+               rate=float(body.get("rate", 0.1)), tau=body.get("tau"))}
+    elif a == "reproducibility":
+        out = il.reproducibility_score(body.get("runs", []))
+    elif a == "comparison":
+        out = il.comparison_test(body["inst_a"], body["inst_b"])
+    elif a == "misuse":
+        out = il.misuse_risk(operator_skill=float(body.get("operator_skill", 0.5)),
+                             complexity=float(body.get("complexity", 0.5)),
+                             safeguards=float(body.get("safeguards", 0.5)))
+    elif a == "resolution":
+        out = {"resolution": il.resolution_limit(float(body.get("full_scale", 10.0)),
+                                                 bits=int(body.get("bits", 12)))}
+    elif a == "standardise":
+        out = il.standardisation(float(body["reading"]), reference=float(body["reference"]))
+    else:
+        out = il.noise_profile(float(body.get("signal", 1.0)),
+                               white=float(body.get("white", 0.1)),
+                               pink=float(body.get("pink", 0.0)),
+                               bandwidth=float(body.get("bandwidth", 1.0)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/manufacturing")

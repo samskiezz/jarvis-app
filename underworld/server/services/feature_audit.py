@@ -103,19 +103,19 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
     backing: list[str] = []
     hits = 0
 
-    # 1) dedicated module whose name contains a feature keyword
-    for kw in kws:
-        for mod in c["modules"]:
-            if kw == mod or kw in mod.split("_"):
-                backing.append(f"module:{mod}")
-    # 2) function/class named after the feature. A single def/class that matches
-    #    several of the feature's keywords (e.g. `latin_hypercube`, `UCB1Bandit`)
-    #    is strong evidence of a real, dedicated implementation.
     def _tok_match(kw: str, toks: set[str], full: str) -> bool:
         # plural-insensitive token / substring match
         return (kw in toks or kw + "s" in toks or (kw.endswith("s") and kw[:-1] in toks)
                 or kw == full or (len(kw) >= 5 and kw in full))
 
+    # 1) dedicated module whose name contains a feature keyword
+    for kw in kws:
+        for mod in c["modules"]:
+            if _tok_match(kw, set(mod.split("_")), mod):
+                backing.append(f"module:{mod}")
+    # 2) function/class named after the feature. A single def/class that matches
+    #    several of the feature's keywords (e.g. `latin_hypercube`, `UCB1Bandit`)
+    #    is strong evidence of a real, dedicated implementation.
     strong_def = False
     for d in c["defs"]:
         toks = set(d.split("_"))
