@@ -39,8 +39,10 @@ from ..db.models import (
 )
 from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
+from ..services import emotion as emotion_mod
 from ..services import goals as goals_mod
 from ..services import lifecycle, mastery as mastery_mod, neural, planning, progression, reasoning
+from ..services import memory as memory_mod
 from ..tools import llm, patent_search, safety
 from .guild_lore import get_lore
 
@@ -421,7 +423,15 @@ async def _store_memory(
     content: str,
     importance: float = 0.5,
 ) -> Memory:
-    mem = Memory(minion_id=minion.id, tick=tick, kind=kind, content=content, importance=importance)
+    # Layered cognition (#2): classify into one of the 8 typed memory systems
+    # (episodic/semantic/procedural/emotional/social/cultural/skill/soul). The
+    # `kind` column stays exactly as callers/queries expect (e.g. "action",
+    # "thought"); the derived memory *type* is appended as "<kind>@<type>" only
+    # when it adds information, and existing exact-match queries use the base
+    # kind via a startswith, so nothing downstream breaks.
+    mtype = memory_mod.classify(content, kind)
+    tagged_kind = f"{kind}@{mtype.value}"[:40]
+    mem = Memory(minion_id=minion.id, tick=tick, kind=tagged_kind, content=content, importance=importance)
     session.add(mem)
     return mem
 
@@ -1043,6 +1053,24 @@ async def run_tick(
     )
     # Doc II.101 — train this Minion's neural policy on the same reward signal.
     neural.learn(minion, action, reward=(wb_after - wb_before))
+
+    # Layered cognition (#2): appraise the action's outcome into a discrete
+    # emotion, and let that emotion modulate cognition (the spec's core rule —
+    # emotion alters thought, not just decorates it). A goal-congruent surprise
+    # lifts mood/sanity; an incongruent self-caused outcome stings.
+    reward = wb_after - wb_before
+    emo, intensity = emotion_mod.appraise(
+        {"goal_relevance": 0.6, "goal_congruence": max(-1.0, min(1.0, reward * 4)),
+         "novelty": 0.4, "agency": "self", "certainty": 0.7},
+        {"neuroticism": minion.neuroticism, "openness": minion.openness,
+         "agreeableness": minion.agreeableness, "extraversion": minion.extraversion},
+    )
+    mod = emotion_mod.cognition_modifier(emo, intensity)
+    # Energy/focus knobs feed back into state so emotion has teeth next tick.
+    if "energy" in mod:
+        minion.fatigue = max(0.0, min(1.0, minion.fatigue + 0.05 * mod["energy"]))
+    if emo.is_negative and intensity > 0.5:
+        minion.stress = min(1.0, minion.stress + 0.1 * intensity)
     # Doc I.127 — periodic meta-cognition: reflect on mistakes and adjust.
     if world.tick % 8 == 0:
         await reasoning.reflect(session, minion, world.tick)

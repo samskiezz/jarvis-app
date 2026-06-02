@@ -233,7 +233,9 @@ async def get_latest_actions(
         .join(Minion, Minion.id == Memory.minion_id)
         .where(
             Minion.world_id == world_id,
-            Memory.kind == "action",
+            # Typed-memory kinds are stored as "action@<type>"; match the base
+            # kind via prefix so both legacy ("action") and tagged rows resolve.
+            (Memory.kind == "action") | (Memory.kind.like("action@%")),
             Memory.tick >= min_tick,
         )
         .order_by(Memory.tick.desc())
@@ -273,7 +275,7 @@ async def get_latest_thoughts(
         .join(Minion, Minion.id == Memory.minion_id)
         .where(
             Minion.world_id == world_id,
-            Memory.kind == "thought",
+            (Memory.kind == "thought") | (Memory.kind.like("thought@%")),
             Memory.tick >= min_tick,
         )
         .order_by(Memory.tick.desc())
