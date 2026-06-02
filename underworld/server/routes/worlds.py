@@ -29,8 +29,10 @@ from ..db.models import (
 from ..db.session import get_session
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
+from ..services import electronics
 from ..services import experiment_design
 from ..services import feature_audit
+from ..services import photonics
 from ..services import instruments_lab
 from ..services import knowledge_graph as kg_mod
 from ..services import manufacturing_capability
@@ -967,6 +969,72 @@ async def run_real_materials(
         result = real_materials.cross_validated_performance(
             model=body.get("model", "rf"), folds=int(body.get("folds", 5)))
     return {"world_id": world_id, "tick": world.tick, "action": action, "result": result}
+
+
+@router.post("/{world_id}/electronics")
+async def run_electronics(
+    world_id: str, body: dict,
+    session: AsyncSession = Depends(get_session), _token: str = Depends(require_bearer),
+):
+    """Real electronics models (category N), live. Actions: 'dc', 'ac', 'diode',
+    'transformer', 'motor', 'battery', 'fuse', 'micro'."""
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "dc"); e = electronics
+    if a == "ac":
+        out = e.ac_impedance(resistance=float(body.get("resistance", 10)),
+                             inductance=float(body.get("inductance", 1e-3)),
+                             capacitance=float(body.get("capacitance", 1e-6)),
+                             frequency=float(body.get("frequency", 1000)))
+    elif a == "diode":
+        out = {"current": e.diode_current(voltage=float(body.get("voltage", 0.7)))}
+    elif a == "transformer":
+        out = e.transformer(primary_turns=int(body.get("primary_turns", 100)),
+                            secondary_turns=int(body.get("secondary_turns", 200)),
+                            primary_voltage=float(body.get("primary_voltage", 120)))
+    elif a == "motor":
+        out = e.dc_motor(voltage=float(body.get("voltage", 12)), back_emf=float(body.get("back_emf", 10)),
+                         resistance=float(body.get("resistance", 1)))
+    elif a == "battery":
+        out = e.battery_electrochemistry(e0=float(body.get("e0", 1.1)), n=int(body.get("n", 2)),
+                                         q_reaction=float(body.get("q_reaction", 1.0)))
+    elif a == "micro":
+        out = e.microprocessor_architecture(clock_ghz=float(body.get("clock_ghz", 3)),
+                                            ipc=float(body.get("ipc", 2)), cores=int(body.get("cores", 4)))
+    else:
+        out = e.dc_circuit_solve(voltage=float(body.get("voltage", 10)),
+                                 resistances=body.get("resistances", [5]),
+                                 parallel=bool(body.get("parallel", False)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
+
+
+@router.post("/{world_id}/photonics")
+async def run_photonics(
+    world_id: str, body: dict,
+    session: AsyncSession = Depends(get_session), _token: str = Depends(require_bearer),
+):
+    """Real photonics models (category O), live. Actions: 'lens', 'laser',
+    'fibre', 'mach_zehnder', 'microring', 'matmul', 'detector'."""
+    world = await _world_or_404(session, world_id)
+    a = body.get("action", "lens"); p = photonics
+    if a == "laser":
+        out = p.laser_threshold(gain_coeff=float(body.get("gain_coeff", 100)),
+                                length=float(body.get("length", 0.1)), loss=float(body.get("loss", 5)),
+                                mirror_r1=float(body.get("mirror_r1", 0.99)), mirror_r2=float(body.get("mirror_r2", 0.99)))
+    elif a == "fibre":
+        out = p.fibre_optics(n_core=float(body.get("n_core", 1.5)), n_clad=float(body.get("n_clad", 1.48)))
+    elif a == "mach_zehnder":
+        out = p.mach_zehnder(phase_diff=float(body.get("phase_diff", 0.0)))
+    elif a == "microring":
+        out = p.microring_resonator(radius_um=float(body.get("radius_um", 10)), n_group=float(body.get("n_group", 4)),
+                                    wavelength_nm=float(body.get("wavelength_nm", 1550)), q_factor=float(body.get("q_factor", 10000)))
+    elif a == "matmul":
+        out = p.optical_matrix_multiply(body["matrix"], body["vector"])
+    elif a == "detector":
+        out = p.photodetector_noise(optical_power=float(body.get("optical_power", 1e-4)))
+    else:
+        out = p.thin_lens_image(focal_length=float(body.get("focal_length", 0.1)),
+                                object_distance=float(body.get("object_distance", 0.3)))
+    return {"world_id": world_id, "tick": world.tick, "action": a, "result": out}
 
 
 @router.post("/{world_id}/quantum")

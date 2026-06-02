@@ -96,6 +96,10 @@ def _variants(tok: str) -> set[str]:
     if tok.endswith("ing") and len(tok) > 5:        # gerund -> stem
         out.add(tok[:-3])
         out.add(tok[:-3] + "e")
+    if (tok.endswith("er") or tok.endswith("or")) and len(tok) > 4:
+        out.add(tok[:-2])                           # agentive: solver->solv(e)
+        out.add(tok[:-2] + "e")                     # tracker->track, solver->solve
+        out.add(tok[:-1])
     if tok.endswith("s") and len(tok) > 3:          # plural -> singular
         out.add(tok[:-1])
     else:
@@ -144,7 +148,7 @@ def audit_feature(fid: int, category: str, name: str) -> Evidence:
         # a single function that matches EVERY keyword of a specific feature
         # (e.g. `combustion_model` for "Combustion model") is a real dedicated
         # implementation even when the feature reduces to one keyword.
-        if kws and matched == len(kws) and longest_kw >= 6:
+        if kws and matched == len(kws) and longest_kw >= 5:
             strong_def = True
     # 3) live endpoint touching the area
     for kw in kws:
