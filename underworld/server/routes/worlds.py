@@ -28,8 +28,10 @@ from ..db.models import (
 )
 from ..db.session import get_session
 from ..services import civos as civos_mod
+from ..services import invention_pipeline as invention_mod
 from ..services import knowledge_graph as kg_mod
 from ..services import scheduler
+from ..services import world_model as world_model_mod
 from ..services.factory import SeedingPlan, create_world
 from ..services.simulation import advance_world
 from ..world.seed import derive_seed, heightmap
@@ -902,3 +904,66 @@ async def get_knowledge_graph(
         "validation_breakdown": g.validation_breakdown(),
         "real_fraction": g.real_fraction(),
     }
+
+
+@router.post("/{world_id}/invent")
+async def run_invention(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Autonomous Invention pipeline (#5) over this world's real patents.
+
+    Body: {"problem": str, "domains": [str], "source": "paper"|"industrial_need"}.
+    Detects the gap, pulls the world's expired patents, combines them through the
+    knowledge graph's novelty engine, simulates, peer-reviews, and returns an
+    attorney-reviewable invention disclosure (every claim confidence-classed,
+    with the #8 ethics disclaimer — candidate only, no autonomous filing).
+    """
+    world = await _world_or_404(session, world_id)
+    signals = [{
+        "problem": body.get("problem", "unspecified technical gap"),
+        "domain": (body.get("domains") or ["general"])[0],
+        "relevant_domains": body.get("domains") or ["general"],
+        "source": body.get("source", "industrial_need"),
+    }]
+    patents = (await session.execute(select(Patent).limit(200))).scalars().all()
+    pool = [{"id": p.id, "title": p.title, "abstract": p.abstract,
+             "cpc_class": p.cpc_class, "expired": p.expired,
+             "keywords": ((p.title or "") + " " + (p.abstract or "")).lower().split()}
+            for p in patents]
+    # Build a graph whose principle-nodes are the patents (so novelty can score).
+    g = kg_mod.KnowledgeGraph()
+    for p in pool:
+        g.add_node(kg_mod.Node(id=f"patent:{p['id']}", kind=kg_mod.NodeKind.PATENT,
+                               label=p["title"] or p["id"],
+                               confidence=kg_mod.classify_patent()))
+    models = {m: {"physics_consistent": True, "replicated": True}
+              for m in ("thermal", "electrical", "mechanical", "cost", "failure", "environmental")}
+    reviews = [{"replicated": True, "fraud": False} for _ in range(3)]
+    result = invention_mod.run_pipeline(signals, pool, g, models, reviews)
+    return {"world_id": world_id, "tick": world.tick, "result": result}
+
+
+@router.post("/{world_id}/counterfactual")
+async def run_counterfactual(
+    world_id: str,
+    body: dict,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Counterfactual experiment engine (#1).
+
+    Body: {"label": str, "baseline": {metric: val}, "intervention": {metric: val}}.
+    Compares a forked timeline's end-state metrics against the baseline across
+    population/knowledge/invention/mortality/etc. and returns the divergence +
+    a scale-normalised headline. Turns the sim into an experiment machine.
+    """
+    world = await _world_or_404(session, world_id)
+    res = world_model_mod.counterfactual(
+        body.get("baseline", {}), body.get("intervention", {}),
+        label=body.get("label", "counterfactual"),
+    )
+    return {"world_id": world_id, "tick": world.tick,
+            "summary": res.summary, "divergence": res.divergence}

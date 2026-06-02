@@ -43,7 +43,7 @@ from ..services import emotion as emotion_mod
 from ..services import goals as goals_mod
 from ..services import lifecycle, mastery as mastery_mod, neural, planning, progression, reasoning
 from ..services import memory as memory_mod
-from ..tools import llm, patent_search, safety
+from ..tools import llm, patent_intelligence, patent_search, safety
 from .guild_lore import get_lore
 
 
@@ -462,6 +462,20 @@ async def _do_search_patents(
     for r in records:
         existing = await session.get(Patent, r.id)
         if not existing:
+            # Patent Intelligence (#4): enrich the scanned patent with quality
+            # score + comprehension prerequisites + extracted requirements, so
+            # the "understanding not copying" gate has real data to enforce.
+            pdict = {"id": r.id, "title": r.title, "abstract": r.abstract,
+                     "cpc_class": r.cpc_class}
+            try:
+                quality = patent_intelligence.quality_score(pdict)
+                prereqs = patent_intelligence.comprehension_prerequisites(pdict)
+                reqs = patent_intelligence.extract_requirements(pdict)
+            except Exception:  # never let analysis break a scan
+                quality, prereqs, reqs = {}, [], {}
+            raw = dict(r.raw or {})
+            raw["intelligence"] = {"quality": quality, "prerequisites": prereqs,
+                                   "requirements": reqs}
             session.add(
                 Patent(
                     id=r.id,
@@ -471,7 +485,7 @@ async def _do_search_patents(
                     grant_date=r.grant_date,
                     expired=r.expired,
                     source=r.source,
-                    raw=r.raw,
+                    raw=raw,
                 )
             )
     summary = (
