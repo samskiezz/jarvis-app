@@ -3440,5 +3440,22 @@
     "epoch": "any",
     "name": "Board Game",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:broom_bucket": {
+    "prompt": "a broom and cleaning bucket, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8a09ce41-4f80-4e14-9933-99ce8a42db05",
+    "path": "/models/generated/tripo/broom_bucket.glb",
+    "bytes": 14978800,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8a09ce41-4f80-4e14-9933-99ce8a42db05/tripo_pbr_model_8a09ce41-4f80-4e14-9933-99ce8a42db05.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGEwOWNlNDEtNGY4MC00ZTE0LTk5MzMtOTljZThhNDJkYjA1L3RyaXBvX3Bicl9tb2RlbF84YTA5Y2U0MS00ZjgwLTRlMTQtOTkzMy05OWNlOGE0MmRiMDUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=BwZkEzRkCR50xB8r9JPs1~vToBB3W0xs9MWP042ni9DWUopiQpIfhGS6VxzFM2mS1GkwZVuZx7Yn4S-AXvXlouoRPoXqz2hL3NO-Kb6Nj0pC9RQ2yY5yWnqZV2cvJFjQ-kKsRnJLm6vOzL6zaiEnEfSBca7Sn6qy-zEJjBo8-j45DBdAfV89AJQ3SLXAaBvs6ZlXGRn~nCEsz47vMiIsAPD4kX~ssrah61iMm4Rg5CIyf13LwgB3E7ANaBBDtP8YeXE0ExyN9-I3Aci6L4K2p27Jn7xHHf4mIqkhEllyzqvZWIntHhW-ppcjRExihoXAX1aQiEyHGAEqVLrFTF6pcg__",
+    "asset_id": "broom_bucket",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Broom Bucket",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
