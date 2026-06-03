@@ -6908,5 +6908,22 @@
     "epoch": "information",
     "name": "Petri Dish",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pipette": {
+    "prompt": "a laboratory pipette, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a54a81bd-5b56-4f85-8d7a-9a9ca6aceb75",
+    "path": "/models/generated/tripo/pipette.glb",
+    "bytes": 6189172,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a54a81bd-5b56-4f85-8d7a-9a9ca6aceb75/tripo_pbr_model_a54a81bd-5b56-4f85-8d7a-9a9ca6aceb75.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTU0YTgxYmQtNWI1Ni00Zjg1LThkN2EtOWE5Y2E2YWNlYjc1L3RyaXBvX3Bicl9tb2RlbF9hNTRhODFiZC01YjU2LTRmODUtOGQ3YS05YTljYTZhY2ViNzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kpknRpKIxGq5587fyD8hoOzPcr5Irf4Qz6D2kzX7hKHp0xjZA5G56LCHwGS6wjLE12iTE1nLnXMCsp14yEA1wVi63XuWDNh7MXs1UmwSLgS63bYO3W5hHmhrxE~nnkaufQgl-3ocC5b9irERifOT0-7CnREXstbL65QHTlZz6fTjQFu~fwU8YEGnTd32qrsgbGY9ZCn2chlRz~NB1LGjOQJKCOKjzpqV9rCrnJRqk0i5VboZbvZ6trtzmpQBO9oHfGezG5wO-dMNpRnJqNGbFZ8W83OuAsLWhpkuGmB2EZgfFK6zONTDpSC88fhg9T8xdxg70vCeJF-qtSaZ26RsuA__",
+    "asset_id": "pipette",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "information",
+    "name": "Pipette",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
