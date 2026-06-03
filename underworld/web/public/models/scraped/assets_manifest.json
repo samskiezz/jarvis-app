@@ -2828,5 +2828,22 @@
     "epoch": "any",
     "name": "Doorway Wood",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fireplace": {
+    "prompt": "a brick fireplace with mantel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "55d774a8-c8ee-4792-8c5a-6d125702e20e",
+    "path": "/models/generated/tripo/fireplace.glb",
+    "bytes": 14940732,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/55d774a8-c8ee-4792-8c5a-6d125702e20e/tripo_pbr_model_55d774a8-c8ee-4792-8c5a-6d125702e20e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTVkNzc0YTgtYzhlZS00NzkyLThjNWEtNmQxMjU3MDJlMjBlL3RyaXBvX3Bicl9tb2RlbF81NWQ3NzRhOC1jOGVlLTQ3OTItOGM1YS02ZDEyNTcwMmUyMGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RIN6Y-Dc9TeCjZeYzXvKsrZ7qK6EiHv28D~F4HA8fBzKsAWeWzoWLgq-gAtq-SNvnanILUMH8~Fn57pqhpz3RxhPPFWH8kOgvmEh8G0j7qs3R591CmjirI-ucpFkZjY1jDYHPDhL2-DyaI5tt0tXyi16qOc9kZS69MmujNdoW7Pue1ZL5iyZmmmlcDGvVF-S92maKZrMMEwbBkzq8sHPScwfVxenNqcWpVd8iD2gJXjMF2mOVbiGC48WNyC~6WywQ1KHwXf3OZ0uR87LA7gDG9N05CByfDf20n7K12Ffy3LC-Bm98UncqMTNszgL3Vgq5fdzhK1ckS8zWvh9UfVBng__",
+    "asset_id": "fireplace",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "iron",
+    "name": "Fireplace",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
