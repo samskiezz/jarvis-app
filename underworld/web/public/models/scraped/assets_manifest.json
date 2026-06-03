@@ -2590,5 +2590,22 @@
     "epoch": "any",
     "name": "Fx Rock Arch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_rune_stone": {
+    "prompt": "a standing stone carved with softly glowing runes, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "3baeb75f-a5f8-4bd0-aba4-c20210d6f066",
+    "path": "/models/generated/tripo/fx_rune_stone.glb",
+    "bytes": 12277480,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3baeb75f-a5f8-4bd0-aba4-c20210d6f066/tripo_pbr_model_3baeb75f-a5f8-4bd0-aba4-c20210d6f066.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2JhZWI3NWYtYTVmOC00YmQwLWFiYTQtYzIwMjEwZDZmMDY2L3RyaXBvX3Bicl9tb2RlbF8zYmFlYjc1Zi1hNWY4LTRiZDAtYWJhNC1jMjAyMTBkNmYwNjYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RaxP99mfTKGTt~QBWgDGInHh~a0IwZg1~mDwduLpc611dAfLkciFmfB2v8kDeYDU~jJh~zoTzsiGLFvxzDue30itL3XKQXdb8bvIuNPJ2CHWaDj8WD~iTH5D8NJcT3WViO07IJKk-qcp1d7LKlokwsj24s~uzTKywf6g4YAqLnEm1GRUlqk4fO4ff5r3UTM~v2ldsdON7sTXBteXtRVyYfND5lrAQifpYs3fZV6GkJ7ADAPb2UbrJop3uKxvi5Vxb5LLrOUDkTwZ3goBfpmv67IMr-MCMcFEVd5FPP~bNxhZ5ht48HavrwCM4nu~wTNY4W3un861J9tl-G8wAAjVRg__",
+    "asset_id": "fx_rune_stone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "iron",
+    "name": "Fx Rune Stone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
