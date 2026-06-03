@@ -175,3 +175,109 @@ def tight_binding_1d(*, n=20, t=1.0) -> dict:
     width = float(evals.max() - evals.min())
     return {"band_width": round(width, 4), "expected_4t": round(4*t, 4),
             "matches_theory": abs(width - 4*t) < 0.2}
+
+
+# ── Statistical physics: 2D site percolation (phase transition at pc≈0.5927) ──
+def percolation_2d(*, n: int = 40, p: float = 0.6, seed: int = 0) -> dict:
+    """Site percolation: occupy sites with prob p, test for a top-bottom spanning
+    cluster via flood fill. A spanning path appears above pc≈0.5927."""
+    rng = np.random.default_rng(seed)
+    grid = rng.random((n, n)) < p
+    seen = np.zeros((n, n), bool)
+    stack = [(0, j) for j in range(n) if grid[0, j]]
+    for s in stack:
+        seen[s] = True
+    spans = False
+    while stack:
+        i, j = stack.pop()
+        if i == n - 1:
+            spans = True
+            break
+        for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            a, b = i + di, j + dj
+            if 0 <= a < n and 0 <= b < n and grid[a, b] and not seen[a, b]:
+                seen[a, b] = True
+                stack.append((a, b))
+    return {"p": p, "spans": spans, "pc": 0.5927, "occupied_fraction": round(float(grid.mean()), 3)}
+
+
+# ── Evolution: a real genetic algorithm (selection + crossover + mutation) ────
+def genetic_algorithm(*, length: int = 40, pop: int = 60, gens: int = 120, seed: int = 0) -> dict:
+    """Evolve random bitstrings toward a target by fitness-proportional selection,
+    one-point crossover and mutation — natural selection, computationally."""
+    rng = np.random.default_rng(seed)
+    target = rng.integers(0, 2, length)
+    P = rng.integers(0, 2, (pop, length))
+    best0 = int(np.max(np.sum(P == target, axis=1)))
+    for _ in range(gens):
+        fit = np.sum(P == target, axis=1).astype(float)
+        elite = P[int(np.argmax(fit))].copy()        # elitism: never lose the best
+        probs = fit / fit.sum()
+        idx = rng.choice(pop, size=pop, p=probs)
+        P = P[idx]
+        for k in range(0, pop - 1, 2):
+            cx = rng.integers(1, length)
+            P[k, cx:], P[k+1, cx:] = P[k+1, cx:].copy(), P[k, cx:].copy()
+        mask = rng.random((pop, length)) < 0.02
+        P[mask] ^= 1
+        P[0] = elite                                 # carry the elite forward
+    best = int(np.max(np.sum(P == target, axis=1)))
+    return {"genome_length": length, "best_fitness_start": best0, "best_fitness_end": best,
+            "converged": best >= length * 0.95, "improved": best > best0}
+
+
+# ── Complexity: Conway's Game of Life (emergent computation) ──────────────────
+def game_of_life(*, steps: int = 4, seed: int = 0) -> dict:
+    """Conway's Life. A 'blinker' is a period-2 oscillator — verify it returns to
+    its start after 2 steps (real emergent dynamics)."""
+    g = np.zeros((5, 5), int)
+    g[2, 1:4] = 1                                    # a blinker
+    start = g.copy()
+    states = []
+    cur = g
+    for _ in range(steps):
+        nb = sum(np.roll(np.roll(cur, i, 0), j, 1)
+                 for i in (-1, 0, 1) for j in (-1, 0, 1) if (i, j) != (0, 0))
+        cur = ((nb == 3) | ((cur == 1) & (nb == 2))).astype(int)
+        states.append(cur.copy())
+    period2 = bool(np.array_equal(states[1], start)) if len(states) >= 2 else False
+    return {"period_2_oscillator": period2, "live_cells": int(states[-1].sum())}
+
+
+# ── Climate: zero-dimensional energy-balance model (Earth ≈ 288 K) ────────────
+def energy_balance_climate(*, solar=1361.0, albedo=0.3, greenhouse=0.40) -> dict:
+    """Radiative energy balance: equilibrium surface temperature from absorbed
+    solar vs outgoing IR with a greenhouse factor. Earth's ~288 K emerges."""
+    sigma = 5.670374419e-8
+    absorbed = solar * (1 - albedo) / 4.0
+    T = (absorbed / (sigma * (1 - greenhouse))) ** 0.25
+    return {"equilibrium_temp_k": round(T, 2), "equilibrium_temp_c": round(T - 273.15, 2),
+            "habitable": 273 < T < 320}
+
+
+# ── Signal processing: real FFT recovers a signal's frequencies ───────────────
+def fft_spectral(*, freqs=(5.0, 12.0), fs=128.0, n=256) -> dict:
+    """Synthesize a multi-tone signal and recover its dominant frequencies with
+    the FFT — the basis of all spectral analysis."""
+    t = np.arange(n) / fs
+    sig = sum(np.sin(2 * np.pi * f * t) for f in freqs)
+    spec = np.abs(np.fft.rfft(sig))
+    fft_freqs = np.fft.rfftfreq(n, 1 / fs)
+    peaks = fft_freqs[np.argsort(spec)[-len(freqs):]]
+    recovered = sorted(round(float(p), 1) for p in peaks)
+    return {"input_freqs": sorted(freqs), "recovered_freqs": recovered,
+            "match": all(any(abs(r - f) < 1.0 for r in recovered) for f in freqs)}
+
+
+# ── Networks: Markov-chain stationary distribution / PageRank (power iteration)
+def markov_stationary(*, seed: int = 0, n: int = 6, iters: int = 200) -> dict:
+    """Stationary distribution of a random Markov chain by power iteration —
+    the math behind PageRank. The distribution is a probability vector (sums to 1)."""
+    rng = np.random.default_rng(seed)
+    M = rng.random((n, n)) + 0.1
+    M /= M.sum(axis=1, keepdims=True)                # row-stochastic
+    v = np.ones(n) / n
+    for _ in range(iters):
+        v = v @ M
+    return {"stationary": [round(float(x), 4) for x in v], "sums_to_one": abs(v.sum() - 1) < 1e-6,
+            "dominant_node": int(np.argmax(v))}

@@ -44,3 +44,31 @@ def test_logistic_map_chaos_vs_fixed_point():
 
 def test_tight_binding_band_width_is_4t():
     assert SM.tight_binding_1d(n=30, t=1.0)["matches_theory"]
+
+
+def test_percolation_phase_transition():
+    assert SM.percolation_2d(p=0.75, seed=1)["spans"]        # above pc -> spanning cluster
+    assert not SM.percolation_2d(p=0.40, seed=1)["spans"]    # below pc -> no path
+
+
+def test_genetic_algorithm_converges():
+    r = SM.genetic_algorithm(gens=200, seed=1)
+    assert r["improved"] and r["converged"]                  # evolution reaches the target
+
+
+def test_game_of_life_blinker_oscillates():
+    assert SM.game_of_life()["period_2_oscillator"]
+
+
+def test_climate_energy_balance_earthlike():
+    r = SM.energy_balance_climate()
+    assert 280 < r["equilibrium_temp_k"] < 300 and r["habitable"]   # ~288 K
+
+
+def test_fft_recovers_frequencies():
+    assert SM.fft_spectral(freqs=(5.0, 12.0))["match"]
+
+
+def test_markov_stationary_is_probability_vector():
+    r = SM.markov_stationary(seed=2)
+    assert r["sums_to_one"] and 0 <= r["dominant_node"] < 6

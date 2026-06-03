@@ -237,6 +237,48 @@ def _radiation(field: str, seed: int) -> tuple[str, dict, float]:
             r, 0.9)
 
 
+def _percolation(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import percolation_2d
+    r = percolation_2d(n=36, p=0.3 + (seed % 7) * 0.1, seed=seed)
+    return (f"Percolation for {field}: p={r['p']}, spans={r['spans']} (pc≈{r['pc']}).",
+            r, 0.85)
+
+
+def _evolution(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import genetic_algorithm
+    r = genetic_algorithm(length=30, gens=120, seed=seed)
+    return (f"Genetic-algorithm evolution for {field}: fitness {r['best_fitness_start']}→"
+            f"{r['best_fitness_end']}/30.", r, 1.0 if r["improved"] else 0.6)
+
+
+def _complexity(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import game_of_life
+    r = game_of_life()
+    return (f"Cellular-automaton dynamics for {field} (period-2={r['period_2_oscillator']}).",
+            r, 0.85)
+
+
+def _climate(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import energy_balance_climate
+    r = energy_balance_climate(albedo=0.25 + (seed % 5) * 0.05, greenhouse=0.3 + (seed % 4) * 0.05)
+    return (f"Energy-balance climate for {field}: T={r['equilibrium_temp_k']} K "
+            f"(habitable={r['habitable']}).", r, 0.9 if r["habitable"] else 0.6)
+
+
+def _signal(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import fft_spectral
+    r = fft_spectral(freqs=(3.0 + seed % 5, 10.0 + seed % 7))
+    return (f"FFT spectral analysis for {field}: recovered {r['recovered_freqs']} Hz.",
+            r, 1.0 if r["match"] else 0.5)
+
+
+def _networks(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import markov_stationary
+    r = markov_stationary(seed=seed, n=7)
+    return (f"Markov/PageRank stationary distribution for {field} "
+            f"(dominant node {r['dominant_node']}).", r, 0.85)
+
+
 def _stats_fallback(field: str, seed: int) -> tuple[str, dict, float]:
     # a real statistical/optimisation computation (never a fake)
     import numpy as np
@@ -259,6 +301,12 @@ _ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("condensed", "band", "semiconductor_mat"), _bands),
     (("reaction", "kinetic", "catalys"), _oscillator),
     (("plasma", "thermal_rad", "atomic_phys"), _radiation),
+    (("percolat", "porous", "phase_trans"), _percolation),
+    (("evolution", "breeding", "selection", "plant_breed", "optimization_theory"), _evolution),
+    (("cellular", "complexity", "automata", "emergence"), _complexity),
+    (("climate", "atmospher", "environmental", "meteorolog", "geophys"), _climate),
+    (("signal", "spectro", "communication", "telecom", "radio"), _signal),
+    (("network", "graph_theory", "distributed", "web", "social_net"), _networks),
     (("crispr", "genom", "genetic", "gene", "dna", "crop_genet", "bioinform", "synthetic_bio"), _genetics),
     (("protein", "molecular_bio", "proteom", "biophys"), _protein),
     (("quantum_field", "quantum_mech", "quantum_comp", "particle", "atomic", "exotic"), _quantum_phys),
