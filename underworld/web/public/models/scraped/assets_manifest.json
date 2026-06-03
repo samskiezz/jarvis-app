@@ -2930,5 +2930,22 @@
     "epoch": "any",
     "name": "Staircase",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wall_brick": {
+    "prompt": "a modular exposed-brick interior wall panel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "12287691-0001-43ab-8d88-5fa542a3e2a3",
+    "path": "/models/generated/tripo/wall_brick.glb",
+    "bytes": 2889728,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/12287691-0001-43ab-8d88-5fa542a3e2a3/tripo_pbr_model_12287691-0001-43ab-8d88-5fa542a3e2a3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTIyODc2OTEtMDAwMS00M2FiLThkODgtNWZhNTQyYTNlMmEzL3RyaXBvX3Bicl9tb2RlbF8xMjI4NzY5MS0wMDAxLTQzYWItOGQ4OC01ZmE1NDJhM2UyYTMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dL9Xm3gIKFRzlWZklaf~ziPQFRGhienl7adtIfTf2BhZUAwi37LB0zjlpKfKPPO8--zODfG8OG9XgV8CVUwGmfIzyaPu6ayq~MvyxIjbD4DC-P7~x~9vvLIDetX0Zkp9RVj15D898xNNo-GijWplU1~nzYL67yLtpksNVCzce0pUdPj5Aueza9A5qu8rrFrj5OFwEnrcUk3v5xPi14M3fcWnYeQtsSbwAMv3K9mWuSmBhMOxDjqlAQ-L0ofyX52mtCuLUnWm~ryPl7fQ~Am23eu7v-K~nnnsgw-1eTIM1V4M9KESuDj9YZB0pdhiNjjec~~7ASLsAnKqFPoJDqA4jQ__",
+    "asset_id": "wall_brick",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Wall Brick",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
