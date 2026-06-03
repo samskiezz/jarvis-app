@@ -5922,5 +5922,22 @@
     "epoch": "information",
     "name": "Role Chemistry Generator Hood",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_experimental_designer_board": {
+    "prompt": "an experiment-design planning board with pinned protocols, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ac00a05b-cce3-4966-95af-d0ee21301869",
+    "path": "/models/generated/tripo/role_experimental_designer_board.glb",
+    "bytes": 15089904,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ac00a05b-cce3-4966-95af-d0ee21301869/tripo_pbr_model_ac00a05b-cce3-4966-95af-d0ee21301869.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWMwMGEwNWItY2NlMy00OTY2LTk1YWYtZDBlZTIxMzAxODY5L3RyaXBvX3Bicl9tb2RlbF9hYzAwYTA1Yi1jY2UzLTQ5NjYtOTVhZi1kMGVlMjEzMDE4NjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XPy~blcVMaFwM0-uUfnnF3zZLtC02FzkRjM5Vmxxm478hkgGqdLklm~C9~ZycC-Zkzki-xJHOyph6laO~E5X~163Qp5ljimIBJwjnK90foj6waBm11439weZE9J9QOudxbQ3MyZtem-EOCPi3GB4FOVwDLZsrJqlY76V9Rj2e~Se0-PezYc8irPmqwGzrIr-Sc-kFVcJOodAljvFn91YNORGStelGGvy0a4UKRXfZpDGI4Hngx3QsSzWMGq75MXYnvtAGYEPYm5ZdTVuQzIiTDkld3G1STTTNpW3t6WAGaIjWFwzFP~XaN3SYzSf450ZXcYCC1WyVIvLUSdHfhHTvA__",
+    "asset_id": "role_experimental_designer_board",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "industrial",
+    "name": "Role Experimental Designer Board",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
