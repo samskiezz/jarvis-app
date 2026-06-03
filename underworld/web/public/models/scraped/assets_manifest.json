@@ -7452,5 +7452,22 @@
     "epoch": "information",
     "name": "Fire Extinguisher",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:warning_sign": {
+    "prompt": "a hazard warning sign on a post, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6c944d76-662c-4b42-88e3-197351227aca",
+    "path": "/models/generated/tripo/warning_sign.glb",
+    "bytes": 8324096,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6c944d76-662c-4b42-88e3-197351227aca/tripo_pbr_model_6c944d76-662c-4b42-88e3-197351227aca.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmM5NDRkNzYtNjYyYy00YjQyLTg4ZTMtMTk3MzUxMjI3YWNhL3RyaXBvX3Bicl9tb2RlbF82Yzk0NGQ3Ni02NjJjLTRiNDItODhlMy0xOTczNTEyMjdhY2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=a1RdYuPQF2JEzuzfiOF9KGJxrr9FvcNyZ3Sb1h92-EkthYfz4HoNrfy~e9y9CzMvtxQXzppe-yRhK6i4x9LE1Axf42~W4XlriqM2-fWV~0bvj7OkGfTBfU4tHX5cda6wXDnznmYFShCyt7igbBj6Pcq52dP-XqNP0x8PX0AVBdUZ-61i0dh98ryl46qodnLd~p33oXynkiLWnX8upZlyVprObVDuGUb-sJqfhUZWerysWqMNTgphCH8QZ2aJuOK6fclPqILruMfnP8vGuAcbST~NqelxMCzQ~4uediX3WGYQcsCWsuYsnxOpn7AouBmpl8ntyodXzId2TH-8bFJygQ__",
+    "asset_id": "warning_sign",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "safety",
+    "epoch": "industrial",
+    "name": "Warning Sign",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
