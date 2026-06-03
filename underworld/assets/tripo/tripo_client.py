@@ -37,19 +37,40 @@ def _key() -> str:
     return k
 
 
+def _resilient(req, *, retries: int = 6, timeout: int = 90) -> bytes:
+    """Open a request, retrying transient network blips (SSL cert-rotation races,
+    timeouts, 5xx) with backoff. Raises the last error if all retries fail."""
+    import ssl
+    import urllib.error
+    last = None
+    for attempt in range(retries):
+        try:
+            with urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
+                last = e; time.sleep(2 ** attempt * 2); continue
+            raise
+        except (urllib.error.URLError, ssl.SSLError, TimeoutError, ConnectionError) as e:
+            last = e
+            if attempt < retries - 1:
+                time.sleep(2 ** attempt * 2); continue
+            raise
+    if last:
+        raise last
+
+
 def _post(path: str, body: dict) -> dict:
     req = Request(f"{BASE}{path}", method="POST",
                   data=json.dumps(body).encode(),
                   headers={"Authorization": f"Bearer {_key()}",
                            "Content-Type": "application/json"})
-    with urlopen(req, timeout=60) as r:
-        return json.loads(r.read())
+    return json.loads(_resilient(req))
 
 
 def _get(path: str) -> dict:
     req = Request(f"{BASE}{path}", headers={"Authorization": f"Bearer {_key()}"})
-    with urlopen(req, timeout=60) as r:
-        return json.loads(r.read())
+    return json.loads(_resilient(req))
 
 
 def create_text_task(prompt: str, *, model_version: str = "v2.0-20240919",
@@ -88,7 +109,10 @@ def poll_task(task_id: str, *, timeout_s: int = 600, interval_s: float = 5.0) ->
     """Poll until the task finishes. Returns data.output (with model URLs)."""
     deadline = time.time() + timeout_s
     while time.time() < deadline:
-        data = _get(f"/v2/openapi/task/{task_id}").get("data", {})
+        try:
+            data = _get(f"/v2/openapi/task/{task_id}").get("data", {})
+        except Exception:
+            time.sleep(interval_s); continue        # transient — task still runs
         status = data.get("status")
         if status in ("success", "completed"):
             return data.get("output", {})
@@ -99,9 +123,9 @@ def poll_task(task_id: str, *, timeout_s: int = 600, interval_s: float = 5.0) ->
 
 
 def download(url: str, dest: Path) -> int:
-    """Download a finished model GLB to dest. Returns bytes written."""
+    """Download a finished model GLB to dest (resilient to transient blips)."""
     dest.parent.mkdir(parents=True, exist_ok=True)
-    data = urlopen(Request(url), timeout=120).read()
+    data = _resilient(Request(url), timeout=180)
     dest.write_bytes(data)
     return len(data)
 

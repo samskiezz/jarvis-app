@@ -91,8 +91,8 @@ def main(argv=None) -> int:
             _save_manifest(manifest)          # checkpoint after each (jobs cost credits)
             ok += 1
             print(f"  ✓ {did}  ({rec['bytes']//1024} KB)")
-        except TripoError as e:
-            print(f"  ✗ {did}: {e}", file=sys.stderr)
+        except Exception as e:  # one bad asset must not abort the whole run
+            print(f"  ✗ {did}: {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
     print(f"done: {ok}/{len(todo)} generated, manifest -> {MANIFEST}")
     return 0
 
