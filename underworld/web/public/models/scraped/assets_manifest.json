@@ -7112,5 +7112,22 @@
     "epoch": "bronze",
     "name": "Seed Sack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sheep": {
+    "prompt": "a woolly sheep, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c12d0656-2194-4d80-8695-ee3050d3dfce",
+    "path": "/models/generated/tripo/sheep.glb",
+    "bytes": 14710760,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c12d0656-2194-4d80-8695-ee3050d3dfce/tripo_pbr_model_c12d0656-2194-4d80-8695-ee3050d3dfce.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzEyZDA2NTYtMjE5NC00ZDgwLTg2OTUtZWUzMDUwZDNkZmNlL3RyaXBvX3Bicl9tb2RlbF9jMTJkMDY1Ni0yMTk0LTRkODAtODY5NS1lZTMwNTBkM2RmY2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=g-NmLJBMmh31uxeiI4odrqI~wvJ88h0q3~uIlEhso-WOLROiL8AjzGejKBbDAs27YzMH3nYVW~Xid5FKJXViz0g6FgwM0Q7AhtWkMaiMg0hk4ztx68owA6RJx4CZ3BQNrVXebxZf1CM0972xc3EFWRSdxlMyXfsf670NGcEpc59taaKwzajUxiNMIA7bDptZP0s1DJXacSHMxHmscKIBSkiC2EBPvTNQMEn43eLJdSUOJgCyTvIGveSe0gNPdgso5P3Yx-n1fa0KMZXc8oPy1V2xch1jVSwjBx~KvVOyiZPEoKYyUbjOb~W1H758ZxYeXkWha1umy~XrU1zrBnAisw__",
+    "asset_id": "sheep",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Sheep",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
