@@ -551,12 +551,24 @@ async def _do_propose_invention(
     # (no FTL, over-unity, or >100% efficiency). The reviewer reads this back.
     assessment = physics_engine.assess_invention(combined)
 
+    # Ground the proposal in REAL computation from the Minion's craft engine — a
+    # materials Minion really predicts an alloy's Tc, a computing Minion really
+    # runs a quantum circuit, etc. A strong real result lifts feasibility, so
+    # inventions are judged on genuine work, not text. (Task 2 — modules wired in.)
+    from ..services import minion_research
+    grounded = minion_research.run_research(
+        minion.guild.value, seed=hash(f"{minion.id}:{world.tick}") & 0x7FFFFFFF)
+    grounded_quality = float(grounded.get("quality", 0.5))
+
     # Doc I.72 — an unscrupulous (low-conscientiousness, low-karma) Minion may
     # fabricate results: inflate the claimed feasibility to slip past review.
     # Replication later exposes it.
     fabricated = minion.conscientiousness < 0.35 and minion.karma < 0.0 and \
         (hash(inv_seed := f"{minion.id}:{world.tick}") % 100) < 25
-    claimed_feasibility = min(0.95, assessment.feasibility + 0.4) if fabricated else assessment.feasibility
+    # Real computed quality blends with the physics assessment: grounded work
+    # raises feasibility, weak/ungrounded work lowers it.
+    base_feasibility = 0.5 * assessment.feasibility + 0.5 * grounded_quality
+    claimed_feasibility = min(0.95, base_feasibility + 0.4) if fabricated else base_feasibility
     inv = Invention(
         world_id=world.id,
         minion_id=minion.id,
@@ -576,13 +588,19 @@ async def _do_propose_invention(
                 "violates_limit": assessment.violates_limit,
                 "notes": assessment.notes,
             },
+            "grounded_research": grounded,
         },
     )
     session.add(inv)
     await session.flush()
+    # Record the real computation as a memory so the grounded work is visible.
+    if grounded.get("grounded"):
+        await _store_memory(session, minion, world.tick, "calculation",
+                            f"Grounded the proposal: {grounded['summary']}", importance=0.7)
     extra = " — violates a physical limit" if assessment.violates_limit else ""
+    ground = f" [grounded: {grounded['summary']}]" if grounded.get("grounded") else ""
     return (
-        f"Proposed invention {inv.id} titled {title!r} (status={inv.status.value}){extra}",
+        f"Proposed invention {inv.id} titled {title!r} (status={inv.status.value}){extra}{ground}",
         inv.id,
         blocked,
     )
