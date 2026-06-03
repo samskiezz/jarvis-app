@@ -2250,5 +2250,22 @@
     "epoch": "any",
     "name": "Fx Geode",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_giant_lilypad": {
+    "prompt": "oversized lily pads with bioluminescent veins on dark water, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "9b74678b-0ebb-4b26-a4ae-c989e1a42377",
+    "path": "/models/generated/tripo/fx_giant_lilypad.glb",
+    "bytes": 8763828,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9b74678b-0ebb-4b26-a4ae-c989e1a42377/tripo_pbr_model_9b74678b-0ebb-4b26-a4ae-c989e1a42377.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWI3NDY3OGItMGViYi00YjI2LWE0YWUtYzk4OWUxYTQyMzc3L3RyaXBvX3Bicl9tb2RlbF85Yjc0Njc4Yi0wZWJiLTRiMjYtYTRhZS1jOTg5ZTFhNDIzNzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=W-P7U3VQ5RU-V5OFGGIfnYb34WGstm~6aqfSV8mZZMWQ2IpDp5NqO8I7sv12NNHg0gYHLw~p6RcvF1WlH-aAaEKlN3BfQOxyeK5enqCtOnKAc7NwdIPZk7jwn7vBTl80t8mGLiWV~TLXhS7YwspwdQC8gtYtNqU-Fi404Q8bB7Kj9V~FVqCPVEze7jv-j93HauB0Td~j6adX4xeQRymcf1NjLcyckxOYDr5j7~GEbrWRxlNQp8Ww44LfyfzpXVvPLSet-cFNB9XPLLzP~VLeErgM9IGUPfGlbE3XP~8GsG9jfeo8KJTS6rBYeXZcpNLg-CBKGoHDGfIUbRCIc-FlWA__",
+    "asset_id": "fx_giant_lilypad",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Giant Lilypad",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
