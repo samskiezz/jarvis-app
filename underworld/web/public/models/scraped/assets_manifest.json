@@ -2046,5 +2046,22 @@
     "epoch": "quantum",
     "name": "Fx Antigrav Pad",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_cathedral": {
+    "prompt": "a vast gothic cathedral with stained-glass windows glowing from within, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "6712fa72-5584-45e4-9b63-f90435f986f3",
+    "path": "/models/generated/tripo/fx_cathedral.glb",
+    "bytes": 15716568,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6712fa72-5584-45e4-9b63-f90435f986f3/tripo_pbr_model_6712fa72-5584-45e4-9b63-f90435f986f3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjcxMmZhNzItNTU4NC00NWU0LTliNjMtZjkwNDM1Zjk4NmYzL3RyaXBvX3Bicl9tb2RlbF82NzEyZmE3Mi01NTg0LTQ1ZTQtOWI2My1mOTA0MzVmOTg2ZjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ISrS0TdVOzEbc-~IdpZw6LVgF5ceaMtnfWO1oldVxO5PUs5uK0mCviXRKdnC6C5AkBbFPbqr4OZ8ycAyHt~gQiOoOcugDDEgQLQlMYSSmVxuFk~~mwxkYqqSVv~2qKJ3fO9XlbtCTNanHGL6uM4B6Q9UeBkW-oQQl41UaKkMxtAGHA8vM2rJSqFYbeGPAif0n4-KPFPOW~1tD8tXWav3PoEjDsLJdzwz5EKSg84T4Sh83Oje~A54IpLH-VwM-doxWJ6aL-64EPTs9Xk8cCOufJdyixWFkPb~gStLr-OaBh4ucMUaYi5VwBz46MTM5H~Z57rdRV0hNjp6P3nM0jxbpw__",
+    "asset_id": "fx_cathedral",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "iron",
+    "name": "Fx Cathedral",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
