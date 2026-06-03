@@ -2760,5 +2760,22 @@
     "epoch": "industrial",
     "name": "Renaissance Open Studio",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:smog_haze_emitter": {
+    "prompt": "a thick industrial smog haze set piece over rooftops, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "8be36e59-2155-4cb3-8ede-9adb4bcc54a0",
+    "path": "/models/generated/tripo/smog_haze_emitter.glb",
+    "bytes": 2519524,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8be36e59-2155-4cb3-8ede-9adb4bcc54a0/tripo_pbr_model_8be36e59-2155-4cb3-8ede-9adb4bcc54a0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGJlMzZlNTktMjE1NS00Y2IzLThlZGUtOWFkYjRiY2M1NGEwL3RyaXBvX3Bicl9tb2RlbF84YmUzNmU1OS0yMTU1LTRjYjMtOGVkZS05YWRiNGJjYzU0YTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=MXhygUaScodJIfYkhn7M9OOXDPn7ivOryP9-AcoLj782BliR1lCHD0vrEeWZejo9FXfJc6zzBlvBxxQDA2F4Lnuj13VOic2D2yHaYkHkqtwFlS2~YVHW9WdiDC1evds8Ky24ENWRIQbqkWtcdu1ia-vI7uAp1lxHvTge3WjAoOKsmlmYA18XQnxy9O7g2gnvuWkL1aoHF1bS0ZD3CUOX2awW5imWS3r6YkjSRARO4taCQ7Y-3E9Z9EkKm74XRlDO16Vbfby-iqIvqLU79g5qgV7EGd~~Jve6YVJrU2Ap2MfHhzVH6cwPLD8UvabVOLH-wWbZS7ZEOzIwHmmr9SYtwQ__",
+    "asset_id": "smog_haze_emitter",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "industrial",
+    "name": "Smog Haze Emitter",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
