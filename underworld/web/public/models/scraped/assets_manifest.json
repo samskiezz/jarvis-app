@@ -8846,5 +8846,22 @@
     "epoch": "any",
     "name": "Signpost",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:well": {
+    "prompt": "a stone water well with a bucket, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "004728e1-90dd-45ba-b077-f2f654a91429",
+    "path": "/models/generated/tripo/well.glb",
+    "bytes": 14921396,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/004728e1-90dd-45ba-b077-f2f654a91429/tripo_pbr_model_004728e1-90dd-45ba-b077-f2f654a91429.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDA0NzI4ZTEtOTBkZC00NWJhLWIwNzctZjJmNjU0YTkxNDI5L3RyaXBvX3Bicl9tb2RlbF8wMDQ3MjhlMS05MGRkLTQ1YmEtYjA3Ny1mMmY2NTRhOTE0MjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qoTLRkKpPxTTkBY2A3P0CeTXzIRkGe21diDtXXfwfKfJNHeIXGMG3pa6zEiLZog3F1PsGry543fhhJq4D9gKv8zE68pBcnp30KvZaTXVCqN3QPyrn09PVqjRJqbd~KAUMTxe1kOdabDRl8Mq62dQb4VMFHkNgHup9zNgShMfMsZ8CgwS1gBjw8icYSJ4X~kO-k-WBYlQCj92QVp9FYOaCWzZUdDHOCUaRLb01cw6-0i8ZVU7NUcqHJWNxA7RJzoCs-YFZVNXz1Xt5oP9XuYHSADMaLdA1BpsTQ0VavvPktHLp6FSpEM6nOtWLrH4xYqOz0gS8TJm1fyglkuhHaW5Vg__",
+    "asset_id": "well",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Well",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
