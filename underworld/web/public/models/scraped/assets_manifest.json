@@ -3168,5 +3168,22 @@
     "epoch": "stone",
     "name": "Exhaustion Bedroll",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fridge": {
+    "prompt": "a kitchen refrigerator, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d0b331a7-b031-4772-8034-2ba83ccb5df1",
+    "path": "/models/generated/tripo/fridge.glb",
+    "bytes": 14980272,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d0b331a7-b031-4772-8034-2ba83ccb5df1/tripo_pbr_model_d0b331a7-b031-4772-8034-2ba83ccb5df1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDBiMzMxYTctYjAzMS00NzcyLTgwMzQtMmJhODNjY2I1ZGYxL3RyaXBvX3Bicl9tb2RlbF9kMGIzMzFhNy1iMDMxLTQ3NzItODAzNC0yYmE4M2NjYjVkZjEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=laOZCkYpb9zhFcCnc-XJ0CIO5crXZWMwxmkMHd~YIQ7U2eA1Slg8dYjss-Qe~PaKeE9FpMnpxZHpi9IhdKviMDV0a2sUP8K5mBsMOF9nR9zGU0gQkA~mh02g20EUesP2PE9HAIMiw~2QNLELlRgcJGX8WPeHXek1C-awH0w4PnhjRvxyeIDrJ2TjXiUqqxKftMytxcWTV4wW7BD0bG4f3t4e~Q-yXT5rOKwr0X80yNg67AWuOmm2NZSjDva9gtUuy4iVgrYbUZoa~2r4mMo146e91IUy5wtyw6m97i~td0Lhdgii-cLT6Z1IdVUilANEtAOqIWOvWmUoNK0XSvcBXA__",
+    "asset_id": "fridge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "information",
+    "name": "Fridge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
