@@ -3916,5 +3916,22 @@
     "epoch": "bronze",
     "name": "Abacus",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:anvil": {
+    "prompt": "a blacksmith's anvil on a stump, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1586e4db-39aa-4510-b5ff-673dd2136576",
+    "path": "/models/generated/tripo/anvil.glb",
+    "bytes": 14737732,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1586e4db-39aa-4510-b5ff-673dd2136576/tripo_pbr_model_1586e4db-39aa-4510-b5ff-673dd2136576.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTU4NmU0ZGItMzlhYS00NTEwLWI1ZmYtNjczZGQyMTM2NTc2L3RyaXBvX3Bicl9tb2RlbF8xNTg2ZTRkYi0zOWFhLTQ1MTAtYjVmZi02NzNkZDIxMzY1NzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=rntPKKNfjwXjK5gP-Vc0B-p4fp8LEPdrDTndlJbS4w9CmxBOvVox071Bi5X7CkyAO~HC~als-PAjV3Yfe7-HJ1xFHkVg3yt2WFW5CizDxLbiF~E322xatLkHCeI3-aQoxzRgycMtK10kxTjYh-CqaTvVcdrOKbFb5YKFF7UP-8ELzJLAeSbojCVi1Cgd7ubT11vKbzmZkSMSxtDcGoP18AL9~-z1fhHI~fXEhNN~i9AfMfGHhnP8ybLYxRfXgD-cP0lgQMLORsuYpspXs8KfG5jIlJxWuErGKnj0tV-oFP88bxi9k4mBav0ogb9gTGw7I24NyDLAbuW3Y3jUajvKeg__",
+    "asset_id": "anvil",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Anvil",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
