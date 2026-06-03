@@ -7554,5 +7554,22 @@
     "epoch": "stone",
     "name": "Bow And Arrow",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:burial_mound": {
+    "prompt": "a ritual stone burial cairn mound, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ba059ff3-ef57-4a68-9ef0-38f119245b3a",
+    "path": "/models/generated/tripo/burial_mound.glb",
+    "bytes": 14873700,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ba059ff3-ef57-4a68-9ef0-38f119245b3a/tripo_pbr_model_ba059ff3-ef57-4a68-9ef0-38f119245b3a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmEwNTlmZjMtZWY1Ny00YTY4LTllZjAtMzhmMTE5MjQ1YjNhL3RyaXBvX3Bicl9tb2RlbF9iYTA1OWZmMy1lZjU3LTRhNjgtOWVmMC0zOGYxMTkyNDViM2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=w1mefbQcLOqcoZ8zDxhV2HS~uUkQWGVcJwA8Vd8ZMT1MYuFAmbOZGftndlgz3CTVLAFBRCZY~4PxY0vpsiIAxU~5y0sKEhgljcmstAX9u1rdWcR8lO98MY7ULashZsCJ9y8Q5b2uex06yI89gyr7T33BIrivaYVwrMHDyN3ubOYBXBWWziW7nWcMdZrzlSZTY76BjqkO785Q~NoP-6fgGd~UbjWOGMdEylrnRWCsVZ9~~luID-Tz3nwnd0eDdHNaPD2kHkfgoyMf9DHtnvLK5Bru-JA2mULCAtXOwptZiQeWoBhpRLPi679vrKEuochgzvWXdkbNutlCEJ5MPhZ7NA__",
+    "asset_id": "burial_mound",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "stone",
+    "name": "Burial Mound",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
