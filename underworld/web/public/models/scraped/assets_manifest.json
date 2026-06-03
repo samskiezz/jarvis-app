@@ -8370,5 +8370,22 @@
     "epoch": "bronze",
     "name": "Obelisk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:prayer_circle_stones": {
+    "prompt": "a circle of standing prayer stones, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e26f0259-6f6f-4b74-b6ce-ab072db1a956",
+    "path": "/models/generated/tripo/prayer_circle_stones.glb",
+    "bytes": 15231476,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e26f0259-6f6f-4b74-b6ce-ab072db1a956/tripo_pbr_model_e26f0259-6f6f-4b74-b6ce-ab072db1a956.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTI2ZjAyNTktNmY2Zi00Yjc0LWI2Y2UtYWIwNzJkYjFhOTU2L3RyaXBvX3Bicl9tb2RlbF9lMjZmMDI1OS02ZjZmLTRiNzQtYjZjZS1hYjA3MmRiMWE5NTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uv0pogTa8roVtjFfTHG9-Vbop42b-NITaranirbyRh01XsnFnTkYWwEEiOa8zA3DRSg4s9IWeuZCu4DU0rfDW1Dyd0ZRJlm6CeusZpN7Y~eXAdaJpDKihHSz0kDN-dgGPrNEgkgyTRVRothfmfPN5nxwceJyGOAeCvsHPNaWOc8E2gOec8dnOs9KgwLSA9yDUl~Xxk0eEvUGYEaFqlahOtGmYURh93UwD2e~d-h6Rsz4-~ggum3KQc4tWKdYpYiNfAfIEtr~xYnGOYp2AX3zB3jlUtyJ1qEokO6mREBlLR2cP6yTGo~-ua5ntWlexTdk-T-KNPzTNwAPIW0HkI1lhQ__",
+    "asset_id": "prayer_circle_stones",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "stone",
+    "name": "Prayer Circle Stones",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
