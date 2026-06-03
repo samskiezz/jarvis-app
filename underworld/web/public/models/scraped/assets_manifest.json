@@ -3627,5 +3627,22 @@
     "epoch": "any",
     "name": "Pillow Blanket",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:radio_set": {
+    "prompt": "a vintage wooden radio set, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9932df82-948a-490c-b37e-c464886cbeb9",
+    "path": "/models/generated/tripo/radio_set.glb",
+    "bytes": 14965080,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9932df82-948a-490c-b37e-c464886cbeb9/tripo_pbr_model_9932df82-948a-490c-b37e-c464886cbeb9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTkzMmRmODItOTQ4YS00OTBjLWIzN2UtYzQ2NDg4NmNiZWI5L3RyaXBvX3Bicl9tb2RlbF85OTMyZGY4Mi05NDhhLTQ5MGMtYjM3ZS1jNDY0ODg2Y2JlYjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=S582fq1-8mAVP34Q37DdFekQCjFN9iYbLEWosfxC5u4ywc9fGCZQZ5Ov6y8Q5Pvz6HdkfG16Lp6uV0jeTuqeiehk7EgRrVdpqnJ558zXG~Yl56XRcwIk-p4xxINwISSnLK8c~2PWYIhoyYVJIGlEK4-DO13~CoRzb80Sa3l0yLp8uYRB5iXOPuoaSkjrsawh6hNt~sGJwdhv5TftL7QYxl~IGYmqnlAn1IDrMtdRk4CP~lyRzMclNo6KXKEqmiBvkSlaWtXSXiVyP7EkeNxhr7leudxDzo2oF6LG6VcghD91x-1KecOhyMpeVIQ0Q4fBtcOtmKfv66CXzWtrDo7mXg__",
+    "asset_id": "radio_set",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "industrial",
+    "name": "Radio Set",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
