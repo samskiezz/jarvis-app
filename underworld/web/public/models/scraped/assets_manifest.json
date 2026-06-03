@@ -2454,5 +2454,22 @@
     "epoch": "quantum",
     "name": "Fx Light Orb",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_lumino_fern": {
+    "prompt": "a luminous fern with softly glowing fronds, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "dc621cb0-c9a5-4efa-8a6e-d76c947c660c",
+    "path": "/models/generated/tripo/fx_lumino_fern.glb",
+    "bytes": 15444392,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/dc621cb0-c9a5-4efa-8a6e-d76c947c660c/tripo_pbr_model_dc621cb0-c9a5-4efa-8a6e-d76c947c660c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGM2MjFjYjAtYzlhNS00ZWZhLThhNmUtZDc2Yzk0N2M2NjBjL3RyaXBvX3Bicl9tb2RlbF9kYzYyMWNiMC1jOWE1LTRlZmEtOGE2ZS1kNzZjOTQ3YzY2MGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IC7meyDzVduYOAlnBCDSUDiQka8h~9VH3fpWIT6lt9NpBPTK1fO-zZBnB-alsHpCVY5S3kzF8kM-ptU8lbh9ezstnHjGWC~RfSm7ksqc82fHWRxCG3OwtI34Tf9AT-aDJ0dmdac7EOn2cS1QhjTdYoewsNfZsFj6hWxDAVZYTOB7l0bNCDwuUFAaHHN3Zlp8VGxzJjfLDPDSXeQgVc29dky0Fh3B9aVKSTOnFPr26ytDNRo8HqcZOXes9-bQHLomNzT~BhK9ya4DBgPcQehSSt9G3p~K06xjT02Cm2mmYJr0Q1ayZcwhH3S93I-mCgE2f2ETbDYzASixPxV1stE6xA__",
+    "asset_id": "fx_lumino_fern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Lumino Fern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
