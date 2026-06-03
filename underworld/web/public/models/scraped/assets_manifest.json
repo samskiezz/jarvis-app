@@ -1485,5 +1485,22 @@
     "epoch": "any",
     "name": "Plains Meadow Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plateau_mesa": {
+    "prompt": "a flat-topped desert mesa rock formation, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "83aa3a8a-a3a6-473f-9123-d8c9ba320164",
+    "path": "/models/generated/tripo/plateau_mesa.glb",
+    "bytes": 15049156,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/83aa3a8a-a3a6-473f-9123-d8c9ba320164/tripo_pbr_model_83aa3a8a-a3a6-473f-9123-d8c9ba320164.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODNhYTNhOGEtYTNhNi00NzNmLTkxMjMtZDhjOWJhMzIwMTY0L3RyaXBvX3Bicl9tb2RlbF84M2FhM2E4YS1hM2E2LTQ3M2YtOTEyMy1kOGM5YmEzMjAxNjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=b7WjyZ7y4MaFUlgVpu9Wu2xLbOWdC-6SFgPVqMviSYDROr~4C1-V94fCrnjxV2Arpv2jCQIvYHwJxuMtUyinAhPvERUn3ezyo-PtbbVDVFJG12AozxFvcmhzR-LnieMhjRTklReAmEZ9P23Xgm7-uQFYR7ZwJ4y1Qz4CZRzA~nEHaR8N3aW8Aoocyy8NTp4O9AaQV-xa64X7mMucUM4XtACErKiHbwBJTb~1ltoGWhQ09mzubnCDImHODPDvCtU8cgRakADibwpxn8BFDF6zJUGqul8onBA3UuI7iXIUmWErPqJ-XxHqkXDN095sSDQs1fe~Mip0mg7RQ7GHUlBACg__",
+    "asset_id": "plateau_mesa",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Plateau Mesa",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
