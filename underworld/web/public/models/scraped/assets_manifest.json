@@ -2114,5 +2114,22 @@
     "epoch": "iron",
     "name": "Fx Dragon Statue",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_energy_core": {
+    "prompt": "a pulsing spherical energy core in a metal frame, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "53fb62da-6f6f-4d16-969b-0f2f1286f930",
+    "path": "/models/generated/tripo/fx_energy_core.glb",
+    "bytes": 16126852,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/53fb62da-6f6f-4d16-969b-0f2f1286f930/tripo_pbr_model_53fb62da-6f6f-4d16-969b-0f2f1286f930.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTNmYjYyZGEtNmY2Zi00ZDE2LTk2OWItMGYyZjEyODZmOTMwL3RyaXBvX3Bicl9tb2RlbF81M2ZiNjJkYS02ZjZmLTRkMTYtOTY5Yi0wZjJmMTI4NmY5MzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=q0ZZPK9XlSm46wQuQjmGt-28LQh5QPwlWsVQ9jwFKbICNUH1DfkmRO5V3dHsjneOQwYVwW65zsbiuW0AgY9Vh3qrJFH0h4-VxZSAD8wX0yZ~QOhEUEUCtEatCmsdHvQEsIlj8jJ3IxhZMR-CVFfejnIQNwNojLO8nJfii72x7WoHjI9W098cDvy5AcASw5KGmOw0~1KbOfG5KpFtlq9jJ37XYMV2kENAtD7S3FJcnnlOTsgq0IcHiV8FRktDdXimcBykAcJvGObhRH-uf1-taUFmhdxMaCfHuZcLTQTZEnmxkr6qui4RsNKQVrhbgrnKPQkH3H2FdHqWytoycCcPVQ__",
+    "asset_id": "fx_energy_core",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Energy Core",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
