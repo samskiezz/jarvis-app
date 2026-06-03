@@ -1519,5 +1519,22 @@
     "epoch": "any",
     "name": "Predator Wolf",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:prey_deer_herd": {
+    "prompt": "a small group of grazing deer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "f150e662-40fe-4f2b-be1b-59a59ee634ba",
+    "path": "/models/generated/tripo/prey_deer_herd.glb",
+    "bytes": 9394368,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f150e662-40fe-4f2b-be1b-59a59ee634ba/tripo_pbr_model_f150e662-40fe-4f2b-be1b-59a59ee634ba.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjE1MGU2NjItNDBmZS00ZjJiLWJlMWItNTlhNTllZTYzNGJhL3RyaXBvX3Bicl9tb2RlbF9mMTUwZTY2Mi00MGZlLTRmMmItYmUxYi01OWE1OWVlNjM0YmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DTFk6kHIVvllRGwKNjEHOHhRrRiyGj72Bmkpr9s4u05CqMxjjKj5npU5MtMKfRzI~QIlpI~4Aou9w2U9gXvAQJyv-h4Ml4jM6tI~wyT0ty4v3xJSb1GI5CQPdsmQFJ7~gVYUp0kTDFKb5vySqODeYrNCwjur62aJRk~FQ94VcYw54fs5VKbXZMjXJ8vrDgUgq7ejNJoHG~sxXXabuSZqDjYjEIBgEuVL3jMlSsONgDYilm9TEocZyFB8dP-HgIy4yv7Xj~qM2CTPNjWlbGKDu3YfHHogP4Ad7d-WS5JmpstvZ8ueGHWZ8jwMPWxy7awIEVn4-GE2cB3dIJ2B-GhoHw__",
+    "asset_id": "prey_deer_herd",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Prey Deer Herd",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
