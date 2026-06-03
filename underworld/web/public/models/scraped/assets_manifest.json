@@ -2896,5 +2896,22 @@
     "epoch": "iron",
     "name": "Pillar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:roof_beams": {
+    "prompt": "exposed wooden roof beams section, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "e9ffebe8-5255-42df-9b07-dbd4dec7f65b",
+    "path": "/models/generated/tripo/roof_beams.glb",
+    "bytes": 14915380,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e9ffebe8-5255-42df-9b07-dbd4dec7f65b/tripo_pbr_model_e9ffebe8-5255-42df-9b07-dbd4dec7f65b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTlmZmViZTgtNTI1NS00MmRmLTliMDctZGJkNGRlYzdmNjViL3RyaXBvX3Bicl9tb2RlbF9lOWZmZWJlOC01MjU1LTQyZGYtOWIwNy1kYmQ0ZGVjN2Y2NWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hi39-qQ-OeyOw2u9CO-C5DaTlPHEWH~C-e5nuMAlr3M7h2RP9Rqql9yYvt5i7Nf7QtwVxdHgGw70Vy3RxFIs1QSo7KNNA7b8es8kh~xXfpcaQgWBgw7Lbr3AOOdlz3PMKDfworX6NCk89oaePy6V4a9pHoPtwYftp86HVwT3qrNaPD6uiwySE9tBB432XzZIYCim7pPGtbp8ahes~ErCrVVjMGmfcqEY9rqAJ4Nx-sBbaQkYaKJs7RGG8I3JR4Y98k3xTb-MRowQBNgxG2GGLJCLbFeFRF9CgDkG-plXchVx-6f~i4PQEjbxLkZ3~4NrBkqxwFV0k16w2b-pIAuvLg__",
+    "asset_id": "roof_beams",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Roof Beams",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
