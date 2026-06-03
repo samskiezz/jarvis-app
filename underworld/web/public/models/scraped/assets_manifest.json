@@ -4307,5 +4307,22 @@
     "epoch": "industrial",
     "name": "Drilling Rig Deep",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:forge_furnace": {
+    "prompt": "a glowing blacksmith forge furnace, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "24f39a8d-306b-4058-a540-12d83deadbae",
+    "path": "/models/generated/tripo/forge_furnace.glb",
+    "bytes": 14672228,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/24f39a8d-306b-4058-a540-12d83deadbae/tripo_pbr_model_24f39a8d-306b-4058-a540-12d83deadbae.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjRmMzlhOGQtMzA2Yi00MDU4LWE1NDAtMTJkODNkZWFkYmFlL3RyaXBvX3Bicl9tb2RlbF8yNGYzOWE4ZC0zMDZiLTQwNTgtYTU0MC0xMmQ4M2RlYWRiYWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pjNJbIDLP3atPu-j~0XwdTDuvBLdqHS4j1~IQ7QLSpenjkbRias2tKhNEcY~5fhBz9uwItc~u~6uW~kWgc0c37uJgLIen1NDzVO8Q09KWTl7weDRxPtLOjnKzozI20wuBrbwYYklMAE5qOjm0ln0RqafBZxE9FOmziPIX3h2k-XashnF-xZvKikZycrm79Evs47fEYd9yZ~CcyPzMhH5DmFnbIoaO-ijCrX~mKJeTrkXrt5ygXNekff4qwtuP7NG6zs0xAf38V5MIgTuVqRhdizAPSH405r~9QsaZz3ej8qlALJncC1xItr~AbWOfGXzX22F~Bmq1Q-IEArr~3xFZQ__",
+    "asset_id": "forge_furnace",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Forge Furnace",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
