@@ -5191,5 +5191,22 @@
     "epoch": "iron",
     "name": "Workbench Vice",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:workstation": {
+    "prompt": "a computer workstation with monitors, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "391531ff-9020-47b8-ab6b-89e8c215c1ba",
+    "path": "/models/generated/tripo/workstation.glb",
+    "bytes": 13737572,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/391531ff-9020-47b8-ab6b-89e8c215c1ba/tripo_pbr_model_391531ff-9020-47b8-ab6b-89e8c215c1ba.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzkxNTMxZmYtOTAyMC00N2I4LWFiNmItODllOGMyMTVjMWJhL3RyaXBvX3Bicl9tb2RlbF8zOTE1MzFmZi05MDIwLTQ3YjgtYWI2Yi04OWU4YzIxNWMxYmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HU8WNHy0f5rFtFP-zlsXEHvLydPyLxdbXFtusj~vEsXRBV-rdPAI12yoTLSbO4iHOdQLC4g~lAZHF7McOiZCCfKA0FlcNRImp4luOo1nAC~lB6sTEutUPhHPkwirVV8rnJ71rYLUMLX02Ckua5m57BYaomgvfMXQyATTLzsOKEf-vQ0f0L5D~wHWyXdiODSJ2AzhaTIhN69OEkQImk--vdVWWc57z0a5xFpVLnKMcB5SF5LIfojCI01Cp7PY7FjuEB7uDntDAUKtjrCDbuky2Y7TtjHFk-TMCsKSyKLH9S7dn1mjVor2PCZ8HpUlF5GDoMPdScI-DJMnObHVhQbk2A__",
+    "asset_id": "workstation",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Workstation",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
