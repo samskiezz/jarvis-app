@@ -1,0 +1,4346 @@
+{
+  "version": 1,
+  "note": "Ordered GLB load packages \u2014 load stage by stage; render the world layer by layer as each stage completes.",
+  "total_assets": 390,
+  "critical": [
+    {
+      "path": "/models/polyhaven/sky_puresky_1k.hdr",
+      "phase": "skies",
+      "stage": 0
+    },
+    {
+      "path": "/models/Michelle.glb",
+      "phase": "characters",
+      "stage": 0
+    },
+    {
+      "path": "/models/RobotExpressive.glb",
+      "phase": "characters",
+      "stage": 0
+    }
+  ],
+  "packages": [
+    {
+      "stage": 1,
+      "name": "Core World & Biomes",
+      "asset_count": 151,
+      "assets": [
+        {
+          "id": "boulder_large",
+          "path": "/models/generated/tripo/boulder_large.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "cliff_face",
+          "path": "/models/generated/tripo/cliff_face.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "dirt_path",
+          "path": "/models/generated/tripo/dirt_path.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "fence_wood",
+          "path": "/models/generated/tripo/fence_wood.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "ground_dirt_tile",
+          "path": "/models/generated/tripo/ground_dirt_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "ground_grass_tile",
+          "path": "/models/generated/tripo/ground_grass_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "ground_sand_tile",
+          "path": "/models/generated/tripo/ground_sand_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "ground_stone_tile",
+          "path": "/models/generated/tripo/ground_stone_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "hill_mound",
+          "path": "/models/generated/tripo/hill_mound.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "pond",
+          "path": "/models/generated/tripo/pond.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "riverbank",
+          "path": "/models/generated/tripo/riverbank.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "road_corner",
+          "path": "/models/generated/tripo/road_corner.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "road_cross",
+          "path": "/models/generated/tripo/road_cross.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "road_straight",
+          "path": "/models/generated/tripo/road_straight.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "rock_outcrop",
+          "path": "/models/generated/tripo/rock_outcrop.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "stone_bridge",
+          "path": "/models/generated/tripo/stone_bridge.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "stone_wall",
+          "path": "/models/generated/tripo/stone_wall.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "town_gate",
+          "path": "/models/generated/tripo/town_gate.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "waterfall",
+          "path": "/models/generated/tripo/waterfall.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "wooden_bridge",
+          "path": "/models/generated/tripo/wooden_bridge.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "berry_bush",
+          "path": "/models/generated/tripo/berry_bush.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "bush_round",
+          "path": "/models/generated/tripo/bush_round.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "crop_corn",
+          "path": "/models/generated/tripo/crop_corn.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "crop_wheat",
+          "path": "/models/generated/tripo/crop_wheat.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "fern",
+          "path": "/models/generated/tripo/fern.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "flower_mixed_bed",
+          "path": "/models/generated/tripo/flower_mixed_bed.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "flower_red",
+          "path": "/models/generated/tripo/flower_red.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "grass_tuft",
+          "path": "/models/generated/tripo/grass_tuft.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "log_fallen",
+          "path": "/models/generated/tripo/log_fallen.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "mushroom_cluster",
+          "path": "/models/generated/tripo/mushroom_cluster.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "stromatolite_mound",
+          "path": "/models/generated/tripo/stromatolite_mound.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_birch",
+          "path": "/models/generated/tripo/tree_birch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_dead",
+          "path": "/models/generated/tripo/tree_dead.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_oak",
+          "path": "/models/generated/tripo/tree_oak.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_palm",
+          "path": "/models/generated/tripo/tree_palm.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_pine",
+          "path": "/models/generated/tripo/tree_pine.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_stump",
+          "path": "/models/generated/tripo/tree_stump.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_willow",
+          "path": "/models/generated/tripo/tree_willow.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "alpine_pine_cluster",
+          "path": "/models/generated/tripo/alpine_pine_cluster.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "autumn_leaf_pile",
+          "path": "/models/generated/tripo/autumn_leaf_pile.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "cactus_succulent",
+          "path": "/models/generated/tripo/cactus_succulent.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "desert_dune_tile",
+          "path": "/models/generated/tripo/desert_dune_tile.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "fault_rift_terrain",
+          "path": "/models/generated/tripo/fault_rift_terrain.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "forest_floor_tile",
+          "path": "/models/generated/tripo/forest_floor_tile.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "hunting_blind",
+          "path": "/models/generated/tripo/hunting_blind.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "mountain_peak_tile",
+          "path": "/models/generated/tripo/mountain_peak_tile.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "plains_meadow_tile",
+          "path": "/models/generated/tripo/plains_meadow_tile.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "plateau_mesa",
+          "path": "/models/generated/tripo/plateau_mesa.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "predator_wolf",
+          "path": "/models/generated/tripo/predator_wolf.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "prey_deer_herd",
+          "path": "/models/generated/tripo/prey_deer_herd.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "rain_puddle_decal",
+          "path": "/models/generated/tripo/rain_puddle_decal.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "rolling_hills_tile",
+          "path": "/models/generated/tripo/rolling_hills_tile.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "slag_heap",
+          "path": "/models/generated/tripo/slag_heap.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "snow_drift",
+          "path": "/models/generated/tripo/snow_drift.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "storm_debris",
+          "path": "/models/generated/tripo/storm_debris.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "volcano_cone",
+          "path": "/models/generated/tripo/volcano_cone.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "winter_bare_tree",
+          "path": "/models/generated/tripo/winter_bare_tree.glb",
+          "category": "biome",
+          "phase": "biome"
+        },
+        {
+          "id": "apartment_modern",
+          "path": "/models/generated/tripo/apartment_modern.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "cinema_marquee",
+          "path": "/models/generated/tripo/cinema_marquee.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "clean_room_booth",
+          "path": "/models/generated/tripo/clean_room_booth.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "cottage_iron",
+          "path": "/models/generated/tripo/cottage_iron.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_agriculture_barn",
+          "path": "/models/generated/tripo/guild_agriculture_barn.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_civil_yard",
+          "path": "/models/generated/tripo/guild_civil_yard.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_computing_hall",
+          "path": "/models/generated/tripo/guild_computing_hall.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_electrical_workshop",
+          "path": "/models/generated/tripo/guild_electrical_workshop.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_energy_plant",
+          "path": "/models/generated/tripo/guild_energy_plant.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_materials_forge",
+          "path": "/models/generated/tripo/guild_materials_forge.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_maths_academy",
+          "path": "/models/generated/tripo/guild_maths_academy.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_mechanical_workshop",
+          "path": "/models/generated/tripo/guild_mechanical_workshop.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_patent_office",
+          "path": "/models/generated/tripo/guild_patent_office.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_physics_lab",
+          "path": "/models/generated/tripo/guild_physics_lab.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "guild_safety_station",
+          "path": "/models/generated/tripo/guild_safety_station.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "habitat_quantum",
+          "path": "/models/generated/tripo/habitat_quantum.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "home_modern",
+          "path": "/models/generated/tripo/home_modern.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "house_bronze",
+          "path": "/models/generated/tripo/house_bronze.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "house_medieval",
+          "path": "/models/generated/tripo/house_medieval.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "hut_stone",
+          "path": "/models/generated/tripo/hut_stone.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "kings_throne_hall",
+          "path": "/models/generated/tripo/kings_throne_hall.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "supply_depot_warehouse",
+          "path": "/models/generated/tripo/supply_depot_warehouse.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "townhouse_industrial",
+          "path": "/models/generated/tripo/townhouse_industrial.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "vr_arcade",
+          "path": "/models/generated/tripo/vr_arcade.glb",
+          "category": "building",
+          "phase": "building"
+        },
+        {
+          "id": "courthouse",
+          "path": "/models/generated/tripo/courthouse.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "entertainment_arena",
+          "path": "/models/generated/tripo/entertainment_arena.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "granary",
+          "path": "/models/generated/tripo/granary.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "hospital",
+          "path": "/models/generated/tripo/hospital.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "library",
+          "path": "/models/generated/tripo/library.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "market_hall",
+          "path": "/models/generated/tripo/market_hall.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "mint_bank",
+          "path": "/models/generated/tripo/mint_bank.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "museum",
+          "path": "/models/generated/tripo/museum.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "observatory",
+          "path": "/models/generated/tripo/observatory.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "republic_senate_house",
+          "path": "/models/generated/tripo/republic_senate_house.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "school",
+          "path": "/models/generated/tripo/school.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "temple",
+          "path": "/models/generated/tripo/temple.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "theatre_stage",
+          "path": "/models/generated/tripo/theatre_stage.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "town_hall",
+          "path": "/models/generated/tripo/town_hall.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "tribal_council_circle",
+          "path": "/models/generated/tripo/tribal_council_circle.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "university",
+          "path": "/models/generated/tripo/university.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "voting_booth",
+          "path": "/models/generated/tripo/voting_booth.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "water_tower",
+          "path": "/models/generated/tripo/water_tower.glb",
+          "category": "civic",
+          "phase": "civic"
+        },
+        {
+          "id": "ascension_altar",
+          "path": "/models/generated/tripo/ascension_altar.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "citation_graph_display",
+          "path": "/models/generated/tripo/citation_graph_display.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "cloud_volume",
+          "path": "/models/generated/tripo/cloud_volume.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "discovery_eureka_lamp",
+          "path": "/models/generated/tripo/discovery_eureka_lamp.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fork_pod",
+          "path": "/models/generated/tripo/fork_pod.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_ancient_roots",
+          "path": "/models/generated/tripo/fx_ancient_roots.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_antigrav_pad",
+          "path": "/models/generated/tripo/fx_antigrav_pad.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_cathedral",
+          "path": "/models/generated/tripo/fx_cathedral.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_crystal_cluster",
+          "path": "/models/generated/tripo/fx_crystal_cluster.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_crystal_spire",
+          "path": "/models/generated/tripo/fx_crystal_spire.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_dragon_statue",
+          "path": "/models/generated/tripo/fx_dragon_statue.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_energy_core",
+          "path": "/models/generated/tripo/fx_energy_core.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_energy_pylon",
+          "path": "/models/generated/tripo/fx_energy_pylon.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_fire_pit",
+          "path": "/models/generated/tripo/fx_fire_pit.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_floating_crystal",
+          "path": "/models/generated/tripo/fx_floating_crystal.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_floating_island",
+          "path": "/models/generated/tripo/fx_floating_island.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_floating_lantern",
+          "path": "/models/generated/tripo/fx_floating_lantern.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_flowering_wall",
+          "path": "/models/generated/tripo/fx_flowering_wall.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_geode",
+          "path": "/models/generated/tripo/fx_geode.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_giant_lilypad",
+          "path": "/models/generated/tripo/fx_giant_lilypad.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_giant_mushroom",
+          "path": "/models/generated/tripo/fx_giant_mushroom.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_glow_flowers",
+          "path": "/models/generated/tripo/fx_glow_flowers.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_glow_lamppost",
+          "path": "/models/generated/tripo/fx_glow_lamppost.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_glowing_mushroom",
+          "path": "/models/generated/tripo/fx_glowing_mushroom.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_glowing_waterfall",
+          "path": "/models/generated/tripo/fx_glowing_waterfall.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_grand_palace",
+          "path": "/models/generated/tripo/fx_grand_palace.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_hanging_vines",
+          "path": "/models/generated/tripo/fx_hanging_vines.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_hologram",
+          "path": "/models/generated/tripo/fx_hologram.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_hover_boulder",
+          "path": "/models/generated/tripo/fx_hover_boulder.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_jungle_cluster",
+          "path": "/models/generated/tripo/fx_jungle_cluster.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_light_orb",
+          "path": "/models/generated/tripo/fx_light_orb.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_lumino_fern",
+          "path": "/models/generated/tripo/fx_lumino_fern.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_mist_pool",
+          "path": "/models/generated/tripo/fx_mist_pool.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_moss_statue",
+          "path": "/models/generated/tripo/fx_moss_statue.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_neon_sign",
+          "path": "/models/generated/tripo/fx_neon_sign.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_plasma_lamp",
+          "path": "/models/generated/tripo/fx_plasma_lamp.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_pod_plant",
+          "path": "/models/generated/tripo/fx_pod_plant.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_power_conduit",
+          "path": "/models/generated/tripo/fx_power_conduit.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_rock_arch",
+          "path": "/models/generated/tripo/fx_rock_arch.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_rune_stone",
+          "path": "/models/generated/tripo/fx_rune_stone.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_spirit_tree",
+          "path": "/models/generated/tripo/fx_spirit_tree.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_temple_of_light",
+          "path": "/models/generated/tripo/fx_temple_of_light.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_torch_brazier",
+          "path": "/models/generated/tripo/fx_torch_brazier.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_wizard_tower",
+          "path": "/models/generated/tripo/fx_wizard_tower.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "fx_world_tree_hall",
+          "path": "/models/generated/tripo/fx_world_tree_hall.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "mood_emote_ring",
+          "path": "/models/generated/tripo/mood_emote_ring.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "moon_disc",
+          "path": "/models/generated/tripo/moon_disc.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "reincarnation_shrine",
+          "path": "/models/generated/tripo/reincarnation_shrine.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "renaissance_open_studio",
+          "path": "/models/generated/tripo/renaissance_open_studio.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "smog_haze_emitter",
+          "path": "/models/generated/tripo/smog_haze_emitter.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "sun_disc",
+          "path": "/models/generated/tripo/sun_disc.glb",
+          "category": "fx",
+          "phase": "fx"
+        },
+        {
+          "id": "time_crystal_rig",
+          "path": "/models/generated/tripo/time_crystal_rig.glb",
+          "category": "fx",
+          "phase": "fx"
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "name": "Home & Daily Life",
+      "asset_count": 64,
+      "assets": [
+        {
+          "id": "doorway_wood",
+          "path": "/models/generated/tripo/doorway_wood.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "fireplace",
+          "path": "/models/generated/tripo/fireplace.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "floor_tile",
+          "path": "/models/generated/tripo/floor_tile.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "floor_wood",
+          "path": "/models/generated/tripo/floor_wood.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "pillar",
+          "path": "/models/generated/tripo/pillar.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "roof_beams",
+          "path": "/models/generated/tripo/roof_beams.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "staircase",
+          "path": "/models/generated/tripo/staircase.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "wall_brick",
+          "path": "/models/generated/tripo/wall_brick.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "wall_plaster",
+          "path": "/models/generated/tripo/wall_plaster.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "window_frame",
+          "path": "/models/generated/tripo/window_frame.glb",
+          "category": "interior",
+          "phase": "interior"
+        },
+        {
+          "id": "armchair",
+          "path": "/models/generated/tripo/armchair.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "bathtub",
+          "path": "/models/generated/tripo/bathtub.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "bed_bunk",
+          "path": "/models/generated/tripo/bed_bunk.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "bed_double",
+          "path": "/models/generated/tripo/bed_double.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "bookshelf",
+          "path": "/models/generated/tripo/bookshelf.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "chair_dining",
+          "path": "/models/generated/tripo/chair_dining.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "chair_office",
+          "path": "/models/generated/tripo/chair_office.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "desk",
+          "path": "/models/generated/tripo/desk.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "dresser",
+          "path": "/models/generated/tripo/dresser.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "exhaustion_bedroll",
+          "path": "/models/generated/tripo/exhaustion_bedroll.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "fridge",
+          "path": "/models/generated/tripo/fridge.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "kitchen_counter",
+          "path": "/models/generated/tripo/kitchen_counter.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "lamp_desk",
+          "path": "/models/generated/tripo/lamp_desk.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "lamp_floor",
+          "path": "/models/generated/tripo/lamp_floor.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "mentor_apprentice_bench",
+          "path": "/models/generated/tripo/mentor_apprentice_bench.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "painting",
+          "path": "/models/generated/tripo/painting.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "plant_pot",
+          "path": "/models/generated/tripo/plant_pot.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "rug",
+          "path": "/models/generated/tripo/rug.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "sofa",
+          "path": "/models/generated/tripo/sofa.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "stool",
+          "path": "/models/generated/tripo/stool.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "stove",
+          "path": "/models/generated/tripo/stove.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "table_coffee",
+          "path": "/models/generated/tripo/table_coffee.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "table_dining",
+          "path": "/models/generated/tripo/table_dining.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "toilet",
+          "path": "/models/generated/tripo/toilet.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "tool_rack",
+          "path": "/models/generated/tripo/tool_rack.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "wall_clock",
+          "path": "/models/generated/tripo/wall_clock.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "wardrobe",
+          "path": "/models/generated/tripo/wardrobe.glb",
+          "category": "furniture",
+          "phase": "furniture"
+        },
+        {
+          "id": "board_game",
+          "path": "/models/generated/tripo/board_game.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "broom_bucket",
+          "path": "/models/generated/tripo/broom_bucket.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "cooking_pot",
+          "path": "/models/generated/tripo/cooking_pot.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "cupboard",
+          "path": "/models/generated/tripo/cupboard.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "cutlery_set",
+          "path": "/models/generated/tripo/cutlery_set.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "cutting_board",
+          "path": "/models/generated/tripo/cutting_board.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "frying_pan",
+          "path": "/models/generated/tripo/frying_pan.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "guitar",
+          "path": "/models/generated/tripo/guitar.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "kettle",
+          "path": "/models/generated/tripo/kettle.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "laundry_basket",
+          "path": "/models/generated/tripo/laundry_basket.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "mirror_stand",
+          "path": "/models/generated/tripo/mirror_stand.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "pillow_blanket",
+          "path": "/models/generated/tripo/pillow_blanket.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "radio_set",
+          "path": "/models/generated/tripo/radio_set.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "shower",
+          "path": "/models/generated/tripo/shower.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "sink_basin",
+          "path": "/models/generated/tripo/sink_basin.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "television",
+          "path": "/models/generated/tripo/television.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "towel_rack",
+          "path": "/models/generated/tripo/towel_rack.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "wardrobe_open",
+          "path": "/models/generated/tripo/wardrobe_open.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "washbasin",
+          "path": "/models/generated/tripo/washbasin.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "water_glass",
+          "path": "/models/generated/tripo/water_glass.glb",
+          "category": "household",
+          "phase": "household"
+        },
+        {
+          "id": "ball",
+          "path": "/models/generated/tripo/ball.glb",
+          "category": "family",
+          "phase": "family"
+        },
+        {
+          "id": "child_crib_mobile",
+          "path": "/models/generated/tripo/child_crib_mobile.glb",
+          "category": "family",
+          "phase": "family"
+        },
+        {
+          "id": "cradle",
+          "path": "/models/generated/tripo/cradle.glb",
+          "category": "family",
+          "phase": "family"
+        },
+        {
+          "id": "playground_swing",
+          "path": "/models/generated/tripo/playground_swing.glb",
+          "category": "family",
+          "phase": "family"
+        },
+        {
+          "id": "rocking_horse",
+          "path": "/models/generated/tripo/rocking_horse.glb",
+          "category": "family",
+          "phase": "family"
+        },
+        {
+          "id": "school_desk",
+          "path": "/models/generated/tripo/school_desk.glb",
+          "category": "family",
+          "phase": "family"
+        },
+        {
+          "id": "toy_blocks",
+          "path": "/models/generated/tripo/toy_blocks.glb",
+          "category": "family",
+          "phase": "family"
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "name": "Guild Work & Roles",
+      "asset_count": 129,
+      "assets": [
+        {
+          "id": "abacus",
+          "path": "/models/generated/tripo/abacus.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "anvil",
+          "path": "/models/generated/tripo/anvil.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "assembly_line_conveyor",
+          "path": "/models/generated/tripo/assembly_line_conveyor.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "balance_scale_lab",
+          "path": "/models/generated/tripo/balance_scale_lab.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "barometer",
+          "path": "/models/generated/tripo/barometer.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "battery_bank",
+          "path": "/models/generated/tripo/battery_bank.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "beaker_set",
+          "path": "/models/generated/tripo/beaker_set.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "bioreactor_vessel",
+          "path": "/models/generated/tripo/bioreactor_vessel.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "blueprint_table",
+          "path": "/models/generated/tripo/blueprint_table.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "breadboard_rig",
+          "path": "/models/generated/tripo/breadboard_rig.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "bunsen_burner",
+          "path": "/models/generated/tripo/bunsen_burner.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "calculating_machine",
+          "path": "/models/generated/tripo/calculating_machine.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "casting_foundry_ladle",
+          "path": "/models/generated/tripo/casting_foundry_ladle.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "centrifuge",
+          "path": "/models/generated/tripo/centrifuge.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "cfd_wind_tunnel",
+          "path": "/models/generated/tripo/cfd_wind_tunnel.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "chalkboard",
+          "path": "/models/generated/tripo/chalkboard.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "chromatograph",
+          "path": "/models/generated/tripo/chromatograph.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "cnc_machining_center",
+          "path": "/models/generated/tripo/cnc_machining_center.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "concrete_mixer",
+          "path": "/models/generated/tripo/concrete_mixer.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "crucible",
+          "path": "/models/generated/tripo/crucible.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "cryostat_dewar",
+          "path": "/models/generated/tripo/cryostat_dewar.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "drafting_table",
+          "path": "/models/generated/tripo/drafting_table.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "drill_press",
+          "path": "/models/generated/tripo/drill_press.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "drilling_rig_deep",
+          "path": "/models/generated/tripo/drilling_rig_deep.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "forge_furnace",
+          "path": "/models/generated/tripo/forge_furnace.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "fume_hood",
+          "path": "/models/generated/tripo/fume_hood.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "gear_assembly",
+          "path": "/models/generated/tripo/gear_assembly.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "generator",
+          "path": "/models/generated/tripo/generator.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "genome_sequencer_bench",
+          "path": "/models/generated/tripo/genome_sequencer_bench.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "greenhouse",
+          "path": "/models/generated/tripo/greenhouse.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "harvester",
+          "path": "/models/generated/tripo/harvester.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "heat_treat_furnace",
+          "path": "/models/generated/tripo/heat_treat_furnace.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "industrial_robot_arm",
+          "path": "/models/generated/tripo/industrial_robot_arm.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "invention_prototype_bench",
+          "path": "/models/generated/tripo/invention_prototype_bench.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "irrigation_pump",
+          "path": "/models/generated/tripo/irrigation_pump.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "jig_fixture_table",
+          "path": "/models/generated/tripo/jig_fixture_table.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "lab_bench",
+          "path": "/models/generated/tripo/lab_bench.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "lathe",
+          "path": "/models/generated/tripo/lathe.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "mainframe",
+          "path": "/models/generated/tripo/mainframe.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "mass_spectrometer",
+          "path": "/models/generated/tripo/mass_spectrometer.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "master_clock_instrument",
+          "path": "/models/generated/tripo/master_clock_instrument.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "microscope_electron",
+          "path": "/models/generated/tripo/microscope_electron.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "microscope_light",
+          "path": "/models/generated/tripo/microscope_light.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "milling_machine",
+          "path": "/models/generated/tripo/milling_machine.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "multimeter",
+          "path": "/models/generated/tripo/multimeter.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "optical_bench",
+          "path": "/models/generated/tripo/optical_bench.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "oscilloscope",
+          "path": "/models/generated/tripo/oscilloscope.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "particle_detector",
+          "path": "/models/generated/tripo/particle_detector.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "pcr_thermocycler",
+          "path": "/models/generated/tripo/pcr_thermocycler.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "pendulum_rig",
+          "path": "/models/generated/tripo/pendulum_rig.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "photonics_bench",
+          "path": "/models/generated/tripo/photonics_bench.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "plough",
+          "path": "/models/generated/tripo/plough.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "printer_3d_additive",
+          "path": "/models/generated/tripo/printer_3d_additive.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "prior_art_terminal",
+          "path": "/models/generated/tripo/prior_art_terminal.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "probe_station",
+          "path": "/models/generated/tripo/probe_station.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "protein_crystallography_rig",
+          "path": "/models/generated/tripo/protein_crystallography_rig.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "quantum_computer",
+          "path": "/models/generated/tripo/quantum_computer.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "reactor_model",
+          "path": "/models/generated/tripo/reactor_model.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "replication_station",
+          "path": "/models/generated/tripo/replication_station.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "rivalry_dueling_chalkboards",
+          "path": "/models/generated/tripo/rivalry_dueling_chalkboards.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "ruler_calipers",
+          "path": "/models/generated/tripo/ruler_calipers.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "scaffolding",
+          "path": "/models/generated/tripo/scaffolding.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "server_rack",
+          "path": "/models/generated/tripo/server_rack.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "solar_array",
+          "path": "/models/generated/tripo/solar_array.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "soldering_station",
+          "path": "/models/generated/tripo/soldering_station.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "spectrometer",
+          "path": "/models/generated/tripo/spectrometer.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "spice_test_rig",
+          "path": "/models/generated/tripo/spice_test_rig.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "telescope_optical",
+          "path": "/models/generated/tripo/telescope_optical.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "tensile_tester",
+          "path": "/models/generated/tripo/tensile_tester.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "theodolite",
+          "path": "/models/generated/tripo/theodolite.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "thermometer_lab",
+          "path": "/models/generated/tripo/thermometer_lab.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "transformer_unit",
+          "path": "/models/generated/tripo/transformer_unit.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "vacuum_chamber",
+          "path": "/models/generated/tripo/vacuum_chamber.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "voltmeter",
+          "path": "/models/generated/tripo/voltmeter.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "wafer_lithography_stepper",
+          "path": "/models/generated/tripo/wafer_lithography_stepper.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "wind_turbine",
+          "path": "/models/generated/tripo/wind_turbine.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "workbench_vice",
+          "path": "/models/generated/tripo/workbench_vice.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "workstation",
+          "path": "/models/generated/tripo/workstation.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "xrd_machine",
+          "path": "/models/generated/tripo/xrd_machine.glb",
+          "category": "instrument",
+          "phase": "instrument"
+        },
+        {
+          "id": "apprentice_slate",
+          "path": "/models/generated/tripo/apprentice_slate.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "archive_cabinet",
+          "path": "/models/generated/tripo/archive_cabinet.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "book_open",
+          "path": "/models/generated/tripo/book_open.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "bread_loaf",
+          "path": "/models/generated/tripo/bread_loaf.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "calibration_standard_set",
+          "path": "/models/generated/tripo/calibration_standard_set.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "candle",
+          "path": "/models/generated/tripo/candle.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "clipboard",
+          "path": "/models/generated/tripo/clipboard.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "discovery_ledger_book",
+          "path": "/models/generated/tripo/discovery_ledger_book.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "forage_basket",
+          "path": "/models/generated/tripo/forage_basket.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "fruit_bowl",
+          "path": "/models/generated/tripo/fruit_bowl.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "hammer",
+          "path": "/models/generated/tripo/hammer.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "hard_hat",
+          "path": "/models/generated/tripo/hard_hat.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "keyboard",
+          "path": "/models/generated/tripo/keyboard.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "laptop",
+          "path": "/models/generated/tripo/laptop.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "lectern",
+          "path": "/models/generated/tripo/lectern.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "magnifying_glass",
+          "path": "/models/generated/tripo/magnifying_glass.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "market_ledger",
+          "path": "/models/generated/tripo/market_ledger.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "meal_plate",
+          "path": "/models/generated/tripo/meal_plate.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "meditation_cushion",
+          "path": "/models/generated/tripo/meditation_cushion.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "mug",
+          "path": "/models/generated/tripo/mug.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "nickname_charm",
+          "path": "/models/generated/tripo/nickname_charm.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "patent_globe_kiosk",
+          "path": "/models/generated/tripo/patent_globe_kiosk.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "patent_scanner",
+          "path": "/models/generated/tripo/patent_scanner.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "prayer_beads",
+          "path": "/models/generated/tripo/prayer_beads.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "quill_ink",
+          "path": "/models/generated/tripo/quill_ink.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "screwdriver",
+          "path": "/models/generated/tripo/screwdriver.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "scroll",
+          "path": "/models/generated/tripo/scroll.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "scythe",
+          "path": "/models/generated/tripo/scythe.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "slide_rule",
+          "path": "/models/generated/tripo/slide_rule.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "soul_bond_token",
+          "path": "/models/generated/tripo/soul_bond_token.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "stamp",
+          "path": "/models/generated/tripo/stamp.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "standards_master_gauge",
+          "path": "/models/generated/tripo/standards_master_gauge.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "tablet_device",
+          "path": "/models/generated/tripo/tablet_device.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "thirst_water_skin",
+          "path": "/models/generated/tripo/thirst_water_skin.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "trowel",
+          "path": "/models/generated/tripo/trowel.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "umbrella",
+          "path": "/models/generated/tripo/umbrella.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "wanderer_pack",
+          "path": "/models/generated/tripo/wanderer_pack.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "watering_can",
+          "path": "/models/generated/tripo/watering_can.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "winter_cloak",
+          "path": "/models/generated/tripo/winter_cloak.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "wrench",
+          "path": "/models/generated/tripo/wrench.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
+          "id": "project_stage_kanban",
+          "path": "/models/generated/tripo/project_stage_kanban.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_chemistry_generator_hood",
+          "path": "/models/generated/tripo/role_chemistry_generator_hood.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_experimental_designer_board",
+          "path": "/models/generated/tripo/role_experimental_designer_board.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_formula_oracle_orb",
+          "path": "/models/generated/tripo/role_formula_oracle_orb.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_genome_analyst_station",
+          "path": "/models/generated/tripo/role_genome_analyst_station.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_literature_scout_carrel",
+          "path": "/models/generated/tripo/role_literature_scout_carrel.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_protein_modeller_display",
+          "path": "/models/generated/tripo/role_protein_modeller_display.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_regulatory_reasoner_desk",
+          "path": "/models/generated/tripo/role_regulatory_reasoner_desk.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_toxicity_checker_cabinet",
+          "path": "/models/generated/tripo/role_toxicity_checker_cabinet.glb",
+          "category": "role",
+          "phase": "role"
+        },
+        {
+          "id": "role_trial_simulator_console",
+          "path": "/models/generated/tripo/role_trial_simulator_console.glb",
+          "category": "role",
+          "phase": "role"
+        }
+      ]
+    },
+    {
+      "stage": 4,
+      "name": "Community & Economy",
+      "asset_count": 40,
+      "assets": [
+        {
+          "id": "coal_pile",
+          "path": "/models/generated/tripo/coal_pile.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "coin_pile",
+          "path": "/models/generated/tripo/coin_pile.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "coin_purse",
+          "path": "/models/generated/tripo/coin_purse.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "collaboration_round_table",
+          "path": "/models/generated/tripo/collaboration_round_table.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "crate_goods",
+          "path": "/models/generated/tripo/crate_goods.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "notice_board",
+          "path": "/models/generated/tripo/notice_board.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "oil_barrel_stack",
+          "path": "/models/generated/tripo/oil_barrel_stack.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "ore_stockpile",
+          "path": "/models/generated/tripo/ore_stockpile.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "patent_archive_wall",
+          "path": "/models/generated/tripo/patent_archive_wall.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "peer_review_table",
+          "path": "/models/generated/tripo/peer_review_table.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "peer_review_verdict_board",
+          "path": "/models/generated/tripo/peer_review_verdict_board.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "produce_basket",
+          "path": "/models/generated/tripo/produce_basket.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "scales_balance",
+          "path": "/models/generated/tripo/scales_balance.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "shop_counter",
+          "path": "/models/generated/tripo/shop_counter.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "stall_canopy",
+          "path": "/models/generated/tripo/stall_canopy.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "tavern_bar",
+          "path": "/models/generated/tripo/tavern_bar.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "tavern_table",
+          "path": "/models/generated/tripo/tavern_table.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "tech_transfer_crate",
+          "path": "/models/generated/tripo/tech_transfer_crate.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "timber_stack",
+          "path": "/models/generated/tripo/timber_stack.glb",
+          "category": "community",
+          "phase": "community"
+        },
+        {
+          "id": "altar",
+          "path": "/models/generated/tripo/altar.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "constitution_display",
+          "path": "/models/generated/tripo/constitution_display.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "drum",
+          "path": "/models/generated/tripo/drum.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "ethics_oath_lectern",
+          "path": "/models/generated/tripo/ethics_oath_lectern.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "fossil_ammonite",
+          "path": "/models/generated/tripo/fossil_ammonite.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "fossil_dimetrodon",
+          "path": "/models/generated/tripo/fossil_dimetrodon.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "fossil_mastodon_tusk",
+          "path": "/models/generated/tripo/fossil_mastodon_tusk.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "fossil_trilobite",
+          "path": "/models/generated/tripo/fossil_trilobite.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "funeral_pyre",
+          "path": "/models/generated/tripo/funeral_pyre.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "guild_charter_scroll",
+          "path": "/models/generated/tripo/guild_charter_scroll.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "idol_statue",
+          "path": "/models/generated/tripo/idol_statue.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "incense_burner",
+          "path": "/models/generated/tripo/incense_burner.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "legacy_portrait_gallery",
+          "path": "/models/generated/tripo/legacy_portrait_gallery.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "loom",
+          "path": "/models/generated/tripo/loom.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "lute",
+          "path": "/models/generated/tripo/lute.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "painting_easel",
+          "path": "/models/generated/tripo/painting_easel.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "pottery_wheel",
+          "path": "/models/generated/tripo/pottery_wheel.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "prodigy_laurel",
+          "path": "/models/generated/tripo/prodigy_laurel.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "scroll_rack",
+          "path": "/models/generated/tripo/scroll_rack.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "sky_belief_totem",
+          "path": "/models/generated/tripo/sky_belief_totem.glb",
+          "category": "culture",
+          "phase": "culture"
+        },
+        {
+          "id": "statue_pedestal",
+          "path": "/models/generated/tripo/statue_pedestal.glb",
+          "category": "culture",
+          "phase": "culture"
+        }
+      ]
+    },
+    {
+      "stage": 5,
+      "name": "Society Systems",
+      "asset_count": 1,
+      "assets": [
+        {
+          "id": "apothecary_shelf",
+          "path": "/models/generated/tripo/apothecary_shelf.glb",
+          "category": "medical",
+          "phase": "medical"
+        }
+      ]
+    },
+    {
+      "stage": 6,
+      "name": "Epoch Ladder",
+      "asset_count": 0,
+      "assets": []
+    },
+    {
+      "stage": 7,
+      "name": "Movement & Polish",
+      "asset_count": 2,
+      "assets": [
+        {
+          "id": "fountain",
+          "path": "/models/generated/tripo/fountain.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "street_lamp",
+          "path": "/models/generated/tripo/street_lamp.glb",
+          "category": "prop",
+          "phase": "prop"
+        }
+      ]
+    }
+  ],
+  "ordered": [
+    {
+      "path": "/models/polyhaven/sky_puresky_1k.hdr",
+      "phase": "skies",
+      "stage": 0
+    },
+    {
+      "path": "/models/Michelle.glb",
+      "phase": "characters",
+      "stage": 0
+    },
+    {
+      "path": "/models/RobotExpressive.glb",
+      "phase": "characters",
+      "stage": 0
+    },
+    {
+      "path": "/models/generated/tripo/boulder_large.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cliff_face.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/dirt_path.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fence_wood.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ground_dirt_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ground_grass_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ground_sand_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ground_stone_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/hill_mound.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/pond.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/riverbank.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/road_corner.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/road_cross.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/road_straight.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/rock_outcrop.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stone_bridge.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stone_wall.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/town_gate.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/waterfall.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/wooden_bridge.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/berry_bush.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/bush_round.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/crop_corn.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/crop_wheat.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fern.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/flower_mixed_bed.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/flower_red.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/grass_tuft.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/log_fallen.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/mushroom_cluster.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stromatolite_mound.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_birch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_dead.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_oak.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_palm.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_pine.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_stump.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_willow.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/alpine_pine_cluster.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/autumn_leaf_pile.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cactus_succulent.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/desert_dune_tile.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fault_rift_terrain.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/forest_floor_tile.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/hunting_blind.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/mountain_peak_tile.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/plains_meadow_tile.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/plateau_mesa.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/predator_wolf.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/prey_deer_herd.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/rain_puddle_decal.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/rolling_hills_tile.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/slag_heap.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/snow_drift.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/storm_debris.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/volcano_cone.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/winter_bare_tree.glb",
+      "phase": "biome",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/apartment_modern.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cinema_marquee.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/clean_room_booth.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cottage_iron.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_agriculture_barn.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_civil_yard.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_computing_hall.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_electrical_workshop.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_energy_plant.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_materials_forge.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_maths_academy.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_mechanical_workshop.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_patent_office.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_physics_lab.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/guild_safety_station.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/habitat_quantum.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/home_modern.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/house_bronze.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/house_medieval.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/hut_stone.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/kings_throne_hall.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/supply_depot_warehouse.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/townhouse_industrial.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/vr_arcade.glb",
+      "phase": "building",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/courthouse.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/entertainment_arena.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/granary.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/hospital.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/library.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/market_hall.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/mint_bank.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/museum.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/observatory.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/republic_senate_house.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/school.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/temple.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/theatre_stage.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/town_hall.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tribal_council_circle.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/university.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/voting_booth.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/water_tower.glb",
+      "phase": "civic",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ascension_altar.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/citation_graph_display.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cloud_volume.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/discovery_eureka_lamp.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fork_pod.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_ancient_roots.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_antigrav_pad.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_cathedral.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_crystal_cluster.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_crystal_spire.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_dragon_statue.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_energy_core.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_energy_pylon.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_fire_pit.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_floating_crystal.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_floating_island.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_floating_lantern.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_flowering_wall.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_geode.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_giant_lilypad.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_giant_mushroom.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_glow_flowers.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_glow_lamppost.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_glowing_mushroom.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_glowing_waterfall.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_grand_palace.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_hanging_vines.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_hologram.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_hover_boulder.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_jungle_cluster.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_light_orb.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_lumino_fern.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_mist_pool.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_moss_statue.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_neon_sign.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_plasma_lamp.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_pod_plant.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_power_conduit.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_rock_arch.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_rune_stone.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_spirit_tree.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_temple_of_light.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_torch_brazier.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_wizard_tower.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/fx_world_tree_hall.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/mood_emote_ring.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/moon_disc.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/reincarnation_shrine.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/renaissance_open_studio.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/smog_haze_emitter.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/sun_disc.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/time_crystal_rig.glb",
+      "phase": "fx",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/doorway_wood.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/fireplace.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/floor_tile.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/floor_wood.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/pillar.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/roof_beams.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/staircase.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/wall_brick.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/wall_plaster.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/window_frame.glb",
+      "phase": "interior",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/armchair.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/bathtub.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/bed_bunk.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/bed_double.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/bookshelf.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/chair_dining.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/chair_office.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/desk.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/dresser.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/exhaustion_bedroll.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/fridge.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/kitchen_counter.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/lamp_desk.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/lamp_floor.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/mentor_apprentice_bench.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/painting.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/plant_pot.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/rug.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/sofa.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/stool.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/stove.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/table_coffee.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/table_dining.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/toilet.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/tool_rack.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/wall_clock.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/wardrobe.glb",
+      "phase": "furniture",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/board_game.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/broom_bucket.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/cooking_pot.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/cupboard.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/cutlery_set.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/cutting_board.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/frying_pan.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/guitar.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/kettle.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/laundry_basket.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/mirror_stand.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/pillow_blanket.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/radio_set.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/shower.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/sink_basin.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/television.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/towel_rack.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/wardrobe_open.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/washbasin.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/water_glass.glb",
+      "phase": "household",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/ball.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/child_crib_mobile.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/cradle.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/playground_swing.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/rocking_horse.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/school_desk.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/toy_blocks.glb",
+      "phase": "family",
+      "stage": 2
+    },
+    {
+      "path": "/models/generated/tripo/abacus.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/anvil.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/assembly_line_conveyor.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/balance_scale_lab.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/barometer.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/battery_bank.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/beaker_set.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/bioreactor_vessel.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/blueprint_table.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/breadboard_rig.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/bunsen_burner.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/calculating_machine.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/casting_foundry_ladle.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/centrifuge.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/cfd_wind_tunnel.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/chalkboard.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/chromatograph.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/cnc_machining_center.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/concrete_mixer.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/crucible.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/cryostat_dewar.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/drafting_table.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/drill_press.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/drilling_rig_deep.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/forge_furnace.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/fume_hood.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/gear_assembly.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/generator.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/genome_sequencer_bench.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/greenhouse.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/harvester.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/heat_treat_furnace.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/industrial_robot_arm.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/invention_prototype_bench.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/irrigation_pump.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/jig_fixture_table.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/lab_bench.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/lathe.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/mainframe.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/mass_spectrometer.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/master_clock_instrument.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/microscope_electron.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/microscope_light.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/milling_machine.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/multimeter.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/optical_bench.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/oscilloscope.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/particle_detector.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/pcr_thermocycler.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/pendulum_rig.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/photonics_bench.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/plough.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/printer_3d_additive.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/prior_art_terminal.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/probe_station.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/protein_crystallography_rig.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/quantum_computer.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/reactor_model.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/replication_station.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/rivalry_dueling_chalkboards.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/ruler_calipers.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/scaffolding.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/server_rack.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/solar_array.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/soldering_station.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/spectrometer.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/spice_test_rig.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/telescope_optical.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/tensile_tester.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/theodolite.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/thermometer_lab.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/transformer_unit.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/vacuum_chamber.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/voltmeter.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/wafer_lithography_stepper.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/wind_turbine.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/workbench_vice.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/workstation.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/xrd_machine.glb",
+      "phase": "instrument",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/apprentice_slate.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/archive_cabinet.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/book_open.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/bread_loaf.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/calibration_standard_set.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/candle.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/clipboard.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/discovery_ledger_book.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/forage_basket.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/fruit_bowl.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/hammer.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/hard_hat.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/keyboard.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/laptop.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/lectern.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/magnifying_glass.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/market_ledger.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/meal_plate.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/meditation_cushion.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/mug.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/nickname_charm.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/patent_globe_kiosk.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/patent_scanner.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/prayer_beads.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/quill_ink.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/screwdriver.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/scroll.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/scythe.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/slide_rule.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/soul_bond_token.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/stamp.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/standards_master_gauge.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/tablet_device.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/thirst_water_skin.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/trowel.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/umbrella.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/wanderer_pack.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/watering_can.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/winter_cloak.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/wrench.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/project_stage_kanban.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_chemistry_generator_hood.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_experimental_designer_board.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_formula_oracle_orb.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_genome_analyst_station.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_literature_scout_carrel.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_protein_modeller_display.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_regulatory_reasoner_desk.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_toxicity_checker_cabinet.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/role_trial_simulator_console.glb",
+      "phase": "role",
+      "stage": 3
+    },
+    {
+      "path": "/models/generated/tripo/coal_pile.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/coin_pile.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/coin_purse.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/collaboration_round_table.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/crate_goods.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/notice_board.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/oil_barrel_stack.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/ore_stockpile.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/patent_archive_wall.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/peer_review_table.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/peer_review_verdict_board.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/produce_basket.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/scales_balance.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/shop_counter.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/stall_canopy.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/tavern_bar.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/tavern_table.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/tech_transfer_crate.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/timber_stack.glb",
+      "phase": "community",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/altar.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/constitution_display.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/drum.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/ethics_oath_lectern.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/fossil_ammonite.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/fossil_dimetrodon.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/fossil_mastodon_tusk.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/fossil_trilobite.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/funeral_pyre.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/guild_charter_scroll.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/idol_statue.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/incense_burner.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/legacy_portrait_gallery.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/loom.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/lute.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/painting_easel.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/pottery_wheel.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/prodigy_laurel.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/scroll_rack.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/sky_belief_totem.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/statue_pedestal.glb",
+      "phase": "culture",
+      "stage": 4
+    },
+    {
+      "path": "/models/generated/tripo/apothecary_shelf.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/fountain.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/street_lamp.glb",
+      "phase": "prop",
+      "stage": 7
+    }
+  ]
+}

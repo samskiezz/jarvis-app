@@ -46,8 +46,30 @@ async function fetchManifest(url: string): Promise<Record<string, ManifestRec>> 
   }
 }
 
-/** Discover everything the world needs from the live manifests. */
+interface LoadOrder {
+  ordered?: { path?: string; phase?: string; stage?: number }[];
+}
+
+/** Discover everything the world needs, IN STAGE ORDER. Prefers the generated
+ *  load_order.json (core world & biomes first, then homes, guild equipment,
+ *  society, epoch ladder, polish) so the world streams in coherently; falls back
+ *  to the raw manifests if the ordered package isn't built yet. */
 export async function discoverAssets(): Promise<AssetEntry[]> {
+  try {
+    const r = await fetch("/models/generated/load_order.json", { cache: "no-cache" });
+    if (r.ok) {
+      const lo = (await r.json()) as LoadOrder;
+      const ordered = (lo.ordered || [])
+        .filter((e) => e.path)
+        .map((e) => ({ url: e.path as string, phase: e.phase || "world" }));
+      if (ordered.length) {
+        const seen = new Set<string>();           // de-dupe, preserve staged order
+        return ordered.filter((e) => (seen.has(e.url) ? false : (seen.add(e.url), true)));
+      }
+    }
+  } catch {
+    /* fall through to manifests */
+  }
   const [scraped, generated] = await Promise.all([
     fetchManifest("/models/scraped/assets_manifest.json"),
     fetchManifest("/models/generated/manifest.json"),
