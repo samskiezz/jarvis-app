@@ -3780,5 +3780,22 @@
     "epoch": "any",
     "name": "Ball",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stool": {
+    "prompt": "a wooden stool, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bb649453-532c-438e-b822-ba94f5c1e323",
+    "path": "/models/generated/tripo/stool.glb",
+    "bytes": 14809724,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bb649453-532c-438e-b822-ba94f5c1e323/tripo_pbr_model_bb649453-532c-438e-b822-ba94f5c1e323.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmI2NDk0NTMtNTMyYy00MzhlLWI4MjItYmE5NGY1YzFlMzIzL3RyaXBvX3Bicl9tb2RlbF9iYjY0OTQ1My01MzJjLTQzOGUtYjgyMi1iYTk0ZjVjMWUzMjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NaoEvLuuu5UsI2vGrW5Ww7FuxqGCxi6X0x4901V84a4pFSH1MOEpLOop4U0dHPjtGnn~puYtaBcfDtuyBA-C~HRO-05xUlLgcacNDFCw~3j0b8GHxDLJci8I1Y2fUkwNbFtDFQh6IBw50fnijQB3kLzEmqbDrqClgTneAB6ufqo7PpSqjEqswfjP1lLe8NQW12SIVz8VqQt~fqy8Fy6lMTPpyEvqBwoGlprQRNAPAaszuuerTlWfy7-yFf5gjVDAzIo2U5Of32PQXiuqyytWmomuUGS5AE51WXxBwG6tqSmkXkD-kP7s1ss1tvsCLFGeMGC4kBAmf37SyCIuYd9EPg__",
+    "asset_id": "stool",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Stool",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
