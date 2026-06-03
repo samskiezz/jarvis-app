@@ -2845,5 +2845,22 @@
     "epoch": "iron",
     "name": "Fireplace",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:floor_tile": {
+    "prompt": "a modular ceramic tiled floor piece, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "bddf30b9-26a3-48cd-ae4b-822ab5fb4c06",
+    "path": "/models/generated/tripo/floor_tile.glb",
+    "bytes": 14046264,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bddf30b9-26a3-48cd-ae4b-822ab5fb4c06/tripo_pbr_model_bddf30b9-26a3-48cd-ae4b-822ab5fb4c06.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmRkZjMwYjktMjZhMy00OGNkLWFlNGItODIyYWI1ZmI0YzA2L3RyaXBvX3Bicl9tb2RlbF9iZGRmMzBiOS0yNmEzLTQ4Y2QtYWU0Yi04MjJhYjVmYjRjMDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DZpWJwhyLbosf3AZYj3-QTGoahUR~9375EA11RBENIxzfmo9iPyTZFr5KVmcpZ3kYFRQYSnG0qfy8zovHDWflEa3K0I~mH-hzO7OJRMKiHLA8Cb50zx9IQzwV~1MPQT2DQ2J39KOzVO1jxLmlmiDQS95jF5UuI-NY8xXndGCQ4~o7YX1TEEHVHJ51gEcHBI0NtWEmGjoPirzKASjknP1A221jd7mbl3siJDIjiurjTMSvHFzfCwdGqqvqQDNyGh46ms8X6vwSl-GtvUNemCRj50xG1x5WiuEnKcyfKngqy6FD4cYSySzN1WUFMeKMQK-NGque3g-xMy4Z4BlNHIFhQ__",
+    "asset_id": "floor_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Floor Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
