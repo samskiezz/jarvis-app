@@ -321,6 +321,18 @@ def _phylogenetics(field: str, seed: int) -> tuple[str, dict, float]:
             r, 0.9 if r["AB_joined_first"] else 0.6)
 
 
+def _aerospace(field: str, seed: int) -> tuple[str, dict, float]:
+    from . import aerospace as AE
+    r1 = 6678.0
+    r2 = 7000.0 + (seed % 40) * 1000
+    h = AE.hohmann_transfer(r1_km=r1, r2_km=r2)
+    esc = AE.escape_velocity()["escape_velocity_kms"]
+    return (f"Astrodynamics for {field}: Hohmann Δv {h['total_dv_kms']} km/s "
+            f"(transfer {h['transfer_time_hr']} h), escape {esc} km/s.",
+            {"total_dv_kms": h["total_dv_kms"], "transfer_time_hr": h["transfer_time_hr"],
+             "escape_velocity_kms": esc}, 0.95)
+
+
 def _stats_fallback(field: str, seed: int) -> tuple[str, dict, float]:
     # a real statistical/optimisation computation (never a fake)
     import numpy as np
@@ -342,6 +354,8 @@ _ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("nuclear", "radioact", "fission", "fusion"), _nuclear),
     (("condensed", "band", "semiconductor_mat"), _bands),
     (("reaction", "kinetic", "catalys"), _oscillator),
+    (("propuls", "astrodynam", "spaceflight", "orbital_mech", "reentry", "rocket",
+      "spacecraft", "launch_veh", "aerospace"), _aerospace),
     (("plasma", "thermal_rad", "atomic_phys"), _radiation),
     (("percolat", "porous", "phase_trans"), _percolation),
     (("evolution", "breeding", "selection", "plant_breed", "optimization_theory"), _evolution),
