@@ -7571,5 +7571,22 @@
     "epoch": "stone",
     "name": "Burial Mound",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cave_painting_wall": {
+    "prompt": "a rock wall with ochre handprints and animal cave paintings, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d542626a-7cbb-4a5c-ac95-a2d5cab64542",
+    "path": "/models/generated/tripo/cave_painting_wall.glb",
+    "bytes": 14771540,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d542626a-7cbb-4a5c-ac95-a2d5cab64542/tripo_pbr_model_d542626a-7cbb-4a5c-ac95-a2d5cab64542.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDU0MjYyNmEtN2NiYi00YTVjLWFjOTUtYTJkNWNhYjY0NTQyL3RyaXBvX3Bicl9tb2RlbF9kNTQyNjI2YS03Y2JiLTRhNWMtYWM5NS1hMmQ1Y2FiNjQ1NDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WxPEWFbB8jb1cNbwmyc5YU~O6VbQ18QfZNr9sFSvdoXdKlGi8WAAU2OkHz6hvDAaYcxa-hbnk-Xiw3v1kKhSZuq-JRIuw2A0GRFUcIGXLUCkd2AsyG5pQFegSgF2PXlEr04dnfrwUXx57MSYt3gnz2qeCieTWO3NMwoDwUwJSNVno1CI5ImQSqhj6jqGa17aPZl8bqkrOwNPNHWuwZkq252rdNommrwbU6-j433g8u~unzjUmq4jwkW10UMkZnoAeL5Kr3FQaiOn1lOCt1epvH8vOnhDDGcOK2Z2ocbuw54i2jfipj58u7lj8toKIfJa6JjQqvDbnYT99~MYp1sZCQ__",
+    "asset_id": "cave_painting_wall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "stone",
+    "name": "Cave Painting Wall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
