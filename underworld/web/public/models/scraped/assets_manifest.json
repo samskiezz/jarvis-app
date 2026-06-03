@@ -2998,5 +2998,22 @@
     "epoch": "any",
     "name": "Armchair",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bathtub": {
+    "prompt": "a clawfoot bathtub, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "33e2cf38-28f9-49a9-943f-04dfa3f7efa5",
+    "path": "/models/generated/tripo/bathtub.glb",
+    "bytes": 13380676,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/33e2cf38-28f9-49a9-943f-04dfa3f7efa5/tripo_pbr_model_33e2cf38-28f9-49a9-943f-04dfa3f7efa5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzNlMmNmMzgtMjhmOS00OWE5LTk0M2YtMDRkZmEzZjdlZmE1L3RyaXBvX3Bicl9tb2RlbF8zM2UyY2YzOC0yOGY5LTQ5YTktOTQzZi0wNGRmYTNmN2VmYTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=PmRfhU1I3OLXyXCqaKXmigjA1YVnO~BzESbi02PMnMPWxOXOQNh6FtJsZKMGSAaXoFdhNhkzKUb1eFW-rBK4zoj~t5M7u~YkpBNt8hVXSfWJd0BTaKLT58vc8Yli95cHnKB5MJ4WyKUKas7mthRQNSaxZ4RZV0fTvyz1Q1-uVqM75mwZqOqv2Hfv9wExL3dZZrdPC7z-92uSFglXnRas4JkCnCMHwvGQohu4bCPqPwPrqjKTIO-yt7v-zGaxqtJw-YJcJf1TaszIwxyFtzRcbUp19xRmOZG1-m8M2vjEcWntlGwUOjdcMZqIY7fVE~-eN~dJAoZbvcc8G8qjSZR8LA__",
+    "asset_id": "bathtub",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "industrial",
+    "name": "Bathtub",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
