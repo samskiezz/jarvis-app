@@ -3882,5 +3882,22 @@
     "epoch": "industrial",
     "name": "School Desk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:toy_blocks": {
+    "prompt": "a pile of children's wooden toy blocks, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ef7860d1-1f2a-4a7b-9796-c748ef35822e",
+    "path": "/models/generated/tripo/toy_blocks.glb",
+    "bytes": 15014548,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ef7860d1-1f2a-4a7b-9796-c748ef35822e/tripo_pbr_model_ef7860d1-1f2a-4a7b-9796-c748ef35822e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWY3ODYwZDEtMWYyYS00YTdiLTk3OTYtYzc0OGVmMzU4MjJlL3RyaXBvX3Bicl9tb2RlbF9lZjc4NjBkMS0xZjJhLTRhN2ItOTc5Ni1jNzQ4ZWYzNTgyMmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KI1W9OOYUVyGZuO2SIDg90YEYoLkDLCrOtECJS6mndbOWpGPypadqwROTzHVFqkYv2Owv3oT637el68lWCn9oIrE6d116YKjNza9521CAZQiiKVQGQ3PJhPaLLRfl6g8vufxwYWvEMsYsl-05rzWmZcHwdDciViIe9amQAg8hdBA-SXx7eHkdFjlVdHUAuSqkbRhUF6JxKqi~GXlAEFreCIxtRJ-xrc5n3USYKfjCi9ZsOD7e62xx15wFt2mdF5xSy0NeLsWfmo73IJm-JiZ2rQcePOVuEnAl4VCbKxCtEtAVuCDoeNAM4ZlqX4Q-A9W65OauwfXWC4iiasRwi7Kog__",
+    "asset_id": "toy_blocks",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "family",
+    "epoch": "any",
+    "name": "Toy Blocks",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
