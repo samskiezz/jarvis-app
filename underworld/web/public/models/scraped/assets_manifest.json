@@ -3848,5 +3848,22 @@
     "epoch": "industrial",
     "name": "Playground Swing",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rocking_horse": {
+    "prompt": "a wooden rocking horse, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f2f4ad58-1279-4b0a-8c88-7067a15e5694",
+    "path": "/models/generated/tripo/rocking_horse.glb",
+    "bytes": 11677556,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f2f4ad58-1279-4b0a-8c88-7067a15e5694/tripo_pbr_model_f2f4ad58-1279-4b0a-8c88-7067a15e5694.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjJmNGFkNTgtMTI3OS00YjBhLThjODgtNzA2N2ExNWU1Njk0L3RyaXBvX3Bicl9tb2RlbF9mMmY0YWQ1OC0xMjc5LTRiMGEtOGM4OC03MDY3YTE1ZTU2OTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=d-CWGzSscRC6Q6csNXEJVody-WpBzZLJfMZusDgDZpF9OlJWSr5Ohf2Vsje4WF5fvSR9YBKfRAnnFwaeL~R4xUW~G-QSgDdUkT3Dm60r8qUZ7Yi6SZUze1nto6a-bq-w5~8n9f~bJGUTGN1-LMSeB3xiEQX~ZFvpFclQu1qcFhFI4r0LgL2vtDCIe6yw6rTB17oaODwdLJOmwfpAaO2KfiVVu7gHNdBpwzFowwOjn91W4ySWPMbwAQ~s21As37M5uDp-FQHuN4vlSz4s9HXMvoRACXIr959msQ~lYAArTWFiKsZXVv4JlkDADVdj7PlRc5veWqbXksWxWW7RYOUpMw__",
+    "asset_id": "rocking_horse",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "family",
+    "epoch": "iron",
+    "name": "Rocking Horse",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
