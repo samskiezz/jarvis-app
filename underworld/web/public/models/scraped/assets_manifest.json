@@ -6534,5 +6534,22 @@
     "epoch": "stone",
     "name": "Funeral Pyre",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_charter_scroll": {
+    "prompt": "a framed founding-charter scroll with wax seal, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6fe36d12-a8a9-4b41-bc2b-733879e3148f",
+    "path": "/models/generated/tripo/guild_charter_scroll.glb",
+    "bytes": 12351800,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6fe36d12-a8a9-4b41-bc2b-733879e3148f/tripo_pbr_model_6fe36d12-a8a9-4b41-bc2b-733879e3148f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmZlMzZkMTItYThhOS00YjQxLWJjMmItNzMzODc5ZTMxNDhmL3RyaXBvX3Bicl9tb2RlbF82ZmUzNmQxMi1hOGE5LTRiNDEtYmMyYi03MzM4NzllMzE0OGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aE9QBwr1TN64u~XsxvXeFnU2Dy7BLQlOnormo46aikeH1dSa3RE1lt1HDZ~wE8lZZRL4Po-XjTUb13qdF3ChiOPR8huvQJEcW1kcjXAukmngIQ86se4BGJ1~Ng8IjaSi~1dFvO69I1hBeTta8cT6sqbh-rjIwI32h9xFI11uSoBGv~GUHxzSE9AmTIG-ovWliW~OPDZH7C2JCNPJyuakGfYfT7ZWljBdTk2WMQCYmYuOi3YByduQCTjIt7gc6LiL0ouAPTZNykeIonocFxLeZeMYYuxgum4U5l-bgU-LvvxHcHglGZdAyDcmN8kwuxSPUXYwFcgjuwFwud5s~Vm73g__",
+    "asset_id": "guild_charter_scroll",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "iron",
+    "name": "Guild Charter Scroll",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
