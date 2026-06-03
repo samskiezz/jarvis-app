@@ -5429,5 +5429,22 @@
     "epoch": "industrial",
     "name": "Hard Hat",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:keyboard": {
+    "prompt": "a computer keyboard, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1ba012b6-233f-4625-8fd5-9e561c0fb8f4",
+    "path": "/models/generated/tripo/keyboard.glb",
+    "bytes": 12541008,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1ba012b6-233f-4625-8fd5-9e561c0fb8f4/tripo_pbr_model_1ba012b6-233f-4625-8fd5-9e561c0fb8f4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMWJhMDEyYjYtMjMzZi00NjI1LThmZDUtOWU1NjFjMGZiOGY0L3RyaXBvX3Bicl9tb2RlbF8xYmEwMTJiNi0yMzNmLTQ2MjUtOGZkNS05ZTU2MWMwZmI4ZjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Sb6B0BouK9X1uXA3~~vfYgmVuERrI6wHbOAI25ejTCskoDzWcqSvMDuRJrrWRhz8C6GrciP~6FiYbyduNXOFRtiybF2D~bDTZs0mCginao7bx9kJY-s4DiO1fE6aX2OMWGKJhrxSylfpRxU56suYf1g8Sl4QLcYAzQioDh9r7m~unxe6s9MrK~qyizfaxp6F1mrqx2O8jOiRa9Tj6NUaD0gsFU1ypCitFMSgX06S3t4l3CThg0UWXjNHvPgdTQh7OOgt8d3hJvcvy8HK0zVUj6tmXME5-2~t7L5lutBFtiWIHjAxsH0ado~Md1d0lmN~Ue9mJH2477SOBzJt1Gc7kQ__",
+    "asset_id": "keyboard",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "information",
+    "name": "Keyboard",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
