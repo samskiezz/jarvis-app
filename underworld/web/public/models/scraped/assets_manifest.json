@@ -8115,5 +8115,22 @@
     "epoch": "information",
     "name": "Transistor Replica",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:vaccination_kit": {
+    "prompt": "an early vaccination lancet kit with vials, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "af59dc3c-1422-40d3-a5ab-d04c26ebad92",
+    "path": "/models/generated/tripo/vaccination_kit.glb",
+    "bytes": 15151332,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/af59dc3c-1422-40d3-a5ab-d04c26ebad92/tripo_pbr_model_af59dc3c-1422-40d3-a5ab-d04c26ebad92.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWY1OWRjM2MtMTQyMi00MGQzLWE1YWItZDA0YzI2ZWJhZDkyL3RyaXBvX3Bicl9tb2RlbF9hZjU5ZGMzYy0xNDIyLTQwZDMtYTVhYi1kMDRjMjZlYmFkOTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Vb41szUdncAhHJlyFqe-NhEFzjkA9PF3PtaDiiERuo43pjL0KGG5pYKBEEdSqspduYmx1F9MlERY~VXicdKYiwdKWWXory1ihAnKTso~6AKl7xXhXmFB3zmBloeXAwr04lluYmrk4pFtW0BZq95aoqOKxT~GmRY91ePIWJf0~Dguzi-zTLue9IMyNelfCn1JU4sUrATnIffsqBYJ0gRjiYyv7VSG1aL3zsAYt8UYTNDdd-TKqvyhFcwd~0s4FzaU3h~~oY2xuFzZSJaRytEMavYlng-JkuMxDhX38rWGsb9PRSpViaV2YlYsr~yOfMQy-loGhQxY-s4iskt48z9zxQ__",
+    "asset_id": "vaccination_kit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Vaccination Kit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
