@@ -6551,5 +6551,22 @@
     "epoch": "iron",
     "name": "Guild Charter Scroll",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:idol_statue": {
+    "prompt": "a carved religious idol statue, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d770d081-a8d0-4bbb-8ecb-a89458e4e6d3",
+    "path": "/models/generated/tripo/idol_statue.glb",
+    "bytes": 10957460,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d770d081-a8d0-4bbb-8ecb-a89458e4e6d3/tripo_pbr_model_d770d081-a8d0-4bbb-8ecb-a89458e4e6d3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDc3MGQwODEtYThkMC00YmJiLThlY2ItYTg5NDU4ZTRlNmQzL3RyaXBvX3Bicl9tb2RlbF9kNzcwZDA4MS1hOGQwLTRiYmItOGVjYi1hODk0NThlNGU2ZDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=e9VWzu7KrFWMhCTOQmFJYXCylOiRuoUGmbKYM5PYLYdrGpEqnZBuylUaex882JPa6~09sg-8xLRmpzqenRXc4-I1gcNHqISp68XY~Lvdb1rhBY~KYxlVoiySXXyc-D7sIUmct3RfJ7vDbu2wf~gVcgt8-I4YPMvXJMJNh8HcZzb4q980SCFEcRGHFdXT2ZazICmimQJUjTBq3hqGNHvIAmyfcAwKxPBBvQlVUbL99PqW5QSE~SHE6AIbRcDcGq6uo5oJ3OFI~qpcBDjkao4nXXvB0beaX34PbNX9DNORQf6vEl-rK0FAGRVxQLvd2UR3y8JObSHwnzPFgvqOfklFZg__",
+    "asset_id": "idol_statue",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "bronze",
+    "name": "Idol Statue",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
