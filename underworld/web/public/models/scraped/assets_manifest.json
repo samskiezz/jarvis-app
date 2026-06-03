@@ -7299,5 +7299,22 @@
     "epoch": "industrial",
     "name": "Rail Track",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rowboat": {
+    "prompt": "a small wooden rowboat, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "136d6d9a-9bd6-4dd8-9450-6db5face08d3",
+    "path": "/models/generated/tripo/rowboat.glb",
+    "bytes": 13321620,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/136d6d9a-9bd6-4dd8-9450-6db5face08d3/tripo_pbr_model_136d6d9a-9bd6-4dd8-9450-6db5face08d3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTM2ZDZkOWEtOWJkNi00ZGQ4LTk0NTAtNmRiNWZhY2UwOGQzL3RyaXBvX3Bicl9tb2RlbF8xMzZkNmQ5YS05YmQ2LTRkZDgtOTQ1MC02ZGI1ZmFjZTA4ZDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=sqHwJxlKwNSHd5uOYyDYxnjvNca6EEw2SZ3HnYMrfsb1629V49HB0Hbb9TqCDwedEG8Hsbg4nq~40rKs6Z3Me6VAw1s2uyby~6V4rbEafuYOeADDELWDu7mUcaDskl7XyigSuor~31iNG1LOZu4tSoxOpYdPqDPqGZyQ9kX2PqmPenPmzApbSMt6ipnrONbC5-~ptawDA81OLGmnRgD1RU7F5PlFdhCl~jLpmDMgiUlXHp0YVlEwnVJFK~Pgq4amPj0K9HSk3A7mlJOe2J7PqCNZ7B6VJE2ArFsnGOjXTL0tACND-ts0P0yg1e-14-W2eEK-aitduxak27pHzEUGrw__",
+    "asset_id": "rowboat",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "iron",
+    "name": "Rowboat",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
