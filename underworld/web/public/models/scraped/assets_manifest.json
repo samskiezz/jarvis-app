@@ -5973,5 +5973,22 @@
     "epoch": "information",
     "name": "Role Genome Analyst Station",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_literature_scout_carrel": {
+    "prompt": "a library study carrel piled with stacked research papers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0f498cd3-4896-40ca-9a3e-81a2536e8077",
+    "path": "/models/generated/tripo/role_literature_scout_carrel.glb",
+    "bytes": 14930348,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0f498cd3-4896-40ca-9a3e-81a2536e8077/tripo_pbr_model_0f498cd3-4896-40ca-9a3e-81a2536e8077.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGY0OThjZDMtNDg5Ni00MGNhLTlhM2UtODFhMjUzNmU4MDc3L3RyaXBvX3Bicl9tb2RlbF8wZjQ5OGNkMy00ODk2LTQwY2EtOWEzZS04MWEyNTM2ZTgwNzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QUJ0J2Fa4KpPUCzdILhUjJzrvJUE~~Kyo8HyldqAE~cY1EVGgiqgDQ0dPDCkqfxCTqnCfDoQfOozV2vn94lmATr0Knom7DjXg09GvAnPaNl~Y-jpmhetbY4n5U4~qJx2vXNIF6QGRU35A9JjNH2RVkg9cOTRdrkMF1M0X5WyjcTlgWOvRo7Sm4k2eiMpNnAlTzeywFEgR1hlopZCmEy5cbRP3Am~Gak-ApkW0Vb7KgszQFYjO~K5fff07IjnlIkk~fod7kTtGvppPLdEY~YWNgE1OZUNwHU8ykiyRJtrba~6rFOFL8VXhV~xpxFiHbl6x5t7aVr9bCYTpk4-wh4z7w__",
+    "asset_id": "role_literature_scout_carrel",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "industrial",
+    "name": "Role Literature Scout Carrel",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
