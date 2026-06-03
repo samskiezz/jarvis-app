@@ -418,16 +418,251 @@ DESIGNS += [
     ("watchtower", "safety", "iron", f"a wooden guard watchtower, {_STYLE}"),
 ]
 
+# ══════════════════════════════════════════════════════════════════════════════
+# DEPTH PASS — every simulation system made visible. Each row is justified by a
+# real symbol in the backend (cited in the comment), from a full audit of the
+# guilds, instruments, actions, epochs, sagas, roles, biomes and lifecycle.
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── 21. GUILD IDENTITY — banners, crests, review (server/agents/guilds.py) ────
+DESIGNS += [
+    ("guild_banner_maths", "prop", "iron", f"a heraldic banner with a golden compass-and-pi mathematics emblem, {_STYLE}"),
+    ("guild_banner_physics", "prop", "iron", f"a heraldic banner with an orbiting-atom physics emblem, {_STYLE}"),
+    ("guild_banner_electrical", "prop", "iron", f"a heraldic banner with a lightning-bolt electrical emblem, {_STYLE}"),
+    ("guild_banner_mechanical", "prop", "iron", f"a heraldic banner with a cog-and-piston mechanical emblem, {_STYLE}"),
+    ("guild_banner_computing", "prop", "information", f"a heraldic banner with a circuit-tree computing emblem, {_STYLE}"),
+    ("guild_banner_civil", "prop", "iron", f"a heraldic banner with an arch-and-compass civil-engineering emblem, {_STYLE}"),
+    ("guild_banner_materials", "prop", "iron", f"a heraldic banner with a crucible-and-crystal materials emblem, {_STYLE}"),
+    ("guild_banner_energy", "prop", "industrial", f"a heraldic banner with a sun-and-turbine energy emblem, {_STYLE}"),
+    ("guild_banner_agriculture", "prop", "bronze", f"a heraldic banner with a wheat-sheaf agriculture emblem, {_STYLE}"),
+    ("guild_banner_patent", "prop", "industrial", f"a heraldic banner with a quill-and-seal patent emblem, {_STYLE}"),
+    ("guild_banner_safety", "prop", "industrial", f"a heraldic banner with a shield safety emblem, {_STYLE}"),
+    ("guild_crest_plaque", "prop", "iron", f"a carved wall crest plaque mounted by a guild entrance, {_STYLE}"),
+    ("guild_charter_scroll", "culture", "iron", f"a framed founding-charter scroll with wax seal, {_STYLE}"),
+    ("peer_review_table", "community", "iron", f"a round peer-review table with verdict tokens and stacked papers, {_STYLE}"),
+    ("safety_block_stamp", "object", "industrial", f"a heavy red safety-BLOCK rubber stamp and ink pad, {_STYLE}"),
+]
+
+# ── 22. INSTRUMENTS — canonical Instrument enum + domain benches ──────────────
+# server/services/instruments.py::Instrument, feature_catalog.py categories N–U
+DESIGNS += [
+    ("ruler_calipers", "instrument", "bronze", f"a wooden ruler with brass vernier calipers, {_STYLE}"),
+    ("balance_scale_lab", "instrument", "iron", f"a precision two-pan laboratory balance with weights, {_STYLE}"),
+    ("thermometer_lab", "instrument", "industrial", f"a tall mercury laboratory thermometer on a stand, {_STYLE}"),
+    ("barometer", "instrument", "industrial", f"a polished wall barometer, {_STYLE}"),
+    ("voltmeter", "instrument", "industrial", f"an analog panel voltmeter with a needle dial, {_STYLE}"),
+    ("chromatograph", "instrument", "information", f"a gas-chromatography column rig with tubing, {_STYLE}"),
+    ("mass_spectrometer", "instrument", "information", f"a mass-spectrometer console with vacuum chamber, {_STYLE}"),
+    ("genome_sequencer_bench", "instrument", "information", f"a benchtop genome sequencer with sample tray, {_STYLE}"),
+    ("master_clock_instrument", "instrument", "iron", f"a precision pendulum regulator master clock, {_STYLE}"),
+    ("photonics_bench", "instrument", "quantum", f"an optical photonics table with fibre, lenses and a laser, {_STYLE}"),
+    ("cryostat_dewar", "instrument", "quantum", f"a quantum cryostat dilution dewar with gold plates, {_STYLE}"),
+    ("protein_crystallography_rig", "instrument", "information", f"a protein crystallography diffraction bench, {_STYLE}"),
+    ("bioreactor_vessel", "instrument", "information", f"a stirred glass bioreactor vessel with probes, {_STYLE}"),
+    ("pcr_thermocycler", "instrument", "information", f"a PCR thermocycler machine with a sample block, {_STYLE}"),
+    ("wafer_lithography_stepper", "instrument", "information", f"a semiconductor photolithography stepper, {_STYLE}"),
+    ("probe_station", "instrument", "information", f"a semiconductor wafer probe station with micro-needles, {_STYLE}"),
+    ("cfd_wind_tunnel", "instrument", "industrial", f"a wind-tunnel test section with a model inside, {_STYLE}"),
+    ("spice_test_rig", "instrument", "information", f"an electronics breadboard SPICE test rig with probes, {_STYLE}"),
+    ("calibration_standard_set", "object", "industrial", f"a boxed set of calibration weights and gauge standards, {_STYLE}"),
+    ("clean_room_booth", "building", "information", f"a glass clean-room booth with an air shower, {_STYLE}"),
+    ("time_crystal_rig", "fx", "quantum", f"a time-crystal experiment chamber with pulsing rings of light, {_FX}"),
+]
+
+# ── 23. ACTION SET-PIECES — minion.py::_ACTIONS without a unique prop ─────────
+DESIGNS += [
+    ("ascension_altar", "fx", "quantum", f"a glowing ascension shrine with a rising beam of light, {_FX}"),
+    ("fork_pod", "fx", "quantum", f"a futuristic minion-duplication pod with glowing fluid, {_FX}"),
+    ("collaboration_round_table", "community", "industrial", f"a large round collaboration table strewn with shared blueprints, {_STYLE}"),
+    ("partner_courtship_bench", "prop", "any", f"a romantic garden courtship bench under a flowering arch, {_STYLE}"),
+    ("prior_art_terminal", "instrument", "information", f"a patent prior-art search terminal with a glowing screen, {_STYLE}"),
+]
+
+# ── 24. EPOCH LADDER — the 65 milestones made visible (epochs.py::EPOCHS) ─────
+# History you can see: each artifact marks how far the civilisation has climbed.
+DESIGNS += [
+    ("oldowan_tool", "epoch", "stone", f"a knapped stone Oldowan chopper tool, {_STYLE}"),
+    ("cave_painting_wall", "epoch", "stone", f"a rock wall with ochre handprints and animal cave paintings, {_STYLE}"),
+    ("burial_mound", "epoch", "stone", f"a ritual stone burial cairn mound, {_STYLE}"),
+    ("bow_and_arrow", "epoch", "stone", f"a hunting bow with a quiver of arrows, {_STYLE}"),
+    ("potters_kiln", "epoch", "bronze", f"a fired-pottery kiln with clay pots, {_STYLE}"),
+    ("cuneiform_tablet", "epoch", "bronze", f"a clay tablet covered in cuneiform writing, {_STYLE}"),
+    ("law_stele", "epoch", "bronze", f"a tall carved stone law stele with inscriptions, {_STYLE}"),
+    ("iron_smelting_bloomery", "epoch", "iron", f"a clay bloomery furnace smelting iron with glowing ore, {_STYLE}"),
+    ("coin_mint_die", "epoch", "iron", f"a coin-striking die with blank discs and struck coins, {_STYLE}"),
+    ("philosophy_agora", "epoch", "iron", f"an open-air colonnaded agora for philosophical debate, {_STYLE}"),
+    ("aqueduct_arch", "epoch", "iron", f"a Roman stone aqueduct arch span, {_STYLE}"),
+    ("euclid_scroll_geometry", "epoch", "iron", f"a geometry proof scroll with a compass and straightedge, {_STYLE}"),
+    ("paper_press_screen", "epoch", "iron", f"a papermaking vat with a deckle screen drying sheets, {_STYLE}"),
+    ("mechanical_clock_movement", "epoch", "industrial", f"an exposed brass mechanical clock gear movement, {_STYLE}"),
+    ("scientific_method_chart", "epoch", "industrial", f"a wall chart of the hypothesis-experiment scientific method, {_STYLE}"),
+    ("vaccination_kit", "epoch", "industrial", f"an early vaccination lancet kit with vials, {_STYLE}"),
+    ("faraday_induction_coil", "epoch", "industrial", f"a Faraday induction coil dynamo apparatus, {_STYLE}"),
+    ("germ_theory_slides", "epoch", "industrial", f"a tray of stained microscope slides with a culture flask, {_STYLE}"),
+    ("combustion_engine_cutaway", "epoch", "industrial", f"a cutaway internal-combustion engine model, {_STYLE}"),
+    ("wright_flyer", "epoch", "industrial", f"an early wood-and-canvas powered biplane flyer, {_STYLE}"),
+    ("nuclear_reactor_pile", "epoch", "information", f"an early graphite nuclear reactor pile, {_STYLE}"),
+    ("transistor_replica", "epoch", "information", f"an oversized chrome transistor sculpture on a plinth, {_STYLE}"),
+    ("dna_double_helix_model", "epoch", "information", f"a coloured DNA double-helix molecular model, {_STYLE}"),
+    ("satellite_sputnik", "epoch", "information", f"an early metal satellite with antennae, {_STYLE}"),
+    ("integrated_circuit_wafer", "epoch", "information", f"a silicon integrated-circuit wafer on a display stand, {_STYLE}"),
+    ("network_switch_node", "epoch", "information", f"an early network router node with blinking link lights, {_STYLE}"),
+    ("smartphone_device", "epoch", "information", f"a modern smartphone with a glowing touchscreen, {_STYLE}"),
+    ("crispr_cas9_model", "epoch", "information", f"a CRISPR-Cas9 gene-editing molecular model, {_STYLE}"),
+    ("foundation_model_gpu_pod", "epoch", "information", f"an AI training GPU server pod with glowing racks, {_STYLE}"),
+    ("agi_core", "epoch", "quantum", f"a glowing spherical AGI reasoning core suspended in a frame, {_FX}"),
+    ("longevity_pod", "epoch", "quantum", f"a medical longevity regeneration pod with soft light, {_STYLE}"),
+    ("bci_headset", "epoch", "quantum", f"a sleek brain-computer-interface headset with electrodes, {_STYLE}"),
+    ("self_driving_lab_cell", "epoch", "quantum", f"an autonomous robotic self-driving laboratory cell, {_STYLE}"),
+    ("nanofab_assembler", "epoch", "quantum", f"an atomically-precise nanofabrication assembler glowing blue, {_FX}"),
+    ("orbital_habitat_ring", "epoch", "quantum", f"a rotating orbital habitat ring station, {_FX}"),
+    ("dyson_swarm_collector", "epoch", "quantum", f"a Dyson-swarm solar collector panel array glowing gold, {_FX}"),
+    ("mind_upload_substrate", "epoch", "quantum", f"a mind-upload substrate column streaming light, {_FX}"),
+    ("interstellar_ship", "epoch", "quantum", f"a sleek interstellar starship with glowing engines, {_FX}"),
+    ("star_engine", "epoch", "quantum", f"a colossal stellar-engineering megastructure beside a star, {_FX}"),
+]
+
+# ── 25. SAGAS — narrative motifs/cast set-pieces (sagas.py::ARCHETYPES) ───────
+DESIGNS += [
+    ("mentor_apprentice_bench", "furniture", "iron", f"a shared workbench set for a mentor and apprentice, two stools, {_STYLE}"),
+    ("rivalry_dueling_chalkboards", "instrument", "industrial", f"two competing chalkboards facing off, covered in rival equations, {_STYLE}"),
+    ("discovery_eureka_lamp", "fx", "industrial", f"a desk with a brilliantly glowing eureka-moment lamp and notes, {_FX}"),
+    ("prodigy_laurel", "culture", "iron", f"a prodigy's laurel wreath and medal on a display stand, {_STYLE}"),
+    ("plague_sickbed_lamp", "medical", "iron", f"a sickbed studied by lamplight with medicine bottles, {_STYLE}"),
+    ("renaissance_open_studio", "fx", "industrial", f"a flourishing open art-and-science studio cluster, glowing warmly, {_FX}"),
+    ("wanderer_pack", "object", "iron", f"a traveller's leather pack with a bedroll and walking staff, {_STYLE}"),
+    ("saga_memorial_plaque", "monument", "any", f"a bronze memorial plaque on a stone for a resolved saga, {_STYLE}"),
+    ("legacy_portrait_gallery", "culture", "industrial", f"a wall gallery of ancestral lineage portraits in gilt frames, {_STYLE}"),
+]
+
+# ── 26. INVENTIONS / PATENTS — the discovery machinery (discovery.py etc.) ────
+DESIGNS += [
+    ("invention_prototype_bench", "instrument", "industrial", f"a workbench with a half-built mechanical invention prototype, {_STYLE}"),
+    ("patent_archive_wall", "community", "industrial", f"a wall of labelled patent filing drawers, {_STYLE}"),
+    ("discovery_ledger_book", "object", "iron", f"a heavy bound discovery provenance ledger with a ribbon, {_STYLE}"),
+    ("peer_review_verdict_board", "community", "industrial", f"a review verdict board with PASS, REVISE and BLOCK cards, {_STYLE}"),
+    ("replication_station", "instrument", "information", f"a replication-experiment station with paired apparatus, {_STYLE}"),
+    ("patent_globe_kiosk", "object", "information", f"a prior-art world-map globe kiosk with pins, {_STYLE}"),
+    ("tech_transfer_crate", "community", "industrial", f"a stencilled technology-transfer shipping crate, {_STYLE}"),
+    ("citation_graph_display", "fx", "information", f"a holographic citation knowledge-graph display, glowing nodes, {_FX}"),
+]
+
+# ── 27. SOCIAL / CIVIC / GOVERNANCE (governance.py, civics.py, economy.py) ────
+DESIGNS += [
+    ("tribal_council_circle", "civic", "stone", f"a tribal council circle of log seats around a fire ring, {_STYLE}"),
+    ("kings_throne_hall", "building", "iron", f"a grand throne hall with a raised royal throne, {_STYLE}"),
+    ("republic_senate_house", "civic", "iron", f"a columned senate assembly chamber with tiered seats, {_STYLE}"),
+    ("courthouse", "civic", "industrial", f"a dignified courthouse with columns and a pediment, {_STYLE}"),
+    ("law_code_pillar", "monument", "bronze", f"a stone pillar inscribed with a codified law code, {_STYLE}"),
+    ("constitution_display", "culture", "industrial", f"a framed constitution document under glass on a stand, {_STYLE}"),
+    ("voting_booth", "civic", "industrial", f"a curtained ballot voting booth with a box, {_STYLE}"),
+    ("mint_bank", "civic", "iron", f"a stately bank and treasury building with a vault door, {_STYLE}"),
+    ("ore_stockpile", "community", "bronze", f"a stockpile of mixed copper, tin and iron ore chunks, {_STYLE}"),
+    ("coal_pile", "community", "industrial", f"a heaped pile of black coal, {_STYLE}"),
+    ("oil_barrel_stack", "community", "industrial", f"a stack of riveted oil barrels, {_STYLE}"),
+    ("timber_stack", "community", "any", f"a neatly stacked pile of cut timber logs, {_STYLE}"),
+    ("entertainment_arena", "civic", "iron", f"a small open-air contest arena with tiered stone seating, {_STYLE}"),
+    ("theatre_stage", "civic", "industrial", f"a proscenium theatre stage with red curtains, {_STYLE}"),
+    ("cinema_marquee", "building", "industrial", f"a cinema building with a lit marquee, {_STYLE}"),
+    ("vr_arcade", "building", "information", f"a neon video-game and VR arcade hall, {_STYLE}"),
+    ("race_track_post", "prop", "stone", f"a foot-race finish post with a ribbon, {_STYLE}"),
+    ("sky_belief_totem", "culture", "stone", f"a carved totem venerating a glowing console in the sky, {_STYLE}"),
+    ("prayer_circle_stones", "monument", "stone", f"a circle of standing prayer stones, {_STYLE}"),
+    ("ethics_oath_lectern", "culture", "iron", f"an ornate lectern holding an open ethics oath book, {_STYLE}"),
+    ("standards_master_gauge", "object", "industrial", f"a glass case holding a master reference gauge standard, {_STYLE}"),
+]
+
+# ── 28. BIOMES / WEATHER / WORLD (climate.py, seed.py, ecosystem.py …) ────────
+DESIGNS += [
+    ("desert_dune_tile", "biome", "any", f"a modular sand dune desert terrain tile, seamless, {_STYLE}"),
+    ("cactus_succulent", "biome", "any", f"a cluster of desert cacti and succulents, {_STYLE}"),
+    ("mountain_peak_tile", "biome", "any", f"a rocky snow-capped mountain peak terrain tile, {_STYLE}"),
+    ("plateau_mesa", "biome", "any", f"a flat-topped desert mesa rock formation, {_STYLE}"),
+    ("forest_floor_tile", "biome", "any", f"a leaf-litter forest floor terrain tile with roots, {_STYLE}"),
+    ("rolling_hills_tile", "biome", "any", f"a grassy rolling-hills terrain tile, {_STYLE}"),
+    ("plains_meadow_tile", "biome", "any", f"an open flower-dotted meadow plains tile, {_STYLE}"),
+    ("alpine_pine_cluster", "biome", "any", f"a cluster of tall alpine conifer pines, {_STYLE}"),
+    ("rain_puddle_decal", "biome", "any", f"a wet ground patch with rain puddles and ripples, {_STYLE}"),
+    ("snow_drift", "biome", "any", f"a sculpted snow drift over snow-covered ground, {_STYLE}"),
+    ("storm_debris", "biome", "any", f"scattered wind-blown storm debris and broken branches, {_STYLE}"),
+    ("autumn_leaf_pile", "biome", "any", f"a pile of fallen autumn leaves in warm colours, {_STYLE}"),
+    ("winter_bare_tree", "biome", "any", f"a snow-laden bare winter tree, {_STYLE}"),
+    ("sun_disc", "fx", "any", f"a warm glowing sun disc billboard with soft rays, {_FX}"),
+    ("moon_disc", "fx", "any", f"a pale glowing crescent moon billboard, {_FX}"),
+    ("cloud_volume", "fx", "any", f"a soft stylised fluffy cloud set piece, {_FX}"),
+    ("prey_deer_herd", "biome", "any", f"a small group of grazing deer, {_STYLE}"),
+    ("predator_wolf", "biome", "any", f"a standing grey wolf predator, {_STYLE}"),
+    ("hunting_blind", "biome", "stone", f"a camouflaged wooden hunter's blind hide, {_STYLE}"),
+    ("fault_rift_terrain", "biome", "any", f"a cracked tectonic fault-rift terrain section, {_STYLE}"),
+    ("volcano_cone", "biome", "any", f"a smoking volcanic cone with a glowing crater, {_STYLE}"),
+    ("smog_haze_emitter", "fx", "industrial", f"a thick industrial smog haze set piece over rooftops, {_FX}"),
+    ("slag_heap", "biome", "industrial", f"a dark industrial slag waste heap, {_STYLE}"),
+]
+
+# ── 29. NEEDS / LIFECYCLE / MOOD (lifecycle.py, emotion.py, MoodKind) ─────────
+DESIGNS += [
+    ("mood_emote_ring", "fx", "any", f"a floating ring of glowing mood emoji icons, {_FX}"),
+    ("grave_headstone", "monument", "any", f"a weathered stone grave headstone, {_STYLE}"),
+    ("funeral_pyre", "culture", "stone", f"a stacked wooden funeral pyre bier, {_STYLE}"),
+    ("reincarnation_shrine", "fx", "quantum", f"a soul-reincarnation shrine with a rising swirl of light, {_FX}"),
+    ("child_crib_mobile", "family", "any", f"a hanging crib mobile of little carved shapes, {_STYLE}"),
+    ("nickname_charm", "object", "any", f"a small engraved birth-nickname charm token, {_STYLE}"),
+    ("thirst_water_skin", "object", "stone", f"a leather water-skin flask, {_STYLE}"),
+    ("exhaustion_bedroll", "furniture", "stone", f"a simple rolled-out woven bedroll, {_STYLE}"),
+    ("wound_bandage_kit", "medical", "iron", f"a rolled bandage and wound-dressing kit, {_STYLE}"),
+    ("soul_bond_token", "object", "any", f"a pair of matching soul-bond keepsake pendants, {_STYLE}"),
+]
+
+# ── 30. RESEARCH ROLES & PROJECT PIPELINE (roles.py::SwarmRoleKind) ───────────
+DESIGNS += [
+    ("role_literature_scout_carrel", "role", "industrial", f"a library study carrel piled with stacked research papers, {_STYLE}"),
+    ("role_genome_analyst_station", "role", "information", f"a genome-analysis station with a wall of sequence screens, {_STYLE}"),
+    ("role_protein_modeller_display", "role", "information", f"a glowing holographic 3D protein-fold display, {_FX}"),
+    ("role_chemistry_generator_hood", "role", "information", f"a chemistry synthesis fume hood with reagent bottles, {_STYLE}"),
+    ("role_toxicity_checker_cabinet", "role", "information", f"a toxicity-assay safety cabinet with hazard labels, {_STYLE}"),
+    ("role_trial_simulator_console", "role", "information", f"an in-silico clinical-trial simulation console, {_STYLE}"),
+    ("role_regulatory_reasoner_desk", "role", "industrial", f"a regulatory-review desk with stacked binders and stamps, {_STYLE}"),
+    ("role_experimental_designer_board", "role", "industrial", f"an experiment-design planning board with pinned protocols, {_STYLE}"),
+    ("role_formula_oracle_orb", "role", "iron", f"a glowing equation-filled formula oracle orb on a pedestal, {_FX}"),
+    ("project_stage_kanban", "role", "information", f"a project-stage kanban board with cards across columns, {_STYLE}"),
+]
+
+# ── 31. PALEONTOLOGY / DEEP TIME (paleontology.py::_PREHISTORY) ───────────────
+DESIGNS += [
+    ("fossil_dig_site", "prop", "any", f"an excavation dig pit with brushes, pickaxe and exposed bones, {_STYLE}"),
+    ("fossil_trilobite", "culture", "any", f"a trilobite fossil embedded in a stone slab, {_STYLE}"),
+    ("fossil_ammonite", "culture", "any", f"a spiral ammonite fossil in rock, {_STYLE}"),
+    ("fossil_tyrannosaur_skull", "monument", "any", f"a large mounted tyrannosaur fossil skull, {_STYLE}"),
+    ("fossil_dimetrodon", "culture", "any", f"a sail-backed dimetrodon fossil skeleton, {_STYLE}"),
+    ("fossil_mastodon_tusk", "culture", "any", f"a curved mastodon fossil tusk on a mount, {_STYLE}"),
+    ("stromatolite_mound", "nature", "any", f"a layered stromatolite mound in shallow water, {_STYLE}"),
+    ("drilling_rig_deep", "instrument", "industrial", f"a deep-strata core drilling rig, {_STYLE}"),
+]
+
+# ── 32. MANUFACTURING / FACTORY / SUPPLY (manufacturing.py::Process, grid.py) ─
+DESIGNS += [
+    ("casting_foundry_ladle", "instrument", "iron", f"a foundry casting ladle pouring molten metal into a mould, {_STYLE}"),
+    ("heat_treat_furnace", "instrument", "industrial", f"an industrial heat-treatment furnace, {_STYLE}"),
+    ("cnc_machining_center", "instrument", "information", f"an enclosed CNC machining centre, {_STYLE}"),
+    ("industrial_robot_arm", "instrument", "information", f"an articulated industrial assembly robot arm, {_STYLE}"),
+    ("printer_3d_additive", "instrument", "information", f"an additive 3D printer mid-print, {_STYLE}"),
+    ("assembly_line_conveyor", "instrument", "industrial", f"a section of factory conveyor assembly line, {_STYLE}"),
+    ("jig_fixture_table", "instrument", "industrial", f"a workholding jig-and-fixture table with clamps, {_STYLE}"),
+    ("power_grid_substation", "infra", "industrial", f"an electrical grid substation with transformers, {_STYLE}"),
+    ("supply_depot_warehouse", "building", "industrial", f"a supply-chain depot warehouse with loading bays, {_STYLE}"),
+]
+
 
 # Build order: terrain first, then the world fills in, instruments dress the labs,
 # daily-life props last. Every category appears here so `designs_for` sorts cleanly.
 PHASE_ORDER = [
-    "terrain", "nature", "building", "civic", "fx",          # stage 1: core world
+    "terrain", "nature", "biome", "building", "civic", "fx",  # stage 1: core world + biomes
     "interior", "furniture", "household", "family",           # stage 2: home & daily life
-    "instrument", "object",                                   # stage 3: guild work & tools
+    "instrument", "object", "role",                           # stage 3: guild work, tools & roles
     "community", "culture",                                   # stage 4: community & economy
     "medical", "agri", "infra", "safety",                     # stage 5: society systems
-    "vehicle", "monument", "prop",                            # stage 6: movement & polish
+    "epoch",                                                  # stage 6: epoch ladder (history)
+    "vehicle", "monument", "prop",                            # stage 7: movement & polish
 ]
 
 # ── STAGES — the best order to complete generation in, as credit-sized waves ───
@@ -436,12 +671,13 @@ PHASE_ORDER = [
 # follow a Minion through her home; stage 3 makes the guilds work; and so on. This
 # lets generation run one wave at a time, matched to how many credits are loaded.
 STAGES: dict[int, dict] = {
-    1: {"name": "Core World",          "categories": ["terrain", "nature", "building", "civic", "fx"]},
+    1: {"name": "Core World & Biomes", "categories": ["terrain", "nature", "biome", "building", "civic", "fx"]},
     2: {"name": "Home & Daily Life",   "categories": ["interior", "furniture", "household", "family"]},
-    3: {"name": "Guild Work & Tools",  "categories": ["instrument", "object"]},
+    3: {"name": "Guild Work & Roles",  "categories": ["instrument", "object", "role"]},
     4: {"name": "Community & Economy",  "categories": ["community", "culture"]},
     5: {"name": "Society Systems",     "categories": ["medical", "agri", "infra", "safety"]},
-    6: {"name": "Movement & Polish",   "categories": ["vehicle", "monument", "prop"]},
+    6: {"name": "Epoch Ladder",        "categories": ["epoch"]},
+    7: {"name": "Movement & Polish",   "categories": ["vehicle", "monument", "prop"]},
 }
 
 # category → stage number (reverse index, for fast filtering)
