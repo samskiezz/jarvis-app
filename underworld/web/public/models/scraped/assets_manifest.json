@@ -7826,5 +7826,22 @@
     "epoch": "bronze",
     "name": "Law Stele",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:longevity_pod": {
+    "prompt": "a medical longevity regeneration pod with soft light, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "82c222d5-2d39-41c2-a395-c54d5ecbcbbc",
+    "path": "/models/generated/tripo/longevity_pod.glb",
+    "bytes": 14762672,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/82c222d5-2d39-41c2-a395-c54d5ecbcbbc/tripo_pbr_model_82c222d5-2d39-41c2-a395-c54d5ecbcbbc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODJjMjIyZDUtMmQzOS00MWMyLWEzOTUtYzU0ZDVlY2JjYmJjL3RyaXBvX3Bicl9tb2RlbF84MmMyMjJkNS0yZDM5LTQxYzItYTM5NS1jNTRkNWVjYmNiYmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jhkei6TUG6hCNEEL4TUh9UEUJXjqy9yBv5ISIk1afFO2e0-oSRvhmSCqYpO6bSCeOGe~ZYwmLpG-Y-cGmNt0Rho83VJzeADFeNQOCfJpFyyUH8-i7~ENBTizHN4ISnj5Pg~9okxjZcla9UKOn3PHD-dUi9jbrhyiS6p7EpKEuDPQrTxBd5P~Kn5RWEh3b1pByJE~aEON8vgGX5JWkbRfJShMpNqjtnP~vsW0eXM716cKswaFXZe2JzbsPZjf6xIRvJgktIRJp5KqLlBVnlVfwqaS3aixFlRf-w3hAURQaCLYBiyu7DX96UBVaP5lSqEdlJFtTF3xxlnP1Ie~W3hIhw__",
+    "asset_id": "longevity_pod",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Longevity Pod",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
