@@ -4035,5 +4035,22 @@
     "epoch": "information",
     "name": "Bioreactor Vessel",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:blueprint_table": {
+    "prompt": "a table covered with rolled blueprints, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9f980d74-2c39-456d-8371-e3b043fa8609",
+    "path": "/models/generated/tripo/blueprint_table.glb",
+    "bytes": 14996932,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9f980d74-2c39-456d-8371-e3b043fa8609/tripo_pbr_model_9f980d74-2c39-456d-8371-e3b043fa8609.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWY5ODBkNzQtMmMzOS00NTZkLTgzNzEtZTNiMDQzZmE4NjA5L3RyaXBvX3Bicl9tb2RlbF85Zjk4MGQ3NC0yYzM5LTQ1NmQtODM3MS1lM2IwNDNmYTg2MDkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=gWYeydIi9nTq0x6KvOfgJ50Yp2Mq2b9hEsqFg5sCElKmvBtiCqyJlFT6z9y3Y0EDvMD4bpvesFaPunIvH-QoCJh0vSYLoVQ8Qu8W8YOdkpT-GXA3PSNKu2vrjWar35-UcGsiNXftfOF-iQshc1DK7EmWCUkoTZK8qP8ukFmV6tkfvHvUHiJC2DgswWGig2HEY0DHYMRyAZEMIoTtBoyX2JmWR~tzz0KgEIxLNjXIBqjWkeNHsk1XI4wUA2aQRXse~ZP679QJyszsxEWTeoEGt1Tw0a~BWR~evsgo9XimkmRBFgSkLkThmkooiHf25APM3ARdJxGlr5p8MyudJRbCzg__",
+    "asset_id": "blueprint_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Blueprint Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
