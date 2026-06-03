@@ -5769,5 +5769,22 @@
     "epoch": "information",
     "name": "Tablet Device",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:thirst_water_skin": {
+    "prompt": "a leather water-skin flask, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "62edcd3b-209c-4a31-8cae-27eff11210e2",
+    "path": "/models/generated/tripo/thirst_water_skin.glb",
+    "bytes": 14827348,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/62edcd3b-209c-4a31-8cae-27eff11210e2/tripo_pbr_model_62edcd3b-209c-4a31-8cae-27eff11210e2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjJlZGNkM2ItMjA5Yy00YTMxLThjYWUtMjdlZmYxMTIxMGUyL3RyaXBvX3Bicl9tb2RlbF82MmVkY2QzYi0yMDljLTRhMzEtOGNhZS0yN2VmZjExMjEwZTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kiFEK6gsDXVGnvRJZ7Fu1jBSCCxh8DRhB9hzIEmAS-OLqO0y-JDnjn8YFm46DCLm7tfNrK7XoHqe6kauQUqB~QN5SIxkLm6-2TUPH0ZW9M2AGMBg5KaTZd2u2HOWH0bmSckauUJcS9Rs3qLv~MeYuR7ypajUGf2JlcPhwaUuVkh3PPJ1HuaBs1f0SqurGsj6rB7RfhxA1EK1XpcMQ5UGxhidY4GNIT8MGlTholz15wuSUsri91B3voXRlpLPVpXlcyQHXYg8OVbtrK9L7ujY0DnrUp9UDwK7tzUza4nVTKcWb2osJjgPOFVU0ad9XN~vrh5X-yXTSPNq7BwS86heSw__",
+    "asset_id": "thirst_water_skin",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "stone",
+    "name": "Thirst Water Skin",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
