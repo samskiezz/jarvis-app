@@ -23,6 +23,10 @@ from . import (methods_medicine as MED, methods_neuro as NEU, methods_agronomy a
 from . import (methods_ocean as OC, methods_metallurgy as MET, methods_qcomputing as QC,
                methods_linguistics as LING, methods_geodesy as GD, methods_nuclear as NUC,
                methods_polymer as POL, methods_atmoschem as ATM)
+# fleet 5
+from . import (methods_plasma as PL, methods_photovoltaics as PV, methods_foodscience as FS2,
+               methods_biomechanics as BM, methods_forestry as FOR, methods_hydrogeology as HG,
+               methods_pharmacology as PHA, methods_veterinary as VET)
 
 # (keyword-substrings, callable) — first match wins. Domain-specific first.
 ROUTES: list[tuple[tuple[str, ...], object]] = [
@@ -317,6 +321,77 @@ ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("henry_law", "gas_solubility"), ATM.henry_law_solubility),
     (("lcl", "condensation_level", "cloud_base"), ATM.lifting_condensation_level),
     (("residence_time", "turnover", "atmospheric_chem"), ATM.atmospheric_residence_time),
+    # ── fleet 5 ───────────────────────────────────────────────────────────────
+    # plasma / fusion
+    (("plasma_freq",), PL.plasma_frequency),
+    (("debye",), PL.debye_length),
+    (("lawson", "fusion", "triple_product"), PL.lawson_triple_product),
+    (("gyroradius", "gyromotion"), PL.gyromotion),
+    (("coulomb_log",), PL.coulomb_log_collision),
+    (("saha", "ionization"), PL.saha_ionization),
+    (("bremsstrahlung",), PL.bremsstrahlung_power),
+    (("plasma_beta", "plasma"), PL.plasma_beta),
+    # photovoltaics
+    (("solar_cell", "iv_curve"), PV.solar_cell_iv_curve),
+    (("fill_factor",), PV.fill_factor_efficiency),
+    (("shockley_queisser", "detailed_balance"), PV.shockley_queisser),
+    (("mppt", "max_power_point"), PV.maximum_power_point),
+    (("air_mass", "irradiance", "am15"), PV.air_mass_irradiance),
+    (("voc_temp", "temperature_coeff"), PV.voc_temperature_coeff),
+    (("bandgap_wave", "photovolt"), PV.bandgap_wavelength),
+    # food science
+    (("d_value", "z_value", "thermal_death"), FS2.thermal_death),
+    (("pasteuriz", "steriliz", "f0"), FS2.f0_sterilization),
+    (("water_activity", "sorption"), FS2.water_activity_raoult),
+    (("freezing_point", "cryoscopic"), FS2.freezing_point_depression),
+    (("maillard", "browning"), FS2.maillard_rate_ratio),
+    (("shelf_life", "q10"), FS2.q10_shelf_life),
+    (("brix", "food_science"), FS2.sg_to_brix),
+    # biomechanics
+    (("hill_muscle", "force_velocity"), BM.hill_muscle),
+    (("bone_stress",), BM.bone_stress),
+    (("bone_buckling", "long_bone"), BM.bone_buckling),
+    (("joint_torque", "moment_arm"), BM.joint_torque),
+    (("gait", "walking_freq"), BM.gait_pendulum),
+    (("cost_transport", "metabolic_cost"), BM.cost_transport),
+    (("tendon", "strain_energy"), BM.tendon_energy),
+    (("ground_reaction", "biomechanic"), BM.ground_reaction),
+    # forestry
+    (("tree_volume", "taper"), FOR.tree_volume),
+    (("biomass_allometry", "agb"), FOR.biomass_allometry),
+    (("tree_growth", "dendrolog"), FOR.tree_growth),
+    (("carbon_sequest", "sequestration"), FOR.carbon_sequest),
+    (("self_thinning", "stand_density", "silvicultur"), FOR.self_thinning),
+    (("site_index", "height_age"), FOR.site_index),
+    (("basal_area",), FOR.basal_area),
+    (("forest_canopy", "forestry"), FOR.canopy_light),
+    # hydrogeology
+    (("darcy_flux", "groundwater_flux"), HG.darcy_flux),
+    (("theis", "well_drawdown", "pumping_test"), HG.theis_drawdown),
+    (("conductivity_perm", "intrinsic_perm"), HG.conductivity_permeability),
+    (("dupuit", "thiem", "well_discharge"), HG.dupuit_well_discharge),
+    (("contaminant_transport", "advection_disp", "retardation"), HG.contaminant_transport),
+    (("storativity", "aquifer_storage"), HG.aquifer_storage_volume),
+    (("hazen",), HG.hazen_conductivity),
+    (("seepage", "pore_velocity", "hydrogeolog", "groundwater", "aquifer"), HG.seepage_velocity),
+    # pharmacology / toxicology
+    (("two_compartment", "biexponential"), PHA.two_compartment_pk),
+    (("clearance", "half_life", "volume_dist"), PHA.pk_parameters),
+    (("loading_dose",), PHA.loading_dose),
+    (("steady_state", "accumulation"), PHA.steady_state),
+    (("therapeutic_index",), PHA.therapeutic_index),
+    (("pkpd", "emax"), PHA.emax_pkpd),
+    (("michaelis_elim", "saturable"), PHA.michaelis_menten_elimination),
+    (("probit", "ld50", "pharmacolog", "toxicolog"), PHA.probit_ld50),
+    # veterinary / animal science
+    (("kleiber", "metabolic_rate", "bmr_animal"), VET.kleiber_metabolic_rate),
+    (("allometric_dose", "animal_dose"), VET.allometric_dose),
+    (("von_bertalanffy", "animal_growth"), VET.von_bertalanffy_growth),
+    (("heart_rate_mass",), VET.heart_rate_mass),
+    (("gestation",), VET.gestation_period),
+    (("feed_conversion", "fcr"), VET.feed_conversion),
+    (("thermoneutral", "critical_temp"), VET.thermoneutral_zone),
+    (("herd", "livestock", "animal_husbandry", "veterinar"), VET.herd_logistic_growth),
 ]
 
 
