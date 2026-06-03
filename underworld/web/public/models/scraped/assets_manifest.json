@@ -8812,5 +8812,22 @@
     "epoch": "any",
     "name": "Partner Courtship Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:race_track_post": {
+    "prompt": "a foot-race finish post with a ribbon, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6782f414-0428-411a-b1c0-79d9580d2942",
+    "path": "/models/generated/tripo/race_track_post.glb",
+    "bytes": 14934948,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6782f414-0428-411a-b1c0-79d9580d2942/tripo_pbr_model_6782f414-0428-411a-b1c0-79d9580d2942.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjc4MmY0MTQtMDQyOC00MTFhLWIxYzAtNzlkOTU4MGQyOTQyL3RyaXBvX3Bicl9tb2RlbF82NzgyZjQxNC0wNDI4LTQxMWEtYjFjMC03OWQ5NTgwZDI5NDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=h9kGwY2AsMs5cx~3cWNpf~2rFMi0qZh8JsFOUkJSH4mioM4Lw9TzQqEpnVr9tq0m2qZmhlVdzxVfcwF04pgz67yGB6UWtxlhpRiN96u4UjTocT1tKkcYV18S6-3CQvSZ24HKs~mpqldNFFLTlu-YykGz3Deo3nsXxFZ-k9ezYkuw-10q0hU8Z~kHrIYz3uqhQfVBxVUQlLP1Hk~wR-jeHzg5YKlkdvbg2330TpzODXnvkFC58P9N023hhmfebPpLQTeN9edY-cki0ohPRac5pD9kz43omASZz7W-97gEabkeeiWhSo46FIvOu6HMR3SYDMJsgwYTJWP0bDfblE5PRg__",
+    "asset_id": "race_track_post",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "stone",
+    "name": "Race Track Post",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
