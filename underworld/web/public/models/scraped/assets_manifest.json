@@ -8710,5 +8710,22 @@
     "epoch": "iron",
     "name": "Guild Banner Physics",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_safety": {
+    "prompt": "a heraldic banner with a shield safety emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "768fc0c5-c80d-4c0a-b4a7-1b6fcac39cec",
+    "path": "/models/generated/tripo/guild_banner_safety.glb",
+    "bytes": 12106632,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/768fc0c5-c80d-4c0a-b4a7-1b6fcac39cec/tripo_pbr_model_768fc0c5-c80d-4c0a-b4a7-1b6fcac39cec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzY4ZmMwYzUtYzgwZC00YzBhLWI0YTctMWI2ZmNhYzM5Y2VjL3RyaXBvX3Bicl9tb2RlbF83NjhmYzBjNS1jODBkLTRjMGEtYjRhNy0xYjZmY2FjMzljZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VICTxpS1eSY5FYr41iH54GhanGLGNYm3e8WmFEieBxWylQyCQptZsJOyCpddF4YO1t-2mWem59s0oM0Dvw2XZ4S5b-o3m9h2jw7byMASC2R8oCF1~374UiKbsF1Pap3MFa8UKsvLjiBeo0fhJx21194u0q3Nyme1ISOXUjriF~7ahH3~NWpRtKjPJ94moXwuz98HU-8IIhs3t4KP2FSOFdCFw0V1~l9OD~E0tUsadvfGa0R2dxejx83m5zmdc~Bn-SM4AMqns7XJy3JsFG7xD4f65RGqMvV3~doFse8HBBzrKp25regUSHQxjnf3H96sPfSrg~213PxZSG-q1C8DlQ__",
+    "asset_id": "guild_banner_safety",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "industrial",
+    "name": "Guild Banner Safety",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
