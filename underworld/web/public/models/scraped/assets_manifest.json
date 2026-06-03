@@ -8132,5 +8132,22 @@
     "epoch": "industrial",
     "name": "Vaccination Kit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wright_flyer": {
+    "prompt": "an early wood-and-canvas powered biplane flyer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5198b511-b9f5-4092-819f-88ade9f6e008",
+    "path": "/models/generated/tripo/wright_flyer.glb",
+    "bytes": 7057836,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5198b511-b9f5-4092-819f-88ade9f6e008/tripo_pbr_model_5198b511-b9f5-4092-819f-88ade9f6e008.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTE5OGI1MTEtYjlmNS00MDkyLTgxOWYtODhhZGU5ZjZlMDA4L3RyaXBvX3Bicl9tb2RlbF81MTk4YjUxMS1iOWY1LTQwOTItODE5Zi04OGFkZTlmNmUwMDguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pgvy9gP1Pu6WUyklrrdS3swhJ6qbLXbwS5SAxMM~zhyjgk6OAfAh-1jcZQgVl9-IXedFdYnveTE2icPIv3LIfIy5zZAL2YqEtVzw87kcspcK2G-lqngpZvKTKfv1w0-w0A1FIChbc8vyeem6G1XO2ulxVunNxSzacatC7OTdvT6UU7duhaeqk4KRbtiwjx5DsbuZBR0WU18a7j70fMBGT4UxeQ2qGkWu6JHSfaTIJTIJWQ2oYQgvI3BWdtMrEOp~G6ui2QrnRd6guTzUgehFvS6YoEc7qXiqtyVKHgy~yQFaAmb7vEQj10XOosm9nFhQHQaTpMAv5o99Kr58UKEhgQ__",
+    "asset_id": "wright_flyer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Wright Flyer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
