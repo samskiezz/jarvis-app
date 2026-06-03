@@ -3389,5 +3389,22 @@
     "epoch": "iron",
     "name": "Tool Rack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wall_clock": {
+    "prompt": "a round wall clock, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "dbeb2ca2-d6c9-4cd9-832d-f87c9a304d17",
+    "path": "/models/generated/tripo/wall_clock.glb",
+    "bytes": 14904048,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/dbeb2ca2-d6c9-4cd9-832d-f87c9a304d17/tripo_pbr_model_dbeb2ca2-d6c9-4cd9-832d-f87c9a304d17.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGJlYjJjYTItZDZjOS00Y2Q5LTgzMmQtZjg3YzlhMzA0ZDE3L3RyaXBvX3Bicl9tb2RlbF9kYmViMmNhMi1kNmM5LTRjZDktODMyZC1mODdjOWEzMDRkMTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Z2Pc99ULwFgZy9prPHn9b8aY58brhPAVug6o7ujCMzO4Y-px0g7KeJKk7uzjawOuS-OyYRSgpMHSEdOtAS02XeStZqimZc9qHST3TOAR7UE~c8TYaam297ahJvl9zoXTO4rY6Y0R7cMZw3H4d-ByaG-VAQHyFYHqaUsjMnPo9mcC5~WPWbpK1~NdIM7B4BFJ3xVmo2lyKOwQBpCUjyZRvmM-P30xpRieu4Yv92XtgJwtI~FQDk4~tdF4Rw83azFrRdOIkxmm2gPadzjcIy1P3oJVbD3fs7X5rVJOHqNlN54B2RwOOLe6FH5d292N87sh0Jdt1xyF0q4eGcRwML59BA__",
+    "asset_id": "wall_clock",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "iron",
+    "name": "Wall Clock",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
