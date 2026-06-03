@@ -8421,5 +8421,22 @@
     "epoch": "iron",
     "name": "Victory Arch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:banner": {
+    "prompt": "a hanging guild banner, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2570b2e5-bd2b-4d22-a49e-b568cdf704df",
+    "path": "/models/generated/tripo/banner.glb",
+    "bytes": 6308052,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2570b2e5-bd2b-4d22-a49e-b568cdf704df/tripo_pbr_model_2570b2e5-bd2b-4d22-a49e-b568cdf704df.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjU3MGIyZTUtYmQyYi00ZDIyLWE0OWUtYjU2OGNkZjcwNGRmL3RyaXBvX3Bicl9tb2RlbF8yNTcwYjJlNS1iZDJiLTRkMjItYTQ5ZS1iNTY4Y2RmNzA0ZGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=m~Y7oxJY~2Wuoqgj4ZH7hMwdPO1yfCZ8HNZy1TkYeYf-FPVbNv2j0hsg8-VFZUXfS3ndM0ixqL7yNsbJXxKEsxpSPS6hgfHir1T6efcwM0fuLxPZZbehIed7j4-OCNphk0Qp79GnNvYaXZAM4PyDy2YQxSQTPynn9~tM2lfNjC4UCXO3vfRadxg213wkzAIewqzKx8WoKMIS3KBsSTyoOPvibPmD~t5AXm5MQ5K3ZbGW1Dip9~0BSLNol~yQ60C-lu3lY8IuXYMS3i3Ab7g46dEBgZbh9F~f3YoFpCzMIQXvn58Fjls7v6ltXUoFAcjJe0sqre1Yqea5C8Aq7ph2WQ__",
+    "asset_id": "banner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Banner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
