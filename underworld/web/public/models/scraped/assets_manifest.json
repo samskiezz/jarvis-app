@@ -2148,5 +2148,22 @@
     "epoch": "quantum",
     "name": "Fx Energy Pylon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_fire_pit": {
+    "prompt": "a stone fire pit with glowing embers and flame, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "21a03e05-5f98-47a9-93eb-ce67198177c5",
+    "path": "/models/generated/tripo/fx_fire_pit.glb",
+    "bytes": 15156512,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/21a03e05-5f98-47a9-93eb-ce67198177c5/tripo_pbr_model_21a03e05-5f98-47a9-93eb-ce67198177c5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjFhMDNlMDUtNWY5OC00N2E5LTkzZWItY2U2NzE5ODE3N2M1L3RyaXBvX3Bicl9tb2RlbF8yMWEwM2UwNS01Zjk4LTQ3YTktOTNlYi1jZTY3MTk4MTc3YzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=AzHUBgePveIDsZ2XtBHS0CVVc38jgl-8Yq14UN4q5OgBMtNNZ5xvA7rljcVI3Ss4r67vdlleCUzkMiYzpP80eWvqfZDy8M~MheaVfJcMbplf45uBJnEkSammq88b5SKNcbPNP86QD18zrWozOIwWa7m5bvBSfyf8enmJHbco9Rus4ZxrpQu~ad5XaG-3hZYHiEOPT1O2995-wL1UAGAZ4BOVdUdfowpru4pQIAU1ecNqkKI1vBbZjn3aAt16XepL178EFbYuuC3q1LkDZlNk-NYyu8gKWONmG8qxWC13lowyakQ5v2cXhzTY1qZPAxAgiZJFdz24M~ej~sbA~HeMxw__",
+    "asset_id": "fx_fire_pit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "stone",
+    "name": "Fx Fire Pit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
