@@ -4596,5 +4596,22 @@
     "epoch": "iron",
     "name": "Master Clock Instrument",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:microscope_electron": {
+    "prompt": "a modern electron microscope console, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "90640c16-6815-42a3-b160-b32918f5e91b",
+    "path": "/models/generated/tripo/microscope_electron.glb",
+    "bytes": 14870812,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/90640c16-6815-42a3-b160-b32918f5e91b/tripo_pbr_model_90640c16-6815-42a3-b160-b32918f5e91b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTA2NDBjMTYtNjgxNS00MmEzLWIxNjAtYjMyOTE4ZjVlOTFiL3RyaXBvX3Bicl9tb2RlbF85MDY0MGMxNi02ODE1LTQyYTMtYjE2MC1iMzI5MThmNWU5MWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZrVE3Zisb8WDR5GFcE-WJenFzcA1SLBzHDEfQhYtfFNCzY7Ns9XHmOhGqZPSHFPWVb96WTWoGie3lHTmNJL4u1PQA9TzfrpG3FxHGCPI4U2jt5~DkZEjp1mMVh1xDjWDPM048hLpaD-YMU3hZJfGrPJK7dZGshUIEodP-WfKO6przPmAVyQN0k1FwE68BGF~ZfTUMZDJhQatp1EkKM7wv~ikT5S4SbXORH10PcIEBveIptRs~mRK50-tEHE6XDiI9ej8MUoIRx2SAIjqyZUBTAo4OBIYCk8H7A3MUoGuexdhpTN0AnKZZSV8qA0n-TZRWiasI6WtcDqt0NZ~fYOvHQ__",
+    "asset_id": "microscope_electron",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Microscope Electron",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
