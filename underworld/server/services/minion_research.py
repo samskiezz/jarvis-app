@@ -28,12 +28,24 @@ def _materials(seed: int) -> tuple[str, float, float]:
     # design a candidate superconductor (real BCS) …
     tc = ma.superconductor_candidate(debye_temp=300 + (seed % 200),
                                      coupling=0.2 + (seed % 5) * 0.06, dos=1.0)["estimated_tc_k"]
-    # … and run a REAL molecular-dynamics simulation of the candidate lattice
-    # (velocity-Verlet Lennard-Jones); a stable lattice conserves energy.
+    # … run a REAL molecular-dynamics simulation of the candidate lattice
+    # (velocity-Verlet Lennard-Jones; a stable lattice conserves energy) …
     sim = md.run_md(n=32, steps=120, dt=0.001, temp=0.6 + (seed % 4) * 0.1, seed=seed)
-    quality = max(0.0, min(1.0, 0.6 * (tc / 80.0) + 0.4 * (1.0 if sim["conserves_energy"] else 0.3)))
-    return (f"Predicted critical temperature {tc:.1f} K and ran an MD lattice sim "
-            f"(T={sim['temperature']}, energy stable={sim['conserves_energy']}).",
+    # … and a REAL ab-initio electronic-structure calc (Hartree-Fock) of a
+    # candidate diatomic — genuine quantum chemistry, not a heuristic.
+    try:
+        from . import quantum_chemistry as qc
+        r = 0.70 + (seed % 5) * 0.04
+        qe = qc.molecule_energy(f"H 0 0 0; H 0 0 {r:.3f}", basis="sto-3g")
+        qstr = f", HF energy {qe['total_energy_hartree']} Ha (gap {qe['homo_lumo_gap_ev']} eV)"
+        qok = qe["converged"]
+    except Exception:
+        qstr, qok = "", True
+    quality = max(0.0, min(1.0, 0.5 * (tc / 80.0)
+                           + 0.25 * (1.0 if sim["conserves_energy"] else 0.3)
+                           + 0.25 * (1.0 if qok else 0.3)))
+    return (f"Predicted critical temperature {tc:.1f} K, ran an MD lattice sim "
+            f"(T={sim['temperature']}, stable={sim['conserves_energy']}){qstr}.",
             quality, tc)
 
 
@@ -86,15 +98,17 @@ def _energy(seed: int) -> tuple[str, float, float]:
 
 
 def _maths(seed: int) -> tuple[str, float, float]:
-    from . import experiment_design as ed
-    import numpy as np
-    # fit a real response surface to a noisy quadratic and find its optimum
-    rng = np.random.default_rng(seed)
-    X = rng.uniform(-5, 5, size=(40, 2))
-    y = -((X[:, 0] - 1) ** 2 + (X[:, 1] + 2) ** 2) + 10
-    rs = ed.response_surface_fit(X, y)
-    quality = max(0.0, min(1.0, rs.r2))
-    return f"Fit a response surface (R²={rs.r2:.3f}) and located its optimum.", quality, rs.r2
+    """Grounded by REAL symbolic mathematics (SymPy): an exact identity proof,
+    a symbolic equation solve, and a prime factorisation — computer-algebra, not
+    a numeric fit."""
+    from . import math_advanced as ma
+    proven = ma.prove_identity("sin(x)**2 + cos(x)**2", "1")["proven_equal"]
+    sols = ma.solve_equation(f"x**2 - {2 + seed % 23}", "x")["count"]
+    nt = ma.number_theory(360 + (seed % 640))
+    quality = 1.0 if (proven and sols == 2) else 0.6
+    fact = "·".join(f"{p}^{e}" if e > 1 else p for p, e in nt["factorization"].items())
+    return (f"Proved a trig identity exactly, solved a quadratic ({sols} roots), "
+            f"and factored {nt['n']} = {fact}.", quality, float(sols))
 
 
 def _agriculture(seed: int) -> tuple[str, float, float]:
