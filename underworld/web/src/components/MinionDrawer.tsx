@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Brain, Dna as DnaIcon, GitBranch, Heart, Network, ScrollText, X } from "lucide-react";
+import { Brain, Dna as DnaIcon, GitBranch, Heart, MessageSquare, Network, ScrollText, Send, X } from "lucide-react";
 import { api } from "@/lib/api";
 import Avatar from "@/components/ui/Avatar";
 import GuildBadge from "@/components/ui/GuildBadge";
@@ -57,6 +58,111 @@ function TraitBar({ label, value }: { label: string; value: number }) {
       </div>
       <span className="text-right font-mono text-[9px] text-zinc-300">{value.toFixed(2)}</span>
     </div>
+  );
+}
+
+interface ChatLine {
+  role: "user" | "minion";
+  content: string;
+}
+
+function TalkSection({ minionId, name, alive }: { minionId: string; name: string; alive: boolean }) {
+  const [lines, setLines] = useState<ChatLine[]>([]);
+  const [draft, setDraft] = useState("");
+
+  const send = useMutation({
+    mutationFn: (message: string) => {
+      const history = lines.map((l) => ({
+        role: l.role === "minion" ? "assistant" : "user",
+        content: l.content,
+      }));
+      return api.chatMinion(minionId, message, history);
+    },
+    onSuccess: (res) => {
+      setLines((prev) => [...prev, { role: "minion", content: res.reply }]);
+    },
+    onError: (err) => {
+      setLines((prev) => [
+        ...prev,
+        { role: "minion", content: `(no reply — ${(err as Error).message})` },
+      ]);
+    },
+  });
+
+  const submit = () => {
+    const message = draft.trim();
+    if (!message || send.isPending) return;
+    setLines((prev) => [...prev, { role: "user", content: message }]);
+    setDraft("");
+    send.mutate(message);
+  };
+
+  return (
+    <section className="panel">
+      <div className="panel-header">
+        <span className="flex items-center gap-1.5">
+          <MessageSquare size={11} />
+          Talk to {name}
+        </span>
+        {lines.length ? <span>{lines.length} msgs</span> : null}
+      </div>
+      <div className="p-3">
+        {lines.length === 0 ? (
+          <p className="text-[10px] text-zinc-500">
+            Ask {name} anything — they answer in character, from their own mind.
+          </p>
+        ) : (
+          <div className="mb-2 max-h-56 space-y-2 overflow-y-auto pr-1">
+            {lines.map((l, i) => (
+              <div
+                key={i}
+                className={`flex ${l.role === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={
+                    l.role === "user"
+                      ? "max-w-[80%] rounded-lg border border-glow-sky/25 bg-glow-sky/10 px-2.5 py-1.5 text-[10px] text-zinc-200"
+                      : "max-w-[80%] rounded-lg border border-glow-purple/20 bg-ink-2/50 px-2.5 py-1.5 text-[10px] text-zinc-300"
+                  }
+                >
+                  {l.content}
+                </div>
+              </div>
+            ))}
+            {send.isPending ? (
+              <div className="flex justify-start">
+                <div className="rounded-lg border border-glow-purple/20 bg-ink-2/50 px-2.5 py-1.5 text-[10px] italic text-zinc-500">
+                  {name} is thinking…
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+        <div className="flex items-center gap-1.5">
+          <input
+            className="input flex-1 text-[10px]"
+            placeholder={alive ? `Say something to ${name}…` : `Speak with the memory of ${name}…`}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submit();
+              }
+            }}
+          />
+          <button
+            type="button"
+            className="btn shrink-0"
+            disabled={send.isPending || !draft.trim()}
+            onClick={submit}
+            title="Send"
+          >
+            <Send size={12} />
+          </button>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -178,6 +284,9 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             </div>
           ) : null}
         </section>
+
+        {/* TALK — direct in-character chat with this Minion */}
+        <TalkSection minionId={m.id} name={m.name} alive={m.alive} />
 
         {/* COGNITION — neural policy + learned beliefs + trained models */}
         {(brain.data?.dispositions?.length || beliefs.data?.length || models.data?.length) ? (
