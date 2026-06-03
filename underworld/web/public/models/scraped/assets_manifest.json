@@ -7741,5 +7741,22 @@
     "epoch": "information",
     "name": "Foundation Model Gpu Pod",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:germ_theory_slides": {
+    "prompt": "a tray of stained microscope slides with a culture flask, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "42ab2519-a7f4-483a-8ac0-ac568982035b",
+    "path": "/models/generated/tripo/germ_theory_slides.glb",
+    "bytes": 14835640,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/42ab2519-a7f4-483a-8ac0-ac568982035b/tripo_pbr_model_42ab2519-a7f4-483a-8ac0-ac568982035b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDJhYjI1MTktYTdmNC00ODNhLThhYzAtYWM1Njg5ODIwMzViL3RyaXBvX3Bicl9tb2RlbF80MmFiMjUxOS1hN2Y0LTQ4M2EtOGFjMC1hYzU2ODk4MjAzNWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=g~GrW282zOpG1U2BCigS0v-s68r2W-WVZzvWMQC1pYOK1ZNc682a42J4LpAvHrcJiO7qdgBKPNNmM6dDLoj70WMqOCBrLaFW4TLH5JUYQWSGV8NvSje0nIWWHyB--x~b9ex0Gj6q0WdA-EFoFs6ydMVhf0seRYLZbhsg76UTGWw9dtzO6DnGM4z~vreTZDFnASRNolpMAGxRZwGT8plXXTh3nP~wWPca~IyuWC-QpjPiFGuZqUGB8HfYab11b2lLZJervOxqUOn2QMWDOFHmh80z-xJaLfJ7ctoKQvKIA8Napo1ua~Xr~fe6Va22V219EtmnJC5njI3d4L98ZQNIAA__",
+    "asset_id": "germ_theory_slides",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Germ Theory Slides",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
