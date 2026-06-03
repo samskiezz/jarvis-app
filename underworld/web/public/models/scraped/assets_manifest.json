@@ -1587,5 +1587,22 @@
     "epoch": "industrial",
     "name": "Slag Heap",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:snow_drift": {
+    "prompt": "a sculpted snow drift over snow-covered ground, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "3dc59388-a3f0-42a4-8099-d25a2992339f",
+    "path": "/models/generated/tripo/snow_drift.glb",
+    "bytes": 11804896,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3dc59388-a3f0-42a4-8099-d25a2992339f/tripo_pbr_model_3dc59388-a3f0-42a4-8099-d25a2992339f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2RjNTkzODgtYTNmMC00MmE0LTgwOTktZDI1YTI5OTIzMzlmL3RyaXBvX3Bicl9tb2RlbF8zZGM1OTM4OC1hM2YwLTQyYTQtODA5OS1kMjVhMjk5MjMzOWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=sFYVoyAOhKOERSSrMM~zDfhYm8sytME749c6RXbhG4BTLrBNXc~~KPeQEtzZ6AWFrBvH0DcoWKmPR2FzvkLMFDGyYemv98LwmfWWgKyTmBezpzSQUV4hXENYkH1mTjVJFubq82kNVvibFfR0ndFJqxiyvOJ3H7fwbXzrYz-jPRHWF1reuefv-lgRrKeyOAWWnemzEReY3VrHRo4PtAJip3UM0fHd2g6ZduW80u8QMnlJTy8SE1xMqjc2EFPG0VWv4yIWyjR~FhXGRlEUvXC-h2su2800pndWtoTmf4EYsC87szxzPRUVNBysSyndekVdVteS~EmIzEIkPsCOQEdABA__",
+    "asset_id": "snow_drift",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Snow Drift",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
