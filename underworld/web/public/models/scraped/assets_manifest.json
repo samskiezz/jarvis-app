@@ -4239,5 +4239,22 @@
     "epoch": "iron",
     "name": "Crucible",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cryostat_dewar": {
+    "prompt": "a quantum cryostat dilution dewar with gold plates, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8b85b9b3-17bd-4b83-80d6-1e2fe59ec062",
+    "path": "/models/generated/tripo/cryostat_dewar.glb",
+    "bytes": 14709256,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8b85b9b3-17bd-4b83-80d6-1e2fe59ec062/tripo_pbr_model_8b85b9b3-17bd-4b83-80d6-1e2fe59ec062.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGI4NWI5YjMtMTdiZC00YjgzLTgwZDYtMWUyZmU1OWVjMDYyL3RyaXBvX3Bicl9tb2RlbF84Yjg1YjliMy0xN2JkLTRiODMtODBkNi0xZTJmZTU5ZWMwNjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=LJgM~HoyU8ibnwdoA4Ut9-wj0e9ZqbOkyWvu9gAzjtB3JPmL61wpXBV2x81Xc11hSoI5FupjqLIdURVRdvFIrS5zb6TC9jbdRqrzRj-FLVGmhi-ZbkC5Mc1NmW5NtkONlEWAvwvIM8GWONXvzSwLuAvcosGcu02XpmGZbnZZ9GIEOBehJ3kcp5vOyLPBWnkVwKUesKrPiBe2ldBS73oG6PeJpbM~56c2ZNDSHuicunhnbACVhEN1uePzpOF2HWKWQMa0iAMhNyWu851gfvehQ6O8wbNXJwXvZ7v3CPVNsZReaXgWKvl3mU~gx2fn3UJ9DHWHmbZ3ymQ6lFzfHGqlbw__",
+    "asset_id": "cryostat_dewar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "quantum",
+    "name": "Cryostat Dewar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
