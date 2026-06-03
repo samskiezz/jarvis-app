@@ -4698,5 +4698,22 @@
     "epoch": "information",
     "name": "Particle Detector",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pcr_thermocycler": {
+    "prompt": "a PCR thermocycler machine with a sample block, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "925dcccb-871b-4e6a-a1c9-2405141cc82e",
+    "path": "/models/generated/tripo/pcr_thermocycler.glb",
+    "bytes": 15016684,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/925dcccb-871b-4e6a-a1c9-2405141cc82e/tripo_pbr_model_925dcccb-871b-4e6a-a1c9-2405141cc82e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTI1ZGNjY2ItODcxYi00ZTZhLWExYzktMjQwNTE0MWNjODJlL3RyaXBvX3Bicl9tb2RlbF85MjVkY2NjYi04NzFiLTRlNmEtYTFjOS0yNDA1MTQxY2M4MmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=USO3pDoirN~n6ns~ZxXdcnK1U1kHfaPT7eM8jssKBFh4MHoIq8MKYC~Qz~Xnvf7iKBl9cbLeH0YqfJ36O8uuGyZRSz0wYXmtjbhyQQay-c8jurs4zi-LHRkjBqmJ68fYrPGXEX9K6CHKs9bXzmjrgSmvDvqNBXFrdhv~2KA3bJbDRr0GnYiw1-4hfqQkiST7fsaYISV0SM6x1MVYfOnG72XePJMibFQXqOwiaVRsphLDhR4JWBMtScHLy5sK4YPdT3v3u79SDhxSY2UtEOW1LbbhiUpfLuHEuyh~xtohPy6jv0St5AY6iMxscJ~q8PX34heqDmKKQvVU60Yp61Wuxw__",
+    "asset_id": "pcr_thermocycler",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Pcr Thermocycler",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
