@@ -5106,5 +5106,22 @@
     "epoch": "industrial",
     "name": "Transformer Unit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:vacuum_chamber": {
+    "prompt": "a steel vacuum chamber apparatus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e50e2353-7307-4b97-97de-68b5ae81e7a8",
+    "path": "/models/generated/tripo/vacuum_chamber.glb",
+    "bytes": 14763720,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e50e2353-7307-4b97-97de-68b5ae81e7a8/tripo_pbr_model_e50e2353-7307-4b97-97de-68b5ae81e7a8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTUwZTIzNTMtNzMwNy00Yjk3LTk3ZGUtNjhiNWFlODFlN2E4L3RyaXBvX3Bicl9tb2RlbF9lNTBlMjM1My03MzA3LTRiOTctOTdkZS02OGI1YWU4MWU3YTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=YLfCOti3B0P1-TmB9SM2p90BYxTj5fRqJZnouEckRX3HDsjT90qxJszEAtwwi~9wyYV1J9TkwaxdObpUWh3f2MQIsFxiuNEOlIjOSviE1UQSvpfmjLHKH2lCsqCUZGO9UP1FAZEav8nL42R2WJ4xYUQBEUrk3p2p-6FrqHHkcooP6kBenCsmCe9tcXKQ2vfXlWdrXUNa1hdvgQGDnm5KX9D809lpmygEMEZmUFjBOlSy3zkk0ZeZCxWMgvSZlMICEKf0FNpXbPJIIRg9jj4Xpno8u0etwBMvksnxxcpeIny2c97TGEEADmQw9uhKOHVb4q5Izn1uS4eRzoIMJFK0Qw__",
+    "asset_id": "vacuum_chamber",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Vacuum Chamber",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
