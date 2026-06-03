@@ -7282,5 +7282,22 @@
     "epoch": "information",
     "name": "Radio Tower",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rail_track": {
+    "prompt": "a section of railway track, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "32f2c1ac-71b4-4774-b50a-b4b031eb2da9",
+    "path": "/models/generated/tripo/rail_track.glb",
+    "bytes": 6258916,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/32f2c1ac-71b4-4774-b50a-b4b031eb2da9/tripo_pbr_model_32f2c1ac-71b4-4774-b50a-b4b031eb2da9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzJmMmMxYWMtNzFiNC00Nzc0LWI1MGEtYjRiMDMxZWIyZGE5L3RyaXBvX3Bicl9tb2RlbF8zMmYyYzFhYy03MWI0LTQ3NzQtYjUwYS1iNGIwMzFlYjJkYTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=oa6tptm8dMzTK1cT5em9IuhlwXDBODilS-tCV81q-4jx4xMSQGhrqV1x-r8uFv5NfYUCaYdaartMJsRzrVNVSvWz-Ow60NzTkYDHBLRLa5wdCC4dBar2ANfLrWzsKLZn8XJrGJsMP0Ci7xq~FTB-WbLl13MdRhOTpbOm9jl~T3vzlbBYqKhVE-ZuYf41ZzkAwekEZrYpTH6iWYQ97dFXdGAbNu-DmQmAGcaNXUBKjrSDu~KC6AdthUYxd5Rt362OxL~RPZHX5aBtTmf0km4~gbHw96F84hABqMxOcFTKCWN8UCnOzqeFPYs5TYmDxbC-UrmEZ3ne6ijA~cceyE-vLw__",
+    "asset_id": "rail_track",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Rail Track",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
