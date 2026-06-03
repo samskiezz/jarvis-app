@@ -6959,5 +6959,22 @@
     "epoch": "industrial",
     "name": "Stretcher",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:surgical_table": {
+    "prompt": "a stainless surgical table with a light, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3526dd9f-b9d4-4a02-9d0d-fb6db8d666ff",
+    "path": "/models/generated/tripo/surgical_table.glb",
+    "bytes": 12765312,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3526dd9f-b9d4-4a02-9d0d-fb6db8d666ff/tripo_pbr_model_3526dd9f-b9d4-4a02-9d0d-fb6db8d666ff.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzUyNmRkOWYtYjlkNC00YTAyLTlkMGQtZmI2ZGI4ZDY2NmZmL3RyaXBvX3Bicl9tb2RlbF8zNTI2ZGQ5Zi1iOWQ0LTRhMDItOWQwZC1mYjZkYjhkNjY2ZmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZRvb2c8k5AOliJS4cpIG8Ixm7tbROyA4pQslxOWB4siAPkarOc~jKWaY6IFZbbrQ3NID7Vk7jWI7w3X7~k9oDCfWapGXFuC0TZNwSDQPIqwod8hDh8UzhytcqsDdjXo1m4PeCifMQaF0F9CDWiPnjUpfOuSYm9mCi8K7-e4CHvB6eFp9wNt9r1Nx-aXEey6YFUH7tH6sLnF~MYEhpJFBXbyijHPT83HPiCnf0sFZAOVNHxuinNSrP1HHV4Ts-7rjs2oWmSL7ubugmcDUQ~qmf4CyWyAOrffnyDGSGLwU8VfRraZ5e17987SG02PD0VhpsAXp7Ixsuy-F2PcIRfLYVA__",
+    "asset_id": "surgical_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "information",
+    "name": "Surgical Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
