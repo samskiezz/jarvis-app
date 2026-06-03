@@ -8744,5 +8744,22 @@
     "epoch": "iron",
     "name": "Guild Crest Plaque",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:haystack": {
+    "prompt": "a round haystack, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "07ce9c76-fcdb-4506-93f1-b1335e09960d",
+    "path": "/models/generated/tripo/haystack.glb",
+    "bytes": 15408104,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/07ce9c76-fcdb-4506-93f1-b1335e09960d/tripo_pbr_model_07ce9c76-fcdb-4506-93f1-b1335e09960d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDdjZTljNzYtZmNkYi00NTA2LTkzZjEtYjEzMzVlMDk5NjBkL3RyaXBvX3Bicl9tb2RlbF8wN2NlOWM3Ni1mY2RiLTQ1MDYtOTNmMS1iMTMzNWUwOTk2MGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kHDU0MAdhypBbCwAXojpwLUrYcZ9Rwbyqik8FTx6cWMr1HfWapmzQEV187nYeSGn3zNFIfYChS9305M43VnG6w~TDljVhfXWHxs0oZVJvAu2TdObAqjB4xbDKhHXxj554TVAofFFx1ZpiBh8zTpTVfCLd3cZJ3GMAouFG5uZa-by3S0RdGiqNnXc~HfNB~1vu0s4f-BYPPFah5Y4frf85Kop92PvP8~zADp24AKazvHwlBFJLa8Wa-DmPw~j7oN4b8maoFOv36Zq77UB1YXs-0cfWt~48dty3foAUkJs3XB~meuzapGb-QycY3tDyEv~mvGWOiz9R7uYi2j5IYzitA__",
+    "asset_id": "haystack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Haystack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
