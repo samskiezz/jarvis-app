@@ -873,5 +873,39 @@
     "epoch": "any",
     "name": "Tree Pine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_stump": {
+    "prompt": "a cut tree stump with rings, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "964388ce-e061-4c5e-8217-d1e37fe4e2b2",
+    "path": "/models/generated/tripo/tree_stump.glb",
+    "bytes": 14852588,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/964388ce-e061-4c5e-8217-d1e37fe4e2b2/tripo_pbr_model_964388ce-e061-4c5e-8217-d1e37fe4e2b2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTY0Mzg4Y2UtZTA2MS00YzVlLTgyMTctZDFlMzdmZTRlMmIyL3RyaXBvX3Bicl9tb2RlbF85NjQzODhjZS1lMDYxLTRjNWUtODIxNy1kMWUzN2ZlNGUyYjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jBxM9fPDZQ8lXUEHWbJhIWBmXQ4gPb5fgnYRBfX5542Gn2ZLTS4u7UrhKx4iZDDE7gmUZUyWS9Y6s4PWusWkz12v0aCo7U1gIBBBeN8t9lTLJvWrSnYfNX-jJEz37uiq7Lc61ryNeHoO-jx-za-WeFUYVGA7g7fCa8gwjAgwLbHpacqdlhqlR2gcHffrMsekpWCpW12Q-NHyOb7aIIfvna-fYS6tIS~NYt74HaKs4qAwgmWq5d7dASyjguOwAMLlZMU1fROv4dOLi3cwHea3uGA-VXRNOHYmIuYAPNLiUgaJWteQKpIB0sYePTzRJnt8I~r7jY6~wmMyiHDXoImbnQ__",
+    "asset_id": "tree_stump",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Stump",
+    "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_willow": {
+    "prompt": "a drooping willow tree by water, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "59f5916c-28f1-4b66-8925-31f9c3626e34",
+    "path": "/models/generated/tripo/tree_willow.glb",
+    "bytes": 15798400,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/59f5916c-28f1-4b66-8925-31f9c3626e34/tripo_pbr_model_59f5916c-28f1-4b66-8925-31f9c3626e34.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTlmNTkxNmMtMjhmMS00YjY2LTg5MjUtMzFmOWMzNjI2ZTM0L3RyaXBvX3Bicl9tb2RlbF81OWY1OTE2Yy0yOGYxLTRiNjYtODkyNS0zMWY5YzM2MjZlMzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=FrxlW9IGH002SFNg-CnjQL2EBCiPOnW2Hp9j4ke17if6OjZEsuU~~ubbO9hy0SgjV~IA1dPQ-3xzva2Imzrow7toNsy~TkQpM82~uDdlP9mF6GKINt32xG2iPdxZv4cGuyi9rTt3bs-8lu5XQTmXROY2uCw4UKduKuaGD0sI7h7ciotPXBkiSwELogbE-LnfcHY6FcolpaHosl3c5-D1iUkGbZ-dNBy9Eb1F5BNSwKJzz0cgywd0HQD3Vba10aaYhGCxkyPJw-8juCg9eZt4xkOI~hKnuycxJwrIFs3M02bqhoFBeBkWhZqnxhN7ej0Nylf~SSaEv9M3IXJqnIh-uA__",
+    "asset_id": "tree_willow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Willow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
