@@ -7044,5 +7044,22 @@
     "epoch": "bronze",
     "name": "Cow",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fishing_boat": {
+    "prompt": "a small wooden fishing boat with nets, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a9f1fd98-010c-41ec-84db-9b8bacdbc0d2",
+    "path": "/models/generated/tripo/fishing_boat.glb",
+    "bytes": 13969768,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a9f1fd98-010c-41ec-84db-9b8bacdbc0d2/tripo_pbr_model_a9f1fd98-010c-41ec-84db-9b8bacdbc0d2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTlmMWZkOTgtMDEwYy00MWVjLTg0ZGItOWI4YmFjZGJjMGQyL3RyaXBvX3Bicl9tb2RlbF9hOWYxZmQ5OC0wMTBjLTQxZWMtODRkYi05YjhiYWNkYmMwZDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Ckl~A6hRTTHmlvGqtUkM1wX19B3hFw3rTggWeOggQIyoIjgdOW-GVHMhUj~Shzb9QGpO2jANQ44ghxA~J8HKccMoj2Zfja9t63fkgpK-qmqgjXwqfn8ojh0zlt6c0aRJ8VZJKdXN~d0Da7plTKKgOxdgQPzSRCOFeSyGR2U2jePjU8mMAuFgphCAiFGGnu8DuVEqyG9Xu594rXXaq~jQcftaz7QGtTfqjWjS8SHDE11O22KIWBltGP1SK3DRpz1WL9ZJkUVwpfKUuSvkefQCkGp~HITKJCfqVLWr753Q4YPLsjf2Um74lPVPpuSFrlonVd4Q2uRBnamlGHwFPHV3aw__",
+    "asset_id": "fishing_boat",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "iron",
+    "name": "Fishing Boat",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
