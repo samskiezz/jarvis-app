@@ -4290,5 +4290,22 @@
     "epoch": "industrial",
     "name": "Drill Press",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:drilling_rig_deep": {
+    "prompt": "a deep-strata core drilling rig, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2a23d39b-5e49-4c53-aef0-cdcf41f2e2fd",
+    "path": "/models/generated/tripo/drilling_rig_deep.glb",
+    "bytes": 15249740,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2a23d39b-5e49-4c53-aef0-cdcf41f2e2fd/tripo_pbr_model_2a23d39b-5e49-4c53-aef0-cdcf41f2e2fd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmEyM2QzOWItNWU0OS00YzUzLWFlZjAtY2RjZjQxZjJlMmZkL3RyaXBvX3Bicl9tb2RlbF8yYTIzZDM5Yi01ZTQ5LTRjNTMtYWVmMC1jZGNmNDFmMmUyZmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dIAGTd7obZbtbxjv2r8zgbMsyamT1s0HwSvfLyHuva9cD8khNPCjh5AhZL7lx0VeeRBx-5oqF7ykxY-gB5FLRuKRfU4blnXEl6XTmOFSFZqTXlfAd8A2bu0TmMZwcU6x0~H-xgrW-potVLrxTUhc4WNnYP-Ono9tMxPbJawSptiUfUUrjw0OVAymcds6O1U18AkjiDP3C3vnKcUkADsXj3jwEsWplRE~wTAyjX46pLE7lebdV6mUZV-CeRvPETa3OkOKcJpnCtxUcvEvunxaNUy0PPwb5GO9tTrHr-bzai~XbAjGel7gzA0qIlTMoNC3DDwTSdU5GtvUpNXXVpBQcQ__",
+    "asset_id": "drilling_rig_deep",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Drilling Rig Deep",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
