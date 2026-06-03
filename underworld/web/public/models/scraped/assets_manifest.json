@@ -8795,5 +8795,22 @@
     "epoch": "bronze",
     "name": "Well",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_computing_hall": {
+    "prompt": "a modern computing data-hall with server cooling, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ce42da5e-3527-47b2-ab2a-6741e68ead0f",
+    "path": "/models/generated/tripo/guild_computing_hall.glb",
+    "bytes": 15382732,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ce42da5e-3527-47b2-ab2a-6741e68ead0f/tripo_pbr_model_ce42da5e-3527-47b2-ab2a-6741e68ead0f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvY2U0MmRhNWUtMzUyNy00N2IyLWFiMmEtNjc0MWU2OGVhZDBmL3RyaXBvX3Bicl9tb2RlbF9jZTQyZGE1ZS0zNTI3LTQ3YjItYWIyYS02NzQxZTY4ZWFkMGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=S6kr3EutncxFcLN2sKlrosJFcpo891jiw1FdRJSltsmyW9~7Jft8pWP4vo4k308ZTJisHtXqU6gEHX6lkPfcysiJUZ5iAKjrdsxiRYbC97n7DTM48liVDvXmI1LPHPO-1SNVtyOMgiPkBQjo6XtV3loUf3wfaWcomD5ZXuVcnmbqhAOwH6kJbJCgEvo74O9t0tenG0LmrCpwo88O87uECn7rorjFIvUBvpQ11wt8Q64MxIJ2YeeCLRO6kCZYN0~cAWkReW9iTGkwisIsNeis9WAT3Ws1PBtkIORWLKjUY09JSmG8VGNpyOI-CbozsTkL-R5SUDjHwLY31ndkjd6fvA__",
+    "asset_id": "guild_computing_hall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "information",
+    "name": "Guild Computing Hall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
