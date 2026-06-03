@@ -1349,5 +1349,22 @@
     "epoch": "any",
     "name": "Alpine Pine Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:autumn_leaf_pile": {
+    "prompt": "a pile of fallen autumn leaves in warm colours, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "7f6e26c0-1241-49fe-b7b9-7ed08c5531c3",
+    "path": "/models/generated/tripo/autumn_leaf_pile.glb",
+    "bytes": 15371224,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7f6e26c0-1241-49fe-b7b9-7ed08c5531c3/tripo_pbr_model_7f6e26c0-1241-49fe-b7b9-7ed08c5531c3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2Y2ZTI2YzAtMTI0MS00OWZlLWI3YjktN2VkMDhjNTUzMWMzL3RyaXBvX3Bicl9tb2RlbF83ZjZlMjZjMC0xMjQxLTQ5ZmUtYjdiOS03ZWQwOGM1NTMxYzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NBOXLHnV-xFP2g0yXVi6b5fhoziVJxaWr0iIkj1C~J7AcxkfLyW~9JN7Rr2oXUJI-O6g6FoQNbsxnqHC~y3rWj5mFUeW3MFBvEkIbSYoZR8rVMgNp6Ue53z1jQ8nR-1vTxn0Rdr1-nuGGLEfrUutVe~U9-zqBUsvTCyI2~K8VrLSgnil7nT0H~P9UVL6p8pPk7FDY~aApol3aoe1SsC3dWouJxg3mvG0nzKfPirUUgIijfKl0IqGO7hAVWttC1IjSD6wJqPPsjyGe6He5tKsAe26zHOA5hBgXoMJ9siGOKcwaBZKgKInRFJNoUvZRm8JocjkQckd-l~mJwexT0loig__",
+    "asset_id": "autumn_leaf_pile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Autumn Leaf Pile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
