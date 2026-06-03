@@ -8353,5 +8353,22 @@
     "epoch": "industrial",
     "name": "Lighthouse",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:obelisk": {
+    "prompt": "a carved stone obelisk, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "276e2033-45ff-4761-9290-1ddc8821c3c0",
+    "path": "/models/generated/tripo/obelisk.glb",
+    "bytes": 5962740,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/276e2033-45ff-4761-9290-1ddc8821c3c0/tripo_pbr_model_276e2033-45ff-4761-9290-1ddc8821c3c0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjc2ZTIwMzMtNDVmZi00NzYxLTkyOTAtMWRkYzg4MjFjM2MwL3RyaXBvX3Bicl9tb2RlbF8yNzZlMjAzMy00NWZmLTQ3NjEtOTI5MC0xZGRjODgyMWMzYzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=GtdnvbkWkd0mgqGw~sjj57FvM5IqALe5eBiZM5jPrsyewMUZMeME3wMD6RTNvXMhnDWj~ewjMIZiVXWYGsrva8-L3Ml89N2UpB28ylQLMKCqjof5d2B9sxAYXFydMIOivtxAKDSMgfXVPp~OlJ-HT9QxMXiNMwaLoXfh73aavJQZvyiZwD-Ra8sCYuAt2CtqJuLtvOXbTZlaJM5muPDYvx5NNoKhDss~2QBtE63XaZ-ehYUm~imXm3ZJp~YMNHTKOyHw9ZsR6LIaQ7iW1z6uy4ydj~uDgJKRLGaWtOGNryncaJToOeA3U7rl-aHGkswp-MYksPdFFsQzbUKvHJCxMQ__",
+    "asset_id": "obelisk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "bronze",
+    "name": "Obelisk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
