@@ -5888,5 +5888,22 @@
     "epoch": "industrial",
     "name": "Wrench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:project_stage_kanban": {
+    "prompt": "a project-stage kanban board with cards across columns, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6f101ec7-5825-4306-a1a5-f78f9309d0da",
+    "path": "/models/generated/tripo/project_stage_kanban.glb",
+    "bytes": 10896280,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6f101ec7-5825-4306-a1a5-f78f9309d0da/tripo_pbr_model_6f101ec7-5825-4306-a1a5-f78f9309d0da.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmYxMDFlYzctNTgyNS00MzA2LWExYTUtZjc4ZjkzMDlkMGRhL3RyaXBvX3Bicl9tb2RlbF82ZjEwMWVjNy01ODI1LTQzMDYtYTFhNS1mNzhmOTMwOWQwZGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=gNtJtUqrJKw~WQ~o5rkJ-l8Oxq3N308O0XoYvVVpKREv8uJ~MO2GpGbjUbqiH81KtcEA1pgaDgVJnv~l1EVPvYMjp4Qa~mqtr6u70rk5WgxqDKmHxeCMna9exrZo-Kod9x~cDHe6lGLtZqv7I3hWsMfnd8p5K2GBIdSf21pUec5ETYeB2wSloxXDk4F6MLkNydsHgG6zWRc~WPjIyfdt4lxn1EPa0EDKLqjHsVFDzu2fUsxaToeZdI5egvgD-iBecYitLR7UZ8dW6i~OI7Cxd4rfz75aUCB2kiHBu6-z3QCuZR2CSGduccvn8jazKk0IWDq-hzJsoxhsDzjXfJbwVQ__",
+    "asset_id": "project_stage_kanban",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "information",
+    "name": "Project Stage Kanban",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
