@@ -7656,5 +7656,22 @@
     "epoch": "bronze",
     "name": "Cuneiform Tablet",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:dna_double_helix_model": {
+    "prompt": "a coloured DNA double-helix molecular model, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e1c84aa3-277d-4715-b897-de1c725a4aff",
+    "path": "/models/generated/tripo/dna_double_helix_model.glb",
+    "bytes": 11044016,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e1c84aa3-277d-4715-b897-de1c725a4aff/tripo_pbr_model_e1c84aa3-277d-4715-b897-de1c725a4aff.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTFjODRhYTMtMjc3ZC00NzE1LWI4OTctZGUxYzcyNWE0YWZmL3RyaXBvX3Bicl9tb2RlbF9lMWM4NGFhMy0yNzdkLTQ3MTUtYjg5Ny1kZTFjNzI1YTRhZmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HM6XlrssojmELODQql8OQKe60lldAooU8y6u~hMluov3sZbz7JiXUIulPSbdW3j~1a839HsO43-KxcIIfawMGLk3dYNnrP8Ymc01diQDfHnxGJRa2PI97hlL5io2dU3URVtwIDpV2ZMSH0H9EODP3l1m7Khx2JFgHK6qBRGXwyw~uXEKrDVQ8Txdu~FhKnXspjkW0ddkR1aH6ATFS0lcaGWKPWOyQUNOpQp~T66q-WvyZ5MqRc8eyYyudjeNlReal~z-S9ErEoAbRVvr6ccsUX3GkxfAyQvuhVRIe-AHelWj0qQkk6WsuSEbfxXrKBE40z0uuMHx4eYrCIHGMsNSNQ__",
+    "asset_id": "dna_double_helix_model",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Dna Double Helix Model",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
