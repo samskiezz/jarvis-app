@@ -1927,5 +1927,22 @@
     "epoch": "industrial",
     "name": "Water Tower",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ascension_altar": {
+    "prompt": "a glowing ascension shrine with a rising beam of light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "c712de0b-8abd-492b-84b9-109dc0bb5dac",
+    "path": "/models/generated/tripo/ascension_altar.glb",
+    "bytes": 11492624,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c712de0b-8abd-492b-84b9-109dc0bb5dac/tripo_pbr_model_c712de0b-8abd-492b-84b9-109dc0bb5dac.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzcxMmRlMGItOGFiZC00OTJiLTg0YjktMTA5ZGMwYmI1ZGFjL3RyaXBvX3Bicl9tb2RlbF9jNzEyZGUwYi04YWJkLTQ5MmItODRiOS0xMDlkYzBiYjVkYWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=i6SLbAVfdUDXmGkjBcehu~Wm47JSWzJZxTbetU3pOS2uPu59ooHdWmrmm4jHsOevMrkWE8L4zITSv93y5huyWBnlQPztxLwNBM~J9VwzEOl8kP32LEBUiLKfo7xhxTkb-HiYsNkO015yqj3ZfiOQkiz6MyO9DuAjZzs2paTd8x48mtvmG-g~7Hia3vReMN6yraNHPRiYyu4ummTNOYmvuMK0IEeuzW8tvA3ybNWGloAKNkCIcnmwKm7hlzzUS6PssSuzne6hxwzJtvL2RGYAmwEWFEQzXQzNdJkwQZ7~ciH1lHsf97X1Ha154LVOum9lUl0Q9ZleMtNmN2wsa7curA__",
+    "asset_id": "ascension_altar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Ascension Altar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
