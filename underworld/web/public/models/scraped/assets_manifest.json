@@ -5497,5 +5497,22 @@
     "epoch": "industrial",
     "name": "Magnifying Glass",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:market_ledger": {
+    "prompt": "an open market ledger book with a pen, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "df0b991d-ac0e-4e38-a312-e0194fcdde5a",
+    "path": "/models/generated/tripo/market_ledger.glb",
+    "bytes": 14964012,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/df0b991d-ac0e-4e38-a312-e0194fcdde5a/tripo_pbr_model_df0b991d-ac0e-4e38-a312-e0194fcdde5a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGYwYjk5MWQtYWMwZS00ZTM4LWEzMTItZTAxOTRmY2RkZTVhL3RyaXBvX3Bicl9tb2RlbF9kZjBiOTkxZC1hYzBlLTRlMzgtYTMxMi1lMDE5NGZjZGRlNWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=sLwyOoe0CIBOtgmG9loLXSsqYYPajxgja4uTlWeDG10hdErz7s8BQQS91N7OtZeF8Itnzq4MbKCoga4vSUz6jDzMHicb125gxQbQrY3coiCkPnFahiNeEnpn11swsshaWJ6rslNank8R~tMXog6Dby8oEsks12NyFSlvkbKKOyBhMiuRhgYupm6fiWUQfzHmYAliwYrdGdbNZ8ZuCXfPvEKu9cv0zsWqBvrkJ4SA~7Z9dnduNzVyyXLy1LKBV70BC5OuLZnDW0~BVxYHRSuSLqoRg4YqnHa65wlHCjZhTDndceVsNmEcnwVIejbJoIOtj4JA3hdpZtAdYuM~jMFbHA__",
+    "asset_id": "market_ledger",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Market Ledger",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
