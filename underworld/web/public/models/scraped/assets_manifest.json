@@ -8030,5 +8030,22 @@
     "epoch": "information",
     "name": "Satellite Sputnik",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:scientific_method_chart": {
+    "prompt": "a wall chart of the hypothesis-experiment scientific method, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ac00ddfa-1523-4523-b481-d98d5e208001",
+    "path": "/models/generated/tripo/scientific_method_chart.glb",
+    "bytes": 8455664,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ac00ddfa-1523-4523-b481-d98d5e208001/tripo_pbr_model_ac00ddfa-1523-4523-b481-d98d5e208001.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWMwMGRkZmEtMTUyMy00NTIzLWI0ODEtZDk4ZDVlMjA4MDAxL3RyaXBvX3Bicl9tb2RlbF9hYzAwZGRmYS0xNTIzLTQ1MjMtYjQ4MS1kOThkNWUyMDgwMDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DTXGC1W6lJithYWEr9WIUAMMGmhzsDWADuHIpBNUm0BMJtRoFAIdqNRfDaLi5eSdNuENsitwSUJrnSWAOkq8MvDYpTkV2~U16SiT3M3fYyojFMnlBEvRvUcIwtJ4KyjkbNN9y9balJ59h6S4unH5lRZsjwL53FHen9bE5hiJISU5mz5aUbBoi9aG4JL9K~sFl8i6xu5QSewU05ROpZ~DlZBjy3PK9U6oSfDEXxW~i0gpwYdTQF4-k0C4QVEfcpirATKjYkzRXlN~tWruh-w54yoRKhl1MQ2CInZcX6hBOvdlaPWp6v3Up6J7u1le-dU0godN604HKCG2vJGljGDi0w__",
+    "asset_id": "scientific_method_chart",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Scientific Method Chart",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
