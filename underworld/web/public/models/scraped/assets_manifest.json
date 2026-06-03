@@ -8166,5 +8166,22 @@
     "epoch": "industrial",
     "name": "Bicycle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:car_modern": {
+    "prompt": "a friendly rounded modern compact car, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c482c98d-d0cb-4a3e-b8b8-f3d1be32c5e6",
+    "path": "/models/generated/tripo/car_modern.glb",
+    "bytes": 15096376,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c482c98d-d0cb-4a3e-b8b8-f3d1be32c5e6/tripo_pbr_model_c482c98d-d0cb-4a3e-b8b8-f3d1be32c5e6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzQ4MmM5OGQtZDBjYi00YTNlLWI4YjgtZjNkMWJlMzJjNWU2L3RyaXBvX3Bicl9tb2RlbF9jNDgyYzk4ZC1kMGNiLTRhM2UtYjhiOC1mM2QxYmUzMmM1ZTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=sUV3spET4G5Dxy-Fr31cmXNqHaxnRblp8r4z7FwMy3A5CrkMDG2vDQwGbbVSHc-m6ZPtCiH4Hj6H7ToJ-eUTObi~LD7G4tzYWYwogJFOeBoVHTZ9NTT7fBNgYr3QtLeicbwCD-0vCRGJcPhDnUImYkAU9Dav3W9VN~hxyLvP~3g~BJqLRM~QZd2ebKZhOEhx~RSQu8G4UiRh~AFKuHdu3-k-QStTHwY5BzCG5NvbmNv-Fn18rSKfqZm3q2nd9g9vowFPgHkuCUK1r7JA~UcmHh2BUWOcpQBtTzeSoO9cWtGKxEi2N2pJi1HBdiHSBGE10TWNKCbAQ8KSu6lXA1ziOQ__",
+    "asset_id": "car_modern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "information",
+    "name": "Car Modern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
