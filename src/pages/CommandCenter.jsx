@@ -121,7 +121,7 @@ export default function CommandCenter() {
             {LAUNCH.map((l) => (
               <button
                 key={l.name}
-                onClick={() => navigate(createPageUrl(l.name))}
+                onClick={() => navigate(`/apex${createPageUrl(l.name)}`)}
                 style={{
                   display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6,
                   padding: "14px 12px", borderRadius: 6, cursor: "pointer", fontFamily: "inherit",

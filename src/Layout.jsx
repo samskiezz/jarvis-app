@@ -11,6 +11,10 @@ import { COLORS as C } from "@/domain/colors";
 import { GROUPS, PAGES, pagesByGroup } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 import { OBJECTS } from "@/domain/ontology";
+
+// All APEX feature pages are mounted under the /apex base in App.jsx.
+const APEX_BASE = "/apex";
+const apexUrl = (name) => `${APEX_BASE}${createPageUrl(name)}`;
 import { RISK_SIGNALS } from "@/domain/risk";
 import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 
@@ -26,7 +30,7 @@ export function AppLayout({ children }) {
   const loc = useLocation();
   const navigate = useNavigate();
   const groups = pagesByGroup();
-  const current = PAGES.find((p) => createPageUrl(p.name) === loc.pathname);
+  const current = PAGES.find((p) => apexUrl(p.name) === loc.pathname);
   const w = collapsed ? DOCK_W_COLLAPSED : DOCK_W;
 
   // JARVIS rides on every page with real agency: it can route to any of the 30
@@ -34,7 +38,7 @@ export function AppLayout({ children }) {
   const jarvisPages = PAGES.map((p) => ({ name: p.name, label: p.label }));
   const jarvisEntities = OBJECTS.map((o) => ({ id: o.id, label: o.label }));
   const jarvisActions = {
-    navigate: (name) => navigate(createPageUrl(name)),
+    navigate: (name) => navigate(apexUrl(name)),
     refresh: () => navigate(0),
   };
 
@@ -67,7 +71,7 @@ export function AppLayout({ children }) {
                 padding: "2px 12px 4px", fontWeight: 700 }}>{g.label}</div>
             )}
             {g.pages.map((p) => {
-              const path = createPageUrl(p.name);
+              const path = apexUrl(p.name);
               const active = loc.pathname === path;
               return (
                 <Link key={p.name} to={path} title={p.label}

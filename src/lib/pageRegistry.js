@@ -6,7 +6,9 @@
  * page-to-page navigation. Adding a page = one entry here + the component.
  *
  * `group` clusters pages in the dock so the nav reads as a handful of sections
- * instead of a wall of 30 links.
+ * instead of a wall of links. `dest` separates the two top-level destinations:
+ * APEX pages (the HUD, dest undefined/"apex") vs the Underworld sim (dest:
+ * "underworld") which is reached as a peer and never shows in the APEX nav.
  */
 
 // Lazy imports keep the initial bundle small — each page is its own chunk.
@@ -14,24 +16,28 @@ import { lazy } from "react";
 
 const P = (loader) => lazy(loader);
 
+// The six APEX domains. Underworld is a separate top-level destination and is
+// intentionally not a GROUP here.
 export const GROUPS = [
-  { id: "intel",    label: "INTELLIGENCE", color: "#00c878" },
-  { id: "command",  label: "COMMAND",      color: "#0096d4" },
-  { id: "ml",       label: "ML / AI",      color: "#a855f7" },
-  { id: "apex",     label: "APEX / PLUGINS", color: "#f07820" },
-  { id: "patents",  label: "PATENTS",      color: "#e8a800" },
-  { id: "kgik",     label: "KGIK",         color: "#00c878" },
-  { id: "sim",      label: "SIMULATION",   color: "#e8203c" },
-  { id: "wealth",   label: "WEALTH",       color: "#e8a800" },
-  { id: "system",   label: "SYSTEM",       color: "#566878" },
+  { id: "intel",     label: "INTEL",           color: "#00c878" },
+  { id: "command",   label: "COMMAND",         color: "#0096d4" },
+  { id: "cognition", label: "COGNITION",       color: "#a855f7" },
+  { id: "apex",      label: "APEX CORE",       color: "#f07820" },
+  { id: "knowledge", label: "KNOWLEDGE",       color: "#e8a800" },
+  { id: "wealth",    label: "WEALTH & SYSTEM", color: "#566878" },
 ];
 
 /**
- * Each page: { name (route + nav id), label, icon, group, component, home? }.
+ * Each page: { name (route + nav id), label, icon, group, component, home?,
+ * dest?, aliases? }.
  * `name` is the PascalCase route segment; createPageUrl turns it into the path.
+ * `dest: "underworld"` flags sim/theatre pages so they stay out of the APEX dock
+ * while keeping their routes reachable by URL / from the Underworld destination.
+ * `aliases` is an optional list of alternate search terms (used later by the
+ * command palette) — purely metadata, no behavior change.
  */
 export const PAGES = [
-  // ── Intelligence ───────────────────────────────────────────────────────
+  // ── INTEL ──────────────────────────────────────────────────────────────
   { name: "JarvisTerminal", label: "Jarvis Terminal", icon: "◆", group: "intel", home: true,
     component: P(() => import("@/pages/JarvisTerminal")) },
   { name: "GlobalIntel", label: "Global Intel", icon: "🌐", group: "intel",
@@ -41,25 +47,21 @@ export const PAGES = [
   { name: "AlertsNotificationCenter", label: "Alerts & Notifications", icon: "🔔", group: "intel",
     component: P(() => import("@/pages/AlertsNotificationCenter")) },
 
-  // ── Command ────────────────────────────────────────────────────────────
+  // ── COMMAND ────────────────────────────────────────────────────────────
   { name: "CommandCenter", label: "Command Center", icon: "⌘", group: "command",
     component: P(() => import("@/pages/CommandCenter")) },
-  { name: "Command", label: "Command", icon: "▶", group: "command",
-    component: P(() => import("@/pages/Command")) },
-  { name: "AxisCommand", label: "Axis Command", icon: "✥", group: "command",
-    component: P(() => import("@/pages/AxisCommand")) },
   { name: "PipelineMonitor", label: "Pipeline Monitor", icon: "⛓", group: "command",
     component: P(() => import("@/pages/PipelineMonitor")) },
 
-  // ── ML / AI ────────────────────────────────────────────────────────────
-  { name: "MLHub", label: "ML Hub", icon: "🧠", group: "ml",
+  // ── COGNITION ──────────────────────────────────────────────────────────
+  { name: "MLHub", label: "ML Hub", icon: "🧠", group: "cognition",
     component: P(() => import("@/pages/MLHub")) },
-  { name: "MLDashboard", label: "ML Dashboard", icon: "📊", group: "ml",
+  { name: "MLDashboard", label: "ML Dashboard", icon: "📊", group: "cognition",
     component: P(() => import("@/pages/MLDashboard")) },
-  { name: "TechTree", label: "Tech Tree", icon: "🌳", group: "ml",
+  { name: "TechTree", label: "Tech Tree", icon: "🌳", group: "cognition",
     component: P(() => import("@/pages/TechTree")) },
 
-  // ── Apex / Plugins ───────────────────────────────────────────────────────
+  // ── APEX CORE ──────────────────────────────────────────────────────────
   { name: "ApexCore", label: "Apex Core", icon: "◉", group: "apex",
     component: P(() => import("@/pages/ApexCore")) },
   { name: "PluginControlPlane", label: "Plugin Control Plane", icon: "🔌", group: "apex",
@@ -67,48 +69,44 @@ export const PAGES = [
   { name: "PluginIntegrationProof", label: "Plugin Integration Proof", icon: "✓", group: "apex",
     component: P(() => import("@/pages/PluginIntegrationProof")) },
 
-  // ── Patents ──────────────────────────────────────────────────────────────
-  { name: "PatentsSearch", label: "Patents Search", icon: "🔎", group: "patents",
+  // ── KNOWLEDGE ──────────────────────────────────────────────────────────
+  { name: "PatentsSearch", label: "Patents Search", icon: "🔎", group: "knowledge",
     component: P(() => import("@/pages/PatentsSearch")) },
-  { name: "PatentRegistry", label: "Patent Registry", icon: "📜", group: "patents",
+  { name: "PatentRegistry", label: "Patent Registry", icon: "📜", group: "knowledge",
     component: P(() => import("@/pages/PatentRegistry")) },
-  { name: "PatentIngest", label: "Patent Ingest", icon: "📥", group: "patents",
+  { name: "PatentIngest", label: "Patent Ingest", icon: "📥", group: "knowledge",
     component: P(() => import("@/pages/PatentIngest")) },
-
-  // ── KGIK ───────────────────────────────────────────────────────────────
-  { name: "KGIKBrain", label: "KGIK Brain", icon: "🧬", group: "kgik",
+  { name: "KGIKBrain", label: "KGIK Brain", icon: "🧬", group: "knowledge",
     component: P(() => import("@/pages/KGIKBrain")) },
-  { name: "KGIKLedger", label: "KGIK Ledger", icon: "📒", group: "kgik",
+  { name: "KGIKLedger", label: "KGIK Ledger", icon: "📒", group: "knowledge",
     component: P(() => import("@/pages/KGIKLedger")) },
-  { name: "TCIS", label: "TCIS", icon: "⟁", group: "kgik",
+  { name: "TCIS", label: "TCIS", icon: "⟁", group: "knowledge",
     component: P(() => import("@/pages/TCIS")) },
 
-  // ── Simulation / Arena ───────────────────────────────────────────────────
-  { name: "Underworld", label: "Underworld", icon: "🏙", group: "sim",
-    component: P(() => import("@/pages/Underworld")) },
-  { name: "WarEnvironment", label: "War Environment", icon: "🎯", group: "sim",
-    component: P(() => import("@/pages/WarEnvironment")) },
-  { name: "GameArena", label: "Game Arena", icon: "🕹", group: "sim",
-    component: P(() => import("@/pages/GameArena")) },
-  { name: "GameLeaderboard", label: "Game Leaderboard", icon: "🏆", group: "sim",
-    component: P(() => import("@/pages/GameLeaderboard")) },
-  { name: "HandParticles", label: "Hand Particles", icon: "✋", group: "sim",
-    component: P(() => import("@/pages/HandParticles")) },
-  { name: "ImageBlast", label: "Image Blast", icon: "💥", group: "sim",
-    component: P(() => import("@/pages/ImageBlast")) },
-
-  // ── Wealth ───────────────────────────────────────────────────────────────
+  // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
     component: P(() => import("@/pages/InvestmentTracker")) },
-
-  // ── System ───────────────────────────────────────────────────────────────
-  { name: "SystemHealth", label: "System Health", icon: "❤", group: "system",
+  { name: "SystemHealth", label: "System Health", icon: "❤", group: "wealth",
     component: P(() => import("@/pages/SystemHealth")) },
+
+  // ── UNDERWORLD (separate destination — not shown in the APEX dock) ────────
+  { name: "Underworld", label: "Underworld", icon: "🏙", group: "sim", dest: "underworld",
+    component: P(() => import("@/pages/Underworld")) },
+  { name: "WarEnvironment", label: "War Environment", icon: "🎯", group: "sim", dest: "underworld",
+    component: P(() => import("@/pages/WarEnvironment")) },
+  { name: "GameArena", label: "Game Arena", icon: "🕹", group: "sim", dest: "underworld",
+    component: P(() => import("@/pages/GameArena")) },
+  { name: "GameLeaderboard", label: "Game Leaderboard", icon: "🏆", group: "sim", dest: "underworld",
+    component: P(() => import("@/pages/GameLeaderboard")) },
 ];
 
 export const HOME_PAGE = PAGES.find((p) => p.home) || PAGES[0];
 
+// Only APEX pages (dest !== "underworld") cluster into the dock groups.
 export const pagesByGroup = () =>
-  GROUPS.map((g) => ({ ...g, pages: PAGES.filter((p) => p.group === g.id) })).filter((g) => g.pages.length);
+  GROUPS.map((g) => ({
+    ...g,
+    pages: PAGES.filter((p) => p.group === g.id && p.dest !== "underworld"),
+  })).filter((g) => g.pages.length);
 
 export const findPage = (name) => PAGES.find((p) => p.name === name);

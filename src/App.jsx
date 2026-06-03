@@ -10,6 +10,9 @@ import { AppLayout } from '@/Layout';
 import { PAGES, HOME_PAGE } from '@/lib/pageRegistry';
 import { createPageUrl } from '@/utils';
 import { COLORS as C } from '@/domain/colors';
+import { lazy } from 'react';
+
+const Launcher = lazy(() => import('@/pages/Launcher'));
 
 const Loading = () => (
   <div style={{ padding: 40, color: C.text, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, letterSpacing: 2 }}>
@@ -23,18 +26,35 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <AuthGate>
-            <AppLayout>
-              <Suspense fallback={<Loading />}>
-                <Routes>
-                  <Route path="/" element={<Navigate to={createPageUrl(HOME_PAGE.name)} replace />} />
-                  {PAGES.map((p) => {
-                    const Page = p.component;
-                    return <Route key={p.name} path={createPageUrl(p.name)} element={<Page />} />;
-                  })}
-                  <Route path="*" element={<PageNotFound />} />
-                </Routes>
-              </Suspense>
-            </AppLayout>
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                {/* Root: two-tile destination launcher (APEX vs Underworld). */}
+                <Route path="/" element={<Launcher />} />
+
+                {/* APEX HUD — AppLayout + all feature pages live under /apex. */}
+                <Route
+                  path="/apex/*"
+                  element={
+                    <AppLayout>
+                      <Suspense fallback={<Loading />}>
+                        <Routes>
+                          <Route index element={<Navigate to={createPageUrl(HOME_PAGE.name).slice(1)} replace />} />
+                          {PAGES.map((p) => {
+                            const Page = p.component;
+                            // Relative paths (no leading slash) since this Routes
+                            // tree is nested under the /apex/* parent route.
+                            return <Route key={p.name} path={createPageUrl(p.name).slice(1)} element={<Page />} />;
+                          })}
+                          <Route path="*" element={<PageNotFound />} />
+                        </Routes>
+                      </Suspense>
+                    </AppLayout>
+                  }
+                />
+
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </Suspense>
           </AuthGate>
         </Router>
         <Toaster />
