@@ -1808,5 +1808,22 @@
     "epoch": "iron",
     "name": "Republic Senate House",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:temple": {
+    "prompt": "an ancient stone temple with steps, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "2fd7dc87-11c4-4359-8d5d-23a1439e2560",
+    "path": "/models/generated/tripo/temple.glb",
+    "bytes": 15201040,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2fd7dc87-11c4-4359-8d5d-23a1439e2560/tripo_pbr_model_2fd7dc87-11c4-4359-8d5d-23a1439e2560.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmZkN2RjODctMTFjNC00MzU5LThkNWQtMjNhMTQzOWUyNTYwL3RyaXBvX3Bicl9tb2RlbF8yZmQ3ZGM4Ny0xMWM0LTQzNTktOGQ1ZC0yM2ExNDM5ZTI1NjAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=N~ZBo2jCy9UfdKmrBJDtLD1FXc2w75SOjl8m7vFRt96FCyCCPN5Zxc0jkaTHsHWtyIof-ODcMG9PUIPftaM1PdeAIRcEW4nkF0HX~5E4JJIGyVdBQwwufzprKd7suIpjlwHPFAY~R5~0gxWD3g6WV7gANCeqE1fr0bY6G7oOmqRXBRxyrWVIAiCv1Maeo~-0RlYk4OjM365kvUs26nPxYUmO2QcirbVliyk9E2HK8NZH2-T1-ZzMnbLp6J0flMLh~hc4csR0qKuokwQiIjtLl-MePisqEZ7aeFtjtsqHf2QtmqwZTqbK5mLGYHKPldbZaOQWweEs7DNcJ9wtZN~MWg__",
+    "asset_id": "temple",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "bronze",
+    "name": "Temple",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
