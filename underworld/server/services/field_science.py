@@ -413,6 +413,17 @@ def simulate(field: str, *, seed: int = 0) -> dict:
     """Run the real, field-appropriate simulation. Returns a grounded result with
     a quality in [0,1] and real `data` — for ANY of the ~198 fields."""
     fn = engine_for(field)
+    # Before the generic statistics fallback, try the benchmark-verified method
+    # registry (the ~65 parallel-researched methods) — deeper, real coverage.
+    if fn is _stats_fallback:
+        try:
+            from . import methods_registry as MR
+            hit = MR.run(field, seed=seed)
+            if hit is not None:
+                return hit
+        except Exception:
+            pass
+    fn = engine_for(field)
     try:
         summary, data, quality = fn(field, seed)
         return {"field": field, "engine": getattr(fn, "__name__", "?").lstrip("_"),
