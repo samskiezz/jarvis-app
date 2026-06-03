@@ -8319,5 +8319,22 @@
     "epoch": "iron",
     "name": "Hero Statue",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:law_code_pillar": {
+    "prompt": "a stone pillar inscribed with a codified law code, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "144430d6-ca04-4795-8cab-a33e22c4b02a",
+    "path": "/models/generated/tripo/law_code_pillar.glb",
+    "bytes": 8631696,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/144430d6-ca04-4795-8cab-a33e22c4b02a/tripo_pbr_model_144430d6-ca04-4795-8cab-a33e22c4b02a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTQ0NDMwZDYtY2EwNC00Nzk1LThjYWItYTMzZTIyYzRiMDJhL3RyaXBvX3Bicl9tb2RlbF8xNDQ0MzBkNi1jYTA0LTQ3OTUtOGNhYi1hMzNlMjJjNGIwMmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=t6TVl5LroJgtrAaMlRksZB4Pkw3iryvzl3-orixGpHfddKJmuHinVkX6cSaDzaCYzATRbFAJTgT7e5lvHE9DxumDJMlkMe0I7MqPUepG3F2e31IlqpBpgC1pz45baHQCXOgyj0zeg8lfaK3p~z02z8dczhlIH9eAGxsQ4-cQ6ica3o43Um3dT6cMHq3xYRYUZdaSLUb~H32MSOk0LHybaiaYjxF16bIBGU~LUMh0Vz2xpuWK6SCx1iIp5yeI1aNl0KAjYXarHqfTYVZx07K4sKDJouvz7dBTfqI7VGpWqlbQPHiYgVw99~elj9IliuPwOmU09SfYnE7aouRnYTD9KQ__",
+    "asset_id": "law_code_pillar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "bronze",
+    "name": "Law Code Pillar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
