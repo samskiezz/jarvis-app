@@ -3304,5 +3304,22 @@
     "epoch": "any",
     "name": "Rug",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sofa": {
+    "prompt": "a two-seater fabric sofa, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "29b1498f-948b-4cbf-8c18-4eb6aee665ae",
+    "path": "/models/generated/tripo/sofa.glb",
+    "bytes": 15069476,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/29b1498f-948b-4cbf-8c18-4eb6aee665ae/tripo_pbr_model_29b1498f-948b-4cbf-8c18-4eb6aee665ae.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjliMTQ5OGYtOTQ4Yi00Y2JmLThjMTgtNGViNmFlZTY2NWFlL3RyaXBvX3Bicl9tb2RlbF8yOWIxNDk4Zi05NDhiLTRjYmYtOGMxOC00ZWI2YWVlNjY1YWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NeFeZTsuYY8Q0FWvqgHuE1yO4wpgO2AetarMrHBwhZf9gWTCcVn35OmEvKFIa2XRpWcvpnlH7Fben27wfTIz6bD9f8y~DhkIjb4RtAbrhImFynmETMztVNiwHkJepZc-k7OueuB-HkLWt1KVih3zFVBuuvaZ-DK5zZ9oAIBSaR1LEM5P7VST4oH0jeGOEfZANhARaiH5O0nGTDD3GDaAStc8t34zo6IS42VeHk-gn5~puKoyhqnQrlHNebFzrVakfNkFk~cEpAVpo~UJB~iL-jsob9boLR-CpVv7Sy0XHSQ8gRRp2Ij4BGhatE89eKS5vPOeAAm9xbgaymhJS7q6aQ__",
+    "asset_id": "sofa",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "industrial",
+    "name": "Sofa",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
