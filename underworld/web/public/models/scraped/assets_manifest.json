@@ -5378,5 +5378,22 @@
     "epoch": "stone",
     "name": "Forage Basket",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fruit_bowl": {
+    "prompt": "a bowl of mixed fruit, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f9251e6b-92eb-40aa-b1de-9c9dd75257b2",
+    "path": "/models/generated/tripo/fruit_bowl.glb",
+    "bytes": 15017384,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f9251e6b-92eb-40aa-b1de-9c9dd75257b2/tripo_pbr_model_f9251e6b-92eb-40aa-b1de-9c9dd75257b2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjkyNTFlNmItOTJlYi00MGFhLWIxZGUtOWM5ZGQ3NTI1N2IyL3RyaXBvX3Bicl9tb2RlbF9mOTI1MWU2Yi05MmViLTQwYWEtYjFkZS05YzlkZDc1MjU3YjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=EHzDpqoe4lrauESIU~NNvizM6y6ntYfaVKPn7FzEp5XU4BeuCJwRSXE7GqZlLUDqn8mItLu-pWlktKb5LE2Hd9m8WsQykltI~CpUWZSQ3vpnDWAJdWh0RHO~Rp1dvT0tlI5lPAjfiBM6FQkHF2PaIY2LSPbTJFPLPGiU-lYjxbDjA4vIiuRFLsM85ITawkl5DuMD~OjFQWcu2KKbXKioOUMCS-flO4-QTAuFX~MCu7ABVdeMa71G27R3cFgIA9oxV7javN1uxh3SNAwxJAGj2-RUMRCj56Y3dnIxBi79OjA~vaA1VNgTJR5rDZqd5SotkF9ObNI0~bCwUXgzb2YShA__",
+    "asset_id": "fruit_bowl",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Fruit Bowl",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
