@@ -5446,5 +5446,22 @@
     "epoch": "information",
     "name": "Keyboard",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:laptop": {
+    "prompt": "an open laptop computer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b2731e51-0c4a-47fa-b5ad-7ee87884b316",
+    "path": "/models/generated/tripo/laptop.glb",
+    "bytes": 14836184,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b2731e51-0c4a-47fa-b5ad-7ee87884b316/tripo_pbr_model_b2731e51-0c4a-47fa-b5ad-7ee87884b316.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjI3MzFlNTEtMGM0YS00N2ZhLWI1YWQtN2VlODc4ODRiMzE2L3RyaXBvX3Bicl9tb2RlbF9iMjczMWU1MS0wYzRhLTQ3ZmEtYjVhZC03ZWU4Nzg4NGIzMTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=K4Iibz8SYC1fysKGeckYBzrVFbWWa322zWZcVoc4EmaPgHysDKrfEEi0iqyG4VbSE~QbahYwcW1igyy7pp4TH-bIPL8jLVLBwRK8Oe8IB8KPob2DuIN0QzFsNz8vy1sCAlt4Hl7yXDpFMksuEGQlPurb6~VYIRgtXxdHoHt9U3sd7vyFDGfyCbxlSHUwN2Ex2yxkDxBWqu5kloHu0o5WeV7RFXZ--C3btKCz~s37hXZw9Jtod7Zi3cQsC1KjiP-m8fwQyezGybUGaEgnJC7BuksDYBYKT7r649Rpn4qMiyPJgF48L4EutbyBBKDWzHG66f6uFNlxzavqiCpN9n~9mw__",
+    "asset_id": "laptop",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "information",
+    "name": "Laptop",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
