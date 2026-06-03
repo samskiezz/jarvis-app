@@ -6517,5 +6517,22 @@
     "epoch": "any",
     "name": "Fossil Trilobite",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:funeral_pyre": {
+    "prompt": "a stacked wooden funeral pyre bier, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0f72896c-2f91-45fb-a7d9-7a2a468952a3",
+    "path": "/models/generated/tripo/funeral_pyre.glb",
+    "bytes": 15235976,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0f72896c-2f91-45fb-a7d9-7a2a468952a3/tripo_pbr_model_0f72896c-2f91-45fb-a7d9-7a2a468952a3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGY3Mjg5NmMtMmY5MS00NWZiLWE3ZDktN2EyYTQ2ODk1MmEzL3RyaXBvX3Bicl9tb2RlbF8wZjcyODk2Yy0yZjkxLTQ1ZmItYTdkOS03YTJhNDY4OTUyYTMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WC1ydcnfN1tYTOHX8WeN3THT4HsLOGNAQ5uY3XAAVFtV7mXEeLWKIgGYC0y-1bvm0uE8BgFmZ7PTqZixc1Z7qMd7WLUd9yVINVwSIT5wQyLasC2TKK~H6AUdboGfPxgUdi9hLyJk2PV3x7NPoak7rbGCtPGYWJDk3-gakgTJUCNFCgSiWYujqJ1Q1Y2~E8CIanu3tOfV60lSHm5O-Hcwo4wreuIbpy2mgTTr~X1hL1hKoptjR~FEdTPSRGrwvnHW079Nrzz7XUXaLih-HNEu~MDtDFuny2~iU6FRmTdjCDSWeQOW0cwzdLrD4BIxFBhtOaWFQ0ihHywZm4lDh~UmLw__",
+    "asset_id": "funeral_pyre",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "stone",
+    "name": "Funeral Pyre",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
