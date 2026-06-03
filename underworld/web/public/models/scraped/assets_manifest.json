@@ -5174,5 +5174,22 @@
     "epoch": "information",
     "name": "Wind Turbine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:workbench_vice": {
+    "prompt": "a sturdy workbench with a metal vice, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b2432a8d-3ae7-4ca2-9c46-477090c8b383",
+    "path": "/models/generated/tripo/workbench_vice.glb",
+    "bytes": 14861672,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b2432a8d-3ae7-4ca2-9c46-477090c8b383/tripo_pbr_model_b2432a8d-3ae7-4ca2-9c46-477090c8b383.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjI0MzJhOGQtM2FlNy00Y2EyLTljNDYtNDc3MDkwYzhiMzgzL3RyaXBvX3Bicl9tb2RlbF9iMjQzMmE4ZC0zYWU3LTRjYTItOWM0Ni00NzcwOTBjOGIzODMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Im8UhvO~wxYm3Od4BdgjdUWPDouCaM1UnBfNzofhv0vN56UEWmB4XbAsViDRfH57QCmqzKijBIKCYdiroKV9UzKyLySMe-X0ZnWaWf2EwHR9cE9kaVDXiiqBLko7z-ezzia--NnZGDzeEE6tz3fJi~8-ZNJsll1u4q4xXPZ9DNOLhZehEN7bG~90XoctBQhec9~Cxlocnc7-zsnsJIJdvb64~ePtKxH3CaA3hqEMrT6qwS6oSgNzlvLOkLEtnJNG3fsoki7uDwTSD05upqtdbPzIWdUafUWtqMUINd3RHneuqa-L0qWkBClgKVTAGgoNSqsFXXUF3vNhq6cjpL-UKA__",
+    "asset_id": "workbench_vice",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Workbench Vice",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
