@@ -6806,5 +6806,22 @@
     "epoch": "information",
     "name": "Dna Sequencer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:first_aid_kit": {
+    "prompt": "a first-aid kit, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c5e121b3-8638-4988-92bb-2642376dae33",
+    "path": "/models/generated/tripo/first_aid_kit.glb",
+    "bytes": 14635792,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c5e121b3-8638-4988-92bb-2642376dae33/tripo_pbr_model_c5e121b3-8638-4988-92bb-2642376dae33.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzVlMTIxYjMtODYzOC00OTg4LTkyYmItMjY0MjM3NmRhZTMzL3RyaXBvX3Bicl9tb2RlbF9jNWUxMjFiMy04NjM4LTQ5ODgtOTJiYi0yNjQyMzc2ZGFlMzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=p-jgalPdpCoGazlL2CfyE58cMFg-3UcTLbhyP9IGAYVXxRPNSL-6Pak-~2DkoGVTv4s1ZjqukHV8UZLq~CXmEW-BE5aZ-9IZ4GhxtRsdaeZW-phQh21KVJJDX~4z33DxhDdHCNUMwFWwbrd0OsnQh8D1KayQjAyg73QVyV06fn0osZbKF2JyvbSvUVTR6VOgviIjGVdWpVGE7pPIwcS9BjQf2Oq05KYl6OZhNZFesO7m7MBKeo6LaBOOA-cYs7kExsrPS6pZvbf7Q58kx6fHZxat69ToVKe2sL~MmziShv8vkDwgy8Gjw3ufSWbPrgtv7Fb2k88QRERRqGyn1rR0YA__",
+    "asset_id": "first_aid_kit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "information",
+    "name": "First Aid Kit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
