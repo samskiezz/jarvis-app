@@ -2063,5 +2063,22 @@
     "epoch": "iron",
     "name": "Fx Cathedral",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_crystal_cluster": {
+    "prompt": "a cluster of glowing translucent crystals, refractive, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "d0319d18-34f9-407a-af29-22419f84aa5d",
+    "path": "/models/generated/tripo/fx_crystal_cluster.glb",
+    "bytes": 15016856,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d0319d18-34f9-407a-af29-22419f84aa5d/tripo_pbr_model_d0319d18-34f9-407a-af29-22419f84aa5d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDAzMTlkMTgtMzRmOS00MDdhLWFmMjktMjI0MTlmODRhYTVkL3RyaXBvX3Bicl9tb2RlbF9kMDMxOWQxOC0zNGY5LTQwN2EtYWYyOS0yMjQxOWY4NGFhNWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DaGfUwc2MzUjxUdOvur21G0veKw4p3HnRQV4nQvRk-ZUcBIIPFEqoBKwFZHnNSE2K-~MR7Id6Qes5cB7FF61j3PXsH3fwkCKEm77huXrdTdgi65lIafTXMI9FpqSYrxyzi7tSHEx~yM-T0P2uVYfHWhPt6LhWGO1grzmJJP~xZ9Gy9VrOQR2yMXTB~ZoKfW9udTo007Q4brf5T0t7mOEy7QZy-D-NM~Ra0yQv7k-vR0gC7egcEaV5sidYroqnw87qV8QDH0Ed7dR2puJMqps7Hi6vkvJsqO5t3GMhR~ZW2-Bq-kOVLDUJqnmnmz7aevjfbfmZNQpXJDrCWwVkHZohA__",
+    "asset_id": "fx_crystal_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Crystal Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
