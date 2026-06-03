@@ -5531,5 +5531,22 @@
     "epoch": "any",
     "name": "Meal Plate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:meditation_cushion": {
+    "prompt": "a round floor meditation cushion, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "da24b4cf-74fe-4880-9cee-3e1f013fce8d",
+    "path": "/models/generated/tripo/meditation_cushion.glb",
+    "bytes": 14579516,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/da24b4cf-74fe-4880-9cee-3e1f013fce8d/tripo_pbr_model_da24b4cf-74fe-4880-9cee-3e1f013fce8d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGEyNGI0Y2YtNzRmZS00ODgwLTljZWUtM2UxZjAxM2ZjZThkL3RyaXBvX3Bicl9tb2RlbF9kYTI0YjRjZi03NGZlLTQ4ODAtOWNlZS0zZTFmMDEzZmNlOGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IPmUp5Y6G6XIBrUzmiVS3F8t5U2p8rbDmgvqv0nB-cy4GPvBiEGRxhL86tZXxKDKMNFkagiuLQy6YXKaT-2rfG8GmcsiWm6DGExeiP-UhqyZEh9p5KrI~aYtlgFb7S9HPaIuE34IVZAykrjGDwSr9JcOp~gXH5WtL3UYGbPbAw2o8b-o2gpkKnUCB-FexXWDn--pbUk7ms-6saTAEAr8bFQb~usvhYP6SuAYuiVteVvXed1X-MFnwmXPuCj0jX1hm3K2DNkeRFTzvgdhIIwq7AeGNaFzlbK-fKeIFmflV9jW5NTpX7td8DiF~eRdsUxJXZzfd20eHunm~uJgm9WaNQ__",
+    "asset_id": "meditation_cushion",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Meditation Cushion",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
