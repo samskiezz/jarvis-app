@@ -4494,5 +4494,22 @@
     "epoch": "industrial",
     "name": "Irrigation Pump",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:jig_fixture_table": {
+    "prompt": "a workholding jig-and-fixture table with clamps, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "90723345-0805-4f14-bf99-f7596fd16d9c",
+    "path": "/models/generated/tripo/jig_fixture_table.glb",
+    "bytes": 15024348,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/90723345-0805-4f14-bf99-f7596fd16d9c/tripo_pbr_model_90723345-0805-4f14-bf99-f7596fd16d9c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTA3MjMzNDUtMDgwNS00ZjE0LWJmOTktZjc1OTZmZDE2ZDljL3RyaXBvX3Bicl9tb2RlbF85MDcyMzM0NS0wODA1LTRmMTQtYmY5OS1mNzU5NmZkMTZkOWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Jh5-OgfH0Wuw34JL20yYU4Q787xIeRhR9aNDZXaAtx0B88hpn-exzHnXkbs2lYDByYwGOeA5x6GakXJz91DgKHkWDc59d-ITjsF7GLMnh6GD7SBxRjOUFwoIDmD~bvU8qbt5BNSQqE25THSWNGJXPjpYwwnFtnjIuFmnwjRrn0qeaO9VALlgz6kAPMdNkrBt--XNbNmxOoqDyUmJS9CkXi4XwVwMrj-~jofFs4JIXrlbi4ccg6T378HBRsgh9o0ARGhhjFpbAOMviy0jVeXKAdGxYKDZd5a8KSkFuuup4gCQZCw4V1qMclL7CVzndo3-pz0t6a1hhgCocBjytERXZA__",
+    "asset_id": "jig_fixture_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Jig Fixture Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
