@@ -3593,5 +3593,22 @@
     "epoch": "any",
     "name": "Laundry Basket",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mirror_stand": {
+    "prompt": "a standing mirror, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fbf415e0-79d8-476f-9405-74415bde470a",
+    "path": "/models/generated/tripo/mirror_stand.glb",
+    "bytes": 7315984,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fbf415e0-79d8-476f-9405-74415bde470a/tripo_pbr_model_fbf415e0-79d8-476f-9405-74415bde470a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmJmNDE1ZTAtNzlkOC00NzZmLTk0MDUtNzQ0MTViZGU0NzBhL3RyaXBvX3Bicl9tb2RlbF9mYmY0MTVlMC03OWQ4LTQ3NmYtOTQwNS03NDQxNWJkZTQ3MGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RBFc1sIQNJ6OQgoDwwrwHzKAf57Z9bMF9qnmS9r5-3O1HDqdYxKmMSfJwoVac55tffCiSM1RHpgR0Y4gK6uLyNxwzKtDC4keI37EJkyQqxC3uKLXCaGOiIpujLh9YMo9YTj01xpOSLbWlMGHRvmSSAHf4mUUuQ7ziKiyVk66kEXvolOrG9GEtFGLypgPZDGfOg-HAM-ISScRhCOKGZs0jW-43FlsgH4FWEBsXRqkVeVQv3HKXN6Hj~WIGfUVW07Dbu30Sl13cQU2VVxyLVEv1dly9orimwvMvU7XmSBaoCxr4-8a3w01xweFF9w~h0Cqn9Qu-bxZbJAV0uz9JAHCJw__",
+    "asset_id": "mirror_stand",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Mirror Stand",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
