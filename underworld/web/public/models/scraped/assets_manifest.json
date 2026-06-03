@@ -8727,5 +8727,22 @@
     "epoch": "industrial",
     "name": "Guild Banner Safety",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_crest_plaque": {
+    "prompt": "a carved wall crest plaque mounted by a guild entrance, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bb7336e8-4d16-47ef-98d5-9316821f7069",
+    "path": "/models/generated/tripo/guild_crest_plaque.glb",
+    "bytes": 11964148,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bb7336e8-4d16-47ef-98d5-9316821f7069/tripo_pbr_model_bb7336e8-4d16-47ef-98d5-9316821f7069.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmI3MzM2ZTgtNGQxNi00N2VmLTk4ZDUtOTMxNjgyMWY3MDY5L3RyaXBvX3Bicl9tb2RlbF9iYjczMzZlOC00ZDE2LTQ3ZWYtOThkNS05MzE2ODIxZjcwNjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KR53I4nA8IlQ6bpjZaJhmXjFJBkOtVP65ZTvqnfq2LQIAuDjJHy4uNff0QUab1TzrObpxcpeKpO15HSzN3j6LGQ3nAM-il1yZRT2N87ywie5Ib5K0akrkoewxSpEJ-Ho2CKNhfhWT9~ZLN-uszcTv3YdyxP~wNYLLmPm3e~iQkGTzQ6mWpgNXtnshQbnbIzEYzudtH5RkBQxjx9UbxebfAbedwVKhoj7r5CzpiCqS2DMIypiS-96DhXLl~0Jf1kQm7AMBLa39y1CNHZ0po2bg2c2XL8eZITYvegWKdQeSHAACCjvx~WrhD2kgfDcQ6tYCTIcrTnKqykoPdWbi7lzdw__",
+    "asset_id": "guild_crest_plaque",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Crest Plaque",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
