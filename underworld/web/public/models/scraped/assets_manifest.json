@@ -7027,5 +7027,22 @@
     "epoch": "bronze",
     "name": "Chicken",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cow": {
+    "prompt": "a standing dairy cow, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "41a77117-c5c6-4d1a-b1b0-1c6400135116",
+    "path": "/models/generated/tripo/cow.glb",
+    "bytes": 10771520,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/41a77117-c5c6-4d1a-b1b0-1c6400135116/tripo_pbr_model_41a77117-c5c6-4d1a-b1b0-1c6400135116.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDFhNzcxMTctYzVjNi00ZDFhLWIxYjAtMWM2NDAwMTM1MTE2L3RyaXBvX3Bicl9tb2RlbF80MWE3NzExNy1jNWM2LTRkMWEtYjFiMC0xYzY0MDAxMzUxMTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=wK0fItMWXVckjNfKM3WwqK3YlWsScSgVqq64N0SDbszipPHHl983vyzG8SCL0NSVsabO-ARLgMLsRFUkVgJDWj8GhvppsidMP6fpGb5spQB6JU9sYWsnTAkP6dhRGXnDoJEKV44gbmAjL3jt0vFyq4aKCYv9pqzevSvvgMs9BAsz2yJNNPwckMZqhCGU4U4cEs-1gm4ucJfkp-TWNAFzS12D2KbLSjf5ClSZdRzP8JFf8OpC7MT01AR39KDajbzNIczATdgk71UGe0sKxhEt5U-p~DGCQ3cb5B~6WNH1EBMlZn8x~b2IFjO2sRXzsz9TsmOqBoIaV3p27BCZuA2ELw__",
+    "asset_id": "cow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Cow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
