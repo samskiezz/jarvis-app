@@ -8387,5 +8387,22 @@
     "epoch": "stone",
     "name": "Prayer Circle Stones",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:saga_memorial_plaque": {
+    "prompt": "a bronze memorial plaque on a stone for a resolved saga, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "20cdb1a9-9273-44e0-9f68-c3a028bedd15",
+    "path": "/models/generated/tripo/saga_memorial_plaque.glb",
+    "bytes": 15127396,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/20cdb1a9-9273-44e0-9f68-c3a028bedd15/tripo_pbr_model_20cdb1a9-9273-44e0-9f68-c3a028bedd15.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjBjZGIxYTktOTI3My00NGUwLTlmNjgtYzNhMDI4YmVkZDE1L3RyaXBvX3Bicl9tb2RlbF8yMGNkYjFhOS05MjczLTQ0ZTAtOWY2OC1jM2EwMjhiZWRkMTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=C7i3WwkOx25cMDSb-fEwui98JQPv3JNrdgOVtLGmjWjsKyzdUDtbIjzg2wRXD15vAqi0Wh0Vm8Cbetov3zqz6P1BIt2N6Oq5bMxgT2AI0Eu1bN1yhMBPg340uwn4Yl0tljaT-iVUoFjE4jbTW4elBcrFxBap5nro4FNBwSbXloAgAtRzy2SpU71nx8X3lrx1Y0hThfvE2gqjyMCcj0SihPNNiakzTOeGOxXwSN7Bu9DLDBSw5Xc1DLL6-IGHpCDrG-twK97oUjdqQE9pnAe4HzOXrO4ytXBLd9NBEcwXW12ZCSgW~qnd-y047vnPeH~tKTTqUI6~ViIoFAL539Mihg__",
+    "asset_id": "saga_memorial_plaque",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "any",
+    "name": "Saga Memorial Plaque",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
