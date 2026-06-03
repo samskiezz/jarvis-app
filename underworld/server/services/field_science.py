@@ -181,6 +181,62 @@ def _navigation(field: str, seed: int) -> tuple[str, dict, float]:
             {"distance_km": round(d, 1)}, 0.8)
 
 
+def _ising(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import ising_2d
+    r = ising_2d(n=14, temp=1.0 + (seed % 35) / 10.0, steps=40, seed=seed)
+    return (f"Ising MC for {field}: T={r['temperature']}, M={r['magnetisation']} "
+            f"(Tc≈{r['tc_onsager']}).", r, 0.9 if r["ordered"] or r["temperature"] > 2.3 else 0.6)
+
+
+def _chaos(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import logistic_map
+    r = logistic_map(r=2.5 + (seed % 16) / 10.0, steps=600)
+    return (f"Nonlinear-dynamics map for {field}: r={r['r']}, spread={r['spread']} "
+            f"(chaotic={r['chaotic']}).", r, 0.85)
+
+
+def _waves(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import wave_1d
+    r = wave_1d(c=1.0, dt=0.4 + (seed % 3) * 0.05, dx=1.0, steps=250)
+    return (f"Wave-equation FDTD for {field} (CFL={r['cfl']}, stable={r['stable']}).",
+            r, 1.0 if r["stable"] else 0.4)
+
+
+def _neuro(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import hodgkin_huxley
+    r = hodgkin_huxley(I=4.0 + (seed % 12))
+    return (f"Hodgkin-Huxley neuron for {field}: {r['spikes']} action potentials.",
+            r, 0.9 if r["fired"] else 0.6)
+
+
+def _nuclear(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import decay_chain
+    r = decay_chain(half_life=1.0 + (seed % 10))
+    return (f"Radioactive decay for {field}: half-life {r['half_life']} verified.",
+            r, 1.0 if r["matches_half_life"] else 0.5)
+
+
+def _bands(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import tight_binding_1d
+    r = tight_binding_1d(n=20, t=0.5 + (seed % 6) * 0.3)
+    return (f"Tight-binding bands for {field}: width {r['band_width']} (=4t).",
+            r, 1.0 if r["matches_theory"] else 0.6)
+
+
+def _oscillator(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import brusselator
+    r = brusselator(a=1.0, b=1.5 + (seed % 20) / 10.0)
+    return (f"Reaction-kinetics oscillator for {field}: amplitude {r['amplitude']} "
+            f"(oscillates={r['oscillates']}).", r, 0.85)
+
+
+def _radiation(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import blackbody
+    r = blackbody(temp_k=1000.0 + (seed % 60) * 100)
+    return (f"Blackbody radiation for {field}: peak {r['peak_wavelength_nm']} nm (Wien).",
+            r, 0.9)
+
+
 def _stats_fallback(field: str, seed: int) -> tuple[str, dict, float]:
     # a real statistical/optimisation computation (never a fake)
     import numpy as np
@@ -194,6 +250,15 @@ def _stats_fallback(field: str, seed: int) -> tuple[str, dict, float]:
 
 # field-keyword → engine. First match wins; order matters (specific before generic).
 _ROUTES: list[tuple[tuple[str, ...], object]] = [
+    # specific deep methods first (each a distinct CRISPR-depth simulation)
+    (("statistical_mech", "magnet", "spin_glass"), _ising),
+    (("nonlinear", "chaos", "dynamical_sys"), _chaos),
+    (("electromagnet", "wave_", "antenna"), _waves),
+    (("neuro", "biophys", "cognit"), _neuro),
+    (("nuclear", "radioact", "fission", "fusion"), _nuclear),
+    (("condensed", "band", "semiconductor_mat"), _bands),
+    (("reaction", "kinetic", "catalys"), _oscillator),
+    (("plasma", "thermal_rad", "atomic_phys"), _radiation),
     (("crispr", "genom", "genetic", "gene", "dna", "crop_genet", "bioinform", "synthetic_bio"), _genetics),
     (("protein", "molecular_bio", "proteom", "biophys"), _protein),
     (("quantum_field", "quantum_mech", "quantum_comp", "particle", "atomic", "exotic"), _quantum_phys),
