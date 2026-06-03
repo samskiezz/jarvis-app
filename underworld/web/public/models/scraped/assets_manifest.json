@@ -4528,5 +4528,22 @@
     "epoch": "industrial",
     "name": "Lab Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lathe": {
+    "prompt": "a metalworking lathe machine, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2c9cec2e-7d80-4eab-8dad-07e876bb0727",
+    "path": "/models/generated/tripo/lathe.glb",
+    "bytes": 9901992,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2c9cec2e-7d80-4eab-8dad-07e876bb0727/tripo_pbr_model_2c9cec2e-7d80-4eab-8dad-07e876bb0727.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmM5Y2VjMmUtN2Q4MC00ZWFiLThkYWQtMDdlODc2YmIwNzI3L3RyaXBvX3Bicl9tb2RlbF8yYzljZWMyZS03ZDgwLTRlYWItOGRhZC0wN2U4NzZiYjA3MjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UZU35tRzMetGO2C-b2E6kfTCjhodKd-anZmlfSCjXE-uW5AhusQ2ZuZbTC~HO0csBh-V1PetIkZO8SiXQ0fn4hc7B6u7mg0cJvyRjIJ-K08kbncYyZx69qjr~o5UJcTVckT47DXJCgjZbq9jOD7ckvtrtCd4LZ2r8hhnZKvWlRrySqvnLwiOojQHnTFYbID3ZtO4ZrdDmXX3aZzvlvjhh3VWdYDNDoC1N2IblE1klyhqdho7fyNEgciJL72JqnhTkQkBRWMYTcgrKqRZZAKPEtt3V86uv3m4ciqfT35OoeuSqzps83BEeqj13CRNGllRgvsTOcqH3uirnS4EwCZAGQ__",
+    "asset_id": "lathe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Lathe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
