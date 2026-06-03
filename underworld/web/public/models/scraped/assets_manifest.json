@@ -3015,5 +3015,22 @@
     "epoch": "industrial",
     "name": "Bathtub",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bed_bunk": {
+    "prompt": "a wooden bunk bed, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "a2bbd7fe-cfee-4822-8f2a-e7cfa9fb8235",
+    "path": "/models/generated/tripo/bed_bunk.glb",
+    "bytes": 15019944,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a2bbd7fe-cfee-4822-8f2a-e7cfa9fb8235/tripo_pbr_model_a2bbd7fe-cfee-4822-8f2a-e7cfa9fb8235.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTJiYmQ3ZmUtY2ZlZS00ODIyLThmMmEtZTdjZmE5ZmI4MjM1L3RyaXBvX3Bicl9tb2RlbF9hMmJiZDdmZS1jZmVlLTQ4MjItOGYyYS1lN2NmYTlmYjgyMzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dquZGu6gdpoQaJFCuPoqot90WwYmMThjvNqaerWEHdystOtUsO6RTgoHIDd0aUhk5RQ3vUnPLaAHeg2-3tSyI5luTTYolLy~YNYkvrSbxgAhqQFnfa8Z1hXHw8navkZVe-z6uIRwbr4vuZCK4lcHcNd2lXW~xCHdtiLl2m~yfwVCdNA0EMDgHq3XDgOje4at0GOPJg63NAJp5xwbPhX2XnnKkiljzlGO6qFj4POGKNQKJD6u-JHbYZybehRPQgEM-amVVQsPiweEfoxXlnIyqxg8lLSxVa4nDY51NiKbQK7W4fYT50ADbWBF7clOWYFIlAMWiilKhsHPk1y-uIjr0Q__",
+    "asset_id": "bed_bunk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Bed Bunk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
