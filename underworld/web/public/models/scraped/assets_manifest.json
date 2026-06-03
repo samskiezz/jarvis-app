@@ -2777,5 +2777,22 @@
     "epoch": "industrial",
     "name": "Smog Haze Emitter",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sun_disc": {
+    "prompt": "a warm glowing sun disc billboard with soft rays, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "1a14490d-bd1d-473a-af32-2864a9c463ad",
+    "path": "/models/generated/tripo/sun_disc.glb",
+    "bytes": 13864728,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1a14490d-bd1d-473a-af32-2864a9c463ad/tripo_pbr_model_1a14490d-bd1d-473a-af32-2864a9c463ad.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMWExNDQ5MGQtYmQxZC00NzNhLWFmMzItMjg2NGE5YzQ2M2FkL3RyaXBvX3Bicl9tb2RlbF8xYTE0NDkwZC1iZDFkLTQ3M2EtYWYzMi0yODY0YTljNDYzYWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=iNkS1yjTg8BbG5Vp7pLhrZXjzzv-h--WI99t-W0SxjrBfu1G2Gf8qhnw-h38JG5FHZoK780drgvu9nH8H0zumnj7CqaxU6TQjXirB1Hxl-PvLlbOrawq63a6h1PJt7CHGb-PxuBBVxoQl9IeYBynWEyobLbNpqbi4l7TBt5jLyGWaOLy-BSnuDTM-9IffugXXRRPgdF60ZDjPKCqz4gWOj22mKOATSCd0GadAQ8h0TJsDzdlzMhFw~tImCm4rcYEfDfwrx7BM2rWLYxaa1fcQOVBVgA2RBy8ngCTprFs9LCPchd9EZFq7q5e~RDkdRlYw4edxVe3LMyxjPbppDqr7A__",
+    "asset_id": "sun_disc",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Sun Disc",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
