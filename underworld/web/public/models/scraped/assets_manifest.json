@@ -5225,5 +5225,22 @@
     "epoch": "information",
     "name": "Xrd Machine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:apprentice_slate": {
+    "prompt": "a child's writing slate with chalk lessons, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0bd26a93-4a16-4e5b-bddc-56778a11985f",
+    "path": "/models/generated/tripo/apprentice_slate.glb",
+    "bytes": 15432324,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0bd26a93-4a16-4e5b-bddc-56778a11985f/tripo_pbr_model_0bd26a93-4a16-4e5b-bddc-56778a11985f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGJkMjZhOTMtNGExNi00ZTViLWJkZGMtNTY3NzhhMTE5ODVmL3RyaXBvX3Bicl9tb2RlbF8wYmQyNmE5My00YTE2LTRlNWItYmRkYy01Njc3OGExMTk4NWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=e5AUJK5vR9CZKVEGd7eP7IeIlh9ZgAkbrfU6ww93bR8eVa~1MLivZDUdCRoun5IisD8fBKFt6GQ-vGt-Pjd3xSMhAI1JM5-zymgzHcuXEBaG5aI6tjK8mWyTSaUGuNPco2EZYm~mxXQLIFm1DGigryUu9-bzunMW4yWb-uwSoFnQLiPqEj9XotlJ1DocjyTmcw0zZ5yynZCmQYJ5L6i~j2KLnEEF8fiNE66x5K7oneTdQHvoYktSU4B2I5DWa9uhvGMFxnu12Wlpz51kiJ0xrsfYm~VcRZdQ03tlP8DzNMHDaqeypTv1z5ZlDK~tleJscnBZPB-SNHlxHFh6HXUWQw__",
+    "asset_id": "apprentice_slate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Apprentice Slate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
