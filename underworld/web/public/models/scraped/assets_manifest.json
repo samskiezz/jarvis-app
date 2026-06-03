@@ -2369,5 +2369,22 @@
     "epoch": "industrial",
     "name": "Fx Grand Palace",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_hanging_vines": {
+    "prompt": "cascading hanging vines with tiny glowing buds, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "4b15ee87-43a3-4f2a-9e35-7ea11b103ace",
+    "path": "/models/generated/tripo/fx_hanging_vines.glb",
+    "bytes": 15761844,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4b15ee87-43a3-4f2a-9e35-7ea11b103ace/tripo_pbr_model_4b15ee87-43a3-4f2a-9e35-7ea11b103ace.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGIxNWVlODctNDNhMy00ZjJhLTllMzUtN2VhMTFiMTAzYWNlL3RyaXBvX3Bicl9tb2RlbF80YjE1ZWU4Ny00M2EzLTRmMmEtOWUzNS03ZWExMWIxMDNhY2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=FDsVhDBYy83BycIEGXL0fXMtpdGymdWciVBh0s~Z4GgdMZ1KQZUKxy6sOjnpwStL5tq4kTXARzu2ZeS5X1xrqPLpYmtyFrYU~V1gnCVxHyuPQVW6wLotsur1MxPOM~5ykD3eyWcQ7Nqm-l7Nk~QpPl354GbBA6xfmxFtmkG7Nc0dPkUjRtPman9DycLh1KCuoF9jwTKU0UG2wk0OSmJTA86ma7Cl9Sbw7XmtCYloLj5pjzR6ZlIjoIAGoJeWpnAn-vOEGc6f7n5TVGMJDNzWBQW4NsAL27Zi1roil9P2MXvoZTz33PO6ZRlTGwVDxj3C02OfkUL4p8ZvZcbMx966ow__",
+    "asset_id": "fx_hanging_vines",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Hanging Vines",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
