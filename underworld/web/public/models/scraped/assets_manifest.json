@@ -1570,5 +1570,22 @@
     "epoch": "any",
     "name": "Rolling Hills Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:slag_heap": {
+    "prompt": "a dark industrial slag waste heap, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "ffdff258-c810-4c04-b56b-cfdbb0a971d1",
+    "path": "/models/generated/tripo/slag_heap.glb",
+    "bytes": 14945040,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ffdff258-c810-4c04-b56b-cfdbb0a971d1/tripo_pbr_model_ffdff258-c810-4c04-b56b-cfdbb0a971d1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmZkZmYyNTgtYzgxMC00YzA0LWI1NmItY2ZkYmIwYTk3MWQxL3RyaXBvX3Bicl9tb2RlbF9mZmRmZjI1OC1jODEwLTRjMDQtYjU2Yi1jZmRiYjBhOTcxZDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dc1FEuLuV11v-oZbHAPo2vbmEpdk~KVIZmXjhSNwO9mc3Ti3XBO0UWH9Og8vdYEObR56kAyWNhesM-0K1NznU5us6V7zXZVAZvi5NCGj9pkMMGx9rV2xzLsP8IQs542aBDJ5qFZfE6AAl91Ym~FDghcnMM9SJ0QlTTPk3FZz7--YxSmKUNPI5S0iqX6iZbtBJJkBmmOykC7u76YjUPbiVgQ6Gb5BSMoFw3aYR8yIB1ZXqfa7-fR9iQQYyt35JkrRg~7h7VWMKePfVU2jzLoncqwNZkQ8i732VfVgtbJZafR4PSZafbXom1vSx7FHcPmrp-iMSFQX1h3KXVaZ4MFuQA__",
+    "asset_id": "slag_heap",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "industrial",
+    "name": "Slag Heap",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
