@@ -6262,5 +6262,22 @@
     "epoch": "bronze",
     "name": "Produce Basket",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:scales_balance": {
+    "prompt": "a merchant's brass balance scale, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "164460f1-3f05-4be1-a405-423ccee0a003",
+    "path": "/models/generated/tripo/scales_balance.glb",
+    "bytes": 8704924,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/164460f1-3f05-4be1-a405-423ccee0a003/tripo_pbr_model_164460f1-3f05-4be1-a405-423ccee0a003.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTY0NDYwZjEtM2YwNS00YmUxLWE0MDUtNDIzY2NlZTBhMDAzL3RyaXBvX3Bicl9tb2RlbF8xNjQ0NjBmMS0zZjA1LTRiZTEtYTQwNS00MjNjY2VlMGEwMDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=O6hhuE8CLbh4-2-K~QLJlKdTJPDFZm~cDz8zmT-9ALn-bgJFXwXiZyDOs7BxysegmM6pur6rUmQ8GD5XhyYC-GFPLoq5mUCrcrTAfTzIRZ4ymuQbGz0Krm9ACX5R8mT79s-Nl5KE88kqlRwukYpUoSXN~nFZ0WoF1Sgzd3GodQ0oeCZ29o7OenZnk05g8UP70nqRA0vksMnR55FeZma4FtkODrzwmmQ6WQI8saxCuamVwuBYsK4-AFoqlyOoT1ON-0g57a~1LlG03TotpkcuUTGWR~IFYSyf4lKPidh6wiZA-9c9diuS9N64k6gUgikJ4Y~FzJcLgHQ8bag-V31jGw__",
+    "asset_id": "scales_balance",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "bronze",
+    "name": "Scales Balance",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
