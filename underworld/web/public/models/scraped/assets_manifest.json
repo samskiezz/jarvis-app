@@ -5310,5 +5310,22 @@
     "epoch": "industrial",
     "name": "Calibration Standard Set",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:candle": {
+    "prompt": "a lit candle in a holder, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bab12bac-6463-4690-932a-2b7770afd0c9",
+    "path": "/models/generated/tripo/candle.glb",
+    "bytes": 14189308,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bab12bac-6463-4690-932a-2b7770afd0c9/tripo_pbr_model_bab12bac-6463-4690-932a-2b7770afd0c9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmFiMTJiYWMtNjQ2My00NjkwLTkzMmEtMmI3NzcwYWZkMGM5L3RyaXBvX3Bicl9tb2RlbF9iYWIxMmJhYy02NDYzLTQ2OTAtOTMyYS0yYjc3NzBhZmQwYzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=C22Wh76RWum2TZSt3N~eavESGtGwhP0dIjprMowtb9JV1g4NLB-MD2Zyg-jjWS3EyOR1yE3QdBRrA4Xlu63bZ8A1E4INhsWdYqBUDrvMchic3Q-sex9ymYhJE~ooIjtv80PqcHmGKFI6Oo9WfKr2GDYTJpIX76S9VDezMo1OciIow~vfP2h9ntzYhsiKrwEhkkhfTHp0DjNcrL3Md-HyZ6cnUQmv4hWB1zV~vM0DguIUnQZ1kR64dwnqM7a0xb5OfETqTPKra3XoaodWGkjxycXajA24eUpSh9GUqvOkyLmZ0uxoLfjEFmqfG9FH6x3N3wwxmJni~mwnUN6VJz3wpw__",
+    "asset_id": "candle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Candle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
