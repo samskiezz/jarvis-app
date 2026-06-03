@@ -8829,5 +8829,22 @@
     "epoch": "stone",
     "name": "Race Track Post",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:signpost": {
+    "prompt": "a wooden directional signpost, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9640fdba-de0d-409f-9c2c-45b71e819b23",
+    "path": "/models/generated/tripo/signpost.glb",
+    "bytes": 7468752,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9640fdba-de0d-409f-9c2c-45b71e819b23/tripo_pbr_model_9640fdba-de0d-409f-9c2c-45b71e819b23.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTY0MGZkYmEtZGUwZC00MDlmLTljMmMtNDViNzFlODE5YjIzL3RyaXBvX3Bicl9tb2RlbF85NjQwZmRiYS1kZTBkLTQwOWYtOWMyYy00NWI3MWU4MTliMjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=rZhAr~JzVZWdxWPGpa~CFT26kRg6GtXHdNvhQI6UlrTi4osreFHDyIlMsHybv430XO37DLnXV6rho8QQtfxCosZ0dwd91hjNpaCaEVeUUGKz3j0TCDLwe46edNZZv0vx-6GvepXHcHKm7MdRZ9fDkXrFaAns7dTi~lGXliFio~~AYbmailDIJDnGUlwYHUinCaP-d0wvvkBy4AUl1cBTIth6ZUz0el7d76kOavJ688P5olhA4Wnu~PzsmZ-qY0-gA4nyKrIS~mmMoszbENzUi9t9u~Qj1ctSNptl7sVqANWrVUkBzT4qEK5n0Q3bQ~NCE7Ly26rrkpDCatx6Xf~QPg__",
+    "asset_id": "signpost",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Signpost",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
