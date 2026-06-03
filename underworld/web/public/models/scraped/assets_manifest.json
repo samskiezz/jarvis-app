@@ -6449,5 +6449,22 @@
     "epoch": "iron",
     "name": "Ethics Oath Lectern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fossil_ammonite": {
+    "prompt": "a spiral ammonite fossil in rock, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6d62af81-3dd6-4ae4-8db2-4a8c197a24a4",
+    "path": "/models/generated/tripo/fossil_ammonite.glb",
+    "bytes": 14943908,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6d62af81-3dd6-4ae4-8db2-4a8c197a24a4/tripo_pbr_model_6d62af81-3dd6-4ae4-8db2-4a8c197a24a4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmQ2MmFmODEtM2RkNi00YWU0LThkYjItNGE4YzE5N2EyNGE0L3RyaXBvX3Bicl9tb2RlbF82ZDYyYWY4MS0zZGQ2LTRhZTQtOGRiMi00YThjMTk3YTI0YTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hfMpaT3~JUbwtOF6ZiLjjVzJmYLIfceErVl~tz3W0qjtItA8QY5BgBGaIfV53wSrBkfB3VcmclyLu8cHUg~fN7HE0eqTZOSRsAsJYybBiIFn2v6CNAHyo-UpjmZBDmjwVGKv-zVSoFRBdrmhmjco3uZCoNzKSGieIQfVa77RosoY47NFRscZRfwJOWEqOAbXyHvdepVIEsNX25GiNKtntJnFC19UeDUK274~5Cuug3Nrm1PclxQHQyJS6rnrpPofebYq-8p4DbYvClR2rPWPRF~9rOw8vXZWfDPR9jsdB4CZY2X1X5Q2qfc2lmlOGON-VHF6SakaGwKztR0~XN3U1A__",
+    "asset_id": "fossil_ammonite",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "any",
+    "name": "Fossil Ammonite",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
