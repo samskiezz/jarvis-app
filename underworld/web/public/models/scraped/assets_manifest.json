@@ -8438,5 +8438,22 @@
     "epoch": "iron",
     "name": "Banner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:barrel": {
+    "prompt": "a wooden storage barrel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c4508ff6-14e8-4d82-9650-2d16774de056",
+    "path": "/models/generated/tripo/barrel.glb",
+    "bytes": 14909076,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c4508ff6-14e8-4d82-9650-2d16774de056/tripo_pbr_model_c4508ff6-14e8-4d82-9650-2d16774de056.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzQ1MDhmZjYtMTRlOC00ZDgyLTk2NTAtMmQxNjc3NGRlMDU2L3RyaXBvX3Bicl9tb2RlbF9jNDUwOGZmNi0xNGU4LTRkODItOTY1MC0yZDE2Nzc0ZGUwNTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ds5f2OdMmtw8U3lXE4kHqp4kNpCHAzo3mKxtMrYpVC3PNQAdudx4HOWcwyr4kinvSPXXUTv0OWH0X8mn2M29yeKn5VruGMgZnYBRiarrtn2rmkJIoFz2nbWQZKeNL~ZxvcuZji9Qhgyw6BAhnBhMxj8e03i1O-TUnGEvR-lMWKQpVWDt-nRUrORnra6St2px-rI3v-NjywDZ56U2ZQPwhEOQHyXViWytcjlwWv54bGJ8vXWDQ3Q8oMN8t~o~5EJbQIMHdUSMarRq7ifRZoTvGO4saUOSOsiR4WbL7xVEWhlD0rptCdDQS-pktRL~PDXj4fQcaCbvcaLETd6VyN3FOg__",
+    "asset_id": "barrel",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Barrel",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
