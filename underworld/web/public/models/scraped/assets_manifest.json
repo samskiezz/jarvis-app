@@ -6007,5 +6007,22 @@
     "epoch": "information",
     "name": "Role Protein Modeller Display",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_regulatory_reasoner_desk": {
+    "prompt": "a regulatory-review desk with stacked binders and stamps, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2c0a401e-3ed2-48be-8f91-9cd66641907e",
+    "path": "/models/generated/tripo/role_regulatory_reasoner_desk.glb",
+    "bytes": 14845936,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2c0a401e-3ed2-48be-8f91-9cd66641907e/tripo_pbr_model_2c0a401e-3ed2-48be-8f91-9cd66641907e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmMwYTQwMWUtM2VkMi00OGJlLThmOTEtOWNkNjY2NDE5MDdlL3RyaXBvX3Bicl9tb2RlbF8yYzBhNDAxZS0zZWQyLTQ4YmUtOGY5MS05Y2Q2NjY0MTkwN2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=h7TWBqX9a4pbuL62auNKCJueE3JXdGoWwIKdT1a-cUszKECGXaOo~x8cTtpCvS8lF5rCRCIACicJFlA73uq~61GlJ1iM7pKQlGnDrF6YhABVy~HuW4GOR6OBcb13Hx9MI75a4J-tl8bjgtFRV-yeJA0TXEPXC0Otv4HkogKv4BnZFaJUGKBl8TVaEhXmH5qMlVwFcw4rhPcWH6CEG36aOfU486ABnJnWs9iFRaR1TDk2LvHptjiGNE2E3PmGjYUqTdwWRBID72YtPtwvbbDrLSvZFNeppJabAR5ANbYlroMlgCQh3sXT0vg1KYsDMOthB7yJQe6684KNnd2X902ywA__",
+    "asset_id": "role_regulatory_reasoner_desk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "industrial",
+    "name": "Role Regulatory Reasoner Desk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
