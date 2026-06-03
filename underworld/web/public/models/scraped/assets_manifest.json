@@ -5123,5 +5123,22 @@
     "epoch": "information",
     "name": "Vacuum Chamber",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:voltmeter": {
+    "prompt": "an analog panel voltmeter with a needle dial, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a8fafe4a-9e62-4809-8a78-140d2257052b",
+    "path": "/models/generated/tripo/voltmeter.glb",
+    "bytes": 14656864,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a8fafe4a-9e62-4809-8a78-140d2257052b/tripo_pbr_model_a8fafe4a-9e62-4809-8a78-140d2257052b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYThmYWZlNGEtOWU2Mi00ODA5LThhNzgtMTQwZDIyNTcwNTJiL3RyaXBvX3Bicl9tb2RlbF9hOGZhZmU0YS05ZTYyLTQ4MDktOGE3OC0xNDBkMjI1NzA1MmIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qvooq1A3dCqL~nL7geU-VnhfTldxPm5OXKlN-0inSn3~wFDw9y9mGjimNUVviely6ikIAZ558fqvNn3TXJj18TQLrh9~dgEFxBQA-qZcUL5nHQSUBxZr9UcVi021pK4wKB9-JBHUF0YMam6ndMBQJHBuqFCru4Eq-9BGq3XtxR6Aa6kyJQA0pcrs-srRFRQ4Y6A1tS13c6iCc~dTQyrntPM1L7VrSVWtR81s8if2e7taodg8euyQbHBi~3XCUvzBqw~9zFeXeBjaCizYPu34ipOIxHNPrsEHstdzFoapbrwh3qRedp0NHlM9ulVUUpKZwzNJzeR-n26Tli-~r6dCKw__",
+    "asset_id": "voltmeter",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Voltmeter",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
