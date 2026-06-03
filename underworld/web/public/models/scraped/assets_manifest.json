@@ -8149,5 +8149,22 @@
     "epoch": "industrial",
     "name": "Wright Flyer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bicycle": {
+    "prompt": "a vintage bicycle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1d3106ca-5344-4b13-9e3f-1cc3f0256c51",
+    "path": "/models/generated/tripo/bicycle.glb",
+    "bytes": 8380180,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1d3106ca-5344-4b13-9e3f-1cc3f0256c51/tripo_pbr_model_1d3106ca-5344-4b13-9e3f-1cc3f0256c51.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMWQzMTA2Y2EtNTM0NC00YjEzLTllM2YtMWNjM2YwMjU2YzUxL3RyaXBvX3Bicl9tb2RlbF8xZDMxMDZjYS01MzQ0LTRiMTMtOWUzZi0xY2MzZjAyNTZjNTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dtlkn-T7652H2ZEsgr-YyD5iUsoc4J-toYccTYwUndfHRGsJKEI7m9MMvTATwzcn2tGK1j6VJtEfYfOPIgESAITUHz-~MIn7tM2vxebgsL4P51yAY14w0pVamKCWKr1MCTCIxqLGoLOTC3c0PoEZv0nJ6ckboX7he2Nx-u16-lVCxC89uJtC5ZQ8ywqbZPPskJNs-ukylFNfxIQ2Sx~qvgdYMc9UmZd2EaBJETBqksaLu9JFCcwV9OjnzvlHKw0djAjUM-FcL2ozJSWM8Uz6Wt1K8kYjfCjBNXJIWsvGYXohUhhMQTlI0oJ0d67PQdkGhi~DHHsHO-IFk6cIxGgt3Q__",
+    "asset_id": "bicycle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Bicycle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
