@@ -3542,5 +3542,22 @@
     "epoch": "any",
     "name": "Frying Pan",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guitar": {
+    "prompt": "an acoustic guitar, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d4821c21-f98b-4d48-9fba-d8d7e80b8005",
+    "path": "/models/generated/tripo/guitar.glb",
+    "bytes": 6490732,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d4821c21-f98b-4d48-9fba-d8d7e80b8005/tripo_pbr_model_d4821c21-f98b-4d48-9fba-d8d7e80b8005.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDQ4MjFjMjEtZjk4Yi00ZDQ4LTlmYmEtZDhkN2U4MGI4MDA1L3RyaXBvX3Bicl9tb2RlbF9kNDgyMWMyMS1mOThiLTRkNDgtOWZiYS1kOGQ3ZTgwYjgwMDUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=xF2nRFP2DMMKPH727PIuQa17C-g~LhfoAAIftkqKdwMOz6~RfadqeXyhNLqn8bJfdxkRw1~7CJTwbzod-xbyLXcRHWP2cciuCJ8hKJulM52QZFZffDU5bok7KvGrkMP7u~1UCCKHo431tH9i0-cLubFZq3lzWOZgC9gp7bu-rFeb12culCqbagQW5f7cBjbsW0ToGHtK342C8mKrzZtMVnuozFN26EqMvKI1LLl6gWBihtngM8rJ59usJOJNRjm~dSQaV-o5xbutsXPsbzS4zToaMyRMMAlcwjH-rVrHJUM8y3egbpWUC36vX6H7U9Ha4NLHwJVn843NHTtHCjMIZg__",
+    "asset_id": "guitar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "industrial",
+    "name": "Guitar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
