@@ -7231,5 +7231,22 @@
     "epoch": "industrial",
     "name": "Power Grid Substation",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:power_pole": {
+    "prompt": "a wooden electrical power pole with wires, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9744f6ce-e2b4-4241-9c4c-b51fede44c8b",
+    "path": "/models/generated/tripo/power_pole.glb",
+    "bytes": 3917488,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9744f6ce-e2b4-4241-9c4c-b51fede44c8b/tripo_pbr_model_9744f6ce-e2b4-4241-9c4c-b51fede44c8b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTc0NGY2Y2UtZTJiNC00MjQxLTljNGMtYjUxZmVkZTQ0YzhiL3RyaXBvX3Bicl9tb2RlbF85NzQ0ZjZjZS1lMmI0LTQyNDEtOWM0Yy1iNTFmZWRlNDRjOGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jyiZ6XdIEy6u3j16-TZHcQgSLpGiFbrpytc-jt3vDPllptsAJlB~fAwUXtKMO8c8DscBAzjlNKoQgjnmvvVrEnNfVMbrL1Zy1VzQ7IhtqCZHOhZOvaVOGhfnwzYjRUWbe3thSQYZF-Eui8g8CZVM-p8Qji8LqvvDxrwKNCvG12XweSq-~JPwfiOlPrNB3W7uH-YhlqeN7-zlTkusUcWLtF0COtPTwIL~Qvf8eFSc4C~vDbyEnx3PC147WRs4TTC-FV0MOsJltOyo0Mru40EGLhxRrX3l4Nt~ZbOz5DuMKKl2TTb905RPHPoYwISQehp999o91hfEFUR~wxJ1pQ~v7Q__",
+    "asset_id": "power_pole",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Power Pole",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
