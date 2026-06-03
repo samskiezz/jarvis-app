@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import AuthGate from "@/components/AuthGate";
+import GameLoader from "@/components/GameLoader";
 import Layout from "@/components/Layout";
 import CommandCentre from "@/pages/CommandCentre";
 import WorldDetail from "@/pages/WorldDetail";
@@ -15,6 +16,7 @@ import Safety from "@/pages/Safety";
 export default function App() {
   return (
     <AuthGate>
+      <GameLoader>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<CommandCentre />} />
@@ -29,6 +31,7 @@ export default function App() {
           <Route path="/safety" element={<Safety />} />
         </Route>
       </Routes>
+      </GameLoader>
     </AuthGate>
   );
 }
