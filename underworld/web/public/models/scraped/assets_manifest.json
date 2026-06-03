@@ -1451,5 +1451,22 @@
     "epoch": "stone",
     "name": "Hunting Blind",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mountain_peak_tile": {
+    "prompt": "a rocky snow-capped mountain peak terrain tile, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "06b0b0ea-b29b-4847-a632-26e99f41807d",
+    "path": "/models/generated/tripo/mountain_peak_tile.glb",
+    "bytes": 14870004,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/06b0b0ea-b29b-4847-a632-26e99f41807d/tripo_pbr_model_06b0b0ea-b29b-4847-a632-26e99f41807d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDZiMGIwZWEtYjI5Yi00ODQ3LWE2MzItMjZlOTlmNDE4MDdkL3RyaXBvX3Bicl9tb2RlbF8wNmIwYjBlYS1iMjliLTQ4NDctYTYzMi0yNmU5OWY0MTgwN2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IS8aoqB48Wy6IMgiJBEuXS4khv2-NmHN2SKfyAWjKuuvx4H2PZ3V77Tf306QubzHDEWV1OEznZZxmphmj~4kTpZOJ0j8sgGql56VPXgHi19keQ5zDgqT5vrOVIhBqQYwIpziEuyDTUG80PZcKoofsNQALu1mMGgwolpC0kBd1wQxcrFkdZxErEwG28Kr~6Ph9BuSJUNi0ONJ3GirGHkhJ83CaVc5TN76d6~oN~AkebwnOjQg-LbDFzKUDvxMh18KHgVQQQrLWJE~GCVl57IxZmrRR5jv40uDnx17FG5O~lhlQGsJomsJbNm~pyQvpqXbvQ1NVpb2j1O2vKqGINuong__",
+    "asset_id": "mountain_peak_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Mountain Peak Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
