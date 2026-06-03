@@ -139,6 +139,31 @@ async def create_world_route(
     return await _world_out(session, world)
 
 
+@router.get("/scale-capacity")
+async def get_scale_capacity(
+    n: int = Query(default=100_000),
+    _token: str = Depends(require_bearer),
+):
+    """Report this machine's scaling backend (GPU via CuPy, else CPU NumPy) and a
+    live full-richness rich-tick benchmark at population `n` — the same per-Minion
+    math (needs, mood, neural-policy MLP, skills, grounded solve, mortality) run
+    as batched array ops. On a vast.ai GPU node this auto-uses the GPU unchanged.
+    Declared before /{world_id} so the literal path wins routing."""
+    from ..services import gpu_backend, scale_bench
+    n = max(1000, min(n, 2_000_000))
+    bench = scale_bench.bench_curve(sizes=[10_000, n], ticks=3)
+    return {
+        "hardware": gpu_backend.available_backends(),
+        "benchmark": bench,
+        "llm_at_scale": [
+            scale_bench.llm_capacity(n_minions=1_000_000, deliberation_interval_ticks=100, gpus=32),
+            scale_bench.llm_capacity(n_minions=10_000_000, deliberation_interval_ticks=200, gpus=64),
+        ],
+        "note": "vectorising runs the IDENTICAL rich per-Minion logic in parallel; "
+                "no richness is dropped. CuPy/GPU path auto-engages on a GPU node.",
+    }
+
+
 @router.get("/feature-audit")
 async def get_feature_audit(
     category: str | None = Query(default=None),
