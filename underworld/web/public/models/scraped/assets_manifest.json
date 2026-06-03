@@ -2981,5 +2981,22 @@
     "epoch": "any",
     "name": "Window Frame",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:armchair": {
+    "prompt": "a comfy upholstered armchair, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "48dd6f6e-15de-4962-9817-46ec99c90cbd",
+    "path": "/models/generated/tripo/armchair.glb",
+    "bytes": 14790320,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/48dd6f6e-15de-4962-9817-46ec99c90cbd/tripo_pbr_model_48dd6f6e-15de-4962-9817-46ec99c90cbd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDhkZDZmNmUtMTVkZS00OTYyLTk4MTctNDZlYzk5YzkwY2JkL3RyaXBvX3Bicl9tb2RlbF80OGRkNmY2ZS0xNWRlLTQ5NjItOTgxNy00NmVjOTljOTBjYmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hT4VRywwqS8ztKG~PK5oCeurUUzmGVHocnx7mrVZGIzcLlyp8xSrPK0iyIIyPnaBp~nS9-L~Ttbznehigw1FUpyobdes0PDZRqicytku87bv2dFGjRpoXRk~x4oXy6b3iDPkN3qekoRDkZ8E4NxQz1nugizlNwOtzklGiSMV5jVXj~bcr~UaLuQKTuXasP9M7BKvFDc-LEBA7YzlkRkOKoIJ1WHIKFObLM2b53SfzCeozwZXJQePY-5HRNLIvz-Mr9w3FUqIJHuFZJQrmLBSRaRiUOK976t16DeGZ~i4tl1ByulQZWVLCOL7OSzumiPp4y7AjkZmf4Q~7q5O~glV8g__",
+    "asset_id": "armchair",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Armchair",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
