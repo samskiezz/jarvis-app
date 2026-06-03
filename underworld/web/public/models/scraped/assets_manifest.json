@@ -5208,5 +5208,22 @@
     "epoch": "information",
     "name": "Workstation",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:xrd_machine": {
+    "prompt": "an X-ray diffractometer instrument, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ec2a16c6-cc1a-4baa-b8c3-165b14b36930",
+    "path": "/models/generated/tripo/xrd_machine.glb",
+    "bytes": 11617076,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ec2a16c6-cc1a-4baa-b8c3-165b14b36930/tripo_pbr_model_ec2a16c6-cc1a-4baa-b8c3-165b14b36930.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWMyYTE2YzYtY2MxYS00YmFhLWI4YzMtMTY1YjE0YjM2OTMwL3RyaXBvX3Bicl9tb2RlbF9lYzJhMTZjNi1jYzFhLTRiYWEtYjhjMy0xNjViMTRiMzY5MzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=GfdppCO5JS0SS43s2qi4dZLmpK7wC3Rz2DSl~X2HLIH4VO2~I0X24xEDmhPvGB3ES8FPISUM289~b7A01wCUQ0b~GK9rGodwtbkse48IyYafoI18pCs6ztytgTM~f1wIHKvm7bzXHjSc2VebjszXYSSIPApa1wxGaUT2knMaL4Tjxl4uaBQdJ3fhwFjwxQH3qK9MDqjGzNv6vzzJ9uMU9SxFoXK7kooOnwrksZcY5rZyp6LHDdfwgtOAZ17-AHDj8n8in07mEfm35SZHsC4owwAs3ZwVcshw9kpJDO-zWqhoSgvzXnFT0tNcGQ3vJghaeIDZDyF3zIeUCm88Pj8GYg__",
+    "asset_id": "xrd_machine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Xrd Machine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
