@@ -7877,5 +7877,22 @@
     "epoch": "quantum",
     "name": "Mind Upload Substrate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:nanofab_assembler": {
+    "prompt": "an atomically-precise nanofabrication assembler glowing blue, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "84636d76-bf6d-4c63-98df-f77014b94402",
+    "path": "/models/generated/tripo/nanofab_assembler.glb",
+    "bytes": 15649456,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/84636d76-bf6d-4c63-98df-f77014b94402/tripo_pbr_model_84636d76-bf6d-4c63-98df-f77014b94402.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODQ2MzZkNzYtYmY2ZC00YzYzLTk4ZGYtZjc3MDE0Yjk0NDAyL3RyaXBvX3Bicl9tb2RlbF84NDYzNmQ3Ni1iZjZkLTRjNjMtOThkZi1mNzcwMTRiOTQ0MDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ubOpyAJPLAnRTZdosNsQt9tB4Q1k2M2uxu03MmRd5z0tyXZg7~5lQl5z5NGQBNKe23MuPnpoe6SszC2iIHjezSpz83q9kCov9Q2txhPF9dGftLRPgobONEhFI5r8Absbq95Wcg27po2RzmuRtM2HU8xw9vzyJcVjr70pRLBW7hazw7~Ttjh0uvGEk94uBbtRWtZuQ17qsV3j1KPLFyEU340oGi5x~2134UjJkYRt9Jn2ptUltksrlfH62MRb0E1BFc9iQn~3UfORT1hrQcqxgaCcIKm1u632bcciIrZCUF2jGVms3~nigZTZSXmb4KZCF6xHtqxKzdfBZgMG9WocYg__",
+    "asset_id": "nanofab_assembler",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Nanofab Assembler",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
