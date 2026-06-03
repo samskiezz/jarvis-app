@@ -7775,5 +7775,22 @@
     "epoch": "information",
     "name": "Integrated Circuit Wafer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:interstellar_ship": {
+    "prompt": "a sleek interstellar starship with glowing engines, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "0bc77afc-6cfb-4ba7-9e9f-1080e308336c",
+    "path": "/models/generated/tripo/interstellar_ship.glb",
+    "bytes": 15001576,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0bc77afc-6cfb-4ba7-9e9f-1080e308336c/tripo_pbr_model_0bc77afc-6cfb-4ba7-9e9f-1080e308336c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGJjNzdhZmMtNmNmYi00YmE3LTllOWYtMTA4MGUzMDgzMzZjL3RyaXBvX3Bicl9tb2RlbF8wYmM3N2FmYy02Y2ZiLTRiYTctOWU5Zi0xMDgwZTMwODMzNmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=G5XEJErUL-Z52ZJHAEYjRTLdOSFWiEu4UWZbKFBFpkhS8rqQZUDTvrWfjDNNFuo~ZDjBMdOF8e7QI9D1iDFrGTKg43neyHrgJa1Mokg-SXOC4zdKgBqkJff0u6Wh7OSHmyJC32fF1TOLyBiihcUbYUZEg1EUmRcK~iFYMb3GUBPtrZP8IOXA8U2KGAGQ18z82QR93ZZhvY1scMYSyITorQn-MUKryYUBnBEPkwQyQRncDXoYy7RG~tkPR~wYcPhkV-ngyomwHSuRxV-aeZLCKBZk3XJwL4woCo8urOgFTmYNtEU~7J480gDX43j3~N2m1S4tRNHomzd55bDSMu~Zgg__",
+    "asset_id": "interstellar_ship",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Interstellar Ship",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
