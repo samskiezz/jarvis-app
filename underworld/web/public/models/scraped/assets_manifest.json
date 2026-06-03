@@ -5820,5 +5820,22 @@
     "epoch": "any",
     "name": "Umbrella",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wanderer_pack": {
+    "prompt": "a traveller's leather pack with a bedroll and walking staff, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "78cf58d6-97fa-4cec-a905-2a03cc503cb8",
+    "path": "/models/generated/tripo/wanderer_pack.glb",
+    "bytes": 14902864,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/78cf58d6-97fa-4cec-a905-2a03cc503cb8/tripo_pbr_model_78cf58d6-97fa-4cec-a905-2a03cc503cb8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzhjZjU4ZDYtOTdmYS00Y2VjLWE5MDUtMmEwM2NjNTAzY2I4L3RyaXBvX3Bicl9tb2RlbF83OGNmNThkNi05N2ZhLTRjZWMtYTkwNS0yYTAzY2M1MDNjYjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Z3NBQN4~9Wd9T7927tdjE2EKGKpjdOjle-NGLzx02ZaC4mdb6pWlXSrI4nS8wRnDmIiG4nhGih~eh9-R436gRf4jOisfNj0pHr25xA-UOea4cb3BW3tVISbs8M488GamQHByX1LZl5GTsgwf9sW~h84zAMOk0j1IaHdVrh890pUw9Bvkrz3eGcAVeswVnCRQnMYc6uslR47fCK5Rrk4oC7Naz0Gm5wSXbjTw9dTUe94yrUAuM9BebDNKuWw1nnHA0I1pzhUx~P1HI19CHOFgiIrgcSTUdS0cxb~DR2ijxaXXcX1eLmQn71X7f04rhOS343mKm4xwENZHiy-Ari8RBw__",
+    "asset_id": "wanderer_pack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Wanderer Pack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
