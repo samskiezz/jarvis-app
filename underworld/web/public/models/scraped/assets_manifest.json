@@ -6143,5 +6143,22 @@
     "epoch": "any",
     "name": "Crate Goods",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:notice_board": {
+    "prompt": "a town notice board with pinned papers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4f29f569-3fa9-4544-8a0b-61a05c7d6d5a",
+    "path": "/models/generated/tripo/notice_board.glb",
+    "bytes": 15122596,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4f29f569-3fa9-4544-8a0b-61a05c7d6d5a/tripo_pbr_model_4f29f569-3fa9-4544-8a0b-61a05c7d6d5a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGYyOWY1NjktM2ZhOS00NTQ0LThhMGItNjFhMDVjN2Q2ZDVhL3RyaXBvX3Bicl9tb2RlbF80ZjI5ZjU2OS0zZmE5LTQ1NDQtOGEwYi02MWEwNWM3ZDZkNWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=LJsuFD2Yqueg-lRsVFkRky2kofWGFfh4ltuiKsAvJ5Q7jK3kIjDUh3ydi~Ld3pu1KEVUt34fHrnciV4ZVfM1fZ~fj0u7UoNG8I7p4JsyZMCcgN0u-BgzcuKyIiIHPEExqnKJGjMc6oqKQEa8ibiR1K9zEe1jv~f7OwfHOTThiaE4ox1xmAhmNYr4J45twlZlLZYqP3a79VIML1jr3oDcelgvAKzhVMYH3pkUMBqgxPpITv5IRVR0M5FoF2oO-9xesw6tAPvL5hGmnX1ySe14p3ZW4qU1V0T35jOyGktoKBOY4Faagrv1GanX3msp2RP-doKL295eQHgkMwWrEY~jfw__",
+    "asset_id": "notice_board",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "iron",
+    "name": "Notice Board",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
