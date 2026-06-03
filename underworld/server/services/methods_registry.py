@@ -31,6 +31,10 @@ from . import (methods_plasma as PL, methods_photovoltaics as PV, methods_foodsc
 from . import (methods_seismology as SEIS, methods_control as CTL, methods_electrochem as ECHEM,
                methods_spectroscopy as SPEC, methods_heattransfer as HT, methods_signal as SIG,
                methods_crystallography as XTAL, methods_epidemiology as EPI)
+# fleet 7
+from . import (methods_tribology as TRB, methods_combustion as CMB, methods_aerodynamics as AERO,
+               methods_structural as STR, methods_semiconductor as SEMI, methods_geotechnical as GTC,
+               methods_hydrology as HYD, methods_rf as RFM)
 
 # (keyword-substrings, callable) — first match wins. Domain-specific first.
 ROUTES: list[tuple[tuple[str, ...], object]] = [
@@ -469,6 +473,80 @@ ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("logistic_epidemic", "verhulst_cases"), EPI.logistic_growth),
     (("case_fatality", "prevalence", "incidence"), EPI.epidemiologic_measures),
     (("doubling_time", "epidemic_growth"), EPI.doubling_time),
+    # fleet 7 — tribology
+    (("friction", "amontons", "coulomb_friction"), TRB.amontons_coulomb_friction),
+    (("archard", "wear"), TRB.archard_wear),
+    (("hertz", "contact_stress"), TRB.hertz_sphere_flat),
+    (("stribeck", "lambda_ratio", "lubrication"), TRB.stribeck_lambda_ratio),
+    (("petroff", "bearing_friction"), TRB.petroff_bearing_friction),
+    (("stokes_drag",), TRB.stokes_drag),
+    (("rolling_resistance",), TRB.rolling_resistance),
+    (("hersey", "tribolog"), TRB.hersey_number),
+    # fleet 7 — combustion
+    (("stoichiometric_afr", "air_fuel"), CMB.stoichiometric_afr),
+    (("equivalence_ratio", "excess_air"), CMB.equivalence_ratio),
+    (("adiabatic_flame", "flame_temperature"), CMB.adiabatic_flame_temperature),
+    (("heating_value", "calorific"), CMB.lower_heating_value),
+    (("flue_gas", "exhaust_composition"), CMB.flue_gas_composition),
+    (("flame_speed", "laminar_flame"), CMB.laminar_flame_speed),
+    (("wobbe",), CMB.wobbe_index),
+    (("flammability", "le_chatelier", "combustion"), CMB.flammability_le_chatelier),
+    # fleet 7 — aerodynamics
+    (("lift_force", "lift_coefficient"), AERO.lift_force),
+    (("drag_polar", "induced_drag"), AERO.drag_polar),
+    (("pitot", "airspeed"), AERO.pitot_airspeed),
+    (("mach_number", "speed_of_sound"), AERO.mach_number),
+    (("prandtl_glauert", "compressibility"), AERO.prandtl_glauert),
+    (("isentropic", "stagnation"), AERO.isentropic_stagnation),
+    (("thin_airfoil", "lift_curve"), AERO.thin_airfoil_lift),
+    (("glide", "aerodynamic"), AERO.glide_performance),
+    # fleet 7 — structural engineering
+    (("simply_supported_point", "beam_point_load"), STR.simply_supported_point_load),
+    (("simply_supported_udl", "distributed_load"), STR.simply_supported_udl),
+    (("cantilever",), STR.cantilever_point_load),
+    (("euler_buckling", "column_buckling"), STR.euler_buckling_load),
+    (("bending_stress", "flexural"), STR.bending_stress),
+    (("second_moment_of_area", "section_inertia"), STR.second_moment_of_area),
+    (("axial_member", "elongation"), STR.axial_member),
+    (("truss", "method_of_joints"), STR.truss_triangle_method_of_joints),
+    (("shaft_torsion", "torsion", "structural"), STR.circular_shaft_torsion),
+    # fleet 7 — semiconductor devices
+    (("intrinsic_carrier", "ni_concentration"), SEMI.intrinsic_carrier_concentration),
+    (("carrier_density", "fermi_level"), SEMI.carrier_density_fermi),
+    (("shockley", "diode"), SEMI.shockley_diode),
+    (("built_in_potential", "junction_potential"), SEMI.built_in_potential),
+    (("depletion_width", "junction_capacitance"), SEMI.depletion_width),
+    (("drift_conductivity", "carrier_mobility"), SEMI.drift_conductivity),
+    (("hall_effect",), SEMI.hall_effect),
+    (("varshni", "bandgap", "semiconductor"), SEMI.varshni_bandgap),
+    # fleet 7 — geotechnical / soil mechanics
+    (("terzaghi", "bearing_capacity"), GTC.terzaghi_bearing_capacity),
+    (("rankine", "earth_pressure"), GTC.rankine_earth_pressure),
+    (("effective_stress", "pore_pressure"), GTC.effective_stress),
+    (("darcy_seepage", "seepage"), GTC.darcy_seepage),
+    (("consolidation_settlement", "settlement"), GTC.consolidation_settlement),
+    (("time_factor", "consolidation_time"), GTC.consolidation_time_factor),
+    (("mohr_coulomb", "shear_strength"), GTC.mohr_coulomb_strength),
+    (("slope_stability", "infinite_slope", "factor_of_safety"), GTC.infinite_slope_fos),
+    (("soil_phase", "void_ratio", "geotechnic"), GTC.soil_phase_relations),
+    # fleet 7 — surface hydrology
+    (("rational_method", "peak_runoff"), HYD.rational_method_peak_flow),
+    (("curve_number", "scs_runoff"), HYD.scs_curve_number_runoff),
+    (("manning", "open_channel"), HYD.manning_channel_flow),
+    (("pipe_head_loss", "hazen_williams"), HYD.pipe_head_loss),
+    (("time_of_concentration", "kirpich"), HYD.kirpich_time_of_concentration),
+    (("unit_hydrograph", "hydrograph"), HYD.unit_hydrograph_convolution),
+    (("reservoir_routing", "water_balance"), HYD.reservoir_water_balance),
+    (("thornthwaite", "evapotranspiration", "hydrolog"), HYD.thornthwaite_pet),
+    # fleet 7 — RF / antenna engineering
+    (("friis", "rf_transmission"), RFM.friis_transmission),
+    (("path_loss", "fspl"), RFM.free_space_path_loss),
+    (("radar_range", "radar_equation"), RFM.radar_range_equation),
+    (("antenna_gain", "aperture_gain"), RFM.antenna_aperture_gain),
+    (("beamwidth", "directivity"), RFM.aperture_beamwidth_directivity),
+    (("link_budget", "eirp"), RFM.link_budget),
+    (("rf_doppler", "doppler_radar"), RFM.doppler_shift),
+    (("skin_depth",), RFM.skin_depth),
 ]
 
 
