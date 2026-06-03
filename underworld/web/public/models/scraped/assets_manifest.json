@@ -4188,5 +4188,22 @@
     "epoch": "information",
     "name": "Chromatograph",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cnc_machining_center": {
+    "prompt": "an enclosed CNC machining centre, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "92f1894a-de8b-43b8-9488-36a83ebf46d6",
+    "path": "/models/generated/tripo/cnc_machining_center.glb",
+    "bytes": 14948840,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/92f1894a-de8b-43b8-9488-36a83ebf46d6/tripo_pbr_model_92f1894a-de8b-43b8-9488-36a83ebf46d6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTJmMTg5NGEtZGU4Yi00M2I4LTk0ODgtMzZhODNlYmY0NmQ2L3RyaXBvX3Bicl9tb2RlbF85MmYxODk0YS1kZThiLTQzYjgtOTQ4OC0zNmE4M2ViZjQ2ZDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=mDZKhQqda-Oju3VxUXfvrME9cny6gO9S0H5vjSRWk~0eNGTXjAcCXszsrXLgFWcobwjR9u-me~Sffqii~cxBveMvpCVVXotMXhUqV-SWzgfPJsde1ToDPK4EHnGFBoU7byRuOmIbiokQwYJv59deHvL1akHDTab2ewbwR2mQ5rTpT6FVb6S5iG-yViOqgwe~EG46qxmHGmlBVBUQi6fm~iipyzt3rvxXiTD5QHWBpVCtEdbRYtiiK9vCIMWl~BCNX2PEgpPchV~4WiaU0aY5Gk6ULozjGmkDmW9fG789jpQw8lg~5qrQIxGsHDGOjlyAhTGNr2W-AKnOEk-AkaoKfw__",
+    "asset_id": "cnc_machining_center",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Cnc Machining Center",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
