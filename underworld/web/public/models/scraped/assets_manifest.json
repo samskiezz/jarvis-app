@@ -5565,5 +5565,22 @@
     "epoch": "any",
     "name": "Mug",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:nickname_charm": {
+    "prompt": "a small engraved birth-nickname charm token, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b64e9f81-8307-4904-8496-b23e4f7d9934",
+    "path": "/models/generated/tripo/nickname_charm.glb",
+    "bytes": 14584368,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b64e9f81-8307-4904-8496-b23e4f7d9934/tripo_pbr_model_b64e9f81-8307-4904-8496-b23e4f7d9934.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjY0ZTlmODEtODMwNy00OTA0LTg0OTYtYjIzZTRmN2Q5OTM0L3RyaXBvX3Bicl9tb2RlbF9iNjRlOWY4MS04MzA3LTQ5MDQtODQ5Ni1iMjNlNGY3ZDk5MzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=j~hlCj7cka60GrwJi6OD-0wMuclu85~yNj8dzpEJXJfL939npYukMypl9OjCgQ5VIbDdYEIXCz8Huk62y4OdL2-5VDvn-ElmTdULb-iZ3ILBz1EHhwyzLB61i9OQoWwImvoVLnmZ0G3~wMpnJAlXjxTHgUDg8tUSW6TJNefIciE-c2AM4MIwfCmatDQF5AOMVDcihxWfQFPXiOX8ZRkEsmw-z7Td9NT2TkSHGsSxngQ3Bry2048Sgwa3SyKJHfmpiQsKVreZGISIGmCqw46sQrbt~fRMEeTdbkKNoH0Hqd9IwTUcLVPTQvHUyJguUwqACZHWI-sOMLuI2WipmSigkQ__",
+    "asset_id": "nickname_charm",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Nickname Charm",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
