@@ -90,12 +90,15 @@ def discover(guild: str, *, seed: int, with_molecule: bool = True) -> dict:
     # Per-FIELD real science: pick the Minion's niche field for this guild and run
     # its world-class engine (genomics→CRISPR+fold, optics→QC, metallurgy→MD, …).
     try:
-        from . import taxonomy as T, field_science as FS
+        from . import taxonomy as T, science_niches as SN
         fields = T.FIELDS_BY_GUILD.get(guild) or T.CIVIC_FIELDS
         field = fields[seed % len(fields)]
-        fsim = FS.simulate(field, seed=seed)
-        grounded["field_science"] = {"field": field, "engine": fsim["engine"],
-                                     "summary": fsim["summary"], "data": fsim["data"]}
+        mod = SN.MODIFIERS[(seed >> 4) % len(SN.MODIFIERS)]
+        reg = (seed >> 8) % len(SN.REGIMES)
+        fsim = SN.simulate_niche(field, mod, reg, seed=seed)   # 1 of ~104k niches
+        grounded["field_science"] = {"niche": fsim["niche"], "engine": fsim["engine"],
+                                     "summary": fsim["summary"], "data": fsim["data"],
+                                     "formula": fsim["rendered"]}
         grounded["quality"] = round(0.5 * float(grounded.get("quality", 0.5))
                                     + 0.5 * float(fsim["quality"]), 4)
     except Exception:
