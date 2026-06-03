@@ -5361,5 +5361,22 @@
     "epoch": "iron",
     "name": "Discovery Ledger Book",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:forage_basket": {
+    "prompt": "a woven foraging basket with gathered food, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "47eca426-f914-4141-a0bf-55da1359714a",
+    "path": "/models/generated/tripo/forage_basket.glb",
+    "bytes": 15198892,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/47eca426-f914-4141-a0bf-55da1359714a/tripo_pbr_model_47eca426-f914-4141-a0bf-55da1359714a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDdlY2E0MjYtZjkxNC00MTQxLWEwYmYtNTVkYTEzNTk3MTRhL3RyaXBvX3Bicl9tb2RlbF80N2VjYTQyNi1mOTE0LTQxNDEtYTBiZi01NWRhMTM1OTcxNGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=G~uAFZXCfi7zggOAlieNQ4CKX6Jt4C4PAA2sxRyMlztct4Bb5GQ5hy7xHBei-inzZQvW05JpjcY9qBFk3hDnEFFTYJj4N-lv1rJaVGqmzA36HBi6cDzWMu6rdTiuP5uhPhjE92bwK7YifI-LKSw32EqoTHq~76H4lYwxPfJ-NSyuv0zbzyvNYvRubNV4zMaZDDO6FhJlur8yR6MtMLhbXMvdyY2w-8Tyxu6Q~OsND4c18zHK6GXuIzGTrTgxhYOyptji6BMa8s1YTQiU6DGZ58y7P8kNINk7dLw-A1KeJ5GvDz3z8jO7LLU-BazcUkBVQ2dQElZFieYpnb3MT9Za2A__",
+    "asset_id": "forage_basket",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "stone",
+    "name": "Forage Basket",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
