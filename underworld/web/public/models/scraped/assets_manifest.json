@@ -4256,5 +4256,22 @@
     "epoch": "quantum",
     "name": "Cryostat Dewar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:drafting_table": {
+    "prompt": "an angled drafting table with instruments, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6e1e5bfc-2b6b-41c6-8b42-6a4654791876",
+    "path": "/models/generated/tripo/drafting_table.glb",
+    "bytes": 14973088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6e1e5bfc-2b6b-41c6-8b42-6a4654791876/tripo_pbr_model_6e1e5bfc-2b6b-41c6-8b42-6a4654791876.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmUxZTViZmMtMmI2Yi00MWM2LThiNDItNmE0NjU0NzkxODc2L3RyaXBvX3Bicl9tb2RlbF82ZTFlNWJmYy0yYjZiLTQxYzYtOGI0Mi02YTQ2NTQ3OTE4NzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Akw1kCVMHwgZIjBRI8DIC38UxTxSsqDFuGcisC-hOXeq6JY67q~zfqUoQ~YL7WxvXnnXYcrJApXkI57OuHEzyV~fpQJs1l-FZLCpPjeLvMQEhnTJuihko~W~tB28BRpxu4dZccALLzHYDyqLIT3emN1gaw3zrhMzP8KGPkiNBYFULHXXHsgus03LdES-Ev-KqrWmJzDgTAHqaRLRP4~8s9PZZVsakTVzbRDog7-JZTzmjUROP2TscnYVj8Jr3ocXmoc5oPi-3VUeXh26xwUIKhNtBMVdWW3o~tUoSfMvq1xSZUgnS4PAkZfhN1l3Qjp~E~e3GNt~XBAIG8up4mRbuw__",
+    "asset_id": "drafting_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Drafting Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
