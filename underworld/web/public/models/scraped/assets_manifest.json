@@ -5701,5 +5701,22 @@
     "epoch": "industrial",
     "name": "Slide Rule",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:soul_bond_token": {
+    "prompt": "a pair of matching soul-bond keepsake pendants, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "83119ef1-eb49-41bc-a062-5260b5553eec",
+    "path": "/models/generated/tripo/soul_bond_token.glb",
+    "bytes": 14067684,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/83119ef1-eb49-41bc-a062-5260b5553eec/tripo_pbr_model_83119ef1-eb49-41bc-a062-5260b5553eec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODMxMTllZjEtZWI0OS00MWJjLWEwNjItNTI2MGI1NTUzZWVjL3RyaXBvX3Bicl9tb2RlbF84MzExOWVmMS1lYjQ5LTQxYmMtYTA2Mi01MjYwYjU1NTNlZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=TQuJ7lombiN41YAab9QXxzI8SUqrtUKEAdSESPCx~Un3JaIxw2wxZQlVGQaSloH-cCUTa8hbUC0EOnMB3n2IRtChB14UBbyw03e~OgN7n8rnPR8~uXYFckOS2OLF8m9wdRNFWjEbylQN5BF1fr25KFIfdt7mqLLDcBwTi8743e7N1c8r4ogzyGS3VObDumgzH~pvIAYjQzOkxQpurHkNynFDw~Tj9XUarOCqU7pOaQIk4s5MwaCkCeZ-zXEBgCs10w9scQo5h7nUV~MqSQ6RSX5XFeN9dq4CmoFYpcr~eAnI4iUw7-jatjCyDJ07Ml5vQZwzeKvI6wmb8ieqZr8yBQ__",
+    "asset_id": "soul_bond_token",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Soul Bond Token",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
