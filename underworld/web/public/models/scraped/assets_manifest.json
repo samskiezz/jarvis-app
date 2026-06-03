@@ -3474,5 +3474,22 @@
     "epoch": "any",
     "name": "Cooking Pot",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cupboard": {
+    "prompt": "a kitchen cupboard with dishes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bfd1864e-d8f3-4c24-b476-607ada66aabc",
+    "path": "/models/generated/tripo/cupboard.glb",
+    "bytes": 15053556,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bfd1864e-d8f3-4c24-b476-607ada66aabc/tripo_pbr_model_bfd1864e-d8f3-4c24-b476-607ada66aabc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmZkMTg2NGUtZDhmMy00YzI0LWI0NzYtNjA3YWRhNjZhYWJjL3RyaXBvX3Bicl9tb2RlbF9iZmQxODY0ZS1kOGYzLTRjMjQtYjQ3Ni02MDdhZGE2NmFhYmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QaMgQmQigdpA3iyvZq6CNT8MGXBzR1xwooZwTaMVzJn~w4Y5mNc4k-iUZQzU8JT9LBKtBtP-P0k3-4z2p1ec9ke5ALXRaEH0ztU7zMzDRfjJ4MX~ceo49YfHJcF~Q1z9dBD1rtjn564l6h0mp7-kJrB942MRLVJUeOYN7Imi6khS65H-7wA6hiCGXLduk1qzuGtmdpFY~ZVhyzWmRGlNCTvrFYKZZ3oovfq9qxOzGlzY97DxuTogFcXgiFCEjRS31t0CYtNnv2FEYR-5FSoc43NWFgKeOsD~Z2ebzJaUIK0qdnLm3TLlB0rltJFmgOMYjnI0oiqFkfoyUW53eVIv~A__",
+    "asset_id": "cupboard",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Cupboard",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
