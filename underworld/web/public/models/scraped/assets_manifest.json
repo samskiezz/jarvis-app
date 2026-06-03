@@ -6330,5 +6330,22 @@
     "epoch": "iron",
     "name": "Tavern Bar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tavern_table": {
+    "prompt": "a tavern table with benches and tankards, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "66749d7d-21c2-4cbb-ad32-940267920ab8",
+    "path": "/models/generated/tripo/tavern_table.glb",
+    "bytes": 14967080,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/66749d7d-21c2-4cbb-ad32-940267920ab8/tripo_pbr_model_66749d7d-21c2-4cbb-ad32-940267920ab8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjY3NDlkN2QtMjFjMi00Y2JiLWFkMzItOTQwMjY3OTIwYWI4L3RyaXBvX3Bicl9tb2RlbF82Njc0OWQ3ZC0yMWMyLTRjYmItYWQzMi05NDAyNjc5MjBhYjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kSYaxkuX3xKoCV0qTiWAQjATlv5I9uNVQfv-WkL~89BnajRiTP6cjq2hWc2OBy4vPhBWAGRRat3JW43y4HsbYfOhSE578WcItM4K7sNslem0N3u9hFxSst2t~iuv85KmsoG~TzZqDEeSsIZGI5moNSQKBeaVQ5xeuPxhPsJxu-wIsl8dzU2KovYWToJ4ulRNTrGsiJFRZhz4oysK~FvTbZmgQsy4C2A55J~pdunlzg~oCiSoxnX9UE-3B1oiVxMftm4WoMeaPwbzRu5PFqBCIFN0Lqr4jMNY2bdAfEUxyz1m5nokQY4opmq-xmzRRMlaqx7nwKzlMWZgHA9upVCa7Q__",
+    "asset_id": "tavern_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "iron",
+    "name": "Tavern Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
