@@ -7605,5 +7605,22 @@
     "epoch": "iron",
     "name": "Coin Mint Die",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:combustion_engine_cutaway": {
+    "prompt": "a cutaway internal-combustion engine model, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "771df19b-67f7-404e-b135-4e802bb1ecd4",
+    "path": "/models/generated/tripo/combustion_engine_cutaway.glb",
+    "bytes": 15246068,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/771df19b-67f7-404e-b135-4e802bb1ecd4/tripo_pbr_model_771df19b-67f7-404e-b135-4e802bb1ecd4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzcxZGYxOWItNjdmNy00MDRlLWIxMzUtNGU4MDJiYjFlY2Q0L3RyaXBvX3Bicl9tb2RlbF83NzFkZjE5Yi02N2Y3LTQwNGUtYjEzNS00ZTgwMmJiMWVjZDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=BRgfF7uxhuzUDXp4n07~oorexGHf6U23SMQxCd0TPe~A3SKV2kJU7KWtSuBuTqhbPXpXnN9nSuXjeTFuxyW0Wn3JEV7NhypxPLIiaEdIiKE~rXm8Xp4lLD9JCbrxJ6~plxMIlTv-TZbwUlx7oT8SMlnCOhibXXhWXPdRBbKoCary6Xx8N5jmZLhyCTRdskimnIcLgHZQy4eZ77m1ZntnHo11-uRqgEeBrkf9VO0pOISabUjvXBBMRtZmja-wuPsNVnWKbxL8bhgdZ0I~Tc39pxmlLut2zunGpra9ZjhOFDuhe10m2E7-jfdDsBQrJeHI4cItfM9kgSJXIv1rmUE9Fg__",
+    "asset_id": "combustion_engine_cutaway",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Combustion Engine Cutaway",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
