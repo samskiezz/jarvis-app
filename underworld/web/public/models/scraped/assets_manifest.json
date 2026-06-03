@@ -4936,5 +4936,22 @@
     "epoch": "industrial",
     "name": "Scaffolding",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:server_rack": {
+    "prompt": "a tall server rack with blinking lights, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "11129bab-6a3f-4448-b11f-2a756f75ec0a",
+    "path": "/models/generated/tripo/server_rack.glb",
+    "bytes": 14397980,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/11129bab-6a3f-4448-b11f-2a756f75ec0a/tripo_pbr_model_11129bab-6a3f-4448-b11f-2a756f75ec0a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTExMjliYWItNmEzZi00NDQ4LWIxMWYtMmE3NTZmNzVlYzBhL3RyaXBvX3Bicl9tb2RlbF8xMTEyOWJhYi02YTNmLTQ0NDgtYjExZi0yYTc1NmY3NWVjMGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pWkvWQ~J00j5PovpefdZSH5aYBWgjEfV4765sZS2np1MYedd2XSxWxWTJmSlhApFfGiPGLWZU3qWZrfzChOS0ppFgWASpkqCmcdk6HXJpzEo2D1dUVRTC~lrpMhfKSAcX4ISO1BePOxfG2r4~DnJv7muaHITtRuRWNEN1p22AvquMBflsIeMuK3HfQ9uSaOvIUGU8D2afOmlajD0QKoWm~rdkfwp05s9B9nYYTnJmVktAmoOL83~~2KC4w~Ot~68l-dHS6-CyBKKWfFN8HMRwbLA6fxGXz94iB397CrDbUvfM5ckhryUAZ4uytkvNh7epYIz3Lk8b~HugxtqmoLt0Q__",
+    "asset_id": "server_rack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Server Rack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
