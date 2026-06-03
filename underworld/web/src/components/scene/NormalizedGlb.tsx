@@ -36,21 +36,28 @@ export default function NormalizedGlb({
   const { clone, scale, offset } = useMemo(() => {
     const c = scene.clone(true);
     const emissive = GLOW_RE.test(url) ? 0.9 : 0;
+    // Perf: with hundreds of placed GLBs, only the larger pieces (buildings,
+    // monuments, big flora) cast shadows. Small dressing props skip the extra
+    // shadow-map pass — their contact shadows are imperceptible at this scale.
+    const castsShadow = targetSize >= 2.5;
     c.traverse((o) => {
       const m = o as THREE.Mesh;
       if (!m.isMesh) return;
-      m.castShadow = true;
+      m.castShadow = castsShadow;
       m.receiveShadow = true;
-      if (emissive > 0) {
-        const mats = Array.isArray(m.material) ? m.material : [m.material];
-        for (const mat of mats) {
-          const s = mat as THREE.MeshStandardMaterial;
-          if (!s || !("emissive" in s)) continue;
+      const mats = Array.isArray(m.material) ? m.material : [m.material];
+      for (const mat of mats) {
+        const s = mat as THREE.MeshStandardMaterial;
+        if (!s || !("emissive" in s)) continue;
+        // Real HDRI reflections on the paid PBR assets so they sit in the
+        // world's light rather than reading flat.
+        if ("envMapIntensity" in s) s.envMapIntensity = 1.0;
+        if (emissive > 0) {
           s.emissive = (s.color ? s.color.clone() : new THREE.Color(0xffffff));
           s.emissiveIntensity = emissive;
           if (s.map && "emissiveMap" in s) s.emissiveMap = s.map;
-          s.needsUpdate = true;
         }
+        s.needsUpdate = true;
       }
     });
 

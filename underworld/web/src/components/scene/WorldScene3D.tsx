@@ -447,11 +447,17 @@ export default function WorldScene3D({
               gives the cinematic falloff Sims-style cameras have, SMAA
               cleans edges, bloom haloes the obelisk + sun, vignette + ACES
               finishes. */}
+          {/* NOTE: @react-three/postprocessing's EffectComposer forces
+              gl.toneMapping = NoToneMapping while it renders the scene, so the
+              renderer's toneMappingExposure is bypassed and the ToneMapping
+              effect below is the single source of ACES tone mapping (no double
+              apply). Day/night brightness is driven by the HDRI intensity
+              ramps + light intensities + the grade passes, not gl exposure. */}
           <EffectComposer multisampling={0} enableNormalPass={!lowPower}>
             {!lowPower ? (
               <N8AO
                 aoRadius={2.5}
-                intensity={isNight ? 3 : 2.2}
+                intensity={isNight ? 2.4 : 1.6}
                 distanceFalloff={1}
                 quality="high"
                 halfRes={false}
@@ -477,10 +483,10 @@ export default function WorldScene3D({
                 running in character-follow mode where there's a clear
                 subject. Re-enable behind a flag if you want it. */}
             <Bloom
-              luminanceThreshold={isNight ? 0.4 : 0.7}
-              luminanceSmoothing={0.5}
-              intensity={isNight ? 2.0 : 0.65}
-              radius={0.9}
+              luminanceThreshold={isNight ? 0.45 : 0.85}
+              luminanceSmoothing={0.4}
+              intensity={isNight ? 1.8 : 0.55}
+              radius={0.85}
               mipmapBlur
             />
             <Vignette eskil={false} offset={0.15} darkness={isNight ? 0.55 : 0.35} />
@@ -489,8 +495,8 @@ export default function WorldScene3D({
             {/* Cinematic colour grade — the "Avatar/Sims-4" vibrancy. ACES tone
                 mapping desaturates a touch; we punch saturation + contrast back
                 up so the world reads rich and colourful, not muddy. */}
-            <HueSaturation saturation={isNight ? 0.38 : 0.3} />
-            <BrightnessContrast brightness={0.02} contrast={0.12} />
+            <HueSaturation saturation={isNight ? 0.3 : 0.22} />
+            <BrightnessContrast brightness={isNight ? -0.03 : 0.02} contrast={0.1} />
           </EffectComposer>
         </Suspense>
       </Canvas>

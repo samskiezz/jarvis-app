@@ -38,18 +38,22 @@ export default function GlbModel({
       if (!m.isMesh) return;
       m.castShadow = castShadow;
       m.receiveShadow = receiveShadow;
-      if (emissive > 0) {
-        const mats = Array.isArray(m.material) ? m.material : [m.material];
-        for (const mat of mats) {
-          const s = mat as THREE.MeshStandardMaterial;
-          if (!s || !("emissive" in s)) continue;
+      const mats = Array.isArray(m.material) ? m.material : [m.material];
+      for (const mat of mats) {
+        const s = mat as THREE.MeshStandardMaterial;
+        if (!s || !("emissive" in s)) continue;
+        // Let the scene HDRI drive real reflections on the PBR materials so
+        // metals/ceramics catch the sky. Restrained so it complements, not
+        // blows out, the key light.
+        if ("envMapIntensity" in s) s.envMapIntensity = 1.0;
+        if (emissive > 0) {
           // emit the material's own base colour so the glow matches the look,
           // and let the base colour map drive the emissive intensity per-texel.
           s.emissive = (s.color ? s.color.clone() : new THREE.Color(0xffffff));
           s.emissiveIntensity = emissive;
           if (s.map && "emissiveMap" in s) s.emissiveMap = s.map;
-          s.needsUpdate = true;
         }
+        s.needsUpdate = true;
       }
     });
     return c;
