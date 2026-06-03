@@ -7707,5 +7707,22 @@
     "epoch": "iron",
     "name": "Euclid Scroll Geometry",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:faraday_induction_coil": {
+    "prompt": "a Faraday induction coil dynamo apparatus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "50dd0473-c179-42f8-a48e-06fb1ab14892",
+    "path": "/models/generated/tripo/faraday_induction_coil.glb",
+    "bytes": 14907876,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/50dd0473-c179-42f8-a48e-06fb1ab14892/tripo_pbr_model_50dd0473-c179-42f8-a48e-06fb1ab14892.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTBkZDA0NzMtYzE3OS00MmY4LWE0OGUtMDZmYjFhYjE0ODkyL3RyaXBvX3Bicl9tb2RlbF81MGRkMDQ3My1jMTc5LTQyZjgtYTQ4ZS0wNmZiMWFiMTQ4OTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=h6HSz9nQbSpMxd2AK8wLBH--UPln-vra1wYFxRsZ3o9czVMHbQ5cE7ZG3INIbPl7dH0qptJhTrgiC00oYEZ3CQ7xNT9~j1g-PnowQIu0ogZNWKvMR33ywchX~BODPpN5nlrjKLQG8-60dl-8TkA5seMmKdlok75-VksXRusRNHrGmpyhnonW1L8aAqZE2gR-tGRCibpw8gfJ02EB2qU9Sq7LlnThURzA5IGED9aNWZRBhxLavuoTM5GpqU3yDaQQSwf4PNovonlYOEpqS2jenMrlJeRPrzlPoNLvJwQEmYsBIgZbHeSMVioHcWX1mrJr9ND1M8nuRwR-eKqNROfRjA__",
+    "asset_id": "faraday_induction_coil",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Faraday Induction Coil",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
