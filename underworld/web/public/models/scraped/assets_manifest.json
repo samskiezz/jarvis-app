@@ -8455,5 +8455,22 @@
     "epoch": "any",
     "name": "Barrel",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:brazier": {
+    "prompt": "an iron fire brazier, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "45f1cd91-d890-43f9-a3e4-8e96e5b2e5fc",
+    "path": "/models/generated/tripo/brazier.glb",
+    "bytes": 14790332,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/45f1cd91-d890-43f9-a3e4-8e96e5b2e5fc/tripo_pbr_model_45f1cd91-d890-43f9-a3e4-8e96e5b2e5fc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDVmMWNkOTEtZDg5MC00M2Y5LWEzZTQtOGU5NmU1YjJlNWZjL3RyaXBvX3Bicl9tb2RlbF80NWYxY2Q5MS1kODkwLTQzZjktYTNlNC04ZTk2ZTViMmU1ZmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZnibeevF3DHD3RSY2bosLG517QFkGjvMsyO2u6dmyR78DI5E2EYiOOhY6cuELIMhMOmDjsv2Wgcs25zQ4ll0k2SqzhGcmgh8M~FX5A~H8~MoM00E2dch9nleI2tZfKSmvGJhp0tgHSNmC6MfGDbG5uchHs4hRoeplmBwRec2bQRxxKlKMQJuQMt2lhX3IrYnnWw1ue0mYg2dKqYA5LvZQyTZaBCQOWwF0UAkyVw8jrxZXov4VZmTuW2YTyf7GtcLEXwCcaCqGsakfOjgEuALNfEyG6k1ANkyrm31t4dO~C6myIB1X62EetIv8C434u57iozvQ1jAPgOegM6y3w42Tw__",
+    "asset_id": "brazier",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Brazier",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
