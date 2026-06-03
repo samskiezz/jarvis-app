@@ -1043,5 +1043,22 @@
     "epoch": "iron",
     "name": "Guild Maths Academy",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_mechanical_workshop": {
+    "prompt": "a mechanical workshop with a sawtooth factory roof, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "791cda01-f711-4815-b4c7-579205c77ca7",
+    "path": "/models/generated/tripo/guild_mechanical_workshop.glb",
+    "bytes": 15134368,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/791cda01-f711-4815-b4c7-579205c77ca7/tripo_pbr_model_791cda01-f711-4815-b4c7-579205c77ca7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzkxY2RhMDEtZjcxMS00ODE1LWI0YzctNTc5MjA1Yzc3Y2E3L3RyaXBvX3Bicl9tb2RlbF83OTFjZGEwMS1mNzExLTQ4MTUtYjRjNy01NzkyMDVjNzdjYTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=MPpWseOiC~Q0hSyelBpHxgKEqw8wS4jnxf-lSkmXlWK-jVshMc3FChj2M7C-rea3bNi8pVONOiEkG7Mt1m1VQ0e-SDCkUlgiBhbr3YtXJJM-PDKKczwe9oBG5tlopoMgcq8drqPDAMiwBJ0UaJ1xpM8AyPhaJD5A305XSWtrfQIquqr-ZeCL-OBo0kXiw71RrL8GzHF5VT7z8wQSwfUtm4pZZdwJhu10rKsgPPj8KeiiX-UNjrq5--CT-noTGHfi5X9pkFxmWqREsx5L0Ol~aDtCMfhAcAtKP~EO9s75Oer6xY2iRO1WnrboTMw5exPJg0orE~gHyeubGdby6cB3cA__",
+    "asset_id": "guild_mechanical_workshop",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Guild Mechanical Workshop",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
