@@ -4103,5 +4103,22 @@
     "epoch": "industrial",
     "name": "Calculating Machine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:casting_foundry_ladle": {
+    "prompt": "a foundry casting ladle pouring molten metal into a mould, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c09da8f8-060f-43ed-87df-5eac6c038245",
+    "path": "/models/generated/tripo/casting_foundry_ladle.glb",
+    "bytes": 14780712,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c09da8f8-060f-43ed-87df-5eac6c038245/tripo_pbr_model_c09da8f8-060f-43ed-87df-5eac6c038245.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzA5ZGE4ZjgtMDYwZi00M2VkLTg3ZGYtNWVhYzZjMDM4MjQ1L3RyaXBvX3Bicl9tb2RlbF9jMDlkYThmOC0wNjBmLTQzZWQtODdkZi01ZWFjNmMwMzgyNDUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=xgLZQ0t4rKicL22TNnDinYEC~H~W2jz5zw~z3UqQjGog9-Edv5-iUlz1ZBbj3i~BWbqIWW5gNFH5MDYWx4E807nRD9C3MVWqczIuH~CPW0p8XOfLrLhHt7UXqXblB9fe3b~1FQAYSJnpj3c-jxiVsUQNQRCb6C8uPpXKw6GATiwMmZYU8X7cCk177Y6QZ1dWwd84qjeZjQZ4M~t4HHSJOv9z5ysR7e6X3aY0txLzgrHm5CITnQuIO6orBtnfVbxB4bCBJUIw6WVtGlu4CZigCwigmN8RRUW699t-LqP9PLweUjqsKuMql4SZkxexvedxx9GeMXsO4RBGhHNDFsH-VA__",
+    "asset_id": "casting_foundry_ladle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Casting Foundry Ladle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
