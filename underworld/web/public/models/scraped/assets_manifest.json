@@ -3117,5 +3117,22 @@
     "epoch": "any",
     "name": "Desk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:dresser": {
+    "prompt": "a chest of drawers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "d21defc1-a8a3-4ac0-af81-b21e749ce270",
+    "path": "/models/generated/tripo/dresser.glb",
+    "bytes": 14776260,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d21defc1-a8a3-4ac0-af81-b21e749ce270/tripo_pbr_model_d21defc1-a8a3-4ac0-af81-b21e749ce270.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDIxZGVmYzEtYThhMy00YWMwLWFmODEtYjIxZTc0OWNlMjcwL3RyaXBvX3Bicl9tb2RlbF9kMjFkZWZjMS1hOGEzLTRhYzAtYWY4MS1iMjFlNzQ5Y2UyNzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=SAqvIFIdanK7aISA0u45H1MpavoGqYnSQP2XL44Qe1u6~6~dkIdYBdOnMadSr2cZd5Zi5sTYzQ9j4~B30Xw8v2vNKw~4dtGyKUXuXgxjT8yugyHmKbfhvZH0dQG0HTUcIgUNIdnnC4lyQGa4FpOHLlnv54u30pUmgbYyW69Eb96lhKaFpGsiXQlLOIkXs1GbtQO2VM9WpRv05dvrJMeY7pZwlaN4rg1B-sSA~KK~waGfXY8Z9Dy~K~AKqFLQrJQ-Q8xUAkGHj~wlJlg2io89wehEn9Iwp7AzhRCXJpqG4oaGbGW1VAIUNV5k2EaPhJG6OLFUQXDKCGQTo6WsSgbkMg__",
+    "asset_id": "dresser",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Dresser",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
