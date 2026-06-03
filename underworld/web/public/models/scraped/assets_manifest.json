@@ -3559,5 +3559,22 @@
     "epoch": "industrial",
     "name": "Guitar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:kettle": {
+    "prompt": "a metal kettle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c7f78779-c554-4d2e-9613-c5302b491e0f",
+    "path": "/models/generated/tripo/kettle.glb",
+    "bytes": 13505336,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c7f78779-c554-4d2e-9613-c5302b491e0f/tripo_pbr_model_c7f78779-c554-4d2e-9613-c5302b491e0f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzdmNzg3NzktYzU1NC00ZDJlLTk2MTMtYzUzMDJiNDkxZTBmL3RyaXBvX3Bicl9tb2RlbF9jN2Y3ODc3OS1jNTU0LTRkMmUtOTYxMy1jNTMwMmI0OTFlMGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ACOYxMysaihDrnwLAaEB9ovNNdlCyemihmEkbXxZJ3txP33DOoRwDb4Oybd1ra44Uly8wT9kuOl5IvKUAs7NblV7G26YodAGeN5m-tHF5NKVHSB~B7l9KAEUBn3EBVqncecrFr6UQuLON7-tCT0IBC-lVj9jNBddSF55CnnpvORjdacF7RLTBRaI8lTtW0JYS5yT-jaDBWq2nK9jrhEgFEKt8NipSucPGK3bLV2dohdsYcflgipis7pom-OaLtMbIznBcTDnulxJMXYWDtwR5f7Cyhe0yLXV5LvntIfXMHqxop68LuexdwAUqdrISnTogZlEM77j69zDh4hxLVkPRA__",
+    "asset_id": "kettle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "industrial",
+    "name": "Kettle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
