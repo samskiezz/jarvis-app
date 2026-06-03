@@ -5599,5 +5599,22 @@
     "epoch": "information",
     "name": "Patent Scanner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:prayer_beads": {
+    "prompt": "a string of worn prayer beads, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "50b20346-2276-4ff3-867d-1b264d01d46e",
+    "path": "/models/generated/tripo/prayer_beads.glb",
+    "bytes": 13200484,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/50b20346-2276-4ff3-867d-1b264d01d46e/tripo_pbr_model_50b20346-2276-4ff3-867d-1b264d01d46e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTBiMjAzNDYtMjI3Ni00ZmYzLTg2N2QtMWIyNjRkMDFkNDZlL3RyaXBvX3Bicl9tb2RlbF81MGIyMDM0Ni0yMjc2LTRmZjMtODY3ZC0xYjI2NGQwMWQ0NmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=JhjcI9tHrFmkoQ29g5XUuTKTAXimQVRfxzgpSFThkmU6T6azsok~j0cc9nqomps9wrHP664vcz~hWyg8fIFJ2BhRgg~uybVLmY2B8arLFka8VUAJyIw~gDtazc3PwpKf-nGtLOg8VaCNEi7Kork0019XU9AQYjSQzEiSSW6BY3GEuxxuJcUqnWKtNiutqz2hUzjaedeZTeG0fEGNttwlzjZgst4IQfs~GOSJ37d55i7fouap-dBbZc000IPLNHbqE4YU17iRn5-S5qxmfuWWMMWveXwamQw4JPKOxuuwGs5stzlIMsORRjDAeD9lpFNZaA-G-jSB3R83iZQOVCNthQ__",
+    "asset_id": "prayer_beads",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "stone",
+    "name": "Prayer Beads",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
