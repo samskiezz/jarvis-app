@@ -2709,5 +2709,22 @@
     "epoch": "any",
     "name": "Mood Emote Ring",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:moon_disc": {
+    "prompt": "a pale glowing crescent moon billboard, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "3751b422-5203-445c-85e3-4a599dffdafe",
+    "path": "/models/generated/tripo/moon_disc.glb",
+    "bytes": 7708456,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3751b422-5203-445c-85e3-4a599dffdafe/tripo_pbr_model_3751b422-5203-445c-85e3-4a599dffdafe.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzc1MWI0MjItNTIwMy00NDVjLTg1ZTMtNGE1OTlkZmZkYWZlL3RyaXBvX3Bicl9tb2RlbF8zNzUxYjQyMi01MjAzLTQ0NWMtODVlMy00YTU5OWRmZmRhZmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=K4xZuynpRNs1DSkt0Bzm3XtSPiOvQBexNQqGBosCOCGsCFoQ78-LM2ohaqKjzyw5IUNFCdCs6mnYImBc8-2aNJbPoFPNjpNGMNvSY28Cefb9da0dgMYjB5zVz-D9eLkpdqWhFTkZmO4NtuxPn6W84HryCs1w2BSpmhz9U05UEhwkuk5WjbfRdObdou~~-FTJ22wXv7B8ipAQeXh42oLOPYgLg2Hb6g7ZodFtRt-w233mZqEjH5XjRYDqZVCSWugl4qYmsLT2~mzAZxoYAz4ZOOE8Grk1Z9-E1hkGJztOusozUpD7LsOjYwG1cjlCwGiIwPuciz77uSPi4CjpccbCMQ__",
+    "asset_id": "moon_disc",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Moon Disc",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
