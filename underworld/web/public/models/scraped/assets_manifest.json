@@ -3236,5 +3236,22 @@
     "epoch": "industrial",
     "name": "Lamp Floor",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mentor_apprentice_bench": {
+    "prompt": "a shared workbench set for a mentor and apprentice, two stools, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c10b3bf5-3476-4ce5-b39b-44846a091574",
+    "path": "/models/generated/tripo/mentor_apprentice_bench.glb",
+    "bytes": 14812484,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c10b3bf5-3476-4ce5-b39b-44846a091574/tripo_pbr_model_c10b3bf5-3476-4ce5-b39b-44846a091574.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzEwYjNiZjUtMzQ3Ni00Y2U1LWIzOWItNDQ4NDZhMDkxNTc0L3RyaXBvX3Bicl9tb2RlbF9jMTBiM2JmNS0zNDc2LTRjZTUtYjM5Yi00NDg0NmEwOTE1NzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=YODjK6dupyFth0Z4gfOW5aFDPxitfIYAd3jlfo0XR3d~VGxqJiWxF5LU0Zq601Rt0himtySTTnrc8eaGolknp626F14lwKwFBkrVxMaFjhyO9RXtLL87eOM-xe1Dvqg5EPC6~wL9a4TN226yt6~71X-d3HAllBWO4w6gK9~li1ODgJoUeiyMGWDaWFmEjU5dDLJSLEG-AEmwF07KN4NUFmRqccqleFcSMlv65O60JBbwwywmYd7ByN7E-G4z2WRqrPAYFGAdr9lqzWxZBjwweaIesrhsnzNhQVMfV48DTMSbKcmfrCUF68Wcn4q9zzKKHSiX1cG6f7F5hgn749M67g__",
+    "asset_id": "mentor_apprentice_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "iron",
+    "name": "Mentor Apprentice Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
