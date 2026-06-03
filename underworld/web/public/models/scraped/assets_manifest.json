@@ -1434,5 +1434,22 @@
     "epoch": "any",
     "name": "Forest Floor Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hunting_blind": {
+    "prompt": "a camouflaged wooden hunter's blind hide, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "f4e07393-705e-4fb9-a26b-67e440e7b96c",
+    "path": "/models/generated/tripo/hunting_blind.glb",
+    "bytes": 14915612,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f4e07393-705e-4fb9-a26b-67e440e7b96c/tripo_pbr_model_f4e07393-705e-4fb9-a26b-67e440e7b96c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjRlMDczOTMtNzA1ZS00ZmI5LWEyNmItNjdlNDQwZTdiOTZjL3RyaXBvX3Bicl9tb2RlbF9mNGUwNzM5My03MDVlLTRmYjktYTI2Yi02N2U0NDBlN2I5NmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VC8ELdiVOX6ZYO2eT-CthSbfyh~VpuWDgm~OPOOpJWFuFfrLPwRd79ryn7CjW8RjeZ3e5Q5Jp4xxCL5U-fXFvU04QreebTozqMFw3T8iQV6j-2zJqxMPEZiU5CJzg05TbIa09otv-o4PIR3OnO9HgcO76Kd8AeBeepPRep1KHp6w1SP09wRDd~-AJs463fURhhi5FMMu7Sqm3L6EDFoJ9uwlFz3oD75T-v9hul7FJm5nkMhtpuLPRk7LQO7qUChcY8ptPDSQW280EHKhZUYO5oSetJnowTRcTo0pQZH5lpFeoKD6JVxcUtubWBUGHdLCL~lCY7sZV4UhD5YKRcGMQw__",
+    "asset_id": "hunting_blind",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "stone",
+    "name": "Hunting Blind",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
