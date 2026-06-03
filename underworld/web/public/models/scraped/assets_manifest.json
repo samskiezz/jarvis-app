@@ -5582,5 +5582,22 @@
     "epoch": "any",
     "name": "Nickname Charm",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:patent_scanner": {
+    "prompt": "a futuristic desktop patent-scanner device with a glowing slot, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1807bff8-af1b-4c6a-876e-57e98faa5ada",
+    "path": "/models/generated/tripo/patent_scanner.glb",
+    "bytes": 14622420,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1807bff8-af1b-4c6a-876e-57e98faa5ada/tripo_pbr_model_1807bff8-af1b-4c6a-876e-57e98faa5ada.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTgwN2JmZjgtYWYxYi00YzZhLTg3NmUtNTdlOThmYWE1YWRhL3RyaXBvX3Bicl9tb2RlbF8xODA3YmZmOC1hZjFiLTRjNmEtODc2ZS01N2U5OGZhYTVhZGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QERcZJeZno94q3XksQqP9LhQE-NFJbqb4ZTadTj22WPpYthxLdjsIWKZyQY6w~H52U4enfxCzrBd6~-FYVZ3nMo1IuKG2CkWQQrGYjNjayqSBovEk11ke-43psLybOyFJfVBFSA9eePaCmpbDEh1PvUVXDMSffdvHmi5mnqjRglGZFw7MhaFZkX4rgyc-kKn6v48N863PoEsrE7tmEgI992px8u53irS66X8tuI2TSnc8iM54IdHQO3h9U6oOWat9GYQs2XyFL98~AopGbxoHCEHH0M63DLXivRUR1lxdNYtEkeX5uCYetz~BASgIj3Dju81jNhJ58W~UZN5eXM7Jg__",
+    "asset_id": "patent_scanner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "information",
+    "name": "Patent Scanner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
