@@ -3049,5 +3049,22 @@
     "epoch": "any",
     "name": "Bed Double",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bookshelf": {
+    "prompt": "a tall bookshelf full of books, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "0ca81a89-bed1-4b5d-b469-5d93efb801c1",
+    "path": "/models/generated/tripo/bookshelf.glb",
+    "bytes": 14876800,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0ca81a89-bed1-4b5d-b469-5d93efb801c1/tripo_pbr_model_0ca81a89-bed1-4b5d-b469-5d93efb801c1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGNhODFhODktYmVkMS00YjVkLWI0NjktNWQ5M2VmYjgwMWMxL3RyaXBvX3Bicl9tb2RlbF8wY2E4MWE4OS1iZWQxLTRiNWQtYjQ2OS01ZDkzZWZiODAxYzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dxt-ilsXfiB~5vusKoJKvnFUvYPbdo5yl5BmqrLYDKKWB5NWcmkrS3B7jbkCPJo8cAlWTkkkID9rrWJdXDodCsFHE~JZP9Pf7k6EJvXhQ5uJvbClVpLZNN~XOImJi7lLyK6w1z6UbQHWupFJFGxC6QO8wyuNy87QU4cZMar8FAwYBlWID4~ZjADJl~81l2wpTMgM1TjhxRGjCbq3Wr72WY6GbyRDHz06O9fNfYNJYiU2uyZyFgkbtXF72F3hjomH-5nV2R5Uy8jcD4s1MiHz~ZWvy1MuFx0EF1R9c1zsPkLRNE9gf~pT9ZTu2fTdqSRMdYhEiXsDX6nY2D-v7DFASQ__",
+    "asset_id": "bookshelf",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Bookshelf",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
