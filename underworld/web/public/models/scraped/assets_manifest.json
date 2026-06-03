@@ -4222,5 +4222,22 @@
     "epoch": "industrial",
     "name": "Concrete Mixer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:crucible": {
+    "prompt": "a ceramic smelting crucible with tongs, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "74cb6b79-58f9-4edd-b122-25ffbe4ce64f",
+    "path": "/models/generated/tripo/crucible.glb",
+    "bytes": 14700740,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/74cb6b79-58f9-4edd-b122-25ffbe4ce64f/tripo_pbr_model_74cb6b79-58f9-4edd-b122-25ffbe4ce64f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzRjYjZiNzktNThmOS00ZWRkLWIxMjItMjVmZmJlNGNlNjRmL3RyaXBvX3Bicl9tb2RlbF83NGNiNmI3OS01OGY5LTRlZGQtYjEyMi0yNWZmYmU0Y2U2NGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=A28A12hSwdnF~FNJZDKYuuRcMkYy4ul8NY5FuTp-gCYnzTUg6hR~dODlR~mkwTVArFUtZogCPYEeX4dsfg6G37~B-1YlmR~wZS34~H~q40UVjMq9hl9dj0U8qMTqTscmZJYCzNt8iNC~yXFchhgFxbP5FhLc6PlXZhVhTREfB2jI3mXVumTTusfVpRf82~I7jLRSM1NTnAglOgfNxrsFgjPw2G8ekKTQyBHAE0Keze8jLH2ZZEiQV~EdzTIcU~yNAUiNJ53V6Ei4WKyvw2Jv5RClApqv-09JHCOKyqpXqtF9N6w-b47-KQe5kzm5gBFU8j7BLGiJiQrAJXfTqMOGYQ__",
+    "asset_id": "crucible",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Crucible",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
