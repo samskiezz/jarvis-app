@@ -4409,5 +4409,22 @@
     "epoch": "industrial",
     "name": "Greenhouse",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:harvester": {
+    "prompt": "a small combine harvester, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d32b363f-da96-4494-a2b1-4d938205887a",
+    "path": "/models/generated/tripo/harvester.glb",
+    "bytes": 15236868,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d32b363f-da96-4494-a2b1-4d938205887a/tripo_pbr_model_d32b363f-da96-4494-a2b1-4d938205887a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDMyYjM2M2YtZGE5Ni00NDk0LWEyYjEtNGQ5MzgyMDU4ODdhL3RyaXBvX3Bicl9tb2RlbF9kMzJiMzYzZi1kYTk2LTQ0OTQtYTJiMS00ZDkzODIwNTg4N2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=B8SxOAmNmJB4lVHF5VXoPVeWwS6OsxxbHpx4Us7bn-eiWvnqmF5VaWz2auJ6iopcM5qCDrCSkHB2IxxQzRIOqN7USvfi7XPnDz5cNmpNTXTHN2WmxqdU04-OX46TeVVe0GNxPMQ9rQW4Uuga82DvsKQ3RmYULIFJkfVWNno783BG4JqOYrDDYheWSkPg3P7ncNGTw~TJjFFvAE6eABx-u-rCfhzqRLaPZjOT8JD6Kp7oaXX09u60yI7Ty9mYntuWMSgxBzD4NwjCQbXZWZ0fEp-pD6OnfN3Q2jldN3e9cMk3o~L-lyYuTkT2yUeBwRh3H9gw94eOy7i2JNoh0ecf4A__",
+    "asset_id": "harvester",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Harvester",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
