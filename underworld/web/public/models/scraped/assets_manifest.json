@@ -1604,5 +1604,22 @@
     "epoch": "any",
     "name": "Snow Drift",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:storm_debris": {
+    "prompt": "scattered wind-blown storm debris and broken branches, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "e9290f4f-281c-44d0-b42d-740cb0e2a3ec",
+    "path": "/models/generated/tripo/storm_debris.glb",
+    "bytes": 9296516,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e9290f4f-281c-44d0-b42d-740cb0e2a3ec/tripo_pbr_model_e9290f4f-281c-44d0-b42d-740cb0e2a3ec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTkyOTBmNGYtMjgxYy00NGQwLWI0MmQtNzQwY2IwZTJhM2VjL3RyaXBvX3Bicl9tb2RlbF9lOTI5MGY0Zi0yODFjLTQ0ZDAtYjQyZC03NDBjYjBlMmEzZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=T407yK6q6dHDa2wHv0uq4rE2miewVb2eTovGKxo889XMs3th-cGjWsEecPb3C6pI7ucB5LqffZ490TEirIB4R2O8xE5q4IRIxDh-l2rKj7YwnzLwYfmVwVlbNyq1zzAH-tnR7FKITKGsqxE5VwSP0NpODySmhalZq1ESx6xzfz4eZFcs0FqCEZO1coJO1IDF86ALRZhwBybLzpkKzezbeq8Vplr5qnUh3HDzOioyjdrzRskZHwXO1yYMu3iptzu09ZL1qmT5qXWEtXomBh-uTBBnUs9kY-CMgz5-5JngegCeFSyB4vIXWZEhCX~BX3GDucE8xgDQb4x-90YCy6MggA__",
+    "asset_id": "storm_debris",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Storm Debris",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
