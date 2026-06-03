@@ -6279,5 +6279,22 @@
     "epoch": "bronze",
     "name": "Scales Balance",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:shop_counter": {
+    "prompt": "a shop counter with a till, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c3cd6d76-9e9e-4bd9-8979-f1b5a051f138",
+    "path": "/models/generated/tripo/shop_counter.glb",
+    "bytes": 14755048,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c3cd6d76-9e9e-4bd9-8979-f1b5a051f138/tripo_pbr_model_c3cd6d76-9e9e-4bd9-8979-f1b5a051f138.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzNjZDZkNzYtOWU5ZS00YmQ5LTg5NzktZjFiNWEwNTFmMTM4L3RyaXBvX3Bicl9tb2RlbF9jM2NkNmQ3Ni05ZTllLTRiZDktODk3OS1mMWI1YTA1MWYxMzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uNCoS6EcRB9BqBfpldtvETEltEk-yaqoD~3cJrGxlpnLcm7PByd5yFFhBsMAzRJw1ROO-Ugb7Xko3h6PwnB8k8hfMzCCUKcdw1scLmRcSruc96VyQHteIx0Gp8TJMwmGjyPV-48-5hU-AWOfWAqzqi3Qk1hsCESOpuNvE2N1moGRKSz0C4EbT4WFQN680JuBkxgPGO5nHUx1FBF7QnySwZR5uXuuLevHZBz3V4k5YLoUGXFPlSejJ4fwY76b1Rw0L-On6sqAWkcz8Nv4fLaLfCBolgMf7Ts1d0RqEv1GT4giMXXKDAR~rAkqybwD7bs-id4lUJ6Geh25ly9tqqFl0w__",
+    "asset_id": "shop_counter",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "iron",
+    "name": "Shop Counter",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
