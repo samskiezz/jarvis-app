@@ -5752,5 +5752,22 @@
     "epoch": "industrial",
     "name": "Standards Master Gauge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tablet_device": {
+    "prompt": "a handheld tablet device with a glowing screen, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ab044dcd-a8a2-45ae-a148-75925dc19ab4",
+    "path": "/models/generated/tripo/tablet_device.glb",
+    "bytes": 11029264,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ab044dcd-a8a2-45ae-a148-75925dc19ab4/tripo_pbr_model_ab044dcd-a8a2-45ae-a148-75925dc19ab4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWIwNDRkY2QtYThhMi00NWFlLWExNDgtNzU5MjVkYzE5YWI0L3RyaXBvX3Bicl9tb2RlbF9hYjA0NGRjZC1hOGEyLTQ1YWUtYTE0OC03NTkyNWRjMTlhYjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UYlMILQebIvXYPUwuD-NE1-d0FWWJYO8T~h9Y3qSJ1YtnR2v97deiJ32N61W-knx8cldlyrjCB9vD83HCAxHx8qv4E1l2Cml6iNod55oCvDrBPuUoHLHK~G02VNWS0IuGnaLQduHcj5GiT-CSnSDAhyi9mu8v~wqLpBdGnZN7CMGRP-S4y4Fw95jzXUbsIKz3bhYIylMoGmLLZ0gOYGWuOmMFTibrookD69RhZ2Luzuhnci96WMPDzMHyEIAbhq7XI-5mb0J12MxK9EpUAAr-e1iEPvjOF5bjmxJs89O2pqVUXKPEol9JoaY6ywDnWk~yGSy88pRy2LQ1YDpzvCZ5w__",
+    "asset_id": "tablet_device",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "information",
+    "name": "Tablet Device",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
