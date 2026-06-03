@@ -2573,5 +2573,22 @@
     "epoch": "quantum",
     "name": "Fx Power Conduit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_rock_arch": {
+    "prompt": "a dramatic natural rock arch with glowing moss, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "e029e722-d8ca-41c8-acb8-28669d72f33e",
+    "path": "/models/generated/tripo/fx_rock_arch.glb",
+    "bytes": 15184828,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e029e722-d8ca-41c8-acb8-28669d72f33e/tripo_pbr_model_e029e722-d8ca-41c8-acb8-28669d72f33e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTAyOWU3MjItZDhjYS00MWM4LWFjYjgtMjg2NjlkNzJmMzNlL3RyaXBvX3Bicl9tb2RlbF9lMDI5ZTcyMi1kOGNhLTQxYzgtYWNiOC0yODY2OWQ3MmYzM2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=FPuE5AS58UhcQ5Fncqcr29sxgT-1lnitJ-SF3kr4Sk0jzTBLzph~Zd3X-G357k82d19ooOjRdn00eNrQMndkt0Jh65t-k1cEYLAjC4KSsga210p2CkH-1qbE9aL~JafgSCShYSv61CANt2vL30rWhG64PwI-viX4a3skm4KIwF955JqxpxUxuVUO40Tyu4cWyheu7pcGarrcp9X9byML7cccjovB8RnuA~HxkplPhxDMpTf9dDLD86gybAvIYPdRQF0y2mq~TGo6vKzbR7xADkKvld9iOZJKUhi-J6mLSDxRVerbMSmC5BzzVHJfbF-Q~xUa8nzchreLH4jMpq81fQ__",
+    "asset_id": "fx_rock_arch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Rock Arch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
