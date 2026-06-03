@@ -3950,5 +3950,22 @@
     "epoch": "industrial",
     "name": "Assembly Line Conveyor",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:balance_scale_lab": {
+    "prompt": "a precision two-pan laboratory balance with weights, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "467a371a-1475-4c9b-8739-f19529887084",
+    "path": "/models/generated/tripo/balance_scale_lab.glb",
+    "bytes": 14876076,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/467a371a-1475-4c9b-8739-f19529887084/tripo_pbr_model_467a371a-1475-4c9b-8739-f19529887084.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDY3YTM3MWEtMTQ3NS00YzliLTg3MzktZjE5NTI5ODg3MDg0L3RyaXBvX3Bicl9tb2RlbF80NjdhMzcxYS0xNDc1LTRjOWItODczOS1mMTk1Mjk4ODcwODQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vhKmYG6s73UElgysqnDgfjf3GtbqypCRx4LxBbzkRivW-N9dG7GaK7tECP8F6Z988r9hEPxw2G9k8mgjGVPJPJS4ma4FyRYBuoQbRCgP5UkltsdMNOAuYpDytoV9eGIqSO-Hm2TN46l1e9an2n~tPc9DTs0oRxjiqlzWI2-5jcVTt9YoJoAkd71SZDfIfBxzKLDU1eA2M1rrUuiTax-cpnYfvxt2gq8K1CEhSnLoeesLcyiJrGIHK2lI6MjRv8MNsRVEi5WBDXGcbtx~x9S0rAcWkTrjEbKnvQr8TeDw3KKgy6ONCX7AK8m-ATnoBUKCPYalaGf0zHi9pll2IUjOEw__",
+    "asset_id": "balance_scale_lab",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Balance Scale Lab",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
