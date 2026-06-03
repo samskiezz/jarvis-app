@@ -7503,5 +7503,22 @@
     "epoch": "quantum",
     "name": "Agi Core",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:aqueduct_arch": {
+    "prompt": "a Roman stone aqueduct arch span, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "efcaa1d9-5376-4dbe-b948-e05d01ac4958",
+    "path": "/models/generated/tripo/aqueduct_arch.glb",
+    "bytes": 14836760,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/efcaa1d9-5376-4dbe-b948-e05d01ac4958/tripo_pbr_model_efcaa1d9-5376-4dbe-b948-e05d01ac4958.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWZjYWExZDktNTM3Ni00ZGJlLWI5NDgtZTA1ZDAxYWM0OTU4L3RyaXBvX3Bicl9tb2RlbF9lZmNhYTFkOS01Mzc2LTRkYmUtYjk0OC1lMDVkMDFhYzQ5NTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=e1CNVvyyLfUG4DGLAHeRtGlMEwIPOQTzREKoWyqZUyJrOCnm5LWAPc253huNCzQycBJsNHYo51DNKcpXld9vPtv1jvAUyQnLD0Q5IsEhhupu~Hp6UlkxbHw2brxgSyn0Bb0yJLx2umkN-rqDd0CCS1fwwlEcaLRlX~yl7g5hM0CAJDY-mt3tZPMqh0ONcJHkRLsMaxKQp8AVlW81YGmcGEk~9wa5G3dZPO2rNW8Gcs9n0rFq~qP37javd9MQZI9DcPsuiBArfsOVXePPtktAgEjO~aiJ1cZQr2gOXmehnrhL-oYCDsRpn9QkHGxTSv~akrgcip~2kBy2XyB9mPPvBw__",
+    "asset_id": "aqueduct_arch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "iron",
+    "name": "Aqueduct Arch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
