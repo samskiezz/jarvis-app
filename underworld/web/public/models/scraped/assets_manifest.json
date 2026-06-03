@@ -4460,5 +4460,22 @@
     "epoch": "information",
     "name": "Industrial Robot Arm",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:invention_prototype_bench": {
+    "prompt": "a workbench with a half-built mechanical invention prototype, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b572846e-946c-4266-9cfd-ecd8a8e95335",
+    "path": "/models/generated/tripo/invention_prototype_bench.glb",
+    "bytes": 14448136,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b572846e-946c-4266-9cfd-ecd8a8e95335/tripo_pbr_model_b572846e-946c-4266-9cfd-ecd8a8e95335.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjU3Mjg0NmUtOTQ2Yy00MjY2LTljZmQtZWNkOGE4ZTk1MzM1L3RyaXBvX3Bicl9tb2RlbF9iNTcyODQ2ZS05NDZjLTQyNjYtOWNmZC1lY2Q4YThlOTUzMzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZVYNbtKxbcn9HBSn9n80UQMd~1wDV5oigMOKnON657n2nAHm55Wb93ZWpD58F~7CY84KY5jfe28acRjUzXdHCYVH8aJ3o5qZYNdzOiMSiayCCJkLV8Ow64GcHhQulpU9CKdDE~qWuRPZsJ27QWXsoXD2-RcT3mczsGGHr19pKURWMZo8SzPpYeGCF2BuYPUB22mN0ZRG6utEVENMUvymp1lUikgkpymdl9pamFv7i7rdKR8IFParUd--lYHWCTfIPHqIzAMN4rKhaqOdn2VDrgDqpoGnKZL-c8peVG9RblLUTrC5mKIdHfcfVhpCeqdpO9dqULep5K28IIZ8WfbCmw__",
+    "asset_id": "invention_prototype_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Invention Prototype Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
