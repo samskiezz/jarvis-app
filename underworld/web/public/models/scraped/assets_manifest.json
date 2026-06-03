@@ -4205,5 +4205,22 @@
     "epoch": "information",
     "name": "Cnc Machining Center",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:concrete_mixer": {
+    "prompt": "a portable concrete mixer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "19de9f5f-89bb-4642-9755-923c8d2cca9f",
+    "path": "/models/generated/tripo/concrete_mixer.glb",
+    "bytes": 14924088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/19de9f5f-89bb-4642-9755-923c8d2cca9f/tripo_pbr_model_19de9f5f-89bb-4642-9755-923c8d2cca9f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTlkZTlmNWYtODliYi00NjQyLTk3NTUtOTIzYzhkMmNjYTlmL3RyaXBvX3Bicl9tb2RlbF8xOWRlOWY1Zi04OWJiLTQ2NDItOTc1NS05MjNjOGQyY2NhOWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=PDL6xx7F3rPN4uHmujSO7AQ-BRvdq8-SDOe~obN0epF7RozlhkCD8ztSx5Z-mmYzk7hTQ~6BcJFRDFPkUbZs-qgS--ZiW~3Jp-Yge0-Wge48HWzYgzyJgymwNQY3i5lpNlAgKmm9p~SrlI~ZfO1LeL9ib6x1w23pqOstzBXBECcSwp442lvrh7uuaSdrwGgTA1p75k87ze74TOEK0y9PPgWRvOxqV5rrj778QY1B8UR7Vq-Ti9Y80ppT8AaSDfJig2QGzaO4r~msfFf4rprtfj~cDEJlJ-iAmOoEmUmqEQuN4QP8DVlVr~n8tymAC8DQNTwO~95K8IXsx2umCSBOVA__",
+    "asset_id": "concrete_mixer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Concrete Mixer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
