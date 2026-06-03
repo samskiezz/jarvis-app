@@ -3491,5 +3491,22 @@
     "epoch": "any",
     "name": "Cupboard",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cutlery_set": {
+    "prompt": "a fork, knife and spoon set, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c2d7e139-33bf-421d-b97d-f67194b24845",
+    "path": "/models/generated/tripo/cutlery_set.glb",
+    "bytes": 7197308,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c2d7e139-33bf-421d-b97d-f67194b24845/tripo_pbr_model_c2d7e139-33bf-421d-b97d-f67194b24845.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzJkN2UxMzktMzNiZi00MjFkLWI5N2QtZjY3MTk0YjI0ODQ1L3RyaXBvX3Bicl9tb2RlbF9jMmQ3ZTEzOS0zM2JmLTQyMWQtYjk3ZC1mNjcxOTRiMjQ4NDUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=JNi~Lgs4u6jmzjCYftdvE06dLNFnNQJfB3nDvjm6W8d23tdkSeHG487NpgCWbHiMtiyoq10tx~W7YxRjF~OgFo7ObGnhjffgwtyio0839wND3XOaYrjzvVUYgynvlsz3AEWepgIShQMwVTfTo5UCYbUAAtF4ViVOXXsqlkaNFR1KC3CmLciv~r5A5AMN1s02B2xOTtOef1aq3yE6jpsUiN6YGkyeImkc8S~uv5hbr7Y51d5vB5QLtIx~zAop58~HSBPhKfbKBDcLu-AAktVXwrm7Bc48D5RHoPzXCqfSHXeaUtglGa-ALgimX-ZrkGdifyZ-U1ZskrR292dh62RbSg__",
+    "asset_id": "cutlery_set",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Cutlery Set",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
