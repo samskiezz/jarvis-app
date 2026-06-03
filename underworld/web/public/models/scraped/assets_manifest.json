@@ -1995,5 +1995,22 @@
     "epoch": "industrial",
     "name": "Discovery Eureka Lamp",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fork_pod": {
+    "prompt": "a futuristic minion-duplication pod with glowing fluid, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "43a2f9b1-6639-4409-8c2a-dc43daea0bc6",
+    "path": "/models/generated/tripo/fork_pod.glb",
+    "bytes": 14593984,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/43a2f9b1-6639-4409-8c2a-dc43daea0bc6/tripo_pbr_model_43a2f9b1-6639-4409-8c2a-dc43daea0bc6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDNhMmY5YjEtNjYzOS00NDA5LThjMmEtZGM0M2RhZWEwYmM2L3RyaXBvX3Bicl9tb2RlbF80M2EyZjliMS02NjM5LTQ0MDktOGMyYS1kYzQzZGFlYTBiYzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=TKhCuL3jjt2qSbe2NmoY9D8zvnlyX50YJk2YjXTEttaHIlkT9uy-ArQwi~8tWISFvEgnI9HaasmRl9u3XKRMuQ4Hbc7QP3hi7Gg4-rIe~W2At1Qt784Qh3yz1N7l~96P6pOpYAlgiJW64waCmf2ro~BRElZDr1D4nFhjLulpfOFwwIUjvBwx34zIb6YeX6n8QpEVZDlhSHayr4xfgpHo10vkYwC5TfEKxl2crWgnymwZrCITTPtjfutwKnbfA5dOw~rGihOeLTyiaOOrLtsHaKLRtTZp~lBx95~bSz-VqlqQfn-wP6UW7oOgtWt9yHyu5xkeY81ykUD-qcGLILzhAA__",
+    "asset_id": "fork_pod",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fork Pod",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
