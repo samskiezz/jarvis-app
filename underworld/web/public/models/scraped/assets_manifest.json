@@ -7061,5 +7061,22 @@
     "epoch": "iron",
     "name": "Fishing Boat",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hay_bale": {
+    "prompt": "a rectangular hay bale, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "28353772-f4d0-4463-9b73-d25c3eb1da31",
+    "path": "/models/generated/tripo/hay_bale.glb",
+    "bytes": 15821064,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/28353772-f4d0-4463-9b73-d25c3eb1da31/tripo_pbr_model_28353772-f4d0-4463-9b73-d25c3eb1da31.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjgzNTM3NzItZjRkMC00NDYzLTliNzMtZDI1YzNlYjFkYTMxL3RyaXBvX3Bicl9tb2RlbF8yODM1Mzc3Mi1mNGQwLTQ0NjMtOWI3My1kMjVjM2ViMWRhMzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uy1qxQrv5XEfDx52P9Hdhs8VaKo4ln-YJEjhW5~XtYtiG1Jagp~3jhfUz316gK3PA4dpBvaqkBKLmagvaUqB01GTNy94EHH-fYBG8MN11IAy-Lu-KrvMEoYLikW8OFXPqdNIshJrKN1iCWaLYfzeQ303DEap4uzvT2cH0BZQH4lpqf6kSeV7WQFo8LaIBdb9aI-KHR0TY4-7hWSYBsQs5j1WZhBkKItkSYg3XQsCll~qyQNOEoiwcBASvzdDhcKN9Yhb-V3ThjmBSlH0c8sZjNyX3qQnU1jPl-yBhP43UXMGm7msAHJtoQfjW2h4UZhZMmfgsgfsY-3t3LbQG0f8tA__",
+    "asset_id": "hay_bale",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Hay Bale",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
