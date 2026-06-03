@@ -7622,5 +7622,22 @@
     "epoch": "industrial",
     "name": "Combustion Engine Cutaway",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:crispr_cas9_model": {
+    "prompt": "a CRISPR-Cas9 gene-editing molecular model, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b5376ae4-f1f5-4e5a-97ca-c360ff16aede",
+    "path": "/models/generated/tripo/crispr_cas9_model.glb",
+    "bytes": 15205248,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b5376ae4-f1f5-4e5a-97ca-c360ff16aede/tripo_pbr_model_b5376ae4-f1f5-4e5a-97ca-c360ff16aede.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjUzNzZhZTQtZjFmNS00ZTVhLTk3Y2EtYzM2MGZmMTZhZWRlL3RyaXBvX3Bicl9tb2RlbF9iNTM3NmFlNC1mMWY1LTRlNWEtOTdjYS1jMzYwZmYxNmFlZGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kOpQyDvmK8L5f2i4fvtFipzBFUh5kDPfxhPGcLwLCq5kLOU82mW61VyuFTJVwvngaKX9au36Kr5wsXGfKrL~ApOwNLMXjWah1V2eSb-4WWFKM-6cVg-JeEdQTPETltC9HznW51cohvF~oRM8aHLL5ZyyKTU4IRRKx9njutBUOz4ok4VRwzKxgKGaSHw7ftzY~oVDRyQdB0RWr0d7AVqw0f9cP7RnVpDGbUleKeXA38SNQpOLyHUv-fzLu3fpR~gq5w2XzOrrgByeU99ASXNLVdzEAbYlxG1HeDeRiHZNh7n2bHKX4oA4fdNzLjKPxZ71BwSQU2REZvJV3D9W~XkhuA__",
+    "asset_id": "crispr_cas9_model",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Crispr Cas9 Model",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
