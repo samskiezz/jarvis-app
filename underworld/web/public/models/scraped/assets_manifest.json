@@ -5650,5 +5650,22 @@
     "epoch": "industrial",
     "name": "Screwdriver",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:scroll": {
+    "prompt": "a partially unrolled parchment scroll, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "cca56eec-f6c2-4b16-9a20-d688cf68d197",
+    "path": "/models/generated/tripo/scroll.glb",
+    "bytes": 15642984,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/cca56eec-f6c2-4b16-9a20-d688cf68d197/tripo_pbr_model_cca56eec-f6c2-4b16-9a20-d688cf68d197.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvY2NhNTZlZWMtZjZjMi00YjE2LTlhMjAtZDY4OGNmNjhkMTk3L3RyaXBvX3Bicl9tb2RlbF9jY2E1NmVlYy1mNmMyLTRiMTYtOWEyMC1kNjg4Y2Y2OGQxOTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VGijsRIqBZPxuIiZIkrL3cfAtk9IHtwEGUelXxEOmi~H1GO9~qonaHB01adGvddANybNeJgYE6BwxSV3sMnO~namCa6ArSgiGcfQPtgsvdP1~xep7Ilc1vUSo9tT0X~qNcz26aPh3NeMM4PjhlcUUlbg8ANypZlNiPpeDvA9RjtfjLbvC4DVt-ihW3aSDVWygHrnvcs3eUU7p0sWyWvUpwFrGz6uPoyiCVIGFsMl5NQ~xnclQnCvEieENRAHfb7fUZWJSnxjdVomZOMvp6ys4wiBfqzAvYQnwMmd-sO9PTE4z11RXDNe8vz9Fb0dOvk8EzMtdZTQ-eic6iMLtC-O8w__",
+    "asset_id": "scroll",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Scroll",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
