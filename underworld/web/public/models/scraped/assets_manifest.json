@@ -5055,5 +5055,22 @@
     "epoch": "information",
     "name": "Tensile Tester",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:theodolite": {
+    "prompt": "a surveyor's theodolite on a tripod, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c54922f6-dc4a-41a7-9aa3-252f44694bda",
+    "path": "/models/generated/tripo/theodolite.glb",
+    "bytes": 14933416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c54922f6-dc4a-41a7-9aa3-252f44694bda/tripo_pbr_model_c54922f6-dc4a-41a7-9aa3-252f44694bda.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzU0OTIyZjYtZGM0YS00MWE3LTlhYTMtMjUyZjQ0Njk0YmRhL3RyaXBvX3Bicl9tb2RlbF9jNTQ5MjJmNi1kYzRhLTQxYTctOWFhMy0yNTJmNDQ2OTRiZGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=gc-6Bg91V1jCT-b4c9mdd5JzarWkZBrVEPdurXPPGzvkY38cXNrz0X6seIPMI0-rLnp4oNFSac81nw7zAobka9thy-~vjPnXFW4TizCY9W8SPugQFvZARJzTGNi~Pi04LBmvizMjqpHjsElmf5l2GDrLbGTZVtOj7qJzu6Io5aAuwJrvgLpUYIchtbzgkPb0LnrF1EsuPlCLS8CsfcpVcYuF3ITRmw8b5~Dikak9pmevqn~Z0B-K-Jh0JJJNOCWI1ljoTNDZkW~mB7pHXnK0-~OoVZWPHuS3FiH1uCy6oi4IZ1MJsMib5YGmu1iMW6DR~F5OiVtFfkn8etxQl0q82A__",
+    "asset_id": "theodolite",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Theodolite",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
