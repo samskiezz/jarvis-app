@@ -6432,5 +6432,22 @@
     "epoch": "stone",
     "name": "Drum",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ethics_oath_lectern": {
+    "prompt": "an ornate lectern holding an open ethics oath book, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9f030ff6-9780-42f2-b83e-29660aa20734",
+    "path": "/models/generated/tripo/ethics_oath_lectern.glb",
+    "bytes": 14889996,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9f030ff6-9780-42f2-b83e-29660aa20734/tripo_pbr_model_9f030ff6-9780-42f2-b83e-29660aa20734.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWYwMzBmZjYtOTc4MC00MmYyLWI4M2UtMjk2NjBhYTIwNzM0L3RyaXBvX3Bicl9tb2RlbF85ZjAzMGZmNi05NzgwLTQyZjItYjgzZS0yOTY2MGFhMjA3MzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qqhl~yWGqv9ATRVTN2Eo-5gVw3g7QJIlohT6OTmh4byeDjzbqw4vbL3-Gjunafwb881CjEBH4F8f9Hi1jKcl4AYygaX-SyiTfES4S3Csu2XWUvDwOeVNOHRRlWVhfhgQ5utccQRDhv3u6w-ZCQLomlovShyFuSa-8NjlXmqn7irYeSq6SLpdzTzlp2CH9bKzCH0Whs4ta25Avx~LJo16Cgjc7u-8SKciOKhH4PSAiX9dE5PYjzjnkyDGW3M8weIaX3XcaypyW~FjOLQc4hoj6LHGOX0RHM0q5mw1Yi8Icnnc~clUuw6oVXTk6~cNSAcEyHxQXqqTHumh5Ao4aDmPIw__",
+    "asset_id": "ethics_oath_lectern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "iron",
+    "name": "Ethics Oath Lectern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
