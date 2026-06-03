@@ -2913,5 +2913,22 @@
     "epoch": "any",
     "name": "Roof Beams",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:staircase": {
+    "prompt": "a wooden interior staircase, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "0e50c7cc-6fed-4a73-81fc-205f67f82b6a",
+    "path": "/models/generated/tripo/staircase.glb",
+    "bytes": 14066100,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0e50c7cc-6fed-4a73-81fc-205f67f82b6a/tripo_pbr_model_0e50c7cc-6fed-4a73-81fc-205f67f82b6a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGU1MGM3Y2MtNmZlZC00YTczLTgxZmMtMjA1ZjY3ZjgyYjZhL3RyaXBvX3Bicl9tb2RlbF8wZTUwYzdjYy02ZmVkLTRhNzMtODFmYy0yMDVmNjdmODJiNmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=fi7OGA1bTCed7tiAnoPWBBqtGHJPaHBMdcyO6cijuP~UuHSmzrZSz5WH~cZ~Vmu~PbN~jYQH6Q-6wnt4dEatM9WlWychcdQL4xrjKuh0hvAIzGJlTuKtBybX3SEvhHGp2tPHrTtplSdtMLEkOybnpTErexwqiv0eSkC5BxoRrnvLJjo-Q5O6D8CVCge2r~9PAftT0SoaeqPzXdumJV52SZyQPHqnUVPlPqDZ0XyAaB4MjtLvYMcQI~ESMORvqQUelkYVoive2WcoqxXqk1aq92CkpnIAL2FRhU6sOiHIMV2oh6QBpSPgEONe-a0VvdqU1qKMpyjT5IGqPA90T~CALQ__",
+    "asset_id": "staircase",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Staircase",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
