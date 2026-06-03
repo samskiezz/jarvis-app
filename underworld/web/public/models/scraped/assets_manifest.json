@@ -7979,5 +7979,22 @@
     "epoch": "iron",
     "name": "Paper Press Screen",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:philosophy_agora": {
+    "prompt": "an open-air colonnaded agora for philosophical debate, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "eb9e2723-6779-4ddc-bb77-b2d62d3e5777",
+    "path": "/models/generated/tripo/philosophy_agora.glb",
+    "bytes": 1102980,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/eb9e2723-6779-4ddc-bb77-b2d62d3e5777/tripo_pbr_model_eb9e2723-6779-4ddc-bb77-b2d62d3e5777.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWI5ZTI3MjMtNjc3OS00ZGRjLWJiNzctYjJkNjJkM2U1Nzc3L3RyaXBvX3Bicl9tb2RlbF9lYjllMjcyMy02Nzc5LTRkZGMtYmI3Ny1iMmQ2MmQzZTU3NzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=bDxIFJiyo7xf34C9XvtJE6Wud2~gbnxh~3RjfSPC3BBtaEIzqUj8ghGiaZ37fB7hoksa3ZZjJbtJrUojggQWqy1ate5m3hvtvy--9FR07IIr62VhSEYxbwVtnj6bZMOBgI97YQkL6q8z0bo-TJXzLbmLUqQ0LstQtlcnQQfjGaW0fLYMNqMW9Op~RNJWMiykQMjQi~A~1uIbDQNt7120vjvLwD5uJ~BWfrOcgEilqmv2C9Ro5lvlsgWv1EHX5OOFNH5NgnJ9e3bvLrNVWYgLz6EjFZWrfL8rZnQPa-~xgtlVvpsqE6jUrOPqjWwgDxLRbNSLgxBVlxI6knpxRJIfZw__",
+    "asset_id": "philosophy_agora",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "iron",
+    "name": "Philosophy Agora",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
