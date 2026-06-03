@@ -5140,5 +5140,22 @@
     "epoch": "industrial",
     "name": "Voltmeter",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wafer_lithography_stepper": {
+    "prompt": "a semiconductor photolithography stepper, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "52db32ce-aee4-4f2c-a2f9-58b44b4ee4a2",
+    "path": "/models/generated/tripo/wafer_lithography_stepper.glb",
+    "bytes": 14846328,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/52db32ce-aee4-4f2c-a2f9-58b44b4ee4a2/tripo_pbr_model_52db32ce-aee4-4f2c-a2f9-58b44b4ee4a2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTJkYjMyY2UtYWVlNC00ZjJjLWEyZjktNThiNDRiNGVlNGEyL3RyaXBvX3Bicl9tb2RlbF81MmRiMzJjZS1hZWU0LTRmMmMtYTJmOS01OGI0NGI0ZWU0YTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NEwOKyD2zTHOeWEUHsCjMPafzFgMGeiIQKKAEVMeYlKToFMFnMyIqOu2X8A1MfZRAqOsyKVBWDJAP~n7vU0Nb1mN5t1kXHATMtV8iiUfoNsh6kc2SumBrrHezeP9kxGEk-gg~L1E8UuvsENMdmWR1PEZSSQaVH42QLG2EpVBdVUcFJJP0Sdv8xGPGcOqYw7ArygXT1ct271rNHuZPCQGStpaW55RpsERFlMUK-lCMz8f-70-m~MyBBDARnRmPH2gKeihSyGP6O8AXq6GD90CPcdafDwiVUTIgetlmWFvEqAaVxC~s4Zm8RCBgjEdbutdJLF6Ub~QmttlKI5rHN3ylw__",
+    "asset_id": "wafer_lithography_stepper",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Wafer Lithography Stepper",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
