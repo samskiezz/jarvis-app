@@ -2301,5 +2301,22 @@
     "epoch": "any",
     "name": "Fx Glow Flowers",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_glow_lamppost": {
+    "prompt": "an elegant lamppost with a warm glowing globe and filigree, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "8b700f46-a2e6-4174-97e9-c83858081e01",
+    "path": "/models/generated/tripo/fx_glow_lamppost.glb",
+    "bytes": 3989080,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8b700f46-a2e6-4174-97e9-c83858081e01/tripo_pbr_model_8b700f46-a2e6-4174-97e9-c83858081e01.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGI3MDBmNDYtYTJlNi00MTc0LTk3ZTktYzgzODU4MDgxZTAxL3RyaXBvX3Bicl9tb2RlbF84YjcwMGY0Ni1hMmU2LTQxNzQtOTdlOS1jODM4NTgwODFlMDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vjGqi2bghn4Jvwn27sR4ebjxxZDzE4IfAjgqOPqBvS2dNTMQEXebCxMsm9AKf2DgLO-Q766RnH-TbhNE27e0xOxjtQAYR1urlxgou6~qqrAEgrfuti7EeWnDGFnM~UvhwzXO57f3CDWPq4TNUexmkn6nzzzUIO~wwR5kdwgp3-8rG1R~N6kWDxDno7rP54sDge2zTD4S~DTzh9SvnI7DGRSHWW~uViphKx5dawYk9GAO8m2fdaIO6RRnmslXGkZSfTTUSI~SDxOwJJv0y8GeTkVNfmnRp42UrXIu7WE73V9dFL4zzW0TJbp4RVWL9ktF82FsmS-hsA9xIKlAY3VImQ__",
+    "asset_id": "fx_glow_lamppost",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "industrial",
+    "name": "Fx Glow Lamppost",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
