@@ -7792,5 +7792,22 @@
     "epoch": "quantum",
     "name": "Interstellar Ship",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:iron_smelting_bloomery": {
+    "prompt": "a clay bloomery furnace smelting iron with glowing ore, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d2eb7c2b-43bb-4913-98bd-6f6cb2917009",
+    "path": "/models/generated/tripo/iron_smelting_bloomery.glb",
+    "bytes": 14956652,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d2eb7c2b-43bb-4913-98bd-6f6cb2917009/tripo_pbr_model_d2eb7c2b-43bb-4913-98bd-6f6cb2917009.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDJlYjdjMmItNDNiYi00OTEzLTk4YmQtNmY2Y2IyOTE3MDA5L3RyaXBvX3Bicl9tb2RlbF9kMmViN2MyYi00M2JiLTQ5MTMtOThiZC02ZjZjYjI5MTcwMDkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Ak2U9nmE8CLeDMvDWuIo9J9y0JjGzniWJ0B9Z1cA-f2TGKyD-ckUeb4ktG8UlOUaBEi-Xx2MxCPwpG~fWIwgq11qk3ZpLN0M6uu0S8fP7qbR8NI7FeGQvgUZD-ylCyqBb3rit5fEtu8SwskJqjIiVH-c7yayQaDWL9d8ZT4nvSEk9jZ98nxkPid7L0WiSq5B3K3Tc-PGVYR1mcwujuOP4rXBAVJ3gNKQAOt4~7G9WHWz6NXAaRTKG08ronMv01sGtW7nRJt3XB3xE5BV0mNh6zGsz~mNH49UZhLvTPqHOZ2fHpb7DsnQoL74GXC5VXOXKPU61Sj3utdCzwy8GgznVQ__",
+    "asset_id": "iron_smelting_bloomery",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "iron",
+    "name": "Iron Smelting Bloomery",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
