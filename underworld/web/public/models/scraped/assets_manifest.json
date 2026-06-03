@@ -4392,5 +4392,22 @@
     "epoch": "information",
     "name": "Genome Sequencer Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:greenhouse": {
+    "prompt": "a glass greenhouse with planting beds, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c0e01074-4395-41e7-b625-1cb05a4cf7e1",
+    "path": "/models/generated/tripo/greenhouse.glb",
+    "bytes": 15289796,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c0e01074-4395-41e7-b625-1cb05a4cf7e1/tripo_pbr_model_c0e01074-4395-41e7-b625-1cb05a4cf7e1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzBlMDEwNzQtNDM5NS00MWU3LWI2MjUtMWNiMDVhNGNmN2UxL3RyaXBvX3Bicl9tb2RlbF9jMGUwMTA3NC00Mzk1LTQxZTctYjYyNS0xY2IwNWE0Y2Y3ZTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Jx6tHFQEFUwRWb8KOI5Tr7ezmEFJeuCJLcfUibLvGW0KVH1A2W9Ws20GoswWEA9sPdlaEvEiiNxwnIoy~U8iARma0irNHbekGIpcJeQ3CkSDYgiedoRQ811GcnbX~icBwXI7PblfHiJAti69uj~HUoDrjD~-VEVOZIVvCPguSqS4bJIZtxpxRq1l~G29Ngup8AFKvMttNcQ1~VldooaR4R5Ykmr1AmUKUmLVh~MESUqp7rHmRA7nuFOF~E66-h1n6D~UADByz36RDee~2d1EMs4G4UwlBANfrnp~f7k44FqF1ER0zAl16cX-taZxx3P6N3znASBWsLIY52FietGa2w__",
+    "asset_id": "greenhouse",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Greenhouse",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
