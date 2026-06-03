@@ -8183,5 +8183,22 @@
     "epoch": "information",
     "name": "Car Modern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cart_wooden": {
+    "prompt": "a wooden two-wheel hand cart, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7bf1952c-d606-4c93-8eb9-bd85f44eca1f",
+    "path": "/models/generated/tripo/cart_wooden.glb",
+    "bytes": 14811004,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7bf1952c-d606-4c93-8eb9-bd85f44eca1f/tripo_pbr_model_7bf1952c-d606-4c93-8eb9-bd85f44eca1f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2JmMTk1MmMtZDYwNi00YzkzLThlYjktYmQ4NWY0NGVjYTFmL3RyaXBvX3Bicl9tb2RlbF83YmYxOTUyYy1kNjA2LTRjOTMtOGViOS1iZDg1ZjQ0ZWNhMWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=a0M7nrK5L-iB8AWZRB-T3HTq4DrF92cAZI57PcQC9-5lAw~KeE-XPMwVlcUv22Nu02n92jli2htfF2uEA3HGFibm7Cj7ZgrhDstbcsq-uNnh~cDDjcViQp4R75Ji-PoAi4aj0ilW2tHxcv3Cg-U1mXMwvuI3vHtS3dZcuoYEBXkuA-5iuwBTuKtPji4CssYNrQm980DYv-8v~OJK81gq7pxehlg19dHEtX8~fNmcGcaNbkS~iyyvqkokx~~vtpDyMm8X2Uxw-m6vpjfDtxG6qd15A8Sve5UNVFui1xpaNsH93tl9HgWixvWhU9-VU8D3kN4p~Yez0~tOXm8WOpug1g__",
+    "asset_id": "cart_wooden",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "bronze",
+    "name": "Cart Wooden",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
