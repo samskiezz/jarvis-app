@@ -6211,5 +6211,22 @@
     "epoch": "industrial",
     "name": "Patent Archive Wall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:peer_review_table": {
+    "prompt": "a round peer-review table with verdict tokens and stacked papers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f1f01d09-b2b6-4b47-ac1d-5db925a38c64",
+    "path": "/models/generated/tripo/peer_review_table.glb",
+    "bytes": 14936488,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f1f01d09-b2b6-4b47-ac1d-5db925a38c64/tripo_pbr_model_f1f01d09-b2b6-4b47-ac1d-5db925a38c64.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjFmMDFkMDktYjJiNi00YjQ3LWFjMWQtNWRiOTI1YTM4YzY0L3RyaXBvX3Bicl9tb2RlbF9mMWYwMWQwOS1iMmI2LTRiNDctYWMxZC01ZGI5MjVhMzhjNjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NDhrQo4pAVYDGT1j06SZ9vLbgSrFvreAQpbgmYynYtJ9aTcO5RkGDdOxVIMz39xpFWCO0vjrh1oboCpSNfONRl~K0VvI9PU9eJ7MN62iwhL1fRtuoY519gLJ4vyadOJuDp3QSxyFYJbBWa7HZK4~0MhhgZJQBNSacYbExgdO8FpuZm~74Z5fmQCmQLmyfXiRF2Kd6dntyJNb8ddg0HbUVrGy7go93Vw-KXAM0v9QeXd413-dvNu05mYanCBhhNDoZ2ea5RY8gBaYxCgGkA8B5J12bTm6dX9Pdp5DYOs00v~PFmxuuviJBlCsbyvD2sFcsKgX6iVSpxWDdeZg21m0Mw__",
+    "asset_id": "peer_review_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "iron",
+    "name": "Peer Review Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
