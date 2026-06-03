@@ -465,5 +465,22 @@
     "epoch": "iron",
     "name": "Stone Bridge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_oak": {
+    "prompt": "a lush oak tree with rounded canopy, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "468cc4f2-489f-4950-b1a6-ee4e75cb3323",
+    "path": "/models/generated/tripo/tree_oak.glb",
+    "bytes": 15705412,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/468cc4f2-489f-4950-b1a6-ee4e75cb3323/tripo_pbr_model_468cc4f2-489f-4950-b1a6-ee4e75cb3323.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDY4Y2M0ZjItNDg5Zi00OTUwLWIxYTYtZWU0ZTc1Y2IzMzIzL3RyaXBvX3Bicl9tb2RlbF80NjhjYzRmMi00ODlmLTQ5NTAtYjFhNi1lZTRlNzVjYjMzMjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kbEluLMr1C4RYd0Atrbguqmlz-JXbE54al3rh3~8oejAah~L3YPG4dSK5~Bhwemjk6IZw4oh-LtE6jcyr95AW4UHWKZE7~GLjqYRuI6f4iUKqJUBwBZKhoa9eY8caNK~aTJYDr9jJuhye4-HyitYXDIRkheXNJKfKe7C9wOV0Dgt4Jt6ZbCkxG5fQI~60PeunJo0epPPnrHOehi~phK5T128Th9NCVbRB2QrUpEaU7zITjNOiYC~OE4Q646Klgw6bciy4y4uVEEmTeHpMRrqohE-LAKGhzDl0cUqniFFwlSykeLwwh04eftLXV7oWrRNmjncMpacJ553A3gFztSlRw__",
+    "asset_id": "tree_oak",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Oak",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
