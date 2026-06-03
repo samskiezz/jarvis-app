@@ -6755,5 +6755,22 @@
     "epoch": "iron",
     "name": "Apothecary Shelf",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:patent_globe_kiosk": {
+    "prompt": "a prior-art world-map globe kiosk with pins, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c89cbbd2-aa57-4a05-b9a4-52ab2697546f",
+    "path": "/models/generated/tripo/patent_globe_kiosk.glb",
+    "bytes": 15194260,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c89cbbd2-aa57-4a05-b9a4-52ab2697546f/tripo_pbr_model_c89cbbd2-aa57-4a05-b9a4-52ab2697546f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzg5Y2JiZDItYWE1Ny00YTA1LWI5YTQtNTJhYjI2OTc1NDZmL3RyaXBvX3Bicl9tb2RlbF9jODljYmJkMi1hYTU3LTRhMDUtYjlhNC01MmFiMjY5NzU0NmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=nZ-W7KvVCHJwy7UqVUSTM35KAFKPB96izFseFjW3HNlAREo0KtHYyyi0kVnm3b5rMb0dPMEd3ZqeVllzvap2gqSQ6sUF-TxZbh~PpNzpA6wKEkGtY0gNs4dzI4-A6mBFCqQ82JponfvuVz~ZtkUWVsa7IxSzMSGllbFzrA9rFq7pjl-VWxQBdJZGgA~DIehsju1~guQGoiuuyTivPrqASoSLiUDI0d9ybut-p48R2tf6XlBlJkyaoCYXKAU2zuo1F6qwqIPtbq69rgdFcVSdWSA-ybxyFnW1GugUxnuB3zuWsXDblQgWVhqRoaQ2pfXDvT47rlbpyGryC0PkVbsFSw__",
+    "asset_id": "patent_globe_kiosk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "information",
+    "name": "Patent Globe Kiosk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
