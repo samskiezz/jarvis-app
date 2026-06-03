@@ -2386,5 +2386,22 @@
     "epoch": "any",
     "name": "Fx Hanging Vines",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_hologram": {
+    "prompt": "a holographic projector emitting a glowing 3D display, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "3f4b56c8-4474-4103-8d97-950119f5bbf3",
+    "path": "/models/generated/tripo/fx_hologram.glb",
+    "bytes": 15995720,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3f4b56c8-4474-4103-8d97-950119f5bbf3/tripo_pbr_model_3f4b56c8-4474-4103-8d97-950119f5bbf3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2Y0YjU2YzgtNDQ3NC00MTAzLThkOTctOTUwMTE5ZjViYmYzL3RyaXBvX3Bicl9tb2RlbF8zZjRiNTZjOC00NDc0LTQxMDMtOGQ5Ny05NTAxMTlmNWJiZjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=oBnXD7YXXYEUf9Z6rsu5BDghHSCL2gIS6iQb2Qhk8QKzCywXlTjH62UbFYERattkbJK3IXYp1Q4PDIgM-eqijKyozGmAFdv5UxkjcHEAgctXY97FRX5wWArEaF7mZMGPulvocd8RAyJzygM4yrdUiCDxpnu0kltIHnyF35wQBRnjAjIsuKxZYWfh1zEBS5dNBIChxNfKvac5ZgvEv-irNsgLkXIRKJsv~VW90sk1CoprqglODWqHeDvRG7X6mh1AvJbSHqSIPx2DxnaLYlGWS6ug4dg71qZlQC2cWj1XkRbcdGzvDSDja9XBm2~X6ugaH78PezvU7xBrCxFvKQweyg__",
+    "asset_id": "fx_hologram",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Hologram",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
