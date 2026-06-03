@@ -1859,5 +1859,22 @@
     "epoch": "iron",
     "name": "Town Hall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tribal_council_circle": {
+    "prompt": "a tribal council circle of log seats around a fire ring, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "7716ddb0-abca-4fd1-b078-fdfde790cf5e",
+    "path": "/models/generated/tripo/tribal_council_circle.glb",
+    "bytes": 9691248,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7716ddb0-abca-4fd1-b078-fdfde790cf5e/tripo_pbr_model_7716ddb0-abca-4fd1-b078-fdfde790cf5e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzcxNmRkYjAtYWJjYS00ZmQxLWIwNzgtZmRmZGU3OTBjZjVlL3RyaXBvX3Bicl9tb2RlbF83NzE2ZGRiMC1hYmNhLTRmZDEtYjA3OC1mZGZkZTc5MGNmNWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=R9QXurA6EzefRcUFUtGxklC7grmEDDSDBCH84H3QA~gXIHXHlR3PxnD8PnDBEGzE7AYts0qnil54W2RNb4zbNQIzVbVpldrddwAG2DvKVtdHJNEIWJfhbEriQPcJe6J~lMSxB8AjmdOYZqJHcx9FA1VE~MxSiMfGmeS82S1D9Oj80u7~gv2hYBV6HP6vbceLJkDB6He6Vdosgd3AtDlVq-3rgi0cx12yF6Cn4RFIEKVwKSdFMmwMoOR7dimzMX2e6R2Nm4uf0MF5umxU3TgzRwV73OZHzynlecN8g730EanWNsGQ6itRKUBWM7VXHdhbPX3xBt-TqdVgJKMgV7dK7Q__",
+    "asset_id": "tribal_council_circle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "stone",
+    "name": "Tribal Council Circle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
