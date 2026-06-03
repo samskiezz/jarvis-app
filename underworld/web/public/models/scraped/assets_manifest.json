@@ -5038,5 +5038,22 @@
     "epoch": "industrial",
     "name": "Telescope Optical",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tensile_tester": {
+    "prompt": "a materials tensile-testing machine, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d2973f83-94ab-4db0-a460-43b5fde55983",
+    "path": "/models/generated/tripo/tensile_tester.glb",
+    "bytes": 13778608,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d2973f83-94ab-4db0-a460-43b5fde55983/tripo_pbr_model_d2973f83-94ab-4db0-a460-43b5fde55983.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDI5NzNmODMtOTRhYi00ZGIwLWE0NjAtNDNiNWZkZTU1OTgzL3RyaXBvX3Bicl9tb2RlbF9kMjk3M2Y4My05NGFiLTRkYjAtYTQ2MC00M2I1ZmRlNTU5ODMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=U214kntOtYF7Xnc5VqspDpG-RExUT2hWRi0gufdZ0ih0fdW-Owq9a5mU9UG6h0SgQGpc~Wf70MZFZG-ybG9gyy5ufMp9yeA8~-B58F43ghQ9gyh4r7s-whUavYJigc40YLCXpSTSkUb1-uInQ4hXTa2HikQx1srs1NOgtHdkXZ-aaUgC-IEDZzgOQAv9Q7H9m4Xy08ferqrpb9SKVDFIxxh2jUPN88NbKdy42Oq-Mk7G7gEKFpCWRNYfuJsB9tfjjIItvKje4g3rysB4Q1EjNKhN95gVwI34RXnYVM1iKA-Z-Hj9U5WVIbwT4L1S4t04zZ2tyQcnfFT2W-hS6-6CKA__",
+    "asset_id": "tensile_tester",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Tensile Tester",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
