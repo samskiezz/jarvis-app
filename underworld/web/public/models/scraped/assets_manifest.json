@@ -3287,5 +3287,22 @@
     "epoch": "any",
     "name": "Plant Pot",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rug": {
+    "prompt": "a patterned floor rug, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d65d1278-a9e7-47e0-ba8f-06a0b378a5b4",
+    "path": "/models/generated/tripo/rug.glb",
+    "bytes": 12937400,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d65d1278-a9e7-47e0-ba8f-06a0b378a5b4/tripo_pbr_model_d65d1278-a9e7-47e0-ba8f-06a0b378a5b4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDY1ZDEyNzgtYTllNy00N2UwLWJhOGYtMDZhMGIzNzhhNWI0L3RyaXBvX3Bicl9tb2RlbF9kNjVkMTI3OC1hOWU3LTQ3ZTAtYmE4Zi0wNmEwYjM3OGE1YjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=FE9GOr-ZiR43MuNEcRDXSnDrGqPjGLtZDa~x0xdhCkZ24-OCkFZwIkfla5vKoqZeJJv9WmOyGDRgTGkqEXTVq~K16thPyFdaNW2ZINeMmHoC4~bCC-pK-mfYXRtjSksQze6QrfLtSufyaYFWKVf5xugV0gN-Y262eoh-PFN2Qdao5eFdDtGQ9LWOYMqVIru65p-enGWZMVewpoh823-fxj51pxRBBOzz-U0wkUVWPH20kmdLZ27jL~mhhPRsei8mQF3nl6-Ado0GuVuSM34iBozM6guYMW4s3tTvXW1ImhVag3g0oO6v~uEOVzYALODWz6WycsqxWKFk9X9Ogl6W8A__",
+    "asset_id": "rug",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Rug",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
