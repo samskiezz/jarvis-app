@@ -3457,5 +3457,22 @@
     "epoch": "any",
     "name": "Broom Bucket",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cooking_pot": {
+    "prompt": "a cast-iron cooking pot on a hook, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "deaaf324-9fb6-4882-81a1-5f4404000e78",
+    "path": "/models/generated/tripo/cooking_pot.glb",
+    "bytes": 14600972,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/deaaf324-9fb6-4882-81a1-5f4404000e78/tripo_pbr_model_deaaf324-9fb6-4882-81a1-5f4404000e78.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGVhYWYzMjQtOWZiNi00ODgyLTgxYTEtNWY0NDA0MDAwZTc4L3RyaXBvX3Bicl9tb2RlbF9kZWFhZjMyNC05ZmI2LTQ4ODItODFhMS01ZjQ0MDQwMDBlNzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VgmC9uZGh1fBGA8MX9x8dR6uFSPXL4FHv0-c9WCoSHSJHPnqbE9caIUBEROZmVTRqJhR3n9avM1JdXL5OnLKj6iEuTCEcEfhaYXb9N~WXeehdyq~r15vXTmHFaiRj8v9icSzWcUpbEG6-MHag7QU5nlAF3rq6SWyPO71A3kzM72Y3Iog8af-YNXunbtkAB9JaJSjbBNMC50cIBJ5bOq3czCsCV5l7uM9o6svdKF3kNJkYnnqQoOhOwCYw6j02LRDf-e76zJEA-k6xOYKIM5f-ixim3VqSQeRxi-QyZ3UkaqcV1DiJhxblSUnIeawHZIySqCHuU1ZyO~kB6MTczxe1g__",
+    "asset_id": "cooking_pot",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Cooking Pot",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
