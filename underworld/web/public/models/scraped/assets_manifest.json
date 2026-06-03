@@ -1910,5 +1910,22 @@
     "epoch": "industrial",
     "name": "Voting Booth",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:water_tower": {
+    "prompt": "a tall steel water tower, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "30da6bf5-8651-407d-94cc-f5b4d7f0bd0a",
+    "path": "/models/generated/tripo/water_tower.glb",
+    "bytes": 9383920,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/30da6bf5-8651-407d-94cc-f5b4d7f0bd0a/tripo_pbr_model_30da6bf5-8651-407d-94cc-f5b4d7f0bd0a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzBkYTZiZjUtODY1MS00MDdkLTk0Y2MtZjViNGQ3ZjBiZDBhL3RyaXBvX3Bicl9tb2RlbF8zMGRhNmJmNS04NjUxLTQwN2QtOTRjYy1mNWI0ZDdmMGJkMGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=D93t~LgCVEP7MaP13vhdSvA7H2tTYygYEVxRGlt28x2DATqePwC5HhfziFzR~uJYbgFC~J7y-Z38YtSrUBdjI2jPp9C0Gelyi3QKyUh33NUqhvwh5~PFCCcNt0gZW~nlS1GF-T2ZTuyEzXYKJODqF4piYpLZlksYPiGXPgaL1JkZjNWBahD-YCnMV300Xw4T7mBntTCgekAKQLiJ4edlaamgFrV9u59yanmuBlmzatsQCDpURs0jmpsp4ibKEUMszN~1LzuxDgHzPHy89kRzV~nR0Hx5kJHOkhpg2Z9Fx~QBZFBdtOmKV9jTJxXRiJJOeJ5264UfxmdQ39W1CYvKaw__",
+    "asset_id": "water_tower",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "Water Tower",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
