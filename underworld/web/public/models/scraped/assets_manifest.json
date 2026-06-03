@@ -2641,5 +2641,22 @@
     "epoch": "bronze",
     "name": "Fx Temple Of Light",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_torch_brazier": {
+    "prompt": "an ornate wall brazier with bright flame, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "bd4754df-6c62-4059-acd8-7fa12b9603e2",
+    "path": "/models/generated/tripo/fx_torch_brazier.glb",
+    "bytes": 14907024,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bd4754df-6c62-4059-acd8-7fa12b9603e2/tripo_pbr_model_bd4754df-6c62-4059-acd8-7fa12b9603e2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmQ0NzU0ZGYtNmM2Mi00MDU5LWFjZDgtN2ZhMTJiOTYwM2UyL3RyaXBvX3Bicl9tb2RlbF9iZDQ3NTRkZi02YzYyLTQwNTktYWNkOC03ZmExMmI5NjAzZTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=a7PQ7aNLnckFDoOoesFc47HTr-5RbYlKWc3ujwdDxY0BtmKug4H9VKaFGrJQOq4AYiP-GfvHU8MB~kBAJ121DiSR67XEI6eMeWQVv1QRqycjNIzxFOtKCKZ6~7A8ixv-SLxcbLCd~-yP-Mv5fudTTkvK-XzsNWvxYm6NFL6Am2T9h56SHeZXhFGQtJwLgbvT2y6cGKFCxxN67WOslzALYzo4q5S8FvxSeLAHKLJKp6WtNXSjAzd5Y0GQS6gxmiHf7Grl2gUtjloD6pZ6nfQka1Tgeiq0Xz-GbR3~Bp2ahJLWWk7oDlVVwi-r03IvS7-UVPpqAEpKwKUvJSXWi9iulg__",
+    "asset_id": "fx_torch_brazier",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "iron",
+    "name": "Fx Torch Brazier",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
