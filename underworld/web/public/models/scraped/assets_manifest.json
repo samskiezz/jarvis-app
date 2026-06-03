@@ -1298,5 +1298,22 @@
     "epoch": "industrial",
     "name": "Observatory",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:school": {
+    "prompt": "a friendly schoolhouse with a bell, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "f57c9dda-cbc6-48a9-89f4-c29a75b38d7c",
+    "path": "/models/generated/tripo/school.glb",
+    "bytes": 14971448,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f57c9dda-cbc6-48a9-89f4-c29a75b38d7c/tripo_pbr_model_f57c9dda-cbc6-48a9-89f4-c29a75b38d7c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjU3YzlkZGEtY2JjNi00OGE5LTg5ZjQtYzI5YTc1YjM4ZDdjL3RyaXBvX3Bicl9tb2RlbF9mNTdjOWRkYS1jYmM2LTQ4YTktODlmNC1jMjlhNzViMzhkN2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=sjNK2l6VkxyvX6dOqOwdjRIAQuXnjlcVmBkQsdmjw4hWtHiUjkdbHJGIJ-NrsEsuzjBmkT2Yn43ikyd0U2N6otBtowU~h9ifeEOWUeY-5qLL368AQidkX-ERvRaj1-glJx91uMi3iVBE86YMjmPpZSPt6HYA5A1AaqjVfC86cCr7UeD-hWkLmiybSoXb994Owy7DFxauKKxPt7cUlSiDsEJa5cg1DLgz-f-vKY~ekTLZrfMnyI5KeswVsmXIP6DMbZ75GRuEEplPyhZdmqKoMPIn3Jq4tl0ZDT1xDXmFn4Sik7VlQAxlnZ~QKoO~oPzV7JAPfJ9PxOwqOg-NklSD5g__",
+    "asset_id": "school",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "School",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
