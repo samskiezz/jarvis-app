@@ -1961,5 +1961,22 @@
     "epoch": "information",
     "name": "Citation Graph Display",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cloud_volume": {
+    "prompt": "a soft stylised fluffy cloud set piece, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "40c6dc60-70c7-4a81-8158-771355ccf027",
+    "path": "/models/generated/tripo/cloud_volume.glb",
+    "bytes": 15205976,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/40c6dc60-70c7-4a81-8158-771355ccf027/tripo_pbr_model_40c6dc60-70c7-4a81-8158-771355ccf027.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDBjNmRjNjAtNzBjNy00YTgxLTgxNTgtNzcxMzU1Y2NmMDI3L3RyaXBvX3Bicl9tb2RlbF80MGM2ZGM2MC03MGM3LTRhODEtODE1OC03NzEzNTVjY2YwMjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=txpp9n~NkUwgGUoPtpdtOrIR1ynoCAOK7TfW3U0nfUa6UUjB4VZlfeN9vMu5whgS~KhIMiUJaczRwZMXNShZfqQ6mvGV-ecZF8edXAoW~BYHEF6b-ZYy2H22PGRSNguxJeOP3sd2Fo5SY8ObReIE7dS2Rj-3SQ1OSCk6mJqRuZJo3JehVG4QmhQBiTcOjPw4Qc2Qi5ywIUIF7vVfiQnOE4VYZQuduxedyWuHYiksd1mWMJ~MWTmhOHBMRIqa7AicBkJncZlAIFtv9-tuMbgo-FR2v--y3B-VPTCBF3yExSWWKYakA9EAmUwgX~Vgl3naQoXfpc1sikPs6EKuD-3oFg__",
+    "asset_id": "cloud_volume",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Cloud Volume",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
