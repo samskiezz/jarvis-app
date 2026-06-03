@@ -1553,5 +1553,22 @@
     "epoch": "any",
     "name": "Rain Puddle Decal",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rolling_hills_tile": {
+    "prompt": "a grassy rolling-hills terrain tile, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "2a6ec05b-e3e5-4d4f-9083-c535eb107e0a",
+    "path": "/models/generated/tripo/rolling_hills_tile.glb",
+    "bytes": 14973088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2a6ec05b-e3e5-4d4f-9083-c535eb107e0a/tripo_pbr_model_2a6ec05b-e3e5-4d4f-9083-c535eb107e0a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmE2ZWMwNWItZTNlNS00ZDRmLTkwODMtYzUzNWViMTA3ZTBhL3RyaXBvX3Bicl9tb2RlbF8yYTZlYzA1Yi1lM2U1LTRkNGYtOTA4My1jNTM1ZWIxMDdlMGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ke1OFjBI0HmqB9Oz-pqPDAt3vmcDGpvOBOM0AnjxTDZGHycv~3lZlIMzlnzfduQMFYqkZsENbYU8Z7toaeBMRxEblLk1QSYzThsQMGZIm-bgR0mRfiGDsv9hBUSabXigr1r2HhlzuzQNAN59NUp~4hRXYJzKT7aUXw~4Lb0yF6WAAvTumeBDznkP2LQHhHrQMMXXGRT8TF-t4SvJRjn2wMYpqTOqN1Jelogb4TZjX7dWcMaU1d8o~VF~VfnliKN6TnbYEfDxe67dRrXqONsSd7XEaGelkUg0RP3mjdGXasCI1HZz35DLe-DfiBc6UwgZQA3~PawTCkQbRDgIxoI8OQ__",
+    "asset_id": "rolling_hills_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Rolling Hills Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
