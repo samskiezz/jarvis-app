@@ -5548,5 +5548,22 @@
     "epoch": "any",
     "name": "Meditation Cushion",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mug": {
+    "prompt": "a ceramic mug of hot drink, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "376744f9-007e-4cea-97d2-90dba3d25086",
+    "path": "/models/generated/tripo/mug.glb",
+    "bytes": 14676808,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/376744f9-007e-4cea-97d2-90dba3d25086/tripo_pbr_model_376744f9-007e-4cea-97d2-90dba3d25086.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzc2NzQ0ZjktMDA3ZS00Y2VhLTk3ZDItOTBkYmEzZDI1MDg2L3RyaXBvX3Bicl9tb2RlbF8zNzY3NDRmOS0wMDdlLTRjZWEtOTdkMi05MGRiYTNkMjUwODYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=JlKkFYIjbslR7rRddSJ4oIuQyfgZxzhgdpcbCWwJBDy7Yt7fXspLHfZ2Qll0-Xl~yW5gmUdJFh0ejsNWb9kVtacWYfRtV8ArE1pYYtYrOQogXGA1PuQ0LMO4wCAGh8TpQcdLFaRXrzJSxKFiACgNgYNMK18zyC-fXR2-7i9rpAGQd-FYCSsFd10ZVXufBJfMvT1LzW3kGAOLw-WuiHkTU0-KruVhs5rIxQ39xXfU2WJiK7xgHL9LBnWWnYIaU62L3GhnEN6HT-sJBHvIWTl-PNRQIZuuYZtdUgZn~q~kXGFe8U8-OWprg3IH~7Ddx7e~tEHQPYn-NTEvS7ND8Y1-YQ__",
+    "asset_id": "mug",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Mug",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
