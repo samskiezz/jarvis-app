@@ -8676,5 +8676,22 @@
     "epoch": "iron",
     "name": "Guild Banner Mechanical",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_patent": {
+    "prompt": "a heraldic banner with a quill-and-seal patent emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ad95079a-16f0-4f05-9b0f-7b3cfa9280c1",
+    "path": "/models/generated/tripo/guild_banner_patent.glb",
+    "bytes": 9696256,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ad95079a-16f0-4f05-9b0f-7b3cfa9280c1/tripo_pbr_model_ad95079a-16f0-4f05-9b0f-7b3cfa9280c1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWQ5NTA3OWEtMTZmMC00ZjA1LTliMGYtN2IzY2ZhOTI4MGMxL3RyaXBvX3Bicl9tb2RlbF9hZDk1MDc5YS0xNmYwLTRmMDUtOWIwZi03YjNjZmE5MjgwYzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DWtDTVTG0EXStdIt13LIK5X4I0eGHKCnsUfUhaL8-xaKA1PwCpuu~RDO5PuGWX2ARC3PRCrUlvL2E8NdM5JayyZQ0b19kTPONtAYIh1InpBlOuzrYnPhoo3vCWej9LfNNwgfkBfHFy1qUI9SxPEzkwt0ULxfeeyoU6zrJOEaMeMejw5Lrz70sGfLN3fss4kYotIRu~WRQ-o9drlz~5Posq2DZdhLsf5heyjS-fOBQdaknorg3CRLQlitw9mUCt3aYWJBv3xYTBN7tGUGPHbmJG4YqM88TjIjNgw1JjTsfspSPxFrp0CVh5X0ETtGqvr9gTfCx2DYdKMxMTtnSMvpqw__",
+    "asset_id": "guild_banner_patent",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "industrial",
+    "name": "Guild Banner Patent",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
