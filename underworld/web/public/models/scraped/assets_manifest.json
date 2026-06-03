@@ -8795,5 +8795,22 @@
     "epoch": "any",
     "name": "Park Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:partner_courtship_bench": {
+    "prompt": "a romantic garden courtship bench under a flowering arch, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d3f95102-0832-4687-95c7-336ce0f8e22b",
+    "path": "/models/generated/tripo/partner_courtship_bench.glb",
+    "bytes": 14831624,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d3f95102-0832-4687-95c7-336ce0f8e22b/tripo_pbr_model_d3f95102-0832-4687-95c7-336ce0f8e22b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDNmOTUxMDItMDgzMi00Njg3LTk1YzctMzM2Y2UwZjhlMjJiL3RyaXBvX3Bicl9tb2RlbF9kM2Y5NTEwMi0wODMyLTQ2ODctOTVjNy0zMzZjZTBmOGUyMmIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=mKhiF2d5in1mY0zMXk7Me5feilJw-yXfkSQrMWqB7xqO-h-w26tzKZZHbyq~~3swNBnLCfkbA5VgenPfcO8eiLrk7lR92AsvttKYTkq5gzGbKUeekJrBJ59N5ykqS9UEI7VotQapr-3jCM9SFjGjc0DWpz~chjWKwNo7O9kczVDNesO6Q-sJxX-TN~U7Hb40HTsp5~GlmBSH2uiQU1hfBWF2wua~oOUhGmmlsY745~v46Y8~iFZL8upJgUwqRsb93EWeehJ4QFod3BmQIUWOtgxBi-p3gTRNhgX1SbORxADNOnI6HAoDlv5uBSQMLYWKiUj4XxzZCnNujKKkH4Dw6A__",
+    "asset_id": "partner_courtship_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Partner Courtship Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
