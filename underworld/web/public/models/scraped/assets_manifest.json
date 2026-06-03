@@ -4120,5 +4120,22 @@
     "epoch": "iron",
     "name": "Casting Foundry Ladle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:centrifuge": {
+    "prompt": "a laboratory centrifuge, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "39df1517-73ff-4a38-93e6-698d00917782",
+    "path": "/models/generated/tripo/centrifuge.glb",
+    "bytes": 14801900,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/39df1517-73ff-4a38-93e6-698d00917782/tripo_pbr_model_39df1517-73ff-4a38-93e6-698d00917782.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzlkZjE1MTctNzNmZi00YTM4LTkzZTYtNjk4ZDAwOTE3NzgyL3RyaXBvX3Bicl9tb2RlbF8zOWRmMTUxNy03M2ZmLTRhMzgtOTNlNi02OThkMDA5MTc3ODIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=bOoIyA6iBq19GenDT59LjfHAECClGvwMnMDseV6cGUjbJ56xduLmLDOGyW9dfbCBsLg24YCabi-M8sbPsqzQ0-Lp1DxnDuDm4xt7fwoYV4sFKIfWqdbbhWhskKT8TL5ol~g1zGFf7BSXMjCzEfcQzsTHA0ay~7hagwZtGdCMorcigMa~WPa3ralTaK2GkUeNQ6aevvT5nsBWhoEbgtzmg7oIR9UgFBL2rmUcpc53dpkq-CF-CKfkEJO0gfxP1ER2fkcRKM1Jmg5KCznCNysnoAQoHtVzRtsKyGS73YcmwsM~YioLf8MxjaSX3jNQcTcsUH~v8QY71bASs7Enu7GuGw__",
+    "asset_id": "centrifuge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Centrifuge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
