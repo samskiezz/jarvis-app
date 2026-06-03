@@ -6194,5 +6194,22 @@
     "epoch": "bronze",
     "name": "Ore Stockpile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:patent_archive_wall": {
+    "prompt": "a wall of labelled patent filing drawers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d8404ec7-ca97-4b75-a6db-befcfe3e24ae",
+    "path": "/models/generated/tripo/patent_archive_wall.glb",
+    "bytes": 11256104,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d8404ec7-ca97-4b75-a6db-befcfe3e24ae/tripo_pbr_model_d8404ec7-ca97-4b75-a6db-befcfe3e24ae.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDg0MDRlYzctY2E5Ny00Yjc1LWE2ZGItYmVmY2ZlM2UyNGFlL3RyaXBvX3Bicl9tb2RlbF9kODQwNGVjNy1jYTk3LTRiNzUtYTZkYi1iZWZjZmUzZTI0YWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=iKNpElSHqe7McvFLnEPNT3Rj9jaVNjmEESIx5jX6P1yJcDp2AIzwgOAILvkAznp1Elb63UOmJMnK2nHcNT2yAi61NL2piUGAFuV-e6ZfMs9veVM~~9xV48OejmwzRX1XrddEOv55AjRAws1P3-35vadXgvHqGrPRrBxh-DRThK8d-X9-Ag1831EBhsv5hnmfJiEJNj8jiBo9IbdG~j-kdqw-UJC6P4fsDJXjrjmOpoF6Aky00~7X4vfmFjQyE5zhg78K1EdQnaAubzG82tvEXtZgckxLVVPaNpdhrX5LWZeii2BiMH60BJu0i6nFH4O0300OSAM8vmcXnj73EYWiWw__",
+    "asset_id": "patent_archive_wall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "industrial",
+    "name": "Patent Archive Wall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
