@@ -5633,5 +5633,22 @@
     "epoch": "iron",
     "name": "Quill Ink",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:screwdriver": {
+    "prompt": "a screwdriver, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a5b298c0-9210-4331-9728-ba48f0219ca1",
+    "path": "/models/generated/tripo/screwdriver.glb",
+    "bytes": 4250256,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a5b298c0-9210-4331-9728-ba48f0219ca1/tripo_pbr_model_a5b298c0-9210-4331-9728-ba48f0219ca1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTViMjk4YzAtOTIxMC00MzMxLTk3MjgtYmE0OGYwMjE5Y2ExL3RyaXBvX3Bicl9tb2RlbF9hNWIyOThjMC05MjEwLTQzMzEtOTcyOC1iYTQ4ZjAyMTljYTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=CKik-4HgAhp8OK14TGe4uEkE0Z3BsKdhGo3HTCtrBmb1lmlsZxRVX5l-xFNt9JkLe6dtNtfT51Vnv9~ZZPxP7gn8EWZ4s72FHK4t1PZDfHZSArMkHGlBsBQ8PZmFzJtKjGxCzdK8lShQepRFMTElWfAbE6-Tba9Sm23nILXyiPf1P7LdlkKXIsKKtFSI4Oaxxbb9RkOrwp2AyM-T7BYeScdl5YRl2lX3ItAoJVFsL2G1hlez0~VuOGt70CxpYi9R76cLZp5FwKp6D6UyQ2CRimh7pCbCq36K3seC0BnN2KKezGJikqOY9JClLUAfan5mIH-zxxRiqDjDpYXAvPchjA__",
+    "asset_id": "screwdriver",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Screwdriver",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
