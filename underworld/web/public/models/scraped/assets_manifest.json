@@ -5412,5 +5412,22 @@
     "epoch": "iron",
     "name": "Hammer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hard_hat": {
+    "prompt": "a safety hard hat, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "14474a52-efae-4e28-9194-8b688185091d",
+    "path": "/models/generated/tripo/hard_hat.glb",
+    "bytes": 14883244,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/14474a52-efae-4e28-9194-8b688185091d/tripo_pbr_model_14474a52-efae-4e28-9194-8b688185091d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTQ0NzRhNTItZWZhZS00ZTI4LTkxOTQtOGI2ODgxODUwOTFkL3RyaXBvX3Bicl9tb2RlbF8xNDQ3NGE1Mi1lZmFlLTRlMjgtOTE5NC04YjY4ODE4NTA5MWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=lZyM88YZRS84Y58KpXVtF7R7ze-nzFZ5o0ZDNhVDmQWIHXQbolzc2QRMTYdwydN1kZ15hi8rrxjK8GGStLPuQBEvZORCW8QRQjtyTbM35vxTXy-zgog88s4~8bWlbzbjCxqtY8PuCNAmzYWmRVeeqNYuKD7cptMCtmGSEFDkdKN1DwRDFj-y6kuf~OJub4pLw87R1S98uSdQwFceT-GZZIF4r~h5F~3mcGBFFYjEr-q1ATIu1TCHClv0nh8i8cWflWFJQdj4IsK68iwyYPZK5uZeWVV2fH6gM97cGpqqYVeZ1jGJT1MreSOPOofU8tc7vGrrDyd~lRx93ykk~6DcLA__",
+    "asset_id": "hard_hat",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Hard Hat",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
