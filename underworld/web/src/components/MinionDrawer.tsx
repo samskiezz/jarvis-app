@@ -63,19 +63,19 @@ function TraitBar({ label, value }: { label: string; value: number }) {
 export default function MinionDrawer({ minionId, onClose }: Props) {
   const qc = useQueryClient();
   // The world ticks in the background; the selected minion's live state must keep
-  // up, so the changing views poll every 3s. Static facts (DNA, soul, lineage,
-  // appearance) are fetched once.
+  // up, so every sub-view polls every 3s. (DNA/lineage/appearance rarely change
+  // but a fork or mutation can shift them mid-life, so they stay live too.)
   const LIVE = 3000;
   const minion = useQuery({ queryKey: ["minion", minionId], queryFn: () => api.getMinion(minionId), refetchInterval: LIVE });
   const skills = useQuery({ queryKey: ["minion", minionId, "skills"], queryFn: () => api.listSkills(minionId), refetchInterval: LIVE });
   const memories = useQuery({ queryKey: ["minion", minionId, "memories"], queryFn: () => api.listMemories(minionId, 12), refetchInterval: LIVE });
   const rels = useQuery({ queryKey: ["minion", minionId, "rels"], queryFn: () => api.listRelationships(minionId), refetchInterval: LIVE });
-  const dna = useQuery({ queryKey: ["minion", minionId, "dna"], queryFn: () => api.getDna(minionId) });
+  const dna = useQuery({ queryKey: ["minion", minionId, "dna"], queryFn: () => api.getDna(minionId), refetchInterval: LIVE });
   const soul = useQuery({ queryKey: ["minion", minionId, "soul"], queryFn: () => api.getSoul(minionId), refetchInterval: LIVE });
-  const lineage = useQuery({ queryKey: ["minion", minionId, "lineage"], queryFn: () => api.getLineage(minionId) });
+  const lineage = useQuery({ queryKey: ["minion", minionId, "lineage"], queryFn: () => api.getLineage(minionId), refetchInterval: LIVE });
   const beliefs = useQuery({ queryKey: ["minion", minionId, "beliefs"], queryFn: () => api.beliefs(minionId), refetchInterval: LIVE });
   const models = useQuery({ queryKey: ["minion", minionId, "models"], queryFn: () => api.models(minionId), refetchInterval: LIVE });
-  const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId) });
+  const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId), refetchInterval: LIVE });
   const brain = useQuery({ queryKey: ["minion", minionId, "brain"], queryFn: () => api.brain(minionId), refetchInterval: LIVE });
 
   const fork = useMutation({
@@ -148,10 +148,28 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             <NeedBar label="Health" value={m.health} />
             <NeedBar label="Calm" value={1 - m.stress} />
             {m.morale != null ? <NeedBar label="Morale" value={m.morale} /> : null}
-            {m.purpose != null ? <NeedBar label="Purpose" value={m.purpose} /> : null}
-            {m.injury ? <NeedBar label="Wound" value={m.injury} /> : null}
-            {m.addiction ? <NeedBar label="Addiction" value={m.addiction} /> : null}
           </div>
+          {/* Purpose — drive toward a goal, shown as a short line */}
+          {m.purpose != null ? (
+            <div className="mt-2 flex items-center justify-between text-[10px]">
+              <span className="text-zinc-500 uppercase tracking-widest text-[9px]">Sense of purpose</span>
+              <span className="font-mono text-glow-purple">{m.purpose.toFixed(2)}</span>
+            </div>
+          ) : null}
+          {/* Afflictions — only surfaced when present */}
+          {(m.injury || m.addiction || (!m.alive && m.cause_of_death)) ? (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {m.injury ? (
+                <span className="badge badge-rose">wound {m.injury.toFixed(2)}</span>
+              ) : null}
+              {m.addiction ? (
+                <span className="badge badge-amber">addiction {m.addiction.toFixed(2)}</span>
+              ) : null}
+              {!m.alive && m.cause_of_death ? (
+                <span className="badge badge-zinc">died: {m.cause_of_death.replace(/_/g, " ")}</span>
+              ) : null}
+            </div>
+          ) : null}
           {appearance.data ? (
             <div className="mt-2 text-[10px] text-zinc-500">
               {appearance.data.hair} hair · {appearance.data.garment}

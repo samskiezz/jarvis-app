@@ -7,6 +7,7 @@ import {
 import { api } from "@/lib/api";
 import EmptyState from "@/components/ui/EmptyState";
 import GuildBadge from "@/components/ui/GuildBadge";
+import ProgressBar from "@/components/ui/ProgressBar";
 import RoleBadge from "@/components/ui/RoleBadge";
 import StatCard from "@/components/ui/StatCard";
 import type { ProjectStage, ResearchProjectT } from "@/lib/types";
@@ -243,19 +244,54 @@ export default function Projects() {
                   <span className="text-zinc-500">Stage</span>
                   <span className={STAGE_DEF[selectedProj.stage].color}>{STAGE_DEF[selectedProj.stage].label}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-500">Confidence</span>
-                  <span className="font-mono text-glow-purple">{(selectedProj.confidence * 100).toFixed(0)}%</span>
+                <div>
+                  <ProgressBar
+                    value={selectedProj.confidence}
+                    variant="purple"
+                    size="sm"
+                    label="Confidence"
+                    hint={`${(selectedProj.confidence * 100).toFixed(0)}%`}
+                  />
                 </div>
-                <div className="flex justify-between">
+                <div className="flex items-center justify-between">
                   <span className="text-zinc-500">Needs role</span>
-                  <span className="text-glow-sky">{selectedProj.needs_role ?? "—"}</span>
+                  {selectedProj.needs_role ? (
+                    <span className="badge badge-sky">{selectedProj.needs_role}</span>
+                  ) : (
+                    <span className="text-zinc-500">—</span>
+                  )}
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Created tick</span>
                   <span className="font-mono">{selectedProj.created_tick}</span>
                 </div>
               </div>
+              {selectedProj.flagged_clinical ||
+              selectedProj.flagged_genetic ||
+              selectedProj.flagged_chem_synth ? (
+                <div className="mt-4">
+                  <div className="section-title text-[10px] uppercase tracking-widest text-zinc-500">
+                    Safety flags
+                  </div>
+                  <div className="mt-1.5 flex flex-wrap gap-1.5">
+                    {selectedProj.flagged_clinical ? (
+                      <span className="badge badge-rose text-[10px]">
+                        <ShieldAlert size={10} /> Clinical
+                      </span>
+                    ) : null}
+                    {selectedProj.flagged_genetic ? (
+                      <span className="badge badge-rose text-[10px]">
+                        <ShieldAlert size={10} /> Genetic
+                      </span>
+                    ) : null}
+                    {selectedProj.flagged_chem_synth ? (
+                      <span className="badge badge-amber text-[10px]">
+                        <ShieldAlert size={10} /> Chem synth
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </div>
             <div>
               <div className="page-eyebrow text-[9px] mb-2">Contributions ({contributions.data.length})</div>
@@ -277,7 +313,9 @@ export default function Projects() {
                         <div className="mt-0.5 truncate text-zinc-300">
                           {c.contributor.name} {c.contributor.surname}
                         </div>
-                        <div className="mt-0.5 text-zinc-500">{c.note}</div>
+                        {c.note && c.note.trim() ? (
+                          <div className="mt-0.5 text-zinc-500">{c.note}</div>
+                        ) : null}
                       </div>
                       <span className="text-right font-mono text-glow-jade">
                         +{(c.delta_confidence * 100).toFixed(0)}%
