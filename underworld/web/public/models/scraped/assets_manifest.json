@@ -2879,5 +2879,22 @@
     "epoch": "any",
     "name": "Floor Wood",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pillar": {
+    "prompt": "a stone interior support pillar, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "267c781e-5c4a-4678-acc6-75ccb64b5936",
+    "path": "/models/generated/tripo/pillar.glb",
+    "bytes": 14836596,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/267c781e-5c4a-4678-acc6-75ccb64b5936/tripo_pbr_model_267c781e-5c4a-4678-acc6-75ccb64b5936.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjY3Yzc4MWUtNWM0YS00Njc4LWFjYzYtNzVjY2I2NGI1OTM2L3RyaXBvX3Bicl9tb2RlbF8yNjdjNzgxZS01YzRhLTQ2NzgtYWNjNi03NWNjYjY0YjU5MzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KsQjG4DMj6JxtRJkNgVvMkfFbHJWVAjFVMV0YRTRaD-eLoqTQl3X-D7T4SoU4NLFGPmErwMmiAMMKTJoNlvWRRp4nmCi9Z1sdh~MElDcSmL5JQOY-HCwpbemax8ap6YSE09wBgtkwiRTnnLT8s1dYHYEFTO86qUQH47k9c6Eiz~QKjb3DYtn~u6ptJpxw1qnUWSPEsBWqnmbwYYt-eacXCb2hiOji0Pyz5rDpEB8iFb5Y~p2ktuMOJJL-okh6LFwXS1WcoSeRSsXxQnutB0601jCbRyYDVavYi75GSkoKQSp0XWXPSxIKOoVXyLjPfyKIQfls7XTjFxbsafMsUMPZA__",
+    "asset_id": "pillar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "iron",
+    "name": "Pillar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
