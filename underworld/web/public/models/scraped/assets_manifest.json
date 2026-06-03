@@ -4375,5 +4375,22 @@
     "epoch": "industrial",
     "name": "Generator",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:genome_sequencer_bench": {
+    "prompt": "a benchtop genome sequencer with sample tray, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3d890770-7267-49c9-86a8-8ea15fd28822",
+    "path": "/models/generated/tripo/genome_sequencer_bench.glb",
+    "bytes": 14660368,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3d890770-7267-49c9-86a8-8ea15fd28822/tripo_pbr_model_3d890770-7267-49c9-86a8-8ea15fd28822.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2Q4OTA3NzAtNzI2Ny00OWM5LTg2YTgtOGVhMTVmZDI4ODIyL3RyaXBvX3Bicl9tb2RlbF8zZDg5MDc3MC03MjY3LTQ5YzktODZhOC04ZWExNWZkMjg4MjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aqwlXTTchCMppHumqLNCWpa0brPXeJ2WbtMbvXppAyLcUAOnOivRAYOxTfXmd~J9gSPg8cWVlda-LARNeaKnVljB2KhWp18TJgF1wFq6MdKHBrAjetThVOHPkdeFHK0wK5W7PDHGUKVvJ2pICILYlOQ6sU9YflBLl7AxZUNB523GsYZi2iNXiX9DVfXJ~7uvgdPq~xiOfYi4OaMweH64POg0Oy03dt~5nHLAjCUjq4eXSuhJvMNX7SQx~e3pwjC082JiU3rTp6I~2Ere5WQxnRwvUa77Th8fAjQ23TA-q3NAeFjbDgB1mQKaOdGsJ3TDTzj~Um6ctflfg9mnigtIfA__",
+    "asset_id": "genome_sequencer_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Genome Sequencer Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
