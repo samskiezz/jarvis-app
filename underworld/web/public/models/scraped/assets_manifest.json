@@ -5276,5 +5276,22 @@
     "epoch": "any",
     "name": "Book Open",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bread_loaf": {
+    "prompt": "a rustic loaf of bread, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f7a97896-370d-4f5d-ae6f-3c8482f6ff12",
+    "path": "/models/generated/tripo/bread_loaf.glb",
+    "bytes": 14993320,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f7a97896-370d-4f5d-ae6f-3c8482f6ff12/tripo_pbr_model_f7a97896-370d-4f5d-ae6f-3c8482f6ff12.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjdhOTc4OTYtMzcwZC00ZjVkLWFlNmYtM2M4NDgyZjZmZjEyL3RyaXBvX3Bicl9tb2RlbF9mN2E5Nzg5Ni0zNzBkLTRmNWQtYWU2Zi0zYzg0ODJmNmZmMTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WnqUB5W32fsPS27ugmApUX1CQ5iHKPuuQlMaUg2tYqyrLq8qWmK-fYotPTLpi46yyqALFZ0EuffLhDQyeW-fDMfVHSFToN2rRCuN-deaqzlXc4uYUhLJOp2IzuEpNwSkMlNHJlYdTjo~lklOQy490YjxPMPIk6VOKRpLAvHpuBcQLDYOHSSaPiqGY2gPo-UZysPEdUgODGPElWLyCBGhYLdnYlfnUZCrW8eUqPPgiwtq8jAK0bVVHVzZTdLL5oRuLgg1TLTQjzSj2su7Qll3MFmvZZx0-YmcLjLP8aL9LKwHEUTJgEKIjh2t4bvvXqtQ3R5JEbEGHbWkMRszh1kKmg__",
+    "asset_id": "bread_loaf",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Bread Loaf",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
