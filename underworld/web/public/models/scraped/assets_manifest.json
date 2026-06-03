@@ -7214,5 +7214,22 @@
     "epoch": "industrial",
     "name": "Mailbox",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:power_grid_substation": {
+    "prompt": "an electrical grid substation with transformers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4a72bbce-2aa7-4bf4-83ac-f16bf097d63c",
+    "path": "/models/generated/tripo/power_grid_substation.glb",
+    "bytes": 15419212,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4a72bbce-2aa7-4bf4-83ac-f16bf097d63c/tripo_pbr_model_4a72bbce-2aa7-4bf4-83ac-f16bf097d63c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGE3MmJiY2UtMmFhNy00YmY0LTgzYWMtZjE2YmYwOTdkNjNjL3RyaXBvX3Bicl9tb2RlbF80YTcyYmJjZS0yYWE3LTRiZjQtODNhYy1mMTZiZjA5N2Q2M2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=EO8bhVPk~NcE-6nRAyJkXaRiEmPm0NJ8iXCt7rXt79nafLghOlcW1zSi-G1nDHTfNW0gu9fNf-IVueB2Iv4jl~NiDMrOv0Dt0IFNTltTmAduX2LQhJ1cekgQX2k5icVAd4TkDkICnicm0ZQQhSNeDPFaS5G91KrfShrhN-N6Ec2kCuMcRR4N8BIkYiqjtxUM3Dn1eLeCAq0hxsdkxiAfk~Volr4-U7L47NatOsdM3VFo4ShfFL0HKodPyfm9wVpFQA0LEFKNtxCHQvcyr7gb2NKeAexAJVyns1hiiFHzcIOjnK5xQRjWG~plRqtPLN14Wwmzw5yBtg3~B4STBq46Fw__",
+    "asset_id": "power_grid_substation",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Power Grid Substation",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
