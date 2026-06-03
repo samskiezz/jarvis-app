@@ -284,10 +284,42 @@ DESIGNS += [
     ("fx_ancient_roots", "fx", "any", f"a tangle of massive ancient tree roots with glowing sap, {_FX}"),
 ]
 
+# ── 12. OBJECTS / HANDHELD TOOLS / CONSUMABLES (immersive interactions) ───────
+# The things Minions actually pick up, read, eat and operate through a day —
+# referenced by interactions.py so every action a Minion takes has a real prop.
+DESIGNS += [
+    ("meal_plate", "object", "any", f"a plate of cooked food with vegetables, {_STYLE}"),
+    ("bread_loaf", "object", "any", f"a rustic loaf of bread, {_STYLE}"),
+    ("fruit_bowl", "object", "any", f"a bowl of mixed fruit, {_STYLE}"),
+    ("mug", "object", "any", f"a ceramic mug of hot drink, {_STYLE}"),
+    ("book_open", "object", "any", f"an open hardcover book with visible pages, {_STYLE}"),
+    ("scroll", "object", "iron", f"a partially unrolled parchment scroll, {_STYLE}"),
+    ("keyboard", "object", "information", f"a computer keyboard, {_STYLE}"),
+    ("laptop", "object", "information", f"an open laptop computer, {_STYLE}"),
+    ("tablet_device", "object", "information", f"a handheld tablet device with a glowing screen, {_STYLE}"),
+    ("hammer", "object", "iron", f"a blacksmith's hammer with a wooden handle, {_STYLE}"),
+    ("wrench", "object", "industrial", f"a steel adjustable wrench, {_STYLE}"),
+    ("screwdriver", "object", "industrial", f"a screwdriver, {_STYLE}"),
+    ("magnifying_glass", "object", "industrial", f"a brass magnifying glass, {_STYLE}"),
+    ("slide_rule", "object", "industrial", f"a vintage slide rule, {_STYLE}"),
+    ("scythe", "object", "bronze", f"a farming scythe, {_STYLE}"),
+    ("watering_can", "object", "bronze", f"a metal watering can, {_STYLE}"),
+    ("trowel", "object", "industrial", f"a bricklayer's trowel, {_STYLE}"),
+    ("clipboard", "object", "industrial", f"a clipboard with papers, {_STYLE}"),
+    ("stamp", "object", "industrial", f"an official rubber stamp and ink pad, {_STYLE}"),
+    ("hard_hat", "object", "industrial", f"a safety hard hat, {_STYLE}"),
+    ("meditation_cushion", "object", "any", f"a round floor meditation cushion, {_STYLE}"),
+    ("lectern", "object", "iron", f"a wooden lectern with an open book, {_STYLE}"),
+    ("archive_cabinet", "object", "industrial", f"a wooden filing/archive cabinet, {_STYLE}"),
+    ("patent_scanner", "object", "information", f"a futuristic desktop patent-scanner device with a glowing slot, {_STYLE}"),
+    ("candle", "object", "iron", f"a lit candle in a holder, {_STYLE}"),
+    ("quill_ink", "object", "iron", f"a quill pen and ink pot, {_STYLE}"),
+]
+
 
 # Build order: terrain first, then the world fills in, instruments dress the labs.
 PHASE_ORDER = ["terrain", "nature", "building", "civic", "interior",
-               "furniture", "instrument", "vehicle", "monument", "prop", "fx"]
+               "furniture", "instrument", "object", "vehicle", "monument", "prop", "fx"]
 
 
 def designs_for(epoch_tag: str | None = None) -> list[tuple[str, str, str, str]]:
