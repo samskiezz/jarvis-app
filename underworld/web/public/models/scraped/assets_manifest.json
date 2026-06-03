@@ -1944,5 +1944,22 @@
     "epoch": "quantum",
     "name": "Ascension Altar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:citation_graph_display": {
+    "prompt": "a holographic citation knowledge-graph display, glowing nodes, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "9b67ca24-5c16-4676-a3bd-d61a72803e4e",
+    "path": "/models/generated/tripo/citation_graph_display.glb",
+    "bytes": 15774924,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9b67ca24-5c16-4676-a3bd-d61a72803e4e/tripo_pbr_model_9b67ca24-5c16-4676-a3bd-d61a72803e4e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWI2N2NhMjQtNWMxNi00Njc2LWEzYmQtZDYxYTcyODAzZTRlL3RyaXBvX3Bicl9tb2RlbF85YjY3Y2EyNC01YzE2LTQ2NzYtYTNiZC1kNjFhNzI4MDNlNGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uQMRiE78YuPeCQk4De7ZbetEQnVYyk07gySBHRoGU7aCHO1eJdAw8O~tpeiGKE1tWcAxLvQ9LBXe~3mY~Aqa4bLS9AqBgIHxtpfXSCzNs5ndBcAn4ZX5SIEIWQ0QmeizQXc0q0RKC507VmaihGX9RihWDpRheCihetWRU6W7iA~52SEzbw0z4GpVuBGhIUcLF1CN4nekja8Y7ydpPfTxn2HZl7ujUalcljfOUVUEkFSKJR3ghKimd2f68o0We6oUm1~cmKiyIZ3XqD7IzyEE7KH9wuQ9peIZEpq89kj8XNXp6Vq~fUGgSThKKj9oAo6aSTsDLLPTis~xVs29VN7mCw__",
+    "asset_id": "citation_graph_display",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "information",
+    "name": "Citation Graph Display",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
