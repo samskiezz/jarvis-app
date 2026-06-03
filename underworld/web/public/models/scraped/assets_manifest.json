@@ -2267,5 +2267,22 @@
     "epoch": "any",
     "name": "Fx Giant Lilypad",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_giant_mushroom": {
+    "prompt": "a giant fantasy mushroom the size of a tree, glowing cap, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "c322e1d8-4afb-4d27-a8e9-610e623277b5",
+    "path": "/models/generated/tripo/fx_giant_mushroom.glb",
+    "bytes": 15229288,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c322e1d8-4afb-4d27-a8e9-610e623277b5/tripo_pbr_model_c322e1d8-4afb-4d27-a8e9-610e623277b5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzMyMmUxZDgtNGFmYi00ZDI3LWE4ZTktNjEwZTYyMzI3N2I1L3RyaXBvX3Bicl9tb2RlbF9jMzIyZTFkOC00YWZiLTRkMjctYThlOS02MTBlNjIzMjc3YjUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=SqFAN5Cbn7w-GiMZ~t8qb5XLv6IWDgK4u1F6Q7I99k5VLaR1hhHGqvj2jajVNXml296p2rES3MDNO1vwH7koGIMOQjfcLS25DRwpNCh~b4tbikGUiEsbHP3gpIrGo3cUyB~Lib3RNidOG0srj5jrVAoeQH~BT4SRFbjmcdi0SE8QxTxIf0Is84LwCM8e2LtwwEvbdlt2Swbhuu-73eHBH6Z4XhtllMAAWpTrpAlIiA1VIMx7QdoMJESJ7kXySctKAAswpVx-XyAlOoJmHAVSTVkBqnysgM5KL0fKcy5ldsoWUQYxUiscXbefw2e3F04xYw8Xftyq33pL7P5i4Ku6Mw__",
+    "asset_id": "fx_giant_mushroom",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Giant Mushroom",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
