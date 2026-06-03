@@ -4358,5 +4358,22 @@
     "epoch": "industrial",
     "name": "Gear Assembly",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:generator": {
+    "prompt": "a diesel electrical generator unit, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "028886f7-f4b0-4b1b-8b00-c2f5a64d0896",
+    "path": "/models/generated/tripo/generator.glb",
+    "bytes": 14996676,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/028886f7-f4b0-4b1b-8b00-c2f5a64d0896/tripo_pbr_model_028886f7-f4b0-4b1b-8b00-c2f5a64d0896.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDI4ODg2ZjctZjRiMC00YjFiLThiMDAtYzJmNWE2NGQwODk2L3RyaXBvX3Bicl9tb2RlbF8wMjg4ODZmNy1mNGIwLTRiMWItOGIwMC1jMmY1YTY0ZDA4OTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=McpSg0iAFQzGqgOwX0QmR2QYs-whSIYONCvlcrHIblKxLmki~7gNS9gU4H~~EEKxNJ5cQMcvv5NQxMXWdc5YzmU66p7xj-pd7m2CzSLSd2t0dk6eRhv0J0XkN~02YjObzaY5baGf8rTKVad~6b1vgv14s8mWfkCH0oiPWp8cWoIuP8ESJyuCepSccf6hrIfuN-5wwQphRyYO4c3OQ-4DlNxNbv0KAvSyxw5YpU0ItUIU13bkw1aXMPvGazEFW8xawOL6yNrlu-6JCwvP~8p~~y4OT0n3SJj8ceaWuWNXKiEI4bBO0xX6E~0PmlGeCs9OYmhVRZ-Vz4-13HAGckAPqw__",
+    "asset_id": "generator",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Generator",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
