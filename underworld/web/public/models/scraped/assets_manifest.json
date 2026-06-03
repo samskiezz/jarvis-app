@@ -6415,5 +6415,22 @@
     "epoch": "industrial",
     "name": "Constitution Display",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:drum": {
+    "prompt": "a hide hand drum, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1263e963-0a97-40d4-9812-36f58210aef6",
+    "path": "/models/generated/tripo/drum.glb",
+    "bytes": 14832696,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1263e963-0a97-40d4-9812-36f58210aef6/tripo_pbr_model_1263e963-0a97-40d4-9812-36f58210aef6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTI2M2U5NjMtMGE5Ny00MGQ0LTk4MTItMzZmNTgyMTBhZWY2L3RyaXBvX3Bicl9tb2RlbF8xMjYzZTk2My0wYTk3LTQwZDQtOTgxMi0zNmY1ODIxMGFlZjYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=D4uojjnWfzczLn4rwImaQZJPmZ29FIb6SEIg82aIQTEhWyL58dlHsFsxG4lZBI1u28RiiQKFp2-xwcd~OZtn3fl-i60zrjAHMofW2Z1fpNXR3gUcn~0tdSSCX4-2jP5cVGV-rKSq1B2boqdkafFg0Y~4FFb2nExBjfGZBo2AnfHmQCUxukM1FiY~u9ZREu55ZYojPthaVNJwqJjvqjZ0aE5uPfZ1NFRVyvlpAykvUkQZYzr0dIIJtum9vvRak2jRCLTI1QJ3jnKNwMPkOnCRyFhK9U2p-MEPWTVvjrrSs7hUK8I46cbvAfmabqeBCLSJhLlZ3baUoF1lHWEx-KsNbw__",
+    "asset_id": "drum",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "stone",
+    "name": "Drum",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
