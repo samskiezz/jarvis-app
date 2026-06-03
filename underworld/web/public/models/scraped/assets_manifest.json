@@ -2420,5 +2420,22 @@
     "epoch": "quantum",
     "name": "Fx Hover Boulder",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_jungle_cluster": {
+    "prompt": "a lush dense jungle plant cluster with broad leaves, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "33dcf610-9450-4366-99ce-80faa0c1a118",
+    "path": "/models/generated/tripo/fx_jungle_cluster.glb",
+    "bytes": 11506648,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/33dcf610-9450-4366-99ce-80faa0c1a118/tripo_pbr_model_33dcf610-9450-4366-99ce-80faa0c1a118.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzNkY2Y2MTAtOTQ1MC00MzY2LTk5Y2UtODBmYWEwYzFhMTE4L3RyaXBvX3Bicl9tb2RlbF8zM2RjZjYxMC05NDUwLTQzNjYtOTljZS04MGZhYTBjMWExMTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZWH~frWPKQqq5eY-jhGBzlLvnHsMYYTE9xsLUTuHryGv0DNjNuCyhxZPrl9pZ86z6kr4ANR0v16xuZ8vZpArhLIw5GBmSylwbR4xuWA2ROL2C9DEg~HKc442i0jtZAj~1bbEh5cZzyNhtOvc47b9Z1Qf32ty4zdcyNixNz6-nghyFUL6c0FnpeJ7hYMl8-ZohgyZ81~2unSwFCCNxquRl0bwSP7Uk88b7uKalpk7E7pkRYyPt62HWj6EwXgUDQeBlrm47ndZmHEhoppJacomcv9o1ViGsSeEHm9j65063LOu5iB6m5zJ3dE4qlFPLsaTwBIgSDl9GJm0bgOlRe7ttQ__",
+    "asset_id": "fx_jungle_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Jungle Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
