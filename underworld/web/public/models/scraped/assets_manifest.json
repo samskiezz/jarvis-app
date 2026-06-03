@@ -5242,5 +5242,22 @@
     "epoch": "iron",
     "name": "Apprentice Slate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:archive_cabinet": {
+    "prompt": "a wooden filing/archive cabinet, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "42e97456-30bf-4037-9ff7-ddeefbead701",
+    "path": "/models/generated/tripo/archive_cabinet.glb",
+    "bytes": 14745180,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/42e97456-30bf-4037-9ff7-ddeefbead701/tripo_pbr_model_42e97456-30bf-4037-9ff7-ddeefbead701.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDJlOTc0NTYtMzBiZi00MDM3LTlmZjctZGRlZWZiZWFkNzAxL3RyaXBvX3Bicl9tb2RlbF80MmU5NzQ1Ni0zMGJmLTQwMzctOWZmNy1kZGVlZmJlYWQ3MDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Kn~k5w3VuvXfuIdZfbg1QCXoFMvGq7fESXMJwfwuMLuIew-UHHJu0y1H~JN6nUcCume2Fq-Cy0i0~i-UieM9vco6bA11muWRW8l3H3YhufN9HazmNhFxc7WybjvkPgy0Y5jZzVAphEjL2BHNkoC9qgeBHK4KY~EdN72dalwvNxF6iiij2CN8fv6vv09OerImJsUsiW6dvvmVTZrp0BnrxzNMLIo3U82Gi-hv8AbwaeQLbKxK6vTBKQxjk1CFpWcf0meyHFjSGwMP1Y55WAfeg78uzYzLJMdxwsjzjK8KIX5XJ3aCCOO6mOaAlam0dj6ATOHsh26LLz8IeMFV0kOi6g__",
+    "asset_id": "archive_cabinet",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Archive Cabinet",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
