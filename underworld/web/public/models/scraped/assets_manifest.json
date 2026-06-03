@@ -3967,5 +3967,22 @@
     "epoch": "iron",
     "name": "Balance Scale Lab",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:barometer": {
+    "prompt": "a polished wall barometer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "29698419-2912-48f6-85ca-9fade5fb65f5",
+    "path": "/models/generated/tripo/barometer.glb",
+    "bytes": 14893472,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/29698419-2912-48f6-85ca-9fade5fb65f5/tripo_pbr_model_29698419-2912-48f6-85ca-9fade5fb65f5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjk2OTg0MTktMjkxMi00OGY2LTg1Y2EtOWZhZGU1ZmI2NWY1L3RyaXBvX3Bicl9tb2RlbF8yOTY5ODQxOS0yOTEyLTQ4ZjYtODVjYS05ZmFkZTVmYjY1ZjUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=oWcscBIyNVl8LkcQ1T86ieCOOBxrFhZTmDnqKo-ckMOcJe1oKV5ear-QsXKgDRnM7gyEXvNM1gwo9y1rHJH6L60xNwFkdxd7KbDJnKfyUeA0zyTMJmk8gUJKZ5sPzjrIZ4No-~qLB6gPYRTOvkyERegaLvV~6G~FxmX8YanpIXyaS4FEq71fDnCH042lnburjOmZPIjidd3hq0SPaedKNRpGA6hFEFlurlbkKZ3998fQnGfCKpcq3wo0C~xcCnQHSNrYiHkoQgPPy6mJ1rdIG9KloYigECbKjgzp8xD7JeTR-qfjf5srQFIv1H-~Bv7cZUPrLMZ9I27izX1Elh3~5A__",
+    "asset_id": "barometer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Barometer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
