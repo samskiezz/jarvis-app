@@ -2080,5 +2080,22 @@
     "epoch": "any",
     "name": "Fx Crystal Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_crystal_spire": {
+    "prompt": "a soaring crystalline spire tower that catches the light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "8db4fc59-8712-46f6-8bcd-a9003200cdc8",
+    "path": "/models/generated/tripo/fx_crystal_spire.glb",
+    "bytes": 16241752,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8db4fc59-8712-46f6-8bcd-a9003200cdc8/tripo_pbr_model_8db4fc59-8712-46f6-8bcd-a9003200cdc8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGRiNGZjNTktODcxMi00NmY2LThiY2QtYTkwMDMyMDBjZGM4L3RyaXBvX3Bicl9tb2RlbF84ZGI0ZmM1OS04NzEyLTQ2ZjYtOGJjZC1hOTAwMzIwMGNkYzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=X9G4S7UPWrTv8bKR5ATUVnmcxfOR2e4ZnZwUu2yhruR3THQTMtWcv606-q41WM~cQz7J9ZGhX0dUiR6W7La2ME7cNc475PuvIy1H3aNV3SQ3OqLa3852rWVONNzcWj0VeTlJPXzkVWmz7GMZPYhYmCkiT2bAL-Hqat5uXiVcWonymw9R4tlYwPA4hncK8oWJ7W1j4I~AZzF6FSCyIp0G4JtSehphIVrJCdXFLFdu87WZ4ryOespFuY1nWFt1~xBkb7Las2WKceuNP4Rk5KIt0S-ySXZoCqkubVTFGxW8oINIcI-e62IbZL44w93ze~uLZvroyLjUD~-vxnaavl2nRw__",
+    "asset_id": "fx_crystal_spire",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Crystal Spire",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
