@@ -6245,5 +6245,22 @@
     "epoch": "industrial",
     "name": "Peer Review Verdict Board",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:produce_basket": {
+    "prompt": "a basket of fresh produce, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "df3b82fc-a549-47a1-bcdd-33913d4909bb",
+    "path": "/models/generated/tripo/produce_basket.glb",
+    "bytes": 15085220,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/df3b82fc-a549-47a1-bcdd-33913d4909bb/tripo_pbr_model_df3b82fc-a549-47a1-bcdd-33913d4909bb.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGYzYjgyZmMtYTU0OS00N2ExLWJjZGQtMzM5MTNkNDkwOWJiL3RyaXBvX3Bicl9tb2RlbF9kZjNiODJmYy1hNTQ5LTQ3YTEtYmNkZC0zMzkxM2Q0OTA5YmIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VSVOwBzpzpU1IDAIRFJWcRJfHq5TrVvMzlE53~B4AF2I1XSew3Km7uJhxdV3tgcYB7p46ufzGjuz4x6aBM~FE3r5yczwiInYr7cXp3C7HOsbMHf442MzMTUQG9w-nC7XCjoiQCtB9DPEpHeCP9UiNB8sTgCFQBvdKqIzIM-sFaIX6barK77OulknSsS4yBbGfWU0vKFjQzCjgcxTflqU8N9rY8jlPXSjkdjsAphNImHs2LgJk8PhKA4kCcoOD57F-vLi5AKWEkGR6a0gBOpz46C9gpzATpZNZ68zOQI38SxiKSMPf76ltnq7L6eRkyiTRn0FlBBil-iEWHwnNJqdFg__",
+    "asset_id": "produce_basket",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "bronze",
+    "name": "Produce Basket",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
