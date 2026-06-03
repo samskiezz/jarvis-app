@@ -6041,5 +6041,22 @@
     "epoch": "information",
     "name": "Role Toxicity Checker Cabinet",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_trial_simulator_console": {
+    "prompt": "an in-silico clinical-trial simulation console, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e9ca528b-1c0e-4375-a9c0-507d2babd686",
+    "path": "/models/generated/tripo/role_trial_simulator_console.glb",
+    "bytes": 14865780,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e9ca528b-1c0e-4375-a9c0-507d2babd686/tripo_pbr_model_e9ca528b-1c0e-4375-a9c0-507d2babd686.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTljYTUyOGItMWMwZS00Mzc1LWE5YzAtNTA3ZDJiYWJkNjg2L3RyaXBvX3Bicl9tb2RlbF9lOWNhNTI4Yi0xYzBlLTQzNzUtYTljMC01MDdkMmJhYmQ2ODYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=H5GnuGj~OpVpeiHKLLFzicIVACLsPljCey6CO8rGPukNN5pXPUS2oV46uDNcNx93s0fR7T~UDc7Vs9f90km~S30b1wtVPhfBn374INelaGYXdjPGMdDpqWu2kxBXf1EKOoFekMZj6dByj89XvgBQCk6mjZ-YXQKPqIwNqfKa-uhxDLs5asNIn1SusLV~oBseNkeRxn~QzoE2DZUIKVdOfShbs8T-E3mPZoFiH1yBZpt81dJM~t15qbBOjJhD8Cg-gwTbdW0dTxqM66RnDCuqGJ6tm8geqw2k0eribOqx~pMYAiIBziSiPTUO--~~IHRAeV6fPym420uXsKHASEVY~w__",
+    "asset_id": "role_trial_simulator_console",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "information",
+    "name": "Role Trial Simulator Console",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
