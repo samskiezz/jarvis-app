@@ -4341,5 +4341,22 @@
     "epoch": "information",
     "name": "Fume Hood",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:gear_assembly": {
+    "prompt": "an interlocking brass gear assembly, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9101c2a8-2bac-4132-82ed-b2d3ac7e70c3",
+    "path": "/models/generated/tripo/gear_assembly.glb",
+    "bytes": 11578676,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9101c2a8-2bac-4132-82ed-b2d3ac7e70c3/tripo_pbr_model_9101c2a8-2bac-4132-82ed-b2d3ac7e70c3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTEwMWMyYTgtMmJhYy00MTMyLTgyZWQtYjJkM2FjN2U3MGMzL3RyaXBvX3Bicl9tb2RlbF85MTAxYzJhOC0yYmFjLTQxMzItODJlZC1iMmQzYWM3ZTcwYzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kBO0-tvyYKLLWMKp2SyNyaPn5Z7WJF4osKyrfFeB6iqoQvGA4d0LDYjOP01UTsloW~4A76WK5Lxu2pKSipreUi4e5JBrDCJtuAqVcAesOf7lyCMG7n-VLdaXQO7Bll6d-2kOsSleSvX92ISP7r53NtYVwbUckR1qGEaqGxVj~XfZxhQ1XxKh7ZwKTaFdgwv1bmmxd-aCUSMmHtOg1HAVWwQARp2DWx7xvBSFjtV-W6POogeU3YUmqGWbCMLyt~d-wT1avNTSAQ0co0H57z4qqtXh91516KUhyKBSx6FrfCZIH0GtBixJZhpQQc8xD8oQvTssBITue6lIiw3RapHIaw__",
+    "asset_id": "gear_assembly",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Gear Assembly",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
