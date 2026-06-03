@@ -4562,5 +4562,22 @@
     "epoch": "information",
     "name": "Mainframe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mass_spectrometer": {
+    "prompt": "a mass-spectrometer console with vacuum chamber, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "56d79522-ceab-41c7-b002-5fbf8c3f1120",
+    "path": "/models/generated/tripo/mass_spectrometer.glb",
+    "bytes": 14770664,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/56d79522-ceab-41c7-b002-5fbf8c3f1120/tripo_pbr_model_56d79522-ceab-41c7-b002-5fbf8c3f1120.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTZkNzk1MjItY2VhYi00MWM3LWIwMDItNWZiZjhjM2YxMTIwL3RyaXBvX3Bicl9tb2RlbF81NmQ3OTUyMi1jZWFiLTQxYzctYjAwMi01ZmJmOGMzZjExMjAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=N5cUDmcNXOGYYecvMDnMpxyyx4Haxev3x0TtzFMWDQdfEaeXn0PLcZ340B8IeUoRnSJeL~1UxYQKQBtm-QPJjLg6l-SrocldLWYJm0Rp5KgHX~XbWe~8MgA08aAOS7l2emOMENj-OACu4qFwGu-fKvz1wfm759tBwbDfWCjQQJX3mK79ApsQ08WXD-sHm3Xv9Z0xwRC7fGDMolMNbdwXfrZMZRLZqkCT9OR~d2i8aVVVa9XGfeDxHNrESkYf9FGVG09HKe~XpSx8LlXg1cnCdbQm~J9qANviXEcpanMws-qcuyt4c3-hSq~1Dm3GC6eCwxC7LrZjBcw4BSvx5W8-3w__",
+    "asset_id": "mass_spectrometer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Mass Spectrometer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
