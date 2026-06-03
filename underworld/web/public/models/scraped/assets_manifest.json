@@ -3202,5 +3202,22 @@
     "epoch": "any",
     "name": "Kitchen Counter",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lamp_desk": {
+    "prompt": "a desk lamp, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fc0b6655-4f99-483b-82af-77bd0685007d",
+    "path": "/models/generated/tripo/lamp_desk.glb",
+    "bytes": 14724336,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fc0b6655-4f99-483b-82af-77bd0685007d/tripo_pbr_model_fc0b6655-4f99-483b-82af-77bd0685007d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmMwYjY2NTUtNGY5OS00ODNiLTgyYWYtNzdiZDA2ODUwMDdkL3RyaXBvX3Bicl9tb2RlbF9mYzBiNjY1NS00Zjk5LTQ4M2ItODJhZi03N2JkMDY4NTAwN2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=CeOX~2PhpVehgrT55pQ6mJSMhuQCq6vl0~M2BHbUOQgX5apKIvS6SlfNOJ8FNP-ue03P-OUSwVGSsll10pkfNG7IXK~OV3dINtnT0vL66K-PUTUAk9k-0lEzmb9ZPMM31DBofdpofE7RKfJesqOXfk2sBCRcTp110QVHVcy6JYzW9GAvspT19qJbLamyOWZpOFxUChR1Gc0EPJOCzdC7ch0ITiarC5c1rWwORVajAzG34jPVmOnTdtWnKY-5u3RvMGZ00DvRNGI8KTEQTvFQoFJSY--P7s404LowokGFnc5MRR5gMJnr4FgOkNhaHe-KRCGbQiJCYzUVk2ZI43OVlA__",
+    "asset_id": "lamp_desk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "industrial",
+    "name": "Lamp Desk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
