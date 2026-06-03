@@ -3508,5 +3508,22 @@
     "epoch": "any",
     "name": "Cutlery Set",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cutting_board": {
+    "prompt": "a wooden cutting board with a knife and vegetables, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a98d2c6b-a9b8-460f-aafd-e2ccb2b79a30",
+    "path": "/models/generated/tripo/cutting_board.glb",
+    "bytes": 13425244,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a98d2c6b-a9b8-460f-aafd-e2ccb2b79a30/tripo_pbr_model_a98d2c6b-a9b8-460f-aafd-e2ccb2b79a30.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTk4ZDJjNmItYTliOC00NjBmLWFhZmQtZTJjY2IyYjc5YTMwL3RyaXBvX3Bicl9tb2RlbF9hOThkMmM2Yi1hOWI4LTQ2MGYtYWFmZC1lMmNjYjJiNzlhMzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=U4jrfWawA-z-a8iWFvkNiazTyUauqyltifyj5lTYiBWRlMMG0xkwHmYFgxXk0fKvY0VZ8LrFFMBQSkVTf2SMHlA2mKUlkfc-a~jDUld~qJgx0AzSKaRgpIPfSrNyGhiXrds1BcFcr3XekFFR-plzz5n~sLBLnhemkyjLQ5WEPyC3mPenTP82cdfUeQSfEN1kagaJYTs2gj4akdbPl2CtC1z7HtHbP-SgwRQlVIAh-axIZWnFpkF5WADhH326oKbNEygHseXLIqHZyr8tOROP2xnkt5Xkux44cztph0EjaolC-fiYNSAUvDaP1xLXfq~UsbvECTbOsln4t4B8lfTeEQ__",
+    "asset_id": "cutting_board",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Cutting Board",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
