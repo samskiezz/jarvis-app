@@ -3831,5 +3831,22 @@
     "epoch": "any",
     "name": "Cradle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:playground_swing": {
+    "prompt": "a playground swing set, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f3ff851d-e993-4314-946f-1c3809cf8f22",
+    "path": "/models/generated/tripo/playground_swing.glb",
+    "bytes": 9758044,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f3ff851d-e993-4314-946f-1c3809cf8f22/tripo_pbr_model_f3ff851d-e993-4314-946f-1c3809cf8f22.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjNmZjg1MWQtZTk5My00MzE0LTk0NmYtMWMzODA5Y2Y4ZjIyL3RyaXBvX3Bicl9tb2RlbF9mM2ZmODUxZC1lOTkzLTQzMTQtOTQ2Zi0xYzM4MDljZjhmMjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dFO66kvNJ75YVw81LfzcQP5iZKkWHYg~b0n5gxcHCDq9FArA74TRRlPztQ9f8qaKueBs~82gxhsPcAj0oOL9KS1yYKkXbVGmKVNOVVts7bnbLQ9z4uLL0HMMzfTFxTTejr97UvJWmraPeKJabsI5NCVkba4XOxmGSHJuseO-YJp~X6Qp3XwvSaeFmOg50tQ85CBRxlr8dtyPJr23FRFznVznQjl~q-kgXu11Z5Tuwoun6x29-8b5NN0Ra3pldNG9U4MesQo9tTwKoumm3imldBiDneSdWLURbGWy782JCL0MEH8CpfQsG3UE3z6vut4xxcSQ6Zwc2kujLZ7nSZ56oQ__",
+    "asset_id": "playground_swing",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "family",
+    "epoch": "industrial",
+    "name": "Playground Swing",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
