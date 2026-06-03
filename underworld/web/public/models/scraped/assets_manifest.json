@@ -8574,5 +8574,22 @@
     "epoch": "iron",
     "name": "Guild Banner Civil",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_computing": {
+    "prompt": "a heraldic banner with a circuit-tree computing emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "496d1dc9-da6a-4e3c-bd40-fa75b20bd794",
+    "path": "/models/generated/tripo/guild_banner_computing.glb",
+    "bytes": 15113196,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/496d1dc9-da6a-4e3c-bd40-fa75b20bd794/tripo_pbr_model_496d1dc9-da6a-4e3c-bd40-fa75b20bd794.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDk2ZDFkYzktZGE2YS00ZTNjLWJkNDAtZmE3NWIyMGJkNzk0L3RyaXBvX3Bicl9tb2RlbF80OTZkMWRjOS1kYTZhLTRlM2MtYmQ0MC1mYTc1YjIwYmQ3OTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HMOXNHK0jmU9hvZjNdV6qeowQjcTJKZ9tFw5KX0Z~Ag2fL5x6moOvC~PXaDwfFiNrUzFzRgohJmJDhX3eqhvmG0dqwXxzlORQeSpPXSTSmwmdchcyKLASm~U~o~o29dxp6Ucne1gb1jZA6gKmQ3Mo~~hhzO3ABGtfTwHZHAsz2hmciiPuLfuoFy8jIHcsTh0Sy2EtY7ov7DCdtZTk9PaHqawYoxCXjD9v7x7PBHMEGGSwyf8MWTQT6P6Qu-iJVS7qH502wRfXsZZw2LeZV7csc3lq9OjKk~USH7DbyeGYt3ZkutebUWJa-dW0qDrmkDZTG~1FjKcxElX2zRCWgR91A__",
+    "asset_id": "guild_banner_computing",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "information",
+    "name": "Guild Banner Computing",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
