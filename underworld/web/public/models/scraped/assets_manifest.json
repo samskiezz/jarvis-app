@@ -1723,5 +1723,22 @@
     "epoch": "industrial",
     "name": "Supply Depot Warehouse",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:vr_arcade": {
+    "prompt": "a neon video-game and VR arcade hall, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "efe18d95-881b-4a11-8721-9545071f2ad3",
+    "path": "/models/generated/tripo/vr_arcade.glb",
+    "bytes": 14780048,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/efe18d95-881b-4a11-8721-9545071f2ad3/tripo_pbr_model_efe18d95-881b-4a11-8721-9545071f2ad3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWZlMThkOTUtODgxYi00YTExLTg3MjEtOTU0NTA3MWYyYWQzL3RyaXBvX3Bicl9tb2RlbF9lZmUxOGQ5NS04ODFiLTRhMTEtODcyMS05NTQ1MDcxZjJhZDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=xbjISXi6Nalqe459tC9OXR1OLo-~5lAUzWYHmrMrQXyzAdZ27qc9C5siZ3y6mO-d5c-LXN61~ReDlqM0Mni6omi9fHMeyT0U1dowtw-W8Un6UZAfrnlOzX1fVR~5P4VjzntDAf0ZEDn82~DgdULX3Iinjue5U5SO3WC3KG0dnxim-M454a9Fdi1r8aQRvl4Lmff9sW~74X9eYKU9CZKyNKiW3JvRjwXTr0wVh4YHL~5Oh9xwlwxMVT36hIQpbLSo~-Hy~mHBWRmWt4IBCZ-ajh4~OisuJuKWHMGGWd3Km7ijhgvhhF3eJOBJWe9ZaXKO3fK7sHDAvpSNqPhlhetQIw__",
+    "asset_id": "vr_arcade",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "information",
+    "name": "Vr Arcade",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
