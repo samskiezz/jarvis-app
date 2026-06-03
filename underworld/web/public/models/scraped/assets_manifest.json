@@ -7724,5 +7724,22 @@
     "epoch": "industrial",
     "name": "Faraday Induction Coil",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:foundation_model_gpu_pod": {
+    "prompt": "an AI training GPU server pod with glowing racks, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "04c0b93e-9dd4-4676-8e2c-bdf715416471",
+    "path": "/models/generated/tripo/foundation_model_gpu_pod.glb",
+    "bytes": 15014504,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/04c0b93e-9dd4-4676-8e2c-bdf715416471/tripo_pbr_model_04c0b93e-9dd4-4676-8e2c-bdf715416471.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDRjMGI5M2UtOWRkNC00Njc2LThlMmMtYmRmNzE1NDE2NDcxL3RyaXBvX3Bicl9tb2RlbF8wNGMwYjkzZS05ZGQ0LTQ2NzYtOGUyYy1iZGY3MTU0MTY0NzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XNoUxBdbJQUx~dphv9bmI6-Fw16ZXVj86W-qlwiCWFjB8xtXlrXbNMt2qE-deud524b7T6PzmiTwqlkQyrsBA2b7Oy4b~mBBGDAkebUyHM~PKWSRaTHwxX5h8pPV3tIC-dhV-FyBq-6ow4ZY~4-un47nP9k3Z1PJJsgF7tDM0VqZPgrLydQIQxnUbsvd-m4EQnNzL2OHfd5ORPrFGUoH9JLtMsgAIKcaDQ15zX1LRr~viiF3h4SCIvun~1s3PJ~Pkj8ZkLeRRPaOwrosX01Wi~6joTMT0jxeRI3SnUJzLB4e-0NBffq7lX9p6BbZpAE1OCBVbAHX2i9CXsZMmx8agg__",
+    "asset_id": "foundation_model_gpu_pod",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Foundation Model Gpu Pod",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
