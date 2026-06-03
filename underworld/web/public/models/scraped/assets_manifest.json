@@ -3423,5 +3423,22 @@
     "epoch": "any",
     "name": "Wardrobe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:board_game": {
+    "prompt": "a board game laid out on a table, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "31149500-c262-4735-a287-da1ea0a56985",
+    "path": "/models/generated/tripo/board_game.glb",
+    "bytes": 15272620,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/31149500-c262-4735-a287-da1ea0a56985/tripo_pbr_model_31149500-c262-4735-a287-da1ea0a56985.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzExNDk1MDAtYzI2Mi00NzM1LWEyODctZGExZWEwYTU2OTg1L3RyaXBvX3Bicl9tb2RlbF8zMTE0OTUwMC1jMjYyLTQ3MzUtYTI4Ny1kYTFlYTBhNTY5ODUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=mJ~pRWGxFLnpD~srKl6C~rsUz50t7Z452zHY20jFi5PZ5OVKEEOoa3f7027LEMRY4qgPqQnnZr-qnajTkIu8IOvU8M1RWZfv0AlKIOyQ~xXvblux3v6VumzitLp9bK0itLMICy8Pn0K74q9h15IJIfTH-EaF4KyCutnrm3lb1Dj3RUmBa7p55pglUMsM-zj5TkoAoXTbY9JJLaEl6n7HPMXC4IZr9XqpDLk4J1o3c~hc9Qsj8O-sHIIaV-PXTtY8n3lRqG8ohDHF7plTvS1WYahPWq6yN2e9IceCgd-CYcLwZghAEhS42kPrtu0WEHdCSGMAcvhpoyMcNLWwKCBjyg__",
+    "asset_id": "board_game",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Board Game",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
