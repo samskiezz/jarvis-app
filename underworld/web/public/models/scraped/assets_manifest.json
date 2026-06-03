@@ -3321,5 +3321,22 @@
     "epoch": "industrial",
     "name": "Sofa",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stove": {
+    "prompt": "a kitchen stove with oven, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2f14003c-9763-4f67-a80a-357caa93b940",
+    "path": "/models/generated/tripo/stove.glb",
+    "bytes": 15016812,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2f14003c-9763-4f67-a80a-357caa93b940/tripo_pbr_model_2f14003c-9763-4f67-a80a-357caa93b940.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmYxNDAwM2MtOTc2My00ZjY3LWE4MGEtMzU3Y2FhOTNiOTQwL3RyaXBvX3Bicl9tb2RlbF8yZjE0MDAzYy05NzYzLTRmNjctYTgwYS0zNTdjYWE5M2I5NDAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=xvzJFs1d93ludL1FTgXVdEujOWcI9URBswA2ko43qg3ck-xff~yM1CTNyfz3IsKuqD7Vy335fd~s5raZv9YoAFbI2W1l1WVxusEcdy9MdWDVzQFhQuBVBmXdUNJHbWxfdJqcDp-pZdrz9-YMzrab7ccGXD0YAHeX6gcu1Iu4FDVIaj5NoYgkTltmKtf4CvxgeSO90KBfz9kcwo9MPaoflRoEVwuWlvZFiFHbNMl~4wzi1ddbu2-L3zYVzx8NVcjo6zMhyu6~0Am2C6ytDVjLR97EEAsETJsn~1SpfcsVcuoyPaDVzugZ7kAnCxcbxk7mXStpG~BBrDLDdgNOlWzOlw__",
+    "asset_id": "stove",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "industrial",
+    "name": "Stove",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
