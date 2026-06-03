@@ -7010,5 +7010,22 @@
     "epoch": "bronze",
     "name": "Animal Pen",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:chicken": {
+    "prompt": "a hen chicken, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3a0f0938-4896-4f1e-bd79-32b06f9c4247",
+    "path": "/models/generated/tripo/chicken.glb",
+    "bytes": 14667376,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3a0f0938-4896-4f1e-bd79-32b06f9c4247/tripo_pbr_model_3a0f0938-4896-4f1e-bd79-32b06f9c4247.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2EwZjA5MzgtNDg5Ni00ZjFlLWJkNzktMzJiMDZmOWM0MjQ3L3RyaXBvX3Bicl9tb2RlbF8zYTBmMDkzOC00ODk2LTRmMWUtYmQ3OS0zMmIwNmY5YzQyNDcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=te8HvmA7Srf23545Z-MV7XKrvPsLjISA3Twihj~YPCCfXbDFTduDCMqnOgvG~fAs7KnxEFo1VHuSx8dYZNAZ3DUsS9hwrU5xTppg6VoXzLvay8r~Zf-kQ2OGKjQur6ZQ-b4z6oIYHOv9iCzCVB751ib07q22sVhb28q~s8SbyCzVdiZ0Q3EarmORlIgRi3VlwI631CwHza6soMQuRU80xndTg96lWOQu55bP-1sqyGqCh2YKnAK8c9CFSi4V3Bo2Ff6ECFWGPLIB-3DL2jR--RGj5dfAZQ9LV7KY~N6oeToCbRt5QjobHNNb4luBiXXHG1ZIuK0w3VYBBp~-WXTJBQ__",
+    "asset_id": "chicken",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Chicken",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
