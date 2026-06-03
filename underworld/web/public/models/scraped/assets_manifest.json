@@ -7758,5 +7758,22 @@
     "epoch": "industrial",
     "name": "Germ Theory Slides",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:integrated_circuit_wafer": {
+    "prompt": "a silicon integrated-circuit wafer on a display stand, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a94b2850-2e5d-4f4f-98ac-ce249d1bd741",
+    "path": "/models/generated/tripo/integrated_circuit_wafer.glb",
+    "bytes": 15120364,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a94b2850-2e5d-4f4f-98ac-ce249d1bd741/tripo_pbr_model_a94b2850-2e5d-4f4f-98ac-ce249d1bd741.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTk0YjI4NTAtMmU1ZC00ZjRmLTk4YWMtY2UyNDlkMWJkNzQxL3RyaXBvX3Bicl9tb2RlbF9hOTRiMjg1MC0yZTVkLTRmNGYtOThhYy1jZTI0OWQxYmQ3NDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Ja9f9zJn3v6hylz-OKn-GNtyjNOwBCPm1pLCdMUIcH6PZBR9WjV4gFc~f6crEDK4Bk9GQGMAL5tWsKkSCYTF61Dc7ZgbKJGP8mtw8gh1E7ww4p8TNytZRR2qjZGwoS4BSAmhAtU4l0MEyB-jOxEIQciGhbud1qX6hyEP7Ab5rjrFCwKeyRPkeIPC8r0~xm9POtuCd-HrP6lUyS5bMMTykbLGap71ZQU3VlW83CTDdec1VoUXBdTE-zVvte1rYjLxZun8upXf4d4DxU5Qxq5xUp5E3FapdEU3VQGx4HNCo8bJJaHo2tdk9A5POtPQH2HpkfuRv9yru537RpOUCP7wzQ__",
+    "asset_id": "integrated_circuit_wafer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Integrated Circuit Wafer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
