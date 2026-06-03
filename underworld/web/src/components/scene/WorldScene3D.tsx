@@ -11,6 +11,7 @@ import type { MinionListItem } from "@/lib/types";
 import Lights, { diurnal } from "./Lights";
 import Terrain, { elevationAt } from "./Terrain";
 import WorldEnvironment from "./Environment";
+import GeneratedWorld from "./GeneratedWorld";
 import MinionAvatar from "./MinionAvatar";
 import { computePois, destinationForAction } from "./pois";
 import type { Collider } from "./colliders";
@@ -317,6 +318,7 @@ export default function WorldScene3D({
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
           <Water size={WORLD_SIZE} sunDirection={sunNorm} />
           <WorldEnvironment pois={pois} size={WORLD_SIZE} seed={seed} tick={tick} />
+          <GeneratedWorld pois={pois} size={WORLD_SIZE} seed={seed} />
           <Vehicles
             size={WORLD_SIZE}
             seed={seed}
