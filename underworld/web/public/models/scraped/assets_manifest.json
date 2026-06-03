@@ -1893,5 +1893,22 @@
     "epoch": "industrial",
     "name": "University",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:voting_booth": {
+    "prompt": "a curtained ballot voting booth with a box, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "d68832e4-ae34-4b2c-b2c4-cdc976e68ae6",
+    "path": "/models/generated/tripo/voting_booth.glb",
+    "bytes": 14896536,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d68832e4-ae34-4b2c-b2c4-cdc976e68ae6/tripo_pbr_model_d68832e4-ae34-4b2c-b2c4-cdc976e68ae6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDY4ODMyZTQtYWUzNC00YjJjLWIyYzQtY2RjOTc2ZTY4YWU2L3RyaXBvX3Bicl9tb2RlbF9kNjg4MzJlNC1hZTM0LTRiMmMtYjJjNC1jZGM5NzZlNjhhZTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=BB7x3V1zYF3j5-I4C3J7wBQAq1hpIV73bmYwO1LWYIXiummslacpFPZpIJ9Yjoyk~8ycxF1p-2iRtRQh4Lu2braCxnPoqRZeDCxkdmvhyRw-r04AVrmrufM9pP6bW~3V83xpZqDIAyVNUOEfpG26N7JJXmS~sahbIe-U0593bFLR3bDbwNmEsbcRuZCDWiV-pP3IURrQtkLlomCSf4OXzeVD~tHe1IivJJVcKkWoqGDlsqyPeGB0625imVV8N~prsPVSmQZ6864opAmMyKz5Alh0LA4LkJa~TS3IisZzF-hF6uwAQAk7GKHJYkXfq9f7SIfZxfLEGD91e6ug9P5gBQ__",
+    "asset_id": "voting_booth",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "Voting Booth",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
