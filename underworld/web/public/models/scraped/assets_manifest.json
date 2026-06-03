@@ -8591,5 +8591,22 @@
     "epoch": "information",
     "name": "Guild Banner Computing",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_electrical": {
+    "prompt": "a heraldic banner with a lightning-bolt electrical emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c63342b4-3015-4b60-a2b1-adcc6eee1151",
+    "path": "/models/generated/tripo/guild_banner_electrical.glb",
+    "bytes": 10794016,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c63342b4-3015-4b60-a2b1-adcc6eee1151/tripo_pbr_model_c63342b4-3015-4b60-a2b1-adcc6eee1151.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzYzMzQyYjQtMzAxNS00YjYwLWEyYjEtYWRjYzZlZWUxMTUxL3RyaXBvX3Bicl9tb2RlbF9jNjMzNDJiNC0zMDE1LTRiNjAtYTJiMS1hZGNjNmVlZTExNTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pHGpT5bjPxwqtB8USnS3W-d9eoG71lkCKW2n-66aB7w1ngALfV3EqpuDg4xRZW3ZkqrmpRwSxAE6iHgcct2mgoU~kadJ8cbjUjPWV94BYej2oTXQS-Nhq82uQjzJfgN1vYXk2fQZxeOa8jti9CqiUQU-kph~I5Z74C9zuJxJTVXhmAJnmd8H~bLwmkzbxC2~qLiWJ6F20zsq~Lt99QpGXj2WX98OQX~mcTsffTidCASYxPynYmiEigjrLNidQMMaCTzkong9aVUhBtiPTXRTJjMT9MijK41Ik855wV2XJr~uVd5AMMh9ToWm29BVhmVFeC2I70r9-xBMyBsQdhATgg__",
+    "asset_id": "guild_banner_electrical",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Banner Electrical",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
