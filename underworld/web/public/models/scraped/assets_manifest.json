@@ -8829,5 +8829,22 @@
     "epoch": "industrial",
     "name": "Guild Electrical Workshop",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_energy_plant": {
+    "prompt": "an energy plant with cooling towers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "40464abb-6598-4b54-9477-78f40a71c39e",
+    "path": "/models/generated/tripo/guild_energy_plant.glb",
+    "bytes": 14986996,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/40464abb-6598-4b54-9477-78f40a71c39e/tripo_pbr_model_40464abb-6598-4b54-9477-78f40a71c39e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDA0NjRhYmItNjU5OC00YjU0LTk0NzctNzhmNDBhNzFjMzllL3RyaXBvX3Bicl9tb2RlbF80MDQ2NGFiYi02NTk4LTRiNTQtOTQ3Ny03OGY0MGE3MWMzOWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=LEuXOIUeXy7Wz92N4Uyxjr5381dI2mhGmNv5~cV8aSaj8-m1DPKNnAvdQOXu3dRrmSOOyHwSIl2sRt5beQnybV7tvfCNCzkC6fjoQLX-RTliqIbhdxW1YXIXOKY~~C4RfnOlAirTLJC3FtRMp25yNiEL85cmEQVpslw4eYXO~9OEFUqPd9M7PLfYJMhAn9CJTgmXsoV7je5Ttp0Q9HPZnCaPNQ-IwCiXgJll7yE2qn15Z6UTzl0PA5f26MIJp-VGjK-xe2PXU3dcA1VwFboIOUQtMdjbPDswsgyPIk3IUifFZI8eoEhyNjE351CwfN4SrIP2gJLkycoXiCfD3GjNpg__",
+    "asset_id": "guild_energy_plant",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Guild Energy Plant",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
