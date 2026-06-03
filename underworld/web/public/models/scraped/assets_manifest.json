@@ -1400,5 +1400,22 @@
     "epoch": "any",
     "name": "Desert Dune Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fault_rift_terrain": {
+    "prompt": "a cracked tectonic fault-rift terrain section, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "65e2d46a-cfb2-451e-a50e-98b5f70ff08c",
+    "path": "/models/generated/tripo/fault_rift_terrain.glb",
+    "bytes": 14769800,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/65e2d46a-cfb2-451e-a50e-98b5f70ff08c/tripo_pbr_model_65e2d46a-cfb2-451e-a50e-98b5f70ff08c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjVlMmQ0NmEtY2ZiMi00NTFlLWE1MGUtOThiNWY3MGZmMDhjL3RyaXBvX3Bicl9tb2RlbF82NWUyZDQ2YS1jZmIyLTQ1MWUtYTUwZS05OGI1ZjcwZmYwOGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=OZJ2JPx0ujbSoeGpDXSN4TagBmV69Kv6OIf4e6OQqGv6yl3tHb1bpxto8M5vzEkAcoSumSm6XUtQWHdJ1iNHzg6PvoUamH3vW0Yfd1o-ty7zXykLdbmq5NzabfInqjWujxvcpsX68VMDdiDJ55Ko66n9JwVbwHMTrQGZnFHKTPLISeKNdOwsVLEeZpTruDmJHGx8K5h0-5diHnQ-kE8BE3vE-aA8tMNBdtxllhOm-HlfOHGqjB~xButzxgV2xyq3MLqNhVcnst-JA1ZFWyqEEUZJhPkp1AmIDFeNdY6YoifnbbA79C8SgnKbp-E-iSr0C~B-fTbWc8c50N0JbrZF-Q__",
+    "asset_id": "fault_rift_terrain",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Fault Rift Terrain",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
