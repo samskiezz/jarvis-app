@@ -6126,5 +6126,22 @@
     "epoch": "industrial",
     "name": "Collaboration Round Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:crate_goods": {
+    "prompt": "a crate of trade goods, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4f499fdf-c570-452d-acbb-bab84cc34e6c",
+    "path": "/models/generated/tripo/crate_goods.glb",
+    "bytes": 14968440,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4f499fdf-c570-452d-acbb-bab84cc34e6c/tripo_pbr_model_4f499fdf-c570-452d-acbb-bab84cc34e6c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGY0OTlmZGYtYzU3MC00NTJkLWFjYmItYmFiODRjYzM0ZTZjL3RyaXBvX3Bicl9tb2RlbF80ZjQ5OWZkZi1jNTcwLTQ1MmQtYWNiYi1iYWI4NGNjMzRlNmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=w-jmP21xB4aiIJhv5BAvCZGRxoPFze8KcsmDM4yPPof83SbYILkRuYN9fBSnguBrtPSEpPoMCa0rhrtleJSZwrNTEkuSixbRWxHPU64-MrxuUAQw0bMIgCydnA-vDa4Ne5QDckpqFNaUn05zsMpNlP5VRHR8vzbMoaeiR5Fx9Cb0B1Zp5fe5nsre85Olt2xEkNuOrT8L42NK07txaJZ-YSEtFL98e4arTkBnLHuxCVchrTVOEcFFdyxXEQnC2iuEKV9Nn6B~x9YexhqCwJNq2uYHmEzWj8xNRqTgdclY~0mOXTizc5UhWDxBET9f2V0hNSrnNmMIbt3Q--s4k04cvg__",
+    "asset_id": "crate_goods",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "any",
+    "name": "Crate Goods",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
