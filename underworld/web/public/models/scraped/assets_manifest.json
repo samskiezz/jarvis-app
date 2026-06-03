@@ -1417,5 +1417,22 @@
     "epoch": "any",
     "name": "Fault Rift Terrain",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:forest_floor_tile": {
+    "prompt": "a leaf-litter forest floor terrain tile with roots, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "39d015a5-9aba-419e-9223-66c0c1d30142",
+    "path": "/models/generated/tripo/forest_floor_tile.glb",
+    "bytes": 15159420,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/39d015a5-9aba-419e-9223-66c0c1d30142/tripo_pbr_model_39d015a5-9aba-419e-9223-66c0c1d30142.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzlkMDE1YTUtOWFiYS00MTllLTkyMjMtNjZjMGMxZDMwMTQyL3RyaXBvX3Bicl9tb2RlbF8zOWQwMTVhNS05YWJhLTQxOWUtOTIyMy02NmMwYzFkMzAxNDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UIvYca9iSjDhR5Q54KfSSfpMFPyiTmLCKxKZ~v40DpVPK~fGW75ZcEPNM~psWQVqjpGhUr8NFD4czanCNV0qezZEvZek2fpEnAjVW93ObHpOtQoLv1zSQ7Ad~5QweG03bWtbUyhl2mZGSQ95B7vLcQKgOK2g2S3x8VrTffYgLcZYEXJA7HOBGqYNdeLHCmuRsY3LfiwCYwJxS6lrAXIAyYD1jlUkpc3MmPiYtEnv38LQPEff6rZxBU-10aJghSEPKMZDU8kTIBjAS7R~swVdPaZHMO~LScF8k0SGnzggW7j-SMUmkGBvwRNfvY0GJ2oRwvHwmMMHQeuoSdIDv2~3fw__",
+    "asset_id": "forest_floor_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Forest Floor Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
