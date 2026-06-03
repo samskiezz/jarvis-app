@@ -8285,5 +8285,22 @@
     "epoch": "any",
     "name": "Fossil Tyrannosaur Skull",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:grave_headstone": {
+    "prompt": "a weathered stone grave headstone, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "63f9a565-fe00-4efc-9940-ab81cea21032",
+    "path": "/models/generated/tripo/grave_headstone.glb",
+    "bytes": 12909236,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/63f9a565-fe00-4efc-9940-ab81cea21032/tripo_pbr_model_63f9a565-fe00-4efc-9940-ab81cea21032.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjNmOWE1NjUtZmUwMC00ZWZjLTk5NDAtYWI4MWNlYTIxMDMyL3RyaXBvX3Bicl9tb2RlbF82M2Y5YTU2NS1mZTAwLTRlZmMtOTk0MC1hYjgxY2VhMjEwMzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pusknEGsuK2cYDDGEb2OoQLAFs4hwSKx~hIaH17k5TdsX2fTVr25hy~ESRC15iH9jwpEt7JfuPmYTLPLz-rPNrMvHZVhe3EDETglzEc7~FoeNvELNkFtsZKPmgK5xY0AMElruklA8Lkq~5YIVA6AofKMKpkuKUAuSrRT6DspIgLDPDVRHt5fD35--vNXNd2SO~F4jDsme9LJToFuY6nO0i26dUkiHm54ZoEn7GVOxjuhqOoJD4347zVlujy76LatRky2ivzcMoqZuEVw5yvtgINwYC~83tL5xEviPgFwGLv890nyED-MibkjDtbmFzAGXAnRVQLR8VpTbYeX6biVxQ__",
+    "asset_id": "grave_headstone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "any",
+    "name": "Grave Headstone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
