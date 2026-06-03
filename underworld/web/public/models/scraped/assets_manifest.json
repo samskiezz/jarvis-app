@@ -7520,5 +7520,22 @@
     "epoch": "iron",
     "name": "Aqueduct Arch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bci_headset": {
+    "prompt": "a sleek brain-computer-interface headset with electrodes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b945e044-0525-4f2a-a41b-0b61cd6432ac",
+    "path": "/models/generated/tripo/bci_headset.glb",
+    "bytes": 14769764,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b945e044-0525-4f2a-a41b-0b61cd6432ac/tripo_pbr_model_b945e044-0525-4f2a-a41b-0b61cd6432ac.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjk0NWUwNDQtMDUyNS00ZjJhLWE0MWItMGI2MWNkNjQzMmFjL3RyaXBvX3Bicl9tb2RlbF9iOTQ1ZTA0NC0wNTI1LTRmMmEtYTQxYi0wYjYxY2Q2NDMyYWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Qx1GVAvKfLSUXVsX4idYsPZN-vOQlC4GQ9xCZugW2gsxVt3Hwd5CCfQ6XUd10PPYYP8SkDnsZtTtNcUnGCKm8aQpSNeaosl41MQ7~tT-hr4Qzmkuh4sKUXfjObqbEYEA00Sxnvjf~MMrMUNKBetUeex75aiONzX2ItSQLG4WF1n7n--beZkMSujWe-IDVuuHlFT0jHlueZ-TZFCRBwQZItCFhOcaOP1Ciy8ERYFQwsVxzK-mHUu7GdUdkxszLWd~p0NTNcxXq0rz03x3qixS94RqvQ7YPB70gdg2MUgRT5VroM7ykxRA40rFK44snTddFGiDCgltHuUhCFDLde45RQ__",
+    "asset_id": "bci_headset",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Bci Headset",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
