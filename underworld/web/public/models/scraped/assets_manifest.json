@@ -3610,5 +3610,22 @@
     "epoch": "any",
     "name": "Mirror Stand",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pillow_blanket": {
+    "prompt": "a pillow and folded blanket, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e7661bc3-9973-47ce-88cd-7f79e87e40ab",
+    "path": "/models/generated/tripo/pillow_blanket.glb",
+    "bytes": 14713236,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e7661bc3-9973-47ce-88cd-7f79e87e40ab/tripo_pbr_model_e7661bc3-9973-47ce-88cd-7f79e87e40ab.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTc2NjFiYzMtOTk3My00N2NlLTg4Y2QtN2Y3OWU4N2U0MGFiL3RyaXBvX3Bicl9tb2RlbF9lNzY2MWJjMy05OTczLTQ3Y2UtODhjZC03Zjc5ZTg3ZTQwYWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=rPSy~Pjz6YnGiL2FKO~L686maE7aZCXG8WO5PWGASrfn7-H7fgR34YzyVpJrk-afy3o8dcIteIM6TWRtnXAufscWE5~83hZbrZ~A0fr3e3bEab7wEFywv-jH1q7kCVQwRTEmNp07O4hxk-7yTr6TXDXT7d~CyW~ZDxKcRns30L4bfMIV62XH76blvHPdIiBZ7zCPc~TsR~A0J03k2XTXgaFueERQl1xtMKqOm-0ziEEsBzhqyq~XoDZPRF20zlFYwf-D1XCWQqfXbQRGhs8JWKn6YmTQ2TU2SoNTVr~VrCyruCXWcW-L83Wx0-dE6P4RvpwZWsoeDUi-fxwX0t~EKA__",
+    "asset_id": "pillow_blanket",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Pillow Blanket",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
