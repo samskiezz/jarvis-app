@@ -3185,5 +3185,22 @@
     "epoch": "information",
     "name": "Fridge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:kitchen_counter": {
+    "prompt": "a kitchen counter with sink and cabinets, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b774fb4a-7fc1-417b-94c0-78cfd01361ce",
+    "path": "/models/generated/tripo/kitchen_counter.glb",
+    "bytes": 14939196,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b774fb4a-7fc1-417b-94c0-78cfd01361ce/tripo_pbr_model_b774fb4a-7fc1-417b-94c0-78cfd01361ce.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjc3NGZiNGEtN2ZjMS00MTdiLTk0YzAtNzhjZmQwMTM2MWNlL3RyaXBvX3Bicl9tb2RlbF9iNzc0ZmI0YS03ZmMxLTQxN2ItOTRjMC03OGNmZDAxMzYxY2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UIQOcfnvQYWmj4CQWfneAkc3cLMjyNtC3pCkl6eSZ~GJdBhvtrWTczWmBYvbNLlA8XwzI1jGfjgQjuP0dvh~B8LWKZZMvue4wYuAVXqB-xq5l7W9PD5SlyBzTNZjw4DJ7ZqvY0tNAl4J2CDs6mYA75UZpejBTsS39LT8ChhdG--Uritjin3kbg6r0vlEgTTMPCeVSCRb7xE1JBy85w4Tt8Pr73Ans4e6cIGf9N1OI1ECVazyWu-iwFfyeRcOhelWaKjy8X9IKuwzoYTbsKS2-Xxquj2uQZJD45VXCsbHO3rpiWnueODKTJUxW7x9U8SMRTxzCK3~vdMRoUSpEKqhEA__",
+    "asset_id": "kitchen_counter",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Kitchen Counter",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
