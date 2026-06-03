@@ -2131,5 +2131,22 @@
     "epoch": "quantum",
     "name": "Fx Energy Core",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_energy_pylon": {
+    "prompt": "a tall energy pylon arcing with electricity, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "fa7685bd-a6f6-4c3a-9276-7367b7585137",
+    "path": "/models/generated/tripo/fx_energy_pylon.glb",
+    "bytes": 3592868,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fa7685bd-a6f6-4c3a-9276-7367b7585137/tripo_pbr_model_fa7685bd-a6f6-4c3a-9276-7367b7585137.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmE3Njg1YmQtYTZmNi00YzNhLTkyNzYtNzM2N2I3NTg1MTM3L3RyaXBvX3Bicl9tb2RlbF9mYTc2ODViZC1hNmY2LTRjM2EtOTI3Ni03MzY3Yjc1ODUxMzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XikeKCNoNiqbaDUadqASVj~bH4dCNadSSo4FqZ7OliClUNmXVjbKbZ7QRVQgYVrku-Nmw4LYnuGlMJKbXdMlweibOLH18Whwc0357NeiqZkj0v6QcqtamzAMjcoSh8vmw9AUrM0FSgbMhE8w7ArpPF1Jthi1B7lB~xpwme4BNYYpK9XZhtyfEOGajXUeI1eMpVW8ymWBnSkQpCEEdeDB2wBSIpRXWiLpDlJibUdvsV1y0o1xW7mU6ju4oxGLaPXWdeYNbL7sYAlfiN10QpRs9svEFYC2xevNgF-C2eiFN8DaSOv4FmBga8slvxuryIH76yIA2cOrslfZJhqg9U6suQ__",
+    "asset_id": "fx_energy_pylon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Energy Pylon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
