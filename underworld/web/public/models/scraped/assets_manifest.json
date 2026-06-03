@@ -4154,5 +4154,22 @@
     "epoch": "industrial",
     "name": "Cfd Wind Tunnel",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:chalkboard": {
+    "prompt": "a large chalkboard on a stand covered in equations, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "65c43d68-e9db-44a7-bdb0-a698219de2cc",
+    "path": "/models/generated/tripo/chalkboard.glb",
+    "bytes": 13103760,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/65c43d68-e9db-44a7-bdb0-a698219de2cc/tripo_pbr_model_65c43d68-e9db-44a7-bdb0-a698219de2cc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjVjNDNkNjgtZTlkYi00NGE3LWJkYjAtYTY5ODIxOWRlMmNjL3RyaXBvX3Bicl9tb2RlbF82NWM0M2Q2OC1lOWRiLTQ0YTctYmRiMC1hNjk4MjE5ZGUyY2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=n9x8FGuX12c-OonZfQ9wQ3KvDbmbX8EEXPcITWwOtzSg7CIjiiV9nU~fsM7gnVkCq-M4xseAkWAxcOgMy8l5UUVhk7JRcMx300aTAS~~eLJU~3iUc0mZM7zZ7bIQzpVBUx8iqtqmIoo2lGGz2Io6rPDWo3xAJerh1SKb48Wse9-qnnhXam~doqs7uQW1lgXJLJFjsimm3jnONKvLqIASp0UwTwLkjjAPTfXXFG0t2jhtg1KfD0ArS2HI9oH0O~qAK3OO6k4AKSqHweITBJ1aIqqoY8OaqELvhva9N6vu1fuPh5ooK7hVb52V1iHG3Nc0uZ70DebR7bIiyHHcdHbb3g__",
+    "asset_id": "chalkboard",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Chalkboard",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
