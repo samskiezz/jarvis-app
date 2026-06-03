@@ -4987,5 +4987,22 @@
     "epoch": "information",
     "name": "Soldering Station",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:spectrometer": {
+    "prompt": "a benchtop spectrometer instrument, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bb0f5b49-0995-4805-a935-c3c7a8ea2327",
+    "path": "/models/generated/tripo/spectrometer.glb",
+    "bytes": 14733772,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bb0f5b49-0995-4805-a935-c3c7a8ea2327/tripo_pbr_model_bb0f5b49-0995-4805-a935-c3c7a8ea2327.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmIwZjViNDktMDk5NS00ODA1LWE5MzUtYzNjN2E4ZWEyMzI3L3RyaXBvX3Bicl9tb2RlbF9iYjBmNWI0OS0wOTk1LTQ4MDUtYTkzNS1jM2M3YThlYTIzMjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=V-umDtsFbq~tc-SxKcn6sFz3Hvqk8TPNsxI5YYJTna7pYRIwBHKuOqEUsPtAzBNUvJVRJX1HLCaF~aIUFJrRKd~pAWKyeoPfi1zQPEHzLnGWCBo4kj3myyZ7btnu~ijIDYcwTSKx5uYwNEFgi0scBoAwoJzSGCpWGXS8TVAv8BdaV9OS75o4leoiQOdGvpojvStMkVngQhlrFEoJcZ3KWezYoBaYsXAXTPFbhpUjOhL8dimfepul8iY-LtLwWcgkNQEqEBIVs3q44oF6uYxF-AG7vzYkCoJOXP4-AY1Cjb3c6e9AqEOlZW8dq0OHyi3P77~3dRUnyK-diregJ-XIQA__",
+    "asset_id": "spectrometer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Spectrometer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
