@@ -5004,5 +5004,22 @@
     "epoch": "information",
     "name": "Spectrometer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:spice_test_rig": {
+    "prompt": "an electronics breadboard SPICE test rig with probes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "93d6704b-f7a2-47ed-85a3-e0ff01b27db3",
+    "path": "/models/generated/tripo/spice_test_rig.glb",
+    "bytes": 14983908,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/93d6704b-f7a2-47ed-85a3-e0ff01b27db3/tripo_pbr_model_93d6704b-f7a2-47ed-85a3-e0ff01b27db3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTNkNjcwNGItZjdhMi00N2VkLTg1YTMtZTBmZjAxYjI3ZGIzL3RyaXBvX3Bicl9tb2RlbF85M2Q2NzA0Yi1mN2EyLTQ3ZWQtODVhMy1lMGZmMDFiMjdkYjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=PSHrwTKH6cVzXxT44hS4g3tHUHUxG70tMlzPZ8vxLd8zLKTv8q9ohgFT3diEQ7TA1w2rUhbjvljU~5HSlWJkgzSloiQwEFVVA9p0gquaCYuVraiBFLtr~pma0GA7LZtHh88fzpWPzvRAEZ6UrwUYOGEqIZ9dP3CJBw-c4HBgl3iQ8wbJSLZEfNn301-WU9ztiIjj3dMVKoVmGXYcMBzDw5VriyOTrtcl2zwVgqDUIr22Q1P3hcvUx~a1aMpI9ha4eb1f6yDrBzA4UaVmdJRAQpyU7Rb8aOpO8GJspe5J8NQqZaJcEn6wClg-S685nx0hptU6xXVGD3s6DT6flxgVuQ__",
+    "asset_id": "spice_test_rig",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Spice Test Rig",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
