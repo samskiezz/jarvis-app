@@ -2437,5 +2437,22 @@
     "epoch": "any",
     "name": "Fx Jungle Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_light_orb": {
+    "prompt": "a hovering orb of soft light on a delicate stand, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "b5f8224c-ad32-4e45-a7e5-0bc364fca797",
+    "path": "/models/generated/tripo/fx_light_orb.glb",
+    "bytes": 14561956,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b5f8224c-ad32-4e45-a7e5-0bc364fca797/tripo_pbr_model_b5f8224c-ad32-4e45-a7e5-0bc364fca797.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjVmODIyNGMtYWQzMi00ZTQ1LWE3ZTUtMGJjMzY0ZmNhNzk3L3RyaXBvX3Bicl9tb2RlbF9iNWY4MjI0Yy1hZDMyLTRlNDUtYTdlNS0wYmMzNjRmY2E3OTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XJgjboOqKsflEeVECU03gz0KpZCaWN-5uZcNHYUK9cxT-h5YJSgqd1BccYSg6I2iHHKctr6sAIpxQzivMZUbIxymp13kV8~tCX5gg416EHa~p1Emn~P5ubZ-~Pi4raPaM2mjQ3XVzv2UGQpRkfOqhWNpLoxiUklM1d70fWZR86vGvcCvWlq8Zm9UIEXJ5edjtyBT1JJwBRY40E-XLDWuoZg6EEG0j775dMcsg~JJQ6PYiig98LvCAMy3GUcbBIWsuGvSfpBpGhkbdzZWpkdTXlz3ipRcJzDOPrSlslsqKkiEQs7gq-BVf9UmafIXpsaVCzx~5EWYImKEh1jnPEh7ow__",
+    "asset_id": "fx_light_orb",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Light Orb",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
