@@ -6160,5 +6160,22 @@
     "epoch": "iron",
     "name": "Notice Board",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:oil_barrel_stack": {
+    "prompt": "a stack of riveted oil barrels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "25a2bcfa-3293-496b-8d57-35a80bee9044",
+    "path": "/models/generated/tripo/oil_barrel_stack.glb",
+    "bytes": 14918340,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/25a2bcfa-3293-496b-8d57-35a80bee9044/tripo_pbr_model_25a2bcfa-3293-496b-8d57-35a80bee9044.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjVhMmJjZmEtMzI5My00OTZiLThkNTctMzVhODBiZWU5MDQ0L3RyaXBvX3Bicl9tb2RlbF8yNWEyYmNmYS0zMjkzLTQ5NmItOGQ1Ny0zNWE4MGJlZTkwNDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=adwxTNyt6bp07ScguXU9nfknT9PjxOdoaLkzwyY1GYZA9-xzMX46yT86XOWJ7ZCNDCoa6p0rWVz9YpcCjTgNXZ~ovipgS-gdZ9D-BI76mmKu0uIlIaDw6iF9AdyS5UakcgKLkdXu69HMO1r8AdHxxEsuxj0mmgKxqvuTymrbdNyoUiyKTJNtXJbTWZAUDBDiZpTC0MPVpJKS70llronXFwyciw077Pr5lk347mfBmvrzP2BTWfzqvLL03x4nEVHSGfjZorV~aWalKVTbXSn21U4QyGSn3lrrdRkpAPvxx9JfUTW4zdnlpXxQiv~H4abZM4zzUR~Rh9BxttdEfkvT0g__",
+    "asset_id": "oil_barrel_stack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "industrial",
+    "name": "Oil Barrel Stack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
