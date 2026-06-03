@@ -92,10 +92,30 @@ def _maths(seed: int) -> tuple[str, float, float]:
 
 
 def _agriculture(seed: int) -> tuple[str, float, float]:
-    from . import synbio as sb
+    """Grounded by REAL bioinformatics (Biopython) + cheminformatics (RDKit):
+    engineer a crop gene → translate → assess the protein, and screen an
+    agrochemical candidate for drug-likeness. Tier-2/3, not a heuristic."""
+    import random
+    from . import synbio as sb, bio_advanced as bio, chem_advanced as chem
     f = sb.fermentation(s0=100, x0=1.0, mu_max=0.4 + (seed % 4) * 0.1, ks=5.0, yield_xs=0.5)
-    quality = max(0.0, min(1.0, f["final_biomass"] / 50.0))
-    return f"Optimised a bioprocess: {f['final_biomass']:.1f} biomass from fermentation.", quality, f["final_biomass"]
+
+    rng = random.Random(seed)
+    gene = "ATG" + "".join(rng.choice("ATGC") for _ in range(90))
+    peptide = (bio.translate(gene)["protein"].split("*")[0] or "M")
+    prot = bio.protein_params(peptide if len(peptide) >= 2 else "MA")
+
+    panel = ["CCO", "CC(=O)Oc1ccccc1C(=O)O", "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+             "CC(C)Cc1ccc(cc1)C(C)C(=O)O", "O=C(O)c1ccccc1O"]
+    dl = chem.drug_likeness(panel[seed % len(panel)])
+
+    quality = max(0.0, min(1.0, 0.4 * (f["final_biomass"] / 50.0)
+                           + 0.3 * (1.0 if prot["stable"] else 0.4)
+                           + 0.3 * dl["qed"]))
+    return (f"Engineered a crop protein ({prot['length']} aa, stable={prot['stable']}, "
+            f"pI {prot['isoelectric_point']}) and screened an agrochemical "
+            f"(QED {dl['qed']}, Ro5={'pass' if dl['passes_ro5'] else 'fail'}); "
+            f"bioprocess yield {f['final_biomass']:.1f}.",
+            quality, f["final_biomass"])
 
 
 _DISPATCH = {
