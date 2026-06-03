@@ -8846,5 +8846,22 @@
     "epoch": "industrial",
     "name": "Guild Energy Plant",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_materials_forge": {
+    "prompt": "a materials foundry with a tall brick chimney, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9fc6e3f2-22f1-4f63-b92f-9711d353d59c",
+    "path": "/models/generated/tripo/guild_materials_forge.glb",
+    "bytes": 9051384,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9fc6e3f2-22f1-4f63-b92f-9711d353d59c/tripo_pbr_model_9fc6e3f2-22f1-4f63-b92f-9711d353d59c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWZjNmUzZjItMjJmMS00ZjYzLWI5MmYtOTcxMWQzNTNkNTljL3RyaXBvX3Bicl9tb2RlbF85ZmM2ZTNmMi0yMmYxLTRmNjMtYjkyZi05NzExZDM1M2Q1OWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Pu3kpp8by0BdKePMoSMAD~v03W8a5H191njaYr0aJk4aA6LShSTqtxBs~c6zxeVqPy2tOko8pfnTrv5RP9NU3O0wz~WMWlXl7-jCrdRp3aCh5i3l61q80VcfISWUPKqWwCLVMZCKGpRA95kpWF-WJOvEGnSy3tgPUHw7x-AnIEw4cZb8dNj0f9~OBDZFtUdmiPB1APBRZCv3Aj3xZsOjXrnzImU2Ktm~CX4~FqmXpHutu84OuM3zkpNQEEWoWwt5mb2d45auARHn1ZfqXHO1SbbhghpZHhBuh~WwG0tvyJOoA8C0hsY515wF0eKB~-U96U5syZ7tTYNz06aeYPvUVQ__",
+    "asset_id": "guild_materials_forge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "iron",
+    "name": "Guild Materials Forge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
