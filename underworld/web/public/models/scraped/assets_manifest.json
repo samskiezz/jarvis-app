@@ -7316,5 +7316,22 @@
     "epoch": "iron",
     "name": "Rowboat",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:solar_streetlight": {
+    "prompt": "a modern solar-powered street light, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "daec147d-2f19-4ba3-836f-8f9fa24249e4",
+    "path": "/models/generated/tripo/solar_streetlight.glb",
+    "bytes": 6480244,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/daec147d-2f19-4ba3-836f-8f9fa24249e4/tripo_pbr_model_daec147d-2f19-4ba3-836f-8f9fa24249e4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGFlYzE0N2QtMmYxOS00YmEzLTgzNmYtOGY5ZmEyNDI0OWU0L3RyaXBvX3Bicl9tb2RlbF9kYWVjMTQ3ZC0yZjE5LTRiYTMtODM2Zi04ZjlmYTI0MjQ5ZTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=StGUT~sj3tHSd5~t6ftRshtE1SBnO~SuoLOu6gBIl5Z7TooYtxlJs7NsrNdblkAlav9t0LEtDFlVPo3onZ7yglSbJHtBVOU3zkSVIB-SZ3gHKxnhr73gvhm~-DQl1IWeXYBaWj8dYb-2NNLSICUmJQLwZ96fsc3j1ExRrOfRpXXP8ZS0yoVd1Lz1fdhs2RvEhLaKKWwmCQaKhllQH2DoyJk~i2kEHwWy0JDtcsw6pKNVs4llzvKzuzCOseesqlUbmtdGSj6BUa91hLdI6Goov5B9VhCc0N~ne081tw1eIyDtFCEVxuXVwChoFyRnk~YG31szmJLtxzUL1xBvucNYwA__",
+    "asset_id": "solar_streetlight",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "quantum",
+    "name": "Solar Streetlight",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
