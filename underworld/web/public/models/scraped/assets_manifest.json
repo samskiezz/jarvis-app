@@ -3933,5 +3933,22 @@
     "epoch": "iron",
     "name": "Anvil",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:assembly_line_conveyor": {
+    "prompt": "a section of factory conveyor assembly line, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d3c47505-5034-4e06-affa-1653a538693f",
+    "path": "/models/generated/tripo/assembly_line_conveyor.glb",
+    "bytes": 7741324,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d3c47505-5034-4e06-affa-1653a538693f/tripo_pbr_model_d3c47505-5034-4e06-affa-1653a538693f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDNjNDc1MDUtNTAzNC00ZTA2LWFmZmEtMTY1M2E1Mzg2OTNmL3RyaXBvX3Bicl9tb2RlbF9kM2M0NzUwNS01MDM0LTRlMDYtYWZmYS0xNjUzYTUzODY5M2YuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=nqSKK1SPpq717OSzTlRnSDe47GeeWAnV1sRorjKVBQdrbdr61GMY~rjaD5HqNm7e7b70InVLg07uBleH2c~hM8rBqjz-ZDhHJGwWvkOgFZBLJ6G9wcQlRcauOD3b4nYweLcsR-Uyi9vJJ9Yc0nuUb-WUXSYEql~s2QlOuCYO6E9hX4mHnDLpS7m-PNe97k6L8k0EjwDoCr0mtg8NJvCnNER4z7XMIEp9F9H~1uS9NIxQcTNd1vHbpbuGpTDwN2xSts1psoNNi57QDdVvUFBFM7TMMbnMxNnCUloWBVHo-83nZeqADKCFZbO~CsrwdFJLNSu0bR70Xvqn6WA1~HrfjA__",
+    "asset_id": "assembly_line_conveyor",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Assembly Line Conveyor",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
