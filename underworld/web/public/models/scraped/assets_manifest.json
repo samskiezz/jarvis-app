@@ -8336,5 +8336,22 @@
     "epoch": "bronze",
     "name": "Law Code Pillar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lighthouse": {
+    "prompt": "a striped coastal lighthouse, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "62cc50ec-144b-4411-9864-3074133c5346",
+    "path": "/models/generated/tripo/lighthouse.glb",
+    "bytes": 7800480,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/62cc50ec-144b-4411-9864-3074133c5346/tripo_pbr_model_62cc50ec-144b-4411-9864-3074133c5346.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjJjYzUwZWMtMTQ0Yi00NDExLTk4NjQtMzA3NDEzM2M1MzQ2L3RyaXBvX3Bicl9tb2RlbF82MmNjNTBlYy0xNDRiLTQ0MTEtOTg2NC0zMDc0MTMzYzUzNDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VX2Etg0kjwt2wd1xgnahIPkxlK3twMUqJyCGJYR2JkMf-~u1YswEyk-xmuaw3zeO0QHtXWa1EbiIzKDOHHvvI3gprldBh2FB5EFo6K-cJhraEsFftBUNHRxjBJMcs3iODhpGTrNoseJVxn0P45U6KtPZrgXCMJX69QFdupe7-~sUOOJf~1OUuLAMAYJ4FhmatpQ6DtjPEduP-xrxHCeCuKGTsIRfC2GTAvperhk6d-flOzvF3OMSzIKmMCHE8gG7TNkBDfjmu7ow1~pb4MSacLhjaDh64NkwAy4zPiYu1orYo64p9DV8QoUhjWeExE6sR1kfaztRW5-iYSeg~LPgIQ__",
+    "asset_id": "lighthouse",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "industrial",
+    "name": "Lighthouse",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
