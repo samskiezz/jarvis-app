@@ -1,0 +1,53 @@
+# Underworld UE5 Pixel Streaming stack — runs on a GPU host (vast.ai).
+#
+# Three services:
+#   ue5         – the packaged Linux build of the Underworld UE5 game, run
+#                 headless (-RenderOffscreen) with the PixelStreaming plugin.
+#   signalling  – Epic's Pixel Streaming Infrastructure SignallingWebServer:
+#                 serves the web frontend (loaded by the React iframe) and
+#                 brokers WebRTC between the UE5 app and each browser.
+#   turn        – coturn TURN/STUN relay for NAT traversal (browsers behind
+#                 firewalls). Needed for reliable public connections.
+#
+# Host networking is used (Epic's recommendation) so WebRTC ICE works cleanly.
+# Requires the NVIDIA Container Toolkit on the host (vast.ai images ship it).
+services:
+  ue5:
+    build:
+      context: .
+      dockerfile: Dockerfile.ue5
+    image: underworld-ue5:latest
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      SIGNALLING_IP: ${SIGNALLING_IP:-127.0.0.1}
+      SIGNALLING_PORT: ${SIGNALLING_PORT:-8888}
+      EXTRA_UE_ARGS: ${EXTRA_UE_ARGS:-}
+    network_mode: host
+    restart: unless-stopped
+    depends_on: [signalling]
+
+  signalling:
+    # Official Epic Pixel Streaming Infrastructure signalling + web frontend.
+    # Pin a tag that matches your UE version (UE5.5 -> the 5.5 release tag).
+    image: ${PSINFRA_IMAGE:-ghcr.io/epicgamesext/pixelstreamtinginfrastructure/signalling:5.5}
+    command: >
+      --PublicIp=${PUBLIC_IP:-auto}
+      --HttpPort=${HTTP_PORT:-80}
+      --StreamerPort=${SIGNALLING_PORT:-8888}
+      --SFUPort=8889
+      --peerConnectionOptions={"iceServers":[{"urls":["stun:${PUBLIC_IP:-stun.l.google.com}:3478"]},{"urls":["turn:${PUBLIC_IP}:3478"],"username":"${TURN_USER:-underworld}","credential":"${TURN_PASS:-changeme}"}]}
+    network_mode: host
+    restart: unless-stopped
+
+  turn:
+    image: coturn/coturn:latest
+    command: >
+      -n --no-cli --no-tls --no-dtls
+      --listening-port=3478 --realm=underworld
+      --user=${TURN_USER:-underworld}:${TURN_PASS:-changeme}
+      --external-ip=${PUBLIC_IP}
+      --min-port=49152 --max-port=49252
+    network_mode: host
+    restart: unless-stopped

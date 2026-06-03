@@ -1,0 +1,23 @@
+# Runtime image for the packaged Linux build of the Underworld UE5 game with the
+# PixelStreaming plugin. Built on Epic's official pixel-streaming runtime base,
+# which carries the Vulkan + NVENC (hardware H.264/H.265 encode) deps UE needs.
+#
+# You supply the packaged build (see README "Packaging your UE5 game"): a folder
+# containing <Project>.sh + Linux/ binaries, placed at ./game/ next to this file.
+# (Epic's base image requires accepting the EULA + linking your Epic/GitHub
+# account; the README documents the one-time `docker login ghcr.io` step.)
+FROM ghcr.io/epicgames/unreal-engine:runtime-pixel-streaming
+
+# ---- the packaged game -------------------------------------------------------
+# Copy the packaged Linux build in. Expecting ./game/<Project>.sh as the entry.
+COPY --chown=ue4:ue4 game/ /home/ue4/game/
+
+# Launch wrapper applies the PixelStreaming flags and points at the signalling
+# server. RenderOffscreen = headless GPU render, no display needed.
+COPY --chown=ue4:ue4 run-ue5.sh /home/ue4/run-ue5.sh
+RUN chmod +x /home/ue4/run-ue5.sh && \
+    chmod +x /home/ue4/game/*.sh 2>/dev/null || true
+
+USER ue4
+WORKDIR /home/ue4
+ENTRYPOINT ["/home/ue4/run-ue5.sh"]
