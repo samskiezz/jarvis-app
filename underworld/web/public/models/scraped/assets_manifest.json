@@ -7894,5 +7894,22 @@
     "epoch": "quantum",
     "name": "Nanofab Assembler",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:network_switch_node": {
+    "prompt": "an early network router node with blinking link lights, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "26aeb642-0a1e-4234-a718-249441ca34cc",
+    "path": "/models/generated/tripo/network_switch_node.glb",
+    "bytes": 14672884,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/26aeb642-0a1e-4234-a718-249441ca34cc/tripo_pbr_model_26aeb642-0a1e-4234-a718-249441ca34cc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjZhZWI2NDItMGExZS00MjM0LWE3MTgtMjQ5NDQxY2EzNGNjL3RyaXBvX3Bicl9tb2RlbF8yNmFlYjY0Mi0wYTFlLTQyMzQtYTcxOC0yNDk0NDFjYTM0Y2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WnqT~NRAoBq-flfcYpNKDpfEBFS8fohA68QiriOjlqv6tlthOIWfny8PwSK7Pgia36BcSpLYRT93YCeP6VUVc0PJAZrkirXR6qTyutCJWIaAR1JRdnsqlu3Yehe3osjhgziB~vcpftE-UdOv2eIXr9lV9Aylh-LKQdfHbbYHwHHlIPjbhRM3c2fK-m1Z66nQj3sVFl3pUnbfF9-dLsmBuWnnkYhDlLDadbYJl3o3AePLkj66E6tNNGXCRou5Ae6mPVbabvIJ171uEK-vFjIpunCZxrev1sZEW1B~Idk1ysmtmr8c6-wxzKKTpYOSrJtUjmhdSJrQ6hO6aArtPoCIsA__",
+    "asset_id": "network_switch_node",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Network Switch Node",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
