@@ -5684,5 +5684,22 @@
     "epoch": "bronze",
     "name": "Scythe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:slide_rule": {
+    "prompt": "a vintage slide rule, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "583e9adb-f2d9-4d33-8822-acda2870a7c3",
+    "path": "/models/generated/tripo/slide_rule.glb",
+    "bytes": 7280492,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/583e9adb-f2d9-4d33-8822-acda2870a7c3/tripo_pbr_model_583e9adb-f2d9-4d33-8822-acda2870a7c3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTgzZTlhZGItZjJkOS00ZDMzLTg4MjItYWNkYTI4NzBhN2MzL3RyaXBvX3Bicl9tb2RlbF81ODNlOWFkYi1mMmQ5LTRkMzMtODgyMi1hY2RhMjg3MGE3YzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=TZYiGTfzaIuEZBkCd4~~f8M~uTqtIFuBsEW1odxoLIQlfz0-yUMCrJ2Zv26-8cveqZ0Q2ArjgcA8UeRKw~mdPX-Ai5VvDb4bspbWC7Z5xu~2hzoTd45NYNsGfysXMiz9ief2Ez1N9M9hlq2lBGnSqxxteB3UbTjTcOu3umx6NxA0o0RHgnMCiqDIMk~EmgYCcncpTjsP6DFE~d1sp0pe-EmXR8or7tIH0iV5BsMLxyDkeQPc-6H2fe8oRfOpZiDWgJ7LRcdUUIHFWBtWVGWR-80g76GfH4a9GOkpeDKIGak21ZFOOZ1MSJQdUVjMLmN4Wks~mbDveuc-sxjGYjlVXg__",
+    "asset_id": "slide_rule",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Slide Rule",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
