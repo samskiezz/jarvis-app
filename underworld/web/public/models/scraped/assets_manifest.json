@@ -1876,5 +1876,22 @@
     "epoch": "stone",
     "name": "Tribal Council Circle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:university": {
+    "prompt": "a university hall with a domed roof, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "7aab2e1c-4d24-4332-aeb8-027594e1bc4b",
+    "path": "/models/generated/tripo/university.glb",
+    "bytes": 15080200,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7aab2e1c-4d24-4332-aeb8-027594e1bc4b/tripo_pbr_model_7aab2e1c-4d24-4332-aeb8-027594e1bc4b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2FhYjJlMWMtNGQyNC00MzMyLWFlYjgtMDI3NTk0ZTFiYzRiL3RyaXBvX3Bicl9tb2RlbF83YWFiMmUxYy00ZDI0LTQzMzItYWViOC0wMjc1OTRlMWJjNGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=lA~pKuPEZMruPvbc0zgLXXf2V81jfIwkxCyeyr3HfzNxNRJWEuYy18Nayq8058yEeCseg2X6rxm5iNsC1fNU4xinrlosNYmj~aZ29tdWXp0g2JX3xoaCP82DpXaUkmV-R4cJWKyKldgb6fvEfqE6No4SRfUnEmZek9XH7RtSTNBHrc0Elv5r6mQi8N-ryyviFa7ZrHifIVJ7-C3nd16GuMhmzYl00p~6BCXZsdvV8wBPosl0s2grk1VCI27dYCECZOqeLt~4vqyLXn4sAlZMjSJ0SBixP0D2vCRZNwo6FpoL044lGoBRR4X2kgkBHHxYWwWtbxSDdqrLFJSALHHrVg__",
+    "asset_id": "university",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "University",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
