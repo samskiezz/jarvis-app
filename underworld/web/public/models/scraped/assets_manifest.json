@@ -2352,5 +2352,22 @@
     "epoch": "any",
     "name": "Fx Glowing Waterfall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_grand_palace": {
+    "prompt": "an opulent grand palace with golden domes and ornate carvings, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "3bd79139-2f8b-417a-91d8-8a520663ae40",
+    "path": "/models/generated/tripo/fx_grand_palace.glb",
+    "bytes": 15831060,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3bd79139-2f8b-417a-91d8-8a520663ae40/tripo_pbr_model_3bd79139-2f8b-417a-91d8-8a520663ae40.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2JkNzkxMzktMmY4Yi00MTdhLTkxZDgtOGE1MjA2NjNhZTQwL3RyaXBvX3Bicl9tb2RlbF8zYmQ3OTEzOS0yZjhiLTQxN2EtOTFkOC04YTUyMDY2M2FlNDAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jJmWaEDB3kbUteMyvh2yJrX2H2KXn0Sy1degwWn4dugWvtXW2hNEdMLDErmU-ZvuIo0kKb1ua7sanDFhy769lbVbyL7KredWtjAya2TBOHjgED8SnOIpswLmEx5fDtSYQQ0r27KGFPW~ikDjuHjfOyWo2QsChvDD0fP4ksDVrweV~J8NzUsyVeNQcLA-FwH4iZfUVXx~z~W9Cx7V4U5Bm6-Xt15TDaDiMauSNRDY3m~p~sUv1-U3pgUokgWIwHIpNLIMw5u9mP7H60Yo-yMxVLfGn27VSmoTnoUTQ8ylCVo3cLVXUgXXIhHX5w5gQnhM9i4SkwmfdYY7gYfhbq2aiA__",
+    "asset_id": "fx_grand_palace",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "industrial",
+    "name": "Fx Grand Palace",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
