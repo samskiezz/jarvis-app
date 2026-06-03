@@ -6313,5 +6313,22 @@
     "epoch": "bronze",
     "name": "Stall Canopy",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tavern_bar": {
+    "prompt": "a wooden tavern bar with mugs and barrels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6d4ec082-3b23-4d08-a7d5-354f06985844",
+    "path": "/models/generated/tripo/tavern_bar.glb",
+    "bytes": 15139620,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6d4ec082-3b23-4d08-a7d5-354f06985844/tripo_pbr_model_6d4ec082-3b23-4d08-a7d5-354f06985844.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmQ0ZWMwODItM2IyMy00ZDA4LWE3ZDUtMzU0ZjA2OTg1ODQ0L3RyaXBvX3Bicl9tb2RlbF82ZDRlYzA4Mi0zYjIzLTRkMDgtYTdkNS0zNTRmMDY5ODU4NDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=bXsJ93TX7aNYcucOaxe0zsdHuyDGrNXC8zlOWaRgMEpXRdq7bUi2I43LXgLneitKBzWygVBF48L4P5VRfgd7FUTP8VIuf306sQU5pK8UpeMqD3TdH5OEVTPIO~vrOSo5M~Fl345pOXw~FXFZTrpLNf2q1G3b-vB9BjZTrJxIUyPN3XRfNew7wgKCdPTkXW~WaK1pgWUd2sAwHIC-4KCFORSX2VG8eBGnHsQsusSNwPr5jbOyA-9-YNoLOLVZsS3vWC~3FPWouyTcMF6tj-fPivITAqg8SBLJSx4ODLUqWqrMvEdRLT4hmxgLuNOzg~E7No8cZKf9xBPtXp2OjpOjlQ__",
+    "asset_id": "tavern_bar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "iron",
+    "name": "Tavern Bar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
