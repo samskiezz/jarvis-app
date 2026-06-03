@@ -5021,5 +5021,22 @@
     "epoch": "information",
     "name": "Spice Test Rig",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:telescope_optical": {
+    "prompt": "a large optical telescope on a mount, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "62a22b21-d663-4be5-be8c-ac47e091c4f4",
+    "path": "/models/generated/tripo/telescope_optical.glb",
+    "bytes": 9813492,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/62a22b21-d663-4be5-be8c-ac47e091c4f4/tripo_pbr_model_62a22b21-d663-4be5-be8c-ac47e091c4f4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjJhMjJiMjEtZDY2My00YmU1LWJlOGMtYWM0N2UwOTFjNGY0L3RyaXBvX3Bicl9tb2RlbF82MmEyMmIyMS1kNjYzLTRiZTUtYmU4Yy1hYzQ3ZTA5MWM0ZjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=nqPLIvqxBI6xsDeyoq18efoiwow7HbzIUh7Y-bOG0~w~He1mtb5GJJFDFa9nlUIwuDA7kdESKC~0nimlO52Mi~85TK2TaFijTj5pd2i7OhbGZQ-9q7r9Jle~T4URXw~oUribVIK32-TZzy2lxLto7ytEOzr9MHeYYqfKwVWMxLT-PjuQ~p0Fn~hQbwGFNZ0Gx33-dD9K7vwSHdem5uutdlJeBKwV~lDW-EWjearYojc9LguTrgDVyLLwn957Vgqm949MTs4Hcg-UlEEpRc9x9njvzR5eCQdJ7Kn1OS-aBihrjGBlC3Ioe7kGcT7smtWewvi-G~qXnj-0SuOOrFFCaA__",
+    "asset_id": "telescope_optical",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Telescope Optical",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
