@@ -4715,5 +4715,22 @@
     "epoch": "information",
     "name": "Pcr Thermocycler",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pendulum_rig": {
+    "prompt": "a tall pendulum experiment rig, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "24d4f188-90e5-41e0-acd3-b1ed42fcec55",
+    "path": "/models/generated/tripo/pendulum_rig.glb",
+    "bytes": 7884180,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/24d4f188-90e5-41e0-acd3-b1ed42fcec55/tripo_pbr_model_24d4f188-90e5-41e0-acd3-b1ed42fcec55.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjRkNGYxODgtOTBlNS00MWUwLWFjZDMtYjFlZDQyZmNlYzU1L3RyaXBvX3Bicl9tb2RlbF8yNGQ0ZjE4OC05MGU1LTQxZTAtYWNkMy1iMWVkNDJmY2VjNTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=a1eAcOSmUF9NFpylldBewk~B1Nyftg0pGqpb1iThsiD89YUiv7TI5byIkNlSZWN6KWbvP93gZdth3elKsxfkmnoFOqw55TuzlzS~0CdmJvaJxFxv8CDWZmUO6h8e4jpw6ZAV~PbgZXblz8uKx~g5HNSfK1aFW2f-mwkbY1moHtcyumf0NdQmMyDdCi~URhGPCY1ZuQWKARM2pQbFjJXDACWKFX7DqmbLE7ZOEL-Hmb-Y5wclEpTXUTsUmmG88oI7KiC0mOyaqUAvPQ3WdQ~wIZs059GUipsR~9Vu5kzdTVZSWTlYZR-E88XzRK1tlZsFCa-kqjJ3BhLBfm7nLDgSKw__",
+    "asset_id": "pendulum_rig",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Pendulum Rig",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
