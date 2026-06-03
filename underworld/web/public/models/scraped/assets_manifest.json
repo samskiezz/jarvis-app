@@ -7996,5 +7996,22 @@
     "epoch": "iron",
     "name": "Philosophy Agora",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:potters_kiln": {
+    "prompt": "a fired-pottery kiln with clay pots, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "63402200-df27-4bb6-84c0-f4d24b55aa55",
+    "path": "/models/generated/tripo/potters_kiln.glb",
+    "bytes": 14781548,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/63402200-df27-4bb6-84c0-f4d24b55aa55/tripo_pbr_model_63402200-df27-4bb6-84c0-f4d24b55aa55.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjM0MDIyMDAtZGYyNy00YmI2LTg0YzAtZjRkMjRiNTVhYTU1L3RyaXBvX3Bicl9tb2RlbF82MzQwMjIwMC1kZjI3LTRiYjYtODRjMC1mNGQyNGI1NWFhNTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=OPN-kfsk0Mw5GRw-VEZrNa4L0RCXMdcY~bz3F9deQjllWfwFpmo5~aKCGnH6K3YTU0SeeCpMfozm11hWztpmacatB8AhrUqCHAF9G-k5f50Gv5DoB8u41GkwpP-Gq4tWnq1t1Y8bCa0nrPa9UvCwYH~Gf-M1ZHcmeazWlqIhf-X9OuJrPZc1930Y7BzlpJppuraBX4TgKWUFJmJGClA59MGrUMszBxPtXbyWPJWoI09djESJN-e2aLs8Jsb-jGS~Dmyv45Q18BXtiVzW3XA4xYjSX5VSUC7af4udRKLMjpJVjYQRMYc2ob0euZCeFvgbPRN5eqJX~0KGFp-LSIGhxQ__",
+    "asset_id": "potters_kiln",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "bronze",
+    "name": "Potters Kiln",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
