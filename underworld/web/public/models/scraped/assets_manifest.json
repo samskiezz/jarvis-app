@@ -8081,5 +8081,22 @@
     "epoch": "information",
     "name": "Smartphone Device",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:star_engine": {
+    "prompt": "a colossal stellar-engineering megastructure beside a star, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "483261d7-611b-4260-8cdd-ffcb864d3ef1",
+    "path": "/models/generated/tripo/star_engine.glb",
+    "bytes": 15392972,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/483261d7-611b-4260-8cdd-ffcb864d3ef1/tripo_pbr_model_483261d7-611b-4260-8cdd-ffcb864d3ef1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDgzMjYxZDctNjExYi00MjYwLThjZGQtZmZjYjg2NGQzZWYxL3RyaXBvX3Bicl9tb2RlbF80ODMyNjFkNy02MTFiLTQyNjAtOGNkZC1mZmNiODY0ZDNlZjEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=sDD2HW5CvNI2juy5dL6RYQjm7KAYv0BiqUCKekcXtdJvVUGtta~xwdh4y3GN5SsoRt4cOGStSIZ5wfRXH8I-59imYrpzcuDr1Jifg~Vu4-dEijyX1dU-GGfTFX~F0SYdtzYRMI1fY3GNeW-OOHUXhMNILpmlBIRy~ddQ49sU5mUEXlOmqDuT8FVmFBiSbLPvuUdrYvUB1YqddGW9-g9asDeI2pCv2xpgFUKlOK-NxloXq-BTvsFdSPhWaEfV9JTqLE0ztV-F2FMBmQB54~dtecR9I~zJKiL9n0b5f3yLwHaD-FwBH-NV04t0HDSZHsKg-E95fhq673nC-OGPpuGhJA__",
+    "asset_id": "star_engine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Star Engine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
