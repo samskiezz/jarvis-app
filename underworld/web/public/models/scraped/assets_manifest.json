@@ -2318,5 +2318,22 @@
     "epoch": "industrial",
     "name": "Fx Glow Lamppost",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_glowing_mushroom": {
+    "prompt": "a cluster of bioluminescent glowing mushrooms, soft cyan light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "59a03225-9db6-4b9b-9789-58d11daccff2",
+    "path": "/models/generated/tripo/fx_glowing_mushroom.glb",
+    "bytes": 15148076,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/59a03225-9db6-4b9b-9789-58d11daccff2/tripo_pbr_model_59a03225-9db6-4b9b-9789-58d11daccff2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTlhMDMyMjUtOWRiNi00YjliLTk3ODktNThkMTFkYWNjZmYyL3RyaXBvX3Bicl9tb2RlbF81OWEwMzIyNS05ZGI2LTRiOWItOTc4OS01OGQxMWRhY2NmZjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=SpHy4ovXrCJtmGiU37uk6LujVjV-iLILJ-G03k~8nA5whUEfjq3nGnhrd5Yk73ifTlRCQR0xAfBXj8TDH-mUhIlsJPy-ewxg4foRYgWh2IV9qWkJ1nxvzOCSpxvlQ7~RKovcQyBawKV93IWhweTvsU-wvKIP~vspNViNnE8YHfm~Bd6AqwufPoXz9mPuxZBa69vU7PpavKbz3Vd9jBWWfDtKyWFSXBXwDf01tEI4UjyWACAb8sErxOUY0UFs1o4xr7hO1QxbJ7OHv~7NB409Dw1iIXrhzlYHk6kB~yAvopexMfJudITsq~vr0hL9cMcoLt20WCf6-0dvlLsR5kxGxg__",
+    "asset_id": "fx_glowing_mushroom",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Glowing Mushroom",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
