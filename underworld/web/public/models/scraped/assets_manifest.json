@@ -6092,5 +6092,22 @@
     "epoch": "bronze",
     "name": "Coin Pile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:coin_purse": {
+    "prompt": "a leather coin purse, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "073208d0-e949-4940-b4f7-272ec498e0da",
+    "path": "/models/generated/tripo/coin_purse.glb",
+    "bytes": 14812136,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/073208d0-e949-4940-b4f7-272ec498e0da/tripo_pbr_model_073208d0-e949-4940-b4f7-272ec498e0da.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDczMjA4ZDAtZTk0OS00OTQwLWI0ZjctMjcyZWM0OThlMGRhL3RyaXBvX3Bicl9tb2RlbF8wNzMyMDhkMC1lOTQ5LTQ5NDAtYjRmNy0yNzJlYzQ5OGUwZGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=MyuUvy0bmu2MUr1xFaFIZ7kw5eokmuWWdOrmo5JAj~yzjDFwjQNhnJ1mEWR7WqQBwo4qhkemYGqaYPFvzirP1FqbGaHRG86CNfXKXpcJxpTxKDlCsUfqO75a8GK9Te1o24MxenLSarHM~w-Gh4cKO3x8U7fGWtkHfH3MSUe8I9WTKkd~eQl82geZ~zx6KU1No7EFonOUYN2WGU1jYd81e~3wqzGwcrZD38TtwOVpmYjKkbMJSjaxAiE8wyGe~bICk7gOkAOEd7sST3TxxK-kDvyAduwsqj97iaDwcVWJMu9rOXtDJeiWs5-Rtbl5FgIvbMCdBDDjtVVCcDX49N-V7w__",
+    "asset_id": "coin_purse",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "iron",
+    "name": "Coin Purse",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
