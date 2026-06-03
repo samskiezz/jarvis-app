@@ -8013,5 +8013,22 @@
     "epoch": "bronze",
     "name": "Potters Kiln",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:satellite_sputnik": {
+    "prompt": "an early metal satellite with antennae, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0ef58741-4c5c-46c7-b2da-20a6968d8a7a",
+    "path": "/models/generated/tripo/satellite_sputnik.glb",
+    "bytes": 14683040,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0ef58741-4c5c-46c7-b2da-20a6968d8a7a/tripo_pbr_model_0ef58741-4c5c-46c7-b2da-20a6968d8a7a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGVmNTg3NDEtNGM1Yy00NmM3LWIyZGEtMjBhNjk2OGQ4YTdhL3RyaXBvX3Bicl9tb2RlbF8wZWY1ODc0MS00YzVjLTQ2YzctYjJkYS0yMGE2OTY4ZDhhN2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XA4X8R6ouxC6kde8tBSix~CavI6Yw~AISmuE-2RUX4vtuHmWz2EDavTFCQqyFowbAI5IYGJrITwP2xXOytwR5Kz5ujbv5E4yih~NXlbyRbryGLxIZg13XZIEwXOs2tjhfN9Vd50gWH4me4yeyz7-kCllNyOKnXCnytZyyOdYfZRNfyi2iwiE3bOGn6bsUhHD7etiMlbShCihwtZiU~o3h5dq6tdP3aymJHOpyzQvvNJ0WHOmyCu8YC0LuVPMASu4RFJK9qFZER3ZsLAZtVY1SEUDytBjrDioCAVdc8q9y0R2KcOYY0eytTtujXSx1d7zQMD3RzuO4NnhjnURJhDn-Q__",
+    "asset_id": "satellite_sputnik",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Satellite Sputnik",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
