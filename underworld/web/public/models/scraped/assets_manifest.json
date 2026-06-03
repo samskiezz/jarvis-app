@@ -8693,5 +8693,22 @@
     "epoch": "industrial",
     "name": "Guild Banner Patent",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_physics": {
+    "prompt": "a heraldic banner with an orbiting-atom physics emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "67d598a8-727b-4c26-88af-66bf9af98867",
+    "path": "/models/generated/tripo/guild_banner_physics.glb",
+    "bytes": 13016116,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/67d598a8-727b-4c26-88af-66bf9af98867/tripo_pbr_model_67d598a8-727b-4c26-88af-66bf9af98867.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjdkNTk4YTgtNzI3Yi00YzI2LTg4YWYtNjZiZjlhZjk4ODY3L3RyaXBvX3Bicl9tb2RlbF82N2Q1OThhOC03MjdiLTRjMjYtODhhZi02NmJmOWFmOTg4NjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VjJsxj82wDwBCWVPegjqXzUbMIgBHR6MQko6T0aRKGCq5S4WG-yCy~bsdAnPEW~TaKDJJdnBdjpg9BpOYlFtxAy3s8KjvFt4~FVIfx6Ltjqy9dQfYfry-gw-MB03spStOzF0vCpdGWpFBB9Zk8jJIcCOXB01UeBmj4Y3sb1rPrM4F2OmuJ1jFk-iDgmai7KhX3uQOUphdpOKOGcSWm8LjsL0tIie5cL2NVgmB8QiWLOVd1IMYajfM-~cJLeyPrndq7a3CafWUhJedbBaOwTqXRttex2Bq~rc7qibPLpbnPxOfh8NpwZ7WVjQ9UR3S-q0~0L22IhlSQTvnnx~~aRgkw__",
+    "asset_id": "guild_banner_physics",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Banner Physics",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
