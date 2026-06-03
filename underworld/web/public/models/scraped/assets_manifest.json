@@ -4732,5 +4732,22 @@
     "epoch": "iron",
     "name": "Pendulum Rig",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:photonics_bench": {
+    "prompt": "an optical photonics table with fibre, lenses and a laser, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "422cdc45-a2e7-4f18-abf0-cda63eb4322a",
+    "path": "/models/generated/tripo/photonics_bench.glb",
+    "bytes": 14874608,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/422cdc45-a2e7-4f18-abf0-cda63eb4322a/tripo_pbr_model_422cdc45-a2e7-4f18-abf0-cda63eb4322a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDIyY2RjNDUtYTJlNy00ZjE4LWFiZjAtY2RhNjNlYjQzMjJhL3RyaXBvX3Bicl9tb2RlbF80MjJjZGM0NS1hMmU3LTRmMTgtYWJmMC1jZGE2M2ViNDMyMmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Y4yCVIolLvWDdQNuuosszqsesvECKGuYcMLf7m-UlKwBjJSP0VjSj2nx4nxPAZ5XWCa-GBuusVxsZAx0sLBUodKqVM5Sj7sDFsXu9YWCFsALbivr~9eiUy2LaTq~ZtXOtYJvkn9hI3Bmt26YpPr5jS~MeoQ7IVij38AD-djCsBmXSSesRNGCHQt~8Gx2CJRw-n~315RnmoMDBoqFVzY9ELTYd90xAoEXUrZvdZGvXoV8DZcUY97REJdWEqTAHH1OFYqboL1xEM4Hx80ceIrZpcpGfVBDW6ZTynkKXERBL1-4PeuX7YOJ3FQ7~xCdFnvlOLkjOslOt7Y3RJ2DovQY5g__",
+    "asset_id": "photonics_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "quantum",
+    "name": "Photonics Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
