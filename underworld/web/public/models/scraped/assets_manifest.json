@@ -4171,5 +4171,22 @@
     "epoch": "iron",
     "name": "Chalkboard",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:chromatograph": {
+    "prompt": "a gas-chromatography column rig with tubing, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "884c13db-5d47-4f9a-87cc-efa3230b9bff",
+    "path": "/models/generated/tripo/chromatograph.glb",
+    "bytes": 15058240,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/884c13db-5d47-4f9a-87cc-efa3230b9bff/tripo_pbr_model_884c13db-5d47-4f9a-87cc-efa3230b9bff.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODg0YzEzZGItNWQ0Ny00ZjlhLTg3Y2MtZWZhMzIzMGI5YmZmL3RyaXBvX3Bicl9tb2RlbF84ODRjMTNkYi01ZDQ3LTRmOWEtODdjYy1lZmEzMjMwYjliZmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XFWyGMuIVCrmP-lrKzRkhSfuxsb~Hml8BCaVj6vL433elaEZSd5~4FHz9vv0fn06ksZCFCXG0nJj7-CIDrDZ2qfrR90YTLOpOar~3OvGeVDsmSliRAyy3oWY2Ck8ZxkTTPCJeEMHulB0bpgLKJrI~kajFVw~oE-uvULk9fJeNn8zDtr3Vrd67ryt5n5NU869z6VOlNnfVfRGMfDKCHEgY8OSLgT6v8SacqENxuFqKlukPa-ZU5HF9RpayEF6RvgEfBt5HLvTMN~JeACzWCa2ph9Xx06WG11PvITD4YGRKFFqwkEuPCLrkRFfIBXu6kmMVkUqu-heQog7sK8qCgNpyQ__",
+    "asset_id": "chromatograph",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Chromatograph",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
