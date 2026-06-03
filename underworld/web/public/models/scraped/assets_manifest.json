@@ -3253,5 +3253,22 @@
     "epoch": "iron",
     "name": "Mentor Apprentice Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:painting": {
+    "prompt": "a framed wall painting, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "93297c05-7cb7-4112-9b88-9bc270219547",
+    "path": "/models/generated/tripo/painting.glb",
+    "bytes": 14720644,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/93297c05-7cb7-4112-9b88-9bc270219547/tripo_pbr_model_93297c05-7cb7-4112-9b88-9bc270219547.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTMyOTdjMDUtN2NiNy00MTEyLTliODgtOWJjMjcwMjE5NTQ3L3RyaXBvX3Bicl9tb2RlbF85MzI5N2MwNS03Y2I3LTQxMTItOWI4OC05YmMyNzAyMTk1NDcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=LEjg8-x2WDSy75RyXftALaIbkhe4DUpM~raCyNZMk5smGPLQuP15H1GuNAfpZKJWHF1AsWhPZzpwqvnEgu3ai8zLFevdtF-QvUfAo7aR8CvpVXcquD9LUnsecDf8BpMYK-6nVGp7au268gcUI-NIcviasX0liqdmX73gpFF7lJjDe5AGnexnXqMahaMAf0lvb4ckctbqz~BxbYuPTykuSfeHZYhD6ZD5AH0rPuBi4kuO6Z9~LNFmqDJvz7BGMcoxXCesrx-MAW7jsmp0OvVtiv7hOkYmNu2-0R7BpHt5FZgE8J2X0cZ4INpHkA6le4sIktvglWSRyb1s8Crr7RVaUw__",
+    "asset_id": "painting",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Painting",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
