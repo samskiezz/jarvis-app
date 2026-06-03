@@ -4834,5 +4834,22 @@
     "epoch": "information",
     "name": "Protein Crystallography Rig",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:quantum_computer": {
+    "prompt": "a quantum computer with a golden dilution-fridge chandelier, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "05067a3e-cbfa-4920-9ac3-d0e537f965b8",
+    "path": "/models/generated/tripo/quantum_computer.glb",
+    "bytes": 14977380,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/05067a3e-cbfa-4920-9ac3-d0e537f965b8/tripo_pbr_model_05067a3e-cbfa-4920-9ac3-d0e537f965b8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDUwNjdhM2UtY2JmYS00OTIwLTlhYzMtZDBlNTM3Zjk2NWI4L3RyaXBvX3Bicl9tb2RlbF8wNTA2N2EzZS1jYmZhLTQ5MjAtOWFjMy1kMGU1MzdmOTY1YjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hZQdJcVsCiXXf74T6fnQh8I8tg6Ucw~RI2pTP8kJqKCF5p-EQcra844wMEF3djXZKVxZjKUfBzxuy0PUGOnH4CZE8b8eOVEIPYvKoH3GqwJq5TPE5CqZbvoPo4kR6Hl96II7PM~~itESCIqqpBFmwrIoJNL1JNg742PPsxiUErq44WxBubA5EUzwAW5cS33apBnTFTdSlXvlrc74Gz0Nn9GBlsGBhs8zxzrGM4EXl4Zj1n6e1XtAcwjbtiKCBKYcL2fzt-ggm0RYElsToilPaHIjOj6lHKvRGFu240ilOPn9u5~Z0nLCMHlPTLy7GfStVlEb4QLGVZxYxA~q9ffDcA__",
+    "asset_id": "quantum_computer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "quantum",
+    "name": "Quantum Computer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
