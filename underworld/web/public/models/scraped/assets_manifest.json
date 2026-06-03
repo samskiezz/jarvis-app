@@ -4783,5 +4783,22 @@
     "epoch": "information",
     "name": "Printer 3D Additive",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:prior_art_terminal": {
+    "prompt": "a patent prior-art search terminal with a glowing screen, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8b67b1ad-5a03-47d7-821a-65c3976c9bdc",
+    "path": "/models/generated/tripo/prior_art_terminal.glb",
+    "bytes": 13462228,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8b67b1ad-5a03-47d7-821a-65c3976c9bdc/tripo_pbr_model_8b67b1ad-5a03-47d7-821a-65c3976c9bdc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGI2N2IxYWQtNWEwMy00N2Q3LTgyMWEtNjVjMzk3NmM5YmRjL3RyaXBvX3Bicl9tb2RlbF84YjY3YjFhZC01YTAzLTQ3ZDctODIxYS02NWMzOTc2YzliZGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=tJQAnslXOQmyr3uWnUfZ~d5CMRKdMY-xaO~9fm1dH2rZnesQyyqH7zJ-8WJQN29-kbL6x3tirORNQghAV6WAxxrxIKSUuXFr3ntvRJBb86UoA87M5gLyE4~HF7Wh3Qbs56ftDLJqRMZXkaO8ZX-pi10lXCZQZzRvDCBXO30-XNVoTtGTeJajx8Ogb8xPWDgfHZkIOFwsFefUO9jSeHtKmxvC4bgB92NaII4d8qg68svzmii1jY2jW7ZgVxlDAN2oeHpAx-f9Cb7pzgwIfw1RECSAuN46ztECqJHuPltbMLqUxRq3Q79HNUOOO5ZFBmRtG9TtCj8jSu~OLb9RwTKDKA__",
+    "asset_id": "prior_art_terminal",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Prior Art Terminal",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
