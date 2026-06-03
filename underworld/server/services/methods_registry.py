@@ -27,6 +27,10 @@ from . import (methods_ocean as OC, methods_metallurgy as MET, methods_qcomputin
 from . import (methods_plasma as PL, methods_photovoltaics as PV, methods_foodscience as FS2,
                methods_biomechanics as BM, methods_forestry as FOR, methods_hydrogeology as HG,
                methods_pharmacology as PHA, methods_veterinary as VET)
+# fleet 6
+from . import (methods_seismology as SEIS, methods_control as CTL, methods_electrochem as ECHEM,
+               methods_spectroscopy as SPEC, methods_heattransfer as HT, methods_signal as SIG,
+               methods_crystallography as XTAL, methods_epidemiology as EPI)
 
 # (keyword-substrings, callable) — first match wins. Domain-specific first.
 ROUTES: list[tuple[tuple[str, ...], object]] = [
@@ -392,6 +396,79 @@ ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("feed_conversion", "fcr"), VET.feed_conversion),
     (("thermoneutral", "critical_temp"), VET.thermoneutral_zone),
     (("herd", "livestock", "animal_husbandry", "veterinar"), VET.herd_logistic_growth),
+    # fleet 6 — seismology
+    (("richter", "local_magnitude"), SEIS.richter_local_magnitude),
+    (("moment_magnitude", "seismic_moment"), SEIS.moment_magnitude),
+    (("gutenberg", "b_value"), SEIS.gutenberg_richter_b_value),
+    (("p_s_wave", "travel_time_distance"), SEIS.ps_travel_time_distance),
+    (("seismic_velocity", "body_wave"), SEIS.body_wave_velocities),
+    (("omori", "aftershock"), SEIS.omori_aftershock_rate),
+    (("seismic_energy", "energy_release"), SEIS.energy_from_magnitude),
+    (("epicenter", "trilateration", "seismolog"), SEIS.epicenter_trilateration),
+    # fleet 6 — control systems
+    (("second_order", "step_response", "overshoot"), CTL.second_order_step_metrics),
+    (("pid", "closed_loop"), CTL.pid_closed_loop_response),
+    (("routh", "hurwitz"), CTL.routh_hurwitz),
+    (("pole_damping", "pole_placement"), CTL.pole_damping),
+    (("ziegler", "nichols"), CTL.ziegler_nichols_tuning),
+    (("bode", "gain_margin", "phase_margin"), CTL.bode_margins),
+    (("controllab", "state_space"), CTL.state_space_controllability),
+    (("lyapunov", "control_stability"), CTL.lyapunov_stability),
+    # fleet 6 — electrochemistry
+    (("nernst_potential", "cell_potential"), ECHEM.nernst_potential),
+    (("cell_emf", "electrochem"), ECHEM.standard_cell_emf),
+    (("faraday_electrolysis", "electroplat"), ECHEM.faraday_electrolysis),
+    (("butler_volmer",), ECHEM.butler_volmer_current),
+    (("tafel",), ECHEM.tafel_overpotential),
+    (("kohlrausch", "molar_conductivity"), ECHEM.molar_conductivity_kohlrausch),
+    (("nernst_einstein",), ECHEM.nernst_einstein_conductivity),
+    (("debye_huckel", "activity_coeff"), ECHEM.debye_huckel_activity),
+    (("peukert", "state_of_charge", "battery_capacity"), ECHEM.battery_capacity_soc),
+    # fleet 6 — spectroscopy
+    (("rydberg", "balmer", "spectral_line"), SPEC.rydberg_hydrogen),
+    (("beer_lambert", "absorbance"), SPEC.beer_lambert),
+    (("blackbody_spectrum", "wien_displacement"), SPEC.planck_blackbody),
+    (("bragg_spectro", "xray_diffract"), SPEC.bragg_diffraction),
+    (("photon_energy", "photon_wavelength"), SPEC.photon_energy),
+    (("rigid_rotor", "rotational_spectro"), SPEC.rigid_rotor_rotation),
+    (("vibrational", "harmonic_oscillator_ir"), SPEC.harmonic_vibration),
+    (("doppler_broadening", "spectral_shift"), SPEC.doppler_shift),
+    # fleet 6 — heat & mass transfer
+    (("plane_wall", "fourier_conduction"), HT.plane_wall_conduction),
+    (("cylinder_conduction", "radial_conduction"), HT.cylinder_conduction),
+    (("dittus", "nusselt_convection"), HT.dittus_boelter_convection),
+    (("radiative_exchange", "stefan_boltzmann_exchange"), HT.radiative_exchange),
+    (("lumped_capacitance", "transient_cooling"), HT.lumped_capacitance_cooling),
+    (("fin_efficiency", "heat_fin"), HT.fin_heat_transfer),
+    (("lmtd", "heat_exchanger"), HT.lmtd_heat_exchanger),
+    (("fick", "mass_diffusion"), HT.fick_diffusion),
+    # fleet 6 — signal processing & information theory
+    (("nyquist", "aliasing"), SIG.nyquist_alias_frequency),
+    (("shannon_capacity", "channel_capacity"), SIG.shannon_channel_capacity),
+    (("shannon_entropy", "information_entropy"), SIG.shannon_entropy),
+    (("discrete_convolution",), SIG.discrete_convolution),
+    (("autocorrelation", "dominant_period"), SIG.autocorrelation_period),
+    (("rc_lowpass", "filter_cutoff"), SIG.rc_lowpass_response),
+    (("hamming_code", "error_correct"), SIG.hamming74_correct),
+    (("quantization_snr", "adc"), SIG.adc_quantization_snr),
+    # fleet 6 — crystallography
+    (("d_spacing", "miller_indices"), XTAL.cubic_d_spacing),
+    (("packing_factor", "apf"), XTAL.atomic_packing_factor),
+    (("theoretical_density", "unit_cell_density"), XTAL.theoretical_density),
+    (("bragg_angle", "diffraction_angle"), XTAL.bragg_angle),
+    (("structure_factor", "systematic_absence"), XTAL.structure_factor_allowed),
+    (("interplanar_angle",), XTAL.cubic_interplanar_angle),
+    (("planar_density", "linear_density"), XTAL.linear_planar_density),
+    (("schmid", "resolved_shear"), XTAL.schmid_resolved_shear),
+    # fleet 6 — epidemiology
+    (("sir_model", "kermack"), EPI.sir_model),
+    (("reproduction_number", "basic_reproduction"), EPI.reproduction_numbers),
+    (("herd_immunity",), EPI.herd_immunity_threshold),
+    (("final_epidemic_size",), EPI.final_epidemic_size),
+    (("seir",), EPI.seir_model),
+    (("logistic_epidemic", "verhulst_cases"), EPI.logistic_growth),
+    (("case_fatality", "prevalence", "incidence"), EPI.epidemiologic_measures),
+    (("doubling_time", "epidemic_growth"), EPI.doubling_time),
 ]
 
 
