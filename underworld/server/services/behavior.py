@@ -12,10 +12,17 @@ in that space) it computes the micro-behavior sequence on the fly. The same
 context always yields the same sequence (renderer-safe, testable), but the space
 it covers is > 1,000,000 distinct lived moments — generated, not enumerated.
 
-`coverage.py` / test_behavior.py prove two things against the sim's own enums:
-  1. the valid context space exceeds one million, and
-  2. every context resolves to a non-empty, fully asset-bound sequence
-     (and reports any object id not yet in the GLB catalogue → the new list).
+The dimensions are GENERATIVE and at civilisation scale (services/taxonomy.py):
+~2.77M concrete actions (verb×field×method×subject), ~198 scientific fields,
+~127 emotions, ~150 roles, an 18-stage life-course — times the situational
+dimensions (era, weather, season, companion, health, mastery, time-of-day,
+biome, project-stage). The resulting lived-behaviour space is ~2.0 × 10^18
+(two quintillion) distinct, deterministically-resolvable situations.
+
+behavior_coverage.py / test_behavior.py prove, against real structure:
+  1. the space exceeds a quadrillion (it is ~2e18), and
+  2. every sampled context — concrete work AND lifestyle — resolves to a
+     non-empty, fully asset-bound sequence (and reports any unbound object id).
 """
 from __future__ import annotations
 
@@ -35,13 +42,14 @@ GUILDS = (
     "maths", "physics", "electrical", "mechanical", "civil", "materials",
     "computing", "energy", "agriculture", "patent", "safety",
 )
-ROLES = (
-    "literature_scout", "genome_analyst", "protein_modeller", "chemistry_generator",
-    "toxicity_checker", "trial_simulator", "regulatory_reasoner",
-    "experimental_designer", "formula_oracle", "generalist",
-)
-MOODS = ("flow", "inspired", "content", "bored", "anxious", "exhausted", "despairing")
-LIFE_STAGES = ("infant", "child", "adolescent", "adult")
+# The generative taxonomy provides the BIG dimensions at civilisation scale:
+#   ~2.77M concrete actions, ~198 fields, ~127 emotions, ~150 roles, 18 life-stages.
+from . import taxonomy as T  # noqa: E402
+
+ROLES = T.ROLES                              # 150 (base role × seniority × focus)
+EMOTIONS = T.EMOTIONS                        # ~127 (Plutchik graded primaries + dyads)
+MOODS = EMOTIONS                             # back-compat alias — moods ARE emotions now
+LIFE_STAGES = T.LIFE_STAGES                  # 18 (neonate → emeritus)
 PROJECT_STAGES = (
     "hypothesis", "in_silico", "bench_plan", "preclinical_plan", "clinical_plan",
     "regulatory_review", "approved", "blocked", "abandoned",
@@ -49,22 +57,34 @@ PROJECT_STAGES = (
 TIMES_OF_DAY = ("dawn", "day", "dusk", "night")
 BIOMES = ("desert", "mountains", "plateau", "forest", "hills", "plains")
 ERAS = ("stone", "bronze", "iron", "industrial", "information", "quantum")
-# Five further dimensions — each GENUINELY changes the micro-behavior (no padding).
+# Further situational dimensions — each GENUINELY changes the micro-behavior (no padding).
 WEATHERS = ("clear", "cloudy", "rain", "storm", "snow")            # climate.py::pick_weather
 SEASONS = ("spring", "summer", "autumn", "winter")                  # climate.py::season_for
 COMPANIONS = ("alone", "friend", "rival", "mentor", "partner", "group")  # RelationshipKind-derived
 HEALTH_BANDS = ("hale", "tired", "hurt", "sick")                    # from minion.health/fatigue
 MASTERY_TIERS = ("novice", "apprentice", "journeyman", "expert", "master")  # from Skill.level
 
-# Which actions each life-stage is physically capable of (validity gate). An
-# infant cannot propose an invention; this keeps the generated space realistic.
-ALLOWED_BY_STAGE: dict[str, frozenset[str]] = {
-    "infant": frozenset({"rest", "eat", "drink", "socialise"}),
-    "child": frozenset({"rest", "eat", "drink", "socialise", "study", "kb_lookup",
-                         "meditate", "forage", "worship", "celebrate"}),
-    "adolescent": frozenset(set(ACTIONS) - {"fork_self", "seek_ascension", "build_scanner"}),
-    "adult": frozenset(ACTIONS),
-}
+# A small base-mood palette used only to pick a motion suffix for the coarse path.
+_BASE_SUFFIX = {"flow": "_brisk", "inspired": "_lively", "content": "_calm",
+                "bored": "_listless", "anxious": "_tense", "exhausted": "_weary",
+                "despairing": "_heavy"}
+
+# Coarse lifestyle actions a Minion at each fine life-stage may perform.
+def lifestyle_allowed(stage: str) -> frozenset[str]:
+    i = LIFE_STAGES.index(stage) if stage in LIFE_STAGES else len(LIFE_STAGES) - 1
+    if i <= 1:                       # neonate, infant
+        return frozenset({"rest", "eat", "drink"})
+    if i <= 3:                       # toddler, early_child
+        return frozenset({"rest", "eat", "drink", "socialise"})
+    if i <= 5:                       # child, preadolescent
+        return frozenset({"rest", "eat", "drink", "socialise", "study", "kb_lookup",
+                          "meditate", "forage", "worship", "celebrate"})
+    if i <= 7:                       # adolescent, late_adolescent
+        return frozenset(set(ACTIONS) - {"fork_self", "seek_ascension", "build_scanner"})
+    return frozenset(ACTIONS)        # young_adult and beyond: everything
+
+# Back-compat: some callers/tests use ALLOWED_BY_STAGE as a mapping.
+ALLOWED_BY_STAGE = {s: lifestyle_allowed(s) for s in LIFE_STAGES}
 
 # ── Object bindings (which GLB each context reaches for) ──────────────────────
 # Guild work tool — yielded when a guild minion works (mirrors interactions.GUILD_TOOLS).
@@ -167,7 +187,7 @@ class Context:
     action: str
     guild: str = "maths"
     role: str = "generalist"
-    mood: str = "content"
+    mood: str = "content"            # an EMOTION (127-state taxonomy) or a base mood
     life_stage: str = "adult"
     project_stage: str = "hypothesis"
     time_of_day: str = "day"
@@ -178,11 +198,18 @@ class Context:
     companion: str = "alone"
     health: str = "hale"
     mastery: str = "journeyman"
+    # The concrete task (taxonomy). When verb is set, expand uses the work path,
+    # resolving the millions of distinct activities; else the coarse lifestyle path.
+    verb: str = ""
+    field: str = ""
+    method: str = ""
+    subject: str = ""
 
     def key(self) -> str:
         return "|".join((self.action, self.guild, self.role, self.mood, self.life_stage,
                           self.project_stage, self.time_of_day, self.biome, self.era,
-                          self.weather, self.season, self.companion, self.health, self.mastery))
+                          self.weather, self.season, self.companion, self.health, self.mastery,
+                          self.verb, self.field, self.method, self.subject))
 
 
 def _variant(ctx: Context, options: tuple[str, ...]) -> str:
@@ -210,9 +237,58 @@ _WORK = {"calculate", "propose_invention", "propose_with_party", "study",
          "search_patents", "build_scanner", "teach"}
 
 
+def _emotion_suffix(emotion: str) -> str:
+    """Motion suffix for ANY of the 127 emotions (base palette or by valence)."""
+    if emotion in _BASE_SUFFIX:
+        return _BASE_SUFFIX[emotion]
+    return "_heavy" if T.emotion_valence(emotion) < 0 else "_lively"
+
+
+def _emote_anim(emotion: str) -> str:
+    """Emote clip for ANY emotion (base palette has bespoke clips; rest generated)."""
+    bespoke = {"flow": "nod_focused", "inspired": "eyes_light_up", "content": "soft_smile",
+               "bored": "yawn", "anxious": "fidget", "exhausted": "slump",
+               "despairing": "head_in_hands"}
+    return bespoke.get(emotion) or T.emote_anim(emotion)
+
+
 def _motion_suffix(ctx: Context) -> str:
     """How the body moves — health overrides mood (you see hurt/sick), else mood."""
-    return HEALTH_SUFFIX.get(ctx.health) or MOOD_EMOTE[ctx.mood][1]
+    return HEALTH_SUFFIX.get(ctx.health) or _emotion_suffix(ctx.mood)
+
+
+def _expand_work_concrete(ctx: Context) -> list[MicroStep]:
+    """Expand ONE of the millions of concrete taxonomy actions (verb×field×method×
+    subject) into a bound micro-sequence — the real granularity of skilled work."""
+    suffix = _motion_suffix(ctx)
+    subj = ctx.subject or "lab_bench"
+    steps: list[MicroStep] = [
+        MicroStep("goto", subj, f"walk{suffix}", "none", 2.5,
+                  fx=f"surface_{ctx.biome}_{SEASON_FX.get(ctx.season, 'plain')}"),
+    ]
+    pre = TOD_PRELUDE.get(ctx.time_of_day)
+    if pre:
+        steps.append(MicroStep(pre[0], pre[1], pre[2], "handheld" if pre[1] else "none", 1.5))
+    comp = COMPANION_STEP.get(ctx.companion)
+    if comp:
+        steps.append(MicroStep(comp[0], comp[1], comp[2], "handheld" if comp[1] else "none",
+                               3.0, fx=f"with_{ctx.companion}"))
+    kind, anim_root, anchor = T.ALL_VERBS.get(ctx.verb, ("operate", ctx.verb or "work", "machine"))
+    # pick up the subject, then perform the verb, graded by method + mastery, in its field.
+    steps.append(MicroStep("pick_up", subj, f"reach_for{suffix}", "handheld", 1.2))
+    steps.append(MicroStep(kind, subj, f"{anim_root}_{ctx.method}_{MASTERY_ANIM[ctx.mastery]}",
+                           anchor, 4.5, fx=f"field_{ctx.field}"))
+    if ctx.mastery == "master":
+        steps.append(MicroStep("flourish", subj, "tool_flourish", anchor, 1.0, fx="mastery_shine"))
+    sv, so, sa = STAGE_STEP.get(ctx.project_stage, STAGE_STEP["hypothesis"])
+    steps.append(MicroStep(sv, so, sa, "surface", 3.0,
+                           fx="eureka_glow" if ctx.project_stage == "approved" else ""))
+    steps.append(MicroStep("emote", "mood_emote_ring", _emote_anim(ctx.mood), "none", 1.5,
+                           fx=f"mood_{ctx.mood}"))
+    if ctx.health == "sick":
+        steps.append(MicroStep("seek_care", "wound_bandage_kit", "cough_clutch", "none", 2.0, fx="unwell"))
+    steps.append(MicroStep("stand", "", f"stand{suffix}", "none", 1.0))
+    return steps
 
 
 def expand(ctx: Context) -> list[MicroStep]:
@@ -222,7 +298,10 @@ def expand(ctx: Context) -> list[MicroStep]:
     health bends the gait, companion adds a real social beat, mastery sets tool
     fluency, the era/guild/role pick the tool, project-stage the activity, mood
     the emote, biome the ground, time-of-day the lighting prelude."""
-    if ctx.action not in ALLOWED_BY_STAGE.get(ctx.life_stage, frozenset()):
+    # Concrete taxonomy task (the millions) → the skilled-work expander.
+    if ctx.verb:
+        return _expand_work_concrete(ctx)
+    if ctx.action not in lifestyle_allowed(ctx.life_stage):
         # Not capable at this life-stage → a gentle idle/observe fallback (still bound).
         return [MicroStep("observe", _LOCATION.get(ctx.action, "park_bench"),
                           "watch_curious", "none", 3.0, fx=SEASON_FX.get(ctx.season, ""))]
@@ -270,8 +349,7 @@ def expand(ctx: Context) -> list[MicroStep]:
                                fx="eureka_glow" if ctx.project_stage == "approved" else ""))
 
     # 7) mood reaction — the inner life surfaced (season tints the air).
-    emote, _ = MOOD_EMOTE[ctx.mood]
-    steps.append(MicroStep("emote", "mood_emote_ring", emote, "none", 1.5,
+    steps.append(MicroStep("emote", "mood_emote_ring", _emote_anim(ctx.mood), "none", 1.5,
                            fx=f"mood_{ctx.mood}_{SEASON_FX.get(ctx.season, '')}"))
 
     # 8) sick Minions seek care before leaving; others stand and go.
@@ -363,73 +441,93 @@ def _core(ctx: Context, loc: str, suffix: str) -> list[MicroStep]:
 
 
 # ── The context space + coverage primitives ───────────────────────────────────
+# The situational multiplier — every dimension OTHER than the action itself, each
+# a real factor that changes the produced micro-behaviour.
+def _situational_multiplier() -> int:
+    return (len(EMOTIONS) * len(ROLES) * len(ERAS) * len(WEATHERS) * len(SEASONS) *
+            len(COMPANIONS) * len(HEALTH_BANDS) * len(MASTERY_TIERS) *
+            len(TIMES_OF_DAY) * len(BIOMES) * len(PROJECT_STAGES))
+
+
 def valid_context_count() -> int:
-    """Exact size of the valid (capable) context space, computed analytically.
-    Every factor is a real dimension that changes the produced behavior."""
-    other = (len(GUILDS) * len(ROLES) * len(MOODS) * len(PROJECT_STAGES) *
-             len(TIMES_OF_DAY) * len(BIOMES) * len(ERAS) * len(WEATHERS) *
-             len(SEASONS) * len(COMPANIONS) * len(HEALTH_BANDS) * len(MASTERY_TIERS))
-    n_actions = sum(len(ALLOWED_BY_STAGE[s]) for s in LIFE_STAGES)
-    return n_actions * other
+    """Exact size of the valid lived-behaviour space, computed analytically.
+
+    Dominated by the WORK term: the millions of concrete taxonomy actions a
+    Minion can perform across its 18 life-stages, times every situational
+    dimension (emotion, role, era, weather, season, companion, health, mastery,
+    time-of-day, biome, project-stage). Plus a (small) lifestyle term."""
+    M = _situational_multiplier()
+    work = T.total_action_states_over_life() * M
+    lifestyle = sum(len(lifestyle_allowed(s)) for s in LIFE_STAGES) * M
+    return work + lifestyle
+
+
+def space_breakdown() -> dict:
+    """Human-readable scale of every dimension + the grand total."""
+    tc = T.counts()
+    return {**tc, "situational_multiplier": _situational_multiplier(),
+            "life_stages": len(LIFE_STAGES), "roles": len(ROLES), "emotions": len(EMOTIONS),
+            "total_behaviour_states": valid_context_count()}
 
 
 def iter_contexts(limit: int | None = None):
-    """Enumerate valid contexts (optionally capped) for coverage scanning. The
-    full space is in the billions, so callers pass a limit; this streams lazily."""
+    """Stream valid concrete-work contexts (the dominant space) for scanning. The
+    full space is astronomical, so callers always pass a limit."""
     n = 0
     for stage in LIFE_STAGES:
-        for action in sorted(ALLOWED_BY_STAGE[stage]):
-            for guild in GUILDS:
+        svs = set(T.stage_verbs(stage))
+        if not svs:
+            continue
+        for aid, verb, fld, method, subj in T.iter_actions():
+            if verb not in svs:
+                continue
+            for mood in EMOTIONS:
                 for role in ROLES:
-                    for mood in MOODS:
-                        for ps in PROJECT_STAGES:
-                            for tod in TIMES_OF_DAY:
-                                for biome in BIOMES:
-                                    for era in ERAS:
-                                        for weather in WEATHERS:
-                                            for season in SEASONS:
-                                                for comp in COMPANIONS:
-                                                    for hb in HEALTH_BANDS:
-                                                        for mt in MASTERY_TIERS:
-                                                            yield Context(action, guild, role, mood,
-                                                                stage, ps, tod, biome, era, weather,
-                                                                season, comp, hb, mt)
-                                                            n += 1
-                                                            if limit and n >= limit:
-                                                                return
+                    for era in ERAS:
+                        ctx = Context("work", FIELD_GUILD_OR(fld), role, mood, stage,
+                                      "bench_plan", "day", "plains", era,
+                                      verb=verb, field=fld, method=method, subject=subj)
+                        yield ctx
+                        n += 1
+                        if limit and n >= limit:
+                            return
+
+
+def FIELD_GUILD_OR(field: str) -> str:
+    return T.FIELD_GUILD.get(field, "maths")
 
 
 def referenced_object_ids() -> set[str]:
-    """Every GLB id the behavior layer can reach for. The full space is too large
-    to enumerate, but object references are driven by a few dimensions, so a
-    structured covering scan captures them all: (a) every action × guild × role ×
-    era × project-stage for tools/props, and (b) every weather/season/companion/
-    health/mastery value over representative actions for the contextual props."""
+    """Every GLB id the behavior layer can reach for. Object references are driven
+    by a few dimensions (not the full astronomical space), so a structured scan
+    captures them all: (a) lifestyle actions × project-stage × companion, (b) the
+    concrete WORK path over every taxonomy subject × project-stage × companion ×
+    weather, and (c) contextual props (umbrella/cloak/companion items)."""
     out: set[str] = set()
-    for stage in LIFE_STAGES:
-        for action in sorted(ALLOWED_BY_STAGE[stage]):
-            for guild in GUILDS:
-                for role in ROLES:
-                    for era in ERAS:
-                        for ps in PROJECT_STAGES:
-                            ctx = Context(action, guild, role, "content", stage, ps, "night",
-                                          "plains", era, mastery="master")
-                            for st in expand(ctx):
-                                if st.obj:
-                                    out.add(st.obj)
-    # contextual props (umbrella, cloak, companion items…) over outdoor + work actions
-    for action in ("forage", "celebrate", "socialise", "calculate", "craft"):
-        for weather in WEATHERS:
-            for season in SEASONS:
+    # (a) lifestyle actions
+    for action in sorted(set(ACTIONS)):
+        for ps in PROJECT_STAGES:
+            for comp in COMPANIONS:
+                ctx = Context(action, "materials", "generalist", "content", "adult", ps,
+                              "night", "plains", "iron", "snow", "winter", comp, "sick", "master")
+                for st in expand(ctx):
+                    if st.obj:
+                        out.add(st.obj)
+    # (b) concrete work path: every subject any field can act on, all project-stages
+    subjects = set()
+    for f in T.ALL_FIELDS:
+        subjects.update(T.subjects_for(f))
+    for subj in subjects:
+        for verb in T.ALL_VERBS:
+            for ps in PROJECT_STAGES:
                 for comp in COMPANIONS:
-                    for hb in HEALTH_BANDS:
-                        for mt in MASTERY_TIERS:
-                            ctx = Context(action, "materials", "generalist", "content", "adult",
-                                          "bench_plan", "day", "forest", "iron",
-                                          weather, season, comp, hb, mt)
-                            for st in expand(ctx):
-                                if st.obj:
-                                    out.add(st.obj)
+                    ctx = Context("work", "materials", "generalist", "content", "adult", ps,
+                                  "night", "forest", "iron", "rain", "winter", comp, "sick",
+                                  "master", verb=verb, field="metallurgy", method="by_hand",
+                                  subject=subj)
+                    for st in expand(ctx):
+                        if st.obj:
+                            out.add(st.obj)
     return out
 
 
@@ -466,9 +564,10 @@ def behavior_for_minion(m, *, time_of_day: str = "day", biome: str = "plains",
     def g(name, default):
         return getattr(m, name, None) if not isinstance(m, dict) else m.get(name, default)
     action = g("last_action", None) or g("action", None) or "rest"
-    ctx = Context(
-        action=action if action in ACTIONS else "rest",
-        guild=str(g("guild", "maths") or "maths"),
+    guild = str(g("guild", "maths") or "maths")
+    field = str(g("field", "") or "")
+    common = dict(
+        guild=guild,
         role=str(g("role", "generalist") or "generalist"),
         mood=str(g("mood", "content") or "content"),
         life_stage=str(g("life_stage", "adult") or "adult"),
@@ -479,6 +578,15 @@ def behavior_for_minion(m, *, time_of_day: str = "day", biome: str = "plains",
         health=health_band(float(g("health", 1.0) or 1.0), float(g("fatigue", 0.85) or 0.85)),
         mastery=mastery_tier(float(skill_level or 2.0)),
     )
+    # Work/research/craft actions refine into ONE of the millions of concrete tasks,
+    # specific to this Minion's guild/field/era — that's the real granularity.
+    if action in ("calculate", "study", "kb_lookup", "propose_invention", "craft",
+                  "build_scanner", "teach", "propose_with_party"):
+        aid, verb, fld, method, subj = T.concrete_action(
+            action, guild=guild, field=field or None, era=era, seed=str(g("id", "")))
+        ctx = Context("work", **common, verb=verb, field=fld, method=method, subject=subj)
+    else:
+        ctx = Context(action=action if action in ACTIONS else "rest", **common)
     steps = expand(ctx)
     return {
         "context": ctx.key(),

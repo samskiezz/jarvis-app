@@ -37,18 +37,32 @@ def report(sample: int = 20000) -> dict:
     referenced = B.referenced_object_ids()
     unbound = sorted(referenced - have)
 
-    # Resolution check on a random sample across the whole space.
+    # Resolution check on a random sample across the whole space — HALF on the
+    # concrete work path (the dominant millions-of-actions space), half lifestyle.
+    from underworld.server.services import taxonomy as TX
     rng = random.Random(7)
     bad = 0
     checked = 0
     contexts = []
-    # reservoir-free: build the dimension lists and sample tuples directly
-    for _ in range(sample):
-        stage = rng.choice(B.LIFE_STAGES)
-        action = rng.choice(sorted(B.ALLOWED_BY_STAGE[stage]))
-        ctx = B.Context(action, rng.choice(B.GUILDS), rng.choice(B.ROLES),
-                        rng.choice(B.MOODS), stage, rng.choice(B.PROJECT_STAGES),
-                        rng.choice(B.TIMES_OF_DAY), rng.choice(B.BIOMES), rng.choice(B.ERAS))
+    actions = list(TX.iter_actions(limit=200000))   # a slice of the action space
+    for i in range(sample):
+        if i % 2 == 0:                               # concrete work context
+            aid, verb, fld, method, subj = rng.choice(actions)
+            ctx = B.Context("work", B.FIELD_GUILD_OR(fld), rng.choice(B.ROLES),
+                            rng.choice(B.EMOTIONS), rng.choice(B.LIFE_STAGES),
+                            rng.choice(B.PROJECT_STAGES), rng.choice(B.TIMES_OF_DAY),
+                            rng.choice(B.BIOMES), rng.choice(B.ERAS), rng.choice(B.WEATHERS),
+                            rng.choice(B.SEASONS), rng.choice(B.COMPANIONS),
+                            rng.choice(B.HEALTH_BANDS), rng.choice(B.MASTERY_TIERS),
+                            verb=verb, field=fld, method=method, subject=subj)
+        else:                                        # lifestyle context
+            stage = rng.choice(B.LIFE_STAGES)
+            action = rng.choice(sorted(B.lifestyle_allowed(stage)) or ["rest"])
+            ctx = B.Context(action, "materials", rng.choice(B.ROLES), rng.choice(B.EMOTIONS),
+                            stage, rng.choice(B.PROJECT_STAGES), rng.choice(B.TIMES_OF_DAY),
+                            rng.choice(B.BIOMES), rng.choice(B.ERAS), rng.choice(B.WEATHERS),
+                            rng.choice(B.SEASONS), rng.choice(B.COMPANIONS),
+                            rng.choice(B.HEALTH_BANDS), rng.choice(B.MASTERY_TIERS))
         steps = B.expand(ctx)
         checked += 1
         if not steps or any(not s.anim or not s.anchor for s in steps):
