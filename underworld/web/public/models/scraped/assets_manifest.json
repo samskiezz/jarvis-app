@@ -5905,5 +5905,22 @@
     "epoch": "information",
     "name": "Project Stage Kanban",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_chemistry_generator_hood": {
+    "prompt": "a chemistry synthesis fume hood with reagent bottles, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "741751fb-19ae-4acf-b6ea-a8670d9ea071",
+    "path": "/models/generated/tripo/role_chemistry_generator_hood.glb",
+    "bytes": 15029932,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/741751fb-19ae-4acf-b6ea-a8670d9ea071/tripo_pbr_model_741751fb-19ae-4acf-b6ea-a8670d9ea071.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzQxNzUxZmItMTlhZS00YWNmLWI2ZWEtYTg2NzBkOWVhMDcxL3RyaXBvX3Bicl9tb2RlbF83NDE3NTFmYi0xOWFlLTRhY2YtYjZlYS1hODY3MGQ5ZWEwNzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=erIOAqHod3HBYJcBFzx-U~eRtYJ9fRNrPBQYBUPR2WbckJUXBLRZgzbRuKG7o1zexkZKzzzop2vSiPquaefb4rQISu7KHBlWylhYn1BVxVnQWm8LKkCzOG8k85JjLXfP0NRNFZkbLAwNjoCFESbjpRjJvZ0ZiFj61YtRfu0XinpNqbe7NJw84KkhqXDmnU~0qBe6keCv1vg6Uu1iOaO784YHE0y6iTGIH7F9RYg5IsrBpHGNmqkInOVcoKfwzCE0Bl1LlGqsHni9Yj73Ym7AOYhkQ9FoYbcEzb8cDGjEDwqdoqnnhe~Oldhlctasc4WU3JuYwS7HpVVnKcqAykY-dg__",
+    "asset_id": "role_chemistry_generator_hood",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "information",
+    "name": "Role Chemistry Generator Hood",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
