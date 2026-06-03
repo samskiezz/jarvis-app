@@ -4443,5 +4443,22 @@
     "epoch": "industrial",
     "name": "Heat Treat Furnace",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:industrial_robot_arm": {
+    "prompt": "an articulated industrial assembly robot arm, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "64335dd6-16c8-4fc5-9668-135e22a1bdc3",
+    "path": "/models/generated/tripo/industrial_robot_arm.glb",
+    "bytes": 9211784,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/64335dd6-16c8-4fc5-9668-135e22a1bdc3/tripo_pbr_model_64335dd6-16c8-4fc5-9668-135e22a1bdc3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjQzMzVkZDYtMTZjOC00ZmM1LTk2NjgtMTM1ZTIyYTFiZGMzL3RyaXBvX3Bicl9tb2RlbF82NDMzNWRkNi0xNmM4LTRmYzUtOTY2OC0xMzVlMjJhMWJkYzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=r40jM3fltQHbt8OFzHbH1mvVAKaqwws6EfaXWzOsMWQuCTSywTUoCY5gnoIcfYUa3HGlw2HriJsGXnEwIeyvK4~x-IAp7~FUUZy-tUR8z99PdUkpTdIg6MHcvC~5VOGl6Arfz6bUwPLYpoGohadmoF94EQBk5-Xh1VcO0MS9xvrvcAkLiZ7JdtUyA7rPTECW4ctNQfpks7SnfErZ6uW4pFy~EstDGsEU5I2EwfCbUQjEYP3QO8~Nbe20PEQgbg6TcBFmemkgqASac0FlILpcnmvCtlJW6mK4dinm2hCkJCVGtKLvbvbTk9om7GX969kz1F-Br1laqrV4i7SmN4jsHA__",
+    "asset_id": "industrial_robot_arm",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Industrial Robot Arm",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
