@@ -2505,5 +2505,22 @@
     "epoch": "iron",
     "name": "Fx Moss Statue",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_neon_sign": {
+    "prompt": "a vibrant neon shop sign, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "41025341-d0ee-45c1-afe2-9adbb85b66c7",
+    "path": "/models/generated/tripo/fx_neon_sign.glb",
+    "bytes": 9697636,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/41025341-d0ee-45c1-afe2-9adbb85b66c7/tripo_pbr_model_41025341-d0ee-45c1-afe2-9adbb85b66c7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDEwMjUzNDEtZDBlZS00NWMxLWFmZTItOWFkYmI4NWI2NmM3L3RyaXBvX3Bicl9tb2RlbF80MTAyNTM0MS1kMGVlLTQ1YzEtYWZlMi05YWRiYjg1YjY2YzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=PwLZKEQaFivHpn-8DddJkbyikm9GafW-t3J95JReEwiYLur-RObeLDP1lCDGZYNfTXw2x5QLmLw3AE8bOhnb7eBViRtswZggfCdFn8Zsz731NJ6r7qOmaZEBpjOFe-SM-DHrqbWf0STiRu1GYpgg95Tv4oEJAiW7xLNRr3dk3PUbaFkps3Km-7cah49PAR0-~zOaraJg4fcuy-rzrJg~M9odI9LUKwt6b69cNCo7nFHcLnPWpl3~gBtaWOaV8wtCJib3biRgKZKm58EHFb1oKKJR3jM4Uw~5C4-APa-LA6rYiAM4n1nHTzUVWOe9CYqpvW9hVsOrBo5xQUnXQ5jzGw__",
+    "asset_id": "fx_neon_sign",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "information",
+    "name": "Fx Neon Sign",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
