@@ -6602,5 +6602,22 @@
     "epoch": "industrial",
     "name": "Legacy Portrait Gallery",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:loom": {
+    "prompt": "a wooden weaving loom with thread, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4527c27e-89f3-417e-998f-0bf668330fe2",
+    "path": "/models/generated/tripo/loom.glb",
+    "bytes": 15088576,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4527c27e-89f3-417e-998f-0bf668330fe2/tripo_pbr_model_4527c27e-89f3-417e-998f-0bf668330fe2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDUyN2MyN2UtODlmMy00MTdlLTk5OGYtMGJmNjY4MzMwZmUyL3RyaXBvX3Bicl9tb2RlbF80NTI3YzI3ZS04OWYzLTQxN2UtOTk4Zi0wYmY2NjgzMzBmZTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=eAG03Sx4V5WA5BdVv4FHjJVA1N2TT8FxRnBpaVvV-vK7fc5Wnuo-l6GpaQ4s3BF~CKZRk8PvsUEsGTvu6ngn9XF3pyh02TMwrJK1MPiVK2EdIyV25J0hrC8~duvU59KwFQz-r3oB9QWnEoly~9JUJ~mEs8YoskWJVkb5YIIb39ajYSt-m9Z9oKGmjvRwfL7bMi0yVAYJU-~NeLW13t2m-vv9~SnB2pdOH~m8cbGfz1UJcX6OyBwdQ9HDqCBEBtwJwMpRkkKMSp6rTCelctOEv8Ac8WeaeVwX3p1BmnfHaf-PRS4tL5j9UwYNMPSdkuWNTR8mVKjPukt-IlvRevRNhQ__",
+    "asset_id": "loom",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "bronze",
+    "name": "Loom",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
