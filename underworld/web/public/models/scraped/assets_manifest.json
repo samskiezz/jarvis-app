@@ -6058,5 +6058,22 @@
     "epoch": "information",
     "name": "Role Trial Simulator Console",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:coal_pile": {
+    "prompt": "a heaped pile of black coal, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6e4a2513-081f-480c-a99d-8becddc6d412",
+    "path": "/models/generated/tripo/coal_pile.glb",
+    "bytes": 15536052,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6e4a2513-081f-480c-a99d-8becddc6d412/tripo_pbr_model_6e4a2513-081f-480c-a99d-8becddc6d412.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmU0YTI1MTMtMDgxZi00ODBjLWE5OWQtOGJlY2RkYzZkNDEyL3RyaXBvX3Bicl9tb2RlbF82ZTRhMjUxMy0wODFmLTQ4MGMtYTk5ZC04YmVjZGRjNmQ0MTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uxsodn1ut6ey3hgfkpgucrgVgur8TtKJ1g0OySPekdizuCdi~W47ab7hYIVs-rEHhjCw4UjfORfrSks0TVBqxXMgKFHGIKVb4Rs~nsAOJZgifHPefMgNuCvWzD4EmaUxsRxR0e~T0UbhQZSBZRmDphkChp3WN2KO-yBdOPu0uJj8fFh8RLCHOCu9TwNr9JhwjYU1ASrDuGkzAJkPAbMAi6q2wrxucInOVsdXthpXZxyZVG37W0WjFu7kZxLMVPdXqMQKsqESPkWsKROHNJurNj55paqq5dF1~D0FbdTo18d0eC~pqNfcO0AsEi8IQjRuljt91mvdXNEq6DfunSQD7w__",
+    "asset_id": "coal_pile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "industrial",
+    "name": "Coal Pile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
