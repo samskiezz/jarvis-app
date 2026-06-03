@@ -5089,5 +5089,22 @@
     "epoch": "industrial",
     "name": "Thermometer Lab",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:transformer_unit": {
+    "prompt": "an electrical transformer unit, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a982e82e-4f85-42a4-85d7-e10369b19ea9",
+    "path": "/models/generated/tripo/transformer_unit.glb",
+    "bytes": 15051120,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a982e82e-4f85-42a4-85d7-e10369b19ea9/tripo_pbr_model_a982e82e-4f85-42a4-85d7-e10369b19ea9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTk4MmU4MmUtNGY4NS00MmE0LTg1ZDctZTEwMzY5YjE5ZWE5L3RyaXBvX3Bicl9tb2RlbF9hOTgyZTgyZS00Zjg1LTQyYTQtODVkNy1lMTAzNjliMTllYTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=J2DzirYlO3KJamEX-LLJLVC0XvzPSPT16gE--WdsJIopvoOoF7RtIuaQt7r9Y2oC1BAz7zcCgvlVU1D0l72~POmPYLJz09LTuxnpAezImRKz25PmBQOfZSLejkWK-ieHSQKwXQox~~gCXwrdJAcycxVZthVmJklj9PN4VrQRqb7Ap6MvY5ikDDoMuHJ1Lzfoi4s2Dqx8SWOoabJzGkRKJ0YACwQUxj8gyOSi9AyPGv5Lc4203OR5nPDjze4c9zmDQtltlHxmCKP8qU1KDs4YN2fTM-KeDYpFm9p5un2tR7H7cbzCuX7ZwHgTsa26mDs-gx7fFxKkOEmk3R-G8o79bg__",
+    "asset_id": "transformer_unit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Transformer Unit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
