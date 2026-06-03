@@ -1672,5 +1672,22 @@
     "epoch": "industrial",
     "name": "Cinema Marquee",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:clean_room_booth": {
+    "prompt": "a glass clean-room booth with an air shower, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "eb4ebb32-3d08-44fb-84c9-823cf0bf216d",
+    "path": "/models/generated/tripo/clean_room_booth.glb",
+    "bytes": 14844760,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/eb4ebb32-3d08-44fb-84c9-823cf0bf216d/tripo_pbr_model_eb4ebb32-3d08-44fb-84c9-823cf0bf216d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWI0ZWJiMzItM2QwOC00NGZiLTg0YzktODIzY2YwYmYyMTZkL3RyaXBvX3Bicl9tb2RlbF9lYjRlYmIzMi0zZDA4LTQ0ZmItODRjOS04MjNjZjBiZjIxNmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=OnZb~c5ndATOI4IVzfGcf6EFmAmmXZS8oksuP3fLvHThI~s6Dfn-CJk5kJfVhlU-4TMZPBYg7q0vaJqJTlMLTxUqCj75-lKl0xXr0Wa1WG0RuQwZdWDDMeKpyr4YaADBrJ-lXRpqlgrD5Jowfm8lPeeDcnEiLYnuTmWBgO~u1X~XiAg5eXdIqh~gXPvm0aJN-oBdwwG7REdnfHHJfa2GOsLEX-skhiHDFdDp0DXdaPTKJL4QaeRHa8FmEyRjMfYLWSTvh8ccKsG6jbVKgWzkaa4LvFySLlel7BF7srjjjNa15tRQIlfOQtYjB~qdNFRxb~MlCm4btztwRgwlcWcn8Q__",
+    "asset_id": "clean_room_booth",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "information",
+    "name": "Clean Room Booth",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
