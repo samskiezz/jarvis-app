@@ -7962,5 +7962,22 @@
     "epoch": "quantum",
     "name": "Orbital Habitat Ring",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:paper_press_screen": {
+    "prompt": "a papermaking vat with a deckle screen drying sheets, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fc3473de-7769-42fc-a4fb-c705a4f0786c",
+    "path": "/models/generated/tripo/paper_press_screen.glb",
+    "bytes": 15048384,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fc3473de-7769-42fc-a4fb-c705a4f0786c/tripo_pbr_model_fc3473de-7769-42fc-a4fb-c705a4f0786c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmMzNDczZGUtNzc2OS00MmZjLWE0ZmItYzcwNWE0ZjA3ODZjL3RyaXBvX3Bicl9tb2RlbF9mYzM0NzNkZS03NzY5LTQyZmMtYTRmYi1jNzA1YTRmMDc4NmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dkT2fPzHJmfL6R7wROqZJLYIjqysRgnVU5HWQ-~DJfrp~k6hkbAmGBd1E6qIIZRx2BQbZKruGX7llbeNKoITDB3cm3LTd-EoUIotP35WfRszT46NfT~h7K-Un5r-3wOlfjM9uXVedMYyTkyEFN5FGj~mPR2BXy6PUdeGATnjquX6cC2w4kxhTW-uFKvMxEJ-a~ZI6VfglAXASDpFmYp8lXu3PO9UP~ecxgnzq~eBMJPI1RO1Kg78mP1btj4pxIH3VjijwknzW2unIq2V5yEHO397raW5vH-F4X2ZCIYOr82Y42kbA-9tGw1sS-uj~PqlsEF-d5c~2FDiwFiSGZ4F5g__",
+    "asset_id": "paper_press_screen",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "iron",
+    "name": "Paper Press Screen",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
