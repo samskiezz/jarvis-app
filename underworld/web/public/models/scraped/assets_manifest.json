@@ -6177,5 +6177,22 @@
     "epoch": "industrial",
     "name": "Oil Barrel Stack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ore_stockpile": {
+    "prompt": "a stockpile of mixed copper, tin and iron ore chunks, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "38c5b949-28d9-4f04-91dc-1a8060b8a150",
+    "path": "/models/generated/tripo/ore_stockpile.glb",
+    "bytes": 15468824,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/38c5b949-28d9-4f04-91dc-1a8060b8a150/tripo_pbr_model_38c5b949-28d9-4f04-91dc-1a8060b8a150.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzhjNWI5NDktMjhkOS00ZjA0LTkxZGMtMWE4MDYwYjhhMTUwL3RyaXBvX3Bicl9tb2RlbF8zOGM1Yjk0OS0yOGQ5LTRmMDQtOTFkYy0xYTgwNjBiOGExNTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HZ41qEr9sOi8dQt7~JRSHn70-0C~M~2lJ-MqhLlhxhPHjF~h2ZUUNRqSa6Xuw1YrMeCuzWhlxhndaPw8JVoLRlbdzaZQL-Ml~1xFPtabpuq-Vr7Bi47EVTrRgXe9j6jRfDFQrwslGEDJPh2MuJ-33dMtw85oARzv03StdQTjAZ0q~9yWiqxsQjg5fT~JEM2Al5KQJLcVqd5~WLWB12myxrWqMkko7hTDo3DTBlgl2cok~cXgQcn4nFPbtWUjiWrDSp9HLui561CA17KQCzD6M~9A~ori0YdoL1XuAOceV3G2lx~roufVN8kkvyUI~ePRvWEkJkFiqNlex~m9tChnOg__",
+    "asset_id": "ore_stockpile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "bronze",
+    "name": "Ore Stockpile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
