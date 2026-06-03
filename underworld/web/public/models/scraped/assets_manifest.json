@@ -8472,5 +8472,22 @@
     "epoch": "iron",
     "name": "Brazier",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:crate": {
+    "prompt": "a wooden shipping crate, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "090a22cd-7e6e-45fc-abd8-a412361bd771",
+    "path": "/models/generated/tripo/crate.glb",
+    "bytes": 14820556,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/090a22cd-7e6e-45fc-abd8-a412361bd771/tripo_pbr_model_090a22cd-7e6e-45fc-abd8-a412361bd771.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDkwYTIyY2QtN2U2ZS00NWZjLWFiZDgtYTQxMjM2MWJkNzcxL3RyaXBvX3Bicl9tb2RlbF8wOTBhMjJjZC03ZTZlLTQ1ZmMtYWJkOC1hNDEyMzYxYmQ3NzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=GNz-AKLCUD0YWUc62kH5gXNtABHY6pYaIZW0rEVJqApfSmFsC1~NOyf1y6~Sk5Dp3giYD1y-0booeKAQdoln5UVX0Eya9vuznB0AcVE2be28wXUzR2QKzkn9crjB03jqfHPCNT2UrtCm4qIkvpkLupwYTJcIxz1R4Q~nbXGKCAHTtOMMlY8GzBmZ5raCvykhkwO67YTBBbWI~pepIraF6NG0UqFbLx4GNFRxfo0ysROrxZQ7uz7Y~kO9BBuK6K0RkAb0lkLJ3Dkv5u9CPb8uOTbu-3mFNKa~4fHeSmouCRuxWs49KM-6SoP7wwG7rGv8cJjmxzF31qliPWCTk1k-Dg__",
+    "asset_id": "crate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Crate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
