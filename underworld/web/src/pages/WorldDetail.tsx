@@ -47,6 +47,10 @@ export default function WorldDetail() {
   const { id = "" } = useParams<{ id: string }>();
   const qc = useQueryClient();
   const [selectedMinion, setSelectedMinion] = useState<string | null>(null);
+  // Gameplay camera/control toggles for the selected minion. Follow eases the
+  // orbit camera onto the minion; override hands WASD control to the user.
+  const [followCam, setFollowCam] = useState(true);
+  const [overrideCtl, setOverrideCtl] = useState(false);
   const [aliveOnly, setAliveOnly] = useState(true);
   const [guildFilter, setGuildFilter] = useState<Guild | "all">("all");
   const [roleFilter, setRoleFilter] = useState<SwarmRole | "all">("all");
@@ -137,6 +141,26 @@ export default function WorldDetail() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [world.data?.id, world.data?.auto_advance, world.data?.tick]);
+
+  // Deselecting returns to free orbit and releases any override control.
+  useEffect(() => {
+    if (!selectedMinion) {
+      setFollowCam(true);
+      setOverrideCtl(false);
+    }
+  }, [selectedMinion]);
+  // ESC releases override control without deselecting.
+  useEffect(() => {
+    if (!overrideCtl) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOverrideCtl(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [overrideCtl]);
+
+  const selectedMinionData = useMemo(
+    () => (minions.data ?? []).find((m) => m.id === selectedMinion) ?? null,
+    [minions.data, selectedMinion],
+  );
 
   const aliveSeries = useMemo(() => pop.data?.history.map((s) => s.alive) ?? [], [pop.data]);
   const birthsSeries = useMemo(() => pop.data?.history.map((s) => s.births) ?? [], [pop.data]);
@@ -394,22 +418,69 @@ export default function WorldDetail() {
                   height={560}
                 />
               ) : map.data ? (
-                <WorldScene3D
-                  grid={map.data.heightmap}
-                  minions={minions.data ?? []}
-                  tick={world.data.tick}
-                  seed={world.data.seed_value}
-                  selectedId={selectedMinion}
-                  onSelect={(mid) => setSelectedMinion(mid || null)}
-                  width={900}
-                  height={560}
-                  actionByMinion={actions.data?.actions}
-                  thoughtByMinion={thoughts.data?.thoughts}
-                  biomeHint={map.data.biome_hint}
-                  weatherOverride={climate.data?.weather}
-                  season={climate.data?.season}
-                  temperature={climate.data?.temperature}
-                />
+                <div className="relative" style={{ width: 900, height: 560 }}>
+                  <WorldScene3D
+                    grid={map.data.heightmap}
+                    minions={minions.data ?? []}
+                    tick={world.data.tick}
+                    seed={world.data.seed_value}
+                    selectedId={selectedMinion}
+                    onSelect={(mid) => setSelectedMinion(mid || null)}
+                    width={900}
+                    height={560}
+                    actionByMinion={actions.data?.actions}
+                    thoughtByMinion={thoughts.data?.thoughts}
+                    biomeHint={map.data.biome_hint}
+                    weatherOverride={climate.data?.weather}
+                    season={climate.data?.season}
+                    temperature={climate.data?.temperature}
+                    followCam={followCam}
+                    overrideCtl={overrideCtl}
+                  />
+                  {/* Selection HUD — name/guild + camera/control toggles. */}
+                  {selectedMinionData ? (
+                    <div className="panel absolute left-3 top-3 w-56 p-3 text-[11px]">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="truncate font-display text-sm font-medium text-zinc-100">
+                            {selectedMinionData.name} {selectedMinionData.surname}
+                          </div>
+                          <div className="mt-1 flex items-center gap-1.5">
+                            <span className="badge badge-purple">{selectedMinionData.guild}</span>
+                            <span className="badge badge-zinc">{selectedMinionData.mood}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-3 space-y-2">
+                        <label className="flex cursor-pointer items-center justify-between text-zinc-300">
+                          <span>Follow camera</span>
+                          <input
+                            type="checkbox"
+                            checked={followCam}
+                            onChange={(e) => setFollowCam(e.target.checked)}
+                            className="accent-glow-sky"
+                          />
+                        </label>
+                        <label className="flex cursor-pointer items-center justify-between text-zinc-300">
+                          <span>Override control <span className="text-zinc-500">(WASD)</span></span>
+                          <input
+                            type="checkbox"
+                            checked={overrideCtl}
+                            onChange={(e) => setOverrideCtl(e.target.checked)}
+                            className="accent-glow-amber"
+                          />
+                        </label>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMinion(null)}
+                        className="btn-ghost mt-3 w-full justify-center text-[11px]"
+                      >
+                        Deselect
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
               ) : (
                 <div className="skeleton h-[560px] w-[900px] rounded" />
               )}
