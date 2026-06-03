@@ -8047,5 +8047,22 @@
     "epoch": "industrial",
     "name": "Scientific Method Chart",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:self_driving_lab_cell": {
+    "prompt": "an autonomous robotic self-driving laboratory cell, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f07270a6-beb4-4d6c-8ea1-42069b30e408",
+    "path": "/models/generated/tripo/self_driving_lab_cell.glb",
+    "bytes": 14846396,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f07270a6-beb4-4d6c-8ea1-42069b30e408/tripo_pbr_model_f07270a6-beb4-4d6c-8ea1-42069b30e408.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjA3MjcwYTYtYmViNC00ZDZjLThlYTEtNDIwNjliMzBlNDA4L3RyaXBvX3Bicl9tb2RlbF9mMDcyNzBhNi1iZWI0LTRkNmMtOGVhMS00MjA2OWIzMGU0MDguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aAh9ubsxArOi2oVX9lCWN7ti5mEmPJHyNWqWEt8VRJWPaok-CbWayWdDruAG4PJHopUZyxc8f3YiADopKIJ0Lg4Bvyv6NWQy~2BzAcAompxA8mZgnVxL6b-PLWHNyutQLQcsTczoGbt8KvFVhQCz7RW072ukbo3b1M3-XT11Gh~~vKUEekqV0Gw~b6c-0MgVJy1v898M-GpFYuGqWGe66Q~CKDBO1achaDLoa3-auOI2dpwJdio2NkSceUvw71E70UZmy~o0lgEkvbxw323giTW2EL~CNwFLF2ltoM6BOfhAfuyqzVzfAt9ulHHpD9xTRjoUNhc37DgqWE5dCHj38A__",
+    "asset_id": "self_driving_lab_cell",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Self Driving Lab Cell",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
