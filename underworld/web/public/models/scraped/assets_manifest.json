@@ -4613,5 +4613,22 @@
     "epoch": "information",
     "name": "Microscope Electron",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:milling_machine": {
+    "prompt": "a vertical milling machine, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4b0a4b65-5235-4275-b803-c135b1b67dd6",
+    "path": "/models/generated/tripo/milling_machine.glb",
+    "bytes": 14869180,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4b0a4b65-5235-4275-b803-c135b1b67dd6/tripo_pbr_model_4b0a4b65-5235-4275-b803-c135b1b67dd6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGIwYTRiNjUtNTIzNS00Mjc1LWI4MDMtYzEzNWIxYjY3ZGQ2L3RyaXBvX3Bicl9tb2RlbF80YjBhNGI2NS01MjM1LTQyNzUtYjgwMy1jMTM1YjFiNjdkZDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aW1civG4UrqGT0ar7XFINalABoYB7GNR~oRWWjrP8MW~cB7ii2FU-SwHUqmkEBb281ldd~jvHWwJf0MSjW0a3xxF4zYF04WLAK-zZ-pf1enmyiX0NkAra7xs9B5XZir1AEQX3iTTaHG1p3OocFnP2KRshm79YqdttaQ2Dd6qr-qb~Ip0J9gvMHBpDHWeTxRqS2O9Y8mu8mU6vFt1rCoHelKGTJDhrXDPS3tZNN5F1VJ~p-BE8obJ5upQVr6utLEMXD95sHwVgkmPXdJ2R6fo8-uAbp2KWK9MX7MpUueQCKZyN92wqJU4SfAmnTeYmsm8o1jlqu5j-0BHJ9vUZ0UK6g__",
+    "asset_id": "milling_machine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Milling Machine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
