@@ -7843,5 +7843,22 @@
     "epoch": "quantum",
     "name": "Longevity Pod",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mechanical_clock_movement": {
+    "prompt": "an exposed brass mechanical clock gear movement, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9b7f0b87-b1bc-4647-bd0c-fe0e43e0f5fa",
+    "path": "/models/generated/tripo/mechanical_clock_movement.glb",
+    "bytes": 15284604,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9b7f0b87-b1bc-4647-bd0c-fe0e43e0f5fa/tripo_pbr_model_9b7f0b87-b1bc-4647-bd0c-fe0e43e0f5fa.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWI3ZjBiODctYjFiYy00NjQ3LWJkMGMtZmUwZTQzZTBmNWZhL3RyaXBvX3Bicl9tb2RlbF85YjdmMGI4Ny1iMWJjLTQ2NDctYmQwYy1mZTBlNDNlMGY1ZmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IMBYU~FVF9tVb59LZ~2SZFFncsAtKKzekNvura68WkXDyw1tvH6dpjF9sVRAjcSQ~uIXD48YLmaVZVhYeSo3gATbwsExQhvnV1kPaY4fEif0rPc4lqTDjMxoUC3UbHl18grjYO11UaSaOVbOIA8OY80l5N~8rNJPSC03nlKnkQcphLDOIyeX~eYlTG0N5yeGtkQEGTrdkNNhmwGqh0rT32mP5q8jo4wcbBQt07hV7hGyvV6wStzJwoDEEwm16RTRtWgDn35cV6tGdAkvEqRdqdFOeQtP41rAAYaJxm2o7n8dSz1dmbvhWLZrdIg7GpmWB2I8IKeMylIbAONhl8HBEw__",
+    "asset_id": "mechanical_clock_movement",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "industrial",
+    "name": "Mechanical Clock Movement",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
