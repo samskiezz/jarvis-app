@@ -19,6 +19,10 @@ from . import (methods_quantum as QM, methods_optics as OP, methods_fluids as FL
 from . import (methods_medicine as MED, methods_neuro as NEU, methods_agronomy as AGR,
                methods_acoustics2 as AC2, methods_robotics as RB, methods_crypto as CRY,
                methods_statmech as SM2, methods_immunology as IMM)
+# fleet 4
+from . import (methods_ocean as OC, methods_metallurgy as MET, methods_qcomputing as QC,
+               methods_linguistics as LING, methods_geodesy as GD, methods_nuclear as NUC,
+               methods_polymer as POL, methods_atmoschem as ATM)
 
 # (keyword-substrings, callable) — first match wins. Domain-specific first.
 ROUTES: list[tuple[tuple[str, ...], object]] = [
@@ -240,6 +244,79 @@ ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("neutraliz", "titer", "serolog"), IMM.neutralization_titer),
     (("final_size", "attack_rate"), IMM.epidemic_final_size),
     (("clonal", "t_cell", "tcell"), IMM.clonal_expansion),
+    # ── fleet 4 ───────────────────────────────────────────────────────────────
+    # oceanography
+    (("wave_dispersion", "deep_water"), OC.deep_water_wave),
+    (("tsunami", "shallow_water"), OC.shallow_water_wave),
+    (("seawater_density", "salinity"), OC.seawater_density),
+    (("tidal", "m2_tide"), OC.tidal_m2),
+    (("ekman", "wind_stress"), OC.ekman_transport),
+    (("buoyancy_freq", "brunt", "stratification"), OC.buoyancy_frequency),
+    (("stokes_drift", "wave_energy"), OC.wave_energy_stokes),
+    (("geostrophic", "ocean", "marine"), OC.geostrophic_current),
+    # metallurgy / welding
+    (("carbon_equiv", "weldab", "iiw"), MET.carbon_equivalent_iiw),
+    (("rosenthal", "weld_pool", "weld_temp"), MET.rosenthal_temperature),
+    (("cooling_rate", "t85", "t8_5"), MET.cooling_time_t85),
+    (("tempering", "hollomon", "jaffe"), MET.hollomon_jaffe),
+    (("scheil", "microsegregation", "solidif"), MET.scheil_segregation),
+    (("avrami", "jmak", "transformation_kinetic"), MET.avrami_jmak),
+    (("hardenab", "jominy", "critical_diameter"), MET.ideal_critical_diameter),
+    (("hall_petch_metal", "metallurg", "weld"), MET.hall_petch_yield),
+    # quantum computing
+    (("qubit_gate", "hadamard", "pauli_gate"), QC.single_qubit_gates),
+    (("bell_state", "epr"), QC.bell_state),
+    (("grover", "amplitude_amplif"), QC.grover_search),
+    (("qft", "quantum_fourier"), QC.quantum_fourier_transform),
+    (("deutsch", "constant_balanced"), QC.deutsch_jozsa),
+    (("entanglement_entropy", "von_neumann"), QC.entanglement_entropy),
+    (("chsh_qc", "tsirelson"), QC.chsh_inequality),
+    (("phase_estimation", "qpe", "quantum_comput"), QC.phase_estimation),
+    # linguistics / NLP
+    (("zipf", "rank_frequency"), LING.zipf_law_fit),
+    (("perplexity", "language_model"), LING.ngram_perplexity),
+    (("tfidf", "tf_idf", "term_weight"), LING.tfidf_weights),
+    (("levenshtein", "edit_dist"), LING.levenshtein_distance),
+    (("cosine_sim", "bag_of_words"), LING.cosine_similarity_bow),
+    (("char_entropy", "bits_per_char"), LING.char_entropy),
+    (("heaps", "vocabulary_growth"), LING.heaps_law_fit),
+    (("bleu", "ngram_overlap", "linguist"), LING.bleu_score),
+    # geodesy / GIS
+    (("haversine", "great_circle"), GD.haversine_distance),
+    (("vincenty", "ellipsoid_dist"), GD.vincenty_distance),
+    (("trilaterat", "gnss", "gps"), GD.trilateration),
+    (("mercator", "map_projection"), GD.mercator_projection),
+    (("utm", "utm_zone", "gis"), GD.utm_zone),
+    (("bearing", "azimuth"), GD.initial_bearing),
+    (("cross_track", "xtrack"), GD.cross_track_distance),
+    (("ecef", "geodetic", "geodesy", "surveying"), GD.geodetic_to_ecef),
+    # nuclear engineering
+    (("criticality", "k_eff", "k_effective", "six_factor"), NUC.k_effective_criticality),
+    (("neutron_diffus", "critical_radius", "bare_sphere"), NUC.bare_sphere_critical_radius),
+    (("fission", "u235", "fission_energy"), NUC.fission_energy_release),
+    (("reactor_period", "point_kinetic", "inhour"), NUC.reactor_period),
+    (("secular_equil", "radioactive_decay"), NUC.radioactive_decay),
+    (("shielding", "attenuation", "hvl", "half_value"), NUC.gamma_shielding),
+    (("radiation_dose", "inverse_square"), NUC.radiation_dose_inverse_square),
+    (("binding_energy", "mass_defect", "nucleon", "nuclear"), NUC.binding_energy_per_nucleon),
+    # polymer / soft matter
+    (("radius_gyration", "ideal_chain"), POL.radius_gyration),
+    (("flory_radius", "good_solvent", "self_avoid"), POL.flory_radius),
+    (("mark_houwink", "intrinsic_viscos"), POL.mark_houwink),
+    (("flory_huggins", "mixing", "chi_param"), POL.flory_huggins),
+    (("rubber_elastic", "network_stress"), POL.rubber_elastic),
+    (("wlf", "time_temperature", "shift_factor"), POL.wlf_shift),
+    (("reptation", "tube_model", "entanglement"), POL.reptation_diffusion),
+    (("glass_transition", "fox_eq", "polymer", "soft_matter"), POL.glass_transition),
+    # atmospheric chemistry
+    (("ozone", "chapman", "ozone_layer"), ATM.chapman_ozone_steady_state),
+    (("radiative_forcing", "co2_forcing"), ATM.co2_radiative_forcing),
+    (("gwp", "warming_potential"), ATM.global_warming_potential),
+    (("smog", "nox", "leighton"), ATM.nox_o3_photostationary),
+    (("aerosol", "optical_depth"), ATM.aerosol_optical_depth),
+    (("henry_law", "gas_solubility"), ATM.henry_law_solubility),
+    (("lcl", "condensation_level", "cloud_base"), ATM.lifting_condensation_level),
+    (("residence_time", "turnover", "atmospheric_chem"), ATM.atmospheric_residence_time),
 ]
 
 
