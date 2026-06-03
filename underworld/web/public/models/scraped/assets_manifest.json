@@ -754,5 +754,22 @@
     "epoch": "any",
     "name": "Flower Red",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:grass_tuft": {
+    "prompt": "a tuft of tall meadow grass, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "1872d1e3-430c-4b6d-8065-742bedd6af77",
+    "path": "/models/generated/tripo/grass_tuft.glb",
+    "bytes": 3760860,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1872d1e3-430c-4b6d-8065-742bedd6af77/tripo_pbr_model_1872d1e3-430c-4b6d-8065-742bedd6af77.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTg3MmQxZTMtNDMwYy00YjZkLTgwNjUtNzQyYmVkZDZhZjc3L3RyaXBvX3Bicl9tb2RlbF8xODcyZDFlMy00MzBjLTRiNmQtODA2NS03NDJiZWRkNmFmNzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RcPUX2ELpYnLkHpKZxmzT6kxPP347V9jSmp9lgxhYr2J4KXSM6C3MWjfE3YuQxcE~2hoMXCZuupUtr4GOv5Ia3xnA0XTrf0NIj31e7Ceq4REvXWfVNw2~RfFe71BoJ3qUocIJkCK41tYftHq5QTZ0-7SKJsA-29CQ5r6na56gHhvq-u6v-x46yI4AoC1825Q2Zg9Z-OOuCP-plCgeyq2Loiq0YelmXHHYIVK5v8G3096342T2ZI~OZBaYIuEdIzykwJjNiwbPHAjlFFRSNjVsdkQNmG4GM9Poc7PlK8Qd9O0f1H47g2Kkxca8TuUA6yHy0ji76rCnyKIosB0~uoJVQ__",
+    "asset_id": "grass_tuft",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Grass Tuft",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
