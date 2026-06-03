@@ -8625,5 +8625,22 @@
     "epoch": "industrial",
     "name": "Guild Banner Energy",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_materials": {
+    "prompt": "a heraldic banner with a crucible-and-crystal materials emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2c2cda81-7daa-4423-8d22-1939e986452e",
+    "path": "/models/generated/tripo/guild_banner_materials.glb",
+    "bytes": 13145716,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2c2cda81-7daa-4423-8d22-1939e986452e/tripo_pbr_model_2c2cda81-7daa-4423-8d22-1939e986452e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmMyY2RhODEtN2RhYS00NDIzLThkMjItMTkzOWU5ODY0NTJlL3RyaXBvX3Bicl9tb2RlbF8yYzJjZGE4MS03ZGFhLTQ0MjMtOGQyMi0xOTM5ZTk4NjQ1MmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=AUxAh82r32NdBdElsYbO~3K0hCwY6fdyaCN-R0cVmjw-pp6sBZGnxvlf0kZaO27dkCDiCXT61aii-KEIq7~9HXBamdbmmW-WSU3aeDUoRB2g2kh~1S3IMi3acWPG-Tq-gUbcrHhL0DxCk5EmQivykqIz6WrcxkMT~0WI3ZWKjJQGB2MKTh-px8mvOIJQ2X6bWNpSURkYq1YLwhV-xdQljYanvDdPkIuiR1K5l1NJgDUqFd5RUFoV1pDTzZ5Nd1GGmhbyvF7DciI-ScB6~3KECMe7fnqMnFOTfulBTJQWbfMswZgghvvpIHIcAbtHCBZSJCZ1qXiS9syoofVU-pLL9w__",
+    "asset_id": "guild_banner_materials",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Banner Materials",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
