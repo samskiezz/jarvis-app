@@ -1621,5 +1621,22 @@
     "epoch": "any",
     "name": "Storm Debris",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:volcano_cone": {
+    "prompt": "a smoking volcanic cone with a glowing crater, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "2a491eb3-e3c8-4aec-84e9-fd5d20957381",
+    "path": "/models/generated/tripo/volcano_cone.glb",
+    "bytes": 14836052,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2a491eb3-e3c8-4aec-84e9-fd5d20957381/tripo_pbr_model_2a491eb3-e3c8-4aec-84e9-fd5d20957381.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmE0OTFlYjMtZTNjOC00YWVjLTg0ZTktZmQ1ZDIwOTU3MzgxL3RyaXBvX3Bicl9tb2RlbF8yYTQ5MWViMy1lM2M4LTRhZWMtODRlOS1mZDVkMjA5NTczODEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=xOAsUU32omOAiR9k-g1-Aru9fkJCAvvfy0PJtQxTdLvfzwk4CE~4DhhXeYK91KFZhz~5kJX4zEJf7Cos3i55dQyyOJgL0lM~pWy5sUMjFz1TehmP~samD5xWbQwRvt3UdSaZHmdmCDCbEKKrl1KnGu3D~Q8F9d8M0pBMuwF9qPgOFNPh1yj3to43NltAjc0sV~WOLByczAdA~E-NfhN~kijbUw4DZbam4HdnBG7Ehz7FxoLuyUltZwc4L-H~0ewxIecfuCWs8BYGNE-yH2sq6TZ-LpNF6gjCKcvUOv6Ln-aNBlweJDhyTWT~5fx2yE6Gf7v8~K8RUUv5VMUjdPpgHQ__",
+    "asset_id": "volcano_cone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Volcano Cone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
