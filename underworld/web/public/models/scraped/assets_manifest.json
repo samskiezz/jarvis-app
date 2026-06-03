@@ -7588,5 +7588,22 @@
     "epoch": "stone",
     "name": "Cave Painting Wall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:coin_mint_die": {
+    "prompt": "a coin-striking die with blank discs and struck coins, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "eb1318d2-1e34-488c-9caa-a30cd6252269",
+    "path": "/models/generated/tripo/coin_mint_die.glb",
+    "bytes": 14739712,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/eb1318d2-1e34-488c-9caa-a30cd6252269/tripo_pbr_model_eb1318d2-1e34-488c-9caa-a30cd6252269.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWIxMzE4ZDItMWUzNC00ODhjLTljYWEtYTMwY2Q2MjUyMjY5L3RyaXBvX3Bicl9tb2RlbF9lYjEzMThkMi0xZTM0LTQ4OGMtOWNhYS1hMzBjZDYyNTIyNjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Z2BXaH42Ro3f~SWLH42sZxDjzf30j-tJ7P2t2tAUJfdDaN5s--nFSf3qK3l2fmyaoQBvdqflRf8ehS9H~BSOsSftQ1lyiyRoRaosUP2jGhCc5lMzFW3gjzgzRbkAqpOA-5LuUs3IvmVP255CerGw~Cvz1WePgNxdzCIO7DHZuxcYt1ZhZjsxX3sf18PiqOgfHhwSfxzcltrjjVxSyrOM-G~qcF6DzgeHFsfiVdt0StCsJgLBldaRej9Oop7gUgy5ahrNDcIFpUKPZns6mppP-kdX6i7vmJFH3UnPTo1FpcSEunDeoruxjSXvt72rJLh60jN8cHsC4m9H1QuBxV~BwQ__",
+    "asset_id": "coin_mint_die",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "iron",
+    "name": "Coin Mint Die",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
