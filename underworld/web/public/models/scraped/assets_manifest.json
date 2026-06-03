@@ -8557,5 +8557,22 @@
     "epoch": "bronze",
     "name": "Guild Banner Agriculture",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_civil": {
+    "prompt": "a heraldic banner with an arch-and-compass civil-engineering emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "636bb3b3-39ba-48c4-b420-99bd7dcf7473",
+    "path": "/models/generated/tripo/guild_banner_civil.glb",
+    "bytes": 14013404,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/636bb3b3-39ba-48c4-b420-99bd7dcf7473/tripo_pbr_model_636bb3b3-39ba-48c4-b420-99bd7dcf7473.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjM2YmIzYjMtMzliYS00OGM0LWI0MjAtOTliZDdkY2Y3NDczL3RyaXBvX3Bicl9tb2RlbF82MzZiYjNiMy0zOWJhLTQ4YzQtYjQyMC05OWJkN2RjZjc0NzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=wV-zEhEgdhtNVCkXjWv2OYyz-pz5U90iNqcQviI9Zv9yFMzNfA2INn7Ad9LAsFwDZ80TX84hymWPPdyJGES9hzyKu8yN47QIAYvXFbm86wtZp4wCq6-i5lM7sgZ1OpqiVaBzi5EbUa7Y1VoDDUE~Kf5lVb1fsZMI5xUnDU94UwIIw4Ch-niPYBOQhSVg5afpYgBec7-lQxeN~wP1u~dJ~KYf7TEStD9XWGwQCOBy5ruyCOXZA~YBUOGIfby~ZimjbQNC3W7Jix0TEBitWBdvAD9EA7RVZWyKjPmfGQKecLodtNVElHjNI5-H1V0UOIXCsOKvp-YvmIeWdt~D~NWEmQ__",
+    "asset_id": "guild_banner_civil",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Banner Civil",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
