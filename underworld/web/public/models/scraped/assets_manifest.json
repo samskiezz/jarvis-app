@@ -3865,5 +3865,22 @@
     "epoch": "iron",
     "name": "Rocking Horse",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:school_desk": {
+    "prompt": "a child's school desk with a slate, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7546556b-115a-4af2-a803-405d55e87238",
+    "path": "/models/generated/tripo/school_desk.glb",
+    "bytes": 14680008,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7546556b-115a-4af2-a803-405d55e87238/tripo_pbr_model_7546556b-115a-4af2-a803-405d55e87238.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzU0NjU1NmItMTE1YS00YWYyLWE4MDMtNDA1ZDU1ZTg3MjM4L3RyaXBvX3Bicl9tb2RlbF83NTQ2NTU2Yi0xMTVhLTRhZjItYTgwMy00MDVkNTVlODcyMzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HlflHG0MBRwHMo8hzA-9Mwik9fNpvnzxwD-SoZs6WiS8~f9~5lusAfxD8l~aukwUddgx5bbrDvEGVGGVYTL3QPCNSR5GDGWhpMyrQVuyK1jhsqnNkwgwlTWVuXID5vSQ-fOzKpKAcOmPqQ30E7SN5utXd2OZ1RW7FRnocLk54kfzsoHiMbk-01rUakrtOHyEKcgftmWjkTf5YedObnsUXYxfoF1YvsyPWSRrAneQp3GL97~0Iw~-H3V8yf-~m8Mym9E-l6aYUaJuRP9CvHmm7vNWYrprZM61TwTOmg0mgdNEDFei3yIdSK1beHxun1BRzMCY6pSqrpM9RdsY8LbdTQ__",
+    "asset_id": "school_desk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "family",
+    "epoch": "industrial",
+    "name": "School Desk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
