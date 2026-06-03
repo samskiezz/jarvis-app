@@ -2284,5 +2284,22 @@
     "epoch": "any",
     "name": "Fx Giant Mushroom",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_glow_flowers": {
+    "prompt": "a bed of glowing exotic flowers with light-emitting petals, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "67288641-a000-4f0d-bbce-b59d837718ee",
+    "path": "/models/generated/tripo/fx_glow_flowers.glb",
+    "bytes": 15795080,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/67288641-a000-4f0d-bbce-b59d837718ee/tripo_pbr_model_67288641-a000-4f0d-bbce-b59d837718ee.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjcyODg2NDEtYTAwMC00ZjBkLWJiY2UtYjU5ZDgzNzcxOGVlL3RyaXBvX3Bicl9tb2RlbF82NzI4ODY0MS1hMDAwLTRmMGQtYmJjZS1iNTlkODM3NzE4ZWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Kw29PkLn~u4t8r4wpMLmOvlATzfdZfoVdJ-ma-br3afIBDCscgQHl0jsvbJHsJo9fcZKFygIN237Cq-5Hg~Xq7-a5ZBBr1E4xF1MduyCaY2bt8x0A07glJE~H6shncUftsdCCP0yE6uGpzT7BI~haTQvsnAe3DZGtg15wPF7~ORGi37HZlSSM-5d9vW0qoT1qe2TiYcmebqxAdNjaMEBOOd5XqsHq5ZdJFQsT~ckpxrrQ2N3Fn9aeB-clNkdi5LjrT0FAmPP-cabSruTZMtEooo-wC8cyHXhuCXYtRXSjsBxFcGdBLyc-huA1bzzWtEWuiFYy~rpz9Dsg44MWT7EBw__",
+    "asset_id": "fx_glow_flowers",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Glow Flowers",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
