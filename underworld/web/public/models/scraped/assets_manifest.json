@@ -7197,5 +7197,22 @@
     "epoch": "iron",
     "name": "Dock Pier",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mailbox": {
+    "prompt": "a public post mailbox, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c341501b-cf30-42c9-8f43-e48e637325f8",
+    "path": "/models/generated/tripo/mailbox.glb",
+    "bytes": 14661772,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c341501b-cf30-42c9-8f43-e48e637325f8/tripo_pbr_model_c341501b-cf30-42c9-8f43-e48e637325f8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzM0MTUwMWItY2YzMC00MmM5LThmNDMtZTQ4ZTYzNzMyNWY4L3RyaXBvX3Bicl9tb2RlbF9jMzQxNTAxYi1jZjMwLTQyYzktOGY0My1lNDhlNjM3MzI1ZjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=SC58sJoZJ1NiLz~s3qxqFBx7aG0qtOZB7YZg5whwXHMn-ldt5-IISN7aENvM-Rd0xz5lL-qU7WiQpFTEvpYM~U5QioLQb~2Hk14ND8l1-NB00pwZUajWkqHxI~iuw55w-grML0gTwueiiuL4tpGXkaAXOKfE0GZn-Voh8ahlyjXoPprA62AYgVGWOK2T3SLpasayJt4DBNlcp0STLNmHNkYX7mq~vs15zqLZAJKk~XVJhyYruX8E7VXatLRczXfePXOgDzkcJQ8zL4jNJRXWr8D8w8Jnb6UukoFUhdmwoQnukOJYTIzXNRZVh3D7jaPHr68SPdUwz01Zo-jU3wpHxA__",
+    "asset_id": "mailbox",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Mailbox",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
