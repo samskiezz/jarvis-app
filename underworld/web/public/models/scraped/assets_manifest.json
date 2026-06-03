@@ -4579,5 +4579,22 @@
     "epoch": "information",
     "name": "Mass Spectrometer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:master_clock_instrument": {
+    "prompt": "a precision pendulum regulator master clock, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6c642bcd-8fdf-4cd0-afba-2f46d34b1da2",
+    "path": "/models/generated/tripo/master_clock_instrument.glb",
+    "bytes": 14816364,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6c642bcd-8fdf-4cd0-afba-2f46d34b1da2/tripo_pbr_model_6c642bcd-8fdf-4cd0-afba-2f46d34b1da2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmM2NDJiY2QtOGZkZi00Y2QwLWFmYmEtMmY0NmQzNGIxZGEyL3RyaXBvX3Bicl9tb2RlbF82YzY0MmJjZC04ZmRmLTRjZDAtYWZiYS0yZjQ2ZDM0YjFkYTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vcIf2BqfxMw1q7KIrN19NefS-J1f18w9Bx4P9XZO7KmifGa1FqDD-nU1y~tkB-SgvkzCImjVUz6xjOhpbBrougdhIFxrQkLr3YsgLxnWGj8tO9X7gLVPICcsCrHMt938L4P9063OsySJt4wCqd3p2kcQw5jo6SK-M5nIfGx5nmpGsIyXU9a~2QHKCAm8gMBZSIccio2RHxH75DDtmxXhUlTgOGXaRk95uBhdmtl6uO3ISBRSvLSMEeu3DJf0pVtl5edqosg6ZhNesp7g72AqKa4M5eAEKopWlsxS-XrEe06zowZlEHjxYWNlmoa2gPBxbylQHT6Fs6o18mt766Dryw__",
+    "asset_id": "master_clock_instrument",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Master Clock Instrument",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
