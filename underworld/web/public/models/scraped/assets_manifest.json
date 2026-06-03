@@ -8778,5 +8778,22 @@
     "epoch": "bronze",
     "name": "Market Stall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:park_bench": {
+    "prompt": "a wooden park bench, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2fc1e5be-85af-4344-90b1-ae40e550f04c",
+    "path": "/models/generated/tripo/park_bench.glb",
+    "bytes": 12644388,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2fc1e5be-85af-4344-90b1-ae40e550f04c/tripo_pbr_model_2fc1e5be-85af-4344-90b1-ae40e550f04c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmZjMWU1YmUtODVhZi00MzQ0LTkwYjEtYWU0MGU1NTBmMDRjL3RyaXBvX3Bicl9tb2RlbF8yZmMxZTViZS04NWFmLTQzNDQtOTBiMS1hZTQwZTU1MGYwNGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Xs9JeFDJEYU~8-EpqPQNVSh~JhIe0QW4opamAHm2w32fSwLAzD4WQTCT9xTC8VmtgN5ZzLAALFMtwnJt8xnOrhbX6BU5lfCzKTLUzTFCZ27lHcPkdUP3Or6xrQrM8E7k1XJFc9KdcoWZ-LtFIRlMEJavu~FmoQZcpA-vKIej02wbxLkHhngaP8qj2jrh0620ayX~S7bEvrb1rxvMa03t~-A9J68l3KbptVsJsgm6ArYTa2sOSYT8UnVEVEB1p25SYxPfEGjzkK-tlzs9hFGaHx-MhexnPQ8Tfj6pl1se8cfa0ZaiIwSbFbsptT7TJGi80g-rfxRsg7GLnbUEwyTw4Q__",
+    "asset_id": "park_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Park Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
