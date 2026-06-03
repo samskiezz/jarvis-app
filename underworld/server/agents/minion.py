@@ -565,8 +565,11 @@ async def _do_propose_invention(
     # materials Minion really predicts an alloy's Tc, a computing Minion really
     # runs a quantum circuit, etc. A strong real result lifts feasibility, so
     # inventions are judged on genuine work, not text. (Task 2 — modules wired in.)
-    from ..services import minion_research
-    grounded = minion_research.run_research(
+    # Route through the unified discovery layer: grounded real computation PLUS a
+    # genuine novel artifact (technology/patent, and per-guild a molecule / colour
+    # / sky observation) recorded into a cumulative, self-building ledger.
+    from ..services import discovery_lab
+    grounded = discovery_lab.discover(
         minion.guild.value, seed=hash(f"{minion.id}:{world.tick}") & 0x7FFFFFFF)
     grounded_quality = float(grounded.get("quality", 0.5))
 
