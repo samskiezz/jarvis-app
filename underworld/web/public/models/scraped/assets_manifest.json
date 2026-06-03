@@ -8659,5 +8659,22 @@
     "epoch": "iron",
     "name": "Guild Banner Maths",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_mechanical": {
+    "prompt": "a heraldic banner with a cog-and-piston mechanical emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d18b6e2d-d056-4e68-900e-2518b628ce3a",
+    "path": "/models/generated/tripo/guild_banner_mechanical.glb",
+    "bytes": 8326384,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d18b6e2d-d056-4e68-900e-2518b628ce3a/tripo_pbr_model_d18b6e2d-d056-4e68-900e-2518b628ce3a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDE4YjZlMmQtZDA1Ni00ZTY4LTkwMGUtMjUxOGI2MjhjZTNhL3RyaXBvX3Bicl9tb2RlbF9kMThiNmUyZC1kMDU2LTRlNjgtOTAwZS0yNTE4YjYyOGNlM2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=juhs6oUaVojdDngFyGH-XLDqOGWZBoWTgDVl0dW6t9xj~zY24kYgt4Kkm9AnSpviQEHeYgt4onYU5M8q1ku6DCCArprcK4H3lAWTRiUTXtkIvL3rGNgzuWHl5msdSq5oN4nSntFekH6uuf3qN7nCj5QIw~OsaI9zMawYuefguQByc16o1wJVM0ocZ3-gPu8BhvktbDZ4vhcMEIfyknqAoxbqdmofE7SUxpqGMJ1skyyyjnYQqF68jGItqdbizRibpLBcXWm1x0xKbYbsuF89qXSpYTG5IYnql189aijk4zmoC3er~9qKp5JTsu1H1s83ezA2Bf7JHOc6Ar34~Y0V~Q__",
+    "asset_id": "guild_banner_mechanical",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Banner Mechanical",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
