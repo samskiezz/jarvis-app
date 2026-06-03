@@ -2743,5 +2743,22 @@
     "epoch": "quantum",
     "name": "Reincarnation Shrine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:renaissance_open_studio": {
+    "prompt": "a flourishing open art-and-science studio cluster, glowing warmly, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "7c1e42ae-566d-4c45-9bd0-4a98036956a6",
+    "path": "/models/generated/tripo/renaissance_open_studio.glb",
+    "bytes": 15723088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7c1e42ae-566d-4c45-9bd0-4a98036956a6/tripo_pbr_model_7c1e42ae-566d-4c45-9bd0-4a98036956a6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2MxZTQyYWUtNTY2ZC00YzQ1LTliZDAtNGE5ODAzNjk1NmE2L3RyaXBvX3Bicl9tb2RlbF83YzFlNDJhZS01NjZkLTRjNDUtOWJkMC00YTk4MDM2OTU2YTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IWKLIqpZvxPrxj3R71hXXHtGIPjuwFg-keNXIQLSRYahFDfPW7MHJWu6Znpc6imSjWjoCos94nY1P7RW2jK~ICmjLmJjTZL-R~dHeXENUDees8jJH1RJ6negQIcx9pI4FemlN7rYCEPBeTlQeN5dPxXdEVybA-71cvTLHB~fpnPBK-ij~yagzcMLkXsIfbNhYdkRAEi4fc7LWv5StesEAZXStVDSmOcsWfJgdsMoYrc90Q5VSQp-87Bx0SI2rya3vmSMpcbZfPtlj18sVXDRMmPZdbOpQxNMpUVD4K29lLQkadlWg4RBi~rgQEy7N9hdblnA0RaMA8ZFmwBBIZRUIw__",
+    "asset_id": "renaissance_open_studio",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "industrial",
+    "name": "Renaissance Open Studio",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
