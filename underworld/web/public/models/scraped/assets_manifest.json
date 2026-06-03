@@ -5480,5 +5480,22 @@
     "epoch": "iron",
     "name": "Lectern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:magnifying_glass": {
+    "prompt": "a brass magnifying glass, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9ec2ea01-edbc-488b-a443-bbadfed85e7e",
+    "path": "/models/generated/tripo/magnifying_glass.glb",
+    "bytes": 12926676,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9ec2ea01-edbc-488b-a443-bbadfed85e7e/tripo_pbr_model_9ec2ea01-edbc-488b-a443-bbadfed85e7e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWVjMmVhMDEtZWRiYy00ODhiLWE0NDMtYmJhZGZlZDg1ZTdlL3RyaXBvX3Bicl9tb2RlbF85ZWMyZWEwMS1lZGJjLTQ4OGItYTQ0My1iYmFkZmVkODVlN2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uqq48Qqjx8~~Sw300W2QlO~C8m2NE~PT3MtecUwRc6EAAqsjEP9o2Lov1qqhPUJ9MsLo-TOO3JHqNaEq6XHG6BfMKWymeRf-joeYuv~AOxzFofq2~-Nr3dUKCA0tEs4Ekw75gikiQx7qxOsvb5QdvvwBY8eptR2bjP5GV6SBsDtsEBLfxAIxB1NuL-REcfkOoWBfNMgKr8KbsnczrYio3~flupu5Dq00-IGxlwIlc~c5~9p4iRPTqZdjEV24kWUjewd1lWVoWF7epqncKGVAPGRxZ-BoCdwaROoyZECxmqqOC7MOpHYLkk69ZTo6l1xtk8oO9a1ubp3a0kF~wj~5ug__",
+    "asset_id": "magnifying_glass",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Magnifying Glass",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
