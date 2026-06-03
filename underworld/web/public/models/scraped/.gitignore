@@ -1,0 +1,5 @@
+# Scraped CC0/CC art binaries live on disk / object storage, not in git.
+# The scraper (underworld/assets/scraper) reproduces them; the manifest is the record.
+*
+!.gitignore
+!assets_manifest.json
