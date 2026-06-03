@@ -7418,5 +7418,22 @@
     "epoch": "iron",
     "name": "Windmill",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:barrier": {
+    "prompt": "a striped safety barrier, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "37ea9745-d1c4-43ac-a369-c4d1bc5aaea4",
+    "path": "/models/generated/tripo/barrier.glb",
+    "bytes": 14693964,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/37ea9745-d1c4-43ac-a369-c4d1bc5aaea4/tripo_pbr_model_37ea9745-d1c4-43ac-a369-c4d1bc5aaea4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzdlYTk3NDUtZDFjNC00M2FjLWEzNjktYzRkMWJjNWFhZWE0L3RyaXBvX3Bicl9tb2RlbF8zN2VhOTc0NS1kMWM0LTQzYWMtYTM2OS1jNGQxYmM1YWFlYTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Gteu0xS48TVlL9FitZJeMoI6HZEtYDewJOEqK2Tr4Phr-KGdCmDKgFPts7ueHGGTo8pUzMtIgeLOk6s9Cz6eeCKSFl8GLdn5oE9pzeXoTX5aoapKyFTlCCBVnFMYb8onZegZgHDU~lmpxypeqG8wQsue2WnzR-McF7n0NUH23D11q6hhKaO5NHpdx0WM5cH82Reg0i6~mVszwkXs~w92NOJG4R7HJ7hVwp8YZTpVjIMQsXe1K-1lfMuwo53VWrQ~HyEB6i1If5YiTN76BoxoHBKVNN-E8f3V3gwwxrxHKSCEpTbEQ19CPzosRAdTb47YIysJZhi9Du8adY8ildlh~Q__",
+    "asset_id": "barrier",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "safety",
+    "epoch": "industrial",
+    "name": "Barrier",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
