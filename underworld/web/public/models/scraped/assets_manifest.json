@@ -1468,5 +1468,22 @@
     "epoch": "any",
     "name": "Mountain Peak Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plains_meadow_tile": {
+    "prompt": "an open flower-dotted meadow plains tile, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "de17ccf1-6cb5-43c1-a640-cbff3954e8fc",
+    "path": "/models/generated/tripo/plains_meadow_tile.glb",
+    "bytes": 15207404,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/de17ccf1-6cb5-43c1-a640-cbff3954e8fc/tripo_pbr_model_de17ccf1-6cb5-43c1-a640-cbff3954e8fc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGUxN2NjZjEtNmNiNS00M2MxLWE2NDAtY2JmZjM5NTRlOGZjL3RyaXBvX3Bicl9tb2RlbF9kZTE3Y2NmMS02Y2I1LTQzYzEtYTY0MC1jYmZmMzk1NGU4ZmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Ur7ojPtBc9btT0CK2mELzrVwa7nv5KCeVrckHZsO3NK7o-TK7K6YqJlxMiwfVcvCCvvZpbupUwqk0svVjQupE7lNrYpTnFsJ3j1yDqV26Kv1iwDNfS-MNjs7eNetoc06njV6JchQI0oy43Fpyir2DZ4o23FbkSenjJHhL4ID6c4HKuOOEBRbgzRXikCaU0ElH1JsQzo5r3RwvOSIK9eicL5Y52WgvLIlv8kltt37RkqkAyBGMAieKlEVa6pLk-3b-oglqPisv7VrEelZPxRudENZo~PYHQzfPMpJLzds9cj-d7ZrpvI0MP-GBmZPDI4lhB4FTQeCBM04ft4yffPJRw__",
+    "asset_id": "plains_meadow_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Plains Meadow Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
