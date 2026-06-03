@@ -4426,5 +4426,22 @@
     "epoch": "information",
     "name": "Harvester",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:heat_treat_furnace": {
+    "prompt": "an industrial heat-treatment furnace, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a58a5ee1-69c7-4607-bfd6-d05cdb78824c",
+    "path": "/models/generated/tripo/heat_treat_furnace.glb",
+    "bytes": 14915924,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a58a5ee1-69c7-4607-bfd6-d05cdb78824c/tripo_pbr_model_a58a5ee1-69c7-4607-bfd6-d05cdb78824c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTU4YTVlZTEtNjljNy00NjA3LWJmZDYtZDA1Y2RiNzg4MjRjL3RyaXBvX3Bicl9tb2RlbF9hNThhNWVlMS02OWM3LTQ2MDctYmZkNi1kMDVjZGI3ODgyNGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Sq8p2tenJ-vgsKFLhHPfB-RAlsXu3iaLIzObatDGg9gLMyacG34pKAJL6j948Rw~Cj5CdyXelZc40GxbHUetXPoDKF6DMwpDbNKhLSJoE3WnBvJjHuGR9sbmZKS7aA40HG~vjZI3stX7Z1z2eUU6CpWo0QWDHsiERZ9kFkXVxzbHMd4tD5T3ZcLMRfDvUSkjOdaoGaarEPJZ3vG0rLyV6MAip3UiHYPRX-e1AuhHF1tdxIspfSdtQHELJV-QOYeyDaFgD4jdiCNF~QpVKg8T2g9S400B7jBNkpytzsUOc9e0jATaAIKkzpmS8-6N9BXjVT2hU1dHmlACSDs8yE2XyQ__",
+    "asset_id": "heat_treat_furnace",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Heat Treat Furnace",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
