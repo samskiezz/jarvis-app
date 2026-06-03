@@ -7537,5 +7537,22 @@
     "epoch": "quantum",
     "name": "Bci Headset",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bow_and_arrow": {
+    "prompt": "a hunting bow with a quiver of arrows, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5a3cf85a-f1a2-40f0-bf77-4c3bb233d697",
+    "path": "/models/generated/tripo/bow_and_arrow.glb",
+    "bytes": 3965412,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5a3cf85a-f1a2-40f0-bf77-4c3bb233d697/tripo_pbr_model_5a3cf85a-f1a2-40f0-bf77-4c3bb233d697.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNWEzY2Y4NWEtZjFhMi00MGYwLWJmNzctNGMzYmIyMzNkNjk3L3RyaXBvX3Bicl9tb2RlbF81YTNjZjg1YS1mMWEyLTQwZjAtYmY3Ny00YzNiYjIzM2Q2OTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=F-xjoWUzVjQzrNxVb41U-2DRcqPIHnJxaWKnGIVu3WdDyOvAVhH02uIN0SwXo2X6lKERUFGZJk1nn3ZV14KG1ZL9k3qSh6tslUqMKPjDoY-1O200055QZDIwia8eU-UggHvWrItPABJp~QS2bIivKQhCyJXYFML98KLIHfF4O-WTcOwQj-~phsmyHL7-WODvwcV0hVE-n1FW91fFroTyLT-Qbv~IUrD9CudBBuImfFqY-QRBOhuF~yAbY3f7VcycxapYW~o1RmtVyz4OVjaKqr~G11~s3R7XkuUg5QKjOCQklUuQtCGzRwUd0eaNlexLsmiRZNbP0f75vLveca6btA__",
+    "asset_id": "bow_and_arrow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "stone",
+    "name": "Bow And Arrow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
