@@ -2403,5 +2403,22 @@
     "epoch": "quantum",
     "name": "Fx Hologram",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_hover_boulder": {
+    "prompt": "a large boulder hovering with glowing underside, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "70a8d5f8-add4-43ea-af39-9e81f552ad0b",
+    "path": "/models/generated/tripo/fx_hover_boulder.glb",
+    "bytes": 15407940,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/70a8d5f8-add4-43ea-af39-9e81f552ad0b/tripo_pbr_model_70a8d5f8-add4-43ea-af39-9e81f552ad0b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzBhOGQ1ZjgtYWRkNC00M2VhLWFmMzktOWU4MWY1NTJhZDBiL3RyaXBvX3Bicl9tb2RlbF83MGE4ZDVmOC1hZGQ0LTQzZWEtYWYzOS05ZTgxZjU1MmFkMGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Di8yhmpiLZJyMUlezPqBjLb9jcWfiUmoPSxBmuctzfR9A5hD8jGoLm3WlKu-yFwx0e3tV7zJ9ob7Q3IpBs0buSsg9LNsufHovLBYR5NyAUSRPhzkPt2i40XcPmxOCFuvF2WOz7rQfUDztjXdarcLMmgI~vuY4YdexmyNXKC7YBKkA9-H46e5YIpCphsvxGt~Id8MXQl5Mubml~nWJRy40O-8oVJXMvJCHyXg4Qn20i3eQcTU2xB0V9lvwQ2hlXszGc1SsCDQB6hLGox2Sa3SoqJYjsJ25c4tn3LRR8w688CMMmabsJfKX0243o17gQqLVGY18orTEfd1BuhsCnkukg__",
+    "asset_id": "fx_hover_boulder",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Hover Boulder",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
