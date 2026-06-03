@@ -3355,5 +3355,22 @@
     "epoch": "any",
     "name": "Table Coffee",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:toilet": {
+    "prompt": "a ceramic toilet, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4217df74-35d3-4988-ae13-31e29842808b",
+    "path": "/models/generated/tripo/toilet.glb",
+    "bytes": 14856560,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4217df74-35d3-4988-ae13-31e29842808b/tripo_pbr_model_4217df74-35d3-4988-ae13-31e29842808b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDIxN2RmNzQtMzVkMy00OTg4LWFlMTMtMzFlMjk4NDI4MDhiL3RyaXBvX3Bicl9tb2RlbF80MjE3ZGY3NC0zNWQzLTQ5ODgtYWUxMy0zMWUyOTg0MjgwOGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WFgjZQCO2Tevhfsc7lbCz9vdFNRSLPxqWUV-q8X8dR6lf15IBtUOV8JuCTDrv5fCJqvTDm7ERw~PYm-UlQZwYJMV~Y9NeGusjMQ05cu-jyxq~pe2b-RzUHiVxi3DeunUeVmAfVExex2j7pG8SX1EOOorQBGednNYxLgkKGECOQ4HKh-jEd2GQV4By9qpllfEDjAZdTjuqucwNl903yEonyu-Q38ppEgB45CbD3XGg5rDef4dWoI-YHKZrlrXAga~-NC-w9Qa1YIOL3hJhzF4AjOP9zhf~cHaS~K4hk6PIhvvBYt5Yt02G-xGPq7EMV2bNZw6xBwS7anKXqavOdAm7g__",
+    "asset_id": "toilet",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "industrial",
+    "name": "Toilet",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
