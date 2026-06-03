@@ -7486,5 +7486,22 @@
     "epoch": "iron",
     "name": "Watchtower",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:agi_core": {
+    "prompt": "a glowing spherical AGI reasoning core suspended in a frame, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "1e432033-200c-40cd-9e52-f948a4a29b5b",
+    "path": "/models/generated/tripo/agi_core.glb",
+    "bytes": 15155312,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1e432033-200c-40cd-9e52-f948a4a29b5b/tripo_pbr_model_1e432033-200c-40cd-9e52-f948a4a29b5b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMWU0MzIwMzMtMjAwYy00MGNkLTllNTItZjk0OGE0YTI5YjViL3RyaXBvX3Bicl9tb2RlbF8xZTQzMjAzMy0yMDBjLTQwY2QtOWU1Mi1mOTQ4YTRhMjliNWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dws9NB1sRZwGXlT7X1eQcQ6XDqn8mkmk2VvUw520oj367Gad8F1pHJk9P9IyGMEBbljCAwCli8Wgkdtje~hajmOgPnfHbJb2evF0v~Bw0WDPecxd5f0yDRZ-eVD4SyhBV7MBHPZdWWpDxVb1tlgc8vro7wZlPCpwRYONccwrTzJSfz-opltwNhp7Mkdlj1TU2x5~w9O4hbVwPyn2B8ah7X4buNdvPLFELBZSgdUbnsMcLX1xaEec1~8BMKIAr3-M0fBxN2tmd1PUfHY245xQm4gWu8falBxWfUQ57xD3YxWHjgBPx4SnYCrfJT7KxUsE9GfNBTO7YoiAIKpnegVtdg__",
+    "asset_id": "agi_core",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Agi Core",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
