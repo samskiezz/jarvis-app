@@ -1145,5 +1145,39 @@
     "epoch": "information",
     "name": "Home Modern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:house_bronze": {
+    "prompt": "a bronze-age mud-brick house with courtyard, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "9d7623e4-1ac6-4848-9b22-b77e177b75d5",
+    "path": "/models/generated/tripo/house_bronze.glb",
+    "bytes": 14887100,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9d7623e4-1ac6-4848-9b22-b77e177b75d5/tripo_pbr_model_9d7623e4-1ac6-4848-9b22-b77e177b75d5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWQ3NjIzZTQtMWFjNi00ODQ4LTliMjItYjc3ZTE3N2I3NWQ1L3RyaXBvX3Bicl9tb2RlbF85ZDc2MjNlNC0xYWM2LTQ4NDgtOWIyMi1iNzdlMTc3Yjc1ZDUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=P8pfdsy15y7dRYdSd~Xs5l-owuohnCTupRLDKt3w92TJmcVutLfBauNA4hcTbKikrmnFTsOp47-i21HQLHRdLq5Z-B6pZOGLCt10-Y3nmfxh8vBFuIh7jJ0FdhvguLlI-3y7nphnTBhPc9YjbUMyWKqE0biQB9Nsix~LZ3n02btomwKcpWQ5XMdSfdO07WaJ48L9LmbxTK3WdQMBHVo3jxYIjgzLjEy4nwn38Tn-0~03ayRJ8zWT3ShrhZSbaDTwknwmnP4QhV0ssPChJA4v3DJXwKPK7hgKcZS9cdQoaV8V0MbK45tgDObDNhBXeiSvXC6RB9LHO4uuJaSGFXYEjg__",
+    "asset_id": "house_bronze",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "bronze",
+    "name": "House Bronze",
+    "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:house_medieval": {
+    "prompt": "a medieval half-timbered house, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "39fdb03f-bc88-4aea-a000-2a6d29fb827b",
+    "path": "/models/generated/tripo/house_medieval.glb",
+    "bytes": 15551572,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/39fdb03f-bc88-4aea-a000-2a6d29fb827b/tripo_pbr_model_39fdb03f-bc88-4aea-a000-2a6d29fb827b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzlmZGIwM2YtYmM4OC00YWVhLWEwMDAtMmE2ZDI5ZmI4MjdiL3RyaXBvX3Bicl9tb2RlbF8zOWZkYjAzZi1iYzg4LTRhZWEtYTAwMC0yYTZkMjlmYjgyN2IuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=LB3DrFvZUopgWvebKqFn4-DIXyDPZGDKUKpxcz1hJDaIzd3TdpSw8sqlkPdxmyescByWVpsxu~BqyASVRXdzyf-mBS2i33iJPxznALuIFGtwbliYBUOGD~ZfatzPzOmKU3VglWQDeL9CVBmRdjERgEhsIXku-u3kOAPfShz4K0XJT-T5YViQyYcWWt9PP5j5dE9imPJ5olI45IOcSCfrdgzTgkp4bPiDHYe4VofI65iIwt~Z5BdaBbltzWjHH3KUXXpieLbe8U6gofQIjhfk2-CB4Q7j0N-0AlJCAFmZvyTJUnCp1hUvAVnLXk-e7YPo60n8E1qR5EhA2c8D7a0vsA__",
+    "asset_id": "house_medieval",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "iron",
+    "name": "House Medieval",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
