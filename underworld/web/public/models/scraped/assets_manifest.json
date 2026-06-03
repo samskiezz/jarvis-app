@@ -6483,5 +6483,22 @@
     "epoch": "any",
     "name": "Fossil Dimetrodon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fossil_mastodon_tusk": {
+    "prompt": "a curved mastodon fossil tusk on a mount, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "053ab0b9-6645-4b4e-98a6-297dbb840cbd",
+    "path": "/models/generated/tripo/fossil_mastodon_tusk.glb",
+    "bytes": 7905588,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/053ab0b9-6645-4b4e-98a6-297dbb840cbd/tripo_pbr_model_053ab0b9-6645-4b4e-98a6-297dbb840cbd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDUzYWIwYjktNjY0NS00YjRlLTk4YTYtMjk3ZGJiODQwY2JkL3RyaXBvX3Bicl9tb2RlbF8wNTNhYjBiOS02NjQ1LTRiNGUtOThhNi0yOTdkYmI4NDBjYmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=gtWLpjwhAUzPucpU4ekr~SmdX8~6EF4tzdYo0CZ33yo2dgb6fXvnfYEztUvcerKUqBHSSN~i3maMN9XMtOV7VXMKWWq3YYQ~OIr1ied-H9Gf~8uHSvScvVEJNtDvfcELYC~wG6sAF8ghBqivx8h7pvzKtb1b3UnqcPbq0JVCxccbaEkDwLEbAwBtqstYCaIZJ-BOs6CjmxxbA3g9UqMaje83XbxC4UQ6L4iql1MNCLL-cTZ6d8G0NuHk~1KeV-mbotEejqROM3SbLCtwZ5adV~FBsNteANIjcQn-Bi4LGMQ4JYma-nQeNZSBjMRHA5ASLB6MsTsO~KzcmsVeDHvKTg__",
+    "asset_id": "fossil_mastodon_tusk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "any",
+    "name": "Fossil Mastodon Tusk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
