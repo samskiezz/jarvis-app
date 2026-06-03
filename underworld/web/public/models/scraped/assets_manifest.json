@@ -6500,5 +6500,22 @@
     "epoch": "any",
     "name": "Fossil Mastodon Tusk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fossil_trilobite": {
+    "prompt": "a trilobite fossil embedded in a stone slab, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fe2ce731-f47d-4f25-905c-4af0a4897275",
+    "path": "/models/generated/tripo/fossil_trilobite.glb",
+    "bytes": 14460996,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fe2ce731-f47d-4f25-905c-4af0a4897275/tripo_pbr_model_fe2ce731-f47d-4f25-905c-4af0a4897275.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmUyY2U3MzEtZjQ3ZC00ZjI1LTkwNWMtNGFmMGE0ODk3Mjc1L3RyaXBvX3Bicl9tb2RlbF9mZTJjZTczMS1mNDdkLTRmMjUtOTA1Yy00YWYwYTQ4OTcyNzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=q4wKEV2lByBcDKCgZ8war4Wq5jHbwmit8yTVZQ~Eoce0VcXWw89H8oRbyL8hP5Oi1BCwanQZcUsgT7E-oGBxTmVUrNnLFPFmzhmpgbx-eBmSJVZOtFBy4oa4geWLaStVDMour00LDcaL4BHBmHsSu~gRRxnsFl5oXAPPEnvJEeMavjGA4ZsaTPwNYMCBEgA7AG8IvWV4Kd4-qmPyblNVEs1oCTk4~3uuGKo1SfGly804eTWWnB4sWeGEV9VvrwPQ3q6vKpWcVGAjd7Xr8pi8C0CuVvJji3oCmv3gm-NKoIYNBJwO1VnaJKzECsNuKPpKEuDtZij~p4QNXf9l5JNoMQ__",
+    "asset_id": "fossil_trilobite",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "any",
+    "name": "Fossil Trilobite",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
