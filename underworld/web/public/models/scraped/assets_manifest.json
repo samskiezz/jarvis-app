@@ -4477,5 +4477,22 @@
     "epoch": "industrial",
     "name": "Invention Prototype Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:irrigation_pump": {
+    "prompt": "a hand irrigation water pump, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6c313ad7-8555-4092-81ca-e0737601b839",
+    "path": "/models/generated/tripo/irrigation_pump.glb",
+    "bytes": 13084044,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6c313ad7-8555-4092-81ca-e0737601b839/tripo_pbr_model_6c313ad7-8555-4092-81ca-e0737601b839.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmMzMTNhZDctODU1NS00MDkyLTgxY2EtZTA3Mzc2MDFiODM5L3RyaXBvX3Bicl9tb2RlbF82YzMxM2FkNy04NTU1LTQwOTItODFjYS1lMDczNzYwMWI4MzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HjbW9u83nnbiQLMRB3FIFIcM2Vnv7h0zKK35LV9IrltJ0Vqa-4Q8--2bpTe~4g1kpGRO1pcqoyJLsS0H76La5b9LL24Vbm8aKKyRGfF733qShBh2QCXksTSloGORuvbvQ~TdmdadWPhQNE7Ds7ea~BLuF2brUddTYw8zFJekY8zMG-t1h96etC1~Rt0JTpx9LWouWISZ3LKXBf4OI6wMMjGbf4uzh7MXEXVmWVcNVt82lTNvnuQsM4LTz6Il~EqAX5EaUXK1NiX3mv1ie23QjdU~56jHQvKiHS2OxEMTrK5dIv8CrxZwcTfaSFsb79T8MWg2ixO829-hCOZwyq4oZA__",
+    "asset_id": "irrigation_pump",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Irrigation Pump",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
