@@ -6585,5 +6585,22 @@
     "epoch": "bronze",
     "name": "Incense Burner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:legacy_portrait_gallery": {
+    "prompt": "a wall gallery of ancestral lineage portraits in gilt frames, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "77b8ef19-e5da-445a-9972-8acf9ca22d5f",
+    "path": "/models/generated/tripo/legacy_portrait_gallery.glb",
+    "bytes": 10647424,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/77b8ef19-e5da-445a-9972-8acf9ca22d5f/tripo_pbr_model_77b8ef19-e5da-445a-9972-8acf9ca22d5f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzdiOGVmMTktZTVkYS00NDVhLTk5NzItOGFjZjljYTIyZDVmL3RyaXBvX3Bicl9tb2RlbF83N2I4ZWYxOS1lNWRhLTQ0NWEtOTk3Mi04YWNmOWNhMjJkNWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Wv7fE9cnya3bL8Ws1fn3jG~FEaviWiLoy~IU3YrsWACs-cq~4IizTfSVEEAdbLz7s4gtgs6Y~JfaLElBtqr~FSBnfEqwmFP~5JGC7mzzIbY8Aoqe2mwUdfLsjStSDTUglGmQa54ukkZH6r-xYK03Y-Ovl8~xrGq9-Y~wqSz4a-ZTxeNDN7JKj22LZCt0FoYm5bNuxF8S03L9OlQ1rXNkfsrRLVmZ-uTB4GZpOnYBBWl0nRu3Patq2jp6rg-zW8nzNjQwFPfaDvY78Kje7xD-fbnP6puBzZX7Z2vZtrYiMWdKUyYVVpp3DGTSfvQNOSqs6J-yClZvHJDJXYmuBTDWUw__",
+    "asset_id": "legacy_portrait_gallery",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "industrial",
+    "name": "Legacy Portrait Gallery",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
