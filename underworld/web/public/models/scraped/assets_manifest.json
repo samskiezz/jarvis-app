@@ -4273,5 +4273,22 @@
     "epoch": "industrial",
     "name": "Drafting Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:drill_press": {
+    "prompt": "a floor-standing drill press, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d22ec967-d63d-44e3-8f79-3bac9082fad7",
+    "path": "/models/generated/tripo/drill_press.glb",
+    "bytes": 10668116,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d22ec967-d63d-44e3-8f79-3bac9082fad7/tripo_pbr_model_d22ec967-d63d-44e3-8f79-3bac9082fad7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDIyZWM5NjctZDYzZC00NGUzLThmNzktM2JhYzkwODJmYWQ3L3RyaXBvX3Bicl9tb2RlbF9kMjJlYzk2Ny1kNjNkLTQ0ZTMtOGY3OS0zYmFjOTA4MmZhZDcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=u-5CTUWPe7-~EI7gFvWGKFRATZ5EfdmvBXcuQRFkTkkGx4sdFvuvjz~JfnmmovLNHhBSH-A39JdS2yOFdKXPs9gHWGMrbgpHcKVR7v0HqyEQM5JaGCOGl3RW0CasvS3kFyPYV-Fe21ExyG3bef9IEvqeaOiAxX9Xf0nlIP2J2ZVS5szDXxQpjYHz~GUE6WpbG9W2Csx9yflQxIFC-znEfxuy-p2WFPAhNgA2m1~oG-xUf73KXHbE51pMG8UiaAVQ9ka-F9Jcey7sNhQNWHSCV-ywkSO49qtpRq5RrD6DBpN1ugtWQEgz7uVetXf2b4-hvhy1nvxz~FAMIDFG2TCE~g__",
+    "asset_id": "drill_press",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Drill Press",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
