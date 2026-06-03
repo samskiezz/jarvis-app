@@ -5939,5 +5939,22 @@
     "epoch": "industrial",
     "name": "Role Experimental Designer Board",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_formula_oracle_orb": {
+    "prompt": "a glowing equation-filled formula oracle orb on a pedestal, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "e456bb63-a2b5-448c-ae64-04463a2bed8f",
+    "path": "/models/generated/tripo/role_formula_oracle_orb.glb",
+    "bytes": 14948904,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e456bb63-a2b5-448c-ae64-04463a2bed8f/tripo_pbr_model_e456bb63-a2b5-448c-ae64-04463a2bed8f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTQ1NmJiNjMtYTJiNS00NDhjLWFlNjQtMDQ0NjNhMmJlZDhmL3RyaXBvX3Bicl9tb2RlbF9lNDU2YmI2My1hMmI1LTQ0OGMtYWU2NC0wNDQ2M2EyYmVkOGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QzErCDWY1ZsY4qZWD3-74FYB1JkuYJHc4PtTf1~~ZZdtRa076sR4D6cKG6ZQSMU42pd-IBVNmr3xqRP0-NOyKTjfkdox7hcNZkipPmxk1p22iDxbPgFWQEa7i4vvauj4xB2OR6ubWjTFs3mbfbIEDBjXJP3UyNq1YOLvFdcTwFQXKWYzydU-TmxflH75OnxcN14Na5YwHnxSb88JZjFVK1jUtSvWYZOBtcwdCu7ldo~xJAhEKBA0SVAeYyxviz-BmaSJb41545kVpM8DoHt4N3LCS0wxrQer5PODaTSC-YWvdW~Ch7myL0dJdPu9qwR-W62abZDg8p~UsgeRLTXbwA__",
+    "asset_id": "role_formula_oracle_orb",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "iron",
+    "name": "Role Formula Oracle Orb",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
