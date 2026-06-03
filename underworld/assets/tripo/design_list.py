@@ -20,7 +20,7 @@ This is data only — `generate.py` turns each row into a Tripo3D job, dedupes b
 id, and runs phases in order. Extend freely.
 """
 
-_STYLE = "game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly"
+_STYLE = "game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette"
 
 # (id, category, epoch_tag, prompt)   — categories drive PHASE order (see PHASE_ORDER)
 DESIGNS: list[tuple[str, str, str, str]] = [
@@ -233,7 +233,7 @@ DESIGNS: list[tuple[str, str, str, str]] = [
 # materials; the volumetric glow, particles and ray-traced bounce come from the
 # UE5 renderer on top (Lumen + Niagara) — these meshes give it something gorgeous
 # to light.
-_FX = "cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi"
+_FX = "cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette"
 DESIGNS += [
     # bioluminescent flora
     ("fx_glowing_mushroom", "fx", "any", f"a cluster of bioluminescent glowing mushrooms, soft cyan light, {_FX}"),

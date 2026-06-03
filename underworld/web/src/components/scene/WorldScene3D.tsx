@@ -2,7 +2,8 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment as DreiEnvironment, OrbitControls } from "@react-three/drei";
 import {
-  Bloom, EffectComposer, N8AO, SMAA, SSR, ToneMapping, Vignette,
+  Bloom, BrightnessContrast, EffectComposer, HueSaturation, N8AO, SMAA, SSR,
+  ToneMapping, Vignette,
 } from "@react-three/postprocessing";
 import { BlendFunction, ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
@@ -429,6 +430,11 @@ export default function WorldScene3D({
             <Vignette eskil={false} offset={0.15} darkness={isNight ? 0.55 : 0.35} />
             <SMAA />
             <ToneMapping mode={ToneMappingMode.ACES_FILMIC} blendFunction={BlendFunction.NORMAL} />
+            {/* Cinematic colour grade — the "Avatar/Sims-4" vibrancy. ACES tone
+                mapping desaturates a touch; we punch saturation + contrast back
+                up so the world reads rich and colourful, not muddy. */}
+            <HueSaturation saturation={isNight ? 0.38 : 0.3} />
+            <BrightnessContrast brightness={0.02} contrast={0.12} />
           </EffectComposer>
         </Suspense>
       </Canvas>
