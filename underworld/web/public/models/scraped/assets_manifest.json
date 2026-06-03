@@ -6772,5 +6772,22 @@
     "epoch": "information",
     "name": "Patent Globe Kiosk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:safety_block_stamp": {
+    "prompt": "a heavy red safety-BLOCK rubber stamp and ink pad, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9e69f284-ae7b-48ac-9cb9-dca85ba2530a",
+    "path": "/models/generated/tripo/safety_block_stamp.glb",
+    "bytes": 14673348,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9e69f284-ae7b-48ac-9cb9-dca85ba2530a/tripo_pbr_model_9e69f284-ae7b-48ac-9cb9-dca85ba2530a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWU2OWYyODQtYWU3Yi00OGFjLTljYjktZGNhODViYTI1MzBhL3RyaXBvX3Bicl9tb2RlbF85ZTY5ZjI4NC1hZTdiLTQ4YWMtOWNiOS1kY2E4NWJhMjUzMGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Yndvs4AD7p3qsyZSUie3~Rs2lsrBJOTDRMfbGjN8WsMv8kBIUQXPuopwK20Czv6Bg54H3aRqKwipa2gkLx9evi3qrMOmAhGR-U4XSV38wzv3ArEoqrIrAr3SNx1IbcQtsbCrn8wBHmCAXijsRMVdTFBnSGW3w7sM8Y5Pq7alyP2Kh1bdooFlyLz1JK7X0zRen5fgjYMBGDoVd6OSgm0owF4QxjLPF4uleev-6wny0BgLbI77G6tYU0iuEcAlSPKK3u~4TPRYdP08hfvze0cZUkr2Nr01oEgpWRzZ3eGFdZ5eLHHnG0aUfnpS~5NnBF~Ybu6icexNe6SFpLGQJx5Lag__",
+    "asset_id": "safety_block_stamp",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Safety Block Stamp",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
