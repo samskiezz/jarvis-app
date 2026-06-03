@@ -2488,5 +2488,22 @@
     "epoch": "any",
     "name": "Fx Mist Pool",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_moss_statue": {
+    "prompt": "a weathered stone statue overgrown with glowing moss, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "f6371ef5-e16b-429f-a03f-7d8e18c7fd04",
+    "path": "/models/generated/tripo/fx_moss_statue.glb",
+    "bytes": 15312380,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f6371ef5-e16b-429f-a03f-7d8e18c7fd04/tripo_pbr_model_f6371ef5-e16b-429f-a03f-7d8e18c7fd04.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjYzNzFlZjUtZTE2Yi00MjlmLWEwM2YtN2Q4ZTE4YzdmZDA0L3RyaXBvX3Bicl9tb2RlbF9mNjM3MWVmNS1lMTZiLTQyOWYtYTAzZi03ZDhlMThjN2ZkMDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KZ3i176fBz8CzvOskLdkcXokFuKNFnte6aSFBspeTCeASKuF0Dbb2cL5TVp22UQgF8Khz~OtgebnN1RQoI1MxxcCw3EGWSh8HmFIS1VnzFxRgtcRSQrVGM8DjCrlHmJADzleiaHD2R95pjkwXCH4gVh5HdvNvri6cKyHyKIEJ2nnzbnrFXxr8qvfKDrVXUp1YvYGe2qGuEOPBM1qcXo3dsCX7mi5IS6E1fgugjseEdltFD16rxz~vkst8ATVrqJDxDCtBRQ6M8MRwLBZRolby2YriZHZNFz~yJW64q6Bx3Ryrh33bjhn0RNF0qlrvMUz33s5TuD6aEenxEDPWOssxg__",
+    "asset_id": "fx_moss_statue",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "iron",
+    "name": "Fx Moss Statue",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
