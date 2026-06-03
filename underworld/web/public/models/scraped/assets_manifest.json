@@ -8268,5 +8268,22 @@
     "epoch": "industrial",
     "name": "Clock Tower",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fossil_tyrannosaur_skull": {
+    "prompt": "a large mounted tyrannosaur fossil skull, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "89363514-27f5-4134-befa-f7b87ce8b7ee",
+    "path": "/models/generated/tripo/fossil_tyrannosaur_skull.glb",
+    "bytes": 15278244,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/89363514-27f5-4134-befa-f7b87ce8b7ee/tripo_pbr_model_89363514-27f5-4134-befa-f7b87ce8b7ee.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODkzNjM1MTQtMjdmNS00MTM0LWJlZmEtZjdiODdjZThiN2VlL3RyaXBvX3Bicl9tb2RlbF84OTM2MzUxNC0yN2Y1LTQxMzQtYmVmYS1mN2I4N2NlOGI3ZWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XhhkDxElquSg6W~~UU8YVHcqUXzs8QvOaDm8QHRZXwTU95ECchN6-01SsIhhAARP1Wet-YmQ8tKt4Ysj53ERG20xiqJmDBQtbX0nr6yBsj026QAvOIb2x07V2izuCVjU5beqjtEkBvqnv8f8NH2JaSiIT~8mX1DWJoDzVZullXQImCDzjsJvZvSxwEIhajlYfbDRup7nokM03POLhAZb0kXsNHNNknDZ57CArt4wkpXuXppNTzzSWcKFG~5DFGo9tXazB0-h2M-tOheKani0VDnm5S6RWTQ4N2QY6fW0N56acgZsxiYCDNC6KZ7X6a0JKvG7Xy4QmmKs3UMsUaje4g__",
+    "asset_id": "fossil_tyrannosaur_skull",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "any",
+    "name": "Fossil Tyrannosaur Skull",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
