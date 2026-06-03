@@ -7095,5 +7095,22 @@
     "epoch": "bronze",
     "name": "Orchard Tree",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:seed_sack": {
+    "prompt": "an open sack of grain seeds, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2126bdc4-28b8-4b7b-95b8-9931277556b4",
+    "path": "/models/generated/tripo/seed_sack.glb",
+    "bytes": 15084416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2126bdc4-28b8-4b7b-95b8-9931277556b4/tripo_pbr_model_2126bdc4-28b8-4b7b-95b8-9931277556b4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjEyNmJkYzQtMjhiOC00YjdiLTk1YjgtOTkzMTI3NzU1NmI0L3RyaXBvX3Bicl9tb2RlbF8yMTI2YmRjNC0yOGI4LTRiN2ItOTViOC05OTMxMjc3NTU2YjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=iz8diXRwjWT7TpAnjM~Hh-XAc1VKGyLvzuXXoVp2jiri5Vbubd09SMDTAws4HFMcWlNqsfscdvghMaqy5VGXPWkyfyjCyrtB3sa2yUVNglc43NLa~96XIDTpK4O0cnvJSo~TmBffbbRv5EHsq3YJjb~XMWezA8AV8pHcffMxfA~RicARiX5NBiw6DqzTQ8L5OikBawrsLWXMQf1VZU3tCllFo1Hueo0GCJfqk1iu9ahVEng-H3IBP3PFE3t0RQJ5mliTJgBdoPfr2A22pGjYXpHkT0NmGcjsQexiUUetK6toNFbGEG-RtlmELpE0WfAu1QRWiObM-JqFkqZ0PMudVQ__",
+    "asset_id": "seed_sack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Seed Sack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
