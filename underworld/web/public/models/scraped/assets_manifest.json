@@ -4647,5 +4647,22 @@
     "epoch": "industrial",
     "name": "Multimeter",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:optical_bench": {
+    "prompt": "a physics optical bench with lenses and laser, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "dac34a7f-161b-4ff6-b02c-95fd0434de6d",
+    "path": "/models/generated/tripo/optical_bench.glb",
+    "bytes": 5072804,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/dac34a7f-161b-4ff6-b02c-95fd0434de6d/tripo_pbr_model_dac34a7f-161b-4ff6-b02c-95fd0434de6d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGFjMzRhN2YtMTYxYi00ZmY2LWIwMmMtOTVmZDA0MzRkZTZkL3RyaXBvX3Bicl9tb2RlbF9kYWMzNGE3Zi0xNjFiLTRmZjYtYjAyYy05NWZkMDQzNGRlNmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UcuTtEg~L6YDQM~uimSdq~yDEtHLyXte1PAGQBO7TK8uleOag-gdULKhZqJ~-US0BDf5C0A8HyV7LDEE8goLbOLh5nuSq-RAbZF9axK1r9W7F5U3P9M2tvrlTIQBc8yMspLEc9aFAG2PC-JtrBDw6Pr29tQNyb2I9X8nT75aUC4y1rzJv7dO7~8mVy9EQAtKj-gKopYRAl80Iqdbbx4QgFU8xK0g2n~YqQQojJMLx9kMhJMoVf0142FSIBiDOHJVRtGwF6EF9yhP-oPPCUcalJ1DH2fky~Wj7d9Qtfjx~dkq4l0N4Yl24KcQMhgJJBJ6Ep4EecWLFgN4gZVG6RaYiw__",
+    "asset_id": "optical_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Optical Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
