@@ -2726,5 +2726,22 @@
     "epoch": "any",
     "name": "Moon Disc",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:reincarnation_shrine": {
+    "prompt": "a soul-reincarnation shrine with a rising swirl of light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "a56c59d5-2be3-4337-9f9d-7361fb144d63",
+    "path": "/models/generated/tripo/reincarnation_shrine.glb",
+    "bytes": 15625088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a56c59d5-2be3-4337-9f9d-7361fb144d63/tripo_pbr_model_a56c59d5-2be3-4337-9f9d-7361fb144d63.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTU2YzU5ZDUtMmJlMy00MzM3LTlmOWQtNzM2MWZiMTQ0ZDYzL3RyaXBvX3Bicl9tb2RlbF9hNTZjNTlkNS0yYmUzLTQzMzctOWY5ZC03MzYxZmIxNDRkNjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=I4DSsrcu0drhywaD3Z-hqPprf4r~2tHKXjemoL1bn7qSLoAe5almHy4p-kETcePlnWzEeSnkDx23~KsKOvpplUdrM2pBf3m7g2GzvTetJIym3QhrCY1dP5BeuVQTaD~pwIEiXSwHXID3iARM0D5LmPwYCFmO6yK~fZqeZw87VP0lzEJ-Mgg~0zMiGARvei2Buc43YS7pC4DQocRfrJwfnMU5a3Q2I92TWddxSdyuf3FQxTNdJGGfnLBMJWpJr8fctlFiUAyefk7L5StH60HC2ClUqTTTax0VlRHf~YPzBCUzCK7a1a7TUChXEnKRJgZND-gWnsw48rcdaXKT7KDzBQ__",
+    "asset_id": "reincarnation_shrine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Reincarnation Shrine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
