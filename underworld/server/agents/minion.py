@@ -570,7 +570,8 @@ async def _do_propose_invention(
     # / sky observation) recorded into a cumulative, self-building ledger.
     from ..services import discovery_lab
     grounded = discovery_lab.discover(
-        minion.guild.value, seed=hash(f"{minion.id}:{world.tick}") & 0x7FFFFFFF)
+        minion.guild.value, seed=hash(f"{minion.id}:{world.tick}") & 0x7FFFFFFF,
+        minion_id=minion.id)        # work within this Minion's lifelong specialisation
     grounded_quality = float(grounded.get("quality", 0.5))
 
     # Doc I.72 — an unscrupulous (low-conscientiousness, low-karma) Minion may

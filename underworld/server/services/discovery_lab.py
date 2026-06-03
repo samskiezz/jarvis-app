@@ -81,18 +81,24 @@ def _maybe_sky(seed: int) -> dict | None:
         return None
 
 
-def discover(guild: str, *, seed: int, with_molecule: bool = True) -> dict:
+def discover(guild: str, *, seed: int, with_molecule: bool = True, minion_id: str | None = None) -> dict:
     """Run grounded research for `guild` AND generate + record a real novel
-    artifact. Returns the grounded dict (backward-compatible) plus a 'discovery'."""
+    artifact. Returns the grounded dict (backward-compatible) plus a 'discovery'.
+    If `minion_id` is given, the Minion works within their lifelong specialisation
+    (stable division) and explores different niches of it over time."""
     grounded = minion_research.run_research(guild, seed=seed)
     rng = random.Random(seed)
 
-    # Per-FIELD real science: pick the Minion's niche field for this guild and run
-    # its world-class engine (genomics→CRISPR+fold, optics→QC, metallurgy→MD, …).
+    # Per-FIELD real science within the Minion's guild→division→niche specialisation.
     try:
         from . import taxonomy as T, science_niches as SN
         fields = T.FIELDS_BY_GUILD.get(guild) or T.CIVIC_FIELDS
-        field = fields[seed % len(fields)]
+        if minion_id is not None:
+            from . import guild_structure as GZ
+            spec = GZ.specialisation_for(minion_id, guild)
+            field = spec["division"]                       # stable career field
+        else:
+            field = fields[seed % len(fields)]
         mod = SN.MODIFIERS[(seed >> 4) % len(SN.MODIFIERS)]
         reg = (seed >> 8) % len(SN.REGIMES)
         fsim = SN.simulate_niche(field, mod, reg, seed=seed)   # 1 of ~104k niches
