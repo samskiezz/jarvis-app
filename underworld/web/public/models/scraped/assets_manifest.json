@@ -5803,5 +5803,22 @@
     "epoch": "industrial",
     "name": "Trowel",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:umbrella": {
+    "prompt": "an open umbrella, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "115ac441-ab6c-41f6-b0f7-b0c821a71a7a",
+    "path": "/models/generated/tripo/umbrella.glb",
+    "bytes": 14337380,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/115ac441-ab6c-41f6-b0f7-b0c821a71a7a/tripo_pbr_model_115ac441-ab6c-41f6-b0f7-b0c821a71a7a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTE1YWM0NDEtYWI2Yy00MWY2LWIwZjctYjBjODIxYTcxYTdhL3RyaXBvX3Bicl9tb2RlbF8xMTVhYzQ0MS1hYjZjLTQxZjYtYjBmNy1iMGM4MjFhNzFhN2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jLmAJNSfV22FMC7gvCqxU4Kp4F~mlr4VtdQHs6n-e53u1LLcJ0QSefptfY31PZJrqfzZjS6UZB5PMwyaW0btO6Jg3mjILbWL88VGi2dnUMfc0lBCdfDhpoM8COxBVtoMifDSgH~9hDu1Kr-zjd4~0BIvtk~oSXj8gouFP~nxNlZwHnOKV5LrFNuKdFb0I6r3PFBbrWa9xfgMNZo2eFuSBaOcW4oyuDJmwbSA-7qLOl8~9EbaEnWCNOlIxa1umyyeJ-rOIroGOl8~L7YFoeqqk37wBglkV~DPlizHPERNCJFtYCOL7XoWJlnbrXU~6s1fjZJHSB9SxLsznNwhP8N9FQ__",
+    "asset_id": "umbrella",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Umbrella",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
