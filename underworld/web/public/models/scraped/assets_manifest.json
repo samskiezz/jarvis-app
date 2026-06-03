@@ -1842,5 +1842,22 @@
     "epoch": "industrial",
     "name": "Theatre Stage",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:town_hall": {
+    "prompt": "an ornate town hall with a clock, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "a276196c-5e43-4970-840a-b9242b295dd2",
+    "path": "/models/generated/tripo/town_hall.glb",
+    "bytes": 13144468,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a276196c-5e43-4970-840a-b9242b295dd2/tripo_pbr_model_a276196c-5e43-4970-840a-b9242b295dd2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTI3NjE5NmMtNWU0My00OTcwLTg0MGEtYjkyNDJiMjk1ZGQyL3RyaXBvX3Bicl9tb2RlbF9hMjc2MTk2Yy01ZTQzLTQ5NzAtODQwYS1iOTI0MmIyOTVkZDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=v2z9BBGD5XUCRniIc1x768vJySKh72WYAk2oi7XFfT5Zlsjw5ffDnaPPAUHEPTvkH-S2Vt9l5q9v~rjVyNBQtuDFtEvjSQFmvzi3PmeWBsaRE5h5g3~8WTML7furWbf53v06KyllI9ZfmOI~aDm0YlMeRYNauUbXOdHE7XgFkYV7ZEYWIA8u8-lfw15dzO4vSbb4od~I2qUcBwKxQnGSKmtmXFRdW4pEZThNDdVdFJlJiXuwpSiMJwiZgNFgA9O4nEZkcTwvJLf6s3hfP4VwlmLwLAVQdJ4GcZA17IT0ObAjmQwy5VD6esPpqmmd0ID2CCpHvmH0p4OR-bPX5ydI6w__",
+    "asset_id": "town_hall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "iron",
+    "name": "Town Hall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
