@@ -4069,5 +4069,22 @@
     "epoch": "information",
     "name": "Breadboard Rig",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bunsen_burner": {
+    "prompt": "a bunsen burner with stand, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "840aa552-d463-4028-bcc4-6a8df4149f19",
+    "path": "/models/generated/tripo/bunsen_burner.glb",
+    "bytes": 5612044,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/840aa552-d463-4028-bcc4-6a8df4149f19/tripo_pbr_model_840aa552-d463-4028-bcc4-6a8df4149f19.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODQwYWE1NTItZDQ2My00MDI4LWJjYzQtNmE4ZGY0MTQ5ZjE5L3RyaXBvX3Bicl9tb2RlbF84NDBhYTU1Mi1kNDYzLTQwMjgtYmNjNC02YThkZjQxNDlmMTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=eONrfuRD6YwWCK6PGm1XvvVuR6IdXZ-ZMPGFkzl3PScGv2nkezcsSJY~JWCfRPTPRUGAko0pUIIlVWruNQHjWjfCPx0K8StdAgOqr4SpHUqYOzBiiXltvvrYpSYush22ZQJBfj5UgpeKuygdAzt8gybfgaesqvXyeXJgHWB23LLnG3zoOZv2ZHbu3VNe0ZtcOOMvz6uvXNNNjTMey5E8-B89uXueGVopGtbBe-FLMzVX77xiBZfiQArEKPpT98J0eqFcsOiCttCcDi5J3hL-S-nkzNkNdNKxQaGGf8-GZIJ7rubV-QjYvUzwR--woTEucRaI7F4QEup1GXqaej4gew__",
+    "asset_id": "bunsen_burner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Bunsen Burner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
