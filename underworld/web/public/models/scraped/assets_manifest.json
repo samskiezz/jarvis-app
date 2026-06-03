@@ -6347,5 +6347,22 @@
     "epoch": "iron",
     "name": "Tavern Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tech_transfer_crate": {
+    "prompt": "a stencilled technology-transfer shipping crate, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "13c40961-0b57-465c-a03f-7cd3daf92023",
+    "path": "/models/generated/tripo/tech_transfer_crate.glb",
+    "bytes": 14890668,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/13c40961-0b57-465c-a03f-7cd3daf92023/tripo_pbr_model_13c40961-0b57-465c-a03f-7cd3daf92023.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTNjNDA5NjEtMGI1Ny00NjVjLWEwM2YtN2NkM2RhZjkyMDIzL3RyaXBvX3Bicl9tb2RlbF8xM2M0MDk2MS0wYjU3LTQ2NWMtYTAzZi03Y2QzZGFmOTIwMjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=cGN-gBhTuCVRA6I04NAwgEPaUoVowqOLkMQsbtwBEOZ65KQxauciyS~1J~9aZEzGT4OFZul7DziIxPwnHvSMKFvu-WkXAFOTxQnGnnL-~1pt5JjXT5mZav9EK6-5y9u6eaFmBPVZxeUk2b36vqrLuLa4wzAdIdlQBdjw1akD~Sq9sNsy94-GlQIcmbKXNyZMZGYKpq0DtZjiTOs~uSwJ6iWxKnd4XkNYM7J0glfBtCepi7l924ipg1d7Cg5V6Yd8R6147qSHF~rE~g-FIiZifZA7QQflBi6RP~ZRBpWe370-7cLVxg7ViYy2oR-6d98QbiP7B1ae-8cUT2-gjGrgQA__",
+    "asset_id": "tech_transfer_crate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "industrial",
+    "name": "Tech Transfer Crate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
