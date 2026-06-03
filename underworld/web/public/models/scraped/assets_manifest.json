@@ -5735,5 +5735,22 @@
     "epoch": "industrial",
     "name": "Stamp",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:standards_master_gauge": {
+    "prompt": "a glass case holding a master reference gauge standard, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6d026b6a-2d16-4343-8bba-bfbc8e91e9b7",
+    "path": "/models/generated/tripo/standards_master_gauge.glb",
+    "bytes": 14761020,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6d026b6a-2d16-4343-8bba-bfbc8e91e9b7/tripo_pbr_model_6d026b6a-2d16-4343-8bba-bfbc8e91e9b7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmQwMjZiNmEtMmQxNi00MzQzLThiYmEtYmZiYzhlOTFlOWI3L3RyaXBvX3Bicl9tb2RlbF82ZDAyNmI2YS0yZDE2LTQzNDMtOGJiYS1iZmJjOGU5MWU5YjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=C1Ay1VW6Je19WtYwKsiC8LaSQ23b3P--VgTElvvu24GJgTTvg3X~5iKHGmA-s9PrCP5cU3eEEq6NmI-e4u9DhW6UNRRipyCnoDGs4ytkBqeVPQfOBb6Z1gKOUPGgDxVpQvlxDVNXnbGPZThsDhNXHqftQPwq7cmEudkoDCw4n2H8OrUvSMaf4vMfOclywhwM~IAIP6O-4TpfcR2YxRXMIe02Dr1yO4MyVxkTfBtxL6dEkdtHwinDMQoC3jdT-9e5ngXUvK18Od56WJUtNwtuuRK2N-WEzwjFz6P~8Eoxc2sroDEZEyRiUHznmcz8zBa3WzarDKzxynpFnbKR4hpDAg__",
+    "asset_id": "standards_master_gauge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Standards Master Gauge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
