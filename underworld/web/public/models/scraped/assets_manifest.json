@@ -5344,5 +5344,22 @@
     "epoch": "industrial",
     "name": "Clipboard",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:discovery_ledger_book": {
+    "prompt": "a heavy bound discovery provenance ledger with a ribbon, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "32548e16-1098-4ce6-a028-cf6336ddebfe",
+    "path": "/models/generated/tripo/discovery_ledger_book.glb",
+    "bytes": 14861116,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/32548e16-1098-4ce6-a028-cf6336ddebfe/tripo_pbr_model_32548e16-1098-4ce6-a028-cf6336ddebfe.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzI1NDhlMTYtMTA5OC00Y2U2LWEwMjgtY2Y2MzM2ZGRlYmZlL3RyaXBvX3Bicl9tb2RlbF8zMjU0OGUxNi0xMDk4LTRjZTYtYTAyOC1jZjYzMzZkZGViZmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NnRNpIzBfZ~1kLLCnYcpJh555smYjJHwBZOqMzMjoWlTlcAbGUdwcTrI0nCrzEIyGPIv6ywQs7qD-SAzpW38LvuEOpc7~b-STVwK8vLpGBZlzObHwgi0RbwrCGTYRBWCjzqKCDGBneuPH9Aan2QsSyLrL1p40JVv72kjqksAI1Orcu1VDPJJCk6hVzfDfMtRaX5C3112inVixdFvz92gHIHTvukE5f4q0Z-3LPnYGS70DMsmk~rF6VA5xStETMplIvvhtCfbVSSdVovdCGys-eno2BdGhjZ1KWRc0FTsga24Hqt706JPrMYOsoBoZxLeTM7DoWmsX3xhW91VhpyRlw__",
+    "asset_id": "discovery_ledger_book",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Discovery Ledger Book",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
