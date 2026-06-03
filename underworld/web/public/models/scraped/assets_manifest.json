@@ -4137,5 +4137,22 @@
     "epoch": "information",
     "name": "Centrifuge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cfd_wind_tunnel": {
+    "prompt": "a wind-tunnel test section with a model inside, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b74a3b0b-771c-49e5-934c-fab6ce992b78",
+    "path": "/models/generated/tripo/cfd_wind_tunnel.glb",
+    "bytes": 15208188,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b74a3b0b-771c-49e5-934c-fab6ce992b78/tripo_pbr_model_b74a3b0b-771c-49e5-934c-fab6ce992b78.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjc0YTNiMGItNzcxYy00OWU1LTkzNGMtZmFiNmNlOTkyYjc4L3RyaXBvX3Bicl9tb2RlbF9iNzRhM2IwYi03NzFjLTQ5ZTUtOTM0Yy1mYWI2Y2U5OTJiNzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=lKNVXoConV3VKD8Aax6~uQ7GULEowtu5KcfJgg0--B38jlkZnG0ZHoqlA5yJCWSTAfOL8TyxnXp85IwHJ3V6wohyJSSs8~mqj6KG84q65qigxqLzm9YE4dWCVWquo10BQz5wXst4H0GqvjdKa0gfSXFDB7wt1CvCflpBWP7VzQPBxUQ~rGrGaruKqmCeSWm87BxEzITQkI~Mjs0XOAwA4pwvg1yDArEist6uevmWBomuJsCy-lK32ljSo~iScPT1~STSjECitmklAX6DpEFFs1I9XKyM6kKGdZQrodYduUfXfzm-ZD4X8vTH-xTcidPTO6yIe0GBaCIPwAKx~L~IbQ__",
+    "asset_id": "cfd_wind_tunnel",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Cfd Wind Tunnel",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
