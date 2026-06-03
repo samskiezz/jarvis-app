@@ -8064,5 +8064,22 @@
     "epoch": "quantum",
     "name": "Self Driving Lab Cell",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:smartphone_device": {
+    "prompt": "a modern smartphone with a glowing touchscreen, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e8dbcf3b-e4e8-48a0-80db-969df06385a7",
+    "path": "/models/generated/tripo/smartphone_device.glb",
+    "bytes": 11862384,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e8dbcf3b-e4e8-48a0-80db-969df06385a7/tripo_pbr_model_e8dbcf3b-e4e8-48a0-80db-969df06385a7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZThkYmNmM2ItZTRlOC00OGEwLTgwZGItOTY5ZGYwNjM4NWE3L3RyaXBvX3Bicl9tb2RlbF9lOGRiY2YzYi1lNGU4LTQ4YTAtODBkYi05NjlkZjA2Mzg1YTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NJGB3hTrB~UqQBfzmDSdm5rP-ZuqMaS5xaUVF9~lqXL76LXh8Cz9XGJ5sYFtZ21XBentwxB7lOL5TuTGex~9klZAwryjIjAG10cxxlF45UTQKOzzD9RNHe~iiLSWdi0dZMKAyiWzu9CqY1~EPPLiVj~829nJS2Y8e2aSJOhKCaIIOE4TniX-5WlE2-lApeuqTCHWZ0NhXqF7tXQfu-NlaXQGmRGR8aRTFFfSX9sSRskzN346fXY4BARXcvi7i4MSo3K0e7lf-wU8ERS5VZHp4u50qz5mOnVEP4dg3EGd187GS5eVFi-NihB06TSlMp5ReMb5zU18SFmQTsjAb1BVfw__",
+    "asset_id": "smartphone_device",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Smartphone Device",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
