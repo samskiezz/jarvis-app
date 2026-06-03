@@ -4630,5 +4630,22 @@
     "epoch": "industrial",
     "name": "Milling Machine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:multimeter": {
+    "prompt": "a handheld multimeter, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "282419fe-2fa9-4221-a930-da16e27b4ba0",
+    "path": "/models/generated/tripo/multimeter.glb",
+    "bytes": 14824940,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/282419fe-2fa9-4221-a930-da16e27b4ba0/tripo_pbr_model_282419fe-2fa9-4221-a930-da16e27b4ba0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjgyNDE5ZmUtMmZhOS00MjIxLWE5MzAtZGExNmUyN2I0YmEwL3RyaXBvX3Bicl9tb2RlbF8yODI0MTlmZS0yZmE5LTQyMjEtYTkzMC1kYTE2ZTI3YjRiYTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uEmxQXt858fgvHhOKjSNB86C47qXTieIVVPX4iZh5vDR49MxpWXUo6r8FhJVYZLPQLUIiCG~HpLlGVP6nj0kbQsiwTlIwaciuYceC4Sg-~2~SI3P4KXThwRUmyqiVTTtmu90fwMBLsb6pzQHKzaBmkQ6vtd0rRx16PFd86WHTGu9NYUEq~fUaMqOXW3ycxOqTfTUFLh~6~zblkahjRV223NVWpQfsM0FHOr6ZQH-pZv5mAKhPKHkGt0qFY~xSKnXVnT0VRaNU1pWvLqjPcVkUTiwUWx~zPTSu0hGIV~9W6YUvNO5BVg7z2ZlUMqONLLrf8JEpX2hlNrvQzLOvwlxUQ__",
+    "asset_id": "multimeter",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Multimeter",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
