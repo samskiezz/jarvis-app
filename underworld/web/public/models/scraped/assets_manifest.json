@@ -2675,5 +2675,22 @@
     "epoch": "iron",
     "name": "Fx Wizard Tower",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_world_tree_hall": {
+    "prompt": "a grand hall grown into a colossal glowing world-tree, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "601f7f57-c7e9-4a57-910d-77fedba66f18",
+    "path": "/models/generated/tripo/fx_world_tree_hall.glb",
+    "bytes": 15638516,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/601f7f57-c7e9-4a57-910d-77fedba66f18/tripo_pbr_model_601f7f57-c7e9-4a57-910d-77fedba66f18.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjAxZjdmNTctYzdlOS00YTU3LTkxMGQtNzdmZWRiYTY2ZjE4L3RyaXBvX3Bicl9tb2RlbF82MDFmN2Y1Ny1jN2U5LTRhNTctOTEwZC03N2ZlZGJhNjZmMTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WprLJe2uIxAHq5QoRfU~DXi-QAUoveiLXu9mDWBkl-Xm7A90I4blIG-5ZrIG0nmC0yz1yVBGaoK9ZYdenF6S7dkBdfeYYvi0pq8gSJk5ORfJl4zNNDSv7SdDhSzAIN6zpAZ~h4gKnczGzzrFwAPLpAkCjC~3JnDAXzg2UyDo5EfPSdWuL2vJytG6i0RX9PtMajqViWuD0t-6uMGfL2RY9CDWCBLMNd-3~vivUvkYTCqXlmHnUapGANI6i3DO7uhMpNzoilfmukb4S-l~5d67lQsNQCJ4krB2MC4gPeKrtc4q4HX3bxk91sx8xbrKF6hqX-D~1vZNjTcORZBkC-BsGQ__",
+    "asset_id": "fx_world_tree_hall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx World Tree Hall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
