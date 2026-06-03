@@ -7639,5 +7639,22 @@
     "epoch": "information",
     "name": "Crispr Cas9 Model",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cuneiform_tablet": {
+    "prompt": "a clay tablet covered in cuneiform writing, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3ffe85a9-e87a-4bb4-b36b-b1fb82ceb728",
+    "path": "/models/generated/tripo/cuneiform_tablet.glb",
+    "bytes": 12866892,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3ffe85a9-e87a-4bb4-b36b-b1fb82ceb728/tripo_pbr_model_3ffe85a9-e87a-4bb4-b36b-b1fb82ceb728.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2ZmZTg1YTktZTg3YS00YmI0LWIzNmItYjFmYjgyY2ViNzI4L3RyaXBvX3Bicl9tb2RlbF8zZmZlODVhOS1lODdhLTRiYjQtYjM2Yi1iMWZiODJjZWI3MjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=OAt69WY-WBc2GAOmD6tDKrFBq7roBJDMwTuBj30mQ83vIGNwiWhUiWQcdoEgpE6TuMXieo412CJgNebramI2kUF3nrJGcAAN3qmhkz8k0kOb19DevtX-I2N6QWvdGiLhUhq9LeCF0MG~CH8OVEHIZtQmJXTfzBx1AKbm1Ma3vQn3kDoHOMS2eAKe1uV7y25CqJqgtCb1adkiuUI-~ELOrdLNGwpEqs-MfB4UxSjtqdnDYxqtsCB3nk6Y8WCnJxzFjqPiK78jCYQErSJU3kEgq4rpUSS6gII6NSj4rPyezXKffsr-kzNEO2GKGAiXMc1MScaX~lBAIeCOobW00ytQjA__",
+    "asset_id": "cuneiform_tablet",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "bronze",
+    "name": "Cuneiform Tablet",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
