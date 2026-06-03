@@ -3525,5 +3525,22 @@
     "epoch": "any",
     "name": "Cutting Board",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:frying_pan": {
+    "prompt": "a frying pan with a handle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "86a655d0-309d-4c5c-b3fd-a0b2546c2c82",
+    "path": "/models/generated/tripo/frying_pan.glb",
+    "bytes": 11667284,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/86a655d0-309d-4c5c-b3fd-a0b2546c2c82/tripo_pbr_model_86a655d0-309d-4c5c-b3fd-a0b2546c2c82.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODZhNjU1ZDAtMzA5ZC00YzVjLWIzZmQtYTBiMjU0NmMyYzgyL3RyaXBvX3Bicl9tb2RlbF84NmE2NTVkMC0zMDlkLTRjNWMtYjNmZC1hMGIyNTQ2YzJjODIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=tG2dNXcIT8~NMlvQ5IybJfOwm7crhHA8Ebo3x0Y96unaydxPvi2W81zBmaWddUmmM3cbFGZ1yVWes79ZfEgMrVGHcZn72OljfwVgqqXuHoV2jWbANfpEJuO9hLks-CV4cKyLmt8UMkuaUmOSOc~d8ArskKstsoKNl9SdB~YqqS-LrR7SlUvoIbLFq5ryRwN3SpQ4u6iVJgx4IMzk27~0DGSIiehUOgmwqo2m4OoJNuXpR~sle5h7x8rxSgqoOJwPaVz~qd4sPmENiHTqLrZeMbC8gF141csxkZ76fMzzLWHuIdHqxljXdjpH00fhgRGMhtHYwdXzaj69LwsvQU21XA__",
+    "asset_id": "frying_pan",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Frying Pan",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
