@@ -5072,5 +5072,22 @@
     "epoch": "industrial",
     "name": "Theodolite",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:thermometer_lab": {
+    "prompt": "a tall mercury laboratory thermometer on a stand, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f3e9177e-875f-42ba-a8f4-2d9ec98c5896",
+    "path": "/models/generated/tripo/thermometer_lab.glb",
+    "bytes": 2901584,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f3e9177e-875f-42ba-a8f4-2d9ec98c5896/tripo_pbr_model_f3e9177e-875f-42ba-a8f4-2d9ec98c5896.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjNlOTE3N2UtODc1Zi00MmJhLWE4ZjQtMmQ5ZWM5OGM1ODk2L3RyaXBvX3Bicl9tb2RlbF9mM2U5MTc3ZS04NzVmLTQyYmEtYThmNC0yZDllYzk4YzU4OTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IQfAw1GjvhYRZcMTOZcJp65fdA8VHabKRTwAWqdWx-GzRPOBmtDcnHPU3mcVit7ByAndH3Y~byXDIclV3lVVM9Dwd4n7C-IKD7qo6Z6k8mWcdfaIGMeNboc1h5Wjkoib0SrJF6FZJ1sE7-60jAk2xTEeUL3r9k3ox07HbWX-t26LQ~QaDa6whXiTnU4DiMmOKo8Z9bOwHojgPC8BeYehB5A8Leif3ogFUHWvDmha0CptqGFGlz7xLSHG7Kg-mzAwriVaws9Gca-UnFmPEoN0iH20TaGBajQzaeUDFpN5E6~kKjKs2rJjCrflrzJy-188GHXsk8qdxkmeMevr9arahQ__",
+    "asset_id": "thermometer_lab",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Thermometer Lab",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
