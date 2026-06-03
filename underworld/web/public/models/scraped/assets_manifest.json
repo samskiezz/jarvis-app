@@ -5514,5 +5514,22 @@
     "epoch": "iron",
     "name": "Market Ledger",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:meal_plate": {
+    "prompt": "a plate of cooked food with vegetables, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d3712c5d-200e-48f4-8ffc-f60a24cd602a",
+    "path": "/models/generated/tripo/meal_plate.glb",
+    "bytes": 15026888,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d3712c5d-200e-48f4-8ffc-f60a24cd602a/tripo_pbr_model_d3712c5d-200e-48f4-8ffc-f60a24cd602a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDM3MTJjNWQtMjAwZS00OGY0LThmZmMtZjYwYTI0Y2Q2MDJhL3RyaXBvX3Bicl9tb2RlbF9kMzcxMmM1ZC0yMDBlLTQ4ZjQtOGZmYy1mNjBhMjRjZDYwMmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RDOC2F7iiBeQvuiaLq8NcOcujROzrGwuLSgLJiKMpBii7AghtpvR2JiIRK8iijqz6CZiVNSqZuL7CV5jcZd36VOzDGdSs0-w5Kh9aHvXGpktLvrRQv3yOgtZnNbmQUApfEbWy3IuqDEGXGpNjHDBVn0ngeBmgY7LoNUeANpX6odyzuDAP4ASdeshK9GUeh0n7ouHQ07Z4U~QHn3k0iJd~m5R2S3moQV1PbrEml8FpR42MrmextvV666WRpF4vdEAHv-7Q~jPOBIzK~8hGXstNUKuZG-tvQGhKTe6hERDycdvnL7gmWPhdKAaYMKcpvXbipQuAycdmx1A6f1fYxNXbA__",
+    "asset_id": "meal_plate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Meal Plate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
