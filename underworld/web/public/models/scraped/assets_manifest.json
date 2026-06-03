@@ -2692,5 +2692,22 @@
     "epoch": "quantum",
     "name": "Fx World Tree Hall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mood_emote_ring": {
+    "prompt": "a floating ring of glowing mood emoji icons, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "e30c9ace-727c-48c8-85f8-a2bc18a92001",
+    "path": "/models/generated/tripo/mood_emote_ring.glb",
+    "bytes": 15142792,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e30c9ace-727c-48c8-85f8-a2bc18a92001/tripo_pbr_model_e30c9ace-727c-48c8-85f8-a2bc18a92001.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTMwYzlhY2UtNzI3Yy00OGM4LTg1ZjgtYTJiYzE4YTkyMDAxL3RyaXBvX3Bicl9tb2RlbF9lMzBjOWFjZS03MjdjLTQ4YzgtODVmOC1hMmJjMThhOTIwMDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Qp~MXwjDdUOYTti0R0n7GWeHpDtg3y9di6yl5HjC6pswRY1TBAergV~vvzFaw36rArGoCyW1ixzuqSc1j1bg~76sgcIRhnEanaEdAzWFCq16yAeoTIX9ZgP7gC-IyK72QJNfDbRX485lW2C-K-gPre~xq0D3WVLnsZ980CnZOr1EUeDlBvnQGmBNZQff8pO6LzGKsPErKT3vLPBA3aSnkALSIzQPN5YGX1lDrserBpdNmo2Vq3TD6sFcBs0uC629sTZIVPpi2OVJtsC~jHE9SQCLBS6megZez65RYTD8nbxFaZJi7l8L6p73iKYgYVO3feBXDpwZpTGuEVsIHjuhfA__",
+    "asset_id": "mood_emote_ring",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Mood Emote Ring",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
