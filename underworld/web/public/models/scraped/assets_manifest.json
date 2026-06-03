@@ -1366,5 +1366,22 @@
     "epoch": "any",
     "name": "Autumn Leaf Pile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cactus_succulent": {
+    "prompt": "a cluster of desert cacti and succulents, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "f161f5f5-8838-474f-8183-6986c4e4b137",
+    "path": "/models/generated/tripo/cactus_succulent.glb",
+    "bytes": 15296960,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f161f5f5-8838-474f-8183-6986c4e4b137/tripo_pbr_model_f161f5f5-8838-474f-8183-6986c4e4b137.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjE2MWY1ZjUtODgzOC00NzRmLTgxODMtNjk4NmM0ZTRiMTM3L3RyaXBvX3Bicl9tb2RlbF9mMTYxZjVmNS04ODM4LTQ3NGYtODE4My02OTg2YzRlNGIxMzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=i5~Vcg5gUIJpyxBILmT8LCk8Wyn6QgBEPnnPjW24L3HBth2pVgIninutTRqDHddIxNneMNz8CDIJLR2cuRqjkCtHxFM8us-9Ax85S5keQmdxMM71OuXTmCA69G9tCmEThwqdv2yL3YZ0kKthMwhNRSngAqMJQfiqNFMZOYLZl5~cnlKj~uoLjs~eemezxy8873cig0cGx9042KeSPWtKgyhE4GTz6XLH-ERv-JVoL6GRB~-DiAV8ax-K7dQn~l4EOb5e0Z951DT9bShcbySAce46M79eScX2W0h48-Q5Y5-yE3KRSHd1Ttv1dcem6ik4Mcg9Ex0R1Yim5CF-SmvtlQ__",
+    "asset_id": "cactus_succulent",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Cactus Succulent",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
