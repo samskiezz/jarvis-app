@@ -1060,5 +1060,39 @@
     "epoch": "industrial",
     "name": "Guild Mechanical Workshop",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_patent_office": {
+    "prompt": "a dignified patent-office building with arched entrance, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "7f8fde1a-8bc2-4431-8dae-e51cb9e791ba",
+    "path": "/models/generated/tripo/guild_patent_office.glb",
+    "bytes": 15079840,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7f8fde1a-8bc2-4431-8dae-e51cb9e791ba/tripo_pbr_model_7f8fde1a-8bc2-4431-8dae-e51cb9e791ba.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2Y4ZmRlMWEtOGJjMi00NDMxLThkYWUtZTUxY2I5ZTc5MWJhL3RyaXBvX3Bicl9tb2RlbF83ZjhmZGUxYS04YmMyLTQ0MzEtOGRhZS1lNTFjYjllNzkxYmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=cbQ5CEoBO228gpRYdDCDI0ERw9zlaEkQv9kXFpaZODBRbKyr9bJpCFNN7M~dcp5CWjh--KWhgDBq~m~4YpUovK8DFBSfu8aFnCodYqmTBXAanxxlMOs5m0ORK8qmXWq3tDfTVYEYPpWww4dKakuJejzrjhBvof~veZibHSUn1I6UKOnfJrQlYQEAvtK2tVza1PsNx9lpafpxLTK3CtzkP8unVCmVjdUcobM8Laq~4RSqKgSm7ePUpKf1W0f4tF34pstD7TNqvrrDmXfZ3UfaJ~r1rn0E-8R~anU9v5Rm-aCtN61JLggFMdQDzGgC-ftltl4Fy3qgtI2v5S-Dt13f3A__",
+    "asset_id": "guild_patent_office",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Guild Patent Office",
+    "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_physics_lab": {
+    "prompt": "a physics research laboratory building with tall windows, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "03383b51-1aba-4660-96e4-bcb5dd4a88c6",
+    "path": "/models/generated/tripo/guild_physics_lab.glb",
+    "bytes": 15273660,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/03383b51-1aba-4660-96e4-bcb5dd4a88c6/tripo_pbr_model_03383b51-1aba-4660-96e4-bcb5dd4a88c6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDMzODNiNTEtMWFiYS00NjYwLTk2ZTQtYmNiNWRkNGE4OGM2L3RyaXBvX3Bicl9tb2RlbF8wMzM4M2I1MS0xYWJhLTQ2NjAtOTZlNC1iY2I1ZGQ0YTg4YzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=meEkW7sqOqricKYEBwaznigxL7gHgK-d~rqM8zUyDGBcjAoRZQ~7Nc1G0ryJrSIkT2NM1YJA8InAVAvK0VxnnCdUBTaD3nz1BfsrJxVwnOhhSu1NcPnp9nI16ulDiWc3xPwPeON4oZ8HVwCASMvJdZzzEtrElsu5yZMWv6ojsumr00qiQ8okcO3E7j5Ru~vMbLFL~UT8aBH7yF4m0k7SC~WJWjTlJD9d4mQ2S1nDpEkyKvVtVWjz~cMp-~sxGgFximFNaw~VVnuVx~LXcvnH5yNXnTqAn2RqCcovOVUx~h~EBKiXSP~wYlsdfIhIMb1fLnJBHb3obvTxFJJUN0XeNg__",
+    "asset_id": "guild_physics_lab",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Guild Physics Lab",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
