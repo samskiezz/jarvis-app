@@ -1740,5 +1740,22 @@
     "epoch": "information",
     "name": "Vr Arcade",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:courthouse": {
+    "prompt": "a dignified courthouse with columns and a pediment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "095f6160-fc08-4452-b28f-e84f49d83123",
+    "path": "/models/generated/tripo/courthouse.glb",
+    "bytes": 15444136,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/095f6160-fc08-4452-b28f-e84f49d83123/tripo_pbr_model_095f6160-fc08-4452-b28f-e84f49d83123.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDk1ZjYxNjAtZmMwOC00NDUyLWIyOGYtZTg0ZjQ5ZDgzMTIzL3RyaXBvX3Bicl9tb2RlbF8wOTVmNjE2MC1mYzA4LTQ0NTItYjI4Zi1lODRmNDlkODMxMjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=PwqOgGPMlG-slorGVIsoFahi~5PRQGZD7yzPuNDEmii8kcayHcacjxw1sC7dg-mLfJCAs8WKw5ULelPHS~iBaOY2OH~VBQjhl~BiPLXSvuw8K7NPXL-ugWw1YWQ7LDghnInDIIw8vfST-s465Y4Mv~IEMx55XXmMl0cq06gm11o9Gc-0IjHxdtO0Fy5dd88RjPeOzka205h8O-AIvnerF5LbiSx0BOXmMxVeaBwiG2OliE0xFZMK8jUoxGakWyzieRHFOde~4-O1HVwJqWom6UVXIIQVf93l5ukszVva-vW4cyzzVh2i~p6Cxy0mQboiEA3yf4lvQau9Q4imE606aQ__",
+    "asset_id": "courthouse",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "Courthouse",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
