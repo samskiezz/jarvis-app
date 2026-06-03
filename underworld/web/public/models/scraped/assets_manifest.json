@@ -2165,5 +2165,22 @@
     "epoch": "stone",
     "name": "Fx Fire Pit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_floating_crystal": {
+    "prompt": "a slowly hovering luminous crystal shard, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "a6d7e415-0221-40e1-9271-ab064b33c2fd",
+    "path": "/models/generated/tripo/fx_floating_crystal.glb",
+    "bytes": 14786668,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a6d7e415-0221-40e1-9271-ab064b33c2fd/tripo_pbr_model_a6d7e415-0221-40e1-9271-ab064b33c2fd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTZkN2U0MTUtMDIyMS00MGUxLTkyNzEtYWIwNjRiMzNjMmZkL3RyaXBvX3Bicl9tb2RlbF9hNmQ3ZTQxNS0wMjIxLTQwZTEtOTI3MS1hYjA2NGIzM2MyZmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=go-jZrg8cbWFpUXvwNHf6v3Jhhtc11JhgkQ2yhFY1rjgjHWAMZxTYpe8FKpT-PGJgXfVJuGAb7xWD1IWc6N2DK0CDpPIQthGDdXtNCXth8ogMO1XnVT8FOmhTSUz1Rv3dSZ9X~OKedBa3QvO9x9dar9tPPA7fYrD6gcj0tpmm6onkCfnRGl2xjDNf69eb9WKp7msDTAftfdZaFugMkX~MjaLLnzGAawiGFl-4hmkzCxdxpVYdmIiKAeYz7B0sZuKgwFW-VptJIfPMYNzBkxyldWExvvJelSr3akBGufJN8pulnOtsZ6cTzkhP4CFgD5duyJ8BWCIcEtMgZnII9Ij-g__",
+    "asset_id": "fx_floating_crystal",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Floating Crystal",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
