@@ -1247,5 +1247,22 @@
     "epoch": "information",
     "name": "Hospital",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:market_hall": {
+    "prompt": "a covered market hall with stalls, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "020e17c3-f33e-4a60-a21e-ac50699ca801",
+    "path": "/models/generated/tripo/market_hall.glb",
+    "bytes": 15171544,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/020e17c3-f33e-4a60-a21e-ac50699ca801/tripo_pbr_model_020e17c3-f33e-4a60-a21e-ac50699ca801.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDIwZTE3YzMtZjMzZS00YTYwLWEyMWUtYWM1MDY5OWNhODAxL3RyaXBvX3Bicl9tb2RlbF8wMjBlMTdjMy1mMzNlLTRhNjAtYTIxZS1hYzUwNjk5Y2E4MDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=S7uRUcZ7xrA~3MJmwiRafugceoVapY3whlA6vLJeydTqb6Y-mbqDBg95QXg4ZXnFn2ag0hKVysk4Up2yXX7lRoSEwtcm4KYC-PVBlFWYWLLzE6DagcrthkxMhBIKfbhRspkEAwK5AyzYpDyYPX7K9zOg~AXl~ibbjYwenni8GArvMucX8vIk3MQF3VlEhK1LyXOGOWHZvTwZiCNC5XmaPJJZZut94fqCDsZCyP6SvZw2cg0u07pOUoAEz7FMWBHGSXp3spXuGGNClu-spxzbtZYzv7qDP1Mvn3~Bid24~fc-ZaKvO34O3wL4cFdSi4Zp~czu1ojSc0d4b0i0QzftLg__",
+    "asset_id": "market_hall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "iron",
+    "name": "Market Hall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
