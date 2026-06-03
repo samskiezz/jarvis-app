@@ -6568,5 +6568,22 @@
     "epoch": "bronze",
     "name": "Idol Statue",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:incense_burner": {
+    "prompt": "a hanging incense burner with smoke, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0bf55021-3af9-4be6-a1e0-f5cc6c6edc3a",
+    "path": "/models/generated/tripo/incense_burner.glb",
+    "bytes": 13234464,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0bf55021-3af9-4be6-a1e0-f5cc6c6edc3a/tripo_pbr_model_0bf55021-3af9-4be6-a1e0-f5cc6c6edc3a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGJmNTUwMjEtM2FmOS00YmU2LWExZTAtZjVjYzZjNmVkYzNhL3RyaXBvX3Bicl9tb2RlbF8wYmY1NTAyMS0zYWY5LTRiZTYtYTFlMC1mNWNjNmM2ZWRjM2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=GmDJVrKZnddSzV197i8zUlw9OB0BOc39VE~UOjQKTP95FuSRYwie0-uF8xVpgfHWsmuKuhEN919TZhwa~2vyIraRezL9BlOkOAL0YXx-cjwznC7cl6PTQKUVA1~-Cy6H01RwPPS0j1rNdyM7vv-vpZ4cf6vO9gMU14AXzAWgpiiyJAryvdW02TK135tQAmttlCy79Cj0TAa0LpR9jmr2AYrU-ShXUiWWC7eObO1QdR3UBS3ANl9~7TXcAUAZQQCoacVhW1PJH3TJlS16vDgO1OtZR2k2lUiAP48CPM83mrcUrLnEC6647IZmL~OArJ489u38tVPpZ0ykrd0b4JsutQ__",
+    "asset_id": "incense_burner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "bronze",
+    "name": "Incense Burner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
