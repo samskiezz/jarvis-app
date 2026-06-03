@@ -1791,5 +1791,22 @@
     "epoch": "iron",
     "name": "Mint Bank",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:republic_senate_house": {
+    "prompt": "a columned senate assembly chamber with tiered seats, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "5cc48776-e5b5-4905-a6a9-66b586b988ec",
+    "path": "/models/generated/tripo/republic_senate_house.glb",
+    "bytes": 7787864,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5cc48776-e5b5-4905-a6a9-66b586b988ec/tripo_pbr_model_5cc48776-e5b5-4905-a6a9-66b586b988ec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNWNjNDg3NzYtZTViNS00OTA1LWE2YTktNjZiNTg2Yjk4OGVjL3RyaXBvX3Bicl9tb2RlbF81Y2M0ODc3Ni1lNWI1LTQ5MDUtYTZhOS02NmI1ODZiOTg4ZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vWlpCysbo9Fo3KalMQ1bReTKnffpMRvA6Std6y9-6RLnmlxuoDWe3Wgr2dr0kPUz5lirkIqIQxkm6b8~K7240KlAu5gMXLLn9sN2iZ2RhQV1bo2D3g2c59Ly75MgoIm~vOflcooQXOJviGkvEDr5p2mTJ4XQ~bPLQii~gt9OH0SNsnjCD~CYv8mJIIGEivpBkDFxScGxzZSjHVshGBTw7eH2mhvwjIr3gZ9EWly4BelC9gex6Y4cj2dgjEGdm1IwXe~BW1gK5i9iXaZ0eHs~n5I3gHEEdmPCabMjl4ncrJdnos-2Pv7phBK9a4rzl4ird8cIeAX3xvcG0WkxClvmrw__",
+    "asset_id": "republic_senate_house",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "iron",
+    "name": "Republic Senate House",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
