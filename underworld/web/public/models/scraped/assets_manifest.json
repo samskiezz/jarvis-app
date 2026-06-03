@@ -6857,5 +6857,22 @@
     "epoch": "industrial",
     "name": "Hospital Bed",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:iv_stand": {
+    "prompt": "an IV drip stand, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c99d5875-ebc5-43c6-9999-523aa65d422d",
+    "path": "/models/generated/tripo/iv_stand.glb",
+    "bytes": 4332000,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c99d5875-ebc5-43c6-9999-523aa65d422d/tripo_pbr_model_c99d5875-ebc5-43c6-9999-523aa65d422d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzk5ZDU4NzUtZWJjNS00M2M2LTk5OTktNTIzYWE2NWQ0MjJkL3RyaXBvX3Bicl9tb2RlbF9jOTlkNTg3NS1lYmM1LTQzYzYtOTk5OS01MjNhYTY1ZDQyMmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=YrPrH71~7Jjrn2q3frpHb~nu18X-JFQtqB~PS71ZG6Kl~Xb43RKU5Wl-ajlNqpVKla2TUo3ycjuTuWtnBEEG8NzOt3-Ouev-IupXT07mOapy9833jBC1P0z~Z~34TjzOA07OOqpFY-LD234Qy7kIlLgMJ72XlENqNZvbO5EM1ImwrO-crExLu0guQrdT20x4TaV7vlQmlQdzQsk5b3uggM~D9hjEyN-V5NfWntGTYXtrDKevbqjb5LN7msRha6tOX6ilrurRLuadI-der2mbZwm8mtBTaycwmSzexHiKV5gstqwOLO6hzpJ2lLLvt6YwiesOmjFKFsclE7l5sFWNKA__",
+    "asset_id": "iv_stand",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "information",
+    "name": "Iv Stand",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
