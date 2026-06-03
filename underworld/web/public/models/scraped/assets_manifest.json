@@ -5463,5 +5463,22 @@
     "epoch": "information",
     "name": "Laptop",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lectern": {
+    "prompt": "a wooden lectern with an open book, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5ab8fb46-cb77-489e-810f-ea6b18be732c",
+    "path": "/models/generated/tripo/lectern.glb",
+    "bytes": 14850060,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5ab8fb46-cb77-489e-810f-ea6b18be732c/tripo_pbr_model_5ab8fb46-cb77-489e-810f-ea6b18be732c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNWFiOGZiNDYtY2I3Ny00ODllLTgxMGYtZWE2YjE4YmU3MzJjL3RyaXBvX3Bicl9tb2RlbF81YWI4ZmI0Ni1jYjc3LTQ4OWUtODEwZi1lYTZiMThiZTczMmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pLP2aiQUbUFL4U86JbcMAVvc-kuZDJrVwSvT-qctie6unO9~10KHubaD8LgLA1~oPNG5z5Yikqv3sdK7cwSxWDEktOKLBqjIFGh6x9WSGv4rn2pRfPDo4VQAdMxbLNOeEE6a4wwz5iSSjV7Wi2EabToWBpgs1rVK1srFnJEmaQaUbW4Cv2DtBFsY2z~hsVY1UKaVjD0b4wPYbtaQvrsPIx1RqTPRZfDa2nchLh49aIqrIDRa772v6dLa5HAyNtlPCobYTe~O6F04zdGuIhZDx1PG2qWPpKMhc7LSSsZZpRCEimQlXonKGTj7J7ntTme6tdp1jzp~huv0hcJ9kh4cvA__",
+    "asset_id": "lectern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Lectern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
