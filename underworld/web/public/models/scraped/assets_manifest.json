@@ -6296,5 +6296,22 @@
     "epoch": "iron",
     "name": "Shop Counter",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stall_canopy": {
+    "prompt": "a striped market stall canopy with goods, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1bfd241c-8323-4981-ba10-31255da51c2c",
+    "path": "/models/generated/tripo/stall_canopy.glb",
+    "bytes": 14700796,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1bfd241c-8323-4981-ba10-31255da51c2c/tripo_pbr_model_1bfd241c-8323-4981-ba10-31255da51c2c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMWJmZDI0MWMtODMyMy00OTgxLWJhMTAtMzEyNTVkYTUxYzJjL3RyaXBvX3Bicl9tb2RlbF8xYmZkMjQxYy04MzIzLTQ5ODEtYmExMC0zMTI1NWRhNTFjMmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=gOZpeII0T9Tbg-Ty857fr8kOftZS8RveknM-z91SNMYq1Gvp-1OhlE~hhkteXv1uBWuUWJwh9duz7lKbM3GJlUEn4eEsMWqBzLuQj3qhhll-mHDIXrtpfvBPMje64wxjVg5PQVICNvazKQv8sl8y6nJ8lYvrR2EXoeSLO-SQ1yM1RAaUifnfPkLziKcvJJjKExfC~okK-BXshEKt9S3NKmCU~Prm7Le37nMrDaeBF~y~Tz68VVz-AfYqAROiqNn~0ntcDw9gP13Oxdemu2cBIxAwxvY4wYBDy4Jldjq2VYCyu6~qQdyLf7mAet7UH1MHRZs1NnbNPDOmr6OaVbQ0hw__",
+    "asset_id": "stall_canopy",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "bronze",
+    "name": "Stall Canopy",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
