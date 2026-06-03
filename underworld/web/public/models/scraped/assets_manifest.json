@@ -4511,5 +4511,22 @@
     "epoch": "industrial",
     "name": "Jig Fixture Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lab_bench": {
+    "prompt": "a laboratory bench with shelves of glassware, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ec4763fe-a562-4672-9e85-2e0c6198f2a6",
+    "path": "/models/generated/tripo/lab_bench.glb",
+    "bytes": 14979500,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ec4763fe-a562-4672-9e85-2e0c6198f2a6/tripo_pbr_model_ec4763fe-a562-4672-9e85-2e0c6198f2a6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWM0NzYzZmUtYTU2Mi00NjcyLTllODUtMmUwYzYxOThmMmE2L3RyaXBvX3Bicl9tb2RlbF9lYzQ3NjNmZS1hNTYyLTQ2NzItOWU4NS0yZTBjNjE5OGYyYTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vwHJtkpoVc-LxFbmMawnDYrBDYKLqPngx1GfzySEyEFd8REGq9za7lpAABAblnAv320cYpVTmbHru94SxlQc2WfBz4Ez4hLJ0TxYa5MZYmq2C~rioomnJrQclllt1qBDjPu4mjCdn1IstzieNvabVjqx1mfqXK7qCN01BWAsw2-CNqcLfIN2LAzdaCvxMp7EEq3zdTNSkKO6TW0-9kucvS55HHd-i7jr0LySyPduozX5b22sLILlVqYQ-cF1uEiscm-nhJ6BF-SGfB4WFtMQIbKtNeSSScm~GpnRvFVMakOOXeY1x8tLZ57OOBhWJO1tymerP69RFj0Gz6~w10e5mw__",
+    "asset_id": "lab_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Lab Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
