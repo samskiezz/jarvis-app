@@ -3083,5 +3083,22 @@
     "epoch": "any",
     "name": "Chair Dining",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:chair_office": {
+    "prompt": "a modern office swivel chair, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "ba9548c5-8546-40c9-8cef-69131f5af450",
+    "path": "/models/generated/tripo/chair_office.glb",
+    "bytes": 12919428,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ba9548c5-8546-40c9-8cef-69131f5af450/tripo_pbr_model_ba9548c5-8546-40c9-8cef-69131f5af450.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmE5NTQ4YzUtODU0Ni00MGM5LThjZWYtNjkxMzFmNWFmNDUwL3RyaXBvX3Bicl9tb2RlbF9iYTk1NDhjNS04NTQ2LTQwYzktOGNlZi02OTEzMWY1YWY0NTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VWJQEP0V7uLwvqzIeml-Bb2sV1vWs1IIjVTZdvdKsfj4AT8YdPEjDFnTILmIBNx6CAi99bekIdkihY4w4Dz-ktiCZsUZmgMBdYGanc3gu96ILY6cbzZQ7W5iJ4k1qzhLgXVX7CCXkQ1CYyJQ6vuWYuuRSgqWcroLdXVXtGBgGiSwrO0OOsaZVJefavA6UdR0313Jz2P577GVf2eLMdYJ36l4EinkgnK2KJLJUhNjCQM6LbixXP64PV~jMNup9ltcC065i0tk138IK~CEYfqsofesNiCPxmLLwmEMVL2UG3AQSIO2JC8vqbhuljyVQAqEtnUfPtXmxarfWXDXTteCQA__",
+    "asset_id": "chair_office",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "information",
+    "name": "Chair Office",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
