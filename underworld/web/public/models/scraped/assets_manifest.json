@@ -3100,5 +3100,22 @@
     "epoch": "information",
     "name": "Chair Office",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:desk": {
+    "prompt": "a wooden writing desk, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "cc85365a-89fd-4e48-83cc-0a1a86ca5ab3",
+    "path": "/models/generated/tripo/desk.glb",
+    "bytes": 14914348,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/cc85365a-89fd-4e48-83cc-0a1a86ca5ab3/tripo_pbr_model_cc85365a-89fd-4e48-83cc-0a1a86ca5ab3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvY2M4NTM2NWEtODlmZC00ZTQ4LTgzY2MtMGExYTg2Y2E1YWIzL3RyaXBvX3Bicl9tb2RlbF9jYzg1MzY1YS04OWZkLTRlNDgtODNjYy0wYTFhODZjYTVhYjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WV8fWxhC6p2sP6DT2rb0sCe6x9fnaZKZrGQoNguzSKG-VwvtlutwCDRhy1kousl6Lia4U722BaNS3YsJHfCYcB~DN4c3UmQHAwFfOaatqshavg1dS595E5kbzjiJvQQYjYimEmvgkSZyvZfDO5zDyrswK8mG6tWQXaJhJNiDnvTg3Vwz00vsnpTOm1D6GV6kz19eWPypM0x1w0Tkdacj3YMf1YbuLTr2YJg0tHavCmeAUoNTQszxqLshx~xDdiMx91k3AgJpcQY9NAfUT1tP1uvUwyqNlNtfm37uqFN7x1UDn22Em-7d4pYpsjj8N2F6zY2VlUJrihWe8eZJu6ZvwA__",
+    "asset_id": "desk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Desk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
