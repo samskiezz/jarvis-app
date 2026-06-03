@@ -1315,5 +1315,22 @@
     "epoch": "industrial",
     "name": "School",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stromatolite_mound": {
+    "prompt": "a layered stromatolite mound in shallow water, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "db4cd8f4-90a0-4787-b4d8-2f7e0918b00d",
+    "path": "/models/generated/tripo/stromatolite_mound.glb",
+    "bytes": 15129516,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/db4cd8f4-90a0-4787-b4d8-2f7e0918b00d/tripo_pbr_model_db4cd8f4-90a0-4787-b4d8-2f7e0918b00d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGI0Y2Q4ZjQtOTBhMC00Nzg3LWI0ZDgtMmY3ZTA5MThiMDBkL3RyaXBvX3Bicl9tb2RlbF9kYjRjZDhmNC05MGEwLTQ3ODctYjRkOC0yZjdlMDkxOGIwMGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=gfngknJt137lHGGxrkj9I2GwhGj8qD4oK8RUxZNRUqakhXXbecmlrSCM759be3z0S5IikaJvMU0su5Nz-XrJoTLPZ1w2ETLo9xdA7~Kj6ESar4-oYkY7~CflHl30VbtLm5Wk68jPfw2lKdIasgU20mKPn2BRrBr45X12oKk6Jx5LYu3yNDHC4RyCEan7N0wYdf8ivneWIucdiMm-5CBdwZNUIdAtbl4yf5xJTXn1axPBr1PkYqXwCPqUq3cayeHmjIQzDJncnwGc26Cdv9FTUl5NF32DzqkO5LbdV3cdt0Q849IQGbqmOfj9f2ubxneIxwgfZBHFpPSTkaJbU62IJQ__",
+    "asset_id": "stromatolite_mound",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Stromatolite Mound",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
