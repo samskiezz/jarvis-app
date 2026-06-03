@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -8,179 +8,236 @@
   html,
   body,
   #root {
-    @apply h-full bg-ink-0 text-zinc-200;
+    @apply h-full text-zinc-200;
   }
 
   body {
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", monospace;
+    /* Clean, legible Inter/system type for clarity — neon stays in the accents. */
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display",
+      "Segoe UI", system-ui, sans-serif;
+    color: #e9e9f4;
+    /* Deep cyberpunk void: near-black with electric purple + cyan light wells,
+       and a faint tech grid that the frosted glass floats above. */
+    background-color: #040509;
     background-image:
-      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168, 85, 247, 0.10), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(14, 165, 233, 0.05), transparent 60%),
-      linear-gradient(180deg, #04040a 0%, #060612 100%);
+      radial-gradient(ellipse 70% 55% at 10% -10%, rgba(168, 85, 247, 0.22), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 95% 6%, rgba(100, 210, 255, 0.16), transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 112%, rgba(236, 72, 153, 0.08), transparent 60%),
+      linear-gradient(rgba(168, 85, 247, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(100, 210, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(180deg, #05060c 0%, #070810 100%);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 44px 44px, 44px 44px, 100% 100%;
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.011em;
   }
 
-  /* Custom scrollbar */
+  /* Slim neon scrollbar. */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(168, 85, 247, 0.18);
-    border-radius: 3px;
+    background: rgba(168, 85, 247, 0.28);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(168, 85, 247, 0.36);
+    background: rgba(168, 85, 247, 0.5);
+    background-clip: padding-box;
   }
 
-  /* Selection */
   ::selection {
-    background: rgba(168, 85, 247, 0.35);
+    background: rgba(168, 85, 247, 0.45);
     color: #fff;
   }
 }
 
 @layer components {
-  /* --- Panels --- */
+  /* ============================================================
+     Liquid glass, neon-edged — the core cyberpunk material.
+     Frosted + translucent, with a faint electric rim and glow.
+     ============================================================ */
+  .glass {
+    @apply relative rounded-2xl border border-glow-purple/20 bg-white/[0.045]
+           backdrop-blur-2xl backdrop-saturate-150 shadow-glass;
+  }
+  .glass-strong {
+    @apply relative rounded-2xl border border-glow-purple/30 bg-white/[0.07]
+           backdrop-blur-3xl backdrop-saturate-150 shadow-glass-lg;
+  }
+  .glass-hover {
+    @apply transition duration-200 hover:bg-white/[0.08] hover:border-glow-purple/40;
+  }
+
+  /* --- Panels (names the whole app already uses) --- */
   .panel {
-    @apply relative rounded-lg border border-glow-purple/15 bg-ink-1/80 backdrop-blur-sm shadow-panel;
+    @apply relative rounded-2xl border border-glow-purple/20 bg-white/[0.045]
+           backdrop-blur-2xl backdrop-saturate-150 shadow-glass;
   }
   .panel-elevated {
-    @apply relative rounded-lg border border-glow-purple/25 bg-gradient-to-b from-ink-1 to-ink-2/60 shadow-glow backdrop-blur-sm;
+    @apply relative rounded-2xl border border-glow-purple/30 bg-white/[0.07]
+           backdrop-blur-3xl backdrop-saturate-150 shadow-glass-lg;
   }
   .panel-header {
-    @apply flex items-center justify-between border-b border-glow-purple/10 px-4 py-2.5 text-[10px] uppercase tracking-[0.25em] text-glow-purple/80;
+    @apply flex items-center justify-between border-b border-glow-purple/15
+           px-5 py-3.5 text-[13px] font-semibold tracking-tight text-zinc-100;
   }
   .panel-header > span:last-child {
-    @apply text-[9px] normal-case tracking-widest text-zinc-500;
+    @apply text-[11px] font-medium tracking-normal text-glow-sky/70;
   }
 
   /* --- Stat card --- */
   .stat-card {
-    @apply relative overflow-hidden rounded-lg border border-glow-purple/15 bg-gradient-to-br from-ink-1/90 to-ink-2/40 px-4 py-3 shadow-panel transition;
+    @apply relative overflow-hidden rounded-2xl border border-glow-purple/20
+           bg-white/[0.045] px-5 py-4 shadow-glass backdrop-blur-2xl
+           backdrop-saturate-150 transition duration-200;
   }
   .stat-card:hover {
-    @apply border-glow-purple/30;
+    @apply border-glow-purple/40 bg-white/[0.07];
   }
   .stat-label {
-    @apply flex items-center justify-between text-[9px] font-medium uppercase tracking-[0.22em] text-zinc-500;
+    @apply flex items-center justify-between text-[12px] font-medium
+           tracking-tight text-zinc-400;
   }
   .stat-value {
-    @apply mt-1 text-3xl font-light tracking-tight;
-    font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+    @apply mt-1.5 text-[28px] font-semibold leading-none tracking-tight text-white;
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    font-feature-settings: "tnum" 1, "cv01" 1;
+    text-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
   }
 
-  /* --- Buttons --- */
+  /* --- Buttons — pill shapes, neon glass, electric fills --- */
   .btn {
-    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-glow-purple/40 bg-glow-purple/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-glow-purple shadow-sm transition;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-full
+           border border-glow-purple/30 bg-white/[0.06] px-4 py-2 text-[13px]
+           font-semibold tracking-tight text-zinc-100 backdrop-blur-xl transition duration-200;
   }
   .btn:hover:not(:disabled) {
-    @apply border-glow-purple/60 bg-glow-purple/20 shadow-glow;
+    @apply border-glow-purple/55 bg-glow-purple/15 shadow-glow;
+  }
+  .btn:active:not(:disabled) {
+    @apply scale-[0.97];
   }
   .btn:disabled {
-    @apply cursor-not-allowed opacity-50;
+    @apply cursor-not-allowed opacity-40;
   }
   .btn-primary {
-    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-glow-purple bg-gradient-to-br from-glow-purple to-glow-violet px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-white shadow-glow transition;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-full
+           border border-glow-purple/40 bg-gradient-to-b from-glow-purple to-glow-indigo
+           px-5 py-2 text-[13px] font-semibold tracking-tight text-white
+           shadow-glow transition duration-200;
   }
   .btn-primary:hover:not(:disabled) {
-    @apply shadow-glow-strong brightness-110;
+    @apply shadow-glow-strong brightness-[1.1];
+  }
+  .btn-primary:active:not(:disabled) {
+    @apply scale-[0.97];
   }
   .btn-primary:disabled {
-    @apply cursor-not-allowed opacity-50;
+    @apply cursor-not-allowed opacity-40;
   }
   .btn-ghost {
-    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-zinc-700/60 bg-transparent px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-400 transition;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-full
+           border border-transparent bg-transparent px-4 py-2 text-[13px]
+           font-medium tracking-tight text-zinc-400 transition duration-200;
   }
   .btn-ghost:hover:not(:disabled) {
-    @apply border-glow-purple/40 bg-glow-purple/5 text-zinc-100;
+    @apply bg-glow-purple/10 text-zinc-100;
   }
   .btn-danger {
-    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md border border-glow-rose/40 bg-glow-rose/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-glow-rose transition;
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-full
+           border border-glow-rose/40 bg-glow-rose/15 px-4 py-2 text-[13px]
+           font-semibold tracking-tight text-glow-rose backdrop-blur-xl transition duration-200;
   }
   .btn-danger:hover:not(:disabled) {
-    @apply border-glow-rose bg-glow-rose/20;
+    @apply border-glow-rose/60 bg-glow-rose/25 shadow-glow-rose;
   }
   .btn-icon {
-    @apply inline-flex h-8 w-8 select-none items-center justify-center rounded-md border border-zinc-700/60 bg-transparent text-zinc-400 transition;
+    @apply inline-flex h-9 w-9 select-none items-center justify-center rounded-full
+           border border-glow-purple/20 bg-white/[0.05] text-zinc-300 backdrop-blur-xl
+           transition duration-200;
   }
   .btn-icon:hover:not(:disabled) {
-    @apply border-glow-purple/40 bg-glow-purple/5 text-zinc-100;
+    @apply border-glow-purple/45 bg-glow-purple/15 text-white;
   }
 
-  /* --- Badges --- */
+  /* --- Badges — neon tinted pills --- */
   .badge {
-    @apply inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-[0.16em];
+    @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5
+           text-[11px] font-semibold tracking-tight;
   }
   .badge-purple {
-    @apply border-glow-purple/40 bg-glow-purple/10 text-glow-purple;
+    @apply border-glow-purple/35 bg-glow-purple/15 text-glow-purple;
   }
   .badge-amber {
-    @apply border-glow-amber/40 bg-glow-amber/10 text-glow-amber;
+    @apply border-glow-amber/35 bg-glow-amber/15 text-glow-amber;
   }
   .badge-jade {
-    @apply border-glow-jade/40 bg-glow-jade/10 text-glow-jade;
+    @apply border-glow-jade/35 bg-glow-jade/15 text-glow-jade;
   }
   .badge-sky {
-    @apply border-glow-sky/40 bg-glow-sky/10 text-glow-sky;
+    @apply border-glow-sky/35 bg-glow-sky/15 text-glow-sky;
   }
   .badge-rose {
-    @apply border-glow-rose/40 bg-glow-rose/10 text-glow-rose;
+    @apply border-glow-rose/35 bg-glow-rose/15 text-glow-rose;
   }
   .badge-zinc {
-    @apply border-zinc-700/60 bg-zinc-700/10 text-zinc-400;
+    @apply border-white/10 bg-white/[0.06] text-zinc-300;
   }
 
   /* --- Inputs --- */
   .input {
-    @apply w-full rounded-md border border-glow-purple/20 bg-ink-2/60 px-3 py-2 text-[11px] text-zinc-100 outline-none transition placeholder:text-zinc-600;
+    @apply w-full rounded-xl border border-glow-purple/20 bg-white/[0.05] px-3.5 py-2.5
+           text-[14px] text-zinc-100 outline-none backdrop-blur-xl transition
+           duration-200 placeholder:text-zinc-500;
   }
   .input:focus {
-    @apply border-glow-purple/60 bg-ink-2 shadow-glow;
+    @apply border-glow-purple/60 bg-white/[0.08] ring-2 ring-glow-purple/30 shadow-glow;
   }
   .input-sm {
-    @apply px-2 py-1.5 text-[10px];
+    @apply rounded-lg px-2.5 py-1.5 text-[13px];
   }
 
   /* --- Section headers --- */
   .section-title {
-    @apply text-[10px] font-medium uppercase tracking-[0.28em] text-glow-purple/80;
+    @apply text-[13px] font-semibold tracking-tight text-zinc-200;
   }
   .page-title {
-    @apply text-2xl font-light tracking-tight text-zinc-100;
-    font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+    @apply text-[28px] font-bold tracking-tight text-white;
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    text-shadow: 0 0 28px rgba(168, 85, 247, 0.3);
   }
   .page-eyebrow {
-    @apply text-[10px] font-semibold uppercase tracking-[0.32em] text-glow-purple;
+    @apply text-[12px] font-semibold uppercase tracking-[0.2em] text-glow-sky;
+    text-shadow: 0 0 16px rgba(100, 210, 255, 0.4);
   }
 
-  /* --- Tabs --- */
+  /* --- Tabs — neon segmented --- */
   .tab {
-    @apply relative rounded-t-md px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500 transition;
+    @apply relative rounded-full px-4 py-2 text-[13px] font-medium tracking-tight
+           text-zinc-400 transition duration-200;
   }
   .tab:hover {
-    @apply text-zinc-200;
+    @apply text-zinc-100;
   }
   .tab-active {
-    @apply text-glow-purple;
-  }
-  .tab-active::after {
-    content: "";
-    @apply absolute inset-x-0 bottom-0 h-0.5 rounded-t bg-gradient-to-r from-glow-purple to-glow-violet;
+    @apply border border-glow-purple/40 bg-glow-purple/15 text-white shadow-glow;
   }
 
   /* --- Skeleton / shimmer --- */
   .skeleton {
-    @apply animate-shimmer rounded;
+    @apply animate-shimmer rounded-xl;
     background: linear-gradient(
       90deg,
-      rgba(168, 85, 247, 0.04) 0%,
-      rgba(168, 85, 247, 0.12) 50%,
-      rgba(168, 85, 247, 0.04) 100%
+      rgba(168, 85, 247, 0.05) 0%,
+      rgba(168, 85, 247, 0.16) 50%,
+      rgba(168, 85, 247, 0.05) 100%
     );
     background-size: 200% 100%;
   }
@@ -188,12 +245,14 @@
   /* --- Live indicator dot --- */
   .live-dot {
     @apply inline-block h-2 w-2 rounded-full animate-pulse-glow;
-    background: radial-gradient(circle, #10b981, #047857);
+    background: radial-gradient(circle, #30d158, #1f9e44);
   }
 
   /* --- Tooltip --- */
   .tooltip {
-    @apply pointer-events-none absolute z-50 rounded-md border border-glow-purple/30 bg-ink-2 px-2 py-1 text-[9px] uppercase tracking-widest text-zinc-200 opacity-0 shadow-lg transition;
+    @apply pointer-events-none absolute z-50 rounded-xl border border-glow-purple/25
+           bg-ink-2/90 px-2.5 py-1.5 text-[11px] tracking-tight text-zinc-100
+           opacity-0 shadow-glass backdrop-blur-xl transition duration-200;
   }
   .has-tooltip:hover .tooltip {
     @apply opacity-100;
@@ -201,12 +260,13 @@
 
   /* --- Kbd --- */
   .kbd {
-    @apply inline-flex items-center rounded border border-zinc-700 bg-ink-2 px-1.5 py-0.5 font-mono text-[9px] text-zinc-300 shadow-sm;
+    @apply inline-flex items-center rounded-lg border border-glow-purple/20 bg-white/[0.05]
+           px-1.5 py-0.5 font-mono text-[11px] text-zinc-300;
   }
 
   /* --- Section divider --- */
   .divider {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-glow-purple/20 to-transparent;
+    @apply h-px w-full bg-gradient-to-r from-transparent via-glow-purple/25 to-transparent;
   }
 }
 
@@ -219,9 +279,12 @@
     scrollbar-width: none;
   }
   .text-glow {
-    text-shadow: 0 0 12px currentColor;
+    text-shadow: 0 0 18px currentColor;
   }
   .ring-glow {
-    box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 0 20px rgba(168, 85, 247, 0.25);
+    box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 8px 30px rgba(168, 85, 247, 0.3);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }
