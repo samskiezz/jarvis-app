@@ -2607,5 +2607,22 @@
     "epoch": "iron",
     "name": "Fx Rune Stone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_spirit_tree": {
+    "prompt": "a majestic ancient tree with glowing leaves and luminous bark, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "a89be830-c9d9-4e47-b000-d17dd0925d27",
+    "path": "/models/generated/tripo/fx_spirit_tree.glb",
+    "bytes": 15874480,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a89be830-c9d9-4e47-b000-d17dd0925d27/tripo_pbr_model_a89be830-c9d9-4e47-b000-d17dd0925d27.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTg5YmU4MzAtYzlkOS00ZTQ3LWIwMDAtZDE3ZGQwOTI1ZDI3L3RyaXBvX3Bicl9tb2RlbF9hODliZTgzMC1jOWQ5LTRlNDctYjAwMC1kMTdkZDA5MjVkMjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=wtBpSAnmT4drjvu6S2y7d~yWfoCmRBcUxLTSqB4s5714koyMXofYBtyp3BNgQOwNzvHsgrtgAJtim9dbVjk2pPLDLVnoXh6JuRSbHmtvH7sbPDJVP9DdAhiIHcBRtgLOoCoLd4qnbczQokRsR6FUb0dLjb9~MyrXu4iqeD2w6wLezLWKUzeNrh917JxukmghdY2FzyWij-xx7U~lRix~3~5GBwpdynfToDDi-yoHF4-kH360qgK3Y0IIFbJ3RXPCoDY7dzHqgGxlw1WnKaDJ7iPQYQDvGwBENQufKBY9oV9-fZNN3AhHlKX45LpoAn-4Dk2TXTBexdkWjR8DlQsvQQ__",
+    "asset_id": "fx_spirit_tree",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Spirit Tree",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
