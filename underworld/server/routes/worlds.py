@@ -890,6 +890,40 @@ async def stream_events(
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
+@router.get("/{world_id}/scene-state")
+async def get_scene_state(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Canonical, renderer-agnostic scene state — the authoritative world both the
+    WebGL scene and the UE5 Pixel-Streaming client render. Gives every Minion a
+    backend-owned position, animation state, appearance and active saga, plus the
+    world frame (time-of-day, weather, biome, epoch, terrain). Fixes the old
+    'frontend invents positions' divergence."""
+    world = await _world_or_404(session, world_id)
+    from ..services import epochs as epochs_mod
+    from ..services import scene_state as ss
+    from ..world.seed import derive_seed, heightmap as heightmap_fn
+    seed = derive_seed(world.seed_class)
+    hmap = heightmap_fn(seed, size=64)
+    minions = (await session.execute(
+        select(Minion).where(Minion.world_id == world_id, Minion.alive.is_(True)).limit(2000)
+    )).scalars().all()
+    discoveries = int(await session.scalar(
+        select(func.count(Discovery.id)).where(Discovery.world_id == world_id)) or 0)
+    _best = (select(Skill.minion_id, func.max(Skill.level).label("b"))
+             .join(Minion, Minion.id == Skill.minion_id)
+             .where(Minion.world_id == world_id, Minion.alive.is_(True))
+             .group_by(Skill.minion_id).subquery())
+    avg_exp = float(await session.scalar(select(func.coalesce(func.avg(_best.c.b), 0.0))) or 0.0)
+    epoch = epochs_mod.epoch_progress(epochs_mod.knowledge_index(
+        discoveries=discoveries, avg_expertise=avg_exp, approved_inventions=0))
+    return ss.build_scene_state(world, seed, minions, heightmap=hmap,
+                                weather=getattr(world, "weather", "clear") or "clear",
+                                epoch=epoch)
+
+
 @router.get("/{world_id}/chronicle")
 async def get_chronicle(
     world_id: str,
