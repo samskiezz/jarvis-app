@@ -3406,5 +3406,22 @@
     "epoch": "iron",
     "name": "Wall Clock",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wardrobe": {
+    "prompt": "a wooden wardrobe, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "02f5c138-43b9-46fc-995e-ef81e8c412b2",
+    "path": "/models/generated/tripo/wardrobe.glb",
+    "bytes": 14795604,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/02f5c138-43b9-46fc-995e-ef81e8c412b2/tripo_pbr_model_02f5c138-43b9-46fc-995e-ef81e8c412b2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDJmNWMxMzgtNDNiOS00NmZjLTk5NWUtZWY4MWU4YzQxMmIyL3RyaXBvX3Bicl9tb2RlbF8wMmY1YzEzOC00M2I5LTQ2ZmMtOTk1ZS1lZjgxZThjNDEyYjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=klqKrgo9rAup-gnnZCQqvE9r9kLOEOyazWMDdEbGq0c3L9lKiYWFWtVOT6OFUKU6Lwzbn4s68TDlwAwt~piRYiVktX4YBn~CjSmZ-OxnVR00FEvhGz5pone7fYQtgEt~k848PL0an2w8rAsLzfsM~bSAUp3QCDwXLrQsEcYGKvQy8IO7P6OkuaWradNm~TZml0IYRznYcSC-sD9oEeyZbOurUfHn9tLIABMc6bSAxlQ0KoUYrWnKkIu48tYDhSh~yrkSgKdXhHidAEiVMSE8irrOpLyu8PNjd4KbxNVi4OKv9Y2GbBIReeNpPrGifpEOzBZtxWwI-XvGUPpCHQ6O2A__",
+    "asset_id": "wardrobe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Wardrobe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
