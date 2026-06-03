@@ -5395,5 +5395,22 @@
     "epoch": "any",
     "name": "Fruit Bowl",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hammer": {
+    "prompt": "a blacksmith's hammer with a wooden handle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5803bf5a-cb6e-47c8-92a4-e73d12059c7d",
+    "path": "/models/generated/tripo/hammer.glb",
+    "bytes": 7891496,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5803bf5a-cb6e-47c8-92a4-e73d12059c7d/tripo_pbr_model_5803bf5a-cb6e-47c8-92a4-e73d12059c7d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTgwM2JmNWEtY2I2ZS00N2M4LTkyYTQtZTczZDEyMDU5YzdkL3RyaXBvX3Bicl9tb2RlbF81ODAzYmY1YS1jYjZlLTQ3YzgtOTJhNC1lNzNkMTIwNTljN2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=P6xsW3jwB2qryezX8xG~sKoDhL8CjSTBtqsAb6rFNbgIEuNgzYxPudzCZWtsO7niLXZEMND2IAdwOaV5ttar9R6FKJyFqYUBsGQXA95r-cbS-Vk-Q6DABvg57rFl8O8YrA5s68yyjEZx16pgTnkeZ6O8XtKtCQFS~kTEWHAuoQyAtuhfrQO6c2uK2IojPnXQ7okhMnErNZz-gsgHvp3DEuhGfBhifUZD06wZ2Sz3hIgtF2gqBCQnXm-BRXF7xFaTVJ638e7i0uM55QtREv6gwRRahj0GKpDHm1TaK4ALSQc7NdHlkPxUpBKo0nnYvfvhgzFMeN10TXyBelKT9ZAqKg__",
+    "asset_id": "hammer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Hammer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
