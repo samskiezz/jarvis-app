@@ -2794,5 +2794,22 @@
     "epoch": "any",
     "name": "Sun Disc",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:time_crystal_rig": {
+    "prompt": "a time-crystal experiment chamber with pulsing rings of light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "581ec43a-ef65-4b81-a9d0-f827c76a6fee",
+    "path": "/models/generated/tripo/time_crystal_rig.glb",
+    "bytes": 15287416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/581ec43a-ef65-4b81-a9d0-f827c76a6fee/tripo_pbr_model_581ec43a-ef65-4b81-a9d0-f827c76a6fee.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTgxZWM0M2EtZWY2NS00YjgxLWE5ZDAtZjgyN2M3NmE2ZmVlL3RyaXBvX3Bicl9tb2RlbF81ODFlYzQzYS1lZjY1LTRiODEtYTlkMC1mODI3Yzc2YTZmZWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vQolNm7bSCiT~1A~Vx-t5ZUJS~z43kFFs2jVaWcQUBZmfGCCvHXX-L6MoB-W~bHbnU92IJN666oP2CGgxLRAIiz2BZNWTR0yDLTaqUAYLfhfxZIBNguFsF-yOUyxVkGH8R8OfXrpKg55l-RDY2qbWpZ0vC6Zdl-6L968tfbVL3e6cgNL5x~Ptw-vXc-Wa8ptrAhXJ9cJHXgLTzUtwAn8T87Lu~DwUrHdeMXdDZENuCXi6gbF~HgCvfiQ23a40euMdyufFBUoFSawLUWnCi9DTlRa2NbytMulFnUrzxbr-zk4klXD5wVTHAuP1CXTwoCOe96Fqvx5iHSwFGyA8hMyLQ__",
+    "asset_id": "time_crystal_rig",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Time Crystal Rig",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
