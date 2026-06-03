@@ -7945,5 +7945,22 @@
     "epoch": "stone",
     "name": "Oldowan Tool",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:orbital_habitat_ring": {
+    "prompt": "a rotating orbital habitat ring station, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "bbc2a9c4-7a4b-4cb5-a48c-1d00ff40d1de",
+    "path": "/models/generated/tripo/orbital_habitat_ring.glb",
+    "bytes": 15996072,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bbc2a9c4-7a4b-4cb5-a48c-1d00ff40d1de/tripo_pbr_model_bbc2a9c4-7a4b-4cb5-a48c-1d00ff40d1de.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmJjMmE5YzQtN2E0Yi00Y2I1LWE0OGMtMWQwMGZmNDBkMWRlL3RyaXBvX3Bicl9tb2RlbF9iYmMyYTljNC03YTRiLTRjYjUtYTQ4Yy0xZDAwZmY0MGQxZGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RlTmmD94QYE7-XQ8uYTlScCqPUySCRKnT8IuUNlaq4k~UC8caLqtLznn75RboqLkcjdf4dXuWhgrnq7j8xGsozCho~vj9euF3HNlYm9RfMYUOQCtQAS7pUzGmA2FOILQ9YO-R1dsZs3fdanepw1ZJ~0RHHAppNDGWQu5qTvJTs~phEb4nz4GTny3u56Kb~fNt4zN8RKQj7o60xmSkPkfe~gBeq7bumLUcIv3WIWDUpxxAw5MT7Tbps9OSMSfwdylpYsQ7uRSBrp2Cv31A6mlHZkDW-mu73taYw-Cv5OjHbU7u9yQdD0bbwyyg8SAdBDaUNhIDBsyhr7uZzyAj04ziA__",
+    "asset_id": "orbital_habitat_ring",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Orbital Habitat Ring",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
