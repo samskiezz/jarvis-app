@@ -8251,5 +8251,22 @@
     "epoch": "industrial",
     "name": "Steam Loco",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:clock_tower": {
+    "prompt": "a tall ornate town clock tower, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "51c116c4-04e2-4cb2-8b0a-f2ae4fec6511",
+    "path": "/models/generated/tripo/clock_tower.glb",
+    "bytes": 7047396,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/51c116c4-04e2-4cb2-8b0a-f2ae4fec6511/tripo_pbr_model_51c116c4-04e2-4cb2-8b0a-f2ae4fec6511.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTFjMTE2YzQtMDRlMi00Y2IyLThiMGEtZjJhZTRmZWM2NTExL3RyaXBvX3Bicl9tb2RlbF81MWMxMTZjNC0wNGUyLTRjYjItOGIwYS1mMmFlNGZlYzY1MTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=K8o0w1w5PPQnSjIui1jxCaOnMz67oKglZaSA4e6tI-EZBU6eWps~z5QiijYTdvWdl3Cm3n7nBqicsSqsNJ4AafbBMQq8aL5kDToNjA83OHy2URBHBEVl1ivLHeBm4yFOxutMR1w5aAEMrC8Y1cNkYn7Ga3Qxt680NO4oez-8Z6waX9xnNdjBdkg3hDNUicR~q-oTHPQgdA79TPET~RlGYk~LdH1a13H~~7Lrp36TBCAVyQxnOXLwj814dw3g8IS7q~7XjmtPch7BIJ1ttYqIe~7xvNzgFU1yEd8S4P76glNaDix3DXnut1Tk4FGmhm7gCbjddlkWIjHhkzUmGqw6ZA__",
+    "asset_id": "clock_tower",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "industrial",
+    "name": "Clock Tower",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
