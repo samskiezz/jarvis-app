@@ -1689,5 +1689,22 @@
     "epoch": "information",
     "name": "Clean Room Booth",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:kings_throne_hall": {
+    "prompt": "a grand throne hall with a raised royal throne, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "8df1e3ae-9284-4c38-9bcd-d191fdd30f32",
+    "path": "/models/generated/tripo/kings_throne_hall.glb",
+    "bytes": 14800256,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8df1e3ae-9284-4c38-9bcd-d191fdd30f32/tripo_pbr_model_8df1e3ae-9284-4c38-9bcd-d191fdd30f32.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGRmMWUzYWUtOTI4NC00YzM4LTliY2QtZDE5MWZkZDMwZjMyL3RyaXBvX3Bicl9tb2RlbF84ZGYxZTNhZS05Mjg0LTRjMzgtOWJjZC1kMTkxZmRkMzBmMzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=YAizaNnD77FPShfYlTxRsNMqVwWFB2nBYbtCg98GCmaZDDCRtNHJ6JsY2EeX7Cs8JbknIrvL69R4wWQPdAOrXE0cVYa3vSy1nQMwqEPL3qtZyt6Ft-~vEIUDh78q14uRHPc-WGdjLHFXnc3kaBDmigHmZHYRBYwI-~7F82j1IWybW96KctYSXbMIEQsp-J67HudFVu6mfj3gFkFcpZWim4mlCW6mQbYm-I7XKMqBISosopdffDUh5TGd-H~EJ2I1vwACmvJHgFzwikl~iFBfpbAMnWnwEFNZ61LOQ7Bl9jgKL~eLWSQT7E1L20woVqFEz8XBaCU94WWZ1Vj50q-c9w__",
+    "asset_id": "kings_throne_hall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "iron",
+    "name": "Kings Throne Hall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
