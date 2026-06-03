@@ -4018,5 +4018,22 @@
     "epoch": "iron",
     "name": "Beaker Set",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bioreactor_vessel": {
+    "prompt": "a stirred glass bioreactor vessel with probes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "51bcd10b-3441-4d2b-919d-17679ed69656",
+    "path": "/models/generated/tripo/bioreactor_vessel.glb",
+    "bytes": 15037564,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/51bcd10b-3441-4d2b-919d-17679ed69656/tripo_pbr_model_51bcd10b-3441-4d2b-919d-17679ed69656.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTFiY2QxMGItMzQ0MS00ZDJiLTkxOWQtMTc2NzllZDY5NjU2L3RyaXBvX3Bicl9tb2RlbF81MWJjZDEwYi0zNDQxLTRkMmItOTE5ZC0xNzY3OWVkNjk2NTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Y1ebSGwtuvb1Bn5n9PcUKvezE0O4Laban0YWqomYbzIkuK9gLApKzf-YygMiFXT1PRl4y2qr6OeOc3KIZCG8ElIsJCqp-LZU-bRSjtkvdlhr~68NnPXt9lmQ3CpI-etq8RzUISobTav~LhVvC4ZPD5jLM-xGYmkURoFghETZpKfcCeTKYoHflVq3qtHQy-gQWH3l9Uv~Q7SxQ-yQvszG3NctrcaQl0WoFZ-jXiULvLFI~VMKmy~Qo0nbRwuw-GXaUh5fQR2WAw~kvNp9Y7teiYgkCoaq6L0sDdUYI6NIu-FlGP7oHssxLFHZUWwhGMBe8s7MOiaNcqSMHFuPMPVOCw__",
+    "asset_id": "bioreactor_vessel",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Bioreactor Vessel",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
