@@ -1,6 +1,15 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Component, ReactNode, useEffect, useRef, useState } from "react";
 import { discoverAssets, preloadAll } from "@/lib/assetPreloader";
 import * as music from "@/lib/loaderMusic";
+import HeroAssembleLoader from "@/components/HeroAssembleLoader";
+
+// If the 3D hero canvas ever throws (missing/broken GLB, no WebGL), fall back
+// silently to the gradient backdrop — the loader must NEVER block entry.
+class HeroBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() { return this.state.failed ? null : this.props.children; }
+}
 
 // RuneScape-style game loader: a real progress bar that must reach 100% (every
 // required asset fetched into cache) before you can enter, with looping theme
@@ -38,7 +47,15 @@ export default function GameLoader({ children }: { children: ReactNode }) {
   const [entered, setEntered] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
   const [flavour, setFlavour] = useState(FLAVOUR[0]);
+  const [heroReady, setHeroReady] = useState(false);
   const started = useRef(false);
+
+  // Only show the 3D assembling hero if its GLB is actually present.
+  useEffect(() => {
+    fetch("/models/hero/underworld_logo.glb", { method: "HEAD" })
+      .then((r) => setHeroReady(r.ok))
+      .catch(() => setHeroReady(false));
+  }, []);
 
   useEffect(() => {
     if (started.current) return;
@@ -79,23 +96,37 @@ export default function GameLoader({ children }: { children: ReactNode }) {
                  bg-[#0a0a12] text-zinc-200 select-none overflow-hidden"
       style={{ backgroundImage: "radial-gradient(circle at 50% 35%, #1a1030 0%, #0a0a12 60%)" }}
     >
+      {/* The 3D Underworld hero: scattered → assembles as the bar fills. */}
+      {heroReady && (
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <HeroBoundary>
+            <HeroAssembleLoader progress={pct} />
+          </HeroBoundary>
+        </div>
+      )}
+
       <button
         onClick={toggleMusic}
-        className="absolute top-4 right-5 text-xs tracking-widest text-zinc-500 hover:text-glow-amber"
+        className="absolute top-4 right-5 z-10 text-xs tracking-widest text-zinc-500 hover:text-glow-amber"
         title="Toggle theme music"
       >
         {musicOn ? "♪ MUSIC ON" : "♪ MUSIC OFF"}
       </button>
 
-      <div className="mb-2 text-3xl font-bold tracking-[0.3em] text-glow-jade drop-shadow">
-        UNDERWORLD
-      </div>
-      <div className="mb-10 text-[11px] uppercase tracking-[0.4em] text-zinc-500">
-        a living patent-minion civilisation
-      </div>
+      {/* 2D title only when there's no 3D hero (the hero logo IS the title). */}
+      {!heroReady && (
+        <>
+          <div className="mb-2 text-3xl font-bold tracking-[0.3em] text-glow-jade drop-shadow">
+            UNDERWORLD
+          </div>
+          <div className="mb-10 text-[11px] uppercase tracking-[0.4em] text-zinc-500">
+            a living patent-minion civilisation
+          </div>
+        </>
+      )}
 
-      {/* progress bar */}
-      <div className="w-[min(560px,80vw)]">
+      {/* progress bar — pushed below the hero when it's present */}
+      <div className={`relative z-10 w-[min(560px,80vw)] ${heroReady ? "mt-[44vh]" : ""}`}>
         <div className="mb-2 flex justify-between text-[11px] uppercase tracking-widest text-zinc-400">
           <span>{ready ? "Ready" : (TIPS[label] || "Loading…")}</span>
           <span className="tabular-nums">{pct}%</span>
@@ -113,7 +144,7 @@ export default function GameLoader({ children }: { children: ReactNode }) {
       </div>
 
       {/* enter gate — only at 100% (RuneScape "click to play") */}
-      <div className="mt-10 h-14">
+      <div className="relative z-10 mt-10 h-14">
         {ready ? (
           <button
             onClick={enter}
