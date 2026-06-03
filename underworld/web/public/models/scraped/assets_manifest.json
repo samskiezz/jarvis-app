@@ -1502,5 +1502,22 @@
     "epoch": "any",
     "name": "Plateau Mesa",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:predator_wolf": {
+    "prompt": "a standing grey wolf predator, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "fc3f4ad1-79bb-4dce-bfe6-35489104c92c",
+    "path": "/models/generated/tripo/predator_wolf.glb",
+    "bytes": 9600316,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fc3f4ad1-79bb-4dce-bfe6-35489104c92c/tripo_pbr_model_fc3f4ad1-79bb-4dce-bfe6-35489104c92c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmMzZjRhZDEtNzliYi00ZGNlLWJmZTYtMzU0ODkxMDRjOTJjL3RyaXBvX3Bicl9tb2RlbF9mYzNmNGFkMS03OWJiLTRkY2UtYmZlNi0zNTQ4OTEwNGM5MmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=mB7XIGP3OVmieOgSxoODXI5MlMwBQjh5pEA5uU1gymld-U6j4BhCc-C-XVQlfHyJwNPODfSVRk9Rdto8YUPd~B80oGYZxHIkFVnDJqkIs2Vii0vuaeQWoJ5Yecrc6nOIRFn2-9yjnpbopnCGFFgGq7k9n0l39t~K~Q50ISDtSjkpFRuGbfXnu-RQgj0Qs71whjUu8R3kR9TsiyUqMte2p6AdgvEFx-powdFPvCUc8ZZWX1io4jzbxBD5Ao-cKM6E-kndNrQud04wkdtehPyz~2~QFIwKND9~3NrdVHKCWKmo6LwDfM-DG70YQhn-WRGoIJl0oLyZghezx4YUnMrTFA__",
+    "asset_id": "predator_wolf",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Predator Wolf",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
