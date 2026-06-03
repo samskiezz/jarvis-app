@@ -7673,5 +7673,22 @@
     "epoch": "information",
     "name": "Dna Double Helix Model",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:dyson_swarm_collector": {
+    "prompt": "a Dyson-swarm solar collector panel array glowing gold, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "39fc9898-af43-4028-b8a6-afd7f4ed769a",
+    "path": "/models/generated/tripo/dyson_swarm_collector.glb",
+    "bytes": 16385580,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/39fc9898-af43-4028-b8a6-afd7f4ed769a/tripo_pbr_model_39fc9898-af43-4028-b8a6-afd7f4ed769a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzlmYzk4OTgtYWY0My00MDI4LWI4YTYtYWZkN2Y0ZWQ3NjlhL3RyaXBvX3Bicl9tb2RlbF8zOWZjOTg5OC1hZjQzLTQwMjgtYjhhNi1hZmQ3ZjRlZDc2OWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vxx2T7FKEDG95U51Hf0WzYbdZUzDSCptvrEyu-udB6L4t4azW91-epR4nEUtVLyrnTMFm2n3siDgpvqIyAPJxoiUg-IglJH2JT75I7UJTMumLl2mHRp5OHVbIOfTHH6P6IHbZtCh1F-1yZtSXD2zsRB57-riaXrzGbvWFcbQa00qEhUElN5YF9i1mBLn73Uzk0Kxa7k2WMabYBcyegbpYfQ8XaBcaFLPdIa0015SHsNi~qaqE~hF0gjT8wT5GUIAY9gHlAYmfrLkiznt9YrIfRWe3IeT9zzHJYzK8GJ5Knx8f~dnNpQGz~pss76242~jflSKqoYigKDEdjQL9UW5Ag__",
+    "asset_id": "dyson_swarm_collector",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Dyson Swarm Collector",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
