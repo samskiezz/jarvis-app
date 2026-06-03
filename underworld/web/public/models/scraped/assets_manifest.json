@@ -1128,5 +1128,22 @@
     "epoch": "quantum",
     "name": "Habitat Quantum",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:home_modern": {
+    "prompt": "a modern suburban family home with garden, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "89b3218e-4f79-4c94-93a5-ace8b3e9571a",
+    "path": "/models/generated/tripo/home_modern.glb",
+    "bytes": 15116012,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/89b3218e-4f79-4c94-93a5-ace8b3e9571a/tripo_pbr_model_89b3218e-4f79-4c94-93a5-ace8b3e9571a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODliMzIxOGUtNGY3OS00Yzk0LTkzYTUtYWNlOGIzZTk1NzFhL3RyaXBvX3Bicl9tb2RlbF84OWIzMjE4ZS00Zjc5LTRjOTQtOTNhNS1hY2U4YjNlOTU3MWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=M8zFf-rdf92sl2c2k27DCLST~zvYZVixs28TaINtamUe8lXFyiXuKRHq3iOBoXKv~Mh-OLI6Yn8JsPIoyQZaRF~h2~xTkQ81LFhs4vmEoNxi83mVpY6nka8ioFeoPXy4s81DTmoHBbfg4I7UXaOEID0WSzz9yauFHqp~JvtJ17BLadQuXIdivRbYWA~4AMXvuGzylR78ruE1I2NUuTDSOsli3~lm9cF36qdjqY6P0l6vfIWV336PFio1e8GJcfq1QaeQgTYqPt61gf59xXdZFWv1wK1ymsJ8eWiCbG8xxAVfNbGETYhTfU3UthEiZ9A9Wcb0hvY3g2cV0Vla2yJNzQ__",
+    "asset_id": "home_modern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "information",
+    "name": "Home Modern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
