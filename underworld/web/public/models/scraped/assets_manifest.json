@@ -4324,5 +4324,22 @@
     "epoch": "iron",
     "name": "Forge Furnace",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fume_hood": {
+    "prompt": "a laboratory fume hood, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "da8b5b52-ee17-45d9-ab1f-e0940c095333",
+    "path": "/models/generated/tripo/fume_hood.glb",
+    "bytes": 15012740,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/da8b5b52-ee17-45d9-ab1f-e0940c095333/tripo_pbr_model_da8b5b52-ee17-45d9-ab1f-e0940c095333.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGE4YjViNTItZWUxNy00NWQ5LWFiMWYtZTA5NDBjMDk1MzMzL3RyaXBvX3Bicl9tb2RlbF9kYThiNWI1Mi1lZTE3LTQ1ZDktYWIxZi1lMDk0MGMwOTUzMzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZgSbZKl-OKT2pn9SNDSnQVsAlR7C4np4sH-3duj3I39nwDcHnWL~jwvOlVZcg-lTnmB8mPRWH3Y1g8vY5yXoJwxsqHSsIT0nzarHahf6zJWOeg7ktrXSpjyT~K~zDUYoJ3ZdwXnVyXBqrMahq0I9sq9xhRxGMK9~Rjz1tuEdqUVLWQoLP76weWPyIxsOfwRrVvtFrzIhMquu3g5Lmx4S0FLguUJGRZ~dkM7DEnLRBFO3nk3CZ-utW2~bQeLli66lrv0RpWV7c8tk-45FZGhPuermchwOZXCbdQdflHgqRdQ-z8kH-1pbGSl3ePBQQfcrDLKcQmu6L3mdGkaOrV69TQ__",
+    "asset_id": "fume_hood",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Fume Hood",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
