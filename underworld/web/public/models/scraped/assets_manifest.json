@@ -4766,5 +4766,22 @@
     "epoch": "bronze",
     "name": "Plough",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:printer_3d_additive": {
+    "prompt": "an additive 3D printer mid-print, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "da39e318-76e2-4edc-b3b9-0047645c2f6f",
+    "path": "/models/generated/tripo/printer_3d_additive.glb",
+    "bytes": 14961736,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/da39e318-76e2-4edc-b3b9-0047645c2f6f/tripo_pbr_model_da39e318-76e2-4edc-b3b9-0047645c2f6f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGEzOWUzMTgtNzZlMi00ZWRjLWIzYjktMDA0NzY0NWMyZjZmL3RyaXBvX3Bicl9tb2RlbF9kYTM5ZTMxOC03NmUyLTRlZGMtYjNiOS0wMDQ3NjQ1YzJmNmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hBVZVhpk5W6IxEFB9PCrWUdKxKNPYZQQf3mKoF6EqulJmaSDTpff5XpYlkW~fqmVvu3EQ-YKjdKdpQACOAFAKUHRaOtGx9B6GxE2r1PKoll6dxIHpbTohg3GQC8-p7KjC8nykDfsXVq~cUvqLnrH0brhKtTLx~8b4UONEoSMPdmhHCvsZRBLWIhdUvvPqe~dVXSGsO~LsSYsnklEs1phaU6PIMHphelZ3fp64by2FEWaWzLq9OUdR5kYn~OAcrpvYzcx9m~ry9Bzi-xZkduRikRdMteO5IfW9cjXQc9m8hW77--5yqRXWwIRq0lcwDn8JuMgdv6GzT9nGDkiVl9HJw__",
+    "asset_id": "printer_3d_additive",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Printer 3D Additive",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
