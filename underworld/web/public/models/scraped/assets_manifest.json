@@ -6075,5 +6075,22 @@
     "epoch": "industrial",
     "name": "Coal Pile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:coin_pile": {
+    "prompt": "a small pile of gold coins, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b9d85f43-433a-4092-8a17-b8a12de160ba",
+    "path": "/models/generated/tripo/coin_pile.glb",
+    "bytes": 14970376,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b9d85f43-433a-4092-8a17-b8a12de160ba/tripo_pbr_model_b9d85f43-433a-4092-8a17-b8a12de160ba.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjlkODVmNDMtNDMzYS00MDkyLThhMTctYjhhMTJkZTE2MGJhL3RyaXBvX3Bicl9tb2RlbF9iOWQ4NWY0My00MzNhLTQwOTItOGExNy1iOGExMmRlMTYwYmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DibifP-4Io9bFbrqD3ii68VvTNqRNNvIsIj2u8OsvzKeKcOKmgQpigFIW1sn5q2flI2yCZbCAT~Th5IbMxuzX4VT6UG1ywP7KyszBsckffH9XLbi4lFOwt6trkyu00wrBmJs9fJRZDrbZCdP~pP3~GLxrjvPh7Xxb7ZNM61rNKahPhG5~aQ0BVID6f0hVv7mSa8p9xsJ1koAxfjDcAPN1rsOYC3yzBAIJ1~EqFhq5qAL6akYjnZZFTu~t7d4nhmfl~V3AYju0qCOQRjn7ZcoBqEZ9Q-jSF8qogAjUWcIYdPbGSaQ90XsJ3hUt4v1iHV4JQs8v-EVxOv059GIP8QkgA__",
+    "asset_id": "coin_pile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "bronze",
+    "name": "Coin Pile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
