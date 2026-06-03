@@ -5293,5 +5293,22 @@
     "epoch": "any",
     "name": "Bread Loaf",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:calibration_standard_set": {
+    "prompt": "a boxed set of calibration weights and gauge standards, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bf3fc74e-1242-49cb-b4a4-ab584e4c9719",
+    "path": "/models/generated/tripo/calibration_standard_set.glb",
+    "bytes": 14978024,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bf3fc74e-1242-49cb-b4a4-ab584e4c9719/tripo_pbr_model_bf3fc74e-1242-49cb-b4a4-ab584e4c9719.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmYzZmM3NGUtMTI0Mi00OWNiLWI0YTQtYWI1ODRlNGM5NzE5L3RyaXBvX3Bicl9tb2RlbF9iZjNmYzc0ZS0xMjQyLTQ5Y2ItYjRhNC1hYjU4NGU0Yzk3MTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VZsB8UwoUlEunrIpm~WTve7XsCYaZfkcA6nyCqsGqf-7e8EqDo2iV8dXWlUK98tN3KMazPA3ccbMZka8HBpLFd09wlFl~z~9H3jHK6PzgsYLThIBgmCTx2nYsmUTREJAcD3PEzA3W2AyV3tiFmHiZMnmlEjW3FIvPtElk4DUApnMD8Q4-BbhnCDzTJMm2ZlDlJ602JSbn3~4upRPPvopfFMuifmk~c11LeAvXu-UNhB1ICW9EWolKnNravjFxFmsBPR3qeFlvB2oCYc4Ih-8FSVc4CpUn-8g2K0JecsNN3tLSXfuztdA2VJlQcINRAdVv8KC3Aun3UVAcIry0l0UDQ__",
+    "asset_id": "calibration_standard_set",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Calibration Standard Set",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
