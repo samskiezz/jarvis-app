@@ -5718,5 +5718,22 @@
     "epoch": "any",
     "name": "Soul Bond Token",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stamp": {
+    "prompt": "an official rubber stamp and ink pad, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0e37efd9-c7d1-4c8e-b8a5-b77d2b186378",
+    "path": "/models/generated/tripo/stamp.glb",
+    "bytes": 14700472,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0e37efd9-c7d1-4c8e-b8a5-b77d2b186378/tripo_pbr_model_0e37efd9-c7d1-4c8e-b8a5-b77d2b186378.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGUzN2VmZDktYzdkMS00YzhlLWI4YTUtYjc3ZDJiMTg2Mzc4L3RyaXBvX3Bicl9tb2RlbF8wZTM3ZWZkOS1jN2QxLTRjOGUtYjhhNS1iNzdkMmIxODYzNzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dDZhKwsTytN6zjxwYwz7YmNStprwL-Saq9OEca~xBlSGFoQAM1yIYGig9P99SUmcuUUTRxnofz-s5ciDXuLyyuucmATph~lhAvVf9pgRz~CtSMZ4VxlEGI3DXcPcPPTZn8Ie~~Fjm0O-zCDQhYAsiySjBU6c5OMXdpACjCiOsbuQJCweTyfgTX58CMFDO6uJeWekQUQwVJ~gNU0ptCPwa-hQNmc1qucdyFYY5n4NEcnS~zWStxg1nmPr~t0mJ4~TXr-NOsgM2u~d3daQ06pncNXHNuKfGg~YBavApqnYoNPon92Ntrysjk58MS8ydF9pBlEoUvILnyb6ZA4OUdaT8Q__",
+    "asset_id": "stamp",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Stamp",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
