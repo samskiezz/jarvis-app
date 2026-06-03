@@ -7860,5 +7860,22 @@
     "epoch": "industrial",
     "name": "Mechanical Clock Movement",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mind_upload_substrate": {
+    "prompt": "a mind-upload substrate column streaming light, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "85c9afff-82d5-423f-b164-f97ddcac9b55",
+    "path": "/models/generated/tripo/mind_upload_substrate.glb",
+    "bytes": 16023600,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/85c9afff-82d5-423f-b164-f97ddcac9b55/tripo_pbr_model_85c9afff-82d5-423f-b164-f97ddcac9b55.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODVjOWFmZmYtODJkNS00MjNmLWIxNjQtZjk3ZGRjYWM5YjU1L3RyaXBvX3Bicl9tb2RlbF84NWM5YWZmZi04MmQ1LTQyM2YtYjE2NC1mOTdkZGNhYzliNTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Rkjt-N5b1G4gjssUIy9851aJKjT2rw4wrawKxIfhiAnaKSrpUxU5BOL0bnpHNLa0F9~~WyfXMyRU4gjI9wu~pHYYKoeaOw4dmBqOUCWbNFC~PIP0VPfxpJTq0fiAvfgRlA8DZN4rM-qyymttb7xt74nEyQcNb3l2N6eSZfxn2JbM9OcdBC6sGX2OmKbE4cSqVZ4wVOslzk8nQMgpH8cNHkDkMy4PqNF8c6AZYDic67awWq~66DJDVwcMDg6njf1JnpEYl3hvd6t1qwjTXpFFXmB0WcSRoDZyEVclqU~poF1VFYQv8hKKzTDRV1fxt6nwm9MZFKDy4mzmrpAPfC0gjQ__",
+    "asset_id": "mind_upload_substrate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "quantum",
+    "name": "Mind Upload Substrate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
