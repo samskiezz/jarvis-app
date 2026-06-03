@@ -4868,5 +4868,22 @@
     "epoch": "quantum",
     "name": "Reactor Model",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:replication_station": {
+    "prompt": "a replication-experiment station with paired apparatus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9f408bd3-f8e6-453b-a631-64f561ea83d1",
+    "path": "/models/generated/tripo/replication_station.glb",
+    "bytes": 15057812,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9f408bd3-f8e6-453b-a631-64f561ea83d1/tripo_pbr_model_9f408bd3-f8e6-453b-a631-64f561ea83d1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWY0MDhiZDMtZjhlNi00NTNiLWE2MzEtNjRmNTYxZWE4M2QxL3RyaXBvX3Bicl9tb2RlbF85ZjQwOGJkMy1mOGU2LTQ1M2ItYTYzMS02NGY1NjFlYTgzZDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=B~M6wfJsb8IdxmBYDxV~yIcCIKxYcSa887EfinQrRqVpklkYTHm~jLvGd29jY0q~zbxLTDnXQYakeGhIj09kn2UwUnWNvJ9wk0eNNaHsnume4jkZ4D8XKlN0QKmGcpwZrIgDEg7FTKralIHKD9TWl1cGUg1zQrEJ8P~wS-wWbuVBs~lvwcJWQWZ3aKW8n~SwALiQnmhFR1u9H-~BuvONjoYvjCvfR8iimuXgf3nDwRqHrh~5qfSb~yg7x6dz8DuqlHcF0f~yLAfXw0OztliMnyqYc5-AXJN5pBb2i4TTOWC-4HS9Dc3qxYyCwEBlmRZGS3dRYDo46Ovvh9cuJxNDYA__",
+    "asset_id": "replication_station",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Replication Station",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
