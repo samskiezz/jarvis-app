@@ -4885,5 +4885,22 @@
     "epoch": "information",
     "name": "Replication Station",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rivalry_dueling_chalkboards": {
+    "prompt": "two competing chalkboards facing off, covered in rival equations, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "65588354-1897-4016-a1e9-886621480bb3",
+    "path": "/models/generated/tripo/rivalry_dueling_chalkboards.glb",
+    "bytes": 13752048,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/65588354-1897-4016-a1e9-886621480bb3/tripo_pbr_model_65588354-1897-4016-a1e9-886621480bb3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjU1ODgzNTQtMTg5Ny00MDE2LWExZTktODg2NjIxNDgwYmIzL3RyaXBvX3Bicl9tb2RlbF82NTU4ODM1NC0xODk3LTQwMTYtYTFlOS04ODY2MjE0ODBiYjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aYmI4QkLN3j5TUq8Rqvw~VPWIptk7jkwVV5dVNFK5g2517cv1P~OkFXqcZoPucgO~He3963yRRVnokQZAXyoWfnXo0Ra2BSbhRSOE1hJPIHJlCbvE1VZnt~dZI2d7ekvvdAmcx20RUdnxgwvnmWj7B8ibiaYDwjr6oLZPLAtvmYE4Vjd0qOC82aCJ~3V3fWOgBgX8WcHurKYhnvUrccW-m1IgMT~V3uBlXXjXtlUGLU3gOEj~X~94xHDICLV1LQsjWELGcdeDjW2MqLaMf5r~WQKbKNy8OqnaF6P3WHuVkX9W~ttN3h91Fn-vqhXSDncBc628NuIEQ-WIuoWmkLiqA__",
+    "asset_id": "rivalry_dueling_chalkboards",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Rivalry Dueling Chalkboards",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
