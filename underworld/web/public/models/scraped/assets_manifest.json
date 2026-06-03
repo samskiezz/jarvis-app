@@ -2556,5 +2556,22 @@
     "epoch": "any",
     "name": "Fx Pod Plant",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_power_conduit": {
+    "prompt": "a glowing energy conduit pillar with flowing light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "9146ec46-7d01-4903-80f3-686f05d27163",
+    "path": "/models/generated/tripo/fx_power_conduit.glb",
+    "bytes": 7993976,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9146ec46-7d01-4903-80f3-686f05d27163/tripo_pbr_model_9146ec46-7d01-4903-80f3-686f05d27163.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOTE0NmVjNDYtN2QwMS00OTAzLTgwZjMtNjg2ZjA1ZDI3MTYzL3RyaXBvX3Bicl9tb2RlbF85MTQ2ZWM0Ni03ZDAxLTQ5MDMtODBmMy02ODZmMDVkMjcxNjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Z~G3Z5P02XL6o-9mcydg6n8UunDpGrjPXEApHFFYpT3fVQvTUfNZP98oP~xxkoFKgjp2BuNseE5VZYD-NXjP6S0bYeYDQ9M7x1wUampOED93xzhc~9vFRFS7MvXvGSYTZtBYvOeAAYq4T6Kx02hG24UiK-biR1fDP8~CcrUODq9ncEu0e7HaQP4~VwExR5RIrgC6uZfqtp3q1Z03noEYhiCGf5iURhwAm-8WFFIISaVKMwbMGK3ZayuBcf2KHEp9ns5o~OOXtdmWhTpQXggIN2AHO0wzQeymckH26Rn11nn84LHR78COfZgDtZs66haxoBqOlWKZwCZUhNfSt323Sw__",
+    "asset_id": "fx_power_conduit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Power Conduit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
