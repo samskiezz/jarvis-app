@@ -227,9 +227,67 @@ DESIGNS: list[tuple[str, str, str, str]] = [
     ("haystack", "prop", "bronze", f"a round haystack, {_STYLE}"),
 ]
 
+# ── 11. FX / HERO DETAIL — the "Avatar-grade" cinematic layer ─────────────────
+# High-detail, glowing, exotic and floating set pieces that lift the world from
+# "nice" to "cinematic". These are static high-poly GLBs with PBR + emissive
+# materials; the volumetric glow, particles and ray-traced bounce come from the
+# UE5 renderer on top (Lumen + Niagara) — these meshes give it something gorgeous
+# to light.
+_FX = "cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi"
+DESIGNS += [
+    # bioluminescent flora
+    ("fx_glowing_mushroom", "fx", "any", f"a cluster of bioluminescent glowing mushrooms, soft cyan light, {_FX}"),
+    ("fx_spirit_tree", "fx", "any", f"a majestic ancient tree with glowing leaves and luminous bark, {_FX}"),
+    ("fx_lumino_fern", "fx", "any", f"a luminous fern with softly glowing fronds, {_FX}"),
+    ("fx_glow_flowers", "fx", "any", f"a bed of glowing exotic flowers with light-emitting petals, {_FX}"),
+    ("fx_hanging_vines", "fx", "any", f"cascading hanging vines with tiny glowing buds, {_FX}"),
+    ("fx_giant_lilypad", "fx", "any", f"oversized lily pads with bioluminescent veins on dark water, {_FX}"),
+    ("fx_pod_plant", "fx", "any", f"an exotic alien seed-pod plant that glows from within, {_FX}"),
+    # crystals + energy
+    ("fx_crystal_cluster", "fx", "any", f"a cluster of glowing translucent crystals, refractive, {_FX}"),
+    ("fx_floating_crystal", "fx", "quantum", f"a slowly hovering luminous crystal shard, {_FX}"),
+    ("fx_energy_core", "fx", "quantum", f"a pulsing spherical energy core in a metal frame, {_FX}"),
+    ("fx_geode", "fx", "any", f"a large split geode lined with glowing amethyst crystals, {_FX}"),
+    ("fx_power_conduit", "fx", "quantum", f"a glowing energy conduit pillar with flowing light, {_FX}"),
+    ("fx_rune_stone", "fx", "iron", f"a standing stone carved with softly glowing runes, {_FX}"),
+    # floating / exotic terrain
+    ("fx_floating_island", "fx", "quantum", f"a small floating island of rock with grass and a tiny waterfall, {_FX}"),
+    ("fx_hover_boulder", "fx", "quantum", f"a large boulder hovering with glowing underside, {_FX}"),
+    ("fx_rock_arch", "fx", "any", f"a dramatic natural rock arch with glowing moss, {_FX}"),
+    ("fx_glowing_waterfall", "fx", "any", f"a tall waterfall over a cliff with luminous blue water and mist, {_FX}"),
+    ("fx_mist_pool", "fx", "any", f"a glowing hot-spring pool with rising mist, {_FX}"),
+    ("fx_giant_mushroom", "fx", "any", f"a giant fantasy mushroom the size of a tree, glowing cap, {_FX}"),
+    # ornate hero buildings / landmarks
+    ("fx_crystal_spire", "fx", "quantum", f"a soaring crystalline spire tower that catches the light, {_FX}"),
+    ("fx_grand_palace", "fx", "industrial", f"an opulent grand palace with golden domes and ornate carvings, {_FX}"),
+    ("fx_cathedral", "fx", "iron", f"a vast gothic cathedral with stained-glass windows glowing from within, {_FX}"),
+    ("fx_wizard_tower", "fx", "iron", f"a tall crooked mage's tower topped with a glowing orb, {_FX}"),
+    ("fx_temple_of_light", "fx", "bronze", f"an ancient temple with a beam of light from its apex, {_FX}"),
+    ("fx_world_tree_hall", "fx", "quantum", f"a grand hall grown into a colossal glowing world-tree, {_FX}"),
+    # atmospheric props / lighting
+    ("fx_floating_lantern", "fx", "any", f"a glowing paper lantern floating in the air, warm light, {_FX}"),
+    ("fx_light_orb", "fx", "quantum", f"a hovering orb of soft light on a delicate stand, {_FX}"),
+    ("fx_fire_pit", "fx", "stone", f"a stone fire pit with glowing embers and flame, {_FX}"),
+    ("fx_torch_brazier", "fx", "iron", f"an ornate wall brazier with bright flame, {_FX}"),
+    ("fx_glow_lamppost", "fx", "industrial", f"an elegant lamppost with a warm glowing globe and filigree, {_FX}"),
+    # sci-fi / high-tech set dressing
+    ("fx_hologram", "fx", "quantum", f"a holographic projector emitting a glowing 3D display, {_FX}"),
+    ("fx_energy_pylon", "fx", "quantum", f"a tall energy pylon arcing with electricity, {_FX}"),
+    ("fx_antigrav_pad", "fx", "quantum", f"a circular anti-gravity platform glowing blue underneath, {_FX}"),
+    ("fx_neon_sign", "fx", "information", f"a vibrant neon shop sign, {_FX}"),
+    ("fx_plasma_lamp", "fx", "quantum", f"a plasma globe lamp with arcing tendrils of light, {_FX}"),
+    # detailed nature set pieces
+    ("fx_jungle_cluster", "fx", "any", f"a lush dense jungle plant cluster with broad leaves, {_FX}"),
+    ("fx_flowering_wall", "fx", "any", f"a wall covered in cascading flowering vines, {_FX}"),
+    ("fx_moss_statue", "fx", "iron", f"a weathered stone statue overgrown with glowing moss, {_FX}"),
+    ("fx_dragon_statue", "fx", "iron", f"an ornate coiled stone dragon statue, intricate scales, {_FX}"),
+    ("fx_ancient_roots", "fx", "any", f"a tangle of massive ancient tree roots with glowing sap, {_FX}"),
+]
+
+
 # Build order: terrain first, then the world fills in, instruments dress the labs.
 PHASE_ORDER = ["terrain", "nature", "building", "civic", "interior",
-               "furniture", "instrument", "vehicle", "monument", "prop"]
+               "furniture", "instrument", "vehicle", "monument", "prop", "fx"]
 
 
 def designs_for(epoch_tag: str | None = None) -> list[tuple[str, str, str, str]]:
