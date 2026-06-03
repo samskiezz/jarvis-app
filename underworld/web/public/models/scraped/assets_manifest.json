@@ -2964,5 +2964,22 @@
     "epoch": "any",
     "name": "Wall Plaster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:window_frame": {
+    "prompt": "a glazed window frame, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "3fe6403f-8f86-42a1-a0d9-d26fd76f27fe",
+    "path": "/models/generated/tripo/window_frame.glb",
+    "bytes": 12481996,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3fe6403f-8f86-42a1-a0d9-d26fd76f27fe/tripo_pbr_model_3fe6403f-8f86-42a1-a0d9-d26fd76f27fe.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2ZlNjQwM2YtOGY4Ni00MmExLWEwZDktZDI2ZmQ3NmYyN2ZlL3RyaXBvX3Bicl9tb2RlbF8zZmU2NDAzZi04Zjg2LTQyYTEtYTBkOS1kMjZmZDc2ZjI3ZmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=A4i1XIegNJ~PeKmHGIgZqV-gbeA3~nVGJu9EVyZfWJc1e4t6lzkotGiBJRCC3j~XLheXz48~Mr8YmBpWHgOgi0abU9y6cZ-shy-kLqdTrIjdwsawRaK-zSSPScE~qHAILylUIKQjJewhfkfVkgQgtCbnrfzbCI6YhkPLPuY0UgGYFXArcXsRhv3o0ThrAZr7WjJBy8v~pRo~xlXhK3xOHcVS1MqwYnDkYiY29gRpxTxoyrdhO0et~P5W2U2B8OS6dYXN8w7lqulOVRbY50NGXekDAEjWLLJYqryWo7yb5LicaFz1orvi1seouTHrHo4VMYDo2aBFjO-TXnQCiO4e8g__",
+    "asset_id": "window_frame",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Window Frame",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
