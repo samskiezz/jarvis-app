@@ -1757,5 +1757,22 @@
     "epoch": "industrial",
     "name": "Courthouse",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:entertainment_arena": {
+    "prompt": "a small open-air contest arena with tiered stone seating, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "ef495036-365c-4abe-86c4-d7353a4a137d",
+    "path": "/models/generated/tripo/entertainment_arena.glb",
+    "bytes": 15509284,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ef495036-365c-4abe-86c4-d7353a4a137d/tripo_pbr_model_ef495036-365c-4abe-86c4-d7353a4a137d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWY0OTUwMzYtMzY1Yy00YWJlLTg2YzQtZDczNTNhNGExMzdkL3RyaXBvX3Bicl9tb2RlbF9lZjQ5NTAzNi0zNjVjLTRhYmUtODZjNC1kNzM1M2E0YTEzN2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XGKcCISJPYfLpm9fbEfiBEiGKgK7V2enNwUdvqMA5qjRmDaans2c-hAHuKrEv0iRawrDPsREwOgh-uTbLf6lBMukhY7fpvQo0EjIMwDUyjTEJOG-wA2aCmAAOywBasKMuAVtoYdffwXkT-UH0cXDCKqa0Ft~v4pmPNUG3HWg4aZ0MdZvMPriCz8SBIl7MO~B48VkHgcbu8ElnW1n1ZQr-dkJXvOuSaOmhq7Iy3rt5gPzciibj7wFbT9Rsd2cjqCtwoSlAknuYqRzvMuGLQazGL-gtCdFUw6YPMkkd45SzVS~wadMNH8KWqWD0e~j3TMT2foW1TRbdBZWHFpLOdHhTA__",
+    "asset_id": "entertainment_arena",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "iron",
+    "name": "Entertainment Arena",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
