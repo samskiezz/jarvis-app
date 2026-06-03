@@ -7435,5 +7435,22 @@
     "epoch": "industrial",
     "name": "Barrier",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fire_extinguisher": {
+    "prompt": "a red fire extinguisher, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "13c1885a-3f89-4c89-a089-1e870ef234e9",
+    "path": "/models/generated/tripo/fire_extinguisher.glb",
+    "bytes": 8350340,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/13c1885a-3f89-4c89-a089-1e870ef234e9/tripo_pbr_model_13c1885a-3f89-4c89-a089-1e870ef234e9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTNjMTg4NWEtM2Y4OS00Yzg5LWEwODktMWU4NzBlZjIzNGU5L3RyaXBvX3Bicl9tb2RlbF8xM2MxODg1YS0zZjg5LTRjODktYTA4OS0xZTg3MGVmMjM0ZTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=k6jZXRJGTx4NaO-ADuGAKhcSadd~g4pt1fo1P3V2~-O-VukZGB6htTfq47B-LjFOaHTtGm1gsqi9CSwB3TQsm9SkiFwROEuAg4Xin0JLk2N~fQmiVnIvo1ogUdQFF5QxSCcJrUrnuLj6IZKShPj8e3kp2nOZoNqd7eBJ4BzCiW7RstDbaTKDuL89Ax5cCblsq8IJbP~1jVnx~Cdh9RnYRnCqp45DAVOGwAIeCopw9EbY0pFmUca2NAIcWqR2Ppe6tdk2EdZiNMzZsHo9oD33yNLXGhdKvcqUbv1MkmRh1SIFOgVNUUVzWY6X2OPPzHcZa~fDsPLy5GceKOSAaKSo8A__",
+    "asset_id": "fire_extinguisher",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "safety",
+    "epoch": "information",
+    "name": "Fire Extinguisher",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
