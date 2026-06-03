@@ -8642,5 +8642,22 @@
     "epoch": "iron",
     "name": "Guild Banner Materials",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_maths": {
+    "prompt": "a heraldic banner with a golden compass-and-pi mathematics emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5039e05f-2ade-4ed6-b258-3e9db72190e0",
+    "path": "/models/generated/tripo/guild_banner_maths.glb",
+    "bytes": 15112240,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5039e05f-2ade-4ed6-b258-3e9db72190e0/tripo_pbr_model_5039e05f-2ade-4ed6-b258-3e9db72190e0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTAzOWUwNWYtMmFkZS00ZWQ2LWIyNTgtM2U5ZGI3MjE5MGUwL3RyaXBvX3Bicl9tb2RlbF81MDM5ZTA1Zi0yYWRlLTRlZDYtYjI1OC0zZTlkYjcyMTkwZTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IZw8DFXKeoolRqjdGosIrm-92gpTjQs1aAa1rqBIJJKKBAITA6nQtIxicMnl4ILf2~0dAwzSll7WCsRboS5FG72IkbAECS7kQbkri8KijTYmJDReeX~BBOeHabrpag3Bd4FZN2o92XfZlW7d7Z7sgSSITVN4-tmwtBUufFL254Uj2jDZlKusw3hMlWSZXuBVQ599KFE~VjAwygzs51Xf~uYD95X3ReMaCsGe34OCOhc8AHRLS2yW5kCXk0x~TfD6bqxF4Awl-jpx1xjXozSNPQ6QNAcl8NMd5gR41fEMIxb2ySNUIO4gS32AZS-hXtEncWqFGsHe42wHgkD5DR51Bg__",
+    "asset_id": "guild_banner_maths",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Guild Banner Maths",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
