@@ -1774,5 +1774,22 @@
     "epoch": "iron",
     "name": "Entertainment Arena",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mint_bank": {
+    "prompt": "a stately bank and treasury building with a vault door, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "ae00c4e4-5679-4b7a-8118-d99a193150f8",
+    "path": "/models/generated/tripo/mint_bank.glb",
+    "bytes": 15404448,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ae00c4e4-5679-4b7a-8118-d99a193150f8/tripo_pbr_model_ae00c4e4-5679-4b7a-8118-d99a193150f8.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWUwMGM0ZTQtNTY3OS00YjdhLTgxMTgtZDk5YTE5MzE1MGY4L3RyaXBvX3Bicl9tb2RlbF9hZTAwYzRlNC01Njc5LTRiN2EtODExOC1kOTlhMTkzMTUwZjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uIJiIKW48j84Pz9mf7MkXnhll7cr2sReN2e9yRu8IbgdDysPpZ-fDY6LMEoA6ug8khsk90FRP1MFAkhhgu6i7Aqxv8dJw2-EP1IHe8X9v5xxrWg9xT32lO2sHs4tzU9weq4jxBG816jNF-LnBcIDe-z7A1lXNTHTHrjNLmHGDn1CmPEQYG37BRRpHkNVOk6rAwVqB7UacbXPY-YXRpHMVw5F0BKuxgdi8fGpw7adVVKAmhMS6Xoy~oix0w9knhS520fVq7Lu1K-~VcMcN0TrXiNSQtpq17lyrK3e-9lj941u~TdVCfaHndZJDrAhtbtI2OcUPhp-sX4AqjiVXt0Wdg__",
+    "asset_id": "mint_bank",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "iron",
+    "name": "Mint Bank",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
