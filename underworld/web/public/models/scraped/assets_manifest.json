@@ -6942,5 +6942,22 @@
     "epoch": "iron",
     "name": "Plague Sickbed Lamp",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stretcher": {
+    "prompt": "a wheeled medical stretcher, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7484bc87-3ffd-4c82-bebb-fc8ec7fb7800",
+    "path": "/models/generated/tripo/stretcher.glb",
+    "bytes": 14922848,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7484bc87-3ffd-4c82-bebb-fc8ec7fb7800/tripo_pbr_model_7484bc87-3ffd-4c82-bebb-fc8ec7fb7800.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzQ4NGJjODctM2ZmZC00YzgyLWJlYmItZmM4ZWM3ZmI3ODAwL3RyaXBvX3Bicl9tb2RlbF83NDg0YmM4Ny0zZmZkLTRjODItYmViYi1mYzhlYzdmYjc4MDAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QCX-rHwiSWT~4RoyJlMaLbJyoCtFw~EP8e036wSA8D6-oA1pyZVEb6OI-mHjKnGgKtgw~19XKZZHOki50VWwy4lkz-5FNbWbFtPp~YKhpKGBpCppTL1WCWlrMGr6malc4KIAwKNrfgYj13JVn64sfq5sLNb1pARgO-TsGqLTcKlzHHXXZj6kbSlQLwuOYsGZQZQoE-Tin3-X-9PvzbijeATDnAl6ex-fWqO4XrMEcBSo3Uj0LiIarpbFWwrqIV22LpcWeNuIZDp83n2R1hrC4v6GxfEfCGsR-qqFPNmflkQFkV744sMGK3evblSWFuMjWSSpggu1TW37UEG86eyopQ__",
+    "asset_id": "stretcher",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "industrial",
+    "name": "Stretcher",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
