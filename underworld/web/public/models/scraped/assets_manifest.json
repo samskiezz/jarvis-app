@@ -2029,5 +2029,22 @@
     "epoch": "any",
     "name": "Fx Ancient Roots",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_antigrav_pad": {
+    "prompt": "a circular anti-gravity platform glowing blue underneath, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "ba4b6f28-1aa8-4771-b231-eeea3746f735",
+    "path": "/models/generated/tripo/fx_antigrav_pad.glb",
+    "bytes": 14000892,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ba4b6f28-1aa8-4771-b231-eeea3746f735/tripo_pbr_model_ba4b6f28-1aa8-4771-b231-eeea3746f735.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmE0YjZmMjgtMWFhOC00NzcxLWIyMzEtZWVlYTM3NDZmNzM1L3RyaXBvX3Bicl9tb2RlbF9iYTRiNmYyOC0xYWE4LTQ3NzEtYjIzMS1lZWVhMzc0NmY3MzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KGa6Ubxn6dDw2I4A70jv-lHeuk6uEVKdLBV6AjhtofiGFNxEa8UhmQYi1wSrrmai8t0vm-jgi8gOLaMed-K0lPhACNv4wP7J~3faiEf37iJgmI8qDqW~i5RjXt1mJM5YJI1-lDk2SRkasQEw~6ml2Mg6d5IlhLCixlKqXsX2ZmeSKp9v6f~DQDSog2N2do6z3ZTiy1mmjwJZjK3uzkpkCc9WiyvuN-0UOpjG2UCTBRBLKRJbB2ltB6NWlqc73m93uf-2mFj90reNdy4RJpPfM4Zl-9awXLMtJ9WQcdNE~AsulKVitc0QAlihXHfvBREHTslNObBGTWlP2yaJteYGpg__",
+    "asset_id": "fx_antigrav_pad",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Antigrav Pad",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
