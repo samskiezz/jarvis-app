@@ -1,7 +1,7 @@
 {
   "version": 1,
   "note": "Ordered GLB load packages \u2014 load stage by stage; render the world layer by layer as each stage completes.",
-  "total_assets": 390,
+  "total_assets": 513,
   "critical": [
     {
       "path": "/models/polyhaven/sky_puresky_1k.hdr",
@@ -1327,7 +1327,7 @@
     {
       "stage": 3,
       "name": "Guild Work & Roles",
-      "asset_count": 129,
+      "asset_count": 130,
       "assets": [
         {
           "id": "abacus",
@@ -1954,6 +1954,12 @@
           "phase": "object"
         },
         {
+          "id": "safety_block_stamp",
+          "path": "/models/generated/tripo/safety_block_stamp.glb",
+          "category": "object",
+          "phase": "object"
+        },
+        {
           "id": "screwdriver",
           "path": "/models/generated/tripo/screwdriver.glb",
           "category": "object",
@@ -2355,27 +2361,556 @@
     {
       "stage": 5,
       "name": "Society Systems",
-      "asset_count": 1,
+      "asset_count": 42,
       "assets": [
         {
           "id": "apothecary_shelf",
           "path": "/models/generated/tripo/apothecary_shelf.glb",
           "category": "medical",
           "phase": "medical"
+        },
+        {
+          "id": "dna_sequencer",
+          "path": "/models/generated/tripo/dna_sequencer.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "first_aid_kit",
+          "path": "/models/generated/tripo/first_aid_kit.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "healers_poultice",
+          "path": "/models/generated/tripo/healers_poultice.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "hospital_bed",
+          "path": "/models/generated/tripo/hospital_bed.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "iv_stand",
+          "path": "/models/generated/tripo/iv_stand.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "medicine_cabinet",
+          "path": "/models/generated/tripo/medicine_cabinet.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "petri_dish",
+          "path": "/models/generated/tripo/petri_dish.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "pipette",
+          "path": "/models/generated/tripo/pipette.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "plague_sickbed_lamp",
+          "path": "/models/generated/tripo/plague_sickbed_lamp.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "stretcher",
+          "path": "/models/generated/tripo/stretcher.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "surgical_table",
+          "path": "/models/generated/tripo/surgical_table.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "wound_bandage_kit",
+          "path": "/models/generated/tripo/wound_bandage_kit.glb",
+          "category": "medical",
+          "phase": "medical"
+        },
+        {
+          "id": "animal_pen",
+          "path": "/models/generated/tripo/animal_pen.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "chicken",
+          "path": "/models/generated/tripo/chicken.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "cow",
+          "path": "/models/generated/tripo/cow.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "fishing_boat",
+          "path": "/models/generated/tripo/fishing_boat.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "hay_bale",
+          "path": "/models/generated/tripo/hay_bale.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "orchard_tree",
+          "path": "/models/generated/tripo/orchard_tree.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "seed_sack",
+          "path": "/models/generated/tripo/seed_sack.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "sheep",
+          "path": "/models/generated/tripo/sheep.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "silo",
+          "path": "/models/generated/tripo/silo.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "water_trough",
+          "path": "/models/generated/tripo/water_trough.glb",
+          "category": "agri",
+          "phase": "agri"
+        },
+        {
+          "id": "carriage",
+          "path": "/models/generated/tripo/carriage.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "dock_pier",
+          "path": "/models/generated/tripo/dock_pier.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "mailbox",
+          "path": "/models/generated/tripo/mailbox.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "power_grid_substation",
+          "path": "/models/generated/tripo/power_grid_substation.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "power_pole",
+          "path": "/models/generated/tripo/power_pole.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "printing_press",
+          "path": "/models/generated/tripo/printing_press.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "radio_tower",
+          "path": "/models/generated/tripo/radio_tower.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "rail_track",
+          "path": "/models/generated/tripo/rail_track.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "rowboat",
+          "path": "/models/generated/tripo/rowboat.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "solar_streetlight",
+          "path": "/models/generated/tripo/solar_streetlight.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "telegraph",
+          "path": "/models/generated/tripo/telegraph.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "telephone_old",
+          "path": "/models/generated/tripo/telephone_old.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "water_pump_well",
+          "path": "/models/generated/tripo/water_pump_well.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "watermill",
+          "path": "/models/generated/tripo/watermill.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "windmill",
+          "path": "/models/generated/tripo/windmill.glb",
+          "category": "infra",
+          "phase": "infra"
+        },
+        {
+          "id": "barrier",
+          "path": "/models/generated/tripo/barrier.glb",
+          "category": "safety",
+          "phase": "safety"
+        },
+        {
+          "id": "fire_extinguisher",
+          "path": "/models/generated/tripo/fire_extinguisher.glb",
+          "category": "safety",
+          "phase": "safety"
+        },
+        {
+          "id": "warning_sign",
+          "path": "/models/generated/tripo/warning_sign.glb",
+          "category": "safety",
+          "phase": "safety"
+        },
+        {
+          "id": "watchtower",
+          "path": "/models/generated/tripo/watchtower.glb",
+          "category": "safety",
+          "phase": "safety"
         }
       ]
     },
     {
       "stage": 6,
       "name": "Epoch Ladder",
-      "asset_count": 0,
-      "assets": []
+      "asset_count": 39,
+      "assets": [
+        {
+          "id": "agi_core",
+          "path": "/models/generated/tripo/agi_core.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "aqueduct_arch",
+          "path": "/models/generated/tripo/aqueduct_arch.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "bci_headset",
+          "path": "/models/generated/tripo/bci_headset.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "bow_and_arrow",
+          "path": "/models/generated/tripo/bow_and_arrow.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "burial_mound",
+          "path": "/models/generated/tripo/burial_mound.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "cave_painting_wall",
+          "path": "/models/generated/tripo/cave_painting_wall.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "coin_mint_die",
+          "path": "/models/generated/tripo/coin_mint_die.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "combustion_engine_cutaway",
+          "path": "/models/generated/tripo/combustion_engine_cutaway.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "crispr_cas9_model",
+          "path": "/models/generated/tripo/crispr_cas9_model.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "cuneiform_tablet",
+          "path": "/models/generated/tripo/cuneiform_tablet.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "dna_double_helix_model",
+          "path": "/models/generated/tripo/dna_double_helix_model.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "dyson_swarm_collector",
+          "path": "/models/generated/tripo/dyson_swarm_collector.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "euclid_scroll_geometry",
+          "path": "/models/generated/tripo/euclid_scroll_geometry.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "faraday_induction_coil",
+          "path": "/models/generated/tripo/faraday_induction_coil.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "foundation_model_gpu_pod",
+          "path": "/models/generated/tripo/foundation_model_gpu_pod.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "germ_theory_slides",
+          "path": "/models/generated/tripo/germ_theory_slides.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "integrated_circuit_wafer",
+          "path": "/models/generated/tripo/integrated_circuit_wafer.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "interstellar_ship",
+          "path": "/models/generated/tripo/interstellar_ship.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "iron_smelting_bloomery",
+          "path": "/models/generated/tripo/iron_smelting_bloomery.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "law_stele",
+          "path": "/models/generated/tripo/law_stele.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "longevity_pod",
+          "path": "/models/generated/tripo/longevity_pod.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "mechanical_clock_movement",
+          "path": "/models/generated/tripo/mechanical_clock_movement.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "mind_upload_substrate",
+          "path": "/models/generated/tripo/mind_upload_substrate.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "nanofab_assembler",
+          "path": "/models/generated/tripo/nanofab_assembler.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "network_switch_node",
+          "path": "/models/generated/tripo/network_switch_node.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "nuclear_reactor_pile",
+          "path": "/models/generated/tripo/nuclear_reactor_pile.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "oldowan_tool",
+          "path": "/models/generated/tripo/oldowan_tool.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "orbital_habitat_ring",
+          "path": "/models/generated/tripo/orbital_habitat_ring.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "paper_press_screen",
+          "path": "/models/generated/tripo/paper_press_screen.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "philosophy_agora",
+          "path": "/models/generated/tripo/philosophy_agora.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "potters_kiln",
+          "path": "/models/generated/tripo/potters_kiln.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "satellite_sputnik",
+          "path": "/models/generated/tripo/satellite_sputnik.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "scientific_method_chart",
+          "path": "/models/generated/tripo/scientific_method_chart.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "self_driving_lab_cell",
+          "path": "/models/generated/tripo/self_driving_lab_cell.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "smartphone_device",
+          "path": "/models/generated/tripo/smartphone_device.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "star_engine",
+          "path": "/models/generated/tripo/star_engine.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "transistor_replica",
+          "path": "/models/generated/tripo/transistor_replica.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "vaccination_kit",
+          "path": "/models/generated/tripo/vaccination_kit.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        },
+        {
+          "id": "wright_flyer",
+          "path": "/models/generated/tripo/wright_flyer.glb",
+          "category": "epoch",
+          "phase": "epoch"
+        }
+      ]
     },
     {
       "stage": 7,
       "name": "Movement & Polish",
-      "asset_count": 2,
+      "asset_count": 44,
       "assets": [
+        {
+          "id": "bicycle",
+          "path": "/models/generated/tripo/bicycle.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "car_modern",
+          "path": "/models/generated/tripo/car_modern.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "cart_wooden",
+          "path": "/models/generated/tripo/cart_wooden.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "chariot",
+          "path": "/models/generated/tripo/chariot.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "hover_pod",
+          "path": "/models/generated/tripo/hover_pod.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "steam_loco",
+          "path": "/models/generated/tripo/steam_loco.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "clock_tower",
+          "path": "/models/generated/tripo/clock_tower.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "fossil_tyrannosaur_skull",
+          "path": "/models/generated/tripo/fossil_tyrannosaur_skull.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
         {
           "id": "fountain",
           "path": "/models/generated/tripo/fountain.glb",
@@ -2383,8 +2918,212 @@
           "phase": "monument"
         },
         {
+          "id": "grave_headstone",
+          "path": "/models/generated/tripo/grave_headstone.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "hero_statue",
+          "path": "/models/generated/tripo/hero_statue.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "law_code_pillar",
+          "path": "/models/generated/tripo/law_code_pillar.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "lighthouse",
+          "path": "/models/generated/tripo/lighthouse.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "obelisk",
+          "path": "/models/generated/tripo/obelisk.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "prayer_circle_stones",
+          "path": "/models/generated/tripo/prayer_circle_stones.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "saga_memorial_plaque",
+          "path": "/models/generated/tripo/saga_memorial_plaque.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "victory_arch",
+          "path": "/models/generated/tripo/victory_arch.glb",
+          "category": "monument",
+          "phase": "monument"
+        },
+        {
+          "id": "banner",
+          "path": "/models/generated/tripo/banner.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "barrel",
+          "path": "/models/generated/tripo/barrel.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "brazier",
+          "path": "/models/generated/tripo/brazier.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "crate",
+          "path": "/models/generated/tripo/crate.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "festival_bonfire",
+          "path": "/models/generated/tripo/festival_bonfire.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "festival_bunting",
+          "path": "/models/generated/tripo/festival_bunting.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "fossil_dig_site",
+          "path": "/models/generated/tripo/fossil_dig_site.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_agriculture",
+          "path": "/models/generated/tripo/guild_banner_agriculture.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_civil",
+          "path": "/models/generated/tripo/guild_banner_civil.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_computing",
+          "path": "/models/generated/tripo/guild_banner_computing.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_electrical",
+          "path": "/models/generated/tripo/guild_banner_electrical.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_energy",
+          "path": "/models/generated/tripo/guild_banner_energy.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_materials",
+          "path": "/models/generated/tripo/guild_banner_materials.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_maths",
+          "path": "/models/generated/tripo/guild_banner_maths.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_mechanical",
+          "path": "/models/generated/tripo/guild_banner_mechanical.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_patent",
+          "path": "/models/generated/tripo/guild_banner_patent.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_physics",
+          "path": "/models/generated/tripo/guild_banner_physics.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_banner_safety",
+          "path": "/models/generated/tripo/guild_banner_safety.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "guild_crest_plaque",
+          "path": "/models/generated/tripo/guild_crest_plaque.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "haystack",
+          "path": "/models/generated/tripo/haystack.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "market_stall",
+          "path": "/models/generated/tripo/market_stall.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "park_bench",
+          "path": "/models/generated/tripo/park_bench.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "partner_courtship_bench",
+          "path": "/models/generated/tripo/partner_courtship_bench.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "race_track_post",
+          "path": "/models/generated/tripo/race_track_post.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "signpost",
+          "path": "/models/generated/tripo/signpost.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "street_lamp",
           "path": "/models/generated/tripo/street_lamp.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "well",
+          "path": "/models/generated/tripo/well.glb",
           "category": "prop",
           "phase": "prop"
         }
@@ -4003,6 +4742,11 @@
       "stage": 3
     },
     {
+      "path": "/models/generated/tripo/safety_block_stamp.glb",
+      "phase": "object",
+      "stage": 3
+    },
+    {
       "path": "/models/generated/tripo/screwdriver.glb",
       "phase": "object",
       "stage": 3
@@ -4333,12 +5077,622 @@
       "stage": 5
     },
     {
+      "path": "/models/generated/tripo/dna_sequencer.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/first_aid_kit.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/healers_poultice.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/hospital_bed.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/iv_stand.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/medicine_cabinet.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/petri_dish.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/pipette.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/plague_sickbed_lamp.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/stretcher.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/surgical_table.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/wound_bandage_kit.glb",
+      "phase": "medical",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/animal_pen.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/chicken.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/cow.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/fishing_boat.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/hay_bale.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/orchard_tree.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/seed_sack.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/sheep.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/silo.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/water_trough.glb",
+      "phase": "agri",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/carriage.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/dock_pier.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/mailbox.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/power_grid_substation.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/power_pole.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/printing_press.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/radio_tower.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/rail_track.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/rowboat.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/solar_streetlight.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/telegraph.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/telephone_old.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/water_pump_well.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/watermill.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/windmill.glb",
+      "phase": "infra",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/barrier.glb",
+      "phase": "safety",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/fire_extinguisher.glb",
+      "phase": "safety",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/warning_sign.glb",
+      "phase": "safety",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/watchtower.glb",
+      "phase": "safety",
+      "stage": 5
+    },
+    {
+      "path": "/models/generated/tripo/agi_core.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/aqueduct_arch.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/bci_headset.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/bow_and_arrow.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/burial_mound.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/cave_painting_wall.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/coin_mint_die.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/combustion_engine_cutaway.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/crispr_cas9_model.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/cuneiform_tablet.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/dna_double_helix_model.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/dyson_swarm_collector.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/euclid_scroll_geometry.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/faraday_induction_coil.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/foundation_model_gpu_pod.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/germ_theory_slides.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/integrated_circuit_wafer.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/interstellar_ship.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/iron_smelting_bloomery.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/law_stele.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/longevity_pod.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/mechanical_clock_movement.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/mind_upload_substrate.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/nanofab_assembler.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/network_switch_node.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/nuclear_reactor_pile.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/oldowan_tool.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/orbital_habitat_ring.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/paper_press_screen.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/philosophy_agora.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/potters_kiln.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/satellite_sputnik.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/scientific_method_chart.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/self_driving_lab_cell.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/smartphone_device.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/star_engine.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/transistor_replica.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/vaccination_kit.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/wright_flyer.glb",
+      "phase": "epoch",
+      "stage": 6
+    },
+    {
+      "path": "/models/generated/tripo/bicycle.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/car_modern.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/cart_wooden.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/chariot.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/hover_pod.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/steam_loco.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/clock_tower.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/fossil_tyrannosaur_skull.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/fountain.glb",
       "phase": "monument",
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/grave_headstone.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/hero_statue.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/law_code_pillar.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/lighthouse.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/obelisk.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/prayer_circle_stones.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/saga_memorial_plaque.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/victory_arch.glb",
+      "phase": "monument",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/banner.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/barrel.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/brazier.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/crate.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/festival_bonfire.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/festival_bunting.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/fossil_dig_site.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_agriculture.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_civil.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_computing.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_electrical.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_energy.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_materials.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_maths.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_mechanical.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_patent.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_physics.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_banner_safety.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/guild_crest_plaque.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/haystack.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/market_stall.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/park_bench.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/partner_courtship_bench.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/race_track_post.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/signpost.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/street_lamp.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/well.glb",
       "phase": "prop",
       "stage": 7
     }
