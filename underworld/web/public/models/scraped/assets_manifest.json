@@ -7690,5 +7690,22 @@
     "epoch": "quantum",
     "name": "Dyson Swarm Collector",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:euclid_scroll_geometry": {
+    "prompt": "a geometry proof scroll with a compass and straightedge, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b436237a-ef10-4e47-98ee-fb4ca35a2213",
+    "path": "/models/generated/tripo/euclid_scroll_geometry.glb",
+    "bytes": 14860636,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b436237a-ef10-4e47-98ee-fb4ca35a2213/tripo_pbr_model_b436237a-ef10-4e47-98ee-fb4ca35a2213.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjQzNjIzN2EtZWYxMC00ZTQ3LTk4ZWUtZmI0Y2EzNWEyMjEzL3RyaXBvX3Bicl9tb2RlbF9iNDM2MjM3YS1lZjEwLTRlNDctOThlZS1mYjRjYTM1YTIyMTMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aabMX~Lp1l4MZRx6G1uri5ROW9nvSly6OzXHb8t8N-rg1E~bEWrVmYg~zT~GoPxddXA88rk5rgGPPyfCipnpkZHqnbwVPvH-s3iN~7WUU8o-L9-LRum0lrvPNxGWw2CZjfBrroIUlzw9Zqy8GfA8ZTi~5oMJIgo3fZu4VkVEVaNdZ5ge-jkeOAkelqsO~NlaGyZ92ctth1EZCxfr8TBY72QitIbZWBuhLvlxME6AZDdn0uGkR8IZQNMkA4svAePyGxR2PacNr~ZZCUyQLHfksQWiHRQ7nDgzYUuJmPwueoXFptvIEPnuBPT2A5XDFauWB57QuLgLNfPSvhm0wtw8GQ__",
+    "asset_id": "euclid_scroll_geometry",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "iron",
+    "name": "Euclid Scroll Geometry",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
