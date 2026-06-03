@@ -7367,5 +7367,22 @@
     "epoch": "industrial",
     "name": "Telephone Old",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:water_pump_well": {
+    "prompt": "a cast-iron street water pump, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c3d1e89c-9775-441f-9845-fb6eaf0911ee",
+    "path": "/models/generated/tripo/water_pump_well.glb",
+    "bytes": 14887960,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c3d1e89c-9775-441f-9845-fb6eaf0911ee/tripo_pbr_model_c3d1e89c-9775-441f-9845-fb6eaf0911ee.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzNkMWU4OWMtOTc3NS00NDFmLTk4NDUtZmI2ZWFmMDkxMWVlL3RyaXBvX3Bicl9tb2RlbF9jM2QxZTg5Yy05Nzc1LTQ0MWYtOTg0NS1mYjZlYWYwOTExZWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=M4yPG0ZkXpiBzG-2~LF8XDghSu-6Z~8wLGuZcirFNzyWS~yyiODUGEa~Eec3wEJNJNLQtC-Uiz89xjel6kxDtx64qCHXCOEFaAX~TeEDTkfr7St8g812nntc~BkSzJN13RgqmBtMB88Jxyi1Rh5hZmBidMxQH5O0N~N5NyKbsLCVXZUTSobZw0at~bCdTROpsfFm9euiTnwUDFDkAIKp~PwOuCY8Cce74LUS8YAUuUTQ3ZRwPny1mL1OSEK9k~auPScgblIrc~Jp2B2PSLkmwc22w4fqQeCTBjlAPPOeTpPEarZ1dWzSvVDOZw4YYSE1rzAV1miXe~jdnVtCUV6--A__",
+    "asset_id": "water_pump_well",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Water Pump Well",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
