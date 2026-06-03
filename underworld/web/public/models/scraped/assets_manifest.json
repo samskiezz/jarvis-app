@@ -2522,5 +2522,22 @@
     "epoch": "information",
     "name": "Fx Neon Sign",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_plasma_lamp": {
+    "prompt": "a plasma globe lamp with arcing tendrils of light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "247025ce-bbab-48e3-99cd-a0b2c39db489",
+    "path": "/models/generated/tripo/fx_plasma_lamp.glb",
+    "bytes": 14782648,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/247025ce-bbab-48e3-99cd-a0b2c39db489/tripo_pbr_model_247025ce-bbab-48e3-99cd-a0b2c39db489.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjQ3MDI1Y2UtYmJhYi00OGUzLTk5Y2QtYTBiMmMzOWRiNDg5L3RyaXBvX3Bicl9tb2RlbF8yNDcwMjVjZS1iYmFiLTQ4ZTMtOTljZC1hMGIyYzM5ZGI0ODkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jD4gKoF9bdnnL8Cu91Q3r~fl2Iu2mMwT6LPCMda~-AVrxAAw~dy3H3ZYBBYuRydKfyDlc3m4jnJ7TE2KxH686PULCooZ2cA3ALFxot1yA5JLHQlBF0qdXA8n6LJaRFi-lqtZnG4elzeDXa6lf6Tfr4bh-1uXSw2ZHCo6NIgPSsctadwMyT2hW7o9oh0zmVGY~LxPsNQrHfckSiVq8~eJ8159Ae6uEetN0p2goJGKEvfFNftQjfgPxfLZtFCxNVSuBI1r43-AjhAkl-MrH82-mejMQRKFZiSF-ISVFM-8ljQGySnn27S70TjESx~KzD15PV8yjEwm5aed20OwogoHQQ__",
+    "asset_id": "fx_plasma_lamp",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Plasma Lamp",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
