@@ -5854,5 +5854,22 @@
     "epoch": "bronze",
     "name": "Watering Can",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:winter_cloak": {
+    "prompt": "a heavy hooded winter cloak, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c9dba3de-4c61-4449-9ccf-778e75c27c36",
+    "path": "/models/generated/tripo/winter_cloak.glb",
+    "bytes": 14798168,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c9dba3de-4c61-4449-9ccf-778e75c27c36/tripo_pbr_model_c9dba3de-4c61-4449-9ccf-778e75c27c36.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzlkYmEzZGUtNGM2MS00NDQ5LTljY2YtNzc4ZTc1YzI3YzM2L3RyaXBvX3Bicl9tb2RlbF9jOWRiYTNkZS00YzYxLTQ0NDktOWNjZi03NzhlNzVjMjdjMzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hRPfSQ7GkLdd2Xc~mzqawsN2JWu9lEaUgBKeuV0nxm8qGTBTktza85-mBN6QLTXgU1mhx~CGSTGSedgO6ncS1VSXLSFctKdkjjgkq5sJO1dG9cix0g-oNVo-R5mZSdzI4PAHqvPxeK~YMjdMBjz-223d8JFbgnGwuG5-w1a36AYWyPRz5vukm2VTyWtAOuqSs0eDyp~Tx8V4BnKRB8RZyJBUEGJpr3wfMf3JiHQqkZomrXU0odVHp0idD-MZRtprTcN8Uu87j~PDWEVCrFZoaTPqei5I1qCRS3EgRFABacPrWgDkvGmr7-ZXveslKudLaMVM6gTQy10Ydu7TrPGMUA__",
+    "asset_id": "winter_cloak",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Winter Cloak",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
