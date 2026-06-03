@@ -2862,5 +2862,22 @@
     "epoch": "any",
     "name": "Floor Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:floor_wood": {
+    "prompt": "a modular wooden plank floor tile, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "af378c81-bec4-45d1-a163-7331f9451f09",
+    "path": "/models/generated/tripo/floor_wood.glb",
+    "bytes": 14991928,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/af378c81-bec4-45d1-a163-7331f9451f09/tripo_pbr_model_af378c81-bec4-45d1-a163-7331f9451f09.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWYzNzhjODEtYmVjNC00NWQxLWExNjMtNzMzMWY5NDUxZjA5L3RyaXBvX3Bicl9tb2RlbF9hZjM3OGM4MS1iZWM0LTQ1ZDEtYTE2My03MzMxZjk0NTFmMDkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=c8~o-9BDdSHfB1ZJ8Cxx0OAqNgpgfLaHlfKkj8Gfm5wy6gBk9l4XE36FGb3k3XM8ZgwsipqI~AtRsBGakQoMm9sXrLOTkKzALJS01aAqlIwWbWip5chea6xunI1MGjbTl~NSe4Q8QHkVU3XQU8JyZfVasEoS-~1rwV7FzSwU00AZFWn2tOU1a9ng2071U~T-XkcwGnb9YZRPhDWsA4ZgkcQBwBpq~n7hV79sHDWKIzVo~TYs4LSS9tJnNlqYh8F6rKmb5mylGpbsz1prHTuawMFJxGe0WIs05HWKQNI80HvBzyiBjP4veupRHaJJNgU3RbWuRvWG2WP8WZmhH~bqDw__",
+    "asset_id": "floor_wood",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Floor Wood",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
