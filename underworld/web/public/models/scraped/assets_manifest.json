@@ -3899,5 +3899,22 @@
     "epoch": "any",
     "name": "Toy Blocks",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:abacus": {
+    "prompt": "a wooden abacus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "39607676-39d4-49e2-ab0b-52a1ef5485c5",
+    "path": "/models/generated/tripo/abacus.glb",
+    "bytes": 15065824,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/39607676-39d4-49e2-ab0b-52a1ef5485c5/tripo_pbr_model_39607676-39d4-49e2-ab0b-52a1ef5485c5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzk2MDc2NzYtMzlkNC00OWUyLWFiMGItNTJhMWVmNTQ4NWM1L3RyaXBvX3Bicl9tb2RlbF8zOTYwNzY3Ni0zOWQ0LTQ5ZTItYWIwYi01MmExZWY1NDg1YzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aeJ5895hCq6ouTV2VX4fL23g0yhEFjWXaE1YVyG41yysvrt8gXwehOnyXpJmJFcskvWg4qLDk71py-nTlSvAxW8LkuqoHvKv1SJbvKERovWBOJYVMZj7pu3dS3uY9Zx0h309AbCS1HGRhANglT1w95b~MF72BYaj92DfyFOYmyUr~BAziTnuAbKQ0qDfzWy5vy0vjbuxMJnsQIkPy6MdA~sQeRAHqeH5EGYCf3SmrpZcTtPqw~Ztd31Hp1mLY4S8ctJ4x0N2twEgmap5zCOtg6rtRCFjWbth~5QhT7YvTfIPNJWysLvZDGg~aK0ORYnehcpb9pEa3xHEMY-AFxgiAg__",
+    "asset_id": "abacus",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "bronze",
+    "name": "Abacus",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
