@@ -7809,5 +7809,22 @@
     "epoch": "iron",
     "name": "Iron Smelting Bloomery",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:law_stele": {
+    "prompt": "a tall carved stone law stele with inscriptions, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d0567fc0-9a76-468f-84c0-4c121d6a0712",
+    "path": "/models/generated/tripo/law_stele.glb",
+    "bytes": 6589308,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d0567fc0-9a76-468f-84c0-4c121d6a0712/tripo_pbr_model_d0567fc0-9a76-468f-84c0-4c121d6a0712.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDA1NjdmYzAtOWE3Ni00NjhmLTg0YzAtNGMxMjFkNmEwNzEyL3RyaXBvX3Bicl9tb2RlbF9kMDU2N2ZjMC05YTc2LTQ2OGYtODRjMC00YzEyMWQ2YTA3MTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=W9L~czdypmBYs~L~q6SLeE0sdt2vQCdbuPDgGW1pVvHfo~JPeux0vIgFB5NJHPRJI-0ynuz9kuZ1sYcxRQzYrqflTTy~DIA9sVg5tJEG5yXre51vAUAYLzOFRXn7l87UynLgvzwhRSEYM1KbR13wbmFXucbBu5Ul5mc2cGc4EYMf6baG6nvs6q7qrJZ82E94JAtWAPYasC9o4RvV7nMUGiRZuSRH9oGlQx7xK8l3gnqX7n7XSWj3a85VFuEJPFyd4LK1~r0SejseNoS6BwIsSuxD3w5ITpk~~YkC8Xxz6innC3HFzFLICHd5Y8BabYwaBj8ldHbNyMkDqrOqd-T0qg__",
+    "asset_id": "law_stele",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "bronze",
+    "name": "Law Stele",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
