@@ -4919,5 +4919,22 @@
     "epoch": "bronze",
     "name": "Ruler Calipers",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:scaffolding": {
+    "prompt": "a section of metal scaffolding, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3919b2f7-8ccd-4606-ac25-4815bbb32683",
+    "path": "/models/generated/tripo/scaffolding.glb",
+    "bytes": 14956008,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3919b2f7-8ccd-4606-ac25-4815bbb32683/tripo_pbr_model_3919b2f7-8ccd-4606-ac25-4815bbb32683.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzkxOWIyZjctOGNjZC00NjA2LWFjMjUtNDgxNWJiYjMyNjgzL3RyaXBvX3Bicl9tb2RlbF8zOTE5YjJmNy04Y2NkLTQ2MDYtYWMyNS00ODE1YmJiMzI2ODMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=XKrhjyfKUcKHdYCVJGNnl7J5R6iiJiroUNEnjkLoAi9O5DCbDM-MzkgLUFBeYA0ouwSvzvqRgozPmyN~K9TuLwDdqqp3aLlD3jDRjd8URJcgJcHDwg7fUK02IWawVpm52XFXHUaiZD9fWbQUtrOn~dEZwhWUKXvWlPkcO~I0sgFXJ-60KkaUGHBU9H-16GOYqLU1eVKnhv3YDb0hTJcekhEqWL~w2yhBe5jHXNJGgPV8STR6SWUG4t-Fxr5cvOcPUKLK32eSMegYx56cmeqZY-DGx524Zf0z8Mtxcb24sk~2Ni-uhYg3wZADNxX-i8xmWIIuojj8jrnGbvqQEckBtA__",
+    "asset_id": "scaffolding",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Scaffolding",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
