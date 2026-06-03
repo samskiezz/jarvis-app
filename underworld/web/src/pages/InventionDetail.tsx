@@ -19,10 +19,15 @@ const VERDICT_META: Record<ReviewVerdict, { color: string; bg: string; icon: typ
 export default function InventionDetail() {
   const { id = "" } = useParams<{ id: string }>();
   const qc = useQueryClient();
-  const inv = useQuery({ queryKey: ["invention", id], queryFn: () => api.getInvention(id) });
+  const inv = useQuery({
+    queryKey: ["invention", id],
+    queryFn: () => api.getInvention(id),
+    refetchInterval: 4000,
+  });
   const reviews = useQuery({
     queryKey: ["invention", id, "reviews"],
     queryFn: () => api.listReviews(id),
+    refetchInterval: 4000,
   });
 
   const [rationale, setRationale] = useState("");
