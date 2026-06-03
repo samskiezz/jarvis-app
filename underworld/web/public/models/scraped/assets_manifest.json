@@ -2811,5 +2811,22 @@
     "epoch": "quantum",
     "name": "Time Crystal Rig",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:doorway_wood": {
+    "prompt": "a wooden interior doorway with door, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "8c8694a5-f30e-4d5e-8199-9242bf0dc094",
+    "path": "/models/generated/tripo/doorway_wood.glb",
+    "bytes": 10943816,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8c8694a5-f30e-4d5e-8199-9242bf0dc094/tripo_pbr_model_8c8694a5-f30e-4d5e-8199-9242bf0dc094.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGM4Njk0YTUtZjMwZS00ZDVlLTgxOTktOTI0MmJmMGRjMDk0L3RyaXBvX3Bicl9tb2RlbF84Yzg2OTRhNS1mMzBlLTRkNWUtODE5OS05MjQyYmYwZGMwOTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kINyc57efL1rNTFHgAj0NTp-94t5bguRZJmKlO0tU7pUxwwJdfeR9RWzNBoUyelV87OlS3d3rZ~9CAO9rYK~I7ZBjjlM5w6ApjWzSYNB5vAhDalweY1crvBVvUehgv1xR4tmk2OzeCAuLbOiZq1osJCzyUi5SxwNOt047OKmcGfHEN54Vy124C1Rimkibcf3cZyYxeRFTHp0kL59uWNdgYF6ycT2laZBVMXD5OSLycaIIuh2OFpFwNXfDNnKDUXStfcOPrHBYHyxdQAnmUImKm27Z4tU2jYlw4OqQPD2qUtS5f6L5zsI8xkapL4i3jdEXbz73BN7YCBO~jSmSc8auA__",
+    "asset_id": "doorway_wood",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Doorway Wood",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
