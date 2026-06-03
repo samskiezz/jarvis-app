@@ -6993,5 +6993,22 @@
     "epoch": "iron",
     "name": "Wound Bandage Kit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:animal_pen": {
+    "prompt": "a wooden livestock pen with a gate, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7aa2bfdb-cab0-402a-b007-1745addedb1d",
+    "path": "/models/generated/tripo/animal_pen.glb",
+    "bytes": 14982068,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7aa2bfdb-cab0-402a-b007-1745addedb1d/tripo_pbr_model_7aa2bfdb-cab0-402a-b007-1745addedb1d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2FhMmJmZGItY2FiMC00MDJhLWIwMDctMTc0NWFkZGVkYjFkL3RyaXBvX3Bicl9tb2RlbF83YWEyYmZkYi1jYWIwLTQwMmEtYjAwNy0xNzQ1YWRkZWRiMWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=eqGkeGXTP4cKTSeA1UxZG3OZ0a18FM~rt5ECsL-UiwjsrRGGvQzJ7CbSMmJ6qdFal-F8p5g~AECXochQhp2BXgjxwp-nvS0lEI-mFeHdb~wVkdT0dqEnrtLdb8p8QhaqtDWcrvD2sTT4j6OzmruGM0Sdzfuf5TOli5G6BR9rhic9er4g7M~d5NYG756ZJ~gg8RLO9tVtArcTpfKY1W-t9Q2eu9A3JKcBRI0WufUXjsGqtSl8q4Vr2a2UqnbaYNJW200cPFxm3BJifRbmL~tP4B6s1QqL3IzORA1e6DzRlxx~1M8NCV44m5wPvo7vl~9lLG-etOoL0ssvqZa6zGvfKA__",
+    "asset_id": "animal_pen",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Animal Pen",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
