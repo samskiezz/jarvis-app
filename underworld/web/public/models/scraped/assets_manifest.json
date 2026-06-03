@@ -6789,5 +6789,22 @@
     "epoch": "industrial",
     "name": "Safety Block Stamp",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:dna_sequencer": {
+    "prompt": "a benchtop DNA sequencer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d3c3061b-2865-4899-9e58-1d32557b2b78",
+    "path": "/models/generated/tripo/dna_sequencer.glb",
+    "bytes": 14648824,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d3c3061b-2865-4899-9e58-1d32557b2b78/tripo_pbr_model_d3c3061b-2865-4899-9e58-1d32557b2b78.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDNjMzA2MWItMjg2NS00ODk5LTllNTgtMWQzMjU1N2IyYjc4L3RyaXBvX3Bicl9tb2RlbF9kM2MzMDYxYi0yODY1LTQ4OTktOWU1OC0xZDMyNTU3YjJiNzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=nZbCOWkq9Nn6ffEBBc5-FM1W6-qvCNU-W6vlH8~QsMjN-s6Qx7FSNXnXUyhepEOusBjwm509we0UekP4MQ10MLRxAPso8gQLJRIn4RHZIBWjAjAueKdCH~PVtNwg1Q~JA-x1P7AFcWFykuDvgeAQYFmGREoEKwYrl0FXkTu7Ti8ShqekbRPY7D92BjVNhKFqI5FO-8Rydp4jBlCHqbLsv~YaeioPsABt-3gbGsLKKaJ6N-A-k7W6~z0I6weCWvI8JAjJxJGZk~qUa4jdgKAjPJlcS5QyTJ~uSwLZejZgOXLwYzvaHR1dbnxaYDYQbZjjJIWabpatKzYVvdfItlv0kg__",
+    "asset_id": "dna_sequencer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "information",
+    "name": "Dna Sequencer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
