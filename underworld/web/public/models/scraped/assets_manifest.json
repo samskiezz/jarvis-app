@@ -3219,5 +3219,22 @@
     "epoch": "industrial",
     "name": "Lamp Desk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lamp_floor": {
+    "prompt": "a standing floor lamp with warm glow, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "21a499ef-fad0-4c26-b994-5852d800431a",
+    "path": "/models/generated/tripo/lamp_floor.glb",
+    "bytes": 12863932,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/21a499ef-fad0-4c26-b994-5852d800431a/tripo_pbr_model_21a499ef-fad0-4c26-b994-5852d800431a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjFhNDk5ZWYtZmFkMC00YzI2LWI5OTQtNTg1MmQ4MDA0MzFhL3RyaXBvX3Bicl9tb2RlbF8yMWE0OTllZi1mYWQwLTRjMjYtYjk5NC01ODUyZDgwMDQzMWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qjXyO5gYINGnKUtFHsL6v9CcDd5H~OAK5vUkeL~SVbOGybclsDmWEhcXHjcCU05CvbGOmsiJ~7W620EgWJsfLocKlsxqzMwQm1TNNaJWJlS5R4jDrT7cma7XxnjkfryvteR2nyiUEwm6uYY56RrnBCeQHWyHGQyD5X27AZKfxygejsRe157k-5BCVYENLXMbCOVa9Folk2OYnGk53VSDj0mRjLZQU1M6RERYLjvArvkm0ha56ZcSZOuHTaAt48U1WrTaosLJktkyWOYRkCY3iekd1zZ0CxrfJu8Av3eB~ADViVowoPuMr~VExuzmg1oC6YSxVBaWd9faLY4CTDnBaQ__",
+    "asset_id": "lamp_floor",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "industrial",
+    "name": "Lamp Floor",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
