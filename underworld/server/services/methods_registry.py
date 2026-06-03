@@ -15,6 +15,10 @@ from . import (methods_physics as PH, methods_chemistry as CH, methods_biology a
 from . import (methods_quantum as QM, methods_optics as OP, methods_fluids as FL,
                methods_electronics as EL2, methods_astronomy as AST, methods_geology as GEO,
                methods_ecology as ECO, methods_economics as ECON)
+# fleet 3
+from . import (methods_medicine as MED, methods_neuro as NEU, methods_agronomy as AGR,
+               methods_acoustics2 as AC2, methods_robotics as RB, methods_crypto as CRY,
+               methods_statmech as SM2, methods_immunology as IMM)
 
 # (keyword-substrings, callable) — first match wins. Domain-specific first.
 ROUTES: list[tuple[tuple[str, ...], object]] = [
@@ -163,6 +167,79 @@ ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("option", "black_scholes", "greek"), ECON.black_scholes_delta),
     (("bond", "ytm", "fixed_income"), ECON.bond_price_ytm),
     (("elasticity", "price_sensitiv"), ECON.price_elasticity_demand),
+    # ── fleet 3 ───────────────────────────────────────────────────────────────
+    # medicine / physiology
+    (("cardiac", "stroke_volume"), MED.cardiac_output),
+    (("hemodynam", "vascular_resist", "blood_flow"), MED.poiseuille_blood_flow),
+    (("oxygen", "hemoglobin", "spo2"), MED.oxygen_hemoglobin_saturation),
+    (("renal", "gfr", "creatinine", "clearance"), MED.creatinine_clearance),
+    (("metabol", "bmr", "harris_benedict"), MED.basal_metabolic_rate),
+    (("bmi", "body_surface", "anthropom"), MED.body_metrics),
+    (("pharmacodynam", "dose_resp"), MED.dose_response),
+    (("blood_pressure", "mean_arterial", "physiolog", "medicine"), MED.mean_arterial_pressure),
+    # neuroscience
+    (("integrate_fire", "lif", "leaky_integ"), NEU.lif_neuron),
+    (("fitzhugh", "nagumo", "excitab"), NEU.fitzhugh_nagumo),
+    (("cable_eq", "length_constant"), NEU.cable_length_constant),
+    (("epsp", "synap"), NEU.synaptic_epsp_decay),
+    (("stdp", "hebbian", "plasticity"), NEU.stdp_weight_change),
+    (("refractor", "action_potential"), NEU.hodgkin_huxley_refractory),
+    (("firing_rate", "fi_curve"), NEU.population_fi_curve),
+    (("membrane_potential", "nernst", "goldman", "neuro", "cognit"), NEU.resting_membrane_potential),
+    # agronomy / plant
+    (("evapotranspir", "penman", "et0"), AGR.penman_monteith_et0),
+    (("photosynth", "leaf_light"), AGR.leaf_light_response),
+    (("crop_yield", "radiation_use", "rue"), AGR.light_use_efficiency_biomass),
+    (("degree_days", "gdd", "phenolog"), AGR.growing_degree_days),
+    (("soil_water", "field_capacity", "irrigat"), AGR.soil_water_balance),
+    (("nitrogen", "mineraliz"), AGR.nitrogen_mineralization),
+    (("crop_growth", "harvest_index"), AGR.logistic_crop_growth),
+    (("canopy", "leaf_area", "lai"), AGR.canopy_light_extinction),
+    # acoustics
+    (("decibel", "spl", "loudness", "sound_level"), AC2.sound_intensity_level),
+    (("doppler", "pitch_shift"), AC2.doppler_shift),
+    (("string_harmonic", "standing_wave", "overtone"), AC2.string_harmonics),
+    (("organ_pipe", "wind_instrument"), AC2.organ_pipe_resonance),
+    (("reverberation", "rt60", "sabine", "room_acoust"), AC2.sabine_reverberation),
+    (("beat_freq", "detune"), AC2.beat_frequency),
+    (("transmission_loss", "soundproof", "mass_law"), AC2.transmission_loss),
+    (("speed_of_sound_air", "sound_speed"), AC2.speed_of_sound_air),
+    # robotics
+    (("forward_kinematic", "fk_arm"), RB.two_link_forward_kinematics),
+    (("inverse_kinematic", "ik_arm"), RB.two_link_inverse_kinematics),
+    (("jacobian", "manipulability"), RB.two_link_jacobian),
+    (("pd_control", "joint_control", "servo"), RB.pd_joint_control),
+    (("odometry", "differential_drive"), RB.differential_drive_odometry),
+    (("path_planning", "astar", "a_star"), RB.astar_grid_path),
+    (("trajectory", "projectile", "ballistic"), RB.projectile_range),
+    (("rotation_matrix", "homogeneous", "se2", "transform_compose", "robotic", "mechatronic"), RB.homogeneous_transform),
+    # cryptography / coding
+    (("diffie", "key_exchange"), CRY.diffie_hellman_exchange),
+    (("rsa_sign", "signature"), CRY.rsa_sign_verify),
+    (("hamming", "error_correct", "ecc"), CRY.hamming_7_4),
+    (("sha", "avalanche", "hash"), CRY.sha256_avalanche),
+    (("keyspace", "password_entropy"), CRY.shannon_keyspace_entropy),
+    (("elliptic", "ec_point"), CRY.ec_point_addition),
+    (("one_time_pad", "otp", "xor_cipher"), CRY.one_time_pad),
+    (("crc", "checksum", "cyclic_redund"), CRY.crc32_checksum),
+    # statistical mechanics
+    (("boltzmann_dist", "two_level"), SM2.boltzmann_distribution),
+    (("partition_func",), SM2.partition_function),
+    (("heat_capacity", "debye", "einstein_solid", "dulong"), SM2.heat_capacity_solid),
+    (("entropy_micro", "microstate"), SM2.entropy_microstates),
+    (("equipartition",), SM2.equipartition_energy),
+    (("stefan_boltzmann", "blackbody_power"), SM2.stefan_boltzmann_power),
+    (("fermi_bose", "quantum_statistic"), SM2.fermi_bose_occupancy),
+    (("mean_speed", "statistical_mech"), SM2.maxwell_boltzmann_speed),
+    # immunology / virology
+    (("viral_dynamic", "virolog", "within_host"), IMM.within_host_viral_dynamics),
+    (("antibody", "antigen", "affinity_kd"), IMM.antibody_binding_fraction),
+    (("immune", "effector", "immunolog"), IMM.immune_response_logistic),
+    (("herd_immunity", "vaccine", "vaccination"), IMM.herd_immunity_threshold),
+    (("hill_dose", "ld50", "toxicol"), IMM.dose_response_hill),
+    (("neutraliz", "titer", "serolog"), IMM.neutralization_titer),
+    (("final_size", "attack_rate"), IMM.epidemic_final_size),
+    (("clonal", "t_cell", "tcell"), IMM.clonal_expansion),
 ]
 
 
