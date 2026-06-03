@@ -5667,5 +5667,22 @@
     "epoch": "iron",
     "name": "Scroll",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:scythe": {
+    "prompt": "a farming scythe, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2c61117a-8ee6-4274-b9da-dfe29beac6a4",
+    "path": "/models/generated/tripo/scythe.glb",
+    "bytes": 4120828,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2c61117a-8ee6-4274-b9da-dfe29beac6a4/tripo_pbr_model_2c61117a-8ee6-4274-b9da-dfe29beac6a4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmM2MTExN2EtOGVlNi00Mjc0LWI5ZGEtZGZlMjliZWFjNmE0L3RyaXBvX3Bicl9tb2RlbF8yYzYxMTE3YS04ZWU2LTQyNzQtYjlkYS1kZmUyOWJlYWM2YTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QshsksEXfWwg46EgylVKZr6a8fSwRIkMOq-rBjKpqGUWt-wydUxMIREXHOoZKhu8tIxChR7a1wp0wBpIBBqEvWEfv8LJiaVBblYzst6HLmiYaK4r0XVuE9A24J6S2QW7sHPowTYjVfzuXN9AqjIifO4bldk6BdiUIcfGlZw68vaX9hMd5in6qYvJM2kRXCwSG4TjnOHbPZjnzGFsSYtPDD5CSeIGAul8h7ABcTw~0LYjbKcNT4cyKonys84TQB-ZoyjvYNX5NrSz8gd~MXoG023ngqtwptAzKyrf04mz4Myyetx0Kj3Jin4tCyxJqTs3huRPbASxe77eYo7qZ0Ql6g__",
+    "asset_id": "scythe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "bronze",
+    "name": "Scythe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
