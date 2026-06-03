@@ -2335,5 +2335,22 @@
     "epoch": "any",
     "name": "Fx Glowing Mushroom",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_glowing_waterfall": {
+    "prompt": "a tall waterfall over a cliff with luminous blue water and mist, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "fd1fe416-f1ce-42f9-a64f-ac572de2a450",
+    "path": "/models/generated/tripo/fx_glowing_waterfall.glb",
+    "bytes": 11128084,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fd1fe416-f1ce-42f9-a64f-ac572de2a450/tripo_pbr_model_fd1fe416-f1ce-42f9-a64f-ac572de2a450.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmQxZmU0MTYtZjFjZS00MmY5LWE2NGYtYWM1NzJkZTJhNDUwL3RyaXBvX3Bicl9tb2RlbF9mZDFmZTQxNi1mMWNlLTQyZjktYTY0Zi1hYzU3MmRlMmE0NTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pcicylgqg4i26Sitpg-~I8MDlGrMmUmpz4M8o85yubiSi2ft8LqOaBuOzXAb6fDDFWtsIs5U-VQsYzt5wGvdw1ocrF-Ielyf3-5DehaYYfVuWhJTQUMHSY~ltJNuq~~I6UoICp-FJwwzqJhHiWpO5CF6XoXxg334APAAqLFTxT-7fSfiWugq3hsCEWm4gFMO1nCx6co9qF2TrixYCggAlN2EpGwKI1Bo2ndc8Tr4lmIonsVVUuhReGmlZMhioNsidvpJWN~5BSUoBlNZfxWOW0ERJqRfr9CEU85OGKtgrKyLVkOHzDONnZX3AgfVpnsNeufA6ke0vHQHwKC~01uONg__",
+    "asset_id": "fx_glowing_waterfall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Glowing Waterfall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
