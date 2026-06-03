@@ -102,9 +102,21 @@ def _life_stage(m) -> str:
         return "adult"
 
 
+def _season_for(tick: int, *, year_length: int = 96) -> str:
+    q = int((tick % year_length) / (year_length / 4)) % 4
+    return ("spring", "summer", "autumn", "winter")[q]
+
+
+def _companion_for(m) -> str:
+    """Which social mode the Minion is in, from their strongest current bond."""
+    brain = getattr(m, "brain", None) or {}
+    return str(brain.get("companion", "alone"))
+
+
 def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0,
                   terrain_scale: float = 8.0, saga_title: str | None = None,
-                  tod_phase: str = "day", biome: str = "plains", era: str = "iron") -> dict:
+                  tod_phase: str = "day", biome: str = "plains", era: str = "iron",
+                  weather: str = "clear", season: str = "spring") -> dict:
     """The full visual record for one Minion — position, animation, appearance,
     their current story, AND the micro-behavior the renderer should play out.
     Renderer-agnostic."""
@@ -125,10 +137,13 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         role = m.swarm_role.value if hasattr(getattr(m, "swarm_role", None), "value") else \
             str(getattr(m, "swarm_role", "generalist") or "generalist")
         proj_stage = (m.brain or {}).get("project_stage", "hypothesis")
+        skill_level = float((m.brain or {}).get("top_skill", 2.0) or 2.0)
         behavior = behavior_for_minion(
             {"last_action": (m.brain or {}).get("last_action", "rest"),
-             "guild": guild, "role": role, "mood": mood, "life_stage": _life_stage(m)},
+             "guild": guild, "role": role, "mood": mood, "life_stage": _life_stage(m),
+             "health": getattr(m, "health", 1.0), "fatigue": getattr(m, "fatigue", 0.85)},
             time_of_day=tod_phase, biome=biome, era=era, project_stage=proj_stage,
+            weather=weather, season=season, companion=_companion_for(m), skill_level=skill_level,
         )
     except Exception:
         behavior = None
@@ -170,11 +185,13 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
     era = getattr(world, "era", "iron")
     tod = time_of_day(world.tick)
     tod_phase = _tod_phase(tod)
+    season = _season_for(world.tick)
     for m in minions:
         setattr(m, "_world_tick", world.tick)  # lets _life_stage derive age
     visuals = [minion_visual(m, seed_int=seed_int, heightmap=heightmap,
                              town_radius=town_radius, tod_phase=tod_phase,
-                             biome=biome, era=era) for m in minions if m.alive]
+                             biome=biome, era=era, weather=weather, season=season)
+               for m in minions if m.alive]
     return {
         "world_id": world.id, "tick": world.tick, "era": world.era,
         "sim_year": round(world.sim_year, 1),

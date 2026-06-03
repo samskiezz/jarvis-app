@@ -41,6 +41,7 @@ from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
 from ..services import emotion as emotion_mod
 from ..services import goals as goals_mod
+from ..services import activities
 from ..services import lifecycle, mastery as mastery_mod, neural, planning, progression, reasoning
 from ..services import memory as memory_mod
 from ..tools import llm, patent_intelligence, patent_search, safety
@@ -69,6 +70,14 @@ _ACTIONS = {
     "teach",
     "kb_lookup",
     "calculate",            # run a real physics calculation + learn from it
+    # Deepened lived actions (services/activities.py) — real well-being effects.
+    "forage",               # gather food + water from the land
+    "worship",              # sky-belief ritual
+    "craft",                # make a tool/artifact
+    "trade",                # exchange goods at market
+    "celebrate",            # a festival / shared joy
+    "heal",                 # tend wounds (self or a neighbour)
+    "mentor",               # guide an apprentice
 }
 
 # Doc II.131 — actions that advance the App's mission and so confer purpose.
@@ -1075,6 +1084,9 @@ async def run_tick(
         summary = await _do_kb_lookup(session, minion, world, args)
     elif action == "calculate":
         summary = await _do_calculate(session, minion, world, args)
+    elif action in activities.NEW_ACTIONS:
+        # Deepened lived actions with real, bounded well-being effects.
+        summary = activities.perform(action, minion, rng, neighbours=neighbours)
     elif action == "eat":
         lifecycle.replenish(minion, food=0.45)
         summary = "Ate and replenished."

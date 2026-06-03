@@ -1,17 +1,18 @@
 # Underworld asset generation — the stages
 
-The full catalogue is **499 distinct GLBs** (`design_list.py`) covering every
+The full catalogue is **510 distinct GLBs** (`design_list.py`) covering every
 feature, function, guild, role, epoch and storyline the simulation actually
 models — every one justified by a real symbol in the backend (the catalogue was
 expanded from a full audit of `epochs.py`, `guilds.py`, `instruments.py`,
-`roles.py`, `sagas.py`, `climate.py`, `minion.py::_ACTIONS`, etc.).
+`roles.py`, `sagas.py`, `climate.py`, `minion.py::_ACTIONS`, etc., plus the
+lived-detail props the behavior bridge surfaced in `behavior_coverage.py`).
 
 Rather than generate all 499 at once, we generate them in **7 stages**. Each
 stage is a coherent slice that is *usable on its own* — finish a stage and the
 world is meaningfully more complete, not half-dressed. This also matches
 generation to credits: load enough for the next stage, run it, top up, continue.
 
-Approx cost: **~20 Tripo credits per GLB**, so the whole world is **~9,980
+Approx cost: **~20 Tripo credits per GLB**, so the whole world is **~10,200
 credits**. Generate a stage with:
 
 ```bash

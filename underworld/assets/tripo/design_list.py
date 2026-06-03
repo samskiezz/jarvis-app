@@ -418,6 +418,24 @@ DESIGNS += [
     ("watchtower", "safety", "iron", f"a wooden guard watchtower, {_STYLE}"),
 ]
 
+# ── 21b. LIVED-DETAIL PROPS — surfaced by the behavior bridge (services/behavior.py)
+# These are the micro-props the deepened, billion-state behavior layer reaches for
+# (weather gear, forage/craft/festival/heal/mentor detail) that nothing else needed.
+# Derived automatically from behavior_coverage.py's unbound-object report.
+DESIGNS += [
+    ("umbrella", "object", "any", f"an open umbrella, {_STYLE}"),
+    ("winter_cloak", "object", "any", f"a heavy hooded winter cloak, {_STYLE}"),
+    ("berry_bush", "nature", "any", f"a berry bush laden with ripe berries, {_STYLE}"),
+    ("forage_basket", "object", "stone", f"a woven foraging basket with gathered food, {_STYLE}"),
+    ("prayer_beads", "object", "stone", f"a string of worn prayer beads, {_STYLE}"),
+    ("tool_rack", "furniture", "iron", f"a wall tool rack hung with hand tools, {_STYLE}"),
+    ("market_ledger", "object", "iron", f"an open market ledger book with a pen, {_STYLE}"),
+    ("festival_bonfire", "prop", "stone", f"a blazing festival bonfire, {_STYLE}"),
+    ("festival_bunting", "prop", "bronze", f"a string of colourful festival bunting flags, {_STYLE}"),
+    ("healers_poultice", "medical", "iron", f"a herbal healer's poultice and bandages on a cloth, {_STYLE}"),
+    ("apprentice_slate", "object", "iron", f"a child's writing slate with chalk lessons, {_STYLE}"),
+]
+
 # ══════════════════════════════════════════════════════════════════════════════
 # DEPTH PASS — every simulation system made visible. Each row is justified by a
 # real symbol in the backend (cited in the comment), from a full audit of the

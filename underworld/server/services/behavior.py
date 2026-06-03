@@ -28,6 +28,8 @@ ACTIONS = (
     "search_patents", "propose_invention", "propose_with_party", "build_scanner",
     "seek_ascension", "study", "rest", "eat", "drink", "socialise",
     "seek_partner", "meditate", "fork_self", "teach", "kb_lookup", "calculate",
+    # deepened lived actions (services/activities.py)
+    "forage", "worship", "craft", "trade", "celebrate", "heal", "mentor",
 )
 GUILDS = (
     "maths", "physics", "electrical", "mechanical", "civil", "materials",
@@ -47,12 +49,19 @@ PROJECT_STAGES = (
 TIMES_OF_DAY = ("dawn", "day", "dusk", "night")
 BIOMES = ("desert", "mountains", "plateau", "forest", "hills", "plains")
 ERAS = ("stone", "bronze", "iron", "industrial", "information", "quantum")
+# Five further dimensions — each GENUINELY changes the micro-behavior (no padding).
+WEATHERS = ("clear", "cloudy", "rain", "storm", "snow")            # climate.py::pick_weather
+SEASONS = ("spring", "summer", "autumn", "winter")                  # climate.py::season_for
+COMPANIONS = ("alone", "friend", "rival", "mentor", "partner", "group")  # RelationshipKind-derived
+HEALTH_BANDS = ("hale", "tired", "hurt", "sick")                    # from minion.health/fatigue
+MASTERY_TIERS = ("novice", "apprentice", "journeyman", "expert", "master")  # from Skill.level
 
 # Which actions each life-stage is physically capable of (validity gate). An
 # infant cannot propose an invention; this keeps the generated space realistic.
 ALLOWED_BY_STAGE: dict[str, frozenset[str]] = {
     "infant": frozenset({"rest", "eat", "drink", "socialise"}),
-    "child": frozenset({"rest", "eat", "drink", "socialise", "study", "kb_lookup", "meditate"}),
+    "child": frozenset({"rest", "eat", "drink", "socialise", "study", "kb_lookup",
+                         "meditate", "forage", "worship", "celebrate"}),
     "adolescent": frozenset(set(ACTIONS) - {"fork_self", "seek_ascension", "build_scanner"}),
     "adult": frozenset(ACTIONS),
 }
@@ -113,6 +122,33 @@ TOD_PRELUDE: dict[str, tuple[str, str, str] | None] = {
     "dusk": None,
     "night": ("light", "candle", "light_candle"),
 }
+# Weather prelude — wet/cold weather makes a Minion gear up before anything else.
+WEATHER_PRELUDE: dict[str, tuple[str, str, str, str] | None] = {  # -> (verb,obj,anim,fx)
+    "clear": None, "cloudy": None,
+    "rain": ("shelter", "umbrella", "raise_umbrella", "rain_drips"),
+    "storm": ("shelter", "umbrella", "brace_wind", "storm_gust"),
+    "snow": ("bundle", "winter_cloak", "pull_cloak", "breath_fog"),
+}
+# Season tint — winter bundles + fogs breath, summer wipes brow, etc. (fx only,
+# plus a possible object for winter so the world reads the season on the body).
+SEASON_FX: dict[str, str] = {"spring": "petals", "summer": "heat_shimmer",
+                             "autumn": "leaf_fall", "winter": "breath_fog"}
+# Health band overrides the locomotion style — you can SEE someone hurt or sick.
+HEALTH_SUFFIX: dict[str, str | None] = {
+    "hale": None, "tired": "_weary", "hurt": "_limp", "sick": "_unsteady"}
+# Mastery colours how fluently a tool is handled (and masters add a flourish).
+MASTERY_ANIM: dict[str, str] = {
+    "novice": "fumble", "apprentice": "careful", "journeyman": "steady",
+    "expert": "fluent", "master": "masterful"}
+# Who the Minion is with → a real interaction step (companion social mode).
+COMPANION_STEP: dict[str, tuple[str, str, str] | None] = {  # -> (verb,obj,anim)
+    "alone": None,
+    "friend": ("greet", "", "talk_warm"),
+    "rival": ("size_up", "rivalry_dueling_chalkboards", "size_up_rival"),
+    "mentor": ("learn", "apprentice_slate", "listen_attentive"),
+    "partner": ("embrace", "soul_bond_token", "embrace"),
+    "group": ("address", "collaboration_round_table", "address_group"),
+}
 
 
 @dataclass(frozen=True)
@@ -137,10 +173,16 @@ class Context:
     time_of_day: str = "day"
     biome: str = "plains"
     era: str = "iron"
+    weather: str = "clear"
+    season: str = "spring"
+    companion: str = "alone"
+    health: str = "hale"
+    mastery: str = "journeyman"
 
     def key(self) -> str:
         return "|".join((self.action, self.guild, self.role, self.mood, self.life_stage,
-                          self.project_stage, self.time_of_day, self.biome, self.era))
+                          self.project_stage, self.time_of_day, self.biome, self.era,
+                          self.weather, self.season, self.companion, self.health, self.mastery))
 
 
 def _variant(ctx: Context, options: tuple[str, ...]) -> str:
@@ -158,6 +200,9 @@ _LOCATION: dict[str, str] = {
     "propose_invention": "invention_prototype_bench", "propose_with_party": "collaboration_round_table",
     "search_patents": "prior_art_terminal", "build_scanner": "patent_scanner",
     "seek_ascension": "ascension_altar", "fork_self": "fork_pod",
+    "forage": "produce_basket", "worship": "altar", "craft": "workbench_vice",
+    "trade": "market_stall", "celebrate": "tavern_table",
+    "heal": "wound_bandage_kit", "mentor": "mentor_apprentice_bench",
 }
 
 # Whether an action is "work" (gets the guild tool + project-stage choreography).
@@ -165,45 +210,73 @@ _WORK = {"calculate", "propose_invention", "propose_with_party", "study",
          "search_patents", "build_scanner", "teach"}
 
 
+def _motion_suffix(ctx: Context) -> str:
+    """How the body moves — health overrides mood (you see hurt/sick), else mood."""
+    return HEALTH_SUFFIX.get(ctx.health) or MOOD_EMOTE[ctx.mood][1]
+
+
 def expand(ctx: Context) -> list[MicroStep]:
-    """Compute the full micro-behavior sequence for one context. Deterministic."""
+    """Compute the full micro-behavior sequence for one context. Deterministic.
+
+    Every dimension genuinely changes the output: weather/season gear the body,
+    health bends the gait, companion adds a real social beat, mastery sets tool
+    fluency, the era/guild/role pick the tool, project-stage the activity, mood
+    the emote, biome the ground, time-of-day the lighting prelude."""
     if ctx.action not in ALLOWED_BY_STAGE.get(ctx.life_stage, frozenset()):
         # Not capable at this life-stage → a gentle idle/observe fallback (still bound).
         return [MicroStep("observe", _LOCATION.get(ctx.action, "park_bench"),
-                          "watch_curious", "none", 3.0)]
+                          "watch_curious", "none", 3.0, fx=SEASON_FX.get(ctx.season, ""))]
 
     steps: list[MicroStep] = []
-    _, suffix = MOOD_EMOTE[ctx.mood]
+    suffix = _motion_suffix(ctx)
     loc = _LOCATION.get(ctx.action, "park_bench")
+    outdoor = ctx.action in ("forage", "socialise", "seek_partner", "celebrate", "worship")
 
-    # 1) arrival — walk to where the action happens, surface tinted by biome.
-    steps.append(MicroStep("goto", loc, f"walk{suffix}", "none", 2.5, fx=f"surface_{ctx.biome}"))
+    # 1) weather gear-up (rain → umbrella, snow → cloak) — only if heading outside.
+    wp = WEATHER_PRELUDE.get(ctx.weather)
+    if wp and outdoor:
+        steps.append(MicroStep(wp[0], wp[1], wp[2], "handheld" if wp[1] else "none", 1.2, fx=wp[3]))
 
-    # 2) time-of-day prelude (night lights a lamp, dawn stretches).
+    # 2) arrival — walk to where the action happens, ground tinted by biome+season.
+    steps.append(MicroStep("goto", loc, f"walk{suffix}", "none", 2.5,
+                           fx=f"surface_{ctx.biome}_{SEASON_FX.get(ctx.season, 'plain')}"))
+
+    # 3) time-of-day prelude (night lights a lamp, dawn stretches).
     pre = TOD_PRELUDE.get(ctx.time_of_day)
     if pre:
         steps.append(MicroStep(pre[0], pre[1], pre[2], "handheld" if pre[1] else "none", 1.5))
 
-    # 3) core choreography per action.
+    # 4) companion social beat — who they're with changes the scene.
+    comp = COMPANION_STEP.get(ctx.companion)
+    if comp:
+        steps.append(MicroStep(comp[0], comp[1], comp[2], "handheld" if comp[1] else "none", 3.0,
+                               fx=f"with_{ctx.companion}"))
+
+    # 5) core choreography per action.
     steps += _core(ctx, loc, suffix)
 
-    # 4) work actions get the project-stage activity + the guild/role tool.
+    # 6) work actions: mastery-graded tool handling + project-stage activity.
     if ctx.action in _WORK:
         tool = (CALC_TOOL_BY_ERA[ctx.era] if ctx.action == "calculate"
                 else ROLE_STATION.get(ctx.role) if ctx.role != "generalist"
                 else GUILD_TOOL.get(ctx.guild, "desk"))
         steps.append(MicroStep("pick_up", tool, f"reach_for{suffix}", "handheld", 1.2))
-        steps.append(MicroStep("operate", tool, _variant(ctx, ("operate_a", "operate_b", "operate_c")),
+        steps.append(MicroStep("operate", tool, f"operate_{MASTERY_ANIM[ctx.mastery]}",
                                "machine", 4.0, fx="work_focus"))
+        if ctx.mastery == "master":
+            steps.append(MicroStep("flourish", tool, "tool_flourish", "machine", 1.0, fx="mastery_shine"))
         sv, so, sa = STAGE_STEP.get(ctx.project_stage, STAGE_STEP["hypothesis"])
         steps.append(MicroStep(sv, so, sa, "surface", 3.5,
                                fx="eureka_glow" if ctx.project_stage == "approved" else ""))
 
-    # 5) mood reaction — the inner life surfaced.
+    # 7) mood reaction — the inner life surfaced (season tints the air).
     emote, _ = MOOD_EMOTE[ctx.mood]
-    steps.append(MicroStep("emote", "mood_emote_ring", emote, "none", 1.5, fx=f"mood_{ctx.mood}"))
+    steps.append(MicroStep("emote", "mood_emote_ring", emote, "none", 1.5,
+                           fx=f"mood_{ctx.mood}_{SEASON_FX.get(ctx.season, '')}"))
 
-    # 6) close out — stand and leave (unless resting/meditating, which settle).
+    # 8) sick Minions seek care before leaving; others stand and go.
+    if ctx.health == "sick" and ctx.action != "heal":
+        steps.append(MicroStep("seek_care", "wound_bandage_kit", "cough_clutch", "none", 2.0, fx="unwell"))
     if ctx.action not in ("rest", "meditate", "seek_ascension"):
         steps.append(MicroStep("stand", "", f"stand{suffix}", "none", 1.0))
     return steps
@@ -260,22 +333,49 @@ def _core(ctx: Context, loc: str, suffix: str) -> list[MicroStep]:
                 MicroStep("tinker", "invention_prototype_bench", "tinker", "machine", 5.0, fx="sparks")]
     if a == "calculate":
         return [MicroStep("sit", "stool", f"sit{suffix}", "seat", 1.0)]
+    # ── deepened lived actions ────────────────────────────────────────────
+    if a == "forage":
+        return [MicroStep("gather", "berry_bush", "forage_pick", "stand", 4.0),
+                MicroStep("fill", "forage_basket", "fill_basket", "handheld", 2.5)]
+    if a == "worship":
+        return [MicroStep("kneel", "altar", "kneel", "floor", 2.0),
+                MicroStep("pray", "prayer_beads", "pray", "handheld", 5.0, fx="calm_aura")]
+    if a == "craft":
+        return [MicroStep("sit", "stool", f"sit{suffix}", "seat", 1.0),
+                MicroStep("craft", "workbench_vice", "hammer_work", "machine", 5.0, fx="sparks"),
+                MicroStep("store", "tool_rack", "hang_tool", "surface", 1.5)]
+    if a == "trade":
+        return [MicroStep("stand", "market_stall", "barter", "stand", 4.0),
+                MicroStep("exchange", "coin_purse", "hand_coins", "handheld", 2.0),
+                MicroStep("record", "market_ledger", "write_standing", "surface", 2.0)]
+    if a == "celebrate":
+        return [MicroStep("dance", "festival_bonfire", _variant(ctx, ("dance_a", "dance_b", "cheer")),
+                          "floor", 5.0, fx="festive"),
+                MicroStep("toast", "tavern_table", "raise_toast", "surface", 2.5, fx="festive"),
+                MicroStep("observe", "festival_bunting", "look_up_smile", "none", 1.5)]
+    if a == "heal":
+        return [MicroStep("kneel", "wound_bandage_kit", "kneel", "floor", 1.5),
+                MicroStep("apply", "healers_poultice", "bandage", "handheld", 5.0)]
+    if a == "mentor":
+        return [MicroStep("sit", "mentor_apprentice_bench", f"sit{suffix}", "seat", 1.2),
+                MicroStep("teach", "apprentice_slate", "gesture_teach", "surface", 5.0)]
     return [MicroStep("idle", loc, "idle", "none", 2.0)]
 
 
 # ── The context space + coverage primitives ───────────────────────────────────
 def valid_context_count() -> int:
-    """Exact size of the valid (capable) context space, computed analytically."""
-    total = 0
-    for stage in LIFE_STAGES:
-        n_actions = len(ALLOWED_BY_STAGE[stage])
-        total += (n_actions * len(GUILDS) * len(ROLES) * len(MOODS) *
-                  len(PROJECT_STAGES) * len(TIMES_OF_DAY) * len(BIOMES) * len(ERAS))
-    return total
+    """Exact size of the valid (capable) context space, computed analytically.
+    Every factor is a real dimension that changes the produced behavior."""
+    other = (len(GUILDS) * len(ROLES) * len(MOODS) * len(PROJECT_STAGES) *
+             len(TIMES_OF_DAY) * len(BIOMES) * len(ERAS) * len(WEATHERS) *
+             len(SEASONS) * len(COMPANIONS) * len(HEALTH_BANDS) * len(MASTERY_TIERS))
+    n_actions = sum(len(ALLOWED_BY_STAGE[s]) for s in LIFE_STAGES)
+    return n_actions * other
 
 
 def iter_contexts(limit: int | None = None):
-    """Enumerate valid contexts (optionally capped) for coverage scanning."""
+    """Enumerate valid contexts (optionally capped) for coverage scanning. The
+    full space is in the billions, so callers pass a limit; this streams lazily."""
     n = 0
     for stage in LIFE_STAGES:
         for action in sorted(ALLOWED_BY_STAGE[stage]):
@@ -286,16 +386,25 @@ def iter_contexts(limit: int | None = None):
                             for tod in TIMES_OF_DAY:
                                 for biome in BIOMES:
                                     for era in ERAS:
-                                        yield Context(action, guild, role, mood, stage,
-                                                      ps, tod, biome, era)
-                                        n += 1
-                                        if limit and n >= limit:
-                                            return
+                                        for weather in WEATHERS:
+                                            for season in SEASONS:
+                                                for comp in COMPANIONS:
+                                                    for hb in HEALTH_BANDS:
+                                                        for mt in MASTERY_TIERS:
+                                                            yield Context(action, guild, role, mood,
+                                                                stage, ps, tod, biome, era, weather,
+                                                                season, comp, hb, mt)
+                                                            n += 1
+                                                            if limit and n >= limit:
+                                                                return
 
 
 def referenced_object_ids() -> set[str]:
-    """Every GLB id the behavior layer can reach for, across a covering scan
-    (all actions × guilds × roles × stages × eras with representative mood/tod)."""
+    """Every GLB id the behavior layer can reach for. The full space is too large
+    to enumerate, but object references are driven by a few dimensions, so a
+    structured covering scan captures them all: (a) every action × guild × role ×
+    era × project-stage for tools/props, and (b) every weather/season/companion/
+    health/mastery value over representative actions for the contextual props."""
     out: set[str] = set()
     for stage in LIFE_STAGES:
         for action in sorted(ALLOWED_BY_STAGE[stage]):
@@ -303,15 +412,55 @@ def referenced_object_ids() -> set[str]:
                 for role in ROLES:
                     for era in ERAS:
                         for ps in PROJECT_STAGES:
-                            ctx = Context(action, guild, role, "content", stage, ps, "night", "plains", era)
+                            ctx = Context(action, guild, role, "content", stage, ps, "night",
+                                          "plains", era, mastery="master")
+                            for st in expand(ctx):
+                                if st.obj:
+                                    out.add(st.obj)
+    # contextual props (umbrella, cloak, companion items…) over outdoor + work actions
+    for action in ("forage", "celebrate", "socialise", "calculate", "craft"):
+        for weather in WEATHERS:
+            for season in SEASONS:
+                for comp in COMPANIONS:
+                    for hb in HEALTH_BANDS:
+                        for mt in MASTERY_TIERS:
+                            ctx = Context(action, "materials", "generalist", "content", "adult",
+                                          "bench_plan", "day", "forest", "iron",
+                                          weather, season, comp, hb, mt)
                             for st in expand(ctx):
                                 if st.obj:
                                     out.add(st.obj)
     return out
 
 
+def health_band(health: float, fatigue: float) -> str:
+    """Map continuous health/fatigue → the renderable band (you can SEE it)."""
+    if health < 0.35:
+        return "sick"
+    if health < 0.6:
+        return "hurt"
+    if fatigue < 0.3:
+        return "tired"
+    return "hale"
+
+
+def mastery_tier(skill_level: float) -> str:
+    """Map a Skill.level (~0–6) → the five mastery tiers."""
+    if skill_level >= 5.0:
+        return "master"
+    if skill_level >= 3.5:
+        return "expert"
+    if skill_level >= 2.0:
+        return "journeyman"
+    if skill_level >= 0.8:
+        return "apprentice"
+    return "novice"
+
+
 def behavior_for_minion(m, *, time_of_day: str = "day", biome: str = "plains",
-                        era: str = "iron", project_stage: str = "hypothesis") -> dict:
+                        era: str = "iron", project_stage: str = "hypothesis",
+                        weather: str = "clear", season: str = "spring",
+                        companion: str = "alone", skill_level: float = 2.0) -> dict:
     """Adapter: a live Minion's state → the renderer's micro-behavior contract.
     `m` may be an ORM object or a plain dict (duck-typed on the fields we need)."""
     def g(name, default):
@@ -324,6 +473,11 @@ def behavior_for_minion(m, *, time_of_day: str = "day", biome: str = "plains",
         mood=str(g("mood", "content") or "content"),
         life_stage=str(g("life_stage", "adult") or "adult"),
         project_stage=project_stage, time_of_day=time_of_day, biome=biome, era=era,
+        weather=weather if weather in WEATHERS else "clear",
+        season=season if season in SEASONS else "spring",
+        companion=companion if companion in COMPANIONS else "alone",
+        health=health_band(float(g("health", 1.0) or 1.0), float(g("fatigue", 0.85) or 0.85)),
+        mastery=mastery_tier(float(skill_level or 2.0)),
     )
     steps = expand(ctx)
     return {
