@@ -3576,5 +3576,22 @@
     "epoch": "industrial",
     "name": "Kettle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:laundry_basket": {
+    "prompt": "a wicker laundry basket with clothes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "de0a8a50-774e-4f5f-a508-edb931277536",
+    "path": "/models/generated/tripo/laundry_basket.glb",
+    "bytes": 14999920,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/de0a8a50-774e-4f5f-a508-edb931277536/tripo_pbr_model_de0a8a50-774e-4f5f-a508-edb931277536.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGUwYThhNTAtNzc0ZS00ZjVmLWE1MDgtZWRiOTMxMjc3NTM2L3RyaXBvX3Bicl9tb2RlbF9kZTBhOGE1MC03NzRlLTRmNWYtYTUwOC1lZGI5MzEyNzc1MzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vcS2daUj3VEAvrpk~7vpXuwlLCniOz129~B0sSXrE7zqgkKShyM2sZcJ-gxCSbl4-nw81pliytdBqlDl07vQFCUqdf80WhZ8EcVU5x~L4KWOnqjgmttmsC9ADOIIcW-3NvMJggOdtMYJiTpkXPjN6vIHTEJE19IYjYIQ~XoYfh4mpKweJ5wCRvL0DuThB7Mce8zLy~f0AmEZp8KP92V2S-FjxNLlGmrvqK-Dg4GnpOKOsTCezkatU084GtIbDKvDqs86ZDypEdGiwzdS3HFhR6v~V7--KHuA971mkMnoDUQmTlBoWOgSTPX75Yh0YWIqPrYHinLiObwCm0B~YyCe3Q__",
+    "asset_id": "laundry_basket",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "household",
+    "epoch": "any",
+    "name": "Laundry Basket",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
