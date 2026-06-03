@@ -8523,5 +8523,22 @@
     "epoch": "bronze",
     "name": "Festival Bunting",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fossil_dig_site": {
+    "prompt": "an excavation dig pit with brushes, pickaxe and exposed bones, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f0f13bb2-f316-4d83-b810-9444164dfab3",
+    "path": "/models/generated/tripo/fossil_dig_site.glb",
+    "bytes": 15031500,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f0f13bb2-f316-4d83-b810-9444164dfab3/tripo_pbr_model_f0f13bb2-f316-4d83-b810-9444164dfab3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjBmMTNiYjItZjMxNi00ZDgzLWI4MTAtOTQ0NDE2NGRmYWIzL3RyaXBvX3Bicl9tb2RlbF9mMGYxM2JiMi1mMzE2LTRkODMtYjgxMC05NDQ0MTY0ZGZhYjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HlcPxJm2tlotlNFV1U6rQwkLyohOerfsHC4UpwOsDKJZMXKA~NwwG4c3iqRqNanpOCFFMXZ42lKSDTTXFtrK7-kmKQAv~DkrCtStXIGLQmjXeOyOSEpCiX2qRgLQHWIjKfUM14qbv7hay9r96W7NlWNsai59YY~vPCCy-zBrq-qsOj8WTWRtmA3l6IEhtzV627xek73sjbuzpBCtUvaK-eBFj3WIgUNg1su4oTrjz17NeudHgwS9o39EyNO474lH-3pyphnQKb2DrPkbAnmoGcZRRpNksqF5lhtINdDj49YqGB3siyt9LM5t4I0mg0ZnIvsHV~LkNV6ohUFSLmlWqA__",
+    "asset_id": "fossil_dig_site",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Fossil Dig Site",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
