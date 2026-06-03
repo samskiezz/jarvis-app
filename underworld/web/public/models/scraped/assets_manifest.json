@@ -4902,5 +4902,22 @@
     "epoch": "industrial",
     "name": "Rivalry Dueling Chalkboards",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ruler_calipers": {
+    "prompt": "a wooden ruler with brass vernier calipers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4c253ed3-288b-4faf-bd2f-f5d27e8d7591",
+    "path": "/models/generated/tripo/ruler_calipers.glb",
+    "bytes": 6445036,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4c253ed3-288b-4faf-bd2f-f5d27e8d7591/tripo_pbr_model_4c253ed3-288b-4faf-bd2f-f5d27e8d7591.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGMyNTNlZDMtMjg4Yi00ZmFmLWJkMmYtZjVkMjdlOGQ3NTkxL3RyaXBvX3Bicl9tb2RlbF80YzI1M2VkMy0yODhiLTRmYWYtYmQyZi1mNWQyN2U4ZDc1OTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=raHLsDOf9IIRvZalnmerYRhsFVPDA4~18n7QMW5EzZ06oC6QU31BKdHJ9SD0YEzKo4Pj5hRBMuUs0iLUGxwwVRjpAtQE4YvSbZ~n2dUGvbXtgWQnT5K7H3h3N9PBd1QaOOprmESdPmBjmtMebAOBY9kk8FSyNTd3xrpN9xgWfpqc3n4SnbLbsYjfMZIlJmqF1-3ql50yiDGdcpPLJG3-Bihh5uP5tViOY1KVkUeM-Uxyr53GMLWQ0PJnisu0qxRmSE3wZI66TxbJdPun54q~Hm0~estvRKh3nEIumwj55WKuGWe-7vQCS8pVpeE9Y84t7DTGszvdjW3Av5iw-XHdoA__",
+    "asset_id": "ruler_calipers",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "bronze",
+    "name": "Ruler Calipers",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
