@@ -8234,5 +8234,22 @@
     "epoch": "quantum",
     "name": "Hover Pod",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:steam_loco": {
+    "prompt": "a charming small steam locomotive, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2c576a1a-2712-43d2-8bbd-3c63cc3febc4",
+    "path": "/models/generated/tripo/steam_loco.glb",
+    "bytes": 15046416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2c576a1a-2712-43d2-8bbd-3c63cc3febc4/tripo_pbr_model_2c576a1a-2712-43d2-8bbd-3c63cc3febc4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmM1NzZhMWEtMjcxMi00M2QyLThiYmQtM2M2M2NjM2ZlYmM0L3RyaXBvX3Bicl9tb2RlbF8yYzU3NmExYS0yNzEyLTQzZDItOGJiZC0zYzYzY2MzZmViYzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=MFTESh3X2Er-85BxyI7Cd--V6yo7Kye4P8AR0DiEbwkMUY1PQkzhUybrZ8blWZWHljD0BH5WT9aGyF9CD1Z4wNFlWU0lNLsNcsAnWXl0puFXsWRexfLIcjpGxpSNQXtBjlwawm8FzJqrZzKqTHly2xJ51B457FNowi-PO4nI3sOUb~l9mfYOkqpIXw5AvBtLNK9TAPYYnp9PY8KnqFRcaIyzl0USnO3g0lG1mIc8Mp3PBieIU1NTE2s9tuwtZ2Hi8Vnn3moAxQVPWxvArOmkICRRlvJ5mNLgILceO-QvmYwr0rpbFl1Ds7k1U8b~yGmLGRHDLMqcR1mwTwkgW1p5mw__",
+    "asset_id": "steam_loco",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Steam Loco",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
