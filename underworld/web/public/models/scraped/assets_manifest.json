@@ -1638,5 +1638,22 @@
     "epoch": "any",
     "name": "Volcano Cone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:winter_bare_tree": {
+    "prompt": "a snow-laden bare winter tree, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "3c4860a0-0e3f-4877-8928-066c729c14e0",
+    "path": "/models/generated/tripo/winter_bare_tree.glb",
+    "bytes": 5098824,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3c4860a0-0e3f-4877-8928-066c729c14e0/tripo_pbr_model_3c4860a0-0e3f-4877-8928-066c729c14e0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2M0ODYwYTAtMGUzZi00ODc3LTg5MjgtMDY2YzcyOWMxNGUwL3RyaXBvX3Bicl9tb2RlbF8zYzQ4NjBhMC0wZTNmLTQ4NzctODkyOC0wNjZjNzI5YzE0ZTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=c1kGRJ91FEZjs6AbQ0utPw6LscOpC3LekcTNmabO6OPCSVAuFq2gHeNxp6dihRh4NBOVvnj4~285hsX7BUT3nzl4qiXfgEFkR3AWNs6t4R81Px6LzpmyhHW~nFTi1WzFe~3QTquLozV2SpkHRW1SLVCav-F3gcOtlvAFYZN7tE4H2m~MlHsiCTBB5T95XUi6YwAYpc1gFlxLTPPLmgs5YdZJh1-T8IgzKB7v2PFLZBfMhOm2Qf0L5C7Jn5vExg5d9UzDeMhPbwemThtP1heG3lBC6UAPst3RYakBq1J9uh6obC9Ndl9rqa9UcXMxduy5SHc-OvQjGhwc6rJkKvNAFA__",
+    "asset_id": "winter_bare_tree",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Winter Bare Tree",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
