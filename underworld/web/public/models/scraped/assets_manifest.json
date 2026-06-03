@@ -5837,5 +5837,22 @@
     "epoch": "iron",
     "name": "Wanderer Pack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:watering_can": {
+    "prompt": "a metal watering can, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d787cfdf-3679-4670-9c29-532110f7c42b",
+    "path": "/models/generated/tripo/watering_can.glb",
+    "bytes": 14859752,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d787cfdf-3679-4670-9c29-532110f7c42b/tripo_pbr_model_d787cfdf-3679-4670-9c29-532110f7c42b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDc4N2NmZGYtMzY3OS00NjcwLTljMjktNTMyMTEwZjdjNDJiL3RyaXBvX3Bicl9tb2RlbF9kNzg3Y2ZkZi0zNjc5LTQ2NzAtOWMyOS01MzIxMTBmN2M0MmIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=BHgBkOiocmNLc1InmeLJQFZqPJ5Cki0MHY-zOp6rqoDqsdcztkDo17~tYo2ZozTfafNvkuRaYKPsB5stc~UmIJeER75RcoBauHw97OLVeYEG0jKSHI2j1fYQ3yLdjFMbiPC37Er3~8XYO78yPFbIZV8tVnQrVMPciJz7r1mS5ZOx~R2dp9lTCH8~1fIZu-plBftIOFWaCBd2cqSoMpRxQCyoBuwvUls9FSKwT2lDc0MUcSs~D-wM9n2Kt6oTUMqdZwq8q5DasvjJsLV~JHTm517ncVB4Uj8bdrOeV2o~M1P25-hYVqj7KVyoHudenhbZeovnKVMulsHz2h~utpgKJg__",
+    "asset_id": "watering_can",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "bronze",
+    "name": "Watering Can",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
