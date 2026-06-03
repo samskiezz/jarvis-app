@@ -1825,5 +1825,22 @@
     "epoch": "bronze",
     "name": "Temple",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:theatre_stage": {
+    "prompt": "a proscenium theatre stage with red curtains, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "dc004552-b810-4747-a9af-2432b33e5441",
+    "path": "/models/generated/tripo/theatre_stage.glb",
+    "bytes": 15013636,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/dc004552-b810-4747-a9af-2432b33e5441/tripo_pbr_model_dc004552-b810-4747-a9af-2432b33e5441.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZGMwMDQ1NTItYjgxMC00NzQ3LWE5YWYtMjQzMmIzM2U1NDQxL3RyaXBvX3Bicl9tb2RlbF9kYzAwNDU1Mi1iODEwLTQ3NDctYTlhZi0yNDMyYjMzZTU0NDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aG7wsQ6qlKnZ~vFZIYfNr46ypBcoBQpxiTS1i2sO5yBTXmOWCfKKwGVHtnGDrA~UOL0nbe3m3VG32eWsCQcM8OtPQtEWwS~Y3Pdk6y36enLGI42jRvh~wiKZxVA1Wew7tLqaHY335pHIReZDt-xzAcvFISoyAGKKWiJUfCjN4M0qbP6Cf7Wt4~D~cSlQ54SaU5EO8JMaph2nGr4n0Yj9WZJviqCUkfym~C7P2NVgx9cKRuw1-66ou3UH4RoYHHvMIqPsRBm-jaNgKPO36TVfhIDF0-NJfUbXUw861Stqe9ylQ9zy9W5NAVNE5QV4AQPF4tFgKQ8J8liGx8M44UW1Gg__",
+    "asset_id": "theatre_stage",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "Theatre Stage",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
