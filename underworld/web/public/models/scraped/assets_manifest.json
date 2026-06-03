@@ -4545,5 +4545,22 @@
     "epoch": "industrial",
     "name": "Lathe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mainframe": {
+    "prompt": "a vintage mainframe computer cabinet, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7fee5781-c143-4b48-b70a-836674f97b41",
+    "path": "/models/generated/tripo/mainframe.glb",
+    "bytes": 14757840,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7fee5781-c143-4b48-b70a-836674f97b41/tripo_pbr_model_7fee5781-c143-4b48-b70a-836674f97b41.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvN2ZlZTU3ODEtYzE0My00YjQ4LWI3MGEtODM2Njc0Zjk3YjQxL3RyaXBvX3Bicl9tb2RlbF83ZmVlNTc4MS1jMTQzLTRiNDgtYjcwYS04MzY2NzRmOTdiNDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=HI5UnjWds7ohUPUBafNwqZcyv4m5tPS6urmq6Uhsk8VpqdQo1ck3qKR6ctKtg~7KSeQr8BkZW8oEFyiavAvYoszDZWgM6VG8A2Tc7Fwi0HmeW91RzhBbaMcBE-9fa2JgT51VquNn3Hd7TF5N9YxYu~DPPFUi8HDJzuO7~d1LNn6yN4cXmhVNXfskRt2hYSd0r8BhzUTlKEmnihp~ZAg6gKBi9VxCe9AWrfNBa3pEhfwCeDTjFVFEqG8Y9HaYFTtFk61MVGLswdW8Al9~ZStM2XijfgCw0dfKBALOt79SpImiqvYfaztueu9ar3ZNbzyO9tAoAyWzB8MBqxPt0vgkWg__",
+    "asset_id": "mainframe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Mainframe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
