@@ -1383,5 +1383,22 @@
     "epoch": "any",
     "name": "Cactus Succulent",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:desert_dune_tile": {
+    "prompt": "a modular sand dune desert terrain tile, seamless, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "7193e5bb-62e2-4e3f-ae4a-d6fa211c2699",
+    "path": "/models/generated/tripo/desert_dune_tile.glb",
+    "bytes": 14688596,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7193e5bb-62e2-4e3f-ae4a-d6fa211c2699/tripo_pbr_model_7193e5bb-62e2-4e3f-ae4a-d6fa211c2699.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzE5M2U1YmItNjJlMi00ZTNmLWFlNGEtZDZmYTIxMWMyNjk5L3RyaXBvX3Bicl9tb2RlbF83MTkzZTViYi02MmUyLTRlM2YtYWU0YS1kNmZhMjExYzI2OTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Im8MEhY8WPZsEHJxqgrvRhMmyrof9y7HryFYLWkq5nwY7PPNwlRVIGHsy0mn8lWRtuZyuk4aC050S5MhHXUWbYhinkRyFvTfG4g1AAkNZSzEiE284yqvdGOUO5FJOwgogsYCXHbnR4aVchMTsEk~zqgdaI6b3Cfd0aUell6ykr-B8HzoyTqTrCJ3RCtYqgmGrKL89PmhQPqAGU9fU4NeJJxNJh4BRrLE2~SXDrS-kSj2f3NSoDPdrIkl0j~7B69w1owmlXyowUBFuNUATkN5ZvhgsqDDm9pBjXCLqCJ-QF~GxObQvd7k9Y-VfzbAw8O~1ODTMwCc-5o~RR4VhLjQCw__",
+    "asset_id": "desert_dune_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Desert Dune Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
