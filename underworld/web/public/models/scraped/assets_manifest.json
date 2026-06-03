@@ -2216,5 +2216,22 @@
     "epoch": "any",
     "name": "Fx Floating Lantern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_flowering_wall": {
+    "prompt": "a wall covered in cascading flowering vines, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "3cf6283a-499f-40ec-a362-427fcebe4116",
+    "path": "/models/generated/tripo/fx_flowering_wall.glb",
+    "bytes": 15110560,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3cf6283a-499f-40ec-a362-427fcebe4116/tripo_pbr_model_3cf6283a-499f-40ec-a362-427fcebe4116.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2NmNjI4M2EtNDk5Zi00MGVjLWEzNjItNDI3ZmNlYmU0MTE2L3RyaXBvX3Bicl9tb2RlbF8zY2Y2MjgzYS00OTlmLTQwZWMtYTM2Mi00MjdmY2ViZTQxMTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DFJOB4FRWJKRWCg12bdeYF-qzgREm3nO3q6ydc2CEIrvfE1pxzcz~ubvmaRuLqk-wfp4vshzPWa2JMxMCtJrIBe44iCsEILIOsqB~t1mRzSGXbjJVyWWTLOfMIfTyQyrmaz-xLVxidnqT0zpsX9santLKxVHQbtn1~RnD5duvbVDEl6Z7pq0~F5vKe2MuI0oBMadjyLoYKesftdVR2p514Y31kF7yyp96qQre2lfnJ901LFvRIFNiHPJsQko9mHdNoMDZxKArmLtoCyUE9wDrU6RjhxwyNK2SeyJqOFCfG9oiT0gASIOP-tkplKbiZ5M3zMLat3IObzdVKcPZ4lUCQ__",
+    "asset_id": "fx_flowering_wall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Flowering Wall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
