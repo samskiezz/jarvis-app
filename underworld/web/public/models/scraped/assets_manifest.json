@@ -3814,5 +3814,22 @@
     "epoch": "any",
     "name": "Child Crib Mobile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cradle": {
+    "prompt": "a wooden baby cradle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b882e9e8-0e78-452e-b647-508d4f36496a",
+    "path": "/models/generated/tripo/cradle.glb",
+    "bytes": 15113072,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b882e9e8-0e78-452e-b647-508d4f36496a/tripo_pbr_model_b882e9e8-0e78-452e-b647-508d4f36496a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjg4MmU5ZTgtMGU3OC00NTJlLWI2NDctNTA4ZDRmMzY0OTZhL3RyaXBvX3Bicl9tb2RlbF9iODgyZTllOC0wZTc4LTQ1MmUtYjY0Ny01MDhkNGYzNjQ5NmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qmr8-hcelKyhunb4k-QNjohUNazxhHYfkG180ky1QIHxcVsc6tGEvNdmjk4Dt15509-9xWRQQQivU959Nwxso-bvGA1EjAxxbdg1sPCiu84VdeGKpXOkRtLkITUx3i1hMOc9rvTtg0tgBUe5-V-qElJlxbGJIhxesoBVP7uXHLl3LuRlbTV7wEAgz5LhqPdNfRU4o49ep1CI8tR4CgYg40xXIQIiDaoeDVXoNJPNnQTV2uXh-ODw4rU-FFK4RfB4umQ1wlQAmTE6rxTsy1FwDeOTwhUzo2WZ-TeI8r9fOs3VhiQk5UealDR5KGcjvmqomdqRd~S9R3L-nh-GXKq~~g__",
+    "asset_id": "cradle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "family",
+    "epoch": "any",
+    "name": "Cradle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
