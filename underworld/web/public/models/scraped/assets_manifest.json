@@ -8608,5 +8608,22 @@
     "epoch": "iron",
     "name": "Guild Banner Electrical",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_energy": {
+    "prompt": "a heraldic banner with a sun-and-turbine energy emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2974a332-e4a8-4353-8d9a-33cd536d5026",
+    "path": "/models/generated/tripo/guild_banner_energy.glb",
+    "bytes": 10112280,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2974a332-e4a8-4353-8d9a-33cd536d5026/tripo_pbr_model_2974a332-e4a8-4353-8d9a-33cd536d5026.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjk3NGEzMzItZTRhOC00MzUzLThkOWEtMzNjZDUzNmQ1MDI2L3RyaXBvX3Bicl9tb2RlbF8yOTc0YTMzMi1lNGE4LTQzNTMtOGQ5YS0zM2NkNTM2ZDUwMjYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=mVv9hzTwaIXGCMi~EimzFpaDNJ51QwPw2le4YeCDRyV8s4Pa3NMjaO7nfdd2-AjISjIsPmG2~8hkDLlxLZ3tQUhdAUoaJDSQMW-7mGvsqqIw1RlI53N6v7jYK3I8UkaXw5QFIiJQm2YIvm1dYX6UwIerSFyrPYDUty3u8QFMhMofc8NqF1fh7gbs76GHfIjT2CNz97dsB0qN1VFip-qId7xWoVKMMlVRTqgqAL0fNEx9Q0NkaV0UqNPa9vgQMb53MorEzCY4mSiNM-cttngFHpslirMjrxMUsLaFt9m7PiHXHQzWTcyGCjt0Xa74~Ooajq-IwhO4npxOZtKpiS5w3w__",
+    "asset_id": "guild_banner_energy",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "industrial",
+    "name": "Guild Banner Energy",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
