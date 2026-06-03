@@ -6024,5 +6024,22 @@
     "epoch": "industrial",
     "name": "Role Regulatory Reasoner Desk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_toxicity_checker_cabinet": {
+    "prompt": "a toxicity-assay safety cabinet with hazard labels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b9fbb2b6-0da4-4aab-8872-af0a28077193",
+    "path": "/models/generated/tripo/role_toxicity_checker_cabinet.glb",
+    "bytes": 14821212,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b9fbb2b6-0da4-4aab-8872-af0a28077193/tripo_pbr_model_b9fbb2b6-0da4-4aab-8872-af0a28077193.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjlmYmIyYjYtMGRhNC00YWFiLTg4NzItYWYwYTI4MDc3MTkzL3RyaXBvX3Bicl9tb2RlbF9iOWZiYjJiNi0wZGE0LTRhYWItODg3Mi1hZjBhMjgwNzcxOTMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=YEhFYVDQSLGh2Sty-UuXz9c7e4i~t1IziS2LT~Xz2G5RVsPJpgQkxJFjuU2qcRoMazCrKT1DU1UsVknclAZj~inN~96VMK84qbG6AryAbsDqJ3hMp-JxdGvDPD71bZUFh4Z7xbb1ghRa0OHBSFopLQy~e5SuT2GdgQ2SczkJ7e8ODf9jTGkTRa3KxIvU8vapbKalotUYG7bFI9mPqR4BL3lhqMT-X2e7r9orHd-KvP-m6UfNu31chkjysDJ8mUQukfvAAXrDq6OQ49phhxAsICZDnJQHU7dgwU1AV5QhWCbOhwpXLB29NHSSpMyvTR5aOgGywR2V5focvht8MKaW1w__",
+    "asset_id": "role_toxicity_checker_cabinet",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "information",
+    "name": "Role Toxicity Checker Cabinet",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
