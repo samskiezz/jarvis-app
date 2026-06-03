@@ -8200,5 +8200,22 @@
     "epoch": "bronze",
     "name": "Cart Wooden",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:chariot": {
+    "prompt": "a two-wheeled war chariot, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2db7fde0-ee0c-4f63-9b29-62932e4b0ad0",
+    "path": "/models/generated/tripo/chariot.glb",
+    "bytes": 12926000,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2db7fde0-ee0c-4f63-9b29-62932e4b0ad0/tripo_pbr_model_2db7fde0-ee0c-4f63-9b29-62932e4b0ad0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmRiN2ZkZTAtZWUwYy00ZjYzLTliMjktNjI5MzJlNGIwYWQwL3RyaXBvX3Bicl9tb2RlbF8yZGI3ZmRlMC1lZTBjLTRmNjMtOWIyOS02MjkzMmU0YjBhZDAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uV39xp2JdJlz4CqaW1IuouyFj2speBIbdipCttII6k3nqWumLRU3vlfVz3cYVlpK6DKZVwKQ12Fq74e5djWC1ZeSDB0-mM21YtzWhCxVUIPCNv64xCbMaZRDxMbHSEmrZ~6MY~T-LLFUi8djeaK2wd61f2ab4tGe1B4CQV9Unh9dO0UQ2OHxI7Kwx13rjFA7wRzSdI0zblQBWMa3gxB2dykC4VJqS0W1LxFDXVDbFzgY7lDa8XzJYvOUhHvJ-mLldpfY42BxiaI8TCczYu-uq9W~APNI0av8wB3~oc7xdT0CTvqvUVAWHqkEveboDB-By~xWrqxg44avM2f7pZgf~w__",
+    "asset_id": "chariot",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "iron",
+    "name": "Chariot",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
