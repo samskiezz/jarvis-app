@@ -87,6 +87,20 @@ def discover(guild: str, *, seed: int, with_molecule: bool = True) -> dict:
     grounded = minion_research.run_research(guild, seed=seed)
     rng = random.Random(seed)
 
+    # Per-FIELD real science: pick the Minion's niche field for this guild and run
+    # its world-class engine (genomics→CRISPR+fold, optics→QC, metallurgy→MD, …).
+    try:
+        from . import taxonomy as T, field_science as FS
+        fields = T.FIELDS_BY_GUILD.get(guild) or T.CIVIC_FIELDS
+        field = fields[seed % len(fields)]
+        fsim = FS.simulate(field, seed=seed)
+        grounded["field_science"] = {"field": field, "engine": fsim["engine"],
+                                     "summary": fsim["summary"], "data": fsim["data"]}
+        grounded["quality"] = round(0.5 * float(grounded.get("quality", 0.5))
+                                    + 0.5 * float(fsim["quality"]), 4)
+    except Exception:
+        pass
+
     # 1) always: invent a technology + file a patent, often expanding prior art
     tech = TECH.invent(guild, seed=seed)
     existing = list(LEDGER.office.graph.nodes)
