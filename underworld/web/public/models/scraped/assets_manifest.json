@@ -2947,5 +2947,22 @@
     "epoch": "any",
     "name": "Wall Brick",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wall_plaster": {
+    "prompt": "a modular plastered interior wall panel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "9a74501e-aa56-4dad-9c56-2ed663f5801c",
+    "path": "/models/generated/tripo/wall_plaster.glb",
+    "bytes": 14660800,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/9a74501e-aa56-4dad-9c56-2ed663f5801c/tripo_pbr_model_9a74501e-aa56-4dad-9c56-2ed663f5801c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOWE3NDUwMWUtYWE1Ni00ZGFkLTljNTYtMmVkNjYzZjU4MDFjL3RyaXBvX3Bicl9tb2RlbF85YTc0NTAxZS1hYTU2LTRkYWQtOWM1Ni0yZWQ2NjNmNTgwMWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=NO3WkS0pBlo4xBfabudeYJTCa3fM~n72I6Okx2hWh81xdkVwwUY~KhoYKqeFsfHCJrk2nkgxAh522Rxk454zQOVYhTqWXWxc4lpoq6bxyWdA~PRGPBvDhxX3M1VyT4rwumpjyU5CWWRc21IqsiIIVfWYLIAwLgXLPbQJQFF94ql4PwBXfpxqQ9gftGjmj00WlD72wKhI-Uk5zEaOeIuyyRpGfdukQcOfT5NwtVbNiVV20MNsICRIpc5po2UoFFt6YHpQvgOKNiFtTPeX7V2jkLtdpQyj9pA19VLboehgnVNCnZ-NQOPgQ9zPquYsGRuFp~Zqk2WOy7efoA9WsEFn9w__",
+    "asset_id": "wall_plaster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "interior",
+    "epoch": "any",
+    "name": "Wall Plaster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
