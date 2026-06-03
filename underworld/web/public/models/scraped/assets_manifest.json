@@ -6874,5 +6874,22 @@
     "epoch": "information",
     "name": "Iv Stand",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:medicine_cabinet": {
+    "prompt": "a medicine cabinet with bottles, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "cd97c082-ae7f-4cae-b509-78272c271036",
+    "path": "/models/generated/tripo/medicine_cabinet.glb",
+    "bytes": 14852624,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/cd97c082-ae7f-4cae-b509-78272c271036/tripo_pbr_model_cd97c082-ae7f-4cae-b509-78272c271036.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvY2Q5N2MwODItYWU3Zi00Y2FlLWI1MDktNzgyNzJjMjcxMDM2L3RyaXBvX3Bicl9tb2RlbF9jZDk3YzA4Mi1hZTdmLTRjYWUtYjUwOS03ODI3MmMyNzEwMzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pgXkjETMpgNsdGCwSGGL01AqDQc0B2IBMcqzn--7W99fj6Nv1cd3wHdsEtkWMoROVQkc~PI2nZndreQgE9WEqhYg3nRhwafPC~D1MS4-mjIl70DNBocgjqTiBXP-XoQN2rDTF66z5TtKXRXTC8OUEEMWm~nDr0Q-irPvYBLZJS9G2b9tSD55LOCUyPfV3ZLU1PDz~DngkDhL-2R6o6X8AL6VxbwNDeZySm~Vz4MnnYW~hLfoQMJzqE8zJmwXZ8TUmrX7at0dDo1PqphUWbAYR6weoYTztzZ1cqXswoBH50YDAGiutgZ64~EpT4vtqjIK4dzO2Dwdih2QEna9hhAySA__",
+    "asset_id": "medicine_cabinet",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "industrial",
+    "name": "Medicine Cabinet",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
