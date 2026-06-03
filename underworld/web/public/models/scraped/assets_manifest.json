@@ -5956,5 +5956,22 @@
     "epoch": "iron",
     "name": "Role Formula Oracle Orb",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_genome_analyst_station": {
+    "prompt": "a genome-analysis station with a wall of sequence screens, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4f3e8968-2f8f-406c-a6bb-dec6699755cd",
+    "path": "/models/generated/tripo/role_genome_analyst_station.glb",
+    "bytes": 5438888,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4f3e8968-2f8f-406c-a6bb-dec6699755cd/tripo_pbr_model_4f3e8968-2f8f-406c-a6bb-dec6699755cd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGYzZTg5NjgtMmY4Zi00MDZjLWE2YmItZGVjNjY5OTc1NWNkL3RyaXBvX3Bicl9tb2RlbF80ZjNlODk2OC0yZjhmLTQwNmMtYTZiYi1kZWM2Njk5NzU1Y2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=C8kGhzYQo7EzO9ou-AbBEq8-vcJGl-j-KY3r4PSOC0FDZFlXFdn-4lXEMEVj8VZiV9FMzToKL7aa-9-9FeaQDGCN7bjXWW3Qs62U0Iql~gR53CJ0f1SXWgm87h253pEGbNkbgAk2x1ZiI9ea9wiPcZpueg-9zFHE5p8uaOHfhqB-CI2ju7TOk2QOs5F2u8m8BZ-9UficiD-OXOXzDaMuWkYlMYnBkjCw71h2v~eycaoHB36QlO1kY8SoFVOkpvJ2EwD8n78u6b3HeAiaKe4xrWuTLw1ap2OK6Dz0n-ti8SuARVRQsrYKFMJ7KAUBh3gm5QmskurcBg-sYJlDqI9zQA__",
+    "asset_id": "role_genome_analyst_station",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "information",
+    "name": "Role Genome Analyst Station",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
