@@ -6823,5 +6823,22 @@
     "epoch": "information",
     "name": "First Aid Kit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:healers_poultice": {
+    "prompt": "a herbal healer's poultice and bandages on a cloth, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2cd4d494-4c31-4e43-acb4-ddc647008348",
+    "path": "/models/generated/tripo/healers_poultice.glb",
+    "bytes": 14805452,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/2cd4d494-4c31-4e43-acb4-ddc647008348/tripo_pbr_model_2cd4d494-4c31-4e43-acb4-ddc647008348.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMmNkNGQ0OTQtNGMzMS00ZTQzLWFjYjQtZGRjNjQ3MDA4MzQ4L3RyaXBvX3Bicl9tb2RlbF8yY2Q0ZDQ5NC00YzMxLTRlNDMtYWNiNC1kZGM2NDcwMDgzNDguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dRD0P1NYJEBCNAb6oTBss~vnUmgb-ZrXa8ZC9l2z01N1RJDTi7gJsfzgXYzIGCEgDFsx3Nwst3JCWEIM1ksHMGxxKOCU855sB3-wz5M0k7AWMHzqutHsw-BFtZHhbimrTEnhiaM7ioEtv7VsA5aVuZ~K8RHnGr9j-Qle~tg2LYjUcW7aDImybWd9y5P~h8uvdzYD2WhpHX6BtiXowqbT03TOpC7j0Sh~it5DOBDoCu2sHeOIaODvpS4q5Ta-8VJYD3qDcJke3pxCilemwFn~2TyupTy7x1AXB7Di-wibQr35TM2dmHYZHVR2RKjr8AIde46D6vin9jYlCtDDFWv0gg__",
+    "asset_id": "healers_poultice",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "iron",
+    "name": "Healers Poultice",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
