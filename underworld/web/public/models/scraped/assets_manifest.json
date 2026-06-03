@@ -6228,5 +6228,22 @@
     "epoch": "iron",
     "name": "Peer Review Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:peer_review_verdict_board": {
+    "prompt": "a review verdict board with PASS, REVISE and BLOCK cards, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6b97b7b2-2cae-4124-ae8b-d2d8a06f0f67",
+    "path": "/models/generated/tripo/peer_review_verdict_board.glb",
+    "bytes": 8749304,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6b97b7b2-2cae-4124-ae8b-d2d8a06f0f67/tripo_pbr_model_6b97b7b2-2cae-4124-ae8b-d2d8a06f0f67.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmI5N2I3YjItMmNhZS00MTI0LWFlOGItZDJkOGEwNmYwZjY3L3RyaXBvX3Bicl9tb2RlbF82Yjk3YjdiMi0yY2FlLTQxMjQtYWU4Yi1kMmQ4YTA2ZjBmNjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=bmJrBcmH2m6pPkT~AOgtFYv6HYD-BjtsvZYsvOA-wX7JxSCqvpLQAt-JyD6Mfo19-wkBK6UgbmU9jT~tmSwypdLu6onjT0s2Seg9mhCExoYuL6oiHac~rx5MDFDyZ1dyg2pizy9xqSx262qUYpr~XMXXLaHPqVWzHP~0Fvps9QXjeikrIWl8UrgZw~KbYqqG3D0LCuPXBPlC5E3UZDqdIriEpNeq7qhTpE41LE5LIOjpKDEl22YuzW1xHhgKLsUY3ZQYfzI201Ecwd1OmbernbAPTYQf0nKJHR4J5WiMlExPWjGk1ZONMJuDEHyxVriOmHDOnKFQnaQi2Er4fY5zzw__",
+    "asset_id": "peer_review_verdict_board",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "industrial",
+    "name": "Peer Review Verdict Board",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
