@@ -6976,5 +6976,22 @@
     "epoch": "information",
     "name": "Surgical Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wound_bandage_kit": {
+    "prompt": "a rolled bandage and wound-dressing kit, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "82d2ed2b-ea50-4678-abb0-aebf93835402",
+    "path": "/models/generated/tripo/wound_bandage_kit.glb",
+    "bytes": 14829128,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/82d2ed2b-ea50-4678-abb0-aebf93835402/tripo_pbr_model_82d2ed2b-ea50-4678-abb0-aebf93835402.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODJkMmVkMmItZWE1MC00Njc4LWFiYjAtYWViZjkzODM1NDAyL3RyaXBvX3Bicl9tb2RlbF84MmQyZWQyYi1lYTUwLTQ2NzgtYWJiMC1hZWJmOTM4MzU0MDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=jnYRiVC-v-P5I614XH5Mltn5fN2X7CXm0a4oPkbBXklu8Fj6crxIznVJ5xYhnJYuvp5Yof7ywsMkVTErZMFpyE4NM-C9NsabdZk30KFaLw0iTdQbzfxMI70ANft4nLgdrOqCgEydFw44a0sq5hiPRkugU~1Yq0dj5pPlxevSLzcparLttbYAsdcLmCsrBDj05u0AYAuQCUsa2sMxoHrUUDMOLObeyjbDrp4IOc-~I6rc-nsjMuuDJXvgInjwWfvJgye6MBJPAVUdGv4gWI1x5PgWPccQiEcfsZcC9~LnSeXOXmGohZLj80QVcI2PQPJC-QQbDxfYsCuB4~6yEKpLSg__",
+    "asset_id": "wound_bandage_kit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "iron",
+    "name": "Wound Bandage Kit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
