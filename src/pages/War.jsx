@@ -71,6 +71,33 @@ const sevLabel = (s) => {
   return ["LOW", "MEDIUM", "HIGH"].includes(up) ? up : "MEDIUM";
 };
 
+// ── Tactical HUD helpers ────────────────────────────────────────────────────
+// Frame teams: counterstrike = CT/T, panopticon = AGENT/INTRUDER.
+const TEAM_HEX = { CT: "#0096d4", T: "#f07820", AGENT: "#00c878", INTRUDER: "#e8203c" };
+const teamHex = (t) => TEAM_HEX[t] || C.textB;
+
+const ALERT_META = {
+  calm: { label: "CALM", color: C.neon },
+  suspicious: { label: "SUSPICIOUS", color: C.gold },
+  alarmed: { label: "ALARMED", color: C.red },
+};
+
+// Color-code the live event feed by kind.
+const eventColor = (kind) => {
+  const k = String(kind || "").toLowerCase();
+  if (k.includes("kill") || k.includes("breach") || k.includes("explod")) return C.red;
+  if (k.includes("plant") || k.includes("alarm")) return C.orange;
+  if (k.includes("defus") || k.includes("secure") || k.includes("stop")) return C.blue;
+  if (k.includes("detect") || k.includes("suspic")) return C.gold;
+  if (k.includes("round") || k.includes("win")) return C.neon;
+  return C.textB;
+};
+
+const mmss = (secs) => {
+  const s = Math.max(0, Math.floor(Number(secs) || 0));
+  return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+};
+
 // ── Per-mode seeding ───────────────────────────────────────────────────────
 // counterstrike: CT/T on Source-engine coords; panopticon: agents/intruders on
 // a 0..100 city grid (mapped to LiveTactical3D's "CT"/"T" team colors).
@@ -107,11 +134,12 @@ function useTacticalStream(mode, map) {
   const [stale, setStale] = useState(false);
   const [events, setEvents] = useState(0);
   const [liveUnits, setLiveUnits] = useState(null); // null until a valid frame arrives
+  const [frame, setFrame] = useState(null);         // latest FULL frame object
   const seed = useMemo(() => seedUnits(mode, map), [mode, map]);
 
   // Reset live frames whenever the stream key changes.
   const modeRef = useRef(mode);
-  useEffect(() => { modeRef.current = mode; setLiveUnits(null); setEvents(0); }, [mode]);
+  useEffect(() => { modeRef.current = mode; setLiveUnits(null); setFrame(null); setEvents(0); }, [mode]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !appParams.apiBaseUrl) return undefined;
@@ -134,6 +162,8 @@ function useTacticalStream(mode, map) {
         staleTimer = setTimeout(() => setStale(true), 15000);
         try {
           const data = JSON.parse(e.data);
+          // Keep the WHOLE frame so the HUD can read score/phase/events/bomb/etc.
+          setFrame(data);
           const raw = data.units || data.players || data.agents || [];
           if (Array.isArray(raw) && raw.length) {
             setLiveUnits(raw.map((u, idx) => ({
@@ -142,6 +172,13 @@ function useTacticalStream(mode, map) {
               worldX: u.worldX ?? u.position?.x ?? u.x ?? 0,
               worldY: u.worldY ?? u.position?.y ?? u.y ?? 0,
               hp: u.hp ?? u.health ?? 100,
+              state: u.state,
+              weapon: u.weapon,
+              kills: u.kills,
+              deaths: u.deaths,
+              aimX: u.aimX,
+              aimY: u.aimY,
+              firing: !!u.firing,
             })));
           }
         } catch {
@@ -170,7 +207,7 @@ function useTacticalStream(mode, map) {
   const statusColorVal = connected ? (stale ? C.gold : C.neon) : C.red;
   const units = liveUnits && liveUnits.length ? liveUnits : seed;
 
-  return { units, status, statusColor: statusColorVal, events, url, usingSeed: !(liveUnits && liveUnits.length) };
+  return { units, frame, status, statusColor: statusColorVal, events, url, usingSeed: !(liveUnits && liveUnits.length) };
 }
 
 export default function War() {
@@ -248,10 +285,29 @@ export default function War() {
   }, [signals]);
   const threatColor = threatLevel === "HIGH" ? C.red : threatLevel === "ELEVATED" ? C.gold : C.neon;
 
-  const agentCount = stream.units.filter((u) => u.team === "CT").length;
-  const intruderCount = stream.units.filter((u) => u.team === "T").length;
+  const agentCount = stream.units.filter((u) => u.team === "CT" || u.team === "AGENT").length;
+  const intruderCount = stream.units.filter((u) => u.team === "T" || u.team === "INTRUDER").length;
 
   const loading = mode === "panopticon" ? signalLoading : matchLoading;
+
+  // ── Live frame fields (null when offline / pre-first-frame) ──────────────
+  const frame = stream.frame;
+  const frameScore = frame?.score || {};
+  const teamNames = Object.keys(frameScore);
+  const teamA = teamNames[0] || (mode === "panopticon" ? "AGENT" : "CT");
+  const teamB = teamNames[1] || (mode === "panopticon" ? "INTRUDER" : "T");
+  const frameEvents = Array.isArray(frame?.events) ? frame.events.slice(-8).reverse() : [];
+  const alertMeta = ALERT_META[frame?.alert_level] || null;
+  const bombState = frame?.bomb?.state;
+  const bombLabel = bombState
+    ? bombState === "planted"
+      ? `PLANTED ${mmss(frame.bomb.timer)}${frame.bomb.site ? ` · ${frame.bomb.site}` : ""}`
+      : bombState === "exploded"
+        ? `EXPLODED${frame.bomb.site ? ` · ${frame.bomb.site}` : ""}`
+        : bombState.toUpperCase()
+    : null;
+  const bombColor =
+    bombState === "planted" ? C.red : bombState === "defused" ? C.blue : bombState === "exploded" ? C.orange : C.textB;
 
   // ── Styles ─────────────────────────────────────────────────────────────
   const modeBtn = (active) => ({
@@ -332,8 +388,97 @@ export default function War() {
               <button key={m} onClick={() => setMap(m)} style={ctrlBtn(map === m)}>{m}</button>
             ))}
           </div>
-          <div style={{ width: "100%", height: viewHeight, border: `1px solid ${C.border}`, borderRadius: 4, overflow: "hidden" }}>
-            <LiveTactical3D gameKey={mode} mapName={map} units={stream.units} />
+          <div style={{ position: "relative", width: "100%", height: viewHeight, border: `1px solid ${C.border}`, borderRadius: 4, overflow: "hidden" }}>
+            <LiveTactical3D
+              gameKey={mode}
+              mapName={map}
+              units={stream.units}
+              bounds={frame?.bounds || null}
+              bombsites={mode === "counterstrike" ? frame?.bombsites || null : null}
+              bomb={mode === "counterstrike" ? frame?.bomb || null : null}
+              objectives={mode === "panopticon" ? frame?.objectives || null : null}
+              alertLevel={mode === "panopticon" ? frame?.alert_level || null : null}
+            />
+
+            {/* ── SCOREBOARD (top) ──────────────────────────────────────── */}
+            {frame && (
+              <div style={{
+                position: "absolute", top: 8, left: 8, right: 8, display: "flex", alignItems: "center",
+                justifyContent: "space-between", gap: 10, padding: "8px 12px", borderRadius: 5,
+                background: "rgba(2,6,10,0.78)", backdropFilter: "blur(6px)", border: `1px solid ${C.border}`,
+                pointerEvents: "none",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: teamHex(teamA), letterSpacing: 1, whiteSpace: "nowrap" }}>{teamA}</span>
+                  <span style={{ fontSize: 20, fontWeight: 800, color: teamHex(teamA) }}>{frameScore[teamA] ?? 0}</span>
+                  <span style={{ fontSize: 12, color: C.text }}>:</span>
+                  <span style={{ fontSize: 20, fontWeight: 800, color: teamHex(teamB) }}>{frameScore[teamB] ?? 0}</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: teamHex(teamB), letterSpacing: 1, whiteSpace: "nowrap" }}>{teamB}</span>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 17, fontWeight: 800, color: C.textB, fontVariantNumeric: "tabular-nums" }}>{mmss(frame.round_time)}</div>
+                  <div style={{ fontSize: 7, color: C.text, letterSpacing: 2 }}>
+                    R{frame.round ?? 0} · {String(frame.phase || "").toUpperCase()}
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                  {mode === "counterstrike" && bombLabel && (
+                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1, color: bombColor, border: `1px solid ${bombColor}66`, background: `${bombColor}1a`, padding: "3px 8px", borderRadius: 4 }}>
+                      ◈ {bombLabel}
+                    </span>
+                  )}
+                  {mode === "panopticon" && alertMeta && (
+                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1, color: alertMeta.color, border: `1px solid ${alertMeta.color}66`, background: `${alertMeta.color}1a`, padding: "3px 8px", borderRadius: 4 }}>
+                      ⚠ {alertMeta.label}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ── PANOPTICON status strip (counters + objectives) ───────── */}
+            {frame && mode === "panopticon" && (
+              <div style={{
+                position: "absolute", bottom: 8, left: 8, display: "flex", gap: 6, flexWrap: "wrap",
+                pointerEvents: "none",
+              }}>
+                <span style={{ fontSize: 8, color: C.neon, background: "rgba(2,6,10,0.78)", border: `1px solid ${C.neon}44`, padding: "3px 7px", borderRadius: 4 }}>
+                  STOPPED {frame.intrusions_stopped ?? 0}
+                </span>
+                <span style={{ fontSize: 8, color: C.red, background: "rgba(2,6,10,0.78)", border: `1px solid ${C.red}44`, padding: "3px 7px", borderRadius: 4 }}>
+                  BREACHES {frame.breaches ?? 0}
+                </span>
+                {(frame.objectives || []).map((o) => {
+                  const oc = o.state === "secure" ? C.neon : o.state === "contested" ? C.gold : C.red;
+                  return (
+                    <span key={o.id} style={{ fontSize: 8, color: oc, background: "rgba(2,6,10,0.78)", border: `1px solid ${oc}44`, padding: "3px 7px", borderRadius: 4 }}>
+                      {o.id} · {String(o.state).toUpperCase()}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* ── EVENT FEED (bottom-right) ─────────────────────────────── */}
+            {frameEvents.length > 0 && (
+              <div style={{
+                position: "absolute", bottom: 8, right: 8, width: 230, maxHeight: 168, overflow: "hidden",
+                display: "flex", flexDirection: "column", gap: 3, padding: "7px 9px", borderRadius: 5,
+                background: "rgba(2,6,10,0.74)", backdropFilter: "blur(6px)", border: `1px solid ${C.border}`,
+                pointerEvents: "none",
+              }}>
+                <div style={{ fontSize: 7, color: C.text, letterSpacing: 2, marginBottom: 2 }}>EVENT FEED</div>
+                {frameEvents.map((ev, i) => {
+                  const col = eventColor(ev.kind);
+                  return (
+                    <div key={`${ev.tick}-${i}`} style={{ display: "flex", gap: 6, alignItems: "baseline", opacity: 1 - i * 0.08 }}>
+                      <span style={{ fontSize: 7, color: col, fontWeight: 700, letterSpacing: 0.5, minWidth: 44, textTransform: "uppercase" }}>{ev.kind}</span>
+                      <span style={{ fontSize: 8, color: C.textB, lineHeight: 1.25, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{ev.text}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <div style={{ marginTop: 8, fontSize: 8, color: C.text }}>Endpoint: {stream.url}</div>
           <div style={{ marginTop: 6, fontSize: 8, color: C.textB }}>Channels</div>
