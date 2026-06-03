@@ -6925,5 +6925,22 @@
     "epoch": "information",
     "name": "Pipette",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plague_sickbed_lamp": {
+    "prompt": "a sickbed studied by lamplight with medicine bottles, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7774fb54-78e4-4109-ab7c-cd52729fedde",
+    "path": "/models/generated/tripo/plague_sickbed_lamp.glb",
+    "bytes": 14719888,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/7774fb54-78e4-4109-ab7c-cd52729fedde/tripo_pbr_model_7774fb54-78e4-4109-ab7c-cd52729fedde.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzc3NGZiNTQtNzhlNC00MTA5LWFiN2MtY2Q1MjcyOWZlZGRlL3RyaXBvX3Bicl9tb2RlbF83Nzc0ZmI1NC03OGU0LTQxMDktYWI3Yy1jZDUyNzI5ZmVkZGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=wL6lETXUJn2H9Ip5xDFIrsWdqXhL2ELv2tr4fr~ElOItcjEWi5hGhHLVrSGtLJVeq4LF3XGf11HemrhdEOMwVY7OfunJb2Sil7SgQTaRo4IxgO0H8zqUtcB-QlczNaD3wVMrtXSv6IeK2zvPQbdNtQ5h29Z4TDH4C9~h32ac6yZDol6nvZjCN~0kEr7KvGlIr7K1cBk8OfnRQlpiYhH84VGr80BtovAfqsw6-I3uevvTreDy2pAZwvwqKD90K2D7o9kf56GoSxGGrR6cFjn5Y~ItyEhDM7UU0qB3o-HtO3Fyt9cIKDYx4SdcxJVH2Lw192FcqWxzWIZRorSFcXIJYQ__",
+    "asset_id": "plague_sickbed_lamp",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "iron",
+    "name": "Plague Sickbed Lamp",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
