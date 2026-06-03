@@ -5259,5 +5259,22 @@
     "epoch": "industrial",
     "name": "Archive Cabinet",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:book_open": {
+    "prompt": "an open hardcover book with visible pages, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0da59e11-5a3f-43fd-8acd-328d1704ce68",
+    "path": "/models/generated/tripo/book_open.glb",
+    "bytes": 15172176,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0da59e11-5a3f-43fd-8acd-328d1704ce68/tripo_pbr_model_0da59e11-5a3f-43fd-8acd-328d1704ce68.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGRhNTllMTEtNWEzZi00M2ZkLThhY2QtMzI4ZDE3MDRjZTY4L3RyaXBvX3Bicl9tb2RlbF8wZGE1OWUxMS01YTNmLTQzZmQtOGFjZC0zMjhkMTcwNGNlNjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=MMmmxLxoIRLnnyECwaB~iVcQ3dnm~leh2QzYCw6Bmo-04fdhSz-m1hCkxOiQxHFrHc-UU4iGSdBXrA7Ml2UYRS4RB~V5lyqOlUEvqdw61i6AdMBXxZhevj9l~PqXGAY5-Q2S1pqwIbOMiKz~d6YittkId5Gi5~cwxuNsu5pe5JwlsxMw0oBD3MfvKTY-s2CF0-~Byi1b26yqAgvAdQ5NQdMYG-9CL23ViBTDjGEULTUX2a2o5gZoO1JRWE4~AhiKExfcTjo3dMOETusEOZrylAdHSBjKAfPxdSTcxJSPQnK9eaYj9a3HZp-~fyyrTcmOi8rqQU8EDtnHxQTM9Edwdg__",
+    "asset_id": "book_open",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "any",
+    "name": "Book Open",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
