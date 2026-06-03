@@ -3134,5 +3134,22 @@
     "epoch": "any",
     "name": "Dresser",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:berry_bush": {
+    "prompt": "a berry bush laden with ripe berries, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c6dd907a-fff9-4af8-9f24-d3ba953f7e78",
+    "path": "/models/generated/tripo/berry_bush.glb",
+    "bytes": 15537684,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c6dd907a-fff9-4af8-9f24-d3ba953f7e78/tripo_pbr_model_c6dd907a-fff9-4af8-9f24-d3ba953f7e78.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzZkZDkwN2EtZmZmOS00YWY4LTlmMjQtZDNiYTk1M2Y3ZTc4L3RyaXBvX3Bicl9tb2RlbF9jNmRkOTA3YS1mZmY5LTRhZjgtOWYyNC1kM2JhOTUzZjdlNzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=kI5YatiAbUfZX8Ztc4uZkaIbdUljtlmYeISgoNV7DeAW5Hpf2Dnnrq0Q1-wEuM~p01f0oX-4~jv2GFAUGdYdjJI5YKtZRWgzgHbMl4xgdVigq5dNuU7LTh9bw1HRNjDEMyYumv--HKE~Nlf-ILihalCJaSCe0rE8ylRh6RClHgaHoOJk3lTw5YgCFEJyNkJgXOQUy-hoBSDb~ruY5jHSC3T9OjEeJY2EsLHzdsDAEq3ppn0Ogf07QBv7gZuPpZUcMx7zW8m9-KO-0MaEJvHA~P9ejidwoI4CI8N7Cl7-uuvjGgoO1tQcKi-pBdt8nS8Fm7NPNbmYzfgvzV9twVfK2A__",
+    "asset_id": "berry_bush",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Berry Bush",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
