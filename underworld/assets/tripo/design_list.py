@@ -316,13 +316,145 @@ DESIGNS += [
     ("quill_ink", "object", "iron", f"a quill pen and ink pot, {_STYLE}"),
 ]
 
+# ── 13. HOUSEHOLD — cooking, washing, sleeping, hygiene, leisure ──────────────
+DESIGNS += [
+    ("cooking_pot", "household", "any", f"a cast-iron cooking pot on a hook, {_STYLE}"),
+    ("frying_pan", "household", "any", f"a frying pan with a handle, {_STYLE}"),
+    ("cutting_board", "household", "any", f"a wooden cutting board with a knife and vegetables, {_STYLE}"),
+    ("cutlery_set", "household", "any", f"a fork, knife and spoon set, {_STYLE}"),
+    ("water_glass", "household", "any", f"a glass of water, {_STYLE}"),
+    ("kettle", "household", "industrial", f"a metal kettle, {_STYLE}"),
+    ("cupboard", "household", "any", f"a kitchen cupboard with dishes, {_STYLE}"),
+    ("sink_basin", "household", "industrial", f"a kitchen sink basin with a tap, {_STYLE}"),
+    ("washbasin", "household", "iron", f"a ceramic washbasin and jug, {_STYLE}"),
+    ("shower", "household", "information", f"a modern shower cubicle, {_STYLE}"),
+    ("towel_rack", "household", "any", f"a towel rack with hanging towels, {_STYLE}"),
+    ("mirror_stand", "household", "any", f"a standing mirror, {_STYLE}"),
+    ("pillow_blanket", "household", "any", f"a pillow and folded blanket, {_STYLE}"),
+    ("wardrobe_open", "household", "any", f"an open wardrobe with hanging clothes, {_STYLE}"),
+    ("laundry_basket", "household", "any", f"a wicker laundry basket with clothes, {_STYLE}"),
+    ("broom_bucket", "household", "any", f"a broom and cleaning bucket, {_STYLE}"),
+    ("radio_set", "household", "industrial", f"a vintage wooden radio set, {_STYLE}"),
+    ("television", "household", "information", f"a flat-screen television on a stand, {_STYLE}"),
+    ("board_game", "household", "any", f"a board game laid out on a table, {_STYLE}"),
+    ("guitar", "household", "industrial", f"an acoustic guitar, {_STYLE}"),
 
-# Build order: terrain first, then the world fills in, instruments dress the labs.
-PHASE_ORDER = ["terrain", "nature", "building", "civic", "interior",
-               "furniture", "instrument", "object", "vehicle", "monument", "prop", "fx"]
+    # ── 14. COMMUNITY & ECONOMY ──────────────────────────────────────────────
+    ("shop_counter", "community", "iron", f"a shop counter with a till, {_STYLE}"),
+    ("coin_pile", "community", "bronze", f"a small pile of gold coins, {_STYLE}"),
+    ("coin_purse", "community", "iron", f"a leather coin purse, {_STYLE}"),
+    ("crate_goods", "community", "any", f"a crate of trade goods, {_STYLE}"),
+    ("produce_basket", "community", "bronze", f"a basket of fresh produce, {_STYLE}"),
+    ("tavern_bar", "community", "iron", f"a wooden tavern bar with mugs and barrels, {_STYLE}"),
+    ("tavern_table", "community", "iron", f"a tavern table with benches and tankards, {_STYLE}"),
+    ("notice_board", "community", "iron", f"a town notice board with pinned papers, {_STYLE}"),
+    ("scales_balance", "community", "bronze", f"a merchant's brass balance scale, {_STYLE}"),
+    ("stall_canopy", "community", "bronze", f"a striped market stall canopy with goods, {_STYLE}"),
+
+    # ── 15. MEDICAL / HEALTH ─────────────────────────────────────────────────
+    ("hospital_bed", "medical", "industrial", f"a hospital bed with rails, {_STYLE}"),
+    ("medicine_cabinet", "medical", "industrial", f"a medicine cabinet with bottles, {_STYLE}"),
+    ("iv_stand", "medical", "information", f"an IV drip stand, {_STYLE}"),
+    ("stretcher", "medical", "industrial", f"a wheeled medical stretcher, {_STYLE}"),
+    ("apothecary_shelf", "medical", "iron", f"an apothecary shelf of potion bottles and herbs, {_STYLE}"),
+    ("surgical_table", "medical", "information", f"a stainless surgical table with a light, {_STYLE}"),
+    ("first_aid_kit", "medical", "information", f"a first-aid kit, {_STYLE}"),
+    ("petri_dish", "medical", "information", f"a stack of petri dishes with cultures, {_STYLE}"),
+    ("pipette", "medical", "information", f"a laboratory pipette, {_STYLE}"),
+    ("dna_sequencer", "medical", "information", f"a benchtop DNA sequencer, {_STYLE}"),
+
+    # ── 16. AGRICULTURE / FOOD PRODUCTION ────────────────────────────────────
+    ("seed_sack", "agri", "bronze", f"an open sack of grain seeds, {_STYLE}"),
+    ("hay_bale", "agri", "bronze", f"a rectangular hay bale, {_STYLE}"),
+    ("animal_pen", "agri", "bronze", f"a wooden livestock pen with a gate, {_STYLE}"),
+    ("cow", "agri", "bronze", f"a standing dairy cow, {_STYLE}"),
+    ("sheep", "agri", "bronze", f"a woolly sheep, {_STYLE}"),
+    ("chicken", "agri", "bronze", f"a hen chicken, {_STYLE}"),
+    ("water_trough", "agri", "bronze", f"a wooden water trough, {_STYLE}"),
+    ("fishing_boat", "agri", "iron", f"a small wooden fishing boat with nets, {_STYLE}"),
+    ("orchard_tree", "agri", "bronze", f"a fruit-laden apple orchard tree, {_STYLE}"),
+    ("silo", "agri", "industrial", f"a tall metal grain silo, {_STYLE}"),
+
+    # ── 17. CULTURE / RELIGION / ART ─────────────────────────────────────────
+    ("altar", "culture", "bronze", f"a stone offering altar with candles, {_STYLE}"),
+    ("idol_statue", "culture", "bronze", f"a carved religious idol statue, {_STYLE}"),
+    ("painting_easel", "culture", "industrial", f"an artist's easel with a canvas and palette, {_STYLE}"),
+    ("pottery_wheel", "culture", "bronze", f"a potter's wheel with clay, {_STYLE}"),
+    ("loom", "culture", "bronze", f"a wooden weaving loom with thread, {_STYLE}"),
+    ("drum", "culture", "stone", f"a hide hand drum, {_STYLE}"),
+    ("lute", "culture", "iron", f"a wooden lute, {_STYLE}"),
+    ("scroll_rack", "culture", "iron", f"a rack of stored scrolls, {_STYLE}"),
+    ("statue_pedestal", "culture", "iron", f"an empty ornate statue pedestal, {_STYLE}"),
+    ("incense_burner", "culture", "bronze", f"a hanging incense burner with smoke, {_STYLE}"),
+
+    # ── 18. FAMILY / SCHOOL / CHILDREN ───────────────────────────────────────
+    ("cradle", "family", "any", f"a wooden baby cradle, {_STYLE}"),
+    ("toy_blocks", "family", "any", f"a pile of children's wooden toy blocks, {_STYLE}"),
+    ("rocking_horse", "family", "iron", f"a wooden rocking horse, {_STYLE}"),
+    ("school_desk", "family", "industrial", f"a child's school desk with a slate, {_STYLE}"),
+    ("playground_swing", "family", "industrial", f"a playground swing set, {_STYLE}"),
+    ("ball", "family", "any", f"a simple play ball, {_STYLE}"),
+
+    # ── 19. COMMUNICATION / INFRASTRUCTURE / UTILITY ─────────────────────────
+    ("telegraph", "infra", "industrial", f"a telegraph key and machine on a desk, {_STYLE}"),
+    ("telephone_old", "infra", "industrial", f"a vintage candlestick telephone, {_STYLE}"),
+    ("printing_press", "infra", "industrial", f"a cast-iron printing press, {_STYLE}"),
+    ("mailbox", "infra", "industrial", f"a public post mailbox, {_STYLE}"),
+    ("radio_tower", "infra", "information", f"a tall radio broadcast tower, {_STYLE}"),
+    ("power_pole", "infra", "industrial", f"a wooden electrical power pole with wires, {_STYLE}"),
+    ("water_pump_well", "infra", "industrial", f"a cast-iron street water pump, {_STYLE}"),
+    ("windmill", "infra", "iron", f"a traditional windmill, {_STYLE}"),
+    ("watermill", "infra", "iron", f"a watermill with a turning wheel, {_STYLE}"),
+    ("dock_pier", "infra", "iron", f"a wooden harbour dock pier, {_STYLE}"),
+    ("rowboat", "infra", "iron", f"a small wooden rowboat, {_STYLE}"),
+    ("rail_track", "infra", "industrial", f"a section of railway track, modular, {_STYLE}"),
+    ("carriage", "infra", "industrial", f"a horse-drawn passenger carriage, {_STYLE}"),
+    ("solar_streetlight", "infra", "quantum", f"a modern solar-powered street light, {_STYLE}"),
+
+    # ── 20. SAFETY / DEFENCE (safety guild) ──────────────────────────────────
+    ("fire_extinguisher", "safety", "information", f"a red fire extinguisher, {_STYLE}"),
+    ("warning_sign", "safety", "industrial", f"a hazard warning sign on a post, {_STYLE}"),
+    ("barrier", "safety", "industrial", f"a striped safety barrier, {_STYLE}"),
+    ("watchtower", "safety", "iron", f"a wooden guard watchtower, {_STYLE}"),
+]
+
+
+# Build order: terrain first, then the world fills in, instruments dress the labs,
+# daily-life props last. Every category appears here so `designs_for` sorts cleanly.
+PHASE_ORDER = [
+    "terrain", "nature", "building", "civic", "fx",          # stage 1: core world
+    "interior", "furniture", "household", "family",           # stage 2: home & daily life
+    "instrument", "object",                                   # stage 3: guild work & tools
+    "community", "culture",                                   # stage 4: community & economy
+    "medical", "agri", "infra", "safety",                     # stage 5: society systems
+    "vehicle", "monument", "prop",                            # stage 6: movement & polish
+]
+
+# ── STAGES — the best order to complete generation in, as credit-sized waves ───
+# Each stage is a coherent slice of the world that's *usable on its own*: finish
+# stage 1 and you have a beautiful landscape + skyline; finish stage 2 and you can
+# follow a Minion through her home; stage 3 makes the guilds work; and so on. This
+# lets generation run one wave at a time, matched to how many credits are loaded.
+STAGES: dict[int, dict] = {
+    1: {"name": "Core World",          "categories": ["terrain", "nature", "building", "civic", "fx"]},
+    2: {"name": "Home & Daily Life",   "categories": ["interior", "furniture", "household", "family"]},
+    3: {"name": "Guild Work & Tools",  "categories": ["instrument", "object"]},
+    4: {"name": "Community & Economy",  "categories": ["community", "culture"]},
+    5: {"name": "Society Systems",     "categories": ["medical", "agri", "infra", "safety"]},
+    6: {"name": "Movement & Polish",   "categories": ["vehicle", "monument", "prop"]},
+}
+
+# category → stage number (reverse index, for fast filtering)
+STAGE_OF: dict[str, int] = {cat: n for n, s in STAGES.items() for cat in s["categories"]}
 
 
 def designs_for(epoch_tag: str | None = None) -> list[tuple[str, str, str, str]]:
     """All designs (or one epoch + evergreens), sorted into build-phase order."""
     items = DESIGNS if epoch_tag is None else [d for d in DESIGNS if d[2] in (epoch_tag, "any")]
     return sorted(items, key=lambda d: (PHASE_ORDER.index(d[1]) if d[1] in PHASE_ORDER else 99, d[0]))
+
+
+def designs_for_stage(stage: int) -> list[tuple[str, str, str, str]]:
+    """Every design belonging to one completion stage, in build-phase order."""
+    cats = set(STAGES.get(stage, {}).get("categories", ()))
+    return [d for d in designs_for(None) if d[1] in cats]
