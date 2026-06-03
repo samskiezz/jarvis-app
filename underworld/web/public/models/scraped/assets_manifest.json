@@ -8540,5 +8540,22 @@
     "epoch": "any",
     "name": "Fossil Dig Site",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_banner_agriculture": {
+    "prompt": "a heraldic banner with a wheat-sheaf agriculture emblem, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "52658225-62ba-4880-87df-9b4839bdbe9d",
+    "path": "/models/generated/tripo/guild_banner_agriculture.glb",
+    "bytes": 13273416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/52658225-62ba-4880-87df-9b4839bdbe9d/tripo_pbr_model_52658225-62ba-4880-87df-9b4839bdbe9d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTI2NTgyMjUtNjJiYS00ODgwLTg3ZGYtOWI0ODM5YmRiZTlkL3RyaXBvX3Bicl9tb2RlbF81MjY1ODIyNS02MmJhLTQ4ODAtODdkZi05YjQ4MzliZGJlOWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RGeX2XSsmuL69EDD9oxUHy~Kf~jRGQSmermgIVP4UYiHYkWcYQb1sFzfL0aDMI8RyeCvFOgz~dMwJCXxb0l8ILaE1Nvxdeaid-M4ujlqMWvaeWHWGn36QzijOH8uzhEGij55BK8ozAcrvBd0hCGIika83TilLeuopTs5z4vvZ3wPR8hijL29DYgPIz~I-e4a7yqNNMmuppsiUDen4icIdsFKD0oHlY7HChJpGMYz0063wSumBRc5zR9XbKhtZbEOPcmMDX5ibM~MoCMr3-R5VhSNKfYRBjJTsdFsgawkcfJiXo4-3x6hx5~ipVXdoxh8lggrsbB8bGUc~Zc9v3E3vQ__",
+    "asset_id": "guild_banner_agriculture",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Guild Banner Agriculture",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
