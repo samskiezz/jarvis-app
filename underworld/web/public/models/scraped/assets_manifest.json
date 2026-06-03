@@ -3797,5 +3797,22 @@
     "epoch": "any",
     "name": "Stool",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:child_crib_mobile": {
+    "prompt": "a hanging crib mobile of little carved shapes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8018c139-5b33-4387-98a9-c0e4cda2828f",
+    "path": "/models/generated/tripo/child_crib_mobile.glb",
+    "bytes": 5465140,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8018c139-5b33-4387-98a9-c0e4cda2828f/tripo_pbr_model_8018c139-5b33-4387-98a9-c0e4cda2828f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODAxOGMxMzktNWIzMy00Mzg3LTk4YTktYzBlNGNkYTI4MjhmL3RyaXBvX3Bicl9tb2RlbF84MDE4YzEzOS01YjMzLTQzODctOThhOS1jMGU0Y2RhMjgyOGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=LHe4dPIpZhPell6wINjMiyCOFzBFzEa4EeIBK1Z~BTZIREKLYUysy33jmQcDp79DG43UfjfIj6p90cAkbeH81fBH6rFAU53gg1gxiSZHmivme1AdQMZZ4-7C-hmdwNuSENNMKSvOsQX2GSOLaViS8Y6F6rH2Yz9744hx4WHftiGJweytYCaw7bJ416oppoTErpTuRJ8fx3qViFGVSzZFhnGmRGpbT4t81PPzUg07HPNwB4kfizgJYmCdQMYt4v7sCRNmWqD07gkoykeva3uUzG49~xZN0G2885MVo7ZD7sEcKvnVfQb75Dm90H06VkTkQVghpogb2DsZs2D4N6Rsvg__",
+    "asset_id": "child_crib_mobile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "family",
+    "epoch": "any",
+    "name": "Child Crib Mobile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
