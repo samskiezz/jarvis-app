@@ -4086,5 +4086,22 @@
     "epoch": "industrial",
     "name": "Bunsen Burner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:calculating_machine": {
+    "prompt": "a brass mechanical calculating machine, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b8c4c8f5-4086-44c9-bab1-da773da39723",
+    "path": "/models/generated/tripo/calculating_machine.glb",
+    "bytes": 14996068,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b8c4c8f5-4086-44c9-bab1-da773da39723/tripo_pbr_model_b8c4c8f5-4086-44c9-bab1-da773da39723.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjhjNGM4ZjUtNDA4Ni00NGM5LWJhYjEtZGE3NzNkYTM5NzIzL3RyaXBvX3Bicl9tb2RlbF9iOGM0YzhmNS00MDg2LTQ0YzktYmFiMS1kYTc3M2RhMzk3MjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=VHSGt3oKJV-IgnCXRb-OsUZl6GTgtZCxsZJdq0x0-8FX7i4EPeQMn3FthbQg-I9p0gX8gBAKlydxxPHYAGh1LZEz2bmtgsDmGW7QbFutHqjg1XtiCSjaf7ErLQWfTu25COZxncXF0wiUxpWayIP6mz99VLTOeF28y1ll2mOH6e-GnDg0SpCcFldN1a7JW-bGrnTGUgavi~KCq7huOb6E2UlcBVeQfh7fxEDYOAFn9Hng~Qye1-xrtgH5u1TLaMcrANj6~06aC~BrMk2XTUNhbpjZVymOzWjxSbfNLvWA03O26TuXRYXUR9q0WeLtHFGi4j1VjiHNTEVEGGjO7jaiig__",
+    "asset_id": "calculating_machine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Calculating Machine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
