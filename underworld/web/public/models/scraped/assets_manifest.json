@@ -8812,5 +8812,22 @@
     "epoch": "information",
     "name": "Guild Computing Hall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_electrical_workshop": {
+    "prompt": "an electrical engineering workshop with cables and panels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8cc247e5-55b1-47cb-a84e-b0ec67aec999",
+    "path": "/models/generated/tripo/guild_electrical_workshop.glb",
+    "bytes": 15107628,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8cc247e5-55b1-47cb-a84e-b0ec67aec999/tripo_pbr_model_8cc247e5-55b1-47cb-a84e-b0ec67aec999.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGNjMjQ3ZTUtNTViMS00N2NiLWE4NGUtYjBlYzY3YWVjOTk5L3RyaXBvX3Bicl9tb2RlbF84Y2MyNDdlNS01NWIxLTQ3Y2ItYTg0ZS1iMGVjNjdhZWM5OTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DZ1Q8Oync5vJmFClTcsJbUZ1BrQtmxgEkYfbJHJW52l5WYFwfowV6Ok~5VtO6n2at~GlDXkCCzQwSUEhCY~c0LbS7kdbJxI8NU3-G~2P78RvvJ2zA8ZtMYAo8o9VS1xAv2iRRmQMRvkpVQblf124x4O8jLTOsFfmb6gnZouVWNFCmKcxpk7wADcu1Bg1l7ttCwx-sx7WbeLhLW7Zml8jmxxOTwz-C5aVYKd~FMvPzPkWAMRxq3FYE-PhnraKeuPR69Rt6N1dbC0953gfnFwkLYXTzn8N-r7h1Ru3nhL1rI8jjnD3BiUA6lVJRPZ2WwjNuQ3x-TiTlZT903Pa3xSp~Q__",
+    "asset_id": "guild_electrical_workshop",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Guild Electrical Workshop",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
