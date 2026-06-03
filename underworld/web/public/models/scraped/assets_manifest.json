@@ -2182,5 +2182,22 @@
     "epoch": "quantum",
     "name": "Fx Floating Crystal",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_floating_island": {
+    "prompt": "a small floating island of rock with grass and a tiny waterfall, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "a4217f54-2dc0-45c5-bd2e-e8587bfd5a42",
+    "path": "/models/generated/tripo/fx_floating_island.glb",
+    "bytes": 15175496,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a4217f54-2dc0-45c5-bd2e-e8587bfd5a42/tripo_pbr_model_a4217f54-2dc0-45c5-bd2e-e8587bfd5a42.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTQyMTdmNTQtMmRjMC00NWM1LWJkMmUtZTg1ODdiZmQ1YTQyL3RyaXBvX3Bicl9tb2RlbF9hNDIxN2Y1NC0yZGMwLTQ1YzUtYmQyZS1lODU4N2JmZDVhNDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=lsrvIIhiHe7m7LqeEn-t33rkGooy4-1M0r7hpYX0Ft0LyCjOGDmrU9zciVKCxj4CwIahROfg-f6kIk2khcavG3Ly8p3whDS9NHOBsuXU2q1BF519mjJ~Tp~TaBh~uRMtMyotMFp7loau5PHtvKvRPq4S8hqW9kkMspujPOqXz~geZBaX5JD86nLhZiI0FNanhQrqsKFtSoCcYaSvJ9wJmQTaRPGuK05GKRtoIVPQLlpAcI3pYlWyux~qh3LAm8GAspsRnAK5KLI0KG2XPcWjiosavdc7Vk-ZlJUz-It8BKidB4cYQ1h4jLuCi~YjilK9ZVrSnxLMnHTbc0pj~tvZyg__",
+    "asset_id": "fx_floating_island",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "quantum",
+    "name": "Fx Floating Island",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
