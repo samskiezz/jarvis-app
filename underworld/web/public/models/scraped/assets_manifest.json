@@ -3338,5 +3338,22 @@
     "epoch": "industrial",
     "name": "Stove",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:table_coffee": {
+    "prompt": "a low coffee table, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "65926bb0-6cc3-4a34-976e-299689e38dea",
+    "path": "/models/generated/tripo/table_coffee.glb",
+    "bytes": 14778584,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/65926bb0-6cc3-4a34-976e-299689e38dea/tripo_pbr_model_65926bb0-6cc3-4a34-976e-299689e38dea.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNjU5MjZiYjAtNmNjMy00YTM0LTk3NmUtMjk5Njg5ZTM4ZGVhL3RyaXBvX3Bicl9tb2RlbF82NTkyNmJiMC02Y2MzLTRhMzQtOTc2ZS0yOTk2ODllMzhkZWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qgHlRSHQmGaxKH65bPBTKe3RpBJRryVmFNNmhYbCcmWN2OqAVa8jDkd~rMULqmq3IOr-ytkqWPvGXLVZPruYElbuIpQTyKTVlnDcbE5ulZKDSloLYYE7NJlbE5HtD8aj8BU4SMWB3ecLBZIojnDExOAxF7F6Pr6PpzoAWu9bh6AwPFmx9vBqybLPV01p7Dq2Pbwk8qGQPavh91P9qm565uQOUxnlylf2f7s~8FzO6Khigj3WJCXIkabYxxHfhdIBOb0-xSrjzHZrSmwIskoj-rSTOBlosi0Cr2fWCiCAj4BkKmbWPeR16ICuO60kO5CnLJhokLHPWULzP8--SWyBIQ__",
+    "asset_id": "table_coffee",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Table Coffee",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
