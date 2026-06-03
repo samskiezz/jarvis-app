@@ -4052,5 +4052,22 @@
     "epoch": "industrial",
     "name": "Blueprint Table",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:breadboard_rig": {
+    "prompt": "an electronics breadboard prototyping rig, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "aebb5cd4-e6ed-446b-b4ba-0b67ce26a2ce",
+    "path": "/models/generated/tripo/breadboard_rig.glb",
+    "bytes": 15188028,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/aebb5cd4-e6ed-446b-b4ba-0b67ce26a2ce/tripo_pbr_model_aebb5cd4-e6ed-446b-b4ba-0b67ce26a2ce.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWViYjVjZDQtZTZlZC00NDZiLWI0YmEtMGI2N2NlMjZhMmNlL3RyaXBvX3Bicl9tb2RlbF9hZWJiNWNkNC1lNmVkLTQ0NmItYjRiYS0wYjY3Y2UyNmEyY2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=X4RzwRBzkmoG4XlrhL4fbZ7qyhZJjTuGI4sZZWtEnhBV~cj99QQhB138yYFXnpegt5a-WfIW94Zh~RMgf2G6iCTt9pSoea0USk5UEmYJ-tQXIlZkXEyFzK6KnmgXsPrpeVSe-SIaNUGJeD6Cr6TJzgjAjVJJa4Ny3yB94OqkNeLzpE91Ao320ysAfO7hQHW75G-rfJvXqYHfK56QYieXw5ZbW9tDUzBg9rnCvYrvhMqxsMjk0PQbb5oJf8a5oOhJ0YSVpCL-w7lNlPVsk9xgf45euR1shASNgQD60T7vkYl8laobBH4N3q51Vt8IaoH5JEk3LS0rRFB0QjftOxUiSw__",
+    "asset_id": "breadboard_rig",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Breadboard Rig",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
