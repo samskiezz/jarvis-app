@@ -6381,5 +6381,22 @@
     "epoch": "any",
     "name": "Timber Stack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:altar": {
+    "prompt": "a stone offering altar with candles, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b9dec29d-ebfb-4e28-960e-4fd0850b0138",
+    "path": "/models/generated/tripo/altar.glb",
+    "bytes": 15022116,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b9dec29d-ebfb-4e28-960e-4fd0850b0138/tripo_pbr_model_b9dec29d-ebfb-4e28-960e-4fd0850b0138.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjlkZWMyOWQtZWJmYi00ZTI4LTk2MGUtNGZkMDg1MGIwMTM4L3RyaXBvX3Bicl9tb2RlbF9iOWRlYzI5ZC1lYmZiLTRlMjgtOTYwZS00ZmQwODUwYjAxMzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=DnQ5i0Jw3Tdt8ZCF3GTyhWqwrYgllxizzoQ~jGSwhghZ3dbyDRPG-nTtQVt4wgAhn-rWr0XiIN6Lhfh2YnbUpVsXEhuTrobmGVdI0UxZfaCcj6Q4549tdQegbTCE9yT9MoZHzy-JvhP9-~pmpS5LqjmCwj6UXl6osTeUEfHBqifHn9V4izWnjmqNZ4JFqR3n6ct2EsMhVjRvvYaNf7EAiodZo6K81sTxok43aw7FFKcZbb4IRVxJDeMekfXPjfuQxIdokgJ2OhYzDsnt4~qevbqdCcTWma0L6M1ww5Yuajm2nHbx2KqcKWHtWkDfbhnhlfMRjR1AuNBt-AJnzCNzjQ__",
+    "asset_id": "altar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "bronze",
+    "name": "Altar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
