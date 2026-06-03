@@ -7350,5 +7350,22 @@
     "epoch": "industrial",
     "name": "Telegraph",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:telephone_old": {
+    "prompt": "a vintage candlestick telephone, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8da89514-b11f-4e07-a838-208ff2437302",
+    "path": "/models/generated/tripo/telephone_old.glb",
+    "bytes": 14800664,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8da89514-b11f-4e07-a838-208ff2437302/tripo_pbr_model_8da89514-b11f-4e07-a838-208ff2437302.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGRhODk1MTQtYjExZi00ZTA3LWE4MzgtMjA4ZmYyNDM3MzAyL3RyaXBvX3Bicl9tb2RlbF84ZGE4OTUxNC1iMTFmLTRlMDctYTgzOC0yMDhmZjI0MzczMDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=lwiFwc4-K-1RGNCG8AXo0J8D3dukVq2L-ppZ614XJXXBnrT0M6F35PN4GcfY-3wLb4QJ-r352Hj7eZpgHWsEZUJ~Bgjb6QcSGSmu0H~~BYOkGvrZNXyr2PsXLmjyvMdxpWfhk-mnAZnLjdOnYwKohXl~HpRnk7YeaGqXrJTpgEnL3ewJGXhOU5jGr1axOkZT0TI9bft05ZEO8KP4vVWKTpQgWjZVfRuoSDlJNlMewA~KzugbfmOZv4TS~iv7txLNTXT6gpJDJRLpkguLNuKSXC5TDSKEGpRwynp1nYNphFpV8cT4ZYgBH3-tp73eUVHVqy8Fhq0kFXTNmbstqarpVg__",
+    "asset_id": "telephone_old",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Telephone Old",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
