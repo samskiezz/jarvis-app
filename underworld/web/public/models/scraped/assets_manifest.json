@@ -3270,5 +3270,22 @@
     "epoch": "any",
     "name": "Painting",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plant_pot": {
+    "prompt": "a potted indoor plant, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "31bf872d-013a-4360-8727-83b5af5e31c4",
+    "path": "/models/generated/tripo/plant_pot.glb",
+    "bytes": 14810436,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/31bf872d-013a-4360-8727-83b5af5e31c4/tripo_pbr_model_31bf872d-013a-4360-8727-83b5af5e31c4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzFiZjg3MmQtMDEzYS00MzYwLTg3MjctODNiNWFmNWUzMWM0L3RyaXBvX3Bicl9tb2RlbF8zMWJmODcyZC0wMTNhLTQzNjAtODcyNy04M2I1YWY1ZTMxYzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=brgb7aG2MsSaspvk5YpTySRc9sDmETeCNFy32j-a5vcSY-Q2EwDQ5EhdLAe~JWrynzNdq4FbRncl15qp6pAOvRaK-k~yvr99l-dBNVQFMkosLL2EtYeOu-mN3RNf0jIGAutZ~OGWEaVQjCz5wnASpR-Vok1wY7r1jY2CjECPg3N5gch9td3R-x6OWAz9yRH21KyfD4DdbbOWAJi4~62TO4E6fWeUmFOSJgfLa4wS9y3JFBUWQhcXbT4m-g79s-bWKOZG2ZKp3LXY-sLa0ZVUoWjUGnaY9-Lt4EB-lHr8bZhnZS~U7ZNOeOHV-4OHG4cu3EpSdH-P1shgAecCOxwdyA__",
+    "asset_id": "plant_pot",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Plant Pot",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
