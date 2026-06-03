@@ -1655,5 +1655,22 @@
     "epoch": "any",
     "name": "Winter Bare Tree",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cinema_marquee": {
+    "prompt": "a cinema building with a lit marquee, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "e548b23e-9dc5-4854-a5fa-c7d9e24ee307",
+    "path": "/models/generated/tripo/cinema_marquee.glb",
+    "bytes": 15111072,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e548b23e-9dc5-4854-a5fa-c7d9e24ee307/tripo_pbr_model_e548b23e-9dc5-4854-a5fa-c7d9e24ee307.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTU0OGIyM2UtOWRjNS00ODU0LWE1ZmEtYzdkOWUyNGVlMzA3L3RyaXBvX3Bicl9tb2RlbF9lNTQ4YjIzZS05ZGM1LTQ4NTQtYTVmYS1jN2Q5ZTI0ZWUzMDcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=nq9RTH0sbXzBOy0V~YiJXVvw53oTfZyNn5JRBbpNFcIbM2W~MCsPGvl33uUqT9pQJCP75Q2whTk9UiVwDdghpdnVEVdemZB4RDCRLlYjd34H6JclPLLLg7-UMnPY3SjTy1bNK-7R8XFyd-i6bUvtJXpfJ6z3dut7ow-~IobcsxUhj4z362dKW93yBDll5x1-lE7npy-WRb72A~DKvG~tPEMFP7ej7tEkwBYkbzxtCdyE8sotFkpJ3ryhmden~SshupktziKYxUqXsuHM3JlK5V-Zotz-YHr0Vf-T1r3i2hvmnM~8A-AanNBPzzHvQlcC-5Wqkc07sXKVapwWpv63Gg__",
+    "asset_id": "cinema_marquee",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Cinema Marquee",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
