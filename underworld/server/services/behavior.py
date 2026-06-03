@@ -36,7 +36,7 @@ ACTIONS = (
     "seek_ascension", "study", "rest", "eat", "drink", "socialise",
     "seek_partner", "meditate", "fork_self", "teach", "kb_lookup", "calculate",
     # deepened lived actions (services/activities.py)
-    "forage", "worship", "craft", "trade", "celebrate", "heal", "mentor",
+    "forage", "worship", "craft", "trade", "celebrate", "heal", "mentor", "gene_edit",
 )
 GUILDS = (
     "maths", "physics", "electrical", "mechanical", "civil", "materials",
@@ -230,6 +230,7 @@ _LOCATION: dict[str, str] = {
     "forage": "produce_basket", "worship": "altar", "craft": "workbench_vice",
     "trade": "market_stall", "celebrate": "tavern_table",
     "heal": "wound_bandage_kit", "mentor": "mentor_apprentice_bench",
+    "gene_edit": "dna_sequencer",
 }
 
 # Whether an action is "work" (gets the guild tool + project-stage choreography).
@@ -437,6 +438,12 @@ def _core(ctx: Context, loc: str, suffix: str) -> list[MicroStep]:
     if a == "mentor":
         return [MicroStep("sit", "mentor_apprentice_bench", f"sit{suffix}", "seat", 1.2),
                 MicroStep("teach", "apprentice_slate", "gesture_teach", "surface", 5.0)]
+    if a == "gene_edit":
+        return [MicroStep("sit", "chair_office", f"sit{suffix}", "seat", 1.0),
+                MicroStep("load", "dna_sequencer", "load_sample", "machine", 2.0),
+                MicroStep("unzip", "dna_double_helix_model", "unzip_helix", "machine", 4.0, fx="helix_melt"),
+                MicroStep("edit", "crispr_cas9_model", "crispr_cut", "machine", 4.0, fx="crispr_spark"),
+                MicroStep("read_result", "genome_sequencer_bench", "read_screen", "surface", 3.0)]
     return [MicroStep("idle", loc, "idle", "none", 2.0)]
 
 

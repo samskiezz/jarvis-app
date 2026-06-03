@@ -161,6 +161,9 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
                   "sanity": round(m.sanity or 0, 3)},
         "saga": saga_title or (m.brain or {}).get("saga", {}).get("title"),
         "behavior": behavior,
+        # When a Minion has just done CRISPR work, expose the colour-coded helix +
+        # edit so the renderer can visualise the unzip and the cut/insert.
+        "gene_edit": (m.brain or {}).get("gene_edit"),
         "alive": bool(m.alive),
     }
 

@@ -78,6 +78,7 @@ _ACTIONS = {
     "celebrate",            # a festival / shared joy
     "heal",                 # tend wounds (self or a neighbour)
     "mentor",               # guide an apprentice
+    "gene_edit",            # CRISPR: unzip a helix + edit the DNA (information era)
 }
 
 # Doc II.131 — actions that advance the App's mission and so confer purpose.

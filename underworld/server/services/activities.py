@@ -26,6 +26,7 @@ UNLOCKS_BY_ERA: dict[str, tuple[str, ...]] = {
     "stone": ("forage", "worship"),
     "bronze": ("craft", "trade", "celebrate"),
     "iron": ("heal", "mentor"),
+    "information": ("gene_edit",),   # CRISPR epoch — real molecular genetics
 }
 NEW_ACTIONS: frozenset[str] = frozenset(a for v in UNLOCKS_BY_ERA.values() for a in v)
 
@@ -104,8 +105,55 @@ def mentor(m, rng: random.Random) -> Effect:
                   neighbour_deltas={"sanity": +0.03})
 
 
+def gene_edit(m, rng: random.Random) -> Effect:
+    """Perform a REAL CRISPR edit: unzip a DNA helix, find a PAM-adjacent target,
+    cut and edit the sequence. The molecular result (before/after + colour-coded
+    helix view) is stored on the Minion's brain for the renderer to show."""
+    from underworld.server.services import molecular_genetics as MG
+
+    dna = str(getattr(m, "dna", "") or "")
+    if not MG.is_dna(dna) or len(dna) < 30:
+        dna = "".join(rng.choice(MG.BASES) for _ in range(60))
+    # take a real sample window, find a PAM, derive the on-target guide, then edit
+    pams = MG.find_pam_sites(dna)
+    guide, sample = None, dna
+    for p in pams:
+        if p - MG.SPACER_LEN >= 0:
+            guide = dna[p - MG.SPACER_LEN:p]
+            sample = dna[max(0, p - MG.SPACER_LEN - 4):p + 8]
+            break
+    if guide is None:                         # no PAM in this genome → engineer one
+        sample = "".join(rng.choice(MG.BASES) for _ in range(20)) + "TGG"
+        guide = sample[:20]
+    choice = rng.random()
+    if choice < 0.34:
+        res = MG.crispr_edit(sample, guide, delete=3)        # knockout
+    elif choice < 0.67:
+        res = MG.crispr_edit(sample, guide, insert="ATG")    # knock-in
+    else:
+        res = MG.crispr_edit(sample, guide)                  # NHEJ frameshift
+    melt = MG.denature(sample, temperature=98)               # unzip the helix
+    try:
+        brain = dict(getattr(m, "brain", None) or {})
+        brain["gene_edit"] = {
+            "kind": res.kind, "changed": res.changed,
+            "on_target_mismatches": res.on_target.mismatches if res.on_target else None,
+            "off_targets": len(res.off_targets),
+            "helix": MG.helix_view(sample, edit=res),
+            "denatured": melt.denatured, "tm_celsius": melt.tm,
+        }
+        m.brain = brain
+    except Exception:
+        pass
+    verb = {"knockout": "knocked out", "knock_in": "inserted a gene into",
+            "replace": "rewrote", "no_cut": "found no PAM site in"}.get(res.kind, "edited")
+    return Effect(f"Unzipped a DNA helix and {verb} the sequence with CRISPR-Cas9 "
+                  f"({res.off_targets and len(res.off_targets) or 0} off-targets).",
+                  {"reputation": +0.05, "sanity": +0.06, "fatigue": -0.06})
+
+
 _FN = {"forage": forage, "worship": worship, "craft": craft, "trade": trade,
-       "celebrate": celebrate, "heal": heal, "mentor": mentor}
+       "celebrate": celebrate, "heal": heal, "mentor": mentor, "gene_edit": gene_edit}
 
 # Actions that act on a neighbour when one is available (target the neediest).
 _TARGETED = {"heal", "celebrate", "mentor"}
