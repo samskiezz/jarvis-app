@@ -5871,5 +5871,22 @@
     "epoch": "any",
     "name": "Winter Cloak",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wrench": {
+    "prompt": "a steel adjustable wrench, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bd6a3278-a71b-41c1-b567-422a766ffdf7",
+    "path": "/models/generated/tripo/wrench.glb",
+    "bytes": 8498008,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bd6a3278-a71b-41c1-b567-422a766ffdf7/tripo_pbr_model_bd6a3278-a71b-41c1-b567-422a766ffdf7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmQ2YTMyNzgtYTcxYi00MWMxLWI1NjctNDIyYTc2NmZmZGY3L3RyaXBvX3Bicl9tb2RlbF9iZDZhMzI3OC1hNzFiLTQxYzEtYjU2Ny00MjJhNzY2ZmZkZjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qTZ1NCXprjMbupvuuNORZnTzB32NbAuLJVeA~YFB9iOt7sw13Pbnl9foeRWWOr8~LraRhffWtVAvDO8xv-XcZpzQ2KlXff-ZdJlNi4rxEKSQxK90-P-KPMPkbWWWx5J8J3DIP0kCBdHqExyyg47wDf7djm9M1QzExfVKjQ0jW~maYyWjiTm9lH0s40UNOV5CH2GCOB~26CFdP8wGAKSr~L5QtkvzNVlrb~uiLZCWPfS4pF3wIT2Y3B0yjfoToZVacdATvLxyQRR1IU8x6vsjCugRA1fIIS4WoDMu5EI6CbdgPfHnL76KQ-NcH5nFjP0IhtLe3LXAqMsogP8e6gY9eQ__",
+    "asset_id": "wrench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Wrench",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
