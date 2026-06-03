@@ -7401,5 +7401,22 @@
     "epoch": "iron",
     "name": "Watermill",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:windmill": {
+    "prompt": "a traditional windmill, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "89eed7a5-d1e8-4a6e-8f27-5ff49259992c",
+    "path": "/models/generated/tripo/windmill.glb",
+    "bytes": 15002084,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/89eed7a5-d1e8-4a6e-8f27-5ff49259992c/tripo_pbr_model_89eed7a5-d1e8-4a6e-8f27-5ff49259992c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODllZWQ3YTUtZDFlOC00YTZlLThmMjctNWZmNDkyNTk5OTJjL3RyaXBvX3Bicl9tb2RlbF84OWVlZDdhNS1kMWU4LTRhNmUtOGYyNy01ZmY0OTI1OTk5MmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=adrD1BQOGJAM75aAoo7XNtYcHmadVJ0k58465PfV0fqEluDpq1k3GLMGXWqV4G~WyKEx3dyXNeDOkSODGuy5hrIFL~lVQLeau9iB~E6C4UsVBFr57eLoilnAmjvaNdXqjBbWu7Eck6znep~JW2lc3cZDNep0xdbhTjq4N0wet8sRFHDBXNteDdO27uz7tvRnwryOl12KaDibAHFUa0dLmZksfkUuq2vOOd3VJO-mr-Y7acfilPZoEHBi0H~-n6JABeJ8zcrC18RJOmtn4-igpWCxhhAEe1Te7VZzDJBGvsWoC1avQ-~DKfq6Ru~daXSLHlgwX8QSMhR96vrE6NLeYQ__",
+    "asset_id": "windmill",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "iron",
+    "name": "Windmill",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
