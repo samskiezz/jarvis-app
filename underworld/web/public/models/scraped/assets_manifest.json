@@ -4953,5 +4953,22 @@
     "epoch": "information",
     "name": "Server Rack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:solar_array": {
+    "prompt": "a tilted solar panel array, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f4ff0ee4-7b45-4bf5-9fe3-2371fc1cb68d",
+    "path": "/models/generated/tripo/solar_array.glb",
+    "bytes": 14937780,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f4ff0ee4-7b45-4bf5-9fe3-2371fc1cb68d/tripo_pbr_model_f4ff0ee4-7b45-4bf5-9fe3-2371fc1cb68d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjRmZjBlZTQtN2I0NS00YmY1LTlmZTMtMjM3MWZjMWNiNjhkL3RyaXBvX3Bicl9tb2RlbF9mNGZmMGVlNC03YjQ1LTRiZjUtOWZlMy0yMzcxZmMxY2I2OGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qyzyfLidk5QEm-ycLB1isB4wtdGbKgj0vdAdcNxh9BqEBUKWt80JmoaX39O59zAPo4Uu0Ql~HkVBAVYk5GURAEh0JsJxZrEp9e3CTn8HT366PA5EhjwDI-4zKYUB5q5S-ms-3CKGmnUty1n8MKW3wWNE7tEkOkV4U9e4w0nxeLEFHoKhjIkJCvR501VuAUNG~SdodHwKZVQuneCGJYJe6YEx8Zjp8i-o2YsxlNXm6I~VOXWncrn1VZ1YY0DVnpHBIyKVi8VUF2Nur9bAQnryoZkUnv5o0lLAPXrHglC3GFau~4ft1lA-qSe2R2TcZpxY7HGMifW~NwnbX-2mhWZ9BQ__",
+    "asset_id": "solar_array",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Solar Array",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
