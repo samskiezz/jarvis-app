@@ -14,7 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
-import { COLORS as C } from "@/domain/colors";
+import { COLORS as C, SHELL as S, glow } from "@/domain/colors";
 import { PAGES, GROUPS } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 import { interpret } from "@/lib/jarvisAgent";
@@ -125,7 +125,7 @@ export default function CommandPalette() {
         display: "flex", alignItems: "flex-start", justifyContent: "center",
         paddingTop: "14vh", background: "rgba(1,4,7,0.62)",
         backdropFilter: "blur(2px)",
-        fontFamily: "'JetBrains Mono','SF Mono',monospace",
+        fontFamily: S.ui,
       }}
     >
       <Command
@@ -133,16 +133,17 @@ export default function CommandPalette() {
         onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); close(); } }}
         style={{
           width: "min(560px, 92vw)", maxHeight: "62vh", display: "flex", flexDirection: "column",
-          background: "rgba(3,9,14,0.97)", border: `1px solid ${C.neon}44`, borderRadius: 10,
-          boxShadow: `0 12px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(0,200,120,0.05)`,
+          background: S.glass, backdropFilter: S.blur, WebkitBackdropFilter: S.blur,
+          border: `1px solid ${S.border}`, borderTop: `2px solid ${C.neon}`, borderRadius: S.radius,
+          boxShadow: glow(C.neon),
           overflow: "hidden",
         }}
       >
         <div cmdk-input-wrapper="" style={{
           display: "flex", alignItems: "center", gap: 8, padding: "10px 12px",
-          borderBottom: `1px solid ${C.border}`, background: "rgba(0,200,120,0.04)",
+          borderBottom: `1px solid ${S.border}`, background: "transparent",
         }}>
-          <span style={{ color: C.neon, fontSize: 12, opacity: 0.8 }}>⌘</span>
+          <span style={{ fontFamily: S.mono, color: C.neon, fontSize: S.fs.lg, opacity: 0.8 }}>⌘</span>
           <Command.Input
             autoFocus
             value={query}
@@ -150,14 +151,14 @@ export default function CommandPalette() {
             placeholder="Search pages, actions, or ask Jarvis…"
             style={{
               flex: 1, background: "transparent", border: "none", outline: "none",
-              color: C.textB, fontSize: 12, fontFamily: "inherit", letterSpacing: 0.4,
+              color: S.textHi, fontSize: S.fs.lg, fontFamily: S.ui, letterSpacing: 0.2,
             }}
           />
-          <span style={{ color: C.text, fontSize: 8, letterSpacing: 1 }}>ESC</span>
+          <span style={{ fontFamily: S.mono, color: S.text, fontSize: S.fs.xs, letterSpacing: 1 }}>ESC</span>
         </div>
 
         <Command.List style={{ overflowY: "auto", padding: 6 }}>
-          <Command.Empty style={{ padding: "14px 12px", color: C.text, fontSize: 10 }}>
+          <Command.Empty style={{ padding: "14px 12px", color: S.text, fontSize: S.fs.md }}>
             No matches.
           </Command.Empty>
 
@@ -215,7 +216,7 @@ export default function CommandPalette() {
 }
 
 const groupHeadingStyle = {
-  fontSize: 7, letterSpacing: 2, color: "#3a5563", padding: "8px 8px 4px", fontWeight: 700,
+  fontFamily: S.mono, fontSize: S.fs.xxs, letterSpacing: 2, color: S.text, padding: "8px 8px 4px", fontWeight: 700,
 };
 
 function Row({ value, onSelect, icon, label, meta, accent, highlight, forceMount }) {
@@ -226,13 +227,13 @@ function Row({ value, onSelect, icon, label, meta, accent, highlight, forceMount
       forceMount={forceMount}
       style={{
         display: "flex", alignItems: "center", gap: 10, padding: "7px 9px",
-        borderRadius: 6, cursor: "pointer", fontSize: 11, color: C.textB,
+        borderRadius: S.radius, cursor: "pointer", fontFamily: S.ui, fontSize: S.fs.md, color: S.textHi,
         borderLeft: `2px solid ${highlight ? accent : "transparent"}`,
       }}
     >
-      <span style={{ width: 16, textAlign: "center", color: accent, fontSize: 12, flexShrink: 0 }}>{icon}</span>
+      <span style={{ width: 16, textAlign: "center", color: accent, fontSize: S.fs.lg, flexShrink: 0 }}>{icon}</span>
       <span style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
-      {meta && <span style={{ fontSize: 7.5, letterSpacing: 1, color: accent, opacity: 0.75 }}>{meta}</span>}
+      {meta && <span style={{ fontFamily: S.mono, fontSize: S.fs.xxs, letterSpacing: 1, color: accent, opacity: 0.75 }}>{meta}</span>}
     </Command.Item>
   );
 }

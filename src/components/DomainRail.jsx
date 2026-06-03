@@ -14,7 +14,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { COLORS as C } from "@/domain/colors";
+import { COLORS as C, SHELL as S, glow } from "@/domain/colors";
 import { pagesByGroup, HOME_PAGE } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
@@ -76,16 +76,17 @@ export default function DomainRail() {
   return (
     <nav
       style={{
-        width: w, flexShrink: 0, background: "rgba(2,6,10,0.99)",
-        borderRight: `1px solid ${C.border}`, position: "sticky", top: 0, height: "100vh",
+        width: w, flexShrink: 0, background: S.glassRail, backdropFilter: S.blur,
+        WebkitBackdropFilter: S.blur,
+        borderRight: `1px solid ${S.border}`, position: "sticky", top: 0, height: "100vh",
         transition: "width 0.18s", zIndex: 50, display: "flex", flexDirection: "column",
-        fontFamily: "'JetBrains Mono',Courier New,monospace",
+        fontFamily: S.ui,
       }}
       onMouseLeave={scheduleClose}
     >
       {/* brand / APEX home */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 10px 10px",
-        borderBottom: `1px solid ${C.border}` }}>
+        borderBottom: `1px solid ${S.border}` }}>
         <Link to={apexUrl(HOME_PAGE.name)} title={`APEX — ${HOME_PAGE.label}`}
           style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}>
           <svg width={22} height={22} viewBox="0 0 24 24">
@@ -93,9 +94,9 @@ export default function DomainRail() {
             <circle cx={12} cy={12} r={2.5} fill={C.neon} />
           </svg>
         </Link>
-        {expanded && <span style={{ color: C.neon, fontSize: 12, letterSpacing: 3, fontWeight: 700 }}>JARVIS</span>}
+        {expanded && <span style={{ fontFamily: S.mono, color: C.neon, fontSize: S.fs.md, letterSpacing: 3, fontWeight: 700 }}>JARVIS</span>}
         <button onClick={() => setExpanded((v) => !v)} title="toggle rail (⌘\)"
-          style={{ marginLeft: "auto", background: "none", border: "none", color: C.text, cursor: "pointer", fontSize: 13 }}>
+          style={{ marginLeft: "auto", background: "none", border: "none", color: S.text, cursor: "pointer", fontSize: S.fs.lg }}>
           {expanded ? "«" : "»"}
         </button>
       </div>
@@ -117,13 +118,13 @@ export default function DomainRail() {
                 style={{
                   width: "100%", display: "flex", alignItems: "center", gap: 10,
                   padding: expanded ? "8px 12px" : "9px 0", justifyContent: expanded ? "flex-start" : "center",
-                  background: on ? "rgba(0,200,120,0.08)" : "transparent",
+                  background: on ? `${g.color}14` : "transparent",
                   borderLeft: `2px solid ${on ? g.color : "transparent"}`,
                   border: "none", borderLeftWidth: 2, borderLeftStyle: "solid",
-                  color: on ? C.textB : C.text, cursor: "pointer", transition: "all 0.12s",
+                  color: on ? S.textHi : S.text, cursor: "pointer", transition: "all 0.12s",
                 }}>
-                <span style={{ fontSize: 15, flexShrink: 0, color: g.color }}>{DOMAIN_GLYPH[g.id] || "◆"}</span>
-                {expanded && <span style={{ fontSize: 8, letterSpacing: 1.5, fontWeight: 700, color: g.color, whiteSpace: "nowrap" }}>{g.label}</span>}
+                <span style={{ fontSize: S.fs.xl - 3, flexShrink: 0, color: on ? g.color : S.text }}>{DOMAIN_GLYPH[g.id] || "◆"}</span>
+                {expanded && <span style={{ fontFamily: S.ui, fontSize: S.fs.xs, letterSpacing: 1, fontWeight: 600, color: on ? g.color : S.text, whiteSpace: "nowrap" }}>{g.label}</span>}
               </button>
             </div>
           );
@@ -138,12 +139,12 @@ export default function DomainRail() {
           display: "flex", alignItems: "center", gap: 8,
           justifyContent: expanded ? "flex-start" : "center",
           padding: expanded ? "10px 12px" : "10px 0",
-          borderTop: `1px solid ${C.border}`, background: "none", border: "none",
-          borderTopWidth: 1, borderTopStyle: "solid", borderTopColor: C.border,
-          color: C.neon, cursor: "pointer", fontSize: 11, letterSpacing: 1,
+          borderTop: `1px solid ${S.border}`, background: "none", border: "none",
+          borderTopWidth: 1, borderTopStyle: "solid", borderTopColor: S.border,
+          color: S.textHi, cursor: "pointer", fontFamily: S.mono, fontSize: S.fs.md, letterSpacing: 1,
         }}>
-        <span style={{ fontSize: 12 }}>⌘K</span>
-        {expanded && <span style={{ fontSize: 8, color: C.text, letterSpacing: 1 }}>COMMAND</span>}
+        <span style={{ fontSize: S.fs.md }}>⌘K</span>
+        {expanded && <span style={{ fontSize: S.fs.xs, color: S.text, letterSpacing: 1 }}>COMMAND</span>}
       </button>
 
       {/* flyout — pages of the hovered/active domain */}
@@ -153,12 +154,13 @@ export default function DomainRail() {
           onMouseLeave={scheduleClose}
           style={{
             position: "fixed", left: w, top: 0, minWidth: 190, maxHeight: "100vh", overflowY: "auto",
-            background: "rgba(3,9,14,0.98)", borderRight: `1px solid ${C.border}`,
-            borderLeft: `1px solid ${activeFlyoutGroup.color}55`,
-            boxShadow: "8px 0 30px rgba(0,0,0,0.6)", zIndex: 60, padding: "10px 0",
-            fontFamily: "'JetBrains Mono',monospace",
+            background: S.glass, backdropFilter: S.blur, WebkitBackdropFilter: S.blur,
+            borderRight: `1px solid ${S.border}`,
+            borderLeft: `2px solid ${activeFlyoutGroup.color}`,
+            boxShadow: glow(activeFlyoutGroup.color), zIndex: 60, padding: "10px 0",
+            fontFamily: S.ui,
           }}>
-          <div style={{ fontSize: 7, letterSpacing: 2, color: activeFlyoutGroup.color, opacity: 0.85,
+          <div style={{ fontFamily: S.mono, fontSize: S.fs.xxs, letterSpacing: 2, color: activeFlyoutGroup.color,
             padding: "2px 14px 8px", fontWeight: 700 }}>{activeFlyoutGroup.label}</div>
           {activeFlyoutGroup.pages.map((p) => {
             const active = isActivePath(p.name);
@@ -167,12 +169,12 @@ export default function DomainRail() {
                 style={{
                   display: "flex", alignItems: "center", gap: 9, textDecoration: "none",
                   padding: "6px 14px",
-                  background: active ? "rgba(0,200,120,0.1)" : "transparent",
+                  background: active ? `${activeFlyoutGroup.color}14` : "transparent",
                   borderLeft: `2px solid ${active ? activeFlyoutGroup.color : "transparent"}`,
-                  color: active ? C.textB : C.text, transition: "all 0.12s",
+                  color: active ? S.textHi : S.text, transition: "all 0.12s",
                 }}>
-                <span style={{ fontSize: 13, flexShrink: 0 }}>{p.icon}</span>
-                <span style={{ fontSize: 9.5, letterSpacing: 0.5, whiteSpace: "nowrap" }}>{p.label}</span>
+                <span style={{ fontSize: S.fs.lg, flexShrink: 0, color: active ? activeFlyoutGroup.color : S.text }}>{p.icon}</span>
+                <span style={{ fontSize: S.fs.sm, letterSpacing: 0.3, whiteSpace: "nowrap" }}>{p.label}</span>
               </Link>
             );
           })}

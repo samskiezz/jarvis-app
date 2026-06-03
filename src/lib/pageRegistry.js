@@ -24,6 +24,7 @@ export const GROUPS = [
   { id: "cognition", label: "COGNITION",       color: "#a855f7" },
   { id: "apex",      label: "APEX CORE",       color: "#f07820" },
   { id: "knowledge", label: "KNOWLEDGE",       color: "#e8a800" },
+  { id: "theaters",  label: "THEATERS",        color: "#e8203c" },
   { id: "wealth",    label: "WEALTH & SYSTEM", color: "#566878" },
 ];
 
@@ -92,11 +93,11 @@ export const PAGES = [
   // ── UNDERWORLD (separate destination — not shown in the APEX dock) ────────
   { name: "Underworld", label: "Underworld", icon: "🏙", group: "sim", dest: "underworld",
     component: P(() => import("@/pages/Underworld")) },
-  { name: "WarEnvironment", label: "War Environment", icon: "🎯", group: "sim", dest: "underworld",
+  { name: "WarEnvironment", label: "War Environment", icon: "🎯", group: "theaters",
     component: P(() => import("@/pages/WarEnvironment")) },
-  { name: "GameArena", label: "Game Arena", icon: "🕹", group: "sim", dest: "underworld",
+  { name: "GameArena", label: "Game Arena", icon: "🕹", group: "theaters",
     component: P(() => import("@/pages/GameArena")) },
-  { name: "GameLeaderboard", label: "Game Leaderboard", icon: "🏆", group: "sim", dest: "underworld",
+  { name: "GameLeaderboard", label: "Game Leaderboard", icon: "🏆", group: "theaters",
     component: P(() => import("@/pages/GameLeaderboard")) },
 ];
 
