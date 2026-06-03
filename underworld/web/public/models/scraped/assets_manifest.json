@@ -4817,5 +4817,22 @@
     "epoch": "information",
     "name": "Probe Station",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:protein_crystallography_rig": {
+    "prompt": "a protein crystallography diffraction bench, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e72e82cd-fd11-4c80-b201-1b3c7e2e4c6f",
+    "path": "/models/generated/tripo/protein_crystallography_rig.glb",
+    "bytes": 14721628,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e72e82cd-fd11-4c80-b201-1b3c7e2e4c6f/tripo_pbr_model_e72e82cd-fd11-4c80-b201-1b3c7e2e4c6f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTcyZTgyY2QtZmQxMS00YzgwLWIyMDEtMWIzYzdlMmU0YzZmL3RyaXBvX3Bicl9tb2RlbF9lNzJlODJjZC1mZDExLTRjODAtYjIwMS0xYjNjN2UyZTRjNmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Yu1abTZOEVwDL5UwZNZexdARSSmAR~249m6wRuYo-79ifWOsOe3Ekk0DvHsL1QWrI15WBBMA~iA6zfopYyg~LZLLCRl-Lv5VfhUFUJb5iUkyEnx2aVg33ndQcNgUYeZFmSH2MMpb60RDjKDo16WIuh0byyPn6EKNLWJssNzKbrtyDN755oolVh0ZsjXYE9k~wvWwoiZcnsvbKmdU060BK-8UIPW3aDjiG3Ekpl9yCy38VvEST~NrUkR3xoOWoJ7aO~o9woOOdn1iOOOFFNyMNXluSuurShV0bYsmcqIScw4wI-vlpEwkl4c9vY~NY-aNtf4k24JmOYNhYjC6Yp58Mw__",
+    "asset_id": "protein_crystallography_rig",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Protein Crystallography Rig",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
