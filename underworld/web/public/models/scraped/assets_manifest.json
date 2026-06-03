@@ -2199,5 +2199,22 @@
     "epoch": "quantum",
     "name": "Fx Floating Island",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_floating_lantern": {
+    "prompt": "a glowing paper lantern floating in the air, warm light, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "bc67db32-58c5-46bf-886d-4ebd39c9f096",
+    "path": "/models/generated/tripo/fx_floating_lantern.glb",
+    "bytes": 14814776,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/bc67db32-58c5-46bf-886d-4ebd39c9f096/tripo_pbr_model_bc67db32-58c5-46bf-886d-4ebd39c9f096.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYmM2N2RiMzItNThjNS00NmJmLTg4NmQtNGViZDM5YzlmMDk2L3RyaXBvX3Bicl9tb2RlbF9iYzY3ZGIzMi01OGM1LTQ2YmYtODg2ZC00ZWJkMzljOWYwOTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=FebitLCD4EqHzxrM8sG-Nb4Cof5W6BEf7qRuo509P5RitS-BfG98W~S1B~ZWiy1F6Az3zNMlyWSWkxMG2VAQy7vYou2TJipI8KfSBNUa4VYKGSaNol28M5788iDKxA8-W2dRh9Fj1iYWWUwx3YeI3L7~w6pvZJ-zaH8EAsvibYXBndOR~7AtogNCTiRnnE3H3yUOTgpm2S5YBLrYw~WRaRzqoSMgBUVai1wMZR~9TMFlO1cX4i-raaIKijxRtlsHtrkzTHxISNBlIPn07V34GldLZWd7n9pvrpF6pd9NpmXhWbnnt1OE2X6DW9E9cU84fy4cDsWcyZnHGTeR3t7Rzw__",
+    "asset_id": "fx_floating_lantern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Floating Lantern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
