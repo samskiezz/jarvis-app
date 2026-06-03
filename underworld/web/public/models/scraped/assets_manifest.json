@@ -6398,5 +6398,22 @@
     "epoch": "bronze",
     "name": "Altar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:constitution_display": {
+    "prompt": "a framed constitution document under glass on a stand, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b669f736-426f-4014-b23b-b8d9fe9f0f82",
+    "path": "/models/generated/tripo/constitution_display.glb",
+    "bytes": 13293020,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b669f736-426f-4014-b23b-b8d9fe9f0f82/tripo_pbr_model_b669f736-426f-4014-b23b-b8d9fe9f0f82.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjY2OWY3MzYtNDI2Zi00MDE0LWIyM2ItYjhkOWZlOWYwZjgyL3RyaXBvX3Bicl9tb2RlbF9iNjY5ZjczNi00MjZmLTQwMTQtYjIzYi1iOGQ5ZmU5ZjBmODIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=RhuE7KPY8x01D~6DMnyngGuHd9si0uQvZTEGwo0SdT4GrPBdQSfh-ms4EgQqWUI7n5-phB1QgYqW7julW-vZK4HM13nSwz-A49muiVGEWanD1YJNqtW8tzblqQkobLcIDXKnF~QokQYvF0qNWfcX3E4POEEhkiy0Vc19QBE1YBsBfMUg0GiOSvZs4Ms6cFOJOKPLE1DOz149~g7n6vpB2MEPdPAYgj3QwoJcuHrUW0uZxrxVkQ445ZW0qHw44aXESAyLwm6dQkGu3erfpj07e3w0fh~HeN8O7PoG3xzdjauCOjv9jU3pDk-Pt98mEbI~0Zs96Zu-YbBDtdJNYHutwQ__",
+    "asset_id": "constitution_display",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "industrial",
+    "name": "Constitution Display",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
