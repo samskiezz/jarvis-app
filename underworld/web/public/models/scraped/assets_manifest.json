@@ -5157,5 +5157,22 @@
     "epoch": "information",
     "name": "Wafer Lithography Stepper",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wind_turbine": {
+    "prompt": "a tall white wind turbine, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "835f1bcb-6b32-4bd3-842f-079218da7f03",
+    "path": "/models/generated/tripo/wind_turbine.glb",
+    "bytes": 3016820,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/835f1bcb-6b32-4bd3-842f-079218da7f03/tripo_pbr_model_835f1bcb-6b32-4bd3-842f-079218da7f03.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODM1ZjFiY2ItNmIzMi00YmQzLTg0MmYtMDc5MjE4ZGE3ZjAzL3RyaXBvX3Bicl9tb2RlbF84MzVmMWJjYi02YjMyLTRiZDMtODQyZi0wNzkyMThkYTdmMDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=qxAaLugJjN4ZerozjyUVkk03oNSPMjE9ovsz6XYv803T0Gdw6KTLssDWdTxe9rkwyxvFyyzVsCpUDf-C-R-1Gaedk7pMWpCyvKkrvoUblAtb94cWyDD-ttHJwFOD72tuL9N9OjkAPJ9BekZi9loVAeJUCJ9YblronODkrXXEdbVKrGN0CMZkLsEi9WVT6zvsKVnQC00fz-dxeaxupSyXrZbcCoxzTlH33xA5~13KlihjAWJcYrlmwO0pahcQxugjXC3lhXREt00aifWYOdp0N0Gw4jz3Nw6H3F9nBuL4W0T4sCt6KYrnJi15T7cTU6SriL52lucG4KsKgLqH5K6WIw__",
+    "asset_id": "wind_turbine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Wind Turbine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
