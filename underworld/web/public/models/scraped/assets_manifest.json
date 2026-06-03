@@ -4970,5 +4970,22 @@
     "epoch": "information",
     "name": "Solar Array",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:soldering_station": {
+    "prompt": "a soldering station with iron, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0bdf6788-ff64-4700-944d-b233297c563d",
+    "path": "/models/generated/tripo/soldering_station.glb",
+    "bytes": 10444744,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0bdf6788-ff64-4700-944d-b233297c563d/tripo_pbr_model_0bdf6788-ff64-4700-944d-b233297c563d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGJkZjY3ODgtZmY2NC00NzAwLTk0NGQtYjIzMzI5N2M1NjNkL3RyaXBvX3Bicl9tb2RlbF8wYmRmNjc4OC1mZjY0LTQ3MDAtOTQ0ZC1iMjMzMjk3YzU2M2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=SEVrS2T4ECTP~JwhGnbssligjgZXSkzyOhg5Q3uyelGqGJGdMGx65skFiTVl8LA1rU4IQPzMrL4Sepuwk~DJfz8oxTaNh1LYWlwt25geZCZsznKRo6QvVudt4wr2LdMfN9oJJWKa~UPJlZAkqM-u-yTx0ttczzyzQ~XcSkEfZc3GAYPxQOV-hEezHPedE3cNG4-biWSAB0pOQOpDsN6GOKJB-F6rF0PU67HkkjRHQGwBHM9X7inPvrirn~Vwiavdt7JELaP7PcxB5IkNa8cQ2Plr-SQmKQsKSSNACUMGKZ59FgJvQpR-0VBPl7uIk67ftjvCTEvGPAAS455g8Fu4Vw__",
+    "asset_id": "soldering_station",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Soldering Station",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
