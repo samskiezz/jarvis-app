@@ -8098,5 +8098,22 @@
     "epoch": "quantum",
     "name": "Star Engine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:transistor_replica": {
+    "prompt": "an oversized chrome transistor sculpture on a plinth, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e3481ee7-1f4b-4ab9-ba4d-3acae832ea2b",
+    "path": "/models/generated/tripo/transistor_replica.glb",
+    "bytes": 9538100,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e3481ee7-1f4b-4ab9-ba4d-3acae832ea2b/tripo_pbr_model_e3481ee7-1f4b-4ab9-ba4d-3acae832ea2b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTM0ODFlZTctMWY0Yi00YWI5LWJhNGQtM2FjYWU4MzJlYTJiL3RyaXBvX3Bicl9tb2RlbF9lMzQ4MWVlNy0xZjRiLTRhYjktYmE0ZC0zYWNhZTgzMmVhMmIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=uSEWFaTOo-7ZNZXr8m2MTc9qi2nVaBfpYA3M7-lk0OzcDzPdxpB6MCvG5D3gBE74r-C5mhXgmWofH4kKDJQlDHwyibXsJa8jIGtcHxv8arvKn~L867deUklINcvP2sKH3gTzf6KD8TPph~MN-2H-NisXpkIFHFHyvNzxXtd-ttdpzAB6aTlHapTk2aui3ws4gwK9~3F1pxWkKEuYSe3xYhFwvCPGweucRbsbnwnqVQ9V~~PEFXwuYuwOoheuAMjtABpL-LUlflDE2jxgmcuH2cn3qGA33w~NPUFffNLfLWplJ3QeGJfE8b5Df6xciFIvQJ0NiOZ4ZtS~4UHAEK6-sQ__",
+    "asset_id": "transistor_replica",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Transistor Replica",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
