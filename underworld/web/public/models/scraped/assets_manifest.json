@@ -4800,5 +4800,22 @@
     "epoch": "information",
     "name": "Prior Art Terminal",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:probe_station": {
+    "prompt": "a semiconductor wafer probe station with micro-needles, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "79357d17-e458-4928-8cf6-0c9441850edb",
+    "path": "/models/generated/tripo/probe_station.glb",
+    "bytes": 15190104,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/79357d17-e458-4928-8cf6-0c9441850edb/tripo_pbr_model_79357d17-e458-4928-8cf6-0c9441850edb.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzkzNTdkMTctZTQ1OC00OTI4LThjZjYtMGM5NDQxODUwZWRiL3RyaXBvX3Bicl9tb2RlbF83OTM1N2QxNy1lNDU4LTQ5MjgtOGNmNi0wYzk0NDE4NTBlZGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=vgPJxwRNIxZfK0Yj2hZ6WWJ9ddCqHzYu-fL1F6eOWDtOj3vhVFmBI8-n1BAhCfJeBT0g1s5T0LTxMfM9ksfLS7gxUXSP82id1t1~gG~tUDn7ctPYnMw7lnTDJYgKdQy7PxFhFWP4p2N6OlqNoLfEdcDTtv9w-6pgWb7S0pD5Lz4fvILIYIALDgnuyIxGnSA3jndzNGeAziqTVaSfkJ3-UxI45oIrm20nBBJdWLwEB4cr0OliH3f0uTSKReDuGmo7ipVsUGhl0sHkBVvTrqgwGQJ~YvPZxdfZcLJcs5-5ojoU3geuvO-HtCsmk7jCXAiuYSpqmG8U70tF3PIyKWL~RA__",
+    "asset_id": "probe_station",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Probe Station",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
