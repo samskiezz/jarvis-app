@@ -4664,5 +4664,22 @@
     "epoch": "industrial",
     "name": "Optical Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:oscilloscope": {
+    "prompt": "a benchtop oscilloscope with screen, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "27866b36-1bc7-4864-a0fb-246843ca8e5d",
+    "path": "/models/generated/tripo/oscilloscope.glb",
+    "bytes": 14753248,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/27866b36-1bc7-4864-a0fb-246843ca8e5d/tripo_pbr_model_27866b36-1bc7-4864-a0fb-246843ca8e5d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjc4NjZiMzYtMWJjNy00ODY0LWEwZmItMjQ2ODQzY2E4ZTVkL3RyaXBvX3Bicl9tb2RlbF8yNzg2NmIzNi0xYmM3LTQ4NjQtYTBmYi0yNDY4NDNjYThlNWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=PULdfXmCpfv6AHW4xykYXC3tMsGbjJLq6dG78GmJL3v0hHVtbJqsi2Sz9U0DBJtzpWBW-mKTtSTH6-nsGouHukm8Cze8v3xkdKRQKvqAdDnWM6MdFcI6ScmHTuWdRFm94YHzRwZTK-DSWLCyxwhwwnHVj9E5IkyD1qI5NCmFfj30ISws0v-YUWXRn8MSw41vdjw4jwq1c3HtnKxPLh-JD8rHafwat0hNb80g2BhCOgqNT4npS1A6Jfxg87MTij4V~P17gOtqLQe3e4iEEU~sQwiqlZU-XVrCETP-kY1DqckYuqRZklZLuK5fs6n7n65~9D1I6kBP62f5ZOxN61qq9A__",
+    "asset_id": "oscilloscope",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "industrial",
+    "name": "Oscilloscope",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
