@@ -279,6 +279,48 @@ def _networks(field: str, seed: int) -> tuple[str, dict, float]:
             f"(dominant node {r['dominant_node']}).", r, 0.85)
 
 
+def _schrodinger(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import schrodinger_1d
+    r = schrodinger_1d(omega=0.5 + (seed % 6) * 0.25)
+    return (f"Schrödinger eigensolve for {field}: levels {r['levels']}.",
+            r, 1.0 if r["matches_quantization"] else 0.6)
+
+
+def _transport(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import random_walk_diffusion
+    r = random_walk_diffusion(walkers=300, steps=200 + (seed % 5) * 40, seed=seed)
+    return (f"Diffusion/transport for {field}: MSD {r['msd']} (linear={r['linear_in_time']}).",
+            r, 0.9 if r["linear_in_time"] else 0.6)
+
+
+def _finance(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import black_scholes
+    r = black_scholes(sigma=0.15 + (seed % 5) * 0.05, seed=seed)
+    return (f"Black-Scholes pricing for {field}: ${r['analytic_price']} (MC ${r['monte_carlo_price']}).",
+            r, 1.0 if r["agree"] else 0.5)
+
+
+def _ml(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import neural_xor
+    r = neural_xor(seed=seed)
+    return (f"Neural-net training for {field}: loss {r['loss_start']}→{r['loss_end']}.",
+            r, 1.0 if r["learned_xor"] else 0.6)
+
+
+def _social(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import schelling
+    r = schelling(seed=seed, steps=20)
+    return (f"Agent-based social model for {field}: segregation "
+            f"{r['segregation_start']}→{r['segregation_end']}.", r, 0.85)
+
+
+def _phylogenetics(field: str, seed: int) -> tuple[str, dict, float]:
+    from .sim_methods import upgma
+    r = upgma()
+    return (f"Phylogenetic tree for {field}: {r['n_joins']} joins (UPGMA).",
+            r, 0.9 if r["AB_joined_first"] else 0.6)
+
+
 def _stats_fallback(field: str, seed: int) -> tuple[str, dict, float]:
     # a real statistical/optimisation computation (never a fake)
     import numpy as np
@@ -307,6 +349,12 @@ _ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("climate", "atmospher", "environmental", "meteorolog", "geophys"), _climate),
     (("signal", "spectro", "communication", "telecom", "radio"), _signal),
     (("network", "graph_theory", "distributed", "web", "social_net"), _networks),
+    (("quantum_mech", "atomic", "spectroscopy", "wavefunction"), _schrodinger),
+    (("transport", "brownian", "diffusion_proc"), _transport),
+    (("finance", "econometric", "derivatives", "portfolio_mgmt", "pricing"), _finance),
+    (("machine_learning", "deep_learning", "neural", "ai_reason", "automated_reason"), _ml),
+    (("sociolog", "governance", "demograph", "urban_plan", "anthropolog"), _social),
+    (("phylogen", "taxonomy_bio", "systematics", "evolution_bio"), _phylogenetics),
     (("crispr", "genom", "genetic", "gene", "dna", "crop_genet", "bioinform", "synthetic_bio"), _genetics),
     (("protein", "molecular_bio", "proteom", "biophys"), _protein),
     (("quantum_field", "quantum_mech", "quantum_comp", "particle", "atomic", "exotic"), _quantum_phys),

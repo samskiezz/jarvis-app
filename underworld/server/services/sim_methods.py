@@ -281,3 +281,141 @@ def markov_stationary(*, seed: int = 0, n: int = 6, iters: int = 200) -> dict:
         v = v @ M
     return {"stationary": [round(float(x), 4) for x in v], "sums_to_one": abs(v.sum() - 1) < 1e-6,
             "dominant_node": int(np.argmax(v))}
+
+
+# ── Quantum mechanics: 1D Schrödinger eigenvalues (finite difference) ─────────
+def schrodinger_1d(*, n: int = 400, L: float = 12.0, omega: float = 1.0) -> dict:
+    """Solve the time-independent Schrödinger equation for a harmonic oscillator
+    by finite differences. Eigenvalues quantise as E_n=(n+1/2)ħω (ħ=m=1)."""
+    x = np.linspace(-L/2, L/2, n)
+    dx = x[1] - x[0]
+    V = 0.5 * omega**2 * x**2
+    main = 1.0/dx**2 + V
+    off = -0.5/dx**2 * np.ones(n-1)
+    H = np.diag(main) + np.diag(off, 1) + np.diag(off, -1)
+    E = np.linalg.eigvalsh(H)[:4]
+    return {"levels": [round(float(e), 3) for e in E],
+            "ground_state": round(float(E[0]), 3), "expected_ground": 0.5*omega,
+            "matches_quantization": abs(E[0] - 0.5*omega) < 0.05}
+
+
+# ── Transport: Brownian motion / diffusion (Einstein MSD ∝ t) ─────────────────
+def random_walk_diffusion(*, walkers: int = 400, steps: int = 300, seed: int = 0) -> dict:
+    """Many random walkers; mean-squared displacement grows linearly with time
+    (Einstein's diffusion relation ⟨x²⟩=2Dt)."""
+    rng = np.random.default_rng(seed)
+    pos = np.zeros(walkers)
+    msd_half = msd_full = 0.0
+    for t in range(steps):
+        pos += rng.choice([-1.0, 1.0], size=walkers)
+        if t == steps//2 - 1:
+            msd_half = float(np.mean(pos**2))
+    msd_full = float(np.mean(pos**2))
+    ratio = msd_full / max(1e-9, msd_half)
+    return {"msd": round(msd_full, 1), "msd_half_time": round(msd_half, 1),
+            "ratio": round(ratio, 3), "linear_in_time": 1.6 < ratio < 2.4}   # ≈2
+
+
+# ── Quant finance: Black-Scholes (analytic) vs Monte-Carlo pricing ────────────
+def black_scholes(*, S=100.0, K=100.0, r=0.05, sigma=0.2, T=1.0, paths=40000, seed=0) -> dict:
+    """Price a European call analytically (Black-Scholes) and by Monte-Carlo
+    simulation of geometric Brownian motion — they agree."""
+    from math import log, sqrt, exp, erf
+    def N(z): return 0.5 * (1 + erf(z / sqrt(2)))
+    d1 = (log(S/K) + (r + sigma**2/2)*T) / (sigma*sqrt(T))
+    d2 = d1 - sigma*sqrt(T)
+    analytic = S*N(d1) - K*exp(-r*T)*N(d2)
+    rng = np.random.default_rng(seed)
+    z = rng.standard_normal(paths)
+    ST = S*np.exp((r - sigma**2/2)*T + sigma*sqrt(T)*z)
+    mc = float(exp(-r*T)*np.mean(np.maximum(ST-K, 0)))
+    return {"analytic_price": round(analytic, 4), "monte_carlo_price": round(mc, 4),
+            "agree": abs(analytic - mc) < 0.5}
+
+
+# ── Machine learning: a real MLP learns XOR via backpropagation ───────────────
+def neural_xor(*, epochs: int = 4000, lr: float = 0.5, seed: int = 0) -> dict:
+    """A 2-4-1 neural network trained by gradient-descent backprop learns XOR
+    (a non-linearly-separable function) — loss collapses toward zero."""
+    rng = np.random.default_rng(seed)
+    X = np.array([[0,0],[0,1],[1,0],[1,1]], float)
+    y = np.array([[0],[1],[1],[0]], float)
+    W1 = rng.normal(0, 1, (2, 4)); b1 = np.zeros((1, 4))
+    W2 = rng.normal(0, 1, (4, 1)); b2 = np.zeros((1, 1))
+    sig = lambda z: 1/(1+np.exp(-z))
+    loss0 = None
+    for e in range(epochs):
+        h = sig(X@W1 + b1); o = sig(h@W2 + b2)
+        loss = float(np.mean((o - y)**2))
+        if loss0 is None: loss0 = loss
+        do = (o - y) * o*(1-o)
+        dW2 = h.T@do; db2 = do.sum(0, keepdims=True)
+        dh = (do@W2.T) * h*(1-h)
+        dW1 = X.T@dh; db1 = dh.sum(0, keepdims=True)
+        W2 -= lr*dW2; b2 -= lr*db2; W1 -= lr*dW1; b1 -= lr*db1
+    return {"loss_start": round(loss0, 4), "loss_end": round(loss, 4),
+            "learned_xor": loss < 0.05}
+
+
+# ── Social science: Schelling segregation model ───────────────────────────────
+def schelling(*, n: int = 30, vacancy: float = 0.1, tolerance: float = 0.4,
+              steps: int = 30, seed: int = 0) -> dict:
+    """Schelling's model: agents of two groups relocate when too few neighbours
+    match. Mild individual preference produces large-scale segregation."""
+    rng = np.random.default_rng(seed)
+    cells = rng.choice([0, 1, 2], size=(n, n), p=[vacancy, (1-vacancy)/2, (1-vacancy)/2])
+
+    def same_frac():
+        tot = cnt = 0.0
+        for i in range(n):
+            for j in range(n):
+                if cells[i, j] == 0: continue
+                neigh = [cells[a, b] for a in (i-1, i, i+1) for b in (j-1, j, j+1)
+                         if 0 <= a < n and 0 <= b < n and (a, b) != (i, j) and cells[a, b]]
+                if neigh:
+                    tot += sum(1 for x in neigh if x == cells[i, j]) / len(neigh); cnt += 1
+        return tot / max(1, cnt)
+
+    seg0 = same_frac()
+    for _ in range(steps):
+        empties = [(i, j) for i in range(n) for j in range(n) if cells[i, j] == 0]
+        for i in range(n):
+            for j in range(n):
+                if cells[i, j] == 0: continue
+                neigh = [cells[a, b] for a in (i-1, i, i+1) for b in (j-1, j, j+1)
+                         if 0 <= a < n and 0 <= b < n and (a, b) != (i, j) and cells[a, b]]
+                if neigh and (sum(1 for x in neigh if x == cells[i, j])/len(neigh)) < tolerance and empties:
+                    e = empties.pop(rng.integers(0, len(empties)))
+                    cells[e] = cells[i, j]; empties.append((i, j)); cells[i, j] = 0
+    seg1 = same_frac()
+    return {"segregation_start": round(seg0, 3), "segregation_end": round(seg1, 3),
+            "segregated": seg1 > seg0}
+
+
+# ── Phylogenetics: UPGMA tree from a distance matrix ──────────────────────────
+def upgma(dist: list[list[float]] | None = None) -> dict:
+    """Build an evolutionary tree by UPGMA (agglomerative clustering). The two
+    closest taxa join first — verify on a matrix where A,B are nearest."""
+    if dist is None:
+        dist = [[0,1,9,9],[1,0,9,9],[9,9,0,2],[9,9,2,0]]   # (A,B) and (C,D) close
+    D = {i: {j: dist[i][j] for j in range(len(dist))} for i in range(len(dist))}
+    clusters = {i: [i] for i in range(len(dist))}
+    joins = []
+    nxt = len(dist)
+    while len(clusters) > 1:
+        a, b = min(((i, j) for i in clusters for j in clusters if i < j),
+                   key=lambda p: D[p[0]][p[1]])
+        joins.append((sorted(clusters[a]), sorted(clusters[b]), round(D[a][b], 3)))
+        merged = clusters[a] + clusters[b]
+        na, nb = len(clusters[a]), len(clusters[b])
+        D[nxt] = {}
+        for k in clusters:
+            if k in (a, b): continue
+            d = (na*D[a][k] + nb*D[b][k]) / (na+nb)        # average linkage
+            D[nxt][k] = D[k][nxt] = d
+        D[nxt][nxt] = 0
+        clusters[nxt] = merged
+        del clusters[a]; del clusters[b]; nxt += 1
+    first = joins[0]
+    return {"first_join": first[:2], "n_joins": len(joins),
+            "AB_joined_first": set(first[0]+first[1]) == {0, 1}}

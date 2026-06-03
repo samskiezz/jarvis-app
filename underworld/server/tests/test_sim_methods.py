@@ -72,3 +72,27 @@ def test_fft_recovers_frequencies():
 def test_markov_stationary_is_probability_vector():
     r = SM.markov_stationary(seed=2)
     assert r["sums_to_one"] and 0 <= r["dominant_node"] < 6
+
+
+def test_schrodinger_harmonic_oscillator_quantisation():
+    assert SM.schrodinger_1d()["matches_quantization"]       # E0 = 0.5 ħω
+
+
+def test_diffusion_msd_linear_in_time():
+    assert SM.random_walk_diffusion(seed=1)["linear_in_time"]  # ⟨x²⟩ ∝ t
+
+
+def test_black_scholes_mc_matches_analytic():
+    assert SM.black_scholes(seed=1)["agree"]
+
+
+def test_neural_net_learns_xor():
+    assert SM.neural_xor(seed=1)["learned_xor"]
+
+
+def test_schelling_produces_segregation():
+    assert SM.schelling(seed=1)["segregated"]
+
+
+def test_upgma_clusters_nearest_taxa_first():
+    assert SM.upgma()["AB_joined_first"]
