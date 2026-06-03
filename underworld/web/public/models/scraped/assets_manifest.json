@@ -2012,5 +2012,22 @@
     "epoch": "quantum",
     "name": "Fork Pod",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_ancient_roots": {
+    "prompt": "a tangle of massive ancient tree roots with glowing sap, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "8a6c90f5-337f-4c7e-9ad7-092ffc797542",
+    "path": "/models/generated/tripo/fx_ancient_roots.glb",
+    "bytes": 15604452,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/8a6c90f5-337f-4c7e-9ad7-092ffc797542/tripo_pbr_model_8a6c90f5-337f-4c7e-9ad7-092ffc797542.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvOGE2YzkwZjUtMzM3Zi00YzdlLTlhZDctMDkyZmZjNzk3NTQyL3RyaXBvX3Bicl9tb2RlbF84YTZjOTBmNS0zMzdmLTRjN2UtOWFkNy0wOTJmZmM3OTc1NDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=BH0zS8IBlrm8Pck5iVz~197mTv-IPGit1mS6BwNyz1RWsPKZF1qVBkYLiN0iZSzQ8Cdl~QBm9SJmQrVV5d3X4Dk4YUCTeM~gi2FZnCC5RO3Zf5PFU~CqGC-NEGLGCJWmNuHSPijdpBykeDuD8VncUbxl1d7kYVewjuSdLWxYTAesg7gTKaoT62shenGvtPWqCIzyHlxFGk7kHUG5F5HtDEGWhh10hwyOqVExzytjPczw7ajV~bBKbegYv7SmtvqM5c6y1qbKckZwra7HNvrO~QEcz5ar4GIXpqixWvr~6blBUsRP863hNggkMtseBBGa8-44m7CqTQBJWNl~6u1F5w__",
+    "asset_id": "fx_ancient_roots",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Ancient Roots",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
