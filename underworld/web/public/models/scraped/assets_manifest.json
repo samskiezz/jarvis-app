@@ -3066,5 +3066,22 @@
     "epoch": "any",
     "name": "Bookshelf",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:chair_dining": {
+    "prompt": "a simple wooden dining chair, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "0e83a080-1ff8-46a4-ba74-112c5a6b1db3",
+    "path": "/models/generated/tripo/chair_dining.glb",
+    "bytes": 11005772,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/0e83a080-1ff8-46a4-ba74-112c5a6b1db3/tripo_pbr_model_0e83a080-1ff8-46a4-ba74-112c5a6b1db3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMGU4M2EwODAtMWZmOC00NmE0LWJhNzQtMTEyYzVhNmIxZGIzL3RyaXBvX3Bicl9tb2RlbF8wZTgzYTA4MC0xZmY4LTQ2YTQtYmE3NC0xMTJjNWE2YjFkYjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ni-GoJujA4zXRSMS9-5Mn9-hyo84TogT6E1EMLMQvzRvPCGy9pOv095Y--mdXxLJYYg3PE4vHw9rK9bTljTCBeiU5KN67iI-WGUkv0J0DPT75oXZbTNHuGvF2UySY07oQ~CMGbgeNrlkmG1yU6LL809U1wShv9eGROVl7TjSL1K6LqzqzJgK1lXA49QJbkW-v-Tb8013zx6ZTHjl9vgTF8RbeH7VBgl21w7eHgMRWB62vyCP1NTCZwolhMgRFEA06k~5yav7BxEcDXb1WYyr-ankZpUeR9ajWutrpjw7XeVVHTpUQ-GQ1NRmiHwSCVBNhOQ-AJcVnWhCDdgFZSVv6Q__",
+    "asset_id": "chair_dining",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Chair Dining",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
