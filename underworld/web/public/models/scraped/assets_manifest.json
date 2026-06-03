@@ -6619,5 +6619,22 @@
     "epoch": "bronze",
     "name": "Loom",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lute": {
+    "prompt": "a wooden lute, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "321a656a-c4fb-492e-ac61-eda3d0c9daef",
+    "path": "/models/generated/tripo/lute.glb",
+    "bytes": 13040156,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/321a656a-c4fb-492e-ac61-eda3d0c9daef/tripo_pbr_model_321a656a-c4fb-492e-ac61-eda3d0c9daef.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzIxYTY1NmEtYzRmYi00OTJlLWFjNjEtZWRhM2QwYzlkYWVmL3RyaXBvX3Bicl9tb2RlbF8zMjFhNjU2YS1jNGZiLTQ5MmUtYWM2MS1lZGEzZDBjOWRhZWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UyFHIsBqdOksx-A2iLAWVKsR4qA4CQt0kG2H2NSosn~66ay21mNUxiZ6UoY5bpSWUUKnHM6r3pUdZ3uzFC3osrbZvWlCJ8dHinHWKg3I9NvwxYsFMrBPcJHdmACUd6S-9uJ0whuLTgItNlmTLFhFKIpME3AlaC~11s~Qehwxxj0ys0~mB2DQWJDTIasJ4LerbXguKvciasFth5x4K5fzGNAshVcp6Iz5c8SQG1WfDsIa2rJDDRuwbrD73hA3290Xtjm88BRJft4wb~s~lBozIg5iVMwKz3YtgqKxck4oNOyENCXhoCSU13zWdEpiOh2mp1YrtQfoLmkKSH7koJgjOA__",
+    "asset_id": "lute",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "iron",
+    "name": "Lute",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
