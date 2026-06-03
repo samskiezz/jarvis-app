@@ -138,6 +138,49 @@ def _epidemiology(field: str, seed: int) -> tuple[str, dict, float]:
             min(1.0, 0.4 + r["attack_rate"]))
 
 
+def _ecology(field: str, seed: int) -> tuple[str, dict, float]:
+    """Population/agro dynamics via real Lotka-Volterra (ecosystem engine)."""
+    from . import ecosystem as eco
+    prey = 40.0 + (seed % 30); pred = 9.0 + (seed % 7)
+    step = eco.step(prey, pred, hunters=seed % 4)
+    return (f"Population dynamics for {field}: prey→{step.prey:.1f}, predator→{step.predator:.1f}.",
+            {"prey": round(step.prey, 2), "predator": round(step.predator, 2)},
+            0.8 if step.prey > 0 else 0.4)
+
+
+def _economics(field: str, seed: int) -> tuple[str, dict, float]:
+    """Real market clearing (supply/demand price) + price index (economy engine)."""
+    from . import economy as ec
+    supply = 0.6 + (seed % 8) * 0.1; demand = 0.6 + ((seed >> 3) % 8) * 0.1
+    price = ec.clearing_price(1.0, supply=supply, demand=demand)
+    return (f"Market model for {field}: clearing price {price:.3f} (supply {supply:.1f}, demand {demand:.1f}).",
+            {"clearing_price": round(price, 4), "supply": supply, "demand": demand},
+            max(0.4, min(1.0, 1.0 - abs(price - 1.0))))
+
+
+def _acoustics(field: str, seed: int) -> tuple[str, dict, float]:
+    """Real wave physics (frequency, wavelength, intensity falloff)."""
+    freq = 110.0 * (2 ** (seed % 8))                 # musical octaves from A2
+    wl = 343.0 / freq                                # wavelength = c / f (real)
+    return (f"Wave/acoustic model for {field}: {freq:.0f} Hz → wavelength {wl:.3f} m.",
+            {"frequency_hz": freq, "wavelength_m": round(wl, 4)}, 0.8)
+
+
+def _navigation(field: str, seed: int) -> tuple[str, dict, float]:
+    """Real great-circle (haversine) distance between two points."""
+    import math
+    rng = random.Random(seed)
+    lat1, lon1, lat2, lon2 = (rng.uniform(-80, 80), rng.uniform(-180, 180),
+                              rng.uniform(-80, 80), rng.uniform(-180, 180))
+    R = 6371.0
+    dlat = math.radians(lat2 - lat1); dlon = math.radians(lon2 - lon1)
+    a = (math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2))
+         * math.sin(dlon / 2) ** 2)
+    d = 2 * R * math.asin(math.sqrt(a))
+    return (f"Navigation for {field}: great-circle distance {d:.0f} km.",
+            {"distance_km": round(d, 1)}, 0.8)
+
+
 def _stats_fallback(field: str, seed: int) -> tuple[str, dict, float]:
     # a real statistical/optimisation computation (never a fake)
     import numpy as np
@@ -173,7 +216,13 @@ _ROUTES: list[tuple[tuple[str, ...], object]] = [
     (("algorithm", "data_struct", "operating", "network", "database", "machine_learning",
       "computer_vision", "nlp", "distributed", "compiler", "graphics", "hci",
       "cybersecurity", "automated_reason", "software", "ai_"), _computing),
-    (("disease", "epidem", "toxic", "immun", "pest", "ecolog", "agroecolog"), _epidemiology),
+    (("disease", "epidem", "toxic", "immun", "pest"), _epidemiology),
+    (("agronom", "soil", "horticult", "husbandry", "irrigat", "breeding", "aquacult",
+      "forestry", "food_sci", "vitic", "dairy", "agro", "ecolog", "fisher", "brewing", "ferment"), _ecology),
+    (("econ", "trade", "market", "governance", "law", "licensing", "patent_class",
+      "portfolio", "freedom_to_operate", "prior_art", "novelty", "claim", "citation"), _economics),
+    (("music", "acoust", "lute", "sound", "radio", "sonar"), _acoustics),
+    (("navigat", "survey", "transportation", "road", "urban_plan"), _navigation),
 ]
 
 
