@@ -7265,5 +7265,22 @@
     "epoch": "industrial",
     "name": "Printing Press",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:radio_tower": {
+    "prompt": "a tall radio broadcast tower, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5e68cf3f-9969-4bf7-a29c-03a1d41175d1",
+    "path": "/models/generated/tripo/radio_tower.glb",
+    "bytes": 4167600,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/5e68cf3f-9969-4bf7-a29c-03a1d41175d1/tripo_pbr_model_5e68cf3f-9969-4bf7-a29c-03a1d41175d1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNWU2OGNmM2YtOTk2OS00YmY3LWEyOWMtMDNhMWQ0MTE3NWQxL3RyaXBvX3Bicl9tb2RlbF81ZTY4Y2YzZi05OTY5LTRiZjctYTI5Yy0wM2ExZDQxMTc1ZDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=FXcisfHYEfy2XlF1TNMNH~w1TuSOF6229VaAonVbxfqDG-rvhcUfzjbcSPE1UzD7F9BCFRlLuhZpqPr45fNaKp6~Ngsu6I6lCsZfadqaU431atQaedI6vAjT~yF~iFjpTfDYMicLVzmmeUe2ZBt3jJu3qmHWI8d98kpYM~UR~xnqMjYqDBTUQjKo6ZRv2PYLUuiZRHo0YqXzHbufZ49nlr7TjK6na2y0BRAem-~I-PxEEj0WBy0ev4febtM8tu85ECppaRpO9RovxsJLlXAam1Z9DE7R483pDbSPMwDu68pu9pWrjDR9D3MyW6JINW8GOJAKApShrzi6d4XWhSukUQ__",
+    "asset_id": "radio_tower",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "information",
+    "name": "Radio Tower",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
