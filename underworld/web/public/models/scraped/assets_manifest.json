@@ -8404,5 +8404,22 @@
     "epoch": "any",
     "name": "Saga Memorial Plaque",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:victory_arch": {
+    "prompt": "a triumphal stone arch, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "25f48b81-0d7e-48ef-8bd0-3322519135c1",
+    "path": "/models/generated/tripo/victory_arch.glb",
+    "bytes": 15073812,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/25f48b81-0d7e-48ef-8bd0-3322519135c1/tripo_pbr_model_25f48b81-0d7e-48ef-8bd0-3322519135c1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjVmNDhiODEtMGQ3ZS00OGVmLThiZDAtMzMyMjUxOTEzNWMxL3RyaXBvX3Bicl9tb2RlbF8yNWY0OGI4MS0wZDdlLTQ4ZWYtOGJkMC0zMzIyNTE5MTM1YzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pBbSaVqHtQOHST4q0X7pKKF0ZftvxPUM4C704LDVF~DrmqgpDMjLOEvxU-bT8q9yzmZ~4pi2aYaUeSDRPGJwBDVkUYPKA6k3lBa2rEmp-g1ZIU3J1wpdoOAUAbc~D1DuLtYzhTgsIXkBFTGxTcwaF9HtIFPuKSvxE~W5qs-fht600hcYQ9cxo2ILDbMSsuPdseIeXnbizDYjIIhRjHWbp9dA0Ii7qsAMDXxVHBXM2ADr2eHHv4b4OhpD6rotpubyChsCyO1WZf6phQ9dpAR9~b4HrO3rfIFHagxe4iLqdJKOAgjqlT5qbrFRrPvrNwPVoKVwC6z54nKPCCLOP~t5lQ__",
+    "asset_id": "victory_arch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "monument",
+    "epoch": "iron",
+    "name": "Victory Arch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
