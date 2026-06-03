@@ -1332,5 +1332,22 @@
     "epoch": "any",
     "name": "Stromatolite Mound",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:alpine_pine_cluster": {
+    "prompt": "a cluster of tall alpine conifer pines, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "a06475e4-b93b-4fb0-a96c-c1701cc3d02f",
+    "path": "/models/generated/tripo/alpine_pine_cluster.glb",
+    "bytes": 15913136,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a06475e4-b93b-4fb0-a96c-c1701cc3d02f/tripo_pbr_model_a06475e4-b93b-4fb0-a96c-c1701cc3d02f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTA2NDc1ZTQtYjkzYi00ZmIwLWE5NmMtYzE3MDFjYzNkMDJmL3RyaXBvX3Bicl9tb2RlbF9hMDY0NzVlNC1iOTNiLTRmYjAtYTk2Yy1jMTcwMWNjM2QwMmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=aiKN01v0rU0Up332RuFlUkENpkeLNVh9dlu6nBakzd5~ouH7LyVs19E4ClpARV8~SDQHfxr80jM5RmCnzYXi769QcPRTcVHiGknHauWg6p6O4jplhMYeov3fstnD71DEpfeS9AWxeEHP4Vz-8PxWthv17XFMJXXmAAUl7QPsDB5LCEvWA98cuSX~QP29Af41a3pKrAuZd0Jy5gycUMb-lDNArrdSjw5Tm7syCu2D6jGKf~9-DEtzmU9CRWHQeH2n9CcHJC3z4h6GwQNMK3QMIegPq14d2lo4kJ98xIKQoq5znXW-dqQospq4T0XaPr578fo7An0S~f9Ip4owfgYAKw__",
+    "asset_id": "alpine_pine_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Alpine Pine Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
