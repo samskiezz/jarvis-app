@@ -6840,5 +6840,22 @@
     "epoch": "iron",
     "name": "Healers Poultice",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hospital_bed": {
+    "prompt": "a hospital bed with rails, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6c134421-981a-4739-be3a-7bff9280a2ee",
+    "path": "/models/generated/tripo/hospital_bed.glb",
+    "bytes": 14192864,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/6c134421-981a-4739-be3a-7bff9280a2ee/tripo_pbr_model_6c134421-981a-4739-be3a-7bff9280a2ee.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNmMxMzQ0MjEtOTgxYS00NzM5LWJlM2EtN2JmZjkyODBhMmVlL3RyaXBvX3Bicl9tb2RlbF82YzEzNDQyMS05ODFhLTQ3MzktYmUzYS03YmZmOTI4MGEyZWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=B-1Z3xZ2bNAMNwkON7JogiGa2mhb8JcdW0oG8Qx5VWUh-y0ROqnvSTRZJL9c3ECikerRrssrNp5pCZNI3Xq0FIWh8qswP0WrJm0L4F3GS47WGLCKzQZ9quczcnlhPlkeNRxESEhZnHEcZ7riEFLJcNBniKo966mdturneB0oljwuuDfnV7HCY3SEiExU5rbxu-CGFQYFeASAWBkuYw3IZKOR6Py4b~ysh3okB1EjAWpiKomRQaAIo~9N1uDvmny7dR18c6MACiS3wIByY8JFNM3XHROWOMhluv71bm8ElAo~L0RORP1pm8pjzwCgjeRcBoF8zK7KVTXWYOgzIo~ASA__",
+    "asset_id": "hospital_bed",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "industrial",
+    "name": "Hospital Bed",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
