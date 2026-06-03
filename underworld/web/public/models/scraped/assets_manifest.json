@@ -5327,5 +5327,22 @@
     "epoch": "iron",
     "name": "Candle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:clipboard": {
+    "prompt": "a clipboard with papers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "21e743c3-5517-4b8e-b08c-84c1990aa1a7",
+    "path": "/models/generated/tripo/clipboard.glb",
+    "bytes": 15143064,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/21e743c3-5517-4b8e-b08c-84c1990aa1a7/tripo_pbr_model_21e743c3-5517-4b8e-b08c-84c1990aa1a7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMjFlNzQzYzMtNTUxNy00YjhlLWIwOGMtODRjMTk5MGFhMWE3L3RyaXBvX3Bicl9tb2RlbF8yMWU3NDNjMy01NTE3LTRiOGUtYjA4Yy04NGMxOTkwYWExYTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=fNAwZdd~vsg0vYGweKcEBOR1XqftUTvJEfY46LXrD6~KyHYANcfA725hWx2mRj9XS8ITVlHgqg28K8uQU~YheVCnSp5CI~gd3ueuGfPZqNSOu3bGNuCCW2qDVNLo1DZUiLkW5RL9ptkkZE1mmWlbyRjjJi0XJ~i8fw3WFN4MpPFX78S8A-9VUfmfJiG0ZkmI1enlglWyWsrNdyrciaSKDFTdYTDDSz94eK0ZjqL6rMBAidfkbslXp2kWjsu3QQSz4PZ2paBVaPqKWK7TWkRR-XY0qLw-aWUpJeXd5Zeix5SIYoQC3H-GSPiTSY4WIUTghfrkmX7ukhqcptmJZjc~2w__",
+    "asset_id": "clipboard",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Clipboard",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
