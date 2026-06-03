@@ -8506,5 +8506,22 @@
     "epoch": "stone",
     "name": "Festival Bonfire",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:festival_bunting": {
+    "prompt": "a string of colourful festival bunting flags, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "118aa3c9-d933-4ce9-a064-ddd278bc9a82",
+    "path": "/models/generated/tripo/festival_bunting.glb",
+    "bytes": 7683644,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/118aa3c9-d933-4ce9-a064-ddd278bc9a82/tripo_pbr_model_118aa3c9-d933-4ce9-a064-ddd278bc9a82.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTE4YWEzYzktZDkzMy00Y2U5LWEwNjQtZGRkMjc4YmM5YTgyL3RyaXBvX3Bicl9tb2RlbF8xMThhYTNjOS1kOTMzLTRjZTktYTA2NC1kZGQyNzhiYzlhODIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KpnkvzNnTguneRI1koQzWNYavsrBJr~94JcDl438zez6S~6N3j-ocuMMNEdpfExWXqqTdMT9rZa2dc-0ktUEhQJVdJ1dQUYp5Xdke4zW15LIBBK~uLq19cbMwDGu8N~Emee35Qnpc7Aj-u0-~-LBqdFLNKiI45mhKr17F~LgKtrPyyqJmWBVNeSjyS5KPnT31KySZIlpVszyiIZo5tIHBnegE2xQPrPYhXFhoCQTHqOZ0v9GBD~Zr8jqDkG697ZBLJTBHXC-2jvLz8pDwLJvWXoZlA-RjdIzyGHk5y6YzwDyeW2wxVUSdMruB1wiMDAxHkBeQ7bsZ1EVbdWP~PvWRQ__",
+    "asset_id": "festival_bunting",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Festival Bunting",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
