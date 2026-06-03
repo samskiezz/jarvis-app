@@ -5990,5 +5990,22 @@
     "epoch": "industrial",
     "name": "Role Literature Scout Carrel",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:role_protein_modeller_display": {
+    "prompt": "a glowing holographic 3D protein-fold display, cinematic high detail, lush, intricate, PBR with bright emissive glow, ray-tracing friendly, fantasy-sci-fi, vibrant saturated glowing colours, luminous vivid palette",
+    "task_id": "19ab2cdd-de1c-46cb-a40d-958302cda08c",
+    "path": "/models/generated/tripo/role_protein_modeller_display.glb",
+    "bytes": 15786088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/19ab2cdd-de1c-46cb-a40d-958302cda08c/tripo_pbr_model_19ab2cdd-de1c-46cb-a40d-958302cda08c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTlhYjJjZGQtZGUxYy00NmNiLWE0MGQtOTU4MzAyY2RhMDhjL3RyaXBvX3Bicl9tb2RlbF8xOWFiMmNkZC1kZTFjLTQ2Y2ItYTQwZC05NTgzMDJjZGEwOGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=lzzd6jerBjNn4IYVXLS1~vNNTFnVg-r-K95LDcYy4XcIq8G2hD5UsQEQidox-YdLrvt~nedj9KNEojz4skcUlIcucTNafg-pKkJ5xwr6JKNmple9crt3bcFGVK4lLnE4DfviJ2yRwobJ9~cyQTn3gnhFoY8STSoj-NjsomGZZpqrBJCoJHNt8cisNwIO71Oeta65eueO11bM20AZRZuX8pIjSrrrQ5kXhvJppkgqCT7uwTs2YuM7ZEGVSmaaTyZLszFhNSnqpQOrrLpjymvoKfggLklq~LRbcD6aT02gLR9LRF4qenhYKPIo672cCB2vtsNt4rTKVhzNOrLdzoHVQQ__",
+    "asset_id": "role_protein_modeller_display",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "role",
+    "epoch": "information",
+    "name": "Role Protein Modeller Display",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
