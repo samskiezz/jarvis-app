@@ -7384,5 +7384,22 @@
     "epoch": "industrial",
     "name": "Water Pump Well",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:watermill": {
+    "prompt": "a watermill with a turning wheel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "af92f238-4c0a-4142-86e3-396690a7f192",
+    "path": "/models/generated/tripo/watermill.glb",
+    "bytes": 15626560,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/af92f238-4c0a-4142-86e3-396690a7f192/tripo_pbr_model_af92f238-4c0a-4142-86e3-396690a7f192.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYWY5MmYyMzgtNGMwYS00MTQyLTg2ZTMtMzk2NjkwYTdmMTkyL3RyaXBvX3Bicl9tb2RlbF9hZjkyZjIzOC00YzBhLTQxNDItODZlMy0zOTY2OTBhN2YxOTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZbFxroqjeiT~BO2xoZlDDv2II7D4ee8plAjF5Wf5AQSO1HNA4N73GqDWeWk~4WY43ONLd0FvVEUy9GjwjQJ3hQ8eLAV~V-lx7YJABlBXnJGo4cW0GtB0uS2So7Y5V5y3cWWvjYFs0PgnY3TTt~09JMOAliDt4rfW8Bxw9Mo5JL6WDt8QmyOAz3Mo6cJ5MqVLknpQ9tRDTy81sGUQkMrPDKnUiCQC0NDfZYkBhC26SMWi-jRv151NImLYpYgFa7lfH3p3KsG2llDaNEilfgHMs91B0lGMEFFL4YSvs2kxBq2S7Ex6xI6rsEncjTiETkxKzybfo8~hMCReWX6e21MA4A__",
+    "asset_id": "watermill",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "iron",
+    "name": "Watermill",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
