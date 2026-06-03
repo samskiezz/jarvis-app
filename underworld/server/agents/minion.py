@@ -606,6 +606,9 @@ async def _do_study(session: AsyncSession, minion: Minion, world: World, args: d
     boost = 0.20 + 0.12 * minion.conscientiousness + 0.10 * minion.intelligence
     # Doc II.118-119 / I.147 — maturity, upbringing and time-of-day scale learning.
     boost *= lifecycle.growth_multiplier(minion, world.tick)
+    # A living saga — a mentorship, a prodigy's rise — accelerates growth: meaning
+    # makes Minions learn faster (sagas.tick_sagas sets this on the brain).
+    boost *= float((minion.brain or {}).get("saga_learn_mult", 1.0) or 1.0)
     old_level = skill.level
     skill.level = min(10.0, skill.level + boost)
     skill.last_practiced_tick = world.tick

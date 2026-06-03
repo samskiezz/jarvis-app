@@ -865,6 +865,42 @@ async def stream_events(
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
+@router.get("/{world_id}/chronicle")
+async def get_chronicle(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """The world's place in history + its living storylines. Returns the current
+    historically-grounded epoch (one of ~100 real milestones), the next on the
+    horizon, and the active/recent sagas — the emergent stories giving Minions'
+    lives meaning and aiding their development."""
+    world = await _world_or_404(session, world_id)
+    from ..db.models import TaskStatus
+    from ..services import epochs as epochs_mod
+    discoveries = int(await session.scalar(
+        select(func.count(Discovery.id)).where(Discovery.world_id == world_id)) or 0)
+    approved = int(await session.scalar(
+        select(func.count(Invention.id)).where(
+            Invention.world_id == world_id, Invention.status == TaskStatus.APPROVED)) or 0)
+    _best = (select(Skill.minion_id, func.max(Skill.level).label("b"))
+             .join(Minion, Minion.id == Skill.minion_id)
+             .where(Minion.world_id == world_id, Minion.alive.is_(True))
+             .group_by(Skill.minion_id).subquery())
+    avg_exp = float(await session.scalar(select(func.coalesce(func.avg(_best.c.b), 0.0))) or 0.0)
+    idx = epochs_mod.knowledge_index(discoveries=discoveries, avg_expertise=avg_exp,
+                                     approved_inventions=approved)
+    recent = (await session.execute(
+        select(Event.payload, Event.kind, Event.tick).where(
+            Event.world_id == world_id, Event.kind.in_(["saga:begins", "saga:resolved"]))
+        .order_by(Event.tick.desc()).limit(12))).all()
+    return {
+        "world_id": world_id, "tick": world.tick, "era": world.era,
+        "epoch": epochs_mod.epoch_progress(idx),
+        "recent_sagas": [{"kind": k, "tick": t, **(p or {})} for p, k, t in recent],
+    }
+
+
 # ── Cutting-edge analytic layers exposed over the live world ─────────────────
 @router.get("/{world_id}/civos")
 async def get_civos_dashboard(

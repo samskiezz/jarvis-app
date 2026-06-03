@@ -60,6 +60,8 @@ class TickReport:
     project_contributions: int = 0
     project_stages_advanced: int = 0
     projects_approved: int = 0
+    sagas_active: int = 0
+    sagas_spawned: int = 0
     replications: int = 0
 
 
@@ -486,6 +488,15 @@ async def advance_world(
         # thresholds have been met. Doc I.22, III.23-26.
         from .progression import update_era as _update_era
         await _update_era(session, world)
+
+        # 6b. Sagas — emergent storylines (mentorships, prodigies, rivalries,
+        # trials) spun from the world's real Minions and epoch. They give lives
+        # meaning AND materially aid development: faster learning, steadier mood,
+        # purpose. Story and simulation reinforce each other. (#sagas)
+        from . import sagas as _sagas
+        saga_report = await _sagas.tick_sagas(session, world, rng)
+        report.sagas_active = saga_report.get("active", 0)
+        report.sagas_spawned = saga_report.get("spawned", 0)
 
         # 7. Population health event if a generation milestone was reached.
         if report.births > 0:
