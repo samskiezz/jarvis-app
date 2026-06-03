@@ -43,7 +43,11 @@ def main(argv=None) -> int:
     ap.add_argument("--epoch", default=None, help="only this epoch tag (+ evergreens)")
     ap.add_argument("--only", default=None, help="comma list of design ids")
     ap.add_argument("--dry-run", action="store_true")
-    ap.add_argument("--model-version", default="v2.5")
+    ap.add_argument("--estimate", action="store_true",
+                    help="report job count + approx credits, then exit (spends nothing)")
+    ap.add_argument("--credits-per-job", type=float, default=20.0,
+                    help="approx Tripo credits per text-to-model job for the estimate")
+    ap.add_argument("--model-version", default="v2.0-20240919")
     args = ap.parse_args(argv)
 
     designs = designs_for(args.epoch)
@@ -55,9 +59,15 @@ def main(argv=None) -> int:
     todo = [d for d in designs if f"tripo:{d[0]}" not in manifest]
     print(f"{len(designs)} designs in scope, {len(todo)} missing -> to generate")
 
-    if args.dry_run:
+    if args.dry_run or args.estimate:
+        from collections import Counter
+        by_cat = Counter(d[1] for d in todo)
         for did, cat, epoch, prompt in todo:
-            print(f"  [{cat:8s} {epoch:11s}] {did:22s} :: {prompt[:60]}…")
+            print(f"  [{cat:9s} {epoch:11s}] {did:24s} :: {prompt[:56]}…")
+        print(f"\n  by category: {dict(by_cat)}")
+        print(f"  ESTIMATE: {len(todo)} jobs × ~{args.credits_per_job:.0f} credits "
+              f"= ~{len(todo) * args.credits_per_job:.0f} credits "
+              f"(check your balance at https://platform.tripo3d.ai/api-keys)")
         return 0
 
     from .tripo_client import TripoError, generate_to_file

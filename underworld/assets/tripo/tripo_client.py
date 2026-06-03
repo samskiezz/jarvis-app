@@ -52,10 +52,15 @@ def _get(path: str) -> dict:
         return json.loads(r.read())
 
 
-def create_text_task(prompt: str, *, model_version: str = "v2.5",
+def create_text_task(prompt: str, *, model_version: str = "v2.0-20240919",
                      negative_prompt: str = "low quality, blurry, distorted",
                      pbr: bool = True) -> str:
-    """Submit a text→3D task; returns the task_id."""
+    """Submit a text→3D task; returns the task_id.
+
+    model_version: validated against the live API — 'v2.0-20240919' is accepted.
+    (Newer versions like v2.5/v3.0 may be available depending on your plan; pass
+    them explicitly. 'v2.5' was rejected as invalid on the tested account.)
+    """
     body = {"type": "text_to_model", "prompt": prompt,
             "negative_prompt": negative_prompt, "model_version": model_version}
     if pbr:
