@@ -3984,5 +3984,22 @@
     "epoch": "industrial",
     "name": "Barometer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:battery_bank": {
+    "prompt": "a bank of industrial batteries, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a0bdd2b2-f8c2-4eef-acc5-cb7d07828099",
+    "path": "/models/generated/tripo/battery_bank.glb",
+    "bytes": 14722788,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a0bdd2b2-f8c2-4eef-acc5-cb7d07828099/tripo_pbr_model_a0bdd2b2-f8c2-4eef-acc5-cb7d07828099.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTBiZGQyYjItZjhjMi00ZWVmLWFjYzUtY2I3ZDA3ODI4MDk5L3RyaXBvX3Bicl9tb2RlbF9hMGJkZDJiMi1mOGMyLTRlZWYtYWNjNS1jYjdkMDc4MjgwOTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=UZySqQnl0VkwsfmnZmlG9ckc6VHFSTiGwhxEFYa8Mzq8YUNnM0XQbOvXGK7Mn3P1VQZZMqqvrD5YGM-ux6yOJApR7WwGTcglm50Dr34vRi5AackrFrjxbCze2hhIiIuGacf9tnzRh6gC9XLx2PpNcjupCnQkXpPAvzFqhMusSYYll4TCYwBtF23YqU5fJGjJGTUHGHVZAWnzz3gOjHK-YgRSIe1Fspy35kwRuodHg0e1M3SH-iNTh-Bej~vkrV1qMzk6idVnhchaHruxsQIGRLhFrQKcKJ2VdLUZXgzRv~ho0Kggh2vUOCtk1ZKvOrZi5Tp~QzjvNMKl52TOb9MLaQ__",
+    "asset_id": "battery_bank",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "information",
+    "name": "Battery Bank",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
