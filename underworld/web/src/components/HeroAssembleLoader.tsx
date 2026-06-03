@@ -168,13 +168,14 @@ function Rig() {
   return null;
 }
 
-export default function HeroAssembleLoader({ progress }: { progress: number }) {
+export default function HeroAssembleLoader({ progress, onCanvas }: { progress: number; onCanvas?: (c: HTMLCanvasElement) => void }) {
   return (
     <Canvas
       dpr={[1, 1.75]}
-      gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+      gl={{ antialias: true, preserveDrawingBuffer: true, toneMapping: THREE.ACESFilmicToneMapping }}
       camera={{ fov: 42, near: 0.1, far: 100 }}
       style={{ position: "absolute", inset: 0 }}
+      onCreated={(s) => onCanvas?.(s.gl.domElement as HTMLCanvasElement)}
     >
       <Rig />
       <color attach="background" args={["#0a0a12"]} />

@@ -2,6 +2,7 @@ import { Component, ReactNode, useEffect, useRef, useState } from "react";
 import { discoverAssets, preloadAll } from "@/lib/assetPreloader";
 import * as music from "@/lib/loaderMusic";
 import HeroAssembleLoader from "@/components/HeroAssembleLoader";
+import { recordCanvas, Recorder } from "@/lib/recordCanvas";
 
 // If the 3D hero canvas ever throws (missing/broken GLB, no WebGL), fall back
 // silently to the gradient backdrop — the loader must NEVER block entry.
@@ -48,7 +49,21 @@ export default function GameLoader({ children }: { children: ReactNode }) {
   const [musicOn, setMusicOn] = useState(false);
   const [flavour, setFlavour] = useState(FLAVOUR[0]);
   const [heroReady, setHeroReady] = useState(false);
+  const [recording, setRecording] = useState(false);
   const started = useRef(false);
+  const heroCanvas = useRef<HTMLCanvasElement | null>(null);
+  const recorder = useRef<Recorder | null>(null);
+
+  function toggleRecord() {
+    if (recording) {
+      recorder.current?.stop();
+      recorder.current = null;
+      setRecording(false);
+    } else if (heroCanvas.current) {
+      recorder.current = recordCanvas(heroCanvas.current, { fps: 30, maxMs: 30000 });
+      setRecording(true);
+    }
+  }
 
   // Only show the 3D assembling hero if its GLB is actually present.
   useEffect(() => {
@@ -100,9 +115,21 @@ export default function GameLoader({ children }: { children: ReactNode }) {
       {heroReady && (
         <div className="pointer-events-none absolute inset-0 z-0">
           <HeroBoundary>
-            <HeroAssembleLoader progress={pct} />
+            <HeroAssembleLoader progress={pct} onCanvas={(c) => { heroCanvas.current = c; }} />
           </HeroBoundary>
         </div>
+      )}
+
+      {/* Record the REAL GPU loader (true bloom/colours) to a video file. */}
+      {heroReady && (
+        <button
+          onClick={toggleRecord}
+          className={`absolute top-4 left-5 z-10 rounded px-3 py-1 text-xs font-semibold tracking-widest
+                      ${recording ? "bg-red-600/80 text-white animate-pulse" : "bg-white/10 text-zinc-300 hover:bg-white/20"}`}
+          title="Record the loader animation to a video"
+        >
+          {recording ? "■ STOP & SAVE" : "● RECORD"}
+        </button>
       )}
 
       <button
