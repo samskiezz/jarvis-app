@@ -3372,5 +3372,22 @@
     "epoch": "industrial",
     "name": "Toilet",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tool_rack": {
+    "prompt": "a wall tool rack hung with hand tools, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "50f51bcc-69af-4e71-8ff1-eb6bcf3d3ea7",
+    "path": "/models/generated/tripo/tool_rack.glb",
+    "bytes": 12062948,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/50f51bcc-69af-4e71-8ff1-eb6bcf3d3ea7/tripo_pbr_model_50f51bcc-69af-4e71-8ff1-eb6bcf3d3ea7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNTBmNTFiY2MtNjlhZi00ZTcxLThmZjEtZWI2YmNmM2QzZWE3L3RyaXBvX3Bicl9tb2RlbF81MGY1MWJjYy02OWFmLTRlNzEtOGZmMS1lYjZiY2YzZDNlYTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Kcl3gsEKCOqjYRFJvibHXsqLaKBF-FsmmZbeMinjOiKPYN3PMdeXn8tmIMWRVJ3po2YUUbxbyrpT1PlW3TySYiQ-JeSdsqGDZ8j6Qpu4rFos02D1QHdjvzYRkjcuF4yoF3j5zg3QVLZOZBIF1mr7Tznhk1c7vSzh0NgLheQvbLF-ZJ9V5yn0tJR7HqSpCI06S9KkiKvNNy3OylsFYPIL5dMy29nZlQD~dSuIY3UPzrL2CgOMdy5UIsngocLRxHTmMHDWYkMyQmSHK7Z-Q5LwYRlrWuhiXNZQdFow7i8C2ubGGRsQsM4TKu-MRVhYXTly8YNOSuQJOgoH-1-4ilG7uQ__",
+    "asset_id": "tool_rack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "iron",
+    "name": "Tool Rack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
