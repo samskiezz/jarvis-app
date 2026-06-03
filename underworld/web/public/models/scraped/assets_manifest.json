@@ -8217,5 +8217,22 @@
     "epoch": "iron",
     "name": "Chariot",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hover_pod": {
+    "prompt": "a sleek near-future hover pod vehicle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "719f0c41-3cae-4782-bc94-e44e67e38a6e",
+    "path": "/models/generated/tripo/hover_pod.glb",
+    "bytes": 14707820,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/719f0c41-3cae-4782-bc94-e44e67e38a6e/tripo_pbr_model_719f0c41-3cae-4782-bc94-e44e67e38a6e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzE5ZjBjNDEtM2NhZS00NzgyLWJjOTQtZTQ0ZTY3ZTM4YTZlL3RyaXBvX3Bicl9tb2RlbF83MTlmMGM0MS0zY2FlLTQ3ODItYmM5NC1lNDRlNjdlMzhhNmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=tN6-iABs3JGSRAqFW4QlD8Jxizg7rM5bbh4LmhN0qX5aTsh9CNdmaNRDyPuLz9May2EIUHOS3OhhoDFm-fTXxgwPROGvHs6ts4U-9fhCsAfDzy0Ul7ZvNwacpEJ3t57EUZdPHJB0lZuBsyZwliijn44B2TDiSHeISFVzjjhu6QcOgZO~lGEXR2iar9lKzMALGWp0lcv7M9j5UfbQIkBa8ezfOK9-yuDa7~gg9i~MNWQ0JS8f6iE5GM~Yzsj-i-1O~VLByA53Ts~B01dSClKcKJg~onmg1BDCWAmpbZJvifQDF9kguQkRLXxd9Baz04yPaHIUxuPkLLdrp36w9GDtlw__",
+    "asset_id": "hover_pod",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "quantum",
+    "name": "Hover Pod",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
