@@ -2097,5 +2097,22 @@
     "epoch": "quantum",
     "name": "Fx Crystal Spire",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_dragon_statue": {
+    "prompt": "an ornate coiled stone dragon statue, intricate scales, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "04fbe4a5-2214-429d-8d51-065a3ad80391",
+    "path": "/models/generated/tripo/fx_dragon_statue.glb",
+    "bytes": 15352044,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/04fbe4a5-2214-429d-8d51-065a3ad80391/tripo_pbr_model_04fbe4a5-2214-429d-8d51-065a3ad80391.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDRmYmU0YTUtMjIxNC00MjlkLThkNTEtMDY1YTNhZDgwMzkxL3RyaXBvX3Bicl9tb2RlbF8wNGZiZTRhNS0yMjE0LTQyOWQtOGQ1MS0wNjVhM2FkODAzOTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=GBZk0zGXzL6jZ54Ko~8F3jsG9d5EmkwAljjx1yZcorRh~pZqaZMfuUPG4RaXrpjtTwNlZmJ1Mral-KDQKbbldyumawFvo8vcXnUtDN7WuZ-YYhXd0shVj8ng-tCfcdBlMuqhMU71~bqMEcQuLhRYW7OwCZx9dEqRffHyQd2M~mrc-7F7fcRe0mMffFYwaku0wtX0hJ4iZb4KQ-8EFS4eIyYL22aP2QlP~L0DSy-qw1Np2OBExYY3nYOKFPYzS7ds15gFQMWKTOoqqEa7NFFxMStkGNHAXhAd53jEgPFeMrJIbAbcQNKodJEJtsolEVj9zrxhDjOznood6kpp0yFEeg__",
+    "asset_id": "fx_dragon_statue",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "iron",
+    "name": "Fx Dragon Statue",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
