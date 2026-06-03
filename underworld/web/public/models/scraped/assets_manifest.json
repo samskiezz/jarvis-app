@@ -2233,5 +2233,22 @@
     "epoch": "any",
     "name": "Fx Flowering Wall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_geode": {
+    "prompt": "a large split geode lined with glowing amethyst crystals, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "046fc107-3ed4-46b4-b780-d8e6e35b75be",
+    "path": "/models/generated/tripo/fx_geode.glb",
+    "bytes": 15392264,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/046fc107-3ed4-46b4-b780-d8e6e35b75be/tripo_pbr_model_046fc107-3ed4-46b4-b780-d8e6e35b75be.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDQ2ZmMxMDctM2VkNC00NmI0LWI3ODAtZDhlNmUzNWI3NWJlL3RyaXBvX3Bicl9tb2RlbF8wNDZmYzEwNy0zZWQ0LTQ2YjQtYjc4MC1kOGU2ZTM1Yjc1YmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Q2vG708cXmMdfxjtFC0ecRt3il~Lxp8FBDs9kLtHzCx0KigyfpnL-4bC~FrrAEDWmNiy82I9B0Sr~f5FMI4wY02FPBFt1unL0aUDpW646nnIF-RGQ6W4vbyK1d-XoLaBAx96wGSeZO1Yl0IhU2Rmg7wq6YLjxDRF8fQyzpq6At7ciztH0eWR~OsnaAIdAOk3Hcf7~2xwzP0CT5wUh1fZAFOrtt-~emO4EeCyBssbfXtU8~N5KWBIfcJ9DQszTXknjsn5FGVOa7toQyQiJ1r327qcxL~Aj-KtNHMB9XY1-5Qa6IG4Xhppk9CMgQxCC035naTMUM4t7fhhd5hxDxcagA__",
+    "asset_id": "fx_geode",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Geode",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
