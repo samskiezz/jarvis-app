@@ -1706,5 +1706,22 @@
     "epoch": "iron",
     "name": "Kings Throne Hall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:supply_depot_warehouse": {
+    "prompt": "a supply-chain depot warehouse with loading bays, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "4c5b798f-a693-49d0-881b-09da9a519fbc",
+    "path": "/models/generated/tripo/supply_depot_warehouse.glb",
+    "bytes": 15321196,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/4c5b798f-a693-49d0-881b-09da9a519fbc/tripo_pbr_model_4c5b798f-a693-49d0-881b-09da9a519fbc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNGM1Yjc5OGYtYTY5My00OWQwLTg4MWItMDlkYTlhNTE5ZmJjL3RyaXBvX3Bicl9tb2RlbF80YzViNzk4Zi1hNjkzLTQ5ZDAtODgxYi0wOWRhOWE1MTlmYmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ue0se69b5YBS4A4BnmHHIui7xqg7UIgrYt16zzeRiroFAJDjM-39kOE~vajEM3jw6QxRiEOlbxmdxjaLjBPgJOiflU0H3dqdOPytdT0CcmqK7qvdHXrXI68Ads6lLWg77wY0ybCFdwb5w1iH8kcV6oj22skGFhFfyqXmZ6Za~smMS-td8d09veOKk6oONnHhp8L3De5ST3vOaN5lDRIoGmGxT7BRuLqTzkRdM~dZInc2HpVUZ05WvNcoTC31dZkdHuKnnULhwBZEOBlTgw~6FxuAZpcKV4ejzz1H9ejKKz-ErFdmEed7WkQ-P8Pfvl3qNHF6UHiy1b7aq6RF~z1Edw__",
+    "asset_id": "supply_depot_warehouse",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Supply Depot Warehouse",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
