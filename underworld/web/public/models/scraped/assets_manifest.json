@@ -1264,5 +1264,22 @@
     "epoch": "iron",
     "name": "Market Hall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:museum": {
+    "prompt": "a museum building with a grand facade, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "b9f7e287-c57e-43c1-886c-636b48c3de48",
+    "path": "/models/generated/tripo/museum.glb",
+    "bytes": 15406956,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b9f7e287-c57e-43c1-886c-636b48c3de48/tripo_pbr_model_b9f7e287-c57e-43c1-886c-636b48c3de48.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjlmN2UyODctYzU3ZS00M2MxLTg4NmMtNjM2YjQ4YzNkZTQ4L3RyaXBvX3Bicl9tb2RlbF9iOWY3ZTI4Ny1jNTdlLTQzYzEtODg2Yy02MzZiNDhjM2RlNDguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ZteL79gKAdLFxHzRETpgwZ41vGsDtHaz3tfSOT6SzF8dmZHzHa4C2TYL7wYIsv3~bTVbWZVdb33vudP61VgSnH2IcuDjviBx0qBTtx8FIsJxEocVU8RAQuOnjzuXbrHCQ5AUtXVTcsuR~xrRF4-lsoyx3RPEBEehRwqpbgL-7ixoWZbGjMKfWCsceqqqa5fE8St0J~AB-wb2d2~ea-kzGuIkmJcnKMLV-4BGpsQ~67ogEQSsxYc~ejH6R0kBXnpI7q337hWd~eZ9TBZD8m~PO32XjKF4aZTOVRcYi5VG3mD6uy7qsnBql47hRPWm2QivTeNLJ~h~Vx4yokAmKBknYw__",
+    "asset_id": "museum",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "Museum",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
