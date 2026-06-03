@@ -8489,5 +8489,22 @@
     "epoch": "any",
     "name": "Crate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:festival_bonfire": {
+    "prompt": "a blazing festival bonfire, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a1f1bc80-e32e-48f8-8213-906c0b35fae4",
+    "path": "/models/generated/tripo/festival_bonfire.glb",
+    "bytes": 14762396,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/a1f1bc80-e32e-48f8-8213-906c0b35fae4/tripo_pbr_model_a1f1bc80-e32e-48f8-8213-906c0b35fae4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYTFmMWJjODAtZTMyZS00OGY4LTgyMTMtOTA2YzBiMzVmYWU0L3RyaXBvX3Bicl9tb2RlbF9hMWYxYmM4MC1lMzJlLTQ4ZjgtODIxMy05MDZjMGIzNWZhZTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=fo8g2UpSXLWEJDyeR4PlgZ09j2M9ss4Nx-P8p5QarYD5Viywu2w9-dezpah7k8obfXBO86CHDJc6kP1eQZdVTqQrqrs-IelwwV4GiZL501OZte8Hrz3SzmSaT63gim3hJg2kht~37i-3348INaWxgU2DIm7gKtrNkg7WmvDpym6qs9TBVDNGgtGAzbvW1vG-K780HZOGrVKT7q7vObejpU~9G85afV9SCrxioVnsn1qMKAdGHLTbHPF3eOSDQVEP2cv1gLxaKhr5T3A419GYCE1aIWWW-vPF4DC49rK0zM49hcdYT0c99Jlpi5ojpmotihYj7DYcuJWtmK9zVRX27A__",
+    "asset_id": "festival_bonfire",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "stone",
+    "name": "Festival Bonfire",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
