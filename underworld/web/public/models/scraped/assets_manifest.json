@@ -5616,5 +5616,22 @@
     "epoch": "stone",
     "name": "Prayer Beads",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:quill_ink": {
+    "prompt": "a quill pen and ink pot, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fbc18462-bac6-4164-a866-4c3c7a3bc66f",
+    "path": "/models/generated/tripo/quill_ink.glb",
+    "bytes": 11853728,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/fbc18462-bac6-4164-a866-4c3c7a3bc66f/tripo_pbr_model_fbc18462-bac6-4164-a866-4c3c7a3bc66f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZmJjMTg0NjItYmFjNi00MTY0LWE4NjYtNGMzYzdhM2JjNjZmL3RyaXBvX3Bicl9tb2RlbF9mYmMxODQ2Mi1iYWM2LTQxNjQtYTg2Ni00YzNjN2EzYmM2NmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=pU7Z1hdORD-CcfprHlguVEKL~4afh~VugKTxtiCWcFd65g8w7JiSKACH32FCWwXte1pQ0FbjrwLGX0mQ2xtB1qchwLzn-CNPkr9Jpawj~rO7Urp-xafUKcRMwbH72UTRtnqVtLXuEKu-Yq3TTPrigz484ZzK8r6gkZkyfF1-eHpu3n3neLIYnOfS41kr4-92Hq7i7lytPqL4PJUn1baXYLp5VYciTiZDohGGjpBEr-dQTIPudAiqtRLXKQHf3yLPhBGf05JIJMXCDRGb4QbszmOJ9MVWBX29dk9BN9sb7tmrz8Yu~E4nOfBG1tDmBlvHlBPhwuro59O-r9paP1lXNA__",
+    "asset_id": "quill_ink",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "iron",
+    "name": "Quill Ink",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
