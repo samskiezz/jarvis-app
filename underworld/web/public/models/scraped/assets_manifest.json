@@ -6109,5 +6109,22 @@
     "epoch": "iron",
     "name": "Coin Purse",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:collaboration_round_table": {
+    "prompt": "a large round collaboration table strewn with shared blueprints, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ca9e28bb-d181-4fa1-9b8e-3ea96e9dbd48",
+    "path": "/models/generated/tripo/collaboration_round_table.glb",
+    "bytes": 15049088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/ca9e28bb-d181-4fa1-9b8e-3ea96e9dbd48/tripo_pbr_model_ca9e28bb-d181-4fa1-9b8e-3ea96e9dbd48.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvY2E5ZTI4YmItZDE4MS00ZmExLTliOGUtM2VhOTZlOWRiZDQ4L3RyaXBvX3Bicl9tb2RlbF9jYTllMjhiYi1kMTgxLTRmYTEtOWI4ZS0zZWE5NmU5ZGJkNDguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=ADPDRDjfnSkIfe3XdrDllexUGagRbkGwHp~wbiY4~x2mSht5faFsxp0Jkc2qL64K9zAHyBPykHrp4qCvSOFzMS0ZJb73G4afnDEtHE7~ZZYwhwCni8QLKaz4ijIIv8337~n4kQ8D-eXOrOmiFF3XjLrJaC0aY5xGNK0XWiPftp0lZGffZ4Pon93JFWL2SDbv86J2hkxJbrbaskX2l68SUZU1AMOkZqjpJtpsiZ0woTbfhHRNPmyc1loX6h3pXx5JVZJc0kdqYbTZJT3VN4Th2CRKUqGx2AF9NGD57VgCPDWQoRCj4vVqUsxkFcXOsBRZ5cdv-5B09~s6u~Um01Frog__",
+    "asset_id": "collaboration_round_table",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "industrial",
+    "name": "Collaboration Round Table",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
