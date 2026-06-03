@@ -1281,5 +1281,22 @@
     "epoch": "industrial",
     "name": "Museum",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:observatory": {
+    "prompt": "an astronomical observatory with a domed telescope roof, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "39e489f9-58af-4cd3-8f31-db64890919c1",
+    "path": "/models/generated/tripo/observatory.glb",
+    "bytes": 14882392,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/39e489f9-58af-4cd3-8f31-db64890919c1/tripo_pbr_model_39e489f9-58af-4cd3-8f31-db64890919c1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzllNDg5ZjktNThhZi00Y2QzLThmMzEtZGI2NDg5MDkxOWMxL3RyaXBvX3Bicl9tb2RlbF8zOWU0ODlmOS01OGFmLTRjZDMtOGYzMS1kYjY0ODkwOTE5YzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=AXTlnc3wa3yY8WWd8UHR9IQtySRg-ksRnxsNNgJ9sMJ8fBmysZLpVoGAPZ5Gq9~6wXucCcH5DGLA3DT5Lu7OUF3RYKUBIGp2kU2fTRlSULK80v2IpSV3exeSJso3~rfJI0LBq4tbbVyhJCFLzez4r6BHEiVG0Hol7AhCVl0bzpjqXOdPqpTP-gmnpVls2vLsQjfP5nWOejCjAf5p1LxgDsmxuFpe~9dDvMVF1b1eICSo3~6EmRIJKoNMnavxOG~ottUj21gmkkuKq4tDXlqzFM3l3YjfEK9V~mkjFsccJlD2JmucXR5bRmO9dTsPKPqSHLnDpbKjeIlGU1GhjRi54g__",
+    "asset_id": "observatory",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "civic",
+    "epoch": "industrial",
+    "name": "Observatory",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
