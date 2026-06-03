@@ -54,22 +54,34 @@ def _get(path: str) -> dict:
 
 def create_text_task(prompt: str, *, model_version: str = "v2.0-20240919",
                      negative_prompt: str = "low quality, blurry, distorted",
-                     pbr: bool = True) -> str:
+                     pbr: bool = True, retries: int = 5) -> str:
     """Submit a text→3D task; returns the task_id.
 
     model_version: validated against the live API — 'v2.0-20240919' is accepted.
-    (Newer versions like v2.5/v3.0 may be available depending on your plan; pass
-    them explicitly. 'v2.5' was rejected as invalid on the tested account.)
+    (Newer versions like v2.5/v3.0 may be available depending on your plan.)
+
+    Retries transient 400/429 with backoff — the free tier limits *concurrent*
+    tasks, so a fresh create can be briefly rejected while another is running.
     """
+    import urllib.error
     body = {"type": "text_to_model", "prompt": prompt,
             "negative_prompt": negative_prompt, "model_version": model_version}
     if pbr:
         body["texture"] = True
         body["pbr"] = True
-    resp = _post("/v2/openapi/task", body)
-    if resp.get("code") not in (0, None):
-        raise TripoError(f"create failed: {resp}")
-    return resp["data"]["task_id"]
+    for attempt in range(retries):
+        try:
+            resp = _post("/v2/openapi/task", body)
+            if resp.get("code") not in (0, None):
+                raise TripoError(f"create failed: {resp}")
+            return resp["data"]["task_id"]
+        except urllib.error.HTTPError as e:
+            transient = e.code in (400, 409, 429, 500, 502, 503)
+            if transient and attempt < retries - 1:
+                time.sleep(2 ** attempt * 2)        # 2,4,8,16s backoff
+                continue
+            raise TripoError(f"create failed ({e.code}): {e.read().decode()[:200]}")
+    raise TripoError("create failed after retries")
 
 
 def poll_task(task_id: str, *, timeout_s: int = 600, interval_s: float = 5.0) -> dict:

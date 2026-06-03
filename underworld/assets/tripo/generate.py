@@ -41,7 +41,9 @@ def main(argv=None) -> int:
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--epoch", default=None, help="only this epoch tag (+ evergreens)")
+    ap.add_argument("--phase", default=None, help="only this build phase/category (e.g. terrain)")
     ap.add_argument("--only", default=None, help="comma list of design ids")
+    ap.add_argument("--max", type=int, default=0, help="cap number of jobs this run (budget guard)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--estimate", action="store_true",
                     help="report job count + approx credits, then exit (spends nothing)")
@@ -51,12 +53,16 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     designs = designs_for(args.epoch)
+    if args.phase:
+        designs = [d for d in designs if d[1] == args.phase]
     if args.only:
         wanted = {x.strip() for x in args.only.split(",")}
         designs = [d for d in designs if d[0] in wanted]
 
     manifest = _load_manifest()
     todo = [d for d in designs if f"tripo:{d[0]}" not in manifest]
+    if args.max and len(todo) > args.max:
+        todo = todo[:args.max]
     print(f"{len(designs)} designs in scope, {len(todo)} missing -> to generate")
 
     if args.dry_run or args.estimate:
