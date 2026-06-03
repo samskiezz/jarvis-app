@@ -6466,5 +6466,22 @@
     "epoch": "any",
     "name": "Fossil Ammonite",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fossil_dimetrodon": {
+    "prompt": "a sail-backed dimetrodon fossil skeleton, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "85d8c49f-4dcb-4436-871a-b38f80fe8895",
+    "path": "/models/generated/tripo/fossil_dimetrodon.glb",
+    "bytes": 9159408,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/85d8c49f-4dcb-4436-871a-b38f80fe8895/tripo_pbr_model_85d8c49f-4dcb-4436-871a-b38f80fe8895.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvODVkOGM0OWYtNGRjYi00NDM2LTg3MWEtYjM4ZjgwZmU4ODk1L3RyaXBvX3Bicl9tb2RlbF84NWQ4YzQ5Zi00ZGNiLTQ0MzYtODcxYS1iMzhmODBmZTg4OTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=fcL1rGwG0f9UrBnFGELnWqF78XvjSKyiNKaD9w4ycTSl7mVO56btnko0Wc0D6b-fq~o3ExMi4CY-0nBXeFMTRt2F1sm4nSVsaWIB5ZjZfFg7gAkHRFD9VajE59Z7vivQB4pErtrt~oxDicn4ctv-c9OAnwz-cL7Pmo6BGEl01fDwi1Kd4~7riLpVmR3vHC7PxixHOwXMVx6nu0MD2BnTfQV0tE69euyNjah3wpXz2WhhIXN-RclGW0RalMfWzyqkzLOoY-Bjs~ywU5G5iwYw25e4m-0D3QbBdHvKZSL30GPpflQy7xQ1lDj4RTiTJWIF~yin56r5eVSzb7hIwaB26Q__",
+    "asset_id": "fossil_dimetrodon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "any",
+    "name": "Fossil Dimetrodon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
