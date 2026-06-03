@@ -7248,5 +7248,22 @@
     "epoch": "industrial",
     "name": "Power Pole",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:printing_press": {
+    "prompt": "a cast-iron printing press, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c2825fa7-d723-41d5-b68a-aa1755d9855c",
+    "path": "/models/generated/tripo/printing_press.glb",
+    "bytes": 15179860,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/c2825fa7-d723-41d5-b68a-aa1755d9855c/tripo_pbr_model_c2825fa7-d723-41d5-b68a-aa1755d9855c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYzI4MjVmYTctZDcyMy00MWQ1LWI2OGEtYWExNzU1ZDk4NTVjL3RyaXBvX3Bicl9tb2RlbF9jMjgyNWZhNy1kNzIzLTQxZDUtYjY4YS1hYTE3NTVkOTg1NWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=OBw8iAMVIykKV5GBE6vh4l80x1sjtZfmchfWJzVt3b1XQX02SlM7tyEvg06LPdmd07pa9wM4WnfeorYtd7xnG4w-ew3FWXAL03PefqKZTq1SFHZ9-i~v5kKY4ePrb6sjtFlmsTDLGjBQ8cZU8P9Te6LVpRxVLZFsHDHtSkl6~4k5RDhgIacHsxI7MUovFgsOWzFIcQJk7Kw204CxN8nTvfgVjtQITPOTKpAJGExWr9E3L0yceYlA~Vl6JoWV~lLL~7CkO6pw-WmhmCSpUYZBe0x2frGWVnyimpPMvoXpJqp6hmbKZEYWfq9vPLAQiQ9vV2bg8-2BzJY7nNsrMLYxxw__",
+    "asset_id": "printing_press",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "infra",
+    "epoch": "industrial",
+    "name": "Printing Press",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
