@@ -6891,5 +6891,22 @@
     "epoch": "industrial",
     "name": "Medicine Cabinet",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:petri_dish": {
+    "prompt": "a stack of petri dishes with cultures, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d202f6c6-38e9-451a-8748-8883248e006e",
+    "path": "/models/generated/tripo/petri_dish.glb",
+    "bytes": 14719188,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d202f6c6-38e9-451a-8748-8883248e006e/tripo_pbr_model_d202f6c6-38e9-451a-8748-8883248e006e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDIwMmY2YzYtMzhlOS00NTFhLTg3NDgtODg4MzI0OGUwMDZlL3RyaXBvX3Bicl9tb2RlbF9kMjAyZjZjNi0zOGU5LTQ1MWEtODc0OC04ODgzMjQ4ZTAwNmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=m58OfxD61SAv63l~S8vHmAa2B97NhTj6TlMyidfvG3k6vJX2MD~zpj4TBlF1ggK1wQ-8-sgKgTrl~aRuwI-MYU0H0vTVT-y6bHNmBetFaxL2Pgyl5sazqGWYj-EiC68rr8v33IimzZtcbfCV3bW1kgLvsK5GBLEUJopODNvFTaw-BpCafeSIM1kl8A38SMjaJI9BUzSB01Xz~aghTmeXMJrjBmJ0zJ8qTUYct4cGznnyFTfCdIwZc~T13NcHORbU4mPpTLH2LHZpcwE~~cT9adS9GHTPTxfg7uAhnsfakKKs~lqnDj6UDy4bRsWqEqN5lYVZD69SsaZLF3X5ii1fyA__",
+    "asset_id": "petri_dish",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "medical",
+    "epoch": "information",
+    "name": "Petri Dish",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
