@@ -3151,5 +3151,22 @@
     "epoch": "any",
     "name": "Berry Bush",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:exhaustion_bedroll": {
+    "prompt": "a simple rolled-out woven bedroll, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e18b64e4-3f60-4fdb-9301-22eccaea4bcc",
+    "path": "/models/generated/tripo/exhaustion_bedroll.glb",
+    "bytes": 14981044,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e18b64e4-3f60-4fdb-9301-22eccaea4bcc/tripo_pbr_model_e18b64e4-3f60-4fdb-9301-22eccaea4bcc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTE4YjY0ZTQtM2Y2MC00ZmRiLTkzMDEtMjJlY2NhZWE0YmNjL3RyaXBvX3Bicl9tb2RlbF9lMThiNjRlNC0zZjYwLTRmZGItOTMwMS0yMmVjY2FlYTRiY2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=hd039FpC~nC-pUiZwPEwBh-8S82-mzmkWwYKDhkCWzBME5IhdZtHqwkhkW5KUy6ZVwWh81gSGtyLk2VfE8K~k38Dr88Vu3dNgv4030Ng2uTgPVVmwY8hlLsiIm6VFVQQZYTmhvCxwUZsUv5K0Id1BbPnR7IMk~W6JYBkc-RWFH0enl-5iAdx0BchQv6kgr8Z6n~AXmHr2kfSn2lNMfWHmlIiAYW~H3RYl-syemjgM0thp2a5SA1TShNbXO6h0Cpy-ZC8L4035GgQT023IjVr8paD~ByDrodALcN86UDOrqoZ4tSYBtvIvqNzTcV7CuaMC0TiD-zjyalCn-ytRKA30g__",
+    "asset_id": "exhaustion_bedroll",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "stone",
+    "name": "Exhaustion Bedroll",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
