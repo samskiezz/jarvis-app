@@ -1536,5 +1536,22 @@
     "epoch": "any",
     "name": "Prey Deer Herd",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rain_puddle_decal": {
+    "prompt": "a wet ground patch with rain puddles and ripples, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "d77f2021-352f-4fd9-ae0c-57b66b065f23",
+    "path": "/models/generated/tripo/rain_puddle_decal.glb",
+    "bytes": 14209984,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d77f2021-352f-4fd9-ae0c-57b66b065f23/tripo_pbr_model_d77f2021-352f-4fd9-ae0c-57b66b065f23.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDc3ZjIwMjEtMzUyZi00ZmQ5LWFlMGMtNTdiNjZiMDY1ZjIzL3RyaXBvX3Bicl9tb2RlbF9kNzdmMjAyMS0zNTJmLTRmZDktYWUwYy01N2I2NmIwNjVmMjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=bY30SBwaI~7DwPtimBeyCSdCTHlcKpNCjSp0hWHU0jGLRDW9CQevipIcOT-IVX24HZLsMoShaAoRCHK5F5HXSiJyGlwAgbUY4mnSbwE0UXH7HR-mHkrL5-lqBhd-YHg6vuFYAXOX5l9~dZaKLpKSZg4jEqumvm6SoxgH6C2D2pvVF3~4kQ-B98fbairs3b~Kdxe-yKowqz-gLe2eM~VaU91ZVvwv7ttd8fnauIhtFS-OhflVccahWbdpRGfYa-WT1wVv6nCX8iBu~R~QlZF3WjDeiLdg29OBCZPaaH5LpSvtsOR0shVgu-4eFG9iI6D816zAorJyLGUUhXMgBDX-lA__",
+    "asset_id": "rain_puddle_decal",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "biome",
+    "epoch": "any",
+    "name": "Rain Puddle Decal",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
