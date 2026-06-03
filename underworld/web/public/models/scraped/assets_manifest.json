@@ -4749,5 +4749,22 @@
     "epoch": "quantum",
     "name": "Photonics Bench",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plough": {
+    "prompt": "a wooden ox plough, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "300b71d1-63f1-4ee0-80c3-848566551bc3",
+    "path": "/models/generated/tripo/plough.glb",
+    "bytes": 7580884,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/300b71d1-63f1-4ee0-80c3-848566551bc3/tripo_pbr_model_300b71d1-63f1-4ee0-80c3-848566551bc3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMzAwYjcxZDEtNjNmMS00ZWUwLTgwYzMtODQ4NTY2NTUxYmMzL3RyaXBvX3Bicl9tb2RlbF8zMDBiNzFkMS02M2YxLTRlZTAtODBjMy04NDg1NjY1NTFiYzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=G8SulsB7FtqFO9IkO0NxnTCb-umnZjLfNXInIPiXYEdLCZLpjyslDnIjR7WXf84sMjJegdPmnA-3rFWB8vOra~WQ4F11iQ8D4vF1sc53VjqZRUlzC4fWlFmFRLMVRX6U4OMqAn3v2-gDYL0AwcvXMCJq2wCoh5xI6D5MSeoTDZLteFZfUG0SbYLeKxBJW-YQJ3rGpjXz4pP51UDDAU4TM-LfXrC1Pxm~QxQka3hsHkg6TFQ1YnDzdyijPbD7hXto6hTf~khFcraOeyI3jMXGuCHjpj1Z3cuz6d-KpZn56mPvPz7mScGfb6aAmyxAVcIi2SRkCbirCe0BbWSqVTx-4Q__",
+    "asset_id": "plough",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "bronze",
+    "name": "Plough",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
