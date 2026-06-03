@@ -7469,5 +7469,22 @@
     "epoch": "industrial",
     "name": "Warning Sign",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:watchtower": {
+    "prompt": "a wooden guard watchtower, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d9e3a97a-78db-43b4-b704-f2d68bda188b",
+    "path": "/models/generated/tripo/watchtower.glb",
+    "bytes": 15366948,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d9e3a97a-78db-43b4-b704-f2d68bda188b/tripo_pbr_model_d9e3a97a-78db-43b4-b704-f2d68bda188b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDllM2E5N2EtNzhkYi00M2I0LWI3MDQtZjJkNjhiZGExODhiL3RyaXBvX3Bicl9tb2RlbF9kOWUzYTk3YS03OGRiLTQzYjQtYjcwNC1mMmQ2OGJkYTE4OGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Sftw-XuC7L6skR5EVh12l2cFaIkCu6tUaBb9znt4kOr8f7kHrLw-RzLD5Of63FhHAmxogC4J0jf~Vwz3RX80zQTopMT6rLsHGTPZsdFkOnH89zLQVXlWfmqOPdjbzTfXDepMMiDVzwZNYx4ChSXnIxv22q-cLGy3QfUaziAi7ADuBefw2k8SRlUuPgT5m3AEvcpxAu-Qo2~yw4gL7cn983U1LZpUjCLeu8xF3gznL~tF4YI7992VU46kbFGt7Bv51QXhTrE74qurABOGA6KhtAwFyOryX-XKyXCfZUDZzETUM7B9ovuGrA-wPXyJcsmsNHKt9o8UBmcXAQDUDlhmvA__",
+    "asset_id": "watchtower",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "safety",
+    "epoch": "iron",
+    "name": "Watchtower",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
