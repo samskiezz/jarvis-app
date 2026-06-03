@@ -7078,5 +7078,22 @@
     "epoch": "bronze",
     "name": "Hay Bale",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:orchard_tree": {
+    "prompt": "a fruit-laden apple orchard tree, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3f6b6e51-a145-456d-b4d5-96721cb6e1a4",
+    "path": "/models/generated/tripo/orchard_tree.glb",
+    "bytes": 15600792,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3f6b6e51-a145-456d-b4d5-96721cb6e1a4/tripo_pbr_model_3f6b6e51-a145-456d-b4d5-96721cb6e1a4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2Y2YjZlNTEtYTE0NS00NTZkLWI0ZDUtOTY3MjFjYjZlMWE0L3RyaXBvX3Bicl9tb2RlbF8zZjZiNmU1MS1hMTQ1LTQ1NmQtYjRkNS05NjcyMWNiNmUxYTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=D3dTssJP3HPRX~77rP7-yqXIzVtQOoTgXNjPSkLLAqcsHr52wAtwV58pIE9xfS6c4MApVKBy29-NoGdmtMhu24zjYkr9aAdVaLkD0-rOJJf8DhRSlFDsasPwZ~eStx7xQmZsz3B~ibZW8sbqoZTsbDyh5g5WpBKLJtemeCx6CHGDiPRXANJnwt0Y4ldx-PEK4x0CmDbJwnDIGt8UYDB8RKvPAZuSrGmkpfCalcgLDMKLLHazlFKpG3N3KGk1FDBI~YQhzSQ0c-Q4XWlVeh3ZhBoGqQxyTgKHJwsLmTyws~AMISOk3JwypUFE-NUkVPgbzHovVm~6uVO06JXmmb-8wQ__",
+    "asset_id": "orchard_tree",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "agri",
+    "epoch": "bronze",
+    "name": "Orchard Tree",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
