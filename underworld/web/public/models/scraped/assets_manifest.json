@@ -4851,5 +4851,22 @@
     "epoch": "quantum",
     "name": "Quantum Computer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:reactor_model": {
+    "prompt": "a compact fusion reactor torus model, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "01d4527d-9533-487f-8b64-052b8c390bd9",
+    "path": "/models/generated/tripo/reactor_model.glb",
+    "bytes": 15019644,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/01d4527d-9533-487f-8b64-052b8c390bd9/tripo_pbr_model_01d4527d-9533-487f-8b64-052b8c390bd9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMDFkNDUyN2QtOTUzMy00ODdmLThiNjQtMDUyYjhjMzkwYmQ5L3RyaXBvX3Bicl9tb2RlbF8wMWQ0NTI3ZC05NTMzLTQ4N2YtOGI2NC0wNTJiOGMzOTBiZDkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KvGFxYcVVrKjB0sn8tqTtzmkTffy5eSf~dItyI1SuJsb4JIao6j8c7vhda4IJttkgnjSQ4SsgvqCGoFtQ9uyC1UX8Snl4PUsGVlElfum1OCKIDimBbUx-Q99-p3L1q5lwCJtsqJwh7PpRnrG9BhQz8X9sY9fzK4DrNO87Svgr71Uy0EgxJ~74GSKQl-pfz1Y1EtcNKPsq6VMZ5c7DWTQKOo8j7rVhqOJtI6NjFangLbZrED76iEW1dSPWf0GmHaMI-xCV0VL2jtpwY9eXDT167HAqh-ZdzC-wQtpSYqpRejBdfkkjSwWwx8zTXwA4D2Jta~qtPVXEU9TQOpeTM4bCg__",
+    "asset_id": "reactor_model",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "quantum",
+    "name": "Reactor Model",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
