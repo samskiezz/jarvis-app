@@ -2658,5 +2658,22 @@
     "epoch": "iron",
     "name": "Fx Torch Brazier",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_wizard_tower": {
+    "prompt": "a tall crooked mage's tower topped with a glowing orb, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "3c35e7a8-a57b-4207-8b5f-2d146c165711",
+    "path": "/models/generated/tripo/fx_wizard_tower.glb",
+    "bytes": 15400552,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/3c35e7a8-a57b-4207-8b5f-2d146c165711/tripo_pbr_model_3c35e7a8-a57b-4207-8b5f-2d146c165711.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvM2MzNWU3YTgtYTU3Yi00MjA3LThiNWYtMmQxNDZjMTY1NzExL3RyaXBvX3Bicl9tb2RlbF8zYzM1ZTdhOC1hNTdiLTQyMDctOGI1Zi0yZDE0NmMxNjU3MTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=QviGuQq-zL7Ifh7E6Lqe08LtoeGjyNVhSLLbjFp9YovEHrpSuBsxO7KgLGSgnWTtL8RuNNKpo-Y1U5voklI~E9PaxAc59Wv4FtFGynRkRDBNha7mn2dTCTdDZkA3Cr7swXVJHKyMGmOkhchpgblPcyY3p1zqnKHhxEqxgfT~K~aHdLw74COj8iGcB5KnZPWZulpscoefj6MCSgSO4EPgjH9QUPGilln4-7DcVbSzm0EaNvwR2W-9zrbrespExzduj1Q3NZHhpg9bs9bsiUPTpQLXTtABNzJb8B7PXeQjSFqx3xjNK7LOEat0cuQfQudnxQYBYyOSo3dJfLR7N5f6bw__",
+    "asset_id": "fx_wizard_tower",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "iron",
+    "name": "Fx Wizard Tower",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
