@@ -5786,5 +5786,22 @@
     "epoch": "stone",
     "name": "Thirst Water Skin",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:trowel": {
+    "prompt": "a bricklayer's trowel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "eab6d578-be7d-4f40-a6af-08158cbdcb9e",
+    "path": "/models/generated/tripo/trowel.glb",
+    "bytes": 7490268,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/eab6d578-be7d-4f40-a6af-08158cbdcb9e/tripo_pbr_model_eab6d578-be7d-4f40-a6af-08158cbdcb9e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZWFiNmQ1NzgtYmU3ZC00ZjQwLWE2YWYtMDgxNThjYmRjYjllL3RyaXBvX3Bicl9tb2RlbF9lYWI2ZDU3OC1iZTdkLTRmNDAtYTZhZi0wODE1OGNiZGNiOWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=dZ8cL8EV9jZjNfKTE~Q9efEQEN6TpXR8cZel1iMhTVdT7NQUX2-2gA03FdNFe42JY66DhhiqGhK-DKuCsTky~Fapfqar-SkP3zR10IGnJb02dQRy~G-moev7giyKkpQLxzZwI1ImwxroVxi6LyhNat5sfi9yeePx-FiH8f8MbWPQIlwTd0SS1nlQ8mx1KfPdbTK08B1~G96YbGAHZ9MfsxITLBSe0O2d~NfIyGal6SIjUlkxmXe-EfK2kuz448q5bfKYPNP6gA-osak2BcgpdPt~YEV8guC8Zyu1W5eBhdoI2-W4kuPxcbLlFxiyZAvsm3PlhrrvveFR~VLZNEMnsg__",
+    "asset_id": "trowel",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "object",
+    "epoch": "industrial",
+    "name": "Trowel",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
