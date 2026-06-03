@@ -2624,5 +2624,22 @@
     "epoch": "any",
     "name": "Fx Spirit Tree",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_temple_of_light": {
+    "prompt": "an ancient temple with a beam of light from its apex, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "1bebb14e-380e-499d-a06c-53c627c75578",
+    "path": "/models/generated/tripo/fx_temple_of_light.glb",
+    "bytes": 15495112,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1bebb14e-380e-499d-a06c-53c627c75578/tripo_pbr_model_1bebb14e-380e-499d-a06c-53c627c75578.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMWJlYmIxNGUtMzgwZS00OTlkLWEwNmMtNTNjNjI3Yzc1NTc4L3RyaXBvX3Bicl9tb2RlbF8xYmViYjE0ZS0zODBlLTQ5OWQtYTA2Yy01M2M2MjdjNzU1NzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Rx2i2tQzpvoMeeEN8YDmfpPGceR7l~fXZQ-mm2mcWmqukNgwsVkleHmw8sbNCO35mPyNc8Sd1JCG17VkmL9z0LO~PhaD70OAx4C~ptnbIs7OzHFSp8pBQiV9ytO~TAZqJmRAzL5ClEgbZdbSyAghNsbiEE072VgQMDc-TZWaJvMXDah9td16dpzWh2OAJjno9mfdOizFcb3l5qcwZd49EXRNk6x1~61hMdcD4FEXv7BhaZi~f6rx7lYVRqWgnGfELMUn58kU5z6Qt3qOelO80M1z5ShBLuCNZLhDym~zWyvJkr5KkR7teYI6PF0vwtRqgG3CWADFEsfQ5qz9z0FLZA__",
+    "asset_id": "fx_temple_of_light",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "bronze",
+    "name": "Fx Temple Of Light",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
