@@ -2539,5 +2539,22 @@
     "epoch": "quantum",
     "name": "Fx Plasma Lamp",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_pod_plant": {
+    "prompt": "an exotic alien seed-pod plant that glows from within, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "408f5b75-c5ac-480a-ae4c-ed7f6b3d1b78",
+    "path": "/models/generated/tripo/fx_pod_plant.glb",
+    "bytes": 15179932,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/408f5b75-c5ac-480a-ae4c-ed7f6b3d1b78/tripo_pbr_model_408f5b75-c5ac-480a-ae4c-ed7f6b3d1b78.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNDA4ZjViNzUtYzVhYy00ODBhLWFlNGMtZWQ3ZjZiM2QxYjc4L3RyaXBvX3Bicl9tb2RlbF80MDhmNWI3NS1jNWFjLTQ4MGEtYWU0Yy1lZDdmNmIzZDFiNzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=WpPaTc3GCB0qYCzFmGWjF6JSD1kVhp1~cmuSD-3wtra7Gmkbwo8WrD2mQDSJ055k0qiWeSBF5oJ-Tn0H8I62xv7LBg2AaQZxC4ZPpW82fZw9yb5-WEKBCU0ol7y7aE37VfNXH6RzK1F78okQ7b8sd9vOaOiEM4izYa4hOkjFeOl1sc4EfJ6KakTvVlXTCa3yULir4qpb7HXVaWO7Yx32m5RDG4qWTrhst8Qc4g8gQeG~T4JUPDIJuqUGrhFWN4rXKBe62jievxt54Gx6o2FsOBp0c4WcKhhn5jF5Upjfpo7wnFRggS4EiS1H~b3f3EZmsrYCdgEpAAwpMlj2XkNW2g__",
+    "asset_id": "fx_pod_plant",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Pod Plant",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
