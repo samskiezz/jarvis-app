@@ -12,34 +12,72 @@ import * as THREE from "three";
 
 const HERO_URL = "/models/hero/underworld_logo.glb";
 
-/** Patch a GLB's PBR materials so each triangle can explode/assemble + glow,
- *  keeping the original texture + lighting (so it reads "textured, layered"). */
+/** Split a mesh into its separate PIECES (connected components: each letter,
+ *  crystal, tube, minion is its own island) and tag every vertex with its
+ *  piece's pivot + a per-piece random offset/spin. Then patch the PBR material
+ *  so each piece flies apart and blocks back together as ONE rigid unit, glowing
+ *  — keeping the original texture + lighting (textured, layered). */
 function prepareExplode(root: THREE.Object3D): { update: (p: number, t: number) => void } {
   const shaders: any[] = [];
   root.traverse((o) => {
     const mesh = o as THREE.Mesh;
     if (!mesh.isMesh) return;
-    // de-index so every triangle is independent, then tag each with its
-    // centroid + a random direction/spin (shared by the triangle's 3 verts).
-    const geo = (mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry) as THREE.BufferGeometry;
-    const pos = geo.attributes.position as THREE.BufferAttribute;
-    const n = pos.count;
-    const cent = new Float32Array(n * 3);
-    const rnd = new Float32Array(n * 3);
-    for (let t = 0; t + 2 < n; t += 3) {
-      const cx = (pos.getX(t) + pos.getX(t + 1) + pos.getX(t + 2)) / 3;
-      const cy = (pos.getY(t) + pos.getY(t + 1) + pos.getY(t + 2)) / 3;
-      const cz = (pos.getZ(t) + pos.getZ(t + 1) + pos.getZ(t + 2)) / 3;
-      const rx = Math.random() * 2 - 1;
-      const ry = Math.random();              // lift + spin seed (0..1)
-      const rz = Math.random() * 2 - 1;
-      for (let k = 0; k < 3; k++) {
-        const i = (t + k) * 3;
-        cent[i] = cx; cent[i + 1] = cy; cent[i + 2] = cz;
-        rnd[i] = rx; rnd[i + 1] = ry; rnd[i + 2] = rz;
+    const src = mesh.geometry as THREE.BufferGeometry;
+    const spos = src.attributes.position as THREE.BufferAttribute;
+    const vCount = spos.count;
+    const idx = src.index ? src.index.array : null;
+    const triCount = idx ? idx.length / 3 : vCount / 3;
+
+    // weld vertices by position (Tripo meshes split seams), then union-find the
+    // triangles into connected pieces.
+    const parent = new Int32Array(vCount);
+    for (let i = 0; i < vCount; i++) parent[i] = i;
+    const find = (a: number) => { while (parent[a] !== a) { parent[a] = parent[parent[a]]; a = parent[a]; } return a; };
+    const union = (a: number, b: number) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };
+    const tooBig = vCount > 2_000_000;     // guard: skip welding on monster meshes
+    if (!tooBig) {
+      const weld = new Map<string, number>();
+      const rep = new Int32Array(vCount);
+      for (let i = 0; i < vCount; i++) {
+        const k = `${Math.round(spos.getX(i) * 800)}_${Math.round(spos.getY(i) * 800)}_${Math.round(spos.getZ(i) * 800)}`;
+        let r = weld.get(k); if (r === undefined) { r = i; weld.set(k, i); }
+        rep[i] = r;
+      }
+      const vi = (t: number, k: number) => (idx ? (idx[t * 3 + k] as number) : t * 3 + k);
+      for (let t = 0; t < triCount; t++) {
+        const a = rep[vi(t, 0)], b = rep[vi(t, 1)], c = rep[vi(t, 2)];
+        union(a, b); union(b, c);
       }
     }
-    geo.setAttribute("aCentroid", new THREE.BufferAttribute(cent, 3));
+
+    // per-piece centroid + a deterministic random offset/spin seed
+    const sumX = new Map<number, number>(), sumY = new Map<number, number>(),
+          sumZ = new Map<number, number>(), cnt = new Map<number, number>();
+    const compOf = (v: number) => (tooBig ? Math.floor(v / 3) : find(v));
+    for (let i = 0; i < vCount; i++) {
+      const cmp = compOf(i);
+      sumX.set(cmp, (sumX.get(cmp) || 0) + spos.getX(i));
+      sumY.set(cmp, (sumY.get(cmp) || 0) + spos.getY(i));
+      sumZ.set(cmp, (sumZ.get(cmp) || 0) + spos.getZ(i));
+      cnt.set(cmp, (cnt.get(cmp) || 0) + 1);
+    }
+    const rand = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+    // de-index so we can attach per-vertex attributes, mapping each new vertex
+    // back to its original piece.
+    const geo = (src.index ? src.toNonIndexed() : src) as THREE.BufferGeometry;
+    const n = (geo.attributes.position as THREE.BufferAttribute).count;
+    const piv = new Float32Array(n * 3);
+    const rnd = new Float32Array(n * 3);
+    for (let j = 0; j < n; j++) {
+      const orig = idx ? (idx[j] as number) : j;     // new vertex j came from original index
+      const cmp = compOf(orig);
+      const c = cnt.get(cmp) || 1;
+      const px = (sumX.get(cmp) || 0) / c, py = (sumY.get(cmp) || 0) / c, pz = (sumZ.get(cmp) || 0) / c;
+      piv[j * 3] = px; piv[j * 3 + 1] = py; piv[j * 3 + 2] = pz;
+      rnd[j * 3] = rand(cmp + 1); rnd[j * 3 + 1] = rand(cmp + 17); rnd[j * 3 + 2] = rand(cmp + 91);
+    }
+    geo.setAttribute("aPivot", new THREE.BufferAttribute(piv, 3));
     geo.setAttribute("aRand", new THREE.BufferAttribute(rnd, 3));
     mesh.geometry = geo;
 
@@ -49,21 +87,23 @@ function prepareExplode(root: THREE.Object3D): { update: (p: number, t: number) 
       shader.uniforms.uProgress = { value: 0 };
       shader.uniforms.uTime = { value: 0 };
       shader.vertexShader =
-        "attribute vec3 aCentroid;\nattribute vec3 aRand;\nuniform float uProgress;\nuniform float uTime;\nvarying float vExplode;\n" +
+        "attribute vec3 aPivot;\nattribute vec3 aRand;\nuniform float uProgress;\nuniform float uTime;\nvarying float vExplode;\n" +
         shader.vertexShader.replace(
           "#include <begin_vertex>",
           `#include <begin_vertex>
            float p = clamp(uProgress, 0.0, 1.0);
            float e = 1.0 - p;
            vExplode = e;
-           vec3 dir = normalize(aRand + vec3(0.0001, 0.0001, 0.0001));
-           float dist = e * (2.5 + aRand.x * 2.0);
-           float ang = e * (aRand.y * 6.2831 + uTime * 0.6);
+           // each PIECE moves as a rigid unit: spin around its own pivot…
+           float ang = e * ((aRand.y - 0.5) * 9.0 + uTime * 0.4);
            float s = sin(ang), c = cos(ang);
-           vec3 rel = transformed - aCentroid;
+           vec3 rel = transformed - aPivot;
            rel = vec3(rel.x * c - rel.z * s, rel.y, rel.x * s + rel.z * c);
-           transformed = aCentroid + rel + dir * dist;
-           transformed.y += e * aRand.z * 1.6;`
+           // …and flies outward along its own random direction.
+           vec3 dir = normalize((aRand * 2.0 - 1.0) + vec3(0.0001));
+           float dist = e * (2.2 + aRand.x * 3.0);
+           transformed = aPivot + rel + dir * dist;
+           transformed.y += e * (aRand.z * 2.0);`
         );
       shader.fragmentShader =
         "varying float vExplode;\n" +
