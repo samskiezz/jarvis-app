@@ -8761,5 +8761,22 @@
     "epoch": "bronze",
     "name": "Haystack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:market_stall": {
+    "prompt": "a wooden market stall with striped awning and produce, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d4e605d2-25a4-4639-b8e1-d234661a8e66",
+    "path": "/models/generated/tripo/market_stall.glb",
+    "bytes": 15068964,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d4e605d2-25a4-4639-b8e1-d234661a8e66/tripo_pbr_model_d4e605d2-25a4-4639-b8e1-d234661a8e66.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDRlNjA1ZDItMjVhNC00NjM5LWI4ZTEtZDIzNDY2MWE4ZTY2L3RyaXBvX3Bicl9tb2RlbF9kNGU2MDVkMi0yNWE0LTQ2MzktYjhlMS1kMjM0NjYxYThlNjYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=wPgh9xJ8P3HEtlK0lBWiMHsRju-o0H1S6weJrYHeHOWYePFcfGUvPeE3RiavqduF2MTZQsueOejYlfjSMLpmj8UnA2tEwQMJ1go1iW1bs9p-AjaDNDiXKLTOfao6kz0WPbQoodOcnxEHFMGr~C5-swPunPKtbokoiECtYNTl65Viz8PIiLD8ab35MHlU~JhmUSYVMmB16oO46O7hOy5FdCk0MqHCSMrGNMfukyg-bUEOGHngf0l-icOW-cy9Nq7pl2I5u8brJ~DV~ATObEmGtbOUa6vbH9KX3U43HxwVmNusS7D-lgb53YGhHnL5kmoWdbNpsO3F3KvCfGS3pO6TyA__",
+    "asset_id": "market_stall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Market Stall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
