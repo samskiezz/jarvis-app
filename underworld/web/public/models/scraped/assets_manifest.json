@@ -1094,5 +1094,39 @@
     "epoch": "industrial",
     "name": "Guild Physics Lab",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:guild_safety_station": {
+    "prompt": "a safety-inspection station with signage, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "d956eeea-3d46-43b2-ad66-19499ff53c1e",
+    "path": "/models/generated/tripo/guild_safety_station.glb",
+    "bytes": 14921712,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/d956eeea-3d46-43b2-ad66-19499ff53c1e/tripo_pbr_model_d956eeea-3d46-43b2-ad66-19499ff53c1e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZDk1NmVlZWEtM2Q0Ni00M2IyLWFkNjYtMTk0OTlmZjUzYzFlL3RyaXBvX3Bicl9tb2RlbF9kOTU2ZWVlYS0zZDQ2LTQzYjItYWQ2Ni0xOTQ5OWZmNTNjMWUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=CEinbDEFWexjJcA2qwXLdnbA1BCYL~yipDb7QIfYQ6-X3YwuDKAUXPc-nLEF7rzTlCTe2ESUH3zVNIgyIVcTalQ6weEaSsbx6kXkvkUyhjBW5W6OWq1kjyDQaB-LPSz7WUi78KeWcpCwkGGBbvHJTIuh6LN1TE3erfi9ylZAi0z602BDKDFSPuEcVmcmpaTT3XgxM6rCbK3BIk8zH-Sq8fHpuSGiA8tWhMbvrm4dQziIBS6GMqodHyt-r~fl0y2twj4O82khLEiZ5r83f5vgNl~jeLzo7Pxh2o4AuzSlJjN4gQkG-Md6D6N3I8oUQMPICHc2begp9cgXitl5r-y75g__",
+    "asset_id": "guild_safety_station",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "industrial",
+    "name": "Guild Safety Station",
+    "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:habitat_quantum": {
+    "prompt": "a sleek near-future smart home with solar roof and glowing accents, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "b5adb056-5086-4cec-aa7a-b15d426c4d75",
+    "path": "/models/generated/tripo/habitat_quantum.glb",
+    "bytes": 14897972,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b5adb056-5086-4cec-aa7a-b15d426c4d75/tripo_pbr_model_b5adb056-5086-4cec-aa7a-b15d426c4d75.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjVhZGIwNTYtNTA4Ni00Y2VjLWFhN2EtYjE1ZDQyNmM0ZDc1L3RyaXBvX3Bicl9tb2RlbF9iNWFkYjA1Ni01MDg2LTRjZWMtYWE3YS1iMTVkNDI2YzRkNzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=c69E6ErW8U4EktYQY9M0i1b-fLCEBsqlvXK-rck6~yON0mpL1uXskhux4vAfHMEQdUATOa4T~QCpYrNtSHUvMVMZIJEwx9gA5RXxJos809ZfyXlJZKpCygayp7VQRxzSP9xnP5vcgf-fHyI7odcYSTwQEYTqu31NGIiy4aecaq4PNISfvsJc76jL-wlMrTQy8sB9OtguoIKl9POj0J9KNeOUkcZChbN5ALHgGagDFb9WGTE~ntB8P~eFmlLjfPq83H8JgRSYjBZDiTeMjQOf5f3y8GKLE-74nmyjZZPOtBdw9pHfZ3sMXAr~yCHiuNxFNGwRGbwhEplsSQrrU5ZQuA__",
+    "asset_id": "habitat_quantum",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "building",
+    "epoch": "quantum",
+    "name": "Habitat Quantum",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
