@@ -7928,5 +7928,22 @@
     "epoch": "information",
     "name": "Nuclear Reactor Pile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:oldowan_tool": {
+    "prompt": "a knapped stone Oldowan chopper tool, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e12f07db-390f-45c4-b9eb-709e314574c7",
+    "path": "/models/generated/tripo/oldowan_tool.glb",
+    "bytes": 11885428,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e12f07db-390f-45c4-b9eb-709e314574c7/tripo_pbr_model_e12f07db-390f-45c4-b9eb-709e314574c7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTEyZjA3ZGItMzkwZi00NWM0LWI5ZWItNzA5ZTMxNDU3NGM3L3RyaXBvX3Bicl9tb2RlbF9lMTJmMDdkYi0zOTBmLTQ1YzQtYjllYi03MDllMzE0NTc0YzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Tb~fyHGqRXHQx80EmrHI1uMynexsHS3JvysW3u8hliuLfIe9Cs19aShYfz4XOIwZnUlI9NWmp6OtjZmlGdDIBkjGdg~NOXs0eU~HiOAHBx3Lkol8SFdwFK9-RwRhJqrQgWRsTLtu7IX7ZUY0KR8qpQDTFMu0iOKv9711eTCgzLvQ3yYPXb9hf0TJrUXQMdin10BM4kCtyGrADQBpZVY7j95NPvHih9wuS7oJSOeYnQAGjrArnbt1MHtX~-JC5vyMfh~er6GIjoGgpqa1quXG-b6VJTCi8~ew19Q7MHTW0t9wBe2qwaVTFMvYiYHC81Hzz8o9jiW6H1HOBZx0KbhVUA__",
+    "asset_id": "oldowan_tool",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "stone",
+    "name": "Oldowan Tool",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
