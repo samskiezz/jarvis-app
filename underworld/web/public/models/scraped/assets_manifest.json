@@ -6636,5 +6636,22 @@
     "epoch": "iron",
     "name": "Lute",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:painting_easel": {
+    "prompt": "an artist's easel with a canvas and palette, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1722c736-3120-42ce-a57a-c6f26ed76e02",
+    "path": "/models/generated/tripo/painting_easel.glb",
+    "bytes": 8494684,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/1722c736-3120-42ce-a57a-c6f26ed76e02/tripo_pbr_model_1722c736-3120-42ce-a57a-c6f26ed76e02.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvMTcyMmM3MzYtMzEyMC00MmNlLWE1N2EtYzZmMjZlZDc2ZTAyL3RyaXBvX3Bicl9tb2RlbF8xNzIyYzczNi0zMTIwLTQyY2UtYTU3YS1jNmYyNmVkNzZlMDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=wSfH~p7UWmyWA6dzY18JoNofCroN6QNca0DvC5LRuIvNql7ltrISBrOZCAQ-eovQ1hxwFcZ1-oSmXQI~jNdnYsGOxC4Vmi07tWoKUZYN-lDWtwxN9bGGUr78OHt8AbNJrgd1shbWeqVw41gaFxMy6Vlz1O6AA1xaZDn0m~h2BNfeeVTxCYMAQPvgFoeCYLX~pPaGakPHlL9FKJ3QQj5UYEJcaPhfDmqb~gi6esl4svyNdhigY-AJyQW1v6v8jPi2c5JVcL3CZADErE68S22WJCPm87efcDhrXjbsyVZjVvVmKqOOEt6Q3faxFvsFukVD1eOAzHsLDaRv8EGPtIMDYw__",
+    "asset_id": "painting_easel",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "culture",
+    "epoch": "industrial",
+    "name": "Painting Easel",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
