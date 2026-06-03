@@ -3032,5 +3032,22 @@
     "epoch": "any",
     "name": "Bed Bunk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bed_double": {
+    "prompt": "a cosy double bed with blankets, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly",
+    "task_id": "e2d96e85-6d3c-40f2-b6aa-5d898f71513c",
+    "path": "/models/generated/tripo/bed_double.glb",
+    "bytes": 14193248,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e2d96e85-6d3c-40f2-b6aa-5d898f71513c/tripo_pbr_model_e2d96e85-6d3c-40f2-b6aa-5d898f71513c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTJkOTZlODUtNmQzYy00MGYyLWI2YWEtNWQ4OThmNzE1MTNjL3RyaXBvX3Bicl9tb2RlbF9lMmQ5NmU4NS02ZDNjLTQwZjItYjZhYS01ZDg5OGY3MTUxM2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=IQm9eKtDx9Gr-mfxijesMa0cGIgffyfrAVCMhV8LCuJgZFaqTZqlkyLk0MEuSY496gJ9hb~M2ApremOqR62mxODB8QwuU5HtgimjByXllWAIgQEKmDOmmgcKjcvAoo-pMb6oAfxTDCM8M3yNszYBS8lHMJxIr58NNADRhM3pqqw3pw~wqU5McCqLzZWF1ZALCIvk22pFEm6LzS7q5nbf7nlExyQcKHo~2cb-Y~KfpmCoOwAG~ER8g58kSXO955FjB~34i5tLj8vZzUqkuHo3CuAVreRtaMZrCtY2IgQbuBth97XrUeX3fOYLMRBCROT1eO~wMnvPPqPz-qpeC4~qmQ__",
+    "asset_id": "bed_double",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "furniture",
+    "epoch": "any",
+    "name": "Bed Double",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
