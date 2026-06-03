@@ -2471,5 +2471,22 @@
     "epoch": "any",
     "name": "Fx Lumino Fern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fx_mist_pool": {
+    "prompt": "a glowing hot-spring pool with rising mist, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "e173d9a0-3a9f-49d2-86e5-295f9564d138",
+    "path": "/models/generated/tripo/fx_mist_pool.glb",
+    "bytes": 14930660,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/e173d9a0-3a9f-49d2-86e5-295f9564d138/tripo_pbr_model_e173d9a0-3a9f-49d2-86e5-295f9564d138.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZTE3M2Q5YTAtM2E5Zi00OWQyLTg2ZTUtMjk1Zjk1NjRkMTM4L3RyaXBvX3Bicl9tb2RlbF9lMTczZDlhMC0zYTlmLTQ5ZDItODZlNS0yOTVmOTU2NGQxMzguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=fuDlrmtMelBky0b223VSWjC4sKL2rERzqmKV2sJ70k9tZ1baBGiADTRoaKG3WImwRvlA4t9pnK8XDo~avCHdLYOVbNaLGk4mDLtQGzI3bjOeG7hmfqARzHZ1bDSPl9wIaYG1gClV156fMe48WM-Ov7wsMlfachfAT2BSCZdUVHFMYOELAO~eaR5BMwoZdsYjuakoWtp0TFi~Lcd0oOZzXgPxz~3QZImXJjg~xsVH0QIn4R8Q6QcwALiymbaoVLmBK4E-c1UEgTeDRRnCdMzYTKaTmFpFmFCr0QN-WgY2j9bkk6~BJ82JviET8k2mEGigRNYaYlaxHCbk7ignRQanLA__",
+    "asset_id": "fx_mist_pool",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "any",
+    "name": "Fx Mist Pool",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
