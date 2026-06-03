@@ -1167,6 +1167,12 @@ async def run_tick(
         {"summary": summary[:200], "blocked_by_safety": blocked_by_safety},
     )
 
+    # Record the resolved action so the behavior bridge (services/behavior.py)
+    # can expand it into the renderer's micro-interaction stream next frame.
+    brain = dict(minion.brain or {})
+    brain["last_action"] = action
+    minion.brain = brain
+
     return TickOutcome(
         minion_id=minion.id,
         action=action,
