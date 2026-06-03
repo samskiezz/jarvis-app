@@ -1978,5 +1978,22 @@
     "epoch": "any",
     "name": "Cloud Volume",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:discovery_eureka_lamp": {
+    "prompt": "a desk with a brilliantly glowing eureka-moment lamp and notes, cinematic high detail, lush, intricate, PBR with subtle emissive glow, ray-tracing friendly, fantasy-sci-fi",
+    "task_id": "f8de79b9-bc80-4666-a626-996f711fb72f",
+    "path": "/models/generated/tripo/discovery_eureka_lamp.glb",
+    "bytes": 14865608,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/f8de79b9-bc80-4666-a626-996f711fb72f/tripo_pbr_model_f8de79b9-bc80-4666-a626-996f711fb72f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvZjhkZTc5YjktYmM4MC00NjY2LWE2MjYtOTk2ZjcxMWZiNzJmL3RyaXBvX3Bicl9tb2RlbF9mOGRlNzliOS1iYzgwLTQ2NjYtYTYyNi05OTZmNzExZmI3MmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=bowNpdcVfx04cILy3nhtVaT~eoRZeXS766fWdfM4hsUe1MldzkdpIwtehMfwwEdubrJRy6t3yy3zMl3YnpNq~n5bS7jQgT0nJXzkWJ3UZUonLtJ~63ylrak1IO7fur4PNBrOetY90kX5N~KXgYFPTBHjenLf7oIEw4SlDUIfpdVjoeTORexckZBA0i3LGhIWT5n~nj63Qvg3bQCR4jee5YSLiu5WWe-VLdZ-9B9y6Eamf0MYCaZcnBs8mrUfeQe2ZwIOc6EYT3K4Hf9i7umDNX2TThz4lfsQZA-kdPNP5SQN3r-oTrxzeEu2NVBFVkFLtTzVzeweNURBfrhxRJcvjQ__",
+    "asset_id": "discovery_eureka_lamp",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "fx",
+    "epoch": "industrial",
+    "name": "Discovery Eureka Lamp",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
