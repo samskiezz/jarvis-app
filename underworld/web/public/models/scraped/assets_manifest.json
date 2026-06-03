@@ -6364,5 +6364,22 @@
     "epoch": "industrial",
     "name": "Tech Transfer Crate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:timber_stack": {
+    "prompt": "a neatly stacked pile of cut timber logs, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "cefc8d8b-f1f5-479e-8804-60a4313eba64",
+    "path": "/models/generated/tripo/timber_stack.glb",
+    "bytes": 15044724,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/cefc8d8b-f1f5-479e-8804-60a4313eba64/tripo_pbr_model_cefc8d8b-f1f5-479e-8804-60a4313eba64.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvY2VmYzhkOGItZjFmNS00NzllLTg4MDQtNjBhNDMxM2ViYTY0L3RyaXBvX3Bicl9tb2RlbF9jZWZjOGQ4Yi1mMWY1LTQ3OWUtODgwNC02MGE0MzEzZWJhNjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=Qvrird2-kEoaDiGAp-xUQuiUuoBkWl5rZhqyN1-p7DHTf1Ns-c-rq8LTfr00g8RtixhPEJVf16en8qL4blD8i41mc-Cpy41SuzEJE2WETI5dPqm-7-NQbCtffJDmWTDkNsbelFejvqpvV4NVcKmJEK6uuhrmVLnnuhC1ShyqFXxbmmlhRQ7-9X5dteRyBLhMg94GIXLrZ7rZsBh9k6JUegtzuHrtqMLznUhrKyOQSlE8XKxqtvRvRYFnWnDutsNLf4QLwEln6EZniOvudDVz-yue4krmrNy5N67~89x2SnyAQcJ0cJ07negSolLF-4xUQ0ah2FjQrPiMcPdZCf4YSQ__",
+    "asset_id": "timber_stack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "community",
+    "epoch": "any",
+    "name": "Timber Stack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
