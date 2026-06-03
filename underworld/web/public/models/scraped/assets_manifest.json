@@ -4001,5 +4001,22 @@
     "epoch": "information",
     "name": "Battery Bank",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:beaker_set": {
+    "prompt": "a set of glass beakers and flasks on a rack, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "703e29ee-628c-43b6-8470-4b6d364f44f2",
+    "path": "/models/generated/tripo/beaker_set.glb",
+    "bytes": 14792168,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/703e29ee-628c-43b6-8470-4b6d364f44f2/tripo_pbr_model_703e29ee-628c-43b6-8470-4b6d364f44f2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvNzAzZTI5ZWUtNjI4Yy00M2I2LTg0NzAtNGI2ZDM2NGY0NGYyL3RyaXBvX3Bicl9tb2RlbF83MDNlMjllZS02MjhjLTQzYjYtODQ3MC00YjZkMzY0ZjQ0ZjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=CaW2lJBJz4mpzx69ZwvWw02WyCHOUsR8rOqSv0IpIvFnEWpKBPlAgW51EQDdselUD8GyynDdkSipYxUC7ZbFOnHjzbUGxeyBsdf8tbg~qrN9ScTqD0QqXwlE6VIyC2HHCj-nQTFXicbTHwx-MZmKmatNROPSuCBoOpFUJvH3u7x32D7yXatw2mh4DiateDhpOj6FiyYChJDEkBKRQIxQo0fBg~PO9kSw-UAar3NciVj0mr6qheJKwlYzsoGe5nj9BCxYRNLzUpYy8HCdnKd1Z8fmr-6aOsGvdFfnXqKclV2RKmp5XIKpQpByMQltL0I~0NmZFPE2M4zWPyxSzOf3gQ__",
+    "asset_id": "beaker_set",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "instrument",
+    "epoch": "iron",
+    "name": "Beaker Set",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
