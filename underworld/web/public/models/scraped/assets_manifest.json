@@ -7911,5 +7911,22 @@
     "epoch": "information",
     "name": "Network Switch Node",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:nuclear_reactor_pile": {
+    "prompt": "an early graphite nuclear reactor pile, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b4aead60-93f0-447d-87dc-d6e9620976a0",
+    "path": "/models/generated/tripo/nuclear_reactor_pile.glb",
+    "bytes": 15123716,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260603/b4aead60-93f0-447d-87dc-d6e9620976a0/tripo_pbr_model_b4aead60-93f0-447d-87dc-d6e9620976a0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDMvYjRhZWFkNjAtOTNmMC00NDdkLTg3ZGMtZDZlOTYyMDk3NmEwL3RyaXBvX3Bicl9tb2RlbF9iNGFlYWQ2MC05M2YwLTQ0N2QtODdkYy1kNmU5NjIwOTc2YTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNTMxMjAwfX19XX0_&Signature=KhS6EZtYv0eHqSS4AAQlpRNm5JUfXhtYWKdh3v8UaBy-VUhXn~jYtlQuYVIuU5MtKm87c56aUqeh4bqYlRSwO2ulMri17bJOYZ8RUWTZaG7HDPTH8hJC6Tf~czUBZ2qXQ4-P0jxIEmH651pibi3oY4i8f~2uqgBdnaYClJ5fcV9z4DAAbZaOypHtdYXg50ESnuF1WGaYgUodocIFbZlb9FPfSjJVOPedDyTxzFIGnjox-LhvhfaKknxlLoMRiXnsQAseE9h-vAKIqTuQqMR2SsJro3RbO7YZBw-ooDH0BtJA9nQ1laKPU8kaZOqNKdEnjCgZFsX3dVgCoVSLF5X77g__",
+    "asset_id": "nuclear_reactor_pile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "epoch",
+    "epoch": "information",
+    "name": "Nuclear Reactor Pile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
