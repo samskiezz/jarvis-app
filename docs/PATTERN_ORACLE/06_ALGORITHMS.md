@@ -2258,6 +2258,115 @@ for each assimilation cycle:
 
 **Source.** Evensen 2003, *The Ensemble Kalman Filter*, *Ocean Dynamics*; https://doi.org/10.1007/s10236-003-0036-9 · Gaspari–Cohn localization https://doi.org/10.1002/qj.49712555417
 
+#### G21.+ DEPTH MILESTONE
+
+**Full derivation.** The Kalman update is the BLUE (best linear unbiased estimator): minimize the analysis error variance `tr(P^a)` subject to unbiasedness, giving `x^a=x^f+K(y−Hx^f)` with `K=P^fH^T(HP^fH^T+R)^{-1}` and `P^a=(I−KH)P^f`. The EnKF approximates `P^f` by the **sample covariance** of a forecast ensemble (Monte-Carlo, avoiding storing the full `n×n` matrix). Burgers et al. (1998) proved that to get the correct *analysis* covariance you must perturb the observations: updating each member with `y+ε_i` (`ε_i~N(0,R)`) makes the analysis-ensemble sample covariance an unbiased estimate of `P^a`; using the same `y` for all members would under-disperse it by exactly the Kalman-gain term. **Inflation** `r>1` counters the systematic under-dispersion from finite `N` and model error; **localization** `ρ∘P^f` (Schur product with a compact, e.g. Gaspari–Cohn, taper) zeros spurious long-range sample correlations that arise because `rank(P^f)≤N−1≪n`.
+
+**Runnable-quality pseudocode.**
+```python
+def enkf_cycle(ensemble, M, H, y, R, *, inflation=1.05, taper=None, rng=None):
+    import numpy as np
+    rng = rng or np.random.default_rng(0)
+    N = ensemble.shape[1]                          # ensemble.shape = (n_state, N)
+    # 1) forecast each member through dynamics M
+    Xf = np.column_stack([M(ensemble[:, i]) for i in range(N)])
+    xbar = Xf.mean(1, keepdims=True)
+    Xf = xbar + inflation*(Xf - xbar)              # multiplicative inflation
+    A = Xf - Xf.mean(1, keepdims=True)
+    Pf = (A @ A.T) / (N - 1)
+    Pf = 0.5*(Pf + Pf.T)                           # symmetrize
+    if taper is not None: Pf = taper * Pf          # localization (Schur product)
+    # 2) Kalman gain via solve (no explicit inverse)
+    S = H @ Pf @ H.T + R
+    K = Pf @ H.T @ np.linalg.solve(S, np.eye(S.shape[0]))
+    # 3) perturbed-observation update
+    Xa = np.empty_like(Xf)
+    for i in range(N):
+        eps = rng.multivariate_normal(np.zeros(R.shape[0]), R)
+        Xa[:, i] = Xf[:, i] + K @ (y + eps - H @ Xf[:, i])
+    return Xa, Xa.mean(1), Xa.std(1)               # ensemble, estimate, spread
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `N` | int | 50–100 | 20–1000 | ensemble size / rank of P^f | ↑ accuracy, ↑ cost |
+| `inflation r` | float | 1.05 | 1.0–1.2 | counter under-dispersion | tune to keep spread≈RMSE |
+| localization len | float | domain | >0 | spurious-corr cutoff | ↓ with small N |
+| `R` | matrix | sensor specs | PSD | obs error cov | from instrument |
+
+**Worked numeric example.** Scalar state, `M(x)=x` (persistence), true state 10, prior ensemble mean 8 with spread 2 (`P^f=4`), one direct obs `y=10.5`, `R=1`, `H=1`. `K=4/(4+1)=0.8`; analysis mean `=8+0.8(10.5−8)=10.0`; analysis variance `(1−0.8)·4=0.8` (spread shrinks from 2 to ~0.89). The filter pulls the estimate toward the observation, weighted by relative uncertainty.
+
+**Complexity (derivation).** Forecast: `N` dynamics evaluations `O(N·cost(M))`. Covariance `A A^T` is `O(N·n²)` (or `O(N²·n)` working in ensemble space). Gain solve `(HP^fH^T+R)^{-1}` is `O(p³)` for `p` observations (small if few obs). Update `O(N·n·p)`. **Time** `O(N·cost(M)+N n p+p³)`; **space** `O(N·n)` (store ensemble, never the full `P^f` in ensemble-space variants).
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Filter divergence (under-dispersion) | spread ≪ error, ignores obs | inflation r>1 (mandatory) |
+| Spurious long-range correlations | unphysical updates far from obs | localization (Gaspari–Cohn taper) |
+| Explicit inverse instability | NaN gain | Cholesky/`solve`, not `inv` |
+| Asymmetric `P^f` from rounding | non-PSD | symmetrize `0.5(P+Pᵀ)` |
+
+**Unit-test oracle.** Linear-Gaussian scalar system: EnKF analysis mean/variance must converge (large `N`) to the exact **Kalman filter** values. For the worked example, with `N→∞` the analysis mean →10.0 and variance →0.8 (match the closed-form KF within MC error `O(1/√N)`). Identity dynamics + repeated identical obs ⇒ estimate converges to the obs, variance →0.
+
+**Integration code-points.** **NEW** `enkf.py` (numpy; reference `filterpy.EnsembleKalmanFilter`). Reuses the ensemble idioms in `epidemic_network.py` (already runs ensemble SIR) and `gpu_backend.py` for large-`n` covariance ops. FORECAST CORE assimilation leg: nudges model state toward live History-Lake observations each cycle; assimilated estimate + spread enters Error-Weighted-Ensemble (F18) as member `k="enkf"` with a physically-consistent uncertainty band.
+
+---
+
+### G21b. STL Decomposition (Seasonal-Trend via Loess) — **NEW ALGORITHM**
+
+**Purpose.** Robustly split a series into **trend + seasonal + remainder** (`y_t = T_t + S_t + R_t`) using iterated local regression (loess). A preprocessing/feature step: deseasonalize before forecasting (A1/A3), expose the seasonal pattern as a KGIK feature, and isolate the remainder for anomaly (D14) / change-point (D12/D13) detection. STL+ETS/ARIMA on the remainder is a standard strong baseline.
+
+**Math.** STL is two nested loops. **Inner loop** (per iteration):
+1. *Detrend:* `y_t − T_t^{(k)}`.
+2. *Cycle-subseries smoothing:* loess-smooth each seasonal sub-series (all Januaries, all Februaries, ...) → temporary seasonal `C`.
+3. *Low-pass + subtract:* low-pass filter `C`, subtract from `C` to get seasonal `S^{(k+1)}` (ensures seasonal sums ≈0 over a cycle).
+4. *Deseasonalize & trend-smooth:* loess-smooth `y_t − S_t^{(k+1)}` → `T_t^{(k+1)}`.
+**Outer loop:** compute robustness weights `ρ_t = B(|R_t|/(6·median|R|))` (bisquare `B`) and re-run the inner loop weighting by `ρ_t` to downweight outliers.
+
+**Derivation.** Loess at a point fits a low-degree (deg 1 or 2) weighted polynomial using a tricube kernel over the nearest `q` points; the fitted value is `x_0ᵀ(XᵀWX)^{-1}XᵀWy` — a local linear smoother. Iterating detrend↔deseasonalize is a backfitting algorithm (Gauss–Seidel on the additive model), which converges because each loess smoother is a contraction (its eigenvalues ≤1). The robustness outer loop is iteratively reweighted least squares with a bisquare ρ-function, giving resistance to outliers in `R_t`.
+
+**Runnable-quality pseudocode.**
+```python
+def stl_decompose(y, period, *, seasonal=7, trend=None, robust=True, n_inner=2, n_outer=1):
+    import numpy as np
+    from statsmodels.tsa.seasonal import STL
+    res = STL(np.asarray(y, float), period=period, seasonal=seasonal,
+              trend=trend, robust=robust).fit()
+    return {"trend": res.trend.tolist(), "seasonal": res.seasonal.tolist(),
+            "remainder": res.resid.tolist(),
+            "seasonal_strength": float(max(0, 1 - np.var(res.resid)/np.var(res.resid+res.seasonal))),
+            "trend_strength":    float(max(0, 1 - np.var(res.resid)/np.var(res.resid+res.trend)))}
+# (statsmodels STL implements the loess inner/outer loops above)
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `period` | int | — | ≥2 | seasonal cycle length | from FFT/ACF/domain |
+| `seasonal` | int (odd) | 7 | ≥7 odd | seasonal loess window | ↑ ⇒ smoother (more fixed) seasonality |
+| `trend` | int (odd) | auto | ≥period | trend loess window | ↑ ⇒ smoother trend |
+| `robust` | bool | True | — | outlier resistance | True for spiky data |
+| `n_inner`/`n_outer` | int | 2 / 1 (15 if robust) | — | loop iterations | more outer for many outliers |
+
+**Worked numeric example.** Monthly series `y=trend(0.5t) + 10·sin(2πt/12) + noise`, `period=12`. STL recovers `T_t≈0.5t` (near-linear), `S_t` a clean sinusoid with amplitude ~10 summing to ≈0 over each 12 months, and `R_t` ≈ the noise. `seasonal_strength≈0.95` (strong seasonality), `trend_strength≈0.9`.
+
+**Complexity (derivation).** Each loess smooth of `n` points with window `q` is `O(n·q)` (a weighted regression per point); the inner loop does a constant number of smooths → `O(n·q)` per inner iteration; total `O(n·q·n_inner·n_outer)`. **Space** `O(n)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Wrong `period` | seasonal leaks into trend/remainder | detect period via FFT/ACF first |
+| Outliers distort components | biased trend/seasonal | `robust=True` (bisquare reweighting) |
+| Short series (<2 periods) | unstable seasonal | require ≥2 full cycles |
+| Multiplicative seasonality | additive misfit | log-transform first, then STL |
+
+**Unit-test oracle.** Pure additive synthetic `y=a·t + b·sin(2πt/p)` (no noise): STL must recover `trend≈a·t` and `seasonal≈b·sin(...)` with `remainder≈0` (max |R|<1e-2 after warmup). Seasonal component must sum to ≈0 over each full period (a defining property). Constant series ⇒ trend=mean, seasonal=0, remainder=0.
+
+**Integration code-points.** **NEW** `stl.py` (statsmodels `STL`). Preprocessing step in FORECAST CORE: deseasonalize → forecast trend+remainder with ARIMA/GBM (A1/A3) → re-add seasonal (STL+ARIMA pipeline); the `seasonal`/`trend` strengths become KGIK features and ensemble-routing signals (F18); the `remainder` feeds Isolation Forest (D14) and PELT/BOCPD (D12/D13) so anomalies/breaks are detected on the de-trended, de-seasonalized signal. Period detection reuses the FFT/ACF helper shared with A2/A3.
+
+**Source.** Cleveland, Cleveland, McRae, Terpenning 1990, *STL: A Seasonal-Trend Decomposition Procedure Based on Loess*, *J. Official Statistics* 6(1); https://www.wessa.net/download/stl.pdf · statsmodels STL https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html · MSTL (multiple seasonality) https://arxiv.org/abs/2107.13462
+
 ---
 
 ## GROUP H — LATENT WORLD MODEL (design-level, interfaces only)
@@ -2298,6 +2407,57 @@ For time series: context = past window, target = future window; the predicted **
 **Reuse target.** **NEW** (PyTorch). Reuse `gpu_backend.py`, the History-Lake loaders (`05_DATA_MODEL_AND_SCHEMAS.md`), and the foundation-adapter contract (A4) for the probe-head forecast output shape.
 
 **Source.** LeCun 2022 position paper; Assran et al. 2023, *I-JEPA*; https://arxiv.org/abs/2301.08243 · video V-JEPA https://github.com/facebookresearch/jepa
+
+#### H22.+ DEPTH MILESTONE
+
+**Full derivation (collapse avoidance).** The trivial minimizer of `L=‖ŝ_y−sg(s_y)‖²` is the constant map `E_θ(·)=const` (zero loss, useless). JEPA prevents this *without negatives* via an **asymmetry**: (1) the target encoder uses **EMA** weights `ξ←m ξ+(1−m)θ` and **stop-gradient**, so the target is a slowly-moving teacher the student chases — it cannot instantaneously collapse to match a constant because the target lags; (2) optional **VICReg** terms add a variance hinge `Σ max(0, 1−√(Var(s)+ε))` (forces per-dimension std ≥1, preventing dimensional collapse) and a covariance penalty `Σ_{i≠j} Cov(s)_{ij}²` (decorrelates dimensions). The EMA-teacher dynamic is the same mechanism as BYOL; the predictor `P_φ` provides the extra capacity that, combined with the lag, makes the constant solution unstable. The key insight (LeCun): predicting in **representation space** discards unpredictable pixel/value detail, so the model spends capacity on predictable abstract structure — ideal for noisy financial series.
+
+**Runnable-quality pseudocode (train step).**
+```python
+def jepa_train_step(ctx, tgt, E_theta, E_xi, P_phi, opt, *, m=0.996, vicreg=True):
+    import torch, torch.nn.functional as F
+    s_x = E_theta(ctx)                                  # context latent (grad)
+    with torch.no_grad():
+        s_y = E_xi(tgt)                                 # target latent (stop-grad, EMA)
+    pred = P_phi(s_x)                                   # predict target latent
+    loss = F.smooth_l1_loss(pred, s_y)
+    if vicreg:
+        std = torch.sqrt(s_x.var(0) + 1e-4)
+        loss = loss + torch.mean(F.relu(1 - std))       # variance hinge
+        Z = s_x - s_x.mean(0)
+        cov = (Z.T @ Z) / (len(Z) - 1)
+        off = cov - torch.diag(torch.diag(cov))
+        loss = loss + (off**2).sum() / s_x.shape[1]     # covariance penalty
+    opt.zero_grad(); loss.backward(); opt.step()
+    with torch.no_grad():                               # EMA update of target encoder
+        for p, q in zip(E_theta.parameters(), E_xi.parameters()):
+            q.mul_(m).add_((1-m)*p)
+    return loss.item()
+```
+
+**Parameter table (interface-level).**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| latent_dim | int | 256 | 64–1024 | representation size | task capacity |
+| `m` (EMA) | float | 0.996→1.0 | 0.99–0.9999 | teacher lag | ramp up over training |
+| mask_ratio | float | 0.5 | 0.15–0.75 | context/target split | ↑ harder pretext |
+| vicreg λ | float | 1.0 | 0–25 | collapse regularizer | ↑ if collapse observed |
+
+**Worked numeric example.** Pretrain on 100k History-Lake windows; context = first 80% of window, target = last 20%. After convergence, the encoder maps a "bull-trend with rising vol" window and a paraphrased one to nearby latents (cosine ≈0.95), while a "bear crash" window is far (cosine ≈0.1). A linear probe on the frozen latent predicts next-window direction at AUC≈0.7 — the latent is transferable.
+
+**Complexity (derivation).** Forward = two encoder passes (context+target) + predictor; **no decoder**, so ~⅔ the cost of a generative world model. Per step `O(B·encoder_FLOPs)`; EMA update `O(params)`. **Space** dominated by two encoder copies (student + EMA teacher). GPU required for pretraining; inference is a single encoder forward.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Representational collapse | latent variance →0, constant output | EMA target + stop-grad; VICReg variance hinge |
+| Dimensional collapse | latents lie in a subspace | covariance penalty |
+| EMA too fast | student/teacher couple, collapse | ramp `m`→1.0 |
+| Latent scale drift | unstable predictor | layer-norm latents |
+
+**Unit-test oracle.** Collapse detector: after N steps, per-dimension latent std must stay `>0.1` (VICReg lower bound ~1.0) — a collapsed model fails this. Invariance check: feed two augmentations of the same window; cosine(latent₁, latent₂) must exceed cosine(latent₁, latent_random) by a clear margin. EMA monotonicity: teacher weights move strictly toward student weights each step.
+
+**Integration code-points.** **NEW** PyTorch `jepa.py` behind a feature flag. Reuses `gpu_backend.py`, History-Lake loaders (`05_DATA_MODEL_AND_SCHEMAS.md`), and the A4 probe-head output contract. Frozen latents feed: FORECAST CORE probe heads (forecast quantiles), PATTERN-DISCOVERY (HDBSCAN C9 regime clustering on latents), and RELATIONAL LAYER (node features for TGN/TGAT B6/B7). v1 = design + interface.
 
 ---
 

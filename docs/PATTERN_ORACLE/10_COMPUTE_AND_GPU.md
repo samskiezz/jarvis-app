@@ -549,6 +549,32 @@ Concrete plan for which exact operations move to the GPU through `gpu_backend.ge
 
 **Activation:** all five light up automatically the instant `get_backend("auto").is_gpu` is true (i.e. `cupy-cuda12x` installed on a CUDA box) — **zero application-code change**, per §10.7 Step 2.
 
+**Canonical kernel shape (the one-seam pattern):** every T1 kernel is written *once* against `xp` and dispatched through the backend, exactly mirroring `scale_bench.rich_tick(state, rng, xp)`:
+
+```python
+def correlation_matrix(series_2d, *, prefer="auto"):
+    backend = get_backend(prefer)          # cupy if GPU, else numpy
+    xp = backend.xp
+    X = xp.asarray(series_2d)              # H2D copy under cupy; no-op under numpy
+    C = xp.corrcoef(X)                     # O(S²·L) BLAS — same line both backends
+    backend.synchronize()                  # honest timing; no-op under numpy
+    return backend.asnumpy(C)             # D2H back to host; no-op under numpy
+```
+
+The identical four-line body is the T0 *and* the T1 implementation — there is no `if is_gpu:` branch in the numeric code. This is the literal application of §10.2.2's "a T1 kernel is the T0 kernel with `xp = get_backend().xp`."
+
+**Per-op acceleration detail (why each speedup holds):**
+
+| Op | Arithmetic intensity | Bound | Speedup driver |
+|---|---|---|---|
+| correlation | high (GEMM, reuses data) | compute | GPU GEMM TFLOP/s ≫ CPU |
+| EnKF cov + gain | high (GEMM + small solve) | compute | dense covariance is GEMM; `n³` solve amortised |
+| distance matrix | medium (norm expansion) | compute/bandwidth | massive parallelism, no deps |
+| Monte-Carlo | low (elementwise) | bandwidth | sheer thread count hides latency |
+| Matrix-Profile | medium (FFT/GEMM) | compute | batched sliding dot via FFT/GEMM |
+
+High-arithmetic-intensity ops (correlation, EnKF) get the biggest GPU wins; bandwidth-bound Monte-Carlo wins on raw parallelism. None has a data dependency that would serialise the GPU — the reason all five are listed as T1 targets while HDBSCAN/PELT are not.
+
 ---
 
 ## 10.6B COST MODEL (credits / $ per 1k predictions)
@@ -563,9 +589,13 @@ Cost is dominated by GPU-hour rental for T2; T0/T1 ride existing CPU/GPU the sys
 | **T2 primary** | TimesFM 2.5 (200 M) | A6000 (48 GB) | ~$0.50 | ~300 | ~$0.0005 | ~$0.0015 | primary zero-shot forecaster |
 | **T2 large/A100** | full suite + GNN | A100 (80 GB) | ~$1.50 | ~600 (bigger batch) | ~$0.0007 | ~$0.0021 | higher R amortises higher hourly rate |
 
-**Credits mapping:** if PATTERN ORACLE bills internal "credits," set `credits_per_1k = ceil(($_per_1k / $_per_credit))` with a per-tier floor of 1 credit so cache hits (which cost nothing, §10.3.5) and T0 answers stay free or near-free. **Cache leverage:** every cache hit (§10.3.5) is **$0** — the forecast cache is the single biggest cost lever; at a modest 50% hit rate the effective $/1k halves across all T2 rows.
+**Credits mapping:** if PATTERN ORACLE bills internal "credits," set `credits_per_1k = ceil(($_per_1k / $_per_credit))` with a per-tier floor of 1 credit so cache hits (which cost nothing, §10.3.5) and T0 answers stay free or near-free.
 
-**Honest caveat:** all $ figures and `R` are projections (same status as `gens_per_sec_per_gpu`). Replace with billed GPU-hours × `benchmark()`-measured `R` once a real server runs.
+> Worked credits example: at `$_per_credit = $0.001`, the T2-primary row ($0.0005/1k @100% util) maps to `ceil(0.0005/0.001) = 1` credit per 1k predictions — i.e. the floor — so foundation forecasting is effectively a 1-credit-per-1k line item, and any cache hit drops it to 0. **Cache leverage:** every cache hit (§10.3.5) is **$0** — the forecast cache is the single biggest cost lever; at a modest 50% hit rate the effective $/1k halves across all T2 rows.
+
+**Cost-control levers (ranked):** (1) **cache** (§10.3.5) — hits are $0, the single biggest lever; (2) **batch size** — bigger `max_batch` raises effective `R`, lowering $/1k; (3) **tier routing** — send cheap series to Chronos-Bolt, only hard ones to TimesFM; (4) **circuit breaker** (§10.2A.5) — caps spend against a dead host by short-circuiting to free T0; (5) **utilization** — co-scheduling re-forecast bursts into the same rented window raises utilization toward 100%, the denominator in the $/1k formula.
+
+**Honest caveat:** all $ figures and `R` are projections (same status as `gens_per_sec_per_gpu`). Replace with billed GPU-hours × `benchmark()`-measured `R` once a real server runs. Until then, every credits/$ figure surfaced to a user MUST carry the same projection flag the rest of this document uses — no invented precision.
 
 ---
 
@@ -692,3 +722,70 @@ cache @50% hit     ⇒ effective ≈ $0.00045 / 1k
 This is exactly the `llm_capacity` algebra (§10.4.3) re-mapped, the §10.4.4 latency model, and the §10.6B cost row composed — and it is feasible on a single GPU with comfortable headroom, confirming the document's central claim that the foundation-TS suite is *small* and the bottleneck is procurement/scheduling, not compute.
 
 > Every number above carries the standard honesty flag: `R`, `$/hr`, and hit-rate are **projections** until measured by `benchmark()`-style timing and real GPU-hour billing.
+
+---
+
+## 10.9 CONFIGURATION REFERENCE
+
+All compute-tier behavior is configured by environment variables / config — never hard-coded. Defaults keep the system at the T0 floor.
+
+| Key | Default | Tier | Effect |
+|---|---|---|---|
+| `PREDICT_GPU_URL` | *(unset)* | T2 | base URL of the inference host; unset ⇒ T2 disabled, silent T0 fallback |
+| `PREDICT_GPU_TOKEN` | *(unset)* | T2 | bearer token for the inference endpoint; never logged |
+| `PREDICT_GPU_TIMEOUT_MS` | derived (≤8000) | T2 | read-timeout cap; derived from pipeline p95 budget (§10.2A.4) |
+| `PREDICT_GPU_RETRIES` | `1` | T2 | max retries on connect/5xx/timeout inside budget |
+| `PREDICT_CB_FAIL_THRESHOLD` | `5` | T2 | consecutive failures before breaker OPEN (§10.2A.5) |
+| `PREDICT_CB_COOLDOWN_S` | `30` | T2 | OPEN→HALF_OPEN cooldown |
+| `PREDICT_COALESCE_MS` | `15` | T2 | client micro-batch window (§10.3.2), within 10–25 ms band |
+| `PREDICT_MAX_INFLIGHT` | = advertised slots | T2 | `asyncio.Semaphore` cap on concurrent remote calls |
+| `GPU_BACKEND_PREFER` | `auto` | T1 | passthrough to `get_backend(prefer)`: `auto`\|`cupy`\|`numpy` |
+| `FORECAST_CACHE_TTL_S` | data-cadence | all | forecast cache TTL (§10.3.5) |
+| `THREADPOOL_WORKERS` | `cpu_count()` | T0/T1 | bounded offload pool size (§10.3.6) |
+
+**Resolution order:** explicit config > env var > default. `get_backend("auto")` ignores `GPU_BACKEND_PREFER` only when an explicit `prefer` is passed at the call site.
+
+---
+
+## 10.10 SYMBOLS & GLOSSARY
+
+Reference for the formulas in §10.4.4 and the specs above.
+
+| Symbol | Meaning | Typical scale |
+|---|---|---|
+| `S` | number of tracked series | 10²–10⁴ |
+| `L` | context length (history points) | 10²–10⁴ |
+| `H` | forecast horizon (steps) | 1–48 |
+| `d` | embedding / feature dimension | 10–1280 |
+| `E` | EnKF ensemble members | 10²–10³ |
+| `n` | EnKF state dimension | 10–10³ |
+| `P` | Monte-Carlo paths per series | 10²–10⁴ |
+| `B` | inference batch size | 1–`max_batch` |
+| `f`, `f_cpu`, `f_gpu` | effective (measured) FLOP/s | ~50 GF/s CPU; 10–30 TF/s A6000 f32 |
+| `R` | sustained forecasts/sec/GPU | ~300–600 (projection) |
+
+| Term | Definition |
+|---|---|
+| **T0 / T1 / T2** | compute tiers: pure NumPy in-proc / CuPy GPU in-proc / remote foundation inference |
+| **`xp`** | the array namespace bound by `gpu_backend` (numpy or cupy) — single seam for portability |
+| **graceful fallback** | losing a tier removes members/speed, never the answer; intervals widen + caveat recorded |
+| **circuit breaker** | per-endpoint CLOSED/OPEN/HALF_OPEN state machine guarding the remote tier (§10.2A.5) |
+| **warm-pool** | long-lived keep-alive `httpx.AsyncClient` + warm-up forecast so first user call hits warm kernels |
+| **coalesce window** | short client-side batching window that merges concurrent forecast calls into one HTTP batch |
+| **context fingerprint** | hash of last-K context + freq used as cache key for reproducible re-asks |
+| **effective `f`** | measured (not datasheet) device throughput from `benchmark()`-style timing |
+| **projection** | a number derived from published benchmarks, flagged until replaced by a measured value |
+
+---
+
+## 10.11 CROSS-REFERENCES & SOURCE GROUNDING
+
+This document is grounded in two source modules; every claim about runtime behavior traces to them:
+
+| Claim group | Source of truth |
+|---|---|
+| Backend selection, `auto` never raises, `asnumpy`/`synchronize`/`rng`, `available_backends()` probe | `underworld/server/services/gpu_backend.py` |
+| Vectorised kernel discipline, f32 arrays, warm-up + `synchronize()` timing, `benchmark()`/`bench_curve()`, `llm_capacity()` capacity algebra | `underworld/server/services/scale_bench.py` |
+| Tier ladder, fallback matrix, install staging, acceptance invariants | this document (`10_COMPUTE_AND_GPU.md`) |
+
+Related specs: `00_MASTER_INDEX.md` (architecture footer §2), `05_*` (History Lake / shared cache store), `08_*` (self-improvement / re-forecast loop), `11_VALIDATION` (consumes §10.8 invariants).

@@ -1562,3 +1562,34 @@ Every tunable in this document, with its default, scope, and defining section. D
 `ŷ` point forecast · `y` truth · `[L,U]` prediction interval · `F` predictive CDF · `x_k` member-`k` prediction · `m` ensemble size · `w_k` member weight · `Ē_k` EWMA error · `e_i` residual `y−ŷ` · `r_t` BOCPD run length · `S` negatively-oriented score · `SS`/`CRPSS` skill score · `PICP`/`MPIW`/`CE` coverage probability / mean width / coverage error · `E` KGIK edge · `H` challenger / hazard (by context) · `C` champion · `p` canary traffic fraction.
 
 This table is the contract: if code and document disagree on any `[reuse]` value, the **code** (ai_models.py / reasoning.py / models.py) is authoritative and this document is the bug.
+
+### 17.9 Failure-mode → detection → response map (the "what breaks and who catches it")
+A consolidated view of how each realistic failure is caught and handled, so the loop has no silent-failure gaps:
+
+| Failure mode | Caught by | Metric / signal | Automatic response | Human runbook |
+|---|---|---|---|---|
+| Input distribution shifts | PSI (§3.1) | `oracle_drift_psi_max>0.2` | re-forecast trigger (§2.2) | RB-DRIFT (data path) |
+| Model mapping degrades | KS residuals (§3.3) | `ks_pvalue<0.01` | drift alarm | RB-DRIFT (model path) |
+| Intervals miscalibrated | ECE / coverage (§3.2, §1.3.4) | `ece>0.1` / `|CE|>0.05` | recalibrate buffer | RB-CALIBRATION |
+| Regime break | BOCPD (§3.4.1) | `cp_prob>0.5` | shrink buffer, T4 retrain | RB-DRIFT (regime) |
+| One member rots | per-member skill (§1.4) | rising `ewma_error{member}` | down-weight online (§12) | — (auto) |
+| Promoted version regresses | canary watchdog (§10.4) | R1–R6 on live slice | auto-rollback (§11.4) | RB-CANARY-ROLLBACK |
+| Whole ensemble regresses | trend test (§6.5) | `crpss_slope<0` CI | — | RB-SKILL-REGRESSION |
+| Feed gap / no outcomes | matcher (§1.2.1) | `unmatchable` rate | mark unmatchable, defer | RB-FEEDGAP |
+| Loop stalls / lags | scheduler (§1.2.1) | `matcher_lag>2·tick` | oldest-first backpressure | RB-LOOP-STALLED |
+| Serving SLO breach | serving (§7.6) | `latency_p99` / `error_rate` | (canary R4/R5 rollback) | RB-SLO |
+| Backtest leakage | harness asserts (§14.2) | assertion fail | **fail the run** | re-audit §14 |
+| KGIK edge goes stale/wrong | Laplace + decay (§13) | confidence<0.40 | demote/archive (§13.5) | — (auto) |
+
+Every row has a *detector* and a *response*; the design goal is that no failure can degrade user-facing forecasts without at least one signal firing and one (automatic or human) response engaging. That closed coverage — detector → response for every mode — is the operational meaning of a *self-improving* (not merely self-monitoring) system.
+
+### 17.10 Why these specific reused primitives (closing the loop on grounding)
+The whole engine is anchored in four audited, already-tested code units so that the self-improvement loop is not new untested math bolted on:
+- **`drift_detector` (PSI)** and **`calibration_error` (ECE)** (ai_models.py:74–94) are the *eyes* — they tell the loop when reality has moved away from what the model assumes. Reusing them verbatim means the drift thresholds (>0.2, >0.1) are the same numbers the rest of the platform already trusts.
+- **`uncertainty_estimate`** (ai_models.py:103–107) is the *honesty* — ensemble spread feeding the §2.5 epistemic/aleatoric decomposition, so the system can say "I don't know" instead of emitting false precision.
+- **`reasoning._confidence` / `CausalBelief`** (reasoning.py:31–32, models.py:475–494) are the *memory* — the exact Laplace `(c+1)/(t+2)` belief-revision rule the Minions already use to learn cause→effect, lifted to KGIK graph edges. KGIK learning is *literally the same learning rule* the codebase has elsewhere, which is why §13's constants mirror reasoning.py's (`PROMOTE_MIN=3`, `PRUNE=0.40`).
+- **`model_registry` / `dataset_lineage`** (ai_models.py:17–27) are the *spine* — the provenance chain the §15 experiment/registry lifecycle extends so every production number is reproducible and every model is revertible.
+
+Grounding the loop in these primitives is what lets §8's exit gate be unit-testable against the existing codebase rather than against fresh, unproven code — the self-improvement engine *reuses the platform's own validated learning and evaluation machinery* and orchestrates it into a closed, measurable loop.
+
+The orchestration — not any single new algorithm — is the contribution of this section: forecast→outcome scoring (§1), cycling (§2), four-surface drift (§3), online re-weighting + champion/challenger/canary (§4, §11, §12), KGIK graph learning (§5, §13), leakage-guarded backtesting (§6, §14), and full observability (§7) are wired into one auditable state machine (§10) whose exit criterion is a *measurable, leakage-free, calibration-preserving upward skill trend* (§0, §6.5). That is the falsifiable definition of "improves its own prediction ability," and every clause above exists to make that claim checkable rather than rhetorical.
