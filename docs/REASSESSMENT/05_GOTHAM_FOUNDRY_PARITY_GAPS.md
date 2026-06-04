@@ -191,5 +191,12 @@ Current: 2 disconnected FastAPI backends, Vite frontends, optional Fly/pixelstre
   - ✅ **P16 CI/CD** #115 — real CI (275-test backend + lint + build) + gated/inert deploy (until `DEPLOY_ENABLED`) + Dockerfiles + docs.
   - ✅ **P15 Shell pages** #110 — ApexCore (live telemetry), PluginControlPlane (live endpoint timers), TechTree (the real ~489-method registry) all rewired to real data.
   - 153 routes, 328 tests pass. Frontend: 48 wired pages.
-- **Approx parity:** ~92 of 116 items built or meaningfully advanced. **Program continues in waves — building toward Palantir 1:1, no exceptions.**
+- **Wave 8** (merged to `main`, commit `69d075a`):
+  - ✅ **P16 Gateway/unify** #111 — `/v1/underworld` HTTP gateway proxying the underworld science/sim backend + catalog + health, complementing the in-process science_bridge → **GatewayConsole**.
+  - ✅ **P1 Connector framework** #1/#10/#12 — `/v1/sources` typed connectors (rest_json/csv_url/rss/inline), preview-without-landing, run→dataset+lineage, backfill/replay, run-history → **SourcesConsole**.
+  - ✅ **P2 Ontology depth** #19/#23/#24/#26 — `/v1/ontology-ext` safe computed-functions, object views, live object sets, governed bulk actions, export/import → **ObjectSets**.
+  - ✅ **P4 Search depth** #33/#35/#37 — `/v1/search-plus` faceted filters, saved searches + new-match alerting, search-in-graph paths → **SearchPlus**.
+  - 187 routes; 65 new tests across the wave. Frontend: 52 wired pages.
+- **Approx parity:** ~104 of 116 items built or meaningfully advanced. **Remaining (Wave 9+):** dedicated science consoles for the named domains (#91-104; several already surfaced via Geo/Sci consoles), register the real underworld engine into Scenario Lab (#85-88 upgrade), prediction surfaced in chat (#66), purpose-based access + retention/deletion (#77/#78), connector secrets vault (#11), command-palette-for-everything + keyboard nav + unified theming (#107/#108/#109). **Program continues — Palantir 1:1, no exceptions.**
+- **Approx parity (historical line):** ~92 of 116 at end of Wave 7.
 - **Approx parity (historical line):** ~74 of 116 items built or meaningfully advanced. **Remaining (Wave 7+):** bind real geo sources (seismic/air/buoys/flight) to live feeds; register the underworld engine methods so scenario/optimize use the real GP/counterfactual; multi-tenancy (#116); CI/CD to prod (#115); fill remaining shell pages (ApexCore/PluginControlPlane/TechTree, #110); semantic/vector search + RAG grounding (#34,#62,#67); GPU tier activation (#113, blocked on a vast.ai instance).
