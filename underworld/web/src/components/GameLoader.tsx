@@ -111,8 +111,17 @@ export default function GameLoader({ children }: { children: ReactNode }) {
                  bg-[#0a0a12] text-zinc-200 select-none overflow-hidden"
       style={{ backgroundImage: "radial-gradient(circle at 50% 35%, #1a1030 0%, #0a0a12 60%)" }}
     >
-      {/* The 3D Underworld hero: scattered → assembles as the bar fills. */}
-      {heroReady && (
+      {/* Underworld key-art load screen — full-bleed backdrop. */}
+      <img
+        src="/models/hero/underworld_loadscreen.png"
+        alt="Underworld"
+        className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
+      />
+      {/* bottom scrim keeps the progress bar legible over the art */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/3 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+      {/* The 3D assembling hero (kept available; disabled while the key-art backdrop is the hero). */}
+      {false && heroReady && (
         <div className="pointer-events-none absolute inset-0 z-0">
           <HeroBoundary>
             <HeroAssembleLoader progress={pct} onCanvas={(c) => { heroCanvas.current = c; }} />
@@ -152,8 +161,8 @@ export default function GameLoader({ children }: { children: ReactNode }) {
         </>
       )}
 
-      {/* progress bar — pushed below the hero when it's present */}
-      <div className={`relative z-10 w-[min(560px,80vw)] ${heroReady ? "mt-[44vh]" : ""}`}>
+      {/* progress bar — sits low over the key-art's "LOADING" band */}
+      <div className="absolute bottom-[11%] z-10 w-[min(620px,82vw)]">
         <div className="mb-2 flex justify-between text-[11px] uppercase tracking-widest text-zinc-400">
           <span>{ready ? "Ready" : (TIPS[label] || "Loading…")}</span>
           <span className="tabular-nums">{pct}%</span>
