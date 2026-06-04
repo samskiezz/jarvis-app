@@ -9084,5 +9084,22 @@
     "epoch": "any",
     "name": "Coral Reef Chunk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:corner_bastion": {
+    "prompt": "an angled stone corner bastion fortification, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "52e71d68-90f2-4f35-8354-190db2022139",
+    "path": "/models/generated/tripo/corner_bastion.glb",
+    "bytes": 14963116,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/52e71d68-90f2-4f35-8354-190db2022139/tripo_pbr_model_52e71d68-90f2-4f35-8354-190db2022139.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTJlNzFkNjgtOTBmMi00ZjM1LTgzNTQtMTkwZGIyMDIyMTM5L3RyaXBvX3Bicl9tb2RlbF81MmU3MWQ2OC05MGYyLTRmMzUtODM1NC0xOTBkYjIwMjIxMzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=QtV36vDrhF6IKZ9abPam7Bzd4NOQD3MimG8B4Ij108uKhRi5Di4g7Aw7idtYjZNqM~JMX5bVELm4tymWxVl8PMAJ7gRag3wyaZa-9yUfVhg9N4Z5hKM~XE4M-shhbSQ9lyTSzaBFrL96ACsVnxjU0fXazeOPqz4DtqlyzvXQE7Eat49ibqcOh34rZrXRQlKUZDTBWHlTc6bfKIrivWGhGsZT8yTUCPSmCi3k0EZFNlx8JRrkAya9QOstTWTnpVu8p86ud18~OJxXpdwe5a5kmSWff1~Fi5~jp9i6kgTM1b~1ZWIbKLfmBOPv-ZcDSZJVsYnJqMzVTEbiTVnQSotMig__",
+    "asset_id": "corner_bastion",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Corner Bastion",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
