@@ -9373,5 +9373,22 @@
     "epoch": "any",
     "name": "Oasis",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:palisade_corner": {
+    "prompt": "a corner sharpened-log palisade wall piece, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "23249a30-6ccd-4707-98f0-c90ab1988919",
+    "path": "/models/generated/tripo/palisade_corner.glb",
+    "bytes": 14987776,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/23249a30-6ccd-4707-98f0-c90ab1988919/tripo_pbr_model_23249a30-6ccd-4707-98f0-c90ab1988919.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjMyNDlhMzAtNmNjZC00NzA3LTk4ZjAtYzkwYWIxOTg4OTE5L3RyaXBvX3Bicl9tb2RlbF8yMzI0OWEzMC02Y2NkLTQ3MDctOThmMC1jOTBhYjE5ODg5MTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Pz4JD~G7L5I5peEd7pXj8FiyE6UGmmUJ~SgYAaViHF2YLJfeSm-W-O~ajqMqBxTod9T-BhxKbDW1gH4q1CBWfeBhZXk5dXj5BxWxhfyDQ3J-xwfaQtfkjmBgtnQCu5iPPvwsPciHUuqiyH3yg8Rn3XCpd2lb76yhHW0Lcdika4jfo3ZNCc3YSAW2bcAyq3IAQTwmqLIk3AHycDyhureZ1z9lEtguny-fIXCHOvxsdWnBIfXHWuadxUelQwMJf2XSxMll3xf1vFni19QEC~g20SVKY5RrUw99dLjNFc93nmm1iA5HAhdTL-w95FMEOvUfJURqdZg2Dbs6hMPNat~~1A__",
+    "asset_id": "palisade_corner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "bronze",
+    "name": "Palisade Corner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
