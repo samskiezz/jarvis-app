@@ -158,6 +158,8 @@ CE = PICP − (1 − α)        # ≈ 0 is calibrated; CE < 0 = overconfident (t
 ```
 Acceptance band: `|CE| ≤ 0.05` for the production target horizon (see §6.4). EnbPI (§06) is the calibration mechanism that keeps `PICP ≈ 1 − α`; this loop *measures* whether it holds out-of-sample and feeds the conformal residual buffer.
 
+**Worked coverage example.** 90% PI target (`α=0.10`, nominal `1−α=0.90`), `n=200` scored forecasts, `172` realized values fell inside their `[L,U]`. `PICP = 172/200 = 0.86`; `CE = 0.86 − 0.90 = −0.04`. `|CE|=0.04 ≤ 0.05` → within band, but **negative CE = overconfident** (intervals slightly too narrow — only 86% landed inside a band that promised 90%). The fix is *not* retraining: it's refreshing the conformal residual buffer (RB-CALIBRATION), which widens the band until `PICP→0.90`. Contrast: if `186/200` landed inside, `PICP=0.93`, `CE=+0.03` → mildly *under*-confident (bands too wide, `MPIW` larger than needed) — acceptable but a sharpness opportunity. The `±0.05` band tolerates Monte-Carlo noise at `n=200`: the binomial standard error of PICP at nominal 0.90 is `sqrt(0.9·0.1/200) ≈ 0.021`, so `±0.05 ≈ 2.4σ` — a real breach, not sampling noise.
+
 #### 1.3.5 Skill score vs baseline
 A **skill score** normalizes a forecast's error against a naive reference so improvement is meaningful (a forecast can have low RMSE simply because the series is easy). For any negatively-oriented score `S` (CRPS, MSE, MAE):
 ```

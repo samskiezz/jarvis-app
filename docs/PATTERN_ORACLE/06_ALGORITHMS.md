@@ -1299,6 +1299,68 @@ for each x_t:
 
 **Source.** Adams & MacKay 2007, *Bayesian Online Changepoint Detection*; https://arxiv.org/abs/0710.3742
 
+#### D13.+ DEPTH MILESTONE
+
+**Full derivation.** Let `r_t` = run length (steps since last change). The joint `P(r_t, x_{1:t})` factors recursively. Two events: (a) **growth** — no change, `r_t=r_{t−1}+1`, contributing `P(r_{t−1},x_{1:t−1})·π(x_t|r_{t−1})·(1−H(r_{t−1}))`; (b) **change** — `r_t=0`, summing over all previous run lengths times the hazard `H`. The hazard for a constant rate is `H(r)=1/λ` (geometric prior: `P(run length=r)=(1−1/λ)^r/λ`). `π(x_t|r)` is the **posterior predictive** of the segment model given the `r` observations since the last change. For a Gaussian with Normal-Inverse-Gamma prior, the posterior predictive is a **Student-t**: `x_t | x_{(t−r):t} ~ t_{2α_n}(μ_n, β_n(κ_n+1)/(α_n κ_n))` with the standard NIG sufficient-statistic updates `κ_n=κ_0+r, μ_n=(κ_0μ_0+rx̄)/κ_n, α_n=α_0+r/2, β_n=β_0+½Σ(x−x̄)²+κ_0 r(x̄−μ_0)²/(2κ_n)`. Closed form ⇒ no integration.
+
+**Runnable-quality pseudocode.**
+```python
+def bocpd(stream, *, hazard_lambda=250, mu0=0., kappa0=1., alpha0=1., beta0=1.,
+          threshold=0.5, R_max=500):
+    import numpy as np
+    from scipy.stats import t as student_t
+    H = 1.0 / hazard_lambda
+    # run-length posterior, NIG sufficient stats per run length
+    P = np.array([1.0])
+    mu, kap, al, be = ([mu0], [kappa0], [alpha0], [beta0])
+    cps = []
+    for i, x in enumerate(stream):
+        # posterior predictive per run length (Student-t)
+        df = 2*np.array(al)
+        scale = np.sqrt(np.array(be)*(np.array(kap)+1)/(np.array(al)*np.array(kap)))
+        pred = student_t.pdf(x, df=df, loc=np.array(mu), scale=scale)
+        growth = P * pred * (1 - H)
+        cp     = (P * pred * H).sum()
+        newP   = np.concatenate([[cp], growth])
+        newP  /= newP.sum()
+        # update sufficient stats (prepend fresh r=0 prior, advance others)
+        nmu  = [mu0]  + [(kap[j]*mu[j] + x)/(kap[j]+1) for j in range(len(mu))]
+        nkap = [kappa0]+ [kap[j]+1 for j in range(len(kap))]
+        nal  = [alpha0]+ [al[j]+0.5 for j in range(len(al))]
+        nbe  = [beta0] + [be[j] + kap[j]*(x-mu[j])**2/(2*(kap[j]+1)) for j in range(len(be))]
+        # truncate run lengths for bounded cost
+        if len(newP) > R_max:
+            newP, nmu, nkap, nal, nbe = (a[:R_max] for a in (list(newP),nmu,nkap,nal,nbe))
+            newP = np.array(newP)/np.sum(newP)
+        P, mu, kap, al, be = np.array(newP), nmu, nkap, nal, nbe
+        if P[0] > threshold: cps.append(i)
+    return cps
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `hazard_lambda` | float | 250 | 10–10000 | expected run length | ↑ ⇒ rarer CPs |
+| `mu0,kappa0,alpha0,beta0` | float | 0,1,1,1 | priors | segment model prior | set on standardized data |
+| `threshold` | float | 0.5 | (0,1) | CP flag on P(r=0) | ↑ ⇒ fewer flags |
+| `R_max` | int | 500 | 50–5000 | run-length truncation | bound memory/cost |
+
+**Worked numeric example.** Standardized stream `[0,0,0,0,...,3,3,3,...]` with `λ=250`. While stable, `P(r=0)` stays tiny (predictive favors growth). At the first `x=3` after a run of zeros, the Student-t predictive under the long run assigns very low likelihood, so the change branch `P(r=0)` spikes (e.g. to ~0.8 > threshold) → change-point emitted at that index; run length resets and grows again.
+
+**Complexity (derivation).** Naive: at step `t` the run-length vector has length `t` → `O(t)` per step, `O(n²)` total. With `R_max` truncation or `ε`-pruning, vector length is bounded → `O(R_max)` per step, `O(n·R_max)` total. **Space** `O(R_max)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Underflow in long products | `P` collapses to 0 | work in log-space (logsumexp) |
+| Unbounded run-length growth | memory/time blow-up | `R_max` truncation + `ε`-prune low mass |
+| Misscaled priors | over/under-sensitive | standardize input; tune `β0` |
+| Heavy tails vs Gaussian predictive | false change flags | use t-predictive (already), or robust model |
+
+**Unit-test oracle.** Pure i.i.d. `N(0,1)` stream of length 1000 with `λ=250`: expected number of flagged change-points ≈ `1000/250 = 4` (order of magnitude; should not flag dozens). A single hard step (mean 0→10 at index 500) must produce a sharp `P(r=0)` spike at ~500 and a MAP run length that resets there. Stable constant stream → `P(r=0)` never exceeds threshold.
+
+**Integration code-points.** **NEW** pure-numpy `bocpd.py` (reference `bayesian_changepoint_detection`). Runs **online** on live History-Lake feeds; a fresh change-point invalidates current forecasts → triggers SELF-IMPROVEMENT retrain/re-weight and resets Error-Weighted-Ensemble (F18) error windows; the VERIFIER appends a "regime change detected" caveat. Complements PELT (D12, offline). Defensive numpy patterns reuse `prediction.py`.
+
 ---
 
 ### D14. Isolation Forest
