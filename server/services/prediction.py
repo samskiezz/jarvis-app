@@ -144,9 +144,19 @@ def _cache_put(key: str, value: Any) -> None:
 # ══════════════════════════════════════════════════════════════════════════════
 # DATA LOADERS
 # ══════════════════════════════════════════════════════════════════════════════
+def _cg_headers() -> dict:
+    """CoinGecko Demo-tier auth header from env (never hard-coded). Empty dict
+    falls back to the keyless free tier (lower rate limit)."""
+    import os
+
+    key = os.environ.get("CG_API_KEY", "").strip()
+    return {"x-cg-demo-api-key": key} if key else {}
+
+
 def load_crypto_series(asset: str, days: int = 90) -> list[dict]:
     """Fetch a real CoinGecko price series. Returns [{t: ms, v: price}, ...] or
-    [] on any error (no network, rate limit, bad id). Cached ~5 min."""
+    [] on any error (no network, rate limit, bad id). Cached ~5 min.
+    days=1 -> ~5-min granularity; 2-90 -> hourly; >90 -> daily (CoinGecko auto)."""
     coin_id = _TICKER_TO_ID.get(asset.lower().strip(), asset.lower().strip())
     key = f"crypto:{coin_id}:{days}"
     cached = _cache_get(key)
@@ -158,7 +168,8 @@ def load_crypto_series(asset: str, days: int = 90) -> list[dict]:
         resp = httpx.get(
             f"{_COINGECKO_BASE}/coins/{coin_id}/market_chart",
             params={"vs_currency": "usd", "days": str(days)},
-            timeout=httpx.Timeout(15.0, connect=8.0),
+            headers=_cg_headers(),
+            timeout=httpx.Timeout(20.0, connect=8.0),
         )
         resp.raise_for_status()
         prices = resp.json().get("prices", [])
@@ -167,6 +178,36 @@ def load_crypto_series(asset: str, days: int = 90) -> list[dict]:
         series = []
     if series:
         _cache_put(key, series)
+    return series
+
+
+def load_crypto_history(asset: str, days: str | int = 365) -> list[dict]:
+    """Longest free-tier daily series (CoinGecko market_chart). The Demo tier caps
+    historical range at 365 days and rejects the `interval` param (Pro-only), so we
+    request days<=365 and take CoinGecko's auto daily granularity. Returns
+    [{t: ms, v: price}, ...] or []. Cached ~5 min. (Full since-listing history
+    needs a Pro key.)"""
+    coin_id = _TICKER_TO_ID.get(asset.lower().strip(), asset.lower().strip())
+    cache_key = f"cryptohist:{coin_id}:{days}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
+    try:
+        import httpx
+
+        resp = httpx.get(
+            f"{_COINGECKO_BASE}/coins/{coin_id}/market_chart",
+            params={"vs_currency": "usd", "days": str(days)},
+            headers=_cg_headers(),
+            timeout=httpx.Timeout(30.0, connect=8.0),
+        )
+        resp.raise_for_status()
+        prices = resp.json().get("prices", [])
+        series = [{"t": int(p[0]), "v": float(p[1])} for p in prices if len(p) >= 2]
+    except Exception:  # noqa: BLE001
+        series = []
+    if series:
+        _cache_put(cache_key, series)
     return series
 
 
