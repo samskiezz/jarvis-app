@@ -8948,5 +8948,22 @@
     "epoch": "iron",
     "name": "Canal Corner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:canal_lock": {
+    "prompt": "a canal lock with wooden lock gates, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4c53f02a-947f-4e57-8d5f-d30f2282e198",
+    "path": "/models/generated/tripo/canal_lock.glb",
+    "bytes": 15006308,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/4c53f02a-947f-4e57-8d5f-d30f2282e198/tripo_pbr_model_4c53f02a-947f-4e57-8d5f-d30f2282e198.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNGM1M2YwMmEtOTQ3Zi00ZTU3LThkNWYtZDMwZjIyODJlMTk4L3RyaXBvX3Bicl9tb2RlbF80YzUzZjAyYS05NDdmLTRlNTctOGQ1Zi1kMzBmMjI4MmUxOTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=W0qReRN7y7-a5B2vCi709SNU~fZ0A167LrS2aIPL1WTuDg2LMgP4dGch0KpMuwC0gyGRPahU8YxfTR1Hm9Fzh2EwZDwnuw5QfCTheJGr5XfcMFdKvWLOFku59xySzz448rB9bsK1trDoxixshFVPz7gJ6~RaS3RImdiVmod1dLx3Me5YGKQDkFsTwQK5JHn5pnZPTsMWRMLrELlHxeQlXfBUWjM2Dmau7YDlFac15F9C0E2P3ttsnU3tE~2YPyFTGHqEur~dnU8nZQaawZGqk-bUCMdrpOEDDLC-82yKYRnjReV~marz88a3QIFQICmShI5-lkyxAKAj-47eve3fww__",
+    "asset_id": "canal_lock",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Canal Lock",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
