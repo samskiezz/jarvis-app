@@ -413,6 +413,60 @@ return {quantiles:q, mean:q[0.5], model, version}
 
 **Source.** TimesFM — Das et al. 2024, https://github.com/google-research/timesfm · Chronos — Ansari et al. 2024, https://github.com/amazon-science/chronos-forecasting (both Apache-2.0).
 
+#### A4.+ DEPTH MILESTONE
+
+**Full derivation.** *Patch tokenization (TimesFM).* A context of length `L` is reshaped into `⌈L/P⌉` patches; each patch `x_{(i−1)P+1:iP}` is instance-normalized then linearly projected to a `d`-dim token. A causal decoder attends over tokens; the output MLP maps the final hidden state to `Q` quantile values for the next `H_out` steps. Long horizons roll the model autoregressively, feeding predicted patches back as input. *Quantile head loss (training, for context).* The model is trained with the **pinball (quantile) loss** `ρ_α(u)=u(α−1{u<0})` summed over quantile levels — this is what makes the output quantiles calibrated by construction. *Chronos quantization.* Values are mean-scaled `x̃=x/(1+mean|x|)` then mapped to `B` uniform bins over a clipped range `[−c,c]`; forecasting is categorical next-token prediction; sampling `S` trajectories and taking empirical quantiles recovers a predictive distribution. Instance normalization is the linchpin: the model saw scaled data in pretraining, so the adapter must store `(μ_s,σ_s)` and invert after inference.
+
+**Runnable-quality pseudocode (adapter).**
+```python
+def foundation_forecast(context, horizon, *, quantile_levels=(.1,.2,.3,.4,.5,.6,.7,.8,.9),
+                        max_ctx=512, model=None, endpoint=None, timeout=30):
+    import numpy as np, requests
+    x = np.asarray([v for v in context if np.isfinite(v)], float)[-max_ctx:]
+    if x.size == 0:
+        raise ValueError("empty context")
+    mu_s, sd_s = float(x.mean()), float(x.std()) or 1.0   # guard constant series
+    z = (x - mu_s) / sd_s
+    if model is not None:                       # local weights
+        out = model.predict(z[None, :], horizon=horizon, quantiles=list(quantile_levels))
+        q = np.asarray(out["quantiles"])        # shape [Q, horizon]
+    elif endpoint is not None:                   # remote GPU dispatch
+        r = requests.post(endpoint, json={"context": z.tolist(), "horizon": horizon,
+                          "quantiles": list(quantile_levels)}, timeout=timeout)
+        r.raise_for_status(); q = np.asarray(r.json()["quantiles"])
+    else:
+        raise RuntimeError("no model/endpoint -> caller falls back to A1/A3")
+    q = q * sd_s + mu_s                          # denormalize
+    qd = {lvl: q[i].tolist() for i, lvl in enumerate(quantile_levels)}
+    return {"quantiles": qd, "mean": qd.get(0.5, q[len(q)//2].tolist()),
+            "model": getattr(model, "name", "remote"), "version": "v1"}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `patch_len` | int | 32 | 8–64 | tokens per patch (TimesFM) | model-fixed; do not change at inference |
+| `max_ctx` | int | 512 | 64–2048 | context truncation | ↑ to model max if signal long-memory |
+| `quantile_levels` | tuple | .1..​.9 | (0,1) | output grid | add .05/.95 for tail coverage |
+| `num_samples` | int | 20 | 1–100 | Chronos trajectories | ↑ for smoother tail quantiles |
+| `timeout` | int (s) | 30 | 5–120 | remote call budget | ↓ with classical fallback ready |
+
+**Worked numeric example.** `context` = 100 points of `sin(t/5)+0.1·noise`, `horizon=12`. After instance-norm (`μ_s≈0, σ_s≈0.72`) the model returns normalized quantiles; e.g. predicted `q0.5` for step 1 = `0.31` → denorm `0.31·0.72+0 = 0.223`; `q0.1=−0.55→−0.40`, `q0.9=1.18→0.85`. Output dict: `{0.1:[-0.40,...], 0.5:[0.223,...], 0.9:[0.85,...], mean=q0.5}`.
+
+**Complexity (derivation).** Full attention over `T_tok=⌈L/P⌉` tokens is `O(T_tok²·d)` per layer × `n_layers`; patched models keep `T_tok` small (e.g. 512/32=16). Autoregressive rollout multiplies by `⌈horizon/H_out⌉` decode steps. **Space** `O(T_tok·d + params)`; dominated by model weights (GPU resident).
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Constant series | `σ_s=0` → div-by-0 | guard `sd_s = std or 1.0`; return flat quantiles |
+| Endpoint down/timeout | request exception | catch → caller falls back to A1/A3, set `model:"fallback"` |
+| Out-of-range values | quantization clips | mean-scale before quantize; report clip flag |
+| Quantile crossing | `q0.1>q0.5` | sort quantiles per step (monotone projection) |
+
+**Unit-test oracle.** Mock model that returns the identity (predicts the normalized last value for all quantiles/steps). For `context=[2,4,6,8,10]` (`μ_s=6,σ_s≈2.83`), normalized last = `(10−6)/2.83=1.414`; denorm = `1.414·2.83+6=10.0`. So every output quantile must equal `10.0±1e-6`, proving the normalize→predict→denormalize round-trip is lossless.
+
+**Integration code-points.** **NEW** `foundation_forecast.py` implementing the `FoundationForecaster` Protocol; reuses the remote-HTTP + defensive-fallback pattern from `_kimi_extract()` (`/home/user/jarvis-app/server/services/prediction.py:65`) and `gpu_backend.py` for local device selection. Registered as the **highest-prior** ensemble member `k="timesfm"`/`k="chronos"` in F18; its `quantiles` feed EnbPI (F19) and CRPS scoring (F20). Endpoint URL from `PREDICT_GPU_URL` (see `10_COMPUTE_AND_GPU.md`).
+
 ---
 
 ### A5. Lag-Llama Student-t Probabilistic Head

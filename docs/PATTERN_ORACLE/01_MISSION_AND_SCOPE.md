@@ -350,6 +350,38 @@ All requirements below are **normative, ID-stable, and testable**. The `Verify` 
 | **FR-19** | Record provenance for every technique used (cited source or audited-code reference) in the answer/audit log. | P1 | P-1, P-E | Each method emitted carries a source tag resolvable to §02/§03. |
 | **FR-20** | Version the forecast API contract and preserve backward compatibility within a major version. | P1 | P-C, §07 | Contract tests pass across a minor version bump; breaking change ⇒ major bump. |
 
+#### 1.10.1.1 Functional sub-requirements (FR-x.y)
+
+Sub-requirements decompose the parent FR into independently testable obligations. Each inherits its parent's priority unless overridden and carries its own acceptance hook. These exist so the traceability stub (§1.12) can bind at fine grain and no parent FR is "passed" while a sub-obligation is unbuilt.
+
+| ID | Sub-requirement (the system **MUST** …) | Parent | Verify (acceptance hook) |
+|----|------------------------------------------|--------|--------------------------|
+| **FR-1.1** | Extract the **target** entity/series from free text. | FR-1 | Labeled-set target accuracy ≥95%. |
+| **FR-1.2** | Extract the **horizon** (and units) or apply a documented default. | FR-1 | Horizon parse correct or default applied + flagged. |
+| **FR-1.3** | Extract the **operator** (point vs `P(>x)` vs risk vs regime vs scenario). | FR-1 | Operator routed to correct UC archetype. |
+| **FR-1.4** | Return a structured "could not parse" signal (not a guess) on ambiguous input. | FR-1, FR-18 | Ambiguous fixture → clarify/refuse, never fabricate. |
+| **FR-3.1** | Attach the contributing **lake series ID(s)** to every forecast record. | FR-3 | Each forecast row references ≥1 series_id. |
+| **FR-3.2** | Block emission of any number when no grounded series resolves. | FR-3, FR-18 | No-source ask → refusal, not a number. |
+| **FR-4.1** | Normalize every feed to the shared `series` row shape `(source,symbol,ts,value,meta)`. | FR-4 | Schema validation on ingest. |
+| **FR-4.2** | Isolate per-feed ingestion errors (one failed feed cannot abort others). | FR-4, NFR-8 | Kill one feed → others still write rows. |
+| **FR-4.3** | Idempotent upsert keyed on `(source,symbol,ts)`. | FR-4 | Re-ingest same window → no duplicate rows. |
+| **FR-5.1** | Compute cross-series lead-lag (lag + strength) between candidate driver and target. | FR-5 | Synthetic lead recovered within tolerance. |
+| **FR-5.2** | Attach the discovered driver list (with lags) to the answer object. | FR-5, FR-9 | Drivers present in response. |
+| **FR-8.1** | Produce a conformal interval at each requested nominal level. | FR-8 | Interval present per level. |
+| **FR-8.2** | Use realized residuals from the outcome store when available, else cold-start residuals with a caveat. | FR-8 | Cold-start path emits caveat; warm path uses Lake residuals. |
+| **FR-9.1** | Validate the response against the §07 schema before emission. | FR-9 | Response validator rejects malformed objects. |
+| **FR-9.2** | Populate `baseline` with the named reference used for skill. | FR-9, K-1 | `baseline` field non-empty + matches scorer. |
+| **FR-11.1** | Write a forecast row at issue time with all reproduction fields. | FR-11, NFR-11 | Row written; fields complete. |
+| **FR-11.2** | Link the realized outcome when observable; keep "pending" until then. | FR-11 | Pending honored; outcome linked on maturity. |
+| **FR-12.1** | Compute CRPS, RMSE, PICP, FSS per (feed, method) on resolution. | FR-12 | Scoring job emits all four per feed/method. |
+| **FR-12.2** | Expose the skill **trend** (slope over trailing window) per feed. | FR-12, K-6 | Trend queryable; slope computed. |
+| **FR-16.1** | Compute PSI on input-series distribution (reference vs recent). | FR-16 | Injected shift → PSI crosses threshold. |
+| **FR-16.2** | Compute ECE on forecast confidence vs realized hits. | FR-16 | Miscalibration → ECE crosses threshold. |
+| **FR-16.3** | Fire an alarm/retrain trigger when either crosses its threshold. | FR-16, K-11 | Threshold crossing → trigger fires before FSS collapse. |
+| **FR-18.1** | Refuse when grounding is absent (EC-1/EC-2). | FR-18 | Out-of-grounding → refusal w/ reason. |
+| **FR-18.2** | Hedge (widen/decline) when horizon exceeds the information limit (EC-3). | FR-18, P-2 | Over-horizon ask → honest width or decline. |
+| **FR-19.1** | Tag every emitted method with a source reference resolvable to §02/§03. | FR-19 | Source tag resolves; no untagged method. |
+
 ### 1.10.2 Non-Functional Requirements (NFR)
 | ID | Requirement (the system **MUST** …) | Priority | Traces to | Verify (acceptance hook) |
 |----|--------------------------------------|----------|-----------|--------------------------|
