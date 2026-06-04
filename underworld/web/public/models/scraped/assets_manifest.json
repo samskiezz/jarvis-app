@@ -9543,5 +9543,22 @@
     "epoch": "any",
     "name": "Ramp Segment",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rapids_tile": {
+    "prompt": "a churning whitewater rapids river tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "214d4515-b18e-4b28-b731-197bd3b4eb91",
+    "path": "/models/generated/tripo/rapids_tile.glb",
+    "bytes": 15329068,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/214d4515-b18e-4b28-b731-197bd3b4eb91/tripo_pbr_model_214d4515-b18e-4b28-b731-197bd3b4eb91.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjE0ZDQ1MTUtYjE4ZS00YjI4LWI3MzEtMTk3YmQzYjRlYjkxL3RyaXBvX3Bicl9tb2RlbF8yMTRkNDUxNS1iMThlLTRiMjgtYjczMS0xOTdiZDNiNGViOTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=R1O6HcCbYZ6ldyEykbqJp4GeljUR50OOb6KG67zKm-U2eGKOKBeCkMPymM8aLIKnQCSavkNnjue6uXNEzEtu2e-Q-s-qAEWwIoZxy18hhB9Ash90lx~aLLknsek3RyI~42~EnZhfkQInsgw3bCOgO6sfCp86~UMfFPKgaoCuM3rMualeSmXzWAnNvChWkxkKwDTfc~W7VubijjYyn3ouEtItSgXTi~YxwY1Y-eP~rKGbw8Y5igD-r4JQCLD39bT0-2FNjJGBU5W5zx7KcWKJSiS~zh7CQUlpjDxzd34fAse9EUj0xiKBzpYTAp62gpTbS9AjImr6pktI0k3UEOfp~w__",
+    "asset_id": "rapids_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Rapids Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
