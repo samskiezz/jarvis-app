@@ -185,6 +185,12 @@ export const PAGES = [
   { name: "ScienceConsoles", label: "Science Consoles", icon: "🔬", group: "platform",
     aliases: ["sonar","submarine","meteor","asteroid","buoy","ocean","air quality","ppm","flight","aerospace","rf","spectrum","frequency","neuron","neural","seismic","satellite","cluster","epidemic","quantum","materials","trajectory","science"],
     component: P(() => import("@/pages/ScienceConsoles")) },
+  { name: "Investigations", label: "Investigations", icon: "🔍", group: "platform",
+    aliases: ["investigation","case","graph case","playback","annotate","share","timeline graph"],
+    component: P(() => import("@/pages/Investigations")) },
+  { name: "Governance", label: "Governance", icon: "⚖️", group: "platform",
+    aliases: ["governance","purpose","retention","subject rights","erase","gdpr","secrets","vault","policy"],
+    component: P(() => import("@/pages/Governance")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
