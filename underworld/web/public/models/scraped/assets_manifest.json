@@ -9101,5 +9101,22 @@
     "epoch": "industrial",
     "name": "Corner Bastion",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:crater_small": {
+    "prompt": "a small rocky impact crater terrain feature, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a400f81a-9645-4e57-973d-dc373b2b7efd",
+    "path": "/models/generated/tripo/crater_small.glb",
+    "bytes": 15195352,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/a400f81a-9645-4e57-973d-dc373b2b7efd/tripo_pbr_model_a400f81a-9645-4e57-973d-dc373b2b7efd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYTQwMGY4MWEtOTY0NS00ZTU3LTk3M2QtZGMzNzNiMmI3ZWZkL3RyaXBvX3Bicl9tb2RlbF9hNDAwZjgxYS05NjQ1LTRlNTctOTczZC1kYzM3M2IyYjdlZmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=RBX2J1a8Ue4YnUyykFyWbHBd4s~Ewpm5mkH6H3meIJa8MT4l7RpiNdveg9SM~WBydKQrXKIUtUVjv5D5BJsv3vGZXtCmJtpa8a9K7Xt5Gq3LQoAebWOvBAypJRuYhDScDfSBAE8ACL-kLqJTz4IfW~4CrTt99JvL8RpTfC~wPUJI5jqn3iYAeV6bkiQVPScjgbfWzVXnx3Rfk6VCKI3f9z6qNzUOHFtx3ttnKYgDZ3d0As03hWBmafiwRhIq4tb4JGlusP~baONDZoOZmBR1yWI7nXEH9XfT8eWkh84psWdTst1NTekiln2OAH~4at4SBEtkA0~E1XC4y2DZ1Mo7FA__",
+    "asset_id": "crater_small",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Crater Small",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
