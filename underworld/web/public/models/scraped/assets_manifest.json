@@ -9135,5 +9135,22 @@
     "epoch": "iron",
     "name": "Defensive Tower Round",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:drawbridge": {
+    "prompt": "a wooden castle drawbridge with chains, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "30a8fb36-d33e-45d9-80f8-3b2581ebd7fe",
+    "path": "/models/generated/tripo/drawbridge.glb",
+    "bytes": 10714452,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/30a8fb36-d33e-45d9-80f8-3b2581ebd7fe/tripo_pbr_model_30a8fb36-d33e-45d9-80f8-3b2581ebd7fe.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzBhOGZiMzYtZDMzZS00NWQ5LTgwZjgtM2IyNTgxZWJkN2ZlL3RyaXBvX3Bicl9tb2RlbF8zMGE4ZmIzNi1kMzNlLTQ1ZDktODBmOC0zYjI1ODFlYmQ3ZmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=ROxKKEAH8WKhGBLU7gmgOH1MyEh598gk4gWLe2PkDBpK~7qZiwq5GodNa4fU3eUTo8YMJ~4Ha5ETPHeLvM92Kmo4HkDayRcHlakTTfOB2AvmS3ux0puj4k~xpidx1LKhrjGbGmC4e2GK1XRC1OKsACnuh6dZMfeglq~xG-t4N15x95hOQ3WKeG58gWDnuwzaKxdBJRp3qYOEeV7DbfQs-tNrholeUjAH3MtuXbLojkI3HsD5W4gVEloo51fmhier-3iElsqPwX9SQUQq4QkyugrS6fXeVVQnGGuzbkvEg6JdC71ppWIhlFw45ZvxxK3ocjgNKolauzts4cUiE4uzZg__",
+    "asset_id": "drawbridge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Drawbridge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
