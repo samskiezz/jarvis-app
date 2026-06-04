@@ -9492,5 +9492,22 @@
     "epoch": "iron",
     "name": "Portcullis",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:railway_crossing": {
+    "prompt": "a level railway crossing road tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "81f561a1-53c6-4472-8ab7-9eb0a30dd83a",
+    "path": "/models/generated/tripo/railway_crossing.glb",
+    "bytes": 14971352,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/81f561a1-53c6-4472-8ab7-9eb0a30dd83a/tripo_pbr_model_81f561a1-53c6-4472-8ab7-9eb0a30dd83a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODFmNTYxYTEtNTNjNi00NDcyLThhYjctOWViMGEzMGRkODNhL3RyaXBvX3Bicl9tb2RlbF84MWY1NjFhMS01M2M2LTQ0NzItOGFiNy05ZWIwYTMwZGQ4M2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=c7Sol2695lle1iAGpp2BXy3pOtdD7yroY7OIrVI7ijTWl2Ne0Xo7UVsbdpZ~vOf1lTtEud9uNlNLHmSx8FyIFgro3nx0xi-W-VqdwLfvLkU03qtf~3mZdDltGiHkaIGWPSULEN~M-FTI9X6aAR-5u92UWFAE-X5WPsjBa3Zltizc5S3MZuoEplRwPAVgt6K9xZNuB-2YLrYqOtNaY0-gmdc8VLYlv2tl4c6Iv7vqXKaYDPGabtut6BOU0E0lMm2U7drZYw-d55ELsJh~DCAfD0t4pYBXW3T2hBTWatM2cQDsqcLbnoTomDJJE76d7pO0vY1gPgr2aw2xt0rziXJ7sw__",
+    "asset_id": "railway_crossing",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Railway Crossing",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
