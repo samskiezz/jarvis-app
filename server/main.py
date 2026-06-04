@@ -11,6 +11,7 @@ from .routes import aip_tools as aip_tools_routes
 from .routes import auth as auth_routes
 from .routes import datasets as datasets_routes
 from .routes import bridge as bridge_routes
+from .routes import chat_predict as chat_predict_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
@@ -124,6 +125,7 @@ def create_app() -> FastAPI:
     app.include_router(sci_domains_routes.router)
     app.include_router(graph_time_routes.router)
     app.include_router(investigations_routes.router)
+    app.include_router(chat_predict_routes.router)
 
     @app.get("/")
     async def root():
