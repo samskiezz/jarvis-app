@@ -9356,5 +9356,22 @@
     "epoch": "iron",
     "name": "Moat Segment",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:oasis": {
+    "prompt": "a desert oasis pool ringed with palms, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8c412295-1a5f-422a-abc6-5997d5ff3922",
+    "path": "/models/generated/tripo/oasis.glb",
+    "bytes": 15569660,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/8c412295-1a5f-422a-abc6-5997d5ff3922/tripo_pbr_model_8c412295-1a5f-422a-abc6-5997d5ff3922.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOGM0MTIyOTUtMWE1Zi00MjJhLWFiYzYtNTk5N2Q1ZmYzOTIyL3RyaXBvX3Bicl9tb2RlbF84YzQxMjI5NS0xYTVmLTQyMmEtYWJjNi01OTk3ZDVmZjM5MjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=uZ~DkmfBmrZCZikiqW-GYx8EzLqTpc260H47cF2c44HkF0w-xtZtP5HjQVyF1nvjZrPRomNQMQWW-5ob7h~0hxaTjQvT9X7b4y9gGfmodZcUY3lB~tipVXNatL815Whzjlu2HXdeMvwPDWGbyNA60a0rNap2qsNVG-eQhnh40E56jjFpW52lzDnFY4PwH8E9kaLGlfh77clU1q1Tym0Gmypmojan8XZMdnaj7ebEmrpw8xmm9QtRvcqMdCX0dNr~8FoTKtahVUwpk0hkg76o4hf8ubCIG0onjUeok21NC-yPfRYGsOd0GWbYzElSTNCEkh~y8icJTCsTm-PMNHWw-Q__",
+    "asset_id": "oasis",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Oasis",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
