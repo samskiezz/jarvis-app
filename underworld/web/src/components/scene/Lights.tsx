@@ -86,12 +86,55 @@ export function diurnal(tick: number, size: number): Diurnal {
   };
 }
 
+// Cool sky-fill colour for the bounce/ambient side, derived per phase so the
+// shadowed faces never go dead-flat — the "filmic fill" opposite the warm key.
+const FILL_COLOR: Record<Diurnal["label"], string> = {
+  day: "#9fc4ff",
+  dusk: "#6a78c8",
+  night: "#2b3a78",
+  dawn: "#8a96e0",
+};
+
+// Warm rim/back-light colour — a subtle kicker from behind to separate
+// silhouettes from the sky (the classic three-point "rim").
+const RIM_COLOR: Record<Diurnal["label"], string> = {
+  day: "#fff0c8",
+  dusk: "#ff7a3a",
+  night: "#7088e0",
+  dawn: "#ffd0b0",
+};
+
 export default function Lights({ tick, size }: Props) {
   const d = useMemo(() => diurnal(tick, size), [tick, size]);
+
+  // Three-point rig positions derived from the sun so the whole setup tracks
+  // the time-of-day arc cohesively.
+  const fillPos = useMemo<[number, number, number]>(
+    // Opposite azimuth + lower, simulating cool sky bounce from the far side.
+    () => [-d.sun.x * 0.6, size * 0.5, -d.sun.z * 0.6],
+    [d.sun.x, d.sun.z, size],
+  );
+  const rimPos = useMemo<[number, number, number]>(
+    // Behind the subject relative to the key, slightly elevated, for a kicker.
+    () => [-d.sun.x, d.sun.y * 0.5 + size * 0.2, -d.sun.z * 1.2],
+    [d.sun.x, d.sun.y, d.sun.z, size],
+  );
+
+  // Shadow frustum: focus it on the dense play area (the city core + nearby
+  // terrain) rather than the whole 4× ground plane. A tighter box means the
+  // 4096² map resolves crisp contact shadows instead of smearing them across
+  // the entire world. ~0.36·size half-extent comfortably covers the orbit
+  // range the camera works in.
+  const shadowExtent = size * 0.36;
+
   return (
     <>
-      <hemisphereLight args={[d.hemiSky, d.hemiGround, 0.6]} />
+      {/* Cool hemisphere + ambient — the global skylight base (image-based
+          lighting from the HDRI handles the rest of the indirect term). */}
+      <hemisphereLight args={[d.hemiSky, d.hemiGround, 0.55]} />
       <ambientLight color={d.ambientColor} intensity={d.ambientIntensity} />
+
+      {/* KEY — the warm sun. Sole shadow caster (PCFSoft on the renderer). */}
       <directionalLight
         position={[d.sun.x, d.sun.y, d.sun.z]}
         color={d.sunColor}
@@ -99,21 +142,32 @@ export default function Lights({ tick, size }: Props) {
         castShadow
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
-        shadow-camera-left={-size * 0.6}
-        shadow-camera-right={size * 0.6}
-        shadow-camera-top={size * 0.6}
-        shadow-camera-bottom={-size * 0.6}
+        shadow-camera-left={-shadowExtent}
+        shadow-camera-right={shadowExtent}
+        shadow-camera-top={shadowExtent}
+        shadow-camera-bottom={-shadowExtent}
         shadow-camera-near={0.5}
-        shadow-camera-far={size * 4}
-        shadow-bias={-0.00015}
-        shadow-normalBias={0.04}
+        shadow-camera-far={size * 3}
+        shadow-bias={-0.00012}
+        shadow-normalBias={0.05}
         shadow-radius={4}
         shadow-blurSamples={16}
       />
-      {/* Linear fog with a closer near-plane for depth perception in busy
-          scenes — buildings far from camera fade into the sky colour. */}
-      <fog attach="fog" args={[d.fogColor, size * 0.5, size * 1.8]} />
-      <color attach="background" args={[d.fogColor]} />
+
+      {/* FILL — cool, dimmer, opposite the key. No shadows: it only lifts the
+          shadowed side so faces read with form instead of crushing to black. */}
+      <directionalLight
+        position={fillPos}
+        color={FILL_COLOR[d.label]}
+        intensity={d.sunIntensity * 0.35 + 0.2}
+      />
+
+      {/* RIM — a subtle warm kicker from behind for silhouette separation. */}
+      <directionalLight
+        position={rimPos}
+        color={RIM_COLOR[d.label]}
+        intensity={d.sunIntensity * 0.25 + 0.1}
+      />
     </>
   );
 }

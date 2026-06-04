@@ -78,10 +78,48 @@ def _anim_for(mood: str, fatigue: float, sanity: float, role: str) -> str:
     return ANIM_IDLE
 
 
+def _tod_phase(frame_tod: dict) -> str:
+    """Map the numeric time-of-day frame to a behavior phase name."""
+    frac = float(frame_tod.get("fraction", 0.5)) if isinstance(frame_tod, dict) else 0.5
+    if frac < 0.2:
+        return "night"
+    if frac < 0.35:
+        return "dawn"
+    if frac < 0.7:
+        return "day"
+    if frac < 0.85:
+        return "dusk"
+    return "night"
+
+
+def _life_stage(m) -> str:
+    try:
+        from underworld.server.services.lifecycle import life_stage
+        age = (getattr(m, "age_ticks", None)
+               or (getattr(m, "_world_tick", 0) - (m.born_tick or 0)))
+        return life_stage(int(age))
+    except Exception:
+        return "adult"
+
+
+def _season_for(tick: int, *, year_length: int = 96) -> str:
+    q = int((tick % year_length) / (year_length / 4)) % 4
+    return ("spring", "summer", "autumn", "winter")[q]
+
+
+def _companion_for(m) -> str:
+    """Which social mode the Minion is in, from their strongest current bond."""
+    brain = getattr(m, "brain", None) or {}
+    return str(brain.get("companion", "alone"))
+
+
 def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0,
-                  terrain_scale: float = 8.0, saga_title: str | None = None) -> dict:
+                  terrain_scale: float = 8.0, saga_title: str | None = None,
+                  tod_phase: str = "day", biome: str = "plains", era: str = "iron",
+                  weather: str = "clear", season: str = "spring") -> dict:
     """The full visual record for one Minion — position, animation, appearance,
-    and their current story. Renderer-agnostic."""
+    their current story, AND the micro-behavior the renderer should play out.
+    Renderer-agnostic."""
     guild = m.guild.value if hasattr(m.guild, "value") else str(m.guild)
     mood = m.mood.value if hasattr(m.mood, "value") else str(m.mood)
     look = GUILD_LOOK.get(guild, {"color": "#cccccc", "role": "scholar"})
@@ -90,6 +128,26 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
     anim = _anim_for(mood, m.fatigue or 0.5, m.sanity or 0.85, look["role"])
     # prominence: masters / high-reputation Minions render larger & adorned
     prominence = round(min(1.5, 0.8 + 0.14 * (m.reputation or 1.0)), 3)
+
+    # The behavior bridge: expand this Minion's abstract state into the continuous
+    # micro-interaction stream (go to bench → sit → operate tool → emote …).
+    behavior = None
+    try:
+        from underworld.server.services.behavior import behavior_for_minion
+        role = m.swarm_role.value if hasattr(getattr(m, "swarm_role", None), "value") else \
+            str(getattr(m, "swarm_role", "generalist") or "generalist")
+        proj_stage = (m.brain or {}).get("project_stage", "hypothesis")
+        skill_level = float((m.brain or {}).get("top_skill", 2.0) or 2.0)
+        behavior = behavior_for_minion(
+            {"last_action": (m.brain or {}).get("last_action", "rest"),
+             "guild": guild, "role": role, "mood": mood, "life_stage": _life_stage(m),
+             "health": getattr(m, "health", 1.0), "fatigue": getattr(m, "fatigue", 0.85)},
+            time_of_day=tod_phase, biome=biome, era=era, project_stage=proj_stage,
+            weather=weather, season=season, companion=_companion_for(m), skill_level=skill_level,
+        )
+    except Exception:
+        behavior = None
+
     return {
         "id": m.id,
         "name": f"{m.name} {m.surname or ''}".strip(),
@@ -102,6 +160,10 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         "needs": {"hunger": round(m.hunger or 0, 3), "fatigue": round(m.fatigue or 0, 3),
                   "sanity": round(m.sanity or 0, 3)},
         "saga": saga_title or (m.brain or {}).get("saga", {}).get("title"),
+        "behavior": behavior,
+        # When a Minion has just done CRISPR work, expose the colour-coded helix +
+        # edit so the renderer can visualise the unzip and the cut/insert.
+        "gene_edit": (m.brain or {}).get("gene_edit"),
         "alive": bool(m.alive),
     }
 
@@ -122,8 +184,17 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
     """Assemble the canonical scene every renderer draws. This IS the world the
     backend says exists — positions, looks, stories, and the world frame."""
     seed_int = getattr(seed, "seed_int", 0)
+    biome = getattr(seed, "biome_hint", "plains")
+    era = getattr(world, "era", "iron")
+    tod = time_of_day(world.tick)
+    tod_phase = _tod_phase(tod)
+    season = _season_for(world.tick)
+    for m in minions:
+        setattr(m, "_world_tick", world.tick)  # lets _life_stage derive age
     visuals = [minion_visual(m, seed_int=seed_int, heightmap=heightmap,
-                             town_radius=town_radius) for m in minions if m.alive]
+                             town_radius=town_radius, tod_phase=tod_phase,
+                             biome=biome, era=era, weather=weather, season=season)
+               for m in minions if m.alive]
     return {
         "world_id": world.id, "tick": world.tick, "era": world.era,
         "sim_year": round(world.sim_year, 1),

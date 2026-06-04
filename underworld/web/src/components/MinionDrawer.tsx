@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Brain, Dna as DnaIcon, GitBranch, Heart, Network, ScrollText, X } from "lucide-react";
+import { Brain, Dna as DnaIcon, GitBranch, Heart, MessageSquare, Network, ScrollText, Send, X } from "lucide-react";
 import { api } from "@/lib/api";
 import Avatar from "@/components/ui/Avatar";
 import GuildBadge from "@/components/ui/GuildBadge";
@@ -60,22 +61,127 @@ function TraitBar({ label, value }: { label: string; value: number }) {
   );
 }
 
+interface ChatLine {
+  role: "user" | "minion";
+  content: string;
+}
+
+function TalkSection({ minionId, name, alive }: { minionId: string; name: string; alive: boolean }) {
+  const [lines, setLines] = useState<ChatLine[]>([]);
+  const [draft, setDraft] = useState("");
+
+  const send = useMutation({
+    mutationFn: (message: string) => {
+      const history = lines.map((l) => ({
+        role: l.role === "minion" ? "assistant" : "user",
+        content: l.content,
+      }));
+      return api.chatMinion(minionId, message, history);
+    },
+    onSuccess: (res) => {
+      setLines((prev) => [...prev, { role: "minion", content: res.reply }]);
+    },
+    onError: (err) => {
+      setLines((prev) => [
+        ...prev,
+        { role: "minion", content: `(no reply — ${(err as Error).message})` },
+      ]);
+    },
+  });
+
+  const submit = () => {
+    const message = draft.trim();
+    if (!message || send.isPending) return;
+    setLines((prev) => [...prev, { role: "user", content: message }]);
+    setDraft("");
+    send.mutate(message);
+  };
+
+  return (
+    <section className="panel">
+      <div className="panel-header">
+        <span className="flex items-center gap-1.5">
+          <MessageSquare size={11} />
+          Talk to {name}
+        </span>
+        {lines.length ? <span>{lines.length} msgs</span> : null}
+      </div>
+      <div className="p-3">
+        {lines.length === 0 ? (
+          <p className="text-[10px] text-zinc-500">
+            Ask {name} anything — they answer in character, from their own mind.
+          </p>
+        ) : (
+          <div className="mb-2 max-h-56 space-y-2 overflow-y-auto pr-1">
+            {lines.map((l, i) => (
+              <div
+                key={i}
+                className={`flex ${l.role === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={
+                    l.role === "user"
+                      ? "max-w-[80%] rounded-lg border border-glow-sky/25 bg-glow-sky/10 px-2.5 py-1.5 text-[10px] text-zinc-200"
+                      : "max-w-[80%] rounded-lg border border-glow-purple/20 bg-ink-2/50 px-2.5 py-1.5 text-[10px] text-zinc-300"
+                  }
+                >
+                  {l.content}
+                </div>
+              </div>
+            ))}
+            {send.isPending ? (
+              <div className="flex justify-start">
+                <div className="rounded-lg border border-glow-purple/20 bg-ink-2/50 px-2.5 py-1.5 text-[10px] italic text-zinc-500">
+                  {name} is thinking…
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+        <div className="flex items-center gap-1.5">
+          <input
+            className="input flex-1 text-[10px]"
+            placeholder={alive ? `Say something to ${name}…` : `Speak with the memory of ${name}…`}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submit();
+              }
+            }}
+          />
+          <button
+            type="button"
+            className="btn shrink-0"
+            disabled={send.isPending || !draft.trim()}
+            onClick={submit}
+            title="Send"
+          >
+            <Send size={12} />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function MinionDrawer({ minionId, onClose }: Props) {
   const qc = useQueryClient();
   // The world ticks in the background; the selected minion's live state must keep
-  // up, so the changing views poll every 3s. Static facts (DNA, soul, lineage,
-  // appearance) are fetched once.
+  // up, so every sub-view polls every 3s. (DNA/lineage/appearance rarely change
+  // but a fork or mutation can shift them mid-life, so they stay live too.)
   const LIVE = 3000;
   const minion = useQuery({ queryKey: ["minion", minionId], queryFn: () => api.getMinion(minionId), refetchInterval: LIVE });
   const skills = useQuery({ queryKey: ["minion", minionId, "skills"], queryFn: () => api.listSkills(minionId), refetchInterval: LIVE });
   const memories = useQuery({ queryKey: ["minion", minionId, "memories"], queryFn: () => api.listMemories(minionId, 12), refetchInterval: LIVE });
   const rels = useQuery({ queryKey: ["minion", minionId, "rels"], queryFn: () => api.listRelationships(minionId), refetchInterval: LIVE });
-  const dna = useQuery({ queryKey: ["minion", minionId, "dna"], queryFn: () => api.getDna(minionId) });
+  const dna = useQuery({ queryKey: ["minion", minionId, "dna"], queryFn: () => api.getDna(minionId), refetchInterval: LIVE });
   const soul = useQuery({ queryKey: ["minion", minionId, "soul"], queryFn: () => api.getSoul(minionId), refetchInterval: LIVE });
-  const lineage = useQuery({ queryKey: ["minion", minionId, "lineage"], queryFn: () => api.getLineage(minionId) });
+  const lineage = useQuery({ queryKey: ["minion", minionId, "lineage"], queryFn: () => api.getLineage(minionId), refetchInterval: LIVE });
   const beliefs = useQuery({ queryKey: ["minion", minionId, "beliefs"], queryFn: () => api.beliefs(minionId), refetchInterval: LIVE });
   const models = useQuery({ queryKey: ["minion", minionId, "models"], queryFn: () => api.models(minionId), refetchInterval: LIVE });
-  const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId) });
+  const appearance = useQuery({ queryKey: ["minion", minionId, "appearance"], queryFn: () => api.appearance(minionId), refetchInterval: LIVE });
   const brain = useQuery({ queryKey: ["minion", minionId, "brain"], queryFn: () => api.brain(minionId), refetchInterval: LIVE });
 
   const fork = useMutation({
@@ -148,10 +254,28 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             <NeedBar label="Health" value={m.health} />
             <NeedBar label="Calm" value={1 - m.stress} />
             {m.morale != null ? <NeedBar label="Morale" value={m.morale} /> : null}
-            {m.purpose != null ? <NeedBar label="Purpose" value={m.purpose} /> : null}
-            {m.injury ? <NeedBar label="Wound" value={m.injury} /> : null}
-            {m.addiction ? <NeedBar label="Addiction" value={m.addiction} /> : null}
           </div>
+          {/* Purpose — drive toward a goal, shown as a short line */}
+          {m.purpose != null ? (
+            <div className="mt-2 flex items-center justify-between text-[10px]">
+              <span className="text-zinc-500 uppercase tracking-widest text-[9px]">Sense of purpose</span>
+              <span className="font-mono text-glow-purple">{m.purpose.toFixed(2)}</span>
+            </div>
+          ) : null}
+          {/* Afflictions — only surfaced when present */}
+          {(m.injury || m.addiction || (!m.alive && m.cause_of_death)) ? (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {m.injury ? (
+                <span className="badge badge-rose">wound {m.injury.toFixed(2)}</span>
+              ) : null}
+              {m.addiction ? (
+                <span className="badge badge-amber">addiction {m.addiction.toFixed(2)}</span>
+              ) : null}
+              {!m.alive && m.cause_of_death ? (
+                <span className="badge badge-zinc">died: {m.cause_of_death.replace(/_/g, " ")}</span>
+              ) : null}
+            </div>
+          ) : null}
           {appearance.data ? (
             <div className="mt-2 text-[10px] text-zinc-500">
               {appearance.data.hair} hair · {appearance.data.garment}
@@ -160,6 +284,9 @@ export default function MinionDrawer({ minionId, onClose }: Props) {
             </div>
           ) : null}
         </section>
+
+        {/* TALK — direct in-character chat with this Minion */}
+        <TalkSection minionId={m.id} name={m.name} alive={m.alive} />
 
         {/* COGNITION — neural policy + learned beliefs + trained models */}
         {(brain.data?.dispositions?.length || beliefs.data?.length || models.data?.length) ? (

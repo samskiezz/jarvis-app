@@ -189,6 +189,15 @@ export const api = {
     }),
   killMinion: (minion_id: string) =>
     request<Minion>(`/minions/${minion_id}/kill`, { method: "POST" }),
+  chatMinion: (
+    id: string,
+    message: string,
+    history: { role: string; content: string }[] = [],
+  ) =>
+    request<{ reply: string; in_character: boolean; used_llm: boolean }>(
+      `/minions/${id}/chat`,
+      { method: "POST", body: JSON.stringify({ message, history }) },
+    ),
 
   // patents
   searchPatents: (query: string, limit = 10, only_expired = true) =>

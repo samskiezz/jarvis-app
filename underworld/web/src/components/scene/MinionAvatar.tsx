@@ -104,6 +104,10 @@ interface Props {
   positionRef?: MutableRefObject<THREE.Vector3>;
   /** Unit XZ direction the user is pressing in control mode. */
   controlInputRef?: MutableRefObject<THREE.Vector3>;
+  /** Ground elevation at a world (x, z). When driving the minion under user
+   *  control we sample this so it hugs the terrain rather than floating at its
+   *  spawn height. */
+  groundHeight?: (x: number, z: number) => number;
   /** Latest internal thought — shown as a bubble that tracks the avatar. */
   thought?: string;
   /** Human-readable label of the current action — shown when selected. */
@@ -126,6 +130,7 @@ export default function MinionAvatar({
   worldSize = 1000,
   positionRef,
   controlInputRef,
+  groundHeight,
   thought,
   actionLabel,
   onClick,
@@ -278,13 +283,17 @@ export default function MinionAvatar({
       const input = controlInputRef.current;
       const moving = input.lengthSq() > 0.01;
       if (moving) {
-        const speed = 10;
+        const speed = 14;
         let nx = g.position.x + input.x * speed * dt;
         let nz = g.position.z + input.z * speed * dt;
         if (colliders && colliders.length) {
           const out = clampToFree(nx, nz, AVATAR_RADIUS, colliders);
           nx = out[0]; nz = out[1];
         }
+        // Keep the driven minion inside the world bounds.
+        const bound = worldSize / 2 - 2;
+        nx = Math.max(-bound, Math.min(bound, nx));
+        nz = Math.max(-bound, Math.min(bound, nz));
         g.position.x = nx;
         g.position.z = nz;
         const targetAngle = Math.atan2(input.x, input.z) + FACING_OFFSET;
@@ -293,8 +302,12 @@ export default function MinionAvatar({
         while (diff < -Math.PI) diff += Math.PI * 2;
         g.rotation.y += diff * Math.min(1, dt * 10);
       }
-      g.position.y = basePosition[1];
+      // Hug the terrain when we can sample it; fall back to spawn height.
+      g.position.y = groundHeight ? groundHeight(g.position.x, g.position.z) : basePosition[1];
       if (positionRef) positionRef.current.copy(g.position);
+      // Reset arrival/path state so the AI doesn't think it's still en route
+      // to an old target when the user releases control.
+      s.path = []; s.wp = 0; s.pathKey = "";
       return;
     }
 

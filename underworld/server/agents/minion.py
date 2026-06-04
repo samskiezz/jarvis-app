@@ -41,6 +41,7 @@ from ..genetics import dna as dna_mod
 from ..physics import engine as physics_engine
 from ..services import emotion as emotion_mod
 from ..services import goals as goals_mod
+from ..services import activities
 from ..services import lifecycle, mastery as mastery_mod, neural, planning, progression, reasoning
 from ..services import memory as memory_mod
 from ..tools import llm, patent_intelligence, patent_search, safety
@@ -69,6 +70,15 @@ _ACTIONS = {
     "teach",
     "kb_lookup",
     "calculate",            # run a real physics calculation + learn from it
+    # Deepened lived actions (services/activities.py) — real well-being effects.
+    "forage",               # gather food + water from the land
+    "worship",              # sky-belief ritual
+    "craft",                # make a tool/artifact
+    "trade",                # exchange goods at market
+    "celebrate",            # a festival / shared joy
+    "heal",                 # tend wounds (self or a neighbour)
+    "mentor",               # guide an apprentice
+    "gene_edit",            # CRISPR: unzip a helix + edit the DNA (information era)
 }
 
 # Doc II.131 — actions that advance the App's mission and so confer purpose.
@@ -555,9 +565,13 @@ async def _do_propose_invention(
     # materials Minion really predicts an alloy's Tc, a computing Minion really
     # runs a quantum circuit, etc. A strong real result lifts feasibility, so
     # inventions are judged on genuine work, not text. (Task 2 — modules wired in.)
-    from ..services import minion_research
-    grounded = minion_research.run_research(
-        minion.guild.value, seed=hash(f"{minion.id}:{world.tick}") & 0x7FFFFFFF)
+    # Route through the unified discovery layer: grounded real computation PLUS a
+    # genuine novel artifact (technology/patent, and per-guild a molecule / colour
+    # / sky observation) recorded into a cumulative, self-building ledger.
+    from ..services import discovery_lab
+    grounded = discovery_lab.discover(
+        minion.guild.value, seed=hash(f"{minion.id}:{world.tick}") & 0x7FFFFFFF,
+        minion_id=minion.id)        # work within this Minion's lifelong specialisation
     grounded_quality = float(grounded.get("quality", 0.5))
 
     # Doc I.72 — an unscrupulous (low-conscientiousness, low-karma) Minion may
@@ -1075,6 +1089,9 @@ async def run_tick(
         summary = await _do_kb_lookup(session, minion, world, args)
     elif action == "calculate":
         summary = await _do_calculate(session, minion, world, args)
+    elif action in activities.NEW_ACTIONS:
+        # Deepened lived actions with real, bounded well-being effects.
+        summary = activities.perform(action, minion, rng, neighbours=neighbours)
     elif action == "eat":
         lifecycle.replenish(minion, food=0.45)
         summary = "Ate and replenished."
@@ -1166,6 +1183,12 @@ async def run_tick(
         minion.id,
         {"summary": summary[:200], "blocked_by_safety": blocked_by_safety},
     )
+
+    # Record the resolved action so the behavior bridge (services/behavior.py)
+    # can expand it into the renderer's micro-interaction stream next frame.
+    brain = dict(minion.brain or {})
+    brain["last_action"] = action
+    minion.brain = brain
 
     return TickOutcome(
         minion_id=minion.id,

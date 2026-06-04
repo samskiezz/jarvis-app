@@ -42,6 +42,8 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--epoch", default=None, help="only this epoch tag (+ evergreens)")
     ap.add_argument("--phase", default=None, help="only this build phase/category (e.g. terrain)")
+    ap.add_argument("--stage", type=int, default=None,
+                    help="only this completion stage (1=core world … 6=polish; see STAGES.md)")
     ap.add_argument("--only", default=None, help="comma list of design ids")
     ap.add_argument("--max", type=int, default=0, help="cap number of jobs this run (budget guard)")
     ap.add_argument("--dry-run", action="store_true")
@@ -52,7 +54,15 @@ def main(argv=None) -> int:
     ap.add_argument("--model-version", default="v2.0-20240919")
     args = ap.parse_args(argv)
 
-    designs = designs_for(args.epoch)
+    if args.stage is not None:
+        from .design_list import STAGES, designs_for_stage
+        designs = designs_for_stage(args.stage)
+        if args.epoch:
+            designs = [d for d in designs if d[2] in (args.epoch, "any")]
+        sname = STAGES.get(args.stage, {}).get("name", "?")
+        print(f"stage {args.stage} — {sname}")
+    else:
+        designs = designs_for(args.epoch)
     if args.phase:
         designs = [d for d in designs if d[1] == args.phase]
     if args.only:

@@ -37,11 +37,11 @@ class Era:
 
 
 ERAS: list[Era] = [
-    Era("stone",       "Stone Age",       min_pop=0,  min_inventions=0,   min_avg_skill=0.0, unlocks=("eat","drink","rest","meditate","socialise","study","teach","seek_partner","fork_self","kb_lookup","calculate","propose_invention")),
-    Era("bronze",      "Bronze Age",      min_pop=15, min_inventions=2,   min_avg_skill=1.2, unlocks=("build_scanner",)),
-    Era("iron",        "Iron Age",        min_pop=30, min_inventions=8,   min_avg_skill=2.0, unlocks=("search_patents",)),
+    Era("stone",       "Stone Age",       min_pop=0,  min_inventions=0,   min_avg_skill=0.0, unlocks=("eat","drink","rest","meditate","socialise","study","teach","seek_partner","fork_self","kb_lookup","calculate","propose_invention","forage","worship")),
+    Era("bronze",      "Bronze Age",      min_pop=15, min_inventions=2,   min_avg_skill=1.2, unlocks=("build_scanner","craft","trade","celebrate")),
+    Era("iron",        "Iron Age",        min_pop=30, min_inventions=8,   min_avg_skill=2.0, unlocks=("search_patents","heal","mentor")),
     Era("industrial",  "Industrial Age",  min_pop=60, min_inventions=20,  min_avg_skill=3.0, unlocks=("propose_with_party",)),
-    Era("information", "Information Age", min_pop=100, min_inventions=50, min_avg_skill=4.0, unlocks=("seek_ascension",)),
+    Era("information", "Information Age", min_pop=100, min_inventions=50, min_avg_skill=4.0, unlocks=("seek_ascension", "gene_edit")),
     Era("quantum",     "Quantum Age",     min_pop=160, min_inventions=120, min_avg_skill=5.5, unlocks=()),
 ]
 

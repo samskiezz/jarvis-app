@@ -193,6 +193,19 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [messages]);
 
+  // The command palette ("Ask Jarvis: <query>") and any other surface can hand
+  // a query to the assistant via a window event. Open the panel and process it.
+  useEffect(() => {
+    const onAsk = (e) => {
+      const q = e?.detail?.query;
+      if (!q) return;
+      setOpen(true);
+      handlerRef.current?.(q);
+    };
+    window.addEventListener("jarvis:ask", onAsk);
+    return () => window.removeEventListener("jarvis:ask", onAsk);
+  }, []);
+
   // First user gesture unlocks audio (browsers block speech before one) and
   // arms the wake word.
   const activate = useCallback(() => {

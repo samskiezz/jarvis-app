@@ -3,6 +3,7 @@ from __future__ import annotations
 import random
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
 from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -90,6 +91,22 @@ async def _minion_or_404(session: AsyncSession, minion_id: str) -> Minion:
     return m
 
 
+class ChatTurn(BaseModel):
+    role: str
+    content: str
+
+
+class MinionChatRequest(BaseModel):
+    message: str = Field(min_length=1)
+    history: list[ChatTurn] | None = None
+
+
+class MinionChatResponse(BaseModel):
+    reply: str
+    in_character: bool
+    used_llm: bool
+
+
 @router.get("/{minion_id}", response_model=MinionOut)
 async def get_minion(
     minion_id: str,
@@ -101,6 +118,31 @@ async def get_minion(
         select(Skill.id).where(Skill.minion_id == minion_id).limit(1)
     )
     return _to_minion_out(minion, 1 if skill_count else 0)
+
+
+@router.post("/{minion_id}/chat", response_model=MinionChatResponse)
+async def chat_minion(
+    minion_id: str,
+    body: MinionChatRequest,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Talk directly to a Minion — it answers AS ITSELF, grounded in its live
+    state. Uses Kimi K2 when configured, with a local in-character fallback so
+    the feature always works offline. Never 500s on a normal chat."""
+    from ..services import minion_chat
+
+    minion = await _minion_or_404(session, minion_id)
+    history = [{"role": t.role, "content": t.content} for t in (body.history or [])]
+    try:
+        result = await minion_chat.reply(session, minion, body.message, history)
+    except Exception:  # noqa: BLE001 — chat must never hard-fail the request
+        result = {
+            "reply": f"{minion.name} looks at you but says nothing right now.",
+            "in_character": True,
+            "used_llm": False,
+        }
+    return MinionChatResponse(**result)
 
 
 @router.get("/{minion_id}/dna")

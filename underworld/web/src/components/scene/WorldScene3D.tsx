@@ -2,7 +2,8 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment as DreiEnvironment, OrbitControls } from "@react-three/drei";
 import {
-  Bloom, EffectComposer, N8AO, SMAA, SSR, ToneMapping, Vignette,
+  Bloom, BrightnessContrast, EffectComposer, HueSaturation, N8AO, SMAA, SSR,
+  ToneMapping, Vignette,
 } from "@react-three/postprocessing";
 import { BlendFunction, ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
@@ -10,6 +11,7 @@ import type { MinionListItem } from "@/lib/types";
 import Lights, { diurnal } from "./Lights";
 import Terrain, { elevationAt } from "./Terrain";
 import WorldEnvironment from "./Environment";
+import GeneratedWorld from "./GeneratedWorld";
 import MinionAvatar from "./MinionAvatar";
 import { computePois, destinationForAction } from "./pois";
 import type { Collider } from "./colliders";
@@ -17,7 +19,6 @@ import Weather, { weatherFor, type WeatherKind } from "./Weather";
 import Water from "./Water";
 import CelestialBodies from "./CelestialBodies";
 import Vehicles from "./Vehicles";
-import CharacterController from "./CharacterController";
 import { HDRI_SKY } from "./assets";
 
 interface Props {
@@ -41,6 +42,14 @@ interface Props {
   /** Live climate readout for the HUD. */
   season?: string;
   temperature?: number;
+  /** When true (and a minion is selected) the camera eases its orbit target
+   *  toward the selected minion each frame, so it tracks the minion while the
+   *  user keeps orbit/zoom control. Driven by the HUD's "Follow camera" toggle. */
+  followCam?: boolean;
+  /** When true (and a minion is selected) WASD/arrow keys drive the selected
+   *  minion directly, suppressing only that minion's AI. Driven by the HUD's
+   *  "Override control" toggle. */
+  overrideCtl?: boolean;
 }
 
 /** Follow camera: when a minion is selected, smoothly track its live position so
@@ -66,6 +75,56 @@ function FollowRig({
     controls.target.copy(next);
     camera.position.add(delta);
     controls.update();
+  });
+  return null;
+}
+
+/** In-scene WASD/arrow listener. While override is active for the selected
+ *  minion, it writes a camera-relative unit XZ vector into controlInputRef each
+ *  frame; the selected MinionAvatar reads that ref and walks itself. OrbitControls
+ *  stays mounted so the user can still orbit/zoom around the minion. */
+function WasdInput({
+  active, controlInputRef,
+}: {
+  active: boolean;
+  controlInputRef: React.MutableRefObject<THREE.Vector3>;
+}) {
+  const { camera } = useThree();
+  const keys = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!active) {
+      controlInputRef.current.set(0, 0, 0);
+      return;
+    }
+    const down = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase());
+    const up = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase());
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+      keys.current.clear();
+      controlInputRef.current.set(0, 0, 0);
+    };
+  }, [active, controlInputRef]);
+  useFrame(() => {
+    if (!active) return;
+    const k = keys.current;
+    // Camera-relative basis flattened onto the ground plane: 'forward' is the
+    // direction the camera looks (minus Y), 'right' is its perpendicular.
+    const fwd = new THREE.Vector3();
+    camera.getWorldDirection(fwd);
+    fwd.y = 0;
+    if (fwd.lengthSq() < 1e-6) fwd.set(0, 0, -1);
+    fwd.normalize();
+    const right = new THREE.Vector3(fwd.z, 0, -fwd.x); // 90° CW on XZ plane
+    const dir = new THREE.Vector3();
+    if (k.has("w") || k.has("arrowup")) dir.add(fwd);
+    if (k.has("s") || k.has("arrowdown")) dir.sub(fwd);
+    if (k.has("d") || k.has("arrowright")) dir.add(right);
+    if (k.has("a") || k.has("arrowleft")) dir.sub(right);
+    if (dir.lengthSq() > 0.01) dir.normalize();
+    controlInputRef.current.copy(dir);
   });
   return null;
 }
@@ -162,6 +221,8 @@ export default function WorldScene3D({
   weatherOverride,
   season,
   temperature,
+  followCam = false,
+  overrideCtl = false,
 }: Props) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   // Shared refs the selected MinionAvatar mutates (its world position) and
@@ -171,22 +232,21 @@ export default function WorldScene3D({
   const controlInputRef = useRef(new THREE.Vector3());
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const orbitRef = useRef<any>(null);
-  // Track whether the user is actively driving the selected character; if
-  // not, OrbitControls is in charge of the camera.
-  const [controlMode, setControlMode] = useState(false);
-  // ESC releases control. Selecting a different minion or deselecting also
-  // exits the mode so the camera doesn't end up tracking nothing.
-  useEffect(() => {
-    if (!controlMode) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setControlMode(false);
+  // Override + follow only mean anything while something is selected.
+  const overriding = overrideCtl && !!selectedId;
+  const following = followCam && !!selectedId;
+
+  // Ground height at a world (x, z) — reused by override movement so the
+  // driven minion hugs the terrain instead of floating at its spawn height.
+  // Mirrors placeMinion's elevation math (Terrain.elevationAt + amplitude band).
+  const groundHeight = useMemo(() => {
+    return (x: number, z: number) => {
+      const nx = x / WORLD_SIZE + 0.5;
+      const ny = z / WORLD_SIZE + 0.5;
+      const e = elevationAt(grid, nx, ny);
+      return Math.max(0, (e - 0.42) * AMPLITUDE);
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [controlMode]);
-  useEffect(() => {
-    if (controlMode && !selectedId) setControlMode(false);
-  }, [controlMode, selectedId]);
+  }, [grid]);
 
   const pois = useMemo(
     () => computePois(grid, WORLD_SIZE, AMPLITUDE, seed),
@@ -316,6 +376,7 @@ export default function WorldScene3D({
           <Terrain grid={grid} size={WORLD_SIZE} amplitude={AMPLITUDE} />
           <Water size={WORLD_SIZE} sunDirection={sunNorm} />
           <WorldEnvironment pois={pois} size={WORLD_SIZE} seed={seed} tick={tick} />
+          <GeneratedWorld pois={pois} size={WORLD_SIZE} seed={seed} />
           <Vehicles
             size={WORLD_SIZE}
             seed={seed}
@@ -343,9 +404,10 @@ export default function WorldScene3D({
                 colliders={colliders}
                 navColliders={navColliders}
                 worldSize={WORLD_SIZE}
-                controlled={isSelected && controlMode}
+                controlled={isSelected && overriding}
+                groundHeight={groundHeight}
                 positionRef={isSelected ? selectedPosRef : undefined}
-                controlInputRef={isSelected && controlMode ? controlInputRef : undefined}
+                controlInputRef={isSelected && overriding ? controlInputRef : undefined}
                 thought={p.minion.alive ? thoughtByMinion?.[p.minion.id] : undefined}
                 actionLabel={
                   isSelected && actionByMinion?.[p.minion.id]
@@ -359,42 +421,43 @@ export default function WorldScene3D({
               />
             );
           })}
-          {controlMode && selectedId ? (
-            <CharacterController
-              selectedId={selectedId}
-              position={selectedPosRef.current}
-              controlInputRef={controlInputRef}
-            />
-          ) : null}
+          {/* WASD/arrow capture for override mode. Writes a camera-relative
+              input vector that the selected avatar reads; OrbitControls stays
+              live so the user can still orbit/zoom while driving. */}
+          <WasdInput active={overriding} controlInputRef={controlInputRef} />
           {/* Selected-minion label + internal-monologue bubbles now render
               inside each MinionAvatar, so they track the moving avatar live
               (doc II.25) instead of floating over the minion's home. */}
-          {!controlMode && (
-            <OrbitControls
-              ref={orbitRef}
-              target={[0, 2, 0]}
-              enablePan
-              enableDamping
-              dampingFactor={0.08}
-              minDistance={WORLD_SIZE * 0.08}
-              maxDistance={WORLD_SIZE * 1.6}
-              maxPolarAngle={Math.PI * 0.48}
-            />
-          )}
-          {/* Follow the selected minion (unless the user has taken WASD control,
-              which uses its own chase camera). */}
-          <FollowRig posRef={selectedPosRef} orbitRef={orbitRef} active={!!selectedId && !controlMode} />
+          <OrbitControls
+            ref={orbitRef}
+            target={[0, 2, 0]}
+            enablePan
+            enableDamping
+            dampingFactor={0.08}
+            minDistance={WORLD_SIZE * 0.08}
+            maxDistance={WORLD_SIZE * 1.6}
+            maxPolarAngle={Math.PI * 0.48}
+          />
+          {/* Follow the selected minion: eases the orbit target toward it while
+              the user keeps full orbit/zoom control. Gated on the HUD toggle. */}
+          <FollowRig posRef={selectedPosRef} orbitRef={orbitRef} active={following} />
           {/* Post stack — modern WebGL ceiling. N8AO grounds objects in
               their crevices, SSR adds screen-space reflections on the
               shinier materials (wet road, glass, water), DepthOfField
               gives the cinematic falloff Sims-style cameras have, SMAA
               cleans edges, bloom haloes the obelisk + sun, vignette + ACES
               finishes. */}
+          {/* NOTE: @react-three/postprocessing's EffectComposer forces
+              gl.toneMapping = NoToneMapping while it renders the scene, so the
+              renderer's toneMappingExposure is bypassed and the ToneMapping
+              effect below is the single source of ACES tone mapping (no double
+              apply). Day/night brightness is driven by the HDRI intensity
+              ramps + light intensities + the grade passes, not gl exposure. */}
           <EffectComposer multisampling={0} enableNormalPass={!lowPower}>
             {!lowPower ? (
               <N8AO
                 aoRadius={2.5}
-                intensity={isNight ? 3 : 2.2}
+                intensity={isNight ? 2.4 : 1.6}
                 distanceFalloff={1}
                 quality="high"
                 halfRes={false}
@@ -420,15 +483,20 @@ export default function WorldScene3D({
                 running in character-follow mode where there's a clear
                 subject. Re-enable behind a flag if you want it. */}
             <Bloom
-              luminanceThreshold={isNight ? 0.4 : 0.7}
-              luminanceSmoothing={0.5}
-              intensity={isNight ? 2.0 : 0.65}
-              radius={0.9}
+              luminanceThreshold={isNight ? 0.45 : 0.85}
+              luminanceSmoothing={0.4}
+              intensity={isNight ? 1.8 : 0.55}
+              radius={0.85}
               mipmapBlur
             />
             <Vignette eskil={false} offset={0.15} darkness={isNight ? 0.55 : 0.35} />
             <SMAA />
             <ToneMapping mode={ToneMappingMode.ACES_FILMIC} blendFunction={BlendFunction.NORMAL} />
+            {/* Cinematic colour grade — the "Avatar/Sims-4" vibrancy. ACES tone
+                mapping desaturates a touch; we punch saturation + contrast back
+                up so the world reads rich and colourful, not muddy. */}
+            <HueSaturation saturation={isNight ? 0.3 : 0.22} />
+            <BrightnessContrast brightness={isNight ? -0.03 : 0.02} contrast={0.1} />
           </EffectComposer>
         </Suspense>
       </Canvas>
@@ -442,20 +510,10 @@ export default function WorldScene3D({
         {hiddenCount > 0 ? ` · +${hiddenCount} off-screen (LOD)` : ""}
       </div>
       <div className="pointer-events-none absolute bottom-3 left-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
-        {controlMode
-          ? "WASD/arrows move · Q/E rotate · ESC release"
+        {overriding
+          ? "WASD/arrows move (camera-relative) · drag to orbit · scroll to zoom"
           : "drag to orbit · scroll to zoom · click a minion to inspect"}
       </div>
-      {/* Take-control button — enabled only when a minion is selected. */}
-      {selectedId ? (
-        <button
-          type="button"
-          onClick={() => setControlMode((v) => !v)}
-          className="absolute bottom-3 right-3 rounded-md border border-glow-amber/40 bg-glow-amber/15 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-glow-amber backdrop-blur hover:bg-glow-amber/25"
-        >
-          {controlMode ? "release control" : "take control"}
-        </button>
-      ) : null}
       {hoveredId && hoveredId !== selectedId ? (
         <div className="pointer-events-none absolute right-3 bottom-3 rounded-md border border-white/10 bg-black/40 px-2 py-1 text-[9px] text-zinc-300 backdrop-blur">
           selecting…

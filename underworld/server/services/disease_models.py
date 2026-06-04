@@ -84,26 +84,67 @@ def drug_perturbation(baseline: dict[str, float], targets: dict[str, float]) -> 
     return {"perturbed": perturbed, "shifts": shifts, "largest_effect": biggest}
 
 
-def gene_knockout(expression: dict[str, float], gene: str) -> dict:
-    """Knockout: set a gene's expression to zero; report the network response
-    (downstream genes scaled by their dependence)."""
+def _propagate(expression: dict[str, float], source: str, new_value: float,
+               network: dict[str, dict[str, float]] | None, *, hops: int = 3,
+               decay: float = 0.6) -> tuple[dict[str, float], dict[str, float]]:
+    """Apply a perturbation to `source` and ripple it through a gene-regulatory
+    network: each downstream gene shifts by (weight × upstream Δ), decaying per
+    hop, for `hops` levels. weight ∈ [-1,1] (+ activator, − repressor). Returns
+    the new expression dict and the per-gene downstream shifts."""
     out = dict(expression)
-    out[gene] = 0.0
-    return {"expression": out, "knocked_out": gene}
+    delta0 = new_value - float(out.get(source, 0.0))
+    out[source] = round(new_value, 6)
+    shifts: dict[str, float] = {}
+    if not network:
+        return out, shifts
+    # breadth-first ripple with decay, accumulating effects, guarding cycles
+    frontier = [(source, delta0)]
+    for _ in range(hops):
+        nxt: list[tuple[str, float]] = []
+        for node, d in frontier:
+            for downstream, w in (network.get(node) or {}).items():
+                eff = w * d * decay
+                if abs(eff) < 1e-4:
+                    continue
+                cur = float(out.get(downstream, 0.0))
+                new = max(0.0, cur + eff)         # expression can't go negative
+                out[downstream] = round(new, 6)
+                shifts[downstream] = round(shifts.get(downstream, 0.0) + (new - cur), 6)
+                nxt.append((downstream, new - cur))
+        if not nxt:
+            break
+        frontier = nxt
+    return out, shifts
 
 
-def gene_knockdown(expression: dict[str, float], gene: str, *, fraction: float = 0.5) -> dict:
-    """Knockdown: partially reduce a gene's expression."""
-    out = dict(expression)
-    out[gene] = round(out.get(gene, 0.0) * (1 - fraction), 6)
-    return {"expression": out, "knockdown_gene": gene, "fraction": fraction}
+def gene_knockout(expression: dict[str, float], gene: str, *,
+                  network: dict[str, dict[str, float]] | None = None) -> dict:
+    """Knockout: set a gene's expression to zero. If a regulatory `network` is
+    given, the perturbation propagates to downstream genes scaled by their
+    dependence (multi-hop, decaying); otherwise only the target gene changes."""
+    out, shifts = _propagate(expression, gene, 0.0, network)
+    return {"expression": out, "knocked_out": gene, "downstream_shifts": shifts,
+            "downstream_affected": len(shifts)}
 
 
-def overexpression(expression: dict[str, float], gene: str, *, fold: float = 5.0) -> dict:
-    """Overexpression: amplify a gene's expression."""
-    out = dict(expression)
-    out[gene] = round(out.get(gene, 1.0) * fold, 6)
-    return {"expression": out, "overexpressed_gene": gene, "fold": fold}
+def gene_knockdown(expression: dict[str, float], gene: str, *, fraction: float = 0.5,
+                   network: dict[str, dict[str, float]] | None = None) -> dict:
+    """Knockdown: partially reduce a gene's expression; with a regulatory
+    `network`, the reduction propagates to downstream genes by their dependence."""
+    new_val = float(expression.get(gene, 0.0)) * (1 - fraction)
+    out, shifts = _propagate(expression, gene, new_val, network)
+    return {"expression": out, "knockdown_gene": gene, "fraction": fraction,
+            "downstream_shifts": shifts, "downstream_affected": len(shifts)}
+
+
+def overexpression(expression: dict[str, float], gene: str, *, fold: float = 5.0,
+                   network: dict[str, dict[str, float]] | None = None) -> dict:
+    """Overexpression: amplify a gene's expression; with a regulatory `network`,
+    the increase propagates to downstream genes scaled by their dependence."""
+    new_val = float(expression.get(gene, 1.0)) * fold
+    out, shifts = _propagate(expression, gene, new_val, network)
+    return {"expression": out, "overexpressed_gene": gene, "fold": fold,
+            "downstream_shifts": shifts, "downstream_affected": len(shifts)}
 
 
 def therapy_candidate_score(*, efficacy: float, safety: float, deliverability: float) -> dict:
