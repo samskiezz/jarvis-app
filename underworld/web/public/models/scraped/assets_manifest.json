@@ -10886,5 +10886,22 @@
     "epoch": "industrial",
     "name": "Blunderbuss",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bolt_action_rifle": {
+    "prompt": "a wooden-stocked bolt-action rifle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "18361b45-65aa-4739-bc8e-1b0632130b73",
+    "path": "/models/generated/tripo/bolt_action_rifle.glb",
+    "bytes": 2131744,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/18361b45-65aa-4739-bc8e-1b0632130b73/tripo_pbr_model_18361b45-65aa-4739-bc8e-1b0632130b73.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMTgzNjFiNDUtNjVhYS00NzM5LWJjOGUtMWIwNjMyMTMwYjczL3RyaXBvX3Bicl9tb2RlbF8xODM2MWI0NS02NWFhLTQ3MzktYmM4ZS0xYjA2MzIxMzBiNzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=soqSgl7r~OGQ0cCg9LyROIXZPqyGf6Zv5VNwMoyUGK-6faCSQ6RiU~ZAyEuHjoE-hMQO85V3T5T85YIZ3uy1uVLMetAeVST1hM2IOB2gKI7I7EUk4i~juuXCvGxfihAs5YVUjma05Bj-Ds9sQhbroAm-9hzfEBzoFhGMCiePcHbH310Kh83WCayc8SqI4SrOIkH5zrvrlPdAOMedV~MYMsjJDdAFhtGZSWdFi5EhyUeUAUAZdpk8yR8zCI7M9m5~hrgob5aQk-OKHIsNWvHBk0YbrJi6DeEYs4eSz-Zl2eVHL6~ecILJ1Z36fhmxtAKdGe-Z3k1sBS-NrxeoZFqxJA__",
+    "asset_id": "bolt_action_rifle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Bolt Action Rifle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
