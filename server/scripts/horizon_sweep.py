@@ -47,10 +47,16 @@ BASKET = {
 
 HORIZONS_DAYS = [1, 3, 7, 30, 90, 180, 365]
 
-TRAIN_WINDOW = 300        # trailing daily points used to train at each origin
-TARGET_ORIGINS = 90       # aim for ~60-120 walk-forward origins per (asset,horizon)
-MAX_ORIGINS = 120
+import os
+
+TRAIN_WINDOW = int(os.environ.get("SWEEP_TRAIN_WINDOW", "300"))
+# aim for ~60-120 walk-forward origins per (asset, horizon); env-overridable so a
+# quick demo run can cap them lower. HistGBR is fast, but 5 assets x 7 horizons x
+# N origins x 4 model fits adds up — keep N reasonable.
+TARGET_ORIGINS = int(os.environ.get("SWEEP_ORIGINS", "60"))
+MAX_ORIGINS = TARGET_ORIGINS
 CONFIDENCE = 0.90
+FAST_MODELS = os.environ.get("SWEEP_FAST", "1") != "0"  # smaller boosting budget
 
 
 def _series_arrays(series: list[dict]) -> tuple[np.ndarray, np.ndarray]:
@@ -96,7 +102,7 @@ def _walk_forward(
         max_train_idx = max(max_train_idx, i)
         assert i < i + h <= n - 1
 
-        fc = MLForecaster(seed=42)
+        fc = MLForecaster(seed=42, fast=FAST_MODELS)
         rep = fc.train(prefix, horizon_steps=h)
         if rep.get("status") != "trained":
             continue
