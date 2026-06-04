@@ -49,3 +49,4 @@ server/.pytest_cache/
 __pycache__/
 *.pyc
 sandbox-ca.crt
+server/data/oracle_model.joblib
