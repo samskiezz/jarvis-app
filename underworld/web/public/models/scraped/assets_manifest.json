@@ -9509,5 +9509,22 @@
     "epoch": "industrial",
     "name": "Railway Crossing",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:railway_switch": {
+    "prompt": "a railway track switch point section, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f0908995-18da-4c17-840a-af3f7e0c4eaa",
+    "path": "/models/generated/tripo/railway_switch.glb",
+    "bytes": 8396596,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f0908995-18da-4c17-840a-af3f7e0c4eaa/tripo_pbr_model_f0908995-18da-4c17-840a-af3f7e0c4eaa.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjA5MDg5OTUtMThkYS00YzE3LTg0MGEtYWYzZjdlMGM0ZWFhL3RyaXBvX3Bicl9tb2RlbF9mMDkwODk5NS0xOGRhLTRjMTctODQwYS1hZjNmN2UwYzRlYWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=xAfLqLdPPdzmXPxESy49qj~VLHDs065aEcbSTUMUPCX0dCCKbhGq-8oai647BUv1hbNOoP71JCty3rUPeR5hhCug2CuAOf0JgvLiWdeLsMGGajXkVPcQfYE1C0uPK7KEMIPx0ZR3dhShgen12v8Bl7GcViuWoYUnF-oK7icSSQlQVPBke2X-hVC9SJu1k5n1NS3P2uNNNB-~GBs0H1Z3HtiyT1Wyzbcrpvg93CHyAcFfpzzKSfDmdSxE3Mp0Hh2eq7fxK1Ajkzx8KRKD~y6IaJ1383v4YbnLA93CcIwTXsF1mSzVJsJviZjOrWDJXQ275GLzJvXUQwZcd5qzJjAxhA__",
+    "asset_id": "railway_switch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Railway Switch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
