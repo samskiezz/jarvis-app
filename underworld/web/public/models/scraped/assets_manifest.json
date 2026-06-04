@@ -11634,5 +11634,22 @@
     "epoch": "bronze",
     "name": "Stone Well",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:toolbox_open": {
+    "prompt": "an open metal toolbox with hand tools, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8b899bf5-5b9f-4f47-923b-e5c26b818a33",
+    "path": "/models/generated/tripo/toolbox_open.glb",
+    "bytes": 15042628,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/8b899bf5-5b9f-4f47-923b-e5c26b818a33/tripo_pbr_model_8b899bf5-5b9f-4f47-923b-e5c26b818a33.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOGI4OTliZjUtNWI5Zi00ZjQ3LTkyM2ItZTVjMjZiODE4YTMzL3RyaXBvX3Bicl9tb2RlbF84Yjg5OWJmNS01YjlmLTRmNDctOTIzYi1lNWMyNmI4MThhMzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=O~R1OiBlsUn7KwvwUdfbhu368wnn9ttuKlBHkMBEzkx4prvRT76WwB7xNNtdN0NnJTLEiBHCS~OetkLibAAzLG56eC~txCVRt5UBwlSCrzr-7NuN~4d2CP-rCKJuomqh2yF1KJzSTPbxzETGfGDi3sFPIiCt26mhoK~KbNnp0KzUitYBViWVQfjPO6fT-7Q~8MvGtuXCkAWcEmNr6PNebPLqq6X0ztc-foS0YxA0rF9AAk02WbulLKHK-3Mseguufe5Qhm97gW7LKiZPt0drYClr6DLRAq~GJuVwr~atjbS3ZsyClJ4p6Nigw5PwNFx7hqR6yWIcbnOwvIhbG1AggA__",
+    "asset_id": "toolbox_open",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "industrial",
+    "name": "Toolbox Open",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
