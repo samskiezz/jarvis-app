@@ -11532,5 +11532,22 @@
     "epoch": "iron",
     "name": "Outdoor Anvil",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:road_signpost": {
+    "prompt": "a weathered wooden directional road signpost, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6ffd39ae-0a45-438a-8458-c0ad8ccd7970",
+    "path": "/models/generated/tripo/road_signpost.glb",
+    "bytes": 7281456,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/6ffd39ae-0a45-438a-8458-c0ad8ccd7970/tripo_pbr_model_6ffd39ae-0a45-438a-8458-c0ad8ccd7970.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNmZmZDM5YWUtMGE0NS00MzhhLTg0NTgtYzBhZDhjY2Q3OTcwL3RyaXBvX3Bicl9tb2RlbF82ZmZkMzlhZS0wYTQ1LTQzOGEtODQ1OC1jMGFkOGNjZDc5NzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=ZWnpfHq3MDUBTbOLXa1qcyM5b5aqlTuAlGQKLJUwkD9z~~1pehyOscCuwkUXdj6rbLfT3n~3YyAWVZ1GKYhVKHu~-SZZ8Yu9-9lF7UvmPdzkSRGcz62DpxOh5td~XTyrEg5G29FwstZjzr5xsu4HvycdDRbW2W0B-~3YOwn7MD-JDqOMExeu9Te8PdqVZ2PM-pNvwy4ykZQ5IQ0Frd779yrY1SE6HwUFQBAoxTSyjLqabTE44qr0QA260Fj979Q~hPUNIN~yLn71l7QDXFEe~JwX6cl0dNxgWPYn4vXPjhksA~1rCUajyvvu~m20VcOzYyLjasJ-bSg5UIjKnzApow__",
+    "asset_id": "road_signpost",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Road Signpost",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
