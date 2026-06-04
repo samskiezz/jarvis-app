@@ -11073,5 +11073,22 @@
     "epoch": "stone",
     "name": "Hunting Spear",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:iron_shortsword": {
+    "prompt": "an iron shortsword with a leather scabbard, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a5a3a75c-abc1-4f64-a8b4-e6ae8fc5d1c3",
+    "path": "/models/generated/tripo/iron_shortsword.glb",
+    "bytes": 6247900,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/a5a3a75c-abc1-4f64-a8b4-e6ae8fc5d1c3/tripo_pbr_model_a5a3a75c-abc1-4f64-a8b4-e6ae8fc5d1c3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYTVhM2E3NWMtYWJjMS00ZjY0LWE4YjQtZTZhZThmYzVkMWMzL3RyaXBvX3Bicl9tb2RlbF9hNWEzYTc1Yy1hYmMxLTRmNjQtYThiNC1lNmFlOGZjNWQxYzMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=i0OkmTKmPmOTTZwlMLDauXacNlLHOmFQgrCMGqGWqgS7frZkVATO-PYp7MKQgvpAqtHInNFEUp6kxLAqSP5cy6DCUFyiERglozAMVWEBsDN5rXA-1D0I0hsRQ2AivID3cI~MJxtVt6w1grX7sXFIz~iGp1hitBMTlCNlwjlNJ7MDKQbW~xp~r7~PAuC395mDBunU9MrnsLJGBEVKbet9P7wIDvgofjQhE0P2U2hXuBT4JIdPyJLko2EOeva-wcYsa9pAHQfcd33VlMbG9D31Nt-~BZr~yAK-5N6gNgea7lPiQoTNebNCQrQfLHeNsw7TFKveJ5D6DdOPvXDqwCNjTg__",
+    "asset_id": "iron_shortsword",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Iron Shortsword",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
