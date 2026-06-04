@@ -11651,5 +11651,22 @@
     "epoch": "industrial",
     "name": "Toolbox Open",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:water_barrel_rain": {
+    "prompt": "a wooden rain-water collection barrel, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "da13cdc6-3fa4-442b-91b0-2709bd733bc2",
+    "path": "/models/generated/tripo/water_barrel_rain.glb",
+    "bytes": 14768576,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/da13cdc6-3fa4-442b-91b0-2709bd733bc2/tripo_pbr_model_da13cdc6-3fa4-442b-91b0-2709bd733bc2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGExM2NkYzYtM2ZhNC00NDJiLTkxYjAtMjcwOWJkNzMzYmMyL3RyaXBvX3Bicl9tb2RlbF9kYTEzY2RjNi0zZmE0LTQ0MmItOTFiMC0yNzA5YmQ3MzNiYzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=oEaxI1x2NiSPBizKajN9vuggCc2yvaBWlm~mCRwDn25j6ZwoxebUK3~4dek59WOiGxOc6DLvjPFbGfSOCGAu-G3xpBUtXHUz66CcJNUdtoL9ytAMNtTyncSId5VAzhcJ5mK9Ix86eMS5329HmfrG03stnOeBCEsF9PKv28OWw3p9mNOgB97qsSFVXLoXMKhM5RVTXEswdDVqlZS0-T6xkarJAGDzPw1eci~Cd6gSK0z2Lu7g63SGsORmBdP3Do02vHkakzKqNOo7kPaleT4dPoJ6p6I-R1ANXbwzNY2OwO~NFbfOTHLkPp2H87bh-kTqD49eyQ0QTnXYRfHTqtq03A__",
+    "asset_id": "water_barrel_rain",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Water Barrel Rain",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
