@@ -10563,5 +10563,22 @@
     "epoch": "iron",
     "name": "Hand Cart",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:horse_omnibus": {
+    "prompt": "a horse-drawn double-decker omnibus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d09e7392-a5e2-47bb-8e10-d7615524c6b7",
+    "path": "/models/generated/tripo/horse_omnibus.glb",
+    "bytes": 15463964,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d09e7392-a5e2-47bb-8e10-d7615524c6b7/tripo_pbr_model_d09e7392-a5e2-47bb-8e10-d7615524c6b7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDA5ZTczOTItYTVlMi00N2JiLThlMTAtZDc2MTU1MjRjNmI3L3RyaXBvX3Bicl9tb2RlbF9kMDllNzM5Mi1hNWUyLTQ3YmItOGUxMC1kNzYxNTUyNGM2YjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=t2CLqbhnbgqn-JW09cQ0mmqt92bJfrwDmkPVnefHi8NIqbh6q03nzZAhMpCRo5hPipG9RhoikmbrgJqlUo80NP2jem1gyoGQPdMt4YBwXbm4~2hr6ziMTB9dx-iHjaXf5H6PVRbeUoRqYI6bbl~36ltXCWv4QCuVrOXvs7NHu14OGZ-BbKCWPQMfsmEMwxtoOgsOVZPHy8GoslI1-rKqc4Nqfvh0coixyzopnBktn7SviwucAQLuPbXqbsVNmEWV7Xl-NCXPMh3dbvgDu3zT-T-egPjhtR1VH3CTarWya-LPOgfa1nnqSP6I5c~LO9sPUgXKIj7-Wa6OWYfsm9kI6w__",
+    "asset_id": "horse_omnibus",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Horse Omnibus",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
