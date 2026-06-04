@@ -9050,5 +9050,22 @@
     "epoch": "iron",
     "name": "Cobblestone Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:colonnade_segment": {
+    "prompt": "a modular columned colonnade walkway segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ed9fd91f-8500-489c-b5dc-26151bb8d279",
+    "path": "/models/generated/tripo/colonnade_segment.glb",
+    "bytes": 5647180,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ed9fd91f-8500-489c-b5dc-26151bb8d279/tripo_pbr_model_ed9fd91f-8500-489c-b5dc-26151bb8d279.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZWQ5ZmQ5MWYtODUwMC00ODljLWI1ZGMtMjYxNTFiYjhkMjc5L3RyaXBvX3Bicl9tb2RlbF9lZDlmZDkxZi04NTAwLTQ4OWMtYjVkYy0yNjE1MWJiOGQyNzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=NQ8rXUaCgBPKkG0j20Pq1yJWLdHtcUWP~tk5GiObZGpXZIwz7FeDz5wt6VcUtV90WrsB5rI6Say0j-c2D6uH3N1aoWUAIm1eVk~YnxCD~Ve3Y8qxYK6gJyKQuM2j4MeFknzKGveuvW1N1SyHFPCl~jwRBzSKdIfgifSReKaJ7qMEs-XgFTLFYHxlpn3C9kf6BywkztjLPhyfkoE1~Cfim2xPHnW2DML8ehT5GucgiOWUxL1FByD-AxpTXD4G4jjeJdjm5mvFEY3XdpOpX40z7kwKKzJi2~SJc-fIrZRaanpzZE2qUT3wWcIPuVgN5IQCV-moivvKsBz3UUoM3L2nvQ__",
+    "asset_id": "colonnade_segment",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Colonnade Segment",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
