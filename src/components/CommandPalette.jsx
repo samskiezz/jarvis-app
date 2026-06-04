@@ -196,6 +196,20 @@ export default function CommandPalette() {
           )}
 
           {query.trim() && (
+            <Command.Group heading="Forecast" style={groupHeadingStyle}>
+              <Row
+                value="predict-query"
+                onSelect={() => go(`${apexUrl("PredictionOracle")}?q=${encodeURIComponent(query.trim())}`)}
+                icon="🔮"
+                label={`Predict: ${query.trim()}`}
+                meta="oracle"
+                accent={C.purple}
+                forceMount
+              />
+            </Command.Group>
+          )}
+
+          {query.trim() && (
             <Command.Group heading="Jarvis" style={groupHeadingStyle}>
               <Row
                 value="ask-jarvis"

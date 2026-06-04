@@ -61,6 +61,9 @@ export const PAGES = [
     component: P(() => import("@/pages/MLDashboard")) },
   { name: "TechTree", label: "Tech Tree", icon: "🌳", group: "cognition",
     component: P(() => import("@/pages/TechTree")) },
+  { name: "PredictionOracle", label: "Prediction Oracle", icon: "🔮", group: "cognition",
+    aliases: ["predict", "forecast", "oracle", "prediction"],
+    component: P(() => import("@/pages/PredictionOracle")) },
 
   // ── APEX CORE ──────────────────────────────────────────────────────────
   { name: "ApexCore", label: "Apex Core", icon: "◉", group: "apex",
