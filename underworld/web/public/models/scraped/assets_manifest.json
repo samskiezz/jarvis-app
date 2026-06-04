@@ -11549,5 +11549,22 @@
     "epoch": "any",
     "name": "Road Signpost",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rope_coil": {
+    "prompt": "a coil of thick hemp rope, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "471cba41-3260-4a5f-afec-f63766e05c99",
+    "path": "/models/generated/tripo/rope_coil.glb",
+    "bytes": 15224948,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/471cba41-3260-4a5f-afec-f63766e05c99/tripo_pbr_model_471cba41-3260-4a5f-afec-f63766e05c99.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNDcxY2JhNDEtMzI2MC00YTVmLWFmZWMtZjYzNzY2ZTA1Yzk5L3RyaXBvX3Bicl9tb2RlbF80NzFjYmE0MS0zMjYwLTRhNWYtYWZlYy1mNjM3NjZlMDVjOTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=PlBTCyJmXpXWwudH9PKzMpJ7DO55bbR6yW~aSjq~NAFXbXxlGkMGT4pGJR1oUBMJcyNb7a2AGnX9QFMuewCuVrqrSyytGxwZiEZXo6uDr-9waED49od07uRbBMaGW2PV-Y3~wTA3SBrkeK-a0a~m8oZkoQTpxg6qkwOfxsg4qR0kzcDjk-wlY47GS7WTGCIpPIboRpQC1iDtFpyTK~LfPTcuuwIqbyl-3UfyOuuqwZ6059j~~mCuDTVPVvo1fiiIzt6cM2rCyLl8UWRlgSwzq9VH~fZM~ufNkL~17OBBBnbTlaDv~063q7tkIYMQusCU7IfcWsOVipibqxucv2Odaw__",
+    "asset_id": "rope_coil",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Rope Coil",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
