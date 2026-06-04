@@ -137,6 +137,17 @@ export const PAGES = [
     aliases: ["activity", "feed", "collab", "notes", "audit"],
     component: P(() => import("@/pages/Activity")) },
 
+  // ── PLATFORM (builder · workshop · admin) ────────────────────────────────
+  { name: "DashboardBuilder", label: "Dashboard Builder", icon: "📐", group: "platform",
+    aliases: ["dashboard", "builder", "widgets"],
+    component: P(() => import("@/pages/DashboardBuilder")) },
+  { name: "ObjectExplorer", label: "Object Explorer", icon: "📊", group: "platform",
+    aliases: ["explorer", "histogram", "pivot", "workshop"],
+    component: P(() => import("@/pages/ObjectExplorer")) },
+  { name: "SystemAdmin", label: "System Admin", icon: "⚙️", group: "platform",
+    aliases: ["admin", "metrics", "health", "labs", "system"],
+    component: P(() => import("@/pages/SystemAdmin")) },
+
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
     component: P(() => import("@/pages/InvestmentTracker")) },
