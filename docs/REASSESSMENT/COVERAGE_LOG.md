@@ -47,7 +47,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 40 | ☐ | server/services/forecaster.py | 567 |
 | 41 | ☐ | server/services/forecaster_ml.py | 624 |
 | 42 | ☐ | server/services/forward_test.py | 587 |
-| 43 | ☐ | server/services/history_lake.py | 622 |
+| 43 | ☑ | server/services/history_lake.py | 622 |
 | 44 | ☑ | server/services/ingestion.py | 193 |
 | 45 | ☑ | server/services/live_intel.py | 146 |
 | 46 | ☐ | server/services/oracle_model.py | 654 |
@@ -715,3 +715,5 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 
 ## BATCH 3 — simulation engine
 - `server/services/simulation.py` — tactical sim engine; GameSim dataclass (L80); counterstrike full round loop buy/live/planted/over + LOS combat + plant/defuse (L201-453); panopticon agent-vs-intruder grid w/ vision cones, alert escalation, breaches (L455-667); get_game/snapshot (L772-783); 2 games registered (L752)
+
+- `server/services/history_lake.py` — P0 SQLite store (stdlib sqlite3, WAL); 6 tables series/observation/feed_run/forecast/realized_outcome/skill_score (SCHEMA L55); deterministic series ids (L163); idempotent upsert_series/write_observations; record_forecast/record_outcome; score_due_forecasts self-scoring (L500, abs/sq err+coverage+skill-vs-baseline); skill_summary (L573); init_db on import (L622)
