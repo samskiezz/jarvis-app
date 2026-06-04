@@ -88,6 +88,86 @@ _YAHOO_SYM = {
 }
 
 
+# ── S&P 500 constituents (Wikipedia scrape) ──────────────────────────────────
+_SP500_CACHE: list[dict] | None = None
+_WIKI_SP500 = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+
+
+def sp500_constituents() -> list[dict]:
+    """Current S&P 500 constituents scraped from the Wikipedia "List of S&P 500
+    companies" page (first table). Returns ``[{"ticker": str, "sector": str}, ...]``
+    with symbols converted to Yahoo format (``BRK.B`` -> ``BRK-B``). Cached in
+    process. Returns ``[]`` gracefully on any error (network / parse).
+
+    Parses the first wikitable, reading the ``Symbol`` and ``GICS Sector`` columns
+    by header name (robust to column reordering).
+    """
+    global _SP500_CACHE
+    if _SP500_CACHE is not None:
+        return _SP500_CACHE
+    import html as _html
+    import re
+
+    import httpx
+
+    out: list[dict] = []
+    try:
+        r = httpx.get(
+            _WIKI_SP500,
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=httpx.Timeout(30.0, connect=8.0),
+            follow_redirects=True,
+        )
+        r.raise_for_status()
+        text = r.text
+        # isolate the first wikitable (the constituents table)
+        m = re.search(r'<table[^>]*class="[^"]*wikitable[^"]*"[^>]*>(.*?)</table>',
+                      text, re.DOTALL)
+        if not m:
+            return []
+        table = m.group(1)
+        rows = re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.DOTALL)
+        if not rows:
+            return []
+
+        def _cells(row: str, tag: str) -> list[str]:
+            raw = re.findall(rf"<{tag}[^>]*>(.*?)</{tag}>", row, re.DOTALL)
+            cleaned = []
+            for c in raw:
+                c = re.sub(r"<[^>]+>", "", c)        # strip nested tags
+                c = _html.unescape(c).strip()
+                cleaned.append(c)
+            return cleaned
+
+        # header row -> locate Symbol / Sector column indices
+        header = _cells(rows[0], "th")
+        sym_idx, sec_idx = 0, 2
+        for i, h in enumerate(header):
+            hl = h.lower()
+            if "symbol" in hl:
+                sym_idx = i
+            elif "sector" in hl and "sub" not in hl:
+                sec_idx = i
+
+        seen: set[str] = set()
+        for row in rows[1:]:
+            cells = _cells(row, "td")
+            if not cells or len(cells) <= max(sym_idx, sec_idx):
+                continue
+            sym = cells[sym_idx].strip().upper()
+            sym = sym.replace(".", "-")  # BRK.B -> BRK-B for Yahoo
+            sym = re.sub(r"[^A-Z0-9\-]", "", sym)
+            if not sym or sym in seen:
+                continue
+            sector = cells[sec_idx].strip() or "Unknown"
+            seen.add(sym)
+            out.append({"ticker": sym, "sector": sector})
+    except Exception:  # noqa: BLE001
+        return []
+    _SP500_CACHE = out
+    return out
+
+
 def deep_history(asset: str) -> list[dict]:
     """Best free deep-history series for `asset`: crypto/gold via CryptoCompare,
     indices/stocks via Yahoo Finance. Accepts CoinGecko ids, tickers, index names
