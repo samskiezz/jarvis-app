@@ -9628,5 +9628,22 @@
     "epoch": "any",
     "name": "River Fork",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:river_straight": {
+    "prompt": "a straight flowing river water tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "36cd3585-ac8f-4dcf-99d3-6297c85be367",
+    "path": "/models/generated/tripo/river_straight.glb",
+    "bytes": 15045520,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/36cd3585-ac8f-4dcf-99d3-6297c85be367/tripo_pbr_model_36cd3585-ac8f-4dcf-99d3-6297c85be367.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzZjZDM1ODUtYWM4Zi00ZGNmLTk5ZDMtNjI5N2M4NWJlMzY3L3RyaXBvX3Bicl9tb2RlbF8zNmNkMzU4NS1hYzhmLTRkY2YtOTlkMy02Mjk3Yzg1YmUzNjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=pWtw86m04bpFIndlYCq20aKG3IKkrczcEJjqlYEbI2UBzUQw2xe3AoRESW1k0nbPNxR-PEAwmHxC8avmVOUfHpQf-BqzLWIcnIwxNEudEWY4oCgRxbdGaZwM5ycMgJhZyb4sC~qJY0Yt3BSd7MKzaxpnWcpzrBen0puu0~YhnHSE6aapX-qBBOdecQr6FjWMCDJ~fnex9Ju0U5BWB2y0Lc161YqnLn4vCvMxRHcH~wP9XNBtgBzONFz47mzsr3kEMNF-~V8Ur86hNhe1ueyt8Cx9I0fSUNAuSV~vm9cf-YSVKWQQ6sAyv4DS3BQ3RyepchH0snmSl8QOOu8VKyyprw__",
+    "asset_id": "river_straight",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "River Straight",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
