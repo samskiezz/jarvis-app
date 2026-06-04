@@ -10104,5 +10104,22 @@
     "epoch": "bronze",
     "name": "Corn Stalk Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:giant_fern": {
+    "prompt": "a large prehistoric tree fern, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "381956c4-7e58-4136-9e22-feba88826ed1",
+    "path": "/models/generated/tripo/giant_fern.glb",
+    "bytes": 15552264,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/381956c4-7e58-4136-9e22-feba88826ed1/tripo_pbr_model_381956c4-7e58-4136-9e22-feba88826ed1.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzgxOTU2YzQtN2U1OC00MTM2LTllMjItZmViYTg4ODI2ZWQxL3RyaXBvX3Bicl9tb2RlbF8zODE5NTZjNC03ZTU4LTQxMzYtOWUyMi1mZWJhODg4MjZlZDEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=WDWsXwedCK9PXa17iUydxaE5sggp2X-QvQdolUsoD2FZrmXQyKFErjxKVoCNW3wmuXNbaybL2S6dOQl52cuqxFwwrjuHdjxa3jxCLzhgYxuYIQ9bT7trVSGRCKpSfUd6CXh2zrKS8JMkf~blZkuJFg3rcooOArC62fHe94iIF7DjHa79bjpV0BKjEGX-F2e9IAMioYZ7oYoumO6HvRzAM1Eye8JbXLOc51Pzmh11TzeHPg513IoKODPU3TxgcqvE-64OIRYxttOwR~TMc3Fse7iESwgo9F69j-fO8Xhck1Kv17PtWbMoAngIvs48lsCItBbWrGp4BK-o1BHjo1cxMQ__",
+    "asset_id": "giant_fern",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Giant Fern",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
