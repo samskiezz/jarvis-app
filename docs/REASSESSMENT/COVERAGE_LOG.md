@@ -45,14 +45,14 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 38 | ☐ | server/services/backtest.py | 315 |
 | 39 | ☑ | server/services/corpus.py | 53 |
 | 40 | ☑ | server/services/forecaster.py | 567 |
-| 41 | ☐ | server/services/forecaster_ml.py | 624 |
+| 41 | ☑ | server/services/forecaster_ml.py | 624 |
 | 42 | ☑ | server/services/forward_test.py | 587 |
 | 43 | ☑ | server/services/history_lake.py | 622 |
 | 44 | ☑ | server/services/ingestion.py | 193 |
 | 45 | ☑ | server/services/live_intel.py | 146 |
 | 46 | ☑ | server/services/oracle_model.py | 654 |
 | 47 | ☐ | server/services/prediction.py | 1187 |
-| 48 | ☐ | server/services/scrapers.py | 185 |
+| 48 | ☑ | server/services/scrapers.py | 185 |
 | 49 | ☑ | server/services/simulation.py | 783 |
 | 50 | ☑ | server/services/train_sp500.py | 425 |
 | 51 | ☑ | server/tests/__init__.py | 0 |
@@ -722,3 +722,5 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/services/forward_test.py` — live closed loop: issue_forecast persists w/ resolve_ts (L125), resolve_value fetches realized AT/AFTER target — never fabricates (L239), score_due delegates to history_lake.score_due_forecasts + directional rollup (L279/334), forward_test_loop opt-in (L397), simulate_forward_test deterministic replay no-leakage (L476)
 - `server/services/train_sp500.py` — pooled cross-sectional S&P500: build_dataset pools causal feature rows across tickers w/ strict GLOBAL time-split no-leakage (L226), train_global one HistGBR point+quantile members (L260), evaluate_global honest level/dir/coverage/skill + per-sector (L330); explicit honesty docstring ~50% not 99% (L14)
 - `server/services/oracle_model.py` — OracleModel multi-head: direction HistGBClassifier+isotonic calib (L279/358), volatility HistGBR |fwd return| (L384), return via MLForecaster; OracleDataset pooled leakage-safe global time-sort (L96); purged_time_folds embargoed CV (L192); hyperparam search L_PARAM_GRID (L220/333); conviction=|p-0.5|*2 + act threshold (L425/431); online update rolling refit (L496); save/load joblib (L528); evaluate honest dir-acc@conviction + vol R2 + Brier (L591)
+- `server/services/forecaster_ml.py` — MLForecaster: _feature_matrix builds 28 causal features (lagged log-returns, SMA/EMA ratios, rvol, momentum, RSI14, MACD+signal+hist, zscore20, calendar dow/month L150-254); _supervised target=fwd log-return (L257); train HistGBR point + 0.05/0.5/0.95 quantile interval members + conformal tail (L342); fast flag shrinks trees; sklearn-absent -> ShortHorizonForecaster fallback (L333)
+- `server/services/scrapers.py` — deep-history scrapers: cryptocompare_full paginated full crypto/gold history (L18), yahoo_daily stocks/indices (L60), sp500_constituents Wikipedia scrape (L96), deep_history dispatcher crypto->CC / stocks->Yahoo (L171)
