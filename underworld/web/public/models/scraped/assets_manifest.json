@@ -9815,5 +9815,22 @@
     "epoch": "iron",
     "name": "Stone Archway",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stone_steps": {
+    "prompt": "a flight of modular stone steps, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a52d89c1-390f-42d7-b675-69cc51a961f4",
+    "path": "/models/generated/tripo/stone_steps.glb",
+    "bytes": 15020964,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/a52d89c1-390f-42d7-b675-69cc51a961f4/tripo_pbr_model_a52d89c1-390f-42d7-b675-69cc51a961f4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYTUyZDg5YzEtMzkwZi00MmQ3LWI2NzUtNjljYzUxYTk2MWY0L3RyaXBvX3Bicl9tb2RlbF9hNTJkODljMS0zOTBmLTQyZDctYjY3NS02OWNjNTFhOTYxZjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=FBTho2vGFK7uWdUJZ2dTrFyoMnPKbKeR3hq6hpGfE7BPeGAXCZWRTCfOL-TxpWpxZJyJD6Co1YHhpFkhn7Eu9bjvGm4gdCAnw0heggBfI--adpSyNbca8ebwhgumcacf72LbCoGDwqlPWc4vMFX8zFyc7hvoAfondGUKBOnk~SVdf-sFc5iH1iKWbIT0390U2~pb6ArXGPvSNujkMQ~eEfqXcr4lIgnHXc-GbaQWW9~-cCYy-5Z9f6xkr162WJnlN4LyHHfIiXchwH9tjYFSPKSppLpxhhb~9qZu0GdI9rmcw4ksKT~pwX5HNfvNYNcMiy8vAmpKLLnglzbtPXswuw__",
+    "asset_id": "stone_steps",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Stone Steps",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
