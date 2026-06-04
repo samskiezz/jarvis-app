@@ -10767,5 +10767,22 @@
     "epoch": "industrial",
     "name": "Submarine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:train_freight_wagon": {
+    "prompt": "an open railway freight goods wagon, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9e7be390-9438-401d-890c-e6bbb170b2a9",
+    "path": "/models/generated/tripo/train_freight_wagon.glb",
+    "bytes": 13820680,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/9e7be390-9438-401d-890c-e6bbb170b2a9/tripo_pbr_model_9e7be390-9438-401d-890c-e6bbb170b2a9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOWU3YmUzOTAtOTQzOC00MDFkLTg5MGMtZTZiYmIxNzBiMmE5L3RyaXBvX3Bicl9tb2RlbF85ZTdiZTM5MC05NDM4LTQwMWQtODkwYy1lNmJiYjE3MGIyYTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=sqrc7Tly5NQrkuhRu301Viz65~sEd7Q4LHGfOIBXTjkLSJhPILAeizkocjLc5rMXsJQ9uFXNoXxCui580o0nor6cQLLO15tlbNKvBw6TZg7yCQns9IRYDyPXrq22bvVtgOwHZQ5eeF0LfygkeaML5jpcDgJLqEz~4mHQoWe-nz4GZaU1othLR7Q8vrVy08efhDQjRs7-ZuB5sgMBjRefXvWVcHoSOlPp5FzW~lV788jjZEoKtTWe~pJowrBIoG7mXZhzXjbLxdFsCdKsrgkErcra5GdHERJpYVrsMAETD2hWk5lfSgH5fMirljLaX-aDPYDaKE0ush3oWf-k8nKoig__",
+    "asset_id": "train_freight_wagon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Train Freight Wagon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
