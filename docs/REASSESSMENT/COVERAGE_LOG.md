@@ -33,7 +33,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 26 | ☑ | server/routes/streams.py | 50 |
 | 27 | ☑ | server/scripts/__init__.py | 0 |
 | 28 | ☑ | server/scripts/accuracy_scorecard.py | 87 |
-| 29 | ☐ | server/scripts/forward_test.py | 179 |
+| 29 | ☑ | server/scripts/forward_test.py | 179 |
 | 30 | ☐ | server/scripts/horizon_sweep.py | 233 |
 | 31 | ☑ | server/scripts/live_5min.py | 107 |
 | 32 | ☑ | server/scripts/predict_5min.py | 124 |
@@ -61,8 +61,8 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 54 | ☐ | server/tests/test_forward_test.py | 173 |
 | 55 | ☐ | server/tests/test_history_lake.py | 223 |
 | 56 | ☑ | server/tests/test_oracle_model.py | 146 |
-| 57 | ☐ | server/tests/test_prediction.py | 157 |
-| 58 | ☐ | server/tests/test_routes.py | 164 |
+| 57 | ☑ | server/tests/test_prediction.py | 157 |
+| 58 | ☑ | server/tests/test_routes.py | 164 |
 | 59 | ☐ | server/tests/test_simulation.py | 186 |
 | 60 | ☐ | server/tests/test_train_sp500.py | 148 |
 | 61 | ☑ | src/App.jsx | 66 |
@@ -732,3 +732,6 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/scripts/accuracy_scorecard.py` — multi-metric scorecard: level-acc(1-MAPE) vs persistence + within1/2% + directional + coverage across deep crypto/index/equity history (authored this session)
 - `server/scripts/train_backtest.py` — multi-asset train+walk-forward backtest over deep_history basket; MAE/dir/coverage/skill-vs-persistence (authored this session)
 - `server/services/backtest.py` — walk-forward rolling-origin tester: backtest() trains on trailing window only, predicts h ahead, scores vs realized w/ assert leakage guard (L98); metrics MAE/RMSE/dir-acc/coverage/skill-vs-persistence + leakage_audit (L171); _synthetic_ar1_trend learnable series (L208); five_minute_test real CoinGecko days=1 5-min w/ honest synthetic fallback (L235)
+- `server/tests/test_prediction.py` — offline engine tests: crypto point+interval+P (L37), endpoint (L56), seismic G-R b~1 + Poisson (L70), Omori (L87), trajectory great-circle ~8deg lng (L97), orbital reuse (L116), growth CI (L123), insufficient->structured not 500 (L143), regex classify no-LLM (L152)
+- `server/tests/test_routes.py` — route tests: root open, auth 401/me (L24), live_intel shape mocked (L35), entity CRUD seeded (L69), stub not_implemented (L99), public getLiveIntel (L105), honest corpus counts (L117), sim advances (L128), 404 stream, analyst real-data answers (L145)
+- `server/scripts/forward_test.py` — forward-test CLI: run_live issues+scores basket + scorecard (L90), run_simulate temp-DB deterministic replay no-leakage (L111), _infer_source stock vs crypto (L43), synthetic offline fallback (L55)
