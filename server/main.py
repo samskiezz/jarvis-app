@@ -20,6 +20,7 @@ from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
 from .routes import history as history_routes
 from .routes import ontology as ontology_routes
+from .routes import ontology_ext as ontology_ext_routes
 from .routes import ops as ops_routes
 from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
@@ -111,6 +112,7 @@ def create_app() -> FastAPI:
     app.include_router(tenancy_routes.router)
     app.include_router(gateway_routes.router)
     app.include_router(search_plus_routes.router)
+    app.include_router(ontology_ext_routes.router)
 
     @app.get("/")
     async def root():
