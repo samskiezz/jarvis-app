@@ -32,12 +32,12 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 25 | ☑ | server/routes/predict.py | 114 |
 | 26 | ☑ | server/routes/streams.py | 50 |
 | 27 | ☑ | server/scripts/__init__.py | 0 |
-| 28 | ☐ | server/scripts/accuracy_scorecard.py | 87 |
+| 28 | ☑ | server/scripts/accuracy_scorecard.py | 87 |
 | 29 | ☐ | server/scripts/forward_test.py | 179 |
 | 30 | ☐ | server/scripts/horizon_sweep.py | 233 |
-| 31 | ☐ | server/scripts/live_5min.py | 107 |
+| 31 | ☑ | server/scripts/live_5min.py | 107 |
 | 32 | ☑ | server/scripts/predict_5min.py | 124 |
-| 33 | ☐ | server/scripts/train_backtest.py | 81 |
+| 33 | ☑ | server/scripts/train_backtest.py | 81 |
 | 34 | ☑ | server/scripts/train_oracle.py | 163 |
 | 35 | ☐ | server/scripts/train_sp500.py | 160 |
 | 36 | ☑ | server/services/__init__.py | 0 |
@@ -51,7 +51,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 44 | ☑ | server/services/ingestion.py | 193 |
 | 45 | ☑ | server/services/live_intel.py | 146 |
 | 46 | ☑ | server/services/oracle_model.py | 654 |
-| 47 | ☐ | server/services/prediction.py | 1187 |
+| 47 | ☑ | server/services/prediction.py | 1187 |
 | 48 | ☑ | server/services/scrapers.py | 185 |
 | 49 | ☑ | server/services/simulation.py | 783 |
 | 50 | ☑ | server/services/train_sp500.py | 425 |
@@ -727,3 +727,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/scripts/train_oracle.py` — heavy-train OracleModel CLI: fetches 20 crypto (CryptoCompare) + 50 S&P (Yahoo) deep history (L29-37), pools leakage-safe, purged-CV hyperparam search, saves joblib, prints HONEST scorecard (all-bars ~50% + rising conviction curve + vol R2 + Brier, explicit no-99% L106)
 - `server/scripts/predict_5min.py` — 5-min prediction CLI via backtest.five_minute_test (L47): prints predicted next-5min price+interval+prob_up + walk-forward skill scorecard (MAE/RMSE/dir/coverage/skill-vs-persist + verdict)
 - `server/tests/test_oracle_model.py` — offline OracleModel tests: purged folds no-overlap+embargo (L61), train+predict contract (L71), CONVICTION subset beats all-bars + coin-flip (L93), vol R2>0 (L109), save/load roundtrip (L120), online update (L138)
+- `server/services/prediction.py` — flagship /functions/predict engine: CoinGecko/CryptoCompare loaders + _cg_headers (L125-235), USGS catalog (L238); 4 forecasters — gbm_montecarlo_forecast GBM+Holt blend w/ documented math (L284), gutenberg_richter_poisson seismic P(>=1) (L369), omori_aftershock_probability (L443), great_circle_forward haversine (L474); _kimi_extract NL + regex classify router 5 domains (L673), _parse_horizon_hours '48h/2029/20min' (L634); predict orchestrator never-raises + _insufficient (L789/749); domain handlers _predict_crypto/seismic/trajectory/growth/generic (L800-1187)
+- `server/scripts/live_5min.py` — live 5-min forward runner: predicts next 5-min bar, resolves+scores closed bars, JSON state, cumulative dir/level/coverage scorecard (authored this session)
+- `server/scripts/accuracy_scorecard.py` — multi-metric scorecard: level-acc(1-MAPE) vs persistence + within1/2% + directional + coverage across deep crypto/index/equity history (authored this session)
+- `server/scripts/train_backtest.py` — multi-asset train+walk-forward backtest over deep_history basket; MAE/dir/coverage/skill-vs-persistence (authored this session)
