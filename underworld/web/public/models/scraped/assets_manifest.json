@@ -9152,5 +9152,22 @@
     "epoch": "iron",
     "name": "Drawbridge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:earth_rampart": {
+    "prompt": "a sloped earthwork rampart embankment segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1c47513e-383c-4b13-a806-e51176ee11cc",
+    "path": "/models/generated/tripo/earth_rampart.glb",
+    "bytes": 14850912,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/1c47513e-383c-4b13-a806-e51176ee11cc/tripo_pbr_model_1c47513e-383c-4b13-a806-e51176ee11cc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMWM0NzUxM2UtMzgzYy00YjEzLWE4MDYtZTUxMTc2ZWUxMWNjL3RyaXBvX3Bicl9tb2RlbF8xYzQ3NTEzZS0zODNjLTRiMTMtYTgwNi1lNTExNzZlZTExY2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=YS2fForFQBxTrVjHGpXyLt6AEDe2SyabBrWSKyUnmKO2Q3oVOnORSmGbyYbTFk54oGeCeiYPcdEPwagaqPKihvbY8IvzZJzyNjfKXc6GhxM4ymBmOjyKtcxDqsQ2Ed8t9kQiDOUmgSbDlKJh4UQFGIGYDqLBDUtZwvU96lA2LCZVhkwXUUfQ6pirnmMvWkmF0i9Mj~DpRPGf8vjplo0wDDpneQkPko20hKua4iHY9h~Wir6T6x9nqnujtzhzDo675lxLKLZrokhjzfGFFCWcuTum23ba56o0bHYOZuMcI-esJ8jtGbiGpRk1FAgShkm36nhbGkDtKKJ1ldqLSf~6uQ__",
+    "asset_id": "earth_rampart",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "stone",
+    "name": "Earth Rampart",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
