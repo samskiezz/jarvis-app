@@ -227,6 +227,11 @@ def subgraph(seed_ids: Iterable[str], depth: int = 1, *, role: Optional[str] = N
         links = _all_links()
         adj = _adjacency(links)
 
+        # "blank = all": with no seeds, return the whole graph (capped) so the
+        # Link Analysis view renders the full ontology by default.
+        if not seeds:
+            seeds = [str(o.get("id")) for o in _all_objects() if o.get("id")][:500]
+
         visited: set[str] = set(seeds)
         frontier = list(seeds)
         for _ in range(depth):
