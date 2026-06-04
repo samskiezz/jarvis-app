@@ -9016,5 +9016,22 @@
     "epoch": "any",
     "name": "Cave Entrance",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:city_gate_large": {
+    "prompt": "a large fortified city gatehouse with twin towers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "538b25bf-8a5e-4fc6-bb82-a588fbd61a06",
+    "path": "/models/generated/tripo/city_gate_large.glb",
+    "bytes": 15490568,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/538b25bf-8a5e-4fc6-bb82-a588fbd61a06/tripo_pbr_model_538b25bf-8a5e-4fc6-bb82-a588fbd61a06.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTM4YjI1YmYtOGE1ZS00ZmM2LWJiODItYTU4OGZiZDYxYTA2L3RyaXBvX3Bicl9tb2RlbF81MzhiMjViZi04YTVlLTRmYzYtYmI4Mi1hNTg4ZmJkNjFhMDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=pIhlbjvVmrm-yvPhjz3C0gUssF5QWBtC51SOy58JLy2LnfmxB1RI0jaSBN3XhC3NYehYP-IV8jnD7gvM3IBvhma~n5Ry4yesAm7vbB6NZxWLSgR~c-ozImZ1TdU4F5r26vzsZwPFIrZ5uMxqy2XQXCyKIKQYQEDy-TJUe3E~0HTf8YYXSmmrqschgw4bLfee~Fvpy1vgblscarIEExv3oY--t67B0mH8Rrt5Cy0TWpKdFDN8J8TKnZq4FsoeCQkkOuzcS5DVYu~MgEJVWqZCh7LKbO58bodbRhf1hUKzC3aYKcJjnVqmcXHmDRrRp1TnBqPZBsxJdGVj~T0WVnTTkw__",
+    "asset_id": "city_gate_large",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "City Gate Large",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
