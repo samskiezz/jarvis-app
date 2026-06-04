@@ -9424,5 +9424,22 @@
     "epoch": "bronze",
     "name": "Palisade Straight",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:picket_fence_gate": {
+    "prompt": "a white picket fence section with a gate, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "60858b4d-2e7a-4633-93de-881898640104",
+    "path": "/models/generated/tripo/picket_fence_gate.glb",
+    "bytes": 14799948,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/60858b4d-2e7a-4633-93de-881898640104/tripo_pbr_model_60858b4d-2e7a-4633-93de-881898640104.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNjA4NThiNGQtMmU3YS00NjMzLTkzZGUtODgxODk4NjQwMTA0L3RyaXBvX3Bicl9tb2RlbF82MDg1OGI0ZC0yZTdhLTQ2MzMtOTNkZS04ODE4OTg2NDAxMDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=QJeK9UBbrCeJbFn5j3EOlQ-3NC9QGdAimlj5qQtCsABD9rILhPeHsCSDgejsSEPaPhyO-N9bnUvh5DF4UkShJQOps2e7V4YRHRJmxlZr0IbsXEPonVtnQ1PYCxCt1zzpe5KqK0PQ-m2vSqo3k8v6GjeQuObDA3-6Q34kfQ26NlamzpuoX2rE1Ep~qgvOQWb1ZwIBsTBb7r-eC5SLhGOee6fH4OOusikiP6pj3WZsbblWJNqIU3kAb2IPW09fr5UlbCjPqWT0-pu3Xx0grSsCgmp0P~3F7Y9ufJinmGWWGoAOxoaOAz~341Ol9er5L0myjNvcvt~AGJ-08D~s5kuFPw__",
+    "asset_id": "picket_fence_gate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Picket Fence Gate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
