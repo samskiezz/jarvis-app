@@ -9339,5 +9339,22 @@
     "epoch": "any",
     "name": "Mesa Rock",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:moat_segment": {
+    "prompt": "a water-filled defensive moat segment, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fe38544e-b055-470a-96ca-286576c81051",
+    "path": "/models/generated/tripo/moat_segment.glb",
+    "bytes": 14781596,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/fe38544e-b055-470a-96ca-286576c81051/tripo_pbr_model_fe38544e-b055-470a-96ca-286576c81051.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZmUzODU0NGUtYjA1NS00NzBhLTk2Y2EtMjg2NTc2YzgxMDUxL3RyaXBvX3Bicl9tb2RlbF9mZTM4NTQ0ZS1iMDU1LTQ3MGEtOTZjYS0yODY1NzZjODEwNTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=xsw0Ivm5BjAZQnzvKvEBSsKm6Gtk966ItajTuz8qMGOMyVqDQskJ5AiXjeA41j4jdBuKrBWvqkZWUZiIhNmnfq5aHYlBHNMA2wcpKUXsNy-RB1lHNv1a5oM9Wq4g73vrgYDycdEPcvH121c4oJUzFtmUoMH2uJjnGL76ADxt~KiMjOXeaCKHYZ4MmuVd0Yiv1JCghcHh9vq5LRgz5slPRSsuOX3vIscnWdE1RFQahRuyklMRGTZCgEN1w~cn02mqsFLCBphhq2RAOvk6RMZO~NeLZIrr0Lxl53kZ0zIcjEspHre7vTX6RarKP3SKtOv4FQx0FSMQUeRJRTdTDnzGjg__",
+    "asset_id": "moat_segment",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Moat Segment",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
