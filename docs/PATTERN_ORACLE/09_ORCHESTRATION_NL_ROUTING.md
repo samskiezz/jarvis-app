@@ -1408,7 +1408,36 @@ A frozen table of `(question, expected_domain, expected_handler, expected_reques
 
 Calibration is run on the deterministic forecasters (the only number source), so improving calibration is a core-model task, never a prompt-tuning task — consistent with the §9.0 axiom.
 
-### 9.18.4 Cross-reference to validation plan
+### 9.18.4 Horizon → steps canonicalisation (worked numbers)
+
+The verifier and handlers depend on a single, reproducible horizon-to-steps conversion. The table below is the exact arithmetic the handlers perform (`_predict_crypto`/`_growth_steps`), so a reviewer can hand-check any trace:
+
+| Phrase | `hours` | crypto `step_hours` | crypto `horizon_steps = round(hours/step_hours)` | growth steps (daily) |
+|---|---|---|---|---|
+| "20 min" | 0.333 | 24 | `max(1, round(0.0139))` = 1 | 1 |
+| "in 48h" | 48 | 24 | 2 | 2 |
+| "this week" | 168 | 24 | 7 | 7 |
+| "next month" | 720 | 24 | 30 | 30 |
+| "by 2029" (from 2026) | 26298 | 24 | 1096 | 1096 |
+| absent (crypto) | default 24 | 24 | 1 | — |
+| absent (seismic) | — | — | — | `horizon_days=30` default |
+| absent (trajectory) | — | — | — | `minutes=10` default |
+| absent (growth) | — | — | — | `max(1, n//4)` |
+
+`step_hours` itself is `_infer_dt_years(ts) * 365.25 * 24`; for the typical daily CoinGecko series it is ~24, but if `params.series` carries hourly timestamps it collapses to ~1 and the step count rises accordingly. This is why the handlers read the canonical `hours` field, not `value/unit` — the conversion is data-dependent and must be deterministic.
+
+### 9.18.5 Provenance contract
+
+Every emitted envelope carries enough provenance to reconstruct the route without the trace log:
+- `used_llm` (bool) — was the LLM plan accepted at all (matches today's field).
+- `provenance.resolver_hits[]` — each `entity_type:raw→resolved` (e.g. `ticker:xrp→ripple`, `place:tokyo→(35.68,139.69)`).
+- `provenance.fallbacks[]` — which deterministic steps fired (`deterministic_parser`, `flag:prompt_injection`, `bad_param:<k>`).
+- `data.source` — the feed name or `params` (honesty rule H5).
+- `method.models_used[]` + `method.math` — the exact forecaster and its formula string (already populated by every handler).
+
+Together these satisfy invariant 3 (honesty) and the §9.18.1 replayability guarantee: given `provenance` + `params` + `seed=42`, the numeric answer is bit-reproducible.
+
+### 9.18.6 Cross-reference to validation plan
 
 Each metric and golden-route row maps to a test in `11_VALIDATION_AND_TEST_PLAN.md`; the traceability table (§9.8) is extended with rows for the FSM transitions (§9.9.2), the verifier rule set (§9.15.1–9.15.7), the injection defenses (§9.12), the compound decomposer (§9.13), and the 8 worked traces (§9.16), giving requirement → component → test coverage for every new capability added in this pass.
 
