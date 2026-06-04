@@ -670,6 +670,206 @@ DESIGNS += [
     ("supply_depot_warehouse", "building", "industrial", f"a supply-chain depot warehouse with loading bays, {_STYLE}"),
 ]
 
+# ══════════════════════════════════════════════════════════════════════════════
+# FINE-DETAIL PASS — vehicles, weapons, modular walls/roads, terrain/water/geo,
+# flora and clutter props that fill the remaining gaps in the catalogue. DATA ONLY.
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── 33. VEHICLES — the full transport ladder (cart → maglev → drone) ──────────
+DESIGNS += [
+    ("ox_wagon", "vehicle", "bronze", f"an ox-drawn wooden wagon with spoked wheels, {_STYLE}"),
+    ("hand_cart", "vehicle", "iron", f"a two-handled wooden push cart, {_STYLE}"),
+    ("wheelbarrow", "vehicle", "iron", f"a single-wheel wooden wheelbarrow, {_STYLE}"),
+    ("wooden_sled", "vehicle", "stone", f"a simple wooden hauling sled with runners, {_STYLE}"),
+    ("dog_sled", "vehicle", "any", f"a wooden dog sled with harness rigging, {_STYLE}"),
+    ("canoe", "vehicle", "stone", f"a slender wooden dugout canoe with a paddle, {_STYLE}"),
+    ("sailboat", "vehicle", "iron", f"a small single-masted wooden sailboat, {_STYLE}"),
+    ("merchant_galleon", "vehicle", "iron", f"a tall-masted wooden merchant galleon with rigging, {_STYLE}"),
+    ("steam_locomotive", "vehicle", "industrial", f"a black steam locomotive with a smokestack and cowcatcher, {_STYLE}"),
+    ("train_passenger_car", "vehicle", "industrial", f"a vintage railway passenger carriage with windows, {_STYLE}"),
+    ("train_freight_wagon", "vehicle", "industrial", f"an open railway freight goods wagon, {_STYLE}"),
+    ("tram_car", "vehicle", "industrial", f"an electric street tram car on rails, {_STYLE}"),
+    ("horse_omnibus", "vehicle", "industrial", f"a horse-drawn double-decker omnibus, {_STYLE}"),
+    ("penny_farthing", "vehicle", "industrial", f"a high-wheel penny-farthing bicycle, {_STYLE}"),
+    ("motorcycle", "vehicle", "industrial", f"a classic two-wheel motorcycle, {_STYLE}"),
+    ("delivery_truck", "vehicle", "information", f"a small boxy delivery truck, {_STYLE}"),
+    ("farm_tractor", "vehicle", "industrial", f"a red farm tractor with big rear wheels, {_STYLE}"),
+    ("hot_air_balloon", "vehicle", "industrial", f"a striped hot-air balloon with a wicker basket, {_STYLE}"),
+    ("biplane", "vehicle", "industrial", f"a vintage wood-and-canvas biplane, {_STYLE}"),
+    ("propeller_airliner", "vehicle", "industrial", f"a propeller-driven passenger airliner, {_STYLE}"),
+    ("submarine", "vehicle", "industrial", f"a riveted steel submarine with a conning tower, {_STYLE}"),
+    ("hovercar", "vehicle", "quantum", f"a sleek hovering anti-gravity car with glowing thrusters, {_STYLE}"),
+    ("maglev_pod", "vehicle", "quantum", f"a streamlined magnetic-levitation transit pod, {_STYLE}"),
+    ("cargo_drone", "vehicle", "quantum", f"a quad-rotor autonomous cargo delivery drone, {_STYLE}"),
+    ("electric_car", "vehicle", "quantum", f"a sleek modern electric car with a charging port, {_STYLE}"),
+    ("city_bus", "vehicle", "information", f"a low-floor city transit bus, {_STYLE}"),
+]
+
+# ── 34. WEAPONS / EPOCH TOOLS — stone hand-axe to plasma carbine ──────────────
+DESIGNS += [
+    ("hunting_spear", "weapon", "stone", f"a flint-tipped wooden hunting spear, {_STYLE}"),
+    ("throwing_sling", "weapon", "stone", f"a leather throwing sling with stones, {_STYLE}"),
+    ("flint_handaxe", "weapon", "stone", f"a knapped flint hand-axe, {_STYLE}"),
+    ("stone_club", "weapon", "stone", f"a heavy stone-headed war club, {_STYLE}"),
+    ("bronze_sword", "weapon", "bronze", f"a leaf-shaped bronze sword with a wrapped grip, {_STYLE}"),
+    ("iron_shortsword", "weapon", "iron", f"an iron shortsword with a leather scabbard, {_STYLE}"),
+    ("wooden_round_shield", "weapon", "iron", f"a wooden round shield with an iron boss, {_STYLE}"),
+    ("kite_shield", "weapon", "iron", f"a painted heraldic kite shield, {_STYLE}"),
+    ("longbow", "weapon", "iron", f"a tall wooden longbow with a quiver of arrows, {_STYLE}"),
+    ("crossbow", "weapon", "iron", f"a wooden crossbow with a steel prod, {_STYLE}"),
+    ("war_hammer", "weapon", "iron", f"a heavy spiked war hammer, {_STYLE}"),
+    ("halberd", "weapon", "iron", f"a long polearm halberd with an axe blade, {_STYLE}"),
+    ("flintlock_pistol", "weapon", "industrial", f"an ornate flintlock pistol, {_STYLE}"),
+    ("musket", "weapon", "industrial", f"a long-barrelled flintlock musket with a bayonet, {_STYLE}"),
+    ("blunderbuss", "weapon", "industrial", f"a flared-barrel blunderbuss firearm, {_STYLE}"),
+    ("field_cannon", "weapon", "industrial", f"a wheeled iron field artillery cannon, {_STYLE}"),
+    ("bronze_cannon", "weapon", "iron", f"a cast bronze cannon on a wooden carriage, {_STYLE}"),
+    ("gatling_gun", "weapon", "industrial", f"a hand-cranked multi-barrel gatling gun, {_STYLE}"),
+    ("bolt_action_rifle", "weapon", "industrial", f"a wooden-stocked bolt-action rifle, {_STYLE}"),
+    ("energy_rifle", "weapon", "quantum", f"a sleek energy rifle with a glowing power cell, {_STYLE}"),
+    ("plasma_carbine", "weapon", "quantum", f"a compact plasma carbine with glowing vents, {_STYLE}"),
+    ("riot_shield", "weapon", "information", f"a transparent polycarbonate riot shield, {_STYLE}"),
+    ("battle_axe", "weapon", "iron", f"a broad double-bladed battle axe, {_STYLE}"),
+    ("morning_star", "weapon", "iron", f"a spiked morning-star flail, {_STYLE}"),
+    ("revolver", "weapon", "industrial", f"a six-shot revolver pistol, {_STYLE}"),
+]
+
+# ── 35. MODULAR WALLS / STRUCTURE — defensive and civic kit pieces ────────────
+DESIGNS += [
+    ("wall_straight_stone", "terrain", "iron", f"a straight modular stone fortification wall segment, {_STYLE}"),
+    ("wall_corner_stone", "terrain", "iron", f"a corner modular stone fortification wall piece, {_STYLE}"),
+    ("wall_gate_stone", "terrain", "iron", f"a modular stone wall gate segment with timber doors, {_STYLE}"),
+    ("palisade_straight", "terrain", "bronze", f"a straight sharpened-log palisade wall segment, {_STYLE}"),
+    ("palisade_corner", "terrain", "bronze", f"a corner sharpened-log palisade wall piece, {_STYLE}"),
+    ("palisade_gate", "terrain", "bronze", f"a log palisade gate with a timber doorway, {_STYLE}"),
+    ("earth_rampart", "terrain", "stone", f"a sloped earthwork rampart embankment segment, {_STYLE}"),
+    ("city_gate_large", "terrain", "iron", f"a large fortified city gatehouse with twin towers, {_STYLE}"),
+    ("portcullis", "terrain", "iron", f"an iron portcullis grille in a stone gateway, {_STYLE}"),
+    ("battlement_segment", "terrain", "iron", f"a crenellated stone battlement wall segment, {_STYLE}"),
+    ("defensive_tower_round", "terrain", "iron", f"a round stone defensive tower with a conical roof, {_STYLE}"),
+    ("corner_bastion", "terrain", "industrial", f"an angled stone corner bastion fortification, {_STYLE}"),
+    ("brick_wall_segment", "terrain", "industrial", f"a straight modular brick wall segment, {_STYLE}"),
+    ("brick_wall_corner", "terrain", "industrial", f"a corner modular brick wall piece, {_STYLE}"),
+    ("garden_wall", "terrain", "any", f"a low ivy-topped garden wall segment, {_STYLE}"),
+    ("retaining_wall", "terrain", "industrial", f"a stone retaining wall holding back earth, {_STYLE}"),
+    ("stone_archway", "terrain", "iron", f"a freestanding ornamental stone archway, {_STYLE}"),
+    ("colonnade_segment", "terrain", "iron", f"a modular columned colonnade walkway segment, {_STYLE}"),
+    ("rope_footbridge", "terrain", "any", f"a swaying rope-and-plank footbridge, {_STYLE}"),
+    ("stone_viaduct", "terrain", "industrial", f"a tall multi-arched stone viaduct span, {_STYLE}"),
+    ("drawbridge", "terrain", "iron", f"a wooden castle drawbridge with chains, {_STYLE}"),
+    ("moat_segment", "terrain", "iron", f"a water-filled defensive moat segment, modular, {_STYLE}"),
+    ("hedge_row_long", "terrain", "any", f"a long trimmed garden hedge row segment, {_STYLE}"),
+    ("picket_fence_gate", "terrain", "any", f"a white picket fence section with a gate, {_STYLE}"),
+    ("wrought_iron_railing", "terrain", "industrial", f"a decorative wrought-iron railing fence segment, {_STYLE}"),
+    ("watchtower_wall_tower", "terrain", "iron", f"a square stone wall watchtower segment, {_STYLE}"),
+]
+
+# ── 36. ROADS / PAVING — modular ground connectors ───────────────────────────
+DESIGNS += [
+    ("road_t_junction", "terrain", "any", f"a T-junction paved road tile, modular, {_STYLE}"),
+    ("road_curve_wide", "terrain", "any", f"a wide sweeping curved road tile, modular, {_STYLE}"),
+    ("cobblestone_tile", "terrain", "iron", f"a modular rounded-cobblestone paving tile, seamless, {_STYLE}"),
+    ("plaza_paving_tile", "terrain", "iron", f"a modular patterned plaza paving slab tile, seamless, {_STYLE}"),
+    ("canal_straight", "terrain", "iron", f"a straight stone-lined canal water channel tile, modular, {_STYLE}"),
+    ("canal_corner", "terrain", "iron", f"a corner stone-lined canal channel tile, modular, {_STYLE}"),
+    ("canal_lock", "terrain", "industrial", f"a canal lock with wooden lock gates, {_STYLE}"),
+    ("railway_switch", "terrain", "industrial", f"a railway track switch point section, modular, {_STYLE}"),
+    ("railway_crossing", "terrain", "industrial", f"a level railway crossing road tile, modular, {_STYLE}"),
+    ("stone_steps", "terrain", "any", f"a flight of modular stone steps, {_STYLE}"),
+    ("ramp_segment", "terrain", "any", f"a modular sloped ramp segment, {_STYLE}"),
+    ("pier_walkway", "terrain", "iron", f"a wooden pier walkway on pilings, modular, {_STYLE}"),
+    ("road_y_fork", "terrain", "any", f"a Y-fork paved road tile, modular, {_STYLE}"),
+    ("brick_paving_tile", "terrain", "industrial", f"a modular herringbone brick paving tile, seamless, {_STYLE}"),
+]
+
+# ── 37. TERRAIN / WATER / GEO — natural features and biome connectors ─────────
+DESIGNS += [
+    ("river_straight", "terrain", "any", f"a straight flowing river water tile, modular, {_STYLE}"),
+    ("river_bend", "terrain", "any", f"a bending river water tile, modular, {_STYLE}"),
+    ("river_fork", "terrain", "any", f"a forking river confluence water tile, modular, {_STYLE}"),
+    ("waterfall_large", "terrain", "any", f"a tall thundering waterfall over a rocky cliff, {_STYLE}"),
+    ("lake_edge", "terrain", "any", f"a modular lake shoreline edge tile with reeds, {_STYLE}"),
+    ("marsh_tile", "terrain", "any", f"a boggy marsh terrain tile with shallow water, {_STYLE}"),
+    ("swamp_tile", "terrain", "any", f"a murky swamp terrain tile with gnarled roots, {_STYLE}"),
+    ("snow_tile", "terrain", "any", f"a modular snow-covered ground tile, seamless, {_STYLE}"),
+    ("ice_floe", "terrain", "any", f"a floating sheet of cracked sea ice, {_STYLE}"),
+    ("lava_flow_tile", "terrain", "any", f"a glowing molten lava flow terrain tile, {_STYLE}"),
+    ("volcanic_rock", "terrain", "any", f"a chunk of black volcanic basalt rock, {_STYLE}"),
+    ("sand_dune_large", "terrain", "any", f"a large rolling sand dune terrain feature, {_STYLE}"),
+    ("oasis", "terrain", "any", f"a desert oasis pool ringed with palms, {_STYLE}"),
+    ("cave_entrance", "terrain", "any", f"a dark rocky cave mouth entrance, {_STYLE}"),
+    ("stalagmite_cluster", "terrain", "any", f"a cluster of pointed cave stalagmites, {_STYLE}"),
+    ("crater_small", "terrain", "any", f"a small rocky impact crater terrain feature, {_STYLE}"),
+    ("canyon_wall", "terrain", "any", f"a striated red canyon rock wall section, modular, {_STYLE}"),
+    ("mesa_rock", "terrain", "any", f"a flat-topped mesa rock formation, {_STYLE}"),
+    ("geyser", "terrain", "any", f"an erupting hot geyser with a steam plume, {_STYLE}"),
+    ("hot_spring", "terrain", "any", f"a steaming mineral hot-spring pool, {_STYLE}"),
+    ("coral_reef_chunk", "terrain", "any", f"a colourful coral reef rock chunk, {_STYLE}"),
+    ("tidal_pool", "terrain", "any", f"a rocky coastal tidal pool with shells, {_STYLE}"),
+    ("glacier_chunk", "terrain", "any", f"a jagged blue glacier ice chunk, {_STYLE}"),
+    ("sinkhole", "terrain", "any", f"a collapsed earth sinkhole terrain feature, {_STYLE}"),
+    ("river_delta", "terrain", "any", f"a branching river delta water tile, modular, {_STYLE}"),
+    ("rapids_tile", "terrain", "any", f"a churning whitewater rapids river tile, modular, {_STYLE}"),
+    ("salt_flat_tile", "terrain", "any", f"a cracked white salt-flat terrain tile, seamless, {_STYLE}"),
+]
+
+# ── 38. NATURE / FLORA — trees, bushes, crops and water plants ────────────────
+DESIGNS += [
+    ("tree_baobab", "nature", "any", f"a broad swollen-trunk baobab tree, {_STYLE}"),
+    ("tree_maple_autumn", "nature", "any", f"a maple tree in fiery autumn colours, {_STYLE}"),
+    ("tree_cherry_blossom", "nature", "any", f"a cherry tree in pink blossom, {_STYLE}"),
+    ("tree_cypress", "nature", "any", f"a tall slender cypress tree, {_STYLE}"),
+    ("tree_acacia", "nature", "any", f"a flat-topped savannah acacia tree, {_STYLE}"),
+    ("bush_berry", "nature", "any", f"a low bush heavy with ripe berries, {_STYLE}"),
+    ("bush_flowering", "nature", "any", f"a rounded bush covered in bright flowers, {_STYLE}"),
+    ("reed_cluster", "nature", "any", f"a cluster of tall waterside reeds, {_STYLE}"),
+    ("cattail_patch", "nature", "any", f"a patch of cattail bulrushes, {_STYLE}"),
+    ("vine_hanging", "nature", "any", f"a curtain of hanging leafy vines, {_STYLE}"),
+    ("ivy_wall_patch", "nature", "any", f"a patch of climbing ivy on a wall, {_STYLE}"),
+    ("giant_fern", "nature", "any", f"a large prehistoric tree fern, {_STYLE}"),
+    ("bamboo_clump", "nature", "any", f"a dense clump of tall green bamboo, {_STYLE}"),
+    ("lavender_patch", "nature", "any", f"a patch of fragrant purple lavender, {_STYLE}"),
+    ("sunflower_patch", "nature", "any", f"a patch of tall bright sunflowers, {_STYLE}"),
+    ("pumpkin_patch", "nature", "bronze", f"a vine-laden pumpkin patch with orange gourds, {_STYLE}"),
+    ("vineyard_row", "nature", "bronze", f"a trellised row of grapevines, {_STYLE}"),
+    ("wheat_sheaf", "nature", "bronze", f"a bound sheaf of golden wheat, {_STYLE}"),
+    ("corn_stalk_cluster", "nature", "bronze", f"a cluster of tall ripe corn stalks, {_STYLE}"),
+    ("cactus_tall", "nature", "any", f"a tall branching saguaro cactus, {_STYLE}"),
+    ("water_lily_patch", "nature", "any", f"a patch of floating water lilies in bloom, {_STYLE}"),
+    ("moss_patch", "nature", "any", f"a soft green moss-covered ground patch, {_STYLE}"),
+    ("tree_olive", "nature", "any", f"a gnarled silver-leaved olive tree, {_STYLE}"),
+    ("rose_bush", "nature", "any", f"a flowering rose bush in bloom, {_STYLE}"),
+]
+
+# ── 39. DETAIL PROPS / CLUTTER — the lived-in micro-dressing ──────────────────
+DESIGNS += [
+    ("wooden_crate_stack", "prop", "any", f"a stack of wooden shipping crates, {_STYLE}"),
+    ("barrel_cluster", "prop", "any", f"a cluster of wooden storage barrels, {_STYLE}"),
+    ("sack_pile", "prop", "bronze", f"a pile of bulging grain sacks, {_STYLE}"),
+    ("rope_coil", "prop", "any", f"a coil of thick hemp rope, {_STYLE}"),
+    ("fishing_net", "prop", "iron", f"a draped fishing net with floats, {_STYLE}"),
+    ("market_stall_awning", "prop", "bronze", f"a striped market stall awning with goods, {_STYLE}"),
+    ("lantern_string", "prop", "iron", f"a hanging string of paper lanterns, {_STYLE}"),
+    ("stone_well", "prop", "bronze", f"a round stone well with a roof and bucket, {_STYLE}"),
+    ("road_signpost", "prop", "any", f"a weathered wooden directional road signpost, {_STYLE}"),
+    ("milestone_marker", "prop", "iron", f"a carved stone distance milestone marker, {_STYLE}"),
+    ("hitching_post", "prop", "iron", f"a wooden horse hitching post with a ring, {_STYLE}"),
+    ("stone_water_trough", "prop", "iron", f"a stone water trough for animals, {_STYLE}"),
+    ("flower_planter", "prop", "any", f"a wooden flower planter box in bloom, {_STYLE}"),
+    ("iron_park_bench", "prop", "industrial", f"a cast-iron and wood park bench, {_STYLE}"),
+    ("woodpile", "prop", "any", f"a neatly stacked pile of firewood, {_STYLE}"),
+    ("outdoor_anvil", "prop", "iron", f"a blacksmith's anvil on a wooden stump outdoors, {_STYLE}"),
+    ("grindstone", "prop", "iron", f"a foot-pedal sharpening grindstone, {_STYLE}"),
+    ("scarecrow", "prop", "bronze", f"a straw-stuffed scarecrow on a post, {_STYLE}"),
+    ("campfire_pit", "prop", "stone", f"a stone-ringed campfire pit with logs, {_STYLE}"),
+    ("hay_cart_load", "prop", "bronze", f"a wooden cart piled high with loose hay, {_STYLE}"),
+    ("fruit_crate", "prop", "any", f"a wooden crate brimming with fresh fruit, {_STYLE}"),
+    ("ceramic_amphora_stack", "prop", "bronze", f"a stack of clay storage amphorae, {_STYLE}"),
+    ("water_barrel_rain", "prop", "any", f"a wooden rain-water collection barrel, {_STYLE}"),
+    ("toolbox_open", "prop", "industrial", f"an open metal toolbox with hand tools, {_STYLE}"),
+    ("flower_garland", "prop", "any", f"a hanging garland of fresh flowers, {_STYLE}"),
+]
+
 
 # Build order: terrain first, then the world fills in, instruments dress the labs,
 # daily-life props last. Every category appears here so `designs_for` sorts cleanly.
@@ -680,7 +880,7 @@ PHASE_ORDER = [
     "community", "culture",                                   # stage 4: community & economy
     "medical", "agri", "infra", "safety",                     # stage 5: society systems
     "epoch",                                                  # stage 6: epoch ladder (history)
-    "vehicle", "monument", "prop",                            # stage 7: movement & polish
+    "vehicle", "weapon", "monument", "prop",                  # stage 7: movement & polish
 ]
 
 # ── STAGES — the best order to complete generation in, as credit-sized waves ───
@@ -695,7 +895,7 @@ STAGES: dict[int, dict] = {
     4: {"name": "Community & Economy",  "categories": ["community", "culture"]},
     5: {"name": "Society Systems",     "categories": ["medical", "agri", "infra", "safety"]},
     6: {"name": "Epoch Ladder",        "categories": ["epoch"]},
-    7: {"name": "Movement & Polish",   "categories": ["vehicle", "monument", "prop"]},
+    7: {"name": "Movement & Polish",   "categories": ["vehicle", "weapon", "monument", "prop"]},
 }
 
 # category → stage number (reverse index, for fast filtering)
