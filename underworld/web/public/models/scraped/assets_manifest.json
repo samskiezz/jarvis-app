@@ -8863,5 +8863,22 @@
     "epoch": "iron",
     "name": "Guild Materials Forge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:battlement_segment": {
+    "prompt": "a crenellated stone battlement wall segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c258e7c0-20db-4630-a5d3-ea0e4178db11",
+    "path": "/models/generated/tripo/battlement_segment.glb",
+    "bytes": 14927300,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c258e7c0-20db-4630-a5d3-ea0e4178db11/tripo_pbr_model_c258e7c0-20db-4630-a5d3-ea0e4178db11.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzI1OGU3YzAtMjBkYi00NjMwLWE1ZDMtZWEwZTQxNzhkYjExL3RyaXBvX3Bicl9tb2RlbF9jMjU4ZTdjMC0yMGRiLTQ2MzAtYTVkMy1lYTBlNDE3OGRiMTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=TVc3W5txGfcrPBViRVhfVlm16oaFDmnWhr3VEyO2z-bL1wLY2~110R1F0SSGQDOl5yDGotcIxSgwVkDfDEylTgG8n815Kk7woOtZNP0ztJ~~dOpKKMUtBDZpIHAOTM1r4PnBhMlF6w70ZEKJnuDO6X1FrbIRE3hzklBGW4ymL0iqP0F2-3htZ1UajerCoLwJ724ZXr0umLOrObbqtX5mw7T7m81FJj-YNXtuiV0CFIMaim-2rapSvlxuV8UtboIILdY3UAFdSru1QBG5OOY4TurnOpPuSkvo~lWrP0Ak-dZj0o1mb-mL~vVMmncpQBAp6~rb8I2GvNEhvgR-KNdtVw__",
+    "asset_id": "battlement_segment",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Battlement Segment",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
