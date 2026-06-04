@@ -10546,5 +10546,22 @@
     "epoch": "industrial",
     "name": "Farm Tractor",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hand_cart": {
+    "prompt": "a two-handled wooden push cart, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "8bfdf9e3-25c0-49fa-81ce-19bb7e840912",
+    "path": "/models/generated/tripo/hand_cart.glb",
+    "bytes": 14919960,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/8bfdf9e3-25c0-49fa-81ce-19bb7e840912/tripo_pbr_model_8bfdf9e3-25c0-49fa-81ce-19bb7e840912.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOGJmZGY5ZTMtMjVjMC00OWZhLTgxY2UtMTliYjdlODQwOTEyL3RyaXBvX3Bicl9tb2RlbF84YmZkZjllMy0yNWMwLTQ5ZmEtODFjZS0xOWJiN2U4NDA5MTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=dNWvSxdAbkBiHZBVnGYojrIEwxst5eQUHOgtakPfVN6YjNYU2yoHWxgh5Ua0yOx-HrmUtL7KMipGN5crFGDMVBIyFuLPK~p-IIRlEK2U~meofyn7beDJoOmtiCbiVfGiokUKffrfhne0Vl3HA2jJ0LqPk53OcP9ot1QLpSlLSvwX8Hx1l3fWxQ6HXrnEXblQIJLVkf8wLC9gXHbDzW1-i2i-lWkwLwV0pn~Y6UDB8kojXxa5JwDQ4PJhjYqiKvuxRylkD0tbdSucmhHQNqrYB0r5Vc9Wtz9Ek~tKva1b9uTvFUxaD~J9vg42AW3fLlyIxnACyOFZCdnTjfQq95aaLA__",
+    "asset_id": "hand_cart",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "iron",
+    "name": "Hand Cart",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
