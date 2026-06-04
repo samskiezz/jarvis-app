@@ -8931,5 +8931,22 @@
     "epoch": "industrial",
     "name": "Brick Wall Segment",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:canal_corner": {
+    "prompt": "a corner stone-lined canal channel tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fd05ddee-d72c-4d63-a99d-60d3270439ed",
+    "path": "/models/generated/tripo/canal_corner.glb",
+    "bytes": 15120892,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/fd05ddee-d72c-4d63-a99d-60d3270439ed/tripo_pbr_model_fd05ddee-d72c-4d63-a99d-60d3270439ed.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZmQwNWRkZWUtZDcyYy00ZDYzLWE5OWQtNjBkMzI3MDQzOWVkL3RyaXBvX3Bicl9tb2RlbF9mZDA1ZGRlZS1kNzJjLTRkNjMtYTk5ZC02MGQzMjcwNDM5ZWQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=P5DmLq0xL1u8V3KUqBqO6xiODwDA70-q~r0~k~Hm0966vtHL9jdE8EFVGHDxmXYAKfU3dN1mhycUKO2SqJgcLU2qcH09W0mlhAmVqP1mYzc2EVvcwobWfmjeyxPXo5VkaCFntXL6AFk8~-DxWMm9GVjFzbGTFtF6g79tvX7Cbjt54MJWDV6UK4AB7qk7wDxhbKFkcfAb6Y7qbvEYDANQgiruoqf23H2p5utth5jhj3b63vVOzEcONegaNZTOiJ~VLJSJm8s4~aL7Bejp0cjoluCVGj9ShG4LIMbSHTgrocTk~FUFCn26t8ZwZSw40nuroVCtaAiBz0q~CuUuEcKioQ__",
+    "asset_id": "canal_corner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Canal Corner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
