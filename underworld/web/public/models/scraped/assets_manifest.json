@@ -9577,5 +9577,22 @@
     "epoch": "industrial",
     "name": "Retaining Wall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:river_bend": {
+    "prompt": "a bending river water tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ac20136c-9529-4ccb-add9-ba37290a8944",
+    "path": "/models/generated/tripo/river_bend.glb",
+    "bytes": 14928840,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ac20136c-9529-4ccb-add9-ba37290a8944/tripo_pbr_model_ac20136c-9529-4ccb-add9-ba37290a8944.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYWMyMDEzNmMtOTUyOS00Y2NiLWFkZDktYmEzNzI5MGE4OTQ0L3RyaXBvX3Bicl9tb2RlbF9hYzIwMTM2Yy05NTI5LTRjY2ItYWRkOS1iYTM3MjkwYTg5NDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=n7Jg0GbKGyk0lZSN0oVTqaTNhDEqlzo5W42ONbkXtXV5VrOhOSJTnXaXWDaEJVqxGBQeCtm5JM15MOamuwR96V5cVZlkDUkgZPqkDLquOBvLcPSeMgWb2GZ0hiISmEBV4ookDaqgtgXtmFlASoQR0KUdDCEnvDUrF3RDF9gT0GV5c7C5U78tWmT-MJkKG07YxKeju9FJcpXeDiZabxhmKx58ZCzhoR6kaf1sVRbctLJBRAuVlLqNHsqTK8X-jmLGMm42lutcxPXnSUuPD8XPZudvzZvo2m73L0ByjHnCdRoxA2~XFGiPlIhseK9dIdO6oHe-15uoprf~NmgTKMiF2A__",
+    "asset_id": "river_bend",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "River Bend",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
