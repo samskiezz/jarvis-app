@@ -36,9 +36,9 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 29 | ☐ | server/scripts/forward_test.py | 179 |
 | 30 | ☐ | server/scripts/horizon_sweep.py | 233 |
 | 31 | ☐ | server/scripts/live_5min.py | 107 |
-| 32 | ☐ | server/scripts/predict_5min.py | 124 |
+| 32 | ☑ | server/scripts/predict_5min.py | 124 |
 | 33 | ☐ | server/scripts/train_backtest.py | 81 |
-| 34 | ☐ | server/scripts/train_oracle.py | 163 |
+| 34 | ☑ | server/scripts/train_oracle.py | 163 |
 | 35 | ☐ | server/scripts/train_sp500.py | 160 |
 | 36 | ☑ | server/services/__init__.py | 0 |
 | 37 | ☑ | server/services/analyst.py | 144 |
@@ -60,7 +60,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 53 | ☐ | server/tests/test_forecaster_ml.py | 149 |
 | 54 | ☐ | server/tests/test_forward_test.py | 173 |
 | 55 | ☐ | server/tests/test_history_lake.py | 223 |
-| 56 | ☐ | server/tests/test_oracle_model.py | 146 |
+| 56 | ☑ | server/tests/test_oracle_model.py | 146 |
 | 57 | ☐ | server/tests/test_prediction.py | 157 |
 | 58 | ☐ | server/tests/test_routes.py | 164 |
 | 59 | ☐ | server/tests/test_simulation.py | 186 |
@@ -724,3 +724,6 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/services/oracle_model.py` — OracleModel multi-head: direction HistGBClassifier+isotonic calib (L279/358), volatility HistGBR |fwd return| (L384), return via MLForecaster; OracleDataset pooled leakage-safe global time-sort (L96); purged_time_folds embargoed CV (L192); hyperparam search L_PARAM_GRID (L220/333); conviction=|p-0.5|*2 + act threshold (L425/431); online update rolling refit (L496); save/load joblib (L528); evaluate honest dir-acc@conviction + vol R2 + Brier (L591)
 - `server/services/forecaster_ml.py` — MLForecaster: _feature_matrix builds 28 causal features (lagged log-returns, SMA/EMA ratios, rvol, momentum, RSI14, MACD+signal+hist, zscore20, calendar dow/month L150-254); _supervised target=fwd log-return (L257); train HistGBR point + 0.05/0.5/0.95 quantile interval members + conformal tail (L342); fast flag shrinks trees; sklearn-absent -> ShortHorizonForecaster fallback (L333)
 - `server/services/scrapers.py` — deep-history scrapers: cryptocompare_full paginated full crypto/gold history (L18), yahoo_daily stocks/indices (L60), sp500_constituents Wikipedia scrape (L96), deep_history dispatcher crypto->CC / stocks->Yahoo (L171)
+- `server/scripts/train_oracle.py` — heavy-train OracleModel CLI: fetches 20 crypto (CryptoCompare) + 50 S&P (Yahoo) deep history (L29-37), pools leakage-safe, purged-CV hyperparam search, saves joblib, prints HONEST scorecard (all-bars ~50% + rising conviction curve + vol R2 + Brier, explicit no-99% L106)
+- `server/scripts/predict_5min.py` — 5-min prediction CLI via backtest.five_minute_test (L47): prints predicted next-5min price+interval+prob_up + walk-forward skill scorecard (MAE/RMSE/dir/coverage/skill-vs-persist + verdict)
+- `server/tests/test_oracle_model.py` — offline OracleModel tests: purged folds no-overlap+embargo (L61), train+predict contract (L71), CONVICTION subset beats all-bars + coin-flip (L93), vol R2>0 (L109), save/load roundtrip (L120), online update (L138)
