@@ -9220,5 +9220,22 @@
     "epoch": "any",
     "name": "Glacier Chunk",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hedge_row_long": {
+    "prompt": "a long trimmed garden hedge row segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1cb6222f-0ebf-457f-86fa-a28a4e708586",
+    "path": "/models/generated/tripo/hedge_row_long.glb",
+    "bytes": 7779564,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/1cb6222f-0ebf-457f-86fa-a28a4e708586/tripo_pbr_model_1cb6222f-0ebf-457f-86fa-a28a4e708586.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMWNiNjIyMmYtMGViZi00NTdmLTg2ZmEtYTI4YTRlNzA4NTg2L3RyaXBvX3Bicl9tb2RlbF8xY2I2MjIyZi0wZWJmLTQ1N2YtODZmYS1hMjhhNGU3MDg1ODYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=sy8kr4z9A4kdkQTmwSgNXB8AMHYCOkjG5coLLoJ7~RpnyGLaZB3cxmTSFOlekbVjtliMenzuWcQOlizh6RBwGHxG3LwB5CcIcr~gbh5YBOr~JUv589sZBKqu5PpMXyKWzY924upiDzLqPsg481iwvdBKBgLc9pG-bBqOESoduKf9bR5ESvJw8ZG9RY8q8leVfcmNlq4tIGcjd4pUsu59cDTkeYpdqLYNvZpV9jJX00x8kES6J6kg7Ng1qecxYjCwCbLvHg~Pb5~UmJ0575lZZYUx0weafSkpxjbCMIF39SGAXp3WE-M5pA1tb0Rn-OGaK2OxUsf9RY2pVsQUjGumnw__",
+    "asset_id": "hedge_row_long",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Hedge Row Long",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
