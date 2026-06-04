@@ -2005,6 +2005,130 @@ for each test t in order:
 
 **Source.** Xu & Xie 2021, *Conformal prediction interval for dynamic time-series*, ICML; https://arxiv.org/abs/2010.09107 · MAPIE https://mapie.readthedocs.io/
 
+#### F19.+ DEPTH MILESTONE
+
+**Full derivation.** Split conformal prediction guarantees `P(y ∈ [f̂±q_{1−α}(residuals)]) ≥ 1−α` *under exchangeability* — the residual quantile is calibrated because, by exchangeability, a future residual is equally likely to fall at any rank among the calibration residuals. Time series violate exchangeability (temporal dependence). EnbPI restores validity two ways: (1) **LOO ensemble residuals** `ε_i=|y_i−f^{−i}(x_i)|` use out-of-bag predictions, removing the train/test leakage that would shrink residuals; (2) a **sliding window** of the most recent `W` residuals tracks the (possibly drifting) error distribution, so the empirical quantile adapts. Xu & Xie prove asymptotically valid marginal coverage under mild assumptions (stationary-after-conditioning + bounded estimation error). The online residual append makes it a self-correcting interval: persistent under-coverage widens future intervals automatically.
+
+**Runnable-quality pseudocode.**
+```python
+def enbpi(base_fit, base_predict, X_train, y_train, X_test, *,
+          B=25, alpha=0.1, W=100, block=None, agg="mean", seed=0):
+    import numpy as np
+    rng = np.random.default_rng(seed)
+    n = len(y_train); block = block or max(1, int(np.sqrt(n)))
+    models, in_bag = [], []
+    for b in range(B):
+        # block bootstrap (preserves short-range dependence)
+        starts = rng.integers(0, n-block+1, size=n//block)
+        idx = np.concatenate([np.arange(s, s+block) for s in starts])
+        models.append(base_fit(X_train[idx], y_train[idx])); in_bag.append(set(idx))
+    # LOO residuals
+    agg_fn = np.mean if agg == "mean" else np.median
+    eps = []
+    for i in range(n):
+        oob = [base_predict(m, X_train[i:i+1])[0] for m, s in zip(models, in_bag) if i not in s]
+        if oob: eps.append(abs(y_train[i] - agg_fn(oob)))
+    eps = list(eps)
+    intervals = []
+    for xt in X_test:
+        fhat = agg_fn([base_predict(m, xt[None])[0] for m in models])
+        w = np.quantile(eps[-W:], 1-alpha)
+        intervals.append((fhat - w, fhat + w))
+    return intervals, eps        # caller appends |y_t - fhat| to eps online
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `B` | int | 25 | 10–100 | bootstraps; OOB coverage | ↑ ensures ≥1 OOB per index |
+| `alpha` | float | 0.1 | (0,1) | miscoverage (1−cov) | 0.1 ⇒ 90% PI |
+| `W` | int | 100 | 30–∞ | residual window | ↓ for fast drift |
+| `block` | int | √T | 1–T | bootstrap block len | seasonal period if known |
+| `agg` | str | mean | {mean,median} | aggregator | median for robustness |
+
+**Worked numeric example.** Base = linear model, true `y=2x+ε`, ε~N(0,1), n=500, α=0.1. LOO residuals ≈ |N(0,1)| with `q_{0.9}≈1.645`. Interval half-width ≈ 1.645; realized coverage over a held-out stream ≈ 0.90 (±sampling). If a variance break doubles ε's spread, the sliding window's `q_{0.9}` climbs toward 3.29 within `W` steps, restoring coverage.
+
+**Complexity (derivation).** Training: `B` base fits → `O(B·cost(fit))`. LOO residuals: each of `n` indices aggregates ≤`B` OOB predictions → `O(n·B·cost(predict))`. Per test point: `B` predictions + a window quantile (`O(W log W)` or `O(W)` with a heap) → `O(B + W log W)`. **Space** `O(B·model + W)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Some index never OOB | missing residual | raise `B`; leave-one-block-out |
+| Non-stationarity | coverage drifts | sliding window (the core fix); shrink `W` |
+| Asymmetric errors | symmetric PI miscovers one side | use signed residual quantiles (two-sided) |
+| Tiny calibration set | noisy quantile | full-history window; more data |
+
+**Unit-test oracle.** Homoscedastic Gaussian residuals: realized coverage over a long test stream must converge to `1−α=0.90` (±2%). For α=0.5 the interval half-width must equal the median absolute residual. Degenerate case: zero-residual perfect model ⇒ interval width 0 and 100% coverage.
+
+**Integration code-points.** **NEW** `enbpi.py` (reference MAPIE's `EnbPI`); `numpy.percentile` reuse as in `gbm_montecarlo_forecast`. FORECAST CORE **final calibration** after F18: wraps the combined point forecast (or any A1–A5 member) to produce the published interval; realized coverage feeds SELF-IMPROVEMENT (§08) and the VERIFIER's honest interval statement. Online residual append closes the calibration loop.
+
+---
+
+### F19b. Quantile Regression & Quantile Gradient Boosting — **NEW ALGORITHM**
+
+**Purpose.** Directly model conditional quantiles `Q_Y(α|X)` (not just the mean) — a native way to produce calibrated predictive intervals and asymmetric/heteroscedastic bands. Linear (Koenker) and gradient-boosted (LightGBM/sklearn `GradientBoostingRegressor(loss="quantile")`) variants. Complements conformal (F19): QR gives *conditional* quantiles, conformal *calibrates* them.
+
+**Math.** Fit `β_α` minimizing the **pinball (check) loss**:
+```
+ρ_α(u) = u·(α − 1{u<0}) = max(α·u, (α−1)·u)
+β̂_α = argmin_β Σ_t ρ_α(y_t − x_tᵀβ)
+Q_Y(α|x) = xᵀβ̂_α
+```
+
+**Derivation.** The pinball loss is minimized in expectation at the conditional α-quantile: setting the subgradient `E[α−1{y<q}]=0` gives `P(y<q)=α`, i.e. `q=Q_Y(α)` — so minimizing `ρ_α` *is* quantile estimation (the mean-analog of OLS). It is piecewise-linear and convex, solvable by linear programming (Koenker–Bassett) or, for the boosted version, by fitting regression trees to the negative gradient of `ρ_α` (a step function: `−1{u<0}+α` … i.e. `α` or `α−1`). Fitting several `α` levels yields a quantile grid; **monotonicity** across levels is enforced by post-hoc sorting (or joint estimation) to prevent quantile crossing.
+
+**Runnable-quality pseudocode.**
+```python
+def quantile_forecast(X_train, y_train, X_test, *, levels=(.1,.25,.5,.75,.9),
+                      method="gbm", n_estimators=200, max_depth=3, lr=0.05):
+    import numpy as np
+    preds = {}
+    if method == "gbm":
+        from sklearn.ensemble import GradientBoostingRegressor
+        for a in levels:
+            m = GradientBoostingRegressor(loss="quantile", alpha=a,
+                    n_estimators=n_estimators, max_depth=max_depth, learning_rate=lr)
+            m.fit(X_train, y_train); preds[a] = m.predict(X_test)
+    else:  # linear, IRLS / LP via statsmodels
+        import statsmodels.formula.api as smf, pandas as pd
+        df = pd.DataFrame(X_train); df["y"] = y_train
+        cols = "+".join(map(str, range(X_train.shape[1])))
+        for a in levels:
+            r = smf.quantreg(f"y ~ {cols}", df).fit(q=a)
+            preds[a] = r.predict(pd.DataFrame(X_test))
+    # enforce monotone, non-crossing quantiles
+    P = np.array([preds[a] for a in sorted(levels)])
+    P = np.sort(P, axis=0)
+    return {a: P[i].tolist() for i, a in enumerate(sorted(levels))}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `levels` | tuple | .1..​.9 | (0,1) | quantile grid | add .05/.95 for tails |
+| `method` | str | gbm | {gbm,linear} | model family | gbm for nonlinearity |
+| `n_estimators` | int | 200 | 50–1000 | boosting rounds | early-stop on val pinball |
+| `max_depth` | int | 3 | 2–8 | tree depth | ↑ for interactions |
+| `lr` | float | 0.05 | 0.01–0.3 | learning rate | ↓ with ↑ estimators |
+
+**Worked numeric example.** Heteroscedastic `y=x+ x·ε`, ε~N(0,1) (spread grows with x). At `x=1`: `Q(0.1)≈1−1.28=−0.28`, `Q(0.5)≈1`, `Q(0.9)≈2.28` (width ~2.56). At `x=5`: `Q(0.1)≈5−6.4=−1.4`, `Q(0.9)≈11.4` (width ~12.8) — QR captures the widening band that a constant-width interval cannot.
+
+**Complexity (derivation).** Linear QR via LP/IRLS: `O(n·p²)` per level. GBM QR: `O(n·log n · n_estimators)` per level (tree building), × `|levels|`. **Space** `O(n·p)` + model.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Quantile crossing | `Q(0.1)>Q(0.9)` | post-hoc sort; monotone constraints |
+| Extreme tails, sparse data | unstable `Q(0.01)` | regularize; widen via conformal (F19) |
+| Pinball non-smooth at 0 | optimizer stalls | smoothed pinball or LP solver |
+| Overfit per level | jagged quantiles | shared features; early stopping |
+
+**Unit-test oracle.** Homoscedastic `y=N(μ,σ²)` independent of `x`: estimated `Q(α|x)` must converge to `μ+σ·Φ^{-1}(α)` (constant in x). `Q(0.5)→median`. Pinball loss at the true quantile is minimized — perturbing the predicted quantile up or down must increase average pinball loss (gradient check).
+
+**Integration code-points.** **NEW** `quantile_regression.py` (sklearn `GradientBoostingRegressor(loss="quantile")` / statsmodels `quantreg`). Acts as an ensemble member (F18) emitting a native `quantiles` dict in the standard contract; its quantiles can be EnbPI-calibrated (F19) and CRPS-scored (F20). Features sourced from engineered History-Lake covariates + Granger/CCM/TE-screened drivers (E15/E16/E16b).
+
+**Source.** Koenker & Bassett 1978, *Regression Quantiles*, *Econometrica*; https://doi.org/10.2307/1913643 · Koenker, *Quantile Regression* (2005) · sklearn https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_quantile.html · LightGBM quantile objective https://lightgbm.readthedocs.io/
+
 ---
 
 ### F20. CRPS & Skill Score vs Climatology

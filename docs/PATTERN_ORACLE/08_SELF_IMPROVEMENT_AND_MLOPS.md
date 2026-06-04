@@ -985,6 +985,12 @@ R6  any DRIFTING/REGIME_BREAK alarm attributable to the challenger
 ```
 On rollback: (a) flip 100% of traffic back to champion in **one** registry transition; (b) snapshot the triggering metrics into `learning_audit.guard_snapshot`; (c) demote challenger `production→shadow` (kept scored for diagnosis, never auto-retried without a code/data change); (d) page on-call (RB-CANARY-ROLLBACK). Rollback is **idempotent** and must complete within the canary dwell tick so a bad challenger never serves a full window of degraded traffic.
 
+### 10.5 FROZEN / incident handling (the manual override)
+`FROZEN` exists so a human can stop the learning loop from making *changes* during an incident while still serving forecasts. On entry: (a) **freeze promotions** — no `EVALUATING→CANARY`, no canary advancement, no auto-rollback re-ramp; (b) pin the current champion as serving; (c) **keep the matcher running** best-effort so the loop doesn't lose outcome data (the data is still valuable post-incident); (d) suppress retrain triggers (they'd queue work that can't promote anyway). Common entry causes: a confirmed data-feed corruption (don't learn from poisoned data), a downstream incident where you want serving stable, or a release freeze. Exit (`FROZEN→STEADY`) is **manual** and requires the operator to confirm: champion is healthy, the incident is closed, and any forecasts scored against bad data during the incident are quarantined (re-scored with a corrected `vintage`, §1.2.1). FROZEN never silently expires — a stuck FROZEN target raises a low-severity ticket after a configurable hold (default 24 h) so it isn't forgotten.
+
+### 10.6 State-machine observability
+The FSM itself is monitored: `oracle_fsm_state{target_key,state}` (a gauge that is 1 for the current state, 0 otherwise) drives a per-target state timeline on the MLOps dashboard (§7.3.1). Time-in-state is alertable — e.g. a target stuck in `RETRAINING` longer than the nightly window, or in `ROLLBACK` for more than one tick (rollback should be near-instant), surfaces as an anomaly even when no metric threshold tripped. Every `learning_audit` row carries `from_state, to_state, trigger, guard_snapshot, at`, so the full lifetime of any decision (why did target X promote on date D?) is reconstructable for §6.5 trend disputes and post-incident review.
+
 ---
 
 ## 11. CHAMPION / CHALLENGER + CANARY ROLLOUT — full protocol
@@ -1110,6 +1116,24 @@ Three members A, B, C; `β=0.9`, `γ=1`, `w_min=0.01`. At t0 all have `Ē=0.10`,
 | 10 | 0.380 | 2.63 | 0.116 |
 
 B's weight roughly **halves within ~10 cycles** (the effective window) — satisfying §8.4 "down-weighted within ~10 cycles." When B is fixed (CRPS back to 0.10), the EWMA decays back toward 0.10 over another ~10 cycles and `w_B` climbs back toward 0.33 — the floor guaranteed it never hit 0, so recovery is automatic. ✓
+
+### 12.6 Worked weight-vector computation (the softmax made concrete)
+At cycle 10 of the §12.5 trace: `Ē = {A:0.10, B:0.38, C:0.10}`, `γ=1`, `ε≈0`, `w_min=0.01`.
+```
+raw_A = 1/0.10 = 10.0
+raw_B = 1/0.38 = 2.632
+raw_C = 1/0.10 = 10.0
+Σraw  = 22.632
+w_A = 10.0/22.632 = 0.4419
+w_B = 2.632/22.632 = 0.1163
+w_C = 10.0/22.632 = 0.4419
+```
+All weights exceed `w_min=0.01`, so no flooring needed; `Σw = 1.0` ✓. The ensemble point becomes `ŷ_ens = 0.4419·x_A + 0.1163·x_B + 0.4419·x_C` — B's contribution has shrunk from 1/3 to ~1/9 while A and C absorbed its trust. Now raise sharpness to `γ=2`:
+```
+raw_A = 10.0² = 100, raw_B = 2.632² = 6.93, raw_C = 100  →  Σ = 206.93
+w = {A:0.4833, B:0.0335, C:0.4833}
+```
+`γ=2` *concentrates* harder on the good members (B drops to ~3%) — the temperature knob in action (§12.2). The `γ_max=3` cap stops this from collapsing to winner-take-all on a member that's merely lucky this window.
 
 ---
 
@@ -1284,6 +1308,17 @@ BacktestRun(
 )
 ```
 Determinism: a `(model_version, data_vintage, seed)` triple must reproduce identical `aggregates` bit-for-bit — this is what makes a `retired` model version reproducible for audit (§4.5) and what the validation suite re-runs to detect silent metric drift in the harness itself.
+
+### 14.5 Worked purge + embargo example (the leakage made concrete)
+Series sampled daily; horizon `h = 5d`; feature lookback `L_max = 3d`; test fold starts at `test_start = o + embargo`. Take origin `o = day 100`:
+- **Embargo:** `embargo = L_max = 3d` → `test_start = day 103`. Training data is allowed up to `day 100`; days 101–102 are the **embargo gap** (used by neither train nor the first test sample's features) so a test sample at day 103 — whose features span days 100–103 — shares no feature window with any training sample (the last train sample's features ended at day 100).
+- **Purge:** a candidate *training* forecast issued at `day 98` has its label realized at `day 98 + 5 = day 103` — which lands **inside** the test period. Purge **drops** it from training: keeping it would let the model train on a label that was only knowable at day 103, leaking test-era information. Concretely, any training forecast with `issued_at + h ≥ test_start` (i.e. `issued_at ≥ day 98`) is purged. The clean training set is forecasts issued `≤ day 97` (label realized `≤ day 102 < test_start`).
+- **Net effect:** train uses `issued_at ≤ day 97`; embargo gap days 98–102; test from day 103. No shared label window (purge) and no shared feature window (embargo). The harness `assert`s both; a fold that violated either (e.g. an off-by-one that trained through day 99) **fails the run** rather than reporting an inflated, leaked CRPSS.
+
+Without purge, naive walk-forward (train ≤ day 100, test from day 101) would have trained on the day-98 forecast whose label was realized day 103 — a silent leak that flatters skill by ~the label-overlap fraction. Purge+embargo is the difference between a backtest you can trust to gate a production promotion (§6.4) and one that manufactures the very improvement §0 demands be *real*.
+
+### 6.8 Reporting cadence & live-vs-backtest reconciliation
+Backtests run nightly (full walk-forward) and on every challenger build (§4.6); live skill aggregates continuously (§1). Because both use the **same scoring code** (§1.3) on the **same schema** (`skill_record`), live and backtest CRPSS are directly comparable — a persistent gap (live worse than backtest on the same horizon) is itself a monitored signal of either leakage in the backtest (re-audit §14) or a live serving issue (drift/SLO) the backtest can't see. `/predict/skill` (§6.6) returns both the live `window` aggregate and the latest backtest run so the user sees the reconciliation, and the §6.5 `trend.improving` flag is computed on the backtest series (the controlled, leakage-guarded measurement) while live skill is the in-production confirmation.
 
 ---
 

@@ -546,6 +546,61 @@ Order = capability-per-effort. **Nothing here is required for T0; each step is a
 
 **Placement rule (critical):** `torch`/`cupy` go on the **GPU/inference host**, *not* into `server/requirements.txt` or `underworld/server/requirements.txt`. The two FastAPI apps stay torch-free and reach GPU work only via `gpu_backend` (T1, optional) and the T2 HTTP client. This preserves the prime directive: `pip install` of the default requirements yields a fully-working T0 system on any laptop or CI runner.
 
+### 10.7.1 Staged dependency-install plan — pinned versions, rationale, risk
+
+Each stage is independently revertible. Versions are **pinned with a compatible-release floor** (`>=x,<x+1`) so security patches flow but no major-version surprise lands; they target the existing `numpy>=1.26 / scipy>=1.11 / sklearn>=1.3` base. CI stays CPU-only — Stages 2–3 install **only** on their respective hosts.
+
+**Stage 0 — baseline (already pinned, do nothing):**
+
+| Package | Pin | Where | Rationale |
+|---|---|---|---|
+| `numpy` | `>=1.26,<3` | both backends | T0 array floor; already present |
+| `scipy` | `>=1.11,<2` | underworld only | distance/stats kernels |
+| `scikit-learn` | `>=1.3,<2` | underworld only | clustering / metrics |
+| `httpx` | (existing) | both backends | T2 client transport; **no new dep needed for the client** |
+
+**Stage 1 — CPU discovery upgrades (`requirements-discovery.txt`, optional extra):**
+
+| Package | Pin | Tier | Rationale | Risk |
+|---|---|---|---|---|
+| `stumpy` | `>=1.13,<2` | T0 | tested Matrix-Profile vs hand-rolled NumPy; Numba-accelerated | Numba/LLVM build can lag newest Python; **mitigate** by pinning `<2` and testing on the target Python first |
+| `hdbscan` | `>=0.8.33,<0.9` | T0 | robust density regimes vs k-means | C-extension build; wheel availability varies — **mitigate** prefer wheels, fall back to `scikit-learn` `HDBSCAN` if build fails |
+| `statsforecast` | `>=1.7,<2` | T0 | fast AutoARIMA/ETS/Theta members | Numba warm-up cost on first call; **mitigate** warm at startup |
+
+**Stage 2 — local GPU acceleration (`requirements-gpu.txt`, GPU box only):**
+
+| Package | Pin | Tier | Rationale | Risk |
+|---|---|---|---|---|
+| `cupy-cuda12x` | `>=13,<14` | T1 | activates `gpu_backend` GPU path; **zero app-code change** (§10.6A) | **CUDA-version coupling** — `cuda12x` wheel requires CUDA 12.x driver/toolkit on host; **mitigate** match the Triton CUDA base (§10.5.4) and verify `cupy.cuda.runtime.getDeviceCount()>0` before relying on T1; auto-falls-back to NumPy if absent (§10.1.1) |
+
+**Stage 3 — remote inference host (inference server ONLY, never the FastAPI backends):**
+
+| Package | Pin | Tier | Rationale | Risk |
+|---|---|---|---|---|
+| `torch` | `>=2.3,<3` (CUDA build) | T2 | runs foundation TS + temporal GNN weights | large (GB), GPU-coupled; **isolate** on inference host image only |
+| `timesfm` | `>=1.2,<2` | T2 | primary zero-shot forecaster | weights download + license check; pin to Apache-2.0 release |
+| `chronos-forecasting` | `>=1.4,<2` | T2 | fast quantile member | torch-version coupling — keep in lockstep with `torch` pin |
+| `lag-llama` | (git tag/commit pin) | T2 | probabilistic sample baseline | research code, no PyPI release → **pin an exact commit**, vendor if unstable |
+| `tritonserver` (container) | image tag `<ver>-py3` | T2 | hosts the suite; dynamic batching | container, not pip; pin the image tag to the CUDA line above |
+
+**Stage 4 — scale-out (DEFERRED, do not install until proven):**
+
+| Package | Pin | Rationale | Risk |
+|---|---|---|---|
+| `ray` *or* `redis`+`rq`/`celery` | — | distributed re-forecast workers | **heavy operational cost**; **explicitly out of scope** until single-process is *measured* as the bottleneck (§10.3.3). Premature install = ops burden with no payoff |
+
+**Install ordering & verification gates:** Stage 1 → run T0 acceptance suite (§10.8.1) green. Stage 2 → `available_backends()` must report `cupy:true, gpus>0`, then T1 kernels must pass the T0-diff tolerance gate (§10.8.3). Stage 3 → `/v1/health` returns `ready:true` + caps, then the unreachable-host fallback test (§10.8.4) must still pass with the host *up*. Each stage gates the next; a failed gate reverts that stage with no impact on lower tiers.
+
+**Cross-cutting risk register:**
+
+| Risk | Affected stage | Mitigation |
+|---|---|---|
+| CUDA/driver mismatch | 2, 3 | pin CuPy `cuda12x` + Triton image to one CUDA major; verify at startup |
+| Heavy dep leaks into FastAPI backends | 2, 3 | keep `torch`/`cupy` out of `server/` & `underworld/server/` requirements; CI lint = no `import torch/cupy` outside `try/except` (§10.8.5) |
+| Numba/LLVM build failure on new Python | 1 | upper-bound pins, prefer wheels, sklearn fallback for HDBSCAN |
+| Research-code drift (Lag-Llama) | 3 | exact-commit pin or vendoring |
+| Silent over-spend on rented GPU | 3 | cost model (§10.6B) + cache (§10.3.5) + circuit breaker (§10.2A.5) cap waste |
+
 ---
 
 ## 10.8 ACCEPTANCE INVARIANTS (for `11_VALIDATION`)

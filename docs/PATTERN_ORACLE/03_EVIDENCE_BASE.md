@@ -337,6 +337,77 @@ Consolidates the per-technique risk notes from §L into one register: **legal ri
 
 ---
 
+## R. DEEP DIVE — NON-FOUNDATION CLASSES (internals, limits, replicate-risk)
+
+§L profiled the foundation forecasters. This section gives the same engineering depth to classes B–H so each one is replicable from first principles, with explicit failure modes.
+
+### R.1 World models / latent prediction (§B)
+- **Mechanism internals:** A **joint-embedding predictive architecture (JEPA)** trains an encoder `f` and a predictor `g`; given context `x` and a masked/future target `y`, it minimizes `||g(f(x)) − sg(f_target(y))||` in **representation space**, where `f_target` is an **EMA (momentum) copy** of `f` and `sg` is stop-gradient — this avoids representation collapse without negatives and avoids pixel reconstruction cost. DreamerV3 instead learns an **RSSM** (deterministic GRU state + stochastic latent) and trains actor/critic purely on **imagined latent rollouts**. https://arxiv.org/abs/2301.08243 · https://arxiv.org/abs/2301.04104
+- **Why it matters here:** lets us forecast the **embedding** of a future world state and decode only when needed (cheap "imagine forward, score against reality").
+- **Limits / failure modes:** latent forecasts are only as good as the encoder; collapse risk if EMA/stop-gradient tuning is wrong; heavy compute to train an encoder over History Lake.
+- **Replicate-risk:** **R-C** — adopt the *principle*, not a V-JEPA/Dreamer deployment. Legal: research code; engineering: overkill in early phases. https://github.com/facebookresearch/vjepa2
+
+### R.2 Temporal graph & KG forecasting (§C)
+- **Mechanism internals:** event stream `(u,v,t,feat)` → **per-node memory** vector updated by a **GRU memory updater** from **messages** emitted at each interaction; **continuous time** encoded via **Bochner / random-Fourier features** (TGAT) so attention can weight *when* a neighbour occurred; **temporal-graph attention** aggregates recent neighbours into node embeddings used for **link prediction**. xERTE instead does **explainable extrapolation**: iteratively grow a query subgraph, propagate attention, score candidate future entities with an evidence subgraph. https://arxiv.org/abs/2006.10637 · https://arxiv.org/abs/2002.07962 · https://arxiv.org/abs/2012.15537
+- **Limits / failure modes:** memory staleness for inactive nodes; cold-start for unseen relation types; research-license code; must be adapted to our typed graph schema.
+- **Replicate-risk:** **R-B** — reimplement node-memory + Bochner time-encoding + attention on `server/data/ontology.py`; vendor only OSI-clean parts. https://github.com/twitter-research/tgn
+
+### R.3 Clustering / motif / regime discovery (§D)
+- **Mechanism internals:** **Matrix Profile** stores, for each subsequence, the z-normalized Euclidean distance to its nearest non-trivial neighbour; **motifs = global minima**, **discords = global maxima**; computed exactly via **STOMP/SCRIMP++** with **FFT-accelerated** sliding dot-products, incrementally updatable for streaming. **HDBSCAN** builds a mutual-reachability graph, takes its **MST**, condenses the hierarchy, and selects clusters by **stability** (persistence across density thresholds); labels low-density points as noise; **no `k`**. **DTW** is a DP over a cost matrix finding the min-cost monotonic warping path → shift/stretch-invariant similarity. https://github.com/TDAmeritrade/stumpy · https://hdbscan.readthedocs.io · https://doi.org/10.1109/TASSP.1978.1163055
+- **Limits / failure modes:** Matrix Profile needs a chosen window length `m`; DTW is `O(n²)` without bands (use Sakoe-Chiba band); HDBSCAN sensitive to `min_cluster_size`.
+- **Replicate-risk:** **R-A** — all BSD; highest capability-per-effort discovery tools. https://github.com/TDAmeritrade/stumpy
+
+### R.4 Change-point & anomaly detection (§E)
+- **Mechanism internals:** **PELT** minimizes `Σ cost(segment) + β·(#changes)` exactly, **pruning** candidate change points that can never be optimal → ~`O(n)` under linear cost growth. **BOCPD** maintains a posterior over **run length** (time since last change) updated online via a **hazard function** + per-regime predictive model; run-length-posterior spikes flag changes. **Isolation Forest** isolates anomalies in **fewer random splits** → shorter expected path length → higher score; `O(n)` train, no distance metric. https://arxiv.org/abs/1101.1438 · https://arxiv.org/abs/0710.3742 · https://ieeexplore.ieee.org/document/4781136
+- **Limits / failure modes:** PELT needs a cost model + penalty `β` tuning; BOCPD needs a hazard rate + conjugate predictive; IsoForest weak on local/contextual anomalies.
+- **Replicate-risk:** **R-A** — public math + permissive reference impls (`ruptures` BSD-2, sklearn BSD-3). These primitives also sidestep the patent crowding in §N. https://github.com/deepcharles/ruptures
+
+### R.5 Ensemble & uncertainty (§F)
+- **Mechanism internals:** **Error-weighted ensemble** sets member weight `w_i ∝ 1/recent_error_i` (renormalized) — down-weights recently-wrong models; the math is from **expired** WO2014075108A2. **EnbPI** forms distribution-free intervals by bootstrapping/ensembling **leave-one-out residuals** as conformity scores, taking residual quantiles, and updating online — **no exchangeability assumption**; valid coverage around *any* point forecaster. **CopulaCPTS** calibrates **jointly** across dimensions/steps via a **copula** so the *joint* region (not just marginals) has valid coverage. https://patents.google.com/patent/WO2014075108A2/en · https://arxiv.org/abs/2010.09107 · https://arxiv.org/abs/2212.03281
+- **Limits / failure modes:** error-weighting can chase noise if the error window is too short; EnbPI coverage degrades under strong nonstationarity (monitor coverage in skill loop); CopulaCPTS adds copula-fit cost.
+- **Replicate-risk:** **R-A** (error-weighting expired; EnbPI public math/MAPIE); CopulaCPTS **R-B**. https://github.com/scikit-learn-contrib/MAPIE
+
+### R.6 Data assimilation & NWP behaviour (§G)
+- **Mechanism internals:** **EnKF** keeps an **ensemble** of states; at each observation updates with **Kalman gain** `K = Pᶠ Hᵀ (H Pᶠ Hᵀ + R)⁻¹` using the **ensemble-estimated** forecast covariance `Pᶠ`; **covariance localization** (Gaspari-Cohn taper) suppresses spurious long-range correlations from finite ensembles. **GraphCast** is a GNN on an icosahedral mesh doing one autoregressive 6-h step; **GenCast** is a **diffusion** model generating probabilistic ensembles. https://doi.org/10.1029/94JC00572 · https://doi.org/10.1002/qj.49712555417 · https://www.science.org/doi/10.1126/science.adi2336 · https://arxiv.org/abs/2312.15796
+- **Limits / failure modes:** EnKF underestimates spread with small ensembles (needs inflation + localization); GraphCast/GenCast **weights are non-commercial** so we emulate behaviour only.
+- **Replicate-risk:** **EnKF R-A** (public math); **GraphCast/GenCast R-C** (Apache code, CC-BY-NC-SA-4.0 weights — never bundle). https://github.com/google-deepmind/graphcast
+
+### R.7 NL → prediction orchestration (§H)
+- **Mechanism internals:** a **router** LLM classifies intent/domain/target/horizon and dispatches to a **specialist** tool; a **verifier** checks grounding, calibration, and contradictions before return. **LangGraph** provides the state-machine substrate (nodes = agents/tools, edges = control flow, shared state). https://arxiv.org/abs/2509.07571 · https://github.com/langchain-ai/langgraph
+- **Limits / failure modes:** router misclassification cascades; verifier needs explicit calibration checks to add value.
+- **Replicate-risk:** **R-A** — pattern + MIT framework; reuses existing Kimi routing in `server/llm/kimi.py`.
+
+---
+
+## S. CONSOLIDATED REPLICABILITY SCORECARD
+
+One-glance summary of every technique's deploy posture, for the phased build plan (`13_PHASED_BUILD_PLAN.md`). Legend in §0.
+
+| Technique | Class | License posture | Replicate | Deploy phase | Key risk |
+|---|---|---|---|---|---|
+| TimesFM 2.5 | Foundation TS | Apache-2.0 | R-A | 1 | Domain shift |
+| Chronos-Bolt | Foundation TS | Apache-2.0 | R-A | 1 | Quantization on spikes |
+| Lag-Llama | Foundation TS | Apache-2.0 | R-A | 1 | Weaker zero-shot |
+| Toto | Foundation TS | Apache-2.0 | R-A | 2 | Infra-domain bias |
+| Moirai-2 | Foundation TS | uni2ts/verify | R-B | 2 | License + repro |
+| TabPFN-TS | Foundation TS | Custom/verify | R-B | 3 | Weight license |
+| EnbPI | Uncertainty | Public/MAPIE | R-A | 1 | Nonstationarity |
+| CopulaCPTS | Uncertainty | Public/code | R-B | 3 | Copula-fit cost |
+| Error-weighted ensemble | Ensemble | Expired patent | R-A | 1 | Noise-chasing |
+| Matrix Profile / STUMPY | Discovery | BSD-3 | R-A | 1 | Window choice |
+| HDBSCAN | Discovery | BSD-3 | R-A | 1 | min_cluster_size |
+| DTW | Discovery | BSD/perm. | R-A | 1 | O(n²) cost |
+| PELT | Change-point | BSD-2 | R-A | 1 | Penalty tuning |
+| BOCPD | Change-point | Public | R-A | 2 | Hazard choice |
+| Isolation Forest | Anomaly | BSD-3 | R-A | 1 | Local anomalies |
+| EnKF | Assimilation | Public math | R-A | 3 | Spread/inflation |
+| GraphCast/GenCast | NWP | Apache code / NC weights | R-C | reference | Non-commercial weights |
+| TGN/TGAT/xERTE | Temporal graph | Research | R-B | 3 | Schema + license |
+| V-JEPA 2 / DreamerV3 | World model | Research | R-C | reference | Compute / principle-only |
+| Router→Specialist→Verifier | Orchestration | Pattern/MIT | R-A | 1 | Routing cascade |
+
+---
+
 ## K. SOURCE INDEX (all primary URLs, grouped)
 
 **A. Foundation TS:** https://github.com/google-research/timesfm · https://huggingface.co/google/timesfm-2.5-200m-pytorch · https://arxiv.org/abs/2310.10688 · https://github.com/amazon-science/chronos-forecasting · https://arxiv.org/abs/2403.07815 · https://arxiv.org/abs/2511.11698 · https://huggingface.co/Salesforce/moirai-2.0-R-small · https://arxiv.org/abs/2310.08278 · https://github.com/time-series-foundation-models/lag-llama · https://arxiv.org/abs/2505.14766 · https://github.com/DataDog/toto · https://github.com/PriorLabs/tabpfn-time-series
@@ -351,7 +422,8 @@ Consolidates the per-technique risk notes from §L into one register: **legal ri
 **L. Model deep dives:** https://research.google/blog/a-decoder-only-foundation-model-for-time-series-forecasting/ · https://arxiv.org/pdf/2310.10688 · https://www.marktechpost.com/2024/02/12/google-research-introduces-timesfm-a-single-forecasting-model-pre-trained-on-a-large-time-series-corpus-of-100b-real-world-time-points/ · https://arxiv.org/html/2403.07815v1 · https://huggingface.co/amazon/chronos-t5-large · https://huggingface.co/amazon/chronos-t5-small · https://huggingface.co/amazon/chronos-bolt-base · https://arxiv.org/html/2511.11698v1 · https://huggingface.co/Salesforce/moirai-2.0-R-small
 **M/N. Selection & FTO:** https://huggingface.co/google/timesfm-2.5-200m-pytorch · https://github.com/SalesforceAIResearch/uni2ts · https://patents.google.com/patent/US10977551B2/en
 **P. Benchmarks/leaderboards:** https://arxiv.org/abs/2410.10393 · https://huggingface.co/spaces/Salesforce/GIFT-Eval · https://www.salesforce.com/blog/gift-eval-time-series-benchmark/ · https://forecastingdata.org/ · https://arxiv.org/abs/2105.06643 · https://huggingface.co/datasets/Monash-University/monash_tsf · https://www.datadoghq.com/blog/ai/toto-boom-unleashed/ · https://confluence.ecmwf.int/display/FUG/Section+12+Verification
+**R. Non-foundation deep dives:** https://arxiv.org/abs/2301.08243 · https://arxiv.org/abs/2301.04104 · https://arxiv.org/abs/2002.07962 · https://arxiv.org/abs/2012.15537 · https://doi.org/10.1109/TASSP.1978.1163055 · https://ieeexplore.ieee.org/document/4781136 · https://doi.org/10.1002/qj.49712555417
 
 ---
 
-*End of `03_EVIDENCE_BASE.md`. Cross-refs: `00_MASTER_INDEX.md` (§0 non-negotiables, §1.3 replicate-first, §2 architecture), `06_ALGORITHMS.md` (math/pseudocode per method), `12_SECURITY_GOVERNANCE_LEGAL.md` (FTO/license compliance). Verification date: June 2026 — re-verify patent legal status and gated-weight licenses before any commercial deployment.*
+*End of `03_EVIDENCE_BASE.md`. Sections: A–K (original evidence base) + L (foundation-model deep dives) + M (model-selection decision matrix) + N (expanded patent FTO ledger) + O (replicate-in-our-repo mapping) + P (benchmark/leaderboard references) + Q (risks-of-replication register) + R (non-foundation deep dives) + S (consolidated replicability scorecard). Cross-refs: `00_MASTER_INDEX.md` (§0 non-negotiables, §1.3 replicate-first, §2 architecture), `06_ALGORITHMS.md` (math/pseudocode per method), `11_VALIDATION_AND_TEST_PLAN.md` (benchmarks), `12_SECURITY_GOVERNANCE_LEGAL.md` (FTO/license compliance), `13_PHASED_BUILD_PLAN.md` (deploy phases), `14_RISKS_AND_LIMITS.md` (risk register). Verification date: June 2026 — re-verify patent legal status and gated-weight licenses before any commercial deployment.*
