@@ -10512,5 +10512,22 @@
     "epoch": "any",
     "name": "Dog Sled",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:electric_car": {
+    "prompt": "a sleek modern electric car with a charging port, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7767f9ed-61ae-4226-99fb-98d2378f5aec",
+    "path": "/models/generated/tripo/electric_car.glb",
+    "bytes": 11450636,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/7767f9ed-61ae-4226-99fb-98d2378f5aec/tripo_pbr_model_7767f9ed-61ae-4226-99fb-98d2378f5aec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNzc2N2Y5ZWQtNjFhZS00MjI2LTk5ZmItOThkMjM3OGY1YWVjL3RyaXBvX3Bicl9tb2RlbF83NzY3ZjllZC02MWFlLTQyMjYtOTlmYi05OGQyMzc4ZjVhZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=hVguFgTfWstSYW6Tn18SPdM4w1b7mOFxlwftqgOGw9MgHslGE5uWdcxoI-IOStWIqgirI0zBIK48yJCw-x630CYBzKRfIYiD4wA~BD4xjNhvQob1f3KF8jgSv7cN0evfJPKXvS~RUJf7TeZc0L5cwminMj93GOKhLHA~sYg5UoRliuhydIolnRJstlrtoAYUbCn8D4NepYQMbPeHNVEvVAxymvZYQXGe3wB6TCKuSS990WSwm36P65KhCkslpjOYFkWmAHeutUICuwfcwefQwKQ5EQTOgjryHxLwEBHMfA5C3e~ieceI-ZiJ7BzQ1L4E9FEM4blc1YxXJ3TTVyk4Rw__",
+    "asset_id": "electric_car",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "quantum",
+    "name": "Electric Car",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
