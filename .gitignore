@@ -50,3 +50,5 @@ __pycache__/
 *.pyc
 sandbox-ca.crt
 server/data/oracle_model.joblib
+underworld/data/*.db
+underworld/data/*.db-*

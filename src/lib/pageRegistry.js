@@ -22,8 +22,10 @@ export const GROUPS = [
   { id: "intel",     label: "INTEL",           color: "#00c878" },
   { id: "command",   label: "COMMAND",         color: "#0096d4" },
   { id: "cognition", label: "COGNITION",       color: "#a855f7" },
+  { id: "sensors",   label: "SENSORS",         color: "#0096d4" },
   { id: "apex",      label: "APEX CORE",       color: "#f07820" },
   { id: "knowledge", label: "KNOWLEDGE",       color: "#e8a800" },
+  { id: "platform",  label: "PLATFORM",        color: "#0096d4" },
   { id: "war",       label: "WAR",             color: "#e8203c" },
   { id: "wealth",    label: "WEALTH & SYSTEM", color: "#566878" },
 ];
@@ -71,6 +73,17 @@ export const PAGES = [
     aliases: ["science", "methods", "compute"],
     component: P(() => import("@/pages/ScienceConsole")) },
 
+  // ── SENSORS (curated slices of the bridged 449-method science engine) ────
+  { name: "SensorGrid", label: "Sensor Grid", icon: "🛰️", group: "sensors",
+    aliases: ["sensor", "ppm", "buoy", "ocean", "air", "seismic", "hydrology"],
+    component: P(() => import("@/pages/SensorGrid")) },
+  { name: "SkyOrbital", label: "Sky / Orbital", icon: "☄️", group: "sensors",
+    aliases: ["sky", "meteor", "flight", "orbital", "satellite", "asteroid", "aero"],
+    component: P(() => import("@/pages/SkyOrbital")) },
+  { name: "RFSpectrum", label: "RF / Spectrum", icon: "📡", group: "sensors",
+    aliases: ["rf", "spectrum", "sonar", "frequency", "signal", "acoustics"],
+    component: P(() => import("@/pages/RFSpectrum")) },
+
   // ── APEX CORE ──────────────────────────────────────────────────────────
   { name: "ApexCore", label: "Apex Core", icon: "◉", group: "apex",
     component: P(() => import("@/pages/ApexCore")) },
@@ -92,6 +105,20 @@ export const PAGES = [
     component: P(() => import("@/pages/KGIKLedger")) },
   { name: "TCIS", label: "TCIS", icon: "⟁", group: "knowledge",
     component: P(() => import("@/pages/TCIS")) },
+
+  // ── PLATFORM (Wave-1 backends: ontology · search · ops · graph) ──────────
+  { name: "OntologyManager", label: "Ontology Manager", icon: "🗃️", group: "platform",
+    aliases: ["ontology", "objects", "entities"],
+    component: P(() => import("@/pages/OntologyManager")) },
+  { name: "SearchHub", label: "Search Hub", icon: "🔎", group: "platform",
+    aliases: ["search", "find", "resolve"],
+    component: P(() => import("@/pages/SearchHub")) },
+  { name: "Operations", label: "Operations", icon: "🚨", group: "platform",
+    aliases: ["alerts", "rules", "cases", "ops"],
+    component: P(() => import("@/pages/Operations")) },
+  { name: "GraphOps", label: "Graph Ops", icon: "🕸️", group: "platform",
+    aliases: ["graph", "bridge", "pagerank", "optimize", "counterfactual"],
+    component: P(() => import("@/pages/GraphOps")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",

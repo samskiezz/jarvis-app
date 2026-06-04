@@ -1,0 +1,8 @@
+# PATTERN ORACLE GPU tier — runtime deps for the inference server.
+# torch is NOT pinned here: the Docker base image (pytorch/pytorch:*-cuda12*)
+# already ships a CUDA-enabled torch. If you `pip install` outside that image,
+# install the right torch build first (https://pytorch.org/get-started/locally/).
+fastapi>=0.115
+uvicorn[standard]>=0.32
+numpy>=1.26
+# torch>=2.2   # provided by the CUDA base image; uncomment for a bare pip install

@@ -19,6 +19,15 @@ CORS_ORIGINS = [
     if o.strip()
 ]
 
+# ── Optional GPU prediction tier (PATTERN ORACLE accelerator) ─────────────────
+# When PREDICT_GPU_URL is set, the JARVIS side dispatches forecasts to a remote
+# PyTorch+CUDA inference server (see deploy/gpu/). Empty (default) => everything
+# runs locally on CPU, unchanged. PREDICT_GPU_KEY is an optional bearer token;
+# PREDICT_GPU_MODEL names the remote model variant to request (informational).
+PREDICT_GPU_URL = os.environ.get("PREDICT_GPU_URL", "")
+PREDICT_GPU_KEY = os.environ.get("PREDICT_GPU_KEY", "")
+PREDICT_GPU_MODEL = os.environ.get("PREDICT_GPU_MODEL", "")
+
 USGS_FEED = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 # open.er-api.com: free, no API key, daily FX rates with AUD/USD/AED/etc.
 FX_FEED = "https://open.er-api.com/v6/latest/AUD"

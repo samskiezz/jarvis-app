@@ -119,6 +119,34 @@ def _make_forecaster(model: str, *, fast: bool = False):
     return ShortHorizonForecaster(), "short_horizon"
 
 
+def _maybe_gpu_forecast(
+    series: Sequence[dict], horizon_steps: int, *, confidence: float = 0.9
+) -> Optional[dict]:
+    """Best-effort remote GPU forecast (env-gated, transparent).
+
+    Returns the remote forecast dict (in the same ``MLForecaster.predict_next``
+    schema) when ``PREDICT_GPU_URL`` is set AND the remote call succeeds with a
+    usable ``point``; otherwise returns ``None`` to signal "use the local model".
+    NEVER raises — a broken GPU box must never break a forecast. No torch import,
+    no network unless the operator opted in.
+    """
+    try:
+        from . import gpu_client
+    except Exception:  # noqa: BLE001 - defensive
+        return None
+    if not gpu_client.gpu_configured():
+        return None
+    try:
+        out = gpu_client.remote_forecast(
+            series, int(max(1, horizon_steps)), confidence=confidence
+        )
+    except Exception:  # noqa: BLE001 - belt-and-suspenders; client already guards
+        return None
+    if not isinstance(out, dict) or out.get("status") != "ok" or out.get("point") is None:
+        return None
+    return out
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # 1. ISSUE
 # ══════════════════════════════════════════════════════════════════════════════
@@ -161,9 +189,24 @@ def issue_forecast(
     ts = ts if len(ts) == len(values) else None
     last_value = values[-1]
 
-    fc, model_name = _make_forecaster(model, fast=fast)
-    train_rep = fc.train(data, horizon_steps=h)
-    out = fc.predict_next(data, horizon_steps=h, confidence=confidence)
+    # Optional GPU accelerator (env-gated, best-effort). When PREDICT_GPU_URL is
+    # set we try the remote PyTorch+CUDA forecaster first; on any miss we fall
+    # back to the local forecaster below. ``compute`` records which path ran.
+    compute = "cpu"
+    out: Optional[dict] = None
+    train_rep: Any = None
+    model_name = model
+    gpu_out = _maybe_gpu_forecast(data, h, confidence=confidence)
+    if gpu_out is not None:
+        out = gpu_out
+        compute = "gpu"
+        model_name = out.get("model", "gpu_remote")
+        train_rep = {"status": "remote_gpu", "model": model_name}
+
+    if out is None:
+        fc, model_name = _make_forecaster(model, fast=fast)
+        train_rep = fc.train(data, horizon_steps=h)
+        out = fc.predict_next(data, horizon_steps=h, confidence=confidence)
 
     if not isinstance(out, dict) or out.get("status") != "ok" or out.get("point") is None:
         return {
@@ -196,6 +239,7 @@ def issue_forecast(
         "forecaster": out.get("model", model_name),
         "prob_up": prob_up,
         "method": out.get("method"),
+        "compute": compute,
     }
 
     fid = _hl.record_forecast(
@@ -230,6 +274,7 @@ def issue_forecast(
         "confidence": conf,
         "prob_up": prob_up,
         "baseline": last_value,
+        "compute": compute,
     }
 
 
