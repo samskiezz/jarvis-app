@@ -44,9 +44,9 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 37 | ☑ | server/services/analyst.py | 144 |
 | 38 | ☐ | server/services/backtest.py | 315 |
 | 39 | ☑ | server/services/corpus.py | 53 |
-| 40 | ☐ | server/services/forecaster.py | 567 |
+| 40 | ☑ | server/services/forecaster.py | 567 |
 | 41 | ☐ | server/services/forecaster_ml.py | 624 |
-| 42 | ☐ | server/services/forward_test.py | 587 |
+| 42 | ☑ | server/services/forward_test.py | 587 |
 | 43 | ☑ | server/services/history_lake.py | 622 |
 | 44 | ☑ | server/services/ingestion.py | 193 |
 | 45 | ☑ | server/services/live_intel.py | 146 |
@@ -54,7 +54,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 47 | ☐ | server/services/prediction.py | 1187 |
 | 48 | ☐ | server/services/scrapers.py | 185 |
 | 49 | ☑ | server/services/simulation.py | 783 |
-| 50 | ☐ | server/services/train_sp500.py | 425 |
+| 50 | ☑ | server/services/train_sp500.py | 425 |
 | 51 | ☑ | server/tests/__init__.py | 0 |
 | 52 | ☐ | server/tests/test_forecaster.py | 137 |
 | 53 | ☐ | server/tests/test_forecaster_ml.py | 149 |
@@ -717,3 +717,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/services/simulation.py` — tactical sim engine; GameSim dataclass (L80); counterstrike full round loop buy/live/planted/over + LOS combat + plant/defuse (L201-453); panopticon agent-vs-intruder grid w/ vision cones, alert escalation, breaches (L455-667); get_game/snapshot (L772-783); 2 games registered (L752)
 
 - `server/services/history_lake.py` — P0 SQLite store (stdlib sqlite3, WAL); 6 tables series/observation/feed_run/forecast/realized_outcome/skill_score (SCHEMA L55); deterministic series ids (L163); idempotent upsert_series/write_observations; record_forecast/record_outcome; score_due_forecasts self-scoring (L500, abs/sq err+coverage+skill-vs-baseline); skill_summary (L573); init_db on import (L622)
+## BATCH — server ML (read in full)
+- `server/services/forecaster.py` — ShortHorizonForecaster: trained ridge (closed-form L2, L195) on lagged log-return features (L105) + GBM member, error-weighted ensemble (L361 weight∝1/err^gamma), EnbPI conformal interval (L532 half-width=conf-quantile of held-out abs residuals); prob_up blends GBM MC + logistic (L541); honest insufficient_data
+- `server/services/forward_test.py` — live closed loop: issue_forecast persists w/ resolve_ts (L125), resolve_value fetches realized AT/AFTER target — never fabricates (L239), score_due delegates to history_lake.score_due_forecasts + directional rollup (L279/334), forward_test_loop opt-in (L397), simulate_forward_test deterministic replay no-leakage (L476)
+- `server/services/train_sp500.py` — pooled cross-sectional S&P500: build_dataset pools causal feature rows across tickers w/ strict GLOBAL time-split no-leakage (L226), train_global one HistGBR point+quantile members (L260), evaluate_global honest level/dir/coverage/skill + per-sector (L330); explicit honesty docstring ~50% not 99% (L14)
