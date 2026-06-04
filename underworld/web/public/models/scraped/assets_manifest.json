@@ -11141,5 +11141,22 @@
     "epoch": "iron",
     "name": "Morning Star",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:musket": {
+    "prompt": "a long-barrelled flintlock musket with a bayonet, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f78bdbaa-80e7-4739-af50-3a8a8d7a64c7",
+    "path": "/models/generated/tripo/musket.glb",
+    "bytes": 3229584,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f78bdbaa-80e7-4739-af50-3a8a8d7a64c7/tripo_pbr_model_f78bdbaa-80e7-4739-af50-3a8a8d7a64c7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjc4YmRiYWEtODBlNy00NzM5LWFmNTAtM2E4YThkN2E2NGM3L3RyaXBvX3Bicl9tb2RlbF9mNzhiZGJhYS04MGU3LTQ3MzktYWY1MC0zYThhOGQ3YTY0YzcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Zc2N5~cgYK524A2c49aUFWkxASX-qajVe0oY4oZUfYlVZq3go1-Vv1WWOf0vUhJ6jnkTRwCyNTB-ftX2IPmU7uOJBMRbHsJMIpjiPck7iOuzmpmW1sEL3Ok146o3kyaG8AiPLAYJ3S9~TQPzFQ1uSRKKv5J2H96j25NLVeKQw8GGfKzGbKgB~aSL9ekr6kOGxcDInUKWfAvQsejtDJaBdu88DzKYZV~wpYIsyMuYCKXqVQF1CoY~nQG4kgtTklHEcFjHDnjvcTDKmxmAMw--gCZFkhu4D9xGe~Jl9uRL3Qau4o8xDz~pkedx9~ZnGQ97vKAmDyUJ2HSdFprtNEyrRQ__",
+    "asset_id": "musket",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Musket",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
