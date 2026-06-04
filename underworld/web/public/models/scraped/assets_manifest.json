@@ -8880,5 +8880,22 @@
     "epoch": "iron",
     "name": "Battlement Segment",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:brick_paving_tile": {
+    "prompt": "a modular herringbone brick paving tile, seamless, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c9bf90d3-2f8e-4357-bb47-8d86ad60149c",
+    "path": "/models/generated/tripo/brick_paving_tile.glb",
+    "bytes": 14821052,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c9bf90d3-2f8e-4357-bb47-8d86ad60149c/tripo_pbr_model_c9bf90d3-2f8e-4357-bb47-8d86ad60149c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzliZjkwZDMtMmY4ZS00MzU3LWJiNDctOGQ4NmFkNjAxNDljL3RyaXBvX3Bicl9tb2RlbF9jOWJmOTBkMy0yZjhlLTQzNTctYmI0Ny04ZDg2YWQ2MDE0OWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=SYnQgAvlRH7TbPe7ut3WLNVxJCEGLaOYBp6TB6WSX7wpkkbcDpPJpvdB7yiSmROhircpTVMymUMkZ0L1B-3CwNvoSU6jeNCrS8p8hf2YGoWl9b0X08Zaa9O5ef04DlbGk7xdMZEwjIS6SYb6ZXcn~hmkwly1GAT9CPj-0XDy67FSbTcBx21F-H8exQcCHM0HjRXMXBcg5PX2By2W8iw-PDNzRRkWzx5pGYB9FKrlhnGaMCd6BssaGg738hE3~UNHIfoE0g4hpVMvZ5iJcIdtTU-DnG1G1MNOBdShXQf99tRY6uiC1Ps3Mbcbcfgt75-87bCL9U6OYw5t2zXW9qas3w__",
+    "asset_id": "brick_paving_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Brick Paving Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
