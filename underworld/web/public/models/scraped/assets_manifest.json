@@ -11685,5 +11685,22 @@
     "epoch": "any",
     "name": "Wooden Crate Stack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:woodpile": {
+    "prompt": "a neatly stacked pile of firewood, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b372cbda-53aa-4d28-9181-3276092dbf34",
+    "path": "/models/generated/tripo/woodpile.glb",
+    "bytes": 15106136,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/b372cbda-53aa-4d28-9181-3276092dbf34/tripo_pbr_model_b372cbda-53aa-4d28-9181-3276092dbf34.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYjM3MmNiZGEtNTNhYS00ZDI4LTkxODEtMzI3NjA5MmRiZjM0L3RyaXBvX3Bicl9tb2RlbF9iMzcyY2JkYS01M2FhLTRkMjgtOTE4MS0zMjc2MDkyZGJmMzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=OHyaHXyBH1FBvCDBbsNWm~HMF1KMbGufn3gjA-orMqq2QyU0SF4J1iBnNSS08SnE2QGsfvKJzqqeVatfdhQsvhdmMWcQerDNr5c1u~kWlDWfflct3PdfODX~Mb~nO-zgBxTWeY9qJLyOyrjHCvftXxz-YPDvk8w63iiByr14NSAaoVx-WvjUSz7egms4n1ffLQAs0BgQyVxYDQ90gBWASQSrA9xHXRwmb5fNPTO8eukeWG1ZDm6FYbO-8E46c4wNATxaZxEtgLHtweDXl2DtoXMpzWenFPkK8dRW21CZvDHSNrfp-KwptCpDbDKCvegqro5Vc7Bwbbg054AxHUk9Vw__",
+    "asset_id": "woodpile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Woodpile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
