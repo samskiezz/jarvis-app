@@ -10325,5 +10325,22 @@
     "epoch": "any",
     "name": "Tree Maple Autumn",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_olive": {
+    "prompt": "a gnarled silver-leaved olive tree, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d37db21c-c0dc-4b0a-b1c5-f75280ee3dcd",
+    "path": "/models/generated/tripo/tree_olive.glb",
+    "bytes": 15842356,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d37db21c-c0dc-4b0a-b1c5-f75280ee3dcd/tripo_pbr_model_d37db21c-c0dc-4b0a-b1c5-f75280ee3dcd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDM3ZGIyMWMtYzBkYy00YjBhLWIxYzUtZjc1MjgwZWUzZGNkL3RyaXBvX3Bicl9tb2RlbF9kMzdkYjIxYy1jMGRjLTRiMGEtYjFjNS1mNzUyODBlZTNkY2QuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=bjJXFmhSo0I9OaoGCpyImOagHPt4p-OQAonDslHVD4QK7sbN5tlG8ldhDf0vlH86XCohen577DPLO9D0bf3vM8LMz1CUQi3d81j6qI8w5rs9gJM~so82nEh-ST7GgENYw7lMJJq0id72yNtHxJWSueeADkLMjk33sK0u5mXGyZd3zEkJlhE-bsvJ8ab7su~X97iRgQ55WFNT7JoNGymJljiNTPGIKloNjfqT9h0QYUtaRa9j~RDK7yKskKL320DkUT6eL4oRSLspCWmEHGaHHyejyeQlQqOn8ttwSuKo3w42QB1K1gs1lbIRNVChHu6WXMzqkgAZ2qCrVSJsVYTHfQ__",
+    "asset_id": "tree_olive",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Olive",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
