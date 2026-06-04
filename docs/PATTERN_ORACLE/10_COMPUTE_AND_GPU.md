@@ -347,6 +347,30 @@ feasible_realtime    = sustained_ticks_per_sec >= 1.0
 
 > Honest caveat: `gens_per_sec_per_gpu` is a **published-benchmark projection**, exactly as `scale_bench` notes for FLAME GPU 2 / vLLM. It MUST be replaced with a measured `benchmark()`-style number once a real inference server runs (see §10.7).
 
+### 10.4.4 Per-pipeline FLOPs / memory / latency budgets (formulas)
+
+The budgets in §10.4.1 are *targets*; this section gives the **formulas** that explain them and let an operator predict whether a given workload fits a given backend. Notation: `S` = number of series, `L` = context length (points), `H` = horizon, `d` = embedding/feature dim, `E` = EnKF ensemble members, `n` = state dimension, `P` = Monte-Carlo paths, `B` = batch size, `f` = sustained device FLOP/s (effective, not peak). All FLOP counts are leading-order (drop constants).
+
+| Pipeline | FLOPs (leading order) | Peak working memory | Latency model |
+|---|---|---|---|
+| Classical forecast (GBM Monte-Carlo + Holt) | `≈ P·H` RNG+update per series; ARIMA fit `≈ L·p²` (p=order) | `O(P·H)` paths buffer (f32) | `t ≈ (P·H)/f_cpu + fit_const`; tune `P` to hold ≤300 ms |
+| Cross-series correlation matrix | `≈ S²·L` (each pair dot over L) | `O(S²)` corr + `O(S·L)` input | `t ≈ S²·L / f`; T0→T1 crossover when `S²·L/f_cpu > budget` |
+| Pairwise distance matrix (regime/motif) | `≈ S²·d` (or `N²·d` over N windows) | `O(S²)` distances | `t ≈ S²·d / f`; embarrassingly parallel → near-linear GPU speedup |
+| EnKF assimilation step | covariance `≈ E·n²` + Kalman gain solve `≈ n³` (or `n·m²` obs-space) | `O(n² + E·n)` | `t ≈ (E·n² + n³)/f`; covariance-dominated for large `E` |
+| Matrix-Profile (STUMP-style) | `≈ L²` naive sliding dot; `≈ L·log L` with FFT MASS | `O(L)` profile + `O(L)` index | `t ≈ L²/f` (naive) — the prime CuPy/STUMPY-cuda target |
+| Batched Monte-Carlo (all series) | `≈ S·P·H` | `O(S·P·H)` f32 (chunk if > VRAM) | `t ≈ S·P·H / f` |
+| Foundation TS transcript (transformer) | `≈ B·(L+H)·d² · n_layers` (attention+FFN) | weights + KV `O(B·(L+H)·d·n_layers)` | remote; `t ≈ compute/f_gpu + network_RTT` |
+
+**Crossover rule (T0→T1):** escalate a kernel to CuPy when its modeled CPU time exceeds its pipeline budget, i.e. `FLOPs / f_cpu > budget_ms·1e-3`. With `f_cpu ≈ 50 GFLOP/s` (vectorised NumPy, single box) and `f_gpu ≈ 10–30 TFLOP/s` (A6000 f32, effective), the correlation/distance/EnKF kernels cross over around **a few hundred series** — exactly the §10.4.1 note. Memory crossover: if `peak_working_memory > VRAM_free` the kernel must **chunk** (tile the S×S or S·P·H array); the chunk size is `VRAM_free / bytes_per_element` rounded to a tile.
+
+**f32 discipline (from `scale_bench.make_state`):** all device arrays are **float32** (`make_state` casts every array to `f32` "to halve VRAM and double GPU throughput"). This halves every memory figure above versus f64 and is the default for all T1 kernels and the `bytes_per_minion`-style accounting `benchmark()` returns.
+
+**Effective-`f` calibration:** `f` in these formulas is **not** datasheet peak. The honest way to obtain it is the `scale_bench.benchmark()` pattern: time a warmed kernel with `backend.synchronize()` around the loop, then `f_effective = measured_FLOPs / seconds`. Until measured, use the conservative constants above and flag every derived budget as a projection (same caveat as `llm_capacity`).
+
+### 10.4.5 Worked memory sizing — single-GPU colocation
+
+Total VRAM demand = `Σ model_weights + Σ runtime/KV + peak T1 working set`. Using §10.4.2: TimesFM 2.5 (~1–2 GB) + Chronos-Bolt base (~1 GB) + Lag-Llama (~0.5 GB) + a temporal GNN (~1–2 GB) ≈ **4–6 GB of weights**. Dynamic-batching KV/activation at `max_batch=64`, `L+H≈1024`, `d≈1280` adds low single-digit GB. That leaves an A6000 (48 GB) or A100 (40/80 GB) with **tens of GB free** for T1 CuPy working sets — confirming §10.4.2/§10.5.2: the whole foundation-TS suite colocates on one GPU with room to spare.
+
 ---
 
 ## 10.5 DEPLOYMENT OPTIONS — GPU TIER

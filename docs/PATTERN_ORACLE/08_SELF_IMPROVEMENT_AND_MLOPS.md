@@ -1362,3 +1362,86 @@ This document grew two layers: the **contract layer** (§§0–9, the falsifiabl
 | §7.6–7.8 Observability spec | §7 (metrics/dashboards/alerts) | §1.3, §3 surfaces |
 
 Reading order for a new engineer: contract layer first (what must be true), then the depth section matching the subsystem they're building. Every depth section ends with a worked example or trace that the validation suite (§8, `11_VALIDATION_AND_TEST_PLAN.md`) can assert against, so the math is not just described but **checkable**.
+
+---
+
+## 17. PARAMETERS, THRESHOLDS & SYMBOLS (single source of truth)
+
+Every tunable in this document, with its default, scope, and defining section. Defaults are starting points; all are **per-target tunable** unless marked *global*. Values that mirror reused code are tagged `[reuse]` with the source so the document and the codebase cannot silently diverge.
+
+### 17.1 Loop & cycling
+| Symbol / param | Default | Scope | Section | Meaning |
+|---|---|---|---|---|
+| matcher tick | 5 min | global | §1.2 | outcome-matcher poll interval |
+| `MATCH_TOLERANCE` | 60 s (FX) … 1 h (daily) | target | §1.2 | slack between `due_at` and nearest obs |
+| `GRACE_WINDOW` | per target | target | §1.2 | wait before declaring `unmatchable` |
+| cycle cadence | 5–15 min / hourly / nightly | target class | §2.1 | re-forecast cadence by data velocity |
+
+### 17.2 Skill metrics
+| Symbol | Default | Section | Meaning |
+|---|---|---|---|
+| `α` | 0.10 (→90% PI) | §1.3 | miscoverage target |
+| `fair` (CRPS) | True for `m<20` | §1.5.1 | unbiased ensemble CRPS estimator |
+| `|CE|` accept band | 0.05 | §1.3.4 | coverage-error tolerance |
+| baseline | persistence (HF) / climatology (seasonal) | §1.3.5 | harder baseline used for headline |
+| `ACCEPT_SS` | 0.05 | §6.4 | min CRPSS to accept a build |
+
+### 17.3 Drift surfaces
+| Symbol | Default | Section | Meaning |
+|---|---|---|---|
+| PSI alarm | 0.2 | §3.1 | `[reuse]` ai_models.py:82 `drift>0.2` |
+| PSI watch band | 0.1–0.2 | §3.1 | moderate (WATCH) |
+| ECE alarm | 0.1 | §3.2 | `[reuse]` ai_models.py:94 `ece<0.1` |
+| KS p-value alarm | 0.01 | §3.3 | residual distribution shift |
+| `λ` (BOCPD hazard) | 250 ticks | §3.4.1 | expected run length |
+| `CP_THRESHOLD` | 0.5 | §3.4 | `P(r_t=0)` to declare changepoint |
+| `drift_score` page | 0.5 | §3.6 | rolled-up alarm (A-DRIFT) |
+
+### 17.4 Re-weighting (online ensemble)
+| Symbol | Default | Section | Meaning |
+|---|---|---|---|
+| `β` (EWMA) | 0.9 (window ~10) | §12.1 | error-memory decay |
+| `γ` (sharpness) | 1.0 (cap `γ_max=3`) | §12.2 | weight concentration |
+| `ε` | 1e-9 | §12.2 | divide-by-zero guard |
+| `w_min` | 0.01 | §12.2 | weight floor (recovery) |
+| `ρ` (participation decay) | 0.95/missed cycle | §12.4 | silent-member down-weight |
+| `t_warm` | 10 | §12.1 | bias-correction warmup |
+
+### 17.5 Retrain / champion-challenger / canary
+| Symbol | Default | Section | Meaning |
+|---|---|---|---|
+| T1 skill-drop | 15% vs 30-cycle median, or <0 for 3 cycles | §4.2 | retrain trigger |
+| T5 new-data | 500 outcomes | §4.2 | scheduled refit |
+| T6 staleness | 30 d | §4.2 | `MAX_AGE` refit |
+| `M` (eval sample) | 30 / horizon | §4.3 | min scored before promotion |
+| `δ` (promo margin) | 0.02 | §4.3 | min CRPSS edge over champion |
+| canary stages | 5→25→50→100% | §11.2 | ramp fractions |
+| dwell D1–D3 / D4 | 24 h / 48 h soak | §11.2 | per-stage hold |
+| rollback CE | 0.08 | §10.4 R2 | canary coverage kill |
+| `COOLDOWN` | 7 d | §11.4 | re-ramp lockout |
+
+### 17.6 KGIK learning
+| Symbol | Default | Section | Source |
+|---|---|---|---|
+| `PRIOR_CONF` | 0.5 | §13.1 | `[reuse]` CausalBelief default (models.py:493) |
+| `PROMOTE_MIN` | 3 | §13.1 | `[reuse]` `MIN_TRIALS_TO_ACT` (reasoning.py:19) |
+| `PROMOTE_CONF` | 0.66 | §13.1 | ≈ `ACT_CONFIDENCE` 0.6 (reasoning.py:20) |
+| Laplace rule | `(c+1)/(t+2)` | §13.4 | `[reuse]` `_confidence` (reasoning.py:32) |
+| `TAU_DAYS` | 30 (half-life ≈20.8 d) | §13.5 | exponential decay constant |
+| `PRUNE_THRESHOLD` | 0.40 | §13.1 | `[reuse]` reflect `<0.4` (reasoning.py:83) |
+| `HARD_PRUNE` | 0.20 | §13.1 | archive threshold |
+| `K_STALE_TRIALS` | 5 | §13.1 | trials_since_confirm before demotion |
+
+### 17.7 Backtest & trend
+| Symbol | Default | Section | Meaning |
+|---|---|---|---|
+| mode | expanding (stable) / rolling (regime-prone) | §6.1 | window policy |
+| `embargo` | `L_max` (feature lookback) | §14.1 | train/test gap |
+| CPCV `(N,k)` | per acceptance run | §14.3 | combinatorial paths |
+| `N` (trend window) | 20 cycles | §6.5 | trend-test horizon |
+| `ε` (slope CI floor) | 0.001/cycle | §6.5 | non-decline tolerance |
+
+### 17.8 Symbol legend
+`ŷ` point forecast · `y` truth · `[L,U]` prediction interval · `F` predictive CDF · `x_k` member-`k` prediction · `m` ensemble size · `w_k` member weight · `Ē_k` EWMA error · `e_i` residual `y−ŷ` · `r_t` BOCPD run length · `S` negatively-oriented score · `SS`/`CRPSS` skill score · `PICP`/`MPIW`/`CE` coverage probability / mean width / coverage error · `E` KGIK edge · `H` challenger / hazard (by context) · `C` champion · `p` canary traffic fraction.
+
+This table is the contract: if code and document disagree on any `[reuse]` value, the **code** (ai_models.py / reasoning.py / models.py) is authoritative and this document is the bug.

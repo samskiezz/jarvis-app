@@ -1605,6 +1605,131 @@ X→Y if ρ[L] increases with L and saturates high
 
 **Source.** Sugihara et al. 2012, *Detecting Causality in Complex Ecosystems*, *Science*; https://doi.org/10.1126/science.1227079 · pyEDM https://github.com/SugiharaLab/pyEDM
 
+#### E16.+ DEPTH MILESTONE
+
+**Full derivation (Takens).** Takens' embedding theorem: for a generic observation function on a `q`-dimensional attractor, the delay map `Ŷ(t)=[Y_t, Y_{t−τ}, ..., Y_{t−(E−1)τ}]` with `E>2q` is a diffeomorphism onto a reconstruction (shadow) manifold `M_Y` that preserves the attractor's topology. If `X` and `Y` belong to the *same* dynamical system and `X` drives `Y`, then information about `X` is encoded in `Y`'s trajectory, so `M_Y` can recover `X`'s states — **cross-mapping**. The estimator finds the `E+1` simplex neighbors of `Ŷ(t)` (minimal set to bound a simplex in `E`-space), weights them by `w_i=exp(−d_i/d_1)/Σexp(...)` (normalized, `d_1`=nearest distance), and predicts `X̂(t)=Σ w_i X(t_i)`. **Convergence** — `ρ(L)=corr(X̂,X)` rising and saturating as library length `L→T` — is the signature of causation: more data fills `M_Y` so the local neighborhoods shrink and prediction improves. Direction asymmetry (`X→Y` converges but `Y→X` doesn't) distinguishes driver from response. Note the (initially counterintuitive) direction: `X` causing `Y` means `X` is *cross-mappable from* `M_Y`.
+
+**Runnable-quality pseudocode.**
+```python
+def ccm(X, Y, *, E=3, tau=1, lib_sizes=None, seed=0):
+    import numpy as np
+    from scipy.spatial import cKDTree
+    rng = np.random.default_rng(seed)
+    X = (np.asarray(X,float)-np.mean(X))/(np.std(X) or 1)
+    Y = (np.asarray(Y,float)-np.mean(Y))/(np.std(Y) or 1)
+    def embed(Z):
+        idx = np.arange((E-1)*tau, len(Z))
+        return np.column_stack([Z[idx - k*tau] for k in range(E)]), idx
+    MY, tidx = embed(Y)                      # cross-map X from M_Y
+    Xt = X[tidx]
+    if lib_sizes is None:
+        lib_sizes = np.linspace(E+2, len(MY), 8, dtype=int)
+    rhos = []
+    for L in lib_sizes:
+        lib = rng.choice(len(MY), L, replace=False)
+        tree = cKDTree(MY[lib])
+        d, nn = tree.query(MY, k=E+1)
+        d = np.maximum(d, 1e-12)
+        w = np.exp(-d / d[:, :1]); w /= w.sum(1, keepdims=True)
+        Xhat = (w * Xt[lib][nn]).sum(1)
+        rhos.append(float(np.corrcoef(Xhat, Xt)[0, 1]))
+    converges = rhos[-1] > rhos[0] + 0.1 and rhos[-1] > 0.3
+    return {"lib_sizes": list(map(int, lib_sizes)), "rho": rhos,
+            "converges": bool(converges)}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `E` | int | 3 | 1–10 | embedding dim | pick max simplex-projection skill |
+| `tau` | int | 1 | 1–20 | delay | first ACF/mutual-info minimum |
+| `lib_sizes` | list | E+2..T | — | convergence sweep | dense near small L |
+| neighbors | int | E+1 | E+1 | simplex size | fixed by theory |
+
+**Worked numeric example.** Coupled logistic map `X_{t+1}=X_t(3.8−3.8X_t−0.02Y_t)`, `Y_{t+1}=Y_t(3.5−3.5Y_t−0.1X_t)` (X drives Y strongly). Cross-mapping X from `M_Y`: `ρ` rises from ~0.4 (L=20) to ~0.9 (L=2000) — converges → X causes Y. Cross-mapping Y from `M_X`: `ρ` stays ~0.5 flat → weak/no Y→X. Asymmetry confirms direction.
+
+**Complexity (derivation).** Per library size `L`: build KD-tree `O(L log L)`, query all `N` points for `E+1` neighbors `O(N·E log L)`, predict `O(N·E)`. Over `|lib_sizes|` sizes and both directions → multiply. **Space** `O(N·E)` (embedding) + tree.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Stochastic/noisy data | false convergence | require simplex determinism check first; surrogate test |
+| Under/over-embedding | distorted manifold | choose E by prediction skill |
+| Short series | unstable ρ | need long, low-noise data |
+| Synchrony (strong coupling) | both directions converge | report as "bidirectional/synchronized" |
+
+**Unit-test oracle.** Two **independent** logistic maps (no coupling): `ρ(L)` must stay flat and low (no convergence) in both directions → `converges=False`. A one-way coupled pair must converge only in the driver→response direction. Surrogate (phase-shuffled) data must destroy convergence.
+
+**Integration code-points.** **NEW** `ccm.py` (numpy + `scipy.spatial.cKDTree`; reference pyEDM/skccm). Screens **nonlinear** couplings Granger (E15) misses; converged links → candidate KGIK edges typed "nonlinear coupling." Run alongside Granger for linear+nonlinear coverage. Batched NN can route through `gpu_backend.py` at scale.
+
+---
+
+### E16b. Transfer Entropy (information-theoretic directed coupling) — **NEW ALGORITHM**
+
+**Purpose.** Model-free, **nonlinear** directed information flow: how much knowing `X`'s past reduces uncertainty about `Y`'s future beyond `Y`'s own past. The information-theoretic generalization of Granger (they coincide for Gaussian variables). Third leg of the causal-screen trio (linear Granger E15, dynamical CCM E16, information-theoretic TE).
+
+**Math.** Transfer entropy from `X` to `Y` with history lengths `k,l`:
+```
+TE_{X→Y} = Σ p(y_{t+1}, y_t^{(k)}, x_t^{(l)}) · log[ p(y_{t+1} | y_t^{(k)}, x_t^{(l)}) / p(y_{t+1} | y_t^{(k)}) ]
+         = I(Y_{t+1} ; X_t^{(l)} | Y_t^{(k)})            (conditional mutual information)
+```
+where `y_t^{(k)}=(y_t,...,y_{t−k+1})`. `TE_{X→Y}>0` ⇔ X's past adds predictive information about Y's next value given Y's own past. It is **directed** (`TE_{X→Y}≠TE_{Y→X}`) and captures arbitrary nonlinear dependence.
+
+**Derivation.** TE is the Kullback–Leibler divergence between the full transition `p(y_{t+1}|y_t^{(k)},x_t^{(l)})` and the reduced `p(y_{t+1}|y_t^{(k)})`, averaged over states. Writing it as conditional mutual information `I(Y_{t+1};X^{(l)}|Y^{(k)})` shows it is non-negative (CMI≥0) and zero iff `Y_{t+1} ⟂ X^{(l)} | Y^{(k)}` — exactly the conditional-independence statement of "no information flow." For jointly Gaussian variables, `TE_{X→Y} = ½ ln(RSS_R/RSS_U)` which is a monotone transform of the Granger F-statistic — proving TE ⊇ Granger.
+
+**Runnable-quality pseudocode (KSG estimator, k-NN, bias-reduced).**
+```python
+def transfer_entropy(X, Y, *, k_hist=1, l_hist=1, knn=4, seed=0):
+    import numpy as np
+    from scipy.spatial import cKDTree
+    from scipy.special import digamma
+    X = np.asarray(X,float); Y = np.asarray(Y,float)
+    m = (k_hist if k_hist>l_hist else l_hist)
+    yf = Y[m:]                                   # Y_{t+1}
+    Yp = np.column_stack([Y[m-1-i:len(Y)-1-i] for i in range(k_hist)])  # Y past
+    Xp = np.column_stack([X[m-1-i:len(X)-1-i] for i in range(l_hist)])  # X past
+    yf = yf[:len(Yp)]
+    # TE = I(yf ; Xp | Yp) via KSG conditional MI (Frenzel-Pompe)
+    joint = np.column_stack([yf.reshape(-1,1), Yp, Xp])
+    tree_j = cKDTree(joint)
+    eps = tree_j.query(joint, k=knn+1)[0][:, -1]    # distance to k-th neighbor
+    def count(space):
+        t = cKDTree(space)
+        return np.array([len(t.query_ball_point(p, r-1e-12))-1
+                         for p, r in zip(space, eps)])
+    n_yYp = count(np.column_stack([yf.reshape(-1,1), Yp]))
+    n_XpYp= count(np.column_stack([Xp, Yp]))
+    n_Yp  = count(Yp if Yp.size else np.zeros((len(yf),1)))
+    te = digamma(knn) + np.mean(digamma(n_Yp+1) - digamma(n_yYp+1) - digamma(n_XpYp+1))
+    return max(float(te), 0.0)                    # CMI is non-negative
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `k_hist` | int | 1 | 1–10 | target history length | ACF/embedding skill |
+| `l_hist` | int | 1 | 1–10 | source history length | match expected lag |
+| `knn` | int | 4 | 3–10 | KSG neighbor count | ↑ less variance, more bias |
+| estimator | str | KSG | {KSG,binning} | density method | KSG for continuous data |
+
+**Worked numeric example.** `Y_{t+1}=0.7 X_t + 0.2 Y_t + ε` (X drives Y), T=2000. `TE_{X→Y} ≈ 0.45 nats` (clearly positive); `TE_{Y→X} ≈ 0.01 nats` (≈0, within noise). Directionality and magnitude recovered. For independent series both ≈0.
+
+**Complexity (derivation).** KSG builds KD-trees on the joint and three marginal spaces (`O(N log N)` each) and does `O(N)` range queries (`O(log N)` each) → `O(N log N)` overall. **Space** `O(N·(k+l))`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Finite-sample bias | TE>0 for independent data | use KSG (bias-reduced); permutation null |
+| Wrong history lengths | missed/spurious flow | select `k,l` by embedding criteria |
+| High dimensionality | neighbor sparsity | keep `k+l` small; more data |
+| Negative estimate (rounding) | small negative TE | clamp at 0 (CMI≥0) |
+
+**Unit-test oracle.** Independent Gaussian white noise `X,Y` (T=5000): `TE_{X→Y}≈0±0.02` and `TE_{Y→X}≈0±0.02` (permutation test p>0.05). For jointly Gaussian linear coupling, TE must match the analytic `½ln(RSS_R/RSS_U)` (the Granger equivalence) within estimator error — a strong cross-check against E15.
+
+**Integration code-points.** **NEW** `transfer_entropy.py` (numpy + `scipy.spatial`, KSG estimator; reference `pyinform`/`JIDT`). Third causal-screen leg in `causal_screen.py` alongside Granger (E15) and CCM (E16): a link counts as a candidate KGIK edge only if it passes a permutation-null significance test; agreement across the three estimators raises edge confidence. Significant directed TE → candidate ARIMAX exogenous driver (A3). Honest framing: "directed information flow," not mechanistic proof.
+
+**Source.** Schreiber 2000, *Measuring Information Transfer*, *Phys. Rev. Lett.* 85; https://doi.org/10.1103/PhysRevLett.85.461 · KSG estimator Kraskov et al. 2004 https://doi.org/10.1103/PhysRevE.69.066138 · `pyinform` https://elife-asu.github.io/PyInform/ · JIDT https://github.com/jlizier/jidt
+
 ---
 
 ### E17. PSI — Population Stability Index (distribution shift) — **REUSE EXISTING**
