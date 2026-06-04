@@ -8999,5 +8999,22 @@
     "epoch": "any",
     "name": "Canyon Wall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cave_entrance": {
+    "prompt": "a dark rocky cave mouth entrance, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "260b7951-1001-4e63-8541-c4011b80e416",
+    "path": "/models/generated/tripo/cave_entrance.glb",
+    "bytes": 15192756,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/260b7951-1001-4e63-8541-c4011b80e416/tripo_pbr_model_260b7951-1001-4e63-8541-c4011b80e416.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjYwYjc5NTEtMTAwMS00ZTYzLTg1NDEtYzQwMTFiODBlNDE2L3RyaXBvX3Bicl9tb2RlbF8yNjBiNzk1MS0xMDAxLTRlNjMtODU0MS1jNDAxMWI4MGU0MTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=IBbD8CeVJCIhebrsHQuOXnP-3A-Gpl63seKCN0ZqmTFhPjqgiE9y7uY770l~nuqO4V6On5HULTF7wXXvDrqCPv3ifSMsFuUX5CEJZonhLErdKbaEo1FIig0yBbTrp8W92cL2ud48BAItC5VfFlQU58nvRpJMntHLChP7qxYCZo9t7M-9lZdTCXOzGkbDAaVrOU6rUHUq5WQTIP3j40pj18581Mn8YaRNbNT3mpxGwn1gSGVcNfIQ9dJ1XYMb~taYtW5YDhTqP~lG4Z7m4CV1cABiJlIbQpBmzb8F1o2CVGYNympJVYK8kqEf1JTUjjik7~OADEyqo0L6Bj3g1V9jUg__",
+    "asset_id": "cave_entrance",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Cave Entrance",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
