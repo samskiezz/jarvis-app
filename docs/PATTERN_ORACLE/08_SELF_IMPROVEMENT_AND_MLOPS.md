@@ -689,6 +689,68 @@ Every metric in §1.3 and §3 is **emitted, not just stored**, so degradation is
 - **RB-CANARY-ROLLBACK:** automatic; verify champion restored, capture challenger metrics snapshot, file regression ticket, hold challenger in `shadow` for diagnosis.
 - **RB-LOOP-STALLED:** check scheduler liveness, DB write path, feed availability; replay `due_at<=now & status='pending'` once recovered; backfill missed cycles.
 
+### 7.6 Full metrics catalogue (names · types · labels · alert binding)
+
+The table below is the **authoritative emission contract** — exact metric names, Prometheus-style types, the label set, and which alert (§7.7) each binds to. All metrics share the base label set `{target_key, horizon_bucket, model_id, version, env}` unless noted; additional labels are listed in the Labels column. Types: `gauge` (point-in-time), `counter` (monotonic), `histogram` (latency/distribution), `rate` (derived per-second).
+
+| Metric name | Type | Extra labels | Unit | Source | Binds to alert |
+|---|---|---|---|---|---|
+| `oracle_skill_mae` | gauge | window | abs-error units | §1.3.1 | — |
+| `oracle_skill_rmse` | gauge | window | abs-error units | §1.3.2 | — |
+| `oracle_skill_crps` | gauge | window | score units | §1.3.3 | — |
+| `oracle_skill_crpss` | gauge | baseline | unitless | §1.3.5 | A-SKILL |
+| `oracle_cov_picp` | gauge | window | fraction | §1.3.4 | A-CAL |
+| `oracle_cov_coverage_error` | gauge | window | fraction | §1.3.4 | A-CAL |
+| `oracle_cov_mpiw` | gauge | window | interval units | §1.3.4 | — |
+| `oracle_cal_ece` | gauge | window | fraction | ai_models ECE | A-CAL |
+| `oracle_drift_psi_max` | gauge | feature | unitless | ai_models PSI | A-DRIFT |
+| `oracle_drift_psi_mean` | gauge | — | unitless | ai_models PSI | A-DRIFT |
+| `oracle_drift_ks_pvalue` | gauge | — | probability | §3.3 | A-DRIFT |
+| `oracle_drift_bocpd_cp_prob` | gauge | — | probability | §3.4 | A-REGIME |
+| `oracle_drift_score` | gauge | — | [0,1] | §3.5 | A-DRIFT |
+| `oracle_ensemble_weight` | gauge | member | [0,1] | §4.1/§12 | — |
+| `oracle_ensemble_ewma_error` | gauge | member | score units | §12.1 | — |
+| `oracle_kgik_learned_edges` | gauge | relation | count | §5/§13 | — |
+| `oracle_kgik_promotions_total` | counter | relation | count | §13.3 | — |
+| `oracle_kgik_decays_total` | counter | relation | count | §13.5 | — |
+| `oracle_loop_matched_total` | counter | — | count | §1.2 | — |
+| `oracle_loop_unmatchable_total` | counter | cause | count | §1.2 | A-FEEDGAP |
+| `oracle_loop_pending_age_seconds` | gauge | quantile=p95 | seconds | §1.2 | A-LOOP |
+| `oracle_loop_matcher_lag_seconds` | gauge | — | seconds | §1.2 | A-LOOP |
+| `oracle_predict_latency_seconds` | histogram | quantile | seconds | serving | A-SLO |
+| `oracle_predict_error_rate` | rate | code | errors/s | serving | A-SLO |
+| `oracle_registry_transition_total` | counter | from,to | count | §4.5/§10 | — |
+| `oracle_canary_stage` | gauge | challenger | {0,5,25,50,100} | §11.2 | A-CANARY |
+| `oracle_trend_crpss_slope` | gauge | — | slope | §6.5 | A-SKILL |
+| `oracle_trend_improving` | gauge | — | {0,1} | §6.5 | A-SKILL |
+
+**Cardinality control:** `feature` and `member` labels are bounded (≤ feature count, ≤ ensemble size); `target_key` is the highest-cardinality dimension and is the natural sharding key for the metrics store. Histograms (`latency`) export pre-computed `p50/p95/p99` buckets to keep query cost flat.
+
+### 7.7 Alert rules (exact thresholds, for, severity, route)
+
+Each rule is `expr` (PromQL-style) · `for` (sustain window, prevents flapping) · severity · route. Thresholds match the source sections so there is one number, not two.
+
+| Alert id | Expr (threshold) | for | Severity | Route | Runbook |
+|---|---|---|---|---|---|
+| A-SKILL | `oracle_trend_crpss_slope < 0` (95%-CI upper<0) **OR** `oracle_skill_crpss < 0` | 3 cycles | page | on-call | RB-SKILL-REGRESSION |
+| A-DRIFT | `oracle_drift_psi_max > 0.2` **OR** `oracle_drift_score > 0.5` | 2 windows | ticket→page | ML owner | RB-DRIFT |
+| A-CAL | `oracle_cal_ece > 0.1` **OR** `abs(oracle_cov_coverage_error) > 0.05` | sustained (calib window) | ticket | ML owner | RB-CALIBRATION |
+| A-REGIME | `oracle_drift_bocpd_cp_prob > 0.5` (confirmed 2 ticks) | 2 ticks | info→ticket | ML owner | RB-DRIFT (regime path) |
+| A-CANARY | challenger live-slice trips R1–R6 (§10.4) | 1 dwell tick | auto-rollback + page | on-call | RB-CANARY-ROLLBACK |
+| A-LOOP | `oracle_loop_pending_age_seconds{p95} > GRACE_WINDOW` **OR** `oracle_loop_matcher_lag_seconds > 2·tick` | 2 ticks | page | on-call | RB-LOOP-STALLED |
+| A-FEEDGAP | `rate(oracle_loop_unmatchable_total[1h]) > FEEDGAP_RATE` | 1 h | ticket | data owner | RB-FEEDGAP |
+| A-SLO | `oracle_predict_latency_seconds{p99} > SLO_latency` **OR** `oracle_predict_error_rate > SLO_error_rate` | 2 min | page | on-call | RB-SLO |
+
+`for` windows are deliberate: paging alerts (A-SKILL, A-LOOP, A-SLO) require multi-cycle/multi-minute persistence so a single noisy point doesn't wake on-call; `A-CANARY` fires on a *single* dwell tick because protecting live traffic outweighs flap-avoidance (the cost of a false rollback is low — challenger returns to shadow).
+
+### 7.8 Runbooks per alert (additions to §7.5)
+
+- **RB-FEEDGAP (A-FEEDGAP):** check the upstream feed's last-write timestamp and ingestion health (§04). If feed down → declare incident, stop counting affected forecasts as model failures (they're `unmatchable`, not wrong), optionally move the target to `FROZEN` (§10) so canaries don't promote on a starved sample. When feed recovers, backfill outcomes and re-run the matcher over the gap window. Do **not** retrain on a feed-gap-induced "drift" — RB-DRIFT's data-vs-model triage must classify it as data first.
+- **RB-SLO (A-SLO):** verify it's the model path (not infra). If latency: check ensemble size / member timeout config; consider shedding the slowest member (it keeps being scored, just not awaited). If error_rate: check the serving deploy; if a recent canary correlates, A-CANARY's R4/R5 should already be rolling it back — confirm rollback completed.
+- **RB-REGIME (A-REGIME path of RB-DRIFT):** confirm the BOCPD changepoint with PELT offline segmentation (§3.4); if persistent, shrink the conformal buffer to the post-break segment **before** the next re-forecast (FSM invariant §10.2.4), queue T4 retrain on post-break data only, and annotate the skill dashboard with the changepoint marker so the §6.5 trend is read per-segment, not across the break.
+
+Each alert's runbook ends with a **resolution check**: the alert auto-resolves only after the bound metric is back within threshold for the same `for` window (no manual "ack-and-forget").
+
 ---
 
 ## 10. CONTINUAL-LEARNING STATE MACHINE (complete)

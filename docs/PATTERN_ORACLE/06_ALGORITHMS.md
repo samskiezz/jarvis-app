@@ -791,6 +791,58 @@ return ranked_objects, subgraph        # subgraph = explanation
 
 **Source.** Han et al. 2021, *xERTE: Explainable Subgraph Reasoning for Forecasting on Temporal KGs*, ICLR; https://arxiv.org/abs/2012.15537 · impl https://github.com/TemporalKGTeam/xERTE
 
+#### B8.+ DEPTH MILESTONE
+
+**Full derivation.** xERTE frames future-link prediction as **attention-flow** over a temporal subgraph. Define a normalized attention `α(e,r,e',t',t_q)=softmax_e'(score)` over a node's temporally-valid out-edges. Treating attention as a transition probability, the score arriving at a node after `L` steps is the sum over all length-`≤L` temporal paths of the product of edge attentions weighted by the source mass — a truncated personalized-PageRank-like diffusion where edges are gated by recency and relation type. The top-K pruning at each step is a beam search that keeps the diffusion tractable while preserving the highest-mass paths, which double as the **explanation** (the retained subgraph). Training minimizes cross-entropy of the arrived mass against the one-hot true object — gradients flow back through the attention weights along the retained paths. Strict masking `t'<t_q` is the temporal-causality constraint that makes this *extrapolation*, not interpolation.
+
+**Runnable-quality pseudocode.**
+```python
+def xerte_query(kg, subject, rel, t_query, *, L=3, top_K=80, attn_fn=None):
+    frontier = {subject: 1.0}          # node -> arrived mass
+    subgraph = []
+    for step in range(L):
+        new = {}
+        for e, mass in frontier.items():
+            edges = kg.temporal_out_edges(e, before=t_query)   # (r', e', t') with t'<t_query
+            if not edges: continue
+            scores = [attn_fn(e, rel, r2, e2, t2, t_query) for (r2, e2, t2) in edges]
+            w = softmax(scores)
+            for (r2, e2, t2), a in zip(edges, w):
+                new[e2] = new.get(e2, 0.0) + mass * a
+                subgraph.append((e, r2, e2, t2, mass * a))
+        # prune to top-K by arrived mass (beam)
+        frontier = dict(sorted(new.items(), key=lambda kv: -kv[1])[:top_K])
+        s = sum(frontier.values()) or 1.0
+        frontier = {k: v/s for k, v in frontier.items()}       # renormalize
+    ranked = sorted(frontier.items(), key=lambda kv: -kv[1])
+    return ranked, subgraph            # subgraph = human-auditable explanation
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `L` | int | 3 | 1–5 | inference hops | ↑ reaches farther, ↑ cost |
+| `top_K` | int | 80 | 20–200 | beam width per step | ↑ recall, ↑ subgraph size |
+| `embed_dim` | int | 100 | 32–256 | entity/rel embeds | — |
+| `time_dim` | int | 100 | 32–200 | φ(t) encoding | log-space init |
+| `lr` | float | 2e-4 | 1e-5–1e-3 | Adam | — |
+
+**Worked numeric example.** Query `(Alice, collaborates, ?, t=10)`. Step 1 from Alice: edges to Bob (att 0.6), Carol (0.4). Step 2 from Bob: Bob→Dave (0.7), Bob→Eve (0.3); from Carol: Carol→Dave (0.5), Carol→Frank (0.5). Arrived mass at Dave = `0.6·0.7 + 0.4·0.5 = 0.42+0.20 = 0.62`; Eve `=0.18`; Frank `=0.20`. Ranked object = **Dave** (0.62), with the explanatory subgraph `{Alice→Bob→Dave, Alice→Carol→Dave}`.
+
+**Complexity (derivation).** Each step expands ≤`top_K` frontier nodes, each with up to `avg_degree` temporal edges, each scored in `O(d)` → `O(top_K·avg_degree·d)` per step × `L` steps → `O(L·top_K·avg_degree·d)` per query. Pruning bounds growth (without it, frontier could explode as `avg_degree^L`). **Space** `O(top_K·L + |subgraph|)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Temporal leakage | uses `t'≥t_q` edges | strict `before=t_query` filter |
+| Subgraph blow-up | OOM / slow | top-K beam pruning each step |
+| Dead-end frontier (zero mass) | no candidates | additive smoothing / fallback to TGAT |
+| Attention saturation | one path dominates spuriously | renormalize per step; temperature on softmax |
+
+**Unit-test oracle.** Construct a KG where exactly one length-2 temporal path connects subject→target (all other paths dead-end before `t_query`). The model must rank the target #1 with mass = product of the two edge attentions, and the returned subgraph must contain exactly those 2 edges. Add an edge with `t'=t_query` (future): asserting the target's mass is unchanged proves the masking works.
+
+**Integration code-points.** **NEW** `xerte.py`. Enumerates temporal edges via `temporal_nodes.causal_chain`; reads/writes the quadruple store in `knowledge_graph.py`. Directly answers RELATIONAL-LAYER future-edge queries; the returned `subgraph` is surfaced by the VERIFIER as grounded drivers/assumptions (provenance). Predicted objects promoted into KGIK via the confidence ladder; complements TGN/TGAT (which embed) by answering queries with explanations.
+
 ---
 
 ## GROUP C — CLUSTER / MOTIF / REGIME

@@ -874,8 +874,60 @@ Each ADR: **Decision · Rationale · Alternatives rejected · Consequences.** Gr
 
 ---
 
-## 14. TRACEABILITY (architecture → spec sections → real files)
+## 14. TIMEOUT / RETRY / BACKOFF POLICY MATRIX
 
+Every outbound or cross-boundary call has an explicit policy. "Retries" counts *additional* attempts after the first. All terminal failures resolve to the component's degrade form (§10), never an exception across the boundary (ADR-03).
+
+| Call site | Timeout | Retries | Backoff | Terminal degrade |
+|---|---|---|---|---|
+| `_kimi_extract` → Kimi K2 (`prediction.py:65`) | short (~few s) | 0 | — | return `None` → regex fallback (`:651`) |
+| `load_crypto_series` market_chart (`prediction.py:707`) | httpx default | 2 | exp (200ms→400ms) | `_insufficient` if Lake also empty |
+| Ingestion adapters (`live_intel._earthquakes/_crypto/_fx`) | per-source | 0 (next tick) | — | STALE marker; keep last good (§9.4) |
+| 429 rate-limit on any feed | — | 0 | skip tick | STALE; never hammer (cadence ≥ TTL `:25`) |
+| `uw_bridge` Mode A import | — | n/a | — | `_UW_OK=False` → Mode B or DEGRADE (§11.4) |
+| `uw_bridge` Mode B HTTP (`UNDERWORLD_URL/methods/run`) | `UW_TIMEOUT` | 0 | — | return `None` → DEGRADE step + caveat |
+| `compute.foundation_infer` remote (`PREDICT_GPU_URL`) | `Ts` | 1 | short | fall to local GPU → CPU; drop member + caveat |
+| local CuPy infer (`gpu_backend.get_backend :46`) | n/a | 0 | — | CPU fallback (numpy), wider intervals |
+| `persist_forecast` → History Lake | n/a (fire-and-forget, ADR-09) | scheduler-retried | — | log; answer still returns |
+| `due_for_scoring` / `run_cycle` (nightly) | n/a | resumable next night | — | PARTIAL_REPORT; idempotent per `forecast_id` (§8.7) |
+
+**Policy rationale:** user-facing calls (Kimi, GPU remote) get **0–1** retries so a flaky dependency never blocks the response; background calls (ingestion, scoring) get **next-tick / next-night** retries because there is no user waiting. Backoff is only applied where a transient feed error is likely recoverable within the request (the market_chart backfill).
+
+---
+
+## 15. COMPONENT-INTERACTION MATRIX (who calls whom, with mode)
+
+Rows call columns. `A` = Mode-A in-proc, `B` = Mode-B HTTP, `L` = local function call, `S` = scheduled (background), `—` = no direct interaction.
+
+| caller ↓ / callee → | Orch | HistLake | Ingest | Patterns | Relational | Forecast | SelfImpr | Compute | Surface | UW-bridge |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Orchestrator** | — | L (get/persist) | — | L | L | L | — | — | — | L |
+| **History Lake** | — | — | — | — | — | — | — | — | — | — |
+| **Ingestion** | — | L (put) | — | — | — | — | — | — | — | A/B (sim snaps) |
+| **Patterns** | — | L (get/panel) | — | — | — | — | — | — | — | — |
+| **Relational** | — | — | — | — | — | L (per-affected) | — | — | — | A/B (KGIK/temporal) |
+| **Forecast Core** | — | L (get) | — | reads features | — | — | reads weights | L (foundation) | — | A/B (gpu/methods) |
+| **Self-Improvement** | — | L (due/score) | — | — | L (edge upd) | writes weights | — | retrain trig | — | A (ai_models PSI/ECE) |
+| **Compute** | — | — | — | — | — | — | — | — | — | A (gpu_backend) / B (PREDICT_GPU_URL) |
+| **Surface** | L (POST predict) | — | — | — | — | — | — | — | — | — |
+| **Scheduler (lifespan)** | — | — | S (ingest_tick) | — | — | — | S (run_cycle) | — | — | — |
+
+**Reading the matrix:**
+- The Orchestrator is the only hot-path *fan-out* node (it drives Patterns/Relational/Forecast and persists via the Lake) — consistent with the §1 spine.
+- The History Lake is a pure callee (never calls out) — it is the only stateful node and stays passive, satisfying "everything else is functional/stateless" (§2.2).
+- Every `A/B` cell is a cross-backend reach routed through `uw_bridge.py` (§11) — no component touches underworld directly after migration (ADR-07).
+- The Scheduler row is the only background driver; it owns the two `S` interactions (ingestion + nightly cycle) that require the JARVIS `lifespan` added per ADR-08.
+
+---
+
+## 16. TRACEABILITY (architecture → spec sections → real files)
+
+- DETAILED DESIGN / STATE MACHINES (§8) → this file; code `prediction.py`, `history_lake.py` (new), `patterns.py` (new), `relational.py` (new), `improvement.py` (new), `compute.py` (new).
+- ADDITIONAL SEQUENCES (§9) + TIMEOUT/RETRY MATRIX (§14) → `07_API_CONTRACTS.md`, `11_VALIDATION_AND_TEST_PLAN.md`; code call sites cited inline.
+- DATA-FLOW CONTRACTS (§10) + INTERACTION MATRIX (§15) → `05_DATA_MODEL_AND_SCHEMAS.md` (payload shapes).
+- CROSS-BACKEND BRIDGE FULL DETAIL (§11) → `10_COMPUTE_AND_GPU.md`; code `prediction.py:42-63`, `underworld/server/main.py:40,55`, `server/main.py:12`, `underworld/.../methods_registry.py:561`.
+- CAPACITY/SCALING (§12) → `13_PHASED_BUILD_PLAN.md`, `14_RISKS_AND_LIMITS.md`.
+- ADRs (§13) → cross-cut all companion docs; each ADR cites its grounding file inline.
 - ORCHESTRATOR → `09_ORCHESTRATION_NL_ROUTING.md`; code `server/services/prediction.py:65,651,748`, `server/routes/predict.py`.
 - HISTORY LAKE / INGESTION → `05_DATA_MODEL_AND_SCHEMAS.md`; code `server/services/live_intel.py`, pattern `underworld/server/db/models.py`.
 - PATTERN-DISCOVERY / FORECAST CORE / RELATIONAL → `06_ALGORITHMS.md`; code `prediction.py`, `underworld/.../knowledge_graph.py`, `temporal_nodes.py`, `src/domain/ontology.js`.

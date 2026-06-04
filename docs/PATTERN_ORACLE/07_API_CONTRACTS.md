@@ -1274,4 +1274,1118 @@ export const oracle = {
 | Auth (`optional_bearer`/`require_bearer`, `JARVIS_REQUIRE_AUTH`) | `server/auth.py`, `server/config.py` | §12 |
 | Frontend wiring | `src/api/kimiClient.js`, `src/pages/PredictionOracle.jsx` | §09, this §8 |
 
-> Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract).
+---
+
+## 10. COMPLETE OpenAPI 3.1 SPECIFICATION
+
+This is the machine-readable contract for the entire surface above, expressed as a single OpenAPI 3.1 document. It is **derived from and consistent with** the live `PredictRequest`/`predict()` shapes (`server/routes/predict.py`, `server/services/prediction.py`) and the forward `/v1` endpoints (§§2–6d). It is intended to be served verbatim at `GET /v1/openapi.json` and rendered at `GET /v1/docs` (FastAPI already auto-generates the live subset at `/openapi.json`; this is the curated superset).
+
+> **OpenAPI 3.1 note:** 3.1 is a strict superset of JSON Schema 2020-12, so the `$schema`-flavoured schemas in §§1–6 drop straight into `components/schemas` with only cosmetic edits (nullable expressed as `type: [..,"null"]`, which 3.1 supports natively — no `nullable: true` shim). Examples reuse the worked examples above.
+
+### 10.1 Document head, servers, security
+
+```yaml
+openapi: 3.1.0
+info:
+  title: PATTERN ORACLE — Prediction Engine API
+  version: 1.4.0
+  summary: Ask-anything forecasting (crypto, seismic, trajectory, growth, relational) with honest intervals.
+  description: |
+    Unified prediction engine. The live, un-versioned `POST /functions/predict`
+    is permanent and aliased at `/v1/functions/predict`. All new endpoints are
+    `/v1`-prefixed. Soft/domain failures (e.g. insufficient_data) on
+    `/functions/predict` are returned as 200 on-schema results; hard/protocol
+    failures use the error envelope (see ErrorEnvelope).
+  contact:
+    name: PATTERN ORACLE Platform
+    url: https://docs.apex.local/pattern-oracle
+  license:
+    name: Proprietary
+servers:
+  - url: https://api.apex.local
+    description: Production
+  - url: http://localhost:8000
+    description: Local backend (FastAPI, server/main.py)
+tags:
+  - name: predict
+    description: Forecasting endpoints (the canonical PredictResponse envelope).
+  - name: explain
+    description: Drivers / patterns / attributions behind a forecast.
+  - name: skill
+    description: Self-improvement scorecard (realized-vs-predicted skill).
+  - name: history
+    description: History Lake — persisted world-data series + outcomes.
+  - name: patterns
+    description: Training-free pattern discovery (motif/regime/changepoint).
+  - name: kgik
+    description: Temporal knowledge graph + relational link prediction.
+  - name: models
+    description: Model registry.
+  - name: backtest
+    description: Rolling-origin backtests (mutating; persists runs).
+  - name: meta
+    description: Discovery, versioning, health.
+security:
+  - {}                      # default: public (optional_bearer) when JARVIS_REQUIRE_AUTH=false
+  - bearerAuth: []          # accepted on every endpoint; required on write endpoints
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+      description: |
+        `Authorization: Bearer <JARVIS_API_KEY>`. Validated by
+        `server/auth.py::_check`: a malformed/absent header on a protected route
+        yields 401 "missing bearer token"; a token != API_KEY yields 401
+        "invalid token". When JARVIS_REQUIRE_AUTH=false, read endpoints accept
+        no token; write endpoints (`/v1/predict/backtest`) always require one.
+```
+
+### 10.2 Reusable parameters & headers
+
+```yaml
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema: { type: integer, minimum: 1, maximum: 500, default: 50 }
+      description: Page size (cursor pagination, §0.6).
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema: { type: string }
+      description: Opaque cursor from a prior `page.next_cursor`.
+    From:
+      name: from
+      in: query
+      required: false
+      schema: { oneOf: [ { type: integer }, { type: string, format: date-time } ] }
+      description: Window start — epoch ms or ISO-8601 UTC.
+    To:
+      name: to
+      in: query
+      required: false
+      schema: { oneOf: [ { type: integer }, { type: string, format: date-time } ] }
+      description: Window end — epoch ms or ISO-8601 UTC.
+    DomainFilter:
+      name: domain
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [crypto, seismic, trajectory, growth, generic, relational]
+    SortBy:
+      name: sort
+      in: query
+      required: false
+      schema: { type: string }
+      description: |
+        Field to sort by, optionally `-`-prefixed for descending (e.g.
+        `sort=-last_t`). Allowed fields are per-endpoint (see each path).
+        Multiple keys are comma-separated; first key is primary.
+    Order:
+      name: order
+      in: query
+      required: false
+      schema: { type: string, enum: [asc, desc], default: asc }
+      description: Sort direction when `sort` carries no `-` prefix.
+  headers:
+    X-Request-Id:
+      description: Correlation id; mirrors `error.request_id`. Present on every response.
+      schema: { type: string }
+    X-API-Version:
+      description: Semantic version of the running build (matches info.version).
+      schema: { type: string, example: "1.4.0" }
+    X-RateLimit-Limit:
+      description: Requests permitted per window for this identity+class.
+      schema: { type: integer, example: 120 }
+    X-RateLimit-Remaining:
+      description: Requests remaining in the current window.
+      schema: { type: integer, example: 117 }
+    X-RateLimit-Reset:
+      description: Epoch seconds when the bucket refills.
+      schema: { type: integer, example: 1749038400 }
+    Retry-After:
+      description: Seconds to wait before retrying (sent on 429/503/502 when retryable).
+      schema: { type: integer, example: 12 }
+    Deprecation:
+      description: "`true` on deprecated endpoints/fields (RFC 8594)."
+      schema: { type: boolean }
+    Sunset:
+      description: HTTP-date after which a deprecated endpoint returns 410 (RFC 8594).
+      schema: { type: string }
+    Link:
+      description: 'On deprecated responses: `<replacement>; rel="successor-version"`.'
+      schema: { type: string }
+    Idempotency-Key:
+      description: Client-chosen opaque key (<=200 chars) for safe retries of writes.
+      schema: { type: string }
+```
+
+### 10.3 Components / schemas
+
+The forecast envelope (`PredictResponse`) and request (`PredictRequest`) are the **live** shapes; the rest are forward.
+
+```yaml
+components:
+  schemas:
+    # ── Errors ────────────────────────────────────────────────────────────────
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, status]
+          properties:
+            code:
+              type: string
+              enum: [insufficient_data, unknown_entity, upstream_feed_error,
+                     model_unavailable, validation_error, unauthorized, forbidden,
+                     not_found, rate_limited, idempotency_conflict,
+                     deprecated_endpoint, payload_too_large, timeout, internal_error]
+            message: { type: string }
+            status: { type: integer }
+            details: { type: object, additionalProperties: true }
+            request_id: { type: string }
+            docs: { type: string }
+            retryable: { type: boolean }
+      example:
+        error:
+          code: insufficient_data
+          message: "Human-readable explanation safe to surface to the user."
+          status: 422
+          details: { needs: "a price series via params.series, or a recognised ticker" }
+          request_id: req_2f9c1ab4e7
+          docs: https://docs.apex.local/pattern-oracle/errors#insufficient_data
+          retryable: false
+
+    # ── Series primitives ─────────────────────────────────────────────────────
+    SeriesPoint:
+      type: object
+      required: [t, v]
+      properties:
+        t: { type: integer, description: epoch ms (or integer index when no timestamps) }
+        v: { type: [number, "null"] }
+    ForecastPoint:
+      type: object
+      properties:
+        t: { oneOf: [ { type: integer }, { type: string } ], description: "epoch ms, index, or label e.g. 'horizon'." }
+        v: { description: "number or {lat,lng,alt_m} for trajectory" }
+        low: { type: [number, "null"] }
+        high: { type: [number, "null"] }
+    Page:
+      type: object
+      properties:
+        limit: { type: integer }
+        next_cursor: { type: [string, "null"] }
+        has_more: { type: boolean }
+        total_estimate: { type: [integer, "null"] }
+
+    # ── Predict (LIVE) ────────────────────────────────────────────────────────
+    PredictRequest:
+      type: object
+      required: [question]
+      additionalProperties: false
+      properties:
+        question:
+          type: string
+          minLength: 1
+          description: Natural-language forecasting question.
+        params:
+          type: [object, "null"]
+          additionalProperties: true
+          description: |
+            Optional structured overrides + offline data (see §1.1 for the full
+            per-domain key list — domain, target, horizon_hours, series/values/
+            prices, lookback_days, magnitude(s)/catalog/min_magnitude/catalog_days,
+            latitude/longitude/radius_km, omori/mainshock_K/omori_c/omori_p/
+            days_since_mainshock, state_vector, minutes, semi_major_axis_km/a_km,
+            projectile/speed/angle_deg/height0, horizon_steps, unit).
+      example:
+        question: "XRP price in 48h"
+    Interval:
+      type: object
+      required: [low, high, confidence]
+      properties:
+        low: { type: [number, "null"] }
+        high: { type: [number, "null"] }
+        confidence: { type: [number, "null"], minimum: 0, maximum: 1 }
+    Prediction:
+      type: object
+      required: [value, unit, point_estimate, interval, probability]
+      properties:
+        value: { type: [number, object, "null"] }
+        unit: { type: [string, "null"] }
+        point_estimate: { type: [number, object, "null"] }
+        interval: { $ref: '#/components/schemas/Interval' }
+        probability: { type: [number, "null"], minimum: 0, maximum: 1 }
+    Method:
+      type: object
+      required: [name, family, models_used, math]
+      properties:
+        name: { type: string }
+        family:
+          type: string
+          enum: [time_series, event_probability, trajectory, growth, relational, ensemble, unknown]
+        models_used: { type: array, items: { type: string } }
+        math: { type: string }
+    PredictData:
+      type: object
+      required: [source, as_of, history, forecast]
+      properties:
+        source: { type: [string, "null"] }
+        as_of: { type: [integer, "null"] }
+        lookback: { type: [string, "null"] }
+        history: { type: array, items: { $ref: '#/components/schemas/SeriesPoint' } }
+        forecast: { type: array, items: { $ref: '#/components/schemas/ForecastPoint' } }
+    PredictResponse:
+      type: object
+      required: [question, domain, target, horizon, prediction, method, drivers, data, assumptions, caveats, used_llm]
+      properties:
+        question: { type: string }
+        domain:
+          type: string
+          enum: [crypto, seismic, trajectory, growth, generic, unknown]
+        target: { type: [string, "null"] }
+        horizon: { type: [string, "null"] }
+        prediction: { $ref: '#/components/schemas/Prediction' }
+        method: { $ref: '#/components/schemas/Method' }
+        drivers: { type: object, additionalProperties: true }
+        data: { $ref: '#/components/schemas/PredictData' }
+        assumptions: { type: array, items: { type: string } }
+        caveats: { type: array, items: { type: string } }
+        used_llm: { type: boolean }
+      # Note: insufficient_data on /functions/predict is THIS schema with
+      # method.name="insufficient_data", method.family=<domain>, and a caveat
+      # explaining what was needed — delivered with HTTP 200 (soft result).
+```
+
+(The remaining schemas — `ExplainRequest/Response`, `SkillResponse`, `SeriesCatalog`, `SeriesPoints`, `PatternScanRequest/Response`, `KgikGraph`, `LinkPredictRequest/Response`, `ModelRegistry`, `BacktestRequest`, `BacktestRun` — are the JSON-Schema objects already defined inline in §§2–6d; under OpenAPI they are copied into `components/schemas` 1:1 with their `$ref`-able titles. They are not duplicated here to keep this section authoritative-not-redundant.)
+
+### 10.4 Paths
+
+```yaml
+paths:
+  /functions/predict:
+    post:
+      tags: [predict]
+      operationId: predict
+      summary: Unified prediction engine (LIVE; alias /v1/functions/predict).
+      security: [ {}, { bearerAuth: [] } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PredictRequest' }
+            examples:
+              crypto:        { value: { question: "XRP price in 48h" } }
+              seismic:       { value: { question: "Chance of an M6+ near 35.7,139.7 in the next 7 days?", params: { domain: seismic, magnitude: 6.0, horizon_hours: 168, magnitudes: [2.5,2.6,2.7,2.9,3.1,3.3,3.0,2.8,4.1,3.7,2.6,5.2,3.9], catalog_days: 30 } } }
+              trajectory:    { value: { question: "Where will this aircraft be in 20 minutes?", params: { domain: trajectory, state_vector: { lat: 51.47, lng: -0.4543, alt_m: 11277, speed_mps: 246, heading_deg: 285, vertical_rate_mps: 0 }, minutes: 20 } } }
+              growth:        { value: { question: "Project our user growth 6 months out", params: { domain: growth, series: [1000,1320,1700,2150,2700,3300,3950], horizon_steps: 6, unit: users } } }
+      responses:
+        '200':
+          description: Forecast (or soft insufficient_data result).
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/X-Request-Id' }
+            X-API-Version: { $ref: '#/components/headers/X-API-Version' }
+            X-RateLimit-Limit: { $ref: '#/components/headers/X-RateLimit-Limit' }
+            X-RateLimit-Remaining: { $ref: '#/components/headers/X-RateLimit-Remaining' }
+            X-RateLimit-Reset: { $ref: '#/components/headers/X-RateLimit-Reset' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PredictResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v1/functions/predict:
+    post:
+      tags: [predict]
+      operationId: predictV1Alias
+      summary: Identical to POST /functions/predict (v1 alias).
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/PredictRequest' } } }
+      responses:
+        '200': { description: See POST /functions/predict., content: { application/json: { schema: { $ref: '#/components/schemas/PredictResponse' } } } }
+  /v1/predict/explain:
+    post:
+      tags: [explain]
+      operationId: explain
+      security: [ {}, { bearerAuth: [] } ]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/ExplainRequest' } } }
+      responses:
+        '200': { description: Explanation., content: { application/json: { schema: { $ref: '#/components/schemas/ExplainResponse' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/InsufficientData' }
+  /v1/predict/skill:
+    get:
+      tags: [skill]
+      operationId: skill
+      parameters:
+        - { $ref: '#/components/parameters/DomainFilter' }
+        - { name: target, in: query, schema: { type: string } }
+        - { name: metric, in: query, schema: { type: string, enum: [crps, rmse, mae, coverage, brier, skill_score], default: skill_score } }
+        - { $ref: '#/components/parameters/From' }
+        - { $ref: '#/components/parameters/To' }
+        - { name: bucket, in: query, schema: { type: string, enum: [day, week, month], default: week } }
+      responses:
+        '200': { description: Skill scorecard., content: { application/json: { schema: { $ref: '#/components/schemas/SkillResponse' } } } }
+        '422': { $ref: '#/components/responses/InsufficientData' }
+  /v1/history/series:
+    get:
+      tags: [history]
+      operationId: listSeries
+      parameters:
+        - { $ref: '#/components/parameters/DomainFilter' }
+        - { name: source, in: query, schema: { type: string } }
+        - { name: entity, in: query, schema: { type: string } }
+        - { name: q, in: query, schema: { type: string } }
+        - { name: as_of_from, in: query, schema: { oneOf: [ { type: integer }, { type: string } ] } }
+        - { name: as_of_to, in: query, schema: { oneOf: [ { type: integer }, { type: string } ] } }
+        - { $ref: '#/components/parameters/SortBy' }      # allowed: last_t, first_t, n_points, freshness_seconds
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/Cursor' }
+      responses:
+        '200': { description: Catalog page., content: { application/json: { schema: { $ref: '#/components/schemas/SeriesCatalog' } } } }
+  /v1/history/series/{id}:
+    get:
+      tags: [history]
+      operationId: getSeries
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+        - { $ref: '#/components/parameters/From' }
+        - { $ref: '#/components/parameters/To' }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 50000, default: 1000 } }
+        - { $ref: '#/components/parameters/Cursor' }
+        - { name: downsample, in: query, schema: { type: string, enum: [none, lttb, mean], default: none } }
+        - { name: outcomes, in: query, schema: { type: boolean, default: false } }
+      responses:
+        '200': { description: Series points., content: { application/json: { schema: { $ref: '#/components/schemas/SeriesPoints' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /v1/patterns/scan:
+    post:
+      tags: [patterns]
+      operationId: patternScan
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/PatternScanRequest' } } }
+      responses:
+        '200': { description: Discovered patterns., content: { application/json: { schema: { $ref: '#/components/schemas/PatternScanResponse' } } } }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '422': { $ref: '#/components/responses/InsufficientData' }
+  /v1/kgik/graph:
+    get:
+      tags: [kgik]
+      operationId: kgikGraph
+      parameters:
+        - { name: node, in: query, schema: { type: string } }
+        - { name: depth, in: query, schema: { type: integer, minimum: 1, maximum: 3, default: 1 } }
+        - { name: relation, in: query, schema: { type: string } }
+        - { name: min_confidence, in: query, schema: { type: number, minimum: 0, maximum: 1, default: 0 } }
+        - { name: as_of, in: query, schema: { oneOf: [ { type: integer }, { type: string } ] } }
+        - { $ref: '#/components/parameters/Limit' }
+        - { $ref: '#/components/parameters/Cursor' }
+      responses:
+        '200': { description: Subgraph., content: { application/json: { schema: { $ref: '#/components/schemas/KgikGraph' } } } }
+        '422': { $ref: '#/components/responses/UnknownEntity' }
+  /v1/kgik/link-predict:
+    post:
+      tags: [kgik]
+      operationId: linkPredict
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/LinkPredictRequest' } } }
+      responses:
+        '200': { description: Link predictions., content: { application/json: { schema: { $ref: '#/components/schemas/LinkPredictResponse' } } } }
+        '422': { $ref: '#/components/responses/UnknownEntity' }
+  /v1/models/registry:
+    get:
+      tags: [models]
+      operationId: modelsRegistry
+      parameters:
+        - { $ref: '#/components/parameters/DomainFilter' }
+        - { name: status, in: query, schema: { type: string, enum: [active, shadow, deprecated, unavailable] } }
+        - { name: family, in: query, schema: { type: string, enum: [time_series, event_probability, trajectory, growth, relational, ensemble] } }
+      responses:
+        '200': { description: Model list., content: { application/json: { schema: { $ref: '#/components/schemas/ModelRegistry' } } } }
+  /v1/predict/backtest:
+    post:
+      tags: [backtest]
+      operationId: backtest
+      security: [ { bearerAuth: [] } ]      # write: token ALWAYS required
+      parameters:
+        - { name: Idempotency-Key, in: header, required: false, schema: { type: string, maxLength: 200 } }
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/BacktestRequest' } } }
+      responses:
+        '200': { description: Completed run (sync)., content: { application/json: { schema: { $ref: '#/components/schemas/BacktestRun' } } } }
+        '202':
+          description: Accepted (async); poll the run.
+          content: { application/json: { schema: { type: object, properties: { run_id: { type: string }, status: { type: string }, poll: { type: string } } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/IdempotencyConflict' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v1/predict/backtest/{run_id}:
+    get:
+      tags: [backtest]
+      operationId: backtestStatus
+      security: [ { bearerAuth: [] } ]
+      parameters:
+        - { name: run_id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: Run status/results., content: { application/json: { schema: { $ref: '#/components/schemas/BacktestRun' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /v1/:
+    get:
+      tags: [meta]
+      operationId: discovery
+      summary: Version + endpoint + deprecation discovery.
+      responses:
+        '200':
+          description: Discovery document.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version: { type: string }
+                  endpoints: { type: array, items: { type: string } }
+                  deprecations: { type: array, items: { type: object } }
+              example:
+                version: "1.4.0"
+                endpoints: ["/functions/predict", "/v1/predict/explain", "/v1/history/series"]
+                deprecations: []
+  /healthz:
+    get:
+      tags: [meta]
+      operationId: healthz
+      security: [ {} ]
+      responses:
+        '200': { description: OK., content: { application/json: { schema: { type: object, properties: { ok: { type: boolean } } }, example: { ok: true } } } }
+```
+
+### 10.5 Reusable responses (error envelope per code)
+
+```yaml
+components:
+  responses:
+    ValidationError:
+      description: Malformed body / failed schema validation.
+      headers: { X-Request-Id: { $ref: '#/components/headers/X-Request-Id' } }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+          example: { error: { code: validation_error, message: "Field 'question' is required.", status: 400, details: { field: question }, request_id: req_a1, retryable: false } }
+    Unauthorized:
+      description: Missing/invalid bearer (server/auth.py).
+      headers: { X-Request-Id: { $ref: '#/components/headers/X-Request-Id' } }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+          example: { error: { code: unauthorized, message: "missing bearer token", status: 401, request_id: req_a2, retryable: false } }
+    Forbidden:
+      description: Authenticated but not permitted.
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: forbidden, message: "Not permitted.", status: 403, details: { resource: "backtest:write" }, request_id: req_f1, retryable: false } } } }
+    NotFound:
+      description: Unknown route or path resource.
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: not_found, message: "Series 'crypto:nope:usd:1d' does not exist.", status: 404, details: { id: "crypto:nope:usd:1d" }, request_id: req_n1, retryable: false } } } }
+    InsufficientData:
+      description: Well-formed but no useful result (422 on /v1 analytics).
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: insufficient_data, message: "Need >= 8 points to scan for patterns; got 4.", status: 422, details: { n_points: 4, min: 8 }, request_id: req_ps1, retryable: false } } } }
+    UnknownEntity:
+      description: Referenced ticker/node/series does not resolve.
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: unknown_entity, message: "Node 'protocol:Nope' is not in the KGIK graph.", status: 422, details: { node: "protocol:Nope" }, request_id: req_kg1, retryable: false } } } }
+    RateLimited:
+      description: Token bucket exhausted (§0.7).
+      headers:
+        Retry-After: { $ref: '#/components/headers/Retry-After' }
+        X-RateLimit-Limit: { $ref: '#/components/headers/X-RateLimit-Limit' }
+        X-RateLimit-Remaining: { $ref: '#/components/headers/X-RateLimit-Remaining' }
+        X-RateLimit-Reset: { $ref: '#/components/headers/X-RateLimit-Reset' }
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: rate_limited, message: "Rate limit exceeded for the Forecast class.", status: 429, details: { retry_after_seconds: 12, limit: 120 }, request_id: req_rl1, retryable: true } } } }
+    IdempotencyConflict:
+      description: Idempotency-Key reused with a different body.
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: idempotency_conflict, message: "Idempotency-Key already used with a different request body.", status: 409, details: { idempotency_key: "bt_xrp_2026-06-04_run7" }, request_id: req_bt2, retryable: false } } } }
+    PayloadTooLarge:
+      description: Inline series / body exceeds limits.
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: payload_too_large, message: "Inline series exceeds 50000 points.", status: 413, details: { limit: 50000, received: 91234 }, request_id: req_pl1, retryable: false } } } }
+    UpstreamFeedError:
+      description: External feed hard failure (retryable).
+      headers: { Retry-After: { $ref: '#/components/headers/Retry-After' } }
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: upstream_feed_error, message: "CoinGecko returned 503.", status: 502, details: { feed: coingecko, upstream_status: 503, retry_after_seconds: 30 }, request_id: req_up1, retryable: true } } } }
+    ModelUnavailable:
+      description: Inference backend down/not loaded (retryable).
+      headers: { Retry-After: { $ref: '#/components/headers/Retry-After' } }
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: model_unavailable, message: "timesfm_2_5 backend is not loaded.", status: 503, details: { model: timesfm_2_5, backend: "PREDICT_GPU_URL" }, request_id: req_mu1, retryable: true } } } }
+    Timeout:
+      description: A bounded compute/feed step exceeded its deadline (retryable).
+      headers: { Retry-After: { $ref: '#/components/headers/Retry-After' } }
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: timeout, message: "Pattern scan exceeded its compute deadline.", status: 504, details: { stage: matrix_profile, deadline_ms: 15000 }, request_id: req_to1, retryable: true } } } }
+    InternalError:
+      description: Unhandled bug (rare; predictor self-handles).
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' }, example: { error: { code: internal_error, message: "An unexpected error occurred.", status: 500, request_id: req_ie1, retryable: true } } } }
+```
+
+---
+
+## 11. HEADERS — full request/response header reference
+
+### 11.1 Request headers
+| Header | Endpoints | Required | Notes |
+|---|---|---|---|
+| `Authorization: Bearer <key>` | all | conditional | Required on writes (`/v1/predict/backtest`) always; required everywhere when `JARVIS_REQUIRE_AUTH=true`; otherwise optional. Validated by `server/auth.py::_check`. |
+| `Content-Type: application/json` | all `POST` | yes | Bodies are JSON; a wrong/absent type on a body → `400 validation_error`. |
+| `Accept: application/json` | reads | no | Default. For streaming endpoints use `Accept: text/event-stream` (§13). |
+| `Idempotency-Key: <opaque>` | `POST /v1/predict/backtest` | no | ≤200 chars; replays the original run within 24 h (§0.5). |
+| `If-None-Match: <etag>` | reads (history/registry/skill) | no | Conditional GET; `304 Not Modified` when the `ETag` is unchanged. |
+| `X-Request-Id: <id>` | all | no | Client-supplied correlation id; echoed back. If absent, the server generates one. |
+
+### 11.2 Response headers (every response)
+| Header | Always? | Meaning |
+|---|---|---|
+| `X-Request-Id` | yes | Correlation id; equals `error.request_id` on errors. |
+| `X-API-Version` | yes | Build semver, e.g. `1.4.0` (§6.1). |
+| `X-RateLimit-Limit` / `-Remaining` / `-Reset` | yes | Token-bucket state (§0.7). |
+| `Cache-Control` | reads | Per-endpoint (`public, max-age=30|60`; `no-store` on writes/forecasts). |
+| `ETag` | cacheable reads | Strong validator for `If-None-Match`. |
+| `Retry-After` | on 429/502/503/504 | Seconds to back off. |
+| `Deprecation` / `Sunset` / `Link` | deprecated only | RFC 8594 lifecycle (§6.2). |
+| `Content-Type` | yes | `application/json; charset=utf-8`, or `text/event-stream` for SSE. |
+
+> **Forecast cacheability:** `POST /functions/predict` is `Cache-Control: no-store` even though it is a pure function of body, because the *default network path* reads a live ~5-min-cached feed (`load_crypto_series`, `load_seismic_catalog`) — so two identical calls minutes apart may legitimately differ. Offline (params-supplied series) calls are deterministic (GBM `seed=42`) but the header stays `no-store` for a single, simple contract.
+
+---
+
+## 12. PAGINATION, FILTERING & SORTING — consolidated reference
+
+### 12.1 Pagination (cursor; §0.6 expanded)
+- **Model:** opaque forward cursors. A cursor encodes the last-seen sort key + tiebreak id (base64url JSON), so it is stable under concurrent inserts (no skipped/duplicated rows the way offset pagination drifts).
+- **Request:** `?limit=<1..500, default 50>&cursor=<opaque>`. For `GET /v1/history/series/{id}` the point limit is larger (`default 1000, max 50000`).
+- **Response:** every list wraps items in `{ items|points|edges, page }` where `page = { limit, next_cursor, has_more, total_estimate? }`.
+- **Termination:** iterate until `page.next_cursor == null` (equivalently `has_more == false`). Do **not** rely on `total_estimate` for loop control — it is best-effort.
+- **Invalid cursor →** `400 validation_error` with `details.field = "cursor"`.
+
+```text
+GET /v1/history/series?domain=crypto&limit=50
+  → page.next_cursor = "eyJvZmYiOjUwfQ=="
+GET /v1/history/series?domain=crypto&limit=50&cursor=eyJvZmYiOjUwfQ==
+  → ... until next_cursor == null
+```
+
+### 12.2 Filtering
+| Endpoint | Filters |
+|---|---|
+| `GET /v1/history/series` | `domain`, `source`, `entity`, `q` (free text over entity/label), `as_of_from`/`as_of_to`. |
+| `GET /v1/history/series/{id}` | `from`/`to` (time window), `outcomes` (join realized), `downsample`. |
+| `GET /v1/predict/skill` | `domain`, `target`, `metric`, `from`/`to`, `bucket`. |
+| `GET /v1/kgik/graph` | `node`, `depth`, `relation`, `min_confidence`, `as_of`. |
+| `GET /v1/models/registry` | `domain`, `status`, `family`. |
+
+- Unknown filter params are **ignored** (forward-compatible), not rejected.
+- Time filters accept **either** epoch ms (integer) **or** ISO-8601 UTC; responses always echo ms.
+- Range filters are half-open `[from, to)`.
+
+### 12.3 Sorting
+- Syntax: `?sort=<field>` ascending, `?sort=-<field>` descending; or `?sort=<field>&order=desc`. Multiple keys comma-separated, first is primary: `?sort=-last_t,entity`.
+- Allowed sort fields (others → `400 validation_error`, `details.field="sort"`):
+
+| Endpoint | Allowed sort fields | Default |
+|---|---|---|
+| `GET /v1/history/series` | `last_t`, `first_t`, `n_points`, `freshness_seconds`, `entity` | `-last_t` |
+| `GET /v1/models/registry` | `weight`, `updated_at`, `version`, `skill.crps` | `-weight` |
+| `GET /v1/kgik/graph` (edges) | `confidence`, `last_seen`, `support` | `-confidence` |
+
+---
+
+## 13. STREAMING & WEBHOOKS — long-running predictions, backtests, and live forecasts
+
+Two delivery models for work that is either long (backtests) or continuous (live re-forecasting). Both are **forward** contracts; neither changes the live `/functions/predict` request/response shape.
+
+### 13.1 Server-Sent Events (SSE) — incremental forecast / backtest progress
+**Transport:** `text/event-stream` over a held-open HTTP `GET`/`POST`. Negotiated with `Accept: text/event-stream`. Each event is `event: <type>\ndata: <json>\n\n`. Clients use `EventSource` (GET) or `fetch` + a stream reader (POST). The terminal `done`/`error` event closes the stream.
+
+**13.1.1 Streaming a prediction** — `POST /v1/predict/stream`
+Same body as `/functions/predict`; streams partials as the engine classifies → loads data → simulates → blends. Useful for Monte-Carlo progress on large `n_paths`.
+
+```
+POST /v1/predict/stream
+Accept: text/event-stream
+Content-Type: application/json
+
+{ "question": "XRP price in 48h", "params": { "n_paths": 200000 } }
+```
+Event sequence (each `data:` is one JSON line):
+```text
+event: routed
+data: {"domain":"crypto","target":"xrp","horizon":"48h","used_llm":false}
+
+event: data_loaded
+data: {"source":"CoinGecko /coins/ripple/market_chart","n_points":90,"as_of":1749038400000}
+
+event: progress
+data: {"stage":"montecarlo","paths_done":50000,"paths_total":200000,"pct":0.25}
+
+event: progress
+data: {"stage":"montecarlo","paths_done":150000,"paths_total":200000,"pct":0.75}
+
+event: partial
+data: {"point_estimate":0.5208,"interval":{"low":0.479,"high":0.569,"confidence":0.90}}
+
+event: done
+data: { /* the FULL PredictResponse envelope from §1.2, identical to non-streamed */ }
+```
+- The terminal `done` payload is byte-for-byte a `PredictResponse`, so a client can ignore all intermediate events and treat the stream as a slow request.
+- On failure mid-stream: `event: error\ndata: {ErrorEnvelope}` then the stream closes. A soft `insufficient_data` still arrives as a normal `event: done` with the 200 soft result body (consistent with §0.4).
+- Heartbeat: a `:` comment line (`: keep-alive`) every 15 s to defeat idle proxies.
+
+**13.1.2 Streaming a backtest** — `GET /v1/predict/backtest/{run_id}/stream`
+Auth: `require_bearer`. Streams per-origin progress for an async run (§6d).
+```text
+event: status
+data: {"run_id":"bt_8c2f","status":"running","n_origins":88}
+
+event: origin
+data: {"origin":12,"t":1742428800000,"model":"gbm_mc_holt","crps":0.0219}
+
+event: progress
+data: {"origins_done":44,"origins_total":88,"pct":0.5}
+
+event: done
+data: { /* the BacktestRun completed body from §6d */ }
+```
+
+**13.1.3 SSE event-type catalogue**
+| `event:` | Where | `data` shape |
+|---|---|---|
+| `routed` | predict/stream | `{domain,target,horizon,used_llm}` |
+| `data_loaded` | predict/stream | `{source,n_points,as_of}` |
+| `progress` | both | `{stage?,pct,...counts}` |
+| `partial` | predict/stream | partial `Prediction` (subject to change before `done`) |
+| `status` / `origin` | backtest/stream | run status / per-origin score |
+| `done` | both | the FULL terminal envelope (PredictResponse or BacktestRun) |
+| `error` | both | `ErrorEnvelope` (then stream closes) |
+
+### 13.2 Webhooks — push on async completion
+For fire-and-forget async backtests (or scheduled re-forecasts from the self-improvement loop), the caller may register a webhook instead of polling.
+
+**Registration (in the backtest body):**
+```json
+{ "series_id": "crypto:ripple:usd:1d", "horizon_hours": 48, "async": true,
+  "webhook": { "url": "https://client.example/hooks/oracle", "secret": "whsec_..." } }
+```
+**Delivery:** `POST <url>` with the run result and signature headers:
+```
+POST /hooks/oracle
+Content-Type: application/json
+X-Oracle-Event: backtest.completed
+X-Oracle-Delivery: dlv_91af
+X-Oracle-Signature: t=1749038460,v1=hex(HMAC_SHA256(secret, "{t}.{body}"))
+```
+```json
+{ "event": "backtest.completed", "run_id": "bt_8c2f", "status": "completed",
+  "result": { /* BacktestRun body, §6d */ }, "sent_at": 1749038460000 }
+```
+**Event types:** `backtest.completed`, `backtest.failed`, `forecast.scored` (self-improvement loop attached a realized outcome — see §08), `model.promoted` (registry status change), `drift.detected`.
+**Verification (client side):** recompute `HMAC_SHA256(secret, "{t}.{raw_body}")`, constant-time compare to `v1`, reject if `|now - t| > 300 s` (replay window).
+**Delivery semantics:** at-least-once; retried with exponential backoff (1m, 5m, 30m, 2h, 6h) on non-2xx; each carries the same `X-Oracle-Delivery` id so the receiver can dedupe. Endpoints MUST be idempotent on `run_id`/`X-Oracle-Delivery`.
+
+---
+
+## 14. RATE-LIMIT TIERS
+
+§0.7 defines the four request *classes* and the per-response headers. Limits additionally scale with the caller's **plan tier** (resolved from the API key; anonymous = IP-bucketed at the `free` tier).
+
+### 14.1 Class × tier matrix (requests per minute)
+| Class \ Tier | Anonymous / `free` | `dev` | `pro` | `enterprise` |
+|---|---|---|---|---|
+| Forecast (`/functions/predict`, `/v1/predict/explain`, `/v1/predict/stream`, `/v1/kgik/link-predict`) | 120 | 300 | 1200 | custom |
+| Query (`/v1/history/*`, `/v1/kgik/graph`, `/v1/models/registry`, `/v1/predict/skill`) | 240 | 600 | 2400 | custom |
+| Heavy compute (`/v1/patterns/scan`) | 30 | 60 | 240 | custom |
+| Job submission (`/v1/predict/backtest`) | 10 | 30 | 120 | custom |
+| Streaming concurrency (open SSE conns) | 2 | 5 | 25 | custom |
+
+### 14.2 Mechanics
+- **Algorithm:** token bucket per `(identity, class)`. Identity = API key when present, else client IP. Burst = the per-minute limit; refill is continuous (limit/60 tokens per second).
+- **Headers:** `X-RateLimit-Limit/-Remaining/-Reset` reflect the bucket for the *class of the called endpoint*.
+- **Exhaustion:** `429 rate_limited` + `Retry-After` + `details.retry_after_seconds` + `details.limit`. `retryable: true`.
+- **Heavy/job buckets are separate** from Forecast/Query, so hammering `/v1/patterns/scan` never starves `/functions/predict`.
+- **Idempotent replays** (same `Idempotency-Key` returning the stored run) do **not** consume a fresh job-submission token.
+- **Enterprise** tiers may set per-key custom limits and exempt specific source IP ranges; these are provisioned out-of-band and reflected in the headers.
+
+---
+
+## 15. ERROR CATALOGUE — exhaustive
+
+Every `code` from §7, restated with: meaning, the HTTP status it ships with, retry guidance, the headers that accompany it, and a copy-paste example body. `code` is the contract; branch on it (§0.4). This expands §7's table into per-code detail.
+
+### 15.1 `insufficient_data`
+- **Meaning:** not enough data to produce a meaningful result.
+- **Status:** **200** (soft, on `/functions/predict` — the live behaviour) · **422** (hard, on `/v1` analytics that cannot degrade).
+- **Retry:** no (more/better *input* is needed, not a retry).
+- **Headers:** standard; no `Retry-After`.
+- **Soft body (200, /functions/predict)** — note this is the full `PredictResponse`, not the envelope:
+```json
+{ "question": "XRP price in 48h", "domain": "crypto", "target": "xrp", "horizon": "48h",
+  "prediction": { "value": null, "unit": null, "point_estimate": null,
+    "interval": { "low": null, "high": null, "confidence": 0.0 }, "probability": null },
+  "method": { "name": "insufficient_data", "family": "crypto", "models_used": [], "math": "" },
+  "drivers": {}, "data": { "source": null, "as_of": null, "lookback": null, "history": [], "forecast": [] },
+  "assumptions": [],
+  "caveats": ["Insufficient data to answer. Needs: a price series via params.series/values, or a recognised ticker with network access"],
+  "used_llm": false }
+```
+- **Hard body (422, /v1/patterns/scan):**
+```json
+{ "error": { "code": "insufficient_data", "message": "Need >= 8 points to scan for patterns; got 4.",
+  "status": 422, "details": { "n_points": 4, "min": 8 }, "request_id": "req_ps1", "retryable": false } }
+```
+
+### 15.2 `unknown_entity`
+- **Meaning:** a referenced ticker / KGIK node / region / series entity does not resolve. (For crypto, an unrecognised ticker yields **`insufficient_data`** on `/functions/predict` because the live code degrades — see `_predict_crypto`; `unknown_entity` is used by the `/v1` resolvers that look entities up explicitly.)
+- **Status:** 422 (or 404 when it is a path id).
+- **Retry:** no.
+```json
+{ "error": { "code": "unknown_entity", "message": "source 'protocol:Ghost' not found in graph.",
+  "status": 422, "details": { "source": "protocol:Ghost" }, "request_id": "req_lp1", "retryable": false } }
+```
+
+### 15.3 `upstream_feed_error`
+- **Meaning:** a required external feed (CoinGecko `/coins/{id}/market_chart`, USGS `fdsnws/event/1/query`, FX) failed hard. **Live nuance:** `load_crypto_series`/`load_seismic_catalog` swallow feed failures and return `[]`, which becomes a **200 `insufficient_data`** soft result — so this hard 502 only appears on `/v1` endpoints that explicitly require a live feed and cannot degrade.
+- **Status:** 502 · **Retry:** **yes** (`Retry-After`).
+```json
+{ "error": { "code": "upstream_feed_error", "message": "CoinGecko returned 503.", "status": 502,
+  "details": { "feed": "coingecko", "upstream_status": 503, "retry_after_seconds": 30 },
+  "request_id": "req_up1", "retryable": true } }
+```
+
+### 15.4 `model_unavailable`
+- **Meaning:** the requested/required forecast model or inference backend (e.g. a foundation-TS server at `PREDICT_GPU_URL`) is down or not loaded. The native forecasters (`gbm_montecarlo_forecast`, `gutenberg_richter_poisson`, `great_circle_forward`, `fit_growth_series`) are in-process and never raise this; it applies to shadow/remote models in the registry.
+- **Status:** 503 · **Retry:** **yes**.
+```json
+{ "error": { "code": "model_unavailable", "message": "timesfm_2_5 backend is not loaded.", "status": 503,
+  "details": { "model": "timesfm_2_5", "backend": "PREDICT_GPU_URL" }, "request_id": "req_mu1", "retryable": true } }
+```
+
+### 15.5 `validation_error`
+- **Meaning:** malformed JSON, wrong types, missing required field, failed schema validation. For the live route this is what FastAPI/Pydantic raises when `question` is absent or not a string (`PredictRequest`).
+- **Status:** 400 · **Retry:** no.
+```json
+{ "error": { "code": "validation_error", "message": "Field 'question' is required.", "status": 400,
+  "details": { "field": "question", "errors": [ { "loc": ["body","question"], "type": "missing" } ] },
+  "request_id": "req_a1", "retryable": false } }
+```
+
+### 15.6 `unauthorized`
+- **Meaning:** missing or invalid bearer. Messages mirror `server/auth.py` exactly: `"missing bearer token"` (no/!Bearer header) and `"invalid token"` (token != `API_KEY`).
+- **Status:** 401 · **Retry:** no.
+```json
+{ "error": { "code": "unauthorized", "message": "invalid token", "status": 401, "request_id": "req_a2", "retryable": false } }
+```
+
+### 15.7 `forbidden`
+- **Meaning:** authenticated but not permitted (e.g. a `dev`-tier key calling an `enterprise`-only export).
+- **Status:** 403 · **Retry:** no.
+```json
+{ "error": { "code": "forbidden", "message": "Your plan cannot run backtests.", "status": 403,
+  "details": { "resource": "backtest:write", "tier": "free" }, "request_id": "req_f1", "retryable": false } }
+```
+
+### 15.8 `not_found`
+- **Meaning:** unknown route, or unknown path resource (`series_id`, `run_id`, `forecast_id`, KGIK `node` by path).
+- **Status:** 404 · **Retry:** no.
+```json
+{ "error": { "code": "not_found", "message": "series_id 'crypto:nope:usd:1d' not found.", "status": 404,
+  "details": { "series_id": "crypto:nope:usd:1d" }, "request_id": "req_bt3", "retryable": false } }
+```
+
+### 15.9 `rate_limited`
+- **Meaning:** token bucket exhausted for the (identity, class). See §14.
+- **Status:** 429 · **Retry:** **yes** — wait `details.retry_after_seconds` / `Retry-After`.
+- **Headers:** `Retry-After`, `X-RateLimit-*`.
+```json
+{ "error": { "code": "rate_limited", "message": "Rate limit exceeded for the Heavy compute class.",
+  "status": 429, "details": { "retry_after_seconds": 12, "limit": 30, "class": "heavy_compute" },
+  "request_id": "req_rl1", "retryable": true } }
+```
+
+### 15.10 `idempotency_conflict`
+- **Meaning:** `Idempotency-Key` reused within 24 h with a *different* body.
+- **Status:** 409 · **Retry:** no (change the key or send the original body).
+```json
+{ "error": { "code": "idempotency_conflict", "message": "Idempotency-Key already used with a different request body.",
+  "status": 409, "details": { "idempotency_key": "bt_xrp_2026-06-04_run7" }, "request_id": "req_bt2", "retryable": false } }
+```
+
+### 15.11 `deprecated_endpoint`
+- **Meaning:** called after its `Sunset` date (§6.2). One release of 410, then 404.
+- **Status:** 410 · **Retry:** no (migrate to `replacement`).
+- **Headers:** `Deprecation: true`, `Sunset`, `Link: <replacement>; rel="successor-version"`.
+```json
+{ "error": { "code": "deprecated_endpoint", "message": "POST /v0/predict was sunset on 2026-03-01.",
+  "status": 410, "details": { "sunset": "2026-03-01", "replacement": "/functions/predict" },
+  "request_id": "req_dp1", "retryable": false } }
+```
+
+### 15.12 `payload_too_large`
+- **Meaning:** request body / inline series exceeds limits (inline `series` > 50k points; body > 8 MB).
+- **Status:** 413 · **Retry:** no (use a `series_id` or downsample client-side).
+```json
+{ "error": { "code": "payload_too_large", "message": "Inline series exceeds 50000 points.", "status": 413,
+  "details": { "limit": 50000, "received": 91234 }, "request_id": "req_pl1", "retryable": false } }
+```
+
+### 15.13 `timeout`
+- **Meaning:** a bounded compute/feed step blew its deadline (e.g. Matrix Profile on a huge series, or a slow feed within the `httpx.Timeout(...)` used by the loaders).
+- **Status:** 504 · **Retry:** **yes** (often after narrowing the window or via async/SSE).
+```json
+{ "error": { "code": "timeout", "message": "Pattern scan exceeded its compute deadline.", "status": 504,
+  "details": { "stage": "matrix_profile", "deadline_ms": 15000 }, "request_id": "req_to1", "retryable": true } }
+```
+
+### 15.14 `internal_error`
+- **Meaning:** unhandled server bug. **Rare on `/functions/predict`** because `predict()` wraps every domain handler in a `try/except` that degrades to a 200 soft `insufficient_data` ("never 500 a normal query"). This code is for genuinely unexpected failures (e.g. in the `/v1` layer).
+- **Status:** 500 · **Retry:** **yes** (transient assumption); report `request_id` if persistent.
+```json
+{ "error": { "code": "internal_error", "message": "An unexpected error occurred.", "status": 500,
+  "request_id": "req_ie1", "retryable": true } }
+```
+
+### 15.15 Retry decision flow (client pseudocode)
+```text
+on response r:
+  if r.ok: return r.body
+  e = parse(r.body).error
+  switch e.code:
+    rate_limited                  -> sleep(e.details.retry_after_seconds); retry (cap N)
+    upstream_feed_error, timeout,
+    model_unavailable, internal_error -> if e.retryable: backoff_jittered(); retry (cap N)
+    unauthorized                  -> refresh/prompt for key; do NOT auto-loop
+    validation_error, not_found,
+    unknown_entity, forbidden,
+    idempotency_conflict,
+    payload_too_large,
+    deprecated_endpoint           -> surface to user; do NOT retry as-is
+    insufficient_data (422)       -> render empty-state (not an error toast)
+```
+
+---
+
+## 16. SDK USAGE SNIPPETS
+
+### 16.1 Frontend — `kimiClient` (existing) and the proposed `oracle` wrapper
+The live page uses the function proxy (unchanged, §8.1):
+```js
+import { kimiClient } from "@/api/kimiClient";
+
+// LIVE — POSTs to /functions/predict, auto-attaches Bearer only if a key is set.
+const res = await kimiClient.functions.predict({ question: "XRP price in 48h" });
+// res is a PredictResponse; a soft insufficient_data result is NOT thrown.
+if (res.method.name === "insufficient_data") {
+  // render res.caveats[] as an informational empty-state, not an error.
+} else {
+  console.log(res.prediction.point_estimate, res.prediction.interval);
+}
+
+// With offline params (deterministic; no network touched for the supplied series):
+await kimiClient.functions.predict({
+  question: "Project our user growth 6 months out",
+  params: { domain: "growth", series: [1000,1320,1700,2150,2700,3300,3950], horizon_steps: 6, unit: "users" },
+});
+```
+The `/v1` wrapper (additive to `src/api/kimiClient.js`, §8.2) used end-to-end:
+```js
+import { oracle } from "@/api/kimiClient";
+
+const skill   = await oracle.skill({ domain: "crypto", target: "xrp", metric: "crps", bucket: "week" });
+const catalog = await oracle.seriesList({ domain: "crypto", q: "rip", limit: 50 });
+const points  = await oracle.series("crypto:ripple:usd:1d", { from: "2026-06-01", limit: 200, downsample: "lttb" });
+const scan    = await oracle.scan({ series_id: "crypto:ripple:usd:1d", detectors: ["motif","changepoint"], window: 5 });
+const graph   = await oracle.kgikGraph({ node: "protocol:X", depth: 1, min_confidence: 0.3 });
+const links   = await oracle.linkPredict({ source: "protocol:X", relation: "adopts", target: null, top_k: 3 });
+const models  = await oracle.models({ domain: "crypto", status: "active" });
+
+// Write (requires a key); idempotent via a client-chosen key.
+const run = await oracle.backtest(
+  { series_id: "crypto:ripple:usd:1d", models: ["gbm_mc_holt"], horizon_hours: 48, from: "2026-03-06", to: "2026-06-04" },
+  "bt_xrp_2026-06-04_run7"
+);
+```
+Streaming a prediction with `fetch` + a reader (SSE over POST, §13.1):
+```js
+const resp = await fetch("/v1/predict/stream", {
+  method: "POST",
+  headers: { "Content-Type": "application/json", "Accept": "text/event-stream",
+             ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}) },
+  body: JSON.stringify({ question: "XRP price in 48h", params: { n_paths: 200000 } }),
+});
+const reader = resp.body.getReader();
+const dec = new TextDecoder();
+let buf = "";
+for (;;) {
+  const { value, done } = await reader.read();
+  if (done) break;
+  buf += dec.decode(value, { stream: true });
+  let i;
+  while ((i = buf.indexOf("\n\n")) >= 0) {
+    const frame = buf.slice(0, i); buf = buf.slice(i + 2);
+    const ev = (frame.match(/^event:\s*(.*)$/m) || [])[1];
+    const data = (frame.match(/^data:\s*(.*)$/m) || [])[1];
+    if (ev === "progress") updateBar(JSON.parse(data).pct);
+    if (ev === "done") render(JSON.parse(data));      // full PredictResponse
+    if (ev === "error") showError(JSON.parse(data).error);
+  }
+}
+```
+Error-envelope handling (parse the thrown text, branch on `error.code`, §8.3):
+```js
+try {
+  await oracle.scan({ series: [1,2,3,4] });           // too few points
+} catch (err) {
+  // request() throws Error("API <status>: <text>") with err.status set.
+  const env = (() => { try { return JSON.parse(err.message.replace(/^API \d+:\s*/, "")); } catch { return null; } })();
+  if (env?.error?.code === "insufficient_data") showEmptyState(env.error.message);
+  else if (err.status === 429) showRetryIn(env?.error?.details?.retry_after_seconds ?? 30);
+  else if (err.status === 401) promptForKey();
+  else showError(env?.error?.message ?? "Request failed");
+}
+```
+
+### 16.2 curl
+```bash
+# 1) LIVE forecast (public; no key needed when JARVIS_REQUIRE_AUTH=false)
+curl -sS https://api.apex.local/functions/predict \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"XRP price in 48h"}'
+
+# 2) Offline/deterministic seismic via params (no network feed touched)
+curl -sS http://localhost:8000/functions/predict \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"Chance of M6+ in 7 days?","params":{"domain":"seismic","magnitude":6.0,
+       "horizon_hours":168,"magnitudes":[2.5,2.6,2.7,2.9,3.1,3.3,3.0,2.8,4.1,3.7,2.6,5.2,3.9],
+       "catalog_days":30}}'
+
+# 3) Authenticated call (when JARVIS_REQUIRE_AUTH=true, or for write endpoints)
+curl -sS https://api.apex.local/v1/predict/explain \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer '"$JARVIS_API_KEY" \
+  -d '{"question":"XRP price in 48h","depth":"full","max_patterns":5}'
+
+# 4) Paginated, filtered, sorted catalog query
+curl -sS 'https://api.apex.local/v1/history/series?domain=crypto&q=rip&sort=-last_t&limit=50' \
+  -H 'Authorization: Bearer '"$JARVIS_API_KEY"
+
+# 5) Series points with a time window + server-side downsample
+curl -sS 'https://api.apex.local/v1/history/series/crypto:ripple:usd:1d?from=2026-06-01&limit=200&downsample=lttb'
+
+# 6) Write: enqueue a backtest, idempotent + async
+curl -sS https://api.apex.local/v1/predict/backtest \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer '"$JARVIS_API_KEY" \
+  -H 'Idempotency-Key: bt_xrp_2026-06-04_run7' \
+  -d '{"series_id":"crypto:ripple:usd:1d","models":["gbm_mc_holt","timesfm_2_5"],
+       "horizon_hours":48,"from":"2026-03-06","to":"2026-06-04","async":true,
+       "webhook":{"url":"https://client.example/hooks/oracle","secret":"whsec_xxx"}}'
+
+# 7) Poll the async run
+curl -sS https://api.apex.local/v1/predict/backtest/bt_8c2f \
+  -H 'Authorization: Bearer '"$JARVIS_API_KEY"
+
+# 8) Stream a prediction (SSE)
+curl -N https://api.apex.local/v1/predict/stream \
+  -H 'Content-Type: application/json' -H 'Accept: text/event-stream' \
+  -d '{"question":"XRP price in 48h","params":{"n_paths":200000}}'
+
+# 9) Conditional GET (ETag) to save bandwidth on registry polling
+curl -sS https://api.apex.local/v1/models/registry \
+  -H 'If-None-Match: "W/abc123"'   # -> 304 Not Modified if unchanged
+```
+
+### 16.3 Python (httpx) — mirrors the server's own client style
+```python
+import httpx
+
+BASE = "http://localhost:8000"
+key = "..."  # optional locally
+headers = {"Authorization": f"Bearer {key}"} if key else {}
+
+with httpx.Client(timeout=httpx.Timeout(20.0, connect=8.0)) as c:
+    r = c.post(f"{BASE}/functions/predict", json={"question": "XRP price in 48h"}, headers=headers)
+    r.raise_for_status()
+    res = r.json()
+    if res["method"]["name"] == "insufficient_data":
+        print("no answer:", res["caveats"])
+    else:
+        p = res["prediction"]
+        print(p["point_estimate"], p["interval"])
+```
+
+---
+
+## 17. BACKWARDS-COMPATIBILITY / VERSIONING / DEPRECATION MATRIX
+
+Concrete change-by-change ruling for what is allowed where, the lifecycle of each surface, and a worked deprecation timeline. Extends §6.
+
+### 17.1 Change-class compatibility matrix
+| Change | Backward-compatible? | Where it ships | Client action |
+|---|---|---|---|
+| Add a new **optional** request field/param | Yes | same `/v1` (minor) | none (ignore if unused) |
+| Add a new **response** field | Yes | same `/v1` (minor) | **must ignore unknown fields** |
+| Add a new **enum member** (with documented fallback) | Yes | same `/v1` (minor) | treat unknown values as fallback (`generic`/`unknown`) |
+| Add a new **endpoint** | Yes | same `/v1` (minor) | none |
+| Loosen validation (accept more) | Yes | same `/v1` | none |
+| Make an optional field **required** | **No** (breaking) | `/v2` | migrate |
+| Remove/rename a field | **No** | `/v2` (field deprecated first, §6.2) | migrate |
+| Change a field's **type** | **No** | `/v2` | migrate |
+| **Tighten** an enum (remove a member) | **No** | `/v2` | migrate |
+| Change default **semantics** of a param | **No** | `/v2` | migrate |
+| Change the **error envelope** shape | **No** | `/v2` | migrate (codes are stable within a major) |
+| Change `/functions/predict` response shape | **No** — it is permanent | only `/v2/functions/predict` | none for v1 clients |
+
+### 17.2 Surface lifecycle table
+| Surface | Status | Stability guarantee | Notes |
+|---|---|---|---|
+| `POST /functions/predict` | **LIVE, permanent** | shape frozen at v1 semantics | Backed by `predict()`; soft-error contract (200) is load-bearing for the UI. |
+| `POST /v1/functions/predict` | LIVE alias | tracks `/functions/predict` exactly | For uniform `/v1` clients. |
+| `PredictResponse` envelope | **stable** | additive-only within v1 | Every forecast endpoint MUST emit it unchanged so shared UI components render it. |
+| Error `code` vocabulary | **stable** | codes never re-meaning within a major | New codes may be *added* (clients default-branch). |
+| `/v1/predict/explain`, `/skill`, `/history/*`, `/patterns/scan`, `/kgik/*`, `/models/registry`, `/predict/backtest` | **[FORWARD]** | additive within v1 once shipped | Forward contracts; consistent with the live envelope. |
+| `/v1/predict/stream`, backtest stream, webhooks | **[FORWARD]** | additive | `done` payloads reuse the stable envelopes. |
+| `/v0/*` (hypothetical legacy) | deprecated→sunset | 90-day window then 410→404 | Example used in §17.4. |
+
+### 17.3 Discovery & header signalling (how clients detect state)
+- `GET /v1/` → `{ "version": "1.4.0", "endpoints": [...], "deprecations": [ { "surface": "...", "since": "...", "sunset": "...", "replacement": "..." } ] }`.
+- Every response: `X-API-Version: 1.4.0`.
+- Deprecated responses additionally: `Deprecation: true`, `Sunset: <HTTP-date>`, `Link: <replacement>; rel="successor-version"`.
+- A field being phased out is **still populated** for the full window and listed in `deprecations[]` with `field`-level granularity; its replacement ships alongside (no silent removals).
+
+### 17.4 Worked deprecation timeline (example)
+Suppose `drivers.doubling_time` (growth) is renamed to `drivers.doubling_time_steps` for clarity:
+| Date | Event | Behaviour |
+|---|---|---|
+| 2026-06-04 | New field added | Both `doubling_time` and `doubling_time_steps` present; identical values. Listed in `deprecations[]`. Responses carry `Deprecation: true` on the growth path. |
+| 2026-06-04 → 2026-09-02 | 90-day window | Old field stays populated; docs + discovery point to the new name. |
+| 2026-09-02 | Sunset of the *field* | Old field omitted in `/v1` minor bump `1.5.0`. (A field removal that would break parsers ships only at `/v2`; a purely additive rename keeps both for the window, then drops the alias as a documented minor.) |
+| breaking variants | `/v2` only | Any change that alters types/required-ness/enums of an existing field is reserved for `/v2/...`, mounted in parallel; `/v1` keeps running through its own deprecation window (min 90 days) before `410 Gone` then `404`. |
+
+### 17.5 Client compatibility checklist (normative)
+1. **Ignore unknown response fields.** Never fail on additive fields.
+2. **Default unknown enum values** to the documented fallback (`domain`→`generic`, `family`→`unknown`).
+3. **Treat `null` as "unavailable,"** never `0` (the predictor emits `null` for absent values/intervals/probabilities).
+4. **Branch on `error.code`,** not `message` or numeric `status` alone.
+5. **Respect `Retry-After`** on `429/502/503/504`; honour `retryable`.
+6. **Send `Idempotency-Key`** on backtest submissions you might retry.
+7. **Read `X-API-Version` / `GET /v1/`** to detect deprecations; migrate before `Sunset`.
+8. **Never NaN/Infinity:** floats arrive as `null` at the boundary — parse accordingly.
+
+---
+
+> Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract; **this pass:** complete OpenAPI 3.1 document (§10), full header reference (§11), pagination/filtering/sorting reference (§12), SSE + webhooks streaming contracts (§13), rate-limit tier matrix (§14), exhaustive per-code error catalogue with retry flow (§15), frontend `kimiClient`/`oracle` + curl + Python SDK snippets (§16), and the backwards-compat/versioning/deprecation matrix with worked timeline (§17)).

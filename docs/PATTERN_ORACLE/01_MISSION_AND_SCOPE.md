@@ -263,6 +263,27 @@ Each KPI is restated as a **computable formula** with an explicit pass/alarm thr
 
 **KPI computation rules (normative).** (i) Every KPI **MUST** be computed only over **resolved** forecasts (K-1…K-4, K-6, K-8, K-9) except latency/availability/refusal which are request-time. (ii) Every reported skill KPI **MUST** name its baseline inline. (iii) A KPI with `N` below the minimum-sample floor (defined in §08) is reported as "insufficient sample", not as a pass or fail. (iv) Thresholds here are the *charter* targets; §11 §3.5 holds the executable assertions and any per-feed tightening.
 
+#### 1.4.5 Worked KPI examples (illustrative, for unambiguous interpretation)
+
+These examples fix the *interpretation* of each formula so two engineers compute identical numbers. Values are illustrative, not benchmarks.
+
+- **K-1 FSS (point/RMSE).** If `RMSE_model = 0.85` and `RMSE_persistence = 1.00`, then `FSS = 1 − 0.85/1.00 = 0.15` ⇒ meets the mature target on that feed. A negative example: `RMSE_model = 1.10` ⇒ `FSS = −0.10` ⇒ alarm (worse than baseline).
+- **K-2 PICP.** Over `N = 200` resolved 90% intervals, if `184` outcomes fell inside, `PICP = 0.92`; `|0.92 − 0.90| = 0.02 ≤ 0.05` ⇒ pass. If only `160` fell inside (`PICP = 0.80`), `|0.80−0.90| = 0.10 > 0.05` ⇒ fail (under-coverage).
+- **K-6 trend.** Rolling weekly FSS `[0.05, 0.07, 0.06, 0.09]` ⇒ OLS slope `β > 0` ⇒ non-negative trend ⇒ pass. A monotone decline `[0.12, 0.09, 0.05, 0.01]` ⇒ `β < 0` sustained ⇒ alarm.
+- **K-8 sharpness vs K-2.** If widening intervals raises `PICP` from 0.88 to 0.97 *and* mean width jumps 40%, the sharpness flag fires (coverage-gaming) even though coverage "improved" — K-2 must be held *at* nominal, not maximized.
+- **K-10 refusal correctness.** Over `100` deliberately out-of-grounding asks, `≥99` returned a refusal/hedge with a reason and `0` fabricated a number ⇒ pass; a single fabricated number ⇒ fail (P-1 violation), regardless of the count.
+
+#### 1.4.6 KPI measurement-cadence summary
+
+| Cadence bucket | KPIs | Trigger |
+|----------------|------|---------|
+| Per request (request-time) | K-5, K-12 | each `/predict` call |
+| Per scoring run (on resolution) | K-1, K-3, K-4, K-8, K-9 | outcome resolver completes |
+| Rolling/daily | K-2, K-12 | scheduled job |
+| Weekly trailing window | K-6 | scheduled trend job |
+| Per drift-eval run | K-11 | drift monitor / injected shift |
+| Per release / monthly | K-7, K-10 | release gate + eval set |
+
 ---
 
 ## 1.5 ENGINEERING PRINCIPLES (binding constraints)
@@ -309,6 +330,25 @@ These principles are **non-negotiable** and constrain every later section. Each 
 | OS-6 | **Training of giant new foundation models from scratch.** | We *replicate behaviour* by integrating pretrained Apache-2.0 models (P-4); we fine-tune/ensemble/calibrate, not pretrain at frontier scale. |
 | OS-7 | **PII-driven individual-level prediction.** | Governance/privacy (§12); engine operates on world-data aggregates and grounded series. |
 | OS-8 | **General chit-chat / non-forecast Q&A.** | Out-of-charter; such asks are routed away or answered as "not a forecast question". |
+
+### 1.6.3 Scope edge-case clarifications (boundary partition)
+
+The IN/OUT partition above is clean at the centre but has *grey-zone asks* that integrators routinely send. This table resolves each grey zone to a definite side of the boundary so behavior is not improvised. Each links to the runtime edge-case (§1.3.2) it triggers.
+
+| SEC | Grey-zone ask | Resolution | Side | Triggers |
+|-----|---------------|------------|------|----------|
+| SEC-1 | "What's the *exact* price tomorrow?" | Reinterpret as a calibrated point+interval; never a certainty. | IN (reframed) | EC-3 |
+| SEC-2 | "Should I buy/sell?" | Forecast the variable; decline the advice with an OS-2 caveat. | OUT (advice) | EC-9 |
+| SEC-3 | "Predict for *this specific person*." | Refuse on governance grounds. | OUT (PII) | EC-10 |
+| SEC-4 | "Forecast a target we have no feed for." | Refuse (no grounding) **or** instruct that a feed adapter is the path (FR-15). | OUT until adapter | EC-1 |
+| SEC-5 | "Why did X happen?" (post-hoc causation) | Provide association/screening only, never proven cause. | IN (screening) | EC-5 |
+| SEC-6 | "Forecast at microsecond cadence." | Out of latency charter (OS-5); decline or downsample to interactive cadence. | OUT (HFT) | — |
+| SEC-7 | "Use this external dataset I paste in." | Refuse un-vetted data; only audited feed adapters ingest. | OUT (ungrounded) | EC-1, OS-3 |
+| SEC-8 | "Give a forecast even though the feed is down." | Allow on last-good data with stale caveat, else refuse. | IN (degraded) | EC-2 |
+| SEC-9 | "Forecast 10 years out for a chaotic series." | Hedge with honest-width interval or refuse; never imply precision. | IN (hedged) / OUT (refuse) | EC-3 |
+| SEC-10 | "Just chat with me." | Route to "not a forecast question". | OUT (chit-chat) | EC-6 |
+
+> **Partition completeness (normative).** Every grey-zone ask **MUST** resolve to exactly one side (IN/reframed/degraded vs OUT) with a stated trigger; no ask may be left to runtime improvisation. New grey zones discovered in operation **MUST** be added here before the behavior ships.
 
 ---
 
@@ -474,6 +514,30 @@ Sub-requirements decompose the parent FR into independently testable obligations
 
 ### 1.10.3 Requirement priority key
 - **P0** — must ship in v1 / hard acceptance gate. **P1** — must ship within the v2–v50 expansion. **P2** — hardening (v51–v150).
+
+#### 1.10.3.1 Coverage cross-check (mission · principle · UC · persona → requirement)
+
+This proves gate clauses (a)–(d) of §1.11 hold at authoring time: every driver of the charter maps to ≥1 requirement.
+
+| Driver | Requirement(s) that satisfy it |
+|--------|--------------------------------|
+| M-1 ask anything (NL) | FR-1, FR-2 |
+| M-2 real world data | FR-3, FR-4, NFR-8 |
+| M-3 find patterns | FR-5, FR-6, FR-17 |
+| M-4 historical relationships | FR-7, FR-13 |
+| M-5 calibrated forecast | FR-8, FR-9, FR-10, NFR-3, NFR-13 |
+| M-6 self-improves | FR-11, FR-12, FR-13, FR-16, NFR-2 |
+| M-7 honest, never invented | FR-3, FR-18, FR-19, NFR-10, NFR-13 |
+| P-1 grounded | FR-3, FR-19, NFR-9, NFR-10 |
+| P-2 calibrated honesty | FR-8, FR-9, FR-18, NFR-13 |
+| P-3 self-improving | FR-11, FR-12, FR-13, FR-16 |
+| P-4 replicate the best | FR-10, FR-8 (foundation+conformal) |
+| P-5 domain-agnostic core | FR-15, NFR-14 |
+| P-6 testable & traceable | NFR-9, all `Verify` hooks |
+| UC-1…UC-8 | FR-1 (intake) + the UC's row in §1.3.1 |
+| P-A…P-E | the persona's journey J-A…J-E (§1.2.1) |
+
+> **Cross-check rule (normative).** Every cell above **MUST** be non-empty. A driver with no requirement is a charter gap and blocks the gate (§1.11).
 
 ### 1.10.4 RACI for requirements ownership
 
