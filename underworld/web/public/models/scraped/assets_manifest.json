@@ -10138,5 +10138,22 @@
     "epoch": "any",
     "name": "Ivy Wall Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lavender_patch": {
+    "prompt": "a patch of fragrant purple lavender, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d4ef12c4-05ce-4410-8653-ea877a2fdc91",
+    "path": "/models/generated/tripo/lavender_patch.glb",
+    "bytes": 15897700,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d4ef12c4-05ce-4410-8653-ea877a2fdc91/tripo_pbr_model_d4ef12c4-05ce-4410-8653-ea877a2fdc91.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDRlZjEyYzQtMDVjZS00NDEwLTg2NTMtZWE4NzdhMmZkYzkxL3RyaXBvX3Bicl9tb2RlbF9kNGVmMTJjNC0wNWNlLTQ0MTAtODY1My1lYTg3N2EyZmRjOTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=kFWW4FIxcgQLN4KsD8FrPY0IYuKTo3FaO6A2r-U-WgIXW3VKhCz1We-TXKS1WV1oVhh4tTrO0vDBuUMxaVGu6kxHU5ysn4q0UeWmyf6mUEgYCFZ6A75sHH-njcD3GI4Og9293jNnpXLKMmiCQLLQhO9I6ut5DhwWqmh08XKePPwueORBeSC44WPWf~nLKGuOHwQR9Ef7GI7dLqmz6vOKBXT-R2jJZJnIgn33XS2DbanS7RtjVHd~ma2E9WqvG61RoVbj1pAAK-pMW6~3VdZszJ8IvaPKZoXD5NzKv7YfswZ4BUP-9RTeKzbnkeQanPUidKfsI4TdieLd9~ha-weQ2g__",
+    "asset_id": "lavender_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Lavender Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
