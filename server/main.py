@@ -29,13 +29,24 @@ async def _lifespan(app: FastAPI):
 
         interval = int(os.environ.get("HISTORY_INGEST_INTERVAL_S", "900"))
         task = asyncio.create_task(ingestion_loop(interval_s=interval))
+
+    # Opt-in live forward-test loop (issue -> resolve -> score). Disabled by
+    # default; enable with FORWARD_TEST_ENABLE=true. Never auto-runs otherwise.
+    ft_task = None
+    try:
+        from .services.forward_test import start_loop_if_enabled
+
+        ft_task = start_loop_if_enabled()
+    except Exception:  # noqa: BLE001 - startup must never break on an optional loop
+        ft_task = None
     try:
         yield
     finally:
-        if task is not None:
-            task.cancel()
-            with contextlib.suppress(asyncio.CancelledError, Exception):
-                await task
+        for t in (task, ft_task):
+            if t is not None:
+                t.cancel()
+                with contextlib.suppress(asyncio.CancelledError, Exception):
+                    await t
 
 
 def create_app() -> FastAPI:
