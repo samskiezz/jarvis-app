@@ -9458,5 +9458,22 @@
     "epoch": "iron",
     "name": "Pier Walkway",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plaza_paving_tile": {
+    "prompt": "a modular patterned plaza paving slab tile, seamless, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "235ec2cb-1542-4ab5-bb01-f3aa73d690cf",
+    "path": "/models/generated/tripo/plaza_paving_tile.glb",
+    "bytes": 14953236,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/235ec2cb-1542-4ab5-bb01-f3aa73d690cf/tripo_pbr_model_235ec2cb-1542-4ab5-bb01-f3aa73d690cf.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjM1ZWMyY2ItMTU0Mi00YWI1LWJiMDEtZjNhYTczZDY5MGNmL3RyaXBvX3Bicl9tb2RlbF8yMzVlYzJjYi0xNTQyLTRhYjUtYmIwMS1mM2FhNzNkNjkwY2YuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=XulbP1100XS5sSN69-cozAX~~zGW6GeQmTlLC4GmliJlEQsTrSaPtz0iDcJn5eyCe6T53BiPUXPkfa-9upeiiEASriNPp4S6e3gRPX~XrdNiG4zsSzEeNFV2FTb4mEwvW9rM~BVxzphaH8MyiRcq5PjveAJyXY4JTWW-it6sMTpwIqLXZNIASS63wQ8sycgR7fnbzOktZoJeJhstcBcKDEpy10c-syn947TgmUt~fpLvhNOUgl24wlyjBlOb1fJfUkHW2xVfSrdA~ZP4SEQ1H1fKLnJ7IC262kIdUxEunsIOljSVx8QhurvVbRoeMcdpqReREoL7LS7H~RpaAGT2uw__",
+    "asset_id": "plaza_paving_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Plaza Paving Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
