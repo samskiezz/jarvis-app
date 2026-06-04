@@ -11209,5 +11209,22 @@
     "epoch": "information",
     "name": "Riot Shield",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stone_club": {
+    "prompt": "a heavy stone-headed war club, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "20bf919f-7d59-4956-9f5d-72823e53f99b",
+    "path": "/models/generated/tripo/stone_club.glb",
+    "bytes": 6670792,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/20bf919f-7d59-4956-9f5d-72823e53f99b/tripo_pbr_model_20bf919f-7d59-4956-9f5d-72823e53f99b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjBiZjkxOWYtN2Q1OS00OTU2LTlmNWQtNzI4MjNlNTNmOTliL3RyaXBvX3Bicl9tb2RlbF8yMGJmOTE5Zi03ZDU5LTQ5NTYtOWY1ZC03MjgyM2U1M2Y5OWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=PMa8RYnVcR69w1ro2nrY8ZCQq~irF96CuyxEELJwNKVnM~KH33R0w58PQzK68u1q2uxG-RZApxCeMGY7wtBlHsp1qKPsOtB98e4NYcgCZI9RJRwcCKbYxbx09jZ5Qh-KntYIZGoyiM1fHm2TViqhWUK5S4ymkCM9ciEXXz2CrZfUlK1QuY2spiI0AP3wHmUxyVbUglGR9wuL8khEl~BRQEnsJNAOd7WDtoJZDkFn799FZae-7sNHl68~u2oh-PuGSQaNlu6vOzAq1LjaofQ-bey3Ld4uBsqN1iOjvTsv8ZBL-nDgKX8rN7~ou7qcEC5Tgq91B0RNC2MzMckaR~OFhQ__",
+    "asset_id": "stone_club",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "stone",
+    "name": "Stone Club",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
