@@ -22,6 +22,7 @@ export const GROUPS = [
   { id: "intel",     label: "INTEL",           color: "#00c878" },
   { id: "command",   label: "COMMAND",         color: "#0096d4" },
   { id: "cognition", label: "COGNITION",       color: "#a855f7" },
+  { id: "sensors",   label: "SENSORS",         color: "#0096d4" },
   { id: "apex",      label: "APEX CORE",       color: "#f07820" },
   { id: "knowledge", label: "KNOWLEDGE",       color: "#e8a800" },
   { id: "war",       label: "WAR",             color: "#e8203c" },
@@ -70,6 +71,17 @@ export const PAGES = [
   { name: "ScienceConsole", label: "Science Console", icon: "🔬", group: "cognition",
     aliases: ["science", "methods", "compute"],
     component: P(() => import("@/pages/ScienceConsole")) },
+
+  // ── SENSORS (curated slices of the bridged 449-method science engine) ────
+  { name: "SensorGrid", label: "Sensor Grid", icon: "🛰️", group: "sensors",
+    aliases: ["sensor", "ppm", "buoy", "ocean", "air", "seismic", "hydrology"],
+    component: P(() => import("@/pages/SensorGrid")) },
+  { name: "SkyOrbital", label: "Sky / Orbital", icon: "☄️", group: "sensors",
+    aliases: ["sky", "meteor", "flight", "orbital", "satellite", "asteroid", "aero"],
+    component: P(() => import("@/pages/SkyOrbital")) },
+  { name: "RFSpectrum", label: "RF / Spectrum", icon: "📡", group: "sensors",
+    aliases: ["rf", "spectrum", "sonar", "frequency", "signal", "acoustics"],
+    component: P(() => import("@/pages/RFSpectrum")) },
 
   // ── APEX CORE ──────────────────────────────────────────────────────────
   { name: "ApexCore", label: "Apex Core", icon: "◉", group: "apex",
