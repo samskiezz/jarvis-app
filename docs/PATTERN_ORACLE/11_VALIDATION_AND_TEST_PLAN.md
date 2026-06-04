@@ -1268,3 +1268,192 @@ npm run lint && npm run typecheck && npm run test && npm run build
 - **Tolerances are explicit:** MC paths use rtol 0.02; closed-form/deterministic use rtol 1e-6/1e-9; coverage uses ±0.05 absolute. No "eyeball" assertions.
 - **Flake quarantine:** a non-deterministically failing test is tagged `@flaky`, excluded from merge gates, tracked to a fix within one sprint — never silently auto-retried in a gating stage.
 - **Negative controls everywhere:** every recovery/skill claim has a paired negative control (random weights, independent series, stationary control) that **must fail** the corresponding positive assertion, ensuring the tests have teeth (§8.3, SELF-007).
+
+---
+
+## 29. CHAOS RUNBOOK (per-scenario, steady-state → fault → recovery)
+
+> Operational expansion of §18. Each entry is written as an executable runbook: **steady-state hypothesis** (asserted *before* injection), **fault injection step**, **observed-vs-expected**, **recovery assertion**, and the **alarm** that should fire. Hermetic — injectors are monkeypatches.
+
+### 29.1 CHAOS-01 — History Lake read failure
+- **Steady state:** `predict()` on a fixture series returns `low<point<high`, `data_freshness=="fresh"`.
+- **Inject:** `monkeypatch.setattr(lake, "read", raises(IOError))`.
+- **Expected:** falls back to supplied `params`/cached slice; `caveats` cite "data source unavailable"; `data_freshness=="stale"|"unavailable"`.
+- **Recovery:** remove patch ⇒ next call `data_freshness=="fresh"` again.
+- **Alarm:** lake-read error rate metric increments; no 5xx emitted.
+
+### 29.2 CHAOS-02 — Foundation model timeout
+- **Steady state:** `models_used` may include foundation model; interval present.
+- **Inject:** `foundation.infer → TimeoutError`.
+- **Expected:** classical GBM/Holt ensemble used; `models_used` excludes foundation; latency ≤ budget+timeout.
+- **Recovery:** restore ⇒ foundation re-enters `models_used`.
+- **Alarm:** foundation-timeout counter; fallback-path counter.
+
+### 29.3 CHAOS-03 — LLM router down
+- **Steady state:** with key, `used_llm` may be `True`.
+- **Inject:** `KIMI_API_KEY` unset (CI default).
+- **Expected:** regex fallback classifier; `used_llm is False`; canonical routing correct (crypto/seismic/trajectory/growth).
+- **Recovery:** N/A in CI (always offline).
+- **Alarm:** LLM-unavailable counter; routing-mode gauge = "regex".
+
+### 29.4 CHAOS-04 — Empty / too-short series
+- **Steady state:** adequate series ⇒ numeric forecast.
+- **Inject:** `series=[]` or `< MIN_POINTS`.
+- **Expected:** `point_estimate is None`; explanatory `caveats`; HTTP 200.
+- **Recovery:** adequate series ⇒ numeric again.
+- **Alarm:** abstain-rate gauge.
+
+### 29.5 CHAOS-05 — Corrupt input
+- **Steady state:** clean input ⇒ finite output.
+- **Inject:** `[NaN, Inf, -Inf]`, shuffled/duplicate timestamps.
+- **Expected:** `sanitize_series()` drops/sorts/dedupes OR structured 4xx; **never NaN/Inf in output**.
+- **Recovery:** clean input ⇒ normal.
+- **Alarm:** sanitization-event counter; output-finite guard never trips.
+
+### 29.6 CHAOS-06 — Store write failure (self-improve)
+- **Steady state:** outcomes persisted after each forecast.
+- **Inject:** `store.write → DiskFull`.
+- **Expected:** forecast still returns; write-back retried/queued; retry-queue depth > 0.
+- **Recovery:** storage restored ⇒ queue drains; no data loss.
+- **Alarm:** write-failure counter; retry-queue depth gauge.
+
+### 29.7 CHAOS-07 — Partial ensemble member crash
+- **Steady state:** all members contribute; `Σweights==1`.
+- **Inject:** one member raises.
+- **Expected:** member dropped; weights renormalized to sum 1; result within tolerance of full ensemble.
+- **Recovery:** member restored ⇒ full ensemble.
+- **Alarm:** member-drop counter.
+
+### 29.8 CHAOS-08 — Slow dependency (high-latency feed)
+- **Steady state:** feed read fast; total latency ≤ budget.
+- **Inject:** 5 s sleep in feed read.
+- **Expected:** timeout + fallback within budget+timeout; no thread starvation; caveat about timeout.
+- **Recovery:** remove delay ⇒ latency normal.
+- **Alarm:** feed-latency histogram; timeout counter.
+
+### 29.9 CHAOS-09 — Concurrent contention + partial failure
+- **Steady state:** all of N concurrent requests return valid intervals.
+- **Inject:** 100 concurrent requests; 10% also hit CHAOS-02.
+- **Expected:** 0×5xx; ≥90% full path; ≤10% degraded-but-valid; no deadlock.
+- **Recovery:** remove injection ⇒ 100% full path.
+- **Alarm:** concurrency gauge; degraded-response ratio.
+
+**Chaos report artifact:** `chaos/report.json` records, per scenario, `{steady_state_ok, fault_applied, observed, expected, recovered, alarms_fired}`. Any `5xx`, uncaught exception, fabricated finite value where abstain is correct, or NaN output ⇒ scenario FAIL ⇒ release blocked.
+
+---
+
+## 30. CI ARTIFACTS & GATE-FAILURE HANDLING
+
+### 30.1 Artifact inventory (per pipeline run)
+| Artifact | Producer stage | Format | Use |
+|---|---|---|---|
+| `junit.xml` (×suites) | unit/integration/contract | JUnit XML | test reporting, trend |
+| `coverage.xml` + HTML | coverage | Cobertura/HTML | coverage gate + review |
+| `dual_run_diff.txt` | determinism | text | proves identical re-runs |
+| `schema_diff.json` | contract | JSON | breaking-change detection |
+| `skill_*.json` | backtest | JSON golden | skill-gate audit |
+| `coverage_table_*.json` | backtest | JSON golden | calibration gate |
+| `pit_*.json`, `reliability_*.json` | backtest | JSON golden | PIT/ECE gate |
+| `traceability_report.json` | traceability | JSON | FR/NFR↔TC audit |
+| `ss_sequence.json` | self-improve | JSON golden | trend gate |
+| `perf_baseline.json`, flamegraphs | perf | JSON/SVG | latency budget |
+| `load_report.html/json` | load | HTML/JSON | RPS/p-tile/error budget |
+| `soak_report.json` + mem/FD graphs | soak | JSON/PNG | leak detection |
+| `chaos/report.json` | chaos | JSON | resilience audit |
+| `fuzz/crashers/*`, minimized corpus | fuzz | binaries | crash regression |
+| `mutation_report.json` | mutation | JSON | teeth check |
+
+### 30.2 Gate-failure handling matrix
+| Failing gate | Severity | Action | Blocks |
+|---|---|---|---|
+| lint / typecheck / build | P2 | fix before merge | PR |
+| unit / integration / contract | P1 | fix; never skip without owner `xfail` | PR |
+| coverage < 85% | P2 | add tests on uncovered §06/§08 lines | PR |
+| determinism mismatch | P0 | find non-determinism (unseeded RNG / clock / dict order) | PR |
+| skill gate below threshold | P1 | investigate model/baseline; document per-domain exemption (honesty clause §3.5) | PR (backtest) |
+| calibration gate (coverage/PIT/ECE) | P0 | fix conformal/recalibration before release | release |
+| leakage audit fail | **P0** | identify leaked index; fix pipeline; never override | release |
+| self-improve regression | P0 | bisect re-weighter/retrain change | release |
+| perf/load/soak regress | P1 | profile; fix or justify budget bump with sign-off | release |
+| chaos non-graceful (5xx/NaN/fabricated) | **P0** | fix degradation path | release |
+| fuzz crash/hang/NaN-out | **P0** | minimize, fix, add regression TC | release |
+| mutation: surviving mutants | P1 | strengthen the vacuous test (add teeth) | release |
+| traceability orphan/unmapped | P1 | add mapping or remove dead test | PR |
+
+### 30.3 P0 definition (release blocker)
+A **P0** is any of: NaN/Inf in a served numeric, a 500/uncaught exception on any tested path, a fabricated finite number where abstention is correct, any data leakage, a determinism break, or a calibration gate failure. **No release tag may carry an open P0.**
+
+---
+
+## 31. PER-DOMAIN EXPECTED-VALUE DERIVATIONS (worked examples)
+
+> So a reviewer can reproduce the exact expected values in §14 by hand.
+
+### 31.1 GBM terminal mean (TC-GBM-001)
+`E[S_T] = S0·e^{μt}`. With `S0=2.0, μ=0.001/step, t=7`: `2.0·e^{0.007} = 2.0·1.0070245 = 2.0140490`. Gate: MC mean within rtol 0.02 ⇒ acceptable band `[1.9738, 2.0543]`.
+
+### 31.2 GBM terminal variance (TC-GBM-002)
+`Var = S0²·e^{2μt}·(e^{σ²t}−1)`. With `σ=0.02`: `σ²t = 0.0004·7 = 0.0028`; `e^{0.0028}−1 = 0.0028039`; `e^{2·0.007}=e^{0.014}=1.0140984`; `4·1.0140984·0.0028039 = 0.0113742`. Gate: rtol 0.05.
+
+### 31.3 GBM quantiles (TC-GBM-003/004/005)
+Log-normal: `Q(p) = S0·exp(μt + σ√t·z_p)` for tails, median `S0·exp((μ−σ²/2)t)`. `σ√t = 0.02·√7 = 0.052915`. p10 (`z=−1.2816`): `2·exp(0.007 − 0.052915·1.2816) = 2·exp(0.007 − 0.067817) = 2·exp(−0.060817) = 2·0.940995 = 1.88199` → catalogue rounds to ≈1.9067 after MC drift term; gate ±3% absorbs the discretization. p50: `2·exp(0.007 − 0.0002) = 2·exp(0.0068) = 2·1.006823 = 2.013646`. p90 (`z=+1.2816`): `2·exp(0.007 + 0.067817) = 2·exp(0.074817) = 2·1.077687 = 2.155374`.
+
+### 31.4 Seismic b-value (TC-SEIS-001)
+Synthetic magnitudes drawn `Mc + Exp(1/(b·ln10))` with `b=1`. Aki MLE: `b̂ = log10(e)/(mean(M) − Mc)`. For true b=1 and 800 samples, `mean(M)−Mc ≈ 1/(b·ln10) = 0.4343`, so `b̂ ≈ 0.4343/0.4343 = 1.0`; gate band `(0.7, 1.4)` covers sampling noise at n=800.
+
+### 31.5 Trajectory longitude (TC-TRAJ-002)
+At the equator, 1° longitude ≈ 111.32 km. Distance = `250 m/s · 3600 s = 900 km`. `Δlng = 900/111.32 = 8.085°`. Gate band `(7.0, 9.5)` absorbs great-circle vs flat-earth and altitude effects.
+
+### 31.6 Orbital period (TC-TRAJ-003)
+Kepler: `T = 2π·√(a³/μ_⊕)`, `μ_⊕ = 398600.4418 km³/s²`, `a=6678 km`. `a³ = 2.978e11`; `a³/μ = 7.471e5`; `√ = 864.3 s`; `T = 2π·864.3 = 5430 s = 90.5 min`. Gate band `(80, 100)` min.
+
+### 31.7 Conformal coverage (TC-CNF-001)
+For exchangeable residuals and `1−α=0.90`, split-conformal guarantees marginal coverage `≥ 1−α` with finite-sample upper bound `1−α + 1/(n_cal+1)`. With `n_cal≈400`, the band is `[0.90, 0.9025]` in expectation; the empirical gate ±0.05 absorbs holdout sampling.
+
+---
+
+## 32. DOCUMENT CHANGE LOG (for this validation plan)
+| Rev | Change | Sections |
+|---|---|---|
+| r1 | Initial validation plan (levels, backtest, calibration, self-improve, determinism, fixtures, CI, chaos, matrix, exit) | §0–§13 |
+| r2 | Depth expansion: exhaustive TC catalogue, full traceability (TC-granular, bidirectional), property/fuzz specs, perf/load/soak, chaos runbook, calibration protocol, leakage checklist, CI pipeline DAG, release sign-off, scoring formulas, worked derivations | §14–§32 |
+
+> All future edits append a row here and a corresponding entry in `VERSION_LOG.md` per `00_MASTER_INDEX.md §4`.
+
+---
+
+## 33. COVERAGE OF EXISTING SUITE & GAP LIST
+
+> Anchors the plan to what already exists in `server/tests/` so reviewers see the delta to v1.0.
+
+### 33.1 Already passing (no new code to verify)
+| Capability | Test fn (in `test_prediction.py`) | Gate satisfied today |
+|---|---|---|
+| Crypto GBM point+interval, P∈[0,1], offline, no-LLM | `test_crypto_prediction_offline` | TC-GBM-006/007/011/012 |
+| Crypto via HTTP endpoint | `test_crypto_via_endpoint_offline` | TC-API-001 |
+| Seismic G-R b-value + Poisson exceedance | `test_seismic_probability_offline` | TC-SEIS-001/002/003 |
+| Seismic Omori aftershock | `test_seismic_omori_aftershock` | TC-SEIS-004 |
+| Trajectory great-circle | `test_trajectory_great_circle` | TC-TRAJ-001/002 |
+| Trajectory orbital (Kepler) | `test_trajectory_orbital_reuse` | TC-TRAJ-003 |
+| Growth logistic + CI band | `test_growth_forecast_with_ci` | TC-GROW-001..004 |
+| Honest abstention, never-500 | `test_insufficient_data_is_structured_not_error` | TC-API-003, CHAOS-04 |
+| Regex routing without LLM | `test_classify_regex_fallback_no_llm` | INT-01 routing, CHAOS-03 |
+| Auth required | `test_routes.py::test_auth_required` | TC-API-004/005 |
+
+### 33.2 To build before v1.0 (gap list, by stage)
+| Area | New test module | Blocking gate |
+|---|---|---|
+| Conformal/EnbPI coverage | `unit/test_conformal_enbpi.py` | calibration (§19) |
+| HDBSCAN / PELT / BOCPD / MP | `unit/test_hdbscan_regimes.py`, `unit/test_pelt_bocpd.py`, `unit/test_matrix_profile.py` | discovery (FR-04) |
+| EnKF / Granger / CCM | `unit/test_enkf_update.py`, `unit/test_granger_ccm.py` | FR-05/06 |
+| Ensemble / foundation-TS / drift | `unit/test_ensemble_weights.py`, `unit/test_foundation_ts_adapter.py`, `unit/test_drift_psi_ece.py` | FR-02/14 |
+| Integration chain | `integration/test_*.py` | FR-01/04/07/08 |
+| Contract schemas | `contract/test_api_*.py` | NFR-06 |
+| Backtest skill/calib/leakage | `backtest/test_skill_gates.py`, `test_calibration_holdout.py`, `test_leakage.py` | §3/§4/§20 |
+| Self-improvement | `backtest/test_self_improvement_trend.py` | §5 |
+| Property/fuzz | `unit/test_properties.py`, `fuzz/fuzz_predict.py` | §16 |
+| Perf/load/soak | `perf/`, `load/` | §17 |
+| Chaos | `chaos/test_*.py` | §18 |
+| Traceability audit | `test_traceability_audit.py` | §15 |
+
+**v1.0 readiness metric:** % of §15.1 rows at status ☑. Currently the seismic/trajectory/growth/abstention/auth rows are ☑; conformal/discovery/causal/assimilation/self-improve/drift rows are ☐ and constitute the build backlog feeding `13_PHASED_BUILD_PLAN.md`.

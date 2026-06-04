@@ -1096,6 +1096,63 @@ return sqrt(D[n,m])  (+ backtrack for alignment path)
 
 **Source.** Sakoe & Chiba 1978; Müller, *Information Retrieval for Music and Motion* ch.4; https://en.wikipedia.org/wiki/Dynamic_time_warping · soft-DTW https://arxiv.org/abs/1703.01541
 
+#### C11.+ DEPTH MILESTONE
+
+**Full derivation.** DTW seeks the warping path `π=((i₁,j₁),...,(i_K,j_K))` minimizing `Σ_k c(i_k,j_k)` subject to boundary (`(1,1)→(n,m)`), monotonicity, and step constraints. The optimal-substructure property — the best path to `(i,j)` extends a best path to one of `(i−1,j),(i,j−1),(i−1,j−1)` — yields Bellman's recursion `D(i,j)=c(i,j)+min(...)`. This is dynamic programming over an `n×m` lattice. The **Sakoe–Chiba band** `|i−j|≤w` restricts the lattice to a diagonal strip, both pruning cost and forbidding pathological warps (e.g. matching all of `a` to one point of `b`). **Soft-DTW** replaces the hard `min` with the smooth `min_γ(x)=−γ log Σ exp(−x_i/γ)`, making the loss differentiable (gradient via the soft-argmin), enabling DTW as a training loss / barycenter objective. **LB_Keogh** lower-bounds DTW by enveloping the query with `±w` upper/lower bounds and summing exceedances — cheap `O(n)` pruning before the `O(nm)` full DP in k-NN.
+
+**Runnable-quality pseudocode.**
+```python
+def dtw(a, b, *, w=None, znorm=True):
+    import numpy as np
+    a = np.asarray(a, float); b = np.asarray(b, float)
+    if znorm:
+        a = (a - a.mean())/(a.std() or 1.0); b = (b - b.mean())/(b.std() or 1.0)
+    n, m = len(a), len(b)
+    if w is None: w = int(np.ceil(0.1*max(n, m)))
+    w = max(w, abs(n-m))                       # band must reach the corner
+    INF = float("inf")
+    D = np.full((n+1, m+1), INF); D[0, 0] = 0.0
+    for i in range(1, n+1):
+        jlo, jhi = max(1, i-w), min(m, i+w)
+        for j in range(jlo, jhi+1):
+            cost = (a[i-1]-b[j-1])**2
+            D[i, j] = cost + min(D[i-1, j], D[i, j-1], D[i-1, j-1])
+    return float(np.sqrt(D[n, m]))
+
+def lb_keogh(query, candidate, w):             # fast pruning bound
+    import numpy as np
+    q = np.asarray(query); c = np.asarray(candidate); lb = 0.0
+    for i in range(len(c)):
+        lo = q[max(0,i-w):i+w+1].min(); hi = q[max(0,i-w):i+w+1].max()
+        if c[i] > hi: lb += (c[i]-hi)**2
+        elif c[i] < lo: lb += (c[i]-lo)**2
+    return np.sqrt(lb)
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `w` (band) | int | ⌈0.1·max(n,m)⌉ | \|n−m\|–max(n,m) | warp flexibility / cost | ↓ to restrict warp, speed up |
+| `metric` | str | sq-euclid | any | local cost | match data |
+| `znorm` | bool | True | — | shape vs scale | True for shape similarity |
+| `γ` (soft-DTW) | float | 0.1 | >0 | smoothing | ↓→hard DTW; ↑→smoother grad |
+
+**Worked numeric example.** `a=[1,2,3]`, `b=[1,1,2,3]` (b is `a` with a stutter), `w=2`, no z-norm. The DP aligns `a[0]=1` to `b[0]=1` and `b[1]=1` (warp), then `2→2`, `3→3`; all matched costs are 0 → `D[3,4]=0` → `DTW=0`. Plain Euclidean (after padding) would be nonzero — DTW's elasticity absorbs the stutter.
+
+**Complexity (derivation).** Full lattice fills `n·m` cells, each `O(1)` → `O(nm)`. Banded: only `~(2w+1)` cells per row × `n` rows → `O(n·w)`. Backtrack the path in `O(n+m)`. **Space** `O(nm)` for the full matrix, reducible to `O(min(n,m))` with the two-row rolling trick (if the path itself isn't needed). FastDTW gives approximate `O(n)` via multi-resolution.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Band too narrow vs `\|n−m\|` | INF at corner (no valid path) | `w=max(w,\|n−m\|)` |
+| Scale mismatch | distance dominated by amplitude | z-normalize first |
+| Pathological warp (singularities) | one point matches many | Sakoe–Chiba band; slope constraints |
+| Large corpus k-NN slow | `O(corpus·nm)` | LB_Keogh prune, then full DTW on survivors |
+
+**Unit-test oracle.** `dtw(a, a)=0` for any `a` (identity). `dtw([0,1,2],[0,1,2])=0`. Known shift: `dtw([0,0,1,1],[0,1,1,1], w=2, znorm=False)` — hand-computed DP gives `0` (the leading-zero stutter is absorbed). Symmetry: `dtw(a,b)=dtw(b,a)` within 1e-9.
+
+**Integration code-points.** Prefer `tslearn`/`dtaidistance` or STUMPY's `stumpy.match` behind a **NEW** wrapper `dtw_retrieval.py`. Matches the current window against History-Lake motifs (cross-series complement to Matrix Profile's intra-series search). DTW distance is a feature for HDBSCAN (C9) and the kernel of an analog-forecasting retriever feeding FORECAST CORE. Distance-matrix idioms reuse `sim_methods.upgma`; batched NN routes through `gpu_backend.py`.
+
 ---
 
 ## GROUP D — CHANGE-POINT / ANOMALY
@@ -1141,6 +1198,64 @@ changepoints = backtrack(last)
 **Reuse target.** Prefer `ruptures` (`rpt.Pelt`); **NEW** thin wrapper. Reuse `numpy` cumulative-stats idioms already used across `prediction.py`.
 
 **Source.** Killick, Fearnhead, Eckley 2012, *JASA*; https://arxiv.org/abs/1101.1438 · `ruptures` https://centre-borelli.github.io/ruptures-docs/
+
+#### D12.+ DEPTH MILESTONE
+
+**Full derivation.** The segmentation objective is `min_τ Σ_seg C(seg) + βK`. The DP `F(t)=min_{0≤τ<t}[F(τ)+C(y_{τ+1:t})+β]` is exact but `O(n²)`. The **pruning theorem** (Killick et al.): if the cost satisfies `C(y_{τ+1:t}) + C(y_{t+1:s}) ≤ C(y_{τ+1:s})` (a mild condition met by likelihood costs), then once `F(τ)+C(y_{τ+1:t}) ≥ F(t)` holds, `τ` can *never* be the optimal last change-point for any future `s>t` and is removed from the candidate set `R`. Because pruned points stay pruned, the amortized candidate-set size is `O(1)` under reasonable change-point density → near-linear total. Costs are `O(1)` via precomputed prefix sums: for the L2/mean-shift cost `C=Σ(y−ȳ)² = Σy² − (Σy)²/len`, both `Σy` and `Σy²` come from cumulative arrays.
+
+**Runnable-quality pseudocode.**
+```python
+def pelt(y, *, penalty=None, min_size=2, cost="l2"):
+    import numpy as np
+    y = np.asarray(y, float); n = len(y)
+    cs  = np.concatenate([[0], np.cumsum(y)])
+    cs2 = np.concatenate([[0], np.cumsum(y*y)])
+    def C(a, b):                                   # cost of y[a:b]
+        ln = b - a
+        if ln <= 0: return 0.0
+        s, s2 = cs[b]-cs[a], cs2[b]-cs2[a]
+        return s2 - s*s/ln                         # SSE (L2 / mean-shift)
+    if penalty is None:
+        sigma2 = max(y.var(), 1e-12)
+        penalty = np.log(n) * sigma2               # BIC-style
+    F = {0: -penalty}; last = {0: None}; R = [0]
+    for t in range(min_size, n+1):
+        best, arg = np.inf, None
+        for tau in R:
+            if t - tau < min_size: continue
+            v = F[tau] + C(tau, t) + penalty
+            if v < best: best, arg = v, tau
+        F[t] = best; last[t] = arg
+        R = [tau for tau in R if F[tau] + C(tau, t) <= F[t]] + [t]   # prune + add
+    # backtrack
+    cps, t = [], n
+    while last.get(t):
+        cps.append(last[t]); t = last[t]
+    return sorted(c for c in cps if 0 < c < n)
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `penalty β` | float | log(n)·σ̂² (BIC) | >0 | #change-points | ↑ ⇒ fewer CPs |
+| `cost` | str | l2 | {l2,normal,rbf} | what shift it detects | rbf for distributional |
+| `min_size` | int | 2 | ≥1 | min segment length | ↑ to avoid spurious tiny segs |
+
+**Worked numeric example.** `y=[0,0,0,0,5,5,5,5]` (clear mean shift at index 4). With BIC penalty: segmenting at `τ=4` gives total cost `C(0,4)+C(4,8)+2β = 0+0+2β`; no segmentation gives `C(0,8)+β = Σ(y−2.5)² + β = 50 + β`. Since `2β ≪ 50+β` for the small `β`, PELT returns change-point `[4]` with per-segment means `0` and `5`.
+
+**Complexity (derivation).** Without pruning, `Σ_t |R_t| = Σ_t t = O(n²)`. Pruning bounds `E[|R_t|]=O(1)` (constant under geometric change spacing) → `O(n)`–`O(n log n)`. Each `C(a,b)` is `O(1)` (prefix sums). **Space** `O(n)` for `F,last,R` + prefix arrays.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Penalty too low | over-segmentation | raise β; use BIC/MBIC |
+| Penalty too high | misses real CPs | lower β; validate on labeled breaks |
+| Heteroscedastic series | L2 misreads variance shifts | use `normal`/`rbf` cost |
+| Floating cumsum drift (long n) | tiny negative SSE | clamp `C≥0`; float64 |
+
+**Unit-test oracle.** Step function `y=[1]*100+[10]*100` with default penalty must return exactly `[100]`. Pure constant `y=[3]*200` must return `[]` (no change-points). Two steps `[0]*50+[5]*50+[0]*50` → `[50,100]`. Compare against `ruptures.Pelt` on random data — change-point sets must match.
+
+**Integration code-points.** Prefer `ruptures` (`rpt.Pelt`) behind a **NEW** wrapper `changepoint.py`. Offline/batch segmentation of History-Lake series; segment boundaries define stationary windows handed to ARIMA/GBM (A1/A3) fitting and label regimes for Error-Weighted-Ensemble (F18) switching. Complements BOCPD (D13, online). Cumulative-stat idioms reuse the numpy patterns in `prediction.py`.
 
 ---
 

@@ -2388,4 +2388,645 @@ Suppose `drivers.doubling_time` (growth) is renamed to `drivers.doubling_time_st
 
 ---
 
-> Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract; **this pass:** complete OpenAPI 3.1 document (§10), full header reference (§11), pagination/filtering/sorting reference (§12), SSE + webhooks streaming contracts (§13), rate-limit tier matrix (§14), exhaustive per-code error catalogue with retry flow (§15), frontend `kimiClient`/`oracle` + curl + Python SDK snippets (§16), and the backwards-compat/versioning/deprecation matrix with worked timeline (§17)).
+## 18. OpenAPI `components/schemas` — the deferred forward schemas in full
+
+§10.3 spelled out the **live** envelope and deferred the forward schemas to "copied 1:1 from §§2–6d." For a self-contained OpenAPI document, here they are as explicit `components/schemas` entries (3.1 / JSON-Schema 2020-12). These are `$ref`-able from the paths in §10.4.
+
+```yaml
+components:
+  schemas:
+    # ── Explain (§2) ───────────────────────────────────────────────────────────
+    ExplainRequest:
+      type: object
+      additionalProperties: false
+      oneOf:
+        - { required: [forecast_id] }
+        - { required: [question] }
+      properties:
+        forecast_id: { type: string }
+        question: { type: string }
+        params: { type: [object, "null"] }
+        depth: { type: string, enum: [summary, full], default: summary }
+        max_patterns: { type: integer, minimum: 1, maximum: 50, default: 10 }
+      example: { question: "XRP price in 48h", depth: full, max_patterns: 5 }
+    Pattern:
+      type: object
+      required: [type, summary, strength]
+      properties:
+        type: { type: string, enum: [motif, regime, changepoint, lead_lag, seasonality, trend, anomaly] }
+        summary: { type: string }
+        strength: { type: number, minimum: 0, maximum: 1 }
+        span: { type: object, properties: { start: {}, end: {} } }
+        evidence: { type: object, additionalProperties: true }
+    Attribution:
+      type: object
+      properties:
+        feature: { type: string }
+        contribution: { type: number }
+        direction: { type: string, enum: [up, down, neutral] }
+    ExplainResponse:
+      type: object
+      required: [forecast_ref, domain, drivers, patterns, attributions, narrative]
+      properties:
+        forecast_ref:
+          type: object
+          properties:
+            forecast_id: { type: [string, "null"] }
+            question: { type: [string, "null"] }
+            target: { type: [string, "null"] }
+        domain: { type: string, enum: [crypto, seismic, trajectory, growth, generic, relational] }
+        drivers: { type: object, additionalProperties: true }
+        patterns: { type: array, items: { $ref: '#/components/schemas/Pattern' } }
+        attributions: { type: array, items: { $ref: '#/components/schemas/Attribution' } }
+        narrative: { type: string }
+
+    # ── Skill (§3) ─────────────────────────────────────────────────────────────
+    SkillResponse:
+      type: object
+      required: [window, filters, headline, series, baselines]
+      properties:
+        window:
+          type: object
+          properties: { from: { type: integer }, to: { type: integer }, bucket: { type: string } }
+        filters:
+          type: object
+          properties:
+            domain: { type: [string, "null"] }
+            target: { type: [string, "null"] }
+            metric: { type: string }
+        headline:
+          type: object
+          properties:
+            n_forecasts: { type: integer }
+            n_scored: { type: integer }
+            crps: { type: [number, "null"] }
+            rmse: { type: [number, "null"] }
+            mae: { type: [number, "null"] }
+            coverage_90: { type: [number, "null"] }
+            coverage_95: { type: [number, "null"] }
+            brier: { type: [number, "null"] }
+            skill_score: { type: [number, "null"] }
+            calibration:
+              type: object
+              properties: { ece: { type: [number, "null"] }, psi_drift: { type: [number, "null"] } }
+        series:
+          type: array
+          items:
+            type: object
+            properties:
+              t: { type: integer }
+              metric_value: { type: [number, "null"] }
+              n: { type: integer }
+        baselines:
+          type: object
+          properties:
+            climatology: { type: [number, "null"] }
+            naive_persistence: { type: [number, "null"] }
+
+    # ── History Lake (§4) ──────────────────────────────────────────────────────
+    SeriesCatalogItem:
+      type: object
+      required: [id, domain, source, entity, unit, n_points, first_t, last_t]
+      properties:
+        id: { type: string }
+        domain: { type: string }
+        source: { type: string }
+        entity: { type: string }
+        label: { type: [string, "null"] }
+        unit: { type: [string, "null"] }
+        interval: { type: [string, "null"] }
+        n_points: { type: integer }
+        first_t: { type: [integer, "null"] }
+        last_t: { type: [integer, "null"] }
+        freshness_seconds: { type: [integer, "null"] }
+    SeriesCatalog:
+      type: object
+      required: [items, page]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/SeriesCatalogItem' } }
+        page: { $ref: '#/components/schemas/Page' }
+    SeriesPoints:
+      type: object
+      required: [id, meta, points, page]
+      properties:
+        id: { type: string }
+        meta:
+          type: object
+          properties:
+            domain: { type: string }
+            source: { type: string }
+            entity: { type: string }
+            unit: { type: [string, "null"] }
+            interval: { type: [string, "null"] }
+        points:
+          type: array
+          items:
+            type: object
+            required: [t, v]
+            properties:
+              t: { type: integer }
+              v: { type: [number, "null"] }
+              outcome: { type: [number, "null"] }
+        page: { $ref: '#/components/schemas/Page' }
+
+    # ── Pattern scan (§5) ──────────────────────────────────────────────────────
+    PatternScanRequest:
+      type: object
+      additionalProperties: false
+      oneOf:
+        - { required: [series] }
+        - { required: [series_id] }
+      properties:
+        series:
+          type: array
+          minItems: 8
+          items:
+            oneOf:
+              - { type: number }
+              - { type: object, required: [v], properties: { t: { type: number }, v: { type: number } } }
+        series_id: { type: string }
+        from: { type: [integer, string] }
+        to: { type: [integer, string] }
+        detectors:
+          type: array
+          items: { type: string, enum: [motif, anomaly, regime, changepoint, seasonality] }
+          default: [motif, anomaly, regime, changepoint]
+        window: { type: integer, minimum: 3 }
+        max_results_per_detector: { type: integer, minimum: 1, maximum: 100, default: 10 }
+        changepoint:
+          type: object
+          properties:
+            method: { type: string, enum: [pelt, bocpd], default: pelt }
+            penalty: { type: string, enum: [bic, aic, mbic], default: bic }
+    PatternScanResponse:
+      type: object
+      required: [series_ref, n_points, motifs, anomalies, regimes, changepoints, math]
+      properties:
+        series_ref:
+          type: object
+          properties: { series_id: { type: [string, "null"] }, inline: { type: boolean } }
+        n_points: { type: integer }
+        window: { type: integer }
+        motifs:
+          type: array
+          items:
+            type: object
+            properties:
+              start_a: { type: integer }
+              start_b: { type: integer }
+              length: { type: integer }
+              distance: { type: number }
+              strength: { type: number }
+        anomalies:
+          type: array
+          items:
+            type: object
+            properties:
+              index: { type: integer }
+              t: { type: [integer, "null"] }
+              score: { type: number }
+              matrix_profile: { type: number }
+        regimes:
+          type: array
+          items:
+            type: object
+            properties:
+              label: { type: integer }
+              start: { type: integer }
+              end: { type: integer }
+              summary: { type: string }
+              stats: { type: object }
+        changepoints:
+          type: array
+          items:
+            type: object
+            properties:
+              index: { type: integer }
+              t: { type: [integer, "null"] }
+              confidence: { type: number }
+              kind: { type: string, enum: [mean, variance, trend] }
+        math: { type: string }
+
+    # ── KGIK (§6b) ─────────────────────────────────────────────────────────────
+    KgikNode:
+      type: object
+      required: [id, type]
+      properties:
+        id: { type: string }
+        type: { type: string }
+        label: { type: [string, "null"] }
+        attributes: { type: object }
+    KgikEdge:
+      type: object
+      required: [source, relation, target, confidence]
+      properties:
+        source: { type: string }
+        relation: { type: string }
+        target: { type: string }
+        confidence: { type: number, minimum: 0, maximum: 1 }
+        confidence_tier: { type: string, enum: [A, B, C, D] }
+        first_seen: { type: [integer, "null"] }
+        last_seen: { type: [integer, "null"] }
+        support: { type: integer }
+        learned: { type: boolean }
+    KgikGraph:
+      type: object
+      required: [snapshot_as_of, nodes, edges, page]
+      properties:
+        snapshot_as_of: { type: integer }
+        nodes: { type: array, items: { $ref: '#/components/schemas/KgikNode' } }
+        edges: { type: array, items: { $ref: '#/components/schemas/KgikEdge' } }
+        page: { $ref: '#/components/schemas/Page' }
+    LinkPredictRequest:
+      type: object
+      additionalProperties: false
+      anyOf:
+        - { required: [source] }
+        - { required: [target] }
+      properties:
+        source: { type: [string, "null"] }
+        relation: { type: [string, "null"] }
+        target: { type: [string, "null"] }
+        horizon_hours: { type: [number, "null"] }
+        as_of: { type: [integer, string, "null"] }
+        top_k: { type: integer, minimum: 1, maximum: 100, default: 10 }
+    LinkPredictResponse:
+      type: object
+      required: [query, predictions, method, as_of]
+      properties:
+        query:
+          type: object
+          properties: { source: {}, relation: {}, target: {}, horizon_hours: {} }
+        as_of: { type: integer }
+        predictions:
+          type: array
+          items:
+            type: object
+            required: [source, relation, target, probability]
+            properties:
+              source: { type: string }
+              relation: { type: string }
+              target: { type: string }
+              probability: { type: number, minimum: 0, maximum: 1 }
+              score: { type: number }
+              confidence_tier: { type: string, enum: [A, B, C, D] }
+              top_path: { type: array, items: { type: string } }
+        method:
+          type: object
+          properties:
+            name: { type: string }
+            family: { type: string, const: relational }
+            models_used: { type: array, items: { type: string } }
+            math: { type: string }
+
+    # ── Model registry (§6c) ───────────────────────────────────────────────────
+    ModelRegistryItem:
+      type: object
+      required: [id, name, family, status, version]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        family: { type: string, enum: [time_series, event_probability, trajectory, growth, relational, ensemble] }
+        domains: { type: array, items: { type: string } }
+        status: { type: string, enum: [active, shadow, deprecated, unavailable] }
+        version: { type: string }
+        source: { type: [string, "null"] }
+        weight: { type: [number, "null"] }
+        calibration:
+          type: object
+          properties: { ece: { type: [number, "null"] }, last_calibrated: { type: [integer, "null"] } }
+        skill:
+          type: object
+          properties:
+            crps: { type: [number, "null"] }
+            rmse: { type: [number, "null"] }
+            coverage_90: { type: [number, "null"] }
+            n_scored: { type: integer }
+        updated_at: { type: [integer, "null"] }
+    ModelRegistry:
+      type: object
+      required: [items]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/ModelRegistryItem' } }
+
+    # ── Backtest (§6d) ─────────────────────────────────────────────────────────
+    BacktestRequest:
+      type: object
+      required: [series_id, horizon_hours]
+      additionalProperties: false
+      properties:
+        series_id: { type: string }
+        models: { type: array, items: { type: string } }
+        horizon_hours: { type: number, exclusiveMinimum: 0 }
+        from: { type: [integer, string] }
+        to: { type: [integer, string] }
+        scheme: { type: string, enum: [rolling_origin, expanding_window, sliding_window], default: rolling_origin }
+        step: { type: integer, minimum: 1, default: 1 }
+        metrics: { type: array, items: { type: string, enum: [crps, rmse, mae, coverage, brier] }, default: [crps, rmse, coverage] }
+        baselines: { type: array, items: { type: string, enum: [climatology, naive_persistence, seasonal_naive] }, default: [climatology, naive_persistence] }
+        async: { type: boolean, default: false }
+        webhook:
+          type: [object, "null"]
+          properties:
+            url: { type: string, format: uri }
+            secret: { type: string }
+    BacktestRun:
+      type: object
+      required: [run_id, status, series_id, horizon_hours]
+      properties:
+        run_id: { type: string }
+        status: { type: string, enum: [queued, running, completed, failed] }
+        series_id: { type: string }
+        horizon_hours: { type: number }
+        window:
+          type: object
+          properties: { from: { type: integer }, to: { type: integer } }
+        n_origins: { type: integer }
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              model: { type: string }
+              crps: { type: [number, "null"] }
+              rmse: { type: [number, "null"] }
+              mae: { type: [number, "null"] }
+              coverage_90: { type: [number, "null"] }
+              brier: { type: [number, "null"] }
+              skill_score: { type: [number, "null"] }
+        baselines:
+          type: object
+          additionalProperties: { type: [number, "null"] }
+        poll: { type: [string, "null"] }
+```
+
+---
+
+## 19. FORWARD-DOMAIN WORKED EXAMPLES — the remaining branches
+
+§1.3 covered crypto/seismic-GR/trajectory-great-circle/growth/relational. The live `predict()` has more branches (Omori aftershocks, ballistic, orbital, generic) plus more soft-error shapes. Each is documented here as request + on-schema result, grounded in the exact handler that produces it.
+
+### 19.1 Seismic — Omori aftershock branch (`_predict_seismic` → `omori_aftershock_probability`)
+Triggered when `params.omori` is present or `params.mainshock_K` is set.
+**Request**
+```json
+{ "question": "Aftershock chance in the next 2 days after the mainshock?",
+  "params": { "domain": "seismic", "mainshock_K": 100, "omori_c": 0.05, "omori_p": 1.1,
+              "days_since_mainshock": 1.0, "horizon_hours": 48 } }
+```
+**Success (200)**
+```json
+{
+  "question": "Aftershock chance in the next 2 days after the mainshock?",
+  "domain": "seismic", "target": "M>=5.0", "horizon": "2.0d",
+  "prediction": { "value": 0.999, "unit": "probability", "point_estimate": 0.999,
+    "interval": { "low": 0.0, "high": 1.0, "confidence": 0.0 }, "probability": 0.999 },
+  "method": { "name": "Omori-Utsu aftershock decay", "family": "event_probability",
+    "models_used": ["omori_aftershock_rate"],
+    "math": "Omori-Utsu n(t)=K/(t+c)^p; N=int over horizon; P=1-exp(-N)." },
+  "drivers": { "K": 100.0, "c_days": 0.05, "p": 1.1, "t_days": 1.0, "used_underworld": false },
+  "data": { "source": "params (mainshock state)", "as_of": 1749038400000, "lookback": "mainshock state",
+    "history": [], "forecast": [ { "t": "horizon", "v": 0.999, "low": 0.0, "high": 1.0 } ] },
+  "assumptions": [
+    "Aftershocks follow the modified Omori-Utsu law n(t)=K/(t+c)^p.",
+    "Occurrence is an inhomogeneous Poisson process with this rate."
+  ],
+  "caveats": [
+    "Poisson stationarity ignores clustering / triggering beyond the model used.",
+    "Probability is for AT LEAST ONE event of the target magnitude in the horizon.",
+    "G-R extrapolation to large M above the catalog max is uncertain."
+  ],
+  "used_llm": false
+}
+```
+
+### 19.2 Trajectory — ballistic branch (`_predict_trajectory` → `projectile_range`)
+Triggered by `params.projectile` or both `speed` and `angle_deg`.
+**Request**
+```json
+{ "question": "How far will this projectile travel?",
+  "params": { "domain": "trajectory", "speed": 100, "angle_deg": 45, "height0": 0 } }
+```
+**Success (200)**
+```json
+{
+  "question": "How far will this projectile travel?",
+  "domain": "trajectory", "target": "Ballistic projectile range", "horizon": null,
+  "prediction": { "value": 1019.7, "unit": "meters", "point_estimate": 1019.7,
+    "interval": { "low": null, "high": null, "confidence": 0.0 }, "probability": null },
+  "method": { "name": "Ballistic projectile range", "family": "trajectory",
+    "models_used": ["projectile_range"], "math": "R=v^2 sin(2*theta)/g (no drag, flat ground)." },
+  "drivers": { "speed_mps": 100.0, "angle_deg": 45.0, "used_underworld": false },
+  "data": { "source": "params", "as_of": 1749038400000, "lookback": "analytic",
+    "history": [], "forecast": [ { "t": "impact", "v": 1019.7, "low": 1019.7, "high": 1019.7 } ] },
+  "assumptions": ["No aerodynamic drag; flat ground; constant g."],
+  "caveats": [
+    "Analytic idealisation; point estimate has no statistical interval.",
+    "Real ballistics need drag, wind, and Coriolis corrections."
+  ],
+  "used_llm": false
+}
+```
+
+### 19.3 Trajectory — orbital-period branch (`_predict_trajectory` → `orbital_period`)
+Triggered by `params.semi_major_axis_km` (or `a_km` with "orbit" in the question).
+**Request**
+```json
+{ "question": "What's the orbital period?",
+  "params": { "domain": "trajectory", "semi_major_axis_km": 6778 } }
+```
+**Success (200)**
+```json
+{
+  "question": "What's the orbital period?",
+  "domain": "trajectory", "target": "Orbital period (Kepler III)", "horizon": null,
+  "prediction": { "value": 92.68, "unit": "minutes", "point_estimate": 92.68,
+    "interval": { "low": null, "high": null, "confidence": 0.0 }, "probability": null },
+  "method": { "name": "Orbital period (Kepler III)", "family": "trajectory",
+    "models_used": ["orbital_period"], "math": "T=2*pi*sqrt(a^3/mu) (Kepler's third law)." },
+  "drivers": { "semi_major_axis_km": 6778.0, "used_underworld": false },
+  "data": { "source": "params", "as_of": 1749038400000, "lookback": "analytic",
+    "history": [], "forecast": [ { "t": "period", "v": 92.68, "low": 92.68, "high": 92.68 } ] },
+  "assumptions": ["Two-body Keplerian orbit about Earth (mu=398600 km^3/s^2)."],
+  "caveats": [
+    "Analytic idealisation; point estimate has no statistical interval.",
+    "Ignores J2 oblateness, drag, and third-body perturbations."
+  ],
+  "used_llm": false
+}
+```
+
+### 19.4 Generic — series via the growth fitter (`_predict_generic` → `_predict_growth`, `domain` rewritten)
+**Request**
+```json
+{ "question": "Forecast this metric", "params": { "series": [10, 12, 15, 19, 24, 30], "horizon_steps": 3 } }
+```
+**Success (200)** — note `domain` is rewritten to `generic` while the method/drivers come from the growth fit:
+```json
+{
+  "question": "Forecast this metric", "domain": "generic", "target": null, "horizon": "3 steps",
+  "prediction": { "value": 59.3, "unit": null, "point_estimate": 59.3,
+    "interval": { "low": 53.1, "high": 65.5, "confidence": 0.95 }, "probability": null },
+  "method": { "name": "exponential growth fit", "family": "growth",
+    "models_used": ["exponential_fit", "logistic_fit"],
+    "math": "exp: ln(y)=ln(y0)+r t (OLS), T2=ln2/r; logistic: y=K/(1+A e^{-r t}), K grid-searched, A,r OLS on logit; pick lower-SSE; CI=point +/- 1.96*sigma_resid." },
+  "drivers": { "model": "exponential", "y0": 9.71, "growth_rate": 0.224, "doubling_time": 3.09, "residual_std": 0.62 },
+  "data": { "source": "params", "as_of": null, "lookback": "6 points",
+    "history": [ { "t": 0, "v": 10 }, { "t": 5, "v": 30 } ],
+    "forecast": [ { "t": 6, "v": 38.1, "low": 31.9, "high": 44.3 } ] },
+  "assumptions": [
+    "Best-fit model selected by SSE: exponential.",
+    "Residuals are homoscedastic; CI is +/-1.96*sigma_resid (95%).",
+    "Growth regime is stable over the forecast horizon."
+  ],
+  "caveats": [
+    "Exponential growth cannot continue indefinitely; check the logistic K.",
+    "Short series make the fit and CI unreliable."
+  ],
+  "used_llm": false
+}
+```
+
+### 19.5 Soft-error gallery (every domain's `insufficient_data`, exact `caveats` strings)
+These are the verbatim `needs` messages from the handlers, each yielding the §15.1 200 soft shape with the quoted caveat.
+
+| Domain | Trigger | `caveats[0]` (exact) |
+|---|---|---|
+| crypto | `<3` price points & no resolvable ticker | `Insufficient data to answer. Needs: a price series via params.series/values, or a recognised ticker with network access` |
+| seismic | `<2` magnitudes & no USGS access | `Insufficient data to answer. Needs: a magnitude catalog via params.magnitudes, or network access to USGS` |
+| trajectory | state vector missing lat/lng/speed/heading | `Insufficient data to answer. Needs: a state vector params.{lat,lng,alt_m,speed_mps,heading_deg,vertical_rate_mps} (no live ADS-B feed; supply current state), or projectile/orbital params` |
+| growth | `<3` numeric points | `Insufficient data to answer. Needs: a numeric series via params.series/values (>= 3 points)` |
+| generic | `<3` numeric points & not a specific domain | `Insufficient data to answer. Needs: a numeric series via params.series/values to forecast, or a more specific question (crypto ticker, seismic magnitude+region, trajectory state vector)` |
+| any | internal exception caught in `predict()` | `<exc str>` + `An internal error was caught and handled; result degraded gracefully.` |
+
+### 19.6 `used_llm` truth table
+| Path through `classify()` | `used_llm` |
+|---|---|
+| `params.domain` set (Kimi skipped) | `false` |
+| Kimi returns a valid `domain` and `params.domain` unset | `true` |
+| Kimi unavailable / no key / bad JSON → regex fallback | `false` |
+| Relational/forward endpoints that consult Kimi for intent | `true` (per §1.3.5 preview) |
+
+---
+
+## 20. PER-ENDPOINT CONTRACT-TEST MATRIX
+
+A normative checklist a conformance suite (or the existing pytest layer for the live route) must assert. "LIVE" rows are testable today against `predict()`; "[FWD]" rows are the forward contracts.
+
+### 20.1 `POST /functions/predict` [LIVE]
+| # | Given | Assert |
+|---|---|---|
+| 1 | `{question:"XRP price in 48h"}` offline (no series) | 200; `method.name=="insufficient_data"`; `domain=="crypto"`; `prediction.value==null`; one caveat starting `Insufficient data` |
+| 2 | crypto `params.series` of ≥3 prices | 200; `domain=="crypto"`; `method.family=="time_series"`; `prediction.unit=="USD"`; `interval.confidence==0.90`; `drivers.percentiles` has keys 5/25/50/75/95; deterministic (`seed=42`) → identical `point_estimate` on repeat |
+| 3 | seismic with ≥2 `magnitudes` | 200; `method.family=="event_probability"`; `prediction.unit=="probability"`; `0<=probability<=1`; `interval=={low:0,high:1,confidence:0}` |
+| 4 | seismic `mainshock_K` set | 200; `method.name=="Omori-Utsu aftershock decay"` |
+| 5 | trajectory full `state_vector` | 200; `prediction.value==null`; `point_estimate` is `{lat,lng,alt_m}`; `unit=="lat/lng/alt"` |
+| 6 | trajectory `speed`+`angle_deg` | 200; `unit=="meters"`; `method.name=="Ballistic projectile range"` |
+| 7 | trajectory `semi_major_axis_km` | 200; `unit=="minutes"`; `method.name=="Orbital period (Kepler III)"` |
+| 8 | growth `series` ≥3 + `horizon_steps` | 200; `method.family=="growth"`; `interval.confidence==0.95`; `forecast[].{low,high}` present |
+| 9 | generic `series` ≥3 | 200; `domain=="generic"` (rewritten); growth-style `method` |
+| 10 | body missing `question` | 4xx `validation_error` (FastAPI/Pydantic) |
+| 11 | any handler raises internally | 200 soft `insufficient_data` + "internal error was caught" caveat (never 500) |
+| 12 | every 200 response | top-level keys exactly: `question,domain,target,horizon,prediction,method,drivers,data,assumptions,caveats,used_llm`; no `NaN`/`Infinity` tokens in JSON |
+
+### 20.2 Forward endpoints
+| Endpoint | Key assertions |
+|---|---|
+| `/v1/predict/explain` [FWD] | 200 shape has `patterns[].strength∈[0,1]`; bad `forecast_id`→404; no resolvable series→422 `insufficient_data` |
+| `/v1/predict/skill` [FWD] | 200 has `headline.n_scored`; empty window→422; `skill_score>0` ⇒ beats baseline |
+| `/v1/history/series` [FWD] | cursor pagination terminates (`next_cursor==null`); unknown filter ignored; invalid `sort`→400 |
+| `/v1/history/series/{id}` [FWD] | unknown id→404; `downsample` reduces `points` length; `outcomes=true` adds `outcome` |
+| `/v1/patterns/scan` [FWD] | `<8` points→422; inline `series>50k`→413; deterministic given identical series |
+| `/v1/kgik/graph` [FWD] | unknown `node`→422 `unknown_entity`; `depth` bounded 1..3 |
+| `/v1/kgik/link-predict` [FWD] | `anyOf(source,target)` enforced; `predictions[].probability∈[0,1]`; `method.family=="relational"` |
+| `/v1/models/registry` [FWD] | `status`/`family` filters narrow `items` |
+| `/v1/predict/backtest` [FWD] | no token→401 even when `JARVIS_REQUIRE_AUTH=false`; same `Idempotency-Key`+same body→original run; same key+diff body→409; `async:true`→202+`run_id` |
+
+---
+
+## 21. IDEMPOTENCY, CACHING & CONSISTENCY LIFECYCLE
+
+A consolidated, step-by-step model of how a write replay, a cache hit, and a live-feed read interact — the three behaviours most likely to surprise integrators.
+
+### 21.1 Idempotency-Key lifecycle (`POST /v1/predict/backtest`)
+```text
+1. Client POSTs body B with Idempotency-Key K.
+2. Server computes fingerprint = hash(B). Looks up K.
+   a. K unseen           -> store {K, fingerprint, run_id, response} (24h TTL); run; return.
+   b. K seen, same fp    -> return the STORED response (200/202); no new run; no job token spent.
+   c. K seen, diff fp    -> 409 idempotency_conflict (details.idempotency_key=K).
+3. After 24h TTL, K is forgotten; a replay starts a fresh run.
+```
+Notes: only `/v1/predict/backtest` persists, so it is the only endpoint honouring `Idempotency-Key`. The pure-function POSTs (`/functions/predict`, `/explain`, `/patterns/scan`, `/kgik/link-predict`) need no key — repeat the body to repeat the result.
+
+### 21.2 Cache lifecycle (reads)
+- Cacheable reads (`/v1/history/*`, `/v1/models/registry`, `/v1/predict/skill`) send `Cache-Control: public, max-age=<30|60>` and a strong `ETag`.
+- Client sends `If-None-Match: <etag>` → `304 Not Modified` (no body) when unchanged; saves bandwidth on polling loops (e.g. a registry watcher).
+- Writes and forecasts send `Cache-Control: no-store`.
+
+### 21.3 Live-feed read consistency (the in-process 5-min cache)
+- `load_crypto_series` / `load_seismic_catalog` cache successful fetches for `_CACHE_TTL = 300 s` keyed by `(asset|filters, window)`; failures are **not** cached (so a transient feed blip self-heals on the next call).
+- Consequence for `/functions/predict` with **no** `params.series`: two identical questions within 5 min return identical data (cache hit) and — because GBM is `seed=42` — an identical forecast; after the TTL, fresh data may shift the answer. Hence `Cache-Control: no-store` on the route (§11) even though it is body-pure.
+- With `params.series` supplied, the network is never touched (`_series_from_params` short-circuits) → fully deterministic, offline, test-friendly.
+
+### 21.4 Determinism guarantees (normative)
+| Condition | Deterministic? |
+|---|---|
+| `/functions/predict` with `params.series` (any domain) | **Yes** — pure function; GBM `seed=42`; growth/seismic/trajectory are closed-form. |
+| `/functions/predict` crypto/seismic without `params`, within 5-min cache | Yes for the cache window (same cached data + seeded MC). |
+| `/functions/predict` across the 5-min TTL boundary | No — fresh live data may change the answer. |
+| `/v1/predict/stream` terminal `done` vs non-streamed `/functions/predict` | **Identical** body for identical input. |
+| Forecast with a remote/shadow model (e.g. TimesFM) | Subject to that model's own determinism guarantees (not the native `seed=42`). |
+
+---
+
+## 22. END-TO-END ANNOTATED TRANSCRIPT (HTTP wire view)
+
+A full request/response pair on the wire for the live route, headers included, to anchor the header/envelope contracts above.
+
+**Request**
+```http
+POST /functions/predict HTTP/1.1
+Host: api.apex.local
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer JARVIS_xxx          # optional when JARVIS_REQUIRE_AUTH=false
+X-Request-Id: req_client_7af3             # optional; echoed back
+
+{"question":"Project our user growth 6 months out",
+ "params":{"domain":"growth","series":[1000,1320,1700,2150,2700,3300,3950],
+           "horizon_steps":6,"unit":"users"}}
+```
+**Response**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+X-Request-Id: req_client_7af3
+X-API-Version: 1.4.0
+X-RateLimit-Limit: 120
+X-RateLimit-Remaining: 119
+X-RateLimit-Reset: 1749038460
+Cache-Control: no-store
+
+{"question":"Project our user growth 6 months out","domain":"growth","target":null,
+ "horizon":"6 steps",
+ "prediction":{"value":11842.6,"unit":"users","point_estimate":11842.6,
+   "interval":{"low":10903.1,"high":12782.1,"confidence":0.95},"probability":null},
+ "method":{"name":"exponential growth fit","family":"growth",
+   "models_used":["exponential_fit","logistic_fit"],"math":"exp: ln(y)=ln(y0)+r t ..."},
+ "drivers":{"model":"exponential","y0":1014.2,"growth_rate":0.226,"doubling_time":3.07,"residual_std":479.3},
+ "data":{"source":"params","as_of":null,"lookback":"7 points",
+   "history":[{"t":0,"v":1000},{"t":6,"v":3950}],
+   "forecast":[{"t":7,"v":4942.1,"low":4002.8,"high":5881.4}]},
+ "assumptions":["Best-fit model selected by SSE: exponential.","Residuals are homoscedastic; CI is +/-1.96*sigma_resid (95%).","Growth regime is stable over the forecast horizon."],
+ "caveats":["Exponential growth cannot continue indefinitely; check the logistic K.","Short series make the fit and CI unreliable."],
+ "used_llm":false}
+```
+**Annotations**
+- `X-Request-Id` echoes the client value (else server-generated); equals `error.request_id` on the failure path.
+- `Cache-Control: no-store` even for this deterministic params-supplied call — one simple rule (§11/§21.3).
+- The body is exactly the `PredictResponse` schema (§10.3 / §1.2): top-level keys fixed, `probability:null` (growth has no event probability), `interval.confidence:0.95` (growth band), `used_llm:false` (params forced the route).
+
+---
+
+> Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract; **this pass:** complete OpenAPI 3.1 document (§10), full header reference (§11), pagination/filtering/sorting reference (§12), SSE + webhooks streaming contracts (§13), rate-limit tier matrix (§14), exhaustive per-code error catalogue with retry flow (§15), frontend `kimiClient`/`oracle` + curl + Python SDK snippets (§16), backwards-compat/versioning/deprecation matrix with worked timeline (§17), the deferred OpenAPI component schemas in full (§18), the remaining forward-domain worked examples incl. Omori/ballistic/orbital/generic + soft-error gallery + `used_llm` truth table (§19), per-endpoint contract-test matrix (§20), idempotency/caching/consistency lifecycle (§21), and an end-to-end annotated wire transcript (§22)).

@@ -2199,11 +2199,135 @@ Concrete instances that validate against the §12 schemas — usable directly as
 
 ---
 
-## 19. ACCEPTANCE CRITERIA (for this section)
+## 19. CONTROL-PLANE COMPLETENESS — `schema_meta` DDL, INDEX RATIONALE, PARTITIONING
+
+This section completes the DDL set with the version table introduced in §16, gives the rationale for every index (so none is cargo-culted), and states the partitioning/clustering choices precisely.
+
+### 19.1 `schema_meta` DDL
+
+```sql
+-- SCHEMA META (singleton-ish key/value version store, §16.1) ------------------
+CREATE TABLE IF NOT EXISTS schema_meta (
+    key   TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+-- seeded by Alembic 0006:
+-- INSERT INTO schema_meta(key,value) VALUES ('po_schema_version','6');
+-- INSERT INTO schema_meta(key,value) VALUES ('parquet_layout_version','1');
+```
+
+`schema_meta` is intentionally schemaless-by-value (TEXT) so version bumps never require a migration of the version table itself. Readers parse `value` per `key` convention (integers for the two version keys).
+
+### 19.2 Index rationale (every index, why it exists)
+
+| Index | Table | Serves query | Why not redundant |
+|-------|-------|--------------|-------------------|
+| `ix_series_source_entity` | series | "all series for a source/entity" (UI catalog, adapter refresh) | not covered by the natural-key UQ leading columns alone in lookups by entity |
+| `ix_series_metric` | series | cross-source "all `close_price` series" | metric is non-leading in the UQ |
+| `ix_series_kgik` | series | graph→series join (`kgik_node_id`) | FK column, frequently joined |
+| PK `(series_id, ts)` WITHOUT ROWID | observation | point/range reads of one series in time order | clustering = sequential disk reads for forecasts |
+| `ix_obs_ts` | observation | cross-series time-window scans (maintenance, pattern engine) | PK is series-leading, useless for ts-only ranges |
+| `ix_obs_series_ts` | observation | explicit covering for `(series_id, ts)` range with extra predicates | mirrors PK but usable by planner with non-PK joins |
+| `ix_feedrun_source_started` | feed_run | "last run per source" (scheduler) | status index alone can't time-order |
+| `ix_feedrun_status` | feed_run | "all errored/partial runs" (alerting) | status is low-cardinality but selective for error states |
+| `ix_forecast_due_unscored` (partial `WHERE scored=0`) | forecast | the scorer's hot query "due & unscored" | partial index keeps it tiny (only open forecasts) |
+| `ix_forecast_domain` / `ix_forecast_series` / `ix_forecast_issued` | forecast | aggregations by domain, series auto-resolve join, recency | distinct access paths |
+| `ix_skill_forecast` | skill_score | join back to forecast | FK join |
+| `ix_kgnode_type` | kg_node | "all nodes of type X" (graph queries) | type is non-PK |
+| `ix_kgnode_current` (partial `WHERE valid_to IS NULL`) | kg_node | current-graph traversal | excludes historical versions cheaply |
+| `ix_kgedge_a/_b/_relation` | kg_edge | neighborhood + relation-typed traversal | three distinct traversal directions |
+| `ix_kgedge_current` (partial) | kg_edge | current edges only | bitemporal hot path |
+| `ix_pattern_kind/_series/_pair/_status` | pattern | discovery dashboards, pair lookup, lifecycle filters | distinct predicates |
+| `ix_pattern_promotable` (partial `WHERE status='active'`) | pattern | promotion scan (kind+confidence) | only active patterns are promotable |
+| `ix_model_family_status` / `ix_model_status` | model_registry | "production model for family X" | ensemble assembly hot path |
+
+### 19.3 Partitioning & clustering (precise)
+
+- **SQLite `observation`**: clustered by `WITHOUT ROWID` on `(series_id, ts)` — physical row order matches the dominant read pattern (one series, ascending time), eliminating a sort for every forecast load.
+- **Parquet `observation`**: Hive-partitioned on `source / series_id / year / month` (path-encoded, §1.4). Partition pruning makes "one series, one month" reads touch a single file. Within a file, rows are **sorted ascending by `ts`** to enable Parquet predicate pushdown on the `ts` min/max statistics per row-group.
+- **Row-group target**: 128 MB; **page size**: default 1 MB; **compression**: ZSTD-3 (hot/warm/cold), ZSTD-19 (frozen).
+- **Rolled-up partitions** carry `meta.rolled=true` and the bucket width in `_metadata.rollup_width_ms`, so the `UNION ALL` reader can prefer the coarse partition over any stray fine rows after a mid-maintenance crash (§14.4).
+- **Cross-partition uniqueness**: logical `(series_id, ts)` uniqueness spans SQLite-hot + Parquet-cold; the reader view resolves duplicates by preferring rolled (coarse) rows, then the latest `ingested_at`.
+
+### 19.4 Rolled-up observation JSON Schema (Parquet/derived form)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://apex/pattern-oracle/record/observation_rolled.json",
+  "title": "RolledObservationRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["series_id","ts","value","quality","ingested_at","meta"],
+  "properties": {
+    "series_id":   { "$ref": "common.json#/$defs/uuid" },
+    "ts":          { "$ref": "common.json#/$defs/epoch_ms", "description": "left-aligned bucket_ts (§14.2)" },
+    "value":       { "$ref": "common.json#/$defs/finite", "description": "aggregated per point_kind (§14.3)" },
+    "quality":     { "$ref": "common.json#/$defs/QualityEnum", "description": "worst contributing flag" },
+    "feed_run_id": { "oneOf": [ { "$ref": "common.json#/$defs/uuid" }, { "type": "null" } ] },
+    "ingested_at": { "$ref": "common.json#/$defs/epoch_ms" },
+    "meta": {
+      "type": "object",
+      "required": ["rolled","count"],
+      "properties": {
+        "rolled":          { "const": true },
+        "count":           { "type": "integer", "minimum": 1 },
+        "rollup_width_ms": { "type": "integer", "enum": [86400000, 604800000] },
+        "ohlc":            { "type": "object",
+                             "properties": { "open": {"type":"number"}, "high": {"type":"number"},
+                                             "low": {"type":"number"}, "close": {"type":"number"} } }
+      }
+    }
+  }
+}
+```
+
+### 19.5 Full DDL run order (single transaction, fresh DB)
+
+The complete bootstrap order (respecting FK creation dependencies) is:
+
+```
+PRAGMA journal_mode = WAL;
+PRAGMA foreign_keys  = ON;
+-- 1. independent dimensions / audit
+CREATE TABLE feed_run ...            -- §1.3
+CREATE TABLE kg_node  ...            -- §3.2  (referenced by series, kg_edge)
+CREATE TABLE model_registry ...      -- §7.2
+-- 2. series references kg_node
+CREATE TABLE series ...              -- §1.3  (FK kgik_node_id -> kg_node)
+-- 3. fact + edges referencing the above
+CREATE TABLE observation ...         -- §1.3  (FK series, feed_run)
+CREATE TABLE pattern ...             -- §4.3  (FK series x2, feed_run; promoted_edge_id added after kg_edge)
+CREATE TABLE kg_edge ...             -- §3.2  (FK kg_node x2, pattern_id -> pattern)
+-- 4. outcome store
+CREATE TABLE forecast ...            -- §2.2  (FK series)
+CREATE TABLE realized_outcome ...    -- §2.2  (FK forecast)
+CREATE TABLE skill_score ...         -- §2.2  (FK forecast)
+-- 5. version store
+CREATE TABLE schema_meta ...         -- §19.1
+-- (all CREATE INDEX statements follow their tables)
+```
+
+`pattern.promoted_edge_id → kg_edge.id` and `kg_edge.pattern_id → pattern.id` form a mutual reference; under SQLite the second-created table's FK is added in the same transaction (deferred at create time since `PRAGMA foreign_keys` validation is per-statement on write, not on `CREATE TABLE`). Alembic resolves this by creating `pattern` then `kg_edge`, with the `kg_edge.pattern_id` FK and the `pattern.promoted_edge_id` FK both in place once both tables exist (rev `0004`).
+
+---
+
+## 20. ACCEPTANCE CRITERIA (for this section)
 
 1. Running the §1–§4,§7 DDL on a fresh SQLite file creates all tables, indexes, and constraints with `PRAGMA foreign_keys=ON` and no errors.
 2. The dict returned by `server/services/prediction.py::predict()` (including the `_insufficient()` shape) **validates** against the §5.3 response schema unchanged.
 3. A round-trip — issue forecast → write `forecast` → simulate horizon → write `realized_outcome` → compute `skill_score` — produces a non-null `skill_vs_climatology` against the seeded `climatology@1.0` baseline.
 4. The two reference adapters (`coingecko`, `usgs`) refactored onto the §6 contract write `series`+`observation`+`feed_run` rows that are byte-identical on re-fetch (idempotency).
 5. Seeding `OBJECTS`/`LINKS` from `src/domain/ontology.js` into `kg_node`/`kg_edge` reproduces the current graph (every existing node/edge present, `learned=0`, `confidence=1.0`).
-6. Alembic `upgrade head` on an empty DB and `Base.metadata.create_all` produce schemas that diff clean.
+6. Alembic `upgrade head` on an empty DB and `Base.metadata.create_all` produce schemas that diff clean (and a clean `--autogenerate` diff afterward, §17.4).
+7. Every worked-example record in §18 validates against its §12 JSON Schema; every §12 schema resolves its `$ref`s against the §12.1 common `$defs`.
+8. The data dictionary (§11) covers every column of every control-plane table — no column appears in DDL/ORM without a §11 row (type, unit, nullability, range, description, example).
+9. The data-quality gate (§13) rejects/flags rows exactly per the rule tables; a `suspect`/`imputed` input propagates a machine-generated `caveats[]` notice into the response.
+10. The nightly maintenance job (§14.4) is idempotent: running it twice on the same `now_ms` produces no additional partition writes and no row churn; `event`-kind series are never downsampled.
+11. The three concrete adapters (§15: USGS, CoinGecko, FX) each map their upstream payload field-by-field onto a `SeriesBatch` that validates against §12.12, and round-trip idempotently (§15.5).
+12. Schema versioning (§16) holds: adding an optional field is a minor bump that old clients ignore; the legacy `prediction.py` response (no `_schema_version`) is treated as v1.0 and still validates.
+13. The Alembic ladder (§17.1) applies `upgrade head` then `downgrade base` cleanly on SQLite, using batch mode for the CHECK-widening revision `0008`.
+14. The ERD (§10) enumerates every relationship in the cardinality catalogue; every real FK in the catalogue exists in the DDL with the stated `ON DELETE` action.
+15. The full bootstrap DDL run order (§19.5) creates all tables — including `schema_meta` (§19.1) — on a fresh SQLite file with `PRAGMA foreign_keys=ON` and the mutual `pattern`↔`kg_edge` FKs resolved, with no errors.
+16. Every index in §19.2 maps to a stated query path; partial indexes (`ix_forecast_due_unscored`, `ix_kgnode_current`, `ix_kgedge_current`, `ix_pattern_promotable`) are present with their `WHERE` predicates.
+17. Rolled-up Parquet rows validate against the §19.4 rolled-observation schema (`meta.rolled=true`, correct `rollup_width_ms`, OHLC present for `level` series).

@@ -303,6 +303,26 @@ spread = uncertainty_estimate(member_preds)   # {mean, std, confident}
 ```
 `uncertainty_estimate` (ai_models.py:103–107) returns predictive `mean` and `std` over the members; `std` is the raw model-disagreement component of uncertainty. The reported interval combines this **epistemic spread** with the **EnbPI conformal residual** (aleatoric, from §06) so the final `[L,U]` is honest even when members agree but are jointly wrong. The conformal residual buffer is refreshed each cycle from the latest scored residuals (§1) — this is the feedback that makes intervals self-correct.
 
+### 2.4 Assimilation: how a cycle uses the latest observations
+NWP's "assimilate then integrate" maps onto our cycle as: **(1) ingest** the freshest observations for the target (and its KGIK drivers); **(2) update** each member's state — for the EnKF-assimilated member this is a literal Kalman update of the ensemble state given the new obs; for classical members (GBM/Holt/ARIMA) it is re-conditioning on the extended history; for the foundation TS model it is re-running inference with the new context window; **(3) integrate** forward to all horizons `h∈H`, emitting `member_preds`; **(4) combine** with the §12 weights into `ŷ_ens` and the mixture CDF `F_ens`. The cycle is *idempotent per (target, origin)*: re-running with identical inputs reproduces the forecast (needed for backtest reproducibility, §14.4).
+
+### 2.5 Decomposing uncertainty: epistemic vs aleatoric (the honest interval)
+The reported `[L,U]` must reflect **two** sources, or it will be over-confident:
+```
+σ²_total ≈ σ²_epistemic (member disagreement, from uncertainty_estimate.std)
+         + σ²_aleatoric  (irreducible noise, from the EnbPI conformal residual buffer)
+[L, U]  = conformal_interval(ŷ_ens, residual_buffer, α)   # EnbPI guarantees PICP≈1−α
+         widened by σ_epistemic when members disagree
+```
+The two failure modes this guards against:
+1. **Members agree but are jointly wrong** (low epistemic, high aleatoric) → conformal residual width keeps the interval honest; coverage error (§1.3.4) would otherwise blow out.
+2. **Genuine ambiguity** (high epistemic, e.g. near a regime break) → member spread widens the band, so the system *says it doesn't know* rather than emitting a false-precision point.
+
+This decomposition is why §1.3.4 tracks coverage error as a first-class calibration signal and why a regime break (§3.4) **shrinks the residual buffer** before re-forecasting — stale aleatoric estimates would otherwise under-cover right when uncertainty is highest.
+
+### 2.6 Overlapping lead-times (the rolling-cycle picture)
+Because each cycle emits a *new* forecast row while older ones stay `pending` until their own `due_at`, at any instant a target has **many overlapping forecasts in flight** — a 1h forecast issued 10 min ago, a 1d forecast issued 6h ago, a 7d forecast issued 2d ago, etc. This is the rolling-NWP picture: lead-time-stratified forecasts maturing on a conveyor. The matcher (§1.2) scores each as it comes due, and skill is always aggregated **per horizon bucket** (§6.2) because skill degrades with lead-time — collapsing horizons would average a sharp 1h forecast with a vague 7d one and hide both.
+
 ---
 
 ## 3. DRIFT DETECTION
@@ -345,6 +365,10 @@ p = KS_pvalue(D, n_ref, n_cur)
 ```
 Implemented via `scipy.stats.ks_2samp`. **Alarm when p < 0.01** (residual distribution has shifted — the model's error structure changed). KS catches shifts in *bias and scale* that PSI on raw inputs can miss (e.g. inputs unchanged but the mapping degraded).
 
+**Why residuals, not raw outputs:** if the model is valid, residuals `e_i = y_i − ŷ_i` are a *stationary, mean-zero* stream regardless of how the inputs move — the model has "explained away" the input variation. So a shift in the residual distribution is a direct signal that the *mapping* (not just the input mix) has degraded. PSI watches the inputs; KS watches whether the model still maps them correctly; together they triage **data drift vs model rot** (RB-DRIFT's first question).
+
+**Worked KS example (intuition for the statistic).** Reference residuals `E_ref` centered at 0 with spread ~0.01; recent residuals `E_cur` have drifted to a mean of +0.03 (the model now systematically under-predicts). The empirical CDFs separate: at `x=0`, `F_ref(0)≈0.50` but `F_cur(0)≈0.10` (most recent residuals are now positive). The KS statistic `D = sup_x|F_ref−F_cur|` picks up this ~0.40 vertical gap; with `n_ref=n_cur=200` the asymptotic p-value `p ≈ 2·exp(−2·D²·n_eff)` is `≈ 2·exp(−2·0.16·100) ≈ 2·exp(−32) ≈ 0` ≪ 0.01 → **alarm**. A pure scale change (same mean, doubled spread) shows up as gaps in the *tails* of the CDF comparison, also caught — that's the "bias and scale" coverage PSI-on-inputs misses.
+
 ### 3.4 Regime break — change-point on the error series (BOCPD)
 A KS/PSI alarm says *something shifted*; we also need **when** and whether it is a persistent regime break. Run **Bayesian Online Changepoint Detection (BOCPD)** on the rolling error series `{e_i}`:
 
@@ -356,8 +380,48 @@ predictive P(e_t | ·)       # Student-t (Normal-InvGamma conjugate on residuals
 ```
 A **changepoint** is declared when the MAP run-length `r_t` collapses to ~0 with posterior mass `> CP_THRESHOLD` (default 0.5). This integrates with PELT (offline, batch backtests) — PELT for retrospective segmentation, BOCPD for the online stream. On a confirmed changepoint: fire the `regime break` re-forecast trigger (§2.2), shrink the conformal residual buffer to the post-break segment (old residuals are stale), and flag affected models for the retrain evaluation (§4.2).
 
+### 3.4.1 BOCPD — full recursion, conjugate predictive, and worked update
+The §3.4 summary states the recursion; here it is derived to the level a validator can re-implement. BOCPD maintains a posterior over the **run length** `r_t` = "number of steps since the last changepoint." The joint recursion (Adams & MacKay 2007) factorizes into **growth** (run continues) and **changepoint** (run resets) messages:
+```
+γ_t(r_t) := P(r_t, e_{1:t})
+# growth  (r_t = r_{t-1}+1): run continues, no changepoint
+γ_t(r_{t-1}+1) = γ_{t-1}(r_{t-1}) · π(e_t | r_{t-1}) · (1 − H(r_{t-1}))
+# changepoint (r_t = 0): a break happened at t
+γ_t(0)         = Σ_{r_{t-1}} γ_{t-1}(r_{t-1}) · π(e_t | r_{t-1}) · H(r_{t-1})
+# normalize → posterior
+P(r_t | e_{1:t}) = γ_t(r_t) / Σ_{r} γ_t(r)
+```
+- **Hazard `H(r)=1/λ`** (constant-hazard prior): the per-step prior probability that the current run ends, with expected run length `λ` (default 250 ticks for high-freq, tuned per target). Constant hazard = geometric run-length prior, the memoryless default.
+- **Predictive `π(e_t | r)`** is the posterior-predictive of the residual model conditioned on the last `r` observations. We use the **Normal–Inverse-Gamma** conjugate prior on `(μ, σ²)` of the residuals, whose posterior predictive is a **Student-t**:
+```
+e_t | e^{(r)} ~ Student-t( ν=2α_r,  loc=μ_r,  scale²=β_r(κ_r+1)/(α_r κ_r) )
+# hyperparameter updates as each residual joins run r (standard NIG conjugacy):
+κ_r ← κ_r + 1
+μ_r ← (κ_r μ_r + e_t)/(κ_r+1)
+α_r ← α_r + 1/2
+β_r ← β_r + κ_r (e_t − μ_r)² / (2(κ_r+1))
+```
+- **Changepoint declaration:** the MAP run length `r̂_t = argmax_r P(r_t|·)`. A changepoint at `t` is declared when `P(r_t = 0 | e_{1:t}) > CP_THRESHOLD` (default 0.5) — i.e. the model now believes, with majority posterior mass, that the run reset. `oracle_drift_bocpd_cp_prob` emits `P(r_t=0|·)`.
+
+**Worked single-step update (intuition).** Suppose a long run has predictive `Student-t(loc≈0, scale≈0.01)` (residuals tightly around 0). A new residual arrives at `e_t = 0.15` (15σ-ish). The growth message multiplies by the *tiny* predictive density of 0.15 under that t, while the changepoint message (`r_t=0`, broad prior predictive) assigns 0.15 a *much larger* density → mass floods to `r_t=0` → `P(r_t=0|·)` jumps above 0.5 → **changepoint**. That is BOCPD detecting that "the error structure just broke," firing the §2.2 regime-break trigger.
+
+**Online vs offline split:** BOCPD runs on the live stream (one update per scored residual, `O(t)` run-length states, pruned to a window for `O(1)` amortized cost). **PELT** (Pruned Exact Linear Time) does the *retrospective* segmentation in batch backtests (§6.2) — it finds the globally-optimal set of changepoints minimizing a penalized cost over the whole series, used to report "skill in calm vs break regimes." The two agree on stable series; divergence (BOCPD flags a break PELT later un-segments) is itself a monitored signal (a transient vs a true regime).
+
 ### 3.5 Drift dashboard summary
 The drift subsystem emits, per (target, model): `psi_max`, `psi_mean`, `ece`, `coverage_error`, `ks_pvalue`, `bocpd_cp_prob`, and a single rolled-up `drift_score ∈ [0,1]` (weighted max of normalized signals) for at-a-glance alerting.
+
+### 3.6 Rolled-up `drift_score` — exact composition and a worked value
+The four surfaces have incomparable scales (PSI unbounded≥0, KS p∈[0,1] inverted, ECE∈[0,1], cp_prob∈[0,1]). `drift_score` normalizes each to `[0,1]` "alarm-ness" then takes a **weighted max** (max so any single blown surface dominates; weighted so we can de-emphasize a noisy one):
+```
+n_psi  = clip(psi_max / 0.2, 0, 1)            # 1.0 at the 0.2 alarm
+n_ks   = clip(1 − ks_pvalue / 0.01, 0, 1)     # 1.0 when p≤0.01 alarm
+n_ece  = clip(ece / 0.1, 0, 1)                # 1.0 at the 0.1 alarm
+n_cp   = clip(bocpd_cp_prob / 0.5, 0, 1)      # 1.0 at the 0.5 threshold
+n_cov  = clip(|coverage_error| / 0.05, 0, 1)  # 1.0 at the ±0.05 band edge
+drift_score = max(w_psi·n_psi, w_ks·n_ks, w_ece·n_ece, w_cp·n_cp, w_cov·n_cov)
+# default weights all 1.0; A-DRIFT pages at drift_score > 0.5
+```
+**Worked value.** `psi_max=0.12` → n_psi=0.60; `ks_pvalue=0.20` → n_ks=0 (well above 0.01); `ece=0.04` → n_ece=0.40; `cp_prob=0.10` → n_cp=0.20; `|CE|=0.01` → n_cov=0.20. `drift_score = max(0.60, 0, 0.40, 0.20, 0.20) = 0.60` → **A-DRIFT pages** (>0.5), driven by PSI even though no single hard alarm (PSI 0.12 < 0.2) tripped on its own — the rolled-up score is *more sensitive* to a co-occurrence of moderate signals, which is exactly its job as an early warning.
 
 ---
 
