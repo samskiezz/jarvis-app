@@ -10580,5 +10580,22 @@
     "epoch": "industrial",
     "name": "Horse Omnibus",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hot_air_balloon": {
+    "prompt": "a striped hot-air balloon with a wicker basket, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "04e5bd62-1c87-4dbc-a587-38c2c3f7cdb7",
+    "path": "/models/generated/tripo/hot_air_balloon.glb",
+    "bytes": 14798764,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/04e5bd62-1c87-4dbc-a587-38c2c3f7cdb7/tripo_pbr_model_04e5bd62-1c87-4dbc-a587-38c2c3f7cdb7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMDRlNWJkNjItMWM4Ny00ZGJjLWE1ODctMzhjMmMzZjdjZGI3L3RyaXBvX3Bicl9tb2RlbF8wNGU1YmQ2Mi0xYzg3LTRkYmMtYTU4Ny0zOGMyYzNmN2NkYjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=KAA6HO9wY-QbUC9YhrPweK6U2ssuY1GeqkZatNn3dUMfJJqdZjEZeMHI7Vat2XF9lVYQqNktzCGy0ehHrlpfkD3SiD77j9FAdwH0E3OC2U3XGVlwcfbBBPV9jRHDsZyhsM2oVEcQbEOvNzXjp24TvgMYpfyiTF5cOj~C0KkOih6tL5W9Di39CdbQZSo9rnJPIo4el2i0pM190-3HuHmpnB3k~3gZ1MNRTLMaqEKek1uD6ziLQkzYsG39rJFZZJJvhoXaFxwrblziOS7p1XOnsXj1AxCh8yZWnX4opVA~6R794De8XWXOZh1WE09aLxKPCB6AuKiJxFEd6x3D6NpV1Q__",
+    "asset_id": "hot_air_balloon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Hot Air Balloon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
