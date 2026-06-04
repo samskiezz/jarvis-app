@@ -3140,4 +3140,43 @@ Clients should branch on `error.code == "unauthorized"` (HTTP 401), not the mess
 
 ---
 
-> Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract; **this pass:** complete OpenAPI 3.1 document (§10), full header reference (§11), pagination/filtering/sorting reference (§12), SSE + webhooks streaming contracts (§13), rate-limit tier matrix (§14), exhaustive per-code error catalogue with retry flow (§15), frontend `kimiClient`/`oracle` + curl + Python SDK snippets (§16), backwards-compat/versioning/deprecation matrix with worked timeline (§17), the deferred OpenAPI component schemas in full (§18), the remaining forward-domain worked examples incl. Omori/ballistic/orbital/generic + soft-error gallery + `used_llm` truth table (§19), per-endpoint contract-test matrix (§20), idempotency/caching/consistency lifecycle (§21), an end-to-end annotated wire transcript (§22), the `params` reference matrix by domain (§23), and the auth/config behaviour matrix (§24)).
+## 25. `method.math` & `drivers` APPENDIX — per-forecaster field guide
+
+What each forecaster emits into `method.math` (verbatim, rendered in the UI METHOD panel) and the exact `drivers` keys a client can rely on. Grounded in the return dicts of `gbm_montecarlo_forecast`, `gutenberg_richter_poisson`, `omori_aftershock_probability`, `great_circle_forward`, and `fit_growth_series`.
+
+### 25.1 Crypto / generic-series — `gbm_montecarlo_forecast`
+- `method.math` (verbatim): `log-returns r=ln(P_i/P_{i-1}); mu,sigma per step; GBM P_h=P0*exp((mu-0.5*sigma^2)h+sigma*Z*sqrt(h)) Monte-Carlo (10000 paths); sigma annualised /sqrt(dt); blended 50/50 with Holt linear-trend (alpha=0.3,beta=0.1).`
+- `drivers` keys: `p0`, `drift_per_step` (mu), `volatility_per_step` (sigma), `drift_annualized`, `volatility_annualized`, `sampling_interval_years`, `horizon_steps`, `n_paths`, plus `percentiles{5,25,50,75,95}` and `probability_up` merged in by `_predict_crypto`.
+- `prediction`: `point_estimate = 0.5*GBM_median + 0.5*Holt_point`; `interval = {low: P5, high: P95, confidence: 0.90}`; `probability = P(terminal > P0)`.
+- Edge: needs ≥3 positive prices (`p.size < 3` raises → soft `insufficient_data`); `sigma` floored at `1e-9`; Holt point floored at 0 (prices are non-negative).
+
+### 25.2 Seismic G-R+Poisson — `gutenberg_richter_poisson`
+- `method.math`: `G-R log10(N>=M)=a-b*M (Aki/Utsu MLE b); N_target=10^(a-b*M); lambda=N_target/catalog_days; P(>=1 in T)=1-exp(-lambda*T) (Poisson).`
+- `drivers`: `b_value`, `a_value`, `b_std_error`, `mc` (completeness magnitude), `n_events`, `rate_per_day` (lambda), `target_magnitude`, `used_underworld_gr` (true when the underworld `gutenberg_richter_b_value` was used, else native Aki/Utsu MLE).
+- `prediction`: `probability = clamp(1-exp(-lambda*T), 0, 1)`; `interval = {0, 1, confidence:0}` (probability, not a band).
+- Edge: needs ≥2 magnitudes; `mc` defaults to `min(magnitudes)`.
+
+### 25.3 Seismic Omori — `omori_aftershock_probability`
+- `method.math`: `Omori-Utsu n(t)=K/(t+c)^p; N=int over horizon; P=1-exp(-N).`
+- `drivers`: `K`, `c_days`, `p`, `t_days`, `used_underworld`.
+- Integral: for `p==1`, `N = K*(ln(t+T+c) - ln(t+c))`; else `N = K/(1-p)*((t+T+c)^(1-p) - (t+c)^(1-p))`. `P = clamp(1-exp(-max(N,0)),0,1)`.
+
+### 25.4 Trajectory great-circle — `great_circle_forward`
+- `method.math`: `haversine direct: delta=d/R; lat2=asin(sin l1 cos d + cos l1 sin d cos h); lng2=l1+atan2(sin h sin d cos l1, cos d - sin l1 sin l2).`
+- `drivers`: `speed_mps`, `heading_deg`, `vertical_rate_mps`, `minutes`, `earth_radius_m` (6371000.0), plus `predicted_lat`, `predicted_lng`, `ground_distance_m` merged by `_predict_trajectory`.
+- `prediction`: `value=null`, `point_estimate={lat,lng,alt_m}`, `unit="lat/lng/alt"`, no interval (`confidence:0`).
+- Ballistic variant: `R=v^2 sin(2*theta)/g` → `unit="meters"`. Orbital variant: `T=2*pi*sqrt(a^3/mu)` → `unit="minutes"`.
+
+### 25.5 Growth — `fit_growth_series`
+- `method.math`: `exp: ln(y)=ln(y0)+r t (OLS), T2=ln2/r; logistic: y=K/(1+A e^{-r t}), K grid-searched, A,r OLS on logit; pick lower-SSE; CI=point +/- 1.96*sigma_resid.`
+- `drivers` (exponential chosen): `model="exponential"`, `y0`, `growth_rate` (r), `doubling_time` (ln2/r), `residual_std`. (logistic chosen): `model="logistic"`, `K`, `growth_rate`, `A`, `doubling_time_exp`, `residual_std`.
+- `prediction`: `interval = {point ± 1.96*sigma_resid, confidence:0.95}`, `low` clipped to ≥0; `probability=null`.
+- Model selection: logistic chosen iff its SSE < exponential SSE; K grid `linspace(1.05, 4.0, 40) * max(y)`.
+
+### 25.6 Client rendering contract for `method.math`
+- `method.math` is a **display string**, not a parseable expression — render verbatim (monospace) in the METHOD panel. Do not attempt to evaluate it.
+- `drivers` is a flat-ish `{string: number|bool|object}` map; surface numeric drivers as a key/value table. Unknown driver keys MUST be tolerated (additive within v1, §17).
+
+---
+
+> Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract; **this pass:** complete OpenAPI 3.1 document (§10), full header reference (§11), pagination/filtering/sorting reference (§12), SSE + webhooks streaming contracts (§13), rate-limit tier matrix (§14), exhaustive per-code error catalogue with retry flow (§15), frontend `kimiClient`/`oracle` + curl + Python SDK snippets (§16), backwards-compat/versioning/deprecation matrix with worked timeline (§17), the deferred OpenAPI component schemas in full (§18), the remaining forward-domain worked examples incl. Omori/ballistic/orbital/generic + soft-error gallery + `used_llm` truth table (§19), per-endpoint contract-test matrix (§20), idempotency/caching/consistency lifecycle (§21), an end-to-end annotated wire transcript (§22), the `params` reference matrix by domain (§23), the auth/config behaviour matrix (§24), and the `method.math`/`drivers` per-forecaster appendix (§25)).

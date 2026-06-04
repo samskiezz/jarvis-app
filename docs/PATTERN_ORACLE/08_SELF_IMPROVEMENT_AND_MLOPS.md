@@ -26,6 +26,8 @@ Plus **OBSERVABILITY** (§7): metrics, dashboards, alerts, runbooks.
 
 A guiding non-negotiable from `00_MASTER_INDEX.md` §0: *calibrated honesty* — improvement is judged against information-theoretic baselines (climatology / persistence), never against a strawman.
 
+**Document structure (two layers).** §§0–9 are the **contract layer**: the falsifiable spec — schemas, formulas, thresholds, and the exit gate. §§10–17 are the **depth layer**: full derivations, the complete continual-learning state machine, the canary protocol, the online-ensemble math, the KGIK algorithm, the backtesting harness design, the observability spec, and the experiment/registry lifecycle. The depth sections expand specific contract clauses and each ends with a worked example or trace the validation suite can assert against (cross-reference map in §16). A new engineer reads the contract layer first, then the depth section for the subsystem they are building.
+
 ---
 
 ## 1. FORECAST → OUTCOME LOOP
