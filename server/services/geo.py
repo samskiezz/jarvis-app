@@ -19,11 +19,12 @@ Design rules (mirror ``ontology_store.py`` / ``history_lake.py``):
 Honesty about data sources (important):
   * The ``entities`` layer is **real** — it reflects live ontology objects that
     carry numeric lat/lon.
-  * ``seismic`` / ``air_quality`` / ``buoys`` / ``flight`` layers have **no real
-    source wired into this stdlib-only module** (fetching is async/httpx and
-    lives in ``live_intel``/``prediction``). Rather than fabricate data, those
-    layers return an *empty* FeatureCollection carrying
-    ``{"note": "source not wired"}`` so callers never mistake synthetic for real.
+  * The ``seismic`` layer is **real** — it fetches the live USGS M2.5+/day
+    GeoJSON feed via stdlib ``urllib`` (network-guarded; offline → honest empty).
+  * ``air_quality`` / ``buoys`` / ``flight`` layers have **no real source wired**
+    yet. Rather than fabricate data, they return an *empty* FeatureCollection
+    carrying ``{"note": "source not wired"}`` so callers never mistake synthetic
+    for real.
   * The ``density`` layer is **derived** honestly from the ``entities`` features.
 
 The geofence DB path comes from env ``GEO_DB`` (default ``server/data/geo.db``).
@@ -35,7 +36,9 @@ import math
 import os
 import sqlite3
 import time
+import urllib.request
 import uuid
+import json as _json
 from typing import Any, Optional
 
 from . import ontology_store
@@ -45,8 +48,27 @@ _DEFAULT_DB = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "geo.db"
 )
 
-# Layer ids that have no real source wired into this stdlib-only module.
-_UNWIRED_LAYERS = ("seismic", "air_quality", "buoys", "flight")
+# Public, keyless feeds fetched synchronously via stdlib urllib so geo.py stays
+# dependency-free. Every fetch is network-guarded, so offline / blocked egress
+# degrades to an honest empty collection rather than fabricating data.
+_USGS_SEISMIC_FEED = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
+_OPENSKY_FEED = "https://opensky-network.org/api/states/all"          # live aircraft states (anon)
+_NDBC_BUOY_FEED = "https://www.ndbc.noaa.gov/data/latest_obs/latest_obs.txt"  # NOAA buoy latest obs
+_OPENMETEO_AQ = "https://air-quality-api.open-meteo.com/v1/air-quality"       # keyless air quality
+
+# A small set of major cities to sample point-based air-quality measurements
+# from (the Open-Meteo AQ API is point-based, not a global feed).
+_AQ_CITIES = [
+    ("Sydney", -33.87, 151.21), ("Los Angeles", 34.05, -118.24),
+    ("London", 51.51, -0.13), ("Beijing", 39.90, 116.41),
+    ("Delhi", 28.61, 77.21), ("São Paulo", -23.55, -46.63),
+    ("Tokyo", 35.68, 139.69), ("Lagos", 6.52, 3.38),
+    ("Moscow", 55.75, 37.62), ("New York", 40.71, -74.01),
+]
+
+# Layer ids that still have no real source wired into this stdlib-only module.
+# (All four science layers are now live; kept for forward-compat/unknown ids.)
+_UNWIRED_LAYERS: tuple[str, ...] = ()
 
 # Property keys we will look at when hunting for coordinates (case-insensitive).
 _LAT_KEYS = ("lat", "latitude", "y")
@@ -412,6 +434,174 @@ def _empty_collection(layer_id: str, note: str) -> dict:
     }
 
 
+def _http_get(url: str, timeout: float = 12.0) -> Optional[bytes]:
+    """GET a URL via stdlib urllib, returning raw bytes or ``None`` on any
+    failure (offline / egress blocked / HTTP error). Never raises."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "jarvis-apex/geo"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 - fixed https URLs
+            return resp.read()
+    except Exception:  # noqa: BLE001 - any fetch failure → honest fallback
+        return None
+
+
+def _fetch_seismic(limit: int) -> Optional[list[dict]]:
+    """Fetch live USGS earthquakes (M2.5+, past day) as GeoJSON Features.
+
+    Returns a list of features on success, or ``None`` if the network call
+    fails / egress is blocked / the payload is malformed — the caller then
+    falls back to an honest empty collection. Never raises.
+    """
+    raw = _http_get(_USGS_SEISMIC_FEED)
+    if raw is None:
+        return None
+    try:
+        data = _json.loads(raw.decode("utf-8", "replace"))
+    except (ValueError, TypeError):
+        return None
+    feats: list[dict] = []
+    for f in (data.get("features") or [])[: max(0, limit)]:
+        try:
+            coords = (f.get("geometry") or {}).get("coordinates") or []
+            if len(coords) < 2:
+                continue
+            props = f.get("properties") or {}
+            feats.append(
+                _feature(
+                    float(coords[1]),
+                    float(coords[0]),
+                    {
+                        "id": f.get("id"),
+                        "mag": props.get("mag"),
+                        "place": props.get("place"),
+                        "time": props.get("time"),
+                        "depth_km": coords[2] if len(coords) > 2 else None,
+                        "label": props.get("title") or props.get("place"),
+                    },
+                )
+            )
+        except (TypeError, ValueError):
+            continue
+    return feats
+
+
+def _fetch_flight(limit: int) -> Optional[list[dict]]:
+    """Fetch live aircraft states from the OpenSky Network (anonymous, keyless).
+
+    The ``/states/all`` payload is ``{"states": [[icao24, callsign, origin,
+    ..., lon(5), lat(6), ...]]}``. Returns Point features or ``None`` on failure.
+    """
+    raw = _http_get(_OPENSKY_FEED, timeout=14.0)
+    if raw is None:
+        return None
+    try:
+        data = _json.loads(raw.decode("utf-8", "replace"))
+    except (ValueError, TypeError):
+        return None
+    feats: list[dict] = []
+    for s in (data.get("states") or [])[: max(0, limit)]:
+        try:
+            lon, lat = s[5], s[6]
+            if lon is None or lat is None:
+                continue
+            feats.append(
+                _feature(
+                    float(lat),
+                    float(lon),
+                    {
+                        "id": (s[0] or "").strip(),
+                        "label": (s[1] or "").strip() or (s[0] or "").strip(),
+                        "origin_country": s[2],
+                        "velocity_ms": s[9] if len(s) > 9 else None,
+                        "baro_altitude_m": s[7] if len(s) > 7 else None,
+                        "heading": s[10] if len(s) > 10 else None,
+                    },
+                )
+            )
+        except (TypeError, ValueError, IndexError):
+            continue
+    return feats
+
+
+def _fetch_buoys(limit: int) -> Optional[list[dict]]:
+    """Fetch NOAA NDBC latest buoy observations (keyless, whitespace-delimited).
+
+    Header rows start with ``#``; columns include STN, LAT, LON, plus met/ocean
+    measurements. Returns Point features or ``None`` on failure.
+    """
+    raw = _http_get(_NDBC_BUOY_FEED, timeout=14.0)
+    if raw is None:
+        return None
+    try:
+        text = raw.decode("utf-8", "replace")
+    except Exception:  # noqa: BLE001
+        return None
+    lines = [ln for ln in text.splitlines() if ln.strip()]
+    header: list[str] = []
+    for ln in lines:
+        if ln.startswith("#"):
+            # first '#' line is the column names (strip the leading '#')
+            if not header:
+                header = ln.lstrip("#").split()
+            continue
+        break
+    if not header:
+        return None
+    try:
+        i_stn = header.index("STN") if "STN" in header else 0
+        i_lat = header.index("LAT")
+        i_lon = header.index("LON")
+    except ValueError:
+        return None
+    feats: list[dict] = []
+    for ln in lines:
+        if ln.startswith("#"):
+            continue
+        cols = ln.split()
+        if len(cols) <= max(i_lat, i_lon):
+            continue
+        try:
+            lat = float(cols[i_lat]); lon = float(cols[i_lon])
+        except (TypeError, ValueError):
+            continue
+        feats.append(
+            _feature(lat, lon, {
+                "id": cols[i_stn] if i_stn < len(cols) else None,
+                "label": f"buoy {cols[i_stn]}" if i_stn < len(cols) else "buoy",
+            })
+        )
+        if len(feats) >= max(0, limit):
+            break
+    return feats
+
+
+def _fetch_air(limit: int) -> Optional[list[dict]]:
+    """Sample real air-quality (PM2.5 / US AQI) at a set of major cities via the
+    keyless Open-Meteo Air-Quality API. Point-based, so we query a fixed city
+    list. Returns Point features or ``None`` if every city query failed."""
+    feats: list[dict] = []
+    any_ok = False
+    for name, lat, lon in _AQ_CITIES[: max(0, limit)]:
+        url = (
+            f"{_OPENMETEO_AQ}?latitude={lat}&longitude={lon}"
+            "&current=pm2_5,pm10,us_aqi"
+        )
+        raw = _http_get(url, timeout=10.0)
+        if raw is None:
+            continue
+        try:
+            cur = (_json.loads(raw.decode("utf-8", "replace")).get("current") or {})
+        except (ValueError, TypeError):
+            continue
+        any_ok = True
+        feats.append(_feature(lat, lon, {
+            "id": name, "label": name,
+            "pm2_5": cur.get("pm2_5"), "pm10": cur.get("pm10"),
+            "us_aqi": cur.get("us_aqi"),
+        }))
+    return feats if any_ok else None
+
+
 def layer_features(
     layer_id: str, limit: int = 200, *, db_path: Optional[str] = None
 ) -> dict:
@@ -419,8 +609,9 @@ def layer_features(
 
       * ``entities`` — **real** points from :func:`objects_with_coords`.
       * ``density``  — heat grid **derived** from the entities layer.
-      * ``seismic`` / ``air_quality`` / ``buoys`` / ``flight`` — no source wired
-        into this stdlib module → an honest *empty* collection carrying
+      * ``seismic``  — **real** live USGS M2.5+/day feed (offline → honest empty).
+      * ``air_quality`` / ``buoys`` / ``flight`` — no source wired into this
+        stdlib module → an honest *empty* collection carrying
         ``{"note": "source not wired"}``. Never fabricated.
 
     Always returns a FeatureCollection dict; never raises."""
@@ -464,6 +655,28 @@ def layer_features(
             "layer": lid,
             "features": cells,
             "source": "derived:entities",
+        }
+
+    # Live science layers — each fetches a real, keyless public feed. Network
+    # is guarded inside the fetcher: a None result means the feed was
+    # unreachable (offline / egress blocked), and we return an honest empty
+    # collection naming the source rather than fabricating points.
+    _LIVE = {
+        "seismic": (_fetch_seismic, "usgs:2.5_day", "USGS"),
+        "flight": (_fetch_flight, "opensky:states", "OpenSky"),
+        "buoys": (_fetch_buoys, "noaa:ndbc", "NOAA NDBC"),
+        "air_quality": (_fetch_air, "open-meteo:air-quality", "Open-Meteo"),
+    }
+    if lid in _LIVE:
+        fetch, source, name = _LIVE[lid]
+        feats = fetch(lim)
+        if feats is None:
+            return _empty_collection(lid, f"{name} feed unreachable (offline / egress blocked)")
+        return {
+            "type": "FeatureCollection",
+            "layer": lid,
+            "features": feats,
+            "source": source,
         }
 
     if lid in _UNWIRED_LAYERS:
