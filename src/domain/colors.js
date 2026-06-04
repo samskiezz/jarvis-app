@@ -1,3 +1,7 @@
+// Canonical platform brand tokens live in /design-tokens.json and are mirrored
+// here (APEX runtime) and in underworld/web/tailwind.config.js (`brand.*`) so
+// both surfaces share one identity (parity P15 #109). Keep the brand hexes below
+// in sync with design-tokens.json.
 export const COLORS = {
   bg: "#020608",
   panel: "rgba(4,10,16,0.95)",
