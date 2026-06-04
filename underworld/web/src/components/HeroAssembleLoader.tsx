@@ -10,7 +10,7 @@ import * as THREE from "three";
 // pieces fly back and "block themselves together" into the finished, textured,
 // glowing logo. Driven by the live asset-load progress so it IS the loading bar.
 
-const HERO_URL = "/models/hero/underworld_logo.glb";
+const HERO_URL = "/models/hero/underworld_hero.glb";
 
 /** Split a mesh into its separate PIECES (connected components: each letter,
  *  crystal, tube, minion is its own island) and tag every vertex with its
