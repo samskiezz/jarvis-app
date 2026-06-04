@@ -9271,5 +9271,22 @@
     "epoch": "any",
     "name": "Ice Floe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lake_edge": {
+    "prompt": "a modular lake shoreline edge tile with reeds, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "80efa38e-6ac1-428b-a7e2-1be5f7d05ba9",
+    "path": "/models/generated/tripo/lake_edge.glb",
+    "bytes": 15438632,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/80efa38e-6ac1-428b-a7e2-1be5f7d05ba9/tripo_pbr_model_80efa38e-6ac1-428b-a7e2-1be5f7d05ba9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODBlZmEzOGUtNmFjMS00MjhiLWE3ZTItMWJlNWY3ZDA1YmE5L3RyaXBvX3Bicl9tb2RlbF84MGVmYTM4ZS02YWMxLTQyOGItYTdlMi0xYmU1ZjdkMDViYTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VtgeIvzfpih7jKlEClzStdTRcPQYT4QCOpl1O6iXIioPNFwGm790uJMVfY5YBXpboC7vTjfjYfYgLCyDhOTV5ovYiBfU9bCAZw3B1vC~AEIb2GhkS4~MyGKq4IOEqU1em6mW7mMjL9MZpvNocwJl~pig-o1BiLoD5HBU--1I9w38YlXoikIAzMDUI~snoTqM7~hvZ9Fwe~PgZ46cDcZOPp7xQh62a5RhEKlz~JKQRM0ZEZKUAxrXJr8UFZy5ckrk~8~X9LPv7sVq4KxGvSREgOBUmbexDSDeEV~HZroEWpBOnVBKXdOwpeFK3kwporJtlaBR4W9R1QrRCHYGn9YnEw__",
+    "asset_id": "lake_edge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Lake Edge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
