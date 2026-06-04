@@ -10291,5 +10291,22 @@
     "epoch": "any",
     "name": "Tree Cherry Blossom",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_cypress": {
+    "prompt": "a tall slender cypress tree, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "75f5b378-b409-452b-b503-7343d95c5568",
+    "path": "/models/generated/tripo/tree_cypress.glb",
+    "bytes": 8645052,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/75f5b378-b409-452b-b503-7343d95c5568/tripo_pbr_model_75f5b378-b409-452b-b503-7343d95c5568.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNzVmNWIzNzgtYjQwOS00NTJiLWI1MDMtNzM0M2Q5NWM1NTY4L3RyaXBvX3Bicl9tb2RlbF83NWY1YjM3OC1iNDA5LTQ1MmItYjUwMy03MzQzZDk1YzU1NjguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=TCc3VVJAWeIKCcyjQ-h5KgdjO3xO4cEK54hAN~sUR35rMuaWDLnMnKeOkJHncMzayOGJt4byTLX6ifJprmZbVeWz58FVbV7vjtegr~KFKdgU882ViiBuKBazg39HHrG86eI5~vDGWW135n~XXfeT1dDnkY0PZ-jR6XKNq5iL-RUgjrE3-tNS-uL~L3iEJu9rcbJh1CISEFzvU6Eoki18483AzrX-QftwhGYCLeQyUkVj-8-qWFlVh9q7qGY3qEXMzJ2ee7zWZ-NRzYc8YCLC-KyYZAhAPS9si2Q0s45k8Lwd9rXPvk~VI3yzNEO1vb6Za5-KH5zDP8k3XA5-eRV12A__",
+    "asset_id": "tree_cypress",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Cypress",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
