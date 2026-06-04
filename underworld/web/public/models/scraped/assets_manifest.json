@@ -9237,5 +9237,22 @@
     "epoch": "any",
     "name": "Hedge Row Long",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hot_spring": {
+    "prompt": "a steaming mineral hot-spring pool, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "dc13a5c9-7a27-4c9d-972b-3b8a4d189280",
+    "path": "/models/generated/tripo/hot_spring.glb",
+    "bytes": 14949860,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/dc13a5c9-7a27-4c9d-972b-3b8a4d189280/tripo_pbr_model_dc13a5c9-7a27-4c9d-972b-3b8a4d189280.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGMxM2E1YzktN2EyNy00YzlkLTk3MmItM2I4YTRkMTg5MjgwL3RyaXBvX3Bicl9tb2RlbF9kYzEzYTVjOS03YTI3LTRjOWQtOTcyYi0zYjhhNGQxODkyODAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=qfjy~w4qrSk9XmOe641JBIPE~s4nB~lj3xaH6YBNpaaDdd77YJbc-~5fxL42Dwb1bOxqME6K5KB2ykH3mnqLk4gVme9vMIKEn3rWOJJzb8FINuHar9VZNcKUbhEql4OReWSvv1ZDVkXk~C2ws33HXrXtJ0D5H1vLaQYju6Avt7fNUZbpNK822UvyGnDwTFMpr5Lyo~rAUyh5NZE0O40ctc6HM7yvmIH2vNdpTqf9imc3TOjuz27g4Cfkia-ndyb7bSqSfNZEmRGokyQr33xv0ARFJVC88oqouV8BHzvFJU~-mCbzldGlovkYhHn-xqWEFWAgWLPEuwRMvKykOL-k9w__",
+    "asset_id": "hot_spring",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Hot Spring",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
