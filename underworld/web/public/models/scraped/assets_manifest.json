@@ -10019,5 +10019,22 @@
     "epoch": "any",
     "name": "Bamboo Clump",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bush_berry": {
+    "prompt": "a low bush heavy with ripe berries, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d2c3b5eb-3f16-46b1-8369-e7de5f8feddc",
+    "path": "/models/generated/tripo/bush_berry.glb",
+    "bytes": 15318916,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d2c3b5eb-3f16-46b1-8369-e7de5f8feddc/tripo_pbr_model_d2c3b5eb-3f16-46b1-8369-e7de5f8feddc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDJjM2I1ZWItM2YxNi00NmIxLTgzNjktZTdkZTVmOGZlZGRjL3RyaXBvX3Bicl9tb2RlbF9kMmMzYjVlYi0zZjE2LTQ2YjEtODM2OS1lN2RlNWY4ZmVkZGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=gI9lLalq8QH~zHeYyzaIUe0B6tv3MYA6iSOxM3Ph9mlWmW90aDdvp64aw-0F4HkOHK-U6VF1E1HqFW2B-ffb8DyDq7U75CpoyhxARwwik2Wg0jJqDSk4SOnNMsmpuVLeCDbcGjPWS9UWojiwIChjs-mFavv1gbycEW9kXCLLHG~oZqE7C1CkY1fEkRCSGZKWThbGfI03sEGF3LRHnfB97soT7fsFmUOmZYH50E5nDFIX1BySeXPhvaVwjBAhwFUA46~TL0vGluyDctg0E58usKsmifN7oG7lc4urHGZrbTyXKBdAzmI78x2U2blree8wH35yBu4oAqKiuq6rSxJAHQ__",
+    "asset_id": "bush_berry",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Bush Berry",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
