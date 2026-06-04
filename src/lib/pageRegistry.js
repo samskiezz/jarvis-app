@@ -209,6 +209,9 @@ export const PAGES = [
   { name: "AIPLogic", label: "AIP Logic", icon: "🧩", group: "platform",
     aliases: ["aip logic","agent studio","plan builder","logic","pipeline","tools","governed"],
     component: P(() => import("@/pages/AIPLogic")) },
+  { name: "Quiver", label: "Quiver", icon: "📈", group: "platform",
+    aliases: ["quiver","dashboard","charts","analytics","widgets","recharts","workshop"],
+    component: P(() => import("@/pages/Quiver")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
