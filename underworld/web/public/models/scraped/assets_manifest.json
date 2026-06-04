@@ -9934,5 +9934,22 @@
     "epoch": "iron",
     "name": "Wall Gate Stone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wall_straight_stone": {
+    "prompt": "a straight modular stone fortification wall segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ccda2c60-7465-46a6-9b03-22f6d76a987a",
+    "path": "/models/generated/tripo/wall_straight_stone.glb",
+    "bytes": 8309212,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ccda2c60-7465-46a6-9b03-22f6d76a987a/tripo_pbr_model_ccda2c60-7465-46a6-9b03-22f6d76a987a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvY2NkYTJjNjAtNzQ2NS00NmE2LTliMDMtMjJmNmQ3NmE5ODdhL3RyaXBvX3Bicl9tb2RlbF9jY2RhMmM2MC03NDY1LTQ2YTYtOWIwMy0yMmY2ZDc2YTk4N2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VpCvd4g4EvAg7sFSXyQr47BXBFKJLrGP96oIvyh1h3aRXWsNac1z9l8HY0e9wSV8i8Ul~m0xdjlArw6jwa17DTTarlnz7mE5fDibBSSpl9nOfSmxyrwymR36RPw7slPIj9M8u4FdBVUNi7FR5NZ1IOLiCkAN9UaKFg2VEpMf8~WNQkKKeaNH6ORDqJkMu5Ys0MoYocz4Yclmg5obsUGbI5AIkVk-TVrH1yZ3W-Dx9tNHzF-zjXQvgishNzA1tAJ~12gN8qR2Q7mV-5MDKZsliR7a90CBxBVsDyhQhZnx87onGrRB6Tyehddz6CiiDyqRF2ka0imtBaqzUak1QZCUeA__",
+    "asset_id": "wall_straight_stone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Wall Straight Stone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
