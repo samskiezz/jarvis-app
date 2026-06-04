@@ -10648,5 +10648,22 @@
     "epoch": "iron",
     "name": "Merchant Galleon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:motorcycle": {
+    "prompt": "a classic two-wheel motorcycle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2e4cce1d-913c-4d3e-b698-df0b8bec7fbf",
+    "path": "/models/generated/tripo/motorcycle.glb",
+    "bytes": 13051716,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/2e4cce1d-913c-4d3e-b698-df0b8bec7fbf/tripo_pbr_model_2e4cce1d-913c-4d3e-b698-df0b8bec7fbf.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMmU0Y2NlMWQtOTEzYy00ZDNlLWI2OTgtZGYwYjhiZWM3ZmJmL3RyaXBvX3Bicl9tb2RlbF8yZTRjY2UxZC05MTNjLTRkM2UtYjY5OC1kZjBiOGJlYzdmYmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Vl8~XoP5-iNjJ5XoLtO55Qp4mX8UVg6SqOEHfOxrZBIQiFWYzPSGz5RakkgXPmxDKJ2OH7ojL18r67Yeml20k~Fu4OK7H8WjmlxfFLSfrx-arYRvMj0lcCtjdkrH4ZdDsjT2xmRmpzDEPK7M3ltCXr5jGvyujz~~7zzDnUkk7-uLfYIH~JXSlgEPEav4M9uvFzacIXwoiqT18RXisWaR7iedT9ZRG1QC6zFFNk6lHLQpTOrAmaFgzr0quZoqqHncDEs3AOvVXisPnoAmqvgJ42Z9KuViX6pwOm-LABV4R5kJ7Z4umjtlSU~dVkJJyiwsdFTWg1FSGVkjzCrWkvnXhA__",
+    "asset_id": "motorcycle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Motorcycle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
