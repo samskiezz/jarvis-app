@@ -9441,5 +9441,22 @@
     "epoch": "any",
     "name": "Picket Fence Gate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pier_walkway": {
+    "prompt": "a wooden pier walkway on pilings, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "83f7bec5-9c14-4b20-8420-6cc89c0813f9",
+    "path": "/models/generated/tripo/pier_walkway.glb",
+    "bytes": 15131812,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/83f7bec5-9c14-4b20-8420-6cc89c0813f9/tripo_pbr_model_83f7bec5-9c14-4b20-8420-6cc89c0813f9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODNmN2JlYzUtOWMxNC00YjIwLTg0MjAtNmNjODljMDgxM2Y5L3RyaXBvX3Bicl9tb2RlbF84M2Y3YmVjNS05YzE0LTRiMjAtODQyMC02Y2M4OWMwODEzZjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=E~YsPeNpzOmWc0jXx1fVKFN92CiSmCp4FWCaPq6vKAafyP-Y8qE7B2jmWlyb~mLyWPl6Tw9Z6nxXxUOwiwJe92JuszWMT9WoVTy9OBUkah8HO9Wt~TicRfNV2VaWMQJq2iHGArUdjVnW4H1D4b7bGDNh0GJiBm344mSrJwljA7Sd18NM-~JkFaXd3UpotoJUfkUMazcO3FE9ZU2ZrAG8l7J78pnhjO8pEMQN3N27e~EZgxTLiYsCWkVusGoIrI-lqdh9pb~QQLzF~pcJBpcTF1bYBCRhmsYDJhsLPUaEvHwP3FA6CllL0yQmKH9NPgeoyiBp20otYJpjLnsjVz-A-g__",
+    "asset_id": "pier_walkway",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Pier Walkway",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
