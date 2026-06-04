@@ -10,6 +10,7 @@
  */
 import { useState, useCallback } from "react";
 import { kimiClient } from "@/api/kimiClient";
+import { appParams } from "@/lib/app-params";
 
 // Thin convenience wrappers over kimiClient.request so call sites read cleanly.
 export const apiGet = (path) => kimiClient.request(path);
@@ -18,6 +19,34 @@ export const apiPost = (path, body) =>
     method: "POST",
     body: JSON.stringify(body ?? {}),
   });
+
+// Raw GET that returns the response body as text (kimiClient always JSON-parses,
+// which breaks markdown/plain-text exports). Used for report exports where the
+// backend may hand back markdown rather than JSON.
+export const apiGetText = async (path) => {
+  const headers = appParams.apiKey ? { Authorization: `Bearer ${appParams.apiKey}` } : {};
+  const res = await fetch(`${appParams.apiBaseUrl}${path}`, { headers });
+  if (!res.ok) {
+    const t = await res.text().catch(() => "");
+    const err = new Error(`API ${res.status}: ${t || res.statusText}`);
+    err.status = res.status;
+    throw err;
+  }
+  return res.text();
+};
+
+// Trigger a browser download of a text/JSON blob (used by report exports).
+export const download = (filename, content, mime = "text/plain") => {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+};
 
 // Build a querystring from an object, dropping empty/nullish values.
 export const qs = (params) => {

@@ -126,6 +126,17 @@ export const PAGES = [
     aliases: ["graph", "bridge", "pagerank", "optimize", "counterfactual"],
     component: P(() => import("@/pages/GraphOps")) },
 
+  // ── PLATFORM (Wave-4 backends: link graph · reports · collab) ────────────
+  { name: "LinkAnalysis", label: "Link Analysis", icon: "🕸️", group: "platform",
+    aliases: ["graph", "link", "network", "paths", "communities", "centrality", "subgraph"],
+    component: P(() => import("@/pages/LinkAnalysis")) },
+  { name: "Reports", label: "Reports", icon: "📄", group: "platform",
+    aliases: ["report", "brief", "export", "dossier", "markdown"],
+    component: P(() => import("@/pages/Reports")) },
+  { name: "Activity", label: "Activity", icon: "📣", group: "platform",
+    aliases: ["activity", "feed", "collab", "notes", "audit"],
+    component: P(() => import("@/pages/Activity")) },
+
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
     component: P(() => import("@/pages/InvestmentTracker")) },
