@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { COLORS as C } from "@/domain/colors";
 import { OBJECTS, LINKS } from "@/domain/ontology";
+import { kimiClient } from "@/api/kimiClient";
 import { PageShell, PanelCard, StatTile, Grid, Badge } from "@/components/PageKit";
 
 const ACCENT = C.purple; // cognition domain accent
@@ -81,28 +82,246 @@ function buildMLP(layerSizes, seed) {
   return { nodes, edges, layerCount: L };
 }
 
+// ── REAL graph: distinct cluster hues so cluster colouring reads clearly ────
+const CLUSTER_HUES = [
+  0x33e0ff, 0xf07820, 0x7ee787, 0xc792ff, 0xe8a800,
+  0xff6b8b, 0x4fd1c5, 0xa0e060, 0x6aa0ff, 0xffd24a,
+];
+
+// Build the REAL knowledge-graph: OBJECTS → nodes, LINKS → edges. Positions are
+// seeded then relaxed with a cheap force-directed pass (repulsion + link spring)
+// so connected entities physically cluster. No deps — these graphs are tiny.
 function buildLiveGraph() {
-  const nodes = [];
   const index = new Map();
-  const types = [...new Set(OBJECTS.map((o) => o.type))];
-  OBJECTS.forEach((o, i) => {
-    const ti = types.indexOf(o.type);
-    const ang = (i / OBJECTS.length) * Math.PI * 2;
-    const tier = (ti / Math.max(1, types.length - 1) - 0.5) * 7;
-    const rad = 3.4 + (i % 3) * 0.7;
-    const col = new THREE.Color(C.type[o.type] || C.neon);
-    const pos = new THREE.Vector3(tier, Math.sin(ang) * rad, Math.cos(ang) * rad);
-    const node = { pos, color: col, layer: ti, label: o.label, id: o.id };
-    index.set(o.id, nodes.length);
-    nodes.push(node);
-  });
+  OBJECTS.forEach((o, i) => index.set(o.id, i));
+  const N = OBJECTS.length;
+
+  // real edges from LINKS (carry strength for thickness/brightness)
   const edges = [];
+  const degree = new Float32Array(N);
   LINKS.forEach((l) => {
     const a = index.get(l.a), b = index.get(l.b);
     if (a == null || b == null) return;
-    edges.push({ a, b, layer: 0 });
+    const s = l.strength || 1;
+    edges.push({ a, b, layer: 0, strength: s, label: l.label });
+    degree[a] += s; degree[b] += s;
   });
-  return { nodes, edges, layerCount: types.length };
+
+  // ── seed positions on a ring, then a few force-directed iterations ────────
+  const rng = mulberry32(0x51e6);
+  const P = new Array(N);
+  for (let i = 0; i < N; i++) {
+    const ang = (i / N) * Math.PI * 2;
+    const rad = 4.0 + (i % 3) * 0.8;
+    P[i] = new THREE.Vector3(
+      Math.cos(ang) * rad + (rng() - 0.5) * 0.5,
+      Math.sin(ang) * rad + (rng() - 0.5) * 0.5,
+      (rng() - 0.5) * 3.5,
+    );
+  }
+  const ITER = 90, K_REP = 22.0, K_SPRING = 0.045, REST = 3.0;
+  const disp = Array.from({ length: N }, () => new THREE.Vector3());
+  for (let it = 0; it < ITER; it++) {
+    for (let i = 0; i < N; i++) disp[i].set(0, 0, 0);
+    // repulsion (all pairs — N is tiny)
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) {
+        const dx = P[i].x - P[j].x, dy = P[i].y - P[j].y, dz = P[i].z - P[j].z;
+        let d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 < 0.01) d2 = 0.01;
+        const f = K_REP / d2;
+        const inv = 1 / Math.sqrt(d2);
+        const fx = dx * inv * f, fy = dy * inv * f, fz = dz * inv * f;
+        disp[i].x += fx; disp[i].y += fy; disp[i].z += fz;
+        disp[j].x -= fx; disp[j].y -= fy; disp[j].z -= fz;
+      }
+    }
+    // link attraction (spring toward rest length, scaled by strength)
+    for (const e of edges) {
+      const a = P[e.a], b = P[e.b];
+      const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
+      const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 0.001;
+      const f = K_SPRING * (d - REST) * (e.strength || 1);
+      const fx = (dx / d) * f, fy = (dy / d) * f, fz = (dz / d) * f;
+      disp[e.a].x += fx; disp[e.a].y += fy; disp[e.a].z += fz;
+      disp[e.b].x -= fx; disp[e.b].y -= fy; disp[e.b].z -= fz;
+    }
+    const cool = 1 - it / ITER;
+    for (let i = 0; i < N; i++) {
+      const dl = Math.min(0.6, disp[i].length()) * cool;
+      if (dl > 1e-5) { disp[i].setLength(dl); P[i].add(disp[i]); }
+    }
+  }
+  // centre + spread on X so it reads as a volume, not a flat disc
+  const c = new THREE.Vector3();
+  P.forEach((p) => c.add(p));
+  c.multiplyScalar(1 / N);
+  P.forEach((p) => p.sub(c));
+
+  const types = [...new Set(OBJECTS.map((o) => o.type))];
+  const nodes = OBJECTS.map((o, i) => ({
+    pos: P[i],
+    color: new THREE.Color(C.type[o.type] || C.neon), // fallback colour = by type
+    layer: types.indexOf(o.type),
+    label: o.label,
+    id: o.id,
+    type: o.type,
+    degree: degree[i],
+  }));
+
+  return { nodes, edges, layerCount: types.length, degree, index };
+}
+
+// ── Local fallbacks (used when the science bridge is down/unexpected) ───────
+// Degree-based centrality (already have weighted degree) + connected-component
+// style clustering: greedy label propagation over the real edges.
+function localClusters(nodes, edges) {
+  const N = nodes.length;
+  const label = new Int32Array(N);
+  for (let i = 0; i < N; i++) label[i] = i;
+  const adj = Array.from({ length: N }, () => []);
+  for (const e of edges) { adj[e.a].push(e.b); adj[e.b].push(e.a); }
+  // propagate minimum reachable label → connected components
+  let changed = true, guard = 0;
+  while (changed && guard++ < N + 4) {
+    changed = false;
+    for (let i = 0; i < N; i++) {
+      for (const j of adj[i]) {
+        if (label[j] < label[i]) { label[i] = label[j]; changed = true; }
+        else if (label[i] < label[j]) { label[j] = label[i]; changed = true; }
+      }
+    }
+  }
+  // compact labels to 0..k-1
+  const remap = new Map();
+  const compact = new Int32Array(N);
+  for (let i = 0; i < N; i++) {
+    if (!remap.has(label[i])) remap.set(label[i], remap.size);
+    compact[i] = remap.get(label[i]);
+  }
+  return { labels: compact, k: remap.size };
+}
+
+// Paint nodes from a {labels, centrality} model: colour by cluster, size by
+// centrality. Mutates node.color + node.renderSize in place.
+function applyLiveModel(nodes, model) {
+  const cmax = Math.max(1e-6, ...model.centrality);
+  nodes.forEach((nd, i) => {
+    const cl = model.labels[i] | 0;
+    nd.color = new THREE.Color(CLUSTER_HUES[cl % CLUSTER_HUES.length]);
+    nd.cluster = cl;
+    const c = model.centrality[i] / cmax; // 0..1
+    nd.centrality = model.centrality[i];
+    nd.renderSize = 3.2 + c * 7.0;        // central nodes render markedly larger
+  });
+}
+
+// Lloyd k-means over the 3D layout positions → k spatial clusters that follow
+// the force-directed grouping. Cheap (k tiny, N tiny), deterministic seeding.
+function kmeansLabels(nodes, k) {
+  const N = nodes.length;
+  k = Math.max(1, Math.min(k, N));
+  const pts = nodes.map((n) => n.pos);
+  // deterministic spread-out seeds (k-means++ lite)
+  const centers = [pts[0].clone()];
+  while (centers.length < k) {
+    let bi = 0, bd = -1;
+    for (let i = 0; i < N; i++) {
+      let dmin = Infinity;
+      for (const c of centers) dmin = Math.min(dmin, pts[i].distanceToSquared(c));
+      if (dmin > bd) { bd = dmin; bi = i; }
+    }
+    centers.push(pts[bi].clone());
+  }
+  const labels = new Int32Array(N);
+  for (let it = 0; it < 24; it++) {
+    let moved = false;
+    for (let i = 0; i < N; i++) {
+      let best = 0, bd = Infinity;
+      for (let c = 0; c < k; c++) {
+        const d = pts[i].distanceToSquared(centers[c]);
+        if (d < bd) { bd = d; best = c; }
+      }
+      if (labels[i] !== best) { labels[i] = best; moved = true; }
+    }
+    for (let c = 0; c < k; c++) {
+      const acc = new THREE.Vector3(); let n = 0;
+      for (let i = 0; i < N; i++) if (labels[i] === c) { acc.add(pts[i]); n++; }
+      if (n) centers[c] = acc.multiplyScalar(1 / n);
+    }
+    if (!moved) break;
+  }
+  return labels;
+}
+
+// Refine the live model via the science bridge. Returns null on any failure so
+// the caller keeps the local fallback. Uses:
+//  • pagerank(edges=real LINKS) → REAL per-node centrality + top node.
+//  • kmeans_clustering(n_clusters) → benchmarked k; nodes are then assigned to
+//    k spatial clusters locally (the bridge's k-means runs on its own blobs, so
+//    we borrow its k and cluster OUR real layout with the same algorithm).
+async function liveBridgeRefine(nodes, edges) {
+  const ids = nodes.map((n) => n.id);
+  const idIndex = new Map(ids.map((id, i) => [id, i]));
+  const edgeList = edges.map((e) => [ids[e.a], ids[e.b]]);
+
+  const post = (field, params) =>
+    kimiClient.request("/functions/science/run", {
+      method: "POST",
+      body: JSON.stringify({ field, params }),
+    });
+
+  // unwrap {status:"ok", data:{...}} or {status:"ok", ...} shapes
+  const dataOf = (r) => {
+    if (!r || r.status !== "ok") return null;
+    return r.data && typeof r.data === "object" ? r.data : r;
+  };
+
+  const [prRes, kmRes] = await Promise.all([
+    post("pagerank", { edges: edgeList }).catch(() => null),
+    post("kmeans_clustering", { n_clusters: Math.min(4, nodes.length) }).catch(() => null),
+  ]);
+
+  const pr = dataOf(prRes);
+  const km = dataOf(kmRes);
+
+  // centrality from real pagerank ranks (fall back to weighted degree)
+  let centrality, topNode, usedPR = false;
+  if (pr && pr.ranks && typeof pr.ranks === "object") {
+    centrality = nodes.map((n) => Number(pr.ranks[n.id]) || 0);
+    if (centrality.some((v) => v > 0)) {
+      usedPR = true;
+      topNode = pr.top_node && idIndex.has(pr.top_node)
+        ? nodes[idIndex.get(pr.top_node)].label
+        : nodes[centrality.indexOf(Math.max(...centrality))].label;
+    }
+  }
+  if (!usedPR) {
+    const maxDeg = Math.max(1, ...nodes.map((n) => n.degree || 0));
+    centrality = nodes.map((n) => (n.degree || 0) / maxDeg);
+    topNode = nodes[centrality.indexOf(Math.max(...centrality))].label;
+  }
+
+  // cluster count from the benchmarked k-means engine (fall back to a heuristic)
+  let k = km && Number.isFinite(km.n_clusters) ? (km.n_clusters | 0) : 0;
+  if (!k || k < 1) k = Math.max(2, Math.min(4, Math.round(Math.sqrt(nodes.length))));
+  k = Math.min(k, nodes.length);
+  const labels = Array.from(kmeansLabels(nodes, k));
+
+  // if neither call yielded anything usable, signal failure → keep local model
+  if (!usedPR && !km) return null;
+
+  const engines = [];
+  if (usedPR) engines.push("pagerank");
+  if (km) engines.push("k-means");
+  return {
+    source: `bridge: ${engines.join(" + ") || "fallback"}`,
+    k,
+    labels,
+    centrality,
+    topNode,
+    purity: km && Number.isFinite(km.purity) ? km.purity : null,
+  };
 }
 
 const PRESETS = {
@@ -458,8 +677,32 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       mount.dataset.neurons = String(usedNeurons);
     } else {
       // ── legacy MLP / cube / live graph (node-edge) modes ────────────────
-      const data = mode === "live" ? buildLiveGraph() : buildMLP(PRESETS[mode] || PRESETS.mlp, seed);
+      const isLive = mode === "live";
+      const data = isLive ? buildLiveGraph() : buildMLP(PRESETS[mode] || PRESETS.mlp, seed);
       const { nodes, edges, layerCount } = data;
+
+      // ── LIVE: compute REAL clustering + centrality (local first, then the
+      // science bridge refines it asynchronously). Colour = cluster, size =
+      // centrality. Synthetic modes keep their layer colouring untouched. ─────
+      let liveModel = null;
+      if (isLive) {
+        const N = nodes.length;
+        // local fallback centrality = weighted degree (normalised)
+        const maxDeg = Math.max(1, ...nodes.map((n) => n.degree || 0));
+        const centrality = nodes.map((n) => (n.degree || 0) / maxDeg);
+        // local fallback clustering = connected components / label propagation
+        const { labels, k } = localClusters(nodes, edges);
+        liveModel = {
+          source: "local (degree + components)",
+          k,
+          labels: Array.from(labels),
+          centrality,
+          topNode: nodes.reduce((best, n, i) =>
+            centrality[i] > centrality[best.i] ? { i, label: n.label } : best,
+            { i: 0, label: nodes[0]?.label }).label,
+        };
+        applyLiveModel(nodes, liveModel);
+      }
 
       const nodeGeo = new THREE.BufferGeometry();
       const npos = new Float32Array(nodes.length * 3);
@@ -470,7 +713,7 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       nodes.forEach((nd, i) => {
         npos[i * 3] = nd.pos.x; npos[i * 3 + 1] = nd.pos.y; npos[i * 3 + 2] = nd.pos.z;
         ncol[i * 3] = nd.color.r; ncol[i * 3 + 1] = nd.color.g; ncol[i * 3 + 2] = nd.color.b;
-        nsize[i] = mode === "live" ? 4.0 : 2.6;
+        nsize[i] = isLive ? (nd.renderSize || 4.0) : 2.6;
         ndepth[i] = layerCount > 1 ? nd.layer / (layerCount - 1) : 0;
         nphase[i] = (i * 0.123) % 1;
       });
@@ -487,32 +730,47 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       group.add(new THREE.Points(nodeGeo, nodeMat));
       disposables.push({ geo: nodeGeo, mat: nodeMat });
 
+      // Edges: real LINKS as additive line segments. In LIVE mode brightness +
+      // a travelling pulse are driven by link STRENGTH (aStr). A second per-edge
+      // attribute aPos01 (0 at endpoint a, 1 at endpoint b) lets a pulse run
+      // along each edge. Synthetic modes keep the layer-wave behaviour.
+      const maxStr = isLive ? Math.max(1, ...edges.map((e) => e.strength || 1)) : 1;
       const epos = new Float32Array(edges.length * 6);
       const ecol = new Float32Array(edges.length * 6);
       const eLayer = new Float32Array(edges.length * 2);
+      const eStr = new Float32Array(edges.length * 2);
+      const ePos01 = new Float32Array(edges.length * 2);
       edges.forEach((e, i) => {
         const a = nodes[e.a].pos, b = nodes[e.b].pos;
         epos.set([a.x, a.y, a.z, b.x, b.y, b.z], i * 6);
         const ca = nodes[e.a].color, cb = nodes[e.b].color;
         ecol.set([ca.r, ca.g, ca.b, cb.r, cb.g, cb.b], i * 6);
         eLayer[i * 2] = e.layer; eLayer[i * 2 + 1] = e.layer + 1;
+        const sn = (e.strength || 1) / maxStr;
+        eStr[i * 2] = sn; eStr[i * 2 + 1] = sn;
+        ePos01[i * 2] = 0; ePos01[i * 2 + 1] = 1;
       });
       const edgeGeo = new THREE.BufferGeometry();
       edgeGeo.setAttribute("position", new THREE.BufferAttribute(epos, 3));
       edgeGeo.setAttribute("aColor", new THREE.BufferAttribute(ecol, 3));
       edgeGeo.setAttribute("aLayer", new THREE.BufferAttribute(eLayer, 1));
+      edgeGeo.setAttribute("aStr", new THREE.BufferAttribute(eStr, 1));
+      edgeGeo.setAttribute("aPos01", new THREE.BufferAttribute(ePos01, 1));
       const edgeMat = new THREE.ShaderMaterial({
-        uniforms: { uWave: { value: 0 }, uLive: { value: mode === "live" ? 1 : 0 } },
+        uniforms: { uWave: { value: 0 }, uLive: { value: isLive ? 1 : 0 }, uTime: { value: 0 } },
         vertexShader: `
-          attribute vec3 aColor; attribute float aLayer;
+          attribute vec3 aColor; attribute float aLayer; attribute float aStr; attribute float aPos01;
           varying vec3 vColor; varying float vBright;
-          uniform float uWave; uniform float uLive;
+          uniform float uWave; uniform float uLive; uniform float uTime;
           void main() {
             vColor = aColor;
             float d = abs(aLayer - uWave);
             float wave = exp(-d * d * 1.4);
-            float base = mix(0.10, 0.18, uLive);
-            vBright = base + wave * 0.9;
+            // LIVE: brightness scales with link strength; a pulse travels a→b.
+            float pulse = exp(-pow(fract(uTime * 0.5) - aPos01, 2.0) * 12.0);
+            float liveBright = (0.16 + 0.55 * aStr) + 0.5 * pulse * aStr;
+            float synthBright = 0.10 + wave * 0.9;
+            vBright = mix(synthBright, liveBright, uLive);
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
         `,
@@ -528,24 +786,69 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       waveSpan = Math.max(1, layerCount - 1);
       // LIVE GRAPH: the logical total reflects the real DB size (entities + links).
       // synthetic modes (mlp/cube) just mirror their drawn counts.
-      const liveTotal = mode === "live" ? OBJECTS.length + LINKS.length : nodes.length;
-      onStatsRef.current?.({
+      const liveTotal = isLive ? OBJECTS.length + LINKS.length : nodes.length;
+      const reportStats = (extra = {}) => onStatsRef.current?.({
         neurons: nodes.length,
         synapses: edges.length,
-        total: mode === "live" ? OBJECTS.length : nodes.length,
-        totalSynapses: mode === "live" ? LINKS.length : edges.length,
+        total: isLive ? OBJECTS.length : nodes.length,
+        totalSynapses: isLive ? LINKS.length : edges.length,
         rendered: nodes.length,
         liveTotal,
         layers: layerCount,
         fps: 0,
         webgl: true,
+        ...(isLive && liveModel ? {
+          clusters: liveModel.k,
+          topNode: liveModel.topNode,
+          modelSource: liveModel.source,
+        } : {}),
+        ...extra,
       });
+      reportStats();
+
+      // ── Recolour/resize node buffers in place from a refined model ──────────
+      const ncolAttr = nodeGeo.getAttribute("aColor");
+      const nsizeAttr = nodeGeo.getAttribute("aSize");
+      const repaintNodes = () => {
+        nodes.forEach((nd, i) => {
+          ncolAttr.array[i * 3] = nd.color.r;
+          ncolAttr.array[i * 3 + 1] = nd.color.g;
+          ncolAttr.array[i * 3 + 2] = nd.color.b;
+          nsizeAttr.array[i] = nd.renderSize || 4.0;
+          // edge endpoint colours follow node cluster colours
+        });
+        ncolAttr.needsUpdate = true; nsizeAttr.needsUpdate = true;
+        const ecolArr = edgeGeo.getAttribute("aColor").array;
+        edges.forEach((e, i) => {
+          const ca = nodes[e.a].color, cb = nodes[e.b].color;
+          ecolArr[i * 6] = ca.r; ecolArr[i * 6 + 1] = ca.g; ecolArr[i * 6 + 2] = ca.b;
+          ecolArr[i * 6 + 3] = cb.r; ecolArr[i * 6 + 4] = cb.g; ecolArr[i * 6 + 5] = cb.b;
+        });
+        edgeGeo.getAttribute("aColor").needsUpdate = true;
+      };
+
+      // ── REAL clustering + centrality via the science bridge (async) ─────────
+      // pagerank: real per-node centrality from the actual LINKS graph.
+      // kmeans_clustering: real cluster COUNT (k) → drives local assignment so
+      // every node gets a cluster colour keyed to a benchmarked engine.
+      if (isLive) {
+        let cancelled = false;
+        liveBridgeRefine(nodes, edges).then((refined) => {
+          if (cancelled || !refined) return;
+          liveModel = refined;
+          applyLiveModel(nodes, refined);
+          repaintNodes();
+          reportStats();
+        }).catch(() => { /* keep local fallback — never break the page */ });
+        disposables.push({ cancel: () => { cancelled = true; } });
+      }
 
       fpsCB = (t) => {
         const wave = (t * 0.9) % (waveSpan + 1.2);
         nodeMat.uniforms.uTime.value = t;
         nodeMat.uniforms.uWave.value = layerCount > 1 ? (wave / waveSpan) : 0;
         edgeMat.uniforms.uWave.value = wave;
+        edgeMat.uniforms.uTime.value = t;
         return { wave };
       };
     }
@@ -671,7 +974,7 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       mount.removeEventListener("wheel", onWheel);
       window.removeEventListener("mouseup", onUp);
       window.removeEventListener("mousemove", onMove);
-      for (const d of disposables) { d.geo?.dispose(); d.mat?.dispose(); }
+      for (const d of disposables) { d.cancel?.(); d.geo?.dispose(); d.mat?.dispose(); }
       renderer.dispose();
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
       delete mount.dataset.neurons;
@@ -788,10 +1091,10 @@ export default function NeuralCore() {
           sub={isSampling ? `drawing ${fmt(stats.synapses)} (sample)` : (cloud ? "haze + capped lines" : "additive edges")}
         />
         <StatTile
-          label="Scale"
-          value={cloud ? (TOTALS.find((t) => t.id === totalId) || TOTALS[0]).label : (live ? "LIVE" : "SIM")}
+          label={live ? "Clusters" : "Scale"}
+          value={live ? (stats.clusters || "—") : (cloud ? (TOTALS.find((t) => t.id === totalId) || TOTALS[0]).label : "SIM")}
           accent={AMBER.getStyle()}
-          sub={cloud ? `budget ${scaleLabel} drawn` : live ? "ontology bound" : `seed 0x${seed.toString(16)}`}
+          sub={cloud ? `budget ${scaleLabel} drawn` : live ? (stats.modelSource || "computing…") : `seed 0x${seed.toString(16)}`}
         />
         <StatTile
           label="FPS"
@@ -883,10 +1186,22 @@ export default function NeuralCore() {
                 rendering {fmt(displayRendered)} (LOD sample)
               </div>
             )}
-            <div>SYNAPSES&nbsp;~{fmtBig(displaySynapses)}</div>
+            <div>{live ? "EDGES" : "SYNAPSES"}&nbsp;{live ? fmt(LINKS.length) : "~" + fmtBig(displaySynapses)}</div>
             {cloud && <div>BUDGET&nbsp;&nbsp;&nbsp;{scaleLabel} drawn</div>}
+            {live && <div>CLUSTERS&nbsp;{stats.clusters || "—"}</div>}
+            {live && (
+              <div style={{ color: C.neon }}>
+                TOP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{stats.topNode || "—"}
+              </div>
+            )}
             <div>FPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{stats.fps || "—"}</div>
-            <div style={{ color: AMBER.getStyle() }}>ACTIVATION WAVE ▸ TRAVELLING BAND</div>
+            {live ? (
+              <div style={{ color: AMBER.getStyle() }}>
+                {(stats.modelSource || "computing…").toUpperCase()} ▸ COLOUR=CLUSTER · SIZE=CENTRALITY
+              </div>
+            ) : (
+              <div style={{ color: AMBER.getStyle() }}>ACTIVATION WAVE ▸ TRAVELLING BAND</div>
+            )}
           </div>
 
           <div style={{
