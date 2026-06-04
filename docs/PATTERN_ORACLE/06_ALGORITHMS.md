@@ -2494,6 +2494,59 @@ symlog(x)=sign(x)ln(1+|x|);  symexp(y)=sign(y)(exp|y|-1)
 
 **Source.** Hafner et al. 2023, *DreamerV3: Mastering Diverse Domains through World Models*; https://arxiv.org/abs/2301.04104 · impl https://github.com/danijar/dreamerv3
 
+#### H23.+ DEPTH MILESTONE
+
+**Full derivation (symlog & two-hot).** *symlog.* `symlog(x)=sign(x)ln(1+|x|)` is a signed, smooth, invertible compression: near 0 it is ≈ identity (`ln(1+x)≈x`), for large `|x|` it grows logarithmically, so a single network output covers values spanning many orders of magnitude without per-task reward scaling. Its inverse `symexp(y)=sign(y)(e^{|y|}−1)` decodes. Predicting `symlog(x)` and decoding with `symexp` removes the need to know reward/return scale a priori — the key to DreamerV3's "one config" robustness. *two-hot.* Regressing a scalar `v` directly with MSE is unstable across scales; instead represent `v` as a distribution over `K` fixed bins `b_1<...<b_K` (often symexp-spaced). If `b_i≤v≤b_{i+1}`, the two-hot target puts weight `(b_{i+1}−v)/(b_{i+1}−b_i)` on bin `i` and the complement on `i+1` (so `Σ p_k b_k = v` exactly). The head outputs a softmax over bins; prediction `=Σ softmax_k · b_k`. Training with cross-entropy to the two-hot target turns scalar regression into well-behaved classification — stable gradients regardless of magnitude. *RSSM/imagination* derivation: the ELBO `E_q[ln p(x|h,z)] − KL(q(z|h,x)‖p(z|h))` is maximized; KL-balancing scales the prior- and posterior-update KL terms separately to prevent posterior collapse; the actor-critic is trained on latent rollouts ("imagination") using λ-returns through the learned model.
+
+**Runnable-quality pseudocode (symlog + two-hot heads).**
+```python
+import numpy as np, torch, torch.nn.functional as F
+def symlog(x):  return torch.sign(x)*torch.log1p(torch.abs(x))
+def symexp(y):  return torch.sign(y)*(torch.expm1(torch.abs(y)))
+
+def two_hot(v, bins):                         # bins: sorted 1-D tensor, length K
+    v = v.clamp(bins[0], bins[-1])
+    idx = torch.searchsorted(bins, v).clamp(1, len(bins)-1)
+    lo, hi = bins[idx-1], bins[idx]
+    w_hi = (v - lo) / (hi - lo + 1e-8); w_lo = 1 - w_hi
+    t = torch.zeros(*v.shape, len(bins))
+    t.scatter_(-1, (idx-1).unsqueeze(-1), w_lo.unsqueeze(-1))
+    t.scatter_add_(-1, idx.unsqueeze(-1), w_hi.unsqueeze(-1))
+    return t                                   # sums to 1, expectation == v
+
+def two_hot_loss(logits, v, bins):
+    return F.cross_entropy(logits, two_hot(v, bins), reduction="mean")
+
+def decode_value(logits, bins):
+    return (F.softmax(logits, -1) * bins).sum(-1)   # expectation over bins
+```
+
+**Parameter table (interface-level).**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| deter_dim | int | 512 | 128–4096 | GRU recurrent state | model capacity |
+| stoch (categoricals) | int×int | 32×32 | — | discrete latent | DreamerV3 default |
+| two_hot bins `K` | int | 255 | 41–255 | value head resolution | symexp-spaced |
+| KL balance | float | 0.8 | 0–1 | prior vs posterior KL | prevent collapse |
+| imagination horizon | int | 15 | 5–50 | rollout length | ↑ for long credit |
+| free_bits | float | 1.0 | 0–3 | min KL per dim | avoid posterior collapse |
+
+**Worked numeric example.** Reward `r=1000`. `symlog(1000)=ln(1001)=6.909` → a tiny network output; `symexp(6.909)=e^{6.909}−1=1000.0` (round-trip exact). two-hot of `v=2.5` with bins `[0,1,2,3,4]`: between bins 2 and 3, `w_hi=(2.5−2)/1=0.5` → target `[0,0,0.5,0.5,0]`; `Σ p_k b_k = 0.5·2+0.5·3 = 2.5` ✓ (exact reconstruction).
+
+**Complexity (derivation).** World-model training = sequence model forward/back `O(L·B·d²)` + imagination rollouts `O(horizon·B·d²)` per actor-critic update — heavier than JEPA (generative + RL). symlog/two-hot add `O(K)` per value. GPU required. **Space** `O(L·B·d + K)`. Strictly future scope.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Reward/value scale explosion | unstable critic | symlog transform + two-hot head |
+| Posterior collapse | KL→0, prior ignored | KL balancing + free-bits |
+| Categorical latent grad | high variance | straight-through estimator |
+| Imagination compounding error | drift in long rollouts | shorter horizon; λ-returns |
+
+**Unit-test oracle.** Round-trip: `symexp(symlog(x))=x` for any `x` within 1e-5 (test `x∈{−1e6,0,1e6}`). two-hot expectation: for any `v` in range, `Σ two_hot(v,bins)_k·bins_k == v` within 1e-5 (the defining property). `decode_value(two_hot_logits)` of a peaked target recovers the value. `symlog(0)=0`, `two_hot` sums to 1.
+
+**Integration code-points.** **NEW** PyTorch `dreamer.py` (interface only in v1, behind feature flag). Applies where PATTERN ORACLE both predicts **and acts** — e.g. the underworld minion simulation (`epidemic_network.py` agent dynamics) — enabling counterfactual "what if we intervene" rollouts that complement the observational causal screens (E15/E16/E16b). `temporal_nodes.counterfactual_fork` is the conceptual analog of imagined rollouts. Document-only; not built in v1.
+
 ---
 
 ## SUMMARY TABLE — algorithm → role in pipeline → reuse target → source

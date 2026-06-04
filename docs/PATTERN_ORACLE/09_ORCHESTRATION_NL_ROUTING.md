@@ -1437,7 +1437,27 @@ Every emitted envelope carries enough provenance to reconstruct the route withou
 
 Together these satisfy invariant 3 (honesty) and the §9.18.1 replayability guarantee: given `provenance` + `params` + `seed=42`, the numeric answer is bit-reproducible.
 
-### 9.18.6 Cross-reference to validation plan
+### 9.18.6 Synthesis anti-hallucination tripwire (algorithm)
+
+The S11 Kimi path is permitted only behind a number-equality check. The deterministic tripwire:
+
+```python
+def synth_guard(prose, verified):
+    allowed = collect_numbers(verified)      # every numeric in the verified JSON
+    for tok in extract_numeric_tokens(prose): # regex r"-?\d+(?:\.\d+)?%?"
+        v = normalise(tok)                    # strip %, commas; round to JSON precision
+        if v not in allowed and v not in DERIVED_OK(allowed):  # e.g. 0.90->"90%"
+            return TEMPLATE_RENDER(verified)  # discard prose, fall back
+    if contains_advice_verb(prose):           # "buy","sell","you should","guaranteed"
+        return TEMPLATE_RENDER(verified)
+    return prose
+```
+
+`DERIVED_OK` whitelists only format-equivalent restatements (a probability `0.90` may appear as `90%`; `$1234.5` as `$1,234.50`). Any other number in the prose — a rounded figure, an invented target, an extrapolated date — is treated as a hallucination and the deterministic template wins. This makes the LLM synthesis layer **incapable** of introducing a number the deterministic core did not produce, closing the last gap in the §9.0 "no numbers from the LLM" axiom.
+
+The same tripwire runs in the key-free path as a no-op (the template only interpolates verified fields, so every number is trivially `∈ allowed`), guaranteeing identical honesty guarantees with or without `KIMI_API_KEY`.
+
+### 9.18.7 Cross-reference to validation plan
 
 Each metric and golden-route row maps to a test in `11_VALIDATION_AND_TEST_PLAN.md`; the traceability table (§9.8) is extended with rows for the FSM transitions (§9.9.2), the verifier rule set (§9.15.1–9.15.7), the injection defenses (§9.12), the compound decomposer (§9.13), and the 8 worked traces (§9.16), giving requirement → component → test coverage for every new capability added in this pass.
 

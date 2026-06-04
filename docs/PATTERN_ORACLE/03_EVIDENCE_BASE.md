@@ -485,6 +485,37 @@ Defines the load-bearing terms used in §L/§R so the deep dives are self-contai
 
 ---
 
+## V. TRAINING-RECIPE & REPRODUCE-COST TABLE (foundation models)
+
+What it actually takes to **retrain from scratch** vs **fine-tune** vs **use-as-is** — informs whether "replicate" means "use weights" (cheap) or "reproduce training" (expensive). PATTERN ORACLE's posture is **use-as-is + light fine-tune**, never from-scratch.
+
+| Model | Pretrain objective | Corpus scale | From-scratch cost (qualitative) | Fine-tune feasible? | Our posture | Source |
+|---|---|---|---|---|---|---|
+| **TimesFM 2.5** | Next-patch prediction (decoder LM) | ~100B time points | High (industrial TPU) | Yes (released) | Use-as-is + optional FT | https://arxiv.org/pdf/2310.10688 |
+| **Chronos / Bolt** | Token LM over quantized values (Chronos); direct quantile (Bolt) | Large public + GP-synthetic | High | Yes (AutoGluon) | Use-as-is | https://arxiv.org/html/2403.07815v1 |
+| **Moirai-2** | Multi-quantile decoder | 36M series | Medium-High | Yes (uni2ts) | Use weights (verify license) | https://arxiv.org/abs/2511.11698 |
+| **Lag-Llama** | Student-t next-step | Diverse open corpus | Medium | Yes | Use-as-is fallback | https://arxiv.org/abs/2310.08278 |
+| **Toto** | Observability next-step (u-μP) | Datadog telemetry + public | High | Yes (open-weights) | Use-as-is for telemetry | https://arxiv.org/abs/2505.14766 |
+| **TabPFN-TS** | ICL over synthetic tabular priors | Synthetic priors | High (prior fitting) | N/A (no per-task fit) | Use-as-is iff license OK | https://www.nature.com/articles/s41586-024-08328-6 |
+
+**Implication:** for every R-A model, "replicate" = **load published weights + thin adapter into the ensemble**, not retrain — keeping build cost in `prediction.py`-adapter territory (`10_COMPUTE_AND_GPU.md`).
+
+---
+
+## W. SUPPLEMENTARY PATENT NOTES (forecasting-adjacent, watch-list)
+
+Beyond §I/§N, these are forecasting-adjacent patents worth a claim-read before any learned-ensemble feature ships. **Watch-list only — none currently blocks the R-A stack** (public-math primitives sit outside these combination claims). Re-verify status with counsel.
+
+| Area | Representative patent | Why on the watch-list | Our posture | URL |
+|---|---|---|---|---|
+| Ensemble residual anomaly | **US10977551B2** | Recurrent/forecast residual ensembles — crowded combination space. | Stay on IsoForest/PELT/BOCPD/MP (public). | https://patents.google.com/patent/US10977551B2/en |
+| Conformal-style intervals | (none asserted; EnbPI is public ICML math) | Confirms our interval layer rests on **published, non-patented** conformal methods. | Use EnbPI/MAPIE freely. | https://arxiv.org/abs/2010.09107 |
+| Error-weighted combine | **WO2014075108A2** | The combiner we use — **expired**, hence free. | Implement directly. | https://patents.google.com/patent/WO2014075108A2/en |
+
+**Net FTO conclusion (engineering, not legal):** the entire **R-A deploy stack is FTO-clean** — it is built from expired-patent math (error-weighting) and published, non-patented methods (EnbPI, IsoForest, PELT, BOCPD, Matrix Profile, DTW, HDBSCAN, EnKF) plus Apache-2.0 foundation weights. The only patent exposure lives in the **R-B/R-C deep layer's learned-ensemble combinations**, which we deliberately avoid or reimplement in non-claimed arrangements. Full FTO opinion required pre-launch (`12_SECURITY_GOVERNANCE_LEGAL.md`).
+
+---
+
 ## K. SOURCE INDEX (all primary URLs, grouped)
 
 **A. Foundation TS:** https://github.com/google-research/timesfm · https://huggingface.co/google/timesfm-2.5-200m-pytorch · https://arxiv.org/abs/2310.10688 · https://github.com/amazon-science/chronos-forecasting · https://arxiv.org/abs/2403.07815 · https://arxiv.org/abs/2511.11698 · https://huggingface.co/Salesforce/moirai-2.0-R-small · https://arxiv.org/abs/2310.08278 · https://github.com/time-series-foundation-models/lag-llama · https://arxiv.org/abs/2505.14766 · https://github.com/DataDog/toto · https://github.com/PriorLabs/tabpfn-time-series
