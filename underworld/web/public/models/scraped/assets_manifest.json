@@ -11226,5 +11226,22 @@
     "epoch": "stone",
     "name": "Stone Club",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:throwing_sling": {
+    "prompt": "a leather throwing sling with stones, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "923da20c-021c-4462-87ba-f7fa484e46c2",
+    "path": "/models/generated/tripo/throwing_sling.glb",
+    "bytes": 14910728,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/923da20c-021c-4462-87ba-f7fa484e46c2/tripo_pbr_model_923da20c-021c-4462-87ba-f7fa484e46c2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOTIzZGEyMGMtMDIxYy00NDYyLTg3YmEtZjdmYTQ4NGU0NmMyL3RyaXBvX3Bicl9tb2RlbF85MjNkYTIwYy0wMjFjLTQ0NjItODdiYS1mN2ZhNDg0ZTQ2YzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=jrPWFTmE~4pKoRRDpDWmosOczid~CSxKYxuFnYXukansnsf6dZLGAW~3b2fPyK6pS5Zfp8QEu8oLHm3xfh6gLd-qjxnarP-iqCAqdiLhxmKv~VXpGmncq9Wk3GipSuzy8hyMj~z--x0olnDqTCh8wsZCS8GtLDwr1HIJElhwGO-Hh88~8wKKa8f8ajQbe2ev9e8PvSOyTk-ziHEQQ~h9NYLF2dODofFXzDQQkk75kzpYGec7ZvJNb0~upTD3dZF0w5geDucV3bKvaL1EzDFvaAGg0PeOvpaX-no4nCFec6d3dZhYw0b5L2frW61E00ApmElzlw6kJ40MJG13KhFDPQ__",
+    "asset_id": "throwing_sling",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "stone",
+    "name": "Throwing Sling",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
