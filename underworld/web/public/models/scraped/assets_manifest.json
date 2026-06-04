@@ -10784,5 +10784,22 @@
     "epoch": "industrial",
     "name": "Train Freight Wagon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:train_passenger_car": {
+    "prompt": "a vintage railway passenger carriage with windows, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "014dbe05-c160-4a8e-9ff6-0231a800ed05",
+    "path": "/models/generated/tripo/train_passenger_car.glb",
+    "bytes": 10592140,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/014dbe05-c160-4a8e-9ff6-0231a800ed05/tripo_pbr_model_014dbe05-c160-4a8e-9ff6-0231a800ed05.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMDE0ZGJlMDUtYzE2MC00YThlLTlmZjYtMDIzMWE4MDBlZDA1L3RyaXBvX3Bicl9tb2RlbF8wMTRkYmUwNS1jMTYwLTRhOGUtOWZmNi0wMjMxYTgwMGVkMDUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=rlSJV~RCG8P5n389g~eYd~Ex3jt06mxVTvtQhF6R0XO5G3WqzxdlaNDHuiVTrP~UvvWqAADngijxVdsjQGJJBGWox8EiQi27lnnyenF0iJTXUvZxBhOCsuVY1Y0TAyhhmnGF9lA10sfC~Irb0Q4EJG4Pf4YySu7r4OQhBbOvKhUm9Kjvo~bnzFQj84OXRP5f26ku2IVKfqpKUJJyez-pjFP5izc3~rDGWyIgncpzMclwCVVklVA0jeLmSrzkPv~su5sL~cFV1kJheN4ZkLd6ykVOVbVvy2VdK0WLbuq2-DyOzwAT1vuzJ8JBV9xgcD0fMjMSmBYHLzkZpL5eNFLtsg__",
+    "asset_id": "train_passenger_car",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Train Passenger Car",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
