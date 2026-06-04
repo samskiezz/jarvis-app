@@ -8897,5 +8897,22 @@
     "epoch": "industrial",
     "name": "Brick Paving Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:brick_wall_corner": {
+    "prompt": "a corner modular brick wall piece, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "912ce29a-fdbe-4da3-8b21-02653dd109f3",
+    "path": "/models/generated/tripo/brick_wall_corner.glb",
+    "bytes": 14903240,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/912ce29a-fdbe-4da3-8b21-02653dd109f3/tripo_pbr_model_912ce29a-fdbe-4da3-8b21-02653dd109f3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOTEyY2UyOWEtZmRiZS00ZGEzLThiMjEtMDI2NTNkZDEwOWYzL3RyaXBvX3Bicl9tb2RlbF85MTJjZTI5YS1mZGJlLTRkYTMtOGIyMS0wMjY1M2RkMTA5ZjMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Vpg4Fn65NbuToLp1ndjCVYFrfR8h7pwIBHegCwlEO-eE2Ux6W406buR76r3OUQ8r4AEMyzM2PMdx86vXU9v~upqjBFwxAU~X~9r3nMIs4kMAWc33wXtZTPUgiOZ6cC8iIFtWHLYJCKuOv~tX6LztCLCg7vLQKks9XMdAqqTK3ScdYI95Xkfcdao6pXMO8zaKwKM-Mu3~r-3eIb1r4fgZ3whe8WN8oBNrOM2epWab62FXfdnGr4JhgaultGepv7SiBiE-kijoDszjGYDy-BqlxddrjO~e1w1kvxmBgoaHCNfSvirR-JO2477IGs2~WfkznjUIjRfcmssgThecvNUuNA__",
+    "asset_id": "brick_wall_corner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Brick Wall Corner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
