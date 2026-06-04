@@ -446,6 +446,27 @@ drift_score = max(w_psi·n_psi, w_ks·n_ks, w_ece·n_ece, w_cp·n_cp, w_cov·n_c
 ```
 **Worked value.** `psi_max=0.12` → n_psi=0.60; `ks_pvalue=0.20` → n_ks=0 (well above 0.01); `ece=0.04` → n_ece=0.40; `cp_prob=0.10` → n_cp=0.20; `|CE|=0.01` → n_cov=0.20. `drift_score = max(0.60, 0, 0.40, 0.20, 0.20) = 0.60` → **A-DRIFT pages** (>0.5), driven by PSI even though no single hard alarm (PSI 0.12 < 0.2) tripped on its own — the rolled-up score is *more sensitive* to a co-occurrence of moderate signals, which is exactly its job as an early warning.
 
+### 3.7 Drift triage decision tree (data drift vs model rot)
+RB-DRIFT's first question is "is this the data or the model?" — they have opposite remedies (fix ingestion vs retrain). The four surfaces, read together, answer it:
+
+```
+            PSI (inputs)        KS (residuals)      → diagnosis & remedy
+            high (>0.2)         low/clean           → DATA DRIFT: input distribution moved but the model
+                                                       still maps it correctly. Remedy: refresh reference
+                                                       window, validate feed (§04). Often self-resolves;
+                                                       a refit only needed if PSI stays high (T2).
+            low/clean           low p (<0.01)       → MODEL ROT: inputs steady but the mapping degraded
+                                                       (residuals shifted). Remedy: recalibrate then T3/T4
+                                                       retrain. PSI alone would have MISSED this.
+            high                low p               → REAL SHIFT: inputs moved AND model can't cope.
+                                                       Remedy: retrain on recent data (T2+T4), shrink buffer.
+            low                 clean, but ECE high → CALIBRATION-ONLY: point ok, intervals wrong.
+                                                       Remedy: recalibrate (EnbPI/quantiles), usually no retrain.
+            (any)               BOCPD cp confirmed  → REGIME BREAK: overrides above; drop pre-break data,
+                                                       retrain post-break only (§3.4.1 / T4).
+```
+This is exactly why the system watches **four** surfaces, not one: each pair of (input-side, residual-side) signals localizes the fault to data vs model, so the runbook routes to the *cheap* remedy (feed fix / recalibration) before the *expensive* one (retrain). Misrouting — retraining on a feed glitch — bakes the glitch into the model, so RB-DRIFT mandates this triage before any T2/T4 retrain is queued (§4.2 trigger guards reference it).
+
 ---
 
 ## 4. MODEL RE-WEIGHTING & RETRAIN
@@ -1384,6 +1405,13 @@ model_version(
 3. `retired`/`rejected` rows are **immutable** — never deleted (lineage + reproducibility for §6.5 trend disputes).
 4. Re-entry to canary requires a **new** `version`/`params_hash` (no re-ramping the same rejected artifact within cooldown, §11.4).
 5. Every state transition writes `learning_audit` (§10) with the `metrics_snapshot` that justified it.
+
+### 15.5 Reproducibility & emergency-rollback drill
+Two operational guarantees the lifecycle must support, periodically rehearsed:
+- **Reproduce-a-number drill.** Given any production CRPSS on a date `D`, the on-call must reconstruct it: look up which champion served on `D` (`champion_since`/`superseded_by` lineage, §15.3) → fetch that version's `experiment` (`params_hash, data_vintage, seed, code_commit`, §15.1) → re-run `backtest` on `data_vintage` → assert the aggregate matches bit-for-bit (§14.4). If it doesn't, either the harness drifted (bug) or a row was mutated (invariant §15.4.3 violated) — both are P1.
+- **Emergency rollback drill.** Beyond the automatic canary watchdog (§11.4), an operator can force `champion → previous champion` in one transition using the lineage chain (`superseded_by` is reversible because retired rows are immutable, §15.4.3). The drill verifies: the previous version is still loadable, its `trained_on_through` still predates current traffic (no future-leak on restore), and traffic flips within one tick. This is the human backstop for a slow-burn regression the automated soak (§11.2 D4) didn't catch.
+
+These drills are what make "the registry is the source of truth" operationally real rather than aspirational: a model lineage you can't *replay* and can't *revert* is just metadata.
 
 ---
 

@@ -289,6 +289,45 @@ When workloads outgrow single-process (continuous re-forecasting loop §08, mult
 - **In-process LRU** (e.g. `functools.lru_cache` / a small TTL dict) in T0; promote to the History Lake / shared store (`05_*`) when persisted forecasts are needed for the self-improvement loop (§08).
 - **Context fingerprint** = hash of the last-K context values + freq, so identical re-asks within a TTL are free and reproducible.
 
+### 10.3.6 Thread-offload contract (T0/T1 detail)
+
+The single concurrency primitive available today (§10.1.2) is asyncio + a bounded thread pool. The normative offload contract:
+
+| Concern | Rule |
+|---|---|
+| What to offload | any synchronous NumPy/SciPy/CuPy kernel whose modeled time exceeds ~5 ms (correlation, distance, EnKF, MC, Matrix-Profile) |
+| How | `await asyncio.to_thread(kernel, ...)` or a process-wide `ThreadPoolExecutor(max_workers=n_cores)` shared across requests |
+| GPU joins | a CuPy kernel returns control immediately (async queue); the offloaded thread MUST call `backend.synchronize()` then `backend.asnumpy()` before returning host data |
+| Sizing | `max_workers = os.cpu_count()` for CPU kernels; for the GPU, one logical worker per device suffices (CUDA serialises a stream) — extra threads only help overlap H2D/D2H copies |
+| Never | never run a heavy kernel inline on the event loop; never hold the GIL-bound kernel without `to_thread` |
+
+This keeps the FastAPI event loop responsive while the GIL is released inside NumPy/CuPy C code — the only way single-process T0/T1 stays interactive under load.
+
+### 10.3.7 End-to-end dispatch sequence (T2 present)
+
+```
+NL request ─▶ orchestrator
+   │  cache lookup (§10.3.5)  ──hit──▶ return cached forecast ($0)
+   │                          miss
+   ▼
+build forecast members:
+   ├─ T0 classical (in-proc, asyncio.to_thread)        ── always
+   ├─ T1 CuPy kernels (if is_gpu)  ── correlation/EnKF/dist for features
+   └─ T2 foundation member:
+        submit→coalesce window (§10.2A.3)
+        │ breaker CLOSED & ready? ──no──▶ skip member, caveat (T0/T1 only)
+        │ yes ▼
+        post_with_policy (timeout/retry §10.2A.4)
+        │ success ─▶ demux by id ─▶ add member
+        │ fail    ─▶ breaker++, RemoteInferenceUnavailable ─▶ skip member, caveat
+   ▼
+error-weighted ensemble over available members ─▶ EnbPI conformal intervals
+   ▼  write-through cache (§10.3.5)
+answer + caveats[]
+```
+
+Every branch terminates in an *answer* — the only difference between branches is how many members the ensemble had and how wide the intervals are (degradation principle, §10.6).
+
 ---
 
 ## 10.4 CAPACITY MODEL
@@ -610,3 +649,46 @@ Each stage is independently revertible. Versions are **pinned with a compatible-
 4. With `PREDICT_GPU_URL` set to an unreachable host, every pipeline still returns an answer (T2 → T0 fallback) within the p95 budget, with a caveat recorded.
 5. No `import torch` / `import cupy` outside `try/except` anywhere in the two FastAPI backends.
 6. Capacity endpoint reports the live tier set via `available_backends()` + `/v1/health`.
+7. The remote-inference client (§10.2A) demuxes responses by `id` and tolerates server reordering; a per-series `status:"error"` drops only that member.
+8. The circuit breaker (§10.2A.5) trips after `fail_threshold` consecutive failures and re-probes via `/v1/health` after `cooldown`; a `ready:false` does **not** trip it.
+9. Client never exceeds the advertised `max_batch` / `max_context` / `max_horizon` (splits/truncates per §10.2A.3/.1).
+10. All T1 device arrays are float32 (`scale_bench.make_state` discipline, §10.4.4).
+
+### 10.8.1 Test mapping (capability × backend → assertion)
+
+Each invariant maps to a concrete, backend-parametrised test. The grid below is the executable form of §10.6.1 — run once per available backend column; absent backends are `skip`ped, never failed.
+
+| Test | Backend(s) | Asserts | Ties to |
+|---|---|---|---|
+| `test_t0_floor_all_pipelines` | T0 always | every forecaster + discovery pipeline returns a valid answer with deps absent | inv. 1 |
+| `test_get_backend_auto_numpy_no_raise` | CI (no GPU) | returns `name=="numpy"`, `is_gpu==False`, never raises | inv. 2 |
+| `test_get_backend_cupy_explicit_raises` | CI (no GPU) | `get_backend("cupy")` raises `RuntimeError` | §10.1.1 |
+| `test_t1_matches_t0_tolerance` | T1 (skip if no GPU) | corr/dist/EnKF/MC kernels diff vs T0 within `atol/rtol` | inv. 3, §10.6A |
+| `test_t1_arrays_are_f32` | T1 | all device arrays `.dtype==float32` | inv. 10 |
+| `test_unreachable_endpoint_fallback` | T0 + bad `PREDICT_GPU_URL` | answer still produced within p95 budget; `caveats[]` records dropped member | inv. 4 |
+| `test_no_hard_gpu_imports` | static lint | grep: no `import torch/cupy` outside `try/except` in backends | inv. 5 |
+| `test_capacity_endpoint_reports_tiers` | any | endpoint echoes `available_backends()` + `/v1/health` summary | inv. 6 |
+| `test_client_demux_by_id_reordered` | mocked server | shuffled `predictions[]` resolve to correct futures by `id` | inv. 7 |
+| `test_per_series_soft_error` | mocked server | one `status:"error"` drops only that series + caveat | inv. 7 |
+| `test_circuit_breaker_trip_and_recover` | mocked server | CLOSED→OPEN after N fails; HALF_OPEN→CLOSED on probe success | inv. 8 |
+| `test_breaker_ignores_not_ready` | mocked server | `ready:false` → T0 fallback without incrementing failure count | inv. 8 |
+| `test_batch_caps_respected` | mocked server | oversize batch split to `max_batch`; long context left-truncated | inv. 9 |
+
+**Backend parametrisation:** the suite is parametrised over `prefer in {"numpy"}` always and `{"cupy"}` when `available_backends()["cupy"]` is true, mirroring `scale_bench.bench_curve`'s "whatever backend is present" stance — so the *same* assertions validate both the CPU floor and the GPU path.
+
+### 10.8.2 Capacity worked example — end to end
+
+Putting §10.4.3 + §10.4.4 + §10.6B together for a concrete operator decision. Suppose 5,000 tracked series, 60 s re-forecast cadence, one A6000, measured `R≈500 fcst/s` (TimesFM 2.5):
+
+```
+needed_per_cycle   = 5000 / 60        ≈ 83 forecasts/s
+cluster_per_sec    = 500 · 1          = 500 forecasts/s
+sustained_cycles/s = 500 / 83         ≈ 6.0   (≥1 ⇒ feasible, ~6× headroom)
+batch service time = max_batch/R = 64/500 ≈ 128 ms  (≤1.5 s budget ✓)
+$ / 1k preds @30%  ≈ ($0.50/3600)·(1000/500)/0.30 ≈ $0.0009
+cache @50% hit     ⇒ effective ≈ $0.00045 / 1k
+```
+
+This is exactly the `llm_capacity` algebra (§10.4.3) re-mapped, the §10.4.4 latency model, and the §10.6B cost row composed — and it is feasible on a single GPU with comfortable headroom, confirming the document's central claim that the foundation-TS suite is *small* and the bottleneck is procurement/scheduling, not compute.
+
+> Every number above carries the standard honesty flag: `R`, `$/hr`, and hit-rate are **projections** until measured by `benchmark()`-style timing and real GPU-hour billing.

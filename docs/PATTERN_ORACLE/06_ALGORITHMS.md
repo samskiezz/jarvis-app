@@ -2166,6 +2166,52 @@ SS = 1 - mean(crps_model) / mean(crps_climatology)
 
 **Source.** Gneiting & Raftery 2007, *Strictly Proper Scoring Rules*, *JASA*; https://doi.org/10.1198/016214506000001437 · properscoring https://github.com/properscoring/properscoring
 
+#### F20.+ DEPTH MILESTONE
+
+**Full derivation.** CRPS `= ∫(F(z)−1{z≥y})²dz` is **strictly proper**: its expected value `E_{y~G}[CRPS(F,y)]` is uniquely minimized at `F=G` (the true distribution), so honest probabilistic reporting is optimal — no gaming. The **energy-form identity** `CRPS(F,y)=E|X−y|−½E|X−X'|` (with `X,X'` i.i.d. from `F`) decomposes it into **accuracy** (`E|X−y|`, distance of forecast to truth) minus **sharpness** (`½E|X−X'|`, forecast spread) — rewarding calibrated *and* sharp forecasts. For an `m`-member ensemble the unbiased estimator is `(1/m)Σ|x_i−y| − (1/(2m²))ΣΣ|x_i−x_j|`; sorting the samples lets the double sum be computed in `O(m log m)` via `Σ_i x_(i)(2i−m−1)` (order-statistic trick). For a point forecast (degenerate `F`), CRPS reduces to `|x−y|` = MAE, so CRPS generalizes MAE to distributions. The skill score `SS=1−CRPS_model/CRPS_clim` is the fractional improvement over the unconditional climatology baseline.
+
+**Runnable-quality pseudocode (O(m log m)).**
+```python
+def crps_ensemble(samples, y):
+    import numpy as np
+    s = np.sort(np.asarray(samples, float)); m = len(s)
+    term1 = np.mean(np.abs(s - y))                       # E|X-y|
+    # sharpness via order statistics: sum_{i,j}|s_i-s_j| = 2 * sum_i s_(i)*(2i-m-1)
+    i = np.arange(1, m+1)
+    term2 = np.sum(s * (2*i - m - 1)) / (m*m)            # = E|X-X'|/2
+    return float(term1 - term2)
+
+def skill_score(crps_model, crps_clim):
+    cm, cc = float(np.mean(crps_model)), float(np.mean(crps_clim))
+    return 1.0 - cm/cc if cc > 0 else 0.0
+
+def coverage(intervals, ys):                              # empirical PI coverage
+    return float(np.mean([lo <= y <= hi for (lo, hi), y in zip(intervals, ys)]))
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| climatology window | int | 365 / 1 cycle | ≥30 | baseline distribution | one seasonal cycle |
+| backtest | str | rolling-origin | — | evaluation protocol | expanding vs sliding window |
+| metrics | set | {CRPS,RMSE,MAE,cov,sharp} | — | scorecard | always report coverage with CRPS |
+
+**Worked numeric example.** Ensemble `samples=[1,2,3]`, observation `y=2`. `term1=(|1−2|+|2−2|+|3−2|)/3=2/3=0.667`. Sorted `s=[1,2,3]`, `Σ s_(i)(2i−4)=1·(−2)+2·0+3·2=4`; `term2=4/9=0.444`. `CRPS=0.667−0.444=0.222`. If climatology CRPS=0.5, `SS=1−0.222/0.5=0.556` (model beats climatology by 56%).
+
+**Complexity (derivation).** Sorting `O(m log m)`; both terms then `O(m)` → **time** `O(m log m)` (vs naive `O(m²)` for the double sum). Over `N` forecasts evaluated: `O(N·m log m)`. **Space** `O(m)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Naive `O(m²)` slow | timeout on large ensembles | order-statistic `O(m log m)` form |
+| CRPS hides miscalibration | low CRPS but bad coverage | always co-report coverage + sharpness |
+| Mismatched targets/horizons | invalid comparison | score model & clim on identical (t,h) |
+| Zero-spread ensemble | CRPS=MAE (fine) | expected; report sharpness=0 |
+
+**Unit-test oracle.** Point forecast (all samples equal `c`): `CRPS=|c−y|` (must equal MAE exactly). For `samples=[1,2,3], y=2` the worked value `0.2222…` is the oracle (cross-check against `properscoring.crps_ensemble`). Perfect deterministic forecast `samples=[y]` ⇒ CRPS=0. `SS=0` when model==climatology; `SS=1` when CRPS_model=0.
+
+**Integration code-points.** **NEW** `scoring.py` (small numpy; reference `properscoring`/`scoringrules`). Reuses the metrics-dict shape of `ai_models.evaluation_arena()` (`/home/user/jarvis-app/underworld/server/services/ai_models.py:59`). SELF-IMPROVEMENT scoring engine (§08): every forecast is scored vs realized outcome; scores drive F18 ensemble weights, retrain triggers, and the VERIFIER's "beats climatology by X%" statement. The metric the supercomputer loop optimizes.
+
 ---
 
 ## GROUP G — DATA ASSIMILATION
