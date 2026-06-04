@@ -890,6 +890,76 @@ probs  = membership_strength(points, λ)
 
 **Source.** Campello, Moulavi, Sander 2013; McInnes et al. *JOSS* 2017; https://hdbscan.readthedocs.io/ · https://github.com/scikit-learn-contrib/hdbscan
 
+#### C9.+ DEPTH MILESTONE
+
+**Full derivation.** Single-linkage clustering chains through low-density bridges. HDBSCAN fixes this by transforming the metric: the **mutual reachability distance** `d_mr(a,b)=max(core_k(a),core_k(b),d(a,b))` inflates distances in sparse regions (where `core_k` is large), so a sparse bridge point cannot cheaply connect two dense blobs. Building a single-linkage hierarchy on `d_mr` then sweeping a density threshold `λ=1/d_mr` is equivalent to running DBSCAN at *every* `ε` simultaneously. A cluster's **stability** `S(C)=Σ_{x∈C}(λ_x−λ_birth(C))` integrates how long (over the `λ` sweep) points remained in `C` before falling out — clusters that persist across many density scales are "real." The **Excess of Mass** extraction selects the antichain of tree nodes maximizing total stability subject to "one cluster per root-to-leaf path," a DP over the condensed tree. This is why HDBSCAN needs no global `ε`: it picks the most stable density per cluster.
+
+**DBSCAN vs HDBSCAN tradeoff (requested).**
+| Aspect | DBSCAN | HDBSCAN |
+|---|---|---|
+| Params | `ε` (global radius) + `min_samples` | `min_cluster_size` (+ `min_samples`) — no `ε` |
+| Variable density | fails (one `ε` can't fit all) | handles (per-cluster density) |
+| Noise labeling | yes | yes, with membership `probabilities` |
+| Cluster count | implicit via `ε` | implicit via stability |
+| Determinism | deterministic | deterministic |
+| Complexity | `O(n log n)` w/ index | `O(n log n)` typical, MST extra |
+| When to use | uniform density, known scale, streaming | unknown/variable density, exploratory regimes |
+| Failure | merges/splits at wrong `ε` | over-fragments if `min_cluster_size` too small |
+
+Rule for PATTERN ORACLE: use **HDBSCAN** for regime discovery (unknown #regimes, variable density); fall back to DBSCAN only when a fixed operational radius is meaningful (e.g. fixed sensor tolerance).
+
+**Runnable-quality pseudocode.**
+```python
+def hdbscan_cluster(X, *, min_cluster_size=5, min_samples=None, metric="euclidean"):
+    import numpy as np
+    from scipy.spatial import cKDTree
+    from scipy.sparse.csgraph import minimum_spanning_tree
+    ms = min_samples or min_cluster_size
+    Xs = (X - X.mean(0)) / (X.std(0) + 1e-9)          # standardize
+    tree = cKDTree(Xs)
+    dk, _ = tree.query(Xs, k=ms)                       # ms-th neighbor distance
+    core = dk[:, -1]
+    n = len(Xs)
+    # mutual reachability (dense for clarity; library uses sparse MST construction)
+    D = np.zeros((n, n))
+    for i in range(n):
+        d = np.linalg.norm(Xs - Xs[i], axis=1)
+        D[i] = np.maximum.reduce([core, np.full(n, core[i]), d])
+    mst = minimum_spanning_tree(D).toarray()
+    # condense + stability + EOM extraction handled by library:
+    import hdbscan
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size,
+                                min_samples=ms, metric=metric).fit(X)
+    return {"labels": clusterer.labels_.tolist(),
+            "probabilities": clusterer.probabilities_.tolist(),
+            "persistence": clusterer.cluster_persistence_.tolist()}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `min_cluster_size` | int | 5 | 2–n/2 | smallest valid cluster | ↑ to suppress micro-clusters |
+| `min_samples` | int | =mcs | 1–50 | conservativeness / noise | ↑ ⇒ more points labeled noise |
+| `metric` | str | euclidean | any | distance | match feature space; standardize first |
+| `cluster_selection_method` | str | eom | {eom,leaf} | flat extraction | leaf ⇒ finer clusters |
+| `cluster_selection_epsilon` | float | 0.0 | ≥0 | merge below ε | >0 to prevent over-split |
+
+**Worked numeric example.** `X` = two Gaussian blobs (50 pts at (0,0) σ=0.3; 50 at (5,5) σ=0.3) + 5 uniform noise points. `min_cluster_size=5`: core distances inside blobs are small (~0.1), bridge/noise points have large core → mutual reachability separates the blobs; output `labels` = `[0]*50+[1]*50+[−1]*5`, two clusters with `persistence≈[0.8,0.8]`, 5 noise points (label −1).
+
+**Complexity (derivation).** Core distances via KD/Ball tree: `O(n log n)` for `n` queries. Mutual-reachability MST with Boruvka on a space tree: `O(n log n)` typical (worst `O(n²)` if tree degenerates, e.g. high-d). Condensing + stability DP: `O(n)` (tree has `O(n)` nodes). Total **time** `O(n log n)` typical; **space** `O(n)` (+ MST edges `O(n)`).
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Duplicate points (`d=0`) | `λ=1/0=∞` | epsilon-jitter or merge duplicates |
+| Unstandardized mixed-unit features | one dim dominates distance | z-score standardize |
+| High dimensionality | distance concentration, slow tree | PCA/UMAP reduce first |
+| `min_cluster_size` too small | spurious micro-clusters | raise it; use eom |
+
+**Unit-test oracle.** Two perfectly separated unit clusters: `X=[[0,0]]*10 + [[10,10]]*10`. With `min_cluster_size=5`, exactly 2 clusters, 0 noise, and the two cluster labels partition the 20 points 10/10. Single well-separated blob of 3 points with `min_cluster_size=5` → all labeled noise (−1), since no group reaches the size threshold.
+
+**Integration code-points.** Prefer the `hdbscan` library behind a **NEW** wrapper `cluster_regimes.py`. Reuses the call/return shape of `methods_cs_ai.kmeans_clustering` and `disease_models.symptom_clustering` (`/home/user/jarvis-app/underworld/server/services/`). Input `X` = Matrix-Profile motif embeddings (C10) or foundation-model latents (A4/H22). Output `labels` become a regime feature/driver for FORECAST CORE and a switch key for Error-Weighted-Ensemble (F18) weighting.
+
 ---
 
 ### C10. Matrix Profile (STOMP / SCRIMP++) — motifs & discords
@@ -929,6 +999,65 @@ motifs   = k_smallest(MP);  discords = k_largest(MP)
 **Reuse target.** Prefer **STUMPY** (`stumpy.stomp`/`stump`, GPU `gpu_stump`); **NEW** wrapper. Reuse `/home/user/jarvis-app/underworld/server/services/gpu_backend.py` for CuPy acceleration.
 
 **Source.** Yeh et al. 2016 (Matrix Profile I); Zhu et al. 2018 (SCRIMP++); STUMPY https://stumpy.readthedocs.io/ · https://www.cs.ucr.edu/~eamonn/MatrixProfile.html
+
+#### C10.+ DEPTH MILESTONE
+
+**Full derivation (MASS).** The z-normalized Euclidean distance between subsequences `T_i` and `T_j` of length `m` expands as `d²=Σ((t_{i+k}−μ_i)/σ_i − (t_{j+k}−μ_j)/σ_j)²`. Multiplying out and using that z-normalized vectors have norm `√m`, this reduces to `d²=2m(1 − (QT_{i,j}−m μ_i μ_j)/(m σ_i σ_j))` where `QT_{i,j}=Σ_k t_{i+k}t_{j+k}` is the raw dot product. The dot products along a fixed diagonal satisfy the `O(1)` recurrence `QT_{i,j}=QT_{i−1,j−1} − t_{i−1}t_{j−1} + t_{i+m−1}t_{j+m−1}` (drop the leaving term, add the entering term). STOMP computes the first column via one FFT-based convolution (`O(n log n)`) then sweeps all diagonals in `O(1)` each → `O(n²)` total. The rolling means/stds use cumulative-sum tricks for `O(1)` per window. The exclusion zone `|i−j|<m/2` removes trivial matches where a subsequence is compared to its own near-overlap.
+
+**Runnable-quality pseudocode (STOMP core).**
+```python
+def stomp(T, m):
+    import numpy as np
+    n = len(T) - m + 1
+    # rolling mean/std via cumulative sums (O(1) per window)
+    cs  = np.concatenate([[0], np.cumsum(T)])
+    cs2 = np.concatenate([[0], np.cumsum(T*T)])
+    mu  = (cs[m:]-cs[:-m]) / m
+    s2  = (cs2[m:]-cs2[:-m]) / m - mu*mu
+    sig = np.sqrt(np.maximum(s2, 1e-12))
+    def dist_profile(QT):
+        d2 = 2*m*(1 - (QT - m*mu*mu[0]) / (m*sig*sig[0]))
+        return np.sqrt(np.maximum(d2, 0))
+    # first dot-product column via FFT sliding dot product
+    QT0 = np.array([np.dot(T[i:i+m], T[0:m]) for i in range(n)])   # ref; FFT in prod
+    QT = QT0.copy()
+    MP = np.full(n, np.inf); MPI = np.full(n, -1, int)
+    excl = m // 2
+    for j in range(n):
+        if j > 0:   # O(1) diagonal update of the whole column
+            QT[1:] = QT[:-1] - T[:n-1]*T[j-1] + T[m:m+n-1]*T[j+m-1]
+            QT[0]  = QT0[j]
+        D = dist_profile_col(QT, mu, sig, m, j)
+        lo, hi = max(0, j-excl), min(n, j+excl+1)
+        D[lo:hi] = np.inf                          # exclusion zone
+        idx = int(np.argmin(D))
+        if D[idx] < MP[j]: MP[j], MPI[j] = D[idx], idx
+    return MP, MPI
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `m` | int | domain | 4–n/4 | subsequence length | one natural cycle (e.g. 1 day) |
+| `exclusion_zone` | int | ⌈m/2⌉ | 0–m | suppress trivial matches | keep ~m/2 |
+| `k` | int | 3 | 1–20 | #motifs/discords reported | task-driven |
+| `sample_pct` | float | 0.25 | 0–1 | PreSCRIMP sampling | ↑ accuracy of early profile |
+
+**Worked numeric example.** `T=[0,1,2,3,0,1,2,3,7,1]`, `m=4`. Windows: W0=[0,1,2,3], W4=[0,1,2,3] are identical → after z-norm `d(0,4)=0` (perfect motif). The discord is the window containing the spike `7` (W6=[2,3,7,1]) — its nearest neighbor distance (`MP[6]`) is the largest. So motif pair `(0,4)` with `MP≈0`; discord at index 6.
+
+**Complexity (derivation).** First column: one FFT convolution `O(n log n)`. Main loop: `n` diagonals, each updated in `O(1)` per element across `O(n)` elements → `O(n)` per column × `n` columns = `O(n²)`. **Space** `O(n)` (keep only current column + MP/MPI). SCRIMP++ has the same worst case but yields a useful approximate profile after the first `sample_pct` fraction.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Flat window `σ≈0` | div-by-zero in z-norm | floor `σ` at 1e-12; set distance to ∞ |
+| Long series float drift | accumulating QT error | use float64; periodic FFT recompute |
+| Negative `d²` from rounding | NaN sqrt | `max(d²,0)` clamp |
+| Trivial self-match | MP≈0 everywhere | exclusion zone `m/2` |
+
+**Unit-test oracle.** A series that is two concatenated copies of the same length-`m` random pattern (plus noise-free) must have `MP[0]=0` (or ≤1e-6) with `MPI[0]` pointing to the copy. A constant series → all `σ=0` → every MP entry is `∞`/skipped (verifies the flat-window guard). Cross-check `MP` against the brute-force `O(n²m)` z-normed distance for a small `n` — must match within 1e-6.
+
+**Integration code-points.** Prefer **STUMPY** (`stumpy.stump`, GPU `stumpy.gpu_stump`) behind a **NEW** wrapper `matrix_profile.py`; routes through `gpu_backend.py` for CuPy. Motif index pairs → promoted into KGIK as recurring-pattern edges (RELATIONAL LAYER); discord indices → fed to the anomaly stage (D14) and SELF-IMPROVEMENT alerts. Motif subsequences → embedded and clustered by HDBSCAN (C9) into regime sets.
 
 ---
 

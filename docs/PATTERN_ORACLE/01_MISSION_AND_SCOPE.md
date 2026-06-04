@@ -383,6 +383,23 @@ The IN/OUT partition above is clean at the centre but has *grey-zone asks* that 
 | D-11 | Conformal lib / Matrix-Profile (STUMPY) / HDBSCAN / PELT/BOCPD | external libs | §06 |
 | D-12 | LLM provider (Kimi K2) for routing | external | §09 |
 
+### 1.8.1 Assumption/dependency → requirement-at-risk linkage
+
+If an assumption fails or a dependency is unavailable, specific requirements degrade. This linkage lets §14 reason about blast radius and tells P-D/P-E which acceptance hooks to re-check after an environment change.
+
+| Assumption/Dependency | Requirement(s) at risk | Degraded behavior |
+|-----------------------|------------------------|-------------------|
+| A-1 (audited code exists) | FR-3, FR-5, FR-7, FR-17 | Affected IS-* slip from "exists" to "build"; capability-matrix rows drop a tier. |
+| A-2 / D-9 (external feeds) | FR-4, NFR-8 | Affected feeds go stale (stale flag), others unaffected; breadth (K-7) dips. |
+| A-3 / D-10 (foundation TS model) | FR-10 (foundation member), NFR-5 | Fall back to classical ensemble + conformal; FSS targets adjusted. |
+| A-4 / D-3 (persistence) | FR-11, FR-12, FR-13, FR-16 | Self-improvement cannot function — **hard dependency**; P-3 blocked. |
+| A-5 / D-12 (LLM routing) | FR-1, FR-2 | Constrained-parser fallback; breadth (K-7) reduced. |
+| A-6 (outcomes observable) | FR-11, FR-12 | Forecasts stay pending; skill aggregates sparse. |
+| A-7 / D-8 (GPU/compute) | NFR-1, NFR-5, NFR-6 | CPU/NumPy fallback; latency/throughput reduced, not blocked. |
+| D-11 (conformal/MP/HDBSCAN libs) | FR-6, FR-8 | NumPy sliding-window fallbacks where available; affected UC tiers drop. |
+
+> **Linkage rule (normative).** A-4 is the only **hard** dependency (its failure blocks P-3 entirely). Every other failure **MUST** degrade gracefully (NFR-6/NFR-8) and set an explicit caveat; silent capability loss is prohibited.
+
 ---
 
 ## 1.9 DEFINITIONS / GLOSSARY
@@ -412,6 +429,16 @@ The IN/OUT partition above is clean at the centre but has *grey-zone asks* that 
 | **Regime** | A persistent statistical state of a series; transitions are change-points. |
 | **Pending forecast** | A persisted forecast whose realized outcome is not yet observable; excluded from skill aggregates. |
 | **Specialist** | A domain-specific handler invoked by the orchestrator for a class of targets (§09). |
+| **Persona journey (J-x)** | An end-to-end narrative walking one persona through the core loop, with every step bound to a requirement and acceptance hook (§1.2.1). |
+| **Capability matrix** | The grounded inventory mapping capability × data-source × model × maturity tier (§1.3.1). |
+| **Maturity tier (A/G/P/X)** | Audited-in-repo / Grounded-and-integrable / Planned-build-only / Experimental-flagged (§1.3.1). |
+| **Edge-case (EC-x)** | A normative behavior at a capability boundary (§1.3.2). |
+| **Scope edge-case (SEC-x)** | A grey-zone ask resolved to a definite IN/OUT side (§1.6.3). |
+| **Sub-requirement (FR-x.y / NFR-x.y)** | An independently testable obligation decomposed from a parent requirement (§1.10.1.1, §1.10.2.1). |
+| **RACI** | Responsible / Accountable / Consulted / Informed ownership model for requirement families (§1.10.4). |
+| **Acceptance hook** | The named test that verifies a requirement; lives in §11 and is referenced by every `Verify` column. |
+| **Traceability stub** | The charter-level seed binding each FR/NFR → build task (T-###) → test artifact (§1.12); fully expanded by T-048. |
+| **Measurement cadence** | The frequency/trigger at which a KPI is recomputed (§1.4.6). |
 
 ---
 
@@ -644,6 +671,8 @@ This stub is the **charter-level seed** of the full matrix that `T-048` produces
 | NFR-15 | T-047 | Governance §12 | PII rejection / authz |
 
 > **Stub completeness check (normative).** Every FR-1…FR-20 and NFR-1…NFR-15 appears exactly once above with a non-empty build-task and a test ref ⇒ **zero orphans at charter scope** (discharges NFR-9 at this level). Any future requirement added to §1.10 **MUST** add a row here in the same change, or the section gate (§1.11) fails.
+
+> **Bidirectionality note.** This stub is the *forward* (requirement → task → test) view. The *reverse* views — task → requirement (proving no task is gold-plating) and test → requirement (proving no test is orphaned) — are produced by `T-048` from the same bindings, so the three views must reconcile exactly. Any task in §13 not reachable from a requirement here, or any test in §11 not reachable from a `Verify` hook here, is flagged by the §8 traceability CI gate (NFR-9).
 
 ---
 *End of Section 01 — MISSION & SCOPE. Next: `02_CURRENT_STATE_AUDIT.md` (the grounded code inventory this charter rests on).*

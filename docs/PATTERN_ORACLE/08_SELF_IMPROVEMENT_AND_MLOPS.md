@@ -1173,8 +1173,14 @@ This section is **done / validated** when:
 4. **Re-weighting works:** Error-Weighted Ensemble weights move inversely with EWMA member error online; a deliberately-degraded member is down-weighted within ~10 cycles and recovers when fixed.
 5. **Registry lifecycle enforced:** champion/challenger shadow scoring + canary ramp with auto-rollback; leakage guard (`trained_on_through < test_start`) asserted in the harness.
 6. **KGIK learns honestly:** a confirmed discovered edge gains confidence via Laplace `(confirmations+1)/(trials+2)` (mirroring `reasoning._confidence` / `CausalBelief`), promotes at `learned=true` after `PROMOTE_MIN` confirmations, and unconfirmed edges decay/prune.
-7. **Backtests are leakage-free** and report skill vs both baselines at `/predict/skill`, per horizon.
+7. **Backtests are leakage-free** and report skill vs both baselines at `/predict/skill`, per horizon. Purge + embargo (§14.1–14.2) are enforced; CPCV (§14.3) yields the CI used for the trend gate; the harness is bit-reproducible for `(model_version, data_vintage, seed)` (§14.4).
 8. **The system measurably improves:** on the standing walk-forward backtest suite, **the rolling headline CRPS skill-score trend is ≥ 0 over N=20 cycles** (95%-CI lower bound ≥ −ε) **with no calibration regression** — the §0 / §6.5 contract, asserted in `11_VALIDATION_AND_TEST_PLAN.md`.
+9. **State machine is deterministic & auditable:** every target sits in exactly one §10 state; every transition writes `learning_audit` with a guard snapshot; promotion-on-noise is structurally impossible (no `CANARY` without a passing `EVALUATING`).
+10. **Canary protects traffic:** staged ramp 5→25→50→100 with deterministic routing (§11.1), per-stage dwell = max(wall-clock, min-sample) (§11.2), and a single-tick watchdog enforcing rollback rules R1–R6 (§10.4) with cooldown on re-entry (§11.4).
+11. **Online re-weight math verified:** EWMA effective window `1/(1−β)≈10` at β=0.9 (§12.1), softmax-over-log-inverse-error weight map with floor `w_min` (§12.2), participation decay for silent members (§12.4); the §12.5 recovery trace reproduces in tests.
+12. **KGIK constants match CausalBelief:** `PROMOTE_MIN=MIN_TRIALS_TO_ACT=3`, `PRUNE_THRESHOLD=0.40` (reasoning.py:83), Laplace `(c+1)/(t+2)` (reasoning.py:32); add/strengthen/decay traces (§13.4–13.5) reproduce, half-life `TAU·ln2≈20.8d`.
+13. **Observability is a contract:** every §7.6 metric (exact name/type/labels) is emitted; every §7.7 alert binds to a metric with the stated threshold + `for` window; every alert has a runbook (§7.5/§7.8) with an auto-resolution check.
+14. **Registry/experiment lifecycle traceable:** each challenger has an `experiment` row keyed by `(params_hash, data_vintage, seed, code_commit)` (§15.1); champion lineage (`superseded_by`/`retired_at`) answers "what served on date D?"; retired/rejected rows immutable (§15.4).
 
 ---
 
@@ -1194,3 +1200,30 @@ This section is **done / validated** when:
 | Forecast/outcome/skill schema | `05_DATA_MODEL_AND_SCHEMAS.md` |
 | `/predict`, `/predict/skill` contracts | `07_API_CONTRACTS.md` |
 | Backtest acceptance assertions | `11_VALIDATION_AND_TEST_PLAN.md` |
+| KGIK promote/prune constants | `reasoning.MIN_TRIALS_TO_ACT=3` / `ACT_CONFIDENCE=0.6` (reasoning.py:19–20), `reasoning.reflect` `<0.4` bar (reasoning.py:83) |
+| CausalBelief trial/confirmation/confidence schema | `CausalBelief` (models.py:475–494): `trials`/`confirmations`/`confidence default 0.5` |
+| Laplace add-one update (verbatim) | `reasoning._confidence` `(c+1)/(t+2)` (reasoning.py:31–32), `reasoning.record` bookkeeping (reasoning.py:52–54) |
+| CRPS energy form / fair estimator | Gneiting & Raftery 2007 (`03_EVIDENCE_BASE.md`) |
+| PSI = symmetrized (Jeffreys) KL | derivation §1.5.2 over `drift_detector` (ai_models.py:74–82) |
+| ECE = weighted L¹ reliability gap | derivation §1.5.3 over `calibration_error` (ai_models.py:85–94) |
+| Purged & embargoed / combinatorial-purged CV | López de Prado (financial ML CV), §14 |
+| Champion lineage / experiment reproducibility | `ai_models.dataset_lineage` (ai_models.py:24–27) + §15 `experiment`/`model_version` |
+
+---
+
+## 16. CROSS-REFERENCE MAP (new deep-dive sections)
+
+This document grew two layers: the **contract layer** (§§0–9, the falsifiable spec) and the **depth layer** (§§10–16, full derivations/protocols/specs). The depth sections expand specific contract clauses:
+
+| Depth section | Expands contract | Grounded in |
+|---|---|---|
+| §1.5 Derivations & worked examples | §1.3 metric formulas | ai_models PSI/ECE; CRPS energy form |
+| §10 Continual-learning FSM | §§2,4 cycling + retrain sequencing | `learning_audit` |
+| §11 Champion/challenger + canary | §§4.3–4.4 | registry FSM §4.5 |
+| §12 Online EWE update & decay | §4.1 | patent WO2014075108A2 |
+| §13 KGIK edge-learning algorithm | §5 | `reasoning._confidence`, `CausalBelief` |
+| §14 Backtesting harness | §6 | purged/embargoed CV |
+| §15 Experiment tracking & registry | §4.5 | `ai_models.model_registry`/`dataset_lineage` |
+| §7.6–7.8 Observability spec | §7 (metrics/dashboards/alerts) | §1.3, §3 surfaces |
+
+Reading order for a new engineer: contract layer first (what must be true), then the depth section matching the subsystem they're building. Every depth section ends with a worked example or trace that the validation suite (§8, `11_VALIDATION_AND_TEST_PLAN.md`) can assert against, so the math is not just described but **checkable**.

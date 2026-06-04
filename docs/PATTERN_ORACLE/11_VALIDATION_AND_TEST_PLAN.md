@@ -1165,3 +1165,106 @@ pytest --benchmark-only server/tests/perf
 # frontend (root package.json)
 npm run lint && npm run typecheck && npm run test && npm run build
 ```
+
+---
+
+## 24. SCORING-FORMULA REFERENCE (exact definitions used by gates)
+
+> Every metric a gate depends on, with its **exact formula**, the **gate** that consumes it, and the **golden** it is recorded in. This removes ambiguity: a reviewer can compute any gate by hand from a holdout.
+
+| Metric | Formula | Gate consumer | Golden |
+|---|---|---|---|
+| **MAE** | `(1/n)·Σ|ŷ_i − y_i|` | §3.5 (informational) | `forecasts/*.json` |
+| **RMSE** | `√((1/n)·Σ(ŷ_i − y_i)²)` | §3.5; skill-vs-persistence | `forecasts/*.json` |
+| **CRPS** (ensemble form) | `(1/m)Σ|x_j − y| − (1/2m²)ΣΣ|x_j − x_k|` | `CRPS_model ≤ CRPS_best_baseline` | `forecasts/*.json` |
+| **Skill (RMSE)** | `SS = 1 − RMSE_model/RMSE_persistence` | `SS ≥ 0.05` | `calibration/skill_*.json` |
+| **Skill (CRPS)** | `SS = 1 − CRPS_model/CRPS_climatology` | `SS ≥ 0.0` | `calibration/skill_*.json` |
+| **Empirical coverage** | `(1/n)·Σ 1[lo_i ≤ y_i ≤ hi_i]` | `|cov − (1−α)| ≤ 0.05` | `calibration/coverage_table_*.json` |
+| **Mean interval width** | `(1/n)·Σ(hi_i − lo_i)` | width < climatology (informative) | `calibration/coverage_table_*.json` |
+| **PIT** | `F̂_i(y_i)` | KS p ≥ 0.05; χ² p ≥ 0.05 | `calibration/pit_*.json` |
+| **ECE** | `Σ_b (n_b/N)·|acc_b − conf_b|` (15 bins) | `≤ 0.05` | `calibration/reliability_*.json` |
+| **MCE** | `max_b |acc_b − conf_b|` | `≤ 0.15` | `calibration/reliability_*.json` |
+| **Brier** | `(1/n)·Σ(p_i − o_i)²` | BSS ≥ 0 vs base rate | `calibration/reliability_*.json` |
+| **PSI** | `Σ_b (a_b − e_b)·ln(a_b/e_b)` | `≈0` same dist; `>0.2` alert | `forecasts/drift_*.json` |
+| **ARI** | adjusted Rand index vs truth | `≥ 0.90` (clustering) | unit assertion |
+| **Mann-Kendall S** | `Σ_{i<j} sign(SS_j − SS_i)` | trend ≠ "decreasing" | `calibration/skill_seq.json` |
+
+**Bootstrap CIs:** aggregate skill metrics report a **95% bootstrap CI** (`B=1000` resamples over origins, seeded). A gate that depends on "better than baseline" must have the **lower CI bound** of the skill difference `> 0` to avoid declaring spurious improvement from noise.
+
+---
+
+## 25. SELF-IMPROVEMENT TEST CATALOGUE (SELF-IDs)
+
+> TC-granular expansion of §5. Harness: `backtest/test_self_improvement_trend.py`, frozen multi-series fixture, `cycles ≥ 20`, seed pinned.
+
+| SELF-ID | Given | When | Then (expected) | Tolerance | Seed |
+|---|---|---|---|---|---|
+| SELF-001 | frozen fixture, 24 cycles | OLS slope of `SS_i` | `slope ≥ 0.0` | ≥0 | 2026 |
+| SELF-002 | same | Mann-Kendall trend test | `trend != "decreasing"` (p≥0.05 non-decreasing) | p≥0.05 | 2026 |
+| SELF-003 | same | min cycle skill | `min_i SS_i ≥ SS_0 − 0.02` | −0.02 floor | 2026 |
+| SELF-004 | same | final vs initial | `SS_N ≥ SS_0` | strict | 2026 |
+| SELF-005 | same | coverage each cycle | `|cov_90,i − 0.90| ≤ 0.05` for **all** i | ±0.05 abs | 2026 |
+| SELF-006 | identical seed twice | `SS_i` sequence | bit-identical | exact | 2026 |
+| SELF-007 (negative control) | random-weight re-weighter injected | run suite | suite **FAILS** (teeth check) | must fail | 2026 |
+| SELF-008 | drift injected mid-run (PSI>0.2) | retrain trigger | retrain fires; subsequent coverage restored within 3 cycles | ±0.05 by cycle+3 | 2026 |
+| SELF-009 | KGIK edge update path | after scoring | edge strength monotone with realized skill of that edge | monotone | 2026 |
+
+**Determinism note:** improvement is attributable to the *engine* (data frozen). Any cycle-to-cycle variance must trace to re-weighting/retraining decisions, not RNG — asserted by SELF-006.
+
+---
+
+## 26. INTEGRATION TEST CATALOGUE (INT-IDs, given/when/then)
+
+> Expands §2.2 to explicit given/when/then with exact assertions. All offline, LLM disabled (regex fallback), socket guard active.
+
+| INT-ID | Given | When | Then (exact assertions) |
+|---|---|---|---|
+| INT-01 | "forecast eth price in 48h" + 120-pt GBM series (seed 7) | POST `/functions/predict` | `domain=="crypto"`, `target=="eth"`, `horizon_hours==48.0`, `used_llm is False`, `low<point<high`, `assumptions` & `caveats` non-empty |
+| INT-02 | "chance of M5 quake in 30d" + 800 mags (seed 3) | POST | `0≤probability≤1`, `0.7<b_value<1.4`, `"poisson" in method.math.lower()` |
+| INT-03 | History-Lake-backed forecast via `fixtures/datasets` (no network) | route→lake→discovery→forecast | series sourced from fixture; **socket guard not triggered** (no network); valid interval |
+| INT-04 | series with regime break @t=300 (seed 11) | discovery (PELT)→regime-aware forecast | PELT detects break ±5; ensemble weights **differ** from no-regime baseline (asserted Δ>0) |
+| INT-05 | "will it rain in tokyo next tuesday?" (insufficient) | full chain | `point_estimate is None`, non-empty `caveats`, HTTP 200 (never 500) |
+| INT-06 | forecast → persist → later score vs realized | self-improve write-back | outcome row written; skill recomputed; KGIK edge updated; `GET /predict/skill` reflects new cycle |
+| INT-07 | forecast yielding negative price (implausible) | verifier guardrail | output clamped/flagged; `caveats` cite physical-range violation; no negative price emitted |
+
+---
+
+## 27. CONTRACT-SCHEMA DETAIL (field-level)
+
+> Field-level expansion of §2.3 / §14.14. Schemas live in `fixtures/golden/schemas/`; validated with `jsonschema` (Python) and `zod` parity (frontend).
+
+### 27.1 `PredictResponse` required fields
+| Field | Type | Constraint | Tested by |
+|---|---|---|---|
+| `domain` | string | one of {crypto,seismic,trajectory,growth,…} | CON-01, TC-API-001 |
+| `used_llm` | boolean | `false` in offline CI | INT-01, CHAOS-03 |
+| `prediction.point_estimate` | number\|null | finite or null (abstain) | TC-GBM-006, TC-API-003 |
+| `prediction.interval.low` | number | `< high` | TC-GBM-006 |
+| `prediction.interval.high` | number | `> low` | TC-GBM-006 |
+| `prediction.interval.confidence` | number | `0 ≤ c ≤ 1` | TC-GBM-007 |
+| `prediction.probability` | number | `0 ≤ p ≤ 1` (where applicable) | TC-GBM-007, TC-SEIS-002 |
+| `method.models_used` | string[] | non-empty for non-abstain | TC-GBM-011 |
+| `method.math` / `method.name` | string | present | TC-SEIS-003/004 |
+| `drivers` | object | present | TC-SEIS-001 |
+| `assumptions` | string[] | non-empty for non-abstain | TC-GBM-012 |
+| `caveats` | string[] | non-empty (always for abstain) | TC-API-003 |
+
+### 27.2 `ErrorEnvelope` (4xx)
+| Field | Type | Constraint |
+|---|---|---|
+| `code` | string | machine-readable error code |
+| `message` | string | human-readable |
+| `hint` | string | remediation hint |
+
+**Breaking-change gate:** removing a required field or changing its type fails `contract` (stage 4) unless `api_version` is bumped (NFR-06). Additive optional fields are allowed and must be ignored by old clients (TC-API-009).
+
+---
+
+## 28. NOTES ON TEST INDEPENDENCE, ORDERING & FLAKE CONTROL
+
+- **Isolation:** each test constructs its own data via `fixtures/synth.py`; no shared mutable global state. `conftest.py` `_seed_all` (autouse) re-seeds before every test (§6.1).
+- **Order-independence:** suite passes under `pytest -p no:randomly` (fixed order) **and** `pytest-randomly` (shuffled) — proves no inter-test coupling.
+- **No wall-clock:** scored paths use injected `t0 = 1_700_000_000_000` (matches `_synthetic_prices` in `test_prediction.py`); `datetime.now()`/`time.time()` banned in scored code (grep gate in §8.1).
+- **Tolerances are explicit:** MC paths use rtol 0.02; closed-form/deterministic use rtol 1e-6/1e-9; coverage uses ±0.05 absolute. No "eyeball" assertions.
+- **Flake quarantine:** a non-deterministically failing test is tagged `@flaky`, excluded from merge gates, tracked to a fix within one sprint — never silently auto-retried in a gating stage.
+- **Negative controls everywhere:** every recovery/skill claim has a paired negative control (random weights, independent series, stationary control) that **must fail** the corresponding positive assertion, ensuring the tests have teeth (§8.3, SELF-007).
