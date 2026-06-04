@@ -10665,5 +10665,22 @@
     "epoch": "industrial",
     "name": "Motorcycle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ox_wagon": {
+    "prompt": "an ox-drawn wooden wagon with spoked wheels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "282d45d1-fc00-4d9a-a99e-73b9a65d64dc",
+    "path": "/models/generated/tripo/ox_wagon.glb",
+    "bytes": 15303956,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/282d45d1-fc00-4d9a-a99e-73b9a65d64dc/tripo_pbr_model_282d45d1-fc00-4d9a-a99e-73b9a65d64dc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjgyZDQ1ZDEtZmMwMC00ZDlhLWE5OWUtNzNiOWE2NWQ2NGRjL3RyaXBvX3Bicl9tb2RlbF8yODJkNDVkMS1mYzAwLTRkOWEtYTk5ZS03M2I5YTY1ZDY0ZGMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=HJjgtkHjGhQ4KUIRo8VtDL~1yTk0YcgMZb4P5WFWxqpSCdBsbDGy~2Sq9EcFiV58ZBCzbzm87FhJTJkYTVM6ZFgw7VKxE1Zm8~6HX9kH~YrvJJ57K1TBoL2twLNmjPk7PNGODxdhghE0cDGr32m3RwnXrtJGjbn3G06pbSX50jt4zxh2W18Tv-fGm-uR8SydMNODILEilAI9IImRP3iKp34NhVvQnVftlUha31wMN-h3kjar2LS2cZFGJlh4i6LTsb3rz02u3Tou1L6TIISXv8~rKyQwwYgE-2TYNYFlBjdZW29KAmKKMyjYPMPJfsnRX0Q-W4m2Yrr7IxEPSbXkIQ__",
+    "asset_id": "ox_wagon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "bronze",
+    "name": "Ox Wagon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
