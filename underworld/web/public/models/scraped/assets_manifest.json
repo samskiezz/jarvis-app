@@ -9968,5 +9968,22 @@
     "epoch": "iron",
     "name": "Watchtower Wall Tower",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:waterfall_large": {
+    "prompt": "a tall thundering waterfall over a rocky cliff, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "596592da-51fd-41e9-acf6-bec1c3314b42",
+    "path": "/models/generated/tripo/waterfall_large.glb",
+    "bytes": 15175472,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/596592da-51fd-41e9-acf6-bec1c3314b42/tripo_pbr_model_596592da-51fd-41e9-acf6-bec1c3314b42.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTk2NTkyZGEtNTFmZC00MWU5LWFjZjYtYmVjMWMzMzE0YjQyL3RyaXBvX3Bicl9tb2RlbF81OTY1OTJkYS01MWZkLTQxZTktYWNmNi1iZWMxYzMzMTRiNDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=P4YgAl0MTgYygUyiGC3Lo3tBBiR5Ui6a7BUxgWkuq9U3bGNZQ-5xQhavj4zzAVjksDyEgh~zSPhXlcL9ION-irvtk69pe~cF4EwbZsF54e3gXsgf0jRipP5ZInYr22yuCyExZ-XhBO7Jefr7ZotLnFGaGK-4TrcFWjtz8DJgyWVV2Lu8TSzmWfRZxbDfccvihm~t1CMYImnC7feiybCsz8szl2x4nHODR7y7Vl3ZPTIF9hkAkUWE9gJLaVXAAtlfoHDYrcpQX6U1OMv8EiGc3U1~~79727Sn55952I22ybVBz0QNrkk77EAaitxJJQjx0TnPcP~YTEuegXdAxWcBVw__",
+    "asset_id": "waterfall_large",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Waterfall Large",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
