@@ -10937,5 +10937,22 @@
     "epoch": "bronze",
     "name": "Bronze Sword",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:crossbow": {
+    "prompt": "a wooden crossbow with a steel prod, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "63597371-7a2f-428c-a4bc-5d7e2796a343",
+    "path": "/models/generated/tripo/crossbow.glb",
+    "bytes": 3852720,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/63597371-7a2f-428c-a4bc-5d7e2796a343/tripo_pbr_model_63597371-7a2f-428c-a4bc-5d7e2796a343.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNjM1OTczNzEtN2EyZi00MjhjLWE0YmMtNWQ3ZTI3OTZhMzQzL3RyaXBvX3Bicl9tb2RlbF82MzU5NzM3MS03YTJmLTQyOGMtYTRiYy01ZDdlMjc5NmEzNDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=ZCwIynH3nJ7KMM-mGqerLyGjQfnBHojf5N2xjhmc2yax-jrD5MhM1h5reR6bMKTYa0ocbKQwSTZ4mkc8knK~22fqmb3gdUYkGNkdtZnCJNLL7AlqQQAWsEJ-cEJS9aRwVDrJDPfEwvzlDhpqbfolJQ1m972jTA-8R4DeG~j8CgZ8JCIWvfNZZ3CHppy6v5fBF67zOPxk0C808uO3DjCpUgUSkxGnSc60Z1RaBh4P7x8jS3jcpPc~CUxsAZHsvANCvZ-b-gKZw1hGbgvQ1nPvehb-ZZ-dBQLXSNvYZe6rW2gM9FuW-eaUalYEPxIoukdcz-sqJtDepdK0yhShzXzRQQ__",
+    "asset_id": "crossbow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Crossbow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
