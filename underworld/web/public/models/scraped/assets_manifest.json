@@ -11022,5 +11022,22 @@
     "epoch": "industrial",
     "name": "Flintlock Pistol",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:gatling_gun": {
+    "prompt": "a hand-cranked multi-barrel gatling gun, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "57a66836-9b3b-48df-baf8-8d16ffac1364",
+    "path": "/models/generated/tripo/gatling_gun.glb",
+    "bytes": 14645660,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/57a66836-9b3b-48df-baf8-8d16ffac1364/tripo_pbr_model_57a66836-9b3b-48df-baf8-8d16ffac1364.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTdhNjY4MzYtOWIzYi00OGRmLWJhZjgtOGQxNmZmYWMxMzY0L3RyaXBvX3Bicl9tb2RlbF81N2E2NjgzNi05YjNiLTQ4ZGYtYmFmOC04ZDE2ZmZhYzEzNjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=mmb9FDZ7a1Y9azKxIqR2fAmtXntvZKayBeS6vCQFMvgFyOdCres~cng5x8x~CZbqnANEs2-7FYNsMwjwX-EBSr32A5KbkwtCV8LAMvyuCopN8mlYgwRKLe~vDWeKLaMT-WENU8OiHIl7K~m-r45-n6ZLWFyHc4ex~S4bubK4gpFurvmPymvKJROUEObYRcTFbAPfN8qQZwdh6Q1VX~zHU3MYvuXxHxCM4C9sXhnHdz34~PyCuXsPf9OsAKj9qkG7OlmyuroPYfeZHBwVotDq0x0RS8KLKcK9Mwdo7nRNR6oQVnWnm21ZoXNolRay~~H51F3X9eMehig31l~CYmIXhg__",
+    "asset_id": "gatling_gun",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Gatling Gun",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
