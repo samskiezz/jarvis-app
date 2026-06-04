@@ -3179,4 +3179,43 @@ What each forecaster emits into `method.math` (verbatim, rendered in the UI METH
 
 ---
 
+## 26. SECTION INDEX (this document)
+
+Quick map of where each contract lives, for cross-referencing from sibling specs.
+
+| § | Topic | Status |
+|---|---|---|
+| 0 | Conventions (base URL, versioning, auth, error envelope, idempotency, pagination, rate limits, status codes) | normative |
+| 1 | `POST /functions/predict` request/response schemas + per-domain examples | LIVE |
+| 2 | `POST /v1/predict/explain` | [FORWARD] |
+| 3 | `GET /v1/predict/skill` | [FORWARD] |
+| 4 | History Lake (`/v1/history/series[/{id}]`) | [FORWARD] |
+| 5 | `POST /v1/patterns/scan` | [FORWARD] |
+| 6 | Versioning & deprecation strategy | normative |
+| 6b | KGIK (`/v1/kgik/graph`, `/v1/kgik/link-predict`) | [FORWARD] |
+| 6c | `GET /v1/models/registry` | [FORWARD] |
+| 6d | `POST /v1/predict/backtest` | [FORWARD] |
+| 7 | Error taxonomy (codes table) | normative |
+| 8 | Frontend contract (`kimiClient`/`oracle`, UI error handling) | normative |
+| 9 | Traceability matrix | reference |
+| 10 | Complete OpenAPI 3.1 spec (head/servers/security, parameters/headers, schemas, paths, responses) | normative |
+| 11 | Full request/response header reference | normative |
+| 12 | Pagination / filtering / sorting consolidated | normative |
+| 13 | Streaming (SSE) & webhooks contracts | [FORWARD] |
+| 14 | Rate-limit tier matrix (class × tier) | normative |
+| 15 | Exhaustive per-code error catalogue + retry flow | normative |
+| 16 | SDK snippets (frontend kimiClient/oracle, curl, Python httpx) | reference |
+| 17 | Backwards-compat / versioning / deprecation matrix + worked timeline | normative |
+| 18 | OpenAPI `components/schemas` — deferred forward schemas in full | normative |
+| 19 | Forward-domain worked examples (Omori/ballistic/orbital/generic) + soft-error gallery + `used_llm` table | LIVE-grounded |
+| 20 | Per-endpoint contract-test matrix | normative |
+| 21 | Idempotency / caching / consistency lifecycle | normative |
+| 22 | End-to-end annotated wire transcript | reference |
+| 23 | `params` reference matrix by domain | LIVE-grounded |
+| 24 | Auth & config behaviour matrix | LIVE-grounded |
+| 25 | `method.math` / `drivers` per-forecaster appendix | LIVE-grounded |
+| 26 | This section index | reference |
+
+---
+
 > Append an entry to `VERSION_LOG.md` for this expansion pass (sections touched: 07; depth added: full request/response JSON Schemas, per-domain examples, error taxonomy, versioning/deprecation, frontend contract; **this pass:** complete OpenAPI 3.1 document (§10), full header reference (§11), pagination/filtering/sorting reference (§12), SSE + webhooks streaming contracts (§13), rate-limit tier matrix (§14), exhaustive per-code error catalogue with retry flow (§15), frontend `kimiClient`/`oracle` + curl + Python SDK snippets (§16), backwards-compat/versioning/deprecation matrix with worked timeline (§17), the deferred OpenAPI component schemas in full (§18), the remaining forward-domain worked examples incl. Omori/ballistic/orbital/generic + soft-error gallery + `used_llm` truth table (§19), per-endpoint contract-test matrix (§20), idempotency/caching/consistency lifecycle (§21), an end-to-end annotated wire transcript (§22), the `params` reference matrix by domain (§23), the auth/config behaviour matrix (§24), and the `method.math`/`drivers` per-forecaster appendix (§25)).

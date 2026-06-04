@@ -466,6 +466,30 @@ Re-weighting handles *relative* member quality online. **Retraining** (or refitt
 
 A trigger queues a **challenger** build; it does NOT auto-replace production (see §4.3–4.4).
 
+**Trigger debouncing & precedence.** Multiple triggers can fire at once (a regime break usually drags PSI and skill with it). To avoid spawning redundant challengers: (a) coalesce all triggers for a target within a nightly window into **one** challenger build whose training recipe is the *union* of remedies (e.g. T4's post-break window + T2's refreshed reference); (b) precedence `T4 > T1 > T2/T3 > T5/T6` — a regime break's "drop pre-break data" recipe dominates a staleness refit; (c) a target already in `RETRAINING`/`EVALUATING`/`CANARY` (§10) **suppresses** new builds for the same member until that one resolves (no overlapping challengers for one member — keeps the comparison clean and the registry FSM single-writer).
+
+### 4.6 Retrain pipeline (queue → build → guard → register)
+A queued trigger produces a challenger through a fixed, leakage-guarded pipeline:
+```
+def retrain(member, target_key, trigger):
+    vintage   = lake.latest_obs(target_key)            # trained_on_through (leakage audit, §4.5)
+    data      = lake.through(vintage, recipe=trigger.recipe)  # purged per §14.1 (no future labels)
+    scalers   = fit_transforms(data.train_only)        # NEVER fit across the train/test boundary
+    artifact  = fit(member.algo, data, scalers, seed)  # deterministic given (data,seed,commit)
+    exp       = experiment.create(target_key, trigger, artifact.params_hash,
+                                  data_vintage=vintage, seed=seed, code_commit=commit)   # §15.1
+    ver       = registry.register(artifact, state="staging", experiment_id=exp.id,
+                                  trained_on_through=vintage)                            # §15.3
+    smoke_ok  = smoke_test(ver)                         # predicts, schema-valid, latency sane
+    if not smoke_ok: registry.transition(ver, "rejected"); return
+    bt        = backtest(ver, rolling_origin, purge=True, embargo=L_max,
+                         baselines=[persistence, climatology])                          # §14
+    assert bt.leakage_assertions_passed                 # hard fail on any leak
+    if bt.accept:  registry.transition(ver, "shadow")   # §6.4 gate → start shadow scoring (§10)
+    else:          registry.transition(ver, "rejected")
+```
+Key guards: `trained_on_through` is stamped from the **data vintage** so the §6.3 backtest model-vintage check can never be satisfied by a future-trained model; transforms are fit on train-only; the whole call is deterministic for `(data_vintage, seed, code_commit)` so a rejected/retired challenger is reproducible for audit (§14.4/§15.4).
+
 ### 4.3 Champion / Challenger
 - **Champion** = the model/version currently serving production for a target.
 - **Challenger** = a newly retrained/reconfigured candidate.

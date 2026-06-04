@@ -156,6 +156,114 @@ GET  {PREDICT_GPU_URL}/v1/health        # readiness + loaded models + max_batch
 
 ---
 
+## 10.2A REMOTE-INFERENCE-CLIENT — FULL SPEC
+
+This section is the *complete* contract for the T2 client. It is normative: an implementation that diverges is a defect. The client is a single module (proposed `server/services/remote_inference.py`, mirrored read-only into `underworld/server/services/`) that depends **only** on `httpx` (already pinned on both backends) and stdlib. It MUST NOT import `torch`, `cupy`, or `tritonclient` — those live only on the inference host.
+
+### 10.2A.1 Request schema (normative)
+
+| Field | Type | Required | Default | Constraint / meaning |
+|---|---|---|---|---|
+| `model` | string | yes | — | one of `/v1/health.models[]`; rejected client-side if not advertised |
+| `series` | array<Series> | yes | — | 1..`max_batch` independent series; client splits if larger |
+| `series[].id` | string | yes | — | stable series key (`source.metric`), used to demux the response |
+| `series[].context` | float[] | yes | — | history; length ≥ model `min_context`, ≤ `max_context` (truncate-left if longer) |
+| `series[].freq` | string | yes | — | pandas-style offset (`D`,`h`,`min`,`W`) — informs positional encoding |
+| `series[].mask` | bool[] | no | all-true | per-step validity; gaps → false (server imputes/ignores) |
+| `horizon` | int | yes | — | 1..`max_horizon`; clipped to advertised cap |
+| `quantiles` | float[] | no | `[0.1,0.5,0.9]` | strictly increasing in (0,1) |
+| `num_samples` | int | no | `100` | sample-based models only (Lag-Llama); ignored by quantile-native models |
+| `request_id` | string (uuid) | no | client-gen | echoed back; used for tracing/idempotency-dedup |
+| `deadline_ms` | int | no | derived | server-side hint = remaining pipeline budget; lets server shed load early |
+
+### 10.2A.2 Response schema (normative)
+
+| Field | Type | Meaning |
+|---|---|---|
+| `model` | string | model that actually served (may differ if server aliased) |
+| `predictions` | array<Pred> | one per input series, order **not** guaranteed → demux by `id` |
+| `predictions[].id` | string | matches a request `series[].id` |
+| `predictions[].mean` | float[horizon] | point forecast |
+| `predictions[].quantiles` | map<str,float[horizon]> | keyed by quantile string (`"0.5"`) |
+| `predictions[].status` | string | `ok` \| `degraded` \| `error`; per-series soft failure |
+| `latency_ms` | int | server compute time (excl. network) |
+| `device` | string | e.g. `NVIDIA A6000` — logged for capacity telemetry |
+| `request_id` | string | echo |
+
+**Per-series soft failure:** a single bad series returns `status:"error"` with empty arrays rather than failing the whole batch; the client drops that member and records a caveat for *that* series only. Batch-level failures (5xx, timeout) trip the fallback path in §10.2A.5.
+
+### 10.2A.3 Client-side batching algorithm (normative)
+
+```
+coalesce(window_ms, max_batch, max_context):
+  buf = []                                   # pending (request, future) pairs
+  on submit(req):
+      future = loop.create_future()
+      buf.append((req, future))
+      if len(flatten(buf).series) >= max_batch:   # batch full → flush now
+          flush()
+      elif timer not running:
+          start_timer(window_ms)              # first item arms the window
+      return future
+  on timer_fire(): flush()
+  flush():
+      pending = drain(buf); cancel_timer()
+      groups = group_by(pending, key=req.model) # one HTTP call per model
+      for model, items in groups:
+          for chunk in split(items.series, max_batch):   # respect server cap
+              resp = await post_with_policy(model, chunk) # §10.2A.4/.5
+              scatter(resp.predictions, items_by_id)      # resolve futures by id
+```
+
+Properties: (1) **window-bounded** — `window_ms` (default 10–25 ms, §10.3.2) is chosen so it never consumes more than ~1% of the pipeline p95 budget; (2) **batch-cap-aware** — never sends more than the advertised `max_batch`; oversize requests are split into sequential chunks under the same `Semaphore` slot budget; (3) **model-grouped** — series for different `model`s become separate HTTP calls; (4) **id-demuxed** — futures resolve by `id`, tolerant of server reordering; (5) **fair** — FIFO drain so no series starves.
+
+### 10.2A.4 Timeout / retry budget (normative)
+
+```
+T_read   = min(8000ms, p95_pipeline_budget_ms - elapsed_ms - 200ms_demux_margin)
+timeout  = httpx.Timeout(connect=2.0, read=T_read/1000, write=2.0, pool=2.0)
+retries  = 1   on {ConnectError, ReadTimeout, 5xx}  iff (elapsed + est_next) < budget
+backoff  = 150ms ± jitter(0..75ms)
+no-retry on {4xx, 422 schema, circuit-open}
+```
+
+The single retry is the cap because a second failure inside a 1.5 s budget almost always means the host is unhealthy → cheaper to fall to T0 than to keep paying network RTT.
+
+### 10.2A.5 Circuit-breaker state machine (normative)
+
+States and transitions for the per-endpoint breaker (one instance per `PREDICT_GPU_URL`):
+
+| State | Behavior | Transition trigger | → Next state |
+|---|---|---|---|
+| **CLOSED** | calls pass through; count consecutive failures | `failures ≥ fail_threshold` (default 5) within `window` (default 30 s) | OPEN |
+| **CLOSED** | — | any success | reset failure count (stay CLOSED) |
+| **OPEN** | short-circuit immediately → raise `RemoteInferenceUnavailable` → T0 | `cooldown` elapsed (default 30 s) | HALF_OPEN |
+| **HALF_OPEN** | allow **1** trial call (or a `/v1/health` probe) | trial succeeds | CLOSED (reset) |
+| **HALF_OPEN** | — | trial fails | OPEN (restart cooldown, optional exponential cap 5 min) |
+
+```
+            success
+   ┌──────────────────────────┐
+   ▼                          │
+[CLOSED] ──fail≥N/window──▶ [OPEN] ──cooldown elapsed──▶ [HALF_OPEN]
+   ▲                                                       │   │
+   │                            trial ok                   │   │ trial fail
+   └───────────────────────────────────────────────────────┘   │
+   ▲                                                            │
+   └──────────────────────── OPEN ◀──────────────────────────-─┘
+```
+
+The breaker is **per-process** (single-process asyncio, §10.1.2) — no shared state needed. It is asyncio-safe via a simple lock around the counter; transitions are O(1).
+
+### 10.2A.6 Health-checking & warm-pool
+
+- **Readiness probe:** `GET /v1/health` returns `{ready, models[], max_batch, max_context, max_horizon, max_queue_delay_ms, device, gpu_mem_free_mb}`. Polled at startup and on each HALF_OPEN transition. Advertised caps drive §10.2A.3 splitting and §10.2A.1 validation.
+- **Liveness vs readiness:** `ready:false` (model still loading) is treated like OPEN — fall to T0 — but does **not** increment the failure counter (it is expected during cold start), so the breaker doesn't trip on a deploy.
+- **Warm-pool:** the client maintains a single long-lived `httpx.AsyncClient` with HTTP/2 keep-alive (`limits=httpx.Limits(max_keepalive_connections=server_slots, keepalive_expiry=30s)`), so connections are reused — no per-call TLS/TCP handshake. The bounded `asyncio.Semaphore(server_slots)` (§10.3.4) caps in-flight calls to the advertised server concurrency.
+- **Warm-up forecast:** on first reaching CLOSED/ready, the client may fire one tiny throwaway forecast (`horizon=1`, single dummy series) to force the server to JIT/compile CUDA kernels and page in weights, so the *first user-facing* call hits warm kernels. Failures here are swallowed (warm-up is best-effort).
+
+---
+
 ## 10.3 DISPATCH & BATCHING
 
 ### 10.3.1 Today (T0/T1) — in-process offload
