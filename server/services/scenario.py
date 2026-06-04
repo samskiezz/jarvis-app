@@ -43,6 +43,21 @@ try:  # pragma: no cover - import guard
 except Exception:  # noqa: BLE001
     _bridge = None  # type: ignore[assignment]
 
+# Optional HTTP gateway to the separate underworld FastAPI backend (the
+# complementary path for capability that only lives over HTTP). Best-effort:
+# any import failure leaves _gateway as None and we simply skip the HTTP tier.
+try:  # pragma: no cover - import guard
+    from . import gateway as _gateway
+except Exception:  # noqa: BLE001
+    _gateway = None  # type: ignore[assignment]
+
+# Short network budget for the HTTP tier so a missing/slow underworld backend
+# never hangs a scenario request. Overridable via env for ops tuning.
+try:
+    _HTTP_TIMEOUT = float(os.environ.get("SCENARIO_HTTP_TIMEOUT", "3"))
+except (TypeError, ValueError):
+    _HTTP_TIMEOUT = 3.0
+
 # Optional reuse of the prediction engine for baseline projections.
 try:  # pragma: no cover - import guard
     from . import prediction as _prediction
@@ -153,6 +168,32 @@ def _persist_run(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# HTTP GATEWAY TIER (underworld backend over HTTP)
+# ══════════════════════════════════════════════════════════════════════════════
+def _gateway_post(path: str, json_body: dict) -> Optional[dict]:
+    """POST to the underworld HTTP backend via the gateway proxy. Returns the
+    parsed JSON body on a 2xx, or None on any failure / non-2xx / unconfigured
+    gateway. Never raises; never hangs (short timeout)."""
+    if _gateway is None:
+        return None
+    try:
+        if not getattr(_gateway, "underworld_configured", lambda: False)():
+            return None
+        res = _gateway.proxy("POST", path, json_body=dict(json_body or {}), timeout=_HTTP_TIMEOUT)
+    except Exception:  # noqa: BLE001 - gateway is best-effort
+        return None
+    if not isinstance(res, dict) or not res.get("ok"):
+        return None
+    try:
+        if int(res.get("status", 0)) >= 300:
+            return None
+    except (TypeError, ValueError):
+        return None
+    body = res.get("json")
+    return body if isinstance(body, dict) else None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # WHAT-IF / SCENARIO
 # ══════════════════════════════════════════════════════════════════════════════
 def _bridge_counterfactual(name: str, params: dict) -> Optional[dict]:
@@ -168,6 +209,18 @@ def _bridge_counterfactual(name: str, params: dict) -> Optional[dict]:
             continue
         if isinstance(out, dict) and out.get("status") == "ok":
             return out
+    return None
+
+
+def _http_counterfactual(name: str, params: dict) -> Optional[dict]:
+    """Try the underworld HTTP backend for a counterfactual / what-if. Returns
+    its JSON body on success, else None so the caller falls back. Never raises /
+    hangs."""
+    payload = {"name": name, "params": dict(params or {})}
+    for path in ("/worlds/counterfactual", "/science/counterfactual", "/physics/solve"):
+        body = _gateway_post(path, payload)
+        if body is not None:
+            return body
     return None
 
 
@@ -264,10 +317,12 @@ def run_scenario(
 ) -> dict:
     """Run a what-if scenario and persist it. Never raises.
 
-    Prefers ``world_model.counterfactual`` via the bridge; otherwise computes a
-    transparent local percentage-shock projection. The returned dict carries an
-    ``"engine"`` field that is HONEST about which path was used
-    (``"counterfactual"`` vs ``"local-shock"``).
+    Resolution order (HONEST ``"engine"`` reflects which path actually answered):
+      1. in-process ``world_model.counterfactual`` via the science bridge
+         -> engine ``"counterfactual"``;
+      2. the underworld HTTP backend via the gateway proxy (when configured /
+         reachable) -> engine ``"underworld-http"``;
+      3. the transparent local percentage-shock projection -> ``"local-shock"``.
     """
     params = dict(params or {})
     name = str(name or "scenario")
@@ -275,12 +330,17 @@ def run_scenario(
     engine = "local-shock"
     try:
         cf = _bridge_counterfactual(name, params)
-        if cf is not None:
-            engine = "counterfactual"
+        http_cf = _http_counterfactual(name, params) if cf is None else None
+        if cf is not None or http_cf is not None:
+            engine = "counterfactual" if cf is not None else "underworld-http"
             result: dict = {
-                "engine": "counterfactual",
-                "counterfactual": cf,
-                "note": "Computed via underworld world_model.counterfactual (bridge).",
+                "engine": engine,
+                "counterfactual": cf if cf is not None else http_cf,
+                "note": (
+                    "Computed via underworld world_model.counterfactual (in-process bridge)."
+                    if cf is not None
+                    else "Computed via the underworld HTTP backend (gateway proxy)."
+                ),
             }
             # Best-effort: still surface a baseline/scenario shape if the engine
             # returned series-like data; otherwise the local what-if is included
@@ -383,18 +443,26 @@ _KNOWN_MODELS = [
 
 
 def _drift_block() -> Optional[dict]:
-    """Try to surface a PSI/ECE drift block via the underworld ``ai_models``
-    drift methods (through the bridge). Returns the drift dict when reachable, or
-    None so the caller marks drift null with a note."""
-    if _bridge is None or not getattr(_bridge, "available", lambda: False)():
-        return None
-    for field in ("ai_models.drift", "model_drift", "psi", "ece", "ai_models"):
-        try:
-            out = _bridge.run_method(field)
-        except Exception:  # noqa: BLE001
-            continue
-        if isinstance(out, dict) and out.get("status") == "ok":
-            return {"engine": "ai_models", "field": field, "data": out}
+    """Try to surface a PSI/ECE drift block. Resolution order (honest ``engine``):
+      1. underworld ``ai_models`` drift methods via the in-process bridge
+         -> engine ``"ai_models"``;
+      2. the underworld HTTP backend via the gateway proxy
+         -> engine ``"underworld-http"``.
+    Returns the drift dict when reachable, else None so the caller marks drift
+    ``null`` with an honest note. Never raises / hangs."""
+    if _bridge is not None and getattr(_bridge, "available", lambda: False)():
+        for field in ("ai_models.drift", "model_drift", "psi", "ece", "ai_models"):
+            try:
+                out = _bridge.run_method(field)
+            except Exception:  # noqa: BLE001
+                continue
+            if isinstance(out, dict) and out.get("status") == "ok":
+                return {"engine": "ai_models", "field": field, "data": out}
+    # HTTP tier: the underworld backend's model-drift endpoint.
+    for path in ("/ai-models/drift", "/science/drift", "/science/anomaly"):
+        body = _gateway_post(path, {"models": [m["name"] for m in _KNOWN_MODELS]})
+        if body is not None:
+            return {"engine": "underworld-http", "path": path, "data": body}
     return None
 
 
@@ -433,15 +501,16 @@ def model_registry() -> dict:
     except Exception:  # noqa: BLE001
         drift = None
 
+    drift_engine = drift.get("engine") if isinstance(drift, dict) else None
     return {
         "models": models,
         "count": len(models),
         "drift": drift,
-        "drift_engine": "ai_models" if drift is not None else None,
+        "drift_engine": drift_engine,
         "drift_note": (
             None
             if drift is not None
-            else "PSI/ECE drift not reachable via the science bridge; drift is null."
+            else "PSI/ECE drift not reachable via the science bridge or underworld HTTP backend; drift is null."
         ),
     }
 
@@ -510,11 +579,14 @@ def optimize(
 ) -> dict:
     """Maximise ``objective`` over ``bounds``. Never raises.
 
-    Prefers a real Bayesian/GP optimizer (``real_optimizer``) via the bridge when
-    reachable AND no custom Python objective is supplied (the bridge cannot run a
-    local callable); otherwise performs a transparent random + local-refine
-    search. The result carries an honest ``"engine"`` field
-    (``"real_optimizer"`` vs ``"random-search"``) and returns the best point +
+    Resolution order (when no custom Python objective is supplied — neither the
+    bridge nor the HTTP backend can run a local callable):
+      1. a real Bayesian/GP optimizer via the in-process bridge
+         -> engine ``"real_optimizer"``;
+      2. the underworld HTTP backend via the gateway proxy
+         -> engine ``"underworld-http"``;
+      3. a transparent random + local-refine search -> engine ``"random-search"``.
+    The result carries an honest ``"engine"`` field and returns the best point +
     full history. Each history point's value is the objective at that point.
     """
     pairs = _coerce_bounds(bounds)
@@ -537,15 +609,22 @@ def optimize(
 
     fn = _resolve_objective(objective)
 
-    # Real optimizer path: only when an actual optimizer is reachable via the
-    # bridge and the objective is the built-in (the bridge can't call a local
-    # python objective). It is honestly skipped otherwise.
+    # Real optimizer path: only when an actual optimizer is reachable AND the
+    # objective is the built-in (neither the bridge nor the HTTP backend can call
+    # a local python objective). Resolution order: in-process bridge
+    # (engine "real_optimizer") -> underworld HTTP backend (engine
+    # "underworld-http"). Honestly skipped for custom python objectives.
     real = None
     if not callable(objective):
         try:
             real = _try_real_optimizer(pairs, n_iter)
         except Exception:  # noqa: BLE001
             real = None
+        if real is None:
+            try:
+                real = _try_http_optimizer(pairs, n_iter)
+            except Exception:  # noqa: BLE001
+                real = None
     if real is not None:
         return real
 
@@ -642,7 +721,26 @@ def _try_real_optimizer(pairs: list[tuple[str, float, float]], n_iter: int) -> O
                 "field": field,
                 "result": out,
                 "bounds": [{"name": n, "lo": lo, "hi": hi} for (n, lo, hi) in pairs],
-                "note": "Computed via underworld real_optimizer (bridge).",
+                "note": "Computed via underworld real_optimizer (in-process bridge).",
+            }
+    return None
+
+
+def _try_http_optimizer(pairs: list[tuple[str, float, float]], n_iter: int) -> Optional[dict]:
+    """Try a real Bayesian/GP optimizer through the underworld HTTP backend.
+    Returns a normalised result dict (engine ``"underworld-http"``) on success,
+    else None. Never raises / hangs."""
+    bounds_payload = {name: [lo, hi] for (name, lo, hi) in pairs}
+    payload = {"bounds": bounds_payload, "n_iter": int(n_iter)}
+    for path in ("/optimize", "/science/optimize", "/physics/optimize"):
+        body = _gateway_post(path, payload)
+        if body is not None:
+            return {
+                "engine": "underworld-http",
+                "path": path,
+                "result": body,
+                "bounds": [{"name": n, "lo": lo, "hi": hi} for (n, lo, hi) in pairs],
+                "note": "Computed via the underworld HTTP backend (gateway proxy).",
             }
     return None
 

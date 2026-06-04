@@ -24,6 +24,7 @@ from fastapi.testclient import TestClient  # noqa: E402
 from server.main import app  # noqa: E402
 from server.routes import scenario as scenario_routes  # noqa: E402
 from server.services import scenario as S  # noqa: E402
+from server.services import science_bridge as SB  # noqa: E402
 
 # The scenario router is delivered ready-to-mount (main.py is not edited), so
 # the route tests mount it here to exercise the HTTP surface offline.
@@ -161,3 +162,79 @@ def test_run_requires_bearer():
     # require_bearer: without a token (and with a configured key) -> 401.
     r = client.post("/v1/scenario/run", json={"name": "x", "params": {}})
     assert r.status_code == 401
+
+
+# ── REAL-ENGINE wiring (Part A): in-process science_bridge path ────────────────
+# scenario.py imports ``science_bridge as _bridge``; monkeypatching the module's
+# ``available`` + ``run_method`` exercises the in-process bridge tier without any
+# network and without the underworld package actually being importable.
+def test_run_scenario_uses_bridge_counterfactual(monkeypatch):
+    fake = {
+        "status": "ok",
+        "field": "world_model.counterfactual",
+        "engine": "world_model_counterfactual",
+        "data": {"effect": 0.42, "series": [1, 2, 3]},
+    }
+    monkeypatch.setattr(SB, "available", lambda: True)
+    monkeypatch.setattr(SB, "run_method", lambda field, params=None: fake)
+
+    out = S.run_scenario("bridge-cf", {"horizon": 5, "shock_pct": 1.0})
+    assert out["engine"] == "counterfactual"
+    res = out["result"]
+    assert res["engine"] == "counterfactual"
+    # The real bridge result is carried through verbatim.
+    assert res["counterfactual"] == fake
+    assert "in-process bridge" in res["note"]
+
+
+def test_optimize_uses_real_optimizer_via_bridge(monkeypatch):
+    fake = {
+        "status": "ok",
+        "best": {"x": 0.0, "y": 0.0},
+        "best_value": 0.0,
+        "history": [{"point": {"x": 0.1, "y": -0.1}, "value": -0.02}],
+    }
+    monkeypatch.setattr(SB, "available", lambda: True)
+    monkeypatch.setattr(SB, "run_method", lambda field, params=None: fake)
+
+    out = S.optimize(objective=None, bounds={"x": [-10.0, 10.0], "y": [-5.0, 5.0]}, n_iter=10)
+    assert out["engine"] == "real_optimizer"
+    # The real optimizer's result is carried through verbatim.
+    assert out["result"] == fake
+    assert "in-process bridge" in out["note"]
+
+
+def test_model_registry_drift_via_bridge(monkeypatch):
+    fake = {"status": "ok", "psi": 0.03, "ece": 0.01}
+    monkeypatch.setattr(SB, "available", lambda: True)
+    monkeypatch.setattr(SB, "run_method", lambda field, params=None: fake)
+
+    reg = S.model_registry()
+    assert reg["drift_engine"] == "ai_models"
+    assert reg["drift"]["engine"] == "ai_models"
+    assert reg["drift"]["data"] == fake
+    assert reg["drift_note"] is None
+
+
+# ── HONEST fallback when the bridge is unavailable (and HTTP unreachable) ───────
+def test_run_scenario_falls_back_when_bridge_unavailable(monkeypatch):
+    # Bridge reports unavailable; the HTTP gateway is forced to an unreachable
+    # target so the local what-if must answer honestly.
+    monkeypatch.setattr(SB, "available", lambda: False)
+    monkeypatch.setenv("UNDERWORLD_URL", "http://127.0.0.1:9")  # discard port
+    monkeypatch.setenv("SCENARIO_HTTP_TIMEOUT", "0.2")
+
+    out = S.run_scenario("fallback", {"horizon": 4, "shock_pct": -3.0})
+    assert out["engine"] == "local-shock"
+    assert out["result"]["engine"] == "local-shock"
+    assert len(out["result"]["baseline"]) == 4
+
+
+def test_optimize_falls_back_when_bridge_unavailable(monkeypatch):
+    monkeypatch.setattr(SB, "available", lambda: False)
+    monkeypatch.setenv("UNDERWORLD_URL", "http://127.0.0.1:9")
+    monkeypatch.setenv("SCENARIO_HTTP_TIMEOUT", "0.2")
+
+    out = S.optimize(objective=None, bounds={"x": [-2.0, 2.0]}, n_iter=15)
+    assert out["engine"] == "random-search"
+    assert out["best"] is not None
