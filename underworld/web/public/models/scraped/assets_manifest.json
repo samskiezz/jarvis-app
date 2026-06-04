@@ -11430,5 +11430,22 @@
     "epoch": "bronze",
     "name": "Hay Cart Load",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hitching_post": {
+    "prompt": "a wooden horse hitching post with a ring, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "45ae57d3-980f-4649-a433-e03ba6e2330a",
+    "path": "/models/generated/tripo/hitching_post.glb",
+    "bytes": 13870912,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/45ae57d3-980f-4649-a433-e03ba6e2330a/tripo_pbr_model_45ae57d3-980f-4649-a433-e03ba6e2330a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNDVhZTU3ZDMtOTgwZi00NjQ5LWE0MzMtZTAzYmE2ZTIzMzBhL3RyaXBvX3Bicl9tb2RlbF80NWFlNTdkMy05ODBmLTQ2NDktYTQzMy1lMDNiYTZlMjMzMGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Go1XzECjbYbxUEtDGRbRYWjUUjuKYJWl0EpRVjr-~sR6-Cr3NVnX4F6Tga77SwTNSlQ2Hb8Cz-B3N-Smk4tfCW60UMW83MWCMHa1nRwgAQ7EQZyjeFR~Az6-QLwD9u~h26Mi-IGmOajo7xaMheHeC-Y7EGI925QDagSAVCW4FEYo5O1fxVENiIwT1pKRG8X-a86XC4w8QGcBMCk-Cw1ekjh6JlgWKHBzwGHvZdKd4ZTZXuuFg2d4Nq13lOrIEuepjDgE1N2PpTDOdHfHmMaoG9TxZctLZWJQSnoBoQRZq6HA31UVPk5gT-Sm4JlPe-9ggymtbBVlwrXF5QAbbgV0qQ__",
+    "asset_id": "hitching_post",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Hitching Post",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
