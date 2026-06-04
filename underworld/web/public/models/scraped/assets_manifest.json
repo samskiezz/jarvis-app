@@ -9475,5 +9475,22 @@
     "epoch": "iron",
     "name": "Plaza Paving Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:portcullis": {
+    "prompt": "an iron portcullis grille in a stone gateway, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0962a91f-2520-4a69-9177-5b8235da28f2",
+    "path": "/models/generated/tripo/portcullis.glb",
+    "bytes": 11285492,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/0962a91f-2520-4a69-9177-5b8235da28f2/tripo_pbr_model_0962a91f-2520-4a69-9177-5b8235da28f2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMDk2MmE5MWYtMjUyMC00YTY5LTkxNzctNWI4MjM1ZGEyOGYyL3RyaXBvX3Bicl9tb2RlbF8wOTYyYTkxZi0yNTIwLTRhNjktOTE3Ny01YjgyMzVkYTI4ZjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=gJLqxyWr7npZBzMJeVfd6F4nqzMkMY5eg7Ngn3CpgM4CNMXnT8icUvnwNC3g3DEp1ryrWc-ZU8vyv900Rl7Vfgnx0GJE9pLoZ1iJJmEJA0N~whL1DA9llW6Gj6et7xHcj0fxP5yV-xeD~wm19fQrvW2KIkl99COVenAlmgKgrzxejcIHvDTIbMs-BS7AJwHx2Jsr~caqvQuzPW3bFAAWmu9q9cnRHpYKivqoWeqf1-5H5AkdmGIXDIJp3YOcDgLDoGMMBBrl8kdDBkCOHjKNrdK5isR2s9RWQK5GkxQJCmRnCSouMkifM3vzhvZH2WLxl8iW2F6KqF9GVBtbby6amg__",
+    "asset_id": "portcullis",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Portcullis",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
