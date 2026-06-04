@@ -9203,5 +9203,22 @@
     "epoch": "any",
     "name": "Geyser",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:glacier_chunk": {
+    "prompt": "a jagged blue glacier ice chunk, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "df83ad6b-3360-43f0-b43d-c723c82837f2",
+    "path": "/models/generated/tripo/glacier_chunk.glb",
+    "bytes": 14746036,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/df83ad6b-3360-43f0-b43d-c723c82837f2/tripo_pbr_model_df83ad6b-3360-43f0-b43d-c723c82837f2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGY4M2FkNmItMzM2MC00M2YwLWI0M2QtYzcyM2M4MjgzN2YyL3RyaXBvX3Bicl9tb2RlbF9kZjgzYWQ2Yi0zMzYwLTQzZjAtYjQzZC1jNzIzYzgyODM3ZjIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=gQz~XlENXDvvBfa1Mb~Qu-BDA~qbA55QaFivGYlBwyq6mMdAuTZQ98smgPM3RVV1ixKJ7U4yFkN6EhTMWBA6fygOHmPcD6R1vMwYQaZDO3cV5qBmyKHCXYzqTFBNIA1nhaWjfUqi105ShaXxr8i0hSfkHGXt0t7Uezain5nnqAexBfZmhtWc5WRKZXai-RtAcyLL4q4RVWO4yuUSj6lb52YQeRPJDAJIFpvGcmC-cywLCVuno0YZf2gaTTsJ-AmosXRXBmF1FIu4Z~V-vgF7oLmOxBdqg8ORR2pvQ1ismtRxRHbtVLChOoDs5qnpxupIYiLJqIDp4XWbI7UPynOAzw__",
+    "asset_id": "glacier_chunk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Glacier Chunk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
