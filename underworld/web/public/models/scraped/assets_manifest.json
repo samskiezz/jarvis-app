@@ -10206,5 +10206,22 @@
     "epoch": "any",
     "name": "Reed Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rose_bush": {
+    "prompt": "a flowering rose bush in bloom, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ecbf959d-4128-488d-b4c7-76dbb200b487",
+    "path": "/models/generated/tripo/rose_bush.glb",
+    "bytes": 15258500,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ecbf959d-4128-488d-b4c7-76dbb200b487/tripo_pbr_model_ecbf959d-4128-488d-b4c7-76dbb200b487.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZWNiZjk1OWQtNDEyOC00ODhkLWI0YzctNzZkYmIyMDBiNDg3L3RyaXBvX3Bicl9tb2RlbF9lY2JmOTU5ZC00MTI4LTQ4OGQtYjRjNy03NmRiYjIwMGI0ODcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VURJ2r9qwOd0L~4EUQpcWZtkyiHDJenKHtC-Nfyg5UM53gtW53RGNeFVoGvmj8BsM3TagwJkm6QG8BSp1awg4Wyz7f54D8jlYt-yjLe73EWEX~7ef3~eI803AY4QSls97jWYPGeEJDWBJfY3rbuuuHVbmlRnZdJDOxb8xOpKb8JII6OvUTtOo7g826aKYPI9dOM2r9VNk8RWrAKwkmbjlLAf3v-HmeRhZL5AjMB29hFhBqjU~k9XtUGANhtbZnQDRQ1eb~6K3~M2jnZFySMC2-OmY9noZmiEGmS7BFGAIMHSg3HP2arComW2ARV77hJtLtOMToYBdySG8ftlC0tYIg__",
+    "asset_id": "rose_bush",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Rose Bush",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
