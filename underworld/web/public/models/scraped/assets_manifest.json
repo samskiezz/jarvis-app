@@ -9305,5 +9305,22 @@
     "epoch": "any",
     "name": "Lava Flow Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:marsh_tile": {
+    "prompt": "a boggy marsh terrain tile with shallow water, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "627173d4-0cbd-43a0-9dbd-929e0c74ee95",
+    "path": "/models/generated/tripo/marsh_tile.glb",
+    "bytes": 15475400,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/627173d4-0cbd-43a0-9dbd-929e0c74ee95/tripo_pbr_model_627173d4-0cbd-43a0-9dbd-929e0c74ee95.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNjI3MTczZDQtMGNiZC00M2EwLTlkYmQtOTI5ZTBjNzRlZTk1L3RyaXBvX3Bicl9tb2RlbF82MjcxNzNkNC0wY2JkLTQzYTAtOWRiZC05MjllMGM3NGVlOTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=d~cGZigynuqxpN8CjotoDj4oggBHelhMaVM-WYwizOlP0Es6AvWGRkaNt9PrsbH42yUHs9y85kOj5NCksCJXOgP8sV2~eEG4XNKpSPFyXuwHdyspUiPpkBlxzYt0Hddjv6HFhR8qJ5WpbYuRCE~Dvz-aNTYIqAt7nHA3-ladAxzji4inaFnhwgyp7vCZ-5j~wRhSW7L-rfHoq2BHmaZ-lP~QhoXLutQ4sj2o5FfGtt8DvbCe0~4Hr1Ug-DgL6lAW3Vb9JUQbq939HRopBDKda3FTbkHYprHdjliJkIrDgAFUtCnjT54KTKqC2176fUaHFMFgeilVjs0wFctmmxWxMA__",
+    "asset_id": "marsh_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Marsh Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
