@@ -10036,5 +10036,22 @@
     "epoch": "any",
     "name": "Bush Berry",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bush_flowering": {
+    "prompt": "a rounded bush covered in bright flowers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e23109cd-f815-436c-8ceb-9ffc5626d5ec",
+    "path": "/models/generated/tripo/bush_flowering.glb",
+    "bytes": 15586460,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/e23109cd-f815-436c-8ceb-9ffc5626d5ec/tripo_pbr_model_e23109cd-f815-436c-8ceb-9ffc5626d5ec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZTIzMTA5Y2QtZjgxNS00MzZjLThjZWItOWZmYzU2MjZkNWVjL3RyaXBvX3Bicl9tb2RlbF9lMjMxMDljZC1mODE1LTQzNmMtOGNlYi05ZmZjNTYyNmQ1ZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=fKT-sGKAk51jprGadjKsxeXDU4PI8zDwX~NBIGypq9Y3oyczDcIehL7ZXgXwTwVPxCBmXTqtWGEZxe-5SWQPpAN4XGjtS0FoQB2UrEnW0ts1lAR26L2ruc4SnVvjxpIiXsT~JIAcJ~dmSP6z9CHYa2uGz4GWRbKelc-HAKrwavOU90OC-hUeA8s~ZXk7yNIsP80i-~coeH1UPoKgSsSjPk0aHJeSG4ZSCgv6Fs1njo5lAXI4OVuZ584PPyK0W3bkGZyWUEprIRhgclt42gPbWhrEE7CyCFDw6wFDRXXal8smQHs8f1Jt-wlzegZkGqNNVhmUG-h9Xxju-aNDJQqnPw__",
+    "asset_id": "bush_flowering",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Bush Flowering",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
