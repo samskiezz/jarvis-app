@@ -11260,5 +11260,22 @@
     "epoch": "iron",
     "name": "War Hammer",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wooden_round_shield": {
+    "prompt": "a wooden round shield with an iron boss, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e355fe01-24a4-4534-abce-c4b1ceb7f551",
+    "path": "/models/generated/tripo/wooden_round_shield.glb",
+    "bytes": 13678188,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/e355fe01-24a4-4534-abce-c4b1ceb7f551/tripo_pbr_model_e355fe01-24a4-4534-abce-c4b1ceb7f551.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZTM1NWZlMDEtMjRhNC00NTM0LWFiY2UtYzRiMWNlYjdmNTUxL3RyaXBvX3Bicl9tb2RlbF9lMzU1ZmUwMS0yNGE0LTQ1MzQtYWJjZS1jNGIxY2ViN2Y1NTEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=BsLuW5NRudXTVUwSzyjonIbHpVTMR0J6QEbJkRn~ImnwP06D1zZbavjZ46whUOXvq1fWKQ2DrMenym031GRdQdfFNUSPU8Gyd9Ccvvg8FGjcVHT6Swk5kRxapQfKYq-wrsbXSarTIwx7n4A1K6OV7d7yPDsfeluRGCIxfLeErWgb1HqqHYwLFx6pJs3OYacxm0iclFjuJZWBiJjoT0zhh9nFCgow0ZtMbVvuNbD5nBNDV7-I82aYETYDzKHiV1RUwohVBKfjaKi5udXykiydVzpilEtTXSJ0TzAiX-uE9hHmAvw92x8iN-kz-8eYg38GYb6PDLfucDUr1iA3CpZb2w__",
+    "asset_id": "wooden_round_shield",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Wooden Round Shield",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
