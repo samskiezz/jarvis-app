@@ -10801,5 +10801,22 @@
     "epoch": "industrial",
     "name": "Train Passenger Car",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tram_car": {
+    "prompt": "an electric street tram car on rails, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "88a30fd3-c636-4e23-b4d5-fef77db9477e",
+    "path": "/models/generated/tripo/tram_car.glb",
+    "bytes": 11665540,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/88a30fd3-c636-4e23-b4d5-fef77db9477e/tripo_pbr_model_88a30fd3-c636-4e23-b4d5-fef77db9477e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODhhMzBmZDMtYzYzNi00ZTIzLWI0ZDUtZmVmNzdkYjk0NzdlL3RyaXBvX3Bicl9tb2RlbF84OGEzMGZkMy1jNjM2LTRlMjMtYjRkNS1mZWY3N2RiOTQ3N2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VZYLXoVb8jXTGPmEDoF2J-b3UlGDCs2KRKAUMpx1pbb~kT9c0pVTLlDfKD7pkP12s287DMZonlNukk6Lxn3d-cKi~Gp0H~0A5Ry4aWMddWRiHbhphMcigKsVDV14BpZ8BOEg5EP~~MzeWz8NXXxA-SEOgpKg4-9QiHxUllrrqCoECKnb4zARMdoCQ44iF23xe87NV9WSjkaPHvhy6c8qwCA2pyQzu6LSUDwh2hSKk6vq8dOv5Sbbnmpc17jjRi3NmWbfBl-eprggdKkHbPI1uyyzE6vCROG5fm0r9P~GXwZeBiOQwnnYEShIXNEJxvSOWGNFvRuOdPDz47lOQZa-8Q__",
+    "asset_id": "tram_car",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Tram Car",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
