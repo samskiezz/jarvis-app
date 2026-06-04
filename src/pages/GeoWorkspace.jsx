@@ -1,28 +1,24 @@
 /**
- * GeoWorkspace — front end for the Wave-6 Geospatial service (Palantir-Gotham
- * Map pillar). A lightweight equirectangular map canvas that plots ontology
- * objects with coordinates, supports radius + bbox selection, draws geofences,
- * and switches between data LAYERS (entities / seismic / air / buoys / flight /
- * density). No external map tiles — it's a self-contained SVG projection so it
- * works fully offline. Backed by /v1/geo/* (objects, radius, bbox, layers,
- * layers/{id}/features, geofences, contains, tracks).
- *
- * Honesty: layers whose real source isn't wired return empty FeatureCollections
- * (the backend says so) — this page surfaces that note rather than inventing dots.
+ * GeoWorkspace — the Gotham-grade map application. A real Leaflet dark-tile map
+ * (CartoDB dark_matter basemap, no key) with live data LAYERS, radius/bbox
+ * selection, geofences, and movement. Switch layers (entities / seismic / flight
+ * / buoys / air_quality / density) — all backed by real /v1/geo feeds. Click the
+ * map to run a radius query; draw geofences server-side. Replaces the old SVG
+ * canvas with a true pan/zoom/select map workspace.
  */
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { MapContainer, TileLayer, CircleMarker, Popup, Circle, Polygon, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import { COLORS as C } from "@/domain/colors";
-import { PageShell, PanelCard, StatTile, Grid, DataState, Badge } from "@/components/PageKit";
+import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
 import { Btn, inputStyle } from "@/components/Wave1Kit";
 import { apiGet, qs, asList, useAsync } from "@/lib/wave1";
 
-const ACCENT = C.neon;
-const W = 720, H = 360; // equirectangular canvas
-const proj = (lat, lon) => ({ x: ((lon + 180) / 360) * W, y: ((90 - lat) / 180) * H });
-const LAYER_COLOR = { entities: C.neon, seismic: C.red, air_quality: C.gold, buoys: "#3bd", flight: "#c8f", density: C.gold };
+const LAYER_COLOR = { entities: "#00c878", seismic: "#e8203c", air_quality: "#e8a800", buoys: "#3bd4ff", flight: "#c88cff", density: "#e8a800" };
+const DARK_TILES = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+const TILE_ATTR = "&copy; OpenStreetMap &copy; CARTO";
 
 function featureCoords(f) {
-  // Accept GeoJSON Feature, {lat,lon}, or [lon,lat].
   const g = f.geometry;
   if (g && Array.isArray(g.coordinates) && g.type === "Point") return { lat: g.coordinates[1], lon: g.coordinates[0] };
   if (typeof f.lat === "number" && typeof f.lon === "number") return { lat: f.lat, lon: f.lon };
@@ -31,13 +27,19 @@ function featureCoords(f) {
   return null;
 }
 
+// Leaflet click → radius query (must be a child of MapContainer).
+function ClickToQuery({ onClick }) {
+  useMapEvents({ click(e) { onClick(Number(e.latlng.lat.toFixed(3)), Number(e.latlng.lng.toFixed(3))); } });
+  return null;
+}
+
 export default function GeoWorkspace() {
   const [layers, setLayers] = useState([]);
   const [layerId, setLayerId] = useState("entities");
   const [features, setFeatures] = useState([]);
   const [note, setNote] = useState(null);
-  const [sel, setSel] = useState(null);     // clicked feature
-  const [center, setCenter] = useState(null); // radius center {lat,lon}
+  const [sel, setSel] = useState(null);
+  const [center, setCenter] = useState(null);
   const [radiusKm, setRadiusKm] = useState(500);
   const [radiusHits, setRadiusHits] = useState([]);
   const [geofences, setGeofences] = useState([]);
@@ -48,50 +50,37 @@ export default function GeoWorkspace() {
   useEffect(() => {
     (async () => {
       const body = await layersAsync.run(() => apiGet("/v1/geo/layers"));
-      const list = asList(body, "layers");
-      setLayers(list);
+      setLayers(asList(body, "layers"));
       const f = await apiGet("/v1/geo/geofences").catch(() => null);
       setGeofences(asList(f, "geofences"));
     })();
   }, []);
 
   const loadLayer = useCallback(async (id) => {
-    const body = await featAsync.run(() => apiGet(`/v1/geo/layers/${encodeURIComponent(id)}/features${qs({ limit: 400 })}`));
-    const feats = asList(body, "features");
-    setFeatures(feats);
+    const body = await featAsync.run(() => apiGet(`/v1/geo/layers/${encodeURIComponent(id)}/features${qs({ limit: 500 })}`));
+    setFeatures(asList(body, "features"));
     setNote(body && body.note ? body.note : null);
     setSel(null);
   }, [featAsync]);
-
   useEffect(() => { loadLayer(layerId); }, [layerId, loadLayer]);
 
   const pts = useMemo(() =>
-    features.map((f) => ({ f, c: featureCoords(f) })).filter((p) => p.c &&
-      isFinite(p.c.lat) && isFinite(p.c.lon)), [features]);
+    features.map((f) => ({ f, c: featureCoords(f) })).filter((p) => p.c && isFinite(p.c.lat) && isFinite(p.c.lon)), [features]);
 
-  const runRadius = async (lat, lon) => {
+  const runRadius = useCallback(async (lat, lon) => {
     setCenter({ lat, lon });
     const body = await radiusAsync.run(() => apiGet(`/v1/geo/radius${qs({ lat, lon, km: radiusKm })}`));
     setRadiusHits(asList(body, "objects", "results"));
-  };
+  }, [radiusAsync, radiusKm]);
 
-  const onMapClick = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * W;
-    const y = ((e.clientY - rect.top) / rect.height) * H;
-    const lon = (x / W) * 360 - 180;
-    const lat = 90 - (y / H) * 180;
-    runRadius(Number(lat.toFixed(3)), Number(lon.toFixed(3)));
-  };
-
-  const accent = LAYER_COLOR[layerId] || ACCENT;
+  const accent = LAYER_COLOR[layerId] || C.neon;
 
   return (
-    <PageShell title="GEO WORKSPACE" subtitle="map · layers · radius/bbox select · geofences · tracks" accent={ACCENT}
+    <PageShell title="GEO WORKSPACE" subtitle="live Leaflet map · layers · radius select · geofences" accent={C.neon}
       actions={<Badge color={accent}>{pts.length} PLOTTED</Badge>}>
-      <Grid min={150} style={{ marginBottom: 14 }}>
+      <Grid min={150} style={{ marginBottom: 12 }}>
         <StatTile label="layer" value={layerId} accent={accent} />
-        <StatTile label="features" value={features.length} accent={ACCENT} />
+        <StatTile label="features" value={features.length} accent={C.neon} />
         <StatTile label="geofences" value={geofences.length} accent={C.gold} />
         <StatTile label="radius hits" value={radiusHits.length} accent={C.red} sub={center ? `${radiusKm}km @ ${center.lat},${center.lon}` : "click map"} />
       </Grid>
@@ -99,63 +88,62 @@ export default function GeoWorkspace() {
       <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
         <span style={{ fontSize: 9, letterSpacing: 1, color: C.text }}>LAYER</span>
         {(layers.length ? layers : [{ id: "entities", label: "entities" }]).map((l) => (
-          <Btn key={l.id} accent={l.id === layerId ? (LAYER_COLOR[l.id] || ACCENT) : C.text}
+          <Btn key={l.id} accent={l.id === layerId ? (LAYER_COLOR[l.id] || C.neon) : C.text}
             style={l.id === layerId ? {} : { opacity: 0.6 }} onClick={() => setLayerId(l.id)}>
             {(l.label || l.id).toUpperCase()}
           </Btn>
         ))}
         <span style={{ marginLeft: 16, fontSize: 9, color: C.text }}>RADIUS km</span>
-        <input type="number" value={radiusKm} onChange={(e) => setRadiusKm(Number(e.target.value) || 0)}
-          style={{ ...inputStyle, width: 90 }} />
+        <input type="number" value={radiusKm} onChange={(e) => setRadiusKm(Number(e.target.value) || 0)} style={{ ...inputStyle, width: 90 }} />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 12 }}>
         <PanelCard title="MAP" accent={accent} right={note ? <Badge color={C.red}>{String(note)}</Badge> : null}>
-          <DataState loading={featAsync.loading} error={featAsync.error}
-            empty={!pts.length && !note} emptyLabel="No georeferenced features in this layer">
-            <svg viewBox={`0 0 ${W} ${H}`} width="100%" onClick={onMapClick}
-              style={{ display: "block", cursor: "crosshair", background: "#04080c", borderRadius: 4 }}>
-              {/* graticule */}
-              {[...Array(11)].map((_, i) => <line key={`v${i}`} x1={(i / 10) * W} y1={0} x2={(i / 10) * W} y2={H} stroke="#0e2230" strokeWidth="0.5" />)}
-              {[...Array(7)].map((_, i) => <line key={`h${i}`} x1={0} y1={(i / 6) * H} x2={W} y2={(i / 6) * H} stroke="#0e2230" strokeWidth="0.5" />)}
-              {/* geofences */}
-              {geofences.map((g, i) => {
-                const poly = (g.polygon || []).map(([la, lo]) => { const p = proj(la, lo); return `${p.x},${p.y}`; }).join(" ");
-                return poly ? <polygon key={i} points={poly} fill={`${C.gold}14`} stroke={C.gold} strokeWidth="1" strokeDasharray="4 3" /> : null;
-              })}
-              {/* radius */}
-              {center && (() => { const p = proj(center.lat, center.lon); const r = (radiusKm / 111) / 180 * H;
-                return <circle cx={p.x} cy={p.y} r={Math.max(2, r)} fill={`${C.red}10`} stroke={C.red} strokeWidth="1" />; })()}
-              {/* features */}
-              {pts.map((p, i) => { const xy = proj(p.c.lat, p.c.lon);
+          <div style={{ height: 460, borderRadius: 6, overflow: "hidden", border: `1px solid ${C.border}` }}>
+            <MapContainer center={[20, 0]} zoom={2} minZoom={2} worldCopyJump style={{ height: "100%", width: "100%", background: "#04080c" }}>
+              <TileLayer url={DARK_TILES} attribution={TILE_ATTR} subdomains="abcd" />
+              <ClickToQuery onClick={runRadius} />
+              {pts.map((p, i) => {
                 const isSel = sel === p.f;
-                return <circle key={i} cx={xy.x} cy={xy.y} r={isSel ? 4.5 : 2.6}
-                  fill={accent} fillOpacity={0.85} stroke={isSel ? "#fff" : "none"} strokeWidth="0.8"
-                  style={{ cursor: "pointer" }}
-                  onClick={(e) => { e.stopPropagation(); setSel(p.f); }} />; })}
-            </svg>
-            <div style={{ fontSize: 8, color: C.text, marginTop: 6 }}>Click empty map → radius query · click a dot → inspect</div>
-          </DataState>
+                return (
+                  <CircleMarker key={i} center={[p.c.lat, p.c.lon]} radius={isSel ? 8 : 5}
+                    pathOptions={{ color: isSel ? "#fff" : accent, fillColor: accent, fillOpacity: 0.85, weight: isSel ? 2 : 1 }}
+                    eventHandlers={{ click: () => setSel(p.f) }}>
+                    <Popup>
+                      <div style={{ fontFamily: "monospace", fontSize: 11 }}>
+                        <b>{p.f.label || p.f.properties?.label || p.f.id || "feature"}</b><br />
+                        {p.c.lat.toFixed(3)}, {p.c.lon.toFixed(3)}
+                        {p.f.properties?.mag != null && <><br />mag {p.f.properties.mag}</>}
+                        {p.f.properties?.us_aqi != null && <><br />AQI {p.f.properties.us_aqi}</>}
+                      </div>
+                    </Popup>
+                  </CircleMarker>
+                );
+              })}
+              {geofences.map((g, i) => {
+                const poly = (g.polygon || []).map(([la, lo]) => [la, lo]);
+                return poly.length ? <Polygon key={i} positions={poly} pathOptions={{ color: C.gold, fillOpacity: 0.08, dashArray: "5 4" }} /> : null;
+              })}
+              {center && <Circle center={[center.lat, center.lon]} radius={radiusKm * 1000} pathOptions={{ color: C.red, fillOpacity: 0.06 }} />}
+            </MapContainer>
+          </div>
+          <div style={{ fontSize: 8, color: C.text, marginTop: 6 }}>Click the map → radius query · click a marker → inspect</div>
         </PanelCard>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <PanelCard title="SELECTION" accent={ACCENT}>
+          <PanelCard title="SELECTION" accent={C.neon}>
             {sel ? (
               <div style={{ fontSize: 10, color: C.textB, lineHeight: 1.7 }}>
-                <div><b style={{ color: ACCENT }}>{sel.label || sel.properties?.label || sel.id || "feature"}</b></div>
+                <div><b style={{ color: accent }}>{sel.label || sel.properties?.label || sel.id || "feature"}</b></div>
                 {(() => { const c = featureCoords(sel); return c ? <div style={{ color: C.text }}>{c.lat}, {c.lon}</div> : null; })()}
-                {sel.type && <Badge color={C.gold}>{sel.type}</Badge>}
+                {sel.type && <Badge color={C.gold}>{sel.type}</Badge>}{" "}
                 {sel.mark && <Badge color={C.red}>{sel.mark}</Badge>}
-                <pre style={{ marginTop: 8, fontSize: 8, color: C.text, maxHeight: 120, overflow: "auto" }}>
-                  {JSON.stringify(sel.properties || sel, null, 1)}
-                </pre>
+                <pre style={{ marginTop: 8, fontSize: 8, color: C.text, maxHeight: 160, overflow: "auto" }}>{JSON.stringify(sel.properties || sel, null, 1)}</pre>
               </div>
-            ) : <div style={{ color: C.text, fontSize: 10, padding: 10 }}>Click a map feature</div>}
+            ) : <div style={{ color: C.text, fontSize: 10, padding: 10 }}>Click a map marker</div>}
           </PanelCard>
-
           <PanelCard title="RADIUS HITS" accent={C.red}>
-            <DataState loading={radiusAsync.loading} empty={!radiusHits.length}
-              emptyLabel="Click the map to query within a radius">
+            <DataState loading={radiusAsync.loading} empty={!radiusHits.length} emptyLabel="Click the map to query within a radius">
               <div style={{ maxHeight: 200, overflowY: "auto", display: "flex", flexDirection: "column", gap: 3 }}>
                 {radiusHits.slice(0, 40).map((o, i) => (
                   <div key={i} style={{ display: "flex", gap: 8, fontSize: 10, padding: "3px 5px", borderBottom: `1px solid ${C.border}` }}>
