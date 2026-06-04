@@ -8,13 +8,16 @@ from .config import CORS_ORIGINS
 from .routes import aip as aip_routes
 from .routes import auth as auth_routes
 from .routes import bridge as bridge_routes
+from .routes import collab as collab_routes
 from .routes import entities as entities_routes
+from .routes import graph as graph_routes
 from .routes import functions as functions_routes
 from .routes import history as history_routes
 from .routes import ontology as ontology_routes
 from .routes import ops as ops_routes
 from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
+from .routes import reports as reports_routes
 from .routes import science as science_routes
 from .routes import search as search_routes
 from .routes import security as security_routes
@@ -81,6 +84,9 @@ def create_app() -> FastAPI:
     app.include_router(pipelines_routes.router)
     app.include_router(aip_routes.router)
     app.include_router(security_routes.router)
+    app.include_router(collab_routes.router)
+    app.include_router(reports_routes.router)
+    app.include_router(graph_routes.router)
 
     @app.get("/")
     async def root():
