@@ -10869,5 +10869,22 @@
     "epoch": "iron",
     "name": "Battle Axe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:blunderbuss": {
+    "prompt": "a flared-barrel blunderbuss firearm, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6b2c9512-d8d9-4512-bbe3-8fe71a819808",
+    "path": "/models/generated/tripo/blunderbuss.glb",
+    "bytes": 2348408,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/6b2c9512-d8d9-4512-bbe3-8fe71a819808/tripo_pbr_model_6b2c9512-d8d9-4512-bbe3-8fe71a819808.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNmIyYzk1MTItZDhkOS00NTEyLWJiZTMtOGZlNzFhODE5ODA4L3RyaXBvX3Bicl9tb2RlbF82YjJjOTUxMi1kOGQ5LTQ1MTItYmJlMy04ZmU3MWE4MTk4MDguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=bvGcxY5uJM8Lfgib98yaeQokIkUY-AHAbWmb-Kh5TvOUv2hfmIR7RGAJdCAvHhUypqpheA0D-E1WMrRBCsHdaV0Uv6fNvd6Gtt1db27HDdubcHvv9c22C49pJxvi5eTPM-TB~YFOZxLfpkteoXK9ThBZZ1TiqdV6LeGIYLrpMOK2DKKDYnG~aM6zm9WjfHM8VofW-luLQqHXqaRfiotgrtXwwyd~cyQX~hMVz-0QaPqSyyQFHNaGVN01ulezVVoGO~FKI70Kpd8MuvdPYJ8yzMg1oUuhjwB-LItD8LtnVmQC3jrfzQ13mxiHJcSNU-30dNT-oHKZKvFPSyM-ORgtMw__",
+    "asset_id": "blunderbuss",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Blunderbuss",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
