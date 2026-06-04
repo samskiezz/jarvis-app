@@ -8982,5 +8982,22 @@
     "epoch": "iron",
     "name": "Canal Straight",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:canyon_wall": {
+    "prompt": "a striated red canyon rock wall section, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9b9e268c-ba64-4468-8f55-b501fc1e3eac",
+    "path": "/models/generated/tripo/canyon_wall.glb",
+    "bytes": 15072836,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/9b9e268c-ba64-4468-8f55-b501fc1e3eac/tripo_pbr_model_9b9e268c-ba64-4468-8f55-b501fc1e3eac.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOWI5ZTI2OGMtYmE2NC00NDY4LThmNTUtYjUwMWZjMWUzZWFjL3RyaXBvX3Bicl9tb2RlbF85YjllMjY4Yy1iYTY0LTQ0NjgtOGY1NS1iNTAxZmMxZTNlYWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=lFKRpG~DJ1pkKMb5yuiXlnciMxQZ10el-j60USIaR5Zq~Bvj31KGP0taJo-jYAF~XfqvyuwSWjySnCDMpDBAeLt6WOCrJyxaOIYYX96h5-eB9JjsdEXWGrhstwaeHvWtBxLN18d-lHW-YQafrrDKsve9dN-if7RxB~z65eFfRB8zwQk-L1ZJ1PzGQXMzBxh9entq-dBc6TeXNTqsGd7kdb8rsgTueiDjkIxKCV9O-plQ~zVoj2W4P~rhIxmdhCbw1s11gaU5y8Xkegvm~vgZOpqFOdRZw7SwPKJNglu~jwOqAEpTSkL1y12HSxpA5cbH0Kw2qEpsSSc78tMnVzdrlQ__",
+    "asset_id": "canyon_wall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Canyon Wall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
