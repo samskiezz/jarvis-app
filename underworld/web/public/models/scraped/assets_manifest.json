@@ -10410,5 +10410,22 @@
     "epoch": "bronze",
     "name": "Wheat Sheaf",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:biplane": {
+    "prompt": "a vintage wood-and-canvas biplane, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c9dbc595-90d3-408e-8329-504bbfa7360f",
+    "path": "/models/generated/tripo/biplane.glb",
+    "bytes": 8950088,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c9dbc595-90d3-408e-8329-504bbfa7360f/tripo_pbr_model_c9dbc595-90d3-408e-8329-504bbfa7360f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzlkYmM1OTUtOTBkMy00MDhlLTgzMjktNTA0YmJmYTczNjBmL3RyaXBvX3Bicl9tb2RlbF9jOWRiYzU5NS05MGQzLTQwOGUtODMyOS01MDRiYmZhNzM2MGYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Pzko4~fy-qKwVeYGqgMqx47dIYZME6pz3gW1LWhZQaus4L9dqggLUspkPIXBxdX-KvVNflNjdbF3gaMZKIbNnB9CyGeKpbbyGDhQr2E80ILhm0cHqJo5xXLTI5avQyKTms6o3-LgogArIb2KwBHg2vGXY~t02sCdi8ZIoTZR9C89yoOtEsnKRdPIrnv3uNjENjk-gKor4QuXHxZFcITaEUAzQszD2sKtLX3UiBJ~wXF5oxFuVWVQ7dZ2HUS78R9s8VzyyFZftOL2DAkZ7jktFAEHJkWv65yQdeWC7lcCpv2luT2yYeuJv8UGd2H0I8vTa1KjVIV8BrGFg~I7Aal-jQ__",
+    "asset_id": "biplane",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Biplane",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
