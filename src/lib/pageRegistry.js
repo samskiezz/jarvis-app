@@ -194,6 +194,9 @@ export const PAGES = [
   { name: "SecondBrain", label: "Second Brain", icon: "🧠", group: "knowledge",
     aliases: ["second brain","brain","notes","vault","wiki","wikilinks","capture","daily","research","ingest","reconcile","crm","obsidian","pkm","zettelkasten"],
     component: P(() => import("@/pages/SecondBrain")) },
+  { name: "ForgeConsole", label: "Forge", icon: "🛠️", group: "apex",
+    aliases: ["forge","code improve","self-improving","autonomous","approvals","ollama","agent"],
+    component: P(() => import("@/pages/ForgeConsole")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",

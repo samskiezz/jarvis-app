@@ -22,6 +22,7 @@ from .routes import governance as governance_routes
 from .routes import graph as graph_routes
 from .routes import graph_time as graph_time_routes
 from .routes import labs as labs_routes
+from .routes import forge as forge_routes
 from .routes import functions as functions_routes
 from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
@@ -138,6 +139,7 @@ def create_app() -> FastAPI:
     app.include_router(brain_research_routes.router)
     app.include_router(brain_crm_routes.router)
     app.include_router(brain_extras_routes.router)
+    app.include_router(forge_routes.router)
 
     @app.get("/")
     async def root():
