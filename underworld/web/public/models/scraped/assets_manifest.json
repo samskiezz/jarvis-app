@@ -10359,5 +10359,22 @@
     "epoch": "any",
     "name": "Vine Hanging",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:vineyard_row": {
+    "prompt": "a trellised row of grapevines, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0cf6e08c-ab3d-49fc-8018-af4416ebb154",
+    "path": "/models/generated/tripo/vineyard_row.glb",
+    "bytes": 15411896,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/0cf6e08c-ab3d-49fc-8018-af4416ebb154/tripo_pbr_model_0cf6e08c-ab3d-49fc-8018-af4416ebb154.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMGNmNmUwOGMtYWIzZC00OWZjLTgwMTgtYWY0NDE2ZWJiMTU0L3RyaXBvX3Bicl9tb2RlbF8wY2Y2ZTA4Yy1hYjNkLTQ5ZmMtODAxOC1hZjQ0MTZlYmIxNTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=B4Io~nOn29kEQBrEoMKnU7hSHp5Mb1lsZoLWeTKo-gppQTROqRTlJ2FRMwwle16tl9odozG-lrnT7-Y2PcoPXf5LUWOAZns5P7IIe6bkKLBVIB-sYFs87k9wGBTCgmiRae8qXmYmAHUoKL~40x9JSJjB~MvrLNuzHV9KJB96dU-S8IVpEU8yACfuQVEyqIyxfCidGLUKe1Zw6QgodeNVbAF7TFJXqv6MbVs2-mnzQbUGh3-DW8u9znBKkZk99gWx6b-c1Z6g5QXMtsDH5N0cQU6RkIb1ObvSpBi2BD8dNO72Aek7GC0xQmBYxkvwxKTAGEPOHGVEaZ0XZtjO6wCbJQ__",
+    "asset_id": "vineyard_row",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "bronze",
+    "name": "Vineyard Row",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
