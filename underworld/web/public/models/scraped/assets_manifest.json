@@ -10733,5 +10733,22 @@
     "epoch": "iron",
     "name": "Sailboat",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:steam_locomotive": {
+    "prompt": "a black steam locomotive with a smokestack and cowcatcher, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1e881766-8fb8-4931-8339-d27aff9d89d3",
+    "path": "/models/generated/tripo/steam_locomotive.glb",
+    "bytes": 15417384,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/1e881766-8fb8-4931-8339-d27aff9d89d3/tripo_pbr_model_1e881766-8fb8-4931-8339-d27aff9d89d3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMWU4ODE3NjYtOGZiOC00OTMxLTgzMzktZDI3YWZmOWQ4OWQzL3RyaXBvX3Bicl9tb2RlbF8xZTg4MTc2Ni04ZmI4LTQ5MzEtODMzOS1kMjdhZmY5ZDg5ZDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=O6hYbkh6AF0Yv4kx0WDwX4kGUM67GDXNAlh4wFs0dEixGjI0TDII98pZmNc~L1tYbynnYsXo-WWKh6QhXZyQNjGNX0qiqSL5-3jrSdhDG~fyjd2mT6RBnOeiBdgVtgLEZNxYN56qwKnusTe5dQqJksGhXSHYZ4SJwkmq522Cr1DJBrRvz2hcdvikwEMJmJA5kq7yuXb3obRSBm52bXbPQJU8zYpzuRQGJlhNJtl3fG1Dux-WgaqlYNYSRBEoouuU2bLLtcrGIZCGGUddJYsB6mUTnSc83Sh~6oNNMPoZ0mUqvf5sjng6DTjN7k5VTkRNdO7890aI2K8u9mUUnVXDPA__",
+    "asset_id": "steam_locomotive",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Steam Locomotive",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
