@@ -210,6 +210,133 @@ Ship the **R-A stack** first (foundation TS + EnbPI + STUMPY/HDBSCAN + orchestra
 
 ---
 
+## L. DEEP DIVE — FOUNDATION TS MODELS (architecture internals, training data, limits, benchmarks)
+
+This section expands §A.2 from a one-line summary into a reproducible engineering profile per model. Each profile states: **(i) architecture internals**, **(ii) training data + scale**, **(iii) context/horizon limits**, **(iv) benchmark numbers**, **(v) license**, **(vi) risk-of-replication**. Every numeric claim carries a URL.
+
+### L.1 TimesFM (Google) — decoder-only patch Transformer
+- **Architecture internals:** Decoder-only stacked Transformer with **input patching** (non-overlapping windows → patch embeddings), **rotary positional embeddings (RoPE)**, **causal masking**, and a longer output-patch length than input-patch length so one forward step emits multiple future points (reduces autoregressive roll count). TimesFM 2.0 backbone = **50 Transformer layers at 1,280 model width**; TimesFM 2.5 = **200M params, 16k context, fused QKV** (Oct 2025). https://research.google/blog/a-decoder-only-foundation-model-for-time-series-forecasting/ · https://arxiv.org/pdf/2310.10688
+- **Training data + scale:** ~**100B real-world time points**, **80% real / 20% synthetic**, balanced by frequency; sources include **Google Trends** (~22k head queries, 2007–2022), **Wikimedia Pageviews**, M4, ETT, electricity, traffic. https://www.marktechpost.com/2024/02/12/google-research-introduces-timesfm-a-single-forecasting-model-pre-trained-on-a-large-time-series-corpus-of-100b-real-world-time-points/
+- **Context / horizon limits:** 2.5 supports **16k context, 1k horizon**; longer-than-trained horizons need autoregressive roll-forward (error compounds). https://huggingface.co/google/timesfm-2.5-200m-pytorch
+- **Benchmark numbers:** TimesFM 2.5 reported to **lead GIFT-Eval zero-shot** at release (Sep 2025); live leaderboard tracks TimesFM-2.5/2.0/1.x among 37 models. https://www.marktechpost.com/2025/09/16/google-ai-ships-timesfm-2-5-smaller-longer-context-foundation-model-that-now-leads-gift-eval-zero-shot-forecasting/ · https://huggingface.co/spaces/Salesforce/GIFT-Eval
+- **License:** Apache-2.0 (code + weights) → **R-A**, commercial-clean. https://github.com/google-research/timesfm
+- **Risk of replication:** Low legal risk (Apache). Engineering risk = **horizon extrapolation drift** beyond 1k and **distribution shift** vs our crypto/seismic series (corpus is web/utility heavy). Mitigation: ensemble with classical GBM/Holt (already in `prediction.py`) and wrap in EnbPI.
+
+### L.2 Chronos (Amazon) — tokenized values + T5 LM
+- **Architecture internals:** Scales + **quantizes** real values into a fixed vocabulary of **4,096 tokens** (vs 32,128 for vanilla T5), trains a **T5 encoder-decoder** as a language model over those tokens, then **samples** future tokens and de-tokenizes to value paths (native probabilistic via sampling). https://arxiv.org/html/2403.07815v1
+- **Training data + scale:** Large public TS corpus **plus synthetic series generated from Gaussian Processes** (TSMix augmentation + KernelSynth). https://arxiv.org/html/2403.07815v1
+- **Model sizes:** Small **46M**, Base **200M**, Large **710M** params. https://huggingface.co/amazon/chronos-t5-large · https://huggingface.co/amazon/chronos-t5-small
+- **Context / horizon limits:** Context length is a train-time choice; paper shows accuracy improves with longer context; sampling cost scales with #paths × horizon (the motivation for Bolt). https://arxiv.org/html/2403.07815v1
+- **Benchmark numbers:** Chronos / Chronos-2 appear on the GIFT-Eval leaderboard alongside TimesFM-2.5 and Moirai-2. https://huggingface.co/spaces/Salesforce/GIFT-Eval
+- **License:** Apache-2.0 → **R-A**. https://github.com/amazon-science/chronos-forecasting
+- **Risk of replication:** Low legal. Engineering risk = **token-sampling latency** (mitigated by Bolt) and **quantization error** on spiky series. For PATTERN ORACLE prefer **Chronos-Bolt** (direct quantile decode, CPU-viable, ~250× faster).
+
+### L.3 Moirai-2 (Salesforce) — decoder-only multi-quantile
+- **Architecture internals:** **Decoder-only**, single-patch input, **recursive multi-token / multi-quantile decoding**; ~30× smaller and ~2× faster than Moirai-1.0-Large. https://arxiv.org/html/2511.11698v1
+- **Training data + scale:** Pretrained on a **36M-series** corpus. https://arxiv.org/abs/2511.11698
+- **Benchmark numbers:** Ranks **5th of 37 foundation models** on GIFT-Eval overall; **5th MASE, 6th CRPS**, beating Moirai-Large with fewer params, on a favorable speed/size/accuracy frontier. https://arxiv.org/html/2511.11698v1 · https://huggingface.co/spaces/Salesforce/GIFT-Eval
+- **License:** `uni2ts` code permissive; weights on HF (confirm per-checkpoint terms) → **R-B**. https://github.com/SalesforceAIResearch/uni2ts · https://huggingface.co/Salesforce/moirai-2.0-R-small
+- **Risk of replication:** Reproduce-from-paper is nontrivial (corpus + training recipe); deploying released weights is the practical path. Verify the exact checkpoint license before shipping.
+
+### L.4 Lag-Llama / Toto / TabPFN-TS (condensed deep notes)
+| Model | Internals | Data/scale | Horizon | Benchmark | License | Repl. risk |
+|---|---|---|---|---|---|---|
+| **Lag-Llama** | LLaMA-style decoder; inputs are **lagged values at multiple lags** + datetime covariates; **Student-t head** per step → autoregressive. https://arxiv.org/abs/2310.08278 | Open corpus of diverse series | Any (autoregressive; drift grows) | On GIFT-Eval list. https://huggingface.co/spaces/Salesforce/GIFT-Eval | Apache-2.0 → R-A | Low legal; weaker zero-shot than TimesFM/Chronos — use as lightweight native-probabilistic fallback. |
+| **Toto (Datadog)** | Decoder-only tuned for **observability metrics**; **u-μP** scaled; Toto-2.0 family **4M–2.5B** params. https://arxiv.org/abs/2505.14766 | Largely Datadog telemetry + public | Long-context observability | Paired **BOOM** benchmark. https://www.datadoghq.com/blog/ai/toto-boom-unleashed/ | Apache-2.0 (now open-weights) → R-A | Low legal; **domain bias toward infra telemetry** — validate on non-infra series before trusting. |
+| **TabPFN-TS** | Forecasting as **tabular regression** via in-context-learning TabPFN; calendar/time-index features become columns, single forward pass, **no gradient fit**. https://github.com/PriorLabs/tabpfn-time-series | TabPFN pretrained on **synthetic tabular tasks** (priors). https://www.nature.com/articles/s41586-024-08328-6 | Short/medium tabular horizons | On GIFT-Eval list. https://huggingface.co/spaces/Salesforce/GIFT-Eval | **TabPFN weights custom license** → R-B | **Legal: verify commercial terms** of TabPFN weights before deploy; engineering: weak on long horizons / many rows. |
+
+---
+
+## M. MODEL-SELECTION DECISION MATRIX (use-case → model → why → license)
+
+Maps PATTERN ORACLE forecasting use-cases to a recommended backbone. "Why" cites the deciding property; "License" is the deploy gate. Default-deploy rows are **R-A** only.
+
+| Use-case (PATTERN ORACLE) | Recommended primary | Fallback | Why (deciding property) | License gate | Replicate | Source |
+|---|---|---|---|---|---|---|
+| **General zero-shot numeric series** (default path in `predict()`) | **TimesFM 2.5** | Chronos-Bolt | Leads GIFT-Eval zero-shot; 16k context; Apache. | Apache-2.0 (clean) | R-A | https://huggingface.co/google/timesfm-2.5-200m-pytorch |
+| **CPU-only / low-latency deploy** (no GPU node) | **Chronos-Bolt** | Lag-Llama | Direct quantile decode, ~250× faster than Chronos, CPU-viable. | Apache-2.0 | R-A | https://huggingface.co/amazon/chronos-bolt-base |
+| **Native probabilistic, tiny footprint** | **Lag-Llama** | Chronos-Bolt | Student-t head gives distribution per step at low param count. | Apache-2.0 | R-A | https://github.com/time-series-foundation-models/lag-llama |
+| **Observability / telemetry metrics** | **Toto** | TimesFM 2.5 | Pretrained on telemetry; BOOM-validated for infra patterns. | Apache-2.0 | R-A | https://github.com/DataDog/toto |
+| **Speed/size/accuracy trade-off frontier** | **Moirai-2** | TimesFM 2.5 | Top GIFT-Eval efficiency frontier; multi-quantile decode. | uni2ts permissive / weights verify | R-B | https://arxiv.org/abs/2511.11698 |
+| **Small tabular-style series w/ rich calendar features** | **TabPFN-TS** | Chronos-Bolt | In-context tabular regression, no fitting. | **Verify TabPFN license** | R-B | https://github.com/PriorLabs/tabpfn-time-series |
+| **Price / financial trajectory** | **classical GBM-MC + Holt** (in-repo) ensembled w/ TimesFM | TimesFM alone | Closed-form volatility/drift drivers are explainable + auditable; no license risk. | In-repo (own code) | R-A | https://github.com/google-research/timesfm |
+| **Calibrated intervals around ANY of the above** | **EnbPI** (MAPIE) | CopulaCPTS | Distribution-free, model-agnostic, no exchangeability needed. | Public math / MAPIE | R-A | https://arxiv.org/abs/2010.09107 |
+
+**Routing rule (matches `00_MASTER_INDEX.md` §1.3 item 1):** default to the **R-A** column; only escalate to **R-B** (Moirai-2 / TabPFN-TS) when a use-case demonstrably needs it AND the weight license is cleared. Never auto-route to non-commercial weights.
+
+---
+
+## N. EXPANDED PATENT FTO LEDGER (claim summaries + freedom-to-operate notes)
+
+Extends §I. Each row adds an **independent-claim summary** (the legally load-bearing combination) and an explicit **FTO note** (what we may/may not do). Statuses are as published on Google Patents; **re-verify before commercial launch** (`12_SECURITY_GOVERNANCE_LEGAL.md`). This is engineering guidance, **not legal advice**.
+
+| # | Patent | Independent-claim summary (the protected *combination*) | FTO note for PATTERN ORACLE | Replicate | URL |
+|---|---|---|---|---|---|
+| 1 | **WO2014075108A2** | ML forecasting that **weights ensemble members by inverse recent error** + trend identification + SVM/GMM clustering, as one pipeline. | **EXPIRED** → entire claim is now public domain. Error-weighted combiner is **free to build** (it is our default combiner). | R-A | https://patents.google.com/patent/WO2014075108A2/en |
+| 2 | **US11575697B2** | Anomaly detection by an **ensemble of LSTM variants** (autoencoder + uncertainty + dropout) **trained on fuzzy clusters formed with DTW distance** — the *combination* is claimed. | **Avoid the exact combined pipeline.** We may use DTW (§D) and ensembles (§F) **separately**; do NOT train an LSTM ensemble over DTW-fuzzy-clusters. | R-C | https://patents.google.com/patent/US11575697B2/en |
+| 3 | **US20220124110A1** | Flag anomalies when an observation is **low-probability under forecast models (e.g. Holt-Winters)** within an **ensemble of detectors**. | Holt-Winters alone is classical/free; **avoid the claimed ensemble-of-detectors arrangement** if granted. Re-check status. | R-C | https://patents.google.com/patent/US20220124110A1/en |
+| 4 | **US9979675B2** | **Predict-then-detect on telemetry**: predict per-class data at system aggregates from historical telemetry, detect anomalies on prediction error (Microsoft). | Predict-then-detect is broadly practiced; **do not copy the specific claimed telemetry pipeline / estimator combo**. | R-C | https://patents.google.com/patent/US9979675B2/en |
+| 5 | **US11494252B2** | Ensemble anomaly/forecast method — **full claims must be read** before reliance (title/assignee unverified this pass). | **Treat as blocking until claim-read.** Do not design against it from the abstract. | R-C | https://patents.google.com/patent/US11494252B2/en |
+| 6 | **US11922280B2** | Ensemble anomaly/forecast method — **full claims must be read** before reliance (title/assignee unverified this pass). | **Treat as blocking until claim-read.** Do not design against it from the abstract. | R-C | https://patents.google.com/patent/US11922280B2/en |
+| 7 | **US10977551B2** (additional) | Anomaly detection methods using **recurrent/forecast residual ensembles** — representative of a crowded space around ensemble-residual anomaly detection. | Confirms FTO crowding: keep our anomaly path on **public-math primitives** (Isolation Forest, BOCPD, PELT, Matrix Profile) which predate/sit outside these combination claims. Read claims before any LSTM-residual ensemble. | R-C | https://patents.google.com/patent/US10977551B2/en |
+
+**FTO design posture:** PATTERN ORACLE's anomaly/forecast stack deliberately rests on **expired-patent or public-domain math** (error-weighting [row 1 expired], EnbPI, Isolation Forest, PELT, BOCPD, Matrix Profile, DTW, HDBSCAN, EnKF). The active rows (2–7) all claim **specific learned-ensemble combinations**; using the underlying ingredients **individually or in non-claimed arrangements is generally fine**, but replicating any claimed end-to-end pipeline is not. Route the full set (incl. unverified rows 5–7) through IP counsel pre-launch.
+
+---
+
+## O. REPLICATE-IN-OUR-REPO MAPPING (technique → existing module/method it builds on)
+
+Each external technique is mapped to the concrete in-repo surface it extends, so "replicate" means **extend audited code**, not greenfield. Paths are relative to repo root; see `02_CURRENT_STATE_AUDIT.md`.
+
+| Technique (this doc §) | Builds on (file · method) | What changes / extends | Replicate | Anchor source |
+|---|---|---|---|---|
+| **Foundation TS backbone** (§A/§L) | `server/services/prediction.py` · `predict()`, `classify()`, `_predict_generic()` | Add a foundation-model adapter as one ensemble member alongside the existing classical forecasters; route via `classify()`. | R-A | https://github.com/google-research/timesfm |
+| **GBM Monte-Carlo + Holt blend** (financial path, §M) | `server/services/prediction.py` · `gbm_montecarlo_forecast()` (already implemented) | Already present; becomes the explainable price member of the ensemble. | R-A (in-repo) | https://arxiv.org/abs/2310.10688 |
+| **Gutenberg-Richter + Poisson** (seismic) | `server/services/prediction.py` · `gutenberg_richter_poisson()`, `omori_aftershock_probability()` | Existing seismic members; can be EnbPI-wrapped for calibrated rates. | R-A (in-repo) | https://patents.google.com/patent/WO2014075108A2/en |
+| **Growth-curve fitting** (adoption/logistic) | `server/services/prediction.py` · `fit_growth_series()`, `_predict_growth()` | Existing member; candidate for ensemble + interval layer. | R-A (in-repo) | https://arxiv.org/abs/2010.09107 |
+| **Error-weighted ensemble combiner** (§F row 1) | `server/services/prediction.py` · `_seismic_result()`, `_trajectory_result()` (results assembly) | Add inverse-recent-error weighting across the members each result already lists in `models`. | R-A (expired patent) | https://patents.google.com/patent/WO2014075108A2/en |
+| **EnbPI conformal intervals** (§F) | `server/services/prediction.py` · `gbm_montecarlo_forecast()` `interval` block; `predict()` output | Replace ad-hoc percentile intervals with EnbPI residual-quantile intervals (model-agnostic). | R-A | https://arxiv.org/abs/2010.09107 |
+| **Matrix Profile / HDBSCAN motifs** (§D) | `server/data/corpus.py`, `server/data/ontology.py` (series + entity store) | New PATTERN-DISCOVERY pass over stored series; no training. | R-A | https://github.com/TDAmeritrade/stumpy |
+| **PELT / BOCPD change-points** (§E) | `server/services/prediction.py` · series loaders `load_crypto_series()`, `load_seismic_catalog()` | Segment series before fitting members; feed regimes to forecast. | R-A | https://arxiv.org/abs/1101.1438 |
+| **Router→Specialist→Verifier orchestration** (§H) | `server/services/analyst.py`, `server/llm/kimi.py` (`_kimi_extract()` already routes) | Formalize existing Kimi routing into router/specialist/verifier graph (LangGraph optional). | R-A | https://github.com/langchain-ai/langgraph |
+| **Supercomputer loop** (re-forecast + CRPS skill, §G) | `server/services/prediction.py` outputs + `server/routes/predict.py` | Persist forecast→outcome, score CRPS/RMSE vs climatology in SELF-IMPROVEMENT loop. | R-A | https://doi.org/10.1198/016214506000001437 |
+| **Temporal graph (TGN/TGAT/xERTE)** (§C) | `server/data/ontology.py` (entity/relation store) | Add node-memory + Bochner time-encoding mechanism on our typed graph; reimplement, do not vendor. | R-B | https://arxiv.org/abs/2006.10637 |
+| **Latent world-model loop** (§B) | `server/services/simulation.py` · `GameSim._advance()`, `step_to_now()` | Borrow imagine-forward-then-score loop principle; no V-JEPA/Dreamer dependency. | R-C | https://arxiv.org/abs/2301.04104 |
+
+---
+
+## P. BENCHMARK & LEADERBOARD REFERENCES (how we will measure "good")
+
+These are the standard yardsticks PATTERN ORACLE forecasting must report against (per `11_VALIDATION_AND_TEST_PLAN.md`). Each is public; metrics map to our skill-scoring loop (§G.2).
+
+| Benchmark | Scope / scale | Metrics | Why we use it | Source |
+|---|---|---|---|---|
+| **GIFT-Eval** (Salesforce) | **97 task configs across 55 datasets**, many domains/frequencies/horizons; live HF leaderboard of **37 foundation models**. | MASE, CRPS, rank | Primary zero-shot foundation-model yardstick; directly compares our chosen backbone vs alternatives. | https://arxiv.org/abs/2410.10393 · https://huggingface.co/spaces/Salesforce/GIFT-Eval · https://www.salesforce.com/blog/gift-eval-time-series-benchmark/ |
+| **Monash TSF Archive** | **30 datasets / 58 variations**, `.tsf` format, real + competition series. | MASE, sMAPE, RMSE vs classical baselines | Classical-baseline coverage; sanity-check our non-foundation members. | https://forecastingdata.org/ · https://arxiv.org/abs/2105.06643 · https://huggingface.co/datasets/Monash-University/monash_tsf |
+| **BOOM** (Datadog) | Observability-metric forecasting benchmark paired with Toto. | Probabilistic + point error | Validates telemetry-domain forecasting (Toto use-case). | https://www.datadoghq.com/blog/ai/toto-boom-unleashed/ |
+| **WeatherBench / ECMWF scores** | NWP skill scoring practice (CRPS, RMSE vs climatology/persistence). | CRPS, RMSE, skill score | Defines our "supercomputer loop" skill metric (§G.2). | https://confluence.ecmwf.int/display/FUG/Section+12+Verification · https://doi.org/10.1198/016214506000001437 |
+
+**Reporting rule:** every shipped forecaster reports **MASE + CRPS** on at least one of GIFT-Eval/Monash, plus an internal **skill score vs persistence/climatology** on History Lake data, logged by the SELF-IMPROVEMENT loop.
+
+---
+
+## Q. RISKS-OF-REPLICATION REGISTER (per technique)
+
+Consolidates the per-technique risk notes from §L into one register: **legal risk** (license/patent) and **engineering risk** (where the technique fails) with a mitigation. Aligns with `14_RISKS_AND_LIMITS.md`.
+
+| Technique | Legal risk | Engineering risk | Mitigation | Source |
+|---|---|---|---|---|
+| **TimesFM / Chronos-Bolt / Lag-Llama / Toto** | **Low** (Apache-2.0). | Domain shift vs our series; horizon-extrapolation drift. | Ensemble w/ classical members; EnbPI intervals; cap horizon. | https://github.com/google-research/timesfm |
+| **Moirai-2** | **Medium** — verify weight checkpoint license. | Hard to reproduce from paper. | Deploy released weights only after license check. | https://arxiv.org/abs/2511.11698 |
+| **TabPFN-TS** | **Medium/High** — custom TabPFN weight license. | Weak on long horizons / many rows. | Verify commercial terms; else fall back to Chronos-Bolt. | https://github.com/PriorLabs/TabPFN |
+| **GraphCast / GenCast** | **High** — **weights CC-BY-NC-SA-4.0 (non-commercial)**. | N/A (we don't ship weights). | Emulate behaviour only; never bundle weights. | https://github.com/google-deepmind/graphcast |
+| **TGN / TGAT / xERTE** | **Medium** — research (non-OSI) licenses. | Schema mismatch w/ our typed graph. | Reimplement mechanism on `ontology.py`; vendor only OSI-clean parts. | https://arxiv.org/abs/2006.10637 |
+| **V-JEPA 2 / DreamerV3** | **Low/Medium** — research code, principle only. | Heavy compute; overkill early. | Adopt latent-predict-then-score principle, not the artifact. | https://arxiv.org/abs/2506.09985 |
+| **Ensemble-residual anomaly methods** | **Medium** — active patent crowding (§N rows 2–7). | Patented combinations. | Stay on public-math primitives (IsoForest/PELT/BOCPD/MP). | https://patents.google.com/patent/US11575697B2/en |
+| **Error-weighted ensemble / EnbPI / public-math stack** | **Low** (expired patent / public math). | Mis-calibration if residuals nonstationary. | Online residual updates; monitor coverage in skill loop. | https://patents.google.com/patent/WO2014075108A2/en · https://arxiv.org/abs/2010.09107 |
+
+---
+
 ## K. SOURCE INDEX (all primary URLs, grouped)
 
 **A. Foundation TS:** https://github.com/google-research/timesfm · https://huggingface.co/google/timesfm-2.5-200m-pytorch · https://arxiv.org/abs/2310.10688 · https://github.com/amazon-science/chronos-forecasting · https://arxiv.org/abs/2403.07815 · https://arxiv.org/abs/2511.11698 · https://huggingface.co/Salesforce/moirai-2.0-R-small · https://arxiv.org/abs/2310.08278 · https://github.com/time-series-foundation-models/lag-llama · https://arxiv.org/abs/2505.14766 · https://github.com/DataDog/toto · https://github.com/PriorLabs/tabpfn-time-series
@@ -220,7 +347,10 @@ Ship the **R-A stack** first (foundation TS + EnbPI + STUMPY/HDBSCAN + orchestra
 **F. Ensemble/uncertainty:** https://patents.google.com/patent/WO2014075108A2/en · https://arxiv.org/abs/2010.09107 · https://github.com/scikit-learn-contrib/MAPIE · https://arxiv.org/abs/2212.03281
 **G. DA/NWP:** https://github.com/google-deepmind/graphcast · https://www.science.org/doi/10.1126/science.adi2336 · https://arxiv.org/abs/2312.15796 · https://www.nature.com/articles/s41586-024-08252-9 · https://www.ecmwf.int/en/about/media-centre/aifs-blog · https://doi.org/10.1029/94JC00572 · https://doi.org/10.1198/016214506000001437
 **H. Orchestration:** https://arxiv.org/abs/2509.07571 · https://github.com/langchain-ai/langgraph
-**I. Patents:** https://patents.google.com/patent/WO2014075108A2/en · https://patents.google.com/patent/US11575697B2/en · https://patents.google.com/patent/US20220124110A1/en · https://patents.google.com/patent/US9979675B2/en · https://patents.google.com/patent/US11494252B2/en · https://patents.google.com/patent/US11922280B2/en
+**I. Patents:** https://patents.google.com/patent/WO2014075108A2/en · https://patents.google.com/patent/US11575697B2/en · https://patents.google.com/patent/US20220124110A1/en · https://patents.google.com/patent/US9979675B2/en · https://patents.google.com/patent/US11494252B2/en · https://patents.google.com/patent/US11922280B2/en · https://patents.google.com/patent/US10977551B2/en
+**L. Model deep dives:** https://research.google/blog/a-decoder-only-foundation-model-for-time-series-forecasting/ · https://arxiv.org/pdf/2310.10688 · https://www.marktechpost.com/2024/02/12/google-research-introduces-timesfm-a-single-forecasting-model-pre-trained-on-a-large-time-series-corpus-of-100b-real-world-time-points/ · https://arxiv.org/html/2403.07815v1 · https://huggingface.co/amazon/chronos-t5-large · https://huggingface.co/amazon/chronos-t5-small · https://huggingface.co/amazon/chronos-bolt-base · https://arxiv.org/html/2511.11698v1 · https://huggingface.co/Salesforce/moirai-2.0-R-small
+**M/N. Selection & FTO:** https://huggingface.co/google/timesfm-2.5-200m-pytorch · https://github.com/SalesforceAIResearch/uni2ts · https://patents.google.com/patent/US10977551B2/en
+**P. Benchmarks/leaderboards:** https://arxiv.org/abs/2410.10393 · https://huggingface.co/spaces/Salesforce/GIFT-Eval · https://www.salesforce.com/blog/gift-eval-time-series-benchmark/ · https://forecastingdata.org/ · https://arxiv.org/abs/2105.06643 · https://huggingface.co/datasets/Monash-University/monash_tsf · https://www.datadoghq.com/blog/ai/toto-boom-unleashed/ · https://confluence.ecmwf.int/display/FUG/Section+12+Verification
 
 ---
 

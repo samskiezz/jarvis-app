@@ -1765,6 +1765,53 @@ return {psi, drift: psi > 0.2}
 
 **Source.** Standard credit-scoring PSI; overview https://www.listendata.com/2015/05/population-stability-index.html
 
+#### E17.+ DEPTH MILESTONE
+
+**Full derivation.** PSI is the **symmetrized KL divergence** between the reference and current binned distributions. The standard (forward) KL is `Σ c_b ln(c_b/r_b)`; reverse is `Σ r_b ln(r_b/c_b)`. Adding them: `Σ (c_b−r_b)(ln c_b − ln r_b) = Σ (c_b−r_b) ln(c_b/r_b)` — exactly the PSI formula. So PSI = `KL(c‖r)+KL(r‖c)` = **Jeffreys divergence**, which is why it is symmetric in reference/current and always ≥0 (each term `(c−r)ln(c/r)` is non-negative since `c−r` and `ln(c/r)` share sign). The `<0.1 / 0.1–0.2 / >0.2` thresholds are industry heuristics (roughly: small/moderate/large population shift), not from a sampling distribution — for a principled test, bootstrap PSI under the null or use a chi-square two-sample test.
+
+**Runnable-quality pseudocode (as implemented + quantile-bin option).**
+```python
+def psi(reference, current, *, bins=10, quantile=True, eps=1e-6):
+    import numpy as np
+    ref = np.asarray(reference, float); cur = np.asarray(current, float)
+    if quantile:
+        edges = np.quantile(ref, np.linspace(0, 1, bins+1))
+        edges[0], edges[-1] = -np.inf, np.inf
+        edges = np.unique(edges)
+    else:
+        edges = np.histogram_bin_edges(ref, bins=bins)
+    r = np.histogram(ref, edges)[0] / max(len(ref), 1)
+    c = np.histogram(cur, edges)[0] / max(len(cur), 1)
+    r = np.clip(r, eps, None); c = np.clip(c, eps, None)
+    val = float(np.sum((c - r) * np.log(c / r)))
+    band = "stable" if val < 0.1 else ("moderate" if val < 0.2 else "significant")
+    return {"psi": val, "drift": val > 0.2, "band": band}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `bins` | int | 10 | 5–50 | resolution | ↑ sensitivity, ↑ noise |
+| `quantile` | bool | True | — | bin scheme | quantile for skewed data |
+| threshold | float | 0.2 | 0.1–0.25 | drift flag | 0.1 for high-sensitivity monitors |
+| `eps` | float | 1e-6 | >0 | empty-bin floor | avoid log(0) |
+
+**Worked numeric example.** `reference~N(0,1)`, `current~N(0.5,1)` (mean shift), 10 quantile bins. Lower bins lose mass (`c<r`), upper bins gain (`c>r`); summing `(c−r)ln(c/r)` gives `PSI≈0.12` → "moderate" drift. Same vs `current~N(1.5,1)` → `PSI≈0.9` → "significant."
+
+**Complexity (derivation).** Quantile edges sort the reference `O(N_ref log N_ref)`; two histograms `O(N)`; bin sum `O(bins)`. **Time** `O(N log N)`, **space** `O(bins)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Empty current bin | `ln(0)=−∞` | clip to `eps` (already done) |
+| Few samples | unstable PSI | fewer bins; bootstrap CI |
+| Different bin edges for ref/cur | invalid comparison | always use reference-defined edges |
+| Skewed data + equal-width bins | most mass in one bin | use quantile bins |
+
+**Unit-test oracle.** Identical distributions (`current==reference`): `PSI=0` exactly (each `c_b=r_b` ⇒ term 0). Disjoint distributions (no overlap) → large PSI driven by `eps` floors. Symmetry: `psi(a,b)≈psi(b,a)` (Jeffreys property) — must hold within binning artifacts.
+
+**Integration code-points.** **ALREADY EXISTS** — `drift_detector()` at `/home/user/jarvis-app/underworld/server/services/ai_models.py:74`. SELF-IMPROVEMENT drift monitor (§08): PSI on incoming feature feeds and on forecast-error distributions → retrain/re-weight trigger; pairs with `calibration_error()` (ECE, line 85) and CRPS (F20). Drift event resets Error-Weighted-Ensemble (F18) windows and may trigger BOCPD-style caveats.
+
 ---
 
 ## GROUP F — ENSEMBLE / UNCERTAINTY
@@ -1806,6 +1853,119 @@ forecast: ŷ = Σ w_k ŷ_k
 **Reuse target.** **NEW** combiner; reuse `uncertainty_estimate()` (`ai_models.py` lines 103–107) for ensemble mean/std and the error-tracking store from `08_SELF_IMPROVEMENT_AND_MLOPS.md`.
 
 **Source.** Expired patent **WO2014075108A2** (error-weighted predictive ensemble) https://patents.google.com/patent/WO2014075108A2 · related: Cerqueira et al., arbitrated dynamic ensembles https://arxiv.org/abs/1811.10916
+
+#### F18.+ DEPTH MILESTONE
+
+**Full derivation.** The softmax weighting `w_k=exp(−γ e_k/ē)/Σ_j exp(−γ e_j/ē)` is the solution to `max_w Σ_k w_k(−e_k/ē) + (1/γ)H(w)` where `H(w)=−Σ w_k ln w_k` is the entropy regularizer — i.e. **maximum-entropy weighting subject to an expected-error budget**. Large `γ` (low temperature) concentrates weight on the best member (winner-take-all); `γ→0` gives uniform weights. This is the multiplicative-weights / Hedge family from online learning, whose regret vs the best fixed expert is `O(√(T log K))` — the ensemble provably tracks the best member up to that bound. Normalizing by `ē` makes `γ` scale-free across different error magnitudes. For predictive quantiles, the combined CDF is the `w`-weighted mixture `F(z)=Σ_k w_k F_k(z)`; its quantiles are found by inverting the mixture (not by averaging member quantiles, which is only exact for the median under symmetry).
+
+**Runnable-quality pseudocode.**
+```python
+def error_weighted_ensemble(member_forecasts, member_errors, *, gamma=2.0,
+                            w_floor=0.01, quantile_levels=(.1,.25,.5,.75,.9)):
+    import numpy as np
+    ks = list(member_forecasts)
+    e  = np.array([member_errors[k] for k in ks], float)
+    present = np.isfinite(e)
+    e = e[present]; ks = [k for k,p in zip(ks, present) if p]
+    ebar = e.mean() or 1.0
+    z = -gamma * e / ebar
+    z -= z.max()                                   # stable softmax
+    w = np.exp(z); w /= w.sum()
+    w = np.maximum(w, w_floor); w /= w.sum()       # floor + renorm (keep diversity)
+    point = float(sum(wk*member_forecasts[k]["point"] for wk,k in zip(w,ks)))
+    # weighted-mixture quantiles via fine grid inversion of mixture CDF
+    grid = np.linspace(min(member_forecasts[k]["quantiles"][min(quantile_levels)] for k in ks),
+                       max(member_forecasts[k]["quantiles"][max(quantile_levels)] for k in ks), 2000)
+    def member_cdf(k, x):
+        q = member_forecasts[k]["quantiles"]
+        xs = np.array(sorted(q)); ys = np.array([q[s] for s in sorted(q)])
+        return np.interp(x, ys, xs)               # level at value x
+    mix = sum(wk*np.array([member_cdf(k, g) for g in grid]) for wk,k in zip(w,ks))
+    out_q = {lvl: float(grid[np.searchsorted(mix, lvl)]) for lvl in quantile_levels}
+    return {"point_estimate": point, "quantiles": out_q,
+            "weights": dict(zip(ks, w.tolist()))}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `gamma` | float | 2.0 | 0–10 | temperature | ↑ ⇒ winner-take-all |
+| `lambda` (error EWMA) | float | 0.3 | (0,1) | error memory | ↑ faster adaptation |
+| `W` (window) | int | 30 | 10–200 | trailing error window | match drift speed |
+| `w_floor` | float | 0.01 | 0–0.1 | min weight | keeps diversity |
+
+**Worked numeric example.** 3 members with recent RMSE `e=[1.0, 2.0, 4.0]`, `γ=2`, `ē=2.33`. `z=−2·[1,2,4]/2.33=[−0.857,−1.714,−3.429]`; after subtract-max `[0,−0.857,−2.571]`; `exp=[1,0.424,0.0764]`; sum`=1.500`; `w=[0.667,0.283,0.051]`. Floor 0.01 unchanged. Point `=0.667·ŷ₁+0.283·ŷ₂+0.051·ŷ₃` — best member dominates but others retain influence.
+
+**Complexity (derivation).** Weight computation `O(K)`. Mixture-quantile inversion uses a grid of `G` points evaluating `K` member CDFs → `O(K·G)`. For point-only combination it is `O(K)`. **Space** `O(K+G)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Softmax overflow | inf weights | subtract max (done) |
+| One member dominates permanently | loss of diversity | `w_floor`; reset on change-point |
+| Missing member forecast | broken sum | drop & renormalize over present |
+| Stale errors after regime change | wrong weights | reset error windows on BOCPD/PELT event |
+
+**Unit-test oracle.** Equal errors `e=[1,1,1]` ⇒ `w=[1/3,1/3,1/3]` exactly (uniform), so the combined point = simple average. One perfect member (`e=[0, 1, 1]`, `γ` large) ⇒ its weight →1 (up to floor). Weights must always sum to 1.0±1e-9.
+
+**Integration code-points.** **NEW** combiner `ensemble.py`. Reads member forecasts (A1–A5, G21) and their recent realized errors tracked by SELF-IMPROVEMENT (`08_SELF_IMPROVEMENT_AND_MLOPS.md`); reuses `ai_models.uncertainty_estimate()` (`/home/user/jarvis-app/underworld/server/services/ai_models.py:103`) for ensemble mean/std. Output feeds EnbPI (F19) for final interval calibration; weights are surfaced as VERIFIER drivers.
+
+---
+
+### F18b. EWMA & EWMA-Variance (RiskMetrics) — **NEW ALGORITHM**
+
+**Purpose.** Exponentially-weighted moving average of level and of squared returns — the lightweight, online volatility/level tracker. Used to compute the "recent error" that drives the Error-Weighted Ensemble (F18), to estimate time-varying volatility for GBM bands (A1), and as a fast trend baseline. RiskMetrics' EWMA variance is the industry volatility standard.
+
+**Math.**
+```
+EWMA level:    μ_t = λ x_t + (1−λ) μ_{t−1}              (= SES, A2's degenerate case)
+EWMA variance: σ²_t = λ r_t² + (1−λ) σ²_{t−1}           (RiskMetrics, r_t = return)
+EWMA control limits: μ_t ± L·σ_{ewma}·√(λ/(2−λ))         (Roberts 1959 EWMA chart)
+```
+
+**Derivation.** Unrolling `μ_t=λΣ_{k≥0}(1−λ)^k x_{t−k}` shows EWMA is an IIR low-pass filter with geometric weights summing to 1. The **effective window** (center of mass) is `(1−λ)/λ`, and the "span" convention used by pandas is `λ=2/(span+1)`. For the EWMA variance, taking expectations of the recursion at stationarity gives `E[σ²_t]=σ²` (unbiased for constant volatility) while reacting to clustering — the basis of RiskMetrics' choice `λ=0.94` (daily). The control-limit factor `√(λ/(2−λ))` is the asymptotic standard deviation of the EWMA statistic (variance of a geometric-weighted sum of unit-variance innovations).
+
+**Runnable-quality pseudocode.**
+```python
+def ewma(x, *, lam=0.3, var_lambda=0.94, L=3.0):
+    import numpy as np
+    x = np.asarray(x, float)
+    mu = np.empty_like(x); mu[0] = x[0]
+    for t in range(1, len(x)):
+        mu[t] = lam*x[t] + (1-lam)*mu[t-1]
+    r = np.diff(np.log(np.clip(x, 1e-12, None))) if (x > 0).all() else np.diff(x)
+    var = np.empty(len(r)); var[0] = r[0]**2
+    for t in range(1, len(r)):
+        var[t] = var_lambda*r[t]**2 + (1-var_lambda)*var[t-1]
+    sigma = np.sqrt(var)
+    cl = L*sigma[-1]*np.sqrt(lam/(2-lam))
+    return {"ewma_level": mu.tolist(), "ewma_vol": sigma.tolist(),
+            "upper": (mu[-1]+cl), "lower": (mu[-1]-cl)}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `lam` (level) | float | 0.3 | (0,1) | level smoothing | span `=2/λ−1`; ↑ for fast level |
+| `var_lambda` | float | 0.94 | (0,1) | vol memory | 0.94 daily / 0.97 monthly (RiskMetrics) |
+| `L` | float | 3.0 | 2–4 | control-limit width | 3σ ≈ 99.7% under normality |
+
+**Worked numeric example.** `x=[10,11,9,12,10]`, `λ=0.5`. `μ=[10, 10.5, 9.75, 10.875, 10.4375]`. The EWMA reacts to each move at half-weight — smoother than raw, faster than a long SMA. With `var_lambda=0.94` on returns, the volatility estimate up-ticks after the 9→12 jump and decays back.
+
+**Complexity (derivation).** Single forward pass, `O(1)` per step → `O(T)` time. **Space** `O(1)` for streaming (or `O(T)` if storing the series).
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Initialization bias | early values off | bias-correct `μ_t/(1−(1−λ)^t)` (pandas `adjust=True`) |
+| `λ` too small | sluggish, misses shifts | raise `λ`; pair with CUSUM |
+| Non-positive prices for log-returns | log error | guard `clip`/use raw diffs |
+
+**Unit-test oracle.** Constant series `x=[5]*100`, any `λ` ⇒ `μ_t=5` for all `t` (fixed point) and `vol=0`. Step `x=[0]*50+[1]*50`, `λ=0.5`: `μ` rises geometrically toward 1 with `μ_{50+k}=1−(0.5)^{k+1}` — closed-form check.
+
+**Integration code-points.** **NEW** `ewma.py` (or pandas `.ewm`). Supplies the **recent-error EWMA** consumed by F18 (`member_errors[k]` updated as `e_k=λ|ŷ_k−y|+(1−λ)e_k`); supplies time-varying `σ` to A1's GBM bands and a fast trend baseline ensemble member. Output also feeds the SELF-IMPROVEMENT dashboards.
+
+**Source.** Roberts 1959, *Control Chart Tests Based on Geometric Moving Averages*, *Technometrics*; https://doi.org/10.1080/00401706.1959.10489860 · RiskMetrics Technical Document (1996), J.P. Morgan; https://www.msci.com/documents/10199/5915b101-4206-4ba0-aee2-3449d5c7e95a
 
 ---
 

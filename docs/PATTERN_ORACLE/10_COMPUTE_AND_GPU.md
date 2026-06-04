@@ -396,6 +396,55 @@ Recommended: **Triton** (multi-model + dynamic batching out of the box) or a **c
 - **Colocation note:** if a backend *itself* runs on the GPU host, `PREDICT_GPU_URL=http://127.0.0.1:PORT` makes the call a loopback — same contract, near-zero network cost.
 - `available_backends()` / `/v1/health` are used at startup to log which tiers are live, so operators see "T0 only" vs "T1 GPU present" vs "T2 endpoint reachable" explicitly.
 
+### 10.5.4 Model-hosting deployment guide
+
+This is the operator-facing recipe for standing up the T2 inference host. It is **out-of-band** from the two FastAPI backends — they only learn its URL.
+
+**Server choice matrix (decision):**
+
+| Need | Pick | Why |
+|---|---|---|
+| Multiple TS models, dynamic batching, mixed ONNX/torch, zero glue | **Triton** | model repository + dynamic batcher + `/v2/health` for free; closest to §10.2.3 contract |
+| One torch checkpoint, simple ops, `.mar` packaging | **TorchServe** | lightweight, torch-native handlers; batching configured per-model |
+| LLM-style decoder TS model, very high concurrency | **vLLM / SGLang** | continuous batching; **overkill** for encoder TS — only if a decoder model is adopted |
+| Minimal footprint, full control of `/v1/forecast` shape | **Custom FastAPI + torch** | implement the §10.2.3 contract directly; fewest moving parts |
+
+**Recommended default: Triton** (multi-model + dynamic batcher) for the full suite, or **Custom FastAPI+torch** for a single-model minimal start. Either exposes the §10.2.3 / §10.2A contract; an adapter route maps Triton's `/v2/...` to the `/v1/forecast`+`/v1/health` shape the client expects.
+
+**Container layout (Triton example):**
+```
+inference-host/
+├── Dockerfile                # FROM nvcr.io/nvidia/tritonserver:<ver>-py3
+├── model_repository/
+│   ├── timesfm_2_5/
+│   │   ├── config.pbtxt      # platform, max_batch_size, dynamic_batching{max_queue_delay_microseconds}
+│   │   └── 1/model.pt        # (or model.onnx)
+│   ├── chronos_bolt_base/
+│   │   ├── config.pbtxt
+│   │   └── 1/model.onnx
+│   └── lag_llama/
+│       ├── config.pbtxt
+│       └── 1/model.pt
+├── adapter/                  # thin FastAPI mapping /v1/forecast → triton infer; /v1/health → /v2/health
+│   ├── app.py
+│   └── requirements.txt      # fastapi, httpx (NO torch)
+└── compose.yaml              # triton + adapter; GPU reservation (--gpus all)
+```
+For the **custom FastAPI+torch** option the layout collapses to `app.py` (the `/v1/forecast` handler), `models/` (checkpoints), `requirements-gpu.txt` (torch + model libs), and a CUDA-base `Dockerfile`.
+
+**Single-GPU sizing (A6000 48 GB / A100 40/80 GB):**
+
+| Resource | Budget on A6000 (48 GB) | Source / formula |
+|---|---|---|
+| Model weights (full suite) | ~4–6 GB | §10.4.5 |
+| Dynamic-batch KV/activations | low single-digit GB at `max_batch=64` | §10.4.5 |
+| Headroom for fragmentation / spikes | keep ≥ 20% (~10 GB) free | ops rule of thumb |
+| Net free for T1 CuPy working sets (if colocated) | tens of GB | §10.4.5 |
+
+**Concurrency math (how to set `max_batch` / slots):** the server's sustainable concurrency is bounded by both compute and the latency budget. Given measured `forecasts/sec/GPU = R` (the `gens_per_sec_per_gpu` analogue, §10.4.3) and a per-batch service time `t_batch`, **Little's Law** gives in-flight = `R · t_batch`; set the advertised `max_batch` so `t_batch ≤` the foundation-inference budget (≤1.5 s, §10.4.1) and set client `server_slots` = advertised concurrency so the §10.3.4 Semaphore matches. Worked: at `R≈500/s` and `t_batch≈100 ms`, in-flight ≈ 50 series → `max_batch≈64` with one slot is ample; the §10.4.3 example (1,000 series / 60 s ⇒ ~17/s needed) leaves ~30× headroom.
+
+**Deploy checklist:** (1) `--gpus all` + pin CUDA matching the `cupy-cuda12x` line (§10.7); (2) bind a **private** port, reach via VPN/tunnel, set `PREDICT_GPU_URL` + `PREDICT_GPU_TOKEN`; (3) verify `/v1/health` reports `ready:true` and advertised caps; (4) confirm the client logs the tier as "T2 endpoint reachable"; (5) run a warm-up forecast (§10.2A.6) before announcing readiness.
+
 ---
 
 ## 10.6 FALLBACK MATRIX
@@ -417,6 +466,67 @@ Columns = available compute. Rows = capability. Cell = *what runs / what degrade
 Legend: ✅ full · ⚙️ available if optional dep added · ⚠️ degrades gracefully (answer still produced, intervals widen, caveat recorded).
 
 **Degradation principle:** dropping a tier removes *members from the ensemble and speed*, never the *answer*. Missing learned members are surfaced as honest, wider uncertainty — consistent with the master spec's "calibrated honesty, no invented capability."
+
+### 10.6.1 Full fallback matrix — capability × backend → behavior + degradation
+
+The §10.6 table summarises; this is the exhaustive grid. For every capability and every backend column `{no-GPU (T0), CuPy (T1), Remote (T2)}` it states the *exact runtime behavior* and the *degradation* when that backend is the best available. "Degradation" = what the user loses relative to the richest tier that capability can reach.
+
+| Capability | no-GPU (T0) — behavior | CuPy (T1) — behavior | Remote (T2) — behavior | Degradation when only T0 |
+|---|---|---|---|---|
+| GBM/Holt/ARIMA forecast | full result, NumPy, ≤300 ms | identical result; MC paths faster (`S·P·H/f_gpu`) | unchanged (stays local — never a remote job) | none (T0 is full) |
+| Cross-series correlation matrix | `np.corrcoef`/`einsum`, slows as `S²·L` | `cupy.corrcoef`, ~10× (BLAS) | stays T1/T0 | latency only at large `S`; result identical |
+| Pairwise distance matrix | `scipy`/`einsum`, `S²·d` | CuPy einsum+reductions, near-linear speedup | stays T1/T0 | latency only at scale |
+| EnKF covariance / assimilation | `np.cov`, `X@X.T`, ≤500 ms | CuPy `cov`/`@`, ≤100 ms | stays local | latency only; result identical within tol |
+| Batched Monte-Carlo paths | vectorised NumPy, chunked | vectorised CuPy, thousands of paths fast | stays local | fewer paths to hold budget → slightly wider MC bands |
+| Matrix-Profile (motifs/anomalies) | pure NumPy/`stumpy` (CPU), `L²` | STUMPY-cuda path **if** added (⚙️) | stays local | latency only; may cap `L` on slow CPU |
+| HDBSCAN regime clustering | sklearn/`hdbscan` CPU | CPU (no native CuPy) — stays T0 | stays local | latency only at large N |
+| Change-point (PELT/BOCPD) | pure NumPy/SciPy | mostly CPU; vector ops may use xp | stays local | latency only |
+| **Foundation TS (TimesFM/Chronos/Lag-Llama)** | ⚠️ **omit member**, widen intervals, caveat | ⚠️ same (no in-proc torch by design) | ✅ full learned zero-shot member | **loses the learned member entirely** → wider intervals + caveat |
+| **Temporal GNN edges (TGN/TGAT)** | ⚠️ KGIK uses heuristic edges only | ⚠️ same | ✅ learned edges via remote | loses learned edges → heuristic graph only |
+| Error-weighted ensemble | runs over whatever members exist | same | best (most members present) | fewer members → weights over a smaller set |
+| EnbPI conformal intervals | always (wraps any member set) | always | always | none — intervals just reflect available members |
+| Self-improvement / backtest loop | CPU scoring | faster scoring (T1 kernels) | also scores remote members | slower scoring; can't backtest learned members |
+| Capacity / tier reporting | reports "T0 only" | reports "T1 GPU present" | reports "T2 reachable" | accurate either way (no degradation, just honesty) |
+
+**Transition semantics:** the *only* rows that change the **answer's content** (not just speed) are the two ⚠️ learned rows — losing T2 removes the foundation/GNN members, which the ensemble surfaces as wider, calibrated intervals plus a `caveats[]` note. Every other row degrades **latency only**; results match T0 within numerical tolerance (acceptance invariant §10.8.3).
+
+---
+
+## 10.6A CuPy ACCELERATION PLAN (T1)
+
+Concrete plan for which exact operations move to the GPU through `gpu_backend.get_backend().xp`, in priority order of **speedup-per-effort**. Each item is *literally the T0 kernel with `xp` rebound* (§10.2.2) — no second algorithm. Speedups are projections to be replaced by `benchmark()`-measured numbers (§10.4.4 caveat).
+
+| # | Operation | Where today (T0) | T1 form (CuPy) | Why it accelerates | Expected speedup (A6000 vs 1 CPU box, f32) | Effort |
+|---|---|---|---|---|---|---|
+| 1 | **Cross-series correlation matrix** | `np.corrcoef`/`einsum` over S series × L | `cupy.corrcoef`/`einsum`; `backend.asnumpy()` on return | `O(S²·L)` maps to GPU BLAS (GEMM); dense, regular | ~8–15× at S≈10³ | trivial (rebind `xp`) |
+| 2 | **EnKF ensemble covariance** | `np.cov`, `X @ X.T` | `cupy.cov`, `@`; gain solve via `cupysolve` | dense covariance of large ensembles → GEMM; `E·n²+n³` | ~10–20× for large `E`,`n` | trivial |
+| 3 | **Pairwise distance matrices** (regime/motif) | `scipy.spatial.distance` / `einsum` | CuPy `einsum` + reductions (squared-norm expansion) | `O(N²·d)` embarrassingly parallel, no data deps | ~10–25× at N≈10³ | low |
+| 4 | **Batched Monte-Carlo forecast paths** | vectorised NumPy `S·P·H` | vectorised CuPy; `backend.rng(seed)` device RNG | thousands of paths × horizons; pure elementwise+reduce (mirrors `rich_tick`'s `einsum`/`tanh`/`clip`) | ~10–30× (throughput-bound) | low |
+| 5 | **Matrix-Profile distances** (STUMP-style) | NumPy sliding dot / FFT MASS | CuPy FFT/`einsum`, or `stumpy.gpu_stump` | sliding-window dot products → batched GEMM/FFT | ~5–15× (kernel-dependent) | medium (optional dep) |
+
+**Non-targets (stay CPU):** HDBSCAN and PELT/BOCPD have control-flow-heavy, pointer-chasing structure with no mature CuPy path — they stay T0; trying to GPU them is negative ROI. This is reflected as "stays T0" in §10.6.1.
+
+**Validation gate (ties to §10.8.3):** every T1 kernel is diffed against its T0 output within numerical tolerance before it is allowed to serve — the GPU path may *never* diverge from the CPU reference. The `scale_bench` discipline (one warm-up tick, `backend.synchronize()` before timing, f32 arrays) is the template for both correctness diff and honest speedup measurement.
+
+**Activation:** all five light up automatically the instant `get_backend("auto").is_gpu` is true (i.e. `cupy-cuda12x` installed on a CUDA box) — **zero application-code change**, per §10.7 Step 2.
+
+---
+
+## 10.6B COST MODEL (credits / $ per 1k predictions)
+
+Cost is dominated by GPU-hour rental for T2; T0/T1 ride existing CPU/GPU the system already pays for. Model: `$ per 1k predictions = (gpu_$_per_hour / 3600) · (1000 / R) / utilization`, where `R` = sustained forecasts/sec/GPU (§10.4.3) and `utilization` = fraction of the rented hour actually serving. Tiers below assume vast.ai-class spot pricing (illustrative, 2026; **projection** until billed).
+
+| Tier | Backend | GPU | $/GPU-hr (illustrative) | Sustained R (fcst/s) | $ / 1k predictions @ 100% util | @ 30% util | Notes |
+|---|---|---|---|---|---|---|---|
+| **T0** | CPU in-process | none | $0 marginal | n/a (≤300 ms/series CPU) | ~$0 marginal | ~$0 | rides existing FastAPI host; cost = already-paid CPU |
+| **T1** | CuPy, colocated | shared A6000 | $0 marginal* | kernel-bound | ~$0 marginal | ~$0 | *if sharing the existing UE5 box; else = T2 rental |
+| **T2 small** | Chronos-Bolt base | A6000 (48 GB) | ~$0.50 | ~500 | ~$0.0003 | ~$0.0009 | distilled/fast; cheapest learned member |
+| **T2 primary** | TimesFM 2.5 (200 M) | A6000 (48 GB) | ~$0.50 | ~300 | ~$0.0005 | ~$0.0015 | primary zero-shot forecaster |
+| **T2 large/A100** | full suite + GNN | A100 (80 GB) | ~$1.50 | ~600 (bigger batch) | ~$0.0007 | ~$0.0021 | higher R amortises higher hourly rate |
+
+**Credits mapping:** if PATTERN ORACLE bills internal "credits," set `credits_per_1k = ceil(($_per_1k / $_per_credit))` with a per-tier floor of 1 credit so cache hits (which cost nothing, §10.3.5) and T0 answers stay free or near-free. **Cache leverage:** every cache hit (§10.3.5) is **$0** — the forecast cache is the single biggest cost lever; at a modest 50% hit rate the effective $/1k halves across all T2 rows.
+
+**Honest caveat:** all $ figures and `R` are projections (same status as `gens_per_sec_per_gpu`). Replace with billed GPU-hours × `benchmark()`-measured `R` once a real server runs.
 
 ---
 

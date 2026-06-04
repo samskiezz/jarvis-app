@@ -110,6 +110,25 @@ ON TICK now:
 
 **Leakage guard at match time:** `lookup_realized` MUST only read observations with `observed_at >= f.issued_at` and reads the value *as it was at due_at* — never a later-revised value (revisions are tracked separately as a re-score with a `vintage` tag). This prevents scoring against data the model could not possibly have learned from.
 
+#### 1.2.1 Scheduler edge cases (the cases that bite in production)
+- **Data revisions.** Macro/seismic feeds revise past values. The original score uses the value *as known at `due_at`* (`vintage='first'`); a revision triggers an additional `skill_record` with `vintage='revised'` so the model is never penalized for a number that didn't exist when it forecast, yet analysts can still see post-revision skill. The headline `/predict/skill` uses `vintage='first'` (the honest, decision-time score).
+- **Duplicate / late observations.** If multiple observations fall within `MATCH_TOLERANCE` of `due_at`, pick the one with **minimum `|realized_at − due_at|`**; record `match_lag_s` for audit. A late observation arriving after a forecast was already marked `unmatchable` reopens it for a one-time score and emits `oracle_loop_matched_total{cause=late}`.
+- **Idempotency.** The matcher is safe to re-run (crash recovery, manual replay): scoring keys on `forecast_id` with an upsert on `(forecast_id, vintage)`, so replaying a tick never double-counts a forecast in skill aggregates.
+- **Backpressure.** If `due` exceeds a per-tick budget (e.g. after an outage), the matcher processes oldest-`due_at`-first and emits `oracle_loop_matcher_lag_seconds`; A-LOOP pages if lag exceeds `2·tick` (§7.7). It never drops a due forecast — it defers, so no skill data is silently lost.
+- **Clock skew.** `due_at` comparisons use the ingestion store's authoritative time, not the matcher host clock, so a skewed worker can't prematurely mark forecasts `unmatchable`.
+
+#### 1.2.2 Worked scoring record (one forecast, end to end)
+A 90% PI forecast on `FX.EURUSD`, `horizon=1d`, members `{1.0832, 1.0840, 1.0836}`, `ŷ=1.0836`, `[L,U]=[1.0805,1.0867]`, `baseline_point(persistence)=1.0828`; realized `y=1.0851`:
+```
+AE         = |1.0836 − 1.0851| = 0.0015
+SE         = 0.0015² = 2.25e-6
+CRPS_fair  = (mean|x_k−y|) − (1/(2m(m−1)))·Σ|x_k−x_l|       # §1.5.1 energy form
+in_interval= 1   (1.0805 ≤ 1.0851 ≤ 1.0867)
+width      = 0.0062
+SS(persist)= 1 − CRPS_model/CRPS_persistence
+```
+This row is written for `model_id='ensemble'` **and** once per member (§1.4); the per-member rows feed §12's EWMA, the ensemble row feeds `/predict/skill` and the §6.5 trend. `maybe_promote_kgik` (§13.3) then runs because the forecast beat baseline (`SS>0`) and any KGIK driver edge it used gets a confirmation.
+
 ### 1.3 Skill metrics — exact formulas
 
 Let a forecast issue a point `ŷ`, a predictive interval `[L, U]` at miscoverage `α`, a predictive CDF `F` (from `quantiles`), and let the realized value be `y`. Aggregations below are over a scoring window of `n` matched forecasts.
@@ -1008,7 +1027,20 @@ def rollback(H):
 ```
 `COOLDOWN` (default 7 d) prevents an oscillating challenger from thrashing traffic; re-entry to canary requires a *new* `version` (a real change), enforced by the registry (the same `params_hash` cannot re-enter canary within cooldown).
 
-### 11.5 Why staged + statistical (not just "flip and watch")
+### 11.5 Worked canary timeline (one challenger, ramp to promotion)
+Challenger `tsfm 2.6.0-rc1` on `FX.EURUSD`, champion `tsfm 2.5.1` at CRPSS 0.12:
+
+| t | stage | traffic to H | live-slice CRPSS(H) | coverage_err | latency p99 | gate | action |
+|---|---|---|---|---|---|---|---|
+| day 0 | SHADOW | 0% | 0.14 (n=34) | 0.01 | — | eligible (M≥30, +δ, cal OK) | → CANARY 5% |
+| day 1 | 5% | 5% | 0.135 (n=22) | 0.02 | OK | stage pass (≥champ, SLO OK) | → 25% |
+| day 2 | 25% | 25% | 0.138 (n=58) | 0.01 | OK | stage pass | → 50% |
+| day 3 | 50% | 50% | 0.131 (n=110) | 0.03 | OK | stage pass | → 100% |
+| day 4–5 | 100% soak | 100% | 0.133 (n=240) | 0.02 | OK | soak pass | **promote → champion** |
+
+On promotion: `2.6.0-rc1.champion_since = day5`; `2.5.1 → retired, retired_at=day5, superseded_by=2.6.0-rc1`; `metrics_snapshot` = the soak skill. Had day-3 shown `CRPSS(H)=0.10 < champion 0.12` (R1) or `coverage_err=0.09 > 0.08` (R2), the watchdog would have fired ROLLBACK that dwell tick: traffic → 100% champion, `2.6.0-rc1 → shadow`, 7-day cooldown, A-CANARY page.
+
+### 11.7 Why staged + statistical (not just "flip and watch")
 A single flip exposes 100% of users to an unvetted model and gives a *biased* comparison (champion and challenger never scored on the same conditions). Staged canary with deterministic routing gives a **paired, same-period** comparison at each stage and bounds blast radius to `p`% until the evidence (M-sample, δ-margin, calibration, SLO) clears. The δ-margin at the SHADOW gate and the `≥` (no-margin) gate on live slices is deliberate: we demand a *demonstrated* edge before any exposure, then only require *non-inferiority* to keep ramping.
 
 ---
@@ -1179,6 +1211,28 @@ def decay_edge(E):                              # §5.4, run nightly per learned
 | 21 | 0.4966 | 0.397 | **demote** (conf<0.40 AND trials_since_confirm>5) → hypothesis |
 | 35 | 0.3114 | 0.249 | hypothesis |
 | 49 | 0.1954 | 0.156 | **archive** (conf<0.20) |
+
+### 13.6 Driver attribution — what `driver_contribution(E, ŷ)` actually computes
+`strengthen` (§13.3) needs the *signed* contribution of edge `E` to the forecast `ŷ`, to compare its predicted direction against reality. Attribution depends on how `E` entered the forecast:
+- **Lead-lag / feature edge:** `E` contributes a feature `f_E` (the lagged driver value) with a fitted coefficient/SHAP value `φ_E`. `driver_contribution = φ_E · (f_E − f̄_E)` — the signed push relative to the feature's mean. `sign` of this is `pred_dir`.
+- **Granger/CCM screen edge:** `E` gates a member's inclusion; contribution is the member's signed deviation from the baseline, weighted by `E.confidence`.
+- **Motif (Matrix-Profile) edge:** contribution is the signed expected continuation implied by the matched motif.
+The attribution is logged per scored forecast (`forecast_edge_use(forecast_id, edge_id, contribution)`) so an edge's confirmation history is fully auditable — you can replay *why* an edge gained or lost confidence, not just that it did.
+
+### 5.5 Worked refutation trace (an edge that stops working)
+A once-good edge `MACRO.cpi →(lead_lag@+1m) FX.EURUSD`, currently `learned=True`, confidence 0.75, `confirmations=6, trials=8`. The macro regime shifts and the lead-lag breaks; the next forecasts that rely on it predict the wrong direction:
+
+| event | confirmed? | trials | confirmations | confidence=(c+1)/(t+2) | learned? | trials_since_confirm |
+|---|---|---|---|---|---|---|
+| start | — | 8 | 6 | 7/10 = 0.700 | yes | 0 |
+| score | no | 9 | 6 | 7/11 = 0.636 | yes | 1 |
+| score | no | 10 | 6 | 7/12 = 0.583 | yes | 2 |
+| score | no | 12 | 6 | 7/14 = 0.500 | yes | 4 |
+| score | no | 14 | 6 | 7/16 = 0.4375 | yes | 6 |
+| score | no | 15 | 6 | 7/17 = 0.412 | yes | 7 |
+| score | no | 16 | 6 | 7/18 = 0.389 | **demote** (conf<0.40 AND tsc>5) → hypothesis | 8 |
+
+The Laplace rule alone (no time-decay needed here) refutes the edge purely on **fresh contradicting evidence**: each failed trial pulls confidence down toward the empirical rate `6/16=0.375`. Time-decay (§13.5) handles the *different* failure mode — an edge that goes silent (no trials at all) — while this trace handles an edge that is actively *wrong*. Both routes converge on demotion/archival, so the graph self-corrects whether an edge fails loudly or fades quietly.
 
 ---
 
