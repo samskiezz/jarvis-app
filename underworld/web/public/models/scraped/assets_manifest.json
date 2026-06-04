@@ -9322,5 +9322,22 @@
     "epoch": "any",
     "name": "Marsh Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:mesa_rock": {
+    "prompt": "a flat-topped mesa rock formation, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ed3c2704-e355-42e3-97dd-4d67dbb47c59",
+    "path": "/models/generated/tripo/mesa_rock.glb",
+    "bytes": 15289660,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ed3c2704-e355-42e3-97dd-4d67dbb47c59/tripo_pbr_model_ed3c2704-e355-42e3-97dd-4d67dbb47c59.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZWQzYzI3MDQtZTM1NS00MmUzLTk3ZGQtNGQ2N2RiYjQ3YzU5L3RyaXBvX3Bicl9tb2RlbF9lZDNjMjcwNC1lMzU1LTQyZTMtOTdkZC00ZDY3ZGJiNDdjNTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=seDeR7fttB08aQEChueqS8XuzP4PSnWiZh6YzSby-g3GPMOeOq5LD-1JEChEx5XijjtfmeiEwnEBaRH8upvTEV17Id93IdM2YJDWBJqu9kSlyL7dJM2J6GI1TEqQJCAXvIOMtub96byKVvA-ldwzk7lrcAkVLy2Gl52VvFGvVGUPcqd0gsxot9IxPFvFbpQXFa-qcvgtOI4zrgystM-CnZUqkPAaxdDubqcSCDM~ix71suBuRZ2oFSrvY5lmuJywgiAFBVfkEP0Z0UlDikw5zJiN7y6qB7Lcfu4t0F1CVvcL-kDKM95wQSP5yM070LaYCSg1lZwSTJ1aRirLKn2zPg__",
+    "asset_id": "mesa_rock",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Mesa Rock",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
