@@ -7,13 +7,13 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 |---|--------|------|-------|
 | 1 | ☐ | eslint.config.js | 60 |
 | 2 | ☐ | forge/__init__.py | 1 |
-| 3 | ☐ | forge/approvals.py | 118 |
-| 4 | ☐ | forge/forge_agent.py | 462 |
-| 5 | ☐ | forge/notify.py | 141 |
+| 3 | ☑ | forge/approvals.py | 118 |
+| 4 | ☑ | forge/forge_agent.py | 462 |
+| 5 | ☑ | forge/notify.py | 141 |
 | 6 | ☐ | forge/tests/__init__.py | 0 |
 | 7 | ☐ | forge/tests/test_forge.py | 137 |
 | 8 | ☐ | forge/tests/test_whatsapp.py | 133 |
-| 9 | ☐ | forge/webhook.py | 141 |
+| 9 | ☑ | forge/webhook.py | 141 |
 | 10 | ☐ | postcss.config.js | 6 |
 | 11 | ☑ | server/__init__.py | 0 |
 | 12 | ☑ | server/auth.py | 31 |
@@ -34,7 +34,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 27 | ☑ | server/scripts/__init__.py | 0 |
 | 28 | ☑ | server/scripts/accuracy_scorecard.py | 87 |
 | 29 | ☑ | server/scripts/forward_test.py | 179 |
-| 30 | ☐ | server/scripts/horizon_sweep.py | 233 |
+| 30 | ☑ | server/scripts/horizon_sweep.py | 233 |
 | 31 | ☑ | server/scripts/live_5min.py | 107 |
 | 32 | ☑ | server/scripts/predict_5min.py | 124 |
 | 33 | ☑ | server/scripts/train_backtest.py | 81 |
@@ -738,3 +738,8 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/scripts/train_sp500.py` — pooled S&P500 CLI: fetch constituents (Wikipedia) + per-name Yahoo throttled, build_dataset/train_global/evaluate_global, prints pooled OOS scorecard (level-acc vs persist, dir-acc, coverage, skill) + per-sector table + explicit honesty note ~50-55% not 99% (L149)
 - `server/tests/test_history_lake.py` — offline P0 tests: init creates 6 tables (L43)+idempotent, observation roundtrip+upsert idempotent (L58/69), since/limit (L90), score_due abs_err+in_interval+skill-vs-baseline exact (L101), out-of-interval (L130), resolver-None skip (L152), score idempotent (L162), skill_summary aggregate+domain filter (L185), feed_run audit (L218)
 - `server/tests/test_forward_test.py` — offline closed-loop tests: issue_forecast persists row+drivers (L51), score_due writes outcome+skill exact abs_err+in_interval (L79), out-of-interval (L121), resolve_value None beyond series — never fabricates (L142), simulate produces non-empty scorecard matching skill_summary (L154)
+- `forge/forge_agent.py` — APEX Forge autonomous app-evolution agent: scans source (sharded L106), researches (DDG/arXiv/GitHub L141-167), Ollama improves files (L184), is_safe_replacement guards refusal/truncation/balance (L221), test-gated apply on forge/* branch NEVER main (L378-423), WhatsApp-approval mode (L359), FileLock parallel-safe (L289); dry-run default
+- `forge/approvals.py` — sqlite ApprovalStore for pending changes (PENDING/APPROVED/REJECTED/LANDED/FAILED); create/get/list/set_status (L45-117)
+- `forge/webhook.py` — FastAPI WhatsApp webhook: verify handshake (L92), inbound parses APPROVE/REJECT -> land_change merges branch->base+push (L28) or reject_change deletes branch (L64); /forge/approvals list
+- `forge/notify.py` — WhatsApp notifier: build_request_text diff preview (L31), parse_decision approve/reject+id (L49), Twilio/Meta/Console providers (L72-141), from_env fail-safe to console
+- `server/scripts/horizon_sweep.py` — multi-horizon walk-forward sweep MLForecaster: horizons [1,3,7,30,90,180,365]d x basket; per-(asset,horizon) level-acc/within2/5/dir/coverage/skill w/ assert no-leakage (L103/128); horizon-summary decay curve; honest note dir ~50-55% flat (L227)
