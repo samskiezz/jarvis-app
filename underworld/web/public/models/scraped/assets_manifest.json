@@ -11294,5 +11294,22 @@
     "epoch": "any",
     "name": "Barrel Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:campfire_pit": {
+    "prompt": "a stone-ringed campfire pit with logs, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fd19c5c5-90b6-4b7a-a5f9-63f4a2444bde",
+    "path": "/models/generated/tripo/campfire_pit.glb",
+    "bytes": 14929040,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/fd19c5c5-90b6-4b7a-a5f9-63f4a2444bde/tripo_pbr_model_fd19c5c5-90b6-4b7a-a5f9-63f4a2444bde.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZmQxOWM1YzUtOTBiNi00YjdhLWE1ZjktNjNmNGEyNDQ0YmRlL3RyaXBvX3Bicl9tb2RlbF9mZDE5YzVjNS05MGI2LTRiN2EtYTVmOS02M2Y0YTI0NDRiZGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=vG09C9V~p~TMOk3uqyrEqcKOjdUg8d5BmLg7VI5SSgv5tJiipa~2mBwEVz85GGVy3YjxGiBGotcAs0Rp0NweQkYi9jJV9OXv3qgGhB9057CHINop-yXULHtkzNLl2gNbHlLd6zaZizBTTY9FneEpPYoki8yOtLr--kxezR3kHhMyyR5OnjeghJELXUyu7A0NRNuQ6WTUmMHalRrS~u7ilL02IEQUh2jDjwX98W0EgRYkNRV32stzzVDvvdjFzjRADQ1lAL5ZsiQTtrdUcfvCCrwsqKjQe8kCcQBWGeBl-Twsid~QdYjU~gEmk~A9Pa7gkjF5M89HSYK39tEAfhjpGw__",
+    "asset_id": "campfire_pit",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "stone",
+    "name": "Campfire Pit",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
