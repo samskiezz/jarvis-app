@@ -10529,5 +10529,22 @@
     "epoch": "quantum",
     "name": "Electric Car",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:farm_tractor": {
+    "prompt": "a red farm tractor with big rear wheels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "eef2e8f0-5d26-4386-9bc0-bf74201cf93c",
+    "path": "/models/generated/tripo/farm_tractor.glb",
+    "bytes": 15129112,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/eef2e8f0-5d26-4386-9bc0-bf74201cf93c/tripo_pbr_model_eef2e8f0-5d26-4386-9bc0-bf74201cf93c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZWVmMmU4ZjAtNWQyNi00Mzg2LTliYzAtYmY3NDIwMWNmOTNjL3RyaXBvX3Bicl9tb2RlbF9lZWYyZThmMC01ZDI2LTQzODYtOWJjMC1iZjc0MjAxY2Y5M2MuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=g6VXadesnmLQWxa1hgoBgQkNF-c6dZc0TTBPUhxGN-kfLXBqejSXdRk2vLa7Ahmzf5MGZEsvuzb71Y2Hkad1vpZo4BVJ0Ev0VtfUDO41OhEvtAXbCwL1ze5O2P9EQCVvqHyc6WpS6OKbBosEN-6QcOhipsKWt7ono16qR8qBVaW1Tc3keX0RPEADU-UB4Bb29U-zane8tXJVH6zlLzd3mgEidfLofUc5jg5qdf2XLzmPWMk74nlqNz7n88tqjVisURJ0RE5hI8O2rV6L~b57txpe1wwbEy5jVvz6G6T0uNurFTAEd~Oa6rCTEbyajOkyCE0jgQOMmNugLEE6e8Gj2w__",
+    "asset_id": "farm_tractor",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Farm Tractor",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
