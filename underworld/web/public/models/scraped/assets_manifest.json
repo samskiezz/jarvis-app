@@ -10988,5 +10988,22 @@
     "epoch": "industrial",
     "name": "Field Cannon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:flint_handaxe": {
+    "prompt": "a knapped flint hand-axe, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2acd01a5-a6be-4e1b-9c1e-e5e1433d0134",
+    "path": "/models/generated/tripo/flint_handaxe.glb",
+    "bytes": 6394348,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/2acd01a5-a6be-4e1b-9c1e-e5e1433d0134/tripo_pbr_model_2acd01a5-a6be-4e1b-9c1e-e5e1433d0134.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMmFjZDAxYTUtYTZiZS00ZTFiLTljMWUtZTVlMTQzM2QwMTM0L3RyaXBvX3Bicl9tb2RlbF8yYWNkMDFhNS1hNmJlLTRlMWItOWMxZS1lNWUxNDMzZDAxMzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=SVJL5~KoiQj-U5mC8EDrVkCLG-adyNKcKt0vI650J~IxLjg-YBD2xwqyj9oC2IrB0-FrrNRswNzeHcJ1LdpJ4Dk3zpCI0pyMrZnLrYtbnapXOyBpN0LC01yh2~FB7msOhpDa0FFMKyZ8PemuPYSOt~EdDJFe2Ekg4-50EHzAXqWtC8e6swLr3MIP1jprc-UuL4weVYxJTpIGDH6ar-HdbrwOHqQM48yUIRXuZorMu5aaM6VIMLjPbppDRmpaVr5~Np-fMARBcbByR0ySHrQpyuxoLy-DUZif9anyeAyIabVp~ZstyoB5Z9j-rK9x7E2yjaODRhvP-NsUDXxnoXzYfg__",
+    "asset_id": "flint_handaxe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "stone",
+    "name": "Flint Handaxe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
