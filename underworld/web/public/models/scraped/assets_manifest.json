@@ -9696,5 +9696,22 @@
     "epoch": "any",
     "name": "Road Y Fork",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:rope_footbridge": {
+    "prompt": "a swaying rope-and-plank footbridge, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ce6b9ad7-fc2c-40ed-bebf-d4fb2d956e5b",
+    "path": "/models/generated/tripo/rope_footbridge.glb",
+    "bytes": 10837112,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ce6b9ad7-fc2c-40ed-bebf-d4fb2d956e5b/tripo_pbr_model_ce6b9ad7-fc2c-40ed-bebf-d4fb2d956e5b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvY2U2YjlhZDctZmMyYy00MGVkLWJlYmYtZDRmYjJkOTU2ZTViL3RyaXBvX3Bicl9tb2RlbF9jZTZiOWFkNy1mYzJjLTQwZWQtYmViZi1kNGZiMmQ5NTZlNWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=C0~LkD4nI4SfIDj~lXZ5Dcv2F-sDnNcFpm~-Q3gdx~nG19LpV-TNAritQPAL8btkNSN5YOlsJARHJwZd-O4TrmojWecBE7EIoUj183Mq9f2OKQbQyzsJ4XvczJdPjrUNdkeJ-L0YlHeHR2OC1QRcVD1xWinbvM7eM~avPauqNEP64oIUExQhZz1DywiICjRyleI2nQCUa76ebUnCAlRcCHQiqvBtq~LYZls2k-qdb9pKNZS1acfzA6F7UYp-eeU6XD13HZPr0Tbr06g1UQo9TqkJaGpob4jKJTqN3jcL31WfYlQAtY~4RgUOeDwIntaFMHUibhDOEcH71fUTPET9Nw__",
+    "asset_id": "rope_footbridge",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Rope Footbridge",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
