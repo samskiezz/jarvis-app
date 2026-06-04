@@ -9611,5 +9611,22 @@
     "epoch": "any",
     "name": "River Delta",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:river_fork": {
+    "prompt": "a forking river confluence water tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6819e71d-c67f-453e-a77c-1fe88f5a2dec",
+    "path": "/models/generated/tripo/river_fork.glb",
+    "bytes": 8862416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/6819e71d-c67f-453e-a77c-1fe88f5a2dec/tripo_pbr_model_6819e71d-c67f-453e-a77c-1fe88f5a2dec.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNjgxOWU3MWQtYzY3Zi00NTNlLWE3N2MtMWZlODhmNWEyZGVjL3RyaXBvX3Bicl9tb2RlbF82ODE5ZTcxZC1jNjdmLTQ1M2UtYTc3Yy0xZmU4OGY1YTJkZWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=YIbW0T8kG4mXBLhqFGTU7qHGi-rreRr8QHES60~RFvVcyXoiBO78xN6UWL4Zzem3275Jtj3jQKpCV~gUOqopQkdKC8CzE3rBaCxFjJubrNkeDAUgWgKWXvHT7FTg0mABkcroKRWp445sR6q1r8BYbWJw9kmcpZ0bgLJNqIPC8hKpKrOqe9KWz~LaJOH9hmhPMDT9uWxQBRre4fPz5KypNZpzButH6eZV8ZlUjkznJZ-7SgP2RI2xsvWTG5E-ntgLnuVR0p2xgZ0GhQ-RqQ-702yy9u235n9yHQ43QWVEhEcIb0PZuKoSzcCuFRxq7xbcE5ptT1v5FyxNiH~kPj-Hiw__",
+    "asset_id": "river_fork",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "River Fork",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
