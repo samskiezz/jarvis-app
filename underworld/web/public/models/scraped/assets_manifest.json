@@ -10597,5 +10597,22 @@
     "epoch": "industrial",
     "name": "Hot Air Balloon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hovercar": {
+    "prompt": "a sleek hovering anti-gravity car with glowing thrusters, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "44043e98-db1b-4758-bdd9-6fa6a6ae38c0",
+    "path": "/models/generated/tripo/hovercar.glb",
+    "bytes": 10752084,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/44043e98-db1b-4758-bdd9-6fa6a6ae38c0/tripo_pbr_model_44043e98-db1b-4758-bdd9-6fa6a6ae38c0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNDQwNDNlOTgtZGIxYi00NzU4LWJkZDktNmZhNmE2YWUzOGMwL3RyaXBvX3Bicl9tb2RlbF80NDA0M2U5OC1kYjFiLTQ3NTgtYmRkOS02ZmE2YTZhZTM4YzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=mnuT~REPyg7je91S0e4g9WxyJ0rrRz-3WRt806VNsltFaPc1mvyYlssZ4fASKGIxu0m4GQE7ZVA-uV~LR9ApRvQgJ7Xw8yZsdAWHea7DR2hqZWnsaZKmEKMJIPN9krItjqj2u3l-TU1iurKIc944nTjR5Z7I-9xzpS8t8-scUIQCFk4Vya4u8Lb3rM54N8PROmWiCmP42nzypmNx4dfUumTg77BdNLobCSmsdxGEr8yxo4gE8RF5emsVXmpVoC0p08QgwUPfDleYeu1dhmW0ktCps56f~dbYv17ZjSe8zUgXYdDa67~zq9~8nVzj0iam7jQQ~5mJIm4TP-2wEUuXeQ__",
+    "asset_id": "hovercar",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "quantum",
+    "name": "Hovercar",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
