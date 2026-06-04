@@ -11498,5 +11498,22 @@
     "epoch": "bronze",
     "name": "Market Stall Awning",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:milestone_marker": {
+    "prompt": "a carved stone distance milestone marker, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7d634849-a6a2-407b-a0f8-23b7fbc7ef90",
+    "path": "/models/generated/tripo/milestone_marker.glb",
+    "bytes": 10803128,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/7d634849-a6a2-407b-a0f8-23b7fbc7ef90/tripo_pbr_model_7d634849-a6a2-407b-a0f8-23b7fbc7ef90.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvN2Q2MzQ4NDktYTZhMi00MDdiLWEwZjgtMjNiN2ZiYzdlZjkwL3RyaXBvX3Bicl9tb2RlbF83ZDYzNDg0OS1hNmEyLTQwN2ItYTBmOC0yM2I3ZmJjN2VmOTAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=u5j0LYpSmFRnYIGWXtSr1geMACRzVkIiqcGpBVqf0qIyGtphcSQ7IE3o19CBW7NcCq0Nh1pDirZuJ2EHqysDhQ9IkW2vCgEwY9QvSxSh2A441KMpTURoyFhfHMU~cnItcjdOcshkGlGm4WUwJY9hS27FI17RBgV4stM3Bi5ELqtukNqZ57SFTqbBQ8voHw4O5Q~uekfpjgRshlDGeTsbwccMtPVzfcTW1jfoN-OZLk~HyrjU5e~RNmNvN5yxE7aAKEb9bDYxWdgELcDuhcL4F3yt5892LCOAA0OvCNsK7e691MQxjoi07RZKkmVng0rzI~oVB-bxzBGFrjLkbEkGpg__",
+    "asset_id": "milestone_marker",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Milestone Marker",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
