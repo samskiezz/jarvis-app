@@ -50,7 +50,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 43 | ☑ | server/services/history_lake.py | 622 |
 | 44 | ☑ | server/services/ingestion.py | 193 |
 | 45 | ☑ | server/services/live_intel.py | 146 |
-| 46 | ☐ | server/services/oracle_model.py | 654 |
+| 46 | ☑ | server/services/oracle_model.py | 654 |
 | 47 | ☐ | server/services/prediction.py | 1187 |
 | 48 | ☐ | server/services/scrapers.py | 185 |
 | 49 | ☑ | server/services/simulation.py | 783 |
@@ -721,3 +721,4 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/services/forecaster.py` — ShortHorizonForecaster: trained ridge (closed-form L2, L195) on lagged log-return features (L105) + GBM member, error-weighted ensemble (L361 weight∝1/err^gamma), EnbPI conformal interval (L532 half-width=conf-quantile of held-out abs residuals); prob_up blends GBM MC + logistic (L541); honest insufficient_data
 - `server/services/forward_test.py` — live closed loop: issue_forecast persists w/ resolve_ts (L125), resolve_value fetches realized AT/AFTER target — never fabricates (L239), score_due delegates to history_lake.score_due_forecasts + directional rollup (L279/334), forward_test_loop opt-in (L397), simulate_forward_test deterministic replay no-leakage (L476)
 - `server/services/train_sp500.py` — pooled cross-sectional S&P500: build_dataset pools causal feature rows across tickers w/ strict GLOBAL time-split no-leakage (L226), train_global one HistGBR point+quantile members (L260), evaluate_global honest level/dir/coverage/skill + per-sector (L330); explicit honesty docstring ~50% not 99% (L14)
+- `server/services/oracle_model.py` — OracleModel multi-head: direction HistGBClassifier+isotonic calib (L279/358), volatility HistGBR |fwd return| (L384), return via MLForecaster; OracleDataset pooled leakage-safe global time-sort (L96); purged_time_folds embargoed CV (L192); hyperparam search L_PARAM_GRID (L220/333); conviction=|p-0.5|*2 + act threshold (L425/431); online update rolling refit (L496); save/load joblib (L528); evaluate honest dir-acc@conviction + vol R2 + Brier (L591)
