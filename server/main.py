@@ -11,15 +11,18 @@ from .routes import aip_tools as aip_tools_routes
 from .routes import auth as auth_routes
 from .routes import datasets as datasets_routes
 from .routes import bridge as bridge_routes
+from .routes import chat_predict as chat_predict_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
 from .routes import graph as graph_routes
+from .routes import graph_time as graph_time_routes
 from .routes import labs as labs_routes
 from .routes import functions as functions_routes
 from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
 from .routes import history as history_routes
+from .routes import investigations as investigations_routes
 from .routes import ontology as ontology_routes
 from .routes import ontology_ext as ontology_ext_routes
 from .routes import ops as ops_routes
@@ -27,6 +30,7 @@ from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
 from .routes import reports as reports_routes
 from .routes import scenario as scenario_routes
+from .routes import sci_domains as sci_domains_routes
 from .routes import science as science_routes
 from .routes import search as search_routes
 from .routes import search_plus as search_plus_routes
@@ -118,6 +122,10 @@ def create_app() -> FastAPI:
     app.include_router(search_plus_routes.router)
     app.include_router(ontology_ext_routes.router)
     app.include_router(connectors_routes.router)
+    app.include_router(sci_domains_routes.router)
+    app.include_router(graph_time_routes.router)
+    app.include_router(investigations_routes.router)
+    app.include_router(chat_predict_routes.router)
 
     @app.get("/")
     async def root():

@@ -182,6 +182,9 @@ export const PAGES = [
   { name: "ObjectSets", label: "Object Sets", icon: "📦", group: "platform",
     aliases: ["object sets", "bulk", "export", "import", "saved filter", "ontology ext"],
     component: P(() => import("@/pages/ObjectSets")) },
+  { name: "ScienceConsoles", label: "Science Consoles", icon: "🔬", group: "platform",
+    aliases: ["sonar","submarine","meteor","asteroid","buoy","ocean","air quality","ppm","flight","aerospace","rf","spectrum","frequency","neuron","neural","seismic","satellite","cluster","epidemic","quantum","materials","trajectory","science"],
+    component: P(() => import("@/pages/ScienceConsoles")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
