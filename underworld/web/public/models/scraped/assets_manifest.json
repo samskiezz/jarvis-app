@@ -11090,5 +11090,22 @@
     "epoch": "iron",
     "name": "Iron Shortsword",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:kite_shield": {
+    "prompt": "a painted heraldic kite shield, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f4bbd27f-c236-457b-8c72-6f3d498afe20",
+    "path": "/models/generated/tripo/kite_shield.glb",
+    "bytes": 10699132,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f4bbd27f-c236-457b-8c72-6f3d498afe20/tripo_pbr_model_f4bbd27f-c236-457b-8c72-6f3d498afe20.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjRiYmQyN2YtYzIzNi00NTdiLThjNzItNmYzZDQ5OGFmZTIwL3RyaXBvX3Bicl9tb2RlbF9mNGJiZDI3Zi1jMjM2LTQ1N2ItOGM3Mi02ZjNkNDk4YWZlMjAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=q7WZmoaGm6BKLtRnJlKF9KGMELCp86-6wdFHrVA~8UG6SnCV9lYdtgZI3xJJWpgzW7Z597H-QuPGv5J2zOseCwprYbC~EkE0242hwLjtpPUmEcH6efDqsuLri7Kxd6Asz4hUXT6qex3zqRBnrEauXI0eoipArLFK63tlZPUHMsADEX7OhKAMCWEhoLpWEML~E8iUXybP8P1lE6N9jGURpc4zOzuXdtvFDJX2t-fDb5uBBbmOCqiOeKy9lP3WWX6frZBlcPc3i0L21K6~h5K36DFSDAl1kGeW7FgumJxjuM~0gtPr80Ge6QECoQbs76wXn68ODDsvA37~ZvCXwQDynw__",
+    "asset_id": "kite_shield",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Kite Shield",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
