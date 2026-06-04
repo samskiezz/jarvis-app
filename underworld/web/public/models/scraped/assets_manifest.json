@@ -10223,5 +10223,22 @@
     "epoch": "any",
     "name": "Rose Bush",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sunflower_patch": {
+    "prompt": "a patch of tall bright sunflowers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b6ef562f-0958-4258-be07-dc11eba60144",
+    "path": "/models/generated/tripo/sunflower_patch.glb",
+    "bytes": 15401032,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/b6ef562f-0958-4258-be07-dc11eba60144/tripo_pbr_model_b6ef562f-0958-4258-be07-dc11eba60144.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYjZlZjU2MmYtMDk1OC00MjU4LWJlMDctZGMxMWViYTYwMTQ0L3RyaXBvX3Bicl9tb2RlbF9iNmVmNTYyZi0wOTU4LTQyNTgtYmUwNy1kYzExZWJhNjAxNDQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=qEgpDP8jYOuZ5afXRf0iD-WzbxIT4sAj7s~93dthoJMHDtorDvZhJc0mjm4x09A-dH7L2XZOxChM6p-wcn~FNWX5Q~AFOxLwmpxdNoYz~0sjo4rTj9bHyUjRzP78DopeafZYnhmYDDgZJdTaRol9WdtrEacef1E25jg~EwonRiQqlQhiKv0BE8VSyjtEEObpti9OqjrG3WqXMuMbGq-S~KTKrYGi5723nBrg3m5eB3X~bleVzZuwpNexbQOATfrLV-t9YHYLeiBNeJz7QKoDJR-73GUVStj6GKt5N8z5D9XaXTQi7FV8fhRWNRZ6MvNfQ1OsNKLbWPqwrMoEiI00VA__",
+    "asset_id": "sunflower_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Sunflower Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
