@@ -9526,5 +9526,22 @@
     "epoch": "industrial",
     "name": "Railway Switch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ramp_segment": {
+    "prompt": "a modular sloped ramp segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6c81946d-ae16-4769-bb04-af72408c43d2",
+    "path": "/models/generated/tripo/ramp_segment.glb",
+    "bytes": 9929332,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/6c81946d-ae16-4769-bb04-af72408c43d2/tripo_pbr_model_6c81946d-ae16-4769-bb04-af72408c43d2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNmM4MTk0NmQtYWUxNi00NzY5LWJiMDQtYWY3MjQwOGM0M2QyL3RyaXBvX3Bicl9tb2RlbF82YzgxOTQ2ZC1hZTE2LTQ3NjktYmIwNC1hZjcyNDA4YzQzZDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=vTQDo2DR4SyjcMgZnT8F5lKXME1aTMGISjFQsT4M1ygqpMV8yqs9xcHZ4VXP4LRxc24q4WaKW6lY7JvAHv0eiF9-Q55UMhGa6JlTq69KzLau5uXxk8AJLnjCYbFenC-P7SGcK8wC76nnWXA97vS2qaoe2T5TpmdBIQrtsbJxK~B-V5Ve0VrUHG7do8oPUi2y9~5PTJX~uePs3IP86j3worK9Lo1xam0rf9DX3lqu2c6s0esTZOkDpk~uxEPQQdM7bToTPqc7Gk3GwIU2w57eWS39XpCAhp0QVW2Tlqcfsi8k4DpqViu8Z9GqfZA0-8MJl5aO4B0zX38kr8rOr5Ws4A__",
+    "asset_id": "ramp_segment",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Ramp Segment",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
