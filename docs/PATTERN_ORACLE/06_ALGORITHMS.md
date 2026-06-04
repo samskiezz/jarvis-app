@@ -2576,6 +2576,12 @@ def decode_value(logits, bins):
 | 21 | Ensemble Kalman Filter | FORECAST CORE assimilation leg | NEW + `epidemic_network.py` ensembles, `gpu_backend.py` | doi.org/10.1007/s10236-003-0036-9 |
 | 22 | JEPA | LATENT WORLD MODEL (latent features, design-level) | NEW + `gpu_backend.py`, A4 contract | arxiv.org/abs/2301.08243 |
 | 23 | DreamerV3 RSSM | LATENT WORLD MODEL / planning (interface-only) | NEW + `epidemic_network.py`, `temporal_nodes.counterfactual_fork` | arxiv.org/abs/2301.04104 |
+| 16b | Transfer Entropy (KSG) | PATTERN-DISCOVERY info-theoretic directed coupling | NEW (numpy+scipy, KSG) | doi.org/10.1103/PhysRevLett.85.461 |
+| 18b | EWMA / EWMA-variance | FORECAST CORE recent-error tracker + volatility | NEW (numpy / pandas `.ewm`) | RiskMetrics TD (1996); Roberts 1959 |
+| 19b | Quantile Regression / Quantile GBM | FORECAST CORE native conditional quantiles | NEW (sklearn / statsmodels `quantreg`) | doi.org/10.2307/1913643 |
+| 21b | STL decomposition (loess) | Preprocessing: trend/seasonal/remainder split | NEW (statsmodels `STL`) | wessa.net/download/stl.pdf |
+
+**New algorithms added in this depth milestone:** E16b Transfer Entropy (third causal-screen leg, info-theoretic), F18b EWMA/EWMA-variance (recent-error + volatility engine), F19b Quantile Regression/Quantile GBM (native conditional quantiles), G21b STL decomposition (seasonal-trend preprocessing). The **DBSCAN vs HDBSCAN tradeoff** table is embedded in C9.+. Total algorithms now **27** (23 original + 4 new).
 
 ---
 
