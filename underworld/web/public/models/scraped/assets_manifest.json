@@ -9067,5 +9067,22 @@
     "epoch": "iron",
     "name": "Colonnade Segment",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:coral_reef_chunk": {
+    "prompt": "a colourful coral reef rock chunk, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1e8d649b-903d-4158-bd41-0efb65b87aa9",
+    "path": "/models/generated/tripo/coral_reef_chunk.glb",
+    "bytes": 15530000,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/1e8d649b-903d-4158-bd41-0efb65b87aa9/tripo_pbr_model_1e8d649b-903d-4158-bd41-0efb65b87aa9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMWU4ZDY0OWItOTAzZC00MTU4LWJkNDEtMGVmYjY1Yjg3YWE5L3RyaXBvX3Bicl9tb2RlbF8xZThkNjQ5Yi05MDNkLTQxNTgtYmQ0MS0wZWZiNjViODdhYTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=DzWH~CO-pI82~kGYnsPsvuDdB9U8JdAgGKOVEMZs05qFV62BMZ-esBzjyWfWYm14dQpyl47i6DD9HU~kJac0zX96Z54ciqWiucC3DjG7oKqolh-fgWNRLjTfi54DcEnaumHQY1Drpn6qqIzNLQLf5p2ZOonJMxVsNEv3myo~fJ1bMB2MAIg~TtMXYMWYWBSYerA0xnvCdHakYDCcgulIjcuT3F15-lCPkYCz60nBsYH45WMEB7yFE9s55LZ-iuZ6o5w7XCW4jNxmqNUiWLn02vj3pw7XXZdGem96nj5Tpcg6Mag71tb0X4oGyPTNnaywVrW9HEnwA~9w8oW1Cc0Snw__",
+    "asset_id": "coral_reef_chunk",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Coral Reef Chunk",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
