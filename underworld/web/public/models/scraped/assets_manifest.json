@@ -10614,5 +10614,22 @@
     "epoch": "quantum",
     "name": "Hovercar",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:maglev_pod": {
+    "prompt": "a streamlined magnetic-levitation transit pod, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "872c77ff-a1c5-47c1-b356-e7e51162422e",
+    "path": "/models/generated/tripo/maglev_pod.glb",
+    "bytes": 13420408,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/872c77ff-a1c5-47c1-b356-e7e51162422e/tripo_pbr_model_872c77ff-a1c5-47c1-b356-e7e51162422e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODcyYzc3ZmYtYTFjNS00N2MxLWIzNTYtZTdlNTExNjI0MjJlL3RyaXBvX3Bicl9tb2RlbF84NzJjNzdmZi1hMWM1LTQ3YzEtYjM1Ni1lN2U1MTE2MjQyMmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=diCmo4gLY7kSCc-WdIo39L-TaQrbS-Ku4hh0razIizvd8xECPy9UVhkOwcy-3jFr~~iNSTulg1rf653zybkbNEuPo9n348hjhwLdBdltz2AR5YWQAyPFf6~KmzaDtokZtWZZmgOHL2H6WuWWkfm1MPbcuLoJuqsG8XFyGZNpy9Pr5lfYebDMNmPnYRtf79GilFuob4~3iltTAfO~5ryNVKgKoVhp~-dLYhC7JcX5TOAElnB3Fw3TdQfk84riMn4gR9yGmzPtCF457t8zwr5vMLPke8dl1G1Bx9RnXOa3mntu3SyQfp9cnrsO9sWaju9bsqNCOUEcgxHm-UDFnkLPBA__",
+    "asset_id": "maglev_pod",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "quantum",
+    "name": "Maglev Pod",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
