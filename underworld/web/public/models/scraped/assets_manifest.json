@@ -10121,5 +10121,22 @@
     "epoch": "any",
     "name": "Giant Fern",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ivy_wall_patch": {
+    "prompt": "a patch of climbing ivy on a wall, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "1073a9aa-be0d-4403-8648-c4f9027b0480",
+    "path": "/models/generated/tripo/ivy_wall_patch.glb",
+    "bytes": 13749880,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/1073a9aa-be0d-4403-8648-c4f9027b0480/tripo_pbr_model_1073a9aa-be0d-4403-8648-c4f9027b0480.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMTA3M2E5YWEtYmUwZC00NDAzLTg2NDgtYzRmOTAyN2IwNDgwL3RyaXBvX3Bicl9tb2RlbF8xMDczYTlhYS1iZTBkLTQ0MDMtODY0OC1jNGY5MDI3YjA0ODAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VrqmUfTRwC2G0pVmm7snmKVRDY4vQuTOLYL0BxpyQ7GwtZiIepD7KCcfiSa1oDJv0~7Viz4kxWm2eJ3WJIuGuYbTx9tH1-I1f~ZHAmgvMpqOeb-PaUP5Qv5mL3K8all9OniIGqY4iNiMBhRzKaI2iMD-7cPQCn2Q2bckWSqsApFfhtAwuesxEYRfOhDs-KFZqDz7ybkb8auVMbSeyIW-PmM6QkhypA-4v2~oJgYymViGRqjf5oPKtY0hJSQ-nZ-BrgtrcTyM~pUaR104FDNkd58q4iAGUpZKi8CTNhkt7LPnX5IK9c3Wn02GZuT7n7z1LfYxYY78-7D64M8nNUXU9Q__",
+    "asset_id": "ivy_wall_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Ivy Wall Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
