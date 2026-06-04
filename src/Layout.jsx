@@ -18,6 +18,7 @@ import { RISK_SIGNALS } from "@/domain/risk";
 import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 import DomainRail from "@/components/DomainRail";
 import CommandPalette from "@/components/CommandPalette";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -68,6 +69,9 @@ export function AppLayout({ children }) {
 
       {/* Command palette — primary nav, available on every /apex page */}
       <CommandPalette />
+
+      {/* Keyboard-first navigation layer (?, /, [ ], g-chord) */}
+      <KeyboardShortcuts />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant actions={jarvisActions} entities={jarvisEntities} pages={jarvisPages} risks={RISK_SIGNALS} />
