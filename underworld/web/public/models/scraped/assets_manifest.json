@@ -10444,5 +10444,22 @@
     "epoch": "stone",
     "name": "Canoe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cargo_drone": {
+    "prompt": "a quad-rotor autonomous cargo delivery drone, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "415eaa7a-99b6-4b4f-8317-7a5ae7421fbc",
+    "path": "/models/generated/tripo/cargo_drone.glb",
+    "bytes": 8891784,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/415eaa7a-99b6-4b4f-8317-7a5ae7421fbc/tripo_pbr_model_415eaa7a-99b6-4b4f-8317-7a5ae7421fbc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNDE1ZWFhN2EtOTliNi00YjRmLTgzMTctN2E1YWU3NDIxZmJjL3RyaXBvX3Bicl9tb2RlbF80MTVlYWE3YS05OWI2LTRiNGYtODMxNy03YTVhZTc0MjFmYmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=iG7KtDcyxbmlNtsH87JdtWxhcJ5dSX4YH7ZMdddRvnKd3ZmBP77dVfYzAGovPX8bLiK70jGK1x-bcsKvKjjofzcYL6v1UUXFuG~mqDq7oYLihnA6nQmSUtZSNytwjeZnJv1Jr0GVMazrfWXLaQepAjNnuQsUMauvG9iYz5Jpg1nWor29kg5Zs8BC0OTgAO2HDmy0PKWUOCq5kXMmkRj1yAMsRGuPmCMqiC8p8054gO2RWAatek7BMXXcnW~y4yOCTJGoc7sOWThNjmMVNaQP6q-CkfIGagGDKTMUtJK0DX05qXXQDuHHn7St5HQPFLKbNP5oLsJeJ-ArgBsfuk-ZxA__",
+    "asset_id": "cargo_drone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "quantum",
+    "name": "Cargo Drone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
