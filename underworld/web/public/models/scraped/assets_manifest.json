@@ -9849,5 +9849,22 @@
     "epoch": "industrial",
     "name": "Stone Viaduct",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:swamp_tile": {
+    "prompt": "a murky swamp terrain tile with gnarled roots, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d9b90d80-ea5f-4397-ac33-75a03fa7c33f",
+    "path": "/models/generated/tripo/swamp_tile.glb",
+    "bytes": 13059416,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d9b90d80-ea5f-4397-ac33-75a03fa7c33f/tripo_pbr_model_d9b90d80-ea5f-4397-ac33-75a03fa7c33f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDliOTBkODAtZWE1Zi00Mzk3LWFjMzMtNzVhMDNmYTdjMzNmL3RyaXBvX3Bicl9tb2RlbF9kOWI5MGQ4MC1lYTVmLTQzOTctYWMzMy03NWEwM2ZhN2MzM2YuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=UuhgPWd-ylU2j2T5MMBiLtkvaTAgxDvDC~BIGzXK4OItpdo-ekl1lSNrcQvWvSadiEEC3SrfF7nyLJ02Yw6rkD-Dh9cZez~yfozT~NDJmn26lCk3w59K4CG9beGo7wAoUjwlweIIc42qKm~FZU7Hm8gtYkFrQqfVF4KahVEth08gynKj59qYyZ-MT2Rl988WtX3QW4q7SsUaGlzn~KfodPgcVt53EVVEmpJYeXctNrGuh5aIvqvODVMj4mHTWlMchxMy5X0RdmIZGpi4wanTnCoNbjSn3OPj4Zfff9dzcWX6MfeFAgkMvoHImOJDmRn5hhBQx-k~BSjoh1joB5tonQ__",
+    "asset_id": "swamp_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Swamp Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
