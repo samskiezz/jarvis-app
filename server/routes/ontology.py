@@ -22,13 +22,23 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel
 
 from ..auth import optional_bearer, require_bearer
 from ..services import ontology_store as store
+from ..services import redaction
 
 router = APIRouter()
+
+
+def _caller_clearance(token: str | None, x_clearance: str | None) -> str:
+    """Derive the caller's classification clearance for a read.
+
+    Prefers a bearer-token-derived clearance (via ``security.role_for_token``);
+    falls back to the ``X-Clearance`` header; else defaults to PUBLIC (lowest).
+    See ``services/redaction.clearance_for``."""
+    return redaction.clearance_for(token, x_clearance)
 
 
 # ── Models ───────────────────────────────────────────────────────────────────────
@@ -68,22 +78,30 @@ async def get_types(_token: str | None = Depends(optional_bearer)):
 async def get_objects(
     type: Optional[str] = Query(default=None, description="filter by object type"),
     limit: Optional[int] = Query(default=None, ge=1, le=10000),
-    _token: str | None = Depends(optional_bearer),
+    token: str | None = Depends(optional_bearer),
+    x_clearance: str | None = Header(default=None, alias="X-Clearance"),
 ):
     items = store.query_objects(type=type, limit=limit)
+    clearance = _caller_clearance(token, x_clearance)
+    items = redaction.redact_objects(items, clearance)
     return {"items": items, "count": len(items)}
 
 
 @router.get("/v1/ontology/objects/{object_id}")
 async def get_one_object(
     object_id: str,
-    _token: str | None = Depends(optional_bearer),
+    token: str | None = Depends(optional_bearer),
+    x_clearance: str | None = Header(default=None, alias="X-Clearance"),
 ):
     obj = store.get_object(object_id)
     if obj is None:
         raise HTTPException(status_code=404, detail="object not found")
+    clearance = _caller_clearance(token, x_clearance)
+    allowed = redaction.can_read(clearance, obj.get("mark"))
+    actor = (token[:12] if token else None) or "anonymous"
+    redaction.audit_read(actor, clearance, object_id, allowed)
     obj["links"] = store.links_for(object_id)
-    return obj
+    return redaction.redact_object(obj, clearance)
 
 
 @router.post("/v1/ontology/objects")
@@ -102,9 +120,14 @@ async def post_object(
 async def get_neighbors(
     object_id: str,
     depth: int = Query(default=1, ge=0, le=5),
-    _token: str | None = Depends(optional_bearer),
+    token: str | None = Depends(optional_bearer),
+    x_clearance: str | None = Header(default=None, alias="X-Clearance"),
 ):
-    return store.neighbors(object_id, depth=depth)
+    result = store.neighbors(object_id, depth=depth)
+    clearance = _caller_clearance(token, x_clearance)
+    if isinstance(result, dict):
+        result["objects"] = redaction.redact_objects(result.get("objects", []), clearance)
+    return result
 
 
 @router.get("/v1/ontology/objects/{object_id}/actions")
