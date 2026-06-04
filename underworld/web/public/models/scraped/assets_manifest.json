@@ -11345,5 +11345,22 @@
     "epoch": "iron",
     "name": "Fishing Net",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:flower_garland": {
+    "prompt": "a hanging garland of fresh flowers, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3256e4da-8382-432d-b5fc-a31f5006883e",
+    "path": "/models/generated/tripo/flower_garland.glb",
+    "bytes": 16112932,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/3256e4da-8382-432d-b5fc-a31f5006883e/tripo_pbr_model_3256e4da-8382-432d-b5fc-a31f5006883e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzI1NmU0ZGEtODM4Mi00MzJkLWI1ZmMtYTMxZjUwMDY4ODNlL3RyaXBvX3Bicl9tb2RlbF8zMjU2ZTRkYS04MzgyLTQzMmQtYjVmYy1hMzFmNTAwNjg4M2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=WvljRh6hRnj3Vn7An1gZsggnpeHEPbKo~u1p1K2euwAj~WEs8iKNqpgOIfgvyUhwdx4W0OGZGDdraKqQhuQlDuv9zt3IeFF~2A6Ijg1XLiHoXwhXTwAE6YCJdn61bl8Gr03T9LqhJSfRX1GKxGmxXpcgzYcW5qCklmiPukuIfG5lS4nD5BC2l8TUTO8qzBlZsbl00D2TqwTOwNux0f9Cq2SmS0G8V~TEDGYcj3KaaDoiVYmJ167SF-flgFwxoZhNQxILmQouTPYLZpF6v6DZ3mb98vVxgiMD6tYHV7Ll34kCTc7-izxBu-EyEKWDeaT9EUkqAieHq4kcrPkFoirN1A__",
+    "asset_id": "flower_garland",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Flower Garland",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
