@@ -11362,5 +11362,22 @@
     "epoch": "any",
     "name": "Flower Garland",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:flower_planter": {
+    "prompt": "a wooden flower planter box in bloom, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d2c022c5-2e69-4804-8845-41ea771f40fa",
+    "path": "/models/generated/tripo/flower_planter.glb",
+    "bytes": 15094568,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d2c022c5-2e69-4804-8845-41ea771f40fa/tripo_pbr_model_d2c022c5-2e69-4804-8845-41ea771f40fa.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDJjMDIyYzUtMmU2OS00ODA0LTg4NDUtNDFlYTc3MWY0MGZhL3RyaXBvX3Bicl9tb2RlbF9kMmMwMjJjNS0yZTY5LTQ4MDQtODg0NS00MWVhNzcxZjQwZmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=c3ExGBi3gFgYMsV9gZeXje935VrFy0LjrsoF69W4lCPo87K8yjV7ECkH6KjZQujjynzCWoO6TUw7db3XBE99zhQXcLpv6Lhxlus3ceFvomqoJTJfUeam7fFhDyoByslNOmK5rlbmA4eLi9kmsbrIQAQBG3i0VDTMrd-suPEJpn6pMFwgS95iGP7PNFCrIQcQVIIRsEg88Jm0gDr6UkC-GTtavNdZfMIMahMos5pQCYznANfEAi~ZD8P6hctFDv5IGbc2vNzdtXlqiLLvOeiqxfCPXlPo-TQbw5n082onznEwSQwlmC7U5b5ugKx6vYRuvBjlbQdJEwNr7wk7Ttud5g__",
+    "asset_id": "flower_planter",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Flower Planter",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
