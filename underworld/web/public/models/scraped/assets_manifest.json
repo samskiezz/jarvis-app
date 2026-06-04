@@ -11158,5 +11158,22 @@
     "epoch": "industrial",
     "name": "Musket",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:plasma_carbine": {
+    "prompt": "a compact plasma carbine with glowing vents, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f91076e5-5fcc-44cf-bb71-67c1f94cbc2f",
+    "path": "/models/generated/tripo/plasma_carbine.glb",
+    "bytes": 4131752,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f91076e5-5fcc-44cf-bb71-67c1f94cbc2f/tripo_pbr_model_f91076e5-5fcc-44cf-bb71-67c1f94cbc2f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjkxMDc2ZTUtNWZjYy00NGNmLWJiNzEtNjdjMWY5NGNiYzJmL3RyaXBvX3Bicl9tb2RlbF9mOTEwNzZlNS01ZmNjLTQ0Y2YtYmI3MS02N2MxZjk0Y2JjMmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Mgbj3mYz5C20g5JOFvg7eItNseqMkxZ4QTgcDlC4-eDpdkkF~ullATfT3kM7MU05c8RetpiAyhQqH0RcaiZoZOPKArCNBkUefHWleYuKzWbO1lBlOAVnbWSqJ3dKB3O-5PYE14OqGsJCKFIwmSnxB5QExlnN3mNOE62gvhGWe8chBeBcqQ1dDIxApF9dx2YQxzp9sJvC8gEJ-ykD3y4JZDGewYaFrbbWVugmjBEk-gezPyfLSQeo8EU30ux4biq5IzR8S-W6zFYPeJn7~dFCQ3g8SeUXvaUSHxBa0yqxukArQZFhrQ1bIIJGWtMcMOaxh9~4SGbiSzsWmp0BSnkMow__",
+    "asset_id": "plasma_carbine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "quantum",
+    "name": "Plasma Carbine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
