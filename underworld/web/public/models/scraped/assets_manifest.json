@@ -9033,5 +9033,22 @@
     "epoch": "iron",
     "name": "City Gate Large",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cobblestone_tile": {
+    "prompt": "a modular rounded-cobblestone paving tile, seamless, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a1608b60-3acd-4025-b8da-dd9a445579ef",
+    "path": "/models/generated/tripo/cobblestone_tile.glb",
+    "bytes": 14882268,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/a1608b60-3acd-4025-b8da-dd9a445579ef/tripo_pbr_model_a1608b60-3acd-4025-b8da-dd9a445579ef.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYTE2MDhiNjAtM2FjZC00MDI1LWI4ZGEtZGQ5YTQ0NTU3OWVmL3RyaXBvX3Bicl9tb2RlbF9hMTYwOGI2MC0zYWNkLTQwMjUtYjhkYS1kZDlhNDQ1NTc5ZWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=shSf1AfrpLUkjoLl3xYrSfB24V~iG9UkuYn5dmxR2BzoNnYzV2Imfgcfrk8~~qcNdiwKBLiN075UpXWlWqyp3Ic-RQ7u56BNNYIkh8WbI~qIMDMezNTMD3NSxqZOO3pZwcZw8AYhvc1oiL7fHCgtGJu~QklMUpgywIP0M15ncwFmCJnQotVFcwMSu4Dp7fsRq6ac0iJoaKXPIUg55n~TvLLvCa7KEGBk0uJB3aCmT2g4vyX~AI1Q416o5anirzJsqSHkku4hc0La6NJhmVXQLj5rssO9-YqHAx8oD6X7wsmQUYV9H6LjKHaMveEsIXH5iaSQErLs-M83IouRno6Hlg__",
+    "asset_id": "cobblestone_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Cobblestone Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
