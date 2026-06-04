@@ -1,7 +1,7 @@
 {
   "version": 1,
   "note": "Ordered GLB load packages \u2014 load stage by stage; render the world layer by layer as each stage completes.",
-  "total_assets": 513,
+  "total_assets": 680,
   "critical": [
     {
       "path": "/models/polyhaven/sky_puresky_1k.hdr",
@@ -23,11 +23,71 @@
     {
       "stage": 1,
       "name": "Core World & Biomes",
-      "asset_count": 151,
+      "asset_count": 242,
       "assets": [
+        {
+          "id": "battlement_segment",
+          "path": "/models/generated/tripo/battlement_segment.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
         {
           "id": "boulder_large",
           "path": "/models/generated/tripo/boulder_large.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "brick_paving_tile",
+          "path": "/models/generated/tripo/brick_paving_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "brick_wall_corner",
+          "path": "/models/generated/tripo/brick_wall_corner.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "brick_wall_segment",
+          "path": "/models/generated/tripo/brick_wall_segment.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "canal_corner",
+          "path": "/models/generated/tripo/canal_corner.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "canal_lock",
+          "path": "/models/generated/tripo/canal_lock.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "canal_straight",
+          "path": "/models/generated/tripo/canal_straight.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "canyon_wall",
+          "path": "/models/generated/tripo/canyon_wall.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "cave_entrance",
+          "path": "/models/generated/tripo/cave_entrance.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "city_gate_large",
+          "path": "/models/generated/tripo/city_gate_large.glb",
           "category": "terrain",
           "phase": "terrain"
         },
@@ -38,14 +98,80 @@
           "phase": "terrain"
         },
         {
+          "id": "cobblestone_tile",
+          "path": "/models/generated/tripo/cobblestone_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "colonnade_segment",
+          "path": "/models/generated/tripo/colonnade_segment.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "coral_reef_chunk",
+          "path": "/models/generated/tripo/coral_reef_chunk.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "corner_bastion",
+          "path": "/models/generated/tripo/corner_bastion.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "crater_small",
+          "path": "/models/generated/tripo/crater_small.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "defensive_tower_round",
+          "path": "/models/generated/tripo/defensive_tower_round.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "dirt_path",
           "path": "/models/generated/tripo/dirt_path.glb",
           "category": "terrain",
           "phase": "terrain"
         },
         {
+          "id": "drawbridge",
+          "path": "/models/generated/tripo/drawbridge.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "earth_rampart",
+          "path": "/models/generated/tripo/earth_rampart.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "fence_wood",
           "path": "/models/generated/tripo/fence_wood.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "garden_wall",
+          "path": "/models/generated/tripo/garden_wall.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "geyser",
+          "path": "/models/generated/tripo/geyser.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "glacier_chunk",
+          "path": "/models/generated/tripo/glacier_chunk.glb",
           "category": "terrain",
           "phase": "terrain"
         },
@@ -74,14 +200,164 @@
           "phase": "terrain"
         },
         {
+          "id": "hedge_row_long",
+          "path": "/models/generated/tripo/hedge_row_long.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "hill_mound",
           "path": "/models/generated/tripo/hill_mound.glb",
           "category": "terrain",
           "phase": "terrain"
         },
         {
+          "id": "hot_spring",
+          "path": "/models/generated/tripo/hot_spring.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "ice_floe",
+          "path": "/models/generated/tripo/ice_floe.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "lake_edge",
+          "path": "/models/generated/tripo/lake_edge.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "lava_flow_tile",
+          "path": "/models/generated/tripo/lava_flow_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "marsh_tile",
+          "path": "/models/generated/tripo/marsh_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "mesa_rock",
+          "path": "/models/generated/tripo/mesa_rock.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "moat_segment",
+          "path": "/models/generated/tripo/moat_segment.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "oasis",
+          "path": "/models/generated/tripo/oasis.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "palisade_corner",
+          "path": "/models/generated/tripo/palisade_corner.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "palisade_gate",
+          "path": "/models/generated/tripo/palisade_gate.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "palisade_straight",
+          "path": "/models/generated/tripo/palisade_straight.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "picket_fence_gate",
+          "path": "/models/generated/tripo/picket_fence_gate.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "pier_walkway",
+          "path": "/models/generated/tripo/pier_walkway.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "plaza_paving_tile",
+          "path": "/models/generated/tripo/plaza_paving_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "pond",
           "path": "/models/generated/tripo/pond.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "portcullis",
+          "path": "/models/generated/tripo/portcullis.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "railway_crossing",
+          "path": "/models/generated/tripo/railway_crossing.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "railway_switch",
+          "path": "/models/generated/tripo/railway_switch.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "ramp_segment",
+          "path": "/models/generated/tripo/ramp_segment.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "rapids_tile",
+          "path": "/models/generated/tripo/rapids_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "retaining_wall",
+          "path": "/models/generated/tripo/retaining_wall.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "river_bend",
+          "path": "/models/generated/tripo/river_bend.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "river_delta",
+          "path": "/models/generated/tripo/river_delta.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "river_fork",
+          "path": "/models/generated/tripo/river_fork.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "river_straight",
+          "path": "/models/generated/tripo/river_straight.glb",
           "category": "terrain",
           "phase": "terrain"
         },
@@ -104,8 +380,26 @@
           "phase": "terrain"
         },
         {
+          "id": "road_curve_wide",
+          "path": "/models/generated/tripo/road_curve_wide.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "road_straight",
           "path": "/models/generated/tripo/road_straight.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "road_t_junction",
+          "path": "/models/generated/tripo/road_t_junction.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "road_y_fork",
+          "path": "/models/generated/tripo/road_y_fork.glb",
           "category": "terrain",
           "phase": "terrain"
         },
@@ -116,8 +410,62 @@
           "phase": "terrain"
         },
         {
+          "id": "rope_footbridge",
+          "path": "/models/generated/tripo/rope_footbridge.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "salt_flat_tile",
+          "path": "/models/generated/tripo/salt_flat_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "sand_dune_large",
+          "path": "/models/generated/tripo/sand_dune_large.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "sinkhole",
+          "path": "/models/generated/tripo/sinkhole.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "snow_tile",
+          "path": "/models/generated/tripo/snow_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "stalagmite_cluster",
+          "path": "/models/generated/tripo/stalagmite_cluster.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "stone_archway",
+          "path": "/models/generated/tripo/stone_archway.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "stone_bridge",
           "path": "/models/generated/tripo/stone_bridge.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "stone_steps",
+          "path": "/models/generated/tripo/stone_steps.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "stone_viaduct",
+          "path": "/models/generated/tripo/stone_viaduct.glb",
           "category": "terrain",
           "phase": "terrain"
         },
@@ -128,8 +476,50 @@
           "phase": "terrain"
         },
         {
+          "id": "swamp_tile",
+          "path": "/models/generated/tripo/swamp_tile.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "tidal_pool",
+          "path": "/models/generated/tripo/tidal_pool.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "town_gate",
           "path": "/models/generated/tripo/town_gate.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "volcanic_rock",
+          "path": "/models/generated/tripo/volcanic_rock.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "wall_corner_stone",
+          "path": "/models/generated/tripo/wall_corner_stone.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "wall_gate_stone",
+          "path": "/models/generated/tripo/wall_gate_stone.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "wall_straight_stone",
+          "path": "/models/generated/tripo/wall_straight_stone.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "watchtower_wall_tower",
+          "path": "/models/generated/tripo/watchtower_wall_tower.glb",
           "category": "terrain",
           "phase": "terrain"
         },
@@ -140,10 +530,28 @@
           "phase": "terrain"
         },
         {
+          "id": "waterfall_large",
+          "path": "/models/generated/tripo/waterfall_large.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
           "id": "wooden_bridge",
           "path": "/models/generated/tripo/wooden_bridge.glb",
           "category": "terrain",
           "phase": "terrain"
+        },
+        {
+          "id": "wrought_iron_railing",
+          "path": "/models/generated/tripo/wrought_iron_railing.glb",
+          "category": "terrain",
+          "phase": "terrain"
+        },
+        {
+          "id": "bamboo_clump",
+          "path": "/models/generated/tripo/bamboo_clump.glb",
+          "category": "nature",
+          "phase": "nature"
         },
         {
           "id": "berry_bush",
@@ -152,8 +560,38 @@
           "phase": "nature"
         },
         {
+          "id": "bush_berry",
+          "path": "/models/generated/tripo/bush_berry.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "bush_flowering",
+          "path": "/models/generated/tripo/bush_flowering.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
           "id": "bush_round",
           "path": "/models/generated/tripo/bush_round.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "cactus_tall",
+          "path": "/models/generated/tripo/cactus_tall.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "cattail_patch",
+          "path": "/models/generated/tripo/cattail_patch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "corn_stalk_cluster",
+          "path": "/models/generated/tripo/corn_stalk_cluster.glb",
           "category": "nature",
           "phase": "nature"
         },
@@ -188,8 +626,26 @@
           "phase": "nature"
         },
         {
+          "id": "giant_fern",
+          "path": "/models/generated/tripo/giant_fern.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
           "id": "grass_tuft",
           "path": "/models/generated/tripo/grass_tuft.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "ivy_wall_patch",
+          "path": "/models/generated/tripo/ivy_wall_patch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "lavender_patch",
+          "path": "/models/generated/tripo/lavender_patch.glb",
           "category": "nature",
           "phase": "nature"
         },
@@ -200,8 +656,32 @@
           "phase": "nature"
         },
         {
+          "id": "moss_patch",
+          "path": "/models/generated/tripo/moss_patch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
           "id": "mushroom_cluster",
           "path": "/models/generated/tripo/mushroom_cluster.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "pumpkin_patch",
+          "path": "/models/generated/tripo/pumpkin_patch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "reed_cluster",
+          "path": "/models/generated/tripo/reed_cluster.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "rose_bush",
+          "path": "/models/generated/tripo/rose_bush.glb",
           "category": "nature",
           "phase": "nature"
         },
@@ -212,8 +692,38 @@
           "phase": "nature"
         },
         {
+          "id": "sunflower_patch",
+          "path": "/models/generated/tripo/sunflower_patch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_acacia",
+          "path": "/models/generated/tripo/tree_acacia.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_baobab",
+          "path": "/models/generated/tripo/tree_baobab.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
           "id": "tree_birch",
           "path": "/models/generated/tripo/tree_birch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_cherry_blossom",
+          "path": "/models/generated/tripo/tree_cherry_blossom.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_cypress",
+          "path": "/models/generated/tripo/tree_cypress.glb",
           "category": "nature",
           "phase": "nature"
         },
@@ -224,8 +734,20 @@
           "phase": "nature"
         },
         {
+          "id": "tree_maple_autumn",
+          "path": "/models/generated/tripo/tree_maple_autumn.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
           "id": "tree_oak",
           "path": "/models/generated/tripo/tree_oak.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "tree_olive",
+          "path": "/models/generated/tripo/tree_olive.glb",
           "category": "nature",
           "phase": "nature"
         },
@@ -250,6 +772,30 @@
         {
           "id": "tree_willow",
           "path": "/models/generated/tripo/tree_willow.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "vine_hanging",
+          "path": "/models/generated/tripo/vine_hanging.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "vineyard_row",
+          "path": "/models/generated/tripo/vineyard_row.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "water_lily_patch",
+          "path": "/models/generated/tripo/water_lily_patch.glb",
+          "category": "nature",
+          "phase": "nature"
+        },
+        {
+          "id": "wheat_sheaf",
+          "path": "/models/generated/tripo/wheat_sheaf.glb",
           "category": "nature",
           "phase": "nature"
         },
@@ -2861,7 +3407,7 @@
     {
       "stage": 7,
       "name": "Movement & Polish",
-      "asset_count": 44,
+      "asset_count": 120,
       "assets": [
         {
           "id": "bicycle",
@@ -2870,8 +3416,26 @@
           "phase": "vehicle"
         },
         {
+          "id": "biplane",
+          "path": "/models/generated/tripo/biplane.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "canoe",
+          "path": "/models/generated/tripo/canoe.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
           "id": "car_modern",
           "path": "/models/generated/tripo/car_modern.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "cargo_drone",
+          "path": "/models/generated/tripo/cargo_drone.glb",
           "category": "vehicle",
           "phase": "vehicle"
         },
@@ -2888,8 +3452,104 @@
           "phase": "vehicle"
         },
         {
+          "id": "city_bus",
+          "path": "/models/generated/tripo/city_bus.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "delivery_truck",
+          "path": "/models/generated/tripo/delivery_truck.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "dog_sled",
+          "path": "/models/generated/tripo/dog_sled.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "electric_car",
+          "path": "/models/generated/tripo/electric_car.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "farm_tractor",
+          "path": "/models/generated/tripo/farm_tractor.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "hand_cart",
+          "path": "/models/generated/tripo/hand_cart.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "horse_omnibus",
+          "path": "/models/generated/tripo/horse_omnibus.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "hot_air_balloon",
+          "path": "/models/generated/tripo/hot_air_balloon.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
           "id": "hover_pod",
           "path": "/models/generated/tripo/hover_pod.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "hovercar",
+          "path": "/models/generated/tripo/hovercar.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "maglev_pod",
+          "path": "/models/generated/tripo/maglev_pod.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "merchant_galleon",
+          "path": "/models/generated/tripo/merchant_galleon.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "motorcycle",
+          "path": "/models/generated/tripo/motorcycle.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "ox_wagon",
+          "path": "/models/generated/tripo/ox_wagon.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "penny_farthing",
+          "path": "/models/generated/tripo/penny_farthing.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "propeller_airliner",
+          "path": "/models/generated/tripo/propeller_airliner.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "sailboat",
+          "path": "/models/generated/tripo/sailboat.glb",
           "category": "vehicle",
           "phase": "vehicle"
         },
@@ -2898,6 +3558,198 @@
           "path": "/models/generated/tripo/steam_loco.glb",
           "category": "vehicle",
           "phase": "vehicle"
+        },
+        {
+          "id": "steam_locomotive",
+          "path": "/models/generated/tripo/steam_locomotive.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "submarine",
+          "path": "/models/generated/tripo/submarine.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "train_freight_wagon",
+          "path": "/models/generated/tripo/train_freight_wagon.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "train_passenger_car",
+          "path": "/models/generated/tripo/train_passenger_car.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "tram_car",
+          "path": "/models/generated/tripo/tram_car.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "wheelbarrow",
+          "path": "/models/generated/tripo/wheelbarrow.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "wooden_sled",
+          "path": "/models/generated/tripo/wooden_sled.glb",
+          "category": "vehicle",
+          "phase": "vehicle"
+        },
+        {
+          "id": "battle_axe",
+          "path": "/models/generated/tripo/battle_axe.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "blunderbuss",
+          "path": "/models/generated/tripo/blunderbuss.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "bolt_action_rifle",
+          "path": "/models/generated/tripo/bolt_action_rifle.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "bronze_cannon",
+          "path": "/models/generated/tripo/bronze_cannon.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "bronze_sword",
+          "path": "/models/generated/tripo/bronze_sword.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "crossbow",
+          "path": "/models/generated/tripo/crossbow.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "energy_rifle",
+          "path": "/models/generated/tripo/energy_rifle.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "field_cannon",
+          "path": "/models/generated/tripo/field_cannon.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "flint_handaxe",
+          "path": "/models/generated/tripo/flint_handaxe.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "flintlock_pistol",
+          "path": "/models/generated/tripo/flintlock_pistol.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "gatling_gun",
+          "path": "/models/generated/tripo/gatling_gun.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "halberd",
+          "path": "/models/generated/tripo/halberd.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "hunting_spear",
+          "path": "/models/generated/tripo/hunting_spear.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "iron_shortsword",
+          "path": "/models/generated/tripo/iron_shortsword.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "kite_shield",
+          "path": "/models/generated/tripo/kite_shield.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "longbow",
+          "path": "/models/generated/tripo/longbow.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "morning_star",
+          "path": "/models/generated/tripo/morning_star.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "musket",
+          "path": "/models/generated/tripo/musket.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "plasma_carbine",
+          "path": "/models/generated/tripo/plasma_carbine.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "revolver",
+          "path": "/models/generated/tripo/revolver.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "riot_shield",
+          "path": "/models/generated/tripo/riot_shield.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "stone_club",
+          "path": "/models/generated/tripo/stone_club.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "throwing_sling",
+          "path": "/models/generated/tripo/throwing_sling.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "war_hammer",
+          "path": "/models/generated/tripo/war_hammer.glb",
+          "category": "weapon",
+          "phase": "weapon"
+        },
+        {
+          "id": "wooden_round_shield",
+          "path": "/models/generated/tripo/wooden_round_shield.glb",
+          "category": "weapon",
+          "phase": "weapon"
         },
         {
           "id": "clock_tower",
@@ -2978,8 +3830,26 @@
           "phase": "prop"
         },
         {
+          "id": "barrel_cluster",
+          "path": "/models/generated/tripo/barrel_cluster.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "brazier",
           "path": "/models/generated/tripo/brazier.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "campfire_pit",
+          "path": "/models/generated/tripo/campfire_pit.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "ceramic_amphora_stack",
+          "path": "/models/generated/tripo/ceramic_amphora_stack.glb",
           "category": "prop",
           "phase": "prop"
         },
@@ -3002,8 +3872,38 @@
           "phase": "prop"
         },
         {
+          "id": "fishing_net",
+          "path": "/models/generated/tripo/fishing_net.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "flower_garland",
+          "path": "/models/generated/tripo/flower_garland.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "flower_planter",
+          "path": "/models/generated/tripo/flower_planter.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "fossil_dig_site",
           "path": "/models/generated/tripo/fossil_dig_site.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "fruit_crate",
+          "path": "/models/generated/tripo/fruit_crate.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "grindstone",
+          "path": "/models/generated/tripo/grindstone.glb",
           "category": "prop",
           "phase": "prop"
         },
@@ -3080,14 +3980,56 @@
           "phase": "prop"
         },
         {
+          "id": "hay_cart_load",
+          "path": "/models/generated/tripo/hay_cart_load.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "haystack",
           "path": "/models/generated/tripo/haystack.glb",
           "category": "prop",
           "phase": "prop"
         },
         {
+          "id": "hitching_post",
+          "path": "/models/generated/tripo/hitching_post.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "iron_park_bench",
+          "path": "/models/generated/tripo/iron_park_bench.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "lantern_string",
+          "path": "/models/generated/tripo/lantern_string.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "market_stall",
           "path": "/models/generated/tripo/market_stall.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "market_stall_awning",
+          "path": "/models/generated/tripo/market_stall_awning.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "milestone_marker",
+          "path": "/models/generated/tripo/milestone_marker.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "outdoor_anvil",
+          "path": "/models/generated/tripo/outdoor_anvil.glb",
           "category": "prop",
           "phase": "prop"
         },
@@ -3110,8 +4052,44 @@
           "phase": "prop"
         },
         {
+          "id": "road_signpost",
+          "path": "/models/generated/tripo/road_signpost.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "rope_coil",
+          "path": "/models/generated/tripo/rope_coil.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "sack_pile",
+          "path": "/models/generated/tripo/sack_pile.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "scarecrow",
+          "path": "/models/generated/tripo/scarecrow.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "signpost",
           "path": "/models/generated/tripo/signpost.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "stone_water_trough",
+          "path": "/models/generated/tripo/stone_water_trough.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "stone_well",
+          "path": "/models/generated/tripo/stone_well.glb",
           "category": "prop",
           "phase": "prop"
         },
@@ -3122,8 +4100,32 @@
           "phase": "prop"
         },
         {
+          "id": "toolbox_open",
+          "path": "/models/generated/tripo/toolbox_open.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "water_barrel_rain",
+          "path": "/models/generated/tripo/water_barrel_rain.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
           "id": "well",
           "path": "/models/generated/tripo/well.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "wooden_crate_stack",
+          "path": "/models/generated/tripo/wooden_crate_stack.glb",
+          "category": "prop",
+          "phase": "prop"
+        },
+        {
+          "id": "woodpile",
+          "path": "/models/generated/tripo/woodpile.glb",
           "category": "prop",
           "phase": "prop"
         }
@@ -3147,7 +4149,57 @@
       "stage": 0
     },
     {
+      "path": "/models/generated/tripo/battlement_segment.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/boulder_large.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/brick_paving_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/brick_wall_corner.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/brick_wall_segment.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/canal_corner.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/canal_lock.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/canal_straight.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/canyon_wall.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cave_entrance.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/city_gate_large.glb",
       "phase": "terrain",
       "stage": 1
     },
@@ -3157,12 +4209,67 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/cobblestone_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/colonnade_segment.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/coral_reef_chunk.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/corner_bastion.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/crater_small.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/defensive_tower_round.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/dirt_path.glb",
       "phase": "terrain",
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/drawbridge.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/earth_rampart.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/fence_wood.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/garden_wall.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/geyser.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/glacier_chunk.glb",
       "phase": "terrain",
       "stage": 1
     },
@@ -3187,12 +4294,137 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/hedge_row_long.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/hill_mound.glb",
       "phase": "terrain",
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/hot_spring.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ice_floe.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/lake_edge.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/lava_flow_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/marsh_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/mesa_rock.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/moat_segment.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/oasis.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/palisade_corner.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/palisade_gate.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/palisade_straight.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/picket_fence_gate.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/pier_walkway.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/plaza_paving_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/pond.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/portcullis.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/railway_crossing.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/railway_switch.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ramp_segment.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/rapids_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/retaining_wall.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/river_bend.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/river_delta.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/river_fork.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/river_straight.glb",
       "phase": "terrain",
       "stage": 1
     },
@@ -3212,7 +4444,22 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/road_curve_wide.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/road_straight.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/road_t_junction.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/road_y_fork.glb",
       "phase": "terrain",
       "stage": 1
     },
@@ -3222,7 +4469,52 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/rope_footbridge.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/salt_flat_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/sand_dune_large.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/sinkhole.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/snow_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stalagmite_cluster.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stone_archway.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/stone_bridge.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stone_steps.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/stone_viaduct.glb",
       "phase": "terrain",
       "stage": 1
     },
@@ -3232,7 +4524,42 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/swamp_tile.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tidal_pool.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/town_gate.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/volcanic_rock.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/wall_corner_stone.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/wall_gate_stone.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/wall_straight_stone.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/watchtower_wall_tower.glb",
       "phase": "terrain",
       "stage": 1
     },
@@ -3242,8 +4569,23 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/waterfall_large.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/wooden_bridge.glb",
       "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/wrought_iron_railing.glb",
+      "phase": "terrain",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/bamboo_clump.glb",
+      "phase": "nature",
       "stage": 1
     },
     {
@@ -3252,7 +4594,32 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/bush_berry.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/bush_flowering.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/bush_round.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cactus_tall.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/cattail_patch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/corn_stalk_cluster.glb",
       "phase": "nature",
       "stage": 1
     },
@@ -3282,7 +4649,22 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/giant_fern.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/grass_tuft.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/ivy_wall_patch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/lavender_patch.glb",
       "phase": "nature",
       "stage": 1
     },
@@ -3292,7 +4674,27 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/moss_patch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/mushroom_cluster.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/pumpkin_patch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/reed_cluster.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/rose_bush.glb",
       "phase": "nature",
       "stage": 1
     },
@@ -3302,7 +4704,32 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/sunflower_patch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_acacia.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_baobab.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/tree_birch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_cherry_blossom.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_cypress.glb",
       "phase": "nature",
       "stage": 1
     },
@@ -3312,7 +4739,17 @@
       "stage": 1
     },
     {
+      "path": "/models/generated/tripo/tree_maple_autumn.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
       "path": "/models/generated/tripo/tree_oak.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/tree_olive.glb",
       "phase": "nature",
       "stage": 1
     },
@@ -3333,6 +4770,26 @@
     },
     {
       "path": "/models/generated/tripo/tree_willow.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/vine_hanging.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/vineyard_row.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/water_lily_patch.glb",
+      "phase": "nature",
+      "stage": 1
+    },
+    {
+      "path": "/models/generated/tripo/wheat_sheaf.glb",
       "phase": "nature",
       "stage": 1
     },
@@ -5482,7 +6939,22 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/biplane.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/canoe.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/car_modern.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/cargo_drone.glb",
       "phase": "vehicle",
       "stage": 7
     },
@@ -5497,13 +6969,253 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/city_bus.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/delivery_truck.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/dog_sled.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/electric_car.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/farm_tractor.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/hand_cart.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/horse_omnibus.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/hot_air_balloon.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/hover_pod.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/hovercar.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/maglev_pod.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/merchant_galleon.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/motorcycle.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/ox_wagon.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/penny_farthing.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/propeller_airliner.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/sailboat.glb",
       "phase": "vehicle",
       "stage": 7
     },
     {
       "path": "/models/generated/tripo/steam_loco.glb",
       "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/steam_locomotive.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/submarine.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/train_freight_wagon.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/train_passenger_car.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/tram_car.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/wheelbarrow.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/wooden_sled.glb",
+      "phase": "vehicle",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/battle_axe.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/blunderbuss.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/bolt_action_rifle.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/bronze_cannon.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/bronze_sword.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/crossbow.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/energy_rifle.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/field_cannon.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/flint_handaxe.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/flintlock_pistol.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/gatling_gun.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/halberd.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/hunting_spear.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/iron_shortsword.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/kite_shield.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/longbow.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/morning_star.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/musket.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/plasma_carbine.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/revolver.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/riot_shield.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/stone_club.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/throwing_sling.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/war_hammer.glb",
+      "phase": "weapon",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/wooden_round_shield.glb",
+      "phase": "weapon",
       "stage": 7
     },
     {
@@ -5572,7 +7284,22 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/barrel_cluster.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/brazier.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/campfire_pit.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/ceramic_amphora_stack.glb",
       "phase": "prop",
       "stage": 7
     },
@@ -5592,7 +7319,32 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/fishing_net.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/flower_garland.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/flower_planter.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/fossil_dig_site.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/fruit_crate.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/grindstone.glb",
       "phase": "prop",
       "stage": 7
     },
@@ -5657,12 +7409,47 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/hay_cart_load.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/haystack.glb",
       "phase": "prop",
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/hitching_post.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/iron_park_bench.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/lantern_string.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/market_stall.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/market_stall_awning.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/milestone_marker.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/outdoor_anvil.glb",
       "phase": "prop",
       "stage": 7
     },
@@ -5682,7 +7469,37 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/road_signpost.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/rope_coil.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/sack_pile.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/scarecrow.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/signpost.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/stone_water_trough.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/stone_well.glb",
       "phase": "prop",
       "stage": 7
     },
@@ -5692,7 +7509,27 @@
       "stage": 7
     },
     {
+      "path": "/models/generated/tripo/toolbox_open.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/water_barrel_rain.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
       "path": "/models/generated/tripo/well.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/wooden_crate_stack.glb",
+      "phase": "prop",
+      "stage": 7
+    },
+    {
+      "path": "/models/generated/tripo/woodpile.glb",
       "phase": "prop",
       "stage": 7
     }
