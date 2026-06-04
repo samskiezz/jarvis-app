@@ -10427,5 +10427,22 @@
     "epoch": "industrial",
     "name": "Biplane",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:canoe": {
+    "prompt": "a slender wooden dugout canoe with a paddle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b3220519-32e8-417e-86c8-c60331da2c58",
+    "path": "/models/generated/tripo/canoe.glb",
+    "bytes": 6779668,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/b3220519-32e8-417e-86c8-c60331da2c58/tripo_pbr_model_b3220519-32e8-417e-86c8-c60331da2c58.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYjMyMjA1MTktMzJlOC00MTdlLTg2YzgtYzYwMzMxZGEyYzU4L3RyaXBvX3Bicl9tb2RlbF9iMzIyMDUxOS0zMmU4LTQxN2UtODZjOC1jNjAzMzFkYTJjNTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=W8ftBRRuebaDF8oCeZmboY2w2PqJug6JCwTeGzXHj5FvHmhYYuD2482TKhZvjWrf7Qu8NmIQtAv8Zgar6rdN5S9hPm~C9vimTcqNXoxk~1rVlt18yCNZi~c1nbL6qeLyTcDLNGQa~aW7GGG13D92O3sXUzbYQ6HnoaNg9chXQ91WI6zJquzrGJaUca6popM39LhlRcaH4Dc-DO-0Oe2gjPaxXXIIN1qFhFbD4py4GPIPUMgah6muruKjacXTvFvEkGn8RNs6~tDIbsOChk-uKF9j5rMiW0wWvqcJ5Ll2qph~5ypXo5Tp2-husZTzWYF5PjFtdoRZOU9lGBG8GDHZSQ__",
+    "asset_id": "canoe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "stone",
+    "name": "Canoe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
