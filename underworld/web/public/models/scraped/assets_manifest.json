@@ -10461,5 +10461,22 @@
     "epoch": "quantum",
     "name": "Cargo Drone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:city_bus": {
+    "prompt": "a low-floor city transit bus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "a41d4e14-8df0-4520-9163-fee31f1ed7d3",
+    "path": "/models/generated/tripo/city_bus.glb",
+    "bytes": 9649624,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/a41d4e14-8df0-4520-9163-fee31f1ed7d3/tripo_pbr_model_a41d4e14-8df0-4520-9163-fee31f1ed7d3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYTQxZDRlMTQtOGRmMC00NTIwLTkxNjMtZmVlMzFmMWVkN2QzL3RyaXBvX3Bicl9tb2RlbF9hNDFkNGUxNC04ZGYwLTQ1MjAtOTE2My1mZWUzMWYxZWQ3ZDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=WyRzYF6x~VMjpsrIZFoNHG8q8hYAiww16oWe~k9XtWS59cjGknX5zR-pvtM-8vmuPcK0cc6dYYu8iAqQ2~nNvl5yo8NNXLQoTYBO3Gzk~TOYQvtxhpL6JbyQpjQn8AJJLBHBesSuiO8hLf-UJWM4FdDU-v3dY1hMQH9UoJMzFcb-l0WXRVU~BAXkA150vpCp1EdctK0lZT7AoYTuuDTSrZiCoymYXxLWiOL8x0EjWPED643h3ziIXetck1LmeQM3iScjd7nVEpRK1XaFUzQkdIJ0nTYJYJB6dpLxDcLGiSnqqt6BzCm1KiXILnMe29WmMBcIIP8yH66vuT9B5RFimg__",
+    "asset_id": "city_bus",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "information",
+    "name": "City Bus",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
