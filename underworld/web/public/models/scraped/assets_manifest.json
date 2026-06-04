@@ -9781,5 +9781,22 @@
     "epoch": "any",
     "name": "Snow Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stalagmite_cluster": {
+    "prompt": "a cluster of pointed cave stalagmites, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "277a5347-3bb6-4c20-8345-86e93f0f7798",
+    "path": "/models/generated/tripo/stalagmite_cluster.glb",
+    "bytes": 14934016,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/277a5347-3bb6-4c20-8345-86e93f0f7798/tripo_pbr_model_277a5347-3bb6-4c20-8345-86e93f0f7798.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjc3YTUzNDctM2JiNi00YzIwLTgzNDUtODZlOTNmMGY3Nzk4L3RyaXBvX3Bicl9tb2RlbF8yNzdhNTM0Ny0zYmI2LTRjMjAtODM0NS04NmU5M2YwZjc3OTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=rBxfd18NSntAFDi6YWBxox2o88YJC~EvkqUvAoZdAh2hw6Fy0Jyro0hDRiF2F2zZGm7wdjg24O7Uor4EzsoKDO7V4-lfr7CiitW21Ik0EUK99M7a1aJDuvr0Fe9VmkPFjfvCGqMZnqHbwTXfcPIpR7ZbRcnzFUku54qhXv2xUppIikkEBobKVYwzm-p5dhdvTNqnSBaD6hbeAinylsfnpkhM-dHxc6Br~e46LqQ08RCI6xP~1mt7KjfZaovGT4w3n62x5hxSsLrVZsjVamxKgOHTKFDMehf9t1BjpkiqnjQYZGlJJ4WqUtWpdJHOmVJDwaq2Ec3Y8a6EkIvOALe2VA__",
+    "asset_id": "stalagmite_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Stalagmite Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
