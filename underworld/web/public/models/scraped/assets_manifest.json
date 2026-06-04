@@ -9951,5 +9951,22 @@
     "epoch": "iron",
     "name": "Wall Straight Stone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:watchtower_wall_tower": {
+    "prompt": "a square stone wall watchtower segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6cd3c930-4328-4562-acf5-67fc4d933997",
+    "path": "/models/generated/tripo/watchtower_wall_tower.glb",
+    "bytes": 14952356,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/6cd3c930-4328-4562-acf5-67fc4d933997/tripo_pbr_model_6cd3c930-4328-4562-acf5-67fc4d933997.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNmNkM2M5MzAtNDMyOC00NTYyLWFjZjUtNjdmYzRkOTMzOTk3L3RyaXBvX3Bicl9tb2RlbF82Y2QzYzkzMC00MzI4LTQ1NjItYWNmNS02N2ZjNGQ5MzM5OTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Ys0CzVA9~5WsnZXJuR2-wixSMzHIyVFXwz5oh3ODE9vD~1a44SYIuRNrYP7fqCVcSPNolqAeMJBHKziRh5GLYcE7ZDKLbrZvMpOLo8dejpdzuqZ6lz3WZ4XGPzgoS39xnpSF0yhDiWeERbvSoxkdCWG~qplMF21kL85d6FPg46EMHz8nwojOqFYJ9KrPjQGCUknbNkTa6VaePpH4sfjohscbvlc7NRDTH9SmRcAfQmQp918f2r2lqXyUGXncmGBNOVjpEhnA6ssk5sr4FDmkATyRaU91dmEzcJAa2yJLC50GxpXeuft0ZI0m7MZd9rG9yoCQSL8ZcZ-PyP4Vton9fw__",
+    "asset_id": "watchtower_wall_tower",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Watchtower Wall Tower",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
