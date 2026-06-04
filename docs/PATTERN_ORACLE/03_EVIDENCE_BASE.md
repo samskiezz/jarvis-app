@@ -482,6 +482,31 @@ Defines the load-bearing terms used in §L/§R so the deep dives are self-contai
 | **Kalman gain + covariance localization** | EnKF update weight + Gaspari-Cohn taper to kill spurious correlations. | EnKF | https://doi.org/10.1029/94JC00572 · https://doi.org/10.1002/qj.49712555417 |
 | **Diffusion ensemble** | Generate probabilistic trajectory samples by reverse-diffusion (vs one deterministic field). | GenCast | https://arxiv.org/abs/2312.15796 |
 | **Conformity score / coverage** | Residual-based score giving distribution-free intervals with target coverage. | EnbPI | https://arxiv.org/abs/2010.09107 |
+| **Pinball (quantile) loss** | Asymmetric loss minimized by the τ-quantile; trains quantile heads. | Chronos-Bolt, Moirai-2 | https://huggingface.co/amazon/chronos-bolt-base |
+| **TSMix / KernelSynth** | Chronos data augmentation: mix real series / synthesize from GP kernels. | Chronos | https://arxiv.org/html/2403.07815v1 |
+| **Icosahedral mesh GNN** | Message-passing on a sphere-tiling mesh for global fields. | GraphCast | https://www.science.org/doi/10.1126/science.adi2336 |
+| **Covariance inflation** | Scale up ensemble spread to counter EnKF under-dispersion. | EnKF | https://doi.org/10.1029/94JC00572 |
+| **Sakoe-Chiba band** | Warping-path constraint making DTW near-linear and avoiding pathological alignments. | DTW | https://doi.org/10.1109/TASSP.1978.1163055 |
+
+---
+
+## X. VERIFICATION LOG FOR NEW CLAIMS (this expansion pass)
+
+Documents the primary source consulted for each **new numeric/architectural claim** added in §L–§W, per the §0 rule "every claim carries a URL." Verified June 2026.
+
+| New claim | Value asserted | Verifying source |
+|---|---|---|
+| TimesFM pretrain scale | ~100B time points, 80/20 real/synthetic | https://www.marktechpost.com/2024/02/12/google-research-introduces-timesfm-a-single-forecasting-model-pre-trained-on-a-large-time-series-corpus-of-100b-real-world-time-points/ |
+| TimesFM 2.0 backbone | 50 layers, 1,280 width | https://research.google/blog/a-decoder-only-foundation-model-for-time-series-forecasting/ |
+| Chronos sizes | 46M / 200M / 710M; 4,096-token vocab | https://huggingface.co/amazon/chronos-t5-large · https://arxiv.org/html/2403.07815v1 |
+| Moirai-2 corpus + rank | 36M series; 5th/37, 5th MASE/6th CRPS | https://arxiv.org/html/2511.11698v1 |
+| GIFT-Eval scope | 97 configs / 55 datasets / ~37 models | https://arxiv.org/abs/2410.10393 · https://huggingface.co/spaces/Salesforce/GIFT-Eval |
+| Monash scope | 30 datasets / 58 variations | https://arxiv.org/abs/2105.06643 |
+| GenCast vs ENS | 97.2% of 1,320 targets; 99.8% >36h; ~8 min/TPU v5 | https://deepmind.google/blog/gencast-predicts-weather-and-the-risks-of-extreme-conditions-with-sota-accuracy/ |
+| MASE interpretation | <1 beats naive baseline | https://www.nixtla.io/docs/forecasting/evaluation/evaluation_metrics |
+| CRPS property | Proper score, reduces to MAE deterministically | https://www.lokad.com/continuous-ranked-probability-score/ |
+| Toto family | 4M–2.5B params, u-μP, BOOM benchmark | https://arxiv.org/abs/2505.14766 · https://www.datadoghq.com/blog/ai/toto-boom-unleashed/ |
+| Chronos-Bolt speedup | ~250× faster, CPU-viable | https://huggingface.co/amazon/chronos-bolt-base |
 
 ---
 
@@ -536,4 +561,4 @@ Beyond §I/§N, these are forecasting-adjacent patents worth a claim-read before
 
 ---
 
-*End of `03_EVIDENCE_BASE.md`. Sections: A–K (original evidence base) + L (foundation-model deep dives) + M (model-selection decision matrix) + N (expanded patent FTO ledger) + O (replicate-in-our-repo mapping) + P (benchmark/leaderboard references) + Q (risks-of-replication register) + R (non-foundation deep dives) + S (consolidated replicability scorecard) + T (worked end-to-end forecast flows) + U (glossary of architecture-internals terms) + V (training-recipe & reproduce-cost) + W (supplementary patent watch-list). Cross-refs: `00_MASTER_INDEX.md` (§0 non-negotiables, §1.3 replicate-first, §2 architecture), `06_ALGORITHMS.md` (math/pseudocode per method), `11_VALIDATION_AND_TEST_PLAN.md` (benchmarks), `12_SECURITY_GOVERNANCE_LEGAL.md` (FTO/license compliance), `13_PHASED_BUILD_PLAN.md` (deploy phases), `14_RISKS_AND_LIMITS.md` (risk register). Verification date: June 2026 — re-verify patent legal status and gated-weight licenses before any commercial deployment.*
+*End of `03_EVIDENCE_BASE.md`. Sections: A–K (original evidence base) + L (foundation-model deep dives) + M (model-selection decision matrix) + N (expanded patent FTO ledger) + O (replicate-in-our-repo mapping) + P (benchmark/leaderboard references) + Q (risks-of-replication register) + R (non-foundation deep dives) + S (consolidated replicability scorecard) + T (worked end-to-end forecast flows) + U (glossary of architecture-internals terms) + V (training-recipe & reproduce-cost) + W (supplementary patent watch-list) + X (verification log for new claims). Cross-refs: `00_MASTER_INDEX.md` (§0 non-negotiables, §1.3 replicate-first, §2 architecture), `06_ALGORITHMS.md` (math/pseudocode per method), `11_VALIDATION_AND_TEST_PLAN.md` (benchmarks), `12_SECURITY_GOVERNANCE_LEGAL.md` (FTO/license compliance), `13_PHASED_BUILD_PLAN.md` (deploy phases), `14_RISKS_AND_LIMITS.md` (risk register). Verification date: June 2026 — re-verify patent legal status and gated-weight licenses before any commercial deployment.*
