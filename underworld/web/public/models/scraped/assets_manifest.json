@@ -9917,5 +9917,22 @@
     "epoch": "iron",
     "name": "Wall Corner Stone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wall_gate_stone": {
+    "prompt": "a modular stone wall gate segment with timber doors, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0d2efcd9-4c9b-4c1b-9951-26486b440a24",
+    "path": "/models/generated/tripo/wall_gate_stone.glb",
+    "bytes": 14905608,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/0d2efcd9-4c9b-4c1b-9951-26486b440a24/tripo_pbr_model_0d2efcd9-4c9b-4c1b-9951-26486b440a24.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMGQyZWZjZDktNGM5Yi00YzFiLTk5NTEtMjY0ODZiNDQwYTI0L3RyaXBvX3Bicl9tb2RlbF8wZDJlZmNkOS00YzliLTRjMWItOTk1MS0yNjQ4NmI0NDBhMjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=A5OcCbr1hlDNOPopXz4pXKA4Nknl7y6swCGCcGrhC3iDAO4m~Kvfnv3-fpUnNi9MRKkwNTQaIpbmb1~YJfk7xQuW~~JUXipqX2l-mMFfihWWyuW80g1gx67R5xgjrJHL1HCainUO6YRIESFGXRbeR1wzgdC8yjNNC~Taze05u3eQyq-azOicu1emDuihBHNzPiby0-lHdqjHnB3RV7NvfV2a2JukqPV0EZVxVE5mYvmw1Jgi1XZ3ZXT6SxCgEtKDijpzRWd2-UEZLz4M7ZnFKQSLcJtE~G0wNHVzSsuG~q4~W2LN7KsbUuXDoH4f1oFuM3gx0FFjMx84GRhYQfO9QA__",
+    "asset_id": "wall_gate_stone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Wall Gate Stone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
