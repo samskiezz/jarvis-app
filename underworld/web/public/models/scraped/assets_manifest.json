@@ -10053,5 +10053,22 @@
     "epoch": "any",
     "name": "Bush Flowering",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cactus_tall": {
+    "prompt": "a tall branching saguaro cactus, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "17bbf279-f9d9-470e-90dd-34d6fc538de5",
+    "path": "/models/generated/tripo/cactus_tall.glb",
+    "bytes": 11958156,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/17bbf279-f9d9-470e-90dd-34d6fc538de5/tripo_pbr_model_17bbf279-f9d9-470e-90dd-34d6fc538de5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMTdiYmYyNzktZjlkOS00NzBlLTkwZGQtMzRkNmZjNTM4ZGU1L3RyaXBvX3Bicl9tb2RlbF8xN2JiZjI3OS1mOWQ5LTQ3MGUtOTBkZC0zNGQ2ZmM1MzhkZTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=LlkiEtn49x6jEckkGycJCeX6knGEVnQRaqQRf1OdykmAjx0KkzgXk8fbNaZZbtUeDeC5jq37thLJNITRX5r91ekP8pBA0shjn~zTcmXXaAxSetCSpNr9WH6oc5NopPlM5Gy-poptd4N0E7YfjR7EzzF0mVYrweGN6drjktf08hxgeicA1ZtL9lIUZ5Fw-mVd7oS9nzUkISGnOKA15DXZnJvXUsuv-OQZ~Rs~6A9UsYTyrbgz~xjfMvs0fMN4NAgpIY-PusyX-rZNCFjS4qYB0su-a2rl~Nh6pEEv7~jEfbGkz63VuAcmOs9bbAPwjNTp70thRDZ1yrux9jrn3uIQ4A__",
+    "asset_id": "cactus_tall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Cactus Tall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
