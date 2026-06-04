@@ -10835,5 +10835,22 @@
     "epoch": "iron",
     "name": "Wheelbarrow",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wooden_sled": {
+    "prompt": "a simple wooden hauling sled with runners, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "376147eb-7716-4a4d-a0b6-72fe7d9a2eba",
+    "path": "/models/generated/tripo/wooden_sled.glb",
+    "bytes": 14492092,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/376147eb-7716-4a4d-a0b6-72fe7d9a2eba/tripo_pbr_model_376147eb-7716-4a4d-a0b6-72fe7d9a2eba.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzc2MTQ3ZWItNzcxNi00YTRkLWEwYjYtNzJmZTdkOWEyZWJhL3RyaXBvX3Bicl9tb2RlbF8zNzYxNDdlYi03NzE2LTRhNGQtYTBiNi03MmZlN2Q5YTJlYmEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=X32u~gy4nMUlTMGABeXCb8~6PTXzsHv6nDMs~v2xxKBYqvWkOdCAFvA5fTrNsm~ujL3OAsuUl5j6~0Vy0LqUHGMOJ3eZwBHJL~wMy45A~GFSyaTcU~1p4HTectbk1eiGC36H7CzyuSBtuQRGFjUI4qoB1hkygHrcTYkBbwjXi2MCrag-dg9ZNg6ZnmsrW5rATJtoUYmPx5GeSUUj28AtX05ayXPgfC4sLxO0W1F~TG9IyxBCMgnbWLL~7Ihptirtvyh6FKyqJlM0cSBZKJXhpl-zwvKuqHpKpo5rdyGsx084M1zb-CrmHA~ULY0OeWPpHyNzowwb27UQt~jdFecAiA__",
+    "asset_id": "wooden_sled",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "stone",
+    "name": "Wooden Sled",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
