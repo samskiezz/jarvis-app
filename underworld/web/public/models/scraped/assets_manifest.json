@@ -10342,5 +10342,22 @@
     "epoch": "any",
     "name": "Tree Olive",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:vine_hanging": {
+    "prompt": "a curtain of hanging leafy vines, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5c36e97b-6581-4a74-bb17-2531812216bd",
+    "path": "/models/generated/tripo/vine_hanging.glb",
+    "bytes": 9041744,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/5c36e97b-6581-4a74-bb17-2531812216bd/tripo_pbr_model_5c36e97b-6581-4a74-bb17-2531812216bd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNWMzNmU5N2ItNjU4MS00YTc0LWJiMTctMjUzMTgxMjIxNmJkL3RyaXBvX3Bicl9tb2RlbF81YzM2ZTk3Yi02NTgxLTRhNzQtYmIxNy0yNTMxODEyMjE2YmQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=DjygdFr5uSS8yLpVKPskdb1wPuyGdEvIcvPfnLXhp22Jb-4ZPHldNBy2c20WRtEg6ipg12qjfb4ycogR1mpEGJQUZoeDEY-cTK7vg8aKh2cu~5-KP7kzuf7Xu8-pyLFlJbD9do002ZAbCyrWV01FuNHUcmVqe7VDHTHj73tRCb5yNmCpQEDa3GiNlGU82bjSDA4om2J6WCxhfL61dn-lxb97tweNrdL099didHxjsUNqOodeQaLcADTeDjkvKop2alpNk8WGa7iW99o3~IXTTfl26XGOjCHdbGWYI8e~fuxT6uYx5FUkrCxtMmpmM1puARAUSNQqcH-zsW06bjXOLg__",
+    "asset_id": "vine_hanging",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Vine Hanging",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
