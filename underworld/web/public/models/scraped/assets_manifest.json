@@ -9764,5 +9764,22 @@
     "epoch": "any",
     "name": "Sinkhole",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:snow_tile": {
+    "prompt": "a modular snow-covered ground tile, seamless, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fc093f79-021f-4ca1-a38b-8df764f2f182",
+    "path": "/models/generated/tripo/snow_tile.glb",
+    "bytes": 15122396,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/fc093f79-021f-4ca1-a38b-8df764f2f182/tripo_pbr_model_fc093f79-021f-4ca1-a38b-8df764f2f182.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZmMwOTNmNzktMDIxZi00Y2ExLWEzOGItOGRmNzY0ZjJmMTgyL3RyaXBvX3Bicl9tb2RlbF9mYzA5M2Y3OS0wMjFmLTRjYTEtYTM4Yi04ZGY3NjRmMmYxODIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=K0t4mqlQNtl-DNb5e7GxeolbIIIb~xaq4LHW7QFzU8xm0lyAw6IwU35DqEoO0ZfE-L~qHknN6mLMBN~eBi6VZiPY1ykvhJaoWlBMjcNyp2I2uhHxx7kdgobqjVYhGCvoWuICUX7Aut--bWXRXLxe1fLmHg57~Sse08pALvsjlAhMcNLJnIvxRegcMrGx0DP5dfltZh7IhmbqNlHhYORij3cBTM69gvHJ7pRB7faPzy6zY41Pl1xQepcehdIrJDESRgVh3ipIGYxQiTFnwKkWfLbb0BcquaV8fhE5TbU4WggKZsvjVybo0j6v2BP6modF9~1l2xGDM~EChdv-xBS4Zg__",
+    "asset_id": "snow_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Snow Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
