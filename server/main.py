@@ -12,6 +12,7 @@ from .routes import auth as auth_routes
 from .routes import datasets as datasets_routes
 from .routes import bridge as bridge_routes
 from .routes import collab as collab_routes
+from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
 from .routes import graph as graph_routes
 from .routes import labs as labs_routes
@@ -94,6 +95,10 @@ def create_app() -> FastAPI:
     app.include_router(search_routes.router)
     app.include_router(ops_routes.router)
     app.include_router(bridge_routes.router)
+    # datasets (Wave-7 rich catalog) before pipelines so it wins the shared
+    # /v1/datasets paths; pipelines keeps its connector-kinds/transform/pipeline
+    # endpoints (distinct paths).
+    app.include_router(datasets_routes.router)
     app.include_router(pipelines_routes.router)
     app.include_router(aip_routes.router)
     app.include_router(security_routes.router)
@@ -108,11 +113,11 @@ def create_app() -> FastAPI:
     app.include_router(scenario_routes.router)
     app.include_router(search_semantic_routes.router)
     app.include_router(aip_tools_routes.router)
-    app.include_router(datasets_routes.router)
     app.include_router(tenancy_routes.router)
     app.include_router(gateway_routes.router)
     app.include_router(search_plus_routes.router)
     app.include_router(ontology_ext_routes.router)
+    app.include_router(connectors_routes.router)
 
     @app.get("/")
     async def root():
