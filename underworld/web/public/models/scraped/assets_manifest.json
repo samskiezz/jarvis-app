@@ -11311,5 +11311,22 @@
     "epoch": "stone",
     "name": "Campfire Pit",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ceramic_amphora_stack": {
+    "prompt": "a stack of clay storage amphorae, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7d8cafc2-9fb8-4e2a-bd60-21053fa1e3c6",
+    "path": "/models/generated/tripo/ceramic_amphora_stack.glb",
+    "bytes": 14606360,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/7d8cafc2-9fb8-4e2a-bd60-21053fa1e3c6/tripo_pbr_model_7d8cafc2-9fb8-4e2a-bd60-21053fa1e3c6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvN2Q4Y2FmYzItOWZiOC00ZTJhLWJkNjAtMjEwNTNmYTFlM2M2L3RyaXBvX3Bicl9tb2RlbF83ZDhjYWZjMi05ZmI4LTRlMmEtYmQ2MC0yMTA1M2ZhMWUzYzYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=WPyFmbiECF41NjKXjRVsvqPh5eHgms6yDU8M0aPAgvdQkIyBg0HqE11OzgjrUQMftzi7MLjY09CRD-hYKKrLOZDpAEXAPR4k3yTsEKTEPQtRWRf2oJJLkFEa~Rl0A85YJvAX2sHr4QTvjs0cvHh60WIfmYm6IgHJhT8b-JwNhZfOCHBThaUAx-3ZgMwjnyiWR7XZHTpJ1NWFlYcxJriONBA6ijf9sD9I4ooDDsHs4ItnPtXQLgH1xB~NdQNl9JXJwGTXrizKoZcl89ZD6ZFSX5zZQqSLqN2EMixVyEybJ~UwfzmPPRQUukBc~qR5hxK~2cAkV-7PqPtZutlLSp-wKw__",
+    "asset_id": "ceramic_amphora_stack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Ceramic Amphora Stack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
