@@ -261,6 +261,9 @@ Maps PATTERN ORACLE forecasting use-cases to a recommended backbone. "Why" cites
 | **Small tabular-style series w/ rich calendar features** | **TabPFN-TS** | Chronos-Bolt | In-context tabular regression, no fitting. | **Verify TabPFN license** | R-B | https://github.com/PriorLabs/tabpfn-time-series |
 | **Price / financial trajectory** | **classical GBM-MC + Holt** (in-repo) ensembled w/ TimesFM | TimesFM alone | Closed-form volatility/drift drivers are explainable + auditable; no license risk. | In-repo (own code) | R-A | https://github.com/google-research/timesfm |
 | **Calibrated intervals around ANY of the above** | **EnbPI** (MAPIE) | CopulaCPTS | Distribution-free, model-agnostic, no exchangeability needed. | Public math / MAPIE | R-A | https://arxiv.org/abs/2010.09107 |
+| **Multi-target / multi-horizon joint intervals** | **CopulaCPTS** | EnbPI per-target | Copula calibrates the *joint* region, not just marginals. | Public math / code | R-B | https://arxiv.org/abs/2212.03281 |
+| **Regime-aware forecasting** (segment then fit) | **PELT/BOCPD** + any backbone | backbone alone | Fit volatility/trend on the current regime only. | BSD-2 / public | R-A | https://arxiv.org/abs/1101.1438 |
+| **Motif / anomaly discovery (no forecast)** | **Matrix Profile + HDBSCAN** | DTW 1-NN | Training-free shape discovery on History Lake. | BSD-3 | R-A | https://github.com/TDAmeritrade/stumpy |
 
 **Routing rule (matches `00_MASTER_INDEX.md` §1.3 item 1):** default to the **R-A** column; only escalate to **R-B** (Moirai-2 / TabPFN-TS) when a use-case demonstrably needs it AND the weight license is cleared. Never auto-route to non-commercial weights.
 
@@ -507,6 +510,9 @@ Documents the primary source consulted for each **new numeric/architectural clai
 | CRPS property | Proper score, reduces to MAE deterministically | https://www.lokad.com/continuous-ranked-probability-score/ |
 | Toto family | 4M–2.5B params, u-μP, BOOM benchmark | https://arxiv.org/abs/2505.14766 · https://www.datadoghq.com/blog/ai/toto-boom-unleashed/ |
 | Chronos-Bolt speedup | ~250× faster, CPU-viable | https://huggingface.co/amazon/chronos-bolt-base |
+| TimesFM 2.5 specs | 200M params, 16k context, 1k horizon, fused QKV | https://huggingface.co/google/timesfm-2.5-200m-pytorch |
+| TimesFM Google Trends source | ~22k head queries, 2007–2022 | https://www.marktechpost.com/2024/02/12/google-research-introduces-timesfm-a-single-forecasting-model-pre-trained-on-a-large-time-series-corpus-of-100b-real-world-time-points/ |
+| Lag-Llama on GIFT-Eval | listed among 37 foundation models | https://huggingface.co/spaces/Salesforce/GIFT-Eval |
 
 ---
 
