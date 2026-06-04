@@ -1397,6 +1397,71 @@ anomalies = score(x) > 1 - contamination_quantile
 
 **Source.** Liu, Ting, Zhou 2008, *Isolation Forest*, ICDM; https://doi.org/10.1109/ICDM.2008.17 · sklearn https://scikit-learn.org/stable/modules/outlier_detection.html#isolation-forest
 
+#### D14.+ DEPTH MILESTONE
+
+**Full derivation.** Anomalies are "few and different," so a random axis-parallel partition isolates them in fewer cuts. The path length `h(x)` to isolate `x` in a random binary tree is analogous to an unsuccessful BST search; its expectation over random trees relates to the data structure's average depth. The normalization `c(n)=2H(n−1)−2(n−1)/n` (with `H` the harmonic number) is the **average path length of an unsuccessful BST search on `n` nodes** — it makes scores comparable across sample sizes. The score `s(x)=2^{−E[h(x)]/c(n)}` maps short paths (anomalies) to `s→1` and long paths (normal) to `s→0.5`. Using subsamples of size `ψ` and `max_depth=⌈log₂ψ⌉` both speeds training and mitigates **swamping** (normal points flagged due to large dense regions) and **masking** (anomaly clusters hiding each other) by limiting how much structure each tree sees.
+
+**Runnable-quality pseudocode.**
+```python
+import numpy as np
+def c_factor(n):
+    if n <= 1: return 0.0
+    return 2.0*(np.log(n-1)+0.5772156649) - 2.0*(n-1)/n      # harmonic ≈ ln+γ
+
+def build_itree(X, depth, max_depth, rng):
+    n = len(X)
+    if depth >= max_depth or n <= 1:
+        return {"size": n}
+    f = rng.integers(X.shape[1])
+    lo, hi = X[:, f].min(), X[:, f].max()
+    if lo == hi: return {"size": n}
+    v = rng.uniform(lo, hi)
+    mask = X[:, f] < v
+    return {"f": f, "v": v,
+            "L": build_itree(X[mask], depth+1, max_depth, rng),
+            "R": build_itree(X[~mask], depth+1, max_depth, rng)}
+
+def path_len(x, node, depth=0):
+    if "f" not in node:                       # leaf
+        return depth + c_factor(node["size"])  # adjust for unsplit leaf size
+    nxt = node["L"] if x[node["f"]] < node["v"] else node["R"]
+    return path_len(x, nxt, depth+1)
+
+def isolation_forest(X, *, n_estimators=100, max_samples=256, seed=0):
+    rng = np.random.default_rng(seed); X = np.asarray(X, float)
+    psi = min(max_samples, len(X)); md = int(np.ceil(np.log2(max(psi,2))))
+    trees = [build_itree(X[rng.choice(len(X), psi, replace=False)], 0, md, rng)
+             for _ in range(n_estimators)]
+    cn = c_factor(psi)
+    scores = np.array([2**(-np.mean([path_len(x,t) for t in trees])/cn) for x in X])
+    return scores       # ~1 anomaly, ~0.5 normal
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `n_estimators` | int | 100 | 50–500 | #trees, score stability | ↑ smooths scores |
+| `max_samples ψ` | int | 256 | 64–1024 | subsample per tree | 256 is paper sweet spot |
+| `max_features` | float | 1.0 | (0,1] | features per split | <1 for high-d |
+| `contamination` | float/auto | auto | (0,0.5) | label threshold | set to expected anomaly rate |
+| `random_state` | int | fixed | any | reproducibility | fix in prod |
+
+**Worked numeric example.** `X` = 1000 points `N(0, I₂)` plus one outlier at `(10,10)`. Mean path length for the outlier ≈ 2–3 splits (isolated immediately) vs ≈ `c(256)≈10.2` for inliers. Outlier score `≈ 2^{−2.5/10.2} = 0.844` (near 1 ⇒ anomaly); inliers `≈ 2^{−10/10.2} = 0.506` (≈0.5 ⇒ normal). Threshold at 0.6 cleanly flags only the outlier.
+
+**Complexity (derivation).** Building one tree on `ψ` points: average depth `O(log ψ)`, each level partitions `ψ` points → `O(ψ log ψ)`; `t` trees → `O(t·ψ log ψ)`. Scoring one point: traverse `t` trees of depth `O(log ψ)` → `O(t log ψ)`; **sublinear in `n`** (training subsamples). **Space** `O(t·ψ)` (tree nodes).
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Constant feature | `lo==hi`, no valid split | return leaf early (handled) |
+| Mixed-unit features | split granularity skew | standardize per feature |
+| Swamping/masking | wrong flags in dense data | subsampling `ψ`; default 256 |
+| Highly correlated dims | axis-parallel cuts weak | use Extended Isolation Forest |
+
+**Unit-test oracle.** `c_factor(256)≈10.244` (compute against `2(ln255+γ)−2·255/256`). A dataset of 1 inlier blob + 1 extreme outlier must give the outlier the maximum score, strictly greater than every inlier's score (with fixed seed, deterministic). `c_factor(1)=0`, `c_factor(2)=2(ln1+γ)−1=2·0.5772−1=0.1544`.
+
+**Integration code-points.** `sklearn.ensemble.IsolationForest` behind a **NEW** wrapper `anomaly_screen.py`. Reuses the sklearn usage pattern in `ai_model.py` (RF/GB/MLP on the Yeh dataset). Input = engineered multivariate features (returns, volatility, Matrix-Profile discord scores from C10, forecast residuals); flags → VERIFIER caveats + SELF-IMPROVEMENT outlier handling. Complements C10's univariate-shape discords with multivariate point anomalies.
+
 ---
 
 ## GROUP E — CAUSAL DISCOVERY
@@ -1440,6 +1505,68 @@ report min-p lag; granger_causes = (p < α)
 **Reuse target.** `statsmodels.tsa.stattools.grangercausalitytests`; **NEW** wrapper. Reuse `numpy` OLS idioms (`np.polyfit`/`lstsq`) already used in `prediction.py` (`fit_growth_series`).
 
 **Source.** Granger 1969, *Econometrica*; https://doi.org/10.2307/1912791 · statsmodels https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.grangercausalitytests.html
+
+#### E15.+ DEPTH MILESTONE
+
+**Full derivation.** Under the null "`X` does not Granger-cause `Y`," the extra regressors `b_1..b_L` are jointly zero. The F-test compares nested OLS models: restricted (Y on its own lags, RSS_R, `T−L−1` residual df) vs unrestricted (adds X lags, RSS_U, `T−2L−1` df). The statistic `F=((RSS_R−RSS_U)/L)/(RSS_U/(T−2L−1))` follows `F(L, T−2L−1)` under Gaussian errors because `(RSS_R−RSS_U)/σ²~χ²_L` and `RSS_U/σ²~χ²_{T−2L−1}` are independent (Cochran's theorem). A significant `F` means the X-lags explain variance beyond Y's own past — *predictive* causality. Stationarity is required because OLS on integrated (unit-root) series produces spurious significance (Granger–Newbold). The Toda–Yamamoto extension fits a VAR in levels with `L+d_max` lags and Wald-tests only the first `L`, sidestepping pretesting bias for integrated series.
+
+**Runnable-quality pseudocode.**
+```python
+def granger_test(X, Y, *, max_lag=None, alpha=0.05):
+    import numpy as np
+    from scipy.stats import f as f_dist
+    X = np.asarray(X, float); Y = np.asarray(Y, float); T0 = len(Y)
+    max_lag = max_lag or max(1, int(np.ceil(T0**(1/3))))
+    def ensure_stationary(z, dmax=2):
+        from statsmodels.tsa.stattools import adfuller
+        d = 0
+        while d < dmax and adfuller(z)[1] > 0.05:
+            z = np.diff(z); d += 1
+        return z, d
+    X, _ = ensure_stationary(X); Y, _ = ensure_stationary(Y)
+    n = min(len(X), len(Y)); X, Y = X[-n:], Y[-n:]
+    best = {"p": 1.0, "F": 0.0, "lag": None}
+    for L in range(1, max_lag+1):
+        T = n - L
+        yt = Y[L:]
+        Yl = np.column_stack([Y[L-k-1:n-k-1] for k in range(L)])
+        Xl = np.column_stack([X[L-k-1:n-k-1] for k in range(L)])
+        def rss(A):
+            A = np.column_stack([np.ones(T), A])
+            beta, *_ = np.linalg.lstsq(A, yt, rcond=None)
+            r = yt - A@beta; return float(r@r)
+        RSS_R = rss(Yl); RSS_U = rss(np.column_stack([Yl, Xl]))
+        df2 = T - 2*L - 1
+        if df2 <= 0: continue
+        F = ((RSS_R - RSS_U)/L) / (RSS_U/df2)
+        p = 1 - f_dist.cdf(F, L, df2)
+        if p < best["p"]: best = {"p": p, "F": F, "lag": L}
+    best["granger_causes"] = best["p"] < alpha
+    return best
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `max_lag` | int | ⌈T^{1/3}⌉ | 1–T/4 | candidate lags | AIC/BIC selection |
+| `alpha` | float | 0.05 | (0,1) | significance | BH-correct over pairs |
+| diff order `d` | int | auto (ADF) | 0–2 | stationarization | cap at 2 |
+
+**Worked numeric example.** Construct `Y_t = 0.5 Y_{t−1} + 0.8 X_{t−1} + ε`, `X` i.i.d., T=500. Granger test X→Y at L=1: `RSS_U ≪ RSS_R` (X-lag explains lots) → large `F` (e.g. >100), `p<1e-10` → `granger_causes=True`. Reverse Y→X: `F≈small`, `p>0.05` → not significant. Correctly recovers the one-way coupling.
+
+**Complexity (derivation).** Per lag `L`: two OLS solves on `T×(≈L)` and `T×(≈2L)` design matrices → `O(T·L²)` each (normal equations / QR). Over lags `1..max_lag`: `O(max_lag²·T·max_lag)≈O(T·max_lag³)` worst. Pairwise over `S` series: `O(S²·...)`. **Space** `O(T·max_lag)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Non-stationary inputs | spurious significance | ADF/KPSS + differencing first |
+| Collinear lags | singular normal matrix | `lstsq`/pinv (rank-robust) |
+| Multiple testing over S² pairs | false discoveries | Benjamini–Hochberg FDR |
+| Confounding/common driver | "causality" that's correlation | frame as "Granger-predictive," pair with CCM |
+
+**Unit-test oracle.** Independent white-noise `X,Y` (T=1000): p-value should be ~Uniform(0,1) → not significant at 0.05 in ~95% of seeds (calibration check). The constructed `Y_t=0.8X_{t−1}+ε` example above must yield `p<0.01` for X→Y and `p>0.05` for Y→X. Cross-check `F`/`p` against `statsmodels.grangercausalitytests` (match within numerical tolerance).
+
+**Integration code-points.** `statsmodels.tsa.stattools.grangercausalitytests` behind a **NEW** wrapper `causal_screen.py`; OLS idioms reuse `np.linalg.lstsq` as in `prediction.py:fit_growth_series` (`/home/user/jarvis-app/server/services/prediction.py:491`). Significant `X→Y` (post BH-correction) becomes a candidate ARIMAX exogenous regressor (A3) and a candidate KGIK edge (RELATIONAL LAYER) pending SELF-IMPROVEMENT confirmation.
 
 ---
 

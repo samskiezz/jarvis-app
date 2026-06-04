@@ -1777,6 +1777,81 @@ Every datapoint passes a **validation gate** before it is upserted into `observa
 
 **Quality propagation into forecasting.** When a series feeding a forecast contains `suspect`/`imputed` rows, the engine adds a machine-generated caveat to the response `caveats[]` (e.g. `"3 of 90 inputs were flagged suspect (Hampel spike filter)."`), keeping the honesty contract `prediction.py` already follows.
 
+### 13.6 The validation gate (reference pseudocode)
+
+The gate is one function applied to every `SeriesPoint` emitted by every adapter, before upsert. It returns `(accept: bool, point: dict|None, quality: str)`.
+
+```python
+def validate_point(series: SeriesRow, p: SeriesPoint, ctx: BatchCtx) -> tuple[bool, dict | None, str]:
+    t, v = p["t"], p["v"]
+    # --- S1/S2 structural (hard) ---
+    if not isinstance(t, int) or t < 0 or t > ctx.now_ms + 86_400_000:
+        return (False, None, "")                       # S1 reject
+    if v is None or not math.isfinite(v):
+        return (False, None, "")                       # S2 reject
+    q = p.get("quality", "ok")
+    if q not in QUALITY_ENUM:                            # S5 coerce
+        q = "ok"
+    # --- D-rules domain/unit (soft) ---
+    if _is_price_like(series) and v <= 0:               # D1
+        q = "suspect"
+    if series.point_kind == "ratio" and not (0.0 <= v <= 1.0) \
+            and not series.meta.get("allow_gt1"):       # D6
+        q = "suspect"
+    if series.point_kind == "flow" and v < 0:           # D7
+        q = "suspect"
+    if series.metric == "magnitude" and not (-1.0 <= v <= 10.0):  # D3
+        q = "suspect"
+    # --- T1 spike (Hampel, soft) ---
+    med, mad = ctx.rolling_hampel(series.series_id, t)  # 21-pt window
+    if mad > 0 and abs(v - med) > 8.0 * mad:            # T1
+        q = "suspect"
+    # --- T5 revision (on upsert conflict) ---
+    prev = ctx.existing_value(series.series_id, t)
+    if prev is not None and abs(prev - v) > 1e-9:       # T5
+        q = "revised"
+        ctx.rows_revised += 1
+    return (True, {"t": t, "v": v, "quality": q}, q)
+```
+
+`ctx.rolling_hampel` reads the last 21 stored points around `t`; on cold start (fewer than 5 points) T1 is skipped (insufficient context — the same "say so when data is thin" stance as `_insufficient()`). Gap imputation (T3) runs as a *post-pass* over the accepted batch, not per-point, because it needs both neighbours.
+
+### 13.7 Quality state-transition table
+
+`quality` is monotone toward "worse" within a single row's lifetime except via explicit re-fetch of corrected upstream data:
+
+| From \ Event | finite re-fetch, same value | re-fetch, changed value | gap-fill pass | downsample (§14.3) |
+|--------------|-----------------------------|--------------------------|---------------|---------------------|
+| `ok` | `ok` | `revised` | — | worst-of bucket |
+| `interpolated` | `interpolated` | `revised` | — | worst-of bucket |
+| `imputed` | `imputed` | `ok` (real datum arrived) | — | worst-of bucket |
+| `suspect` | `suspect` | `revised`/`ok` (if now passes) | — | worst-of bucket |
+| `revised` | `revised` | `revised` | — | worst-of bucket |
+| (missing) | — | — | `imputed`/`interpolated` | — |
+
+Ordering for "worst-of bucket" (§14.3): `ok < interpolated < imputed < suspect < revised`.
+
+### 13.8 Per-field validation summary (every persisted field that carries a rule)
+
+| Table.field | Validation source | Rule |
+|-------------|-------------------|------|
+| `observation.ts` | S1 | epoch ms, `0 ≤ ts ≤ now+1d` |
+| `observation.value` | S2, D1–D7, T1 | finite; domain bounds; Hampel spike |
+| `observation.quality` | S5, T5 | enum; revision detection |
+| `observation.ingested_at` | T6 | non-decreasing per `(series_id, ts)` |
+| `series.freq` | CHECK | FreqEnum |
+| `series.point_kind` | CHECK | PointKindEnum |
+| `series` natural key | S6, UQ | all five components present & unique |
+| `forecast.low/point/high` | F1 | `low ≤ point ≤ high` |
+| `forecast.confidence/probability` | F2 | `[0,1]` |
+| `forecast.due_ts` | F3 | recomputed from `issued_ts + horizon_s·1000` |
+| `forecast.domain/family` | F4, CHECK | enums |
+| `realized_outcome.*` | F6 | at least one actual_* present |
+| `skill_score.brier` | F5 | `[0,1]` |
+| `skill_score.crps/rmse/abs_err/pinball_*` | F5 | `≥ 0` |
+| `kg_edge.a/b` | R6 | resolve to current nodes |
+| `pattern.promoted_edge_id` ↔ `kg_edge.pattern_id` | R7 | consistent pair |
+
 ---
 
 ## 14. RETENTION, ROLLUP & COMPACTION — EXACT RULES
