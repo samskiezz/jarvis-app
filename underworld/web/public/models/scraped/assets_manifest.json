@@ -10070,5 +10070,22 @@
     "epoch": "any",
     "name": "Cactus Tall",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:cattail_patch": {
+    "prompt": "a patch of cattail bulrushes, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0a2d8c67-8e1a-47fa-aa60-fe7097ddbf58",
+    "path": "/models/generated/tripo/cattail_patch.glb",
+    "bytes": 15865264,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/0a2d8c67-8e1a-47fa-aa60-fe7097ddbf58/tripo_pbr_model_0a2d8c67-8e1a-47fa-aa60-fe7097ddbf58.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMGEyZDhjNjctOGUxYS00N2ZhLWFhNjAtZmU3MDk3ZGRiZjU4L3RyaXBvX3Bicl9tb2RlbF8wYTJkOGM2Ny04ZTFhLTQ3ZmEtYWE2MC1mZTcwOTdkZGJmNTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=vYikYjE3EOB59kmNAGj4oNZdMSUCHWXO9hVyKXLtXonHgyKd4ePWatgkmmj7zX3zpcH9nOCn5VuZucM1OqA57NCzSnlILwGg~oS52fNGk0JEtO9K6N1pJS4jFaoFHuHKkp6SN2SDcqDdhXZTehhsarOJySylEJp5do7P-4jaRJN4ef8Htv8yy2DsIotCFYK2A8eDB8vNgthUjgbj4a68mFtnr6Gh57ZRyhV6TIwVtiogsABCgkjtf98N3E3AhE4pxZT9FDPhQYWlPNSAUKukTkNnbhhMQo6iUrzlHmF3mNF~HYadISchOysfiRtqxw-hENAYW91XrjOoXnvxUoTnyw__",
+    "asset_id": "cattail_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Cattail Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
