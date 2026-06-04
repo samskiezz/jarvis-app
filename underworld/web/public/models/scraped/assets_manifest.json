@@ -10308,5 +10308,22 @@
     "epoch": "any",
     "name": "Tree Cypress",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_maple_autumn": {
+    "prompt": "a maple tree in fiery autumn colours, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "547b0af4-b412-4560-9cfd-395534c16132",
+    "path": "/models/generated/tripo/tree_maple_autumn.glb",
+    "bytes": 4759836,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/547b0af4-b412-4560-9cfd-395534c16132/tripo_pbr_model_547b0af4-b412-4560-9cfd-395534c16132.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTQ3YjBhZjQtYjQxMi00NTYwLTljZmQtMzk1NTM0YzE2MTMyL3RyaXBvX3Bicl9tb2RlbF81NDdiMGFmNC1iNDEyLTQ1NjAtOWNmZC0zOTU1MzRjMTYxMzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=UKMtqGdCrLUhReqBkjuAgR8yExIgteJAn2m1~UkhX9oVP~bkyA5QhaFWdAeywQLmx-HHDrFahZnP8-T-7mxw5fvS~E8FR6mKmO7iXUI0DFtXAVPQ6By3T5jUwx383vKmUU7mCCMI3iKHfjpiEPhbD34A~TQH3vmFeNcAFhpAhMlyw0Jtcw0Kpt1sOm5ZOzdBR6X0dJC3Dgiap6onrFZUd4vqRzg7vAQp4PGuFvOj~PunE8S8DVBwn9kLhuajeOF1LqzzXOTvvaiZDN7-6XZvrvjeMG-JB22-HLuEhKta0DGbJklTUaWsqUIiynz5wNgf7DZZqUGqRkeX3PrMcI2Gqw__",
+    "asset_id": "tree_maple_autumn",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Maple Autumn",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
