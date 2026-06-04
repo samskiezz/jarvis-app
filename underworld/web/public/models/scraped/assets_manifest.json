@@ -11243,5 +11243,22 @@
     "epoch": "stone",
     "name": "Throwing Sling",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:war_hammer": {
+    "prompt": "a heavy spiked war hammer, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f95d5521-6058-4209-9ae4-b24d4cadc179",
+    "path": "/models/generated/tripo/war_hammer.glb",
+    "bytes": 11359472,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f95d5521-6058-4209-9ae4-b24d4cadc179/tripo_pbr_model_f95d5521-6058-4209-9ae4-b24d4cadc179.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjk1ZDU1MjEtNjA1OC00MjA5LTlhZTQtYjI0ZDRjYWRjMTc5L3RyaXBvX3Bicl9tb2RlbF9mOTVkNTUyMS02MDU4LTQyMDktOWFlNC1iMjRkNGNhZGMxNzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=v94FIXLvnuJyEXBe-h1z2HI-T8anHAZJ34DD4soYI9GSLBRBi6VgXaAkiq~LNBPPz6FLDb88GxihBUfyW5GOc6rWlilkgya3lzv~77iIyqqD3~DP3XZPecwKOIgVMx8KWxuo8u-non2oRmy289M7H5dLhsNzKLXBUpftZh-mFkZi2Sb7r1UlXIe2kAgoj~A-buFw2oMVBAT25zAKVjvo3ZdLWI8KJDjZoW2tuywLVN2iy1BWbPOaQHHEnjYQr3Z769GB-H3x6n4JdBaE0bNK8SfJEjt4bDCtQp1U6qCNDqUJd98HLqO1cqwevulSJnYefv9rHrKs4M7e~9YmIt7uRw__",
+    "asset_id": "war_hammer",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "War Hammer",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
