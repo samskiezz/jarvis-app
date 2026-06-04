@@ -9390,5 +9390,22 @@
     "epoch": "bronze",
     "name": "Palisade Corner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:palisade_gate": {
+    "prompt": "a log palisade gate with a timber doorway, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "de5189b6-7399-4f56-b997-8a5f434728e6",
+    "path": "/models/generated/tripo/palisade_gate.glb",
+    "bytes": 15321028,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/de5189b6-7399-4f56-b997-8a5f434728e6/tripo_pbr_model_de5189b6-7399-4f56-b997-8a5f434728e6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGU1MTg5YjYtNzM5OS00ZjU2LWI5OTctOGE1ZjQzNDcyOGU2L3RyaXBvX3Bicl9tb2RlbF9kZTUxODliNi03Mzk5LTRmNTYtYjk5Ny04YTVmNDM0NzI4ZTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=H0ZOXv5mZ-POUTBJQkR2YQcnLmvjD4iY4jHM8aYLc4Cfv6BwjjpIqUcAj-rVM1KOL4c8w9sbmOBtGNl43nEPLzR-KWxMgA~vBE~EmGIwDVDnWt6LqruZ1udFFIYVM3eVbjEYt1cXkzYXeWgtIOVFLUrsBYEDO3lDZUHbUAIwFT-b7YoeE4iz58mhUHHtbCRtfIg~IEE6ZiAxQ-WnRLk~FshlVnmUhIdAg9g9h75rj5pt8vJDvOmvNa~jK5ZWPjTrOWALYlh7DSRa8uY-8yYG3IpJZGmvVeZqpX4yzfpWKd8QmR-2UslRf45zUZ5eYXgoXHqMbLT7KTlzOL-HuHKzcw__",
+    "asset_id": "palisade_gate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "bronze",
+    "name": "Palisade Gate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
