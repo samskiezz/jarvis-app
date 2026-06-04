@@ -11515,5 +11515,22 @@
     "epoch": "iron",
     "name": "Milestone Marker",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:outdoor_anvil": {
+    "prompt": "a blacksmith's anvil on a wooden stump outdoors, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ee9bf601-ab87-419f-8d04-58c92cef17a3",
+    "path": "/models/generated/tripo/outdoor_anvil.glb",
+    "bytes": 14617548,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ee9bf601-ab87-419f-8d04-58c92cef17a3/tripo_pbr_model_ee9bf601-ab87-419f-8d04-58c92cef17a3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZWU5YmY2MDEtYWI4Ny00MTlmLThkMDQtNThjOTJjZWYxN2EzL3RyaXBvX3Bicl9tb2RlbF9lZTliZjYwMS1hYjg3LTQxOWYtOGQwNC01OGM5MmNlZjE3YTMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VYi04gMqSJ4D5ymWJh1XKgBc0AmRtIFK1obvHiapDe-LBdVtgwHpHp09rYnj8H0~P2gnyC6jqFw8hELqny-YbCMBKksfKSpcqnf2vEwZOkzc1EGhKK8FQ0V~s7kLE5gXABXRusHFbrWp2X15OSy7xSYBDL4s1sZ81hLz7d132~ci3v7bamQRgBCQBfR3OWpLz25wtmx-bMAKRYNiL27FrXguIPl7ot2oadCcx0I3ukvClZZydbY4e1Z09Ngpo6Fohjp77zDPrM2vBaUcy0QtOGhEEcGl5JOjp72jHdi0jZ9HW~LiT6xozzyHC0dxe5kwL4HUsqom~pLwtj7nxZVGYg__",
+    "asset_id": "outdoor_anvil",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Outdoor Anvil",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
