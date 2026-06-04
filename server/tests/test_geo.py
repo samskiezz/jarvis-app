@@ -147,11 +147,35 @@ def test_entities_layer_is_real(geo):
     assert len(feat["geometry"]["coordinates"]) == 2
 
 
-def test_unwired_layers_are_honest_empty(geo):
-    for lid in ("seismic", "air_quality", "buoys", "flight"):
+def test_unknown_layer_is_honest_empty(geo):
+    fc = geo.layer_features("does_not_exist")
+    assert fc["features"] == []
+    assert fc.get("note") == "unknown layer"
+
+
+def test_live_science_layers_are_real_or_honest_offline(geo, monkeypatch):
+    # The four science layers (seismic/flight/buoys/air_quality) fetch real,
+    # keyless public feeds. Each is network-guarded: force the fetch to fail
+    # (offline-safe, deterministic) → honest empty collection naming the source,
+    # never fabricated points; force success → features flow through with a
+    # real `source` tag.
+    cases = {
+        "seismic": ("_fetch_seismic", "usgs:2.5_day", "USGS"),
+        "flight": ("_fetch_flight", "opensky:states", "OpenSky"),
+        "buoys": ("_fetch_buoys", "noaa:ndbc", "NOAA"),
+        "air_quality": ("_fetch_air", "open-meteo:air-quality", "Open-Meteo"),
+    }
+    for lid, (fn, source, name) in cases.items():
+        monkeypatch.setattr(geo, fn, lambda limit: None)
         fc = geo.layer_features(lid)
         assert fc["features"] == []
-        assert fc.get("note") == "source not wired"
+        assert name.split()[0] in (fc.get("note") or "")
+
+        sample = [geo._feature(35.0, -118.0, {"id": "x", "label": "test"})]
+        monkeypatch.setattr(geo, fn, lambda limit, _s=sample: _s)
+        fc2 = geo.layer_features(lid)
+        assert fc2.get("source") == source
+        assert len(fc2["features"]) == 1
 
 
 def test_density_grid(geo):
