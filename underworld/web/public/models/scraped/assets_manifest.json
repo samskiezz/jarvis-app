@@ -9407,5 +9407,22 @@
     "epoch": "bronze",
     "name": "Palisade Gate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:palisade_straight": {
+    "prompt": "a straight sharpened-log palisade wall segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c2f7f7c1-2aa5-4ad4-bd17-28d1c83959fc",
+    "path": "/models/generated/tripo/palisade_straight.glb",
+    "bytes": 8949624,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c2f7f7c1-2aa5-4ad4-bd17-28d1c83959fc/tripo_pbr_model_c2f7f7c1-2aa5-4ad4-bd17-28d1c83959fc.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzJmN2Y3YzEtMmFhNS00YWQ0LWJkMTctMjhkMWM4Mzk1OWZjL3RyaXBvX3Bicl9tb2RlbF9jMmY3ZjdjMS0yYWE1LTRhZDQtYmQxNy0yOGQxYzgzOTU5ZmMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=JXexwRCzlPWYWgH21d0gHCMS7t8f1ZmJn-ebOpAOpIKRUMAi3B0-C1~GRwQgQ~4dM-cLUdZmcwfdP-qUs-jVCY0FuXKZ5-FkN~iiok8cXPn7qohRNePHSO81ZWuEEd7npwI4H~akK~Ai0DYaIcfeHCxzSQC54y6JFm4dOu6AFUW7oSrdKvYCoEdq7HMXAmlUzr8mBGs58N3GbED4~EI8u8GY1fTK43k~BzqQG76xjOSdnJr0I1HlEPdg0mVbGn6p8NN3fD1flWPZlSZ6N36d33yGj4zGCCXASXl7BxxuPekEB-vsTgDIt7hTUtnQGDn-FR7wy6RFv~yU4jXbyNrlqA__",
+    "asset_id": "palisade_straight",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "bronze",
+    "name": "Palisade Straight",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
