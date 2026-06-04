@@ -49,6 +49,12 @@ export const PAGES = [
     component: P(() => import("@/pages/SystemIntel")) },
   { name: "AlertsNotificationCenter", label: "Alerts & Notifications", icon: "🔔", group: "intel",
     component: P(() => import("@/pages/AlertsNotificationCenter")) },
+  { name: "GeoMap", label: "Geo Map", icon: "🗺️", group: "intel",
+    aliases: ["map", "geo", "geospatial", "earthquakes"],
+    component: P(() => import("@/pages/GeoMap")) },
+  { name: "Dashboard", label: "Dashboard", icon: "📊", group: "intel",
+    aliases: ["dashboard", "metrics", "overview"],
+    component: P(() => import("@/pages/Dashboard")) },
 
   // ── COMMAND ────────────────────────────────────────────────────────────
   { name: "CommandCenter", label: "Command Center", icon: "⌘", group: "command",
