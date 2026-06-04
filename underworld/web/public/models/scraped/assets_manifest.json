@@ -9866,5 +9866,22 @@
     "epoch": "any",
     "name": "Swamp Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tidal_pool": {
+    "prompt": "a rocky coastal tidal pool with shells, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e31eea39-bbb6-482c-89ae-309492fe79c9",
+    "path": "/models/generated/tripo/tidal_pool.glb",
+    "bytes": 15159524,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/e31eea39-bbb6-482c-89ae-309492fe79c9/tripo_pbr_model_e31eea39-bbb6-482c-89ae-309492fe79c9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZTMxZWVhMzktYmJiNi00ODJjLTg5YWUtMzA5NDkyZmU3OWM5L3RyaXBvX3Bicl9tb2RlbF9lMzFlZWEzOS1iYmI2LTQ4MmMtODlhZS0zMDk0OTJmZTc5YzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=pBcOm5-23wESyu7vXAjXdP6SmNLH8zoxxiX~PknoCBycJSOikvCOn2vmjciFoDWidZWb5ioaYxnyu4osNZVYrrCgitGaowCoPJU1tr0PlcevsH6aaQh2SelPHfLUT4sDqPpqU2OhpkcDQFpymxb8OODeUMzgQJ4zLyuyge~KVbgIWjhVRWF0nUxg7o0BwJ-bf6P-qF4rmn3Mv2IVxnh4kh5ShkxYP5jNjkL~yEe2jD-CMY2INdeb~lEVhqRSVoPF2fXkq6arWBqjBT8~fOUjyW90zXay0gabSjC-PD1dmj6vvkvW6~3ljtXSht8j2uhWofXT1x7IRD5P4CPhmBNtsA__",
+    "asset_id": "tidal_pool",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Tidal Pool",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
