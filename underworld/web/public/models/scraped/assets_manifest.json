@@ -9798,5 +9798,22 @@
     "epoch": "any",
     "name": "Stalagmite Cluster",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stone_archway": {
+    "prompt": "a freestanding ornamental stone archway, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5faf9c32-0dd9-4b02-b854-748f9cf6c6dd",
+    "path": "/models/generated/tripo/stone_archway.glb",
+    "bytes": 12687752,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/5faf9c32-0dd9-4b02-b854-748f9cf6c6dd/tripo_pbr_model_5faf9c32-0dd9-4b02-b854-748f9cf6c6dd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNWZhZjljMzItMGRkOS00YjAyLWI4NTQtNzQ4ZjljZjZjNmRkL3RyaXBvX3Bicl9tb2RlbF81ZmFmOWMzMi0wZGQ5LTRiMDItYjg1NC03NDhmOWNmNmM2ZGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=HoZPHmsPj7ogDIXRXqRLufXsmoR5ud9YIqb3eDisf12mzAB8A8O~SWllzGRrSODRgvoObd5Ch~TcUkVxtYD8CDUDSlIO6KcsfRiKGeoI6AmoUkvkmAtCIqLusf4n-a-ae7FEn~iRmiJItEF03913x87VSV0Le55c7iZ98cf~eefyaHaRjx9h7m4aapxZTcFTeq9wGZNL54Ji7UHsdhDpnvspSjPIZGpLUANO2fMJB~K7b8ycvfaoiYWijZ7mObZEhE514byUXJU~vyTmUZWlkXoAGi0fLNT4CySu0Vc4mwoaN~tXs-UKuF4VLqvrvYHTcZioLg1bPhPXGHRjDwmpyA__",
+    "asset_id": "stone_archway",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Stone Archway",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
