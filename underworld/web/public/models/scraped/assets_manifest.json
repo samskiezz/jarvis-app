@@ -9254,5 +9254,22 @@
     "epoch": "any",
     "name": "Hot Spring",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:ice_floe": {
+    "prompt": "a floating sheet of cracked sea ice, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d4ad9a68-117c-4ca9-a424-7064f80282d6",
+    "path": "/models/generated/tripo/ice_floe.glb",
+    "bytes": 13635764,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d4ad9a68-117c-4ca9-a424-7064f80282d6/tripo_pbr_model_d4ad9a68-117c-4ca9-a424-7064f80282d6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDRhZDlhNjgtMTE3Yy00Y2E5LWE0MjQtNzA2NGY4MDI4MmQ2L3RyaXBvX3Bicl9tb2RlbF9kNGFkOWE2OC0xMTdjLTRjYTktYTQyNC03MDY0ZjgwMjgyZDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=HrmcB-b8xcMJBL4~lSHxT4Cv-HfQZj244OljFnKFiNEWiPQXyWFe8Ft31uI4Y5fxARg2In71LY2v78IyvAs6IUqDgX-GjWjfRdqa-9Bm2L1uW3SAVyz7OxL2OFr-ZrV-DEEqvJlH0JwNX5bv9As-087nILAi1RaXDLWlfeFWakf5UfJ7fsd06l5Vl5NmpDl8CS8GiiPglKcbxjNpvHKTlwZwTilpP~wA5KfMLjAHqw9d6HjGiBt9KukZNTDco3TKbiCgdCbHM1K6UFr5AtLOYPTG-r26~KXXoeLdgIDNiXB1UqKlI73Z5xbX-ylB7jT4Ok9MKXCTDJQXYQYRb5-8iw__",
+    "asset_id": "ice_floe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Ice Floe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
