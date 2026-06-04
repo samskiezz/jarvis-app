@@ -10189,5 +10189,22 @@
     "epoch": "bronze",
     "name": "Pumpkin Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:reed_cluster": {
+    "prompt": "a cluster of tall waterside reeds, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "89273e0b-c9b8-44dd-8f3b-0dfe3356987a",
+    "path": "/models/generated/tripo/reed_cluster.glb",
+    "bytes": 7837572,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/89273e0b-c9b8-44dd-8f3b-0dfe3356987a/tripo_pbr_model_89273e0b-c9b8-44dd-8f3b-0dfe3356987a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODkyNzNlMGItYzliOC00NGRkLThmM2ItMGRmZTMzNTY5ODdhL3RyaXBvX3Bicl9tb2RlbF84OTI3M2UwYi1jOWI4LTQ0ZGQtOGYzYi0wZGZlMzM1Njk4N2EuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=KxbNC4xeVbjOjohy9qHRU-rPC6Las2vM21iVCzJt55c2QVsGkuK126k6-ro1SFY7Apg0DOjZczFkT3jh0B6DGO0Cudsv1mmKmv0nrjaYZfchZQeiGdgKgTjpcotND1lozdHrwTemBN4GsQEmXbxGXKZJ1pZ0vtyy~f4DN7i1O73ytGCTcf7lS4vMdvbSADWdhf7uTQ7edDVus7TqxKVnzdhHofUmKMxB81hfMV2k5-CAGhUI6U~qfUmclL4pvg0pnCben3LYILN8lfrQgyFnjD2to5OfcEoy427ZgpoeiUDQKtWc2BjTafOGWFzMMABXbNLBOBO54dIvrKzIql31fA__",
+    "asset_id": "reed_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Reed Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
