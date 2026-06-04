@@ -25,6 +25,7 @@ export const GROUPS = [
   { id: "sensors",   label: "SENSORS",         color: "#0096d4" },
   { id: "apex",      label: "APEX CORE",       color: "#f07820" },
   { id: "knowledge", label: "KNOWLEDGE",       color: "#e8a800" },
+  { id: "platform",  label: "PLATFORM",        color: "#0096d4" },
   { id: "war",       label: "WAR",             color: "#e8203c" },
   { id: "wealth",    label: "WEALTH & SYSTEM", color: "#566878" },
 ];
@@ -104,6 +105,20 @@ export const PAGES = [
     component: P(() => import("@/pages/KGIKLedger")) },
   { name: "TCIS", label: "TCIS", icon: "⟁", group: "knowledge",
     component: P(() => import("@/pages/TCIS")) },
+
+  // ── PLATFORM (Wave-1 backends: ontology · search · ops · graph) ──────────
+  { name: "OntologyManager", label: "Ontology Manager", icon: "🗃️", group: "platform",
+    aliases: ["ontology", "objects", "entities"],
+    component: P(() => import("@/pages/OntologyManager")) },
+  { name: "SearchHub", label: "Search Hub", icon: "🔎", group: "platform",
+    aliases: ["search", "find", "resolve"],
+    component: P(() => import("@/pages/SearchHub")) },
+  { name: "Operations", label: "Operations", icon: "🚨", group: "platform",
+    aliases: ["alerts", "rules", "cases", "ops"],
+    component: P(() => import("@/pages/Operations")) },
+  { name: "GraphOps", label: "Graph Ops", icon: "🕸️", group: "platform",
+    aliases: ["graph", "bridge", "pagerank", "optimize", "counterfactual"],
+    component: P(() => import("@/pages/GraphOps")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
