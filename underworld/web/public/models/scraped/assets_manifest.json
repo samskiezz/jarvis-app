@@ -9169,5 +9169,22 @@
     "epoch": "stone",
     "name": "Earth Rampart",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:garden_wall": {
+    "prompt": "a low ivy-topped garden wall segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "158d8d76-2c0c-4fbc-a0b0-01394c19adaf",
+    "path": "/models/generated/tripo/garden_wall.glb",
+    "bytes": 15281352,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/158d8d76-2c0c-4fbc-a0b0-01394c19adaf/tripo_pbr_model_158d8d76-2c0c-4fbc-a0b0-01394c19adaf.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMTU4ZDhkNzYtMmMwYy00ZmJjLWEwYjAtMDEzOTRjMTlhZGFmL3RyaXBvX3Bicl9tb2RlbF8xNThkOGQ3Ni0yYzBjLTRmYmMtYTBiMC0wMTM5NGMxOWFkYWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=jMYXaNWmGsQb3~8bpDU6lyouAx5e9Mh-qAAU35ShVJsjnOff18klfnXUAxus0U76CrBjDySwZMjDWi5vMpNnHgvWZozIfEnv6-pz9rVKtGfdYyvgaEz3Lqq4YkTMS~ByFfZaq8p906UNx1FBomL0EUFM0q87PU6j7D7d3pk04z04nhFBayGAF-fMGo5nSMkjzyi7g0bLNwaCrZwQEJZXO5PQCU1MPZ~5HuHqHFwyF3k539xxZUpiKiGyolgYSkTttkXylYfdpVC41CZ62ZW~8ZnEatYrhrFqhH-rPvkoK~rfyINAqc~sFzM88XY7cYvxPW9pPsagkO263CsUvl4qng__",
+    "asset_id": "garden_wall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Garden Wall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
