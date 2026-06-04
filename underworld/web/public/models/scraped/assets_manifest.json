@@ -9118,5 +9118,22 @@
     "epoch": "any",
     "name": "Crater Small",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:defensive_tower_round": {
+    "prompt": "a round stone defensive tower with a conical roof, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4dc1359e-c7e5-437f-a0e9-553ff5544980",
+    "path": "/models/generated/tripo/defensive_tower_round.glb",
+    "bytes": 15096128,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/4dc1359e-c7e5-437f-a0e9-553ff5544980/tripo_pbr_model_4dc1359e-c7e5-437f-a0e9-553ff5544980.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNGRjMTM1OWUtYzdlNS00MzdmLWEwZTktNTUzZmY1NTQ0OTgwL3RyaXBvX3Bicl9tb2RlbF80ZGMxMzU5ZS1jN2U1LTQzN2YtYTBlOS01NTNmZjU1NDQ5ODAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=omprfwdENKfqK35~UHOO1sxJPzVmkJW7AJr0uIo2qIE5gblQuyCj44EOh6r0PNPitMNf7rPNX6iiOBcxBqwX1deCIahaTYagsmQkuHTg1SzhufSvmHgQ2idVvchr85upE2ipeVyadSPEWpHcFPi1AdbBbux1mOiGPfgO4cSC-O4aZZb0~vB-f5KVV~aPJhusuWYpefptEU2ohlJhSwGjQeOdNQOGN2FE50cPy5q1RUjpr8H8H9mYHuoYrYZXFnX6-L2du5~gKCQyy-OXehCysW7IjgKO734ijpKAunIUvEG-Z4ME9Ay6Km3eFVJyndqzo5p498~F7vCXYf-VsWpezA__",
+    "asset_id": "defensive_tower_round",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Defensive Tower Round",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
