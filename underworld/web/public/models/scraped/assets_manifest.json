@@ -9747,5 +9747,22 @@
     "epoch": "any",
     "name": "Sand Dune Large",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sinkhole": {
+    "prompt": "a collapsed earth sinkhole terrain feature, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "7f186aee-ed8b-4bc6-905c-53a9fd57e107",
+    "path": "/models/generated/tripo/sinkhole.glb",
+    "bytes": 14966344,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/7f186aee-ed8b-4bc6-905c-53a9fd57e107/tripo_pbr_model_7f186aee-ed8b-4bc6-905c-53a9fd57e107.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvN2YxODZhZWUtZWQ4Yi00YmM2LTkwNWMtNTNhOWZkNTdlMTA3L3RyaXBvX3Bicl9tb2RlbF83ZjE4NmFlZS1lZDhiLTRiYzYtOTA1Yy01M2E5ZmQ1N2UxMDcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=cYQy6FGYcEki~rL8s4lROFI7iRWEDTwBArqhrODkCil6bVNAqdY~SdgH3GOZTzsBnP2geaVvc7C6kxto4zw03KC5f5Gh5Gaw8jmyPGTKrPxoFa-KUvmGtjOpVZAARdbj2g5L6dRhhumVswE0V-IN-YmPiQDpusKKagxFCp-rkOfGEzSrG7dgT5X3~0JWSI1~k-f49NW-alDBpYz3j9Um~Y50Uq3Dg74RD8yuBoR1GPrwfSCjtfCqwA~eRyzyjAbk9cs81nCLvRRV-HGsMIY~hmgAwWyrSUB4Iy8ao06BedYIdfcaOAFtTNbZMLL93DtX~Zb3CmdJYFcedfBzLkAYXA__",
+    "asset_id": "sinkhole",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Sinkhole",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
