@@ -170,6 +170,18 @@ export const PAGES = [
   { name: "TenantAdmin", label: "Tenant Admin", icon: "🏛️", group: "platform",
     aliases: ["tenant", "tenancy", "multi-tenant", "members", "org", "whoami"],
     component: P(() => import("@/pages/TenantAdmin")) },
+  { name: "SourcesConsole", label: "Sources", icon: "🔌", group: "platform",
+    aliases: ["sources", "connectors", "ingest", "rest", "csv", "rss", "backfill", "preview"],
+    component: P(() => import("@/pages/SourcesConsole")) },
+  { name: "GatewayConsole", label: "Gateway", icon: "🌉", group: "platform",
+    aliases: ["gateway", "underworld", "proxy", "unify", "sim", "worlds"],
+    component: P(() => import("@/pages/GatewayConsole")) },
+  { name: "SearchPlus", label: "Search+", icon: "🔭", group: "platform",
+    aliases: ["facets", "saved search", "alerts", "paths", "search in graph"],
+    component: P(() => import("@/pages/SearchPlus")) },
+  { name: "ObjectSets", label: "Object Sets", icon: "📦", group: "platform",
+    aliases: ["object sets", "bulk", "export", "import", "saved filter", "ontology ext"],
+    component: P(() => import("@/pages/ObjectSets")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
