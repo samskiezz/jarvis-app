@@ -9900,5 +9900,22 @@
     "epoch": "any",
     "name": "Volcanic Rock",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wall_corner_stone": {
+    "prompt": "a corner modular stone fortification wall piece, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "dfd086bb-d681-4257-ad4f-346000ce5c69",
+    "path": "/models/generated/tripo/wall_corner_stone.glb",
+    "bytes": 15484920,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/dfd086bb-d681-4257-ad4f-346000ce5c69/tripo_pbr_model_dfd086bb-d681-4257-ad4f-346000ce5c69.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGZkMDg2YmItZDY4MS00MjU3LWFkNGYtMzQ2MDAwY2U1YzY5L3RyaXBvX3Bicl9tb2RlbF9kZmQwODZiYi1kNjgxLTQyNTctYWQ0Zi0zNDYwMDBjZTVjNjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=eJaWdQV5AU~hJB1o~Cz3EOCxXHElYsSfL~bG497VUnX74VPDMRGFzbKm~wXd0sLHLtEvzSnRUy4Ded9JB2-5VOAsvNKVI4e7je5Tob1~Y-CV3zL6ltILLX30W8vgKHfGqTeybyoi1PCz4gCABfVm5OkZdD~TCSfijvcW1Spso0rLpnkjO3Ja9sFKntYC8n3l2yrKXA-ZbCseR-6LdVJq19vccf7TjU8P4Q5NxJOZ7CLY9y-~n~KGC5HUxE2P3dSrsmFzvKlVj1oq~UV6fcpjmngtEvub6cPqTzii6~gx9Eqd5yyEM-Q0tBQ3xUacMjU4KT7Y7nKF4y4F3vfUt-MKbg__",
+    "asset_id": "wall_corner_stone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Wall Corner Stone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
