@@ -9645,5 +9645,22 @@
     "epoch": "any",
     "name": "River Straight",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:road_curve_wide": {
+    "prompt": "a wide sweeping curved road tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f7d32829-440c-49ac-aafc-de7d192194d2",
+    "path": "/models/generated/tripo/road_curve_wide.glb",
+    "bytes": 13402792,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f7d32829-440c-49ac-aafc-de7d192194d2/tripo_pbr_model_f7d32829-440c-49ac-aafc-de7d192194d2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjdkMzI4MjktNDQwYy00OWFjLWFhZmMtZGU3ZDE5MjE5NGQyL3RyaXBvX3Bicl9tb2RlbF9mN2QzMjgyOS00NDBjLTQ5YWMtYWFmYy1kZTdkMTkyMTk0ZDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=jWH1EyrPbx6DpVW0tC7iPKWzowij9GhvzZU6mtAvERUJ7~kQjLfjTpLc8VweuJMn4YQTT2-hx5e17HnC74yF1H2I3PpfpymyIfAPaUHgMc2f~wYALjn0~-CldWvAXI2tzqDpbecnu-XZ31W2Arg71AweHtMW7q-UwceT11SKOjbJIqlGRoFMTQ3ZcBsew46gUy9Yo6SH-viQQlXsi-mRd8s2G3~IoMznN3VuRshf0GtNlN9UCv3oUJ6-CBzR5WpVdkMFdnUbiABgdC3Piwk2cLCL85X-iyx65VaFnnSRW0Ch~rTdbEyJDqHEwvDD4TzQ~7swMpgRClF-KsSysa5RYA__",
+    "asset_id": "road_curve_wide",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Road Curve Wide",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
