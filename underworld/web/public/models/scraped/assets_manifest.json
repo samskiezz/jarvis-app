@@ -10087,5 +10087,22 @@
     "epoch": "any",
     "name": "Cattail Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:corn_stalk_cluster": {
+    "prompt": "a cluster of tall ripe corn stalks, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "af6738f4-ff8c-44cf-848a-2e1f101e46a5",
+    "path": "/models/generated/tripo/corn_stalk_cluster.glb",
+    "bytes": 15579224,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/af6738f4-ff8c-44cf-848a-2e1f101e46a5/tripo_pbr_model_af6738f4-ff8c-44cf-848a-2e1f101e46a5.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYWY2NzM4ZjQtZmY4Yy00NGNmLTg0OGEtMmUxZjEwMWU0NmE1L3RyaXBvX3Bicl9tb2RlbF9hZjY3MzhmNC1mZjhjLTQ0Y2YtODQ4YS0yZTFmMTAxZTQ2YTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=xtU2AXHAry7qD3WZzuGZV5NNKoIdF1zQ9~0FPFfeeHnK6SGvgRw3ey-OUkuXDGENGXrJsVOn8SjSC~~HmaJtY1Sj5wvz9ZMDM5Y7tDDHpM2rAnM7laSBXwPwEqMlvGzUYbOwbr4vgcweTOYICwEWZw9Qbm5KqCpIjZAk~eZJowbo6u6-0Pbac7y9OlkK3qBeIeqr0UwvSD~nG7evoUJN7ddPpT3xx8OF~XDhHRg~UGqnOKwAr3P4aT3VJvnRCcg4rk1svKb8uCz8y5KOkl7CliQiKQ5goEuHQ98skt--wco8RNI8tVZL0dhbWv~jUK4Sudunx27nR2wAryOcT7aSfw__",
+    "asset_id": "corn_stalk_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "bronze",
+    "name": "Corn Stalk Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
