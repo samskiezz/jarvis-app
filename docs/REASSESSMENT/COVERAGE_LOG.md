@@ -19,8 +19,8 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 12 | ☑ | server/auth.py | 31 |
 | 13 | ☑ | server/config.py | 25 |
 | 14 | ☑ | server/data/__init__.py | 0 |
-| 15 | ☐ | server/data/corpus.py | 120 |
-| 16 | ☐ | server/data/ontology.py | 84 |
+| 15 | ☑ | server/data/corpus.py | 120 |
+| 16 | ☑ | server/data/ontology.py | 84 |
 | 17 | ☑ | server/llm/__init__.py | 0 |
 | 18 | ☑ | server/llm/kimi.py | 77 |
 | 19 | ☑ | server/main.py | 76 |
@@ -41,15 +41,15 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 34 | ☐ | server/scripts/train_oracle.py | 163 |
 | 35 | ☐ | server/scripts/train_sp500.py | 160 |
 | 36 | ☑ | server/services/__init__.py | 0 |
-| 37 | ☐ | server/services/analyst.py | 144 |
+| 37 | ☑ | server/services/analyst.py | 144 |
 | 38 | ☐ | server/services/backtest.py | 315 |
-| 39 | ☐ | server/services/corpus.py | 53 |
+| 39 | ☑ | server/services/corpus.py | 53 |
 | 40 | ☐ | server/services/forecaster.py | 567 |
 | 41 | ☐ | server/services/forecaster_ml.py | 624 |
 | 42 | ☐ | server/services/forward_test.py | 587 |
 | 43 | ☐ | server/services/history_lake.py | 622 |
-| 44 | ☐ | server/services/ingestion.py | 193 |
-| 45 | ☐ | server/services/live_intel.py | 146 |
+| 44 | ☑ | server/services/ingestion.py | 193 |
+| 45 | ☑ | server/services/live_intel.py | 146 |
 | 46 | ☐ | server/services/oracle_model.py | 654 |
 | 47 | ☐ | server/services/prediction.py | 1187 |
 | 48 | ☐ | server/services/scrapers.py | 185 |
@@ -704,3 +704,11 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/scripts/__init__.py` — (empty package marker)
 - `server/services/__init__.py` — (empty package marker)
 - `server/tests/__init__.py` — (empty package marker)
+
+## BATCH 2 FINDINGS — JARVIS services/data (read in full)
+- `server/services/analyst.py` — local LLM-free analyst; keyword->entity routing (_TOPICS L20), risk/markets/corpus intents, entity blocks w/ links+risks (L59); XRP holding valuation 9,300 units (L96)
+- `server/services/live_intel.py` — getLiveIntel aggregator (L124, 60s cache); USGS quakes (L34), CoinGecko crypto XRP/BTC/ETH (L67), open.er-api FX (L98), + corpus + 2 sim snapshots
+- `server/services/corpus.py` — corpus payload for getLiveIntel; honest counts from EMAIL_TABLES+ontology (L16 _predicate_counts, L32 get_corpus)
+- `server/data/ontology.py` — SEED ontology (mirrors src/domain/ontology.js): 13 OBJECTS w/ real PII (Sam addr/email/phone L7-34), 21 LINKS (L37-59), 8 RISK_SIGNALS (L61-70), ontology_summary (L73)
+- `server/data/corpus.py` — real corpus dataset: 6 email tables (investment/crypto/psg/travel/wedding/music, ~57 emails) + 19-event TIMELINE; all consistent w/ ontology
+- `server/services/ingestion.py` — P0 ingestion adapters -> History Lake: ingest_crypto (L39), ingest_seismic (L68, day-bucketed count+maxmag), ingest_fx (L127); ingest_all (L163) fault-isolated; ingestion_loop opt-in (L177)
