@@ -11396,5 +11396,22 @@
     "epoch": "any",
     "name": "Fruit Crate",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:grindstone": {
+    "prompt": "a foot-pedal sharpening grindstone, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "30ba610b-1af7-4a94-8d1b-a0dadcaa315c",
+    "path": "/models/generated/tripo/grindstone.glb",
+    "bytes": 13553764,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/30ba610b-1af7-4a94-8d1b-a0dadcaa315c/tripo_pbr_model_30ba610b-1af7-4a94-8d1b-a0dadcaa315c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzBiYTYxMGItMWFmNy00YTk0LThkMWItYTBkYWRjYWEzMTVjL3RyaXBvX3Bicl9tb2RlbF8zMGJhNjEwYi0xYWY3LTRhOTQtOGQxYi1hMGRhZGNhYTMxNWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=xqD1Mb0vulmEMfJwIfabtUZnvEHDiGwLMVf3ZTgonKJW-qFjiwknlvOXJdMSg4jArSLhkpE1xs8hbCVYWuyblPdzW5~l~xgDJ3-ItGCbAbVvJLC1YFR6ax3mxKI0V-ZyxyCj-oPEoQicrX6KazrHK5OWvN6WBSyiqtZT2CTw5xAG6RpWhVnGC5shoTWc1XCl4viL2j8BSu6QYPDAGTOBZ3m3cM7-Lqjdf1mZ0p2sRCxd6FSGHoYJUfyigR~gjeI0t6c9UTdfsEA~iQRjizo4ik1mZ7PV9vGsNnfWijFYzGhjCVtBS5dDbTPA4QZuX9gyCAnc3pKlWeCT83DrgeBHyQ__",
+    "asset_id": "grindstone",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Grindstone",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
