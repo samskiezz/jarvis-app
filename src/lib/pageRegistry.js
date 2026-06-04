@@ -203,6 +203,12 @@ export const PAGES = [
   { name: "GraphCanvas", label: "Graph Canvas", icon: "🕸️", group: "platform",
     aliases: ["graph canvas","gotham","force graph","node-link","investigation","expand","network","link analysis"],
     component: P(() => import("@/pages/GraphCanvas")) },
+  { name: "GraphTimeline", label: "Graph Timeline", icon: "⏳", group: "platform",
+    aliases: ["graph timeline","playback","scrubber","graph over time","temporal graph","animate"],
+    component: P(() => import("@/pages/GraphTimeline")) },
+  { name: "AIPLogic", label: "AIP Logic", icon: "🧩", group: "platform",
+    aliases: ["aip logic","agent studio","plan builder","logic","pipeline","tools","governed"],
+    component: P(() => import("@/pages/AIPLogic")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
