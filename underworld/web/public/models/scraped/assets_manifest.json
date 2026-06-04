@@ -10274,5 +10274,22 @@
     "epoch": "any",
     "name": "Tree Baobab",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_cherry_blossom": {
+    "prompt": "a cherry tree in pink blossom, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4b6951ee-e0cf-4799-b0c9-25c387b8a4a9",
+    "path": "/models/generated/tripo/tree_cherry_blossom.glb",
+    "bytes": 15018116,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/4b6951ee-e0cf-4799-b0c9-25c387b8a4a9/tripo_pbr_model_4b6951ee-e0cf-4799-b0c9-25c387b8a4a9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNGI2OTUxZWUtZTBjZi00Nzk5LWIwYzktMjVjMzg3YjhhNGE5L3RyaXBvX3Bicl9tb2RlbF80YjY5NTFlZS1lMGNmLTQ3OTktYjBjOS0yNWMzODdiOGE0YTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=BUDU0iXKg~aUDO1KSYDXgayYLK4RpTr2oVfIArZXST1Q6HSlCPYzUiz3RMt3-n9sZVwpd4j0wgiCQyAJqmMqDyNBfdw4gtWnmLncGUj-8c7tnXMoKJEOgHJnEsnnZO8Jz7dM~sF6ZGqA6gxoq4bQay2Y8eHFtXJZBszvszcXPW3s0BJFM-1r5LMNE4mfLAXI2zWFuNYA30tdcyM06FuDl2~2B-PvAsW4k-fxqaHEyS-VWPIySBYVOlEiJqx5arhy~YURe4G04tTB~FQPuDGZ5wMHxxETlntdjU6c~-O0ZyFTmczkTsed8COUdkSwbIzGZ7qH6sQxVl39i6liT~BNRQ__",
+    "asset_id": "tree_cherry_blossom",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Cherry Blossom",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
