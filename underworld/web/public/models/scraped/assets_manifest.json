@@ -9730,5 +9730,22 @@
     "epoch": "any",
     "name": "Salt Flat Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sand_dune_large": {
+    "prompt": "a large rolling sand dune terrain feature, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4d017bdb-146b-4bee-b0b3-20ea2fd214e7",
+    "path": "/models/generated/tripo/sand_dune_large.glb",
+    "bytes": 14497432,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/4d017bdb-146b-4bee-b0b3-20ea2fd214e7/tripo_pbr_model_4d017bdb-146b-4bee-b0b3-20ea2fd214e7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNGQwMTdiZGItMTQ2Yi00YmVlLWIwYjMtMjBlYTJmZDIxNGU3L3RyaXBvX3Bicl9tb2RlbF80ZDAxN2JkYi0xNDZiLTRiZWUtYjBiMy0yMGVhMmZkMjE0ZTcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=n-xx6vPYNYNyU74HrX7TMr2MpLJ6A7-Knr6b16B5kOYTED2AHlQr9REl-KUyrFdctLppbWxmzVxxOYFMR7Pig4hbTNvdtqJQ3z0ckG5jy5ZUw2DqfGy4JuwYuBJGPs7ni8nAPvLCE9rHk4jKR7APhDGCMqMeJa8hqV44h50DlPJy3TcS3OKYlpySlZWd-8v-97Ixa6bMdAbUVHOo11KMSV~32tOTKwTJSdPx9h7FbO5bX714OqqyU9H5VKS0-d4e8oWK~LRWhrmc1jteh6JvH~2oLMU-ztk4FQ-oFUHSP6fVZ~0K~tXtsuQBPDtwe9L7XJD58QHU4i3V1yOlaQ6tiw__",
+    "asset_id": "sand_dune_large",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Sand Dune Large",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
