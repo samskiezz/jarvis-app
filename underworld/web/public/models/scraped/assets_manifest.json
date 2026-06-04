@@ -10155,5 +10155,22 @@
     "epoch": "any",
     "name": "Lavender Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:moss_patch": {
+    "prompt": "a soft green moss-covered ground patch, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ca3ce997-7915-4583-b486-36af0b423455",
+    "path": "/models/generated/tripo/moss_patch.glb",
+    "bytes": 15187244,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ca3ce997-7915-4583-b486-36af0b423455/tripo_pbr_model_ca3ce997-7915-4583-b486-36af0b423455.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvY2EzY2U5OTctNzkxNS00NTgzLWI0ODYtMzZhZjBiNDIzNDU1L3RyaXBvX3Bicl9tb2RlbF9jYTNjZTk5Ny03OTE1LTQ1ODMtYjQ4Ni0zNmFmMGI0MjM0NTUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=a-4nrEcRf~~GSCPt8Xob2coPV9m67p188W7GpZwyOKCwhiJi0isu4tjRqhHfk9xnDq~sLOUqp59YEhDbJEAYJU-SUuPAx03kXzVemLt9CAmdbneYrbbZPqly0w4iFM~jDjZxsPccT~PKaICLUoUoeT~tJC-K9K3mTFnacc0oBL6i5e7ecm~l5jLLcMvDacEd67k6AHS2m6a~B4CEsXYI8lpwlITJUuIOpTQRc3FeCxF6KyZQkzVlc7OUFRlSu5MSPW3JDzL0C7AM2tDChWMQy4oSaOr0mVPyG70YxYNCHbmwm0qZsLBlJuga71iSeG-fiqttkCztD2Vl9XopvQgY~A__",
+    "asset_id": "moss_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Moss Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
