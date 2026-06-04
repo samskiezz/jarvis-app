@@ -11107,5 +11107,22 @@
     "epoch": "iron",
     "name": "Kite Shield",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:longbow": {
+    "prompt": "a tall wooden longbow with a quiver of arrows, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "39991da7-e521-4cc4-a973-ab3353cc4bf7",
+    "path": "/models/generated/tripo/longbow.glb",
+    "bytes": 2667092,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/39991da7-e521-4cc4-a973-ab3353cc4bf7/tripo_pbr_model_39991da7-e521-4cc4-a973-ab3353cc4bf7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzk5OTFkYTctZTUyMS00Y2M0LWE5NzMtYWIzMzUzY2M0YmY3L3RyaXBvX3Bicl9tb2RlbF8zOTk5MWRhNy1lNTIxLTRjYzQtYTk3My1hYjMzNTNjYzRiZjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=wzIi1aMXQdfrF0jLTCMDK0KSAEPtcQ1BmHU9V56tdLw396-K0VR1jC1-mMU6MHTXmB0Wsymmbev9hKnBxfK~Un5l96SA5Ds9ZZ85cmbSC7aZ3jTCEyCzHseDRtcNz9Ne~Iqmtf4OW1cS070sSXup8Hvie5mnNnXX34U2i4yUImJ8rIlr~2oD6gwqrVNceqCh88T7D6JFKVpOjnLeDhlsvth~7RfBvPLsBzfWt9DOB39~tO7BIL5pYK~XeuL-I0r9Lm2i7ByOGkLeAgd5Pc8ONKOh-ipQTFtwkbxCKtWEn4s42ijtvsaYQt3OSh1oR8v9V4hTL9qFHYnYZudpUKI1ig__",
+    "asset_id": "longbow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Longbow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
