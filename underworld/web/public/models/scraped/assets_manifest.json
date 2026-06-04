@@ -11481,5 +11481,22 @@
     "epoch": "iron",
     "name": "Lantern String",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:market_stall_awning": {
+    "prompt": "a striped market stall awning with goods, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5414f3c5-3053-4f2c-b917-8dded716127e",
+    "path": "/models/generated/tripo/market_stall_awning.glb",
+    "bytes": 14894368,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/5414f3c5-3053-4f2c-b917-8dded716127e/tripo_pbr_model_5414f3c5-3053-4f2c-b917-8dded716127e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTQxNGYzYzUtMzA1My00ZjJjLWI5MTctOGRkZWQ3MTYxMjdlL3RyaXBvX3Bicl9tb2RlbF81NDE0ZjNjNS0zMDUzLTRmMmMtYjkxNy04ZGRlZDcxNjEyN2UuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=klU06h7s~exUKSG~-Ctg8zlBCX8Q1Dx~KBIC3dAwzSTzgejIDc5zUF0hyHerau~t08dPi5fVH11HPll~o4sccHbKrq7f~1K2B4pwV7LUi~2RCAwsE0tPBbtCrtDeNn4S8B4blqJGEwmVSWRvO7rEe8kulDKaQNBCGu7GkbWaWwe2B2Lq~vc5ngyPsL~fyZPXlb7tPsmj92xyjoql69CI7GAlrs1nIow8f5elNw56eakrIAkS2sHrNVTwxQ-lxikXVQjVgVgJp2cSTSjhOTCGePzvyiE3sOivDrg8Ee1BM3xOa6p~gL99G4tNnHg61b9TSNWE8gnx5IjF83lFVkZRdg__",
+    "asset_id": "market_stall_awning",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Market Stall Awning",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
