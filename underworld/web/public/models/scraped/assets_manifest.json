@@ -10631,5 +10631,22 @@
     "epoch": "quantum",
     "name": "Maglev Pod",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:merchant_galleon": {
+    "prompt": "a tall-masted wooden merchant galleon with rigging, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "48922ab8-bb72-4792-9a27-14dedc7fbf6f",
+    "path": "/models/generated/tripo/merchant_galleon.glb",
+    "bytes": 12910816,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/48922ab8-bb72-4792-9a27-14dedc7fbf6f/tripo_pbr_model_48922ab8-bb72-4792-9a27-14dedc7fbf6f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNDg5MjJhYjgtYmI3Mi00NzkyLTlhMjctMTRkZWRjN2ZiZjZmL3RyaXBvX3Bicl9tb2RlbF80ODkyMmFiOC1iYjcyLTQ3OTItOWEyNy0xNGRlZGM3ZmJmNmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=mjd-vR~xMj7eygWjXqDU2T0UVie0lrrNDzSv9ezsqWso-uAoJN~gIpSV4VpFJYGkGgszLPxfx5k4S5RAXxML3dkQDRiOd34wNaGCLqY23dRxS9t90wsn9lPwr-~AzSwHB8Rfdvyk2zhVvtnL6I9YDj64hW~JBOxlQX3gB0AmX-pOq76RMJrpgGG1L5kVHY-n-tSICOkLyLVuOysXetuf4ipBvXK1o9NVtvHQYK9ol12B0vpv2wf81BH6ro6dWCrNf--r-lg2Gcdp-8T~ElINnVc0Rb2m9gZEUQoGGKML5xk0P7JPdGX0l~DayyFYmAkOmhnpPaThckbDe-Jesg8bpw__",
+    "asset_id": "merchant_galleon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "iron",
+    "name": "Merchant Galleon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
