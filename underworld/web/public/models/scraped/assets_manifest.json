@@ -11192,5 +11192,22 @@
     "epoch": "industrial",
     "name": "Revolver",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:riot_shield": {
+    "prompt": "a transparent polycarbonate riot shield, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c1e43e2d-253d-4d4f-99e1-dced41a117cf",
+    "path": "/models/generated/tripo/riot_shield.glb",
+    "bytes": 14472276,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c1e43e2d-253d-4d4f-99e1-dced41a117cf/tripo_pbr_model_c1e43e2d-253d-4d4f-99e1-dced41a117cf.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzFlNDNlMmQtMjUzZC00ZDRmLTk5ZTEtZGNlZDQxYTExN2NmL3RyaXBvX3Bicl9tb2RlbF9jMWU0M2UyZC0yNTNkLTRkNGYtOTllMS1kY2VkNDFhMTE3Y2YuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=CGC3P5eJLfR-DtjhObs6OYGWYLmEHUWFf6x8-hXGJ2SbWX8nLHGOEZgdI-yebkrJ2iFI9yh3tuSAq7TxQRcDujHfpsV7Qi3CTXPfBkX5C64cK0N6i5rY9rRkJdWvFH~E6DeC~S2sN6qdfYbs2BVkLd4h~IhHnYmZbxGhmrLpLX~gw4IVdh7-5o9kR6sj0e1UkCmkQukKrsWXZxmSixYiSf5MEZg8ktXQ0mlH8AerM07m0KX6bOja~X8ryFtkjsEiSjfF2bCA5oysC3-T54XGxf2XK5~qTl3VRXIzimjtFq6tBaqCc0-2gabfD35gmdA34uPt5L5Mf88hs9g-AANv7w__",
+    "asset_id": "riot_shield",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "information",
+    "name": "Riot Shield",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
