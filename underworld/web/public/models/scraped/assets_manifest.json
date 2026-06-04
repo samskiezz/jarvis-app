@@ -10920,5 +10920,22 @@
     "epoch": "iron",
     "name": "Bronze Cannon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bronze_sword": {
+    "prompt": "a leaf-shaped bronze sword with a wrapped grip, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "df0c84ae-db80-4001-82f3-48e30df3064d",
+    "path": "/models/generated/tripo/bronze_sword.glb",
+    "bytes": 5986144,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/df0c84ae-db80-4001-82f3-48e30df3064d/tripo_pbr_model_df0c84ae-db80-4001-82f3-48e30df3064d.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGYwYzg0YWUtZGI4MC00MDAxLTgyZjMtNDhlMzBkZjMwNjRkL3RyaXBvX3Bicl9tb2RlbF9kZjBjODRhZS1kYjgwLTQwMDEtODJmMy00OGUzMGRmMzA2NGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=EMtvXWsSqV8Xg8ZazKgUbnAPCd4owukjMPgUblX9h5v2TqrkxOVDjn1Ge3gM-MZJPDavKemvd9hR9BrRsZ8lKUg6ooD5uvwDcL1a~cNbyDHekKGPhJL3gHd6jTkKRQAx2UYhQiiQUiptXo-rCDUV7II9xWNHOVts0ti0~rf7C7cJXoh17ZBGpnhgUZjBASCfv58yxtgWBOxc4FZdF40J0rR1X8ZzERBzeDs--2zWmWtyPDbez~hoTF8uaLwnyB0CbIYepceaH0N-6GM3J7YLJsqdgXMcP1-5omqz75uVNlQ92JLIT9K-j1UjEbds0gpGjLmTm18JvUF8xu-oD8LeCQ__",
+    "asset_id": "bronze_sword",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "bronze",
+    "name": "Bronze Sword",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
