@@ -1,0 +1,138 @@
+name: Deploy to Production
+
+# GATED, INERT-BY-DEFAULT deploy pipeline.
+#
+# Nothing here deploys anything until you opt in by setting the repository
+# secret DEPLOY_ENABLED to the literal string "true" AND providing the
+# target-specific secrets documented below (see docs/CICD.md).
+#
+# Until then every real deploy step is guarded by an `if:` condition and is a
+# no-op — the workflow runs, reports "deploy disabled", and exits green.
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Gate: resolve whether deploys are enabled. Reads a repo secret so we can
+  # use its boolean output in downstream job-level `if:` guards (secrets cannot
+  # be referenced directly in job-level `if:`).
+  # ---------------------------------------------------------------------------
+  gate:
+    name: Resolve deploy gate
+    runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
+    steps:
+      - id: check
+        name: Check DEPLOY_ENABLED
+        env:
+          DEPLOY_ENABLED: ${{ secrets.DEPLOY_ENABLED }}
+        run: |
+          if [ "${DEPLOY_ENABLED}" = "true" ]; then
+            echo "Deploy is ENABLED (DEPLOY_ENABLED=true)."
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Deploy is DISABLED. Set repo secret DEPLOY_ENABLED=true plus"
+            echo "target secrets to activate. This run is a no-op."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Backend deploy (APEX FastAPI in server/). Disabled until the gate passes.
+  # Every step additionally re-checks for its required secret so a half-config
+  # never half-deploys.
+  # ---------------------------------------------------------------------------
+  deploy-backend:
+    name: Deploy backend (production)
+    needs: gate
+    if: ${{ needs.gate.outputs.enabled == 'true' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- OPTION A: Fly.io --------------------------------------------------
+      # Requires secrets: FLY_API_TOKEN (and a fly.toml for the backend).
+      # Uncomment to use. Builds from the root Dockerfile in this repo.
+      #
+      # - name: Set up flyctl
+      #   uses: superfly/flyctl-actions/setup-flyctl@master
+      #
+      # - name: Fly deploy
+      #   if: ${{ secrets.FLY_API_TOKEN != '' }}
+      #   env:
+      #     FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      #   run: flyctl deploy --remote-only --dockerfile Dockerfile
+
+      # --- OPTION B: Generic Docker registry push ----------------------------
+      # Requires secrets: REGISTRY (e.g. ghcr.io/owner), REGISTRY_USERNAME,
+      # REGISTRY_PASSWORD. Uncomment to use.
+      #
+      # - name: Log in to registry
+      #   if: ${{ secrets.REGISTRY_USERNAME != '' }}
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ${{ secrets.REGISTRY }}
+      #     username: ${{ secrets.REGISTRY_USERNAME }}
+      #     password: ${{ secrets.REGISTRY_PASSWORD }}
+      #
+      # - name: Build and push backend image
+      #   if: ${{ secrets.REGISTRY_USERNAME != '' }}
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     file: Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.REGISTRY }}/apex-backend:latest
+
+      - name: No-op notice
+        run: echo "Backend deploy gate passed; enable Option A or B above and add secrets."
+
+  # ---------------------------------------------------------------------------
+  # Frontend deploy (Vite SPA). Disabled until the gate passes.
+  # The repo already ships netlify.toml and vercel.json, so the SPA is normally
+  # deployed via those platforms' native Git integrations. This job is for an
+  # optional self-managed container/static push (Dockerfile.web).
+  # ---------------------------------------------------------------------------
+  deploy-frontend:
+    name: Deploy frontend (production)
+    needs: gate
+    if: ${{ needs.gate.outputs.enabled == 'true' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- OPTION A: Static container (Dockerfile.web -> registry) -----------
+      # Requires secrets: REGISTRY, REGISTRY_USERNAME, REGISTRY_PASSWORD.
+      #
+      # - name: Log in to registry
+      #   if: ${{ secrets.REGISTRY_USERNAME != '' }}
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ${{ secrets.REGISTRY }}
+      #     username: ${{ secrets.REGISTRY_USERNAME }}
+      #     password: ${{ secrets.REGISTRY_PASSWORD }}
+      #
+      # - name: Build and push web image
+      #   if: ${{ secrets.REGISTRY_USERNAME != '' }}
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     file: Dockerfile.web
+      #     push: true
+      #     tags: ${{ secrets.REGISTRY }}/apex-web:latest
+      #     build-args: |
+      #       VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+
+      - name: No-op notice
+        run: echo "Frontend deploy gate passed; enable Option A above and add secrets, or use Netlify/Vercel Git integration."
