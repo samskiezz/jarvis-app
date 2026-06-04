@@ -158,6 +158,18 @@ export const PAGES = [
   { name: "ScenarioLab", label: "Scenario Lab", icon: "🧪", group: "platform",
     aliases: ["scenario", "whatif", "what-if", "optimize", "model registry", "drift"],
     component: P(() => import("@/pages/ScenarioLab")) },
+  { name: "SemanticDiscover", label: "Semantic Discover", icon: "🧠", group: "platform",
+    aliases: ["semantic", "vector", "rag", "embedding", "discover", "nl query", "natural language"],
+    component: P(() => import("@/pages/SemanticDiscover")) },
+  { name: "DataCatalog", label: "Data Catalog", icon: "🗂️", group: "platform",
+    aliases: ["datasets", "catalog", "lineage", "transform", "schema", "data health", "provenance"],
+    component: P(() => import("@/pages/DataCatalog")) },
+  { name: "AIPActions", label: "AIP Actions", icon: "🤖", group: "platform",
+    aliases: ["aip", "actions", "tools", "proposals", "agent", "workflow", "write-back"],
+    component: P(() => import("@/pages/AIPActions")) },
+  { name: "TenantAdmin", label: "Tenant Admin", icon: "🏛️", group: "platform",
+    aliases: ["tenant", "tenancy", "multi-tenant", "members", "org", "whoami"],
+    component: P(() => import("@/pages/TenantAdmin")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",

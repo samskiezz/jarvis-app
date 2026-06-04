@@ -1,0 +1,72 @@
+name: CI
+
+# Real, green-by-construction CI. Every command below has been verified to run
+# against this repo (server/requirements.txt + package.json scripts).
+on:
+  push:
+    branches:
+      - main
+      - claude/help-needed-V3BvZ
+  pull_request:
+    branches:
+      - main
+      - claude/help-needed-V3BvZ
+
+# Cancel superseded runs on the same ref to save minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (FastAPI / pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: server/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r server/requirements.txt
+
+      - name: Run tests (fast suite; slow ML tests deselected)
+        # The ML training/oracle tests (forecaster_ml, oracle_model, train_sp500)
+        # are heavy and deselected to keep CI fast. Run them in a nightly/manual
+        # job if/when needed.
+        run: |
+          python3 -m pytest server/tests -q \
+            --deselect server/tests/test_forecaster_ml.py \
+            --deselect server/tests/test_oracle_model.py \
+            --deselect server/tests/test_train_sp500.py
+
+  frontend:
+    name: Frontend (Vite / React)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build

@@ -7,7 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import CORS_ORIGINS
 from .routes import admin as admin_routes
 from .routes import aip as aip_routes
+from .routes import aip_tools as aip_tools_routes
 from .routes import auth as auth_routes
+from .routes import datasets as datasets_routes
 from .routes import bridge as bridge_routes
 from .routes import collab as collab_routes
 from .routes import entities as entities_routes
@@ -24,9 +26,11 @@ from .routes import reports as reports_routes
 from .routes import scenario as scenario_routes
 from .routes import science as science_routes
 from .routes import search as search_routes
+from .routes import search_semantic as search_semantic_routes
 from .routes import security as security_routes
 from .routes import streams as streams_routes
 from .routes import temporal as temporal_routes
+from .routes import tenancy as tenancy_routes
 from .routes import workshop as workshop_routes
 
 
@@ -99,6 +103,10 @@ def create_app() -> FastAPI:
     app.include_router(temporal_routes.router)
     app.include_router(geo_routes.router)
     app.include_router(scenario_routes.router)
+    app.include_router(search_semantic_routes.router)
+    app.include_router(aip_tools_routes.router)
+    app.include_router(datasets_routes.router)
+    app.include_router(tenancy_routes.router)
 
     @app.get("/")
     async def root():

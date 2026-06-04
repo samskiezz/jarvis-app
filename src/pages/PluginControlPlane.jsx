@@ -1,138 +1,106 @@
 /**
- * PluginControlPlane — detailed plugin management table.
- * The full Apex plugin set in a styled table: name, category, status, version,
- * actions. Filter by category, toggle enable/disable per row, plus a bulk filter
- * summary. Apex pages use the orange accent.
+ * PluginControlPlane — live service/endpoint control plane.
+ *
+ * Was a static plugin table; now a REAL ops view driven by:
+ *   • /v1/metrics      — measured endpoint timers (count + latency) and counters.
+ *   • /v1/health/deep  — core component health.
+ * Each measured endpoint is a row with its live call count, average latency and
+ * derived status. Filter by category (inferred from the route prefix). No fake
+ * health — a service only shows here once it has actually been exercised.
+ * Apex pages use the orange accent.
  */
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { COLORS as C } from "@/domain/colors";
-import { PageShell, PanelCard, StatTile, Grid, Badge } from "@/components/PageKit";
+import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
+import { Btn } from "@/components/Wave1Kit";
+import { apiGet, useAsync } from "@/lib/wave1";
 
 const ACCENT = C.orange;
 
-const PLUGINS = [
-  { id: "rag", name: "RAG Memory", category: "Memory", version: "2.4.1", health: "healthy" },
-  { id: "gpu", name: "GPU Compute", category: "Compute", version: "3.1.0", health: "healthy" },
-  { id: "vision", name: "Vision Multimodal", category: "Perception", version: "1.9.2", health: "healthy" },
-  { id: "llm", name: "LLM Gateway / Inference", category: "Inference", version: "4.0.3", health: "healthy" },
-  { id: "quantum", name: "Quantum Simulation", category: "Compute", version: "0.7.0", health: "degraded" },
-  { id: "graph", name: "Graph Intelligence", category: "Reasoning", version: "2.0.5", health: "healthy" },
-  { id: "opt", name: "Optimisation", category: "Reasoning", version: "1.6.0", health: "healthy" },
-  { id: "agent", name: "Agent Workflow", category: "Orchestration", version: "3.3.1", health: "healthy" },
-  { id: "lineage", name: "Data Workflow Lineage", category: "Orchestration", version: "1.2.4", health: "healthy" },
-  { id: "eval", name: "Evaluation Observability", category: "Observability", version: "0.9.8", health: "degraded" },
-  { id: "ts", name: "TypeScript Runtime", category: "Runtime", version: "5.4.0", health: "healthy" },
-];
+// Infer a capability category from an endpoint/timer name.
+function categoryOf(name = "") {
+  const n = name.toLowerCase();
+  if (n.includes("predict") || n.includes("forecast") || n.includes("oracle")) return "Prediction";
+  if (n.includes("science") || n.includes("labs") || n.includes("method")) return "Science";
+  if (n.includes("ontology") || n.includes("entit") || n.includes("graph") || n.includes("search") || n.includes("semantic")) return "Ontology";
+  if (n.includes("geo") || n.includes("temporal") || n.includes("scenario")) return "Analysis";
+  if (n.includes("alert") || n.includes("case") || n.includes("collab") || n.includes("report")) return "Operations";
+  if (n.includes("admin") || n.includes("metric") || n.includes("health") || n.includes("tenant")) return "Platform";
+  return "Other";
+}
 
-const HEALTH_COLOR = { healthy: C.neon, degraded: C.gold, down: C.red };
-const CATEGORIES = ["all", ...Array.from(new Set(PLUGINS.map((p) => p.category)))];
+const latColor = (ms) => (ms == null ? C.text : ms < 50 ? C.neon : ms < 300 ? C.gold : C.red);
 
 export default function PluginControlPlane() {
-  const [enabled, setEnabled] = useState(() => {
-    const init = {};
-    PLUGINS.forEach((p) => { init[p.id] = p.health !== "degraded"; });
-    return init;
-  });
-  const [filter, setFilter] = useState("all");
+  const [metrics, setMetrics] = useState(null);
+  const [health, setHealth] = useState(null);
+  const [cat, setCat] = useState("all");
+  const a = useAsync();
 
-  const toggle = (id) => setEnabled((prev) => ({ ...prev, [id]: !prev[id] }));
+  const load = useCallback(async () => {
+    const m = await a.run(() => apiGet("/v1/metrics"));
+    if (m) setMetrics(m);
+    const h = await apiGet("/v1/health/deep").catch(() => null);
+    if (h) setHealth(h);
+  }, [a]);
 
-  const rows = useMemo(
-    () => (filter === "all" ? PLUGINS : PLUGINS.filter((p) => p.category === filter)),
-    [filter],
-  );
-  const activeCount = PLUGINS.filter((p) => enabled[p.id]).length;
+  useEffect(() => { load(); const t = setInterval(load, 8000); return () => clearInterval(t); }, [load]);
 
-  const th = {
-    textAlign: "left", fontSize: 8, letterSpacing: 1.5, color: C.text,
-    textTransform: "uppercase", padding: "8px 10px", borderBottom: `1px solid ${C.border}`,
-  };
-  const td = {
-    fontSize: 10, color: C.textB, padding: "9px 10px", borderBottom: `1px solid ${C.borderB}`,
-  };
-  const filterBtn = (cat) => ({
-    background: filter === cat ? ACCENT + "22" : "rgba(0,0,0,0.4)",
-    border: `1px solid ${filter === cat ? ACCENT + "77" : C.border}`,
-    color: filter === cat ? ACCENT : C.text, borderRadius: 4, padding: "5px 10px",
-    fontSize: 9, letterSpacing: 1, fontFamily: "inherit", cursor: "pointer", fontWeight: 700,
-  });
+  const timers = metrics?.metrics?.timers || [];
+  const rows = useMemo(() => timers.map((t) => {
+    const avg = t.avg_ms ?? t.mean_ms ?? t.avg ?? (t.total_ms && t.count ? t.total_ms / t.count : null);
+    return {
+      name: t.name || t.key,
+      category: categoryOf(t.name || t.key),
+      count: t.count ?? t.n ?? 0,
+      avg_ms: typeof avg === "number" ? avg : null,
+      p95: t.p95_ms ?? t.p95 ?? null,
+      status: (t.count ?? 0) > 0 ? "active" : "idle",
+    };
+  }), [timers]);
+
+  const categories = useMemo(() => ["all", ...Array.from(new Set(rows.map((r) => r.category)))], [rows]);
+  const filtered = cat === "all" ? rows : rows.filter((r) => r.category === cat);
+  const components = health?.components || {};
+  const totalCalls = rows.reduce((s, r) => s + (r.count || 0), 0);
 
   return (
-    <PageShell
-      title="PLUGIN CONTROL PLANE"
-      subtitle="DETAILED PLUGIN MANAGEMENT · FILTER · TOGGLE · VERSIONS"
-      accent={ACCENT}
-    >
-      <Grid min={160} gap={10} style={{ marginBottom: 14 }}>
-        <StatTile label="Registered" value={PLUGINS.length} accent={ACCENT} />
-        <StatTile label="Enabled" value={activeCount} accent={C.neon} />
-        <StatTile label="Showing" value={rows.length} accent={C.blue} sub={filter} />
-        <StatTile label="Categories" value={CATEGORIES.length - 1} accent={C.gold} />
+    <PageShell title="PLUGIN CONTROL PLANE" subtitle="live endpoint telemetry · measured latency · component health" accent={ACCENT}
+      actions={<Btn accent={ACCENT} onClick={load}>↻ REFRESH</Btn>}>
+      <Grid min={150} style={{ marginBottom: 14 }}>
+        <StatTile label="measured services" value={rows.length} accent={ACCENT} />
+        <StatTile label="total calls" value={totalCalls} accent={C.neon} />
+        <StatTile label="active" value={rows.filter((r) => r.status === "active").length} accent={C.neon} />
+        <StatTile label="core components up" value={`${Object.values(components).filter(Boolean).length}/${Object.keys(components).length || "—"}`} accent={C.gold} />
       </Grid>
 
-      <PanelCard
-        title="PLUGIN REGISTRY"
-        accent={ACCENT}
-        right={
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-            {CATEGORIES.map((cat) => (
-              <button key={cat} onClick={() => setFilter(cat)} style={filterBtn(cat)}>
-                {cat.toUpperCase()}
-              </button>
+      <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+        {categories.map((cc) => (
+          <Btn key={cc} accent={cc === cat ? ACCENT : C.text} style={cc === cat ? {} : { opacity: 0.55 }}
+            onClick={() => setCat(cc)}>{cc.toUpperCase()}</Btn>
+        ))}
+      </div>
+
+      <PanelCard title="SERVICES" accent={ACCENT}>
+        <DataState loading={a.loading} error={a.error} empty={!rows.length}
+          emptyLabel="No endpoint timers yet — exercise the API (open other pages) and they appear here live.">
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 0.8fr", gap: 8, fontSize: 8,
+              color: C.text, letterSpacing: 1, padding: "4px 8px", borderBottom: `1px solid ${C.border}` }}>
+              <span>ENDPOINT</span><span>CATEGORY</span><span>CALLS</span><span>AVG LATENCY</span><span>STATUS</span>
+            </div>
+            {filtered.map((r, i) => (
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 0.8fr", gap: 8,
+                fontSize: 10, padding: "7px 8px", borderBottom: `1px solid ${C.border}`, alignItems: "center" }}>
+                <span style={{ color: C.textB, fontWeight: 600 }}>{r.name}</span>
+                <span><Badge color={C.gold}>{r.category}</Badge></span>
+                <span style={{ color: C.neon }}>{r.count}</span>
+                <span style={{ color: latColor(r.avg_ms) }}>{r.avg_ms != null ? `${r.avg_ms.toFixed(1)}ms` : "—"}</span>
+                <span><Badge color={r.status === "active" ? C.neon : C.text}>{r.status}</Badge></span>
+              </div>
             ))}
           </div>
-        }
-      >
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
-            <thead>
-              <tr>
-                <th style={th}>Plugin</th>
-                <th style={th}>Category</th>
-                <th style={th}>Health</th>
-                <th style={th}>Status</th>
-                <th style={th}>Version</th>
-                <th style={{ ...th, textAlign: "right" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((p) => {
-                const on = enabled[p.id];
-                const hc = HEALTH_COLOR[p.health] || C.text;
-                return (
-                  <tr key={p.id}>
-                    <td style={{ ...td, fontWeight: 700 }}>{p.name}</td>
-                    <td style={td}><Badge color={ACCENT}>{p.category}</Badge></td>
-                    <td style={td}>
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: hc }}>
-                        <span style={{ width: 7, height: 7, borderRadius: "50%", background: hc, boxShadow: `0 0 5px ${hc}` }} />
-                        {p.health}
-                      </span>
-                    </td>
-                    <td style={td}><Badge color={on ? C.neon : C.text}>{on ? "ENABLED" : "DISABLED"}</Badge></td>
-                    <td style={{ ...td, color: C.text }}>v{p.version}</td>
-                    <td style={{ ...td, textAlign: "right" }}>
-                      <button
-                        onClick={() => toggle(p.id)}
-                        style={{
-                          background: (on ? C.red : C.neon) + "1a",
-                          border: `1px solid ${(on ? C.red : C.neon)}55`,
-                          color: on ? C.red : C.neon, borderRadius: 4, padding: "4px 10px",
-                          fontSize: 8, letterSpacing: 1, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
-                        }}
-                      >{on ? "DISABLE" : "ENABLE"}</button>
-                    </td>
-                  </tr>
-                );
-              })}
-              {rows.length === 0 && (
-                <tr><td colSpan={6} style={{ ...td, color: C.text, textAlign: "center", padding: 24 }}>
-                  No plugins in this category.
-                </td></tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        </DataState>
       </PanelCard>
     </PageShell>
   );
