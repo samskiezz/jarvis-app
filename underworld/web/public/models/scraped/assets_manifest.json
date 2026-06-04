@@ -8965,5 +8965,22 @@
     "epoch": "industrial",
     "name": "Canal Lock",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:canal_straight": {
+    "prompt": "a straight stone-lined canal water channel tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "4a4d00eb-d6e7-4d8c-9abb-1a073f09e81c",
+    "path": "/models/generated/tripo/canal_straight.glb",
+    "bytes": 15012620,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/4a4d00eb-d6e7-4d8c-9abb-1a073f09e81c/tripo_pbr_model_4a4d00eb-d6e7-4d8c-9abb-1a073f09e81c.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNGE0ZDAwZWItZDZlNy00ZDhjLTlhYmItMWEwNzNmMDllODFjL3RyaXBvX3Bicl9tb2RlbF80YTRkMDBlYi1kNmU3LTRkOGMtOWFiYi0xYTA3M2YwOWU4MWMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=hzZ9TBvZswSuzUM9B9YtenFbyedoCOW7ehlch1PObqVlTvDApa16OzmHtXBQDzUxPN7Xwdue2XY6KvW31rpN9E53G8bab4ICoAOnMtJdUspJcD5ju64goRdOeG0kW4AZ2m5PPUTB4ubwOT8oBLqZzd6~YARAulh5xKUWqNKiTZjhjU1bsnBXZ4XPF4wIxoG3sfz5-j7CkPTjFMvet710jmmsJUCwaEq7gpcvkSexCe-uokONxlz7vMu-4OUHnFU3dyW~j3H3YkZAYwWGJg6QygrVGQ7vOarAiYFXwCAGuxM4kpMrtbQT1Vwna1Y25ReUFduJQaOwrRwvUclb6l~9kg__",
+    "asset_id": "canal_straight",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "iron",
+    "name": "Canal Straight",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
