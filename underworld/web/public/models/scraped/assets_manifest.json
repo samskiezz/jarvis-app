@@ -9594,5 +9594,22 @@
     "epoch": "any",
     "name": "River Bend",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:river_delta": {
+    "prompt": "a branching river delta water tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f10c0927-ac1e-49ad-a0e1-7765b3975659",
+    "path": "/models/generated/tripo/river_delta.glb",
+    "bytes": 15111936,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f10c0927-ac1e-49ad-a0e1-7765b3975659/tripo_pbr_model_f10c0927-ac1e-49ad-a0e1-7765b3975659.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjEwYzA5MjctYWMxZS00OWFkLWEwZTEtNzc2NWIzOTc1NjU5L3RyaXBvX3Bicl9tb2RlbF9mMTBjMDkyNy1hYzFlLTQ5YWQtYTBlMS03NzY1YjM5NzU2NTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=cTTQELGsp~Wd5emiEo0oQNERUi2D5L7ewqt2kC8DMOr~ZqfEf~U1w9BsHVa1kb7BX~H-WZNmiu8Ahlb0RnOHeQjSouzmMhVdncfDqYPHb6qg96ZtWc6e0p0xgEDvs63QDBw9ZD8uO7qp~brpc-5cLBq0HrNszf6cSfNE6tAe~AFCr153iJwJFv~EYecEEVGWUFVBCJbxBrDYCTIAR8K~VLi3T4aMvEU4Z-Df1uoMd2aXZ7pQAI7p1Rc5PZvlUioz9kO1DPk-GP~WO6Frf3JjnGgrvndHkQczjT11xScpU9fKXFeuMGeAK32ygXRHFaAbwKIZ92dAqTnO5SCnGk-QzA__",
+    "asset_id": "river_delta",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "River Delta",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
