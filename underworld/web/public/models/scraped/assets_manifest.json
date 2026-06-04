@@ -10376,5 +10376,22 @@
     "epoch": "bronze",
     "name": "Vineyard Row",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:water_lily_patch": {
+    "prompt": "a patch of floating water lilies in bloom, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c70ed790-348f-4bd4-a2b3-544392da9fb4",
+    "path": "/models/generated/tripo/water_lily_patch.glb",
+    "bytes": 15224508,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c70ed790-348f-4bd4-a2b3-544392da9fb4/tripo_pbr_model_c70ed790-348f-4bd4-a2b3-544392da9fb4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzcwZWQ3OTAtMzQ4Zi00YmQ0LWEyYjMtNTQ0MzkyZGE5ZmI0L3RyaXBvX3Bicl9tb2RlbF9jNzBlZDc5MC0zNDhmLTRiZDQtYTJiMy01NDQzOTJkYTlmYjQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=WhD4hFWM~W2-06lQaLKHjhB8~mRpuG9YgGTAbDBozGuVrwOrfeg7F1l8VxaSMix5S-NB-Ekeu6AO9TN60kyC2HiuTKWFntij-PD-b5Dj1fGuDFwKLi-tQkvUGK6pKcuKM9YayaBJN~YBsNOUs7f4ZhE5vRWdY8o2RYySsEohmqebJ7DvuBGb1SFgcg0lLs3uj2-xiXa2blC2R-2uq8ZJo9aB29O0Oo3E9HuP3Tu~8oVc2uHCewXQpl5IRVAWFWXWb3in5SI4v-ZRc7sYN81c0xuiDEqCm3LU4PCyo0ltacXgbz9LQJ9xag7gvTWNoGGuv5pbA7vZePc1v4clNgio6w__",
+    "asset_id": "water_lily_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Water Lily Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
