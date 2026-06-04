@@ -15,11 +15,13 @@ from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
 from .routes import graph as graph_routes
+from .routes import graph_time as graph_time_routes
 from .routes import labs as labs_routes
 from .routes import functions as functions_routes
 from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
 from .routes import history as history_routes
+from .routes import investigations as investigations_routes
 from .routes import ontology as ontology_routes
 from .routes import ontology_ext as ontology_ext_routes
 from .routes import ops as ops_routes
@@ -120,6 +122,8 @@ def create_app() -> FastAPI:
     app.include_router(ontology_ext_routes.router)
     app.include_router(connectors_routes.router)
     app.include_router(sci_domains_routes.router)
+    app.include_router(graph_time_routes.router)
+    app.include_router(investigations_routes.router)
 
     @app.get("/")
     async def root():
