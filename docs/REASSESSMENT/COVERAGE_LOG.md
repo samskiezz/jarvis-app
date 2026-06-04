@@ -53,7 +53,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 46 | ☐ | server/services/oracle_model.py | 654 |
 | 47 | ☐ | server/services/prediction.py | 1187 |
 | 48 | ☐ | server/services/scrapers.py | 185 |
-| 49 | ☐ | server/services/simulation.py | 783 |
+| 49 | ☑ | server/services/simulation.py | 783 |
 | 50 | ☐ | server/services/train_sp500.py | 425 |
 | 51 | ☑ | server/tests/__init__.py | 0 |
 | 52 | ☐ | server/tests/test_forecaster.py | 137 |
@@ -712,3 +712,6 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/data/ontology.py` — SEED ontology (mirrors src/domain/ontology.js): 13 OBJECTS w/ real PII (Sam addr/email/phone L7-34), 21 LINKS (L37-59), 8 RISK_SIGNALS (L61-70), ontology_summary (L73)
 - `server/data/corpus.py` — real corpus dataset: 6 email tables (investment/crypto/psg/travel/wedding/music, ~57 emails) + 19-event TIMELINE; all consistent w/ ontology
 - `server/services/ingestion.py` — P0 ingestion adapters -> History Lake: ingest_crypto (L39), ingest_seismic (L68, day-bucketed count+maxmag), ingest_fx (L127); ingest_all (L163) fault-isolated; ingestion_loop opt-in (L177)
+
+## BATCH 3 — simulation engine
+- `server/services/simulation.py` — tactical sim engine; GameSim dataclass (L80); counterstrike full round loop buy/live/planted/over + LOS combat + plant/defuse (L201-453); panopticon agent-vs-intruder grid w/ vision cones, alert escalation, breaches (L455-667); get_game/snapshot (L772-783); 2 games registered (L752)
