@@ -10240,5 +10240,22 @@
     "epoch": "any",
     "name": "Sunflower Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_acacia": {
+    "prompt": "a flat-topped savannah acacia tree, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "89995df1-90c9-45cc-947b-be7ad1dde552",
+    "path": "/models/generated/tripo/tree_acacia.glb",
+    "bytes": 13214996,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/89995df1-90c9-45cc-947b-be7ad1dde552/tripo_pbr_model_89995df1-90c9-45cc-947b-be7ad1dde552.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODk5OTVkZjEtOTBjOS00NWNjLTk0N2ItYmU3YWQxZGRlNTUyL3RyaXBvX3Bicl9tb2RlbF84OTk5NWRmMS05MGM5LTQ1Y2MtOTQ3Yi1iZTdhZDFkZGU1NTIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=uadM0TMzLToXh44W82MZxvIXo4f-DCiwxR4XnFzCaYGg~SjwJAUu5TPhQ-PQN4UVc6KL79LH1lwGPCJPpdgHDWAgAHRMx9hz6CMbOGUHGfMVD-NneNWv5lcQ77RxWiPUGrGO-BXUCgvJArQs6V880SrjMJGSQBwtl0TTcYLXKWxfB9qzs6egeAhcp9GyLTdfTqueEwy0E31iiNAuGy~SlBbsJDbNi6EVbyTbPz0lDYulScyEPwJCOrFyTiDXva-K9swacrv3NCQ3lPXVP5KhuE6xZzePk-Zpy0eUdHE~yZ5mFhgQOm9dr1zVLc2CawPV2p6sXXaerG7AMp~PYxNy5g__",
+    "asset_id": "tree_acacia",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Acacia",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
