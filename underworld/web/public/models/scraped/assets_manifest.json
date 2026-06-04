@@ -11413,5 +11413,22 @@
     "epoch": "iron",
     "name": "Grindstone",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hay_cart_load": {
+    "prompt": "a wooden cart piled high with loose hay, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "f3c6a86b-1e00-45a1-b6e1-60c120a382a3",
+    "path": "/models/generated/tripo/hay_cart_load.glb",
+    "bytes": 15440256,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/f3c6a86b-1e00-45a1-b6e1-60c120a382a3/tripo_pbr_model_f3c6a86b-1e00-45a1-b6e1-60c120a382a3.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZjNjNmE4NmItMWUwMC00NWExLWI2ZTEtNjBjMTIwYTM4MmEzL3RyaXBvX3Bicl9tb2RlbF9mM2M2YTg2Yi0xZTAwLTQ1YTEtYjZlMS02MGMxMjBhMzgyYTMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=fGHA~rT-RamTBSnCVthRaw4QFxPhi6rRUbZIQGWAGcR7LF79j6KlAN4U-G4oVE-Hhuf3JLGL3lnizAyKzMuZedujbJeD7KtctPbPkB6ZpVJjlLWpelzYGCffMbAGJCauMAlq3DBTKNN9h0rvcm97THFKnVikv~GbECDItFE1AzvyxheZolhMD8GJX7ZFoz3Q~StU~ThXHW6VuOd1bgTK1ShbCpUXuL5B-NbTHUKM5M2237BegWKOfRZq-4CptMLY~URDKA79PirZcMHawaFw-FAq~zPTN-aMT9q9kgMMoKXI4nBRE4h4V-~tb9dNPzOR~f5jh1oL-kRqGqotWp8e7g__",
+    "asset_id": "hay_cart_load",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Hay Cart Load",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
