@@ -11175,5 +11175,22 @@
     "epoch": "quantum",
     "name": "Plasma Carbine",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:revolver": {
+    "prompt": "a six-shot revolver pistol, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "2151a2aa-7567-4681-96da-3f1366291571",
+    "path": "/models/generated/tripo/revolver.glb",
+    "bytes": 10160260,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/2151a2aa-7567-4681-96da-3f1366291571/tripo_pbr_model_2151a2aa-7567-4681-96da-3f1366291571.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMjE1MWEyYWEtNzU2Ny00NjgxLTk2ZGEtM2YxMzY2MjkxNTcxL3RyaXBvX3Bicl9tb2RlbF8yMTUxYTJhYS03NTY3LTQ2ODEtOTZkYS0zZjEzNjYyOTE1NzEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=hbjZuZdmopF2yy3r9ONeHQ7Vh~x8rRQXvVKvGXq64j6ka295L7mkFmz0l4RhFgE8rqOWmk-KEON-M3sp2t~IP7hEZYq8d~9s8Ai8nCXJxFo2o0E8ahYbanV2HqkOQC5FF2hT4DTg4SwZUceJelt8wtU0T29717vShkJG0qDmYFuZ2XY~skSnoye~fdrzTfLJhoSsCj3RaNJxZD5mE0Qv-ohlgTbZni0m1lBNc-DM5lsFqEVAFXk1DzqHMEh9YFj-3SojQNfAmK8x0HcMaeJJq86iLS6D0u~Lcip1zaiXOwkpVQgUPmPU6f0mAsVvwnSMA3tc8PregxE22OjoKiQCbg__",
+    "asset_id": "revolver",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Revolver",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
