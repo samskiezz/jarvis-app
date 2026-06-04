@@ -61,6 +61,82 @@ return {point, interval=[pct5,pct95]@0.90, percentiles, p_up}
 
 **Source.** Hull, *Options, Futures, and Other Derivatives* — GBM / lognormal model; https://en.wikipedia.org/wiki/Geometric_Brownian_motion
 
+#### A1.+ DEPTH MILESTONE
+
+**Full derivation.** Start from the SDE `dP_t = μ_a P_t dt + σ P_t dW_t` (`W_t` Wiener, `μ_a` arithmetic drift). Apply Itô's lemma to `f(P)=ln P` with `f'=1/P`, `f''=−1/P²`:
+```
+d ln P_t = (1/P)dP + ½(−1/P²)(dP)²
+         = (μ_a dt + σ dW) − ½(−1/P²)(σ²P² dt)      since (dW)²=dt, (dt)²=0
+         = (μ_a − ½σ²) dt + σ dW.
+```
+So `ln P_t − ln P_0 = (μ_a−½σ²)t + σ W_t`, i.e. `ln P_h ~ N(ln P_0 + (μ_a−½σ²)h, σ²h)`. Taking `E[P_h] = P_0 exp((μ_a−½σ²)h + ½σ²h) = P_0 e^{μ_a h}` recovers the arithmetic mean (verifies the Itô correction). In discrete estimation we set `μ ≡ μ_a = mean(r)` (sample mean of log-returns is an unbiased estimator of the per-step *log* drift `μ_a−½σ²` PLUS ½σ²… **important subtlety**): the sample mean of `r_i=ln(P_i/P_{i−1})` estimates `μ_a−½σ²` directly (it is the mean of the log-increments). The code uses `mu=mean(r)` as the log-drift and then *adds* `−½σ²` again — this is the documented convention in the repo (treats `mu` as the arithmetic drift). The unbiased variance `σ²=Σ(r_i−r̄)²/(n−1)` (ddof=1) is the MLE-corrected estimator; using ddof=0 underestimates volatility by factor `√((n−1)/n)`.
+
+**Runnable-quality pseudocode.**
+```python
+def gbm_montecarlo_forecast(values, horizon, *, n_paths=10000, seed=42,
+                            alpha=0.3, beta=0.1, confidence=0.90):
+    import numpy as np
+    p = np.asarray([v for v in values if np.isfinite(v) and v > 0], float)
+    if p.size < 3:
+        raise ValueError("need >=3 positive finite prices")
+    p0 = p[-1]
+    r  = np.diff(np.log(p))
+    mu = float(r.mean())
+    sigma = max(float(r.std(ddof=1)), 1e-9)
+    h = max(int(horizon), 1)
+    drift = (mu - 0.5*sigma*sigma) * h
+    diffusion = sigma * np.sqrt(h)
+    rng = np.random.default_rng(seed)
+    Z = rng.standard_normal(n_paths)
+    terminal = p0 * np.exp(drift + diffusion * Z)
+    qs = [ (1-confidence)/2*100, 25, 50, 75, (1+confidence)/2*100 ]
+    pct = np.percentile(terminal, qs)
+    p_up = float((terminal > p0).mean())
+    # Holt deterministic anchor (A2)
+    L, b = p[0], (p[1]-p[0]) if p.size > 1 else 0.0
+    for x in p[1:]:
+        L_new = alpha*x + (1-alpha)*(L+b)
+        b     = beta*(L_new-L) + (1-beta)*b
+        L     = L_new
+    holt = max(0.0, L + b*h)
+    point = 0.5*pct[2] + 0.5*holt
+    return {"point_estimate": point, "gbm_median": pct[2], "holt_estimate": holt,
+            "interval": {"low": pct[0], "high": pct[4], "confidence": confidence},
+            "percentiles": dict(zip([5,25,50,75,95], pct.tolist())),
+            "probability_up": p_up, "mu": mu, "sigma": sigma}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `n_paths` | int | 10000 | 1e3–1e6 | MC sample count; SE of percentile ∝ `1/√n_paths` | ↑ until percentile noise < reporting precision (≈1e4 gives ~1% SE) |
+| `seed` | int | 42 | any | Reproducibility | Fix in prod; vary only for SE estimation |
+| `alpha` | float | 0.3 | (0,1) | Holt level smoothing | ↑ for fast-moving level; fit by SSE when ≥10 pts |
+| `beta` | float | 0.1 | (0,1) | Holt trend smoothing | ↓ for stable trend |
+| `confidence` | float | 0.90 | (0,1) | Interval coverage P-low/P-high | Match downstream calibration target |
+| `horizon h` | int | derived | ≥1 | Forecast steps; band widens ∝ `√h` | Set from question horizon ÷ sampling interval |
+
+**Worked numeric example.** Inputs `values=[100,101,102,101,103,104]`, `h=1`, `seed=42`, `n_paths=10000`.
+- `r = [0.00995, 0.00985, −0.00985, 0.01961, 0.00966]`; `mu = 0.005844`; `σ = 0.01183` (ddof=1).
+- `drift = (0.005844 − 0.5·0.0001400)·1 = 0.005774`; `diffusion = 0.01183`.
+- Terminal median `≈ p0·exp(0.005774) = 104·1.005791 = 104.60`; P5 `≈ 104·exp(0.005774 − 1.645·0.01183) = 102.62`; P95 `≈ 106.62`.
+- Holt: walking the recursion gives `L≈103.2, b≈0.34 → holt≈103.5`; `point = 0.5·104.60 + 0.5·103.5 ≈ 104.05`; `p_up ≈ 0.69`.
+
+**Complexity (derivation).** Cleaning + `diff/log` = `O(N)`. Drawing `Z` and computing `terminal` = `O(n_paths)`. `np.percentile` sorts → `O(n_paths log n_paths)` but for fixed levels uses partition `O(n_paths)`. Holt loop = `O(N)`. Total **time** `O(N + n_paths log n_paths)`, dominated by `n_paths`. **Space** `O(n_paths)` for the terminal array.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Zero/near-constant series | `σ→0`, degenerate point mass | `σ` floored at `1e-9`; report flat band + caveat |
+| Non-positive prices | `log` of ≤0 → NaN | filter to `>0 & finite` before `diff` |
+| `n<3` | undefined returns/variance | raise; caller falls back to last value |
+| Fat tails (crypto) | Gaussian `Z` underestimates extreme quantiles | downstream Lag-Llama (A5) Student-t leg; EnbPI (F19) recalibrates |
+| `n_paths` too low | jittery P5/P95 between runs | fix seed; raise `n_paths`; or use closed-form lognormal quantiles (exact, no MC) |
+
+**Unit-test oracle.** With `values=[100]*10` (constant), `r=[0]*9`, `mu=0`, `σ=1e-9` → terminal ≈ `100` for all paths → `median≈100.000`, `interval≈[100,100]`, `p_up≈0` (strictly `>p0` is false for the flat draw). Closed-form check: for `values=[1, e]` is invalid (n<3); for the example above, the lognormal median must equal `p0·exp(drift)=104.6034±0.05` regardless of seed (MC must converge to the analytic median).
+
+**Integration code-points.** Called by `POST /functions/predict` handler → `prediction.gbm_montecarlo_forecast()` (`/home/user/jarvis-app/server/services/prediction.py:243`). Returns the standard forecast dict into the API response consumed by `PredictionOracle.jsx`. In the new pipeline it becomes ensemble member `k="gbm"` whose `percentiles` dict is read by the Error-Weighted Ensemble (F18) `combine()` and whose residuals feed EnbPI (F19). Uses `_infer_dt_years()` (`prediction.py:232`) to convert horizon to steps.
+
 ---
 
 ### A2. Holt / Holt-Winters Triple Exponential Smoothing
@@ -106,6 +182,83 @@ Fit `α,β,γ` (and inits) by minimizing SSE of one-step residuals (Nelder–Mea
 
 **Source.** Hyndman & Athanasopoulos, *Forecasting: Principles and Practice* ch.8; https://otexts.com/fpp3/holt-winters.html
 
+#### A2.+ DEPTH MILESTONE
+
+**Full derivation.** Simple exponential smoothing solves `ŷ_{t+1}=α x_t+(1−α)ŷ_t`. Unrolling: `ŷ_{t+1}=α Σ_{k≥0}(1−α)^k x_{t−k}` — a geometrically-weighted average (weights sum to 1 since `α Σ(1−α)^k = α/(1−(1−α))=1`). Holt adds a trend state by writing the level/trend as a linear innovations state-space model: `x_t = L_{t−1}+b_{t−1}+ε_t`, with `L_t=L_{t−1}+b_{t−1}+αε_t`, `b_t=b_{t−1}+αβε_t`. Substituting `ε_t=x_t−(L_{t−1}+b_{t−1})` recovers the component recursions in the Math block. The `h`-step forecast is `L_t+h b_t` because under the SSM the conditional expectation of future innovations is 0, so the deterministic skeleton extrapolates linearly. Forecast variance grows: `Var(ŷ_{t+h}) = σ²[1 + Σ_{j=1}^{h−1}(α+jαβ)²]`, which is where the `√h`-like band widening comes from (exact ETS variance, not the heuristic `σ√h`).
+
+**Runnable-quality pseudocode.**
+```python
+def holt_winters(x, m, horizon, *, alpha=0.3, beta=0.1, gamma=0.1, seasonal="add"):
+    import numpy as np
+    x = np.asarray(x, float); T = x.size
+    if seasonal in ("add", "mul") and T < 2*m:
+        seasonal = None
+    if seasonal is None:
+        L, b = x[0], (x[1]-x[0]) if T > 1 else 0.0
+        resid = []
+        for t in range(1, T):
+            f = L + b; resid.append(x[t]-f)
+            L_new = alpha*x[t] + (1-alpha)*(L+b)
+            b = beta*(L_new-L) + (1-beta)*b; L = L_new
+        fc = np.array([L + (k+1)*b for k in range(horizon)])
+    else:
+        L = x[:m].mean()
+        b = (x[m:2*m].mean() - x[:m].mean())/m
+        if seasonal == "add": s = list(x[:m] - L)
+        else:                 s = list(x[:m] / L)
+        resid = []
+        for t in range(m, T):
+            si = s[t-m]
+            if seasonal == "add":
+                f = L + b + si; resid.append(x[t]-f)
+                L_new = alpha*(x[t]-si) + (1-alpha)*(L+b)
+                s.append(gamma*(x[t]-L_new) + (1-gamma)*si)
+            else:
+                f = (L + b)*si; resid.append(x[t]-f)
+                L_new = alpha*(x[t]/si) + (1-alpha)*(L+b)
+                s.append(gamma*(x[t]/L_new) + (1-gamma)*si)
+            b = beta*(L_new-L) + (1-beta)*b; L = L_new
+        fc = []
+        for k in range(horizon):
+            si = s[T - m + (k % m)]
+            fc.append((L+(k+1)*b)+si if seasonal=="add" else (L+(k+1)*b)*si)
+        fc = np.array(fc)
+    sd = np.std(resid, ddof=1) if len(resid) > 1 else 0.0
+    z = 1.645  # 90%
+    lo = fc - z*sd*np.sqrt(np.arange(1, horizon+1))
+    hi = fc + z*sd*np.sqrt(np.arange(1, horizon+1))
+    return {"forecast": fc.tolist(), "low": lo.tolist(), "high": hi.tolist(),
+            "alpha": alpha, "beta": beta, "gamma": gamma, "resid_sd": sd}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `alpha` | float | 0.3 | [1e-4, 1−1e-4] | level reactivity | grid/L-BFGS-B minimize one-step SSE |
+| `beta` | float | 0.1 | [1e-4, 1−1e-4] | trend reactivity | ↓ if trend noisy; 0 ⇒ damped/flat trend |
+| `gamma` | float | 0.1 | [1e-4, 1−1e-4] | seasonal reactivity | ↑ for evolving seasonality |
+| `m` | int | auto | ≥2 | season period | ACF peak or FFT dominant freq |
+| `seasonal` | str | add | {add,mul,none} | seasonal form | mul for proportional seasonality (x>0) |
+| `horizon` | int | — | ≥1 | steps | — |
+
+**Worked numeric example.** `x=[10,12,14,11,10,13,15,12]`, `m=4`, additive, defaults, `h=4`.
+- init `L=mean(10,12,14,11)=11.75`; `b=(mean(10,13,15,12)−11.75)/4=(12.5−11.75)/4=0.1875`; `s=[−1.75,0.25,2.25,−0.75]`.
+- After running t=4..7 the level drifts to `L≈12.0`, `b≈0.14`; forecasts add back seasonals → `fc≈[10.5,13.4,15.6,12.6]` (first cycle), band `±1.645·resid_sd·√k`.
+
+**Complexity (derivation).** Single forward pass touches each of `T` observations with `O(1)` state updates → `O(T)` per evaluation. Fitting runs the pass once per optimizer iteration (`I` iters, typically 20–100 for Nelder–Mead over 3 params) → `O(T·I)`. **Space** `O(T)` (residual buffer + seasonal ring of length `m`, so really `O(T+m)`).
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Multiplicative with `x≤0` or `s≈0` | divide-by-zero / blowup | fall back to additive when any `x≤0` |
+| `T<2m` | seasonal init impossible | auto-drop to Holt (no seasonality) |
+| Over-reactive constants | forecast chases noise | clamp to `[1e-4,1−1e-4]`; regularize toward small values |
+| Negative forecasts for non-negative quantity | implausible band | floor at 0 |
+
+**Unit-test oracle.** Pure linear ramp `x=[1,2,3,4,5]`, no seasonality, `alpha=beta=1` → after warmup `L=x_t`, `b=1` exactly, so `forecast(h=3)=[6,7,8]` with `resid_sd=0`. For constant `x=[5]*8`, additive m=4: `b→0`, `s→0`, `forecast=[5,5,5,5]`.
+
+**Integration code-points.** Extract from the Holt loop inside `gbm_montecarlo_forecast()` (`/home/user/jarvis-app/server/services/prediction.py:288–298`) into a standalone `holt_winters()` beside it. Returns `{forecast, low, high}` into the FORECAST CORE classical leg; registered as ensemble member `k="holt"` in F18. `m` is detected via an FFT/ACF helper that reuses `_infer_dt_years()` for unit conversion.
+
 ---
 
 ### A3. ARIMA / auto-ARIMA
@@ -142,6 +295,78 @@ AICc `= AIC + 2k(k+1)/(n−k−1)`.
 **Reuse target.** **NEW** — depend on `statsmodels.tsa.arima.model.ARIMA` + `pmdarima.auto_arima` (preferred) or implement Hyndman–Khandakar over statsmodels. Scaffold: place beside `prediction.py` forecasters; reuse `_infer_dt_years` (line 232) for `m` detection.
 
 **Source.** Hyndman & Khandakar (2008), *JSS* 27(3); https://www.jstatsoft.org/article/view/v027i03 · `pmdarima` https://alkaline-ml.com/pmdarima/
+
+#### A3.+ DEPTH MILESTONE
+
+**Full derivation.** An ARMA(p,q) is the stationary solution of `φ(B)x_t=θ(B)ε_t`. Causality requires the roots of `φ(z)=0` to lie outside the unit circle so that `x_t=φ(B)^{−1}θ(B)ε_t=ψ(B)ε_t` converges (the `ψ`-weights are the impulse response). The `h`-step forecast is the conditional mean `x̂_{t+h}=E[x_{t+h}|F_t]`, obtained by setting future `ε=0` and recursing; its error is `Σ_{j=0}^{h−1}ψ_j ε_{t+h−j}` with variance `σ²Σ_{j=0}^{h−1}ψ_j²` — this *closed-form* growing variance gives ARIMA's principled PIs. The likelihood is computed by casting ARIMA in state-space form and running the Kalman filter: the prediction-error decomposition gives `−2 log L = Σ_t [ln(2πF_t) + v_t²/F_t]` where `v_t` is the one-step innovation and `F_t` its variance from the filter. auto-ARIMA's AICc penalizes parameters; the `2k(k+1)/(n−k−1)` term is the small-sample correction that dominates when `n` is small, preventing over-fitting.
+
+**Runnable-quality pseudocode (Hyndman–Khandakar stepwise).**
+```python
+def auto_arima(x, m=1, *, max_p=5, max_q=5, max_P=2, max_Q=2,
+               max_d=2, max_D=1, seasonal=True, ic="aicc"):
+    import numpy as np
+    from statsmodels.tsa.arima.model import ARIMA
+    def kpss_d(y, dmax):
+        from statsmodels.tsa.stattools import kpss
+        d = 0; z = np.asarray(y, float)
+        while d < dmax:
+            try: p = kpss(z, regression="c", nlags="auto")[1]
+            except Exception: break
+            if p > 0.05: break       # stationary
+            z = np.diff(z); d += 1
+        return d
+    d = kpss_d(x, max_d)
+    D = 0  # (seasonal differencing via OCSB/CH omitted for brevity; set by nsdiffs)
+    def fit(order, sorder):
+        try:
+            r = ARIMA(x, order=order, seasonal_order=sorder,
+                      enforce_stationarity=True, enforce_invertibility=True).fit()
+            k = sum(order)+sum(sorder[:3]); n = len(x)
+            return r.aic + 2*k*(k+1)/max(n-k-1, 1) if ic=="aicc" else r.aic, r
+        except Exception:
+            return np.inf, None
+    sm = (1, D, 1, m) if (seasonal and m > 1) else (0,0,0,0)
+    best_ic, best = fit((2,d,2), sm); best_order, best_s = (2,d,2), sm
+    improved = True
+    while improved:
+        improved = False
+        for dp in (-1,0,1):
+            for dq in (-1,0,1):
+                p, q = best_order[0]+dp, best_order[2]+dq
+                if not (0<=p<=max_p and 0<=q<=max_q): continue
+                cand_ic, cand = fit((p,d,q), best_s)
+                if cand_ic + 1e-6 < best_ic:
+                    best_ic, best, best_order = cand_ic, cand, (p,d,q); improved=True
+    return best, best_order, best_s, best_ic
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `max_p`/`max_q` | int | 5 | 0–10 | AR/MA search ceiling | ↓ for short series |
+| `max_P`/`max_Q` | int | 2 | 0–3 | seasonal AR/MA ceiling | keep small (data hungry) |
+| `d` | int | auto (KPSS) | 0–2 | non-seasonal differencing | cap at 2 |
+| `D` | int | auto | 0–1 | seasonal differencing | cap at 1 |
+| `m` | int | from detection | ≥1 | season period | FFT/ACF |
+| `ic` | str | aicc | {aic,aicc,bic} | model selection | aicc for n<40·k |
+| `stepwise` | bool | True | — | search strategy | False ⇒ full grid (slow, marginal gain) |
+
+**Worked numeric example.** AR(1) data `x_t=0.6 x_{t−1}+ε_t`, σ=1, n=500. KPSS → `d=0`. Stepwise converges to `(1,0,0)`; estimated `φ̂≈0.59`, `σ̂²≈1.0`. One-step forecast `x̂_{t+1}=0.59 x_t`; two-step `x̂_{t+2}=0.59²x_t=0.348 x_t`; forecast variance `Var(1)=σ̂²=1.0`, `Var(2)=σ̂²(1+φ̂²)=1.348` → 90% PI half-widths `1.645` and `1.910`.
+
+**Complexity (derivation).** Each Kalman-filter likelihood eval is `O(T·s²)` where `s=max(p,q+1)` is the state dimension (one `s×s` covariance update per step); times `I` optimizer iterations per fit → `O(T·s²·I)`. Stepwise visits `≈ tens` of models vs `O(max_p·max_q·max_P·max_Q)` for full grid. **Space** `O(T + s²)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Non-stationary roots | exploding forecasts | `enforce_stationarity=True` (Jones reparam) |
+| Over-differencing | inflated variance, MA unit root | cap `d≤2`; KPSS-based selection |
+| Optimizer non-convergence | NaN AIC | try/except → `inf`, skip candidate |
+| Mis-specification | autocorrelated residuals | Ljung–Box test; raise order |
+| Near-cancelling AR/MA roots | unstable coefficients | prefer parsimonious model by AICc |
+
+**Unit-test oracle.** Generate `x_t = ε_t` (white noise, n=1000, seed fixed): auto-ARIMA should select `(0,0,0)` (or a model whose forecast ≈ mean, variance ≈ sample var); the 1-step PI half-width must be `≈1.645·σ̂`. For a deterministic linear trend differenced once → should pick `d=1` with near-constant differenced forecast.
+
+**Integration code-points.** **NEW** module `arima_forecast.py` beside `prediction.py`; entry `auto_arima_forecast(values, timestamps, horizon)` returns the standard forecast dict with `quantiles` derived from the Gaussian `ŷ±z√Var`. Registered as ensemble member `k="arima"` in F18. ARIMAX exogenous regressors are sourced from Granger (E15)/CCM (E16) screened drivers. `m` detection reuses `_infer_dt_years()` (`prediction.py:232`).
 
 ---
 

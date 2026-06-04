@@ -181,6 +181,93 @@ CRPSS = 1 − mean(CRPS_model) / mean(CRPS_baseline)
 ### 1.4 Per-member vs ensemble scoring
 `score_forecast` writes **one** `skill_record` for the ensemble (`model_id='ensemble'`) **and** one per member listed in `member_preds`. The per-member records drive the Error-Weighted Ensemble (§4.1); the ensemble record drives `/predict/skill` and the acceptance criteria.
 
+### 1.5 Full derivations & worked examples (CRPS, PSI, ECE, skill-score)
+
+The summary formulas in §1.3 are the *contract*; the derivations below are the *justification* — they exist so the validation suite (`11_VALIDATION_AND_TEST_PLAN.md`) can unit-test each metric against a closed-form value, and so an on-call engineer reading a runbook can re-derive a number by hand.
+
+#### 1.5.1 CRPS — derivation from the integral, energy form, and the CRPS→MAE limit
+
+**Step 1 — the defining integral.** For a predictive CDF `F` and scalar truth `y`,
+```
+CRPS(F, y) = ∫_{-∞}^{∞} ( F(z) − 1{z ≥ y} )^2 dz
+```
+The integrand is the squared distance, at each level `z`, between the forecast CDF and the *ideal* CDF (a Heaviside step that jumps from 0 to 1 at `y`). CRPS is therefore the L²-distance between forecast and truth in CDF space — a **strictly proper** score: its expectation is uniquely minimized by the true generating distribution, so a forecaster cannot game it by hedging.
+
+**Step 2 — the kernel (energy) identity.** A classical identity rewrites the integral as expectations over independent draws `X, X' ~ F`:
+```
+CRPS(F, y) = E|X − y|  −  ½ · E|X − X'|
+```
+*Why this holds (sketch):* expand `(F(z) − 1{z≥y})² = F(z)² − 2F(z)1{z≥y} + 1{z≥y}`. Integrate each term using `∫ F(z)(1−F(z)) dz = ½ E|X−X'|` (the mean-absolute-difference / Gini identity) and `∫ (1{z≥y} − F(z)·1{z≥y})… = E|X−y| − ½E|X−X'|`. Collecting terms yields the kernel form. The first term rewards **accuracy** (members near `y`); the second term *credits* **spread** (a sharp ensemble pays a smaller subtraction), which is exactly why CRPS jointly scores calibration and sharpness.
+
+**Step 3 — the ensemble estimator we ship.** With `member_preds = {x_1..x_m}` we plug the empirical measure into the kernel form:
+```
+CRPS_ens = (1/m) Σ_k |x_k − y|  −  (1/(2 m²)) Σ_{k,l} |x_k − x_l|     # biased
+CRPS_fair = (1/m) Σ_k |x_k − y|  −  (1/(2 m(m−1))) Σ_{k,l} |x_k − x_l|  # fair (unbiased)
+```
+The biased form underestimates spread for small `m`; the `1/(m(m−1))` denominator (Gneiting & Raftery 2007) corrects it. `fair=True` is the default below `m=20`.
+
+**Step 4 — the deterministic limit (the unit test).** If the ensemble degenerates to a single value `x` repeated (or `m=1`), the second term is 0 and `CRPS = |x − y| = AE`. Hence **CRPS of a point forecast equals its absolute error** — the invariant asserted in §8.2.
+
+**Worked example.** Ensemble `{x} = {2.0, 3.0, 4.0}`, truth `y = 3.5`, `m=3`.
+- Accuracy term: `(|2−3.5| + |3−3.5| + |4−3.5|)/3 = (1.5 + 0.5 + 0.5)/3 = 2.5/3 = 0.8333`.
+- Spread term, all pairwise `|x_k−x_l|`: the 9 ordered pairs give absolute gaps `{0,1,2, 1,0,1, 2,1,0}`, sum `= 8`.
+  - Biased: `8 / (2·3²) = 8/18 = 0.4444` → `CRPS_ens = 0.8333 − 0.4444 = 0.3889`.
+  - Fair: `8 / (2·3·2) = 8/12 = 0.6667` → `CRPS_fair = 0.8333 − 0.6667 = 0.1667`.
+- Sanity: a *single*-member forecast `{3.0}` gives `CRPS = |3−3.5| = 0.5`, larger than the fair ensemble — the ensemble's honest spread earned it a better (lower) score. ✓
+
+#### 1.5.2 PSI — derivation as a symmetrized KL divergence, with a worked table
+
+`drift_detector` (ai_models.py:74–82) computes `PSI = Σ_b (c_b − r_b) · ln(c_b / r_b)`. This is **not** an arbitrary heuristic; it is the **symmetrized (Jeffreys) KL divergence** between the reference density `r` and current density `c`:
+```
+KL(c‖r) = Σ_b c_b ln(c_b/r_b)
+KL(r‖c) = Σ_b r_b ln(r_b/c_b)
+PSI     = KL(c‖r) + KL(r‖c) = Σ_b (c_b − r_b) ln(c_b/r_b)
+```
+(The last equality follows because `Σ_b c_b ln(c_b/r_b) − Σ_b r_b ln(c_b/r_b) = Σ_b (c_b−r_b)ln(c_b/r_b)`, and `KL(r‖c)= −Σ r_b ln(c_b/r_b)`.) PSI is therefore **symmetric** (`PSI(r,c)=PSI(c,r)`), always `≥ 0`, and `=0` iff the two histograms are identical bin-for-bin. The `1e-6` clip (ai_models.py:80) bounds `ln(c_b/r_b)` so an empty current bin cannot send a term to `±∞`.
+
+**Threshold rationale.** The industry bands (`<0.1` stable, `0.1–0.2` moderate, `>0.2` significant) correspond to a Jeffreys divergence at which a ~10-bin histogram has visibly migrated mass between adjacent bins — empirically the level at which downstream model error begins to rise. The function hard-codes `>0.2 → drift=True` (ai_models.py:82).
+
+**Worked example** (3-bin reduction for legibility; production uses `bins=10`). Reference shares `r = [0.50, 0.30, 0.20]`; current shares `c = [0.40, 0.30, 0.30]` (mass shifted from bin 1 into bin 3):
+
+| bin | r_b | c_b | c_b − r_b | c_b/r_b | ln(c_b/r_b) | term = (c−r)·ln |
+|---|---|---|---|---|---|---|
+| 1 | 0.50 | 0.40 | −0.10 | 0.800 | −0.2231 | +0.02231 |
+| 2 | 0.30 | 0.30 |  0.00 | 1.000 |  0.0000 |  0.00000 |
+| 3 | 0.20 | 0.30 | +0.10 | 1.500 | +0.4055 | +0.04055 |
+
+`PSI = 0.02231 + 0 + 0.04055 = 0.0629` → **stable** (`<0.1`), `drift=False`. Note each term is `≥0` (the `(c−r)` and `ln(c/r)` always share sign), confirming non-negativity term-by-term. To cross the `0.2` alarm you need substantially more migration, e.g. `c=[0.25,0.30,0.45]` gives `PSI≈0.30` → alarm.
+
+#### 1.5.3 ECE — derivation as a binned calibration-gap expectation, with a worked table
+
+`calibration_error` (ai_models.py:85–94) computes `ECE = Σ_b (|B_b|/n) · | conf(B_b) − acc(B_b) |`. **Derivation:** perfect calibration means `P(correct | confidence = p) = p` for all `p`. The *calibration gap* at confidence level `p` is `|p − P(correct|p)|`. ECE is the expectation of this gap under the distribution of predicted confidences, estimated by partitioning `[0,1]` into `bins` equal-width buckets and weighting each bucket's gap by its occupancy `|B_b|/n`:
+```
+ECE = E_p [ | p − P(correct|p) | ]  ≈  Σ_b (|B_b|/n) · | mean_conf(B_b) − empirical_acc(B_b) |
+```
+It is the **weighted L¹** gap of the reliability diagram (the per-bin scatter of confidence vs accuracy against the 45° line). Bins with no samples contribute 0 (the `if mask.sum()` guard, ai_models.py:92). The function flags `well_calibrated = ece < 0.1` (ai_models.py:94).
+
+**Worked example** (5 bins for legibility). 100 forecasts:
+
+| bin (conf range) | |B_b| | mean conf | # correct | acc | gap | weighted = (|B|/n)·gap |
+|---|---|---|---|---|---|---|
+| (0.0,0.2] | 10 | 0.15 | 2 | 0.20 | 0.05 | 0.0050 |
+| (0.2,0.4] | 20 | 0.32 | 6 | 0.30 | 0.02 | 0.0040 |
+| (0.4,0.6] | 30 | 0.51 | 18 | 0.60 | 0.09 | 0.0270 |
+| (0.6,0.8] | 25 | 0.71 | 15 | 0.60 | 0.11 | 0.0275 |
+| (0.8,1.0] | 15 | 0.92 | 12 | 0.80 | 0.12 | 0.0180 |
+
+`ECE = 0.0050+0.0040+0.0270+0.0275+0.0180 = 0.0815` → **well-calibrated** (`<0.1`) but close to the line; the two high-confidence bins (gaps 0.11, 0.12) are *over-confident* (conf > acc) and are what an ECE alarm would surface first.
+
+#### 1.5.4 Skill score & CRPSS — derivation, interpretation, and a worked end-to-end
+
+For any negatively-oriented score `S`, the skill score `SS = 1 − S_model/S_baseline` is the **fractional reduction in error relative to a reference forecaster**. Derivation of its anchors: at `S_model = 0` (perfect), `SS = 1`; at `S_model = S_baseline`, `SS = 0`; the ratio `S_model/S_baseline` is unitless so SS is comparable across series of wildly different scale (FX at 1e-3 vs seismicity rates at 1e0). The `< 0` region is unbounded below — a model can be arbitrarily worse than persistence — which is why §7.4 pages on `CRPSS < 0`.
+
+**Worked end-to-end** for a 30-forecast window on `FX.EURUSD`, horizon `1d`:
+- `mean CRPS_model = 0.0033`, `mean CRPS_persistence = 0.0041`, `mean CRPS_climatology = 0.0052`.
+- `CRPSS_vs_persistence = 1 − 0.0033/0.0041 = 1 − 0.8049 = 0.1951` → ~19.5% better than carry-forward.
+- `CRPSS_vs_climatology = 1 − 0.0033/0.0052 = 1 − 0.6346 = 0.3654` → ~36.5% better than the seasonal mean.
+- Headline uses the **harder** baseline (the one with lower CRPS = persistence here), so `headline CRPSS = 0.195`. This clears `ACCEPT_SS = 0.05` (§6.4). ✓
+- *Interpretation guard:* always quote the headline against the harder baseline; reporting only the easier (climatology) number would inflate apparent skill — a §0 "calibrated honesty" violation.
+
 ---
 
 ## 2. CONTINUOUS RE-FORECASTING (numerical-weather "cycling")

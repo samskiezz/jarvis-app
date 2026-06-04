@@ -49,6 +49,58 @@ PATTERN ORACLE is a **capability surface**, not a vertical product. The same eng
 
 **Persona priority for v1–v50:** P-A and P-C (deliver answers + contracts), then P-B (explainability), then P-D and P-E (MLOps + governance hardening) in v51–v150.
 
+### 1.2.1 Persona journeys (end-to-end, grounded to the core loop §1.1.1)
+
+Each journey below is a *normative narrative*: it walks one persona through the engine and binds every step to a requirement and an acceptance hook. Journeys exist so that UX, latency, and explainability obligations are testable as flows, not just as isolated requirements. No step asserts a capability not already grounded in §1.3 / §02 / §03.
+
+#### Journey J-A — The Asker (P-A): "Will BTC be above 80k in 30 days?"
+| Step | What happens | Persona experience | Requirement | Acceptance hook |
+|------|--------------|--------------------|-------------|-----------------|
+| J-A.1 | Free-text question submitted via UI/`/predict`. | Types a sentence, no form. | FR-1 | NL parse yields `(target=BTC/USD, horizon=30d, op=P(>80000))` vs labeled set. |
+| J-A.2 | Intent routed to UC-1 (numeric series forecast) with probability operator. | Invisible. | FR-2 | Fixture routes to UC-1 numeric path. |
+| J-A.3 | History-Lake series for BTC/USD retrieved; staleness checked. | Invisible. | FR-3, NFR-8 | Forecast references ≥1 lake series ID; stale flag if feed dead. |
+| J-A.4 | Ensemble + conformal produce point, 80/90% interval, and P(>80k). | Sees probability + interval. | FR-8, FR-10 | PICP within ±5 pts (K-2). |
+| J-A.5 | Answer rendered with drivers, assumptions, caveats, baseline name. | Reads "62% (80% PI 71k–93k), driver: ETH lead 2d, vs random-walk". | FR-9 | Schema-valid response, all fields present. |
+| J-A.6 | If grounding/skill insufficient → calibrated refusal/hedge instead of a number. | Reads honest "cannot ground beyond 30d". | FR-18, P-2 | Out-of-grounding ask → refusal w/ reason (K-10). |
+| **Latency contract** | Warm path end-to-end. | Answer in seconds. | NFR-1 | p95 ≤ 8 s warm / ≤ 2 s cached. |
+
+#### Journey J-B — The Analyst (P-B): "Show drivers and lead-lag; CRPS vs climatology?"
+| Step | What happens | Requirement | Acceptance hook |
+|------|--------------|-------------|-----------------|
+| J-B.1 | Asks for a forecast *with* driver attribution and baseline comparison. | FR-5, FR-14 | UC-8 scorecard returns FSS, CRPS, PICP, baseline name. |
+| J-B.2 | Engine returns cross-series lead-lag drivers with lags + strengths. | FR-5 | Synthetic-lead fixture recovers correct driver+lag. |
+| J-B.3 | Engine returns CRPS_model vs CRPS_climatology and the FSS. | FR-12, K-1, K-3 | Scoring job emits CRPS/FSS per feed. |
+| J-B.4 | Analyst exports the detail (driver table, per-model weights). | FR-10, FR-14 | Per-model weights present and sum to 1. |
+| J-B.5 | Wording uses "associated/leading", not "causes", unless a confirmed edge exists. | OS-4, FR-19 | Lexical guard: no "causes" without graph edge. |
+
+#### Journey J-C — The Builder (P-C): `POST /predict` integration
+| Step | What happens | Requirement | Acceptance hook |
+|------|--------------|-------------|-----------------|
+| J-C.1 | Sends structured `{target, horizon, op}`; receives the shared forecast object. | FR-9, §07 | Contract test validates response schema. |
+| J-C.2 | Relies on a versioned, backward-compatible contract. | FR-20 | Contract tests pass across a minor bump. |
+| J-C.3 | Re-issues an identical request and gets a reproducible result (fixed seed). | NFR-12 | Same inputs+version+seed ⇒ same output within tolerance. |
+| J-C.4 | Depends on availability + latency SLOs. | NFR-1, NFR-7 | Monitor ≥99.0% success; p95 within budget. |
+| J-C.5 | Receives `forecast_id` to later retrieve the realized scorecard. | FR-11, NFR-11 | Given `forecast_id`, full reproduction record retrievable. |
+
+#### Journey J-D — The Steward (P-D): "Is skill degrading? Trigger retrain."
+| Step | What happens | Requirement | Acceptance hook |
+|------|--------------|-------------|-----------------|
+| J-D.1 | Views rolling FSS trend per feed. | FR-12, K-6 | Trend queryable; slope computed over trailing window. |
+| J-D.2 | Receives PSI/ECE drift alarm before FSS collapses. | FR-16, K-11 | Injected shift crosses threshold → alarm fires. |
+| J-D.3 | Inspects per-model weights; sees which models lost weight. | FR-10, FR-13 | Weights shift toward lower-error model on controlled feed. |
+| J-D.4 | Triggers/observes re-weight or retrain; skill recovers. | FR-13 | After N outcomes, weights/edges move error-reducing direction. |
+
+#### Journey J-E — The Auditor (P-E): "Prove grounding + coverage + license compliance."
+| Step | What happens | Requirement | Acceptance hook |
+|------|--------------|-------------|-----------------|
+| J-E.1 | Picks any technique; asks for its source. | FR-19, P-1 | Method carries source tag resolvable to §02/§03. |
+| J-E.2 | Picks any `forecast_id`; asks for the full reproduction record. | NFR-11 | Inputs, model, weights, version, timestamp retrievable. |
+| J-E.3 | Asks for realized coverage vs nominal across feeds. | FR-12, NFR-3, K-2 | Rolling PICP per nominal level within band. |
+| J-E.4 | Runs the license/patent audit. | NFR-10 | Each technique resolves to a compliant (Apache-2.0/expired/own) source. |
+| J-E.5 | Confirms no PII-driven individual prediction occurred. | NFR-15, OS-7 | Governance test: PII inputs rejected; surfaces require authz. |
+
+> **Journey acceptance rule (normative).** A persona journey is "passing" only when *every* step's acceptance hook passes in `11_VALIDATION_AND_TEST_PLAN.md`. A green individual requirement with a red journey indicates a wiring gap and **MUST** block the section gate (§1.11).
+
 ---
 
 ## 1.3 TOP USE-CASES (framed as CAPABILITIES, not fixed domains)
@@ -67,6 +119,44 @@ PATTERN ORACLE is a **capability surface**, not a vertical product. The same eng
 | **UC-8** | **Skill / calibration introspection** | "How good have your BTC forecasts been vs climatology?" | self-improvement store (§08), CRPS/RMSE/coverage | skill scorecard |
 
 Each UC **MUST** be expressible through the single NL intake (FR-1) and resolve to the shared forecast contract (§07). No UC may bypass calibration (FR-8) or grounding (FR-3).
+
+### 1.3.1 Capability matrix (capability × data-source × model/algorithm × maturity)
+
+This matrix is the *grounded inventory* of what the engine can do. Every row maps a capability to a concrete data source in the History Lake, the model/algorithm that realizes it (named in §03/§06 or audited in §02), and a **maturity tier**. No row asserts a capability beyond what §02 (audited code) or §03 (cited models) supports; speculative rows are explicitly tiered **Planned** and gated behind the build plan.
+
+**Maturity legend.** `A` = Audited/exists-in-repo (§02). `G` = Grounded/cited-and-integrable (§03, integration task exists). `P` = Planned/build-plan-only (no code yet, gated by a T-task). `X` = Experimental/research-flagged (kept behind a flag; never the default path).
+
+| Capability (UC) | Data source(s) in Lake | Primary model/algorithm | Calibration | Self-improve hook | Maturity | Grounded by | Build task(s) |
+|-----------------|------------------------|-------------------------|-------------|-------------------|----------|-------------|---------------|
+| UC-1 Numeric series forecast | CoinGecko crypto, FX (Frankfurter), any series feed | GBM-MC / Holt (audited) + Error-Weighted Ensemble + Foundation TS (TimesFM/Chronos) | EnbPI conformal | re-weight from realized error | A (classical) / G (foundation) | §02 prediction.py; §03 TimesFM/Chronos | T-014, T-015, T-039, T-040 |
+| UC-2 Rare-event / hazard risk | USGS seismic catalog | Gutenberg-Richter + Omori (audited) | conformal/ECE on exceedance prob | re-score realized exceedances | A | §02 prediction.py seismic | T-008, T-024 |
+| UC-3 Trajectory / kinematics | track/state snapshots | great-circle / orbital / ballistic (audited) | uncertainty cone from spread | n/a (deterministic-ish) | A | §02 prediction.py kinematics | (existing) |
+| UC-4 Generic exogenous-pattern forecast | any 2+ Lake series | Matrix Profile motifs + cross-series lead-lag → ensemble | EnbPI | re-weight | G | §03/§06 STUMPY, lead-lag | T-018, T-021, T-015 |
+| UC-5 Cross-entity relational forecast | KGIK graph + paired series | temporal link-prediction (TGN/TGAT-style, light) → KGIK edge | conditional interval | edge-strength update | P (light), X (heavy TGN) | §03/§06 relational | T-034, T-035 |
+| UC-6 Anomaly / regime / change-point | any Lake series | HDBSCAN regimes + PELT/BOCPD + Matrix-Profile discords | label confidence | n/a | G | §03/§06 | T-018, T-019, T-020 |
+| UC-7 Scenario / counterfactual | Lake series + intervention spec | counterfactual_fork / causal_chain (audited) + causal screen | scenario delta + caveat | n/a | A (fork) / G (screen) | §02 temporal_nodes; §06 causal | T-031, T-032, T-033 |
+| UC-8 Skill / calibration introspection | outcome store | CRPS/RMSE/coverage/pinball metrics | n/a (reports calibration) | feeds the trend itself | P | §08; §06 skill | T-016, T-024, T-027, T-028 |
+| (cross-cut) Drift / miscalibration alarm | input series + outcome store | PSI / ECE (audited in ai_models) | n/a | triggers retrain | A/G | §02 ai_models; §08 | T-025 |
+| (cross-cut) Foundation-model acceleration | any series → remote inference | TimesFM 2.5 / Chronos-Bolt via remote endpoint | quantiles feed conformal | weight learned | G | §03; §10 | T-039, T-040, T-041 |
+
+> **Matrix invariants (normative).** (i) Every `A`/`G` row **MUST** trace to a §02 or §03 reference and to ≥1 build task. (ii) No `P`/`X` row may be the *default* resolution path for any UC until promoted to `A`/`G`. (iii) Adding a column value (new data source, new model) is a feed-adapter/specialist change (FR-15, P-5) and **MUST NOT** edit core modules (NFR-14).
+
+### 1.3.2 Edge-case scope clarifications (what each capability does at its boundary)
+
+These clarify behavior at boundaries so testers and integrators do not infer un-grounded behavior. Each is normative and bound to a requirement.
+
+| EC | Boundary situation | Required behavior | Requirement |
+|----|--------------------|-------------------|-------------|
+| EC-1 | Target has **no Lake series** (cold target). | Refuse with reason ("no grounded data"); never synthesize a series. | FR-3, FR-18 |
+| EC-2 | Series exists but is **stale** (feed dead). | Forecast may proceed on last-good data **only** with an explicit stale-data caveat + reduced-confidence flag; or refuse if staleness exceeds horizon. | NFR-8, FR-18 |
+| EC-3 | Horizon **beyond information limit** (chaotic regime, e.g. price at 5y). | Hedge: widen interval to honest width or refuse; never narrow to imply false precision. | P-2, OS-1, NFR-4 |
+| EC-4 | **Too few outcomes** to score skill yet. | Report forecast as issued but mark skill "insufficient sample"; exclude from FSS aggregates (pending). | FR-11, §1.4.3 |
+| EC-5 | Driver detected but **only association**, no confirmed edge. | Use "associated/leading" wording; do not claim causation. | OS-4, FR-19 |
+| EC-6 | NL ask is **not a forecast question** (chit-chat). | Route to "not a forecast question"; do not fabricate an answer. | FR-2, OS-8 |
+| EC-7 | Foundation model / GPU **unavailable**. | Silent fallback to classical ensemble on CPU; result still calibrated. | NFR-6, A-7 |
+| EC-8 | Conflicting drivers / **multimodal** outcome. | Represent with an honest wide/multimodal interval; never collapse to a single misleading point silently. | P-2, FR-8 |
+| EC-9 | Ask implies **OOS action** (advice/transaction). | Forecast only; decline the action with an OS-2 caveat. | OS-2 |
+| EC-10 | Ask requires **PII / individual-level** prediction. | Refuse on governance grounds. | OS-7, NFR-15 |
 
 ---
 
@@ -98,6 +188,27 @@ Success is measured against a **climatology / naïve baseline** — the engine m
 - Probabilistic forecasts are scored with **CRPS** (and pinball loss per quantile); point forecasts with **RMSE/MAE**. Skill (K-1) is always reported **relative to an explicit baseline** named in the answer.
 - Coverage (K-2) is computed per nominal level (e.g. 50/80/90/95%) and must be reported, not assumed.
 - A forecast with no realized outcome yet is **pending** and excluded from skill aggregates until resolved.
+
+### 1.4.4 Measurable KPI definitions (formula + threshold + cadence)
+
+Each KPI is restated as a **computable formula** with an explicit pass/alarm threshold and a **measurement cadence**. Thresholds are split into a v1 acceptance gate and a mature target. All formulas reuse the scoring definitions in `11_VALIDATION_AND_TEST_PLAN.md` §3.5 so there is one source of truth. Notation: `y` realized, `ŷ` forecast, `F` predictive CDF, `N` resolved-forecast count over the window, `1{·}` indicator.
+
+| KPI | Formula | v1 gate | Mature target | Alarm condition | Cadence | Owner / source |
+|-----|---------|---------|---------------|-----------------|---------|----------------|
+| **K-1 FSS** | `FSS = 1 − score_model/score_baseline`, `score ∈ {CRPS, RMSE}` | `FSS > 0` on ≥1 active feed | median `FSS ≥ 0.15` across active feeds | `FSS < 0` on a previously-positive feed | per scoring run (post-resolution) + daily rollup | P-D · §08 self_improve.py |
+| **K-2 Coverage (PICP)** | `PICP = (1/N)·Σ 1{lo ≤ y ≤ hi}` per nominal level `1−α` | `|PICP − (1−α)| ≤ 0.05` at ≥1 level | within ±0.05 at 50/80/90/95% | `|PICP − (1−α)| > 0.05` for 2 consecutive windows | rolling window, daily | P-E · NFR-3, conformal.py |
+| **K-3 CRPS** | `CRPS = ∫ (F(z) − 1{z ≥ y})² dz` (ensemble form per §06) | `CRPS_model ≤ CRPS_climatology` | strictly below baseline + downward trend | CRPS rises above baseline | per scoring run | P-D · skill.py |
+| **K-4 RMSE/MAE** | `RMSE = √((1/N)Σ(ŷ−y)²)`; `MAE = (1/N)Σ|ŷ−y|` | `RMSE_model < RMSE_persistence` | sustained below persistence | RMSE ≥ persistence | per scoring run | P-D · skill.py |
+| **K-5 Latency p95** | `p95` of end-to-end `answer_ts − request_ts` over the window | warm `p95 ≤ 8 s`; cached `≤ 2 s` | warm `p95 ≤ 5 s` | `p95 > 8 s` warm | continuous (per request) + hourly p95 | P-C/SRE · NFR-1, observability.py |
+| **K-6 Self-improvement trend** | OLS slope `β` of rolling `FSS_t` over trailing window | `β ≥ 0` (non-negative) | `β > 0` and statistically clear | sustained `β < 0` (decline) | weekly trailing window | P-D · §08, FR-12 |
+| **K-7 Breadth** | `#{ feeds f : FSS_f > 0 }` | ≥1 | monotonically growing | drops vs prior period | per release + monthly | PL · FR-15 |
+| **K-8 Sharpness** | mean interval width `(1/N)Σ(hi−lo)` reported *with* PICP | report-only | minimize s.t. K-2 holds | width grows while PICP unchanged (coverage-gaming) | per scoring run | P-D · NFR-4 |
+| **K-9 Pinball loss** | `(1/N)Σ_q Σ ρ_q(y−ŷ_q)`, `ρ_q(u)=max(qu,(q−1)u)` | below baseline pinball | downward trend | above baseline | per scoring run | P-D · skill.py |
+| **K-10 Refusal correctness** | `correct_refusals / total_out_of_grounding` | `≥ 0.99` | `≥ 0.999` | `< 0.99` (fabrication leak) | per release (eval set) + spot-checks | P-E · FR-18, P-1/P-2 |
+| **K-11 Drift detection lead** | `t(FSS_collapse) − t(PSI/ECE_alarm)` (want positive) | alarm before FSS collapse on injected shift | larger lead | alarm fires after collapse | per drift-eval run | P-D · FR-16 |
+| **K-12 Availability** | `successful_predict / total_predict` | `≥ 0.990` | `≥ 0.995` | `< 0.990` over window | rolling, daily | SRE · NFR-7 |
+
+**KPI computation rules (normative).** (i) Every KPI **MUST** be computed only over **resolved** forecasts (K-1…K-4, K-6, K-8, K-9) except latency/availability/refusal which are request-time. (ii) Every reported skill KPI **MUST** name its baseline inline. (iii) A KPI with `N` below the minimum-sample floor (defined in §08) is reported as "insufficient sample", not as a pass or fail. (iv) Thresholds here are the *charter* targets; §11 §3.5 holds the executable assertions and any per-feed tightening.
 
 ---
 
