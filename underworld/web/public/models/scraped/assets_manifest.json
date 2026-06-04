@@ -10172,5 +10172,22 @@
     "epoch": "any",
     "name": "Moss Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:pumpkin_patch": {
+    "prompt": "a vine-laden pumpkin patch with orange gourds, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "e6422b19-3ca0-4935-9bca-0907bad8b3aa",
+    "path": "/models/generated/tripo/pumpkin_patch.glb",
+    "bytes": 14803920,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/e6422b19-3ca0-4935-9bca-0907bad8b3aa/tripo_pbr_model_e6422b19-3ca0-4935-9bca-0907bad8b3aa.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZTY0MjJiMTktM2NhMC00OTM1LTliY2EtMDkwN2JhZDhiM2FhL3RyaXBvX3Bicl9tb2RlbF9lNjQyMmIxOS0zY2EwLTQ5MzUtOWJjYS0wOTA3YmFkOGIzYWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=q56rih63mXzrc6lDYoyZ4iSp6j7aa4AmkpIENeSRfWMhZdE4YxzGvDVGHSN2XB3lOTzd1ke9jHmZlL74x85PEzSR1SBWvGrK8mh2ATyBvUiKRV20831DMu2n6jyR9b1NA-ZsNHH6UH7rVm3XC6cJ2NZXKbYRqLfaERbZ8T888FnWEqZ-SgCnk2TsaRqyg1aKv1~Zxo5KhhHjR0iiglUtr~1zky7QWfsuLHhS8OiH7sCMrsCLnGkS0tKjhW6-ooTUzwW0NDz4WwM0D-VHt4KRVBsmKKbGFlj1D4KMPhdgGTVTGAdCp3gtu8sK6KnCyJcRy~j2EafwqLK4Em9-FAn~cw__",
+    "asset_id": "pumpkin_patch",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "bronze",
+    "name": "Pumpkin Patch",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
