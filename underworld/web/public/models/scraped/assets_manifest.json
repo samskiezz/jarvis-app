@@ -9883,5 +9883,22 @@
     "epoch": "any",
     "name": "Tidal Pool",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:volcanic_rock": {
+    "prompt": "a chunk of black volcanic basalt rock, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "fe9d7a10-33d2-490c-a44a-40be0337a0bb",
+    "path": "/models/generated/tripo/volcanic_rock.glb",
+    "bytes": 14975308,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/fe9d7a10-33d2-490c-a44a-40be0337a0bb/tripo_pbr_model_fe9d7a10-33d2-490c-a44a-40be0337a0bb.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZmU5ZDdhMTAtMzNkMi00OTBjLWE0NGEtNDBiZTAzMzdhMGJiL3RyaXBvX3Bicl9tb2RlbF9mZTlkN2ExMC0zM2QyLTQ5MGMtYTQ0YS00MGJlMDMzN2EwYmIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=pbMOYMv~mSLs0D5MY~O0rktZ8KTY~D59-5Eq2wKKcyMXBNqwgHIaS8~ypWRt0EmBXB3qDmDhR7MeV-JI6myAi0ua7~4yKdg~8tBdrK~YgN3D7MnuY4eOh2nDhB9OyGdxFDkjGzxgca8aZRPv33wZq69fbUNgNP6cyFuLBwbC5f6IgyP3AXe7hXd-m7AdLBXpVRiug6PSw82lBnpBQOTu-GhW1fJJgq8abkMxyn7NvWdeG2OmAJFTIusZCribDis2WLxOmNrLW2B69naYR3D9nhVV3g97Ij8rMC8OQBPW9obfJtKl-1kh4610UfvMIjW6bVlqCj-mYqauojnpy04Bpg__",
+    "asset_id": "volcanic_rock",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Volcanic Rock",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
