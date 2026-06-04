@@ -11328,5 +11328,22 @@
     "epoch": "bronze",
     "name": "Ceramic Amphora Stack",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fishing_net": {
+    "prompt": "a draped fishing net with floats, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "cc1fab18-3a61-41ce-a193-e0afa0de5cdd",
+    "path": "/models/generated/tripo/fishing_net.glb",
+    "bytes": 12769108,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/cc1fab18-3a61-41ce-a193-e0afa0de5cdd/tripo_pbr_model_cc1fab18-3a61-41ce-a193-e0afa0de5cdd.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvY2MxZmFiMTgtM2E2MS00MWNlLWExOTMtZTBhZmEwZGU1Y2RkL3RyaXBvX3Bicl9tb2RlbF9jYzFmYWIxOC0zYTYxLTQxY2UtYTE5My1lMGFmYTBkZTVjZGQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Fqk13DUKqZwOpHT03mf8yOoYsJ4orrt4rOpnxoEVlQPiqQMokcssG2q~YUVjww~5q82Tgb9qTDhhH2VryhkLppLbe7PM-9lwsqbPHPKGEvDXF~xI17~Q~DH4bd4LC11aljFw9Rr4OycErNeTcyhcpckVcH-BJ3kCeqXuO9S12IE-WHKu07etU-HQUivnypSAj4Q8tQdp10DYr6qX7Mg~ptvYl8czSeszWa76Me6A71CPvP8WMqSYavylhovRNR5Z2P4XfAeLrMNkKY0-daSqcyLp1la9QaLr-gk4VnU113uJY08KcMcE0ruNEBTzdGyRn1~0i4zTJDcfepUw-nnvQQ__",
+    "asset_id": "fishing_net",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Fishing Net",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
