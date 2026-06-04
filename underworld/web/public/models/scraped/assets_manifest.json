@@ -10393,5 +10393,22 @@
     "epoch": "any",
     "name": "Water Lily Patch",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wheat_sheaf": {
+    "prompt": "a bound sheaf of golden wheat, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9e98b5a8-5a5a-4d86-831c-2cd8e0a3e643",
+    "path": "/models/generated/tripo/wheat_sheaf.glb",
+    "bytes": 15890068,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/9e98b5a8-5a5a-4d86-831c-2cd8e0a3e643/tripo_pbr_model_9e98b5a8-5a5a-4d86-831c-2cd8e0a3e643.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOWU5OGI1YTgtNWE1YS00ZDg2LTgzMWMtMmNkOGUwYTNlNjQzL3RyaXBvX3Bicl9tb2RlbF85ZTk4YjVhOC01YTVhLTRkODYtODMxYy0yY2Q4ZTBhM2U2NDMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=wkjsbdAVjwOZxK5BZI-bGAmtbgFiSCHkVUBsZS2XxoVRvE-UwmJh8Y8Jtly6A2aP~Z598dPIXjESMAM0fFLdswM8JFlrAnuFrHuQHb6Sos0n4xKgJkW9n5P8ctOOjNQqvWMqcq-SO64pxi4z7vDKKiD48Uxq-oXBQiBrOHhtIMQsbceyRctuyWBX9uy-2c6fcwhUWUBK~zzybOSxYbpozhE8vsKuV2wemXn-LkEN6ScigEia1~e-JzJhidfVUj76~jBsypb1vfBev6jEvtEKLdzyNo0nN91pLt5POlxON0t0U-AwPgXIaNC7Ej4PjkHHAr-O-IaTDUTo2N0qPVu3rQ__",
+    "asset_id": "wheat_sheaf",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "bronze",
+    "name": "Wheat Sheaf",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
