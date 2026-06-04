@@ -11124,5 +11124,22 @@
     "epoch": "iron",
     "name": "Longbow",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:morning_star": {
+    "prompt": "a spiked morning-star flail, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "97aab612-94f8-46c4-bf7d-66fe26fc5da9",
+    "path": "/models/generated/tripo/morning_star.glb",
+    "bytes": 12283980,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/97aab612-94f8-46c4-bf7d-66fe26fc5da9/tripo_pbr_model_97aab612-94f8-46c4-bf7d-66fe26fc5da9.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOTdhYWI2MTItOTRmOC00NmM0LWJmN2QtNjZmZTI2ZmM1ZGE5L3RyaXBvX3Bicl9tb2RlbF85N2FhYjYxMi05NGY4LTQ2YzQtYmY3ZC02NmZlMjZmYzVkYTkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Euea8-eErzjsPNTGUwPvHypSzytGPbiH5F60hfNQnZrINjHlo86f9reXf9hX5~WEjbPchHvXRyfO5odd3vM5bmPdrq6qsdYfU0B9OcySw7TNTFR28wS6OXYc-OpuG-lfRpoqtj0IBxNxv7tmocd-jYScwxn3vSJ~PwYt6cL0tCa2HsKCSVY2j5sZ23A8au7Czszqt3H3ZSrIKYX4qQzw09~tRl3Q708Ip5TyvWohhjTSG0IoiHxe8WW4yRF81mBmHw52vt1TgDoKRzz7FbrJKnWjwOeIxEUFn5d0guL655-av9LcMC0G6fXkZA0VCNChbtmTRMOoKXajVKeHOFrFjA__",
+    "asset_id": "morning_star",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Morning Star",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
