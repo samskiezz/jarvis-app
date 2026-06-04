@@ -11,7 +11,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 4 | ☑ | forge/forge_agent.py | 462 |
 | 5 | ☑ | forge/notify.py | 141 |
 | 6 | ☐ | forge/tests/__init__.py | 0 |
-| 7 | ☐ | forge/tests/test_forge.py | 137 |
+| 7 | ☑ | forge/tests/test_forge.py | 137 |
 | 8 | ☐ | forge/tests/test_whatsapp.py | 133 |
 | 9 | ☑ | forge/webhook.py | 141 |
 | 10 | ☐ | postcss.config.js | 6 |
@@ -56,14 +56,14 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 49 | ☑ | server/services/simulation.py | 783 |
 | 50 | ☑ | server/services/train_sp500.py | 425 |
 | 51 | ☑ | server/tests/__init__.py | 0 |
-| 52 | ☐ | server/tests/test_forecaster.py | 137 |
+| 52 | ☑ | server/tests/test_forecaster.py | 137 |
 | 53 | ☐ | server/tests/test_forecaster_ml.py | 149 |
 | 54 | ☑ | server/tests/test_forward_test.py | 173 |
 | 55 | ☑ | server/tests/test_history_lake.py | 223 |
 | 56 | ☑ | server/tests/test_oracle_model.py | 146 |
 | 57 | ☑ | server/tests/test_prediction.py | 157 |
 | 58 | ☑ | server/tests/test_routes.py | 164 |
-| 59 | ☐ | server/tests/test_simulation.py | 186 |
+| 59 | ☑ | server/tests/test_simulation.py | 186 |
 | 60 | ☐ | server/tests/test_train_sp500.py | 148 |
 | 61 | ☑ | src/App.jsx | 66 |
 | 62 | ☑ | src/Layout.jsx | 79 |
@@ -620,7 +620,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 613 | ☑ | underworld/server/world/seed.py | 82 |
 | 614 | ☐ | underworld/web/eslint.config.js | 29 |
 | 615 | ☐ | underworld/web/postcss.config.js | 6 |
-| 616 | ☐ | underworld/web/src/App.tsx | 37 |
+| 616 | ☑ | underworld/web/src/App.tsx | 37 |
 | 617 | ☑ | underworld/web/src/components/AuthGate.tsx | 106 |
 | 618 | ☑ | underworld/web/src/components/GameLoader.tsx | 205 |
 | 619 | ☑ | underworld/web/src/components/HeroAssembleLoader.tsx | 196 |
@@ -669,7 +669,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 662 | ☑ | underworld/web/src/lib/loaderMusic.ts | 119 |
 | 663 | ☑ | underworld/web/src/lib/recordCanvas.ts | 52 |
 | 664 | ☑ | underworld/web/src/lib/types.ts | 419 |
-| 665 | ☐ | underworld/web/src/main.tsx | 27 |
+| 665 | ☑ | underworld/web/src/main.tsx | 27 |
 | 666 | ☑ | underworld/web/src/pages/CommandCentre.tsx | 423 |
 | 667 | ☑ | underworld/web/src/pages/Guilds.tsx | 303 |
 | 668 | ☑ | underworld/web/src/pages/InventionDetail.tsx | 233 |
@@ -743,3 +743,8 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `forge/webhook.py` — FastAPI WhatsApp webhook: verify handshake (L92), inbound parses APPROVE/REJECT -> land_change merges branch->base+push (L28) or reject_change deletes branch (L64); /forge/approvals list
 - `forge/notify.py` — WhatsApp notifier: build_request_text diff preview (L31), parse_decision approve/reject+id (L49), Twilio/Meta/Console providers (L72-141), from_env fail-safe to console
 - `server/scripts/horizon_sweep.py` — multi-horizon walk-forward sweep MLForecaster: horizons [1,3,7,30,90,180,365]d x basket; per-(asset,horizon) level-acc/within2/5/dir/coverage/skill w/ assert no-leakage (L103/128); horizon-summary decay curve; honest note dir ~50-55% flat (L227)
+- `server/tests/test_simulation.py` — sim tests: common+CS+pano schema keys (L54-89), unit fields (L92), CS progresses bomb plant/defuse/explode+score+round (L106), pano detect/breach (L128), events capped 12 (L148), registered games+snapshot (L156), set_map respawn (L167), catchup cap (L181)
+- `server/tests/test_forecaster.py` — forecaster tests: train+predict contract low<pt<hi (L37), insufficient graceful (L61), plain-number series (L70), BEATS persistence skill>0 + coverage±0.15 (L82), backtest metrics+leakage_audit (L105), determinism (L132)
+- `forge/tests/test_forge.py` — forge SAFETY tests: strip_fences, is_safe_replacement rejects refusal/truncation/unbalanced (L19), shard disjoint (L38), research offline-safe (L56), dry-run never writes (L79), apply commits+backup on pass (L92), reverts on fail (L106), REFUSES-TO-WRITE-ON-MAIN -> forge/* branch, main unmodified (L119)
+- `underworld/web/src/App.tsx` — underworld React app: AuthGate>GameLoader>Routes, 10 pages (CommandCentre/WorldDetail/Population/Projects/Knowledge/Inventions/Patents/Guilds/Safety)
+- `underworld/web/src/main.tsx` — React entry: QueryClientProvider+BrowserRouter, react-query defaults (L9)
