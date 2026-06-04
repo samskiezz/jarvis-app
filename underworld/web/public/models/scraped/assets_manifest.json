@@ -10495,5 +10495,22 @@
     "epoch": "information",
     "name": "Delivery Truck",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:dog_sled": {
+    "prompt": "a wooden dog sled with harness rigging, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "9b47d612-0c50-4b29-b32e-aef2ee467746",
+    "path": "/models/generated/tripo/dog_sled.glb",
+    "bytes": 15107676,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/9b47d612-0c50-4b29-b32e-aef2ee467746/tripo_pbr_model_9b47d612-0c50-4b29-b32e-aef2ee467746.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOWI0N2Q2MTItMGM1MC00YjI5LWIzMmUtYWVmMmVlNDY3NzQ2L3RyaXBvX3Bicl9tb2RlbF85YjQ3ZDYxMi0wYzUwLTRiMjktYjMyZS1hZWYyZWU0Njc3NDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=j2ulDMv3So8HApDpyQ2627OFGtqwnobbCIEkOkgTHB3vblBJQjCEdGY-19g9uQ3sncZLzq40SOKuB20zmokVjuqmsYPB4TAnp7NbPfLoLl258L7tazCCLNjDKQX3Fq2h~0SbhPjzEeCf7yBOwVakuO7c0DwyJGTZRPtLl~o6JIzqaeE~K5vd7cSUYd8RgAn2NTFbEvPWM8arnao3hGYBxMATH~RcS9GkKTtp0PQl~ExbIzV-wtMEcW9TUigvBSzqKN8dt6epWp9-6W79zhz1b1nLoqAyMBKMcpLeipT9k1IHXWrM~hMNMEYOyBeOIcmJ6kpBuiu-bbZW38d6fs79gA__",
+    "asset_id": "dog_sled",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "any",
+    "name": "Dog Sled",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
