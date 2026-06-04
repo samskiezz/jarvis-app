@@ -9560,5 +9560,22 @@
     "epoch": "any",
     "name": "Rapids Tile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:retaining_wall": {
+    "prompt": "a stone retaining wall holding back earth, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "07fbd091-f1fe-41e1-b2a0-e38aa5d51918",
+    "path": "/models/generated/tripo/retaining_wall.glb",
+    "bytes": 11853232,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/07fbd091-f1fe-41e1-b2a0-e38aa5d51918/tripo_pbr_model_07fbd091-f1fe-41e1-b2a0-e38aa5d51918.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMDdmYmQwOTEtZjFmZS00MWUxLWIyYTAtZTM4YWE1ZDUxOTE4L3RyaXBvX3Bicl9tb2RlbF8wN2ZiZDA5MS1mMWZlLTQxZTEtYjJhMC1lMzhhYTVkNTE5MTguZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=DbZpCaBBuTK5en1RJDphaNpub80hGXaClnnuS1kcFae1dhsNLiajssjCLjl8oci-geOWCgC4DC4qJunuoK91K3f7EQl0kau7CxPiNf8dX4S2hP0abAZpMiwKy3c~ttmrUk7EUAT07m-aNbJ683isp-4Brhvqh8PBFESRbiA3C6JEjnpFIX5uQTDDQXbxA5~I9Gp9BepmdA15tFoKKEoD3rxmjmxnRi-7x8kq~WL-TfwbvEMjPdjdecDqIglvdLh9R8BhX-mLyqeZzWhJfNvkdNt70u2dAdszxhTbAVFvB6yyNOL05q-Moz5AFo4rWFuHMeKmF4YkrLbz1DwxrWInvg__",
+    "asset_id": "retaining_wall",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Retaining Wall",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
