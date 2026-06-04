@@ -4,6 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Canonical platform BRAND palette — mirrors /design-tokens.json and the
+        // APEX runtime tokens in src/domain/colors.js, so both surfaces share one
+        // brand identity (parity P15 #109, unified theming). Use as bg-brand-neon,
+        // text-brand-purple, etc. Additive — existing ink/glass/glow stay intact.
+        brand: {
+          neon: "#00c878",
+          blue: "#0096d4",
+          gold: "#e8a800",
+          red: "#e8203c",
+          purple: "#a855f7",
+          orange: "#f07820",
+        },
         // Graphite "liquid-glass" base — deep, slightly blue, never pure black.
         ink: {
           0: "#06070d",

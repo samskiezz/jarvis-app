@@ -1,0 +1,34 @@
+{
+  "$comment": "Canonical brand design tokens for the whole platform (parity P15 #109 — unified theming across APEX `src/` and the underworld web `underworld/web/`). APEX consumes these via src/domain/colors.js (the runtime token object mirrors these values); the underworld Tailwind config exposes them under the `brand` color group. Change a brand hex here and reflect it in both consumers so the two surfaces stay visually unified.",
+  "brand": {
+    "neon": "#00c878",
+    "blue": "#0096d4",
+    "gold": "#e8a800",
+    "red": "#e8203c",
+    "purple": "#a855f7",
+    "orange": "#f07820"
+  },
+  "ink": {
+    "bg": "#020608",
+    "panel": "#040a12",
+    "text": "#566878",
+    "textHi": "#a8bcc8"
+  },
+  "marks": {
+    "PUBLIC": "#566878",
+    "INTERNAL": "#00c878",
+    "FINANCIAL": "#e8a800",
+    "PII": "#e8203c",
+    "LEGAL": "#a855f7",
+    "RESTRICTED": "#f07820"
+  },
+  "glass": {
+    "surface": "rgba(4,10,18,0.82)",
+    "line": "rgba(0,200,120,0.14)",
+    "blur": "blur(14px)"
+  },
+  "font": {
+    "mono": "JetBrains Mono, SF Mono, ui-monospace, Menlo, monospace",
+    "sans": "Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+  }
+}
