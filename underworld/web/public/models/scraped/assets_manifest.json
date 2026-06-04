@@ -11056,5 +11056,22 @@
     "epoch": "iron",
     "name": "Halberd",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:hunting_spear": {
+    "prompt": "a flint-tipped wooden hunting spear, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "66fa522a-6793-485a-963e-2b0a235cf14a",
+    "path": "/models/generated/tripo/hunting_spear.glb",
+    "bytes": 2830168,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/66fa522a-6793-485a-963e-2b0a235cf14a/tripo_pbr_model_66fa522a-6793-485a-963e-2b0a235cf14a.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNjZmYTUyMmEtNjc5My00ODVhLTk2M2UtMmIwYTIzNWNmMTRhL3RyaXBvX3Bicl9tb2RlbF82NmZhNTIyYS02NzkzLTQ4NWEtOTYzZS0yYjBhMjM1Y2YxNGEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=YI4Fvva8JBrdBcq~zQFXqlnln~xWojYW3c8mapN3J-NfNQw~GlBhpoKrdOLedRnI4KjoiY8H5lyAInTtejmx-t9SDnivMv1F~tIZUJxD-mh-cC1rg7JjwmTPZqqnr-6iwSyyNemFLj1TtzxeeaO3i5nnfEkJYMb2sDzeU4q0k8deAf~QpodSbDFklwsq~KsxxxwtY4-hkBFnu0vfliR~eaEhGre6jeHnZUs4kIppIcFy2mshESFBJk32JmQnmwQ9c~gWs5A2RltW~ImX0AvRrJS1lF9qJf84xrSN2vxhqwTWNyjUBrNokuHLbD7y8fw8SFwzfDboMehm-rBzOyHzlg__",
+    "asset_id": "hunting_spear",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "stone",
+    "name": "Hunting Spear",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
