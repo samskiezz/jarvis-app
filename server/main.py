@@ -10,6 +10,7 @@ from .routes import entities as entities_routes
 from .routes import functions as functions_routes
 from .routes import history as history_routes
 from .routes import predict as predict_routes
+from .routes import science as science_routes
 from .routes import streams as streams_routes
 
 
@@ -61,6 +62,7 @@ def create_app() -> FastAPI:
 
     app.include_router(auth_routes.router)
     app.include_router(functions_routes.router)
+    app.include_router(science_routes.router)
     app.include_router(predict_routes.router)
     app.include_router(entities_routes.router)
     app.include_router(streams_routes.router)
