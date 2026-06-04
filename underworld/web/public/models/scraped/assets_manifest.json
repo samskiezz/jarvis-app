@@ -11600,5 +11600,22 @@
     "epoch": "bronze",
     "name": "Scarecrow",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stone_water_trough": {
+    "prompt": "a stone water trough for animals, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "778e762b-a144-4f6a-9c36-0ce2c6d91032",
+    "path": "/models/generated/tripo/stone_water_trough.glb",
+    "bytes": 14689788,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/778e762b-a144-4f6a-9c36-0ce2c6d91032/tripo_pbr_model_778e762b-a144-4f6a-9c36-0ce2c6d91032.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNzc4ZTc2MmItYTE0NC00ZjZhLTljMzYtMGNlMmM2ZDkxMDMyL3RyaXBvX3Bicl9tb2RlbF83NzhlNzYyYi1hMTQ0LTRmNmEtOWMzNi0wY2UyYzZkOTEwMzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Q0vbmiXzMuv6IQNCh23My4H~~XQJqEt2Fzb90uDS-roGXLU2D7HOAw9QK8NG~Eveb3JGL0F32mOUVpijCx8VVfW9fd5tu5D1G8r1C9y-Dg1KUtoqmel81-w0gKp8UTYvKb1h4Z3lt0sdn-hknmfP2B1ube7mYWQA3oQm79AlOGXtRUkfLzOnBvLNbGN8IyjpzfTsVfRjeyGwkXQe44z-AIpL65erpKvGPM5y2mgGN8N59qqXjwBagHZ9xQA4XMw6xhPQxYZ9beqsB-wvEGYPZBq4GIcV8eyEAoaiVCRoeXt8gClwv2n8AZemnSvVt9rT4ugPNjKj4Y3h1ZoTy3Pluw__",
+    "asset_id": "stone_water_trough",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Stone Water Trough",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
