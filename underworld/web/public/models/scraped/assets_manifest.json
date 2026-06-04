@@ -9679,5 +9679,22 @@
     "epoch": "any",
     "name": "Road T Junction",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:road_y_fork": {
+    "prompt": "a Y-fork paved road tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5684ab05-35cb-47fc-aa25-6d605edc842e",
+    "path": "/models/generated/tripo/road_y_fork.glb",
+    "bytes": 15134072,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/5684ab05-35cb-47fc-aa25-6d605edc842e/tripo_pbr_model_5684ab05-35cb-47fc-aa25-6d605edc842e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNTY4NGFiMDUtMzVjYi00N2ZjLWFhMjUtNmQ2MDVlZGM4NDJlL3RyaXBvX3Bicl9tb2RlbF81Njg0YWIwNS0zNWNiLTQ3ZmMtYWEyNS02ZDYwNWVkYzg0MmUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=ArsXYpcVBgbOBisMTMolgQF5bQS8XaQhphpqI3WJSnXQ-ojzhKfH--u-2t50X8eozrpMs6~rQ0g0Wbb~sCVnlWpFgCrbyk8iywdbF9B1cw7dA1n9B2eR04VmQgjJuLUwrFewOLfB2xCeYCh~O7urVaYQ9B5ky7mo4LZZKgs93nBZcgEiYeeJo1kUDt5~M5ZmmaESqAanw1HpuQFTx6S3Sc~AFhjA~PpLcF9MgNtKrdPpCJuJpclnhoLofHB6MY-3Z5o6Xw3z4u96PSU0AaPOeQTptOjyPQD-7LTZ2-Sn9VWXiv5R4ODUanl1ZKVyuu4-~QQF7Ah58-GPGskUVK2ARg__",
+    "asset_id": "road_y_fork",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Road Y Fork",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
