@@ -8914,5 +8914,22 @@
     "epoch": "industrial",
     "name": "Brick Wall Corner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:brick_wall_segment": {
+    "prompt": "a straight modular brick wall segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3e2a7bb4-ece8-46b2-b9e3-2b8655ea0d6f",
+    "path": "/models/generated/tripo/brick_wall_segment.glb",
+    "bytes": 15088096,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/3e2a7bb4-ece8-46b2-b9e3-2b8655ea0d6f/tripo_pbr_model_3e2a7bb4-ece8-46b2-b9e3-2b8655ea0d6f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvM2UyYTdiYjQtZWNlOC00NmIyLWI5ZTMtMmI4NjU1ZWEwZDZmL3RyaXBvX3Bicl9tb2RlbF8zZTJhN2JiNC1lY2U4LTQ2YjItYjllMy0yYjg2NTVlYTBkNmYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=JD7AGKrmBv5uFhJrxIm2DmXkGnse5Yd0YecvKXmqQ6yPP6n6Ord136jnrKzBXoGOFSIFf-jCNBZeheyV4QMdInxAZ65DttY8brmO-8c2JCdADfXxVlJQnRwEZbf6hAQ~EJb94ATakB7nS84r2YbEel57DmmV5uXSYFXmCrGu9MhJtczFOb9D8NV9~~iVOkF1l~0f2Rmowh~dgsOZEIUB8GRFuk3wDlgtmXsg1x2n6FDWuQn5mRbdrWP8fDWxJ~fBIxnjod86NtBXtJvTwjrwMFZlaK9XJB3Bw2I5TnyvyxwwsjJB-GwC4l6yrb3K2khilDkjyOOJSx0-gF6D-dFkyQ__",
+    "asset_id": "brick_wall_segment",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Brick Wall Segment",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
