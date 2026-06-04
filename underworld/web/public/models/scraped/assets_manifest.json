@@ -10699,5 +10699,22 @@
     "epoch": "industrial",
     "name": "Penny Farthing",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:propeller_airliner": {
+    "prompt": "a propeller-driven passenger airliner, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3805a988-10e0-49c0-9ae7-041d2dc39f5b",
+    "path": "/models/generated/tripo/propeller_airliner.glb",
+    "bytes": 7620488,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/3805a988-10e0-49c0-9ae7-041d2dc39f5b/tripo_pbr_model_3805a988-10e0-49c0-9ae7-041d2dc39f5b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzgwNWE5ODgtMTBlMC00OWMwLTlhZTctMDQxZDJkYzM5ZjViL3RyaXBvX3Bicl9tb2RlbF8zODA1YTk4OC0xMGUwLTQ5YzAtOWFlNy0wNDFkMmRjMzlmNWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=lWTU5xMJYL2YD~UiDcvO72t-tAxew75rOjF1FDxLdnsZJxm~iYmwnpxnZwz1OyAspItmaJf6D2Wr4UiLAcGHXWapyRKUiEC6DzbPxt7zdGaErEepouWOFDSKhVM8YpOTZE6stMv4cCdyzOzJacHHCw85DKyLZ141CH~4qbU3GGrw~1G0JxK5Df~5L0qWavYib6BAXvdahPo9-nbH7GT4Y1V0hrUaIhd4HHfAjfZo0ZmeYhpBRm37XI01BmGcLIIxyP71hnQkWPt0-fSch3-WkfMPZdOUIUzRBxmeYjZrTvCBo0QCgdhpM9q59OUSmJjzGB8vGTNuAKThImAgW-D~UQ__",
+    "asset_id": "propeller_airliner",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Propeller Airliner",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
