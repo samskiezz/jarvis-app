@@ -10903,5 +10903,22 @@
     "epoch": "industrial",
     "name": "Bolt Action Rifle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bronze_cannon": {
+    "prompt": "a cast bronze cannon on a wooden carriage, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "047ae363-051d-4c6c-8b52-a4e13584569f",
+    "path": "/models/generated/tripo/bronze_cannon.glb",
+    "bytes": 15262408,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/047ae363-051d-4c6c-8b52-a4e13584569f/tripo_pbr_model_047ae363-051d-4c6c-8b52-a4e13584569f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMDQ3YWUzNjMtMDUxZC00YzZjLThiNTItYTRlMTM1ODQ1NjlmL3RyaXBvX3Bicl9tb2RlbF8wNDdhZTM2My0wNTFkLTRjNmMtOGI1Mi1hNGUxMzU4NDU2OWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=VQAp36I5DjTJjoffTAFMzXqeK9qkqtu7dmIBkxz43ZYrFVx4gM3GbPnD8NMR4tSJbo1gVRyJyTutEsyAmvrl6ssmZkioI4ZOydhrFvkGI~lg6cncONQdvPyCVKm0OdxwRiq-VhXEX2BVdsXmG8xTcRmiuecJDaEzXtd9WANu3qUePE1v-2IuKfxCZMM1fXTWLccBi0jWlm7xFwOMs-cwqJ0PnerpDz1jFdvzz9xhi5da-mIlA~s3zHX84avkDmMxzW8Tq7~Q2yukBOh9vOihQJqPz7ZgFWF2m-~W6I3yGdgfpHMD~pWZHERL7b-ed~DMbRV0KxWs-4hYrUUYe2zSCA__",
+    "asset_id": "bronze_cannon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Bronze Cannon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
