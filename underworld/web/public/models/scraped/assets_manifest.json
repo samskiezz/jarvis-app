@@ -10716,5 +10716,22 @@
     "epoch": "industrial",
     "name": "Propeller Airliner",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sailboat": {
+    "prompt": "a small single-masted wooden sailboat, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "b3c06702-b05f-4c20-8702-0f11e269b789",
+    "path": "/models/generated/tripo/sailboat.glb",
+    "bytes": 8951988,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/b3c06702-b05f-4c20-8702-0f11e269b789/tripo_pbr_model_b3c06702-b05f-4c20-8702-0f11e269b789.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYjNjMDY3MDItYjA1Zi00YzIwLTg3MDItMGYxMWUyNjliNzg5L3RyaXBvX3Bicl9tb2RlbF9iM2MwNjcwMi1iMDVmLTRjMjAtODcwMi0wZjExZTI2OWI3ODkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=hXtQi4dlDHmh23Pup8OSZV1TAVvp5H8MrewShRsuk-c34s1Ldybp6SCB1Osy3w8gC1pCAl~vg5rCeQKDc0avb3-lM7ak3FJqMmpn0mBbtZF9pELxtqpRkJpL5Sphn4PtDWk2tUh5pJSEDvtdzqIgbhilvI9Hah4VhU~GQ6Vyen44Ac22KkL0o6AdV7mOmZGtaQo-6ysyED-vE6gMwYFuxbuYClKcdAyy4lOrtdZ6ZLpUllchdXYm1I1P4YlKU7kwFxUMOIAX6smyBqcK30mI1AMPA-pI2iOmHpJBxtTim9QcWnMkBGJc2UV~MSjloBeMdSa9~Rd27rckNF~bc-ly~A__",
+    "asset_id": "sailboat",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "iron",
+    "name": "Sailboat",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
