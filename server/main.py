@@ -33,6 +33,7 @@ from .routes import reports as reports_routes
 from .routes import scenario as scenario_routes
 from .routes import sci_domains as sci_domains_routes
 from .routes import science as science_routes
+from .routes import second_brain as second_brain_routes
 from .routes import search as search_routes
 from .routes import search_plus as search_plus_routes
 from .routes import search_semantic as search_semantic_routes
@@ -130,6 +131,7 @@ def create_app() -> FastAPI:
     app.include_router(chat_predict_routes.router)
     app.include_router(governance_routes.router)
     app.include_router(vault_routes.router)
+    app.include_router(second_brain_routes.router)
 
     @app.get("/")
     async def root():
