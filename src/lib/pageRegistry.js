@@ -191,6 +191,9 @@ export const PAGES = [
   { name: "Governance", label: "Governance", icon: "⚖️", group: "platform",
     aliases: ["governance","purpose","retention","subject rights","erase","gdpr","secrets","vault","policy"],
     component: P(() => import("@/pages/Governance")) },
+  { name: "SecondBrain", label: "Second Brain", icon: "🧠", group: "knowledge",
+    aliases: ["second brain","brain","notes","vault","wiki","wikilinks","capture","daily","research","ingest","reconcile","crm","obsidian","pkm","zettelkasten"],
+    component: P(() => import("@/pages/SecondBrain")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",

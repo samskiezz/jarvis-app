@@ -1,63 +1,89 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { COLORS as C } from "@/domain/colors";
-import { OBJECTS, LINKS } from "@/domain/ontology";
+import { OBJECTS as STATIC_OBJECTS, LINKS as STATIC_LINKS } from "@/domain/ontology";
 import { PageShell, PanelCard, StatTile, Grid, Badge } from "@/components/PageKit";
+import { apiGet, asList } from "@/lib/wave1";
 
 const ACCENT = C.neon;
 
 const typeColor = (t) => C.type[t] || C.text;
 
-// Adjacency built once from the ontology links.
-const buildLinksFor = (id) =>
-  LINKS.filter((l) => l.a === id || l.b === id).map((l) => ({
-    other: l.a === id ? l.b : l.a,
-    label: l.label,
-    strength: l.strength,
-  }));
-
 export default function KGIKBrain() {
   const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState(OBJECTS[0]?.id || null);
+  // Live-first: load the real ontology graph from /v1/graph/subgraph, falling
+  // back to the static seed ontology only when the backend is unreachable. This
+  // consolidates the former static-only KGIK with the live store that
+  // SecondBrain / Ontology Manager write into.
+  const [objects, setObjects] = useState(STATIC_OBJECTS);
+  const [links, setLinks] = useState(STATIC_LINKS);
+  const [live, setLive] = useState(false);
+  const [selectedId, setSelectedId] = useState(STATIC_OBJECTS[0]?.id || null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const g = await apiGet("/v1/graph/subgraph");
+        const nodes = asList(g, "nodes");
+        if (nodes.length) {
+          setObjects(nodes.map((n) => ({
+            id: n.id, label: n.label, type: n.type || "object", mark: n.mark,
+            props: n.props || {}, conf: n.conf ?? 1,
+          })));
+          setLinks(asList(g, "edges").map((e) => ({
+            a: e.a ?? e.source, b: e.b ?? e.target,
+            label: e.relation ?? e.label ?? "rel", strength: e.strength ?? 1,
+          })));
+          setLive(true);
+          setSelectedId((prev) => prev || nodes[0]?.id || null);
+        }
+      } catch { /* keep static fallback */ }
+    })();
+  }, []);
+
+  const buildLinksFor = (id) =>
+    links.filter((l) => l.a === id || l.b === id).map((l) => ({
+      other: l.a === id ? l.b : l.a, label: l.label, strength: l.strength,
+    }));
 
   const byType = useMemo(() => {
     const map = {};
-    OBJECTS.forEach((o) => { map[o.type] = (map[o.type] || 0) + 1; });
+    objects.forEach((o) => { map[o.type] = (map[o.type] || 0) + 1; });
     return Object.entries(map).sort((a, b) => b[1] - a[1]);
-  }, []);
+  }, [objects]);
 
   const linkCountById = useMemo(() => {
     const m = {};
-    LINKS.forEach((l) => { m[l.a] = (m[l.a] || 0) + 1; m[l.b] = (m[l.b] || 0) + 1; });
+    links.forEach((l) => { m[l.a] = (m[l.a] || 0) + 1; m[l.b] = (m[l.b] || 0) + 1; });
     return m;
-  }, []);
+  }, [links]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = q
-      ? OBJECTS.filter((o) =>
+      ? objects.filter((o) =>
           [o.label, o.type, o.id, ...Object.values(o.props || {})]
             .some((v) => String(v).toLowerCase().includes(q)))
-      : OBJECTS;
+      : objects;
     return [...list].sort((a, b) => (linkCountById[b.id] || 0) - (linkCountById[a.id] || 0));
-  }, [query, linkCountById]);
+  }, [query, linkCountById, objects]);
 
-  const selected = useMemo(() => OBJECTS.find((o) => o.id === selectedId) || null, [selectedId]);
-  const selectedLinks = useMemo(() => (selected ? buildLinksFor(selected.id) : []), [selected]);
+  const selected = useMemo(() => objects.find((o) => o.id === selectedId) || null, [selectedId, objects]);
+  const selectedLinks = useMemo(() => (selected ? buildLinksFor(selected.id) : []), [selected, links]);
 
   const avgDegree = useMemo(
-    () => (OBJECTS.length ? ((LINKS.length * 2) / OBJECTS.length).toFixed(1) : "0"),
-    []
+    () => (objects.length ? ((links.length * 2) / objects.length).toFixed(1) : "0"),
+    [objects, links]
   );
 
   return (
     <PageShell
       title="KGIK BRAIN"
-      subtitle="KNOWLEDGE GRAPH INTELLIGENCE KERNEL · ONTOLOGY CORE"
+      subtitle={`KNOWLEDGE GRAPH INTELLIGENCE KERNEL · ${live ? "LIVE ONTOLOGY" : "SEED ONTOLOGY (backend offline)"}`}
       accent={ACCENT}
     >
       <Grid min={160} style={{ marginBottom: 14 }}>
-        <StatTile label="Entities" value={OBJECTS.length} accent={ACCENT} sub="graph nodes" />
-        <StatTile label="Relations" value={LINKS.length} accent={C.blue} sub="typed links" />
+        <StatTile label="Entities" value={objects.length} accent={ACCENT} sub="graph nodes" />
+        <StatTile label="Relations" value={links.length} accent={C.blue} sub="typed links" />
         <StatTile label="Entity Types" value={byType.length} accent={C.purple} />
         <StatTile label="Avg Degree" value={avgDegree} accent={C.gold} sub="links / node" />
       </Grid>
@@ -149,7 +175,7 @@ export default function KGIKBrain() {
               <div style={{ display: "grid", gap: 6 }}>
                 {selectedLinks.length === 0 && <div style={{ color: C.text, fontSize: 9 }}>No relations.</div>}
                 {selectedLinks.map((l, i) => {
-                  const o = OBJECTS.find((x) => x.id === l.other);
+                  const o = objects.find((x) => x.id === l.other);
                   return (
                     <button
                       key={i}
