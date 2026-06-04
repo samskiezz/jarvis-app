@@ -10002,5 +10002,22 @@
     "epoch": "industrial",
     "name": "Wrought Iron Railing",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:bamboo_clump": {
+    "prompt": "a dense clump of tall green bamboo, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "927e13b3-4a0e-44eb-88b1-b997a14539b7",
+    "path": "/models/generated/tripo/bamboo_clump.glb",
+    "bytes": 11733372,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/927e13b3-4a0e-44eb-88b1-b997a14539b7/tripo_pbr_model_927e13b3-4a0e-44eb-88b1-b997a14539b7.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOTI3ZTEzYjMtNGEwZS00NGViLTg4YjEtYjk5N2ExNDUzOWI3L3RyaXBvX3Bicl9tb2RlbF85MjdlMTNiMy00YTBlLTQ0ZWItODhiMS1iOTk3YTE0NTM5YjcuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=K8poNhWekkt65d0RyEbyZx~WWrE36YHmrNIl-wpcKVx1D8qjShjZOfyW9yvuSvGEYG1Pk9Wwy6Fyoxl8R0PRjTCwTfzt34l~CRtrWTBF4Qd3uzwCcUReULAEYGrA~FyUmhYlP932TQhyrB2fwi7DWO6AyiFc39z~9C56yKUNqbmxiAHLUaIq6tEC8oHEt~VBwbFTq7JbdcXmRvzODXvp2Z2TWSg~lGW~Vdj-3Bppx~kGbTnXIVS~0bbPlnRgs18IG~9MyCPEvhM3i~rMKv1dbZ3GNuF7x4DuIYtusvQGb56msum~7rS2gp33BHsWbLR6vamK1u1vpyQrUoAN9YoCmw__",
+    "asset_id": "bamboo_clump",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Bamboo Clump",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
