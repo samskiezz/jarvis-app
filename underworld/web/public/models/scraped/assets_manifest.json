@@ -9832,5 +9832,22 @@
     "epoch": "any",
     "name": "Stone Steps",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stone_viaduct": {
+    "prompt": "a tall multi-arched stone viaduct span, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "130a751d-9be8-4058-bad2-b6c39647d2ea",
+    "path": "/models/generated/tripo/stone_viaduct.glb",
+    "bytes": 15161404,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/130a751d-9be8-4058-bad2-b6c39647d2ea/tripo_pbr_model_130a751d-9be8-4058-bad2-b6c39647d2ea.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMTMwYTc1MWQtOWJlOC00MDU4LWJhZDItYjZjMzk2NDdkMmVhL3RyaXBvX3Bicl9tb2RlbF8xMzBhNzUxZC05YmU4LTQwNTgtYmFkMi1iNmMzOTY0N2QyZWEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=oZ9OrTEx9uoyn~FhCWidJ~UI2rGCnKOzqm9qWFw0b~OGKXmeFZamVxF0-pSpD8hsAchc0lKRryP8tT35qRwtfh256xvzpcP1h~H03PGybhaTn~Z1zIGHdP1yXWACJpkjM-G6wnN9f3z6QJm12dBEIgWN6lScbwWI7V25h1YnrZQlN0QL5YjgbLbCTmc~-4jm-yGpuhMikCAbRtAfQAWh0jW6f9e1s0~laCqw2vb~Q1iY0v4dp7SQQGnGnQZtFCkVwjZvblsHcvTJPOu8YvvsimKCbuMbE32NrqMc4yZchfVbtKVRX~NKlEF6VvROzTulzihPM2vsnjBoCCj~4SUo7g__",
+    "asset_id": "stone_viaduct",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Stone Viaduct",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
