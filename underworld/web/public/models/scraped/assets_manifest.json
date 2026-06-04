@@ -11583,5 +11583,22 @@
     "epoch": "bronze",
     "name": "Sack Pile",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:scarecrow": {
+    "prompt": "a straw-stuffed scarecrow on a post, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "84545039-da52-44d9-9d7f-7ffc66e64320",
+    "path": "/models/generated/tripo/scarecrow.glb",
+    "bytes": 10359308,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/84545039-da52-44d9-9d7f-7ffc66e64320/tripo_pbr_model_84545039-da52-44d9-9d7f-7ffc66e64320.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODQ1NDUwMzktZGE1Mi00NGQ5LTlkN2YtN2ZmYzY2ZTY0MzIwL3RyaXBvX3Bicl9tb2RlbF84NDU0NTAzOS1kYTUyLTQ0ZDktOWQ3Zi03ZmZjNjZlNjQzMjAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=B8ZJv5H6FAgLJQKmNI3~ASE2qwbMJLUFrjTd2roDDoPNUd3eWwhe3YzyhRml1iUsEghwIak0fu3-coZNL3-mdPaKiNrxQbfRxe9g3AzcyGwnr96sTnaBnQ9xaCzCTutG~gQnyHpYLsoN6Hb3I6Gnw7u3vjGfHxST2B5FTS55b2Glq~FIibFBYEbmww21iq3kYcDIriD-jMRlhhhywbHtWKnulCyrCekaH1DikRJM6iQYGrUZGU2LKO~Ub8elPyO5Pept9UnpG0yyHSmJy1up7UCf5g36vFe85s8I8gfmhIV7CstqT2m0uroo~dmnCPl2qzOUnJ46oNOT74Mxa1c5vw__",
+    "asset_id": "scarecrow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Scarecrow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
