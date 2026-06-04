@@ -5,16 +5,16 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 
 | # | status | file | lines |
 |---|--------|------|-------|
-| 1 | ☐ | eslint.config.js | 60 |
-| 2 | ☐ | forge/__init__.py | 1 |
+| 1 | ☑ | eslint.config.js | 60 |
+| 2 | ☑ | forge/__init__.py | 1 |
 | 3 | ☑ | forge/approvals.py | 118 |
 | 4 | ☑ | forge/forge_agent.py | 462 |
 | 5 | ☑ | forge/notify.py | 141 |
-| 6 | ☐ | forge/tests/__init__.py | 0 |
+| 6 | ☑ | forge/tests/__init__.py | 0 |
 | 7 | ☑ | forge/tests/test_forge.py | 137 |
-| 8 | ☐ | forge/tests/test_whatsapp.py | 133 |
+| 8 | ☑ | forge/tests/test_whatsapp.py | 133 |
 | 9 | ☑ | forge/webhook.py | 141 |
-| 10 | ☐ | postcss.config.js | 6 |
+| 10 | ☑ | postcss.config.js | 6 |
 | 11 | ☑ | server/__init__.py | 0 |
 | 12 | ☑ | server/auth.py | 31 |
 | 13 | ☑ | server/config.py | 25 |
@@ -57,14 +57,14 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 50 | ☑ | server/services/train_sp500.py | 425 |
 | 51 | ☑ | server/tests/__init__.py | 0 |
 | 52 | ☑ | server/tests/test_forecaster.py | 137 |
-| 53 | ☐ | server/tests/test_forecaster_ml.py | 149 |
+| 53 | ☑ | server/tests/test_forecaster_ml.py | 149 |
 | 54 | ☑ | server/tests/test_forward_test.py | 173 |
 | 55 | ☑ | server/tests/test_history_lake.py | 223 |
 | 56 | ☑ | server/tests/test_oracle_model.py | 146 |
 | 57 | ☑ | server/tests/test_prediction.py | 157 |
 | 58 | ☑ | server/tests/test_routes.py | 164 |
 | 59 | ☑ | server/tests/test_simulation.py | 186 |
-| 60 | ☐ | server/tests/test_train_sp500.py | 148 |
+| 60 | ☑ | server/tests/test_train_sp500.py | 148 |
 | 61 | ☑ | src/App.jsx | 66 |
 | 62 | ☑ | src/Layout.jsx | 79 |
 | 63 | ☑ | src/api/backendFunctions.js | 14 |
@@ -176,7 +176,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 169 | ☑ | src/panels/registry.js | 52 |
 | 170 | ☑ | src/panels/registry.test.js | 27 |
 | 171 | ☑ | src/utils/index.ts | 2 |
-| 172 | ☐ | tailwind.config.js | 91 |
+| 172 | ☑ | tailwind.config.js | 91 |
 | 173 | ☑ | underworld/__init__.py | 0 |
 | 174 | ☑ | underworld/assets/scraper/tests/test_pipeline_licence.py | 60 |
 | 175 | ☑ | underworld/assets/scraper/underworld_assets/__init__.py | 0 |
@@ -618,8 +618,8 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 611 | ☑ | underworld/server/world/__init__.py | 0 |
 | 612 | ☑ | underworld/server/world/resources.py | 107 |
 | 613 | ☑ | underworld/server/world/seed.py | 82 |
-| 614 | ☐ | underworld/web/eslint.config.js | 29 |
-| 615 | ☐ | underworld/web/postcss.config.js | 6 |
+| 614 | ☑ | underworld/web/eslint.config.js | 29 |
+| 615 | ☑ | underworld/web/postcss.config.js | 6 |
 | 616 | ☑ | underworld/web/src/App.tsx | 37 |
 | 617 | ☑ | underworld/web/src/components/AuthGate.tsx | 106 |
 | 618 | ☑ | underworld/web/src/components/GameLoader.tsx | 205 |
@@ -680,11 +680,11 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 673 | ☑ | underworld/web/src/pages/Projects.tsx | 333 |
 | 674 | ☑ | underworld/web/src/pages/Safety.tsx | 154 |
 | 675 | ☑ | underworld/web/src/pages/WorldDetail.tsx | 674 |
-| 676 | ☐ | underworld/web/src/vite-env.d.ts | 12 |
-| 677 | ☐ | underworld/web/tailwind.config.js | 133 |
-| 678 | ☐ | underworld/web/vite.config.ts | 16 |
-| 679 | ☐ | underworld/web/vitest.config.ts | 14 |
-| 680 | ☐ | vite.config.js | 20 |
+| 676 | ☑ | underworld/web/src/vite-env.d.ts | 12 |
+| 677 | ☑ | underworld/web/tailwind.config.js | 133 |
+| 678 | ☑ | underworld/web/vite.config.ts | 16 |
+| 679 | ☑ | underworld/web/vitest.config.ts | 14 |
+| 680 | ☑ | vite.config.js | 20 |
 
 ## BATCH 1 FINDINGS — JARVIS backend core (read in full)
 - `server/config.py` — env config: API_KEY default 'dev-key' (L3), Kimi base/model (L4-6), REQUIRE_AUTH=false default (L11), USGS/FX feeds (L22-24), TTL 60s (L25)
@@ -748,3 +748,8 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `forge/tests/test_forge.py` — forge SAFETY tests: strip_fences, is_safe_replacement rejects refusal/truncation/unbalanced (L19), shard disjoint (L38), research offline-safe (L56), dry-run never writes (L79), apply commits+backup on pass (L92), reverts on fail (L106), REFUSES-TO-WRITE-ON-MAIN -> forge/* branch, main unmodified (L119)
 - `underworld/web/src/App.tsx` — underworld React app: AuthGate>GameLoader>Routes, 10 pages (CommandCentre/WorldDetail/Population/Projects/Knowledge/Inventions/Patents/Guilds/Safety)
 - `underworld/web/src/main.tsx` — React entry: QueryClientProvider+BrowserRouter, react-query defaults (L9)
+## FINAL BATCH — tests + build configs (read in full)
+- `server/tests/test_forecaster_ml.py` — MLForecaster offline tests: contract low<pt<hi, level-acc>=persistence + dir>0.5, coverage ±0.2, graceful insufficient
+- `server/tests/test_train_sp500.py` — pooled no-leakage (max train date<min test L86) + finite bounded metrics + honesty guard dir<0.95 (L117) + graceful empty
+- `forge/tests/test_whatsapp.py` — approval parse/store/webhook(meta+twilio)/agent-proposes-without-touching-base tests
+- build configs (vite/tailwind/postcss/eslint/vitest/vite-env, both apps) + empty __init__.py package markers — standard tooling, read & confirmed
