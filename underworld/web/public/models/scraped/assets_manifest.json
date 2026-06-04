@@ -11379,5 +11379,22 @@
     "epoch": "any",
     "name": "Flower Planter",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:fruit_crate": {
+    "prompt": "a wooden crate brimming with fresh fruit, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "6ece8159-735a-4c99-ada3-f0a189ac1929",
+    "path": "/models/generated/tripo/fruit_crate.glb",
+    "bytes": 15165992,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/6ece8159-735a-4c99-ada3-f0a189ac1929/tripo_pbr_model_6ece8159-735a-4c99-ada3-f0a189ac1929.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNmVjZTgxNTktNzM1YS00Yzk5LWFkYTMtZjBhMTg5YWMxOTI5L3RyaXBvX3Bicl9tb2RlbF82ZWNlODE1OS03MzVhLTRjOTktYWRhMy1mMGExODlhYzE5MjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Xh4D9r~Fmf0pl30PfaVhpgLBdM7PU6HCBImUdltn6NYpy7Ap-7Ha8Ly~zYEA~8U46fgQ6a-bY7y~y9Pr~-uqMU28eaFsHA5PqFS6OWmclFaKC6FvYEo7E2gtuThFMHabo704udmk7Js8oGt8jWvbFDyXtLWJL~a7-~unMHkWVI4YgvfExNVmYBBcaNn~9m3NsSH3gAuREnbycOcWuY6ux80rw56MMhrcxNRyJ~V6dI35swVy865IXdiblT7jb43PA-iLn4uDoymM-75RSOr41sGbvUTe6GCHeyokhTRl~~QT-37v~mRhaRxIpzBouY5OBaaWieivMabgsuBk0nLBjQ__",
+    "asset_id": "fruit_crate",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Fruit Crate",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
