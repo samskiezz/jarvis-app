@@ -101,6 +101,30 @@ Each journey below is a *normative narrative*: it walks one persona through the 
 
 > **Journey acceptance rule (normative).** A persona journey is "passing" only when *every* step's acceptance hook passes in `11_VALIDATION_AND_TEST_PLAN.md`. A green individual requirement with a red journey indicates a wiring gap and **MUST** block the section gate (§1.11).
 
+#### 1.2.2 Journey failure-mode notes (what each persona must *not* experience)
+
+These are the negative obligations of the journeys — the experiences the engine must prevent. They are the persona-facing restatement of P-1/P-2 and feed the negative-control tests (§11 §8.3).
+
+| Persona | Must-not experience | Prevented by |
+|---------|---------------------|--------------|
+| P-A | A confident number with no interval, or a fabricated answer on an ungrounded target. | NFR-13, FR-3, FR-18 |
+| P-B | A driver labeled "causes" without a confirmed KGIK edge. | OS-4, FR-19 |
+| P-C | A silent breaking change to the response contract. | FR-20, NFR-13 |
+| P-D | Skill decline discovered only after FSS collapse (no early drift alarm). | FR-16, K-11 |
+| P-E | A technique or forecast with no resolvable provenance/reproduction record. | FR-19, NFR-11 |
+
+#### 1.2.3 Persona-to-KPI ownership
+
+Each persona "feels" a subset of KPIs most directly; this fixes who the KPI is reported *to* and aligns the RACI (§1.10.4).
+
+| Persona | Primary KPIs they consume | Why |
+|---------|---------------------------|-----|
+| P-A | K-2 (coverage), K-5 (latency), K-10 (refusal correctness) | They need a fast, honest, well-calibrated answer. |
+| P-B | K-1 (FSS), K-3 (CRPS), K-8 (sharpness), K-9 (pinball) | They benchmark skill and interval quality vs baselines. |
+| P-C | K-5 (latency), K-12 (availability) | They depend on the contract's SLOs. |
+| P-D | K-1, K-6 (trend), K-11 (drift lead) | They keep skill rising and catch drift. |
+| P-E | K-2, K-10, plus provenance/audit (NFR-10/11) | They prove honesty and compliance. |
+
 ---
 
 ## 1.3 TOP USE-CASES (framed as CAPABILITIES, not fixed domains)
@@ -140,6 +164,35 @@ This matrix is the *grounded inventory* of what the engine can do. Every row map
 | (cross-cut) Foundation-model acceleration | any series → remote inference | TimesFM 2.5 / Chronos-Bolt via remote endpoint | quantiles feed conformal | weight learned | G | §03; §10 | T-039, T-040, T-041 |
 
 > **Matrix invariants (normative).** (i) Every `A`/`G` row **MUST** trace to a §02 or §03 reference and to ≥1 build task. (ii) No `P`/`X` row may be the *default* resolution path for any UC until promoted to `A`/`G`. (iii) Adding a column value (new data source, new model) is a feed-adapter/specialist change (FR-15, P-5) and **MUST NOT** edit core modules (NFR-14).
+
+#### 1.3.1.1 Data-source × maturity coverage (second view)
+
+The same inventory, pivoted by data source, shows which feeds are live and which capabilities they unlock today. This is the breadth (K-7) baseline.
+
+| Data source (Lake feed) | Status | Unlocks UC | Maturity of path | Feed adapter (§05) |
+|-------------------------|--------|-----------|------------------|--------------------|
+| USGS seismic catalog | live (audited loader) | UC-2, UC-6 | A | `load_seismic_catalog` → ingestion |
+| CoinGecko crypto | live (audited loader) | UC-1, UC-4, UC-6 | A | `load_crypto_series` → ingestion |
+| FX (Frankfurter/exchangerate.host) | planned adapter | UC-1, UC-4 | P (T-005) | `fetch_fx` |
+| Simulation / KGIK snapshots | present (graph) | UC-5, UC-7 | A/G | KG bridge |
+| Outcome store (derived) | built in P0/P3 | UC-8, drift | P | history_lake outcome table |
+| Remote foundation inference | planned endpoint | UC-1 (accel) | G (T-039) | `gpu_client` |
+
+> **Breadth rule (normative).** K-7 counts only sources with `FSS > 0` on a forecastable target; a feed that is merely ingested does not increment breadth until it demonstrates skill.
+
+#### 1.3.1.2 Model/algorithm × calibration compatibility
+
+Every forecasting model **MUST** be wrappable by the conformal layer (FR-8); models that cannot emit a point or quantiles are not admissible to the default path.
+
+| Model / algorithm | Output type | Conformal-compatible | Default path? | Source |
+|-------------------|-------------|----------------------|---------------|--------|
+| GBM Monte-Carlo | point + path spread | yes (EnbPI on residuals) | yes | §02 |
+| Holt / exponential smoothing | point | yes | yes | §02 |
+| Error-Weighted Ensemble | blended point + interval | yes (wraps members) | yes | §06, patent WO2014075108A2 (expired) |
+| TimesFM / Chronos | point + native quantiles | yes (quantiles feed conformal) | yes when available | §03 |
+| Gutenberg-Richter / Omori | exceedance probability | yes (ECE/coverage on prob) | yes (UC-2) | §02 |
+| Matrix Profile | motif/discord (not a forecaster) | n/a (driver discovery only) | no (feeds drivers) | §03/§06 |
+| Temporal link-prediction | edge score / conditional | yes (conditional interval) | no (UC-5, tier P/X) | §06 |
 
 ### 1.3.2 Edge-case scope clarifications (what each capability does at its boundary)
 
@@ -401,13 +454,132 @@ Sub-requirements decompose the parent FR into independently testable obligations
 | **NFR-14** | Keep the core domain-agnostic: adding a domain must not modify intake/pattern/forecast/self-improve core code. | P1 | P-5, FR-15 | Static check: new-domain PR touches only adapters/specialists. |
 | **NFR-15** | Protect privacy/governance: no PII-driven individual prediction; access-controlled MLOps/audit surfaces. | P1 | OS-7, §12 | Governance test: PII inputs rejected; audit/MLOps endpoints require authz. |
 
+#### 1.10.2.1 Non-functional sub-requirements (NFR-x.y)
+
+| ID | Sub-requirement (the system **MUST** …) | Parent | Verify (acceptance hook) |
+|----|------------------------------------------|--------|--------------------------|
+| **NFR-1.1** | Meet warm `p95 ≤ 8 s` end-to-end. | NFR-1 | Load test p95 within budget. |
+| **NFR-1.2** | Meet cached/short-horizon `p95 ≤ 2 s`. | NFR-1 | Cached-path load test within budget. |
+| **NFR-3.1** | Keep `|PICP − (1−α)| ≤ 0.05` at each active nominal level. | NFR-3 | Rolling PICP per level within band. |
+| **NFR-6.1** | Produce forecasts on CPU/NumPy when GPU/remote inference is absent. | NFR-6 | Disable GPU → forecasts still produced. |
+| **NFR-6.2** | Yield identical-within-tolerance results on CPU vs GPU paths. | NFR-6, NFR-12 | Forced-NumPy path matches GPU path within tolerance. |
+| **NFR-8.1** | Mark answers built on stale data with a stale flag. | NFR-8 | Stale feed → stale flag set. |
+| **NFR-8.2** | Keep unrelated forecasts unaffected by a dead feed. | NFR-8 | Kill one feed → others succeed. |
+| **NFR-9.1** | Maintain zero unmapped FR/NFR in the traceability matrix. | NFR-9 | Matrix has 0 orphans. |
+| **NFR-9.2** | Maintain zero untested requirements. | NFR-9 | Every requirement → ≥1 test ID. |
+| **NFR-11.1** | Persist inputs, model, weights, version, timestamp per forecast. | NFR-11 | Reproduction record retrievable by `forecast_id`. |
+| **NFR-13.1** | Reject any response missing an interval/probability. | NFR-13 | Validator rejects uncertainty-less response. |
+| **NFR-13.2** | Reject any response missing a caveat field. | NFR-13 | Validator rejects caveat-less response. |
+| **NFR-14.1** | Confine new-domain changes to adapters/specialists (no core edits). | NFR-14 | Static check: new-domain PR touches only adapters/specialists. |
+
 ### 1.10.3 Requirement priority key
 - **P0** — must ship in v1 / hard acceptance gate. **P1** — must ship within the v2–v50 expansion. **P2** — hardening (v51–v150).
+
+### 1.10.4 RACI for requirements ownership
+
+Ownership of each requirement family is fixed so that authorship, implementation, verification, and sign-off never fall between roles. **R** = Responsible (does the work), **A** = Accountable (single owner, signs off), **C** = Consulted, **I** = Informed. Roles map to the §13 build-plan owners (PL, DE, BE, DS, MLE, QA, SRE, GOV) plus the personas they serve.
+
+| Requirement family | R | A | C | I |
+|--------------------|---|---|---|---|
+| FR-1, FR-2 (NL intake & routing) | BE | PL | DS, P-A | QA, P-C |
+| FR-3, FR-4 (grounding & ingestion) | DE/BE | PL | GOV (provenance) | QA, P-E |
+| FR-5, FR-6 (pattern discovery) | DS | PL | MLE | QA, P-B |
+| FR-7, FR-13 (relational/KGIK + edge learning) | DS/MLE | PL | BE | QA |
+| FR-8, FR-10 (calibration & ensemble) | DS | PL | MLE | QA, P-B |
+| FR-9, FR-20 (answer object & contract) | BE | PL | P-C | QA, P-A |
+| FR-11, FR-12, FR-14 (persist, score, scorecard) | DS/MLE | PL | BE | P-D, P-E |
+| FR-15 (domain extensibility) | BE | PL | DS | QA |
+| FR-16 (drift/calibration alarms) | MLE | PL | DS, SRE | P-D |
+| FR-17 (scenario/counterfactual) | DS | PL | BE | P-B |
+| FR-18, FR-19 (refusal & provenance) | BE/GOV | PL | DS | P-E |
+| NFR-1, NFR-5, NFR-7 (latency/scale/availability) | SRE | PL | BE, MLE | P-C |
+| NFR-2, NFR-3, NFR-4 (skill/coverage/sharpness) | DS | PL | MLE | P-D |
+| NFR-6, NFR-12 (CPU fallback & reproducibility) | MLE | PL | BE | QA |
+| NFR-8 (feed-failure tolerance) | BE/SRE | PL | DE | QA |
+| NFR-9 (traceability) | QA/PL | PL | all | all |
+| NFR-10, NFR-15 (license/patent & governance) | GOV | PL | DS, BE | P-E |
+| NFR-11, NFR-13, NFR-14 (auditability, honesty gate, core-isolation) | BE | PL | GOV | P-E, QA |
+
+> **RACI rule (normative).** Exactly one **A** per family. Any requirement lacking an **A** **MUST NOT** pass the section gate (§1.11). The **A** signs the requirement's acceptance hook as green before release.
+
+### 1.10.5 Explicit acceptance hooks per requirement (consolidated)
+
+The `Verify` columns above state each hook inline. This consolidated view pins each FR/NFR (and its sub-requirements) to the **test level** that owns it in `11_VALIDATION_AND_TEST_PLAN.md`, so the section is "execution-ready" with no requirement lacking a home test level. (Test-level taxonomy and the executable assertions live in §11; this is the binding stub.)
+
+| Requirement(s) | Owning test level (§11) | Representative test artifact |
+|----------------|-------------------------|------------------------------|
+| FR-1.*, FR-2 | Integration (§11 §2.2) | `test_routes.py` NL→route fixtures |
+| FR-3.*, FR-4.* | Unit + Integration (§2.1, §2.2) | `test_history_lake.py`, `test_ingestion.py` |
+| FR-5.*, FR-6 | Unit (§2.1 C/D/G) | `test_pattern_engine.py` |
+| FR-7, FR-13 | Unit (§2.1) | `test_relational.py`, `test_self_improve.py` |
+| FR-8.*, FR-10 | Unit + Calibration (§2.1 B, §4) | `test_conformal.py`, `test_ensemble.py` |
+| FR-9.*, FR-20, NFR-13.* | Contract (§2.3) | `07_API_CONTRACTS.md` contract tests |
+| FR-11.*, FR-12.*, FR-14 | Self-improvement (§5) + Backtest (§3) | `test_self_improve.py`, `backtest/` |
+| FR-15, NFR-14.* | Static/architecture check (§8) | new-domain PR scope check |
+| FR-16.* | Self-improvement (§5) + Chaos (§9) | drift-injection test |
+| FR-17 | Unit (§2.1) | counterfactual fixture |
+| FR-18.*, K-10 | Integration + negative-control (§2.2, §8.3) | refusal fixtures |
+| FR-19.* | Contract/audit (§2.3, §12) | provenance-tag resolution test |
+| NFR-1.*, NFR-7 | Performance (§8.5) | latency/availability load test |
+| NFR-2/3/4 | Backtest + Calibration (§3.5, §4) | skill/coverage gates |
+| NFR-6.*, NFR-12 | Determinism (§6) | forced-NumPy + fixed-seed reproduction |
+| NFR-8.* | Chaos (§9) | feed-kill injection |
+| NFR-9.* | CI gate (§8) | traceability-matrix check |
+| NFR-10, NFR-15 | Governance (§12) | license/patent audit, PII rejection |
+| NFR-11.* | Audit (§12) | reproduction-record retrieval |
 
 ---
 
 ## 1.11 ACCEPTANCE GATE FOR THIS SECTION
 This section is "execution-ready" when: (a) every mission clause M-1…M-7 maps to ≥1 requirement; (b) every UC and persona maps to ≥1 requirement; (c) every FR/NFR has a unique ID, a priority, a trace, and a verify hook; (d) every principle P-1…P-6 is enforced by ≥1 requirement; and (e) scope is fully partitioned into IN/OUT with no overlap. The traceability obligations stated here are discharged in `11_VALIDATION_AND_TEST_PLAN.md` and the end-to-end traceability matrix (v101–v150).
+
+Additional gate clauses added at this depth milestone: (f) every persona has a journey (J-A…J-E) whose every step binds to a requirement; (g) every capability-matrix row (§1.3.1) is tiered and traces to §02/§03 + ≥1 build task; (h) every KPI (K-1…K-12) has a formula, threshold, and cadence (§1.4.4); (i) every requirement family has exactly one **A** owner (§1.10.4); and (j) every FR/NFR appears in the traceability stub (§1.12) with a build-task and test binding.
+
+---
+
+## 1.12 REQUIREMENTS-TRACEABILITY STUB (requirement → build task → test)
+
+This stub is the **charter-level seed** of the full matrix that `T-048` produces alongside `11_VALIDATION_AND_TEST_PLAN.md`. It binds each FR/NFR to the build-plan task ID(s) from `13_PHASED_BUILD_PLAN.md` (`T-###`) and to the owning test artifact/level in `11_VALIDATION_AND_TEST_PLAN.md`. It is intentionally a **stub**: it proves zero-orphan coverage at section scope; the fine-grained per-component matrix is discharged downstream (NFR-9). Where a requirement is satisfied by already-audited code, the build task is marked `(existing §02)`.
+
+| Requirement | Build task(s) (§13) | Test artifact / level (§11) | Test ref |
+|-------------|---------------------|------------------------------|----------|
+| FR-1 (+1.1–1.4) | T-038 (routing), intake in §09 | Integration §2.2 | `test_routes.py` |
+| FR-2 | T-038 | Integration §2.2 | `test_routes.py` |
+| FR-3 (+3.1–3.2) | T-001, T-003, T-008 | Unit+Integration §2.1/§2.2 | `test_history_lake.py` |
+| FR-4 (+4.1–4.3) | T-004, T-005, T-006, T-007 | Unit+Integration §2.2 | `test_ingestion.py` |
+| FR-5 (+5.1–5.2) | T-021, T-018, T-015 | Unit §2.1 G | `test_pattern_engine.py` |
+| FR-6 | T-018, T-019, T-020 | Unit §2.1 C/D | `test_pattern_engine.py` |
+| FR-7 | T-034, T-035 | Unit §2.1 | `test_relational.py` |
+| FR-8 (+8.1–8.2) | T-011, T-012, T-013 | Unit+Calibration §2.1 B/§4 | `test_conformal.py` |
+| FR-9 (+9.1–9.2) | T-008, §07 contract | Contract §2.3 | `07_API_CONTRACTS.md` tests |
+| FR-10 | T-014, T-015, T-040 | Unit §2.1 H | `test_ensemble.py` |
+| FR-11 (+11.1–11.2) | T-008, T-009 | Self-improve §5 | `test_self_improve.py` |
+| FR-12 (+12.1–12.2) | T-024, T-027, T-028 | Backtest §3 + §5 | `test_backtest.py` |
+| FR-13 | T-026, T-035 | Self-improve §5 | `test_self_improve.py` |
+| FR-14 | T-016, T-028 | Self-improve §5 / Contract §2.3 | `test_skill.py`, `skill` route |
+| FR-15 | T-005 (adapter pattern), NFR-14 check | Static/CI §8 | new-domain scope check |
+| FR-16 (+16.1–16.3) | T-025 | Self-improve §5 + Chaos §9 | `test_self_improve.py` |
+| FR-17 | T-031, T-032, T-033 | Unit §2.1 | `test_causal.py` |
+| FR-18 (+18.1–18.2) | T-038, T-013 (caveat) | Integration + negative-control §2.2/§8.3 | refusal fixtures |
+| FR-19 (+19.1) | T-042, provenance tagging | Contract/audit §2.3/§12 | provenance test |
+| FR-20 | T-008, §07 versioning | Contract §2.3 | contract tests |
+| NFR-1 (+1.1–1.2) | T-044, T-045 | Performance §8.5 | latency load test |
+| NFR-2 | T-027 | Backtest §3.5 | skill gate |
+| NFR-3 (+3.1) | T-011, T-024 | Calibration §4 | coverage gate |
+| NFR-4 | T-016, T-024 | Calibration §4 | sharpness check |
+| NFR-5 | T-041, scale projections §10 | Performance §8.5 | capacity test |
+| NFR-6 (+6.1–6.2) | T-039, T-041 | Determinism §6 | `test_gpu_client.py` |
+| NFR-7 | T-044, T-045 | Performance/monitor §8.5 | availability monitor |
+| NFR-8 (+8.1–8.2) | T-006 (error isolation), T-046 | Chaos §9 | feed-kill injection |
+| NFR-9 (+9.1–9.2) | T-048 | CI gate §8 | traceability check |
+| NFR-10 | T-042 | Governance §12 | license/patent audit |
+| NFR-11 (+11.1) | T-008, T-009 | Audit §12 | reproduction-record retrieval |
+| NFR-12 | T-043, conftest seeds | Determinism §6 | fixed-seed reproduction |
+| NFR-13 (+13.1–13.2) | T-013, §07 validator | Contract §2.3 | response validator |
+| NFR-14 (+14.1) | T-047, FR-15 check | Static/CI §8 | core-isolation check |
+| NFR-15 | T-047 | Governance §12 | PII rejection / authz |
+
+> **Stub completeness check (normative).** Every FR-1…FR-20 and NFR-1…NFR-15 appears exactly once above with a non-empty build-task and a test ref ⇒ **zero orphans at charter scope** (discharges NFR-9 at this level). Any future requirement added to §1.10 **MUST** add a row here in the same change, or the section gate (§1.11) fails.
 
 ---
 *End of Section 01 — MISSION & SCOPE. Next: `02_CURRENT_STATE_AUDIT.md` (the grounded code inventory this charter rests on).*

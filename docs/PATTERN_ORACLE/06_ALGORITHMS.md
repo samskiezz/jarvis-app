@@ -505,6 +505,59 @@ Parameter constraints via softplus: `σ=softplus(s)`, `ν=2+softplus(n)` (keep `
 
 **Source.** Rasul et al. 2023, *Lag-Llama*; https://github.com/time-series-foundation-models/lag-llama · paper https://arxiv.org/abs/2310.08278
 
+#### A5.+ DEPTH MILESTONE
+
+**Full derivation.** The Student-t arises as a Gaussian with an inverse-gamma prior on its variance marginalized out: if `x|τ ~ N(μ, τ)` and `τ ~ Inv-Gamma(ν/2, νσ²/2)`, then `x ~ t_ν(μ, σ)`. This *scale mixture* is exactly why it has heavier tails than the Gaussian — the random variance occasionally inflates, producing extremes. Variance exists only for `ν>2` (`Var=σ²·ν/(ν−2)`); kurtosis for `ν>4`. As `ν→∞` it converges to `N(μ,σ²)`. The model emits `(ν,μ,σ)` per step; the negative log-likelihood (training loss) is the log of the density in the Math block, optimized end-to-end. Quantiles come from the inverse regularized incomplete beta function `t_ν^{-1}(α)`; e.g. for `ν=5`, `t^{-1}(0.95)=2.015` vs Gaussian `1.645` — the tail is `22%` wider, which is the calibration benefit on crypto.
+
+**Runnable-quality pseudocode (inference).**
+```python
+def lag_llama_forecast(context, horizon, *, lag_set=(1,7,14,30), context_length=256,
+                       num_samples=100, model=None, seed=0):
+    import numpy as np
+    from scipy.stats import t as student_t
+    rng = np.random.default_rng(seed)
+    hist = list(np.asarray(context, float)[-context_length:])
+    mu_s, sd_s = np.mean(hist), (np.std(hist) or 1.0)
+    paths = np.zeros((num_samples, horizon))
+    for s in range(num_samples):
+        h = hist.copy()
+        for k in range(horizon):
+            feat = [ (h[-l] - mu_s)/sd_s if l <= len(h) else 0.0 for l in lag_set ]
+            nu, mu, sigma = model.head(feat)          # softplus-constrained inside
+            nu = max(nu, 2.001); sigma = max(sigma, 1e-6)
+            draw = mu + sigma * student_t.rvs(nu, random_state=rng)
+            x_next = draw*sd_s + mu_s
+            paths[s, k] = x_next; h.append(x_next)
+    levels = [.1,.25,.5,.75,.9]
+    q = {lvl: np.percentile(paths, lvl*100, axis=0).tolist() for lvl in levels}
+    return {"quantiles": q, "mean": q[.5], "model": "lag-llama", "version": "v1"}
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `lag_set` | tuple | (1,7,14,30) | data-freq | which past lags become features | match seasonality (e.g. 24,168 hourly) |
+| `context_length` | int | 256 | 32–512 | history window | ↑ for long memory |
+| `num_samples` | int | 100 | 20–1000 | MC paths for quantiles | ↑ smooths tails; cost-linear |
+| `nu_min` | float | 2.001 | >2 | tail floor | keep >2 so variance exists |
+| `sigma_min` | float | 1e-6 | >0 | scale floor | prevents degenerate point mass |
+
+**Worked numeric example.** Suppose head emits `(ν=5, μ=0.02, σ=0.03)` (normalized) at step 1 with `μ_s=100, σ_s=4`. Median draw = `0.02·4+100=100.08`; `q0.9 = (0.02+0.03·t_5^{-1}(0.9))·4+100 = (0.02+0.03·1.476)·4+100 = 100.257`; Gaussian-equiv `q0.9` would be `100.234` — the Student-t band is ~10% wider in the tail, exactly the heavy-tail correction.
+
+**Complexity (derivation).** Per step: feature build `O(|lag_set|)`, one transformer forward `O(T_ctx²·d)` (or `O(T_ctx·d)` if windowed), sampling `O(num_samples)`. Autoregressive over `horizon` and `num_samples` paths → `O(num_samples·horizon·T_ctx·d)`. **Space** `O(num_samples·horizon + params)`.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| `ν≤2` | infinite variance, unstable sampling | softplus + floor `ν=2.001` |
+| `ν` huge | `Γ(ν/2)` overflow | clamp `ν≤100`, treat as Gaussian |
+| `σ` collapses | zero-width bands | softplus + `σ_min` |
+| Error accumulation in rollout | drift over long horizon | report widening bands honestly; cap horizon |
+
+**Unit-test oracle.** With a head fixed at `(ν=1e6, μ=0, σ=1)` the Student-t ≈ standard normal; the empirical `q0.5≈0±0.05`, `q0.9≈1.28±0.05` (matching the normal quantile) for `num_samples≥10000`. With `ν=4, σ=1, μ=0`: theoretical `q0.95=2.132` (vs normal 1.645) — empirical must match within MC error.
+
+**Integration code-points.** **NEW** `lag_llama_forecast.py` using the same `FoundationForecaster` contract as A4; `scipy.stats.t` for inverse-CDF; `gpu_backend.py` for device. Registered as ensemble member `k="lag_llama"` in F18, specifically up-weighted when CRPS (F20) shows the Gaussian legs are under-covering the tails. Quantiles feed EnbPI (F19).
+
 ---
 
 ## GROUP B — TEMPORAL GRAPH
@@ -548,6 +601,63 @@ for batch of events sorted by time:
 
 **Source.** Rossi et al. 2020, *TGN*; https://arxiv.org/abs/2006.10637 · ref impl https://github.com/twitter-research/tgn
 
+#### B6.+ DEPTH MILESTONE
+
+**Full derivation.** The memory `s_i(t)` is a recurrent summary of node `i`'s interaction history; the GRU update `s_i(t)=GRU(m̄_i(t), s_i(t⁻))` is the standard gated recurrence: reset gate `r=σ(W_r[m̄,s])`, update gate `u=σ(W_u[m̄,s])`, candidate `s̃=tanh(W[m̄, r⊙s])`, `s=(1−u)⊙s+u⊙s̃`. The key correctness theorem for TGN training is the **no-leakage ordering**: embeddings for a batch must be computed from memory state *before* that batch's events are applied, otherwise the model trivially "sees" the answer. The BCE link loss `−[y log p + (1−y) log(1−p)]` with `p=σ(MLP[z_i‖z_j])` is the empirical risk of a Bernoulli edge model; negatives sampled uniformly from non-neighbors make it a noise-contrastive estimator of edge probability. The time encoding `Φ(Δt)` (shared with B7) lets the message MLP modulate by recency.
+
+**Runnable-quality pseudocode.**
+```python
+def tgn_train_epoch(events, memory, modules, opt, *, n_neighbors=10, n_neg=1):
+    import torch
+    events = sorted(events, key=lambda e: e.t)
+    for batch in chunk(events, bs=200):
+        srcs = [e.src for e in batch]; dsts = [e.dst for e in batch]
+        ts   = [e.t for e in batch]
+        negs = sample_non_edges(srcs, n_neg)
+        # 1) embed from PRE-batch memory (no leakage)
+        z_src = modules.embed(memory, srcs, ts, n_neighbors)
+        z_dst = modules.embed(memory, dsts, ts, n_neighbors)
+        z_neg = modules.embed(memory, negs, ts, n_neighbors)
+        pos = modules.decoder(z_src, z_dst)         # sigmoid logits
+        neg = modules.decoder(z_src, z_neg)
+        loss = (bce(pos, ones) + bce(neg, zeros)).mean()
+        opt.zero_grad(); loss.backward()
+        torch.nn.utils.clip_grad_norm_(modules.parameters(), 1.0); opt.step()
+        # 2) AFTER loss: compute messages & update memory
+        with torch.no_grad():
+            msgs = modules.message(memory, batch)    # uses Φ(Δt), edge feats
+            memory.update(srcs+dsts, aggregate(msgs))
+            memory.detach()                          # truncate BPTT across batches
+    return loss.item()
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `memory_dim` | int | 172 | 64–512 | node state capacity | ↑ for complex dynamics |
+| `embedding_dim` | int | 100 | 32–256 | output embed size | match decoder MLP |
+| `time_dim` | int | 100 | 32–200 | Φ(Δt) feature size | log-space init freqs |
+| `n_layers` | int | 1–2 | 1–3 | attention hops | 2 captures 2-hop context |
+| `n_neighbors` | int | 10 | 5–50 | sampled temporal nbrs | ↑ accuracy, ↑ cost |
+| `lr` | float | 1e-4 | 1e-5–1e-3 | Adam step | ↓ if unstable |
+| `dropout` | float | 0.1 | 0–0.5 | regularization | ↑ on small graphs |
+
+**Worked numeric example.** 3-node toy: events `(A→B,t=1),(B→C,t=2),(A→C,t=3)`. With `memory_dim=2` init 0: after `t=1` A and B memories become nonzero via GRU; at `t=3` predicting `A→C` uses A's memory (carrying the `A→B` interaction) and C's memory (carrying `B→C`). A correctly-trained model yields `p(A→C,t=3) > p(A→random,t=3)` — the chain `A→B→C` raises the A–C link probability above the negative.
+
+**Complexity (derivation).** Per batch of `E_b` events: each event embeds 2 endpoints + `n_neg` negatives, each requiring `n_neighbors^{n_layers}` neighbor aggregations of `d`-dim vectors → `O(E_b·n_neighbors^{n_layers}·n_heads·d)`. Memory update is `O(E_b·d)` (GRU). **Space** `O(N·memory_dim + E)` for memory + event store.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| Memory leakage | suspiciously perfect train AUC | embed BEFORE updating memory; assert ordering |
+| Exploding gradients (BPTT through memory) | NaN loss | clip_grad_norm 1.0; detach memory per batch |
+| Stale memory | poor cold predictions | store last-update timestamp; encode `Δt` since update |
+| Cold-start nodes | random embeddings | init memory=0; rely on neighbor features |
+
+**Unit-test oracle.** Deterministic repeating pattern: emit `A→B` every even `t`, `A→C` every odd `t`, for 1000 steps. After training, at a held-out even `t` the model must rank `B` above `C` as the destination (AUC→1.0 on this separable task). A randomly-initialized untrained model gives AUC≈0.5 — the gap verifies learning.
+
+**Integration code-points.** **NEW** PyTorch module `tgn.py`. Sources events from `temporal_nodes.py` (`TemporalNode`, `causal_chain`) and writes ranked candidate edges into `knowledge_graph.py` via its confidence-ladder API (`add_edge(..., confidence=p)`); `gpu_backend.py` selects device. Link scores `p` feed SELF-IMPROVEMENT edge-strength updates (§08). Predicted edges enter KGIK at the lowest confidence tier pending realized-outcome confirmation.
+
 ---
 
 ### B7. TGAT — Temporal Graph Attention (Bochner time encoding + self-attention)
@@ -584,6 +694,61 @@ embed(v0,t) = stack L layers; link prob = σ(MLP([z_u‖z_v]))
 **Reuse target.** **NEW** (PyTorch). Same substrate reuse as B6 (`knowledge_graph.py`, `temporal_nodes.py`). PageRank/graph utilities in `graph_extras` for neighbor candidate ranking.
 
 **Source.** Xu et al. 2020, *Inductive Representation Learning on Temporal Graphs (TGAT)*; https://arxiv.org/abs/2002.07962 · impl https://github.com/StatsDLMathsRecomSys/Inductive-representation-learning-on-temporal-graphs
+
+#### B7.+ DEPTH MILESTONE
+
+**Full derivation (Bochner).** Bochner's theorem: a continuous translation-invariant kernel `K(t₁,t₂)=ψ(t₁−t₂)` is positive-definite iff it is the Fourier transform of a non-negative measure `p(ω)`: `ψ(Δt)=∫ e^{iωΔt} p(ω) dω = E_{ω~p}[cos(ωΔt)]` (real part, since the kernel is real). Monte-Carlo approximating the expectation with `d/2` sampled/learned frequencies `ω_k` and using `cos(ω(t₁−t₂))=cos(ωt₁)cos(ωt₂)+sin(ωt₁)sin(ωt₂)` gives the explicit feature map `Φ(t)=√(1/d)[cos(ω₁t),sin(ω₁t),...]` such that `⟨Φ(t₁),Φ(t₂)⟩≈ψ(t₁−t₂)`. This is exactly Random Fourier Features specialized to time — it turns "elapsed time" into a vector the attention can dot-product. Because frequencies are *learnable*, the network discovers the relevant temporal scales. Unlike TGN there is **no memory state**, so embeddings depend only on (sampled) neighbors → inductive on unseen nodes.
+
+**Runnable-quality pseudocode.**
+```python
+class BochnerTime(torch.nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        # log-spaced init over expected Δt range avoids dead gradients
+        self.w = torch.nn.Parameter(1.0/10**(torch.linspace(0,4,dim//2)))
+        self.scale = (1.0/(dim))**0.5
+    def forward(self, dt):                       # dt: [...]
+        a = dt.unsqueeze(-1) * self.w            # [..., dim/2]
+        return self.scale * torch.cat([a.cos(), a.sin()], dim=-1)
+
+def tgat_embed(node, t, neighbors, h, phi, attn, ffn, n_layers=2, n_nbr=20):
+    z = h[node]
+    for _ in range(n_layers):
+        nbr = sample(neighbors[node], n_nbr)     # (j, t_j, e_ij)
+        feats = torch.stack([torch.cat([h[j], phi(t - t_j)]) for j,t_j,_ in nbr])
+        q = torch.cat([z, phi(torch.zeros(()))])
+        z = ffn(torch.cat([attn(q, feats, feats), z]))   # MHA(query, K, V) + residual
+    return z
+
+def link_prob(u, v, t, *a):   # σ(MLP[z_u ‖ z_v])
+    return torch.sigmoid(mlp(torch.cat([tgat_embed(u,t,*a), tgat_embed(v,t,*a)])))
+```
+
+**Parameter table.**
+| Name | Type | Default | Range | Effect | Tuning |
+|------|------|---------|-------|--------|--------|
+| `time_dim` | int | 100 | 32–200 | Fourier features | log-space init `ω` |
+| `n_layers` | int | 2 | 1–3 | attention hops | 2 standard |
+| `n_heads` | int | 2 | 1–8 | attention heads | ↑ with dim |
+| `n_neighbors` | int | 20 | 5–50 | sampled nbrs/layer | ↑ accuracy, cost `n_nbr^L` |
+| `dropout` | float | 0.1 | 0–0.5 | attn/feat dropout | ↑ small graphs |
+| `lr` | float | 1e-4 | 1e-5–1e-3 | Adam | — |
+
+**Worked numeric example.** `time_dim=4`, one learnable freq pair `ω=[1.0, 0.01]`. For `Δt=0`: `Φ=√(1/4)[cos0,cos0,sin0,sin0]=0.5[1,1,0,0]`. For `Δt=π`: `Φ=0.5[cos π, cos(0.01π), sin π, sin(0.01π)]=0.5[−1, 0.9995, 0, 0.0314]`. Kernel `⟨Φ(0),Φ(π)⟩=0.25(−1+0.9995)=−0.000125≈0` — distant times are nearly orthogonal at the fast frequency, capturing "recent vs old."
+
+**Complexity (derivation).** Each query node expands `n_neighbors` per layer recursively → `n_neighbors^{n_layers}` leaf computations, each an `O(n_heads·d)` attention term → `O(n_neighbors^{n_layers}·n_heads·d)` per node. Fully parallel across query nodes (no shared mutable memory). **Space** `O(n_neighbors^{n_layers}·d)` per query during forward.
+
+**Numerical stability + failure modes + mitigations.**
+| Failure mode | Symptom | Mitigation |
+|---|---|---|
+| All-zero time grads | `Φ` flat, time ignored | log-spaced freq init spanning Δt range |
+| Inconsistent Δt units | meaningless encoding | normalize all Δt to a fixed unit (e.g. seconds) |
+| Attention overflow | NaN softmax | scale by `1/√d_k`; subtract max |
+| Neighbor sampling variance | noisy embeddings | average over multiple samples or larger `n_nbr` |
+
+**Unit-test oracle.** Bochner kernel self-consistency: for any frequencies and any `t₁,t₂`, `⟨Φ(t₁),Φ(t₂)⟩` must equal `(1/(d/2))Σ_k cos(ω_k(t₁−t₂))` within `1e-6`. Test `Φ(t)·Φ(t)=1.0±1e-6` for all `t` (unit norm, since `cos²+sin²=1` summed and scaled by `1/d` over `d/2` pairs = `(d/2)/d·2 = 1`). This verifies the encoding is a proper RFF map.
+
+**Integration code-points.** **NEW** `tgat.py`. Same substrate as B6 (`knowledge_graph.py`, `temporal_nodes.py`); preferred over TGN when KGIK gains new entity nodes frequently (inductive). The `BochnerTime` module is reused as the time-feature submodule inside `tgn.py` (B6). Outputs link probabilities → confidence-ladder edges in KGIK; neighbor candidate ranking can reuse PageRank utilities in `graph_extras`.
 
 ---
 

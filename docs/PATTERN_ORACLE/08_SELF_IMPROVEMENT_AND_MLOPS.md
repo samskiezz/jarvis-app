@@ -691,6 +691,416 @@ Every metric in §1.3 and §3 is **emitted, not just stored**, so degradation is
 
 ---
 
+## 10. CONTINUAL-LEARNING STATE MACHINE (complete)
+
+§§1–5 describe the *mechanisms*; this section is the **single authoritative finite-state machine (FSM)** that sequences them, so the self-improvement loop is deterministic, auditable, and replayable. There are two coupled FSMs: a **per-target learning FSM** (the macro loop) and a **per-model-version registry FSM** (§4.5, restated here with full transitions/guards). Every transition is logged to `learning_audit(target_key, model_id, from_state, to_state, trigger, guard_snapshot, at)`.
+
+### 10.1 Per-target learning FSM — states
+
+| State | Meaning | Active subsystems |
+|---|---|---|
+| `STEADY` | nominal; cycling + matching + online re-weight running | §1.2 matcher, §2 cycler, §4.1 re-weight |
+| `WATCH` | a soft signal tripped (moderate PSI, single bad cycle); heightened monitoring, no action yet | + tighter cycler cadence |
+| `DRIFTING` | a hard drift surface alarmed (PSI>0.2 / ECE>0.1 / KS p<0.01) | + §7.4 runbook opened |
+| `REGIME_BREAK` | BOCPD changepoint confirmed; pre-break data declared stale | + conformal buffer shrunk, re-forecast trigger |
+| `RETRAINING` | one or more challengers building under leakage guards | + §6 backtest harness |
+| `EVALUATING` | challenger(s) in shadow, accumulating ≥M scored forecasts | + per-member shadow scoring |
+| `CANARY` | eligible challenger ramping 5→25→50→100% on live traffic | + canary controller §4.4 |
+| `ROLLBACK` | canary regressed; reverting to champion | + auto-rollback path |
+| `FROZEN` | manual hold (incident, data-feed outage) — no promotions, serve last-good champion | matcher only (best-effort) |
+
+### 10.2 Per-target FSM — transition table (state × trigger → next, guard)
+
+| From | Trigger | Guard (must hold) | To | Side-effects |
+|---|---|---|---|---|
+| STEADY | PSI∈[0.1,0.2] **or** 1 cycle CRPSS<median−X% | — | WATCH | tighten cadence; emit `state_change` |
+| STEADY | PSI>0.2 / ECE>0.1 / KS p<0.01 sustained | signal sustained ≥2 windows | DRIFTING | open RB-DRIFT/RB-CALIBRATION |
+| STEADY | BOCPD cp_prob>0.5 | confirmed on 2 consecutive ticks | REGIME_BREAK | shrink conformal buffer, re-forecast |
+| WATCH | signal clears (PSI<0.1, CRPSS recovers) | 3 consecutive clean cycles | STEADY | restore cadence |
+| WATCH | signal escalates to hard alarm | — | DRIFTING | open runbook |
+| DRIFTING | retrain trigger T2/T3/T4 fires | data-vs-model triage done (RB-DRIFT) | RETRAINING | queue challenger(s) |
+| DRIFTING | drift is *data-side* and fixed (feed restored, ref refreshed) | next 30 forecasts clean | STEADY | close runbook |
+| REGIME_BREAK | retrain on post-break segment queued | post-break n ≥ N_min(target) | RETRAINING | drop pre-break from train set |
+| REGIME_BREAK | insufficient post-break data | n < N_min | WATCH | wait, widen intervals defensively |
+| RETRAINING | challenger built + backtest accept (§6.4) | leakage assertions pass | EVALUATING | registry: staging→shadow |
+| RETRAINING | challenger fails backtest | — | STEADY | registry: staging→rejected |
+| EVALUATING | eligible_for_promotion (§4.3) | M≥30, δ-margin, cal OK | CANARY | start ramp at 5% |
+| EVALUATING | not eligible after eval window | window elapsed | STEADY | hold challenger in shadow or reject |
+| CANARY | stage dwell passes criteria | live-slice CRPSS≥champion+δ, no SLO breach | CANARY (next %) | advance ramp |
+| CANARY | reached 100% and held | full-traffic criteria hold for dwell | STEADY | challenger→champion (promote) |
+| CANARY | regression / SLO breach | any rollback criterion (§10.4) | ROLLBACK | revert traffic to champion |
+| ROLLBACK | champion restored | traffic 100% champion, metrics nominal | STEADY | challenger→shadow, file ticket |
+| any | operator hold / incident | manual | FROZEN | freeze promotions |
+| FROZEN | operator release | incident closed | STEADY | resume |
+
+**Invariants (asserted in the FSM driver):**
+1. A target is in **exactly one** state at a time (single-writer lock per `target_key`).
+2. You may **only** serve a `production` model; `CANARY` serves a *blend* (champion + challenger by traffic %), never an unscored version.
+3. No transition into `CANARY` without a prior `EVALUATING` pass — promotion-on-noise is structurally impossible.
+4. `REGIME_BREAK` always shrinks the conformal residual buffer **before** any re-forecast, so the very next interval reflects post-break uncertainty.
+5. Every transition writes `learning_audit` with the full `guard_snapshot` (the metric values that justified it) — this is the replay/audit trail for §6.5 disputes.
+
+### 10.3 Guards in detail (the predicates above, made precise)
+
+```
+guard.sustained(signal, k_windows):      signal true in each of the last k drift windows
+guard.eligible_for_promotion(ch, champ): n_scored(ch) ≥ M
+                                         AND CRPSS(ch) ≥ CRPSS(champ) + δ          (δ=0.02)
+                                         AND |coverage_error(ch)| ≤ 0.05
+                                         AND ECE(ch) ≤ ECE(champ) + 0.02           (no cal regression)
+guard.canary_stage_pass(ch, stage):      live-slice metrics over dwell window satisfy
+                                         CRPSS(ch_live) ≥ CRPSS(champ_live)         (>= , not +δ on live)
+                                         AND |coverage_error| ≤ 0.05
+                                         AND latency_p99 ≤ SLO AND error_rate ≤ SLO
+guard.post_break_data(tk):               count(scored forecasts with issued_at > break_at) ≥ N_min(tk)
+guard.clean(tk, n):                      last n forecasts: no drift alarm, |CE|≤0.05, CRPSS≥0
+```
+
+### 10.4 Rollback criteria (CANARY → ROLLBACK) — the kill switch
+
+Rollback fires if **any** of these hold at **any** canary stage (evaluated each dwell tick on the live-served slice):
+```
+R1  CRPSS(challenger_live) < CRPSS(champion_live)            # outright skill regression
+R2  |coverage_error(challenger_live)| > 0.08                 # interval calibration blown (wider band than promo gate)
+R3  ECE(challenger_live) > champion ECE + 0.05               # probabilistic miscalibration
+R4  latency_p99 > SLO_latency  for ≥ 2 consecutive minutes   # serving SLO breach
+R5  error_rate > SLO_error_rate                              # serving health breach
+R6  any DRIFTING/REGIME_BREAK alarm attributable to the challenger
+```
+On rollback: (a) flip 100% of traffic back to champion in **one** registry transition; (b) snapshot the triggering metrics into `learning_audit.guard_snapshot`; (c) demote challenger `production→shadow` (kept scored for diagnosis, never auto-retried without a code/data change); (d) page on-call (RB-CANARY-ROLLBACK). Rollback is **idempotent** and must complete within the canary dwell tick so a bad challenger never serves a full window of degraded traffic.
+
+---
+
+## 11. CHAMPION / CHALLENGER + CANARY ROLLOUT — full protocol
+
+This expands §§4.3–4.4 into an operational protocol with the exact ramp, dwell windows, traffic-routing mechanics, statistical gates, and rollback wiring.
+
+### 11.1 Roles and routing
+- **Champion `C`** — current `production` version; serves `100 − p`% of live `/predict` traffic during a canary at fraction `p`.
+- **Challenger `H`** — `shadow` then `production`-canary candidate; serves `p`% of live traffic.
+- **Routing key:** deterministic hash of `(target_key, forecast_id_seed)` → bucket in `[0,100)`; a forecast with bucket `< p` is served by `H`, else by `C`. Deterministic hashing means a given series/request is *stable* across the dwell (no flapping between models within a stage), which keeps per-slice metrics interpretable.
+- **Shadow (p=0):** `H` predicts **every** cycle and is scored, but **0%** of traffic is *served* its output. This is how `EVALUATING` accumulates the M≥30 sample at zero user risk.
+
+### 11.2 Ramp schedule and dwell windows
+```
+stage:    SHADOW → 5% → 25% → 50% → 100%
+dwell:      (eval)  D1     D2     D3     D4
+```
+| Stage | Traffic to H | Default dwell | Min scored on live slice | Advance guard |
+|---|---|---|---|---|
+| SHADOW | 0% | until M≥30 (per horizon) | 30 | §10.3 eligible_for_promotion |
+| 5% | 5% | D1 = 24 h or ≥ 20 served-and-scored | 20 | canary_stage_pass |
+| 25% | 25% | D2 = 24 h or ≥ 50 | 50 | canary_stage_pass |
+| 50% | 50% | D3 = 24 h or ≥ 100 | 100 | canary_stage_pass |
+| 100% | 100% | D4 = 48 h soak | 200 | canary_stage_pass → **promote** |
+
+Dwell is `max(wall-clock, min-sample)` so a low-traffic target ramps on *evidence*, not just time. The 100% stage is a **soak** (longer dwell, larger sample) before the challenger is finally written as champion — the soak catches slow-burn regressions (e.g. a weekly seasonality the shorter stages didn't span).
+
+### 11.3 Promotion (CANARY 100% → champion)
+On a passing 100% soak: `registry.transition(H, champion)`; set `H.champion_since = now`; set old champion `C → retired` with `retired_at = now` (kept for lineage/backtest reproducibility, §4.5); write `metrics_snapshot` (the soak skill) onto `H`. Emit `oracle.registry.transition{from=production-canary,to=champion}`.
+
+### 11.4 Rollback wiring (operational)
+The canary controller runs a **watchdog** each dwell tick that evaluates R1–R6 (§10.4). On any trip it calls `registry.rollback(H)`:
+```
+def rollback(H):
+    route.set_fraction(target_key, H, 0)        # all traffic → champion C, atomically
+    registry.transition(H, "shadow")
+    audit.write(from="production-canary", to="shadow", trigger=tripped_rule, snapshot=metrics)
+    page("RB-CANARY-ROLLBACK", H, tripped_rule)
+    canary.lock(H, cooldown=COOLDOWN)           # don't auto-re-ramp same artifact
+```
+`COOLDOWN` (default 7 d) prevents an oscillating challenger from thrashing traffic; re-entry to canary requires a *new* `version` (a real change), enforced by the registry (the same `params_hash` cannot re-enter canary within cooldown).
+
+### 11.5 Why staged + statistical (not just "flip and watch")
+A single flip exposes 100% of users to an unvetted model and gives a *biased* comparison (champion and challenger never scored on the same conditions). Staged canary with deterministic routing gives a **paired, same-period** comparison at each stage and bounds blast radius to `p`% until the evidence (M-sample, δ-margin, calibration, SLO) clears. The δ-margin at the SHADOW gate and the `≥` (no-margin) gate on live slices is deliberate: we demand a *demonstrated* edge before any exposure, then only require *non-inferiority* to keep ramping.
+
+---
+
+## 12. ONLINE ERROR-WEIGHTED ENSEMBLE — update math & decay schedule
+
+This expands §4.1 with the full update derivation, the decay schedule, the cold-start handling, and a worked recovery trace.
+
+### 12.1 The EWMA error estimator (derivation of the effective window)
+Each member's recent error is an exponentially-weighted moving average of its per-forecast score `S_k(t)` (default CRPS from the per-member `skill_record`, §1.4):
+```
+Ē_k(t) = β · Ē_k(t−1) + (1 − β) · S_k(t)
+```
+Unrolling, `Ē_k(t) = (1−β) Σ_{j≥0} β^j S_k(t−j)` — a geometric kernel. The **effective window** (sum of weights / max weight, equivalently the kernel's "center of mass") is `1/(1−β)`; at `β=0.9` that is **~10 cycles**, the number quoted in §4.1 and §8.4. Larger `β` = longer memory (smoother, slower to react); smaller `β` = faster reaction (noisier). `β` is per-target tunable: high-frequency, regime-prone targets use `β≈0.8` (window ~5); slow seasonal targets use `β≈0.95` (window ~20).
+
+**Bias-corrected init.** A raw EWMA initialized at `Ē_k(0)=0` is biased low for the first few cycles. We apply the standard correction `Ê_k(t) = Ē_k(t) / (1 − β^t)` for `t ≤ t_warm` (default 10), so weights are trustworthy from cycle ~3 rather than ~10.
+
+### 12.2 The weight map (derivation of inverse-error normalization)
+```
+w_k = (1/(Ē_k + ε))^γ  /  Σ_j (1/(Ē_j + ε))^γ
+```
+This is a **softmax over log-inverse-error** with temperature `1/γ`: `w_k ∝ exp(γ · ( −ln(Ē_k+ε) ))`. Hence:
+- `γ → 0`: all exponents → equal → **uniform weights** (the safe prior; we never concentrate without evidence).
+- `γ = 1`: weight ∝ `1/error` (harmonic emphasis — the patent's inverse-error rule, WO2014075108A2).
+- `γ → ∞`: winner-take-all (only the current-best member). We cap `γ ≤ γ_max` (default 3) to avoid over-concentration on a member that's merely lucky this window.
+- `ε` (default 1e-9 on CRPS scale): prevents divide-by-zero when a member is briefly perfect.
+
+**The recovery floor.** Weights are floored at `w_min` (default 0.01) and renormalized: `w_k ← max(w_k, w_min)`, then `w ← w/Σw`. A floored member still contributes 0.01 of the mixture and **keeps being scored**, so when it recovers its `Ē_k` falls and its weight climbs back — a zeroed-out member could never earn its way back (it would stop affecting `ŷ_ens` but is still scored individually, so the floor is about *mixture* participation, not scoring).
+
+### 12.3 Update procedure (called online from the matcher, §1.2)
+```
+def update_ensemble_weights(rec):            # rec = a scored per-member skill_record
+    k  = rec.model_id
+    s  = rec.crps                            # chosen score S_k(t)
+    Ē  = load(tk, k).ewma_error
+    Ē' = BETA*Ē + (1-BETA)*s                 # §12.1
+    if t <= WARM: Ē' /= (1 - BETA**t)        # bias correction
+    persist ewma_error=Ē', updated_at=now
+    # recompute the whole weight vector for the target (cheap: m members)
+    raw = { j: (1.0/(E_j + EPS))**GAMMA for j in members(tk) }
+    w   = normalize(raw)
+    w   = { j: max(wj, W_MIN) for j,wj in w.items() }; w = normalize(w)
+    persist ensemble_weights(tk, j, w[j]) for j in members(tk)
+```
+Cost is `O(m)` per scored forecast — continuous and cheap (§4.1), no retraining to react to a member degrading.
+
+### 12.4 Decay schedule (when a member goes silent)
+If a member produces **no** forecast for a cycle (model down, feed gap), its `Ē_k` is not updated by new evidence but its *trust* should not stay frozen forever. A **staleness decay** nudges a silent member's weight toward the floor:
+```
+ON cycle with no fresh score for member k:
+    gap_cycles = cycles since last score for k
+    w_k ← w_k · ρ^gap_cycles           # ρ = 0.95 per missed cycle
+    renormalize; floor at w_min
+```
+This is distinct from the KGIK edge decay (§5.4, time-based on confidence); here it is *participation* decay so a dead member doesn't keep a stale high weight. When the member returns, normal §12.3 updates resume from its last `Ē_k`.
+
+### 12.5 Worked recovery trace (the §8.4 acceptance scenario)
+Three members A, B, C; `β=0.9`, `γ=1`, `w_min=0.01`. At t0 all have `Ē=0.10`, so `w=[0.333,0.333,0.333]`. Now **B degrades** — its CRPS jumps to 0.50 each cycle while A,C stay at 0.10:
+
+| cycle | Ē_B (EWMA) | raw_B=1/Ē_B | w_B (norm, floored) |
+|---|---|---|---|
+| 0 | 0.100 | 10.0 | 0.333 |
+| 1 | 0.140 | 7.14 | 0.263 |
+| 3 | 0.211 | 4.74 | 0.191 |
+| 5 | 0.272 | 3.68 | 0.155 |
+| 8 | 0.343 | 2.92 | 0.127 |
+| 10 | 0.380 | 2.63 | 0.116 |
+
+B's weight roughly **halves within ~10 cycles** (the effective window) — satisfying §8.4 "down-weighted within ~10 cycles." When B is fixed (CRPS back to 0.10), the EWMA decays back toward 0.10 over another ~10 cycles and `w_B` climbs back toward 0.33 — the floor guaranteed it never hit 0, so recovery is automatic. ✓
+
+---
+
+## 13. KGIK EDGE-LEARNING ALGORITHM — full specification
+
+This is the complete algorithm behind §5: add (create a learned edge), strengthen (Laplace update on confirmation), and decay (time-based + pruning), with every threshold made explicit. It mirrors `reasoning.record`/`_confidence` (reasoning.py:31–56) and `CausalBelief` (models.py:475–494) — the **same** Laplace add-one rule with a 0.5 prior, applied to graph edges instead of per-Minion cause→effect beliefs.
+
+### 13.1 Constants (single source of truth)
+```
+PRIOR_CONF        = 0.5     # CausalBelief.confidence default (models.py:493)
+PROMOTE_MIN       = 3       # confirmations to promote hypothesis→learned (mirrors MIN_TRIALS_TO_ACT=3, reasoning.py:19)
+PROMOTE_CONF      = 0.66    # confidence gate to promote (≈ reasoning ACT_CONFIDENCE=0.6, raised for graph)
+TAU_DAYS          = 30.0    # exponential decay time-constant (§5.4)
+PRUNE_THRESHOLD   = 0.40    # demote learned→hypothesis below this (mirrors reasoning.py:83 confidence<0.4)
+HARD_PRUNE        = 0.20    # archive (remove from active graph) below this
+K_STALE_TRIALS    = 5       # trials_since_confirm before demotion is allowed
+```
+Note the deliberate parity: `PROMOTE_MIN = MIN_TRIALS_TO_ACT = 3` and `PRUNE_THRESHOLD = 0.40` exactly matches the "bad belief" bar in `reasoning.reflect` (reasoning.py:83, `confidence < 0.4`). KGIK learning *is* CausalBelief revision lifted to the graph.
+
+### 13.2 ADD — creating a learned edge from a discovery
+PATTERN-DISCOVERY (§06) proposes an edge `(src, dst, relation, effect_size)` (a lead-lag, Granger/CCM screen hit, or Matrix-Profile motif). On first proposal:
+```
+def add_edge(src, dst, relation, effect_size):
+    if exists(src,dst,relation): return strengthen-path        # idempotent
+    insert kgik_edge(
+        edge_id=uuid(), src=src, dst=dst, relation=relation,
+        learned=False,                       # hypothesis until PROMOTE_MIN confirmations
+        trials=0, confirmations=0,
+        confidence=PRIOR_CONF,               # 0.5 uninformative prior
+        evidence_count=0, effect_size=effect_size,
+        last_seen_at=now, updated_at=now)
+```
+The edge enters as a **hypothesis** (`learned=False`) at confidence 0.5 — it can influence forecasts only weakly (gated by confidence downstream) until it earns promotion.
+
+### 13.3 STRENGTHEN — Laplace update on a scored forecast that used the edge
+Called from the matcher (§1.2) via `maybe_promote_kgik` when a scored forecast `f` relied on edge `E` as a driver:
+```
+def strengthen(E, f, y_true):
+    pred_dir = sign(driver_contribution(E, f.point))      # direction E pushed ŷ
+    real_dir = sign(y_true − f.baseline_point)            # realized direction vs baseline
+    confirmed = (pred_dir == real_dir) and (skill_score(f) > 0)   # directional AND beat baseline
+
+    E.trials        += 1
+    E.confirmations += 1 if confirmed else 0
+    E.evidence_count = E.confirmations
+    E.confidence     = laplace(E.confirmations, E.trials)         # §13.4
+    E.last_seen_at   = now ; E.updated_at = now
+
+    if (not E.learned) and E.confirmations >= PROMOTE_MIN and E.confidence >= PROMOTE_CONF:
+        E.learned = True                                          # PROMOTE
+        emit("oracle.kgik.promotions", +1)
+```
+The **double condition** for `confirmed` (correct direction *and* the forecast beat baseline) is the calibrated-honesty guard: an edge gets no credit for being "right" on a forecast that was worse than persistence — that would reward spurious correlation. This is stricter than `reasoning.record`'s single `confirmed` boolean, by design (graph edges feed many downstream forecasts, so the bar is higher).
+
+### 13.4 The Laplace formula (verbatim reuse, with the convergence proof)
+```
+laplace(confirmations, trials) = (confirmations + 1) / (trials + 2)      # reasoning.py:32, round to 4dp
+```
+- **Prior:** `(0+1)/(0+2) = 0.5` — exactly `CausalBelief.confidence` default and `PRIOR_CONF`.
+- **Convergence:** as `trials → ∞` with empirical confirmation rate `r = confirmations/trials`, `(r·t + 1)/(t + 2) → r`. So confidence is a *shrinkage estimator* — pulled toward 0.5 when evidence is thin, converging to the true rate as evidence accrues.
+- **Bounded:** strictly in `(0,1)` for all finite `trials` — never exactly 0 or 1, so an edge is **always recoverable and always refutable** (same robustness rationale as the supply-chain Wilson/Laplace estimator, supply_chain.py:153).
+
+**Worked promotion trace.** New edge `FX.EURUSD →(lead_lag@+3d) SEISM.rate`, starts hypothesis at conf 0.5:
+
+| event | confirmed? | trials | confirmations | confidence=(c+1)/(t+2) | learned? |
+|---|---|---|---|---|---|
+| add | — | 0 | 0 | 1/2 = 0.5000 | no |
+| score 1 | yes | 1 | 1 | 2/3 = 0.6667 | no (conf≥0.66 but conf<PROMOTE_MIN trials) |
+| score 2 | yes | 2 | 2 | 3/4 = 0.7500 | no (confirmations<3) |
+| score 3 | yes | 3 | 3 | 4/5 = 0.8000 | **YES** (≥3 conf, ≥0.66) → promote |
+| score 4 | no | 4 | 3 | 4/6 = 0.6667 | stays learned |
+| score 5 | no | 5 | 3 | 4/7 = 0.5714 | stays learned (above PRUNE 0.40) |
+
+### 13.5 DECAY — time-based confidence erosion + demotion/prune (nightly sweep)
+```
+def decay_edge(E):                              # §5.4, run nightly per learned edge
+    if not E.learned: return                    # ontology edges (learned=False from birth) are never decayed
+    age_days = (now − E.last_seen_at) / 86400
+    E.confidence *= exp(−age_days / TAU_DAYS)   # exponential time-decay, half-life = TAU·ln2 ≈ 20.8 d
+    E.updated_at = now
+
+    if E.confidence < PRUNE_THRESHOLD and E.trials_since_confirm > K_STALE_TRIALS:
+        E.learned = False                        # DEMOTE learned→hypothesis
+        emit("oracle.kgik.decays", +1)
+    if E.confidence < HARD_PRUNE:
+        archive(E)                               # remove from active graph; keep row for audit/lineage
+```
+- **Half-life:** `exp(−age/TAU)` reaches 0.5 at `age = TAU·ln2 ≈ 20.8 d` — an edge unconfirmed for ~3 weeks loses half its confidence.
+- **Demotion** requires *both* low confidence (<0.40, mirroring reasoning.py:83) and staleness (`trials_since_confirm > 5`) so a still-active but currently-unlucky edge isn't demoted prematurely.
+- **Archive** at <0.20 removes it from the *active* graph (no longer influences forecasts) but the row persists for lineage/audit and backtest reproducibility.
+- **Re-confirmation resets the clock:** any new confirmation updates `last_seen_at` (§13.3), so a continually-confirmed edge never decays — only edges that *stop working* fade. This is the graph tracking the *current* world.
+
+**Worked decay trace.** A learned edge at confidence 0.80, no confirmations, `trials_since_confirm` accumulating, swept nightly (`age_days` measured from `last_seen_at`):
+
+| nightly sweep (days since last_seen) | factor exp(−age/30) | confidence | action |
+|---|---|---|---|
+| 7 | 0.7919 | 0.80·0.792 = 0.634 | learned |
+| 14 | 0.6273 | 0.502 | learned (still > 0.40) |
+| 21 | 0.4966 | 0.397 | **demote** (conf<0.40 AND trials_since_confirm>5) → hypothesis |
+| 35 | 0.3114 | 0.249 | hypothesis |
+| 49 | 0.1954 | 0.156 | **archive** (conf<0.20) |
+
+---
+
+## 14. BACKTESTING HARNESS — design (rolling-origin, purged/embargoed CV)
+
+This expands §6 into a full harness design: the rolling-origin engine, **purged** and **embargoed** cross-validation to prevent the subtle leakage that vanilla k-fold and even naive walk-forward miss, and the harness API.
+
+### 14.1 Why time-series needs more than k-fold
+Vanilla k-fold shuffles rows → trains on the future to predict the past = catastrophic leakage. Naive walk-forward fixes the *ordering* but two leaks remain when **features and labels span time**:
+1. **Label horizon overlap (need purging):** a training forecast issued at `t` has its *label* realized at `t+h`. If a test fold starts at `t+δ` with `δ<h`, the training label was observed *inside* the test period → the model "saw" test-era information through its own label. **Purge:** drop training samples whose label window `[t, t+h]` overlaps the test window.
+2. **Feature lookback bleed (need embargo):** a test sample at `t'` uses features with lookback `L`, i.e. data on `[t'−L, t']`. A training sample just *before* the test fold shares that window. **Embargo:** insert a gap of `L` (the max feature lookback) between train-end and test-start. (López de Prado's purged & embargoed CV.)
+
+### 14.2 Rolling-origin engine (the loop, with purge + embargo)
+```
+def rolling_origin(series, horizons H, step, mode="expanding",
+                   purge=True, embargo=L_max):
+    origins = [o_1 < o_2 < ... < o_K]                  # forecast origins along time
+    for o in origins:
+        train_end  = o
+        # PURGE: remove training labels whose realization window overlaps test
+        train = series.filter(issued_at <= train_end
+                              AND label_realized_at <= train_end)   # label fully in the past
+        if mode == "rolling": train = train.window(length=W)        # fixed-length window
+        # EMBARGO: gap between train and test so windowed features don't bleed
+        test_start = o + embargo
+        for h in H:
+            assert model.trained_on_through < test_start            # §6.3 model-vintage guard
+            ŷ = model.forecast(target, origin=o, horizon=h)         # features computed INSIDE fold (≤o)
+            y = realized(target, at=o+h, vintage=as_of(o+h))        # no-revision-peek (§1.2)
+            rec = score_forecast(ŷ, y)                              # SAME scoring as live (§1.3)
+            emit_backtest_record(rec, origin=o, horizon=h)
+```
+- **Expanding** (anchored, keeps all past) vs **rolling** (fixed length, drops dead regimes) — default per §6.1.
+- **Purge** drops training rows whose label realization crosses `train_end`; **embargo** spaces train/test by `L_max`. Together they guarantee no train sample shares either a *label window* or a *feature window* with any test sample.
+- Every `assert` is a hard fail: a fold that would evaluate a model trained past `test_start`, or read a revised outcome, aborts the run (§6.3) — a leaked backtest manufactures fake improvement and is worse than none.
+
+### 14.3 Combinatorial purged CV (optional, for tighter variance estimates)
+For acceptance decisions where a single walk-forward path is noisy, the harness supports **CPCV**: partition the timeline into `N` groups, test on every `k`-subset of groups (purging+embargoing the rest), yielding `C(N,k)` backtest *paths* instead of one. The distribution of CRPSS across paths gives a confidence interval on skill (used to set the 95%-CI bound in §6.4/§6.5) rather than a point estimate that might be a lucky split.
+
+### 14.4 Harness API & determinism
+```
+BacktestRun(
+  run_id, target_key, model_version, mode, horizons, step,
+  purge, embargo, seed,                       # seed → reproducible member sampling/CRPS-fair
+  folds[], records[] (skill_record schema),   # records share the LIVE schema → same scale
+  aggregates{per_horizon, per_regime},        # per-horizon + per-PELT-segment (§6.2)
+  baselines{persistence, climatology},        # computed on identical folds (§6.4)
+  accept: bool, accept_reason, leakage_assertions_passed: bool
+)
+```
+Determinism: a `(model_version, data_vintage, seed)` triple must reproduce identical `aggregates` bit-for-bit — this is what makes a `retired` model version reproducible for audit (§4.5) and what the validation suite re-runs to detect silent metric drift in the harness itself.
+
+---
+
+## 15. EXPERIMENT TRACKING & MODEL REGISTRY — lifecycle
+
+This unifies §4.5 (registry FSM) with an experiment-tracking layer so every challenger is traceable from *idea → built artifact → evaluation → production → retirement*, and any production number can be reproduced.
+
+### 15.1 Experiment record (the "idea + run" unit)
+```
+experiment(
+  experiment_id, target_key, hypothesis,        -- "GBM with regime feature beats champion on break regimes"
+  trigger,                                       -- which T1..T6 or manual reason spawned it (§4.2)
+  algo, params, params_hash,                     -- config; params_hash dedupes identical configs
+  dataset_lineage_id,                            -- -> ai_models.dataset_lineage chain (ai_models.py:24)
+  data_vintage (trained_on_through),             -- latest obs the run was allowed to see (leakage audit)
+  seed, code_commit,                             -- full reproducibility tuple
+  status,                                        -- queued|running|done|failed
+  backtest_run_id,                               -- -> §14 BacktestRun
+  metrics{crpss, coverage_error, ece, per_horizon}, 
+  created_at, finished_at
+)
+```
+Every `RETRAINING` transition (§10) creates an `experiment`; its `params_hash + data_vintage + seed + code_commit` is the **reproducibility key** — re-running that tuple must reproduce `metrics` (ties to §14.4 determinism).
+
+### 15.2 Registry lifecycle (states restated as the model-version FSM, with guards)
+```
+[experiment done] ─register→ [staging] ─smoke ok→ (eval)
+   staging ─backtest accept (§6.4)→ [shadow]
+   staging ─backtest fail→ [rejected]
+   shadow  ─eligible_for_promotion (§10.3)→ [production:canary 5%]
+   shadow  ─eval window elapsed, not eligible→ stays shadow OR [rejected]
+   production:canary ─stage pass (§11.2)→ next % … → [champion]
+   production:canary ─rollback (§10.4)→ [shadow] (+cooldown §11.4)
+   champion ─superseded by new champion→ [retired]
+   any ─manual quarantine→ [rejected]
+```
+| State | Serves? | Scored? | Kept for audit? |
+|---|---|---|---|
+| staging | no | no | yes |
+| shadow | no | yes (every cycle) | yes |
+| production (canary/champion) | yes | yes | yes |
+| retired | no | no | yes (lineage + backtest repro) |
+| rejected | no | no | yes (audit) |
+
+### 15.3 Registry row (full, extends §4.5 / ai_models.model_registry)
+```
+model_version(
+  model_id, version, target_key, algo, params_hash,
+  state, trained_at, trained_on_through,        -- data vintage (leakage audit, load-bearing §6.3)
+  dataset_lineage_id,                            -- -> ai_models.dataset_lineage (ai_models.py:24-27)
+  experiment_id,                                 -- -> §15.1 (idea→artifact link)
+  code_commit, seed,                             -- reproducibility
+  champion_since, retired_at, superseded_by,     -- lineage chain
+  canary_stage, canary_started_at, cooldown_until,
+  metrics_snapshot JSON                          -- skill at each transition (promotion/rollback)
+)
+```
+`model_registry`/`dataset_lineage` (ai_models.py:17–27) provide the indexing + provenance-chain primitives this table builds on; `superseded_by` + `retired_at` form the **champion lineage** so "what was serving on date D?" is answerable for any past forecast (audit + dispute resolution).
+
+### 15.4 Lifecycle invariants
+1. **One champion per (target_key, horizon)** at any instant; the canary blend is the only multi-version serving state.
+2. A `production` version's `trained_on_through` **must predate** every live forecast it serves (it cannot have trained on the future it's predicting).
+3. `retired`/`rejected` rows are **immutable** — never deleted (lineage + reproducibility for §6.5 trend disputes).
+4. Re-entry to canary requires a **new** `version`/`params_hash` (no re-ramping the same rejected artifact within cooldown, §11.4).
+5. Every state transition writes `learning_audit` (§10) with the `metrics_snapshot` that justified it.
+
+---
+
 ## 8. ACCEPTANCE CRITERIA (this section's exit gate)
 
 This section is **done / validated** when:
