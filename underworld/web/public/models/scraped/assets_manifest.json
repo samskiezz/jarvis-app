@@ -9713,5 +9713,22 @@
     "epoch": "any",
     "name": "Rope Footbridge",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:salt_flat_tile": {
+    "prompt": "a cracked white salt-flat terrain tile, seamless, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "158b6aab-a018-4900-8923-81c3b946024e",
+    "path": "/models/generated/tripo/salt_flat_tile.glb",
+    "bytes": 14877952,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/158b6aab-a018-4900-8923-81c3b946024e/tripo_pbr_model_158b6aab-a018-4900-8923-81c3b946024e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMTU4YjZhYWItYTAxOC00OTAwLTg5MjMtODFjM2I5NDYwMjRlL3RyaXBvX3Bicl9tb2RlbF8xNThiNmFhYi1hMDE4LTQ5MDAtODkyMy04MWMzYjk0NjAyNGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=R5MU7FL1L5dFhsLiyrDjIsL4gz0lxYTAly45vCoafjpFlSsdfhiDqeN1ESFJnU5UuuurfjsOVVwuNuyMRylkmH4mDuKaUicvO8BV3OOWATvo28tzoPLtxEzqfE-HQra-LhLMDmhAZFKske8AHj5rTVQ0y9BCzBvi21NYBEn8Mcqds2lSEiNUy~4u5rValiAdrsDFRoxnK7m0lmChFjsq~CLGhdgkunJgY~VR~2IKzrZPiT7I2cAtsjLSyPiO155nuG3A5dDVoisepo3ZQgkJvQB6CflsJ65YkREf2xz2kFX3oNy775fgo~aq554aiKAok6KdQWNy7f9FHRSRHk1c2Q__",
+    "asset_id": "salt_flat_tile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Salt Flat Tile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
