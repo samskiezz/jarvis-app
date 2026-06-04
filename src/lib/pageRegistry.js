@@ -197,6 +197,9 @@ export const PAGES = [
   { name: "ForgeConsole", label: "Forge", icon: "🛠️", group: "apex",
     aliases: ["forge","code improve","self-improving","autonomous","approvals","ollama","agent"],
     component: P(() => import("@/pages/ForgeConsole")) },
+  { name: "ObjectView", label: "Object View", icon: "🗂️", group: "platform",
+    aliases: ["object view","foundry","object","properties","related","actions","detail","explorer"],
+    component: P(() => import("@/pages/ObjectView")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
