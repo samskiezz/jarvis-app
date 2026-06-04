@@ -42,7 +42,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 35 | ☐ | server/scripts/train_sp500.py | 160 |
 | 36 | ☑ | server/services/__init__.py | 0 |
 | 37 | ☑ | server/services/analyst.py | 144 |
-| 38 | ☐ | server/services/backtest.py | 315 |
+| 38 | ☑ | server/services/backtest.py | 315 |
 | 39 | ☑ | server/services/corpus.py | 53 |
 | 40 | ☑ | server/services/forecaster.py | 567 |
 | 41 | ☑ | server/services/forecaster_ml.py | 624 |
@@ -731,3 +731,4 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 - `server/scripts/live_5min.py` — live 5-min forward runner: predicts next 5-min bar, resolves+scores closed bars, JSON state, cumulative dir/level/coverage scorecard (authored this session)
 - `server/scripts/accuracy_scorecard.py` — multi-metric scorecard: level-acc(1-MAPE) vs persistence + within1/2% + directional + coverage across deep crypto/index/equity history (authored this session)
 - `server/scripts/train_backtest.py` — multi-asset train+walk-forward backtest over deep_history basket; MAE/dir/coverage/skill-vs-persistence (authored this session)
+- `server/services/backtest.py` — walk-forward rolling-origin tester: backtest() trains on trailing window only, predicts h ahead, scores vs realized w/ assert leakage guard (L98); metrics MAE/RMSE/dir-acc/coverage/skill-vs-persistence + leakage_audit (L171); _synthetic_ar1_trend learnable series (L208); five_minute_test real CoinGecko days=1 5-min w/ honest synthetic fallback (L235)
