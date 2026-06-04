@@ -9985,5 +9985,22 @@
     "epoch": "any",
     "name": "Waterfall Large",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wrought_iron_railing": {
+    "prompt": "a decorative wrought-iron railing fence segment, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "90f8b18e-4d1c-4f66-b4e9-e1a07cdb5ec0",
+    "path": "/models/generated/tripo/wrought_iron_railing.glb",
+    "bytes": 10783528,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/90f8b18e-4d1c-4f66-b4e9-e1a07cdb5ec0/tripo_pbr_model_90f8b18e-4d1c-4f66-b4e9-e1a07cdb5ec0.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOTBmOGIxOGUtNGQxYy00ZjY2LWI0ZTktZTFhMDdjZGI1ZWMwL3RyaXBvX3Bicl9tb2RlbF85MGY4YjE4ZS00ZDFjLTRmNjYtYjRlOS1lMWEwN2NkYjVlYzAuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=xHJjVZBBXKp2v8zsGlF20p06~xcXAVa3Svxj3yXsv~2gtozBED7MvKbI9WMDEV6Fatmj799FnZrIzVsKNkr6iMf1CdPLg4gUK4TOnP2DfYjV25n6Vus4NdQdV-BVS9nQGnIKAmlQEUklxfgk32Wn4KuuN62qX7W84HE1vLZm2AapWG5BrOz7oCNkkSWNMOJgl0tYgbYoabaPqF2ShXTW3J1NjSTDacWPFr29HhBOBagF10woB1jJC7YHtD5uA6FraprOAkaw-dqPhb~4ip7-jN9GTYH9tyBAOWX6fu3XQ2PFiwZis~WQ4h90OUBRYV9TTdsZssRZy8Tb4G2rl2Zihg__",
+    "asset_id": "wrought_iron_railing",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "industrial",
+    "name": "Wrought Iron Railing",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
