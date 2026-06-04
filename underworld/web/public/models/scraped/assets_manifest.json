@@ -10954,5 +10954,22 @@
     "epoch": "iron",
     "name": "Crossbow",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:energy_rifle": {
+    "prompt": "a sleek energy rifle with a glowing power cell, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "c0519921-fd0d-4b83-bc4b-dbb75fed4ba4",
+    "path": "/models/generated/tripo/energy_rifle.glb",
+    "bytes": 6270036,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/c0519921-fd0d-4b83-bc4b-dbb75fed4ba4/tripo_pbr_model_c0519921-fd0d-4b83-bc4b-dbb75fed4ba4.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYzA1MTk5MjEtZmQwZC00YjgzLWJjNGItZGJiNzVmZWQ0YmE0L3RyaXBvX3Bicl9tb2RlbF9jMDUxOTkyMS1mZDBkLTRiODMtYmM0Yi1kYmI3NWZlZDRiYTQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=eKC~xq28xJirYYFCkcrm8UPNnJgm-St6tCHYhSNrcF9oZ0gPQtY2V6DGxJagzACWG-N5r-wn6qRI7dbuk2kwMy9rrYReaWW8TbNL~W0Pb70OrRWK8xvtA~A6-nzIyACgjWucg85t6Mv--cQ0jfyccCqaEswPjL3mAUiIpw6uRcSQlhK2yF399Y2RuGZtSmczFmrsDMrDBrEB8qtomlDbSSoA~mZ1Xn4b~CQLq2keASkQ5CavtyiJ7dVv4ZHrm4Hx6WBOsiBue26APcKLTwzOjM6rlA-rRD3~VKic1xutGMkiw925EfU5HvREjj~IyYjHpfnpxEVniGHeH6n1A9TUSg__",
+    "asset_id": "energy_rifle",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "quantum",
+    "name": "Energy Rifle",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
