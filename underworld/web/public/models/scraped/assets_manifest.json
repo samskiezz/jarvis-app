@@ -11005,5 +11005,22 @@
     "epoch": "stone",
     "name": "Flint Handaxe",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:flintlock_pistol": {
+    "prompt": "an ornate flintlock pistol, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "835b2049-a591-4dd7-8cde-23a558696ee6",
+    "path": "/models/generated/tripo/flintlock_pistol.glb",
+    "bytes": 5334136,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/835b2049-a591-4dd7-8cde-23a558696ee6/tripo_pbr_model_835b2049-a591-4dd7-8cde-23a558696ee6.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODM1YjIwNDktYTU5MS00ZGQ3LThjZGUtMjNhNTU4Njk2ZWU2L3RyaXBvX3Bicl9tb2RlbF84MzViMjA0OS1hNTkxLTRkZDctOGNkZS0yM2E1NTg2OTZlZTYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=jcEWMyRfK4Ux0SQ6BTTokEWdTHBac-w647iq7Tvs1SjPpvvgiwmvSSOr3FuLhhJTfMohxHxDePG5NxmFNuqiQOMXjFswIhH7oal8lpKwnQEntNRvD0nJs2FksUepN0gYaSj8QRyGvZw3Ub38067NXlPRi9udKCb0gHdWmL1kB2Zg9BF3H2cBELF3ejvwwVYgkEF-UGEGoeqUhBCGP-5289P~TJbr9cq~SteomiM32wkPEZdVvBa7ELXuRzv8gySlQZ9kftPnV2dkPZKajmq6XBryJOwzooHUS9Gh1VyH8802g68YSnazKAHXRDWUqmD~S5c8ohwSpsDbwSZJQRDFVA__",
+    "asset_id": "flintlock_pistol",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Flintlock Pistol",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
