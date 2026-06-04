@@ -5,6 +5,7 @@ from .config import CORS_ORIGINS
 from .routes import auth as auth_routes
 from .routes import entities as entities_routes
 from .routes import functions as functions_routes
+from .routes import predict as predict_routes
 from .routes import streams as streams_routes
 
 
@@ -20,6 +21,7 @@ def create_app() -> FastAPI:
 
     app.include_router(auth_routes.router)
     app.include_router(functions_routes.router)
+    app.include_router(predict_routes.router)
     app.include_router(entities_routes.router)
     app.include_router(streams_routes.router)
 
