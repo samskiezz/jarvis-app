@@ -10971,5 +10971,22 @@
     "epoch": "quantum",
     "name": "Energy Rifle",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:field_cannon": {
+    "prompt": "a wheeled iron field artillery cannon, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "35d58cf3-de87-45b5-8308-6265f45da69b",
+    "path": "/models/generated/tripo/field_cannon.glb",
+    "bytes": 12233500,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/35d58cf3-de87-45b5-8308-6265f45da69b/tripo_pbr_model_35d58cf3-de87-45b5-8308-6265f45da69b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzVkNThjZjMtZGU4Ny00NWI1LTgzMDgtNjI2NWY0NWRhNjliL3RyaXBvX3Bicl9tb2RlbF8zNWQ1OGNmMy1kZTg3LTQ1YjUtODMwOC02MjY1ZjQ1ZGE2OWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=ZhCYSbQEE7qtitmK89rB9ULmtlbOemvR7So3djOrwzyaaKYo2-jIIXWspIVPK~PypDLM4q1V50MnIhw9ysgHGgHrPjDpyrGXtpgQSeJX2jrMGTtfPq5vtVfyKfMuJrd8Mab5kimsC6ZNTKEveHsomDEnsxUgkHpDpCiJbu2YFB9VtGADfAXkh1Xo1h6WgHGsj1~N-eFIOGB0KsbEHhAK9F4EeDeQHQTKoLWidlH08f5K~84t6xJvpjQXywGiPZAhDqDnhpn1MRO0XXMtKMSaNYUqfJnVe6OM81bz34zGrePsMz-6x7LoRtrjf2NvnepePVSP7atsGM8dHzbeah0~pg__",
+    "asset_id": "field_cannon",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "industrial",
+    "name": "Field Cannon",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
