@@ -10750,5 +10750,22 @@
     "epoch": "industrial",
     "name": "Steam Locomotive",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:submarine": {
+    "prompt": "a riveted steel submarine with a conning tower, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ac1682c8-b2ba-4b21-a1f6-c0da590d531b",
+    "path": "/models/generated/tripo/submarine.glb",
+    "bytes": 6584300,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ac1682c8-b2ba-4b21-a1f6-c0da590d531b/tripo_pbr_model_ac1682c8-b2ba-4b21-a1f6-c0da590d531b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYWMxNjgyYzgtYjJiYS00YjIxLWExZjYtYzBkYTU5MGQ1MzFiL3RyaXBvX3Bicl9tb2RlbF9hYzE2ODJjOC1iMmJhLTRiMjEtYTFmNi1jMGRhNTkwZDUzMWIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=mtnWTgFXqqlN2uJ8~tQ0~P-tYHXsKTH5lNn8Dlx6MjZ5HqNZcwvjtrvnDnuNcC0zf7TKcj2YEfZUhcLbjtG9TDhSQSfHEiWpo9nnv-SgMX6TAQjTTDgMZECPceT3AXH8sA5T1r70kBRQAbeio-z8KWBYVr2HLk1yvxUzQvEKhYS43lM8pI5cJJxnkqTv57ySYQ-IMIush0C7GvvXVPFW-TRIbmyWnhQrmGqIfbqkBc~cJgvILFELtBndYHqx7BuO3VI7cJfYIx3cXgnc-gwHkCiX6Ak4I6l03ZzIVOiECGmAjwRfSZti3QgNX2L1aja9hfs569OiiBr5DYuRB2zsVQ__",
+    "asset_id": "submarine",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Submarine",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
