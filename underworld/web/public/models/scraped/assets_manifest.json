@@ -11277,5 +11277,22 @@
     "epoch": "iron",
     "name": "Wooden Round Shield",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:barrel_cluster": {
+    "prompt": "a cluster of wooden storage barrels, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "32dd1dfc-0e30-4ec0-8519-a841a41d6d0e",
+    "path": "/models/generated/tripo/barrel_cluster.glb",
+    "bytes": 14904080,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/32dd1dfc-0e30-4ec0-8519-a841a41d6d0e/tripo_pbr_model_32dd1dfc-0e30-4ec0-8519-a841a41d6d0e.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMzJkZDFkZmMtMGUzMC00ZWMwLTg1MTktYTg0MWE0MWQ2ZDBlL3RyaXBvX3Bicl9tb2RlbF8zMmRkMWRmYy0wZTMwLTRlYzAtODUxOS1hODQxYTQxZDZkMGUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=wUnIDrJ8fI9swdIDuv96b5LFc3CVTJUAmH9UZbYN~NNH2PEKakehR45z6ZRTgN6lAxR3ji7vfOJ4q19orOyqD4ImqMQtICUy2yIkqMLkNcP5iisww2SG-hN9l9IJlKt8DRmKnz3u4U4c8QVUfc5jwCsk5Qrv5LGLh~vPLQLsOBliwNE3UtEHp4Rcu0OWz37NFex5GuToz0VpoGLhFzI3P9GjdKa5iGWu07hc2q1FVMLd7DlGKcRHS5EKh0TrrX9vDjLfU6FZ23Lw3Cgz-N7Fdzynv7XGvLPl6mrjsCT4XQzOjt7JVyCc1jpfYyH-a23OiP9fgEXgMy6vwEwn4atDuQ__",
+    "asset_id": "barrel_cluster",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Barrel Cluster",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
