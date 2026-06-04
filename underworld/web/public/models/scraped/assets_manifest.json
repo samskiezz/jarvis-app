@@ -10852,5 +10852,22 @@
     "epoch": "stone",
     "name": "Wooden Sled",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:battle_axe": {
+    "prompt": "a broad double-bladed battle axe, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "ffe259e2-709b-4edb-8595-aee8cc865f83",
+    "path": "/models/generated/tripo/battle_axe.glb",
+    "bytes": 5886144,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/ffe259e2-709b-4edb-8595-aee8cc865f83/tripo_pbr_model_ffe259e2-709b-4edb-8595-aee8cc865f83.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZmZlMjU5ZTItNzA5Yi00ZWRiLTg1OTUtYWVlOGNjODY1ZjgzL3RyaXBvX3Bicl9tb2RlbF9mZmUyNTllMi03MDliLTRlZGItODU5NS1hZWU4Y2M4NjVmODMuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=OKZk9gCf9xGmGmuybs4Orgys4RlJD8LtUR~F4pjzi1pdRMZIZwTb5acNRaydQqmQNvZCk7D76AIcYc6nbHoyjrmwhhGHkNJMWqXAVU5gxHF3kS95FmLJIhwZ-0Vs~IzGYHZ~oPyOSPy-PcloxuPfKH51nhz9bsHA~Sa4V~xCLfGZJf6Upk5VugGokcjvSTm6E0L-4r7lusj3aU90MKfoSEaxT1ex-2LubxIgpIcwDPSVhY8KTgWv9u-BshCxpZzl4Zc1tANNkX6Ja84kDvqgDbvlHa~TdAQZItzSuKrbmz8N3jA2YyM9CYQ7fuz-rmbgH~Ka-qoP5LzD9~WQRFNK~A__",
+    "asset_id": "battle_axe",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Battle Axe",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
