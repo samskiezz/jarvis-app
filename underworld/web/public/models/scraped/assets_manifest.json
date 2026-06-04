@@ -9662,5 +9662,22 @@
     "epoch": "any",
     "name": "Road Curve Wide",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:road_t_junction": {
+    "prompt": "a T-junction paved road tile, modular, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "adeac39e-e75f-4e7b-be22-0863fb4e84d2",
+    "path": "/models/generated/tripo/road_t_junction.glb",
+    "bytes": 12453740,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/adeac39e-e75f-4e7b-be22-0863fb4e84d2/tripo_pbr_model_adeac39e-e75f-4e7b-be22-0863fb4e84d2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYWRlYWMzOWUtZTc1Zi00ZTdiLWJlMjItMDg2M2ZiNGU4NGQyL3RyaXBvX3Bicl9tb2RlbF9hZGVhYzM5ZS1lNzVmLTRlN2ItYmUyMi0wODYzZmI0ZTg0ZDIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Dw1PqYVno2eornQ90WJWXdxMbHMMHNVG4T05n-~mXMxzJT5NpRXelphl8XTkkwNI2EqcsNxTR~xYzYiXCE39a-4l99iTckeYlk6mCbC8a8pNT9URsuCkT~7RgHcVdVe1Qgw4T~zlSE0SmW02tPIiDKMrmW1yttX9c39xMtvJPFE6s77VPWsbQChKmlb-rAk67zDqpJyeg1U91G8hN5CF7ZXa-u3gMn8xOaGKAa8CNpWHiwFdYup1xoYoJ6thxd~oqND4ZKcCPsyBacfQr-KQY2BzO8CoU7YibWA35~Yop4J-~uo1dFptMu-bpBgAT5RjTA4XM40ndBvw6YlOBhF2bg__",
+    "asset_id": "road_t_junction",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "terrain",
+    "epoch": "any",
+    "name": "Road T Junction",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
