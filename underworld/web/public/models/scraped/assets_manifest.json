@@ -11447,5 +11447,39 @@
     "epoch": "iron",
     "name": "Hitching Post",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:iron_park_bench": {
+    "prompt": "a cast-iron and wood park bench, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "d852e157-c75f-4507-ba70-450d7c9c8b21",
+    "path": "/models/generated/tripo/iron_park_bench.glb",
+    "bytes": 10359436,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/d852e157-c75f-4507-ba70-450d7c9c8b21/tripo_pbr_model_d852e157-c75f-4507-ba70-450d7c9c8b21.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZDg1MmUxNTctYzc1Zi00NTA3LWJhNzAtNDUwZDdjOWM4YjIxL3RyaXBvX3Bicl9tb2RlbF9kODUyZTE1Ny1jNzVmLTQ1MDctYmE3MC00NTBkN2M5YzhiMjEuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=t07K9Oc1MFXiL4u6623caFevILqwLxZ-eaPF6MfD9B5fogb-Y6Re0wfs78Nt4w8egK2eD9GlPFVs87AGy4N8e9mWV4xlfIcTnTHTkfcHWpRcrEosMOFed3CIIeUQFVduPCdSa69T-SDIIlNZjCB1NKL6IiTwDNYaw8O7H4BBMlJ-pK38dcZKoSlssgzeheyPjFWYaknv8N69rsPwvHmlO9qCkd8Ujm59KVc1KSfTH5kadd9idJiMwpSGqRgAw5bfbzDImEjIjAfCaWMbWrBiYUP914UU1Bfoa8z19cLX-aUTT5Fk6l0Pnb1Jma93y4c9iPitxx0NIZhtwxMszBzSMg__",
+    "asset_id": "iron_park_bench",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "industrial",
+    "name": "Iron Park Bench",
+    "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:lantern_string": {
+    "prompt": "a hanging string of paper lanterns, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "dbb9d2d8-e6af-43e3-8967-8593e8294606",
+    "path": "/models/generated/tripo/lantern_string.glb",
+    "bytes": 3774052,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/dbb9d2d8-e6af-43e3-8967-8593e8294606/tripo_pbr_model_dbb9d2d8-e6af-43e3-8967-8593e8294606.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvZGJiOWQyZDgtZTZhZi00M2UzLTg5NjctODU5M2U4Mjk0NjA2L3RyaXBvX3Bicl9tb2RlbF9kYmI5ZDJkOC1lNmFmLTQzZTMtODk2Ny04NTkzZTgyOTQ2MDYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=NJjzNjrlQwHinATR4JFCvEVxgM33ZKcsL7CQMWGnv-NROZotPatSKKIEDhBgyOTo3EWRykx0WgHsPsf1z11ahu-PwQidslXSVlibBX9JVszOVLM9-tCQWZQ4Z~lGnM6xwrFBoOI1ZNIWZccEvaeQb7oQuP99~I8k4ABb3lpy5olxShpDAPnDJzjEpEuaf-jXniYJNXk21I6pppxwCL3bLM2WPGU28p-VcTErhIKZNMtk8Ehdh8tP7eFUImQ4BB5MMDOlVbVny~lQkkBdtX3t92urUc24NbrnK2NrqDBfh8ICbETesi2gsqiartryQ13-ZiQ38UvA6kNykYQEt4FPUQ__",
+    "asset_id": "lantern_string",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "iron",
+    "name": "Lantern String",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
