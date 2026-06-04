@@ -15,23 +15,23 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 8 | ☐ | forge/tests/test_whatsapp.py | 133 |
 | 9 | ☐ | forge/webhook.py | 141 |
 | 10 | ☐ | postcss.config.js | 6 |
-| 11 | ☐ | server/__init__.py | 0 |
-| 12 | ☐ | server/auth.py | 31 |
-| 13 | ☐ | server/config.py | 25 |
-| 14 | ☐ | server/data/__init__.py | 0 |
+| 11 | ☑ | server/__init__.py | 0 |
+| 12 | ☑ | server/auth.py | 31 |
+| 13 | ☑ | server/config.py | 25 |
+| 14 | ☑ | server/data/__init__.py | 0 |
 | 15 | ☐ | server/data/corpus.py | 120 |
 | 16 | ☐ | server/data/ontology.py | 84 |
-| 17 | ☐ | server/llm/__init__.py | 0 |
-| 18 | ☐ | server/llm/kimi.py | 77 |
-| 19 | ☐ | server/main.py | 76 |
-| 20 | ☐ | server/routes/__init__.py | 0 |
-| 21 | ☐ | server/routes/auth.py | 10 |
-| 22 | ☐ | server/routes/entities.py | 106 |
-| 23 | ☐ | server/routes/functions.py | 76 |
-| 24 | ☐ | server/routes/history.py | 64 |
-| 25 | ☐ | server/routes/predict.py | 114 |
-| 26 | ☐ | server/routes/streams.py | 50 |
-| 27 | ☐ | server/scripts/__init__.py | 0 |
+| 17 | ☑ | server/llm/__init__.py | 0 |
+| 18 | ☑ | server/llm/kimi.py | 77 |
+| 19 | ☑ | server/main.py | 76 |
+| 20 | ☑ | server/routes/__init__.py | 0 |
+| 21 | ☑ | server/routes/auth.py | 10 |
+| 22 | ☑ | server/routes/entities.py | 106 |
+| 23 | ☑ | server/routes/functions.py | 76 |
+| 24 | ☑ | server/routes/history.py | 64 |
+| 25 | ☑ | server/routes/predict.py | 114 |
+| 26 | ☑ | server/routes/streams.py | 50 |
+| 27 | ☑ | server/scripts/__init__.py | 0 |
 | 28 | ☐ | server/scripts/accuracy_scorecard.py | 87 |
 | 29 | ☐ | server/scripts/forward_test.py | 179 |
 | 30 | ☐ | server/scripts/horizon_sweep.py | 233 |
@@ -40,7 +40,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 33 | ☐ | server/scripts/train_backtest.py | 81 |
 | 34 | ☐ | server/scripts/train_oracle.py | 163 |
 | 35 | ☐ | server/scripts/train_sp500.py | 160 |
-| 36 | ☐ | server/services/__init__.py | 0 |
+| 36 | ☑ | server/services/__init__.py | 0 |
 | 37 | ☐ | server/services/analyst.py | 144 |
 | 38 | ☐ | server/services/backtest.py | 315 |
 | 39 | ☐ | server/services/corpus.py | 53 |
@@ -55,7 +55,7 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 48 | ☐ | server/services/scrapers.py | 185 |
 | 49 | ☐ | server/services/simulation.py | 783 |
 | 50 | ☐ | server/services/train_sp500.py | 425 |
-| 51 | ☐ | server/tests/__init__.py | 0 |
+| 51 | ☑ | server/tests/__init__.py | 0 |
 | 52 | ☐ | server/tests/test_forecaster.py | 137 |
 | 53 | ☐ | server/tests/test_forecaster_ml.py | 149 |
 | 54 | ☐ | server/tests/test_forward_test.py | 173 |
@@ -685,3 +685,22 @@ Generated 2026-06-04T10:25Z. Auditable: check any ☑ entry against the code.
 | 678 | ☐ | underworld/web/vite.config.ts | 16 |
 | 679 | ☐ | underworld/web/vitest.config.ts | 14 |
 | 680 | ☐ | vite.config.js | 20 |
+
+## BATCH 1 FINDINGS — JARVIS backend core (read in full)
+- `server/config.py` — env config: API_KEY default 'dev-key' (L3), Kimi base/model (L4-6), REQUIRE_AUTH=false default (L11), USGS/FX feeds (L22-24), TTL 60s (L25)
+- `server/auth.py` — _check bearer (L6); require_bearer strict (L15); optional_bearer public-unless-REQUIRE_AUTH (L20)
+- `server/main.py` — FastAPI app; lifespan opt-in ingestion (HISTORY_INGEST_ENABLED L27) + forward-test loop (FORWARD_TEST_ENABLE L37-39); mounts 6 routers (L62-67); NO underworld science mounted (gap confirmed)
+- `server/routes/functions.py` — getLiveIntel (L20); analystChat SSE Kimi-or-local (L39,L46); 11 STUB functions return not_implemented (L53-76)
+- `server/routes/predict.py` — POST /functions/predict (L104)->prediction.predict; opt-in forward-test forecast logging _log_forecast (L45, FORWARD_TEST_LOG L33)
+- `server/routes/entities.py` — in-memory entity CRUD; _store seeded from OBJECTS+RISK_SIGNALS (L27-30); list/get/create/update/delete
+- `server/routes/streams.py` — SSE /streams/{key} (L35) at 8Hz from simulation.get_game
+- `server/routes/history.py` — P0 History Lake: /v1/history/series, /v1/history/series/{id}, /v1/predict/skill, /v1/history/ingest
+- `server/routes/auth.py` — GET /auth/me -> {role:admin,provider:kimi-k2.6} (L8)
+- `server/llm/kimi.py` — Moonshot Kimi streaming stream_chat (L26); falls back to ontology summary when no key (L32)
+- `server/__init__.py` — (empty package marker)
+- `server/data/__init__.py` — (empty package marker)
+- `server/llm/__init__.py` — (empty package marker)
+- `server/routes/__init__.py` — (empty package marker)
+- `server/scripts/__init__.py` — (empty package marker)
+- `server/services/__init__.py` — (empty package marker)
+- `server/tests/__init__.py` — (empty package marker)
