@@ -15,6 +15,7 @@ from .routes import chat_predict as chat_predict_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
+from .routes import governance as governance_routes
 from .routes import graph as graph_routes
 from .routes import graph_time as graph_time_routes
 from .routes import labs as labs_routes
@@ -38,6 +39,7 @@ from .routes import search_semantic as search_semantic_routes
 from .routes import security as security_routes
 from .routes import streams as streams_routes
 from .routes import temporal as temporal_routes
+from .routes import vault as vault_routes
 from .routes import tenancy as tenancy_routes
 from .routes import workshop as workshop_routes
 
@@ -126,6 +128,8 @@ def create_app() -> FastAPI:
     app.include_router(graph_time_routes.router)
     app.include_router(investigations_routes.router)
     app.include_router(chat_predict_routes.router)
+    app.include_router(governance_routes.router)
+    app.include_router(vault_routes.router)
 
     @app.get("/")
     async def root():
