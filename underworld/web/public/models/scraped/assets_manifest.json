@@ -10478,5 +10478,22 @@
     "epoch": "information",
     "name": "City Bus",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:delivery_truck": {
+    "prompt": "a small boxy delivery truck, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "618f64e3-12a4-4008-ac4b-8d0e96d5119f",
+    "path": "/models/generated/tripo/delivery_truck.glb",
+    "bytes": 15006548,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/618f64e3-12a4-4008-ac4b-8d0e96d5119f/tripo_pbr_model_618f64e3-12a4-4008-ac4b-8d0e96d5119f.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNjE4ZjY0ZTMtMTJhNC00MDA4LWFjNGItOGQwZTk2ZDUxMTlmL3RyaXBvX3Bicl9tb2RlbF82MThmNjRlMy0xMmE0LTQwMDgtYWM0Yi04ZDBlOTZkNTExOWYuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=W8MEee~0xWfNBBVUgoyD68LaLFB~kBhK5iPLtxfAmFRV5i0J16Qz0TPZvpYP5I3Jc8rtmvxvflD5y0HygbZ~otKLyOlbYBqW7MfFgG0S4QN5PRylygBRbTUwOPrdlIEYOAe4OUr8UpfKoqLzDHHG8NliCOp6k5a3UjGW1ob67VZbalw70er01cqZ0uEc44oOe04buN5F71gPCf-eFmwgtecWlWkt6XdKWq4lXcNSafpBM5IjvdoqjtdVsruKQOQlGFuQ4iAOVaxVTKnycvE3-HCcpyZSrLcglyJX8mfLqyNDYb3zGdxls4PmDun7NyN6skajS9ZTdhwjhOfIa8FRwQ__",
+    "asset_id": "delivery_truck",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "information",
+    "name": "Delivery Truck",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
