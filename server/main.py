@@ -14,16 +14,19 @@ from .routes import entities as entities_routes
 from .routes import graph as graph_routes
 from .routes import labs as labs_routes
 from .routes import functions as functions_routes
+from .routes import geo as geo_routes
 from .routes import history as history_routes
 from .routes import ontology as ontology_routes
 from .routes import ops as ops_routes
 from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
 from .routes import reports as reports_routes
+from .routes import scenario as scenario_routes
 from .routes import science as science_routes
 from .routes import search as search_routes
 from .routes import security as security_routes
 from .routes import streams as streams_routes
+from .routes import temporal as temporal_routes
 from .routes import workshop as workshop_routes
 
 
@@ -93,6 +96,9 @@ def create_app() -> FastAPI:
     app.include_router(labs_routes.router)
     app.include_router(workshop_routes.router)
     app.include_router(admin_routes.router)
+    app.include_router(temporal_routes.router)
+    app.include_router(geo_routes.router)
+    app.include_router(scenario_routes.router)
 
     @app.get("/")
     async def root():

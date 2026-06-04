@@ -148,6 +148,17 @@ export const PAGES = [
     aliases: ["admin", "metrics", "health", "labs", "system"],
     component: P(() => import("@/pages/SystemAdmin")) },
 
+  // ── PLATFORM (Wave-6 backends: temporal · geo · scenario) ────────────────
+  { name: "TemporalConsole", label: "Temporal Console", icon: "⏱️", group: "platform",
+    aliases: ["temporal", "timeline", "replay", "events", "anomaly", "scrubber"],
+    component: P(() => import("@/pages/TemporalConsole")) },
+  { name: "GeoWorkspace", label: "Geo Workspace", icon: "🗺️", group: "platform",
+    aliases: ["geo", "map", "geospatial", "radius", "geofence", "layers", "tracks"],
+    component: P(() => import("@/pages/GeoWorkspace")) },
+  { name: "ScenarioLab", label: "Scenario Lab", icon: "🧪", group: "platform",
+    aliases: ["scenario", "whatif", "what-if", "optimize", "model registry", "drift"],
+    component: P(() => import("@/pages/ScenarioLab")) },
+
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
     component: P(() => import("@/pages/InvestmentTracker")) },
