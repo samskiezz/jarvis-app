@@ -10,6 +10,9 @@ from .routes import aip as aip_routes
 from .routes import aip_tools as aip_tools_routes
 from .routes import auth as auth_routes
 from .routes import datasets as datasets_routes
+from .routes import brain_crm as brain_crm_routes
+from .routes import brain_extras as brain_extras_routes
+from .routes import brain_research as brain_research_routes
 from .routes import bridge as bridge_routes
 from .routes import chat_predict as chat_predict_routes
 from .routes import collab as collab_routes
@@ -132,6 +135,9 @@ def create_app() -> FastAPI:
     app.include_router(governance_routes.router)
     app.include_router(vault_routes.router)
     app.include_router(second_brain_routes.router)
+    app.include_router(brain_research_routes.router)
+    app.include_router(brain_crm_routes.router)
+    app.include_router(brain_extras_routes.router)
 
     @app.get("/")
     async def root():
