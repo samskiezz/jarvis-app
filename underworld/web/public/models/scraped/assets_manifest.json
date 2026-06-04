@@ -11617,5 +11617,22 @@
     "epoch": "iron",
     "name": "Stone Water Trough",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:stone_well": {
+    "prompt": "a round stone well with a roof and bucket, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "95271d59-3dc6-435f-af13-91405916988b",
+    "path": "/models/generated/tripo/stone_well.glb",
+    "bytes": 15076132,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/95271d59-3dc6-435f-af13-91405916988b/tripo_pbr_model_95271d59-3dc6-435f-af13-91405916988b.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvOTUyNzFkNTktM2RjNi00MzVmLWFmMTMtOTE0MDU5MTY5ODhiL3RyaXBvX3Bicl9tb2RlbF85NTI3MWQ1OS0zZGM2LTQzNWYtYWYxMy05MTQwNTkxNjk4OGIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=cpdS2do~xbguhPu-1oUPVEmyRSnJwPRIJLsISZoXloFdIhFLYnwLxD8uExnuS6dEPltkrWt-DgQak620hXyYuVXrYKGYLluMYJauQPZfD-BdfUPaEwExIE~gcMNNiOvmzejqkihzkhZgwoluojCEx1tcmgSsYhFNbSrJWHBCFZAjnJHhvvhx-djQuYyFc5lfj4kB~85a4BIRgfTCml5EpFJVRCuJ9KRxtJbzCFzg5HZCkkOY8yBnDFjOEc7u~qFMizAjYW133l2ZXAO3QVOCKT-1iNx2DoDc62gfN8GeK8X-HCtbL5xz7Gy~4lPQjeCJ8P1E5UGCk~0KnWPwuLpKsQ__",
+    "asset_id": "stone_well",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Stone Well",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
