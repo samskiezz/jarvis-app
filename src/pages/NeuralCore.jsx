@@ -110,8 +110,13 @@ const PRESETS = {
   cube: [64, 64, 64, 64, 64, 64],
 };
 
-// Scale selector for the massive cloud. Each option is the neuron point count;
-// the synapse haze tracks at ~1/3 of that, lines are capped separately.
+// ── LOD model ───────────────────────────────────────────────────────────────
+// renderBudget = the MAX number of points the GPU ever draws (bounded, 60fps).
+// totalNodes  = the LOGICAL/conceptual graph size, data-driven & unbounded
+//               (millions → billions → trillions). The drawn cloud is always a
+//               density-faithful SAMPLE of min(totalNodes, renderBudget) points.
+// This is honest billion/trillion-scale LOD: deck.gl / Palantir / Gephi style —
+// you never draw literal billions of primitives, you draw a representative slice.
 const SCALES = [
   { id: "250k", label: "250K", neurons: 250_000 },
   { id: "1m", label: "1M", neurons: 1_000_000 },
@@ -119,9 +124,20 @@ const SCALES = [
   { id: "2m", label: "2M", neurons: 2_000_000 },
   { id: "3m", label: "3M", neurons: 3_000_000 },
 ];
-const DEFAULT_SCALE = "1.5m";       // ~1,500,000 neurons by default
+const DEFAULT_SCALE = "1.5m";       // render budget default (~1,500,000 drawn)
 const HAZE_RATIO = 1 / 3;           // synapse haze points per neuron
 const MAX_LINES = 48_000;           // hard-capped near-focus line definition
+
+// Logical total-node tiers — unbounded by GPU; up to 1e12 (one trillion).
+const TOTALS = [
+  { id: "1.5m", label: "1.5M", total: 1_500_000 },
+  { id: "10m", label: "10M", total: 10_000_000 },
+  { id: "100m", label: "100M", total: 100_000_000 },
+  { id: "1b", label: "1B", total: 1_000_000_000 },
+  { id: "1t", label: "1T", total: 1_000_000_000_000 },
+];
+const DEFAULT_TOTAL = "1.5m";
+const AVG_DEGREE = 32;              // conceptual synapses ≈ totalNodes * avgDegree
 
 // ── shared glow shaders (reused by neuron cloud + synapse haze) ─────────────
 const CLOUD_VERT = `
@@ -298,12 +314,14 @@ function makeCloudPoints(count, pos, col, size, depth, phase, { opacity, sizeBoo
   return { points: new THREE.Points(geo, mat), geo, mat, count };
 }
 
-function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
+function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) {
   const mountRef = useRef(null);
   const onStatsRef = useRef(onStats);
   onStatsRef.current = onStats;
   const onStepDownRef = useRef(onStepDown);
   onStepDownRef.current = onStepDown;
+  const totalNodesRef = useRef(totalNodes);
+  totalNodesRef.current = totalNodes;
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -338,12 +356,20 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
     let fpsCB = null;        // per-frame fps reporter (cloud mode)
     let waveSpan = 1;        // wave loop span for current mode
     let cloudMode = mode === "cloud";
+    let cloudZoom = null;    // zoom-to-detail resample state (cloud mode only)
 
     if (cloudMode) {
-      // ── MASSIVE DENSE NEURON CLOUD ──────────────────────────────────────
-      const wanted = (SCALES.find((s) => s.id === scaleId) || SCALES[2]).neurons;
+      // ── MASSIVE DENSE NEURON CLOUD (LOD SAMPLE) ─────────────────────────
+      // renderBudget = max points the GPU may draw. The drawn cloud holds
+      // min(totalNodes, renderBudget) points — a density-faithful SAMPLE of the
+      // logical total. For totalNodes ≥ renderBudget we draw exactly the budget
+      // (the distribution is identical, so 2M vs 1B look the same — correct LOD).
+      const renderBudget = (SCALES.find((s) => s.id === scaleId) || SCALES[2]).neurons;
+      const logicalTotal = totalNodes || renderBudget;
+      const wanted = Math.min(renderBudget, Math.max(1, logicalTotal));
       // try the requested scale; on allocation failure step down automatically
       const ladder = SCALES.map((s) => s.neurons).filter((n) => n <= wanted).sort((a, b) => b - a);
+      if (ladder.length === 0) ladder.push(wanted); // tiny logical totals (< 250k)
       let built = null, usedNeurons = 0;
       for (const n of ladder) {
         try {
@@ -392,11 +418,28 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
       group.add(neuronP.points);
       disposables.push(neuronP);
 
+      // ── Zoom-to-detail (cheap streaming illusion) ───────────────────────
+      // When the camera dollies in close, bias a fraction of points toward the
+      // view target so local structure densifies — implying streamed LOD without
+      // any reload. Keep a pristine copy so we can restore on dolly-out.
+      cloudZoom = {
+        posAttr: neuronP.geo.getAttribute("position"),
+        base: neuron.npos.slice(0),   // pristine positions
+        count: neuron.count,
+        applied: 0,                   // current pull amount 0..1
+      };
+
       waveSpan = 1; // depth normalized 0..1
 
+      // Conceptual synapse count scales with the LOGICAL total, not the sample:
+      // totalNodes * avgDegree. The drawn synapseCount is the rendered sample.
+      const logicalSynapses = Math.round(logicalTotal * AVG_DEGREE);
       onStatsRef.current?.({
-        neurons: usedNeurons,
-        synapses: synapseCount,
+        neurons: usedNeurons,            // points actually drawn (the LOD sample)
+        synapses: synapseCount,          // synapse primitives actually drawn
+        total: logicalTotal,             // logical/conceptual node count
+        totalSynapses: logicalSynapses,  // logical/conceptual synapse count
+        rendered: usedNeurons,           // explicit "rendering N" for the HUD
         layers: 64,
         fps: 0,
         webgl: true,
@@ -483,7 +526,20 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
       disposables.push({ geo: edgeGeo, mat: edgeMat });
 
       waveSpan = Math.max(1, layerCount - 1);
-      onStatsRef.current?.({ neurons: nodes.length, synapses: edges.length, layers: layerCount, fps: 0, webgl: true });
+      // LIVE GRAPH: the logical total reflects the real DB size (entities + links).
+      // synthetic modes (mlp/cube) just mirror their drawn counts.
+      const liveTotal = mode === "live" ? OBJECTS.length + LINKS.length : nodes.length;
+      onStatsRef.current?.({
+        neurons: nodes.length,
+        synapses: edges.length,
+        total: mode === "live" ? OBJECTS.length : nodes.length,
+        totalSynapses: mode === "live" ? LINKS.length : edges.length,
+        rendered: nodes.length,
+        liveTotal,
+        layers: layerCount,
+        fps: 0,
+        webgl: true,
+      });
 
       fpsCB = (t) => {
         const wave = (t * 0.9) % (waveSpan + 1.2);
@@ -509,6 +565,17 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
     mount.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     window.addEventListener("mousemove", onMove);
+
+    // wheel = dolly the camera (zoom). Tracked for zoom-to-detail resampling.
+    const baseZ = camera.position.z;
+    const minZ = baseZ * 0.42, maxZ = baseZ * 1.6;
+    const onWheel = (e) => {
+      e.preventDefault();
+      camera.position.z = THREE.MathUtils.clamp(
+        camera.position.z + e.deltaY * 0.01, minZ, maxZ
+      );
+    };
+    mount.addEventListener("wheel", onWheel, { passive: false });
 
     const clock = new THREE.Clock();
     let raf;
@@ -551,6 +618,36 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
         }
       }
 
+      // ── Zoom-to-detail: ease a fraction of points toward the view centre as
+      // the camera dollies in. Cheap: touches only a strided 1/8 subset/frame
+      // and lerps from a pristine copy, so it never compounds or drifts. ──────
+      if (cloudZoom) {
+        const z = camera.position.z;
+        // 0 at far zoom, →1 fully dollied in
+        const closeness = THREE.MathUtils.clamp((maxZ - z) / (maxZ - minZ), 0, 1);
+        const target = closeness * closeness * 0.5; // bias up to 50% pull-in
+        // ease applied amount toward target so it streams in smoothly
+        cloudZoom.applied += (target - cloudZoom.applied) * 0.08;
+        const a = cloudZoom.applied;
+        if (a > 0.001 || Math.abs(target - cloudZoom.applied) > 0.001) {
+          const arr = cloudZoom.posAttr.array;
+          const base = cloudZoom.base;
+          const n = cloudZoom.count;
+          // refresh a rotating 1/8 stride each frame (cheap, ~constant cost)
+          const stride = 8;
+          const off = frames % stride;
+          for (let i = off; i < n; i += stride) {
+            const i3 = i * 3;
+            // pull factor varies per-point so structure densifies, not collapses
+            const pull = a * (0.35 + 0.65 * ((i * 2654435761) % 1000) / 1000);
+            arr[i3] = base[i3] * (1 - pull * 0.55);
+            arr[i3 + 1] = base[i3 + 1] * (1 - pull * 0.55);
+            arr[i3 + 2] = base[i3 + 2] * (1 - pull * 0.55);
+          }
+          cloudZoom.posAttr.needsUpdate = true;
+        }
+      }
+
       fpsCB && fpsCB(t);
       renderer.render(scene, camera);
     };
@@ -571,6 +668,7 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
       ro.disconnect();
       window.removeEventListener("resize", onResize);
       mount.removeEventListener("mousedown", onDown);
+      mount.removeEventListener("wheel", onWheel);
       window.removeEventListener("mouseup", onUp);
       window.removeEventListener("mousemove", onMove);
       for (const d of disposables) { d.geo?.dispose(); d.mat?.dispose(); }
@@ -579,7 +677,7 @@ function NeuralCanvas({ mode, scaleId, seed, onStats, onStepDown }) {
       delete mount.dataset.neurons;
       delete mount.dataset.synapses;
     };
-  }, [mode, scaleId, seed]);
+  }, [mode, scaleId, totalNodes, seed]);
 
   return <div ref={mountRef} style={{ position: "absolute", inset: 0, cursor: "grab" }} />;
 }
@@ -593,14 +691,35 @@ const MODES = [
 
 const fmt = (n) => (n || 0).toLocaleString();
 
+// Compact big-number formatter: 1.5M / 100M / 1B / 1T. Used for huge logical
+// totals where comma form would be unreadably long.
+const fmtBig = (n) => {
+  n = n || 0;
+  if (n >= 1e12) return (n / 1e12).toFixed(n % 1e12 === 0 ? 0 : 1).replace(/\.0$/, "") + "T";
+  if (n >= 1e9) return (n / 1e9).toFixed(n % 1e9 === 0 ? 0 : 1).replace(/\.0$/, "") + "B";
+  if (n >= 1e6) return (n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1).replace(/\.0$/, "") + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(0) + "K";
+  return String(n);
+};
+
 export default function NeuralCore() {
   const [mode, setMode] = useState("cloud");           // DEFAULT = massive cloud
-  const [scaleId, setScaleId] = useState(DEFAULT_SCALE);
+  const [scaleId, setScaleId] = useState(DEFAULT_SCALE);  // GPU render budget
+  const [totalId, setTotalId] = useState(DEFAULT_TOTAL);  // logical total tier
   const [seed] = useState(() => 0xa53f);
   const [stats, setStats] = useState({ neurons: 0, synapses: 0, layers: 0, fps: 0 });
 
   const cloud = mode === "cloud";
   const live = mode === "live";
+
+  // Logical total node count. In LIVE GRAPH it tracks the real DB size; in
+  // synthetic cloud modes it's the selected total tier (up to 1e12). Set to 0
+  // for non-cloud synthetic modes so the canvas mirrors its drawn counts.
+  const totalNodes = useMemo(() => {
+    if (live) return OBJECTS.length;
+    if (cloud) return (TOTALS.find((t) => t.id === totalId) || TOTALS[0]).total;
+    return 0;
+  }, [cloud, live, totalId]);
 
   // onStats supports both full stat objects and fps-only ticks (for the live FPS)
   const handleStats = (s) => {
@@ -616,6 +735,15 @@ export default function NeuralCore() {
     () => (SCALES.find((s) => s.id === scaleId) || SCALES[2]).label,
     [scaleId]
   );
+
+  // Honest LOD display numbers.
+  // displayTotal     = logical/conceptual node count (the big number).
+  // displayRendered  = points the GPU actually draws this frame (the LOD sample).
+  // displaySynapses  = conceptual synapse count (total * avgDegree, or live links).
+  const displayTotal = stats.total || stats.neurons || 0;
+  const displayRendered = stats.rendered || stats.neurons || 0;
+  const displaySynapses = stats.totalSynapses || stats.synapses || 0;
+  const isSampling = displayTotal > displayRendered;
 
   return (
     <PageShell
@@ -648,22 +776,22 @@ export default function NeuralCore() {
     >
       <Grid min={150} style={{ marginBottom: 14 }}>
         <StatTile
-          label="Neurons"
-          value={fmt(stats.neurons)}
+          label="Nodes"
+          value={fmtBig(displayTotal)}
           accent={CYAN.getStyle()}
-          sub={cloud ? "GPU point-cloud" : live ? "live entities" : "perceptrons"}
+          sub={isSampling ? `rendering ${fmt(displayRendered)} (LOD sample)` : (live ? "live entities" : "GPU point-cloud")}
         />
         <StatTile
           label="Synapses"
-          value={"~" + fmt(stats.synapses)}
+          value={"~" + fmtBig(displaySynapses)}
           accent={C.blue}
-          sub={cloud ? "haze + capped lines" : "additive edges"}
+          sub={isSampling ? `drawing ${fmt(stats.synapses)} (sample)` : (cloud ? "haze + capped lines" : "additive edges")}
         />
         <StatTile
           label="Scale"
-          value={cloud ? scaleLabel : (live ? "LIVE" : "SIM")}
+          value={cloud ? (TOTALS.find((t) => t.id === totalId) || TOTALS[0]).label : (live ? "LIVE" : "SIM")}
           accent={AMBER.getStyle()}
-          sub={cloud ? "neuron count" : live ? "ontology bound" : `seed 0x${seed.toString(16)}`}
+          sub={cloud ? `budget ${scaleLabel} drawn` : live ? "ontology bound" : `seed 0x${seed.toString(16)}`}
         />
         <StatTile
           label="FPS"
@@ -674,8 +802,36 @@ export default function NeuralCore() {
       </Grid>
 
       {cloud && (
+        <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 8, letterSpacing: 1.5, color: C.text, marginRight: 2 }}>TOTAL</span>
+          {TOTALS.map((tNode) => {
+            const active = tNode.id === totalId;
+            return (
+              <button
+                key={tNode.id}
+                onClick={() => setTotalId(tNode.id)}
+                style={{
+                  cursor: "pointer", fontFamily: "inherit", fontSize: 9, letterSpacing: 1.5,
+                  padding: "5px 12px", borderRadius: 4,
+                  color: active ? AMBER.getStyle() : C.text,
+                  background: active ? AMBER.getStyle() + "1a" : "rgba(0,0,0,0.35)",
+                  border: `1px solid ${active ? AMBER.getStyle() + "88" : C.border}`,
+                  fontWeight: 700,
+                }}
+              >
+                {tNode.label}
+              </button>
+            );
+          })}
+          <span style={{ fontSize: 7, letterSpacing: 1, color: "rgba(168,188,200,0.5)", marginLeft: 4 }}>
+            logical · scales to 1T
+          </span>
+        </div>
+      )}
+
+      {cloud && (
         <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 8, letterSpacing: 1.5, color: C.text, marginRight: 2 }}>SCALE</span>
+          <span style={{ fontSize: 8, letterSpacing: 1.5, color: C.text, marginRight: 2 }}>RENDER</span>
           {SCALES.map((s) => {
             const active = s.id === scaleId;
             return (
@@ -695,6 +851,9 @@ export default function NeuralCore() {
               </button>
             );
           })}
+          <span style={{ fontSize: 7, letterSpacing: 1, color: "rgba(168,188,200,0.5)", marginLeft: 4 }}>
+            GPU budget · max points drawn
+          </span>
         </div>
       )}
 
@@ -708,7 +867,7 @@ export default function NeuralCore() {
           background: "radial-gradient(ellipse at 50% 42%, #04111c 0%, #010305 72%)",
           border: `1px solid ${C.border}`,
         }}>
-          <NeuralCanvas mode={mode} scaleId={scaleId} seed={seed} onStats={handleStats} onStepDown={(id) => stepDownRef.current?.(id)} />
+          <NeuralCanvas mode={mode} scaleId={scaleId} totalNodes={totalNodes} seed={seed} onStats={handleStats} onStepDown={(id) => stepDownRef.current?.(id)} />
 
           {/* HUD overlay */}
           <div style={{
@@ -718,9 +877,14 @@ export default function NeuralCore() {
             <div style={{ color: live ? C.neon : cloud ? CYAN.getStyle() : AMBER.getStyle(), fontWeight: 700 }}>
               {live ? "● LIVE GRAPH" : "◌ " + (MODES.find((m) => m.id === mode)?.label)}
             </div>
-            <div>NEURONS&nbsp;&nbsp;{fmt(stats.neurons)}</div>
-            <div>SYNAPSES&nbsp;~{fmt(stats.synapses)}</div>
-            {cloud && <div>SCALE&nbsp;&nbsp;&nbsp;&nbsp;{scaleLabel}</div>}
+            <div>NODES&nbsp;&nbsp;&nbsp;&nbsp;{fmt(displayTotal)}</div>
+            {isSampling && (
+              <div style={{ color: "rgba(168,188,200,0.75)" }}>
+                rendering {fmt(displayRendered)} (LOD sample)
+              </div>
+            )}
+            <div>SYNAPSES&nbsp;~{fmtBig(displaySynapses)}</div>
+            {cloud && <div>BUDGET&nbsp;&nbsp;&nbsp;{scaleLabel} drawn</div>}
             <div>FPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{stats.fps || "—"}</div>
             <div style={{ color: AMBER.getStyle() }}>ACTIVATION WAVE ▸ TRAVELLING BAND</div>
           </div>
@@ -728,9 +892,12 @@ export default function NeuralCore() {
           <div style={{
             position: "absolute", bottom: 10, right: 12, fontSize: 7, letterSpacing: 1.2,
             color: "rgba(168,188,200,0.5)", fontFamily: "inherit", pointerEvents: "none", textAlign: "right",
+            maxWidth: 380,
           }}>
-            DRAG TO ROTATE · ADDITIVE BLOOM · ≤2x DPR<br />
-            GPU point-cloud · {cloud ? scaleLabel : ""} neurons @ 60fps (browsers can't render literal billions)
+            DRAG TO ROTATE · SCROLL TO ZOOM · ADDITIVE BLOOM · ≤2x DPR<br />
+            Level-of-Detail — total scales with the database to billions+; the frame draws a
+            bounded representative sample (constant 60fps). No GPU renders literal billions of
+            primitives — this is how billion-scale graph viz works.
           </div>
         </div>
       </PanelCard>
