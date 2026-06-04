@@ -64,6 +64,12 @@ export const PAGES = [
   { name: "PredictionOracle", label: "Prediction Oracle", icon: "🔮", group: "cognition",
     aliases: ["predict", "forecast", "oracle", "prediction"],
     component: P(() => import("@/pages/PredictionOracle")) },
+  { name: "NeuralCore", label: "Neural Core", icon: "🧠", group: "cognition",
+    aliases: ["neural", "brain", "perceptron", "neurons"],
+    component: P(() => import("@/pages/NeuralCore")) },
+  { name: "ScienceConsole", label: "Science Console", icon: "🔬", group: "cognition",
+    aliases: ["science", "methods", "compute"],
+    component: P(() => import("@/pages/ScienceConsole")) },
 
   // ── APEX CORE ──────────────────────────────────────────────────────────
   { name: "ApexCore", label: "Apex Core", icon: "◉", group: "apex",
