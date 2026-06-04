@@ -10818,5 +10818,22 @@
     "epoch": "industrial",
     "name": "Tram Car",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wheelbarrow": {
+    "prompt": "a single-wheel wooden wheelbarrow, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0485caf2-b1c1-48f0-8ab2-297883fc0e75",
+    "path": "/models/generated/tripo/wheelbarrow.glb",
+    "bytes": 14780448,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/0485caf2-b1c1-48f0-8ab2-297883fc0e75/tripo_pbr_model_0485caf2-b1c1-48f0-8ab2-297883fc0e75.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMDQ4NWNhZjItYjFjMS00OGYwLThhYjItMjk3ODgzZmMwZTc1L3RyaXBvX3Bicl9tb2RlbF8wNDg1Y2FmMi1iMWMxLTQ4ZjAtOGFiMi0yOTc4ODNmYzBlNzUuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=iFcOm1sRIosdzz5sEglNCZ-pKa7ltzOLOruh9M7V-peX4iCQszmLwBEzKC-oFPdh~xBTPxmBF5creCZiVcRGXb9WtF1cfcvHpqmsVFV8fcqCt9MNfIwAUiQXsmkBd0u7yO00~Ce7pdQl~16bK9gApvyhjpc65vipv9gJJMWB9iik8IwkvmAOIARTu4J19EYk-ml6vqVV9bFwDGyuNf4zwKwYSmR~GvGUrRx4dhn2RTo11UOGxj3e-CVriHB-13GakEc0Qal0VNvKK9~HOHu00I4D1Atyc-Ty4io1jyWQEpZh7uKBuhM9OhqNeVJFRCG-x60ADYfHt8AxmFx5o79clQ__",
+    "asset_id": "wheelbarrow",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "iron",
+    "name": "Wheelbarrow",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
