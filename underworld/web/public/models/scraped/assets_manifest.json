@@ -11039,5 +11039,22 @@
     "epoch": "industrial",
     "name": "Gatling Gun",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:halberd": {
+    "prompt": "a long polearm halberd with an axe blade, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "bb272f92-ec9b-4226-bafa-54b41576d579",
+    "path": "/models/generated/tripo/halberd.glb",
+    "bytes": 2388496,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/bb272f92-ec9b-4226-bafa-54b41576d579/tripo_pbr_model_bb272f92-ec9b-4226-bafa-54b41576d579.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvYmIyNzJmOTItZWM5Yi00MjI2LWJhZmEtNTRiNDE1NzZkNTc5L3RyaXBvX3Bicl9tb2RlbF9iYjI3MmY5Mi1lYzliLTQyMjYtYmFmYS01NGI0MTU3NmQ1NzkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=Z81twOC7NQUhWODbobE3G2n3rszbaJOblxSx-Q-JOKYH397JeVXqMorlOws2Q5M0QK~ScZwCRxt2Wtk09o~Mnjl7mcuWcSnIN58NZMt7nEhYujtyTw9HlFNSVtveNu1IfZmO4bfEqHsKXB0ivGv~8aTnclewHJJ5Yc6snlLKWcfnXfcIw14Q5WKW65u1IuUUR0Kbqx-PqKLridAg9RwRD1-pElDEM9utXkdFO323Pc93svc7kvqyOLiUErKr~~phpopDYjqdDD3-HmQnIBPi6stUDYM4HUJJoZ7Tj42vfpckhx8ZvaODzdZLUbtZL~NcJc0NLxitqo2tCSqtlOHjkw__",
+    "asset_id": "halberd",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "weapon",
+    "epoch": "iron",
+    "name": "Halberd",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
