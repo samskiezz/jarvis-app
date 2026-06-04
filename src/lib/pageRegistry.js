@@ -200,6 +200,9 @@ export const PAGES = [
   { name: "ObjectView", label: "Object View", icon: "🗂️", group: "platform",
     aliases: ["object view","foundry","object","properties","related","actions","detail","explorer"],
     component: P(() => import("@/pages/ObjectView")) },
+  { name: "GraphCanvas", label: "Graph Canvas", icon: "🕸️", group: "platform",
+    aliases: ["graph canvas","gotham","force graph","node-link","investigation","expand","network","link analysis"],
+    component: P(() => import("@/pages/GraphCanvas")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",
