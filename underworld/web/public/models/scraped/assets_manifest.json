@@ -11566,5 +11566,22 @@
     "epoch": "any",
     "name": "Rope Coil",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:sack_pile": {
+    "prompt": "a pile of bulging grain sacks, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "3e8e40e2-7cfa-44ac-8b14-339764552dcb",
+    "path": "/models/generated/tripo/sack_pile.glb",
+    "bytes": 14928020,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/3e8e40e2-7cfa-44ac-8b14-339764552dcb/tripo_pbr_model_3e8e40e2-7cfa-44ac-8b14-339764552dcb.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvM2U4ZTQwZTItN2NmYS00NGFjLThiMTQtMzM5NzY0NTUyZGNiL3RyaXBvX3Bicl9tb2RlbF8zZThlNDBlMi03Y2ZhLTQ0YWMtOGIxNC0zMzk3NjQ1NTJkY2IuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=GyA~qKdEpjT3EEQ12oevPca5IlUdq229KYG3m87TRLO01uGSNs5rz-C-8XT9VVGEP9whtAmPxzESjbKQImRFm0lTGy-~EsdeFBZH3v2qtMjLsAEiv6jA3MbVzSjWUITbuj5mRp3387qa84OJggymHxGvUFXQiEfPcQBdx9UMyH1eYdSnhusJJ0FsXcHMg25k-j2dPgsWQYeBuRUieC9WQFYQlKt2WUwmaMnnpJkSrgsAd2A0OX-r1ujueq7GehxGRah8ZKswtaiY-s0VYkdVfGcyFvEVgL9ba19ns6x6GEzgBYzv8m2iehUBW-gIzGxfIFP5ft8UEqRpHzdajiVW6g__",
+    "asset_id": "sack_pile",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "bronze",
+    "name": "Sack Pile",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
