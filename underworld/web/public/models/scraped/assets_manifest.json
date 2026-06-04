@@ -10682,5 +10682,22 @@
     "epoch": "bronze",
     "name": "Ox Wagon",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:penny_farthing": {
+    "prompt": "a high-wheel penny-farthing bicycle, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "80192557-ec2e-4eb4-9084-05529c7b0569",
+    "path": "/models/generated/tripo/penny_farthing.glb",
+    "bytes": 7315796,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/80192557-ec2e-4eb4-9084-05529c7b0569/tripo_pbr_model_80192557-ec2e-4eb4-9084-05529c7b0569.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvODAxOTI1NTctZWMyZS00ZWI0LTkwODQtMDU1MjljN2IwNTY5L3RyaXBvX3Bicl9tb2RlbF84MDE5MjU1Ny1lYzJlLTRlYjQtOTA4NC0wNTUyOWM3YjA1NjkuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=v5Ni0DLWyebeAe8Fh8ZeYpbH7EzQ16yY4jHnVDBxpR6~c7XSEY3tVLmZzJZfaC3zccgNEmlxg0vkFU49MYRycu2HVrpTlNPP4TCwPfEgYD~gofGQAGJ2A0GuGJjSYdud2TZN92TLY2KK8MT~p6hNPSDxGpxJfddWX0lbUr2FL9JKkSgjfuEVgiyK5a-79ejjxr56dqVfMVsxATJypiHjuB8~dZv9Xxg0qrxgE-h~~SxC94mfqhGBfQ~D~EQqoVD4bexF22YVyKnoAWsw2qL5une8D79zx4UFORVAkU3AEHTAHHzkAajRC3kgFCbpIeNqkg7fgWBty83qwhoq2AYNKA__",
+    "asset_id": "penny_farthing",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "vehicle",
+    "epoch": "industrial",
+    "name": "Penny Farthing",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
