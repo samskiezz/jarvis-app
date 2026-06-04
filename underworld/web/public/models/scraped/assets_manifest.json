@@ -10257,5 +10257,22 @@
     "epoch": "any",
     "name": "Tree Acacia",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:tree_baobab": {
+    "prompt": "a broad swollen-trunk baobab tree, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "5b908d14-0c16-424e-afa4-92d0e47db974",
+    "path": "/models/generated/tripo/tree_baobab.glb",
+    "bytes": 15548220,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/5b908d14-0c16-424e-afa4-92d0e47db974/tripo_pbr_model_5b908d14-0c16-424e-afa4-92d0e47db974.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvNWI5MDhkMTQtMGMxNi00MjRlLWFmYTQtOTJkMGU0N2RiOTc0L3RyaXBvX3Bicl9tb2RlbF81YjkwOGQxNC0wYzE2LTQyNGUtYWZhNC05MmQwZTQ3ZGI5NzQuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=uXdAohvYB5aZg-lSw~0lb5vAhvDrybgNpQMwJSA0qTyitzLMCGrW~yi~0VZvI7mbj3ZN42ZCruex-aYfFK-kKPy~23HvSOMszSFSdXXkqP0ipY63Njg4uK0oqCrNNjMGfTq38JrGgxc0Zm1~E3kVWPdIqdu3yU7Kf~g80uj06fGz0TIOdxuVIN8NoPAMqg9sePE6OI47PuYklVN81vUonCXeQYqUmFM52rdI4cHt1ra8K~b1FQ2G7s6-mBzckcKwm33QF8g0MaCmH8~ZQDaUvxrCWufPz-2GmOQSNN0Ms2XbHDUB6okaZ1ntDkgxPygNwZfuizA3qK~feAXXXOo~9g__",
+    "asset_id": "tree_baobab",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "nature",
+    "epoch": "any",
+    "name": "Tree Baobab",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
