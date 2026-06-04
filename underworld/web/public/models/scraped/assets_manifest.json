@@ -11668,5 +11668,22 @@
     "epoch": "any",
     "name": "Water Barrel Rain",
     "attribution": "Generated with Tripo3D (account-owned)"
+  },
+  "tripo:wooden_crate_stack": {
+    "prompt": "a stack of wooden shipping crates, game-ready PBR, clean topology, high detail, soft warm lighting, stylised realism, ray-tracing friendly, vibrant saturated colours, rich vivid palette",
+    "task_id": "0e0a770a-13d6-44f3-b882-05785d3017c2",
+    "path": "/models/generated/tripo/wooden_crate_stack.glb",
+    "bytes": 15060880,
+    "model_version": "v2.0-20240919",
+    "provider": "tripo3d",
+    "licence": "account-owned",
+    "source_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_4d1ad297085940b39c20c55e0eb240ab/20260604/0e0a770a-13d6-44f3-b882-05785d3017c2/tripo_pbr_model_0e0a770a-13d6-44f3-b882-05785d3017c2.glb?Key-Pair-Id=K1676C64NMVM2J&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfNGQxYWQyOTcwODU5NDBiMzljMjBjNTVlMGViMjQwYWIvMjAyNjA2MDQvMGUwYTc3MGEtMTNkNi00NGYzLWI4ODItMDU3ODVkMzAxN2MyL3RyaXBvX3Bicl9tb2RlbF8wZTBhNzcwYS0xM2Q2LTQ0ZjMtYjg4Mi0wNTc4NWQzMDE3YzIuZ2xiIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzgwNjE3NjAwfX19XX0_&Signature=A8qWDfMPnafbcVN04nHKc12GN-28ZjyPkvUZKmLcAVdn4PfrhxC0la2d9iYE2OXVeo5T0skcZNmjMmWME-DS7wpN9Mjor3DGsC0D4VkhKm68r9FBO4cVTHx5x6TT9kt4B-Ctp35-guj2LhrPUdEsss5YzcJwNXA0JszRDyy5Ph0OK8scpC8AkBaYCfBnNWbGBTOIoCmU7Xcs23Qgu3otdq~~sE-gTbBhWoLs-PJvz6fpFu~SHjJC9Qc2cp1z0Sb4mCV5-QyrjMwYD4rBS0NZINI6l2kbKpoDStbtOdwSQB4qG-Uvt6KF4TGL5KSsUW-3AiC3CVdaMv6yOAoRFVbY2Q__",
+    "asset_id": "wooden_crate_stack",
+    "source": "tripo3d",
+    "kind": "model",
+    "category": "prop",
+    "epoch": "any",
+    "name": "Wooden Crate Stack",
+    "attribution": "Generated with Tripo3D (account-owned)"
   }
 }
