@@ -25,6 +25,7 @@ from pydantic import BaseModel, Field
 
 from ..auth import optional_bearer, require_bearer
 from ..services import brain_autopilot as ap
+from ..services import brain_enrich as be
 from ..services import brain_health as bh
 from ..services import brain_think as bt
 
@@ -33,6 +34,11 @@ router = APIRouter(prefix="/v1/brain", tags=["brain-extras"])
 
 class AutopilotBody(BaseModel):
     max_passes: int = Field(default=5, ge=1, le=20, description="Max self-improvement passes.")
+
+
+class EnrichBody(BaseModel):
+    terms: list[str] | None = Field(default=None, description="Explicit concepts to fetch; default = real vault gaps.")
+    limit: int = Field(default=20, ge=1, le=200, description="Max gaps to enrich this run.")
 
 
 # ── request bodies ───────────────────────────────────────────────────────────────────
@@ -81,6 +87,21 @@ async def post_autopilot_run(body: AutopilotBody | None = None, _token: str = De
     resolves dangling references, links orphans, promotes emergent themes."""
     mp = body.max_passes if body else 5
     return ap.run(max_passes=mp)
+
+
+@router.get("/autopilot/network")
+async def get_autopilot_network(_token: str | None = Depends(optional_bearer)):
+    """Whether external knowledge acquisition has egress right now."""
+    return {"online": be.network_ok()}
+
+
+@router.post("/autopilot/enrich")
+async def post_autopilot_enrich(body: EnrichBody | None = None, _token: str = Depends(require_bearer)):
+    """Scrape real external knowledge for the vault's gaps and write grounded,
+    source-cited notes. Fills holes from outside the vault, with provenance."""
+    terms = body.terms if body else None
+    limit = body.limit if body else 20
+    return be.enrich(terms, limit=limit)
 
 
 # ── thinking tools ────────────────────────────────────────────────────────────────────
