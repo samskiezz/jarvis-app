@@ -1,0 +1,26 @@
+{
+  "package": "world_ontology_stage7_iso_expanded",
+  "created_at": "2026-06-05T15:14:21.686085+00:00",
+  "counts": {
+    "catalogues/source_families_260_expanded.csv": 260,
+    "catalogues/domain_subjects_5000_iso_expanded.csv": 5000,
+    "catalogues/endpoint_candidates_50000.csv": 50000,
+    "catalogues/ocr_document_candidates_15000.csv": 15000,
+    "benchmarks/benchmark_candidates_15000.csv": 15000,
+    "catalogues/typed_flow_edges_55000.csv": 55000,
+    "catalogues/subniche_gap_register.csv": 1
+  },
+  "purpose": "Expanded Stage 7 pack with source, endpoint, OCR/document, benchmark, subniche, ISO documentation and implementation artifacts.",
+  "files": {
+    "source_families_260_expanded.csv": "260 source families/entry points",
+    "domain_subjects_5000_iso_expanded.csv": "5,000 ISO-expanded subject rows",
+    "endpoint_candidates_50000.csv": "50,000 endpoint candidates",
+    "ocr_document_candidates_15000.csv": "15,000 OCR/document candidates",
+    "benchmark_candidates_15000.csv": "15,000 benchmark candidates",
+    "sql": "PostgreSQL schema and loading commands",
+    "graph": "Neo4j/Memgraph ingestion",
+    "vectors": "Vector collection schema",
+    "pipelines": "Pipeline manifest",
+    "docs": "ISO-style operating docs"
+  }
+}

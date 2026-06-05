@@ -1,0 +1,31 @@
+master_topic,subject_rows,endpoint_candidates,ocr_document_candidates,benchmark_candidates,source_coverage_status
+Agriculture & food systems,166,1660,498,498,PASS
+Business & organisations,166,1660,498,498,PASS
+Classification & metadata itself,166,1660,498,498,PASS
+Climate & hazards,167,1670,501,501,PASS
+Consumption & lifestyle,166,1660,498,498,PASS
+Earth systems,167,1670,501,501,PASS
+Economy & industry,167,1670,501,501,PASS
+Energy & resources,166,1660,498,498,PASS
+Environment & ecology,167,1670,501,501,PASS
+Ethics & philosophy,166,1660,498,498,PASS
+Finance & ownership,167,1670,501,501,PASS
+Geography & location,167,1670,501,501,PASS
+Government & public administration,167,1670,501,501,PASS
+Human body & health,167,1670,501,501,PASS
+Information & communication,167,1670,501,501,PASS
+Infrastructure & utilities,166,1660,498,498,PASS
+Knowledge & education,167,1670,501,501,PASS
+Law & regulation,167,1670,501,501,PASS
+Life & biology,167,1670,501,501,PASS
+People & demographics,167,1670,501,501,PASS
+Politics & governance,167,1670,501,501,PASS
+Products & commodities,167,1670,501,501,PASS
+Science & research,167,1670,501,501,PASS
+Security & conflict,167,1670,501,501,PASS
+Society & culture,167,1670,501,501,PASS
+Technology & engineering,167,1670,501,501,PASS
+Transport & mobility,166,1660,498,498,PASS
+Universe & cosmology,167,1670,501,501,PASS
+Urban & built environment,166,1660,498,498,PASS
+Work & labour,166,1660,498,498,PASS

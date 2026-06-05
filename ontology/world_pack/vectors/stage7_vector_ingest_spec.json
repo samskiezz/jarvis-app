@@ -1,0 +1,17 @@
+{
+  "collection": "world_ontology_stage7_memory_nodes",
+  "dimensions": "model_defined",
+  "distance": "cosine",
+  "payload_indexes": [
+    "subject_id",
+    "master_topic",
+    "neuron_type",
+    "vector_namespace",
+    "source_count",
+    "source_coverage_status"
+  ],
+  "embedding_input": "embedding_text_template plus subniches_15, source ids, ontology targets, cause/effect and production acceptance gate",
+  "write_policy": "Only after source licence review, parser test and ontology mapping approval.",
+  "read_policy": "Filter by tenant, purpose, classification, object permission, source licence and export policy.",
+  "feedback_loop": "Audit and benchmark results update source trust score and may demote retrieval rank."
+}

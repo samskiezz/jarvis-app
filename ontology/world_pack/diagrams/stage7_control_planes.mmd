@@ -1,0 +1,10 @@
+
+flowchart TB
+  Apollo[Apollo: deploy connectors, parsers, models, policies, apps] --> Foundry[Foundry: ingest, govern, ontology, lineage]
+  Foundry --> AIP[AIP: governed context, vector memory, tool proposals]
+  Foundry --> Gotham[Gotham: mission picture, investigation, workflow]
+  AIP --> Action[Action Plane]
+  Gotham --> Action
+  Action --> Audit[Audit / Replay]
+  Audit --> Foundry
+  Audit --> Apollo

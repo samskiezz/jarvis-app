@@ -1,0 +1,16 @@
+
+flowchart LR
+  S[260 Source Families] --> E[50,000 Endpoint Candidates]
+  S --> D[15,000 OCR Document Candidates]
+  E --> R[Raw Storage / Iceberg]
+  D --> R
+  R --> Q[Quality + Terms + Parser Gate]
+  Q --> O[Ontology Objects]
+  O --> N[Neuron / Vector Memory Nodes]
+  O --> G[Graph Relationships]
+  N --> AIP[AIP Context Builder]
+  G --> W[Workflow / Case / Mission]
+  AIP --> W
+  W --> AC[Governed Action]
+  AC --> AU[Audit + Replay]
+  AU --> N

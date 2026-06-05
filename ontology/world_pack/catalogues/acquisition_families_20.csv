@@ -1,0 +1,21 @@
+family_id,family,captures,foundry_gotham_use,apollo_use
+AF01,Official APIs,"Government, enterprise, weather, finance, registries, statistics","Foundry,Gotham",Indirect Apollo
+AF02,Databases,"SQL, NoSQL, graph, warehouse, enterprise systems","Foundry,Gotham",Indirect Apollo
+AF03,Files and documents,"PDFs, spreadsheets, reports, forms, contracts, manuals","Foundry,Gotham",Indirect Apollo
+AF04,Streaming telemetry,"Sensors, IoT, meters, vehicles, aircraft, ships, satellites","Foundry,Gotham",Indirect Apollo
+AF05,Geospatial feeds,"Maps, satellite imagery, coordinates, parcels, boundaries","Foundry,Gotham",Indirect Apollo
+AF06,Entity registries,"Companies, people, assets, vessels, aircraft, properties, licences","Foundry,Gotham",Indirect Apollo
+AF07,Event feeds,"Alerts, incidents, warnings, case updates, emergency events","Foundry,Gotham",Indirect Apollo
+AF08,Time-series measurements,"Weather, finance, energy, production, health, traffic, sensor history","Foundry,Gotham",Indirect Apollo
+AF09,Imagery and video,"Drone, lawful public cameras, satellite, inspection, medical, industrial","Foundry,Gotham",Indirect Apollo
+AF10,Communications metadata,"Network events, radio/spectrum registries and lawful communications metadata","Foundry,Gotham",Indirect Apollo
+AF11,Cybersecurity logs,"SIEM, endpoint, DNS, BGP, identity, vulnerability and incident data","Foundry,Gotham",Apollo
+AF12,Operational system logs,"Application logs, infrastructure logs, job status, deployment state","Foundry,Gotham",Apollo
+AF13,Supply chain feeds,"Inventory, orders, shipments, ports, customs, freight, vendors","Foundry,Gotham",Indirect Apollo
+AF14,Financial and market feeds,"Prices, ledgers, trades, payments, budgets, invoices, macro indicators",Foundry,Indirect Apollo
+AF15,Public web / open data,"Public datasets, portals, publications, open registries","Foundry,Gotham",Indirect Apollo
+AF16,Scientific and technical datasets,"Literature, lab data, models, simulations, standards",Foundry,Indirect Apollo
+AF17,Human-entered workflows,"Forms, case notes, field reports, approvals, task completions","Foundry,Gotham",Indirect Apollo
+AF18,Machine learning outputs,"Risk scores, detections, forecasts, classifications, recommendations","Foundry,Gotham",Apollo
+AF19,Rules and policy sources,"Laws, regulations, SOPs, constraints, access policies, compliance rules","Foundry,Gotham",Apollo
+AF20,Deployment/runtime state,"Service versions, release status, health, compliance posture, environment constraints","Indirect Foundry,Gotham",Apollo
