@@ -14,6 +14,7 @@ from .routes import brain_crm as brain_crm_routes
 from .routes import brain_extras as brain_extras_routes
 from .routes import brain_research as brain_research_routes
 from .routes import bridge as bridge_routes
+from .routes import jarvis_os as jarvis_os_routes
 from .routes import chat_predict as chat_predict_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
@@ -140,6 +141,7 @@ def create_app() -> FastAPI:
     app.include_router(brain_crm_routes.router)
     app.include_router(brain_extras_routes.router)
     app.include_router(forge_routes.router)
+    app.include_router(jarvis_os_routes.router)
 
     @app.get("/")
     async def root():
