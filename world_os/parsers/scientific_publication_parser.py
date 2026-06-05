@@ -1,6 +1,9 @@
 """
 scientific_publication_parser.py
 Outputs the standard acquisition envelope.
+
+Delegates to the real pipeline parser in server.services.world_publications so the
+parser and the running slice share one implementation.
 """
 STANDARD_ENVELOPE = {
   "source_id": "",
@@ -18,5 +21,16 @@ STANDARD_ENVELOPE = {
   "raw_hash": ""
 }
 
+
 def parse(raw_record, source_context):
-    raise NotImplementedError("Implement scientific_publication_parser parser and return STANDARD_ENVELOPE-compatible dict.")
+    """Parse a single Crossref work item into the standard envelope."""
+    try:
+        from server.services.world_publications import parse_item
+    except Exception:  # noqa: BLE001
+        try:
+            from services.world_publications import parse_item
+        except Exception as exc:  # noqa: BLE001
+            raise RuntimeError(
+                "world_publications.parse_item unavailable: %r" % (exc,)
+            )
+    return parse_item(raw_record)
