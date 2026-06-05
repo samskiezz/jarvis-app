@@ -1,0 +1,63 @@
+apiVersion: control.jarvis/v1
+kind: BootProfile
+metadata:
+  name: edge
+  description: Edge node boot. Intermittent connectivity; tolerates control-plane absence, reconciles later.
+  owner: bootloader
+  contract: contracts/openapi/bootloader-api.yaml
+  desired_state: deployment/desired-state/edge.desired-state.yaml
+spec:
+  profile: edge
+  safe_mode_on_failure: true
+  allow_disconnected_boot: true
+  phases:
+    - id: preflight
+      order: 1
+      checks:
+        config_present: true
+        clock_sane: true
+        local_storage_intact: true
+    - id: storage_init
+      order: 2
+      backend: postgres-embedded
+      checks:
+        migrations_applied: true
+        schema_matches_contract: true
+        local_state_store_checksum_ok: true
+    - id: policy_load
+      order: 3
+      checks:
+        policy_bundles_present: true
+        policy_bundles_signed: true
+        pdp_deny_by_default: true
+    - id: artefact_verify
+      order: 4
+      checks:
+        artefacts_signed: true
+        content_hash_matches: true
+    - id: audit_init
+      order: 5
+      checks:
+        audit_hash_chain_verifies: true
+        audit_buffer_local: true        # buffered, flushed on reconnect
+    - id: service_register
+      order: 6
+      checks:
+        required_services_up: true
+        health_endpoints_responding: true
+    - id: reconcile
+      order: 7
+      optional: true                    # skipped while disconnected
+      checks:
+        control_plane_reachable: false
+        reconcile_on_reconnect: true
+    - id: ready
+      order: 8
+      emit_event: control.boot.ready
+  checks_toggles:
+    enforce_signatures: true
+    enforce_classification_floor: true
+    enforce_audit_chain: true
+    block_on_drift: false               # drift expected while disconnected
+    air_gap: false
+    buffer_audit_offline: true

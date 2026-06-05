@@ -1,0 +1,69 @@
+apiVersion: control.jarvis/v1
+kind: BootProfile
+metadata:
+  name: airgapped
+  description: Fully air-gapped boot. No network; updates only via signed offline bundles, two-person import.
+  owner: bootloader
+  contract: contracts/openapi/bootloader-api.yaml
+  desired_state: deployment/desired-state/edge.desired-state.yaml
+  rollout_policy: deployment/rollout-policies/offline-update.yaml
+spec:
+  profile: airgapped
+  safe_mode_on_failure: true
+  allow_disconnected_boot: true
+  network_egress: forbidden
+  phases:
+    - id: preflight
+      order: 1
+      checks:
+        config_present: true
+        clock_sane: true
+        no_network_interfaces_active: true
+        local_storage_intact: true
+    - id: bundle_verify
+      order: 2
+      checks:
+        offline_bundle_signed: true
+        offline_bundle_hash_matches: true
+        two_person_import_recorded: true
+        bundle_not_stale: true          # within offline_update_rules.max_staleness
+    - id: storage_init
+      order: 3
+      backend: postgres-embedded
+      checks:
+        migrations_applied: true
+        schema_matches_contract: true
+        local_state_store_checksum_ok: true
+        storage_encrypted_at_rest: true
+    - id: policy_load
+      order: 4
+      checks:
+        policy_bundles_present: true
+        policy_bundles_signed: true
+        pdp_deny_by_default: true
+    - id: artefact_verify
+      order: 5
+      checks:
+        artefacts_signed: true
+        content_hash_matches: true
+    - id: audit_init
+      order: 6
+      checks:
+        audit_hash_chain_verifies: true
+        audit_buffer_local: true
+    - id: service_register
+      order: 7
+      checks:
+        required_services_up: true
+        health_endpoints_responding: true
+    - id: ready
+      order: 8
+      emit_event: control.boot.ready
+  checks_toggles:
+    enforce_signatures: true
+    enforce_classification_floor: true
+    enforce_audit_chain: true
+    block_on_drift: false
+    air_gap: true
+    enforce_egress_block: true
+    buffer_audit_offline: true
