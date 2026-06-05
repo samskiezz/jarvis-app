@@ -88,3 +88,53 @@
     font-family: var(--font-mono);
   }
 }
+
+/* ── APEX design-system polish (original brand) ─────────────────────────────
+   Product-grade motion + surface refinement applied app-wide via PageKit. */
+@keyframes apex-rise {
+  0%   { opacity: 0; transform: translateY(8px) scale(0.995); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes apex-fade {
+  0% { opacity: 0; } 100% { opacity: 1; }
+}
+@keyframes apex-sweep {
+  0% { background-position: -180% 0; } 100% { background-position: 180% 0; }
+}
+.apex-rise { animation: apex-rise 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.apex-fade { animation: apex-fade 500ms ease-out both; }
+
+/* Interactive surfaces: subtle lift + edge-glow on hover (pro density feel). */
+.apex-panel { transition: box-shadow 220ms ease, border-color 220ms ease, transform 220ms ease; }
+.apex-panel:hover { border-color: rgba(0, 200, 120, 0.28); }
+.apex-tile {
+  transition: transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms ease, border-color 180ms ease;
+  will-change: transform;
+}
+.apex-tile:hover { transform: translateY(-2px); border-color: rgba(0,200,120,0.3); }
+
+/* Refined, dense scrollbars for the cyberpunk-glass panels. */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(0, 200, 120, 0.16);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(0, 200, 120, 0.32); background-clip: padding-box; }
+
+/* Subtle animated top-edge accent sweep used on primary panel headers. */
+.apex-sweep-edge {
+  background-image: linear-gradient(90deg, transparent, rgba(0,200,120,0.5), transparent);
+  background-size: 200% 100%;
+  animation: apex-sweep 6s linear infinite;
+}
+
+/* Leaflet dark-map polish so the basemap blends with the glass shell. */
+.leaflet-container { background: #04080c !important; font-family: var(--font-mono); }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: rgba(6, 12, 20, 0.94); color: #a8bcc8;
+  border: 1px solid rgba(0, 200, 120, 0.25);
+}
+.leaflet-bar a { background: #0a141c; color: #a8bcc8; border-color: rgba(0,200,120,0.2); }
