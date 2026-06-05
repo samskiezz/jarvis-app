@@ -1,0 +1,35 @@
+{
+  "policy_id": "policy.export_result",
+  "decision_point": "export_result",
+  "version": "1.0.0",
+  "effect_default": "deny",
+  "rules": [
+    {
+      "id": "clearance",
+      "require": "subject.clearance_rank >= resource.classification_rank"
+    },
+    {
+      "id": "tenant",
+      "require": "subject.tenant == resource.tenant"
+    },
+    {
+      "id": "compartment",
+      "require": "resource.compartments subset_of subject.compartments"
+    },
+    {
+      "id": "purpose",
+      "require": "resource.purposes empty OR request.purpose in resource.purposes"
+    },
+    {
+      "id": "export_dest",
+      "require": "request.export_destination in subject.allowed_destinations"
+    }
+  ],
+  "obligations_on_permit": [],
+  "audit": {
+    "emit": "policy.export_result.{decision}",
+    "required": true
+  },
+  "enforced_by": "security-plane/policy-gateway (Java + OPA/Cedar)",
+  "reference_impl": "server/services/jarvis_policy.py::decide"
+}

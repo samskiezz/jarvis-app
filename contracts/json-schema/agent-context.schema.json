@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentContextPackage",
+  "type": "object",
+  "required": [
+    "user_identity",
+    "declared_purpose",
+    "allowed_object_ids"
+  ],
+  "properties": {
+    "user_identity": {
+      "type": "string"
+    },
+    "user_role": {
+      "type": "string"
+    },
+    "declared_purpose": {
+      "type": "string"
+    },
+    "mission_scope": {
+      "type": "string"
+    },
+    "allowed_object_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_object_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_properties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "denied_properties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "data_classification": {
+      "type": "string",
+      "enum": [
+        "UNCLASSIFIED",
+        "OFFICIAL",
+        "SECRET",
+        "TOPSECRET"
+      ]
+    },
+    "evidence_bundle": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "citation_requirements": {
+      "type": "boolean"
+    },
+    "output_schema": {
+      "type": "object"
+    },
+    "redaction_rules": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "required_approvals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model_risk_class": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  }
+}

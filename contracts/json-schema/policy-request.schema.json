@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PolicyRequest",
+  "type": "object",
+  "required": [
+    "identity",
+    "decision_point"
+  ],
+  "properties": {
+    "identity": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "tenant": {
+      "type": "string"
+    },
+    "environment": {
+      "type": "string"
+    },
+    "network_zone": {
+      "type": "string"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "decision_point": {
+      "type": "string",
+      "enum": [
+        "object_read",
+        "property_read",
+        "link_traversal",
+        "action_execution",
+        "tool_execution",
+        "model_access",
+        "export_result",
+        "deployment_change",
+        "break_glass_access"
+      ]
+    },
+    "object_id": {
+      "type": "string"
+    },
+    "object_type": {
+      "type": "string"
+    },
+    "property_name": {
+      "type": "string"
+    },
+    "action_type": {
+      "type": "string"
+    },
+    "tool_name": {
+      "type": "string"
+    },
+    "model_name": {
+      "type": "string"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  }
+}
