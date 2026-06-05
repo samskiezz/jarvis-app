@@ -1,0 +1,4 @@
+desired_state: connectors
+version: 1
+policy_required: true
+audit_required: true

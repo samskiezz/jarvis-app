@@ -1,0 +1,3 @@
+gate: data_quality_gate
+threshold: configure
+blocking: true

@@ -1,0 +1,4 @@
+zone: gold_zone_manifest
+storage: iceberg
+lineage_required: true
+quality_required: true

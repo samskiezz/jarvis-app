@@ -1,0 +1,3 @@
+compensating_action: rollback_deployment
+trigger: failed_or_reversed_action
+audit_required: true

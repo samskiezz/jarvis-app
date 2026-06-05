@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runtime-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: runtime-core
+  template:
+    metadata:
+      labels:
+        app: runtime-core
+    spec:
+      containers:
+        - name: runtime-core
+          image: world-os/runtime-core:reference
+          env:
+            - name: WORLD_OS_AUDIT_FILE
+              value: /data/audit_events.jsonl

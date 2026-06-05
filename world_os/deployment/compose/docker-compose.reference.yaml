@@ -1,0 +1,17 @@
+services:
+  runtime-core:
+    image: world-os/runtime-core:reference
+    environment:
+      WORLD_OS_AUDIT_FILE: /data/audit_events.jsonl
+    volumes:
+      - ./data:/data
+  policy-engine:
+    image: openpolicyagent/opa:latest
+    command: ["run", "--server", "/policies"]
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: world_os
+  redis:
+    image: redis:7

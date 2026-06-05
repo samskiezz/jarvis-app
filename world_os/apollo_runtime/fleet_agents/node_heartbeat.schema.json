@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "title": "node_heartbeat",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "state": {
+      "type": "object"
+    }
+  }
+}

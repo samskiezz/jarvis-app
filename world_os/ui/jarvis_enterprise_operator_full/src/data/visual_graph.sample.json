@@ -1,0 +1,45 @@
+{
+  "nodes": [
+    {
+      "id": "Foundry",
+      "label": "Foundry",
+      "type": "Plane",
+      "plane": "Foundry",
+      "confidence": 1,
+      "classification": "internal",
+      "evidence_id": "ARCH-MANIFEST",
+      "audit_id": "AUD-ARCH"
+    },
+    {
+      "id": "Gotham",
+      "label": "Gotham",
+      "type": "Plane",
+      "plane": "Gotham",
+      "confidence": 1,
+      "classification": "internal",
+      "evidence_id": "ARCH-MANIFEST",
+      "audit_id": "AUD-ARCH"
+    },
+    {
+      "id": "Apollo",
+      "label": "Apollo",
+      "type": "Plane",
+      "plane": "Apollo",
+      "confidence": 1,
+      "classification": "internal",
+      "evidence_id": "ARCH-MANIFEST",
+      "audit_id": "AUD-ARCH"
+    },
+    {
+      "id": "AIP",
+      "label": "AIP",
+      "type": "Plane",
+      "plane": "AIP",
+      "confidence": 1,
+      "classification": "internal",
+      "evidence_id": "ARCH-MANIFEST",
+      "audit_id": "AUD-ARCH"
+    }
+  ],
+  "edges": []
+}

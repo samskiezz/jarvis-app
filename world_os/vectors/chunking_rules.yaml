@@ -1,0 +1,3 @@
+rules:
+  document: {chunk_tokens: 900, overlap_tokens: 120, cite_required: true}
+  telemetry: {window: time_bucketed, aggregate: true}

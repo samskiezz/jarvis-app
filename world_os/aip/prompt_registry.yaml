@@ -1,0 +1,2 @@
+prompts:
+  jarvis_operator: {requires_citations: true, no_ungoverned_actions: true}

@@ -1,0 +1,21 @@
+{
+  "planes": {
+    "Foundry": {
+      "purpose": "Data operations, ontology, lineage, pipelines, graph/vector projection.",
+      "layers": []
+    },
+    "Gotham": {
+      "purpose": "Operational picture, investigation, event fusion and action approval.",
+      "layers": []
+    },
+    "Apollo": {
+      "purpose": "Desired/current runtime state, fleet health, rollout, drift and rollback.",
+      "layers": []
+    },
+    "AIP": {
+      "purpose": "Governed AI context, tools, GraphRAG and action proposals.",
+      "layers": []
+    }
+  },
+  "no_random_edges_rule": true
+}

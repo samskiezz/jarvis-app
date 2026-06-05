@@ -1,0 +1,31 @@
+layers:
+  shell:
+    responsibility: menus, command palette, toolbars, workspace layout, keyboard shortcuts
+    acceptable_technology: strict TypeScript plus compact enterprise component system
+  ontology_gateway:
+    responsibility: object/property/link/action queries
+    interface: GraphQL or typed object API with aggressive caching
+  binary_transport:
+    responsibility: live operational streams and large graph payloads
+    interface: gRPC-Web + WebSockets + Protobuf
+  collaboration_state:
+    responsibility: multiplayer workspace state
+    technology: CRDT with conflict-free object patches
+  compute_worker:
+    responsibility: graph layout, physics, clustering, pathfinding, spatial indexing
+    technology: Rust_or_CPP_to_WASM_in_WebWorker
+  shared_memory:
+    responsibility: zero-copy coordinates and instance buffers
+    technology: SharedArrayBuffer + Atomics + COOP_COEP_cross_origin_isolation
+  renderer:
+    responsibility: high-volume graph/map/3D model rendering
+    technology: WebGPU primary, WebGL fallback
+  interaction:
+    responsibility: selection, hover, drag, inspect
+    technology: GPU color picking via offscreen framebuffer
+  camera:
+    responsibility: cinematic navigation and stable orbit/zoom
+    technology: quaternions + slerp
+  audit_overlay:
+    responsibility: show evidence, lineage, policy and approval state
+    rule: no edge shown without evidence_id and audit_id

@@ -1,0 +1,27 @@
+environment_id: dev-world-os
+classification: internal
+region: local
+services:
+  - name: runtime_core
+    version: 0.7.0
+    replicas: 1
+    required: true
+  - name: policy_engine
+    version: 0.7.0
+    replicas: 1
+    required: true
+  - name: audit_service
+    version: 0.7.0
+    replicas: 1
+    required: true
+policies:
+  - source_terms_required
+  - audit_required
+  - approval_required_for_high_risk_actions
+health_gates:
+  - connector_health_gate
+  - parser_error_rate_gate
+  - audit_completeness_gate
+rollback_policy:
+  automatic_on_failed_gate: true
+  preserve_audit: true

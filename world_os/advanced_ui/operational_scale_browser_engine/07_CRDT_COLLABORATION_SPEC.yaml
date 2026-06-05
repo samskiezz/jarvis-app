@@ -1,0 +1,16 @@
+crdt_workspace:
+  document_types:
+    - investigation_board
+    - graph_selection_state
+    - map_layer_state
+    - timeline_annotations
+    - case_notes
+  operations:
+    - add_annotation
+    - update_selection
+    - pin_object
+    - create_case_note
+    - share_view
+  audit_required: true
+  conflict_resolution: crdt_native
+  persistence: event_log_plus_snapshot

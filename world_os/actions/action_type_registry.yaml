@@ -1,0 +1,1 @@
+actions: [notify, escalate, create_case, assign_task, generate_briefing, request_approval, deploy_connector, disable_source, rerun_pipeline, quarantine_data]

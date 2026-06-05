@@ -1,0 +1,4 @@
+action: generate_briefing
+policy_required: true
+approval_required: conditional
+audit_required: true

@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS v4_acquisition_point (
+  acquisition_point_id TEXT PRIMARY KEY,
+  domain_cluster TEXT,
+  technology_layer TEXT,
+  source_id TEXT,
+  source_name TEXT,
+  official_url TEXT,
+  access_method TEXT,
+  ontology_target TEXT,
+  graph_edges TEXT,
+  cause_input TEXT,
+  effect_output TEXT,
+  foundry_use TEXT,
+  gotham_use TEXT,
+  apollo_use TEXT,
+  aip_use TEXT,
+  quality_gates TEXT,
+  security_controls TEXT,
+  storage_projection TEXT,
+  ui_visualisation TEXT,
+  production_readiness TEXT
+);

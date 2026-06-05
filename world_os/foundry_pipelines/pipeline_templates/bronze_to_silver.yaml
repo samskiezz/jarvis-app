@@ -1,0 +1,2 @@
+pipeline: bronze_to_silver
+stages: [validate, transform, quality_gate, lineage, audit]

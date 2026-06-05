@@ -1,0 +1,3 @@
+policy: model_rollout_policy
+strategy: canary_then_progressive
+rollback_on_health_gate_failure: true

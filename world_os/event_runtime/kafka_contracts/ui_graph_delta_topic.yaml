@@ -1,0 +1,7 @@
+topic: ui.graph.delta
+format: protobuf
+schema: advanced_ui/operational_scale_browser_engine/03_PROTOBUF_CONTRACT.proto
+partition_key: workspace_id
+ordering: per_workspace_sequence
+retention: 24h_hot_then_archive
+backpressure: required

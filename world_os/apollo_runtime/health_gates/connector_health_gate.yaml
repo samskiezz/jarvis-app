@@ -1,0 +1,3 @@
+gate: connector_health_gate
+threshold: configure
+blocking: true

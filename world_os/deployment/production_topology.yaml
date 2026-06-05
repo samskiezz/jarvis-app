@@ -1,0 +1,9 @@
+topology:
+  control_plane:
+    services: [identity, policy, audit, source_registry, pipeline_registry, ontology_registry, action_engine, workflow_engine, aip_gateway, apollo_runtime]
+  data_plane:
+    stores: [object_storage, iceberg_lakehouse, postgres_object_runtime, graph_database, vector_database, search_index, event_bus]
+  ui_plane:
+    apps: [jarvis_command_center, foundry_workspace, gotham_workspace, apollo_workspace, audit_replay_console]
+  security:
+    required: [SSO, MFA, workload_identity, mTLS, secrets_manager, policy_engine, export_control, audit_hash_chain]

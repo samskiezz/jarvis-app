@@ -1,0 +1,22 @@
+risk_ratings:
+  low:
+    description: Official public API with clear permissive terms and no sensitive fields.
+    required_approval: source_owner
+  medium:
+    description: Public portal, mixed licence, rate limits, account key, or OCR/document processing.
+    required_approval: source_owner_and_legal
+  high:
+    description: Personal data, regulated data, paid/licensed feeds, security/cyber exposure, sanctions/PEP or sensitive operational risk.
+    required_approval: legal_security_data_governance
+  blocked:
+    description: Private cameras, private communications, credential bypass, restricted defence telemetry or terms-prohibited scraping.
+    required_approval: not_allowed
+rating_inputs:
+  - licence_clarity
+  - personal_data_presence
+  - rate_limit_risk
+  - redistribution_rights
+  - OCR_allowed
+  - API_allowed
+  - source_authority
+  - operational_sensitivity

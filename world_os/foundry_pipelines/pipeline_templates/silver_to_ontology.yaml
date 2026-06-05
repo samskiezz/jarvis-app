@@ -1,0 +1,2 @@
+pipeline: silver_to_ontology
+stages: [validate, transform, quality_gate, lineage, audit]

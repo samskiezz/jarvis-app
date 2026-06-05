@@ -1,0 +1,10 @@
+agents:
+  jarvis_operator:
+    role: master_operator
+    modes: [Foundry, Gotham, Apollo]
+    allowed_actions: [search, explain, simulate, propose_action, create_case, generate_briefing, deploy_connector_request]
+    approval_required_for: [writeback, deployment, quarantine_data, external_notification]
+  planetary_ops_agent:
+    allowed_domains: [weather, ocean, earthquake, tsunami, wildfire, space_weather]
+  corporate_intelligence_agent:
+    allowed_domains: [company_registry, filings, procurement, sanctions, ownership]

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VisualiserGraphContract",
+  "type": "object",
+  "required": [
+    "nodes",
+    "edges",
+    "view_mode",
+    "policy_context"
+  ],
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "type",
+          "confidence",
+          "classification"
+        ]
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "target",
+          "relationship_type",
+          "weight",
+          "evidence_id",
+          "audit_id"
+        ]
+      }
+    },
+    "view_mode": {
+      "enum": [
+        "Foundry",
+        "Gotham",
+        "Apollo",
+        "AIP",
+        "AuditReplay"
+      ]
+    },
+    "policy_context": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "title": "reconciliation_plan",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "state": {
+      "type": "object"
+    }
+  }
+}

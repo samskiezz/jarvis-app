@@ -1,0 +1,1 @@
+tests: [embedding_presence, namespace_isolation, retrieval_groundedness, citation_accuracy]

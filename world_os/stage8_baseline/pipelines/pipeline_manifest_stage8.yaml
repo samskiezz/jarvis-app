@@ -1,0 +1,35 @@
+
+pipelines:
+  endpoint_ingestion_100000:
+    input: catalogues/endpoint_candidates_100000.csv
+    stages:
+      - source_terms_review
+      - connector_execution
+      - raw_storage_write
+      - parser_execution
+      - schema_validation
+      - data_quality_scoring
+      - ontology_mapping
+      - search_graph_vector_projection
+      - audit_write
+  ocr_document_ingestion_30000:
+    input: catalogues/ocr_document_candidates_30000.csv
+    stages:
+      - source_terms_review
+      - document_download
+      - hash_and_virus_scan
+      - native_text_extract
+      - ocr_if_required_and_allowed
+      - layout_parse
+      - citation_anchor_extract
+      - chunk_and_embed
+      - document_object_materialise
+      - audit_write
+  benchmark_execution_30000:
+    input: benchmarks/benchmark_candidates_30000.csv
+    stages:
+      - benchmark_register
+      - baseline_run
+      - threshold_set
+      - regression_test
+      - report_to_audit

@@ -1,0 +1,3 @@
+compensating_action: quarantine_bad_ingestion
+trigger: failed_or_reversed_action
+audit_required: true

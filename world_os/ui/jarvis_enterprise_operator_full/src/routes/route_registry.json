@@ -1,0 +1,167 @@
+[
+  {
+    "route_id": "home",
+    "path": "/",
+    "plane": "Jarvis",
+    "page": "CommandOverview",
+    "purpose": "landing cockpit with global health, active plane, alerts, acquisition, runtime and AI status",
+    "primary_action": "Ask Jarvis",
+    "back_path": null,
+    "empty_state": "Show onboarding cards and top workflows",
+    "error_state": "Show diagnostic panel and retry"
+  },
+  {
+    "route_id": "foundry_sources",
+    "path": "/foundry/sources",
+    "plane": "Foundry",
+    "page": "SourceCatalogue",
+    "purpose": "search, filter and inspect source families and endpoint candidates",
+    "primary_action": "Register source / inspect endpoint",
+    "back_path": "/",
+    "empty_state": "No sources visible under policy",
+    "error_state": "Source registry unavailable"
+  },
+  {
+    "route_id": "foundry_pipelines",
+    "path": "/foundry/pipelines",
+    "plane": "Foundry",
+    "page": "PipelineTopology",
+    "purpose": "view raw/bronze/silver/gold/ontology-ready pipeline flow and quality gates",
+    "primary_action": "Open pipeline run",
+    "back_path": "/foundry/sources",
+    "empty_state": "No pipeline runs yet",
+    "error_state": "Pipeline registry unavailable"
+  },
+  {
+    "route_id": "foundry_ontology",
+    "path": "/foundry/ontology",
+    "plane": "Foundry",
+    "page": "OntologyExplorer",
+    "purpose": "explore object types, links, actions, functions, lineage and policy",
+    "primary_action": "Open object profile",
+    "back_path": "/foundry/pipelines",
+    "empty_state": "No objects returned by policy",
+    "error_state": "Ontology API unavailable"
+  },
+  {
+    "route_id": "foundry_vectors",
+    "path": "/foundry/vectors",
+    "plane": "Foundry",
+    "page": "VectorMemory",
+    "purpose": "inspect vector namespaces, retrieval policies, chunks and evidence IDs",
+    "primary_action": "Run retrieval test",
+    "back_path": "/foundry/ontology",
+    "empty_state": "No vector memory loaded",
+    "error_state": "Vector DB unavailable"
+  },
+  {
+    "route_id": "gotham_cop",
+    "path": "/gotham/cop",
+    "plane": "Gotham",
+    "page": "CommonOperatingPicture",
+    "purpose": "live event map, entity graph, alert queue and mission state",
+    "primary_action": "Open alert / create case",
+    "back_path": "/",
+    "empty_state": "No active alerts",
+    "error_state": "Event stream unavailable"
+  },
+  {
+    "route_id": "gotham_investigation",
+    "path": "/gotham/investigation",
+    "plane": "Gotham",
+    "page": "InvestigationWorkspace",
+    "purpose": "entity cards, link analysis, evidence chain and hypotheses",
+    "primary_action": "Pin evidence / generate briefing",
+    "back_path": "/gotham/cop",
+    "empty_state": "No investigation selected",
+    "error_state": "Graph query unavailable"
+  },
+  {
+    "route_id": "gotham_timeline",
+    "path": "/gotham/timeline",
+    "plane": "Gotham",
+    "page": "TimelineReplay",
+    "purpose": "reconstruct sequence of source events, object updates, model outputs and actions",
+    "primary_action": "Replay decision",
+    "back_path": "/gotham/investigation",
+    "empty_state": "No events in selected range",
+    "error_state": "Timeline API unavailable"
+  },
+  {
+    "route_id": "gotham_actions",
+    "path": "/gotham/actions",
+    "plane": "Gotham",
+    "page": "ActionApprovalQueue",
+    "purpose": "review proposed actions, policy decision, impact and approvals",
+    "primary_action": "Approve / reject / request more evidence",
+    "back_path": "/gotham/cop",
+    "empty_state": "No pending approvals",
+    "error_state": "Action engine unavailable"
+  },
+  {
+    "route_id": "apollo_desired",
+    "path": "/apollo/desired-state",
+    "plane": "Apollo",
+    "page": "DesiredState",
+    "purpose": "view connector/parser/model/policy/mission app desired state",
+    "primary_action": "Compare drift",
+    "back_path": "/",
+    "empty_state": "No desired-state manifest loaded",
+    "error_state": "Desired-state API unavailable"
+  },
+  {
+    "route_id": "apollo_fleet",
+    "path": "/apollo/fleet",
+    "plane": "Apollo",
+    "page": "FleetHealth",
+    "purpose": "fleet agents, services, versions, health gates and runtime posture",
+    "primary_action": "Open node / service",
+    "back_path": "/apollo/desired-state",
+    "empty_state": "No agents checked in",
+    "error_state": "Fleet API unavailable"
+  },
+  {
+    "route_id": "apollo_rollouts",
+    "path": "/apollo/rollouts",
+    "plane": "Apollo",
+    "page": "RolloutControl",
+    "purpose": "canary/progressive rollouts, release gates, rollback and blast radius",
+    "primary_action": "Promote / pause / rollback",
+    "back_path": "/apollo/fleet",
+    "empty_state": "No active rollouts",
+    "error_state": "Rollout planner unavailable"
+  },
+  {
+    "route_id": "aip_agents",
+    "path": "/aip/agents",
+    "plane": "AIP",
+    "page": "AgentGovernance",
+    "purpose": "agent registry, tool permissions, context filters and model routing",
+    "primary_action": "Open agent trace",
+    "back_path": "/",
+    "empty_state": "No agents visible under policy",
+    "error_state": "AIP registry unavailable"
+  },
+  {
+    "route_id": "audit_replay",
+    "path": "/audit/replay",
+    "plane": "Audit",
+    "page": "AuditReplay",
+    "purpose": "hash-chain audit, source lineage, model trace and action replay",
+    "primary_action": "Replay chain / export evidence",
+    "back_path": "/",
+    "empty_state": "No audit events selected",
+    "error_state": "Audit API unavailable"
+  },
+  {
+    "route_id": "settings_policy",
+    "path": "/settings/policy",
+    "plane": "Governance",
+    "page": "PolicyConsole",
+    "purpose": "source terms, object/property/action access, export control and approvals",
+    "primary_action": "Review policy",
+    "back_path": "/",
+    "empty_state": "No pending policies",
+    "error_state": "Policy service unavailable"
+  }
+]

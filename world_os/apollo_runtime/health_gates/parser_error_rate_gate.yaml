@@ -1,0 +1,3 @@
+gate: parser_error_rate_gate
+threshold: configure
+blocking: true

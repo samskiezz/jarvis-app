@@ -1,0 +1,2 @@
+policies:
+  default: {permission_filter: true, source_terms_filter: true, citation_required: true}

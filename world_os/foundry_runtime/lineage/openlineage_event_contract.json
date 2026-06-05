@@ -1,0 +1,13 @@
+{
+  "eventType": "COMPLETE",
+  "eventTime": "2026-06-05T00:00:00Z",
+  "run": {
+    "runId": "required"
+  },
+  "job": {
+    "namespace": "world_os",
+    "name": "pipeline_name"
+  },
+  "inputs": [],
+  "outputs": []
+}

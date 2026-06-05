@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ApolloDesiredState",
+  "type": "object",
+  "required": [
+    "environment_id",
+    "services",
+    "policies",
+    "health_gates",
+    "rollback_policy"
+  ],
+  "properties": {
+    "environment_id": {
+      "type": "string"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "services": {
+      "type": "array"
+    },
+    "policies": {
+      "type": "array"
+    },
+    "health_gates": {
+      "type": "array"
+    },
+    "rollback_policy": {
+      "type": "object"
+    }
+  }
+}

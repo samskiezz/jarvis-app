@@ -1,0 +1,15 @@
+{
+  "package": "world_ontology_stage8_10000_expanded",
+  "created_at": "2026-06-05T15:21:56.068932+00:00",
+  "counts": {
+    "source_families": 350,
+    "combined_domain_subjects": 10000,
+    "additional_domain_subjects": 5000,
+    "combined_endpoint_candidates": 92000,
+    "additional_endpoint_candidates": 42000,
+    "combined_ocr_document_candidates": 30000,
+    "additional_ocr_document_candidates": 15000,
+    "combined_benchmark_candidates": 30000,
+    "additional_benchmark_candidates": 15000
+  }
+}

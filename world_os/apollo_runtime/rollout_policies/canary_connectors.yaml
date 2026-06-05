@@ -1,0 +1,3 @@
+policy: canary_connectors
+strategy: canary_then_progressive
+rollback_on_health_gate_failure: true

@@ -1,0 +1,122 @@
+{
+  "package": "world_os_final_master_pack",
+  "created_at": "2026-06-05T15:33:33.236858+00:00",
+  "counts": {
+    "domain_subjects": 10000,
+    "priority_acquisition_points_added": 1000,
+    "source_families": 350,
+    "endpoint_candidates_actual": 92000,
+    "ocr_document_candidates": 30000,
+    "benchmark_candidates": 30000,
+    "connectors": 13,
+    "parsers": 32,
+    "quality_gates": 17,
+    "ontology_schemas": 33,
+    "relationship_types": 24,
+    "gotham_mission_apps": 11
+  },
+  "ui": "ui/jarvis_command_center",
+  "lawful_boundary": "official/public/licensed/owned sources only; no private camera scanning, private communications interception, credential bypass or terms-prohibited scraping",
+  "final_v2_completion": {
+    "created_at": "2026-06-05T15:39:24.913254+00:00",
+    "science_domain_files": 30,
+    "critical_paths_verified": 25,
+    "ui_architecture_corrected": "framework-agnostic product spec added; React/Three shell remains only as demonstrator",
+    "catalogue_runtime_use_matrix": "manifests/catalogue_to_runtime_use_matrix.csv",
+    "parser_envelope_schema": "schemas/standard_acquisition_envelope.schema.json",
+    "visualiser_contract": "ui/visualiser_contract.schema.json"
+  },
+  "v3_exact_completion": {
+    "created_at": "2026-06-05T15:41:37.255439+00:00",
+    "fixed_missing_files": [
+      "source_legal_review/robots_review_register.csv",
+      "source_legal_review/licence_register.csv",
+      "source_legal_review/restricted_sources_register.csv",
+      "source_legal_review/source_risk_rating.yaml",
+      "source_legal_review/approval_workflow.yaml"
+    ],
+    "compliance_report": "manifests/exact_20_group_compliance_report.csv",
+    "status": "PASS - all requested groups present; connector count is subdirectory-based",
+    "all_compliance_rows_pass": true
+  },
+  "v4_next_level_expansion": {
+    "created_at": "2026-06-05T15:54:11.332693+00:00",
+    "added_source_families": 150,
+    "total_source_families_v4": 500,
+    "added_acquisition_points": 5000,
+    "high_performance_ui_architecture": "advanced_ui/operational_scale_browser_engine",
+    "runtime_layers_added": [
+      "kernel_runtime",
+      "sovereign_sync",
+      "object_runtime",
+      "query_engine",
+      "policy_runtime",
+      "identity_runtime",
+      "lineage_runtime",
+      "event_runtime",
+      "observability_runtime",
+      "privacy_safety",
+      "formal_methods",
+      "release_evidence"
+    ],
+    "remaining_gaps_review": "advanced_docs/v4_remaining_gaps_review.csv"
+  },
+  "v4_ui_full_implementation": {
+    "created_at": "2026-06-05T15:56:30.364402+00:00",
+    "ui_source_tree": "ui/jarvis_enterprise_operator_full",
+    "ui_files_verified": 23,
+    "architecture_manifest": "ui/jarvis_enterprise_operator_full/src/data/architecture.manifest.json",
+    "graph_policy": "ui/jarvis_enterprise_operator_full/src/engine/graphPolicy.ts",
+    "binary_transport": "ui/jarvis_enterprise_operator_full/src/engine/binaryTransport.ts",
+    "protobuf_contract": "ui/jarvis_enterprise_operator_full/src/proto/graph_delta.proto",
+    "gap_review": "advanced_docs/v4_ui_gap_review_after_rescan.csv"
+  },
+  "v5_production_ui": {
+    "created_at": "2026-06-05T15:59:38.564525+00:00",
+    "design_tokens": "ui/jarvis_enterprise_operator_full/src/design/design_tokens.json",
+    "theme": "ui/jarvis_enterprise_operator_full/src/styles/production-theme.css",
+    "route_registry": "ui/jarvis_enterprise_operator_full/src/routes/route_registry.json",
+    "dead_end_audit": "ui/ux_dead_end_audit.csv",
+    "button_action_registry": "ui/jarvis_enterprise_operator_full/src/features/button_action_registry.csv",
+    "data_table_render_contracts": "ui/jarvis_enterprise_operator_full/src/features/data_table_render_contracts.csv",
+    "component_specifications": "ui/jarvis_enterprise_operator_full/src/specs/component_specifications.csv",
+    "operator_user_flows": "ui/jarvis_enterprise_operator_full/src/specs/operator_user_flows.csv",
+    "gap_review": "manifests/v5_production_ui_gap_review.csv"
+  },
+  "v6_ux_effects_data_specific": {
+    "created_at": "2026-06-05T16:03:18.113655+00:00",
+    "data_asset_inventory": "manifests/v6_data_asset_inventory.csv",
+    "vector_namespace_registry": "vectors/v6_vector_namespace_registry.csv",
+    "vector_database_schema": "vectors/v6_vector_database_schema.json",
+    "excel_control_workbook": "excel/world_os_v6_control_workbook.xlsx",
+    "data_specific_rendering_rules": "ui/jarvis_enterprise_operator_full/src/ux/data_specific_rendering_rules.md",
+    "visual_status_contract": "ui/jarvis_enterprise_operator_full/src/ux/visual_status_contract.json",
+    "final_gap_scan": "manifests/v6_final_gap_scan.csv"
+  },
+  "v6_excel_control_workbook": {
+    "created_at": "2026-06-05T16:04:17.513919+00:00",
+    "path": "excel/world_os_v6_control_workbook.xlsx",
+    "sheets": [
+      "Dashboard",
+      "Vector DB",
+      "Routes",
+      "Buttons",
+      "Table Contracts",
+      "Gap Scan"
+    ],
+    "engine": "openpyxl fallback after artifact_tool workbook API failure",
+    "status": "created"
+  },
+  "v7_runtime_security_apollo": {
+    "created_at": "2026-06-05T16:10:01.130038+00:00",
+    "purpose": "Close the largest V6 gaps by adding executable reference runtime, security enforcement contracts and Apollo-style reconciliation modules.",
+    "runtime_core": "runtime_core",
+    "security_runtime": "security_runtime",
+    "apollo_control_plane": "apollo_control_plane",
+    "aip_runtime": "aip_runtime",
+    "foundry_runtime": "foundry_runtime",
+    "gotham_runtime": "gotham_runtime",
+    "gap_closure_matrix": "manifests/v7_gap_closure_matrix.csv",
+    "guide": "docs/v7/V7_RUNTIME_SECURITY_APOLLO_GUIDE.md"
+  }
+}

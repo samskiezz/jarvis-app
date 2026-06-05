@@ -1,0 +1,19 @@
+{
+  "collections": [
+    {
+      "name": "world_subject_memory_10000",
+      "source_file": "domain_subjects_10000_iso_expanded.csv",
+      "id_field": "embedding_record_id",
+      "namespace_field": "vector_namespace",
+      "embedding_text": "embedding_text_template + subniches_15 + primary_source_ids + source_urls + production_acceptance_gate",
+      "policy_filter": "tenant + classification + purpose + source_terms + object/property permissions"
+    },
+    {
+      "name": "public_document_evidence_30000",
+      "source_file": "ocr_document_candidates_30000.csv",
+      "id_field": "ocr_candidate_id",
+      "embedding_text": "source_name + document_types + extracted text chunks + citation anchors + source provenance",
+      "policy_filter": "document licence + classification + user purpose"
+    }
+  ]
+}
