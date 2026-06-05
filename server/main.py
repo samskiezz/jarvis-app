@@ -25,6 +25,7 @@ from .routes import jarvis_taxonomy as jarvis_taxonomy_routes
 from .routes import jarvis_research as jarvis_research_routes
 from .routes import jarvis_world as jarvis_world_routes
 from .routes import jarvis_system as jarvis_system_routes
+from .routes import jarvis_documents as jarvis_documents_routes
 from .routes import chat_predict as chat_predict_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
@@ -162,6 +163,7 @@ def create_app() -> FastAPI:
     app.include_router(jarvis_research_routes.router)
     app.include_router(jarvis_world_routes.router)
     app.include_router(jarvis_system_routes.router)
+    app.include_router(jarvis_documents_routes.router)
 
     @app.get("/")
     async def root():
