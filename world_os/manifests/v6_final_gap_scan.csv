@@ -1,0 +1,7 @@
+area,status,file,remaining_gap
+Excel control workbook,added_or_build_note,excel/world_os_v6_control_workbook.xlsx,Full 92k/30k tables stay in CSV for performance; workbook is dashboard/control summary.
+Vector database specificity,added,vectors/v6_vector_namespace_registry.csv; vectors/v6_vector_database_schema.json,Actual vector DB deployment and embeddings still require model/API/runtime.
+Data-specific UI rendering,added,ui/jarvis_enterprise_operator_full/src/ux/data_specific_rendering_rules.md,Needs live API connection and renderer implementation.
+Effects/sound/popups,added,"src/sound, src/popups, src/components/effects, src/components/windows",Needs actual product QA and user testing.
+Dead-end prevention,added,ui/ux_dead_end_audit.csv,Must be enforced in runtime router once app is connected.
+Massive graph rendering,specified,advanced_ui/operational_scale_browser_engine,WebGPU/WebGL instanced renderer and WASM physics engine still require production engineering.

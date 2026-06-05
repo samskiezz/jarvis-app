@@ -1,0 +1,55 @@
+catalogue_file,runtime_target,rows,purpose
+catalogues/domain_subjects_10000_iso_expanded.csv,Foundry Pipeline,10000,Foundry Pipeline consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Gotham Mission App,10000,Gotham Mission App consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Apollo Runtime,10000,Apollo Runtime consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,AIP Context,10000,AIP Context consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Graph DB,10000,Graph DB consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Vector DB,10000,Vector DB consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Audit Replay,10000,Audit Replay consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Action Engine,10000,Action Engine consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/domain_subjects_10000_iso_expanded.csv,Governance,10000,Governance consumes catalogues/domain_subjects_10000_iso_expanded.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Foundry Pipeline,1000,Foundry Pipeline consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Gotham Mission App,1000,Gotham Mission App consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Apollo Runtime,1000,Apollo Runtime consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,AIP Context,1000,AIP Context consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Graph DB,1000,Graph DB consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Vector DB,1000,Vector DB consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Audit Replay,1000,Audit Replay consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Action Engine,1000,Action Engine consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/priority_acquisition_points_1000.csv,Governance,1000,Governance consumes catalogues/priority_acquisition_points_1000.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Foundry Pipeline,350,Foundry Pipeline consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Gotham Mission App,350,Gotham Mission App consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Apollo Runtime,350,Apollo Runtime consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,AIP Context,350,AIP Context consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Graph DB,350,Graph DB consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Vector DB,350,Vector DB consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Audit Replay,350,Audit Replay consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Action Engine,350,Action Engine consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/source_families_350_expanded.csv,Governance,350,Governance consumes catalogues/source_families_350_expanded.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Foundry Pipeline,92000,Foundry Pipeline consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Gotham Mission App,92000,Gotham Mission App consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Apollo Runtime,92000,Apollo Runtime consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,AIP Context,92000,AIP Context consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Graph DB,92000,Graph DB consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Vector DB,92000,Vector DB consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Audit Replay,92000,Audit Replay consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Action Engine,92000,Action Engine consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/endpoint_candidates_actual_92000.csv,Governance,92000,Governance consumes catalogues/endpoint_candidates_actual_92000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Foundry Pipeline,30000,Foundry Pipeline consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Gotham Mission App,30000,Gotham Mission App consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Apollo Runtime,30000,Apollo Runtime consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,AIP Context,30000,AIP Context consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Graph DB,30000,Graph DB consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Vector DB,30000,Vector DB consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Audit Replay,30000,Audit Replay consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Action Engine,30000,Action Engine consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+catalogues/ocr_document_candidates_30000.csv,Governance,30000,Governance consumes catalogues/ocr_document_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Foundry Pipeline,30000,Foundry Pipeline consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Gotham Mission App,30000,Gotham Mission App consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Apollo Runtime,30000,Apollo Runtime consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,AIP Context,30000,AIP Context consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Graph DB,30000,Graph DB consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Vector DB,30000,Vector DB consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Audit Replay,30000,Audit Replay consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Action Engine,30000,Action Engine consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.
+benchmarks/benchmark_candidates_30000.csv,Governance,30000,Governance consumes benchmarks/benchmark_candidates_30000.csv through registry/load contract and policy filters.

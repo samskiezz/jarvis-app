@@ -1,0 +1,6 @@
+name,url,note
+Palantir integrated platform architecture,https://www.palantir.com/docs/foundry/architecture-center/platforms,"Public docs state standard architecture consists of AIP, Foundry and Apollo, with Apollo managing infrastructure for Foundry and AIP."
+Palantir Ontology overview,https://www.palantir.com/docs/foundry/ontology/overview,Public docs describe Ontology as semantic objects/properties/links plus kinetic actions/functions/dynamic security.
+Palantir Gotham public page,https://www.palantir.com/platforms/gotham/,Public page describes sensor tasking from drones to satellites and human-in-the-loop control.
+Palantir AIP overview,https://www.palantir.com/docs/foundry/aip/overview,Public docs describe AIP with Foundry and Apollo as operating system/AI Mesh delivering AI-driven products.
+Palantir Rubix,https://www.palantir.com/docs/foundry/architecture-center/rubix,Public docs describe Rubix as hardened autoscaling Kubernetes substrate.

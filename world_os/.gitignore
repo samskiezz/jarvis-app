@@ -1,5 +1,0 @@
-# Bulk data catalogues live on disk / object storage, NOT in git (repo .git is already 6GB)
-*.csv
-*.xlsx
-stage8_baseline/catalogues/
-stage8_baseline/benchmarks/

@@ -1,0 +1,13 @@
+path,exists,bytes
+vectors/v6_vector_namespace_registry.csv,True,3185
+vectors/v6_vector_database_schema.json,True,1610
+ui/jarvis_enterprise_operator_full/src/ux/data_specific_rendering_rules.md,True,2229
+ui/jarvis_enterprise_operator_full/src/ux/visual_status_contract.json,True,1166
+ui/jarvis_enterprise_operator_full/src/ux/window_modal_registry.csv,False,0
+ui/jarvis_enterprise_operator_full/src/popups/popup_toast_registry.csv,False,0
+ui/jarvis_enterprise_operator_full/src/sound/sound_event_registry.csv,False,0
+ui/jarvis_enterprise_operator_full/src/performance/performance_budget.md,True,1045
+ui/jarvis_enterprise_operator_full/src/security/browser_security_requirements.md,False,0
+ui/jarvis_enterprise_operator_full/src/accessibility/accessibility_requirements.md,False,0
+manifests/v6_data_asset_inventory.csv,True,637
+manifests/v6_final_gap_scan.csv,True,986
