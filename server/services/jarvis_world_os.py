@@ -111,3 +111,48 @@ def summary() -> dict:
     s = wp.summary()
     s["world_os_dir"] = world_os_dir()
     return s
+
+
+def _init_secondary(c) -> None:
+    c.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS world_edge (edge_id TEXT PRIMARY KEY, subject_id TEXT,
+            source_class TEXT, target_class TEXT, edge_type TEXT, edge_weight TEXT,
+            evidence_required TEXT, policy_gate TEXT, audit_required TEXT);
+        CREATE TABLE IF NOT EXISTS world_ocr (ocr_candidate_id TEXT PRIMARY KEY, subject_id TEXT,
+            master_topic TEXT, source_name TEXT, source_url TEXT, document_types TEXT, ocr_policy TEXT);
+        CREATE TABLE IF NOT EXISTS world_benchmark (benchmark_candidate_id TEXT PRIMARY KEY, subject_id TEXT,
+            master_topic TEXT, benchmark_name TEXT, benchmark_url TEXT, benchmark_purpose TEXT, metric TEXT);
+        """
+    )
+    c.commit()
+
+
+def load_secondary() -> dict:
+    """Load the remaining catalogues: typed flow edges, OCR doc candidates, benchmarks."""
+    if not available():
+        return {"available": False}
+    base = world_os_dir()
+    c = _conn()
+    try:
+        _init_secondary(c)
+        edge_files = sorted(glob.glob(os.path.join(base, "**", "typed_flow_edges*.csv"), recursive=True))
+        ocr_files = sorted(glob.glob(os.path.join(base, "**", "ocr_document_candidates*.csv"), recursive=True))
+        bm_files = sorted(glob.glob(os.path.join(base, "**", "benchmark_candidates*.csv"), recursive=True))
+        _, edge_rows = _stream_into(c, edge_files, "world_edge",
+            ["edge_id", "subject_id", "source_class", "target_class", "edge_type",
+             "edge_weight", "evidence_required", "policy_gate", "audit_required"], "edge_id")
+        _, ocr_rows = _stream_into(c, ocr_files, "world_ocr",
+            ["ocr_candidate_id", "subject_id", "master_topic", "source_name", "source_url",
+             "document_types", "ocr_policy"], "ocr_candidate_id")
+        _, bm_rows = _stream_into(c, bm_files, "world_benchmark",
+            ["benchmark_candidate_id", "subject_id", "master_topic", "benchmark_name",
+             "benchmark_url", "benchmark_purpose", "metric"], "benchmark_candidate_id")
+        edges = c.execute("SELECT COUNT(*) FROM world_edge").fetchone()[0]
+        ocr = c.execute("SELECT COUNT(*) FROM world_ocr").fetchone()[0]
+        bm = c.execute("SELECT COUNT(*) FROM world_benchmark").fetchone()[0]
+    finally:
+        c.close()
+    return {"available": True, "edges_read": edge_rows, "edges_in_db": edges,
+            "ocr_read": ocr_rows, "ocr_in_db": ocr, "benchmarks_read": bm_rows, "benchmarks_in_db": bm}
+
