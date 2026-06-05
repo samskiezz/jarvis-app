@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.internal/schemas/domain-subject.schema.json",
+  "title": "DomainSubjectISOExpanded",
+  "type": "object",
+  "required": [
+    "subject_id",
+    "master_topic",
+    "domain_subject",
+    "subniches_15",
+    "primary_source_ids",
+    "neuron_id",
+    "vector_namespace",
+    "ontology_targets",
+    "policy_controls",
+    "audit_records"
+  ],
+  "properties": {
+    "subject_id": {
+      "type": "string"
+    },
+    "master_topic": {
+      "type": "string"
+    },
+    "domain_subject": {
+      "type": "string"
+    },
+    "subniches_15": {
+      "type": "string"
+    },
+    "primary_source_ids": {
+      "type": "string"
+    },
+    "secondary_source_ids": {
+      "type": "string"
+    },
+    "neuron_id": {
+      "type": "string"
+    },
+    "neuron_type": {
+      "type": "string"
+    },
+    "vector_namespace": {
+      "type": "string"
+    },
+    "ontology_targets": {
+      "type": "string"
+    },
+    "policy_controls": {
+      "type": "string"
+    },
+    "audit_records": {
+      "type": "string"
+    },
+    "production_acceptance_gate": {
+      "type": "string"
+    }
+  }
+}

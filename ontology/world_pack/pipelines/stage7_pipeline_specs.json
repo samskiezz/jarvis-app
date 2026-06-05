@@ -1,0 +1,39 @@
+{
+  "source_acquisition_pipeline": [
+    "register_source",
+    "review_terms",
+    "select_connector",
+    "fetch_raw",
+    "hash_raw",
+    "store_raw",
+    "validate_schema",
+    "quality_score",
+    "map_ontology",
+    "emit_lineage",
+    "index_search_graph_vector",
+    "write_audit"
+  ],
+  "ocr_pipeline": [
+    "download_document",
+    "hash_original",
+    "virus_scan",
+    "metadata_extract",
+    "pdf_text_extract",
+    "ocr_if_scanned",
+    "layout_parse",
+    "chunk",
+    "citation_anchor",
+    "embed",
+    "map_facts",
+    "audit"
+  ],
+  "benchmark_pipeline": [
+    "register_benchmark",
+    "define_metric",
+    "run_baseline",
+    "set_threshold",
+    "run_regression",
+    "write_result",
+    "block_release_if_failed"
+  ]
+}

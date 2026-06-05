@@ -1,0 +1,11 @@
+niche_id,universal_niche,meaning
+N01,Live status,What is happening now.
+N02,Historical archive,What happened before.
+N03,Forecast / prediction,What is likely to happen.
+N04,Registry / catalogue,What exists and how it is identified.
+N05,Geospatial layer,Where it is.
+N06,Entity relationships,"How people, assets, events and systems connect."
+N07,Event / incident feed,What changed or triggered action.
+N08,Risk / compliance layer,"What rules, hazards or obligations apply."
+N09,Operational workflow,"What task, case, mission or business process follows."
+N10,Audit / provenance,"Who knew, changed, approved or acted, and when."

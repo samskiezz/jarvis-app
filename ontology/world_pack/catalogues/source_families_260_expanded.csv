@@ -1,0 +1,261 @@
+source_id,source_name,url,description,access_method,auth,domain_use
+SRC001,NOAA NDBC,https://www.ndbc.noaa.gov/,Ocean buoy and coastal station meteorological/oceanographic observations,HTTP text/CSV-like files,No key,"Weather, ocean, buoys, maritime risk"
+SRC002,USGS Earthquake FDSN,https://earthquake.usgs.gov/fdsnws/event/1/,Earthquake catalogue API using FDSN event web-service patterns,REST/GeoJSON/XML,No key,"Earthquakes, seismic events, hazards"
+SRC003,NOAA SWPC,https://www.swpc.noaa.gov/products-and-data,"Space weather alerts, watches, warnings, solar wind, geomagnetic indices",JSON/text/API feeds,No key,"Space weather, radio blackout, solar radiation"
+SRC004,NASA DONKI,https://ccmc.gsfc.nasa.gov/tools/DONKI/,"Solar flares, CME, SEP, geomagnetic storms and model outputs",REST/JSON,NASA API key for api.nasa.gov routes,Space weather event intelligence
+SRC005,NASA APIs,https://api.nasa.gov/,NASA public APIs including DONKI/NEO/imagery endpoints,REST/JSON,API key,"NEO, astronomy, imagery, space events"
+SRC006,NASA CMR / Earthdata,https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html,Earth observation dataset discovery and metadata,REST/JSON/UMM,Earthdata depending endpoint,Satellite/EO catalogue
+SRC007,OpenAQ,https://docs.openaq.org/,"Global air quality measurements, locations and sensors",REST/JSON,API key/terms as published,"Air quality, ppm/ppb pollutants"
+SRC008,Copernicus Data Space,https://dataspace.copernicus.eu/,Sentinel and Copernicus earth observation datasets,APIs/download,Account depending product,"Satellite imagery, environment, land/ocean"
+SRC009,ECMWF Open Data,https://www.ecmwf.int/en/forecasts/access-forecasts/access-archive-datasets,Weather forecast model outputs and archives,GRIB/API,Account depending dataset,Weather forecasts and climate models
+SRC010,WMO OSCAR/GBON public metadata,https://oscar.wmo.int/,Meteorological observing systems and station metadata,Portal/API where available,Public/registration depending,Weather station registry
+SRC011,GDACS,https://www.gdacs.org/,Global disaster alerts and coordination information,RSS/XML/JSON where available,No key,"Earthquake, cyclone, flood, tsunami impact alerts"
+SRC012,ReliefWeb API,https://apidoc.rwlabs.org/,"Humanitarian reports, disasters and situation updates",REST/JSON,No key,"Humanitarian crisis, disaster response"
+SRC013,USGS ScienceBase,https://www.sciencebase.gov/catalog/,Scientific datasets and geospatial products,REST/JSON/files,No key,"Geology, hazards, science datasets"
+SRC014,NOAA NCEI,https://www.ncei.noaa.gov/support/access-data-service-api-user-documentation,Climate and environmental data access service,REST/JSON/CSV,No key,"Climate, weather, ocean historical archive"
+SRC015,Global Biodiversity Information Facility,https://techdocs.gbif.org/en/openapi/,Species occurrence and biodiversity data,REST/JSON,No key,Biodiversity and species ontology
+SRC016,Protected Planet / WDPA,https://www.protectedplanet.net/en/resources,Protected area datasets,Downloads/API depending licence,Terms apply,Conservation/protected areas
+SRC017,OpenStreetMap / Overpass,https://wiki.openstreetmap.org/wiki/Overpass_API,"Map features, infrastructure, POIs, roads, boundaries",REST/Overpass QL,Fair use,Geospatial base map and POI graph
+SRC018,H3 Geospatial Indexing,https://h3geo.org/docs/,Hexagonal spatial indexing system,Library/algorithm,Open source,Spatial aggregation and neural geocells
+SRC019,Natural Earth Data,https://www.naturalearthdata.com/,Public domain cultural/physical GIS layers,Downloads,No key,Base world geography
+SRC020,GADM,https://gadm.org/,Administrative boundary data,Downloads,Terms apply,Administrative geography
+SRC021,AIS public/official feeds,https://www.iala-aism.org/technical/data-modelling/ais/,Vessel position data where lawfully licensed or public,AIS/NMEA/API depending provider,Licence/official feed,Maritime awareness
+SRC022,MarineCadastre AIS,https://marinecadastre.gov/ais/,US AIS-derived maritime datasets,Downloads,No key,"Historical AIS, vessel movement"
+SRC023,NOAA Tides and Currents CO-OPS API,https://api.tidesandcurrents.noaa.gov/api/prod/,"Tides, water levels, currents, meteorological observations",REST/JSON/CSV,No key,"Ports, wharves, coastal operations"
+SRC024,FAA NOTAM Search,https://notams.aim.faa.gov/notamSearch/,Aeronautical notices for US aviation,Portal/API depending access,Terms apply,Aviation restriction awareness
+SRC025,OpenSky Network API,https://openskynetwork.github.io/opensky-api/,Aircraft state vectors and aviation data,REST/JSON,Auth recommended/rate limits,Aviation awareness
+SRC026,Eurocontrol Network Manager public information,https://www.eurocontrol.int/,European air traffic and network information,Portal/API depending access,Terms apply,Airspace operations
+SRC027,GTFS Static,https://gtfs.org/schedule/,Public transit schedule standard,Files/ZIP,Agency terms,Public transit schedules
+SRC028,GTFS Realtime,https://gtfs.org/documentation/realtime/reference/,Public transit real-time updates,protobuf/HTTP,Agency terms,Transit live operations
+SRC029,OpenRailwayMap,https://www.openrailwaymap.org/,Rail infrastructure map derived from OSM,Tiles/data via OSM,OSM terms,Rail infrastructure
+SRC030,Bureau of Transportation Statistics,https://www.bts.gov/,Transport statistics and datasets,CSV/API/portal,No key,Transport performance
+SRC031,Wikidata SPARQL,https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/Documentation,Open knowledge graph with entities and relationships,SPARQL/JSON/RDF,No key/fair use,Global entity enrichment
+SRC032,Wikimedia REST APIs,https://api.wikimedia.org/wiki/Getting_started_with_Wikimedia_APIs,Wikipedia and Wikimedia project APIs,REST/JSON,Account/token for some use,"Public figures, topics, summaries"
+SRC033,DBpedia,https://www.dbpedia.org/resources/,Structured data extracted from Wikipedia,SPARQL/RDF/downloads,No key,Knowledge graph enrichment
+SRC034,OpenAlex,https://developers.openalex.org/api-reference/introduction,"Scholarly works, authors, institutions, concepts and sources",REST/JSON,No key; polite email recommended,Science/research graph
+SRC035,Crossref REST API,https://www.crossref.org/documentation/retrieve-metadata/rest-api/,"Scholarly metadata, DOI records, funding and references",REST/JSON,No key; etiquette applies,Publication metadata
+SRC036,ORCID Public API,https://info.orcid.org/documentation/api-tutorials/api-tutorial-searching-the-orcid-registry/,Researcher identifiers and public records,REST/XML/JSON,Public/member API,Researcher identity
+SRC037,ROR API,https://ror.readme.io/,Research organisation registry,REST/JSON,No key,Organisation identity
+SRC038,Open Library API,https://openlibrary.org/developers/api,"Books, authors and editions metadata",REST/JSON,No key,Books/libraries/culture
+SRC039,Library of Congress APIs,https://www.loc.gov/apis/,"Library, authority and cultural heritage APIs",REST/JSON,No key,Authority files and cultural data
+SRC040,Getty Vocabularies,https://www.getty.edu/research/tools/vocabularies/,"Art, architecture and cultural vocabularies",Linked data downloads/API,No key,Culture/heritage ontology
+SRC041,World Bank Indicators API,https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation,World development indicators and over 45 databases,REST/JSON/XML,No key,Macro and development indicators
+SRC042,IMF Data API,https://datahelp.imf.org/knowledgebase/articles/667681-using-json-restful-web-service,IMF economic and financial time series,REST/JSON,No key,Macro/finance
+SRC043,OECD Data API,https://data-explorer.oecd.org/,OECD statistics and indicators,API/SDMX,No key,"Economy, education, labour"
+SRC044,UN Data API,https://data.un.org/Host.aspx?Content=API,UN statistical databases,API/XML,No key,Global statistics
+SRC045,Eurostat API,https://ec.europa.eu/eurostat/web/main/data/web-services,European statistics APIs,REST/SDMX/JSON,No key,EU statistics
+SRC046,data.europa.eu API,https://data.europa.eu/en/about/api,European open data portal catalogue,REST/DCAT,No key,Open-data discovery
+SRC047,CKAN Action API,https://docs.ckan.org/en/2.9/api/,Open data portal API pattern,REST/JSON,Usually no key for public,Open data catalogues
+SRC048,Socrata SODA API,https://dev.socrata.com/,Open data APIs on Socrata portals,REST/JSON/CSV,App token recommended,City/state open data
+SRC049,SEC EDGAR APIs,https://www.sec.gov/search-filings/edgar-application-programming-interfaces,US company submissions and company facts,REST/JSON,No key; fair access policy,Company filings
+SRC050,GLEIF API,https://documenter.getpostman.com/view/7679680/SVYrrxuU,Legal Entity Identifier reference data,REST/JSON,No key,Legal entity identity
+SRC051,OpenCorporates API,https://api.opencorporates.com/documentation/API-Reference,Company registry aggregation,REST/JSON,Key/terms,Company registry enrichment
+SRC052,Companies House API,https://developer.company-information.service.gov.uk/,UK company registry,REST/JSON,API key,Company filings and officers
+SRC053,Australian Business Register lookup,https://abr.business.gov.au/Tools/WebServices,ABN lookup web services,SOAP/REST-like,Guidelines/registration,Australian entity registry
+SRC054,OpenFIGI API,https://www.openfigi.com/api,Financial instrument identifiers,REST/JSON,API key optional/limits,Financial instruments
+SRC055,FRED API,https://fred.stlouisfed.org/docs/api/fred/,US macroeconomic data,REST/JSON/XML,API key,Economic indicators
+SRC056,Legislation.gov.uk API,https://www.legislation.gov.uk/developer,UK legislation data,REST/XML/RDF,No key,Legislation
+SRC057,Federal Register API,https://www.federalregister.gov/developers/documentation/api/v1,US federal rules and notices,REST/JSON,No key,Regulation and policy
+SRC058,Congress.gov API,https://api.congress.gov/,US legislation and congressional data,REST/JSON,API key,Politics and legislation
+SRC059,CourtListener API,https://www.courtlistener.com/api/,US case law and court metadata,REST/JSON,API key/token,Legal cases
+SRC060,EUR-Lex data,https://eur-lex.europa.eu/content/tools/webservices.html,EU law and legal documents,Web services/RDF,Registration depending service,EU law
+SRC061,UN Treaty Collection,https://treaties.un.org/,International treaties,Portal/downloads,Terms apply,Treaties
+SRC062,OFAC Sanctions List Service,https://ofac.treasury.gov/sanctions-list-service,US sanctions lists,Downloads/API,No key,Sanctions screening
+SRC063,UN Security Council Sanctions,https://main.un.org/securitycouncil/en/content/un-sc-consolidated-list,UN consolidated sanctions list,Downloads,No key,Sanctions
+SRC064,SAM.gov API,https://open.gsa.gov/api/get-opportunities-public-api/,US contract opportunities,REST/JSON,API key,Procurement
+SRC065,Open Contracting Data Standard,https://standard.open-contracting.org/,Open contracting data model,JSON/schema,N/A,Procurement data model
+SRC066,NCBI E-utilities,https://www.ncbi.nlm.nih.gov/books/NBK25501/,Biomedical literature and sequence database utilities,REST/XML/JSON,API key recommended,Biomedical/biology
+SRC067,ClinicalTrials.gov API,https://clinicaltrials.gov/data-api/about-api,Clinical trial registry API,REST/JSON,No key,Clinical trials
+SRC068,MeSH,https://www.nlm.nih.gov/mesh/meshhome.html,Biomedical controlled vocabulary,Downloads/RDF,No key,Biomedical ontology
+SRC069,WHO Global Health Observatory,https://www.who.int/data/gho/info/gho-odata-api,WHO health statistics API,OData/JSON,No key,Health indicators
+SRC070,OpenFDA,https://open.fda.gov/apis/,"FDA drug, device, food and adverse-event APIs",REST/JSON,API key recommended,Health product safety
+SRC071,CDC Data API,https://open.cdc.gov/apis.html,CDC public health datasets and APIs,REST/Socrata,No key/token optional,Public health
+SRC072,UniProt,https://www.uniprot.org/help/api,Protein data API,REST/JSON/XML,No key,Proteins and biology
+SRC073,Ensembl REST API,https://rest.ensembl.org/,Genome annotation API,REST/JSON/XML,No key,Genomics
+SRC074,PDB RCSB APIs,https://data.rcsb.org/,Protein structure data APIs,GraphQL/REST,No key,Protein structures
+SRC075,GBIF Species API,https://techdocs.gbif.org/en/openapi/,Species and occurrence APIs,REST/JSON,No key,Biodiversity
+SRC076,NVD API,https://nvd.nist.gov/developers/vulnerabilities,CVE vulnerability data,REST/JSON,API key recommended,Cyber vulnerability
+SRC077,CISA KEV Catalog,https://www.cisa.gov/known-exploited-vulnerabilities-catalog,Known exploited vulnerabilities,CSV/JSON,No key,Cyber risk prioritisation
+SRC078,MITRE CVE,https://www.cve.org/Downloads,CVE data downloads,JSON/CSV,No key,Vulnerability identifiers
+SRC079,BGPStream,https://bgpstream.caida.org/,BGP event and routing monitoring,API/stream/data,No key/terms,Internet routing
+SRC080,RIPEstat API,https://stat.ripe.net/docs/data_api,"IP, ASN and routing data",REST/JSON,No key,Internet infrastructure
+SRC081,crt.sh,https://crt.sh/,Certificate transparency search,Web/SQL-like endpoints,Fair use,Certificate transparency
+SRC082,Have I Been Pwned API,https://haveibeenpwned.com/API/v3,Breach/domain password exposure API,REST/JSON,API key for many endpoints,Breach intelligence
+SRC083,CISA Alerts,https://www.cisa.gov/news-events/cybersecurity-advisories,Cybersecurity advisories,RSS/web/API-like,No key,Cyber advisories
+SRC084,UN M49,https://unstats.un.org/unsd/methodology/m49/,Country/area/region statistical codes,Downloads/pages,No key,Geographic standardisation
+SRC085,UNSD ISIC,https://unstats.un.org/unsd/classifications/Econ/isic,Economic activity classification,Downloads,No key,Industry classification
+SRC086,UNSD CPC,https://unstats.un.org/unsd/classifications/Econ/cpc,Product classification,Downloads,No key,Product classification
+SRC087,ISO 19115 reference,https://www.iso.org/standard/53798.html,Geographic metadata standard reference,Documentation,Purchase standard for full text,Geospatial metadata model
+SRC088,SKOS Primer,https://www.w3.org/TR/skos-primer/,Simple Knowledge Organization System,W3C spec,No key,Taxonomy/controlled vocabularies
+SRC089,RDF 1.1 Concepts,https://www.w3.org/TR/rdf11-concepts/,RDF graph data model,W3C spec,No key,Knowledge graph structure
+SRC090,DCAT,https://www.w3.org/TR/vocab-dcat-3/,Data catalogue vocabulary,W3C spec,No key,Dataset catalogues
+SRC091,Schema.org,https://schema.org/,Common structured data vocabulary,Web/spec,No key,Entity schema enrichment
+SRC092,OpenAPI Specification,https://spec.openapis.org/oas/latest.html,REST API contract specification,Spec,No key,API contracts
+SRC093,AsyncAPI Specification,https://www.asyncapi.com/docs/reference/specification/latest,Event/API contract specification,Spec,No key,Event schemas
+SRC094,NOAA Weather API,https://www.weather.gov/documentation/services-web-api,US weather.gov API,REST/JSON,No key,Weather observations and forecasts
+SRC095,Met Norway API,https://api.met.no/,Weather and location forecasts,REST/JSON,No key; User-Agent required,Weather forecasts
+SRC096,UK Met Office DataHub,https://datahub.metoffice.gov.uk/,UK weather/climate data APIs,REST/files,API key/account depending,Weather and climate
+SRC097,Bureau of Meteorology Australia,https://api.weather.bom.gov.au/,Australian weather data where public,REST/JSON,Public endpoints/terms,Weather Australia
+SRC098,EM-DAT,https://www.emdat.be/,International disaster database,Portal/download/API depending,Registration/terms,Historical disasters
+SRC099,ACLED,https://acleddata.com/data-export-tool/,Political violence and protest event data,API/download,Registration/terms,Conflict/civil unrest
+SRC100,IATI Datastore,https://iatistandard.org/en/iati-tools-and-resources/datastore/,International aid activity data,API/download,No key,Humanitarian/development finance
+SRC101,WHO ICD API,https://icd.who.int/icdapi,ICD classification API,REST/JSON,Auth registration,Health classification
+SRC102,LOINC,https://loinc.org/kb/users-guide/loinc-database-structure/,Lab and clinical observation codes,Downloads/API depending terms,Registration/terms,Clinical lab ontology
+SRC103,Open Charge Map API,https://openchargemap.org/site/develop/api,EV charging station data,REST/JSON,API key,Energy/transport infrastructure
+SRC104,ENTSO-E Transparency Platform API,https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html,European power market and grid data,REST/XML,API key,Energy grid/market
+SRC105,EIA API,https://www.eia.gov/opendata/,US energy statistics API,REST/JSON,API key,Energy data
+SRC106,AEMO NEMWeb,https://nemweb.com.au/,Australian electricity market files,Files/CSV/XML,No key/terms,Energy market
+SRC107,Open Food Facts API,https://openfoodfacts.github.io/openfoodfacts-server/api/,Food product facts and labels,REST/JSON,No key,Products and nutrition
+SRC108,GS1 standards,https://www.gs1.org/standards,Global product identifiers and data standards,Standards/docs,Terms,Product identity
+SRC109,GHS hazard communication,https://unece.org/transport/dangerous-goods/ghs-rev10-2023,Chemical hazard classification,Documents,No key,Chemical safety
+SRC110,PubChem PUG REST,https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest,Chemical substance and compound API,REST/JSON/XML,No key,Chemicals
+SRC111,OpenSanctions,https://www.opensanctions.org/docs/api/,Sanctions and PEP data aggregation,API/bulk downloads,Terms/API key depending,Sanctions/PEP screening
+SRC112,GDELT 2.1,https://www.gdeltproject.org/data.html,Global news/event data,Downloads/BigQuery,No key for files,Media/events
+SRC113,MediaCloud API,https://mediacloud.org/support/api,Media content and analysis platform,API,Terms/account,Media analysis
+SRC114,Common Crawl,https://commoncrawl.org/get-started,Public web crawl data,WARC/S3 indexes,No key,Public web corpus
+SRC115,Internet Archive APIs,https://archive.org/developers/,Archive metadata and files,REST/files,No key,Historical web/media/docs
+SRC116,OpenStreetMap Nominatim,https://nominatim.org/release-docs/latest/api/Overview/,Geocoding based on OSM,REST/JSON,Fair use/User-Agent,Geocoding
+SRC117,Pelias Geocoder,https://github.com/pelias/documentation,Open geocoder stack,API/software,Self-host,Geocoding
+SRC118,US Census API,https://www.census.gov/data/developers/data-sets.html,US demographic and economic datasets,REST/JSON,API key optional/recommended,Demographics
+SRC119,Eurocontrol B2B services,https://www.eurocontrol.int/service/b2b-web-services,Aviation network services,SOAP/API,Account/contract,Aviation operations
+SRC120,ICAO API/data services,https://www.icao.int/safety/Pages/API-Data-Service.aspx,Aviation safety and global data services,API,Account/terms,Aviation safety
+SRC121,NOAA National Hurricane Center,https://www.nhc.noaa.gov/gis/,"Hurricane/cyclone advisories, GIS products, tracks and warnings",GIS/KML/shapefile/text,No key,"Cyclones, hurricane warning, storm surge"
+SRC122,Joint Typhoon Warning Center,https://www.metoc.navy.mil/jtwc/jtwc.html,Public tropical cyclone warnings and best tracks,Web/text,No key,Typhoon/cyclone tracking
+SRC123,Pacific Tsunami Warning Center,https://www.tsunami.gov/,Tsunami messages and warning centre information,Web/RSS/text,No key,Tsunami warning
+SRC124,NOAA Tsunami Warning Center products,https://www.tsunami.gov/products/,"Tsunami warnings, watches, advisories and bulletins",Text/RSS/web,No key,Tsunami alerts
+SRC125,USGS Volcano Hazards Program,https://www.usgs.gov/programs/VHP,"Volcano notices, observatory information and hazard products",Web/API where available,No key,Volcano hazard
+SRC126,Smithsonian Global Volcanism Program,https://volcano.si.edu/,Global volcano database and reports,Web/downloads,No key,Volcano catalogue
+SRC127,NASA FIRMS,https://firms.modaps.eosdis.nasa.gov/,Fire Information for Resource Management System active fire/hotspot data,API/CSV/GeoJSON,API key/account,Wildfire hotspots
+SRC128,Copernicus Emergency Management Service,https://emergency.copernicus.eu/,Emergency mapping and disaster monitoring products,Portal/API/download,Terms/account depending,Disaster mapping
+SRC129,Global Flood Awareness System,https://www.globalfloods.eu/,Global flood forecasts and alerts,Portal/API depending access,Terms/account,Flood forecasting
+SRC130,NASA POWER API,https://power.larc.nasa.gov/docs/services/api/,"Meteorology, solar and climatology data for energy/agriculture",REST/JSON/CSV,No key,"Weather, solar, energy, agriculture"
+SRC131,Minor Planet Center,https://minorplanetcenter.net/,"Asteroid and comet observations, orbital data and NEO information",Downloads/API-like services,No key,"NEO, asteroid, comet tracking"
+SRC132,JPL Small-Body Database API,https://ssd-api.jpl.nasa.gov/doc/sbdb.html,NASA/JPL small-body database API,REST/JSON,No key,"Asteroids, comets, orbital elements"
+SRC133,JPL Horizons API,https://ssd-api.jpl.nasa.gov/doc/horizons.html,Ephemerides for solar system bodies,REST/text/JSON,No key,"Orbital mechanics, ephemerides"
+SRC134,NASA Exoplanet Archive,https://exoplanetarchive.ipac.caltech.edu/docs/program_interfaces.html,Exoplanet archive program interfaces,API/table downloads,No key,Planetary data
+SRC135,HEASARC Browse,https://heasarc.gsfc.nasa.gov/docs/archive.html,High-energy astrophysics science archive,API/downloads,No key,"Gamma-ray, x-ray astronomy"
+SRC136,Gamma-ray Coordinates Network,https://gcn.nasa.gov/,Astronomical transient notices including gamma-ray bursts,Notices/API/email/archive,No key/account depending,Gamma-ray burst alerts
+SRC137,International Astronomical Union Minor Planet Center,https://www.minorplanetcenter.net/iau/mpc.html,Minor planet circulars and catalogues,Downloads/web,No key,Space object catalogue
+SRC138,Space-Track.org,https://www.space-track.org/documentation,Satellite catalogue and conjunction data for approved users,REST/API,Account/terms,Satellite tracking
+SRC139,CelesTrak,https://celestrak.org/,Satellite orbital elements and TLE data,Files/API,No key/terms,Satellite TLE
+SRC140,International Telecommunication Union spectrum data,https://www.itu.int/itu-r/space/snl/,Satellite network filings and spectrum/space services,Portal/downloads,Terms/account,Spectrum and satellite filings
+SRC141,EPA AirNow API,https://docs.airnowapi.org/,US air quality observations and forecasts,REST/JSON,API key,Air quality
+SRC142,EPA AQS API,https://aqs.epa.gov/aqsweb/documents/data_api.html,US EPA air quality system data API,REST/JSON,Email/key depending,Air quality historical
+SRC143,European Environment Agency Air Quality,https://www.eea.europa.eu/en/datahub,European environmental and air-quality datasets,API/download,No key/terms,Air quality/environment
+SRC144,RadNet EPA,https://www.epa.gov/radnet,US radiation monitoring network data,Web/download/API where available,No key,Radiation monitoring
+SRC145,EURDEP radiation monitoring,https://remap.jrc.ec.europa.eu/Advanced.aspx,European radiological data exchange platform,Map/API/download depending access,Terms,Radiation monitoring
+SRC146,IAEA International Radiation Monitoring Information System,https://www.iaea.org/topics/radiation-monitoring,International radiation monitoring information,Portal/reports,Terms,Radiation monitoring
+SRC147,Argo Floats,https://argo.ucsd.edu/data/,Global ocean profiling float data,NetCDF/API/downloads,No key,Ocean temperature/salinity
+SRC148,GOOS Ocean Observing System,https://www.goosocean.org/,Ocean observing network metadata and products,Portal/downloads,No key/terms,Ocean observing
+SRC149,IOC Sea Level Station Monitoring Facility,https://www.ioc-sealevelmonitoring.org/,Sea level station status and data,Web/API-like access,No key,Tide/sea-level
+SRC150,Copernicus Marine Service,https://marine.copernicus.eu/,"Ocean data, models, forecasts and observations",API/download,Account,Ocean/current/waves
+SRC151,Data.gov CKAN,https://catalog.data.gov/api/3/action/package_search,US open data catalogue CKAN API,CKAN Action API,No key,US open data discovery
+SRC152,Data.gov.au CKAN,https://data.gov.au/data/api/3/action/package_search,Australian open data catalogue CKAN API,CKAN Action API,No key,Australian open data discovery
+SRC153,Open Canada CKAN,https://open.canada.ca/data/api/action/package_search,Canada open data catalogue API,CKAN Action API,No key,Canadian open data
+SRC154,data.gov.uk CKAN,https://www.data.gov.uk/api/3/action/package_search,UK open data catalogue API,CKAN Action API,No key,UK open data
+SRC155,Humanitarian Data Exchange CKAN,https://data.humdata.org/api/3/action/package_search,Humanitarian open data catalogue,CKAN Action API,No key,Humanitarian datasets
+SRC156,WHO Data portal,https://data.who.int/,WHO data portal and downloadable indicators,Portal/API depending dataset,No key,Health statistics
+SRC157,FAOSTAT API,https://fenixservices.fao.org/faostat/api/v1/,FAO food and agriculture statistics,REST/JSON,No key,Agriculture/food
+SRC158,UN Comtrade API,https://comtradeapi.un.org/,International trade data API,REST/JSON,Key/free limits,Trade statistics
+SRC159,ILO Data API,https://ilostat.ilo.org/resources/concepts-and-definitions/api/,International labour statistics API,REST/JSON,No key/terms,Labour statistics
+SRC160,UNHCR Operational Data Portal,https://data.unhcr.org/,Refugee and displacement operational data,API/download/portal,No key/terms,Humanitarian/displacement
+SRC161,SEC Company Facts,https://www.sec.gov/edgar/sec-api-documentation,XBRL company facts and submissions,REST/JSON,No key/fair access,Company facts
+SRC162,Open Ownership Register,https://register.openownership.org/,Beneficial ownership data,API/download,No key/terms,Beneficial ownership
+SRC163,USASpending API,https://api.usaspending.gov/,US federal spending and awards API,REST/JSON,No key,Public spending/procurement
+SRC164,EU Tenders Electronic Daily,https://ted.europa.eu/en/,European procurement notices,API/download/portal,Terms,Procurement
+SRC165,World Bank Projects API,https://search.worldbank.org/api/v2/projects,World Bank projects and operations,REST/JSON,No key,Projects/development finance
+SRC166,IATI Registry,https://iatiregistry.org/,International aid transparency datasets,CKAN/API/download,No key,Aid activities
+SRC167,OpenOwnership BODS standard,https://standard.openownership.org/,Beneficial Ownership Data Standard,Spec/JSON schema,No key,Ownership modelling
+SRC168,OpenCorporates bulk/products,https://opencorporates.com/info/our-data/,Company data products and API docs,API/bulk/licensed,Key/licence,Corporate registry
+SRC169,GLEIF Golden Copy files,https://www.gleif.org/en/lei-data/gleif-golden-copy/download-the-golden-copy#/,LEI reference data bulk files,CSV/XML downloads,No key,Legal entity master data
+SRC170,GLEIF Level 2 relationship files,https://www.gleif.org/en/lei-data/gleif-golden-copy/download-the-golden-copy#/,LEI relationship data,CSV/XML downloads,No key,Corporate relationships
+SRC171,UN/LOCODE,https://unece.org/trade/cefact/unlocode-code-list-country-and-territory,UN location codes for trade/transport,Downloads,No key,Ports/locations
+SRC172,World Port Index,https://msi.nga.mil/Publications/WPI,World port index and port data,Downloads,No key,Ports/wharves
+SRC173,Global Shipping Routes public datasets,https://datacatalog.worldbank.org/search/dataset/0037580,Shipping connectivity and route data where public,Downloads,No key/terms,Shipping routes
+SRC174,ICAO airport data services,https://www.icao.int/safety/Pages/API-Data-Service.aspx,Airport and aviation safety data services,API/portal,Account/terms,Aviation
+SRC175,OurAirports data,https://ourairports.com/data/,"Open airport, runway and navaid data",CSV downloads,No key,Airport registry
+SRC176,IATA open data references,https://www.iata.org/en/publications/directories/code-search/,Airline/airport code search and references,Web/portal,Terms,Aviation identifiers
+SRC177,OpenFlights data,https://openflights.org/data.php,"Airport, airline and route data",Downloads,No key/terms,Aviation routes
+SRC178,OSM Transport features,https://wiki.openstreetmap.org/wiki/Key:highway,OpenStreetMap roads/rail/transport feature tagging,OSM/Overpass,Fair use,Transport infrastructure
+SRC179,Transitland API,https://www.transit.land/documentation/rest-api/,"Transit feeds, operators and routes",REST/JSON,API key/terms,Transit mobility
+SRC180,MobilityData GTFS catalog,https://database.mobilitydata.org/,Global GTFS feed catalogue,Portal/API,Terms,Transit feed discovery
+SRC181,Shodan API,https://developer.shodan.io/api,Internet-connected asset search under licence,REST/JSON,API key/licence,Authorised asset inventory only
+SRC182,Censys Search API,https://search.censys.io/api,Internet host/certificate datasets under licence,REST/JSON,API key/licence,Authorised cyber exposure
+SRC183,VirusTotal API,https://docs.virustotal.com/reference/overview,File/URL/domain/IP threat intelligence API,REST/JSON,API key/licence,Threat intelligence
+SRC184,AbuseIPDB API,https://docs.abuseipdb.com/,Reported malicious IP reputation,REST/JSON,API key,Cyber reputation
+SRC185,Spamhaus DROP/EDROP,https://www.spamhaus.org/drop/,IP blocklists for malicious networks,Text downloads,Terms,Cyber threat intel
+SRC186,Team Cymru Bogon Reference,https://www.team-cymru.org/bogon-reference,Bogon routes and IP ranges,Text/Rsync/DNS,No key/terms,Network hygiene
+SRC187,IANA registries,https://www.iana.org/protocols,"Protocol, number, DNS and IP registries",Downloads/web,No key,Internet standards/registries
+SRC188,FCC Universal Licensing System,https://www.fcc.gov/wireless/universal-licensing-system,US radio/spectrum licences,Downloads/API-like,No key/terms,Spectrum licences
+SRC189,FCC CORES/API data,https://www.fcc.gov/developers,FCC developer data resources,APIs/downloads,Terms,Spectrum/communications
+SRC190,Ofcom spectrum data,https://www.ofcom.org.uk/spectrum/information/spectrum-information-system-sis/,UK spectrum licence and allocation data,Portal/download,Terms,Spectrum
+SRC191,Internet Archive Metadata API,https://archive.org/developers/metadata.html,Metadata and files for public domain/archived documents,REST/JSON/files,No key,OCR document corpus
+SRC192,HathiTrust Bibliographic API,https://www.hathitrust.org/member-libraries/resources-for-librarians/data-apis/,Bibliographic and public-domain text APIs,API/download,Key/account depending,Books/OCR corpus
+SRC193,Project Gutenberg,https://www.gutenberg.org/policy/robot_access.html,Public-domain books and metadata,Files/RDF/catalogue,No key/fair use,Text corpus
+SRC194,EU Publications Office CELLAR/SPARQL,https://op.europa.eu/en/web/developer-corner,EU publications and legal/publication metadata,SPARQL/API/download,No key/terms,Government documents
+SRC195,GovInfo API,https://api.govinfo.gov/docs/,US government publications and documents,REST/JSON/files,API key,Government documents
+SRC196,World Bank Documents and Reports API,https://search.worldbank.org/api/v2/wds,World Bank documents and reports,REST/JSON/files,No key,Development documents
+SRC197,UN Digital Library,https://digitallibrary.un.org/,UN documents and records,Portal/API/OAI-PMH,Terms,UN documents
+SRC198,arXiv API,https://info.arxiv.org/help/api/index.html,Scientific preprints API,Atom/XML,No key/fair use,Scientific documents
+SRC199,bioRxiv/medRxiv API,https://api.biorxiv.org/,Life-science and medical preprints,REST/JSON,No key,Scientific documents
+SRC200,Zenodo API,https://developers.zenodo.org/,Research repository records and files,REST/JSON,Token for write; read public,Research datasets/documents
+SRC201,Hugging Face Datasets,https://huggingface.co/docs/datasets/index,Public ML/NLP datasets and benchmark corpora,Library/API/download,Account for some gated data,AI benchmarks
+SRC202,Papers with Code Datasets,https://paperswithcode.com/datasets,ML benchmark and dataset catalogue,Web/API/data,Terms,Benchmark discovery
+SRC203,MLCommons,https://mlcommons.org/benchmarks/,ML benchmarks and evaluation suites,Downloads/specs,No key/terms,AI/ML benchmarks
+SRC204,BIG-bench,https://github.com/google/BIG-bench,Collaborative benchmark for language models,GitHub/data,Open licence,LLM eval benchmark
+SRC205,HELM,https://crfm.stanford.edu/helm/latest/,Holistic evaluation of language models,Reports/data/code,Open/terms,LLM eval benchmark
+SRC206,OpenML,https://www.openml.org/apis,Machine learning datasets and tasks,REST/API/downloads,Account optional,ML benchmarks
+SRC207,UCI Machine Learning Repository,https://archive.ics.uci.edu/,ML datasets and benchmarks,Downloads/API,No key,ML benchmarks
+SRC208,Kaggle Datasets API,https://www.kaggle.com/docs/api,Dataset discovery/download via Kaggle API,CLI/API,Account/API token,Benchmark/data discovery
+SRC209,LDC Catalog,https://catalog.ldc.upenn.edu/,Language datasets catalogue,Catalogue/licensed,Licence,Language data catalogue
+SRC210,MIMIC-IV,https://physionet.org/content/mimiciv/,Critical care database under credentialed access,Data files/API,Credentialed access/training,Health benchmark
+SRC211,NIST AI RMF,https://www.nist.gov/itl/ai-risk-management-framework,AI risk management framework and generative AI profile,Docs/PDF,No key,AI governance benchmark
+SRC212,NIST CSF 2.0,https://www.nist.gov/cyberframework,Cybersecurity framework,Docs/PDF,No key,Cyber governance benchmark
+SRC213,NIST NVD Data Feeds,https://nvd.nist.gov/vuln/data-feeds,NVD data feeds and CVE JSON feeds,Downloads/API,No key/key recommended,Cyber benchmark/source
+SRC214,ISO 8000 Data Quality overview,https://www.iso.org/standard/81745.html,Data quality principles and series overview,Standard overview,Purchase full standard,Data quality governance
+SRC215,ISO/IEC 42001 AI Management System,https://www.iso.org/standard/42001,AI management system requirements overview,Standard overview,Purchase full standard,AI governance
+SRC216,ISO/IEC 27001 Information Security,https://www.iso.org/isoiec-27001-information-security.html,Information security management standard overview,Standard overview,Purchase full standard,Security governance
+SRC217,DAMA DMBOK reference,https://www.dama.org/cpages/body-of-knowledge,Data management body of knowledge reference,Book/reference,Purchase/terms,Data governance
+SRC218,OpenLineage specification,https://openlineage.io/docs/,Open standard for data lineage events,Spec/API,No key,Lineage implementation
+SRC219,OpenTelemetry specification,https://opentelemetry.io/docs/specs/,Observability telemetry specs,Spec,No key,Observability
+SRC220,W3C PROV-O,https://www.w3.org/TR/prov-o/,Provenance ontology,W3C spec,No key,Provenance model
+SRC221,Apache Iceberg Docs,https://iceberg.apache.org/docs/latest/,Table format and time-travel data lakehouse docs,Docs/spec,No key,Lakehouse implementation
+SRC222,Apache Kafka Docs,https://kafka.apache.org/documentation/,Event streaming platform docs,Docs/spec,No key,Event backbone
+SRC223,CloudEvents Spec,https://cloudevents.io/,Standard event metadata format,Spec,No key,Event envelope benchmark
+SRC224,STAC Specification,https://stacspec.org/en,SpatioTemporal Asset Catalog spec,Spec/JSON,No key,EO/geospatial cataloguing
+SRC225,OGC API standards,https://ogcapi.ogc.org/,Open geospatial API standards,Spec,No key,Geospatial API design
+SRC226,OpenAPI Initiative,https://www.openapis.org/,OpenAPI governance and spec resources,Spec/docs,No key,API documentation
+SRC227,AsyncAPI Initiative,https://www.asyncapi.com/,Async/event API specs,Spec/docs,No key,Event API docs
+SRC228,JSON Schema,https://json-schema.org/,JSON schema validation standard,Spec/docs,No key,Schema validation
+SRC229,Apache Parquet,https://parquet.apache.org/docs/,Columnar storage format docs,Docs/spec,No key,Analytical storage
+SRC230,Apache Arrow,https://arrow.apache.org/docs/,Columnar in-memory data format docs,Docs/spec,No key,High-performance data interchange
+SRC231,ABS Data API,https://www.abs.gov.au/about/data-services/application-programming-interfaces-apis,Australian Bureau of Statistics APIs,REST/API,No key/terms,Australian stats
+SRC232,ONS API,https://developer.ons.gov.uk/,UK Office for National Statistics API,REST/JSON,No key,UK stats
+SRC233,Statistics Canada Web Data Service,https://www.statcan.gc.ca/en/developers/wds,Canadian statistical data API,REST/JSON,No key,Canada stats
+SRC234,Singapore data.gov.sg API,https://guide.data.gov.sg/developer-guide/api-overview,Singapore open data APIs,REST/JSON,No key/key depending,Singapore data
+SRC235,NSW Data API,https://data.nsw.gov.au/data/dataset,NSW open data portal,CKAN/API,No key/terms,NSW open data
+SRC236,Queensland Open Data API,https://www.data.qld.gov.au/,Queensland open data portal,CKAN/API,No key/terms,Queensland open data
+SRC237,Victoria Data Directory API,https://discover.data.vic.gov.au/,Victoria open data portal,CKAN/API,No key/terms,Victoria open data
+SRC238,City of Sydney Open Data,https://data.cityofsydney.nsw.gov.au/,City of Sydney Socrata/open data portal,Socrata/API,No key/token optional,City open data
+SRC239,Transport for NSW Open Data,https://opendata.transport.nsw.gov.au/,"Transport NSW data, GTFS and APIs",API/GTFS/files,API key/account depending,Transport NSW
+SRC240,Austroads Open Data reference,https://austroads.com.au/publications,Road/transport research and publications,Documents/downloads,Terms,Transport benchmarks
+SRC241,Australian Water Data Online,http://www.bom.gov.au/waterdata/,Australian water observations,API/files,Terms,Water gauges
+SRC242,BOM Climate Data Online,http://www.bom.gov.au/climate/data/,Australian climate observations,Web/download,Terms,Climate observations
+SRC243,Geoscience Australia Data and Publications,https://www.ga.gov.au/data-pubs,Geoscience datasets and publications,Portal/download/API,Terms,Geoscience/geospatial
+SRC244,Australian Radiation Protection ARPANSA data,https://www.arpansa.gov.au/,Radiation monitoring and reports,Web/downloads,Terms,Radiation Australia
+SRC245,NSW SEED Environmental Data Portal,https://datasets.seed.nsw.gov.au/,NSW environmental datasets,CKAN/API/download,No key/terms,Environment NSW
+SRC246,US EPA Envirofacts API,https://www.epa.gov/enviro/envirofacts-data-service-api,US EPA environmental databases,REST/JSON/XML,No key,Environmental compliance
+SRC247,E-PRTR / Industrial Emissions Portal,https://industry.eea.europa.eu/,European industrial emissions data,Portal/download/API,No key/terms,Emissions/compliance
+SRC248,Global Forest Watch API,https://www.globalforestwatch.org/help/developers/,"Forest change, fires and environmental data APIs",REST/JSON,API key depending,Forests
+SRC249,World Resources Institute Resource Watch API,https://resourcewatch.org/developers,Environmental and resource datasets,REST/JSON,API key/account,Environment/resources
+SRC250,UNEP WCMC Data,https://www.unep-wcmc.org/en/data,Biodiversity and conservation datasets,Portal/download,Terms,Biodiversity/conservation
+SRC251,National Archives Catalog API,https://www.archives.gov/developer,US National Archives catalog and digital objects,API/JSON,No key,Public records/OCR
+SRC252,Trove API,https://trove.nla.gov.au/about/create-something/using-api,Australian library/archive data,REST/JSON,API key,Archives/OCR
+SRC253,Europeana API,https://pro.europeana.eu/page/apis,European cultural heritage APIs,REST/JSON,API key,Cultural documents
+SRC254,Open Archives Initiative OAI-PMH,https://www.openarchives.org/pmh/,Metadata harvesting protocol used by many repositories,XML/OAI-PMH,No key/terms,Repository harvesting
+SRC255,DOAJ API,https://doaj.org/api/,Directory of Open Access Journals metadata,REST/JSON,No key,Open access journals
+SRC256,CORE API,https://core.ac.uk/services/api,Open access research aggregation,REST/JSON,API key,Research documents
+SRC257,Semantic Scholar API,https://api.semanticscholar.org/api-docs/,"Paper metadata, citations and recommendations",REST/JSON,API key recommended,Scientific knowledge
+SRC258,OpenAIRE Graph,https://graph.openaire.eu/develop/,European research graph and APIs,API/download,Terms,Research graph
+SRC259,Dimensions API,https://docs.dimensions.ai/dsl/,Research analytics API,DSL/API,Subscription/terms,Research analytics
+SRC260,Lens.org scholarly/patent APIs,https://www.lens.org/lens/user/subscriptions,Scholarly and patent data APIs,API,Subscription/free tiers,Patents/research

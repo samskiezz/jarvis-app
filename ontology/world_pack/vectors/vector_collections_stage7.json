@@ -1,0 +1,30 @@
+{
+  "collections": [
+    {
+      "name": "world_subject_memory",
+      "source_file": "domain_subjects_5000_iso_expanded.csv",
+      "id_field": "embedding_record_id",
+      "namespace_field": "vector_namespace",
+      "payload_fields": [
+        "subject_id",
+        "master_topic",
+        "domain_subject",
+        "neuron_id",
+        "neuron_type",
+        "subniches_15",
+        "primary_source_ids",
+        "ontology_targets",
+        "policy_controls"
+      ],
+      "embedding_text": "embedding_text_template + subniches_15 + primary_source_ids + production_acceptance_gate",
+      "policy_filter": "tenant + classification + purpose + source terms + object/property permissions"
+    },
+    {
+      "name": "public_document_evidence",
+      "source_file": "ocr_document_candidates_15000.csv",
+      "id_field": "ocr_candidate_id",
+      "embedding_text": "document title + OCR text chunks + citation anchors + source provenance",
+      "policy_filter": "document licence + classification + user purpose"
+    }
+  ]
+}
