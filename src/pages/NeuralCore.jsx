@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { COLORS as C } from "@/domain/colors";
 import { OBJECTS, LINKS } from "@/domain/ontology";
 import { kimiClient } from "@/api/kimiClient";
+import { apiGet, apiPost, qs, asList, useAsync } from "@/lib/wave1";
 import { PageShell, PanelCard, StatTile, Grid, Badge } from "@/components/PageKit";
 
 const ACCENT = C.purple; // cognition domain accent
@@ -87,6 +88,24 @@ const CLUSTER_HUES = [
   0x33e0ff, 0xf07820, 0x7ee787, 0xc792ff, 0xe8a800,
   0xff6b8b, 0x4fd1c5, 0xa0e060, 0x6aa0ff, 0xffd24a,
 ];
+
+// Build the REAL per-kind cluster model from the catalog's `counts` map. Each
+// kind becomes one colour cluster whose `frac` is its true share of the store,
+// so the cloud's colour clusters mirror the actual knowledge breakdown. Returns
+// [{ kind, count, frac, hue }] sorted largest-first, or [] for an empty store.
+function kindClustersFromCounts(counts) {
+  const entries = Object.entries(counts || {}).filter(([, n]) => Number(n) > 0);
+  const total = entries.reduce((s, [, n]) => s + Number(n), 0);
+  if (!total) return [];
+  return entries
+    .sort((a, b) => b[1] - a[1])
+    .map(([kind, n], i) => ({
+      kind,
+      count: Number(n),
+      frac: Number(n) / total,
+      hue: new THREE.Color(CLUSTER_HUES[i % CLUSTER_HUES.length]),
+    }));
+}
 
 // Build the REAL knowledge-graph: OBJECTS → nodes, LINKS → edges. Positions are
 // seeded then relaxed with a cheap force-directed pass (repulsion + link spring)
@@ -331,11 +350,14 @@ const PRESETS = {
 
 // ── LOD model ───────────────────────────────────────────────────────────────
 // renderBudget = the MAX number of points the GPU ever draws (bounded, 60fps).
-// totalNodes  = the LOGICAL/conceptual graph size, data-driven & unbounded
-//               (millions → billions → trillions). The drawn cloud is always a
-//               density-faithful SAMPLE of min(totalNodes, renderBudget) points.
-// This is honest billion/trillion-scale LOD: deck.gl / Palantir / Gephi style —
-// you never draw literal billions of primitives, you draw a representative slice.
+// totalNodes  = the REAL knowledge-store size (catalog.total + ontology objects),
+//               fetched from the backend and growing live as knowledge is
+//               captured. The drawn cloud is always a density-faithful SAMPLE of
+//               min(totalNodes, renderBudget) points.
+// This is honest LOD: deck.gl / Palantir / Gephi style — you never draw a literal
+// record-per-primitive when the store is large; you draw a representative slice.
+// When the store is SMALL, we draw min(total, budget) so the cloud size tracks
+// the real count exactly (10 notes → ~10 visible percepticons, not a fake cloud).
 const SCALES = [
   { id: "250k", label: "250K", neurons: 250_000 },
   { id: "1m", label: "1M", neurons: 1_000_000 },
@@ -343,20 +365,14 @@ const SCALES = [
   { id: "2m", label: "2M", neurons: 2_000_000 },
   { id: "3m", label: "3M", neurons: 3_000_000 },
 ];
-const DEFAULT_SCALE = "1.5m";       // render budget default (~1,500,000 drawn)
+const DEFAULT_SCALE = "1m";         // GPU render budget cap (max points drawn)
 const HAZE_RATIO = 1 / 3;           // synapse haze points per neuron
 const MAX_LINES = 48_000;           // hard-capped near-focus line definition
 
-// Logical total-node tiers — unbounded by GPU; up to 1e12 (one trillion).
-const TOTALS = [
-  { id: "1.5m", label: "1.5M", total: 1_500_000 },
-  { id: "10m", label: "10M", total: 10_000_000 },
-  { id: "100m", label: "100M", total: 100_000_000 },
-  { id: "1b", label: "1B", total: 1_000_000_000 },
-  { id: "1t", label: "1T", total: 1_000_000_000_000 },
-];
-const DEFAULT_TOTAL = "1.5m";
-const AVG_DEGREE = 32;              // conceptual synapses ≈ totalNodes * avgDegree
+const AVG_DEGREE = 8;               // est. links per record (wikilinks + mirror)
+const MIN_CLOUD = 1200;             // floor so a tiny-but-nonempty store still
+                                    // reads as a glowing volume (clearly labelled
+                                    // a representative render, not faked records)
 
 // ── shared glow shaders (reused by neuron cloud + synapse haze) ─────────────
 const CLOUD_VERT = `
@@ -402,8 +418,29 @@ const CLOUD_FRAG = `
 
 // Build the dense brain-cloud buffers. Returns typed arrays + the conceptual
 // synapse count so the HUD can report an honest large number.
-function buildCloudBuffers(neuronCount, seed) {
+//
+// `kindClusters` (optional) is the REAL per-kind breakdown from the catalog:
+// [{ hue, frac, kind }] where frac sums to ~1. When present, each neuron is
+// assigned to a kind cluster in proportion to its real share and coloured by that
+// kind's hue — so the cloud's colour clusters mirror the actual knowledge store.
+function buildCloudBuffers(neuronCount, seed, kindClusters) {
   const rng = mulberry32(seed);
+
+  // Precompute cumulative kind boundaries so we can map rng()→kind by real share.
+  const clusters = (kindClusters && kindClusters.length) ? kindClusters : null;
+  let cum = null;
+  if (clusters) {
+    cum = [];
+    let acc = 0;
+    for (const k of clusters) { acc += Math.max(0, k.frac || 0); cum.push(acc); }
+    const tot = cum[cum.length - 1] || 1;
+    for (let i = 0; i < cum.length; i++) cum[i] /= tot;
+  }
+  const pickCluster = (r) => {
+    if (!cum) return -1;
+    for (let i = 0; i < cum.length; i++) if (r <= cum[i]) return i;
+    return cum.length - 1;
+  };
 
   const npos = new Float32Array(neuronCount * 3);
   const ncol = new Float32Array(neuronCount * 3);
@@ -438,10 +475,18 @@ function buildCloudBuffers(neuronCount, seed) {
     const depth = THREE.MathUtils.clamp(x / (RX * 1.3) * 0.5 + 0.5, 0, 1);
     ndepth[i] = depth;
 
-    // colour: cyan→amber across depth, with blue/orange bias at the poles
-    cA.copy(CYAN).lerp(BLUE, 0.3);
-    cB.copy(AMBER).lerp(ORANGE, 0.3);
-    tmp.copy(cA).lerp(cB, depth);
+    // colour: when real per-kind clusters are supplied, tint each neuron by its
+    // assigned kind hue (so clusters mirror the actual store), modulated slightly
+    // by depth for shading. Otherwise fall back to the cyan→amber depth ramp.
+    if (clusters) {
+      const cl = pickCluster(rng());
+      const base = clusters[cl] ? clusters[cl].hue : CYAN;
+      tmp.copy(base).lerp(CYAN, 0.12 + depth * 0.18);
+    } else {
+      cA.copy(CYAN).lerp(BLUE, 0.3);
+      cB.copy(AMBER).lerp(ORANGE, 0.3);
+      tmp.copy(cA).lerp(cB, depth);
+    }
     // brighten a fraction of points to read as "firing" hotspots
     const hot = rng() < 0.08 ? 1.6 : 1.0;
     ncol[i * 3] = tmp.r * hot;
@@ -533,7 +578,7 @@ function makeCloudPoints(count, pos, col, size, depth, phase, { opacity, sizeBoo
   return { points: new THREE.Points(geo, mat), geo, mat, count };
 }
 
-function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) {
+function NeuralCanvas({ mode, scaleId, totalNodes, kindClusters, seed, onStats, onStepDown }) {
   const mountRef = useRef(null);
   const onStatsRef = useRef(onStats);
   onStatsRef.current = onStats;
@@ -541,6 +586,12 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
   onStepDownRef.current = onStepDown;
   const totalNodesRef = useRef(totalNodes);
   totalNodesRef.current = totalNodes;
+  // serialize the kind clusters so the effect re-runs only when the real
+  // breakdown actually changes (stable across re-renders otherwise).
+  const kindKey = useMemo(
+    () => (kindClusters || []).map((k) => `${k.kind}:${k.frac.toFixed(4)}`).join("|"),
+    [kindClusters]
+  );
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -583,16 +634,22 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       // min(totalNodes, renderBudget) points — a density-faithful SAMPLE of the
       // logical total. For totalNodes ≥ renderBudget we draw exactly the budget
       // (the distribution is identical, so 2M vs 1B look the same — correct LOD).
-      const renderBudget = (SCALES.find((s) => s.id === scaleId) || SCALES[2]).neurons;
-      const logicalTotal = totalNodes || renderBudget;
-      const wanted = Math.min(renderBudget, Math.max(1, logicalTotal));
-      // try the requested scale; on allocation failure step down automatically
-      const ladder = SCALES.map((s) => s.neurons).filter((n) => n <= wanted).sort((a, b) => b - a);
-      if (ladder.length === 0) ladder.push(wanted); // tiny logical totals (< 250k)
+      const renderBudget = (SCALES.find((s) => s.id === scaleId) || SCALES[1]).neurons;
+      // REAL store size drives the cloud. When small we draw exactly the real
+      // count (with a small visual floor so a non-empty store still glows); when
+      // large we cap at the GPU budget and draw a representative LOD sample.
+      const realTotal = Math.max(0, totalNodes || 0);
+      const logicalTotal = realTotal;
+      const drawTarget = realTotal > 0
+        ? Math.min(renderBudget, Math.max(MIN_CLOUD, realTotal))
+        : renderBudget; // empty store → draw the budget as a clearly-labelled demo
+      // try the requested count; on allocation failure step down automatically.
+      const ladder = [drawTarget, ...SCALES.map((s) => s.neurons).filter((n) => n < drawTarget)]
+        .sort((a, b) => b - a);
       let built = null, usedNeurons = 0;
       for (const n of ladder) {
         try {
-          built = buildCloudBuffers(n, seed);
+          built = buildCloudBuffers(n, seed, kindClusters);
           usedNeurons = n;
           break;
         } catch {
@@ -662,7 +719,7 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
         layers: 64,
         fps: 0,
         webgl: true,
-        steppedDown: usedNeurons < wanted,
+        steppedDown: usedNeurons < drawTarget,
       });
 
       // per-frame uniform drive + fps probe
@@ -686,7 +743,6 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       // centrality. Synthetic modes keep their layer colouring untouched. ─────
       let liveModel = null;
       if (isLive) {
-        const N = nodes.length;
         // local fallback centrality = weighted degree (normalised)
         const maxDeg = Math.max(1, ...nodes.map((n) => n.degree || 0));
         const centrality = nodes.map((n) => (n.degree || 0) / maxDeg);
@@ -980,7 +1036,7 @@ function NeuralCanvas({ mode, scaleId, totalNodes, seed, onStats, onStepDown }) 
       delete mount.dataset.neurons;
       delete mount.dataset.synapses;
     };
-  }, [mode, scaleId, totalNodes, seed]);
+  }, [mode, scaleId, totalNodes, kindKey, seed]);
 
   return <div ref={mountRef} style={{ position: "absolute", inset: 0, cursor: "grab" }} />;
 }
@@ -1008,27 +1064,122 @@ const fmtBig = (n) => {
 export default function NeuralCore() {
   const [mode, setMode] = useState("cloud");           // DEFAULT = massive cloud
   const [scaleId, setScaleId] = useState(DEFAULT_SCALE);  // GPU render budget
-  const [totalId, setTotalId] = useState(DEFAULT_TOTAL);  // logical total tier
   const [seed] = useState(() => 0xa53f);
   const [stats, setStats] = useState({ neurons: 0, synapses: 0, layers: 0, fps: 0 });
 
   const cloud = mode === "cloud";
   const live = mode === "live";
 
-  // Logical total node count. In LIVE GRAPH it tracks the real DB size; in
-  // synthetic cloud modes it's the selected total tier (up to 1e12). Set to 0
-  // for non-cloud synthetic modes so the canvas mirrors its drawn counts.
+  // ── REAL Second-Brain data feeds (catalog + timeline + ontology) ──────────
+  // The whole point of this page: the headline TOTAL and the foreground nodes
+  // are REAL records from the store, not fabricated billions. Every call
+  // degrades gracefully (apiGet/useAsync swallow failures) so the renderer
+  // never crashes — an empty store simply reads as empty and SAYS so.
+  const [catalog, setCatalog] = useState(null);     // { total, counts, recent, orphans }
+  const [timeline, setTimeline] = useState([]);     // recent log/daily activity
+  const [notes, setNotes] = useState([]);           // foreground node candidates
+  const [ontoCount, setOntoCount] = useState(0);    // mirrored graph-object count
+  const [throughput, setThroughput] = useState(null); // optional real metric
+  const [selNote, setSelNote] = useState(null);     // click-to-open detail
+  const [captureText, setCaptureText] = useState("");
+  const [toast, setToast] = useState(null);         // last-captured note title
+  const [flashId, setFlashId] = useState(null);     // id of the freshly-grown node
+  const captureAsync = useAsync();
+  const detailAsync = useAsync();
+
+  // Pull the real store: total per-kind counts, recent notes (foreground nodes),
+  // the activity timeline, and the mirrored ontology-object count. Folded into
+  // the headline total so the big number == real knowledge in the store.
+  const refresh = useCallback(async () => {
+    const [cat, tl, ns, onto, metrics] = await Promise.all([
+      apiGet("/v1/brain/catalog").catch(() => null),
+      apiGet(`/v1/brain/timeline${qs({ limit: 50 })}`).catch(() => null),
+      apiGet(`/v1/brain/notes${qs({ limit: 120 })}`).catch(() => null),
+      apiGet(`/v1/ontology/objects${qs({ limit: 200 })}`).catch(() => null),
+      apiGet("/v1/metrics").catch(() => null),
+    ]);
+    if (cat && typeof cat.total === "number") setCatalog(cat);
+    setTimeline(asList(tl, "items"));
+    setNotes(asList(ns, "items", "notes"));
+    setOntoCount(asList(onto, "objects").length);
+    // optional honest throughput: total captured/upserted ops from counters
+    const counters = metrics?.metrics?.counters;
+    if (Array.isArray(counters)) {
+      const cap = counters.find((c) =>
+        /brain|capture|note|upsert/i.test(c?.name || c?.key || ""));
+      if (cap && Number.isFinite(Number(cap.value ?? cap.count)))
+        setThroughput(Number(cap.value ?? cap.count));
+    }
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  // REAL headline total = brain notes + mirrored ontology objects. Grows live as
+  // knowledge is captured. 0 when the store is genuinely empty (honestly so).
+  const realTotal = (catalog?.total || 0) + ontoCount;
+
+  // REAL per-kind colour clusters from the catalog counts (one cluster per kind).
+  const kindClusters = useMemo(
+    () => kindClustersFromCounts(catalog?.counts),
+    [catalog]
+  );
+
+  // Foreground "percepticons" = REAL records: recent notes (catalog + /notes)
+  // plus a sample of mirrored ontology objects. Clickable to open their content.
+  const foreground = useMemo(() => {
+    const seen = new Set();
+    const out = [];
+    const push = (n) => {
+      if (!n) return;
+      const id = n.id || n.title;
+      if (!id || seen.has(id)) return;
+      seen.add(id);
+      out.push(n);
+    };
+    (catalog?.recent || []).forEach(push);
+    notes.forEach(push);
+    return out;
+  }, [catalog, notes]);
+
+  // Logical total fed to the canvas. In LIVE GRAPH it tracks the local demo
+  // graph; in the CLOUD it is the REAL store size (notes + ontology objects).
   const totalNodes = useMemo(() => {
     if (live) return OBJECTS.length;
-    if (cloud) return (TOTALS.find((t) => t.id === totalId) || TOTALS[0]).total;
+    if (cloud) return realTotal;
     return 0;
-  }, [cloud, live, totalId]);
+  }, [cloud, live, realTotal]);
 
   // onStats supports both full stat objects and fps-only ticks (for the live FPS)
   const handleStats = (s) => {
     if (s.fpsOnly) { setStats((p) => ({ ...p, fps: s.fps })); return; }
     setStats(s);
   };
+
+  // ── CAPTURE: the growth path. POST free text → store creates a note →
+  // re-fetch catalog so the REAL total increments and a new percepticon appears.
+  const doCapture = useCallback(async () => {
+    const text = captureText.trim();
+    if (!text) return;
+    const note = await captureAsync.run(() => apiPost("/v1/brain/capture", { text }));
+    setCaptureText("");
+    if (note) {
+      setToast(note.title || "(captured)");
+      setFlashId(note.id || note.title);
+      setSelNote(note);
+      setTimeout(() => setFlashId(null), 2600);
+      setTimeout(() => setToast(null), 4000);
+    }
+    // re-fetch so the headline total goes UP and the new node joins the cloud
+    await refresh();
+  }, [captureText, captureAsync, refresh]);
+
+  // Open a real note's content in the side panel (click-to-open detail).
+  const openNote = useCallback(async (n) => {
+    setSelNote(n);
+    const full = await detailAsync.run(() =>
+      apiGet(`/v1/brain/notes/${encodeURIComponent(n.id || n.title)}`));
+    if (full) setSelNote(full);
+  }, [detailAsync]);
 
   // step-down hook: lets the canvas auto-drop the scale when frames are slow
   const stepDownRef = useRef(null);
@@ -1040,13 +1191,14 @@ export default function NeuralCore() {
   );
 
   // Honest LOD display numbers.
-  // displayTotal     = logical/conceptual node count (the big number).
+  // displayTotal     = REAL store size (catalog.total + ontology objects).
   // displayRendered  = points the GPU actually draws this frame (the LOD sample).
   // displaySynapses  = conceptual synapse count (total * avgDegree, or live links).
   const displayTotal = stats.total || stats.neurons || 0;
   const displayRendered = stats.rendered || stats.neurons || 0;
   const displaySynapses = stats.totalSynapses || stats.synapses || 0;
   const isSampling = displayTotal > displayRendered;
+  const storeEmpty = cloud && realTotal === 0;
 
   return (
     <PageShell
@@ -1079,22 +1231,28 @@ export default function NeuralCore() {
     >
       <Grid min={150} style={{ marginBottom: 14 }}>
         <StatTile
-          label="Nodes"
-          value={fmtBig(displayTotal)}
+          label={cloud ? "Knowledge" : "Nodes"}
+          value={cloud ? fmt(realTotal) : fmtBig(displayTotal)}
           accent={CYAN.getStyle()}
-          sub={isSampling ? `rendering ${fmt(displayRendered)} (LOD sample)` : (live ? "live entities" : "GPU point-cloud")}
+          sub={cloud
+            ? (storeEmpty ? "store empty — capture to grow" : `real records (${fmt(catalog?.total || 0)} notes + ${fmt(ontoCount)} graph)`)
+            : (isSampling ? `rendering ${fmt(displayRendered)} (LOD sample)` : (live ? "live entities" : "GPU point-cloud"))}
         />
         <StatTile
-          label="Synapses"
-          value={"~" + fmtBig(displaySynapses)}
+          label={cloud ? "Rendering" : "Synapses"}
+          value={cloud ? fmt(displayRendered) : "~" + fmtBig(displaySynapses)}
           accent={C.blue}
-          sub={isSampling ? `drawing ${fmt(stats.synapses)} (sample)` : (cloud ? "haze + capped lines" : "additive edges")}
+          sub={cloud
+            ? (isSampling ? "representative LOD sample" : "real records drawn 1:1")
+            : (isSampling ? `drawing ${fmt(stats.synapses)} (sample)` : "additive edges")}
         />
         <StatTile
-          label={live ? "Clusters" : "Scale"}
-          value={live ? (stats.clusters || "—") : (cloud ? (TOTALS.find((t) => t.id === totalId) || TOTALS[0]).label : "SIM")}
+          label={live ? "Clusters" : cloud ? "Kinds" : "Scale"}
+          value={live ? (stats.clusters || "—") : (cloud ? (kindClusters.length || "—") : "SIM")}
           accent={AMBER.getStyle()}
-          sub={cloud ? `budget ${scaleLabel} drawn` : live ? (stats.modelSource || "computing…") : `seed 0x${seed.toString(16)}`}
+          sub={cloud
+            ? (throughput != null ? `${fmt(throughput)} captures logged` : `budget ${scaleLabel} · colour=kind`)
+            : live ? (stats.modelSource || "computing…") : `seed 0x${seed.toString(16)}`}
         />
         <StatTile
           label="FPS"
@@ -1105,30 +1263,51 @@ export default function NeuralCore() {
       </Grid>
 
       {cloud && (
-        <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 8, letterSpacing: 1.5, color: C.text, marginRight: 2 }}>TOTAL</span>
-          {TOTALS.map((tNode) => {
-            const active = tNode.id === totalId;
-            return (
-              <button
-                key={tNode.id}
-                onClick={() => setTotalId(tNode.id)}
-                style={{
-                  cursor: "pointer", fontFamily: "inherit", fontSize: 9, letterSpacing: 1.5,
-                  padding: "5px 12px", borderRadius: 4,
-                  color: active ? AMBER.getStyle() : C.text,
-                  background: active ? AMBER.getStyle() + "1a" : "rgba(0,0,0,0.35)",
-                  border: `1px solid ${active ? AMBER.getStyle() + "88" : C.border}`,
-                  fontWeight: 700,
-                }}
-              >
-                {tNode.label}
-              </button>
-            );
-          })}
-          <span style={{ fontSize: 7, letterSpacing: 1, color: "rgba(168,188,200,0.5)", marginLeft: 4 }}>
-            logical · scales to 1T
+        <div style={{
+          display: "flex", gap: 8, alignItems: "center", marginBottom: 12, flexWrap: "wrap",
+          background: "rgba(0,0,0,0.32)", border: `1px solid ${CYAN.getStyle()}33`,
+          borderRadius: 6, padding: "10px 12px",
+        }}>
+          <span style={{ fontSize: 8, letterSpacing: 1.5, color: CYAN.getStyle(), fontWeight: 700 }}>
+            CAPTURE
           </span>
+          <input
+            value={captureText}
+            onChange={(e) => setCaptureText(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") doCapture(); }}
+            placeholder="Type a thought to store in the Second Brain — it grows the cloud…"
+            style={{
+              flex: 1, minWidth: 220, fontFamily: "inherit", fontSize: 11,
+              padding: "8px 10px", borderRadius: 4, color: C.textB,
+              background: "rgba(0,0,0,0.45)", border: `1px solid ${C.border}`,
+              outline: "none",
+            }}
+          />
+          <button
+            onClick={doCapture}
+            disabled={captureAsync.loading || !captureText.trim()}
+            style={{
+              cursor: captureAsync.loading || !captureText.trim() ? "default" : "pointer",
+              fontFamily: "inherit", fontSize: 9, letterSpacing: 1.5, fontWeight: 700,
+              padding: "8px 16px", borderRadius: 4,
+              color: captureAsync.loading ? C.text : CYAN.getStyle(),
+              background: CYAN.getStyle() + "1a",
+              border: `1px solid ${CYAN.getStyle()}88`,
+              opacity: !captureText.trim() ? 0.5 : 1,
+            }}
+          >
+            {captureAsync.loading ? "STORING…" : "+ STORE"}
+          </button>
+          {toast && (
+            <span style={{ fontSize: 9, letterSpacing: 1, color: C.neon }}>
+              ▸ captured “{toast}” · total {fmt(realTotal)}
+            </span>
+          )}
+          {captureAsync.error && (
+            <span style={{ fontSize: 9, letterSpacing: 1, color: C.red }}>
+              capture failed — store may be read-only (bearer required)
+            </span>
+          )}
         </div>
       )}
 
@@ -1170,7 +1349,7 @@ export default function NeuralCore() {
           background: "radial-gradient(ellipse at 50% 42%, #04111c 0%, #010305 72%)",
           border: `1px solid ${C.border}`,
         }}>
-          <NeuralCanvas mode={mode} scaleId={scaleId} totalNodes={totalNodes} seed={seed} onStats={handleStats} onStepDown={(id) => stepDownRef.current?.(id)} />
+          <NeuralCanvas mode={mode} scaleId={scaleId} totalNodes={totalNodes} kindClusters={cloud ? kindClusters : null} seed={seed} onStats={handleStats} onStepDown={(id) => stepDownRef.current?.(id)} />
 
           {/* HUD overlay */}
           <div style={{
@@ -1180,10 +1359,13 @@ export default function NeuralCore() {
             <div style={{ color: live ? C.neon : cloud ? CYAN.getStyle() : AMBER.getStyle(), fontWeight: 700 }}>
               {live ? "● LIVE GRAPH" : "◌ " + (MODES.find((m) => m.id === mode)?.label)}
             </div>
-            <div>NODES&nbsp;&nbsp;&nbsp;&nbsp;{fmt(displayTotal)}</div>
+            <div>{cloud ? "KNOWLEDGE" : "NODES"}&nbsp;&nbsp;{fmt(displayTotal)}{cloud ? " real" : ""}</div>
+            {storeEmpty && (
+              <div style={{ color: C.gold }}>store empty — capture to grow</div>
+            )}
             {isSampling && (
               <div style={{ color: "rgba(168,188,200,0.75)" }}>
-                rendering {fmt(displayRendered)} (LOD sample)
+                rendering {fmt(displayRendered)} (representative LOD sample)
               </div>
             )}
             <div>{live ? "EDGES" : "SYNAPSES"}&nbsp;{live ? fmt(LINKS.length) : "~" + fmtBig(displaySynapses)}</div>
@@ -1210,12 +1392,105 @@ export default function NeuralCore() {
             maxWidth: 380,
           }}>
             DRAG TO ROTATE · SCROLL TO ZOOM · ADDITIVE BLOOM · ≤2x DPR<br />
-            Level-of-Detail — total scales with the database to billions+; the frame draws a
-            bounded representative sample (constant 60fps). No GPU renders literal billions of
-            primitives — this is how billion-scale graph viz works.
+            {cloud
+              ? `Real store of ${fmt(realTotal)} records (notes + ontology). Colour clusters = real kinds. Level-of-Detail: when the store grows large we draw a bounded representative sample at 60fps rather than one primitive per record — but the TOTAL above is the genuine database count, growing as you capture.`
+              : "Level-of-Detail — the frame draws a bounded representative sample at constant 60fps."}
           </div>
         </div>
       </PanelCard>
+
+      {cloud && (
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(0,1fr)", gap: 14, marginTop: 14 }}>
+          {/* Foreground percepticons = REAL records, click to open */}
+          <PanelCard title="PERCEPTICONS · REAL RECORDS" accent={CYAN.getStyle()}
+            right={<Badge color={CYAN.getStyle()}>{foreground.length}</Badge>}>
+            {foreground.length === 0 ? (
+              <div style={{ fontSize: 10, color: C.text, padding: "12px 4px" }}>
+                The Second Brain store is empty. Use the CAPTURE box above to store your
+                first thought — it becomes a real record and a new percepticon in the cloud.
+              </div>
+            ) : (
+              <Grid min={170}>
+                {foreground.slice(0, 60).map((n) => {
+                  const id = n.id || n.title;
+                  const flashing = flashId && id === flashId;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => openNote(n)}
+                      style={{
+                        cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                        background: flashing ? CYAN.getStyle() + "22" : "rgba(0,0,0,0.3)",
+                        border: `1px solid ${flashing ? CYAN.getStyle() : C.border}`,
+                        borderRadius: 5, padding: "8px 10px",
+                        display: "flex", alignItems: "center", gap: 8,
+                        transition: "background 0.4s, border-color 0.4s",
+                      }}
+                    >
+                      <span style={{ width: 8, height: 8, borderRadius: "50%", flexShrink: 0, background: CYAN.getStyle() }} />
+                      <span style={{ fontSize: 10, color: C.textB, fontWeight: 700, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {n.title || n.id}
+                      </span>
+                      <Badge color={AMBER.getStyle()}>{n.kind || "note"}</Badge>
+                    </button>
+                  );
+                })}
+              </Grid>
+            )}
+          </PanelCard>
+
+          {/* Recent activity timeline + selected note detail */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <PanelCard title={selNote ? "NOTE DETAIL" : "RECENT CAPTURES"} accent={C.neon}
+              right={<Badge color={C.neon}>{selNote ? (selNote.kind || "note") : timeline.length}</Badge>}>
+              {selNote ? (
+                <div style={{ fontSize: 11, color: C.textB, lineHeight: 1.6 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <strong style={{ color: CYAN.getStyle() }}>{selNote.title || selNote.id}</strong>
+                    <button
+                      onClick={() => setSelNote(null)}
+                      style={{ cursor: "pointer", fontFamily: "inherit", fontSize: 8, letterSpacing: 1.2,
+                        color: C.text, background: "transparent", border: `1px solid ${C.border}`,
+                        borderRadius: 4, padding: "3px 8px" }}
+                    >CLOSE</button>
+                  </div>
+                  {detailAsync.loading && <div style={{ color: C.text }}>loading…</div>}
+                  <div style={{ whiteSpace: "pre-wrap", maxHeight: 220, overflowY: "auto", fontSize: 10, color: C.text }}>
+                    {selNote.body_md || selNote.body || selNote.markdown || "(no body)"}
+                  </div>
+                  {selNote.confidence != null && (
+                    <div style={{ fontSize: 8, letterSpacing: 1, color: C.gold, marginTop: 6 }}>
+                      confidence {Math.round((selNote.confidence || 0) * 100)}%
+                    </div>
+                  )}
+                </div>
+              ) : timeline.length === 0 ? (
+                <div style={{ fontSize: 10, color: C.text, padding: "8px 2px" }}>
+                  No activity yet — captures and daily notes appear here.
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 4, maxHeight: 280, overflowY: "auto" }}>
+                  {timeline.map((n) => (
+                    <button
+                      key={n.id || n.title}
+                      onClick={() => openNote(n)}
+                      style={{
+                        cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                        background: "rgba(0,0,0,0.3)", border: `1px solid ${C.border}`,
+                        borderRadius: 4, padding: "6px 9px", fontSize: 10, color: C.textB,
+                        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                      }}
+                    >
+                      <span style={{ color: AMBER.getStyle(), marginRight: 6 }}>{n.kind || "note"}</span>
+                      {n.title || n.id}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </PanelCard>
+          </div>
+        </div>
+      )}
 
       {live && (
         <PanelCard title="BOUND ENTITIES" accent={C.neon} style={{ marginTop: 14 }}
