@@ -1,0 +1,12 @@
+apiVersion: v2
+name: ontology-plane
+description: Ontology plane for the Jarvis enterprise OS (object model, links, CDC)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - jarvis
+  - ontology
+maintainers:
+  - name: Platform Team
+    email: platform@jarvis.internal

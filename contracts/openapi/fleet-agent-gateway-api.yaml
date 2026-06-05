@@ -1,0 +1,207 @@
+openapi: 3.1.0
+info:
+  title: Fleet Agent Gateway API
+  version: 1.0.0
+  description: >
+    The control-plane-facing edge for the agent fleet. Each managed node runs a
+    lightweight Go agent that registers itself, heartbeats liveness, reports its
+    observed current-state, receives and acknowledges reconciliation results
+    pushed by the Control Plane, and streams telemetry. This is the ground truth
+    feed the Control Plane reconciles desired-state against.
+
+
+    Exposes platform concepts (nodes, heartbeats, state reports, reconciliation
+    results, telemetry) — never raw database tables.
+
+
+    Production language: Go agent (Layer B). This OpenAPI document is the REST
+    mirror of the agent's gRPC service contract
+    (`contracts/protobuf` fleet agent service) for tooling and human review; the
+    wire protocol in production is gRPC.
+
+
+    Layer A reference module: `server/services/jarvis_apollo.py` (fleet
+    subsystem), exposed under `/v1/jarvis`. The contract is stable across the
+    Layer A -> Layer B split.
+servers:
+  - url: /v1/fleet-agent
+    description: Layer B production agent gateway mount (gRPC mirror)
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: registration
+    description: Node enrollment into the fleet
+  - name: heartbeat
+    description: Liveness heartbeats from agents
+  - name: state
+    description: Observed current-state reports from nodes
+  - name: reconciliation
+    description: Reconciliation results pushed to and acknowledged by agents
+  - name: telemetry
+    description: Telemetry and metric uploads from nodes
+paths:
+  /nodes/register:
+    post:
+      tags: [registration]
+      summary: Register a node into the fleet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NodeRegistration' }
+      responses:
+        '201':
+          description: Node enrolled; returns assigned identity and config
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NodeIdentity' }
+  /nodes/{nodeId}/heartbeat:
+    post:
+      tags: [heartbeat]
+      summary: Submit a liveness heartbeat
+      parameters:
+        - { name: nodeId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Heartbeat' }
+      responses:
+        '200':
+          description: Heartbeat acknowledged
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HeartbeatAck' }
+  /nodes/{nodeId}/report-state:
+    post:
+      tags: [state]
+      summary: Report observed current-state for the node
+      parameters:
+        - { name: nodeId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StateReport' }
+      responses:
+        '200':
+          description: State accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StateAck' }
+  /nodes/{nodeId}/reconciliation-result:
+    post:
+      tags: [reconciliation]
+      summary: Acknowledge the outcome of an applied reconciliation
+      parameters:
+        - { name: nodeId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReconciliationResult' }
+      responses:
+        '200':
+          description: Result recorded
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ReconciliationAck' }
+  /nodes/{nodeId}/telemetry:
+    post:
+      tags: [telemetry]
+      summary: Upload a batch of telemetry samples
+      parameters:
+        - { name: nodeId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TelemetryBatch' }
+      responses:
+        '202':
+          description: Telemetry accepted
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    NodeRegistration:
+      type: object
+      required: [hostname, environment]
+      properties:
+        hostname: { type: string }
+        environment: { type: string }
+        agentVersion: { type: string }
+        labels:
+          type: object
+          additionalProperties: { type: string }
+        attestation: { type: string, description: Hardware/software attestation token }
+        classification: { $ref: '#/components/schemas/Classification' }
+    NodeIdentity:
+      type: object
+      properties:
+        nodeId: { type: string }
+        environment: { type: string }
+        heartbeatIntervalSeconds: { type: integer, default: 30 }
+        config: { type: object, additionalProperties: true }
+    Heartbeat:
+      type: object
+      required: [sentAt]
+      properties:
+        sentAt: { type: string, format: date-time }
+        health: { type: string, enum: [healthy, degraded, unhealthy] }
+        agentVersion: { type: string }
+    HeartbeatAck:
+      type: object
+      properties:
+        acknowledged: { type: boolean }
+        pendingReconciliation: { type: boolean }
+        nextHeartbeatSeconds: { type: integer }
+    StateReport:
+      type: object
+      required: [observedAt]
+      properties:
+        observedAt: { type: string, format: date-time }
+        artifact: { type: string }
+        version: { type: string }
+        replicas: { type: integer }
+        health: { type: string, enum: [healthy, degraded, unhealthy, unknown] }
+        details: { type: object, additionalProperties: true }
+    StateAck:
+      type: object
+      properties:
+        accepted: { type: boolean }
+        driftDetected: { type: boolean }
+    ReconciliationResult:
+      type: object
+      required: [reconciliationId, status]
+      properties:
+        reconciliationId: { type: string }
+        status: { type: string, enum: [applied, partial, failed] }
+        appliedVersion: { type: string }
+        actionsTaken:
+          type: array
+          items: { type: string }
+        error: { type: string, nullable: true }
+        completedAt: { type: string, format: date-time }
+    ReconciliationAck:
+      type: object
+      properties:
+        recorded: { type: boolean }
+        converged: { type: boolean }
+    TelemetryBatch:
+      type: object
+      required: [samples]
+      properties:
+        samples:
+          type: array
+          items:
+            type: object
+            properties:
+              metric: { type: string }
+              value: { type: number }
+              unit: { type: string }
+              timestamp: { type: string, format: date-time }
+              tags:
+                type: object
+                additionalProperties: { type: string }

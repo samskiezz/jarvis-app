@@ -1,0 +1,12 @@
+apiVersion: v2
+name: control-plane
+description: Control plane for the Jarvis enterprise OS (API gateway, auth, orchestration)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - jarvis
+  - control-plane
+maintainers:
+  - name: Platform Team
+    email: platform@jarvis.internal
