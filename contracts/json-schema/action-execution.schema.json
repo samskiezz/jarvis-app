@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ActionExecution",
+  "type": "object",
+  "required": [
+    "execution_id",
+    "action_type",
+    "target_object_id",
+    "initiating_identity",
+    "status"
+  ],
+  "properties": {
+    "execution_id": {
+      "type": "string"
+    },
+    "action_type": {
+      "type": "string"
+    },
+    "target_object_id": {
+      "type": "string"
+    },
+    "target_object_type": {
+      "type": "string"
+    },
+    "initiating_identity": {
+      "type": "string"
+    },
+    "initiating_agent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "declared_purpose": {
+      "type": "string"
+    },
+    "input_payload": {
+      "type": "object"
+    },
+    "precondition_results": {
+      "type": "object"
+    },
+    "policy_decision": {
+      "type": "object"
+    },
+    "approval_requirement": {
+      "type": "boolean"
+    },
+    "approver_identity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "execution_status": {
+      "type": "string",
+      "enum": [
+        "requested",
+        "policy_checked",
+        "approval_required",
+        "approved",
+        "rejected",
+        "executing",
+        "completed",
+        "failed",
+        "compensated"
+      ]
+    },
+    "status": {
+      "type": "string"
+    },
+    "side_effects": {
+      "type": "array"
+    },
+    "writeback_target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emitted_events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "compensation_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence_bundle": {
+      "type": "array"
+    },
+    "audit_id": {
+      "type": "string"
+    }
+  }
+}

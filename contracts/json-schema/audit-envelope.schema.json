@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AuditEnvelope",
+  "type": "object",
+  "required": [
+    "audit_id",
+    "event_type",
+    "occurred_at",
+    "payload_hash",
+    "previous_hash"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string"
+    },
+    "actor_type": {
+      "type": "string"
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "tenant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "object_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_decision": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "classification": {
+      "type": "string"
+    },
+    "source_ip": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_agent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "policy_id": "policy.link_traversal",
+  "decision_point": "link_traversal",
+  "version": "1.0.0",
+  "effect_default": "deny",
+  "rules": [
+    {
+      "id": "clearance",
+      "require": "subject.clearance_rank >= resource.classification_rank"
+    },
+    {
+      "id": "tenant",
+      "require": "subject.tenant == resource.tenant"
+    },
+    {
+      "id": "compartment",
+      "require": "resource.compartments subset_of subject.compartments"
+    },
+    {
+      "id": "purpose",
+      "require": "resource.purposes empty OR request.purpose in resource.purposes"
+    }
+  ],
+  "obligations_on_permit": [],
+  "audit": {
+    "emit": "policy.access.{decision}",
+    "required": true
+  },
+  "enforced_by": "security-plane/policy-gateway (Java + OPA/Cedar)",
+  "reference_impl": "server/services/jarvis_policy.py::decide"
+}

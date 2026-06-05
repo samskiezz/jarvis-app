@@ -1,0 +1,77 @@
+asyncapi: 3.0.0
+info:
+  title: Sovereign Platform Event Backbone
+  version: 1.0.0
+  description: >
+    Event contract for the platform nervous system. Transport is Kafka (Layer B);
+    the Layer A reference kernel uses an in-process append-only log with the same
+    envelope. Channels = Kafka topics; messages share the PlatformEventEnvelope.
+defaultContentType: application/json
+servers:
+  kafka:
+    host: redpanda:9092
+    protocol: kafka
+    description: Event backbone (Redpanda/Kafka)
+channels:
+  control:
+    address: control
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  fleet:
+    address: fleet
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  ontology:
+    address: ontology
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  objects:
+    address: objects
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  actions:
+    address: actions
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  policy:
+    address: policy
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  audit:
+    address: audit
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  aip:
+    address: aip
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+  deployment:
+    address: deployment
+    messages: {event: {$ref: '#/components/messages/PlatformEvent'}}
+operations:
+  publishControl:
+    action: send
+    channel: {$ref: '#/channels/control'}
+  consumeObjects:
+    action: receive
+    channel: {$ref: '#/channels/objects'}
+  consumeActions:
+    action: receive
+    channel: {$ref: '#/channels/actions'}
+components:
+  messages:
+    PlatformEvent:
+      name: PlatformEvent
+      title: Platform event envelope
+      contentType: application/json
+      payload: {$ref: '#/components/schemas/PlatformEventEnvelope'}
+  schemas:
+    PlatformEventEnvelope:
+      type: object
+      required: [event_id, event_type, event_version, occurred_at, producer, payload]
+      properties:
+        event_id: {type: string}
+        event_type: {type: string, examples: ['object.state.changed', 'action.completed', 'policy.access.denied']}
+        event_version: {type: string, default: '1.0.0'}
+        occurred_at: {type: string, format: date-time}
+        producer: {type: string}
+        tenant_id: {type: [string, 'null']}
+        environment_id: {type: [string, 'null']}
+        object_id: {type: [string, 'null']}
+        correlation_id: {type: [string, 'null']}
+        causation_id: {type: [string, 'null']}
+        classification: {type: string, enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]}
+        audit_required: {type: boolean, default: true}
+        payload: {type: object}

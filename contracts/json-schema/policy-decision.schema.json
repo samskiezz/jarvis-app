@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PolicyDecision",
+  "type": "object",
+  "required": [
+    "permit",
+    "reason"
+  ],
+  "properties": {
+    "permit": {
+      "type": "boolean"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "required_level": {
+      "type": "string"
+    },
+    "subject_clearance": {
+      "type": "string"
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "audit_id": {
+      "type": "string"
+    }
+  }
+}

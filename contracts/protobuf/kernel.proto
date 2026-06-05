@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+// Kernel contract — shared identity, event envelope, audit envelope and access
+// decision primitives. Owned by the JVM kernel module; every service depends on it.
+package company.kernel.v1;
+
+option java_package = "com.company.kernel.proto";
+option java_multiple_files = true;
+option go_package = "github.com/company/enterprise-os/gen/kernel/v1;kernelv1";
+
+enum Classification {
+  CLASSIFICATION_UNSPECIFIED = 0;
+  UNCLASSIFIED = 1;
+  OFFICIAL = 2;
+  SECRET = 3;
+  TOPSECRET = 4;
+}
+
+message PlatformIdentity {
+  string tenant_id = 1;
+  string environment_id = 2;
+  string actor_id = 3;
+  string service_id = 4;
+  string agent_id = 5;
+  string workload_id = 6;
+}
+
+message SecurityContext {
+  PlatformIdentity identity = 1;
+  string role = 2;
+  string purpose = 3;
+  Classification clearance = 4;
+  repeated string compartments = 5;
+  string network_zone = 6;
+}
+
+message EventEnvelope {
+  string event_id = 1;
+  string event_type = 2;
+  string event_version = 3;
+  string occurred_at = 4;          // RFC3339
+  string producer = 5;
+  string tenant_id = 6;
+  string environment_id = 7;
+  string object_id = 8;
+  string correlation_id = 9;
+  string causation_id = 10;
+  Classification classification = 11;
+  bool audit_required = 12;
+  bytes payload = 13;              // JSON or protobuf-any, schema by event_type
+}
+
+message AuditEnvelope {
+  string audit_id = 1;
+  string event_type = 2;
+  string actor_type = 3;
+  string actor_id = 4;
+  string tenant_id = 5;
+  string environment_id = 6;
+  string object_id = 7;
+  string action_type = 8;
+  Classification classification = 9;
+  string correlation_id = 10;
+  string causation_id = 11;
+  string occurred_at = 12;
+  string payload_hash = 13;
+  string previous_hash = 14;       // hash chain
+}
+
+message AccessDecision {
+  bool permit = 1;
+  string reason = 2;
+  Classification required_level = 3;
+  Classification subject_clearance = 4;
+}

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+// Fleet agent contract — the Apollo hub <-> Go node-agent gRPC API.
+// Hub is Java; agents are Go. Production-valid; the agent need not run here.
+package company.fleet.v1;
+
+option java_package = "com.company.fleet.proto";
+option java_multiple_files = true;
+option go_package = "github.com/company/enterprise-os/gen/fleet/v1;fleetv1";
+
+import "kernel.proto";
+
+message NodeIdentity {
+  string node_id = 1;
+  string environment_id = 2;
+  string region = 3;
+  string network_zone = 4;
+  bytes attestation_document = 5;   // hardware/workload attestation
+  string spiffe_id = 6;
+}
+
+message NodeHeartbeat {
+  NodeIdentity node = 1;
+  string occurred_at = 2;
+  double cpu = 3;
+  double mem = 4;
+  bool online = 5;
+  int32 buffered_events = 6;        // offline telemetry backlog
+}
+
+message LocalStateReport {
+  NodeIdentity node = 1;
+  map<string, string> running_versions = 2;   // service -> version
+  repeated string drifted_services = 3;
+  repeated string unhealthy_services = 4;
+  repeated string expiring_certs = 5;
+}
+
+message DesiredStateManifest {
+  string environment_id = 1;
+  string manifest_version = 2;
+  map<string, string> service_versions = 3;
+  bytes signature = 4;              // hub-signed; agent verifies before applying
+  company.kernel.v1.Classification classification = 5;
+}
+
+message ReconciliationPlan {
+  string plan_id = 1;
+  repeated ReconciliationStep steps = 2;
+}
+message ReconciliationStep {
+  string service = 1;
+  string from_version = 2;
+  string to_version = 3;
+  string action = 4;               // apply|drain|cycle|rollback
+}
+message ReconciliationResult {
+  string plan_id = 1;
+  bool success = 2;
+  repeated string applied = 3;
+  repeated string failed = 4;
+}
+
+message HealthProbeResult { string service = 1; bool healthy = 2; string detail = 3; }
+message TelemetryEnvelope { NodeIdentity node = 1; bytes payload = 2; bool buffered_offline = 3; }
+message AgentUpgradePlan { string target_version = 1; bytes signature = 2; }
+
+service FleetAgentGateway {
+  rpc Register(NodeIdentity) returns (DesiredStateManifest);
+  rpc Heartbeat(NodeHeartbeat) returns (DesiredStateManifest);
+  rpc ReportState(LocalStateReport) returns (ReconciliationPlan);
+  rpc ReportReconciliation(ReconciliationResult) returns (kernel.v1.AccessDecision);
+  rpc UploadTelemetry(TelemetryEnvelope) returns (kernel.v1.AccessDecision);
+}
