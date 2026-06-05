@@ -27,6 +27,7 @@ from ..auth import optional_bearer, require_bearer
 from ..services import brain_autopilot as ap
 from ..services import brain_enrich as be
 from ..services import brain_health as bh
+from ..services import brain_planner as bp
 from ..services import brain_think as bt
 
 router = APIRouter(prefix="/v1/brain", tags=["brain-extras"])
@@ -40,6 +41,11 @@ class EnrichBody(BaseModel):
     terms: list[str] | None = Field(default=None, description="Explicit concepts to fetch; default = real vault gaps.")
     limit: int = Field(default=20, ge=1, le=200, description="Max gaps to enrich this run.")
     only: list[str] | None = Field(default=None, description="Restrict to these connector names; default = all.")
+
+
+class PlanBody(BaseModel):
+    goal: dict[str, int] | None = Field(default=None, description="Target max counts per dim (gaps/orphans/themes); default = all 0.")
+    max_steps: int = Field(default=12, ge=1, le=40, description="Max plan/execute steps before stopping.")
 
 
 # ── request bodies ───────────────────────────────────────────────────────────────────
@@ -94,6 +100,21 @@ async def post_autopilot_run(body: AutopilotBody | None = None, _token: str = De
 async def get_autopilot_network(_token: str | None = Depends(optional_bearer)):
     """Whether external knowledge acquisition has egress right now."""
     return {"online": be.network_ok()}
+
+
+@router.get("/autopilot/plan")
+async def get_autopilot_plan(_token: str | None = Depends(optional_bearer)):
+    """Dry-run: compute the goal-directed action plan (GOAP/A*) WITHOUT executing."""
+    return bp.preview()
+
+
+@router.post("/autopilot/plan")
+async def post_autopilot_plan(body: PlanBody | None = None, _token: str = Depends(require_bearer)):
+    """Goal-directed autopilot: A*-plan the cheapest action path to a health goal,
+    execute against the real vault, re-observe and replan on divergence."""
+    goal = body.goal if body else None
+    steps = body.max_steps if body else 12
+    return bp.run(goal=goal, max_steps=steps)
 
 
 @router.get("/sources")
