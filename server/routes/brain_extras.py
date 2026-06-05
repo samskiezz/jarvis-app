@@ -24,10 +24,15 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from ..auth import optional_bearer, require_bearer
+from ..services import brain_autopilot as ap
 from ..services import brain_health as bh
 from ..services import brain_think as bt
 
 router = APIRouter(prefix="/v1/brain", tags=["brain-extras"])
+
+
+class AutopilotBody(BaseModel):
+    max_passes: int = Field(default=5, ge=1, le=20, description="Max self-improvement passes.")
 
 
 # ── request bodies ───────────────────────────────────────────────────────────────────
@@ -61,6 +66,21 @@ async def post_heal_orphans(_token: str = Depends(require_bearer)):
     """Suggest likely links for orphan notes via semantic search. Suggestions
     ONLY — nothing is written to the vault."""
     return bh.heal_orphans()
+
+
+# ── autopilot: the self-improving loop that auto-fills knowledge gaps ──────────────────
+@router.get("/autopilot/scan")
+async def get_autopilot_scan(_token: str | None = Depends(optional_bearer)):
+    """Report current knowledge gaps (gaps/orphans/themes) without writing."""
+    return ap.scan()
+
+
+@router.post("/autopilot/run")
+async def post_autopilot_run(body: AutopilotBody | None = None, _token: str = Depends(require_bearer)):
+    """Run improvement passes until the brain stops improving. ACTUALLY writes:
+    resolves dangling references, links orphans, promotes emergent themes."""
+    mp = body.max_passes if body else 5
+    return ap.run(max_passes=mp)
 
 
 # ── thinking tools ────────────────────────────────────────────────────────────────────
