@@ -110,8 +110,9 @@ def dispatch(*, per_source_limit: int = 20, use_cache_ttl: float = 300.0) -> dic
     report = gate_report()
     results = []
     ingested_total = 0
-    # only dispatch cleared hosts that actually appear in the catalogue
-    present = set((report.get("cleared_by_host") or {}).keys()) or set(CLEARED)
+    # dispatch ALL implemented + cleared domains via their canonical data feeds
+    # (the catalogue's official_urls are mostly docs; the real data APIs live here)
+    present = set(CLEARED)
     restricted = _restricted()
     for host in sorted(present):
         if host not in CLEARED:
