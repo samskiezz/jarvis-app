@@ -23,38 +23,9 @@ help: ## List targets
 	@echo "  up-dev              Bring up the local dev stack (placeholder)"
 	@echo "  test                Run the polyglot test suites (placeholder)"
 
-contracts-validate: ## Parse & validate every contract JSON/YAML (real)
-	@echo ">> Validating contracts under ./contracts ..."
-	@$(PYTHON) - <<'PY'
-	import json, sys, glob, os
-	try:
-	    import yaml
-	except ImportError:
-	    print("PyYAML not installed; install with: pip install pyyaml", file=sys.stderr)
-	    sys.exit(2)
-
-	root = "contracts"
-	ok, bad = 0, 0
-	patterns = ("**/*.json", "**/*.yaml", "**/*.yml")
-	files = sorted({f for p in patterns for f in glob.glob(os.path.join(root, p), recursive=True)})
-	if not files:
-	    print(f"!! no contract files found under {root}/", file=sys.stderr)
-	    sys.exit(1)
-	for f in files:
-	    try:
-	        with open(f, "r", encoding="utf-8") as fh:
-	            if f.endswith(".json"):
-	                json.load(fh)
-	            else:
-	                yaml.safe_load(fh)
-	        ok += 1
-	        print(f"  ok    {f}")
-	    except Exception as e:  # noqa: BLE001
-	        bad += 1
-	        print(f"  FAIL  {f}: {e}", file=sys.stderr)
-	print(f">> contracts: {ok} valid, {bad} invalid")
-	sys.exit(1 if bad else 0)
-	PY
+contracts-validate: ## Parse & validate every contract (real — runs the harness)
+	@echo ">> Validating contract layer via test-harness/contract_validate.py ..."
+	@$(PYTHON) test-harness/contract_validate.py
 
 db-migrate: ## Apply database migrations (placeholder)
 	@echo ">> WOULD RUN: psql \$$DATABASE_URL -f database/postgres migrations (Flyway/Liquibase)"
