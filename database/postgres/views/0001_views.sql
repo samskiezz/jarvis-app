@@ -32,7 +32,7 @@ ORDER BY tier;
 
 -- Audit chain head (latest hash for tamper-evident verification).
 CREATE OR REPLACE VIEW platform_audit.v_chain_head AS
-SELECT id, audit_id, event_type, occurred_at, hash
+SELECT id, audit_id, event_type, occurred_at, payload_hash AS hash
 FROM platform_audit.record
 ORDER BY id DESC
 LIMIT 1;
