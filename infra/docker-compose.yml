@@ -1,0 +1,68 @@
+# =============================================================================
+# Sovereign Platform — Local Dev Substrate (Layer B seed)
+# =============================================================================
+# This declares the REAL backing substrate the platform targets. It is the
+# "seed crystal" infra: bring it up with `docker compose -f infra/docker-compose.yml up`
+# on a host with Docker. The Layer A reference kernel (this repo's FastAPI app)
+# runs WITHOUT these (SQLite/in-process); the JVM services bind to these in dev.
+#
+# This is NOT faked: each service is a real, pinned image. It is marked Layer B
+# because it requires Docker + resources not present in the lightweight sandbox.
+# =============================================================================
+services:
+
+  postgres:                       # authoritative metadata (contracts/sql/*.sql)
+    image: postgres:16
+    environment:
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: platform
+      POSTGRES_DB: platform
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../contracts/sql:/docker-entrypoint-initdb.d:ro   # auto-apply schema
+
+  redpanda:                       # Kafka-compatible event backbone
+    image: redpandadata/redpanda:v24.2.7
+    command:
+      - redpanda start
+      - --smp 1
+      - --overprovisioned
+      - --kafka-addr PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:9092
+    ports: ["9092:9092"]
+
+  minio:                          # S3-compatible object storage (Iceberg/WORM/artefacts)
+    image: minio/minio:RELEASE.2024-10-13T13-34-11Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: platform
+      MINIO_ROOT_PASSWORD: platformsecret
+    ports: ["9000:9000", "9001:9001"]
+    volumes: ["miniodata:/data"]
+
+  opensearch:                     # full-text + object/evidence search
+    image: opensearchproject/opensearch:2.17.1
+    environment:
+      discovery.type: single-node
+      DISABLE_SECURITY_PLUGIN: "true"
+      OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports: ["9200:9200"]
+
+  # --- declared for completeness; uncomment on a sufficiently large host ---
+  # neo4j:                        # graph / link-analysis substrate
+  #   image: neo4j:5
+  #   environment: {NEO4J_AUTH: "neo4j/platform"}
+  #   ports: ["7474:7474", "7687:7687"]
+  #
+  # temporal:                     # durable workflow engine (Layer 11)
+  #   image: temporalio/auto-setup:1.25.1
+  #   ports: ["7233:7233"]
+  #
+  # qdrant:                       # governed vector index (Layer 9/13)
+  #   image: qdrant/qdrant:v1.12.1
+  #   ports: ["6333:6333"]
+
+volumes:
+  pgdata:
+  miniodata:
