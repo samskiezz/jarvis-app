@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OfflineDeploymentBundle",
+  "type": "object",
+  "required": [
+    "bundle_id",
+    "environment_id",
+    "artifacts",
+    "signatures",
+    "policy_snapshot",
+    "created_at"
+  ],
+  "properties": {
+    "bundle_id": {
+      "type": "string"
+    },
+    "environment_id": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array"
+    },
+    "signatures": {
+      "type": "array"
+    },
+    "policy_snapshot": {
+      "type": "object"
+    },
+    "created_at": {
+      "type": "string"
+    }
+  }
+}

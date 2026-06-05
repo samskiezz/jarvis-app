@@ -1,0 +1,14 @@
+export_control:
+  default: deny
+  allow_if:
+    - user_has_export_permission
+    - source_terms_allow_redistribution
+    - object_classification_allows_export
+    - no_sensitive_fields_after_redaction
+  blocked_fields:
+    - personal_identifier
+    - restricted_security_data
+    - credential
+    - precise_private_location
+    - source_terms_restricted_text
+  audit_required: true

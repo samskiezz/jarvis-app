@@ -1,0 +1,21 @@
+{
+  "identity_model": "SPIFFE-compatible workload identity",
+  "spiffe_id_pattern": "spiffe://world-os/{environment}/{service}/{instance}",
+  "required_claims": [
+    "environment",
+    "service",
+    "instance",
+    "tenant",
+    "classification"
+  ],
+  "mTLS_required": true,
+  "rotation": {
+    "certificate_hours": 24,
+    "key_rotation": "automatic"
+  },
+  "denied_if_missing": [
+    "service",
+    "environment",
+    "tenant"
+  ]
+}

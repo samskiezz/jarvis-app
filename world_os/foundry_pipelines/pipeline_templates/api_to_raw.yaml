@@ -1,0 +1,2 @@
+pipeline: api_to_raw
+stages: [validate, transform, quality_gate, lineage, audit]

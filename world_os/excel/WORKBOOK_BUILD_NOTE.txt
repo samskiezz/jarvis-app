@@ -1,0 +1,2 @@
+Excel workbook retry failed: RemoteError('Method add not found')
+The data-specific CSV manifests are authoritative and included in manifests/ and vectors/.

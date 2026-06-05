@@ -1,0 +1,14 @@
+rules:
+  - rule_id: CE-SPACE-001
+    when: {object_type: SpaceWeatherEvent, property: geomagnetic_storm_level, operator: ">=", value: G3}
+    then:
+      affected_domains: [satellite_operations, GNSS, aviation, power_grid, radio_communications]
+      create_model_outputs: [grid_risk_score, aviation_radiation_risk, GNSS_degradation_risk]
+      trigger_workflows: [notify_grid_operator, notify_aviation_ops, increase_satellite_monitoring]
+    audit: true
+  - rule_id: CE-TSUNAMI-001
+    when: {object_type: TsunamiWarning, property: warning_level, operator: in, value: [watch, warning]}
+    then:
+      affected_domains: [coastal_population, ports, emergency_services, transport]
+      trigger_workflows: [coastal_evacuation_review, port_closure_assessment, emergency_briefing]
+    audit: true

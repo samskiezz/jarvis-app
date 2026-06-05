@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "assign_task",
+  "required": [
+    "target_object_id",
+    "purpose"
+  ],
+  "properties": {
+    "target_object_id": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "parameters": {
+      "type": "object"
+    }
+  }
+}

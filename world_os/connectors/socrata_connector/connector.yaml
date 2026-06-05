@@ -1,0 +1,10 @@
+connector_name: socrata_connector
+owner: acquisition_platform
+status: template
+input_contract: source_family + endpoint_candidate
+output_contract: raw_asset + provenance_record + audit_event
+required_gates:
+  - source_terms_review
+  - schema_validation
+  - data_quality_score
+  - audit_write

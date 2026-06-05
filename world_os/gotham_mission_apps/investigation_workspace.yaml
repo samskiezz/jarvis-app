@@ -1,0 +1,11 @@
+app_name: investigation_workspace
+users: [operator, analyst, commander, investigator, admin]
+allowed_domains: [policy_filtered]
+objects_shown: [Person, Organisation, Asset, Place, Event, Document, Measurement, Workflow, Action, AuditRecord]
+graph_views: [entity_network, cause_effect, supply_dependency, operational_timeline]
+map_layers: [live_events, assets, routes, hazards, jurisdiction]
+timeline_views: [source_events, object_changes, workflow_steps, action_history]
+available_actions: [create_case, assign_task, request_approval, generate_briefing, propose_action]
+approval_required: true
+audit_events: [workspace_opened, object_viewed, action_requested, decision_replayed]
+AIP_panel_enabled: true

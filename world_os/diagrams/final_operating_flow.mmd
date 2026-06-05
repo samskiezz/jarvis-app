@@ -1,0 +1,11 @@
+flowchart LR
+  UI[Jarvis UI] --> Toggle{Foundry / Gotham / Apollo}
+  Toggle --> F[Foundry: Source -> Pipeline -> Ontology -> Graph/Vector]
+  Toggle --> G[Gotham: Event -> COP -> Investigation -> Action]
+  Toggle --> A[Apollo: Desired State -> Rollout -> Fleet Health -> Drift/Rollback]
+  F --> AIP[AIP Context Builder]
+  G --> AIP
+  AIP --> ACT[Action Engine]
+  ACT --> AUD[Audit Replay]
+  AUD --> F
+  AUD --> A

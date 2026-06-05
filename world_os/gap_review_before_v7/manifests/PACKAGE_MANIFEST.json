@@ -1,0 +1,12 @@
+{
+  "package": "world_os_v6_deep_gap_review_before_v7",
+  "created_at": "2026-06-05T16:07:13.453423+00:00",
+  "base_package": "world_os_final_master_pack_v6_ux_effects_complete",
+  "files_scanned": 528,
+  "critical_systems_checked": 22,
+  "deep_gap_rows": 140,
+  "categories": 12,
+  "primary_register": "registers/deep_gap_register_before_v7.csv",
+  "summary": "reports/deep_gap_summary_by_category.csv",
+  "recommendation": "Do not make V7 as another broad pack. Make V7 runtime/security/Apollo focused."
+}

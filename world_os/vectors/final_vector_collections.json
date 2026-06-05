@@ -1,0 +1,10 @@
+{
+  "collections": [
+    "world_subject_memory_10000",
+    "priority_acquisition_points_1000",
+    "public_document_evidence_30000",
+    "audit_replay_memory",
+    "jarvis_operator_context"
+  ],
+  "retrieval_policy": "permission, purpose, source_terms, classification, citation, audit"
+}

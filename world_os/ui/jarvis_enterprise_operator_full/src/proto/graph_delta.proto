@@ -1,0 +1,34 @@
+syntax = "proto3";
+package worldos.ui;
+
+message ObjectNode {
+  string object_id = 1;
+  string object_type = 2;
+  string label = 3;
+  float x = 4;
+  float y = 5;
+  float z = 6;
+  float confidence = 7;
+  string classification = 8;
+  string evidence_id = 9;
+  string audit_id = 10;
+}
+
+message RelationshipEdge {
+  string edge_id = 1;
+  string source_object_id = 2;
+  string target_object_id = 3;
+  string relationship_type = 4;
+  float weight = 5;
+  string evidence_id = 6;
+  string audit_id = 7;
+}
+
+message GraphDelta {
+  string workspace_id = 1;
+  uint64 sequence = 2;
+  repeated ObjectNode upsert_nodes = 3;
+  repeated RelationshipEdge upsert_edges = 4;
+  repeated string remove_node_ids = 5;
+  repeated string remove_edge_ids = 6;
+}

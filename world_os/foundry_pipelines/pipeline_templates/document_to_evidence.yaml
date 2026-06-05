@@ -1,0 +1,2 @@
+pipeline: document_to_evidence
+stages: [validate, transform, quality_gate, lineage, audit]

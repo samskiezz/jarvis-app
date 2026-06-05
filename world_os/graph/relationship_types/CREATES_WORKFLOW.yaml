@@ -1,0 +1,10 @@
+relationship_type: CREATES_WORKFLOW
+source_object_types: [Person, Organisation, Asset, Place, Event, Document, Measurement, Workflow, ModelOutput, Action]
+target_object_types: [Person, Organisation, Asset, Place, Event, Document, Measurement, Workflow, ModelOutput, Action, AuditRecord]
+direction: directed
+cardinality: many_to_many
+confidence_required: true
+provenance_required: true
+policy_required: true
+audit_required: true
+allowed_in_aip_context: policy_filtered

@@ -1,0 +1,2 @@
+pipeline: raw_to_bronze
+stages: [validate, transform, quality_gate, lineage, audit]

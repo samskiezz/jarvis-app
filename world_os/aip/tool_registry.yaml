@@ -1,0 +1,13 @@
+tools:
+  - name: ontology_search
+    risk: low
+    approval: none
+  - name: graph_expand
+    risk: low
+    approval: none
+  - name: propose_action
+    risk: medium
+    approval: human
+  - name: deploy_connector
+    risk: high
+    approval: change_control

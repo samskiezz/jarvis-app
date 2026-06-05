@@ -1,0 +1,10 @@
+domain: aviation
+rules:
+  - name: schema_valid
+    severity: blocking
+  - name: freshness_sla
+    severity: blocking
+  - name: provenance_complete
+    severity: blocking
+  - name: anomaly_bounds
+    severity: warning

@@ -1,0 +1,1 @@
+reranking: {enabled: true, model: enterprise_reranker, threshold: 0.65}

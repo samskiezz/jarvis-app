@@ -1,0 +1,30 @@
+workflow: source_legal_review_approval
+states:
+  - discovered
+  - terms_review_pending
+  - licence_review_pending
+  - security_review_pending
+  - approved_for_dev
+  - approved_for_production
+  - blocked
+transitions:
+  discovered: terms_review_pending
+  terms_review_pending: licence_review_pending
+  licence_review_pending: security_review_pending
+  security_review_pending: approved_for_dev
+  approved_for_dev: approved_for_production
+blocking_rules:
+  - private_camera_scan
+  - private_communications_interception
+  - credential_bypass
+  - terms_prohibited_scraping
+  - restricted_or_classified_source
+required_evidence:
+  - terms_url
+  - licence_decision
+  - permitted_use_matrix
+  - rate_limit_policy
+  - data_classification
+  - reviewer
+  - review_date
+  - expiry_date

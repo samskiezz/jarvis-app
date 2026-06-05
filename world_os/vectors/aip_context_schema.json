@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "required": [
+    "user",
+    "purpose",
+    "allowed_objects",
+    "evidence",
+    "actions",
+    "audit"
+  ],
+  "properties": {
+    "user": {
+      "type": "object"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "allowed_objects": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "actions": {
+      "type": "array"
+    },
+    "audit": {
+      "type": "object"
+    }
+  }
+}

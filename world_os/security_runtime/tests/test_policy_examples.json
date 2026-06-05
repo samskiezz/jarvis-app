@@ -1,0 +1,25 @@
+[
+  {
+    "name": "low_risk_allowed",
+    "input": {
+      "actor": {
+        "authenticated": true
+      },
+      "purpose": "test",
+      "action": "ontology_search"
+    },
+    "expected_allow": true
+  },
+  {
+    "name": "high_risk_requires_approval",
+    "input": {
+      "actor": {
+        "authenticated": true
+      },
+      "purpose": "test",
+      "action": "deploy_connector",
+      "approval_id": ""
+    },
+    "expected_allow": false
+  }
+]

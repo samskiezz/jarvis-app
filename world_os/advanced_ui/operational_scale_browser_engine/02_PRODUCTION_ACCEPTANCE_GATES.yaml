@@ -1,0 +1,21 @@
+performance_gates:
+  graph_50k_nodes:
+    target: 60fps interaction, no main-thread lock above 50ms
+    required: instanced_rendering, wasm_worker_layout, binary_transport
+  graph_250k_edges:
+    target: progressive loading and level_of_detail
+    required: edge_bundling, gpu_buffers, viewport_culling
+  live_stream:
+    target: sustained incremental updates without full redraw
+    required: protobuf_deltas, backpressure, ring_buffer
+  hit_detection:
+    target: O(1) object selection
+    required: gpu_color_picking
+  collaboration:
+    target: multi-user conflict-free workspace updates
+    required: CRDT_patch_log
+  security:
+    target: no SharedArrayBuffer unless cross-origin isolated
+    required_headers: [Cross-Origin-Opener-Policy, Cross-Origin-Embedder-Policy]
+  provenance:
+    target: every visible object has source_id, evidence_id, policy_decision, audit_id

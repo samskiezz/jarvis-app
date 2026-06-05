@@ -1,0 +1,1 @@
+hybrid_search: {lexical: OpenSearch, vector: VectorDB, graph: Neo4j, reranker: enterprise_reranker}

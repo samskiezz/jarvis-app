@@ -1,0 +1,46 @@
+{
+  "node_status": {
+    "source_review_pending": {
+      "color": "#FFD166",
+      "effect": "soft_warning_glow",
+      "action": "Open legal register"
+    },
+    "source_approved": {
+      "color": "#55E6A5",
+      "effect": "none",
+      "action": "Trace source"
+    },
+    "quality_failed": {
+      "color": "#FF5C7A",
+      "effect": "critical_glow",
+      "action": "Open quality gate"
+    },
+    "policy_blocked": {
+      "color": "#8A1C2D",
+      "effect": "blocked_pulse",
+      "action": "View policy"
+    },
+    "audit_verified": {
+      "color": "#8BE9FD",
+      "effect": "audit_ring",
+      "action": "Replay audit"
+    },
+    "apollo_healthy": {
+      "color": "#7CFF7C",
+      "effect": "success_glow",
+      "action": "Open rollout"
+    },
+    "gotham_alert": {
+      "color": "#FF3B6B",
+      "effect": "critical_pulse",
+      "action": "Open case"
+    },
+    "aip_generated": {
+      "color": "#B18CFF",
+      "effect": "ai_context_glow",
+      "action": "Open tool trace"
+    }
+  },
+  "edge_visibility_rule": "edge requires relationship_type, source, target, confidence, evidence_id, audit_id and policy_decision",
+  "no_decorative_edges": true
+}

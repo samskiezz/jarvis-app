@@ -1,0 +1,2 @@
+pipeline: ontology_to_graph
+stages: [validate, transform, quality_gate, lineage, audit]

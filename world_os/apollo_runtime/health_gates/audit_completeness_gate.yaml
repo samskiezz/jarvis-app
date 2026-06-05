@@ -1,0 +1,3 @@
+gate: audit_completeness_gate
+threshold: configure
+blocking: true

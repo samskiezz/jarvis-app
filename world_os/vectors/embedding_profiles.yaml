@@ -1,0 +1,2 @@
+profiles:
+  default: {model: enterprise_embedding_model, metric: cosine, dimension: configure}

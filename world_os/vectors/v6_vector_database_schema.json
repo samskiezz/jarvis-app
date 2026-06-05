@@ -1,0 +1,64 @@
+{
+  "databases": {
+    "Qdrant_or_equivalent": {
+      "purpose": "high-throughput vector search for subject/source/document/action context",
+      "collections": [
+        "world_subject_memory_10000",
+        "priority_acquisition_points_1000",
+        "v4_next_level_acquisition_points_5000",
+        "source_family_memory",
+        "endpoint_candidate_memory",
+        "ocr_document_evidence_30000",
+        "benchmark_candidate_memory_30000"
+      ],
+      "distance": "cosine",
+      "payload_index_fields": [
+        "namespace",
+        "source_id",
+        "subject_id",
+        "ontology_target",
+        "classification",
+        "policy_decision",
+        "freshness",
+        "authority_score"
+      ],
+      "required_filters": [
+        "tenant",
+        "purpose",
+        "classification",
+        "source_terms_status",
+        "object_permission",
+        "export_control"
+      ]
+    },
+    "Graph_DB": {
+      "purpose": "relationship expansion after vector retrieval",
+      "join_keys": [
+        "subject_id",
+        "source_id",
+        "endpoint_candidate_id",
+        "acquisition_point_id",
+        "object_id",
+        "audit_id"
+      ]
+    },
+    "Search_Index": {
+      "purpose": "lexical filtering before/after vector retrieval",
+      "indices": [
+        "source_index",
+        "document_index",
+        "object_index",
+        "audit_index"
+      ]
+    }
+  },
+  "hybrid_retrieval_order": [
+    "policy filter",
+    "lexical/source filter",
+    "vector candidate retrieval",
+    "graph expansion",
+    "rerank",
+    "citation/evidence attach",
+    "AIP context pack"
+  ]
+}

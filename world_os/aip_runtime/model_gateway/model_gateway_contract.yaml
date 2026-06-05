@@ -1,0 +1,12 @@
+model_gateway:
+  routing:
+    default: enterprise_llm
+    high_risk: approval_required
+  required_controls:
+    - purpose_bound_context
+    - policy_filtered_retrieval
+    - citation_required
+    - tool_call_logging
+    - prompt_injection_scan
+    - output_redaction
+    - audit_trace

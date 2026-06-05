@@ -1,0 +1,29 @@
+{
+  "name": "jarvis-enterprise-operator-full",
+  "version": "4.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "typescript": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "@blueprintjs/core": "latest",
+    "@blueprintjs/icons": "latest",
+    "@blueprintjs/table": "latest",
+    "zustand": "latest",
+    "yjs": "latest",
+    "automerge": "latest",
+    "protobufjs": "latest",
+    "lucide-react": "latest",
+    "d3": "latest"
+  },
+  "devDependencies": {}
+}

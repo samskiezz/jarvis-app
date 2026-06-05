@@ -1,0 +1,4 @@
+namespaces:
+  weather: {vector_collection: world.weather, refresh: real_time}
+  legal: {vector_collection: world.legal, requires_citation: true}
+  companies: {vector_collection: world.organisations, refresh: daily}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StandardAcquisitionEnvelope",
+  "type": "object",
+  "required": [
+    "source_id",
+    "record_id",
+    "record_type",
+    "observed_at",
+    "valid_time",
+    "location",
+    "entities",
+    "measurements",
+    "relationships",
+    "documents",
+    "quality",
+    "provenance",
+    "raw_hash"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string"
+    },
+    "record_id": {
+      "type": "string"
+    },
+    "record_type": {
+      "type": "string"
+    },
+    "observed_at": {
+      "type": "string"
+    },
+    "valid_time": {
+      "type": "string"
+    },
+    "location": {
+      "type": "object"
+    },
+    "entities": {
+      "type": "array"
+    },
+    "measurements": {
+      "type": "array"
+    },
+    "relationships": {
+      "type": "array"
+    },
+    "documents": {
+      "type": "array"
+    },
+    "quality": {
+      "type": "object"
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "raw_hash": {
+      "type": "string"
+    }
+  }
+}

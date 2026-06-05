@@ -1,0 +1,1 @@
+probe_contract: {purpose: runtime observability, allowed_use: owned infrastructure only}

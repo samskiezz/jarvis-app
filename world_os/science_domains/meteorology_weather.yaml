@@ -1,0 +1,109 @@
+domain: Meteorology Weather
+scientific_scope: Operational and scientific coverage for Meteorology Weather, including live status, historical archive, forecast, registry, geospatial, relationship, risk, workflow and audit layers.
+key_entities:
+  - Person
+  - Organisation
+  - Asset
+  - Place
+  - Event
+  - Document
+  - Measurement
+  - ModelOutput
+  - Workflow
+  - Action
+  - AuditRecord
+key_measurements:
+  - time
+  - location
+  - magnitude
+  - status
+  - confidence
+  - freshness
+  - source_authority
+  - risk_score
+  - quality_score
+key_events:
+  - observation_created
+  - threshold_exceeded
+  - entity_changed
+  - risk_changed
+  - workflow_triggered
+  - action_requested
+  - audit_written
+key_models:
+  - anomaly_detection
+  - forecasting
+  - entity_resolution
+  - risk_scoring
+  - causal_impact
+  - scenario_simulation
+  - retrieval_groundedness
+key_risks:
+  - source_terms_violation
+  - stale_data
+  - misclassification
+  - false_positive
+  - false_negative
+  - policy_bypass
+  - ungrounded_AI_output
+acquisition_sources:
+  - NOAA Weather API
+  - Met Norway
+  - UK Met Office
+  - BOM
+  - ECMWF
+ontology_objects:
+  - SourceRecord
+  - RawAsset
+  - Evidence
+  - Fact
+  - DomainObject
+  - Relationship
+  - ModelOutput
+  - Workflow
+  - Action
+  - AuditRecord
+graph_relationships:
+  - DERIVED_FROM
+  - OBSERVED_AT
+  - LOCATED_AT
+  - AFFECTS
+  - TRIGGERS
+  - GOVERNED_BY
+  - EVIDENCED_BY
+  - USED_BY_MODEL
+  - AUDITED_BY
+vector_memory_namespaces:
+  - world.meteorology_weather
+  - world.meteorology_weather.documents
+  - world.meteorology_weather.events
+workflows:
+  - triage_alert
+  - investigate_entity
+  - generate_briefing
+  - request_approval
+  - run_simulation
+  - replay_decision
+actions:
+  - notify
+  - escalate
+  - create_case
+  - assign_task
+  - generate_briefing
+  - request_approval
+  - quarantine_data
+audits:
+  - source_access
+  - pipeline_run
+  - quality_result
+  - ontology_mapping
+  - model_trace
+  - workflow_trigger
+  - action_execution
+benchmarks:
+  - source_quality_eval
+  - parser_accuracy_eval
+  - retrieval_eval
+  - citation_eval
+  - policy_compliance_eval
+  - audit_completeness_eval

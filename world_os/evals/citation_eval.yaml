@@ -1,0 +1,6 @@
+eval_name: citation_eval
+metric: configure
+threshold: configure
+frequency: continuous_or_release_gate
+failure_action: block_or_review
+audit_required: true

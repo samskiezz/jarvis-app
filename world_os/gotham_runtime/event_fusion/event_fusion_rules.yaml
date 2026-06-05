@@ -1,0 +1,10 @@
+fusion_rules:
+  - name: same_place_same_time
+    window_minutes: 30
+    spatial_radius_km: 5
+    link_type: POSSIBLY_RELATED
+  - name: shared_entity
+    link_type: RELATED_BY_ENTITY
+  - name: cause_effect_trigger
+    link_type: TRIGGERS
+audit_required: true
