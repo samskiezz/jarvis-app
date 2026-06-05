@@ -37,7 +37,23 @@ except Exception:  # noqa: BLE001
     jos = None  # type: ignore
 
 _OLLAMA = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
-_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1")
+
+
+def _ollama_model() -> str:
+    """The Ollama model to use: env override, else the first installed model
+    (zero-config), else a sensible default."""
+    env = os.environ.get("OLLAMA_MODEL")
+    if env:
+        return env
+    try:
+        import json as _j
+        with urllib.request.urlopen(_OLLAMA + "/api/tags", timeout=3) as r:
+            tags = _j.loads(r.read().decode()).get("models", [])
+        if tags:
+            return tags[0].get("name") or tags[0].get("model") or "llama3.2:1b"
+    except Exception:  # noqa: BLE001
+        pass
+    return "llama3.2:1b"
 
 
 def _post(url: str, payload: dict, headers: dict | None = None, timeout: float = 60.0):
@@ -70,22 +86,31 @@ def available() -> bool:
     return backend() is not None
 
 
-def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512) -> str | None:
-    """Single completion via whichever LLM backend is reachable. None if none."""
+def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
+                 fmt: str | None = None, temperature: float = 0.2) -> str | None:
+    """Single completion via whichever LLM backend is reachable. ``fmt='json'``
+    forces structured JSON output (Ollama ``format``/OpenAI ``response_format``).
+    None if no backend."""
     b = backend()
     try:
         if b == "ollama":
             msgs = ([{"role": "system", "content": system}] if system else []) + \
                    [{"role": "user", "content": prompt}]
-            out = _post(_OLLAMA + "/api/chat",
-                        {"model": _OLLAMA_MODEL, "messages": msgs, "stream": False})
+            payload = {"model": _ollama_model(), "messages": msgs, "stream": False,
+                       "options": {"temperature": temperature}}
+            if fmt == "json":
+                payload["format"] = "json"
+            out = _post(_OLLAMA + "/api/chat", payload)
             return (out.get("message", {}) or {}).get("content")
         if b == "openai-compatible":
             from ..config import KIMI_API_KEY, KIMI_BASE_URL, KIMI_MODEL
             msgs = ([{"role": "system", "content": system}] if system else []) + \
                    [{"role": "user", "content": prompt}]
-            out = _post(KIMI_BASE_URL.rstrip("/") + "/chat/completions",
-                        {"model": KIMI_MODEL, "messages": msgs, "max_tokens": max_tokens, "stream": False},
+            payload = {"model": KIMI_MODEL, "messages": msgs, "max_tokens": max_tokens,
+                       "temperature": temperature, "stream": False}
+            if fmt == "json":
+                payload["response_format"] = {"type": "json_object"}
+            out = _post(KIMI_BASE_URL.rstrip("/") + "/chat/completions", payload,
                         headers={"Authorization": f"Bearer {KIMI_API_KEY}"})
             return out.get("choices", [{}])[0].get("message", {}).get("content")
     except Exception:  # noqa: BLE001
@@ -93,14 +118,37 @@ def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512) -> str
     return None
 
 
+def _name_of(item) -> str:
+    """Extract a concept name from a list item that may be a string or an object
+    like {"canonical_name": ...} / {"name": ...} (small models emit both)."""
+    if isinstance(item, str):
+        return item.strip()
+    if isinstance(item, dict):
+        for k in ("canonical_name", "name", "concept", "title", "term"):
+            if item.get(k):
+                return str(item[k]).strip()
+        for v in item.values():
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+    return ""
+
+
 def _parse_list(text: str) -> list[str]:
     if not text:
         return []
-    m = re.search(r"\[.*\]", text, re.S)
-    if m:
+    # structured JSON: {"subtopics":[...]} or a bare [...]; objects or strings
+    for pat in (r"\{.*\}", r"\[.*\]"):
+        m = re.search(pat, text, re.S)
+        if not m:
+            continue
         try:
-            arr = json.loads(m.group(0))
-            return [str(x).strip() for x in arr if str(x).strip()][:12]
+            data = json.loads(m.group(0))
+            arr = data.get("subtopics", data) if isinstance(data, dict) else data
+            if isinstance(arr, list):
+                names = [_name_of(x) for x in arr]
+                names = [n for n in names if n]
+                if names:
+                    return names[:12]
         except Exception:  # noqa: BLE001
             pass
     # fallback: split lines / bullets
@@ -120,25 +168,53 @@ def research(topic: str, *, max_subtopics: int = 5, inject: bool = True) -> dict
                 "reason": "no LLM reachable (set OLLAMA_HOST to your Llama, or KIMI_API_KEY)"}
     bk = backend()
     subs_raw = llm_complete(
-        f"List the {max_subtopics} most important sub-concepts of \"{topic}\" for an "
-        f"intelligence knowledge base. Reply ONLY as a JSON array of short concept names.",
-        system="You are a precise research planner. Output only JSON.")
+        f"Return the {max_subtopics} most important, widely-recognised sub-concepts of "
+        f"\"{topic}\" for an intelligence knowledge base as JSON of the form "
+        f"{{\"subtopics\": [\"concept name\", ...]}}. Use canonical names a knowledge base "
+        f"would have (avoid invented or hyper-specific phrases).",
+        system="You are a precise research planner. Output only valid JSON.", fmt="json")
     subtopics = _parse_list(subs_raw or "")[:max_subtopics]
     injected = []
     for sub in subtopics:
+        # disambiguate short/acronym terms in the topic's context BEFORE retrieval,
+        # so "AIS" under "Maritime domain awareness" resolves to the right entity.
+        query = sub
+        if len(sub) <= 6 or sub.isupper():
+            dis = llm_complete(
+                f"In the context of \"{topic}\", what does \"{sub}\" stand for? "
+                f"Reply with ONLY the full unambiguous term (no punctuation, no explanation).",
+                system="You disambiguate acronyms. Output only the expanded term.")
+            if dis and dis.strip():
+                query = dis.strip().splitlines()[0].strip(" .\"")[:80] or sub
         evidence = None
         if bs is not None:
             try:
-                primary, _ = bs.fetch_best(sub)
+                primary, _ = bs.fetch_best(query)
                 evidence = primary
             except Exception:  # noqa: BLE001
                 evidence = None
+        # relevance guard: reject wrong-sense hits (e.g. dbpedia returning "Illinois"
+        # for "Port State Monitoring") so we never cite a bogus source.
+        if evidence:
+            qtok = set(re.findall(r"[a-z0-9]+", query.lower()))
+            etok = set(re.findall(r"[a-z0-9]+",
+                                  (str(evidence.get("title", "")) + " " +
+                                   str(evidence.get("description", "")) + " " +
+                                   str(evidence.get("url", ""))).lower()))
+            if qtok and not (qtok & etok):
+                evidence = None
         src_line = f"\nSource: {evidence['url']}" if evidence and evidence.get("url") else ""
         ev_text = (evidence or {}).get("extract", "")
+        ev_title = (evidence or {}).get("title", "")
         summary = llm_complete(
-            f"Write 2-3 factual sentences about \"{sub}\" (a sub-concept of {topic}). "
-            f"Ground it in this evidence and do not invent facts:\n\n{ev_text}",
-            system="You are a grounded analyst. Cite only the given evidence.") or ev_text
+            f"Write 2-3 factual sentences about \"{sub}\" (a sub-concept of {topic}), "
+            f"grounded ONLY in the evidence below. If the evidence is irrelevant or empty, "
+            f"reply exactly: NO RELIABLE EVIDENCE.\n\n"
+            f"Evidence title: {ev_title or '(none)'}\nEvidence: {ev_text or '(none)'}",
+            system="You are a grounded analyst. Use only the provided evidence; never invent facts.") \
+            or ev_text
+        if summary.strip().upper().startswith("NO RELIABLE EVIDENCE"):
+            continue  # don't inject ungrounded noise
         if inject and sb is not None and summary:
             try:
                 sb.upsert_note("concept", sub,

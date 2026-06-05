@@ -19,9 +19,9 @@ def test_research_injects_grounded_notes_with_mock_llm(monkeypatch, tmp_path):
     monkeypatch.setattr(lr, "backend", lambda: "ollama")
 
     # 2. mock the single LLM seam: planner returns a JSON list, summaries echo grounded text
-    def fake_complete(prompt, *, system="", max_tokens=512):
-        if "JSON array" in prompt or "sub-concepts" in prompt:
-            return '["Smart grid", "Demand response", "Grid storage"]'
+    def fake_complete(prompt, *, system="", max_tokens=512, fmt=None, temperature=0.2):
+        if "sub-concepts" in prompt or "subtopics" in prompt:
+            return '{"subtopics": ["Smart grid", "Demand response", "Grid storage"]}'
         return "Grounded factual summary sentence derived strictly from the evidence."
     monkeypatch.setattr(lr, "llm_complete", fake_complete)
 
