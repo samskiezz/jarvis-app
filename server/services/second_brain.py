@@ -365,7 +365,29 @@ def upsert_note(
         _mirror_to_ontology(note, wikilinks, db_path)
         _index_note(note)
         _audit("upsert_note", note, actor)
+        _mirror_to_postgres(note, wikilinks)
     return note
+
+
+def _mirror_to_postgres(note: dict, wikilinks) -> None:
+    """Best-effort dual-write of a brain note (and its links) into the PostgreSQL
+    brain store. Gated by env ``BRAIN_PG_MIRROR`` (off by default so SQLite-only
+    runs and the test suite are unaffected); never raises. When enabled (ingestion
+    daemon / production), every write the app makes is also persisted to Postgres."""
+    import os
+    if not os.environ.get("BRAIN_PG_MIRROR"):
+        return
+    try:
+        from . import brain_pg
+        if not brain_pg.available():
+            return
+        brain_pg.upsert_note(note["id"], note.get("kind", "concept"), note.get("title", ""),
+                             note.get("body_md", ""), note.get("frontmatter", {}) or {},
+                             note.get("confidence", 0.5))
+        for dst in (wikilinks or []):
+            brain_pg.add_link(note["id"], str(dst), "wikilink")
+    except Exception:  # noqa: BLE001
+        pass
 
 
 # ── reads ──────────────────────────────────────────────────────────────────────────
