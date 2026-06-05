@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvis.platform/contracts/events/event-envelope.schema.json",
+  "title": "PlatformEventEnvelope",
+  "description": "Canonical event envelope for the sovereign-platform event backbone. Layer A transport is the in-process jarvis_events log; Layer B transport is Kafka. The envelope is identical across both so producers/consumers do not change when the backbone is swapped.",
+  "type": "object",
+  "required": ["event_id", "event_type", "occurred_at", "produced_by", "payload_schema_version", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {"type": "string", "description": "Globally unique event id (UUID)."},
+    "event_type": {"type": "string", "description": "Dotted event name, e.g. object.state.changed."},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "produced_by": {"type": "string", "description": "Service or agent identity that produced the event."},
+    "tenant_id": {"type": ["string", "null"]},
+    "environment_id": {"type": ["string", "null"]},
+    "object_id": {"type": ["string", "null"]},
+    "correlation_id": {"type": ["string", "null"], "description": "Ties a chain of related events together."},
+    "causation_id": {"type": ["string", "null"], "description": "The event_id that directly caused this event."},
+    "payload_schema_version": {"type": "string", "description": "Semver of the payload schema."},
+    "classification": {"type": "string", "enum": ["UNCLASSIFIED", "OFFICIAL", "SECRET", "TOPSECRET"], "default": "UNCLASSIFIED"},
+    "audit_required": {"type": "boolean", "default": true},
+    "payload": {"type": "object", "description": "Event-type-specific body, validated against its family schema."}
+  }
+}

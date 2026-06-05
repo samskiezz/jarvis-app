@@ -1,0 +1,159 @@
+openapi: 3.1.0
+info:
+  title: Sovereign Platform — Core Service Boundaries
+  version: 1.0.0
+  description: >
+    Contract-first API boundaries for the sovereign platform. Each tag is a future
+    standalone JVM service (Layer B); today they are served by the Layer A reference
+    kernel (server/services/jarvis_*.py exposed under /v1/jarvis). The contract is
+    stable across the split — the runtime changes, the API does not.
+servers:
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: control-plane
+    description: Apollo delivery fabric (Java hub + Go agents in prod)
+  - name: ontology
+    description: Ontology kernel (Java/JVM in prod)
+  - name: object-runtime
+    description: Live operational object store (Java in prod)
+  - name: policy
+    description: Zero-trust PDP (Java + OPA/Cedar in prod)
+  - name: action-engine
+    description: Governed verbs on objects (Java + Temporal in prod)
+  - name: audit
+    description: Tamper-evident audit + observability (Java + Kafka/WORM in prod)
+  - name: aip
+    description: Governed AI mesh gateway (Java + vLLM/Triton in prod)
+paths:
+  /apollo/release:
+    post:
+      tags: [control-plane]
+      summary: Cut a release through gates + staged rollout + auto-rollback
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/ReleaseRequest'}}}
+      responses:
+        '200': {description: Release outcome, content: {application/json: {schema: {$ref: '#/components/schemas/ReleaseResult'}}}}
+  /apollo/fleet:
+    get:
+      tags: [control-plane]
+      summary: Current fleet state (version per environment)
+      responses: {'200': {description: Fleet state}}
+  /ontology/object-types:
+    post:
+      tags: [ontology]
+      summary: Define a typed object (schema + lifecycle)
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/ObjectTypeDef'}}}
+      responses: {'200': {description: Created object type}}
+  /ontology/action-types:
+    post:
+      tags: [ontology]
+      summary: Define a governed lifecycle transition
+      responses: {'200': {description: Created action type}}
+  /ontology/objects:
+    post:
+      tags: [object-runtime]
+      summary: Create a typed object (policy-checked)
+      responses: {'200': {description: Created object}}
+  /ontology/objects/{objectId}:
+    get:
+      tags: [object-runtime]
+      summary: Read an object
+      parameters: [{name: objectId, in: path, required: true, schema: {type: string}}]
+      responses: {'200': {description: Object}}
+  /policy/decide:
+    post:
+      tags: [policy]
+      summary: Runtime access decision (the permission question)
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/PolicyQuery'}}}
+      responses: {'200': {description: Decision, content: {application/json: {schema: {$ref: '#/components/schemas/PolicyDecision'}}}}}
+  /actions/execute:
+    post:
+      tags: [action-engine]
+      summary: Execute a governed action (authorize -> approve -> trace -> execute -> lineage -> audit)
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/ActionRequest'}}}
+      responses: {'200': {description: Action outcome}}
+  /audit:
+    get:
+      tags: [audit]
+      summary: Tamper-evident audit log
+      responses: {'200': {description: Audit entries}}
+  /audit/verify:
+    get:
+      tags: [audit]
+      summary: Recompute the hash chain to prove integrity
+      responses: {'200': {description: Integrity result}}
+  /ai/ask:
+    post:
+      tags: [aip]
+      summary: Assemble governed, clearance-redacted, cited context + routed model
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/AipAsk'}}}
+      responses: {'200': {description: Governed context bundle}}
+components:
+  schemas:
+    ReleaseRequest:
+      type: object
+      required: [name, version, env]
+      properties:
+        name: {type: string}
+        version: {type: string}
+        env: {type: string}
+        strategy: {type: string, enum: [canary, rolling, bluegreen], default: canary}
+        approval_id: {type: string, nullable: true}
+    ReleaseResult:
+      type: object
+      properties:
+        status: {type: string, enum: [deployed, gate_failed, rolled_back, pending_approval, denied]}
+        release: {type: string}
+        gates: {type: array, items: {type: object}}
+        stages: {type: array, items: {type: object}}
+    ObjectTypeDef:
+      type: object
+      required: [name, properties]
+      properties:
+        name: {type: string}
+        properties: {type: object, additionalProperties: {type: string}}
+        states: {type: array, items: {type: string}}
+        initial: {type: string}
+    PolicyQuery:
+      type: object
+      required: [subject_id, resource_id]
+      properties:
+        subject_id: {type: string}
+        action: {type: string, default: read}
+        resource_id: {type: string}
+        prop: {type: string}
+        purpose: {type: string}
+    PolicyDecision:
+      type: object
+      properties:
+        permit: {type: boolean}
+        reason: {type: string}
+        required_level: {type: string}
+        subject_clearance: {type: string}
+    ActionRequest:
+      type: object
+      required: [action, role]
+      properties:
+        action: {type: string}
+        role: {type: string}
+        params: {type: object}
+        actor: {type: string}
+        approval_id: {type: string, nullable: true}
+    AipAsk:
+      type: object
+      required: [subject_id, query]
+      properties:
+        subject_id: {type: string}
+        query: {type: string}
+        purpose: {type: string}
+        max_risk: {type: string, enum: [low, medium, high], default: high}

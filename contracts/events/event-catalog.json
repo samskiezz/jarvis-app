@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvis.platform/contracts/events/event-catalog.json",
+  "title": "PlatformEventCatalog",
+  "description": "Authoritative catalogue of event families emitted per layer. Each name is stable across the Layer A (jarvis_events) and Layer B (Kafka) backbones. Topic = event family prefix.",
+  "families": {
+    "control": {
+      "owner_layer": "1 Apollo delivery",
+      "producer": "jarvis_apollo (REF) -> Java control-plane (PROD)",
+      "events": [
+        "control.desired_state.changed", "control.drift.detected",
+        "control.deployment.rollout.started", "control.deployment.canary.promoted",
+        "control.deployment.canary.failed", "control.deployment.rollback.triggered",
+        "control.deployment.completed", "control.fleet.node.reconciled",
+        "control.fleet.node.offline", "control.artefact.signature.failed",
+        "control.policy.deployment.denied"
+      ]
+    },
+    "policy": {
+      "owner_layer": "2 Identity/security/policy",
+      "producer": "jarvis_policy + jarvis_os (REF) -> Java PDP (PROD)",
+      "events": [
+        "policy.access.allowed", "policy.access.denied", "policy.action.denied",
+        "policy.tool.denied", "policy.model.denied", "policy.data.redacted",
+        "policy.export.blocked", "policy.break_glass.requested", "policy.break_glass.approved"
+      ]
+    },
+    "ontology": {
+      "owner_layer": "6 Ontology kernel",
+      "producer": "jarvis_ontology (REF) -> Java ontology kernel (PROD)",
+      "events": [
+        "ontology.object_type.created", "ontology.object_type.updated",
+        "ontology.property_type.updated", "ontology.link_type.created",
+        "ontology.action_type.created", "ontology.function.published",
+        "ontology.sdk.generated", "ontology.mapping.changed", "ontology.version.promoted"
+      ]
+    },
+    "object": {
+      "owner_layer": "7 Object runtime",
+      "producer": "jarvis_ontology object runtime (REF) -> Java object runtime (PROD)",
+      "events": [
+        "object.created", "object.updated", "object.property.changed",
+        "object.state.changed", "object.link.created", "object.link.deleted",
+        "object.subscription.triggered", "object.timeline.updated"
+      ]
+    },
+    "provenance": {
+      "owner_layer": "8 Provenance/lineage/bitemporal",
+      "producer": "jarvis_temporal + jarvis_aip lineage (REF) -> Java provenance (PROD)",
+      "events": [
+        "provenance.record.created", "lineage.edge.created", "field.value.superseded",
+        "field.value.verified", "field.value.conflict_detected", "decision.used_fact"
+      ]
+    },
+    "entity": {
+      "owner_layer": "5 Entity resolution",
+      "producer": "jarvis_er (REF) -> JVM + Spark ER (PROD)",
+      "events": [
+        "entity.candidate_generated", "entity.match_scored", "entity.merge_proposed",
+        "entity.merge_approved", "entity.merge_rejected", "entity.split_requested",
+        "entity.golden_record.updated", "entity.conflict_detected"
+      ]
+    },
+    "action": {
+      "owner_layer": "10 Kinetic action engine",
+      "producer": "jarvis_aip + jarvis_ontology.apply_action (REF) -> Java action engine (PROD)",
+      "events": [
+        "action.requested", "action.policy_checked", "action.approval_required",
+        "action.approved", "action.rejected", "action.executing", "action.completed",
+        "action.failed", "action.compensation_started", "action.compensated",
+        "action.writeback.completed"
+      ]
+    },
+    "workflow": {
+      "owner_layer": "11 Workflow/automation",
+      "producer": "brain_planner (PARTIAL) -> Temporal/Java workers (PROD)",
+      "events": [
+        "workflow.started", "workflow.task.assigned", "workflow.task.completed",
+        "workflow.timer.fired", "workflow.escalated", "workflow.cancelled",
+        "workflow.completed", "workflow.failed", "automation.triggered", "rule.evaluated"
+      ]
+    },
+    "sandbox": {
+      "owner_layer": "12 Simulation/sandbox",
+      "producer": "jarvis_sandbox + jarvis_sim (REF) -> JVM + Iceberg/Nessie (PROD)",
+      "events": [
+        "sandbox.created", "sandbox.object_state.branched", "sandbox.dataset.branched",
+        "simulation.started", "simulation.completed", "scenario.promoted", "scenario.discarded"
+      ]
+    },
+    "ai": {
+      "owner_layer": "13 AIP / AI mesh",
+      "producer": "jarvis_ai (REF) -> Java AI gateway + serving (PROD)",
+      "events": [
+        "ai.request.started", "ai.context.built", "ai.retrieval.executed",
+        "ai.tool.requested", "ai.tool.denied", "ai.action.proposed",
+        "ai.approval.required", "ai.response.generated", "ai.trace.written",
+        "ai.eval.failed", "ai.eval.passed"
+      ]
+    },
+    "audit": {
+      "owner_layer": "15 Observability/audit",
+      "producer": "jarvis_os (REF) -> Java audit + WORM archive (PROD)",
+      "events": ["audit.record.written", "compliance.evidence.generated", "trace.recorded"]
+    }
+  }
+}
