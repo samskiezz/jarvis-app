@@ -39,6 +39,7 @@ class AutopilotBody(BaseModel):
 class EnrichBody(BaseModel):
     terms: list[str] | None = Field(default=None, description="Explicit concepts to fetch; default = real vault gaps.")
     limit: int = Field(default=20, ge=1, le=200, description="Max gaps to enrich this run.")
+    only: list[str] | None = Field(default=None, description="Restrict to these connector names; default = all.")
 
 
 # ── request bodies ───────────────────────────────────────────────────────────────────
@@ -95,13 +96,28 @@ async def get_autopilot_network(_token: str | None = Depends(optional_bearer)):
     return {"online": be.network_ok()}
 
 
+@router.get("/sources")
+async def get_sources(_token: str | None = Depends(optional_bearer)):
+    """The registered open-data connectors powering enrichment (governance view)."""
+    cat = be.sources_catalog()
+    return {"count": len(cat), "sources": cat}
+
+
+@router.get("/sources/probe")
+async def get_sources_probe(_token: str | None = Depends(optional_bearer)):
+    """Live reachability of each connector from this environment."""
+    res = be.sources_probe()
+    return {"online": sum(1 for v in res.values() if v), "total": len(res), "sources": res}
+
+
 @router.post("/autopilot/enrich")
 async def post_autopilot_enrich(body: EnrichBody | None = None, _token: str = Depends(require_bearer)):
     """Scrape real external knowledge for the vault's gaps and write grounded,
     source-cited notes. Fills holes from outside the vault, with provenance."""
     terms = body.terms if body else None
     limit = body.limit if body else 20
-    return be.enrich(terms, limit=limit)
+    only = body.only if body else None
+    return be.enrich(terms, limit=limit, only=only)
 
 
 # ── thinking tools ────────────────────────────────────────────────────────────────────
