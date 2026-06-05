@@ -40,8 +40,11 @@ _SLUG_RE = re.compile(r"[^a-z0-9]+")
 
 
 def _env_backend() -> str:
-    """The requested backend from the environment (lower-cased), default sqlite."""
-    return str(os.environ.get("BRAIN_BACKEND", "sqlite") or "sqlite").strip().lower()
+    """The requested backend from the environment (lower-cased). Default is now
+    'postgres' — Postgres is the live default; ``active_backend`` still falls back
+    to sqlite automatically when no Postgres server is reachable, so environments
+    without a database degrade cleanly instead of failing."""
+    return str(os.environ.get("BRAIN_BACKEND", "postgres") or "postgres").strip().lower()
 
 
 def slug(text: str) -> str:
