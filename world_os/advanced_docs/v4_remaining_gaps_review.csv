@@ -1,0 +1,6 @@
+gap,why,next_step
+"Actual connector implementations remain templates/contracts, not running production services.","A real system needs credentials, network access, infra, source legal approval and parser tests.",Prioritise top 50 acquisition points and implement connectors in Go/Java/Rust/Python as appropriate.
+"WebGPU/WASM UI is specified, not fully built.",Building a production browser engine requires substantial front-end/graphics engineering.,"Implement Protobuf stream, WASM worker, WebGPU renderer, GPU picker and performance tests."
+No live clusters are provisioned.,"This package is architecture, contracts, schemas and registry data; it does not deploy Kubernetes/Kafka/Iceberg/Graph/Vector clusters.",Provision dev cluster and load SQL/Cypher/vector manifests.
+Source legal review is pending by design.,Free/public does not always mean commercially reusable or scrapeable.,Complete source_terms_register and approval workflow before ingestion.
+Palantir proprietary internals are not reproduced.,Only public patterns and open architecture equivalents can be documented.,"Keep architecture truthful: Foundry/Gotham/Apollo-inspired, not a clone of private IP."

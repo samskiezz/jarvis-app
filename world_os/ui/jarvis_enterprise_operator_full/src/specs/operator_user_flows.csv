@@ -1,0 +1,6 @@
+flow_id,name,steps,dead_end_prevention
+F001,Trace a data source to action,open Source Catalogue > select source > Trace Source > view lineage > open object > view graph/vector > view workflow > view action > replay audit,"every step has back path, evidence link and Jarvis explain option"
+F002,Create Gotham case from live alert,open COP > select alert > inspect evidence > generate briefing > create case > assign task > audit written,"if evidence missing, show request evidence action"
+F003,Apollo rollout with health gates,open desired state > compare drift > open rollout > verify gates > promote wave > monitor health > pause/rollback if needed,failed gate opens remediation and rollback
+F004,AIP governed action proposal,ask Jarvis > context builder filters objects > graph/vector retrieval > model proposes action > policy gate > approval panel > action engine > audit,blocked actions show policy reason and required approval
+F005,OCR document to evidence object,open source > select document candidate > terms check > OCR pipeline > citation anchors > document object > vector chunks > evidence chain,low OCR confidence opens manual review workflow

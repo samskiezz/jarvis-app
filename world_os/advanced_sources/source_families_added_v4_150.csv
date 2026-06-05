@@ -1,0 +1,151 @@
+source_id,source_name,url,description,access_method,auth,domain_use
+V4SRC-0001,EarthScope/IRIS FDSN,https://service.iris.edu/fdsnws/,Seismic waveform/station/event web services,REST/FDSN,No key/terms,seismology
+V4SRC-0002,NOAA GOES-R data,https://www.goes-r.gov/,GOES satellite imagery/products,cloud/download/API,No key/terms,weather satellite
+V4SRC-0003,EUMETSAT Data Store,https://data.eumetsat.int/,Meteorological satellite products,API/download,Account/terms,weather satellite
+V4SRC-0004,NASA GRACE/GRACE-FO,https://grace.jpl.nasa.gov/data/,Gravity/water storage data,download/API,No key/terms,water/climate
+V4SRC-0005,NOAA ERDDAP servers,https://coastwatch.pfeg.noaa.gov/erddap/index.html,Scientific datasets via ERDDAP,REST/CSV/NetCDF,No key,ocean/atmosphere
+V4SRC-0006,IUCN Red List API,https://apiv3.iucnredlist.org/api/v3/docs,Species conservation status API,REST/JSON,Token/terms,conservation
+V4SRC-0007,EPA TRI Basic Data Files,https://www.epa.gov/toxics-release-inventory-tri-program/tri-basic-data-files-calendar-years-1987-present,Toxic release inventory files,CSV/download,No key,industrial emissions
+V4SRC-0008,Europe PMC API,https://europepmc.org/RestfulWebService,Biomedical literature REST API,REST/JSON/XML,No key,biomedical literature
+V4SRC-0009,Open Targets Platform,https://platform-docs.opentargets.org/data-access/api,Drug target/disease evidence APIs,GraphQL/API,No key/terms,biomedical knowledge
+V4SRC-0010,ChEMBL Web Services,https://www.ebi.ac.uk/chembl/api/data/docs,Bioactive molecules and drug discovery API,REST/JSON/XML,No key,drug discovery
+V4SRC-0011,FDA FAERS Public Data,https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-public-dashboard,Adverse event reporting data,download/web,No key/terms,pharmacovigilance
+V4SRC-0012,NHTSA Vehicle API,https://vpic.nhtsa.dot.gov/api/,Vehicle product information catalogue,REST/JSON,No key,vehicles
+V4SRC-0013,Aviation Weather Center API,https://aviationweather.gov/data/api/,METAR/TAF/AIRMET/SIGMET aviation weather,REST/JSON/XML,No key,aviation weather
+V4SRC-0014,Network Rail open data,https://www.networkrail.co.uk/industry-and-commercial/information-for-operators/open-data-feeds/,UK rail open data feeds,feeds/API,Account/terms,rail operations
+V4SRC-0015,Global Fishing Watch API,https://globalfishingwatch.org/our-apis/,Fishing activity and vessel datasets,API/download,API key/terms,maritime
+V4SRC-0016,WTO Data API,https://apiportal.wto.org/,World Trade Organization data APIs,API,Account/key,trade statistics
+V4SRC-0017,Open Supply Hub,https://info.opensupplyhub.org/api,Facility/supply chain open data API,REST/API,Key/terms,supply chain
+V4SRC-0018,USGS Water Services,https://waterservices.usgs.gov/,US water data web services,REST/JSON/RDB,No key,water gauges
+V4SRC-0019,Water Quality Portal,https://www.waterqualitydata.us/,US water quality data access,REST/CSV/JSON,No key,water quality
+V4SRC-0020,Open Energy Platform,https://openenergy-platform.org/api/,Open energy system datasets and API,REST/API/download,No key/terms,energy systems
+V4SRC-0021,Climate TRACE,https://climatetrace.org/data,Emissions inventory dataset,download/API-like,No key/terms,emissions
+V4SRC-0022,EDGAR Emissions Database,https://edgar.jrc.ec.europa.eu/,Global emissions database,download,No key/terms,emissions
+V4SRC-0023,USGS Mineral Resources Data System,https://mrdata.usgs.gov/,Mineral resources datasets,download/API,No key,minerals
+V4SRC-0024,MITRE ATT&CK,https://attack.mitre.org/resources/working-with-attack/,Adversary tactics/techniques knowledge base,STIX/download/API-like,No key/terms,cyber threat
+V4SRC-0025,MITRE D3FEND,https://d3fend.mitre.org/,Cyber defensive countermeasure knowledge graph,RDF/SPARQL/download,No key,cyber defence
+V4SRC-0026,FIRST EPSS,https://www.first.org/epss/api,Exploit Prediction Scoring System API,REST/CSV,No key,vulnerability risk
+V4SRC-0027,deps.dev API,https://docs.deps.dev/api/,Open-source dependency metadata API,REST/JSON,No key,software supply chain
+V4SRC-0028,OSV API,https://google.github.io/osv.dev/api/,Open Source Vulnerability API,REST/JSON,No key,software vulnerabilities
+V4SRC-0029,Sigstore Rekor,https://docs.sigstore.dev/logging/overview/,Transparency log for software supply chain,API/log,No key,software provenance
+V4SRC-0030,Open Policy Agent,https://www.openpolicyagent.org/docs/latest/,Policy as code engine/docs,software/docs,Open source,policy enforcement
+V4SRC-0031,SPIFFE/SPIRE,https://spiffe.io/docs/latest/spiffe-about/overview/,Workload identity framework,software/docs,Open source,identity
+V4SRC-0032,OpenTelemetry Collector,https://opentelemetry.io/docs/collector/,Telemetry collector docs,OTLP/config,Open source,observability
+V4SRC-0033,Neo4j Cypher Manual,https://neo4j.com/docs/cypher-manual/current/,Graph database query language docs,Cypher,Self-host/cloud,graph query
+V4SRC-0034,Qdrant API,https://api.qdrant.tech/,Vector search API,REST/gRPC,Self-host/cloud,vector database
+V4SRC-0035,Apache Iceberg REST Catalog,https://iceberg.apache.org/docs/latest/rest-catalog/,REST catalog for Iceberg tables,REST/API,Self-host,lakehouse catalog
+V4SRC-0036,Temporal Docs,https://docs.temporal.io/,Durable workflow execution platform,SDK/API,Self-host/cloud,workflows
+V4SRC-0037,CloudEvents Spec,https://cloudevents.io/,Event metadata standard,spec,No key,event contracts
+V4SRC-0038,AsyncAPI Spec,https://www.asyncapi.com/docs/reference/specification/latest,Event-driven API specification,spec,No key,event contracts
+V4SRC-0039,Protobuf,https://protobuf.dev/,Protocol buffers schema/serialization,spec/tools,No key,binary contracts
+V4SRC-0040,OpenLineage Spec,https://openlineage.io/docs/spec/,Lineage metadata events standard,spec/API,No key,lineage
+V4SRC-0041,W3C PROV,https://www.w3.org/TR/prov-o/,Provenance ontology,spec,No key,provenance
+V4SRC-0042,DataCite REST API,https://support.datacite.org/docs/api,DOI metadata API,REST/API,No key/terms,dataset identifiers
+V4SRC-0043,OGC SensorThings API,https://www.ogc.org/standard/sensorthings/,IoT/sensor observation API standard,spec,No key,sensor APIs
+V4SRC-0044,EarthScope/IRIS FDSN / profile 2,https://service.iris.edu/fdsnws/,Seismic waveform/station/event web services,REST/FDSN,No key/terms,seismology
+V4SRC-0045,NOAA GOES-R data / profile 2,https://www.goes-r.gov/,GOES satellite imagery/products,cloud/download/API,No key/terms,weather satellite
+V4SRC-0046,EUMETSAT Data Store / profile 2,https://data.eumetsat.int/,Meteorological satellite products,API/download,Account/terms,weather satellite
+V4SRC-0047,NASA GRACE/GRACE-FO / profile 2,https://grace.jpl.nasa.gov/data/,Gravity/water storage data,download/API,No key/terms,water/climate
+V4SRC-0048,NOAA ERDDAP servers / profile 2,https://coastwatch.pfeg.noaa.gov/erddap/index.html,Scientific datasets via ERDDAP,REST/CSV/NetCDF,No key,ocean/atmosphere
+V4SRC-0049,IUCN Red List API / profile 2,https://apiv3.iucnredlist.org/api/v3/docs,Species conservation status API,REST/JSON,Token/terms,conservation
+V4SRC-0050,EPA TRI Basic Data Files / profile 2,https://www.epa.gov/toxics-release-inventory-tri-program/tri-basic-data-files-calendar-years-1987-present,Toxic release inventory files,CSV/download,No key,industrial emissions
+V4SRC-0051,Europe PMC API / profile 2,https://europepmc.org/RestfulWebService,Biomedical literature REST API,REST/JSON/XML,No key,biomedical literature
+V4SRC-0052,Open Targets Platform / profile 2,https://platform-docs.opentargets.org/data-access/api,Drug target/disease evidence APIs,GraphQL/API,No key/terms,biomedical knowledge
+V4SRC-0053,ChEMBL Web Services / profile 2,https://www.ebi.ac.uk/chembl/api/data/docs,Bioactive molecules and drug discovery API,REST/JSON/XML,No key,drug discovery
+V4SRC-0054,FDA FAERS Public Data / profile 2,https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-public-dashboard,Adverse event reporting data,download/web,No key/terms,pharmacovigilance
+V4SRC-0055,NHTSA Vehicle API / profile 2,https://vpic.nhtsa.dot.gov/api/,Vehicle product information catalogue,REST/JSON,No key,vehicles
+V4SRC-0056,Aviation Weather Center API / profile 2,https://aviationweather.gov/data/api/,METAR/TAF/AIRMET/SIGMET aviation weather,REST/JSON/XML,No key,aviation weather
+V4SRC-0057,Network Rail open data / profile 2,https://www.networkrail.co.uk/industry-and-commercial/information-for-operators/open-data-feeds/,UK rail open data feeds,feeds/API,Account/terms,rail operations
+V4SRC-0058,Global Fishing Watch API / profile 2,https://globalfishingwatch.org/our-apis/,Fishing activity and vessel datasets,API/download,API key/terms,maritime
+V4SRC-0059,WTO Data API / profile 2,https://apiportal.wto.org/,World Trade Organization data APIs,API,Account/key,trade statistics
+V4SRC-0060,Open Supply Hub / profile 2,https://info.opensupplyhub.org/api,Facility/supply chain open data API,REST/API,Key/terms,supply chain
+V4SRC-0061,USGS Water Services / profile 2,https://waterservices.usgs.gov/,US water data web services,REST/JSON/RDB,No key,water gauges
+V4SRC-0062,Water Quality Portal / profile 2,https://www.waterqualitydata.us/,US water quality data access,REST/CSV/JSON,No key,water quality
+V4SRC-0063,Open Energy Platform / profile 2,https://openenergy-platform.org/api/,Open energy system datasets and API,REST/API/download,No key/terms,energy systems
+V4SRC-0064,Climate TRACE / profile 2,https://climatetrace.org/data,Emissions inventory dataset,download/API-like,No key/terms,emissions
+V4SRC-0065,EDGAR Emissions Database / profile 2,https://edgar.jrc.ec.europa.eu/,Global emissions database,download,No key/terms,emissions
+V4SRC-0066,USGS Mineral Resources Data System / profile 2,https://mrdata.usgs.gov/,Mineral resources datasets,download/API,No key,minerals
+V4SRC-0067,MITRE ATT&CK / profile 2,https://attack.mitre.org/resources/working-with-attack/,Adversary tactics/techniques knowledge base,STIX/download/API-like,No key/terms,cyber threat
+V4SRC-0068,MITRE D3FEND / profile 2,https://d3fend.mitre.org/,Cyber defensive countermeasure knowledge graph,RDF/SPARQL/download,No key,cyber defence
+V4SRC-0069,FIRST EPSS / profile 2,https://www.first.org/epss/api,Exploit Prediction Scoring System API,REST/CSV,No key,vulnerability risk
+V4SRC-0070,deps.dev API / profile 2,https://docs.deps.dev/api/,Open-source dependency metadata API,REST/JSON,No key,software supply chain
+V4SRC-0071,OSV API / profile 2,https://google.github.io/osv.dev/api/,Open Source Vulnerability API,REST/JSON,No key,software vulnerabilities
+V4SRC-0072,Sigstore Rekor / profile 2,https://docs.sigstore.dev/logging/overview/,Transparency log for software supply chain,API/log,No key,software provenance
+V4SRC-0073,Open Policy Agent / profile 2,https://www.openpolicyagent.org/docs/latest/,Policy as code engine/docs,software/docs,Open source,policy enforcement
+V4SRC-0074,SPIFFE/SPIRE / profile 2,https://spiffe.io/docs/latest/spiffe-about/overview/,Workload identity framework,software/docs,Open source,identity
+V4SRC-0075,OpenTelemetry Collector / profile 2,https://opentelemetry.io/docs/collector/,Telemetry collector docs,OTLP/config,Open source,observability
+V4SRC-0076,Neo4j Cypher Manual / profile 2,https://neo4j.com/docs/cypher-manual/current/,Graph database query language docs,Cypher,Self-host/cloud,graph query
+V4SRC-0077,Qdrant API / profile 2,https://api.qdrant.tech/,Vector search API,REST/gRPC,Self-host/cloud,vector database
+V4SRC-0078,Apache Iceberg REST Catalog / profile 2,https://iceberg.apache.org/docs/latest/rest-catalog/,REST catalog for Iceberg tables,REST/API,Self-host,lakehouse catalog
+V4SRC-0079,Temporal Docs / profile 2,https://docs.temporal.io/,Durable workflow execution platform,SDK/API,Self-host/cloud,workflows
+V4SRC-0080,CloudEvents Spec / profile 2,https://cloudevents.io/,Event metadata standard,spec,No key,event contracts
+V4SRC-0081,AsyncAPI Spec / profile 2,https://www.asyncapi.com/docs/reference/specification/latest,Event-driven API specification,spec,No key,event contracts
+V4SRC-0082,Protobuf / profile 2,https://protobuf.dev/,Protocol buffers schema/serialization,spec/tools,No key,binary contracts
+V4SRC-0083,OpenLineage Spec / profile 2,https://openlineage.io/docs/spec/,Lineage metadata events standard,spec/API,No key,lineage
+V4SRC-0084,W3C PROV / profile 2,https://www.w3.org/TR/prov-o/,Provenance ontology,spec,No key,provenance
+V4SRC-0085,DataCite REST API / profile 2,https://support.datacite.org/docs/api,DOI metadata API,REST/API,No key/terms,dataset identifiers
+V4SRC-0086,OGC SensorThings API / profile 2,https://www.ogc.org/standard/sensorthings/,IoT/sensor observation API standard,spec,No key,sensor APIs
+V4SRC-0087,EarthScope/IRIS FDSN / profile 3,https://service.iris.edu/fdsnws/,Seismic waveform/station/event web services,REST/FDSN,No key/terms,seismology
+V4SRC-0088,NOAA GOES-R data / profile 3,https://www.goes-r.gov/,GOES satellite imagery/products,cloud/download/API,No key/terms,weather satellite
+V4SRC-0089,EUMETSAT Data Store / profile 3,https://data.eumetsat.int/,Meteorological satellite products,API/download,Account/terms,weather satellite
+V4SRC-0090,NASA GRACE/GRACE-FO / profile 3,https://grace.jpl.nasa.gov/data/,Gravity/water storage data,download/API,No key/terms,water/climate
+V4SRC-0091,NOAA ERDDAP servers / profile 3,https://coastwatch.pfeg.noaa.gov/erddap/index.html,Scientific datasets via ERDDAP,REST/CSV/NetCDF,No key,ocean/atmosphere
+V4SRC-0092,IUCN Red List API / profile 3,https://apiv3.iucnredlist.org/api/v3/docs,Species conservation status API,REST/JSON,Token/terms,conservation
+V4SRC-0093,EPA TRI Basic Data Files / profile 3,https://www.epa.gov/toxics-release-inventory-tri-program/tri-basic-data-files-calendar-years-1987-present,Toxic release inventory files,CSV/download,No key,industrial emissions
+V4SRC-0094,Europe PMC API / profile 3,https://europepmc.org/RestfulWebService,Biomedical literature REST API,REST/JSON/XML,No key,biomedical literature
+V4SRC-0095,Open Targets Platform / profile 3,https://platform-docs.opentargets.org/data-access/api,Drug target/disease evidence APIs,GraphQL/API,No key/terms,biomedical knowledge
+V4SRC-0096,ChEMBL Web Services / profile 3,https://www.ebi.ac.uk/chembl/api/data/docs,Bioactive molecules and drug discovery API,REST/JSON/XML,No key,drug discovery
+V4SRC-0097,FDA FAERS Public Data / profile 3,https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-public-dashboard,Adverse event reporting data,download/web,No key/terms,pharmacovigilance
+V4SRC-0098,NHTSA Vehicle API / profile 3,https://vpic.nhtsa.dot.gov/api/,Vehicle product information catalogue,REST/JSON,No key,vehicles
+V4SRC-0099,Aviation Weather Center API / profile 3,https://aviationweather.gov/data/api/,METAR/TAF/AIRMET/SIGMET aviation weather,REST/JSON/XML,No key,aviation weather
+V4SRC-0100,Network Rail open data / profile 3,https://www.networkrail.co.uk/industry-and-commercial/information-for-operators/open-data-feeds/,UK rail open data feeds,feeds/API,Account/terms,rail operations
+V4SRC-0101,Global Fishing Watch API / profile 3,https://globalfishingwatch.org/our-apis/,Fishing activity and vessel datasets,API/download,API key/terms,maritime
+V4SRC-0102,WTO Data API / profile 3,https://apiportal.wto.org/,World Trade Organization data APIs,API,Account/key,trade statistics
+V4SRC-0103,Open Supply Hub / profile 3,https://info.opensupplyhub.org/api,Facility/supply chain open data API,REST/API,Key/terms,supply chain
+V4SRC-0104,USGS Water Services / profile 3,https://waterservices.usgs.gov/,US water data web services,REST/JSON/RDB,No key,water gauges
+V4SRC-0105,Water Quality Portal / profile 3,https://www.waterqualitydata.us/,US water quality data access,REST/CSV/JSON,No key,water quality
+V4SRC-0106,Open Energy Platform / profile 3,https://openenergy-platform.org/api/,Open energy system datasets and API,REST/API/download,No key/terms,energy systems
+V4SRC-0107,Climate TRACE / profile 3,https://climatetrace.org/data,Emissions inventory dataset,download/API-like,No key/terms,emissions
+V4SRC-0108,EDGAR Emissions Database / profile 3,https://edgar.jrc.ec.europa.eu/,Global emissions database,download,No key/terms,emissions
+V4SRC-0109,USGS Mineral Resources Data System / profile 3,https://mrdata.usgs.gov/,Mineral resources datasets,download/API,No key,minerals
+V4SRC-0110,MITRE ATT&CK / profile 3,https://attack.mitre.org/resources/working-with-attack/,Adversary tactics/techniques knowledge base,STIX/download/API-like,No key/terms,cyber threat
+V4SRC-0111,MITRE D3FEND / profile 3,https://d3fend.mitre.org/,Cyber defensive countermeasure knowledge graph,RDF/SPARQL/download,No key,cyber defence
+V4SRC-0112,FIRST EPSS / profile 3,https://www.first.org/epss/api,Exploit Prediction Scoring System API,REST/CSV,No key,vulnerability risk
+V4SRC-0113,deps.dev API / profile 3,https://docs.deps.dev/api/,Open-source dependency metadata API,REST/JSON,No key,software supply chain
+V4SRC-0114,OSV API / profile 3,https://google.github.io/osv.dev/api/,Open Source Vulnerability API,REST/JSON,No key,software vulnerabilities
+V4SRC-0115,Sigstore Rekor / profile 3,https://docs.sigstore.dev/logging/overview/,Transparency log for software supply chain,API/log,No key,software provenance
+V4SRC-0116,Open Policy Agent / profile 3,https://www.openpolicyagent.org/docs/latest/,Policy as code engine/docs,software/docs,Open source,policy enforcement
+V4SRC-0117,SPIFFE/SPIRE / profile 3,https://spiffe.io/docs/latest/spiffe-about/overview/,Workload identity framework,software/docs,Open source,identity
+V4SRC-0118,OpenTelemetry Collector / profile 3,https://opentelemetry.io/docs/collector/,Telemetry collector docs,OTLP/config,Open source,observability
+V4SRC-0119,Neo4j Cypher Manual / profile 3,https://neo4j.com/docs/cypher-manual/current/,Graph database query language docs,Cypher,Self-host/cloud,graph query
+V4SRC-0120,Qdrant API / profile 3,https://api.qdrant.tech/,Vector search API,REST/gRPC,Self-host/cloud,vector database
+V4SRC-0121,Apache Iceberg REST Catalog / profile 3,https://iceberg.apache.org/docs/latest/rest-catalog/,REST catalog for Iceberg tables,REST/API,Self-host,lakehouse catalog
+V4SRC-0122,Temporal Docs / profile 3,https://docs.temporal.io/,Durable workflow execution platform,SDK/API,Self-host/cloud,workflows
+V4SRC-0123,CloudEvents Spec / profile 3,https://cloudevents.io/,Event metadata standard,spec,No key,event contracts
+V4SRC-0124,AsyncAPI Spec / profile 3,https://www.asyncapi.com/docs/reference/specification/latest,Event-driven API specification,spec,No key,event contracts
+V4SRC-0125,Protobuf / profile 3,https://protobuf.dev/,Protocol buffers schema/serialization,spec/tools,No key,binary contracts
+V4SRC-0126,OpenLineage Spec / profile 3,https://openlineage.io/docs/spec/,Lineage metadata events standard,spec/API,No key,lineage
+V4SRC-0127,W3C PROV / profile 3,https://www.w3.org/TR/prov-o/,Provenance ontology,spec,No key,provenance
+V4SRC-0128,DataCite REST API / profile 3,https://support.datacite.org/docs/api,DOI metadata API,REST/API,No key/terms,dataset identifiers
+V4SRC-0129,OGC SensorThings API / profile 3,https://www.ogc.org/standard/sensorthings/,IoT/sensor observation API standard,spec,No key,sensor APIs
+V4SRC-0130,EarthScope/IRIS FDSN / profile 4,https://service.iris.edu/fdsnws/,Seismic waveform/station/event web services,REST/FDSN,No key/terms,seismology
+V4SRC-0131,NOAA GOES-R data / profile 4,https://www.goes-r.gov/,GOES satellite imagery/products,cloud/download/API,No key/terms,weather satellite
+V4SRC-0132,EUMETSAT Data Store / profile 4,https://data.eumetsat.int/,Meteorological satellite products,API/download,Account/terms,weather satellite
+V4SRC-0133,NASA GRACE/GRACE-FO / profile 4,https://grace.jpl.nasa.gov/data/,Gravity/water storage data,download/API,No key/terms,water/climate
+V4SRC-0134,NOAA ERDDAP servers / profile 4,https://coastwatch.pfeg.noaa.gov/erddap/index.html,Scientific datasets via ERDDAP,REST/CSV/NetCDF,No key,ocean/atmosphere
+V4SRC-0135,IUCN Red List API / profile 4,https://apiv3.iucnredlist.org/api/v3/docs,Species conservation status API,REST/JSON,Token/terms,conservation
+V4SRC-0136,EPA TRI Basic Data Files / profile 4,https://www.epa.gov/toxics-release-inventory-tri-program/tri-basic-data-files-calendar-years-1987-present,Toxic release inventory files,CSV/download,No key,industrial emissions
+V4SRC-0137,Europe PMC API / profile 4,https://europepmc.org/RestfulWebService,Biomedical literature REST API,REST/JSON/XML,No key,biomedical literature
+V4SRC-0138,Open Targets Platform / profile 4,https://platform-docs.opentargets.org/data-access/api,Drug target/disease evidence APIs,GraphQL/API,No key/terms,biomedical knowledge
+V4SRC-0139,ChEMBL Web Services / profile 4,https://www.ebi.ac.uk/chembl/api/data/docs,Bioactive molecules and drug discovery API,REST/JSON/XML,No key,drug discovery
+V4SRC-0140,FDA FAERS Public Data / profile 4,https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-public-dashboard,Adverse event reporting data,download/web,No key/terms,pharmacovigilance
+V4SRC-0141,NHTSA Vehicle API / profile 4,https://vpic.nhtsa.dot.gov/api/,Vehicle product information catalogue,REST/JSON,No key,vehicles
+V4SRC-0142,Aviation Weather Center API / profile 4,https://aviationweather.gov/data/api/,METAR/TAF/AIRMET/SIGMET aviation weather,REST/JSON/XML,No key,aviation weather
+V4SRC-0143,Network Rail open data / profile 4,https://www.networkrail.co.uk/industry-and-commercial/information-for-operators/open-data-feeds/,UK rail open data feeds,feeds/API,Account/terms,rail operations
+V4SRC-0144,Global Fishing Watch API / profile 4,https://globalfishingwatch.org/our-apis/,Fishing activity and vessel datasets,API/download,API key/terms,maritime
+V4SRC-0145,WTO Data API / profile 4,https://apiportal.wto.org/,World Trade Organization data APIs,API,Account/key,trade statistics
+V4SRC-0146,Open Supply Hub / profile 4,https://info.opensupplyhub.org/api,Facility/supply chain open data API,REST/API,Key/terms,supply chain
+V4SRC-0147,USGS Water Services / profile 4,https://waterservices.usgs.gov/,US water data web services,REST/JSON/RDB,No key,water gauges
+V4SRC-0148,Water Quality Portal / profile 4,https://www.waterqualitydata.us/,US water quality data access,REST/CSV/JSON,No key,water quality
+V4SRC-0149,Open Energy Platform / profile 4,https://openenergy-platform.org/api/,Open energy system datasets and API,REST/API/download,No key/terms,energy systems
+V4SRC-0150,Climate TRACE / profile 4,https://climatetrace.org/data,Emissions inventory dataset,download/API-like,No key/terms,emissions

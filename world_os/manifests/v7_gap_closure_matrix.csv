@@ -1,0 +1,141 @@
+gap_id,category,severity,gap,v7_status,v7_evidence_path,remaining_work
+GAP-0001,Runtime implementation,Critical,Connector services are templates/contracts rather than deployed source-specific services,partially_closed_by_v7_reference_implementation,runtime_core/connector_runner,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0002,Runtime implementation,High,Parser modules do not yet include source-specific tested parse logic for every endpoint,partially_closed_by_v7_reference_implementation,runtime_core/parser_harness,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0003,Runtime implementation,High,Quality gates are defined but not integrated into running pipeline orchestration,partially_closed_by_v7_reference_implementation,runtime_core/quality_gate_runner,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0004,Runtime implementation,Medium,Action engine contracts exist but no deployed service executes actions with compensation,partially_closed_by_v7_reference_implementation,runtime_core/action_engine,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0005,Runtime implementation,Medium,Audit/replay schemas exist but no append-only production audit service is running,partially_closed_by_v7_reference_implementation,runtime_core/audit_service,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0006,Runtime implementation,Critical,Memory runtime schemas exist but no live memory store has been connected to vector and graph DBs,documented_gap,,Backlog item remains open
+GAP-0007,Runtime implementation,High,Apollo desired-state files exist but no fleet agent binary is running on nodes,partially_closed_by_v7_reference_implementation,apollo_control_plane,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0008,Runtime implementation,High,Foundry pipeline manifests exist but no real DAG/Temporal/Airflow/Dagster executions are wired,documented_gap,,Backlog item remains open
+GAP-0009,Runtime implementation,Medium,"Gotham app specs exist but no live event stream, case engine or map backend is connected",partially_closed_by_v7_reference_implementation,gotham_runtime/case_engine,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0010,Runtime implementation,Medium,"AIP registry exists but no model gateway, policy-filtered context builder and tool runner are deployed",partially_closed_by_v7_reference_implementation,aip_runtime,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0011,Data acquisition,Critical,Source terms are pending for most sources; free/public does not equal unrestricted commercial use,documented_gap,,Backlog item remains open
+GAP-0012,Data acquisition,High,"Rate-limit, API-key, quota and authentication metadata is not complete per source",documented_gap,,Backlog item remains open
+GAP-0013,Data acquisition,High,Coverage is broad but not proven complete by country/region/domain,documented_gap,,Backlog item remains open
+GAP-0014,Data acquisition,Medium,No automated source health checker is running,documented_gap,,Backlog item remains open
+GAP-0015,Data acquisition,Medium,No actual scheduled scraping/API/download jobs are executing,documented_gap,,Backlog item remains open
+GAP-0016,Data acquisition,Critical,No connector error taxonomy mapped to remediation workflows,documented_gap,,Backlog item remains open
+GAP-0017,Data acquisition,High,No source deprecation detector or endpoint schema drift detector,documented_gap,,Backlog item remains open
+GAP-0018,Data acquisition,High,No real-world freshness SLA testing by source family,documented_gap,,Backlog item remains open
+GAP-0019,Data acquisition,Medium,No verified robots.txt/terms register for each web/document source,documented_gap,,Backlog item remains open
+GAP-0020,Data acquisition,Medium,No country-by-country public registry completeness matrix,documented_gap,,Backlog item remains open
+GAP-0021,Data engineering,Critical,No physical Iceberg table catalog is deployed,documented_gap,,Backlog item remains open
+GAP-0022,Data engineering,High,Bitemporal object model is specified but not used by live ingestion,documented_gap,,Backlog item remains open
+GAP-0023,Data engineering,High,No CDC ingestion layer for enterprise systems,documented_gap,,Backlog item remains open
+GAP-0024,Data engineering,Medium,No schema registry deployment for Protobuf/Avro/JSON Schema,documented_gap,,Backlog item remains open
+GAP-0025,Data engineering,Medium,No raw/bronze/silver/gold storage lifecycle policy,documented_gap,,Backlog item remains open
+GAP-0026,Data engineering,Critical,No object-store retention tiering policy by domain,documented_gap,,Backlog item remains open
+GAP-0027,Data engineering,High,No data backfill orchestration for historical archives,documented_gap,,Backlog item remains open
+GAP-0028,Data engineering,High,No duplicate detection at billion-row scale,documented_gap,,Backlog item remains open
+GAP-0029,Data engineering,Medium,No unit normalisation library bound to parsers,documented_gap,,Backlog item remains open
+GAP-0030,Data engineering,Medium,No geospatial projection normalisation service,documented_gap,,Backlog item remains open
+GAP-0031,Ontology and graph,Critical,Object schemas exist but are generic and need domain-specific property depth,documented_gap,,Backlog item remains open
+GAP-0032,Ontology and graph,High,Relationship types exist but cardinality and constraints are not tailored per object pair,documented_gap,,Backlog item remains open
+GAP-0033,Ontology and graph,High,No graph database has been loaded and benchmarked,documented_gap,,Backlog item remains open
+GAP-0034,Ontology and graph,Medium,No entity resolution scoring model is implemented,documented_gap,,Backlog item remains open
+GAP-0035,Ontology and graph,Medium,No human adjudication UI for merge/split decisions,documented_gap,,Backlog item remains open
+GAP-0036,Ontology and graph,Critical,No graph versioning/branching/sandbox universe runtime,documented_gap,,Backlog item remains open
+GAP-0037,Ontology and graph,High,No graph query planner with cost controls,documented_gap,,Backlog item remains open
+GAP-0038,Ontology and graph,High,No graph permission enforcement tests across link traversal,documented_gap,,Backlog item remains open
+GAP-0039,Ontology and graph,Medium,No graph edge confidence decay/refresh logic,documented_gap,,Backlog item remains open
+GAP-0040,Ontology and graph,Medium,No validated cause/effect DAG by domain expert review,documented_gap,,Backlog item remains open
+GAP-0041,Vector and retrieval,Critical,Vector namespaces are defined but embeddings are not generated,documented_gap,,Backlog item remains open
+GAP-0042,Vector and retrieval,High,"No embedding model is selected, evaluated or governed",documented_gap,,Backlog item remains open
+GAP-0043,Vector and retrieval,High,No reranker implementation is connected,documented_gap,,Backlog item remains open
+GAP-0044,Vector and retrieval,Medium,No vector payload indexes are actually created,documented_gap,,Backlog item remains open
+GAP-0045,Vector and retrieval,Medium,No citation-grounded retrieval evaluation is executed,documented_gap,,Backlog item remains open
+GAP-0046,Vector and retrieval,Critical,No namespace isolation tests are running,documented_gap,,Backlog item remains open
+GAP-0047,Vector and retrieval,High,No retrieval permission filter has been proven end-to-end,documented_gap,,Backlog item remains open
+GAP-0048,Vector and retrieval,High,No vector drift monitoring exists,documented_gap,,Backlog item remains open
+GAP-0049,Vector and retrieval,Medium,No embedding refresh policy after source/object changes,documented_gap,,Backlog item remains open
+GAP-0050,Vector and retrieval,Medium,No GraphRAG query execution service is deployed,documented_gap,,Backlog item remains open
+GAP-0051,UI/UX and visualisation,Critical,Reference UI exists but production WebGPU/WebGL renderer is not implemented,documented_gap,,Backlog item remains open
+GAP-0052,UI/UX and visualisation,High,WASM physics worker boundary exists but no Rust/C++ layout engine binary,documented_gap,,Backlog item remains open
+GAP-0053,UI/UX and visualisation,High,GPU color picking contract exists but no offscreen framebuffer renderer implementation,documented_gap,,Backlog item remains open
+GAP-0054,UI/UX and visualisation,Medium,CRDT collaboration spec exists but not connected to Yjs/Automerge persistence,documented_gap,,Backlog item remains open
+GAP-0055,UI/UX and visualisation,Medium,Sound/effects registries exist but audio engine is not integrated into UI state,documented_gap,,Backlog item remains open
+GAP-0056,UI/UX and visualisation,Critical,Window/modal registry exists but not all modals have implemented components,documented_gap,,Backlog item remains open
+GAP-0057,UI/UX and visualisation,High,No map tile backend is connected,documented_gap,,Backlog item remains open
+GAP-0058,UI/UX and visualisation,High,No 3D globe/topology renderer is connected to real datasets,documented_gap,,Backlog item remains open
+GAP-0059,UI/UX and visualisation,Medium,No user-tested information architecture results,documented_gap,,Backlog item remains open
+GAP-0060,UI/UX and visualisation,Medium,No accessibility audit report from real browser testing,partially_closed_by_v7_reference_implementation,runtime_core/audit_service,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0061,Security and policy,Critical,SSO/MFA/workload identity is specified but not deployed,partially_closed_by_v7_reference_implementation,security_runtime/identity,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0062,Security and policy,High,OPA/Rego templates exist but not wired to every API/action/query,partially_closed_by_v7_reference_implementation,security_runtime/policy_engine,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0063,Security and policy,High,Object/property/action-level permissions are not tested end-to-end,documented_gap,,Backlog item remains open
+GAP-0064,Security and policy,Medium,SharedArrayBuffer/WebGPU security headers are specified but not deployed,documented_gap,,Backlog item remains open
+GAP-0065,Security and policy,Medium,No secrets manager integration,documented_gap,,Backlog item remains open
+GAP-0066,Security and policy,Critical,No key/certificate rotation workflow,documented_gap,,Backlog item remains open
+GAP-0067,Security and policy,High,No privileged access management workflow,documented_gap,,Backlog item remains open
+GAP-0068,Security and policy,High,No data export control enforcement service,documented_gap,,Backlog item remains open
+GAP-0069,Security and policy,Medium,No red-team prompt injection test harness against Jarvis,documented_gap,,Backlog item remains open
+GAP-0070,Security and policy,Medium,No policy decision audit coverage report,partially_closed_by_v7_reference_implementation,runtime_core/audit_service,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0071,Apollo/runtime operations,Critical,No node agent binary exists,documented_gap,,Backlog item remains open
+GAP-0072,Apollo/runtime operations,High,No rollout planner service exists,documented_gap,,Backlog item remains open
+GAP-0073,Apollo/runtime operations,High,No health gate evaluator service exists,documented_gap,,Backlog item remains open
+GAP-0074,Apollo/runtime operations,Medium,No rollback engine has been implemented,documented_gap,,Backlog item remains open
+GAP-0075,Apollo/runtime operations,Medium,No SBOM/CVE gate connected to CI/CD,documented_gap,,Backlog item remains open
+GAP-0076,Apollo/runtime operations,Critical,No drift detector reading actual node state,documented_gap,,Backlog item remains open
+GAP-0077,Apollo/runtime operations,High,No offline bundle signer/verifier,documented_gap,,Backlog item remains open
+GAP-0078,Apollo/runtime operations,High,No environment constraint solver,documented_gap,,Backlog item remains open
+GAP-0079,Apollo/runtime operations,Medium,No deployment blast-radius calculator,documented_gap,,Backlog item remains open
+GAP-0080,Apollo/runtime operations,Medium,No service dependency graph reconciliation,documented_gap,,Backlog item remains open
+GAP-0081,Testing and validation,Critical,"Test files are placeholders or smoke scaffolds, not comprehensive test suites",documented_gap,,Backlog item remains open
+GAP-0082,Testing and validation,High,No integration test environment,documented_gap,,Backlog item remains open
+GAP-0083,Testing and validation,High,No performance test harness for 50k/250k/1M graph objects,documented_gap,,Backlog item remains open
+GAP-0084,Testing and validation,Medium,No chaos testing for connector failures,documented_gap,,Backlog item remains open
+GAP-0085,Testing and validation,Medium,No data quality regression test execution,documented_gap,,Backlog item remains open
+GAP-0086,Testing and validation,Critical,No AI eval baseline results,documented_gap,,Backlog item remains open
+GAP-0087,Testing and validation,High,No real source parser golden dataset,documented_gap,,Backlog item remains open
+GAP-0088,Testing and validation,High,No browser compatibility test matrix,documented_gap,,Backlog item remains open
+GAP-0089,Testing and validation,Medium,No load testing for websocket/protobuf streams,documented_gap,,Backlog item remains open
+GAP-0090,Testing and validation,Medium,No recovery drills for audit/log corruption,partially_closed_by_v7_reference_implementation,runtime_core/audit_service,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0091,Standards and compliance,Critical,"ISO/NIST docs are mappings, not audited control evidence",partially_closed_by_v7_reference_implementation,runtime_core/audit_service,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0092,Standards and compliance,High,No control owner register,documented_gap,,Backlog item remains open
+GAP-0093,Standards and compliance,High,No evidence collection automation,documented_gap,,Backlog item remains open
+GAP-0094,Standards and compliance,Medium,No data retention implementation per jurisdiction,documented_gap,,Backlog item remains open
+GAP-0095,Standards and compliance,Medium,No privacy impact assessment templates completed,documented_gap,,Backlog item remains open
+GAP-0096,Standards and compliance,Critical,No AI model risk classification per workflow,documented_gap,,Backlog item remains open
+GAP-0097,Standards and compliance,High,No records of processing activity,documented_gap,,Backlog item remains open
+GAP-0098,Standards and compliance,High,No accessibility conformance report,documented_gap,,Backlog item remains open
+GAP-0099,Standards and compliance,Medium,No secure SDLC evidence pack,documented_gap,,Backlog item remains open
+GAP-0100,Standards and compliance,Medium,No legal source approval evidence,documented_gap,,Backlog item remains open
+GAP-0101,Scale and hard technology,Critical,No eBPF telemetry programs are compiled or loaded,documented_gap,,Backlog item remains open
+GAP-0102,Scale and hard technology,High,No Merkle-DAG synchronisation implementation,documented_gap,,Backlog item remains open
+GAP-0103,Scale and hard technology,High,No Roaring Bitmap query engine implementation,documented_gap,,Backlog item remains open
+GAP-0104,Scale and hard technology,Medium,No bitemporal transaction engine beyond schema,partially_closed_by_v7_reference_implementation,runtime_core/action_engine,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0105,Scale and hard technology,Medium,No FoundationDB/Cockroach/Spanner-class transaction design decision record,documented_gap,,Backlog item remains open
+GAP-0106,Scale and hard technology,Critical,No multi-region active-active topology,documented_gap,,Backlog item remains open
+GAP-0107,Scale and hard technology,High,No classified/air-gapped deployment pattern tested,documented_gap,,Backlog item remains open
+GAP-0108,Scale and hard technology,High,No deterministic replay for model/tool/workflow execution,partially_closed_by_v7_reference_implementation,runtime_core/audit_service,"Production deployment, source-specific implementation, integration tests and performance evidence still required"
+GAP-0109,Scale and hard technology,Medium,No GPU memory budget testing,documented_gap,,Backlog item remains open
+GAP-0110,Scale and hard technology,Medium,No billion-row query benchmark,documented_gap,,Backlog item remains open
+GAP-0111,Combinatorial expansion dimension,High,"Need systematic matrix expansion for country/jurisdiction coverage, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0112,Combinatorial expansion dimension,High,"Need systematic matrix expansion for source-by-source legal approval, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0113,Combinatorial expansion dimension,High,"Need systematic matrix expansion for language/localisation, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0114,Combinatorial expansion dimension,High,"Need systematic matrix expansion for sensor class, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0115,Combinatorial expansion dimension,High,"Need systematic matrix expansion for asset class, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0116,Combinatorial expansion dimension,High,"Need systematic matrix expansion for industry ontology, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0117,Combinatorial expansion dimension,High,"Need systematic matrix expansion for mission workflow, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0118,Combinatorial expansion dimension,High,"Need systematic matrix expansion for model/eval suite, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0119,Combinatorial expansion dimension,High,"Need systematic matrix expansion for security control, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0120,Combinatorial expansion dimension,High,"Need systematic matrix expansion for user role, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0121,Combinatorial expansion dimension,High,"Need systematic matrix expansion for approval path, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0122,Combinatorial expansion dimension,High,"Need systematic matrix expansion for retention policy, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0123,Combinatorial expansion dimension,High,"Need systematic matrix expansion for data quality dimension, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0124,Combinatorial expansion dimension,High,"Need systematic matrix expansion for event type, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0125,Combinatorial expansion dimension,High,"Need systematic matrix expansion for action type, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0126,Combinatorial expansion dimension,High,"Need systematic matrix expansion for graph relationship type, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0127,Combinatorial expansion dimension,High,"Need systematic matrix expansion for data classification, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0128,Combinatorial expansion dimension,High,"Need systematic matrix expansion for deployment environment, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0129,Combinatorial expansion dimension,High,"Need systematic matrix expansion for offline/airgap mode, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0130,Combinatorial expansion dimension,High,"Need systematic matrix expansion for browser/device capability, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0131,Combinatorial expansion dimension,High,"Need systematic matrix expansion for map/visual layer, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0132,Combinatorial expansion dimension,High,"Need systematic matrix expansion for sound/effect cue, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0133,Combinatorial expansion dimension,High,"Need systematic matrix expansion for notification channel, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0134,Combinatorial expansion dimension,High,"Need systematic matrix expansion for error state, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0135,Combinatorial expansion dimension,High,"Need systematic matrix expansion for accessibility state, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0136,Combinatorial expansion dimension,High,"Need systematic matrix expansion for compliance regime, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0137,Combinatorial expansion dimension,High,"Need systematic matrix expansion for runtime SLO, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0138,Combinatorial expansion dimension,High,"Need systematic matrix expansion for cost centre, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0139,Combinatorial expansion dimension,High,"Need systematic matrix expansion for tenant boundary, not ad-hoc file generation",documented_gap,,Backlog item remains open
+GAP-0140,Combinatorial expansion dimension,High,"Need systematic matrix expansion for incident scenario, not ad-hoc file generation",documented_gap,,Backlog item remains open

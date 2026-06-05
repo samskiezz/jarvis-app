@@ -1,0 +1,6 @@
+version_option,goal,includes,excludes,recommended
+V7A Runtime First,Replace highest-risk stubs with executable service skeletons and tests,"connector runner, parser harness, quality gate runner, audit writer, action engine, source health checker",more datasets unless needed for tests,YES
+V7B UI Engine First,Build WebGPU/WebGL/WASM/CRDT interactive operator engine,"renderer, worker, graph store adapter, modals, notifications, table virtualisation",full backend deployment,NO unless UI demo is priority
+V7C Data Expansion First,Add more sources/endpoints by country/domain,"source registries, legal review matrices, endpoint discovery",runtime execution,NO until runtime foundation is stronger
+V7D Security First,"Policy, identity, audit, export controls and AI guardrails","OPA, SPIFFE, audit chain, source legal workflow, prompt injection tests",large visual enhancements,YES
+V7E Apollo First,State reconciliation and fleet/deployment fabric,"node agent, desired/current/drift, rollout planner, health gates, rollback",extra UI polish,YES
