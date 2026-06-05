@@ -57,11 +57,16 @@ export function PageShell({ title, subtitle, accent = C.neon, actions, children 
       fontFamily: "'JetBrains Mono','SF Mono',Courier New,monospace" }}>
       <GlassBackdrop />
       <div style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 14, marginBottom: 18,
+        <div className="apex-fade" style={{ display: "flex", alignItems: "flex-end", gap: 14, marginBottom: 18,
           borderBottom: `1px solid ${C.border}`, paddingBottom: 12 }}>
-          <div style={{ flex: 1 }}>
-            <h1 style={{ margin: 0, fontSize: 18, letterSpacing: 3, color: accent, fontWeight: 700 }}>{title}</h1>
-            {subtitle && <div style={{ fontSize: 9, color: C.text, letterSpacing: 1, marginTop: 4 }}>{subtitle}</div>}
+          <div style={{ display: "flex", alignItems: "stretch", gap: 12, flex: 1 }}>
+            <span aria-hidden style={{ width: 3, borderRadius: 2, background: accent,
+              boxShadow: `0 0 10px ${accent}`, alignSelf: "stretch", minHeight: 30 }} />
+            <div style={{ flex: 1 }}>
+              <h1 style={{ margin: 0, fontSize: 19, letterSpacing: 3.5, color: accent, fontWeight: 700,
+                textShadow: `0 0 24px ${accent}44` }}>{title}</h1>
+              {subtitle && <div style={{ fontSize: 9, color: C.text, letterSpacing: 1, marginTop: 5 }}>{subtitle}</div>}
+            </div>
           </div>
           {actions}
         </div>
@@ -73,27 +78,33 @@ export function PageShell({ title, subtitle, accent = C.neon, actions, children 
 
 export function PanelCard({ title, accent = C.neon, right, style, children }) {
   return (
-    <section style={{ ...GLASS, borderRadius: 6, overflow: "hidden", ...style }}>
+    <section className="apex-panel apex-rise" style={{ ...GLASS, borderRadius: 8, overflow: "hidden", ...style }}>
       {title && (
-        <header style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-          borderBottom: `1px solid ${S.border}`, background: `${accent}0d` }}>
+        <header style={{ position: "relative", display: "flex", alignItems: "center", gap: 8, padding: "9px 13px",
+          borderBottom: `1px solid ${S.border}`,
+          background: `linear-gradient(180deg, ${accent}14, ${accent}05)` }}>
+          <span aria-hidden style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1,
+            background: `linear-gradient(90deg, transparent, ${accent}, transparent)`, opacity: 0.55 }} />
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: accent,
-            boxShadow: `0 0 6px ${accent}` }} />
-          <span style={{ fontSize: 10, letterSpacing: 2, color: accent, fontWeight: 700, flex: 1 }}>{title}</span>
+            boxShadow: `0 0 8px ${accent}` }} />
+          <span style={{ fontSize: 10, letterSpacing: 2.2, color: accent, fontWeight: 700, flex: 1 }}>{title}</span>
           {right}
         </header>
       )}
-      <div style={{ padding: 12 }}>{children}</div>
+      <div style={{ padding: 13 }}>{children}</div>
     </section>
   );
 }
 
 export function StatTile({ label, value, accent = C.neon, sub }) {
   return (
-    <div style={{ ...GLASS, borderRadius: 5, padding: "10px 12px" }}>
-      <div style={{ fontSize: 8, letterSpacing: 1.5, color: C.text, textTransform: "uppercase" }}>{label}</div>
-      <div style={{ fontSize: 20, fontWeight: 700, color: accent, marginTop: 4, lineHeight: 1 }}>{value}</div>
-      {sub && <div style={{ fontSize: 8, color: C.text, marginTop: 3 }}>{sub}</div>}
+    <div className="apex-tile" style={{ ...GLASS, position: "relative", borderRadius: 7, padding: "11px 13px", overflow: "hidden" }}>
+      <span aria-hidden style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 2,
+        background: `linear-gradient(180deg, ${accent}, transparent)`, opacity: 0.7 }} />
+      <div style={{ fontSize: 8, letterSpacing: 1.6, color: C.text, textTransform: "uppercase" }}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, color: accent, marginTop: 5, lineHeight: 1,
+        fontVariantNumeric: "tabular-nums", textShadow: `0 0 18px ${accent}55` }}>{value}</div>
+      {sub && <div style={{ fontSize: 8, color: C.text, marginTop: 4 }}>{sub}</div>}
     </div>
   );
 }
