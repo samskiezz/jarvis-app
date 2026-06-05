@@ -1,0 +1,51 @@
+apiVersion: control.jarvis/v1
+kind: RolloutPolicy
+metadata:
+  name: emergency-patch
+  description: Expedited rollout for critical security fixes. Compresses soak, never skips signature/audit.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  release_strategy: canary
+  break_glass: governance/security/break-glass-policy.md
+spec:
+  strategy: canary
+  trigger:
+    requires_incident: true
+    severity_min: SEV1
+    cve_severity_min: CRITICAL
+  gate_before_first_wave:
+    - signature_gate          # NEVER waived even in emergency
+    - audit_gate              # break-glass event must be recorded first
+    # vulnerability_gate and promotion_gate MAY be waived with two-person break-glass
+  waivable_gates:
+    - vulnerability_gate
+    - promotion_gate
+  waiver:
+    requires: break_glass
+    quorum: 2
+    expires_after: 4h
+    audit_event: deployment.emergency.break_glass
+  waves:
+    - name: canary
+      percentage: 10
+      min_soak: 3m
+      health_gates: [liveness, error_rate, audit_chain_intact]
+    - name: full
+      percentage: 100
+      min_soak: 2m
+      health_gates: [liveness, error_rate]
+  pause_conditions:
+    - id: regression
+      when: http_5xx_ratio > 0.02
+      action: rollback
+    - id: audit_chain_broken
+      when: audit_hash_chain_verifies == false
+      action: abort
+  on_failure:
+    action: rollback
+    rollback_policy: deployment/rollback-policies/service-rollback.yaml
+    target: last_good_version
+  post_conditions:
+    - require_followup_change_review: 72h
+    - reconcile_promotion_ladder: true
+  audit_event: deployment.emergency.{decision}

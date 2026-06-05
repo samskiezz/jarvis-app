@@ -1,0 +1,327 @@
+openapi: 3.1.0
+info:
+  title: AIP Gateway API
+  version: 1.0.0
+  description: >
+    The AI Platform gateway (AIP-class): the single, governed entrypoint between
+    language models and the enterprise. It builds permission-aware context,
+    performs retrieval filtered by the Policy API, answers questions grounded in
+    the ontology, brokers tool requests and action proposals (every side effect
+    routed through the Action Engine + Policy), routes prompts across models, and
+    records full traces and evaluation runs.
+
+
+    Exposes platform concepts (context bundles, permission-aware retrieval, tool
+    requests, action proposals, model routes, traces, evals) — never raw
+    database tables and never an unfiltered view of data. The model only ever
+    sees what the subject is permitted to see.
+
+
+    Production language: Java / Spring Boot (Layer B service `aip-gateway`).
+
+
+    Layer A reference module: `server/services/jarvis_aip.py` (with
+    `server/services/jarvis_ai.py`), exposed under `/v1/jarvis`. The contract is
+    stable across the Layer A -> Layer B split.
+servers:
+  - url: /v1/aip
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: context
+    description: Permission-aware context assembly for a subject and task
+  - name: retrieve
+    description: Policy-filtered retrieval over ontology objects and corpora
+  - name: ask
+    description: Grounded question answering
+  - name: tools
+    description: Brokered, governed tool requests
+  - name: actions
+    description: Model-proposed actions routed to the Action Engine
+  - name: models
+    description: Model routing and selection
+  - name: traces
+    description: Full execution traces for observability
+  - name: evals
+    description: Evaluation runs over prompts and datasets
+paths:
+  /context/build:
+    post:
+      tags: [context]
+      summary: Build a permission-aware context bundle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContextBuildRequest' }
+      responses:
+        '200':
+          description: Context bundle
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContextBundle' }
+  /retrieve:
+    post:
+      tags: [retrieve]
+      summary: Permission-aware retrieval
+      description: >
+        Returns only results the subject is authorized to see; redaction
+        obligations from the Policy API are applied before return.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RetrieveRequest' }
+      responses:
+        '200':
+          description: Filtered results
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RetrieveResult' }
+  /ask:
+    post:
+      tags: [ask]
+      summary: Ask a grounded question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AskRequest' }
+      responses:
+        '200':
+          description: Grounded answer with citations
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AskResponse' }
+  /tools/request:
+    post:
+      tags: [tools]
+      summary: Request a governed tool invocation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ToolRequest' }
+      responses:
+        '200':
+          description: Tool result or denial
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ToolResult' }
+  /actions/propose:
+    post:
+      tags: [actions]
+      summary: Propose an action for the subject to confirm
+      description: >
+        The model proposes a typed action; the gateway validates it against the
+        Action Engine and Policy but does not execute it without confirmation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ActionProposal' }
+      responses:
+        '200':
+          description: Validated proposal
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ActionProposalResult' }
+  /models/route:
+    post:
+      tags: [models]
+      summary: Resolve which model serves a request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ModelRouteRequest' }
+      responses:
+        '200':
+          description: Routing decision
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ModelRoute' }
+  /traces/{traceId}:
+    get:
+      tags: [traces]
+      summary: Get a full execution trace
+      parameters:
+        - { name: traceId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Trace
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Trace' }
+  /evals:
+    post:
+      tags: [evals]
+      summary: Launch an evaluation run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvalRequest' }
+      responses:
+        '202':
+          description: Eval run accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EvalRun' }
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    ContextBuildRequest:
+      type: object
+      required: [subjectId, task]
+      properties:
+        subjectId: { type: string }
+        task: { type: string }
+        objectRefs:
+          type: array
+          items: { type: string }
+        maxTokens: { type: integer, default: 8000 }
+    ContextBundle:
+      type: object
+      properties:
+        bundleId: { type: string }
+        subjectId: { type: string }
+        maxClassification: { $ref: '#/components/schemas/Classification' }
+        fragments:
+          type: array
+          items:
+            type: object
+            properties:
+              source: { type: string }
+              objectRef: { type: string, nullable: true }
+              content: { type: string }
+              classification: { $ref: '#/components/schemas/Classification' }
+              redacted: { type: boolean }
+        droppedForPolicy: { type: integer, description: Count of fragments withheld by policy }
+    RetrieveRequest:
+      type: object
+      required: [subjectId, query]
+      properties:
+        subjectId: { type: string }
+        query: { type: string }
+        objectTypes:
+          type: array
+          items: { type: string }
+        topK: { type: integer, default: 10 }
+    RetrieveResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              objectRef: { type: string }
+              score: { type: number }
+              snippet: { type: string }
+              classification: { $ref: '#/components/schemas/Classification' }
+              redacted: { type: boolean }
+        withheldByPolicy: { type: integer }
+    AskRequest:
+      type: object
+      required: [subjectId, question]
+      properties:
+        subjectId: { type: string }
+        question: { type: string }
+        contextBundleId: { type: string, nullable: true }
+    AskResponse:
+      type: object
+      properties:
+        answer: { type: string }
+        citations:
+          type: array
+          items:
+            type: object
+            properties:
+              objectRef: { type: string }
+              span: { type: string }
+        traceId: { type: string }
+    ToolRequest:
+      type: object
+      required: [subjectId, toolId, arguments]
+      properties:
+        subjectId: { type: string }
+        toolId: { type: string }
+        arguments: { type: object, additionalProperties: true }
+    ToolResult:
+      type: object
+      properties:
+        toolId: { type: string }
+        permitted: { type: boolean }
+        output: { type: object, additionalProperties: true, nullable: true }
+        denialReason: { type: string, nullable: true }
+        traceId: { type: string }
+    ActionProposal:
+      type: object
+      required: [subjectId, actionTypeId, parameters]
+      properties:
+        subjectId: { type: string }
+        actionTypeId: { type: string }
+        parameters: { type: object, additionalProperties: true }
+        rationale: { type: string }
+    ActionProposalResult:
+      type: object
+      properties:
+        proposalId: { type: string }
+        valid: { type: boolean }
+        policyEffect: { type: string, enum: [permit, deny] }
+        requiresApproval: { type: boolean }
+        previewWriteback: { type: object, additionalProperties: true, nullable: true }
+        denialReason: { type: string, nullable: true }
+    ModelRouteRequest:
+      type: object
+      required: [subjectId, capability]
+      properties:
+        subjectId: { type: string }
+        capability: { type: string, enum: [chat, embedding, reasoning, vision, code] }
+        maxClassification: { $ref: '#/components/schemas/Classification' }
+        latencyBudgetMs: { type: integer, nullable: true }
+    ModelRoute:
+      type: object
+      properties:
+        modelId: { type: string }
+        provider: { type: string }
+        residency: { type: string, enum: [on_prem, sovereign_cloud, vendor_cloud] }
+        permittedClassification: { $ref: '#/components/schemas/Classification' }
+        reason: { type: string }
+    Trace:
+      type: object
+      properties:
+        traceId: { type: string }
+        subjectId: { type: string }
+        spans:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              kind: { type: string, enum: [retrieve, policy, model, tool, action] }
+              startedAt: { type: string, format: date-time }
+              durationMs: { type: integer }
+              attributes: { type: object, additionalProperties: true }
+    EvalRequest:
+      type: object
+      required: [datasetId, target]
+      properties:
+        datasetId: { type: string }
+        target: { type: string, description: Prompt template or model id under test }
+        metrics:
+          type: array
+          items: { type: string, enum: [groundedness, accuracy, toxicity, leakage, latency] }
+    EvalRun:
+      type: object
+      properties:
+        runId: { type: string }
+        status: { type: string, enum: [queued, running, completed, failed] }
+        scores:
+          type: object
+          additionalProperties: { type: number }
+        startedAt: { type: string, format: date-time }

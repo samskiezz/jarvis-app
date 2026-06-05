@@ -1,0 +1,45 @@
+# Pod Security Standards: enforce the "restricted" profile on sensitive planes
+# via namespace labels, plus a sample compliant Deployment showing the required
+# securityContext settings.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: control-plane
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restricted-sample
+  namespace: control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restricted-sample
+  template:
+    metadata:
+      labels:
+        app: restricted-sample
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: registry.internal/jarvis/control-plane:latest
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 8080

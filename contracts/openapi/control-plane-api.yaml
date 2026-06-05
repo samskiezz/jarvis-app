@@ -1,0 +1,276 @@
+openapi: 3.1.0
+info:
+  title: Control Plane API
+  version: 1.0.0
+  description: >
+    Software-delivery & fleet control plane (Apollo-class). Manages declared
+    desired-state for environments, computes drift against current-state,
+    drives deployments through gates + staged rollout, reconciles the fleet and
+    performs auto/manual rollback.
+
+
+    Production language: Java / Spring Boot (Layer B service `control-plane`),
+    fronting a Go agent fleet.
+
+
+    Layer A reference module: `server/services/jarvis_apollo.py` (exposed under
+    `/v1/jarvis` by the reference kernel). The contract is stable across the
+    Layer A -> Layer B split: the runtime changes, this API does not.
+servers:
+  - url: /v1/control-plane
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: environments
+    description: Declared desired-state and observed current-state per environment
+  - name: deployments
+    description: Releases through gates and staged rollout
+  - name: reconciliation
+    description: Desired vs current convergence loop
+  - name: fleet
+    description: Fleet inventory and per-node deployed state
+  - name: drift
+    description: Divergence between desired and current state
+  - name: rollback
+    description: Revert an environment to a last-known-good version
+paths:
+  /environments:
+    get:
+      tags: [environments]
+      summary: List environments
+      responses:
+        '200':
+          description: Environments
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Environment' }
+    post:
+      tags: [environments]
+      summary: Register an environment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Environment' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Environment' }
+  /environments/{envId}/desired-state:
+    put:
+      tags: [environments]
+      summary: Declare desired state for an environment
+      parameters:
+        - { name: envId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DesiredState' }
+      responses:
+        '200':
+          description: Accepted desired state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DesiredState' }
+  /environments/{envId}/current-state:
+    get:
+      tags: [environments]
+      summary: Observed current state for an environment
+      parameters:
+        - { name: envId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Current state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CurrentState' }
+  /environments/{envId}/drift:
+    get:
+      tags: [drift]
+      summary: Compute drift (desired vs current) for an environment
+      parameters:
+        - { name: envId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Drift report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DriftReport' }
+  /deployments:
+    post:
+      tags: [deployments]
+      summary: Cut a deployment through gates + staged rollout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DeploymentRequest' }
+      responses:
+        '202':
+          description: Deployment accepted / outcome
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Deployment' }
+  /deployments/{deploymentId}:
+    get:
+      tags: [deployments]
+      summary: Deployment status
+      parameters:
+        - { name: deploymentId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Deployment
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Deployment' }
+  /reconciliation/{envId}:
+    post:
+      tags: [reconciliation]
+      summary: Trigger a reconciliation loop for an environment
+      parameters:
+        - { name: envId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Reconciliation result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ReconciliationResult' }
+  /fleet:
+    get:
+      tags: [fleet]
+      summary: Fleet inventory (deployed version per environment/node)
+      responses:
+        '200':
+          description: Fleet state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FleetState' }
+  /rollback:
+    post:
+      tags: [rollback]
+      summary: Roll an environment back to a last-known-good version
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RollbackRequest' }
+      responses:
+        '200':
+          description: Rollback outcome
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Deployment' }
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    Environment:
+      type: object
+      required: [id, tier]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        tier: { type: string, enum: [dev, staging, prod] }
+        promotionOrder: { type: integer }
+        classification: { $ref: '#/components/schemas/Classification' }
+    DesiredState:
+      type: object
+      required: [artifact, version]
+      properties:
+        artifact: { type: string }
+        version: { type: string }
+        replicas: { type: integer, default: 1 }
+        config: { type: object, additionalProperties: true }
+        declaredAt: { type: string, format: date-time }
+    CurrentState:
+      type: object
+      properties:
+        artifact: { type: string }
+        version: { type: string }
+        replicas: { type: integer }
+        health: { type: string, enum: [healthy, degraded, unhealthy, unknown] }
+        observedAt: { type: string, format: date-time }
+    DriftReport:
+      type: object
+      properties:
+        envId: { type: string }
+        drifted: { type: boolean }
+        differences:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              desired: {}
+              current: {}
+    DeploymentRequest:
+      type: object
+      required: [envId, artifact, version]
+      properties:
+        envId: { type: string }
+        artifact: { type: string }
+        version: { type: string }
+        strategy: { type: string, enum: [canary, rolling, bluegreen], default: canary }
+        approvalId: { type: string, nullable: true }
+    Deployment:
+      type: object
+      properties:
+        id: { type: string }
+        envId: { type: string }
+        version: { type: string }
+        status:
+          type: string
+          enum: [pending_approval, gate_failed, rolling_out, deployed, rolled_back, denied]
+        gates:
+          type: array
+          items: { $ref: '#/components/schemas/GateResult' }
+        stages:
+          type: array
+          items: { $ref: '#/components/schemas/RolloutStage' }
+    GateResult:
+      type: object
+      properties:
+        gate: { type: string, enum: [signature, vulnerability, promotion, approval, health] }
+        passed: { type: boolean }
+        detail: { type: string }
+    RolloutStage:
+      type: object
+      properties:
+        name: { type: string, enum: [canary, rolling] }
+        healthy: { type: boolean }
+        percent: { type: integer }
+    ReconciliationResult:
+      type: object
+      properties:
+        envId: { type: string }
+        converged: { type: boolean }
+        actionsTaken:
+          type: array
+          items: { type: string }
+        remainingDrift: { type: integer }
+    FleetState:
+      type: object
+      properties:
+        environments:
+          type: array
+          items:
+            type: object
+            properties:
+              envId: { type: string }
+              version: { type: string }
+              health: { type: string }
+              lastGoodVersion: { type: string }
+    RollbackRequest:
+      type: object
+      required: [envId]
+      properties:
+        envId: { type: string }
+        toVersion: { type: string, nullable: true }
+        approvalId: { type: string, nullable: true }

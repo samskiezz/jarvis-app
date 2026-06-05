@@ -1,0 +1,25 @@
+# Grafana datasource provisioning for the Jarvis platform.
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus.observability.svc:9090
+    isDefault: true
+    jsonData:
+      timeInterval: 15s
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    url: http://tempo.observability.svc:3200
+    jsonData:
+      tracesToLogs:
+        datasourceUid: loki
+
+  - name: Loki
+    type: loki
+    uid: loki
+    access: proxy
+    url: http://loki.observability.svc:3100

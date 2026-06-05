@@ -1,0 +1,40 @@
+# Default values for the control-plane chart.
+replicaCount: 3
+
+image:
+  repository: registry.internal/jarvis/control-plane
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+namespace: control-plane
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  readOnlyRootFilesystem: true
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+postgres:
+  host: jarvis-prod.postgres.internal
+  port: 5432
+  credentialsSecret: jarvis-prod-credentials
+
+ingress:
+  enabled: false

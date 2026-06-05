@@ -1,0 +1,48 @@
+apiVersion: control.jarvis/v1
+kind: BootProfile
+metadata:
+  name: local
+  description: Developer laptop boot. Fast, permissive; SQLite reference store, in-process events.
+  owner: bootloader
+  contract: contracts/openapi/bootloader-api.yaml
+  desired_state: deployment/desired-state/dev.desired-state.yaml
+spec:
+  profile: local
+  safe_mode_on_failure: false
+  phases:                          # ordered; bootloader executes top to bottom
+    - id: preflight
+      order: 1
+      checks:
+        config_present: true
+        clock_sane: true
+        ports_available: true
+    - id: storage_init
+      order: 2
+      backend: sqlite
+      checks:
+        migrations_applied: true
+        schema_matches_contract: false   # tolerated drift in dev
+    - id: policy_load
+      order: 3
+      checks:
+        policy_bundles_present: true
+        policy_bundles_signed: false
+    - id: artefact_verify
+      order: 4
+      checks:
+        artefacts_signed: false
+        sbom_scan: false
+    - id: service_register
+      order: 5
+      checks:
+        required_services_up: true
+        health_endpoints_responding: true
+    - id: ready
+      order: 6
+      emit_event: control.boot.ready
+  checks_toggles:
+    enforce_signatures: false
+    enforce_classification_floor: false
+    enforce_audit_chain: false
+    block_on_drift: false
+    air_gap: false

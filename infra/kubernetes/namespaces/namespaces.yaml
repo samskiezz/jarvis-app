@@ -1,0 +1,48 @@
+# Namespaces, one per logical plane of the enterprise OS.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: control-plane
+  labels:
+    plane: control
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ontology-plane
+  labels:
+    plane: ontology
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aip-plane
+  labels:
+    plane: aip
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: data-plane
+  labels:
+    plane: data
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    plane: observability
+    pod-security.kubernetes.io/enforce: baseline
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fleet
+  labels:
+    plane: fleet
+    pod-security.kubernetes.io/enforce: restricted

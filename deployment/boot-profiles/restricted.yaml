@@ -1,0 +1,72 @@
+apiVersion: control.jarvis/v1
+kind: BootProfile
+metadata:
+  name: restricted
+  description: Classified enclave boot. Production strictness plus compartment + egress checks.
+  owner: bootloader
+  contract: contracts/openapi/bootloader-api.yaml
+  desired_state: deployment/desired-state/restricted.desired-state.yaml
+spec:
+  profile: restricted
+  safe_mode_on_failure: true
+  classification_floor: SECRET
+  phases:
+    - id: preflight
+      order: 1
+      checks:
+        config_present: true
+        secrets_resolvable: true
+        hardware_root_of_trust_attested: true
+        clock_sane: true
+    - id: storage_init
+      order: 2
+      backend: postgres
+      checks:
+        migrations_applied: true
+        schema_matches_contract: true
+        rls_enabled: true
+        storage_encrypted_at_rest: true
+    - id: policy_load
+      order: 3
+      checks:
+        policy_bundles_present: true
+        policy_bundles_signed: true
+        pdp_deny_by_default: true
+        compartments_loaded: true
+    - id: artefact_verify
+      order: 4
+      checks:
+        artefacts_signed: true
+        content_hash_matches: true
+        sbom_scan: true
+        no_critical_vulns: true
+    - id: classification_guard
+      order: 5
+      checks:
+        classification_labels_loaded: true
+        no_classification_downgrade_detected: true
+        egress_blocked: true
+    - id: audit_init
+      order: 6
+      checks:
+        audit_hash_chain_verifies: true
+        audit_sink_reachable: true
+    - id: service_register
+      order: 7
+      checks:
+        required_services_up: true
+        health_endpoints_responding: true
+    - id: drift_check
+      order: 8
+      checks:
+        current_matches_desired: true
+    - id: ready
+      order: 9
+      emit_event: control.boot.ready
+  checks_toggles:
+    enforce_signatures: true
+    enforce_classification_floor: true
+    enforce_audit_chain: true
+    block_on_drift: true
+    enforce_egress_block: true
+    air_gap: false

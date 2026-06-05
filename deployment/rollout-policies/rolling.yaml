@@ -1,0 +1,44 @@
+apiVersion: control.jarvis/v1
+kind: RolloutPolicy
+metadata:
+  name: rolling
+  description: In-place rolling replacement of instances. Default for dev.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  release_strategy: rolling
+spec:
+  strategy: rolling
+  gate_before_first_wave:
+    - signature_gate
+    - vulnerability_gate
+  max_unavailable: 25%
+  max_surge: 25%
+  waves:
+    - name: batch-1
+      percentage: 33
+      min_soak: 2m
+      health_gates: [liveness, error_rate]
+    - name: batch-2
+      percentage: 66
+      min_soak: 2m
+      health_gates: [liveness, error_rate]
+    - name: batch-3
+      percentage: 100
+      min_soak: 1m
+      health_gates: [liveness]
+  pause_conditions:
+    - id: liveness_fail
+      when: healthz_status != 200
+      action: pause
+    - id: error_rate_breach
+      when: http_5xx_ratio > 0.10
+      action: pause
+  on_pause:
+    notify: [on-call]
+    hold_for: 15m
+    auto_resume: true
+  on_failure:
+    action: rollback
+    rollback_policy: deployment/rollback-policies/service-rollback.yaml
+    target: last_good_version
+  audit_event: deployment.rolling.{decision}

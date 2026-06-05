@@ -1,0 +1,45 @@
+apiVersion: control.jarvis/v1
+kind: RollbackPolicy
+metadata:
+  name: database-rollback
+  description: Revert PostgreSQL schema/data migrations safely. Append-only tables never deleted.
+  owner: data-plane
+  reference_impl: server/services/jarvis_apollo.py
+  schemas:
+    - database/postgres/schemas/0001_platform_schemas.sql
+    - contracts/sql/0001_core_schema.sql
+spec:
+  target: database
+  trigger:
+    on_migration_failure: true
+    on_post_migration_gate_fail: true
+  strategy: expand_contract_safe
+  rules:
+    forward_only_tables:           # append-only; per core schema never UPDATE/DELETE
+      - audit.record
+      - audit.event
+      - provenance.fact
+      - provenance.lineage
+    reversible_change_required: true   # every migration ships a paired down() script
+    backfill_isolation: true
+  steps:
+    - id: halt_writers
+      action: drain_and_pause_writers
+    - id: snapshot
+      action: capture_pre_migration_snapshot
+      note: logical snapshot of mutable schemas only
+    - id: apply_down
+      action: run_paired_down_migration
+      guard: down_migration_present
+    - id: verify_invariants
+      checks:
+        - rls_policies_intact          # database/postgres/rls/0001_row_level_security.sql
+        - foreign_keys_valid
+        - audit_hash_chain_verifies
+    - id: resume_writers
+      action: resume_writers
+  guards:
+    never_drop_append_only: true
+    preserve_classification_columns: true
+  on_irreversible: escalate_to_dba_and_freeze
+  audit_event: deployment.rollback.database.{decision}

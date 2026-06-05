@@ -1,0 +1,269 @@
+openapi: 3.1.0
+info:
+  title: Object Runtime API
+  version: 1.0.0
+  description: >
+    The live operational object store. Serves instances of ontology object-types:
+    objects, links, per-object timeline (bitemporal history), change
+    subscriptions, the set of actions currently available on an object, and the
+    governed state-transition entrypoint.
+
+
+    Exposes platform concepts (typed objects and governed transitions) — never
+    raw database tables. Every read is policy-filtered and every write flows
+    through a governed action.
+
+
+    Production language: Java / Spring Boot (Layer B service `object-runtime`).
+
+
+    Layer A reference module: `server/services/jarvis_ontology.py` (instance
+    store; timeline via `server/services/jarvis_temporal.py`), exposed under
+    `/v1/jarvis`. The contract is stable across the Layer A -> Layer B split.
+servers:
+  - url: /v1/object-runtime
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: objects
+    description: Live instances of ontology object-types
+  - name: links
+    description: Instance-level governed relationships
+  - name: timeline
+    description: Per-object bitemporal history
+  - name: subscriptions
+    description: Change subscriptions over objects/links
+  - name: actions
+    description: Actions currently available on an object
+  - name: transitions
+    description: Governed lifecycle state-transitions
+paths:
+  /objects:
+    get:
+      tags: [objects]
+      summary: Search objects (policy-filtered, redacted to clearance)
+      parameters:
+        - { name: objectType, in: query, required: false, schema: { type: string } }
+        - { name: q, in: query, required: false, schema: { type: string } }
+      responses:
+        '200':
+          description: Objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ObjectInstance' }
+    post:
+      tags: [objects]
+      summary: Create a typed object (policy-checked)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ObjectCreate' }
+      responses:
+        '201':
+          description: Created object
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ObjectInstance' }
+  /objects/{objectId}:
+    get:
+      tags: [objects]
+      summary: Read an object (properties redacted to clearance)
+      parameters:
+        - { name: objectId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Object
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ObjectInstance' }
+  /objects/{objectId}/timeline:
+    get:
+      tags: [timeline]
+      summary: Bitemporal timeline of an object (valid-time x transaction-time)
+      parameters:
+        - { name: objectId, in: path, required: true, schema: { type: string } }
+        - { name: asOfValid, in: query, required: false, schema: { type: string, format: date-time } }
+        - { name: asKnownAt, in: query, required: false, schema: { type: string, format: date-time } }
+      responses:
+        '200':
+          description: Timeline
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/TimelineEntry' }
+  /objects/{objectId}/available-actions:
+    get:
+      tags: [actions]
+      summary: Actions currently legal+authorized on an object for the subject
+      parameters:
+        - { name: objectId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Available actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AvailableAction' }
+  /objects/{objectId}/state-transition:
+    post:
+      tags: [transitions]
+      summary: Apply a governed state-transition to an object
+      parameters:
+        - { name: objectId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StateTransitionRequest' }
+      responses:
+        '200':
+          description: Transition outcome
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StateTransitionResult' }
+  /links:
+    get:
+      tags: [links]
+      summary: Traverse links (policy-checked traversal)
+      parameters:
+        - { name: fromObjectId, in: query, required: false, schema: { type: string } }
+        - { name: linkType, in: query, required: false, schema: { type: string } }
+      responses:
+        '200':
+          description: Links
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/LinkInstance' }
+    post:
+      tags: [links]
+      summary: Create a link between two objects (policy-checked)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LinkInstance' }
+      responses:
+        '201':
+          description: Created link
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LinkInstance' }
+  /subscriptions:
+    post:
+      tags: [subscriptions]
+      summary: Create a change subscription over objects/links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SubscriptionRequest' }
+      responses:
+        '201':
+          description: Subscription
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Subscription' }
+  /subscriptions/{subscriptionId}:
+    delete:
+      tags: [subscriptions]
+      summary: Cancel a subscription
+      parameters:
+        - { name: subscriptionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '204':
+          description: Cancelled
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    ObjectInstance:
+      type: object
+      required: [id, objectType]
+      properties:
+        id: { type: string }
+        objectType: { type: string }
+        state: { type: string }
+        properties:
+          type: object
+          additionalProperties: true
+          description: Redacted to the subject's clearance; masked values omitted
+        classification: { $ref: '#/components/schemas/Classification' }
+        redactedProperties:
+          type: array
+          items: { type: string }
+    ObjectCreate:
+      type: object
+      required: [objectType, properties]
+      properties:
+        objectType: { type: string }
+        properties:
+          type: object
+          additionalProperties: true
+        classification: { $ref: '#/components/schemas/Classification' }
+    LinkInstance:
+      type: object
+      required: [linkType, fromObjectId, toObjectId]
+      properties:
+        id: { type: string }
+        linkType: { type: string }
+        fromObjectId: { type: string }
+        toObjectId: { type: string }
+    TimelineEntry:
+      type: object
+      properties:
+        property: { type: string }
+        value: {}
+        validTime: { type: string, format: date-time }
+        transactionTime: { type: string, format: date-time }
+        actor: { type: string }
+        actionId: { type: string }
+    AvailableAction:
+      type: object
+      properties:
+        actionType: { type: string }
+        toState: { type: string }
+        riskTier: { type: string, enum: [low, medium, high] }
+        requiresApproval: { type: boolean }
+        authorized: { type: boolean }
+    StateTransitionRequest:
+      type: object
+      required: [actionType]
+      properties:
+        actionType: { type: string }
+        params:
+          type: object
+          additionalProperties: true
+        approvalId: { type: string, nullable: true }
+    StateTransitionResult:
+      type: object
+      properties:
+        objectId: { type: string }
+        fromState: { type: string }
+        toState: { type: string }
+        status: { type: string, enum: [applied, denied, pending_approval, invalid_transition] }
+        auditId: { type: string }
+    SubscriptionRequest:
+      type: object
+      required: [objectType]
+      properties:
+        objectType: { type: string }
+        filter:
+          type: object
+          additionalProperties: true
+        deliveryUrl: { type: string, format: uri }
+    Subscription:
+      type: object
+      properties:
+        id: { type: string }
+        objectType: { type: string }
+        status: { type: string, enum: [active, paused, cancelled] }
+        createdAt: { type: string, format: date-time }

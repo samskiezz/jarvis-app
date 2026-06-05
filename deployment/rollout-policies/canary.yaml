@@ -1,0 +1,51 @@
+apiVersion: control.jarvis/v1
+kind: RolloutPolicy
+metadata:
+  name: canary
+  description: Progressive traffic shift behind health gates. Default for staging/production.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  release_strategy: canary           # control.release.strategy
+spec:
+  strategy: canary
+  gate_before_first_wave:
+    - signature_gate          # artefact must be signed
+    - vulnerability_gate      # SBOM has no CRITICAL components
+    - promotion_gate          # source tier must be previous tier
+    - approval_gate           # control.release.approval_id present for tier>=2
+  waves:
+    - name: canary-1
+      percentage: 5
+      min_soak: 10m
+      health_gates: [liveness, error_rate, latency_p99, pdp_deny_anomaly]
+    - name: canary-2
+      percentage: 25
+      min_soak: 15m
+      health_gates: [liveness, error_rate, latency_p99, pdp_deny_anomaly]
+    - name: majority
+      percentage: 75
+      min_soak: 15m
+      health_gates: [liveness, error_rate, latency_p99]
+    - name: full
+      percentage: 100
+      min_soak: 5m
+      health_gates: [liveness, error_rate]
+  pause_conditions:
+    - id: error_rate_breach
+      when: http_5xx_ratio > 0.005
+      action: pause
+    - id: latency_breach
+      when: request_latency_p99_ms > 750
+      action: pause
+    - id: audit_chain_broken
+      when: audit_hash_chain_verifies == false
+      action: abort
+  on_pause:
+    notify: [release-manager]
+    hold_for: 30m
+    auto_resume: false
+  on_failure:
+    action: rollback
+    rollback_policy: deployment/rollback-policies/service-rollback.yaml
+    target: last_good_version
+  audit_event: deployment.canary.{decision}

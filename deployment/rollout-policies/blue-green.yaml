@@ -1,0 +1,51 @@
+apiVersion: control.jarvis/v1
+kind: RolloutPolicy
+metadata:
+  name: blue-green
+  description: Stand up green stack, verify, atomic cutover. Default for restricted enclaves.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  release_strategy: bluegreen        # control.release.strategy value
+spec:
+  strategy: blue-green
+  gate_before_first_wave:
+    - signature_gate
+    - vulnerability_gate
+    - promotion_gate
+    - approval_gate
+  waves:
+    - name: provision-green
+      percentage: 0
+      action: deploy_inactive_stack
+      min_soak: 0s
+      health_gates: [liveness]
+    - name: smoke-green
+      percentage: 0
+      action: route_synthetic_traffic
+      min_soak: 10m
+      health_gates: [liveness, error_rate, audit_chain_intact, classification_leak_scan]
+    - name: cutover
+      percentage: 100
+      action: atomic_switch_blue_to_green
+      min_soak: 10m
+      health_gates: [liveness, error_rate, latency_p99]
+    - name: decommission-blue
+      percentage: 100
+      action: retain_blue_for_rollback
+      retain_for: 24h
+  pause_conditions:
+    - id: green_unhealthy
+      when: healthz_status != 200
+      action: abort
+    - id: classification_leak
+      when: no_classification_downgrade_detected == false
+      action: abort
+  on_pause:
+    notify: [release-manager, security-officer]
+    hold_for: 60m
+    auto_resume: false
+  on_failure:
+    action: rollback
+    rollback_policy: deployment/rollback-policies/service-rollback.yaml
+    target: blue_stack        # instant switch back to retained blue
+  audit_event: deployment.bluegreen.{decision}

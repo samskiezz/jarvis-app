@@ -1,0 +1,43 @@
+# Default values for the aip-plane chart.
+replicaCount: 2
+
+image:
+  repository: registry.internal/jarvis/aip-plane
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+namespace: aip-plane
+
+service:
+  type: ClusterIP
+  port: 8082
+
+resources:
+  requests:
+    cpu: "1"
+    memory: 2Gi
+    nvidia.com/gpu: 1
+  limits:
+    cpu: "4"
+    memory: 8Gi
+    nvidia.com/gpu: 1
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+
+nodeSelector:
+  nvidia.com/gpu: "true"
+
+tolerations:
+  - key: nvidia.com/gpu
+    operator: Equal
+    value: "true"
+    effect: NoSchedule
+
+modelRegistry:
+  bucket: jarvis-prod-data
+  prefix: models/
+
+ingress:
+  enabled: false

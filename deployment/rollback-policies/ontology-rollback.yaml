@@ -1,0 +1,42 @@
+apiVersion: control.jarvis/v1
+kind: RollbackPolicy
+metadata:
+  name: ontology-rollback
+  description: Revert object/link/action type changes; ontology is versioned and bitemporal.
+  owner: ontology-plane
+  reference_impl: server/services/jarvis_ontology.py
+  contract: contracts/openapi/ontology-api.yaml
+  state_tables:
+    - ontology.object_type
+    - ontology.link_type
+    - ontology.action_type
+spec:
+  target: ontology
+  trigger:
+    on_type_migration_failure: true
+    on_writeback_rule_regression: true
+  strategy: revert_to_prior_ontology_version
+  rules:
+    instances_preserved: true        # ontology.object / ontology.link rows are not deleted
+    backward_compatible_only: true   # removing a property requires a deprecation window
+    validation_rules_revalidated: true
+  steps:
+    - id: pin_version
+      action: identify_last_good_ontology_version
+    - id: assess_impact
+      action: list_affected_object_and_link_types
+    - id: revert_types
+      action: restore_object_link_action_type_definitions
+    - id: revalidate_instances
+      action: revalidate_instances_against_restored_schema
+      on_invalid: quarantine_not_delete
+    - id: restore_policy_bindings
+      action: rebind_object_read_and_property_read_policies
+      policies:
+        - contracts/policy/object-read.policy.json
+        - contracts/policy/property-read.policy.json
+  guards:
+    preserve_instance_classification: true
+    preserve_bitemporal_history: true
+  on_breaking_change: require_ontology_change_review
+  audit_event: deployment.rollback.ontology.{decision}

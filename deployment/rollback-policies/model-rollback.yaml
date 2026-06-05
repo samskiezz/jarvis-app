@@ -1,0 +1,40 @@
+apiVersion: control.jarvis/v1
+kind: RollbackPolicy
+metadata:
+  name: model-rollback
+  description: Revert an AIP/ML model version. Governed by model-access policy and AI governance.
+  owner: aip-plane
+  reference_impl: server/services/jarvis_aip.py
+  policy: contracts/policy/model-access.policy.json
+  governance: governance/compliance/ai-governance.md
+spec:
+  target: model
+  trigger:
+    on_eval_regression: true
+    on_safety_gate_fail: true
+    on_drift_alarm: true
+  strategy: pin_previous_model_version
+  rules:
+    model_card_required: true
+    eval_suite_required: true        # must pass before a version is eligible as a rollback target
+    classification_aware: true       # model may only read at-or-below caller clearance
+  steps:
+    - id: freeze_inference
+      action: route_to_last_good_model_version
+    - id: select_target
+      action: select_prior_version_with_passing_eval
+    - id: verify_safety
+      checks:
+        - eval_suite_pass
+        - red_team_baseline_pass
+        - pii_leak_scan_pass
+    - id: rebind_policy
+      action: enforce_model_access_policy
+      policy: contracts/policy/model-access.policy.json
+    - id: resume_inference
+      action: resume_with_pinned_version
+  guards:
+    no_unevaluated_model_in_prod: true
+    preserve_inference_audit: true   # every inference logged via audit envelope
+  on_no_safe_target: disable_model_feature_flag
+  audit_event: deployment.rollback.model.{decision}

@@ -1,0 +1,67 @@
+apiVersion: control.jarvis/v1
+kind: EnvironmentDesiredState
+metadata:
+  name: dev
+  description: Developer integration environment. Lowest tier; permissive gates.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  contract: contracts/openapi/control-plane-api.yaml
+  state_table: control.environment
+spec:
+  environment_id: env-dev
+  tenant_id: tenant-internal
+  tier: 0                      # dev=0 staging=1 prod=2 (control.environment.tier)
+  region: us-local-1
+  network_zone: corp
+  classification_level: UNCLASSIFIED
+  required_services:
+    - control-plane
+    - security-plane
+    - event-plane
+    - ontology-plane
+    - object-runtime
+    - aip-plane
+    - observability-plane
+  service_versions:
+    control-plane: 1.4.0
+    security-plane: 1.4.0
+    event-plane: 1.4.0
+    ontology-plane: 1.4.0
+    object-runtime: 1.4.0
+    aip-plane: 0.9.0
+    observability-plane: 1.4.0
+  policy_bundle_versions:
+    action-execution: 1.0.0
+    object-read: 1.0.0
+    property-read: 1.0.0
+    link-traversal: 1.0.0
+    model-access: 1.0.0
+    tool-execution: 1.0.0
+    export: 1.0.0
+  canary_policy:
+    enabled: false
+    strategy: rolling
+    ref: deployment/rollout-policies/rolling.yaml
+  rollback_policy:
+    auto_rollback: true
+    on_health_gate_fail: revert_to_last_good_version
+    refs:
+      - deployment/rollback-policies/service-rollback.yaml
+  health_gates:
+    - id: liveness
+      type: http
+      path: /healthz
+      threshold: "200"
+    - id: error_rate
+      type: metric
+      metric: http_5xx_ratio
+      max: 0.10
+      window: 2m
+  approval_requirements:
+    required: false
+    approvers: []
+    quorum: 0
+  offline_update_rules:
+    enabled: false
+    bundle_signature_required: false
+    max_staleness: 30d

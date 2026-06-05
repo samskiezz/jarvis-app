@@ -1,0 +1,50 @@
+apiVersion: control.jarvis/v1
+kind: RolloutPolicy
+metadata:
+  name: offline-update
+  description: Air-gap / edge update via signed delta bundles imported by sneakernet.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  release_strategy: rolling
+spec:
+  strategy: offline-update
+  bundle:
+    format: signed-delta-tar
+    signature_required: true
+    content_hash_required: true     # tamper-evident; matches control.artefact.content_hash
+    sbom_required: true
+    two_person_import: true
+  gate_before_first_wave:
+    - signature_gate
+    - content_hash_gate
+    - vulnerability_gate
+    - import_authority_gate         # two-person import approval
+  waves:
+    - name: stage-bundle
+      percentage: 0
+      action: verify_and_unpack_local
+      min_soak: 0s
+      health_gates: [local_storage_intact]
+    - name: apply
+      percentage: 100
+      action: apply_delta_in_place
+      min_soak: 5m
+      health_gates: [liveness, local_storage_intact, audit_chain_intact, clock_skew]
+  pause_conditions:
+    - id: signature_invalid
+      when: bundle_signature_valid == false
+      action: abort
+    - id: hash_mismatch
+      when: bundle_content_hash_matches == false
+      action: abort
+    - id: stale_bundle
+      when: bundle_age > max_staleness
+      action: warn
+  on_failure:
+    action: rollback
+    rollback_policy: deployment/rollback-policies/service-rollback.yaml
+    target: last_good_version
+  reconciliation:
+    on_reconnect: push_local_release_log_to_control_release
+    audit_event: deployment.offline.reconciled
+  audit_event: deployment.offline.{decision}

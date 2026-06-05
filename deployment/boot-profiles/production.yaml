@@ -1,0 +1,63 @@
+apiVersion: control.jarvis/v1
+kind: BootProfile
+metadata:
+  name: production
+  description: Production boot. Strict preflight, signed artefacts, audit chain verified, safe-mode fallback.
+  owner: bootloader
+  contract: contracts/openapi/bootloader-api.yaml
+  desired_state: deployment/desired-state/production.desired-state.yaml
+spec:
+  profile: production
+  safe_mode_on_failure: true
+  phases:
+    - id: preflight
+      order: 1
+      checks:
+        config_present: true
+        secrets_resolvable: true
+        clock_sane: true
+        connectivity_to_control_plane: true
+    - id: storage_init
+      order: 2
+      backend: postgres
+      checks:
+        migrations_applied: true
+        schema_matches_contract: true
+        rls_enabled: true
+    - id: policy_load
+      order: 3
+      checks:
+        policy_bundles_present: true
+        policy_bundles_signed: true
+        pdp_deny_by_default: true
+    - id: artefact_verify
+      order: 4
+      checks:
+        artefacts_signed: true
+        content_hash_matches: true
+        sbom_scan: true
+        no_critical_vulns: true
+    - id: audit_init
+      order: 5
+      checks:
+        audit_hash_chain_verifies: true
+        audit_sink_reachable: true
+    - id: service_register
+      order: 6
+      checks:
+        required_services_up: true
+        health_endpoints_responding: true
+        event_backbone_connected: true   # Kafka
+    - id: drift_check
+      order: 7
+      checks:
+        current_matches_desired: true
+    - id: ready
+      order: 8
+      emit_event: control.boot.ready
+  checks_toggles:
+    enforce_signatures: true
+    enforce_classification_floor: true
+    enforce_audit_chain: true
+    block_on_drift: true
+    air_gap: false

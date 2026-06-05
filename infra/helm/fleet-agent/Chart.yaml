@@ -1,0 +1,13 @@
+apiVersion: v2
+name: fleet-agent
+description: Edge fleet agent for forward-deployed Jarvis sites (sync, local serving)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - jarvis
+  - fleet
+  - edge
+maintainers:
+  - name: Platform Team
+    email: platform@jarvis.internal
