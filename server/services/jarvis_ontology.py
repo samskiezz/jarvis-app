@@ -390,6 +390,36 @@ def object_history(object_id: str, limit: int = 100) -> list[dict]:
 
 
 # ───────────────────────────────────────────────────────────── introspection
+def seed_mission_ontology() -> dict:
+    """Bootstrap a starter mission ontology (Person/Organisation/Asset/Event/
+    Location + governed links + lifecycle actions). Idempotent."""
+    define_object_type("Person", {"name": "str", "role": "str", "email": "str"},
+                       states=["active", "flagged", "cleared"], initial="active")
+    define_object_type("Organisation", {"name": "str", "sector": "str", "country": "str"},
+                       states=["active", "under_review", "cleared"], initial="active")
+    define_object_type("Asset", {"name": "str", "kind": "str", "value": "float"},
+                       states=["active", "frozen", "released"], initial="active")
+    define_object_type("Event", {"name": "str", "kind": "str", "ts": "str"},
+                       states=["open", "investigating", "closed"], initial="open")
+    define_object_type("Location", {"name": "str", "lat": "float", "lon": "float"},
+                       states=["active", "restricted"], initial="active")
+    define_link_type("works_for", "Person", "Organisation")
+    define_link_type("owns", "Organisation", "Asset")
+    define_link_type("located_at", "Asset", "Location")
+    define_link_type("involved_in", "Person", "Event")
+    define_action_type("flag_risk", "Person", permission="workflow.run",
+                       from_state="active", to_state="flagged", risk="high",
+                       description="Flag a person for risk review.")
+    define_action_type("clear", "Person", permission="workflow.approve",
+                       from_state="flagged", to_state="cleared", risk="medium",
+                       description="Clear a flagged person after review.")
+    define_action_type("freeze", "Asset", permission="workflow.run",
+                       from_state="active", to_state="frozen", risk="high",
+                       description="Freeze an asset pending investigation.")
+    jos.audit("ontology.seed_mission", target="mission")
+    return schema()
+
+
 def schema() -> dict:
     """The full ontology schema: object/link/action types + instance counts."""
     init_db()

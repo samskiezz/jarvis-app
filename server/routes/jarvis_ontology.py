@@ -80,6 +80,12 @@ async def get_schema(_t: str | None = Depends(optional_bearer)):
     return ont.schema()
 
 
+@router.post("/seed")
+async def post_seed(_t: str = Depends(require_bearer)):
+    """Bootstrap a starter mission ontology (Person/Org/Asset/Event/Location)."""
+    return ont.seed_mission_ontology()
+
+
 @router.post("/object-types")
 async def post_object_type(body: ObjectTypeBody, _t: str = Depends(require_bearer)):
     return ont.define_object_type(body.name, body.properties, states=body.states, initial=body.initial)
