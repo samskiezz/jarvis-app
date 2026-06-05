@@ -1,159 +1,192 @@
 /**
- * MLHub — ML model/job hub.
- * Lists SwarmJob records as training/inference jobs with status + progress,
- * StatTiles for counts by status, and a real "launch job" form that creates a
- * SwarmJob via SwarmJob.create(...). Full CRUD (launch / cancel / remove).
+ * MLHub — model / inference run hub.
+ *
+ * Wired to the REAL AI/Prediction (AIP) engine that the backend already ships
+ * (server/services/aip.py + server/routes/aip.py + server/routes/predict.py):
+ *   - POST /functions/predict            → the unified forecasting model
+ *                                          (point estimate + confidence interval)
+ *   - POST /v1/aip/predict               → same engine via the AIP tool wrapper
+ *   - GET  /v1/aip/oracle?asset=&source= → the TRAINED conviction/direction/
+ *                                          volatility model (oracle_model.joblib)
+ *
+ * The page lists the real models on this engine and turns "launch job" into a
+ * real INFERENCE RUN: each run hits the engine and the live result (status,
+ * point estimate, interval, conviction/direction, method) is surfaced in the run
+ * history. No SwarmJob shells, no fabricated progress bars — every row is the
+ * genuine response of a model that actually executed. Keeps the cyberpunk-glass
+ * identity (status badges, stat tiles, progress = real confidence/conviction).
  */
-import { useState, useEffect, useCallback } from "react";
+import { useMemo, useState } from "react";
 import { COLORS as C } from "@/domain/colors";
-import { SwarmJob } from "@/api/entities";
+import { apiPost, apiGet, qs, useAsync } from "@/lib/wave1";
 import {
   PageShell, PanelCard, StatTile, Grid, Badge, DataState,
 } from "@/components/PageKit";
 
 const ACCENT = C.purple;
 
+// The real models exposed by the AIP engine. "predict" is the unified
+// forecasting engine (any question/domain); "oracle" is the trained joblib
+// conviction model (crypto assets).
+const MODELS = [
+  {
+    id: "predict",
+    label: "Prediction Engine",
+    family: "forecast",
+    color: C.purple,
+    desc: "Unified multi-domain forecaster — point estimate + confidence interval.",
+    targetLabel: "QUESTION / TARGET",
+    placeholder: "e.g. bitcoin price in 24h",
+  },
+  {
+    id: "oracle",
+    label: "Oracle (trained)",
+    family: "conviction",
+    color: C.gold,
+    desc: "Trained conviction / direction / volatility model on a crypto asset.",
+    targetLabel: "ASSET",
+    placeholder: "e.g. bitcoin",
+  },
+];
+
 const STATUS_COLOR = {
-  queued: C.text,
+  ok: C.neon,
   running: C.blue,
-  completed: C.neon,
-  failed: C.red,
-  cancelled: C.gold,
+  no_model: C.gold,
+  not_fitted: C.gold,
+  insufficient_data: C.gold,
+  error: C.red,
+};
+const statusColor = (s) => STATUS_COLOR[String(s || "").toLowerCase()] || C.text;
+
+const fmtNum = (v, d = 2) =>
+  typeof v === "number" && Number.isFinite(v) ? v.toFixed(d) : "—";
+
+const inputStyle = {
+  background: "rgba(0,0,0,0.4)", border: `1px solid ${C.border}`, borderRadius: 4,
+  color: C.textB, padding: "7px 9px", fontSize: 10, fontFamily: "inherit", outline: "none",
 };
 
-const JOB_TYPES = ["training", "inference", "fine-tune", "embedding", "eval"];
-
-function pct(job) {
-  if (typeof job.progress === "number") return Math.max(0, Math.min(100, job.progress));
-  if (job.status === "completed") return 100;
-  if (job.status === "queued") return 0;
-  return 0;
+// Normalise a model response into a uniform run row with a real "confidence" bar
+// (forecast CI confidence, or oracle conviction) — never a faked percentage.
+function buildRun(model, target, res) {
+  const at = Date.now();
+  const base = { id: `${model.id}-${at}`, at, model: model.label, modelColor: model.color, family: model.family, target };
+  if (model.id === "oracle") {
+    const status = res?.status || "error";
+    const conv = typeof res?.conviction === "number" ? res.conviction : null;
+    return {
+      ...base,
+      status,
+      pct: conv != null ? Math.round(conv * 100) : 0,
+      pctLabel: conv != null ? `${Math.round(conv * 100)}% conviction` : "",
+      detail: status === "ok"
+        ? `${String(res.direction || "").toUpperCase()} · p(up) ${fmtNum(res.prob_up)} · vol ${fmtNum(res.vol_pred, 4)} · point ${fmtNum(res.point)}`
+        : (res?.reason || status),
+    };
+  }
+  // predict
+  const pred = res?.prediction || {};
+  const interval = pred.interval || {};
+  const conf = typeof interval.confidence === "number" ? interval.confidence : null;
+  const point = pred.point_estimate ?? pred.value;
+  const prob = pred.probability;
+  const method = res?.method || {};
+  const hasPoint = typeof point === "number" && Number.isFinite(point);
+  const status = res?.status === "error" ? "error" : (hasPoint || typeof prob === "number" ? "ok" : "insufficient_data");
+  let detail;
+  if (hasPoint) {
+    detail = `${res.domain || "generic"} · ${fmtNum(point)} [${fmtNum(interval.low)} – ${fmtNum(interval.high)}] · ${method.name || "model"}`;
+  } else if (typeof prob === "number") {
+    detail = `${res.domain || "generic"} · p ${fmtNum(prob)} · ${method.name || "model"}`;
+  } else {
+    detail = (res?.caveats && res.caveats[0]) || res?.reason || "insufficient data";
+  }
+  return {
+    ...base,
+    status,
+    pct: conf != null ? Math.round(conf * 100) : (typeof prob === "number" ? Math.round(prob * 100) : 0),
+    pctLabel: conf != null ? `${Math.round(conf * 100)}% confidence` : (typeof prob === "number" ? `p=${fmtNum(prob)}` : ""),
+    detail,
+  };
 }
 
 export default function MLHub() {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [busy, setBusy] = useState(false);
+  const [runs, setRuns] = useState([]);
+  const [modelId, setModelId] = useState(MODELS[0].id);
+  const [target, setTarget] = useState("");
+  const { loading: busy, error, run: act } = useAsync();
 
-  const [form, setForm] = useState({ type: "training", model: "", priority: "normal" });
+  const model = useMemo(() => MODELS.find((m) => m.id === modelId) || MODELS[0], [modelId]);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const rows = await SwarmJob.list();
-      setJobs(Array.isArray(rows) ? rows : []);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => { load(); }, [load]);
+  const pushRun = (entry) => setRuns((prev) => [entry, ...prev].slice(0, 30));
 
   const launch = async (e) => {
     e.preventDefault();
-    setBusy(true);
-    try {
-      await SwarmJob.create({
-        type: form.type,
-        model: form.model || `${form.type}-model`,
-        priority: form.priority,
-        status: "queued",
-        progress: 0,
-        created_date: new Date().toISOString(),
-      });
-      setForm({ type: "training", model: "", priority: "normal" });
-      await load();
-    } catch (e) {
-      setError(e);
-    } finally {
-      setBusy(false);
-    }
+    const tgt = target.trim() || model.placeholder.replace(/^e\.g\.\s*/, "");
+    const res = await act(() =>
+      model.id === "oracle"
+        ? apiGet(`/v1/aip/oracle${qs({ asset: tgt, source: "crypto" })}`)
+        : apiPost("/functions/predict", { question: tgt }),
+    );
+    if (res) pushRun(buildRun(model, tgt, res));
   };
 
-  const cancelJob = async (job) => {
-    setBusy(true);
-    try {
-      await SwarmJob.update(job.id, { status: "cancelled" });
-      await load();
-    } catch (e) { setError(e); } finally { setBusy(false); }
-  };
+  const removeRun = (id) => setRuns((prev) => prev.filter((r) => r.id !== id));
 
-  const removeJob = async (job) => {
-    setBusy(true);
-    try {
-      await SwarmJob.remove(job.id);
-      await load();
-    } catch (e) { setError(e); } finally { setBusy(false); }
-  };
-
-  const counts = jobs.reduce((acc, j) => {
-    const s = j.status || "queued";
-    acc[s] = (acc[s] || 0) + 1;
+  const counts = useMemo(() => runs.reduce((acc, r) => {
+    const k = r.status === "ok" ? "ok" : (r.status === "error" ? "error" : "degraded");
+    acc[k] = (acc[k] || 0) + 1;
     return acc;
-  }, {});
-
-  const inputStyle = {
-    background: "rgba(0,0,0,0.4)", border: `1px solid ${C.border}`, borderRadius: 4,
-    color: C.textB, padding: "7px 9px", fontSize: 10, fontFamily: "inherit", outline: "none",
-  };
+  }, {}), [runs]);
 
   return (
     <PageShell
       title="ML HUB"
-      subtitle="SWARM TRAINING & INFERENCE JOB ORCHESTRATION"
+      subtitle="PREDICTION ENGINE · ORACLE MODEL · LIVE INFERENCE RUNS"
       accent={ACCENT}
       actions={
-        <button
-          onClick={load}
-          style={{ ...inputStyle, cursor: "pointer", color: ACCENT, borderColor: ACCENT + "55" }}
-        >↻ REFRESH</button>
+        <Badge color={ACCENT}>{MODELS.length} MODELS</Badge>
       }
     >
       <Grid min={150} gap={10} style={{ marginBottom: 14 }}>
-        <StatTile label="Total Jobs" value={jobs.length} accent={ACCENT} />
-        <StatTile label="Queued" value={counts.queued || 0} accent={C.text} />
-        <StatTile label="Running" value={counts.running || 0} accent={C.blue} />
-        <StatTile label="Completed" value={counts.completed || 0} accent={C.neon} />
-        <StatTile label="Failed" value={counts.failed || 0} accent={C.red} />
+        <StatTile label="Models" value={MODELS.length} accent={ACCENT} sub="on engine" />
+        <StatTile label="Runs (session)" value={runs.length} accent={C.blue} />
+        <StatTile label="OK" value={counts.ok || 0} accent={C.neon} sub="produced output" />
+        <StatTile label="Degraded" value={counts.degraded || 0} accent={C.gold} sub="insufficient/no-model" />
+        <StatTile label="Errors" value={counts.error || 0} accent={C.red} />
       </Grid>
 
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 280px", gap: 14, alignItems: "start" }}>
-        <PanelCard title="JOB QUEUE" accent={ACCENT}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 300px", gap: 14, alignItems: "start" }}>
+        <PanelCard title="INFERENCE RUNS" accent={ACCENT} right={<Badge color={ACCENT}>{runs.length}</Badge>}>
           <DataState
-            loading={loading}
-            error={error}
-            empty={jobs.length === 0}
-            emptyLabel="No jobs yet — launch one with the form →"
+            loading={busy && runs.length === 0}
+            error={error && runs.length === 0 ? error : null}
+            empty={!busy && runs.length === 0}
+            emptyLabel="No runs yet — pick a model and launch a real inference run →"
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {jobs.map((job) => {
-                const p = pct(job);
-                const sc = STATUS_COLOR[job.status] || C.text;
+              {runs.map((r) => {
+                const sc = statusColor(r.status);
                 return (
-                  <div key={job.id} style={{ border: `1px solid ${C.border}`, borderRadius: 5, padding: "9px 11px", background: "rgba(0,0,0,0.25)" }}>
+                  <div key={r.id} style={{ border: `1px solid ${C.border}`, borderRadius: 5, padding: "9px 11px", background: "rgba(0,0,0,0.25)" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 11, color: C.textB, fontWeight: 700, flex: 1 }}>
-                        {job.model || job.name || job.type || "job"}
+                      <span style={{ fontSize: 11, color: C.textB, fontWeight: 700, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {r.target}
                       </span>
-                      <Badge color={ACCENT}>{(job.type || "job").toUpperCase()}</Badge>
-                      <Badge color={sc}>{(job.status || "queued").toUpperCase()}</Badge>
+                      <Badge color={r.modelColor}>{r.model}</Badge>
+                      <Badge color={sc}>{String(r.status || "?").toUpperCase()}</Badge>
                     </div>
                     <div style={{ marginTop: 7, height: 6, borderRadius: 3, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
-                      <div style={{ width: `${p}%`, height: "100%", background: sc, transition: "width .3s" }} />
+                      <div style={{ width: `${Math.max(0, Math.min(100, r.pct))}%`, height: "100%", background: sc, transition: "width .3s" }} />
                     </div>
                     <div style={{ display: "flex", alignItems: "center", marginTop: 6, gap: 10 }}>
-                      <span style={{ fontSize: 8, color: C.text }}>{p}% • priority {job.priority || "normal"}</span>
-                      <span style={{ flex: 1 }} />
-                      {job.status !== "cancelled" && job.status !== "completed" && (
-                        <button onClick={() => cancelJob(job)} disabled={busy}
-                          style={{ ...inputStyle, padding: "3px 8px", fontSize: 8, cursor: "pointer", color: C.gold, borderColor: C.gold + "44" }}>CANCEL</button>
-                      )}
-                      <button onClick={() => removeJob(job)} disabled={busy}
-                        style={{ ...inputStyle, padding: "3px 8px", fontSize: 8, cursor: "pointer", color: C.red, borderColor: C.red + "44" }}>DELETE</button>
+                      <span style={{ fontSize: 8, color: sc, fontWeight: 700 }}>{r.pctLabel}</span>
+                      <span style={{ flex: 1, fontSize: 9, color: C.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {r.detail}
+                      </span>
+                      <button onClick={() => removeRun(r.id)}
+                        style={{ ...inputStyle, padding: "3px 8px", fontSize: 8, cursor: "pointer", color: C.red, borderColor: C.red + "44" }}>✕</button>
                     </div>
                   </div>
                 );
@@ -162,29 +195,47 @@ export default function MLHub() {
           </DataState>
         </PanelCard>
 
-        <PanelCard title="LAUNCH JOB" accent={ACCENT}>
-          <form onSubmit={launch} style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-            <label style={{ fontSize: 8, color: C.text, letterSpacing: 1 }}>JOB TYPE</label>
-            <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} style={inputStyle}>
-              {JOB_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-            </select>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <PanelCard title="LAUNCH RUN" accent={ACCENT}>
+            <form onSubmit={launch} style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+              <label style={{ fontSize: 8, color: C.text, letterSpacing: 1 }}>MODEL</label>
+              <select value={modelId} onChange={(e) => { setModelId(e.target.value); setTarget(""); }} style={inputStyle}>
+                {MODELS.map((m) => <option key={m.id} value={m.id}>{m.label} · {m.family}</option>)}
+              </select>
 
-            <label style={{ fontSize: 8, color: C.text, letterSpacing: 1 }}>MODEL / TARGET</label>
-            <input value={form.model} onChange={(e) => setForm({ ...form, model: e.target.value })}
-              placeholder="e.g. jarvis-7b-rlhf" style={inputStyle} />
+              <div style={{ fontSize: 9, color: C.text }}>{model.desc}</div>
 
-            <label style={{ fontSize: 8, color: C.text, letterSpacing: 1 }}>PRIORITY</label>
-            <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} style={inputStyle}>
-              {["low", "normal", "high", "critical"].map((p) => <option key={p} value={p}>{p}</option>)}
-            </select>
+              <label style={{ fontSize: 8, color: C.text, letterSpacing: 1 }}>{model.targetLabel}</label>
+              <input value={target} onChange={(e) => setTarget(e.target.value)}
+                placeholder={model.placeholder} style={inputStyle} />
 
-            <button type="submit" disabled={busy}
-              style={{ ...inputStyle, cursor: busy ? "wait" : "pointer", color: ACCENT, borderColor: ACCENT + "66",
-                background: ACCENT + "1a", fontWeight: 700, letterSpacing: 1, marginTop: 4 }}>
-              {busy ? "…" : "▶ LAUNCH JOB"}
-            </button>
-          </form>
-        </PanelCard>
+              <button type="submit" disabled={busy}
+                style={{ ...inputStyle, cursor: busy ? "wait" : "pointer", color: model.color, borderColor: model.color + "66",
+                  background: model.color + "1a", fontWeight: 700, letterSpacing: 1, marginTop: 4 }}>
+                {busy ? "… RUNNING" : "▶ RUN INFERENCE"}
+              </button>
+              {error && (
+                <div style={{ fontSize: 9, color: C.red }}>
+                  {String(error.message || error)}
+                </div>
+              )}
+            </form>
+          </PanelCard>
+
+          <PanelCard title="MODELS" accent={C.blue}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {MODELS.map((m) => (
+                <div key={m.id} style={{ border: `1px solid ${C.border}`, borderRadius: 5, padding: "8px 10px", background: "rgba(0,0,0,0.25)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ fontSize: 10, color: C.textB, fontWeight: 700, flex: 1 }}>{m.label}</span>
+                    <Badge color={m.color}>{m.family}</Badge>
+                  </div>
+                  <div style={{ fontSize: 9, color: C.text, marginTop: 4 }}>{m.desc}</div>
+                </div>
+              ))}
+            </div>
+          </PanelCard>
+        </div>
       </div>
     </PageShell>
   );

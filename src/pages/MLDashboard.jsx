@@ -1,33 +1,38 @@
 /**
- * MLDashboard — ML metrics dashboard.
- * Derives simple charts (no external lib) from SwarmJob + OmegaScanProgress data:
- *   - headline StatTiles
- *   - status distribution as horizontal div-bars
- *   - jobs-over-time as a vertical div-bar sparkline (bucketed by day)
- *   - scan progress gauges from OmegaScanProgress
+ * MLDashboard — ML model-quality / self-improvement dashboard.
+ *
+ * Wired to the REAL AIP self-improvement surface the backend already ships
+ * (server/services/aip.py + server/routes/aip.py):
+ *   - GET /v1/aip/skill?domain=          → the self-improvement scorecard:
+ *       skill_summary (n_scored, MAE, RMSE, interval coverage, mean skill vs
+ *       baseline) + the forward-test scorecard (directional accuracy roll-up).
+ *   - GET /v1/aip/oracle?asset=&source=  → the trained model's live conviction /
+ *       direction / volatility for a handful of crypto assets.
+ *
+ * These are the engine's OWN measured metrics over truly-realized, scored
+ * forecasts — not fabricated charts. Empty store renders honest zero/None
+ * states. Keeps the cyberpunk-glass identity (stat tiles, gauges, div-bars).
  */
 import { useState, useEffect, useCallback } from "react";
 import { COLORS as C } from "@/domain/colors";
-import { SwarmJob, OmegaScanProgress } from "@/api/entities";
-import { PageShell, PanelCard, StatTile, Grid, DataState } from "@/components/PageKit";
+import { apiGet, qs } from "@/lib/wave1";
+import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
 
 const ACCENT = C.purple;
 
-const STATUS_COLOR = {
-  queued: C.text,
-  running: C.blue,
-  completed: C.neon,
-  failed: C.red,
-  cancelled: C.gold,
-};
+// Domains the scorecard can be filtered by + the live-oracle asset probes.
+const DOMAINS = ["", "crypto", "series", "growth"];
+const PROBE_ASSETS = ["bitcoin", "ethereum", "xrp", "solana"];
 
-function dayKey(d) {
-  try { return new Date(d).toISOString().slice(0, 10); } catch { return null; }
-}
+const pctStr = (v) => (typeof v === "number" && Number.isFinite(v) ? `${Math.round(v * 100)}%` : "—");
+const num = (v, d = 4) => (typeof v === "number" && Number.isFinite(v) ? v.toFixed(d) : "—");
+
+const DIR_COLOR = { up: C.neon, down: C.red };
 
 export default function MLDashboard() {
-  const [jobs, setJobs] = useState([]);
-  const [scans, setScans] = useState([]);
+  const [domain, setDomain] = useState("");
+  const [card, setCard] = useState(null);
+  const [oracles, setOracles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -35,72 +40,87 @@ export default function MLDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [j, s] = await Promise.all([
-        SwarmJob.list().catch(() => []),
-        OmegaScanProgress.list().catch(() => []),
+      const [skill, ...sigs] = await Promise.all([
+        apiGet(`/v1/aip/skill${qs({ domain: domain || undefined })}`).catch(() => null),
+        ...PROBE_ASSETS.map((a) =>
+          apiGet(`/v1/aip/oracle${qs({ asset: a, source: "crypto" })}`)
+            .then((r) => ({ asset: a, ...r }))
+            .catch(() => ({ asset: a, status: "error" })),
+        ),
       ]);
-      setJobs(Array.isArray(j) ? j : []);
-      setScans(Array.isArray(s) ? s : []);
+      setCard(skill);
+      setOracles(sigs);
     } catch (e) {
       setError(e);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [domain]);
 
   useEffect(() => { load(); }, [load]);
 
-  // Status distribution
-  const statusCounts = jobs.reduce((acc, j) => {
-    const k = j.status || "queued";
-    acc[k] = (acc[k] || 0) + 1;
-    return acc;
-  }, {});
-  const maxStatus = Math.max(1, ...Object.values(statusCounts));
+  const summary = card?.skill_summary || {};
+  const score = card?.scorecard || {};
+  const nScored = summary.n_scored ?? score.n_scored ?? 0;
+  const dirAcc = score.directional_accuracy;
+  const nDir = score.n_directional ?? 0;
 
-  // Jobs over time (last 10 day-buckets present in data)
-  const byDay = {};
-  jobs.forEach((j) => {
-    const k = dayKey(j.created_date || j.createdAt || j.created_at);
-    if (k) byDay[k] = (byDay[k] || 0) + 1;
-  });
-  const dayBuckets = Object.entries(byDay).sort(([a], [b]) => a.localeCompare(b)).slice(-10);
-  const maxDay = Math.max(1, ...dayBuckets.map(([, v]) => v));
+  // Metric bars (normalised 0..1 where sensible). Coverage & directional accuracy
+  // are already fractions; skill-vs-baseline is centred at 0 (positive = beats
+  // the naive baseline) so we map it onto a 0..1 bar around 0.5.
+  const metricBars = [
+    { key: "coverage", label: "INTERVAL COVERAGE", frac: summary.coverage, color: C.blue },
+    { key: "dir", label: "DIRECTIONAL ACCURACY", frac: dirAcc, color: C.neon },
+    {
+      key: "skill", label: "SKILL VS BASELINE",
+      frac: typeof summary.mean_skill_vs_baseline === "number"
+        ? Math.max(0, Math.min(1, 0.5 + summary.mean_skill_vs_baseline / 2))
+        : null,
+      raw: summary.mean_skill_vs_baseline, color: C.gold,
+    },
+  ];
 
-  // Completion rate
-  const done = statusCounts.completed || 0;
-  const completionRate = jobs.length ? Math.round((done / jobs.length) * 100) : 0;
-  const running = statusCounts.running || 0;
+  const okOracles = oracles.filter((o) => o.status === "ok");
 
   return (
-    <PageShell title="ML DASHBOARD" subtitle="DERIVED METRICS FROM SWARM JOBS & OMEGA SCANS" accent={ACCENT}
+    <PageShell title="ML DASHBOARD" subtitle="SELF-IMPROVEMENT SCORECARD · TRAINED-MODEL LIVE SIGNALS" accent={ACCENT}
       actions={
-        <button onClick={load} style={{ background: "rgba(0,0,0,0.4)", border: `1px solid ${ACCENT}55`, borderRadius: 4,
-          color: ACCENT, padding: "7px 9px", fontSize: 10, fontFamily: "inherit", cursor: "pointer" }}>↻ REFRESH</button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <select value={domain} onChange={(e) => setDomain(e.target.value)}
+            style={{ background: "rgba(0,0,0,0.4)", border: `1px solid ${ACCENT}55`, borderRadius: 4,
+              color: C.textB, padding: "6px 8px", fontSize: 10, fontFamily: "inherit", outline: "none" }}>
+            {DOMAINS.map((d) => <option key={d || "all"} value={d}>{d ? d.toUpperCase() : "ALL DOMAINS"}</option>)}
+          </select>
+          <button onClick={load} style={{ background: "rgba(0,0,0,0.4)", border: `1px solid ${ACCENT}55`, borderRadius: 4,
+            color: ACCENT, padding: "7px 9px", fontSize: 10, fontFamily: "inherit", cursor: "pointer" }}>↻ REFRESH</button>
+        </div>
       }>
       <DataState loading={loading} error={error} empty={false}>
         <Grid min={160} gap={10} style={{ marginBottom: 14 }}>
-          <StatTile label="Total Jobs" value={jobs.length} accent={ACCENT} />
-          <StatTile label="Active" value={running} accent={C.blue} sub="running now" />
-          <StatTile label="Completion" value={`${completionRate}%`} accent={C.neon} sub={`${done} done`} />
-          <StatTile label="Scans Tracked" value={scans.length} accent={C.gold} />
+          <StatTile label="Scored Forecasts" value={nScored} accent={ACCENT} sub={domain || "all domains"} />
+          <StatTile label="MAE" value={num(summary.mae)} accent={C.blue} sub="mean abs error" />
+          <StatTile label="RMSE" value={num(summary.rmse)} accent={C.gold} sub="root mean sq" />
+          <StatTile label="Dir. Accuracy" value={pctStr(dirAcc)} accent={C.neon} sub={`${nDir} directional`} />
         </Grid>
 
         <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 14 }}>
-          <PanelCard title="STATUS DISTRIBUTION" accent={ACCENT}>
-            {Object.keys(statusCounts).length === 0 ? (
-              <div style={{ fontSize: 10, color: C.text, padding: 12 }}>No job data.</div>
+          <PanelCard title="MODEL QUALITY" accent={ACCENT}>
+            {nScored === 0 ? (
+              <div style={{ fontSize: 10, color: C.text, padding: 12 }}>
+                No scored forecasts yet for this domain — the forward-test loop scores
+                forecasts once their horizon elapses, then these metrics populate.
+              </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                {Object.entries(statusCounts).map(([status, n]) => (
-                  <div key={status}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+                {metricBars.map((m) => (
+                  <div key={m.key}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: C.text, marginBottom: 3 }}>
-                      <span style={{ textTransform: "uppercase", letterSpacing: 1 }}>{status}</span>
-                      <span>{n}</span>
+                      <span style={{ letterSpacing: 1 }}>{m.label}</span>
+                      <span>{m.key === "skill" ? num(m.raw, 3) : pctStr(m.frac)}</span>
                     </div>
                     <div style={{ height: 14, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden" }}>
-                      <div style={{ width: `${(n / maxStatus) * 100}%`, height: "100%",
-                        background: STATUS_COLOR[status] || C.text, transition: "width .4s" }} />
+                      <div style={{ width: `${typeof m.frac === "number" ? Math.max(0, Math.min(100, m.frac * 100)) : 0}%`,
+                        height: "100%", background: m.color, transition: "width .4s" }} />
                     </div>
                   </div>
                 ))}
@@ -108,49 +128,41 @@ export default function MLDashboard() {
             )}
           </PanelCard>
 
-          <PanelCard title="JOBS OVER TIME" accent={ACCENT}>
-            {dayBuckets.length === 0 ? (
-              <div style={{ fontSize: 10, color: C.text, padding: 12 }}>No dated jobs to chart.</div>
+          <PanelCard title="TRAINED-MODEL LIVE SIGNALS" accent={C.gold}
+            right={<Badge color={C.gold}>{okOracles.length}/{oracles.length}</Badge>}>
+            {oracles.length === 0 ? (
+              <div style={{ fontSize: 10, color: C.text, padding: 12 }}>No oracle probes.</div>
             ) : (
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 120, paddingTop: 6 }}>
-                {dayBuckets.map(([day, n]) => (
-                  <div key={day} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4, height: "100%" }}>
-                    <div style={{ flex: 1, display: "flex", alignItems: "flex-end", width: "100%" }}>
-                      <div title={`${day}: ${n}`} style={{ width: "100%", height: `${(n / maxDay) * 100}%`,
-                        background: ACCENT, borderRadius: "3px 3px 0 0", minHeight: 2 }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+                {oracles.map((o) => {
+                  const ok = o.status === "ok";
+                  const conv = typeof o.conviction === "number" ? o.conviction : 0;
+                  const dirCol = DIR_COLOR[o.direction] || C.text;
+                  return (
+                    <div key={o.asset}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: C.text, marginBottom: 3 }}>
+                        <span style={{ textTransform: "uppercase", letterSpacing: 1 }}>{o.asset}</span>
+                        <span>
+                          {ok ? (
+                            <>
+                              <span style={{ color: dirCol, fontWeight: 700 }}>{String(o.direction || "").toUpperCase()}</span>
+                              {" · "}{pctStr(o.conviction)} conv · vol {num(o.vol_pred)}
+                            </>
+                          ) : (
+                            <span style={{ color: C.gold }}>{o.status}</span>
+                          )}
+                        </span>
+                      </div>
+                      <div style={{ height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden" }}>
+                        <div style={{ width: `${Math.max(0, Math.min(100, conv * 100))}%`, height: "100%", background: dirCol }} />
+                      </div>
                     </div>
-                    <span style={{ fontSize: 7, color: C.text, transform: "rotate(-45deg)", whiteSpace: "nowrap" }}>{day.slice(5)}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </PanelCard>
         </div>
-
-        <PanelCard title="OMEGA SCAN PROGRESS" accent={ACCENT} style={{ marginTop: 14 }}>
-          {scans.length === 0 ? (
-            <div style={{ fontSize: 10, color: C.text, padding: 8 }}>No scan progress records.</div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-              {scans.slice(0, 12).map((s, i) => {
-                const total = s.total || s.target || 0;
-                const cur = s.processed ?? s.current ?? s.count ?? 0;
-                const p = total ? Math.min(100, Math.round((cur / total) * 100)) : (s.progress || 0);
-                return (
-                  <div key={s.id || i}>
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: C.text, marginBottom: 3 }}>
-                      <span>{s.name || s.scan_type || s.id || `scan ${i + 1}`}</span>
-                      <span>{p}%{total ? ` (${cur}/${total})` : ""}</span>
-                    </div>
-                    <div style={{ height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden" }}>
-                      <div style={{ width: `${p}%`, height: "100%", background: C.gold }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </PanelCard>
       </DataState>
     </PageShell>
   );
