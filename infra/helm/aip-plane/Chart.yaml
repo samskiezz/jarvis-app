@@ -1,0 +1,13 @@
+apiVersion: v2
+name: aip-plane
+description: AIP plane for the Jarvis enterprise OS (model serving, agents, pipelines)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - jarvis
+  - aip
+  - ai
+maintainers:
+  - name: Platform Team
+    email: platform@jarvis.internal

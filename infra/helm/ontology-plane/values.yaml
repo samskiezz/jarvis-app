@@ -1,0 +1,38 @@
+# Default values for the ontology-plane chart.
+replicaCount: 2
+
+image:
+  repository: registry.internal/jarvis/ontology-plane
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+namespace: ontology-plane
+
+service:
+  type: ClusterIP
+  port: 8081
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: "2"
+    memory: 4Gi
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  readOnlyRootFilesystem: true
+
+kafka:
+  bootstrapServers: jarvis-prod-kafka.internal:9092
+  cdcTopic: ontology.changes
+
+postgres:
+  host: jarvis-prod.postgres.internal
+  port: 5432
+  credentialsSecret: jarvis-prod-credentials
+
+ingress:
+  enabled: false

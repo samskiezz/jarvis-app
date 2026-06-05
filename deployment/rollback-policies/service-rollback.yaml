@@ -1,0 +1,36 @@
+apiVersion: control.jarvis/v1
+kind: RollbackPolicy
+metadata:
+  name: service-rollback
+  description: Revert a service artefact to the environment's last_good_version.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  state_table: control.environment   # uses last_good_version
+spec:
+  target: service
+  trigger:
+    on_health_gate_fail: true
+    on_operator_command: true
+    on_rollout_abort: true
+  strategy: redeploy_last_good_version
+  artefact_source: control.artefact   # signed, content-hash-verified
+  steps:
+    - id: freeze
+      action: pause_active_rollout
+    - id: select_target
+      action: read control.environment.last_good_version
+    - id: verify_artefact
+      action: assert_signed_and_hash_matches
+    - id: redeploy
+      action: deploy_artefact_all_instances
+      strategy: rolling
+    - id: verify_health
+      health_gates: [liveness, error_rate]
+    - id: update_state
+      action: set control.environment.current_version = last_good_version
+  guards:
+    no_classification_downgrade: true
+    preserve_audit_chain: true
+  max_attempts: 2
+  on_exhausted: page_oncall_and_halt
+  audit_event: deployment.rollback.service.{decision}
