@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: Audit API
+  version: 1.0.0
+  description: >
+    The tamper-evident system of record (audit / WORM-class). Every governed
+    decision, action, policy evaluation and data access emits an immutable audit
+    record into a cryptographic hash chain. This service serves those records,
+    verifies chain integrity, assembles compliance evidence packages, and
+    replays the full decision context behind any historical outcome.
+
+
+    Exposes platform concepts (audit records, hash-chain proofs, evidence
+    packages, decision replays) — never raw database tables. Records are
+    append-only; nothing here mutates history.
+
+
+    Production language: Java / Spring Boot (Layer B service `audit-service`)
+    backed by a WORM archive.
+
+
+    Layer A reference module: `server/services/jarvis_os.py` (audit subsystem),
+    exposed under `/v1/jarvis`. The contract is stable across the Layer A ->
+    Layer B split.
+servers:
+  - url: /v1/audit
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: records
+    description: Append-only audit records
+  - name: verify
+    description: Hash-chain integrity verification
+  - name: compliance
+    description: Compliance evidence packages
+  - name: replay
+    description: Deterministic replay of a past decision's context
+paths:
+  /records:
+    get:
+      tags: [records]
+      summary: Query audit records
+      parameters:
+        - { name: subjectId, in: query, required: false, schema: { type: string } }
+        - { name: action, in: query, required: false, schema: { type: string } }
+        - { name: from, in: query, required: false, schema: { type: string, format: date-time } }
+        - { name: to, in: query, required: false, schema: { type: string, format: date-time } }
+      responses:
+        '200':
+          description: Records
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AuditRecord' }
+  /records/{recordId}:
+    get:
+      tags: [records]
+      summary: Get a single audit record with its chain links
+      parameters:
+        - { name: recordId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Record
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuditRecord' }
+  /verify:
+    post:
+      tags: [verify]
+      summary: Verify hash-chain integrity over a range
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromSeq: { type: integer }
+                toSeq: { type: integer }
+      responses:
+        '200':
+          description: Verification result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ChainVerification' }
+  /compliance/evidence:
+    post:
+      tags: [compliance]
+      summary: Assemble a compliance evidence package
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvidenceQuery' }
+      responses:
+        '200':
+          description: Evidence package
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EvidencePackage' }
+  /replay/{recordId}:
+    get:
+      tags: [replay]
+      summary: Replay the full decision context behind a record
+      parameters:
+        - { name: recordId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Decision replay
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DecisionReplay' }
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    AuditRecord:
+      type: object
+      required: [recordId, seq, hash, prevHash]
+      properties:
+        recordId: { type: string }
+        seq: { type: integer, description: Monotonic chain sequence number }
+        timestamp: { type: string, format: date-time }
+        subjectId: { type: string }
+        tenantId: { type: string }
+        action: { type: string }
+        resource: { type: object, additionalProperties: true }
+        decision: { type: string, enum: [permit, deny, applied, failed] }
+        classification: { $ref: '#/components/schemas/Classification' }
+        hash: { type: string, description: SHA-256 over canonical record + prevHash }
+        prevHash: { type: string }
+        eventRef: { type: string, nullable: true, description: Source event envelope id }
+    ChainVerification:
+      type: object
+      properties:
+        fromSeq: { type: integer }
+        toSeq: { type: integer }
+        intact: { type: boolean }
+        recordsChecked: { type: integer }
+        firstBreakAtSeq: { type: integer, nullable: true }
+        verifiedAt: { type: string, format: date-time }
+    EvidenceQuery:
+      type: object
+      required: [framework]
+      properties:
+        framework: { type: string, enum: [SOC2, ISO27001, NIST80053, GDPR, CUSTOM] }
+        controlIds:
+          type: array
+          items: { type: string }
+        from: { type: string, format: date-time }
+        to: { type: string, format: date-time }
+    EvidencePackage:
+      type: object
+      properties:
+        packageId: { type: string }
+        framework: { type: string }
+        generatedAt: { type: string, format: date-time }
+        chainProof: { $ref: '#/components/schemas/ChainVerification' }
+        controls:
+          type: array
+          items:
+            type: object
+            properties:
+              controlId: { type: string }
+              satisfied: { type: boolean }
+              recordRefs:
+                type: array
+                items: { type: string }
+    DecisionReplay:
+      type: object
+      properties:
+        recordId: { type: string }
+        action: { type: string }
+        subjectSnapshot: { type: object, additionalProperties: true }
+        resourceSnapshot: { type: object, additionalProperties: true }
+        policyTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              rule: { type: string }
+              matched: { type: boolean }
+              effect: { type: string, enum: [permit, deny, na] }
+        reproducedDecision: { type: string, enum: [permit, deny, applied, failed] }
+        deterministic: { type: boolean }

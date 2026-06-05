@@ -1,0 +1,101 @@
+apiVersion: control.jarvis/v1
+kind: EnvironmentDesiredState
+metadata:
+  name: production
+  description: Multi-tenant production. Strict gates, dual approval, signed artefacts only.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  contract: contracts/openapi/control-plane-api.yaml
+  state_table: control.environment
+spec:
+  environment_id: env-production
+  tenant_id: tenant-prod
+  tier: 2
+  region: us-east-1
+  network_zone: trusted
+  classification_level: OFFICIAL
+  required_services:
+    - control-plane
+    - security-plane
+    - event-plane
+    - data-plane
+    - ontology-plane
+    - object-runtime
+    - entity-resolution-plane
+    - aip-plane
+    - workflow-plane
+    - action-plane
+    - simulation-plane
+    - observability-plane
+  service_versions:
+    control-plane: 1.4.0
+    security-plane: 1.4.0
+    event-plane: 1.4.0
+    data-plane: 1.4.0
+    ontology-plane: 1.4.0
+    object-runtime: 1.4.0
+    entity-resolution-plane: 1.4.0
+    aip-plane: 0.9.0
+    workflow-plane: 1.4.0
+    action-plane: 1.4.0
+    simulation-plane: 1.4.0
+    observability-plane: 1.4.0
+  policy_bundle_versions:
+    action-execution: 1.0.0
+    object-read: 1.0.0
+    property-read: 1.0.0
+    link-traversal: 1.0.0
+    model-access: 1.0.0
+    tool-execution: 1.0.0
+    export: 1.0.0
+  canary_policy:
+    enabled: true
+    strategy: canary
+    ref: deployment/rollout-policies/canary.yaml
+  rollback_policy:
+    auto_rollback: true
+    on_health_gate_fail: revert_to_last_good_version
+    refs:
+      - deployment/rollback-policies/service-rollback.yaml
+      - deployment/rollback-policies/database-rollback.yaml
+      - deployment/rollback-policies/ontology-rollback.yaml
+      - deployment/rollback-policies/model-rollback.yaml
+  health_gates:
+    - id: liveness
+      type: http
+      path: /healthz
+      threshold: "200"
+    - id: error_rate
+      type: metric
+      metric: http_5xx_ratio
+      max: 0.005
+      window: 5m
+    - id: latency_p99
+      type: metric
+      metric: request_latency_p99_ms
+      max: 750
+      window: 5m
+    - id: pdp_deny_anomaly
+      type: metric
+      metric: policy_deny_ratio_delta
+      max: 0.05
+      window: 10m
+    - id: audit_chain_intact
+      type: invariant
+      check: audit_hash_chain_verifies
+    - id: event_lag
+      type: metric
+      metric: kafka_consumer_lag_max
+      max: 10000
+      window: 5m
+  approval_requirements:
+    required: true
+    approvers:
+      - role: release-manager
+      - role: security-officer
+    quorum: 2
+    break_glass: deployment/../governance/security/break-glass-policy.md
+  offline_update_rules:
+    enabled: false
+    bundle_signature_required: true
+    max_staleness: 7d

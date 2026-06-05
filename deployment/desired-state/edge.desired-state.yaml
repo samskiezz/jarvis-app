@@ -1,0 +1,80 @@
+apiVersion: control.jarvis/v1
+kind: EnvironmentDesiredState
+metadata:
+  name: edge
+  description: Disconnected / intermittently-connected edge node. Air-gap-capable, offline updates.
+  owner: control-plane
+  reference_impl: server/services/jarvis_apollo.py
+  contract: contracts/openapi/control-plane-api.yaml
+  state_table: control.environment
+spec:
+  environment_id: env-edge
+  tenant_id: tenant-field
+  tier: 2
+  region: edge-mobile
+  network_zone: disconnected
+  classification_level: SECRET
+  required_services:
+    - control-plane
+    - security-plane
+    - event-plane
+    - ontology-plane
+    - object-runtime
+    - observability-plane
+  service_versions:
+    control-plane: 1.4.0
+    security-plane: 1.4.0
+    event-plane: 1.4.0
+    ontology-plane: 1.4.0
+    object-runtime: 1.4.0
+    observability-plane: 1.4.0
+  policy_bundle_versions:
+    action-execution: 1.0.0
+    object-read: 1.0.0
+    property-read: 1.0.0
+    link-traversal: 1.0.0
+    model-access: 1.0.0
+    tool-execution: 1.0.0
+    export: 1.0.0
+  canary_policy:
+    enabled: false
+    strategy: offline-update
+    ref: deployment/rollout-policies/offline-update.yaml
+  rollback_policy:
+    auto_rollback: true
+    on_health_gate_fail: revert_to_last_good_version
+    refs:
+      - deployment/rollback-policies/service-rollback.yaml
+      - deployment/rollback-policies/ontology-rollback.yaml
+      - deployment/rollback-policies/model-rollback.yaml
+  health_gates:
+    - id: liveness
+      type: http
+      path: /healthz
+      threshold: "200"
+    - id: local_storage_intact
+      type: invariant
+      check: local_state_store_checksum_ok
+    - id: audit_chain_intact
+      type: invariant
+      check: audit_hash_chain_verifies
+    - id: clock_skew
+      type: metric
+      metric: clock_skew_seconds
+      max: 120
+      window: 1m
+  approval_requirements:
+    required: true
+    approvers:
+      - role: field-commander
+    quorum: 1
+    note: Approval captured offline and reconciled to control.release on reconnect.
+  offline_update_rules:
+    enabled: true
+    bundle_signature_required: true
+    two_person_import: true
+    air_gap: true
+    max_staleness: 90d
+    delta_bundles: true
+    reconcile_on_reconnect: true
+    boot_profile: deployment/boot-profiles/airgapped.yaml

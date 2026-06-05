@@ -1,0 +1,5 @@
+# pnpm workspace for the Enterprise OS TypeScript/React mission applications
+# (Layer 14). Each mission app is API-backed by the JVM object-runtime / ontology
+# planes via the generated ontology SDK. See mission-apps/TARGET_RUNTIME.md.
+packages:
+  - "mission-apps/**"

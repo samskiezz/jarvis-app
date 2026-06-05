@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: Policy API
+  version: 1.0.0
+  description: >
+    The central authorization & classification decision point (policy gateway,
+    OPA-class). Every governed operation in the platform — reading an object or
+    property, traversing a link, executing an action, invoking a tool, accessing
+    a model, or exporting data — is authorized here against subject attributes,
+    resource classification labels and purpose-of-use.
+
+
+    Decisions are deterministic, explainable (rule trace) and auditable. This is
+    a Policy Decision Point exposing platform concepts (subjects, decisions,
+    classification labels) — never raw security tables.
+
+
+    Production language: Java / Spring Boot + Open Policy Agent (Layer B service
+    `policy-gateway`).
+
+
+    Layer A reference module: `server/services/jarvis_policy.py`, exposed under
+    `/v1/jarvis`. The contract is stable across the Layer A -> Layer B split:
+    the engine changes, this decision API does not.
+servers:
+  - url: /v1/policy
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: evaluate
+    description: Authorization decision point for all governed operation kinds
+  - name: subjects
+    description: Subject (principal) attributes used in decisions
+  - name: classification
+    description: Classification labels and the lattice that orders them
+paths:
+  /evaluate:
+    post:
+      tags: [evaluate]
+      summary: Evaluate a single authorization request
+      description: >
+        Returns a permit/deny decision with an explanation trace for any of the
+        supported operation kinds.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PolicyRequest' }
+      responses:
+        '200':
+          description: Decision
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PolicyDecision' }
+  /evaluate/batch:
+    post:
+      tags: [evaluate]
+      summary: Evaluate many authorization requests in one call
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requests]
+              properties:
+                requests:
+                  type: array
+                  items: { $ref: '#/components/schemas/PolicyRequest' }
+      responses:
+        '200':
+          description: Decisions, positionally aligned with requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  decisions:
+                    type: array
+                    items: { $ref: '#/components/schemas/PolicyDecision' }
+  /subjects/{subjectId}:
+    get:
+      tags: [subjects]
+      summary: Resolve a subject's effective attributes
+      parameters:
+        - { name: subjectId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Subject attributes
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Subject' }
+  /classification/labels:
+    get:
+      tags: [classification]
+      summary: List classification labels and the ordering lattice
+      responses:
+        '200':
+          description: Classification lattice
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ClassificationLattice' }
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    OperationKind:
+      type: string
+      enum:
+        - object_read
+        - property_read
+        - link_traversal
+        - action_execution
+        - tool_execution
+        - model_access
+        - export
+    Subject:
+      type: object
+      required: [id]
+      properties:
+        id: { type: string }
+        tenantId: { type: string }
+        roles:
+          type: array
+          items: { type: string }
+        clearance: { $ref: '#/components/schemas/Classification' }
+        attributes:
+          type: object
+          additionalProperties: true
+    Resource:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [object, property, link, action, tool, model, export]
+        objectType: { type: string, nullable: true }
+        objectId: { type: string, nullable: true }
+        propertyId: { type: string, nullable: true }
+        linkType: { type: string, nullable: true }
+        actionType: { type: string, nullable: true }
+        toolId: { type: string, nullable: true }
+        modelId: { type: string, nullable: true }
+        classification: { $ref: '#/components/schemas/Classification' }
+        markings:
+          type: array
+          items: { type: string }
+    PolicyRequest:
+      type: object
+      required: [operation, subject, resource]
+      properties:
+        operation: { $ref: '#/components/schemas/OperationKind' }
+        subject: { $ref: '#/components/schemas/Subject' }
+        resource: { $ref: '#/components/schemas/Resource' }
+        purpose: { type: string, nullable: true }
+        context:
+          type: object
+          additionalProperties: true
+    PolicyDecision:
+      type: object
+      required: [effect]
+      properties:
+        effect: { type: string, enum: [permit, deny] }
+        operation: { $ref: '#/components/schemas/OperationKind' }
+        reason: { type: string }
+        obligations:
+          type: array
+          description: Conditions the caller must enforce (e.g. redaction, row filters)
+          items:
+            type: object
+            properties:
+              type: { type: string, enum: [redact, filter, watermark, ttl, step_up_auth] }
+              detail: { type: object, additionalProperties: true }
+        trace:
+          type: array
+          description: Ordered rule evaluation trace for explainability
+          items:
+            type: object
+            properties:
+              rule: { type: string }
+              matched: { type: boolean }
+              effect: { type: string, enum: [permit, deny, na] }
+        evaluatedAt: { type: string, format: date-time }
+    ClassificationLattice:
+      type: object
+      properties:
+        labels:
+          type: array
+          items: { $ref: '#/components/schemas/Classification' }
+        order:
+          type: array
+          description: Dominance edges (lower dominated-by higher)
+          items:
+            type: object
+            properties:
+              lower: { $ref: '#/components/schemas/Classification' }
+              higher: { $ref: '#/components/schemas/Classification' }

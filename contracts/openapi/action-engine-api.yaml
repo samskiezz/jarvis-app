@@ -1,0 +1,243 @@
+openapi: 3.1.0
+info:
+  title: Action Engine API
+  version: 1.0.0
+  description: >
+    The governed write path of the platform (kinetic / action-engine class). All
+    mutations to the ontology flow through typed action-types: a request is
+    validated against the action-type contract, authorized by the Policy API,
+    optionally routed through human approval, executed as a transactional
+    writeback into the Object Runtime, and — on downstream failure — compensated
+    via the action-type's declared saga.
+
+
+    Exposes platform concepts (typed action-types, executions, approvals,
+    writebacks, compensations) — never raw database tables. No object is ever
+    mutated except through an action recorded here.
+
+
+    Production language: Java / Spring Boot + Temporal (Layer B service
+    `action-engine`).
+
+
+    Layer A reference module: `server/services/jarvis_aip.py`, exposed under
+    `/v1/jarvis`. The contract is stable across the Layer A -> Layer B split.
+servers:
+  - url: /v1/action-engine
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: action-types
+    description: Registered typed action definitions (the verbs of the ontology)
+  - name: requests
+    description: Submitted action requests awaiting validation/approval/execution
+  - name: executions
+    description: Outcome of executing an action request
+  - name: approvals
+    description: Human approval gates on actions
+  - name: writeback
+    description: Transactional writeback of action effects into the Object Runtime
+  - name: compensation
+    description: Saga compensation when a downstream step fails
+paths:
+  /action-types:
+    get:
+      tags: [action-types]
+      summary: List registered action-types
+      responses:
+        '200':
+          description: Action-types
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ActionType' }
+  /action-types/{actionTypeId}:
+    get:
+      tags: [action-types]
+      summary: Get an action-type definition
+      parameters:
+        - { name: actionTypeId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Action-type
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ActionType' }
+  /action-requests:
+    post:
+      tags: [requests]
+      summary: Submit an action request
+      description: >
+        Validates the parameters against the action-type, evaluates policy and
+        either executes immediately or parks the request pending approval.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ActionRequest' }
+      responses:
+        '202':
+          description: Accepted (may be pending approval)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ActionExecution' }
+  /action-requests/{requestId}:
+    get:
+      tags: [requests]
+      summary: Get an action request and its current execution state
+      parameters:
+        - { name: requestId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Execution state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ActionExecution' }
+  /executions/{executionId}:
+    get:
+      tags: [executions]
+      summary: Get an execution record
+      parameters:
+        - { name: executionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Execution
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ActionExecution' }
+  /executions/{executionId}/writeback:
+    get:
+      tags: [writeback]
+      summary: Inspect the writeback edits produced by an execution
+      parameters:
+        - { name: executionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Writeback set
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Writeback' }
+  /executions/{executionId}/compensate:
+    post:
+      tags: [compensation]
+      summary: Run the compensating saga for a partially-applied execution
+      parameters:
+        - { name: executionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Compensation outcome
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Compensation' }
+  /approvals/{approvalId}:
+    post:
+      tags: [approvals]
+      summary: Decide a pending approval (approve or reject)
+      parameters:
+        - { name: approvalId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApprovalDecision' }
+      responses:
+        '200':
+          description: Updated approval; execution resumes if approved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Approval' }
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    ActionType:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        appliesTo:
+          type: array
+          description: Object-types this action operates on
+          items: { type: string }
+        parameters:
+          type: object
+          description: JSON-Schema of accepted parameters
+          additionalProperties: true
+        requiresApproval: { type: boolean, default: false }
+        classification: { $ref: '#/components/schemas/Classification' }
+        compensable: { type: boolean, default: true }
+    ActionRequest:
+      type: object
+      required: [actionTypeId, parameters]
+      properties:
+        actionTypeId: { type: string }
+        parameters:
+          type: object
+          additionalProperties: true
+        subjectId: { type: string }
+        purpose: { type: string, nullable: true }
+        idempotencyKey: { type: string, nullable: true }
+    ActionExecution:
+      type: object
+      properties:
+        executionId: { type: string }
+        requestId: { type: string }
+        actionTypeId: { type: string }
+        status:
+          type: string
+          enum: [pending_validation, pending_approval, executing, applied, failed, compensated, denied]
+        approval: { $ref: '#/components/schemas/Approval' }
+        writeback: { $ref: '#/components/schemas/Writeback' }
+        error: { type: string, nullable: true }
+        startedAt: { type: string, format: date-time }
+        completedAt: { type: string, format: date-time, nullable: true }
+    Writeback:
+      type: object
+      properties:
+        executionId: { type: string }
+        edits:
+          type: array
+          items:
+            type: object
+            properties:
+              op: { type: string, enum: [create_object, modify_object, delete_object, create_link, delete_link] }
+              objectType: { type: string }
+              objectId: { type: string }
+              before: { type: object, additionalProperties: true, nullable: true }
+              after: { type: object, additionalProperties: true, nullable: true }
+        committed: { type: boolean }
+    Compensation:
+      type: object
+      properties:
+        executionId: { type: string }
+        status: { type: string, enum: [compensating, compensated, failed] }
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              step: { type: string }
+              reversed: { type: boolean }
+    Approval:
+      type: object
+      properties:
+        approvalId: { type: string }
+        executionId: { type: string }
+        status: { type: string, enum: [pending, approved, rejected] }
+        approvers:
+          type: array
+          items: { type: string }
+        decidedBy: { type: string, nullable: true }
+        decidedAt: { type: string, format: date-time, nullable: true }
+    ApprovalDecision:
+      type: object
+      required: [decision]
+      properties:
+        decision: { type: string, enum: [approve, reject] }
+        approverId: { type: string }
+        comment: { type: string, nullable: true }

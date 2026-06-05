@@ -1,0 +1,272 @@
+openapi: 3.1.0
+info:
+  title: Workflow API
+  version: 1.0.0
+  description: >
+    Long-running, durable process orchestration (workflow / Temporal-class).
+    Authors register workflow definitions (graphs of tasks, timers, escalations
+    and approval gates); the engine instantiates them as executions, drives task
+    progression, fires timers, applies escalation policies on breach, and routes
+    approvals — invoking the Action Engine for any governed side effect.
+
+
+    Exposes platform concepts (definitions, executions, tasks, timers,
+    escalations, approvals) — never raw database tables. Workflows never mutate
+    the ontology directly; they call the Action Engine.
+
+
+    Production language: Java / Spring Boot + Temporal (Layer B service
+    `workflow`).
+
+
+    Layer A reference module: `server/services/jarvis_aip.py` (workflow
+    orchestration; sandboxed via `server/services/jarvis_sandbox.py`), exposed
+    under `/v1/jarvis`. The contract is stable across the Layer A -> Layer B
+    split.
+servers:
+  - url: /v1/workflow
+    description: Layer B production service mount
+  - url: /v1/jarvis
+    description: Layer A reference kernel (this repo)
+tags:
+  - name: definitions
+    description: Authored workflow definitions
+  - name: executions
+    description: Running and completed workflow instances
+  - name: tasks
+    description: Units of work within an execution
+  - name: timers
+    description: Scheduled and durable timers
+  - name: escalations
+    description: Escalation policies fired on SLA breach
+  - name: approvals
+    description: Human approval gates within a workflow
+paths:
+  /definitions:
+    get:
+      tags: [definitions]
+      summary: List workflow definitions
+      responses:
+        '200':
+          description: Definitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/WorkflowDefinition' }
+    post:
+      tags: [definitions]
+      summary: Register a workflow definition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WorkflowDefinition' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowDefinition' }
+  /definitions/{definitionId}:
+    get:
+      tags: [definitions]
+      summary: Get a workflow definition
+      parameters:
+        - { name: definitionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Definition
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowDefinition' }
+  /executions:
+    post:
+      tags: [executions]
+      summary: Start a workflow execution
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StartExecution' }
+      responses:
+        '202':
+          description: Execution started
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowExecution' }
+  /executions/{executionId}:
+    get:
+      tags: [executions]
+      summary: Get a workflow execution
+      parameters:
+        - { name: executionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Execution
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowExecution' }
+  /executions/{executionId}/tasks:
+    get:
+      tags: [tasks]
+      summary: List tasks for an execution
+      parameters:
+        - { name: executionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Task' }
+  /tasks/{taskId}/complete:
+    post:
+      tags: [tasks]
+      summary: Complete a task and advance the workflow
+      parameters:
+        - { name: taskId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                output: { type: object, additionalProperties: true }
+      responses:
+        '200':
+          description: Updated task
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+  /timers:
+    get:
+      tags: [timers]
+      summary: List active durable timers
+      parameters:
+        - { name: executionId, in: query, required: false, schema: { type: string } }
+      responses:
+        '200':
+          description: Timers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Timer' }
+  /escalations/{escalationId}:
+    get:
+      tags: [escalations]
+      summary: Get an escalation that fired
+      parameters:
+        - { name: escalationId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Escalation
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Escalation' }
+  /approvals/{approvalId}:
+    post:
+      tags: [approvals]
+      summary: Decide a workflow approval gate
+      parameters:
+        - { name: approvalId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApprovalDecision' }
+      responses:
+        '200':
+          description: Updated approval; workflow resumes if approved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowApproval' }
+components:
+  schemas:
+    Classification:
+      type: string
+      enum: [UNCLASSIFIED, OFFICIAL, SECRET, TOPSECRET]
+    WorkflowDefinition:
+      type: object
+      required: [id, name, steps]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        version: { type: integer, default: 1 }
+        description: { type: string }
+        classification: { $ref: '#/components/schemas/Classification' }
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              kind: { type: string, enum: [task, timer, approval, escalation, decision] }
+              next:
+                type: array
+                items: { type: string }
+              config: { type: object, additionalProperties: true }
+    StartExecution:
+      type: object
+      required: [definitionId]
+      properties:
+        definitionId: { type: string }
+        input: { type: object, additionalProperties: true }
+        subjectId: { type: string }
+        idempotencyKey: { type: string, nullable: true }
+    WorkflowExecution:
+      type: object
+      properties:
+        executionId: { type: string }
+        definitionId: { type: string }
+        status:
+          type: string
+          enum: [running, waiting_approval, waiting_timer, completed, failed, terminated]
+        currentStep: { type: string }
+        startedAt: { type: string, format: date-time }
+        completedAt: { type: string, format: date-time, nullable: true }
+    Task:
+      type: object
+      properties:
+        taskId: { type: string }
+        executionId: { type: string }
+        stepId: { type: string }
+        status: { type: string, enum: [pending, in_progress, completed, failed, escalated] }
+        assignee: { type: string, nullable: true }
+        dueAt: { type: string, format: date-time, nullable: true }
+        output: { type: object, additionalProperties: true, nullable: true }
+    Timer:
+      type: object
+      properties:
+        timerId: { type: string }
+        executionId: { type: string }
+        firesAt: { type: string, format: date-time }
+        status: { type: string, enum: [scheduled, fired, cancelled] }
+    Escalation:
+      type: object
+      properties:
+        escalationId: { type: string }
+        executionId: { type: string }
+        taskId: { type: string }
+        level: { type: integer }
+        reason: { type: string, enum: [sla_breach, no_assignee, manual] }
+        escalatedTo: { type: string }
+        firedAt: { type: string, format: date-time }
+    WorkflowApproval:
+      type: object
+      properties:
+        approvalId: { type: string }
+        executionId: { type: string }
+        status: { type: string, enum: [pending, approved, rejected] }
+        decidedBy: { type: string, nullable: true }
+        decidedAt: { type: string, format: date-time, nullable: true }
+    ApprovalDecision:
+      type: object
+      required: [decision]
+      properties:
+        decision: { type: string, enum: [approve, reject] }
+        approverId: { type: string }
+        comment: { type: string, nullable: true }
