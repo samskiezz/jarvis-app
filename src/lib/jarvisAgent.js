@@ -164,16 +164,21 @@ export function interpret(utterance, ctx = {}) {
 
 // A few in-character lines so spoken confirmations don't feel robotic. Callers
 // pick one with `pick()`. Kept here so they're covered by the same module.
+// JARVIS register: formal, British, dry. Complete sentences, precise words, and
+// — in the manner of Mr Bettany — contractions are avoided ("I have", not "I've").
 export const LINES = {
-  greeting: ["Welcome home, sir.", "At your service, sir.", "Online and listening, sir."],
-  greetingWarm: ["Welcome home, sir. Shall I run the usual diagnostics?"],
+  greeting: ["At your service, sir.", "Online and at your disposal, sir.",
+             "Systems are online, sir. How may I assist?"],
+  greetingWarm: ["Welcome home, sir. Shall I run the usual diagnostics?",
+                 "Daddy is home. All systems are nominal, sir."],
   opened: (label) => `Bringing up ${label}, sir.`,
   closed: (label) => `Closing ${label}, sir.`,
   navigated: (label) => `Taking you to ${label}, sir.`,
   focused: (label) => `Focusing on ${label}, sir.`,
-  refresh: ["Pulling fresh intel, sir.", "Refreshing the feeds, sir."],
-  stop: ["As you wish, sir.", "Standing by, sir."],
-  unknown: ["I'm afraid I didn't catch that, sir.", "Could you rephrase, sir?"],
+  refresh: ["Pulling fresh intelligence, sir.", "Refreshing the feeds at once, sir."],
+  stop: ["As you wish, sir.", "Standing by, sir.", "Very good, sir."],
+  unknown: ["I am afraid I did not quite catch that, sir.",
+            "Forgive me, sir — might you rephrase that?"],
 };
 
 export function pick(arr, seed) {

@@ -4,6 +4,8 @@ import { appParams } from "@/lib/app-params";
 import { interpret, LINES, pick } from "@/lib/jarvisAgent";
 import { createVoice } from "@/lib/jarvisVoice";
 import { agentChat } from "@/lib/jarvisApi";
+import jarvisSound from "@/lib/jarvisSound";
+import ArcReactor from "./ArcReactor";
 
 /**
  * JarvisAssistant — the omnipresent JARVIS HUD.
@@ -189,6 +191,8 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
     setOpen(true);
     if (active) return;
     setActive(true);
+    jarvisSound.unlock();
+    jarvisSound.play("boot");   // the JARVIS power-on
     const v = voiceRef.current;
     v?.setWake(true);
     const greeting = pick(LINES.greeting);
@@ -200,34 +204,36 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
     const next = !muted;
     setMuted(next);
     voiceRef.current?.setMuted(next);
+    jarvisSound.setMuted(next);
   };
+
+  // JARVIS sonic cues — fire on every state transition (the missing audio layer).
+  useEffect(() => { jarvisSound.play(listening ? "listen" : "listenEnd"); }, [listening]);
+  useEffect(() => { if (streaming) jarvisSound.play("think"); }, [streaming]);
+  useEffect(() => { if (speaking) jarvisSound.play("speak"); }, [speaking]);
+  useEffect(() => { jarvisSound.setHum(active); return () => jarvisSound.setHum(false); }, [active]);
 
   const supported = voiceRef.current?.supported || { speech: false, recognition: false };
   const orbColor = speaking ? C.gold : listening ? C.red : active ? C.neon : C.blue;
+  const orbState = speaking ? "speaking" : listening ? "listening"
+    : streaming ? "thinking" : active ? "armed" : "idle";
 
   return (
     <>
-      {/* Arc-reactor orb — always present, bottom-right above the status bar. */}
+      {/* Live arc-reactor orb — animated, state-reactive, with sonic activation. */}
       <button
-        onClick={() => (open ? setOpen(false) : activate())}
+        onClick={() => { jarvisSound.unlock(); jarvisSound.play(open ? "tick" : "activate"); open ? setOpen(false) : activate(); }}
+        onMouseEnter={() => jarvisSound.play("hover")}
         title="JARVIS"
         style={{
-          position: "fixed", right: 16, bottom: 32, width: 54, height: 54, borderRadius: "50%",
-          zIndex: 10000, cursor: "pointer", background: "rgba(2,8,12,0.95)",
-          border: `2px solid ${orbColor}`, boxShadow: `0 0 18px ${orbColor}, inset 0 0 12px ${orbColor}55`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          transition: "all 0.2s", animation: speaking || listening ? "pulse 1.1s infinite" : "none",
+          position: "fixed", right: 16, bottom: 32, width: 58, height: 58, borderRadius: "50%",
+          zIndex: 10000, cursor: "pointer", background: "rgba(2,8,12,0.92)",
+          border: `1px solid ${orbColor}66`, boxShadow: `0 0 22px ${orbColor}66`,
+          display: "flex", alignItems: "center", justifyContent: "center", padding: 0,
+          transition: "box-shadow 0.3s",
         }}
       >
-        <svg width="26" height="26" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9" fill="none" stroke={orbColor} strokeWidth="1.2" opacity="0.6" />
-          <circle cx="12" cy="12" r="4.5" fill={orbColor} opacity={speaking ? 0.95 : 0.7} />
-          {[0, 60, 120, 180, 240, 300].map((a) => (
-            <line key={a} x1="12" y1="12"
-              x2={12 + 8 * Math.cos((a * Math.PI) / 180)} y2={12 + 8 * Math.sin((a * Math.PI) / 180)}
-              stroke={orbColor} strokeWidth="0.8" opacity="0.5" />
-          ))}
-        </svg>
+        <ArcReactor state={orbState} size={56} color={orbColor} />
       </button>
 
       {open && (
