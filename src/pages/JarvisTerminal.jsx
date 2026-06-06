@@ -10,6 +10,7 @@ import { WATCHLIST_INIT } from "@/domain/watchlist";
 import { MARKETS_FALLBACK } from "@/domain/markets";
 import { appParams } from "@/lib/app-params";
 import { PANELS as PANEL_REGISTRY, buildDefaultPanelState } from "@/panels/registry";
+import { agentChat } from "@/lib/jarvisApi";
 
 const API = `${appParams.apiBaseUrl}/functions/getLiveIntel`;
 
@@ -777,8 +778,8 @@ function MarketsPanel({ liveData, loading }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function AnalystPanel() {
   const [msgs, setMsgs] = useState([
-    { r:"sys", t:"JARVIS ANALYST — KIMI K2 BACKEND" },
-    { r:"sys", t:`Ontology: ${OBJECTS.length} objects · ${LINKS.length} links · ${RISK_SIGNALS.length} risk signals\nAsk anything about PSG, Pangani, Dubai, risks, wealth target, ontology.` },
+    { r:"sys", t:"JARVIS AGENT — TOOL-CALLING (search · ontology · science), governed + audited" },
+    { r:"sys", t:`Ontology: ${OBJECTS.length} objects · ${LINKS.length} links · ${RISK_SIGNALS.length} risk signals\nAsk anything — I plan, call real tools, and answer from grounded data. Writes become approval proposals.` },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -791,7 +792,7 @@ function AnalystPanel() {
     setInput("");
     setLoading(true);
 
-    // Append an empty assistant message that we'll stream tokens into.
+    // Append an empty assistant message that the agent result fills in.
     let assistantIdx;
     setMsgs((m) => {
       assistantIdx = m.length;
@@ -799,44 +800,23 @@ function AnalystPanel() {
     });
 
     try {
-      const url = `${appParams.apiBaseUrl}/functions/analystChat`;
-      const headers = { "Content-Type": "application/json" };
-      if (appParams.apiKey) headers["Authorization"] = `Bearer ${appParams.apiKey}`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ message: q }),
+      // Real planner/executor turn: LLM plans → governed tool dispatch (search /
+      // ontology / science) → step memory → synthesised, grounded answer.
+      const history = msgs.map((m) => ({ role: m.r === "user" ? "sam" : "jarvis", text: m.t }));
+      const res = await agentChat(q, { history });
+      const tools = res.used_tools || [];
+      const trace = tools.length
+        ? `\n\n— ${(res.backend || "grounded").toUpperCase()} · ${res.steps || tools.length} step(s) · tools: ${tools.join(", ")}`
+        : "";
+      setMsgs((m) => {
+        const next = [...m];
+        next[assistantIdx] = { r: "jarvis", t: (res.answer || "No result.") + trace };
+        return next;
       });
-      if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        // SSE frames are "data: <token>\n\n"
-        let nl;
-        while ((nl = buffer.indexOf("\n\n")) !== -1) {
-          const frame = buffer.slice(0, nl);
-          buffer = buffer.slice(nl + 2);
-          if (!frame.startsWith("data: ")) continue;
-          const payload = frame.slice(6);
-          if (payload === "[DONE]") continue;
-          let token;
-          try { token = JSON.parse(payload); } catch { token = payload; }
-          setMsgs((m) => {
-            const next = [...m];
-            next[assistantIdx] = { r: "jarvis", t: (next[assistantIdx]?.t || "") + token };
-            return next;
-          });
-        }
-      }
     } catch (err) {
       setMsgs((m) => {
         const next = [...m];
-        next[assistantIdx] = { r: "sys", t: `// Analyst offline: ${err.message}. Start the backend (uvicorn server.main:app --reload) and configure VITE_API_BASE_URL.` };
+        next[assistantIdx] = { r: "sys", t: `// Agent offline: ${err.message}. Start the backend (uvicorn server.main:app --reload) and configure VITE_API_BASE_URL.` };
         return next;
       });
     } finally {

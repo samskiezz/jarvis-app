@@ -3,6 +3,7 @@ import { COLORS as C } from "@/domain/colors";
 import { appParams } from "@/lib/app-params";
 import { interpret, LINES, pick } from "@/lib/jarvisAgent";
 import { createVoice } from "@/lib/jarvisVoice";
+import { agentChat } from "@/lib/jarvisApi";
 
 /**
  * JarvisAssistant — the omnipresent JARVIS HUD.
@@ -15,35 +16,6 @@ import { createVoice } from "@/lib/jarvisVoice";
  * It renders a collapsed arc-reactor orb that expands into a conversation panel.
  * `actions` is the bridge the terminal hands in so JARVIS can actually drive it.
  */
-
-// Stream the JARVIS analyst SSE endpoint, calling onToken(full) as text arrives.
-async function streamAnalyst(message, onToken, signal) {
-  const headers = { "Content-Type": "application/json" };
-  if (appParams.apiKey) headers.Authorization = `Bearer ${appParams.apiKey}`;
-  const res = await fetch(`${appParams.apiBaseUrl}/functions/analystChat`, {
-    method: "POST", headers, body: JSON.stringify({ message }), signal,
-  });
-  if (!res.ok || !res.body) throw new Error(`analystChat ${res.status}`);
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf = "";
-  let full = "";
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buf += dec.decode(value, { stream: true });
-    const parts = buf.split("\n\n");
-    buf = parts.pop() || "";
-    for (const part of parts) {
-      const line = part.trim();
-      if (!line.startsWith("data:")) continue;
-      const data = line.slice(5).trim();
-      if (data === "[DONE]") return full;
-      try { full += JSON.parse(data); onToken(full); } catch { /* skip frame */ }
-    }
-  }
-  return full;
-}
 
 // Compose a short spoken briefing from the live intel snapshot — real figures
 // only, no invention (per the JARVIS contract).
@@ -106,22 +78,27 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
     voiceRef.current?.speak(text);
   }, []);
 
+  // A query now runs the REAL backend agent loop: LLM planner → governed tool
+  // dispatch (search / ontology / science) → step memory → synthesised answer.
+  // We surface the tool trace inline and speak the final answer. `historyRef`
+  // gives the loop short-term memory across turns.
+  const historyRef = useRef([]);
   const runQuery = useCallback(async (message) => {
-    abortRef.current?.abort();
-    const ctrl = new AbortController();
-    abortRef.current = ctrl;
     setStreaming(true);
     const idx = { current: -1 };
     setMessages((m) => { idx.current = m.length; return [...m, { role: "jarvis", text: "" }]; });
     try {
-      const full = await streamAnalyst(message, (text) => {
-        setMessages((m) => m.map((msg, i) => (i === idx.current ? { ...msg, text } : msg)));
-      }, ctrl.signal);
-      voiceRef.current?.speak(full);
-    } catch (e) {
-      if (e.name !== "AbortError") {
-        setMessages((m) => m.map((msg, i) => (i === idx.current ? { ...msg, text: "My apologies, sir — the analyst link is down." } : msg)));
-      }
+      const res = await agentChat(message, { history: historyRef.current });
+      const text = res.answer || "I have nothing to report on that, sir.";
+      setMessages((m) => m.map((msg, i) => (
+        i === idx.current
+          ? { ...msg, text, tools: res.used_tools, backend: res.backend, steps: res.steps }
+          : msg
+      )));
+      historyRef.current = [...historyRef.current, { role: "sam", text: message }, { role: "jarvis", text }].slice(-8);
+      if (!res.error) voiceRef.current?.speak(text);
+    } catch {
+      setMessages((m) => m.map((msg, i) => (i === idx.current ? { ...msg, text: "My apologies, sir — the agent link is down." } : msg)));
     } finally {
       setStreaming(false);
     }
@@ -289,7 +266,20 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
                   background: m.role === "sam" ? "rgba(0,150,212,0.14)" : "rgba(0,200,120,0.08)",
                   border: `1px solid ${m.role === "sam" ? C.blue + "33" : C.neon + "33"}`,
                   color: m.role === "sam" ? C.textB : "#cfe9dc",
+                  whiteSpace: "pre-wrap",
                 }}>{m.text || (streaming ? "…" : "")}</div>
+                {/* Tool trace: which governed tools the agent actually called. */}
+                {Array.isArray(m.tools) && m.tools.length > 0 && (
+                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 4, alignItems: "center" }}>
+                    <span style={{ fontSize: 7, color: C.text, letterSpacing: 1 }}>
+                      {m.backend ? m.backend.toUpperCase() : "GROUNDED"} · {m.steps || m.tools.length} STEP{(m.steps || m.tools.length) === 1 ? "" : "S"}
+                    </span>
+                    {m.tools.map((t, k) => (
+                      <span key={k} style={{ fontSize: 7, color: C.gold, background: C.gold + "14",
+                        border: `1px solid ${C.gold}33`, borderRadius: 3, padding: "1px 5px" }}>⛭ {t}</span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
