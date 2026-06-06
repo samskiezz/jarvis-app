@@ -83,6 +83,26 @@ def _download(url: str, name: str) -> dict:
         return {"ok": False, "error": str(e)}
 
 
+def prompt_via_llm(description: str) -> str:
+    """Ollama-automated: let the LLM craft a clean text-to-3D prompt from a surface
+    description. Falls back to the description itself if no LLM is reachable."""
+    try:
+        from . import llm_research as lr
+        if not lr.available():
+            return description
+        sys = ("You write concise text-to-3D prompts for a sleek, Apple-grade, "
+               "hi-tech holographic asset. Output ONLY the prompt, one line, <40 words.")
+        out = lr.llm_complete(f"Asset: {description}", system=sys, max_tokens=80)
+        return (out or "").strip().strip('"') or description
+    except Exception:  # noqa: BLE001
+        return description
+
+
+def generate_surface(description: str, name: str, *, max_wait: int = 300) -> dict:
+    """Ollama-driven generation: LLM crafts the prompt, then we generate + download."""
+    return generate(prompt_via_llm(description), name, max_wait=max_wait)
+
+
 def generate(prompt: str, name: str, *, max_wait: int = 240, style: str = "") -> dict:
     """Full pipeline: submit -> poll to completion -> download the GLB to
     public/models/<name>.glb. Returns the final result. Never raises."""
