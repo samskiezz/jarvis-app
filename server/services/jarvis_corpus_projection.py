@@ -33,6 +33,7 @@ _TYPES = {
     "DataSource": "Catalogued data acquisition endpoint.",
     "Document": "OCR / reference document candidate.",
     "Topic": "Master domain topic (the 30 cross-correlated domains).",
+    "Concept": "Cross-correlation entity (concept / family) linking domains.",
 }
 
 
@@ -62,6 +63,9 @@ def _ensure_schema(c: sqlite3.Connection) -> None:
         CREATE TABLE IF NOT EXISTS ont_link (
             id TEXT PRIMARY KEY, type TEXT, from_id TEXT, to_id TEXT, ts INTEGER
         );
+        CREATE INDEX IF NOT EXISTS idx_ont_link_from ON ont_link(from_id);
+        CREATE INDEX IF NOT EXISTS idx_ont_link_to ON ont_link(to_id);
+        CREATE INDEX IF NOT EXISTS idx_ont_object_type ON ont_object(type);
         """
     )
 
@@ -206,10 +210,11 @@ def project(*, batch: int = 5000) -> dict:
 
         # 5) DOMAIN COHESION + CROSS-CORRELATION — the layer that ties every section
         # of the platform together. Without it the 30 domains are disconnected islands
-        # and nothing cross-correlates across the whole. Two parts:
+        # and nothing cross-correlates across the whole. Three parts:
         #   5a) every DomainSubject (neuron) -> its master Topic  (IN_TOPIC)
-        #   5b) Topic -> Topic influence edges from cross_correlation_edges.csv
-        #       (CAUSES_RISK_TO / DRIVES / …) — the real cross-domain web.
+        #   5b) a node for every correlation entity (the 30 master Topics reused; the
+        #       finer concepts/families become Concept nodes) so NO edge dangles
+        #   5c) the cross-domain influence edges (CAUSES_RISK_TO / DRIVES / IMPACTS …)
         try:
             from . import jarvis_grow as _grow
             _grow.ensure_topics()              # the 30 master Topic nodes (idempotent)
@@ -227,13 +232,38 @@ def project(*, batch: int = 5000) -> dict:
             if lbuf:
                 out["topic_links"] += _bulk_links(c, lbuf); c.commit()
 
-            rows = c.execute(
+            # map every correlation node name -> a real object id. Master topics reuse
+            # their topic: node; everything else becomes a Concept node (created here).
+            masters = {}
+            for tr in c.execute("SELECT id, props FROM ont_object WHERE type='Topic'"):
+                try:
+                    lbl = json.loads(tr["props"] or "{}").get("label", "")
+                except Exception:  # noqa: BLE001
+                    lbl = ""
+                if lbl:
+                    masters[_slug(lbl)] = tr["id"]
+
+            def _corr_id(name: str) -> str:
+                s = _slug(name)
+                return masters.get(s, f"concept:{s}")
+
+            rows = list(c.execute(
                 "SELECT edge_id, source_node, target_node, edge_type FROM world_correlation "
-                "WHERE source_node<>'' AND target_node<>''")
+                "WHERE source_node<>'' AND target_node<>''"))
+            # 5b) Concept nodes for non-topic correlation entities
+            concept_objs, seen_c = [], set()
+            for r in rows:
+                for nm in (r["source_node"], r["target_node"]):
+                    s = _slug(nm)
+                    if s and s not in masters and s not in seen_c:
+                        seen_c.add(s)
+                        concept_objs.append((f"concept:{s}", "Concept", {"label": nm}))
+            out["concepts"] = _bulk_objects(c, concept_objs); c.commit()
+            # 5c) the influence edges, now between real (non-dangling) nodes
             lbuf = []
             for r in rows:
                 lbuf.append((f"corr:{r['edge_id']}", (r["edge_type"] or "CORRELATES").strip().upper(),
-                             f"topic:{_slug(r['source_node'])}", f"topic:{_slug(r['target_node'])}"))
+                             _corr_id(r["source_node"]), _corr_id(r["target_node"])))
                 if len(lbuf) >= batch:
                     out["correlations"] += _bulk_links(c, lbuf); lbuf = []; c.commit()
             if lbuf:
