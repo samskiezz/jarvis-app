@@ -17,5 +17,5 @@ export function slerp(a: Quat, b: Quat, t: number): Quat {
   const sinTheta = Math.sin(theta);
   const wa = Math.sin((1-t)*theta) / sinTheta;
   const wb = Math.sin(t*theta) / sinTheta;
-  return [ax*wa + bx*wb, ay*wa + by*wb, az*wa + bz*wb, aw*wa + bw*bw];
+  return [ax*wa + bx*wb, ay*wa + by*wb, az*wa + bz*wb, aw*wa + bw*wb];
 }

@@ -29,8 +29,15 @@ import { COLORS as C } from "@/domain/colors";
 import { PageShell, PanelCard, StatTile, DataState, Badge } from "@/components/PageKit";
 import { Btn, KV, inputStyle } from "@/components/Wave1Kit";
 import { apiGet, asList, labelOf, useAsync } from "@/lib/wave1";
+import { idToColor, colorToId } from "@/engine/gpuPicking";
+import { slerp } from "@/engine/quaternionCamera";
 
 const ACCENT = C.neon;
+
+// Encode a screen-plane rotation angle (radians) as a unit quaternion about Z,
+// so camera rotations can be interpolated with proper spherical-linear blending.
+const zQuat = (theta) => [0, 0, Math.sin(theta / 2), Math.cos(theta / 2)];
+const zAngleOf = (q) => 2 * Math.atan2(q[2], q[3]);
 
 const nid = (n) => (n && (n.id ?? n.node ?? n.key ?? n.name)) ?? null;
 const edgeEnds = (e) => [
@@ -68,8 +75,13 @@ export default function GraphCanvas() {
   // Provenance: which node introduced which neighbours (for collapse).
   const introducedBy = useRef(new Map()); // expandedNodeId -> Set(childIds it added)
 
-  // ── View transform (pan/zoom) ─────────────────────────────────────────────
-  const view = useRef({ tx: 0, ty: 0, scale: 1 });
+  // ── View transform (pan/zoom/rotate) ──────────────────────────────────────
+  // `rot` is a screen-plane rotation (radians); camera transitions are animated,
+  // with rotation interpolated via quaternion slerp (engine/quaternionCamera).
+  const view = useRef({ tx: 0, ty: 0, scale: 1, rot: 0 });
+  const camAnim = useRef(null); // active animation frame id
+  // Offscreen colour-id buffer for GPU-style picking (engine/gpuPicking).
+  const pickRef = useRef(null);
 
   // ── Interaction state ─────────────────────────────────────────────────────
   const drag = useRef(null);   // { mode:'pan'|'node', id, sx,sy, ntx,nty }
@@ -241,9 +253,12 @@ export default function GraphCanvas() {
   }, [selectedNode, graphVersion]);
 
   // ── Coordinate helpers ────────────────────────────────────────────────────
+  // Screen → world, inverting translate → scale → rotate (the draw order).
   const toWorld = useCallback((sx, sy) => {
     const v = view.current;
-    return { x: (sx - v.tx) / v.scale, y: (sy - v.ty) / v.scale };
+    const dx = (sx - v.tx) / v.scale, dy = (sy - v.ty) / v.scale;
+    const c = Math.cos(-v.rot || 0), s = Math.sin(-v.rot || 0);
+    return { x: dx * c - dy * s, y: dx * s + dy * c };
   }, []);
 
   const radiusOf = useCallback((id) => {
@@ -251,17 +266,72 @@ export default function GraphCanvas() {
     return 5 + Math.min(14, Math.sqrt(deg) * 3.2);
   }, []);
 
+  // GPU-style colour-buffer picking: render every node into an offscreen canvas
+  // filled with a unique RGB id (engine/gpuPicking.idToColor), then read the one
+  // pixel under the cursor and decode it back to a node (colorToId). O(1) readback,
+  // pixel-accurate, and rotation/zoom-agnostic because it works in screen space.
   const pickNode = useCallback((sx, sy) => {
-    const { x, y } = toWorld(sx, sy);
-    let best = null, bestD = Infinity;
-    for (const n of sim.current.nodes.values()) {
-      const r = radiusOf(n.id) + 4;
-      const dx = n.x - x, dy = n.y - y;
-      const d2 = dx * dx + dy * dy;
-      if (d2 <= r * r && d2 < bestD) { best = n; bestD = d2; }
+    const cv = canvasRef.current;
+    if (!cv) return null;
+    const w = cv.clientWidth, h = cv.clientHeight;
+    if (!pickRef.current) pickRef.current = document.createElement("canvas");
+    const pc = pickRef.current;
+    if (pc.width !== w || pc.height !== h) { pc.width = w; pc.height = h; }
+    const pctx = pc.getContext("2d", { willReadFrequently: true });
+    if (!pctx) return null;
+    const v = view.current;
+    pctx.clearRect(0, 0, w, h);
+    pctx.save();
+    pctx.translate(v.tx, v.ty);
+    pctx.scale(v.scale, v.scale);
+    pctx.rotate(v.rot || 0);
+    const nodes = [...sim.current.nodes.values()];
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      const [r, g, b] = idToColor(i + 1); // +1 so 0 = background
+      pctx.fillStyle = `rgb(${r},${g},${b})`;
+      pctx.beginPath();
+      pctx.arc(n.x, n.y, radiusOf(n.id) + 4, 0, Math.PI * 2);
+      pctx.fill();
     }
-    return best;
-  }, [toWorld, radiusOf]);
+    pctx.restore();
+    let px;
+    try { px = pctx.getImageData(Math.round(sx), Math.round(sy), 1, 1).data; }
+    catch { return null; }
+    if (px[3] === 0) return null;
+    const idx = colorToId(px[0], px[1], px[2]) - 1;
+    return idx >= 0 && idx < nodes.length ? nodes[idx] : null;
+  }, [radiusOf]);
+
+  // Smoothly animate the camera to a target view. Rotation is interpolated with
+  // quaternion slerp (engine/quaternionCamera); pan/zoom ease linearly.
+  const animateCamera = useCallback((target, ms = 420) => {
+    if (camAnim.current) cancelAnimationFrame(camAnim.current);
+    const from = { ...view.current };
+    const qa = zQuat(from.rot || 0), qb = zQuat(target.rot ?? from.rot ?? 0);
+    const t0 = performance.now();
+    const tick = (now) => {
+      const k = Math.min(1, (now - t0) / ms);
+      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; // easeInOutQuad
+      view.current = {
+        tx: from.tx + ((target.tx ?? from.tx) - from.tx) * e,
+        ty: from.ty + ((target.ty ?? from.ty) - from.ty) * e,
+        scale: from.scale + ((target.scale ?? from.scale) - from.scale) * e,
+        rot: zAngleOf(slerp(qa, qb, e)),
+      };
+      if (k < 1) camAnim.current = requestAnimationFrame(tick);
+      else camAnim.current = null;
+    };
+    camAnim.current = requestAnimationFrame(tick);
+  }, []);
+
+  // Rotate the view by a delta, animated via slerp.
+  const rotateView = useCallback((delta) => {
+    animateCamera({ rot: (view.current.rot || 0) + delta });
+  }, [animateCamera]);
+
+  // Stop any in-flight camera animation when the canvas unmounts.
+  useEffect(() => () => { if (camAnim.current) cancelAnimationFrame(camAnim.current); }, []);
 
   // ── Fit-to-view ───────────────────────────────────────────────────────────
   const fitToView = useCallback(() => {
@@ -278,8 +348,9 @@ export default function GraphCanvas() {
     const gw = Math.max(1, maxX - minX), gh = Math.max(1, maxY - minY);
     const scale = Math.max(0.2, Math.min(2.2, Math.min((w - pad * 2) / gw, (h - pad * 2) / gh)));
     const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
-    view.current = { scale, tx: w / 2 - cx * scale, ty: h / 2 - cy * scale };
-  }, []);
+    // FIT squares the view up (rot → 0) and frames the graph, animated.
+    animateCamera({ scale, tx: w / 2 - cx * scale, ty: h / 2 - cy * scale, rot: 0 });
+  }, [animateCamera]);
 
   // Auto-fit after the base load settles.
   useEffect(() => {
@@ -301,9 +372,12 @@ export default function GraphCanvas() {
     const cv = canvasRef.current;
     const v = view.current;
     const w = cv.clientWidth, h = cv.clientHeight;
-    view.current = { ...v, tx: w / 2 - match.x * v.scale, ty: h / 2 - match.y * v.scale };
+    // Centre the match under the current rotation (screen = T + S·R·world).
+    const c = Math.cos(v.rot || 0), s = Math.sin(v.rot || 0);
+    const rx = match.x * c - match.y * s, ry = match.x * s + match.y * c;
+    animateCamera({ tx: w / 2 - rx * v.scale, ty: h / 2 - ry * v.scale });
     setSelected(match.id);
-  }, [search]);
+  }, [search, animateCamera]);
 
   // ── The simulation + render loop (requestAnimationFrame) ──────────────────
   useEffect(() => {
@@ -383,6 +457,7 @@ export default function GraphCanvas() {
       ctx.save();
       ctx.translate(v.tx, v.ty);
       ctx.scale(v.scale, v.scale);
+      ctx.rotate(v.rot || 0);
 
       const selId = selectedRef.current;
       const selAdj = selId != null ? s.adj.get(selId) : null;
@@ -548,9 +623,9 @@ export default function GraphCanvas() {
     const v = view.current;
     const factor = e.deltaY > 0 ? 0.9 : 1.1;
     const ns = Math.max(0.15, Math.min(4, v.scale * factor));
-    // Zoom anchored at cursor.
+    // Zoom anchored at cursor (in rotated-screen space, so rotation is preserved).
     const wx = (sx - v.tx) / v.scale, wy = (sy - v.ty) / v.scale;
-    view.current = { scale: ns, tx: sx - wx * ns, ty: sy - wy * ns };
+    view.current = { ...v, scale: ns, tx: sx - wx * ns, ty: sy - wy * ns };
   };
 
   const selDegree = selected != null ? (sim.current.degree.get(selected) || 0) : 0;
@@ -560,7 +635,7 @@ export default function GraphCanvas() {
   return (
     <PageShell
       title="GRAPH CANVAS"
-      subtitle="GOTHAM GRAPH — FORCE LAYOUT · EXPAND/COLLAPSE · SELECTION HISTOGRAM"
+      subtitle="GOTHAM GRAPH — FORCE LAYOUT · GPU COLOUR-PICK · SLERP CAMERA · EXPAND/COLLAPSE"
       accent={ACCENT}
       actions={<Btn accent={ACCENT} onClick={loadSubgraph} disabled={subAsync.loading}>{subAsync.loading ? "…" : "↻ RELOAD"}</Btn>}
     >
@@ -575,6 +650,8 @@ export default function GraphCanvas() {
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
         <Btn accent={ACCENT} onClick={loadSubgraph} disabled={subAsync.loading}>{subAsync.loading ? "…" : "↻ RELOAD"}</Btn>
         <Btn accent={C.blue} onClick={fitToView}>⤢ FIT</Btn>
+        <Btn accent={C.purple} onClick={() => rotateView(-Math.PI / 6)} title="rotate camera (slerp)">⟲</Btn>
+        <Btn accent={C.purple} onClick={() => rotateView(Math.PI / 6)} title="rotate camera (slerp)">⟳</Btn>
         <Btn accent={showLabels ? C.gold : C.text} onClick={() => setShowLabels((s) => !s)}>
           {showLabels ? "LABELS ON" : "LABELS OFF"}
         </Btn>
@@ -628,6 +705,7 @@ export default function GraphCanvas() {
               <span>◯ size = degree</span>
               <span style={{ color: C.gold }}>◌ ring = pinned</span>
               <span>━ thickness = strength</span>
+              <span style={{ color: C.purple }}>⛭ GPU colour-pick · slerp camera</span>
               {types.slice(0, 8).map((t) => (
                 <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
                   <span style={{ width: 8, height: 8, borderRadius: "50%", background: colorForType(t) }} /> {t}
