@@ -32,8 +32,10 @@ function App() {
             <FirstRunSetup />
             <Suspense fallback={<Loading />}>
               <Routes>
-                {/* Root: two-tile destination launcher (APEX vs Underworld). */}
-                <Route path="/" element={<Launcher />} />
+                {/* Root drops straight into APEX (the Setup/Install landing) — no
+                    chooser hop. The portal chooser stays at /portal. */}
+                <Route path="/" element={<Navigate to="/apex" replace />} />
+                <Route path="/portal" element={<Launcher />} />
 
                 {/* APEX HUD — AppLayout + all feature pages live under /apex. */}
                 <Route
