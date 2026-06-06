@@ -22,3 +22,10 @@ cloudscraper>=1.2
 # even though no browser is launched. Browser binaries are optional (setup.sh, for
 # the stealth/JS fetchers only).
 playwright>=1.40
+# OCR (light path): pytesseract drives the system `tesseract` binary; PyMuPDF reads a
+# PDF's text layer; pdf2image rasterises scanned pages. The heavy GPU OCR engines
+# (easyocr/paddleocr) are installed by setup.sh, not here, to keep CI/image lean.
+pytesseract>=0.3.10
+PyMuPDF>=1.24
+pdf2image>=1.17
+Pillow>=10.0
