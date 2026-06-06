@@ -1,0 +1,23 @@
+runtime:
+  environment: dev_reference
+  policy_mode: enforcing
+  audit_mode: hash_chain
+  source_terms_required: true
+  fail_closed: true
+
+stores:
+  raw_object_storage: object_storage/raw
+  curated_storage: iceberg/silver
+  audit_store: runtime_core/audit_service/audit_events.jsonl
+  action_store: runtime_core/action_engine/action_executions.jsonl
+
+connectors:
+  max_batch_records: 1000
+  retry_count: 3
+  timeout_seconds: 30
+  require_terms_approval: true
+
+quality:
+  minimum_source_authority_score: 0.50
+  maximum_record_age_hours_default: 24
+  require_provenance: true

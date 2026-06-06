@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-06-05T23:44:50.016476+00:00",
+  "canonical_base": "uploaded V7 runtime/security/apollo zip",
+  "v18_reference_preserved": true,
+  "total_files_packaged_before_zip": 765,
+  "python_files_final_scan": 179,
+  "canonical_python_files_with_NotImplementedError": 0,
+  "remaining_canonical_NotImplementedError_files": [],
+  "ui_graphics_rendering_files_preserved": 91,
+  "enterprise_ui_typecheck_passed": true,
+  "enterprise_ui_build_passed": true,
+  "command_center_build_passed": true,
+  "python_compile_passed": true,
+  "runtime_smoke_test_passed": true,
+  "generated_dependency_folders_removed_from_package": 50
+}

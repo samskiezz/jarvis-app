@@ -9,18 +9,10 @@
     "vite": "latest",
     "typescript": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "three": "latest",
-    "@react-three/fiber": "latest",
-    "@react-three/drei": "latest",
-    "lucide-react": "latest",
-    "framer-motion": "latest",
-    "zustand": "latest",
-    "d3": "latest",
-    "deck.gl": "latest",
-    "mapbox-gl": "latest",
-    "recharts": "latest",
-    "ag-grid-community": "latest"
+    "react-dom": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  }
 }

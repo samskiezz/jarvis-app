@@ -1,17 +1,18 @@
-"""
-rss_atom_connector/feed_reader.py
-Production template. Implement connector-specific logic here.
-"""
-from dataclasses import dataclass
-from typing import Any, Dict
+from __future__ import annotations
+from runtime_core.world_os_runtime.connectors import generic_connector, to_envelope
 
-@dataclass
-class ConnectorResult:
-    ok: bool
-    raw_uri: str | None
-    provenance: Dict[str, Any]
-    errors: list[str]
+def _execute_connector(*args, **kwargs):
+    source_id = kwargs.pop("source_id", "rss_atom")
+    url = kwargs.pop("url", kwargs.pop("endpoint", kwargs.pop("base_url", "")))
+    return generic_connector("rss_atom", source_id=source_id, url=url, **kwargs)
 
-def run(config: Dict[str, Any]) -> ConnectorResult:
-    """Execute connector after source terms, auth and rate-limit validation."""
-    raise NotImplementedError("Implement rss_atom_connector production connector.")
+def run(*args, **kwargs):
+    return _execute_connector(*args, **kwargs)
+
+def parse(*args, **kwargs):
+    return to_envelope(_execute_connector(*args, **kwargs), record_type="rss_atom_connector_result")
+
+def validate(*args, **kwargs):
+    result = _execute_connector(*args, **kwargs)
+    return {"valid": isinstance(result, dict), "ok": result.get("ok"), "blocked": result.get("blocked"), "reason": result.get("reason")}
+

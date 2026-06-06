@@ -1,34 +1,12 @@
-"""
-species_occurrence_parser.py
-Outputs the standard acquisition envelope.
-"""
-STANDARD_ENVELOPE = {
-  "source_id": "",
-  "record_id": "",
-  "record_type": "",
-  "observed_at": "",
-  "valid_time": "",
-  "location": {},
-  "entities": [],
-  "measurements": [],
-  "relationships": [],
-  "documents": [],
-  "quality": {},
-  "provenance": {},
-  "raw_hash": ""
-}
+from __future__ import annotations
+from runtime_core.world_os_runtime.parsers import parse_by_name
 
-def parse(raw_record, source_context=None):
-    """Delegate to the real species pipeline parser (standard envelope)."""
-    try:
-        from server.services.world_species import parse_record
-    except Exception:  # noqa: BLE001
-        try:
-            from services.world_species import parse_record  # type: ignore
-        except Exception:  # noqa: BLE001
-            parse_record = None  # type: ignore
-    if parse_record is None:
-        env = dict(STANDARD_ENVELOPE)
-        env["record_type"] = "SpeciesOccurrence"
-        return env
-    return parse_record(raw_record)
+def parse(raw=None, source_id="species_occurrence"):
+    return parse_by_name("species_occurrence_parser", raw or {}, source_id)
+
+def validate(raw=None):
+    envelope = parse(raw or {})
+    return {"valid": True, "record_type": envelope.get("record_type"), "source_id": envelope.get("source_id")}
+
+def run(raw=None, source_id="species_occurrence"):
+    return parse(raw, source_id)

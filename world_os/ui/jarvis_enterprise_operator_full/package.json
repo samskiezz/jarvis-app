@@ -15,15 +15,10 @@
     "typescript": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "@blueprintjs/core": "latest",
-    "@blueprintjs/icons": "latest",
-    "@blueprintjs/table": "latest",
-    "zustand": "latest",
-    "yjs": "latest",
-    "automerge": "latest",
-    "protobufjs": "latest",
-    "lucide-react": "latest",
-    "d3": "latest"
+    "zustand": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  }
 }

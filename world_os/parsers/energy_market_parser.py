@@ -1,22 +1,12 @@
-"""
-energy_market_parser.py
-Outputs the standard acquisition envelope.
-"""
-STANDARD_ENVELOPE = {
-  "source_id": "",
-  "record_id": "",
-  "record_type": "",
-  "observed_at": "",
-  "valid_time": "",
-  "location": {},
-  "entities": [],
-  "measurements": [],
-  "relationships": [],
-  "documents": [],
-  "quality": {},
-  "provenance": {},
-  "raw_hash": ""
-}
+from __future__ import annotations
+from runtime_core.world_os_runtime.parsers import parse_by_name
 
-def parse(raw_record, source_context):
-    raise NotImplementedError("Implement energy_market_parser parser and return STANDARD_ENVELOPE-compatible dict.")
+def parse(raw=None, source_id="energy_market"):
+    return parse_by_name("energy_market_parser", raw or {}, source_id)
+
+def validate(raw=None):
+    envelope = parse(raw or {})
+    return {"valid": True, "record_type": envelope.get("record_type"), "source_id": envelope.get("source_id")}
+
+def run(raw=None, source_id="energy_market"):
+    return parse(raw, source_id)

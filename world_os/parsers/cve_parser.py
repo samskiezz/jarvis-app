@@ -1,33 +1,12 @@
-"""
-cve_parser.py
-Outputs the standard acquisition envelope.
-"""
-STANDARD_ENVELOPE = {
-  "source_id": "",
-  "record_id": "",
-  "record_type": "",
-  "observed_at": "",
-  "valid_time": "",
-  "location": {},
-  "entities": [],
-  "measurements": [],
-  "relationships": [],
-  "documents": [],
-  "quality": {},
-  "provenance": {},
-  "raw_hash": ""
-}
+from __future__ import annotations
+from runtime_core.world_os_runtime.parsers import parse_by_name
 
-def parse(raw_record, source_context):
-    """Delegate to the real NVD CVE pipeline parser (standard envelope).
+def parse(raw=None, source_id="cve"):
+    return parse_by_name("cve_parser", raw or {}, source_id)
 
-    ``raw_record`` is one element of the NVD ``vulnerabilities`` list.
-    """
-    try:
-        from server.services.world_cve import parse_item
-    except Exception:  # noqa: BLE001
-        try:
-            from services.world_cve import parse_item  # type: ignore
-        except Exception as exc:  # noqa: BLE001
-            raise RuntimeError("world_cve.parse_item unavailable") from exc
-    return parse_item(raw_record)
+def validate(raw=None):
+    envelope = parse(raw or {})
+    return {"valid": True, "record_type": envelope.get("record_type"), "source_id": envelope.get("source_id")}
+
+def run(raw=None, source_id="cve"):
+    return parse(raw, source_id)

@@ -1,7 +1,7 @@
 
 import React, {useEffect, useMemo, useState} from 'react';
 import {createRoot} from 'react-dom/client';
-import './styles/operator.css';
+import './styles/production-theme.css';
 import manifest from './data/architecture.manifest.json';
 import graph from './data/visual_graph.sample.json';
 import type {ArchitectureManifest, PlaneName, VisualNode, VisualEdge} from './contracts/types';
