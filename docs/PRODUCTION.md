@@ -12,9 +12,21 @@ runtime pieces that make the bot a real agent rather than a shell.
 ```
 
 `boot.sh` is idempotent and plug-and-play. It: starts/locates the LLM, starts the
-FastAPI backend, runs the governed data load (92k endpoints / 10k subjects / 55k
-edges / 30k OCR / 30k benchmarks → ontology + ingestion jobs behind the legal
-gate), and starts the Vite UI. Re-running heals a partial boot.
+FastAPI backend, runs the governed data load AND **projects the corpus into the
+ontology graph**, then starts the Vite UI. Re-running heals a partial boot.
+
+The projection (`services/jarvis_corpus_projection.py`, run by `/system/startup`)
+turns the acquisition corpus into the Gotham graph so the maths actually maths:
+
+| | loaded (Foundry) | projected into Gotham |
+| --- | --- | --- |
+| domain subjects | 10,000 | → **10,000 neurons** (DomainSubject objects) |
+| endpoints | 92,000 | → 92,000 DataSource objects (+ SERVES links) |
+| OCR docs | 30,000 | → 30,000 Document objects (+ DESCRIBES links) |
+| typed flow edges | 55,000 | → flow links |
+| | | **≈132k ontology objects · 177k links** |
+
+Idempotent (`INSERT OR IGNORE` on the PK), so re-running never duplicates.
 
 Env knobs (all optional): `OLLAMA_HOST`, `OLLAMA_MODEL`, `KIMI_API_KEY`,
 `KIMI_BASE_URL`, `BRAIN_DB`, `API_HOST`, `API_PORT`, `UI_PORT`, `NO_UI=1`,

@@ -30,6 +30,10 @@ try:
 except Exception:  # noqa: BLE001
     wp = None  # type: ignore
 try:
+    from . import jarvis_corpus_projection as proj
+except Exception:  # noqa: BLE001
+    proj = None  # type: ignore
+try:
     from . import world_dispatch as wd
 except Exception:  # noqa: BLE001
     wd = None  # type: ignore
@@ -117,6 +121,14 @@ def startup() -> dict:
             steps["foundry_secondary"] = wos.load_secondary()
         except Exception:  # noqa: BLE001
             steps["foundry_points"] = "error"
+    # Project the loaded corpus into the ONTOLOGY graph so Gotham reflects the real
+    # data (subjects->neurons, endpoints->sources, OCR->documents, flow edges->links)
+    # instead of only the demo seed. Idempotent.
+    if proj is not None:
+        try:
+            steps["gotham_projection"] = proj.project()
+        except Exception:  # noqa: BLE001
+            steps["gotham_projection"] = "error"
     steps["ingestion_jobs"] = register_jobs()
     return {"booted": True, "steps": steps, "status": status()}
 
@@ -148,9 +160,16 @@ def status() -> dict:
             c.close()
     except Exception:  # noqa: BLE001
         pass
+    # Gotham reflects the PROJECTED corpus graph: subjects are neurons, plus the
+    # endpoint/document objects and their links. Falls back to the search index
+    # total only if the projection service is unavailable.
+    pc = proj.counts() if proj is not None else {}
     gotham = {"ontology_objects": _count("ont_object"),
               "object_types": _count("ont_object_type"),
-              "neurons": (sb.index_catalog().get("total", 0) if sb else 0)}
+              "neurons": pc.get("neurons") or (sb.index_catalog().get("total", 0) if sb else 0),
+              "sources": pc.get("sources", 0),
+              "documents": pc.get("documents", 0),
+              "links": pc.get("ont_links", _count("ont_link"))}
     apollo_st = {"environments": _count("apollo_env"), "releases": _count("apollo_release")}
     aip = {"llm_backend": (lr.backend() if lr else None)}
     security = {"subjects": _count("jpol_subject"), "labels": _count("jpol_label")}

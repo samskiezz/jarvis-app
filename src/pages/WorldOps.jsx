@@ -65,11 +65,13 @@ export default function WorldOps() {
       </PanelCard>
 
       <Grid min={300} gap={12}>
-        <PanelCard title="Gotham — ontology" accent={C.purple || C.neon}>
-          <Grid min={130} gap={10}>
+        <PanelCard title="Gotham — ontology graph (projected from corpus)" accent={C.purple || C.neon}>
+          <Grid min={115} gap={10}>
             <StatTile label="Objects" value={(g.ontology_objects || 0).toLocaleString()} accent={C.purple || C.neon} />
-            <StatTile label="Object types" value={g.object_types || 0} accent={C.purple || C.neon} />
-            <StatTile label="Neurons" value={(g.neurons || 0).toLocaleString()} accent={C.purple || C.neon} />
+            <StatTile label="Neurons" value={(g.neurons || 0).toLocaleString()} accent={C.purple || C.neon} sub="subjects" />
+            <StatTile label="Sources" value={(g.sources || 0).toLocaleString()} accent={C.purple || C.neon} />
+            <StatTile label="Documents" value={(g.documents || 0).toLocaleString()} accent={C.purple || C.neon} />
+            <StatTile label="Links" value={(g.links || 0).toLocaleString()} accent={C.purple || C.neon} />
           </Grid>
         </PanelCard>
         <PanelCard title="Ingestion jobs (legal gate)" accent={C.gold || C.neon}>
