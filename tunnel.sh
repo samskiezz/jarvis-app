@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-# tunnel.sh — serve the WHOLE app (UI + API) on ONE port so it's reachable
-# through a single SSH tunnel.
+# tunnel.sh — serve the WHOLE app (UI + API) on ONE port, bound to 0.0.0.0.
 #
-# This is the match for:
-#     ssh -p 41154 root@211.72.13.201 -L 8080:localhost:8080
-#
-# On the server (the vast.ai box) run:
+# Run it on the server (vast.ai or Hostinger VPS):
 #     ./tunnel.sh
 # It builds the UI and runs the backend on 0.0.0.0:8080, with the backend
-# serving the built UI on that SAME port (single-origin). Then on your laptop:
-#     ssh -p 41154 root@211.72.13.201 -L 8080:localhost:8080
-#     # …leave that open, then open in your browser:
-#     http://localhost:8080/
+# serving the built UI on that SAME port. Then just open the server's public
+# IP in any browser:
+#     http://<server-ip>:8080/
+# (one port to open in the firewall — no SSH tunnel needed).
 #
 # Knobs: PORT (8080), NO_AUTOBUILD=1, AUTOBUILD_BATCHES, OLLAMA_HOST=http://gpu:11434
 set -uo pipefail
@@ -58,10 +54,11 @@ else
       >"$LOG/autobuild.json" 2>&1 || true ) &
 fi
 
+IP="$(hostname -I 2>/dev/null | awk '{print $1}')"; [ -z "$IP" ] && IP="<server-ip>"
 echo
 say "════════════════════════════════════════════════════════════════"
-say "  UP on a SINGLE port :$PORT  (UI + API together)."
-say "  On your laptop, open the tunnel and keep it running:"
-say "      ssh -p 41154 root@211.72.13.201 -L 8080:localhost:$PORT"
-say "  Then browse →  http://localhost:8080/"
+say "  UP on a SINGLE port :$PORT  (UI + API together, bound to 0.0.0.0)."
+say "  Open it directly in any browser:"
+say "      http://$IP:$PORT/"
+say "  (make sure port $PORT is open in the vast.ai / Hostinger firewall)"
 say "════════════════════════════════════════════════════════════════"
