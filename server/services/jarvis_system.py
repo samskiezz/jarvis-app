@@ -160,6 +160,12 @@ def status() -> dict:
     foundry = {"endpoints": _count("world_endpoint"), "subjects": _count("world_subject"),
                "flow_edges": _count("world_edge"), "ocr_candidates": _count("world_ocr"),
                "benchmarks": _count("world_benchmark")}
+    # Growing data: documents actually fetched/ingested + topic edges they created.
+    try:
+        from . import jarvis_grow as _grow
+        foundry.update({k: v for k, v in _grow.foundry_growth().items()})
+    except Exception:  # noqa: BLE001
+        pass
     jobs = {"total": _count("world_ingestion_job"),
             "cleared": 0, "review_required": 0}
     try:

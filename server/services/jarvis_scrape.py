@@ -44,6 +44,10 @@ try:
 except Exception:  # noqa: BLE001
     _docstore = None  # type: ignore
 try:
+    from . import jarvis_grow as _grow
+except Exception:  # noqa: BLE001
+    _grow = None  # type: ignore
+try:
     from .second_brain import _db_path
 except Exception:  # noqa: BLE001
     def _db_path() -> str:  # type: ignore
@@ -141,15 +145,25 @@ def doc_id(url: str) -> str:
 
 
 def all_targets(*, skip_fetched: bool = True) -> list[tuple[str, str, str]]:
-    """Every DISTINCT allowed (url, source_name, subject_id) in the catalogue.
-    The concurrent crawlers consume this. Never raises."""
+    """Every DISTINCT allowed (url, source_name, subject_id) to fetch — from BOTH
+    the endpoint catalogue AND the OCR document candidates (real doc repositories:
+    GovInfo, World Bank WDS, arXiv, Zenodo, Europeana, Trove…). The concurrent
+    crawlers consume this. Never raises."""
     try:
         c = _conn()
         try:
             rows = c.execute(
-                "SELECT official_url, MIN(source_name) sn, MIN(subject_id) sid "
+                "SELECT official_url url, MIN(source_name) sn, MIN(subject_id) sid "
                 "FROM world_endpoint WHERE official_url LIKE 'http%' GROUP BY official_url"
             ).fetchall()
+            ocr = []
+            try:  # OCR document candidate URLs are documents to fetch too (Foundry)
+                ocr = c.execute(
+                    "SELECT source_url url, MIN(source_name) sn, MIN(subject_id) sid "
+                    "FROM world_ocr WHERE source_url LIKE 'http%' GROUP BY source_url"
+                ).fetchall()
+            except sqlite3.Error:
+                ocr = []
             done = set()
             if skip_fetched:
                 done = {r[0] for r in c.execute(
@@ -158,10 +172,11 @@ def all_targets(*, skip_fetched: bool = True) -> list[tuple[str, str, str]]:
             c.close()
     except sqlite3.Error:
         return []
-    out = []
-    for r in rows:
-        u = r["official_url"]
-        if u and _allowed(u) and doc_id(u) not in done:
+    out, seen = [], set()
+    for r in list(rows) + list(ocr):
+        u = r["url"]
+        if u and u not in seen and _allowed(u) and doc_id(u) not in done:
+            seen.add(u)
             out.append((u, r["sn"] or _host(u), r["sid"] or ""))
     return out
 
@@ -209,6 +224,13 @@ def store_document(url: str, source_name: str, subject_id: str, *,
                                 source_name=source_name, host=_host(url),
                                 http_status=status, subject_id=subject_id,
                                 raw_bytes=len(body), content_sha256=sha)
+            except Exception:  # noqa: BLE001
+                pass
+        # GOTHAM growth: link this document to the Topics its content mentions, so
+        # the graph grows with real semantic edges (not orphan nodes).
+        if _grow is not None:
+            try:
+                _grow.enrich_document(oid, title, text)
             except Exception:  # noqa: BLE001
                 pass
         return oid
@@ -406,6 +428,12 @@ def document_finder(*, seeds_limit: int = 8, depth: int = 2, per_seed_max: int =
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": f"engines unavailable: {e}"}
 
+    if _grow is not None:
+        try:
+            _grow.ensure_topics()  # GOTHAM: the 31 Topic nodes the docs link into
+        except Exception:  # noqa: BLE001
+            pass
+
     seeds = _pending_seeds(seeds_limit)
     if not seeds:
         return {"ok": True, "seeds": 0, "discovered": 0, "fetched": 0,
@@ -441,9 +469,18 @@ def document_finder(*, seeds_limit: int = 8, depth: int = 2, per_seed_max: int =
                          "fetched": f.get("fetched", 0)})
         _mark_seed(seed_url, len(targets), f.get("fetched", 0))
 
+    # APOLLO growth: record this sweep as a real data delivery (artifact + release).
+    delivery = None
+    if _grow is not None and total_fetched:
+        try:
+            delivery = _grow.record_acquisition_run({"fetched": total_fetched})
+        except Exception:  # noqa: BLE001
+            delivery = None
+
     return {"ok": True, "seeds": len(seeds), "discovered": total_discovered,
             "fetched": total_fetched, "total_chars": total_chars,
-            "per_seed": per_seed, "samples": samples, "progress": seeds_progress()}
+            "per_seed": per_seed, "samples": samples, "delivery": delivery,
+            "progress": seeds_progress()}
 
 
 def cloudscraper_batch(limit: int = 0, *, workers: int = 12, timeout: int = 20) -> dict:
