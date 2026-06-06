@@ -40,6 +40,10 @@ try:
 except Exception:  # noqa: BLE001
     jos = None  # type: ignore
 try:
+    from . import document_store as _docstore
+except Exception:  # noqa: BLE001
+    _docstore = None  # type: ignore
+try:
     from .second_brain import _db_path
 except Exception:  # noqa: BLE001
     def _db_path() -> str:  # type: ignore
@@ -195,6 +199,16 @@ def store_document(url: str, source_name: str, subject_id: str, *,
             try:
                 jos.audit("scrape.fetch", actor="jarvis-scrape", target=url,
                           meta={"chars": len(text), "sha": sha[:12], "status": status})
+            except Exception:  # noqa: BLE001
+                pass
+        # Persist the FULL extracted text to the durable, searchable document store
+        # (the graph node only keeps a short excerpt). Best-effort.
+        if _docstore is not None:
+            try:
+                _docstore.store(oid, url=url, full_text=text, title=title,
+                                source_name=source_name, host=_host(url),
+                                http_status=status, subject_id=subject_id,
+                                raw_bytes=len(body), content_sha256=sha)
             except Exception:  # noqa: BLE001
                 pass
         return oid

@@ -85,6 +85,9 @@ for i in $(seq 1 40); do curl -s -m 2 "http://$API_HOST:$API_PORT/" >/dev/null 2
 [ "$up" = 1 ] && say "    backend up ✓" || { warn "    backend failed to start (see $LOG/uvicorn.log)"; exit 1; }
 
 # ── 3/5 load all data points + register governed jobs ─────────────────────────
+# Restore the scraped document store from its committed snapshot so previously
+# downloaded content is available again after an ephemeral container reset.
+python -c "from server.services import document_store as d; print('    document store:', d.restore())" 2>/dev/null || true
 say "3/5 load all data points + register ingestion jobs…"
 KEY="$(python -c 'from server.config import API_KEY; print(API_KEY)' 2>/dev/null)"
 curl -s -X POST -H "Authorization: Bearer $KEY" \

@@ -57,6 +57,11 @@ try:  # real acquisition-corpus search (92k endpoints / 10k subjects / OCR / ben
 except Exception:  # noqa: BLE001 - defensive
     _world_search = None  # type: ignore[assignment]
 
+try:  # full-text search over the scraped document store (real fetched content)
+    from . import document_store as _docstore
+except Exception:  # noqa: BLE001 - defensive
+    _docstore = None  # type: ignore[assignment]
+
 
 # ── DB location ────────────────────────────────────────────────────────────────
 _DEFAULT_DB = os.path.join(
@@ -287,6 +292,16 @@ def list_tools() -> list[dict]:
                                 "real sources with provenance. Prefer this for data-source questions."),
             }
         )
+        tools.append(
+            {
+                "name": "docs.search",
+                "kind": "read",
+                "params_schema": {"query": "str", "k": "int?"},
+                "description": ("Full-text search over the SCRAPED document store — the actual "
+                                "page content the platform downloaded. Use to quote/cite real "
+                                "fetched documents."),
+            }
+        )
         tools.extend(_science_tools())
         tools.extend(_ontology_tools())
     except Exception:  # noqa: BLE001 - catalog must never raise
@@ -334,6 +349,13 @@ def call_tool(name: str, params: Optional[dict] = None, actor: Optional[str] = N
                 kinds = params.get("kinds") if isinstance(params.get("kinds"), list) else None
                 result = _world_search.search(
                     str(params.get("query") or ""), int(params.get("k") or 8), kinds)
+                out = {"ok": True, "result": result}
+
+        elif name == "docs.search":
+            if _docstore is None:
+                out = {"ok": False, "error": "document store unavailable"}
+            else:
+                result = _docstore.search(str(params.get("query") or ""), int(params.get("k") or 8))
                 out = {"ok": True, "result": result}
 
         elif name == "ontology.query":

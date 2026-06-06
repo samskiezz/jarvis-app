@@ -82,9 +82,33 @@ async def find_documents(req: FindRequest, _t: str = Depends(require_bearer)):
                                per_seed_max=req.per_seed_max, workers=req.workers)
 
 
+@router.get("/document/{doc_id}")
+async def get_document(doc_id: str, _t: str | None = Depends(optional_bearer)):
+    """Full stored content + provenance of a fetched document."""
+    from ..services import document_store as ds
+    d = ds.get(doc_id)
+    return d or {"error": "not found", "id": doc_id}
+
+
+@router.get("/search")
+async def search_documents(q: str, k: int = 10, _t: str | None = Depends(optional_bearer)):
+    """Full-text (FTS5) search over everything that's been scraped + stored."""
+    from ..services import document_store as ds
+    return {"query": q, "results": ds.search(q, k)}
+
+
+@router.post("/snapshot")
+async def snapshot(_t: str = Depends(require_bearer)):
+    """Gzip the document store to documents.db.gz so it survives an ephemeral container."""
+    from ..services import document_store as ds
+    return ds.snapshot()
+
+
 @router.get("/status")
 async def scrape_status(_t: str | None = Depends(optional_bearer)):
+    from ..services import document_store as ds
     return {"scraped_documents": scr.scraped_count(),
+            "stored_full_text": ds.stats(),
             "pending_targets": len(scr.all_targets(skip_fetched=True)),
             "seed_progress": scr.seeds_progress(),
             "best_engine": eng.best_content_engine()}
