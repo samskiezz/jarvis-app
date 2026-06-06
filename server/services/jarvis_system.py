@@ -195,6 +195,8 @@ def status() -> dict:
               "neurons": pc.get("neurons") or (sb.index_catalog().get("total", 0) if sb else 0),
               "sources": pc.get("sources", 0),
               "documents": pc.get("documents", 0),
+              "topics": pc.get("topics", 0),
+              "correlations": pc.get("correlations", 0),  # cross-domain influence edges
               "scraped_live": scraped,  # REAL fetched content (not catalogue rows)
               "links": pc.get("ont_links", _count("ont_link"))}
     apollo_st = {"environments": _count("apollo_env"), "releases": _count("apollo_release")}

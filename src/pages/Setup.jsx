@@ -99,11 +99,17 @@ export default function Setup() {
       </PanelCard>
 
       {/* ── live data ───────────────────────────────────────────────────── */}
-      <PanelCard title="2 · DATA" accent={C.neon}>
-        <Grid min={140} gap={10}>
+      <PanelCard title="2 · DATA — ONE CROSS-CORRELATED GRAPH" accent={C.neon}>
+        <div style={{ color: C.textB, fontSize: 11, marginBottom: 8 }}>
+          Foundry endpoints → Gotham objects → neurons, all tied together by cross-domain
+          correlation edges — one shared graph every plane reads from.
+        </div>
+        <Grid min={130} gap={10}>
           <StatTile label="Endpoints" value={(f.endpoints || 0).toLocaleString()} accent={C.neon} sub="Foundry" />
           <StatTile label="Objects" value={(g.ontology_objects || 0).toLocaleString()} accent={C.neon} sub="Gotham" />
           <StatTile label="Neurons" value={(g.neurons || 0).toLocaleString()} accent={C.neon} />
+          <StatTile label="Graph links" value={(g.links || 0).toLocaleString()} accent={C.neon} />
+          <StatTile label="Correlations" value={(g.correlations || 0).toLocaleString()} accent="#00e0c8" sub="cross-domain" />
           <StatTile label="Scraped docs" value={(g.scraped_live || 0).toLocaleString()} accent={C.neon} />
         </Grid>
       </PanelCard>
