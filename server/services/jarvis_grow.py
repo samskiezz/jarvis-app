@@ -84,6 +84,16 @@ def ensure_topics() -> int:
     try:
         c = _conn()
         try:
+            # On a fresh DB the ont_* tables may not exist yet (e.g. called before the
+            # corpus projection); create them so this never silently returns 0.
+            c.executescript(
+                "CREATE TABLE IF NOT EXISTS ont_object_type ("
+                "  name TEXT PRIMARY KEY, schema TEXT, states TEXT, initial TEXT, ts INTEGER);"
+                "CREATE TABLE IF NOT EXISTS ont_object ("
+                "  id TEXT PRIMARY KEY, type TEXT, props TEXT, state TEXT,"
+                "  created_ts INTEGER, updated_ts INTEGER);"
+                "CREATE TABLE IF NOT EXISTS ont_link ("
+                "  id TEXT PRIMARY KEY, type TEXT, from_id TEXT, to_id TEXT, ts INTEGER);")
             c.execute("INSERT OR IGNORE INTO ont_object_type (name, schema, states, initial, ts) "
                       "VALUES ('Topic','{}','[\"active\"]','active',?)", (now,))
             import json
