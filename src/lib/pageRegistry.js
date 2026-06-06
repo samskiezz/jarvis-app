@@ -52,7 +52,7 @@ export const GROUPS = [
  */
 export const PAGES = [
   // ── INTEL ──────────────────────────────────────────────────────────────
-  { name: "JarvisTerminal", label: "Jarvis Terminal", icon: "◆", group: "intel", home: true,
+  { name: "JarvisTerminal", label: "Jarvis Terminal", icon: "◆", group: "intel",
     component: P(() => import("@/pages/JarvisTerminal")) },
   { name: "GlobalIntel", label: "Global Intel", icon: "🌐", group: "gotham",
     component: P(() => import("@/pages/GlobalIntel")) },
@@ -79,7 +79,7 @@ export const PAGES = [
   { name: "PlaneGraph", label: "Plane Graph", icon: "✶", group: "jarvis",
     aliases: ["plane","constellation","operator","radial","graph","foundry","gotham","apollo","aip"],
     component: P(() => import("@/pages/PlaneGraph")) },
-  { name: "JarvisCore", label: "Jarvis Core", icon: "◉", group: "jarvis",
+  { name: "JarvisCore", label: "Jarvis Core", icon: "◉", group: "jarvis", home: true,
     aliases: ["holo","hologram","webgl","3d","arc reactor","core","iron man"],
     component: P(() => import("@/pages/JarvisCore")) },
   { name: "AutoConsole", label: "Auto Console", icon: "⊞", group: "jarvis",
