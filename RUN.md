@@ -48,9 +48,27 @@ curl -XPOST localhost:8000/v1/jarvis/scrape/find -d '{"seeds_limit":6,"depth":2}
 ```
 Each sweep grows Foundry (fetched docs), Gotham (Topic edges) and Apollo (delivery).
 
+## Auto-sync to GitHub (self-updating repo)
+
+When enabled, the platform commits + pushes its own new artifacts (scraped-content
+snapshot, generated GLB models, manifests) to GitHub after each autobuild — so the
+repo self-updates. Off by default. To enable on your server (one-time):
+
+```bash
+# 1) authenticate the remote with a GitHub token (so push works headless)
+git remote set-url origin https://<GITHUB_TOKEN>@github.com/samskiezz/jarvis-app.git
+# 2) turn it on
+export GIT_AUTOSYNC=1
+./boot.sh
+```
+Manual trigger / status: `POST /v1/jarvis/system/sync` · `GET /v1/jarvis/system/sync/status`
+(the status endpoint redacts the token). Only the artifact paths are staged — never
+your whole working tree.
+
 ## Config knobs
 
 `OLLAMA_HOST`, `OLLAMA_MODEL`, `KIMI_API_KEY`, `BRAIN_DB`, `API_HOST`, `API_PORT`,
-`UI_PORT`, `RECON_ALLOWLIST` (your own hosts for ffuf/kiterunner), `NO_UI=1`, `NO_LLM=1`.
+`UI_PORT`, `RECON_ALLOWLIST` (your own hosts for ffuf/kiterunner), `NO_UI=1`, `NO_LLM=1`,
+`GIT_AUTOSYNC=1` (push new data to GitHub), `AUTOBUILD_BATCHES`, `NO_AUTOBUILD=1`.
 
 See **docs/PRODUCTION.md** for the full architecture.

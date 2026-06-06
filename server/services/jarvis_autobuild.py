@@ -127,6 +127,16 @@ def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 
         except Exception:  # noqa: BLE001
             report["steps"]["snapshot"] = {"ok": False}
 
+    # 5b) auto-sync the new artifacts to GitHub (gated by GIT_AUTOSYNC) — the
+    # platform commits + pushes its own fresh data so the repo self-updates.
+    try:
+        from . import jarvis_gitsync as gs
+        if gs.enabled():
+            report["steps"]["gitsync"] = gs.sync(
+                message=f"data(autosync): build +{fetched} docs {time.strftime('%Y-%m-%d %H:%M')}")
+    except Exception:  # noqa: BLE001
+        report["steps"]["gitsync"] = {"ok": False}
+
     # 6) final rollup
     if sysmod is not None:
         try:

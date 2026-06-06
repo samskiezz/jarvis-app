@@ -39,6 +39,18 @@ async def autobuild_status(_t: str | None = Depends(optional_bearer)):
     from ..services import jarvis_autobuild as ab
     return ab.status()
 
+@router.post("/sync")
+async def gitsync(_t: str = Depends(require_bearer)):
+    """Commit + push new artifacts (snapshot, models, manifests) to GitHub. Gated
+    by GIT_AUTOSYNC; set an authenticated remote on the server first."""
+    from ..services import jarvis_gitsync as gs
+    return gs.sync()
+
+@router.get("/sync/status")
+async def gitsync_status(_t: str | None = Depends(optional_bearer)):
+    from ..services import jarvis_gitsync as gs
+    return gs.status()
+
 @router.get("/gate")
 async def gate(_t: str | None = Depends(optional_bearer)):
     return wd.gate_report()
