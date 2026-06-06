@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { COLORS as C } from "@/domain/colors";
 import { getLiveIntel } from "@/api/backendFunctions";
 import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
+import { apiGet } from "@/lib/wave1";
 
 const ACCENT = C.blue;
 
@@ -28,6 +29,8 @@ export default function SystemIntel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [updatedAt, setUpdatedAt] = useState(null);
+  const [platform, setPlatform] = useState(null);   // world_os system status
+  const [llm, setLlm] = useState(null);             // AIP / Llama backend
 
   const load = useCallback(async () => {
     setError(null);
@@ -40,6 +43,9 @@ export default function SystemIntel() {
     } finally {
       setLoading(false);
     }
+    // world_os platform status (Foundry/Gotham/Apollo/AIP/Security) + Llama
+    apiGet("/v1/jarvis/system/status").then(setPlatform).catch(() => {});
+    apiGet("/v1/jarvis/research/status").then(setLlm).catch(() => {});
   }, []);
 
   // Poll every 30s for a live feed-health view.
@@ -101,6 +107,32 @@ export default function SystemIntel() {
               );
             })}
           </div>
+        </DataState>
+      </PanelCard>
+
+      <PanelCard
+        title="WORLD OS · PLATFORM STATUS"
+        accent={C.gold}
+        right={<Badge color={llm?.available ? C.neon : C.text}>AIP/LLAMA: {llm?.backend || "offline"}</Badge>}
+      >
+        <DataState loading={!platform} empty={!platform} emptyLabel="Platform not booted (run boot.sh / system startup).">
+          {platform && (
+            <>
+              <Grid min={150} style={{ marginBottom: 12 }}>
+                {Object.entries(platform.subsystems_up || {}).map(([name, ok]) => (
+                  <StatTile key={name} label={name} value={ok ? "UP" : "DOWN"} accent={ok ? C.neon : C.text} />
+                ))}
+              </Grid>
+              <Grid min={130}>
+                <StatTile label="Endpoints" value={(platform.foundry?.endpoints || 0).toLocaleString()} accent={C.gold} sub="Foundry" />
+                <StatTile label="Subjects" value={(platform.foundry?.subjects || 0).toLocaleString()} accent={C.gold} />
+                <StatTile label="Flow edges" value={(platform.foundry?.flow_edges || 0).toLocaleString()} accent={C.gold} />
+                <StatTile label="Ontology objs" value={(platform.gotham?.ontology_objects || 0).toLocaleString()} accent={C.blue} sub="Gotham" />
+                <StatTile label="Neurons" value={(platform.gotham?.neurons || 0).toLocaleString()} accent={C.blue} />
+                <StatTile label="Jobs cleared" value={(platform.ingestion_jobs?.cleared || 0).toLocaleString()} accent={C.neon} sub={`of ${(platform.ingestion_jobs?.total || 0).toLocaleString()}`} />
+              </Grid>
+            </>
+          )}
         </DataState>
       </PanelCard>
     </PageShell>

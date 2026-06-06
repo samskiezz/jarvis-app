@@ -54,3 +54,6 @@ test: ## Run polyglot test suites (placeholder)
 	@echo ">> WOULD RUN: (cd fleet-agents && go test ./...)  # Go"
 	@echo ">> WOULD RUN: $(PNPM) -r test          # TS mission apps"
 	@$(MAKE) --no-print-directory contracts-validate
+
+up: ## Boot the whole platform (Llama+backend+data+frontend)
+	@bash boot.sh
