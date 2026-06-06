@@ -3,6 +3,10 @@
 .env.*
 !.env.example
 
+# Python virtualenv
+.venv/
+venv/
+
 # Logs
 /logs
 *.log
