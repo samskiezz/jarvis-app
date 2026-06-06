@@ -144,23 +144,35 @@ def _search_bullets(hits: list) -> list[str]:
 def _fallback(message: str, actor: Optional[str], *, preamble: str = "") -> dict:
     """No usable LLM — still useful: grounded search over the message.
 
-    ``preamble`` lets the caller explain WHY we fell back (offline vs. crash) so we
-    don't stack two near-identical apology lines.
+    Grounds over BOTH the real acquisition corpus (92k endpoints / subjects / OCR /
+    benchmarks via corpus.search) AND the ontology, so the answer cites real data
+    rather than the demo objects. ``preamble`` explains WHY we fell back.
     """
-    res = _tools.call_tool("search", {"query": message, "k": 6}, actor=actor)
-    hits = res.get("result") if isinstance(res, dict) else None
+    corpus = _tools.call_tool("corpus.search", {"query": message, "k": 6}, actor=actor)
+    chits = corpus.get("result") if isinstance(corpus, dict) else None
+    onto = _tools.call_tool("search", {"query": message, "k": 4}, actor=actor)
+    ohits = onto.get("result") if isinstance(onto, dict) else None
     if not preamble:
-        preamble = "No language model is reachable, so I ran a grounded search instead."
-    if isinstance(hits, list) and hits:
-        answer = preamble + " Here is what the ontology holds:\n" + "\n".join(_search_bullets(hits))
+        preamble = "No language model is reachable, so I grounded this with a direct search."
+    blocks = []
+    if isinstance(chits, list) and chits:
+        blocks.append("From the acquisition corpus (real sources):\n" + "\n".join(_search_bullets(chits)))
+    if isinstance(ohits, list) and ohits:
+        blocks.append("From the ontology:\n" + "\n".join(_search_bullets(ohits)))
+    if blocks:
+        answer = preamble + "\n\n" + "\n\n".join(blocks)
     else:
-        answer = (preamble + " Grounded search returned nothing for that query. "
+        answer = (preamble + " Search returned nothing for that query. "
                   "Start Ollama (OLLAMA_HOST) or set KIMI_API_KEY to enable full reasoning.")
     return {
-        "answer": answer, "backend": None, "steps": 1, "used_tools": ["search"],
-        "trace": [{"thought": "LLM unavailable — grounded search fallback",
-                   "tool": "search", "params": {"query": message, "k": 6},
-                   "observation": res}],
+        "answer": answer, "backend": None, "steps": 1,
+        "used_tools": ["corpus.search", "search"],
+        "trace": [
+            {"thought": "LLM unavailable — corpus grounding", "tool": "corpus.search",
+             "params": {"query": message, "k": 6}, "observation": corpus},
+            {"thought": "LLM unavailable — ontology grounding", "tool": "search",
+             "params": {"query": message, "k": 4}, "observation": onto},
+        ],
     }
 
 

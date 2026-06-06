@@ -52,6 +52,11 @@ try:  # grounded retrieval (RAG) — best-effort
 except Exception:  # noqa: BLE001 - defensive
     _aip = None  # type: ignore[assignment]
 
+try:  # real acquisition-corpus search (92k endpoints / 10k subjects / OCR / benchmarks)
+    from . import world_search as _world_search
+except Exception:  # noqa: BLE001 - defensive
+    _world_search = None  # type: ignore[assignment]
+
 
 # ── DB location ────────────────────────────────────────────────────────────────
 _DEFAULT_DB = os.path.join(
@@ -271,6 +276,17 @@ def list_tools() -> list[dict]:
                 "description": "Grounded retrieval (RAG) over the ontology.",
             }
         )
+        tools.append(
+            {
+                "name": "corpus.search",
+                "kind": "read",
+                "params_schema": {"query": "str", "k": "int?",
+                                  "kinds": "list?  # endpoint|subject|ocr|benchmark"},
+                "description": ("Keyword search over the REAL acquisition corpus: 92k endpoint "
+                                "candidates, 10k domain subjects, OCR docs and benchmarks. Returns "
+                                "real sources with provenance. Prefer this for data-source questions."),
+            }
+        )
         tools.extend(_science_tools())
         tools.extend(_ontology_tools())
     except Exception:  # noqa: BLE001 - catalog must never raise
@@ -310,6 +326,15 @@ def call_tool(name: str, params: Optional[dict] = None, actor: Optional[str] = N
             else:
                 result = _aip.retrieve(str(params.get("query") or ""), int(params.get("k") or 8))
             out = {"ok": True, "result": result}
+
+        elif name == "corpus.search":
+            if _world_search is None:
+                out = {"ok": False, "error": "corpus search unavailable"}
+            else:
+                kinds = params.get("kinds") if isinstance(params.get("kinds"), list) else None
+                result = _world_search.search(
+                    str(params.get("query") or ""), int(params.get("k") or 8), kinds)
+                out = {"ok": True, "result": result}
 
         elif name == "ontology.query":
             result = _ont.query_objects(

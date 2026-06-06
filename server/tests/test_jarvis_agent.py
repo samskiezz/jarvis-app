@@ -16,8 +16,9 @@ def test_no_backend_falls_back_to_grounded_search(monkeypatch):
     monkeypatch.setattr(agent._llm, "backend", lambda: None)
     out = agent.run_agent("anything at all")
     assert out["backend"] is None
-    assert out["used_tools"] == ["search"]
-    assert out["trace"] and out["trace"][0]["tool"] == "search"
+    # Grounds over the real corpus AND the ontology.
+    assert out["used_tools"] == ["corpus.search", "search"]
+    assert out["trace"] and out["trace"][0]["tool"] == "corpus.search"
     assert isinstance(out["answer"], str) and out["answer"]
 
 
@@ -28,7 +29,7 @@ def test_backend_advertised_but_inference_fails_degrades_honestly(monkeypatch):
     out = agent.run_agent("what is PSG?")
     assert out["backend"] == "ollama"
     # No fabricated narrative — it grounds via search instead.
-    assert "search" in out["used_tools"]
+    assert "corpus.search" in out["used_tools"]
     assert "crash/timeout" in out["answer"] or "grounded" in out["answer"].lower()
 
 
