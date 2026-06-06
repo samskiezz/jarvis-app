@@ -3,6 +3,8 @@ import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from .config import CORS_ORIGINS
 from .routes import admin as admin_routes
@@ -181,9 +183,39 @@ def create_app() -> FastAPI:
     app.include_router(jarvis_system_routes.router)
     app.include_router(jarvis_documents_routes.router)
 
+    # ── single-port mode ──────────────────────────────────────────────────────
+    # When the built UI exists (dist/), serve it from THIS backend on the SAME
+    # port as the API. That means the whole app is reachable through one port —
+    # so an SSH tunnel that forwards a single port (e.g.
+    #   ssh -p 41154 root@<box> -L 8080:localhost:8080
+    # with the backend on :8080) lands you on the full app at
+    # http://localhost:8080 — UI and API are same-origin, no second port needed.
+    here = os.path.dirname(os.path.abspath(__file__))
+    dist = os.environ.get("JARVIS_UI_DIST") or os.path.join(here, "..", "dist")
+    dist = os.path.abspath(dist)
+    index_html = os.path.join(dist, "index.html")
+    has_ui = os.path.isfile(index_html)
+
     @app.get("/")
     async def root():
+        if has_ui:
+            return FileResponse(index_html)
         return {"service": "jarvis-backend", "status": "ok"}
+
+    if has_ui:
+        # static assets (JS/CSS/fonts) and the public/ payload (GLB models, etc.)
+        assets_dir = os.path.join(dist, "assets")
+        if os.path.isdir(assets_dir):
+            app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+        # SPA fallback: any non-API path that isn't a real file returns index.html
+        # so client-side routing (/apex, /portal, …) works on a hard refresh.
+        @app.get("/{full_path:path}")
+        async def spa(full_path: str):
+            candidate = os.path.normpath(os.path.join(dist, full_path))
+            if candidate.startswith(dist) and os.path.isfile(candidate):
+                return FileResponse(candidate)
+            return FileResponse(index_html)
 
     return app
 
