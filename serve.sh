@@ -15,6 +15,10 @@ set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"
 API_PORT="${API_PORT:-8000}"; UI_PORT="${UI_PORT:-5173}"
+# Prefer the project virtualenv — deps live in .venv and bare `python` may be absent.
+if [ -x "$ROOT/.venv/bin/python" ]; then PY="$ROOT/.venv/bin/python";
+elif command -v python  >/dev/null 2>&1; then PY="python";
+else PY="python3"; fi
 # bake the backend port into the UI build so the browser hits the right port
 # (e.g. API_PORT=8001 ./serve.sh  →  UI calls http://<host>:8001).
 export VITE_API_PORT="$API_PORT"
@@ -28,22 +32,22 @@ IP="$(hostname -I 2>/dev/null | awk '{print $1}')"; [ -z "$IP" ] && IP="<server-
 
 # ── 1. deps ───────────────────────────────────────────────────────────────────
 say "1/4 dependencies…"
-python -m pip install -q -r server/requirements.txt 2>>"$LOG/pip.log" || warn "  pip issues (see $LOG/pip.log)"
+"$PY" -m pip install -q -r server/requirements.txt 2>>"$LOG/pip.log" || warn "  pip issues (see $LOG/pip.log)"
 [ -d node_modules ] || npm install >"$LOG/npm.log" 2>&1
 
 # ── 2. backend on 0.0.0.0 ─────────────────────────────────────────────────────
 say "2/4 backend → http://0.0.0.0:$API_PORT (reachable at http://$IP:$API_PORT)…"
 # restore the durable scraped-content snapshot if present
-python -c "from server.services import document_store as d; d.restore()" 2>/dev/null || true
+"$PY" -c "from server.services import document_store as d; d.restore()" 2>/dev/null || true
 if ! pgrep -f "uvicorn server.main:app" >/dev/null 2>&1; then
-  nohup python -m uvicorn server.main:app --host 0.0.0.0 --port "$API_PORT" >"$LOG/backend.log" 2>&1 &
+  nohup "$PY" -m uvicorn server.main:app --host 0.0.0.0 --port "$API_PORT" >"$LOG/backend.log" 2>&1 &
 fi
 up=0
 for i in $(seq 1 40); do curl -s -m 2 "http://127.0.0.1:$API_PORT/" >/dev/null 2>&1 && { up=1; break; }; sleep 1; done
 [ "$up" = 1 ] && say "    backend up ✓" || { warn "    backend failed (see $LOG/backend.log)"; exit 1; }
 
 # ── 3. first build of data (load + project; autobuild grows it) ────────────────
-KEY="$(python -c 'from server.config import API_KEY; print(API_KEY)' 2>/dev/null)"
+KEY="$("$PY" -c 'from server.config import API_KEY; print(API_KEY)' 2>/dev/null)"
 if [ "${NO_AUTOBUILD:-0}" = "1" ]; then
   say "3/4 data: loading (autobuild off)…"
   curl -s -X POST -H "Authorization: Bearer $KEY" "http://127.0.0.1:$API_PORT/v1/jarvis/system/startup" >/dev/null 2>&1 || true
@@ -55,7 +59,7 @@ else
 fi
 # report live counts
 sleep 2
-curl -s -m 8 "http://127.0.0.1:$API_PORT/v1/jarvis/system/status" 2>/dev/null | python -c "
+curl -s -m 8 "http://127.0.0.1:$API_PORT/v1/jarvis/system/status" 2>/dev/null | "$PY" -c "
 import sys,json
 try:
     d=json.load(sys.stdin); f=d.get('foundry',{}); g=d.get('gotham',{})
