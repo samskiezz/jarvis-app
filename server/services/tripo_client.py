@@ -72,10 +72,11 @@ def poll(task_id: str) -> dict:
 
 
 def _download(url: str, name: str) -> dict:
-    os.makedirs(_MODELS_DIR, exist_ok=True)
+    # name may include a subdir, e.g. "palantir/gotham_command_globe"
     dest = os.path.join(_MODELS_DIR, f"{name}.glb")
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
     try:
-        with urllib.request.urlopen(url, timeout=120) as r, open(dest, "wb") as f:
+        with urllib.request.urlopen(url, timeout=180) as r, open(dest, "wb") as f:
             f.write(r.read())
         return {"ok": True, "path": f"/models/{name}.glb", "bytes": os.path.getsize(dest)}
     except Exception as e:  # noqa: BLE001

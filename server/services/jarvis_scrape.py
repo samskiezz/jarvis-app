@@ -90,9 +90,10 @@ _PUBLIC_PATTERNS = (
     "biorxiv", "core.ac.uk", "clinicaltrials", "archive.org", "wikimedia",
     "wikidata", "celestrak", "argo.ucsd", "ckan", "socrata", "frictionlessdata",
     "dublincore", "ncbi.nlm.nih.gov", "ebi.ac.uk", "gbif.org", "usgs.gov",
+    "palantir.com",  # public Palantir docs (Foundry/Gotham/Apollo) — research source
 )
 _BLOCK_PATTERNS = ("shodan", "opencorporates", "company-information.service",
-                   "developer.", "apidoc.", "/oauth", "login")
+                   "apidoc.", "/oauth", "login")  # note: 'developer.' removed (palantir docs use it)
 
 
 def _allowed(url: str) -> bool:
@@ -481,6 +482,61 @@ def document_finder(*, seeds_limit: int = 8, depth: int = 2, per_seed_max: int =
             "fetched": total_fetched, "total_chars": total_chars,
             "per_seed": per_seed, "samples": samples, "delivery": delivery,
             "progress": seeds_progress()}
+
+
+PALANTIR_SEEDS = [
+    ("https://www.palantir.com/docs/foundry/", "Palantir Foundry Docs", "palantir-foundry"),
+    ("https://www.palantir.com/docs/foundry/workshop/", "Palantir Workshop", "palantir-foundry"),
+    ("https://www.palantir.com/docs/foundry/getting-started/overview/", "Foundry Overview", "palantir-foundry"),
+    ("https://www.palantir.com/docs/foundry/ontology/overview/", "Foundry Ontology", "palantir-foundry"),
+    ("https://www.palantir.com/platforms/gotham/", "Palantir Gotham", "palantir-gotham"),
+    ("https://www.palantir.com/platforms/apollo/", "Palantir Apollo", "palantir-apollo"),
+    ("https://www.palantir.com/docs/apollo/", "Apollo Docs", "palantir-apollo"),
+    ("https://www.palantir.com/docs/foundry/pipeline-builder/overview/", "Pipeline Builder", "palantir-foundry"),
+]
+
+
+def scrape_palantir_docs(*, depth: int = 2, per_seed_max: int = 60, workers: int = 16) -> dict:
+    """Deep-scrape Palantir's OWN documentation (Foundry/Gotham/Apollo/Workshop) into
+    the document store — every page reachable from the doc roots, same-host only.
+    This is the real Palantir source-document corpus that informs the replica. Never
+    raises."""
+    try:
+        from . import scrape_engines as eng
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": f"engines unavailable: {e}"}
+
+    discovered: dict[str, tuple] = {}
+    per_seed = []
+    for seed_url, sn, sid in PALANTIR_SEEDS:
+        d = eng.katana_discover(seed_url, depth=depth, max_urls=per_seed_max * 4)
+        kept = 0
+        # always include the seed itself
+        for u in [seed_url] + list(d.get("urls", [])):
+            if not u.startswith("http") or "palantir.com" not in _host(u):
+                continue
+            if u in discovered:
+                continue
+            discovered[u] = (u, sn, sid)
+            kept += 1
+            if kept >= per_seed_max:
+                break
+        per_seed.append({"seed": seed_url, "discovered": kept})
+
+    fetch = scrapling_fetch_targets(list(discovered.values()), workers=workers)
+    # how many palantir docs are now stored
+    pal = 0
+    try:
+        if _docstore is not None:
+            for r in _docstore.search("palantir foundry gotham apollo ontology", 50):
+                if "palantir.com" in (r.get("host") or ""):
+                    pal += 1
+    except Exception:  # noqa: BLE001
+        pass
+    return {"ok": True, "seeds": len(PALANTIR_SEEDS), "discovered": len(discovered),
+            "fetched": fetch.get("fetched", 0), "failed": fetch.get("failed", 0),
+            "total_chars": fetch.get("total_chars", 0), "per_seed": per_seed,
+            "samples": fetch.get("samples", [])}
 
 
 def cloudscraper_batch(limit: int = 0, *, workers: int = 12, timeout: int = 20) -> dict:
