@@ -330,21 +330,72 @@ def scrapling_fetch_targets(targets: list, *, workers: int = 16, timeout: int = 
             "fetched": fetched, "failed": failed, "total_chars": chars, "samples": samples}
 
 
+def _init_seed_ledger(c) -> None:
+    c.execute("CREATE TABLE IF NOT EXISTS scrape_seed (url TEXT PRIMARY KEY, "
+              "crawled_ts INTEGER, discovered INTEGER, fetched INTEGER)")
+
+
+def _pending_seeds(limit: int) -> list:
+    """Seeds NOT yet crawled (rotates through ALL 124, so the corpus keeps growing
+    instead of re-crawling the same first few)."""
+    try:
+        c = _conn()
+        try:
+            _init_seed_ledger(c)
+            done = {r[0] for r in c.execute("SELECT url FROM scrape_seed").fetchall()}
+        finally:
+            c.close()
+    except sqlite3.Error:
+        done = set()
+    out = [t for t in all_targets(skip_fetched=False) if t[0] not in done]
+    return out[:limit] if limit else out
+
+
+def _mark_seed(url: str, discovered: int, fetched: int) -> None:
+    try:
+        c = _conn()
+        try:
+            _init_seed_ledger(c)
+            c.execute("INSERT OR REPLACE INTO scrape_seed (url,crawled_ts,discovered,fetched) "
+                      "VALUES (?,?,?,?)", (url, int(time.time() * 1000), discovered, fetched))
+            c.commit()
+        finally:
+            c.close()
+    except sqlite3.Error:
+        pass
+
+
+def seeds_progress() -> dict:
+    """How many catalogue sources have been crawled vs remain. Never raises."""
+    try:
+        c = _conn()
+        try:
+            _init_seed_ledger(c)
+            crawled = c.execute("SELECT COUNT(*) FROM scrape_seed").fetchone()[0]
+        finally:
+            c.close()
+        total = len(all_targets(skip_fetched=False))
+        return {"crawled": crawled, "total": total, "remaining": max(0, total - crawled)}
+    except Exception:  # noqa: BLE001
+        return {"crawled": 0, "total": 0, "remaining": 0}
+
+
 def document_finder(*, seeds_limit: int = 8, depth: int = 1, per_seed_max: int = 25,
                     workers: int = 16) -> dict:
     """THE DOCUMENT FINDER — katana discovers deeper document URLs from each
     catalogue source, then the content engine fetches + stores them as real
-    Documents. This goes beyond landing pages to the actual documents/datasets a
-    source exposes. Same-host only (no wandering), governed by the allow policy.
-    Never raises."""
+    Documents. Rotates through UNCRAWLED seeds (a ledger) so each run advances
+    through all 124 sources and the corpus keeps growing. Same-host only, governed
+    by the allow policy. Never raises."""
     try:
         from . import scrape_engines as eng
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": f"engines unavailable: {e}"}
 
-    seeds = all_targets(skip_fetched=False)[:seeds_limit]
+    seeds = _pending_seeds(seeds_limit)
     if not seeds:
-        return {"ok": True, "seeds": 0, "discovered": 0, "fetched": 0}
+        return {"ok": True, "seeds": 0, "discovered": 0, "fetched": 0,
+                "note": "all catalogue seeds already crawled", "progress": seeds_progress()}
 
     discovered: dict[str, tuple] = {}   # url -> (url, source_name, subject_id)
     per_seed: list[dict] = []
@@ -362,13 +413,15 @@ def document_finder(*, seeds_limit: int = 8, depth: int = 1, per_seed_max: int =
             if kept >= per_seed_max:
                 break
         per_seed.append({"seed": seed_url, "discovered": kept})
+        _mark_seed(seed_url, kept, 0)  # advance the ledger so the next run rotates on
 
     # Fetch + store everything katana found, concurrently.
     fetch = scrapling_fetch_targets(list(discovered.values()), workers=workers)
     return {"ok": True, "seeds": len(seeds), "discovered": len(discovered),
             "fetched": fetch.get("fetched", 0), "failed": fetch.get("failed", 0),
             "total_chars": fetch.get("total_chars", 0),
-            "per_seed": per_seed, "samples": fetch.get("samples", [])}
+            "per_seed": per_seed, "samples": fetch.get("samples", []),
+            "progress": seeds_progress()}
 
 
 def cloudscraper_batch(limit: int = 0, *, workers: int = 12, timeout: int = 20) -> dict:

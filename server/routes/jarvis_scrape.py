@@ -86,4 +86,5 @@ async def find_documents(req: FindRequest, _t: str = Depends(require_bearer)):
 async def scrape_status(_t: str | None = Depends(optional_bearer)):
     return {"scraped_documents": scr.scraped_count(),
             "pending_targets": len(scr.all_targets(skip_fetched=True)),
+            "seed_progress": scr.seeds_progress(),
             "best_engine": eng.best_content_engine()}
