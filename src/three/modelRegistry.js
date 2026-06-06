@@ -8,14 +8,18 @@
  */
 
 const M = (file) => `/models/${file}.glb`;
+const P = (file) => `/models/palantir/${file}.glb`; // custom Tripo-generated replica set
 
 // plane / concept  ->  { model, color, label }
+// These are the NEW custom Tripo-generated Palantir-replica renders (not Underworld).
 export const PLANE_MODELS = {
-  jarvis:  { model: M("agi_core"),               color: "#3ad8ff", label: "AGI Core" },
-  aip:     { model: M("server_rack"),            color: "#b18cff", label: "Compute Mesh" },
-  foundry: { model: M("assembly_line_conveyor"), color: "#00d4ff", label: "Foundry Line" },
-  gotham:  { model: M("radio_tower"),            color: "#ff3b6b", label: "Watch Tower" },
-  apollo:  { model: M("cargo_drone"),            color: "#7cff7c", label: "Delivery Fleet" },
+  jarvis:  { model: P("jarvis_core_avatar"),  color: "#3ad8ff", label: "JARVIS Core" },
+  aip:     { model: P("aip_neural_mesh"),     color: "#b18cff", label: "Neural Mesh" },
+  foundry: { model: P("foundry_pipeline_rig"),color: "#00d4ff", label: "Pipeline Rig" },
+  gotham:  { model: P("gotham_command_globe"),color: "#ff3b6b", label: "Command Globe" },
+  apollo:  { model: P("apollo_delivery_rig"), color: "#7cff7c", label: "Delivery Rig" },
+  audit:   { model: P("audit_ledger_vault"),  color: "#8be9fd", label: "Ledger Vault" },
+  helmet:  { model: P("iron_man_helmet"),     color: "#e8a800", label: "JARVIS Helmet" },
 };
 
 // pure-FX holographic props (ambient set dressing for the HUD)
@@ -35,12 +39,14 @@ export function planeModel(plane) {
  * new Tripo/scraped render). The scraper + Tripo pipeline target the gaps.
  */
 export const ASSET_MANIFEST = [
-  // ── planes (hero renders) ────────────────────────────────────────────────────
-  { surface: "JARVIS / AIP core", plane: "jarvis", model: "agi_core", status: "wired", effect: "bloom+fresnel hum" },
-  { surface: "AIP compute mesh", plane: "aip", model: "server_rack", status: "wired", effect: "bloom" },
-  { surface: "Foundry data line", plane: "foundry", model: "assembly_line_conveyor", status: "wired", effect: "bloom" },
-  { surface: "Gotham watch tower", plane: "gotham", model: "radio_tower", status: "wired", effect: "bloom+scanline" },
-  { surface: "Apollo delivery fleet", plane: "apollo", model: "cargo_drone", status: "wired", effect: "bloom" },
+  // ── planes (CUSTOM Tripo-generated Palantir-replica renders) ─────────────────
+  { surface: "JARVIS core (Iron Man)", plane: "jarvis", model: "palantir/jarvis_core_avatar", status: "wired", effect: "bloom+fresnel hum" },
+  { surface: "JARVIS helmet avatar", plane: "jarvis", model: "palantir/iron_man_helmet", status: "wired", effect: "bloom" },
+  { surface: "AIP neural mesh", plane: "aip", model: "palantir/aip_neural_mesh", status: "wired", effect: "bloom" },
+  { surface: "Foundry pipeline rig", plane: "foundry", model: "palantir/foundry_pipeline_rig", status: "wired", effect: "bloom" },
+  { surface: "Gotham command globe", plane: "gotham", model: "palantir/gotham_command_globe", status: "wired", effect: "bloom+scanline" },
+  { surface: "Apollo delivery rig", plane: "apollo", model: "palantir/apollo_delivery_rig", status: "wired", effect: "bloom" },
+  { surface: "Audit ledger vault", plane: "audit", model: "palantir/audit_ledger_vault", status: "wired", effect: "bloom" },
   // ── available in the Tripo library (677), ready to copy/wire ──────────────────
   { surface: "Quantum / oracle", plane: "aip", model: "quantum_computer", status: "available" },
   { surface: "Foundation GPU pod", plane: "aip", model: "foundation_model_gpu_pod", status: "available" },
