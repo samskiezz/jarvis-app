@@ -1,7 +1,18 @@
 # Run the platform
 
-One command:
+**On a remote server (vast.ai / VPS) — use this:**
+```bash
+./serve.sh
+#   backend  → http://0.0.0.0:8000   (reachable at http://<server-ip>:8000)
+#   UI       → http://0.0.0.0:5173   (open http://<server-ip>:5173)
+```
+`serve.sh` binds both to **0.0.0.0** so the app is reachable from a browser, builds
+the UI, loads data, and runs the autobuild. The UI auto-detects its backend from the
+page host (same build works on any IP). Open the UI → the **first-run install pop-up**
+appears → click **Initialise System**. Make sure ports **5173 + 8000 are open** in
+your firewall. Keep it alive with `tmux`/`nohup`/systemd.
 
+**Local dev:**
 ```bash
 ./boot.sh
 #   backend  → http://127.0.0.1:8000
