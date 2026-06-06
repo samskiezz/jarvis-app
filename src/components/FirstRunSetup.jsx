@@ -78,6 +78,7 @@ export default function FirstRunSetup() {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 20000, display: "flex", alignItems: "center", justifyContent: "center",
       background: "rgba(0,2,6,0.86)", backdropFilter: "blur(6px)", fontFamily: "'JetBrains Mono',monospace" }}>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       <div style={{ width: 480, maxWidth: "92vw", background: C.bg, border: `1px solid ${C.border}`, borderRadius: 12,
         boxShadow: "0 12px 60px rgba(0,0,0,0.8)", overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}`, display: "flex", alignItems: "center", gap: 10 }}>

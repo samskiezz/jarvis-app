@@ -11,6 +11,7 @@ import { PAGES, HOME_PAGE } from '@/lib/pageRegistry';
 import { createPageUrl } from '@/utils';
 import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
+import FirstRunSetup from '@/components/FirstRunSetup';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 
@@ -26,6 +27,9 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <AuthGate>
+            {/* Global first-run install pop-up — shows on the landing page too,
+                so a fresh deploy initialises before you even pick a destination. */}
+            <FirstRunSetup />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Root: two-tile destination launcher (APEX vs Underworld). */}
