@@ -36,8 +36,8 @@ SUDO=""; [ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&1 && SUDO="sudo"
 say "1/5 system packages…"
 if command -v apt-get >/dev/null 2>&1; then
   $SUDO apt-get update -qq >>"$LOG/apt.log" 2>&1 || true
-  $SUDO apt-get install -y -qq gcc build-essential tesseract-ocr poppler-utils \
-        >>"$LOG/apt.log" 2>&1 && say "    tesseract + build tools ✓" || warn "    apt issues ($LOG/apt.log)"
+  $SUDO apt-get install -y -qq gcc build-essential tesseract-ocr poppler-utils autossh openssh-client \
+        >>"$LOG/apt.log" 2>&1 && say "    tesseract + build tools + autossh ✓" || warn "    apt issues ($LOG/apt.log)"
   command -v go >/dev/null 2>&1 || $SUDO apt-get install -y -qq golang-go >>"$LOG/apt.log" 2>&1 || true
   # Node.js — the backend shells out to `node` (asset/UI build helpers) and npm needs it.
   command -v node >/dev/null 2>&1 || $SUDO apt-get install -y -qq nodejs npm >>"$LOG/apt.log" 2>&1 || true
