@@ -19,6 +19,9 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"
+# Load the committed deploy config (ports, OLLAMA_HOST, flags) so `git pull` brings the
+# full working setup to every box. Real secrets stay as shell env vars (not here).
+if [ -f "$ROOT/.env" ]; then set -a; . "$ROOT/.env"; set +a; fi
 
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 API_HOST="${API_HOST:-127.0.0.1}"; API_PORT="${API_PORT:-8000}"

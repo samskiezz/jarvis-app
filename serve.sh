@@ -14,6 +14,9 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"
+# Load the committed deploy config (ports, OLLAMA_HOST, flags) so a `git pull` brings
+# the full working setup to every box. Real secrets stay as shell env vars (not here).
+if [ -f "$ROOT/.env" ]; then set -a; . "$ROOT/.env"; set +a; fi
 API_PORT="${API_PORT:-8000}"; UI_PORT="${UI_PORT:-5173}"
 # bake the backend port into the UI build so the browser hits the right port
 # (e.g. API_PORT=8001 ./serve.sh  →  UI calls http://<host>:8001).
