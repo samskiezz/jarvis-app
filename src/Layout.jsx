@@ -16,6 +16,7 @@ const APEX_BASE = "/apex";
 const apexUrl = (name) => `${APEX_BASE}${createPageUrl(name)}`;
 import { RISK_SIGNALS } from "@/domain/risk";
 import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
+import FirstRunSetup from "@/components/FirstRunSetup";
 import DomainRail from "@/components/DomainRail";
 import CommandPalette from "@/components/CommandPalette";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
@@ -40,6 +41,9 @@ export function AppLayout({ children }) {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: S.bg }}>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      {/* First-run install/initialise pop-up (only shows on a fresh/empty deploy) */}
+      <FirstRunSetup />
       {/* ── DOMAIN RAIL (collapsed-by-default nav) ───────────────────────── */}
       <DomainRail />
 

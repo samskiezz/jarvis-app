@@ -28,14 +28,24 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 
 const env = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : {};
 
-// Prefer the new unified VITE_API_BASE_URL (points at the Jarvis backend).
-// Fall back to the legacy VITE_KIMI_K26_API_BASE_URL or localhost:8000 for dev.
+// Prefer an explicit VITE_API_BASE_URL. Otherwise derive the backend from the page's
+// OWN host — so an app served from http://<server>:5173 talks to http://<server>:8000,
+// not the viewer's localhost (the reason a deployed build showed all zeros). Only
+// fall back to localhost for Node/SSR where there is no window.
+const deriveFromLocation = () => {
+  if (typeof window === 'undefined' || !window.location) return 'http://localhost:8000';
+  const { protocol, hostname } = window.location;
+  const port = env.VITE_API_PORT || '8000';
+  return `${protocol}//${hostname}:${port}`;
+};
 const defaultApiBaseUrl =
   env.VITE_API_BASE_URL ||
   env.VITE_KIMI_K26_API_BASE_URL ||
-  'http://localhost:8000';
+  deriveFromLocation();
 
-const defaultApiKey = env.VITE_API_KEY || env.VITE_KIMI_K26_API_KEY;
+// Default to the backend's own default key ("dev-key") so a fresh self-hosted
+// deploy authenticates out of the box; override with VITE_API_KEY in production.
+const defaultApiKey = env.VITE_API_KEY || env.VITE_KIMI_K26_API_KEY || 'dev-key';
 
 const getAppParams = () => {
   if (getAppParamValue('clear_api_key') === 'true') {

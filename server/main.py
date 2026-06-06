@@ -104,9 +104,15 @@ async def _lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Jarvis Backend", version="0.1.0", lifespan=_lifespan)
+    # Unless JARVIS_CORS_ORIGINS is explicitly set, allow any origin (this is a
+    # self-hosted, bearer-token-gated app; a deployed UI on http://<server>:5173
+    # was being CORS-blocked from its own backend, causing all-zeros). When the env
+    # IS set, lock to that exact list.
+    _cors_explicit = bool(os.environ.get("JARVIS_CORS_ORIGINS"))
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=CORS_ORIGINS,
+        allow_origins=CORS_ORIGINS if _cors_explicit else [],
+        allow_origin_regex=None if _cors_explicit else r"https?://.*",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
