@@ -39,6 +39,9 @@ say "1/4 dependencies (setup.sh — installs everything the app needs)…"
 # scraper can find them, then install/repair the whole environment idempotently.
 export PATH="$HOME/go/bin:$PATH"
 [ "${SKIP_SETUP:-0}" = "1" ] || bash "$ROOT/setup.sh" || warn "  setup had issues (see /tmp/jarvis-setup/)"
+# Optional: tunnel the vast.ai GPU's Ollama to 127.0.0.1:11434 (set GPU_LINK=1 +
+# VAST_SSH_* in .env; needs the VPS to have SSH key access to the GPU box).
+[ "${GPU_LINK:-0}" = "1" ] && bash "$ROOT/scripts/gpu-link.sh" || true
 
 # ── 2. backend on 0.0.0.0 ─────────────────────────────────────────────────────
 say "2/4 backend → http://0.0.0.0:$API_PORT (reachable at http://$IP:$API_PORT)…"

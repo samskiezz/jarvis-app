@@ -39,6 +39,8 @@ if command -v apt-get >/dev/null 2>&1; then
   $SUDO apt-get install -y -qq gcc build-essential tesseract-ocr poppler-utils \
         >>"$LOG/apt.log" 2>&1 && say "    tesseract + build tools ✓" || warn "    apt issues ($LOG/apt.log)"
   command -v go >/dev/null 2>&1 || $SUDO apt-get install -y -qq golang-go >>"$LOG/apt.log" 2>&1 || true
+  # Node.js — the backend shells out to `node` (asset/UI build helpers) and npm needs it.
+  command -v node >/dev/null 2>&1 || $SUDO apt-get install -y -qq nodejs npm >>"$LOG/apt.log" 2>&1 || true
 else
   warn "    no apt-get — install tesseract-ocr/poppler/go manually"
 fi
@@ -48,15 +50,15 @@ say "2/5 python deps…"
 python3 -m pip install -q --upgrade pip 2>>"$LOG/pip.log" || true
 python3 -m pip install -q -r server/requirements.txt 2>>"$LOG/pip.log" \
   && say "    requirements ✓" || warn "    pip issues ($LOG/pip.log)"
-# arjun (recon) + the browser content engines in the scrape registry
-python3 -m pip install -q arjun undetected-chromedriver botasaurus-driver 2>>"$LOG/pip.log" \
-  && say "    arjun + browser engines ✓" || warn "    some python scrape engines skipped ($LOG/pip.log)"
+# arjun (recon) + the browser content engines in the scrape registry + optional
+# Postgres driver (psycopg2 — all imports are guarded; only needed in Postgres mode)
+python3 -m pip install -q arjun undetected-chromedriver botasaurus-driver psycopg2-binary 2>>"$LOG/pip.log" \
+  && say "    arjun + browser engines + pg driver ✓" || warn "    some python engines skipped ($LOG/pip.log)"
 if [ "${SETUP_HEAVY_OCR:-1}" = "1" ]; then
-  say "    GPU OCR (easyocr/paddleocr — large, first run downloads models)…"
+  # easyocr is the GPU OCR engine the pipeline actually uses (paddleocr is NOT imported
+  # anywhere, so we don't install it — saves a multi-GB paddlepaddle download).
+  say "    GPU OCR (easyocr — large; first run downloads the model)…"
   python3 -m pip install -q easyocr 2>>"$LOG/pip.log" && say "    easyocr ✓" || warn "    easyocr skipped ($LOG/pip.log)"
-  python3 -m pip install -q paddleocr paddlepaddle-gpu 2>>"$LOG/pip.log" \
-    || python3 -m pip install -q paddleocr paddlepaddle 2>>"$LOG/pip.log" \
-    && say "    paddleocr ✓" || warn "    paddleocr skipped ($LOG/pip.log)"
 else
   say "    heavy GPU OCR skipped (SETUP_HEAVY_OCR=0)"
 fi
