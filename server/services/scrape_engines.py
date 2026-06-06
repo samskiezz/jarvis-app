@@ -122,14 +122,16 @@ def _run_tool(argv: list, timeout: int = 120) -> dict:
 
 
 def katana_discover(seed_url: str, *, depth: int = 2, max_urls: int = 200,
-                    timeout: int = 120) -> dict:
+                    timeout: int = 45, crawl_time: int = 25) -> dict:
     """Crawl a seed with katana (read-only link discovery) and return URLs found.
     Crawling links is gentle content discovery — fine on public open-data sources.
+    ``crawl_time`` caps the per-source crawl so a slow site can't stall the sweep.
     Falls back cleanly if katana isn't installed. Never raises."""
     if not _detect(_REGISTRY["katana"]):
         return {"ok": False, "error": "katana not installed", "urls": []}
     res = _run_tool(["katana", "-u", seed_url, "-d", str(int(depth)),
-                     "-jc", "-silent", "-rl", "10"], timeout=timeout)
+                     "-jc", "-silent", "-rl", "20", "-c", "10",
+                     "-ct", str(int(crawl_time)), "-timeout", "10"], timeout=timeout)
     urls = [u for u in res.get("lines", []) if u.startswith("http")][:max_urls]
     return {"ok": bool(urls), "seed": seed_url, "count": len(urls), "urls": urls,
             "error": res.get("error")}

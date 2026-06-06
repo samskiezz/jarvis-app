@@ -397,31 +397,39 @@ def document_finder(*, seeds_limit: int = 8, depth: int = 2, per_seed_max: int =
         return {"ok": True, "seeds": 0, "discovered": 0, "fetched": 0,
                 "note": "all catalogue seeds already crawled", "progress": seeds_progress()}
 
-    discovered: dict[str, tuple] = {}   # url -> (url, source_name, subject_id)
     per_seed: list[dict] = []
+    total_discovered = total_fetched = total_chars = 0
+    samples: list[dict] = []
     for seed_url, sn, sid in seeds:
         d = eng.katana_discover(seed_url, depth=depth, max_urls=per_seed_max * 3)
         seed_host = _host(seed_url)
-        kept = 0
+        seen: set = set()
+        targets = []
         for u in d.get("urls", []):
             if not u.startswith("http") or _host(u) != seed_host:
                 continue  # same-host documents only
-            if doc_id(u) in discovered:
+            if u in seen:
                 continue
-            discovered[u] = (u, sn, sid)
-            kept += 1
-            if kept >= per_seed_max:
+            seen.add(u)
+            targets.append((u, sn, sid))
+            if len(targets) >= per_seed_max:
                 break
-        per_seed.append({"seed": seed_url, "discovered": kept})
-        _mark_seed(seed_url, kept, 0)  # advance the ledger so the next run rotates on
+        # Fetch + store THIS seed's documents now (incremental — visible growth,
+        # and a slow seed can't block the others).
+        f = scrapling_fetch_targets(targets, workers=workers) if targets else {}
+        total_discovered += len(targets)
+        total_fetched += f.get("fetched", 0)
+        total_chars += f.get("total_chars", 0)
+        for s in f.get("samples", []):
+            if len(samples) < 12:
+                samples.append(s)
+        per_seed.append({"seed": seed_url, "discovered": len(targets),
+                         "fetched": f.get("fetched", 0)})
+        _mark_seed(seed_url, len(targets), f.get("fetched", 0))
 
-    # Fetch + store everything katana found, concurrently.
-    fetch = scrapling_fetch_targets(list(discovered.values()), workers=workers)
-    return {"ok": True, "seeds": len(seeds), "discovered": len(discovered),
-            "fetched": fetch.get("fetched", 0), "failed": fetch.get("failed", 0),
-            "total_chars": fetch.get("total_chars", 0),
-            "per_seed": per_seed, "samples": fetch.get("samples", []),
-            "progress": seeds_progress()}
+    return {"ok": True, "seeds": len(seeds), "discovered": total_discovered,
+            "fetched": total_fetched, "total_chars": total_chars,
+            "per_seed": per_seed, "samples": samples, "progress": seeds_progress()}
 
 
 def cloudscraper_batch(limit: int = 0, *, workers: int = 12, timeout: int = 20) -> dict:
