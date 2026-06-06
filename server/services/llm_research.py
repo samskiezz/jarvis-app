@@ -36,24 +36,105 @@ try:
 except Exception:  # noqa: BLE001
     jos = None  # type: ignore
 
-_OLLAMA = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
+_DEFAULT_OLLAMA = "http://127.0.0.1:11434"
+
+
+def _config_path() -> str:
+    db = os.environ.get("BRAIN_DB", "server/data/brain.db")
+    return os.path.join(os.path.dirname(db) or ".", "llm_connect.json")
+
+
+def _load_config() -> dict:
+    try:
+        with open(_config_path(), "r", encoding="utf-8") as f:
+            return json.load(f) or {}
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+# Runtime-configurable LLM connection. The Ollama URL can come from the Setup page
+# (POST /v1/jarvis/research/connect) — persisted next to the brain DB so it survives a
+# restart AND a recreated GPU box (no SSH/redeploy when vast.ai hands you a new
+# IP/port) — falling back to env OLLAMA_HOST, then localhost.
+_CFG: dict = _load_config()
+
+
+def _save_config(cfg: dict) -> None:
+    try:
+        os.makedirs(os.path.dirname(_config_path()) or ".", exist_ok=True)
+        with open(_config_path(), "w", encoding="utf-8") as f:
+            json.dump(cfg, f)
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _normalise_host(host: str) -> str:
+    host = (host or "").strip().rstrip("/")
+    if host and not host.startswith(("http://", "https://")):
+        host = "http://" + host
+    return host
+
+
+def _ollama_base() -> str:
+    """Ollama base URL: live override (Setup page) → env OLLAMA_HOST → localhost."""
+    return _CFG.get("ollama_host") or os.environ.get("OLLAMA_HOST") or _DEFAULT_OLLAMA
 
 
 def _ollama_model() -> str:
-    """The Ollama model to use: env override, else the first installed model
+    """The Ollama model to use: explicit override, else the first installed model
     (zero-config), else a sensible default."""
-    env = os.environ.get("OLLAMA_MODEL")
+    env = _CFG.get("model") or os.environ.get("OLLAMA_MODEL")
     if env:
         return env
     try:
         import json as _j
-        with urllib.request.urlopen(_OLLAMA + "/api/tags", timeout=3) as r:
+        with urllib.request.urlopen(_ollama_base() + "/api/tags", timeout=3) as r:
             tags = _j.loads(r.read().decode()).get("models", [])
         if tags:
             return tags[0].get("name") or tags[0].get("model") or "llama3.2:1b"
     except Exception:  # noqa: BLE001
         pass
     return "llama3.2:1b"
+
+
+def connection_info() -> dict:
+    """Where JARVIS is currently pointed for the LLM, and how it was configured."""
+    return {"ollama_host": _ollama_base(),
+            "source": ("setup" if _CFG.get("ollama_host") else
+                       ("env" if os.environ.get("OLLAMA_HOST") else "default")),
+            "model": _CFG.get("model") or os.environ.get("OLLAMA_MODEL") or None}
+
+
+def set_connection(*, ollama_host: str | None = None, model: str | None = None) -> dict:
+    """Persist the live LLM connection (survives restarts). Returns connection_info."""
+    if ollama_host is not None:
+        _CFG["ollama_host"] = _normalise_host(ollama_host)
+    if model is not None:
+        _CFG["model"] = model.strip()
+    _save_config(_CFG)
+    return connection_info()
+
+
+def connect(ollama_host: str, *, model: str | None = None) -> dict:
+    """Point JARVIS at an Ollama server (e.g. your vast.ai GPU) at RUNTIME, persist it,
+    and test reachability — no restart. Returns {ok, available, backend, models, …}."""
+    set_connection(ollama_host=ollama_host, model=model)
+    base = _ollama_base()
+    models: list = []
+    err = None
+    try:
+        with urllib.request.urlopen(base + "/api/tags", timeout=6) as r:
+            data = json.loads(r.read().decode("utf-8", errors="ignore"))
+            models = [m.get("name") or m.get("model") for m in data.get("models", [])]
+        ok = True
+    except Exception as e:  # noqa: BLE001
+        ok, err = False, f"{type(e).__name__}: {e}"
+    return {"ok": ok, "available": ok, "ollama_host": base,
+            "backend": "ollama" if ok else backend(), "models": models, "error": err,
+            "hint": None if ok else (
+                "Not reachable from the backend. On the GPU box, run Ollama bound to all "
+                "interfaces (OLLAMA_HOST=0.0.0.0:11434 ollama serve), and use the vast.ai "
+                "EXTERNAL mapped port for 11434 (not 11434 itself).")}
 
 
 def _post(url: str, payload: dict, headers: dict | None = None, timeout: float = 60.0):
@@ -68,7 +149,7 @@ def backend() -> str | None:
     """Which LLM backend is reachable right now (ollama | openai-compatible | None)."""
     # 1. Ollama (the user's Llama)
     try:
-        urllib.request.urlopen(_OLLAMA + "/api/tags", timeout=2)
+        urllib.request.urlopen(_ollama_base() + "/api/tags", timeout=2)
         return "ollama"
     except Exception:  # noqa: BLE001
         pass
@@ -100,7 +181,7 @@ def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
                        "options": {"temperature": temperature}}
             if fmt == "json":
                 payload["format"] = "json"
-            out = _post(_OLLAMA + "/api/chat", payload)
+            out = _post(_ollama_base() + "/api/chat", payload)
             return (out.get("message", {}) or {}).get("content")
         if b == "openai-compatible":
             from ..config import KIMI_API_KEY, KIMI_BASE_URL, KIMI_MODEL

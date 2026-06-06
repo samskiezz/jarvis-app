@@ -17,6 +17,9 @@ export default function Setup() {
   const [offline, setOffline] = useState(false);
   const [phase, setPhase] = useState("idle"); // idle|installing
   const [log, setLog] = useState([]);
+  const [gpuUrl, setGpuUrl] = useState("");
+  const [connecting, setConnecting] = useState(false);
+  const [connectMsg, setConnectMsg] = useState(null);
   const poll = useRef(null);
 
   const refresh = useCallback(async () => {
@@ -52,6 +55,31 @@ export default function Setup() {
     apiPost("/v1/jarvis/research/autopilot/start", {}).then(refresh).catch(() => {}); };
   const stopGpu = () => { addLog("Stopping GPU autopilot.");
     apiPost("/v1/jarvis/research/autopilot/stop", {}).then(refresh).catch(() => {}); };
+
+  // Seed the input with the currently-configured host (unless the user is typing).
+  useEffect(() => {
+    const h = llm?.connection?.ollama_host;
+    if (h && !gpuUrl && !h.includes("127.0.0.1")) setGpuUrl(h);
+  }, [llm]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const connectLlm = async () => {
+    const url = (gpuUrl || "").trim();
+    if (!url) { setConnectMsg({ ok: false, text: "Enter your GPU's Ollama URL, e.g. http://211.72.13.201:41138" }); return; }
+    setConnecting(true); setConnectMsg(null);
+    addLog(`Connecting LLM → ${url}…`);
+    try {
+      const r = await apiPost("/v1/jarvis/research/connect", { ollama_host: url });
+      if (r?.ok) {
+        setConnectMsg({ ok: true, text: `Connected ✓  models: ${(r.models || []).join(", ") || "(none pulled yet — run: ollama pull llama3.1:8b)"}` });
+        addLog("✓ LLM connected — GPU autopilot will start hammering.");
+        apiPost("/v1/jarvis/research/autopilot/start", {}).catch(() => {});
+      } else {
+        setConnectMsg({ ok: false, text: r?.hint || r?.error || "Not reachable from the backend." });
+      }
+      refresh();
+    } catch { setConnectMsg({ ok: false, text: "Request failed — is the backend reachable?" }); }
+    setConnecting(false);
+  };
 
   const g = status?.gotham || {}, f = status?.foundry || {};
   const objs = g.ontology_objects || 0, eps = f.endpoints || 0;
@@ -117,24 +145,40 @@ export default function Setup() {
       {/* ── connect the LLM (the Iron Man brain) ────────────────────────── */}
       <PanelCard title="3 · CONNECT THE LLM (JARVIS BRAIN)" accent={llmOn ? C.neon : C.gold}
         right={<Badge color={llmOn ? C.neon : C.gold}>{llmOn ? `ONLINE · ${llm?.backend}` : "NOT CONNECTED"}</Badge>}>
-        {llmOn ? (
-          <div style={{ color: C.textB, fontSize: 12 }}>
-            JARVIS is reasoning with <b>{llm?.backend}</b>. Voice + tool-use are live.
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {llmOn ? (
+            <div style={{ color: C.textB, fontSize: 12 }}>
+              JARVIS is reasoning with <b>{llm?.backend}</b> at <b>{llm?.connection?.ollama_host}</b>. Voice + tool-use are live.
+            </div>
+          ) : (
+            <div style={{ color: C.textB, fontSize: 12, lineHeight: 1.7 }}>
+              Point JARVIS at your GPU's Ollama. On the GPU box, bind it to all interfaces so it's
+              reachable from here:
+              <pre style={pre}>{`OLLAMA_HOST=0.0.0.0:11434 ollama serve
+ollama pull llama3.1:8b`}</pre>
+              On <b>vast.ai</b>, enter the <b>external mapped port</b> for 11434 (from your instance's
+              port list) — <b>not</b> 11434 itself. Then connect below — no restart, and it survives a
+              new instance IP/port.
+            </div>
+          )}
+          {/* live connect — persisted backend-side; no SSH/env/restart */}
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <input value={gpuUrl} onChange={(e) => setGpuUrl(e.target.value)}
+              placeholder={llm?.connection?.ollama_host || "http://211.72.13.201:41138"}
+              onKeyDown={(e) => { if (e.key === "Enter") connectLlm(); }}
+              style={{ flex: 1, minWidth: 240, padding: "10px 12px", borderRadius: 8,
+                background: "rgba(0,0,0,0.5)", border: `1px solid ${(llmOn ? C.neon : C.gold)}66`,
+                color: C.textB, fontFamily: "inherit", fontSize: 12 }} />
+            <button onClick={connectLlm} disabled={connecting} style={btn("#00e0c8", true)}>
+              {connecting ? "⏳ Testing…" : llmOn ? "↻ Reconnect" : "🔌 Connect GPU"}
+            </button>
           </div>
-        ) : (
-          <div style={{ color: C.textB, fontSize: 12, lineHeight: 1.8 }}>
-            The chat says "no LLM" because no model backend is reachable yet. JARVIS
-            falls back to grounded search until you connect one. On your <b>vast.ai GPU</b>:
-            <pre style={pre}>{`# on the GPU box
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull llama3.1:8b
-ollama serve   # serves on :11434`}</pre>
-            Then tell the backend where it is and restart it:
-            <pre style={pre}>{`export OLLAMA_HOST=http://<gpu-ip>:11434
-# restart: API_PORT=8001 ./serve.sh`}</pre>
-            Now JARVIS reasons on your GPU — the "Iron Man" brain.
-          </div>
-        )}
+          {connectMsg && (
+            <div style={{ fontSize: 11, color: connectMsg.ok ? C.neon : C.red, lineHeight: 1.6 }}>
+              {connectMsg.text}
+            </div>
+          )}
+        </div>
       </PanelCard>
 
       {/* ── hammer the GPU (continuous autonomous research) ───────────────── */}
