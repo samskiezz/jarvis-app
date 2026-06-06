@@ -48,10 +48,19 @@ export default function Setup() {
   };
   useEffect(() => () => clearInterval(poll.current), []);
 
+  const startGpu = () => { addLog("Starting GPU autopilot — continuous LLM research…");
+    apiPost("/v1/jarvis/research/autopilot/start", {}).then(refresh).catch(() => {}); };
+  const stopGpu = () => { addLog("Stopping GPU autopilot.");
+    apiPost("/v1/jarvis/research/autopilot/stop", {}).then(refresh).catch(() => {}); };
+
   const g = status?.gotham || {}, f = status?.foundry || {};
   const objs = g.ontology_objects || 0, eps = f.endpoints || 0;
   const initialised = objs > 200 || eps > 0;
   const llmOn = llm?.available;
+  const ap = llm?.autopilot || {};
+  const hammering = ap.running && !ap.idle_no_llm && (llmOn || ap.backend);
+  const apBadge = !ap.running ? "OFF" : hammering ? "HAMMERING GPU" : "IDLE · WAITING FOR LLM";
+  const apColor = !ap.running ? C.gold : hammering ? C.neon : C.gold;
 
   return (
     <PageShell title="SYSTEM SETUP" subtitle="INSTALL · POWER ON · CONNECT THE LLM" accent="#00e0c8"
@@ -120,6 +129,35 @@ ollama serve   # serves on :11434`}</pre>
             Now JARVIS reasons on your GPU — the "Iron Man" brain.
           </div>
         )}
+      </PanelCard>
+
+      {/* ── hammer the GPU (continuous autonomous research) ───────────────── */}
+      <PanelCard title="4 · GPU AUTOPILOT (HAMMER THE GPU)" accent={apColor}
+        right={<Badge color={apColor}>{apBadge}</Badge>}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ color: C.textB, fontSize: 12, lineHeight: 1.7 }}>
+            The autopilot continuously drives the LLM — decomposing topics, fetching
+            grounded evidence and writing cited notes — so a connected GPU is{" "}
+            <b>always reasoning</b> and the brain keeps growing.{" "}
+            {ap.running
+              ? (hammering
+                  ? <>It's <b style={{ color: C.neon }}>running on {ap.backend}</b>.</>
+                  : <>It's running but <b style={{ color: C.gold }}>no LLM is reachable yet</b> — connect your GPU (step 3) and it starts hammering automatically.</>)
+              : "It's off — press Start to begin."}
+          </div>
+          <Grid min={140} gap={10}>
+            <StatTile label="Topics researched" value={(ap.topics_researched || 0).toLocaleString()} accent={apColor} />
+            <StatTile label="Notes injected" value={(ap.notes_injected || 0).toLocaleString()} accent={apColor} sub="grounded" />
+            <StatTile label="Workers" value={(ap.concurrency || 0).toLocaleString()} accent={apColor} sub="concurrent" />
+            <StatTile label="Last topic" value={ap.last_topic || "—"} accent={apColor} />
+          </Grid>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={startGpu} disabled={!!ap.running} style={btn(C.neon, true)}>
+              {ap.running ? "⚡ Running…" : "⚡ Start hammering the GPU"}
+            </button>
+            {ap.running && <button onClick={stopGpu} style={btn(C.gold, false)}>■ Stop</button>}
+          </div>
+        </div>
       </PanelCard>
     </PageShell>
   );
