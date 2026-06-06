@@ -319,6 +319,49 @@ def scrapling_batch(limit: int = 0, *, workers: int = 16, timeout: int = 20) -> 
             "fetched": fetched, "failed": failed, "total_chars": chars, "samples": samples}
 
 
+def cloudscraper_batch(limit: int = 0, *, workers: int = 12, timeout: int = 20) -> dict:
+    """Concurrent scrape via cloudscraper — clears Cloudflare/anti-bot JS challenges
+    that block plain HTTP. Stores REAL Documents via the shared store_document.
+    Degrades cleanly if cloudscraper isn't installed. Never raises."""
+    try:
+        import cloudscraper
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": f"cloudscraper unavailable: {e}"}
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    targets = all_targets(skip_fetched=True)
+    if limit:
+        targets = targets[:limit]
+    if not targets:
+        return {"ok": True, "engine": "cloudscraper", "attempted": 0, "fetched": 0,
+                "failed": 0, "total_chars": 0, "samples": []}
+
+    def _fetch(t):
+        url, sn, sid = t
+        try:
+            sc = cloudscraper.create_scraper()
+            r = sc.get(url, timeout=timeout)
+            if r.status_code >= 400 or not r.text:
+                return ("fail", None)
+            oid = store_document(url, sn, sid, status=r.status_code, body=r.text)
+            return ("ok", {"host": _host(url), "chars": len(r.text), "status": r.status_code}) if oid else ("fail", None)
+        except Exception:  # noqa: BLE001
+            return ("fail", None)
+
+    fetched = failed = chars = 0
+    samples: list[dict] = []
+    with ThreadPoolExecutor(max_workers=max(2, workers)) as ex:
+        for status, info in (f.result() for f in as_completed([ex.submit(_fetch, t) for t in targets])):
+            if status == "ok" and info:
+                fetched += 1; chars += info["chars"]
+                if len(samples) < 12:
+                    samples.append(info)
+            else:
+                failed += 1
+    return {"ok": True, "engine": "cloudscraper", "attempted": len(targets),
+            "fetched": fetched, "failed": failed, "total_chars": chars, "samples": samples}
+
+
 def scraped_count() -> int:
     """How many REAL fetched documents are in the ontology. Never raises."""
     try:
