@@ -31,8 +31,41 @@ import { Btn, KV, inputStyle } from "@/components/Wave1Kit";
 import { apiGet, asList, labelOf, useAsync } from "@/lib/wave1";
 import { idToColor, colorToId } from "@/engine/gpuPicking";
 import { slerp } from "@/engine/quaternionCamera";
+import { BinaryDeltaSocket } from "@/engine/binaryTransport";
+import { appParams } from "@/lib/app-params";
 
 const ACCENT = C.neon;
+
+// Op codes — must match server/services/graph_stream.py exactly.
+const OP_NODE = 1, OP_EDGE = 2, OP_REMOVE = 3, OP_HEARTBEAT = 4, OP_SNAPSHOT_END = 5;
+
+// Decode one binary delta frame (big-endian, strings = uint16 len + UTF-8).
+function decodeFrame(buf) {
+  const dv = new DataView(buf);
+  let i = 0;
+  const op = dv.getUint8(i); i += 1;
+  const dec = new TextDecoder();
+  const rstr = () => {
+    const len = dv.getUint16(i); i += 2;
+    const s = dec.decode(new Uint8Array(buf, i, len)); i += len;
+    return s;
+  };
+  if (op === OP_NODE) {
+    const id = rstr(), label = rstr(), type = rstr(), mark = rstr();
+    const conf = dv.getFloat32(i); i += 4;
+    const redacted = !!dv.getUint8(i); i += 1;
+    return { op: "node", id, label, type, mark, conf, redacted };
+  }
+  if (op === OP_EDGE) {
+    const a = rstr(), b = rstr(), relation = rstr();
+    const strength = dv.getFloat32(i); i += 4;
+    return { op: "edge", a, b, relation, strength };
+  }
+  if (op === OP_REMOVE) return { op: "remove", id: rstr() };
+  if (op === OP_HEARTBEAT) return { op: "heartbeat", ts: dv.getFloat64(1) };
+  if (op === OP_SNAPSHOT_END) return { op: "snapshot_end" };
+  return { op: "unknown" };
+}
 
 // Encode a screen-plane rotation angle (radians) as a unit quaternion about Z,
 // so camera rotations can be interpolated with proper spherical-linear blending.
@@ -182,6 +215,53 @@ export default function GraphCanvas() {
   }, [subAsync, setGraph]);
 
   useEffect(() => { loadSubgraph(); }, []); // initial load
+
+  // Remove a set of node ids (and their incident edges) from the live sim.
+  const removeNodes = useCallback((ids) => {
+    const s = sim.current;
+    let changed = false;
+    for (const id of ids) { if (s.nodes.delete(id)) changed = true; }
+    if (!changed) return;
+    s.edges = s.edges.filter((e) => s.nodes.has(e._a) && s.nodes.has(e._b));
+    reindex();
+    setCounts({ nodes: s.nodes.size, edges: s.edges.length });
+    setGraphVersion((v) => v + 1);
+  }, [reindex]);
+
+  // ── LIVE binary delta stream (engine/binaryTransport → /v1/graph/stream) ──
+  // Real WebSocket carrying binary ArrayBuffer frames (NOT JSON). We decode each
+  // frame and apply it to the live sim, batching a burst until SNAPSHOT_END /
+  // HEARTBEAT so React only re-derives once per batch.
+  const [live, setLive] = useState({ connected: false, frames: 0, lastBeat: null });
+  useEffect(() => {
+    const base = (appParams.apiBaseUrl || "http://localhost:8000").replace(/^http/, "ws");
+    const buf = { nodes: [], edges: [], removes: [] };
+    let frames = 0;
+    const flush = () => {
+      if (buf.removes.length) { removeNodes(buf.removes); buf.removes = []; }
+      if (buf.nodes.length || buf.edges.length) {
+        mergeGraph(buf.nodes, buf.edges, null);
+        buf.nodes = []; buf.edges = [];
+      }
+    };
+    let sock;
+    try {
+      sock = new BinaryDeltaSocket(`${base}/v1/graph/stream`, (frame) => {
+        let d;
+        try { d = decodeFrame(frame); } catch { return; }
+        frames += 1;
+        if (d.op === "node") buf.nodes.push({ id: d.id, label: d.label, type: d.type, mark: d.mark, redacted: d.redacted });
+        else if (d.op === "edge") buf.edges.push({ a: d.a, b: d.b, relation: d.relation, strength: d.strength });
+        else if (d.op === "remove") buf.removes.push(d.id);
+        else if (d.op === "snapshot_end") { flush(); setLive((l) => ({ ...l, connected: true, frames })); }
+        else if (d.op === "heartbeat") { flush(); setLive((l) => ({ ...l, connected: true, frames, lastBeat: Date.now() })); }
+      });
+      sock.connect();
+      // BinaryDeltaSocket opens lazily; reflect "connecting" immediately.
+      setLive((l) => ({ ...l, connected: false, frames: 0 }));
+    } catch { /* transport unavailable — REST data still works */ }
+    return () => { try { sock?.close(); } catch { /* noop */ } };
+  }, [mergeGraph, removeNodes]);
 
   // ── Backend: expand a node's neighbourhood ────────────────────────────────
   const expand = useCallback(async (id) => {
@@ -637,7 +717,19 @@ export default function GraphCanvas() {
       title="GRAPH CANVAS"
       subtitle="GOTHAM GRAPH — FORCE LAYOUT · GPU COLOUR-PICK · SLERP CAMERA · EXPAND/COLLAPSE"
       accent={ACCENT}
-      actions={<Btn accent={ACCENT} onClick={loadSubgraph} disabled={subAsync.loading}>{subAsync.loading ? "…" : "↻ RELOAD"}</Btn>}
+      actions={
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Badge color={live.connected ? C.neon : C.text}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+              <span style={{ width: 7, height: 7, borderRadius: "50%",
+                background: live.connected ? C.neon : C.text,
+                boxShadow: live.connected ? `0 0 6px ${C.neon}` : "none" }} />
+              {live.connected ? `LIVE · ${live.frames} frames` : "STREAM…"}
+            </span>
+          </Badge>
+          <Btn accent={ACCENT} onClick={loadSubgraph} disabled={subAsync.loading}>{subAsync.loading ? "…" : "↻ RELOAD"}</Btn>
+        </div>
+      }
     >
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr))", gap: 10, marginBottom: 14 }}>
         <StatTile label="Nodes" value={counts.nodes} accent={ACCENT} />

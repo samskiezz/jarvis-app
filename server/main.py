@@ -24,6 +24,7 @@ from .routes import jarvis_db as jarvis_db_routes
 from .routes import jarvis_taxonomy as jarvis_taxonomy_routes
 from .routes import jarvis_research as jarvis_research_routes
 from .routes import jarvis_agent as jarvis_agent_routes
+from .routes import graph_stream as graph_stream_routes
 from .routes import jarvis_world as jarvis_world_routes
 from .routes import jarvis_system as jarvis_system_routes
 from .routes import jarvis_documents as jarvis_documents_routes
@@ -138,6 +139,7 @@ def create_app() -> FastAPI:
     app.include_router(search_semantic_routes.router)
     app.include_router(aip_tools_routes.router)
     app.include_router(jarvis_agent_routes.router)
+    app.include_router(graph_stream_routes.router)
     app.include_router(tenancy_routes.router)
     app.include_router(gateway_routes.router)
     app.include_router(search_plus_routes.router)
