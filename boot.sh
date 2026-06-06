@@ -38,6 +38,12 @@ warn(){ printf '\033[33m[boot]\033[0m %s\n' "$*"; }
 
 is_local_host(){ case "${1:-}" in ""|*127.0.0.1*|*localhost*|*0.0.0.0*) return 0;; *) return 1;; esac; }
 
+# ── 0/5 environment: install/repair ALL deps (python · node · go scraper
+# binaries like katana · …) before anything starts. Idempotent; Ollama is handled
+# in step 1 below so we skip it here. Bypass with SKIP_SETUP=1.
+export PATH="$HOME/go/bin:$PATH"
+[ "${SKIP_SETUP:-0}" = "1" ] || SETUP_OLLAMA=0 bash "$ROOT/setup.sh" || warn "setup had issues (see /tmp/jarvis-setup/)"
+
 # ── 1/5 LLM (AIP) ─────────────────────────────────────────────────────────────
 llm_mode="off"
 if [ "${NO_LLM:-0}" = "1" ]; then

@@ -30,10 +30,12 @@ warn(){ printf '\033[33m[serve]\033[0m %s\n' "$*"; }
 
 IP="$(hostname -I 2>/dev/null | awk '{print $1}')"; [ -z "$IP" ] && IP="<server-ip>"
 
-# ── 1. deps ───────────────────────────────────────────────────────────────────
-say "1/4 dependencies…"
-python -m pip install -q -r server/requirements.txt 2>>"$LOG/pip.log" || warn "  pip issues (see $LOG/pip.log)"
-[ -d node_modules ] || npm install >"$LOG/npm.log" 2>&1
+# ── 1. deps (FULL environment: python · node · go scraper binaries · ollama) ──
+say "1/4 dependencies (setup.sh — installs everything the app needs)…"
+# Go binaries (katana etc.) land in ~/go/bin — put it on PATH so the backend's
+# scraper can find them, then install/repair the whole environment idempotently.
+export PATH="$HOME/go/bin:$PATH"
+[ "${SKIP_SETUP:-0}" = "1" ] || bash "$ROOT/setup.sh" || warn "  setup had issues (see /tmp/jarvis-setup/)"
 
 # ── 2. backend on 0.0.0.0 ─────────────────────────────────────────────────────
 say "2/4 backend → http://0.0.0.0:$API_PORT (reachable at http://$IP:$API_PORT)…"
