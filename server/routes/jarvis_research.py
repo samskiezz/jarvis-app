@@ -29,8 +29,15 @@ async def connection(_t: str | None = Depends(optional_bearer)):
 
 @router.post("/connect")
 async def connect(body: ConnectBody, _t: str = Depends(require_bearer)):
-    """Point JARVIS at your GPU's Ollama at runtime (persisted; no restart). Tests it."""
-    return lr.connect(body.ollama_host, model=body.model)
+    """Point JARVIS at your GPU's Ollama at runtime (persisted; no restart). Tests it,
+    and on success starts the GPU autopilot so the GPU starts hammering immediately."""
+    res = lr.connect(body.ollama_host, model=body.model)
+    if res.get("ok"):
+        try:
+            ap.start()
+        except Exception:  # noqa: BLE001
+            pass
+    return res
 
 @router.post("")
 async def run(body: ResearchBody, _t: str = Depends(require_bearer)):
