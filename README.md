@@ -2,6 +2,14 @@
 
 Personal intelligence terminal — global ontology, live risk, AI analyst over Sam Kazangas's real personal/business universe (PSG, Pangani, Dubai, $100M target).
 
+> **Production / platform:** one-command boot, configurable LLM backend (laptop →
+> GPU servers), a real tool-calling agent grounded on the 92k-source corpus, a
+> governed binary graph stream, and the plane UI. See **[docs/PRODUCTION.md](docs/PRODUCTION.md)**.
+>
+> ```bash
+> ./boot.sh        # LLM → backend → data load → UI, idempotent
+> ```
+
 ## Architecture
 
 ```
