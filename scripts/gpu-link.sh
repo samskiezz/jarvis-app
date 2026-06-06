@@ -13,12 +13,10 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 [ -f .env ] && { set -a; . ./.env; set +a; }
-H="${VAST_SSH_HOST:-}"; P="${VAST_SSH_PORT:-22}"; U="${VAST_SSH_USER:-root}"
-OP="${VAST_OLLAMA_PORT:-11434}"; MODEL="${OLLAMA_MODEL:-llama3.1:8b}"
+U="${VAST_SSH_USER:-root}"; OP="${VAST_OLLAMA_PORT:-11434}"; MODEL="${OLLAMA_MODEL:-llama3.1:8b}"
 say(){ printf '\033[36m[gpu-link]\033[0m %s\n' "$*"; }
 SSHO="-o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=8"
 
-[ -z "$H" ] && { say "VAST_SSH_HOST not set in .env — skipping."; exit 0; }
 command -v ssh >/dev/null 2>&1 || { say "ssh not installed on this box — skipping."; exit 0; }
 
 # already reachable (tunnel up or direct)?
@@ -30,20 +28,30 @@ fi
 KEY="$HOME/.ssh/id_ed25519"
 [ -f "$KEY" ] || { mkdir -p "$HOME/.ssh"; ssh-keygen -t ed25519 -N "" -f "$KEY" -q; }
 
-# 2) authorised on the GPU box?
-if ! ssh $SSHO -p "$P" "$U@$H" true 2>/dev/null; then
-  command -v ssh-copy-id >/dev/null 2>&1 && ssh-copy-id $SSHO -p "$P" "$U@$H" 2>/dev/null || true
+# 2) pick a working endpoint: DIRECT first, then the stable PROXY
+H=""; P=""
+for cand in "${VAST_SSH_HOST:-}:${VAST_SSH_PORT:-}" "${VAST_SSH_PROXY_HOST:-}:${VAST_SSH_PROXY_PORT:-}"; do
+  ch="${cand%%:*}"; cp="${cand##*:}"
+  [ -z "$ch" ] || [ -z "$cp" ] && continue
+  if ssh $SSHO -p "$cp" "$U@$ch" true 2>/dev/null; then H="$ch"; P="$cp"; break; fi
+done
+if [ -z "$H" ]; then
+  # not authorised yet on either endpoint — try to install the key, else tell the user once
+  for cand in "${VAST_SSH_HOST:-}:${VAST_SSH_PORT:-}" "${VAST_SSH_PROXY_HOST:-}:${VAST_SSH_PROXY_PORT:-}"; do
+    ch="${cand%%:*}"; cp="${cand##*:}"; [ -z "$ch" ] || [ -z "$cp" ] && continue
+    command -v ssh-copy-id >/dev/null 2>&1 && ssh-copy-id $SSHO -p "$cp" "$U@$ch" 2>/dev/null || true
+    if ssh $SSHO -p "$cp" "$U@$ch" true 2>/dev/null; then H="$ch"; P="$cp"; break; fi
+  done
 fi
-if ! ssh $SSHO -p "$P" "$U@$H" true 2>/dev/null; then
-  say "ONE-TIME setup: authorise this VPS on the GPU box. Either —"
-  say "  (a) add this key in vast.ai → Account → SSH Keys (then recreate/restart the box):"
+if [ -z "$H" ]; then
+  say "ONE-TIME: authorise this VPS on the GPU box (its key isn't accepted yet). Either —"
+  say "  (a) add this key in vast.ai → Account → SSH Keys, then restart the instance:"
   echo "        $(cat "$KEY.pub")"
-  say "  (b) or run ONCE from a shell that can reach the box (asks for password/key):"
-  say "        ssh-copy-id -p $P $U@$H"
-  say "…then re-run (serve.sh does it automatically next boot). App still runs meanwhile."
+  say "  (b) or run once: ssh-copy-id -p ${VAST_SSH_PORT:-?} ${U}@${VAST_SSH_HOST:-?}"
+  say "…then re-run. (Or skip SSH entirely: run scripts/vast-register.sh ON the box.)"
   exit 0
 fi
-say "SSH to GPU OK ✓"
+say "SSH to GPU OK ✓ ($U@$H:$P)"
 
 # 3) ensure Ollama is up on the box, bound to all interfaces, model present
 ssh $SSHO -p "$P" "$U@$H" \
