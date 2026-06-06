@@ -59,6 +59,9 @@ export const PAGES = [
   // ── COMMAND ────────────────────────────────────────────────────────────
   { name: "CommandCenter", label: "Command Center", icon: "⌘", group: "command",
     component: P(() => import("@/pages/CommandCenter")) },
+  { name: "WorldOps", label: "World OS", icon: "✨", group: "command",
+    aliases: ["foundry","gotham","apollo","endpoints","points","status"],
+    component: P(() => import("@/pages/WorldOps")) },
   { name: "PipelineMonitor", label: "Pipeline Monitor", icon: "⛓", group: "command",
     component: P(() => import("@/pages/PipelineMonitor")) },
 
