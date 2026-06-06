@@ -32,6 +32,7 @@ _TYPES = {
     "DomainSubject": "Domain knowledge subject (neuron).",
     "DataSource": "Catalogued data acquisition endpoint.",
     "Document": "OCR / reference document candidate.",
+    "Topic": "Master domain topic (the 30 cross-correlated domains).",
 }
 
 
@@ -106,7 +107,8 @@ def project(*, batch: int = 5000) -> dict:
         c = _conn()
     except sqlite3.Error as e:
         return {"ok": False, "error": str(e)}
-    out = {"subjects": 0, "sources": 0, "documents": 0, "links": 0}
+    out = {"subjects": 0, "sources": 0, "documents": 0, "links": 0,
+           "topic_links": 0, "correlations": 0}
     try:
         _ensure_types(c)
 
@@ -202,12 +204,51 @@ def project(*, batch: int = 5000) -> dict:
         except sqlite3.Error:
             pass
 
+        # 5) DOMAIN COHESION + CROSS-CORRELATION — the layer that ties every section
+        # of the platform together. Without it the 30 domains are disconnected islands
+        # and nothing cross-correlates across the whole. Two parts:
+        #   5a) every DomainSubject (neuron) -> its master Topic  (IN_TOPIC)
+        #   5b) Topic -> Topic influence edges from cross_correlation_edges.csv
+        #       (CAUSES_RISK_TO / DRIVES / …) — the real cross-domain web.
+        try:
+            from . import jarvis_grow as _grow
+            _grow.ensure_topics()              # the 30 master Topic nodes (idempotent)
+            _slug = _grow._slug
+
+            rows = c.execute(
+                "SELECT subject_id, master_topic FROM world_subject "
+                "WHERE master_topic IS NOT NULL AND master_topic<>''")
+            lbuf = []
+            for r in rows:
+                lbuf.append((f"intopic:{r['subject_id']}", "IN_TOPIC",
+                             f"subject:{r['subject_id']}", f"topic:{_slug(r['master_topic'])}"))
+                if len(lbuf) >= batch:
+                    out["topic_links"] += _bulk_links(c, lbuf); lbuf = []; c.commit()
+            if lbuf:
+                out["topic_links"] += _bulk_links(c, lbuf); c.commit()
+
+            rows = c.execute(
+                "SELECT edge_id, source_node, target_node, edge_type FROM world_correlation "
+                "WHERE source_node<>'' AND target_node<>''")
+            lbuf = []
+            for r in rows:
+                lbuf.append((f"corr:{r['edge_id']}", (r["edge_type"] or "CORRELATES").strip().upper(),
+                             f"topic:{_slug(r['source_node'])}", f"topic:{_slug(r['target_node'])}"))
+                if len(lbuf) >= batch:
+                    out["correlations"] += _bulk_links(c, lbuf); lbuf = []; c.commit()
+            if lbuf:
+                out["correlations"] += _bulk_links(c, lbuf); c.commit()
+        except Exception:  # noqa: BLE001 - cohesion is best-effort, never breaks projection
+            pass
+
         c.commit()
         # honest final counts straight from the graph
         out["ont_objects_total"] = c.execute("SELECT COUNT(*) FROM ont_object").fetchone()[0]
         out["neurons_total"] = c.execute(
             "SELECT COUNT(*) FROM ont_object WHERE type='DomainSubject'").fetchone()[0]
         out["ont_links_total"] = c.execute("SELECT COUNT(*) FROM ont_link").fetchone()[0]
+        out["correlations_total"] = c.execute(
+            "SELECT COUNT(*) FROM ont_link WHERE id LIKE 'corr:%'").fetchone()[0]
     finally:
         c.close()
     out["ok"] = True
@@ -225,6 +266,8 @@ def counts() -> dict:
                 "ont_links": c.execute("SELECT COUNT(*) FROM ont_link").fetchone()[0],
                 "sources": c.execute("SELECT COUNT(*) FROM ont_object WHERE type='DataSource'").fetchone()[0],
                 "documents": c.execute("SELECT COUNT(*) FROM ont_object WHERE type='Document'").fetchone()[0],
+                "topics": c.execute("SELECT COUNT(*) FROM ont_object WHERE type='Topic'").fetchone()[0],
+                "correlations": c.execute("SELECT COUNT(*) FROM ont_link WHERE id LIKE 'corr:%'").fetchone()[0],
             }
         finally:
             c.close()
