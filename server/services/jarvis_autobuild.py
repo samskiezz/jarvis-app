@@ -110,6 +110,16 @@ def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 
         except Exception:  # noqa: BLE001
             pass
 
+    # 4c) rebuild the self-building UI spec so new object types get windows+renders
+    try:
+        from . import jarvis_ui_builder as uib
+        uib.invalidate()
+        s = uib.build_spec()
+        report["steps"]["ui_spec"] = {"windows": s["object_types"],
+                                      "renders": s["renders_assigned"], "gaps": len(s["render_gaps"])}
+    except Exception:  # noqa: BLE001
+        pass
+
     # 5) snapshot the document store for durability
     if docstore is not None:
         try:
