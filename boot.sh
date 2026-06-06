@@ -105,6 +105,16 @@ except Exception as e:
     print("    startup status:", e)
 PY
 
+# Autonomous build: every boot grows the platform on its own — scrape new content,
+# project it, and snapshot for durability (in the background; idempotent + resumable).
+# Tune/skip with AUTOBUILD_BATCHES (default 2) / NO_AUTOBUILD=1.
+if [ "${NO_AUTOBUILD:-0}" != "1" ]; then
+  say "    autobuild: scraping + projecting in background (resumable)…"
+  ( curl -s -m 1800 -X POST -H "Authorization: Bearer $KEY" \
+      "http://$API_HOST:$API_PORT/v1/jarvis/system/autobuild?scrape_batches=${AUTOBUILD_BATCHES:-2}" \
+      >"$LOG/autobuild.json" 2>&1 || true ) &
+fi
+
 # ── 4/5 frontend ──────────────────────────────────────────────────────────────
 if [ "${NO_UI:-0}" = "1" ]; then
   say "4/5 frontend: skipped (NO_UI=1)"

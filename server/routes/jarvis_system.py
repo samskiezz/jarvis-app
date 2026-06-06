@@ -27,6 +27,18 @@ async def expansion(branching: int = 10, _t: str | None = Depends(optional_beare
 async def startup(_t: str = Depends(require_bearer)):
     return sysmod.startup()
 
+@router.post("/autobuild")
+async def autobuild(scrape_batches: int = 2, depth: int = 2, _t: str = Depends(require_bearer)):
+    """Build the whole platform autonomously: restore → load → project → scrape →
+    snapshot. Idempotent; safe to run on every boot and on a schedule."""
+    from ..services import jarvis_autobuild as ab
+    return ab.run_once(scrape_batches=scrape_batches, depth=depth)
+
+@router.get("/autobuild/status")
+async def autobuild_status(_t: str | None = Depends(optional_bearer)):
+    from ..services import jarvis_autobuild as ab
+    return ab.status()
+
 @router.get("/gate")
 async def gate(_t: str | None = Depends(optional_bearer)):
     return wd.gate_report()
