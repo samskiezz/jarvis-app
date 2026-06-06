@@ -92,10 +92,22 @@ async def _lifespan(app: FastAPI):
         ft_task = start_loop_if_enabled()
     except Exception:  # noqa: BLE001 - startup must never break on an optional loop
         ft_task = None
+
+    # Continuous LLM research autopilot — the engine that keeps the GPU busy: it
+    # cycles topics through llm_research.research() forever (idling until a model is
+    # reachable). Opt-in via LLM_AUTOPILOT_ENABLE (the serve scripts set it on deploy
+    # so the GPU is hammered automatically); a no-op for tests / bare imports.
+    ap_task = None
+    try:
+        from .services.llm_autopilot import start_loop_if_enabled as _start_autopilot
+
+        ap_task = _start_autopilot()
+    except Exception:  # noqa: BLE001 - startup must never break on an optional loop
+        ap_task = None
     try:
         yield
     finally:
-        for t in (task, ft_task):
+        for t in (task, ft_task, ap_task):
             if t is not None:
                 t.cancel()
                 with contextlib.suppress(asyncio.CancelledError, Exception):

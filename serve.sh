@@ -20,6 +20,10 @@ API_PORT="${API_PORT:-8000}"; UI_PORT="${UI_PORT:-5173}"
 export VITE_API_PORT="$API_PORT"
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost}"
+# Continuous LLM research autopilot — keeps the GPU hammered (cycles topics through
+# the LLM forever; idles until a model is reachable). On by default for a deploy;
+# disable with LLM_AUTOPILOT_ENABLE=0. Tune LLM_AUTOPILOT_CONCURRENCY (default 3).
+export LLM_AUTOPILOT_ENABLE="${LLM_AUTOPILOT_ENABLE:-1}"
 LOG=/tmp/jarvis-serve; mkdir -p "$LOG"
 say(){ printf '\033[36m[serve]\033[0m %s\n' "$*"; }
 warn(){ printf '\033[33m[serve]\033[0m %s\n' "$*"; }
@@ -74,6 +78,8 @@ echo
 say "════════════════════════════════════════════════════════════════"
 say "  UP.  Open →  http://$IP:$UI_PORT/"
 say "       backend  http://$IP:$API_PORT     (logs in $LOG/)"
+say "  GPU autopilot: ON — continuously researching via the LLM (hammers the GPU"
+say "                 as soon as OLLAMA_HOST points at a reachable model)."
 say "  First load shows the install pop-up → click 'Initialise System'."
 warn "  Make sure ports $UI_PORT and $API_PORT are OPEN in your vast.ai/VPS firewall."
 say "════════════════════════════════════════════════════════════════"

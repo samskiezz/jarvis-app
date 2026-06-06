@@ -27,6 +27,10 @@ API_HOST="${API_HOST:-127.0.0.1}"; API_PORT="${API_PORT:-8000}"
 export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost,$API_HOST}"
 UI_PORT="${UI_PORT:-5173}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-llama3.2:1b}"; export OLLAMA_MODEL
+# Continuous LLM research autopilot — keeps the GPU hammered (cycles topics through
+# the LLM forever; idles until a model is reachable). On by default; disable with
+# LLM_AUTOPILOT_ENABLE=0. Tune LLM_AUTOPILOT_CONCURRENCY (default 3).
+export LLM_AUTOPILOT_ENABLE="${LLM_AUTOPILOT_ENABLE:-1}"
 LOG=/tmp/jarvis-boot; mkdir -p "$LOG"
 
 say(){ printf '\033[36m[boot]\033[0m %s\n' "$*"; }
