@@ -36,7 +36,38 @@ try:
 except Exception:  # noqa: BLE001
     jos = None  # type: ignore
 
-_OLLAMA = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
+_OLLAMA_ENV = os.environ.get("OLLAMA_HOST")
+# Candidate hosts probed (in order) when OLLAMA_HOST isn't set, so the app finds
+# the GPU "brain" by itself — local first, then the known vast.ai box, plus any
+# extra hosts from OLLAMA_HOSTS (comma-separated). Zero-config: it just works.
+_OLLAMA_CANDIDATES = [
+    h.strip() for h in (
+        ([_OLLAMA_ENV] if _OLLAMA_ENV else [])
+        + ["http://127.0.0.1:11434", "http://211.72.13.201:11434"]
+        + os.environ.get("OLLAMA_HOSTS", "").split(",")
+    ) if h.strip()
+]
+_OLLAMA_RESOLVED: str | None = None
+
+
+def _ollama() -> str:
+    """The reachable Ollama base URL. If OLLAMA_HOST is set it's used as-is;
+    otherwise probe the candidates once and cache whichever answers (re-probing
+    only while none has been found, so a GPU box coming online is picked up)."""
+    global _OLLAMA_RESOLVED
+    if _OLLAMA_ENV:
+        return _OLLAMA_ENV
+    if _OLLAMA_RESOLVED:
+        return _OLLAMA_RESOLVED
+    for host in _OLLAMA_CANDIDATES:
+        try:
+            urllib.request.urlopen(host + "/api/tags", timeout=2)
+            _OLLAMA_RESOLVED = host
+            return host
+        except Exception:  # noqa: BLE001
+            continue
+    # nothing reachable yet — fall back to local so URLs are still well-formed
+    return _OLLAMA_CANDIDATES[0] if _OLLAMA_CANDIDATES else "http://127.0.0.1:11434"
 
 
 def _ollama_model() -> str:
@@ -47,7 +78,7 @@ def _ollama_model() -> str:
         return env
     try:
         import json as _j
-        with urllib.request.urlopen(_OLLAMA + "/api/tags", timeout=3) as r:
+        with urllib.request.urlopen(_ollama() + "/api/tags", timeout=3) as r:
             tags = _j.loads(r.read().decode()).get("models", [])
         if tags:
             return tags[0].get("name") or tags[0].get("model") or "llama3.2:1b"
@@ -68,7 +99,7 @@ def backend() -> str | None:
     """Which LLM backend is reachable right now (ollama | openai-compatible | None)."""
     # 1. Ollama (the user's Llama)
     try:
-        urllib.request.urlopen(_OLLAMA + "/api/tags", timeout=2)
+        urllib.request.urlopen(_ollama() + "/api/tags", timeout=2)
         return "ollama"
     except Exception:  # noqa: BLE001
         pass
@@ -100,7 +131,7 @@ def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
                        "options": {"temperature": temperature}}
             if fmt == "json":
                 payload["format"] = "json"
-            out = _post(_OLLAMA + "/api/chat", payload)
+            out = _post(_ollama() + "/api/chat", payload)
             return (out.get("message", {}) or {}).get("content")
         if b == "openai-compatible":
             from ..config import KIMI_API_KEY, KIMI_BASE_URL, KIMI_MODEL
