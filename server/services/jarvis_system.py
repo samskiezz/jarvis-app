@@ -34,6 +34,10 @@ try:
 except Exception:  # noqa: BLE001
     proj = None  # type: ignore
 try:
+    from . import jarvis_synapse as syn
+except Exception:  # noqa: BLE001
+    syn = None  # type: ignore
+try:
     from . import world_dispatch as wd
 except Exception:  # noqa: BLE001
     wd = None  # type: ignore
@@ -180,5 +184,8 @@ def status() -> dict:
         "AIP (AI mesh)": True,
         "Security/Governance": True,
     }
+    # Combinatorial synaptic-capacity expansion of the graph (potential, not edges).
+    capacity = syn.capacity(pc) if (syn is not None and pc) else None
     return {"subsystems_up": up, "foundry": foundry, "gotham": gotham,
-            "apollo": apollo_st, "aip": aip, "security": security, "ingestion_jobs": jobs}
+            "apollo": apollo_st, "aip": aip, "security": security,
+            "ingestion_jobs": jobs, "capacity": capacity}

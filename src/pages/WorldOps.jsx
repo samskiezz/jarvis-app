@@ -36,6 +36,17 @@ export default function WorldOps() {
   const f = status?.foundry || {};
   const g = status?.gotham || {};
   const jobs = status?.ingestion_jobs || {};
+  const cap = status?.capacity || null;
+
+  // Compact human formatting for the very large combinatorial figures.
+  const big = (n) => {
+    n = Number(n) || 0;
+    if (n >= 1e12) return (n / 1e12).toFixed(2) + "T";
+    if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + "k";
+    return String(n);
+  };
 
   return (
     <PageShell title="World OS" subtitle="Jarvis · Foundry · Gotham · Apollo · AIP" accent={ACCENT}
@@ -74,6 +85,20 @@ export default function WorldOps() {
             <StatTile label="Links" value={(g.links || 0).toLocaleString()} accent={C.purple || C.neon} />
           </Grid>
         </PanelCard>
+        {cap && (
+          <PanelCard title="Synaptic capacity (combinatorial potential)" accent={C.neon}
+            right={<Badge color={C.neon}>{(cap.primitives?.total || 0).toLocaleString()} primitives</Badge>}>
+            <Grid min={130} gap={10}>
+              <StatTile label="Neural synapses" value={big(cap.capacity?.neural_synapses_total)} accent={C.neon}
+                sub={`${big(cap.capacity?.neuron_input_synapses)} input`} />
+              <StatTile label="Full mesh (undirected)" value={big(cap.capacity?.full_mesh_undirected)} accent={C.gold || C.neon} />
+              <StatTile label="Full mesh (directed)" value={big(cap.capacity?.full_mesh_directed)} accent={C.gold || C.neon} />
+              <StatTile label="Neuron↔neuron" value={big(cap.capacity?.neuron_to_neuron_synapses)} accent={C.purple || C.neon} />
+              <StatTile label="Clusters (10/ea)" value={(cap.clusters?.per_10 || 0).toLocaleString()} accent={C.blue} />
+            </Grid>
+            <div style={{ fontSize: 8, color: C.text, marginTop: 8 }}>{cap.note}</div>
+          </PanelCard>
+        )}
         <PanelCard title="Ingestion jobs (legal gate)" accent={C.gold || C.neon}>
           <Grid min={130} gap={10}>
             <StatTile label="Total" value={(jobs.total || 0).toLocaleString()} accent={C.gold || C.neon} />
