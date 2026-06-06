@@ -41,7 +41,32 @@ def _conn() -> sqlite3.Connection:
     return c
 
 
+def _ensure_schema(c: sqlite3.Connection) -> None:
+    """Create the ontology-graph tables if they don't exist yet.
+
+    The projection runs during startup on a FRESH database (every ephemeral container
+    clones the repo anew) — BEFORE any ontology API call has created these tables — so
+    it must create them itself or it crashes on the first INSERT and Gotham stays empty
+    (0 objects / 0 neurons). This was the bug that made the whole graph look "fake".
+    Schema is identical to ``jarvis_ontology.init_db`` so both paths share one shape."""
+    c.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS ont_object_type (
+            name TEXT PRIMARY KEY, schema TEXT, states TEXT, initial TEXT, ts INTEGER
+        );
+        CREATE TABLE IF NOT EXISTS ont_object (
+            id TEXT PRIMARY KEY, type TEXT, props TEXT, state TEXT,
+            created_ts INTEGER, updated_ts INTEGER
+        );
+        CREATE TABLE IF NOT EXISTS ont_link (
+            id TEXT PRIMARY KEY, type TEXT, from_id TEXT, to_id TEXT, ts INTEGER
+        );
+        """
+    )
+
+
 def _ensure_types(c: sqlite3.Connection) -> None:
+    _ensure_schema(c)
     now = int(time.time() * 1000)
     c.executemany(
         "INSERT OR IGNORE INTO ont_object_type (name, schema, states, initial, ts) VALUES (?,?,?,?,?)",
