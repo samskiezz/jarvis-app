@@ -1,0 +1,1392 @@
+{
+  "thesis": "Integration -> Ontology -> Application -> Production. If it is not in production, it is not adding value.",
+  "counts": {
+    "pages": 79,
+    "planes": 16,
+    "backend_routes": 293,
+    "renders_to_create": 6
+  },
+  "planes": {
+    "aip": {
+      "module": "AI mesh (AIP)",
+      "render": "aip_neural_mesh",
+      "surfaces": [
+        "AgentGovernance"
+      ]
+    },
+    "apex": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "ApexCore",
+        "PluginControlPlane",
+        "PluginIntegrationProof",
+        "ForgeConsole",
+        "AutopilotConsole"
+      ]
+    },
+    "apollo": {
+      "module": "Production / delivery (Apollo)",
+      "render": "apollo_delivery_rig",
+      "surfaces": [
+        "FleetHealth",
+        "RolloutControl",
+        "DesiredState"
+      ]
+    },
+    "audit": {
+      "module": "Governance / lineage",
+      "render": "audit_ledger_vault",
+      "surfaces": [
+        "AuditReplay",
+        "Governance"
+      ]
+    },
+    "cognition": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "MLHub",
+        "MLDashboard",
+        "TechTree",
+        "PredictionOracle",
+        "NeuralCore",
+        "ScienceConsole"
+      ]
+    },
+    "command": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "CommandCenter",
+        "WorldOps"
+      ]
+    },
+    "foundry": {
+      "module": "Integration + Ontology (Foundry)",
+      "render": "foundry_pipeline_rig",
+      "surfaces": [
+        "SourceCatalogue",
+        "VectorMemory",
+        "PipelineMonitor",
+        "OntologyManager",
+        "ObjectExplorer",
+        "ObjectSets",
+        "LineageGraph",
+        "ObjectView"
+      ]
+    },
+    "gotham": {
+      "module": "Common Operating Picture (Gotham)",
+      "render": "gotham_command_globe",
+      "surfaces": [
+        "GlobalIntel",
+        "ActionApprovalQueue",
+        "GraphOps",
+        "Investigations",
+        "GraphCanvas",
+        "GraphTimeline"
+      ]
+    },
+    "intel": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "JarvisTerminal",
+        "SystemIntel",
+        "AlertsNotificationCenter",
+        "GeoMap",
+        "Dashboard"
+      ]
+    },
+    "jarvis": {
+      "module": "Operator / AIP cockpit",
+      "render": "jarvis_core_avatar",
+      "surfaces": [
+        "CommandOverview",
+        "PlaneGraph",
+        "JarvisCore"
+      ]
+    },
+    "knowledge": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "PatentsSearch",
+        "PatentRegistry",
+        "PatentIngest",
+        "KGIKBrain",
+        "KGIKLedger",
+        "TCIS",
+        "SecondBrain"
+      ]
+    },
+    "platform": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "SearchHub",
+        "Operations",
+        "LinkAnalysis",
+        "Reports",
+        "Activity",
+        "DashboardBuilder",
+        "SystemAdmin",
+        "TemporalConsole",
+        "GeoWorkspace",
+        "ScenarioLab",
+        "SemanticDiscover",
+        "DataCatalog",
+        "AIPActions",
+        "TenantAdmin",
+        "SourcesConsole",
+        "GatewayConsole",
+        "SearchPlus",
+        "ScienceConsoles",
+        "CaseBoard",
+        "PivotWorkshop",
+        "ActionRunner",
+        "AIPLogic",
+        "Quiver"
+      ]
+    },
+    "sensors": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "SensorGrid",
+        "SkyOrbital",
+        "RFSpectrum"
+      ]
+    },
+    "sim": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "Underworld"
+      ]
+    },
+    "war": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "War",
+        "GameLeaderboard"
+      ]
+    },
+    "wealth": {
+      "module": null,
+      "render": null,
+      "surfaces": [
+        "InvestmentTracker",
+        "SystemHealth"
+      ]
+    }
+  },
+  "pages": [
+    {
+      "surface": "AgentGovernance",
+      "label": "Agent Governance",
+      "plane": "aip",
+      "widgets": [
+        "Button Group",
+        "Comments",
+        "Inline Action"
+      ],
+      "render": "aip_neural_mesh"
+    },
+    {
+      "surface": "ApexCore",
+      "label": "Apex Core",
+      "plane": "apex",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "AutopilotConsole",
+      "label": "Autopilot",
+      "plane": "apex",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "ForgeConsole",
+      "label": "Forge",
+      "plane": "apex",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PluginControlPlane",
+      "label": "Plugin Control Plane",
+      "plane": "apex",
+      "widgets": [
+        "Links",
+        "Map",
+        "Object View"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PluginIntegrationProof",
+      "label": "Plugin Integration Proof",
+      "plane": "apex",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "DesiredState",
+      "label": "Desired State",
+      "plane": "apollo",
+      "widgets": [
+        "Button Group",
+        "Metric Card",
+        "Timeline"
+      ],
+      "render": "apollo_delivery_rig"
+    },
+    {
+      "surface": "FleetHealth",
+      "label": "Fleet Health",
+      "plane": "apollo",
+      "widgets": [
+        "Button Group",
+        "Chart XY",
+        "Metric Card",
+        "Timeline"
+      ],
+      "render": "apollo_delivery_rig"
+    },
+    {
+      "surface": "RolloutControl",
+      "label": "Rollout Control",
+      "plane": "apollo",
+      "widgets": [
+        "Button Group",
+        "Metric Card",
+        "Timeline"
+      ],
+      "render": "apollo_delivery_rig"
+    },
+    {
+      "surface": "AuditReplay",
+      "label": "Audit Replay",
+      "plane": "audit",
+      "widgets": [
+        "Gantt",
+        "Markdown",
+        "Object Table",
+        "Timeline"
+      ],
+      "render": "audit_ledger_vault"
+    },
+    {
+      "surface": "Governance",
+      "label": "Governance",
+      "plane": "audit",
+      "widgets": [
+        "Button Group",
+        "Comments",
+        "Inline Action"
+      ],
+      "render": "audit_ledger_vault"
+    },
+    {
+      "surface": "MLDashboard",
+      "label": "ML Dashboard",
+      "plane": "cognition",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "MLHub",
+      "label": "ML Hub",
+      "plane": "cognition",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "NeuralCore",
+      "label": "Neural Core",
+      "plane": "cognition",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PredictionOracle",
+      "label": "Prediction Oracle",
+      "plane": "cognition",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "ScienceConsole",
+      "label": "Science Console",
+      "plane": "cognition",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "TechTree",
+      "label": "Tech Tree",
+      "plane": "cognition",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "CommandCenter",
+      "label": "Command Center",
+      "plane": "command",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "WorldOps",
+      "label": "World OS",
+      "plane": "command",
+      "widgets": [
+        "Map",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "LineageGraph",
+      "label": "Lineage",
+      "plane": "foundry",
+      "widgets": [
+        "Gantt",
+        "Links",
+        "Map",
+        "Object Table",
+        "Object View"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "ObjectExplorer",
+      "label": "Object Explorer",
+      "plane": "foundry",
+      "widgets": [
+        "Object List",
+        "Object Table",
+        "Property List"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "ObjectSets",
+      "label": "Object Sets",
+      "plane": "foundry",
+      "widgets": [
+        "Object List",
+        "Object Table",
+        "Property List"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "ObjectView",
+      "label": "Object View",
+      "plane": "foundry",
+      "widgets": [
+        "Object List",
+        "Object Table",
+        "Property List"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "OntologyManager",
+      "label": "Ontology Manager",
+      "plane": "foundry",
+      "widgets": [
+        "Object List",
+        "Object Table",
+        "Property List"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "PipelineMonitor",
+      "label": "Pipeline Monitor",
+      "plane": "foundry",
+      "widgets": [
+        "Gantt",
+        "Object Table"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "SourceCatalogue",
+      "label": "Source Catalogue",
+      "plane": "foundry",
+      "widgets": [
+        "Object List",
+        "Object Table",
+        "Property List"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "VectorMemory",
+      "label": "Vector Memory",
+      "plane": "foundry",
+      "widgets": [
+        "Filter List",
+        "Object List",
+        "String Selector"
+      ],
+      "render": "foundry_pipeline_rig"
+    },
+    {
+      "surface": "ActionApprovalQueue",
+      "label": "Action Approvals",
+      "plane": "gotham",
+      "widgets": [
+        "Button Group",
+        "Comments",
+        "Inline Action"
+      ],
+      "render": "gotham_command_globe"
+    },
+    {
+      "surface": "GlobalIntel",
+      "label": "Global Intel",
+      "plane": "gotham",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": "gotham_command_globe"
+    },
+    {
+      "surface": "GraphCanvas",
+      "label": "Graph Canvas",
+      "plane": "gotham",
+      "widgets": [
+        "Links",
+        "Map",
+        "Object View"
+      ],
+      "render": "gotham_command_globe"
+    },
+    {
+      "surface": "GraphOps",
+      "label": "Graph Ops",
+      "plane": "gotham",
+      "widgets": [
+        "Links",
+        "Map",
+        "Object View"
+      ],
+      "render": "gotham_command_globe"
+    },
+    {
+      "surface": "GraphTimeline",
+      "label": "Graph Timeline",
+      "plane": "gotham",
+      "widgets": [
+        "Gantt",
+        "Links",
+        "Map",
+        "Object View",
+        "Timeline"
+      ],
+      "render": "gotham_command_globe"
+    },
+    {
+      "surface": "Investigations",
+      "label": "Investigations",
+      "plane": "gotham",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": "gotham_command_globe"
+    },
+    {
+      "surface": "AlertsNotificationCenter",
+      "label": "Alerts & Notifications",
+      "plane": "intel",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "Dashboard",
+      "label": "Dashboard",
+      "plane": "intel",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "GeoMap",
+      "label": "Geo Map",
+      "plane": "intel",
+      "widgets": [
+        "Map",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "JarvisTerminal",
+      "label": "Jarvis Terminal",
+      "plane": "intel",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SystemIntel",
+      "label": "System Intel",
+      "plane": "intel",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "CommandOverview",
+      "label": "Command Overview",
+      "plane": "jarvis",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": "jarvis_core_avatar"
+    },
+    {
+      "surface": "JarvisCore",
+      "label": "Jarvis Core",
+      "plane": "jarvis",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": "jarvis_core_avatar"
+    },
+    {
+      "surface": "PlaneGraph",
+      "label": "Plane Graph",
+      "plane": "jarvis",
+      "widgets": [
+        "Links",
+        "Map",
+        "Object View"
+      ],
+      "render": "jarvis_core_avatar"
+    },
+    {
+      "surface": "KGIKBrain",
+      "label": "KGIK Brain",
+      "plane": "knowledge",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "KGIKLedger",
+      "label": "KGIK Ledger",
+      "plane": "knowledge",
+      "widgets": [
+        "Markdown",
+        "Object Table"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PatentIngest",
+      "label": "Patent Ingest",
+      "plane": "knowledge",
+      "widgets": [
+        "Gantt",
+        "Object Table"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PatentRegistry",
+      "label": "Patent Registry",
+      "plane": "knowledge",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PatentsSearch",
+      "label": "Patents Search",
+      "plane": "knowledge",
+      "widgets": [
+        "Filter List",
+        "Object List",
+        "String Selector"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SecondBrain",
+      "label": "Second Brain",
+      "plane": "knowledge",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "TCIS",
+      "label": "TCIS",
+      "plane": "knowledge",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "AIPActions",
+      "label": "AIP Actions",
+      "plane": "platform",
+      "widgets": [
+        "Button Group",
+        "Comments",
+        "Inline Action"
+      ],
+      "render": null
+    },
+    {
+      "surface": "AIPLogic",
+      "label": "AIP Logic",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "ActionRunner",
+      "label": "Actions",
+      "plane": "platform",
+      "widgets": [
+        "Button Group",
+        "Comments",
+        "Inline Action"
+      ],
+      "render": null
+    },
+    {
+      "surface": "Activity",
+      "label": "Activity",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "CaseBoard",
+      "label": "Case Board",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "DashboardBuilder",
+      "label": "Dashboard Builder",
+      "plane": "platform",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "DataCatalog",
+      "label": "Data Catalog",
+      "plane": "platform",
+      "widgets": [
+        "Object List",
+        "Object Table",
+        "Property List"
+      ],
+      "render": null
+    },
+    {
+      "surface": "GatewayConsole",
+      "label": "Gateway",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "GeoWorkspace",
+      "label": "Geo Workspace",
+      "plane": "platform",
+      "widgets": [
+        "Map",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "LinkAnalysis",
+      "label": "Link Analysis",
+      "plane": "platform",
+      "widgets": [
+        "Links",
+        "Map",
+        "Object View"
+      ],
+      "render": null
+    },
+    {
+      "surface": "Operations",
+      "label": "Operations",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "PivotWorkshop",
+      "label": "Pivot Workshop",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "Quiver",
+      "label": "Quiver",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "Reports",
+      "label": "Reports",
+      "plane": "platform",
+      "widgets": [
+        "Markdown",
+        "Object Table"
+      ],
+      "render": null
+    },
+    {
+      "surface": "ScenarioLab",
+      "label": "Scenario Lab",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "ScienceConsoles",
+      "label": "Science Consoles",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SearchHub",
+      "label": "Search Hub",
+      "plane": "platform",
+      "widgets": [
+        "Filter List",
+        "Object List",
+        "String Selector"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SearchPlus",
+      "label": "Search+",
+      "plane": "platform",
+      "widgets": [
+        "Filter List",
+        "Object List",
+        "String Selector"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SemanticDiscover",
+      "label": "Semantic Discover",
+      "plane": "platform",
+      "widgets": [
+        "Filter List",
+        "Object List",
+        "String Selector"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SourcesConsole",
+      "label": "Sources",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SystemAdmin",
+      "label": "System Admin",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "TemporalConsole",
+      "label": "Temporal Console",
+      "plane": "platform",
+      "widgets": [
+        "Gantt",
+        "Timeline"
+      ],
+      "render": null
+    },
+    {
+      "surface": "TenantAdmin",
+      "label": "Tenant Admin",
+      "plane": "platform",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "RFSpectrum",
+      "label": "RF / Spectrum",
+      "plane": "sensors",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SensorGrid",
+      "label": "Sensor Grid",
+      "plane": "sensors",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SkyOrbital",
+      "label": "Sky / Orbital",
+      "plane": "sensors",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "Underworld",
+      "label": "Underworld",
+      "plane": "sim",
+      "widgets": [
+        "Map",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "GameLeaderboard",
+      "label": "Game Leaderboard",
+      "plane": "war",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "War",
+      "label": "War",
+      "plane": "war",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "InvestmentTracker",
+      "label": "Investment Tracker",
+      "plane": "wealth",
+      "widgets": [
+        "Object View",
+        "Metric Card"
+      ],
+      "render": null
+    },
+    {
+      "surface": "SystemHealth",
+      "label": "System Health",
+      "plane": "wealth",
+      "widgets": [
+        "Chart XY",
+        "Metric Card"
+      ],
+      "render": null
+    }
+  ],
+  "workshop_widgets": {
+    "display": [
+      "Object Table",
+      "Object List",
+      "Object View",
+      "Property List",
+      "Links",
+      "Object Set Title"
+    ],
+    "viz": [
+      "Chart XY",
+      "Map",
+      "Gantt",
+      "Pie",
+      "Pivot Table",
+      "Timeline",
+      "Metric Card",
+      "Markdown"
+    ],
+    "filter": [
+      "Filter List",
+      "Object Dropdown",
+      "String Selector",
+      "Date/Time Picker",
+      "Input",
+      "User Select"
+    ],
+    "events": [
+      "Button Group",
+      "Inline Action",
+      "Comments",
+      "Tabs",
+      "Media Uploader"
+    ]
+  },
+  "backend_routes": [
+    "/v1/activity",
+    "/v1/admin/roles",
+    "/v1/admin/summary",
+    "/v1/aip/ask",
+    "/v1/aip/call",
+    "/v1/aip/oracle",
+    "/v1/aip/plan/run",
+    "/v1/aip/predict",
+    "/v1/aip/proposals",
+    "/v1/aip/proposals/{proposal_id}/approve",
+    "/v1/aip/proposals/{proposal_id}/reject",
+    "/v1/aip/skill",
+    "/v1/aip/tools",
+    "/v1/alerts",
+    "/v1/alerts/{alert_id}/ack",
+    "/v1/audit",
+    "/v1/audit/verify",
+    "/v1/brain/autopilot/enrich",
+    "/v1/brain/autopilot/network",
+    "/v1/brain/autopilot/plan",
+    "/v1/brain/autopilot/run",
+    "/v1/brain/autopilot/scan",
+    "/v1/brain/capture",
+    "/v1/brain/catalog",
+    "/v1/brain/daily",
+    "/v1/brain/heal-orphans",
+    "/v1/brain/health",
+    "/v1/brain/ingest",
+    "/v1/brain/log",
+    "/v1/brain/mention",
+    "/v1/brain/notes",
+    "/v1/brain/notes/{id_or_title}",
+    "/v1/brain/notes/{id_or_title}/backlinks",
+    "/v1/brain/people",
+    "/v1/brain/people/{name}",
+    "/v1/brain/reconcile",
+    "/v1/brain/research",
+    "/v1/brain/sources",
+    "/v1/brain/sources/probe",
+    "/v1/brain/synthesize",
+    "/v1/brain/think/challenge",
+    "/v1/brain/think/connect",
+    "/v1/brain/think/emerge",
+    "/v1/brain/think/panel",
+    "/v1/brain/timeline",
+    "/v1/bridge/counterfactual",
+    "/v1/bridge/graph",
+    "/v1/bridge/optimize",
+    "/v1/bridge/status",
+    "/v1/bridge/temporal",
+    "/v1/cases",
+    "/v1/cases/{case_id}",
+    "/v1/cases/{case_id}/entities",
+    "/v1/cases/{case_id}/notes",
+    "/v1/cases/{case_id}/status",
+    "/v1/chat/predict",
+    "/v1/chat/route",
+    "/v1/connectors",
+    "/v1/dashboards",
+    "/v1/dashboards/{dashboard_id}",
+    "/v1/dashboards/{dashboard_id}/resolve",
+    "/v1/datasets",
+    "/v1/datasets/",
+    "/v1/datasets/lineage",
+    "/v1/datasets/seed",
+    "/v1/datasets/transform",
+    "/v1/datasets/{dataset_id}",
+    "/v1/datasets/{dataset_id}/health",
+    "/v1/datasets/{dataset_id}/version",
+    "/v1/datasets/{name}/health",
+    "/v1/datasets/{name}/lineage",
+    "/v1/forge/approvals",
+    "/v1/forge/approvals/{change_id}",
+    "/v1/forge/status",
+    "/v1/geo/bbox",
+    "/v1/geo/contains",
+    "/v1/geo/geofences",
+    "/v1/geo/layers",
+    "/v1/geo/layers/{layer_id}/features",
+    "/v1/geo/objects",
+    "/v1/geo/radius",
+    "/v1/geo/tracks/{object_id}",
+    "/v1/governance/check",
+    "/v1/governance/due-for-deletion",
+    "/v1/governance/purposes",
+    "/v1/governance/requests",
+    "/v1/governance/requests/{request_id}/erase",
+    "/v1/governance/retention",
+    "/v1/governance/subject-request",
+    "/v1/governance/use",
+    "/v1/graph-time/at",
+    "/v1/graph-time/playback",
+    "/v1/graph/centrality",
+    "/v1/graph/communities",
+    "/v1/graph/expand/{node_id}",
+    "/v1/graph/path",
+    "/v1/graph/paths",
+    "/v1/graph/stream",
+    "/v1/graph/subgraph",
+    "/v1/health/deep",
+    "/v1/history/ingest",
+    "/v1/history/series",
+    "/v1/history/series/{series_id}",
+    "/v1/investigations",
+    "/v1/investigations/{investigation_id}",
+    "/v1/investigations/{investigation_id}/annotations",
+    "/v1/investigations/{investigation_id}/share",
+    "/v1/investigations/{investigation_id}/shares",
+    "/v1/jarvis/actions",
+    "/v1/jarvis/actions/execute",
+    "/v1/jarvis/agent/chat",
+    "/v1/jarvis/agent/tools",
+    "/v1/jarvis/ai/ask",
+    "/v1/jarvis/ai/models",
+    "/v1/jarvis/ai/retrieve",
+    "/v1/jarvis/ai/route",
+    "/v1/jarvis/apollo/artifacts",
+    "/v1/jarvis/apollo/environments",
+    "/v1/jarvis/apollo/fleet",
+    "/v1/jarvis/apollo/release",
+    "/v1/jarvis/apollo/releases",
+    "/v1/jarvis/apollo/rollback",
+    "/v1/jarvis/approvals",
+    "/v1/jarvis/approvals/{approval_id}",
+    "/v1/jarvis/architecture",
+    "/v1/jarvis/assets/gaps",
+    "/v1/jarvis/assets/generate",
+    "/v1/jarvis/assets/library",
+    "/v1/jarvis/assets/status",
+    "/v1/jarvis/assets/wire",
+    "/v1/jarvis/audit",
+    "/v1/jarvis/audit/verify",
+    "/v1/jarvis/db/health",
+    "/v1/jarvis/db/stats",
+    "/v1/jarvis/documents/ingest-batch",
+    "/v1/jarvis/documents/ingest-url",
+    "/v1/jarvis/er/find-duplicates",
+    "/v1/jarvis/er/golden/{object_id}",
+    "/v1/jarvis/er/queue",
+    "/v1/jarvis/er/resolve",
+    "/v1/jarvis/er/stats",
+    "/v1/jarvis/er/unmerge",
+    "/v1/jarvis/events/emit",
+    "/v1/jarvis/events/poll",
+    "/v1/jarvis/events/project/{stream}",
+    "/v1/jarvis/events/replay/{stream}",
+    "/v1/jarvis/events/stats",
+    "/v1/jarvis/lineage",
+    "/v1/jarvis/metrics",
+    "/v1/jarvis/ontology/action-types",
+    "/v1/jarvis/ontology/actions/apply",
+    "/v1/jarvis/ontology/link-types",
+    "/v1/jarvis/ontology/links",
+    "/v1/jarvis/ontology/object-types",
+    "/v1/jarvis/ontology/objects",
+    "/v1/jarvis/ontology/objects/{object_id}",
+    "/v1/jarvis/ontology/objects/{object_id}/history",
+    "/v1/jarvis/ontology/objects/{object_id}/neighbors",
+    "/v1/jarvis/ontology/schema",
+    "/v1/jarvis/ontology/seed",
+    "/v1/jarvis/policy/classify",
+    "/v1/jarvis/policy/decide",
+    "/v1/jarvis/policy/subjects",
+    "/v1/jarvis/policy/subjects/{subject_id}",
+    "/v1/jarvis/policy/summary",
+    "/v1/jarvis/policy/view/{object_id}",
+    "/v1/jarvis/research",
+    "/v1/jarvis/research/status",
+    "/v1/jarvis/sandbox/branches",
+    "/v1/jarvis/sandbox/{branch}/apply",
+    "/v1/jarvis/sandbox/{branch}/diff",
+    "/v1/jarvis/sandbox/{branch}/discard",
+    "/v1/jarvis/sandbox/{branch}/object/{object_id}",
+    "/v1/jarvis/sandbox/{branch}/promote",
+    "/v1/jarvis/sandbox/{branch}/set-prop",
+    "/v1/jarvis/scrape",
+    "/v1/jarvis/scrape/discover",
+    "/v1/jarvis/scrape/document/{doc_id}",
+    "/v1/jarvis/scrape/engines",
+    "/v1/jarvis/scrape/find",
+    "/v1/jarvis/scrape/recon",
+    "/v1/jarvis/scrape/search",
+    "/v1/jarvis/scrape/snapshot",
+    "/v1/jarvis/scrape/status",
+    "/v1/jarvis/sim/montecarlo",
+    "/v1/jarvis/sim/recommend/{object_id}",
+    "/v1/jarvis/sim/risk",
+    "/v1/jarvis/sim/whatif",
+    "/v1/jarvis/system/capacity",
+    "/v1/jarvis/system/dispatch",
+    "/v1/jarvis/system/expansion",
+    "/v1/jarvis/system/gate",
+    "/v1/jarvis/system/startup",
+    "/v1/jarvis/system/status",
+    "/v1/jarvis/taxonomy/cells",
+    "/v1/jarvis/taxonomy/families",
+    "/v1/jarvis/taxonomy/frontier",
+    "/v1/jarvis/taxonomy/load",
+    "/v1/jarvis/taxonomy/summary",
+    "/v1/jarvis/temporal/as-of/{object_id}",
+    "/v1/jarvis/temporal/history/{object_id}",
+    "/v1/jarvis/temporal/record",
+    "/v1/jarvis/temporal/snapshot/{object_id}",
+    "/v1/jarvis/traces",
+    "/v1/jarvis/world/endpoints",
+    "/v1/jarvis/world/load",
+    "/v1/jarvis/world/research-targets",
+    "/v1/jarvis/world/subjects",
+    "/v1/jarvis/world/summary",
+    "/v1/labs/catalog",
+    "/v1/labs/run",
+    "/v1/metrics",
+    "/v1/notes",
+    "/v1/notes/{note_id}",
+    "/v1/ontology-ext/bulk-action",
+    "/v1/ontology-ext/export",
+    "/v1/ontology-ext/functions",
+    "/v1/ontology-ext/import",
+    "/v1/ontology-ext/objects/{object_id}/computed",
+    "/v1/ontology-ext/sets",
+    "/v1/ontology-ext/sets/{set_id}",
+    "/v1/ontology-ext/sets/{set_id}/resolve",
+    "/v1/ontology-ext/views/{type_id}",
+    "/v1/ontology/links",
+    "/v1/ontology/objects",
+    "/v1/ontology/objects/{object_id}",
+    "/v1/ontology/objects/{object_id}/actions",
+    "/v1/ontology/objects/{object_id}/neighbors",
+    "/v1/ontology/types",
+    "/v1/pipelines/run",
+    "/v1/pipelines/transform",
+    "/v1/predict/skill",
+    "/v1/reports",
+    "/v1/reports/generate",
+    "/v1/reports/{report_id}",
+    "/v1/reports/{report_id}/export",
+    "/v1/resolve",
+    "/v1/rules",
+    "/v1/rules/evaluate",
+    "/v1/scenario/list",
+    "/v1/scenario/models",
+    "/v1/scenario/optimize",
+    "/v1/scenario/run",
+    "/v1/scenario/{scenario_id}",
+    "/v1/schedules",
+    "/v1/schedules/{schedule_id}/toggle",
+    "/v1/sci/domains",
+    "/v1/sci/domains/{domain_id}/examples",
+    "/v1/sci/domains/{domain_id}/methods",
+    "/v1/sci/domains/{domain_id}/run",
+    "/v1/search",
+    "/v1/search-plus/faceted",
+    "/v1/search-plus/facets",
+    "/v1/search-plus/paths",
+    "/v1/search-plus/pattern",
+    "/v1/search-plus/saved",
+    "/v1/search-plus/saved/{search_id}",
+    "/v1/search-plus/saved/{search_id}/new",
+    "/v1/search-plus/saved/{search_id}/run",
+    "/v1/search/suggest",
+    "/v1/security/whoami",
+    "/v1/semantic/nl",
+    "/v1/semantic/rag",
+    "/v1/semantic/reindex",
+    "/v1/semantic/search",
+    "/v1/sources",
+    "/v1/sources/",
+    "/v1/sources/preview",
+    "/v1/sources/{connector_id}",
+    "/v1/sources/{connector_id}/backfill",
+    "/v1/sources/{connector_id}/run",
+    "/v1/sources/{connector_id}/runs",
+    "/v1/temporal/events",
+    "/v1/temporal/object/{object_id}/versions",
+    "/v1/temporal/patterns",
+    "/v1/temporal/range",
+    "/v1/temporal/replay",
+    "/v1/temporal/timeline",
+    "/v1/tenants",
+    "/v1/tenants/whoami",
+    "/v1/tenants/{tenant_id}",
+    "/v1/tenants/{tenant_id}/members",
+    "/v1/underworld/catalog",
+    "/v1/underworld/health",
+    "/v1/underworld/proxy/{path:path}",
+    "/v1/vault",
+    "/v1/vault/",
+    "/v1/vault/resolve/{connector_id}",
+    "/v1/vault/{name}",
+    "/v1/workshop/groupby",
+    "/v1/workshop/histogram",
+    "/v1/workshop/pivot",
+    "/v1/workshop/series/{series_id}/stats"
+  ],
+  "renders_to_create": [
+    {
+      "name": "jarvis_core_avatar",
+      "plane": "jarvis",
+      "module": "Operator / AIP cockpit",
+      "namespace": "public/models/palantir/",
+      "status": "to_generate",
+      "via": "tripo_client (needs TRIPO_API_KEY)"
+    },
+    {
+      "name": "foundry_pipeline_rig",
+      "plane": "foundry",
+      "module": "Integration + Ontology (Foundry)",
+      "namespace": "public/models/palantir/",
+      "status": "to_generate",
+      "via": "tripo_client (needs TRIPO_API_KEY)"
+    },
+    {
+      "name": "gotham_command_globe",
+      "plane": "gotham",
+      "module": "Common Operating Picture (Gotham)",
+      "namespace": "public/models/palantir/",
+      "status": "to_generate",
+      "via": "tripo_client (needs TRIPO_API_KEY)"
+    },
+    {
+      "name": "apollo_delivery_rig",
+      "plane": "apollo",
+      "module": "Production / delivery (Apollo)",
+      "namespace": "public/models/palantir/",
+      "status": "to_generate",
+      "via": "tripo_client (needs TRIPO_API_KEY)"
+    },
+    {
+      "name": "aip_neural_mesh",
+      "plane": "aip",
+      "module": "AI mesh (AIP)",
+      "namespace": "public/models/palantir/",
+      "status": "to_generate",
+      "via": "tripo_client (needs TRIPO_API_KEY)"
+    },
+    {
+      "name": "audit_ledger_vault",
+      "plane": "audit",
+      "module": "Governance / lineage",
+      "namespace": "public/models/palantir/",
+      "status": "to_generate",
+      "via": "tripo_client (needs TRIPO_API_KEY)"
+    }
+  ],
+  "note": "Underworld Tripo GLBs are reserved for Underworld. Palantir replica renders are NEW, generated into public/models/palantir/."
+}
