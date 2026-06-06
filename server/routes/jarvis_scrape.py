@@ -42,6 +42,31 @@ async def engines(_t: str | None = Depends(optional_bearer)):
     return eng.list_engines()
 
 
+class DiscoverRequest(BaseModel):
+    seed: str
+    depth: int = 2
+    max_urls: int = 200
+
+
+@router.post("/discover")
+async def discover(req: DiscoverRequest, _t: str = Depends(require_bearer)):
+    """Katana link discovery (read-only crawl) from a seed URL."""
+    return eng.katana_discover(req.seed, depth=req.depth, max_urls=req.max_urls)
+
+
+class ReconRequest(BaseModel):
+    tool: str                 # katana | ffuf | kiterunner
+    target: str
+    authorized: bool = False  # must be true AND target on RECON_ALLOWLIST
+    extra: list[str] | None = None
+
+
+@router.post("/recon")
+async def recon(req: ReconRequest, _t: str = Depends(require_bearer)):
+    """Governed recon/fuzz against an authorised, allow-listed target (your assets)."""
+    return eng.run_recon(req.tool, req.target, authorized=req.authorized, extra=req.extra)
+
+
 @router.get("/status")
 async def scrape_status(_t: str | None = Depends(optional_bearer)):
     return {"scraped_documents": scr.scraped_count(),

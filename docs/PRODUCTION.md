@@ -85,11 +85,28 @@ The bot is a real planner/executor, not regex or a plain text stream.
 The catalogue lists ~235 distinct real sources. To turn them into REAL fetched
 content (not catalogue rows), the platform ships a concurrent scraping bundle:
 
+The bundle is a registry (`services/scrape_engines.py`); `GET /v1/jarvis/scrape/engines`
+reports what's installed here vs. install hints (real `import`/ELF-verified probe — a
+python `httpx` shim never masquerades as the Go tool).
+
+**Content engines** (safe on public open-data sources):
+
 | engine | what it is | when |
 | --- | --- | --- |
-| **Scrapling** + `curl_cffi` | concurrent fetch with browser-TLS impersonation (beats 403/503 blocks) | default — `POST /v1/jarvis/scrape` |
+| **Scrapling** + `curl_cffi` | concurrent fetch with browser-TLS impersonation (beats 403/503 blocks) | default — `POST /v1/jarvis/scrape` (engine=auto) |
+| **cloudscraper** | clears Cloudflare/anti-bot JS challenges | `engine=cloudscraper` |
 | **Scrapy** | large async crawler, AutoThrottle, robots-obeying | bulk — `python -m server.scrapers.run` |
+| **katana** | JS-rendering link discovery (read-only crawl) | `POST /v1/jarvis/scrape/discover` |
 | sequential (`net_ratelimit`) | stdlib polite fetch, no deps | fallback |
+
+**Browser engines** (JS / bot-walled pages, need browser binaries ~80-400MB):
+camoufox, undetected-chromedriver, botasaurus — registered, install on a host with disk.
+
+**Recon engines — GOVERNED** (`katana`/`ffuf`/`kiterunner`/`arjun`): endpoint/param
+discovery + fuzzing. These are dual-use: a fuzzer pointed at third-party infra gets the
+platform IP-banned and can DoS them. So `POST /v1/jarvis/scrape/recon` runs them ONLY
+against an authorised, allow-listed target you own (`RECON_ALLOWLIST` env + `authorized:true`).
+katana (read-only crawl) is the gentle option and is also usable for content discovery.
 
 Each fetched page becomes an `ont_object` of type `Document` with **honest
 provenance** — HTTP status, byte/char counts, a SHA-256 of the body, fetch

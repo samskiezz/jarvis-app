@@ -104,6 +104,70 @@ def _recon_allowlist() -> set:
     return {h.strip().lower() for h in raw.split(",") if h.strip()}
 
 
+def _run_tool(argv: list, timeout: int = 120) -> dict:
+    """Shell out to a recon/crawl binary, capture stdout. Never raises."""
+    import subprocess
+    try:
+        p = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
+        out = (p.stdout or "").strip()
+        return {"ok": p.returncode == 0 or bool(out), "returncode": p.returncode,
+                "lines": [l for l in out.splitlines() if l.strip()],
+                "stderr": (p.stderr or "")[:400]}
+    except FileNotFoundError:
+        return {"ok": False, "error": "tool not installed"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "error": f"timeout after {timeout}s"}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)}
+
+
+def katana_discover(seed_url: str, *, depth: int = 2, max_urls: int = 200,
+                    timeout: int = 120) -> dict:
+    """Crawl a seed with katana (read-only link discovery) and return URLs found.
+    Crawling links is gentle content discovery — fine on public open-data sources.
+    Falls back cleanly if katana isn't installed. Never raises."""
+    if not _detect(_REGISTRY["katana"]):
+        return {"ok": False, "error": "katana not installed", "urls": []}
+    res = _run_tool(["katana", "-u", seed_url, "-d", str(int(depth)),
+                     "-jc", "-silent", "-rl", "10"], timeout=timeout)
+    urls = [u for u in res.get("lines", []) if u.startswith("http")][:max_urls]
+    return {"ok": bool(urls), "seed": seed_url, "count": len(urls), "urls": urls,
+            "error": res.get("error")}
+
+
+# Tool → argv builder for the governed recon runner. {target} is substituted.
+_RECON_CMD = {
+    "katana": lambda t, extra: ["katana", "-u", t, "-silent", "-d", "2", *extra],
+    "ffuf": lambda t, extra: ["ffuf", "-u", t, "-mc", "200,204,301,302,401,403", "-s", *extra],
+    "kiterunner": lambda t, extra: ["kr", "scan", t, "-x", "10", *extra],
+    "httpx_pd": lambda t, extra: ["httpx-pd", "-u", t, "-silent", *extra],
+}
+
+
+def run_recon(tool: str, target: str, *, authorized: bool = False,
+              extra: list | None = None, timeout: int = 180) -> dict:
+    """Run a recon/fuzz tool against an AUTHORISED, allow-listed target.
+
+    The gate exists to protect the platform: pointing fuzzers (ffuf/kiterunner) at
+    third-party infrastructure gets the IP banned and can DoS them. Targets must be
+    on RECON_ALLOWLIST (hosts you own/control). katana (read-only crawl) is the
+    gentle option. Never raises."""
+    import urllib.parse
+    host = urllib.parse.urlparse(target if "://" in target else f"//{target}").netloc.lower()
+    host = host.split(":")[0]
+    ok, reason = recon_allowed(host, authorized=authorized)
+    if not ok:
+        return {"ok": False, "blocked": True, "reason": reason, "target": target}
+    if tool not in _RECON_CMD:
+        return {"ok": False, "error": f"unknown recon tool: {tool}"}
+    if not _detect(_REGISTRY.get(tool, ("recon", ("bin", tool), ""))):
+        return {"ok": False, "error": f"{tool} not installed"}
+    argv = _RECON_CMD[tool](target, extra or [])
+    res = _run_tool(argv, timeout=timeout)
+    res.update({"tool": tool, "target": target, "authorized": True})
+    return res
+
+
 def recon_allowed(target_host: str, *, authorized: bool) -> tuple[bool, str]:
     """Gate a recon run. Requires explicit authorization AND the target host on the
     allow-list. Returns (ok, reason). This is what keeps the offensive tools from
