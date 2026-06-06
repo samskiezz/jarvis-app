@@ -24,9 +24,13 @@ const apexUrl = (name) => `${APEX_BASE}${createPageUrl(name)}`;
 const RAIL_W = 52;
 const RAIL_W_EXPANDED = 196;
 
-// Per-domain glyph so the rail reads without labels.
+// Per-domain glyph so the rail reads without labels. Planes lead, then legacy.
 const DOMAIN_GLYPH = {
-  intel: "🛰", command: "⌘", cognition: "🧠", apex: "◉", knowledge: "📚", wealth: "💎",
+  // planes
+  jarvis: "◆", foundry: "⬡", gotham: "🕸", apollo: "🚀", aip: "🤖", audit: "📜",
+  // legacy domains
+  intel: "🛰", command: "⌘", cognition: "🧠", sensors: "📡", apex: "◉",
+  knowledge: "📚", platform: "▤", war: "⚔", wealth: "💎",
 };
 
 export default function DomainRail() {

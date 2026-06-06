@@ -16,9 +16,20 @@ import { lazy } from "react";
 
 const P = (loader) => lazy(loader);
 
-// The six APEX domains. Underworld is a separate top-level destination and is
-// intentionally not a GROUP here.
+// The platform PLANES (Drive UI architecture) lead the rail, followed by the
+// legacy APEX domains (nothing removed). Plane colours match design_tokens.json
+// so the dock, the canvas and the theme all speak the same status language:
+//   cyan=Foundry/data · red=Gotham/ops · green=Apollo/deploy · purple=AIP · audit=cyan-ice.
+// Underworld is a separate top-level destination and is intentionally not a GROUP.
 export const GROUPS = [
+  // ── PLANES ───────────────────────────────────────────────────────────────
+  { id: "jarvis",    label: "JARVIS",          color: "#f07820", plane: true },
+  { id: "foundry",   label: "FOUNDRY",         color: "#00d4ff", plane: true },
+  { id: "gotham",    label: "GOTHAM",          color: "#ff3b6b", plane: true },
+  { id: "apollo",    label: "APOLLO",          color: "#7cff7c", plane: true },
+  { id: "aip",       label: "AIP",             color: "#b18cff", plane: true },
+  { id: "audit",     label: "AUDIT",           color: "#8be9fd", plane: true },
+  // ── LEGACY APEX DOMAINS ──────────────────────────────────────────────────
   { id: "intel",     label: "INTEL",           color: "#00c878" },
   { id: "command",   label: "COMMAND",         color: "#0096d4" },
   { id: "cognition", label: "COGNITION",       color: "#a855f7" },
@@ -65,6 +76,9 @@ export const PAGES = [
   // ── PLANES (Drive UI architecture, wired to /v1/jarvis/*) ──────────────
   { name: "CommandOverview", label: "Command Overview", icon: "▣", group: "jarvis",
     aliases: ["cockpit","overview","home"], component: P(() => import("@/pages/CommandOverview")) },
+  { name: "PlaneGraph", label: "Plane Graph", icon: "✶", group: "jarvis",
+    aliases: ["plane","constellation","operator","radial","graph","foundry","gotham","apollo","aip"],
+    component: P(() => import("@/pages/PlaneGraph")) },
   { name: "SourceCatalogue", label: "Source Catalogue", icon: "🗜", group: "foundry",
     aliases: ["sources","endpoints","92k"], component: P(() => import("@/pages/SourceCatalogue")) },
   { name: "VectorMemory", label: "Vector Memory", icon: "🧠", group: "foundry",
