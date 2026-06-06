@@ -15,6 +15,9 @@ set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"
 API_PORT="${API_PORT:-8000}"; UI_PORT="${UI_PORT:-5173}"
+# bake the backend port into the UI build so the browser hits the right port
+# (e.g. API_PORT=8001 ./serve.sh  →  UI calls http://<host>:8001).
+export VITE_API_PORT="$API_PORT"
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost}"
 LOG=/tmp/jarvis-serve; mkdir -p "$LOG"
@@ -61,8 +64,8 @@ except Exception: pass
 " 2>/dev/null || true
 
 # ── 4. build + serve the UI on 0.0.0.0 ────────────────────────────────────────
-say "4/4 building UI…"
-npm run build >"$LOG/build.log" 2>&1 || { warn "    UI build failed (see $LOG/build.log)"; exit 1; }
+say "4/4 building UI (backend port baked in: $API_PORT)…"
+VITE_API_PORT="$API_PORT" npm run build >"$LOG/build.log" 2>&1 || { warn "    UI build failed (see $LOG/build.log)"; exit 1; }
 say "    UI → http://0.0.0.0:$UI_PORT (open http://$IP:$UI_PORT)"
 pgrep -f "vite preview" >/dev/null 2>&1 || nohup npx vite preview --host 0.0.0.0 --port "$UI_PORT" --strictPort >"$LOG/ui.log" 2>&1 &
 sleep 2
