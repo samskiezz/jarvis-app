@@ -121,16 +121,41 @@ export function makeGLBLoader({ dracoDecoderPath = "https://www.gstatic.com/drac
   return loader;
 }
 
+/** A SOLID holographic skin for real GLB models — emissive PBR that reads under
+ * bloom (additive Fresnel would make a dense mesh ghostly). Semi-transparent,
+ * emissive in the plane colour, with a touch of metalness for the tech sheen. */
+export function holoSolidMaterial({ color = "#3ad8ff", emissive = 1.1, opacity = 0.92 } = {}) {
+  const c = new THREE.Color(color);
+  return new THREE.MeshStandardMaterial({
+    color: c, emissive: c, emissiveIntensity: emissive,
+    metalness: 0.6, roughness: 0.3, transparent: true, opacity,
+  });
+}
+
 /** Load a .glb and (optionally) reskin its meshes with the holographic material. */
-export function loadGLB(url, { holo = true, color = "#3ad8ff" } = {}) {
+export function loadGLB(url, { holo = true, color = "#3ad8ff", solid = true } = {}) {
   const loader = makeGLBLoader();
   return new Promise((resolve, reject) => {
     loader.load(url, (gltf) => {
       const root = gltf.scene;
       if (holo) {
-        const mat = holoMaterial({ color });
-        root.traverse((o) => { if (o.isMesh) o.material = mat; });
+        const mat = solid ? holoSolidMaterial({ color }) : holoMaterial({ color });
+        root.traverse((o) => {
+          if (o.isMesh) {
+            o.material = mat;
+            // a faint wireframe overlay = the "scanned hologram" read
+            const wf = new THREE.Mesh(o.geometry,
+              new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: 0.12 }));
+            o.add(wf);
+          }
+        });
       }
+      // centre + normalise scale so any model frames nicely
+      const box = new THREE.Box3().setFromObject(root);
+      const size = box.getSize(new THREE.Vector3()).length() || 1;
+      const center = box.getCenter(new THREE.Vector3());
+      root.position.sub(center);
+      root.scale.setScalar(3.0 / size);
       resolve({ root, gltf });
     }, undefined, reject);
   });
