@@ -80,6 +80,36 @@ The bot is a real planner/executor, not regex or a plain text stream.
   `lib/jarvisVoice.js`) and the terminal `AnalystPanel` both run this loop through one
   unified client (`lib/jarvisApi.js` → `kimiClient`), showing the tool trace.
 
+## Scraping the catalogue (real fetched content)
+
+The catalogue lists ~235 distinct real sources. To turn them into REAL fetched
+content (not catalogue rows), the platform ships a concurrent scraping bundle:
+
+| engine | what it is | when |
+| --- | --- | --- |
+| **Scrapling** + `curl_cffi` | concurrent fetch with browser-TLS impersonation (beats 403/503 blocks) | default — `POST /v1/jarvis/scrape` |
+| **Scrapy** | large async crawler, AutoThrottle, robots-obeying | bulk — `python -m server.scrapers.run` |
+| sequential (`net_ratelimit`) | stdlib polite fetch, no deps | fallback |
+
+Each fetched page becomes an `ont_object` of type `Document` with **honest
+provenance** — HTTP status, byte/char counts, a SHA-256 of the body, fetch
+timestamp, excerpt — and a `DESCRIBES` link to its subject (`services/jarvis_scrape.py`,
+`services/jarvis_scrape.store_document` is the single storage path for every engine).
+Governance: only legal-gate **CLEARED** hosts and public open-standard / open-data /
+gov / open-science hosts are fetched; everything else stays `review_required`.
+
+```bash
+# concurrent (Scrapling)        # large crawl (Scrapy)
+curl -XPOST :8000/v1/jarvis/scrape -d '{"engine":"scrapling","limit":60}'
+python -m server.scrapers.run --limit 200
+```
+
+`status().gotham.scraped_live` reports the count of genuinely-fetched documents —
+distinct from the catalogue projection counts, so real vs catalogue is never blurred.
+Install: `pip install -r server/requirements.txt` (scrapy, scrapling, curl_cffi,
+browserforge). Playwright/Puppeteer (JS rendering) are optional and need browser
+binaries (~400MB) — enable on a host with the disk for them.
+
 ## Grounding on the REAL corpus
 
 `services/world_search.py` (`corpus.search` tool) does ranked keyword search across

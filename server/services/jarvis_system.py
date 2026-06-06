@@ -168,11 +168,21 @@ def status() -> dict:
     # endpoint/document objects and their links. Falls back to the search index
     # total only if the projection service is unavailable.
     pc = proj.counts() if proj is not None else {}
+    scraped = 0
+    try:
+        c = _conn();
+        try:
+            scraped = c.execute("SELECT COUNT(*) FROM ont_object WHERE state='fetched'").fetchone()[0]
+        finally:
+            c.close()
+    except Exception:  # noqa: BLE001
+        pass
     gotham = {"ontology_objects": _count("ont_object"),
               "object_types": _count("ont_object_type"),
               "neurons": pc.get("neurons") or (sb.index_catalog().get("total", 0) if sb else 0),
               "sources": pc.get("sources", 0),
               "documents": pc.get("documents", 0),
+              "scraped_live": scraped,  # REAL fetched content (not catalogue rows)
               "links": pc.get("ont_links", _count("ont_link"))}
     apollo_st = {"environments": _count("apollo_env"), "releases": _count("apollo_release")}
     aip = {"llm_backend": (lr.backend() if lr else None)}
