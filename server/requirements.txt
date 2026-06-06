@@ -16,3 +16,9 @@ scrapy>=2.13
 scrapling>=0.4
 curl_cffi>=0.7
 browserforge>=1.2
+cloudscraper>=1.2
+# scrapling's fetchers module imports playwright at load time, so the HTTP fetcher
+# (curl_cffi based, used by the document finder) needs the playwright PACKAGE present
+# even though no browser is launched. Browser binaries are optional (setup.sh, for
+# the stealth/JS fetchers only).
+playwright>=1.40
