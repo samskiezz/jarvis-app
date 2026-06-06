@@ -52,3 +52,7 @@ sandbox-ca.crt
 server/data/oracle_model.joblib
 underworld/data/*.db
 underworld/data/*.db-*
+
+# runtime LLM connection (holds GPU URL — not committed)
+server/data/llm_connect.json
+**/llm_connect.json
