@@ -6,7 +6,7 @@
  */
 import { useState, useEffect, useCallback } from "react";
 import { COLORS as C } from "@/domain/colors";
-import { PageShell, PanelCard, Grid, Badge, DataState } from "@/components/PageKit";
+import { PageShell, PanelCard, Badge, DataState } from "@/components/PageKit";
 import { apiGet, asList, useAsync } from "@/lib/wave1";
 
 const ACCENT = C.purple || C.neon;
