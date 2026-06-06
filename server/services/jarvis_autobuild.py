@@ -37,8 +37,19 @@ try:
 except Exception:  # noqa: BLE001
     grow = None  # type: ignore
 
+# Live domain ingestion pipelines — pull REAL world data (USGS quakes, GBIF species,
+# NVD CVEs, NWS weather, Crossref publications) into the ontology each build, adding
+# genuine detail + strength beyond the scraped documents.
+_DOMAINS = {}
+for _name in ("world_earthquake", "world_species", "world_cve", "world_weather", "world_publications"):
+    try:
+        _DOMAINS[_name.replace("world_", "")] = __import__(f"server.services.{_name}", fromlist=[_name])
+    except Exception:  # noqa: BLE001
+        pass
 
-def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 2) -> dict:
+
+def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 2,
+             domain_limit: int = 50) -> dict:
     """Build the whole platform once. Idempotent; never raises. Returns a report."""
     t0 = time.time()
     report: dict = {"steps": {}}
@@ -80,6 +91,24 @@ def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 
             if r.get("seeds", 1) == 0:  # all seeds crawled — nothing left this pass
                 break
         report["steps"]["scrape"] = {"batches": batches, "fetched": fetched}
+
+    # 4b) live domain ingestion — real-world data for extra detail + strength
+    ingested = {}
+    for dname, mod in _DOMAINS.items():
+        try:
+            r = mod.run_pipeline(limit=domain_limit, live=True)
+            ingested[dname] = (r.get("ingested") or r.get("stored") or r.get("count")
+                               or (r.get("objects") if isinstance(r.get("objects"), int) else None) or 0)
+        except Exception as e:  # noqa: BLE001
+            ingested[dname] = f"error: {e}"
+    if ingested:
+        report["steps"]["live_domains"] = ingested
+        # re-project so the new live objects strengthen the graph
+        try:
+            from . import jarvis_corpus_projection as proj
+            report["steps"]["reproject"] = {"ok": proj.project().get("ok")}
+        except Exception:  # noqa: BLE001
+            pass
 
     # 5) snapshot the document store for durability
     if docstore is not None:

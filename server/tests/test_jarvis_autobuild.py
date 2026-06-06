@@ -7,6 +7,7 @@ from server.services import jarvis_autobuild as ab
 
 def test_run_once_orchestrates_and_never_raises(monkeypatch):
     calls = []
+    monkeypatch.setattr(ab, "_DOMAINS", {})  # keep live pipelines offline in tests
     # stub every heavy step so the test is fast + offline
     monkeypatch.setattr(ab, "docstore", type("D", (), {
         "restore": staticmethod(lambda: (calls.append("restore"), {"ok": True})[1]),
@@ -36,7 +37,22 @@ def test_run_once_orchestrates_and_never_raises(monkeypatch):
     assert out["status"]["gotham"]["ontology_objects"] == 5
 
 
+def test_live_domains_strengthen_the_build(monkeypatch):
+    monkeypatch.setattr(ab, "docstore", None)
+    monkeypatch.setattr(ab, "scrape", None)
+    monkeypatch.setattr(ab, "grow", None)
+    monkeypatch.setattr(ab, "sysmod", type("S", (), {
+        "startup": staticmethod(lambda: {"booted": True, "steps": {}}),
+        "status": staticmethod(lambda: {}),
+    }))
+    fake = type("P", (), {"run_pipeline": staticmethod(lambda **k: {"ingested": 7})})
+    monkeypatch.setattr(ab, "_DOMAINS", {"earthquake": fake, "cve": fake})
+    out = ab.run_once(scrape_batches=0)
+    assert out["steps"]["live_domains"] == {"earthquake": 7, "cve": 7}
+
+
 def test_run_once_with_no_services_is_safe(monkeypatch):
+    monkeypatch.setattr(ab, "_DOMAINS", {})
     monkeypatch.setattr(ab, "docstore", None)
     monkeypatch.setattr(ab, "sysmod", None)
     monkeypatch.setattr(ab, "scrape", None)
