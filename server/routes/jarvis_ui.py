@@ -17,3 +17,10 @@ router = APIRouter(prefix="/v1/jarvis/ui", tags=["jarvis-ui"])
 @router.get("/spec")
 async def spec(_t: str | None = Depends(optional_bearer)):
     return ui.spec()
+
+
+@router.get("/features")
+async def features(_t: str | None = Depends(optional_bearer)):
+    """Palantir feature catalogue audited against our code: implemented/partial/missing."""
+    from ..services import jarvis_features as f
+    return f.audit()
