@@ -22,6 +22,9 @@ ROOT="$PWD"
 
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 API_HOST="${API_HOST:-127.0.0.1}"; API_PORT="${API_PORT:-8000}"
+# Recon (ffuf/kiterunner/katana) may ONLY target hosts you own. Default to this
+# platform's own infra; add your production host(s), comma-separated, to extend.
+export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost,$API_HOST}"
 UI_PORT="${UI_PORT:-5173}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-llama3.2:1b}"; export OLLAMA_MODEL
 LOG=/tmp/jarvis-boot; mkdir -p "$LOG"

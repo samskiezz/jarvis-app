@@ -45,3 +45,14 @@ def test_elf_check_rejects_script(tmp_path):
     p = tmp_path / "fake"
     p.write_text("#!/usr/bin/env python\nprint('hi')\n")
     assert eng._is_elf(str(p)) is False
+
+
+def test_ffuf_argv_injects_default_wordlist():
+    argv = eng._ffuf_argv("http://127.0.0.1:8000/", [])
+    assert argv[0] == "ffuf" and "FUZZ" in argv[2]
+    assert "-w" in argv  # default wordlist injected
+
+
+def test_ffuf_argv_respects_explicit_wordlist():
+    argv = eng._ffuf_argv("http://h/FUZZ", ["-w", "/my/list.txt"])
+    assert argv.count("-w") == 1 and "/my/list.txt" in argv

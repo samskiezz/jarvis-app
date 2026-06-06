@@ -82,6 +82,7 @@ export default function WorldOps() {
             <StatTile label="Neurons" value={(g.neurons || 0).toLocaleString()} accent={C.purple || C.neon} sub="subjects" />
             <StatTile label="Sources" value={(g.sources || 0).toLocaleString()} accent={C.purple || C.neon} />
             <StatTile label="Documents" value={(g.documents || 0).toLocaleString()} accent={C.purple || C.neon} />
+            <StatTile label="Scraped (real)" value={(g.scraped_live || 0).toLocaleString()} accent={C.green || C.neon} sub="fetched content" />
             <StatTile label="Links" value={(g.links || 0).toLocaleString()} accent={C.purple || C.neon} />
           </Grid>
         </PanelCard>

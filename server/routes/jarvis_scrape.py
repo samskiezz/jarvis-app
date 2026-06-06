@@ -67,6 +67,21 @@ async def recon(req: ReconRequest, _t: str = Depends(require_bearer)):
     return eng.run_recon(req.tool, req.target, authorized=req.authorized, extra=req.extra)
 
 
+class FindRequest(BaseModel):
+    seeds_limit: int = 8
+    depth: int = 1
+    per_seed_max: int = 25
+    workers: int = 16
+
+
+@router.post("/find")
+async def find_documents(req: FindRequest, _t: str = Depends(require_bearer)):
+    """THE DOCUMENT FINDER: katana discovers deeper document URLs from catalogue
+    sources, then fetches + stores them as real Documents with provenance."""
+    return scr.document_finder(seeds_limit=req.seeds_limit, depth=req.depth,
+                               per_seed_max=req.per_seed_max, workers=req.workers)
+
+
 @router.get("/status")
 async def scrape_status(_t: str | None = Depends(optional_bearer)):
     return {"scraped_documents": scr.scraped_count(),

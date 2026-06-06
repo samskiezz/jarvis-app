@@ -1,0 +1,16 @@
+v1
+v1/jarvis
+v1/jarvis/system/status
+v1/jarvis/system/capacity
+v1/jarvis/agent/tools
+v1/jarvis/scrape/engines
+v1/jarvis/scrape/status
+v1/graph/subgraph
+v1/aip/tools
+auth/me
+functions/getLiveIntel
+health
+docs
+openapi.json
+admin
+metrics

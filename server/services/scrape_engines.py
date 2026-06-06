@@ -135,10 +135,23 @@ def katana_discover(seed_url: str, *, depth: int = 2, max_urls: int = 200,
             "error": res.get("error")}
 
 
-# Tool → argv builder for the governed recon runner. {target} is substituted.
+_DEFAULT_WORDLIST = os.path.join(os.path.dirname(__file__), "..", "scrapers",
+                                 "wordlists", "api-small.txt")
+
+
+def _ffuf_argv(t: str, extra: list) -> list:
+    # ffuf needs FUZZ in the URL + a wordlist; inject a default if none supplied.
+    target = t if "FUZZ" in t else t.rstrip("/") + "/FUZZ"
+    args = ["ffuf", "-u", target, "-mc", "200,201,204,301,302,401,403", "-s"]
+    if "-w" not in extra:
+        args += ["-w", os.path.abspath(_DEFAULT_WORDLIST)]
+    return args + list(extra)
+
+
+# Tool → argv builder for the governed recon runner.
 _RECON_CMD = {
     "katana": lambda t, extra: ["katana", "-u", t, "-silent", "-d", "2", *extra],
-    "ffuf": lambda t, extra: ["ffuf", "-u", t, "-mc", "200,204,301,302,401,403", "-s", *extra],
+    "ffuf": _ffuf_argv,
     "kiterunner": lambda t, extra: ["kr", "scan", t, "-x", "10", *extra],
     "httpx_pd": lambda t, extra: ["httpx-pd", "-u", t, "-silent", *extra],
 }

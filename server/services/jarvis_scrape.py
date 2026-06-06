@@ -277,46 +277,98 @@ def scrapling_batch(limit: int = 0, *, workers: int = 16, timeout: int = 20) -> 
         from scrapling.fetchers import Fetcher
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": f"scrapling unavailable: {e}"}
-    from concurrent.futures import ThreadPoolExecutor, as_completed
 
     targets = all_targets(skip_fetched=True)
     if limit:
         targets = targets[:limit]
+    return scrapling_fetch_targets(targets, workers=workers, timeout=timeout)
+
+
+def scrapling_fetch_targets(targets: list, *, workers: int = 16, timeout: int = 20) -> dict:
+    """Concurrently fetch + store a list of (url, source_name, subject_id) via
+    Scrapling. The shared engine behind scrapling_batch AND the document finder."""
+    try:
+        from scrapling.fetchers import Fetcher
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": f"scrapling unavailable: {e}"}
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    targets = [t for t in (targets or []) if t and t[0]]
     if not targets:
-        return {"ok": True, "attempted": 0, "fetched": 0, "failed": 0,
-                "total_chars": 0, "samples": [], "engine": "scrapling"}
+        return {"ok": True, "engine": "scrapling", "attempted": 0, "fetched": 0,
+                "failed": 0, "total_chars": 0, "samples": []}
 
     def _fetch(t):
         url, sn, sid = t
         try:
             r = Fetcher.get(url, timeout=timeout, stealthy_headers=True)
             if not r or int(getattr(r, "status", 0)) >= 400:
-                return ("fail", url, None)
+                return ("fail", None)
             title_sel = r.css("title::text")
             title = (title_sel.get() if hasattr(title_sel, "get") else "") or ""
             text = r.get_all_text() or ""
             oid = store_document(url, sn, sid, status=r.status,
                                  body=getattr(r, "html_content", "") or "",
                                  title=title, text=text)
-            return ("ok", url, {"title": title[:70], "host": _host(url),
-                                "chars": len(text), "status": r.status}) if oid else ("fail", url, None)
+            return ("ok", {"title": title[:70], "host": _host(url),
+                           "chars": len(text), "status": r.status}) if oid else ("fail", None)
         except Exception:  # noqa: BLE001
-            return ("fail", url, None)
+            return ("fail", None)
 
     fetched = failed = chars = 0
     samples: list[dict] = []
     with ThreadPoolExecutor(max_workers=max(2, workers)) as ex:
-        for status, _url, info in (f.result() for f in as_completed(
+        for status, info in (f.result() for f in as_completed(
                 [ex.submit(_fetch, t) for t in targets])):
             if status == "ok" and info:
-                fetched += 1
-                chars += info["chars"]
+                fetched += 1; chars += info["chars"]
                 if len(samples) < 12:
                     samples.append(info)
             else:
                 failed += 1
     return {"ok": True, "engine": "scrapling", "attempted": len(targets),
             "fetched": fetched, "failed": failed, "total_chars": chars, "samples": samples}
+
+
+def document_finder(*, seeds_limit: int = 8, depth: int = 1, per_seed_max: int = 25,
+                    workers: int = 16) -> dict:
+    """THE DOCUMENT FINDER — katana discovers deeper document URLs from each
+    catalogue source, then the content engine fetches + stores them as real
+    Documents. This goes beyond landing pages to the actual documents/datasets a
+    source exposes. Same-host only (no wandering), governed by the allow policy.
+    Never raises."""
+    try:
+        from . import scrape_engines as eng
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": f"engines unavailable: {e}"}
+
+    seeds = all_targets(skip_fetched=False)[:seeds_limit]
+    if not seeds:
+        return {"ok": True, "seeds": 0, "discovered": 0, "fetched": 0}
+
+    discovered: dict[str, tuple] = {}   # url -> (url, source_name, subject_id)
+    per_seed: list[dict] = []
+    for seed_url, sn, sid in seeds:
+        d = eng.katana_discover(seed_url, depth=depth, max_urls=per_seed_max * 3)
+        seed_host = _host(seed_url)
+        kept = 0
+        for u in d.get("urls", []):
+            if not u.startswith("http") or _host(u) != seed_host:
+                continue  # same-host documents only
+            if doc_id(u) in discovered:
+                continue
+            discovered[u] = (u, sn, sid)
+            kept += 1
+            if kept >= per_seed_max:
+                break
+        per_seed.append({"seed": seed_url, "discovered": kept})
+
+    # Fetch + store everything katana found, concurrently.
+    fetch = scrapling_fetch_targets(list(discovered.values()), workers=workers)
+    return {"ok": True, "seeds": len(seeds), "discovered": len(discovered),
+            "fetched": fetch.get("fetched", 0), "failed": fetch.get("failed", 0),
+            "total_chars": fetch.get("total_chars", 0),
+            "per_seed": per_seed, "samples": fetch.get("samples", [])}
 
 
 def cloudscraper_batch(limit: int = 0, *, workers: int = 12, timeout: int = 20) -> dict:
