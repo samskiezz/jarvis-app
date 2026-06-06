@@ -1,7 +1,0 @@
-topic,source,url,relevance
-WebGPU,MDN WebGPU API,https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API,Confirms WebGPU gives browser access to GPU for high-performance computation and complex rendering.
-SharedArrayBuffer security,web.dev COOP/COEP,https://web.dev/articles/coop-coep,Cross-origin isolation via COOP/COEP is required for powerful features like SharedArrayBuffer.
-Protocol Buffers,protobuf.dev overview,https://protobuf.dev/overview/,"Protobuf is language-neutral, platform-neutral structured data serialisation and is smaller/faster than JSON."
-OpenLineage,OpenLineage official,https://openlineage.io/,"Open standard/API for capturing data lineage events and tracking datasets, jobs and runs."
-WebGPU security risk,DarthShader WebGPU fuzzing paper,https://arxiv.org/abs/2409.01824,WebGPU exposes a larger GPU attack surface and shader compiler/translator security needs testing.
-Browser GPU performance,WebGPU dispatch overhead paper,https://arxiv.org/abs/2604.02344,Shows WebGPU dispatch overhead matters and performance must be benchmarked across browsers/backends.

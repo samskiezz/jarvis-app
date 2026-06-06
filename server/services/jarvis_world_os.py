@@ -48,6 +48,14 @@ def _conn() -> sqlite3.Connection:
     return c
 
 
+def _open_csv(path):
+    """Open a .csv or .csv.gz transparently as a text stream."""
+    import gzip
+    if path.endswith(".gz"):
+        return gzip.open(path, "rt", encoding="utf-8", errors="ignore", newline="")
+    return open(path, newline="", encoding="utf-8", errors="ignore")
+
+
 def _stream_into(c, files, table, cols, pk, batch=5000):
     placeholders = ",".join("?" * len(cols))
     sql = f"INSERT OR REPLACE INTO {table} ({','.join(cols)}) VALUES ({placeholders})"
@@ -57,7 +65,7 @@ def _stream_into(c, files, table, cols, pk, batch=5000):
             continue
         seen_files += 1
         try:
-            with open(path, newline="", encoding="utf-8", errors="ignore") as f:
+            with _open_csv(path) as f:
                 rdr = csv.DictReader(f)
                 for r in rdr:
                     if not r.get(pk):
@@ -81,9 +89,9 @@ def load_all() -> dict:
         return {"available": False, "reason": f"world_os not found at {world_os_dir()}"}
     wp.init_db()  # ensures world_endpoint / world_subject tables exist
     base = world_os_dir()
-    ep_files = sorted(glob.glob(os.path.join(base, "**", "endpoint_candidates*.csv"), recursive=True))
-    su_files = sorted(glob.glob(os.path.join(base, "**", "domain_subjects*.csv"), recursive=True))
-    pa_files = sorted(glob.glob(os.path.join(base, "**", "*acquisition_points*.csv"), recursive=True))
+    ep_files = sorted(glob.glob(os.path.join(base, "**", "endpoint_candidates*.csv*"), recursive=True))
+    su_files = sorted(glob.glob(os.path.join(base, "**", "domain_subjects*.csv*"), recursive=True))
+    pa_files = sorted(glob.glob(os.path.join(base, "**", "*acquisition_points*.csv*"), recursive=True))
 
     c = _conn()
     try:
@@ -136,9 +144,9 @@ def load_secondary() -> dict:
     c = _conn()
     try:
         _init_secondary(c)
-        edge_files = sorted(glob.glob(os.path.join(base, "**", "typed_flow_edges*.csv"), recursive=True))
-        ocr_files = sorted(glob.glob(os.path.join(base, "**", "ocr_document_candidates*.csv"), recursive=True))
-        bm_files = sorted(glob.glob(os.path.join(base, "**", "benchmark_candidates*.csv"), recursive=True))
+        edge_files = sorted(glob.glob(os.path.join(base, "**", "typed_flow_edges*.csv*"), recursive=True))
+        ocr_files = sorted(glob.glob(os.path.join(base, "**", "ocr_document_candidates*.csv*"), recursive=True))
+        bm_files = sorted(glob.glob(os.path.join(base, "**", "benchmark_candidates*.csv*"), recursive=True))
         _, edge_rows = _stream_into(c, edge_files, "world_edge",
             ["edge_id", "subject_id", "source_class", "target_class", "edge_type",
              "edge_weight", "evidence_required", "policy_gate", "audit_required"], "edge_id")

@@ -1,5 +1,0 @@
-restricted_source_id,source_name,restriction,allowed_alternative,approval_status
-RS-001,Private/unsecured IP cameras,"Do not scan, enumerate, access or ingest private cameras. Only use official public agency camera feeds or licensed CCTV feeds.",Official transport/port/weather/agency webcam APIs or licensed enterprise-owned camera streams.,blocked
-RS-002,Private communications / radio interception,Do not intercept private communications or restricted radio/signal content.,"Public spectrum licence registries, official interference reports, lawful metadata from owned systems.",blocked
-RS-003,Terms-prohibited professional profile scraping,Do not scrape platforms where terms prohibit automated extraction.,"Official APIs, licensed data providers, company registries, filings, LEI/GLEIF/OpenCorporates where permitted.",blocked
-RS-004,Restricted military/submarine/defence tracking,"Do not seek classified, restricted, non-public or operationally sensitive defence telemetry.","Public registries, official defence publications, sanctions lists, procurement data, press releases.",blocked

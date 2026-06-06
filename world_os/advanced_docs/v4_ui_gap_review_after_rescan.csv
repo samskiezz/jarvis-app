@@ -1,9 +1,0 @@
-area,status,evidence,remaining_gap
-UI architecture,implemented_as_source_tree,ui/jarvis_enterprise_operator_full,reference renderer is SVG; WebGPU/WebGL renderer contract is included but production renderer still requires engineering.
-Architecture layout knowledge,implemented,src/data/architecture.manifest.json,real backend API discovery must replace static manifest in production.
-No-random-edge rule,implemented,src/engine/graphPolicy.ts,production must enforce same rule server-side before streaming edges.
-Binary transport,contract_and_reference_implemented,src/engine/binaryTransport.ts and proto/graph_delta.proto,real gRPC-Web/WebSocket gateway must be deployed.
-WASM worker,worker_boundary_implemented,src/workers/layout.worker.ts and src/wasm/README.md,Rust/C++ WASM physics/layout binary must be implemented.
-GPU picking,algorithm_contract_implemented,src/engine/gpuPicking.ts,offscreen framebuffer implementation must be added in WebGPU/WebGL renderer.
-Quaternion camera,math_reference_implemented,src/engine/quaternionCamera.ts,camera integration required once WebGPU/WebGL renderer is built.
-Jarvis operator,implemented_reference,src/components/JarvisOperator.tsx,connect to real AIP/action/ontology APIs.
