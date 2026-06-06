@@ -17,6 +17,12 @@ async def capacity(neurons_per_cluster: int = 10, _t: str | None = Depends(optio
     """Combinatorial synaptic-capacity expansion of the live ontology graph."""
     return synmod.capacity(neurons_per_cluster=neurons_per_cluster)
 
+@router.get("/expansion")
+async def expansion(branching: int = 10, _t: str | None = Depends(optional_bearer)):
+    """Full hierarchical expansion: neurons -> clusters -> super/hyper-clusters,
+    with every node/synapse/cluster tallied across all layers."""
+    return synmod.full_expansion(branching=branching)
+
 @router.post("/startup")
 async def startup(_t: str = Depends(require_bearer)):
     return sysmod.startup()

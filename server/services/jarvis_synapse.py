@@ -37,6 +37,97 @@ def _live_counts() -> dict:
         return {}
 
 
+def _mesh(n: int) -> int:
+    return n * (n - 1) // 2 if n > 1 else 0
+
+
+def full_expansion(counts: Optional[dict] = None, *, branching: int = 10) -> dict:
+    """The COMPLETE Palantir-style expansion: build the neuron→cluster hierarchy
+    from the data, then tally every node, synapse and cluster across all layers.
+
+    Hierarchy: data primitives feed 10k neurons; neurons group into clusters at
+    ``branching`` each, clusters into super-clusters, and so on to a single apex.
+    Synapses counted in three families:
+      * input    : every data primitive -> every neuron
+      * tree      : each node -> its parent cluster (hierarchy edges)
+      * intra     : full mesh WITHIN each layer (neuron<->neuron, cluster<->cluster …)
+    plus the theoretical full-mesh over ALL nodes. Computed off live counts; exact.
+    """
+    c = counts if isinstance(counts, dict) else _live_counts()
+    objects = int(c.get("ont_objects", 0) or 0)
+    neurons = int(c.get("neurons", 0) or 0)
+    sources = int(c.get("sources", 0) or 0)
+    documents = int(c.get("documents", 0) or 0)
+    links = int(c.get("ont_links", 0) or 0)
+    b = max(2, int(branching or 10))
+
+    primitives = objects + neurons + sources + documents + links
+    data_primitives = primitives - neurons  # everything that feeds the neurons
+
+    # Build the cluster hierarchy above the neuron layer.
+    layers = []            # [(name, count)] for cluster tiers above neurons
+    level, n = 1, neurons
+    while n > 1:
+        nxt = -(-n // b)   # ceil(n / b)
+        if nxt < 1:
+            break
+        name = ("clusters" if level == 1 else
+                "super_clusters" if level == 2 else
+                "hyper_clusters" if level == 3 else f"tier{level}_clusters")
+        layers.append((name, nxt))
+        if nxt == 1:
+            break
+        n, level = nxt, level + 1
+
+    cluster_layers = {name: cnt for name, cnt in layers}
+    clusters_total = sum(cnt for _, cnt in layers)
+
+    # ── nodes ────────────────────────────────────────────────────────────────────
+    total_nodes = primitives + clusters_total
+
+    # ── synapses ─────────────────────────────────────────────────────────────────
+    input_synapses = data_primitives * neurons                  # data -> neurons
+    # tree edges: neurons->clusters->super…->apex (each layer's count of children)
+    tree_synapses = neurons if layers else 0                     # neuron -> its cluster
+    for i in range(len(layers) - 1):
+        tree_synapses += layers[i][1]                            # cluster -> super, etc.
+    # intra-layer full mesh within neurons and within each cluster tier
+    intra_synapses = _mesh(neurons) + sum(_mesh(cnt) for _, cnt in layers)
+    neural_synapses_total = input_synapses + tree_synapses + intra_synapses
+
+    full_mesh_undirected = _mesh(total_nodes)
+    full_mesh_directed = total_nodes * (total_nodes - 1) if total_nodes > 1 else 0
+
+    grand_total = total_nodes + neural_synapses_total + clusters_total
+
+    return {
+        "base": {"objects": objects, "neurons": neurons, "sources": sources,
+                 "documents": documents, "links": links,
+                 "primitives": primitives, "data_primitives": data_primitives},
+        "hierarchy": {"branching": b, "neurons": neurons, **cluster_layers,
+                      "clusters_total_all_tiers": clusters_total,
+                      "tiers": [{"layer": nm, "count": cnt} for nm, cnt in layers]},
+        "nodes": {"data_primitives": data_primitives, "neurons": neurons,
+                  "clusters_all_tiers": clusters_total, "total_nodes": total_nodes},
+        "synapses": {"input_data_to_neuron": input_synapses,
+                     "tree_hierarchy": tree_synapses,
+                     "intra_layer_mesh": intra_synapses,
+                     "neural_synapses_total": neural_synapses_total,
+                     "full_mesh_undirected": full_mesh_undirected,
+                     "full_mesh_directed": full_mesh_directed},
+        "grand_tally": {
+            "total_nodes": total_nodes,
+            "total_neurons": neurons,
+            "total_clusters": clusters_total,
+            "neural_synapses": neural_synapses_total,
+            "full_graph_synapses_undirected": full_mesh_undirected,
+            "full_graph_synapses_directed": full_mesh_directed,
+            "nodes_plus_neural_synapses_plus_clusters": grand_total,
+        },
+        "note": "Exact combinatorial expansion off the live graph; scales as data grows.",
+    }
+
+
 def capacity(counts: Optional[dict] = None, *, neurons_per_cluster: int = 10) -> dict:
     """Compute the synaptic-capacity expansion. ``counts`` defaults to the live
     projected graph; override for what-if sizing. Never raises."""

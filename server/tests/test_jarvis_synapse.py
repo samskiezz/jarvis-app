@@ -36,3 +36,22 @@ def test_capacity_empty_is_safe():
     r = syn.capacity({})
     assert r["primitives"]["total"] == 0
     assert r["capacity"]["full_mesh_undirected"] == 0
+
+
+def test_full_expansion_hierarchy_and_tally():
+    r = syn.full_expansion(COUNTS, branching=10)
+    h = r["hierarchy"]
+    assert h["neurons"] == 10000 and h["clusters"] == 1000
+    assert h["super_clusters"] == 100 and h["hyper_clusters"] == 10
+    assert h["clusters_total_all_tiers"] == 1111
+    n = r["nodes"]
+    assert n["total_nodes"] == 442230  # 441,119 primitives + 1,111 clusters
+    s = r["synapses"]
+    assert s["input_data_to_neuron"] == 4_311_190_000
+    assert s["intra_layer_mesh"] == 50_499_495
+    assert s["neural_synapses_total"] == 4_361_700_605
+    assert s["full_mesh_undirected"] == 97_783_465_335
+    assert s["full_mesh_directed"] == 195_566_930_670
+    g = r["grand_tally"]
+    assert g["total_clusters"] == 1111
+    assert g["nodes_plus_neural_synapses_plus_clusters"] == 4_362_143_946
