@@ -18,7 +18,7 @@ from ..services import jarvis_scrape as s
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--batch", type=int, default=6)
-    ap.add_argument("--depth", type=int, default=1)
+    ap.add_argument("--depth", type=int, default=2)
     ap.add_argument("--per-seed-max", type=int, default=25)
     ap.add_argument("--max-batches", type=int, default=0, help="0 = until exhausted")
     args = ap.parse_args()

@@ -380,7 +380,7 @@ def seeds_progress() -> dict:
         return {"crawled": 0, "total": 0, "remaining": 0}
 
 
-def document_finder(*, seeds_limit: int = 8, depth: int = 1, per_seed_max: int = 25,
+def document_finder(*, seeds_limit: int = 8, depth: int = 2, per_seed_max: int = 25,
                     workers: int = 16) -> dict:
     """THE DOCUMENT FINDER — katana discovers deeper document URLs from each
     catalogue source, then the content engine fetches + stores them as real

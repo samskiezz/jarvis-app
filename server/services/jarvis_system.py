@@ -125,6 +125,13 @@ def startup() -> dict:
             steps["foundry_secondary"] = wos.load_secondary()
         except Exception:  # noqa: BLE001
             steps["foundry_points"] = "error"
+    # Load the v20 priority acquisition points (the real operational layer).
+    try:
+        from . import jarvis_priority as _prio
+        if _prio.available():
+            steps["priority_points"] = _prio.load()
+    except Exception:  # noqa: BLE001
+        steps["priority_points"] = "error"
     # Project the loaded corpus into the ONTOLOGY graph so Gotham reflects the real
     # data (subjects->neurons, endpoints->sources, OCR->documents, flow edges->links)
     # instead of only the demo seed. Idempotent.
