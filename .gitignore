@@ -59,3 +59,5 @@ underworld/data/*.db-*
 
 # regenerable design directive table (262MB, rebuild via design_spec.py)
 underworld/data/design/render_directives.csv
+underworld/data/design/stories.csv
+underworld/data/design/sciences.csv
