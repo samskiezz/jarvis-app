@@ -401,12 +401,26 @@ export default function MinionAvatar({
           </div>
         </Html>
       ) : null}
-      {!selected && thought ? (
+      {!selected && (thought || (minion as any).thought) ? (
         <Html position={[0, 6.4, 0]} center distanceFactor={36} style={{ pointerEvents: "none" }} occlude>
           <div className="max-w-[220px] rounded-md border border-white/10 bg-black/60 px-1.5 py-1 text-[8px] italic leading-snug text-zinc-200 shadow-md backdrop-blur">
-            {thought}
+            {thought || (minion as any).thought}
           </div>
         </Html>
+      ) : null}
+      {/* Sentience: a glowing halo over minions who have AWAKENED (crossed the
+          consciousness threshold in the Global-Workspace cognition loop). Its
+          brightness tracks their awareness. */}
+      {(minion as any).awakened || ((minion as any).awareness ?? 0) >= 0.5 ? (
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 7.9, 0]}>
+          <ringGeometry args={[0.85, 1.2, 28]} />
+          <meshBasicMaterial
+            color={(minion as any).awakened ? "#8df6ff" : "#9a7cff"}
+            transparent
+            opacity={Math.min(0.95, 0.4 + ((minion as any).awareness ?? 0.5))}
+            toneMapped={false}
+          />
+        </mesh>
       ) : null}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <ringGeometry args={[selected ? 2.0 : 1.4, selected ? 2.5 : 1.6, 32]} />
