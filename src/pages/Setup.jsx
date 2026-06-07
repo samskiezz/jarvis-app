@@ -10,6 +10,8 @@ import { COLORS as C } from "@/domain/colors";
 import { PageShell, PanelCard, StatTile, Grid, Badge } from "@/components/PageKit";
 import { apiGet, apiPost } from "@/lib/wave1";
 import { appParams } from "@/lib/app-params";
+import HoloCore from "@/components/Jarvis/HoloCore";
+import { PLANE_MODELS } from "@/three/modelRegistry";
 
 export default function Setup() {
   const [status, setStatus] = useState(null);
@@ -52,11 +54,22 @@ export default function Setup() {
   const objs = g.ontology_objects || 0, eps = f.endpoints || 0;
   const initialised = objs > 200 || eps > 0;
   const llmOn = llm?.available;
+  const core = PLANE_MODELS.jarvis; // GPU-rendered JARVIS core avatar (Iron Man arc-reactor)
 
   return (
     <PageShell title="SYSTEM SETUP" subtitle="INSTALL · POWER ON · CONNECT THE LLM" accent="#00e0c8"
       actions={<Badge color={offline ? C.red : initialised ? C.neon : C.gold}>
         {offline ? "BACKEND OFFLINE" : initialised ? "ONLINE" : "NOT INITIALISED"}</Badge>}>
+
+      {/* ── GPU-rendered holographic JARVIS core (WebGL · ACES + UnrealBloom) ─ */}
+      <PanelCard title="JARVIS CORE · WEBGL · ACES+BLOOM" accent={core.color} noPad>
+        <div style={{ borderRadius: 8, overflow: "hidden",
+          background: "radial-gradient(circle at 50% 45%, rgba(8,24,44,0.7), rgba(0,2,6,0.95))" }}>
+          {/* HoloCore loads the jarvis_core_avatar GLB; falls back to the procedural
+              arc-reactor core gracefully if the model is missing. */}
+          <HoloCore color={core.color} glbUrl={core.model} height={420} />
+        </div>
+      </PanelCard>
 
       {/* ── the big install action ──────────────────────────────────────── */}
       <PanelCard title="1 · POWER ON" accent="#00e0c8">

@@ -74,7 +74,13 @@ export function AppLayout({ children }) {
       <KeyboardShortcuts />
 
       {/* JARVIS rides on every page */}
-      <JarvisAssistant actions={jarvisActions} entities={jarvisEntities} pages={jarvisPages} risks={RISK_SIGNALS} />
+      <JarvisAssistant
+        actions={jarvisActions}
+        entities={jarvisEntities}
+        pages={jarvisPages}
+        risks={RISK_SIGNALS}
+        currentPage={current ? { name: current.name, label: current.label, route: loc.pathname } : null}
+      />
     </div>
   );
 }

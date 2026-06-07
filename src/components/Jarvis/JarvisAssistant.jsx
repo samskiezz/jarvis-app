@@ -38,7 +38,7 @@ function buildBriefing(liveData, topRisk) {
   return `Briefing, sir. ${bits.join("; ")}.`;
 }
 
-export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, entities = [], risks = [], pages = [] }) {
+export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, entities = [], risks = [], pages = [], currentPage = null }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(false);   // audio unlocked + wake armed
   const [muted, setMuted] = useState(false);
@@ -85,12 +85,20 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
   // We surface the tool trace inline and speak the final answer. `historyRef`
   // gives the loop short-term memory across turns.
   const historyRef = useRef([]);
+  // Keep the latest page context in a ref so runQuery (created once) always sends
+  // the current route without being torn down on every navigation.
+  const currentPageRef = useRef(currentPage);
+  useEffect(() => { currentPageRef.current = currentPage; }, [currentPage]);
   const runQuery = useCallback(async (message) => {
     setStreaming(true);
     const idx = { current: -1 };
     setMessages((m) => { idx.current = m.length; return [...m, { role: "jarvis", text: "" }]; });
     try {
-      const res = await agentChat(message, { history: historyRef.current });
+      const page = currentPageRef.current;
+      const pageContext = page
+        ? { name: page.name, label: page.label, route: page.route }
+        : undefined;
+      const res = await agentChat(message, { history: historyRef.current, pageContext });
       const text = res.answer || "I have nothing to report on that, sir.";
       setMessages((m) => m.map((msg, i) => (
         i === idx.current
@@ -304,7 +312,7 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
             <form style={{ flex: 1, display: "flex", gap: 6 }} onSubmit={(e) => { e.preventDefault(); if (!active) activate(); handleUtterance(draft); setDraft(""); }}>
               <input
                 value={draft} onChange={(e) => setDraft(e.target.value)}
-                placeholder="Ask JARVIS…"
+                placeholder={currentPage?.label ? `Ask JARVIS about ${currentPage.label}…` : "Ask JARVIS…"}
                 style={{ flex: 1, background: "rgba(0,0,0,0.4)", border: `1px solid ${C.border}`, borderRadius: 5, color: C.textB, fontSize: 10, padding: "7px 9px", outline: "none", fontFamily: "inherit" }}
               />
             </form>

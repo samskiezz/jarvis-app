@@ -15,7 +15,7 @@ import { kimiClient } from "@/api/kimiClient";
  * Never throws — on transport failure it returns a structured error answer so the
  * UI (and voice) always have something to say.
  */
-export async function agentChat(message, { history = [], maxSteps } = {}) {
+export async function agentChat(message, { history = [], maxSteps, pageContext } = {}) {
   // Keep history compact and in the shape the backend expects ({role,text}).
   const compactHistory = (history || [])
     .slice(-8)
@@ -24,6 +24,9 @@ export async function agentChat(message, { history = [], maxSteps } = {}) {
   try {
     const body = { message, history: compactHistory };
     if (maxSteps) body.max_steps = maxSteps;
+    // Optional page/route awareness so the agent knows where the user is.
+    // Backend ignores unknown fields — fully non-breaking.
+    if (pageContext) body.page = pageContext;
     const res = await kimiClient.request("/v1/jarvis/agent/chat", {
       method: "POST",
       body: JSON.stringify(body),
