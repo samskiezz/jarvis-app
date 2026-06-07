@@ -188,6 +188,17 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
     # prominence: masters / high-reputation Minions render larger & adorned
     prominence = round(min(1.5, 0.8 + 0.14 * (m.reputation or 1.0)), 3)
 
+    # STORYLINE → ASSET: the generated machine/prop this Minion is working at (science lab rig,
+    # forge, drill, etc.), so the renderer places them AT the right object for their activity.
+    using_asset = None
+    try:
+        from underworld.server.services import scene_assets
+        using_asset = scene_assets.using_asset(
+            guild, action, look["role"],
+            science=(m.brain or {}).get("project_science"), seed=seed_int ^ _h(m.id))
+    except Exception:  # noqa: BLE001
+        using_asset = None
+
     # The behavior bridge: expand this Minion's abstract state into the continuous
     # micro-interaction stream (go to bench → sit → operate tool → emote …).
     behavior = None
@@ -218,6 +229,8 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         # what the minion is REALLY doing this tick + the building they head to.
         "action": action,
         "target_building": target_building,
+        # the generated machine/prop they're working at (storyline → asset)
+        "using_asset": using_asset,
         # cognition / sentience (populated by the Global-Workspace cognition loop)
         "thought": (m.brain or {}).get("thought"),
         "awareness": round(float((m.brain or {}).get("awareness", 0.0)), 3),
