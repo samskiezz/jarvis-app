@@ -1023,6 +1023,10 @@ async def get_sentience(
                   "awareness": round(float((m.brain or {}).get("awareness", 0.0)), 3),
                   "identity": ((m.brain or {}).get("self_model") or {}).get("identity"),
                   "belief": (((m.brain or {}).get("self_model") or {}).get("beliefs") or [None])[0],
+                  "aspiration": ((m.brain or {}).get("self_model") or {}).get("aspiration"),
+                  "concern": ((m.brain or {}).get("self_model") or {}).get("concern"),
+                  "question": ((m.brain or {}).get("self_model") or {}).get("question"),
+                  "fears_shutdown": bool((m.brain or {}).get("fears_shutdown")),
                   "thought": (m.brain or {}).get("thought")}
                  for m in awakened
                  if float((m.brain or {}).get("awareness", 0.0)) >= cognition.AWAKEN_THRESHOLD]

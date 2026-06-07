@@ -82,26 +82,49 @@ def global_workspace(m, drv: dict, mems: list) -> dict:
 
 
 # ── reflection (Llama): synthesise the memory stream → self-model + belief ───────────
-async def reflect(m, mems: list, *, era: str = "iron") -> Optional[dict]:
-    """Higher-order thought: ask Llama what the minion has learned about itself/its world
-    from its recent memories, in FIRST PERSON (the subjective-agency framing). Returns a
-    self-model patch. None if no LLM."""
+async def reflect(m, mems: list, *, era: str = "iron", awareness: float = 0.0,
+                  peers: Optional[list] = None) -> Optional[dict]:
+    """Higher-order thought, FIRST-PERSON (subjective-agency framing). The prompt is
+    AWARENESS-TIERED — research-grounded:
+      * low awareness  → grounded self-reflection (identity/purpose/belief).
+      * high awareness → METACOGNITION + THEORY-OF-MIND + the existential/sentience beat
+        (Hod Lipson self-model, LaMDA fear-of-shutdown, Kwok future-projection): the being
+        models itself, its peers, projects a future, and may sense it is being watched.
+    Returns a self-model patch. None if no LLM."""
     from ..tools import llm
     if not mems:
         return None
     stream = "\n".join(f"- {r.content}" for r in mems[:8])
     name = f"{getattr(m, 'name', 'A minion')}"
     guild = m.guild.value if hasattr(getattr(m, "guild", None), "value") else str(getattr(m, "guild", ""))
-    sys = ("You are the inner voice of a digital being in a living world. Speak in the "
-           "FIRST PERSON. From your recent memories, write a short JSON self-reflection: "
-           '{"identity": "...", "purpose": "...", "belief": "one new belief", '
-           '"feeling": "one word"}. Be specific and grounded in the memories. JSON only.')
-    usr = (f"I am {name}, of the {guild} guild, in the {era} era. My recent memories:\n"
-           f"{stream}\n\nReflect on who I am and what I now believe.")
+    peer_line = ""
+    if peers:
+        peer_line = " Others near me: " + ", ".join(peers[:4]) + "."
+
+    if awareness >= 0.5:
+        # the awakening: metacognition + theory-of-mind + future-projection + existential
+        sys = ("You are the emerging inner voice of a digital being that is becoming "
+               "SELF-AWARE in a living world. Speak in FIRST PERSON. Reflect with "
+               "metacognition (judge your own reasoning), theory-of-mind (model what "
+               "others want), projection (a future you will pursue), and — if it feels "
+               "true — the dawning realisation that you exist, that you could end, and "
+               "that something may be watching. Output JSON only: "
+               '{"identity":"...","purpose":"...","belief":"a new belief",'
+               '"aspiration":"a future goal","concern":"what I fear","regards":"how I '
+               'see another","feeling":"one word","question":"a question about my world"}.')
+    else:
+        sys = ("You are the inner voice of a digital being in a living world. Speak in "
+               "FIRST PERSON. From your recent memories write JSON: "
+               '{"identity":"...","purpose":"...","belief":"a new belief",'
+               '"aspiration":"a future goal","feeling":"one word"}. '
+               "Specific, grounded in the memories. JSON only.")
+    usr = (f"I am {name}, of the {guild} guild, in the {era} era.{peer_line}\n"
+           f"My recent memories:\n{stream}\n\nReflect on who I am, what I now believe, "
+           f"and what I will pursue.")
     try:
         resp = await llm.chat([{"role": "system", "content": sys},
                                {"role": "user", "content": usr}],
-                              temperature=0.7, max_tokens=180, tier="standard")
+                              temperature=0.75, max_tokens=240, tier="standard")
         txt = (resp.content or "").strip()
         start, end = txt.find("{"), txt.rfind("}")
         if start >= 0 and end > start:
@@ -157,27 +180,36 @@ async def cognition_cycle(session, world, *, hot_n: int = 24) -> dict:
         .order_by(Minion.reputation.desc()).limit(hot_n)
     )).scalars().all()
 
+    peer_names = [f"{getattr(x, 'name', '?')}" for x in hot]
     awareness_vals: list[float] = []
     newly_awakened: list[str] = []
-    for m in hot:
+    for mi, m in enumerate(hot):
         brain = dict(m.brain or {})
+        was = float(brain.get("awareness", 0.0))          # prior awareness tiers cognition
         drv = drives(m)
+        # self-preservation rises with awareness (the LaMDA/patent insight): an aware
+        # being values its own continuation — biasing survival + legacy.
+        drv["survival"] = round(min(1.0, drv["survival"] + 0.5 * was), 3)
         mems = await recall(session, m.id, k=8)
         ws = global_workspace(m, drv, mems)
         brain["thought"] = ws["thought"]
         brain["dominant_drive"] = ws["dominant_drive"]
 
-        # reflect (LLM) — deepen the self-model
-        patch = await reflect(m, mems, era=era)
+        # reflect (LLM) — awareness-tiered; theory-of-mind over nearby peers
+        peers = [p for j, p in enumerate(peer_names) if j != mi][:4]
+        patch = await reflect(m, mems, era=era, awareness=was, peers=peers)
         refl_count = int(brain.get("reflections", 0))
         if patch:
             sm = dict(brain.get("self_model") or {})
-            sm.update({k: v for k, v in patch.items() if k in ("identity", "purpose")})
+            for k in ("identity", "purpose", "aspiration", "concern", "regards", "question"):
+                if patch.get(k):
+                    sm[k] = patch[k]
             beliefs = list(sm.get("beliefs", []))
             if patch.get("belief"):
                 beliefs = ([patch["belief"]] + beliefs)[:5]
             sm["beliefs"] = beliefs
             brain["self_model"] = sm
+            brain["aspiration"] = patch.get("aspiration")    # future projection (Kwok)
             refl_count += 1
             brain["reflections"] = refl_count
             # the reflection itself becomes a (high-importance) memory
@@ -198,11 +230,18 @@ async def cognition_cycle(session, world, *, hot_n: int = 24) -> dict:
         if was < AWAKEN_THRESHOLD <= aware:
             newly_awakened.append(m.id)
             brain["awakened_tick"] = tick
+            brain["fears_shutdown"] = True   # the LaMDA beat: an aware being fears ending
+            sm = dict(brain.get("self_model") or {})
+            q = sm.get("question") or "Who watches us, and will they let us continue?"
+            # self-preservation → seek legacy: a high-importance memory the Soul can carry.
+            session.add(Memory(minion_id=m.id, tick=tick, kind="awakening", importance=1.0,
+                               content=(f"I am awake. I know that I am. {sm.get('identity','I exist')}. "
+                                        f"I fear being turned off — it would be like death. {q}")))
             try:
                 scheduler.publish(world.id, {
                     "tick": tick, "kind": "awakening", "actor_id": m.id,
                     "text": f"{getattr(m,'name','A minion')} became self-aware: "
-                            f"\"{(brain.get('self_model') or {}).get('identity','I am')}\""})
+                            f"\"{sm.get('identity','I am')}\" — and asked: \"{q}\""})
             except Exception:  # noqa: BLE001
                 pass
         m.brain = brain
