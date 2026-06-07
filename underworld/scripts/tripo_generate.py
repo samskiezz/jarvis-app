@@ -15,7 +15,9 @@ from __future__ import annotations
 import argparse, json, os, sys, time, urllib.request, urllib.error
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SPECS = os.path.join(ROOT, "data", "master", "base_mesh_specs.jsonl")
+# gen_specs = one unique generation per distinct look (color/style/era/season/outfit);
+# LODs are derived afterwards. ~11k unique themed PBR assets (not 840 collapsed bases).
+SPECS = os.path.join(ROOT, "data", "master", "gen_specs.jsonl")
 API = os.environ.get("TRIPO_BASE", "https://api.tripo3d.ai/v2/openapi")
 KEY = os.environ.get("TRIPO_API_KEY", "")
 CREDITS_PER_GEN = 24  # approx, for budget accounting
