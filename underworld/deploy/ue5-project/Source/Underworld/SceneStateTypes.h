@@ -22,6 +22,30 @@ struct FUwMinionState
 	UPROPERTY(BlueprintReadOnly) FString Guild;                       // A..H CPC guild (skin tint)
 };
 
+/** One placed structure inside a φ/fractal chunk (building / wall / prop). Mirrors the
+ *  backend chunk contract: each carries the GLB url + φ-placed transform. */
+USTRUCT(BlueprintType)
+struct FUwStructure
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly) FString GlbUrl;                   // "/models/.../x.glb" -> resolved via manifest
+	UPROPERTY(BlueprintReadOnly) FVector Pos = FVector::ZeroVector; // backend units (metres)
+	UPROPERTY(BlueprintReadOnly) float   RotY = 0.f;              // yaw degrees
+	UPROPERTY(BlueprintReadOnly) float   Scale = 1.f;
+};
+
+/** One spatial chunk of the millions-strong world (GET /worlds/{id}/chunk?cx&cz). */
+USTRUCT(BlueprintType)
+struct FUwChunk
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly) int32 Cx = 0;
+	UPROPERTY(BlueprintReadOnly) int32 Cz = 0;
+	UPROPERTY(BlueprintReadOnly) TArray<FUwStructure> Structures;
+};
+
 /** The whole live world for the current tick. */
 USTRUCT(BlueprintType)
 struct FUwSceneState

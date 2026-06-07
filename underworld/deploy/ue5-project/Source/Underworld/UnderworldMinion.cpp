@@ -13,8 +13,10 @@ void AUnderworldMinion::ApplyState(const FUwMinionState& State)
 {
 	MinionId = State.Id;
 
-	// Backend (X,Y,Z) → UE (X, Y, Z up). Map backend Z (height) to UE Z.
-	TargetLocation = FVector(State.Pos.X, State.Pos.Y, State.Pos.Z) * WorldScale;
+	// Backend is Y-up (index 1 = height), same as the chunk/structure contract and the
+	// Omniverse renderer. UE is Z-up, so map backend (x, y-up, z) → UE (x, z, y-up).
+	// Keeps minions on the SAME ground plane as the streamed buildings.
+	TargetLocation = FVector(State.Pos.X, State.Pos.Z, State.Pos.Y) * WorldScale;
 	TargetRotation = FRotator(0.f, State.Facing, 0.f);
 
 	if (State.Anim != Anim)   { Anim = State.Anim;   OnAnimChanged(Anim); }

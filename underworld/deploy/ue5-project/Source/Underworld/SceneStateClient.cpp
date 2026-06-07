@@ -130,3 +130,72 @@ bool USceneStateClient::ParseScene(const FString& Body, FUwSceneState& Out) cons
 	}
 	return true;
 }
+
+void USceneStateClient::FetchChunk(int32 Cx, int32 Cz, TFunction<void(const FUwChunk&)> OnDone)
+{
+	if (WorldId.IsEmpty()) { return; }
+	const FString Url = FString::Printf(TEXT("%s/worlds/%s/chunk?cx=%d&cz=%d"), *ApiUrl, *WorldId, Cx, Cz);
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	Req->SetURL(Url);
+	Req->SetVerb(TEXT("GET"));
+	Req->SetHeader(TEXT("Authorization"), FString::Printf(TEXT("Bearer %s"), *ApiKey));
+	Req->SetTimeout(15.f);
+	Req->OnProcessRequestComplete().BindLambda(
+		[this, OnDone = MoveTemp(OnDone)](FHttpRequestPtr, FHttpResponsePtr Resp, bool bOk)
+		{
+			if (!bOk || !Resp.IsValid() || Resp->GetResponseCode() != 200) { return; }
+			FUwChunk Chunk;
+			if (ParseChunk(Resp->GetContentAsString(), Chunk) && OnDone) { OnDone(Chunk); }
+		});
+	Req->ProcessRequest();
+}
+
+bool USceneStateClient::ParseChunk(const FString& Body, FUwChunk& Out) const
+{
+	TSharedPtr<FJsonObject> Root;
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Body);
+	if (!FJsonSerializer::Deserialize(Reader, Root) || !Root.IsValid()) { return false; }
+
+	// "chunk": [cx, cz]
+	const TArray<TSharedPtr<FJsonValue>>* CC = nullptr;
+	if (Root->TryGetArrayField(TEXT("chunk"), CC) && CC && CC->Num() >= 2)
+	{
+		Out.Cx = (int32)(*CC)[0]->AsNumber();
+		Out.Cz = (int32)(*CC)[1]->AsNumber();
+	}
+
+	// settlements[].placements[] + settlements[].walls[] — each is one structure
+	auto AddPlacements = [&Out](const TArray<TSharedPtr<FJsonValue>>* Arr)
+	{
+		if (!Arr) { return; }
+		for (const TSharedPtr<FJsonValue>& V : *Arr)
+		{
+			const TSharedPtr<FJsonObject> P = V->AsObject();
+			if (!P.IsValid() || !P->HasField(TEXT("glb"))) { continue; }
+			FUwStructure S;
+			S.GlbUrl = P->GetStringField(TEXT("glb"));
+			S.RotY   = P->HasField(TEXT("rot_y")) ? (float)P->GetNumberField(TEXT("rot_y")) : 0.f;
+			S.Scale  = P->HasField(TEXT("scale")) ? (float)P->GetNumberField(TEXT("scale")) : 1.f;
+			const TArray<TSharedPtr<FJsonValue>>* Pos = nullptr;
+			if (P->TryGetArrayField(TEXT("pos"), Pos) && Pos && Pos->Num() >= 3)
+			{
+				S.Pos = FVector((*Pos)[0]->AsNumber(), (*Pos)[1]->AsNumber(), (*Pos)[2]->AsNumber());
+			}
+			Out.Structures.Add(MoveTemp(S));
+		}
+	};
+
+	const TArray<TSharedPtr<FJsonValue>>* Settles = nullptr;
+	if (Root->TryGetArrayField(TEXT("settlements"), Settles) && Settles)
+	{
+		for (const TSharedPtr<FJsonValue>& SV : *Settles)
+		{
+			const TSharedPtr<FJsonObject> S = SV->AsObject();
+			if (!S.IsValid()) { continue; }
+			const TArray<TSharedPtr<FJsonValue>>* A = nullptr;
+			if (S->TryGetArrayField(TEXT("placements"), A)) { AddPlacements(A); }
+			if (S->TryGetArrayField(TEXT("walls"), A))      { AddPlacements(A); }
+		}
+	}
+	return true;
+}

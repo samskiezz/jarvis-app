@@ -31,6 +31,11 @@ public:
 	UFUNCTION(BlueprintCallable) void StartPolling();
 	UFUNCTION(BlueprintCallable) void StopPolling();
 
+	/** Fetch ONE φ/fractal chunk (buildings/walls with real GLBs) and deliver it to the
+	 *  callback on the game thread. The WorldManager calls this for the ring of chunks
+	 *  around the camera; chunks are deterministic + cacheable backend-side. */
+	void FetchChunk(int32 Cx, int32 Cz, TFunction<void(const FUwChunk&)> OnDone);
+
 	/** Backend config (overridable via cmdline). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) FString ApiUrl = TEXT("http://localhost:8091");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) FString WorldId;
@@ -41,6 +46,7 @@ private:
 	void Poll();
 	void OnResponse(FHttpRequestPtr Req, FHttpResponsePtr Resp, bool bOk);
 	bool ParseScene(const FString& Body, FUwSceneState& Out) const;
+	bool ParseChunk(const FString& Body, FUwChunk& Out) const;
 
 	FTimerHandle PollTimer;
 	bool bInFlight = false;
