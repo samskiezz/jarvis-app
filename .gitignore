@@ -54,3 +54,6 @@ underworld/data/*.db-*
 underworld/data/design/render_directives.csv
 underworld/data/design/stories.csv
 underworld/data/design/sciences.csv
+
+# secrets — never commit
+.tripo_env
