@@ -25,6 +25,12 @@ module.exports = {
         // Semantic-index embeddings on the GPU (Ollama /api/embed). Unset => the
         // offline hashing-TF-IDF embedder (CPU) is used, unchanged.
         OLLAMA_EMBED_MODEL: 'nomic-embed-text',
+        // Self-enrichment: build + GPU-embed + LLM-enrich the KB on boot and every
+        // 30 min. The Llama brain summarises a batch of scraped docs each cycle.
+        AUTOBUILD_ON_START: 'true',
+        AUTOBUILD_INTERVAL_S: '1800',
+        AUTOBUILD_SCRAPE_BATCHES: '1',
+        AUTOBUILD_ENRICH_LIMIT: '12',
         KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',

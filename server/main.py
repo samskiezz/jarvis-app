@@ -70,6 +70,33 @@ def _ingest_enabled() -> bool:
     return os.environ.get("HISTORY_INGEST_ENABLED", "").lower() in ("1", "true", "yes")
 
 
+def _autobuild_on_start() -> bool:
+    return os.environ.get("AUTOBUILD_ON_START", "").lower() in ("1", "true", "yes")
+
+
+async def _autobuild_loop():
+    """Self-enrichment loop: build + GPU-embed + LLM-enrich the knowledge base on
+    start-up and on an interval. Opt-in via AUTOBUILD_ON_START. Runs the (sync) build
+    in a worker thread so the event loop keeps serving. Never crashes the app."""
+    import asyncio
+
+    from .services import jarvis_autobuild as ab
+
+    delay = int(os.environ.get("AUTOBUILD_START_DELAY_S", "10"))
+    interval = max(60, int(os.environ.get("AUTOBUILD_INTERVAL_S", "1800")))
+    scrape_batches = int(os.environ.get("AUTOBUILD_SCRAPE_BATCHES", "1"))
+    enrich_limit = int(os.environ.get("AUTOBUILD_ENRICH_LIMIT", "12"))
+    await asyncio.sleep(delay)  # let the server come up before the heavy build
+    while True:
+        try:
+            await asyncio.to_thread(
+                ab.run_once, scrape_batches=scrape_batches, enrich_limit=enrich_limit
+            )
+        except Exception:  # noqa: BLE001 - a build failure must never kill the loop
+            pass
+        await asyncio.sleep(interval)
+
+
 @contextlib.asynccontextmanager
 async def _lifespan(app: FastAPI):
     """Opt-in History Lake ingestion loop. Disabled by default so imports/tests
@@ -92,10 +119,20 @@ async def _lifespan(app: FastAPI):
         ft_task = start_loop_if_enabled()
     except Exception:  # noqa: BLE001 - startup must never break on an optional loop
         ft_task = None
+
+    # Opt-in self-enrichment build loop (scrape -> GPU embed -> LLM enrich). Disabled
+    # by default; enable with AUTOBUILD_ON_START=true so the system builds + deepens
+    # its knowledge base on every boot and on an interval.
+    ab_task = None
+    try:
+        if _autobuild_on_start():
+            ab_task = asyncio.create_task(_autobuild_loop())
+    except Exception:  # noqa: BLE001 - startup must never break on an optional loop
+        ab_task = None
     try:
         yield
     finally:
-        for t in (task, ft_task):
+        for t in (task, ft_task, ab_task):
             if t is not None:
                 t.cancel()
                 with contextlib.suppress(asyncio.CancelledError, Exception):

@@ -49,7 +49,7 @@ for _name in ("world_earthquake", "world_species", "world_cve", "world_weather",
 
 
 def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 2,
-             domain_limit: int = 50) -> dict:
+             domain_limit: int = 50, enrich_limit: int = 12) -> dict:
     """Build the whole platform once. Idempotent; never raises. Returns a report."""
     t0 = time.time()
     report: dict = {"steps": {}}
@@ -140,6 +140,24 @@ def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 
         }
     except Exception as e:  # noqa: BLE001
         report["steps"]["embed_index"] = {"ok": False, "error": str(e)}
+
+    # 4e) self-enrichment with the GPU LLM — the Llama brain reads a bounded batch of
+    # scraped documents and writes grounded factual summaries back into the knowledge
+    # base. This is how the system deepens itself on every start-up (and the step that
+    # puts sustained GPU load on the box). Resumable: each build advances onto fresh
+    # docs. Raise enrich_limit to enrich (and GPU-process) more per build.
+    if enrich_limit and enrich_limit > 0:
+        try:
+            from . import llm_enrich as enrich
+            er = enrich.enrich_documents(limit=int(enrich_limit))
+            report["steps"]["llm_enrich"] = {
+                "enriched": er.get("enriched"),
+                "backend": er.get("backend"),
+                "available": er.get("available"),
+                "pending_remaining": er.get("pending_remaining"),
+            }
+        except Exception as e:  # noqa: BLE001
+            report["steps"]["llm_enrich"] = {"ok": False, "error": str(e)}
 
     # 5) snapshot the document store for durability
     if docstore is not None:

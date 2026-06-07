@@ -28,11 +28,13 @@ async def startup(_t: str = Depends(require_bearer)):
     return sysmod.startup()
 
 @router.post("/autobuild")
-async def autobuild(scrape_batches: int = 2, depth: int = 2, _t: str = Depends(require_bearer)):
+async def autobuild(scrape_batches: int = 2, depth: int = 2, enrich_limit: int = 12,
+                    _t: str = Depends(require_bearer)):
     """Build the whole platform autonomously: restore → load → project → scrape →
-    snapshot. Idempotent; safe to run on every boot and on a schedule."""
+    embed (GPU) → LLM self-enrich (GPU) → snapshot. Idempotent; safe to run on every
+    boot and on a schedule. ``enrich_limit`` = scraped docs the LLM enriches this run."""
     from ..services import jarvis_autobuild as ab
-    return ab.run_once(scrape_batches=scrape_batches, depth=depth)
+    return ab.run_once(scrape_batches=scrape_batches, depth=depth, enrich_limit=enrich_limit)
 
 @router.get("/autobuild/status")
 async def autobuild_status(_t: str | None = Depends(optional_bearer)):
