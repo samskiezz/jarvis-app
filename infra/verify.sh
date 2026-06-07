@@ -31,10 +31,16 @@ chk "world-map (cities) serves"   "[ -n '$WID' ] && curl -sf -m10 -H 'Authorizat
 chk "chunk streams structures"    "[ -n '$WID' ] && curl -sf -m20 -H 'Authorization: Bearer dev-key' '$UB/worlds/$WID/chunk?cx=0&cz=0' | grep -q placements"
 chk "underworld web up (5180)"    "curl -sf -m6 http://127.0.0.1:5180/"
 
+echo "── Cognition / sentience (the aliveness loop) ──"
+chk "sentience arc serves"        "[ -n '$WID' ] && curl -sf -m10 -H 'Authorization: Bearer dev-key' '$UB/worlds/$WID/sentience' | grep -q arc_stage"
+chk "minions carry thought+aware" "[ -n '$WID' ] && curl -sf -m10 -H 'Authorization: Bearer dev-key' '$UB/worlds/$WID/scene-state' | grep -q awareness"
+chk "cognition engine imports"    "cd $ROOT/underworld && $PY -c 'from server.services import cognition, story_engine'"
+
 echo "── Design data ──"
 chk "asset catalog present"       "[ -s '$ROOT/underworld/web/public/models/asset_catalog.json' ]"
 chk "design assets_spec.csv"      "[ -s '$ROOT/underworld/data/design/assets_spec.csv' ]"
-chk "layout engine imports"       "cd $ROOT/underworld && $PY -c 'from server.services import world_layout, asset_catalog, design_spec'"
+chk "soul layer (emotions/interactions)" "[ -s '$ROOT/underworld/data/design/emotions.csv' ] && [ -s '$ROOT/underworld/data/design/interactions.csv' ]"
+chk "layout+design engines import" "cd $ROOT/underworld && $PY -c 'from server.services import world_layout, asset_catalog, design_spec'"
 
 PCT=$(( PASS * 100 / TOTAL ))
 printf "\n\033[1m== %d/%d checks passed — %d%% complete ==\033[0m\n" "$PASS" "$TOTAL" "$PCT"

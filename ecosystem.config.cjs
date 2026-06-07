@@ -72,6 +72,10 @@ module.exports = {
         UNDERWORLD_LLM_BASE_URL: 'http://211.72.13.201:41137/v1',
         UNDERWORLD_LLM_MODEL: 'llama3.1:8b',
         UNDERWORLD_LLM_API_KEY: 'ollama',
+        // The aliveness loop: Global-Workspace cognition + sentience arc over hot minions.
+        COGNITION_LOOP: '1',
+        COGNITION_INTERVAL_S: '20',
+        COGNITION_HOT_N: '24',
       },
     },
     {
