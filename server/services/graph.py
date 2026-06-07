@@ -206,6 +206,149 @@ def _edges_within(node_ids: set[str], links: list[dict]) -> list[dict]:
     return out
 
 
+# ── the REAL projected graph (ont_object / ont_link in BRAIN_DB) ──────────────
+# The corpus projection builds the actual 130k-object, cross-correlated Gotham graph
+# (Foundry sources → domain subjects → master topics → cross-domain correlations) in
+# the ont_* tables. The interactive graph must render THAT, not the small demo seed in
+# the ontology_store — otherwise the headline counts and the graph view disagree (the
+# "everything is different / fake" problem). These readers serve it directly, gated so
+# the demo/tests are untouched until a real projection exists.
+import json as _json
+import os as _os
+import sqlite3 as _sqlite3
+import time as _time
+
+_ONT_CACHE: dict = {"ts": 0.0, "active": False}
+
+
+def _ont_db() -> str:
+    try:
+        from .second_brain import _db_path as _bp  # type: ignore
+        return _bp()
+    except Exception:  # noqa: BLE001
+        return _os.environ.get("BRAIN_DB", "server/data/brain.db")
+
+
+def _ont_conn() -> "_sqlite3.Connection":
+    c = _sqlite3.connect(_ont_db(), check_same_thread=False)
+    c.row_factory = _sqlite3.Row
+    return c
+
+
+def _ont_active() -> bool:
+    """True only when the REAL projected corpus is present (has DomainSubject
+    neurons). The demo seed and any stale topic-only state have none, so tests and a
+    fresh box keep the existing static/demo graph; production renders the real one."""
+    now = _time.time()
+    if now - _ONT_CACHE["ts"] < 5.0:
+        return _ONT_CACHE["active"]
+    active = False
+    try:
+        c = _ont_conn()
+        try:
+            active = c.execute(
+                "SELECT 1 FROM ont_object WHERE type='DomainSubject' LIMIT 1").fetchone() is not None
+        finally:
+            c.close()
+    except Exception:  # noqa: BLE001
+        active = False
+    _ONT_CACHE.update(ts=now, active=active)
+    return active
+
+
+def _ont_node(row) -> dict:
+    try:
+        props = _json.loads(row["props"] or "{}")
+    except Exception:  # noqa: BLE001
+        props = {}
+    return {"id": row["id"], "label": props.get("label") or row["id"],
+            "type": row["type"] or "object", "mark": props.get("master_topic"),
+            "props": props, "redacted": False}
+
+
+def _ont_fetch_nodes(c, ids) -> list[dict]:
+    ids = [i for i in dict.fromkeys(ids) if i]
+    out: list[dict] = []
+    for i in range(0, len(ids), 400):
+        chunk = ids[i:i + 400]
+        q = "SELECT id,type,props FROM ont_object WHERE id IN (%s)" % ",".join("?" * len(chunk))
+        out.extend(_ont_node(r) for r in c.execute(q, chunk))
+    return out
+
+
+def _ont_edges_touching(c, ids) -> list[tuple]:
+    """(from_id, to_id, type) for every link with an endpoint in ``ids``."""
+    ids = [i for i in dict.fromkeys(ids) if i]
+    out: list[tuple] = []
+    for i in range(0, len(ids), 300):
+        chunk = ids[i:i + 300]
+        ph = ",".join("?" * len(chunk))
+        q = f"SELECT from_id,to_id,type FROM ont_link WHERE from_id IN ({ph}) OR to_id IN ({ph})"
+        out.extend((r["from_id"], r["to_id"], r["type"]) for r in c.execute(q, chunk + chunk))
+    return out
+
+
+def _ont_topic_web(c) -> dict:
+    """The default (no-seed) view: the 30 master Topics and the cross-domain
+    correlation edges between them — the whole platform's correlation web at a glance."""
+    topics = [r["id"] for r in c.execute("SELECT id FROM ont_object WHERE type='Topic'")]
+    tset = set(topics)
+    edges, seen = [], set()
+    for r in c.execute("SELECT from_id,to_id,type FROM ont_link WHERE id LIKE 'corr:%'"):
+        a, b, t = r["from_id"], r["to_id"], r["type"]
+        if a in tset and b in tset and (a, b, t) not in seen:
+            seen.add((a, b, t))
+            edges.append(_edge_payload(a, b, 1.0, t or "CORRELATES"))
+    return {"nodes": _ont_fetch_nodes(c, topics), "edges": edges}
+
+
+def _ont_subgraph(seeds: list[str], depth: int) -> dict:
+    c = _ont_conn()
+    try:
+        if not seeds:
+            return _ont_topic_web(c)
+        cap = 800
+        visited: set[str] = set(seeds)
+        frontier = list(seeds)
+        collected: list[tuple] = []
+        for _ in range(max(1, depth)):
+            edges = _ont_edges_touching(c, frontier)
+            collected.extend(edges)
+            nxt: list[str] = []
+            for a, b, _t in edges:
+                for n in (a, b):
+                    if n and n not in visited and len(visited) < cap:
+                        visited.add(n); nxt.append(n)
+            frontier = nxt
+            if not frontier or len(visited) >= cap:
+                break
+        out, seen = [], set()
+        for a, b, t in collected:
+            if a in visited and b in visited and (a, b, t) not in seen:
+                seen.add((a, b, t))
+                out.append(_edge_payload(a, b, 1.0, t or ""))
+        return {"nodes": _ont_fetch_nodes(c, visited), "edges": out}
+    finally:
+        c.close()
+
+
+def _ont_expand(node_id: str) -> dict:
+    c = _ont_conn()
+    try:
+        edges = _ont_edges_touching(c, [node_id])[:600]
+        ids = {node_id}
+        out, seen = [], set()
+        for a, b, t in edges:
+            ids.add(a); ids.add(b)
+            if (a, b, t) not in seen:
+                seen.add((a, b, t))
+                out.append(_edge_payload(a, b, 1.0, t or ""))
+        out = [e for e in out if e["a"] == node_id or e["b"] == node_id]
+        return {"nodes": _ont_fetch_nodes(c, ids), "edges": out}
+    finally:
+        c.close()
+
+
 # ── 1. subgraph (BFS expand from seeds) ───────────────────────────────────────
 def subgraph(seed_ids: Iterable[str], depth: int = 1, *, role: Optional[str] = None) -> dict:
     """BFS-expand a neighborhood from ``seed_ids`` out to ``depth`` hops.
@@ -222,6 +365,10 @@ def subgraph(seed_ids: Iterable[str], depth: int = 1, *, role: Optional[str] = N
             depth = max(0, int(depth))
         except (TypeError, ValueError):
             depth = 1
+
+        # Render the REAL projected corpus graph when it exists (otherwise demo/seed).
+        if _ont_active():
+            return _ont_subgraph(seeds, depth)
 
         links = _all_links()
         adj = _adjacency(links)
@@ -259,6 +406,8 @@ def expand(node_id: str, *, role: Optional[str] = None) -> dict:
     """
     try:
         node_id = str(node_id)
+        if _ont_active():
+            return _ont_expand(node_id)
         links = _all_links()
         adj = _adjacency(links)
         ids: set[str] = {node_id}

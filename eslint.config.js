@@ -5,6 +5,19 @@ import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginUnusedImports from "eslint-plugin-unused-imports";
 
 export default [
+  // Global ignores: only the app's own src/ is linted. Vendored third-party code
+  // (vendor/) and the bundled sim/UI snapshots (world_os/, underworld/) ship their
+  // own tooling and must not be linted by the app config, or CI fails on code we
+  // don't own. (node_modules / .git are ignored by ESLint by default.)
+  {
+    ignores: [
+      "vendor/**",
+      "world_os/**",
+      "underworld/**",
+      "dist/**",
+      "build/**",
+    ],
+  },
   {
     files: [
       "src/components/**/*.{js,mjs,cjs,jsx}",

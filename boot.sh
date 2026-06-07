@@ -19,6 +19,9 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"
+# Load the committed deploy config (ports, OLLAMA_HOST, flags) so `git pull` brings the
+# full working setup to every box. Real secrets stay as shell env vars (not here).
+if [ -f "$ROOT/.env" ]; then set -a; . "$ROOT/.env"; set +a; fi
 
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 API_HOST="${API_HOST:-127.0.0.1}"; API_PORT="${API_PORT:-8000}"
@@ -27,12 +30,22 @@ API_HOST="${API_HOST:-127.0.0.1}"; API_PORT="${API_PORT:-8000}"
 export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost,$API_HOST}"
 UI_PORT="${UI_PORT:-5173}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-llama3.2:1b}"; export OLLAMA_MODEL
+# Continuous LLM research autopilot — keeps the GPU hammered (cycles topics through
+# the LLM forever; idles until a model is reachable). On by default; disable with
+# LLM_AUTOPILOT_ENABLE=0. Tune LLM_AUTOPILOT_CONCURRENCY (default 3).
+export LLM_AUTOPILOT_ENABLE="${LLM_AUTOPILOT_ENABLE:-1}"
 LOG=/tmp/jarvis-boot; mkdir -p "$LOG"
 
 say(){ printf '\033[36m[boot]\033[0m %s\n' "$*"; }
 warn(){ printf '\033[33m[boot]\033[0m %s\n' "$*"; }
 
 is_local_host(){ case "${1:-}" in ""|*127.0.0.1*|*localhost*|*0.0.0.0*) return 0;; *) return 1;; esac; }
+
+# ── 0/5 environment: install/repair ALL deps (python · node · go scraper
+# binaries like katana · …) before anything starts. Idempotent; Ollama is handled
+# in step 1 below so we skip it here. Bypass with SKIP_SETUP=1.
+export PATH="$HOME/go/bin:$PATH"
+[ "${SKIP_SETUP:-0}" = "1" ] || SETUP_OLLAMA=0 bash "$ROOT/setup.sh" || warn "setup had issues (see /tmp/jarvis-setup/)"
 
 # ── 1/5 LLM (AIP) ─────────────────────────────────────────────────────────────
 llm_mode="off"

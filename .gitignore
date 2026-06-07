@@ -1,9 +1,4 @@
-#env
-.env
-.env.*
-!.env.example
-
-# Python virtualenv
+# Python virtualenv (never commit — caused the 7,616-file blunder)
 .venv/
 venv/
 
@@ -19,7 +14,6 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
 
 # Editor directories and files
 .vscode/*
@@ -32,10 +26,12 @@ dist-ssr
 *.sln
 *.sw?
 
-.env
 .vite
 
-# Backend
+# Backend caches + REGENERATED runtime data ONLY. These are rebuilt by setup.sh /
+# autobuild on every box, so they don't belong in git (committing them bloats the repo
+# and breaks pulls). ALL real CONFIG is committed — .env, .env.*, llm_connect.json,
+# IPs/ports/flags — so `git pull` brings the full working setup to every box.
 server/__pycache__/
 server/**/__pycache__/
 server/*.db
@@ -44,9 +40,6 @@ server/data/*.db-wal
 server/data/*.db-shm
 server/.pytest_cache/
 .pytest_cache/
-
-# Local dev env (committed via .env.example)
-.env.local
 
 # APEX Forge runtime (locks + backups)
 .forge/

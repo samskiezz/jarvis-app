@@ -14,6 +14,9 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"
+# Load the committed deploy config (ports, OLLAMA_HOST, flags) so a `git pull` brings
+# the full working setup to every box. Real secrets stay as shell env vars (not here).
+if [ -f "$ROOT/.env" ]; then set -a; . "$ROOT/.env"; set +a; fi
 API_PORT="${API_PORT:-8000}"; UI_PORT="${UI_PORT:-5173}"
 # Prefer the project virtualenv — deps live in .venv and bare `python` may be absent.
 if [ -x "$ROOT/.venv/bin/python" ]; then PY="$ROOT/.venv/bin/python";
@@ -24,16 +27,25 @@ else PY="python3"; fi
 export VITE_API_PORT="$API_PORT"
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost}"
+# Continuous LLM research autopilot — keeps the GPU hammered (cycles topics through
+# the LLM forever; idles until a model is reachable). On by default for a deploy;
+# disable with LLM_AUTOPILOT_ENABLE=0. Tune LLM_AUTOPILOT_CONCURRENCY (default 3).
+export LLM_AUTOPILOT_ENABLE="${LLM_AUTOPILOT_ENABLE:-1}"
 LOG=/tmp/jarvis-serve; mkdir -p "$LOG"
 say(){ printf '\033[36m[serve]\033[0m %s\n' "$*"; }
 warn(){ printf '\033[33m[serve]\033[0m %s\n' "$*"; }
 
 IP="$(hostname -I 2>/dev/null | awk '{print $1}')"; [ -z "$IP" ] && IP="<server-ip>"
 
-# ── 1. deps ───────────────────────────────────────────────────────────────────
-say "1/4 dependencies…"
-"$PY" -m pip install -q -r server/requirements.txt 2>>"$LOG/pip.log" || warn "  pip issues (see $LOG/pip.log)"
-[ -d node_modules ] || npm install >"$LOG/npm.log" 2>&1
+# ── 1. deps (FULL environment: python · node · go scraper binaries · ollama) ──
+say "1/4 dependencies (setup.sh — installs everything the app needs)…"
+# Go binaries (katana etc.) land in ~/go/bin — put it on PATH so the backend's
+# scraper can find them, then install/repair the whole environment idempotently.
+export PATH="$HOME/go/bin:$PATH"
+[ "${SKIP_SETUP:-0}" = "1" ] || bash "$ROOT/setup.sh" || warn "  setup had issues (see /tmp/jarvis-setup/)"
+# Optional: tunnel the vast.ai GPU's Ollama to 127.0.0.1:11434 (set GPU_LINK=1 +
+# VAST_SSH_* in .env; needs the VPS to have SSH key access to the GPU box).
+[ "${GPU_LINK:-0}" = "1" ] && bash "$ROOT/scripts/gpu-link.sh" || true
 
 # ── 2. backend on 0.0.0.0 ─────────────────────────────────────────────────────
 say "2/4 backend → http://0.0.0.0:$API_PORT (reachable at http://$IP:$API_PORT)…"
@@ -78,6 +90,8 @@ echo
 say "════════════════════════════════════════════════════════════════"
 say "  UP.  Open →  http://$IP:$UI_PORT/"
 say "       backend  http://$IP:$API_PORT     (logs in $LOG/)"
+say "  GPU autopilot: ON — continuously researching via the LLM (hammers the GPU"
+say "                 as soon as OLLAMA_HOST points at a reachable model)."
 say "  First load shows the install pop-up → click 'Initialise System'."
 warn "  Make sure ports $UI_PORT and $API_PORT are OPEN in your vast.ai/VPS firewall."
 say "════════════════════════════════════════════════════════════════"

@@ -110,6 +110,18 @@ def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 
         except Exception:  # noqa: BLE001
             pass
 
+    # 4b-ocr) OCR a bounded batch of document candidates (scanned PDFs/images) into
+    # the searchable baseline. Best-effort + bounded so it never stalls the build;
+    # tune with AUTOBUILD_OCR (default 5), disable with AUTOBUILD_OCR=0.
+    try:
+        import os as _os
+        _ocr_n = int(_os.environ.get("AUTOBUILD_OCR", "5"))
+        if _ocr_n > 0:
+            from . import world_documents as _wd
+            report["steps"]["ocr"] = _wd.ocr_batch(limit=_ocr_n)
+    except Exception:  # noqa: BLE001
+        report["steps"]["ocr"] = {"ok": False}
+
     # 4c) rebuild the self-building UI spec so new object types get windows+renders
     try:
         from . import jarvis_ui_builder as uib

@@ -17,7 +17,7 @@ import uuid
 
 import pytest
 
-from services import brain_migrate
+from server.services import brain_migrate
 
 pytestmark = pytest.mark.skipif(
     not brain_migrate.available(),

@@ -62,6 +62,8 @@ def init_db() -> None:
                 CREATE TABLE IF NOT EXISTS world_endpoint (endpoint_candidate_id TEXT PRIMARY KEY, subject_id TEXT,
                     master_topic TEXT, source_name TEXT, official_url TEXT, access_method TEXT, auth_requirement TEXT,
                     recommended_ingestion_connector TEXT, licence_review_required TEXT, robots_or_terms_review_required TEXT);
+                CREATE TABLE IF NOT EXISTS world_correlation (edge_id TEXT PRIMARY KEY, source_node TEXT,
+                    target_node TEXT, edge_type TEXT, description TEXT, weight TEXT, evidence_type TEXT, flow_layer TEXT);
                 CREATE INDEX IF NOT EXISTS idx_we_subject ON world_endpoint(subject_id);
                 CREATE INDEX IF NOT EXISTS idx_ws_topic ON world_subject(master_topic);
                 """
@@ -125,6 +127,12 @@ def load(*, endpoint_limit: int | None = None) -> dict:
                                       "official_url", "access_method", "auth_requirement",
                                       "recommended_ingestion_connector", "licence_review_required",
                                       "robots_or_terms_review_required"], limit=endpoint_limit)
+        # Cross-domain correlation edges (Universe→Information, Earth→Climate, …): the
+        # layer that ties all 30 domains together so data cross-correlates across the
+        # whole platform instead of sitting in disconnected silos.
+        out["correlations"] = _load_csv(c, "cross_correlation_edges.csv", "world_correlation",
+                                        ["edge_id", "source_node", "target_node", "edge_type",
+                                         "description", "weight", "evidence_type", "flow_layer"])
     finally:
         c.close()
     out["available"] = True
