@@ -1,0 +1,251 @@
+type,name,detail,variants
+science,ALL,56 sciences × 105 facets × 20 steps,5880
+science,acoustics,research domain,105
+science,aerodynamics,research domain,105
+science,agronomy,research domain,105
+science,astronomy,research domain,105
+science,atmoschem,research domain,105
+science,biology,research domain,105
+science,biomechanics,research domain,105
+science,chemistry,research domain,105
+science,combustion,research domain,105
+science,control,research domain,105
+science,crypto,research domain,105
+science,crystallography,research domain,105
+science,cs_ai,research domain,105
+science,earth,research domain,105
+science,ecology,research domain,105
+science,economics,research domain,105
+science,electrochem,research domain,105
+science,electronics,research domain,105
+science,engineering,research domain,105
+science,epidemiology,research domain,105
+science,fluids,research domain,105
+science,foodscience,research domain,105
+science,forestry,research domain,105
+science,geodesy,research domain,105
+science,geology,research domain,105
+science,geotechnical,research domain,105
+science,heattransfer,research domain,105
+science,hydrogeology,research domain,105
+science,hydrology,research domain,105
+science,immunology,research domain,105
+science,linguistics,research domain,105
+science,materials,research domain,105
+science,math,research domain,105
+science,medicine,research domain,105
+science,metallurgy,research domain,105
+science,neuro,research domain,105
+science,nuclear,research domain,105
+science,ocean,research domain,105
+science,optics,research domain,105
+science,pharmacology,research domain,105
+science,photovoltaics,research domain,105
+science,physics,research domain,105
+science,plasma,research domain,105
+science,polymer,research domain,105
+science,qcomputing,research domain,105
+science,quantum,research domain,105
+science,rf,research domain,105
+science,robotics,research domain,105
+science,seismology,research domain,105
+science,semiconductor,research domain,105
+science,signal,research domain,105
+science,spectroscopy,research domain,105
+science,statmech,research domain,105
+science,structural,research domain,105
+science,tribology,research domain,105
+science,veterinary,research domain,105
+scene_situation,idle,scene/camera/sound/vfx,1
+scene_situation,research,scene/camera/sound/vfx,1
+scene_situation,build,scene/camera/sound/vfx,1
+scene_situation,trade,scene/camera/sound/vfx,1
+scene_situation,breed,scene/camera/sound/vfx,1
+scene_situation,birth,scene/camera/sound/vfx,1
+scene_situation,death,scene/camera/sound/vfx,1
+scene_situation,conflict,scene/camera/sound/vfx,1
+scene_situation,festival,scene/camera/sound/vfx,1
+scene_situation,discovery,scene/camera/sound/vfx,1
+scene_situation,travel,scene/camera/sound/vfx,1
+scene_situation,rest,scene/camera/sound/vfx,1
+scene_situation,disaster,scene/camera/sound/vfx,1
+scene_situation,harvest,scene/camera/sound/vfx,1
+scene_situation,ritual,scene/camera/sound/vfx,1
+ability_action,study,minion action,1
+ability_action,forge,minion action,1
+ability_action,farm,minion action,1
+ability_action,trade,minion action,1
+ability_action,teach,minion action,1
+ability_action,invent,minion action,1
+ability_action,rest,minion action,1
+ability_action,celebrate,minion action,1
+ability_action,fight,minion action,1
+ability_action,breed,minion action,1
+ability_action,build,minion action,1
+ability_action,mine,minion action,1
+ability_action,worship,minion action,1
+ability_action,flee,minion action,1
+social_interaction,mentor,minion↔minion,1
+social_interaction,rival,minion↔minion,1
+social_interaction,romance,minion↔minion,1
+social_interaction,collab,minion↔minion,1
+social_interaction,debate,minion↔minion,1
+social_interaction,betray,minion↔minion,1
+social_interaction,console,minion↔minion,1
+social_interaction,trade,minion↔minion,1
+social_interaction,inspire,minion↔minion,1
+social_interaction,challenge,minion↔minion,1
+social_interaction,gossip,minion↔minion,1
+social_interaction,forgive,minion↔minion,1
+social_interaction,recruit,minion↔minion,1
+social_interaction,grieve,minion↔minion,1
+social_interaction,celebrate,minion↔minion,1
+social_interaction,conflict,minion↔minion,1
+social_interaction,apprentice,minion↔minion,1
+social_interaction,eulogise,minion↔minion,1
+saga_archetype,prodigy,5-beat storyline,5
+saga_archetype,mentorship,5-beat storyline,5
+saga_archetype,great_discovery,5-beat storyline,5
+saga_archetype,rivalry,5-beat storyline,5
+saga_archetype,plague_trial,5-beat storyline,5
+saga_archetype,lost_knowledge,5-beat storyline,5
+saga_archetype,renaissance,5-beat storyline,5
+saga_archetype,first_of_kind,5-beat storyline,5
+saga_archetype,legacy,5-beat storyline,5
+saga_archetype,wanderer,5-beat storyline,5
+saga_archetype,reconciliation,5-beat storyline,5
+emotion,joy,appraisal emotion,1
+emotion,grief,appraisal emotion,1
+emotion,pride,appraisal emotion,1
+emotion,envy,appraisal emotion,1
+emotion,wonder,appraisal emotion,1
+emotion,fear,appraisal emotion,1
+emotion,love,appraisal emotion,1
+emotion,ambition,appraisal emotion,1
+emotion,curiosity,appraisal emotion,1
+emotion,despair,appraisal emotion,1
+emotion,awe,appraisal emotion,1
+emotion,resolve,appraisal emotion,1
+emotion,doubt,appraisal emotion,1
+emotion,triumph,appraisal emotion,1
+emotion,longing,appraisal emotion,1
+mood,flow,mood state,1
+mood,inspired,mood state,1
+mood,content,mood state,1
+mood,bored,mood state,1
+mood,anxious,mood state,1
+mood,exhausted,mood state,1
+mood,despairing,mood state,1
+building_function,hospital,interior program,6
+building_function,clinic,interior program,4
+building_function,school,interior program,5
+building_function,academy,interior program,5
+building_function,library,interior program,4
+building_function,office,interior program,4
+building_function,bank,interior program,4
+building_function,hotel,interior program,4
+building_function,gym,interior program,4
+building_function,store,interior program,3
+building_function,restaurant,interior program,3
+building_function,market,interior program,3
+building_function,church,interior program,3
+building_function,police,interior program,4
+building_function,fire_station,interior program,3
+building_function,factory,interior program,4
+building_function,workshop,interior program,3
+building_function,power_plant,interior program,3
+building_function,water_works,interior program,2
+building_function,home,interior program,4
+building_function,apartment,interior program,4
+building_function,house,interior program,4
+building_function,storehouse,interior program,3
+building_function,bus_station,interior program,3
+building_function,train_station,interior program,4
+building_function,subway,interior program,3
+room_type,altar,interior room,1
+room_type,armory,interior room,1
+room_type,bathroom,interior room,1
+room_type,bay,interior room,1
+room_type,bedroom,interior room,1
+room_type,breakroom,interior room,1
+room_type,cell,interior room,1
+room_type,classroom,interior room,1
+room_type,concourse,interior room,1
+room_type,control,interior room,1
+room_type,counter,interior room,1
+room_type,dining,interior room,1
+room_type,dorm,interior room,1
+room_type,exam,interior room,1
+room_type,floor,interior room,1
+room_type,hall,interior room,1
+room_type,kitchen,interior room,1
+room_type,lab,interior room,1
+room_type,library,interior room,1
+room_type,living,interior room,1
+room_type,loading,interior room,1
+room_type,lobby,interior room,1
+room_type,locker,interior room,1
+room_type,meeting,interior room,1
+room_type,nave,interior room,1
+room_type,office,interior room,1
+room_type,openplan,interior room,1
+room_type,pharmacy,interior room,1
+room_type,platform,interior room,1
+room_type,plaza,interior room,1
+room_type,pump_hall,interior room,1
+room_type,reading,interior room,1
+room_type,restaurant,interior room,1
+room_type,room,interior room,1
+room_type,shopfloor,interior room,1
+room_type,stacks,interior room,1
+room_type,storeroom,interior room,1
+room_type,studio,interior room,1
+room_type,surgery,interior room,1
+room_type,teller,interior room,1
+room_type,ticket,interior room,1
+room_type,turbine_hall,interior room,1
+room_type,vault,interior room,1
+room_type,vestry,interior room,1
+room_type,waiting,interior room,1
+room_type,ward,interior room,1
+civic_building,school,city building type,1
+civic_building,hospital,city building type,1
+civic_building,clinic,city building type,1
+civic_building,hotel,city building type,1
+civic_building,gym,city building type,1
+civic_building,store,city building type,1
+civic_building,church,city building type,1
+civic_building,factory,city building type,1
+civic_building,office,city building type,1
+civic_building,skyscraper,city building type,1
+civic_building,apartment,city building type,1
+civic_building,bank,city building type,1
+civic_building,police,city building type,1
+civic_building,fire_station,city building type,1
+civic_building,library,city building type,1
+civic_building,restaurant,city building type,1
+civic_building,bus_station,city building type,1
+civic_building,train_station,city building type,1
+civic_building,subway,city building type,1
+civic_building,power_plant,city building type,1
+civic_building,water_works,city building type,1
+civic_building,park,city building type,1
+guild,maths,faction,1
+guild,physics,faction,1
+guild,electrical,faction,1
+guild,mechanical,faction,1
+guild,civil,faction,1
+guild,materials,faction,1
+guild,computing,faction,1
+guild,energy,faction,1
+guild,agriculture,faction,1
+guild,patent,faction,1
+guild,safety,faction,1
+era,stone,architectural age,1
+era,bronze,architectural age,1
+era,iron,architectural age,1
+era,classical,architectural age,1
+era,medieval,architectural age,1
+era,industrial,architectural age,1
+era,modern,architectural age,1
+era,future,architectural age,1

@@ -1002,6 +1002,32 @@ async def get_world_chunk(
                           catalog=_layout_catalog())
 
 
+@router.get("/{world_id}/interior")
+async def get_building_interior(
+    world_id: str,
+    function: str = "office",
+    category: str = "civic",
+    footprint_w: float = 12.0,
+    footprint_d: float = 10.0,
+    floors: int = 1,
+    px: float = 0.0,
+    pz: float = 0.0,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """The walkable INTERIOR of one building instance: rooms + furniture + lights + the
+    SCENES that play in each room. Deterministic from (world seed, position, function) so
+    every instance HAS a full interior without storing millions. The renderer requests this
+    when the avatar enters a building."""
+    world = await _world_or_404(session, world_id)
+    from ..services import interiors
+    from ..world.seed import derive_seed
+    wseed = derive_seed(world.seed_class)
+    structure = {"function": function, "category": category, "pos": [px, 0, pz],
+                 "footprint_w": footprint_w, "footprint_d": footprint_d, "floors": floors}
+    return interiors.interior_for_structure(structure, world_seed=wseed, catalog=_layout_catalog())
+
+
 @router.get("/{world_id}/sentience")
 async def get_sentience(
     world_id: str,
