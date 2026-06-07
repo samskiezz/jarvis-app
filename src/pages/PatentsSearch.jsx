@@ -6,7 +6,29 @@ import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/compon
 const ACCENT = C.gold;
 const Patent = kimiClient.entities.Patent;
 
-// Patents are loaded from the Patent entity API.
+// Realistic seed records mirroring the backend patent schema
+// (id/title/abstract/assignee/filing_date/status/classification).
+const SAMPLES = [
+  { id: "US3192570A", title: "Self-bearing roller skate", assignee: "Chicago Roller Skate Co.",
+    filing_date: "1963-02-11", status: "EXPIRED", classification: "B62B",
+    abstract: "A roller skate having ball-bearing wheels arranged so the skate can pivot freely about a vertical axis." },
+  { id: "US4344146A", title: "Optical recording medium having a chalcogenide layer", assignee: "Eastman Kodak Co.",
+    filing_date: "1980-05-08", status: "EXPIRED", classification: "G11B",
+    abstract: "An optical recording medium comprising a substrate, a reflective layer, and a recording layer of a chalcogenide glass." },
+  { id: "US4055768A", title: "Light-emitting diode display structure", assignee: "Hewlett-Packard",
+    filing_date: "1976-09-07", status: "EXPIRED", classification: "H01L",
+    abstract: "A multi-character LED display with a printed-circuit substrate and a translucent overlay focusing emitted light." },
+  { id: "US3987387A", title: "Method of separating solid particles from a fluid stream", assignee: "Dow Chemical Co.",
+    filing_date: "1974-06-19", status: "EXPIRED", classification: "B01D",
+    abstract: "A centrifugal separator using a tangential inlet and a fluid-bed collection chamber for high-throughput separation." },
+  { id: "US10892374B2", title: "Bifacial photovoltaic module with reflective backsheet", assignee: "Project Solar Group",
+    filing_date: "2019-03-22", status: "ACTIVE", classification: "H02S",
+    abstract: "A bifacial PV module incorporating a microstructured reflective backsheet to recapture rear-incident irradiance and raise yield." },
+  { id: "US11456701B2", title: "Distributed energy storage arbitrage controller", assignee: "Hilts Group Australia",
+    filing_date: "2020-11-04", status: "ACTIVE", classification: "H02J",
+    abstract: "A controller that schedules charge/discharge of distributed batteries against real-time wholesale price signals." },
+];
+
 const statusColor = (s) => ({ ACTIVE: C.neon, PENDING: C.gold, EXPIRED: C.text }[s] || C.text);
 
 const btn = (active) => ({
@@ -19,7 +41,7 @@ export default function PatentsSearch() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [seeding] = useState(false);
+  const [seeding, setSeeding] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(null);
 
@@ -38,6 +60,19 @@ export default function PatentsSearch() {
 
   useEffect(() => { load(); }, [load]);
 
+  const seed = useCallback(async () => {
+    setSeeding(true);
+    setError(null);
+    try {
+      for (const s of SAMPLES) await Patent.create(s);
+      await load();
+    } catch (e) {
+      setError(e);
+    } finally {
+      setSeeding(false);
+    }
+  }, [load]);
+
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return rows;
@@ -54,9 +89,14 @@ export default function PatentsSearch() {
       subtitle="FULL-TEXT SEARCH · TITLE · ABSTRACT · ASSIGNEE"
       accent={ACCENT}
       actions={
-        <button onClick={load} disabled={loading} style={btn(false)}>
-          {loading ? "◌ SYNC" : "↻ REFRESH"}
-        </button>
+        <>
+          <button onClick={seed} disabled={seeding} style={btn(false)}>
+            {seeding ? "◌ SEEDING" : "+ SEED SAMPLES"}
+          </button>
+          <button onClick={load} disabled={loading} style={btn(false)}>
+            {loading ? "◌ SYNC" : "↻ REFRESH"}
+          </button>
+        </>
       }
     >
       <Grid min={170} style={{ marginBottom: 14 }}>
@@ -83,7 +123,7 @@ export default function PatentsSearch() {
         <PanelCard title="RESULTS" accent={ACCENT} right={<Badge color={ACCENT}>{results.length}</Badge>}>
           <DataState
             loading={loading} error={error} empty={empty}
-            emptyLabel="No patents found."
+            emptyLabel="No patents indexed yet — use SEED SAMPLES to populate the corpus."
           >
             {results.length === 0 ? (
               <div style={{ color: C.text, fontSize: 10, padding: 8 }}>No patents match this query.</div>

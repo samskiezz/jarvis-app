@@ -19,6 +19,7 @@ import { getLiveIntel } from "@/api/backendFunctions";
 import { apiGet, qs, asList } from "@/lib/wave1";
 import { PageShell, PanelCard, StatTile, Grid, Badge } from "@/components/PageKit";
 import { Btn } from "@/components/Wave1Kit";
+import LiveDataPanel from "@/components/LiveDataPanel";
 
 const ACCENT = C.blue;
 
@@ -176,6 +177,7 @@ export default function Dashboard() {
           )}
         </PanelCard>
       </div>
+      <LiveDataPanel pageName="Dashboard" limit={50} refreshMs={30000} />
     </PageShell>
   );
 }

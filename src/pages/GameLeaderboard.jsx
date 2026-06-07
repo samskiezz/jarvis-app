@@ -1,8 +1,9 @@
 /**
  * GameLeaderboard — ranked players / agents.
  *
- * Players are sourced from Contact entities. The table is sortable by any
- * numeric column and the top three rows are highlighted.
+ * Players are sourced from Contact entities when present; otherwise a seeded
+ * sample leaderboard is shown with a "seed sample" affordance. The table is
+ * sortable by any numeric column and the top three rows are highlighted.
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { COLORS as C } from "@/domain/colors";
@@ -11,7 +12,17 @@ import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/compon
 
 const ACCENT = C.red;
 
-// Real data comes from Contact entities via the API.
+const SAMPLE = [
+  { name: "Reaper", score: 4820, wins: 142, losses: 31, delta: 2 },
+  { name: "Nyx", score: 4610, wins: 128, losses: 40, delta: -1 },
+  { name: "Vortex", score: 4395, wins: 119, losses: 44, delta: 1 },
+  { name: "Specter", score: 4180, wins: 110, losses: 52, delta: 0 },
+  { name: "Halcyon", score: 3990, wins: 101, losses: 58, delta: 3 },
+  { name: "Cinder", score: 3720, wins: 94, losses: 61, delta: -2 },
+  { name: "Quasar", score: 3510, wins: 88, losses: 66, delta: 0 },
+  { name: "Onyx", score: 3290, wins: 80, losses: 71, delta: 1 },
+];
+
 // Derive a deterministic stat block from an arbitrary contact so the leaderboard
 // is meaningful even when Contact records carry no game stats.
 function contactToPlayer(c, idx) {
@@ -37,6 +48,7 @@ const COLUMNS = [
 
 export default function GameLeaderboard() {
   const [players, setPlayers] = useState([]);
+  const [usingSample, setUsingSample] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortKey, setSortKey] = useState("score");
@@ -48,7 +60,13 @@ export default function GameLeaderboard() {
     try {
       const rows = await Contact.list();
       const arr = Array.isArray(rows) ? rows : [];
-      setPlayers(arr.map(contactToPlayer));
+      if (arr.length) {
+        setPlayers(arr.map(contactToPlayer));
+        setUsingSample(false);
+      } else {
+        setPlayers([]);
+        setUsingSample(false);
+      }
     } catch (e) {
       setError(e);
       setPlayers([]);
@@ -58,6 +76,8 @@ export default function GameLeaderboard() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const seed = () => { setPlayers(SAMPLE.map((p) => ({ ...p }))); setUsingSample(true); setError(null); };
 
   const withRate = useMemo(
     () => players.map((p) => ({ ...p, winrate: p.wins + p.losses > 0 ? Math.round((p.wins / (p.wins + p.losses)) * 100) : 0 })),
@@ -89,15 +109,25 @@ export default function GameLeaderboard() {
       subtitle="RANKED AGENTS · SCORE · WINS · RANK DELTA"
       accent={ACCENT}
       actions={
-        <button
-          onClick={load}
-          disabled={loading}
-          style={{
-            background: ACCENT + "1a", border: `1px solid ${ACCENT}55`, color: ACCENT,
-            fontFamily: "inherit", fontSize: 10, letterSpacing: 2, padding: "7px 14px",
-            borderRadius: 5, cursor: loading ? "wait" : "pointer", fontWeight: 700,
-          }}
-        >{loading ? "◌ SYNC" : "↻ REFRESH"}</button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            onClick={seed}
+            style={{
+              background: "rgba(0,0,0,0.4)", border: `1px solid ${C.border}`, color: C.gold,
+              fontFamily: "inherit", fontSize: 10, letterSpacing: 1, padding: "7px 12px",
+              borderRadius: 5, cursor: "pointer", fontWeight: 700,
+            }}
+          >⚑ SEED SAMPLE</button>
+          <button
+            onClick={load}
+            disabled={loading}
+            style={{
+              background: ACCENT + "1a", border: `1px solid ${ACCENT}55`, color: ACCENT,
+              fontFamily: "inherit", fontSize: 10, letterSpacing: 2, padding: "7px 14px",
+              borderRadius: 5, cursor: loading ? "wait" : "pointer", fontWeight: 700,
+            }}
+          >{loading ? "◌ SYNC" : "↻ REFRESH"}</button>
+        </div>
       }
     >
       <Grid min={170} style={{ marginBottom: 14 }}>
@@ -112,8 +142,11 @@ export default function GameLeaderboard() {
           loading={loading}
           error={error}
           empty={sorted.length === 0}
-          emptyLabel="No Contact records found."
+          emptyLabel="No Contact records — click SEED SAMPLE to populate a demo leaderboard."
         >
+          {usingSample && (
+            <div style={{ fontSize: 8, color: C.gold, marginBottom: 8 }}>Showing seeded sample leaderboard.</div>
+          )}
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10 }}>
               <thead>

@@ -16,7 +16,13 @@ const fmtMoney = (n) => {
 
 const num = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
 
-// Holdings are loaded from the Investment entity API.
+// Realistic seed records grounded in the app's ontology (XRP, PSG cashflow).
+const SEED = [
+  { name: "XRP", symbol: "XRP", type: "crypto", amount: 9300, value: 9300 * 3.1 },
+  { name: "PSG Solar (operating)", symbol: "PSG", type: "business", amount: 1, value: 120000 * 52 },
+  { name: "Bitcoin", symbol: "BTC", type: "crypto", amount: 0.85, value: 0.85 * 95000 },
+];
+
 export default function InvestmentTracker() {
   const [holdings, setHoldings] = useState([]);
   const [snapshots, setSnapshots] = useState([]);
@@ -130,6 +136,18 @@ export default function InvestmentTracker() {
     }
   };
 
+  const seed = async () => {
+    setBusy(true);
+    try {
+      await Promise.all(SEED.map((s) => Investment.create(s)));
+      await load();
+    } catch (err) {
+      setError(err);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const empty = !loading && !error && holdings.length === 0;
 
   const inputStyle = {
@@ -208,9 +226,9 @@ export default function InvestmentTracker() {
         <PanelCard
           title="HOLDINGS"
           accent={ACCENT}
-          right={null}
+          right={empty ? <button onClick={seed} disabled={busy} style={btnStyle(C.neon)}>+ SEED SAMPLES</button> : null}
         >
-          <DataState loading={loading} error={error} empty={empty} emptyLabel="No holdings found.">
+          <DataState loading={loading} error={error} empty={empty} emptyLabel="No holdings yet — seed samples to begin.">
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10 }}>
                 <thead>

@@ -6,7 +6,7 @@
  * (seismology + earth/geology). Thin wrapper over the shared SciDomainConsole.
  */
 import SciDomainConsole from "@/components/SciDomainConsole";
-import AnalyticsPanel from "@/components/AnalyticsPanel";
+import LiveDataPanel from "@/components/LiveDataPanel";
 import { COLORS as C } from "@/domain/colors";
 
 export default function SensorGrid() {
@@ -21,7 +21,7 @@ export default function SensorGrid() {
         domains={["atmoschem", "ocean", "hydrology", "hydrogeology", "seismology", "earth", "geology"]}
         extraMatch={["ppm", "air", "buoy", "seismic", "quake", "tide", "groundwater"]}
       />
-      <AnalyticsPanel pageName="SensorGrid" limit={20} refreshMs={30000} />
+      <LiveDataPanel pageName="SensorGrid" limit={60} refreshMs={30000} />
     </div>
   );
 }
