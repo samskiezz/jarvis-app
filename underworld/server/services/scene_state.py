@@ -113,6 +113,60 @@ def _companion_for(m) -> str:
     return str(brain.get("companion", "alone"))
 
 
+# The sim→scene bridge: a Minion's REAL last_action (from the agent's decide()) maps to
+# the BUILDING they go to (a function-tagged slot in the φ/fractal layout) and the
+# animation they play there. This is what makes the world show what minions actually do.
+_ACTION_MAP: dict[str, tuple[str, str]] = {
+    # action            (target building function, animation)
+    "eat":              ("market", "rest"),
+    "drink":            ("market", "rest"),
+    "rest":             ("home", "rest"),
+    "sleep":            ("home", "rest"),
+    "meditate":         ("monument", "study"),
+    "worship":          ("monument", "study"),
+    "kb_lookup":        ("academy", "study"),
+    "calculate":        ("academy", "study"),
+    "study":            ("academy", "study"),
+    "research":         ("academy", "study"),
+    "experiment":       ("academy", "study"),
+    "search_patents":   ("academy", "study"),
+    "invent":           ("academy", "celebrate"),
+    "discover":         ("academy", "celebrate"),
+    "craft":            ("workshop", "work"),
+    "forge":            ("workshop", "work"),
+    "build":            ("workshop", "work"),
+    "mine":             ("workshop", "work"),
+    "manufacture":      ("workshop", "work"),
+    "trade":            ("market", "talk"),
+    "sell":             ("market", "talk"),
+    "teach":            ("academy", "talk"),
+    "forage":           ("farm", "work"),
+    "farm":             ("farm", "work"),
+    "harvest":          ("farm", "work"),
+    "seek_partner":     ("home", "talk"),
+    "breed":            ("home", "celebrate"),
+    "fork_self":        ("home", "celebrate"),
+    "celebrate":        ("plaza", "celebrate"),
+    "fight":            ("gate", "fight"),
+    "propose_invention":("academy", "celebrate"),
+    "build_scanner":    ("workshop", "work"),
+    "socialise":        ("market", "talk"),
+    "socialize":        ("market", "talk"),
+    "gossip":           ("market", "talk"),
+    "patrol":           ("gate", "walk"),
+    "explore":          ("plaza", "walk"),
+    "heal":             ("home", "rest"),
+    "pray":             ("monument", "study"),
+}
+
+
+def _action_target(last_action: str, mood: str) -> tuple[str, str, str]:
+    """(action, target_building_function, anim) from the Minion's real last action."""
+    a = (last_action or "rest").lower()
+    bld, anim = _ACTION_MAP.get(a, ("home", ""))
+    return a, bld, anim
+
+
 def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0,
                   terrain_scale: float = 8.0, saga_title: str | None = None,
                   tod_phase: str = "day", biome: str = "plains", era: str = "iron",
@@ -126,6 +180,11 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
     x, z = _position(m.id, seed_int, town_radius=town_radius)
     y = _elevation(heightmap, x, z, town_radius=town_radius, scale=terrain_scale)
     anim = _anim_for(mood, m.fatigue or 0.5, m.sanity or 0.85, look["role"])
+    # The minion's REAL current activity → where they go + how they animate.
+    last_action = (m.brain or {}).get("last_action", "rest")
+    action, target_building, act_anim = _action_target(last_action, mood)
+    if act_anim:
+        anim = act_anim                      # the real task overrides the idle/mood anim
     # prominence: masters / high-reputation Minions render larger & adorned
     prominence = round(min(1.5, 0.8 + 0.14 * (m.reputation or 1.0)), 3)
 
@@ -156,6 +215,9 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         "position": [x, y, z],
         "facing": round((_h(m.id) % 360), 1),
         "anim": anim,
+        # what the minion is REALLY doing this tick + the building they head to.
+        "action": action,
+        "target_building": target_building,
         "scale": prominence,
         "needs": {"hunger": round(m.hunger or 0, 3), "fatigue": round(m.fatigue or 0, 3),
                   "sanity": round(m.sanity or 0, 3)},
