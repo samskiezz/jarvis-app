@@ -56,7 +56,7 @@ def submit(spec):
     return (out.get("data") or {}).get("task_id") or out.get("task_id")
 
 
-def poll(task_id, every=5, timeout=900):
+def poll(task_id, every=3, timeout=900):
     """Poll until success/failed; return the output dict (with pbr_model/model urls)."""
     deadline = time.time() + timeout
     while time.time() < deadline:
@@ -124,16 +124,17 @@ def main():
             tid = submit(s); out = poll(tid); n = download(out, dest)
             with lock:
                 state["ok"] += 1
-                if state["ok"] % 10 == 0 or state["ok"] < 5:
-                    print(f"  [{state['ok']}/{len(todo)}] {s['glb_id']} ({n//1024}KB) ~{state['spent']}cr", flush=True)
+                print(f"  [{state['ok']}/{len(todo)}] {s['glb_id']} ({n//1024}KB) ~{state['spent']}cr", flush=True)
         except Exception as e:
             with lock:
                 state["fail"] += 1; state["spent"] -= CREDITS_PER_GEN  # not charged on failure
                 msg = str(e)[:120]
                 print(f"  FAIL {s['glb_id']}: {msg}", flush=True)
-                # stop fast if we've clearly run out of credits
-                if "credit" in msg.lower() or "balance" in msg.lower() or "402" in msg:
-                    state["stop"] = True
+                # stop fast if we've clearly run out of credits (Tripo returns 403 Forbidden
+                # when the balance hits zero, also 402/explicit credit messages)
+                ml = msg.lower()
+                if any(k in ml for k in ("credit", "balance", "402", "403", "forbidden")):
+                    state["stop"] = True; print("  -> out of credits; stopping cleanly.", flush=True)
 
     with ThreadPoolExecutor(max_workers=a.concurrency) as ex:
         futs = [ex.submit(work, s) for s in todo]

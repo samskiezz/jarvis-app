@@ -76,16 +76,72 @@ def _llama(s) -> tuple[str, str, str]:
     return base, s.llm_api_key, (s.llm_model or "llama-3.1-8b-instant")
 
 
+# ── Underworld Minion MODEL STACK (5 layers) ────────────────────────────────────────
+# Layer→model on the GPU box's Ollama. Env-overridable. 3B = whispers, 8B = individuals,
+# 70B = the colony thinking. Heavy layers fall back to a present model until 70B is pulled.
+import os as _os
+LAYER_MODELS = {
+    "overmind":      _os.environ.get("UW_MODEL_OVERMIND",  "llama3.3:70b"),   # L1 collective mind
+    "god_brain":     _os.environ.get("UW_MODEL_GODBRAIN",  "llama3.3:70b"),   # L5 major story events
+    "high_minion":   _os.environ.get("UW_MODEL_HIGH",      "llama3.1:8b"),    # L2 named characters
+    "high_major":    _os.environ.get("UW_MODEL_HIGH_MAJOR","llama3.3:70b"),   # L2 escalated
+    "normal_minion": _os.environ.get("UW_MODEL_NORMAL",    "llama3.1:8b"),    # L3 everyday minions
+    "chatter":       _os.environ.get("UW_MODEL_CHATTER",   "llama3.2:latest"),# L4 background whispers
+}
+# fallbacks to models that ARE pulled, so a missing 70B never breaks the world
+LAYER_FALLBACK = {
+    "overmind":  _os.environ.get("UW_MODEL_OVERMIND_FB",  "qwen2.5:32b"),
+    "god_brain": _os.environ.get("UW_MODEL_GODBRAIN_FB",  "qwen2.5:32b"),
+    "high_major":_os.environ.get("UW_MODEL_HIGH_MAJOR_FB","qwen2.5:32b"),
+}
+_AVAIL_MODELS = None
+
+
+def _available_models(base_url: str) -> set:
+    """Models actually pulled on the Ollama box (cached). Empty set on failure."""
+    global _AVAIL_MODELS
+    if _AVAIL_MODELS is not None:
+        return _AVAIL_MODELS
+    _AVAIL_MODELS = set()
+    try:
+        import urllib.request
+        tags_url = base_url.split("/v1", 1)[0].rstrip("/") + "/api/tags"
+        with urllib.request.urlopen(tags_url, timeout=6) as r:
+            import json as _j
+            _AVAIL_MODELS = {m["name"] for m in _j.loads(r.read()).get("models", [])}
+    except Exception:  # noqa: BLE001
+        pass
+    return _AVAIL_MODELS
+
+
+def _layer_model(base_url: str, tier: str) -> str:
+    """The model for a layer, downgraded to a present fallback if not pulled."""
+    want = LAYER_MODELS[tier]
+    avail = _available_models(base_url)
+    if avail and want not in avail:
+        fb = LAYER_FALLBACK.get(tier)
+        if fb and fb in avail:
+            return fb
+        # last resort: largest present llama/qwen
+        for cand in ("qwen2.5:32b", "llama3.1:8b", "llama3.2:latest"):
+            if cand in avail:
+                return cand
+    return want
+
+
 def _provider(tier: str = "standard") -> tuple[str, str, str]:
     """Resolve (base_url, api_key, model) for a task tier.
 
-    - "high"  (guild reviews, oracle, hard reasoning) → prefer Kimi for quality,
-      falling back to a free Llama if that's all that's configured.
-    - "standard" (routine per-tick minion decisions) → prefer the cheap free
-      Llama, falling back to Kimi.
-    Returns an empty key when nothing is configured (→ heuristic+neural path).
+    Layer tiers (overmind/god_brain/high_minion/high_major/normal_minion/chatter) route to a
+    specific Llama model on the GPU box. "high" prefers Kimi; "standard" the cheap Llama.
+    Returns an empty key when nothing is configured (→ heuristic path).
     """
     s = get_settings()
+    if tier in LAYER_MODELS:
+        base, key, _m = _llama(s)
+        if base or key:
+            return base, key, _layer_model(base, tier)
+        return _kimi(s) if s.kimi_api_key else ("", "", "")
     if tier == "high":
         if s.kimi_api_key:
             return _kimi(s)

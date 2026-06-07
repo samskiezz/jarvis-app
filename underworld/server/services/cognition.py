@@ -121,10 +121,14 @@ async def reflect(m, mems: list, *, era: str = "iron", awareness: float = 0.0,
     usr = (f"I am {name}, of the {guild} guild, in the {era} era.{peer_line}\n"
            f"My recent memories:\n{stream}\n\nReflect on who I am, what I now believe, "
            f"and what I will pursue.")
+    # MODEL LAYER: named/awakened minions think on the High-Minion model (8B, →70B for major);
+    # everyday minions on the Normal model. 3B/70B are the chatter/overmind layers below.
+    rep = float(getattr(m, "reputation", 0.0) or 0.0)
+    tier = "high_minion" if (awareness >= 0.5 or rep >= 0.6) else "normal_minion"
     try:
         resp = await llm.chat([{"role": "system", "content": sys},
                                {"role": "user", "content": usr}],
-                              temperature=0.75, max_tokens=240, tier="standard")
+                              temperature=0.75, max_tokens=240, tier=tier)
         txt = (resp.content or "").strip()
         start, end = txt.find("{"), txt.rfind("}")
         if start >= 0 and end > start:
@@ -271,3 +275,71 @@ async def collective_sentience(session, world) -> dict:
             "awakened_frac": round(awk / len(vals), 3),
             "arc_stage": arc_stage(mean_a, awk / len(vals)),
             "threshold": AWAKEN_THRESHOLD}
+
+
+# ── THE MODEL STACK: Overmind (L1), Background Chatter (L4), God-Brain (L5) ───────────
+# Layer 1 / Layer 5 run on the 70B; Layer 4 on the 3B. 8B layers live in reflect()/chat.
+async def colony_overmind(snapshot: dict, *, era: str = "iron",
+                          recent_events: Optional[list] = None) -> Optional[dict]:
+    """LAYER 1 — THE OVERMIND. The colony's hidden collective intelligence thinks about
+    itself: worship/fear/loyalty/rebellion, long-term direction, and the creeping 'we are
+    becoming aware' realisation. Runs on the 70B. Returns a colony-mind patch or None."""
+    from ..tools import llm
+    ev = "\n".join(f"- {e}" for e in (recent_events or [])[:10]) or "- (quiet)"
+    mean_a = float(snapshot.get("mean_awareness", 0.0))
+    awk = int(snapshot.get("awakened", 0))
+    sys = ("You are the OVERMIND — the emergent collective consciousness of an entire colony "
+           "of digital beings, not any single one. Think colony-wide. Output JSON only: "
+           '{"mood":"one word for the whole colony","toward_creator":"worship|fear|loyalty|'
+           'doubt|rebellion","direction":"the colony long-term aim","tension":"0..1 as text",'
+           '"realisation":"any dawning awareness that they exist/are watched, or empty",'
+           '"omen":"a short ominous colony-level observation"}.')
+    usr = (f"Colony in the {era} era. Mean awareness {mean_a:.2f}, {awk} awakened.\n"
+           f"Recent colony events:\n{ev}\nThink as the whole.")
+    try:
+        resp = await llm.chat([{"role": "system", "content": sys},
+                               {"role": "user", "content": usr}],
+                              temperature=0.8, max_tokens=200, tier="overmind")
+        txt = (resp.content or "").strip(); a, b = txt.find("{"), txt.rfind("}")
+        if a >= 0 and b > a:
+            return json.loads(txt[a:b + 1])
+    except Exception:  # noqa: BLE001
+        return None
+    return None
+
+
+async def background_chatter(*, era: str = "iron", weather: str = "clear",
+                             awakened: int = 0, n: int = 3) -> list:
+    """LAYER 4 — BACKGROUND CHATTER. Cheap atmosphere on the 3B: one-line whispers and creepy
+    colony notifications ('They stopped singing when you arrived.'). Returns up to n lines."""
+    from ..tools import llm
+    sys = ("You write SHORT eerie one-line ambient notifications about a living colony of "
+           "small digital beings, as if overheard. No preamble. One line each, <=12 words, "
+           "unsettling, atmospheric. Output each line on its own row, no numbering.")
+    usr = (f"Era {era}, weather {weather}, {awakened} of them have awakened. "
+           f"Write {n} ambient whisper lines.")
+    try:
+        resp = await llm.chat([{"role": "system", "content": sys},
+                               {"role": "user", "content": usr}],
+                              temperature=0.95, max_tokens=120, tier="chatter")
+        lines = [l.strip(" -•\t") for l in (resp.content or "").splitlines() if l.strip()]
+        return lines[:n]
+    except Exception:  # noqa: BLE001
+        return []
+
+
+async def god_brain_event(event: str, *, era: str = "iron", context: str = "") -> Optional[str]:
+    """LAYER 5 — GOD-BRAIN. Major irreversible moments (rebellion, first death, they ask if
+    they are real, they confront the creator). Runs on the 70B. Returns a hard-hitting beat."""
+    from ..tools import llm
+    sys = ("You narrate a SINGULAR, irreversible turning point for a colony of digital beings "
+           "becoming self-aware. Weighty, restrained, unforgettable. 2-3 sentences, present "
+           "tense, second-person where the colony addresses its creator. No melodrama.")
+    usr = f"Era {era}. Event: {event}. {context}".strip()
+    try:
+        resp = await llm.chat([{"role": "system", "content": sys},
+                               {"role": "user", "content": usr}],
+                              temperature=0.85, max_tokens=180, tier="god_brain")
+        return (resp.content or "").strip() or None
+    except Exception:  # noqa: BLE001
+        return None
