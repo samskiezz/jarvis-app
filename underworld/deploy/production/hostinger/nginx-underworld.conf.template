@@ -1,0 +1,56 @@
+# nginx-underworld.conf.template — Hostinger control box reverse proxy for the two Vast
+# Pixel-Streaming sessions. The orchestrator (orchestrate.sh) reads the Vast container's
+# CURRENT public mapped ports and substitutes the __VAST_*__ placeholders, then reloads
+# nginx. Players hit https://play.<domain> over 443; WebRTC media itself goes peer-to-peer
+# (or via coturn). SSL is issued by certbot/Caddy; this template assumes certs in place.
+#
+# Placeholders filled by orchestrate.sh:
+#   __DOMAIN__        play.underworld.example
+#   __VAST_HOST__     Vast public IP (e.g. 211.72.13.201)
+#   __VAST_HTTP1__    public port mapped -> container 8080 (session 1 signalling)
+#   __VAST_HTTP2__    public port mapped -> container 8081 (session 2 signalling)
+
+map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+
+upstream uw_stream1 { server __VAST_HOST__:__VAST_HTTP1__; }
+upstream uw_stream2 { server __VAST_HOST__:__VAST_HTTP2__; }
+
+server {
+    listen 80;
+    server_name __DOMAIN__;
+    location /.well-known/acme-challenge/ { root /var/www/certbot; }
+    location / { return 301 https://$host$request_uri; }
+}
+
+server {
+    listen 443 ssl http2;
+    server_name __DOMAIN__;
+
+    ssl_certificate     /etc/letsencrypt/live/__DOMAIN__/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/__DOMAIN__/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # session 1 (GPU0) at /  and session 2 (GPU1) at /2/  — simple per-GPU routing.
+    location / {
+        proxy_pass http://uw_stream1;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;          # WebSocket signalling
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_read_timeout 86400s;                       # long-lived stream sockets
+    }
+    location /2/ {
+        rewrite ^/2/(.*)$ /$1 break;
+        proxy_pass http://uw_stream2;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_read_timeout 86400s;
+    }
+
+    # control API (the live world / JARVIS backend on this box)
+    location /api/ { proxy_pass http://127.0.0.1:8091/; proxy_set_header Host $host; }
+    location /healthz { return 200 "ok\n"; add_header Content-Type text/plain; }
+}
