@@ -103,21 +103,35 @@ def _get_paddle():
 
 
 def _paddle_ocr_image(image_bytes: bytes) -> Optional[str]:
-    """OCR via PaddleOCR. Returns text, or None if paddle is unavailable / errors."""
+    """OCR via PaddleOCR (supports both the 2.x ``.ocr()`` and 3.x ``.predict()``
+    APIs). Returns text, or None if paddle is unavailable / errors. On a runtime
+    failure it marks paddle failed so the auto-chain fails FAST to Tesseract instead
+    of paying the cost on every image."""
+    global _paddle_failed
     ocr = _get_paddle()
     if ocr is None:
         return None
     try:
         import io
 
-        import numpy as np  # noqa: F401  (PaddleOCR accepts a numpy array)
+        import numpy as np
         from PIL import Image
 
-        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-        import numpy as np  # noqa: F811
-        arr = np.array(img)
-        result = ocr.ocr(arr, cls=True)
+        arr = np.array(Image.open(io.BytesIO(image_bytes)).convert("RGB"))
         lines: list[str] = []
+        # 3.x pipeline API
+        if hasattr(ocr, "predict"):
+            try:
+                for r in (ocr.predict(arr) or []):
+                    texts = r.get("rec_texts") if hasattr(r, "get") else None
+                    if texts:
+                        lines.extend(str(t) for t in texts if t)
+                if lines:
+                    return "\n".join(lines).strip() or None
+            except Exception:  # noqa: BLE001 - fall through to 2.x / fail-fast
+                raise
+        # 2.x API
+        result = ocr.ocr(arr, cls=True) if hasattr(ocr, "ocr") else []
         for block in (result or []):
             for line in (block or []):
                 try:
@@ -127,7 +141,8 @@ def _paddle_ocr_image(image_bytes: bytes) -> Optional[str]:
                 except Exception:  # noqa: BLE001
                     continue
         return "\n".join(lines).strip() or None
-    except Exception:  # noqa: BLE001
+    except Exception:  # noqa: BLE001 - runtime broken (e.g. paddle PIR bug) -> fail fast
+        _paddle_failed = True
         return None
 
 
