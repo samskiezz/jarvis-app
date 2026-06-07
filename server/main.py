@@ -74,6 +74,10 @@ def _autobuild_on_start() -> bool:
     return os.environ.get("AUTOBUILD_ON_START", "").lower() in ("1", "true", "yes")
 
 
+def _enrich_loop_enabled() -> bool:
+    return os.environ.get("ENRICH_LOOP", "").lower() in ("1", "true", "yes")
+
+
 async def _autobuild_loop():
     """Self-enrichment loop: build + GPU-embed + LLM-enrich the knowledge base on
     start-up and on an interval. Opt-in via AUTOBUILD_ON_START. Runs the (sync) build
@@ -93,6 +97,27 @@ async def _autobuild_loop():
                 ab.run_once, scrape_batches=scrape_batches, enrich_limit=enrich_limit
             )
         except Exception:  # noqa: BLE001 - a build failure must never kill the loop
+            pass
+        await asyncio.sleep(interval)
+
+
+async def _enrich_loop():
+    """Continuous self-enrichment loop: between the 30-min full builds, keep the GPU
+    chewing the enrichment backlog. Opt-in via ENRICH_LOOP. Runs the (sync) deep,
+    concurrent enrichment in a worker thread so the event loop keeps serving. Never
+    crashes the app."""
+    import asyncio
+
+    from .services import llm_enrich as le
+
+    delay = int(os.environ.get("ENRICH_LOOP_START_DELAY_S", "20"))
+    interval = max(10, int(os.environ.get("ENRICH_LOOP_INTERVAL_S", "120")))
+    batch = int(os.environ.get("ENRICH_LOOP_BATCH", "8"))
+    await asyncio.sleep(delay)  # let the server come up first
+    while True:
+        try:
+            await asyncio.to_thread(le.enrich_documents, limit=batch)
+        except Exception:  # noqa: BLE001 - an enrich failure must never kill the loop
             pass
         await asyncio.sleep(interval)
 
@@ -129,10 +154,20 @@ async def _lifespan(app: FastAPI):
             ab_task = asyncio.create_task(_autobuild_loop())
     except Exception:  # noqa: BLE001 - startup must never break on an optional loop
         ab_task = None
+
+    # Opt-in continuous enrichment loop (deep, concurrent LLM passes over the doc
+    # backlog). Disabled by default; enable with ENRICH_LOOP=true so the GPU keeps
+    # chewing the backlog between the 30-min full builds.
+    enrich_task = None
+    try:
+        if _enrich_loop_enabled():
+            enrich_task = asyncio.create_task(_enrich_loop())
+    except Exception:  # noqa: BLE001 - startup must never break on an optional loop
+        enrich_task = None
     try:
         yield
     finally:
-        for t in (task, ft_task, ab_task):
+        for t in (task, ft_task, ab_task, enrich_task):
             if t is not None:
                 t.cancel()
                 with contextlib.suppress(asyncio.CancelledError, Exception):

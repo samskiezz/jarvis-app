@@ -29,8 +29,19 @@ module.exports = {
         // 30 min. The Llama brain summarises a batch of scraped docs each cycle.
         AUTOBUILD_ON_START: 'true',
         AUTOBUILD_INTERVAL_S: '1800',
-        AUTOBUILD_SCRAPE_BATCHES: '1',
+        AUTOBUILD_SCRAPE_BATCHES: '2',
         AUTOBUILD_ENRICH_LIMIT: '12',
+        // Continuous deep enrichment loop — keeps the GPU chewing the doc backlog
+        // between full builds (4 LLM passes/doc: summary/entities/relations/questions).
+        ENRICH_LOOP: 'true',
+        ENRICH_LOOP_INTERVAL_S: '120',
+        ENRICH_LOOP_BATCH: '8',
+        ENRICH_DEPTH: '3',
+        ENRICH_WORKERS: '2',
+        // OCR for scraped PDFs/images — PaddleOCR (GPU-capable) primary, Tesseract
+        // fallback. Graceful no-op until the engines are installed on the box.
+        OCR_ENGINE: 'auto',
+        OCR_LANG: 'en',
         KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',

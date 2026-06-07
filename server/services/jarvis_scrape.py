@@ -81,15 +81,42 @@ def _cleared_hosts() -> set:
 # government, intergovernmental, open science, open standards). We fetch only the
 # public documentation/landing HTML, politely + cached. Anything matching a
 # restricted/credentialed pattern is excluded and left review_required.
+#
+# EXPANSION (2026-06): widened to cover the full set of genuinely public/open
+# document, open-data, open-science, government, statistics and standards
+# repositories that the old policy gated out (arXiv, PMC/PubMed, HAL, RePEc, SSRN,
+# Dryad, Figshare, DataCite, ORCID, OpenAIRE, re3data, GESIS, ICPSR, Dataverse,
+# Kaggle, Papers With Code, OpenML, PLOS, ERIC, govinfo/congress/SEC/FederalRegister,
+# EUR-Lex, Our World In Data, FAO/UNESCO/ILO/WTO/BIS, ECB/Fed/BLS/Census/Eurostat,
+# Europeana, ISO catalogue, Hugging Face, UNECE, …). Only open/public sources —
+# nothing paywalled or credentialed (those stay review_required via _BLOCK_PATTERNS).
 _PUBLIC_PATTERNS = (
-    ".gov", ".gov.au", ".gov.uk", "data.", ".opendata.", "catalog.data",
-    "w3.org", "json-schema", "schema.org", "openapis", "iana.org", "ietf.org",
-    "cloudevents", "rfc-editor", "worldbank.org", "imf.org", "oecd.org",
-    "un.org", "who.int", "europa.eu", "nasa.gov", "noaa.gov", "copernicus.eu",
-    "met.no", "openalex", "zenodo", "doaj.org", "crossref", "semanticscholar",
-    "biorxiv", "core.ac.uk", "clinicaltrials", "archive.org", "wikimedia",
-    "wikidata", "celestrak", "argo.ucsd", "ckan", "socrata", "frictionlessdata",
-    "dublincore", "ncbi.nlm.nih.gov", "ebi.ac.uk", "gbif.org", "usgs.gov",
+    ".gov", ".gov.au", ".gov.uk", ".edu", "data.", ".opendata.", "catalog.data",
+    "data.gov", "data.europa.eu", "w3.org", "json-schema", "schema.org",
+    "openapis", "iana.org", "ietf.org", "cloudevents", "rfc-editor",
+    "worldbank.org", "imf.org", "oecd.org", "stats.oecd", "oecd.ai",
+    "un.org", "data.un.org", "who.int", "europa.eu", "eur-lex.europa.eu",
+    "ec.europa.eu", "ecb.europa.eu", "eurostat", "nasa.gov", "noaa.gov",
+    "copernicus.eu", "met.no", "openalex", "zenodo", "doaj.org", "crossref",
+    "semanticscholar", "biorxiv", "medrxiv", "core.ac.uk", "clinicaltrials",
+    "archive.org", "wikimedia", "wikidata", "celestrak", "argo.ucsd", "ckan",
+    "socrata", "frictionlessdata", "dublincore", "ncbi.nlm.nih.gov",
+    "pubmed.ncbi.nlm.nih.gov", "pmc.ncbi.nlm.nih.gov", "ebi.ac.uk", "gbif.org",
+    "usgs.gov",
+    # — open science / scholarly repositories —
+    "arxiv.org", "hal.science", "ssrn.com", "repec.org", "ideas.repec.org",
+    "datadryad.org", "dryad", "figshare.com", "datacite.org", "orcid.org",
+    "openaire.eu", "re3data.org", "gesis.org", "icpsr.umich.edu", "dataverse",
+    "paperswithcode.com", "openml.org", "plos.org", "eric.ed.gov",
+    "huggingface.co", "europeana.eu", "openarchives.org",
+    # — standards / catalogues —
+    "iso.org", "unece.org",
+    # — government / legislative / regulatory —
+    "govinfo.gov", "congress.gov", "sec.gov", "federalregister.gov",
+    "regulations.gov",
+    # — statistics / economics / intergovernmental —
+    "ourworldindata.org", "fao.org", "unesco.org", "ilo.org", "ilostat.ilo.org",
+    "wto.org", "bis.org", "federalreserve.gov", "bls.gov", "census.gov", "unep",
     "palantir.com",  # public Palantir docs (Foundry/Gotham/Apollo) — research source
 )
 _BLOCK_PATTERNS = ("shodan", "opencorporates", "company-information.service",
@@ -179,6 +206,17 @@ def all_targets(*, skip_fetched: bool = True) -> list[tuple[str, str, str]]:
         if u and u not in seen and _allowed(u) and doc_id(u) not in done:
             seen.add(u)
             out.append((u, r["sn"] or _host(u), r["sid"] or ""))
+    # Merge the curated high-yield OPEN document/data seed catalogue (lazy import so a
+    # missing module never breaks scraping). Same dedupe + allow + not-already-fetched
+    # filtering as the catalogue rows above.
+    try:
+        from . import doc_seeds as _seeds
+        for u, sn, sid in _seeds.curated_targets():
+            if u and u not in seen and _allowed(u) and doc_id(u) not in done:
+                seen.add(u)
+                out.append((u, sn or _host(u), sid or ""))
+    except Exception:  # noqa: BLE001
+        pass
     return out
 
 
