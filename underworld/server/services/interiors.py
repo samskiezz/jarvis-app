@@ -159,18 +159,54 @@ def _furniture_pool(catalog: Optional[dict]) -> list[str]:
     return list(cats.get("furniture", [])) + list(cats.get("prop", []))
 
 
-def _pick_furniture(room_type: str, pool: list[str], seed: int, n: int) -> list[dict]:
-    if not pool:
-        return []
+_UW_BINDINGS = None
+
+
+def _bindings() -> dict:
+    """The generated-asset bindings (room_contents etc.), built by build_underworld_catalog.py."""
+    global _UW_BINDINGS
+    if _UW_BINDINGS is None:
+        import json
+        # interiors.py -> services -> server -> underworld (3 dirnames), then web/public/models
+        uw_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        path = os.environ.get("UW_BINDINGS") or os.path.join(
+            uw_root, "web", "public", "models", "uw_bindings.json")
+        try:
+            _UW_BINDINGS = json.load(open(path))
+        except Exception:  # noqa: BLE001
+            _UW_BINDINGS = {}
+    return _UW_BINDINGS
+
+
+def _pick_furniture(room_type: str, pool: list[str], seed: int, n: int,
+                    function: str = "") -> list[dict]:
+    """Fill a room with its contents. Prefer the GENERATED, room-qualified Underworld assets
+    (e.g. 'hospital bed', 'kitchen fork') from uw_bindings; fall back to the catalog pool."""
     kws = _ROOM_FURNITURE.get(room_type, ("table", "chair"))
-    matches = [u for u in pool
-               if any(k in os.path.basename(u).lower() for k in kws)]
-    src = matches or pool
-    items = []
-    for i in range(n):
-        u = src[_hash(seed, room_type, i) % len(src)]
-        items.append({"glb": u, "kind": os.path.basename(u).rsplit(".", 1)[0]})
-    return items
+    items: list[dict] = []
+
+    # 1) generated bindings: room_contents keyed by room AND by building function
+    rc = _bindings().get("room_contents", {})
+    bound = {}
+    for key in (room_type, function):
+        bound.update(rc.get(key, {}))
+    # match the room's wanted item keywords to bound generated assets
+    for kw in kws:
+        for item_name, glb in bound.items():
+            if kw in item_name.lower():
+                items.append({"glb": glb, "kind": item_name, "generated": True})
+                break
+        if len(items) >= n:
+            break
+
+    # 2) top up from the catalog pool (existing photoreal assets) by keyword
+    if len(items) < n and pool:
+        matches = [u for u in pool if any(k in os.path.basename(u).lower() for k in kws)]
+        src = matches or pool
+        for i in range(n - len(items)):
+            u = src[_hash(seed, room_type, i) % len(src)]
+            items.append({"glb": u, "kind": os.path.basename(u).rsplit(".", 1)[0]})
+    return items[:n]
 
 
 def building_interior(*, function: str, category: str, footprint_w: float, footprint_d: float,
@@ -195,7 +231,7 @@ def building_interior(*, function: str, category: str, footprint_w: float, footp
             "bounds": [round(rx, 2), round(rz, 2), round(rw, 2), round(rd, 2)],
             "center": [cx, cz], "height": WALL_H, "floor_index": 0,
             "door": [round(rx + rw / 2, 2), round(rz, 2)],     # door on the -z wall, centred
-            "furniture": _pick_furniture(rtype, pool, rseed, n_furn),
+            "furniture": _pick_furniture(rtype, pool, rseed, n_furn, function=function),
             "lights": [{"pos": [cx, round(WALL_H - 0.3, 2), cz],
                         "intensity": 1.0, "color": "#fff2da"}],
             "capacity": cap, "scenes": scenes,
