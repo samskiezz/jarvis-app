@@ -48,6 +48,47 @@ try:
 except Exception:  # noqa: BLE001
     _grow = None  # type: ignore
 try:
+    from . import ocr_engine as _ocr
+except Exception:  # noqa: BLE001
+    _ocr = None  # type: ignore
+
+# URL extensions that are document/image payloads (not HTML) — these get raw-bytes
+# fetch + OCR (PaddleOCR/Tesseract) instead of the HTML text extractor.
+_OCR_EXTS = (".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp", ".gif")
+
+
+def _doc_like(url: str) -> bool:
+    """True if the URL points at a PDF/image payload that needs OCR, not HTML."""
+    u = (url or "").split("?")[0].split("#")[0].lower()
+    return u.endswith(_OCR_EXTS)
+
+
+def _ocr_fetch_store(url: str, sn: str, sid: str, *, timeout: int = 30):
+    """Raw-bytes fetch of a PDF/image + OCR (PaddleOCR primary, Tesseract fallback),
+    storing the extracted text as a real Document. Returns (chars, title) or (0, "").
+    Graceful: any failure / OCR disabled → (0, "")."""
+    if _ocr is None:
+        return 0, ""
+    try:
+        import httpx
+
+        with httpx.Client(follow_redirects=True,
+                          timeout=httpx.Timeout(float(timeout), connect=8.0),
+                          headers={"User-Agent": "Mozilla/5.0 (JarvisBot/1.0)"}) as client:
+            resp = client.get(url)
+        if resp.status_code >= 400:
+            return 0, ""
+        out = _ocr.ocr_document(resp.content, resp.headers.get("content-type", ""), url=url)
+        text = (out or {}).get("text") or ""
+        if not text.strip():
+            return 0, ""
+        title = (url.rsplit("/", 1)[-1] or _host(url))[:200]
+        oid = store_document(url, sn, sid, status=resp.status_code, body="",
+                             title=title, text=text)
+        return (len(text), title) if oid else (0, "")
+    except Exception:  # noqa: BLE001 - OCR path never breaks the sweep
+        return 0, ""
+try:
     from .second_brain import _db_path
 except Exception:  # noqa: BLE001
     def _db_path() -> str:  # type: ignore
@@ -373,6 +414,13 @@ def _httpx_fetch_targets(targets: list, *, workers: int = 16, timeout: int = 20)
     def _fetch(t):
         url, sn, sid = t
         try:
+            # PDF/image payloads: raw-bytes fetch + OCR (PaddleOCR/Tesseract).
+            if _doc_like(url):
+                n, title = _ocr_fetch_store(url, sn, sid)
+                if n > 0:
+                    return ("ok", {"title": (title or "")[:70], "host": _host(url),
+                                   "chars": n, "status": 200, "engine": "ocr"}, n)
+                return ("fail", None, 0)
             r = nr.polite_get(url, ttl=86400.0)
             if not r.get("ok") or not r.get("body"):
                 return ("fail", None, 0)
