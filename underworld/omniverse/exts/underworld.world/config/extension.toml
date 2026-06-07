@@ -1,0 +1,37 @@
+[package]
+version = "0.1.0"
+title = "Underworld — RTX path-traced living world"
+description = "Consumes the backend's φ/fractal layout + scene-state + design bible and builds a live USD stage path-traced on the GPU, streamed to the browser. The same contracts the Three.js renderer uses — engine-swappable."
+category = "Simulation"
+authors = ["Underworld"]
+
+[dependencies]
+"omni.usd" = {}
+"omni.kit.uiapp" = {}
+"omni.kit.viewport.utility" = {}
+"omni.kit.livestream.webrtc" = { optional = true }   # browser streaming
+
+[[python.module]]
+name = "underworld.world"
+
+# Settings applied when the extension loads — RTX Interactive (Path Tracing).
+[settings]
+rtx.rendermode = "PathTracing"
+rtx.pathtracing.spp = 1
+rtx.pathtracing.totalSpp = 256
+rtx.pathtracing.maxBounces = 6
+rtx.directLighting.sampledLighting.enabled = true
+rtx.indirectDiffuse.enabled = true
+rtx.reflections.enabled = true
+rtx.translucency.enabled = true
+rtx.post.dlss.execMode = 1          # DLSS quality/perf
+app.window.title = "Underworld — RTX"
+
+[underworld]
+# overridable at launch via --/underworld/api_url= etc.
+api_url = "http://127.0.0.1:8091"
+world_id = ""
+api_key = "dev-key"
+poll_seconds = 1.0
+chunk_size = 512.0
+chunk_radius = 1                     # rings of chunks around the camera to stream
