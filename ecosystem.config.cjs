@@ -28,20 +28,21 @@ module.exports = {
         // Self-enrichment: build + GPU-embed + LLM-enrich the KB on boot and every
         // 30 min. The Llama brain summarises a batch of scraped docs each cycle.
         AUTOBUILD_ON_START: 'true',
-        AUTOBUILD_INTERVAL_S: '1800',
-        AUTOBUILD_SCRAPE_BATCHES: '2',
-        AUTOBUILD_ENRICH_LIMIT: '12',
-        // Continuous deep enrichment loop — keeps the GPU chewing the doc backlog
-        // between full builds (4 LLM passes/doc: summary/entities/relations/questions).
+        AUTOBUILD_INTERVAL_S: '900',
+        AUTOBUILD_SCRAPE_BATCHES: '4',
+        AUTOBUILD_ENRICH_LIMIT: '24',
+        // Continuous deep enrichment loop — FULL POWER: high concurrency + fast cadence
+        // so both 4090s stay hot chewing the doc backlog (4 LLM passes/doc).
         ENRICH_LOOP: 'true',
-        ENRICH_LOOP_INTERVAL_S: '120',
-        ENRICH_LOOP_BATCH: '8',
+        ENRICH_LOOP_INTERVAL_S: '30',
+        ENRICH_LOOP_BATCH: '24',
         ENRICH_DEPTH: '3',
-        ENRICH_WORKERS: '2',
-        // OCR for scraped PDFs/images — PaddleOCR (GPU-capable) primary, Tesseract
-        // fallback. Graceful no-op until the engines are installed on the box.
+        ENRICH_WORKERS: '4',
+        // OCR for scraped PDFs/images — PaddleOCR primary, Tesseract fallback, and the
+        // GPU vision model (llama3.2-vision on the box) for scanned docs.
         OCR_ENGINE: 'auto',
         OCR_LANG: 'en',
+        OCR_VISION_MODEL: 'minicpm-v',
         KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',
