@@ -57,5 +57,32 @@ module.exports = {
       autorestart: true,
       max_restarts: 10,
     },
+    {
+      // Underworld minions sim (FastAPI) — Llama-driven, auto-ticking scheduler.
+      name: 'underworld-backend',
+      cwd: '/opt/jarvis-app-1/underworld',
+      script: '/opt/jarvis-app-1/.venv/bin/python',
+      args: '-m uvicorn server.main:app --host 0.0.0.0 --port 8091',
+      interpreter: 'none',
+      autorestart: true,
+      max_restarts: 10,
+      env: {
+        PYTHONPATH: '/opt/jarvis-app-1',          // so `import underworld` resolves in the sim tick
+        UNDERWORLD_API_KEY: 'dev-key',
+        UNDERWORLD_LLM_BASE_URL: 'http://211.72.13.201:41137/v1',
+        UNDERWORLD_LLM_MODEL: 'llama3.1:8b',
+        UNDERWORLD_LLM_API_KEY: 'ollama',
+      },
+    },
+    {
+      // Underworld 3D world (Vite preview of the built R3F app).
+      name: 'underworld-web',
+      cwd: '/opt/jarvis-app-1/underworld/web',
+      script: 'npm',
+      args: 'run preview -- --host 0.0.0.0 --port 5180',
+      interpreter: 'none',
+      autorestart: true,
+      max_restarts: 10,
+    },
   ],
 };
