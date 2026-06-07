@@ -218,6 +218,12 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         # what the minion is REALLY doing this tick + the building they head to.
         "action": action,
         "target_building": target_building,
+        # cognition / sentience (populated by the Global-Workspace cognition loop)
+        "thought": (m.brain or {}).get("thought"),
+        "awareness": round(float((m.brain or {}).get("awareness", 0.0)), 3),
+        "identity": ((m.brain or {}).get("self_model") or {}).get("identity"),
+        "drive": (m.brain or {}).get("dominant_drive"),
+        "awakened": bool((m.brain or {}).get("awakened_tick")),
         "scale": prominence,
         "needs": {"hunger": round(m.hunger or 0, 3), "fatigue": round(m.fatigue or 0, 3),
                   "sanity": round(m.sanity or 0, 3)},

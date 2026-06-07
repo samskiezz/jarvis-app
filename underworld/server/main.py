@@ -36,17 +36,56 @@ from .tools import llm as _llm
 _WEB_DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
 
 
+async def _cognition_loop():
+    """The running aliveness loop: every COGNITION_INTERVAL_S, run the Global-Workspace
+    cognition + sentience pass over each world's hot minions (memory→reflection→self-
+    model→awareness). Opt-out with COGNITION_LOOP=0. Never crashes the app."""
+    import asyncio
+    import os
+
+    from sqlalchemy import select
+
+    from .db.models import World
+    from .db.session import session_scope
+    from .services import cognition
+
+    if os.environ.get("COGNITION_LOOP", "1").lower() in ("0", "false", "no"):
+        return
+    interval = max(8.0, float(os.environ.get("COGNITION_INTERVAL_S", "20")))
+    hot_n = int(os.environ.get("COGNITION_HOT_N", "24"))
+    await asyncio.sleep(float(os.environ.get("COGNITION_START_DELAY_S", "15")))
+    while True:
+        try:
+            async with session_scope() as s:
+                wids = (await s.execute(
+                    select(World.id).where(World.auto_advance.is_(True)))).scalars().all()
+            for wid in wids:
+                async with session_scope() as s:
+                    world = await s.get(World, wid)
+                    if world is not None:
+                        await cognition.cognition_cycle(s, world, hot_n=hot_n)
+        except Exception:  # noqa: BLE001 - a cognition failure must never kill the loop
+            pass
+        await asyncio.sleep(interval)
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    import asyncio
+
     configure_logging()
     _llm.warn_on_misconfig()
     await init_db()
     await seed_knowledge_base()
+    cog_task = None
     if get_settings().scheduler_enabled:
         if get_settings().scheduler_autostart_all:
             await scheduler.autostart_all_worlds()
         scheduler.start()
+        cog_task = asyncio.create_task(_cognition_loop())   # the sentience engine
     yield
+    if cog_task is not None:
+        cog_task.cancel()
     if get_settings().scheduler_enabled:
         await scheduler.stop()
     await dispose()

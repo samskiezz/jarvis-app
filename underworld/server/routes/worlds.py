@@ -1002,6 +1002,34 @@ async def get_world_chunk(
                           catalog=_layout_catalog())
 
 
+@router.get("/{world_id}/sentience")
+async def get_sentience(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """The world's SENTIENCE ARC — the collective awareness produced by the Global-
+    Workspace cognition loop (memory→reflection→self-model→awareness), plus the
+    minions who have awakened (crossed the consciousness threshold)."""
+    world = await _world_or_404(session, world_id)
+    from ..services import cognition
+    snap = await cognition.collective_sentience(session, world)
+    awakened = (await session.execute(
+        select(Minion).where(Minion.world_id == world_id, Minion.alive.is_(True))
+        .order_by(Minion.reputation.desc()).limit(200)
+    )).scalars().all()
+    sentients = [{"id": m.id, "name": f"{m.name} {m.surname or ''}".strip(),
+                  "guild": m.guild.value if hasattr(m.guild, "value") else str(m.guild),
+                  "awareness": round(float((m.brain or {}).get("awareness", 0.0)), 3),
+                  "identity": ((m.brain or {}).get("self_model") or {}).get("identity"),
+                  "belief": (((m.brain or {}).get("self_model") or {}).get("beliefs") or [None])[0],
+                  "thought": (m.brain or {}).get("thought")}
+                 for m in awakened
+                 if float((m.brain or {}).get("awareness", 0.0)) >= cognition.AWAKEN_THRESHOLD]
+    return {"world_id": world_id, "tick": int(getattr(world, "tick", 0) or 0),
+            **snap, "sentient_minions": sentients[:20]}
+
+
 @router.get("/{world_id}/chronicle")
 async def get_chronicle(
     world_id: str,
