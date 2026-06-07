@@ -359,6 +359,30 @@ def structure_needs(profile: dict) -> dict:
     }
 
 
+def _civic_landmarks(pop: int, research: int) -> dict[str, int]:
+    """How many of each civic building a settlement of ``pop`` needs — plausible
+    city ratios (one hospital per ~300, a school per ~100, transit hubs per ~700…).
+    Counts are per-settlement; the world-map tiles many settlements for millions."""
+    import math as _m
+    p = max(1, int(pop))
+
+    def per(n: int, lo: int = 1, cap: int = 60) -> int:
+        return max(lo, min(cap, _m.ceil(p / n)))
+
+    return {
+        "school":        per(100), "clinic":     per(120, 1),
+        "hospital":      per(300), "library":    per(400),
+        "gym":           per(200), "store":      per(40, 2),
+        "restaurant":    per(60, 2), "hotel":    per(250),
+        "church":        per(350), "bank":       per(400),
+        "police":        per(500), "fire_station": per(600),
+        "park":          per(150, 2), "bus_station": per(400),
+        "train_station": per(800, 1, 6), "subway": per(700, 1, 6),
+        "power_plant":   per(900, 1, 4), "water_works": per(700, 1, 6),
+        "office":        per(120), "apartment":  per(80, 1),
+    }
+
+
 def build_world_from_profile(profile: dict, *, seed: int = 1, density: float = 1.0,
                              catalog: Optional[dict] = None,
                              center: tuple = (0.0, 0.0)) -> dict:
@@ -404,6 +428,29 @@ def build_world_from_profile(profile: dict, *, seed: int = 1, density: float = 1
                            "pos": [round(x, 2), 0, round(z, 2)], "rot_y": round(fy, 1),
                            "scale": 1.0, "district": "civic",
                            "glb": pick(cat, _hash_int(seed, "civic", i))})
+
+    # Modern civic landmarks — a real city has schools, hospitals, hotels, gyms, stores,
+    # churches, transit hubs… placed in a ring around the civic core, counts scaled to the
+    # population. Each resolves to the best matching real GLB (civic_assets), falling back
+    # to a category stand-in so a slot is never empty. See scripts/civic_coverage.py.
+    civic_plan = _civic_landmarks(pop=int(profile.get("population", 0)),
+                                  research=int(profile.get("research_level", 1)))
+    if civic_plan and catalog:
+        from . import civic_assets as _ca
+        resolved = _ca.resolve_civic(catalog)
+        ring = [(ct, k) for ct, n in civic_plan.items() for k in range(n)]
+        for i, (x, z, fy) in enumerate(phyllotaxis(len(ring), r_inner=core_r + 2,
+                                                   r_outer=core_r * 1.9, jitter=3.0,
+                                                   seed=_hash_int(seed, "landmarks"))):
+            ctype, _k = ring[i]
+            entry = resolved.get(ctype) or {}
+            # layout category for the chunk consumer: prefer the resolved asset's bucket
+            lcat = (_ca.CIVIC_TYPES.get(ctype, ((), ("civic",)))[1] or ("civic",))[0]
+            glb = _ca.pick_civic(ctype, _hash_int(seed, "lm", i), resolved) or pick(lcat, _hash_int(seed, "lm", i))
+            placements.append({"slot": ctype, "category": lcat, "function": ctype,
+                               "civic": True, "covered": entry.get("status") == "covered",
+                               "pos": [round(x, 2), 0, round(z, 2)], "rot_y": round(fy, 1),
+                               "scale": 1.0, "district": "civic", "glb": glb})
 
     # Guild districts — one golden-angle sector per guild, radius-banded between the
     # core and the wall, area ∝ guild headcount. Each is fractal-subdivided into plots.
