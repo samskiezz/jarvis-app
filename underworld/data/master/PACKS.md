@@ -1,27 +1,32 @@
-# Underworld Minions — GLB Asset Packs & Cost
+# Underworld Minions — GLB Asset Packs & Cost (Tripo3D credits)
+**The real cost basis is Tripo3D credits.** You generate each distinct *base mesh* once (~20-30 credits, textured); swatches/LODs/most styles are derived for ~free. So the full **1:1 world ≈ 840 base meshes ≈ ~20,000 credits** — not artist $/asset.
 
-Pick a pack. **Advanced = 1:1 real-life simulation** (the complete itemized BOM: every item × style × swatch × LOD, all eras/variants). Packs are cumulative.
+Art direction (all packs): **futuristic-avatar × GTA5 × Sims** — white sci-fi curves, saucer rooftops, holo-waterfalls, neon plumbob signage, GTA graffiti, jacaranda/rooftop gardens, Avatar billboards (see ART-DIRECTION.md).
 
-
-Art direction for ALL packs: **futuristic-avatar × GTA5 × Sims** — sleek white sci-fi curves, saucer rooftops, holo-waterfalls, neon plumbob signage, GTA graffiti, jacaranda/rooftop gardens, Avatar billboards, glass balconies, warm interiors. (see ART-DIRECTION.md)
-
-
-| Pack | GLBs | DIY (AI on your 4090s) | Hybrid (AI+artist) | Studio (photoreal) | What you get |
+| Pack | Base meshes to generate | Tripo credits (~24/gen) | ≈ USD* | GLB variants (derived free) | What you get |
 |---|---:|---:|---:|---:|---|
-| **Easy** | 1,739 | $1,679 | $31,485 | $314,850 | one good version of every object — world fully dressed, no variety |
-| **Average** | 13,485 | $12,933 | $242,490 | $2,424,900 | + a 2nd colourway & all sky/terrain at base — looks intentional |
-| **Medium** | 63,870 | $58,290 | $1,092,945 | $10,929,450 | + 3 styles, 4 swatches, near+mid LODs — reads like a real game |
-| **Advanced** | 95,405 | $86,468 | $1,621,275 | $16,212,750 | **1:1 real life** — every style/swatch/LOD/era/variant, full crowd & city |
+| **Easy** | 714 | ~17,136 (14,280–21,420) | $69–$257 | 1,739 | one version of every object — world fully dressed, no variety |
+| **Average** | 840 | ~20,160 (16,800–25,200) | $81–$302 | 13,485 | + a 2nd colourway & all sky/terrain — looks intentional |
+| **Medium** | 840 | ~20,160 (16,800–25,200) | $81–$302 | 63,870 | + 3 styles, 4 swatches, near+mid LODs — reads like a real game |
+| **Advanced** | 840 | ~20,160 (16,800–25,200) | $81–$302 | 95,405 | **1:1 real life** — every style/swatch/LOD/era/variant, full crowd & city |
 
-*DIY assumes self-hosted AI 3D-gen (Tripo/Meshy/Hunyuan3D) on your Vast 4090s + light cleanup; cost is mostly your time/compute. Hero assets (buildings, characters, vehicles) are weighted 3–4× bulk props.*
+*USD is indicative — Tripo plans vary and free daily credits offset a lot if you batch generations over time ("try hard"). Credits are the real unit.*
 
+**Bottom line:** the entire 1:1 world is **840 base-mesh generations ≈ ~20,160 Tripo credits**; the 95,405 total GLBs are derived from them in-pipeline.
 
-## Advanced (1:1) by domain
+## How the 840 → 95,405 expansion works (no extra credits)
+- **swatch** (colourway) → recolor/material instance
+- **lod0/1/2** → automatic decimation
+- **style** (modern/industrial/…) → mostly material+trim swaps; only hero pieces re-gen
+- **season** (flora) → texture/tint variant
+- **era** (buildings) → material/detail pass
+- **swatch on people/vehicles** → outfit/paint material
 
-- interior: 88,392
-- building: 3,600
-- nature: 1,176
-- vehicle: 960
-- urban: 612
-- character: 573
-- sky: 92
+## Base meshes to generate, by domain (the actual Tripo work)
+- interior: 444 base meshes
+- nature: 146 base meshes
+- sky: 62 base meshes
+- urban: 51 base meshes
+- building: 50 base meshes
+- character: 47 base meshes
+- vehicle: 40 base meshes
