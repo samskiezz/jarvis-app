@@ -8,9 +8,12 @@ VENV="$ROOT/.venv"
 PY="$VENV/bin/python"
 say() { printf "\n\033[1;36m[setup] %s\033[0m\n" "$*"; }
 
-say "1/7 Python venv + JARVIS deps"
+say "1/7 Python venv + JARVIS deps + main-app npm (so a fresh clone needs no manual installs)"
 [ -x "$PY" ] || python3 -m venv "$VENV"
+"$VENV/bin/pip" install -q -U pip >/dev/null 2>&1 || true
 "$VENV/bin/pip" install -q -r "$ROOT/requirements.txt" 2>/dev/null || true
+# main JARVIS frontend deps (vite etc.) — only if missing
+[ -d "$ROOT/node_modules/vite" ] || ( cd "$ROOT" && npm install --no-audit --no-fund ) >/dev/null 2>&1 || true
 
 say "2/7 OCR engines (Tesseract floor + pypdf/pillow; paddle optional)"
 command -v tesseract >/dev/null 2>&1 || (apt-get update -q && apt-get install -y -q tesseract-ocr libgl1 libglib2.0-0) >/dev/null 2>&1 || true
