@@ -9,6 +9,12 @@ SIGNALLING_IP="${SIGNALLING_IP:-127.0.0.1}"
 SIGNALLING_PORT="${SIGNALLING_PORT:-8888}"
 EXTRA_UE_ARGS="${EXTRA_UE_ARGS:-}"
 
+# Backend wiring — the in-engine USceneStateClient reads these off the cmdline and
+# polls {UNDERWORLD_API_URL}/worlds/{UNDERWORLD_WORLD_ID}/scene-state (Bearer).
+UNDERWORLD_API_URL="${UNDERWORLD_API_URL:-http://127.0.0.1:8091}"
+UNDERWORLD_WORLD_ID="${UNDERWORLD_WORLD_ID:-}"
+UNDERWORLD_API_KEY="${UNDERWORLD_API_KEY:-dev-key}"
+
 # Find the packaged entry script (<Project>.sh) Epic generates.
 GAME_SH="$(find /home/ue4/game -maxdepth 2 -name '*.sh' ! -name 'run-ue5.sh' | head -n1)"
 if [[ -z "${GAME_SH}" ]]; then
@@ -27,4 +33,7 @@ exec "${GAME_SH}" \
   -PixelStreamingEncoderCodec=H264 \
   -AllowPixelStreamingCommands \
   -graphicsadapter=0 \
+  -UnderworldApiUrl="${UNDERWORLD_API_URL}" \
+  -UnderworldWorldId="${UNDERWORLD_WORLD_ID}" \
+  -UnderworldApiKey="${UNDERWORLD_API_KEY}" \
   ${EXTRA_UE_ARGS}

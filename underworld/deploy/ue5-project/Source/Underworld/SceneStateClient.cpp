@@ -1,0 +1,132 @@
+// Copyright Underworld. All Rights Reserved.
+#include "SceneStateClient.h"
+#include "HttpModule.h"
+#include "Interfaces/IHttpResponse.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
+#include "Misc/CommandLine.h"
+#include "Misc/Parse.h"
+#include "TimerManager.h"
+#include "Engine/World.h"
+
+void USceneStateClient::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+
+	// Backend config from the cmdline (set by run-ue5.sh in the deploy).
+	FString V;
+	if (FParse::Value(FCommandLine::Get(), TEXT("UnderworldApiUrl="), V)) { ApiUrl = V; }
+	if (FParse::Value(FCommandLine::Get(), TEXT("UnderworldWorldId="), V)) { WorldId = V; }
+	if (FParse::Value(FCommandLine::Get(), TEXT("UnderworldApiKey="), V)) { ApiKey = V; }
+	float F;
+	if (FParse::Value(FCommandLine::Get(), TEXT("UnderworldPollSeconds="), F)) { PollIntervalSeconds = F; }
+
+	UE_LOG(LogTemp, Display, TEXT("[Underworld] SceneStateClient api=%s world=%s poll=%.2fs"),
+		*ApiUrl, *WorldId, PollIntervalSeconds);
+
+	StartPolling();
+}
+
+void USceneStateClient::Deinitialize()
+{
+	StopPolling();
+	Super::Deinitialize();
+}
+
+void USceneStateClient::StartPolling()
+{
+	if (UWorld* W = GetWorld())
+	{
+		W->GetTimerManager().SetTimer(PollTimer, this, &USceneStateClient::Poll,
+			FMath::Max(0.05f, PollIntervalSeconds), true, 0.f);
+	}
+}
+
+void USceneStateClient::StopPolling()
+{
+	if (UWorld* W = GetWorld())
+	{
+		W->GetTimerManager().ClearTimer(PollTimer);
+	}
+}
+
+void USceneStateClient::Poll()
+{
+	if (bInFlight || WorldId.IsEmpty()) { return; }
+	bInFlight = true;
+
+	const FString Url = FString::Printf(TEXT("%s/worlds/%s/scene-state"), *ApiUrl, *WorldId);
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	Req->SetURL(Url);
+	Req->SetVerb(TEXT("GET"));
+	Req->SetHeader(TEXT("Authorization"), FString::Printf(TEXT("Bearer %s"), *ApiKey));
+	Req->SetTimeout(8.f);
+	Req->OnProcessRequestComplete().BindUObject(this, &USceneStateClient::OnResponse);
+	Req->ProcessRequest();
+}
+
+void USceneStateClient::OnResponse(FHttpRequestPtr Req, FHttpResponsePtr Resp, bool bOk)
+{
+	bInFlight = false;
+	if (!bOk || !Resp.IsValid() || Resp->GetResponseCode() != 200) { return; }
+
+	FUwSceneState State;
+	if (ParseScene(Resp->GetContentAsString(), State))
+	{
+		Latest = State;
+		OnSceneState.Broadcast(State);
+	}
+}
+
+bool USceneStateClient::ParseScene(const FString& Body, FUwSceneState& Out) const
+{
+	TSharedPtr<FJsonObject> Root;
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Body);
+	if (!FJsonSerializer::Deserialize(Reader, Root) || !Root.IsValid()) { return false; }
+
+	Out.Tick        = (int64)Root->GetNumberField(TEXT("tick"));
+	Out.Era         = Root->GetStringField(TEXT("era"));
+	Out.Biome       = Root->HasField(TEXT("biome")) ? Root->GetStringField(TEXT("biome")) : TEXT("");
+	Out.Weather     = Root->HasField(TEXT("weather")) ? Root->GetStringField(TEXT("weather")) : TEXT("clear");
+	Out.TimeOfDay   = Root->HasField(TEXT("time_of_day")) ? (float)Root->GetNumberField(TEXT("time_of_day")) : 0.5f;
+	Out.TerrainSeed = Root->HasField(TEXT("terrain_seed")) ? (int64)Root->GetNumberField(TEXT("terrain_seed")) : 0;
+
+	// sun: {x,y,z} or {dir:[..]} — best effort
+	if (Root->HasTypedField<EJson::Object>(TEXT("sun")))
+	{
+		const TSharedPtr<FJsonObject> Sun = Root->GetObjectField(TEXT("sun"));
+		Out.SunDir = FVector(
+			Sun->HasField(TEXT("x")) ? (float)Sun->GetNumberField(TEXT("x")) : 0.f,
+			Sun->HasField(TEXT("y")) ? (float)Sun->GetNumberField(TEXT("y")) : 0.f,
+			Sun->HasField(TEXT("z")) ? (float)Sun->GetNumberField(TEXT("z")) : -1.f).GetSafeNormal();
+	}
+
+	const TArray<TSharedPtr<FJsonValue>>* Mins = nullptr;
+	if (Root->TryGetArrayField(TEXT("minions"), Mins) && Mins)
+	{
+		Out.Minions.Reserve(Mins->Num());
+		for (const TSharedPtr<FJsonValue>& V : *Mins)
+		{
+			const TSharedPtr<FJsonObject> M = V->AsObject();
+			if (!M.IsValid()) { continue; }
+
+			FUwMinionState Ms;
+			Ms.Id   = M->GetStringField(TEXT("id"));
+			Ms.Anim = M->HasField(TEXT("anim")) ? M->GetStringField(TEXT("anim")) : TEXT("idle");
+			Ms.Mood = M->HasField(TEXT("mood")) ? M->GetStringField(TEXT("mood")) : TEXT("");
+			Ms.Saga = M->HasField(TEXT("saga")) ? M->GetStringField(TEXT("saga")) : TEXT("");
+			Ms.Guild= M->HasField(TEXT("guild")) ? M->GetStringField(TEXT("guild")) : TEXT("");
+			Ms.Facing = M->HasField(TEXT("facing")) ? (float)M->GetNumberField(TEXT("facing")) : 0.f;
+
+			// pos: [x,y,z] or {x,y,z}
+			const TArray<TSharedPtr<FJsonValue>>* P = nullptr;
+			if ((M->TryGetArrayField(TEXT("pos"), P) || M->TryGetArrayField(TEXT("position"), P)) && P && P->Num() >= 3)
+			{
+				Ms.Pos = FVector((*P)[0]->AsNumber(), (*P)[1]->AsNumber(), (*P)[2]->AsNumber());
+			}
+			Out.Minions.Add(MoveTemp(Ms));
+		}
+	}
+	return true;
+}
