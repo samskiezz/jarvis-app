@@ -1,0 +1,16 @@
+situation,camera,sound_bed,vfx,anim_set,pace
+idle,orbit_slow,amb_world,,idle,1.0
+research,push_in,amb_hall,vfx_glow_runes,study,0.8
+build,crane_up,amb_forge,vfx_sparks,work,1.1
+trade,handheld,amb_market,,talk,1.0
+breed,soft_close,amb_village,vfx_heart,celebrate,0.6
+birth,soft_close,amb_chime,vfx_bloom,celebrate,0.6
+death,slow_pull,amb_drone_low,vfx_fade,rest,0.4
+conflict,shake_cut,amb_tense,vfx_clash,fight,1.6
+festival,sweeping,amb_music,vfx_fireworks,celebrate,1.3
+discovery,reveal,amb_wonder,vfx_eureka,celebrate,0.9
+travel,follow,amb_road,vfx_dust,walk,1.2
+rest,static_wide,amb_night,,rest,0.5
+disaster,shake_hard,amb_alarm,vfx_smoke,flee,1.8
+harvest,low_dolly,amb_field,,work,1.0
+ritual,circle,amb_drone_low,vfx_aura,study,0.7
