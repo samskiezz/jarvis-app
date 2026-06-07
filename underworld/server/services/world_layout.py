@@ -275,3 +275,330 @@ def build_layout(*, seed: int = 1, world_size: float = 200.0,
         "counts": {"placements": len(placements), "walls": len(walls),
                    "plots": len(core_plots), "roads": len(roads)},
     }
+
+
+# ── catalog binding: map the asset-catalog categories onto the layout's slot kinds ──
+# The layout thinks in zone categories (obelisk/tower/commercial/residential/wall/
+# nature); the asset catalog has finer categories. This pools the right GLBs per slot.
+_LAYOUT_FROM_CATALOG: dict[str, tuple[str, ...]] = {
+    "obelisk":     ("monument", "tower"),
+    "tower":       ("tower", "civic"),
+    "commercial":  ("commercial", "industrial"),
+    "residential": ("residential",),
+    "wall":        ("wall", "gate"),
+    "nature":      ("tree", "rock", "plant"),
+}
+
+
+def catalog_pools(catalog: dict) -> dict:
+    """Build {layout_category: [glb_url…]} from an asset_catalog manifest so the layout
+    places the operator's real photoreal GLBs per slot. Falls back across related
+    categories and finally to 'prop' so no slot is ever empty."""
+    cats = (catalog or {}).get("categories", {})
+    pools: dict[str, list[str]] = {}
+    for layout_cat, src in _LAYOUT_FROM_CATALOG.items():
+        pool: list[str] = []
+        for s in src:
+            pool.extend(cats.get(s, []))
+        if not pool:
+            pool = cats.get("prop", [])
+        pools[layout_cat] = pool
+    # pass-through for any direct matches the layout might request
+    for c, urls in cats.items():
+        pools.setdefault(c, urls)
+    return pools
+
+
+def build_world(*, seed: int = 1, world_size: float = 200.0, density: float = 1.0,
+                catalog: Optional[dict] = None) -> dict:
+    """Full pipeline: bind the asset catalog → pools → φ/Fibonacci/fractal layout with
+    real GLBs assigned to every slot. This is what the layout API serves."""
+    pools = catalog_pools(catalog) if catalog else None
+    return build_layout(seed=seed, world_size=world_size, density=density, catalog=pools)
+
+
+# ── SIM-DRIVEN MASSIVE WORLD: structure derived from the minions' needs ────────────
+# A real civilisation, not a token village. The world's size, districts and every
+# building are demanded by the actual population: housing per minion, farms to feed
+# them, a workshop per guild cohort, markets/wells/storehouses per N, academies per
+# research level. Guilds get their own districts (golden-angle sectors) sized by their
+# headcount; each district is fractal-subdivided into plots populated by need.
+
+def world_profile(world, minions) -> dict:
+    """Extract the demand profile from the live sim: population + per-guild headcount +
+    research/era signals. Defensive — works with whatever fields the models expose."""
+    pop = len(minions) if minions is not None else 0
+    guilds: dict[str, int] = {}
+    for m in (minions or []):
+        g = str(getattr(m, "guild", None) or getattr(m, "cpc_class", None) or "computing").lower()
+        guilds[g] = guilds.get(g, 0) + 1
+    era = str(getattr(world, "era", None) or getattr(world, "epoch", None) or "stone")
+    tick = int(getattr(world, "tick", 0) or 0)
+    research = max(1, tick // 50 + len(guilds))
+    return {"population": pop, "guilds": guilds or {"computing": max(1, pop)},
+            "era": era, "research_level": research}
+
+
+def structure_needs(profile: dict) -> dict:
+    """Translate the profile into concrete structure demand — what the world must
+    contain to serve its minions."""
+    pop = max(1, int(profile.get("population", 0)))
+    guilds = profile.get("guilds", {})
+    research = int(profile.get("research_level", 1))
+    import math as _m
+    return {
+        "housing":     pop,                              # a home per minion
+        "farms":       _m.ceil(pop * 0.45),              # feed the population
+        "wells":       max(1, _m.ceil(pop / 50)),
+        "storehouses": max(1, _m.ceil(pop / 45)),
+        "markets":     max(1, _m.ceil(pop / 35)),
+        "academies":   max(1, research),                 # research → libraries/academies
+        "monuments":   max(1, _m.ceil(research / 3)),
+        # per-guild production workshops (a cohort of ~4 minions shares one)
+        "workshops":   {g: max(1, _m.ceil(c / 4)) for g, c in guilds.items()},
+    }
+
+
+def build_world_from_profile(profile: dict, *, seed: int = 1, density: float = 1.0,
+                             catalog: Optional[dict] = None,
+                             center: tuple = (0.0, 0.0)) -> dict:
+    """Generate ONE settlement (city/town) — needs-driven: guild districts (golden-angle
+    sectors) sized by headcount, each populated to demand (housing/workshops), a farm
+    belt, civic core, curtain wall + gates, and roads. Placed at ``center`` so the
+    world-map can tile many settlements for millions of minions. Deterministic."""
+    needs = structure_needs(profile)
+    pools = catalog_pools(catalog) if catalog else None
+
+    def pick(cat: str, s: int) -> Optional[str]:
+        return _pick_glb(cat, s, pools)
+
+    guilds = profile.get("guilds", {}) or {"computing": 1}
+    total_guild = sum(guilds.values()) or 1
+
+    # World scales with the built footprint: area ∝ total structures × spacing².
+    total_struct = (needs["housing"] + needs["farms"] + needs["markets"]
+                    + needs["academies"] + needs["storehouses"]
+                    + sum(needs["workshops"].values()))
+    spacing = 7.0
+    settled_r = max(60.0, (total_struct ** 0.5) * spacing / math.sqrt(math.pi) / density)
+    world_size = settled_r * 2.6   # wilderness margin beyond the wall
+
+    placements: list[dict] = []
+    walls: list[dict] = []
+    districts: list[dict] = []
+
+    # Civic core (inner φ disc): academies, markets, monuments, central obelisk.
+    core_r = settled_r * 0.18
+    placements.append({"slot": "obelisk", "category": "obelisk", "pos": [0, 0, 0],
+                       "rot_y": 0, "scale": 1.4, "district": "civic",
+                       "glb": pick("obelisk", seed)})
+    civic_items = (["academy"] * needs["academies"] + ["market"] * needs["markets"]
+                   + ["monument"] * needs["monuments"] + ["storehouse"] * needs["storehouses"])
+    for i, (x, z, fy) in enumerate(phyllotaxis(len(civic_items), r_inner=6,
+                                               r_outer=core_r, jitter=2.0,
+                                               seed=_hash_int(seed, "civic"))):
+        kind = civic_items[i]
+        cat = {"academy": "civic", "market": "commercial",
+               "monument": "monument", "storehouse": "industrial"}[kind]
+        placements.append({"slot": kind, "category": cat, "function": kind,
+                           "pos": [round(x, 2), 0, round(z, 2)], "rot_y": round(fy, 1),
+                           "scale": 1.0, "district": "civic",
+                           "glb": pick(cat, _hash_int(seed, "civic", i))})
+
+    # Guild districts — one golden-angle sector per guild, radius-banded between the
+    # core and the wall, area ∝ guild headcount. Each is fractal-subdivided into plots.
+    band_in, band_out = core_r + 8, settled_r - 10
+    for gi, (guild, gcount) in enumerate(sorted(guilds.items(), key=lambda kv: -kv[1])):
+        ang = gi * GOLDEN_ANGLE
+        share = gcount / total_guild
+        # district centre on a φ spiral; size scales with the guild's share
+        dr = band_in + (band_out - band_in) * (0.35 + 0.5 * ((gi + 0.5) / len(guilds)))
+        dcx, dcz = math.cos(ang) * dr, math.sin(ang) * dr
+        dsize = max(24.0, math.sqrt(share) * (band_out - band_in) * 1.4)
+        districts.append({"guild": guild, "pop": gcount,
+                          "center": [round(dcx, 1), round(dcz, 1)],
+                          "size": round(dsize, 1), "angle_deg": round(math.degrees(ang) % 360, 1)})
+        # guild HQ tower at the district centre
+        placements.append({"slot": "guild_hq", "category": "tower", "function": "guild_hq",
+                           "guild": guild, "pos": [round(dcx, 2), 0, round(dcz, 2)],
+                           "rot_y": round(math.degrees(ang), 1), "scale": 1.2,
+                           "district": guild, "glb": pick("tower", _hash_int(seed, guild, "hq"))})
+        # Populate the district to EXACT demand: one home per guild minion + the
+        # guild's workshops. Buildings placed by golden-angle phyllotaxis WITHIN the
+        # district disc (radius ∝ √count for even packing); fractal plots give the
+        # parcel grain via fBm jitter. This is what makes the world massive + real.
+        homes = gcount
+        shops = needs["workshops"].get(guild, 1)
+        n_build = homes + shops
+        drad = max(10.0, math.sqrt(n_build) * spacing * 0.62)
+        local = phyllotaxis(n_build, r_inner=2.0, r_outer=drad, jitter=spacing * 0.4,
+                            seed=_hash_int(seed, guild, "fill"))
+        for pi, (lx, lz, lfy) in enumerate(local):
+            kind = "home" if pi < homes else "workshop"
+            cat = "residential" if kind == "home" else "industrial"
+            bx, bz = dcx + lx, dcz + lz
+            jx = (fbm(bx * 0.05, bz * 0.05, seed=seed) - 0.5) * spacing * 0.5
+            jz = (fbm(bx * 0.05 + 9, bz * 0.05, seed=seed) - 0.5) * spacing * 0.5
+            placements.append({"slot": kind, "category": cat, "function": kind,
+                               "guild": guild,
+                               "pos": [round(bx + jx, 2), 0, round(bz + jz, 2)],
+                               "rot_y": round(lfy + (_hash_int(seed, guild, pi) % 40), 1),
+                               "scale": round(0.85 + (pi % 5) * 0.06, 2),
+                               "district": guild,
+                               "glb": pick(cat, _hash_int(seed, guild, pi))})
+
+    # Farm belt — feeds the population, ringed just outside the districts.
+    farm_pts = phyllotaxis(needs["farms"], r_inner=band_out + 4, r_outer=settled_r,
+                           jitter=4.0, seed=_hash_int(seed, "farm"))
+    for i, (x, z, fy) in enumerate(farm_pts):
+        placements.append({"slot": "farm", "category": "plant", "function": "farm",
+                           "pos": [round(x, 2), 0, round(z, 2)], "rot_y": round(fy, 1),
+                           "scale": 1.0, "district": "farmland",
+                           "glb": pick("plant", _hash_int(seed, "farm", i))})
+
+    # Wells scattered through the settled area.
+    for i, (x, z, fy) in enumerate(phyllotaxis(needs["wells"], r_inner=core_r,
+                                               r_outer=band_out, jitter=6.0,
+                                               seed=_hash_int(seed, "well"))):
+        placements.append({"slot": "well", "category": "water", "function": "well",
+                           "pos": [round(x, 2), 0, round(z, 2)], "rot_y": round(fy, 1),
+                           "scale": 1.0, "district": "civic",
+                           "glb": pick("water", _hash_int(seed, "well", i))})
+
+    # Curtain wall + gates around the settled radius (φ-placed gate breaks).
+    wall_r = settled_r
+    circ = 2 * math.pi * wall_r
+    n_seg = max(24, int(circ / 6.0))
+    gate_every = max(6, n_seg // 6)
+    for i in range(n_seg):
+        a = (i / n_seg) * 2 * math.pi
+        x, z = math.cos(a) * wall_r, math.sin(a) * wall_r
+        is_gate = (i % gate_every == 0)
+        walls.append({"slot": "gate" if is_gate else "wall",
+                      "category": "gate" if is_gate else "wall",
+                      "pos": [round(x, 2), 0, round(z, 2)],
+                      "rot_y": round((math.degrees(a) + 90) % 360, 1), "length": 6.0,
+                      "glb": pick("gate" if is_gate else "wall", _hash_int(seed, "wall", i))})
+
+    # Wilderness beyond the wall — trees & rocks via phyllotaxis (fractal scatter).
+    wild_n = max(40, int(needs["housing"] * 0.5))
+    for i, (x, z, fy) in enumerate(phyllotaxis(wild_n, r_inner=wall_r + 6,
+                                               r_outer=world_size / 2, jitter=8.0,
+                                               seed=_hash_int(seed, "wild"))):
+        cat = "tree" if (i % 3) else "rock"
+        n = fbm(x * 0.02, z * 0.02, seed=seed)
+        placements.append({"slot": cat, "category": cat, "function": "wilderness",
+                           "pos": [round(x, 2), 0, round(z, 2)], "rot_y": round(fy, 1),
+                           "scale": round(0.7 + n * 0.8, 2), "district": "wilderness",
+                           "glb": pick(cat, _hash_int(seed, "wild", i))})
+
+    # Roads: golden-angle spokes + ring roads at the Fibonacci bands.
+    roads: list[dict] = []
+    for k in range(max(6, len(guilds))):
+        a = k * GOLDEN_ANGLE
+        roads.append({"kind": "spoke", "from": [0, 0],
+                      "to": [round(math.cos(a) * wall_r, 1), round(math.sin(a) * wall_r, 1)]})
+    for r in (core_r, band_in, band_out, wall_r):
+        roads.append({"kind": "ring", "radius": round(r, 1)})
+
+    # Translate the whole settlement to its world-map ``center`` (so many settlements
+    # tile a continent for millions of minions).
+    ox, oz = float(center[0]), float(center[1])
+    if ox or oz:
+        for p in placements:
+            p["pos"][0] = round(p["pos"][0] + ox, 2)
+            p["pos"][2] = round(p["pos"][2] + oz, 2)
+        for w in walls:
+            w["pos"][0] = round(w["pos"][0] + ox, 2)
+            w["pos"][2] = round(w["pos"][2] + oz, 2)
+        for rd in roads:
+            if "from" in rd:
+                rd["from"] = [round(rd["from"][0] + ox, 1), round(rd["from"][1] + oz, 1)]
+                rd["to"] = [round(rd["to"][0] + ox, 1), round(rd["to"][1] + oz, 1)]
+            elif "radius" in rd:
+                rd["center"] = [round(ox, 1), round(oz, 1)]
+
+    return {
+        "version": 2,
+        "seed": seed,
+        "center": [round(ox, 1), round(oz, 1)],
+        "world_size": round(world_size, 1),
+        "settled_radius": round(settled_r, 1),
+        "profile": profile,
+        "needs": {k: (v if not isinstance(v, dict) else v) for k, v in needs.items()},
+        "primitives": {"phi": round(PHI, 6),
+                       "golden_angle_deg": round(math.degrees(GOLDEN_ANGLE), 4)},
+        "districts": districts,
+        "placements": placements,
+        "walls": walls,
+        "roads": roads,
+        "counts": {"placements": len(placements), "walls": len(walls),
+                   "districts": len(districts), "structures": total_struct},
+    }
+
+
+# ── MACRO LAYER: millions of minions → a CONTINENT of cities, streamed by chunk ─────
+# A single settlement caps at CITY_CAPACITY minions; beyond that the population spills
+# into more cities spread across a continent. Nothing materialises the whole world —
+# the world_map (cheap, always-loaded) lists the cities; each city's full φ/fractal
+# structure is generated ON DEMAND when the camera's chunk reaches it. Distant cities
+# render as impostors. This is the only way millions of minions can exist + render.
+CITY_CAPACITY = 4000
+
+
+def world_map(profile: dict, *, seed: int = 1, city_capacity: int = CITY_CAPACITY) -> dict:
+    """Distribute the whole population across CITIES on a continent (golden-angle
+    phyllotaxis, organic spread), each sized by its population share. Cheap overview —
+    the minimap + distant impostors. Deterministic."""
+    pop = max(1, int(profile.get("population", 0)))
+    guilds = profile.get("guilds", {}) or {"computing": pop}
+    n_cities = max(1, math.ceil(pop / max(1, city_capacity)))
+    extent = max(800.0, math.sqrt(n_cities) * (city_capacity ** 0.5) * 11.0)
+    base, rem = divmod(pop, n_cities)
+    cities: list[dict] = []
+    pts = phyllotaxis(n_cities, r_inner=0.0, r_outer=extent / 2.0,
+                      jitter=extent * 0.015, seed=_hash_int(seed, "map"))
+    for i, (x, z, _fy) in enumerate(pts):
+        cpop = base + (1 if i < rem else 0)
+        cguilds = ({g: max(1, round(c * cpop / pop)) for g, c in guilds.items()}
+                   if pop else {"computing": cpop})
+        radius = max(60.0, math.sqrt(cpop * 2.0) * 7.0 / math.sqrt(math.pi))
+        cities.append({"id": f"city-{i}", "center": [round(x, 1), round(z, 1)],
+                       "population": cpop, "guilds": cguilds,
+                       "radius": round(radius, 1), "seed": _hash_int(seed, "city", i)})
+    return {"version": 2, "seed": seed, "population": pop, "city_count": n_cities,
+            "extent": round(extent, 1), "city_capacity": city_capacity, "cities": cities}
+
+
+def build_chunk(profile: dict, *, seed: int = 1, cx: int = 0, cz: int = 0,
+                chunk_size: float = 512.0, lod: int = 0,
+                catalog: Optional[dict] = None) -> dict:
+    """Stream ONE spatial chunk: return the full φ/fractal structure of every city whose
+    footprint overlaps the chunk (lod 0), or just impostor nodes (lod ≥ 1) for distant
+    rings. The renderer requests chunks around the camera; the rest of the millions-strong
+    world stays un-materialised until approached. Deterministic; never raises."""
+    wm = world_map(profile, seed=seed)
+    half = chunk_size / 2.0
+    ccx, ccz = cx * chunk_size, cz * chunk_size       # chunk centre in world units
+    x0, x1 = ccx - half, ccx + half
+    z0, z1 = ccz - half, ccz + half
+    settlements: list[dict] = []
+    for city in wm["cities"]:
+        gx, gz = city["center"]
+        r = city["radius"]
+        if gx + r < x0 or gx - r > x1 or gz + r < z0 or gz - r > z1:
+            continue   # city footprint doesn't touch this chunk
+        if lod <= 0:
+            settlements.append(build_world_from_profile(
+                {"population": city["population"], "guilds": city["guilds"],
+                 "era": profile.get("era", "stone"),
+                 "research_level": profile.get("research_level", 1)},
+                seed=city["seed"], catalog=catalog, center=tuple(city["center"])))
+        else:
+            settlements.append({"id": city["id"], "center": city["center"],
+                                "radius": city["radius"], "population": city["population"],
+                                "impostor": True})
+    return {"chunk": [cx, cz], "chunk_size": chunk_size, "lod": lod,
+            "settlements": settlements,
+            "counts": {"settlements": len(settlements),
+                       "placements": sum(len(s.get("placements", [])) for s in settlements)}}
