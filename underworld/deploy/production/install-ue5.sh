@@ -70,6 +70,11 @@ cd "$UE_ROOT"
 
 UAT="$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh"
 
+# --- 2b. import the 1,488 GLBs as cooked StaticMesh assets (Interchange glTF, headless) ---
+echo "== importing GLBs into the project (native UE5 glTF import, no manual clicking) =="
+UE_ROOT="$UE_ROOT" PROJ="$PROJ" "$PROJ/Scripts/run-import.sh" || \
+  echo "WARN: GLB import had issues — see log; packaging continues"
+
 # --- 3. package Underworld Minions -> Linux Shipping (Pixel Streaming plugin baked in) ---
 echo "== BuildCookRun: $PROJ_NAME -> Linux Shipping =="
 "$UAT" BuildCookRun \
