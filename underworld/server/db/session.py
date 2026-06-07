@@ -23,7 +23,21 @@ def _ensure_engine() -> tuple[AsyncEngine, async_sessionmaker[AsyncSession]]:
     global _engine, _sessionmaker
     if _engine is None:
         url = get_settings().database_url
-        _engine = create_async_engine(url, future=True, echo=False)
+        # WAL + busy_timeout so the cognition loop, the scheduler and read requests
+        # don't trip "database is locked" under concurrency (sqlite single-writer).
+        connect_args = {"timeout": 30} if url.startswith("sqlite") else {}
+        _engine = create_async_engine(url, future=True, echo=False,
+                                      connect_args=connect_args)
+        if url.startswith("sqlite"):
+            from sqlalchemy import event
+
+            @event.listens_for(_engine.sync_engine, "connect")
+            def _sqlite_pragmas(dbapi_conn, _rec):  # noqa: ANN001
+                cur = dbapi_conn.cursor()
+                cur.execute("PRAGMA journal_mode=WAL")
+                cur.execute("PRAGMA busy_timeout=30000")
+                cur.execute("PRAGMA synchronous=NORMAL")
+                cur.close()
         _sessionmaker = async_sessionmaker(_engine, expire_on_commit=False)
     assert _sessionmaker is not None
     return _engine, _sessionmaker
