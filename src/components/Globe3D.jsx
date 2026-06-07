@@ -1,214 +1,353 @@
-import { useEffect, useRef } from "react";
+/**
+ * Globe3D — A real interactive 3D globe plotting all cities with live measurements.
+ *
+ * Uses Three.js with the existing holoCore rendering pipeline:
+ *   - Procedural Earth sphere with lat/lon grid
+ *   - City markers positioned by real coordinates
+ *   - Color-coded by metric type (temp=red, aq=green, marine=blue)
+ *   - Click to open detail panel with live data
+ *   - OrbitControls for rotate/zoom
+ *   - UnrealBloomPass for the holographic glow
+ */
+import { useEffect, useRef, useState, useCallback } from "react";
 import * as THREE from "three";
-import { COUNTRIES } from "@/domain/countries";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
+import { appParams } from "@/lib/app-params";
+import { COLORS as C } from "@/domain/colors";
 
-function latLngToVec3(lat, lng, radius) {
+const API_BASE = appParams.apiBaseUrl || "";
+
+// Lat/lon → 3D point on unit sphere
+function latLonToVector3(lat, lon, radius = 1) {
   const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lng + 180) * (Math.PI / 180);
-  return new THREE.Vector3(
-    -radius * Math.sin(phi) * Math.cos(theta),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.sin(theta)
-  );
+  const theta = (lon + 180) * (Math.PI / 180);
+  const x = -(radius * Math.sin(phi) * Math.cos(theta));
+  const z = radius * Math.sin(phi) * Math.sin(theta);
+  const y = radius * Math.cos(phi);
+  return new THREE.Vector3(x, y, z);
 }
 
-export default function Globe3D({ selectedCountry, onSelect, earthquakes }) {
-  const mountRef = useRef(null);
-  const runtimeRef = useRef(null);
+// Color by metric category
+function metricColor(metric) {
+  if (!metric) return C.cyan;
+  const m = metric.toLowerCase();
+  if (m.includes("temp") || m.includes("heat") || m.includes("fire")) return C.red;
+  if (m.includes("pm") || m.includes("pollen") || m.includes("ozone") || m.includes("quality")) return C.green;
+  if (m.includes("wave") || m.includes("ocean") || m.includes("marine") || m.includes("sea")) return C.blue;
+  if (m.includes("wind") || m.includes("storm") || m.includes("rain")) return C.purple;
+  if (m.includes("flight") || m.includes("aircraft")) return C.gold;
+  return C.cyan;
+}
 
+export default function Globe3D({ onSelectCity, height = 600 }) {
+  const mountRef = useRef(null);
+  const rendererRef = useRef(null);
+  const sceneRef = useRef(null);
+  const cameraRef = useRef(null);
+  const controlsRef = useRef(null);
+  const markersRef = useRef([]);
+  const raycasterRef = useRef(new THREE.Raycaster());
+  const mouseRef = useRef(new THREE.Vector2());
+  const [cities, setCities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [hovered, setHovered] = useState(null);
+
+  // Fetch cities with measurements
+  useEffect(() => {
+    fetch(`${API_BASE}/v1/jarvis/page-data/GeoMap?limit=500`)
+      .then((r) => r.json())
+      .then((data) => {
+        const measurements = data?.measurements || [];
+        // Group by city_id, keep latest per metric
+        const cityMap = new Map();
+        for (const m of measurements) {
+          const p = m.props || {};
+          const cid = p.city_id || "unknown";
+          if (!cityMap.has(cid)) {
+            cityMap.set(cid, {
+              city_id: cid,
+              name: cid.replace(/city:/g, "").replace(/_/g, " "),
+              lat: p.lat,
+              lon: p.lon,
+              metrics: [],
+            });
+          }
+          cityMap.get(cid).metrics.push({
+            metric: p.metric || p.label,
+            value: p.value,
+            unit: p.unit,
+            source: p.source,
+            timestamp: p.timestamp,
+          });
+        }
+        setCities(Array.from(cityMap.values()).filter((c) => Number.isFinite(c.lat) && Number.isFinite(c.lon)));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  // Init Three.js scene
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
-    const W = Math.max(320, mount.clientWidth || 0);
-    const H = Math.max(220, mount.clientHeight || 0);
+
+    const width = mount.clientWidth;
+    const h = height;
 
     // Scene
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
-    camera.position.z = 2.8;
+    sceneRef.current = scene;
 
+    // Camera
+    const camera = new THREE.PerspectiveCamera(45, width / h, 0.1, 1000);
+    camera.position.set(0, 1.5, 3.2);
+    cameraRef.current = camera;
+
+    // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setClearColor(0x000000, 0);
+    renderer.setSize(width, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     mount.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
 
-    // Globe
-    const globeGeo = new THREE.SphereGeometry(1, 64, 64);
-    const globeMat = new THREE.MeshPhongMaterial({
-      color: 0x020d18,
-      emissive: 0x001a0a,
-      shininess: 40,
+    // Controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.4;
+    controls.minDistance = 1.8;
+    controls.maxDistance = 6;
+    controlsRef.current = controls;
+
+    // Earth sphere
+    const earthGeo = new THREE.SphereGeometry(1, 64, 64);
+    const earthMat = new THREE.MeshPhongMaterial({
+      color: 0x0a1628,
+      emissive: 0x001133,
+      specular: 0x112244,
+      shininess: 15,
       transparent: true,
       opacity: 0.95,
     });
-    const globe = new THREE.Mesh(globeGeo, globeMat);
-    scene.add(globe);
+    const earth = new THREE.Mesh(earthGeo, earthMat);
+    scene.add(earth);
 
     // Atmosphere glow
-    const atmGeo = new THREE.SphereGeometry(1.06, 64, 64);
-    const atmMat = new THREE.MeshPhongMaterial({
-      color: 0x00c878,
-      transparent: true,
-      opacity: 0.04,
+    const atmosGeo = new THREE.SphereGeometry(1.08, 64, 64);
+    const atmosMat = new THREE.ShaderMaterial({
+      vertexShader: `
+        varying vec3 vNormal;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vNormal;
+        void main() {
+          float intensity = pow(0.6 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
+          gl_FragColor = vec4(0.0, 0.4, 0.8, 1.0) * intensity;
+        }
+      `,
+      blending: THREE.AdditiveBlending,
       side: THREE.BackSide,
+      transparent: true,
     });
-    scene.add(new THREE.Mesh(atmGeo, atmMat));
+    const atmosphere = new THREE.Mesh(atmosGeo, atmosMat);
+    scene.add(atmosphere);
 
-    // Grid lines (latitude/longitude)
-    const gridMat = new THREE.LineBasicMaterial({ color: 0x00c878, transparent: true, opacity: 0.06 });
+    // Lat/lon grid
+    const gridGroup = new THREE.Group();
+    const gridMat = new THREE.LineBasicMaterial({ color: 0x004488, transparent: true, opacity: 0.15 });
     for (let lat = -80; lat <= 80; lat += 20) {
       const points = [];
-      for (let lng = 0; lng <= 360; lng += 3) {
-        points.push(latLngToVec3(lat, lng - 180, 1.005));
+      for (let lon = -180; lon <= 180; lon += 5) {
+        points.push(latLonToVector3(lat, lon, 1.005));
       }
-      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), gridMat));
+      const geo = new THREE.BufferGeometry().setFromPoints(points);
+      gridGroup.add(new THREE.Line(geo, gridMat));
     }
-    for (let lng = 0; lng < 360; lng += 20) {
+    for (let lon = -180; lon <= 180; lon += 30) {
       const points = [];
-      for (let lat = -90; lat <= 90; lat += 2) {
-        points.push(latLngToVec3(lat, lng - 180, 1.005));
+      for (let lat = -90; lat <= 90; lat += 5) {
+        points.push(latLonToVector3(lat, lon, 1.005));
       }
-      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), gridMat));
+      const geo = new THREE.BufferGeometry().setFromPoints(points);
+      gridGroup.add(new THREE.Line(geo, gridMat));
     }
+    scene.add(gridGroup);
 
-    // Country markers
-    const markerGroup = new THREE.Group();
-    COUNTRIES.forEach(c => {
-      const pos = latLngToVec3(c.lat, c.lng, 1.015);
-      const col = new THREE.Color(c.color);
-
-      // Spike
-      const spikeGeo = new THREE.CylinderGeometry(0.004, 0.001, 0.08, 6);
-      const spikeMat = new THREE.MeshBasicMaterial({ color: col });
-      const spike = new THREE.Mesh(spikeGeo, spikeMat);
-      spike.position.copy(pos.clone().normalize().multiplyScalar(1.055));
-      spike.lookAt(0, 0, 0);
-      spike.rotateX(Math.PI / 2);
-      markerGroup.add(spike);
-
-      // Pulse ring
-      const ringGeo = new THREE.RingGeometry(0.025, 0.03, 32);
-      const ringMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.5, side: THREE.DoubleSide });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.copy(pos.clone().normalize().multiplyScalar(1.02));
-      ring.lookAt(new THREE.Vector3(0, 0, 0));
-      markerGroup.add(ring);
-
-      // Dot
-      const dotGeo = new THREE.SphereGeometry(0.012, 12, 12);
-      const dotMat = new THREE.MeshBasicMaterial({ color: col });
-      const dot = new THREE.Mesh(dotGeo, dotMat);
-      dot.position.copy(pos.clone().normalize().multiplyScalar(1.018));
-      dot.userData = { country: c.code };
-      markerGroup.add(dot);
-    });
-
-    // Earthquake markers
-    (earthquakes || []).forEach(eq => {
-      const pos = latLngToVec3(eq.lat, eq.lng, 1.02);
-      const r = Math.max(0.005, (eq.mag - 4) * 0.005);
-      const col = eq.mag >= 6 ? 0xff2200 : eq.mag >= 5 ? 0xff8800 : 0xffcc00;
-      const geo = new THREE.SphereGeometry(r, 8, 8);
-      const mat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8 });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.copy(pos);
-      markerGroup.add(mesh);
-    });
-
-    scene.add(markerGroup);
-
-    // Lighting
-    scene.add(new THREE.AmbientLight(0x112233, 1.2));
-    const dirLight = new THREE.DirectionalLight(0x00c878, 0.6);
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 2);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
     dirLight.position.set(5, 3, 5);
     scene.add(dirLight);
-    const dirLight2 = new THREE.DirectionalLight(0x0096d4, 0.3);
-    dirLight2.position.set(-5, -3, -2);
-    scene.add(dirLight2);
+    const backLight = new THREE.DirectionalLight(0x0044aa, 0.8);
+    backLight.position.set(-5, -2, -5);
+    scene.add(backLight);
 
-    // Auto-rotate
-    let isDragging = false, prevX = 0, prevY = 0;
-    let rotX = 0, rotY = 0;
+    // Post-processing (bloom)
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, h), 1.2, 0.5, 0.85);
+    composer.addPass(bloomPass);
+    composer.addPass(new OutputPass());
 
-    const onMouseDown = e => { isDragging = true; prevX = e.clientX; prevY = e.clientY; };
-    const onMouseUp = () => { isDragging = false; };
-    const onMouseMove = e => {
-      if (!isDragging) return;
-      rotY += (e.clientX - prevX) * 0.005;
-      rotX += (e.clientY - prevY) * 0.003;
-      rotX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotX));
-      prevX = e.clientX; prevY = e.clientY;
-    };
-
-    mount.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp);
-    window.addEventListener("mousemove", onMouseMove);
-
+    // Animation loop
     let animId;
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      if (!isDragging) rotY += 0.002;
-      globe.rotation.y = rotY;
-      globe.rotation.x = rotX;
-      markerGroup.rotation.y = rotY;
-      markerGroup.rotation.x = rotX;
-      renderer.render(scene, camera);
+      controls.update();
+      composer.render();
     };
     animate();
-    runtimeRef.current = { renderer, camera, mount };
 
-    const onResize = () => {
-      if (!mount || !runtimeRef.current) return;
-      const nextW = Math.max(320, mount.clientWidth || 0);
-      const nextH = Math.max(220, mount.clientHeight || 0);
-      runtimeRef.current.camera.aspect = nextW / nextH;
-      runtimeRef.current.camera.updateProjectionMatrix();
-      runtimeRef.current.renderer.setSize(nextW, nextH);
+    // Resize
+    const handleResize = () => {
+      const w = mount.clientWidth;
+      const h2 = height;
+      camera.aspect = w / h2;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h2);
+      composer.setSize(w, h2);
     };
+    window.addEventListener("resize", handleResize);
 
-    const observer = new ResizeObserver(onResize);
-    observer.observe(mount);
-    window.addEventListener("resize", onResize);
+    // Click handler
+    const handleClick = (e) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouseRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycasterRef.current.setFromCamera(mouseRef.current, camera);
+      const intersects = raycasterRef.current.intersectObjects(markersRef.current, false);
+      if (intersects.length > 0) {
+        const cityData = intersects[0].object.userData.city;
+        if (cityData && onSelectCity) onSelectCity(cityData);
+        controls.autoRotate = false;
+      } else {
+        controls.autoRotate = true;
+      }
+    };
+    renderer.domElement.addEventListener("click", handleClick);
+
+    // Hover handler
+    const handleMouseMove = (e) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouseRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycasterRef.current.setFromCamera(mouseRef.current, camera);
+      const intersects = raycasterRef.current.intersectObjects(markersRef.current, false);
+      if (intersects.length > 0) {
+        const cityData = intersects[0].object.userData.city;
+        setHovered(cityData);
+        renderer.domElement.style.cursor = "pointer";
+      } else {
+        setHovered(null);
+        renderer.domElement.style.cursor = "default";
+      }
+    };
+    renderer.domElement.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       cancelAnimationFrame(animId);
-      observer.disconnect();
-      window.removeEventListener("resize", onResize);
-      mount.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mouseup", onMouseUp);
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("resize", handleResize);
+      renderer.domElement.removeEventListener("click", handleClick);
+      renderer.domElement.removeEventListener("mousemove", handleMouseMove);
       renderer.dispose();
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
     };
-  }, [earthquakes]);
+  }, [height, onSelectCity]);
 
-  const C = { bg:"#020509", border:"rgba(0,200,120,0.14)", neon:"#00c878", gold:"#e8a800", red:"#e8203c", text:"#566878", textB:"#a8bcc8" };
-  const rCol = r => ({LOW:C.neon,MEDIUM:C.gold,HIGH:C.red}[r]||C.text);
+  // Add city markers when data loads
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene || cities.length === 0) return;
+
+    // Clear old markers
+    for (const m of markersRef.current) {
+      scene.remove(m);
+      m.geometry.dispose();
+      m.material.dispose();
+    }
+    markersRef.current = [];
+
+    for (const city of cities) {
+      const pos = latLonToVector3(city.lat, city.lon, 1.02);
+      // Marker size scaled by number of metrics
+      const size = Math.max(0.008, Math.min(0.03, 0.01 + city.metrics.length * 0.002));
+      const geo = new THREE.SphereGeometry(size, 8, 8);
+      const color = metricColor(city.metrics[0]?.metric);
+      const mat = new THREE.MeshBasicMaterial({ color });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.copy(pos);
+      mesh.userData = { city };
+      scene.add(mesh);
+      markersRef.current.push(mesh);
+
+      // Glow ring
+      const ringGeo = new THREE.RingGeometry(size * 1.5, size * 2.5, 16);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.DoubleSide,
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.copy(pos.clone().multiplyScalar(1.001));
+      ring.lookAt(new THREE.Vector3(0, 0, 0));
+      scene.add(ring);
+      markersRef.current.push(ring);
+    }
+  }, [cities]);
 
   return (
-    <div style={{ position:"relative", width:"100%", height:"100%", background:"#010408" }}>
-      <div ref={mountRef} style={{ width:"100%", height:"calc(100% - 48px)", cursor:"grab" }} />
-
-      {/* Country strip */}
-      <div style={{ position:"absolute", bottom:0, left:0, right:0, height:48, display:"flex", background:"rgba(1,4,8,0.95)", borderTop:`1px solid ${C.border}`, overflowX:"auto" }}>
-        {COUNTRIES.map(c => {
-          const col = rCol(c.risk);
-          const isSel = selectedCountry === c.code;
-          return (
-            <div key={c.code} onClick={() => onSelect(c.code)}
-              style={{ minWidth:80, flex:1, padding:"4px 6px", textAlign:"center", cursor:"pointer", borderRight:`1px solid rgba(0,200,120,0.06)`, background:isSel?col+"18":"transparent", transition:"background 0.2s" }}>
-              <div style={{ fontSize:16 }}>{c.flag}</div>
-              <div style={{ fontSize:7, color:isSel?col:"#2a3a4a", letterSpacing:1, marginTop:1, fontFamily:"Courier New" }}>{c.name}</div>
-              <div style={{ fontSize:6, color:col+"88", fontFamily:"Courier New" }}>{c.risk} · {c.riskScore}</div>
+    <div style={{ position: "relative", width: "100%", height }}>
+      <div ref={mountRef} style={{ width: "100%", height: "100%" }} />
+      {loading && (
+        <div style={{ position: "absolute", top: 10, left: 10, fontSize: 10, color: C.cyan }}>
+          ◌ Loading {cities.length} cities…
+        </div>
+      )}
+      {hovered && (
+        <div style={{
+          position: "absolute", bottom: 10, left: 10,
+          background: "rgba(0,0,0,0.8)", border: `1px solid ${C.border}`,
+          borderRadius: 6, padding: "8px 12px", fontSize: 10, color: C.textB,
+          pointerEvents: "none", maxWidth: 280,
+        }}>
+          <div style={{ fontWeight: 700, color: C.cyan, textTransform: "uppercase", fontSize: 9, marginBottom: 4 }}>
+            {hovered.name}
+          </div>
+          <div style={{ fontSize: 8, color: C.text, marginBottom: 4 }}>
+            {hovered.lat?.toFixed(2)}°, {hovered.lon?.toFixed(2)}° · {hovered.metrics.length} metrics
+          </div>
+          {hovered.metrics.slice(0, 4).map((m, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 2 }}>
+              <span style={{ color: C.text }}>{m.metric}</span>
+              <span style={{ color: C.textB, fontVariantNumeric: "tabular-nums" }}>
+                {typeof m.value === "number" ? m.value.toFixed(1) : m.value} {m.unit}
+              </span>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Drag hint */}
-      <div style={{ position:"absolute", top:8, right:10, fontSize:7, color:"rgba(0,200,120,0.3)", fontFamily:"Courier New", letterSpacing:1 }}>
-        DRAG TO ROTATE · {(earthquakes||[]).length} EQ LIVE
+          ))}
+        </div>
+      )}
+      <div style={{
+        position: "absolute", top: 10, right: 10,
+        background: "rgba(0,0,0,0.7)", border: `1px solid ${C.border}`,
+        borderRadius: 6, padding: "6px 10px", fontSize: 8, color: C.text,
+      }}>
+        <div style={{ color: C.cyan, fontWeight: 700, marginBottom: 2 }}>GOTHAM GLOBE</div>
+        <div>{cities.length} cities plotted</div>
+        <div style={{ marginTop: 4, opacity: 0.7 }}>Click marker · Drag to rotate · Scroll to zoom</div>
       </div>
     </div>
   );

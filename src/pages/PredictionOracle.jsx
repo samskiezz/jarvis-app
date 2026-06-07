@@ -31,13 +31,7 @@ const inputStyle = {
   color: C.textB, padding: "9px 11px", fontSize: 12, fontFamily: "inherit", outline: "none",
 };
 
-const SAMPLES = [
-  "XRP price in 48h",
-  "Quake risk near Tokyo this week",
-  "Where will flight UA218 be in 20 min",
-  "BTC probability above 80k by Friday",
-];
-
+// Ask a question and the backend returns a real forecast.
 const fmtNum = (n) => {
   if (n === null || n === undefined || Number.isNaN(n)) return "—";
   const abs = Math.abs(n);
@@ -141,17 +135,6 @@ export default function PredictionOracle() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            {SAMPLES.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => { setQuestion(s); run(s, paramsText); }}
-                style={{ ...inputStyle, padding: "3px 9px", fontSize: 9, cursor: "pointer",
-                  color: C.text, borderColor: C.border }}
-              >
-                {s}
-              </button>
-            ))}
             <span style={{ flex: 1 }} />
             <button
               type="button"

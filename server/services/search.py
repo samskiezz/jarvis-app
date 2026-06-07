@@ -352,16 +352,23 @@ def _load_objects() -> list[dict]:
 
     Never raises — any import/attribute failure falls back to the static seed.
     """
-    # Preferred: a future dynamic store module exposing get_objects()/OBJECTS.
+    # 1. Try the live ontology_store (cap to 5k so the dense TF-IDF matrix stays
+    #    memory-safe; topics are created first so they dominate the result).
+    try:
+        from . import ontology_store as _ostore
+        objs = _ostore.query_objects(limit=5000)
+        if objs:
+            return [dict(o) for o in objs if isinstance(o, dict)]
+    except Exception:  # noqa: BLE001
+        pass
+    # 2. Legacy fallback paths.
     for modpath in ("server.data.ontology_store", "..data.ontology_store"):
         try:
             if modpath.startswith(".."):
                 from importlib import import_module
-
                 mod = import_module("ontology_store", package="server.data")
             else:
                 from importlib import import_module
-
                 mod = import_module(modpath)
             getter = getattr(mod, "get_objects", None)
             if callable(getter):
@@ -376,7 +383,6 @@ def _load_objects() -> list[dict]:
     # Fallback: the static seed ontology.
     try:
         from ..data.ontology import OBJECTS
-
         return [dict(o) for o in OBJECTS]
     except Exception:  # noqa: BLE001
         return []

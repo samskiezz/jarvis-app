@@ -10,14 +10,16 @@ import { COLORS as C } from "@/domain/colors";
 
 export default function RFSpectrum() {
   return (
-    <SciDomainConsole
-      title="RF / SPECTRUM"
-      subtitle="SPECTRUM ANALYZER — RF · SIGNAL · ACOUSTICS · SONAR · FREQUENCY"
-      accent={C.purple}
-      runLabel="ANALYZE"
-      emptyHint="Select an RF / signal / acoustic method to analyze it."
-      domains={["rf", "signal", "acoustics2"]}
-      extraMatch={["sonar", "frequency", "doppler", "spectrum", "antenna", "fft", "filter"]}
-    />
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, height: "100%", overflow: "auto" }}>
+      <SciDomainConsole
+        title="RF / SPECTRUM"
+        subtitle="SPECTRUM ANALYZER — RF · SIGNAL · ACOUSTICS · SONAR · FREQUENCY"
+        accent={C.purple}
+        runLabel="ANALYZE"
+        emptyHint="Select an RF / signal / acoustic method to analyze it."
+        domains={["rf", "signal", "acoustics2"]}
+        extraMatch={["sonar", "frequency", "doppler", "spectrum", "antenna", "fft", "filter"]}
+      />
+    </div>
   );
 }

@@ -6,7 +6,6 @@
  * Thin wrapper over the shared SciDomainConsole.
  */
 import SciDomainConsole from "@/components/SciDomainConsole";
-import LiveDataPanel from "@/components/LiveDataPanel";
 import { COLORS as C } from "@/domain/colors";
 
 export default function SkyOrbital() {
@@ -21,7 +20,6 @@ export default function SkyOrbital() {
         domains={["astronomy", "aerodynamics"]}
         extraMatch={["meteor", "asteroid", "orbit", "satellite", "flight", "aero", "mach", "lift", "drag"]}
       />
-      <LiveDataPanel pageName="SkyOrbital" limit={60} refreshMs={30000} />
     </div>
   );
 }

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { COLORS as C, earthquakeColor } from "@/domain/colors";
 import { getLiveIntel } from "@/api/backendFunctions";
 import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
-import LiveDataPanel from "@/components/LiveDataPanel";
 
 const ACCENT = C.neon;
 
@@ -116,7 +115,6 @@ export default function GlobalIntel() {
           </PanelCard>
         </div>
       </DataState>
-      <LiveDataPanel pageName="GlobalIntel" limit={60} refreshMs={30000} />
     </PageShell>
   );
 }

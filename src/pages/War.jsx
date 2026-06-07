@@ -17,7 +17,6 @@ import { SwarmJob, RiskSignal } from "@/api/entities";
 import { appParams } from "@/lib/app-params";
 import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
 import LiveTactical3D from "@/components/LiveTactical3D";
-import LiveDataPanel from "@/components/LiveDataPanel";
 
 const ACCENT = C.red;
 
@@ -27,14 +26,7 @@ const PAN_MAPS = ["city_grid"];
 const CS_CHANNELS = ["sim.tick", "players.state", "round.events", "ml.policy.actions"];
 const PAN_CHANNELS = ["sim.tick", "agents.state", "intruders.state", "ml.policy.actions"];
 
-// ── COUNTERSTRIKE match board (lifted from GameArena) ──────────────────────
-const SAMPLE_MATCHES = [
-  { id: "m1", name: "Alpha Swarm vs Bravo Net", map: "de_dust2", teamA: "Alpha Swarm", teamB: "Bravo Net", scoreA: 13, scoreB: 9, round: 22, status: "running" },
-  { id: "m2", name: "Cobra vs Delta Mind", map: "de_mirage", teamA: "Cobra", teamB: "Delta Mind", scoreA: 7, scoreB: 7, round: 14, status: "running" },
-  { id: "m3", name: "Echo vs Foxtrot AI", map: "de_inferno", teamA: "Echo", teamB: "Foxtrot AI", scoreA: 16, scoreB: 11, round: 27, status: "completed" },
-  { id: "m4", name: "Ghost vs Hydra", map: "de_nuke", teamA: "Ghost", teamB: "Hydra", scoreA: 0, scoreB: 0, round: 0, status: "queued" },
-];
-
+// ── COUNTERSTRIKE match board ──────────────────────────────────────────────
 function jobToMatch(job, idx) {
   const tag = String(job.tag || job.type || "").toLowerCase();
   const model = String(job.model || "").toLowerCase();
@@ -57,14 +49,7 @@ function jobToMatch(job, idx) {
 const statusColor = (s) =>
   s === "running" ? C.neon : s === "completed" ? C.blue : s === "failed" || s === "cancelled" ? C.red : C.gold;
 
-// ── PANOPTICON threat board (lifted from WarEnvironment) ───────────────────
-const SAMPLE_SIGNALS = [
-  { _id: "s1", label: "Hostile movement — sector 4", severity: "HIGH", entity: "OPFOR squad" },
-  { _id: "s2", label: "Supply line exposed — north gate", severity: "MEDIUM", entity: "Logistics" },
-  { _id: "s3", label: "Recon drone overhead", severity: "MEDIUM", entity: "ISR" },
-  { _id: "s4", label: "Perimeter sensor nominal", severity: "LOW", entity: "Sensors" },
-];
-
+// ── PANOPTICON threat board ────────────────────────────────────────────────
 const sevLabel = (s) => {
   const raw = s.severity ?? s.score;
   if (typeof raw === "number") return raw >= 7 ? "HIGH" : raw >= 4 ? "MEDIUM" : "LOW";
@@ -99,35 +84,11 @@ const mmss = (secs) => {
   return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 };
 
-// ── Per-mode seeding ───────────────────────────────────────────────────────
-// counterstrike: CT/T on Source-engine coords; panopticon: agents/intruders on
-// a 0..100 city grid (mapped to LiveTactical3D's "CT"/"T" team colors).
-function seedUnits(mode, map) {
-  if (mode === "panopticon") {
-    return Array.from({ length: 10 }).map((_, i) => ({
-      id: `pan-u${i}`,
-      // even = agent (friendly), odd = intruder (hostile)
-      team: i % 2 === 0 ? "CT" : "T",
-      worldX: (i * 17) % 100,
-      worldY: (i * 31) % 100,
-      hp: 100 - ((i * 7) % 60),
-    }));
-  }
-  return Array.from({ length: 10 }).map((_, i) => ({
-    id: `${map.slice(0, 3)}-u${i}`,
-    team: i % 2 === 0 ? "CT" : "T",
-    worldX: ((i * 211) % 4000) - 2000,
-    worldY: ((i * 367) % 3200) - 1600,
-    hp: 100 - ((i * 9) % 60),
-  }));
-}
-
 /**
- * useTacticalStream — generalized live EventSource feed (lifted from GameArena's
- * StreamMonitor). Opens `${apiBaseUrl}/streams/{streamKey}`, handles
- * reconnect/backoff + stale detection, parses `data.units||players||agents` and
- * maps to the LiveTactical3D unit shape. Falls back to seeded units when offline
- * or before the first valid frame.
+ * useTacticalStream — generalized live EventSource feed.
+ * Opens `${apiBaseUrl}/streams/{streamKey}`, handles reconnect/backoff + stale
+ * detection, parses `data.units||players||agents` and maps to the LiveTactical3D
+ * unit shape. Empty when offline.
  */
 function useTacticalStream(mode, map) {
   const url = `${appParams.apiBaseUrl}/streams/${mode}`;
@@ -136,7 +97,6 @@ function useTacticalStream(mode, map) {
   const [events, setEvents] = useState(0);
   const [liveUnits, setLiveUnits] = useState(null); // null until a valid frame arrives
   const [frame, setFrame] = useState(null);         // latest FULL frame object
-  const seed = useMemo(() => seedUnits(mode, map), [mode, map]);
 
   // Reset live frames whenever the stream key changes.
   const modeRef = useRef(mode);
@@ -206,9 +166,9 @@ function useTacticalStream(mode, map) {
 
   const status = connected ? (stale ? "STALE" : "LIVE") : "OFFLINE";
   const statusColorVal = connected ? (stale ? C.gold : C.neon) : C.red;
-  const units = liveUnits && liveUnits.length ? liveUnits : seed;
+  const units = liveUnits && liveUnits.length ? liveUnits : [];
 
-  return { units, frame, status, statusColor: statusColorVal, events, url, usingSeed: !(liveUnits && liveUnits.length) };
+  return { units, frame, status, statusColor: statusColorVal, events, url, usingSeed: false };
 }
 
 export default function War() {
@@ -223,7 +183,6 @@ export default function War() {
 
   // ── COUNTERSTRIKE data (matches) ─────────────────────────────────────────
   const [matches, setMatches] = useState([]);
-  const [matchSample, setMatchSample] = useState(false);
   const [matchLoading, setMatchLoading] = useState(true);
   const [matchError, setMatchError] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
@@ -234,16 +193,15 @@ export default function War() {
     try {
       const rows = await SwarmJob.list();
       const derived = (Array.isArray(rows) ? rows : []).map(jobToMatch).filter(Boolean);
-      if (derived.length) { setMatches(derived); setMatchSample(false); }
-      else { setMatches(SAMPLE_MATCHES); setMatchSample(true); }
+      setMatches(derived);
     } catch (e) {
-      setMatchError(e); setMatches(SAMPLE_MATCHES); setMatchSample(true);
+      setMatchError(e);
+      setMatches([]);
     } finally { setMatchLoading(false); }
   }, []);
 
   // ── PANOPTICON data (threat signals) ─────────────────────────────────────
   const [signals, setSignals] = useState([]);
-  const [signalSample, setSignalSample] = useState(false);
   const [signalLoading, setSignalLoading] = useState(true);
   const [signalError, setSignalError] = useState(null);
 
@@ -252,11 +210,10 @@ export default function War() {
     setSignalError(null);
     try {
       const rows = await RiskSignal.list();
-      const arr = Array.isArray(rows) ? rows : [];
-      if (arr.length) { setSignals(arr); setSignalSample(false); }
-      else { setSignals(SAMPLE_SIGNALS); setSignalSample(true); }
+      setSignals(Array.isArray(rows) ? rows : []);
     } catch (e) {
-      setSignalError(e); setSignals(SAMPLE_SIGNALS); setSignalSample(true);
+      setSignalError(e);
+      setSignals([]);
     } finally { setSignalLoading(false); }
   }, []);
 
@@ -490,7 +447,7 @@ export default function War() {
           </div>
           {stream.status === "OFFLINE" && (
             <div style={{ marginTop: 6, fontSize: 8, color: C.gold }}>
-              Stream offline — rendering seeded {mode === "panopticon" ? "agents/intruders" : "CT/T units"}. Configure the backend feed at {stream.url}.
+              Stream offline — waiting for backend feed at {stream.url}.
             </div>
           )}
         </PanelCard>
@@ -498,11 +455,6 @@ export default function War() {
         {mode === "counterstrike" ? (
           <PanelCard title="MATCH BOARD" accent={ACCENT} right={<Badge color={ACCENT}>{matches.length}</Badge>}>
             <DataState loading={matchLoading} error={matchError} empty={matches.length === 0} emptyLabel="No matches.">
-              {matchSample && (
-                <div style={{ fontSize: 8, color: C.gold, marginBottom: 8 }}>
-                  No game-tagged SwarmJob records — showing seeded sample matches.
-                </div>
-              )}
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {matches.map((m) => {
                   const active = m.id === selectedId;
@@ -547,12 +499,7 @@ export default function War() {
                 <div style={{ fontSize: 18, fontWeight: 700, color: C.orange }}>{intruderCount}</div>
               </div>
             </div>
-            <DataState loading={signalLoading} error={signalError} empty={false}>
-              {signalSample && (
-                <div style={{ fontSize: 8, color: C.gold, marginBottom: 8 }}>
-                  No RiskSignal records — showing seeded tactical signals.
-                </div>
-              )}
+            <DataState loading={signalLoading} error={signalError} empty={signals.length === 0} emptyLabel="No signals.">
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 {signals.map((s) => {
                   const lvl = sevLabel(s);
@@ -581,7 +528,6 @@ export default function War() {
           </PanelCard>
         )}
       </div>
-      <LiveDataPanel pageName="War" limit={40} refreshMs={30000} />
     </PageShell>
   );
 }

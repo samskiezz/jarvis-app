@@ -495,40 +495,172 @@ def fetch_all_live_data(
     return report
 
 
-# ── Page Data Query ───────────────────────────────────────────────────────────
+# ── Page Data Query — GRAPH-CORRELATED per page ───────────────────────────────
+def _page_keywords(page_name: str, topics: list[dict]) -> set[str]:
+    """Extract keywords from page name + topic names for matching."""
+    keywords = set(page_name.lower().replace(" ", "").split())
+    for t in topics:
+        name = t.get("Topic Name", "")
+        keywords.update(name.lower().split())
+        keywords.update(t.get("Source Class", "").lower().split())
+    return {k for k in keywords if len(k) > 2}
+
+
+def _score_relevance(row: sqlite3.Row, keywords: set[str]) -> float:
+    """Score how relevant an object is to a set of keywords (0-100)."""
+    try:
+        props = json.loads(row["props"] or "{}")
+    except Exception:
+        props = {}
+    text = " ".join(str(v) for v in [
+        row["id"], props.get("label"), props.get("topic_name"),
+        props.get("metric"), props.get("url"), props.get("title"),
+        props.get("source_name"), props.get("source_class"),
+        props.get("city_id"), props.get("country_code"),
+    ] if v).lower()
+    matches = sum(1 for k in keywords if k in text)
+    return min(100.0, matches * 10.0 + (50 if row["type"] in ("Measurement", "Event") else 0))
+
+
 def get_page_data(page_name: str, limit: int = 100) -> dict:
-    """Return the most recent live data relevant to a page."""
+    """Return GRAPH-CORRELATED live data for a specific page.
+
+    Strategy:
+      1. Find topics mapped to this page via the scraper master sheet.
+      2. Build keyword set from topic names + source classes.
+      3. Query the ontology graph for objects linked to those topics.
+      4. Score every candidate by keyword overlap + recency + graph proximity.
+      5. Return top-N per category so each page shows DISTINCT correlated data."""
+    from . import topic_engine as te
+
     c = _conn()
     try:
-        from . import topic_engine as te
         topics = te.topics_for_page(page_name)
         topic_names = [t["Topic Name"] for t in topics[:50]]
+        keywords = _page_keywords(page_name, topics)
 
-        measurements = c.execute(
-            "SELECT id, type, props, state, updated_ts FROM ont_object "
-            "WHERE type IN ('Measurement', 'Event', 'Asset') "
-            "ORDER BY updated_ts DESC LIMIT ?",
-            (limit,)
-        ).fetchall()
+        # Topic IDs for graph expansion
+        topic_ids = {f"topic_{t['ID']}" for t in topics}
+        # Also include ontology topic IDs that match by name
+        if topic_names:
+            placeholders = ",".join("?" * len(topic_names))
+            for r in c.execute(
+                f"SELECT id FROM ont_object WHERE type='Topic' AND json_extract(props,'$.topic_name') IN ({placeholders})",
+                tuple(topic_names)
+            ).fetchall():
+                topic_ids.add(r[0])
 
-        documents = c.execute(
-            "SELECT id, type, props, state, updated_ts FROM ont_object "
-            "WHERE type = 'Document' AND state = 'fetched' "
-            "ORDER BY updated_ts DESC LIMIT ?",
-            (limit // 2,)
-        ).fetchall()
+        # ── Graph-linked objects (objects linked to page topics) ──────────────
+        linked_ids: set[str] = set()
+        if topic_ids:
+            placeholders = ",".join("?" * len(topic_ids))
+            for r in c.execute(
+                f"SELECT from_id, to_id FROM ont_link WHERE from_id IN ({placeholders}) OR to_id IN ({placeholders})",
+                tuple(topic_ids) * 2
+            ).fetchall():
+                linked_ids.add(r[0])
+                linked_ids.add(r[1])
+            # Remove topic IDs themselves from linked (we query topics separately)
+            linked_ids -= topic_ids
 
-        places = c.execute(
+        # ── Measurements: match by metric/topic keywords + recency ─────────────
+        m_rows = c.execute(
             "SELECT id, type, props, state, updated_ts FROM ont_object "
-            "WHERE type = 'Place' ORDER BY id LIMIT ?",
-            (limit // 4,)
+            "WHERE type = 'Measurement' AND state = 'live' ORDER BY updated_ts DESC LIMIT ?",
+            (limit * 3,)
         ).fetchall()
+        measurements = []
+        for r in m_rows:
+            score = _score_relevance(r, keywords)
+            if r["id"] in linked_ids:
+                score += 30
+            measurements.append((score, r))
+        measurements.sort(key=lambda x: (-x[0], -x[1]["updated_ts"]))
+        measurements = [r for _s, r in measurements[:limit]]
 
-        topic_objs = c.execute(
+        # ── Events: same scoring ───────────────────────────────────────────────
+        e_rows = c.execute(
             "SELECT id, type, props, state, updated_ts FROM ont_object "
-            "WHERE type = 'Topic' ORDER BY updated_ts DESC LIMIT ?",
-            (limit // 2,)
+            "WHERE type = 'Event' AND state = 'live' ORDER BY updated_ts DESC LIMIT ?",
+            (limit * 2,)
         ).fetchall()
+        events = []
+        for r in e_rows:
+            score = _score_relevance(r, keywords)
+            if r["id"] in linked_ids:
+                score += 30
+            events.append((score, r))
+        events.sort(key=lambda x: (-x[0], -x[1]["updated_ts"]))
+        events = [r for _s, r in events[:limit // 2]]
+
+        # ── Assets: same scoring ───────────────────────────────────────────────
+        a_rows = c.execute(
+            "SELECT id, type, props, state, updated_ts FROM ont_object "
+            "WHERE type = 'Asset' ORDER BY updated_ts DESC LIMIT ?",
+            (limit * 2,)
+        ).fetchall()
+        assets = []
+        for r in a_rows:
+            score = _score_relevance(r, keywords)
+            if r["id"] in linked_ids:
+                score += 30
+            assets.append((score, r))
+        assets.sort(key=lambda x: (-x[0], -x[1]["updated_ts"]))
+        assets = [r for _s, r in assets[:limit // 3]]
+
+        # ── Documents: fetched docs matching keywords ──────────────────────────
+        d_rows = c.execute(
+            "SELECT id, type, props, state, updated_ts FROM ont_object "
+            "WHERE type = 'Document' AND state = 'fetched' ORDER BY updated_ts DESC LIMIT ?",
+            (limit * 3,)
+        ).fetchall()
+        docs = []
+        for r in d_rows:
+            score = _score_relevance(r, keywords)
+            if r["id"] in linked_ids:
+                score += 30
+            docs.append((score, r))
+        docs.sort(key=lambda x: (-x[0], -x[1]["updated_ts"]))
+        docs = [r for _s, r in docs[:limit // 2]]
+
+        # ── Places: match by geo_scope / country / city keywords ───────────────
+        p_rows = c.execute(
+            "SELECT id, type, props, state, updated_ts FROM ont_object "
+            "WHERE type = 'Place' ORDER BY updated_ts DESC LIMIT ?",
+            (limit * 2,)
+        ).fetchall()
+        places = []
+        for r in p_rows:
+            score = _score_relevance(r, keywords)
+            if r["id"] in linked_ids:
+                score += 30
+            places.append((score, r))
+        places.sort(key=lambda x: (-x[0], -x[1]["updated_ts"]))
+        places = [r for _s, r in places[:limit // 4]]
+
+        # ── Topics: page-mapped first, then keyword-matched ────────────────────
+        topic_rows = []
+        if topic_ids:
+            placeholders = ",".join("?" * len(topic_ids))
+            for r in c.execute(
+                f"SELECT id, type, props, state, updated_ts FROM ont_object WHERE id IN ({placeholders})",
+                tuple(topic_ids)
+            ).fetchall():
+                topic_rows.append((100.0, r))
+        # Backfill with keyword-matched topics
+        t_rows = c.execute(
+            "SELECT id, type, props, state, updated_ts FROM ont_object WHERE type='Topic' LIMIT ?",
+            (limit * 2,)
+        ).fetchall()
+        existing = {r[1]["id"] for r in topic_rows}
+        for r in t_rows:
+            if r["id"] in existing:
+                continue
+            score = _score_relevance(r, keywords)
+            topic_rows.append((score, r))
+        topic_rows.sort(key=lambda x: (-x[0], -x[1]["updated_ts"]))
+        topic_objs = [r for _s, r in topic_rows[:limit // 2]]
+
     finally:
         c.close()
 
@@ -548,14 +680,61 @@ def get_page_data(page_name: str, limit: int = 100) -> dict:
             })
         return out
 
+    # ── Semantic search boost: find objects vector-similar to topic queries ──
+    semantic_ids: set[str] = set()
+    semantic_boost: dict[str, float] = {}
+    try:
+        from . import embeddings as emb
+        for t in topics[:3]:
+            q = t.get("Topic Name", "")
+            if q:
+                for hit in emb.search(q, k=10, kind=None):
+                    hid = hit.get("id")
+                    if hid:
+                        semantic_ids.add(hid)
+                        semantic_boost[hid] = max(semantic_boost.get(hid, 0), hit.get("score", 0))
+    except Exception:
+        pass
+
+    # Add semantic hits to categories if not already present
+    c2 = _conn()
+    try:
+        def _add_semantic(conn, row_ids, target_type):
+            added = []
+            for hid in semantic_ids:
+                if hid in row_ids:
+                    continue
+                row = conn.execute(
+                    "SELECT id, type, props, state, updated_ts FROM ont_object WHERE id=? AND type=?",
+                    (hid, target_type)
+                ).fetchone()
+                if row:
+                    added.append((50.0 + semantic_boost.get(hid, 0) * 50, row))
+            return added
+
+        m_ids = {r["id"] for r in measurements}
+        measurements += [r for _s, r in _add_semantic(c2, m_ids, "Measurement")]
+        measurements.sort(key=lambda r: -(_score_relevance(r, keywords) + (30 if r["id"] in linked_ids else 0) + (semantic_boost.get(r["id"], 0) * 20)))
+        measurements = measurements[:limit]
+
+        d_ids = {r["id"] for r in docs}
+        docs += [r for _s, r in _add_semantic(c2, d_ids, "Document")]
+        docs.sort(key=lambda r: -(_score_relevance(r, keywords) + (30 if r["id"] in linked_ids else 0) + (semantic_boost.get(r["id"], 0) * 20)))
+        docs = docs[:limit // 2]
+    finally:
+        c2.close()
+
     return {
         "page": page_name,
         "mapped_topics": len(topics),
         "topic_names": topic_names[:20],
         "measurements": _serialize(measurements),
-        "events": [m for m in _serialize(measurements) if m["type"] == "Event"],
-        "assets": [m for m in _serialize(measurements) if m["type"] == "Asset"],
-        "documents": _serialize(documents),
+        "events": _serialize(events),
+        "assets": _serialize(assets),
+        "documents": _serialize(docs),
         "places": _serialize(places),
         "topics": _serialize(topic_objs),
+        "keywords": sorted(keywords)[:20],
+        "linked_objects": len(linked_ids),
+        "semantic_matches": len(semantic_ids),
     }

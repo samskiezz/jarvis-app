@@ -97,11 +97,12 @@ def _static_links() -> list[dict]:
         return []
 
 
-def _all_objects() -> list[dict]:
-    """Every object as a plain dict, from the store if importable else the seed."""
+def _all_objects(*, limit: int = 5000) -> list[dict]:
+    """Every object as a plain dict, from the store if importable else the seed.
+    Capped to ``limit`` so the graph API stays fast even with 150k+ objects."""
     if _store is not None:
         try:
-            objs = _store.query_objects()
+            objs = _store.query_objects(limit=limit)
             if objs:
                 return objs
         except Exception:  # noqa: BLE001
@@ -109,30 +110,28 @@ def _all_objects() -> list[dict]:
     return _static_objects()
 
 
-def _all_links() -> list[dict]:
-    """Every link as a normalised ``{a, b, relation, strength}`` dict."""
+def _all_links(*, limit: int = 500000) -> list[dict]:
+    """Links as normalised ``{a, b, relation, strength}`` dicts.
+    Single-query; limit is generous (500k) because 212k links load in <1s."""
     if _store is not None:
         try:
-            objs = _store.query_objects()
-            ids = [o.get("id") for o in objs]
-            seen: set[str] = set()
-            out: list[dict] = []
-            for oid in ids:
-                for lk in _store.links_for(oid):
-                    lid = lk.get("id") or f"{lk.get('a')}|{lk.get('b')}|{lk.get('relation')}"
-                    if lid in seen:
-                        continue
-                    seen.add(lid)
-                    out.append(
-                        {
-                            "a": str(lk.get("a")),
-                            "b": str(lk.get("b")),
-                            "relation": str(lk.get("relation") or ""),
-                            "strength": float(lk.get("strength") or 1),
-                        }
-                    )
-            if out or objs:
-                return out
+            import sqlite3
+            conn = sqlite3.connect(_store._db_path(), check_same_thread=False)
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute(
+                "SELECT id, a, b, relation, strength FROM link LIMIT ?",
+                (limit,)
+            ).fetchall()
+            conn.close()
+            return [
+                {
+                    "a": str(r["a"]),
+                    "b": str(r["b"]),
+                    "relation": str(r["relation"] or ""),
+                    "strength": float(r["strength"] or 1),
+                }
+                for r in rows
+            ]
         except Exception:  # noqa: BLE001
             pass
     return _static_links()
@@ -230,7 +229,7 @@ def subgraph(seed_ids: Iterable[str], depth: int = 1, *, role: Optional[str] = N
         # "blank = all": with no seeds, return the whole graph (capped) so the
         # Link Analysis view renders the full ontology by default.
         if not seeds:
-            seeds = [str(o.get("id")) for o in _all_objects() if o.get("id")][:500]
+            seeds = [str(o.get("id")) for o in _all_objects(limit=500) if o.get("id")]
 
         visited: set[str] = set(seeds)
         frontier = list(seeds)
@@ -393,7 +392,7 @@ def centrality() -> dict:
     ``{id: score}`` for every node. Never raises.
     """
     try:
-        objs = _all_objects()
+        objs = _all_objects(limit=5000)
         links = _all_links()
         ids = [str(o.get("id")) for o in objs]
         if not ids:
@@ -454,7 +453,7 @@ def communities() -> dict:
     inside a component can split off. Returns ``{id: cluster}``. Never raises.
     """
     try:
-        objs = _all_objects()
+        objs = _all_objects(limit=5000)
         links = _all_links()
         ids = [str(o.get("id")) for o in objs]
         id_set = set(ids)

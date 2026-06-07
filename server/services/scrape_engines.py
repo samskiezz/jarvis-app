@@ -89,10 +89,28 @@ def list_engines() -> dict:
 
 
 def best_content_engine() -> str:
-    """Pick the strongest installed content engine (impersonation > plain)."""
-    for name in ("scrapling", "cloudscraper", "scrapy", "sequential"):
-        if _detect(_REGISTRY[name]):
-            return name
+    """Pick the strongest installed content engine (impersonation > plain).
+    Tests the actual import path that will be used so partial installs
+    (e.g. scrapling without playwright) are skipped."""
+    # 1) scrapling — test the exact Fetcher import path
+    try:
+        from scrapling.fetchers import Fetcher  # noqa: F401
+        return "scrapling"
+    except Exception:
+        pass
+    # 2) cloudscraper
+    try:
+        import cloudscraper  # noqa: F401
+        return "cloudscraper"
+    except Exception:
+        pass
+    # 3) scrapy
+    try:
+        import scrapy  # noqa: F401
+        return "scrapy"
+    except Exception:
+        pass
+    # 4) sequential (httpx / urllib) — always works
     return "sequential"
 
 

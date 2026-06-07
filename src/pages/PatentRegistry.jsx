@@ -15,18 +15,7 @@ const COLUMNS = [
   { key: "classification", label: "CLASS" },
 ];
 
-const SAMPLES = [
-  { id: "US10892374B2", title: "Bifacial photovoltaic module with reflective backsheet", assignee: "Project Solar Group",
-    filing_date: "2019-03-22", status: "ACTIVE", classification: "H02S",
-    abstract: "A bifacial PV module incorporating a microstructured reflective backsheet to recapture rear-incident irradiance." },
-  { id: "US11456701B2", title: "Distributed energy storage arbitrage controller", assignee: "Hilts Group Australia",
-    filing_date: "2020-11-04", status: "ACTIVE", classification: "H02J",
-    abstract: "A controller that schedules charge/discharge of distributed batteries against real-time wholesale price signals." },
-  { id: "US3987387A", title: "Method of separating solid particles from a fluid stream", assignee: "Dow Chemical Co.",
-    filing_date: "1974-06-19", status: "EXPIRED", classification: "B01D",
-    abstract: "A centrifugal separator using a tangential inlet and a fluid-bed collection chamber." },
-];
-
+// Patents are loaded from the Patent entity API.
 const statusColor = (s) => ({ ACTIVE: C.neon, PENDING: C.gold, EXPIRED: C.text }[s] || C.text);
 
 const btn = {
@@ -65,19 +54,6 @@ export default function PatentRegistry() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
-
-  const seed = useCallback(async () => {
-    setBusy(true);
-    setError(null);
-    try {
-      for (const s of SAMPLES) await Patent.create(s);
-      await load();
-    } catch (e) {
-      setError(e);
-    } finally {
-      setBusy(false);
-    }
-  }, [load]);
 
   const addPatent = useCallback(async (e) => {
     e.preventDefault();
@@ -137,7 +113,6 @@ export default function PatentRegistry() {
       actions={
         <>
           <button onClick={() => setShowForm((v) => !v)} style={btn}>{showForm ? "✕ CANCEL" : "+ ADD PATENT"}</button>
-          <button onClick={seed} disabled={busy} style={btn}>{busy ? "◌ WORK" : "+ SEED"}</button>
           <button onClick={load} disabled={loading} style={btn}>{loading ? "◌ SYNC" : "↻ REFRESH"}</button>
         </>
       }
@@ -176,7 +151,7 @@ export default function PatentRegistry() {
       )}
 
       <PanelCard title="REGISTER" accent={ACCENT} right={<Badge color={ACCENT}>{rows.length}</Badge>}>
-        <DataState loading={loading} error={error} empty={empty} emptyLabel="Register is empty — ADD PATENT or SEED.">
+        <DataState loading={loading} error={error} empty={empty} emptyLabel="Register is empty.">
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 10 }}>
               <thead>

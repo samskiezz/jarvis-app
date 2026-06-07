@@ -69,8 +69,6 @@ export function PageShell({ title, subtitle, accent = C.neon, actions, children 
               {subtitle && <div style={{ fontSize: 9, color: C.text, letterSpacing: 1, marginTop: 5 }}>{subtitle}</div>}
             </div>
           </div>
-          {/* Per-page launcher: every PageShell page gets a context-aware
-              "Ask JARVIS" button for free. Appended so existing `actions` stay. */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             {actions}
             <AskJarvisButton query={title ? `Tell me about the ${title} page.` : ""} />
