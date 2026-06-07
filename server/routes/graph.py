@@ -24,9 +24,11 @@ Wire it in ``server/main.py`` with::
 
 from __future__ import annotations
 
+import time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Header, Query
+from pydantic import BaseModel, Field
 
 from ..auth import optional_bearer
 from ..services import graph as graph_svc
@@ -151,3 +153,70 @@ async def get_communities(
     clusters = graph_svc.communities()
     n_clusters = len(set(clusters.values())) if clusters else 0
     return {"communities": clusters, "n_clusters": n_clusters, "count": len(clusters)}
+
+
+# ── whiteboard graph annotations (additive, backwards-compatible) ──────────────
+_GRAPH_ANNOTATIONS: list[dict] = []
+
+
+class ExpandBody(BaseModel):
+    node_id: str = Field(..., description="Center node to expand")
+    depth: int = Field(default=1, ge=1, le=3, description="Expansion depth")
+
+
+@router.post("/v1/graph/expand")
+async def post_expand(
+    body: ExpandBody,
+    authorization: Optional[str] = Header(default=None),
+    _token: Optional[str] = Depends(optional_bearer),
+):
+    """POST-variant of expand for whiteboard graph interactions."""
+    result = graph_svc.subgraph([body.node_id], depth=body.depth, role=_role(authorization))
+    return {
+        "center": body.node_id,
+        "depth": body.depth,
+        "nodes": result.get("nodes", []),
+        "edges": result.get("edges", []),
+        "n_nodes": len(result.get("nodes", [])),
+        "n_edges": len(result.get("edges", [])),
+    }
+
+
+class AnnotateBody(BaseModel):
+    target_id: str = Field(..., description="Node or edge id to annotate")
+    target_type: str = Field(default="node", description="node | edge")
+    text: str = Field(..., description="Annotation text")
+    actor: Optional[str] = Field(default=None, description="Author label")
+
+
+@router.post("/v1/graph/annotate")
+async def post_annotate(
+    body: AnnotateBody,
+    _token: Optional[str] = Depends(optional_bearer),
+):
+    """Add an annotation to a node or edge."""
+    ann = {
+        "id": f"ann-{len(_GRAPH_ANNOTATIONS)+1:04d}",
+        "target_id": body.target_id,
+        "target_type": body.target_type,
+        "text": body.text,
+        "actor": body.actor,
+        "ts": int(time.time() * 1000),
+    }
+    _GRAPH_ANNOTATIONS.append(ann)
+    return {"ok": True, "annotation": ann}
+
+
+@router.get("/v1/graph/annotations")
+async def get_annotations(
+    target_id: Optional[str] = Query(default=None, description="Filter by target id"),
+    target_type: Optional[str] = Query(default=None, description="Filter by target type"),
+    _token: Optional[str] = Depends(optional_bearer),
+):
+    """List graph annotations, optionally filtered."""
+    out = list(_GRAPH_ANNOTATIONS)
+    if target_id:
+        out = [a for a in out if a.get("target_id") == target_id]
+    if target_type:
+        out = [a for a in out if a.get("target_type") == target_type]
+    return {"count": len(out), "annotations": out}

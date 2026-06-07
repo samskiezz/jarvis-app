@@ -11,6 +11,7 @@ import { MARKETS_FALLBACK } from "@/domain/markets";
 import { appParams } from "@/lib/app-params";
 import { PANELS as PANEL_REGISTRY, buildDefaultPanelState } from "@/panels/registry";
 import { agentChat } from "@/lib/jarvisApi";
+import IronManChat from "@/components/IronManChat/IronManChat";
 
 const API = `${appParams.apiBaseUrl}/functions/getLiveIntel`;
 
@@ -1280,12 +1281,12 @@ export default function JarvisTerminal() {
           </DraggablePanel>
         )}
 
-        {/* AI ANALYST */}
+        {/* IRON MAN CHAT — JARVIS 1:1 Replica */}
         {panels.ANALYST?.visible && (
-          <DraggablePanel id="ANALYST" title="◎ AI ANALYST" state={panels.ANALYST} onMove={movePanel} onResize={resizePanel}
+          <DraggablePanel id="ANALYST" title="◉ J.A.R.V.I.S." state={panels.ANALYST} onMove={movePanel} onResize={resizePanel}
             onClose={()=>closePanel("ANALYST")} onMinimize={()=>minimizePanel("ANALYST")} zIndex={panels.ANALYST.z}
             onClick={()=>bringToFront("ANALYST")} minimized={panels.ANALYST.minimized}>
-            <AnalystPanel/>
+            <IronManChat embedded />
           </DraggablePanel>
         )}
 

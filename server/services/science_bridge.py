@@ -19,18 +19,35 @@ import inspect
 
 # Best-effort import of the underworld science registry. If the underworld deps
 # are missing in this process, the bridge degrades gracefully.
+# LAZY: we only import on first use so the FastAPI app boots instantly even when
+# scipy/underworld take 30-60s to load (they are heavy C-extension imports).
 _IMPORT_ERROR: str | None = None
-try:  # pragma: no cover - exercised both ways across environments
-    from underworld.server.services.methods_registry import (
-        ROUTES as _ROUTES,
-        lookup as _lookup,
-        run as _run,
-    )
-except Exception as exc:  # noqa: BLE001 - any failure must degrade, not raise
-    _ROUTES = None
-    _lookup = None
-    _run = None
-    _IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
+_ROUTES = None
+_lookup = None
+_run = None
+_import_attempted = False
+
+
+def _ensure_import() -> None:
+    """Idempotent lazy import of the underworld registry."""
+    global _ROUTES, _lookup, _run, _IMPORT_ERROR, _import_attempted
+    if _import_attempted:
+        return
+    _import_attempted = True
+    try:  # pragma: no cover - exercised both ways across environments
+        from underworld.server.services.methods_registry import (
+            ROUTES as _ROUTES_IMPORTED,
+            lookup as _lookup_IMPORTED,
+            run as _run_IMPORTED,
+        )
+        _ROUTES = _ROUTES_IMPORTED
+        _lookup = _lookup_IMPORTED
+        _run = _run_IMPORTED
+    except Exception as exc:  # noqa: BLE001 - any failure must degrade, not raise
+        _ROUTES = None
+        _lookup = None
+        _run = None
+        _IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
 
 
 _UNAVAILABLE = {
@@ -41,6 +58,7 @@ _UNAVAILABLE = {
 
 def available() -> bool:
     """True when the underworld registry imported successfully."""
+    _ensure_import()
     return _ROUTES is not None and _run is not None
 
 

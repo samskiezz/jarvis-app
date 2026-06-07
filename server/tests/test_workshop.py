@@ -164,3 +164,149 @@ def test_series_stats_route_uses_lake():
         # unknown series in the lake -> graceful zeroed shape
         assert body["series_id"] == "does-not-exist"
         assert body["n"] == 0
+
+
+# ── Workshop App Builder CRUD ────────────────────────────────────────────────
+import pytest  # noqa: E402
+
+AUTH_HEADERS = {"Authorization": "Bearer test-key"}
+
+
+@pytest.fixture
+def fresh_wm_db(tmp_path, monkeypatch):
+    """Isolate workshop_models to a temp DB for each test."""
+    db_path = str(tmp_path / "workshop.db")
+    monkeypatch.setenv("WORKSHOP_DB", db_path)
+    monkeypatch.setattr("server.data.workshop_models._db_path", lambda: db_path)
+    from server.data import workshop_models
+
+    workshop_models.init_db(db_path)
+    return db_path
+
+
+def test_create_app_direct(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    app = wm.create_app("Test App", owner_id="user-1", layout={"widgets": []})
+    assert "error" not in app
+    assert app["name"] == "Test App"
+    assert app["owner_id"] == "user-1"
+    assert app["layout"] == {"widgets": []}
+    assert app["is_published"] is False
+    assert "id" in app
+
+
+def test_get_app_direct(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("Get Me", owner_id="u1")
+    fetched = wm.get_app(created["id"])
+    assert fetched is not None
+    assert fetched["name"] == "Get Me"
+
+
+def test_update_app_direct(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("Old Name", owner_id="u1", layout={"v": 1})
+    updated = wm.update_app(created["id"], name="New Name", layout={"v": 2})
+    assert updated is not None
+    assert updated["name"] == "New Name"
+    assert updated["layout"] == {"v": 2}
+
+
+def test_delete_app_direct(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("Delete Me", owner_id="u1")
+    ok = wm.delete_app(created["id"])
+    assert ok is True
+    assert wm.get_app(created["id"]) is None
+
+
+def test_publish_app_direct(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("Publish Me", owner_id="u1")
+    published = wm.publish_app(created["id"])
+    assert published is not None
+    assert published["is_published"] is True
+
+
+def test_list_apps_filters_by_owner(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    wm.create_app("A1", owner_id="u1")
+    wm.create_app("A2", owner_id="u2")
+    wm.create_app("A3", owner_id="u1")
+    apps = wm.list_apps(owner_id="u1", include_published=False)
+    assert len(apps) == 2
+    assert all(a["owner_id"] == "u1" for a in apps)
+
+
+def test_create_app_route(fresh_wm_db):
+    res = client.post(
+        "/v1/workshop/apps",
+        json={"name": "Route App", "owner_id": "u1"},
+        headers=AUTH_HEADERS,
+    )
+    assert res.status_code == 200
+    body = res.json()
+    assert body["name"] == "Route App"
+
+
+def test_list_apps_route(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    wm.create_app("RouteList", owner_id="u1")
+    res = client.get("/v1/workshop/apps?owner_id=u1", headers=AUTH_HEADERS)
+    assert res.status_code == 200
+    body = res.json()
+    assert len(body["apps"]) >= 1
+
+
+def test_get_app_route(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("RouteGet", owner_id="u1")
+    res = client.get(f"/v1/workshop/apps/{created['id']}", headers=AUTH_HEADERS)
+    assert res.status_code == 200
+    assert res.json()["name"] == "RouteGet"
+
+
+def test_update_app_route(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("RouteOld", owner_id="u1")
+    res = client.put(
+        f"/v1/workshop/apps/{created['id']}",
+        json={"name": "RouteNew"},
+        headers=AUTH_HEADERS,
+    )
+    assert res.status_code == 200
+    assert res.json()["name"] == "RouteNew"
+
+
+def test_delete_app_route(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("RouteDel", owner_id="u1")
+    res = client.delete(f"/v1/workshop/apps/{created['id']}", headers=AUTH_HEADERS)
+    assert res.status_code == 200
+    assert res.json()["deleted"] is True
+
+
+def test_publish_app_route(fresh_wm_db):
+    from server.data import workshop_models as wm
+
+    created = wm.create_app("RoutePub", owner_id="u1")
+    res = client.post(
+        f"/v1/workshop/apps/{created['id']}/publish", headers=AUTH_HEADERS
+    )
+    assert res.status_code == 200
+    assert res.json()["is_published"] is True
+
+
+def test_get_app_404(fresh_wm_db):
+    res = client.get("/v1/workshop/apps/does-not-exist", headers=AUTH_HEADERS)
+    assert res.status_code == 404

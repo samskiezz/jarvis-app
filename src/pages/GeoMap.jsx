@@ -20,6 +20,7 @@ import { getLiveIntel } from "@/api/backendFunctions";
 import { apiGet, qs, asList, labelOf } from "@/lib/wave1";
 import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
 import { Btn } from "@/components/Wave1Kit";
+import LiveDataPanel from "@/components/LiveDataPanel";
 
 const ACCENT = C.blue;
 
@@ -288,6 +289,7 @@ export default function GeoMap() {
           </PanelCard>
         )}
       </div>
+      <LiveDataPanel pageName="GeoMap" limit={40} refreshMs={30000} />
     </PageShell>
   );
 }

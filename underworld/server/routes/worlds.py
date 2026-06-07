@@ -924,6 +924,84 @@ async def get_scene_state(
                                 epoch=epoch)
 
 
+# ── World layout (φ/Fibonacci/fractal, sim-driven, chunk-streamed) ─────────────────
+_LAYOUT_CATALOG: dict | None = None
+
+
+def _layout_catalog() -> dict | None:
+    """Load + cache the GLB asset catalog so layout slots get real GLBs. None if absent."""
+    global _LAYOUT_CATALOG
+    if _LAYOUT_CATALOG is None:
+        import json
+        import os
+        for p in ("web/public/models/asset_catalog.json",
+                  os.path.join(os.path.dirname(__file__), "..", "..",
+                               "web", "public", "models", "asset_catalog.json")):
+            try:
+                with open(p, encoding="utf-8") as f:
+                    _LAYOUT_CATALOG = json.load(f)
+                    break
+            except OSError:
+                continue
+        if _LAYOUT_CATALOG is None:
+            _LAYOUT_CATALOG = {}
+    return _LAYOUT_CATALOG or None
+
+
+async def _layout_profile(session, world_id: str, world) -> dict:
+    """Cheap demand profile from the live sim: population + per-guild headcount + era —
+    via aggregate COUNT (no loading every minion, so it scales to millions)."""
+    rows = (await session.execute(
+        select(Minion.guild, func.count())
+        .where(Minion.world_id == world_id, Minion.alive.is_(True))
+        .group_by(Minion.guild)
+    )).all()
+    guilds = {str(getattr(g, "value", g) or "computing"): int(c) for g, c in rows}
+    pop = sum(guilds.values())
+    tick = int(getattr(world, "tick", 0) or 0)
+    return {"population": pop, "guilds": guilds or {"computing": max(1, pop)},
+            "era": str(getattr(world, "era", None) or "stone"),
+            "research_level": max(1, tick // 50 + len(guilds))}
+
+
+@router.get("/{world_id}/world-map")
+async def get_world_map(
+    world_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Macro overview: the continent of CITIES (cheap, always-loadable) — the minimap +
+    distant impostors. Each city's full φ/fractal structure is streamed per chunk."""
+    world = await _world_or_404(session, world_id)
+    from ..services import world_layout as wl
+    from ..world.seed import derive_seed
+    profile = await _layout_profile(session, world_id, world)
+    return wl.world_map(profile, seed=derive_seed(world.seed_class))
+
+
+@router.get("/{world_id}/chunk")
+async def get_world_chunk(
+    world_id: str,
+    cx: int = 0,
+    cz: int = 0,
+    chunk_size: float = 512.0,
+    lod: int = 0,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Stream ONE spatial chunk: the full φ/Fibonacci/fractal structure (real GLBs) of
+    every city overlapping the chunk at lod 0, or impostor nodes at lod≥1. The renderer
+    requests chunks around the camera; the rest of the millions-strong world stays
+    un-materialised. Deterministic — chunks are cacheable."""
+    world = await _world_or_404(session, world_id)
+    from ..services import world_layout as wl
+    from ..world.seed import derive_seed
+    profile = await _layout_profile(session, world_id, world)
+    return wl.build_chunk(profile, seed=derive_seed(world.seed_class),
+                          cx=cx, cz=cz, chunk_size=chunk_size, lod=lod,
+                          catalog=_layout_catalog())
+
+
 @router.get("/{world_id}/chronicle")
 async def get_chronicle(
     world_id: str,

@@ -22,6 +22,7 @@ rather than a 500.
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from fastapi import APIRouter, Depends
@@ -82,13 +83,36 @@ def _check_science_bridge() -> bool:
 
 
 def _check_gpu_configured() -> bool:
-    """GPU tier configured (PREDICT_GPU_URL set)."""
+    """Legacy GPU tier configured (PREDICT_GPU_URL set)."""
     try:
         from ..services.gpu_client import gpu_configured
 
         return bool(gpu_configured())
     except Exception:  # noqa: BLE001
         return False
+
+
+def _check_gpu_compute() -> dict:
+    """New GPU compute tier status (SGLang or remote Ollama)."""
+    import os
+
+    result = {"configured": False, "status": {"ok": False, "checked_at": 0.0}}
+    try:
+        from ..services import gpu_compute as gc
+
+        if gc.gpu_configured():
+            result["configured"] = True
+            result["status"] = gc.gpu_status()
+            return result
+    except Exception:  # noqa: BLE001
+        pass
+
+    # Also count remote Ollama as GPU tier
+    ollama_host = os.environ.get("OLLAMA_HOST", "").strip()
+    if ollama_host and "localhost" not in ollama_host and "127.0.0.1" not in ollama_host:
+        result["configured"] = True
+        result["status"] = {"ok": True, "reason": "remote_ollama_gpu", "url": ollama_host}
+    return result
 
 
 def health_deep() -> dict:
@@ -103,6 +127,7 @@ def health_deep() -> dict:
         "ontology": _check_ontology(),
         "science_bridge": _check_science_bridge(),
         "gpu_configured": _check_gpu_configured(),
+        "gpu_compute": _check_gpu_compute(),
     }
     core_ok = components["history_lake"] and components["ontology"]
     return {"ok": bool(core_ok), "components": components}
@@ -111,6 +136,91 @@ def health_deep() -> dict:
 @router.get("/v1/health/deep")
 async def get_health_deep(_token: str | None = Depends(optional_bearer)):
     return health_deep()
+
+
+# ── GPU tier endpoints ───────────────────────────────────────────────────────────
+@router.get("/v1/gpu/status")
+async def get_gpu_status(_token: str | None = Depends(optional_bearer)):
+    """Live GPU compute tier status.
+    Checks SGLang (GPU_BASE_URL) first, then remote Ollama (OLLAMA_HOST).
+    Returns health, configured flag, and last-known models."""
+    import os
+
+    from ..services import gpu_compute as gc
+
+    result = {
+        "sglang": {
+            "configured": gc.gpu_configured(),
+            "health": await gc.health_check(),
+            "status": gc.gpu_status(),
+        },
+        "ollama": {"configured": False, "health": {"ok": False}, "models": []},
+    }
+
+    ollama_host = os.environ.get("OLLAMA_HOST", "").strip()
+    if ollama_host and "localhost" not in ollama_host and "127.0.0.1" not in ollama_host:
+        result["ollama"]["configured"] = True
+        try:
+            import urllib.request
+
+            req = urllib.request.Request(
+                ollama_host.rstrip("/") + "/api/tags",
+                headers={"Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=10.0) as r:
+                data = json.loads(r.read().decode("utf-8", errors="ignore"))
+            models = [m.get("name") for m in data.get("models", [])]
+            result["ollama"]["health"] = {"ok": True, "models": models}
+            result["ollama"]["models"] = models
+        except Exception as exc:  # noqa: BLE001
+            result["ollama"]["health"] = {"ok": False, "reason": repr(exc)}
+
+    return result
+
+
+@router.post("/v1/gpu/infer")
+async def post_gpu_infer(request: dict, _token: str = Depends(require_bearer)):
+    """Direct GPU LLM inference. Body: {messages, model?, temperature?, max_tokens?}.
+    Streams token chunks back. Requires bearer token."""
+    from ..services import gpu_compute as gc
+
+    messages = request.get("messages", [])
+    if not messages:
+        return {"status": "error", "reason": "messages required"}
+
+    model = request.get("model", "Qwen/Qwen3-8B")
+    temperature = float(request.get("temperature", 0.7))
+    max_tokens = int(request.get("max_tokens", 2048))
+
+    from fastapi.responses import StreamingResponse
+
+    async def _stream():
+        async for chunk in gc.llm_infer(
+            messages=messages,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        ):
+            yield chunk
+
+    return StreamingResponse(_stream(), media_type="text/plain")
+
+
+@router.post("/v1/gpu/embed")
+async def post_gpu_embed(request: dict, _token: str = Depends(require_bearer)):
+    """Direct GPU embedding. Body: {texts: [...], model?}.
+    Returns list of float vectors. Requires bearer token."""
+    from ..services import gpu_compute as gc
+
+    texts = request.get("texts", [])
+    if not texts:
+        return {"status": "error", "reason": "texts required"}
+
+    model = request.get("model", "")
+    result = await gc.embed(texts, model=model)
+    if result is None:
+        return {"status": "error", "reason": "gpu_embed_failed"}
+    return {"status": "ok", "embeddings": result, "count": len(result)}
 
 
 # ── admin summary ────────────────────────────────────────────────────────────────

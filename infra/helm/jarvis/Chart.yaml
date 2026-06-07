@@ -1,0 +1,7 @@
+apiVersion: v2
+name: jarvis
+version: 0.1.0
+appVersion: "0.1.0"
+description: JARVIS / APEX / World OS — Palantir-class sovereign platform
+maintainers:
+  - name: jarvis-platform-team

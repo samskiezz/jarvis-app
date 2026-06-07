@@ -29,9 +29,11 @@ from .routes import jarvis_scrape as jarvis_scrape_routes
 from .routes import jarvis_assets as jarvis_assets_routes
 from .routes import jarvis_ui as jarvis_ui_routes
 from .routes import jarvis_world as jarvis_world_routes
+from .routes import jarvis_page_data as jarvis_page_data_routes
 from .routes import jarvis_system as jarvis_system_routes
 from .routes import jarvis_documents as jarvis_documents_routes
 from .routes import chat_predict as chat_predict_routes
+from .routes import cop as cop_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
@@ -52,6 +54,7 @@ from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
 from .routes import reports as reports_routes
 from .routes import scenario as scenario_routes
+from .routes import sci_3d as sci_3d_routes
 from .routes import sci_domains as sci_domains_routes
 from .routes import science as science_routes
 from .routes import second_brain as second_brain_routes
@@ -62,8 +65,11 @@ from .routes import security as security_routes
 from .routes import streams as streams_routes
 from .routes import temporal as temporal_routes
 from .routes import vault as vault_routes
+from .routes import voice as voice_routes
 from .routes import tenancy as tenancy_routes
 from .routes import workshop as workshop_routes
+from .routes import revdb as revdb_routes
+from .routes import security_ext as security_ext_routes
 
 
 def _ingest_enabled() -> bool:
@@ -164,10 +170,50 @@ async def _lifespan(app: FastAPI):
             enrich_task = asyncio.create_task(_enrich_loop())
     except Exception:  # noqa: BLE001 - startup must never break on an optional loop
         enrich_task = None
+
+    # Opt-in Forge scheduler (autonomous code-evolution agent). Disabled by default;
+    # enable with FORGE_SCHEDULE_ENABLED=true. Dry-run by default; never touches main.
+    forge_task = None
+    try:
+        from .services.forge_scheduler import start_forge_scheduler
+
+        forge_task = await start_forge_scheduler({})
+    except Exception:  # noqa: BLE001 - startup must never break on an optional loop
+        forge_task = None
+
+    # Opt-in proactive intelligence loop (monitors, reasons, proposes, notifies).
+    # Disabled by default; enable with PROACTIVE_LOOP_ENABLED=true.
+    proactive_task = None
+    try:
+        from .services.proactive_loop import is_enabled, proactive_loop
+
+        if is_enabled():
+            proactive_task = asyncio.create_task(proactive_loop())
+    except Exception:  # noqa: BLE001 - startup must never break on an optional loop
+        proactive_task = None
+
+    # GPU health poller: keeps the compute dispatcher warm and marks GPU tier
+    # healthy/unhealthy. Runs whenever GPU_BASE_URL is set; no-op otherwise.
+    gpu_health_task = None
+    try:
+        from .services import gpu_compute as gc
+
+        if gc._GPU_BASE_URL:
+            async def _gpu_poller():
+                while True:
+                    try:
+                        await gc.health()
+                    except Exception:
+                        pass
+                    await asyncio.sleep(30.0)
+            gpu_health_task = asyncio.create_task(_gpu_poller())
+    except Exception:  # noqa: BLE001
+        gpu_health_task = None
+
     try:
         yield
     finally:
-        for t in (task, ft_task, ab_task, enrich_task):
+        for t in (task, ft_task, ab_task, enrich_task, forge_task, proactive_task, gpu_health_task):
             if t is not None:
                 t.cancel()
                 with contextlib.suppress(asyncio.CancelledError, Exception):
@@ -216,6 +262,7 @@ def create_app() -> FastAPI:
     app.include_router(admin_routes.router)
     app.include_router(temporal_routes.router)
     app.include_router(geo_routes.router)
+    app.include_router(cop_routes.router)
     app.include_router(scenario_routes.router)
     app.include_router(search_semantic_routes.router)
     app.include_router(aip_tools_routes.router)
@@ -228,13 +275,16 @@ def create_app() -> FastAPI:
     app.include_router(gateway_routes.router)
     app.include_router(search_plus_routes.router)
     app.include_router(ontology_ext_routes.router)
+    app.include_router(ontology_ext_routes.router_v2)
     app.include_router(connectors_routes.router)
     app.include_router(sci_domains_routes.router)
+    app.include_router(sci_3d_routes.router)
     app.include_router(graph_time_routes.router)
     app.include_router(investigations_routes.router)
     app.include_router(chat_predict_routes.router)
     app.include_router(governance_routes.router)
     app.include_router(vault_routes.router)
+    app.include_router(voice_routes.router)
     app.include_router(second_brain_routes.router)
     app.include_router(brain_research_routes.router)
     app.include_router(brain_crm_routes.router)
@@ -250,8 +300,11 @@ def create_app() -> FastAPI:
     app.include_router(jarvis_taxonomy_routes.router)
     app.include_router(jarvis_research_routes.router)
     app.include_router(jarvis_world_routes.router)
+    app.include_router(jarvis_page_data_routes.router)
     app.include_router(jarvis_system_routes.router)
     app.include_router(jarvis_documents_routes.router)
+    app.include_router(revdb_routes.router)
+    app.include_router(security_ext_routes.router)
 
     @app.get("/")
     async def root():

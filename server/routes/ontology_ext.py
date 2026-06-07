@@ -23,6 +23,22 @@ from ..services import ontology_ext as ext
 
 router = APIRouter(prefix="/v1/ontology-ext", tags=["ontology-ext"])
 
+# ── V2 additive imports (never modify existing lines above) ──────────────────────
+from fastapi import Query  # noqa: E402
+from pydantic import BaseModel as _BaseModel  # noqa: E402  # re-export shim kept for future
+
+from ..data.ontology_v2_models import (  # noqa: E402
+    ActionApproveIn,
+    ActionSubmitIn,
+    ActionTypeDefinition,
+    BulkActionIn as _BulkActionInV2,
+    ObjectSetIn,
+    SyncTriggerIn,
+)
+from ..services import actions_service as actions  # noqa: E402
+from ..services import funnel as funnel_svc  # noqa: E402
+from ..services import ontology_store as store  # noqa: E402
+
 
 # ── Models ───────────────────────────────────────────────────────────────────────
 class FunctionIn(BaseModel):
@@ -156,3 +172,121 @@ async def post_import(body: ImportIn, _token: str = Depends(require_bearer)):
     if not res.get("ok"):
         raise HTTPException(status_code=400, detail=res.get("error", "import failed"))
     return res
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  Ontology V2 cluster — APPEND ONLY (new router mounted separately in main.py)
+# ═══════════════════════════════════════════════════════════════════════════════
+router_v2 = APIRouter(tags=["ontology-v2"])
+
+
+# ── #V2 Action Types ─────────────────────────────────────────────────────────────
+@router_v2.post("/v1/ontology/actions/types")
+async def define_action_type(body: ActionTypeDefinition, _token: str = Depends(require_bearer)):
+    definition = body.model_dump(exclude_none=True)
+    res = await actions.define_action_type(definition)
+    if not res.get("ok"):
+        raise HTTPException(status_code=400, detail=res.get("error", "define failed"))
+    return res
+
+
+@router_v2.get("/v1/ontology/actions/types")
+async def list_action_types(_token: str | None = Depends(optional_bearer)):
+    items = await actions.list_action_types()
+    return {"items": items, "count": len(items)}
+
+
+# ── #V2 Action Execution ─────────────────────────────────────────────────────────
+@router_v2.post("/v1/ontology/actions/submit")
+async def submit_action(body: ActionSubmitIn, token: str = Depends(require_bearer)):
+    actor = token[:32] if token else "anonymous"
+    res = await actions.submit_action(body.action_type_id, body.params, actor)
+    if not res.get("ok"):
+        raise HTTPException(status_code=400, detail=res.get("error", "submit failed"))
+    return res
+
+
+@router_v2.post("/v1/ontology/actions/approve")
+async def approve_action(body: ActionApproveIn, token: str = Depends(require_bearer)):
+    actor = token[:32] if token else "anonymous"
+    res = await actions.approve_action(body.execution_id, actor)
+    if not res.get("ok"):
+        raise HTTPException(status_code=400, detail=res.get("error", "approve failed"))
+    return res
+
+
+@router_v2.get("/v1/ontology/actions/executions")
+async def list_executions(
+    state: str | None = Query(default=None),
+    action_type_id: str | None = Query(default=None),
+    limit: int = Query(default=100, ge=1, le=1000),
+    _token: str | None = Depends(optional_bearer),
+):
+    items = await actions.list_executions(state=state, action_type_id=action_type_id, limit=limit)
+    return {"items": items, "count": len(items)}
+
+
+# ── #V2 Dataset ↔ Object Sync ────────────────────────────────────────────────────
+@router_v2.post("/v1/ontology/sync")
+async def trigger_sync(body: SyncTriggerIn, _token: str = Depends(require_bearer)):
+    if body.direction == "dataset_to_objects":
+        res = await funnel_svc.sync_dataset_to_objects(
+            body.dataset_id, body.object_type, body.mapping, soft_delete=body.soft_delete
+        )
+    else:
+        res = await funnel_svc.sync_objects_to_dataset(body.object_type, body.dataset_id)
+    if not res.get("ok"):
+        raise HTTPException(status_code=400, detail=res.get("error", "sync failed"))
+    return res
+
+
+@router_v2.get("/v1/ontology/sync/status")
+async def sync_status(dataset_id: str, _token: str | None = Depends(optional_bearer)):
+    return funnel_svc.get_sync_status(dataset_id)
+
+
+# ── #V2 Object Sets (alias under /v1/ontology) ───────────────────────────────────
+@router_v2.post("/v1/ontology/object-sets")
+async def create_object_set(body: ObjectSetIn, _token: str = Depends(require_bearer)):
+    res = ext.create_set(body.name, body.query or {})
+    if not res.get("ok"):
+        raise HTTPException(status_code=400, detail=res.get("error", "could not create set"))
+    return res
+
+
+@router_v2.get("/v1/ontology/object-sets")
+async def list_object_sets(_token: str | None = Depends(optional_bearer)):
+    items = ext.list_sets()
+    return {"items": items, "count": len(items)}
+
+
+# ── #V2 Bulk Action (via actions service) ────────────────────────────────────────
+@router_v2.post("/v1/ontology/bulk-action")
+async def bulk_action_v2(body: _BulkActionInV2, token: str = Depends(require_bearer)):
+    actor = token[:32] if token else "anonymous"
+    target_objects: list[dict] = []
+    if body.object_set_id:
+        resolved = ext.resolve_set(body.object_set_id)
+        if not resolved.get("ok"):
+            raise HTTPException(status_code=404, detail=resolved.get("error", "set not found"))
+        target_objects = resolved.get("items", [])
+    else:
+        ot = body.params.get("object_type")
+        if ot:
+            target_objects = store.query_objects(type=ot, limit=1000)
+
+    if not target_objects:
+        raise HTTPException(status_code=400, detail="no target objects found")
+
+    executions: list[str] = []
+    for obj in target_objects:
+        p = dict(body.params)
+        p.setdefault("target_id", obj.get("id"))
+        res = await actions.submit_action(body.action_type_id, p, actor)
+        if res.get("ok"):
+            if body.auto_approve:
+                await actions.approve_action(res["id"], actor)
+                await actions.apply_action(res["id"])
+            executions.append(res["id"])
+
+    return {"ok": True, "submitted": len(executions), "execution_ids": executions}

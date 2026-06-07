@@ -48,17 +48,21 @@ import numpy as np
 DIM = 4096  # default hashing dimensionality (CPU fallback feature space)
 _HASH_DIM = DIM  # alias: the dimension the offline hashing embedder uses
 
-# ── optional GPU embedding backend (Ollama) ───────────────────────────────────────
-# When ``OLLAMA_EMBED_MODEL`` is set (e.g. ``nomic-embed-text``) we embed on the GPU
-# box via Ollama's ``/api/embed`` — every index/search call then exercises the GPU.
-# It is graceful by contract: any failure falls back to the offline hashing embedder
-# AT THE SAME DIMENSION, so the vector store never ends up with mixed-width rows in a
-# steady state. ``reindex_vectors()`` re-embeds the whole corpus to migrate dimensions
-# when the backend is switched on. With the env unset, behaviour is unchanged (CPU).
+# ── optional GPU embedding backends (SGLang PRIMARY, Ollama fallback) ─────────────
+# When ``GPU_BASE_URL`` is set (e.g. Vast.ai SGLang server) we use that FIRST for
+# embeddings via OpenAI-compatible ``/v1/embeddings``. Falls back to Ollama when
+# ``OLLAMA_EMBED_MODEL`` is set. On ANY failure we fall back to the offline hashing
+# embedder AT THE SAME DIMENSION, so the vector store never ends up with mixed-width
+# rows in a steady state. ``reindex_vectors()`` re-embeds the whole corpus to migrate
+# dimensions when the backend is switched on. With no env, behaviour is unchanged (CPU).
 #
 # Process-cached resolution: once a GPU embedding succeeds we learn the model's native
 # dimension and remember it (reset on module reload, so tests stay deterministic).
 _resolved: dict = {"backend": None, "dim": None}
+
+# SGLang GPU tier (Vast.ai 2x RTX 4090) — PRIMARY
+_GPU_BASE_URL = os.environ.get("GPU_BASE_URL", "").strip().rstrip("/")
+_GPU_AUTH_TOKEN = os.environ.get("GPU_AUTH_TOKEN", "").strip()
 
 
 def _embed_model() -> str:
@@ -70,8 +74,8 @@ def _embed_host() -> str:
 
 
 def _gpu_enabled() -> bool:
-    """True iff the operator opted into GPU embeddings via ``OLLAMA_EMBED_MODEL``."""
-    return bool(_embed_model())
+    """True iff a GPU embedding backend is configured (SGLang or Ollama)."""
+    return bool(_GPU_BASE_URL) or bool(_embed_model())
 
 
 def _current_dim() -> int:
@@ -88,10 +92,47 @@ def embedding_backend() -> str:
     return "hash"
 
 
+def _sglang_embed_raw(text: str, *, timeout: float = 15.0) -> Optional[np.ndarray]:
+    """POST one text to SGLang ``/v1/embeddings`` (OpenAI-compatible) and return an
+    L2-normalized float32 vector, or ``None`` on ANY problem."""
+    if not _GPU_BASE_URL:
+        return None
+    try:
+        body = json.dumps({
+            "model": os.environ.get("GPU_EMBED_MODEL", "Qwen/Qwen3-8B"),
+            "input": text or " ",
+        }).encode()
+        headers = {"Content-Type": "application/json"}
+        if _GPU_AUTH_TOKEN:
+            headers["Authorization"] = f"Bearer {_GPU_AUTH_TOKEN}"
+        req = urllib.request.Request(
+            _GPU_BASE_URL + "/v1/embeddings", data=body, headers=headers
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            out = json.loads(r.read().decode("utf-8", errors="ignore"))
+        # OpenAI format: data[0].embedding
+        data = out.get("data") or []
+        if data and isinstance(data, list) and data[0].get("embedding"):
+            v = np.asarray(data[0]["embedding"], dtype=np.float32).ravel()
+            nrm = float(np.linalg.norm(v))
+            if nrm > 0:
+                v = v / nrm
+            return v.astype(np.float32, copy=False)
+    except Exception:  # noqa: BLE001 - graceful by contract
+        return None
+    return None
+
+
 def _gpu_embed_raw(text: str, *, timeout: float = 15.0) -> Optional[np.ndarray]:
-    """POST one text to Ollama ``/api/embed`` and return an L2-normalized float32
-    vector, or ``None`` on ANY problem (model unset, network, bad payload). Never
+    """POST one text to the active GPU backend (SGLang primary, Ollama fallback).
+    Return an L2-normalized float32 vector, or ``None`` on ANY problem. Never
     raises — the caller falls back to the hashing embedder."""
+    # Try SGLang GPU first
+    if _GPU_BASE_URL:
+        v = _sglang_embed_raw(text, timeout=timeout)
+        if v is not None and v.size > 0:
+            return v
+    # Fall back to Ollama
     model = _embed_model()
     if not model:
         return None
@@ -151,10 +192,48 @@ def _ngrams(tokens: list[str]) -> list[str]:
 
 
 
+def _sglang_embed_batch(texts: list, *, timeout: float = 60.0) -> Optional[list]:
+    """Embed a LIST of texts in ONE SGLang ``/v1/embeddings`` call.
+    Returns a list of L2-normalized float32 vectors aligned to ``texts``."""
+    if not _GPU_BASE_URL or not texts:
+        return None
+    try:
+        body = json.dumps({
+            "model": os.environ.get("GPU_EMBED_MODEL", "Qwen/Qwen3-8B"),
+            "input": list(texts),
+        }).encode()
+        headers = {"Content-Type": "application/json"}
+        if _GPU_AUTH_TOKEN:
+            headers["Authorization"] = f"Bearer {_GPU_AUTH_TOKEN}"
+        req = urllib.request.Request(
+            _GPU_BASE_URL + "/v1/embeddings", data=body, headers=headers
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            out = json.loads(r.read().decode("utf-8", errors="ignore"))
+        data = out.get("data") or []
+        if isinstance(data, list) and len(data) == len(texts):
+            vecs: list = []
+            for item in data:
+                emb = item.get("embedding") if isinstance(item, dict) else item
+                v = np.asarray(emb, dtype=np.float32).ravel()
+                nrm = float(np.linalg.norm(v))
+                vecs.append((v / nrm) if nrm > 0 else v)
+            return vecs
+    except Exception:  # noqa: BLE001 - graceful by contract
+        return None
+    return None
+
+
 def _gpu_embed_batch(texts: list, *, timeout: float = 60.0) -> Optional[list]:
-    """Embed a LIST of texts in ONE Ollama ``/api/embed`` call (the GPU processes the
-    whole batch at once — vastly faster than serial round-trips). Returns a list of
-    L2-normalized float32 vectors aligned to ``texts``, or ``None`` on any problem."""
+    """Embed a LIST of texts via the active GPU backend (SGLang primary, Ollama fallback).
+    The GPU processes the whole batch at once — vastly faster than serial round-trips.
+    Returns a list of L2-normalized float32 vectors aligned to ``texts``."""
+    # Try SGLang GPU first
+    if _GPU_BASE_URL:
+        vecs = _sglang_embed_batch(texts, timeout=timeout)
+        if vecs is not None and len(vecs) == len(texts):
+            return vecs
+    # Fall back to Ollama
     model = _embed_model()
     if not model or not texts:
         return None
@@ -233,12 +312,15 @@ def _hash_embed(text: str, dim: int) -> np.ndarray:
 def embed(text: str) -> np.ndarray:
     """Embed ``text`` into an L2-normalized numpy float32 vector.
 
-    Backend selection (graceful, env-gated):
-      * GPU on   (``OLLAMA_EMBED_MODEL`` set): embed via Ollama ``/api/embed`` on the
-        GPU box; on ANY failure fall back to the hashing embedder AT THE GPU DIM so
-        the store stays single-width. The first successful GPU call learns + caches
-        the model's native dimension.
-      * GPU off  (default): the offline hashing embedder at ``DIM`` (unchanged).
+    Backend selection (graceful, env-gated, ordered by speed):
+      * GPU tier (``GPU_BASE_URL`` set): embed via SGLang ``/v1/embeddings`` on the
+        Vast.ai box (2× RTX 4090); on ANY failure fall back to Ollama, then hash.
+      * Ollama   (``OLLAMA_EMBED_MODEL`` set): embed via Ollama ``/api/embed``.
+      * Hash     (default): offline hashing embedder at ``DIM`` (unchanged).
+
+    On ANY GPU failure we fall back to the hashing embedder AT THE GPU DIM so the
+    store stays single-width. The first successful GPU call learns + caches the
+    model's native dimension.
 
     Deterministic + offline in the default (no-env) configuration."""
     if _gpu_enabled():

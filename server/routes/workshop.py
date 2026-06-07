@@ -7,11 +7,12 @@ so these routes always return a JSON body.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from ..auth import optional_bearer
+from ..auth import optional_bearer, require_bearer
 from ..services import workshop
+from ..data import workshop_models as wm
 
 router = APIRouter()
 
@@ -76,3 +77,84 @@ async def workshop_series_stats(series_id: str,
                                 _token: str | None = Depends(optional_bearer)):
     """Mean / std / min / max + linear trend for a History Lake series."""
     return workshop.series_stats(series_id)
+
+
+# ── Workshop App Builder CRUD ────────────────────────────────────────────────
+class AppCreate(BaseModel):
+    name: str
+    owner_id: str | None = None
+    layout: dict | None = None
+
+
+class AppUpdate(BaseModel):
+    name: str | None = None
+    layout: dict | None = None
+
+
+class AppOut(BaseModel):
+    id: str
+    name: str
+    owner_id: str | None = None
+    layout: dict
+    is_published: bool
+    created_at: int
+    updated_at: int
+
+
+@router.post("/v1/workshop/apps", response_model=AppOut)
+async def create_app(req: AppCreate,
+                     _token: str = Depends(require_bearer)):
+    """Create a new Workshop app."""
+    result = wm.create_app(name=req.name, owner_id=req.owner_id, layout=req.layout)
+    if "error" in result:
+        raise HTTPException(status_code=500, detail=result["error"])
+    return result
+
+
+@router.get("/v1/workshop/apps")
+async def list_apps(owner_id: str | None = None,
+                    include_published: bool = True,
+                    _token: str | None = Depends(optional_bearer)):
+    """List Workshop apps (optionally filtered by owner)."""
+    return {"apps": wm.list_apps(owner_id=owner_id, include_published=include_published)}
+
+
+@router.get("/v1/workshop/apps/{app_id}", response_model=AppOut)
+async def get_app(app_id: str,
+                  _token: str | None = Depends(optional_bearer)):
+    """Get a single Workshop app definition."""
+    result = wm.get_app(app_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="App not found")
+    return result
+
+
+@router.put("/v1/workshop/apps/{app_id}", response_model=AppOut)
+async def update_app(app_id: str,
+                     req: AppUpdate,
+                     _token: str = Depends(require_bearer)):
+    """Save / update a Workshop app layout and metadata."""
+    result = wm.update_app(app_id, name=req.name, layout=req.layout)
+    if result is None:
+        raise HTTPException(status_code=404, detail="App not found")
+    return result
+
+
+@router.delete("/v1/workshop/apps/{app_id}")
+async def delete_app(app_id: str,
+                     _token: str = Depends(require_bearer)):
+    """Delete a Workshop app."""
+    ok = wm.delete_app(app_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="App not found")
+    return {"deleted": True}
+
+
+@router.post("/v1/workshop/apps/{app_id}/publish", response_model=AppOut)
+async def publish_app(app_id: str,
+                      _token: str = Depends(require_bearer)):
+    """Publish a Workshop app so others can view it."""
+    result = wm.publish_app(app_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="App not found")
+    return result

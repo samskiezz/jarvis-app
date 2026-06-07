@@ -1,0 +1,24 @@
+{
+  "started_at": 1780807721.6602178,
+  "phases": {
+    "csv_catalogues": {
+      "status": "ok",
+      "checked": 8
+    },
+    "scrape": {
+      "status": "ok",
+      "fetched": 0,
+      "chars": 0
+    },
+    "ocr": {
+      "status": "ok",
+      "ocr_done": 0,
+      "chars": 0
+    },
+    "embeddings": {
+      "status": "ok",
+      "indexed": 1500
+    }
+  },
+  "elapsed_s": 7.86
+}

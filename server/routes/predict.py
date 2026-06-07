@@ -11,11 +11,28 @@ from __future__ import annotations
 import os
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
 from ..auth import optional_bearer
 from ..services.prediction import predict
+
+try:
+    from ..ml.forecast import forecast_learned, _available_models
+except Exception:  # pragma: no cover
+    forecast_learned = None  # type: ignore
+    _available_models = None  # type: ignore
+
+try:
+    from ..ml.patterns import discover_patterns
+except Exception:  # pragma: no cover
+    discover_patterns = None  # type: ignore
+
+try:
+    from ..services.self_improvement import evaluate_forecast, improvement_status
+except Exception:  # pragma: no cover
+    evaluate_forecast = None  # type: ignore
+    improvement_status = None  # type: ignore
 
 try:  # P0 self-improvement: log every forecast so it can be scored vs reality later.
     from ..services import history_lake as _hl
@@ -112,3 +129,67 @@ async def predict_route(
     result = predict(req.question, req.params)
     _log_forecast(result)
     return result
+
+
+# ── Pattern Oracle Self-Improvement routes (APPEND ONLY) ──────────────────────
+
+class LearnedForecastRequest(BaseModel):
+    series: list[float]
+    horizon: int
+    model: str = "auto"
+
+
+class PatternRequest(BaseModel):
+    series: list[float]
+    window: int = 7
+
+
+class EvaluateRequest(BaseModel):
+    forecast_id: str
+    actuals: list[float]
+
+
+@router.post("/v1/predict/learned")
+async def learned_forecast_route(
+    req: LearnedForecastRequest, _token: str | None = Depends(optional_bearer)
+):
+    """Learned-model forecast endpoint.  Preserves existing ``/functions/predict``
+    behaviour; this adds model-driven forecasting with calibrated intervals."""
+    if forecast_learned is None:
+        return {"error": "forecast module unavailable"}
+    return await forecast_learned(req.series, req.horizon, req.model)
+
+
+@router.get("/v1/predict/patterns")
+async def patterns_route(
+    series: list[float] = Query(...), window: int = 7, _token: str | None = Depends(optional_bearer)
+):
+    """Discover motifs, discords, regimes, and anomalies in a time-series."""
+    if discover_patterns is None:
+        return {"error": "pattern module unavailable"}
+    return await discover_patterns(series, window)
+
+
+@router.get("/v1/predict/models")
+async def models_route(_token: str | None = Depends(optional_bearer)):
+    """List available learned forecast models and their current scores."""
+    models = _available_models() if _available_models is not None else []
+    return {"models": models}
+
+
+@router.post("/v1/predict/evaluate")
+async def evaluate_route(
+    req: EvaluateRequest, _token: str | None = Depends(optional_bearer)
+):
+    """Submit actual realised values to evaluate a past forecast."""
+    if evaluate_forecast is None:
+        return {"error": "self-improvement module unavailable"}
+    return await evaluate_forecast(req.forecast_id, req.actuals)
+
+
+@router.get("/v1/predict/improvement")
+async def improvement_route(_token: str | None = Depends(optional_bearer)):
+    """Self-improvement loop status: model scores, pending retrains, recent evals."""
+    if improvement_status is None:
+        return {"error": "self-improvement module unavailable"}
+    return await improvement_status()

@@ -28,6 +28,16 @@ PREDICT_GPU_URL = os.environ.get("PREDICT_GPU_URL", "")
 PREDICT_GPU_KEY = os.environ.get("PREDICT_GPU_KEY", "")
 PREDICT_GPU_MODEL = os.environ.get("PREDICT_GPU_MODEL", "")
 
+# ── GPU compute tier (Vast.ai 2× RTX 4090 — PRIMARY inference) ─────────────────
+# When GPU_BASE_URL is set, the LLM router, embeddings, and batch inference use
+# the remote GPU box FIRST, falling back to cloud APIs / Ollama on failure.
+# GPU_AUTH_TOKEN is the Caddy / Jupyter auth token (Bearer or Query param).
+# GPU_EMBED_MODEL is the model for embeddings on the GPU (SGLang uses the loaded model).
+GPU_BASE_URL = os.environ.get("GPU_BASE_URL", "")
+GPU_AUTH_TOKEN = os.environ.get("GPU_AUTH_TOKEN", "")
+GPU_EMBED_MODEL = os.environ.get("GPU_EMBED_MODEL", "")
+
+
 USGS_FEED = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 # open.er-api.com: free, no API key, daily FX rates with AUD/USD/AED/etc.
 FX_FEED = "https://open.er-api.com/v6/latest/AUD"

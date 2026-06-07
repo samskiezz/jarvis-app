@@ -126,6 +126,9 @@ export const PAGES = [
   { name: "ScienceConsole", label: "Science Console", icon: "🔬", group: "cognition",
     aliases: ["science", "methods", "compute"],
     component: P(() => import("@/pages/ScienceConsole")) },
+  { name: "HoloCADPage", label: "HoloCAD", icon: "🔬", group: "cognition",
+    aliases: ["3d", "holo", "cad", "molecule", "trajectory", "orbital"],
+    component: P(() => import("@/pages/HoloCAD")) },
 
   // ── SENSORS (curated slices of the bridged 449-method science engine) ────
   { name: "SensorGrid", label: "Sensor Grid", icon: "🛰️", group: "sensors",
@@ -269,12 +272,18 @@ export const PAGES = [
   { name: "GraphTimeline", label: "Graph Timeline", icon: "⏳", group: "gotham",
     aliases: ["graph timeline","playback","scrubber","graph over time","temporal graph","animate"],
     component: P(() => import("@/pages/GraphTimeline")) },
+  { name: "CopDashboard", label: "COP Dashboard", icon: "🎯", group: "gotham",
+    aliases: ["cop","common operating picture","fusion","geospatial","snapshot","cross highlight"],
+    component: P(() => import("@/pages/CopDashboard")) },
   { name: "AIPLogic", label: "AIP Logic", icon: "🧩", group: "platform",
     aliases: ["aip logic","agent studio","plan builder","logic","pipeline","tools","governed"],
     component: P(() => import("@/pages/AIPLogic")) },
   { name: "Quiver", label: "Quiver", icon: "📈", group: "platform",
     aliases: ["quiver","dashboard","charts","analytics","widgets","recharts","workshop"],
     component: P(() => import("@/pages/Quiver")) },
+  { name: "WorkshopBuilder", label: "Workshop Builder", icon: "🛠", group: "foundry",
+    aliases: ["workshop builder","app builder","no-code","low-code","palantir","widgets","canvas"],
+    component: P(() => import("@/pages/WorkshopBuilder/WorkshopBuilder")) },
 
   // ── WEALTH & SYSTEM ──────────────────────────────────────────────────────
   { name: "InvestmentTracker", label: "Investment Tracker", icon: "💰", group: "wealth",

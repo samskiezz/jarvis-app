@@ -5,8 +5,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from ..auth import optional_bearer, require_bearer
-from ..config import KIMI_API_KEY
-from ..llm.kimi import stream_chat
+from ..services.llm_router import stream_chat as router_stream_chat
 from ..services.analyst import answer as local_answer
 from ..services.live_intel import get_live_intel
 
@@ -36,7 +35,9 @@ async def _local_chat(message: str):
 async def _sse_chat(message: str):
     import json
 
-    source = stream_chat(message) if KIMI_API_KEY else _local_chat(message)
+    # Use the unified LLM router (GPU Ollama primary -> cloud APIs -> local fallback)
+    # so the chat always has a backend even when KIMI_API_KEY is unset.
+    source = router_stream_chat(message, system_prompt="")
     async for chunk in source:
         # JSON-encode so embedded newlines / quotes don't break SSE framing.
         yield f"data: {json.dumps(chunk)}\n\n"

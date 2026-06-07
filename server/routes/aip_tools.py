@@ -34,6 +34,10 @@ from pydantic import BaseModel
 
 from ..auth import optional_bearer, require_bearer
 from ..services import aip_tools
+from ..services import aip_logic as _aip_logic
+from ..services import agent_studio as _agent_studio
+from ..services import aip_evals as _aip_evals
+from ..services import llm_router as _llm_router
 
 router = APIRouter(prefix="/v1/aip", tags=["aip-tools"])
 
@@ -106,3 +110,91 @@ async def plan_run_route(req: PlanRequest, token: str = Depends(require_bearer))
     (unless the actor carries the ``auto_approve`` capability)."""
     actor = req.actor if req.actor is not None else token
     return aip_tools.run_plan(req.steps, actor)
+
+
+# ── AIP V2 — LLM Router + Workflow + Agent Studio + Evals ──────────────────────
+class WorkflowCreateRequest(BaseModel):
+    name: str = ""
+    workflow_type: str = "research"
+    steps: list[dict[str, Any]]
+    inputs: Optional[dict[str, Any]] = None
+    execute: bool = False
+
+
+class WorkflowExecuteRequest(BaseModel):
+    workflow_id: str
+    inputs: Optional[dict[str, Any]] = None
+
+
+class AgentStudioRequest(BaseModel):
+    task: str
+    agents: list[str]
+    max_steps: int = 8
+
+
+class EvalRequest(BaseModel):
+    suite_id: Optional[str] = "default"
+    name: str = ""
+    prompt: str = ""
+    system: str = ""
+    expect: Optional[dict[str, Any]] = None
+    model: str = "kimi"
+
+
+@router.post("/workflow")
+async def workflow_route(req: WorkflowCreateRequest, token: str = Depends(require_bearer)):
+    """Create a workflow definition; optionally execute it immediately."""
+    wf = _aip_logic.AIPWorkflow(name=req.name, workflow_type=req.workflow_type, steps=req.steps)
+    created = _aip_logic.create_workflow(wf, actor=token)
+    if not created.get("ok"):
+        return created
+    if req.execute:
+        executed = await _aip_logic.execute_workflow(
+            created["workflow_id"], inputs=req.inputs or {}, actor=token
+        )
+        return {"created": created, "executed": executed}
+    return {"created": created}
+
+
+@router.post("/agent-studio")
+async def agent_studio_route(req: AgentStudioRequest, token: str = Depends(require_bearer)):
+    """Run a multi-agent task via the conductor + specialist pattern."""
+    return await _agent_studio.run_multi_agent(
+        req.task, req.agents, max_steps=req.max_steps, actor=token
+    )
+
+
+@router.post("/eval")
+async def eval_route(req: EvalRequest, token: str = Depends(require_bearer)):
+    """Run a single eval test case. Persists the test case if it has no id."""
+    case = {
+        "suite_id": req.suite_id or "default",
+        "name": req.name,
+        "prompt": req.prompt,
+        "system": req.system,
+        "expect": req.expect or {},
+    }
+    # persist so benchmarks can reuse it
+    persisted = _aip_evals.create_test_case(case, actor=token)
+    if persisted.get("ok"):
+        case["id"] = persisted["eval_id"]
+    result = await _aip_evals.run_eval(case, req.model)
+    return {"persisted": persisted, "result": result}
+
+
+@router.get("/eval/benchmark")
+async def eval_benchmark_route(
+    suite_id: str = Query("default"),
+    models: str = Query("kimi,openai,anthropic,ollama"),
+    token: str = Depends(require_bearer),
+):
+    """Run a benchmark suite across models."""
+    model_list = [m.strip() for m in models.split(",") if m.strip()]
+    return await _aip_evals.benchmark(model_list, suite_id)
+
+
+@router.get("/providers")
+async def providers_route(_token: str | None = Depends(optional_bearer)):
+    """List available LLM providers + health status."""
+    providers = _llm_router.list_providers()
+    return {"providers": providers}

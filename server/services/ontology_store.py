@@ -32,6 +32,8 @@ import time
 import uuid
 from typing import Any, Optional
 
+from . import revdb
+
 # ── DB location ────────────────────────────────────────────────────────────────
 _DEFAULT_DB = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "ontology.db"
@@ -415,6 +417,27 @@ def upsert_object(
                     (otype, label, mark, _dumps(merged), now, oid),
                 )
             conn.commit()
+            # RevDB: record ontology mutation
+            try:
+                op = "create" if existing is None else "update"
+                old_obj = _row_to_object(existing) if existing else None
+                new_obj = get_object(oid, db_path=db_path)
+                revdb._commit_sync(
+                    actor="system",
+                    message=f"ontology {op} {oid}",
+                    changes=[
+                        {
+                            "object_type": otype,
+                            "object_id": oid,
+                            "operation": op,
+                            "old_value": old_obj,
+                            "new_value": new_obj,
+                        }
+                    ],
+                    db_path=db_path,
+                )
+            except Exception:  # noqa: BLE001
+                pass
             return get_object(oid, db_path=db_path)
         finally:
             conn.close()
@@ -491,6 +514,26 @@ def delete_object(object_id: str, *, db_path: Optional[str] = None) -> bool:
     try:
         conn = _connect(db_path)
         try:
+            # RevDB: record ontology mutation before deleting
+            try:
+                obj = get_object(object_id, db_path=db_path)
+                if obj:
+                    revdb._commit_sync(
+                        actor="system",
+                        message=f"ontology delete {object_id}",
+                        changes=[
+                            {
+                                "object_type": obj.get("type"),
+                                "object_id": object_id,
+                                "operation": "delete",
+                                "old_value": obj,
+                                "new_value": None,
+                            }
+                        ],
+                        db_path=db_path,
+                    )
+            except Exception:  # noqa: BLE001
+                pass
             cur = conn.execute("DELETE FROM object WHERE id=?", (object_id,))
             conn.execute("DELETE FROM link WHERE a=? OR b=?", (object_id, object_id))
             conn.execute("DELETE FROM object_action WHERE object_id=?", (object_id,))
@@ -702,6 +745,25 @@ def apply_action(
 
             aid = _record_action(conn, object_id, action, payload, actor)
             conn.commit()
+            # RevDB: record ontology mutation
+            try:
+                new_obj = get_object(object_id, db_path=db_path)
+                revdb._commit_sync(
+                    actor=actor or "system",
+                    message=f"ontology action {action} on {object_id}",
+                    changes=[
+                        {
+                            "object_type": obj.get("type") if obj else "unknown",
+                            "object_id": object_id,
+                            "operation": "action",
+                            "old_value": obj,
+                            "new_value": new_obj,
+                        }
+                    ],
+                    db_path=db_path,
+                )
+            except Exception:  # noqa: BLE001
+                pass
             return {
                 "ok": True,
                 "action": action,

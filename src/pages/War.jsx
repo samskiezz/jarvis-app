@@ -17,6 +17,7 @@ import { SwarmJob, RiskSignal } from "@/api/entities";
 import { appParams } from "@/lib/app-params";
 import { PageShell, PanelCard, StatTile, Grid, Badge, DataState } from "@/components/PageKit";
 import LiveTactical3D from "@/components/LiveTactical3D";
+import LiveDataPanel from "@/components/LiveDataPanel";
 
 const ACCENT = C.red;
 
@@ -580,6 +581,7 @@ export default function War() {
           </PanelCard>
         )}
       </div>
+      <LiveDataPanel pageName="War" limit={40} refreshMs={30000} />
     </PageShell>
   );
 }

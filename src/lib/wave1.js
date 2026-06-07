@@ -20,6 +20,17 @@ export const apiPost = (path, body) =>
     body: JSON.stringify(body ?? {}),
   });
 
+export const apiPut = (path, body) =>
+  kimiClient.request(path, {
+    method: "PUT",
+    body: JSON.stringify(body ?? {}),
+  });
+
+export const apiDelete = (path) =>
+  kimiClient.request(path, {
+    method: "DELETE",
+  });
+
 // Raw GET that returns the response body as text (kimiClient always JSON-parses,
 // which breaks markdown/plain-text exports). Used for report exports where the
 // backend may hand back markdown rather than JSON.
