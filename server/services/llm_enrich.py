@@ -241,7 +241,11 @@ def _enrich_one(d: dict, bk: Optional[str], max_chars: int, inject: bool,
         res["passes"] = passes
         res["notes"] = notes
         res["enriched"] = notes > 0
-        _mark(did)
+        # Only mark the doc done when we actually PERSISTED at least one note. If every
+        # pass returned nothing (transient LLM/GPU contention), leave it pending so the
+        # next cycle retries it instead of silently losing the document.
+        if notes > 0:
+            _mark(did)
     except Exception:  # noqa: BLE001 - one doc must never abort the batch
         try:
             _mark(str(d.get("id")))

@@ -40,8 +40,12 @@ _OLLAMA = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
 
 
 def _ollama_model() -> str:
-    """The Ollama model to use: env override, else the first installed model
-    (zero-config), else a sensible default."""
+    """The Ollama CHAT model to use: env override, else the first installed
+    generative model (zero-config), else a sensible default.
+
+    Critically, this NEVER auto-selects an embedding model (e.g. nomic-embed-text):
+    those cannot do chat/generate and would make every llm_complete return nothing.
+    Embedding models are filtered out of the auto-pick."""
     env = os.environ.get("OLLAMA_MODEL")
     if env:
         return env
@@ -49,8 +53,14 @@ def _ollama_model() -> str:
         import json as _j
         with urllib.request.urlopen(_OLLAMA + "/api/tags", timeout=3) as r:
             tags = _j.loads(r.read().decode()).get("models", [])
-        if tags:
-            return tags[0].get("name") or tags[0].get("model") or "llama3.2:1b"
+        names = [t.get("name") or t.get("model") for t in tags
+                 if (t.get("name") or t.get("model"))]
+        # never auto-pick an embedding model — it can't chat.
+        chat = [n for n in names if "embed" not in n.lower()]
+        if chat:
+            return chat[0]
+        if names:
+            return names[0]
     except Exception:  # noqa: BLE001
         pass
     return "llama3.2:1b"
