@@ -321,13 +321,57 @@ def scrapling_batch(limit: int = 0, *, workers: int = 16, timeout: int = 20) -> 
     return scrapling_fetch_targets(targets, workers=workers, timeout=timeout)
 
 
+def _httpx_fetch_targets(targets: list, *, workers: int = 16, timeout: int = 20) -> dict:
+    """Dependency-light concurrent fetch + store via httpx (``nr.polite_get``) — the
+    fallback used when Scrapling/playwright isn't installed. Same contract/return shape
+    as ``scrapling_fetch_targets``. Stores REAL Documents via ``store_document``."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    targets = [t for t in (targets or []) if t and t[0]]
+    if not targets:
+        return {"ok": True, "engine": "httpx", "attempted": 0, "fetched": 0,
+                "failed": 0, "total_chars": 0, "samples": []}
+
+    def _fetch(t):
+        url, sn, sid = t
+        try:
+            r = nr.polite_get(url, ttl=86400.0)
+            if not r.get("ok") or not r.get("body"):
+                return ("fail", None, 0)
+            body = r.get("body") or ""
+            title, text = (wdoc.extract_text(body) if wdoc is not None else ("", body))
+            oid = store_document(url, sn, sid, status=r.get("status"), body=body,
+                                 title=title, text=text)
+            if not oid:
+                return ("fail", None, 0)
+            return ("ok", {"title": (title or "")[:70], "host": _host(url),
+                           "chars": len(text), "status": r.get("status")}, len(text))
+        except Exception:  # noqa: BLE001
+            return ("fail", None, 0)
+
+    fetched = failed = chars = 0
+    samples: list[dict] = []
+    with ThreadPoolExecutor(max_workers=max(2, workers)) as ex:
+        for status, sample, n in ex.map(_fetch, targets):
+            if status == "ok":
+                fetched += 1
+                chars += n
+                if len(samples) < 12 and sample:
+                    samples.append(sample)
+            else:
+                failed += 1
+    return {"ok": True, "engine": "httpx", "attempted": len(targets), "fetched": fetched,
+            "failed": failed, "total_chars": chars, "samples": samples}
+
+
 def scrapling_fetch_targets(targets: list, *, workers: int = 16, timeout: int = 20) -> dict:
-    """Concurrently fetch + store a list of (url, source_name, subject_id) via
-    Scrapling. The shared engine behind scrapling_batch AND the document finder."""
+    """Concurrently fetch + store a list of (url, source_name, subject_id). Uses
+    Scrapling (browser-TLS impersonation) when installed; otherwise falls back to the
+    dependency-light httpx fetcher so the document finder works out of the box."""
     try:
         from scrapling.fetchers import Fetcher
-    except Exception as e:  # noqa: BLE001
-        return {"ok": False, "error": f"scrapling unavailable: {e}"}
+    except Exception:  # noqa: BLE001 - scrapling/playwright not installed
+        return _httpx_fetch_targets(targets, workers=workers, timeout=timeout)
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
     targets = [t for t in (targets or []) if t and t[0]]

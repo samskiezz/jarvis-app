@@ -121,20 +121,78 @@ def _run_tool(argv: list, timeout: int = 120) -> dict:
         return {"ok": False, "error": str(e)}
 
 
+def _httpx_discover(seed_url: str, *, depth: int = 2, max_urls: int = 200,
+                    crawl_time: int = 25) -> dict:
+    """Dependency-light same-host link discovery (no katana/playwright): BFS-crawl the
+    seed with ``httpx`` and extract same-host links from the HTML. Bounded by depth,
+    ``max_urls``, a page cap and ``crawl_time`` wall-clock. Never raises."""
+    import re
+    import time as _t
+    import urllib.parse
+
+    try:
+        import httpx
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": f"httpx unavailable: {e}", "urls": []}
+
+    seed_host = urllib.parse.urlparse(seed_url).netloc.lower()
+    if not seed_host:
+        return {"ok": False, "error": "bad seed", "urls": []}
+    found: dict = {}            # url -> True (insertion-ordered, deduped)
+    queue = [(seed_url, 0)]
+    seen_pages: set = {seed_url}
+    deadline = _t.monotonic() + max(5, int(crawl_time))
+    headers = {"User-Agent": "Mozilla/5.0 (compatible; JarvisBot/1.0; +open-data crawl)"}
+    pages = 0
+    with httpx.Client(follow_redirects=True, timeout=httpx.Timeout(12.0, connect=8.0),
+                      headers=headers) as client:
+        while queue and len(found) < max_urls and _t.monotonic() < deadline and pages < 40:
+            url, d = queue.pop(0)
+            pages += 1
+            try:
+                r = client.get(url)
+                if r.status_code >= 400 or "html" not in r.headers.get("content-type", "html"):
+                    continue
+                html = r.text
+            except Exception:  # noqa: BLE001
+                continue
+            for m in re.findall(r'href=["\']([^"\'#]+)', html):
+                try:
+                    a = urllib.parse.urljoin(url, m)
+                except Exception:  # noqa: BLE001
+                    continue
+                if not a.startswith("http"):
+                    continue
+                if urllib.parse.urlparse(a).netloc.lower() != seed_host:
+                    continue
+                a = a.split("#")[0]
+                if a not in found:
+                    found[a] = True
+                    if len(found) >= max_urls:
+                        break
+                if d + 1 < depth and a not in seen_pages and len(seen_pages) < 60:
+                    seen_pages.add(a)
+                    queue.append((a, d + 1))
+    urls = list(found)[:max_urls]
+    return {"ok": bool(urls), "seed": seed_url, "count": len(urls), "urls": urls,
+            "engine": "httpx", "error": None if urls else "no links found"}
+
+
 def katana_discover(seed_url: str, *, depth: int = 2, max_urls: int = 200,
                     timeout: int = 45, crawl_time: int = 25) -> dict:
-    """Crawl a seed with katana (read-only link discovery) and return URLs found.
-    Crawling links is gentle content discovery — fine on public open-data sources.
-    ``crawl_time`` caps the per-source crawl so a slow site can't stall the sweep.
-    Falls back cleanly if katana isn't installed. Never raises."""
+    """Crawl a seed for link discovery and return URLs found. Uses katana when the
+    binary is installed; otherwise falls back to a dependency-light ``httpx`` same-host
+    crawler so discovery works out of the box. Gentle, read-only. Never raises."""
     if not _detect(_REGISTRY["katana"]):
-        return {"ok": False, "error": "katana not installed", "urls": []}
+        return _httpx_discover(seed_url, depth=depth, max_urls=max_urls, crawl_time=crawl_time)
     res = _run_tool(["katana", "-u", seed_url, "-d", str(int(depth)),
                      "-jc", "-silent", "-rl", "20", "-c", "10",
                      "-ct", str(int(crawl_time)), "-timeout", "10"], timeout=timeout)
     urls = [u for u in res.get("lines", []) if u.startswith("http")][:max_urls]
+    if not urls:  # katana present but empty (some sites block it) — try httpx
+        return _httpx_discover(seed_url, depth=depth, max_urls=max_urls, crawl_time=crawl_time)
     return {"ok": bool(urls), "seed": seed_url, "count": len(urls), "urls": urls,
-            "error": res.get("error")}
+            "engine": "katana", "error": res.get("error")}
 
 
 _DEFAULT_WORDLIST = os.path.join(os.path.dirname(__file__), "..", "scrapers",
