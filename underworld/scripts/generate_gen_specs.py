@@ -1,119 +1,137 @@
 #!/usr/bin/env python3
-"""Build the FOCUSED generation list — meaningful distinct objects, science/tech FIRST.
+"""Build the COMPREHENSIVE Underworld generation list — thousands of distinct subjects.
 
-Reassessed per direction: NO colour/swatch duplication (one fork, not 8), NO LOD/style as
-separate generations. Each entry is a distinct OBJECT generated once. The science/tech machines
-and work apparatus (minions actually doing the work) are merged in and PRIORITISED first.
+Prompt format (no embellishments, exactly as directed):
+    "Futuristic Avatar movie Sims 4 x GTA 5 Futuristic <thing>"
+e.g. "...hospital", "...hospital bed", "...hospital desk computer".
 
-Priority: 1 science/tech/work machines · 2 characters (minions working) · 3 buildings/vehicles/
-infrastructure · 4 furniture/nature · 5 decor/trivial.
+Covers, custom to Underworld and not limited to:
+  • every building/function + every room + every room CONTENT (the insides), room-qualified
+  • room PERSONALITY dressing (so rooms feel individual, not cloned)
+  • every science + its machines, every guild workshop, every work/feature apparatus
+  • the modular architecture kit (walls/floors/roofs/doors/windows/stairs/facades/bridges)
+  • world subjects: vehicles (cars/drones/planes/boats/rail), sky/celestial (sun/moon/stars),
+    terrain/landforms, roads/infrastructure, wildlife, flora/crops, era kits, civic buildings
+NO colour/LOD/style duplication — one generation per distinct subject. Priority-sorted.
 
-Out: data/master/gen_specs.jsonl (priority-sorted; generator runs top-down)
+Out: data/master/gen_specs.jsonl
 """
 from __future__ import annotations
-import csv, json, os, importlib.util
+import json, os, re, importlib.util
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-def _load(name):
-    s = importlib.util.spec_from_file_location(name, os.path.join(HERE, f"{name}.py"))
+def _load(n):
+    s = importlib.util.spec_from_file_location(n, os.path.join(HERE, f"{n}.py"))
     m = importlib.util.module_from_spec(s); s.loader.exec_module(m); return m
-PE = _load("prompt_engine")
-ST = _load("science_tech_assets")
-ARCH = _load("architecture_assets")
+ST = _load("science_tech_assets"); ARCH = _load("architecture_assets"); WS = _load("world_subjects")
 
 ROOT = os.path.dirname(HERE)
-BOM = os.path.join(ROOT, "data", "master", "glb_bom.csv")
+import sys; sys.path.insert(0, os.path.dirname(ROOT))
+from underworld.server.services import interiors as IN
+from underworld.server.services import civic_assets as CA
+from underworld.server.services import story_engine as SE
+
 OUT = os.path.join(ROOT, "data", "master", "gen_specs.jsonl")
+PHRASE = "Futuristic Avatar movie Sims 4 x GTA 5 Futuristic"
 CREDITS_PER_GEN = 24
 
-WORK_KW = ("bench", "machine", "rig", "station", "lab", "console", "reactor", "furnace",
-           "scanner", "microscope", "lathe", "mill", "drill", "press", "turbine", "robot",
-           "operating", "telescope", "chamber", "spectrometer", "centrifuge", "terminal",
-           "workbench", "anvil", "forge", "crucible", "conveyor", "exosuit", "incubator")
-DECOR_KW = ("painting", "vase", "frame", "clock", "candle", "rug", "plant", "cushion",
-            "doormat", "mirror", "ornament", "banner", "lamp")
+# a few personality/mood dressings so each room reads individual (not clones) — kept small
+ROOM_PERSONALITY = ["cozy", "minimalist", "cluttered", "luxury", "rustic", "high_tech"]
+PERSONALITY_PROPS = ["wall_art", "rug", "potted_plant", "shelf_clutter", "mood_lighting", "personal_photos"]
 
 
-def priority(domain, base, source=""):
-    if source.startswith(("science:", "guild:", "work:")):
-        return 1
-    if domain == "character":
-        return 2
-    if any(k in base for k in WORK_KW) or domain in ("industrial",):
-        return 1
-    if domain in ("building", "vehicle", "urban"):
-        return 3
-    if domain in ("nature",) or "table" in base or "chair" in base or "bed" in base or "shelf" in base:
-        return 4
-    if any(k in base for k in DECOR_KW):
-        return 5
-    return 4
+def hum(s): return re.sub(r"[_\-]+", " ", str(s)).strip()
 
 
 def main():
-    # 1) distinct objects from the BOM (collapse swatch/style/lod -> one per base_item per domain)
-    rows = [r for r in csv.DictReader(open(BOM)) if r["lod"] == "lod0"]
-    objects = {}   # base_item -> (domain, category)
-    for r in rows:
-        if r["base_item"] not in objects:
-            objects[r["base_item"]] = (r["domain"], r["category"])
+    items = {}   # name -> (category, domain, priority)
+    def add(name, cat, domain, prio):
+        name = name.strip()
+        if name and name not in items:
+            items[name] = (cat, domain, prio)
 
-    # 2) merge science/tech/work machines (the valuable "minions doing work" assets)
+    # 1) science / tech / guild / work machines (minions doing the work) — P1
     for base, cat, src in ST.all_work_assets():
-        objects.setdefault(base, ("work", cat))   # 'work' domain marks priority-1 origin
-    work_src = {base: src for base, cat, src in ST.all_work_assets()}
+        add(hum(base), cat, "interior", 1)
+    for sci, machines in ST.SCIENCE_MACHINES.items():
+        for m in machines:
+            add(f"{hum(sci)} {hum(m)}", "prop", "interior", 1)   # science-qualified
 
-    # 3) merge the architectural / modular kit (walls, floors, roofs, doors, windows, stairs,
-    #    columns, facades, fences, bridges, ground) — builds every room & building exterior.
-    arch_set = set()
+    # 2) buildings/functions + rooms + room CONTENTS (the insides), room-qualified — P2/P3
+    for fn, program in IN._PROGRAMS.items():
+        add(hum(fn), "building_shell", "building", 3)            # the building, e.g. "hospital"
+        for room, *_ in program:
+            add(f"{hum(fn)} {hum(room)}", "building_shell", "building", 3)   # "hospital ward"
+            for item in IN._ROOM_FURNITURE.get(room, ()):
+                add(f"{hum(fn)} {hum(item)}", "furniture", "interior", 2)    # "hospital bed"
+            # room personality dressing so rooms feel individual
+            for pers in ROOM_PERSONALITY:
+                for pp in PERSONALITY_PROPS:
+                    add(f"{pers} {hum(room)} {hum(pp)}", "furniture", "interior", 4)
+    # generic room contents (room-qualified, for homes/offices everywhere)
+    for room, contents in IN._ROOM_FURNITURE.items():
+        add(hum(room), "building_shell", "building", 3)
+        for item in contents:
+            add(f"{hum(room)} {hum(item)}", "furniture", "interior", 2)
+
+    # 3) civic building types — P3
+    for ct in CA.CIVIC_TYPES:
+        add(hum(ct), "civic", "building", 3)
+
+    # 4) architecture / modular kit (interior + exterior design) — P2
     for base, cat in ARCH.all_architecture():
-        objects.setdefault(base, ("arch", cat)); arch_set.add(base)
+        add(hum(base), cat, "building", 2)
 
-    # Underworld function context per source, so each machine is THIS world's machine
-    def context_for(src):
-        if src.startswith("science:"):
-            return f"used by an Underworld Minion scientist for {src.split(':',1)[1].replace('_',' ')} research"
-        if src.startswith("guild:"):
-            return f"in the Underworld {src.split(':',1)[1]} guild workshop"
-        if src.startswith("work:"):
-            return f"used by an Underworld Minion to perform {src.split(':',1)[1]} work"
-        return ""
+    # 5) world subjects — vehicles/sky/terrain/roads/wildlife/flora/era — P3/P4
+    DOMPRIO = {"vehicle": 3, "sky": 3, "nature": 4, "urban": 3, "wildlife": 3, "era": 3}
+    for base, cat, dom in WS.all_subjects():
+        add(hum(base), cat, dom if dom != "wildlife" else "character", DOMPRIO.get(dom, 4))
 
-    DOM_MAP = {"work": "interior", "arch": "building"}
-    PRIO_DOMAIN = {"arch": 2}
+    # 6) MINIONS — the Underworld characters themselves (accurate to the population) — P2
+    for g in SE.GUILDS:
+        add(f"{g} guild minion", "character", "character", 2)
+    for stage in ["infant", "child", "adolescent", "young adult", "adult", "elder"]:
+        add(f"{stage} minion", "character", "character", 2)
+    for role in ["scientist", "engineer", "builder", "farmer", "trader", "teacher", "medic",
+                 "guard", "inventor", "miner", "researcher", "artisan"]:
+        add(f"minion {role}", "character", "character", 2)
+    for special in ["awakened sentient minion", "minion avatar", "robotic minion",
+                    "minion at work", "minion in lab coat", "minion with tool",
+                    "underworld minion citizen", "minion scientist operating machine"]:
+        add(special, "character", "character", 2)
+
+    # 7) eras (the story spine) — P4
+    for era in SE.ERAS:
+        add(f"{era} era street", "floor", "urban", 4)
+        add(f"{era} era minion", "character", "character", 4)
+
+    # build specs
+    EMK = ("sign","billboard","neon","holo","light","lamp","screen","display","led","aurora",
+           "star","plasma","monitor","tv","sun","moon","fx","reactor","laser")
     specs = []
-    for base, (domain, cat) in objects.items():
-        src = work_src.get(base, "")
-        dom_for_prompt = DOM_MAP.get(domain, domain)
-        prio = PRIO_DOMAIN.get(domain) or priority("prop" if domain == "work" else domain, base, src)
-        prompt = PE.build_prompt(base, cat, dom_for_prompt, style="modern", swatch="default",
-                                 context=context_for(src))
+    for name, (cat, domain, prio) in items.items():
+        gid = re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_")
         specs.append({
-            "glb_id": f"{domain}_{base}",
-            "base_item": base, "domain": dom_for_prompt, "category": cat,
-            "source": src or domain, "priority": prio,
-            "prompt": prompt,
+            "glb_id": gid, "name": name, "category": cat, "domain": domain, "priority": prio,
+            "prompt": f"{PHRASE} {name}",
             "tripo": {"texture": True, "pbr": True, "texture_quality": "detailed",
                        "model_version": "v2.0-20240919", "face_limit": 40000,
-                       "emissive": PE.emissive_for(base, dom_for_prompt)},
-            "out_glb": f"web/public/models/generated/uw/{dom_for_prompt}/{base}.glb",
+                       "emissive": any(k in name.lower() for k in EMK)},
+            "out_glb": f"web/public/models/generated/uw/{domain}/{gid}.glb",
         })
-    specs.sort(key=lambda s: (s["priority"], s["base_item"]))
+    specs.sort(key=lambda s: (s["priority"], s["name"]))
     with open(OUT, "w") as fh:
         for s in specs:
             fh.write(json.dumps(s) + "\n")
 
     from collections import Counter
-    pc = Counter(s["priority"] for s in specs)
-    print(f"FOCUSED generation list: {len(specs):,} distinct objects (NO colour/LOD duplication)")
-    print(f"  ~credits @24: {len(specs)*CREDITS_PER_GEN:,}")
-    print("  by priority:")
-    names = {1: "science/tech/work machines", 2: "characters (minions working)",
-             3: "buildings/vehicles/infra", 4: "furniture/nature", 5: "decor/trivial"}
-    for p in sorted(pc): print(f"    P{p} {names[p]:32s} {pc[p]:,}")
-    p1 = [s for s in specs if s["priority"] == 1]
-    print(f"\n  P1 sample (generated first): {', '.join(s['base_item'] for s in p1[:12])}")
-    print(f"out -> {OUT}")
+    pc = Counter(s["priority"] for s in specs); dc = Counter(s["domain"] for s in specs)
+    print(f"COMPREHENSIVE list: {len(specs):,} distinct subjects  (~{len(specs)*CREDITS_PER_GEN:,} credits)")
+    print("by priority:", dict(sorted(pc.items())))
+    print("by domain:  ", dict(dc.most_common()))
+    print("\nsample prompts:")
+    for s in specs[:3] + [x for x in specs if x['name'].startswith('hospital')][:3]:
+        print("  ", s["prompt"])
 
 
 if __name__ == "__main__":
