@@ -19,6 +19,7 @@ def _load(name):
     m = importlib.util.module_from_spec(s); s.loader.exec_module(m); return m
 PE = _load("prompt_engine")
 ST = _load("science_tech_assets")
+ARCH = _load("architecture_assets")
 
 ROOT = os.path.dirname(HERE)
 BOM = os.path.join(ROOT, "data", "master", "glb_bom.csv")
@@ -60,17 +61,35 @@ def main():
     # 2) merge science/tech/work machines (the valuable "minions doing work" assets)
     for base, cat, src in ST.all_work_assets():
         objects.setdefault(base, ("work", cat))   # 'work' domain marks priority-1 origin
-    src_of = {base: f"{cat}" for base, cat, _ in []}
     work_src = {base: src for base, cat, src in ST.all_work_assets()}
 
+    # 3) merge the architectural / modular kit (walls, floors, roofs, doors, windows, stairs,
+    #    columns, facades, fences, bridges, ground) — builds every room & building exterior.
+    arch_set = set()
+    for base, cat in ARCH.all_architecture():
+        objects.setdefault(base, ("arch", cat)); arch_set.add(base)
+
+    # Underworld function context per source, so each machine is THIS world's machine
+    def context_for(src):
+        if src.startswith("science:"):
+            return f"used by an Underworld Minion scientist for {src.split(':',1)[1].replace('_',' ')} research"
+        if src.startswith("guild:"):
+            return f"in the Underworld {src.split(':',1)[1]} guild workshop"
+        if src.startswith("work:"):
+            return f"used by an Underworld Minion to perform {src.split(':',1)[1]} work"
+        return ""
+
+    DOM_MAP = {"work": "interior", "arch": "building"}
+    PRIO_DOMAIN = {"arch": 2}
     specs = []
     for base, (domain, cat) in objects.items():
         src = work_src.get(base, "")
-        dom_for_prompt = "interior" if domain == "work" else domain
-        prio = priority(domain if domain != "work" else "prop", base, src)
-        prompt = PE.build_prompt(base, cat, dom_for_prompt, style="modern", swatch="default")
+        dom_for_prompt = DOM_MAP.get(domain, domain)
+        prio = PRIO_DOMAIN.get(domain) or priority("prop" if domain == "work" else domain, base, src)
+        prompt = PE.build_prompt(base, cat, dom_for_prompt, style="modern", swatch="default",
+                                 context=context_for(src))
         specs.append({
-            "glb_id": f"{('work' if domain=='work' else domain)}_{base}",
+            "glb_id": f"{domain}_{base}",
             "base_item": base, "domain": dom_for_prompt, "category": cat,
             "source": src or domain, "priority": prio,
             "prompt": prompt,

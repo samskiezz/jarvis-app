@@ -166,8 +166,10 @@ def emissive_for(base_item, domain):
 
 
 def build_prompt(base_item, category, domain, *, style="modern", swatch="default",
-                 lod="lod0", season=None, era=None):
+                 lod="lod0", season=None, era=None, context=""):
     parts = [base_clause(base_item, category, domain)]
+    if context:
+        parts.append(context)   # Underworld function context, e.g. "for crystallography research"
     # variant modifiers (concrete)
     if style and style not in ("std", "modern", "default") and style in STYLE_DESC:
         parts.append(STYLE_DESC[style])

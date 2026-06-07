@@ -23,13 +23,25 @@ KEY = os.environ.get("TRIPO_API_KEY", "")
 CREDITS_PER_GEN = 24  # approx, for budget accounting
 
 
-def _req(method, url, body=None, token=None, raw=False, timeout=60):
+def _req(method, url, body=None, token=None, raw=False, timeout=60, retries=6):
     data = json.dumps(body).encode() if body is not None else None
-    r = urllib.request.Request(url, data=data, method=method)
-    if token: r.add_header("Authorization", f"Bearer {token}")
-    if data is not None: r.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(r, timeout=timeout) as resp:
-        return resp.read() if raw else json.loads(resp.read().decode())
+    delay = 2.0
+    for attempt in range(retries):
+        r = urllib.request.Request(url, data=data, method=method)
+        if token: r.add_header("Authorization", f"Bearer {token}")
+        if data is not None: r.add_header("Content-Type", "application/json")
+        try:
+            with urllib.request.urlopen(r, timeout=timeout) as resp:
+                return resp.read() if raw else json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            # back off on rate-limit / transient server errors; re-raise others
+            if e.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
+                time.sleep(delay); delay = min(delay * 2, 30); continue
+            raise
+        except urllib.error.URLError:
+            if attempt < retries - 1:
+                time.sleep(delay); delay = min(delay * 2, 30); continue
+            raise
 
 
 def submit(spec):
@@ -75,6 +87,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--budget-credits", type=int, default=20000)
+    ap.add_argument("--concurrency", type=int, default=5)
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     specs = [json.loads(l) for l in open(SPECS)]
@@ -94,18 +107,41 @@ def main():
         print(f"  ... {len(todo)} total. (dry-run)")
         return
 
-    spent = 0; ok = 0
-    for s in todo:
-        if spent + CREDITS_PER_GEN > a.budget_credits:
-            print(f"budget reached ({spent} credits) — stopping; re-run to continue."); break
+    import threading
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    lock = threading.Lock()
+    state = {"spent": 0, "ok": 0, "fail": 0, "stop": False}
+
+    def work(s):
+        if state["stop"]:
+            return
+        with lock:
+            if state["spent"] + CREDITS_PER_GEN > a.budget_credits:
+                state["stop"] = True; return
+            state["spent"] += CREDITS_PER_GEN
         dest = os.path.join(ROOT, s["out_glb"])
         try:
             tid = submit(s); out = poll(tid); n = download(out, dest)
-            spent += CREDITS_PER_GEN; ok += 1
-            print(f"  [{ok}/{len(todo)}] {s['base_item']:24s} -> {dest} ({n//1024}KB) ~{spent} cr")
-        except (urllib.error.URLError, RuntimeError, TimeoutError) as e:
-            print(f"  FAIL {s['base_item']}: {e}")
-    print(f"\ndone: generated {ok} base meshes, ~{spent} credits. Next: derive_variants.py")
+            with lock:
+                state["ok"] += 1
+                if state["ok"] % 10 == 0 or state["ok"] < 5:
+                    print(f"  [{state['ok']}/{len(todo)}] {s['glb_id']} ({n//1024}KB) ~{state['spent']}cr", flush=True)
+        except Exception as e:
+            with lock:
+                state["fail"] += 1; state["spent"] -= CREDITS_PER_GEN  # not charged on failure
+                msg = str(e)[:120]
+                print(f"  FAIL {s['glb_id']}: {msg}", flush=True)
+                # stop fast if we've clearly run out of credits
+                if "credit" in msg.lower() or "balance" in msg.lower() or "402" in msg:
+                    state["stop"] = True
+
+    with ThreadPoolExecutor(max_workers=a.concurrency) as ex:
+        futs = [ex.submit(work, s) for s in todo]
+        for _ in as_completed(futs):
+            if state["stop"]:
+                break
+    print(f"\ndone: generated {state['ok']} assets, {state['fail']} failed, ~{state['spent']} credits used.")
+    print("re-run to continue (resumable); then: python3 scripts/derive_variants.py --run")
 
 
 if __name__ == "__main__":
