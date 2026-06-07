@@ -39,12 +39,81 @@ import os
 import re
 import sqlite3
 import time
+import urllib.request
 from typing import Any, Optional
 
 import numpy as np
 
 # ── configuration ────────────────────────────────────────────────────────────────
-DIM = 4096  # fixed embedding dimensionality (hashed feature space)
+DIM = 4096  # default hashing dimensionality (CPU fallback feature space)
+_HASH_DIM = DIM  # alias: the dimension the offline hashing embedder uses
+
+# ── optional GPU embedding backend (Ollama) ───────────────────────────────────────
+# When ``OLLAMA_EMBED_MODEL`` is set (e.g. ``nomic-embed-text``) we embed on the GPU
+# box via Ollama's ``/api/embed`` — every index/search call then exercises the GPU.
+# It is graceful by contract: any failure falls back to the offline hashing embedder
+# AT THE SAME DIMENSION, so the vector store never ends up with mixed-width rows in a
+# steady state. ``reindex_vectors()`` re-embeds the whole corpus to migrate dimensions
+# when the backend is switched on. With the env unset, behaviour is unchanged (CPU).
+#
+# Process-cached resolution: once a GPU embedding succeeds we learn the model's native
+# dimension and remember it (reset on module reload, so tests stay deterministic).
+_resolved: dict = {"backend": None, "dim": None}
+
+
+def _embed_model() -> str:
+    return os.environ.get("OLLAMA_EMBED_MODEL", "").strip()
+
+
+def _embed_host() -> str:
+    return os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").strip()
+
+
+def _gpu_enabled() -> bool:
+    """True iff the operator opted into GPU embeddings via ``OLLAMA_EMBED_MODEL``."""
+    return bool(_embed_model())
+
+
+def _current_dim() -> int:
+    """The active embedding width: the learned GPU dim once known, else hashing dim.
+    Cheap (no network) — callers that need the GPU dim resolved should embed() first."""
+    return int(_resolved["dim"] or _HASH_DIM)
+
+
+def embedding_backend() -> str:
+    """Reportable backend name: 'gpu:<model>' once a GPU embed has succeeded, else
+    'hash' (the offline fallback). Used by autobuild/health for visibility."""
+    if _resolved["backend"] == "gpu":
+        return f"gpu:{_embed_model()}"
+    return "hash"
+
+
+def _gpu_embed_raw(text: str, *, timeout: float = 15.0) -> Optional[np.ndarray]:
+    """POST one text to Ollama ``/api/embed`` and return an L2-normalized float32
+    vector, or ``None`` on ANY problem (model unset, network, bad payload). Never
+    raises — the caller falls back to the hashing embedder."""
+    model = _embed_model()
+    if not model:
+        return None
+    try:
+        body = json.dumps({"model": model, "input": text or " "}).encode()
+        req = urllib.request.Request(
+            _embed_host().rstrip("/") + "/api/embed",
+            data=body,
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            out = json.loads(r.read().decode("utf-8", errors="ignore"))
+        embs = out.get("embeddings") or []
+        if embs and isinstance(embs[0], list) and embs[0]:
+            v = np.asarray(embs[0], dtype=np.float32).ravel()
+            nrm = float(np.linalg.norm(v))
+            if nrm > 0:
+                v = v / nrm
+            return v.astype(np.float32, copy=False)
+    except Exception:  # noqa: BLE001 - graceful by contract
+        return None
+    return None
 
 _DEFAULT_DB = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "vectors.db"
@@ -80,21 +149,66 @@ def _ngrams(tokens: list[str]) -> list[str]:
     return grams
 
 
-def _hash(feature: str) -> tuple[int, float]:
-    """Deterministic (bucket, sign) for a feature via md5. The sign hash reduces
-    the systematic bias introduced by hash collisions (signed hashing trick)."""
-    h = hashlib.md5(feature.encode("utf-8")).digest()
-    bucket = int.from_bytes(h[:8], "big") % DIM
-    sign = 1.0 if (h[8] & 1) else -1.0
-    return bucket, sign
 
 
-def embed(text: str) -> np.ndarray:
-    """Embed ``text`` into a fixed-``DIM`` L2-normalized numpy float32 vector.
+def _gpu_embed_batch(texts: list, *, timeout: float = 60.0) -> Optional[list]:
+    """Embed a LIST of texts in ONE Ollama ``/api/embed`` call (the GPU processes the
+    whole batch at once — vastly faster than serial round-trips). Returns a list of
+    L2-normalized float32 vectors aligned to ``texts``, or ``None`` on any problem."""
+    model = _embed_model()
+    if not model or not texts:
+        return None
+    try:
+        body = json.dumps({"model": model, "input": list(texts)}).encode()
+        req = urllib.request.Request(
+            _embed_host().rstrip("/") + "/api/embed",
+            data=body,
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            out = json.loads(r.read().decode("utf-8", errors="ignore"))
+        embs = out.get("embeddings")
+        if isinstance(embs, list) and len(embs) == len(texts):
+            vecs: list = []
+            for e in embs:
+                v = np.asarray(e, dtype=np.float32).ravel()
+                nrm = float(np.linalg.norm(v))
+                vecs.append((v / nrm) if nrm > 0 else v)
+            return vecs
+    except Exception:  # noqa: BLE001 - graceful by contract
+        return None
+    return None
 
-    Uses hashed 1+2-grams with sublinear (log) term-frequency weighting. Pure,
-    deterministic, offline. Empty/blank text → a zero vector."""
-    vec = np.zeros(DIM, dtype=np.float32)
+
+def embed_batch(texts: list, *, batch: int = 64) -> list:
+    """Embed many texts, batching GPU calls (``batch`` per request) so the GPU is fed
+    in bulk rather than one round-trip at a time. Falls back to the hashing embedder
+    (at the active dim) for any sub-batch the GPU can't serve. Order preserved."""
+    texts = [("" if t is None else str(t)) for t in (texts or [])]
+    if not texts:
+        return []
+    if not _gpu_enabled():
+        return [_hash_embed(t, _HASH_DIM) for t in texts]
+    out: list = [None] * len(texts)
+    for start in range(0, len(texts), max(1, int(batch))):
+        sub = texts[start : start + max(1, int(batch))]
+        vecs = _gpu_embed_batch(sub, timeout=min(180.0, 10.0 + 1.5 * len(sub)))
+        if vecs is not None and len(vecs) == len(sub):
+            if not _resolved["dim"] and vecs[0].size:
+                _resolved["backend"], _resolved["dim"] = "gpu", int(vecs[0].size)
+            for j, v in enumerate(vecs):
+                out[start + j] = v
+        else:
+            dim = _resolved["dim"] or _HASH_DIM
+            for j, t in enumerate(sub):
+                out[start + j] = _hash_embed(t, int(dim))
+    return out
+
+
+def _hash_embed(text: str, dim: int) -> np.ndarray:
+    """Offline hashing TF-IDF embedder into a ``dim``-wide L2-normalized float32
+    vector. Pure, deterministic, no network. Empty/blank text → a zero vector."""
+    vec = np.zeros(dim, dtype=np.float32)
     try:
         grams = _ngrams(_tokenize(text))
         if not grams:
@@ -103,15 +217,47 @@ def embed(text: str) -> np.ndarray:
         for g in grams:
             counts[g] = counts.get(g, 0) + 1
         for g, c in counts.items():
-            bucket, sign = _hash(g)
+            h = hashlib.md5(g.encode("utf-8")).digest()
+            bucket = int.from_bytes(h[:8], "big") % dim
+            sign = 1.0 if (h[8] & 1) else -1.0
             # sublinear tf: 1 + log(count)
             vec[bucket] += sign * (1.0 + math.log(c))
         nrm = float(np.linalg.norm(vec))
         if nrm > 0:
             vec /= nrm
     except Exception:  # noqa: BLE001 - never raise
-        return np.zeros(DIM, dtype=np.float32)
+        return np.zeros(dim, dtype=np.float32)
     return vec
+
+
+def embed(text: str) -> np.ndarray:
+    """Embed ``text`` into an L2-normalized numpy float32 vector.
+
+    Backend selection (graceful, env-gated):
+      * GPU on   (``OLLAMA_EMBED_MODEL`` set): embed via Ollama ``/api/embed`` on the
+        GPU box; on ANY failure fall back to the hashing embedder AT THE GPU DIM so
+        the store stays single-width. The first successful GPU call learns + caches
+        the model's native dimension.
+      * GPU off  (default): the offline hashing embedder at ``DIM`` (unchanged).
+
+    Deterministic + offline in the default (no-env) configuration."""
+    if _gpu_enabled():
+        if text and str(text).strip():
+            v = _gpu_embed_raw(text)
+            if v is not None and v.size > 0:
+                if not _resolved["dim"]:
+                    _resolved["backend"], _resolved["dim"] = "gpu", int(v.size)
+                return v
+        # blank text, or GPU unreachable → hashing fallback at the GPU width when
+        # known (so dims match), else probe once to learn it, else the hashing dim.
+        dim = _resolved["dim"]
+        if not dim:
+            probe = _gpu_embed_raw("dimension probe")
+            if probe is not None and probe.size > 0:
+                _resolved["backend"], _resolved["dim"] = "gpu", int(probe.size)
+                dim = _resolved["dim"]
+        return _hash_embed(text, int(dim or _HASH_DIM))
+    return _hash_embed(text, _HASH_DIM)
 
 
 def cosine(a: np.ndarray, b: np.ndarray) -> float:
@@ -188,15 +334,19 @@ def _vec_to_blob(vec: np.ndarray) -> bytes:
 
 
 def _blob_to_vec(blob: Optional[bytes]) -> np.ndarray:
+    # A row whose stored width != the active width (e.g. a hashing-era 4096-d row
+    # read while GPU embeddings are active at 768) is treated as a zero vector — it
+    # scores 0 and is filtered out until ``reindex_vectors()`` re-embeds it.
+    dim = _current_dim()
     if not blob:
-        return np.zeros(DIM, dtype=np.float32)
+        return np.zeros(dim, dtype=np.float32)
     try:
         v = np.frombuffer(blob, dtype=np.float32)
-        if v.size != DIM:
-            return np.zeros(DIM, dtype=np.float32)
+        if v.size != dim:
+            return np.zeros(dim, dtype=np.float32)
         return v
     except Exception:  # noqa: BLE001
-        return np.zeros(DIM, dtype=np.float32)
+        return np.zeros(dim, dtype=np.float32)
 
 
 def _dumps(value: Any) -> str:
@@ -256,6 +406,44 @@ def index_doc(
             conn.close()
     except (sqlite3.Error, TypeError, ValueError):
         return False
+
+
+def index_batch(items: list, *, db_path: Optional[str] = None) -> int:
+    """Embed + upsert many docs in ONE batched GPU pass + ONE transaction.
+
+    ``items`` is a list of ``(id, kind, text, meta)`` tuples. Returns the number of
+    rows written. Idempotent per id. Never raises (skips bad rows)."""
+    rows = [it for it in (items or []) if it and it[0]]
+    if not rows:
+        return 0
+    init_db(db_path)
+    vecs = embed_batch([str(it[2] or "") for it in rows])
+    n = 0
+    try:
+        conn = _connect(db_path)
+        try:
+            for (rid, kind, text, meta), vec in zip(rows, vecs):
+                try:
+                    conn.execute(
+                        """
+                        INSERT INTO doc (id, kind, text, vec, meta_json, ts)
+                        VALUES (?,?,?,?,?,?)
+                        ON CONFLICT(id) DO UPDATE SET
+                            kind=excluded.kind, text=excluded.text, vec=excluded.vec,
+                            meta_json=excluded.meta_json, ts=excluded.ts
+                        """,
+                        (str(rid), str(kind or "object"), str(text or ""),
+                         _vec_to_blob(vec), _dumps(meta or {}), _now_ms()),
+                    )
+                    n += 1
+                except sqlite3.Error:
+                    continue
+            conn.commit()
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return n
+    return n
 
 
 def _object_text(obj: dict) -> str:
@@ -321,6 +509,92 @@ def reindex_ontology(*, db_path: Optional[str] = None) -> int:
     return n
 
 
+def _text_chunks(text: str, size: int, max_n: int) -> list[str]:
+    """Split ``text`` into up to ``max_n`` windows of ~``size`` chars (cheap, on
+    char boundaries — good enough for embedding granularity)."""
+    text = (text or "").strip()
+    if not text:
+        return []
+    out: list[str] = []
+    for i in range(0, len(text), size):
+        out.append(text[i : i + size])
+        if len(out) >= max_n:
+            break
+    return out
+
+
+def index_documents(
+    docs: Any,
+    *,
+    chunk_chars: int = 1200,
+    max_chunks: int = 6,
+    db_path: Optional[str] = None,
+) -> dict:
+    """Embed the scraped document corpus into the semantic index, one chunk per row.
+
+    Each document is split into a few char-windows; each chunk is embedded (on the GPU
+    when enabled) and upserted as ``{doc_id}#{i}`` with kind ``document``. Idempotent
+    on the chunk id, so re-runs refresh in place rather than duplicate. This is the
+    bulk GPU workload that turns the 6 MB of scraped text into a searchable KB.
+
+    Never raises. Returns ``{"documents", "chunks", "backend", "dim"}``."""
+    n_docs = 0
+    items: list = []
+    for d in docs or []:
+        try:
+            did = str((d or {}).get("id") or "")
+            if not did:
+                continue
+            title = str(d.get("title") or "")
+            url = str(d.get("url") or "")
+            chunks = _text_chunks(d.get("full_text") or d.get("text") or "", chunk_chars, max_chunks)
+            if not chunks:
+                continue
+            for i, ch in enumerate(chunks):
+                # prepend the title to the first chunk so titles are searchable too
+                body = f"{title}\n{ch}" if (i == 0 and title) else ch
+                items.append((f"{did}#{i}", "document", body,
+                              {"doc_id": did, "url": url, "title": title, "chunk": i}))
+            n_docs += 1
+        except Exception:  # noqa: BLE001 - never let one bad doc stop the build
+            continue
+    # one batched GPU pass over ALL chunks (fed in bulk, not one round-trip each)
+    n_chunks = index_batch(items, db_path=db_path)
+    return {"documents": n_docs, "chunks": n_chunks,
+            "backend": embedding_backend(), "dim": _current_dim()}
+
+
+def reindex_vectors(*, db_path: Optional[str] = None) -> dict:
+    """Re-embed EVERY stored doc row from its own ``text`` with the active backend.
+
+    This is the corpus-wide pass that (a) moves the whole vector store onto the GPU
+    embedder when it is enabled, and (b) migrates any legacy-width rows to the current
+    dimension so search stays consistent. Driven each build by autobuild — it is the
+    step that actually puts the scraped/injected knowledge base onto the GPU.
+
+    Never raises. Returns ``{"count", "backend", "dim"}``."""
+    init_db(db_path)
+    try:
+        conn = _connect(db_path)
+        try:
+            rows = conn.execute("SELECT id, text FROM doc").fetchall()
+            n = 0
+            for r in rows:
+                vec = embed(r["text"] or "")
+                conn.execute(
+                    "UPDATE doc SET vec=?, ts=? WHERE id=?",
+                    (_vec_to_blob(vec), _now_ms(), r["id"]),
+                )
+                n += 1
+            conn.commit()
+            return {"count": n, "backend": embedding_backend(), "dim": _current_dim()}
+        finally:
+            conn.close()
+    except sqlite3.Error as exc:
+        return {"count": 0, "backend": embedding_backend(), "dim": _current_dim(),
+                "error": str(exc)}
+
+
 # ── search ─────────────────────────────────────────────────────────────────────────
 def _load_matrix(
     kind: Optional[str], db_path: Optional[str]
@@ -341,7 +615,7 @@ def _load_matrix(
     finally:
         conn.close()
     if not rows:
-        return [], np.zeros((0, DIM), dtype=np.float32)
+        return [], np.zeros((0, _current_dim()), dtype=np.float32)
     meta_rows: list[dict] = []
     vectors: list[np.ndarray] = []
     for r in rows:

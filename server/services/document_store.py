@@ -131,6 +131,23 @@ def get(doc_id: str) -> Optional[dict]:
         return None
 
 
+def all_docs(limit: Optional[int] = None) -> list[dict]:
+    """Return stored documents (id, url, title, full_text) for (re)indexing into the
+    semantic vector store, newest first. ``limit`` caps the count. Never raises."""
+    init_db()
+    try:
+        c = _conn()
+        try:
+            sql = "SELECT id, url, title, full_text FROM document ORDER BY fetched_at DESC"
+            if limit:
+                sql += f" LIMIT {int(limit)}"
+            return [dict(r) for r in c.execute(sql).fetchall()]
+        finally:
+            c.close()
+    except sqlite3.Error:
+        return []
+
+
 def search(query: str, k: int = 10) -> list[dict]:
     """FTS5 full-text search over the stored documents. Returns ranked hits with a
     highlighted snippet. Never raises."""

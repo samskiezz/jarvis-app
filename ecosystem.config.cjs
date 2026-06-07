@@ -22,6 +22,9 @@ module.exports = {
         //    the OpenAI-compatible /v1 drives the analyst chat (kimi client).
         OLLAMA_HOST: 'http://211.72.13.201:41137',
         OLLAMA_MODEL: 'llama3.1:8b',
+        // Semantic-index embeddings on the GPU (Ollama /api/embed). Unset => the
+        // offline hashing-TF-IDF embedder (CPU) is used, unchanged.
+        OLLAMA_EMBED_MODEL: 'nomic-embed-text',
         KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',

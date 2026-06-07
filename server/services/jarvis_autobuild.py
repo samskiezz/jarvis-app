@@ -120,6 +120,27 @@ def run_once(*, scrape_batches: int = 2, seeds_per_batch: int = 6, depth: int = 
     except Exception:  # noqa: BLE001
         pass
 
+    # 4d) embed the knowledge base into the semantic index — on the GPU when
+    # OLLAMA_EMBED_MODEL is set (graceful CPU-hashing fallback otherwise). This is
+    # the step that puts the freshly scraped + projected corpus through the GPU
+    # embedder, so the box actually does work as the base KB is built: the ontology
+    # objects PLUS every scraped document (chunked) become semantically searchable.
+    try:
+        from . import embeddings as emb
+        objs = emb.reindex_ontology()                       # ontology objects -> index
+        docs = docstore.all_docs() if docstore is not None else []
+        docres = emb.index_documents(docs)                  # scraped docs (chunked) -> GPU
+        report["steps"]["embed_index"] = {
+            "objects_indexed": objs,
+            "documents_indexed": docres.get("documents"),
+            "chunks_embedded": docres.get("chunks"),
+            "backend": docres.get("backend"),
+            "dim": docres.get("dim"),
+            "index_total": emb.count(),
+        }
+    except Exception as e:  # noqa: BLE001
+        report["steps"]["embed_index"] = {"ok": False, "error": str(e)}
+
     # 5) snapshot the document store for durability
     if docstore is not None:
         try:
