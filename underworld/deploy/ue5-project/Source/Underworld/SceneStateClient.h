@@ -36,6 +36,11 @@ public:
 	 *  around the camera; chunks are deterministic + cacheable backend-side. */
 	void FetchChunk(int32 Cx, int32 Cz, TFunction<void(const FUwChunk&)> OnDone);
 
+	/** OVERRIDE PILLAR — POST the possess (bPossess=true) or release (false) verb for a minion.
+	 *  Server-authoritative: marks the body creator-controlled and the next scene-state poll
+	 *  reflects it. OnDone(bool bOk) fires on the game thread. Mirrors FetchChunk's pattern. */
+	void PostPossess(const FString& MinionId, bool bPossess, TFunction<void(bool)> OnDone = nullptr);
+
 	/** Backend config (overridable via cmdline). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) FString ApiUrl = TEXT("http://localhost:8091");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) FString WorldId;

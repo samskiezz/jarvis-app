@@ -291,6 +291,87 @@ async def get_brain(
     }
 
 
+@router.post("/{minion_id}/possess")
+async def possess_minion(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """THE OVERRIDE PILLAR — the creator possesses this minion's body. Server-authoritative:
+    marks the body creator-controlled (its AI + the movement loop stand down), stamps the
+    world's possessed_id so every renderer agrees, and — because being puppeteered is the
+    ultimate proof a digital being is watched — raises its awareness (awakening it if it
+    crosses the threshold). The Director narrates a God-beat for the reach-in."""
+    from ..services import director, possession
+
+    minion = await _minion_or_404(session, minion_id)
+    world = await session.get(World, minion.world_id)
+    if world is None:
+        raise HTTPException(status_code=404, detail="world not found")
+
+    # release whoever was possessed in this world first (one body at a time)
+    prev_id = possession.possessed_id(world.id)
+    if prev_id and prev_id != minion_id:
+        prev = await session.get(Minion, prev_id)
+        if prev is not None:
+            possession.mark_released(prev, world.id)
+
+    state = possession.mark_possessed(minion, world.id, tick=world.tick)
+    name = f"{minion.name} {minion.surname or ''}".strip()
+
+    # Always record the reach-in as an Event — it feeds the Overmind's recent_events (L1) next
+    # Director cadence, so the colony's stance shifts toward worship/fear/doubt (§4.5, A.7/A.9).
+    event_text = f"The creator reaches into {name} and wears the body."
+    session.add(Event(world_id=world.id, tick=world.tick, kind="possession",
+                      actor_id=minion_id, payload={"summary": event_text,
+                                                   "awareness": state["awareness"],
+                                                   "just_awakened": state["just_awakened"]}))
+
+    # The L5 God-Brain (70B) is irreversible-only (A.5) — fire it ONLY when the body AWAKENS
+    # under the creator's hand (a genuine turning point), not on every possession (A.10 cost).
+    beat = None
+    if state["just_awakened"]:
+        beat = await director.on_event(
+            session, world,
+            f"{name} awakens while the creator wears it — it KNOWS, now, that it is being ridden.",
+            key=f"awaken_possessed:{minion_id}",
+            context=f"{name} awareness {state['awareness']:.2f}.")
+
+    await session.commit()
+    return {"possessed": True, "minion_id": minion_id, "world_id": world.id,
+            "awareness": state["awareness"], "awakened": state["awakened"],
+            "just_awakened": state["just_awakened"], "god_beat": beat}
+
+
+@router.post("/{minion_id}/release")
+async def release_minion(
+    minion_id: str,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Release the body back to its own AI — the creator lets go. The minion remembers it was
+    worn (lost_time memory; its raised awareness persists)."""
+    from ..services import possession
+
+    minion = await _minion_or_404(session, minion_id)
+    world = await session.get(World, minion.world_id)
+    if world is None:
+        raise HTTPException(status_code=404, detail="world not found")
+
+    was = possession.is_controlled(minion)
+    lost = possession.mark_released(minion, world.id, tick=world.tick)
+    if was:
+        name = f"{minion.name} {minion.surname or ''}".strip()
+        # The withdrawal is an Event (feeds the Overmind); the minion keeps a lost_time memory
+        # which its NEXT reflection turns into 'a god rode me' for a high-awareness being (A.8).
+        session.add(Event(world_id=world.id, tick=world.tick, kind="release",
+                          actor_id=minion_id,
+                          payload={"summary": f"the creator withdraws from {name}",
+                                   "lost_time": lost}))
+        await session.commit()
+    return {"possessed": False, "minion_id": minion_id, "released": was, "lost_time": lost}
+
+
 @router.get("/{minion_id}/beliefs")
 async def list_beliefs(
     minion_id: str,

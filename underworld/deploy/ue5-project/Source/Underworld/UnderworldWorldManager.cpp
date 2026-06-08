@@ -1,6 +1,7 @@
 // Copyright Underworld. All Rights Reserved.
 #include "UnderworldWorldManager.h"
 #include "UnderworldMinion.h"
+#include "UnderworldPlayableMinion.h"
 #include "SceneStateClient.h"
 #include "Engine/DirectionalLight.h"
 #include "Components/DirectionalLightComponent.h"
@@ -10,6 +11,7 @@
 #include "Engine/StaticMesh.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/PlayerController.h"
 #include "TimerManager.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
@@ -78,6 +80,16 @@ void AUnderworldWorldManager::HandleSceneState(const FUwSceneState& State)
 	for (const FUwMinionState& Ms : State.Minions)
 	{
 		Seen.Add(Ms.Id);
+
+		// The body the LOCAL player is wearing is rendered by the player-controlled ACharacter,
+		// not the lightweight crowd actor — feed the character state and skip the crowd pooling
+		// (so it isn't double-rendered). Anim/guild update; movement is player-driven there.
+		if (Ms.Id == PossessedId)
+		{
+			if (PossessedActor) { PossessedActor->ApplyState(Ms); }
+			continue;
+		}
+
 		AUnderworldMinion* Actor = Minions.FindRef(Ms.Id);
 		if (!Actor)
 		{
@@ -243,4 +255,87 @@ void AUnderworldWorldManager::DespawnChunk(const FIntPoint& Key)
 		}
 	}
 	ChunkActors.Remove(Key);
+}
+
+// ── OVERRIDE PILLAR: possession (Bible §4.4) ─────────────────────────────────────────
+
+void AUnderworldWorldManager::RequestPossess(const FString& MinionId)
+{
+	if (MinionId.IsEmpty() || MinionId == PossessedId) { return; }
+	if (!*PlayableMinionClass)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Underworld] PlayableMinionClass not set — cannot possess"));
+		return;
+	}
+	USceneStateClient* Client = nullptr;
+	if (UGameInstance* GI = UGameplayStatics::GetGameInstance(this))
+	{
+		Client = GI->GetSubsystem<USceneStateClient>();
+	}
+	if (!Client) { return; }
+
+	// release any current possession first (one body at a time), then ask the server.
+	if (!PossessedId.IsEmpty()) { ReleasePossession(); }
+
+	TWeakObjectPtr<AUnderworldWorldManager> WeakThis(this);
+	const FString Id = MinionId;
+	Client->PostPossess(Id, /*bPossess=*/true, [WeakThis, Id](bool bOk)
+	{
+		if (bOk && WeakThis.IsValid()) { WeakThis->FinishPossess(Id); }
+	});
+}
+
+void AUnderworldWorldManager::FinishPossess(const FString& MinionId)
+{
+	UWorld* W = GetWorld();
+	if (!W || !*PlayableMinionClass) { return; }
+
+	// spawn the player body at the crowd actor's current transform (seamless hand-off), then
+	// remove the crowd actor so the minion isn't double-rendered.
+	FVector  Loc = FVector::ZeroVector;
+	FRotator Rot = FRotator::ZeroRotator;
+	if (AUnderworldMinion* Crowd = Minions.FindRef(MinionId))
+	{
+		Loc = Crowd->GetActorLocation();
+		Rot = Crowd->GetActorRotation();
+		Crowd->Destroy();
+		Minions.Remove(MinionId);
+	}
+
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	PossessedActor = W->SpawnActor<AUnderworldPlayableMinion>(PlayableMinionClass, Loc, Rot, Params);
+	if (!PossessedActor) { return; }
+	PossessedId = MinionId;
+
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0))
+	{
+		SpectatorPawn = PC->GetPawn();           // remember the god camera to restore on release
+		PC->Possess(PossessedActor);             // dive into the body — input now drives it
+	}
+	UE_LOG(LogTemp, Display, TEXT("[Underworld] possessed minion %s"), *MinionId);
+}
+
+void AUnderworldWorldManager::ReleasePossession()
+{
+	if (PossessedId.IsEmpty()) { return; }
+
+	if (USceneStateClient* Client = UGameplayStatics::GetGameInstance(this)
+			? UGameplayStatics::GetGameInstance(this)->GetSubsystem<USceneStateClient>() : nullptr)
+	{
+		Client->PostPossess(PossessedId, /*bPossess=*/false, nullptr);
+	}
+
+	SpectateAgain();                              // hand control back to the god camera
+	if (PossessedActor) { PossessedActor->Destroy(); PossessedActor = nullptr; }
+	UE_LOG(LogTemp, Display, TEXT("[Underworld] released minion %s"), *PossessedId);
+	PossessedId.Empty();                          // crowd actor reappears on the next scene-state
+}
+
+void AUnderworldWorldManager::SpectateAgain()
+{
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0))
+	{
+		if (SpectatorPawn.IsValid()) { PC->Possess(SpectatorPawn.Get()); }
+	}
 }

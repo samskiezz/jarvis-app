@@ -157,6 +157,27 @@ export default function WorldDetail() {
     return () => window.removeEventListener("keydown", onKey);
   }, [overrideCtl]);
 
+  // OVERRIDE PILLAR (Bible §4.4) — server-authoritative possession. Toggling override ON posts
+  // /possess (the colony's awareness rises and every renderer, WebGL + UE5, agrees who is worn);
+  // toggling OFF / deselecting / ESC posts /release. A ref tracks the worn body so release still
+  // fires after the minion is deselected.
+  const possessedRef = useRef<string | null>(null);
+  useEffect(() => {
+    const wear = overrideCtl ? selectedMinion : null;
+    if (wear && possessedRef.current !== wear) {
+      possessedRef.current = wear;
+      api.possess(wear).catch(() => {});
+    } else if (!wear && possessedRef.current) {
+      const prev = possessedRef.current;
+      possessedRef.current = null;
+      api.release(prev).catch(() => {});
+    }
+  }, [overrideCtl, selectedMinion]);
+  // release on unmount (navigating away while still wearing a body).
+  useEffect(() => () => {
+    if (possessedRef.current) { api.release(possessedRef.current).catch(() => {}); possessedRef.current = null; }
+  }, []);
+
   const selectedMinionData = useMemo(
     () => (minions.data ?? []).find((m) => m.id === selectedMinion) ?? null,
     [minions.data, selectedMinion],

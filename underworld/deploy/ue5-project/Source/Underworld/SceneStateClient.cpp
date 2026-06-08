@@ -102,6 +102,16 @@ bool USceneStateClient::ParseScene(const FString& Body, FUwSceneState& Out) cons
 			Sun->HasField(TEXT("z")) ? (float)Sun->GetNumberField(TEXT("z")) : -1.f).GetSafeNormal();
 	}
 
+	// frame.possessed_id — which body the creator is wearing (empty = none).
+	if (Root->HasTypedField<EJson::Object>(TEXT("frame")))
+	{
+		const TSharedPtr<FJsonObject> Frame = Root->GetObjectField(TEXT("frame"));
+		if (Frame.IsValid() && Frame->HasField(TEXT("possessed_id")))
+		{
+			Out.PossessedId = Frame->GetStringField(TEXT("possessed_id"));
+		}
+	}
+
 	const TArray<TSharedPtr<FJsonValue>>* Mins = nullptr;
 	if (Root->TryGetArrayField(TEXT("minions"), Mins) && Mins)
 	{
@@ -140,6 +150,7 @@ bool USceneStateClient::ParseScene(const FString& Body, FUwSceneState& Out) cons
 				Ms.TargetPos  = FVector((*Tgt)[0]->AsNumber(), 0.f, (*Tgt)[1]->AsNumber());
 				Ms.bHasTarget = true;
 			}
+			Ms.bPossessed = M->HasField(TEXT("possessed")) && M->GetBoolField(TEXT("possessed"));
 			Out.Minions.Add(MoveTemp(Ms));
 		}
 	}
@@ -161,6 +172,27 @@ void USceneStateClient::FetchChunk(int32 Cx, int32 Cz, TFunction<void(const FUwC
 			if (!bOk || !Resp.IsValid() || Resp->GetResponseCode() != 200) { return; }
 			FUwChunk Chunk;
 			if (ParseChunk(Resp->GetContentAsString(), Chunk) && OnDone) { OnDone(Chunk); }
+		});
+	Req->ProcessRequest();
+}
+
+void USceneStateClient::PostPossess(const FString& MinionId, bool bPossess, TFunction<void(bool)> OnDone)
+{
+	if (MinionId.IsEmpty()) { if (OnDone) { OnDone(false); } return; }
+	const FString Verb = bPossess ? TEXT("possess") : TEXT("release");
+	const FString Url = FString::Printf(TEXT("%s/minions/%s/%s"), *ApiUrl, *MinionId, *Verb);
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Req = FHttpModule::Get().CreateRequest();
+	Req->SetURL(Url);
+	Req->SetVerb(TEXT("POST"));
+	Req->SetHeader(TEXT("Authorization"), FString::Printf(TEXT("Bearer %s"), *ApiKey));
+	Req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+	Req->SetContentAsString(TEXT("{}"));
+	Req->SetTimeout(8.f);
+	Req->OnProcessRequestComplete().BindLambda(
+		[OnDone = MoveTemp(OnDone)](FHttpRequestPtr, FHttpResponsePtr Resp, bool bOk)
+		{
+			const bool bSuccess = bOk && Resp.IsValid() && Resp->GetResponseCode() == 200;
+			if (OnDone) { OnDone(bSuccess); }
 		});
 	Req->ProcessRequest();
 }

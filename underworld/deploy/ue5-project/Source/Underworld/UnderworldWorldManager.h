@@ -12,6 +12,7 @@
 #include "UnderworldWorldManager.generated.h"
 
 class AUnderworldMinion;
+class AUnderworldPlayableMinion;
 class ADirectionalLight;
 class AStaticMeshActor;
 class UStaticMesh;
@@ -27,8 +28,23 @@ public:
 	/** BP_Minion class to spawn (assign in the level — has the skeletal mesh + AnimBP). */
 	UPROPERTY(EditAnywhere, Category="Underworld") TSubclassOf<AUnderworldMinion> MinionClass;
 
+	/** BP_PlayableMinion class — the heavier ACharacter spawned when the creator possesses a
+	 *  body (capsule + CharacterMovement + the same mesh/AnimBP). Assign in the level. */
+	UPROPERTY(EditAnywhere, Category="Underworld") TSubclassOf<AUnderworldPlayableMinion> PlayableMinionClass;
+
 	/** The level's sun, rotated by scene-state time-of-day. */
 	UPROPERTY(EditAnywhere, Category="Underworld") ADirectionalLight* Sun = nullptr;
+
+	// ── OVERRIDE PILLAR: possession (Bible §4.4) ───────────────────────────────────
+	/** Possess a minion by id: POST the verb, then swap its crowd actor for a player-controlled
+	 *  ACharacter that the local PlayerController possesses. Called by the PlayerController on a
+	 *  click-trace hit. Releases any current possession first. */
+	UFUNCTION(BlueprintCallable, Category="Underworld") void RequestPossess(const FString& MinionId);
+	/** Release the current possession: POST release, hand control back to the spectator pawn, and
+	 *  let the crowd actor reappear from the next scene-state. */
+	UFUNCTION(BlueprintCallable, Category="Underworld") void ReleasePossession();
+	/** The minion id the local player is currently wearing (empty = none). */
+	UFUNCTION(BlueprintPure, Category="Underworld") FString GetPossessedId() const { return PossessedId; }
 
 	/** φ/fractal world streaming. ChunkSize is in backend units (metres); must match the
 	 *  backend's chunk_size (512). Radius = how many chunks each way to keep materialised
@@ -48,6 +64,13 @@ private:
 	// minions (live, every tick)
 	UPROPERTY() TMap<FString, AUnderworldMinion*> Minions;
 	int64 LastTick = -1;
+
+	// ── possession state (the body the local player is wearing) ────────────────────
+	UPROPERTY() AUnderworldPlayableMinion* PossessedActor = nullptr;
+	FString PossessedId;                                   // empty = spectating (god camera)
+	TWeakObjectPtr<APawn> SpectatorPawn;                   // god camera, re-possessed on release
+	void FinishPossess(const FString& MinionId);           // spawn + PlayerController->Possess
+	void SpectateAgain();                                  // PlayerController->Possess(spectator)
 
 	// ── world streaming (buildings from φ/fractal chunks) ──────────────────────────
 	void LoadManifest();                                  // glb url -> /Game asset path

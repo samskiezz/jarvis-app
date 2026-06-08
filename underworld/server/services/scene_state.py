@@ -255,6 +255,9 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         "identity": ((m.brain or {}).get("self_model") or {}).get("identity"),
         "drive": (m.brain or {}).get("dominant_drive"),
         "awakened": bool((m.brain or {}).get("awakened_tick")),
+        # OVERRIDE PILLAR — is the creator currently wearing this body? (renderers show a halo /
+        # hand control to the player for the possessed minion). Authoritative, server-owned.
+        "possessed": bool((m.brain or {}).get("controlled_by_creator")),
         "scale": prominence,
         "needs": {"hunger": round(m.hunger or 0, 3), "fatigue": round(m.fatigue or 0, 3),
                   "sanity": round(m.sanity or 0, 3)},
@@ -301,6 +304,13 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
         director_frame = director.frame(world.id)
     except Exception:  # noqa: BLE001
         director_frame = {"overmind": None, "chatter": [], "god_beat": None}
+    # OVERRIDE PILLAR — which body (if any) the creator is currently wearing, so every renderer
+    # agrees and hands control to the player for that one minion.
+    try:
+        from underworld.server.services import possession
+        possessed_id = possession.possessed_id(world.id)
+    except Exception:  # noqa: BLE001
+        possessed_id = None
     return {
         "world_id": world.id, "tick": world.tick, "era": world.era,
         "sim_year": round(world.sim_year, 1),
@@ -312,6 +322,7 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
             "overmind": director_frame.get("overmind"),
             "chatter": director_frame.get("chatter", []),
             "god_beat": director_frame.get("god_beat"),
+            "possessed_id": possessed_id,
         },
         "terrain": {
             "seed": seed_int,

@@ -199,9 +199,12 @@ async def cognition_cycle(session, world, *, hot_n: int = 24) -> dict:
         brain["thought"] = ws["thought"]
         brain["dominant_drive"] = ws["dominant_drive"]
 
-        # reflect (LLM) — awareness-tiered; theory-of-mind over nearby peers
+        # reflect (LLM) — awareness-tiered; theory-of-mind over nearby peers.
+        # While the creator WEARS this body (Annex A.8), skip its reflection: the player IS its
+        # cognition, so it's cheaper than letting it think and avoids the AI fighting the rider.
         peers = [p for j, p in enumerate(peer_names) if j != mi][:4]
-        patch = await reflect(m, mems, era=era, awareness=was, peers=peers)
+        patch = None if brain.get("controlled_by_creator") else \
+            await reflect(m, mems, era=era, awareness=was, peers=peers)
         refl_count = int(brain.get("reflections", 0))
         if patch:
             sm = dict(brain.get("self_model") or {})

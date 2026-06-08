@@ -30,6 +30,10 @@ struct FUwMinionState
 	UPROPERTY(BlueprintReadOnly) float   Speed = 0.f;                    // units/sec scalar
 	UPROPERTY(BlueprintReadOnly) FVector TargetPos = FVector::ZeroVector;// (tx, 0, tz) goal slot
 	UPROPERTY(BlueprintReadOnly) bool    bHasTarget = false;
+
+	// OVERRIDE PILLAR — the creator is currently wearing this body (Bible §4.4). Renderers show
+	// a halo / hand control to the player for this one; its AI stands down server-side.
+	UPROPERTY(BlueprintReadOnly) bool    bPossessed = false;
 };
 
 /** One placed structure inside a φ/fractal chunk (building / wall / prop). Mirrors the
@@ -70,4 +74,7 @@ struct FUwSceneState
 	UPROPERTY(BlueprintReadOnly) FString Weather; // clear/rain/...
 	UPROPERTY(BlueprintReadOnly) int64   TerrainSeed = 0;
 	UPROPERTY(BlueprintReadOnly) TArray<FUwMinionState> Minions;
+
+	// frame.possessed_id — the single body the creator is wearing this world (empty = none).
+	UPROPERTY(BlueprintReadOnly) FString PossessedId;
 };

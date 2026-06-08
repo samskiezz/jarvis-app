@@ -81,7 +81,7 @@ async def _movement_loop():
 
     from .db.models import Minion, World
     from .db.session import session_scope
-    from .services import movement
+    from .services import movement, possession
     from .services.scene_state import _action_target
 
     if os.environ.get("MOVEMENT_LOOP", "1").lower() in ("0", "false", "no"):
@@ -103,6 +103,9 @@ async def _movement_loop():
                             Minion.world_id == world.id, Minion.alive.is_(True))
                         .limit(max_n))).scalars().all()
                     for m in minions:
+                        # the creator is wearing this body — the player drives it, the AI stands down
+                        if possession.is_controlled(m):
+                            continue
                         last_action = (m.brain or {}).get("last_action", "rest")
                         _, target_fn, _ = _action_target(last_action, "")
                         movement.step_minion(m, seed_int=seed_int, town_radius=town_radius,

@@ -540,3 +540,49 @@ class TestDirectorLogic:
 
     def test_no_god_trigger_when_quiet(self):
         assert director._god_trigger({"awakened": 0, "mean_awareness": 0.0}, ["birth: a child"]) is None
+
+
+# ── The Override Pillar: server-authoritative possession (Bible §4.4 / Annex A.8) ─────
+
+from underworld.server.services import possession
+
+
+class TestPossession:
+    def test_possess_sets_control_and_session(self):
+        m = _FakeMinion("p1")
+        m.brain = {"awareness": 0.2}
+        st = possession.mark_possessed(m, "w", tick=5)
+        assert possession.is_controlled(m) is True
+        assert possession.possessed_id("w") == "p1"
+        assert m.brain["possession"] == {"count": 1, "last_tick": 5, "rapport_drift": 0.0}
+        assert st["awareness"] > 0.2 and st["just_awakened"] is False
+
+    def test_release_writes_lost_time_and_clears(self):
+        m = _FakeMinion("p2")
+        m.brain = {"awareness": 0.2}
+        possession.mark_possessed(m, "w", tick=5)
+        lost = possession.mark_released(m, "w", tick=9)
+        assert lost == {"from_tick": 5, "to_tick": 9, "gap_felt": True}  # low-awareness → blank gap
+        assert possession.is_controlled(m) is False
+        assert possession.possessed_id("w") is None
+
+    def test_possession_awakens_at_threshold(self):
+        m = _FakeMinion("p3")
+        m.brain = {"awareness": 0.55}                         # +0.12 crosses 0.6
+        st = possession.mark_possessed(m, "w", tick=1)
+        assert st["just_awakened"] is True
+        assert m.brain.get("awakened_tick") == 1
+        lost = possession.mark_released(m, "w", tick=2)
+        assert lost["gap_felt"] is False                      # high-awareness feels it, no blank gap
+
+    def test_release_when_never_possessed_is_noop(self):
+        m = _FakeMinion("p4")
+        m.brain = {}
+        assert possession.mark_released(m, "w", tick=1) == {}
+
+    def test_one_body_per_world_cache(self):
+        a, b = _FakeMinion("a"), _FakeMinion("b")
+        a.brain = {}; b.brain = {}
+        possession.mark_possessed(a, "w", tick=1)
+        possession.mark_possessed(b, "w", tick=2)             # cache reflects the latest possession
+        assert possession.possessed_id("w") == "b"

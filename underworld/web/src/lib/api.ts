@@ -189,6 +189,14 @@ export const api = {
     }),
   killMinion: (minion_id: string) =>
     request<Minion>(`/minions/${minion_id}/kill`, { method: "POST" }),
+  // OVERRIDE PILLAR (Bible §4.4) — server-authoritative possession. The creator wears a body;
+  // the colony reacts (awareness rises) and every renderer (WebGL + UE5) agrees who is worn.
+  possess: (minion_id: string) =>
+    request<{ possessed: boolean; awareness: number; awakened: boolean; just_awakened: boolean; god_beat: string | null }>(
+      `/minions/${minion_id}/possess`, { method: "POST" }),
+  release: (minion_id: string) =>
+    request<{ possessed: boolean; released: boolean; lost_time: Record<string, unknown> }>(
+      `/minions/${minion_id}/release`, { method: "POST" }),
   chatMinion: (
     id: string,
     message: string,
