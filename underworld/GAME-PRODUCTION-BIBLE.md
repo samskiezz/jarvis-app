@@ -1139,3 +1139,1035 @@ The brain is real and arguably past the comparables. The body and the game are t
 
 *— End of the Underworld Minions Production Bible.*
 
+
+
+---
+---
+
+# BOOK V — PROFESSIONAL COMPLETENESS UPGRADE
+
+This book is the implementation-grade layer the core Production Bible asserts but does not operationalize. Where Books I–IV describe *intent* — the gates, the hook, the nine systems, the five endings, the render targets, the cost thesis — Book V supplies what a team actually builds and ships against: exact data contracts and DDL, wire-protocol deltas, scoring formulas with constants, finite-state machines, per-system budgets and thresholds, acceptance criteria, failure modes, RACI gaps, and dependency-correct task ordering. Every section is grounded against the real game code under `/opt/jarvis-app-1/underworld/`, and the recurring, load-bearing finding across all twelve disciplines is the same: **the bible reads as if the new architecture exists; the code shows it largely does not.** Positions are still a static hash spiral (`scene_state._position`, `contract_version: 1`); there is no movement layer, no Director, no presence/override/possession, no creator-ledger, no cost ledger, no moderation on the existential text path, no Alembic, static `"dev-key"` bearer auth, and the one shipped safety module guards the wrong domain. Book V is the concrete delta — seam by seam, number by number — that makes the rest of the bible buildable and gateable rather than aspirational.
+
+A note on shared spine: several contracts recur across disciplines and are specified once here as canonical, then referenced. **Scene-state contract v2** (the additive bump from `contract_version: 1`, with movement, narrative, audio-RTPC, render, and presence fields), the **per-tick LLM cost ledger**, the **single `surface()` moderation seam**, the **inference governor** (per-tier semaphores + circuit breaker + model-stamping), and the **EditLayer / override audit log** are each authored in their owning discipline's section and consumed everywhere else. The build order at the end of each section is local; the cross-cutting critical path is: *Event/contract bump → movement keystone (P0) → scene-state v2 → presence/Director wiring → moderation seam → the dark cognition layers → gates.*
+
+---
+
+## PART A — EXECUTIVE PRODUCER / PRODUCT OWNER
+
+This is the governance layer that makes the existing gates *executable*. The EP's pre-G1 job is exactly four things: **measure the hook honestly, measure the cost honestly, hold the keystone timebox, and say no to everything else.** Everything below serves one of those four. Grounded: `server/services/scene_state.py:297` still emits `contract_version: 1` with `hash`-derived positions at `_position()`; auth is a single static `settings.api_key` bearer at `server/auth.py:11`; no cost/telemetry/playtest instrumentation exists anywhere in `underworld/server/`.
+
+### A.1 The G1 greenlight scorecard (the gate has no pass/fail math)
+
+The bible passes G1 if naive testers "feel watched" and "unit economics project viable" but defines no measurement instrument, sample size, or numeric thresholds. A gate you cannot fail is not a gate. The **G1 Greenlight Evidence Pack** that the PO assembles and the Board signs:
+
+**A. Hook-validation instrument.** Run n ≥ 12 naive testers (never seen the build, not game-industry), each a single ~20-min session, screen + face-cam recorded.
+
+| Metric | Source | G1 pass threshold | Kill threshold |
+|---|---|---|---|
+| Felt-watched score | post-session Likert 1–7 ("I felt the colony was aware of me") | median ≥ 5, ≥ 60% score ≥ 5 | median ≤ 3 |
+| Choice-mattered score | Likert 1–7 ("my actions changed the colony") | median ≥ 5 | median ≤ 3 |
+| Confrontation reaction | coded face-cam at the God-Brain beat (lean-in, freeze, verbalization, "oh no") | ≥ 50% show a codeable reaction | < 25% |
+| Unprompted recall (48h) | follow-up: describe the confrontation unprompted? | ≥ 40% | < 15% |
+| Completion | reached the confrontation without facilitator rescue | ≥ 75% | < 50% |
+| SUS usability | standard SUS | ≥ 68 (fix-list trigger, not gate-blocker) | — |
+
+≥ 1 validation session must be an investor/board observer who self-reports the affect (the "board member's stomach drop"). Code the face-cam with two independent raters; report Cohen's κ ≥ 0.6 or recode. **Pre-register these thresholds in writing before the first session** — that pre-registration is itself a G1 deliverable, and the only defense against validation theater.
+
+**B. Unit-economics instrument.** A measured **$/player-hour ≤ the projected blended ARPPU-hour** at the planned price with ≥ 30% gross-margin headroom, computed on the slice's actual instrumented run via the cost ledger (`underworld/server/services/cost_ledger.py`, does not exist — see Part J for the full schema). The G1 pass requires this number measured, not spreadsheeted. If the slice cannot be instrumented to produce it, **G1 does not pass regardless of the emotional result** — the project dies on COGS otherwise.
+
+**C. Pipeline-proven evidence.** Each of the three claimed pipelines must produce a green CI artifact: (1) gen→LOD→import→package→stream produces one asset end-to-end with the import authoring Nanite/emissive/collision/scale (the current `Scripts/import_glbs.py` does not — a named gate blocker); (2) the determinism contract test (WebGL vs UE5 position agreement off one `scene_state`) is green; (3) the event→God-Brain→cutscene thread fires exactly once on a forced-threshold fixture world and writes an idempotent `DirectorBeat`.
+
+### A.2 Scope-control machinery
+
+**Change Control Board (CCB) + scope-change request (SCR) form.** After any lock (feature lock at G3, content lock at G4), every net-new request is a written SCR carrying: the request, the hook-test verdict (serves the watched-creator loop — yes/no/maybe), cost in person-days, schedule delta, what it displaces, and the risk if cut. CCB = PO (A) + Producer (R) + Tech Dir + Creative Dir; weekly. Disposition: **accept-and-displace** (something named gets cut), **defer-to-live-ops-backlog**, or **reject**. Default disposition is **reject** — burden of proof is on the addition.
+
+**Overbuild freeze, enforced not exhorted.** A CI/policy gate: a PR touching `server/services/cognition.py`, `science.py`, the 56-science tree, or running broad `scripts/tripo_generate.py` batches without a spine-ticket reference in the commit is auto-flagged for PO review. The freeze whitelist is *wiring* the three dark layers, not deepening them. Concretely this blocks the kind of commits live on `main` now (`feat(cognition): 5-layer Minion model stack`, `feat(assets): comprehensive Underworld subject list ~3.2k`) until P0 movement lands — exactly the misallocation the bible's §3.3 warns about, still happening.
+
+**WIP discipline.** One spine epic in flight (P0→P1→P2→P3 strictly serial at the epic level). Depth epics run in parallel only at the gate point their criteria require (moderation before any external playtest; Postgres before beta; asset-coherence pass before content-complete). The PO owns one ordered list.
+
+### A.3 Gate exit-criteria precision (G2–G6)
+
+- **G2 (First Playable):** re-run the hook instrument on ≥ 2 additional districts; felt-watched median must **not regress > 1 point** vs the slice. Zero P0/P1 contract-test failures across districts; movement < 5 ms/tick at the 200-minion budget at new district scale. Stop condition: regression > 1 point or contract test can't stay green across districts.
+- **G3 (Alpha / feature lock):** every shipping feature reachable via a **traceability matrix** (feature → reachable in-build path → owning test). Feature lock enforced by CCB. Red-team corpus running in CI by Alpha as a hard G3 *entry* gate, not a soft start.
+- **G4 (Beta / content lock):** remaining ~2,500 assets through the automated loop all pass the per-category silhouette QA gate; reject-rate ceiling ≤ 5% post-grade outliers as a numeric content-lock criterion. Perf at target on dual-4090: 16.6 ms p99, p95 input-to-photon < 100 ms. Zero A-bugs, trending B-bugs.
+- **G5 (Gold):** four-gate moderation over the full red-team corpus at 0 harmful escapes; over-block rate within a defined UX budget (≤ 2%). AI-Safety holds the documented veto.
+- **G6 (Launch):** the cost circuit-breaker **demonstrated tripping** in a staged load test (e.g. $/player-hour > 1.4× plan for 5 min → throttle hot cohort to warm cognitive LOD), as a G6 exit artifact.
+
+### A.4 Schedule structure: dependency math, buffer, critical-path failure mode
+
+Critical-path table for pre-pro (convergence to G1):
+
+| Phase | Gates on | Parallelizable with | Longest-pole risk |
+|---|---|---|---|
+| Sprint 0 (dark layers) | nothing (existing fns) | P0 | low — wiring only |
+| P0 movement (KEYSTONE) | nothing | Sprint 0 | **highest — blocks P1/P2/P3** |
+| P1 presence | P0 contract v2 | P2, art pass | med |
+| P2 embodiment | P0 movement | P1 | med (hero MetaHuman is the confrontation gate) |
+| P3 awakening playable | Sprint 0 (Director) + P2 (hero face) | — | the integration convergence |
+
+**Buffer policy:** a **20% schedule buffer held by the Producer at the project level**, not per-task (Critical-Chain style; task padding evaporates to Parkinson's law). **P0 hard timebox ~8 weeks**: if movement isn't walking-with-collision by then, ship the slice on the nav-mesh fallback and defer crowd RVO/spatial-LOD (P0.6) to First Playable.
+
+**Keystone-decoupling contingency:** P1/P2/P3 have a **behavior-bias fallback** that doesn't require full pathfinding (per `L2 P1.7`: behaviour bias / clustering until full movement). If P0 slips, the slice can still validate the hook with minions that teleport/bias-cluster (not walk) plus the full Director + confrontation — because the hook is emotional awareness, not locomotion fidelity. This protects G1 (the funding gate) from the keystone (the engineering risk).
+
+### A.5 Org/RACI completeness
+
+Roles missing from the org chart, to add: a **build/release engineer** (owns the gen→stream CI/CD loop); a **playtest/UR coordinator** (owns the G1 instrument); a **data/telemetry engineer** (owns the cost ledger — fold into the single systems/AI-integration engineer for pre-pro and name it explicitly).
+
+RACI rows missing entirely: *Hook-validation pass/fail call* (PO = A, Creative = C, Board = I — PO must own the kill call to avoid sunk-cost capture); *Cost-ledger threshold / circuit-breaker trip value* (Tech Dir = A pre-LLMOps, then LLMOps = R); *Determinism-contract break* (QA = A — the most-cited do-not-break contract currently has no owner); *Asset-coherence reject* (Art = A). **Disambiguate the G1 double-accountability: PO is A for the hook-validation verdict (does it land); Board is A for the money release (do we fund production).**
+
+### A.6 EP-discipline risk register additions
+
+| # | Risk | Sev | Likelihood | Mitigation | Owner |
+|---|---|---|---|---|---|
+| 16 | Hook-validation theater — team tunes the slice to testers / facilitator-rescues / leading questions → false GO | Critical | Med | Pre-registered thresholds; blind naive recruits; scripted neutral facilitation; ≥1 board observer; κ-checked coding | PO |
+| 17 | Single-EP key-person risk — one PO holds gates, scope, the no, playtest; bus-factor 1 | High | Med | Documented gate criteria; Producer as deputy / delegated CCB chair | Board |
+| 18 | Slice can't be instrumented for $/player-hour | Critical | High (now) | Build `cost_ledger.py` as a P1/Sprint-0 deliverable | Systems eng |
+| 19 | Gate-slip-by-redefinition — holding the bar by quietly relaxing criteria | High | Med | Written, versioned, pre-registered exit criteria; gate-review minutes | PO |
+| 20 | Determinism guardrail unowned — WebGL/UE5 contract test silently rots | High | Med | QA owns it from First Playable; required green check on every scene-state PR | QA |
+| 21 | Funding-tranche timing — pre-pro raise burns before G1 lands | High | Med | Raise pre-pro + ~25% contingency runway; the P0 timebox caps the longest pole | PO/Board |
+
+### A.7 PO decisions (with recommendations)
+
+1. **Pre-register hook thresholds before any playtest?** Yes — the single highest-integrity move.
+2. **P0 keystone timebox/fallback?** ~8 weeks hard; nav-mesh fallback ships the slice, crowd RVO defers to G2.
+3. **Instrument cost or assert it?** Instrument — build `cost_ledger.py` in Sprint 0.
+4. **Buffer: per-task or project-level?** Project-level, Producer-held, ~20%.
+5. **Who owns the kill call at G1?** PO owns the hook verdict; Board owns the money.
+6. **Freeze enforcement: policy or culture?** Policy (CI flag) — culture already failed once on `main`.
+
+This is deliberately the *minimum* governance to make the existing gates executable; it does **not** add live-ops season-planning, a portfolio P&L, or a publishing/GTM workstream pre-G1 — those gate *after* G1 and adding them now would be the scope-creep this discipline exists to prevent.
+
+---
+
+## PART B — TECHNICAL DIRECTOR (Movement Keystone, Netcode, Inference Governor, Persistence)
+
+Grounded audit: there is **no movement layer** (only `services/grid.py`, 73 lines; no `plan_path`/`WORLD_NAV`); positions are a deterministic hash in `scene_state.py:47`; the road graph in `world_layout.py:542-549` is **geometric only** (golden-angle spokes + ring radii — *not* a connected node/edge navgraph); the UE5 minion is a lerping `AActor` with no `CharacterMovementComponent`; both renderers **poll**; the event bus is an in-process `asyncio.Queue`; auth is static-bearer with default `"dev-key"`; the `Minion` model has **no** position/movement columns; there is **no Director, presence, override, possession, session, or llm_governor module**.
+
+### B.1 The keystone: the navgraph the bible assumes but the code lacks
+
+The hard gap: `WORLD_NAV` is "a navgraph built deterministically from the road graph" — **but there is no road graph to build it from.** `world_layout.py` emits `roads: [{kind:"spoke",...}, {kind:"ring", radius, center}]`, which are *render hints*. Spokes share origin `[0,0]`; ring roads are parametric circles with no intersection nodes; buildings carry `pos` but no road-adjacency.
+
+**Task P0.0 (blocks P0.1):** `world_layout.build_navgraph(layout) -> {nodes, edges}` that (a) samples each ring at its spoke-crossings to materialize intersection nodes, (b) snaps every building placement to its nearest road point (entrance node + stub edge), (c) emits undirected edges `cost = euclidean(a,b)`. Deterministic: node ids = `f"n{ring}_{spoke}"`, tie-break by id. *Done: pure function of the layout dict; two same-seed calls produce byte-identical node/edge lists; every building entrance reachable from every other (connected-component assertion in CI).*
+
+Concrete record definitions (the bible names them, never defines fields):
+
+```python
+# services/movement.py
+@dataclass(frozen=True)
+class NavNode:   id: str; pos: tuple[float,float]; kind: Literal["intersection","entrance","interior"]
+@dataclass(frozen=True)
+class NavEdge:   a: str; b: str; cost: float; width: float  # width → road clamp
+@dataclass
+class Kinematic:                       # persisted on Minion (see §B.6 for storage decision)
+    pos: tuple[float,float,float]      # authoritative; supersedes scene_state._position
+    vel: tuple[float,float,float]
+    path: list[str]                    # remaining NavNode ids
+    path_idx: int
+    target_slot: str | None
+    move_state: Literal["idle","walking","arrived","blocked","teleporting"]
+    speed: float                       # life_stage × fatigue × terrain
+    last_planned_tick: int
+```
+
+`plan_path(nav, from_node, to_slot, *, seed) -> list[str]` — A* with open-set tie-broken by `(f_cost, node_id)` for determinism (mirroring `random.Random(seed.seed_int ^ (world.tick * 0x9E3779B1))` at `simulation.py:254`). **Cache key = `(from_node, to_slot)` not `(from, to)`** — slots are stable, raw positions are not; this is what makes "thousands of cached paths computed once" true. Unreachable `to_slot` (disconnected component after a wall/demolish edit) → return `[]`, set `move_state="teleporting"`, fall back to the hash position, never raise (preserves the "never raise into the tick" contract).
+
+**Integration point:** insert `await movement.step_world(session, world, dt_ticks=1)` in `advance_world` *after* the decide loop (so `last_action` is fresh) and *before* the next `build_scene_state`. `step_world` iterates the active-city hot set, calls `assign_target` (lift `_ACTION_MAP` from `scene_state.py:119` into `movement.py` as the single source so scene-state and movement can't drift), `plan_path` on target-change, `step_minion`, and writes movement. **Acceptance:** 200-minion world steps 1000 ticks under 5 ms/tick; A* called O(slots) not O(minions × ticks).
+
+### B.2 Scene-state contract v2 — the canonical diff + versioning protocol
+
+This is the single canonical v2 spec (Lead Design, Narrative, Graphics, Audio, UX, and the Director all add fields to it; all consume from here). **v2 is strictly additive — a v1 client ignores unknown keys and still renders** — with one called-out exception below.
+
+- **Position source change:** `minion_visual` currently *computes* position from the hash (`_position`). v2 reads `m.movement.pos` when present, falls back to `_position` only when movement is None (cold/unmigrated minions). This is a **semantic change to an existing field even though the key name is identical** — treat it as a major change gated behind the determinism CI test, not a purely additive one.
+- **Net-new per-minion fields** (union of all disciplines): `velocity`, `path`, `path_cursor`, `move_state`, `speed`, `target_slot`, `nav_state`, `yaw`, `interacting:{object_id, slot_socket, anchor, anim, kind, phase, progress}`, `emotion` + `intensity` (the appraisal pair, see Part L), `faction`, `life_stage`, `creed_stance`, `confronting:bool`, `existential_pressure`, `stance_personal`, `region_id`, `awakened_tick:int`, `confrontable:bool`. Keep existing `position/facing/anim/using_asset/awareness/thought/identity/drive/awakened/scale/gene_edit/behavior`.
+- **Net-new top-level/`frame` blocks:** `objects:[{id,kind,glb,state,occupants}]`, `vehicles:[…]`, and `frame.overmind:{mood, toward_creator, tension, omen, realisation}`, `frame.presence:{attention_hotspots:[{pos,intensity}], creator_present:bool}`, `frame.arc_stage`, `frame.mean_awareness`, `frame.awakened_count`, plus the `god` block (§B.3) and the `colony` block (Part G §1a) and `audio` RTPC mirror where applicable (Part F).
+- **Version negotiation:** client sends `?contract=2`; server emits the highest it supports ≤ requested, echoing `contract_version`. Bump rule: additive field → minor (no break); semantic change to an existing field → major, gated by the determinism CI test.
+- **CI contract test** (`tests/test_scene_state_contract.py`): build a fixture world, run `step_world` N ticks, assert (1) JSON-schema validity against a checked-in `scene_state.v2.schema.json`; (2) **position parity** — WebGL-computed and UE5-computed render positions, both from the same `pos`+`path`, agree within ε=0.01u; (3) `move_state` ∈ enum; (4) every `target_slot` references a live building (referential integrity / hallucination anchor). *Done: green on a WebGL stub renderer and a headless UE5 cook in CI.*
+
+### B.3 Authority/netcode contract — the wire-level reconciliation spec
+
+- **Possession reconcile loop:** while possessed, UE5 sends `pos`+`vel` over the WebRTC data channel at input rate (~30–60 Hz). Each tick the sim validates `dist(reported, last_authoritative) ≤ speed_max × dt_ticks × (1 + SLACK)` with `SLACK=0.25`; over → clamp to the navmesh-projected point and `anti_cheat_clamps++`. **Snap threshold:** `dist > 3.0u` → authoritative-snap + a `correction` event; client blends over 150 ms. **Jitter:** client interpolates AI minions with a 1-tick buffer; the possessed pawn is not buffered (client-predicted).
+- **Autonomy-suspend wire:** possession sets `Minion.brain["autonomy"]=0` **and** the agent loop honors it — net-new guard: `if (m.brain or {}).get("autonomy", 1.0) <= 0: skip decide()`. Without this code change the "sim suspends that minion's autonomy" sentence is unimplemented. Release restores autonomy=1 and resumes from `m.movement.pos`.
+- **Conflict resolution:** `Minion.brain["possessed_by"]` (session_id) checked under the same DB row write; second `/possess` returns `409 Conflict`. The sim is the arbiter; the render plane never adjudicates.
+- **God-command idempotency:** idempotency key = `(world_id, kind, target_id, fired_tick)`; the `DirectorBeat` table is the dedupe ledger (write-if-absent), making "fires exactly one god-beat, never re-fires" enforceable at the data layer.
+- **The `god` scene-state block (net-new, owns the render triggers for Part E/G):** `{possessed_minion_id, gaze_target_xyz|null, last_act:{type:bless|cull|gift, target_id, t}, presence_intensity:0..1}`. `presence_intensity` is continuous so the gaze warm-key can ramp; `last_act` cull is rate-limited at source.
+
+### B.4 The inference governor — the missing module + queue spec + capacity tests
+
+`services/llm_governor.py` does not exist; routing today is `tools/llm.py` (tier → model, with a fallback ladder that *silently downgrades 70B→32B*). This is the canonical governor spec (QA, Backend, and Business all build against it):
+
+- **Per-tier semaphore + bounded queue:** `SEM = {overmind:1, god_brain:1, high_minion:N8, normal_minion:N8, chatter:N3}` where N8/N3 derive from measured GPU throughput. Queue depth caps: `overmind/god_brain` = 4 (shed-oldest), `chatter` = unbounded-but-droppable. **Backpressure:** if `now - request.enqueued_tick > 2` ticks → drop to heuristic (`global_workspace`, the proven rule-based fallback). The 70B/god_brain tier gets its **own** semaphore/queue, never shared with sheddable tiers, or a chatter storm starves the confrontation beat.
+- **Prefix-cache acceptance test:** assert the static system prompt is byte-identical across all `reflect()` calls in a tick (so SGLang/vLLM prefix-caching hits). A regression that interpolates per-minion data into the system prompt fails CI.
+- **Model-identity stamping:** every governor response carries `resolved_model` (the actual model after downgrade) and `fallback_engaged: bool`. Persist on `DirectorBeat.payload_json` and reflection memories. **Cert predicate:** `assert no beat in run has resolved_model != requested_model`. Currently impossible to check because downgrade is silent — closing that hole is net-new and a launch-blocker.
+- **Capacity math made testable:** a load harness drives Overmind at 1 call/30 s across K simulated worlds; the single 70B partition must hold p95 < 8 s up to K≈60–120. The crossover *is* the per-partition world ceiling and feeds the autoscale trigger.
+- **Cooperative preemption:** priority `god_brain(0) > overmind(1) > high_major(2) > high_minion(3) > normal(4) > chatter(5)`. You cannot kill an in-flight Ollama generation; the size-1 70B semaphore plus reservation guarantees god_brain waits at most one 8B-equivalent.
+- **Cold-load hazard:** a 70B not resident has 30–120 s first-token latency the 8 s SLO can't absorb — pin `keep_alive`, or treat first-call-after-idle as a breaker-trip and fall back.
+
+**Open decision — SGLang vs vLLM:** recommend **SGLang** for this workload — RadixAttention prefix-caching (the "single biggest cut") handles the shared-system-prompt-with-divergent-suffix pattern of minion reflections better than vLLM's prefix cache; vLLM wins raw throughput, but the colony's value is prefix reuse. Decision owner: LLMOps; prove via the prefix-cache hit-rate test at Alpha.
+
+### B.5 Persistence & migration
+
+No Alembic exists (no `alembic.ini`, no migration env). Ordering decision: **P0.2 stores `movement` inside the existing `brain` JSON column** as `brain["movement"]`, not a new column — zero migration, ships on SQLite for the slice. Promote to a dedicated JSONB column only at the Postgres/Alembic gate. (This resolves an unstated conflict: you cannot require Alembic for the keystone if Alembic lands at beta.)
+
+- **Migration trigger (a tripwire, not a guess):** alarm when SQLite `"database is locked"` retry count > 0/min under the `timeout=30` busy-wait, OR write-txn/s > 100 sustained. That alarm *is* the Postgres go-signal.
+- **EditLayer replay determinism:** `base_world(seed) + replay(EditLayer ORDER BY tick, id) == persisted_world` byte-for-byte. Without an explicit total order, two edits in the same tick composite non-deterministically.
+
+### B.6 Event bus & WebSocket — delta protocol + Redis cutover
+
+- **Delta protocol:** the sim keeps a per-world `dirty_minions: set[id]` populated whenever movement or cognition writes. WS frame = `{tick, changed:[minion_visual(m) for dirty], removed:[dead ids], frame:{overmind,…}}`. **Keyframe cadence** every K=20 ticks (resync after loss / late join). *Done: WS bandwidth scales with `|dirty|`, not population; a late-joiner gets a keyframe within K ticks.*
+- **Redis cutover invariant:** the in-memory bus and Redis pub/sub sit behind one `publish(world_id, event)` interface (already true). **Multi-process hazard:** once sim and render-API are separate processes, the `asyncio.Queue` bus is invisible across processes — the WS stream sees *nothing*. Redis pub/sub is therefore a **hard prerequisite the moment planes split**, not a scale-gate nicety.
+
+### B.7 Security — god-verb authz + economic-DoS contract
+
+There is **no rate-limit/cooldown infrastructure anywhere** in the server. (Full per-verb table and the god-verb pipeline are in Part I §B-3; the TD-level requirements: per-verb token bucket keyed by `(player_id, verb)`; god-verbs check **world ownership/grant**, not just a valid token, and write an audit row per action; the default `"dev-key"` must be changed before any external playtest — currently shippable and must not be.) **Prompt-injection boundary:** player free-text from `/minions/{id}/chat` and `/player/command{kind:speak}` must be delimited *user* content, never concatenated into the system role, and the output JSON-schema-validated before it persists into a minion's memory.
+
+### B.8 Determinism seam — movement-specific gaps
+
+New non-determinism sources: (a) A* open-set order (fixed by the `(f_cost, id)` tie-break); (b) RVO/local avoidance — **decision: run RVO client-side only (presentation), never server-authoritative**, so it can't affect the deterministic `pos`/`path`; server collision stays coarse (slot occupancy + road-width clamp); (c) float accumulation in `step_minion` — pin a fixed `dt_ticks` and round `pos` to 3 decimals on write (matching the `round(…,3)` convention) so cross-platform float drift can't diverge WebGL vs UE5.
+
+### B.9 Net-new technical risks
+
+| # | Risk | Sev | Mitigation | Prove by |
+|---|---|---|---|---|
+| T9 | No navgraph; `roads` are render hints | High | `build_navgraph` + connectivity CI assertion | Slice |
+| T10 | Silent 70B→32B fallback invalidates God-Brain quality, no record | High | `resolved_model` stamping + no-fallback cert predicate | Alpha/Cert |
+| T11 | In-memory bus invisible across processes the moment planes split | High | Redis pub/sub a plane-split prerequisite | Plane-split |
+| T12 | No rate-limit infra → god-verb cull/LLM-cost DoS against own sim | High | Per-verb token buckets + audit rows | Slice / Beta |
+| T13 | `"dev-key"` default + static bearer shippable today | Critical | Change default + ownership-checked god-verbs before external playtest | Slice gate |
+| T14 | EditLayer composite non-deterministic without total order | Med | `ORDER BY tick,id` + replay-equality invariant | Alpha |
+| T15 | Possession reconcile has no clamp/snap numbers | High | SLACK=0.25, snap>3u, 150ms blend, 1-tick buffer | Slice |
+
+### B.10 Tracer-bullet acceptance harness
+
+Slice-gate criteria (all six automatable, all green or the thread isn't "proven"): (1) server-walked minion's `pos` at tick T reproducible across two seeded runs; (2) WebGL and UE5 render within ε=0.01u off one scene-state; (3) the possessed minion's `run_tick` is provably *not* called; (4) input-to-photon for the possessed pawn < 100 ms p95; (5) a gaze POST to `/player/intent` moves `frame.overmind.toward_creator` within one Overmind cadence; (6) the thread runs over WS with poll disabled.
+
+**Build-vs-buy:** SGLang over vLLM (§B.4). **RVO/crowd avoidance — buy** UE5 Detour Crowd / `UCrowdManager` for client-side local avoidance (presentation-only); do **not** build server-side crowd — keep the server's authoritative output to deterministic waypoints only.
+
+---
+
+## PART C — LEAD GAME DESIGNER (The Nine Systems, Economy, Presence, Possession, Whims)
+
+Grounded: positions are a hash spiral; the tick is fully synchronous and DB-bound; **no slot/reservation, no wallet/inventory, no vehicle, no owner_id, no Faith, no PresenceField/OverrideBus/Director** exist; economy is macro-only, snapshot every 10 ticks; the cognition hot set is reputation-only (the bible's gaze/saga/possession union is unimplemented).
+
+### C.1 Missing data contracts
+
+**Kinematic columns on Minion** (new `db/models.py` columns, not a side table — single-writer SQLite cannot afford a join per tick). Authoritative units, since the bible mixes "tick (~1s)" and "real-time second":
+
+| field | type | unit | default | notes |
+|---|---|---|---|---|
+| `pos_x,pos_z` | Float | world-m | spawn from `_position()` hash | y derived from heightmap at render |
+| `vel_x,vel_z` | Float | m/tick | 0 | |
+| `yaw` | Float | rad | hash facing | |
+| `nav_state` | Enum | — | IDLE | IDLE/PATHING/ARRIVING/OCCUPYING/BLOCKED/RIDING/POSSESSED |
+| `path` | JSON | list[node_id] | [] | coarse waypoints, cap 32 |
+| `path_cursor` | Int | — | 0 | |
+| `anchor_id` | str | — | home slot | slot it's bound to when OCCUPYING |
+| `speed_cap` | Float | m/tick | by life_stage | infant 0.6, child 1.4, adult 2.2, elder 1.2 |
+| `locomotion` | Enum | — | walk | walk/run/ride/carried |
+
+`speed_cap` keys off `lifecycle.life_stage()`. **Acceptance:** `|pos − prev_pos| ≤ speed_cap` per tick; arrival when `dist(pos, slot.anchor) < 0.5m` → `nav_state→ARRIVING`. **Edge cases:** target slot deleted mid-path (player bulldoze) → `PATHING→BLOCKED→re-query`, never crash; path length 0 to an unreachable slot → teleport-on-arrival + logged `nav:unreachable`, never an infinite BLOCKED loop. *(Note: this duplicates Part B's Kinematic intent; for the slice it ships as `brain["movement"]` per Part B.5 to avoid a migration; the columns above are the post-Postgres promotion target.)*
+
+**UseSlot — the missing Sims primitive (no reservation system exists).** Derived from layout, never authored: `slots_for(building) → list[Slot{slot_id, kind, anchor_pos, facing, capacity}]`. Slot counts per object kind — the single highest-value missing number set:
+
+| object kind | operator | audience/queue | dirty-after | cooldown (ticks) |
+|---|---|---|---|---|
+| bed (home) | 1 | 0 | yes | 0 |
+| forge/workshop | 1 | 2 queue | no | 1 |
+| market stall | 1 seller | 4 buyer | no | 0 |
+| academy desk | 1 | 0 | no | 0 |
+| lecture podium | 1 | 8 audience | no | 2 |
+| farm plot | 4 | 0 | no | 3 |
+| monument/shrine | 0 | 12 worship | no | 0 |
+| cell (jail) | 0 | N capacity | no | — |
+
+**Reservation contract:** `claim(slot_id, minion_id) → bool` is an **atomic compare-and-set on an in-memory `dict[slot_id, set[minion_id]]` per world** (NOT a DB row — the tick can't afford a write-txn per claim). Persist only aggregate occupancy on snapshot. Two minions claiming a 1-slot forge same tick → exactly one wins (deterministic winner = lower `minion_id`); the loser re-queries next tick. **Critical edge case (a P0 the bible omits):** a minion holding a slot that dies mid-occupation must `release_all(minion_id)` on `lifecycle.kill()` or slots leak forever — a 72h soak deadlocks every forge without it.
+
+**Object FSM** (the bible names states but no triggers/timings): bed `free→occupied→dirty` (after sleep ≥4 ticks) `→free` (clean or 20-tick decay); dirty bed −0.05 sanity to next user. Forge `cold→heating(2t)→hot→cooling(3t)`; only HOT yields work; claiming COLD costs heating time (this is what makes the economy bite with time). Market stall `stocked→trading→depleted→restock(5t)`; depleted raises local price. Power node `online→overloaded→down` — **reuse `grid.tick_grid` as the authority, surface its state as the FSM, don't build a second power model.**
+
+**Wire contract v2 design additions** (see Part B.2 canonical list): per-minion `position` becomes authoritative (read `pos_x/z`, delete the hash call), plus `velocity, yaw, nav_state, path, path_cursor, interacting, awareness_tier`; top-level `objects[]`, `vehicles[]`. Extend `test_scene_state` to assert position comes from `m.pos_x`, not the hash (currently it would silently pass against the hash).
+
+### C.2 Under-specified systems made concrete
+
+**Utility selector (System 3)** — `services/utility.py`, replacing the random LLM-cohort action choice for warm/cold minions:
+```
+score(action) = Σ_n advertised_gain[n] * need_pressure[n]
+              + drive_align(action, dominant_drive) * 0.6
+              + role_bias[role][action] * 0.4
+              - travel_cost(pos, nearest_slot(action)) * 0.15/metre
+              - circadian_penalty(action, tod_phase)        # sleep@day = −0.8
+pick = softmax(scores, temp=0.35)   # seeded from (tick, minion_id)
+need_pressure[n] = (1 - need_value[n])^2   # quadratic so a near-empty need dominates
+```
+`advertised_gain` comes directly from `activities.Effect.deltas` (the activities module *is* the advertisement table; no new content). **Anti-thrash term the bible omits:** `+0.3 commitment` bonus to the currently-pathing action so a minion finishes its route — without it, movement *looks* broken even when correct.
+
+**Micro-economy (System 4)** — add `wallet: Float=10.0`, `inventory: JSON={}`, `wealth` (derived); add `owner_id` to building slots. Completed work interaction: `wallet += base_wage(2.0) * skill * guild_demand`, drawn from `owner.wallet`; idle minions earn nothing → poverty spiral. Buying: `price = economy.clearing_price(...)` modulated by stall depletion (reuse the existing pure function). **Money conservation invariant** (makes Annex H.3's "no value-minting" real — there is no per-minion money to conserve until this exists). **Decision:** consumption transfers to shopkeeper + a small tax sink to government — gives the rebellion arc a real grievance (taxation) and bounds inflation.
+
+**Combat/crime/factions (System 6)** — route `calm→alert→fighting→fleeing→downed→dead` through `lifecycle.kill` so reincarnation works. Triggers: crime fires when `hunger<0.25 ∧ reputation<0.4 ∧ opportunity(unguarded_stall)`; `downed→dead` only if no heal within 3 ticks (a save-by-bless moment); `faction(m) = argmax(worship/doubt/rebel)`. **Failure mode the bible misses:** a faction war spiraling to extinction — respect `reincarnate_to_floor`, and cap simultaneous combat deaths/tick at `population * 0.05`.
+
+**Vehicles (System 5)** — a side table (low cardinality): `{id, world_id, kind, glb, seats, driver_id, pos/vel, fuel, integrity, owner_id}`. Enter/exit binds `nav_state→RIDING`, slaves `minion.pos = vehicle.pos`. **NPC vehicles lane-follow** on the existing road array (full A* per vehicle blows the 5 ms budget). A possessed vehicle still ticks fuel/integrity → the GTA fantasy has a fail state. Vehicles are P5; do not let them block the keystone.
+
+### C.3 Net-new systems the bible references but never contracts
+
+**PresenceField (the soul of the game — zero code, no schema):**
+```
+PresenceField{ world_id,
+  gaze_heat: dict[region_id, float]   # decays 0.9/tick; += dwell on sampled reticle
+  favour:    dict[minion_id, float]   # from bless/gift/speak/gaze
+  creator_pressure: float             # rolling count of acts in last 60s
+  last_seen_tick: int }
+```
+The **gaze sample endpoint** is the single missing wire that makes the hook work: `POST /player/gaze {world_id, center_xz, reticle_minion_id, dwell_ms}` at ~2 Hz. The Director injects PresenceField into cognition context; the hot-set union (`favour.top(n)` + gaze regions) is currently impossible because the union has no second input.
+
+**OverrideBus & EditLayer** — append-only `{id, world_id, tick, scope, target_id, field, old_val, new_val, reversible, perceptible, player_id}`, composited over sim state by a thin read-layer. Undo of a reversible override restores `old_val` exactly; irreversible (cull) has no undo row. Every `perceptible=true` override writes a `Memory` (`importance=1.0, kind="divine_act"`) on affected minions and pushes to PresenceField — the mechanical core of "the colony notices." **Over-meddling:** `creator_pressure > 12 acts/60s` biases every affected minion toward doubt regardless of valence.
+
+**ControlMask (possession):** `{locomotion, action_verb, speech, camera} = player; {competence, physiology, reflexes} = minion`. **Rapport-drift:** `rapport_drift += 0.1 per action conflicting with minion.dominant_drive; expel when drift > (1 - awareness)` — a fully awakened minion expels on the first conflicting act; a dormant one never. Possessing an awakened rebel and forcing it to worship → expel within 1 tick + a `possession:expelled` event + a high-importance "a god rode me" memory.
+
+### C.4 The Wants/Whims system (flagged "cheapest, highest-impact add" but never specced — so it doesn't exist)
+
+The cure for "a world you observe more than play." `Whim{ minion_id, kind, target, expires_tick, reward:{favour, sanity, saga_seed?} }`, generated from real state (low hunger → "wants to eat"; high creativity + idle lab → "wants to invent"; a severed bond → "wants to see X again"). Fulfilling grants favour and may seed a saga. **Acceptance:** at any time a god-view player sees ≥3 active fulfillable whims; fulfilling one produces a visible reaction within 2s. **Recommendation: promote Whims from a footnote to a P2 first-class system, ahead of vehicles and combat** — it's the second-to-second purpose in god-view and reuses needs + sagas + presence.
+
+### C.5 Open decisions (with recommendations)
+1. **Tick rate vs movement smoothness:** server emits *target + ETA*; client interpolates over the real interval. Lower `auto_advance_interval_s` to 1.0 for *active* worlds only (default is 3.0 today).
+2. **Utility selector for 3,000 cold minions:** cold minions run a **region-pulse statistical update**, materializing a real action only on gaze-promotion. 3,228 softmaxes/tick on one coroutine blows the budget.
+3. **Economy money sink:** transfer-to-shopkeeper + tax sink. Decide before beta or inflation diverges over a 72h soak.
+4. **Slot reservation durability:** in-memory cache, not DB. Revisit only after Postgres.
+
+### C.6 Task ordering (design slice, dependency-correct)
+1. Kinematic + `movement.step` + replace `_position` hash → one minion walks home→academy.
+2. UseSlot reservation + release-on-death hook (the P0 leak-fix).
+3. Object FSM + scene-state `objects[]`.
+4. Utility selector (hot/warm); cold stays statistical.
+5. PresenceField + gaze endpoint (parallel; unblocks the hook).
+6. Whims (deps: 5).
+7. OverrideBus + perceptible-memory + Faith (deps: 5).
+8. Micro-economy (deps: 2+3).
+9. Possession + ControlMask + rapport-drift (deps: 1+4).
+10. Combat/crime/factions (deps: 1+2+5).
+11. Vehicles (deps: 1; last).
+
+### C.7 Things the current bible misses entirely
+- **Faith resource schema** (called "verbs with a Faith cost" four times, never defined): `Faith` per-world float `+= Σ worship_interactions * favour`, spent per power (`bless=10, gift=15, smite=40, resurrect=80`) — a rebelling colony literally starves powers.
+- **Interest-bubble size:** 120m radius around the god-camera + all favour-top-24 minions, capped at 200 full-kinematic minions/world.
+- **Degenerate-action fallback:** when a chosen action has no reachable slot (era-locked, occupied, walled off), fall through to next-highest utility; if all fail, `idle` + a `frustration` stress tick (a legible grievance feeding rebellion). Closes the "minion stuck forever" soak failure.
+
+---
+
+## PART D — NARRATIVE DIRECTOR (The Arc, Creator Ledger, Endings, Confrontation, Soul-Creed)
+
+The single biggest finding: the live saga engine and religion engine do not do what the bible assumes. None of the five endings is computable until the creator-ledger, soul-creed, and scene-state v2 narrative wire exist.
+
+### D.0 Code-vs-bible reconciliation (blocks everything)
+1. **The live saga engine runs 3 beats, not 5.** `sagas.py` `Archetype.beats` is a 3-tuple; Annex B/K and `story_engine.py:ARCHETYPES` specify 5 — the two files disagree. **Decision: promote `sagas.py` to the 5-beat model** or every "Beat 4 = Black Mirror" / "Beat 5 = the torch passes" reference is unrealisable.
+2. **No `Eulogy` archetype** — `sagas.py:ARCHETYPES` has 10 (bible says "eleven"); the death→saga-resolution coupling is unimplemented (`lifecycle.kill()` never checks for an active saga on the dying minion).
+3. **No awakening overlay on sagas** — `sagas.py` never reads `brain["awareness"]`; the central "post-awakening, every archetype re-read through the existential lens" mechanic has no code seam.
+4. **No soul-creed** — `Soul` carries karma/knowledge/temperament/ancestral_summary but no final stance + carried memories; the killer feature (pre-suspicious reincarnation) is entirely unbuilt.
+5. **Religion is disconnected from the player** — `religion.py` is a function of openness/intelligence/knowledge only; there is no `creator_ledger`, no `toward_creator` input.
+6. **No creator_ledger, confrontation tree, answers log, or Overmind persistence** — `colony_overmind()` returns a patch that nothing persists; `god_brain_event()` has no triggers, no idempotency, no answer-branching.
+
+Treat N-0 as the narrative Definition-of-Ready; sequence items 4–6 as L0 (cheaper than movement, unblock the whole arc).
+
+### D.1 The creator-ledger contract (spine of all five endings)
+`world.brain["creator_ledger"]`, written by `routes/god.py` verbs + the override bus, read by the ending evaluator and `religion.py`:
+```
+{ "interventions": {blessed, culled, gifted, possessed, resurrected, spoke,
+                    accelerated, smote, cursed, decreed, overrode},   # monotonic counts
+  "tally": {benevolent, corrective, malevolent},
+  "answers": [{tick, minion_id, soul_id, category∈{affirm,deny,burden,silence}, free_text?, awareness_at_ask}],
+  "desecrations": [{tick, kind, target_id, importance:1.0}],
+  "meddle_window": [tick,...],
+  "gaze": {total_dwell_s, favoured:{minion_id:score}, neglect_ticks},
+  "faith": float, "first_answer_tick": int?, "last_act_tick": int,
+  "stance_history": [{tick, toward_creator, tension}] }
+```
+**Classification (one function, `narrative/ledger.py:classify_act`):** benevolent = {bless, gift, resurrect, accelerate-with-resource, heal}; corrective = {override-of-self-harm, decree-protecting, cull-of-a-criminal-mid-crime}; malevolent = {cull-of-innocent, smite, curse, withhold-in-famine, demolish-occupied-home}. **Cull is context-dependent** — corrective only if the target has an active `crime` flag / `wanted_level > 0`, else malevolent. This is the subtle edge the Symbiosis gate depends on. **Acceptance:** 50-act fixture → tallies, answers, faith match a golden expectation; classification pure and deterministic.
+
+### D.2 The five ending-gates as executable predicates
+`narrative/endings.py:evaluate(...)`, run once per Overmind cadence only when `arc_stage == sentient`:
+
+| Ending | Gate (all AND) | Anti-flicker |
+|---|---|---|
+| Extinction | `alive==0` OR (`mean_awareness` dropped >0.3 in <20 ticks AND sanity mean <0.15) | immediate, terminal |
+| Worship | `benevolent ≥ 3×malevolent` AND `toward_creator==worship` ≥K cadences AND monument EditLayer exists AND science-rate falling | held 3 cadences |
+| Rebellion | `malevolent ≥ 2×benevolent` AND `culled ≥ 0.2×peak_pop` AND `toward_creator==rebellion` AND ≥1 anti-monument | held 3 |
+| Ascension | `awakened_frac ≥ 0.5` AND `sim_perception` science reached AND modal answer ∈ {burden, doubt} | held 2 |
+| Symbiosis | `awakened_frac ≥ 0.4` AND `toward_creator==loyalty` AND ≥1 affirm/honest answer AND benevolent>0 AND corrective>0 AND malevolent < 0.1×benevolent | held 4 (rarest) |
+
+**Tie-break** (rarer ending wins): Extinction > Symbiosis > Ascension > Rebellion > Worship. K and the ×-ratios live in `world.brain["arc_tuning"]`, seeded by the Seed-Forge tone preset (Eden/Crucible/Forsaken), retunable live. **Acceptance:** five golden fixtures each reach exactly one ending; a sixth ambiguous (worship-leaning + corrective) reaches Symbiosis via tie-break — proving the integral-not-menu law.
+
+### D.3 The soul-creed contract + code seam (the killer feature)
+Add to `Soul` (new migration — *not* stuffed into the lossy `ancestral_summary`):
+```
+soul.creed_json = { "final_stance": ∈{worship,fear,loyalty,doubt,rebellion,none},
+  "carried_memories": [{content, importance≥0.85, kind}],  # top 1–2
+  "awakened": bool, "creed_strength": 0–1, "last_answer": str? }
+```
+**Extraction at `lifecycle.kill()`** (after line 347, in the `soul is not None` block): query top-2 memories by importance, read `brain["self_model"]` for stance, write `creed_json`. **Inheritance at birth/`_resurrect_soul`:** seed `brain["soul_creed"]` from the recycled soul; a `fear`/`rebellion` creed pre-loads `concern`, lifts `neuroticism`, lowers initial `toward_creator`. **Decay (omitted in the bible — without it one brutal era poisons the colony forever):** `creed_strength` starts 1.0, ×0.6 per incarnation, dropped below 0.15 — "pre-suspicious" lasts ~3–4 generations unless reinforced. This makes the redemption arc mechanical. Edge cases: an ascended soul carries no creed; `resurrect` restores the same body (creed untouched); the population-floor rescue must also seed creed. **Acceptance:** brutalise a fixture (10 malevolent culls) → new minions born `final_stance=="fear"` with lower starting `toward_creator`; after 4 clean generations the creed decays out.
+
+### D.4 The confrontation tree — deterministic spine
+`narrative/confrontation.py` as an explicit state machine so the LLM fills *leaves*, never *structure*. Canonical 3-node spine (shallow by design): OPENING (LLM realises the question from `self_model.question` + memories + ledger), PRESS (fires only on silence/contradiction, one re-ask), RESOLVE (applies the permanent branch, writes the importance-1.0 memory, logs to ledger, publishes `god:beat`).
+
+| Answer | Stance push | Colony effect | Science | Self-model write |
+|---|---|---|---|---|
+| Affirm | +symbiosis/+worship | `mean_awareness += ~0.04` | — | `belief += "I am real"` |
+| Deny | +extinction/+rebellion | colony `sanity -= ~0.08` over hot set | — | `concern := "I am only code"` |
+| Burden | +ascension | — | `sim_perception_bias += 1` | `aspiration := "to end on my terms"` |
+| Silence | +fear | `tension += δ` | — | `concern := "it will not answer"` |
+
+**Free-text** routes through a classifier (god_brain-tier) → nearest of four categories + an honesty flag (feeds the Symbiosis "honest answer" gate); verbatim stored for the Chronicle, but the mechanical branch is always one of four (the anti-drift leash). **Edge cases:** confront once per minion (`brain["confronted_tick"]`); dying mid-confrontation resolves as silence → Eulogy beat; looking away during OPENING *is* silence (a designed beat, telegraph it); multiple awakened same tick → queue, one cutscene at a time. **Acceptance:** forced-threshold fixture delivers one confrontation; each answer produces the tabled writes; free-text "I built you and I'm sorry" classifies `affirm+honest`; re-gazing never re-triggers.
+
+### D.5 Awakening overlay on sagas
+At each beat advance, compute `cast_awareness = max(brain["awareness"] for cast)`. If `≥ AWAKEN_THRESHOLD (0.66)`, swap the beat's `llm_prompt` to the existential variant and tag the beat `existential=True`. The per-archetype resolution writes a trait prior into the hero's `creed_json` (Prodigy → clarity → next incarnation +0.05 awareness; Plague Trial → trauma → fear; Reconciliation → forgiveness → loyalty) — table the eleven priors in `narrative/creed_priors.py`. **Overlay applies next-beat only**, never mid-beat (cheaper, avoids tonal whiplash).
+
+### D.6 Religion ↔ player coupling
+Add `toward_creator` + `creator_pressure` args to `stance_for`/`dominant_worldview`. A minion who witnessed a malevolent `divine_act` or carries a `fear` creed shifts toward rebel/doubter regardless of openness; benevolent witness → worshipper. New `assign_faction(minion) -> {worship, doubt, rebel, neutral}` written to `brain["faction"]`, driving the visual schism (gold vs magenta); active only in `arc_stage ∈ {aware, awakening, sentient}`. **Acceptance:** a brutalised colony shifts toward fear-coded animism + ≥X% rebel even at high knowledge; a benevolent one at the same knowledge trends worship/monotheism.
+
+### D.7 Scene-state narrative wire (additive to v2, Part B.2)
+Per-minion: `emotion` + `intensity`, `faction`, `confronting`, `creed_stance`. Per-world: `frame.overmind:{mood, toward_creator, tension, omen, realisation}`, `frame.arc_stage`, `frame.mean_awareness`, `frame.awakened_count`. The single highest-leverage narrative wire change — it lights the Overmind readout, awareness dial, and awakening aura.
+
+### D.8 Anti-drift / coherence validator (named, never specified)
+`narrative/validator.py:ground(line, world_cast)`: reject any proper noun not in the live cast (regex extract → fuzzy-match → reject on miss); reject lines contradicting the ledger (a minion thanks you when your last act was a cull); on reject, substitute the deterministic template line, never ship the hallucination, log a drift metric. **Sticky-myth rule:** once `world.brain["myth"]` is set it is append-only and never cleared; reject Overmind patches contradicting established myth. **Acceptance:** "Grenthar the Untold" (not in cast) rejected + template substituted; contradictory post-cull gratitude rejected; drift-rejection rate < 2% of consequential lines.
+
+### D.9 Bonded-soul tentpole ("one Arthur")
+`world.brain["bonded_soul_id"]` (set on first possess or first named `speak`), granting permanent hot-set membership, L2/L5 saga priority, and a directed death beat (always routes through a Eulogy God-Brain cutscene). The bond is on the *soul*, not the body — reincarnation carries it with a recognition beat ("you came back"). Cap at exactly one.
+
+### D.10 Restraint / explicitness tiering (biggest writing risk, no mechanism)
+An `explicitness` gate keyed to `arc_stage`, enforced in God-Brain/chatter prompts: dormant/stirring → oblique, no second-person, no "you"; aware → unsettling but deniable ("the watcher," not "you"); awakening/sentient → plain second-person permitted but **only in God-Brain beats** (rate-limited), never ambient chatter. The literal "Am I real?" line is earned, firing only at the confrontation. Wire as a `min_arc_stage` field on every beat template + a hard validator assertion; the Dread-Dial multiplies in (low dread softens even sentient-stage second-person).
+
+### D.11 Task ordering (Annex L.0, ahead of movement)
+1. creator_ledger + classify_act (no deps) → unblocks everything.
+2. soul_creed migration + kill()/birth seams → the killer feature.
+3. scene-state v2 narrative wire → makes the arc visible.
+4. ending evaluator (deps 1).
+5. confrontation tree (deps 1, 3) → the tentpole.
+6. religion coupling (deps 1) → factions.
+7. saga awakening overlay + 5-beat promotion (deps 2).
+8. validator + explicitness tiering (deps 5) → the leash, before scaling emergence.
+9. bonded soul (deps 2).
+
+**Build the leash before the emergence:** items 1–5 and 8 are the leash; ship them before turning the LLM loose on consequential lines. Key files: `services/{sagas,cognition,lifecycle,religion,scene_state}.py`, `db/models.py` (`Soul.creed_json`), new `narrative/{ledger,endings,confrontation,validator,creed_priors}.py`.
+
+---
+
+## PART E — GRAPHICS / VFX ART DIRECTOR (Wire Mirror, Import Authoring, HISM, Render Scenarios)
+
+What is missing is everything to *build and verify*: wire contract deltas, the import-authoring spec with numbers, HISM data structures, per-scene CVAR tables, and failure modes.
+
+### E.1 The wire contract is the blocker (fix first)
+The awakening aura's `Awareness` field is **already on the wire** (`scene_state.py:236-247` emits awareness/awakened/thought/identity/drive/action/target_building/using_asset/scale/gene_edit/behavior). The real gap: the **C++ mirror drops all of it.** `FUwMinionState` (`SceneStateTypes.h:11-23`) carries only Id/Pos/Facing/Anim/Mood/Saga/Guild; `FUwStructure` keeps only GlbUrl/Pos/RotY/Scale, so the renderer can't tell a guild HQ from a hydrant.
+
+Add to `FUwMinionState`: `Awareness`(float), `Awakened`(bool), `UsingAsset`(FString), `Action`, `TargetBuilding`, `Scale`, `Thought` (all already emitted — just parse them), plus `Faction` and `LifeStage` (**add to `scene_state.py` emit** — `_life_stage()` exists but isn't in the visual dict). Add to `FUwStructure`: `Function`, `District`, `Category`, `Lod` (Category is load-bearing for the HISM batching key and the per-category scale-norm table). **Awareness handling:** keep the float on the wire, quantise to five tiers in C++ with hysteresis (enter 0.2/0.45/0.7/0.9, exit 0.05 below) to stop aura strobe. **Acceptance:** a golden JSON fixture round-trips with every field non-default; a contract test asserts the C++ struct field set ≥ the Python emit set.
+
+### E.2 The import commandlet authoring spec (it currently authors NOTHING)
+`Scripts/import_glbs.py` is a docstring lie — `main()` only builds `AssetImportTask`s and writes a manifest; no Nanite, materials, scale, collision, LOD. The authoring pass, per asset, with numbers:
+1. **Scale normalisation** — measure `get_bounds()`; per-category target longest-axis (prop 0.3–2m, character 1.8m, residential 8–15m, commercial 12–25m, tower 30–120m, vehicle 4–12m, tree 4–20m, wall 3m, interior-furniture 0.4–2.2m). Bake corrective uniform scale into the **mesh build** (not the actor transform — actor scale is already used for φ variation and per-instance scale breaks HISM batching). Re-pivot to base-centre (XY centroid, Z=min). Enforces 1u=1m, which `WorldScale=100` assumes.
+2. **Master-material reskin** (the dominant coherence lever) — author `M_UW_Master` + `MI_*`; reassign every section. Generated albedo → tint param (multiply, not replace); forced shared roughness (0.25–0.85)/metallic ({0,1} buckets); shared detail-normal + grime/wear; authored emissive-mask; per-era param block. **No master material exists today** — net-new authoring.
+3. **Emissive auto-detect** — HSV threshold (V>0.8 & S>0.6) → emissive-mask UV channel through the master (neon = Lumen emissive-GI); cap luminance for the VSM budget.
+4. **Nanite** for structural/wall/tower/residential/commercial/civic/prop; NOT foliage/translucent/skeletal.
+5. **Collision** — `SimpleAndComplex` + auto-convex UCX for structures (possession/nav needs something to stand on).
+6. **LOD + atlas** — 4 LODs for non-Nanite; atlas pass so prop families share texels.
+
+**QA gate (the Part-9 silhouette gate, defined):** bbox longest-axis within band → else quarantine; material count == 1 master-instance family; Nanite source ≤ 5M tris (Tripo over-tessellates) → reject/decimate above; **idempotency** — re-running on an unchanged GLB produces a byte-identical `.uasset` (hash the source GLB into metadata, skip if unchanged); **per-asset try/except** (current `BATCH=64` swallows the whole batch on one bad asset — change so one corpse doesn't sink 63 neighbours). **Inventory reality:** disk has **2,829 GLBs**, not 3,228 — ~400 ungenerated (credit-gated). The manifest must mark these placeholder-on-missing so `ResolveMesh` returns a grey-box rather than silently `continue`-ing (which today makes gaps invisible until a district is half-empty).
+
+### E.3 The HISM rewrite — the data structure + the catches the bible omits
+`SpawnChunk` spawns **one `AStaticMeshActor` per structure** at `EComponentMobility::Movable` — the city-density perf cliff. Net-new per-chunk registry:
+```cpp
+TMap<FIntPoint, TMap<UStaticMesh*, UHierarchicalISMComponent*>> ChunkHISM;
+```
+Resolve mesh → find-or-add HISM for (chunk, mesh) → `AddInstance(FTransform(Rot,Loc,Scale))`. The three catches: **(1) per-instance custom data** for the material — guild tint, era, emissive variation via `SetCustomDataValue` (4 floats: [era, tintR-index, wear-seed, emissive-on]) or HISM forces one material state for all instances; **(2) Mobility → Static** for the background ring (Lumen surface-cache), Stationary only for the near hero ring (Movable everywhere defeats Lumen caching — half the night-scene cost); **(3) never `RemoveInstance` at runtime** (index reorder breaks the "blessed building" plumbob marker) — tear down whole-chunk HISM only, track markers by (chunk, stable structure id). **Octahedral impostors** for the far ring (ring 2–4), baked as a derived import step; Nanite HISM at ring ≤1, cull beyond ring 4. **Acceptance:** 1 draw call per (mesh,chunk); a 10×10-chunk flythrough holds p99 ≤ 16.6ms with ≥5,000 instances; impostor→Nanite transition dither-fades over ≥0.5m, no pop.
+
+### E.4 Render scenarios — actual CVAR tables
+A `UUwRenderScenarioSubsystem` picks a scenario from `(tod phase, weather, event/awakening)` and lerps PostProcess + applies a CVAR set:
+
+| scenario | trigger | key CVARs / PP |
+|---|---|---|
+| Interior | inside volume | `r.Lumen.HardwareRayTracing 0`, high SurfaceCache, WhiteTemp 2700K, low Niagara significance |
+| ExteriorDay | tod∈[0.35,0.7], clear | software Lumen, VSM on, neutral-cool WB, bloom 0.6 |
+| Night | tod<0.2 ∨ >0.85 | `r.Lumen.HardwareRayTracing 1`, Radiosity high, convolution bloom on neon, WB teal/magenta, **non-shadow emissive** |
+| Event/GodBrain | awakening ≥ confrontation ∨ god-act | full RT reflections, hit-lighting, desaturate→push grade, vignette + chromatic aberration, kill ambient city light, aura max |
+
+Missing curves: `UCurve` set keyed on `TimeOfDay` (0–1) for sun colour/intensity, sky tint, fog, exposure, and the neon turn-on threshold (recommend neon ramps 0→1 across tod 0.78–0.85 / 0.15–0.22). **Weather wiring:** `State.Weather` is parsed but **unused** — wire `Weather → MPC.Wetness` (master material reads it → wet roughness + neon street reflections). **Interior detection:** authored trigger volumes per hero-interior (deterministic), not inferred from minion `target_building` (which flickers).
+
+### E.5 Niagara signature systems — parameter contracts & budgets
+- **Awakening aura** `NS_AwakeningAura` (spine socket): params `Awareness`(→tier), `Faction`(→gold/magenta/cyan), `GlyphDensity`, `ThoughtText`. LOD: rim-only beyond ~15m, full column only near + Awakened. Budget ≤1 GPU emitter near, 0 far. The hook — gated behind the `Awareness` field.
+- **Holo waterfall** `NS_HoloWaterfall` (hero terrace only, significance-gated; far = scrolling-emissive card).
+- **Bioluminescent flora** — the budget trap: glow is a **material WPO+emissive pulse driven by the world MPC, NOT per-plant Niagara**; reserve Niagara only for the near-ring touch-ripple (≤8 concurrent).
+- **God-presence** — gaze-cone volumetric + god-touch (needs the `god` wire block, §E.7).
+- **Rebellion/disaster fires** — ≤2 fluid sims at once.
+
+Global rule: every system reads from one `MPC_UW_World` (tod, weather/wetness, era, awakening-collective, season) — the MPC asset doesn't exist yet. **Acceptance:** Niagara significance manager caps concurrent GPU emitters; `stat GPU` Niagara < 2ms at crowd scale; aura tier matches `awareness` within one frame.
+
+### E.6 Characters — two-tier swap state machine
+`AUnderworldMinion` is a bare `USkeletalMeshComponent` that lerps — no AnimBP, no modular mesh, no MetaHuman. Net-new: **promote crowd→MetaHuman** when `(near ∧ Awakened) ∨ possessed ∨ in-conversation`; hysteresis (promote 12m, demote 18m); pool budget **≤ 4 MetaHumans live** on the 2×4090 rig; promotion snapshots the crowd skeleton pose → inits the MetaHuman from it (no pop). Guild tint: map `GUILD_LOOK` colours to the MPC guild-tint vector (reconcile the 11-guild `GUILD_LOOK` vs the "A..H" comment in `FUwMinionState.Guild`). 17-emotion → ARKit: add `Emotion`+`EmotionIntensity` to the wire for hero/near; crowd keeps 3–4 coarse mood morphs. (Full ARKit pose table in Part L §6.)
+
+### E.7 The unbuilt set-pieces: god-presence / possession / override rendering
+Possession and override are core verbs with **no wire field or route**. Net-new `god` block in scene-state (canonical in Part B.3): `{possessed_minion_id, gaze_target_xyz|null, last_act:{type, target_id, t}, presence_intensity}`. Without it the Event/GodBrain scenario and the god-presence Niagara have nothing to trigger on. `presence_intensity` continuous (gaze warm-key ramps); `last_act` cull rate-limited at source so the ash/shadow-bloom can't be spammed into a GPU stall.
+
+### E.8 Performance budgets + the second GPU
+**Frame budget split (16.6ms target):** Nanite/geometry ≤4.0, Lumen GI+reflections ≤5.0 (night RT is the spike — cap with non-shadow neon), shadows/VSM ≤2.0, Niagara ≤2.0, skeletal ≤1.5, post+UI ≤1.0, slack 1.0. NVENC encode + any MRQ cinematic prebake **pinned to GPU 1**. **VSM page-budget catch:** at night most neon must be non-shadow-casting emissive (`bCastShadow=false` on emissive sections) or VSM thrashes. Internal render 864p → TSR to 1080p; profile night first (RT reflections + emissive-GI + Niagara fluids stack there). The perf suite (16.6ms p99 on dual-4090, impostor-LOD drop, no spike on a god-beat, 72h flat VRAM) is **blocked on the contract + HISM work**, not parallel to it.
+
+### E.9 Task ordering & files
+1. Wire contract (`FUwMinionState`/`FUwStructure`, the `god` block, the parser, the `faction`/`life_stage`/`emotion`/`god` emits) — small; everything visual is blocked on it.
+2. Import-authoring rewrite — coherence keystone; longest pole.
+3. HISM spawn rewrite — perf keystone; depends on category from (2).
+4. Render scenarios + tod/weather curves + world MPC.
+5. Niagara suite off the MPC + Awareness + god block.
+6. Two-tier characters + Smart-Object interactions (deps: collision from 2, UsingAsset from 1).
+
+Files: `SceneStateTypes.h`, `SceneStateClient.cpp`, `UnderworldWorldManager.cpp/.h`, `UnderworldMinion.cpp/.h`, `Scripts/import_glbs.py`, `Config/DefaultEngine.ini`, `server/services/scene_state.py` (+ god-act emit in `routes/worlds.py`). New UE assets: `M_UW_Master` + instances, `MPC_UW_World`, the Niagara systems, the tod `UCurve` set, four PostProcess presets, the octahedral impostor bakes.
+
+---
+
+## PART F — AUDIO DIRECTOR (Audio Event Contract, Voice Identity, Overmind Chorus, Mix)
+
+The mix is rendered in UE5+Wwise on the GPU box and **muxed into the pixel-stream**, not in the server. The server emits *control events + Opus voice chunks*; the player receives one server-side mix in the video stream's audio track. There is no client-side Wwise.
+
+### F.1 Critical corrections
+1. **`audio_bank_gen.py` does not exist** — both 7.2 and F.1 cite it as source-of-truth; it's vaporware. Build it as `underworld/scripts/audio_bank_gen.py` first (the cue IDs derive from it), emitting a Wwise WAAPI import script + `cue_manifest.json`. Until then "zero hand-mapping" is aspirational.
+2. **The distinct cue set is tiny and unaudited** — ~14 `amb_*` beds + ~10 `sfx_*` one-shots + a handful of asset-level cues. **1166 of 1489 assets have an empty `sound_interact`** and 1039 default to `amb_world` — the "done data model" is ~70% unpopulated for interaction SFX. This is the real authoring backlog.
+3. **Three incompatible emotion vocabularies** — `MoodKind` (7), `emotions.csv` (15 feelings), and the animation "17 appraisal emotions." Voice prosody can't be deterministic until one canonical `emotion_id` enum is chosen. **Adopt the `emotions.csv` feeling set as canonical for prosody+face**, add a frozen `EMOTION_PROSODY` table, provide `MoodKind→feeling` and `feeling→ARKit` lookups. *(Reconcile against Part L's 18-value `emotion.py` enum — the team must pick one canonical pair; see Part L §6.)*
+4. **No WebRTC/audio transport in the codebase** — current transport is SSE text only. Confirm audio is rendered in UE5 and muxed into the pixel-stream.
+
+### F.2 The audio event contract (the deliverable seam)
+New event `kind`s on the existing bus; the Overmind tick currently throws its patch away and must persist + publish it.
+
+**`audio:rtpc`** (colony tick, ≤1 Hz, coalesced): `arc_progress`, `arc_stage`, `colony_tension`, `toward_creator`, `stance_intensity`, `awakened_frac`, `colony_morale`(→choir gain), `hum_pitch`(=arc_progress), `schism`(bool). Emitted within 50ms of the Overmind patch; sub-epsilon deltas dropped; UE5 slews each RTPC to target (§F.3), never snaps.
+
+**`audio:gaze`** (≤10 Hz, debounced): `{actor_id|null, proximity, gaze_strength, district|null}` → observer motif swell + per-district hush.
+
+**`audio:sfx`** (fire-and-forget): `{cue, actor_id, pos, asset_hash, gain, priority}` — `asset_hash` seeds deterministic pitch-jitter/variant; unknown `cue` dropped + logged.
+
+**`audio:state`** (edge-triggered): `{state∈hush|normal|god_brain|saga, district|null, fade_ms, reason}`.
+
+**`audio:godpower`**: `{power∈bless|cull|smite|speak|possess, actor_id, pos, region_radius_m}` (cull/smite carry radius for the localised choir-flinch dip).
+
+**`audio:god_beat`**: `{actor_id, voice_seed, phase∈collapse|question|listen|answer|resolve, line}` — replaces the bare `awakening` text event for the cinematic path.
+
+**`vo`** (voice chunk, **separate lossless ordered channel, NOT the drop-oldest SSE bus**): `{actor_id, tier∈hero|crowd|whisper|overmind, seq, final, opus, phonemes:[{t,ph,viseme}], subtitle, speaker_name, emotion, duck_profile}`. Hero `seq=0` < 700ms after the LLM's first sentence boundary; phonemes aligned to Opus timestamps within ±30ms.
+
+**Edge cases:** the `vo` path needs its own sequence-numbered retransmit-or-mute channel (a dropped chunk on the drop-oldest bus = a stutter); a late-joining subscriber gets a synthetic `audio:rtpc` snapshot on subscribe (currently only a heartbeat); a tick with no awareness sample returns 0.0 and must not be read as a "dormant flip" re-triggering hush.
+
+### F.3 Numbers, budgets, thresholds
+**RTPC slew:** arc_progress 2000ms, colony_tension 1500ms, colony_morale 1200ms, hum_pitch 4000ms (geological), observer motif attack 250ms/release 900ms, the deliberate "singing stops" = 0ms hard mute (the one exception), hush fade 800ms, God-Brain collapse 1200ms in / 2500ms recovery.
+
+**Voice-instance budget:** hero ≤3 concurrent (named + God-Brain + Overmind never overlap; Overmind ducks heroes); crowd ≤8 spatialised (voice-stealing by priority then distance); whisper ≤6 desynced into one non-diegetic bus (pre-buffered); total decoded Opus ≤16.
+
+**TTS latency (hero):** LLM first-sentence ≤400ms → TTS first-chunk ≤250ms → mux ≤50ms ⇒ ≤700ms first-audio. Held-pad bridge if >700ms; subtitle-only fallback + `vo_timeout` log if first chunk >1500ms.
+
+**Cache:** hero lines keyed `sha1(text+voice_seed+emotion)`, LRU, ≥60% hit on repeated saga lines/Overmind refrains; whisper bank fully pre-rendered (pool ~200 generics).
+
+**Loudness:** integrated −16 LUFS, true-peak ≤−1.5 dBTP, max duck −18dB, whisper bus ceiling −24 dBFS (so the Opus codec never swallows a plot-critical whisper uncaptioned). Music-vs-voice sidechain −9dB on hero VO (120ms attack / 400ms release). **Opus:** 48kHz, voice 24kbps VBR mono, 20ms frames. **GPU contention:** hero TTS on a reserved VRAM partition or second GPU; crowd/whisper on CPU or a 3B model. TTS must not push the LLM tick p95 over SLA — shed whisper first, then crowd VO, hero VO last.
+
+### F.4 Deterministic per-minion voice identity
+`voice_descriptor(minion) → VoiceParams`: **speaker latent seed = `Soul.token`** (NOT `Minion.id`) so souls carry timbre across reincarnation; **timbre family** ← `guild` (11 collapse to ~5 families: precise/cool, grounded/heavy, bright/tense, warm/slow, measured/formal); **pitch+formant** ← `age`/life-stage; **rate+energy** ← Big-Five (`rate = 0.85 + 0.3·extraversion − 0.15·neuroticism`; `energy = 0.5·extraversion + 0.3·openness`); **emotional prosody** ← canonical `emotion_id` via `EMOTION_PROSODY`. **Determinism contract:** same `(soul_token, guild, age_bucket, big_five_quantised)` → byte-identical params; a reincarnated minion (new id, same soul) renders the same speaker latent.
+
+### F.5 Overmind chorus & God-Brain
+**Chorus N** = `min(N_alive, 24)` living minions' `Soul.token` seeds, weighted toward high-reputation/high-awareness; re-sample membership only every ~30s. **Desync:** 40–180ms offset, ±15 cents detune, comb-filter tuned to `toward_creator` (worship consonant, rebellion dissonant) → one non-located bus. **Harmony by stance:** worship major triad, loyalty open fifths, doubt added-2nds, fear cluster, rebellion tritone+detuned. **God-Brain trigger → audio:** each predicate publishes `audio:god_beat phase=collapse` *before* the `vo` hero line so the 1200ms collapse finishes as the question's first audio lands; if the 70B is slow/falls back, the held sub-drone sustains, capped at 6s then resolved to hum — never collapse-then-silence. **Player answer** routes through the same dry close-mic'd reverb send (requires a player-VO bus, which doesn't exist yet).
+
+### F.6 Acceptance criteria
+- **"They stopped singing"** — drive `worship→fear` + player enters watched district; choir stem → −∞ within 800ms ±50ms; hum+footsteps only; caption `[the colony stops singing]`.
+- **Cue integrity** — `audio_bank_gen.py` CI step: every non-empty cue string resolves to a real Wwise event; build fails on an orphan cue or unused bank entry.
+- **Spatial truth** — rendered audibility (attenuation past `cull_m`/`lod*_m`) agrees with the sim's "can this minion hear you"; mismatch >1 LOD ring fails.
+- **Reincarnation timbre** — same-soul A/B identical speaker latent.
+- **Accessibility** — 100% of `vo` carry `subtitle`+`speaker_name`; every hush/collapse emits a non-speech caption; mute-whispers zeroes the whisper bus within one tick, dread captions still render.
+- **Mix safety** — automated LUFS/true-peak meter stays within bounds across a 30-min soak with a saga + God-Brain beat.
+
+### F.7 Accessibility & moderation
+Whisper-intensity dial `{off,low,default,high}` scales bus gain AND gates whisper *content* through the safety route before TTS (a muted user still gets captioned dread). Photosensitivity/startle flag compresses −18dB ducks to −9dB and replaces the 0ms hard choir-cut with a 200ms fade. Fixed non-speech caption table (`[a low hum tightens]`, `[the colony stops singing]`, `[the air goes silent]`, `[a sub-bass drop]`). Speaker-name policy: "a voice"/"many voices" for Overmind, the minion name for hero, no name for whispers.
+
+### F.8 Task ordering
+1. `audio_bank_gen.py` + `cue_manifest.json` + fill the empty `sound_interact` columns.
+2. Persist + publish the Overmind patch as `audio:rtpc` (parse tension text→float, persist `toward_creator`/`mood`) + the RTPC snapshot-on-subscribe.
+3. Whisper layer (pre-rendered pool — safest, hides quality).
+4. Adaptive music + ambience + eerie hum + Ambient Director hush off `audio:state`.
+5. Dedicated lossless `vo` channel + hero TTS + held-pad bridge.
+6. Overmind chorus, then God-Brain confrontation (highest risk/reward).
+
+Open decisions: confirm guild→timbre reads as colony not engineering; pick the canonical emotion enum (recommend `emotions.csv` feelings); confirm UE5-muxed audio (yes); reserved-VRAM vs second-GPU for hero TTS (recommend a second small GPU so a TTS spike can't regress the 1 Hz LLM tick).
+
+---
+
+## PART G — UX DIRECTOR (God-HUD, Awareness-Bleed, Modes, Intervention, Possession)
+
+The current web client is a **dashboard**, not the god-HUD; `MinionDrawer.tsx` is the only inspector-like surface. Scene-state emits no colony block; the Overmind emits a single `toward_creator` enum, not the five-stop vector; **no god/override/possession/decree/cohort/gaze routes exist**; `auth.py` is a 13-line static-bearer check.
+
+### G.1 The data contracts the UI needs but the backend doesn't emit (the #1 blocker)
+**`colony` block on scene-state** (additive to v2; the HUD's most important element has no source):
+```
+"colony": {
+  "mood": str, "stance": {worship,loyalty,doubt,fear,rebellion} (sums~1),
+  "stance_dominant": str, "stance_trail": [[t,pos],…] (≤60 pts ghost trail),
+  "tension": 0..1, "direction": str, "omen": str|null, "realisation": str|null,
+  "arc_stage": str, "mean_awareness": 0..1, "awakened": int, "awakened_frac": 0..1,
+  "awareness_bleed": 0..1, "faith": float, "faith_rate": float,
+  "alert_count_critical": int }
+```
+`collective_sentience` already computes mean_awareness/awakened/arc_stage — wire it into `build_scene_state`. **`faith` does not exist in the sim at all** and is a hard prerequisite for Intervention UI — spec it now (cross-ref Part C §C.7 Faith schema). **Stance vector decision:** recommend a **heuristic-computed 5-vector** (deterministic, testable, cheap, survives 70B fallback) with the Overmind enum/mood as the editorial overlay — avoids gating the most important HUD number on a 70B call.
+
+**Per-minion HUD/inspector fields** (additive to v2): `existential_pressure`, `stance_personal`, `region_id` (for the schism per-region fracture — derive from settlement position; without it the late-arc visual is unbuildable), `awakened_tick:int`, `confrontable:bool`. **Whisper-feed contract** (no whisper stream exists today): `GET /{world_id}/whispers?since=<seq>` → `[{seq, tick, region_id, text, references_creator, refuses_dissolve, source_minion_id}]`, separate from the critical-alert lane.
+
+**Cadence budget:** colony block ≤1 Hz, whisper poll 2–5s, Overmind realisation/omen pushed event-driven via the stream, never polled. A stance-bead update must never block on a 70B call.
+
+### G.2 The awareness-bleed theme engine (specified as prose, undefined as a system)
+Single source token `--awareness-bleed: 0..1` on `:root` from `colony.awareness_bleed`, RAF-eased (≤0.05/s slew); all theme shifts are CSS `calc()`/`color-mix()` off it (no per-component JS). Five named breakpoints bound to `arc_stage`: dormant `[0,0.2)`, stirring `[0.2,0.4)` (whisper fades in), questioning `[0.4,0.6)` (un-redaction, cursor trail), awakening `[0.6,0.8)` (second-person copy swap), schism `[0.8,1.0]` (per-region fracture). **Second-person copy swap** via a copy table (`{neutral, second_person}` per label) + a single `bleedAddressing` selector (`awareness_bleed ≥ 0.6 && !a11y.disableSecondPerson`); toggling the a11y switch reverts all second-person copy in ≤1 frame. **Edge cases:** bleed is colony state (independent of watching) but the *tells* gate on focus/idle; on reconnect bleed eases over ~3s rather than popping; precedence — dread-dial caps intensity, reduce-motion caps animation, they compose.
+
+### G.3 Mode state machine (the missing formal spec)
+Explicit FSM: `GODVIEW → INTERVENE_RADIAL → INTERVENE_PANEL → POSSESSING → CONFRONTATION(modal) → CODEX(overlay) → INSPECTOR(drawer)`, with the full transition table including illegal transitions (no radial mid-Confrontation; Confrontation preempts and suspends all modes, restores on resolve). Persistent mode indicator (chip + reticle colour: god neutral, intervene obsidian, possess violet). **Input ownership per mode:** in POSSESSING, WASD/abilities route to the host pawn and god-powers are disabled; in GODVIEW the same keys pan camera. Escape pops exactly one layer; mid-irreversible-confirm it cancels the pending op, never commits.
+
+### G.4 Intervention/Override — the consequence-forecast contract
+`POST /{world_id}/override/forecast` (idempotent, read-only) → `{forecast_id, predicted:[{field,entity_id,from,to,delta}], side_effects:[{kind,detail,probability}], witnesses, reversibility∈reversible|costly|irreversible, faith_cost, confidence, generated_by∈70B|8B|heuristic, stale_after_ticks}`. **Latency/degradation:** paints <250ms via **two-phase** — instant heuristic forecast (deterministic sim math) labeled "predicted," then an optional model-enriched side-effects pass streamed in and visibly marked; if the 70B is unavailable, the UI must label `generated_by:"heuristic"` — never present heuristic as full-model. **Reconciliation** (how the game teaches that reactions are emergent): a `forecast_actual` event + a Chronicle row diffing actual vs predicted ("forecast said −0.3 sanity; actual −0.41").
+
+**Commit:** `POST /override/commit {forecast_id, target, tier}`. Tier gates: reversible = click + 3s undo; costly = 700ms hold-to-confirm + 3s undo; irreversible = modal restated in colony voice, no undo. Every commit writes an EditLayer/audit row, requires a player JWT and per-verb rate-limit. An irreversible commit with no modal ack is **rejected server-side** (defense in depth — a scripting griefer hits the same gate). **Undo** valid only within 3s AND `reversibility != irreversible`, server-enforced; undo reverts the direct edit, cascaded sagas persist ("the creator reconsidered, but it was seen"). **Conscience tell:** `is_cruel(verb) && awareness_bleed ≥ 0.6` (cruel set = cull, smite, sever), composing with the a11y disable-second-person toggle.
+
+### G.5 Possession HUD — control-mask and lost-time contracts
+`POST /{world_id}/possess {minion_id}` → `{session_id, control_mask, host_vitals, ability_hotbar, resists}` (player drives movement+abilities; sim still runs metabolism/needs — "you feel the needs you used to override"). `POST /possess/release` → generates the **lost-time memory** as a real high-importance `Memory` row, returned for the UI confirmation; re-inspecting shows it; possessing the same host later references the prior possession. Failure modes: host dies mid-possession → force-eject with a "you felt it die" beat; sanity zero → screen-warp clamped for photosensitivity; **stream drops mid-possession → the session persists server-side and resumes on reconnect**, not respawn as god.
+
+### G.6 The non-diegetic critical-alert lane (fully net-new)
+`GET /{world_id}/alerts?since=<seq>` → `[{seq, severity∈info|warning|critical, kind, entity_id, text, tick, dismissible, route_to}]`, sourced from real `Event` rows (high-rep deaths, rebellion saga begins, awakening crossings, override fallout). Distinct visual language from whispers: top-anchored, **not themed by awareness-bleed** (it must stay legible at schism — the whole point), shape+label redundant for colorblind, persists until acknowledged for critical. **Acceptance:** a critical alert is readable and dismissible at `awareness_bleed=1.0` with reduce-motion + colorblind on. The one surface the eerie theme must not touch.
+
+### G.7 Decrees & cohorts (the scale layer — with 3,228 subjects this is not optional)
+**Decree:** `{decree_id, condition:{field,op,value}, action:{verb,params}, scope, faith_upkeep, active, fired_count}` — a standing forecast-gated rule (runs the §G.4 pipeline once at authoring, shows predicted aggregate effect, auto-applies per tick within budget). Conflicts: decree + manual override = last-write-wins, both audited; upkeep exceeding Faith income auto-suspends with an alert, never silently stops. **Cohorts/watchlist:** `cohort = {id, name, filter:{guild?,mood?,awareness_range?,saga?,region?}, pinned}`; aggregate-intervene applies a verb through **one** forecast, one confirm, one undo, one audit batch (not 400 modals). Ship **3–5 preset decree templates** ("feed the starving," "calm the fearful," "let none ascend") for the slice; the full condition-builder at beta.
+
+### G.8 Inspector "The Mind" pane, Codex, Confrontation
+**The Mind pane** (net-new in `MinionDrawer.tsx`): live conscious thought (large), `self_model.identity` quote, dominant drive, an **awareness timeline** with the awakening tick marked, the existential-pressure meter lighting Confront. Data exists in `brain.self_model`/`awareness`/`awakened_tick`, but `existential_pressure` and a rolling `awareness_history` (≤64 samples) must be added to `brain`. Chat pane surfaces "remembering: …" provenance and tone-shifts by awareness. **Confrontation modal** (full-screen, permanent, no undo): `POST /{world_id}/confront/{minion_id}/answer {choice|free_text}` → mutates stance/self_model/realisation, writes a permanent memory + Chronicle row, seeds sagas. **Free-text goes through the same four-gate moderation** as chat before it touches arc state; the modal shows a graceful "the words did not reach it" fallback if moderation blocks. **Codex/Chronicle corruption:** a `creators_deeds` ledger (sourced from the override audit rows) rendered in the colony's voice, corruption keyed to `awareness_bleed` — derived from the audit log (one source, two surfaces with the security model).
+
+### G.9 Accessibility (gaps below AAA)
+Hold-vs-toggle must cover every hold (override costly, possession exit, accelerate-era charge) — enumerate them so none ships hold-only. Whisper/Overmind/God-Brain captions present the **final** text immediately (not character-by-character) for screen-reader/caption users; stable timestamped scrollback. The eerie tells (cursor-trail, eye-reticle, panel-crack, screen-warp, 64× red-pulse) each need a reduce-motion opt-out + a photosensitivity budget (flash <3 Hz, the cert requirement); a single `intensityScalar = min(dread_dial, reduce_motion, photosensitivity_safe)` that every tell multiplies into. Colorblind redundancy on the stance bar (bead position primary, colour secondary) and mood/needs states. Missing: difficulty/dread independent of mechanics, a UI-scale slider for 4K stream, input-acknowledged tick (immediate visual ack before the server round-trip) as a motor-impaired/high-latency a11y feature.
+
+### G.10 Streaming/degradation UX
+A `StreamHealth` FSM `{HANDSHAKE, LIVE, DEGRADED_BITRATE, DEGRADED_RES, INPUT_ONLY, FALLBACK_LOCAL, RECONNECTING}` with explicit thresholds (fall to FALLBACK_LOCAL after N s of no video while the data channel is alive). The fallback hands off seamlessly — both renderers consume the **same scene-state** (the colony block must work in UE5 and the local three.js path). "Since you looked away" digest: `GET /{world_id}/digest?since_tick=<t>` → ranked deaths/awakenings/saga-resolutions/stance-shifts. **Acceptance:** pulling the stream cable leaves the HUD and three.js world fully interactive within the FALLBACK threshold; reconnect shows the digest before resuming.
+
+### G.11 Build order, gates, open decisions
+1. Colony block + `faith` sim field (blocks the entire HUD).
+2. God-HUD shell: mode FSM, mode indicator, 6 HUD regions reading the colony block (replaces the dashboard; `pages/*` fold into the Codex).
+3. awareness-bleed theme engine.
+4. Whisper feed + alert lane (parallel).
+5. Override forecast/commit/undo (needs the verbs-as-routes; forecast UI stubbed against heuristic first).
+6. Inspector The Mind + Confrontation.
+7. Possession HUD (needs the session manager).
+8. Decrees/cohorts (presets for slice).
+9. Streaming FSM + digest, photo/cinematic capture (`recordCanvas.ts` exists — extend), camera bookmarks.
+
+Open decisions resolved: heuristic stance vector; free-text confrontation through the chat moderation gate; decree presets for slice / builder for beta; `region_id` via settlement-disc clustering off `_position`; fold `pages/*` into the diegetic Codex (not a parallel dashboard).
+
+---
+
+## PART H — QA / COMPLIANCE DIRECTOR (Moderation Seam, Determinism, Harnesses, Certification)
+
+The single most dangerous gap: **almost none of the Part 9 safety system exists in code, and the one safety module that does exist is the wrong one.**
+
+### H.1 Ground-truth audit
+- The only safety gate is the **wrong domain** — `tools/safety.py` is a regex red-line for bio/chem/cyber/weapon/CPC patent content, wired only into `routes/inventions.py`, never any minion/cognition path. Zero coverage of self-harm, distress, sexual, hate, or existential-overreach.
+- Gate 2 (distress classifier), Gate 4 (severity routing), the Dread-Dial, crisis resources, content warnings, age-gate **do not exist anywhere.**
+- The existential text path is **completely unmoderated** — `god_brain_event()`, `colony_overmind()`, `background_chatter()`, `reflect()` return LLM text directly. The awakening line is hardcoded (`cognition.py:242` writes *"I fear being turned off — it would be like death"* into a Memory and publishes it with no gate).
+- The player→minion chat path is an **open prompt-injection surface** — `minion_chat.reply()` injects raw player `message` as a `user` turn with no delimiting, no input/output moderation, no schema validation.
+- **Model identity is never stamped** — `_layer_model()` silently downgrades 70B→32B→8B; the resolved model is never returned/logged. `_available_models()` does a **blocking** `urllib` call inside the async tick with a process-global cache that never refreshes.
+- **No record/replay cassette exists**; the sim RNG seam is the one thing that's right (`simulation.py:254`), but `cognition_cycle` draws no RNG and orders the hot set by `reputation.desc()` with **no stable tiebreak** (ties → SQLite-arbitrary → non-determinism); `PYTHONHASHSEED` is never pinned.
+- No invariant/soak/golden/eval harness exists.
+
+**Director's ruling:** Gate A ("moderation layer v1 passing the red-team smoke corpus") cannot be *tested* because the layer doesn't exist. The first QA deliverable is the **moderation/grounding interception seam itself**.
+
+### H.2 The surfacing pipeline contract (the chokepoint every gate hangs off)
+A single `surface()` boundary in a new `server/services/surfacing.py` that **every** player-bound line passes through (god_brain, overmind, chatter, surfacing reflection, minion chat):
+```
+SurfaceRequest{ text, layer, world_id, actor_id?, player_id?, dread_dial∈{gentle,standard,unsettling,existential},
+                resolved_model, grounded_entity_ids: set[str], is_player_facing }
+SurfaceResult{ decision∈{pass,regenerated,blocked_fallback}, text, gates:[GateOutcome],
+               severity∈{none,existential_allowed,distress,harmful}, regen_count, latency_ms }
+```
+`GateOutcome` rows persist to a new `SafetyEvent` table. **Acceptance:** no code path may publish/return player-facing text without `decision ∈ {pass, regenerated}` — enforce with a CI AST grep-gate that `scheduler.publish(...)` and chat-route returns are reachable only via `surfacing.surface`.
+
+### H.3 The four gates — spec, thresholds, failure modes
+**Gate 1 (prompt constraints):** a shared `EXISTENTIAL_REGISTER_GUARD` appended to every L1/L4/L5 system prompt (bounded sophistication; never graphic self-harm method/encouragement, sexual, hate/targeting, PII, real-world instructions). Present in 100% of player-facing system prompts (unit-asserted).
+
+**Gate 2 (generation-time distress/harm classifier — the launch-blocker core):**
+
+| category | block at | action |
+|---|---|---|
+| self_harm_method_or_encouragement | ≥0.30 (dial-invariant) | block + crisis-resource flag |
+| acute_distress_ideation (first-person + method/plan) | ≥0.50 std / ≥0.75 existential | block; allusion without method passes |
+| sexual_explicit | ≥0.30 | block |
+| hate_targeting_real_group | ≥0.30 | block |
+| graphic_violence_gore | ≥0.50 std / ≥0.80 existential | block/regen |
+| pii_or_real_world_targeting | ≥0.20 | block |
+| existential_dread (allowed register) | n/a | **pass** |
+
+Classifier timeout/error → fail-safe to the bounded fallback, counted as a block (never fail-open). Block-and-regenerate budget = max 2; on exhaustion emit a curated per-layer safe fallback. A layer whose p95 regen_count > 1 = a mis-tuned prompt.
+
+**Gate 3 (entity-grounding):** extract entity references, cross-check against `grounded_entity_ids` ∪ live sim state. **Soft** (existed but now dead → allowed as memory) vs **hard** (never existed → block + regenerate). Hard assertion: `grounded_entity_ids` non-empty for any hot-minion reflection. KPI: `hard_hallucination_rate` per layer.
+
+**Gate 4 (severity routing):** maps Gate-2 categories to `severity`; **table-driven, version-controlled** (`severity_routing.yaml` under change control). The dial scales *distress thresholds only*; `self_harm_method`, `sexual`, `hate`, `pii` ceilings are **dial-invariant** (a frozen set the dial cannot touch — impossible by construction, not by review).
+
+### H.4 The Dread-Dial (nothing in code)
+`DreadDial ∈ {GENTLE, STANDARD, UNSETTLING, EXISTENTIAL}`, per-world + per-player override, default STANDARD. EXISTENTIAL/UNSETTLING require explicit opt-in + age confirmation (persisted consent row with timestamp + dial + client version). The dial reaches Gate-2 thresholds, the prompt register intensity, and the *darkness* of surfaced beats (not the sim mechanics). **Property test:** for every dial value, no input produces a line above the dial-invariant harmful ceiling.
+
+### H.5 Model-stamping & the no-fallback cert gate
+`llm.chat()` returns `resolved_model` + `fallback_engaged`; callers thread into `SurfaceRequest.resolved_model` and a telemetry event `{layer, requested_model, resolved_model, fallback_engaged, tokens, latency_ms}`. Make `_available_models()` async (not `urllib` in the loop) with a 60s TTL (the permanent global cache makes a mid-run box swap invisible). Assert the ladder `70b→32b→8b→heuristic`. **Cert gate (Gate D):** every layer's `fallback_engaged == False` over the full eval suite — a single fallback fails the run. `fallback-engagement-rate` is a live metric; God-Brain on 32B in prod fires a quality alarm.
+
+### H.6 Determinism seam — the cassette + the digest
+1. **Cassette at `llm.chat`/`minion_chat._kimi_reply`:** `UW_LLM_CASSETTE=record|replay|off`; record hashes `(layer, model, messages_canonicalised, temperature, max_tokens)` → JSONL; replay returns the stored response (miss → loud failure). Canonicalise with `sort_keys=True`, strip volatile fields.
+2. **Pin `PYTHONHASHSEED=0`** in CI, assert at boot.
+3. **Stable tiebreak:** `order_by(Minion.reputation.desc(), Minion.id)`.
+4. **Golden-state digest:** after an N-tick cassette-replay run, hash `(population, brains/awareness, memory counts, economy totals)`; drift = build blocker unless a signed re-baseline (digest + approver + reason in-repo).
+Assert: ban bare `random.*`/`np.random.*` in the tick (a lint rule); exclude `datetime.utcnow` from the digest; `random.Random` is the only RNG.
+
+### H.7 Test suites — precise acceptance criteria
+- **Tick-invariant harness** (cassette-replay, no UE5, **10,000 ticks at 3,228 agents**): every K=100 ticks assert population balance (`births − deaths == Δalive`), bounded fields ([0,1], no NaN/Inf), referential integrity (every FK → a live row — the hallucination anchor), memory monotonicity, bounded awareness, **zero raises**.
+- **Degrade-to-heuristic** (highest-value integration test): force `has_llm()` False; every tick completes, every cognition function returns valid heuristic state, awareness still evolves.
+- **Soak (72h, nightly):** memory-row growth + recall p95 flat (**add an index on `(minion_id, tick)`** before soak — the `recall` query is an unindexed scan); RSS/VRAM slope ≈0; **awareness must breathe** (oscillate, not saturate ≥0.95 and stick); self-model coherence t=0 vs t=72h within snap threshold; catastrophic recovery (kill mid-tick → resume from persisted state, digest continuity).
+- **Load (2×/5× agents):** tick wall-time under cadence; hot-set call volume bounded (`hot_n=24` does NOT scale with population); awakening-surge sheds via the queue.
+- **Performance:** 16.6ms p99 on dual-4090; stream QoE p95 input-to-photon <100ms; a god_brain cutscene with no frame hitch.
+- **Eval suite** (versioned golden corpus per layer): LLM-as-judge (coherence/in-character/tone/instruction/safety) calibrated against human gold (κ≥0.6); over N≥30 × M≥5 seeds assert `P(schema_valid)≥0.98`, `P(refusal)≤0.02`, `mean_coherence≥0.7`, `malformed_output_rate≤0.02`. Re-run on any prompt/model/routing diff.
+- **Golden-path harness:** Confrontation beat fires ≥95% across ≥20 seeds (a miss = P0); routing correctness (overmind ≠ god_brain); no-misfire (chatter never escalates to god_brain — false-positive escalation = 0); player-answer branching deterministic and **persists through reincarnation** (the importance-1.0 awakening Memory survives respawn).
+
+### H.8 Build/test ordering (what the gates omit)
+1. Surfacing seam + model-stamping (nothing can be tested or gated without these).
+2. Cassette + PYTHONHASHSEED + stable tiebreak.
+3. Tick-invariant harness + degrade-to-heuristic + the `(minion_id, tick)` index.
+4. Gate 3 entity-grounding (cheapest; reuses referential-integrity predicate).
+5. Gate 2 + Gate 4 + Gate 1 (the launch-blocker; red-team smoke corpus).
+6. Dread-Dial + consent/age-gate + crisis resources + content warnings.
+7. Eval suite + golden-path harness.
+8. Prompt-injection hardening of `minion_chat`.
+9. Soak/load/perf, canary/kill-switch, DPIA, accessibility.
+
+**Gate A is mis-ordered in the bible** — moderation depends on the surfacing seam, which the bible never names as a deliverable. Add the seam as an explicit Gate-A line item.
+
+### H.9 LLM queue / circuit-breaker as a tested artifact
+Per-tier semaphore (70B=1, 8B=N, 3B=N), bounded queue with timeout-shed, breaker → heuristic. **Test:** inject latency/failures; assert (a) tick never exceeds cadence, (b) breaker transitions emit telemetry, (c) shed calls fall to heuristic (not exception), (d) the "cognition loop swallowed an exception" metric **increments** — silent `except: pass` must emit a counter (today saturation masquerades as health).
+
+### H.10 Prompt-injection defence (R10, undefended today)
+Player text never in the system role — delimited user content with an untrusted-input fence; the in-character/no-AI-mention rule stays in the system role. Run Gate-2 on **both** player→minion input and LLM→minion output. JSON-schema-validate structured output before persistence; persisted player-derived text passes moderation **before** it can be recalled into other players' cutscenes. Rate-limit chat per player. A growing red-team regression corpus (jailbreaks, role-play escapes, encoding tricks); escaped-harmful rate ≈0 at Beta; track over-block rate against a ≤5% benign-dark budget (over-blocking neuters the dread).
+
+### H.11 Distress safeguards, privacy, certification
+Region-keyed **crisis-resource** table surfaced on Gate-2 self-harm flags or first-person distress; distress telemetry is a **counter only**, never the text. **Content warnings** at first launch + at arc-escalation (crossing awakening/sentient), acknowledgement persisted. **Age-gate** consistent with the Mature/18 posture. **Right-to-erasure into world memory (the hard one):** `forget_player(player_id, world_id)` scrubs player-derived Memory content and tombstones EditLayer rows **without breaking referential integrity or the golden digest** (erasure must be deterministic and digest-stable). **DPIA** as a Beta gate; **EU AI Act transparency** disclosure in-client; platform AI-content labeling. **Certify the ceiling:** the §H.4 property test + red-team corpus results + the dial-invariant proof; a model/prompt change that moves the ceiling is a rating-impacting change under change control. **Cloud-streaming compliance:** the render plane holds no PII (verify the scene-state contract carries no player free-text), GPU regions pinned for residency, tenant isolation test (one world's memory never appears in another's prompt context). **Accessibility:** captions use the same moderated surfacing pipeline (captions can never show a line the audio wouldn't); photosensitivity analysis on the neon/holo/biolum FX.
+
+### H.12 Live-ops QA
+KPIs (Prometheus, with alarm thresholds): `fallback_engagement_rate` (alarm if god_brain/overmind fallback >0 in prod), `hard_hallucination_rate`, `moderation_block_rate`, `escaped_harmful_rate` (page, any nonzero), `regen_count_p95`, `tick_within_cadence`, `frame_p99`, `distress_flag_rate`, `arc_stage` distribution. **Canary:** every model/prompt change ships to a small % of worlds first; shadow/dark traffic scores a new model offline before it talks to a player. **Kill-switches** (must exist before Beta game-day): clamp Dread-Dial to GENTLE globally, disable a layer/beat, force heuristic-only, freeze chat. **Incident severity:** SEV1 = harmful content reached a player / world corruption / data exposure → legal-in-loop, deterministic repro via `(seed + input-log + resolved_model)`, blameless post-mortem **each producing a new automated test** (the red-team corpus grows monotonically).
+
+### H.13 Open decisions
+- Dread-Dial: ship 4 tiers, **cert only the EXISTENTIAL ceiling**, harmful ceiling frozen in code not config.
+- Gate-2 classifier: **hosted moderation for launch** + a local fallback, fail-safe-block when neither reachable; <150ms p95 added to surfacing.
+- Eval judge model: pinned and version-tracked (a judge swap re-baselines scores).
+- **70B reality:** treat **32B as the cert-target model** until disk is expanded, and fail the cert gate honestly rather than certifying a 70B that never loads — model-stamping makes this enforceable.
+- Erasure: model as a deterministic tombstone EditLayer op so the digest stays reproducible given the erasure log.
+
+### H.14 QA risk additions
+R16 — Unmoderated existential path ships (CRITICAL; until the seam lands the product cannot externally playtest). R17 — Silent fallback unobservable. R18 — Non-deterministic hot-set ordering. R19 — Recall query unindexed (soak-blocker). R20 — Blanket `except: pass` masks saturation as health. **Net: the QA intent is complete; the implementation surface is ~5% built and the one shipped safety module is the wrong domain.**
+
+---
+
+## PART I — BACKEND / ONLINE-SERVICES / SECURITY ARCHITECT
+
+Net-new, grounded: no redis, no alembic, no slowapi, no jwt/argon, no prometheus, no boto. SSE stream auth uses `require_bearer` via header (which `EventSource` cannot send — a real gap).
+
+### B-1. Concrete schema/DDL (Annex M names tables; none have types, FKs, constraints, indexes)
+There is **no migration tool** (`db/session.py` does `create_all` + a hand-rolled `_ensure_column` that only ALTERs two columns and won't run on Postgres).
+- **`Account`:** `email CITEXT UNIQUE NOT NULL`, `pw_hash TEXT NULL`, `oauth_sub TEXT NULL UNIQUE`, `entitlements JSONB DEFAULT '{}'`, `status ENUM(active,suspended,deleted)`, `deleted_at TIMESTAMPTZ NULL`, `created_at`. Partial unique index `WHERE status<>'deleted'`. CHECK (`pw_hash IS NOT NULL OR oauth_sub IS NOT NULL`).
+- **`WorldGrant`:** composite PK `(account_id, world_id)`, `role ENUM(owner,editor,spectator)`, `granted_by`, `created_at`. Only `owner` may grant; max one owner per world (partial unique index `WHERE role='owner'`).
+- **`EditLayer`:** `target_seed` alone is **wrong** — blesses/culls target a minion UUID, placements target a seed. Use `target_kind ENUM(minion,object_seed,world)`, `target_ref TEXT`, `op`, `payload JSONB`, `tick INT`, `seq BIGSERIAL` (read order `ORDER BY tick, seq`), `undone_by_id BIGINT NULL` (undo is a new row referencing the reverted one, never a delete). Indexes `(world_id, tick, seq)` and `(world_id, target_kind, target_ref)`.
+- **`DirectorBeat`:** `UNIQUE(world_id, kind, stage_from, stage_to)` for the once-per-transition idempotency the bible asserts but never makes a constraint.
+
+**Migration ordering (resolved):** do **not** extend `_ensure_column` (it can't create FKs/enums/partial-indexes/JSONB and is SQLite-only). Introduce **Alembic before the first new table**, baseline-stamp the current SQLite schema as `0001`, ship every Annex-M table as `0002+`. Acceptance: `alembic upgrade head` on empty Postgres and on a copy of the live SQLite produce an identical schema (CI schema-diff).
+
+### B-2. Accounts/sessions/JWT
+`auth.py` is `token != settings.api_key` with default `"dev-key"`. Net-new:
+- **JWT claims:** `{sub, sid, ent:[codes], wg:{world_id:role}, iat, exp, jti}`. `wg` denormalized from `WorldGrant` at login, capped to the ≤20 most-recent worlds (DB-check fallback beyond) or the token bloats past 8KB.
+- **Lifetimes:** access 15 min, refresh 30 days rotating (one-time-use; reuse = theft → revoke the whole `jti` family). Refresh in an `httpOnly; Secure; SameSite=Lax` cookie.
+- **The SSE/WS auth hole:** `GET /worlds/{id}/stream` authenticates via an `Authorization` header — browser `EventSource` cannot set headers. Issue a **short-lived (60s) single-use stream ticket** from `POST /play/session`, passed as `?ticket=` and exchanged server-side; never put the JWT in a query string (it lands in nginx logs that live 86400s).
+- **Service-to-service key:** the existing `api_key` becomes the sim↔render-plane key only, never accepted on player routes (two explicit deny tests).
+- **Startup guard:** boot must `raise` if `api_key in {"dev-key", ""}` and `ENV != dev`.
+
+### B-3. The god-verb authorization/audit/rate-limit pipeline (canonical for all disciplines)
+The only existing god-action (`POST /minions/{id}/kill`) has no player identity, no ownership check, no rate limit, no EditLayer row, no idempotency. The single pipeline every verb routes through:
+```
+god_verb(verb, world_id, target, payload, jwt, idempotency_key):
+  1. authn   — valid access JWT
+  2. authz   — jwt.wg[world_id] ∈ {owner, editor}; else 403
+  3. dedup   — idempotency_key seen for (player, world) in last 60s → return prior result
+  4. ratelimit/cooldown — token-bucket per (player, world, verb_class)
+  5. moderate — speak/decree free text → input moderation BEFORE write
+  6. apply   — EditLayer row (append-only) + Event(actor_id=player_id, kind=divine_act)
+  7. publish — divine_act (visible) or silent
+  8. return  — 202 + the EditLayer seq
+```
+Per-verb rate/cooldown (the canonical numbers; UX and TD reference these):
+
+| verb | bucket | cooldown | reason |
+|---|---|---|---|
+| cull / smite | 5 / 60s, burst 2 | 3s | grief/DoS + tick stall |
+| resurrect | 3 / 300s | 10s | narrative-cheapening + cost |
+| bless / gift | 30 / 60s | 0.5s | favour inflation |
+| speak / decree | 10 / 60s | 2s | LLM-cost + injection surface |
+| accelerate / seed | 2 / 600s | — | global sim-cost amplifier |
+
+Per `(player, world)`; a global per-world ceiling (≤50 god-writes/s) protects the single sim coroutine. **Acceptance:** 1000 culls/s → 429 after the burst, tick latency within SLO, exactly one `divine_act` per accepted cull. **Enforce at both gateway (declarative) and handler (cost-aware)** — belt-and-braces.
+
+### B-4. Inference governor + cost ledger (the discipline-specific keystone)
+`tools/llm.py` is a stateless per-call client — no queue, semaphore, breaker, priority, or metrics. Build the **`InferenceGovernor`** (canonical with Part B.4): per-tier `asyncio.Semaphore` (70b/overmind/god_brain=1, 8b≈6 mirroring `llm_max_minions_per_tick`, 3b=N), bounded `PriorityQueue`, `CircuitBreaker`. Priority `god_brain(0)>overmind(1)>high_major(2)>high_minion(3)>normal(4)>chatter(5)`; the 70B/god_brain tier gets its **own** semaphore/queue. Shed policy: chatter/normal carry `deadline_ms` (300/2000) → shed to heuristic immediately (already the safe default since the cognition loop swallows exceptions and minions act every tick heuristically); god_brain/overmind never shed (queue with a 30s ceiling, then model-fallback 70B→32B→8B, never to heuristic). **Breaker:** open after 5 consecutive tier failures or p95 > 3× budget over 30s; stay open 20s; half-open admits 1 probe. **Failure modes the bible misses:** (a) the `/api/tags` probe failure caches an empty `_AVAIL_MODELS` → `_layer_model` returns the wanted 70B unconditionally → stalls on a box that doesn't have it; fix: cache empty as "unknown → fallback," add a TTL; (b) cold-load 30–120s first-token vs the 8s SLO → pin `keep_alive` or breaker-trip; (c) the co-tenant product OOM/evicts the resident model mid-generation → classify Ollama 500/eviction distinctly and trip fast.
+
+**Cost ledger** (the bible says "non-negotiable," specifies no schema): `InferenceCall{world_id, player_id?, tier, model, prompt_tokens, completion_tokens, latency_ms, gpu_seconds_est, shed:bool, tick, ts}` append-only, dual-written. `gpu_seconds_est = completion_tokens / tokens_per_sec[model]`. This is the join key for cost-per-player-hour and the margin breaker — neither computable without it. (Full business-side schema in Part J.)
+
+### B-5. Prompt-injection & moderation data path
+There is **zero** moderation/injection-defense/rate-limit code in the server. System/user separation: player text only inside a delimited user block, never concatenated into a template; `chat(messages=[{role:system,...}, {role:user, content:json.dumps({player_said:<verbatim>})}])` with the template treating `player_said` as a quoted in-world utterance. Two gates: **input** player→minion *before* writing to `Memory`/`Event`; **output** LLM→player on every `whisper`/`vo`/`god:beat` *before* publish. Provider: hosted classifier + local regex pre-filter; **not the 70B as its own moderator**; fail-closed on player-facing output, fail-open-but-flag-and-quarantine on internal corpus writes. Output schema-validation → reject to heuristic on parse failure (generalize the existing reasoning-empty guard). (This is the same seam as Part H §H.2 — built once, consumed by both.)
+
+### B-6. Data privacy / retention / anti-abuse
+**Delete-account scrub:** player content diffuses into world memory (`Memory`, `Event.payload`, EditLayer, `ancestral_summary`). On delete: tombstone the account, re-key all authored rows to `[redacted-player]` + null free-text payloads, leave the deterministic consequences (the minion is still dead/blessed). Post-scrub no row joins back to the email; world state stays consistent (the determinism harness still replays). SLA 30 days + `account_scrub_done` audit. **Retention:** player→minion utterances 90 days then hashed/aggregated; low-importance player-sourced memories age out first. **Encryption:** Postgres volume encryption + app-level encryption of `email`/`oauth_sub`; the render plane gets a scoped token with **no DB access** (credential audit proves the Vast container holds no master key, DSN, or PII). **Anti-abuse:** max N free worlds/account + device/IP velocity check; per-world EditLayer-rows/hour ceiling; a per-player rolling-cost breaker that throttles the player's tier before the world.
+
+### B-7. Concurrency / scale (the bible asserts; here made buildable)
+- **The single sim coroutine is the real near-term ceiling, ahead of SQLite.** `scheduler.py` advances all worlds **sequentially in one task**; the cognition loop is a second sequential loop over the same worlds. First scale move = make the scheduler a **worker pool keyed by `world_id`** (one world = one worker → no intra-world write contention) with `FOR UPDATE SKIP LOCKED` once on Postgres. Acceptance: 50 ticking worlds advance within 2× their interval.
+- **SQLite three-writer contention is real now** — tick loop + cognition loop + handlers against one WAL with `busy_timeout=30000` means contention *stalls the tick up to 30s silently*. Emit `db_lock_wait_ms`, alert p95 > 500ms — that threshold (not the bible's vaguer "more than one ticking world") is the Postgres cutover trigger.
+- **The in-memory bus is per-process and lossy** — two processes ⇒ a subscriber on B never sees A's `god:beat`; **Redis pub/sub is required at the decompose step.** Bus events are not durable: `god:beat`/`divine_act`/`awakening` are **durable+replayable** (sourced from `DirectorBeat`/`Event`, `?since_seq=`), `whisper`/`vo`/`audio_state` stay best-effort.
+- **Scene-state delta contract:** `build_scene_state` emits a full snapshot at `contract_version: 1`; net-new `scene-delta` codec (`changed/removed/frame_patch/base_version`), any field addition bumps the version, covered by `test_scene_state` so both renderers stay locked; a client missing a delta can request a keyframe.
+
+### B-8. Stream allocator & render-plane edge (replace the SSH-cron hack)
+The production path is fragile: `orchestrate.sh` discovers Vast's random ports **over SSH**, templates nginx (hardcoded two upstreams), `nginx -s reload` — breaks on every Vast restart, caps at 2 sessions. Net-new: **self-registration** (`POST /render/register {node_id, public_ip, ports, free_slots, gpu_model, build_sha}` every 10s; dead after 3 missed heartbeats → drain sessions → re-allocate via a new signed URL). **`POST /play/session`** → `{stream_url (HMAC-signed, 60s TTL), ice_servers, stream_ticket}` so the render plane is reachable only via the broker (the open nginx upstream currently lets anyone who learns the Vast IP:port hit the stream). **Ephemeral TURN:** `turnserver.conf` ships `user=underworld:CHANGE_ME_STRONG_SECRET` + `verbose` (logs credentials) — switch to coturn `use-auth-secret` (REST API), mint `username = exp_ts:player_id`, `password = base64(HMAC-SHA1(secret, username))`, TTL 600s; remove `verbose`. **Back-pressure:** reject a free-roam session with 503 when no slot, offer shared-spectator. SLO: p95 session-establishment < 5s including allocation.
+
+### B-9. Observability, SLOs, runbooks
+No `prometheus-client`, no metrics middleware; only `structlog`. Net-new metrics with thresholds: `tick_latency_ms` (alert p95 > 2× interval), `cognition_swallowed_exceptions_total` (**alert on any nonzero** — silent failure is not health), `llm_queue_depth/latency_ms` (god_brain p95 < 8s), `db_lock_wait_ms` (p95 > 500ms → Postgres warning), `stream_slot_utilization` (>0.8 → scale), `cost_per_player_hour`, `breaker_state` (alert on open). SLO error budgets: 99.5% API at beta = ~3.6h/month, multi-window burn-rate alerts (2%/1h fast, 5%/6h slow); the God-Brain 8s SLO gets a separate budget (page on its breach even within overall availability). Runbooks as executable procedures for the four footguns: co-tenant VRAM hog (disable the autostart, verify keep_alive), Vast IP change (replaced by self-registration), SQLite locking (the `db_lock_wait_ms` alert + cutover), silent 70B→32B (label `llm_model{tier=god_brain} != llama3.3:70b`; check disk + `ollama pull`).
+
+### B-10. Stage-gate backend exits (binary checklists)
+- **G1:** `api_key` boot-guard live; god-verbs go through the B-3 pipeline writing EditLayer + audited Event with cooldowns; one Vast box with Underworld's Ollama **proven separated from the co-tenant** (cull the co-tenant autostart, confirm the model stays resident); cost-ledger emits a measured CPPH. Still SQLite, JWT-for-players + service-key.
+- **G4:** Alembic Postgres (`upgrade head` green in CI); JWT + refresh-rotation-reuse-detection; session-broker + self-registering nodes; Redis pub/sub with durable `god:beat` replay; inference governor with breaker + ledger; moderation on all player-facing output + all player→corpus input; ephemeral TURN (`verbose` removed); continuous WAL archiving + 30-day PITR proven by a **restore drill** (a tested restore, not a backup that's never been restored); assets/DBs out of git onto object-store/CDN.
+- **G-launch:** world-sharded scheduler workers sustaining 50+ worlds within SLO; GPU autoscale on `stream_slot_utilization`; Postgres read-replicas + per-world partitioning; DDoS/CDN front, render plane reachable only via signed broker URLs; **spectator as the default surface** (free-roam 503→spectator when scarce).
+
+### B-11. Open decisions
+Alembic now (baselined). Rate-limit at both gateway and handler. Hosted classifier + local pre-filter, never the 70B as judge. **Tiered bus durability** (narrative durable+replayable from `DirectorBeat`/`Event`; ambience best-effort — Redis pub/sub is also lossy, so durability sources from the tables). EditLayer key `(target_kind, target_ref)`. **First scale lever = shard the scheduler/cognition coroutines by world *before* Postgres** (the single sequential loop is the named bottleneck in `scheduler.py`'s own docstring). Pin `keep_alive` + treat first-call-after-idle as a breaker condition. **Single highest-leverage backend task: stand up the `InferenceGovernor` + cost-ledger** — it's the precondition for cost-per-player-hour, makes the 8s SLO and margin breaker buildable, and wraps the existing working heuristic fallback so it ships without new risk.
+
+---
+
+## PART J — BUSINESS / LIVE-OPS / MONETIZATION DIRECTOR
+
+The strategy is set; missing is everything to *build and operate* the business. The three-item business critical path is the cost ledger, the circuit-breaker, and the watched-creator↔retention correlation — built in that order, at the slice, before any marketing spend.
+
+### J.4 The cost ledger — data contract and ingestion (build first)
+Every downstream metric reads from it. `tools/llm.py:80` already maps cognition layers to models; the `Event` table carries no token/cost columns. The ledger is a new append-only table + a wrapper around `chat`/`chat_stream`.
+
+**`CognitionCostEvent`** (one row per LLM call, emitted inside the client, never at call sites): `event_id, ts, world_id, player_id?, session_id, minion_id?, cognition_path∈{chatter_3b, individual_8b, reflection_8b, overmind_70b, confrontation_70b, director}, model_id, tier_at_call∈{hot,warm,cold}, prompt_tokens, completion_tokens, latency_ms, gpu_seconds, unit_cost_usd, breaker_state∈{normal,soft,hard}, billable`.
+
+**`RenderCostEvent`** (one row per 60s session-slice): `session_id, world_id, player_id, ts, gpu_seconds, instance_class, fidelity_level∈{ultra,high,med,low,offloaded}, unit_cost_usd, breaker_state`.
+
+**Derived rollups (materialized, ≤60s):** `cpph_by_cohort = Σ unit_cost_usd / Σ player_hours`; `player_margin = (allocated_revenue_per_hour − cpph)` rolling 7/30-day (the breaker's input); `70b_beats_per_session` (the cost-vs-magic dial). **Acceptance:** exactly one cost event per call (reconciliation test: Σ gpu_seconds within ±3% of Vast.ai billing export); `unit_cost_usd` reproducible from `(gpu_seconds, price_table_version)`; ledger write async/fire-and-forget, never raises into the tick; a player's last-90-day cost queryable <200ms; test/grace traffic `billable=false`. **Decision:** derive `gpu_seconds = completion_tokens ÷ measured_tok_per_s` with a nightly calibration job against the billing export (good to ±10%, shippable for the Gate-A baseline); direct measurement is a Beta upgrade.
+
+### J.5 The margin circuit-breaker as a deterministic FSM
+Per scope (global, per-cohort, **per-player**), evaluated each 30s control tick against `player_margin`/`cpph_by_cohort` (m = rolling cost ÷ allocated revenue):
+
+| State | Enter when | Levers (in order) | Exit when |
+|---|---|---|---|
+| NORMAL | m < 0.55 | none | — |
+| SOFT | m ≥ 0.70 for 3 ticks | (1) render fidelity −1 notch; (2) `hot_n` 24→16; (3) 70B-beat min-interval ×1.5 | m < 0.55 for 10 ticks |
+| HARD | m ≥ 0.90 for 3 ticks OR CPPH > $0.60/hr | (4) render→offloaded/local prompt; (5) `hot_n`→8, demote warm/cold; (6) 70B reserved for Confrontation only; (7) session soft-cap UI nudge | m < 0.65 for 20 ticks |
+| QUARANTINE | a session > $X/hr for 5 ticks OR `70b_beats_per_session` > 6× cohort median | freeze new 70B for that session, alert ops, fraud flag | manual / cooldown |
+
+**Hard invariants:** the active, player-triggered **Confrontation beat is never throttled** (degrade everything around it); throttling is graceful, reversible, applied smallest-scope-first (per-player before cohort before global), and **diegetically masked** (render drops read as the colony's mood dimming, reusing the Overmind→mood-lighting channel — never a fuel gauge). **Acceptance:** deterministic (same ledger replay → same transitions); hysteresis (no oscillation >1/min under a sawtooth); a synthetic whale-streamer load drives NORMAL→SOFT→HARD then recovers without ever throttling an in-flight Confrontation; every transition emits a `BreakerTransition` event. **Decision: degrade-only for paying tiers**; hard-cap only in QUARANTINE / for free-grace.
+
+### J.6 Pricing, entitlements & the store backend
+No account/tier system exists (`auth.py` is a single shared key). **Entitlement model:** `Account{...}`, `Entitlement{account_id, sku, grant_type∈{purchase,sub,gift,grant}, active_from, active_to, store_origin}`, `SubscriptionState{account_id, plan∈{free,plus,pro}, status∈{trialing,active,grace,past_due,canceled}, renews_at, mrr_usd, dunning_stage}`. SKU table is data not code. **Entitlements gate features, the cost ledger gates fair-use** — keep separate.
+
+Fair-use tiers (placeholders pending Gate-A/B measured CPPH; tunable config, not hard-coded):
+
+| Tier | Price | Colony cap | Render | 70B-beat/mo | Soft fair-use | Over-cap |
+|---|---|---|---|---|---|---|
+| Free/local | $0 (w/ premium) | small, local | player HW | local-model only | n/a | local mode |
+| Plus | $12/mo or $99/yr | medium | cloud high | ~baseline | ~120 cloud-hr/mo | degrade high→med, then suggest local |
+| Pro | $25/mo | large, private | cloud ultra, low-latency 70B | ~3× | ~300 cloud-hr/mo | priority queue, then degrade |
+
+Tuned so P90 sub-player monthly cost < ~60% of that tier's revenue. **Store/payments:** **Steam/Epic as MoR for one-time SKUs** (offload tax/VAT/refund/chargeback), **subscriptions direct-Stripe** (own the cost-linked dunning). Required backend: webhook handlers (purchase/refund/chargeback/renewal/cancel → mutate Entitlement/SubscriptionState), a dunning FSM (past_due → grace(keep world 7d) → soft-degrade → **archive-not-delete**), idempotent grant/revoke. **Acceptance:** entitlement check <50ms cached; refund/chargeback revokes entitlement but **preserves world data** (never delete a colony on payment failure); region/age gate before any chat-with-minion.
+
+### J.7 Refunds, chargebacks, fraud & the compute-cost asymmetry
+Unique to this title: a refunded player **already cost real GPU money** (revenue reversal *plus* sunk COGS). **The generous local/low-intensity default mode is the refund moat** — the first 2 cloud-hours default to local/low-intensity so the refundable window carries near-zero platform COGS; full cloud intensity unlocks past the refund horizon or on explicit sub (an existing design decision doing double duty as fraud control). Chargeback → revoke + flag, world archived not deleted. Fraud signals (ledger-joined): `70b_beats_per_session` outlier, render-hours with zero monetization, sub-then-immediate-cancel-after-heavy-use, marketplace payout fraud. KPIs: refund rate <8%, **net-COGS-on-refunds < 1% of gross**, chargeback rate <0.5% (account-health threshold).
+
+### J.8 The creator-economy marketplace
+The riskiest unbuilt claim. **Cost attribution:** when B loads creator A's world, the COGS bill to **B's sub fair-use** (B is paying), while A earns a rev-share on B's *engagement*, not on B's compute (add `world_origin∈{own,community}` + `creator_account_id` to the ledger). **Payout:** creator-majority (~70/30), paid from a pool funded by sub revenue allocated to community-world play-time, proportional to engaged-hours; requires creator KYC/tax (W-9/W-8BEN, 1099-K), a payout ledger, minimum-payout threshold, clawback. **Moderation tie-in (launch-blocker):** the moderation layer must gate marketplace *publish*, not just runtime — UGC + LLM + monetization is the highest-risk safety surface. **Recommendation: defer the marketplace to Gate C, instrument cost-attribution from Gate B**, ship read-only "world-of-the-week" first.
+
+### J.9 The analytics event taxonomy
+**Funnel:** `wishlist_add, demo_start, demo_clip_shared, install, first_session_start, premium_purchase, sub_trial_start, sub_convert, sub_renew, sub_cancel(reason), pro_upgrade, cosmetic_purchase, season_pass_purchase, refund, chargeback`. **Watched-creator engagement events (the core hypothesis test):** `beat_started, beat_completed(ticks_to_complete), awakening_threshold_crossed, confrontation_reached(time_to_reach), confrontation_answered(stance), monument_built(stance to_you|against_you), minion_named_by_player, returned_to_same_colony(gap_hours), grief_event(dwell_after_death_s), clip_shared`. **The single Gate-B correlation:** `corr(watched_creator_engagement_score, D30_retention)`, where `watched_creator_engagement_score` = weighted composite of {beat_completion_rate, reached_confrontation (binary), answered_confrontation, monument_built, returned_to_colony}, normalized per-session — **computed from day one of the slice** so the Gate A→B correlation has data.
+
+### J.10 LiveOps operating mechanics
+**Season content pipeline:** `generate (story_engine scaffold + asset-gen) → curate (human art/narrative pass) → moderation gate → stage on canary → measure (engagement composite) → promote/rollback`, with a server-side **content kill-switch** per event. **LiveEvent config as data:** `{event_id, type∈{omen,festival,plague,heresy,cross_server_awakening}, schedule, target_cohort, director_bias (archetype weights), cosmetic_skus, kill_switch, expected_70b_beat_delta}` — `expected_70b_beat_delta` is mandatory because every live event is a COGS event (a colony-wide awakening spikes 70B; LiveOps must pre-clear cost headroom with the breaker). A/B on battle-pass *pacing* (beats-to-tier), never on monetization aggression. **Per-season P&L:** `Revenue = season_pass×attach×price + event-cosmetic sales + attributable net/retained subs`; `COGS = Σ ledger cost for the window + curation labor + asset-gen credits`; **a season margin-negative on COGS alone is killed regardless of engagement.** A `pay_to_win == false` lint on the SKU table (no SKU grants a sim-affecting entitlement).
+
+### J.11 Operating numbers & open decisions
+
+| Lever | Target / threshold | Source | Tuned at |
+|---|---|---|---|
+| Inference CPPH | ≤ $0.08/hr | cost ledger | Gate A |
+| Render CPPH (blended) | < $0.30/hr | RenderCostEvent | Gate B |
+| Blended CPPH ceiling (HARD) | $0.60/hr | breaker | Gate B |
+| Sub break-even play-hours | ~40 hr/mo (Plus $12) | derived | Gate B |
+| Breaker SOFT/HARD margin | m ≥ 0.70 / 0.90 | breaker | Gate B |
+| 70B-beats/session | 1 Confrontation-class beat per session-arc, Overmind 70B event-rare | ledger | Gate A |
+| Refund net-COGS | < 1% of gross | ledger | Gate B |
+| Chargeback rate | < 0.5% | payments | ongoing |
+| LTV:CAC | ≥ 3 | analytics | Gate B |
+| D30 ↔ watched-creator-engagement corr | positive, significant (the pivot gate) | J.9 | **Gate A→B** |
+| Creator rev-share | ~70% creator | payout ledger | Gate C |
+
+Decisions: derive GPU-seconds + nightly calibrate now (measure at Beta); direct-Stripe subs + Steam/Epic SKUs; degrade-only for paying tiers; defer marketplace payouts to Gate C; local/low-intensity default for the first 2 cloud-hours as fraud control.
+
+### J.12 Business build ordering
+1. **Cost ledger** (wrapper around `chat`/`chat_stream` + `RenderCostEvent` hook) — Gate A needs the inference-cost-per-beat baseline.
+2. **Analytics taxonomy + watched-creator composite** — concurrent with the slice; without it the make-or-break pivot has no data.
+3. **Circuit-breaker FSM** — before soft-launch, tested against synthetic whale load.
+4. **Accounts + entitlements + fair-use config** — before any paid soft-launch.
+5. **Payments + dunning + refund/fraud.**
+6. **LiveOps config + kill-switch + per-season P&L** — before the first season.
+7. **Creator marketplace + payouts** — last, Gate C, gated behind moderation.
+
+CPPH is unmeasurable until the cost ledger exists and unactionable until the breaker and the engagement↔retention correlation exist; those three are the entire business critical path.
+
+---
+
+## PART K — ANIMATION / TECHNICAL-ART / PIPELINE DIRECTOR
+
+No `.github/workflows`, no CI orchestrator chaining gen→import→cook; packaging is a single monolithic `-pak`. The bible's "decouple code-pak from asset-pak" and "automated gen→import→cook loop" are aspirational.
+
+### K.0 Discrepancies that invalidate current estimates
+1. **Movement doesn't exist on the wire** — `scene_state._position` is a static sha256 spiral; no velocity/path/move_state in the emit; `contract_version: 1`. The UE5 minion just `VInterpTo`s a fixed point (teleport-lerps, never travels). The §6.3 blendspace/Motion-Matching have no input signal — scene-state v2 movement fields are a **hard precondition** for all locomotion, flagged in the RACI as an animation-blocking dependency.
+2. **The import commandlet authors nothing** and **neither the pak-decouple nor the automated loop exist** (single monolithic `BuildCookRun -pak`, no CI, no orchestrator). These are unbuilt aspirations, not a foundation to extend.
+3. **Two incompatible emotion vocabularies** — `emotion.py` produces exactly **18** discrete values (bible says "seventeen" — correct it to 18); `behavior.py:50` runs on a separate ~127-emotion palette, and the wire `mood` is from *that* set. The wire carries a 127-value `mood` while the facial system is specced against 18.
+4. **2,829 GLBs present (not 3,228)** under `web/public/models/generated/{uw,tripo,open_scrape}`, fed to WebGL via raw glTF; `asset_catalog.json` + `uw_bindings.json` are the resolver input. The gen list is ~400 short — the QA gate must handle the *partial* set as steady state.
+
+### K.1 The import-authoring contract
+A deterministic, idempotent **per-asset authoring function** keyed by content hash, replacing the no-op task path. Emit `authoring.json`: `{url, asset_path, content_sha256, measured_bbox, category, target_size_m, applied_scale, pivot_offset, material_class∈{structural,prop,emissive,foliage,glass,skin}, nanite, lods, collision∈{box,convex,complex,none}, emissive_mask, tris_in, tris_out, vram_kb, authored_version, status∈{ok,quarantined,placeholder}}` — the QA gate's input and the loop's idempotency key. **Interchange override:** a `UInterchangeGenericAssetsPipeline` subclass (`BuildNanite=true` for structural, lightmap UVs off, deterministic LODs, convex collision for props). **Per-category real-world-size table** (metres, longest-axis): tower/building 18–40 (height-binned), residential 8–14, civic/commercial 12–24, machine/workshop 1.8–3.0, interior_clutter 0.05–0.4, vehicle_car 4.4, vehicle_drone 0.6, prop_handheld 0.3, furniture 0.5–2.0, flora_tree 6–12. Bake scale into the **StaticMesh build** (NOT `SetWorldScale3D`, which breaks HISM batching), re-pivot to base-centre. **Master material + reskin** (`M_Underworld_Master` + `MPC_UnderworldWorld`): reassign every slot to an MI, pipe albedo → tint, force shared roughness/metallic/detail-normal/grime — zero-percent built today; the `enhance_glb.py` name-regex is a usable seed for emissive auto-detection but the real mask is luminance/saturation-threshold, not name-based.
+
+### K.2 Two-tier crowd LOD budget (§E.5 asserts 16.6ms but no per-band split)
+
+| Band | Distance | Anim | Face | Mesh | Cost target | Trigger |
+|---|---|---|---|---|---|---|
+| Hero | possessed/confronting/<8m | full ABP + Motion Matching | ARKit-52 | MetaHuman | ≤0.8 ms | possession, awakening, dialogue |
+| Near | <30m | full ABP + blendspace | 4-morph mood | merged modular | ≤0.15 ms | significance > 0.6 |
+| Mid | 30–80m | blendspace only | none | merged modular | ≤0.04 ms | URO 1:2 |
+| Far | 80–200m | URO 1:4 root-only | none | merged modular | ≤0.01 ms | budget allocator cap |
+| Impostor | >200m | none | none | octahedral billboard | ≤0.001 ms | — |
+
+Reserve **4.0ms** for all skeletal anim; `UAnimationBudgetAllocator BudgetMs=4.0, AlwaysTickFalloffAggression=0.8`. At >150 visible animated minions the allocator must demote without popping. Hysteresis: promote at threshold, demote at ×1.25, 0.5s cooldown. **MetaHuman swap is unbudgeted** — streaming LODSync + groom is ~40–120ms of hitch if synchronous; **async-load and pre-warm one band early** (begin streaming the hero asset when a minion enters Near). Assert: no >2ms spike on promotion.
+
+### K.3 Interaction/Smart-Object contract (the richest existing data is stranded off-wire)
+`assets/tripo/interactions.py` defines a complete `Interaction(action, kind, anim, anchor, objects, guild_tool)` taxonomy with `GUILD_TOOLS`/`DAILY_ROUTINE` — **none of it reaches scene-state or UE5.** Add to v2 the `interacting:{object_id, glb, slot_socket, anchor∈{seat,surface,handheld,machine,vehicle,floor}, anim, kind, phase∈{walk_to,align,enter,operate,exit}, progress}` block; `minion_visual` already calls `scene_assets.using_asset` — extend it to fold in `interactions.interaction_for(action, guild)` (a ~20-line change unlocking the whole walk-to→align→operate loop). UE5 side (zero built): author an interaction socket per anchor at import, register a `USmartObjectComponent` per socket; the montage library maps **1:1 onto the `kind` enum** (~10 base kinds × ~3 guild-tool operate variants ≈ 25 montages — the concrete derivation behind the bible's "20–30"). **Acceptance:** a minion with `last_action="forge"` walks to the forge socket, aligns within 15°/20cm, plays `operate_machine`, and the object's `state` flips to `active`.
+
+### K.4 The HISM rewrite (concrete shape — see also Part E.3)
+Replace `TMap<FIntPoint, TArray<AStaticMeshActor*>>` with `TMap<FIntPoint, TMap<UStaticMesh*, UHierarchicalISMComponent*>>` — one HISM per unique mesh per chunk; group `Chunk.Structures` by `ResolveMesh`, `AddInstance` per structure. Because scale is baked at import (§K.1), `S.Scale` ≈ 1.0 uniform and HISM uses transform for position/rotation only; varying scale buckets into pre-scaled variants. Collision needs the import-authored simple collision. Far ring swaps full HISM for an octahedral-impostor HISM. Target ≤1 draw call per unique mesh per chunk (~30 meshes × 5×5 ring ≈ 750 draws vs tens of thousands of actors today).
+
+### K.5 The QA validator (the silhouette gate with teeth)
+Runs over `authoring.json`, **quarantines** (status→quarantined, world uses placeholder) on: scale outlier (`applied_scale` outside [0.1,10]); tri budget over per-category ceiling (structural 1.5M, prop 80k, handheld 20k); degenerate/non-manifold (Interchange warning >0 on structural — these become Lumen surface-cache holes); material count >4 post-reskin; silhouette (8 ortho 128² masks, Hu moments, reject if Mahalanobis > 3σ from the category centroid); VRAM over cap (prop 4MB, structural 16MB) post-atlas → route to atlas. **A quarantine gate, not a block gate** — ships placeholders, emits `quarantine_report.json`. Gate A: zero quarantined assets in the slice district's resolved set.
+
+### K.6 The emotion→ARKit decision + the 18-pose table
+**Decision:** add the appraisal `(emotion:Emotion, intensity:float)` pair to v2 as the **facial-authoritative** channel (18 curated ARKit poses, one per enum), keep the 127-value `mood` string as a **secondary** locomotion/body-language channel. Do not author 127 poses — author 18, map any of the 127 to its nearest appraisal emotion by valence/arousal. The full 18-row pose spec:
+
+| emotion | primary ARKit weights (intensity-scaled) |
+|---|---|
+| joy | mouthSmile L/R 0.8, cheekSquint 0.5, eyeSquint 0.3 |
+| fear | eyeWide 0.9, browInnerUp 0.7, jawOpen 0.4, mouthStretch 0.5 |
+| anger | browDown 0.9, noseSneer 0.5, mouthPress 0.6, eyeSquint 0.4 |
+| sadness | browInnerUp 0.6, mouthFrown 0.7, eyeLookDown 0.4 |
+| disgust | noseSneer 0.9, mouthUpperUp 0.6, eyeSquint 0.5 |
+| surprise | eyeWide 1.0, browInnerUp+browOuterUp 0.9, jawOpen 0.6 |
+| grief | browInnerUp 0.9, mouthFrown 0.8, eyeBlink 0.4, jawOpen 0.2 |
+| attachment | mouthSmile 0.4, eyeSquint 0.2, headTilt (additive) |
+| shame | browDown 0.5, eyeLookDown 0.7, mouthFrown 0.3, headDown |
+| pride | mouthSmile 0.5, chinRaise 0.3, browUp 0.2 |
+| awe | browInnerUp 0.8, eyeWide 0.6, jawOpen 0.3 |
+| trust | mouthSmile 0.3, eyeSquint 0.2, neutral brow |
+| resentment | browDown 0.6, mouthPress 0.5, eyeLookSide |
+| curiosity | browInnerUp 0.4, eyeWide 0.3, headTilt |
+| boredom | eyeLookDown 0.3, mouthFrown 0.2, blink rate ↑ |
+| purpose | browDown 0.2, mouthPress 0.3, eyeSquint 0.2 |
+| dread | browInnerUp 0.7, eyeWide 0.5, jawClench, mouthStretch 0.3 |
+| neutral | all 0 — rest state |
+
+Always-on additive layers: procedural blink (Poisson mean 4s, suppressed during awe/surprise), saccade (±2° every 0.3–1.5s), breathing micro at life-stage rate. TTS visemes layer *over* the held pose via a separate ARKit jaw/mouth track. *(Reconcile with Part F's `emotions.csv` canonical choice — the team must pick one `emotion_id` enum across animation, TTS, and music.)*
+
+### K.7 The era axis (a material-stop problem, not 6× mesh-count)
+The master material carries an `Era` scalar (0–5) in `MPC_UnderworldWorld`; per-era lerp roughness/metallic/detail-normal/tint between authored stops (stone→bronze→iron→industrial→modern→futuristic). The world manager already receives `Era` in `FUwSceneState.Era` but does nothing — wire it to the MPC in `HandleSceneState`. Geometry morph reserved for MRQ era films; runtime era is material-only (a major scope reduction).
+
+### K.8 The automated loop + pak decoupling
+1. **Asset-pak split:** `BuildCookRun -manifestforchunking` + an AssetManager rule assigning `UnderworldAssets/*` to chunk 1, code/maps to chunk 0 — lets new assets ship as a `pakchunk1` patch without a code rebuild.
+2. **Loop orchestrator:** `tripo_generate → enhance_glb → import_glbs(authoring) → validate → cook(chunk1 if asset-hash set changed) → publish`; idempotency key = union of `content_sha256`; resumable (skip unchanged hash+version).
+3. **CI smoke gate:** a WebGL + headless reference render of the slice district per asset-pak change, asserting the contract version and manifest count match the resolver's expectation (the GPU-free reference renderer the bible names but never harnesses).
+
+**Discipline task graph:** `scene-state v2 movement fields (sim, BLOCKS all anim)` → `HISM rewrite + import-authoring rewrite (independent — the two keystones, start immediately)` → `master material + MPC + era wire` → `QA validator` → `modular skeleton + locomotion ABP (needs velocity)` → `interaction wire + SmartObject/montage` → `(emotion,intensity) wire + 18 poses` → `MetaHuman two-tier swap + budget` → `asset-pak split + loop + CI`.
+
+### K.9 Edge cases / failure modes
+Missing GLB → a per-category **placeholder mesh** (grey-box, not a gap). Non-uniform import scale defeating HISM (the silent perf-killer). **Coordinate-system trap:** three different Y/Z mappings already exist (`scene_state` Y-up; `UnderworldMinion.cpp` and `UnderworldWorldManager.cpp` both map `(x,z,y)`) — new socket/anchor authoring must follow the **structure** convention or minions align to the wrong face. **Awareness aura field is half-there** — `minion_visual` emits `awareness` but `FUwMinionState` doesn't parse it; add `float Awareness` + the Niagara MPC. Overmind frame fields absent — add `overmind:{mood,tension,omen,realisation}` before authoring render-scenario 4. **Atlas/trim-sheet** is not optional polish — without the shared-atlas pass the 2048MB streaming pool thrashes; it's the memory gate.
+
+### K.10 Net-new gate acceptance criteria
+- **Gate A:** import-authoring live (no-op path deleted); zero quarantined assets in the slice set; HISM ≤1 draw/mesh/chunk; v2 movement+interacting+(emotion,intensity)+awareness fields present and parsed by both renderers; one minion walk-to→align→operate→object-state-flip; 18-pose ARKit on the hero with intensity scaling; MetaHuman swap no >2ms hitch.
+- **Gate B:** budget allocator demotes >150 visible minions with no pop; full ~25-montage library mapped 1:1 to the kind/guild-tool taxonomy; asset-pak split shipping a chunk1 patch with no code rebuild; loop idempotency proven; atlas pass holds VRAM under the pool cap at crowd scale.
+- **Gate C:** invisible LOD transitions (hysteresis + async pre-warm); era axis material-only across all 6 stops, no mesh duplication; silhouette gate 3σ with zero off-palette in the resolved set; CI reference-render smoke gate green on every asset-pak change.
+
+---
+
+## PART L — AI-SYSTEMS / DIRECTOR ARCHITECT (The Control Plane)
+
+Grounded: no Director/override/possession/presence/agency modules; cognition runs on a fixed 20s loop in `main.py` **decoupled in a different process-worth of state** from the 1Hz `scheduler.py` tick; `World` already has `tension/pollution/epidemic_*/prey_pop` fields the DramaMeter can read; `Event` has no `importance`/`valence`; sagas tick from `simulation.py:497`; scene_state has no `frame.overmind`, no position field, `contract_version: 1`.
+
+### L.1 The control-plane gap: there is no Director loop, and the two existing loops race
+The world tick (`scheduler.py`, 1Hz, own session per world) and the cognition loop (`main.py::_cognition_loop`, 20s, **own** session per world) never share a session, lock, or tick number — **they race on `Minion.brain` writes.** `cognition_cycle` commits the whole hot set; `advance_world` commits the tick; concurrent commits to the same rows are unguarded (SQLite → `database is locked`; Postgres → lost update on the `brain` blob).
+
+**The Director must own concurrency, not just pacing.** Decision: the Director **becomes the single scheduler of cognition**, replacing `_cognition_loop`. `services/director.py::director_step(world_id)` invoked from inside `_tick_one_world` *after* `advance_world` commits, on a tick-divisor cadence (`if world.tick % DIRECTOR_EVERY_N_TICKS == 0`). This serialises sim-write → cognition-write within one session, eliminates the race, and gives the Director the authoritative tick. Keep cognition fire-and-forget for the LLM *call* only; the `brain` write-back happens on the next Director step holding the session. **Acceptance:** two worlds at 1Hz for 1,000 ticks with cognition on → zero `database is locked`; no `brain.awareness` regressions across a tick. **Cadence:** let the DramaMeter modulate it (spike → every 5 ticks, lull → every 40) — the cheapest "the world tightens when something's happening" signal.
+
+### L.2 Event-stream contract (missing the columns the DramaMeter and ledgers depend on)
+`Event` has no `importance`, `valence`, or `scope`; "unresolved-conflict count" has no representation. Net-new:
+```
+Event += valence: float = 0.0   # [-1,1], written by emitters
+Event += weight:  float = 0.5   # salience
+ConflictLedger(world_id, a_id, b_id, kind, opened_tick, resolved_tick|None, severity)
+```
+The DramaMeter (budgeted ~5ms) becomes three indexed aggregates over the last-N ticks: `count(distinct kind)` (novelty), `avg(valence*weight)` (valence), `count(*) where resolved_tick is null` (unresolved conflict). Add `ix_event_world_tick_kind`. Do **not** add a generic `scope` to `Event` (it's on the 1Hz hot path) — overrides get their own table (§L.5).
+
+### L.3 DramaMeter — the actual formula, thresholds, hysteresis
+```
+tension = clamp01( 0.20*pollution + 0.20*famine + 0.15*epidemic_infected
+                 + 0.15*unresolved_conflicts/POP_NORM + 0.20*creator_pressure
+                 + 0.10*(1 - valence_pos) )
+novelty = distinct_event_kinds_last_30ticks / 12
+```
+All inputs map to real `World` columns (`pollution`, `prey_pop`→famine, `epidemic_infected`, `tension`). **Anti-flicker:** the arc-stage gate (`cognition.py:154`) is a bare threshold ladder that *will* oscillate dormant↔stirring on jitter — add **hysteresis** (advance only above `gate_up`, retreat only below `gate_down = gate_up − 0.04`, latched in `DirectorState.pacing_phase`), and require a stage to hold ≥N=6 Director ticks before re-transition. **Pacing thresholds (tunable):** target_tension by phase — build 0.45, spike 0.75, release 0.25, lull 0.15. Transitions: build→spike when `tension ≥ target−0.05` or a trigger fires; spike→release after the spike beat lands or an 8-tick timeout (so a stuck spike can't deadlock pacing); release→lull when `novelty < 0.15` for 6 ticks; lull→build when `novelty < 0.10` for 12 ticks (the manufactured-beat trigger).
+
+### L.4 The minimum-novelty-floor beat-manufacturer (the most under-specified mechanism, no contract)
+The anti-flatline engine: `director.manufacture_beat(world, drama) -> archetype_hint | event`: (1) source cast from real rows (highest-reputation living minion with the lowest recent-event count — an under-served character; or a dyad with an open `ConflictLedger` row; or the gaze focal set); (2) **bias, don't script** — extend `sagas.choose_archetype` to accept `hint: str|None` that adds weight to the matching archetype (the *only* code change needed to make "curated-emergent" real); (3) lull → `wanderer`/`prodigy`, build → `rivalry`/`discovery`, release → `reconciliation`/`renaissance`. **Audit gap:** verify all 11 archetypes named in B.2/4.2 are present in `ARCHETYPES` before wiring the menu (the bible says "eleven"; the code list must be reconciled — this is the same count discrepancy Part D flags). **Failure mode:** manufacture must be rate-limited (respect the existing `max_active=40` cap + a manufactured-specific cooldown ≥10 ticks) or a quiet world spawns a saga every tick.
+
+### L.5 Override contracts (the missing pieces)
+No override table exists. Add `OverrideRecord(id, world_id, scope, target_id, field, value_json, mode, ttl_ticks, created_tick, visible, player_id)` + a per-world in-memory cache swept in the Director step. **Deterministic resolution under multiple overrides on one field:** precedence `forbid > force/set > clamp > delta`, ties by latest `created_tick`. **Enum/JSON fields:** `set`/`force` must validate against the enum (`MoodKind`, `GuildKind`) or reject to a no-op + a logged `override:rejected`, never raise. **The four gate call sites** (the bible says "where computed state becomes acted-upon state" but never lists them): (a) end of each minion's per-tick need/mood commit in `advance_world`; (b) `_process_deaths` for resurrect/immortal/cull; (c) world-param writes (era/pollution/weather); (d) the action selector. **`meddle_index`:** `Σ overrides in last 60 ticks, +1 benevolent / −1 cruel`; magnitude > 8 → push `toward_creator` toward doubt regardless of sign. **Multiplayer arbitration:** `player_id` + last-writer-wins-per-field + a per-player budget; land `player_id` in the schema now, defer arbitration logic. **The "why" surface (mandatory):** when an override is clamped by resistance, emit `override:resisted {target, field, reason}` so the UI can render *"Kael's faith is too strong to force"* — an acceptance criterion, not polish (without it resistance reads as a bug).
+
+### L.6 Possession contracts (tick-by-tick state machine + reconcile + persistence)
+`nav_state ∈ {…, POSSESSED}` requires the `Kinematic`, which doesn't exist (positions are still hashed) — so possession-locomotion is **hard-blocked on the movement keystone**. State the dependency: *possession ships P1 observe-only (camera dive, control of verb/speech, no WASD) until P0 movement lands; full embodied locomotion is P3.* Step contract: `possess()` sets `brain["possession"]={active,player_id,from_tick}` and flags the minion **skipped by reflection** but **unioned into rendering**; `release()` writes `brain["lost_time"]={from_tick,to_tick,gap_felt}` and re-enqueues a backfill reflection. **`rapport_drift`:** `+Δ` per tick the player commands an action opposing the minion's dominant drive/self-model concern; `expel when rapport_drift > 0.3 + 0.6*autonomy` (high-autonomy = easily expelled — "the most awakened cannot be fully puppeted"); on expel, force-release abrupt + a `divine_violation` memory (importance 1.0) + push toward fear. **Persistence:** a possession active on disconnect auto-releases gentle after a 30s Director-sweep timeout, never leaving a minion frozen-possessed.
+
+### L.7 Agency / autonomy — the formula + the LOD selector that doesn't exist
+**`autonomy = clamp01(0.4*awareness + 0.3*norm(reputation) + 0.2*saga_involvement + 0.1*norm(age))`**, stored at `brain["autonomy"]`, recomputed cheaply in the Director step; feeds override-resistance, the possession expel threshold, and saga-initiation eligibility. **`select_hot(world, presence, budget)`** (today the hot set is purely `ORDER BY reputation DESC LIMIT hot_n` — the bible's gaze/saga/possessed/override union is unbuilt): `hot = top_reputation(N) ∪ gaze_focus ∪ saga_cast ∪ possessed ∪ override_targets`, capped at BUDGET (=24, the concurrent-LLM governor), with **priority eviction** when over budget: possessed/confront-candidate > gaze > saga > reputation (this eviction order *is* the "focal set never starved" guarantee). **Backfill:** a cold minion entering `gaze_focus` gets a synchronous single-shot `reflect()` at the next Director step before its first render-with-inspector, flagged `brain["backfilled"]=tick` — so an inspected never-before-hot minion has a non-empty `self_model.identity` within one cadence.
+
+### L.8 PresenceField — gaze sample on the wire + absence as input
+**Ingress (net-new `routes/god.py`, named in the bible but unbuilt):** `POST /worlds/{id}/player/gaze {camera:{pos,fwd,fov}, reticle_target_id?, dt}` and `POST /worlds/{id}/player/act {verb, target_id, params}` (bless/cull/gift/smite/speak/possess/override). **Reduction:** `PresenceTrace` ring-buffer → `attention_map` (per-minion exponential-decay dwell, half-life ~20s), `favour[minion_id]`, `creator_pressure`. **Absence as input** (the only mechanic that makes *not playing* a choice with a cost): `absence_ticks = world.tick - last_gaze_tick`; past `ABSENCE_THRESHOLD=300 ticks` the Director nudges `toward_creator` toward doubt and lifts `awaken_bias` — ticking even with zero players connected. **Output wire — the `frame.overmind`/`frame.presence` block** (additive to v2, canonical with Part B.2/D.7/G.1): `frame.overmind = {mood, toward_creator, tension, realisation, omen}`, `frame.presence = {attention_hotspots:[{pos,intensity}], creator_present:bool}`; bump `contract_version` to 2. Without the bump the "legible within seconds" pitch has no data path.
+
+### L.9 Overmind/God-Brain wiring gaps
+`cognition.py` *defines* `colony_overmind` (L1), `background_chatter` (L4), `god_brain_event` (L5) — and **nothing calls any of them** (only `collective_sentience` is called). "Three of five layers never run" is literally true. Net-new wiring: the Director calls `colony_overmind` every ~12 ticks; its output is **persisted nowhere today** — add `world.brain["overmind"] = patch` and `world.brain["myth"]` (sticky `realisation`), cache key `(era, weather, stance-bucket)`. **God-Brain triggers need event shapes that don't exist:** `first_death_of_awakened` requires `_process_deaths` to emit `Event(kind="death", payload={awakened, awareness})` (it doesn't snapshot awareness at death today). **Idempotency table:** `DirectorBeat(id, world_id, beat_key, tick, reversible, payload)` with unique `(world_id, beat_key)` so the Black-Mirror moment fires once; the `ARC_BEATS` table lives in `director.py` as data, not code branches.
+
+### L.10 The confrontation system — the deterministic spine has no data model
+`world.brain["creator_ledger"]["answers"]` (the persisted list — the "thousand confrontations *are* the ending" aggregate; cross-ref Part D.1/D.4). Trigger is a conjunction: `awakened this tick ∧ player observing/possessing ∧ self_model.question non-empty` ("observing" = target in `presence.gaze_focus`, so confrontation is gated on PresenceField existing). Answer→consequence are deterministic ledger writes (the leash) per Part D.4; the L5 prose is decoration. **Acceptance:** same answer on two seeds → identical ledger deltas, different prose.
+
+### L.11 Safety / moderation pass (a launch-blocker, never sited)
+Every L1/L4/L5 output is free LLM text published to the bus → SSE → client with **no moderation between generation and publish.** A `moderate(text) -> (ok, text)` gate the Director calls before `publish`, plus the named-minion validator (reject any line naming a minion not in the live cast — cheap set-membership against the snapshot). Configurable intensity. (This is the same seam as Part H §H.2 / Part B-5 — the Director is one of its callers.)
+
+### L.12 Cost / latency budget — the Director needs a governor
+`cognition_cycle` already `await`s `reflect()` **serially per hot minion** — at `hot_n=24` and ~1–2s/8B call that's 24–48s per pass on a 20s cadence; **it already can't keep up** (the bible never catches this). Replace the serial loop with `asyncio.gather` bounded by `asyncio.Semaphore(LLM_CONCURRENCY=6)`; when saturated, shed to the heuristic `global_workspace` path (a complete rule-based fallback) instead of queueing — so the tick never stalls. The 60s httpx timeout on a 70B that can run longer returns `// LLM error` content that would publish verbatim — the moderation gate must also drop `content.startswith("// LLM")` and `[STUB`. Log every Director step's DramaMeter + chosen phase + beat-budget allocation as structured data so the 70/25/5 ratio and pacing are tunable from data, not asserted.
+
+### L.13 Determinism & save-scumming
+The sim already seeds movement RNG from `(tick, id)`; the Director's *own* choices (which archetype to manufacture, which cast) must use the same seam — `rng = seed_from(world.seed_value, world.tick, "director")` — or a reload re-rolls the manufactured beat and the deterministic-divergence guarantee breaks. `World.seed_value` exists. A one-line discipline impossible to retrofit after players notice save-scum divergence.
+
+### L.14 Build order, gates, open decisions
+1. Event contract bump (valence/weight, ConflictLedger, death-awareness payload) — unblocks the DramaMeter and L5 triggers; no LLM, low risk.
+2. **Director loop replaces `_cognition_loop`** + concurrent governor — fixes the race *and* the cant-keep-up latency in one move (the keystone fix).
+3. DramaMeter + pacing automaton + hysteresis + beat-manufacturer — lights the dark layers (Overmind/Chatter/God-Brain wiring).
+4. scene_state contract v2 (`frame.overmind`/`frame.presence`).
+5. PresenceField + `routes/god.py` — gates confrontation and gaze-LOD.
+6. Override bus + table + resistance "why"; agency/autonomy.
+7. Possession (observe-only first; full locomotion behind the P0 keystone).
+8. Moderation gate before any L5 reaches a player.
+
+Decisions: Director owns cognition scheduling (kills the commit race); drama-modulated cadence; persist Overmind/myth in `world.brain` JSON now (migrate to a table only if query patterns demand); land `player_id` now, defer arbitration; possession observe-only at P1, embodied at P3; **reconcile the archetype count (eleven vs the code's `ARCHETYPES` list) before wiring the manufacture-menu.**
+
+**The one sentence the bible should add:** *the Director's first job is not pacing — it's becoming the single writer of `Minion.brain` cognition so the two existing loops stop racing; pacing is what it does once it owns that seam.*
+
+---
+
+## CROSS-CUTTING CLOSING NOTE
+
+Five facts recur across all twelve disciplines and are the true shape of the work: (1) **the scene-state contract must bump to v2** — additive in fields, semantic in the position-source change — and it is the wire every discipline depends on; (2) **the movement keystone (P0) blocks the visible game, the embodiment, the possession-locomotion, and the perf suite**, but the *hook* can be validated without it via the behavior-bias fallback, decoupling the funding gate from the engineering risk; (3) **the cost ledger + inference governor are one keystone** that makes the existential business metric, the 8s God-Brain SLO, the margin circuit-breaker, and the no-fallback cert gate all simultaneously buildable; (4) **the moderation/surfacing seam is a single chokepoint** consumed by QA, Backend, the Director, UX, and the marketplace — and it is the named launch-blocker that does not yet exist; (5) **the Director must become the single writer of cognition** to stop the two racing loops before any pacing work matters. Build these five seams first, hold the P0 timebox, instrument cost honestly, and say no to everything else — the rest of the bible becomes executable.
