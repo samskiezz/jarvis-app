@@ -19,6 +19,7 @@ import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 import DomainRail from "@/components/DomainRail";
 import CommandPalette from "@/components/CommandPalette";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import TelemetryTicker from "@/components/cinematic/TelemetryTicker";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -53,6 +54,7 @@ export function AppLayout({ children }) {
           <span style={{ fontSize: S.fs.xs, color: S.text, letterSpacing: 1 }}>JARVIS PALANTIR</span>
           <span style={{ color: S.text, opacity: 0.5 }}>/</span>
           <span style={{ fontSize: S.fs.xs, color: S.textHi, letterSpacing: 1 }}>{(current?.label || "").toUpperCase()}</span>
+          <TelemetryTicker />
           <div style={{ flex: 1 }} />
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("jarvis:open-palette"))}
