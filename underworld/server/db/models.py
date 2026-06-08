@@ -662,6 +662,28 @@ class UwFeedbackFinding(Base):
     created_at: Mapped[datetime] = mapped_column(default=_now, index=True)
 
 
+class UwWorker(Base):
+    """WORKER REGISTRY (Layers 8/10/14) — the live inventory the router/orchestrator/recovery read.
+    The always-on Vast Ollama box is the `base` worker; disposable Vast instances spun for burst
+    tiers (e.g. the 120B Llama) are `disposable` and reaped after idle. Durable so a control-plane
+    restart re-discovers what's running (the VPS = truth; never trust live VRAM)."""
+
+    __tablename__ = "uw_workers"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)        # stable worker_id
+    provider: Mapped[str] = mapped_column(String(16), default="vast")    # local|vast
+    kind: Mapped[str] = mapped_column(String(16), default="base")        # base|disposable
+    endpoint: Mapped[str] = mapped_column(String(200), default="")       # OpenAI-compatible /v1 base
+    model_tier: Mapped[str] = mapped_column(String(16), default="")      # "", 70b, 120b
+    models: Mapped[list[str]] = mapped_column(JSON, default=list)        # models served
+    state: Mapped[str] = mapped_column(String(16), default="healthy", index=True)  # starting|healthy|draining|dead
+    vast_instance_id: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    destroy_after_idle_s: Mapped[int] = mapped_column(Integer, default=600)
+    active_jobs: Mapped[int] = mapped_column(Integer, default=0)
+    last_used_at: Mapped[datetime] = mapped_column(default=_now)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+
+
 class UwLesson(Base):
     """THE 'MAKE LLAMA SMARTER' STORE — validated learnings, injected into the system prompt of the
     matching tier on every call (lessons_for(tier)). This is the write-back end of the loop: a

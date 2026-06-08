@@ -180,6 +180,28 @@ async def _feedback_loop():
         await asyncio.sleep(interval)
 
 
+async def _gpu_reaper_loop():
+    """GPU ORCHESTRATION upkeep — refresh the base-box registry entry + reap idle disposable Vast
+    burst workers (cost control; the VPS=truth recovery model). Opt-out GPU_REAPER_LOOP=0. Never
+    crashes the app."""
+    import asyncio
+    import os
+
+    from .services import gpu_orchestrator as gpu
+
+    if gpu.reaper_disabled():
+        return
+    interval = max(30.0, float(os.environ.get("GPU_REAPER_INTERVAL_S", "120")))
+    await asyncio.sleep(float(os.environ.get("GPU_REAPER_START_DELAY_S", "20")))
+    while True:
+        try:
+            await gpu.register_base()
+            await gpu.reap_idle()
+        except Exception:  # noqa: BLE001 - orchestration upkeep must never kill the loop
+            pass
+        await asyncio.sleep(interval)
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     import asyncio
@@ -188,6 +210,11 @@ async def lifespan(_app: FastAPI):
     _llm.warn_on_misconfig()
     await init_db()
     await seed_knowledge_base()
+    try:
+        from .services import gpu_orchestrator as _gpu
+        await _gpu.register_base()                          # the always-on Vast Ollama base worker
+    except Exception:  # noqa: BLE001
+        pass
     tasks: list[asyncio.Task] = []
     if get_settings().scheduler_enabled:
         if get_settings().scheduler_autostart_all:
@@ -197,6 +224,7 @@ async def lifespan(_app: FastAPI):
         tasks.append(asyncio.create_task(_movement_loop()))     # the keystone — minions walk
         tasks.append(asyncio.create_task(_director_loop()))     # the colony's nervous system
         tasks.append(asyncio.create_task(_feedback_loop()))     # Kimi observes → Llama improves
+        tasks.append(asyncio.create_task(_gpu_reaper_loop()))   # disposable Vast burst upkeep
     yield
     for t in tasks:
         t.cancel()
