@@ -20,6 +20,16 @@ struct FUwMinionState
 	UPROPERTY(BlueprintReadOnly) FString Mood;                        // content/curious/...
 	UPROPERTY(BlueprintReadOnly) FString Saga;                        // current activity narrative
 	UPROPERTY(BlueprintReadOnly) FString Guild;                       // A..H CPC guild (skin tint)
+
+	// ── MOVEMENT v2 (contract_version 2) — server-tracked walking ──────────────────
+	// The backend now simulates each minion's kinematic, so the client dead-reckons
+	// between ~1 Hz polls instead of teleporting. Velocity is the ground-plane vector
+	// (backend units/sec) with elevation left to the terrain; MoveState drives the anim.
+	UPROPERTY(BlueprintReadOnly) FVector Velocity = FVector::ZeroVector; // (vx, 0, vz) units/sec
+	UPROPERTY(BlueprintReadOnly) FString MoveState;                      // idle/walk/occupy
+	UPROPERTY(BlueprintReadOnly) float   Speed = 0.f;                    // units/sec scalar
+	UPROPERTY(BlueprintReadOnly) FVector TargetPos = FVector::ZeroVector;// (tx, 0, tz) goal slot
+	UPROPERTY(BlueprintReadOnly) bool    bHasTarget = false;
 };
 
 /** One placed structure inside a φ/fractal chunk (building / wall / prop). Mirrors the

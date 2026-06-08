@@ -28,11 +28,16 @@ public:
 	UPROPERTY(BlueprintReadOnly) FString Anim;
 	UPROPERTY(BlueprintReadOnly) FString Mood;
 	UPROPERTY(BlueprintReadOnly) FString Guild;
+	UPROPERTY(BlueprintReadOnly) FString MoveState;   // idle/walk/occupy (drives locomotion BS)
+	UPROPERTY(BlueprintReadOnly) float   GroundSpeed = 0.f;  // UE cm/s — feed the locomotion blendspace
 
 	/** Backend units → UE centimetres. Default 100 (1 backend unit = 1 m). */
 	UPROPERTY(EditAnywhere, Category="Underworld") float WorldScale = 100.f;
 	/** Position/rotation interpolation speed (per second). */
 	UPROPERTY(EditAnywhere, Category="Underworld") float LerpSpeed = 6.f;
+	/** Dead-reckon between ~1 Hz server polls: extrapolate along the server velocity so the
+	 *  walk is continuous instead of stuttering to a stale point. Disable to snap-lerp only. */
+	UPROPERTY(EditAnywhere, Category="Underworld") bool bDeadReckon = true;
 
 	/** Anim/guild changed — drive the AnimBP / material from Blueprint. */
 	UFUNCTION(BlueprintImplementableEvent) void OnAnimChanged(const FString& NewAnim);
@@ -43,6 +48,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere) USkeletalMeshComponent* Mesh = nullptr;
 
-	FVector  TargetLocation = FVector::ZeroVector;
+	FVector  TargetLocation = FVector::ZeroVector;   // UE-space goal the actor lerps toward
 	FRotator TargetRotation = FRotator::ZeroRotator;
+	FVector  ServerVelocity = FVector::ZeroVector;   // UE-space cm/s from the backend kinematic
+	FVector  TargetSlot     = FVector::ZeroVector;   // UE-space building slot (dead-reckon clamp)
+	bool     bHasSlot       = false;
 };

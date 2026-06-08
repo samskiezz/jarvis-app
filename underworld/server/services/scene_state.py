@@ -177,7 +177,18 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
     guild = m.guild.value if hasattr(m.guild, "value") else str(m.guild)
     mood = m.mood.value if hasattr(m.mood, "value") else str(m.mood)
     look = GUILD_LOOK.get(guild, {"color": "#cccccc", "role": "scholar"})
-    x, z = _position(m.id, seed_int, town_radius=town_radius)
+    # POSITION — server-tracked movement is the source of truth (minions WALK). If the
+    # minion hasn't been stepped yet (no kin), fall back to the deterministic spawn spot.
+    kin = None
+    try:
+        from underworld.server.services import movement
+        kin = movement.kin_visual(m)
+    except Exception:  # noqa: BLE001
+        kin = None
+    if kin:
+        x, z = kin["pos"]
+    else:
+        x, z = _position(m.id, seed_int, town_radius=town_radius)
     y = _elevation(heightmap, x, z, town_radius=town_radius, scale=terrain_scale)
     anim = _anim_for(mood, m.fatigue or 0.5, m.sanity or 0.85, look["role"])
     # The minion's REAL current activity → where they go + how they animate.
@@ -224,8 +235,15 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         "guild": guild, "role": look["role"], "color": look["color"],
         "mood": mood, "generation": m.generation,
         "position": [x, y, z],
-        "facing": round((_h(m.id) % 360), 1),
-        "anim": anim,
+        # MOVEMENT v2 — live velocity/state so the renderer steers + foots the walk cycle
+        # instead of teleporting. facing follows the velocity heading when walking.
+        "velocity": (kin or {}).get("vel", [0.0, 0.0]),
+        "move_state": (kin or {}).get("move_state", "idle"),
+        "speed": (kin or {}).get("speed", 3.2),
+        "target_pos": (kin or {}).get("target"),
+        "facing": (round(math.degrees(math.atan2(kin["vel"][1], kin["vel"][0])), 1)
+                   if kin and (kin["vel"][0] or kin["vel"][1]) else round((_h(m.id) % 360), 1)),
+        "anim": ("walk" if kin and kin.get("move_state") == "walk" else anim),
         # what the minion is REALLY doing this tick + the building they head to.
         "action": action,
         "target_building": target_building,
@@ -276,6 +294,13 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
                              town_radius=town_radius, tod_phase=tod_phase,
                              biome=biome, era=era, weather=weather, season=season)
                for m in minions if m.alive]
+    # THE AI DIRECTOR — the colony's collective consciousness + ambient chatter + any
+    # irreversible God-beat, refreshed by the director loop. Hung on the frame for renderers.
+    try:
+        from underworld.server.services import director
+        director_frame = director.frame(world.id)
+    except Exception:  # noqa: BLE001
+        director_frame = {"overmind": None, "chatter": [], "god_beat": None}
     return {
         "world_id": world.id, "tick": world.tick, "era": world.era,
         "sim_year": round(world.sim_year, 1),
@@ -284,6 +309,9 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
             "weather": weather,
             "biome": getattr(seed, "biome_hint", "plains"),
             "epoch": epoch,
+            "overmind": director_frame.get("overmind"),
+            "chatter": director_frame.get("chatter", []),
+            "god_beat": director_frame.get("god_beat"),
         },
         "terrain": {
             "seed": seed_int,
@@ -294,6 +322,6 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
         },
         "minions": visuals,
         "population": len(visuals),
-        "contract_version": 1,
+        "contract_version": 2,
         "note": "Authoritative scene state — WebGL and UE5 render this identically.",
     }

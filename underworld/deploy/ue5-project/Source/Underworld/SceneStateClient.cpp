@@ -125,6 +125,21 @@ bool USceneStateClient::ParseScene(const FString& Body, FUwSceneState& Out) cons
 			{
 				Ms.Pos = FVector((*P)[0]->AsNumber(), (*P)[1]->AsNumber(), (*P)[2]->AsNumber());
 			}
+
+			// ── MOVEMENT v2: velocity [vx,vz], move_state, speed, target_pos [tx,tz] ──
+			Ms.MoveState = M->HasField(TEXT("move_state")) ? M->GetStringField(TEXT("move_state")) : TEXT("idle");
+			Ms.Speed     = M->HasField(TEXT("speed")) ? (float)M->GetNumberField(TEXT("speed")) : 0.f;
+			const TArray<TSharedPtr<FJsonValue>>* Vel = nullptr;
+			if (M->TryGetArrayField(TEXT("velocity"), Vel) && Vel && Vel->Num() >= 2)
+			{
+				Ms.Velocity = FVector((*Vel)[0]->AsNumber(), 0.f, (*Vel)[1]->AsNumber());
+			}
+			const TArray<TSharedPtr<FJsonValue>>* Tgt = nullptr;
+			if (M->TryGetArrayField(TEXT("target_pos"), Tgt) && Tgt && Tgt->Num() >= 2)
+			{
+				Ms.TargetPos  = FVector((*Tgt)[0]->AsNumber(), 0.f, (*Tgt)[1]->AsNumber());
+				Ms.bHasTarget = true;
+			}
 			Out.Minions.Add(MoveTemp(Ms));
 		}
 	}

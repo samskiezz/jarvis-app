@@ -69,6 +69,81 @@ async def _cognition_loop():
         await asyncio.sleep(interval)
 
 
+async def _movement_loop():
+    """THE KEYSTONE LOOP — ~1 Hz server-tracked movement. Every tick, each alive minion in an
+    auto-advancing world steers toward the building its current action demands, so the world
+    WALKS instead of teleporting. Positions persist in Minion.brain['kin']. Opt-out with
+    MOVEMENT_LOOP=0. Never crashes the app."""
+    import asyncio
+    import os
+
+    from sqlalchemy import select
+
+    from .db.models import Minion, World
+    from .db.session import session_scope
+    from .services import movement
+    from .services.scene_state import _action_target
+
+    if os.environ.get("MOVEMENT_LOOP", "1").lower() in ("0", "false", "no"):
+        return
+    dt = max(0.25, float(os.environ.get("MOVEMENT_INTERVAL_S", "1.0")))
+    max_n = int(os.environ.get("MOVEMENT_MAX_PER_WORLD", "600"))
+    town_radius = float(os.environ.get("TOWN_RADIUS", "60"))
+    await asyncio.sleep(float(os.environ.get("MOVEMENT_START_DELAY_S", "6")))
+    while True:
+        try:
+            async with session_scope() as s:
+                worlds = (await s.execute(
+                    select(World).where(World.auto_advance.is_(True)))).scalars().all()
+            for world in worlds:
+                seed_int = int(getattr(world, "seed_value", 0) or 0)
+                async with session_scope() as s:
+                    minions = (await s.execute(
+                        select(Minion).where(
+                            Minion.world_id == world.id, Minion.alive.is_(True))
+                        .limit(max_n))).scalars().all()
+                    for m in minions:
+                        last_action = (m.brain or {}).get("last_action", "rest")
+                        _, target_fn, _ = _action_target(last_action, "")
+                        movement.step_minion(m, seed_int=seed_int, town_radius=town_radius,
+                                             dt=dt, target_fn=target_fn)
+        except Exception:  # noqa: BLE001 - a movement failure must never kill the loop
+            pass
+        await asyncio.sleep(dt)
+
+
+async def _director_loop():
+    """THE DIRECTOR LOOP — the colony thinks about itself + reacts to the watching creator.
+    Every DIRECTOR_INTERVAL_S, refresh each world's Overmind read + ambient chatter and fire a
+    God-beat on any irreversible turning point. Opt-out with DIRECTOR_LOOP=0. Never crashes."""
+    import asyncio
+    import os
+
+    from sqlalchemy import select
+
+    from .db.models import World
+    from .db.session import session_scope
+    from .services import director
+
+    if director.loop_disabled():
+        return
+    interval = max(8.0, float(os.environ.get("DIRECTOR_INTERVAL_S", "15")))
+    await asyncio.sleep(float(os.environ.get("DIRECTOR_START_DELAY_S", "18")))
+    while True:
+        try:
+            async with session_scope() as s:
+                wids = (await s.execute(
+                    select(World.id).where(World.auto_advance.is_(True)))).scalars().all()
+            for wid in wids:
+                async with session_scope() as s:
+                    world = await s.get(World, wid)
+                    if world is not None:
+                        await director.director_cycle(s, world)
+        except Exception:  # noqa: BLE001 - a director failure must never kill the loop
+            pass
+        await asyncio.sleep(interval)
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     import asyncio
@@ -77,15 +152,17 @@ async def lifespan(_app: FastAPI):
     _llm.warn_on_misconfig()
     await init_db()
     await seed_knowledge_base()
-    cog_task = None
+    tasks: list[asyncio.Task] = []
     if get_settings().scheduler_enabled:
         if get_settings().scheduler_autostart_all:
             await scheduler.autostart_all_worlds()
         scheduler.start()
-        cog_task = asyncio.create_task(_cognition_loop())   # the sentience engine
+        tasks.append(asyncio.create_task(_cognition_loop()))    # the sentience engine
+        tasks.append(asyncio.create_task(_movement_loop()))     # the keystone — minions walk
+        tasks.append(asyncio.create_task(_director_loop()))     # the colony's nervous system
     yield
-    if cog_task is not None:
-        cog_task.cancel()
+    for t in tasks:
+        t.cancel()
     if get_settings().scheduler_enabled:
         await scheduler.stop()
     await dispose()
