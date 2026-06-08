@@ -148,6 +148,38 @@ async def _director_loop():
         await asyncio.sleep(interval)
 
 
+async def _feedback_loop():
+    """THE CLAUDE↔KIMI↔LLAMA LOOP — the system observes itself and gets smarter. Every
+    FEEDBACK_INTERVAL_S, Kimi diagnoses the Llama tiers' recent telemetry + open findings and
+    proposes terse LESSONS that get injected into the tiers' prompts (Llama improves), plus
+    CODE issues flagged for Claude. Opt-out FEEDBACK_LOOP=0. Never crashes the app."""
+    import asyncio
+    import logging
+    import os
+
+    from .db.session import session_scope
+    from .services import feedback
+
+    if feedback.loop_disabled():
+        return
+    interval = max(60.0, float(os.environ.get("FEEDBACK_INTERVAL_S", "300")))
+    log = logging.getLogger("underworld.feedback")
+    await asyncio.sleep(float(os.environ.get("FEEDBACK_START_DELAY_S", "45")))
+    while True:
+        try:
+            async with session_scope() as s:
+                summary = await feedback.observe_and_improve(s)
+            if summary.get("lessons_added") or summary.get("code_issues_for_claude"):
+                # the "alert me on good feedback loops" surface
+                log.info("feedback.cycle", extra={"summary": summary})
+                print(f"[feedback] {summary.get('summary','')} | +{summary.get('lessons_added',0)} "
+                      f"lessons -> Llama, {summary.get('code_issues_for_claude',0)} for Claude "
+                      f"| {summary.get('lessons',[])}", flush=True)
+        except Exception:  # noqa: BLE001 - a feedback failure must never kill the loop
+            pass
+        await asyncio.sleep(interval)
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     import asyncio
@@ -164,6 +196,7 @@ async def lifespan(_app: FastAPI):
         tasks.append(asyncio.create_task(_cognition_loop()))    # the sentience engine
         tasks.append(asyncio.create_task(_movement_loop()))     # the keystone — minions walk
         tasks.append(asyncio.create_task(_director_loop()))     # the colony's nervous system
+        tasks.append(asyncio.create_task(_feedback_loop()))     # Kimi observes → Llama improves
     yield
     for t in tasks:
         t.cancel()
