@@ -6,6 +6,7 @@ import { createVoice } from "@/lib/jarvisVoice";
 import { agentChat } from "@/lib/jarvisApi";
 import jarvisSound from "@/lib/jarvisSound";
 import ArcReactor from "./ArcReactor";
+import WakeWordToggle from "./WakeWordToggle";
 
 /**
  * JarvisAssistant — the omnipresent JARVIS HUD.
@@ -164,10 +165,21 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
   const handlerRef = useRef(handleUtterance);
   useEffect(() => { handlerRef.current = handleUtterance; }, [handleUtterance]);
 
+  // Keep onWake ref current — fires from the voice engine's passive listener.
+  const wakeHandlerRef = useRef(null);
+  useEffect(() => {
+    wakeHandlerRef.current = () => {
+      setOpen(true);
+      setActive(true);
+      setListening(true);
+      say(pick(LINES.greeting));
+    };
+  }, [say]);
+
   // ── voice engine lifecycle (created once) ────────────────────────────────
   useEffect(() => {
     const v = createVoice({
-      onWake: () => { setListening(true); say(pick(LINES.greeting)); },
+      onWake: () => wakeHandlerRef.current?.(),
       onResult: (text) => handlerRef.current?.(text),
       onListeningChange: setListening,
       onSpeakingChange: setSpeaking,
@@ -208,6 +220,11 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
     v?.speak(greeting, { onend: () => { if (liveData) say(buildBriefing(liveData, topRisk)); } });
   }, [active, liveData, topRisk, say]);
 
+  const disarmWake = useCallback(() => {
+    voiceRef.current?.setWake(false);
+    setActive(false);
+  }, []);
+
   const toggleMute = () => {
     const next = !muted;
     setMuted(next);
@@ -243,6 +260,8 @@ export default function JarvisAssistant({ actions = {}, liveData: liveDataProp, 
       >
         <ArcReactor state={orbState} size={56} color={orbColor} />
       </button>
+
+      <WakeWordToggle armed={active} onArm={activate} onDisarm={disarmWake} />
 
       {open && (
         <div style={{
