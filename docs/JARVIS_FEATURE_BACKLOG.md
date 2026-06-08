@@ -27,7 +27,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
 - [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
-- [ ] F10 Task board — /entities/Task → live mission cards with status.
+- [x] F10 Task board — /entities/Task → CRUD task board with kanban columns (TODO/IN_PROGRESS/DONE), new-task form, stat tiles; registered as TaskManager in pageRegistry.js jarvis group. *(2026-06-08)*
 - [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
