@@ -27,13 +27,16 @@ module.exports = {
         OLLAMA_EMBED_MODEL: 'nomic-embed-text',
         // Self-enrichment: build + GPU-embed + LLM-enrich the KB on boot and every
         // 30 min. The Llama brain summarises a batch of scraped docs each cycle.
-        AUTOBUILD_ON_START: 'true',
+        // ROBUSTNESS: the heavy scrape+GPU-embed+enrich BUILD must NOT run inside the API process
+        // on boot — it spikes CPU/RAM (native libs), GIL-starves uvicorn, and crashed the API
+        // ("Aborted!") so it never bound :8001. Moved to the separate `jarvis-worker` process so the
+        // API boots light + serves reliably. (Set AUTOBUILD_ON_START=true only on the worker.)
+        AUTOBUILD_ON_START: 'false',
         AUTOBUILD_INTERVAL_S: '900',
         AUTOBUILD_SCRAPE_BATCHES: '4',
         AUTOBUILD_ENRICH_LIMIT: '24',
-        // Continuous deep enrichment loop — FULL POWER: high concurrency + fast cadence
-        // so both 4090s stay hot chewing the doc backlog (4 LLM passes/doc).
-        ENRICH_LOOP: 'true',
+        // Continuous deep enrichment loop — runs in the WORKER, not the API (same reason).
+        ENRICH_LOOP: 'false',
         ENRICH_LOOP_INTERVAL_S: '30',
         ENRICH_LOOP_BATCH: '24',
         ENRICH_DEPTH: '3',
@@ -46,10 +49,8 @@ module.exports = {
         KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',
-        // Continuous LLM research autopilot — the engine that KEEPS THE GPU BUSY by cycling the
-        // master topics + knowledge gaps through llm_research.research() forever. Was OFF (unset)
-        // → GPU idle. Reaches the box via OLLAMA_HOST (set above), idles safely if unreachable.
-        LLM_AUTOPILOT_ENABLE: 'true',
+        // The GPU-busy research autopilot also runs in the WORKER, not the API (robust API boot).
+        LLM_AUTOPILOT_ENABLE: 'false',
       },
     },
     {
