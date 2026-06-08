@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import SceneKeyboardNav from "@/components/cinematic/SceneKeyboardNav";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -119,6 +120,7 @@ export default function JarvisBrain() {
 
   return (
     <>
+      <SceneKeyboardNav />
       <button onClick={mic} title="Speak to JARVIS" style={{
         position: "fixed", right: 18, bottom: 18, zIndex: 70, width: 54, height: 54, borderRadius: "50%",
         border: `1px solid ${CY}`, cursor: "pointer", background: listening ? CY : "rgba(5,8,13,0.7)",

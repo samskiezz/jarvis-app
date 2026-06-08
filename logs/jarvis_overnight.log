@@ -1,3 +1,4 @@
 2026-06-08 | TaskManager | Full CRUD task board (Task entity: list/create/update/remove) — kanban columns (TODO/IN_PROGRESS/DONE), new-task form, stat tiles, build PASSED.
 2026-06-08 | WakeWordToggle (F02) | Always-listening wake toggle pill next to JARVIS orb; onWake now opens panel; disarmWake disarms without closing; build PASSED.
 2026-06-08 | TelemetryTicker (F03) | Live CPU/mem/load + brain nodes/synapses ticker in APEX top bar; polls /v1/jarvis/system/status + /v1/cinematic/brain every 15s; build PASSED.
+2026-06-08 | SceneKeyboardNav (F04) | Global keyboard scene-jump: 1-9 → scenes 01-09, 0 → scene 10, Esc → home; guards input focus; HUD flash badge; mounted in JarvisBrain; build PASSED.
