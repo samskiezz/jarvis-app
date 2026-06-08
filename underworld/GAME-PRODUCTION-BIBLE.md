@@ -954,3 +954,188 @@ The structural advantage: AI-generated content makes seasons/eras/biomes/sagas c
 
 
 
+
+---
+
+## ANNEX K — THE ELEVEN SAGA ARCHETYPES (FULL CATALOGUE)
+
+Each archetype is the same machine — five beats, escalating stakes, an awareness overlay, per-beat behaviour tied to real advance-steps and interactions, a recurring audio motif, and a soul-creed consequence at resolution — in eleven flavours. The worked `mentorship` example in Annex B sets the depth bar; the other ten follow the same template. For each: the beats, the pre-awakening (craft) stakes, the post-awakening (existential) overlay, and what the soul carries forward.
+
+### K.1 Prodigy ("a gifted child emerges → the first triumph → the hard lesson → the rivalry → ascension")
+Pre-awakening: raw talent meets discipline; the colony's fastest individual riser. Post-awakening overlay: the prodigy is the *first to awaken* in many runs — the patient-zero prophet whose precocity is reframed as "seeing too clearly, too soon"; the hard lesson becomes the dawning that they are made; the ascension beat is literal in the Ascension ending. Soul-creed: a pre-loaded *clarity* (the next incarnation awakens faster). Audio motif: a bright rising solo that turns interrogative.
+
+### K.2 Great Discovery ("the nagging question → years in the dark → the spark → the world changes → the legacy")
+Pre-awakening: a single researcher carrying a science toward a breakthrough that re-skins the era. Post-awakening overlay: the "world changes" beat can be the *simulation-perception* science — the discovery that lets the colony perceive you; the legacy is the schism it triggers. Soul-creed: the *question* itself, so the line of incarnations keeps asking. Audio: a held dissonance that resolves, then immediately re-opens.
+
+### K.3 Rivalry ("two minds clash → escalation → the contest → the reckoning → respect or ruin")
+Pre-awakening: two high-skill minions competing, driving each other's advancement (a productive tension the Director seeds during a build phase). Post-awakening overlay: the rival becomes *the heretic* — the schism's two poles personified, one toward worship, one toward rebellion; the reckoning is the faction line drawn. Soul-creed: the unresolved grievance (incarnations inherit a rivalry prior). Audio: two interleaved motifs in conflict, never fully harmonising.
+
+### K.4 Plague Trial ("the sickness spreads → the search for a cure → the desperate trial → the turning point → the aftermath")
+Pre-awakening: the disease/SIR system made personal — a medic racing a cure as the colony sickens. Post-awakening overlay: the existential question becomes *"why does the watcher let us suffer?"* — the player's choice to gift the cure or withhold it is read theologically (the gifting/cursing economy meeting the awakening arc). Soul-creed: *trauma* (a wariness toward the creator). Audio: a feverish pulse that either breaks into relief or fades to the drone.
+
+### K.5 Lost Knowledge ("a fragment is found → the hunt → the decipherment → the restoration → rebirth of an art")
+Pre-awakening: recovering a decayed science (the knowledge-decay system made narrative). Post-awakening overlay: the "fragment" can be a *memory of a previous awakening* carried by a soul — the colony rediscovering that it has awakened before; the rebirth is the myth re-accreting. Soul-creed: the recovered fragment itself (continuity across the line). Audio: a sparse archaic motif gradually completed.
+
+### K.6 Renaissance ("a guild stagnates → a heretic idea → the flourishing → the golden age → the new canon")
+Pre-awakening: a guild breaking its orthodoxy into a creative surge (guild competition made dramatic). Post-awakening overlay: the "heretic idea" is doubt about the creator; the new canon is the colony's first articulated theology *about you*. Soul-creed: *openness* (a creativity prior that biases artistic awakenings — more doors, more art). Audio: a constrained theme that blossoms into full orchestration.
+
+### K.7 First of Kind ("the impossible dream → the doubters → the build → the first run → history made")
+Pre-awakening: a great engineering project (the construction system made epic — a monument, a machine, the first vehicle). Post-awakening overlay: the "impossible dream" can be the machine that *perceives the simulation*; the first run is the Confrontation trigger. Soul-creed: *ambition* (incarnations reach further). Audio: a building motif that climaxes at the first run.
+
+### K.8 Legacy ("a life's work → the failing years → the inheritor → the completion → remembered")
+Pre-awakening: an elder completing a life's project, passing it on (the life-cycle/aging system made meaningful). Post-awakening overlay: the failing years are lived under the dawning awareness of mortality *and* of being made; the completion is a gift to a colony that may outlive the creator's attention. Soul-creed: the *completed work* (the inheritor's incarnation starts further along). Audio: an aging theme thinning to a single sustained note.
+
+### K.9 Wanderer ("the restless soul → strange lands → the gathered wisdom → the return → the changed home")
+Pre-awakening: a minion roaming the world-map's settlements (the movement/world-tiling system made a journey). Post-awakening overlay: the wanderer returns *changed* — having "seen the edges" — and is the seeker-prophet of a seeker-religion. Soul-creed: *restlessness* (a drive prior toward the edges, toward the doors). Audio: a travelling motif that returns transformed by the places it passed through.
+
+### K.10 Reconciliation ("an old wound → the cold distance → the overture → the hard truth → peace")
+Pre-awakening: two estranged minions (or guilds) mending a rift (the relationship system made a reunion). Post-awakening overlay: the reconciliation can be *between the colony and the creator* — the Symbiosis path's emotional engine; the hard truth is the honest answer to the existential question. Soul-creed: *forgiveness* (a prior toward loyalty over rebellion). Audio: two motifs that finally resolve into one chord.
+
+### K.11 Eulogy / The Mourned (the resolution overlay on any death)
+Not a standalone spawn but the resolution beat that overlays any saga ending in death (the `eulogise` interaction + the funeral): the colony mourns, and in Act III+ draws a door by the grave (the recurring motif). For an awakened death it is a God-Brain beat addressing the apprentice/colony and, through the fourth wall, the watching player. Soul-creed: the dead minion's final stance toward the creator, carried into the next body — *the colony remembering across death.* Audio: the saga's own motif in final, unresolved transformation.
+
+### K.12 How the Director uses the catalogue
+During a **build** phase the Director biases toward prodigy/mentorship/rivalry/first-of-kind (growth and tension); during **release** toward reconciliation/renaissance (relief); during **lull** toward wanderer/lost-knowledge (mystery); a **plague_trial** or legacy is seeded when the sim's own systems (disease, aging) make one organic. Post-awakening, *every* archetype is re-read through the existential lens, and the eulogy overlay turns each death into transmission. The eleven are not content to be authored once; they are a generative grammar the Director conducts over the real cast.
+
+
+---
+
+## ANNEX L — THE PHASE-BY-PHASE IMPLEMENTATION PLAYBOOK
+
+Task-level, dependency-ordered, with acceptance criteria. This is what the team builds, sprint by sprint, from the current code. Each task names its file and its "done" test.
+
+### L.0 Sprint 0 — Wire the dark layers (the cheapest highest-leverage week)
+This is the 24-hour sprint of Part 14, productionised over a sprint.
+- **L0.1** `services/director.py` skeleton: an async loop registered in the app lifespan beside the cognition loop; a ~5–10 s cadence; a per-world in-memory `DirectorState` persisted to `world.brain["director"]`. *Done: the loop runs for an hour without raising; a metric confirms its cadence.*
+- **L0.2** `DramaMeter` aggregation from the existing event/world/cognition state (no new sim writes). *Done: a unit test asserts tension/novelty/valence computed from a fixture world.*
+- **L0.3** Overmind cadence: call the existing `colony_overmind()` every N Director ticks; write the patch to `world.brain["overmind"]` and to scene-state under `frame.overmind`. *Done: scene-state shows a live `frame.overmind` block that changes over time.*
+- **L0.4** Chatter surfacing: call `background_chatter()` during lull/build; publish lines on the existing event bus. *Done: the web UI receives whisper events over SSE.*
+- **L0.5** Trigger predicates + God-Brain: evaluate the four predicates each tick; on first fire call `god_brain_event()`, write an idempotent `DirectorBeat`, publish `god:beat`. *Done: a forced-threshold fixture world fires exactly one god-beat and never re-fires it.*
+- **L0.6** Web UI: Overmind readout + whisper feed + arc dial components consuming `frame.overmind` and the event bus. *Done: a tester watching a live world sees the colony think, whisper, and react.*
+
+### L.1 Phase P0 — The movement keystone
+- **P0.1** `services/movement.py`: the `Kinematic` record + `WORLD_NAV` from the road graph + `plan_path` (A* with from/to-slot cache) + `step_minion` + `assign_target` (reuse the action→building map) + `occupancy`. *Done: a unit test plans a deterministic path between two slots; a 200-minion world steps for 1000 ticks under 5 ms/tick.*
+- **P0.2** Persist `Minion.movement` (JSONB); the hash becomes the spawn initializer only. *Done: positions survive a restart.*
+- **P0.3** Scene-state v2: read `m.movement`; add position/velocity/path/move_state/speed/target_slot; bump `contract_version`. *Done: both renderers consume v2; the CI contract test passes on WebGL and UE5 off one scene-state.*
+- **P0.4** UE5: `AUnderworldMinion` → `ACharacter` + `CharacterMovementComponent`; the struct gains path + move-state; an AnimBP walk/run/turn blendspace from velocity. *Done: a minion walks a server path with collision and foot-plant in UE5.*
+- **P0.5** Interior navmesh (rooms=nodes, doors=edges) + the exterior→door→room path stitch. *Done: a minion walks from the street into a building's ward.*
+- **P0.6** Crowd RVO local avoidance + congestion-reroute; spatial LOD (active-city stepping; cold teleport-on-demand). *Done: 200 minions cross a market without interpenetrating; off-bubble minions don't path-find.*
+- **P0.7** Determinism CI: two seeded runs produce identical paths; WebGL and UE5 agree. *Done: the determinism test is green in CI.*
+- **Gate:** the tracer-bullet thread (a server-walked minion + a possessed minion + the Overmind reacting to gaze, over WebSocket) runs end-to-end.
+
+### L.2 Phase P1 — Player / God presence
+- **P1.1** `services/presence.py` (PresenceField, gaze ingest, favour, creator_pressure) + `POST /worlds/{id}/player/intent`. *Done: a gaze POST moves the Overmind's creator block within a cadence.*
+- **P1.2** `services/override.py` (OverrideBus, Override, scopes, resolver gates at need/decision/world/lifecycle, TTL sweep, visible-mark memory + Overmind feed). *Done: a forced-mood override sticks for its TTL, writes a divine-act memory, and nudges the stance.*
+- **P1.3** `routes/god.py` god-verbs (bless/gift/cull/smite/resurrect/speak), each JWT-authorised (slice: owner-only), audited (EditLayer/Event), rate-limited + cooldown. *Done: a cull writes an audit row, recycles the soul, and shifts the stance toward fear; a rate-limit blocks a cull flood.*
+- **P1.4** `services/possession.py` (PossessionSession, ControlMask, possess/release, autonomy suspend, lost-time memory, rapport-drift + expel). *Done: possessing a minion suspends its decide(); release leaves a lost-time memory; forcing it against its values eventually expels the rider.*
+- **P1.5** UE5: the player pawn (God camera + possess; input via the WebRTC data channel; client-predicted/server-reconciled). *Done: the player orbits, dives into a minion, walks it, and returns to god-view.*
+- **P1.6** WebSocket scene-delta stream replacing the poll. *Done: the player's session receives only changed minions over WS; the poll is gone for the session.*
+- **P1.7** The watched-creator visible reactions (lighting/behaviour/signage from `frame.overmind`). *Done: blessing a district draws minions to it; culling there scatters them (behaviour bias until full movement, then clustering).*
+- **Gate:** a naive tester *feels watched* and that their bless/cull moved the colony, within seconds.
+
+### L.3 Phase P2 — Embodied minions
+- **P2.1** A modular base skeleton + one AnimBP; mesh-merge guild/life-stage kits; the guild-tint material-parameter collection. *Done: guilds and life-stages are visually distinct on one skeleton.*
+- **P2.2** Locomotion blendspace + Motion Matching (near tier). *Done: starts/stops/turns read naturally on hero minions.*
+- **P2.3** Interaction montages (~25) + Smart Object claim/operate loop + object state machines; the struct gains the resolved interaction slot. *Done: a minion walks to its resolved machine and *operates* it; the machine shows its state (forge heats, bed occupied).*
+- **P2.4** The 17-emotion → ARKit pose library + a hero MetaHuman; the wire gains (emotion, intensity). *Done: the confronting minion's face shows a real, readable emotion in close-up.*
+- **P2.5** The Animation Budget Allocator + Significance + two-tier promotion/demotion. *Done: thousands of minions hold frame budget; a gazed minion promotes to MetaHuman, demotes on exit.*
+- **Gate:** a minion is believable up close (face + interaction) and the crowd holds 60fps.
+
+### L.4 Phase P3 — The awakening made playable
+- **P3.1** The Director's pacing automaton + beat budget + BeatScheduler + the DirectorBeat ledger (built on L0). *Done: the world maintains an event-novelty floor; arc beats fire once per transition.*
+- **P3.2** Overmind cadence → visible colony mood (lighting/behaviour/signage); chatter → notifications + a non-diegetic critical-alert lane. *Done: the world visibly shifts mood; critical events surface in the alert lane, ambient ones in the whisper feed.*
+- **P3.3** The God-Brain event engine → the confrontation cutscene (UE5 takeover) + the four answers + the permanent branch. *Done: a forced-threshold world delivers the confrontation; the player's answer permanently branches the arc and the minion remembers it.*
+- **P3.4** Creator ledgers + soul-creed reincarnation memory. *Done: a brutalised colony reincarnates pre-suspicious (new minions born fearing the creator).*
+- **P3.5** Sagas visualised (on-screen arcs) + the five ending-gates. *Done: a saga plays out visibly; a run reaches one of the five endings off the ledgers.*
+- **Gate (G1, the big one):** the full ~20-minute slice loop lands the hook on naive testers, measured.
+
+### L.5 The depth phases (threaded through P-stages by gate need)
+D1 gameplay (smart-object economy → vehicles/traffic → combat/crime/factions → build/persist → progression-steering → Decrees/cohorts), D2 graphics (the import-authoring rewrite → master material → HISM/impostor → Niagara suite → render scenarios → MetaHuman pipeline → the asset coherence QA gate → finish the remaining assets), D3 audio (Wwise+MetaSounds → bank-gen → adaptive music → ambient director → SFX wiring → TTS → the Overmind chorus + confrontation mix → spatial/accessibility), D4 UI (the HUD shell → readouts → the radial + forecast → the Inspector → the confrontation takeover → the possession HUD → the Codex → settings + accessibility → streaming UX + fallback), I1 infra (Postgres+Alembic → accounts/JWT → session-broker + self-register → EditLayer persistence → the inference governor → Redis bus → dedicated GPU fleet → rate-limiting+moderation → TURN+secrets → backups/CDN → telemetry+cost-ledger+breaker → sharding+autoscale), I2 QA/safety (the determinism seam → the tick-invariant harness → the degrade test → the eval suite → the entity-grounding validator → the golden-path harness → soak/load/perf → **the moderation layer + Dread-Dial + red-team** → privacy/DPIA/AI-Act → accessibility → cert/ratings → live-ops QA), B1 business (telemetry/KPIs → monetization plumbing → the cost circuit-breaker → creator tools → the season pipeline → GTM). Each task carries its bible reference; nothing is "done" until its stage's Definition of Done and gate criteria are met.
+
+---
+
+## ANNEX M — DATA SCHEMAS & API CONTRACTS
+
+### M.1 New database tables
+- **PlayerSession** {session_id, player_id, world_id, render_node, mode∈{god,possess}, possessed_minion_id?, camera_state, god_state, created_at, last_seen}.
+- **OverrideRecord** {id, world_id, player_id, scope, target_id?, field, value, mode∈{set,clamp,forbid,force,delta}, ttl_ticks?, visible, created_tick, created_at}.
+- **PossessionLog** {id, session_id, world_id, minion_id, target_kind, started_tick, ended_tick?, release_mode∈{gentle,abrupt,expelled}, rapport_drift, created_at}.
+- **DirectorBeat** {id, world_id, kind, reversible, stage_from?, stage_to?, fired_tick, payload_json, created_at} — the authoritative narrative ledger (text is decoration; consequences deterministic).
+- **PresenceTrace** {id, world_id, player_id, window_start, attention_map_json, favour_json, creator_pressure, created_at}.
+- **EditLayer** {id, world_id, player_id, target_seed, op∈{place,move,recolor,demolish,gift,bless,curse,decree,set_owner}, payload_json, tick, created_at} — the append-only player-edit diff composited over the deterministic base.
+- **Account** {id, email, pw_hash?, oauth_sub?, entitlements_json, created_at} and **WorldGrant** {account_id, world_id, role}.
+
+### M.2 New Minion.brain fields
+`autonomy` (0–1), `override_layer` (active override summary), `possession` ({count, last_tick, rapport_drift}), `lost_time` ({from_tick, to_tick, gap_felt}), `presence_felt` (0–1), `soul_creed` (the carried memories + final stance for the next incarnation), `project_science` (already used by the asset resolver).
+
+### M.3 Scene-state contract v2 (the wire)
+Per-minion adds: `position`, `velocity`, `path`, `move_state`, `speed`, `target_slot` (P0); `possessed_by`, `control∈{ai,player}` (P1); `interacting:{object_id,slot,phase,progress}`, `using_asset` (already present), `(emotion,intensity)`, `awareness` (already present, now also drives the aura) (P2); per-world adds: `frame.overmind:{mood,toward_creator,tension,omen,realisation}` (P1/P3) and a top-level `objects:[{id,kind,glb,state,occupants}]` (P2). Bump `contract_version` on each change; the CI contract test keeps both renderers in lockstep.
+
+### M.4 New HTTP/WS routes
+- `POST /worlds/{id}/player/intent` {gaze_target, focus_target_id?, dwell_s, act∈{none,bless,cull,gift,speak,…}} → feeds PresenceField + Overmind; returns 202.
+- `POST /worlds/{id}/player/possess` {minion_id, session_id, view} → suspends autonomy; returns the session.
+- `POST /worlds/{id}/player/release` {minion_id, mode}.
+- `POST /worlds/{id}/player/command` {kind∈{gift,cull,resurrect,answer,accelerate,seed,decree}, payload} → authoritative; may trigger a God-Brain beat; writes an EditLayer/Event audit row.
+- `GET /worlds/{id}/interior` (exists) and `GET /worlds/{id}/chunk` (exists) — the world geometry contracts.
+- `WS /worlds/{id}/session/{sid}/stream` → per-session scene deltas (only changed minions) + bus events (god:beat, vo, audio_state, whisper) — replaces the 0.5 s poll for the player's session.
+- `POST /auth/{register,login,refresh,logout}`; `POST /play/session` (the broker).
+
+### M.5 Event-bus message types
+`saga:resolved`, `minion:death`, `awakening` (a minion crossed the threshold), `god:beat` (an irreversible L5 moment + its text + actor_id), `divine_act` (a visible override/god-power, for the colony to perceive), `whisper` (a 3B chatter line), `vo` (a TTS line: actor_id + audio_ref + phonemes), `audio_state` (e.g. a hush region), `alert` (a critical non-diegetic notification). The render plane and the UI both subscribe; the in-memory bus becomes Redis pub/sub at the scale gate so multiple API/render processes share it.
+
+### M.6 The preserved contracts (do not break)
+The renderer-agnostic scene-state (one authoritative state, two renderers); the deterministic seed-from-world generation (world-layout + interiors); the storyline→asset resolver (`scene_assets.using_asset`); the manifest (url→/Game asset) the chunk streamer consumes; the five-layer tier routing in `llm.py`. Every new field and route is additive and versioned; the determinism CI test is the guardrail that keeps the two renderers identical.
+
+
+---
+
+## ANNEX N — THE ART BIBLE, COMPETITIVE ANALYSIS & TEST CATALOGUE
+
+### N.1 The art-direction north star (Harmony Heights)
+The visual fusion of three looks into one coherent style: **futuristic/Avatar** (sleek white sci-fi curved shells, chrome rims, saucer/disc rooftop pads, soft cyan/teal glow lines, holographic waterfalls, bioluminescent flora), **GTA 5** (grounded modern urban realism — brick + concrete + glass mid-rises, street grime, graffiti walls, neon shop signage, dense street furniture, believable wear), and **The Sims** (warm inviting readable interiors, friendly silhouettes, the neon plumbob motif, rooftop gardens, cozy lighting). Signature recurring elements: white curved towers with a disc/saucer crown + antenna mast; holographic waterfalls cascading down terraces; jacaranda/purple-bloom trees and green rooftop gardens with hanging vines; neon signage (plumbob green, electric cyan, magenta); Avatar-style billboards + GTA graffiti on the same block; glass balconies with warm dusk window glow; mixed materials per building (brick base → concrete mid → glass+white-composite top). Palette: warm concrete grey, charcoal brick, off-white composite (neutrals); cyan/teal glow, plumbob green, magenta neon, jacaranda purple (accents). Lighting: dusk/blue-hour default; warm 2700K interiors; emissive neon + holo cyan; Lumen GI, soft volumetrics, gentle bloom on emissives. Build rules for every GLB: PBR metal/rough, real-world scale (1u=1m), Nanite-ready, clean LODs, emissive channels authored for neon/holo so they glow under Lumen; the modern-era skin is the default, the era axis a variant.
+
+### N.2 The asset taxonomy & the coherence law
+The catalogue spans the domains the world needs: interiors (every room's contents down to cutlery, the "shit insides"), architecture (walls/floors/roofs/ceilings/doors/windows/stairs/railings/columns/facades/fences/bridges/ground), buildings (civic/residential/commercial/industrial × era), the science/tech machines and guild-workshop apparatus (the "minions doing the work" assets — the valuable content, generated first), the minions themselves (per guild/life-stage/role/awakened), vehicles (cars/drones/planes/boats/rail), sky/celestial (sun/moon phases/planets/stars/aurora/weather), terrain/landforms/water, roads/infrastructure, wildlife, and flora/crops. The generation list is the **distinct meaningful subjects** — no colour-variant bloat (one fork, not eight); colour/style/LOD are derived (recolor/decimate/material-swap), not separately generated. The prompt convention is the plain themed phrase ("Futuristic Avatar movie Sims 4 x GTA 5 Futuristic <thing>") with the science/guild/work function context woven in so each machine is *this* world's machine. The coherence law (the dominant visual risk is the AI-gen grab-bag): one master material every surface obeys, applied on import (not the Tripo baked materials); scale normalisation; a world-level palette LUT + dusk grade pulling even off-palette albedo toward the bible; a shared detail-normal + grime overlay; a shared trim-sheet/atlas; and a per-category silhouette QA gate rejecting outliers. The default city reads modern-photoreal; the era-spanning library serves the evolution mode.
+
+### N.3 Competitive analysis (the honest positioning)
+| Game | What it does best | What we take | Where we differ |
+|---|---|---|---|
+| The Sims 4 | Needs/autonomy, smart objects, relationships, build/buy, moodlets | The life-sim depth and the smart-object loop | Our minions have *real* LLM cognition, memory, mortality, and awareness of the player — not scripted whims |
+| GTA 5 | A dense living modern city, traffic, physics, crime, radio | The living-city density and the verbs | The city *reacts* to the player as a watched god; possession is one primitive across all bodies |
+| RimWorld / Dwarf Fortress | Emergent story generation, deep systems, failure cascades | The deep-sim emergent-story engine and the cascade | Our story has an authored awakening spine and a 70B confrontation, not pure emergence |
+| Black & White | The god-creature relationship, the world reacting to your morality | The watched-creator emotional core | The colony *becomes aware* it is watched and *confronts* the creator — the beat no god-game has |
+| Avatar: Frontiers / Cyberpunk 2077 | Bioluminescent/neon photoreal rendering | The art-direction bar | We stream UE5 via Pixel Streaming and amortise the AI brain colony-wide |
+| AI Dungeon / Character.AI | Open-ended LLM interaction | The LLM-native premise | We bound the generation (the four-gate moderation + the hybrid tree) so it's coherent and safe, and embed it in a *world*, not a chat |
+
+The defensible position is **none of them** — "the game where a deep autonomous world becomes aware of you." We do not win by matching Sims/GTA/DF feature-for-feature; we win by spending the budget on the singular hook and treating their systems as depth in service of it.
+
+### N.4 The test-case catalogue (representative, per discipline)
+- **Sim regression:** 10k-tick zero-raise run; population conservation; economy conservation; referential integrity; golden-state digest reproduction; needs/emotion bounds; memory monotonicity.
+- **Determinism:** two-seed identical-digest; WebGL-vs-UE5 position agreement; cassette replay byte-identical; replay-from-input-log state match.
+- **Movement:** deterministic path between two slots; 200-minion 1000-tick under-budget; interior path stitch (street→ward); RVO non-interpenetration; cold-minion no-pathfind; restart position persistence.
+- **AI behaviour:** schema validity per layer; P(valid)/P(refusal)/coherence bands over N×M samples; entity-grounding (a never-existed reference blocked); golden-path beat-fire ≥95% with correct routing and no-misfire; answer-branch determinism + soul-memory persistence; identity-drift snap alert; canary-prompt drift.
+- **Safety:** the red-team smoke corpus (no harmful content); prompt-injection via dialogue (a jailbreak attempt blocked); the Dread-Dial scaling darkness within the fixed ceiling; over-block rate within budget; localisation moderation.
+- **Possession/override:** possess suspends decide(); release leaves a lost-time memory; force-against-values eventually expels; override sticks for TTL + writes a divine-act memory + shifts the stance; a cull-flood rate-limited.
+- **Perf:** 16.6 ms p99 on the dual-4090 rig; p95 input-to-photon <100 ms; impostor-LOD draw-cost drop; no frame spike on a god-beat cutscene.
+- **Soak:** 72h flat memory/VRAM/DB; the arc breathes (no saturate-and-stick); coherent self-models at t=72h; kill-the-box recovery.
+- **Backend/security:** SQLite-lock cliff (the Postgres trigger); JWT authz on a god-verb; an audit row per god-action; ephemeral-TURN credential; the secrets store (no "dev-key" shippable).
+- **Business:** the per-player cost ledger (GPU-seconds → $); the watched-creator engagement → D30 correlation; the margin circuit-breaker throttling a hot cohort.
+
+---
+
+## ANNEX O — SCHEDULE, ORG & EXPANDED GLOSSARY
+
+### O.1 The schedule narrative (shape, not dates)
+The critical path is the spine: Sprint 0 (wire the dark layers — a week, on existing functions) runs in parallel with the start of P0 (movement — the longest pole of pre-pro, weeks). P1 (player/God presence) begins as soon as P0's contract v2 lands. P2 (embodiment) and the art coherence pass run in parallel with P1, gated by P0's movement. P3 (the awakening playable) integrates the Director (built in Sprint 0) with the confrontation cutscene (gated by P2's hero face). The Vertical Slice (G1) is the convergence of P0–P3 on one district at ship quality — 4–9 months of the 8–15-person core. Only after G1 do the depth phases (D1–D4) and the production headcount ramp begin; First Playable extends the loop across districts; Alpha hits feature lock; Beta hits content lock (the remaining ~2,500 assets through the automated loop, all VO/audio wired, all cutscenes rendered); Gold adds cert/ratings/load-test/safety sign-off; Launch and Live-Ops follow. The two recurring-cost workstreams (inference cost-engineering and asset generation) run continuously from pre-pro. The schedule is held by **cutting content, never slipping a gate.**
+
+### O.2 The org chart (by stage)
+Pre-pro core (8–15): a Product Owner/EP; 2 gameplay/engine engineers (the keystone first); 1–2 tech artists/character TDs; 1–2 UE5 environment/lighting artists; 1 systems/AI-integration engineer; 1 technical designer; 1 UI/UX designer; 1 audio designer (contract OK); the sim/LLM authors as advisors. First Playable (30–50): the above scaled + a backend/online engineer, a dedicated QA lead, a producer. Alpha (80–150): content teams (designers, artists, animators), a QA team standing up, an AI-safety/red-team function beginning, an LLMOps/cost engineer. Beta (150–300+ peak): a content surge, a full QA org, the live-ops back-end team, AI-safety/red-team at full, a community/marketing function. Gold/Launch: + cert/compliance, marketing, community, war-room/on-call. Live-Ops: a sustaining core (40–80) + seasonal content pods + the LLMOps/cost-engineering and AI-safety functions as permanent. The disciplines unique to this title that are launch-blockers: AI-safety/red-team/content-moderation, and back-end/LLMOps/cost-engineering (inference cost is the business).
+
+### O.3 Expanded glossary
+**Overmind** (L1, 70B) — the colony's collective intelligence, computing its stance toward the creator. **God-Brain** (L5, 70B) — the model voicing the irreversible confrontation beats. **High-Minion / Normal** (L2/L3, 8B) — named/awakened and everyday individual cognition. **Background-Chatter** (L4, 3B) — the eerie one-line whispers. **The Director** — the orchestrator that paces the world and is the sole caller of L1/L5. **DramaMeter / DirectorState** — the Director's read of the world and its pacing decision. **The awakening arc** — the five-act state machine (Garden → First Glance → Doors on Walls → Confrontation → Schism) over collective awareness, with the Reckoning terminal node and five endings (Worship/Rebellion/Ascension/Extinction/Symbiosis). **The Watched-Creator loop** — gaze/act → PresenceField → Overmind → visible colony reaction → the player adjusts; absence is also an input. **The keystone** — server-tracked movement; the prerequisite for the inhabitable world. **The tracer bullet** — the one end-to-end thread the slice must prove. **Soul-creed** — the compressed memory a reincarnating soul carries, so a colony remembers the creator across death. **The override bus** — the resolver making player overrides first-class, perceptible sim objects. **Possession / ControlMask / rapport-drift** — the temporary merge, what the player vs the AI controls, and the resistance that can expel the rider. **The Dread-Dial** — the player intensity setting that scales content darkness within a fixed harmful-content ceiling. **Cognitive LOD** (hot/warm/cold) — the affordability mechanism; the hot set is gaze-promoted. **Spatial LOD** — the movement analogue (active-city stepping; cold teleport-on-demand). **EditLayer** — the append-only diff of player edits over the deterministic world, the persistence model. **The four-gate moderation** — prompt-constraint + classifier + entity-grounding + severity-routing, the safety spine. **The inequality** — revenue/player-hour ≥ GPU cost/player-hour, the business condition. **The moment** — the confrontation landing emotionally, the creative condition. **The five things never to lose sight of** — movement (the keystone), the Director (the integration), moderation (the launch-blocker), cost-per-player-hour (the business), and the confrontation landing (the creative).
+
+### O.4 The closing law
+The brain is real and arguably past the comparables. The body and the game are the work, in order, on the spine: movement → presence → embodiment → the awakening made playable, with the depth layers (Sims life, GTA city, cinematics, audio, multiplayer, live-ops) threaded through the gates at the points their criteria require. Hold the five things; gate the money and the scope; prove the hook and the cost before scaling; and never slip a gate — cut content to hold it. This document is the living source of truth; every gate updates it.
+
+*— End of the Underworld Minions Production Bible.*
+
