@@ -1,0 +1,14 @@
+18:45:28  Overnight finisher running — you can close the chat; this continues.
+18:45:29  [1/4] building underworld-web static dist…
+19:30:09  [1/4] underworld dist OK → switching :5180 to static preview
+19:30:26  [1/4] ! preview not 200 (000000) — reverting to dev so :5180 stays up
+19:30:40  [2/4] /v1/pm2 backend endpoint: {"available":true,"count":21,"processes"
+19:30:40  [3/4] building + deploying the frontend (Fleet Control panel)…
+19:35:55  [3/4] home :5173 -> 200
+19:35:58  [4/4] ✓ pm2 state saved (persists across reboot)
+19:35:58  DONE. Summary:
+19:36:02     jarvis-frontend: online
+19:36:06     jarvis-backend: online
+19:36:09     underworld-web: online
+19:36:13     underworld-backend: online
+19:36:13  Fleet Control panel: open the app → search 'Fleet Control' (or /apex → Command group).

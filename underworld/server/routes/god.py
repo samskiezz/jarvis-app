@@ -185,6 +185,81 @@ async def _apply_verb(session: AsyncSession, world: World, verb: str, target: Op
     return {"valence": valence, "detail": detail}
 
 
+def _forecast_verb(verb: str, target: Optional[Minion], params: dict) -> dict[str, Any]:
+    """Predict a god-verb's effect WITHOUT applying it (Book V Part G.4 consequence-forecast).
+    Read-only: mirrors `_apply_verb`'s deltas so the Intervention UI can show "if you do this, then…"
+    before the creator commits. No state mutation, no audit, no rate-limit consumed."""
+    deltas: list[dict] = []
+    valence, summary, reversible = 0.0, "", True
+
+    def d(field, frm, to):
+        deltas.append({"field": field, "from": frm, "to": to})
+
+    if verb in ("cull", "smite"):
+        if target is None:
+            raise HTTPException(status_code=400, detail="target required")
+        d("alive", bool(target.alive), False)
+        valence, reversible = -1.0, False   # death is the one irreversible act (resurrect aside)
+        summary = f"{target.name} dies" + (" (smitten)" if verb == "smite" else "")
+    elif verb == "resurrect":
+        if target is None:
+            raise HTTPException(status_code=400, detail="target required")
+        d("alive", bool(target.alive), True)
+        valence, summary = 1.0, f"{target.name} is raised from death"
+    elif verb == "bless":
+        if target is None:
+            raise HTTPException(status_code=400, detail="target required")
+        rep = target.reputation or 1.0
+        mor = target.morale if target.morale is not None else 0.5
+        d("reputation", round(rep, 3), round(rep + 0.5, 3))
+        d("morale", round(mor, 3), round(min(1.0, mor + 0.1), 3))
+        valence, summary = 1.0, f"{target.name} is blessed (+reputation, +morale)"
+    elif verb == "gift":
+        if target is None:
+            raise HTTPException(status_code=400, detail="target required")
+        amt = float(params.get("amount", 1.0))
+        k = target.karma or 0.0
+        d("karma", round(k, 3), round(k + amt, 3))
+        valence, summary = 1.0, f"{target.name} receives a gift (+{amt} karma)"
+    elif verb == "speak":
+        ok, text = _moderate(str(params.get("text", "")))
+        if not ok:
+            raise HTTPException(status_code=400, detail="empty or rejected message")
+        valence, summary = 0.2, f"the colony hears: “{text}”"
+    elif verb == "override":
+        field = str(params.get("field", ""))
+        mode = str(params.get("mode", "set"))
+        d(field or params.get("scope", "decision"), "current", params.get("value"))
+        valence = float(params.get("valence", 0.0))
+        summary = f"override {field or params.get('scope', 'decision')} ({mode})"
+        reversible = True  # overrides expire after ttl_ticks
+    else:
+        raise HTTPException(status_code=400, detail=f"unknown verb '{verb}'")
+    return {"verb": verb, "target_id": (target.id if target else None),
+            "predicted": deltas, "valence": valence, "summary": summary, "reversible": reversible}
+
+
+@router.post("/{world_id}/player/forecast")
+async def player_forecast(
+    world_id: str,
+    body: ActRequest,
+    session: AsyncSession = Depends(get_session),
+    _token: str = Depends(require_bearer),
+):
+    """Consequence-forecast for a god-verb (Book V Part G.4). Read-only dry-run — returns the
+    predicted field deltas + valence + reversibility so the Intervention UI can show the outcome
+    BEFORE the creator commits. Never mutates, never audits, never consumes a rate-limit token."""
+    verb = (body.verb or "").lower()
+    if _VERB_CLASS.get(verb) is None:
+        raise HTTPException(status_code=400, detail=f"unknown verb '{verb}'")
+    await _world_or_404(session, world_id)
+    target = await session.get(Minion, body.target_id) if body.target_id else None
+    if body.target_id and target is None:
+        raise HTTPException(status_code=404, detail="target minion not found")
+    res = _forecast_verb(verb, target, body.params or {})
+    return {"ok": True, **res}
+
+
 @router.post("/{world_id}/player/act")
 async def player_act(
     world_id: str,

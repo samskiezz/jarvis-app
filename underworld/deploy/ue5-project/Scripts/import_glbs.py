@@ -46,30 +46,44 @@ def _category_map() -> dict:
     return out
 
 
-def main():
-    cats = _category_map()
-    tools = unreal.AssetToolsHelpers.get_asset_tools()
-    tasks, planned = [], []
-    for dp, _d, files in os.walk(GLB_ROOT):
-        for f in files:
-            if not f.lower().endswith((".glb", ".gltf")):
-                continue
-            src = os.path.join(dp, f)
-            cat = cats.get(f.lower(), "prop")
-            dest = f"{DEST_ROOT}/{cat}"
-            asset = _safe(f)
-            t = unreal.AssetImportTask()
-            t.filename = src
-            t.destination_path = dest
-            t.destination_name = asset
-            t.automated = True            # no dialogs
-            t.save = True
-            t.replace_existing = True
-            tasks.append(t)
-            rel = os.path.relpath(src, GLB_ROOT)
-            planned.append((f"/models/{rel.replace(os.sep, '/')}", cat, f"{dest}/{asset}"))
+def _load_or_build_manifest() -> dict:
+    """The manifest (glb-url → /Game path) is the SINGLE SOURCE OF TRUTH, generated headlessly by
+    gen_manifest.py (correct catalog parse + collision-free unique paths). Prefer it; if it's
+    missing, build it now by shelling gen_manifest.py so the Editor import always matches the C++
+    resolver and the WebGL/backend urls exactly."""
+    proj = os.path.dirname(HERE)
+    man_path = os.path.join(proj, "Content", "UnderworldAssets", "manifest.json")
+    if not os.path.exists(man_path):
+        gen = os.path.join(HERE, "gen_manifest.py")
+        unreal.log(f"[uw-import] manifest absent — generating via {gen}")
+        import subprocess
+        subprocess.run([os.sys.executable, gen], check=False)
+    with open(man_path) as fh:
+        return json.load(fh)
 
-    unreal.log(f"[uw-import] importing {len(tasks)} GLBs -> {DEST_ROOT}/<category>/")
+
+def main():
+    man = _load_or_build_manifest()
+    by_url = man.get("by_url", {})
+    tools = unreal.AssetToolsHelpers.get_asset_tools()
+    tasks = []
+    for url, gpath in by_url.items():
+        rel = url[len("/models/"):] if url.startswith("/models/") else url.lstrip("/")
+        src = os.path.join(GLB_ROOT, rel)
+        if not os.path.exists(src):
+            unreal.log_warning(f"[uw-import] missing source: {src}")
+            continue
+        dest, asset = gpath.rsplit("/", 1)         # /Game/UnderworldAssets/<cat>/<Name>
+        t = unreal.AssetImportTask()
+        t.filename = src
+        t.destination_path = dest
+        t.destination_name = asset
+        t.automated = True            # no dialogs
+        t.save = True
+        t.replace_existing = True
+        tasks.append(t)
+
+    unreal.log(f"[uw-import] importing {len(tasks)} GLBs at the manifest's exact /Game paths")
     # import in batches so a single bad asset can't sink the whole run
     BATCH = 64
     done = 0
@@ -82,22 +96,19 @@ def main():
             unreal.log_warning(f"[uw-import] batch {i//BATCH} error: {e}")
         unreal.log(f"[uw-import] {min(done, len(tasks))}/{len(tasks)}")
 
-    # coverage manifest (by_url for exact resolution, by_category for fallback pick).
-    # Written under Content/UnderworldAssets so it stages into the .pak (UFS) and the C++
-    # resolver can load it at runtime — ONE source of truth for glb-url -> /Game asset.
-    by_url, by_cat = {}, {}
-    for url, cat, path in planned:
-        by_url[url] = path
-        by_cat.setdefault(cat, []).append(path)
-    payload = {"dest_root": DEST_ROOT, "total": len(planned),
-               "categories": {k: len(v) for k, v in by_cat.items()},
-               "by_url": by_url, "by_category": by_cat}
-    proj = os.path.dirname(HERE)  # .../ue5-project
-    content_dir = os.path.join(proj, "Content", "UnderworldAssets")
-    os.makedirs(content_dir, exist_ok=True)
-    for dst in (os.path.join(HERE, "manifest.json"), os.path.join(content_dir, "manifest.json")):
-        json.dump(payload, open(dst, "w"), indent=2)
-    unreal.log(f"[uw-import] DONE {len(planned)} assets, {len(by_cat)} categories -> manifest.json")
+    # Enable Nanite on every imported StaticMesh (city/props render at film density).
+    reg = unreal.AssetRegistryHelpers.get_asset_registry()
+    nanite = 0
+    for a in reg.get_assets_by_path(DEST_ROOT, recursive=True):
+        obj = a.get_asset()
+        if isinstance(obj, unreal.StaticMesh):
+            s = obj.get_editor_property("nanite_settings")
+            s.set_editor_property("enabled", True)
+            obj.set_editor_property("nanite_settings", s)
+            unreal.EditorAssetLibrary.save_loaded_asset(obj)
+            nanite += 1
+    unreal.log(f"[uw-import] DONE — imported {done}/{len(tasks)}, Nanite on {nanite}. "
+               f"Manifest is authoritative (already written by gen_manifest.py).")
 
 
 main()

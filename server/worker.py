@@ -39,6 +39,17 @@ async def main() -> None:
 
     tasks: list[asyncio.Task] = []
 
+    # 0) FEEDBACK BUS — route every module's unhandled errors into the bus + enroll every .py, so the
+    #    improver loop (below) can turn issues into lessons the LLM ladder reads back. This is the seam
+    #    that lets Llama ↔ Kimi ↔ Claude talk to each other about the running code.
+    try:
+        from .services import feedback_bus as fb
+        fb.install_global()
+        nreg = fb.register_all_modules()
+        print(f"[jarvis-worker] feedback bus armed — {nreg} modules watched", flush=True)
+    except Exception as e:  # noqa: BLE001
+        print(f"[jarvis-worker] feedback bus unavailable: {str(e)[:120]}", flush=True)
+
     # 1) self-enrichment BUILD (scrape → GPU-embed → LLM-enrich) on an interval.
     if os.environ.get("AUTOBUILD_ON_START", "true").lower() in ("1", "true", "yes"):
         tasks.append(asyncio.create_task(_periodic(
@@ -62,8 +73,39 @@ async def main() -> None:
             concurrency=int(os.environ.get("LLM_AUTOPILOT_CONCURRENCY", "4")),
             interval_s=float(os.environ.get("LLM_AUTOPILOT_INTERVAL_S", "0.5")))))
 
-    print(f"[jarvis-worker] started {len(tasks)} heavy loops "
-          f"(autobuild/enrich/autopilot) out-of-process; API stays light.", flush=True)
+    # 4) BULK-DATA ENGINE — topic orchestrator: cities × weather/air/marine + earthquakes/flights/
+    #    crypto + topic→page mapping. Injects THOUSANDS of live measurements per cycle (the
+    #    millions-of-bits source + the new-UI data). Was NEVER wired in production — turn it on.
+    if os.environ.get("ORCHESTRATOR_LOOP", "true").lower() in ("1", "true", "yes"):
+        try:
+            from .services import topic_orchestrator as TO
+            tasks.append(asyncio.create_task(_periodic(
+                TO.run_all, delay=8.0,
+                interval=max(300, int(os.environ.get("ORCHESTRATOR_INTERVAL_S", "1800"))),
+                label="orchestrator",
+                cities_limit=int(os.environ.get("ORCHESTRATOR_CITIES", "244")))))
+        except Exception as e:  # noqa: BLE001
+            print(f"[jarvis-worker] orchestrator unavailable: {str(e)[:120]}", flush=True)
+
+    # 5) History Lake ingestion (continuous external-feed pull).
+    if os.environ.get("HISTORY_INGEST_ENABLED", "true").lower() in ("1", "true", "yes"):
+        try:
+            from .services.ingestion import ingestion_loop
+            tasks.append(asyncio.create_task(
+                ingestion_loop(interval_s=int(os.environ.get("HISTORY_INGEST_INTERVAL_S", "900")))))
+        except Exception as e:  # noqa: BLE001
+            print(f"[jarvis-worker] ingestion unavailable: {str(e)[:120]}", flush=True)
+
+    # 6) Proactive intelligence (monitor → reason → propose → notify).
+    if os.environ.get("PROACTIVE_LOOP_ENABLED", "true").lower() in ("1", "true", "yes"):
+        try:
+            from .services.proactive_loop import proactive_loop
+            tasks.append(asyncio.create_task(proactive_loop()))
+        except Exception as e:  # noqa: BLE001
+            print(f"[jarvis-worker] proactive unavailable: {str(e)[:120]}", flush=True)
+
+    print(f"[jarvis-worker] started {len(tasks)} loops (autobuild/enrich/autopilot/orchestrator/"
+          f"ingest/proactive) out-of-process; API stays light.", flush=True)
     if not tasks:
         print("[jarvis-worker] nothing enabled — idling.", flush=True)
         while True:

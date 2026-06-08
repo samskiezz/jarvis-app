@@ -191,10 +191,14 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         x, z = _position(m.id, seed_int, town_radius=town_radius)
     y = _elevation(heightmap, x, z, town_radius=town_radius, scale=terrain_scale)
     anim = _anim_for(mood, m.fatigue or 0.5, m.sanity or 0.85, look["role"])
-    # The minion's REAL current activity → where they go + how they animate.
-    last_action = (m.brain or {}).get("last_action", "rest")
+    # The minion's REAL current activity → where they go + how they animate. Only let the
+    # action-map override the mood/fatigue anim when there's an ACTUAL recorded action — a minion
+    # the sim hasn't stepped yet (no last_action) must keep its mood-derived state, not be forced
+    # to "rest" by the default (which would mask inspired/working bodies as idle).
+    recorded_action = (m.brain or {}).get("last_action")
+    last_action = recorded_action or "rest"
     action, target_building, act_anim = _action_target(last_action, mood)
-    if act_anim:
+    if act_anim and recorded_action is not None:
         anim = act_anim                      # the real task overrides the idle/mood anim
     # prominence: masters / high-reputation Minions render larger & adorned
     prominence = round(min(1.5, 0.8 + 0.14 * (m.reputation or 1.0)), 3)

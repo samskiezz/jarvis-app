@@ -69,3 +69,11 @@ underworld/data/design/sciences.csv
 underworld/web/public/models/generated/uw/
 _old_textfirst_glbs/
 test_crate.glb
+
+# Overnight build — large GENERATED outputs (rebuilt by pipelines; keep out of git history)
+jarvis_assets/
+dist_prev/
+design_pack/
+underworld/deploy/ue5-project/Saved/
+*.db-journal
+*.tmp.*

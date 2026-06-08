@@ -44,7 +44,16 @@ void AUnderworldWorldManager::BeginPlay()
 	{
 		W->GetTimerManager().SetTimer(StreamTimer, this, &AUnderworldWorldManager::UpdateStreaming,
 			FMath::Max(0.25f, StreamIntervalSeconds), true, 0.5f);
+		// Watched-Creator gaze sampling (Part L.8) — report where the god-camera looks, ≤10 Hz.
+		const float GazePeriod = 1.f / FMath::Clamp(GazeHz, 0.5f, 10.f);
+		W->GetTimerManager().SetTimer(GazeTimer, this, &AUnderworldWorldManager::ReportGaze, GazePeriod, true, GazePeriod);
 	}
+}
+
+USceneStateClient* AUnderworldWorldManager::GetClient() const
+{
+	UGameInstance* GI = UGameplayStatics::GetGameInstance(this);
+	return GI ? GI->GetSubsystem<USceneStateClient>() : nullptr;
 }
 
 void AUnderworldWorldManager::EndPlay(const EEndPlayReason::Type Reason)
@@ -56,7 +65,11 @@ void AUnderworldWorldManager::EndPlay(const EEndPlayReason::Type Reason)
 			Client->OnSceneState.RemoveDynamic(this, &AUnderworldWorldManager::HandleSceneState);
 		}
 	}
-	if (UWorld* W = GetWorld()) { W->GetTimerManager().ClearTimer(StreamTimer); }
+	if (UWorld* W = GetWorld())
+	{
+		W->GetTimerManager().ClearTimer(StreamTimer);
+		W->GetTimerManager().ClearTimer(GazeTimer);
+	}
 	Super::EndPlay(Reason);
 }
 
@@ -112,7 +125,172 @@ void AUnderworldWorldManager::HandleSceneState(const FUwSceneState& State)
 	{
 		if (AUnderworldMinion* A = Minions.FindRef(Id)) { A->Destroy(); }
 		Minions.Remove(Id);
+		PromotedIds.Remove(Id);
 	}
+
+	// ── THE AI-DIRECTOR FRAME (Part L) — drive HUD / VFX / audio, only on change ─────
+	if (State.Overmind.bValid)
+	{
+		const FString Fp = FString::Printf(TEXT("%s|%s|%.2f"),
+			*State.Overmind.Mood, *State.Overmind.TowardCreator, State.Overmind.Tension);
+		if (Fp != OvermindFingerprint) { OvermindFingerprint = Fp; OnOvermind(State.Overmind); }
+	}
+	if (State.Chatter.Num() > 0) { OnChatter(State.Chatter); }
+	// God-beat: fire ONCE per distinct beat (the irreversible Black-Mirror moment). The backend
+	// clears it after ~90s, so a new non-empty beat that differs from the last is a fresh one.
+	if (!State.GodBeat.IsEmpty() && State.GodBeat != LastGodBeat)
+	{
+		LastGodBeat = State.GodBeat;
+		OnGodBeat(State.GodBeat);
+	}
+	else if (State.GodBeat.IsEmpty())
+	{
+		LastGodBeat.Empty();   // allow the same beat text to re-fire if it recurs later
+	}
+	// PresenceField — attention hotspots + creator presence (Part L.8).
+	OnPresence(State.Presence);
+	// Colony-wide awareness-bleed (Part G.1/G.2).
+	if (!FMath::IsNearlyEqual(State.MeanAwareness, LastMeanAwareness, 0.005f))
+	{
+		LastMeanAwareness = State.MeanAwareness;
+		OnAwarenessBleed(State.MeanAwareness, State.AwakenedCount);
+	}
+
+	// two-tier crowd→MetaHuman promotion budget (Part E.6).
+	UpdateHeroPromotion();
+}
+
+// ── two-tier crowd→MetaHuman promotion (Part E.6) ────────────────────────────────────
+void AUnderworldWorldManager::UpdateHeroPromotion()
+{
+	if (MaxHeroes <= 0) { return; }
+	APawn* Viewer = UGameplayStatics::GetPlayerPawn(this, 0);
+	if (!Viewer) { return; }
+	const FVector Eye = Viewer->GetActorLocation();
+
+	// Score the candidates: awakened/near or in-conversation. Hysteresis — keep an already-promoted
+	// hero until it leaves 1.5× the promote distance, so it doesn't flicker on the budget boundary.
+	const float PromoteSq = FMath::Square(HeroPromoteDistance);
+	const float DemoteSq  = FMath::Square(HeroPromoteDistance * 1.5f);
+
+	struct FCand { AUnderworldMinion* A; float Score; };
+	TArray<FCand> Cands;
+	for (const TPair<FString, AUnderworldMinion*>& Pair : Minions)
+	{
+		AUnderworldMinion* A = Pair.Value;
+		if (!A) { continue; }
+		const float DistSq = FVector::DistSquared(A->GetActorLocation(), Eye);
+		const bool bWasHero = PromotedIds.Contains(Pair.Key);
+		const float Reach = bWasHero ? DemoteSq : PromoteSq;
+		const bool bInConversation = (A->Anim == TEXT("talk"));
+		if (DistSq <= Reach && (A->bAwakened || bInConversation))
+		{
+			// closer + more awake + in-conversation scores higher; keep heroes sticky.
+			const float Score = (bWasHero ? 1000.f : 0.f) + A->Awareness * 100.f
+				+ (bInConversation ? 50.f : 0.f) - FMath::Sqrt(DistSq) * 0.01f;
+			Cands.Add({A, Score});
+		}
+	}
+	Cands.Sort([](const FCand& L, const FCand& R) { return L.Score > R.Score; });
+
+	TSet<FString> NewSet;
+	for (int32 i = 0; i < Cands.Num() && NewSet.Num() < MaxHeroes; ++i)
+	{
+		NewSet.Add(Cands[i].A->MinionId);
+	}
+
+	// fire transitions
+	for (const TPair<FString, AUnderworldMinion*>& Pair : Minions)
+	{
+		const bool bNow = NewSet.Contains(Pair.Key);
+		const bool bBefore = PromotedIds.Contains(Pair.Key);
+		if (bNow != bBefore && Pair.Value) { OnHeroPromotionChanged(Pair.Value, bNow); }
+	}
+	PromotedIds = MoveTemp(NewSet);
+}
+
+// ── PresenceField gaze reporting (Part L.8) ──────────────────────────────────────────
+void AUnderworldWorldManager::ReportGaze()
+{
+	USceneStateClient* Client = GetClient();
+	if (!Client) { return; }
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (!PC) { return; }
+	FVector CamPos; FRotator CamRot;
+	PC->GetPlayerViewPoint(CamPos, CamRot);
+	const float Period = 1.f / FMath::Clamp(GazeHz, 0.5f, 10.f);
+	Client->PostGaze(CamPos, CamRot.Vector(), 90.f, ReticleTargetId, Period);
+}
+
+// ── GOD-VERB BUS (Part B.3 / routes/god.py) ──────────────────────────────────────────
+void AUnderworldWorldManager::ActVerb(const FString& Verb, const FString& MinionId, const FString& ParamsJson)
+{
+	if (USceneStateClient* Client = GetClient())
+	{
+		Client->PostAct(Verb, MinionId, ParamsJson, nullptr);
+	}
+}
+
+bool AUnderworldWorldManager::DestructiveGuard(const FString& Verb, const FString& MinionId, bool bConfirmed)
+{
+	if (MinionId.IsEmpty()) { return false; }
+	if (!bConfirmed)
+	{
+		OnGodVerbWarning(FString::Printf(TEXT("Hold to confirm before you %s a minion."), *Verb));
+		return false;
+	}
+	const double Now = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0;
+	const double* Until = VerbCooldownUntil.Find(Verb);
+	if (Until && Now < *Until)
+	{
+		OnGodVerbWarning(FString::Printf(TEXT("%s is on cooldown."), *Verb));
+		return false;
+	}
+	VerbCooldownUntil.Add(Verb, Now + 3.0);   // mirrors the server 'harm' class cooldown (3s)
+	return true;
+}
+
+void AUnderworldWorldManager::Bless(const FString& MinionId)
+{
+	if (!MinionId.IsEmpty()) { ActVerb(TEXT("bless"), MinionId, TEXT("{}")); }
+}
+
+void AUnderworldWorldManager::Gift(const FString& MinionId, float Amount)
+{
+	if (MinionId.IsEmpty()) { return; }
+	ActVerb(TEXT("gift"), MinionId, FString::Printf(TEXT("{\"amount\":%.3f}"), Amount));
+}
+
+void AUnderworldWorldManager::Speak(const FString& MinionId, const FString& Text)
+{
+	// Client-side preflight (red-team): strip control chars, drop injection-prone delimiters, cap
+	// length. The server moderates again — this is defence in depth, never the only gate.
+	FString Clean;
+	Clean.Reserve(Text.Len());
+	for (const TCHAR C : Text)
+	{
+		if (C == '\n' || C == '\t' || (C >= 32 && C != '{' && C != '}' && C != '`' && C != '|' &&
+			C != '<' && C != '>')) { Clean.AppendChar(C); }
+	}
+	Clean = Clean.TrimStartAndEnd().Left(280);
+	if (Clean.IsEmpty()) { OnGodVerbWarning(TEXT("Nothing to say.")); return; }
+	// JSON-escape the quotes/backslashes that survive.
+	FString Escaped = Clean.ReplaceCharWithEscapedChar();
+	ActVerb(TEXT("speak"), MinionId, FString::Printf(TEXT("{\"text\":\"%s\"}"), *Escaped));
+}
+
+bool AUnderworldWorldManager::Cull(const FString& MinionId, bool bConfirmed)
+{
+	if (!DestructiveGuard(TEXT("cull"), MinionId, bConfirmed)) { return false; }
+	ActVerb(TEXT("cull"), MinionId, TEXT("{}"));
+	return true;
+}
+
+bool AUnderworldWorldManager::Smite(const FString& MinionId, bool bConfirmed)
+{
+	if (!DestructiveGuard(TEXT("smite"), MinionId, bConfirmed)) { return false; }
+	ActVerb(TEXT("smite"), MinionId, TEXT("{}"));
+	return true;
 }
 
 // ── world streaming ────────────────────────────────────────────────────────────────

@@ -261,3 +261,75 @@ async def get_admin_roles(_token: str = Depends(require_bearer)):
         }
     except Exception:  # noqa: BLE001
         return {"available": False, "roles": [], "clearance": {}, "marks": [], "default_role": None}
+
+
+# ── PM2 fleet control (the operator's "manage while I sleep" panel) ────────────────
+import json as _json
+import shutil as _shutil
+import subprocess as _subprocess
+
+
+def _pm2_bin() -> str | None:
+    return _shutil.which("pm2")
+
+
+def _pm2_list() -> list[dict]:
+    """Parse `pm2 jlist` into compact rows (name, status, cpu%, mem, uptime, restarts, pid)."""
+    pm2 = _pm2_bin()
+    if not pm2:
+        return []
+    try:
+        out = _subprocess.run([pm2, "jlist"], capture_output=True, text=True, timeout=10)
+        procs = _json.loads(out.stdout or "[]")
+    except Exception:  # noqa: BLE001
+        return []
+    rows = []
+    for p in procs:
+        env = p.get("pm2_env", {}) or {}
+        mon = p.get("monit", {}) or {}
+        rows.append({
+            "name": p.get("name"),
+            "id": p.get("pm_id"),
+            "status": env.get("status"),
+            "cpu": mon.get("cpu"),
+            "memory": mon.get("memory"),          # bytes
+            "uptime": env.get("pm_uptime"),        # epoch ms when started
+            "restarts": env.get("restart_time"),
+            "pid": p.get("pid"),
+            "unstable": env.get("unstable_restarts", 0),
+        })
+    rows.sort(key=lambda r: (r.get("name") or "").lower())
+    return rows
+
+
+@router.get("/v1/pm2")
+async def pm2_list(_token: str | None = Depends(optional_bearer)):
+    """Live fleet status — every pm2 process with cpu/mem/uptime/restarts. Read-only, never raises."""
+    rows = _pm2_list()
+    return {"available": _pm2_bin() is not None, "count": len(rows), "processes": rows}
+
+
+# Only these may be toggled from the panel (never the API serving this request, to avoid self-kill).
+_PM2_GUARDED = {"jarvis-backend"}
+_PM2_ACTIONS = {"start", "stop", "restart", "reload"}
+
+
+@router.post("/v1/pm2/{name}/{action}")
+async def pm2_action(name: str, action: str, _token: str = Depends(require_bearer)):
+    """Start/stop/restart/reload a pm2 process. Auth required (bearer). Refuses to stop the backend
+    that serves this very request, so the operator can't accidentally lock themselves out."""
+    pm2 = _pm2_bin()
+    if not pm2:
+        return {"ok": False, "error": "pm2 not found on PATH"}
+    act = action.lower()
+    if act not in _PM2_ACTIONS:
+        return {"ok": False, "error": f"unknown action '{action}'"}
+    if name in _PM2_GUARDED and act in ("stop",):
+        return {"ok": False, "error": f"'{name}' is guarded (it serves this API) — use restart instead"}
+    try:
+        r = _subprocess.run([pm2, act, name], capture_output=True, text=True, timeout=30)
+        ok = r.returncode == 0
+        return {"ok": ok, "name": name, "action": act,
+                "detail": (r.stdout or r.stderr or "").strip()[-300:]}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "name": name, "action": act, "error": str(e)[:200]}

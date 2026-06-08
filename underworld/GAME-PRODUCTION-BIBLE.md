@@ -2168,6 +2168,23 @@ Decisions: Director owns cognition scheduling (kills the commit race); drama-mod
 
 ---
 
+## PART M — UE5 CLIENT CONFORMANCE (the renderer half of Book V, built)
+
+Book V is a contract spec; the contract has two ends. The backend end shipped (`scene_state.py` emits `contract_version: 2`). The **renderer end is now at parity too** — the UE5 Pixel-Streaming client (`underworld/deploy/ue5-project`) parses the *entire* v2 surface and drives the Book V render/HUD/verb seams in code. The full map is `deploy/ue5-project/BOOK-V-UE5-CONFORMANCE.md`; the spine:
+
+- **B.2 wire v2** — `SceneStateClient::ParseScene` → `FUwSceneState` reads the whole frame (Overmind, chatter, God-beat, PresenceField, possessed_id) and the full per-minion record (awareness, awakened, needs, identity, drive, prominence, guild colour). It also *fixes a latent bug*: the old client read `time_of_day/weather/terrain_seed` at the top level, but v2 nests them under `frame{}`/`terrain{}`. A two-way guard test (`test_ue5_v2_contract_fields`) fails if either end drops a field.
+- **B.3 / L.8 god-verbs + gaze** — `PostAct` (bless/gift/cull/smite/speak) and `PostGaze` hit the real `routes/god.py` endpoints; destructive verbs are confirm-gated + client-cooldowned; gaze is ≤10 Hz (the red-team mitigations).
+- **E.6 two-tier swap** — `WorldManager::UpdateHeroPromotion` owns the (near ∧ awakened) ∨ possessed ∨ in-conversation decision with hysteresis + a ≤4 MetaHuman budget; the BP does the mesh swap on `OnHeroPromotionChanged`.
+- **F / K.6 one emotion enum** — `EUwEmotion` + `UnderworldEmotion::Resolve` collapses mood + awakening + needs into the single canonical id the face and voice both read.
+- **G.1/G.2 God-HUD + awareness-bleed** — `AUnderworldGodHud` builds the HUD model (stance, mean-awareness gauge, awakened count, critical-alert lane, whisper feed); the awareness-bleed grades teal→jacaranda via `UnderworldArtPalette`.
+- **L.9 Overmind/God-beat** — `WorldManager::OnOvermind/OnChatter/OnGodBeat` fan the Director frame to HUD/VFX/audio, God-beat fire-once.
+
+**Underworld ≠ JARVIS.** The UE5 client wears *Underworld's* art direction (`ART-DIRECTION.md`: Futuristic-Avatar × GTA5 × Sims — `UnderworldArtPalette.h`), not the JARVIS Stark-cyan war-room. JARVIS is a separate product whose only tie to Underworld is **access**: it observes and commands the Minions through these same v2 contracts (scene-state read + the `/player/act` god-verbs). So this conformance work *is* the JARVIS↔Underworld access seam — built once, consumed by both the game's own renderer and any JARVIS surface, with no extra backend.
+
+The Editor/art half (level build, Anim BP, the MetaHuman swap, the `WBP_GodHud` widget, Niagara, packaging on a Vulkan+NVENC box) is unchanged from `UE5-FINISH-RUNBOOK.md`; the code + contract half — Book V's subject — is complete.
+
+---
+
 ## CROSS-CUTTING CLOSING NOTE
 
 Five facts recur across all twelve disciplines and are the true shape of the work: (1) **the scene-state contract must bump to v2** — additive in fields, semantic in the position-source change — and it is the wire every discipline depends on; (2) **the movement keystone (P0) blocks the visible game, the embodiment, the possession-locomotion, and the perf suite**, but the *hook* can be validated without it via the behavior-bias fallback, decoupling the funding gate from the engineering risk; (3) **the cost ledger + inference governor are one keystone** that makes the existential business metric, the 8s God-Brain SLO, the margin circuit-breaker, and the no-fallback cert gate all simultaneously buildable; (4) **the moderation/surfacing seam is a single chokepoint** consumed by QA, Backend, the Director, UX, and the marketplace — and it is the named launch-blocker that does not yet exist; (5) **the Director must become the single writer of cognition** to stop the two racing loops before any pacing work matters. Build these five seams first, hold the P0 timebox, instrument cost honestly, and say no to everything else — the rest of the bible becomes executable.

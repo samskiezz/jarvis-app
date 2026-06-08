@@ -17,6 +17,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "SceneStateTypes.h"
+#include "UnderworldEmotion.h"
 #include "UnderworldPlayableMinion.generated.h"
 
 UCLASS(Blueprintable)
@@ -38,6 +39,12 @@ public:
 	UPROPERTY(BlueprintReadOnly) FString Mood;
 	UPROPERTY(BlueprintReadOnly) FString Guild;
 	UPROPERTY(BlueprintReadOnly) FString MoveState;
+	// The hero body carries the face + awakening signal too (Part E.6/F/K) — it's the one most
+	// likely to be a MetaHuman in close-up, so its emotion/awareness must read.
+	UPROPERTY(BlueprintReadOnly) float      Awareness = 0.f;
+	UPROPERTY(BlueprintReadOnly) bool       bAwakened = false;
+	UPROPERTY(BlueprintReadOnly) EUwEmotion Emotion = EUwEmotion::Neutral;
+	UPROPERTY(BlueprintReadOnly) float      EmotionIntensity = 0.f;
 
 	/** Backend units → UE centimetres (1 backend unit = 1 m). Matches the crowd + buildings. */
 	UPROPERTY(EditAnywhere, Category="Underworld") float WorldScale = 100.f;
@@ -53,6 +60,10 @@ public:
 	/** Anim/guild changed — drive the AnimBP / material from Blueprint. */
 	UFUNCTION(BlueprintImplementableEvent) void OnAnimChanged(const FString& NewAnim);
 	UFUNCTION(BlueprintImplementableEvent) void OnGuildChanged(const FString& NewGuild);
+	/** Canonical emotion changed — drive the ARKit/morph face + TTS prosody (Part F/K). */
+	UFUNCTION(BlueprintImplementableEvent) void OnEmotionChanged(EUwEmotion NewEmotion, float Intensity);
+	/** Awareness ramped — drive the awareness-bleed rim/eye glow (Part G.2). */
+	UFUNCTION(BlueprintImplementableEvent) void OnAwarenessChanged(float NewAwareness);
 	/** Fired when the creator possesses / releases this body — drive UI + the possess route. */
 	UFUNCTION(BlueprintImplementableEvent) void OnPossessionChanged(bool bNowPlayer);
 

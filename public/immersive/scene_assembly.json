@@ -1,0 +1,734 @@
+{
+ "01_command_atrium": {
+  "hero.ai_core": [
+   "jarvis_command_atrium_data_orb",
+   "jarvis_command_atrium_data_orb_core",
+   "jarvis_command_atrium_orb_wireframe_lattice",
+   "jarvis_command_atrium_projector_dais",
+   "jarvis_command_atrium_dais_emitter_core",
+   "jarvis_command_atrium_projector_beam",
+   "jarvis_command_atrium_orb_lens_flare_sprite"
+  ],
+  "left.ai_command_dock": [
+   "jarvis_command_atrium_orb_orbital_rings",
+   "jarvis_command_atrium_orb_particle_shell",
+   "jarvis_command_atrium_jarvis_wordmark",
+   "jarvis_command_atrium_dais_concentric_rings",
+   "jarvis_command_atrium_ceiling_ring_array",
+   "jarvis_command_atrium_ceiling_emitter_ring",
+   "jarvis_command_atrium_wall_pillar_module",
+   "jarvis_command_atrium_chrome_floor_disc",
+   "jarvis_command_atrium_glass_panel_frame",
+   "jarvis_command_atrium_panel_header_bar",
+   "jarvis_command_atrium_kpi_stat_block",
+   "jarvis_command_atrium_world_map_ribbon",
+   "jarvis_command_atrium_mission_row_card",
+   "jarvis_command_atrium_progress_bar_segment",
+   "jarvis_command_atrium_status_pill",
+   "jarvis_command_atrium_alert_severity_glyph",
+   "jarvis_command_atrium_metric_linear_bar",
+   "jarvis_command_atrium_recommendation_card",
+   "jarvis_command_atrium_event_feed_tick",
+   "jarvis_command_atrium_regional_map_tile",
+   "jarvis_command_atrium_voice_waveform_strip",
+   "jarvis_command_atrium_command_dock_frame",
+   "jarvis_command_atrium_nav_rail_icon_set",
+   "jarvis_command_atrium_topbar_module",
+   "jarvis_command_atrium_data_stream_particles",
+   "jarvis_command_atrium_volumetric_light_shaft",
+   "jarvis_command_atrium_topbar_clock_readout",
+   "jarvis_command_atrium_global_status_chip",
+   "jarvis_command_atrium_threat_level_meter",
+   "jarvis_command_atrium_mic_voice_button",
+   "jarvis_command_atrium_user_role_chip",
+   "jarvis_command_atrium_notification_bell_glyph",
+   "jarvis_command_atrium_nav_rail_spine",
+   "jarvis_command_atrium_nav_active_highlight",
+   "jarvis_command_atrium_panel_cta_button",
+   "jarvis_command_atrium_briefing_panel_frame",
+   "jarvis_command_atrium_trend_arrow_glyph",
+   "jarvis_command_atrium_map_trend_sparkline",
+   "jarvis_command_atrium_section_header_label",
+   "jarvis_command_atrium_gauge_tick_legend",
+   "jarvis_command_atrium_floor_reflection_plane",
+   "jarvis_command_atrium_ground_fog_plane",
+   "jarvis_command_atrium_dais_floor_grid_projection",
+   "jarvis_command_atrium_depth_haze_volume",
+   "jarvis_command_atrium_hud_scanline_overlay",
+   "jarvis_command_atrium_scroll_indicator",
+   "jarvis_command_atrium_mission_progress_pct_label"
+  ],
+  "left.live_missions": [],
+  "right.alert_stack": [
+   "jarvis_command_atrium_alert_row_card"
+  ],
+  "right.intelligence_feed": [],
+  "bottom.command_input": [
+   "jarvis_command_atrium_comm_input_field"
+  ],
+  "bottom.active_contexts": [],
+  "status.system_health": [
+   "jarvis_command_atrium_health_radial_gauge"
+  ]
+ },
+ "02_ai_core_chamber": {
+  "hero.reasoning_orb": [
+   "jarvis_ai_core_reasoning_orb",
+   "jarvis_ai_core_hero_layer_tab_chip",
+   "jarvis_ai_core_projection_beam_cone",
+   "jarvis_ai_core_orb_containment_frame",
+   "jarvis_ai_core_orb_wordmark",
+   "jarvis_ai_core_trace_timeline_scrubber"
+  ],
+  "left.reasoning_stream": [
+   "jarvis_ai_core_filament_streamers",
+   "jarvis_ai_core_reasoning_stream_panel",
+   "jarvis_ai_core_data_inflow_stream"
+  ],
+  "left.ai_core_status": [
+   "jarvis_ai_core_voice_mic_icon",
+   "jarvis_ai_core_ar_mode_icon",
+   "jarvis_ai_core_notifications_bell_icon",
+   "jarvis_ai_core_notification_count_badge",
+   "jarvis_ai_core_director_avatar_plate",
+   "jarvis_ai_core_status_indicator_dot",
+   "jarvis_ai_core_context_usage_bar",
+   "jarvis_ai_core_active_tool_row",
+   "jarvis_ai_core_suggested_command_row",
+   "jarvis_ai_core_execution_queue_row",
+   "jarvis_ai_core_approve_action_button",
+   "jarvis_ai_core_review_action_button",
+   "jarvis_ai_core_risk_severity_tag",
+   "jarvis_ai_core_panel_caret_icon",
+   "jarvis_ai_core_voice_active_pill",
+   "jarvis_ai_core_encrypted_lock_icon",
+   "jarvis_ai_core_ceiling_light_shaft",
+   "jarvis_ai_core_corner_containment_bracket",
+   "jarvis_ai_core_projector_dais",
+   "jarvis_ai_core_concentric_light_rings",
+   "jarvis_ai_core_floor_emissive_ring",
+   "jarvis_ai_core_ceiling_ring_rig",
+   "jarvis_ai_core_chamber_wall_panel",
+   "jarvis_ai_core_chrome_floor_tile",
+   "jarvis_ai_core_support_strut",
+   "jarvis_ai_core_top_status_bar",
+   "jarvis_ai_core_left_icon_rail",
+   "jarvis_ai_core_nav_icon_glyph",
+   "jarvis_ai_core_glass_panel_frame",
+   "jarvis_ai_core_status_radial_gauge_96",
+   "jarvis_ai_core_component_radial_gauge_92",
+   "jarvis_ai_core_health_subbar_stack",
+   "jarvis_ai_core_source_card",
+   "jarvis_ai_core_tool_chip",
+   "jarvis_ai_core_command_history_panel",
+   "jarvis_ai_core_command_bar",
+   "jarvis_ai_core_voice_waveform",
+   "jarvis_ai_core_alert_token_amber",
+   "jarvis_ai_core_particle_motes"
+  ],
+  "center.source_cards": [],
+  "right.memory_context": [
+   "jarvis_ai_core_memory_context_panel"
+  ],
+  "right.action_approval": [
+   "jarvis_ai_core_approval_panel"
+  ],
+  "right.safety_alignment": [
+   "jarvis_ai_core_safety_alignment_panel"
+  ],
+  "bottom.voice_command": []
+ },
+ "03_world_control_room": {
+  "hero.holographic_earth": [
+   "jarvis_world_control_holo_earth",
+   "jarvis_world_threat_arc",
+   "jarvis_world_control_earth_graticule",
+   "jarvis_world_control_equatorial_ring",
+   "jarvis_world_control_threat_arc",
+   "jarvis_world_control_alert_marker_pin",
+   "jarvis_world_control_projector_dais",
+   "jarvis_world_control_concentric_light_rings",
+   "jarvis_world_control_projector_light_column",
+   "jarvis_world_control_glass_panel_frame",
+   "jarvis_world_control_region_filter_bar",
+   "jarvis_world_control_asset_icon_satellite",
+   "jarvis_world_control_asset_icon_uav_drone",
+   "jarvis_world_control_asset_icon_naval",
+   "jarvis_world_control_asset_icon_air",
+   "jarvis_world_control_system_health_radial",
+   "jarvis_world_control_active_missions_minimap",
+   "jarvis_world_control_timeline_transport_controls",
+   "jarvis_world_control_ceiling_light_ring",
+   "jarvis_world_control_ambient_particle_field",
+   "jarvis_world_control_data_stream_particles",
+   "jarvis_world_control_region_map_thumbnail",
+   "jarvis_world_control_top_icon_voice_mic",
+   "jarvis_world_control_top_icon_ar_mode",
+   "jarvis_world_control_user_avatar_chip",
+   "jarvis_world_control_naval_vessel_preview",
+   "jarvis_world_control_severity_tag_chip",
+   "jarvis_world_control_panel_action_button",
+   "jarvis_world_control_panel_close_glyph",
+   "jarvis_world_control_mission_legend_dot",
+   "jarvis_world_control_globe_terminator_band",
+   "jarvis_world_control_orbital_satellite_sprite",
+   "jarvis_world_control_arc_impact_ping",
+   "jarvis_world_control_timeline_event_tick",
+   "jarvis_world_control_timeline_playhead",
+   "jarvis_world_control_playback_speed_selector",
+   "jarvis_world_control_panel_header_chevron",
+   "jarvis_world_control_volumetric_light_shaft",
+   "jarvis_world_control_wall_data_glyph_strip"
+  ],
+  "left.layer_filters": [
+   "jarvis_world_control_threat_layer_toggle",
+   "jarvis_world_control_threat_layer_icon_cyber",
+   "jarvis_world_control_threat_layer_icon_military",
+   "jarvis_world_control_threat_layer_icon_disaster",
+   "jarvis_world_control_left_icon_rail",
+   "jarvis_world_control_toggle_switch_pill",
+   "jarvis_world_control_threat_layer_icon_terrorism",
+   "jarvis_world_control_threat_layer_icon_pandemic",
+   "jarvis_world_control_threat_layer_icon_economic"
+  ],
+  "left.country_city_profile_filters": [
+   "jarvis_world_control_city_marker_pin",
+   "jarvis_world_control_city_light_cluster"
+  ],
+  "floor.major_city_clusters": [
+   "jarvis_world_control_floor_emissive_ring",
+   "jarvis_world_control_floor_dais_disc",
+   "jarvis_world_control_floor_reflection_decal"
+  ],
+  "right.global_intel_summary": [
+   "jarvis_world_control_timeline_scrubber_track",
+   "jarvis_world_control_comms_waveform",
+   "jarvis_world_control_top_status_pill"
+  ],
+  "right.live_incident_feed": [
+   "jarvis_world_control_live_event_row_tile",
+   "jarvis_world_control_live_pill_button"
+  ],
+  "bottom.execute_global_command": [
+   "jarvis_world_control_command_bar_input"
+  ],
+  "status.country_count": [
+   "jarvis_world_control_subsystem_status_bars",
+   "jarvis_world_control_top_status_bar",
+   "jarvis_world_control_region_status_dot",
+   "jarvis_world_control_notification_bell_badge",
+   "jarvis_world_control_mission_count_stat"
+  ]
+ },
+ "04_intelligence_graph_space": {
+  "hero.entity_constellation": [
+   "jarvis_intel_graph_constellation",
+   "jarvis_intel_graph_projector_dais",
+   "jarvis_intel_graph_constellation_core",
+   "jarvis_intel_graph_primary_entity_ring",
+   "jarvis_intel_graph_node_corporate",
+   "jarvis_intel_graph_floor_emissive_ring",
+   "jarvis_intel_graph_node_document",
+   "jarvis_intel_graph_node_event",
+   "jarvis_intel_graph_entity_type_badge",
+   "jarvis_intel_graph_volumetric_light_shaft"
+  ],
+  "left.graph_controls": [
+   "jarvis_intel_graph_node_individual",
+   "jarvis_intel_graph_node_location",
+   "jarvis_intel_graph_node_operations",
+   "jarvis_intel_graph_node_threat",
+   "jarvis_intel_graph_edge_beam",
+   "jarvis_intel_graph_ground_mesh",
+   "jarvis_intel_graph_particle_emitter_shell",
+   "jarvis_intel_graph_left_controls_panel",
+   "jarvis_intel_graph_left_filters_panel",
+   "jarvis_intel_graph_confidence_radial_gauge",
+   "jarvis_intel_graph_submetric_bar",
+   "jarvis_intel_graph_timeline_snippet_card",
+   "jarvis_intel_graph_evidence_doc_chip",
+   "jarvis_intel_graph_relationship_stat_tile",
+   "jarvis_intel_graph_insight_anomaly_tile",
+   "jarvis_intel_graph_health_radial_gauge",
+   "jarvis_intel_graph_destination_rail",
+   "jarvis_intel_graph_topbar_frame",
+   "jarvis_intel_graph_command_bar",
+   "jarvis_intel_graph_active_context_chip",
+   "jarvis_intel_graph_director_avatar_disc",
+   "jarvis_intel_graph_ceiling_ring_rig",
+   "jarvis_intel_graph_node_selected_halo",
+   "jarvis_intel_graph_node_label_plate",
+   "jarvis_intel_graph_edge_strong",
+   "jarvis_intel_graph_edge_pulse_packet",
+   "jarvis_intel_graph_graph_zoom_control",
+   "jarvis_intel_graph_toggle_switch",
+   "jarvis_intel_graph_threshold_slider",
+   "jarvis_intel_graph_pill_button",
+   "jarvis_intel_graph_layer_count_row",
+   "jarvis_intel_graph_status_pill_flagged",
+   "jarvis_intel_graph_bio_tag_chip",
+   "jarvis_intel_graph_recent_activity_row",
+   "jarvis_intel_graph_view_full_cta",
+   "jarvis_intel_graph_insight_community_tile",
+   "jarvis_intel_graph_topbar_voice_icon",
+   "jarvis_intel_graph_topbar_armode_icon",
+   "jarvis_intel_graph_topbar_notification_bell",
+   "jarvis_intel_graph_wordmark",
+   "jarvis_intel_graph_role_chevron",
+   "jarvis_intel_graph_voice_waveform",
+   "jarvis_intel_graph_panel_header_tab",
+   "jarvis_intel_graph_node_orbit_dust",
+   "jarvis_intel_graph_threat_severity_chip",
+   "jarvis_intel_graph_graph_stat_summary_bar"
+  ],
+  "left.filters": [],
+  "center.primary_entity": [],
+  "right.entity_dossier": [
+   "jarvis_intel_dossier_card",
+   "jarvis_intel_graph_dossier_card",
+   "jarvis_intel_graph_dossier_portrait_frame"
+  ],
+  "right.source_evidence": [
+   "jarvis_intel_graph_evidence_card"
+  ],
+  "bottom.investigation_timeline": [
+   "jarvis_intel_graph_timeline_scrubber"
+  ],
+  "bottom.relationship_strength": []
+ },
+ "05_operations_war_room": {
+  "hero.mission_table": [
+   "jarvis_war_room_mission_table",
+   "jarvis_ops_jarvis_wordmark_mark",
+   "jarvis_ops_top_bar_icon_button",
+   "jarvis_ops_notification_count_badge",
+   "jarvis_ops_user_director_avatar_chip",
+   "jarvis_ops_metric_delta_arrow",
+   "jarvis_ops_metric_sparkline_glyph",
+   "jarvis_ops_filter_dropdown_selector_row",
+   "jarvis_ops_secondary_text_button",
+   "jarvis_ops_panel_close_button",
+   "jarvis_ops_segmented_interval_control",
+   "jarvis_ops_confidence_badge",
+   "jarvis_ops_export_download_icon",
+   "jarvis_ops_report_list_row",
+   "jarvis_ops_executive_insight_card",
+   "jarvis_ops_impact_tag_chip",
+   "jarvis_ops_dais_lens_flare_sprite",
+   "jarvis_ops_holographic_scanline_overlay",
+   "jarvis_ops_corner_bracket_frame",
+   "jarvis_ops_volumetric_light_shaft",
+   "jarvis_ops_floor_reflection_falloff_decal",
+   "jarvis_ops_axis_tick_label_set",
+   "jarvis_ops_anomaly_marker_pulse",
+   "jarvis_ops_panel_header_divider",
+   "jarvis_ops_mission_table_hero",
+   "jarvis_ops_projector_dais_base",
+   "jarvis_ops_concentric_light_ring",
+   "jarvis_ops_dais_emissive_floor_ring",
+   "jarvis_ops_mission_card",
+   "jarvis_ops_mission_node_marker",
+   "jarvis_ops_trend_surface_mesh",
+   "jarvis_ops_data_grid_plane",
+   "jarvis_ops_kpi_tower",
+   "jarvis_ops_metric_header_panel",
+   "jarvis_ops_timeline_scrubber",
+   "jarvis_ops_alert_tile_red",
+   "jarvis_ops_alert_tile_amber",
+   "jarvis_ops_health_radial_gauge",
+   "jarvis_ops_escalation_queue_stack",
+   "jarvis_ops_nav_icon_glyph_set",
+   "jarvis_ops_voice_waveform",
+   "jarvis_ops_active_context_rail",
+   "jarvis_ops_ceiling_light_ring",
+   "jarvis_ops_black_chrome_floor_tile",
+   "jarvis_ops_wall_data_pillar",
+   "jarvis_ops_data_stream_particle_emitter",
+   "jarvis_ops_volumetric_glow_cone"
+  ],
+  "center.mission_cards": [],
+  "center.dependency_lines": [
+   "jarvis_ops_dependency_flow_line"
+  ],
+  "left.mission_portfolio": [
+   "jarvis_ops_line_chart_card",
+   "jarvis_ops_mission_portfolio_list_panel",
+   "jarvis_ops_left_icon_rail"
+  ],
+  "left.timeline": [],
+  "right.mission_details": [
+   "jarvis_ops_mission_details_panel"
+  ],
+  "right.operator_assignments": [
+   "jarvis_ops_operator_assignment_chip"
+  ],
+  "right.approval_actions": [
+   "jarvis_ops_approval_action_button"
+  ],
+  "bottom.operations_status": [
+   "jarvis_ops_top_status_pill",
+   "jarvis_ops_insight_severity_dot",
+   "jarvis_ops_top_status_bar",
+   "jarvis_ops_command_bar"
+  ]
+ },
+ "06_data_fusion_reactor": {
+  "hero.reactor_core": [
+   "jarvis_data_fusion_reactor_core",
+   "jarvis_fusion_reactor_core",
+   "jarvis_fusion_core_containment_torus",
+   "jarvis_fusion_core_plasma_filament_bundle",
+   "jarvis_fusion_core_pedestal_mount",
+   "jarvis_fusion_alert_card",
+   "jarvis_fusion_voice_waveform",
+   "jarvis_fusion_active_context_rail",
+   "jarvis_fusion_vector_memory_cloud",
+   "jarvis_fusion_projector_dais",
+   "jarvis_fusion_floor_light_rings",
+   "jarvis_fusion_ceiling_light_ring",
+   "jarvis_fusion_wall_buttress",
+   "jarvis_fusion_volumetric_light_shaft",
+   "jarvis_fusion_ambient_particle_field"
+  ],
+  "left.data_sources": [
+   "jarvis_data_fusion_source_tower",
+   "jarvis_fusion_source_tower",
+   "jarvis_fusion_source_node_dataset",
+   "jarvis_fusion_data_stream_conduit",
+   "jarvis_fusion_left_dock_panel",
+   "jarvis_fusion_icon_rail_glyph_set"
+  ],
+  "center.source_towers": [
+   "jarvis_fusion_source_node_api",
+   "jarvis_fusion_source_node_satellite",
+   "jarvis_fusion_source_node_sensor",
+   "jarvis_fusion_source_node_document",
+   "jarvis_fusion_source_node_pipeline",
+   "jarvis_fusion_source_selector_chip",
+   "jarvis_fusion_source_type_icon_set"
+  ],
+  "center.data_streams": [],
+  "right.sync_status": [
+   "jarvis_fusion_sync_status_radial_gauge",
+   "jarvis_fusion_right_detail_panel",
+   "jarvis_fusion_top_status_bar"
+  ],
+  "right.processing_queue": [
+   "jarvis_fusion_processing_queue_bar"
+  ],
+  "right.data_lineage": [
+   "jarvis_fusion_lineage_node",
+   "jarvis_fusion_lineage_edge_arc",
+   "jarvis_fusion_timeline_scrubber"
+  ],
+  "bottom.reactor_status": [
+   "jarvis_fusion_command_bar"
+  ]
+ },
+ "07_document_intelligence_vault": {
+  "hero.document_book": [
+   "jarvis_document_vault_book",
+   "jarvis_docvault_hero_document_book",
+   "jarvis_docvault_page_spine_blade",
+   "jarvis_docvault_doc_id_plate",
+   "jarvis_docvault_signature_glyph",
+   "jarvis_docvault_projector_core_lens",
+   "jarvis_docvault_dais_ring_stack",
+   "jarvis_docvault_floor_emissive_ring",
+   "jarvis_docvault_ceiling_ring_rig",
+   "jarvis_docvault_floor_chrome_panel",
+   "jarvis_docvault_floor_cable_trench",
+   "jarvis_docvault_panel_frame_tall",
+   "jarvis_docvault_panel_frame_wide",
+   "jarvis_docvault_list_row_chip",
+   "jarvis_docvault_citation_chip",
+   "jarvis_docvault_icon_document",
+   "jarvis_docvault_icon_nodegraph",
+   "jarvis_docvault_icon_search",
+   "jarvis_docvault_icon_shield_check",
+   "jarvis_docvault_icon_vault_archive",
+   "jarvis_docvault_icon_security_flame",
+   "jarvis_docvault_voice_waveform",
+   "jarvis_docvault_context_pill",
+   "jarvis_docvault_health_radial_gauge",
+   "jarvis_docvault_sparkline_strip",
+   "jarvis_docvault_topbar_frame",
+   "jarvis_docvault_ambient_particle_motes"
+  ],
+  "left.ai_annotations": [],
+  "left.extracted_entities": [
+   "jarvis_docvault_entity_node_token"
+  ],
+  "center.page_left": [
+   "jarvis_docvault_data_table_block"
+  ],
+  "center.page_right": [],
+  "right.risk_highlights": [
+   "jarvis_docvault_risk_alert_marker"
+  ],
+  "right.citations": [],
+  "right.linked_evidence": [
+   "jarvis_docvault_evidence_card"
+  ],
+  "bottom.document_command": [
+   "jarvis_docvault_command_orb_glyph"
+  ]
+ },
+ "08_simulation_theatre": {
+  "hero.branching_paths": [
+   "jarvis_simulation_branching_tree",
+   "jarvis_sim_theatre_branching_tree_hero",
+   "jarvis_sim_stage_node_orb",
+   "jarvis_sim_decision_branch_edge",
+   "jarvis_sim_probability_tag_chip",
+   "jarvis_sim_stage_column_marker",
+   "jarvis_sim_projector_dais",
+   "jarvis_sim_floor_emissive_ring",
+   "jarvis_sim_theatre_back_wall",
+   "jarvis_sim_ceiling_ring_array",
+   "jarvis_sim_holo_glass_panel_frame",
+   "jarvis_sim_scenario_library_card",
+   "jarvis_sim_assumptions_panel",
+   "jarvis_sim_impact_bar_meter",
+   "jarvis_sim_confidence_radial_gauge",
+   "jarvis_sim_decision_paths_panel",
+   "jarvis_sim_command_bar",
+   "jarvis_sim_active_context_chip"
+  ],
+  "left.simulation_controls": [
+   "jarvis_sim_overview_header_bar",
+   "jarvis_sim_left_icon_rail"
+  ],
+  "left.variable_sliders": [
+   "jarvis_sim_variable_slider"
+  ],
+  "center.current_state": [],
+  "center.outcome_windows": [
+   "jarvis_sim_outcome_endpoint_orb",
+   "jarvis_sim_outcome_status_sigil"
+  ],
+  "right.outcome_comparison": [
+   "jarvis_sim_outcome_comparison_card"
+  ],
+  "right.ai_recommendation": [
+   "jarvis_sim_ai_recommendation_panel"
+  ],
+  "right.driver_sensitivity": [
+   "jarvis_sim_driver_sensitivity_tornado",
+   "jarvis_sim_particle_stream_fx",
+   "jarvis_sim_light_shaft_fx",
+   "jarvis_sim_ground_scan_grid_fx"
+  ],
+  "bottom.simulation_engine_status": [
+   "jarvis_sim_running_status_pill",
+   "jarvis_sim_topbar_hud_frame"
+  ]
+ },
+ "09_analytics_observatory": {
+  "hero.analytics_globe": [
+   "jarvis_analytics_globe",
+   "jarvis_analytics_observatory_hero_globe",
+   "jarvis_analytics_observatory_globe_orbit_ring",
+   "jarvis_analytics_observatory_globe_city_cluster_marker",
+   "jarvis_analytics_observatory_realtime_trend_bar",
+   "jarvis_analytics_observatory_forecast_surface_panel",
+   "jarvis_analytics_observatory_anomaly_spike_marker",
+   "jarvis_analytics_observatory_system_health_radial_gauge",
+   "jarvis_analytics_observatory_top_nav_rail",
+   "jarvis_analytics_observatory_left_menu_chip",
+   "jarvis_analytics_observatory_analytics_rail_icon",
+   "jarvis_analytics_observatory_command_voice_orb",
+   "jarvis_analytics_observatory_voice_waveform_strip",
+   "jarvis_analytics_observatory_active_context_chip",
+   "jarvis_analytics_observatory_floor_dais",
+   "jarvis_analytics_observatory_floor_emissive_ring",
+   "jarvis_analytics_observatory_ceiling_ring",
+   "jarvis_analytics_observatory_ceiling_dark_disc",
+   "jarvis_analytics_observatory_holo_projector_emitter",
+   "jarvis_analytics_observatory_data_particle_stream",
+   "jarvis_analytics_observatory_timeline_scrubber",
+   "jarvis_analytics_observatory_trend_arc_connector",
+   "jarvis_analytics_observatory_kpi_sparkline_card",
+   "jarvis_analytics_observatory_node_graph_cluster",
+   "jarvis_analytics_observatory_volumetric_light_shaft",
+   "jarvis_analytics_observatory_jarvis_wordmark",
+   "jarvis_analytics_observatory_top_status_clock_module",
+   "jarvis_analytics_observatory_notifications_bell_badge",
+   "jarvis_analytics_observatory_director_role_badge",
+   "jarvis_analytics_observatory_session_user_avatar_chip",
+   "jarvis_analytics_observatory_left_rail_active_highlight",
+   "jarvis_analytics_observatory_left_rail_spine",
+   "jarvis_analytics_observatory_globe_graticule_wireframe",
+   "jarvis_analytics_observatory_globe_atmosphere_shell",
+   "jarvis_analytics_observatory_globe_data_arc_beam",
+   "jarvis_analytics_observatory_scatter_bubble_cloud",
+   "jarvis_analytics_observatory_donut_ring_chart",
+   "jarvis_analytics_observatory_chart_axis_grid_frame",
+   "jarvis_analytics_observatory_data_tooltip_callout",
+   "jarvis_analytics_observatory_chart_legend_chip",
+   "jarvis_analytics_observatory_tabular_data_grid",
+   "jarvis_analytics_observatory_radial_gauge_needle",
+   "jarvis_analytics_observatory_forecast_confidence_band",
+   "jarvis_analytics_observatory_alert_toast_banner",
+   "jarvis_analytics_observatory_hero_warning_ripple",
+   "jarvis_analytics_observatory_dais_support_column",
+   "jarvis_analytics_observatory_backdrop_holo_grid",
+   "jarvis_analytics_observatory_ambient_data_motes",
+   "jarvis_analytics_observatory_floor_reflection_decal"
+  ],
+  "left.performance_index": [
+   "jarvis_analytics_observatory_performance_index_panel"
+  ],
+  "left.regional_intelligence": [
+   "jarvis_analytics_observatory_regional_intelligence_panel"
+  ],
+  "center.kpi_tower": [
+   "jarvis_analytics_observatory_kpi_tower"
+  ],
+  "center.realtime_trends": [
+   "jarvis_analytics_observatory_realtime_trends_frame"
+  ],
+  "right.forecast_surfaces": [],
+  "right.executive_insights": [
+   "jarvis_analytics_observatory_executive_insights_panel"
+  ],
+  "right.anomaly_detection": [
+   "jarvis_analytics_observatory_anomaly_detection_panel"
+  ],
+  "bottom.command": [
+   "jarvis_analytics_observatory_bottom_command_dock"
+  ]
+ },
+ "10_system_security_core": {
+  "hero.security_shield": [
+   "jarvis_security_shield",
+   "jarvis_security_core_shield",
+   "jarvis_security_core_shield_emblem",
+   "jarvis_security_core_energy_torus",
+   "jarvis_security_core_projector_dais",
+   "jarvis_security_core_user_avatar_plinth"
+  ],
+  "left.permissions_matrix": [
+   "jarvis_security_core_permissions_matrix_grid"
+  ],
+  "left.integration_status": [],
+  "left.active_sessions_map": [
+   "jarvis_security_core_sessions_globe"
+  ],
+  "right.security_event_stream": [
+   "jarvis_security_core_event_stream_card"
+  ],
+  "right.access_pathways": [],
+  "right.threat_fracture": [
+   "jarvis_security_core_threat_fracture_shard"
+  ],
+  "bottom.security_core_status": [
+   "jarvis_security_core_scan_beam",
+   "jarvis_security_core_concentric_rings",
+   "jarvis_security_core_floor_emissive_ring",
+   "jarvis_security_core_access_node_pedestal",
+   "jarvis_security_core_node_identity_provider",
+   "jarvis_security_core_node_access_control",
+   "jarvis_security_core_node_policy_engine",
+   "jarvis_security_core_node_audit_service",
+   "jarvis_security_core_node_session_manager",
+   "jarvis_security_core_orbit_edge",
+   "jarvis_security_core_hub_ring",
+   "jarvis_security_core_health_radial_gauge",
+   "jarvis_security_core_compliance_bar",
+   "jarvis_security_core_session_arc",
+   "jarvis_security_core_integration_tile",
+   "jarvis_security_core_api_key_token",
+   "jarvis_security_core_alert_beacon",
+   "jarvis_security_core_panel_frame",
+   "jarvis_security_core_nav_rail_icon",
+   "jarvis_security_core_command_bar_waveform",
+   "jarvis_security_core_ceiling_ring",
+   "jarvis_security_core_wall_pillar"
+  ]
+ },
+ "shared_kit": {
+  "kit_pool": [
+   "jarvis_projector_dais",
+   "jarvis_holo_panel_frame",
+   "jarvis_ring_gauge",
+   "jarvis_command_bar",
+   "jarvis_iron_man_helmet",
+   "jarvis_arc_reactor",
+   "jarvis_kit_projector_dais",
+   "jarvis_kit_dais_ring_concentric",
+   "jarvis_kit_floor_chrome_tile",
+   "jarvis_kit_ceiling_ring_rig",
+   "jarvis_kit_data_orb",
+   "jarvis_kit_helmet_avatar",
+   "jarvis_kit_arc_reactor",
+   "jarvis_kit_holo_earth",
+   "jarvis_kit_holo_shield",
+   "jarvis_kit_reactor_core_tower",
+   "jarvis_kit_panel_small",
+   "jarvis_kit_panel_medium",
+   "jarvis_kit_panel_large",
+   "jarvis_kit_corner_bracket",
+   "jarvis_kit_radial_menu_ring",
+   "jarvis_kit_command_bar_housing",
+   "jarvis_kit_voice_waveform",
+   "jarvis_kit_ticker_rail",
+   "jarvis_kit_timeline_scrubber",
+   "jarvis_kit_health_gauge_radial",
+   "jarvis_kit_alert_card",
+   "jarvis_kit_graph_node",
+   "jarvis_kit_graph_edge",
+   "jarvis_kit_kpi_bar_tower",
+   "jarvis_kit_trend_surface",
+   "jarvis_kit_threat_arc",
+   "jarvis_kit_mission_card",
+   "jarvis_kit_dependency_flow_line",
+   "jarvis_kit_source_tower",
+   "jarvis_kit_holo_document",
+   "jarvis_kit_decision_branch_node",
+   "jarvis_kit_icon_set_cluster",
+   "jarvis_kit_particle_stream_emitter",
+   "jarvis_kit_light_shaft_cone",
+   "jarvis_kit_transition_portal",
+   "jarvis_kit_globe_city_tile",
+   "jarvis_kit_wordmark_logo",
+   "jarvis_kit_status_clock_module",
+   "jarvis_kit_nav_rail_housing",
+   "jarvis_kit_nav_destination_icons",
+   "jarvis_kit_dossier_panel",
+   "jarvis_kit_confidence_meter",
+   "jarvis_kit_evidence_card",
+   "jarvis_kit_source_card",
+   "jarvis_kit_recommendation_card",
+   "jarvis_kit_approval_chip",
+   "jarvis_kit_escalation_queue_stack",
+   "jarvis_kit_variable_slider",
+   "jarvis_kit_outcome_window",
+   "jarvis_kit_permissions_matrix",
+   "jarvis_kit_access_permission_node",
+   "jarvis_kit_sessions_map_pin",
+   "jarvis_kit_reasoning_filament",
+   "jarvis_kit_world_map_ribbon",
+   "jarvis_kit_lineage_flow_diagram",
+   "jarvis_kit_processing_queue_strip",
+   "jarvis_kit_sync_status_dial",
+   "jarvis_kit_anomaly_marker",
+   "jarvis_kit_forecast_surface_band",
+   "jarvis_kit_axis_grid_cage",
+   "jarvis_kit_layer_toggle_stack",
+   "jarvis_kit_live_event_feed_row",
+   "jarvis_kit_fog_volume_slab",
+   "jarvis_kit_summon_burst_ring",
+   "jarvis_kit_warning_ripple_ring",
+   "jarvis_kit_threat_fracture_shard",
+   "jarvis_kit_selection_reticle",
+   "jarvis_kit_holo_callout_leader",
+   "jarvis_kit_notification_badge",
+   "jarvis_kit_command_input_caret",
+   "jarvis_kit_context_chip",
+   "jarvis_kit_filter_control_panel",
+   "jarvis_kit_dais_step_riser",
+   "jarvis_kit_support_strut"
+  ]
+ }
+}

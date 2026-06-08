@@ -178,10 +178,19 @@ def available() -> bool:
 
 
 def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
-                 fmt: str | None = None, temperature: float = 0.2) -> str | None:
+                 fmt: str | None = None, temperature: float = 0.2,
+                 override: dict | None = None) -> str | None:
     """Single completion via whichever LLM backend is reachable. ``fmt='json'``
     forces structured JSON output (Ollama ``format``/OpenAI ``response_format``).
-    None if no backend."""
+    None if no backend.
+
+    ``override`` forces a SPECIFIC provider (for the multi-provider research fan-out), e.g.
+    {"kind":"ollama","base_url":..., "model":...} or
+    {"kind":"openai","base_url":..., "model":"gpt-5.5","api_key":..., "reasoning":True} or
+    {"kind":"openai","base_url":..., "model":"kimi-k2.6","api_key":..., "fixed_temp":True}.
+    On an OpenAI-compatible call it records token usage to _LAST_USAGE for cost tracking."""
+    if override is not None:
+        return _complete_override(prompt, system, max_tokens, fmt, temperature, override)
     b = backend()
     try:
         if b == "ollama":
@@ -207,6 +216,46 @@ def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
     except Exception:  # noqa: BLE001
         return None
     return None
+
+
+_LAST_USAGE: dict = {}   # last OpenAI-compatible call's token usage, for cost tracking
+
+
+def _complete_override(prompt: str, system: str, max_tokens: int, fmt: str | None,
+                       temperature: float, ov: dict) -> str | None:
+    """Force a SPECIFIC provider (multi-provider research fan-out). ov keys: kind(ollama|openai),
+    base_url, model, api_key, reasoning(bool — gpt-5.x/o-series), fixed_temp(bool — kimi k2.x)."""
+    kind = ov.get("kind", "openai")
+    base = ov["base_url"].rstrip("/")
+    model = ov["model"]
+    msgs = ([{"role": "system", "content": system}] if system else []) + \
+           [{"role": "user", "content": prompt}]
+    try:
+        if kind == "ollama":
+            payload = {"model": model, "messages": msgs, "stream": False,
+                       "options": {"temperature": temperature}}
+            if fmt == "json":
+                payload["format"] = "json"
+            out = _post(base + "/api/chat", payload)
+            return (out.get("message", {}) or {}).get("content")
+        # OpenAI-compatible (OpenAI gpt-5.x reasoning, or Moonshot Kimi)
+        payload = {"model": model, "messages": msgs, "stream": False}
+        if ov.get("reasoning"):                       # gpt-5.x / o-series
+            payload["max_completion_tokens"] = max(max_tokens, 2000)  # leave room for reasoning_tokens
+        else:
+            payload["max_tokens"] = max_tokens
+            payload["temperature"] = 1 if ov.get("fixed_temp") else temperature
+        if fmt == "json" and not ov.get("reasoning"):
+            payload["response_format"] = {"type": "json_object"}
+        out = _post(base + "/chat/completions", payload,
+                    headers={"Authorization": f"Bearer {ov.get('api_key', '')}"}, timeout=120.0)
+        try:
+            _LAST_USAGE[ov.get("tag", model)] = out.get("usage") or {}
+        except Exception:  # noqa: BLE001
+            pass
+        return out.get("choices", [{}])[0].get("message", {}).get("content")
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def _name_of(item) -> str:
@@ -251,19 +300,23 @@ def _parse_list(text: str) -> list[str]:
     return out[:12]
 
 
-def research(topic: str, *, max_subtopics: int = 5, inject: bool = True) -> dict:
+def research(topic: str, *, max_subtopics: int = 5, inject: bool = True,
+             override: dict | None = None) -> dict:
     """LLM decomposes the topic, connectors fetch evidence, the LLM writes a grounded
-    summary per subtopic, and each is injected as a cited, audited brain note."""
-    if not available():
+    summary per subtopic, and each is injected as a cited, audited brain note.
+
+    ``override`` forces a specific provider (the multi-provider fan-out) — see llm_complete."""
+    if override is None and not available():
         return {"available": False, "backend": None, "topic": topic,
                 "reason": "no LLM reachable (set OLLAMA_HOST to your Llama, or KIMI_API_KEY)"}
-    bk = backend()
+    bk = override.get("tag", override.get("model")) if override else backend()
     subs_raw = llm_complete(
         f"Return the {max_subtopics} most important, widely-recognised sub-concepts of "
         f"\"{topic}\" for an intelligence knowledge base as JSON of the form "
         f"{{\"subtopics\": [\"concept name\", ...]}}. Use canonical names a knowledge base "
         f"would have (avoid invented or hyper-specific phrases).",
-        system="You are a precise research planner. Output only valid JSON.", fmt="json")
+        system="You are a precise research planner. Output only valid JSON.", fmt="json",
+        override=override)
     subtopics = _parse_list(subs_raw or "")[:max_subtopics]
     injected = []
     for sub in subtopics:
@@ -274,7 +327,7 @@ def research(topic: str, *, max_subtopics: int = 5, inject: bool = True) -> dict
             dis = llm_complete(
                 f"In the context of \"{topic}\", what does \"{sub}\" stand for? "
                 f"Reply with ONLY the full unambiguous term (no punctuation, no explanation).",
-                system="You disambiguate acronyms. Output only the expanded term.")
+                system="You disambiguate acronyms. Output only the expanded term.", override=override)
             if dis and dis.strip():
                 query = dis.strip().splitlines()[0].strip(" .\"")[:80] or sub
         evidence = None
@@ -302,8 +355,8 @@ def research(topic: str, *, max_subtopics: int = 5, inject: bool = True) -> dict
             f"grounded ONLY in the evidence below. If the evidence is irrelevant or empty, "
             f"reply exactly: NO RELIABLE EVIDENCE.\n\n"
             f"Evidence title: {ev_title or '(none)'}\nEvidence: {ev_text or '(none)'}",
-            system="You are a grounded analyst. Use only the provided evidence; never invent facts.") \
-            or ev_text
+            system="You are a grounded analyst. Use only the provided evidence; never invent facts.",
+            override=override) or ev_text
         if summary.strip().upper().startswith("NO RELIABLE EVIDENCE"):
             continue  # don't inject ungrounded noise
         if inject and sb is not None and summary:

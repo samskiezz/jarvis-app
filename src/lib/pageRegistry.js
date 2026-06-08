@@ -70,6 +70,9 @@ export const PAGES = [
   // ── COMMAND ────────────────────────────────────────────────────────────
   { name: "CommandCenter", label: "Command Center", icon: "⌘", group: "command",
     component: P(() => import("@/pages/CommandCenter")) },
+  { name: "FleetControl", label: "Fleet Control", icon: "🛰", group: "command",
+    aliases: ["pm2","processes","services","fleet","ops","uptime"],
+    component: P(() => import("@/pages/FleetControl")) },
   { name: "WorldOps", label: "World OS", icon: "✨", group: "command",
     aliases: ["foundry","gotham","apollo","endpoints","points","status"],
     component: P(() => import("@/pages/WorldOps")) },

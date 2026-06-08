@@ -53,6 +53,21 @@ export default function GameLoader({ children }: { children: ReactNode }) {
   const started = useRef(false);
   const heroCanvas = useRef<HTMLCanvasElement | null>(null);
   const recorder = useRef<Recorder | null>(null);
+  const bootVideo = useRef<HTMLVideoElement | null>(null);
+
+  // Kick the bootloader video off explicitly — the `autoPlay` attribute alone is unreliable on
+  // mobile + when the heavy asset preload competes for the main thread, so we call play() (muted,
+  // so the browser allows it) and retry once it can play. This is why the Jarvis loader runs and
+  // the bare-attribute version didn't. The poster (key-art) covers the first frame meanwhile.
+  useEffect(() => {
+    const v = bootVideo.current;
+    if (!v) return;
+    const kick = () => { v.play().catch(() => {}); };
+    kick();
+    v.addEventListener("canplay", kick);
+    v.addEventListener("loadeddata", kick);
+    return () => { v.removeEventListener("canplay", kick); v.removeEventListener("loadeddata", kick); };
+  }, []);
 
   function toggleRecord() {
     if (recording) {
@@ -111,10 +126,22 @@ export default function GameLoader({ children }: { children: ReactNode }) {
                  bg-[#0a0a12] text-zinc-200 select-none overflow-hidden"
       style={{ backgroundImage: "radial-gradient(circle at 50% 35%, #1a1030 0%, #0a0a12 60%)" }}
     >
-      {/* Underworld key-art load screen — full-bleed backdrop. */}
-      <img
-        src="/models/hero/underworld_loadscreen.png"
-        alt="Underworld"
+      {/* Underworld BOOTLOADER — full-bleed looping video, fit to whatever device it's on
+          (object-cover fills the screen, no letterbox). muted + autoPlay + playsInline (iOS) and an
+          explicit play() above. The static key-art is the poster (instant first frame) AND the
+          natural fallback — if the codec can't decode, the poster frame simply stays, so there's no
+          fragile "swap to a still image on a transient error" that killed playback before. It loops
+          the whole time the world is loading; the world only renders once you enter. */}
+      <video
+        ref={bootVideo}
+        src="/models/hero/underworld_bootloader.mp4"
+        poster="/models/hero/underworld_loadscreen.png"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        disablePictureInPicture
         className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
       />
       {/* bottom scrim keeps the progress bar legible over the art */}

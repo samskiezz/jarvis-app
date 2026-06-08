@@ -36,6 +36,18 @@ void AUnderworldPlayableMinion::ApplyState(const FUwMinionState& State)
 	MoveState = State.MoveState;
 	Mood = State.Mood;
 
+	// face + awakening parity with the crowd actor (Part E.6/F/K/G.2).
+	if (State.Emotion != Emotion || !FMath::IsNearlyEqual(State.EmotionIntensity, EmotionIntensity, 0.02f))
+	{
+		Emotion = State.Emotion; EmotionIntensity = State.EmotionIntensity;
+		OnEmotionChanged(Emotion, EmotionIntensity);
+	}
+	if (!FMath::IsNearlyEqual(State.Awareness, Awareness, 0.01f))
+	{
+		Awareness = State.Awareness; OnAwarenessChanged(Awareness);
+	}
+	bAwakened = State.bAwakened;
+
 	// While the creator drives this body, the server does NOT move it — but if the AI body
 	// drifted from the server's authoritative position (no possession), gently reconcile when
 	// far off to avoid divergence. Only hard-correct when there's no player at the wheel.

@@ -1,0 +1,23 @@
+{
+  "_doc": "JARVIS HUD non-GLB assets: Niagara VFX, post FX, sound FX, music, voice. Authored in-engine (UE5 Niagara/MetaSounds) or generated; GLBs live in jarvis_gen_specs.jsonl. Style per docs/JARVIS_VISUAL_LANGUAGE.md.",
+  "vfx_niagara": [
+    {"id": "fx_boot_sweep", "desc": "Cyan scanline sweep + ring ignition when a scene boots", "trigger": "scene.enter"},
+    {"id": "fx_data_stream", "desc": "Particle data-stream ribbons flowing from sources into an anchor when data hydrates", "trigger": "anchor.hydrate"},
+    {"id": "fx_summon_burst", "desc": "Radial cyan burst when a hero/module is summoned by voice", "trigger": "render_intent"},
+    {"id": "fx_alert_pulse", "desc": "Red/amber ripple from the hero + right-stack pulse on critical alert", "trigger": "alert.critical"},
+    {"id": "fx_ambient_particles", "desc": "Slow drifting ambient cyan motes filling the chamber", "trigger": "always"},
+    {"id": "fx_light_shafts", "desc": "Volumetric ceiling-ring light shafts onto the black-chrome floor", "trigger": "always"},
+    {"id": "fx_acquiring_spinner", "desc": "Amber orbiting particles over an anchor while self-healing scrape runs", "trigger": "anchor.acquiring"}
+  ],
+  "post_fx": ["aces_filmic", "unreal_bloom_strong_on_emissive", "volumetric_fog", "chromatic_aberration_mild", "taa", "vignette", "ray_traced_reflections_floor"],
+  "sfx": [
+    {"id": "sfx_reactor_hum", "desc": "60/90Hz detuned reactor hum bed (loop)", "source": "extend src/lib/jarvisSound.js -> UE5 MetaSound"},
+    {"id": "sfx_boot", "desc": "Rising two-note online confirm"},
+    {"id": "sfx_summon", "desc": "Bright summon swell"},
+    {"id": "sfx_confirm", "desc": "Three-note arpeggio confirm"},
+    {"id": "sfx_alert", "desc": "Two-tone attention"},
+    {"id": "sfx_tick", "desc": "Subtle UI tick/hover"}
+  ],
+  "music": [{"id": "music_ambient_bed", "desc": "Low cinematic ambient pad, evolving, non-intrusive; intensifies during alert/confrontation"}],
+  "voice": {"id": "jarvis_voice", "persona": "calm authoritative British male", "engine": "OpenAI TTS or ElevenLabs", "wire": "server/services/voice_tts.py (planned); replaces Web-Speech stopgap in src/lib/jarvisVoice.js", "lines": ["boot greeting", "scene narration", "alert callouts", "command confirmations"]}
+}

@@ -12,6 +12,7 @@ AUnderworldMinion::AUnderworldMinion()
 void AUnderworldMinion::ApplyState(const FUwMinionState& State)
 {
 	MinionId = State.Id;
+	DisplayName = State.Name;
 
 	// Backend is Y-up (index 1 = height), same as the chunk/structure contract and the
 	// Omniverse renderer. UE is Z-up, so map backend (x, y-up, z) → UE (x, z, y-up).
@@ -30,10 +31,58 @@ void AUnderworldMinion::ApplyState(const FUwMinionState& State)
 		TargetSlot = FVector(State.TargetPos.X * WorldScale, State.TargetPos.Z * WorldScale, TargetLocation.Z);
 	}
 
+	// ── identity / activity ─────────────────────────────────────────────────────────
 	if (State.Anim != Anim)   { Anim = State.Anim;   OnAnimChanged(Anim); }
 	if (State.Guild != Guild) { Guild = State.Guild; OnGuildChanged(Guild); }
+	if (!State.GuildColor.Equals(GuildColor)) { GuildColor = State.GuildColor; OnGuildColor(GuildColor); }
 	if (State.MoveState != MoveState) { MoveState = State.MoveState; }
-	Mood = State.Mood;
+	Mood     = State.Mood;
+	Role     = State.Role;
+	Action   = State.Action;
+	Thought  = State.Thought;
+	Identity = State.Identity;
+
+	// ── prominence: masters / high-reputation render larger & adorned ────────────────
+	// Store the CLAMPED factor (not the raw value) so the change-detect guard reconciles — else an
+	// out-of-range prominence re-issues SetActorScale3D every tick and Prominence reports a value
+	// that was never applied to the transform.
+	const float ClampedProm = FMath::Clamp(State.Prominence, 0.5f, 2.5f);
+	const float NewScale = BaseScale * ClampedProm;
+	if (!FMath::IsNearlyEqual(NewScale, Prominence * BaseScale, 0.001f))
+	{
+		Prominence = ClampedProm;
+		SetActorScale3D(FVector(NewScale));
+	}
+
+	// ── emotion (face + voice) ───────────────────────────────────────────────────────
+	if (State.Emotion != Emotion || !FMath::IsNearlyEqual(State.EmotionIntensity, EmotionIntensity, 0.02f))
+	{
+		Emotion = State.Emotion;
+		EmotionIntensity = State.EmotionIntensity;
+		OnEmotionChanged(Emotion, EmotionIntensity);
+	}
+
+	// ── awakening / awareness (the soul) ─────────────────────────────────────────────
+	const bool bWasAwake = bAwakened;
+	if (!FMath::IsNearlyEqual(State.Awareness, Awareness, 0.01f))
+	{
+		Awareness = State.Awareness;
+		OnAwarenessChanged(Awareness);
+	}
+	bAwakened = State.bAwakened;
+	if (bAwakened && !bWasAwake)   // the one-shot "it sees you" beat
+	{
+		OnAwakened();
+	}
+}
+
+bool AUnderworldMinion::WantsHeroFidelity(const FVector& ViewerLocation, float NearDistanceUU) const
+{
+	// In-conversation (talk anim) or awakened bodies promote when near; always-promote candidates
+	// (possession) are handled by the WorldManager which swaps the actor outright. (Part E.6.)
+	const bool bNear = FVector::DistSquared(GetActorLocation(), ViewerLocation) <= FMath::Square(NearDistanceUU);
+	const bool bInConversation = (Anim == TEXT("talk"));
+	return bNear && (bAwakened || bInConversation);
 }
 
 void AUnderworldMinion::Tick(float DeltaSeconds)
