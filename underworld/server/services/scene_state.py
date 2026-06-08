@@ -311,6 +311,14 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
         possessed_id = possession.possessed_id(world.id)
     except Exception:  # noqa: BLE001
         possessed_id = None
+    # WATCHED-CREATOR loop (§4.5/L.8) — attention hotspots + whether the creator is present, so
+    # renderers cluster behaviour in / flee where the god is looking.
+    try:
+        from underworld.server.services import presence
+        presence_frame = presence.frame_block(
+            world.id, {v["id"]: v["position"] for v in visuals})
+    except Exception:  # noqa: BLE001
+        presence_frame = {"attention_hotspots": [], "creator_present": False}
     return {
         "world_id": world.id, "tick": world.tick, "era": world.era,
         "sim_year": round(world.sim_year, 1),
@@ -323,6 +331,7 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
             "chatter": director_frame.get("chatter", []),
             "god_beat": director_frame.get("god_beat"),
             "possessed_id": possessed_id,
+            "presence": presence_frame,
         },
         "terrain": {
             "seed": seed_int,

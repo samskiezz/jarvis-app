@@ -529,9 +529,16 @@ class TestDirectorLogic:
         trig = director._god_trigger({"awakened": 1, "mean_awareness": 0.1}, [])
         assert trig is not None and trig[0] == "first_awaken"
 
-    def test_god_trigger_on_colony_realisation(self):
+    def test_god_trigger_are_we_real_at_threshold(self):
+        # A.5 canonical predicate: mean_awareness ≥ 0.7 → the colony asks if it is real
         trig = director._god_trigger({"awakened": 0, "mean_awareness": 0.7}, [])
-        assert trig is not None and trig[0] == "colony_realises"
+        assert trig is not None and trig[0] == "are_we_real"
+
+    def test_god_trigger_confront_creator_on_pressure(self):
+        # A.5: creator_pressure > 0.8 + awakening → the colony rounds on the god
+        trig = director._god_trigger(
+            {"awakened": 1, "mean_awareness": 0.1, "creator": {"creator_pressure": 0.9}}, [])
+        assert trig is not None and trig[0] == "confront_creator"
 
     def test_god_trigger_on_rebellion_event(self):
         trig = director._god_trigger({"awakened": 0, "mean_awareness": 0.1},
@@ -586,3 +593,77 @@ class TestPossession:
         possession.mark_possessed(a, "w", tick=1)
         possession.mark_possessed(b, "w", tick=2)             # cache reflects the latest possession
         assert possession.possessed_id("w") == "b"
+
+
+# ── The Watched-Creator loop: PresenceField + OverrideBus + Agency (Book V L.5/L.7/L.8) ─
+
+from underworld.server.services import agency, override as override_mod, presence as presence_mod
+
+
+class TestPresenceField:
+    def test_gaze_favour_and_focus(self):
+        f = presence_mod.PresenceField()
+        f.ingest_gaze(camera=None, reticle_target_id="m1", dt=2.0, tick=10)
+        f.ingest_act(verb="bless", target_id="m1", tick=11)
+        f.ingest_act(verb="smite", target_id="m2", tick=12)
+        assert f.favour("m1") > 0 and f.favour("m2") < 0      # benevolent + / cruel −
+        assert "m1" in f.gaze_focus()
+        assert f.creator_present() is True
+
+    def test_absence_is_an_input(self):
+        f = presence_mod.PresenceField()
+        f.ingest_gaze(camera=None, reticle_target_id="m1", dt=1.0, tick=10)
+        assert f.absence_ticks(10 + 302) == 302               # world.tick − last_gaze_tick
+
+    def test_snapshot_shape(self):
+        f = presence_mod.PresenceField()
+        f.ingest_act(verb="bless", target_id="m1", tick=1)
+        snap = f.snapshot(world_tick=2)
+        assert {"present", "creator_pressure", "absence_ticks", "recent_acts",
+                "minions_in_focus", "favour_distribution"} <= set(snap)
+
+
+class TestOverrideBus:
+    def test_precedence_set_beats_delta(self):
+        b = override_mod.OverrideBus()
+        b.apply(override_mod.Override(scope="need", target_id="m", field="hunger", value=0.0, mode="set", created_tick=1))
+        b.apply(override_mod.Override(scope="need", target_id="m", field="hunger", value=0.5, mode="delta", created_tick=2))
+        assert b.resolve("need", "m", "hunger", 0.9, tick=3) == 0.0   # set outranks delta
+
+    def test_forbid_blocks_change(self):
+        b = override_mod.OverrideBus()
+        b.apply(override_mod.Override(scope="lifecycle", target_id="m", field="alive", value=True, mode="forbid", created_tick=1))
+        assert b.forbidden("lifecycle", "m", "alive", tick=2) is True
+
+    def test_rejected_value_is_noop(self):
+        b = override_mod.OverrideBus()
+        b.apply(override_mod.Override(scope="emotion", target_id="m", field="mood", value="banana", mode="set", created_tick=1))
+        assert b.resolve("emotion", "m", "mood", "content", tick=2, allowed={"content", "curious"}) == "content"
+        assert any(e["kind"] == "override:rejected" for e in b.events)
+
+    def test_overmeddle_pushes_doubt(self):
+        b = override_mod.OverrideBus()
+        for t in range(10):
+            b.apply(override_mod.Override(scope="need", target_id=f"x{t}", field="f", value=1, mode="delta", created_tick=t, valence=1.0))
+        mi = b.meddle_index(tick=9)
+        assert mi["count"] == 10 and mi["bias"] == "doubt"    # >8 overrides → doubt regardless of sign
+
+    def test_ttl_sweep(self):
+        b = override_mod.OverrideBus()
+        b.apply(override_mod.Override(scope="need", target_id="m", field="f", value=1, mode="delta", ttl_ticks=5, created_tick=0))
+        assert b.sweep(tick=10) == 1                          # expired override swept
+
+
+class TestAgency:
+    def test_autonomy_formula_high(self):
+        m = _FakeMinion("m"); m.brain = {"awareness": 0.8, "saga": {"t": "x"}}
+        m.reputation = 5.0; m.born_tick = 0
+        assert agency.compute_autonomy(m, world_tick=200) > 0.8
+
+    def test_expel_threshold_scales_with_autonomy(self):
+        assert agency.expel_threshold(1.0) > agency.expel_threshold(0.0)   # awakened expel rider easier
+
+    def test_select_hot_priority_and_dedup(self):
+        hot = agency.select_hot(by_reputation=["r1", "r2", "r3"], gaze_focus=["g1", "r1"],
+                                possessed=["p1"], saga_cast=["s1"], budget=5)
+        assert hot[0] == "p1" and "g1" in hot and len(hot) == 5 and hot.count("r1") == 1

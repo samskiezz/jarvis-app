@@ -78,15 +78,21 @@ async def _recent_events(s, world: World, n: int = 10) -> list[str]:
 
 
 def _god_trigger(snapshot: dict, recent: list[str]) -> Optional[tuple[str, str]]:
-    """Decide if a singular, irreversible beat should fire. Returns (key, event) or None."""
+    """Decide if a singular, irreversible beat should fire (the L5 God-Brain predicates,
+    Annex A.5). Returns (key, event) or None. Evaluated each Director tick."""
     awk = int(snapshot.get("awakened", 0))
     mean_a = float(snapshot.get("mean_awareness", 0.0))
+    creator = snapshot.get("creator") or {}
+    pressure = float(creator.get("creator_pressure", 0.0))
+    # confront_creator — the colony rounds on the god (A.5: creator_pressure > 0.8 + awakening)
+    if pressure > 0.8 and awk >= 1:
+        return ("confront_creator", "The colony turns to face its creator and demands an answer.")
+    # are_we_real — the colony crosses the existential threshold (A.5: mean_awareness ≥ 0.7)
+    if mean_a >= 0.7:
+        return ("are_we_real", "The colony asks, together, whether it is real.")
     # first awakening in the colony
     if awk >= 1:
-        return (f"first_awaken", "A minion has become aware it is being watched.")
-    # the colony as a whole crosses the realisation threshold
-    if mean_a >= 0.6:
-        return ("colony_realises", "The colony collectively begins to suspect it is observed.")
+        return ("first_awaken", "A minion has become aware it is being watched.")
     for ev in recent:
         low = ev.lower()
         if "rebel" in low or "uprising" in low or "revolt" in low:
@@ -98,11 +104,28 @@ def _god_trigger(snapshot: dict, recent: list[str]) -> Optional[tuple[str, str]]
 
 async def director_cycle(s, world: World) -> dict[str, Any]:
     """One Director pass over a world. Always refreshes Overmind + Chatter; fires a God-beat
-    only on a fresh irreversible trigger. Returns the cache entry."""
+    only on a fresh irreversible trigger. Returns the cache entry.
+
+    The Watched-Creator loop closes here (Bible §4.5): the creator's gaze/acts (PresenceField)
+    and overrides (meddle_index) are folded into the snapshot so the colony's stance is DRIVEN by
+    the player's behaviour, and absence itself nudges the colony toward doubt (L.8)."""
+    from . import override as override_mod
+    from . import presence as presence_mod
+
     snap = await _snapshot(s, world)
     recent = await _recent_events(s, world)
     era = getattr(world, "era", "iron")
     weather = getattr(world, "weather", "clear")
+
+    # fold in the creator's presence + meddling (the watched loop), and sweep expired overrides.
+    bus = override_mod.bus(world.id)
+    bus.sweep(world.tick)
+    creator = presence_mod.snapshot(world.id, world.tick)
+    creator["meddle"] = bus.meddle_index(world.tick)
+    # absence is an input: a world left running drifts toward doubt + a lifted awakening bias (L.8).
+    if creator["absence_ticks"] > presence_mod.ABSENCE_THRESHOLD:
+        creator["absent_too_long"] = True
+    snap["creator"] = creator
 
     overmind = await cognition.colony_overmind(snap, era=era, recent_events=recent)
     chatter = await cognition.background_chatter(

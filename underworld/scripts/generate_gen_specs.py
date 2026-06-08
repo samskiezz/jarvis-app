@@ -32,7 +32,10 @@ from underworld.server.services import civic_assets as CA
 from underworld.server.services import story_engine as SE
 
 OUT = os.path.join(ROOT, "data", "master", "gen_specs.jsonl")
-PHRASE = "Futuristic Avatar movie Sims 4 x GTA 5 Futuristic"
+# Keep the theme title-words AND add the visual cues, so the look renders strongly.
+STYLE = ("Futuristic Avatar movie Sims 4 x GTA 5 futuristic style — sleek white sci-fi forms, "
+         "glowing cyan and violet neon and holographic accents, clean stylized yet realistic, "
+         "modern, high-quality PBR textures, game-ready 3D asset")
 CREDITS_PER_GEN = 24
 
 # a few personality/mood dressings so each room reads individual (not clones) — kept small
@@ -113,7 +116,7 @@ def main():
         gid = re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_")
         specs.append({
             "glb_id": gid, "name": name, "category": cat, "domain": domain, "priority": prio,
-            "prompt": f"{PHRASE} {name}",
+            "prompt": f"{name}, {STYLE}",
             "tripo": {"texture": True, "pbr": True, "texture_quality": "detailed",
                        "model_version": "v2.0-20240919", "face_limit": 40000,
                        "emissive": any(k in name.lower() for k in EMK)},

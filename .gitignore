@@ -57,3 +57,14 @@ underworld/data/design/sciences.csv
 
 # secrets — never commit
 .tripo_env
+
+.openai_env
+
+# Image-first 3D regeneration output — 12GB+ of GLBs/PNGs from the GPT-Image→Tripo pipeline.
+# Large binaries that jam `git add -A` and would push the (already 7.3GB) repo past ~19GB and
+# break clones — the same blunder this file guards against. The repo already carries the older
+# generated/tripo + Kenney kits; this NEW set belongs on a CDN / Git-LFS (Bible EPIC I1
+# 'assets-to-CDN'). Regenerate via scripts/tripo_imagefirst.py. Narrow scope, not a global *.glb.
+underworld/web/public/models/generated/uw/
+_old_textfirst_glbs/
+test_crate.glb

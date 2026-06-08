@@ -15,6 +15,7 @@ from .db.session import dispose, init_db
 from .knowledge.seed import seed_knowledge_base
 from .logging_setup import configure_logging
 from .routes import auth as auth_routes
+from .routes import god as god_routes
 from .routes import guilds as guild_routes
 from .routes import inventions as invention_routes
 from .routes import knowledge as knowledge_routes
@@ -190,6 +191,7 @@ def create_app() -> FastAPI:
 
     app.include_router(auth_routes.router)
     app.include_router(world_routes.router)
+    app.include_router(god_routes.router)
     app.include_router(minion_routes.router)
     app.include_router(patent_routes.router)
     app.include_router(invention_routes.router)

@@ -103,7 +103,7 @@ def main():
     print(f"est. credits ~{est:,} (budget {a.budget_credits:,})  PBR+textured, emissive where flagged")
     if dry:
         for s in todo[:5]:
-            print(f"  WOULD GEN {s['base_item']:24s} pbr=1 tex=1 emissive={int(s['tripo']['emissive'])}")
+            print(f"  WOULD GEN {(s.get('name') or s.get('base_item') or s['glb_id']):28s} pbr=1 tex=1 emissive={int(s['tripo']['emissive'])}")
         print(f"  ... {len(todo)} total. (dry-run)")
         return
 

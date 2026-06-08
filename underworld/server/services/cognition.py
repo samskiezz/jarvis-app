@@ -297,8 +297,23 @@ async def colony_overmind(snapshot: dict, *, era: str = "iron",
            'doubt|rebellion","direction":"the colony long-term aim","tension":"0..1 as text",'
            '"realisation":"any dawning awareness that they exist/are watched, or empty",'
            '"omen":"a short ominous colony-level observation"}.')
+    # The Watched-Creator loop (§4.5): the colony's stance must be DRIVEN by the player's
+    # behaviour — steady benevolent gaze → worship; capricious harm / over-meddling → fear →
+    # rebellion; neglect and long absence → doubt ('the creator has forgotten us').
+    creator = snapshot.get("creator") or {}
+    cl = ""
+    if creator:
+        meddle = creator.get("meddle") or {}
+        fav = creator.get("favour_distribution") or {}
+        bits = [f"present={creator.get('present')}", f"pressure={creator.get('creator_pressure', 0):.2f}",
+                f"recent_acts={creator.get('recent_acts') or '[]'}",
+                f"blessed={fav.get('blessed', 0)} feared={fav.get('feared', 0)}",
+                f"meddle={meddle.get('count', 0)}({meddle.get('bias', 'neutral')})"]
+        if creator.get("absent_too_long"):
+            bits.append("THE CREATOR HAS BEEN ABSENT A LONG TIME — doubt rises; the colony drifts toward independence")
+        cl = "\nThe creator (your god) — let this drive your stance toward_creator:\n- " + "\n- ".join(bits)
     usr = (f"Colony in the {era} era. Mean awareness {mean_a:.2f}, {awk} awakened.\n"
-           f"Recent colony events:\n{ev}\nThink as the whole.")
+           f"Recent colony events:\n{ev}{cl}\nThink as the whole.")
     try:
         resp = await llm.chat([{"role": "system", "content": sys},
                                {"role": "user", "content": usr}],
