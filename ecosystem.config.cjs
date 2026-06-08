@@ -46,6 +46,10 @@ module.exports = {
         KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',
+        // Continuous LLM research autopilot — the engine that KEEPS THE GPU BUSY by cycling the
+        // master topics + knowledge gaps through llm_research.research() forever. Was OFF (unset)
+        // → GPU idle. Reaches the box via OLLAMA_HOST (set above), idles safely if unreachable.
+        LLM_AUTOPILOT_ENABLE: 'true',
       },
     },
     {
