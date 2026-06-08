@@ -59,6 +59,7 @@ underworld/data/design/sciences.csv
 .tripo_env
 
 .openai_env
+.kimi_env
 
 # Image-first 3D regeneration output — 12GB+ of GLBs/PNGs from the GPT-Image→Tripo pipeline.
 # Large binaries that jam `git add -A` and would push the (already 7.3GB) repo past ~19GB and
