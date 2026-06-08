@@ -5,6 +5,15 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   logLevel: 'error',
   plugins: [react()],
+  // The generated 3D asset library (~900MB of preview PNGs + GLBs) lives under
+  // public/immersive/assets for UE5 filesystem import — the browser never loads it.
+  // Keep Vite's dev watcher out of it (and the heavy loader/contact-sheet) so HMR
+  // and startup stay fast while the asset batch is writing there.
+  server: { watch: { ignored: [
+    '**/jarvis_assets', '**/jarvis_assets/**', '**/dist/**',
+    '**/public/immersive/glb/**', '**/public/immersive/loader/**',
+    '**/public/immersive/contact_sheet.png', '**/underworld/**',
+  ] } },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

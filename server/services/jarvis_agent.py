@@ -59,8 +59,9 @@ def _tool_brief() -> list[dict]:
 
 
 def _system_prompt(tools: list[dict]) -> str:
+    from . import jarvis_persona
     lines = [
-        "You are JARVIS, an operations agent for a Palantir-class platform.",
+        jarvis_persona.AGENT_PREAMBLE,
         "You answer by REASONING then optionally CALLING TOOLS to gather real data.",
         "You have these tools (kind=read runs immediately; kind=write is proposed for human approval):",
     ]

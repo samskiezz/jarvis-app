@@ -90,6 +90,40 @@ async def _tts_elevenlabs(text: str, voice_id: str | None = None) -> bytes:
         return r.content
 
 
+def _openai_key() -> str:
+    k = os.environ.get("OPENAI_API_KEY", "")
+    if k:
+        return k
+    try:  # pm2 env may not carry it — fall back to the repo's .openai_env
+        for ln in open("/opt/jarvis-app-1/.openai_env"):
+            ln = ln.strip()
+            if ln.startswith("OPENAI_API_KEY") and "=" in ln:
+                return ln.split("=", 1)[1].strip().strip('"').strip("'")
+    except Exception:
+        pass
+    return ""
+
+
+async def _tts_openai(text: str, voice: str | None, key: str) -> bytes:
+    """Best path: OpenAI gpt-4o-mini-tts with the JARVIS British-butler delivery instruction."""
+    import httpx
+    from ..services import jarvis_persona as _persona
+    body = {
+        "model": "gpt-4o-mini-tts",
+        "voice": voice or _persona.VOICE,
+        "input": text[:4000],
+        "instructions": _persona.VOICE_INSTRUCTIONS,
+        "response_format": "mp3",
+    }
+    async with httpx.AsyncClient(timeout=httpx.Timeout(60.0)) as client:
+        r = await client.post("https://api.openai.com/v1/audio/speech",
+                              headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+                              json=body)
+        if r.status_code != 200:
+            raise HTTPException(status_code=502, detail=f"OpenAI TTS {r.status_code}: {r.text[:160]}")
+        return r.content
+
+
 # ── routes ───────────────────────────────────────────────────────────────────
 
 @router.get("/v1/voice/status", response_model=VoiceStatus)
@@ -107,18 +141,24 @@ async def voice_status():
 
 @router.post("/v1/voice/tts")
 async def text_to_speech(req: TTSRequest):
-    """Convert text to speech audio (mp3/wav stream)."""
+    """Convert text to speech. Prefers OpenAI gpt-4o-mini-tts (JARVIS British-butler voice);
+    falls back to ElevenLabs, then local Piper/espeak."""
     provider = (req.provider or _VOICE_PROVIDER).lower()
+    key = _openai_key()
+    if provider != "elevenlabs" and key:
+        try:
+            audio = await _tts_openai(req.text, req.voice, key)
+            return StreamingResponse(iter([audio]), media_type="audio/mpeg",
+                                     headers={"Content-Disposition": "inline; filename=jarvis.mp3"})
+        except Exception:
+            pass  # degrade gracefully to the local engines
     if provider == "elevenlabs" and _ELEVENLABS_KEY:
         audio = await _tts_elevenlabs(req.text, req.voice)
-    else:
-        audio = await _tts_piper(req.text)
-
-    return StreamingResponse(
-        iter([audio]),
-        media_type="audio/wav",
-        headers={"Content-Disposition": "attachment; filename=jarvis_tts.wav"},
-    )
+        return StreamingResponse(iter([audio]), media_type="audio/mpeg",
+                                 headers={"Content-Disposition": "inline; filename=jarvis.mp3"})
+    audio = await _tts_piper(req.text)
+    return StreamingResponse(iter([audio]), media_type="audio/wav",
+                             headers={"Content-Disposition": "inline; filename=jarvis.wav"})
 
 
 @router.post("/v1/voice/stt")

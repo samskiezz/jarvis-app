@@ -12,8 +12,11 @@ import { createPageUrl } from '@/utils';
 import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
+import JarvisBrain from '@/components/cinematic/JarvisBrain';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
+const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
+const CinematicShell = lazy(() => import('@/components/cinematic/CinematicShell'));
 
 const Loading = () => (
   <div style={{ padding: 40, color: C.text, fontFamily: "'JetBrains Mono',monospace", fontSize: 11, letterSpacing: 2 }}>
@@ -30,12 +33,18 @@ function App() {
             {/* Global first-run install pop-up — shows on the landing page too,
                 so a fresh deploy initialises before you even pick a destination. */}
             <FirstRunSetup />
+            <JarvisBrain />
             <Suspense fallback={<Loading />}>
               <Routes>
-                {/* Root drops straight into APEX (the Setup/Install landing) — no
-                    chooser hop. The portal chooser stays at /portal. */}
-                <Route path="/" element={<Navigate to="/apex" replace />} />
+                {/* Front door is now the cinematic selector (JARVIS / Underworld).
+                    The 86-page APEX wall is preserved under /apex but is no longer
+                    the entry point. The old portal chooser stays at /portal. */}
+                <Route path="/" element={<CinematicHome />} />
                 <Route path="/portal" element={<Launcher />} />
+
+                {/* The 10 render-locked immersive scenes (the JARVIS experience). */}
+                <Route path="/cinematic" element={<Navigate to="/cinematic/01_command_atrium" replace />} />
+                <Route path="/cinematic/:sceneId" element={<CinematicShell />} />
 
                 {/* APEX HUD — AppLayout + all feature pages live under /apex. */}
                 <Route

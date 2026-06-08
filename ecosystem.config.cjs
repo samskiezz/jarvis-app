@@ -56,9 +56,15 @@ module.exports = {
     {
       name: 'jarvis-frontend',
       cwd: '/opt/jarvis-app-1',
-      script: 'node_modules/vite/bin/vite.js',
-      args: '--host 0.0.0.0 --port 5173',
-      interpreter: 'node',
+      // Run the WRAPPER (scripts/serve-frontend.sh), not vite directly: pm2's `args` field was
+      // silently dropping `preview`, leaving it in DEV mode — whose file-watcher scans the multi-GB
+      // monorepo, pins CPU, and wedges the page blank. The wrapper hard-codes `vite preview` so the
+      // mode is GUARANTEED. Static preview = ~0% idle, instant loads, and it serves whatever is in
+      // dist/ per-request — so the zero-downtime deploy (scripts/safe-deploy-frontend.sh, which
+      // builds to a STAGING dir then atomic-swaps dist) goes live with NO restart and NO downtime.
+      // To ship UI changes:  scripts/safe-deploy-frontend.sh   (rollback:  … rollback)
+      script: 'scripts/serve-frontend.sh',
+      interpreter: 'bash',
       autorestart: true,
       max_restarts: 10,
     },
@@ -92,6 +98,17 @@ module.exports = {
       interpreter: 'none',
       autorestart: true,
       max_restarts: 10,
+    },
+    {
+      // Persistent GLB loader — generates (gpt-image-1, medium) + converts (Tripo, budget-
+      // guarded) the full JARVIS asset set to completion, resumable, idles when converged.
+      // Survives session-close + reboot (pm2 save / pm2 startup).
+      name: 'jarvis-glb-loader',
+      cwd: '/opt/jarvis-app-1',
+      script: 'underworld/scripts/jarvis_batch_run.sh',
+      interpreter: 'bash',
+      autorestart: true,
+      max_restarts: 50,
     },
   ],
 };

@@ -35,6 +35,7 @@ from .routes import jarvis_system as jarvis_system_routes
 from .routes import jarvis_documents as jarvis_documents_routes
 from .routes import chat_predict as chat_predict_routes
 from .routes import cop as cop_routes
+from .routes import cinematic as cinematic_routes
 from .routes import collab as collab_routes
 from .routes import connectors as connectors_routes
 from .routes import entities as entities_routes
@@ -320,6 +321,7 @@ def create_app() -> FastAPI:
     app.include_router(jarvis_documents_routes.router)
     app.include_router(revdb_routes.router)
     app.include_router(security_ext_routes.router)
+    app.include_router(cinematic_routes.router)
 
     @app.get("/")
     async def root():
