@@ -13,6 +13,7 @@ response so tests + offline dev still work. The stub is clearly labelled.
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from typing import Any
@@ -199,12 +200,25 @@ async def chat(
     temperature: float | None = None,
     max_tokens: int | None = None,
     tier: str = "standard",
+    world_id: str | None = None,
 ) -> ChatResponse:
     settings = get_settings()
     base_url, api_key, model = _provider(tier)
     if not api_key:
         _warn_stub_once()
         return ChatResponse(content=_stub_response(messages), finish_reason="stub")
+
+    # UNIFIED PIPELINE — inject the tier's validated operator lessons into the system prompt (the
+    # make-Llama-smarter write-back). Best-effort: a pipeline hiccup must never break inference.
+    provider = "other"
+    try:
+        from . import llm_pipeline as _pipe
+        provider = _pipe.provider_name(base_url)
+        _lessons = await _pipe.lessons_for(tier)
+        if _lessons:
+            messages = _pipe.inject_lessons(messages, _lessons)
+    except Exception:  # noqa: BLE001
+        _pipe = None
 
     url = f"{base_url}/chat/completions"
     payload: dict[str, Any] = {
@@ -225,20 +239,40 @@ async def chat(
         "Content-Type": "application/json",
     }
 
+    _t0 = time.monotonic()
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
             resp = await client.post(url, json=payload, headers=headers)
             resp.raise_for_status()
             data = resp.json()
     except httpx.HTTPError as exc:
-        return ChatResponse(content=f"// LLM error: {exc!r}", finish_reason="error")
+        err = f"// LLM error: {exc!r}"
+        if _pipe is not None:
+            try:
+                await _pipe.record_call(tier=tier, model=model, provider=provider, world_id=world_id,
+                                        content=err, finish_reason="error", ok=False,
+                                        latency_ms=int((time.monotonic() - _t0) * 1000))
+            except Exception:  # noqa: BLE001
+                pass
+        return ChatResponse(content=err, finish_reason="error")
 
     choice = (data.get("choices") or [{}])[0]
     msg = choice.get("message") or {}
+    content = msg.get("content") or ""
+    finish = choice.get("finish_reason")
+    # OBSERVE/RECORD — telemetry + auto-file a finding on degradation (empty/length/error).
+    if _pipe is not None:
+        try:
+            await _pipe.record_call(tier=tier, model=model, provider=provider, world_id=world_id,
+                                    content=content, finish_reason=finish, ok=True,
+                                    latency_ms=int((time.monotonic() - _t0) * 1000),
+                                    usage=data.get("usage"))
+        except Exception:  # noqa: BLE001
+            pass
     return ChatResponse(
-        content=msg.get("content") or "",
+        content=content,
         tool_calls=msg.get("tool_calls") or [],
-        finish_reason=choice.get("finish_reason"),
+        finish_reason=finish,
         raw=data,
     )
 

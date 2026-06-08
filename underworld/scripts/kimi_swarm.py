@@ -105,7 +105,8 @@ def run_worker(task: dict) -> dict:
         out = _chat([{"role": "system", "content": sys_msg}, {"role": "user", "content": usr}],
                     thinking=bool(task.get("thinking", True)),
                     max_tokens=int(task.get("max_tokens", 1500)),
-                    timeout=int(task.get("timeout_seconds", 120)))
+                    # reasoning models think for a while before emitting content — generous default
+                    timeout=int(task.get("timeout_seconds", 300)))
         res = _parse_worker(out, role)
     except urllib.error.HTTPError as e:
         detail = e.read().decode()[:200] if hasattr(e, "read") else ""

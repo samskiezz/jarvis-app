@@ -180,12 +180,12 @@ def make_image(spec):
     return prev
 
 
-def generate_one(spec):
-    """themed image (GPT Image 2 via OpenAI, or Tripo default) -> Tripo image_to_model (full PBR/HD/20k)."""
+def convert_one(spec):
+    """Convert an ALREADY-MADE preview image -> Tripo image_to_model GLB (full PBR/HD/20k).
+    Reuses the existing .preview.png (no OpenAI re-cost). Caller ensures it exists + glb missing."""
     dest = os.path.join(ROOT, spec["out_glb"])
-    prev = make_image(spec)                            # save preview for QA
+    prev = dest.rsplit(".", 1)[0] + ".preview.png"
     img = open(prev, "rb").read()
-    # 2) image -> high-quality model
     tok = _upload(img)
     body = {"type": "image_to_model", "file": {"type": "jpeg", "file_token": tok},
             "model_version": "v2.5-20250123", "texture": True, "pbr": True,
@@ -196,8 +196,15 @@ def generate_one(spec):
     if isinstance(murl, dict): murl = murl.get("url")
     if not murl: raise RuntimeError(f"no model url: {list(out)}")
     glb = _req("GET", murl, raw=True, timeout=400)
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
     open(dest, "wb").write(glb)
     return len(glb)
+
+
+def generate_one(spec):
+    """themed image (GPT Image 2 via OpenAI, or Tripo default) -> Tripo image_to_model (full PBR/HD/20k)."""
+    make_image(spec)                                   # save preview for QA
+    return convert_one(spec)
 
 
 def main():
@@ -207,6 +214,12 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--images-only", action="store_true",
                     help="smash out ALL the GPT-Image-2 images first (no 3D); fast, OpenAI-only cost")
+    ap.add_argument("--convert-ready", action="store_true",
+                    help="convert ALREADY-MADE preview images -> GLBs (reuses previews; Tripo cost). "
+                         "Pair with --watch to pick up images as the --images-only batch produces them.")
+    ap.add_argument("--watch", action="store_true", help="keep scanning for newly-made previews")
+    ap.add_argument("--watch-interval", type=int, default=30, help="seconds between watch scans")
+    ap.add_argument("--watch-max-idle", type=int, default=40, help="give up after N idle scans")
     a = ap.parse_args()
     if not KEY and not a.images_only:
         print("set TRIPO_API_KEY"); sys.exit(2)
@@ -215,6 +228,64 @@ def main():
     specs = [s for s in specs if matters(s)]          # only the things that matter as big renders
     DOM_ORDER = {"building": 0, "vehicle": 1, "character": 2, "urban": 3, "sky": 4,
                  "nature": 5, "interior": 6, "era": 7}
+
+    if a.convert_ready:
+        # Convert previews -> GLBs N-at-a-time, optionally watching for new ones (runs alongside
+        # the --images-only batch). Hero domains first. Stops cleanly on Tripo credit exhaustion.
+        print(f"CONVERT-READY: image->GLB, {a.concurrency} at a time, watch={a.watch} "
+              f"(full PBR+HD+smartmesh-v2+20k)", flush=True)
+        lock = threading.Lock(); st = {"ok": 0, "fail": 0, "spent": 0, "stop": False}
+        seen: set[str] = set()
+
+        def _ready():
+            out = []
+            for s in specs:
+                dest = os.path.join(ROOT, s["out_glb"])
+                if dest in seen or os.path.exists(dest):
+                    continue
+                if os.path.exists(dest.rsplit(".", 1)[0] + ".preview.png"):
+                    out.append(s)
+            out.sort(key=lambda s: (DOM_ORDER.get(s["domain"], 9), s.get("priority", 9)))
+            return out
+
+        def cwork(s):
+            if st["stop"]: return
+            dest = os.path.join(ROOT, s["out_glb"])
+            with lock:
+                if st["spent"] + CR_MODEL > a.budget_credits: st["stop"] = True; return
+                if dest in seen: return
+                seen.add(dest); st["spent"] += CR_MODEL
+            try:
+                n = convert_one(s)
+                with lock:
+                    st["ok"] += 1
+                    print(f"  [{st['ok']}] GLB {s['name'][:34]:34s} {n//1024}KB ~{st['spent']}cr", flush=True)
+            except Exception as e:
+                with lock:
+                    st["fail"] += 1; st["spent"] -= CR_MODEL
+                    msg = str(e)[:140]
+                    print(f"  FAIL {s['name'][:30]}: {msg}", flush=True)
+                    if any(k in msg.lower() for k in ("credit", "balance", "402", "403", "forbidden", "insufficient")):
+                        st["stop"] = True; print("  -> out of credits; stopping.", flush=True)
+
+        idle = 0
+        while not st["stop"]:
+            batch = _ready()
+            if not batch:
+                if not a.watch: break
+                idle += 1
+                if idle >= a.watch_max_idle:
+                    print(f"  no new images for {idle} scans; done.", flush=True); break
+                time.sleep(a.watch_interval); continue
+            idle = 0
+            with ThreadPoolExecutor(max_workers=a.concurrency) as ex:
+                futs = [ex.submit(cwork, s) for s in batch]
+                for _ in as_completed(futs):
+                    if st["stop"]: break
+            if not a.watch: break
+            time.sleep(2)
+        print(f"\nconvert-ready done: {st['ok']} GLBs, {st['fail']} failed, ~{st['spent']} credits.", flush=True)
+        return
 
     if a.images_only:
         # Phase 1: generate ALL hero images (GPT Image 2) in one go; skip 3D.

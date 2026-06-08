@@ -595,6 +595,90 @@ class Event(Base):
     world: Mapped["World"] = relationship(back_populates="events")
 
 
+class DirectorBeat(Base):
+    """The authoritative consequence ledger (Bible Annex A.5 / L.9). When the L5 God-Brain fires an
+    irreversible turning point, a row is written here — the LEDGER is authoritative, the LLM prose
+    is decoration (so reloads/save-scums can't re-roll the beat). The unique (world_id, beat_key)
+    makes each Black-Mirror moment fire exactly once, surviving restart (vs the old in-memory set)."""
+
+    __tablename__ = "director_beats"
+    __table_args__ = (UniqueConstraint("world_id", "beat_key", name="uq_beat_world_key"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str] = mapped_column(ForeignKey("worlds.id"), nullable=False, index=True)
+    beat_key: Mapped[str] = mapped_column(String(80), nullable=False)
+    tick: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    reversible: Mapped[bool] = mapped_column(Boolean, default=False)
+    # the latched consequence + the prose; drama level + phase at fire time, for tuning the 70/25/5.
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+
+
+# === AI INFRASTRUCTURE: the unified inference seam (router/governor/validation/observability/
+# feedback) attaches at server/tools/llm.py via these tables. Every LLM call in the repo flows
+# through one place — total symbiosis: Llama (the colony brain) emits telemetry, Kimi observes it,
+# Claude fixes issues, and validated LESSONS are injected back into Llama's prompts so it improves.
+
+
+class UwLlmCall(Base):
+    """OBSERVABILITY (Layer 13) — one row per LLM call, written by the llm.chat facade. The cost +
+    latency + health ledger the router/governor/recovery layers read; also the raw signal the
+    Kimi feedback-observer mines for degradations."""
+
+    __tablename__ = "uw_llm_calls"
+    __table_args__ = (Index("ix_uwllm_tier_created", "tier", "created_at"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    tier: Mapped[str] = mapped_column(String(24), nullable=False, index=True)
+    model: Mapped[str] = mapped_column(String(80), nullable=False)
+    provider: Mapped[str] = mapped_column(String(24), default="")        # ollama|kimi|groq|...
+    ok: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    finish_reason: Mapped[str | None] = mapped_column(String(24), nullable=True)
+    latency_ms: Mapped[int] = mapped_column(Integer, default=0)
+    prompt_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    completion_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(default=_now, index=True)
+
+
+class UwFeedbackFinding(Base):
+    """THE FEEDBACK BUS — issues observed about the running system: degradations auto-detected by
+    the facade (empty content, length-truncation, LLM error, schema/JSON failure) and observations
+    raised by the Kimi observer. Claude triages open findings, fixes them in the background, and
+    marks them resolved — closing the Claude<->Kimi<->Llama loop."""
+
+    __tablename__ = "uw_feedback_findings"
+    __table_args__ = (Index("ix_uwfind_status_created", "status", "created_at"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    world_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    kind: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    tier: Mapped[str | None] = mapped_column(String(24), nullable=True)
+    severity: Mapped[str] = mapped_column(String(12), default="warn")    # info|warn|error
+    detail: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str] = mapped_column(String(12), default="open", index=True)  # open|fixing|fixed|wontfix
+    source: Mapped[str] = mapped_column(String(16), default="facade")    # facade|kimi|claude
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(default=_now, index=True)
+
+
+class UwLesson(Base):
+    """THE 'MAKE LLAMA SMARTER' STORE — validated learnings, injected into the system prompt of the
+    matching tier on every call (lessons_for(tier)). This is the write-back end of the loop: a
+    finding Claude fixes becomes a durable lesson Llama reads forever after. Keep them terse."""
+
+    __tablename__ = "uw_lessons"
+    __table_args__ = (Index("ix_uwlesson_tier_active", "tier", "active"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    tier: Mapped[str] = mapped_column(String(24), nullable=False, index=True)  # "*" = all tiers
+    lesson: Mapped[str] = mapped_column(Text, nullable=False)
+    active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    source: Mapped[str] = mapped_column(String(16), default="claude")    # claude|kimi|manual
+    finding_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+
+
 # --- knowledge base (ingested from docs/AI_Swarms_Master_Reference.docx) ---
 
 
