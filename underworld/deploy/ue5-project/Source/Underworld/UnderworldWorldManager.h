@@ -16,6 +16,7 @@ class AUnderworldPlayableMinion;
 class ADirectionalLight;
 class AStaticMeshActor;
 class UStaticMesh;
+class USceneStateClient;
 
 UCLASS()
 class UNDERWORLD_API AUnderworldWorldManager : public AActor

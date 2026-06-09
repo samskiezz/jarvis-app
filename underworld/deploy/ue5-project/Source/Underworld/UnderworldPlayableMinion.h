@@ -32,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable) void ApplyState(const FUwMinionState& State);
 
 	/** True once an APlayerController possesses this body (creator override). */
-	UFUNCTION(BlueprintPure) bool IsPlayerControlled() const { return bPlayerPossessed; }
+	bool IsPlayerControlled() const { return bPlayerPossessed; }
 
 	UPROPERTY(BlueprintReadOnly) FString MinionId;
 	UPROPERTY(BlueprintReadOnly) FString Anim;

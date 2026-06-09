@@ -1,0 +1,227 @@
+{
+ "dest_root": "/Game/JarvisAssets",
+ "total": 48,
+ "by_url": {
+  "/immersive/assets/jarvis_ai_core_active_tool_row.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_active_tool_row",
+  "/immersive/assets/jarvis_ai_core_approval_panel.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_approval_panel",
+  "/immersive/assets/jarvis_ai_core_approve_action_button.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_approve_action_button",
+  "/immersive/assets/jarvis_ai_core_command_bar.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_command_bar",
+  "/immersive/assets/jarvis_ai_core_command_history_panel.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_command_history_panel",
+  "/immersive/assets/jarvis_ai_core_component_radial_gauge_92.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_component_radial_gauge_92",
+  "/immersive/assets/jarvis_ai_core_context_usage_bar.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_context_usage_bar",
+  "/immersive/assets/jarvis_ai_core_director_avatar_plate.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_director_avatar_plate",
+  "/immersive/assets/jarvis_ai_core_execution_queue_row.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_execution_queue_row",
+  "/immersive/assets/jarvis_ai_core_glass_panel_frame.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_glass_panel_frame",
+  "/immersive/assets/jarvis_ai_core_health_subbar_stack.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_health_subbar_stack",
+  "/immersive/assets/jarvis_ai_core_hero_layer_tab_chip.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_hero_layer_tab_chip",
+  "/immersive/assets/jarvis_ai_core_left_icon_rail.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_left_icon_rail",
+  "/immersive/assets/jarvis_ai_core_memory_context_panel.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_memory_context_panel",
+  "/immersive/assets/jarvis_ai_core_reasoning_orb.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_reasoning_orb",
+  "/immersive/assets/jarvis_ai_core_reasoning_stream_panel.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_reasoning_stream_panel",
+  "/immersive/assets/jarvis_ai_core_review_action_button.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_review_action_button",
+  "/immersive/assets/jarvis_ai_core_safety_alignment_panel.glb": "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_safety_alignment_panel",
+  "/immersive/assets/jarvis_analytics_globe.glb": "/Game/JarvisAssets/09_analytics_observatory/jarvis_analytics_globe",
+  "/immersive/assets/jarvis_analytics_observatory_hero_globe.glb": "/Game/JarvisAssets/09_analytics_observatory/jarvis_analytics_observatory_hero_globe",
+  "/immersive/assets/jarvis_arc_reactor.glb": "/Game/JarvisAssets/shared_kit/jarvis_arc_reactor",
+  "/immersive/assets/jarvis_command_atrium_data_orb.glb": "/Game/JarvisAssets/01_command_atrium/jarvis_command_atrium_data_orb",
+  "/immersive/assets/jarvis_command_atrium_data_orb_core.glb": "/Game/JarvisAssets/01_command_atrium/jarvis_command_atrium_data_orb_core",
+  "/immersive/assets/jarvis_command_atrium_orb_wireframe_lattice.glb": "/Game/JarvisAssets/01_command_atrium/jarvis_command_atrium_orb_wireframe_lattice",
+  "/immersive/assets/jarvis_data_fusion_reactor_core.glb": "/Game/JarvisAssets/06_data_fusion_reactor/jarvis_data_fusion_reactor_core",
+  "/immersive/assets/jarvis_document_vault_book.glb": "/Game/JarvisAssets/07_document_intelligence_vault/jarvis_document_vault_book",
+  "/immersive/assets/jarvis_docvault_hero_document_book.glb": "/Game/JarvisAssets/07_document_intelligence_vault/jarvis_docvault_hero_document_book",
+  "/immersive/assets/jarvis_fusion_core_containment_torus.glb": "/Game/JarvisAssets/06_data_fusion_reactor/jarvis_fusion_core_containment_torus",
+  "/immersive/assets/jarvis_fusion_reactor_core.glb": "/Game/JarvisAssets/06_data_fusion_reactor/jarvis_fusion_reactor_core",
+  "/immersive/assets/jarvis_holo_panel_frame.glb": "/Game/JarvisAssets/shared_kit/jarvis_holo_panel_frame",
+  "/immersive/assets/jarvis_intel_graph_constellation.glb": "/Game/JarvisAssets/04_intelligence_graph_space/jarvis_intel_graph_constellation",
+  "/immersive/assets/jarvis_intel_graph_constellation_core.glb": "/Game/JarvisAssets/04_intelligence_graph_space/jarvis_intel_graph_constellation_core",
+  "/immersive/assets/jarvis_intel_graph_primary_entity_ring.glb": "/Game/JarvisAssets/04_intelligence_graph_space/jarvis_intel_graph_primary_entity_ring",
+  "/immersive/assets/jarvis_iron_man_helmet.glb": "/Game/JarvisAssets/shared_kit/jarvis_iron_man_helmet",
+  "/immersive/assets/jarvis_kit_arc_reactor.glb": "/Game/JarvisAssets/shared_kit/jarvis_kit_arc_reactor",
+  "/immersive/assets/jarvis_kit_data_orb.glb": "/Game/JarvisAssets/shared_kit/jarvis_kit_data_orb",
+  "/immersive/assets/jarvis_kit_holo_earth.glb": "/Game/JarvisAssets/shared_kit/jarvis_kit_holo_earth",
+  "/immersive/assets/jarvis_kit_holo_shield.glb": "/Game/JarvisAssets/shared_kit/jarvis_kit_holo_shield",
+  "/immersive/assets/jarvis_kit_reactor_core_tower.glb": "/Game/JarvisAssets/shared_kit/jarvis_kit_reactor_core_tower",
+  "/immersive/assets/jarvis_ops_mission_table_hero.glb": "/Game/JarvisAssets/05_operations_war_room/jarvis_ops_mission_table_hero",
+  "/immersive/assets/jarvis_projector_dais.glb": "/Game/JarvisAssets/shared_kit/jarvis_projector_dais",
+  "/immersive/assets/jarvis_security_core_shield.glb": "/Game/JarvisAssets/10_system_security_core/jarvis_security_core_shield",
+  "/immersive/assets/jarvis_security_core_user_avatar_plinth.glb": "/Game/JarvisAssets/10_system_security_core/jarvis_security_core_user_avatar_plinth",
+  "/immersive/assets/jarvis_simulation_branching_tree.glb": "/Game/JarvisAssets/08_simulation_theatre/jarvis_simulation_branching_tree",
+  "/immersive/assets/jarvis_war_room_mission_table.glb": "/Game/JarvisAssets/05_operations_war_room/jarvis_war_room_mission_table",
+  "/immersive/assets/jarvis_world_control_earth_graticule.glb": "/Game/JarvisAssets/03_world_control_room/jarvis_world_control_earth_graticule",
+  "/immersive/assets/jarvis_world_control_equatorial_ring.glb": "/Game/JarvisAssets/03_world_control_room/jarvis_world_control_equatorial_ring",
+  "/immersive/assets/jarvis_world_control_holo_earth.glb": "/Game/JarvisAssets/03_world_control_room/jarvis_world_control_holo_earth"
+ },
+ "by_scene": {
+  "01_command_atrium": {
+   "hero.ai_core": [
+    "/Game/JarvisAssets/01_command_atrium/jarvis_command_atrium_data_orb",
+    "/Game/JarvisAssets/01_command_atrium/jarvis_command_atrium_data_orb_core",
+    "/Game/JarvisAssets/01_command_atrium/jarvis_command_atrium_orb_wireframe_lattice"
+   ],
+   "left.ai_command_dock": [],
+   "left.live_missions": [],
+   "right.alert_stack": [],
+   "right.intelligence_feed": [],
+   "bottom.command_input": [],
+   "bottom.active_contexts": [],
+   "status.system_health": []
+  },
+  "02_ai_core_chamber": {
+   "hero.reasoning_orb": [
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_reasoning_orb",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_hero_layer_tab_chip"
+   ],
+   "left.reasoning_stream": [
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_reasoning_stream_panel"
+   ],
+   "left.ai_core_status": [
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_director_avatar_plate",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_context_usage_bar",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_active_tool_row",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_execution_queue_row",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_approve_action_button",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_review_action_button",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_left_icon_rail",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_glass_panel_frame",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_component_radial_gauge_92",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_health_subbar_stack",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_command_history_panel",
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_command_bar"
+   ],
+   "center.source_cards": [],
+   "right.memory_context": [
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_memory_context_panel"
+   ],
+   "right.action_approval": [
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_approval_panel"
+   ],
+   "right.safety_alignment": [
+    "/Game/JarvisAssets/02_ai_core_chamber/jarvis_ai_core_safety_alignment_panel"
+   ],
+   "bottom.voice_command": []
+  },
+  "03_world_control_room": {
+   "hero.holographic_earth": [
+    "/Game/JarvisAssets/03_world_control_room/jarvis_world_control_holo_earth",
+    "/Game/JarvisAssets/03_world_control_room/jarvis_world_control_earth_graticule",
+    "/Game/JarvisAssets/03_world_control_room/jarvis_world_control_equatorial_ring"
+   ],
+   "left.layer_filters": [],
+   "left.country_city_profile_filters": [],
+   "floor.major_city_clusters": [],
+   "right.global_intel_summary": [],
+   "right.live_incident_feed": [],
+   "bottom.execute_global_command": [],
+   "status.country_count": []
+  },
+  "04_intelligence_graph_space": {
+   "hero.entity_constellation": [
+    "/Game/JarvisAssets/04_intelligence_graph_space/jarvis_intel_graph_constellation",
+    "/Game/JarvisAssets/04_intelligence_graph_space/jarvis_intel_graph_constellation_core",
+    "/Game/JarvisAssets/04_intelligence_graph_space/jarvis_intel_graph_primary_entity_ring"
+   ],
+   "left.graph_controls": [],
+   "left.filters": [],
+   "center.primary_entity": [],
+   "right.entity_dossier": [],
+   "right.source_evidence": [],
+   "bottom.investigation_timeline": [],
+   "bottom.relationship_strength": []
+  },
+  "05_operations_war_room": {
+   "hero.mission_table": [
+    "/Game/JarvisAssets/05_operations_war_room/jarvis_war_room_mission_table",
+    "/Game/JarvisAssets/05_operations_war_room/jarvis_ops_mission_table_hero"
+   ],
+   "center.mission_cards": [],
+   "center.dependency_lines": [],
+   "left.mission_portfolio": [],
+   "left.timeline": [],
+   "right.mission_details": [],
+   "right.operator_assignments": [],
+   "right.approval_actions": [],
+   "bottom.operations_status": []
+  },
+  "06_data_fusion_reactor": {
+   "hero.reactor_core": [
+    "/Game/JarvisAssets/06_data_fusion_reactor/jarvis_data_fusion_reactor_core",
+    "/Game/JarvisAssets/06_data_fusion_reactor/jarvis_fusion_reactor_core",
+    "/Game/JarvisAssets/06_data_fusion_reactor/jarvis_fusion_core_containment_torus"
+   ],
+   "left.data_sources": [],
+   "center.source_towers": [],
+   "center.data_streams": [],
+   "right.sync_status": [],
+   "right.processing_queue": [],
+   "right.data_lineage": [],
+   "bottom.reactor_status": []
+  },
+  "07_document_intelligence_vault": {
+   "hero.document_book": [
+    "/Game/JarvisAssets/07_document_intelligence_vault/jarvis_document_vault_book",
+    "/Game/JarvisAssets/07_document_intelligence_vault/jarvis_docvault_hero_document_book"
+   ],
+   "left.ai_annotations": [],
+   "left.extracted_entities": [],
+   "center.page_left": [],
+   "center.page_right": [],
+   "right.risk_highlights": [],
+   "right.citations": [],
+   "right.linked_evidence": [],
+   "bottom.document_command": []
+  },
+  "08_simulation_theatre": {
+   "hero.branching_paths": [
+    "/Game/JarvisAssets/08_simulation_theatre/jarvis_simulation_branching_tree"
+   ],
+   "left.simulation_controls": [],
+   "left.variable_sliders": [],
+   "center.current_state": [],
+   "center.outcome_windows": [],
+   "right.outcome_comparison": [],
+   "right.ai_recommendation": [],
+   "right.driver_sensitivity": [],
+   "bottom.simulation_engine_status": []
+  },
+  "09_analytics_observatory": {
+   "hero.analytics_globe": [
+    "/Game/JarvisAssets/09_analytics_observatory/jarvis_analytics_globe",
+    "/Game/JarvisAssets/09_analytics_observatory/jarvis_analytics_observatory_hero_globe"
+   ],
+   "left.performance_index": [],
+   "left.regional_intelligence": [],
+   "center.kpi_tower": [],
+   "center.realtime_trends": [],
+   "right.forecast_surfaces": [],
+   "right.executive_insights": [],
+   "right.anomaly_detection": [],
+   "bottom.command": []
+  },
+  "10_system_security_core": {
+   "hero.security_shield": [
+    "/Game/JarvisAssets/10_system_security_core/jarvis_security_core_shield",
+    "/Game/JarvisAssets/10_system_security_core/jarvis_security_core_user_avatar_plinth"
+   ],
+   "left.permissions_matrix": [],
+   "left.integration_status": [],
+   "left.active_sessions_map": [],
+   "right.security_event_stream": [],
+   "right.access_pathways": [],
+   "right.threat_fracture": [],
+   "bottom.security_core_status": []
+  },
+  "shared_kit": {
+   "kit_pool": [
+    "/Game/JarvisAssets/shared_kit/jarvis_projector_dais",
+    "/Game/JarvisAssets/shared_kit/jarvis_holo_panel_frame",
+    "/Game/JarvisAssets/shared_kit/jarvis_iron_man_helmet",
+    "/Game/JarvisAssets/shared_kit/jarvis_arc_reactor",
+    "/Game/JarvisAssets/shared_kit/jarvis_kit_data_orb",
+    "/Game/JarvisAssets/shared_kit/jarvis_kit_arc_reactor",
+    "/Game/JarvisAssets/shared_kit/jarvis_kit_holo_earth",
+    "/Game/JarvisAssets/shared_kit/jarvis_kit_holo_shield",
+    "/Game/JarvisAssets/shared_kit/jarvis_kit_reactor_core_tower"
+   ]
+  }
+ }
+}

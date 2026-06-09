@@ -37,7 +37,7 @@ void AUnderworldMinion::ApplyState(const FUwMinionState& State)
 	if (!State.GuildColor.Equals(GuildColor)) { GuildColor = State.GuildColor; OnGuildColor(GuildColor); }
 	if (State.MoveState != MoveState) { MoveState = State.MoveState; }
 	Mood     = State.Mood;
-	Role     = State.Role;
+	MinionRole = State.Role;
 	Action   = State.Action;
 	Thought  = State.Thought;
 	Identity = State.Identity;

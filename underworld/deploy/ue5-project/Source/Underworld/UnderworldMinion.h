@@ -38,7 +38,7 @@ public:
 	UPROPERTY(BlueprintReadOnly) FString Anim;
 	UPROPERTY(BlueprintReadOnly) FString Mood;
 	UPROPERTY(BlueprintReadOnly) FString Guild;
-	UPROPERTY(BlueprintReadOnly) FString Role;
+	UPROPERTY(BlueprintReadOnly) FString MinionRole;
 	UPROPERTY(BlueprintReadOnly) FString Action;       // what they're really doing this tick
 	UPROPERTY(BlueprintReadOnly) FString MoveState;    // idle/walk/occupy (drives locomotion BS)
 	UPROPERTY(BlueprintReadOnly) float   GroundSpeed = 0.f;  // UE cm/s — feed the locomotion blendspace
