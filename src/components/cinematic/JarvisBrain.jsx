@@ -18,6 +18,7 @@ import { isSkillQuery, buildSkillScript } from "@/components/cinematic/SkillScor
 import { isBrainQuery, buildBrainScript } from "@/components/cinematic/BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "@/components/cinematic/SceneAnchorDrillDown";
 import { isAmbientQuery } from "@/components/cinematic/AmbientReactorHum";
+import { isShowMeQuery, resolveShowMeQuery } from "@/components/cinematic/ShowMeNavigation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -94,6 +95,17 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
+
+    // "show me X" / "open X" → silently re-route to normalized query BEFORE opening
+    // the overlay, so the correct panel opens and speaks its own data brief.
+    if (isShowMeQuery(q)) {
+      const showScene = detectScene(q);
+      if (showScene) navigate(`/cinematic/${showScene}`);
+      const normalized = resolveShowMeQuery(q);
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: normalized } }));
+      return;
+    }
+
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
