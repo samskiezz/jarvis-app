@@ -9,6 +9,7 @@ import {
   extractEntitySearchTerm,
   buildEntityDossierScript,
 } from "@/components/cinematic/EntityQuickSearch";
+import { isRiskQuery, buildRiskScript } from "@/components/cinematic/RiskBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -117,6 +118,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term: term || q } }));
       try {
         const answer = await buildEntityDossierScript(term || q);
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isRiskQuery(q)) {
+      try {
+        const answer = await buildRiskScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {

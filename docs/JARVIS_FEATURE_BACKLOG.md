@@ -26,7 +26,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. *(2026-06-09 — WorldIncidentFeed.jsx: floating panel with mini Three.js globe + earthquake pins + scrolling seismic list; auto-refreshes every 60s; mounted in App.jsx; build PASSED)*
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → scrolling bottom-strip ticker; "JARVIS, markets" speaks top movers via isMarketsQuery + TTS early-return in JarvisBrain; expandable grid panel; build PASSED. *(2026-06-09)*
 - [x] F08 Entity quick-search — query /v1/graph/subgraph + /entities/IntelProfile; floating search panel (Ctrl+Shift+E or "JARVIS, find X"); click a result to hear a one-line dossier via TTS; isEntitySearchQuery early-return wired in JarvisBrain; jarvis:speak-dossier event loop for panel → voice; build PASSED. *(2026-06-09)*
-- [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
+- [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards (critical/high/medium/low) with red pulse on critical; severity filter tabs; "JARVIS, risks" opens board via isRiskQuery + buildRiskScript TTS; mounted in App.jsx; build PASSED. *(2026-06-09)*
 - [x] F10 Task board — /entities/Task → CRUD task board with kanban columns (TODO/IN_PROGRESS/DONE), new-task form, stat tiles; registered as TaskManager in pageRegistry.js jarvis group. *(2026-06-08)*
 - [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
