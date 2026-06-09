@@ -23,6 +23,7 @@ import { isClockQuery, buildClockScript } from "@/components/cinematic/LiveClock
 import { isInvestmentQuery, buildInvestmentScript } from "@/components/cinematic/InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "@/components/cinematic/ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "@/components/cinematic/SwarmJobsMonitor";
+import { isCentralityQuery, buildCentralityScript } from "@/components/cinematic/GraphCentralityView";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -274,6 +275,17 @@ export default function JarvisBrain() {
     if (isSwarmQuery(q)) {
       try {
         const answer = await buildSwarmScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isCentralityQuery(q)) {
+      try {
+        const answer = await buildCentralityScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {

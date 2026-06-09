@@ -43,7 +43,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F23 Investment/wealth widget — /entities/Investment + /entities/WealthSnapshot → portfolio readout; allocation bars, P&L indicators, type-filter tabs, TTS brief via isInvestmentQuery+buildInvestmentScript wired in JarvisBrain; ◆ WEALTH toggle at left:1116 bottom strip; mounted in App.jsx; build PASSED. *(2026-06-09)*
 - [x] F24 Contacts directory — /entities/Contact → searchable people list. *(2026-06-09 — ContactsDirectory.jsx: avatar circles with initials+color, name/role/dept/email/phone/location/tags display; filter input; isContactsQuery+buildContactsScript TTS wired in JarvisBrain; ◈ CONTACTS toggle at left:1220 bottom strip; mounted in App.jsx; build PASSED)*
 - [x] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress. (2026-06-09: SwarmJobsMonitor.jsx — stat tiles (running/queued/failed/done), progress bars, filter tabs, 20s auto-refresh, red pulse on failures; ⬡ SWARM toggle at left:1324; isSwarmQuery+buildSwarmScript TTS wired in JarvisBrain; build PASSED)
-- [ ] F26 Graph centrality view — /v1/graph/centrality → top entities by influence.
+- [x] F26 Graph centrality view — /v1/graph/centrality → top entities by influence. *(2026-06-09 — GraphCentralityView.jsx: ranked influence bars + type filter tabs + search + top-node highlight; isCentralityQuery+buildCentralityScript TTS wired in JarvisBrain; ◈ GRAPH toggle at left:1428 bottom strip; mounted in App.jsx; build PASSED)*
 - [ ] F27 "Diagnostics" — JARVIS reads health of each service (via the dashboard's real status).
 - [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
 - [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.
