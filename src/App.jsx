@@ -29,6 +29,7 @@ import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
 import AlertToasts from '@/components/cinematic/AlertToasts';
 import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
+import ContactsDirectory from '@/components/cinematic/ContactsDirectory';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -66,6 +67,7 @@ function App() {
             <LiveClockUptime />
             <AlertToasts />
             <InvestmentWidget />
+            <ContactsDirectory />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
