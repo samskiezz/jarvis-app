@@ -38,7 +38,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts. *(2026-06-09 — JarvisBootSequence.jsx: sessionStorage-gated cinematic overlay fetches /v1/jarvis/system/status + /v1/cinematic/brain, animates real counts line-by-line, speaks "JARVIS online" via /v1/voice/tts on user click; mounted in App.jsx; build PASSED)*
 - [x] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant. *(2026-06-09 — AmbientReactorHum.jsx: 60Hz sawtooth + 120Hz harmonic + 30Hz sub-bass + bandpass noise + LFO tremolo; ◇ HUM toggle at left:1012 bottom strip; isAmbientQuery + jarvis:ambient-toggle wired in JarvisBrain; build PASSED)*
 - [x] F20 "Show me" navigation — ShowMeNavigation.jsx exports isShowMeQuery+resolveShowMeQuery; JarvisBrain.ask() pre-routes "show/open/view X" to normalized jarvis:ask before overlay opens, covering all 10 panels (risks/markets/datasets/investigations/scenarios/docs/skills/brain/anchors/status); build PASSED. *(2026-06-09)*
-- [ ] F21 Live clock + uptime (real process uptime from system status).
+- [x] F21 Live clock + uptime (real process uptime from system status). *(2026-06-09 — LiveClockUptime.jsx: ticking clock (1s interval) + process uptime polled every 30s from /v1/jarvis/system/status; fixed bottom-left display; isClockQuery+buildClockScript TTS wired in JarvisBrain; mounted in App.jsx; build PASSED)*
 - [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
 - [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
 - [ ] F24 Contacts directory — /entities/Contact → searchable people list.

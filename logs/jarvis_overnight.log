@@ -17,3 +17,4 @@
 2026-06-09 F18 JarvisBootSequence.jsx — sessionStorage-gated cinematic boot overlay; fetches /v1/jarvis/system/status + /v1/cinematic/brain for real counts; animates boot lines; speaks JARVIS online via /v1/voice/tts on user click; mounted in App.jsx; build PASSED.
 2026-06-09 F19 AmbientReactorHum.jsx — WebAudio reactor hum synthesizer: 60Hz sawtooth + 120Hz harmonic + 30Hz sub-bass + bandpass noise + 0.7Hz LFO tremolo; ◇ HUM toggle at left:1012 bottom strip; isAmbientQuery + jarvis:ambient-toggle event wired in JarvisBrain; build PASSED.
 2026-06-09 F20 ShowMeNavigation.jsx: "show/open/view X" pre-router in JarvisBrain.ask(); covers 10 panels; build PASSED.
+2026-06-09 F21 LiveClockUptime.jsx — ticking clock (1s setInterval) + real process uptime from /v1/jarvis/system/status (polled every 30s); fixed bottom-left display; isClockQuery+buildClockScript TTS wired in JarvisBrain.ask(); mounted in App.jsx; build PASSED.
