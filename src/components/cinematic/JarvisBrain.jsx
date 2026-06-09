@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import SceneKeyboardNav from "@/components/cinematic/SceneKeyboardNav";
+import { isStatusQuery, buildStatusScript } from "@/components/cinematic/SpokenStatusReport";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -82,6 +83,18 @@ export default function JarvisBrain() {
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+
+    if (isStatusQuery(q)) {
+      try {
+        const answer = await buildStatusScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
     let answer = "";
     try {
       const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
