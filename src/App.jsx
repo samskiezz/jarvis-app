@@ -20,6 +20,7 @@ import RiskBoard from '@/components/cinematic/RiskBoard';
 import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 import InvestigationsList from '@/components/cinematic/InvestigationsList';
 import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
+import DocumentSearch from '@/components/cinematic/DocumentSearch';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -48,6 +49,7 @@ function App() {
             <DatasetsBrowser />
             <InvestigationsList />
             <ScenarioLauncher />
+            <DocumentSearch />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

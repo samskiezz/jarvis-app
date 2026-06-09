@@ -31,7 +31,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F11 Datasets browser — /v1/datasets → catalog list with row counts, filter input, row-count badges; "JARVIS, datasets" intent wired in JarvisBrain; DATA toggle button bottom-left strip; build PASSED. *(2026-06-09)*
 - [x] F12 Investigations list — /v1/investigations → open cases panel; status-sorted cards (open/in-progress/pending/closed), priority badge, lead/assignee, filter input; "JARVIS, investigations" opens panel + TTS brief via isInvestigationsQuery in JarvisBrain; INTEL toggle button bottom-left strip; build PASSED. *(2026-06-09)*
 - [x] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome. *(2026-06-09 — ScenarioLauncher.jsx: floating panel lists /v1/scenario/list; ▶ RUN button POSTs to /v1/scenario/{id}/run + shows outcome inline; isScenarioQuery TTS brief wired in JarvisBrain; SIM toggle bottom-left strip; build PASSED)*
-- [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
+- [x] F14 Document search — /v1/reports + /knowledge/* → combined catalog panel; src-filter tabs; search input; click → JARVIS TTS summary; isDocumentQuery wired in JarvisBrain; DOCS toggle bottom-left; build PASSED. *(2026-06-09)*
 - [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
 - [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.
 - [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
