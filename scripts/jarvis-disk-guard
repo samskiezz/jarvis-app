@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# jarvis-disk-guard — SAFE automatic reclaim of REGENERABLE JUNK ONLY.
+# Runs from cron (and can be called at end-of-task / on-error). It works by an
+# ALLOWLIST of known-junk paths — it never globs over data dirs, so it CANNOT
+# delete knowledge bases, documents, databases, embeddings, ontology, or assets.
+#
+# ════════ HARD PROTECT — NEVER TOUCHED (full data-store map, audited) ════════
+#   /opt/jarvis-app-1/server/data/*.db       JARVIS KBs: vectors, brain, documents, ontology, revdb, audit
+#   /opt/jarvis-app-1/underworld/data/*.db*   Underworld SQLite (+ its -wal/-shm)
+#   /opt/jarvis-app-1/ontology /world_os /underworld/server/knowledge /jarvis_assets  (+ *.glb assets)
+#   /opt/supabase  +  /var/lib/docker/volumes/*  (Postgres/Supabase + the 18G openclaw vol + main.sqlite)
+#   /var/lib/redis/dump.rdb                   Redis ;  /opt/solarflow (chromadb)
+#   ANY *.db *.sqlite* *.duckdb *.rdb *.parquet *.faiss *.npy *.glb  anywhere ; all git repos
+# This script touches NONE of the above. It NEVER runs docker volume/system prune. Junk allowlist only.
+# ═════════════════════════════════════════════════════════════════════
+set -uo pipefail
+TS(){ echo "[$(date -Is)] $*"; }
+BEFORE=$(df --output=avail / | tail -1)
+
+# 1) pm2 logs — truncate any over 200MB (logrotate keeps them small day-to-day; this is the safety net)
+find /root/.pm2/logs -maxdepth 1 -type f -name '*.log' -size +200M -exec truncate -s 0 {} \; 2>/dev/null
+
+# 2) crash debris — coredumps are pure post-mortem dumps, never data
+rm -f /var/lib/apport/coredump/core.* 2>/dev/null
+rm -rf /var/crash/* 2>/dev/null
+
+# 3) journald — hard cap (config also set, this enforces immediately)
+journalctl --vacuum-size=200M >/dev/null 2>&1 || true
+
+# 4) oversized system logs (rsyslog keeps writing to the truncated fd)
+find /var/log -maxdepth 2 -type f \( -name '*.log' -o -name 'syslog*' \) -size +500M -exec truncate -s 0 {} \; 2>/dev/null
+
+# 5) regenerable build/dev caches + UE scratch — NEVER project data
+pip cache purge >/dev/null 2>&1 || true
+rm -rf /tmp/uba_* /tmp/*.tmp /tmp/UnrealTrace* 2>/dev/null
+# UE editor crash reports (regenerated; these are NOT the imported GLB assets)
+find /opt/jarvis-app-1/underworld/deploy/ue5-project/Saved/Crashes -type f -delete 2>/dev/null
+
+AFTER=$(df --output=avail / | tail -1)
+TS "disk-guard freed $(( (AFTER-BEFORE)/1024 ))MB ; / now $(df -h / | awk 'NR==2{print $4" free ("$5")"}')"

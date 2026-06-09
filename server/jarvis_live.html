@@ -100,6 +100,14 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
   align-items:flex-end;transition:opacity .3s,transform .3s}
 #dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
+/* §1 D: drag-grip — grab here to move the WHOLE dock anywhere (position persists in localStorage) */
+#dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.55;font-size:18px;line-height:1;
+  padding:0 4px 0 2px;margin-right:2px;user-select:none;letter-spacing:-2px;transition:opacity .15s}
+#dock .dgrip:hover{opacity:1;text-shadow:0 0 10px var(--cy)}
+#dock .dgrip:active{cursor:grabbing}
+#dock.dragging{transition:none;box-shadow:0 18px 60px rgba(0,0,0,.6),0 0 60px rgba(41,231,255,.45)}
+/* when the user has pinned a custom position we drop the bottom/right anchors via inline left/top */
+#dock.moved{right:auto;bottom:auto}
 /* iOS-style tile: icon glyph on top + a persistent NAME label underneath (R4 "icon tile with a short
    NAME label under it"). The dock itself stays a drop-zone for DRAG-TO-PIN from the 3D world. */
 #dock .di{width:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;
@@ -190,10 +198,84 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #prop .pp .pbuild{margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.6px;padding:10px 18px;border-radius:11px;cursor:pointer;
   color:#cdb4ff;border:1px solid var(--pu);background:linear-gradient(90deg,rgba(122,59,255,.25),rgba(41,231,255,.16))}
 #prop .pp .pbuild:hover{box-shadow:0 0 22px rgba(167,139,250,.55)}
+/* ---------- §1 C: 4 SEE-THROUGH GLASS CRYSTAL PANELS flanking the world (2 left, 2 right) ----------
+   Glassmorphic crystal bubbles bound to /metrics. Each has a TOP-RIGHT 3-state toggle (grey/dark/light)
+   that cycles the panel width slide-in→mid→full (full slides toward page centre). Drag-drop target for
+   planets. State persists in localStorage. They flank the central world and clear the full-width #cmd. */
+.gpanel{position:fixed;z-index:18;width:248px;max-height:calc(100vh - 188px);overflow:hidden;
+  border-radius:18px;padding:0;color:var(--tx);
+  background:linear-gradient(150deg,rgba(12,30,46,.30),rgba(6,16,26,.20));
+  border:1px solid var(--ln);backdrop-filter:blur(15px) saturate(1.25);
+  box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 40px rgba(41,231,255,.10),inset 0 1px 0 rgba(255,255,255,.07);
+  transition:width .42s cubic-bezier(.22,1,.36,1),transform .42s cubic-bezier(.22,1,.36,1),opacity .3s,box-shadow .25s}
+.gpanel.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
+.gpanel::before{content:'';position:absolute;inset:-1px;border-radius:19px;padding:1px;z-index:-1;pointer-events:none;
+  background:conic-gradient(from var(--gang,0deg),rgba(255,93,108,.5),rgba(245,185,66,.5),rgba(52,211,153,.5),rgba(41,231,255,.6),rgba(167,139,250,.5),rgba(255,93,108,.5));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  filter:blur(.4px) saturate(1.3);opacity:.55;animation:irid 9s linear infinite}
+/* edge anchoring — 2 stacked left, 2 stacked right (top below the thin top bar; clear of #cmd ~96px) */
+#pInfra{left:14px;top:60px}
+#pPipe{left:14px;top:calc(50vh + 6px)}
+#pKnow{right:14px;top:60px}
+#pFab{right:14px;top:calc(50vh + 6px)}
+/* 3-state widths. mid + full both grow; full slides toward page centre (left panels grow right, right panels grow left → no transform needed since they're edge-anchored). */
+.gpanel.mid{width:312px}
+.gpanel.full{width:392px;max-height:calc(100vh - 150px)}
+.gpanel .gp-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:grab;user-select:none;
+  border-bottom:1px solid rgba(41,231,255,.14);background:linear-gradient(90deg,rgba(41,231,255,.08),transparent)}
+.gpanel .gp-head:active{cursor:grabbing}
+.gpanel .gp-head .gi{font-size:13px;filter:drop-shadow(0 0 6px var(--cy))}
+.gpanel .gp-head .gt{font-weight:800;letter-spacing:1.2px;font-size:9.5px;color:var(--cy2);text-shadow:0 0 10px rgba(41,231,255,.45);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* TOP-RIGHT 3-state toggle: an interactive image (3 stacked bars in 3 greys) cycling slide-in/normal→mid→full */
+.gp-tog{width:22px;height:16px;flex:none;border:none;background:transparent;cursor:pointer;padding:0;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.gp-tog i{display:block;height:3px;border-radius:2px;transition:background .2s,width .2s;width:60%;margin-left:auto}
+.gp-tog i:nth-child(1){background:#8aa0ad}
+.gp-tog i:nth-child(2){background:#3c4f5b}
+.gp-tog i:nth-child(3){background:#dfeef6}
+.gpanel[data-state="0"] .gp-tog i{width:55%}
+.gpanel[data-state="1"] .gp-tog i{width:78%}
+.gpanel[data-state="2"] .gp-tog i{width:100%}
+.gpanel .gp-body{padding:9px 12px 12px;overflow:auto;max-height:calc(100vh - 232px);font-size:11.5px}
+.gpanel.full .gp-body{max-height:calc(100vh - 196px)}
+.gpanel .gp-gauge{margin:7px 0}
+.gpanel .gp-gauge .lab{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:3px}
+.gpanel .gp-gauge .lab b{color:#eafcff}
+.gpanel .gp-bar{height:7px;border-radius:4px;background:rgba(41,231,255,.10);overflow:hidden}
+.gpanel .gp-bar .f{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cy));box-shadow:0 0 10px var(--cy);transition:width .5s ease}
+.gpanel .gp-bar .f.warn{background:linear-gradient(90deg,#a8741a,var(--am));box-shadow:0 0 10px var(--am)}
+.gpanel .gp-bar .f.bad{background:linear-gradient(90deg,#a3263a,var(--rd));box-shadow:0 0 10px var(--rd)}
+.gpanel .gp-row{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid rgba(41,231,255,.08);font-size:11px}
+.gpanel .gp-row .k{color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gpanel .gp-row b{color:#eafcff;text-align:right;white-space:nowrap}
+.gpanel .gp-row .st{width:7px;height:7px;border-radius:50%;flex:none;align-self:center;margin-right:5px}
+.gpanel .gp-empty{font-size:10.5px;color:var(--dim);padding:10px 2px;text-align:center}
+.gpanel.dropReady{border-color:var(--pu);box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 50px rgba(167,139,250,.5)}
+.gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
+/* hide the side panels on narrow screens so they never cover the world / talk bar */
+@media(max-width:1180px){.gpanel{display:none}}
 </style></head>
 <body>
 <!-- the ONE immersive WebGL universe -->
 <canvas id=uni></canvas>
+
+<!-- §1 C: 4 see-through glass crystal panels flanking the world (2 left · 2 right), bound to /metrics.
+     Each has a TOP-RIGHT 3-state toggle (slide-in→mid→full) and is a drag-drop target for planets. -->
+<div class=gpanel id=pInfra data-state=0>
+  <div class=gp-head><span class=gi>🖥</span><span class=gt>INFRASTRUCTURE</span>
+    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+  <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
+<div class=gpanel id=pPipe data-state=0>
+  <div class=gp-head><span class=gi>⚙</span><span class=gt>PIPELINES · RUNNERS</span>
+    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+  <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
+<div class=gpanel id=pKnow data-state=0>
+  <div class=gp-head><span class=gi>🧠</span><span class=gt>KNOWLEDGE · ONTOLOGY</span>
+    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+  <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
+<div class=gpanel id=pFab data-state=0>
+  <div class=gp-head><span class=gi>🔮</span><span class=gt>INFERENCE FABRIC</span>
+    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+  <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
 
 <!-- thin top bar -->
 <div id=top>
@@ -242,8 +324,9 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
  </div>
 </div>
 
-<!-- R4: Mac-style dock (magnify on hover + drag-reorder; clicking flies to / opens the function) -->
-<div id=dock></div>
+<!-- R4: Mac-style dock (magnify on hover + drag-reorder; clicking flies to / opens the function)
+     §1 D: the WHOLE dock is draggable to any position via the grip handle (left/top persisted). -->
+<div id=dock><span class=dgrip id=dockGrip title="Drag the dock anywhere">⠿</span></div>
 
 <!-- SECOND DOCK — self-development bar: AI "what to build next" blocks (GET /suggestions) -->
 <div id=sdev>
@@ -305,6 +388,11 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 const $=id=>document.getElementById(id), CT="__CTOKEN__";
 const fmt=n=>n==null?'—':(+n).toLocaleString();
 function esc(s){return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* ================= WORLD GLB MANIFEST (embedded — deterministic, from scripts/build_world_glb_manifest.py) =================
+   The dashboard has no /worlddata route and we may only edit this file, so the deterministic manifest
+   (sun + 16 ontology domains + 31 master topics, each → a curated/generated GLB at /asset or /media) is
+   embedded inline. Drives the GLB PLANETS (A) and the morphing-face SUN (B). Counts size the planets. */
+const WORLD_MANIFEST={"sun":{"glb":"jarvis_iron_man_helmet.glb","url":"/asset/jarvis_iron_man_helmet.glb","reason":"central morphing JARVIS / Iron-Man face — the star of the universe"},"domains":{"Measurement":{"url":"/media/gen_tripo__balance_scale_lab.glb","count":111558,"reason":"lab balance/scale — the act of measuring"},"DataSource":{"url":"/asset/jarvis_kit_data_orb.glb","count":92000,"reason":"data orb — the feeds/sources fabric"},"Document":{"url":"/asset/jarvis_docvault_hero_document_book.glb","count":34331,"reason":"document vault hero book — reports/filings"},"DomainSubject":{"url":"/asset/jarvis_ai_core_reasoning_orb.glb","count":10000,"reason":"reasoning orb — ontology subjects/neurons"},"Topic":{"url":"/asset/jarvis_intel_graph_constellation_core.glb","count":7031,"reason":"graph constellation core — topic hub"},"SpeciesOccurrence":{"url":"/media/gen_tripo__fossil_ammonite.glb","count":3136,"reason":"fossil ammonite — species occurrence records"},"ScientificPublication":{"url":"/media/gen_tripo__citation_graph_display.glb","count":3100,"reason":"citation graph display — publications"},"Vulnerability":{"url":"/asset/jarvis_security_core_shield.glb","count":1260,"reason":"security core shield — CVE vulnerabilities"},"AcquisitionPoint":{"url":"/media/gen_uw_urban__ground_satellite_dish.glb","count":1000,"reason":"ground satellite dish — acquisition/ingest feeds"},"Place":{"url":"/asset/jarvis_world_control_holo_earth.glb","count":544,"reason":"holo earth — places/cities"},"Asset":{"url":"/media/gen_tripo__nuclear_reactor_pile.glb","count":430,"reason":"nuclear reactor pile — power-plant assets"},"Concept":{"url":"/media/gen_tripo__agi_core.glb","count":309,"reason":"agi core — abstract concepts"},"EarthquakeEvent":{"url":"/media/gen_tripo__fault_rift_terrain.glb","count":269,"reason":"fault rift terrain — earthquakes"},"Event":{"url":"/media/gen_tripo__volcano_cone.glb","count":86,"reason":"volcano cone — geophysical events"},"Sensor":{"url":"/media/gen_tripo__radio_tower.glb","count":25,"reason":"radio tower — monitoring sensor stations"},"AppPage":{"url":"/asset/jarvis_holo_panel_frame.glb","count":17,"reason":"holo panel frame — app pages/UI routes"}},"topics":[{"title":"Technology & engineering","url":"/media/gen_uw_interior__engineering_cad_workstation.glb","pagerank":0.05691},{"title":"Science & research","url":"/media/gen_uw_interior__lab_experiment_bench.glb","pagerank":0.0416},{"title":"Knowledge & education","url":"/media/gen_tripo__university.glb","pagerank":0.03859},{"title":"Politics & governance","url":"/media/gen_tripo__republic_senate_house.glb","pagerank":0.02936},{"title":"Classification & metadata itself","url":"/asset/jarvis_intel_graph_constellation.glb","pagerank":0.02806},{"title":"Government & public administration","url":"/media/gen_tripo__courthouse.glb","pagerank":0.02325},{"title":"Earth systems","url":"/media/gen_uw_sky__earth.glb","pagerank":0.01704},{"title":"Human body & health","url":"/media/gen_tripo__hospital.glb","pagerank":0.01539},{"title":"Law & regulation","url":"/media/gen_tripo__law_stele.glb","pagerank":0.01439},{"title":"Geography & location","url":"/asset/jarvis_world_control_earth_graticule.glb","pagerank":0.01426},{"title":"Security & conflict","url":"/asset/jarvis_security_core_shield.glb","pagerank":0.01394},{"title":"Economy & industry","url":"/media/gen_uw_interior__economics_market_data_wall.glb","pagerank":0.01316},{"title":"Business & organisations","url":"/media/gen_uw_interior__economics_trading_terminal.glb","pagerank":0.0118},{"title":"Extended Intelligence & Operations","url":"/asset/jarvis_intel_graph_constellation_core.glb","pagerank":0.01134},{"title":"Information & communication","url":"/media/gen_tripo__network_switch_node.glb","pagerank":0.01085},{"title":"Finance & ownership","url":"/media/gen_uw_interior__economics_ledger_analytics_desk.glb","pagerank":0.01054},{"title":"Society & culture","url":"/media/gen_tripo__theatre_stage.glb","pagerank":0.01021},{"title":"Environment & ecology","url":"/media/gen_uw_interior__ecology_biodiversity_camera_trap.glb","pagerank":0.01016},{"title":"Climate & hazards","url":"/media/gen_uw_interior__atmoschem_ozone_monitor.glb","pagerank":0.00941},{"title":"Energy & resources","url":"/media/gen_tripo__power_grid_substation.glb","pagerank":0.00783},{"title":"Urban & built environment","url":"/media/gen_uw_urban__city_street.glb","pagerank":0.00769},{"title":"Agriculture & food systems","url":"/media/gen_tripo__guild_agriculture_barn.glb","pagerank":0.0072},{"title":"People & demographics","url":"/media/gen_uw_interior__epidemiology_contact_tracing_wall.glb","pagerank":0.007},{"title":"Products & commodities","url":"/media/gen_tripo__market_stall.glb","pagerank":0.00659},{"title":"Transport & mobility","url":"/media/gen_tripo__maglev_pod.glb","pagerank":0.00615},{"title":"Infrastructure & utilities","url":"/media/gen_tripo__water_tower.glb","pagerank":0.00479},{"title":"Universe & cosmology","url":"/media/gen_uw_interior__astronomy_observatory_telescope.glb","pagerank":0.00446},{"title":"Work & labour","url":"/media/gen_tripo__assembly_line_conveyor.glb","pagerank":0.00419},{"title":"Life & biology","url":"/media/gen_uw_interior__biology_compound_microscope.glb","pagerank":0.00322},{"title":"Consumption & lifestyle","url":"/media/gen_tripo__market_hall.glb","pagerank":0.00278},{"title":"Ethics & philosophy","url":"/media/gen_tripo__philosophy_agora.glb","pagerank":0.00168}],"fallback":{"glb":"jarvis_command_atrium_data_orb.glb","url":"/asset/jarvis_command_atrium_data_orb.glb","reason":"neutral data orb for any object without a specific match"}};
 let _m={},_ts=0,archon=false,_engaged=false;
 function srlog(t){const s=$('srlog');if(s){s.textContent='';setTimeout(()=>s.textContent=t,50);}}
 
@@ -477,7 +565,9 @@ const DOCK=[
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
 ];
-function renderDock(){const d=$('dock');if(!d)return;d.innerHTML='';
+function renderDock(){const d=$('dock');if(!d)return;
+  // §1 D: keep the drag-grip handle; only clear the icon tiles
+  [...d.querySelectorAll('.di')].forEach(el=>el.remove());
   DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;
     // iOS tile: icon glyph + a persistent NAME label under it. Pinned items get an unpin (×) chip.
     e.innerHTML='<div class=gly>'+it.ic+'</div><div class=nm>'+it.t+'</div>'+
@@ -486,8 +576,8 @@ function renderDock(){const d=$('dock');if(!d)return;d.innerHTML='';
     if(it.pinned){const xb=e.querySelector('.x');if(xb)xb.onclick=ev=>{ev.stopPropagation();unpinFromDock(it.k);};}
     d.appendChild(e);});
   wireDockMagnify(); wireDockDrag();}
-function wireDockMagnify(){const items=[...$('dock').children];
-  $('dock').onmousemove=ev=>{items.forEach(el=>{const r=el.getBoundingClientRect();
+function wireDockMagnify(){const items=[...$('dock').querySelectorAll('.di')];
+  $('dock').onmousemove=ev=>{if(_dockMoving)return;items.forEach(el=>{const r=el.getBoundingClientRect();
     const dx=Math.abs(ev.clientX-(r.left+r.width/2));const s=Math.max(1,1.55-dx/120); // genie magnify
     el.style.transform='scale('+s+') translateY('+(-(s-1)*16)+'px)';});};
   $('dock').onmouseleave=()=>items.forEach(el=>el.style.transform='');}
@@ -513,7 +603,7 @@ function _savePins(){try{
   localStorage.setItem('jarvisDockPins',JSON.stringify(DOCK.filter(d=>d.pinned).map(d=>({k:d.k,t:d.t,body:d.body,ic:d.ic}))));
   localStorage.setItem('jarvisDock',JSON.stringify(DOCK.map(d=>d.k)));}catch(_){}}
 let _dragI=null;
-function wireDockDrag(){[...$('dock').children].forEach(el=>{
+function wireDockDrag(){[...$('dock').querySelectorAll('.di')].forEach(el=>{
   el.ondragstart=e=>{_dragI=+el.dataset.i;el.classList.add('drag');e.dataTransfer.effectAllowed='move';};
   el.ondragend=()=>{el.classList.remove('drag');[...$('dock').children].forEach(x=>x.classList.remove('over'));};
   el.ondragover=e=>{e.preventDefault();el.classList.add('over');};
@@ -532,6 +622,107 @@ function wireDockDrag(){[...$('dock').children].forEach(el=>{
 }catch(_){}})();
 // helper used by dock + controls: fly to a named body if it exists
 function flyToBodyByName(n){const b=bodyMap.get(n);if(b){selectBody(b);return true;}return false;}
+
+/* ================= §1 D: FULLY-MOVABLE DOCK (drag the body via the grip → any position; persists) =======
+   Grab the grip handle and the WHOLE dock follows the cursor (left/top set, anchors dropped). Position
+   persists in localStorage and is restored on load. Magnify is suppressed mid-drag. */
+let _dockMoving=false;
+function _applyDockPos(p){const d=$('dock');if(!d||!p)return;
+  d.classList.add('moved');
+  // clamp into the viewport so it can never be dragged off-screen / under the talk bar
+  const w=d.offsetWidth||220,h=d.offsetHeight||80;
+  const x=Math.max(6,Math.min(innerWidth-w-6,p.x)), y=Math.max(52,Math.min(innerHeight-h-94,p.y));
+  d.style.left=x+'px';d.style.top=y+'px';}
+function _saveDockPos(){const d=$('dock');if(!d||!d.classList.contains('moved'))return;
+  try{localStorage.setItem('jarvisDockPos',JSON.stringify({x:parseFloat(d.style.left)||0,y:parseFloat(d.style.top)||0}));}catch(_){}}
+function wireDockMove(){const d=$('dock'),g=$('dockGrip');if(!d||!g)return;
+  let sx=0,sy=0,ox=0,oy=0;
+  const move=e=>{const cx=(e.touches?e.touches[0].clientX:e.clientX),cy=(e.touches?e.touches[0].clientY:e.clientY);
+    _applyDockPos({x:ox+(cx-sx),y:oy+(cy-sy)});};
+  const up=()=>{_dockMoving=false;d.classList.remove('dragging');
+    removeEventListener('pointermove',move);removeEventListener('pointerup',up);_saveDockPos();};
+  const down=e=>{e.preventDefault();e.stopPropagation();_dockMoving=true;d.classList.add('dragging','moved');
+    const r=d.getBoundingClientRect();ox=r.left;oy=r.top;
+    sx=(e.touches?e.touches[0].clientX:e.clientX);sy=(e.touches?e.touches[0].clientY:e.clientY);
+    if(!d.style.left){d.style.left=r.left+'px';d.style.top=r.top+'px';}
+    addEventListener('pointermove',move);addEventListener('pointerup',up,{once:true});};
+  g.addEventListener('pointerdown',down);}
+(function(){try{const p=JSON.parse(localStorage.getItem('jarvisDockPos')||'null');
+  if(p&&typeof p.x==='number'){addEventListener('load',()=>_applyDockPos(p));setTimeout(()=>_applyDockPos(p),60);}}catch(_){}})();
+
+/* ================= §1 C: 4 GLASS PANELS — bind to /metrics + 3-state toggle + drag-drop targets =========
+   Each panel renders a live slice of /metrics (Infrastructure · Pipelines/Runners · Knowledge & Ontology ·
+   Inference Fabric). The TOP-RIGHT 3-state toggle (image of 3 grey bars) cycles slide-in(0)→mid(1)→full(2);
+   state persists. Planets dragged out of the 3D world can be DROPPED on a panel to inspect them. */
+const GP_STATES=['','mid','full'];
+function setPanelState(id,st){const p=$(id);if(!p)return;st=((st%3)+3)%3;
+  p.dataset.state=st;p.classList.remove('mid','full');if(GP_STATES[st])p.classList.add(GP_STATES[st]);
+  try{localStorage.setItem('gp:'+id,String(st));}catch(_){}}
+function wireGlassPanels(){
+  [['pInfra',renderInfraPanel],['pPipe',renderPipePanel],['pKnow',renderKnowPanel],['pFab',renderFabPanel]].forEach(([id])=>{
+    const p=$(id);if(!p)return;
+    const tog=p.querySelector('.gp-tog');
+    if(tog)tog.onclick=ev=>{ev.stopPropagation();setPanelState(id,(+p.dataset.state||0)+1);};
+    try{const s=localStorage.getItem('gp:'+id);if(s!=null)setPanelState(id,+s);}catch(_){}
+    // drop a dragged planet here → fly to it + inspect (bridges WebGL → DOM, like the dock)
+    p.addEventListener('pointerup',()=>{ if(_pinGrab&&_pinGrab.armed&&_pinGrab.name){
+      const nm=_pinGrab.name,lbl=_pinGrab.label;p.classList.remove('dropReady');
+      flyToBodyByName(nm);showPanelDrop(id,nm,lbl);} });
+  });
+}
+function showPanelDrop(id,name,label){const p=$(id),body=p&&p.querySelector('.gp-body');if(!body)return;
+  const old=body.querySelector('.gp-drop');if(old)old.remove();
+  const d=document.createElement('div');d.className='gp-drop';
+  d.textContent='⤵ inspecting: '+(label||name.split(':').pop());body.insertBefore(d,body.firstChild);
+  if((+p.dataset.state||0)===0)setPanelState(id,1);}
+function _gauge(label,pct,raw){pct=Math.max(0,Math.min(100,pct||0));
+  const cls=pct>=90?'bad':pct>=75?'warn':'';
+  return '<div class=gp-gauge><div class=lab><span>'+esc(label)+'</span><b>'+esc(raw!=null?raw:(pct.toFixed(0)+'%'))+'</b></div>'+
+    '<div class=gp-bar><div class="f '+cls+'" style="width:'+pct+'%"></div></div></div>';}
+function _gprow(k,v,dot){return '<div class=gp-row><span class=k>'+(dot?'<span class=st style="background:'+dot+'"></span>':'')+esc(k)+'</span><b>'+esc(String(v))+'</b></div>';}
+function renderInfraPanel(){const b=_m.box||{},v=_m.vps||{},gz=(_m.health||{}).gauges||{};
+  const vt=b.vram_total_gb||48,vu=b.vram_used_gb||0,vpct=vt?vu/vt*100:0;
+  let h='';
+  h+=_gauge('GPU VRAM (2×4090)',gz.vram_pct!=null?gz.vram_pct:vpct,vu+'/'+vt+' GB');
+  h+=_gauge('VPS CPU',gz.cpu_pct!=null?gz.cpu_pct:(v.cpu_pct||0),(v.cpu_pct!=null?v.cpu_pct+'%':'—')+(v.cores?' · '+v.cores+'c':''));
+  const mp=(v.mem_total_gb?(v.mem_used_gb/v.mem_total_gb*100):(gz.mem_pct||0));
+  h+=_gauge('VPS RAM',gz.mem_pct!=null?gz.mem_pct:mp,(v.mem_used_gb!=null?v.mem_used_gb+'/'+v.mem_total_gb+' GB':'—'));
+  const dp=(v.disk_total_gb?(v.disk_used_gb/v.disk_total_gb*100):(gz.disk_pct||0));
+  h+=_gauge('VPS Disk',gz.disk_pct!=null?gz.disk_pct:dp,(v.disk_used_gb!=null?v.disk_used_gb+'/'+v.disk_total_gb+' GB':'—'));
+  h+=_gprow('GPU reachable',b.reachable?'yes':'no',b.reachable?'#34d399':'#ff5d6c');
+  h+=_gprow('Load',v.load!=null?v.load:'—');
+  return h;}
+function renderPipePanel(){const ws=(_m.workers||[]).filter(w=>w.toggleable);
+  if(!ws.length)return '<div class=gp-empty>no runners reported</div>';
+  const on=ws.filter(w=>w.status==='online').length;
+  let h='<div class=gp-row><span class=k>online</span><b>'+on+' / '+ws.length+'</b></div>';
+  h+=ws.map(w=>{const live=w.status==='online';
+    const val=live?((w.cpu!=null?w.cpu+'%':'')+(w.mem_mb!=null?' · '+w.mem_mb+'MB':'')||'online'):'stopped';
+    return _gprow((w.label||w.name).replace(/^jarvis-/,'').slice(0,18),val,live?'#34d399':'#ff5d6c');}).join('');
+  return h;}
+function renderKnowPanel(){const c=_m.completion||{},corr=_m.correlation||{},g={};
+  ((_m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
+  let h=_gauge('Knowledge build',c.pct||0,(c.pct||0)+'%');
+  h+=_gprow('Topics enriched',fmt(c.enriched)+' / '+fmt(c.total));
+  h+=_gprow('Distinct entities',fmt(corr.distinct_after_dedup));
+  if(corr.topics_connected!=null)h+=_gprow('Topics linked',fmt(corr.topics_connected)+' / '+fmt(corr.topics_total));
+  ['Documents','Measurements','Notes learned','Ontology objects'].forEach(k=>{if(g[k])h+=_gprow(k,fmt(g[k].total)+(g[k].h?'  (+'+fmt(g[k].h)+'/h)':''));});
+  return h;}
+function renderFabPanel(){const ts=_m.tiers||[],rout=_m.routing||{};
+  let h='';
+  if(ts.length){h+=ts.map((t,i)=>_gprow('T'+(t.tier!=null?t.tier:i)+' · '+String(t.model||'—').slice(0,16),fmt(t.calls)+' calls')).join('');}
+  const re=Object.entries(rout);
+  if(re.length){h+='<div class=gp-row><span class=k style="color:var(--cy)">— router —</span><b></b></div>';
+    h+=re.slice(0,6).map(([k,v])=>_gprow(k.slice(0,18),fmt(v))).join('');}
+  return h||'<div class=gp-empty>inference fabric warming up…</div>';}
+function refreshGlassPanels(){
+  try{
+    const map=[['pInfra',renderInfraPanel],['pPipe',renderPipePanel],['pKnow',renderKnowPanel],['pFab',renderFabPanel]];
+    map.forEach(([id,fn])=>{const p=$(id);if(!p)return;const body=p.querySelector('.gp-body');if(!body)return;
+      const drop=body.querySelector('.gp-drop');                 // preserve any active drop note
+      body.innerHTML=(drop?drop.outerHTML:'')+fn();});
+  }catch(e){}
+}
 
 /* ====== SECOND DOCK — self-development: AI suggestions of "what to build next" ======
    GET /suggestions -> blocks (title+detail+styled hyperlink+BUILD). The link opens the formatted
@@ -632,6 +823,7 @@ function setMode(mode,arg){
   const overlayOpen=(mode==='guardian'||mode==='library');
   const dk=$('dock');if(dk)dk.classList.toggle('hidden',overlayOpen);
   const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
+  ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
 }
 async function loadLib(){try{const lib=await(await fetch('library')).json();
    $('libgrid').innerHTML=(lib&&lib.length)?lib.map(m=>m.file.endsWith('.glb')
@@ -690,6 +882,7 @@ function tick(){fetch('metrics?_='+Date.now()).then(r=>r.json()).then(m=>{_m=m;_
     const b=m.box||{},vt=b.vram_total_gb||48,vu=b.vram_used_gb||0,vp=vu/vt*100;   // VRAM fallback until health warms up
     if(!h&&vp>92){$('status').className='chip bad';$('status').textContent='⚠ VRAM '+vp.toFixed(0)+'%';}}
   try{layoutFromMetrics(m);}catch(e){console.warn('layout',e);}
+  try{refreshGlassPanels();}catch(e){}                         // §1 C: feed the 4 flanking glass panels
   if(_selected&&_selected.userData.refresh){try{_selected.userData.refresh();}catch(e){}}
  }).catch(e=>{$('status').className='chip bad';$('status').textContent='● reconnecting';});}
 function budgetTick(){fetch('budget').then(r=>r.json()).then(s=>{
@@ -705,6 +898,7 @@ let envRT=null, liquid=null, liquidGeoBase=null, beamCore=null, beamGlow=null;
 let grid=null, gridMat=null;
 let godrays=null, bokeh=null, filmPass=null;          // (a) cinematic post passes
 let faceMesh=null, faceMat=null;                       // (b) oversized morphing holographic visage
+let sunFace=null;                                      // §1 B: the oversized helmet GLB = the central JARVIS face/sun
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
 let bodies=[],bodyMap=new Map(),_selected=null,flying=false,clock=null;
 let home={pos:new THREE.Vector3(0,60,320),tgt:new THREE.Vector3(0,0,0)};
@@ -956,6 +1150,25 @@ function buildBrain(){
         gl_FragColor=vec4(uColor*(1.3+uAmp), a); }` });
   faceMesh=new THREE.Mesh(faceGeo,faceMat);
   faceMesh.position.set(0,46,-6); faceMesh.renderOrder=2; brain.add(faceMesh);
+
+  /* ---- §1 B: SUN = the manifest helmet (jarvis_iron_man_helmet.glb) as the OVERSIZED central FACE ----
+     Loaded via the capped queue, auto-fit to the LARGEST scale in the universe (Ø≈90 — dwarfs every planet),
+     wrapped in chrome liquid-metal PBR (metalness 1 / low roughness / PMREM env) + cyan emissive. It sits on
+     the reactor stack and a PULSE/amp signal drives its emissive + a subtle scale "breathe/morph" as JARVIS
+     speaks (see tickFrame). The procedural plane-visage above remains as a holographic forming aura. */
+  enqueueGLB(WORLD_MANIFEST.sun.url, s=>{ try{
+      const box=new THREE.Box3().setFromObject(s); const d=box.getSize(new THREE.Vector3());
+      const maxDim=Math.max(d.x,d.y,d.z)||1; const k=90/maxDim;                 // biggest object in the universe
+      const ctr=box.getCenter(new THREE.Vector3());
+      s.scale.setScalar(k); s.position.set(-ctr.x*k, 30-ctr.y*k, -ctr.z*k);     // recentre + lift onto the reactor
+      s.userData._k=k;                                                          // base scale (the breathe-pulse multiplies this)
+      s.traverse(c=>{ if(c.isMesh){ try{
+        c.material=new THREE.MeshStandardMaterial({color:0xdfefff, metalness:1.0, roughness:0.12,
+          envMap:(envRT&&envRT.texture)||null, envMapIntensity:1.7, emissive:new THREE.Color(0x1ea7c8),
+          emissiveIntensity:0.5, dithering:true});
+      }catch(_){}}});
+      sunFace=s; sunFace.renderOrder=1; brain.add(sunFace);
+    }catch(_){}}, ()=>{/* helmet 404 → the liquid-metal blob + procedural visage remain the centre */});
 }
 function brainFallback(){fellBack=true;
   const ico=new THREE.Mesh(new THREE.IcosahedronGeometry(22,1),
@@ -1024,6 +1237,18 @@ function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
   const t=_texLoader.load('asset/'+asset+'.preview.png',()=>{},undefined,()=>{});
   try{t.encoding=THREE.sRGBEncoding;}catch(e){} _texCache.set(asset,t); return t; }
 
+/* ---- §1 A: concurrency-capped GLB loader queue (lazy-load; cap concurrent loads for perf) ----
+   The manifest planets load REAL GLBs by full /asset|/media URL. We never fire 1,600 loads at once: at most
+   MAX_GLB load in flight; the rest queue. enqueueGLB(url, onLoad). Cached so a re-layout never re-fetches. */
+const MAX_GLB=4; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
+function _pumpGLB(){ while(_glbInFlight<MAX_GLB && _glbQueue.length){ const job=_glbQueue.shift();
+    _glbInFlight++; glbsTried++;
+    _glbLoader.load(job.url, g=>{ _glbInFlight--; glbsOk++; try{job.ok(g);}catch(_){}; _pumpGLB(); },
+      undefined, ()=>{ _glbInFlight--; try{job.err&&job.err();}catch(_){}; _pumpGLB(); }); } }
+function enqueueGLB(url,onLoad,onErr){ if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
+  _glbQueue.push({url, ok:g=>{ try{_glbCache.set(url,g.scene);}catch(_){}; onLoad(g.scene.clone(true)); }, err:onErr});
+  _pumpGLB(); }
+
 function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
   const sz=o.size||4.4, asset=glbForName(o.name);
   // PBR fallback body — textured (its preview PNG) + emissive + bloom + PMREM reflections, NEVER a flat dot.
@@ -1043,6 +1268,34 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
         c.material.envMapIntensity=1.0; c.material.needsUpdate=true;}catch(_){}}});
       m.material.opacity=0; m.material.transparent=true;   // hide the proxy sphere; GLB now renders
       m.add(s); m.userData.glb=s; }catch(_){}}, undefined, ()=>{}); // 404 → keep the textured PBR sphere
+  return m;
+}
+
+/* ---- §1 A: MAJOR PLANET from the manifest — loads the REAL GLB by full /asset|/media URL ----
+   o={name,label,color,url,radius,angle,y,size,getCard}. A glowing emissive proxy orb shows immediately
+   (never a flat white dot); the real shaded GLB swaps in (auto-fitted to the target Ø via its bounding box,
+   PMREM env reflections) when the capped loader reaches it. Carries its TITLE label + is fully selectable. */
+function addManifestBody(o){
+  const sz=o.size||6;
+  const m=new THREE.Mesh(new THREE.SphereGeometry(sz,32,32),
+    new THREE.MeshStandardMaterial({color:0x0a3242, emissive:o.color, emissiveIntensity:0.6,
+      metalness:0.55, roughness:0.3, envMap:(envRT&&envRT.texture)||null, envMapIntensity:1.1, dithering:true}));
+  m.position.set(Math.cos(o.angle)*o.radius,o.y||0,Math.sin(o.angle)*o.radius);
+  m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
+    _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null,manifest:true};
+  const lab=makeLabel(o.label);lab.position.set(0,sz+5,0);m.add(lab);m.userData.label=lab;
+  scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
+  if(o.url)enqueueGLB(o.url, s=>{ try{
+      const box=new THREE.Box3().setFromObject(s); const d=box.getSize(new THREE.Vector3());
+      const maxDim=Math.max(d.x,d.y,d.z)||1; const k=(sz*1.8)/maxDim;            // auto-fit to target diameter
+      const ctr=box.getCenter(new THREE.Vector3());
+      s.scale.setScalar(k); s.position.sub(ctr.multiplyScalar(k));               // recentre on the body origin
+      s.traverse(c=>{ if(c.isMesh&&c.material){ try{ c.material.emissive=new THREE.Color(o.color);
+        c.material.emissiveIntensity=0.32; c.material.envMap=(envRT&&envRT.texture)||null;
+        c.material.envMapIntensity=1.1; c.material.needsUpdate=true; }catch(_){}}});
+      m.material.transparent=true; m.material.opacity=0;                          // hide proxy; the real GLB renders
+      m.add(s); m.userData.glb=s;
+    }catch(_){}}, ()=>{/* 404 → keep the glowing proxy orb (still graphical, labelled, selectable) */});
   return m;
 }
 function upsertBody(name,createFn,updateFn){
@@ -1077,10 +1330,61 @@ function phyllo(i, importance, type){
   const y=Math.sin(i*GOLDEN*1.7)*34*(0.5+imp);        // self-similar vertical spread
   return {radius:r, angle:a, y:y};
 }
+/* §1 F: Vogel/sunflower placement for the MAJOR planets — golden-angle θ=i·137.50776° + radius R0+k·√i,
+   scaled so high-importance (bigger count) planets sit CLOSER to the Sun. Self-similar at every nest level. */
+function vogel(i, importance, R0, k){
+  const imp=Math.max(0,Math.min(1,importance));
+  const a=i*GOLDEN;                                    // golden angle — no clumping
+  const r=(R0||300) + (k||26)*Math.sqrt(i+0.5) - imp*70;   // bigger/important → pulled inward
+  const y=Math.sin(i*GOLDEN*0.7)*44*(0.4+0.6*(1-imp));     // gentle self-similar vertical spread
+  return {radius:Math.max(150,r), angle:a, y:y};
+}
+
+/* ---- §1 A: the 16 MAJOR ONTOLOGY-DOMAIN PLANETS (the white-dot killer) ----
+   Built ONCE from the embedded deterministic manifest. Each domain → its CORRECT curated GLB (per
+   manifest.domains), placed by the φ/Vogel law, SIZED log-scaled by its real ont_object count, carrying
+   its TITLE label. Lazy-loaded through the concurrency-capped queue. Clicking flies to it + opens a card. */
+let _domainPlanetsBuilt=false;
+function buildDomainPlanets(){
+  if(_domainPlanetsBuilt||!scene||!THREE)return; _domainPlanetsBuilt=true;
+  const doms=WORLD_MANIFEST.domains||{};
+  // rank by count so the biggest domains get the lowest i (innermost, largest)
+  const entries=Object.entries(doms).sort((a,b)=>(b[1].count||0)-(a[1].count||0));
+  const maxLog=Math.log10(1+Math.max(...entries.map(([,v])=>v.count||1)));   // ≈ log10(111558)
+  entries.forEach(([dom,info],i)=>{
+    const lg=Math.log10(1+(info.count||1));
+    const imp=Math.max(0,Math.min(1,lg/maxLog));                 // 0..1 importance from real count
+    const sz=9+imp*16;                                           // 9..25 — domains are the MAJOR planets (> KPI/tier sizes)
+    const P=vogel(i,imp,300,30);
+    const name='dom:'+dom, count=info.count||0;
+    const card=()=>({title:dom,subtitle:'ontology domain · '+(info.reason||''),
+      bar:Math.round(imp*100),
+      props:[{k:'Objects',v:fmt(count)},{k:'Importance',v:Math.round(imp*100)+'%'},{k:'GLB',v:(info.url||'').split('/').pop()}],
+      lines:['One of the 16 real ontology domains from brain.db.','Sized by its real object count; placed by the golden-angle φ law.'],
+      actions:[{label:'◈ Focus in graph',kind:'graph',arg:dom}]});
+    addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
+      radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
+  });
+  // a lighter outer belt of the 31 master TOPIC planets (ranked by pagerank) — keeps depth without 1,600 loads
+  const topics=(WORLD_MANIFEST.topics||[]).slice(0,16);          // cap concurrent/visible heavy GLB topic planets
+  const maxPr=Math.max(...topics.map(t=>t.pagerank||0))||1;
+  topics.forEach((t,i)=>{const imp=Math.max(0,Math.min(1,(t.pagerank||0)/maxPr));
+    const sz=6+imp*6;
+    const P=vogel(i,imp*0.5,470,30);                             // farther belt
+    const name='topic:'+i;
+    const card=()=>({title:t.title,subtitle:'master topic · pagerank '+(t.pagerank||0).toFixed(4),
+      props:[{k:'PageRank',v:(t.pagerank||0).toFixed(4)},{k:'GLB',v:(t.url||'').split('/').pop()}],
+      actions:[{label:'◈ Focus in graph',kind:'graph',arg:t.title}]});
+    addManifestBody({name:name,label:t.title.length>20?t.title.slice(0,19)+'…':t.title,color:COLORS.tier,url:t.url,
+      radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
+  });
+  rebuildMacroConnections();
+}
 
 /* ---- build/refresh ALL bodies from /metrics (deterministic; relationship-driven placement) ---- */
 function layoutFromMetrics(m){
   if(!scene)return;
+  try{buildDomainPlanets();}catch(e){}                  // §1 A: the 16 real domain planets (built once)
   const c=m.completion||{},g={};((m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
   const corr=m.correlation||{},rout=m.routing||{},box=m.box||{},vps=m.vps||{};
   const vt=box.vram_total_gb||48,vu=box.vram_used_gb||0;
@@ -1239,6 +1543,8 @@ function macroEdges(){
   bodyMap.forEach((m,name)=>{ if(name.indexOf('tier:')===0)push(name,'sys:router');
     if(name.indexOf('pipe:')===0)push(name,'sys:corr'); });
   push('infra:vps','guardian'); push('infra:vps','selfdev'); push('infra:vps','climate'); push('infra:vps','agentos');
+  // §1 A: every ontology-domain planet links to the Ontology hub (and the hub feeds the brain centre)
+  bodyMap.forEach((m,name)=>{ if(name.indexOf('dom:')===0)push(name,'kpi:Ontology'); });
   return E;
 }
 function rebuildMacroConnections(){
@@ -1248,6 +1554,9 @@ function rebuildMacroConnections(){
   const pts=[];
   E.forEach(([s,t])=>{const a=bodyMap.get(s),b=bodyMap.get(t);
     if(a&&b)pts.push(a.position.x,a.position.y,a.position.z, b.position.x,b.position.y,b.position.z);});
+  // §1 A: radial glowing lines from each major domain/topic planet to the Sun (brain at origin)
+  bodyMap.forEach((b,name)=>{ if(name.indexOf('dom:')===0||name.indexOf('topic:')===0)
+    pts.push(b.position.x,b.position.y,b.position.z, 0,14,0); });
   if(!pts.length)return;
   const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
   _macroLines=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x29e7ff,transparent:true,
@@ -1344,11 +1653,16 @@ function _pinDragMove(e){ if(!_pinGrab)return;
     _pinGhost.textContent='📌 '+(_pinGrab.label||_pinGrab.name.split(':').pop());
     document.body.appendChild(_pinGhost);}
   if(_pinGrab.armed&&_pinGhost){_pinGhost.style.left=(e.clientX+12)+'px';_pinGhost.style.top=(e.clientY+12)+'px';
-    $('dock')&&$('dock').classList.toggle('pinReady',_overDock(e));}}
+    $('dock')&&$('dock').classList.toggle('pinReady',_overDock(e));
+    // §1 C: also light up a glass panel when the dragged planet hovers it (drop = inspect)
+    ['pInfra','pPipe','pKnow','pFab'].forEach(id=>{const p=$(id);if(!p)return;const r=p.getBoundingClientRect();
+      const over=e.clientX>=r.left-12&&e.clientX<=r.right+12&&e.clientY>=r.top-12&&e.clientY<=r.bottom+12;
+      p.classList.toggle('dropReady',over);});}}
 function _pinDragEnd(e){ if(_pinGrab&&_pinGrab.armed){
     if(_overDock(e)){pinBodyToDock(_pinGrab.name,_pinGrab.label);}
     if(_pinGhost){_pinGhost.remove();_pinGhost=null;}
-    $('dock')&&$('dock').classList.remove('pinReady');controls&&(controls.enabled=true);}
+    $('dock')&&$('dock').classList.remove('pinReady');controls&&(controls.enabled=true);
+    ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.remove('dropReady'));}  // §1 C: clear panel highlights (their own pointerup already handled the drop)
   _pinGrab=null;}
 function onCanvasClick(e){
   if(!uniReady)return;
@@ -1446,6 +1760,13 @@ function tickFrame(){
       faceMat.uniforms.uForm.value+=(want-faceMat.uniforms.uForm.value)*Math.min(1,dt*4.0);
       if(faceMesh){faceMesh.lookAt(camera.position);}}                                    // billboard toward viewer
 
+    // --- §1 B: the helmet SUN/FACE — chrome liquid-metal emissive + breathe/morph pulse as JARVIS speaks ---
+    if(sunFace){ sunFace.rotation.y+=dt*(0.06+A*0.25);                                     // slow majestic spin, faster when speaking
+      const k=sunFace.userData._k||1, morph=1+A*0.06+SPK*0.10+SPIKE*0.08;                 // subtle living "breathe/morph" scale
+      sunFace.scale.setScalar(k*morph);
+      const ei=0.45+SPK*1.6+SPIKE*1.0+A*0.4;                                              // emissive surges with the voice/pulse
+      sunFace.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=ei;}); }
+
     // --- (c) macro connection lines glow with the pulse ---
     if(_macroLines)_macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25;
 
@@ -1496,6 +1817,8 @@ addEventListener('pointerdown',engage,{once:true});
 
 // start data loops immediately; build the scene on first gesture (autoplay policy) OR auto after 2.2s
 tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();
+wireDockMove();              // §1 D: make the whole dock draggable to any position
+wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
 setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();}},2200);
