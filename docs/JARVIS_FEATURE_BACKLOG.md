@@ -39,7 +39,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant. *(2026-06-09 — AmbientReactorHum.jsx: 60Hz sawtooth + 120Hz harmonic + 30Hz sub-bass + bandpass noise + LFO tremolo; ◇ HUM toggle at left:1012 bottom strip; isAmbientQuery + jarvis:ambient-toggle wired in JarvisBrain; build PASSED)*
 - [x] F20 "Show me" navigation — ShowMeNavigation.jsx exports isShowMeQuery+resolveShowMeQuery; JarvisBrain.ask() pre-routes "show/open/view X" to normalized jarvis:ask before overlay opens, covering all 10 panels (risks/markets/datasets/investigations/scenarios/docs/skills/brain/anchors/status); build PASSED. *(2026-06-09)*
 - [x] F21 Live clock + uptime (real process uptime from system status). *(2026-06-09 — LiveClockUptime.jsx: ticking clock (1s interval) + process uptime polled every 30s from /v1/jarvis/system/status; fixed bottom-left display; isClockQuery+buildClockScript TTS wired in JarvisBrain; mounted in App.jsx; build PASSED)*
-- [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
+- [x] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken). *(2026-06-09 — AlertToasts.jsx: polls /v1/alerts?status=open every 20s; new sev≥70 alerts appear as sliding toasts top-right; critical (sev≥90) speaks aloud via /v1/voice/tts; auto-dismiss 12s; mounted in App.jsx; build PASSED)*
 - [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
 - [ ] F24 Contacts directory — /entities/Contact → searchable people list.
 - [ ] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress.

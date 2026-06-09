@@ -1,0 +1,1 @@
+2026-06-09 F22 Alert toasts — AlertToasts.jsx polls /v1/alerts?status=open every 20s; sev>=70 toasts top-right; sev>=90 spoken via /v1/voice/tts; auto-dismiss 12s; mounted in App.jsx; Vite build PASSED.

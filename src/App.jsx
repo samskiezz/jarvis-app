@@ -27,6 +27,7 @@ import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
+import AlertToasts from '@/components/cinematic/AlertToasts';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -62,6 +63,7 @@ function App() {
             <JarvisBootSequence />
             <AmbientReactorHum />
             <LiveClockUptime />
+            <AlertToasts />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
