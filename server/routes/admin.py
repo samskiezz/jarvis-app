@@ -311,19 +311,25 @@ async def pm2_list(_token: str | None = Depends(optional_bearer)):
 
 # Only these may be toggled from the panel (never the API serving this request, to avoid self-kill).
 _PM2_GUARDED = {"jarvis-backend"}
+# SHARED services owned by ANOTHER product (the Underworld sim). The panel must NEVER control these —
+# stopping/bouncing them is the one thing the build rules forbid. Deny ALL actions, deny-by-default.
+_PM2_SHARED = {"underworld-backend"}
 _PM2_ACTIONS = {"start", "stop", "restart", "reload"}
 
 
 @router.post("/v1/pm2/{name}/{action}")
 async def pm2_action(name: str, action: str, _token: str = Depends(require_bearer)):
-    """Start/stop/restart/reload a pm2 process. Auth required (bearer). Refuses to stop the backend
-    that serves this very request, so the operator can't accidentally lock themselves out."""
+    """Start/stop/restart/reload a pm2 process. Auth required (bearer). Refuses to touch a shared
+    service, and refuses to stop the backend that serves this very request, so the operator can't
+    accidentally take down the sim or lock themselves out."""
     pm2 = _pm2_bin()
     if not pm2:
         return {"ok": False, "error": "pm2 not found on PATH"}
     act = action.lower()
     if act not in _PM2_ACTIONS:
         return {"ok": False, "error": f"unknown action '{action}'"}
+    if name in _PM2_SHARED:
+        return {"ok": False, "error": f"'{name}' is a shared service (another product) — it cannot be controlled from this panel"}
     if name in _PM2_GUARDED and act in ("stop",):
         return {"ok": False, "error": f"'{name}' is guarded (it serves this API) — use restart instead"}
     try:
@@ -333,3 +339,77 @@ async def pm2_action(name: str, action: str, _token: str = Depends(require_beare
                 "detail": (r.stdout or r.stderr or "").strip()[-300:]}
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "name": name, "action": act, "error": str(e)[:200]}
+
+
+# ── UE5 render pipeline status (the background build→deploy→stream job) ────────────
+@router.get("/v1/pipeline")
+async def pipeline_status(_token: str | None = Depends(optional_bearer)):
+    """Live status of the UE5 render pipeline (per-step status + ETA), read from the status file
+    written by scripts/ue5_pipeline.py. Returns {running:false} when no pipeline has run."""
+    import os as _os, time as _time
+    path = "/opt/jarvis-app-1/ue5_pipeline_status.json"
+    try:
+        with open(path) as f:
+            data = _json.load(f)
+    except FileNotFoundError:
+        return {"status": "idle", "steps": [], "overall_pct": 0, "eta_s": 0,
+                "note": "no pipeline run yet"}
+    except Exception as e:  # noqa: BLE001
+        return {"status": "error", "error": str(e)[:200], "steps": []}
+    # Staleness guard: a status file that says 'running' but whose process is gone (OOM/crash/reboot)
+    # — or which hasn't heartbeated in >10min — would otherwise freeze the panel on a dead ETA and
+    # keep LAUNCH disabled forever. Surface 'stalled' so the operator can see it died and relaunch.
+    try:
+        if data.get("status") == "running":
+            pid = data.get("pid")
+            alive = False
+            if pid:
+                try:
+                    _os.kill(int(pid), 0); alive = True
+                except OSError:
+                    alive = False
+            else:
+                alive = bool(_os.popen("pgrep -f 'ue5_pipeline[.]py'").read().strip())
+            stale = (_time.time() - float(data.get("updated_at", 0))) > 600
+            if not alive or stale:
+                data["status"] = "stalled"
+                data["note"] = "pipeline process not running — status is stale (safe to relaunch)"
+                for s in data.get("steps", []):
+                    if s.get("status") == "running":
+                        s["status"] = "stalled"
+    except Exception:  # noqa: BLE001
+        pass
+    return data
+
+
+@router.post("/v1/pipeline/start")
+async def pipeline_start(_token: str = Depends(require_bearer)):
+    """(Re)launch the UE5 render pipeline as a detached background job. Bearer-guarded. No-op if a
+    pipeline process is already running."""
+    import os as _os
+    # Bracket the pattern so pgrep's own shell (whose cmdline contains the pattern) isn't self-matched.
+    running = _os.popen("pgrep -f 'ue5_pipeline[.]py'").read().strip()
+    if running:
+        return {"ok": True, "already_running": True, "pids": running.split()}
+    cmd = ("setsid nohup python3 /opt/jarvis-app-1/scripts/ue5_pipeline.py "
+           "> /tmp/ue5_pipeline.log 2>&1 < /dev/null &")
+    _os.system(cmd)
+    return {"ok": True, "started": True}
+
+
+@router.post("/v1/pipeline/deploy")
+async def pipeline_deploy(_token: str = Depends(require_bearer)):
+    """Run the GPU-deploy phase (ship build to Vast → free its VRAM/pause Ollama → Pixel-Stream on a
+    4090). Touches the SHARED Vast box, so it's a SEPARATE explicit action from the local build."""
+    import os as _os
+    # NEVER kill an in-progress build to deploy — that orphans the multi-hour cook and can ship a
+    # half-built tree to the shared GPU. The deploy button is only meant to fire once the local build
+    # is DONE (the driver has exited). If any pipeline is still running, refuse.
+    running = _os.popen("pgrep -f 'ue5_pipeline[.]py'").read().strip()
+    if running:
+        return {"ok": False, "pids": running.split(),
+                "error": "a pipeline run is in progress — wait for the build (package step) to finish, then deploy"}
+    cmd = ("setsid nohup env UE5_DEPLOY=1 python3 /opt/jarvis-app-1/scripts/ue5_pipeline.py "
+           "> /tmp/ue5_pipeline.log 2>&1 < /dev/null &")
+    _os.system(cmd)
+    return {"ok": True, "deploying": True}

@@ -1,12 +1,25 @@
 // Copyright Underworld. All Rights Reserved.
 #include "UnderworldMinion.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
+#include "UObject/ConstructorHelpers.h"
 
 AUnderworldMinion::AUnderworldMinion()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
+
+	// VISIBLE BODY — engine cylinder so headless renders show moving figures (no authored
+	// BP_Minion mesh exists). Driven by the live sim through ApplyState/Tick.
+	UStaticMeshComponent* BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+	BodyMesh->SetupAttachment(RootComponent);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CylMesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
+	if (CylMesh.Succeeded()) { BodyMesh->SetStaticMesh(CylMesh.Object); }
+	BodyMesh->SetRelativeScale3D(FVector(0.45f, 0.45f, 0.9f));
+	BodyMesh->SetRelativeLocation(FVector(0.f, 0.f, 90.f));
+	BodyMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AUnderworldMinion::ApplyState(const FUwMinionState& State)

@@ -1,0 +1,63 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.5",
+  "Category": "Simulation",
+  "Description": "Underworld \u2014 the live patent-Minion civilisation, rendered in UE5 and streamed to the web via Pixel Streaming. Driven by the backend's /worlds/{id}/scene-state contract.",
+  "Modules": [
+    {
+      "Name": "Underworld",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "PixelStreaming",
+      "Enabled": true
+    },
+    {
+      "Name": "PixelStreamingPlayer",
+      "Enabled": true
+    },
+    {
+      "Name": "JsonBlueprintUtilities",
+      "Enabled": true
+    },
+    {
+      "Name": "WebSocketNetworking",
+      "Enabled": true
+    },
+    {
+      "Name": "HTTPBlueprint",
+      "Enabled": true
+    },
+    {
+      "Name": "Water",
+      "Enabled": true
+    },
+    {
+      "Name": "Landmass",
+      "Enabled": true
+    },
+    {
+      "Name": "InterchangeEditor",
+      "Enabled": true
+    },
+    {
+      "Name": "PythonScriptPlugin",
+      "Enabled": true
+    },
+    {
+      "Name": "EditorScriptingUtilities",
+      "Enabled": true
+    },
+    {
+      "Name": "Fab",
+      "Enabled": false
+    },
+    {
+      "Name": "Bridge",
+      "Enabled": false
+    }
+  ]
+}
