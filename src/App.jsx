@@ -13,6 +13,7 @@ import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
+import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -34,6 +35,7 @@ function App() {
                 so a fresh deploy initialises before you even pick a destination. */}
             <FirstRunSetup />
             <JarvisBrain />
+            <WorldIncidentFeed />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

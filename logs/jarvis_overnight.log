@@ -3,3 +3,4 @@
 2026-06-08 | TelemetryTicker (F03) | Live CPU/mem/load + brain nodes/synapses ticker in APEX top bar; polls /v1/jarvis/system/status + /v1/cinematic/brain every 15s; build PASSED.
 2026-06-08 | SceneKeyboardNav (F04) | Global keyboard scene-jump: 1-9 → scenes 01-09, 0 → scene 10, Esc → home; guards input focus; HUD flash badge; mounted in JarvisBrain; build PASSED.
 2026-06-09 | SpokenStatusReport (F05) | "JARVIS, status" → fetches /v1/jarvis/system/status + /v1/cinematic/brain, formats spoken sentence, TTS via /v1/voice/tts; wired in JarvisBrain.ask() early-return; build PASSED.
+2026-06-09 | WorldIncidentFeed (F06) | Floating cinematic panel: mini Three.js globe with live earthquake pins + scrolling seismic incident list from /functions/getLiveIntel; auto-refreshes every 60s; mounted in App.jsx; build PASSED.
