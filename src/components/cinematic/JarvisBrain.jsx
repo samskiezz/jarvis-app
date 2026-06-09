@@ -20,6 +20,7 @@ import { isAnchorQuery, buildAnchorScript } from "@/components/cinematic/SceneAn
 import { isAmbientQuery } from "@/components/cinematic/AmbientReactorHum";
 import { isShowMeQuery, resolveShowMeQuery } from "@/components/cinematic/ShowMeNavigation";
 import { isClockQuery, buildClockScript } from "@/components/cinematic/LiveClockUptime";
+import { isInvestmentQuery, buildInvestmentScript } from "@/components/cinematic/InvestmentWidget";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -240,6 +241,17 @@ export default function JarvisBrain() {
         const answer = await buildClockScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(7000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isInvestmentQuery(q)) {
+      try {
+        const answer = await buildInvestmentScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
         setThinking(false); setOpen(false);
       }
