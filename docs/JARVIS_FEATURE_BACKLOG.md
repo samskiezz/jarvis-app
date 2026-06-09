@@ -28,7 +28,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F08 Entity quick-search — query /v1/graph/subgraph + /entities/IntelProfile; floating search panel (Ctrl+Shift+E or "JARVIS, find X"); click a result to hear a one-line dossier via TTS; isEntitySearchQuery early-return wired in JarvisBrain; jarvis:speak-dossier event loop for panel → voice; build PASSED. *(2026-06-09)*
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards (critical/high/medium/low) with red pulse on critical; severity filter tabs; "JARVIS, risks" opens board via isRiskQuery + buildRiskScript TTS; mounted in App.jsx; build PASSED. *(2026-06-09)*
 - [x] F10 Task board — /entities/Task → CRUD task board with kanban columns (TODO/IN_PROGRESS/DONE), new-task form, stat tiles; registered as TaskManager in pageRegistry.js jarvis group. *(2026-06-08)*
-- [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
+- [x] F11 Datasets browser — /v1/datasets → catalog list with row counts, filter input, row-count badges; "JARVIS, datasets" intent wired in JarvisBrain; DATA toggle button bottom-left strip; build PASSED. *(2026-06-09)*
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
