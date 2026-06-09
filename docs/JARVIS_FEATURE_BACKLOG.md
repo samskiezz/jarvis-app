@@ -33,7 +33,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome. *(2026-06-09 — ScenarioLauncher.jsx: floating panel lists /v1/scenario/list; ▶ RUN button POSTs to /v1/scenario/{id}/run + shows outcome inline; isScenarioQuery TTS brief wired in JarvisBrain; SIM toggle bottom-left strip; build PASSED)*
 - [x] F14 Document search — /v1/reports + /knowledge/* → combined catalog panel; src-filter tabs; search input; click → JARVIS TTS summary; isDocumentQuery wired in JarvisBrain; DOCS toggle bottom-left; build PASSED. *(2026-06-09)*
 - [x] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live. *(2026-06-09 — SkillScorecard.jsx: floating panel fetches /v1/aip/skill, shows score bars + level badges + filter input; avg score in header; isSkillQuery + buildSkillScript TTS brief wired in JarvisBrain; SKILLS toggle at left:700 bottom-left; auto-refreshes every 60s; mounted in App.jsx; build PASSED)*
-- [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.
+- [x] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time. *(2026-06-09 — BrainGrowthSparkline.jsx: floating panel with rolling 40-point AreaChart sparklines for nodes+synapses; BRAIN toggle at left:804; isBrainQuery+buildBrainScript TTS brief wired in JarvisBrain; auto-polls every 30s; mounted in App.jsx; build PASSED)*
 - [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
 - [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
 - [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
