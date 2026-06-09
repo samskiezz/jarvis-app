@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PipelineState",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "enabled",
+    "status",
+    "can_rerun",
+    "can_pause",
+    "can_stop",
+    "can_resume"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "working",
+        "paused",
+        "stopped",
+        "degraded",
+        "failed"
+      ]
+    },
+    "progress_percent": {
+      "type": "number"
+    },
+    "resource_usage": {
+      "type": "object"
+    }
+  }
+}

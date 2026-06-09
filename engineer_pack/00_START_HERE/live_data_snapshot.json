@@ -1,0 +1,69 @@
+{
+  "jarvis_version": "LIVE AUTOMATION v1.0.1309 -> proposed v3 UI/control plane",
+  "status": "ONLINE",
+  "knowledge_build": {
+    "percent": 97.4,
+    "enriched": 6851,
+    "topics_total": 7031
+  },
+  "velocity_per_min": 7.2,
+  "measurements": 88382,
+  "measurements_growth_per_hour": 4727,
+  "documents": 34331,
+  "notes_learned": 19408,
+  "ontology_objects": 241920,
+  "ontology_growth_per_hour": 4727,
+  "glb_models_generated_existing": 1638,
+  "vast_gpu_box": {
+    "gpus": "2x RTX 4090",
+    "vram_used_gb": 44.5,
+    "vram_total_gb": 48,
+    "models": [
+      {
+        "name": "qwen2.5:32b",
+        "vram_gb": 28.6
+      },
+      {
+        "name": "llama3.1:8b",
+        "vram_gb": 9.6
+      },
+      {
+        "name": "llama3.2:latest",
+        "vram_gb": 6.3
+      }
+    ]
+  },
+  "hostinger_vps": {
+    "cpu_percent": 98.9,
+    "cores": 8,
+    "ram_used_gb": 11.7,
+    "ram_total_gb": 32.9,
+    "disk_used_gb": 370.3,
+    "disk_total_gb": 414.9,
+    "load": 10.98,
+    "warning": "laravel-web restart loop detected"
+  },
+  "llm_calls": {
+    "base llama3.1:8b": 57438,
+    "strong qwen2.5:32b": 57377,
+    "kimi kimi-k2.6": 53,
+    "claude claude-sonnet-4-5": 2,
+    "heavy->strong qwen2.5:32b": 1,
+    "micro llama3.2:latest": 1,
+    "openai gpt-5.5": 1
+  },
+  "pipelines": [
+    "API Server",
+    "Knowledge Builder",
+    "Cross-Correlator",
+    "Live Dashboard",
+    "Self-Learning Loop",
+    "Frontend",
+    "GLB Loader",
+    "Document Ingestor",
+    "Live Data Producer",
+    "Heavy Worker",
+    "Underworld API",
+    "Underworld Web"
+  ]
+}

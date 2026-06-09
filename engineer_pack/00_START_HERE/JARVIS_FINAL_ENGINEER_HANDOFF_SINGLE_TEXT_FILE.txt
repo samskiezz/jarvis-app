@@ -1,0 +1,52 @@
+JARVIS FINAL ENGINEER HANDOFF — SINGLE TEXT FILE
+Date: 2026-06-09
+
+GOAL
+Build a fully interactive JARVIS dashboard/control plane with live infrastructure telemetry, pipeline controls, 6-tier inference routing visibility, cross-correlation daemon controls, embedded Claude coding workspace, voice/alerts, holographic neural brain visualizer, map, animated charts, cinematic VFX/SFX, and an Asset Forge widget that can generate images and GLB/PBR assets on demand.
+
+CURRENT LIVE DATA TO DISPLAY
+- Knowledge build: 97.4%, 6,851 / 7,031 topics enriched
+- Velocity: +7.2/min
+- Measurements: 88,382, +4,727/h
+- Documents: 34,331
+- Notes learned: 19,408
+- Ontology objects: 241,920, +4,727/h
+- Existing GLB models: 1,638
+- Vast GPU Box: 2x4090, 44.5 / 48 GB VRAM used
+- Models: qwen2.5:32b 28.6GB, llama3.1:8b 9.6GB, llama3.2:latest 6.3GB
+- Hostinger VPS: CPU 98.9%, RAM 11.7 / 32.9GB, Disk 370.3 / 414.9GB, Load 10.98, 8 cores
+- Warning: laravel-web restart loop detected
+
+FINAL TECH STACK
+Frontend: React/Next.js or Vite + TypeScript, Tailwind, Framer Motion, GSAP, Three.js, React Three Fiber, Drei, React Postprocessing, Zustand, TanStack Query, Recharts/ECharts/uPlot, WebSocket/SSE, Web Audio API.
+Backend: existing API/FastAPI/Node service, Redis, BullMQ or Temporal, Postgres/existing DB, asset storage, audit logs, resource monitor, pipeline controller, Asset Forge service, Claude Agent bridge.
+AI/Serving: GPT Image 2 for images, Tripo3D for GLB/PBR, LiteLLM Proxy as model gateway, vLLM/Ollama for local models, RouteLLM or Llama 3B router for weak-vs-strong routing.
+Observability: OpenTelemetry + Prometheus/Grafana or equivalent.
+
+PRODUCTION ASSET REQUIREMENTS
+- GPT Image 2 assets: 64 required, 16 optional
+- GLB/PBR assets: 78 required, 24 optional
+- Animation/VFX modules: 116
+- SFX cues: 50
+
+PANEL LAYOUT
+Top: command bar with JARVIS title, ONLINE, search, Run All, Pause All, Stop All, Sleep Mode.
+Left: navigation sidebar.
+Top KPI strip: knowledge build, velocity, measurements, documents, notes, ontology, GLB models.
+Upper panels: Inference Fabric, Infrastructure, Automation Pipelines.
+Middle panels: Cross-Correlation Daemon, Live Activity, Knowledge Graph, Claude Agent workspace.
+Bottom / drawers: Voice & Alerts, Asset Forge, Settings, Audit Timeline.
+
+HARD RULE
+Every number/button/control must be real UI. Images are supporting assets only. GLBs are visual props only. The dashboard must control real backend state.
+
+SEE THE ZIP FILES
+- 00_START_HERE/README_START_HERE.md
+- 04_assets/images/gpt_image_2_asset_inventory.csv
+- 04_assets/glb_pbr/tripo3d_glb_pbr_asset_inventory.csv
+- 04_assets/animation_vfx/animation_vfx_inventory.csv
+- 04_assets/sfx/sfx_inventory.csv
+- 03_ui_panels/feature_matrix.csv
+- 06_api/api_endpoint_inventory.csv
+- 14_implementation/implementation_backlog.csv
+- 15_qa/FINAL_QA_DOUBLE_CHECK_REPORT.md

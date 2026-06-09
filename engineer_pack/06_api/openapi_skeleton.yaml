@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: JARVIS Dashboard Control Plane API
+  version: 3.0.0
+paths:
+  /api/dashboard/state:
+    get:
+      summary: Initial dashboard state snapshot
+      responses:
+        '200': { description: OK }
+  /api/events/stream:
+    get:
+      summary: Server-sent events stream
+      responses:
+        '200': { description: Event stream }
+  /api/pipelines/{id}/toggle:
+    post:
+      summary: Enable or disable a pipeline
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /api/assets/image/generate:
+    post:
+      summary: Generate an image asset with GPT Image 2
+      responses:
+        '202': { description: Job accepted }
+  /api/assets/glb/text-to-3d:
+    post:
+      summary: Generate GLB/PBR asset from text
+      responses:
+        '202': { description: Job accepted }

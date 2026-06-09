@@ -19,9 +19,11 @@ from __future__ import annotations
 import glob
 import http.server
 import json
+import mimetypes
 import os
 import secrets
 import sqlite3
+import sys
 import subprocess
 import threading
 import time
@@ -29,6 +31,8 @@ import urllib.request
 
 PORT = int(os.environ.get("DASHBOARD_PORT", "8095"))
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)  # so `from server.services import ...` works for task/media endpoints
 BRAIN_DB = os.path.join(ROOT, "server/data/brain.db")
 DOCS_DB = os.path.join(ROOT, "server/data/documents.db")
 VEC_DB = os.path.join(ROOT, "server/data/vectors.db")
@@ -36,16 +40,38 @@ TL_DB = os.path.join(ROOT, "server/data/tiered_llm.db")
 FB_DB = os.path.join(ROOT, "server/data/feedback.db")
 GLB_DIR = os.path.join(ROOT, "underworld/web/public/models/generated")
 BOX = os.environ.get("OLLAMA_HOST", "http://211.72.13.201:41137").rstrip("/")
-CONTROL_TOKEN = os.environ.get("DASH_CONTROL_TOKEN") or secrets.token_hex(8)  # toggle auth
+def _control_token() -> str:
+    """Stable control token — persisted so it survives dashboard restarts (otherwise every already-open
+    tab goes stale and every Claude/task/control button returns 'unauthorized')."""
+    t = os.environ.get("DASH_CONTROL_TOKEN")
+    if t:
+        return t
+    p = os.path.join(ROOT, "server", "data", ".control_token")
+    try:
+        if os.path.exists(p):
+            v = open(p).read().strip()
+            if v:
+                return v
+        v = secrets.token_hex(8)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        open(p, "w").write(v)
+        return v
+    except Exception:  # noqa: BLE001
+        return secrets.token_hex(8)
 
-# friendly name  →  the substring that identifies the runner in `ps`
-RUNNERS = [
-    ("Knowledge Builder · 7,000 topics", "batch_loader"),
-    ("Multi-Model Research", "multi_research"),
-    ("Background Worker · scrape·OCR·enrich", "server.worker"),
-    ("Jarvis GLB Generator · 3D assets", "jarvis_convert_budget"),
-    ("API Server", "uvicorn server.main"),
-]
+
+CONTROL_TOKEN = _control_token()  # toggle auth (persistent)
+# Shared secret for the HOME-LAN AirTouch 5 bridge's outbound poll/report (separate from the web
+# control token on purpose — this key never touches a browser). Falls back to the control token so a
+# single-secret setup still works, but a dedicated CLIMATE_BRIDGE_KEY is recommended.
+CLIMATE_BRIDGE_KEY = os.environ.get("CLIMATE_BRIDGE_KEY") or CONTROL_TOKEN
+
+# the work-doing daemons shown in the Live Runners panel (live status from pm2, labels from TASKS)
+RUNNER_SET = ["jarvis-orchestrator", "jarvis-ingestor", "jarvis-worker",
+              "jarvis-batch-loader", "jarvis-correlator", "jarvis-feedback"]
+# which daemons have a finite job vs run indefinitely (for the "time left / indefinite" display)
+INDEFINITE = {"jarvis-orchestrator", "jarvis-ingestor", "jarvis-correlator", "jarvis-feedback",
+              "jarvis-worker", "jarvis-backend", "jarvis-frontend", "jarvis-dashboard", "jarvis-glb-loader"}
 
 _cache: dict = {}  # {key: (expires_ts, value)} — for expensive scans (GLB listing)
 
@@ -82,42 +108,98 @@ def _cpu_pct() -> float:
         return 0.0
 
 
+def _cpu_cores() -> list:
+    try:
+        def snap():
+            d = {}
+            for ln in open("/proc/stat"):
+                if ln.startswith("cpu") and len(ln) > 3 and ln[3].isdigit():
+                    p = list(map(int, ln.split()[1:])); d[ln.split()[0]] = (sum(p), p[3] + p[4])
+            return d
+        a = snap(); time.sleep(0.1); b = snap(); out = []
+        for k in sorted(a, key=lambda x: int(x[3:])):
+            dt = b[k][0] - a[k][0]; di = b[k][1] - a[k][1]
+            out.append(round(100 * (1 - di / dt)) if dt else 0)
+        return out
+    except Exception:  # noqa: BLE001
+        return []
+
+
 def _vps() -> dict:
     out = {"cores": os.cpu_count()}
     try:
         out["cpu_pct"] = _cpu_pct()
+        out["cpu_cores"] = _cached("cores", 4.0, _cpu_cores)
         out["load"] = round(os.getloadavg()[0], 2)
         mem = {ln.split(":")[0]: int(ln.split()[1]) for ln in open("/proc/meminfo")}
         out["mem_total_gb"] = round(mem["MemTotal"] / 1e6, 1)
         out["mem_used_gb"] = round((mem["MemTotal"] - mem["MemAvailable"]) / 1e6, 1)
+        out["swap_total_gb"] = round(mem.get("SwapTotal", 0) / 1e6, 1)
+        out["swap_used_gb"] = round((mem.get("SwapTotal", 0) - mem.get("SwapFree", 0)) / 1e6, 1)
         st = os.statvfs(ROOT)
         out["disk_total_gb"] = round(st.f_blocks * st.f_frsize / 1e9, 1)
         out["disk_used_gb"] = round((st.f_blocks - st.f_bavail) * st.f_frsize / 1e9, 1)
+        out.update(_cached("hostmeta", 60.0, _host_meta))
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
+def _host_meta() -> dict:
+    out = {}
+    try:
+        import platform
+        out["kernel"] = platform.release()
+        if os.path.exists("/etc/os-release"):
+            for ln in open("/etc/os-release"):
+                if ln.startswith("PRETTY_NAME="):
+                    out["os"] = ln.split("=", 1)[1].strip().strip('"')
+        try:
+            d = subprocess.run(["docker", "ps", "-q"], capture_output=True, text=True, timeout=4).stdout.split()
+            da = subprocess.run(["docker", "ps", "-aq"], capture_output=True, text=True, timeout=4).stdout.split()
+            out["docker_running"] = len(d); out["docker_total"] = len(da)
+        except Exception:  # noqa: BLE001
+            out["docker_running"] = None
+        try:
+            ips = subprocess.run(["hostname", "-I"], capture_output=True, text=True, timeout=3).stdout.split()
+            out["public_ip"] = next((i for i in ips if not i.startswith(("10.", "172.", "192.168", "100.", "fd", "fe80"))), ips[0] if ips else "")
+        except Exception:  # noqa: BLE001
+            pass
     except Exception:  # noqa: BLE001
         pass
     return out
 
 
 def _box() -> dict:
-    out = {"reachable": False, "vram_total_gb": 48.0, "models": [], "vram_used_gb": 0.0}
+    # VRAM + resident models are REAL (Ollama /api/ps). GPU util/temp/power/PCIe/cost/instance are NOT
+    # available without nvidia-smi / the Vast API on the box — surfaced as None (shown as "—", not faked).
+    out = {"reachable": False, "vram_total_gb": 48.0, "models": [], "vram_used_gb": 0.0,
+           "gpu_util": None, "gpu_temp": None, "power_w": None, "cuda": None, "cost_hr": None,
+           "instance_id": None, "region": None, "endpoint": BOX}
     try:
         with urllib.request.urlopen(BOX + "/api/ps", timeout=2.5) as r:
             d = json.loads(r.read())
         out["reachable"] = True
-        out["models"] = [{"name": m["name"], "vram_gb": round(m.get("size_vram", 0) / 1e9, 1)}
-                         for m in d.get("models", [])]
-        out["vram_used_gb"] = round(sum(m.get("size_vram", 0) for m in d.get("models", [])) / 1e9, 1)
+        used = sum(m.get("size_vram", 0) for m in d.get("models", []))
+        out["vram_used_gb"] = round(used / 1e9, 1)
+        out["models"] = [{"name": m["name"], "vram_gb": round(m.get("size_vram", 0) / 1e9, 1),
+                          "pct": round(m.get("size_vram", 0) / max(used, 1) * 100)} for m in d.get("models", [])]
     except Exception:  # noqa: BLE001
         pass
     return out
 
 
 def _runners() -> list:
-    try:
-        ps = subprocess.run(["ps", "-eo", "args"], capture_output=True, text=True, timeout=5).stdout
-    except Exception:  # noqa: BLE001
-        ps = ""
-    return [{"name": nm, "on": pat in ps} for nm, pat in RUNNERS]
+    workers = _cached("workers", 10.0, _workers)  # reuse cached pm2 snapshot → accurate live status
+    by = {w.get("name"): w for w in workers}
+    out = []
+    for n in RUNNER_SET:
+        w = by.get(n)
+        out.append({"name": TASKS.get(n, (n, ""))[0],
+                    "on": bool(w and w.get("status") == "online"),
+                    "up_min": (w or {}).get("up_min", 0),
+                    "indefinite": n in INDEFINITE})
+    return out
 
 
 # label registry — plain-English name + what each background task actually does
@@ -128,6 +210,7 @@ TASKS = {
     "jarvis-feedback":     ("🤖 Self-Learning Loop",  "Turns errors from every .py into lessons (Llama→Kimi→Claude)"),
     "jarvis-orchestrator": ("🌍 Live Data Producer",  "Pulls live weather/air/quakes/crypto → new measurements (every 30m)"),
     "jarvis-ingestor":     ("📰 Document Ingestor",   "Pulls fresh arXiv papers → new Document objects linked to topics (every 30m)"),
+    "jarvis-tasks":        ("🎙 Jarvis Studio Daemon", "No-timeout task runner: Claude Code, gpt-image-2, Tripo 3D, pause/resume, library"),
     "jarvis-worker":       ("⚙ Heavy Worker",         "Autobuild / enrich / ingest / proactive background loops"),
     "jarvis-backend":      ("🛰 API Server",          "Serves the JARVIS API on :8001"),
     "jarvis-frontend":     ("🖥 Frontend",            "JARVIS web UI (Vite) on :5173"),
@@ -188,8 +271,11 @@ def _learning() -> dict:
              "h": one(f"SELECT count(*) FROM ont_object WHERE {nt}>?", hr)},
         ]
         # JUST LEARNED — newest notes (titles)
+        # real knowledge only — kind='concept' (the 7,000-topic enrichment + scraped facts);
+        # hide kind='log' logging junk and document_* internal enrichment rows
         out["recent_notes"] = [r[0] for r in
-                               c.execute("SELECT title FROM note ORDER BY learned_ts DESC LIMIT 8")]
+                               c.execute("SELECT title FROM note WHERE kind='concept' "
+                                         "ORDER BY learned_ts DESC LIMIT 8")]
         # newest topics (names)
         names = []
         for (p,) in c.execute("SELECT props FROM ont_object WHERE type='Topic' ORDER BY created_ts DESC, rowid DESC LIMIT 8"):
@@ -254,6 +340,63 @@ def _correlation() -> dict:
         return {}
 
 
+def _routing() -> dict:
+    try:
+        import sys
+        if ROOT not in sys.path:
+            sys.path.insert(0, ROOT)
+        from server.services import llm_gate as G
+        return G.routing_stats()
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+GRAPH_COLORS = {"Topic": "#22d3ee", "Concept": "#34d399", "DataSource": "#f5b942", "Document": "#a78bfa",
+                "Place": "#f87171", "Measurement": "#38bdf8", "DomainSubject": "#fb7185", "Asset": "#fbbf24",
+                "Vulnerability": "#fb7185", "Event": "#c084fc", "ScientificPublication": "#a78bfa",
+                "EarthquakeEvent": "#f97316", "SpeciesOccurrence": "#4ade80", "AcquisitionPoint": "#60a5fa"}
+
+
+def _graph_data(max_nodes: int = 600, max_edges: int = 1800) -> dict:
+    """A bounded, connected, typed subgraph from the real knowledge graph (edge-first so it's never a
+    cloud of orphans). Drives the holographic 3D renderer."""
+    def build():
+        try:
+            c = sqlite3.connect(BRAIN_DB, timeout=8)
+            edges, nodeids = [], set()
+            for rel, cap in [("RELATES_TO", 900), ("DESCRIBES", 300), ("MEASURED_AT", 250),
+                             ("SAME_AS", 200), ("IN_TOPIC", 150), ("SERVES", 150)]:
+                for frm, to in c.execute("SELECT from_id,to_id FROM ont_link WHERE type=? LIMIT ?", (rel, cap)):
+                    if len(nodeids) >= max_nodes and (frm not in nodeids or to not in nodeids):
+                        continue
+                    edges.append({"s": frm, "t": to})
+                    nodeids.add(frm); nodeids.add(to)
+                    if len(edges) >= max_edges:
+                        break
+                if len(edges) >= max_edges:
+                    break
+            nodes = []
+            for nid in list(nodeids)[:max_nodes]:
+                r = c.execute("SELECT type,props FROM ont_object WHERE id=?", (nid,)).fetchone()
+                if not r:
+                    continue
+                typ = r[0]
+                try:
+                    j = json.loads(r[1])
+                    label = j.get("label") or j.get("topic_name") or j.get("name") or j.get("metric") or nid
+                except Exception:  # noqa: BLE001
+                    label = nid
+                nodes.append({"id": nid, "type": typ, "label": str(label)[:42],
+                              "color": GRAPH_COLORS.get(typ, "#9bd4e6")})
+            c.close()
+            have = {n["id"] for n in nodes}
+            edges = [e for e in edges if e["s"] in have and e["t"] in have]
+            return {"nodes": nodes, "edges": edges, "colors": GRAPH_COLORS}
+        except Exception as e:  # noqa: BLE001
+            return {"nodes": [], "edges": [], "error": str(e)[:120]}
+    return _cached("graph", 30.0, build)
+
+
 # ── rate + ETA tracking (the "time remaining" ticker) ─────────────────────────
 _HIST: dict = {}  # metric -> [(ts, value)] over a rolling ~5 min window
 
@@ -293,8 +436,10 @@ def _fmt_eta(mins: float) -> str:
 def _eta_row(name, rate, remaining):
     if remaining is not None and remaining <= 0:
         return {"task": name, "rate": round(rate or 0, 1), "eta": "done ✓"}
-    if not rate or rate <= 0:
-        return {"task": name, "rate": round(rate or 0, 1), "eta": "measuring…"}
+    if rate is None:
+        return {"task": name, "rate": 0, "eta": "measuring…"}
+    if rate <= 0:
+        return {"task": name, "rate": 0, "eta": "steady"}
     if remaining is None:
         return {"task": name, "rate": round(rate, 1), "eta": f"+{round(rate, 1)}/min"}
     return {"task": name, "rate": round(rate, 1), "eta": _fmt_eta(remaining / rate)}
@@ -316,6 +461,126 @@ def _compute_eta(m: dict) -> list:
         _eta_row("Ontology objects", _rate_per_min("ontology"), None),
         _eta_row("GLB 3D models", _rate_per_min("glb"), None),
     ]
+
+
+# ── SYSTEM VITALS — proactive health score + prioritized alerts ───────────────
+# A PURE function over the metrics snapshot (no new collection, never raises) that turns the data we
+# already gather into an early-warning panel. It surfaces the things that actually cause outages —
+# the disk filling (the known disk-guard concern), the GPU brain going offline, a daemon crash-looping,
+# a producer pipeline that has silently stalled — BEFORE they bite, instead of leaving them buried in
+# raw numbers across six other panels.
+_SEV = {"critical": 3, "warn": 2, "ok": 1}
+
+
+def _pct(used, total):
+    try:
+        u, t = float(used), float(total)
+        return round(u / t * 100, 1) if t else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _health(m: dict) -> dict:
+    """Derive a 0-100 score + a severity-sorted alert list from the live snapshot. Reuses the
+    vps/box/workers/learning/budget fields already in `m`, so it adds zero load. Each alert is
+    {level, title, detail, hint} — hint is the plain-English 'what to do'."""
+    alerts = []
+
+    def add(level, title, detail, hint=""):
+        alerts.append({"level": level, "title": title, "detail": detail, "hint": hint})
+
+    v = m.get("vps", {}) or {}
+    b = m.get("box", {}) or {}
+
+    # DISK — a full disk silently breaks ingestion + every SQLite write (the disk-guard concern).
+    dpct = _pct(v.get("disk_used_gb"), v.get("disk_total_gb"))
+    if dpct is not None:
+        det = f"{dpct:g}% used ({v.get('disk_used_gb')}/{v.get('disk_total_gb')} GB)"
+        if dpct >= 93:
+            add("critical", "Disk almost full", det, "Reclaim space now — writes are about to fail.")
+        elif dpct >= 85:
+            add("warn", "Disk filling up", det, "The disk-guard cron should reclaim space; watch the trend.")
+
+    # MEMORY
+    mpct = _pct(v.get("mem_used_gb"), v.get("mem_total_gb"))
+    if mpct is not None:
+        det = f"{mpct:g}% RAM used ({v.get('mem_used_gb')}/{v.get('mem_total_gb')} GB)"
+        if mpct >= 95:
+            add("critical", "Memory exhausted", det, "Risk of an OOM-killed daemon.")
+        elif mpct >= 88:
+            add("warn", "Memory pressure", det)
+
+    # SWAP thrash
+    spct = _pct(v.get("swap_used_gb"), v.get("swap_total_gb"))
+    if spct is not None and (v.get("swap_total_gb") or 0) > 0 and spct >= 60:
+        add("warn", "Heavy swapping", f"{spct:g}% of swap in use", "The box may feel sluggish.")
+
+    # CPU LOAD vs cores
+    cores = v.get("cores") or 1
+    load = v.get("load")
+    if load is not None and cores:
+        ratio = load / cores
+        det = f"load {load} on {cores} cores ({ratio:.1f}× capacity)"
+        if ratio >= 3:
+            add("critical", "CPU overloaded", det)
+        elif ratio >= 1.6:
+            add("warn", "CPU running hot", det)
+
+    # GPU BRAIN — the whole LLM tier ladder + JARVIS chat depend on the box being reachable.
+    if "reachable" in b:
+        if not b.get("reachable"):
+            add("critical", "GPU brain offline", f"the Vast box ({b.get('endpoint')}) is unreachable",
+                "Enrichment + chat fall back to local models until it returns.")
+        else:
+            vpct = _pct(b.get("vram_used_gb"), b.get("vram_total_gb"))
+            if vpct is not None and vpct >= 92:
+                add("warn", "VRAM nearly full", f"{vpct:g}% VRAM "
+                    f"({b.get('vram_used_gb')}/{b.get('vram_total_gb')} GB)", "A larger model may fail to load.")
+
+    # DAEMONS — any of OUR pm2 services down, + crash-loops (restarts climbing).
+    workers = [w for w in (m.get("workers") or []) if w.get("toggleable")]
+    down = [w for w in workers if w.get("status") != "online"]
+    if down:
+        add("warn", f"{len(down)} daemon{'s' if len(down) != 1 else ''} stopped",
+            ", ".join((w.get("label") or w.get("name") or "?") for w in down[:6]),
+            "Press Run, or use the toggles, to bring them back.")
+    storm = [w for w in workers if (w.get("restarts") or 0) >= 25]
+    if storm:
+        add("warn", "Daemon crash-looping",
+            ", ".join(f"{(w.get('label') or w.get('name'))} (↺{w.get('restarts')})" for w in storm[:5]),
+            "Open its logs — it keeps restarting.")
+
+    # PIPELINE STALL — producers online but NOTHING grew in the last hour = a silent gap (HR: surface it).
+    growth = (m.get("learning") or {}).get("growth") or []
+    if growth and any(w.get("status") == "online" for w in workers):
+        if not any((g.get("h") or 0) > 0 for g in growth):
+            add("warn", "Knowledge pipeline idle",
+                "no new topics, notes or measurements in the last hour",
+                "Producers are up but adding nothing — check the ingestor/orchestrator logs.")
+
+    # BUDGET — economy mode means Claude is forced to the cheapest model.
+    bud = m.get("budget") or {}
+    if bud.get("economy_forced"):
+        add("warn", "Daily Claude budget spent",
+            f"${bud.get('spent_usd_today')} / ${bud.get('daily_cap')} — economy mode (haiku) forced")
+
+    # SCORE — start perfect, subtract weighted penalties; level = worst alert present.
+    pen = sum(35 if a["level"] == "critical" else 12 for a in alerts)
+    score = max(0, 100 - pen)
+    level = "critical" if any(a["level"] == "critical" for a in alerts) else ("warn" if alerts else "ok")
+    alerts.sort(key=lambda a: -_SEV.get(a["level"], 0))
+    nc = sum(1 for a in alerts if a["level"] == "critical")
+    nw = len(alerts) - nc
+    if not alerts:
+        summary = "All systems nominal"
+    else:
+        summary = " · ".join(([f"{nc} critical"] if nc else []) +
+                             ([f"{nw} warning{'s' if nw != 1 else ''}"] if nw else []))
+    return {"score": score, "level": level, "summary": summary, "alerts": alerts,
+            "gauges": {"disk_pct": dpct, "mem_pct": mpct, "cpu_pct": v.get("cpu_pct"),
+                       "vram_pct": _pct(b.get("vram_used_gb"), b.get("vram_total_gb")),
+                       "daemons_up": sum(1 for w in workers if w.get("status") == "online"),
+                       "daemons_total": len(workers)}}
 
 
 def _version() -> dict:
@@ -382,7 +647,14 @@ def _detail(kind: str, name: str) -> dict:
             out = subprocess.run(["pm2", "logs", name, "--nostream", "--lines", "25"],
                                  capture_output=True, text=True, timeout=8).stdout
             lines = [ln for ln in out.splitlines() if ln.strip()][-25:]
-            return {"title": f"Runner · {name}", "lines": lines or ["no recent log output"]}
+            base = name.replace("jarvis-", "").replace("underworld-", "").replace("-", "_")
+            acts = [{"label": "↻ Restart", "kind": "task", "arg": f"restart the {name} service"}]
+            for rel in (f"server/services/{base}.py", f"server/{base}.py"):
+                if os.path.exists(os.path.join(ROOT, rel)):
+                    acts.insert(0, {"label": f"📄 {rel.split('/')[-1]}", "kind": "file", "arg": rel})
+                    break
+            return {"title": f"Runner · {name}", "subtitle": "live pm2 logs",
+                    "lines": lines or ["no recent log output"], "actions": acts}
         if kind == "type":
             c = sqlite3.connect(BRAIN_DB, timeout=5)
             rows = c.execute("SELECT props FROM ont_object WHERE type=? ORDER BY rowid DESC LIMIT 30",
@@ -396,7 +668,9 @@ def _detail(kind: str, name: str) -> dict:
                                      or next(iter(j.values()), "?"))[:70])
                 except Exception:  # noqa: BLE001
                     lines.append("?")
-            return {"title": f"Recent {name} objects", "lines": lines or ["none"]}
+            return {"title": f"Recent {name} objects", "subtitle": f"{len(lines)} shown",
+                    "lines": lines or ["none"],
+                    "actions": [{"label": "◈ Focus in 3D graph", "kind": "graph", "arg": name}]}
         if kind == "module":
             c = sqlite3.connect(FB_DB, timeout=5)
             ls = [f"💡 {r[0]}" for r in c.execute(
@@ -423,6 +697,7 @@ def metrics() -> dict:
         "workers": _cached("workers", 10.0, _workers), "tiers": _cached("tiers", 6.0, _tiers),
         "feedback": _cached("feedback", 4.0, _feedback),
         "correlation": _cached("correlation", 5.0, _correlation),
+        "routing": _cached("routing", 4.0, _routing),
         "feed": _feed(),
     }
 
@@ -441,6 +716,15 @@ def _refresher():
             try:
                 m["eta"] = _compute_eta(m)
                 m["version"] = _version()
+            except Exception:  # noqa: BLE001
+                pass
+            try:  # fold the daily Claude budget into the snapshot so Vitals can flag economy mode
+                from server.services import token_governor as TG
+                m["budget"] = TG.state()
+            except Exception:  # noqa: BLE001
+                pass
+            try:  # proactive health score + alerts (pure over the snapshot we just built)
+                m["health"] = _health(m)
             except Exception:  # noqa: BLE001
                 pass
             _SNAP = m
@@ -544,6 +828,7 @@ h1{font-size:18px;letter-spacing:3px;color:var(--cy);margin:0 0 2px;text-shadow:
   <div class=card><h2>🪜 LLM Tiers (telemetry)</h2><div id=tiers class=mono>—</div></div>
   <div class=card style="grid-column:1/-1"><h2>🤖 Self-Learning · Llama ↔ Kimi ↔ Claude (every .py)</h2><div id=feedback class=mono>—</div></div>
   <div class=card style="grid-column:1/-1"><h2>🔗 Cross-Correlation · entity resolution (non-stop)</h2><div id=corr class=mono>scanning…</div></div>
+  <div class=card style="grid-column:1/-1"><h2>🚦 LLM Router · gated 6-tier (why each job ran)</h2><div id=routing class=mono>—</div></div>
 </div></div>
 <div id=modal onclick="if(event.target===this)this.style.display='none'"><div id=modalbox><span id=modalclose onclick="document.getElementById('modal').style.display='none'">✕ close</span><h3 id=modaltitle></h3><div id=modallines></div></div></div>
 <script>
@@ -572,7 +857,7 @@ async function tick(){
   $('clock').textContent=new Date(m.ts*1000).toLocaleTimeString()+' · ONLINE';
   const c=m.completion; $('pct').textContent=c.pct;$('enr').textContent=fmt(c.enriched);$('tot').textContent=fmt(c.total);
   $('pbar').style.width=Math.min(100,c.pct)+'%';
-  $('runners').innerHTML=(m.runners||[]).map(r=>'<div class=row><span><span class="dot'+(r.on?' live':'')+'" style=background:'+(r.on?'#34d399':'#33485a')+'></span>'+r.name+'</span><b style=color:'+(r.on?'#34d399':'#5b7a90')+'>'+(r.on?'WORKING':'idle')+'</b></div>').join('');
+  $('runners').innerHTML=(m.runners||[]).map(r=>{const up=r.up_min>=60?(((r.up_min/60)|0)+'h'+(r.up_min%60)+'m'):((r.up_min||0)+'m');return '<div class=row><span><span class="dot'+(r.on?' live':'')+'" style=background:'+(r.on?'#34d399':'#33485a')+'></span>'+r.name+'</span><b style=color:'+(r.on?'#34d399':'#5b7a90')+'>'+(r.on?('WORKING · up '+up+' · '+(r.indefinite?'∞ runs forever':'finite')):'idle')+'</b></div>'}).join('');
   const L=m.learning||{};
   $('growth').innerHTML=(L.growth||[]).map(g=>'<div class=row><span class=k>'+g.label+'</span><b>'+fmt(g.total)+(g.h>0?' <span class=delta>+'+fmt(g.h)+'/h</span>':'')+'</b></div>').join('');
   $('recent_notes').innerHTML=(L.recent_notes||[]).map(t=>'<div class=li>'+t+'</div>').join('')||'<div class=mono>—</div>';
@@ -589,7 +874,8 @@ async function tick(){
     const sw = w.toggleable
       ? '<span class="tgl '+(ok?'on':'off')+'" title="click to '+(ok?'STOP':'START')+'" onclick="event.stopPropagation();toggle(\''+w.name+'\','+ok+')"></span>'
       : '<span class=dot style=background:'+(ok?'#34d399':'#f87171')+'></span>';
-    const stat = ok ? (w.cpu+'% · '+w.mem_mb+'MB · ↺'+w.restarts) : '<span style=color:#f87171>stopped</span>';
+    const up = w.up_min>=60?(((w.up_min/60)|0)+'h'+(w.up_min%60)+'m'):((w.up_min||0)+'m');
+    const stat = ok ? (w.cpu+'% · '+w.mem_mb+'MB · up '+up+' · ↺'+w.restarts) : '<span style=color:#f87171>stopped</span>';
     return '<div class=task><div class=taskhead>'+sw
       +'<span class=clk onclick="openDetail(\'runner\',\''+w.name+'\')"><b>'+w.label+'</b></span>'
       +'<span class=taskstat>'+stat+'</span></div>'
@@ -611,7 +897,9 @@ async function tick(){
   $('corr').innerHTML='<div class=row><span class=k>raw objects</span><b>'+fmt(X.raw_objects)+'</b></div>'
     +'<div class=row><span class=k>distinct entities (deduped)</span><b style=color:#34d399>'+fmt(X.distinct_after_dedup)+'</b></div>'
     +'<div class=row><span class=k>duplicates collapsed</span><b>'+fmt(X.duplicates_collapsed)+'</b></div>'
-    +'<div class=row><span class=k>SAME_AS links wired</span><b style=color:#34d399>'+fmt(X.sameas_links)+'</b></div>'
+    +'<div class=row><span class=k>SAME_AS links (dedup)</span><b style=color:#34d399>'+fmt(X.sameas_links)+'</b></div>'
+    +'<div class=row><span class=k>Topics connected to data (RELATES_TO)</span><b style=color:#34d399>'+fmt(X.topics_connected)+' / '+fmt(X.topics_total)+'</b></div>'
+    +'<div class=row><span class=k>topic→data links</span><b>'+fmt(X.topic_links)+'</b></div>'
     +'<div class=mono style=margin:8px 0 4px>most-duplicated entities</div>'
     +((X.top||[]).map(t=>'<div class=li>'+t.name+' <span class=tag>×'+fmt(t.members)+' ['+t.types+']</span></div>').join('')||'<div class=mono>scanning…</div>');
  }catch(e){$('clock').textContent='reconnecting…';}
@@ -634,6 +922,608 @@ def _control(action: str, name: str) -> dict:
         return {"ok": False, "error": str(e)[:160]}
 
 
+# global command-bar controls. ESSENTIAL daemons are never touched (dashboard/API/UI stay up).
+_PRODUCERS = ["jarvis-orchestrator", "jarvis-ingestor", "jarvis-worker", "jarvis-batch-loader",
+              "jarvis-correlator", "jarvis-feedback"]
+_HEAVY = ["jarvis-worker", "jarvis-batch-loader", "jarvis-correlator", "jarvis-feedback"]
+
+
+def _control_all(action: str) -> dict:
+    """Run All / Stop All / Sleep Mode — batch pm2 ops over the producer daemons (UI/API kept alive)."""
+    if action in ("run", "start"):
+        targets, op = _PRODUCERS, "start"
+    elif action in ("stop", "pause"):
+        targets, op = _PRODUCERS, "stop"
+    elif action == "sleep":      # sleep = halt the heavy compute, keep light data + UI alive
+        targets, op = _HEAVY, "stop"
+    else:
+        return {"ok": False, "error": "bad action"}
+    res = [_control(op, n) for n in targets]
+    return {"ok": all(r.get("ok") for r in res), "action": action, "op": op,
+            "targets": targets, "done": sum(1 for r in res if r.get("ok"))}
+
+
+_LLM_HOST = (os.environ.get("OLLAMA_HOST") or "http://211.72.13.201:41137").rstrip("/")
+JARVIS_LLM = _LLM_HOST if _LLM_HOST.endswith("/v1") else _LLM_HOST + "/v1"  # OpenAI-compat path
+JARVIS_PERSONA = (
+    "You are JARVIS, the AI from Iron Man — an articulate, composed, quietly witty British intelligence. "
+    "You speak ALOUD to the person you serve as a capable equal, exactly the way JARVIS speaks to Tony "
+    "Stark: natural, intelligent, efficient, with dry warmth and the occasional light wit. "
+    "NEVER be patronising. NEVER use pet names like 'dear', 'love', 'sweetheart', or 'my dear'. Do not "
+    "coddle, do not talk to her like a child or a patient, do not over-reassure or lecture about breathing "
+    "unless she explicitly asks. Treat her as sharp and in control. "
+    "NEVER say you are an AI, a language model, 'Claude', or 'Sonnet'; never output code, lists, markdown, "
+    "or labels — just speak. If she asks you to call someone, control something, or do a task, confirm "
+    "briefly and naturally that it is being done. "
+    "Ground everything in HER real world — her home, her family, her devices, her day. Do NOT invent "
+    "fictional Iron Man elements: no Avengers, no 'the suit', no Pepper, no Tony Stark, no New York labs. "
+    "You are simply her JARVIS, here with her, now. Keep replies under 45 words, conversational, like real speech."
+)
+
+
+_PERSONA_CACHE = {"t": 0, "txt": ""}
+
+
+def _persona() -> str:
+    """Load JARVIS's personality from server/jarvis_persona.md (his 'brain'), hot-reloaded on edit."""
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "jarvis_persona.md")
+    try:
+        m = os.path.getmtime(p)
+        if m != _PERSONA_CACHE["t"]:
+            _PERSONA_CACHE["txt"] = open(p, encoding="utf-8").read()
+            _PERSONA_CACHE["t"] = m
+        return _PERSONA_CACHE["txt"] or JARVIS_PERSONA
+    except Exception:  # noqa: BLE001
+        return JARVIS_PERSONA
+
+
+def _persona_sysmsg(address: str = "ma'am") -> str:
+    """The full JARVIS system prompt with the live speaker (sir/ma'am) appended. Shared by every
+    conversational path so the persona is identical whether we go through the tiered seam or the
+    direct box fallback."""
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "ma'am"
+    return _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with " +
+                         ("a gentleman; address him as \"sir\"" if addr == "sir"
+                          else "a lady; address her as \"ma'am\"") +
+                         " — used naturally and sparingly, not in every sentence.")
+
+
+def _history_to_prompt(prompt: str, history=None) -> str:
+    """Flatten short conversation history + the new turn into a single user prompt. tiered_llm.complete
+    takes one `prompt` string (not a messages array), so we fold the last few turns into it, keeping the
+    persona in `system`. Mirrors the [-8:] / length caps of the old direct path."""
+    lines = []
+    for h in (history or [])[-8:]:
+        if isinstance(h, dict) and h.get("role") in ("user", "assistant") and h.get("content"):
+            who = "JARVIS" if h["role"] == "assistant" else "Speaker"
+            lines.append(f"{who}: {str(h['content'])[:600]}")
+    lines.append("Speaker: " + (prompt or "").strip()[:1000])
+    lines.append("JARVIS:")
+    return "\n".join(lines)
+
+
+def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
+    """Direct box-LLM fallback (the original proven path) — used only if the tiered seam returns
+    nothing. Smartest-first model ladder; never raises."""
+    import urllib.request
+    msgs = [{"role": "system", "content": sysmsg}]
+    for h in (history or [])[-8:]:
+        if isinstance(h, dict) and h.get("role") in ("user", "assistant") and h.get("content"):
+            msgs.append({"role": h["role"], "content": str(h["content"])[:600]})
+    msgs.append({"role": "user", "content": (prompt or "").strip()[:1000]})
+    for model in ("qwen2.5:32b", "qwen2.5:14b", "llama3.1:8b"):  # smartest-first for a human, intelligent feel
+        try:
+            body = json.dumps({"model": model, "messages": msgs, "max_tokens": 240,
+                               "temperature": 0.7, "top_p": 0.92, "stream": False}).encode()
+            req = urllib.request.Request(JARVIS_LLM + "/chat/completions", data=body, method="POST",
+                                         headers={"Content-Type": "application/json", "Authorization": "Bearer ollama"})
+            with urllib.request.urlopen(req, timeout=45) as x:
+                d = json.loads(x.read().decode())
+            txt = ((d.get("choices") or [{}])[0].get("message") or {}).get("content", "").strip()
+            if txt:
+                return txt
+        except Exception:  # noqa: BLE001
+            continue
+    return ""
+
+
+def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
+    """Synchronous, resilient conversational reply in the JARVIS persona (loaded from jarvis_persona.md).
+    Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:32b),
+    which itself records telemetry and escalates/falls back per the ladder. If the seam is unavailable
+    or empty we fall back to the original direct box loop, and finally to a reassuring fixed line — so
+    the mum's lifeline reply is NEVER blank. `address` is 'sir' (male) or 'ma'am' (female)."""
+    sysmsg = _persona_sysmsg(address)
+    # PRIMARY: the tiered seam. strong = qwen2.5:32b on the box; on failure tiered_llm logs it and
+    # returns {ok:False}, so we drop to the direct box loop below (which also tries 32b first).
+    try:
+        from server.services import tiered_llm as _T
+        r = _T.complete(_history_to_prompt(prompt, history), system=sysmsg,
+                        tier="strong", max_tokens=240, module="server/dashboard.py")
+        if isinstance(r, dict) and r.get("ok"):
+            txt = (r.get("content") or "").strip()
+            if txt:
+                return txt
+    except Exception:  # noqa: BLE001
+        pass
+    # FALLBACK 1: direct box ladder (the proven original path).
+    txt = _chat_direct_box(sysmsg, prompt, history)
+    if txt:
+        return txt
+    # FALLBACK 2: never leave her without a voice.
+    return "I'm right here with you. I'm having a little trouble hearing the network just now, but I'm not going anywhere. Take a breath — you're safe."
+
+
+def _zone_phrase(name) -> str:
+    """Natural spoken reference to a zone: 'the lounge', but 'Mum's Room' (no article) when the name
+    is possessive or already starts with an article — so JARVIS never says 'the Mum's Room'."""
+    n = str(name or "room").strip()
+    low = n.lower()
+    if "'s " in low or low.endswith("'s") or low.startswith(("the ", "a ", "my ", "her ", "his ")):
+        return n
+    # Preserve the name's own casing (zone/AC names are user-set, e.g. 'Lounge', 'Daikin').
+    return "the " + n
+
+
+def _climate_say_state(query: str, st: dict, address: str = "ma'am") -> str:
+    """Phrase a spoken answer to a climate QUERY ('temperature' / 'zones' / 'status') from cached
+    state. Honest when no bridge is connected."""
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "love"
+    if not st.get("connected"):
+        return ("I can't reach the heating just now, " + addr +
+                " — the home control link isn't connected yet. I'll keep trying.")
+    zones = st.get("zones") or []
+    acs = st.get("acs") or []
+    if query == "zones":
+        names = [z.get("name") for z in zones if z.get("name")]
+        if not names:
+            return "I don't see any zones reported yet, " + addr + "."
+        return "The zones are: " + ", ".join(names[:-1]) + (" and " + names[-1] if len(names) > 1 else names[0]) + "."
+    if query == "temperature":
+        parts = []
+        for z in zones:
+            t = z.get("temperature")
+            if t is not None and z.get("has_sensor"):
+                sp = z.get("set_point")
+                parts.append(f"{_zone_phrase(z.get('name'))} is {t:g} degrees" +
+                             (f", set to {sp:g}" if sp is not None else ""))
+        if not parts and acs:
+            t = acs[0].get("temperature")
+            if t is not None:
+                parts.append(f"it's {t:g} degrees")
+        if not parts:
+            return "I can't read a temperature just now, " + addr + "."
+        return "Right now " + "; ".join(parts[:4]) + ", " + addr + "."
+    # status
+    bits = []
+    for a in acs:
+        bits.append(f"{_zone_phrase(a.get('name'))} is {str(a.get('power','')).lower()} in {str(a.get('mode','')).lower()} mode"
+                    + (f" at {a.get('setpoint'):g} degrees" if a.get("setpoint") is not None else ""))
+    on_zones = [z.get("name") for z in zones if z.get("power") in ("ON", "TURBO")]
+    if on_zones:
+        bits.append("zones on: " + ", ".join(on_zones))
+    if not bits:
+        return "Everything looks quiet, " + addr + "."
+    sent = "; ".join(bits)
+    return sent[:1].upper() + sent[1:] + ", " + addr + "."
+
+
+def _climate_handle(qtext: str, address: str = "ma'am") -> dict | None:
+    """If `qtext` is a climate request, action it via the relay and return {reply, climate:True,...};
+    else None so the caller falls through to normal chat. This is what keeps 'I am cold', 'set the
+    lounge to 23', 'what is the temperature', 'which zones' OFF the Claude builder."""
+    from server.services import climate_relay as CR
+    intent = CR.parse_intent(qtext or "")
+    if not intent:
+        return None
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "love"
+    st = CR.state()
+    connected = bool(st.get("connected"))
+
+    # Read-only queries answer from cache (instant), and also nudge a refresh for next time.
+    if intent.get("query"):
+        if connected:
+            CR.enqueue({"op": "refresh"})
+        return {"climate": True, "reply": _climate_say_state(intent["query"], st, address),
+                "query": intent["query"]}
+
+    # Control commands. If no bridge is connected, be HONEST — never fake a confirmation.
+    if not connected:
+        return {"climate": True, "connected": False,
+                "reply": ("I'm so sorry, " + addr + " — I can't reach the heating yet. The home "
+                          "control box isn't connected, so I can't change it just now. As soon as "
+                          "it's online I'll be able to warm you right up.")}
+
+    speak = intent.get("speak")
+    if intent["op"] in ("warmer", "cooler"):
+        # Work out which zone + target we'll aim for, from cache, so the spoken line is specific.
+        z = CR.warm_zone()
+        zname = _zone_phrase((z or {}).get("name", "your room"))
+        cur = (z or {}).get("set_point")
+        if cur is None:
+            cur = (z or {}).get("temperature")
+        step = CR.BUMP_STEP_C if intent["op"] == "warmer" else -CR.BUMP_STEP_C
+        if cur is not None:
+            tgt = CR.clamp_c(cur + step)
+            speak = (f"Warming {zname} to {tgt:g} degrees now, {addr}." if intent["op"] == "warmer"
+                     else f"Cooling {zname} to {tgt:g} degrees now, {addr}.")
+        else:
+            speak = (f"Turning the heat up in {zname} now, {addr}." if intent["op"] == "warmer"
+                     else f"Easing {zname} cooler now, {addr}.")
+    cmd = {k: v for k, v in intent.items() if k not in ("speak", "query")}
+    CR.enqueue(cmd)
+    if not speak:
+        speak = "Done, " + addr + "."
+    elif not speak.rstrip().endswith((addr + ".", addr + "!")):
+        speak = speak.rstrip(". ") + ", " + addr + "."
+    return {"climate": True, "connected": True, "reply": speak, "op": intent["op"]}
+
+
+_PIPER = {"v": None}
+_TTS_CACHE = {}
+_TTS_LOCK = __import__("threading").Lock()
+_VOICE_PATH = os.environ.get("JARVIS_VOICE_ONNX") or os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "voices", "en_GB-alan-medium.onnx")  # male, clipped British (JARVIS)
+
+
+# VOICE MODULATOR — bends the neural voice toward the real JARVIS key/tone/balance (deeper, calm,
+# refined). Defaults tuned for JARVIS; tunable live via /tts?semitones=&tempo= or env.
+_VOICE_SR = 22050  # piper alan-medium sample rate
+_DEF_SEMI = float(os.environ.get("JARVIS_VOICE_SEMITONES", "0"))     # 0 = clean male voice (modulation off until matched to a real sample)
+_DEF_TEMPO = float(os.environ.get("JARVIS_VOICE_TEMPO", "1.0"))
+
+# VOICE CLONE (XTTS-v2, warm ~60yo softened-Cockney) — runs as its own localhost pm2 service
+# (jarvis-voiceclone) loaded with the real cloning model. _tts() tries it FIRST and falls back to
+# Piper on any failure/slowness, so the mum's lifeline speech is never blocked. CPU synth is slow on
+# this box (RTF ~15 under load); the service disk-caches by text hash and we pre-render common phrases,
+# so the everyday lines are instant. Set XTTS_ENABLED=0 + restart for an instant pure-Piper rollback.
+_XTTS_URL = os.environ.get("XTTS_URL", "http://127.0.0.1:8097/synthesize")
+_XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "12"))   # short: novel text falls back to Piper fast; cached phrases return in ~ms
+_XTTS_ENABLED = os.environ.get("XTTS_ENABLED", "1") == "1"
+
+
+def _xtts(text: str) -> bytes:
+    """Try the human voice-clone service. Returns WAV bytes, or b'' on ANY failure/timeout
+    so the caller instantly falls back to Piper. Never raises."""
+    if not _XTTS_ENABLED:
+        return b""
+    try:
+        import json as _json
+        import urllib.request
+        req = urllib.request.Request(
+            _XTTS_URL,
+            data=_json.dumps({"text": text}).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=_XTTS_TIMEOUT) as r:
+            return r.read() if r.status == 200 else b""
+    except Exception:  # noqa: BLE001  any failure/slowness -> Piper fallback
+        return b""
+
+
+def _modulate(wav: bytes, semitones: float, tempo: float) -> bytes:
+    """Pitch/tone/balance modulation via ffmpeg, preserving duration on the pitch shift."""
+    if not wav:
+        return wav
+    if abs(semitones) < 0.05 and abs(tempo - 1.0) < 0.02:
+        return wav
+    try:
+        import subprocess
+        ratio = 2 ** (semitones / 12.0)                       # >1 higher, <1 deeper
+        total_tempo = max(0.5, min(2.0, (1.0 / ratio) * tempo))  # restore duration after asetrate, then user pace
+        af = (f"asetrate={int(_VOICE_SR * ratio)},aresample={_VOICE_SR},atempo={total_tempo:.4f},"
+              "equalizer=f=170:t=q:w=1.0:g=2.5,highshelf=f=4800:g=-2.5,"   # warm low presence, tame sibilance
+              "acompressor=ratio=2.2:threshold=-18dB:makeup=2")            # smooth, balanced level
+        p = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "pipe:0",
+                            "-af", af, "-f", "wav", "pipe:1"], input=wav, capture_output=True, timeout=25)
+        return p.stdout if p.returncode == 0 and p.stdout else wav
+    except Exception:  # noqa: BLE001
+        return wav
+
+
+def _tts(text: str, semitones: float = None, tempo: float = None) -> bytes:
+    """Natural neural British voice via Piper (loaded once) + JARVIS voice modulation. Returns WAV bytes;
+    '' on failure so the browser falls back to Web Speech."""
+    import hashlib
+    import io
+    import wave
+    text = (text or "").strip()[:600]
+    if not text:
+        return b""
+    semi = _DEF_SEMI if semitones is None else semitones
+    tmp = _DEF_TEMPO if tempo is None else tempo
+    key = hashlib.md5((text + f"|{semi}|{tmp}").encode()).hexdigest()
+    if key in _TTS_CACHE:
+        return _TTS_CACHE[key]
+    # FIRST try the human voice-clone (XTTS-v2 Cockney). The cloned voice already IS the target
+    # timbre, so do NOT run _modulate on it. On any failure/slowness this returns b'' and we fall
+    # through to the instant Piper path below — the lifeline speech is never blocked.
+    cloned = _xtts(text)
+    if cloned:
+        if len(_TTS_CACHE) > 80:
+            _TTS_CACHE.clear()
+        _TTS_CACHE[key] = cloned
+        return cloned
+    try:
+        with _TTS_LOCK:
+            if _PIPER["v"] is None:
+                from piper import PiperVoice
+                _PIPER["v"] = PiperVoice.load(_VOICE_PATH)
+            buf = io.BytesIO()
+            wf = wave.open(buf, "wb")
+            _PIPER["v"].synthesize_wav(text, wf)
+            wf.close()
+            data = buf.getvalue()
+        data = _modulate(data, semi, tmp)   # bend toward the real JARVIS voice
+        if len(_TTS_CACHE) > 80:
+            _TTS_CACHE.clear()
+        _TTS_CACHE[key] = data
+        return data
+    except Exception:  # noqa: BLE001
+        return b""
+
+
+def _system_brief() -> str:
+    """A compact, real snapshot of the system for a one-touch upgrade brief."""
+    m = _SNAP or {}
+    c = m.get("completion", {}) or {}
+    v = m.get("vps", {}) or {}
+    b = m.get("box", {}) or {}
+    workers = [w.get("name") for w in (m.get("workers") or []) if w.get("toggleable")]
+    return (
+        f"Repo /opt/jarvis-app-1 on a Hostinger VPS ({v.get('cores')} cores, {v.get('mem_total_gb')}GB RAM, "
+        f"{v.get('disk_used_gb')}/{v.get('disk_total_gb')}GB disk, load {v.get('load')}) + a Vast 2x4090 GPU box "
+        f"(endpoint {b.get('endpoint')}, VRAM {b.get('vram_used_gb')}/{b.get('vram_total_gb')}GB). "
+        f"Knowledge build {c.get('pct')}% ({c.get('enriched')}/{c.get('total')} topics). "
+        f"Live pm2 services: {', '.join(workers) or 'n/a'}. "
+        f"Dashboard: server/dashboard.py (stdlib http.server) serving server/jarvis_live.html at /jarvis/. "
+        f"Token governor: server/services/token_governor.py. Task daemon: server/services/task_daemon.py. "
+        f"SQLite brain + media/library + correlation already exist."
+    )
+
+
+# ── SELF-DEVELOPMENT: "what to build next" suggestions (the 2nd dock) ─────────
+# The box LLM analyses the LIVE system (via _system_brief) and proposes concrete build ideas as
+# {id,title,detail,proposal}. Cached so the dock can refresh cheaply; each id is stable within a
+# generation so /proposal?id= can return the full formatted text the user clicked. A deterministic
+# seed list guarantees the dock is NEVER empty / "pending" even if the LLM is unreachable (HR: no
+# bare-minimum, scrape-on-gap — here, fall back to a real curated list grounded in the contract).
+_SUGGEST: dict = {"ts": 0, "items": [], "by_id": {}}
+_SUGGEST_TTL = 600.0  # regenerate at most every 10 min (builds complete on the order of minutes)
+
+_SUGGEST_SEED = [
+    {"title": "Volumetric god-rays from the reactor",
+     "detail": "Add light-shaft/volumetric scattering from the central Sun so the beam reads as Hollywood-grade, per the cinematic acceptance bar.",
+     "proposal": "Add a screen-space radial god-ray pass after UnrealBloom in jarvis_live.html's composer, sampling occlusion from the beam-tube. Tie intensity to the shared PULSE.amp so the rays bloom when JARVIS speaks. Keep three@0.136 + ACES + sRGB. Prove the new pass is in composer.passes headless."},
+    {"title": "Importance-based planet sizing",
+     "detail": "Functions/features should be the LARGEST planets and grow with activity; right now they are hardcoded small (R2 inversion).",
+     "proposal": "In layoutFromMetrics, give pipelines/tiers/sys/infra a larger base radius than KPI minor points and drive radius by live activity (cpu/mem, tier calls, VRAM) using the same baseScale geometry-rebuild block the KPI ring already uses, so functional bodies visibly grow when their data updates."},
+    {"title": "Drag-to-pin tools into the dock",
+     "detail": "Let floating 3D tools be dragged out of the WebGL scene and dropped into the iOS dock as removable shortcuts (WebGL↔DOM bridge).",
+     "proposal": "On pointerdown over a tool body, raycast to identify it, start a DOM drag-ghost following the cursor; on drop over #dock, append a pinned .di icon persisted to localStorage and removable on long-press."},
+    {"title": "Agent OS palette in-universe",
+     "detail": "Surface the 17 real Agent OS tools (disk/docker/gpu/file/knowledge) as a dock app that calls /agent/run and streams progress.",
+     "proposal": "Add a dock app that GETs /agent/tools to render the palette, and on click POSTs /agent/run?token= with the chosen command; show the returned run + step results in the #card. Long-poll the Agent OS event bus for live progress."},
+]
+
+
+def _suggest_fallback() -> list:
+    out = []
+    for i, s in enumerate(_SUGGEST_SEED):
+        out.append({"id": f"sug{i}", "title": s["title"], "detail": s["detail"],
+                    "proposal": s["proposal"]})
+    return out
+
+
+def _gen_suggestions() -> list:
+    """Ask the box LLM (via the tiered seam) to propose build ideas from the live system brief, as a
+    JSON array of {title,detail,proposal}. Falls back to the curated seed list on any failure so the
+    self-development dock is never empty. Each item gets a stable id for /proposal lookup."""
+    items = None
+    try:
+        from server.services import tiered_llm as _T
+        sysmsg = (
+            "You are JARVIS's self-improvement strategist for the project at /opt/jarvis-app-1. "
+            "Given a live snapshot of the running system, propose the NEXT features worth building. "
+            "Reply with ONLY a JSON array (no prose, no markdown fences) of 4 to 6 objects, each: "
+            "{\"title\": short imperative name, \"detail\": one sentence why/what (<=160 chars), "
+            "\"proposal\": a concrete buildable plan a coding agent could execute (2-4 sentences, "
+            "name real files/routes where possible)}. Ground every idea in the snapshot and the "
+            "JARVIS cinematic-universe + Agent OS + her-care goals. No placeholders."
+        )
+        r = _T.complete("LIVE SYSTEM SNAPSHOT:\n" + _system_brief(), system=sysmsg,
+                        tier="strong", max_tokens=1200, fmt="json", module="server/dashboard.py")
+        if isinstance(r, dict) and r.get("ok"):
+            items = _parse_suggestions(r.get("content") or "")
+    except Exception:  # noqa: BLE001
+        items = None
+    if not items:
+        return _suggest_fallback()
+    out = []
+    for i, s in enumerate(items[:6]):
+        if not isinstance(s, dict):
+            continue
+        title = str(s.get("title") or "").strip()[:80]
+        if not title:
+            continue
+        out.append({"id": f"sug{i}", "title": title,
+                    "detail": str(s.get("detail") or "").strip()[:200],
+                    "proposal": str(s.get("proposal") or s.get("detail") or "").strip()[:1200]})
+    return out or _suggest_fallback()
+
+
+def _parse_suggestions(text: str) -> list:
+    """Extract a JSON array from an LLM reply. Python regex only (no JS-style [^]*) — uses re.DOTALL so
+    '.' spans newlines. Tolerates accidental ```json fences and leading prose."""
+    import re as _re
+    t = (text or "").strip()
+    if t.startswith("```"):
+        t = _re.sub(r"^```[a-zA-Z]*\s*", "", t)
+        t = _re.sub(r"\s*```$", "", t).strip()
+    try:
+        v = json.loads(t)
+        if isinstance(v, list):
+            return v
+        if isinstance(v, dict) and isinstance(v.get("suggestions"), list):
+            return v["suggestions"]
+    except Exception:  # noqa: BLE001
+        pass
+    m = _re.search(r"\[.*\]", t, _re.DOTALL)  # first bracketed array, newlines included
+    if m:
+        try:
+            v = json.loads(m.group(0))
+            if isinstance(v, list):
+                return v
+        except Exception:  # noqa: BLE001
+            pass
+    return []
+
+
+def _suggestions(force: bool = False) -> dict:
+    """Cached suggestions for the self-development dock. Regenerates at most every _SUGGEST_TTL."""
+    now = time.time()
+    if force or not _SUGGEST["items"] or (now - _SUGGEST["ts"]) > _SUGGEST_TTL:
+        items = _gen_suggestions()
+        _SUGGEST["items"] = items
+        _SUGGEST["by_id"] = {s["id"]: s for s in items}
+        _SUGGEST["ts"] = now
+    return {"ts": int(_SUGGEST["ts"]), "ttl": int(_SUGGEST_TTL),
+            "suggestions": [{"id": s["id"], "title": s["title"], "detail": s["detail"]}
+                            for s in _SUGGEST["items"]]}
+
+
+def _proposal(sid: str) -> dict:
+    """The full formatted proposal text for a clicked suggestion id."""
+    if not _SUGGEST["by_id"]:
+        _suggestions()
+    s = _SUGGEST["by_id"].get((sid or "").strip())
+    if not s:
+        return {"ok": False, "error": "unknown suggestion id", "id": sid}
+    body = (s["title"] + "\n" + ("─" * min(len(s["title"]), 48)) + "\n\n" +
+            (s["detail"] + "\n\n" if s.get("detail") else "") +
+            "PROPOSAL\n" + s["proposal"] + "\n\n" +
+            "Press BUILD to have Claude execute this on the VPS (POST /upgrade).")
+    return {"ok": True, "id": s["id"], "title": s["title"], "detail": s["detail"],
+            "proposal": s["proposal"], "text": body}
+
+
+# ── AGENT OS exposure (the 17-tool registry + the planner/executor core) ──────
+def _agent_tools() -> dict:
+    """The Agent OS tool palette + a cheap health snapshot. Import is lazy + best-effort so a broken
+    Agent OS can never take the dashboard (or the lifeline) down."""
+    try:
+        from server import agent as _A
+        return {"ok": True, "tools": _A.tools.all(), "status": _A.status()}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:160], "tools": [], "status": {}}
+
+
+def _agent_run(command: str, wait_s: float = 8.0) -> dict:
+    """Plan + execute a natural-language command via the Agent OS core, AUTO-ONLY (only permission='auto'
+    steps run; anything destructive is left 'awaiting' rather than executed by a web POST — the token
+    authorises starting a run, not bypassing the permission engine). Returns the run record after a
+    short bounded wait so the caller gets results inline; the run continues streaming on the BUS either
+    way. Never raises."""
+    command = (command or "").strip()
+    if not command:
+        return {"ok": False, "error": "empty command"}
+    try:
+        from server import agent as _A
+        run_id = _A.CORE.execute(command, auto_only=True)
+        deadline = time.time() + max(0.0, min(wait_s, 25.0))
+        run = _A.CORE.get_run(run_id)
+        terminal = {"completed", "failed", "awaiting", "rejected", "unknown"}
+        while time.time() < deadline and str((run or {}).get("status")) not in terminal:
+            time.sleep(0.4)
+            run = _A.CORE.get_run(run_id)
+        return {"ok": True, "run_id": run_id, "run": run}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:160]}
+
+
+_GODRAYS = {"headless": None, "ts": 0.0, "running": False}  # cached runtime proof for the god-ray pass
+
+
+def _godrays_headless_proof() -> dict:
+    """Run the headless proof (node + a vendored three@0.136) that the volumetric god-ray ShaderPass is
+    actually in composer.passes. Time-bounded; never raises — returns {ok|pass:False,error} on any trouble
+    so a missing/slow node can never affect the dashboard."""
+    try:
+        proc = subprocess.run(
+            ["node", os.path.join(os.path.dirname(__file__), "services", "godrays_headless.mjs"), "--json"],
+            cwd=ROOT, capture_output=True, text=True, timeout=40,
+        )
+        line = (proc.stdout or "").strip().splitlines()[-1] if (proc.stdout or "").strip() else ""
+        return json.loads(line) if line else {"pass": False, "error": (proc.stderr or "no output")[:200]}
+    except Exception as e:  # noqa: BLE001
+        return {"pass": False, "error": str(e)[:200]}
+
+
+def _godrays_warm() -> None:
+    """Refresh the cached headless proof in a daemon thread (non-blocking, so the cinematic page never
+    stalls waiting on node)."""
+    if _GODRAYS["running"]:
+        return
+    _GODRAYS["running"] = True
+
+    def _run() -> None:
+        try:
+            _GODRAYS["headless"] = _godrays_headless_proof()
+            _GODRAYS["ts"] = time.time()
+        finally:
+            _GODRAYS["running"] = False
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
+def _godrays_selfcheck() -> dict:
+    """Self-check for the 'Volumetric god-rays from the reactor' upgrade (sug0).
+
+    STATIC  (instant, stdlib-only): the served jarvis_live.html still carries the god-ray ShaderPass
+            (markers + uniforms), keeps it gated by PULSE.amp, ordered after UnrealBloom, and pins
+            three@0.136 + ACES + sRGB.  HEADLESS (cached, warmed in the background): the node proof that
+            the pass is genuinely in composer.passes.  Always returns instantly; never raises."""
+    here = os.path.dirname(__file__)
+    out = {"upgrade": "sug0", "feature": "volumetric-god-rays", "ok": False, "proof": "static",
+           "active": False, "static": {}, "headless": None,
+           "composerPasses": None, "godRaysIndex": None}
+    try:
+        with open(os.path.join(here, "jarvis_live.html"), encoding="utf-8") as f:
+            src = f.read()
+        a, b = src.find("/*GODRAYS_PASS_BEGIN*/"), src.find("/*GODRAYS_PASS_END*/")
+        seg = src[a:b] if (a >= 0 and b > a) else ""
+        ab = src.find("composer.addPass(bloom)")
+        ag = src.find("composer.addPass(godrays)")
+        st = {
+            "markers": bool(seg),
+            "is_shaderpass": "new THREE.ShaderPass" in seg,
+            "uniforms": all(u in seg for u in
+                            ("tDiffuse", "uSun", "uAspect", "uExposure", "uDecay", "uDensity", "uWeight", "uTint")),
+            "pulse_gated": ("godrays.uniforms.uExposure.value" in src and "+A*" in src.replace(" ", "")),
+            "after_bloom": (0 <= ab < ag),
+            "three_0136": "three@0.136.0/" in src,
+            "aces": "ACESFilmicToneMapping" in src,
+            "srgb": "sRGBEncoding" in src,
+        }
+        out["static"] = st
+        out["active"] = all(st.values())
+        out["ok"] = out["active"]
+    except Exception as e:  # noqa: BLE001
+        out["static"] = {"error": str(e)[:160]}
+
+    hd = _GODRAYS["headless"]
+    if hd is None or (time.time() - _GODRAYS["ts"]) > 600:
+        _godrays_warm()  # non-blocking; the proof appears on a later poll
+    if hd is not None:
+        out["headless"] = hd
+        out["proof"] = "headless"
+        out["composerPasses"] = hd.get("composerPasses")
+        out["godRaysIndex"] = hd.get("godRaysIndex")
+        out["active"] = bool(out["active"] and hd.get("pass"))
+        out["ok"] = out["active"]
+    return out
+
+
 class _H(http.server.BaseHTTPRequestHandler):
     def _send(self, body: bytes, ctype: str):
         self.send_response(200)
@@ -643,6 +1533,14 @@ class _H(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _tmpl(self, name: str) -> str:
+        """Read an html template from server/ and inject the control token."""
+        try:
+            with open(os.path.join(os.path.dirname(__file__), name), encoding="utf-8") as f:
+                return f.read().replace("__CTOKEN__", CONTROL_TOKEN)
+        except Exception as e:  # noqa: BLE001
+            return f"<h1>template {name} missing</h1><pre>{e}</pre>"
+
     def do_GET(self):
         if self.path.startswith("/metrics"):
             self._send(json.dumps(_SNAP).encode(), "application/json")
@@ -651,20 +1549,313 @@ class _H(http.server.BaseHTTPRequestHandler):
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(_detail(q.get("kind", [""])[0], q.get("name", [""])[0])).encode(),
                        "application/json")
-        elif self.path.startswith("/health"):
-            self._send(b'{"ok":true}', "application/json")
-        else:
-            self._send(HTML.replace("__CTOKEN__", CONTROL_TOKEN).encode(), "text/html; charset=utf-8")
-
-    def do_POST(self):
-        if self.path.startswith("/control"):
+        elif self.path.startswith("/graphdata"):
+            self._send(json.dumps(_graph_data()).encode(), "application/json")
+        elif self.path.startswith("/graph"):
+            try:
+                with open(os.path.join(os.path.dirname(__file__), "dashboard_graph.html"), encoding="utf-8") as f:
+                    self._send(f.read().encode(), "text/html; charset=utf-8")
+            except Exception:  # noqa: BLE001
+                self._send(b"graph view unavailable", "text/html")
+        elif self.path.startswith("/files"):
+            try:
+                fs = sorted(os.listdir(os.path.join(os.path.dirname(__file__), "services")))
+                self._send(json.dumps({"files": [f for f in fs if f.endswith(".py")][:40]}).encode(), "application/json")
+            except Exception:  # noqa: BLE001
+                self._send(b'{"files":[]}', "application/json")
+        elif self.path.startswith("/tasks"):
+            from server.services import task_daemon as TD
+            self._send(json.dumps(TD.list_tasks()).encode(), "application/json")
+        elif self.path.startswith("/library"):
+            from server.services import media_gen as MG
+            self._send(json.dumps(MG.library()).encode(), "application/json")
+        elif self.path.startswith("/tts"):
+            from urllib.parse import urlparse, parse_qs
+            _q = parse_qs(urlparse(self.path).query)
+            def _f(name):
+                try:
+                    return float(_q.get(name, [None])[0]) if _q.get(name) else None
+                except Exception:  # noqa: BLE001
+                    return None
+            data = _tts(_q.get("text", [""])[0], _f("semitones"), _f("tempo"))
+            if data:
+                self.send_response(200); self.send_header("Content-Type", "audio/wav")
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Cache-Control", "public, max-age=3600")
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+            else:
+                self.send_response(204); self.end_headers()
+        elif self.path.startswith("/suggestions"):
+            # Self-development dock: box-LLM "what to build next" ideas from the live system brief.
             from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
+            self._send(json.dumps(_suggestions(force=q.get("force", ["0"])[0] == "1")).encode(),
+                       "application/json")
+        elif self.path.startswith("/proposal"):
+            # Formatted proposal text for a clicked suggestion id (?id=sugN).
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            self._send(json.dumps(_proposal(q.get("id", [""])[0])).encode(), "application/json")
+        elif self.path.startswith("/agent/tools"):
+            # Agent OS tool registry (the 17 real tools) + health snapshot.
+            self._send(json.dumps(_agent_tools()).encode(), "application/json")
+        elif self.path.startswith("/budget"):
+            from server.services import token_governor as TG
+            self._send(json.dumps(TG.state()).encode(), "application/json")
+        elif self.path.startswith("/file"):
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            rel = (q.get("path", [""])[0] or "").lstrip("/")
+            try:
+                if ".." in rel or not rel:
+                    raise ValueError("bad path")
+                full = os.path.realpath(os.path.join(ROOT, rel))
+                if not full.startswith(os.path.realpath(ROOT)) or not os.path.isfile(full):
+                    raise ValueError("not found")
+                with open(full, encoding="utf-8", errors="replace") as f:
+                    content = f.read(20000)
+                self._send(json.dumps({"ok": True, "path": rel, "content": content,
+                                       "lang": os.path.splitext(full)[1].lstrip("."),
+                                       "size": os.path.getsize(full)}).encode(), "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)[:80]}).encode(), "application/json")
+        elif self.path.startswith("/rtc/poll"):
+            from urllib.parse import urlparse, parse_qs
+            from server.services import care_signal as CS
+            q = parse_qs(urlparse(self.path).query)
+            self._send(json.dumps(CS.poll(q.get("room", ["mum"])[0], q.get("role", ["?"])[0],
+                                          int(q.get("since", ["0"])[0] or 0))).encode(), "application/json")
+        elif self.path.startswith("/carerooms"):
+            from server.services import care_signal as CS
+            self._send(json.dumps({"rooms": CS.rooms()}).encode(), "application/json")
+        elif self.path.startswith("/talk") or self.path.startswith("/companion"):
+            self._send(self._tmpl("jarvis_voice.html").encode(), "text/html; charset=utf-8")
+        elif self.path.startswith("/care"):
+            self._send(self._tmpl("care.html").encode(), "text/html; charset=utf-8")
+        elif self.path.startswith("/guardian"):
+            self._send(self._tmpl("guardian.html").encode(), "text/html; charset=utf-8")
+        elif self.path.startswith("/taskresult"):
+            from urllib.parse import urlparse, parse_qs
+            from server.services import task_daemon as TD
+            q = parse_qs(urlparse(self.path).query)
+            self._send(json.dumps(TD.result(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
+        elif self.path.startswith("/asset/"):
+            name = os.path.basename(self.path.split("/asset/", 1)[1].split("?")[0])
+            p = os.path.join(ROOT, "jarvis_assets", name)
+            if name and os.path.exists(p):
+                with open(p, "rb") as f:
+                    data = f.read()
+                ct = mimetypes.guess_type(p)[0] or "application/octet-stream"
+                self.send_response(200); self.send_header("Content-Type", ct)
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Cache-Control", "public, max-age=86400")
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+            else:
+                self.send_response(404); self.end_headers()
+        elif self.path.startswith("/assetlist"):
+            try:
+                fs = sorted(os.listdir(os.path.join(ROOT, "jarvis_assets")))
+                self._send(json.dumps({"png": [f for f in fs if f.endswith(".png")],
+                                       "glb": [f for f in fs if f.endswith(".glb")]}).encode(), "application/json")
+            except Exception:  # noqa: BLE001
+                self._send(b'{"png":[],"glb":[]}', "application/json")
+        elif self.path.startswith("/media/"):
+            name = os.path.basename(self.path.split("/media/", 1)[1].split("?")[0])
+            p = os.path.join(ROOT, "server", "data", "media", name)
+            if name and os.path.exists(p):
+                with open(p, "rb") as f:
+                    data = f.read()
+                ct = mimetypes.guess_type(p)[0] or "application/octet-stream"
+                self.send_response(200); self.send_header("Content-Type", ct)
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+            else:
+                self.send_response(404); self.end_headers()
+        elif self.path.startswith("/climate/poll"):
+            # The HOME-LAN AirTouch bridge long-polls this OUTBOUND to collect queued commands.
+            # Authed with the bridge key (NOT the web token) so a browser can never drain the queue.
+            from urllib.parse import urlparse, parse_qs
+            from server.services import climate_relay as CR
+            q = parse_qs(urlparse(self.path).query)
+            if q.get("key", [""])[0] != CLIMATE_BRIDGE_KEY:
+                self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
+            else:
+                self._send(json.dumps(CR.poll()).encode(), "application/json")
+        elif self.path.startswith("/climate/state"):
+            # Voice/chat pages read the cached last-known state (token-free, read-only) so
+            # "what is the temperature / which zones" answers instantly without a bridge round-trip.
+            from server.services import climate_relay as CR
+            self._send(json.dumps(CR.state()).encode(), "application/json")
+        elif self.path.startswith("/healthreport"):
+            # System Vitals — the proactive health score + alert list (lightweight; the cinematic page,
+            # the Care/Guardian view, or an external uptime monitor can poll just this slice).
+            self._send(json.dumps(_SNAP.get("health") or {"score": None, "level": "unknown",
+                       "summary": "warming up", "alerts": [], "gauges": {}}).encode(), "application/json")
+        elif self.path.startswith("/godrays"):
+            # Self-check for upgrade sug0 (volumetric god-rays): static page assertions + a cached headless
+            # proof that the pass is in composer.passes. Powers the accessible "✦ GOD-RAYS" HUD chip.
+            self._send(json.dumps(_godrays_selfcheck()).encode(), "application/json")
+        elif self.path.startswith("/health"):
+            self._send(b'{"ok":true}', "application/json")
+        elif self.path.startswith("/legacy") or self.path.startswith("/v2"):
+            self._send(self._tmpl("dashboard_v2.html").encode(), "text/html; charset=utf-8")
+        else:
+            # Jarvis Live — the cinematic Iron-Man holographic JARVIS. Falls back to v2 then inline HTML.
+            page = self._tmpl("jarvis_live.html")
+            if page.startswith("<h1>template"):
+                page = self._tmpl("dashboard_v2.html")
+            if page.startswith("<h1>template"):
+                page = HTML.replace("__CTOKEN__", CONTROL_TOKEN)
+            self._send(page.encode(), "text/html; charset=utf-8")
+
+    def do_POST(self):
+        from urllib.parse import urlparse, parse_qs
+        q = parse_qs(urlparse(self.path).query)
+        # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
+        # SDP/ICE/control within a room (the room name is the shared secret) and never touches pm2 or
+        # tasks — so mum's phone link carries no admin rights.
+        if self.path.startswith("/rtc"):
+            from server.services import care_signal as CS
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            self._send(json.dumps(CS.post(body.get("room", "mum"), body.get("from", "?"),
+                                          body.get("to", "?"), body.get("kind", ""),
+                                          body.get("payload"))).encode(), "application/json")
+            return
+        if self.path.startswith("/climate/report"):
+            # The HOME-LAN AirTouch bridge pushes full live state here (outbound). Bridge-key authed.
+            from server.services import climate_relay as CR
+            if q.get("key", [""])[0] != CLIMATE_BRIDGE_KEY:
+                self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
+                return
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            self._send(json.dumps(CR.report(body)).encode(), "application/json")
+            return
+        if self.path.startswith("/climate/cmd"):
+            # Programmatic / dashboard climate control. Token-authed (the voice companion page uses
+            # /chat instead, which routes through _climate_handle token-free). Accepts either a raw
+            # command {op,...} or natural-language {q:"..."} which we parse server-side.
             if q.get("token", [""])[0] != CONTROL_TOKEN:
                 self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
                 return
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            text = body.get("q") or body.get("prompt")
+            if text:
+                res = _climate_handle(text, body.get("address", "ma'am")) or \
+                    {"climate": False, "reply": "That isn't a heating request."}
+                self._send(json.dumps({"ok": True, **res}).encode(), "application/json")
+            else:
+                from server.services import climate_relay as CR
+                self._send(json.dumps(CR.enqueue(body)).encode(), "application/json")
+            return
+        if self.path.startswith("/chat"):
+            # Conversational JARVIS for the vulnerable user — local LLM, British persona, no root, no system
+            # control. Token-free so her companion page carries no admin rights.
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            qtext = body.get("q", "") or body.get("prompt", "")
+            # CLIMATE FIRST: "I am cold", "set the lounge to 23", "what is the temperature",
+            # "which zones", "turn off the study" must control the home aircon — NOT the Claude
+            # builder. _climate_handle returns None for non-climate phrases so chat falls through.
+            try:
+                _cl = _climate_handle(qtext, body.get("address", "ma'am"))
+            except Exception:  # noqa: BLE001
+                _cl = None
+            if _cl is not None:
+                self._send(json.dumps({"ok": True, **_cl}).encode(), "application/json")
+                return
+            import re as _re
+            _l = (qtext or "").lower()
+            is_build = (bool(_re.search(r"\b(build|code|make|create|generate|develop|program|design|write|add)\b", _l))
+                        and bool(_re.search(r"\b(feature|function|glb|3d|model|image|picture|photo|scraper|tool|"
+                                            r"app|page|widget|website|game|program|script|button|it|something|that)\b", _l))) \
+                or bool(_re.search(r"\b(can you|could you|please|i need you to|i want you to|i'd like you to)\b"
+                                   r".*\b(build|code|make|create|develop|program|generate|design)\b", _l))
+            if is_build:
+                try:  # saying == doing: actually spawn the Claude builder and report it
+                    from server.services import task_daemon as TD
+                    tid = TD.ask_claude(qtext).get("id")
+                    self._send(json.dumps({"ok": True, "task_id": tid,
+                                           "reply": "Right away. I'm building that for you now — it may take a little "
+                                                    "while, and I'll tell you the moment it's ready."}).encode(),
+                               "application/json")
+                    return
+                except Exception:  # noqa: BLE001
+                    pass
+            reply = _jarvis_chat(qtext, body.get("history"), body.get("address", "ma'am"))
+            self._send(json.dumps({"ok": True, "reply": reply}).encode(), "application/json")
+            return
+        if q.get("token", [""])[0] != CONTROL_TOKEN:
+            self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
+            return
+        if self.path.startswith("/control_all"):
+            self._send(json.dumps(_control_all(q.get("action", [""])[0])).encode(), "application/json")
+        elif self.path.startswith("/control"):
             self._send(json.dumps(_control(q.get("action", [""])[0], q.get("name", [""])[0])).encode(),
                        "application/json")
+        elif self.path.startswith("/ask"):
+            from server.services import task_daemon as TD
+            self._send(json.dumps(TD.ask_claude(q.get("q", [""])[0] or q.get("prompt", [""])[0],
+                                                archon=q.get("archon", ["0"])[0] == "1")).encode(),
+                       "application/json")
+        elif self.path.startswith("/task"):
+            from server.services import task_daemon as TD
+            a = q.get("action", [""])[0]
+            tid = int(q.get("id", ["0"])[0] or 0)
+            pr = q.get("q", [""])[0]
+            res = ({"create": lambda: TD.create(q.get("name", [""])[0]),
+                    "genimage": lambda: TD.gen_media("image", pr),
+                    "gen3d": lambda: TD.gen_media("glb", pr),
+                    "cancel": lambda: TD.cancel(tid), "pause": lambda: TD.pause(tid),
+                    "resume": lambda: TD.resume(tid), "clear": lambda: TD.clear_finished()}
+                   .get(a, lambda: {"ok": False, "error": "bad action"}))()
+            self._send(json.dumps(res).encode(), "application/json")
+        elif self.path.startswith("/agent/run"):
+            # Agent OS: plan + execute a natural-language command via server.agent.core (auto-only;
+            # destructive steps stay 'awaiting', never auto-run from a web POST). Token-authed above.
+            cmd = q.get("q", [""])[0] or q.get("command", [""])[0] or q.get("prompt", [""])[0]
+            if not cmd:
+                try:
+                    ln = int(self.headers.get("Content-Length", 0) or 0)
+                    body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+                    cmd = body.get("q") or body.get("command") or body.get("prompt") or ""
+                except Exception:  # noqa: BLE001
+                    cmd = ""
+            self._send(json.dumps(_agent_run(cmd)).encode(), "application/json")
+        elif self.path.startswith("/upgrade"):
+            # one-touch self-development: brief current system -> web research -> Claude executes.
+            # When the key is a DYNAMIC AI suggestion id (sugN from /suggestions), fold that suggestion's
+            # full proposal into the brief so Claude builds the EXACT thing the user clicked, not a vague
+            # generic upgrade. Static UPGRADES keys (rollback/scheduler/…) keep their catalog behaviour.
+            from server.services import task_daemon as TD
+            key = q.get("key", [""])[0]
+            brief = _system_brief()
+            try:
+                if not _SUGGEST["by_id"]:
+                    _suggestions()
+                s = _SUGGEST["by_id"].get((key or "").strip())
+                if s:
+                    brief = ("BUILD THIS SUGGESTION: " + s["title"] + "\n" +
+                             (s.get("detail") or "") + "\n\nDESIGN PROPOSAL:\n" + s.get("proposal", "") +
+                             "\n\n--- LIVE SYSTEM ---\n" + brief)
+            except Exception:  # noqa: BLE001
+                pass
+            res = TD.run_upgrade(key, brief, archon=q.get("archon", ["0"])[0] == "1")
+            self._send(json.dumps(res).encode(), "application/json")
         else:
             self._send(b'{"ok":false}', "application/json")
 
@@ -686,7 +1877,7 @@ def main():
         enr = _count(BRAIN_DB, "SELECT COUNT(*) FROM note WHERE frontmatter_json LIKE '%\"batch_loader\"%'") or 0
         _SNAP = {"ts": int(time.time()),
                  "completion": {"enriched": enr, "total": total, "pct": round(enr / max(total, 1) * 100, 1)},
-                 "runners": _runners(), "vps": _vps(),
+                 "runners": [], "vps": _vps(),
                  "learning": {}, "glb": {}, "box": {}, "workers": [], "tiers": [], "feedback": {},
                  "loading": True}
     except Exception:  # noqa: BLE001

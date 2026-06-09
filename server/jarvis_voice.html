@@ -1,0 +1,664 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<title>JARVIS</title>
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name=theme-color content="#03050A">
+<style>
+/* ===== design system ===== */
+:root{
+  --cy:#29E7FF;--cy2:#9af3ff;--cy-dim:#5f8298;
+  --ok:#34d399;--rd:#ff4d5e;--amber:#ff7a4d;
+  --bg:#03050A;--bg2:#06121c;--tx:#eafcff;
+  --card:linear-gradient(180deg,rgba(12,40,56,.72),rgba(6,18,28,.78));
+  --card-bd:rgba(41,231,255,.26);
+  /* spacing scale */
+  --s1:6px;--s2:10px;--s3:14px;--s4:18px;--s5:26px;--s6:34px;
+  /* radii */
+  --r1:14px;--r2:18px;--r3:26px;--r-pill:999px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);overflow-x:hidden;
+ font-family:ui-rounded,'SF Pro Rounded',system-ui,Segoe UI,Roboto,sans-serif;
+ -webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0;z-index:0;
+ background:radial-gradient(1000px 760px at 50% 30%,#0a2c40 0%,#051018 46%,var(--bg) 80%)}
+#bg::after{content:'';position:fixed;inset:0;pointer-events:none;
+ background:repeating-linear-gradient(0deg,rgba(41,231,255,.035) 0 1px,transparent 1px 3px);
+ mix-blend-mode:screen;opacity:.5}
+
+/* vertical flow */
+#wrap{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;
+ align-items:center;padding:var(--s4) var(--s3) calc(var(--s4) + env(safe-area-inset-bottom,0));
+ gap:var(--s3)}
+
+/* top bar: gear + family pill */
+#topbar{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;
+ padding-top:env(safe-area-inset-top,0)}
+#gear{font-size:22px;color:var(--cy-dim);background:rgba(8,22,34,.6);
+ border:1px solid var(--card-bd);border-radius:50%;width:48px;height:48px;
+ display:flex;align-items:center;justify-content:center;cursor:pointer;
+ transition:transform .18s ease,box-shadow .25s ease,color .2s ease}
+#gear:hover{color:var(--cy);box-shadow:0 0 22px rgba(41,231,255,.45);transform:translateY(-2px) rotate(35deg)}
+#gear:active{transform:scale(.92) rotate(35deg)}
+#fam{font-size:12px;font-weight:700;color:var(--cy-dim);background:rgba(8,22,34,.6);
+ border:1px solid rgba(41,231,255,.2);border-radius:var(--r-pill);padding:9px 15px;
+ transition:color .25s ease,border-color .25s ease,box-shadow .25s ease}
+#fam.on{color:var(--ok);border-color:#1c5b46;box-shadow:0 0 18px rgba(52,211,153,.3)}
+
+/* ===== hologram hero ===== */
+#holowrap{position:relative;width:100%;max-width:640px;
+ height:min(58vh,420px);display:flex;align-items:center;justify-content:center}
+#holo{position:absolute;inset:0}
+#holo canvas{display:block;width:100%;height:100%}
+/* projector dais glow under the canvas */
+#holowrap::after{content:'';position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+ width:62%;height:26px;border-radius:50%;
+ background:radial-gradient(ellipse at center,rgba(41,231,255,.55),rgba(41,231,255,0) 70%);
+ filter:blur(6px);opacity:.65;pointer-events:none;
+ animation:daisPulse 3.6s ease-in-out infinite}
+@keyframes daisPulse{0%,100%{opacity:.45;transform:translateX(-50%) scaleX(.92)}
+ 50%{opacity:.8;transform:translateX(-50%) scaleX(1.05)}}
+/* holographic flicker veil over the hero */
+#flick{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.0;
+ background:linear-gradient(0deg,rgba(154,243,255,.07),transparent)}
+body.speaking #flick{animation:flick .9s steps(3) infinite}
+@keyframes flick{0%,100%{opacity:.04}40%{opacity:.13}70%{opacity:.02}}
+
+/* status + caption */
+#status{font-size:15px;letter-spacing:2px;color:var(--cy);text-align:center;min-height:20px;
+ text-shadow:0 0 16px rgba(41,231,255,.5);text-transform:uppercase}
+#caption{font-size:18px;line-height:1.45;color:var(--cy2);text-align:center;
+ padding:0 var(--s3);max-width:600px;min-height:26px}
+
+/* ===== control grid ===== */
+#acts{width:100%;max-width:640px;display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.card{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;
+ justify-content:center;gap:var(--s1);min-height:96px;border-radius:var(--r2);
+ border:1px solid var(--card-bd);background:var(--card);color:var(--tx);
+ font-size:17px;font-weight:800;letter-spacing:.3px;cursor:pointer;
+ backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ transition:transform .16s ease,box-shadow .25s ease,border-color .25s ease,background .25s ease}
+.card .ic{font-size:32px;line-height:1;filter:drop-shadow(0 0 10px rgba(41,231,255,.5))}
+.card:hover{transform:translateY(-3px);border-color:var(--cy);
+ box-shadow:0 10px 34px rgba(41,231,255,.28),0 0 0 1px rgba(41,231,255,.25) inset}
+.card:active{transform:scale(.96)}
+.card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(41,231,255,.7),0 0 26px rgba(41,231,255,.5)}
+/* ripple */
+.card .rip{position:absolute;border-radius:50%;transform:scale(0);pointer-events:none;
+ background:radial-gradient(circle,rgba(154,243,255,.6),rgba(41,231,255,0) 70%);
+ animation:rip .55s ease-out forwards}
+@keyframes rip{to{transform:scale(2.4);opacity:0}}
+
+/* mic */
+.card.mic{border-color:var(--cy);color:var(--cy)}
+.card.mic.live{background:linear-gradient(180deg,rgba(52,211,153,.28),rgba(11,107,74,.22));
+ border-color:var(--ok);color:var(--ok);box-shadow:0 0 30px rgba(52,211,153,.4);
+ animation:pulseRing 1.5s ease-in-out infinite}
+@keyframes pulseRing{0%,100%{box-shadow:0 0 22px rgba(52,211,153,.35)}
+ 50%{box-shadow:0 0 46px rgba(52,211,153,.7)}}
+
+/* ===== emergency bar (always visible) ===== */
+#emg{width:100%;max-width:640px;display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);
+ margin-top:var(--s1)}
+.eb{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;
+ justify-content:center;gap:var(--s1);min-height:78px;border-radius:var(--r2);border:none;
+ color:#fff;font-size:17px;font-weight:800;letter-spacing:.4px;cursor:pointer;
+ transition:transform .16s ease,box-shadow .25s ease,filter .2s ease}
+.eb .ic{font-size:30px;line-height:1}
+.eb:hover{transform:translateY(-3px);filter:brightness(1.12)}
+.eb:active{transform:scale(.96)}
+.eb:focus-visible{outline:none;box-shadow:0 0 0 3px #fff,0 0 26px currentColor}
+.eb.help{grid-column:1/3;min-height:104px;font-size:24px;letter-spacing:1.2px;
+ background:linear-gradient(180deg,#ff4d5e,#b3101f);box-shadow:0 0 34px rgba(255,77,94,.6);
+ animation:hp 2.2s ease-in-out infinite}
+.eb.help .ic{font-size:40px}
+@keyframes hp{0%,100%{box-shadow:0 0 24px rgba(255,77,94,.5)}50%{box-shadow:0 0 56px rgba(255,77,94,.95)}}
+.eb.call911{background:linear-gradient(180deg,#ff7a4d,#b34810)}
+.eb.callfam{background:linear-gradient(180deg,#34d399,#0b6b4a);color:#042018}
+
+/* ===== gate ===== */
+#gate{position:fixed;inset:0;z-index:20;
+ background:radial-gradient(840px 640px at 50% 34%,#0a2c40,#03050A 74%);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:var(--s5);text-align:center;padding:var(--s6)}
+#gate h1{font-size:28px;color:var(--cy);margin:0;letter-spacing:5px;text-shadow:0 0 22px var(--cy)}
+#gate p{color:#7fb0c4;max-width:430px;margin:0;font-size:16px;line-height:1.55}
+#go{position:relative;overflow:hidden;min-width:288px;min-height:104px;font-size:24px;
+ font-weight:800;letter-spacing:1px;border:none;border-radius:var(--r3);
+ background:linear-gradient(180deg,#33e0ff,#0b86a6);color:#021018;
+ box-shadow:0 0 44px rgba(41,231,255,.7);cursor:pointer;
+ transition:transform .16s ease,box-shadow .25s ease}
+#go:hover{transform:translateY(-3px);box-shadow:0 0 64px rgba(41,231,255,.9)}
+#go:active{transform:scale(.97)}
+.orb{width:78px;height:78px;border-radius:50%;
+ background:radial-gradient(circle at 35% 30%,#a8f0ff,#22d3ee 55%,#0b6b86);
+ box-shadow:0 0 44px var(--cy);animation:pl 2.4s ease-in-out infinite}
+@keyframes pl{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+/* ===== settings + alarm ===== */
+#set{position:fixed;inset:0;z-index:30;display:none;background:rgba(3,8,14,.97);
+ padding:var(--s5);overflow:auto}
+#set.open{display:block}
+#set h2{color:var(--cy);letter-spacing:1px}
+#set label{display:block;margin:var(--s3) 0 var(--s1);color:#7fb0c4;font-size:13px}
+#set input{width:100%;padding:14px;border-radius:var(--r1);border:1px solid rgba(41,231,255,.3);
+ background:#06151f;color:var(--tx);font-size:16px;transition:border-color .2s,box-shadow .2s}
+#set input:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 3px rgba(41,231,255,.35)}
+#set .save{position:relative;overflow:hidden;margin-top:var(--s5);width:100%;min-height:62px;
+ border:none;border-radius:var(--r1);background:linear-gradient(180deg,#33e0ff,#0b86a6);
+ color:#021018;font-weight:800;font-size:18px;cursor:pointer;
+ transition:transform .16s ease,box-shadow .25s ease}
+#set .save:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(41,231,255,.6)}
+#set .save:active{transform:scale(.97)}
+#self{position:fixed;right:12px;bottom:200px;width:96px;height:128px;border-radius:12px;
+ border:2px solid rgba(41,231,255,.5);object-fit:cover;transform:scaleX(-1);z-index:5;
+ background:#03222e;display:none}
+#alarm{position:fixed;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;
+ justify-content:center;gap:var(--s4);background:#2a0606ee;text-align:center;padding:var(--s5)}
+#alarm.show{display:flex;animation:fl 1s steps(2) infinite}
+@keyframes fl{50%{background:#5a0a0aee}}
+#alarm h2{font-size:30px;color:#fff;margin:0}
+#alarm button{min-height:72px;min-width:236px;font-size:18px;font-weight:800;border:none;
+ border-radius:var(--r2);background:#fff;color:#7a0d0d;cursor:pointer;
+ transition:transform .16s ease}
+#alarm button:active{transform:scale(.96)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+</style></head>
+<body>
+<div id=bg></div>
+<div id=wrap>
+ <div id=topbar>
+  <div id=gear onclick="openSet()" role=button tabindex=0 aria-label="Settings">⚙</div>
+  <div id=fam aria-live=polite>family: offline</div>
+ </div>
+
+ <div id=holowrap>
+  <div id=holo aria-hidden=true></div>
+  <div id=flick></div>
+ </div>
+
+ <div id=status role=status aria-live=polite>JARVIS</div>
+ <div id=caption aria-live=polite></div>
+
+ <div id=acts>
+  <button class="card mic" id=micb onclick="toggleMic()" aria-label="Talk to Jarvis">
+   <span class=ic>🎤</span><span id=micl>Talk to Jarvis</span></button>
+  <button class=card onclick="tvOn()" aria-label="Turn on the television">
+   <span class=ic>📺</span>Turn on TV</button>
+  <button class=card onclick="openApp('captions')" aria-label="Hear the television with captions">
+   <span class=ic>🔊</span>Hear TV</button>
+  <button class=card onclick="openApp('rocky')" aria-label="Open Rocky">
+   <span class=ic>🧹</span>Rocky</button>
+ </div>
+
+ <div id=emg>
+  <button class="eb help" onclick="needHelp()" aria-label="I need help"><span class=ic>🆘</span>I NEED HELP</button>
+  <button class="eb call911" onclick="callNum('emergency')" aria-label="Call emergency services"><span class=ic>🚑</span>Call 911</button>
+  <button class="eb callfam" onclick="callNum('family')" aria-label="Call family"><span class=ic>📞</span>Call Family</button>
+ </div>
+</div>
+
+<video id=remote autoplay playsinline style="display:none;position:fixed;left:50%;top:7%;transform:translateX(-50%);width:min(88vw,540px);max-height:48vh;border-radius:16px;border:2px solid #29E7FF99;box-shadow:0 0 36px rgba(41,231,255,.55);z-index:7;background:#04101a;object-fit:cover"></video>
+<video id=self autoplay playsinline muted></video>
+
+<div id=gate>
+ <div class=orb></div>
+ <h1>J A R V I S</h1>
+ <p>Hello. Tap the button and I'll be with you. I can hear you, talk with you, call for help, and your family can see you.</p>
+ <button id=go onclick="engage()">TAP TO BEGIN</button>
+</div>
+
+<div id=set>
+ <h2>⚙ Setup</h2>
+ <label>Family phone number (for "Call Family")</label><input id=s_fam placeholder="+1 555 123 4567">
+ <label>Emergency number</label><input id=s_emg placeholder="911">
+ <label>"Rocky" app package or link (Android)</label><input id=s_rocky placeholder="com.example.rocky">
+ <label>Closed-captions / hear-TV app package</label><input id=s_cc placeholder="com.samsung.android...">
+ <label>TV remote app package</label><input id=s_tv placeholder="com.samsung.android.oneconnect">
+ <button class=save onclick="saveSet()">Save</button>
+ <p style="color:#5f8298;font-size:12px;margin-top:14px">Tip: send her a link with the numbers built in, e.g. <code>/talk?family=+15551234567&room=mum</code></p>
+</div>
+
+<div id=alarm><h2>🆘 ALERT SENT</h2><div id=alarmsub style="color:#ffd"></div><button onclick="dismissAlarm()">OK</button></div>
+<div class=sr aria-live=assertive id=srlog></div>
+
+<!-- ===== EXACT proven three.js CDN loading (copied from dashboard_graph.html) ===== -->
+<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+<script>
+/* ============================================================================
+   R1 + R2 — REAL 3D HOLOGRAM CORE (Three.js / WebGL + UnrealBloomPass)
+   Star-Wars portal-projector: arc-reactor core, multi-axis rings/tori, orbiting
+   particle field, volumetric beam cone rising from a dais, scanlines + flicker +
+   cyan chromatic glow. Continuously rotates; morphs to a global amp(0..1).
+   Robust: if WebGL/bloom fail, degrades gracefully and NEVER throws.
+   Exposes window.setAmp(x) and renders into #holo.
+   ============================================================================ */
+(function(){
+  var amp=0;                 // smoothed amplitude 0..1 driving the morph
+  window.setAmp=function(x){ // R2 hook — fed every frame by the amp loop below
+    if(typeof x!=='number'||isNaN(x))return;
+    amp=Math.max(0,Math.min(1,x));
+  };
+  if(typeof THREE==='undefined'){console.log('three.js CDN blocked — hologram skipped');return;}
+
+  var host=document.getElementById('holo');
+  var W=host.clientWidth||320, H=host.clientHeight||320;
+  var renderer,scene,camera,composer,bloom,clock;
+  var core,coreMat,glow,rings=[],particles,pMat,beam,beamMat,dais,scan,group;
+  var DPR=Math.min(window.devicePixelRatio||1, 1.8); // R1 cap dpr for mobile perf
+
+  try{
+    renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
+  }catch(e){console.log('WebGL unavailable',e);return;}
+  renderer.setPixelRatio(DPR);
+  renderer.setSize(W,H,false);
+  renderer.setClearColor(0x000000,0);
+  host.appendChild(renderer.domElement);
+
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(46, W/H, 0.1, 100);
+  camera.position.set(0,1.4,9.4);
+  camera.lookAt(0,0.6,0);
+  clock=new THREE.Clock();
+
+  group=new THREE.Group(); scene.add(group);
+
+  // lights (subtle — most luminance comes from emissive + bloom)
+  scene.add(new THREE.AmbientLight(0x0a2230,0.7));
+  var key=new THREE.PointLight(0x29e7ff,1.4,40); key.position.set(3,4,6); scene.add(key);
+  var rim=new THREE.PointLight(0x9af3ff,0.9,40); rim.position.set(-4,-2,4); scene.add(rim);
+
+  // --- arc-reactor core: faceted icosahedron + inner orb + soft glow sprite ---
+  coreMat=new THREE.MeshStandardMaterial({color:0x0b3a4a,emissive:0x29e7ff,
+    emissiveIntensity:1.7,metalness:0.6,roughness:0.25,flatShading:true,
+    transparent:true,opacity:0.96});
+  core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.05,1),coreMat);
+  group.add(core);
+
+  var innerMat=new THREE.MeshBasicMaterial({color:0xeaffff,transparent:true,opacity:0.9});
+  var inner=new THREE.Mesh(new THREE.SphereGeometry(0.55,24,24),innerMat);
+  group.add(inner);
+
+  // radial sprite glow behind core (chromatic cyan bloom seed)
+  (function(){
+    var c=document.createElement('canvas');c.width=c.height=128;
+    var g=c.getContext('2d');var gr=g.createRadialGradient(64,64,2,64,64,64);
+    gr.addColorStop(0,'rgba(180,250,255,0.95)');gr.addColorStop(0.4,'rgba(41,231,255,0.55)');
+    gr.addColorStop(1,'rgba(41,231,255,0)');g.fillStyle=gr;g.fillRect(0,0,128,128);
+    var tex=new THREE.CanvasTexture(c);
+    glow=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,
+      blending:THREE.AdditiveBlending,depthWrite:false,opacity:0.85}));
+    glow.scale.set(5.2,5.2,1);group.add(glow);
+  })();
+
+  // --- multi-axis rings / tori (real depth & thickness, different 3D axes) ---
+  function ring(rad,tube,col,rx,ry,rz){
+    var m=new THREE.MeshStandardMaterial({color:0x05202b,emissive:col,
+      emissiveIntensity:1.5,metalness:0.5,roughness:0.3,transparent:true,opacity:0.92});
+    var t=new THREE.Mesh(new THREE.TorusGeometry(rad,tube,16,90),m);
+    t.rotation.set(rx,ry,rz);t.userData.base=rad;t.userData.mat=m;
+    group.add(t);rings.push(t);return t;
+  }
+  ring(1.9,0.045,0x29e7ff, Math.PI/2,0,0);          // flat equatorial
+  ring(2.4,0.035,0x9af3ff, Math.PI/2.3,0.5,0);       // tilted
+  ring(2.05,0.03,0x29e7ff, 0.4,Math.PI/2,0.2);       // vertical
+  ring(2.75,0.025,0x66d9ff, 1.1,0.2,Math.PI/3);      // oblique outer
+
+  // --- orbiting particle field (modest count for mobile) ---
+  var PCOUNT=520;
+  (function(){
+    var pos=new Float32Array(PCOUNT*3),seed=[];
+    for(var i=0;i<PCOUNT;i++){
+      var a=Math.random()*Math.PI*2, el=(Math.random()-0.5)*Math.PI, r=1.6+Math.random()*2.6;
+      seed.push({a:a,el:el,r:r,sp:0.1+Math.random()*0.5});
+      pos[i*3]=Math.cos(a)*Math.cos(el)*r;pos[i*3+1]=Math.sin(el)*r;pos[i*3+2]=Math.sin(a)*Math.cos(el)*r;
+    }
+    var geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    // tiny soft round dot texture
+    var pc=document.createElement('canvas');pc.width=pc.height=32;var pg=pc.getContext('2d');
+    var pgr=pg.createRadialGradient(16,16,0,16,16,16);
+    pgr.addColorStop(0,'rgba(200,250,255,1)');pgr.addColorStop(1,'rgba(41,231,255,0)');
+    pg.fillStyle=pgr;pg.fillRect(0,0,32,32);
+    pMat=new THREE.PointsMaterial({size:0.10,map:new THREE.CanvasTexture(pc),color:0x9af3ff,
+      transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:0.9});
+    particles=new THREE.Points(geo,pMat);particles.userData.seed=seed;particles.userData.pos=pos;
+    group.add(particles);
+  })();
+
+  // --- volumetric projector BEAM cone rising from the dais ---
+  beamMat=new THREE.MeshBasicMaterial({color:0x29e7ff,transparent:true,opacity:0.10,
+    side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false});
+  beam=new THREE.Mesh(new THREE.ConeGeometry(2.2,4.4,40,1,true),beamMat);
+  beam.position.y=-2.0;                 // wide base at dais, apex toward core
+  beam.rotation.x=Math.PI;              // flip so wide end is down
+  group.add(beam);
+
+  // --- dais base (projector plinth + emissive emitter ring) ---
+  dais=new THREE.Group();
+  var plinth=new THREE.Mesh(new THREE.CylinderGeometry(2.0,2.35,0.35,48),
+    new THREE.MeshStandardMaterial({color:0x07151d,emissive:0x0b2c38,emissiveIntensity:0.6,
+      metalness:0.7,roughness:0.4,transparent:true,opacity:0.9}));
+  plinth.position.y=-4.1;dais.add(plinth);
+  var emitMat=new THREE.MeshBasicMaterial({color:0x29e7ff,transparent:true,opacity:0.85,
+    blending:THREE.AdditiveBlending});
+  var emitter=new THREE.Mesh(new THREE.TorusGeometry(1.7,0.05,12,60),emitMat);
+  emitter.rotation.x=Math.PI/2;emitter.position.y=-3.92;dais.add(emitter);
+  dais.userData.emit=emitMat;
+  scene.add(dais);
+
+  // --- bloom composer (R1) — degrade gracefully if postprocessing missing ---
+  var useComposer=false;
+  try{
+    if(THREE.EffectComposer&&THREE.RenderPass&&THREE.UnrealBloomPass){
+      composer=new THREE.EffectComposer(renderer);
+      composer.addPass(new THREE.RenderPass(scene,camera));
+      bloom=new THREE.UnrealBloomPass(new THREE.Vector2(W,H),1.35,0.85,0.18);
+      composer.addPass(bloom);
+      composer.setPixelRatio(DPR);composer.setSize(W,H);
+      useComposer=true;
+    }
+  }catch(e){console.log('bloom unavailable — core renders without composer',e);useComposer=false;}
+
+  // --- scanline overlay quad (holographic flicker, screen blend) ---
+  try{
+    var sc=document.createElement('canvas');sc.width=4;sc.height=256;var sg=sc.getContext('2d');
+    for(var y=0;y<256;y+=3){sg.fillStyle='rgba(154,243,255,0.10)';sg.fillRect(0,y,4,1);}
+    var stex=new THREE.CanvasTexture(sc);stex.wrapS=stex.wrapT=THREE.RepeatWrapping;stex.repeat.set(1,8);
+    scan=new THREE.Mesh(new THREE.PlaneGeometry(7.5,7.5),
+      new THREE.MeshBasicMaterial({map:stex,transparent:true,opacity:0.18,
+        blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false}));
+    scan.position.z=3.2;scene.add(scan);
+    scan.userData.tex=stex;
+  }catch(e){}
+
+  function resize(){
+    W=host.clientWidth||W;H=host.clientHeight||H;if(W<2||H<2)return;
+    camera.aspect=W/H;camera.updateProjectionMatrix();
+    renderer.setSize(W,H,false);
+    if(useComposer&&composer)composer.setSize(W,H);
+  }
+  window.addEventListener('resize',resize);
+
+  // --- animate loop: continuous rotation + amp morph (R1/R2) ---
+  function frame(){
+    requestAnimationFrame(frame);
+    var dt=clock.getDelta(), t=clock.elapsedTime;
+    var a=amp; // 0..1
+
+    // core pulse (scale) + emissive surge
+    var pulse=1+a*0.42+0.04*Math.sin(t*3.0);
+    core.scale.setScalar(pulse);
+    inner.scale.setScalar(1+a*0.55+0.05*Math.sin(t*5.0));
+    coreMat.emissiveIntensity=1.5+a*2.6;
+    innerMat.opacity=0.75+a*0.25;
+    core.rotation.y+=dt*(0.4+a*1.4);
+    core.rotation.x+=dt*0.18;
+    if(glow){var gs=4.8+a*2.4;glow.scale.set(gs,gs,1);glow.material.opacity=0.6+a*0.4;}
+
+    // rings: expand + spin on their own axes
+    for(var i=0;i<rings.length;i++){var rg=rings[i];
+      var sc2=1+a*0.30*(i+1)/rings.length;rg.scale.setScalar(sc2);
+      rg.rotation.z+=dt*(0.25+i*0.12+a*0.7);
+      rg.rotation.x+=dt*(0.06+a*0.18);
+      rg.userData.mat.emissiveIntensity=1.2+a*2.2;
+    }
+
+    // particle field: orbit, speed up with amp
+    if(particles){var seed=particles.userData.seed,pos=particles.userData.pos;
+      var spd=0.18+a*1.4;
+      for(var j=0;j<seed.length;j++){var s=seed[j];s.a+=dt*s.sp*spd;
+        var rr=s.r*(1+a*0.16);
+        pos[j*3]=Math.cos(s.a)*Math.cos(s.el)*rr;
+        pos[j*3+1]=Math.sin(s.el)*rr+Math.sin(t*1.5+j)*0.04;
+        pos[j*3+2]=Math.sin(s.a)*Math.cos(s.el)*rr;}
+      particles.geometry.attributes.position.needsUpdate=true;
+      pMat.opacity=0.6+a*0.4;pMat.size=0.09+a*0.06;
+      particles.rotation.y+=dt*0.05;
+    }
+
+    // beam cone: brighten + breathe with amp
+    if(beam){beamMat.opacity=0.07+a*0.22+0.02*Math.sin(t*2.0);
+      beam.scale.x=beam.scale.z=1+a*0.1;}
+    if(dais&&dais.userData.emit){dais.userData.emit.opacity=0.6+a*0.4;}
+
+    // whole rig slow auto-rotate (always animating, never frozen)
+    group.rotation.y+=dt*0.10;
+
+    // scanline drift + bloom morph
+    if(scan&&scan.userData.tex){scan.userData.tex.offset.y-=dt*0.25;
+      scan.material.opacity=0.12+a*0.16+0.04*Math.sin(t*9.0);} // flicker
+    if(useComposer&&bloom){bloom.strength=1.1+a*1.9;}
+
+    try{
+      if(useComposer&&composer)composer.render();
+      else renderer.render(scene,camera);
+    }catch(e){ // if composer throws mid-run, fall back permanently
+      useComposer=false;try{renderer.render(scene,camera);}catch(_){}
+    }
+  }
+  // give layout a tick to settle, then run
+  setTimeout(resize,60);
+  frame();
+})();
+</script>
+
+<script>
+/* ============================================================================
+   BACKEND LOGIC — PRESERVED EXACTLY (verified-working). Only visuals/layout
+   above were rebuilt + the 2D canvas core replaced by the Three.js hologram.
+   ============================================================================ */
+const Q=new URLSearchParams(location.search);
+const CT="__CTOKEN__";  // lets her voice-create build tasks (Claude) — no typing/coding needed
+const ROOM=(Q.get('room')||'mum').toLowerCase();
+const CFG={
+  family:Q.get('family')||localStorage.getItem('jv_family')||'',
+  emergency:Q.get('emergency')||localStorage.getItem('jv_emergency')||'911',
+  rocky:Q.get('rocky')||localStorage.getItem('jv_rocky')||'',
+  captions:Q.get('captions')||localStorage.getItem('jv_cc')||'',
+  tv:Q.get('tv')||localStorage.getItem('jv_tv')||'com.samsung.android.oneconnect'
+};
+let spkAddr=(Q.get('who')==='male'||Q.get('who')==='sir')?'sir':"ma'am";  // her link = ma'am; son uses ?who=male
+['family','emergency','rocky','captions','tv'].forEach(k=>{const v=({family:CFG.family,emergency:CFG.emergency,rocky:CFG.rocky,cc:CFG.captions,tv:CFG.tv});});
+function setStatus(t){document.getElementById('status').textContent=t;}
+function cap(t){document.getElementById('caption').textContent=t;}
+function srlog(t){const s=document.getElementById('srlog');s.textContent='';setTimeout(()=>s.textContent=t,40);}
+
+/* ---------- British JARVIS voice ---------- */
+let VOICES=[];function lv(){VOICES=speechSynthesis.getVoices()||[];}lv();if('onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=lv;
+function pick(){const p=['Daniel','Google UK English Male','Microsoft Ryan','Microsoft George','Arthur','Oliver','Google UK English'];
+ for(const n of p){const v=VOICES.find(v=>v.name&&v.name.includes(n));if(v)return v;}
+ return VOICES.find(v=>/en[-_]?GB/i.test(v.lang))||VOICES.find(v=>/^en/i.test(v.lang))||VOICES[0];}
+let speaking=false,curAudio=null;
+function webSpeak(t,done){try{const u=new SpeechSynthesisUtterance(t);const v=pick();if(v){u.voice=v;u.lang=v.lang||'en-GB';}else u.lang='en-GB';
+  u.rate=.99;u.pitch=1.0;u.onstart=()=>{speaking=true;document.body.classList.add('speaking');pauseRec();};
+  u.onend=()=>{speaking=false;document.body.classList.remove('speaking');cap('');resumeRec();done&&done();};
+  u.onerror=()=>{speaking=false;document.body.classList.remove('speaking');resumeRec();done&&done();};
+  speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){done&&done();}}
+// Plain <audio> playback of the neural voice — far more reliable on mobile than Web-Audio routing.
+function jarvis(t,then){return new Promise(res=>{
+  cap(t);try{srlog('Jarvis: '+t);}catch(e){}pauseRec();speaking=true;document.body.classList.add('speaking');
+  try{ if(!curAudio)curAudio=new Audio();
+    const fin=()=>{speaking=false;document.body.classList.remove('speaking');cap('');if(then)then();resumeRec();res();};
+    curAudio.onended=fin;
+    curAudio.onerror=()=>{document.body.classList.remove('speaking');webSpeak(t,()=>{if(then)then();res();});};
+    curAudio.src='tts?text='+encodeURIComponent(String(t).slice(0,600));
+    const p=curAudio.play();
+    if(p&&p.catch)p.catch(()=>{document.body.classList.remove('speaking');webSpeak(t,()=>{if(then)then();res();});});
+  }catch(e){document.body.classList.remove('speaking');webSpeak(t,()=>{if(then)then();res();});}
+});}
+
+/* ---------- amp driver for the 3D hologram (R2) ----------
+   while SPEAKING -> lively synthetic envelope (always morphs as he talks)
+   while LISTENING -> real mic AnalyserNode RMS.  Never freezes. */
+function ampLoop(ts){
+  requestAnimationFrame(ampLoop);
+  let an=0;
+  if(speaking){
+    an=0.45+0.42*Math.abs(Math.sin(ts/95))+0.12*Math.sin(ts/37);
+  }else if(listening&&analyser){
+    analyser.getByteFrequencyData(adata);
+    let s=0;for(let i=0;i<adata.length;i++)s+=adata[i];
+    an=Math.min(1,(s/adata.length)/100);
+  }
+  // idle breathing so the core is alive even when silent
+  const base=0.12+0.06*Math.sin(ts/850);
+  const target=Math.max(base,an);
+  ampLoop._a=(ampLoop._a||0)*0.6+target*0.4;
+  if(window.setAmp)window.setAmp(ampLoop._a);
+}
+
+/* ---------- ripple effect on every control (R3) ---------- */
+function ripple(b,cx,cy){
+  const r=b.getBoundingClientRect();const d=Math.max(r.width,r.height);
+  const x=cx-r.left-d/2, y=cy-r.top-d/2;
+  const s=document.createElement('span');s.className='rip';
+  s.style.width=s.style.height=d+'px';s.style.left=x+'px';s.style.top=y+'px';
+  b.appendChild(s);setTimeout(()=>s.remove(),560);
+}
+addEventListener('pointerdown',e=>{const b=e.target.closest('.card,.eb,#go,.save');
+  if(b)ripple(b, e.clientX||(e.touches&&e.touches[0].clientX)||0, e.clientY||(e.touches&&e.touches[0].clientY)||0);},true);
+
+/* ---------- conversation (local LLM, back to back) ---------- */
+let history=[];
+async function talk(text){
+ history.push({role:'user',content:text});cap(text);srlog('You: '+text);setStatus('thinking…');
+ try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({q:text,history:history.slice(-8),address:spkAddr})})).json();
+   const reply=(r&&r.reply)||"I'm here with you.";history.push({role:'assistant',content:reply});
+   setStatus('JARVIS');await jarvis(reply);
+ }catch(e){await jarvis("I'm right here. Don't worry, I'm not going anywhere.");}}
+
+/* ---------- voice recognition (continuous, barge-in) ---------- */
+let rec=null,listening=false,wantListen=false;
+function pauseRec(){if(rec){try{rec.stop();}catch(e){}}}
+function resumeRec(){if(wantListen&&rec){try{rec.start();}catch(e){}}}
+function toggleMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){jarvis('I need Chrome to hear you, my dear.');return;}
+ if(wantListen){wantListen=false;listening=false;document.body.classList.remove('listening');
+   document.getElementById('micb').classList.remove('live');document.getElementById('micl').textContent='Talk to Jarvis';if(rec){try{rec.stop();}catch(e){}}rec=null;return;}
+ startListening();}
+function startListening(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;
+ wantListen=true;listening=true;document.body.classList.add('listening');
+ document.getElementById('micb').classList.add('live');document.getElementById('micl').textContent='Listening…';
+ rec=new SR();rec.lang='en-GB';rec.continuous=true;rec.interimResults=true;
+ rec.onresult=e=>{const res=e.results[e.results.length-1];const t=(res[0].transcript||'').trim();if(!t)return;cap(t);
+   if(res.isFinal){handle(t);}};
+ rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvis('Please allow me to hear you.');wantListen=false;}};
+ rec.onend=()=>{listening=false;if(wantListen&&!speaking){try{rec.start();listening=true;}catch(e){}}};
+ try{rec.start();}catch(e){}}
+
+/* ---------- intent handling (commands + chat) ---------- */
+function handle(t){const l=t.toLowerCase();
+ if(/\b(help me|i('?ve| have) fallen|i can'?t get up|emergency|i'?m hurt|i am hurt)\b/.test(l)){needHelp();return;}
+ if(/\bcall (the )?(emergency|ambulance|nine one one|911|999)\b/.test(l)){callNum('emergency');return;}
+ if(/\bcall (my )?(son|family|daughter|him|sam|home)\b/.test(l)){callNum('family');return;}
+ if(/\bturn on (the )?(tv|telly|television)\b/.test(l)){tvOn();return;}
+ if(/\b(closed caption|captions?|subtitles?|hear the tv|hear tv)\b/.test(l)){openApp('captions');return;}
+ if(/\b(rocky|mop|mopping|clean the floor)\b/.test(l)){openApp('rocky');return;}
+ // voice-create: she asks JARVIS to build/code/make something -> hand it to the Claude builder
+ if(/\b(code|build|make|create|generate|develop|program|write|design|add)\b[^]*\b(feature|function|glb|3d|model|image|picture|photo|scraper|tool|app|page|widget|website|program|button|game|something)\b/.test(l)
+    || /\b(can you|could you|please|i need you to|i want you to|i'd like you to)\b[^]*\b(code|build|make|create|develop|program|generate|design)\b/.test(l)){buildTask(t);return;}
+ const m=l.match(/\bopen (the )?(.+?)( app)?$/);if(m){openNamed(m[2]);return;}
+ talk(t);}
+async function buildTask(t){
+ await jarvis("Right away. I'm building that for you now — it may take a little while, and I'll tell you the moment it's ready.");
+ try{await fetch('ask?q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}catch(e){}
+}
+
+/* ---------- emergency calling ---------- */
+function callNum(which){const n=which==='emergency'?(CFG.emergency||'911'):CFG.family;
+ if(which==='family'&&!n){jarvis('I do not have your family number yet. Please ask them to set it up.');openSet();return;}
+ sosToFamily(which==='emergency'?'called 911':'called family');
+ jarvis(which==='emergency'?'Calling emergency services now. Stay with me, I am right here.':'Calling your family now. Hold on.',
+   ()=>{ setTimeout(()=>{try{window.location.href='tel:'+String(n).replace(/[^+0-9]/g,'');}catch(e){}},300);});}
+function needHelp(){sosToFamily('pressed HELP');jarvis('Do not worry. I have alerted your family right now, and help is coming. I am staying with you.');
+ showAlarm('Your family has been alerted.');}
+
+/* ---------- open apps / TV (Android intents) ---------- */
+function _launch(target,speakName){if(!target){jarvis("I haven't been told which app that is yet. Your family can set it up.");openSet();return;}
+ jarvis('Opening '+speakName+' for you now.');
+ let url=target;
+ if(!/^[a-z][a-z0-9+.-]*:/i.test(target)){url='intent://#Intent;package='+target+';end';}
+ setTimeout(()=>{try{window.location.href=url;}catch(e){jarvis('I could not open '+speakName+'.');}},400);}
+function openApp(key){const map={rocky:[CFG.rocky,'Rocky'],captions:[CFG.captions,'the captions, so you can hear the television'],tv:[CFG.tv,'the television remote']};
+ const x=map[key]||[ '', key];_launch(x[0],x[1]);}
+function tvOn(){_launch(CFG.tv||'com.samsung.android.oneconnect','the television through your Samsung remote');}
+function openNamed(name){const k=name.includes('caption')||name.includes('tv')?'captions':name.includes('rock')?'rocky':null;
+ if(k)return openApp(k);_launch('',name);}
+
+/* ---------- alarms ---------- */
+let actx;function beep(f){actx=actx||new(window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.frequency.value=f||880;g.gain.value=.16;o.start();o.stop(actx.currentTime+.28);}
+function showAlarm(s){document.getElementById('alarmsub').textContent=s||'';document.getElementById('alarm').classList.add('show');try{beep(990);setTimeout(()=>beep(880),350);}catch(e){}}
+function dismissAlarm(){document.getElementById('alarm').classList.remove('show');}
+
+/* ---------- settings ---------- */
+function openSet(){document.getElementById('s_fam').value=CFG.family;document.getElementById('s_emg').value=CFG.emergency;
+ document.getElementById('s_rocky').value=CFG.rocky;document.getElementById('s_cc').value=CFG.captions;document.getElementById('s_tv').value=CFG.tv;
+ document.getElementById('set').classList.add('open');}
+function saveSet(){CFG.family=document.getElementById('s_fam').value.trim();CFG.emergency=document.getElementById('s_emg').value.trim()||'911';
+ CFG.rocky=document.getElementById('s_rocky').value.trim();CFG.captions=document.getElementById('s_cc').value.trim();CFG.tv=document.getElementById('s_tv').value.trim();
+ localStorage.setItem('jv_family',CFG.family);localStorage.setItem('jv_emergency',CFG.emergency);localStorage.setItem('jv_rocky',CFG.rocky);
+ localStorage.setItem('jv_cc',CFG.captions);localStorage.setItem('jv_tv',CFG.tv);document.getElementById('set').classList.remove('open');jarvis('Saved.');}
+
+/* ---------- WebRTC: publish to family (guardian sees her) ---------- */
+const ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'},
+ {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+ {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+ {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}];
+let pc,local,since=0,pendingIce=[],haveRemote=false,connected=false,analyser=null,adata=null;
+async function getMedia(face){return await navigator.mediaDevices.getUserMedia({audio:true,
+  video:{facingMode:face||'user',width:{ideal:2560},height:{ideal:1440},frameRate:{ideal:30}}});}
+function preferCodec(p){try{const caps=RTCRtpSender.getCapabilities('video');if(!caps)return;
+  const order=['video/h265','video/vp9','video/h264','video/vp8'];
+  const sorted=[...caps.codecs].sort((a,b)=>{const ia=order.indexOf(a.mimeType.toLowerCase()),ib=order.indexOf(b.mimeType.toLowerCase());return (ia<0?9:ia)-(ib<0?9:ib);});
+  p.getTransceivers().forEach(tr=>{if(tr.sender&&tr.sender.track&&tr.sender.track.kind==='video'&&tr.setCodecPreferences){try{tr.setCodecPreferences(sorted);}catch(e){}}});}catch(e){}}
+async function sig(kind,payload){try{await fetch('rtc',{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({room:ROOM,from:'patient',to:'guardian',kind:kind,payload:payload})});}catch(e){}}
+function newPeer(){if(pc){try{pc.close();}catch(e){}}pendingIce=[];haveRemote=false;
+  pc=new RTCPeerConnection({iceServers:ICE});
+  pc.onicecandidate=e=>{if(e.candidate)sig('ice',e.candidate);};
+  pc.ontrack=e=>{const r=document.getElementById('remote');if(r){r.srcObject=e.streams[0];r.style.display='block';}famOn(true);};
+  pc.onconnectionstatechange=()=>{const s=pc.connectionState;if(s==='connected'){connected=true;famOn(true);}else if(s==='failed'||s==='disconnected'){connected=false;famOn(false);}};}
+async function onMsg(m){const k=m.kind,p=m.payload;
+  if(k==='offer'){newPeer();await pc.setRemoteDescription(p);haveRemote=true;
+    if(local)local.getTracks().forEach(t=>pc.addTrack(t,local));preferCodec(pc);  // add HER tracks AFTER remote desc so the son receives her video
+    for(const c of pendingIce){try{await pc.addIceCandidate(c);}catch(e){}}pendingIce=[];
+    const a=await pc.createAnswer();await pc.setLocalDescription(a);sig('answer',a);}
+  else if(k==='ice'){if(pc&&haveRemote){try{await pc.addIceCandidate(p);}catch(e){}}else pendingIce.push(p);}
+  else if(k==='hello'){famOn(true);}
+  else if(k==='ctrl'){if(p){
+    if(p.cam!==undefined){const t=local&&local.getVideoTracks()[0];if(t)t.enabled=p.cam;}
+    if(p.mic!==undefined){const t=local&&local.getAudioTracks()[0];if(t)t.enabled=p.mic;}
+    if(p.zoom!==undefined){try{const t=local&&local.getVideoTracks()[0];if(t&&t.getCapabilities&&t.getCapabilities().zoom)t.applyConstraints({advanced:[{zoom:p.zoom}]});}catch(e){}}
+    if(p.speak)jarvis(p.speak);if(p.ring)jarvis('Your family is calling. I am connecting you.');}}}
+function famOn(on){const f=document.getElementById('fam');f.textContent='family: '+(on?'connected ●':'offline');f.className=on?'on':'';}
+function sosToFamily(what){sig('ctrl',{sos:true,what:what,ts:Date.now()});sig('hello',{role:'patient',sos:true});}
+async function poll(){try{const r=await fetch('rtc/poll?room='+ROOM+'&role=patient&since='+since);const d=await r.json();since=d.seq||since;
+  for(const m of (d.msgs||[]))await onMsg(m);}catch(e){}finally{setTimeout(poll,800);}}
+
+/* ---------- engage ---------- */
+async function engage(){
+ document.getElementById('gate').style.display='none';
+ requestAnimationFrame(ampLoop);   // start the hologram amp driver (3D core morphs)
+ // unlock audio inside the tap (mobile autoplay): play a tiny silent clip on the reused element
+ try{if(!curAudio)curAudio=new Audio();curAudio.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';var _u=curAudio.play();if(_u&&_u.catch)_u.catch(()=>{});}catch(e){}
+ // GREET IMMEDIATELY — voice output needs NO permission and must NEVER wait on the camera prompt
+ setStatus('JARVIS');
+ jarvis('Hello. I am JARVIS. I am right here with you. Just speak to me whenever you like.').then(()=>startListening());
+ // Camera + mic for the family video are OPTIONAL and run in the background — they must not block the voice
+ (async()=>{ try{local=await getMedia('user');document.getElementById('self').srcObject=local;document.getElementById('self').style.display='block';
+   try{const ac=new(window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(local);analyser=ac.createAnalyser();analyser.fftSize=128;adata=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);}catch(e){}
+   sig('hello',{role:'patient'});poll();
+ }catch(e){/* no camera permission — voice still works */ poll();} })();
+}
+// keyboard activation for the gear (focusable role=button)
+document.getElementById('gear').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSet();}});
+</script>
+</body></html>

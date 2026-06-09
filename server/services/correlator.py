@@ -108,6 +108,57 @@ def run_pass(c: sqlite3.Connection) -> dict:
             "distinct": distinct, "new_links": len(new_links)}
 
 
+_STOP = {"the", "and", "for", "with", "data", "api", "from", "into", "your", "this", "that",
+         "all", "are", "was", "has", "have", "not", "via", "per", "new", "set", "use"}
+
+
+def _tokens(name: str) -> set:
+    return {w for w in re.findall(r"[a-z0-9]+", (name or "").lower()) if len(w) > 3 and w not in _STOP}
+
+
+def link_topics(c: sqlite3.Connection, cap: int = 20000) -> dict:
+    """Connect ORPHAN Topics to related objects (Document/Concept/DomainSubject/DataSource) by shared
+    distinctive name tokens → RELATES_TO links. This is the missing cross-correlation: it turns the
+    7,000 topic islands into a connected graph. Conservative (>=2 shared distinctive tokens), idempotent."""
+    now = int(time.time())
+    tok2topics: dict[str, set] = {}
+    for tid, props in c.execute("SELECT id,props FROM ont_object WHERE type='Topic'"):
+        try:
+            j = json.loads(props); nm = j.get("topic_name") or j.get("label") or ""
+        except Exception:  # noqa: BLE001
+            nm = ""
+        for t in _tokens(nm):
+            tok2topics.setdefault(t, set()).add(tid)
+    # drop over-generic tokens (map to too many topics → noise)
+    tok2topics = {t: s for t, s in tok2topics.items() if len(s) <= 40}
+    existing = {r[0] for r in c.execute("SELECT from_id FROM ont_link WHERE type='RELATES_TO'")}
+    new, seen = [], set()
+    for oid, props in c.execute("SELECT id,props FROM ont_object WHERE type IN "
+                                "('Document','Concept','DomainSubject','DataSource')"):
+        if oid in existing:
+            continue
+        try:
+            j = json.loads(props); nm = j.get("label") or j.get("name") or ""
+        except Exception:  # noqa: BLE001
+            nm = ""
+        cand: dict = {}
+        for t in _tokens(nm):
+            for tid in tok2topics.get(t, ()):
+                cand[tid] = cand.get(tid, 0) + 1
+        for tid, score in cand.items():
+            if score >= 2 and (oid, tid) not in seen:
+                seen.add((oid, tid))
+                new.append((f"relates:{oid}->{tid}", "RELATES_TO", oid, tid, now))
+        if len(new) >= cap:
+            break
+    for i in range(0, len(new), 1000):
+        c.executemany("INSERT OR IGNORE INTO ont_link(id,type,from_id,to_id,ts) VALUES(?,?,?,?,?)",
+                      new[i:i + 1000])
+        c.commit()
+    linked_topics = c.execute("SELECT count(DISTINCT to_id) FROM ont_link WHERE type='RELATES_TO'").fetchone()[0]
+    return {"new_relates": len(new), "topics_now_connected": linked_topics}
+
+
 def stats() -> dict:
     try:
         c = _conn()
@@ -122,12 +173,16 @@ def stats() -> dict:
         groups = one("SELECT count(*) FROM corr_entity")
         members = one("SELECT sum(members) FROM corr_entity")
         sameas = one("SELECT count(*) FROM ont_link WHERE type='SAME_AS'")
+        relates = one("SELECT count(*) FROM ont_link WHERE type='RELATES_TO'")
+        topics_connected = one("SELECT count(DISTINCT to_id) FROM ont_link WHERE type='RELATES_TO'")
+        topics_total = one("SELECT count(*) FROM ont_object WHERE type='Topic'")
         distinct = raw - (members - groups) if members else raw
         top = [{"name": n, "members": m, "types": t} for n, m, t in c.execute(
             "SELECT canonical_name,members,types FROM corr_entity ORDER BY members DESC LIMIT 8")]
         c.close()
         return {"raw_objects": raw, "resolved_entities": groups, "duplicates_collapsed": (members - groups) if members else 0,
-                "distinct_after_dedup": distinct, "sameas_links": sameas, "top": top}
+                "distinct_after_dedup": distinct, "sameas_links": sameas, "topic_links": relates,
+                "topics_connected": topics_connected, "topics_total": topics_total, "top": top}
     except Exception as e:  # noqa: BLE001
         return {"error": str(e)[:120]}
 
@@ -135,22 +190,31 @@ def stats() -> dict:
 def run_forever(interval_s: float = 45.0) -> None:
     print(f"[correlator] starting — non-stop cross-correlation, every {interval_s}s, link cap {LINK_CAP}/pass",
           flush=True)
-    idle, prev_raw = 0, -1
+    idle, prev_raw, passes = 0, -1, 0
     while True:
         try:
             c = _conn()
             _ensure(c)
             s = run_pass(c)
+            passes += 1
+            lt = {}
+            if passes == 1 or passes % 3 == 0:   # connect orphan topics to related objects periodically
+                lt = link_topics(c)
             c.close()
             print(f"[correlator] raw={s['raw']:,} resolved_groups={s['groups']:,} "
-                  f"dup_members={s['dup_members']:,} distinct={s['distinct']:,} +links={s['new_links']:,}",
-                  flush=True)
-            # adaptive backoff: when there's no new work (no new links AND no new objects), sleep longer
-            # so we don't burn a CPU core full-scanning for nothing; snap back to fast when data arrives
-            idle = idle + 1 if (s["new_links"] == 0 and s["raw"] == prev_raw) else 0
+                  f"dup_members={s['dup_members']:,} distinct={s['distinct']:,} +links={s['new_links']:,}"
+                  + (f" | +{lt['new_relates']} topic-links ({lt['topics_now_connected']} topics connected)"
+                     if lt.get("new_relates") else ""), flush=True)
+            # adaptive backoff: when there's no new work, sleep longer; snap back when data arrives
+            idle = idle + 1 if (s["new_links"] == 0 and not lt.get("new_relates") and s["raw"] == prev_raw) else 0
             prev_raw = s["raw"]
         except Exception as e:  # noqa: BLE001
             print(f"[correlator] error: {str(e)[:160]}", flush=True)
+            try:
+                from . import feedback_bus as _fb
+                _fb.record("server/services/correlator.py", "exception", str(e)[:200], "error")
+            except Exception:  # noqa: BLE001
+                pass
             idle = 0
         time.sleep(interval_s if idle == 0 else min(interval_s * (idle + 1), 300))
 

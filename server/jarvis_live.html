@@ -1,0 +1,1503 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<!-- mount-agnostic: the server matches ABSOLUTE routes (/asset,/metrics,/tts,/chat,…); this base pins
+     every root-relative fetch/GLB to / so the page works even if served at /jarvis or /jarvis/sub -->
+<base href="/">
+<title>JARVIS · UNIVERSE</title>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#03050A">
+<style>
+:root{--cy:#29E7FF;--cy2:#7af3ff;--ok:#34d399;--am:#f5b942;--rd:#ff5d6c;--pu:#a78bfa;--bg:#02040a;--tx:#dff6ff;--dim:#5f8298;--glass:rgba(8,22,34,.62);--ln:rgba(41,231,255,.22)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hidden;
+ font-family:'Inter',ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:13px}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
+/* the ONE universe */
+#uni{position:fixed;inset:0;z-index:0;display:block;width:100vw;height:100vh;touch-action:none}
+/* ---------- thin top bar ---------- */
+#top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:12px;
+ padding:11px 18px;background:linear-gradient(180deg,rgba(2,6,12,.82),transparent);pointer-events:none}
+#top>*{pointer-events:auto}
+#top .brand{font-weight:800;letter-spacing:5px;font-size:15px;color:#eafcff;text-shadow:0 0 18px var(--cy)}
+#top .brand b{color:var(--cy)}
+.chip{font-size:11px;font-weight:700;letter-spacing:.5px;padding:4px 11px;border-radius:999px;background:var(--glass);border:1px solid var(--ln);color:var(--cy)}
+.chip.ok{color:var(--ok);border-color:#1c5b46}.chip.bad{color:var(--rd);border-color:#5b1c2a;animation:bl .8s steps(2) infinite}
+.chip.warn{color:var(--am);border-color:#6b561e}#status{cursor:pointer}
+@keyframes bl{50%{opacity:.4}}
+#top .sp{flex:1}
+#search{width:min(280px,40vw);background:rgba(2,10,16,.7);border:1px solid var(--ln);border-radius:12px;color:#eafcff;padding:8px 13px;font-size:13px;outline:none}
+#search:focus{border-color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.25)}
+.tbtn{font-size:11px;font-weight:700;padding:6px 11px;border-radius:9px;border:1px solid var(--ln);background:var(--glass);color:var(--tx);cursor:pointer;backdrop-filter:blur(6px)}
+.tbtn:hover{border-color:var(--cy);color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.3)}
+.tbtn.g{color:var(--ok);border-color:#1c5b46}.tbtn.r{color:var(--rd);border-color:#5b1c2a}.tbtn.a{color:var(--am);border-color:#6b561e}
+/* ---------- single contextual info card (NASA-Eyes style, NOT side tabs) ---------- */
+#card{position:fixed;left:22px;bottom:96px;z-index:24;width:min(380px,90vw);max-height:64vh;overflow:auto;
+ background:var(--glass);border:1px solid var(--cy);border-radius:16px;padding:16px 17px;backdrop-filter:blur(16px);
+ box-shadow:0 0 0 1px rgba(0,0,0,.4),0 18px 60px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.16);
+ transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;transition:transform .32s cubic-bezier(.22,1,.36,1),opacity .28s}
+#card.open{transform:none;opacity:1;pointer-events:auto}
+#card .x{position:absolute;top:12px;right:14px;cursor:pointer;color:var(--dim);font-size:18px;line-height:1}
+#card .x:hover{color:var(--cy)}
+#card .t{font-size:15px;color:var(--cy);margin:0 28px 3px 0;letter-spacing:.5px;font-weight:700}
+#card .s{font-size:10.5px;color:var(--dim);letter-spacing:.4px;margin-bottom:10px}
+#card .prop{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(41,231,255,.1);font-size:12px}
+#card .prop .k{color:var(--dim)}#card .prop b{color:#eafcff;text-align:right;word-break:break-word}
+#card .l{font-size:11.5px;color:#bfe6f2;padding:3px 0;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-word;cursor:default}
+#card .acts{margin-top:9px}
+#card .act{display:inline-block;margin:5px 6px 0 0;font-size:11px;font-weight:700;padding:7px 11px;border-radius:9px;border:1px solid var(--ln);background:rgba(41,231,255,.1);color:var(--cy);cursor:pointer}
+#card .act:hover{box-shadow:0 0 16px rgba(41,231,255,.3)}
+#card .bar2{height:7px;background:rgba(41,231,255,.1);border-radius:4px;overflow:hidden;margin:7px 0}
+#card .fill{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cy));box-shadow:0 0 10px var(--cy)}
+#filebody{white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:#bfe6f2;max-height:42vh;overflow:auto;background:rgba(2,10,16,.6);border:1px solid var(--ln);border-radius:8px;padding:10px;margin-top:8px}
+/* ---------- bottom talk bar (preserved voice) ---------- */
+#cmd{position:fixed;left:0;right:0;bottom:0;z-index:25;width:100%;
+ background:var(--glass);border:none;border-top:1px solid var(--ln);border-radius:0;
+ padding:10px 18px calc(10px + env(safe-area-inset-bottom,0));backdrop-filter:blur(14px);
+ box-shadow:0 -8px 40px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.12)}
+#cmd .row1{max-width:1100px;margin:0 auto}#cmd .row2{max-width:1100px;margin:8px auto 0}
+#cmd .row1{display:flex;gap:8px;align-items:center}
+#say{flex:1;background:rgba(2,10,16,.7);border:1px solid var(--ln);border-radius:12px;color:#eafcff;
+ padding:13px 15px;font-size:15px;outline:none}
+#say:focus{border-color:var(--cy);box-shadow:0 0 18px rgba(41,231,255,.25)}
+#mic{width:52px;height:52px;flex:none;border-radius:50%;border:2px solid var(--cy);background:rgba(41,231,255,.1);
+ color:var(--cy);font-size:23px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#mic.live{background:rgba(52,211,153,.18);border-color:var(--ok);color:var(--ok);animation:micp 1.2s infinite}
+@keyframes micp{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 12px rgba(52,211,153,0)}}
+.send{width:52px;height:52px;flex:none;border-radius:14px;border:1px solid var(--ln);background:rgba(41,231,255,.12);color:var(--cy);font-size:19px;cursor:pointer}
+.send:hover{box-shadow:0 0 18px rgba(41,231,255,.3)}
+#cmd .row2{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.mini{font-size:10.5px;font-weight:700;padding:6px 10px;border-radius:9px;border:1px solid var(--ln);background:rgba(2,10,16,.5);color:var(--tx);cursor:pointer}
+.mini:hover{border-color:var(--cy);color:var(--cy)}
+.mini.archon{margin-left:auto}.mini.archon.on{background:linear-gradient(90deg,#7a3bff33,#29e7ff22);border-color:var(--pu);color:#cdb4ff;box-shadow:0 0 16px rgba(167,139,250,.4)}
+#budget{font-size:9.5px;color:var(--dim)}
+#budget b{color:var(--ok)}
+#coreSay{position:fixed;left:50%;bottom:108px;transform:translateX(-50%);z-index:23;font-size:12px;color:var(--cy2);
+ max-width:60vw;text-align:center;min-height:14px;text-shadow:0 0 12px rgba(41,231,255,.5);pointer-events:none}
+/* ---------- WebRTC / studio overlays (preserved) ---------- */
+.ov{position:fixed;inset:0;z-index:30;display:none;background:rgba(3,5,10,.92);backdrop-filter:blur(4px)}
+.ov.open{display:block}
+.ov iframe{width:100%;height:100%;border:0;display:block}
+.ov .close{position:absolute;top:16px;right:18px;z-index:5;font-size:13px;font-weight:700;color:var(--cy);background:var(--glass);border:1px solid var(--cy);border-radius:9px;padding:7px 13px;cursor:pointer}
+#libgrid{position:absolute;inset:60px 24px 24px;overflow:auto;display:flex;gap:12px;flex-wrap:wrap;align-content:flex-start}
+#libgrid .it{width:150px}
+#libgrid img,#libgrid model-viewer{width:150px;height:150px;border:1px solid var(--ln);border-radius:10px;background:#04101a;object-fit:cover}
+.ovtitle{position:absolute;top:18px;left:24px;color:var(--cy);letter-spacing:2px;font-size:13px}
+/* boot */
+#boot{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .9s}
+#boot.gone{opacity:0;pointer-events:none}
+#boot .ring{width:120px;height:120px;border-radius:50%;border:2px solid rgba(41,231,255,.25);border-top-color:var(--cy);animation:spin 1.1s linear infinite;box-shadow:0 0 40px rgba(41,231,255,.4)}
+@keyframes spin{to{transform:rotate(360deg)}}
+#boot .t{font-size:13px;letter-spacing:6px;color:var(--cy);text-shadow:0 0 16px var(--cy)}
+#boot .tap{font-size:11px;color:var(--dim)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-thumb{background:rgba(41,231,255,.25);border-radius:4px}
+@media(max-width:820px){#search{width:34vw}#card{width:88vw}}
+/* ---------- R4: Mac-style glass dock ----------
+   FINDING2: was centred at bottom:96px → it landed directly on the two-row #cmd talk bar (top ~96px),
+   #coreSay (108px) and #card band. Anchored bottom-RIGHT, clear of the centred talk-bar / caption column,
+   and JS hides it while a fullscreen overlay is open (setMode). No more layout collision. */
+#dock{position:fixed;right:18px;bottom:130px;z-index:26;display:flex;gap:10px;
+  padding:9px 14px;border-radius:20px;background:rgba(8,22,34,.5);border:1px solid var(--ln);
+  backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
+  align-items:flex-end;transition:opacity .3s,transform .3s}
+#dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
+/* iOS-style tile: icon glyph on top + a persistent NAME label underneath (R4 "icon tile with a short
+   NAME label under it"). The dock itself stays a drop-zone for DRAG-TO-PIN from the 3D world. */
+#dock .di{width:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;
+  cursor:pointer;transition:transform .16s cubic-bezier(.22,1,.36,1),margin .16s;
+  transform-origin:bottom center;user-select:none;position:relative}
+#dock .di .gly{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-size:23px;background:rgba(41,231,255,.07);border:1px solid transparent;transition:background .2s,border-color .2s}
+#dock .di:hover .gly{background:rgba(41,231,255,.16);border-color:var(--cy)}
+#dock .di .nm{font-size:9.5px;font-weight:700;letter-spacing:.3px;color:var(--cy2);opacity:.85;
+  white-space:nowrap;text-shadow:0 0 6px rgba(41,231,255,.4);max-width:58px;overflow:hidden;text-overflow:ellipsis}
+#dock .di.drag{opacity:.4}#dock .di.over{margin:0 12px}
+#dock.pinReady{border-color:var(--cy);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 60px rgba(41,231,255,.45)}
+#dock .di.pinned .gly{border-color:var(--pu);box-shadow:0 0 12px rgba(167,139,250,.5)}
+#dock .di .x{position:absolute;top:-4px;right:6px;width:15px;height:15px;border-radius:50%;font-size:10px;
+  line-height:13px;text-align:center;background:rgba(255,90,90,.85);color:#fff;opacity:0;transition:.15s;cursor:pointer}
+#dock .di.pinned:hover .x{opacity:1}
+/* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
+   row above the talk bar + caption band (clears #cmd ~96px top, #coreSay 108px) and centre it. */
+@media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:128px;gap:6px}
+  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px}}
+/* ---------- R5: crystal caption bubble + iridescent ring ---------- */
+#crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
+  max-width:min(70vw,640px);padding:14px 22px;border-radius:22px;text-align:center;
+  font-size:15px;line-height:1.4;color:#eafcff;text-shadow:0 0 14px rgba(41,231,255,.6);
+  background:rgba(10,26,40,.28);backdrop-filter:blur(14px) saturate(1.3);
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+#crystal.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+#crystal::before{content:'';position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
+  background:conic-gradient(from var(--ang,0deg),#ff5d6c,#f5b942,#34d399,#29e7ff,#a78bfa,#ff5d6c);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  filter:blur(.5px) saturate(1.4);opacity:.9;animation:irid 6s linear infinite}
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes irid{to{--ang:360deg}}
+/* ---------- SECOND DOCK — SELF-DEVELOPMENT bar (R1 §1 "what to build next") ----------
+   A thicker, rectangular glassmorphic crystal bar BENEATH the iOS dock. It holds BLOCKS of AI
+   suggestions from GET /suggestions; each block = title + detail + a styled hyperlink (no blue, no
+   underline until hover) that opens the /proposal formatted text, plus a BUILD button that POSTs
+   /upgrade (Claude executes on the VPS) then auto-refreshes. Anchored bottom-RIGHT, stacked UNDER the
+   iOS dock (which sits at bottom:130px) and above the caption band; it collapses to a tab so it never
+   collides with the centred talk bar, and hides while a fullscreen overlay is open (setMode). */
+#sdev{position:fixed;right:18px;bottom:184px;z-index:26;width:min(372px,calc(100vw - 36px));
+  border-radius:18px;background:rgba(8,22,34,.46);border:1px solid var(--ln);
+  backdrop-filter:blur(20px) saturate(1.25);
+  box-shadow:0 14px 54px rgba(0,0,0,.55),0 0 44px rgba(167,139,250,.12),inset 0 1px 0 rgba(255,255,255,.06);
+  transition:opacity .3s,transform .3s;overflow:hidden}
+#sdev.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
+#sdev.min .sd-body{display:none}
+#sdev .sd-head{display:flex;align-items:center;gap:8px;padding:9px 13px;cursor:pointer;user-select:none;
+  border-bottom:1px solid rgba(167,139,250,.16);background:linear-gradient(90deg,rgba(167,139,250,.10),rgba(41,231,255,.05))}
+#sdev.min .sd-head{border-bottom:none}
+#sdev .sd-head .ic{font-size:14px}
+#sdev .sd-head .ti{font-weight:800;letter-spacing:1.5px;font-size:10.5px;color:#cdb4ff;text-shadow:0 0 12px rgba(167,139,250,.5)}
+#sdev .sd-head .sp{flex:1}
+#sdev .sd-head .rf{font-size:13px;color:var(--dim);transition:.2s;line-height:1}
+#sdev .sd-head .rf:hover{color:var(--cy);transform:rotate(90deg)}
+#sdev .sd-head .cl{font-size:12px;color:var(--dim);transition:.2s}
+#sdev .sd-body{max-height:min(46vh,420px);overflow:auto;padding:7px 9px;display:flex;flex-direction:column;gap:7px}
+.sd-block{border:1px solid rgba(167,139,250,.18);border-radius:13px;padding:10px 12px;
+  background:linear-gradient(160deg,rgba(20,16,40,.5),rgba(8,18,30,.42));transition:border-color .2s,box-shadow .2s}
+.sd-block:hover{border-color:rgba(167,139,250,.5);box-shadow:0 0 22px rgba(167,139,250,.16)}
+.sd-block .bt{font-size:12.5px;font-weight:700;color:#eafcff;margin-bottom:3px;letter-spacing:.2px}
+.sd-block .bd{font-size:11px;line-height:1.45;color:#aebfcd;margin-bottom:8px}
+.sd-block .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+/* styled hyperlink: NOT blue, underline hidden until hover (per R1 §1) */
+.sd-link{font-size:11px;font-weight:700;color:var(--cy2);cursor:pointer;text-decoration:none;
+  text-underline-offset:3px;letter-spacing:.3px;transition:color .15s}
+.sd-link:hover{color:#eafcff;text-decoration:underline}
+.sd-build{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.6px;padding:6px 13px;border-radius:9px;cursor:pointer;
+  color:#cdb4ff;border:1px solid var(--pu);background:linear-gradient(90deg,rgba(122,59,255,.22),rgba(41,231,255,.14));
+  transition:box-shadow .2s,transform .12s}
+.sd-build:hover{box-shadow:0 0 18px rgba(167,139,250,.5)}
+.sd-build:active{transform:scale(.96)}
+.sd-build.busy{opacity:.6;pointer-events:none;color:var(--ok);border-color:#1c5b46}
+.sd-empty{font-size:11px;color:var(--dim);padding:14px 6px;text-align:center}
+@media(max-width:820px){#sdev{right:50%;transform:translateX(50%);bottom:182px;width:min(372px,94vw)}
+  #sdev.hidden{transform:translateX(50%) translateY(14px)}}
+/* proposal reader (formatted text the hyperlink opens) — reuses the glass card look */
+#prop{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:rgba(3,5,10,.78);backdrop-filter:blur(5px)}
+#prop.open{display:flex}
+#prop .pp{width:min(680px,92vw);max-height:84vh;overflow:auto;border-radius:18px;padding:22px 24px;
+  background:var(--glass);border:1px solid var(--pu);backdrop-filter:blur(18px);
+  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 50px rgba(167,139,250,.2)}
+#prop .pp .x{float:right;cursor:pointer;color:var(--dim);font-size:20px;line-height:1}
+#prop .pp .x:hover{color:var(--cy)}
+#prop .pp h3{margin:0 30px 12px 0;color:#cdb4ff;font-size:16px;letter-spacing:.5px}
+#prop .pp pre{white-space:pre-wrap;word-break:break-word;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;color:#cfe6f2;margin:0}
+#prop .pp .pbuild{margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.6px;padding:10px 18px;border-radius:11px;cursor:pointer;
+  color:#cdb4ff;border:1px solid var(--pu);background:linear-gradient(90deg,rgba(122,59,255,.25),rgba(41,231,255,.16))}
+#prop .pp .pbuild:hover{box-shadow:0 0 22px rgba(167,139,250,.55)}
+</style></head>
+<body>
+<!-- the ONE immersive WebGL universe -->
+<canvas id=uni></canvas>
+
+<!-- thin top bar -->
+<div id=top>
+ <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE</div>
+ <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts">● ONLINE</span>
+ <span class="chip mono" id=age>—</span>
+ <span class="chip" id=fxgodrays role=status aria-live=polite tabindex=0 style="display:none;cursor:pointer"
+       title="Cinematic post-FX: volumetric god-rays from the reactor"
+       onclick="readGodrays()" onkeydown="if(event.key==='Enter'||event.key===' ')readGodrays()"></span>
+ <input id=search placeholder="Search / fly to…" autocomplete=off onkeydown="if(event.key==='Enter')flyToQuery(this.value)">
+ <span class=sp></span>
+ <button class="tbtn g" onclick="cmdAll('run')">▶ Run</button>
+ <button class="tbtn a" onclick="cmdAll('pause')">⏸ Pause</button>
+ <button class="tbtn r" onclick="cmdAll('stop')">⏹ Stop</button>
+ <button class=tbtn onclick="cmdAll('sleep')">🌙 Sleep</button>
+</div>
+
+<!-- single contextual info card (hidden until a body is clicked) -->
+<div id=card>
+ <span class=x onclick="closeCard()">✕</span>
+ <div class=t></div><div class=s></div>
+ <div class=props></div><div class=lines></div><div class=acts></div><div class=filewrap></div>
+</div>
+
+<!-- spoken-line readout -->
+<div id=coreSay aria-live=polite></div>
+
+<!-- R5: crystal caption bubble (iridescent rainbow ring; fades when silent) -->
+<div id=crystal aria-live=polite></div>
+
+<!-- bottom talk-to-JARVIS bar (voice preserved) -->
+<div id=cmd>
+ <div class=row1>
+   <input id=say placeholder="Talk to JARVIS…" aria-label="Talk to Jarvis" autocomplete=off onkeydown="if(event.key==='Enter')askJarvis()">
+   <button id=mic onclick=micToggle() aria-label="Hold-free voice" title="Voice">🎤</button>
+   <button class=send onclick=askJarvis() aria-label=Send title=Send>➤</button>
+ </div>
+ <div class=row2>
+   <button class=mini onclick="quick('image')">🎨 Image</button>
+   <button class=mini onclick="quick('3d')">🧊 3D GLB</button>
+   <button class=mini onclick="readStatus()">🔊 Status</button>
+   <button class=mini onclick="setMode('guardian')">🛡 Guardian</button>
+   <button class=mini onclick="setMode('library')">🖼 Studio</button>
+   <span id=budget class=mono></span>
+   <button class="mini archon" id=archonBtn onclick=toggleArchon() title="Archon: max tokens / Opus for hard tasks">⚡ ARCHON</button>
+ </div>
+</div>
+
+<!-- R4: Mac-style dock (magnify on hover + drag-reorder; clicking flies to / opens the function) -->
+<div id=dock></div>
+
+<!-- SECOND DOCK — self-development bar: AI "what to build next" blocks (GET /suggestions) -->
+<div id=sdev>
+  <div class=sd-head onclick="toggleSdev()">
+    <span class=ic>🧬</span><span class=ti>SELF-DEVELOPMENT</span><span class=sp></span>
+    <span class=rf title="Refresh suggestions" onclick="event.stopPropagation();loadSuggestions(true)">↻</span>
+    <span class=cl id=sdevChevron>▾</span>
+  </div>
+  <div class=sd-body id=sdevBody><div class=sd-empty>Analysing the system…</div></div>
+</div>
+
+<!-- formatted proposal reader (opened by a suggestion's styled hyperlink) -->
+<div id=prop onclick="if(event.target===this)closeProp()">
+  <div class=pp>
+    <span class=x onclick=closeProp()>✕</span>
+    <h3 id=propTitle>Proposal</h3>
+    <pre id=propText></pre>
+    <button class=pbuild id=propBuild>⚡ BUILD THIS</button>
+  </div>
+</div>
+
+<!-- WebRTC + studio overlays -->
+<div class=ov id=ovGuardian><button class=close onclick="setMode('live')">✕ Close</button><iframe id=guardFrame allow="camera;microphone;autoplay"></iframe></div>
+<div class=ov id=ovLib><button class=close onclick="setMode('live')">✕ Close</button>
+  <div class=ovtitle>🎨 JARVIS STUDIO · LIBRARY <span style="color:var(--dim)">· images &amp; 3D models you created</span></div>
+  <div id=libgrid></div></div>
+
+<!-- boot -->
+<div id=boot><div class=ring></div><div class=t>INITIALIZING JARVIS</div><div class=tap>tap anywhere to engage the universe</div></div>
+<div class=sr aria-live=assertive id=srlog></div>
+
+<!-- model-viewer only for the Studio overlay -->
+<script src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js" type=module></script>
+<!-- three r136 UMD chain: last release that ships examples/js/* legacy globals (THREE.OrbitControls,
+     THREE.GLTFLoader, THREE.EffectComposer, THREE.UnrealBloomPass…). 0.149 REMOVED examples/js/* (ESM-only),
+     so those scripts 404'd and `new THREE.OrbitControls()` threw, killing the whole universe. -->
+<script src="https://unpkg.com/three@0.136.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<!-- SMAA (anti-aliasing AFTER bloom = no grain). three@0.136's legacy SMAAPass.js depends on the
+     THREE.SMAA{Edges,Weights,Blend}Shader globals that live in examples/js/shaders/SMAAShader.js but
+     are NOT bundled in three.min.js — so SMAAShader.js MUST load FIRST or `new THREE.SMAAPass()` throws
+     "Cannot read properties of undefined (reading 'uniforms')". Headless-verified: with this script
+     present the pass constructs, joins the composer chain, and renders with zero page errors. -->
+<script src="https://unpkg.com/three@0.136.0/examples/js/shaders/SMAAShader.js"></script>
+<script src="https://unpkg.com/three@0.136.0/examples/js/postprocessing/SMAAPass.js"></script>
+<!-- HOLLYWOOD post stack extra: FXAAShader (legacy global in r136), used ONLY as the AA fallback if
+     SMAAPass throws. God-rays / depth-of-field / film-grain / vignette / chromatic-aberration are all
+     self-contained inline ShaderPasses built in initUniverse() (r136's legacy BokehPass only composites
+     as the last pass, so DOF is an inline CoC ShaderPass instead — no extra scripts needed). -->
+<script src="https://unpkg.com/three@0.136.0/examples/js/shaders/FXAAShader.js"></script>
+<script>
+const $=id=>document.getElementById(id), CT="__CTOKEN__";
+const fmt=n=>n==null?'—':(+n).toLocaleString();
+function esc(s){return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+let _m={},_ts=0,archon=false,_engaged=false;
+function srlog(t){const s=$('srlog');if(s){s.textContent='';setTimeout(()=>s.textContent=t,50);}}
+
+/* ================= PRESERVED: British JARVIS voice (verbatim) ================= */
+let VOICES=[];function loadVoices(){VOICES=speechSynthesis.getVoices()||[];}
+loadVoices();if('onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){const pref=['Daniel','Google UK English Male','Microsoft Ryan','Microsoft George','Arthur','Oliver'];
+ for(const p of pref){const v=VOICES.find(v=>v.name&&v.name.includes(p));if(v)return v;}
+ return VOICES.find(v=>/en[-_]?GB/i.test(v.lang))||VOICES.find(v=>/^en/i.test(v.lang))||VOICES[0];}
+let _ttsAudio=null,_ttsCtx=null,_ttsSrc=null,_ttsAn=null,_ttsData=null,_chatHist=[];
+function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window.AudioContext||window.webkitAudioContext)();
+  _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
+  _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
+  if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
+function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.99;u.pitch=1.0;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}
+window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}
+  try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
+  try{ if(!_ttsCtx)unlockAudio();
+    speakStart();
+    _ttsAudio.onended=()=>speakEnd();
+    _ttsAudio.onerror=()=>webSpeakFallback(t);
+    _ttsAudio.src='tts?text='+encodeURIComponent(String(t).slice(0,600));
+    if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
+    _ttsAudio.play().catch(()=>webSpeakFallback(t));
+  }catch(e){webSpeakFallback(t);} }
+function speakStart(){document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
+function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);}
+
+/* ================= voice amp envelope (consumed by the brain via currentAmp/setAmp) ================= */
+let spkAmp=0, micAmp=0, analyser=null, micData=null, _ampExt=0;
+window.setAmp=a=>{_ampExt=+a||0;};
+function currentAmp(){
+  // prefer the live TTS-audio analyser when speaking (plain reused <audio>, proven path)
+  if(_ttsAn&&document.body.classList.contains('speaking')){
+    try{_ttsAn.getByteFrequencyData(_ttsData);let s=0;for(let i=0;i<_ttsData.length;i++)s+=_ttsData[i];
+      const a=Math.min(1,(s/_ttsData.length)/96);if(a>0)spkAmp=Math.max(spkAmp,a);}catch(e){}
+  }
+  if(analyser){analyser.getByteFrequencyData(micData);let s=0;for(let i=0;i<micData.length;i++)s+=micData[i];
+    micAmp=Math.min(1,(s/micData.length)/110);}
+  const breathe=.14+.05*Math.sin(performance.now()/900);
+  if(spkAmp>0)spkAmp=Math.max(0,spkAmp-.012);
+  return Math.max(breathe, spkAmp*.95, micAmp*.9, _ampExt);
+}
+
+/* ================= THE ONE LIVING-ORGANISM PULSE ================= */
+/* Single source of truth. currentAmp() = speak+mic+breathe (preserved). We layer:
+   - dataSpike: decaying impulse fired whenever a watched /metrics or /graphdata value changes
+   - flow: monotonic phase used by grid energy + liquid-metal churn (so motion is shared, not per-object)
+   The whole scene reads PULSE.* ; nothing else calls currentAmp() directly except this function. */
+const PULSE = {amp:0, base:0, speak:0, spike:0, flow:0, born:0, t:0};
+let _spikeEnv=0, _bornEnv=0, _lastSigMap=Object.create(null);
+
+// hash the values we care about so any change -> spike; growth in counts -> "birth" pulse
+function _metricsSignature(m){
+  if(!m)return;
+  const c=m.completion||{}, corr=m.correlation||{}, box=m.box||{}, g={};
+  ((m.learning||{}).growth||[]).forEach(x=>g[x.label]=x.total);
+  const watch={pct:c.pct, enr:c.enriched, dd:corr.distinct_after_dedup, vu:box.vram_used_gb,
+               docs:g['Documents'], notes:g['Notes learned'], meas:g['Measurements'],
+               wOn:(m.workers||[]).filter(w=>w.status==='online').length};
+  let changed=0, grew=0;
+  for(const k in watch){const v=+watch[k]||0, p=_lastSigMap[k];
+    if(p!=null && v!==p){changed++; if(v>p)grew++;} _lastSigMap[k]=v;}
+  if(changed){_spikeEnv=Math.min(1,_spikeEnv+0.55+0.12*changed);}   // transient brighten/grow
+  if(grew){_bornEnv=Math.min(1,_bornEnv+0.5);}                       // "a planet was born/grew" pulse
+}
+window.firePulseSpike=(s)=>{_spikeEnv=Math.min(1,_spikeEnv+(s||0.5));}; // manual (graphdata, control acts)
+
+function updatePulse(dt){
+  const amp=currentAmp();                          // preserved fused envelope (speak+mic+breathe)
+  PULSE.t += dt;
+  PULSE.base  = 0.14+0.05*Math.sin(PULSE.t*1.05);  // idle breathing baseline
+  PULSE.speak = Math.max(0, amp-PULSE.base);        // speaking/mic contribution above breath
+  _spikeEnv = Math.max(0, _spikeEnv - dt*0.9);      // ~1.1s decay
+  _bornEnv  = Math.max(0, _bornEnv  - dt*0.7);
+  PULSE.spike = _spikeEnv; PULSE.born = _bornEnv;
+  PULSE.amp   = Math.min(1, Math.max(amp, amp + _spikeEnv*0.6));     // global "energy" everything scales by
+  PULSE.flow += dt*(0.25 + PULSE.amp*1.6);          // shared flowing phase (grid waves + metal churn)
+}
+
+/* ================= PRESERVED: chat / Claude (back-to-back, build-routing server-side) ================= */
+function bubble(who,txt){const t=(who==='You'?'You':'JARVIS')+': '+txt;$('coreSay').textContent=(who==='You'?'» ':'')+ (txt+'').replace(/<[^>]+>/g,'').slice(0,140);srlog(t);
+  showCrystal((who==='You'?'» ':'')+(txt+'').replace(/<[^>]+>/g,'').slice(0,160));hideCrystal(2600);}
+
+/* ================= R5: crystal caption controller ================= */
+let _crystalHide=null;
+function showCrystal(txt){const c=$('crystal');if(!c)return;
+  c.textContent=(txt||'').replace(/<[^>]+>/g,'').slice(0,180);
+  c.classList.add('show');clearTimeout(_crystalHide);}
+function hideCrystal(delay){clearTimeout(_crystalHide);
+  _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
+async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
+  const l=t.toLowerCase();$('say').value='';
+  // voice/command shortcuts (preserved)
+  if(/^(image|picture|draw)\b/.test(l)){return runMedia('genimage',t.replace(/^(image|picture|draw)\s*(of)?\s*/i,''));}
+  if(/\b3d\b|^(model|sculpt)\b/.test(l)){return runMedia('gen3d',t.replace(/\b3d\b|model|sculpt/ig,'').trim());}
+  if(l.includes('run all'))return cmdAll('run');if(l==='stop'||l.includes('stop all'))return cmdAll('stop');
+  if(l.includes('sleep'))return cmdAll('sleep');if(l==='status'||l.includes('read status'))return readStatus();
+  if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');
+  if(l.includes('graph'))return flyToQuery('graph');
+  unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
+  try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:'sir'})})).json();
+    const reply=(r&&r.reply)||"I'm here, sir.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
+    bubble('JARVIS',esc(reply));jarvisSpeak(reply);
+  }catch(e){bubble('JARVIS','connection error');}}
+function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
+   if(r.status&&r.status!=='running'&&r.status!=='paused'){clearInterval(iv);
+     const txt=(r.text||'(done)').slice(-2000);bubble('JARVIS',esc(txt));
+     jarvisSpeak(txt.replace(/<[^>]+>/g,'').slice(0,420));loadLib();}}catch(e){}},3000);}
+
+/* media (preserved) */
+async function quick(kind){const t=prompt(kind==='image'?'Describe the image:':'Describe the 3D model:');if(t)runMedia(kind==='image'?'genimage':'gen3d',t);}
+async function runMedia(action,t){if(!t)return;bubble('You',(action==='gen3d'?'🧊 ':'🎨 ')+esc(t));
+  jarvisSpeak(action==='gen3d'?'Generating a 3D model. This can take a few minutes — it will not time out.':'Generating your image now.');
+  try{await fetch('task?action='+action+'&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}catch(e){}
+  setTimeout(loadLib,1500);}
+
+/* commands (preserved) */
+async function cmdAll(a){window.firePulseSpike(0.8);                   // global command -> big pulse
+  jarvisSpeak(a==='run'?'Running all systems.':a==='stop'?'Stopping all.':a==='sleep'?'Entering sleep mode.':'Pausing.');
+  try{await fetch('control_all?action='+a+'&token='+CT,{method:'POST'});}catch(e){}setTimeout(tick,900);}
+async function ctl(a,n){window.firePulseSpike(0.6);                    // organism reacts to the command
+  try{await fetch('control?action='+a+'&name='+encodeURIComponent(n)+'&token='+CT,{method:'POST'});}catch(e){}
+  jarvisSpeak((a==='stop'?'Stopping ':a==='restart'?'Restarting ':'Starting ')+n.replace(/^jarvis-/,'').replace(/-/g,' ')+'.');
+  setTimeout(tick,800);}
+async function doUpgrade(key){window.firePulseSpike(0.9);
+  jarvisSpeak('Beginning the '+key+' upgrade. I will research the best approach and build it end to end.');
+  try{await fetch('upgrade?key='+encodeURIComponent(key)+'&token='+CT+(archon?'&archon=1':''),{method:'POST'});}catch(e){}
+  setTimeout(loadLib,1500);}
+function openUpgrades(){ if(flyToBodyByName('selfdev'))return;          // fly to the planet if it exists
+  const ks=['rollback','scheduler','forecaster','approvals','replay'];
+  showCard({title:'Self-Development',subtitle:'one-touch upgrades',
+    actions:[['rollback','↩ Rollback'],['scheduler','🗓 Scheduler'],['forecaster','📈 Forecaster'],
+             ['approvals','🛡 Approvals'],['replay','⏪ Replay']].map(([k,l])=>({label:l,kind:'_fn',fn:()=>doUpgrade(k)}))});
+  // rebind _fn actions (showCard wired doAction; override with the upgrade calls)
+  const acts=$('card').querySelector('.acts').querySelectorAll('.act');
+  acts.forEach((el,i)=>el.onclick=()=>doUpgrade(ks[i]));}
+/* Agent OS — render the 17-tool registry palette (GET /agent/tools); pick → POST /agent/run (token-gated) */
+async function openAgentTools(){window.firePulseSpike&&window.firePulseSpike(0.5);
+  showCard({title:'🤖 Agent OS',subtitle:'loading tool registry…'});
+  try{const d=await(await fetch('agent/tools')).json();
+    const tools=(d&&d.tools)||[];
+    showCard({title:'🤖 Agent OS',subtitle:(tools.length||0)+' tools · '+((d&&d.status)||'ready'),
+      lines:tools.map(t=>'• '+(t.name||t.id||'tool')+(t.risk?'  ['+t.risk+']':'')+(t.desc?' — '+String(t.desc).slice(0,48):'')),
+      actions:tools.slice(0,8).map(t=>({label:'▸ '+((t.name||t.id||'tool').replace(/_/g,' ').slice(0,18)),kind:'_fn',fn:()=>runAgentTool(t.name||t.id)}))});
+  }catch(e){showCard({title:'🤖 Agent OS',subtitle:'registry unavailable',lines:['Could not reach /agent/tools.']});}}
+async function runAgentTool(name){if(!name)return;window.firePulseSpike&&window.firePulseSpike(0.7);
+  jarvisSpeak('Running '+String(name).replace(/_/g,' ')+'.');
+  try{await fetch('agent/run?token='+CT+'&q='+encodeURIComponent(name),{method:'POST'});}catch(e){}
+  setTimeout(()=>openAgentTools(),1200);}
+
+function readStatus(){const c=_m.completion||{},X=_m.correlation||{},on=(_m.workers||[]).filter(w=>w.toggleable&&w.status==='online').length;
+  jarvisSpeak('Status. Knowledge build '+(c.pct||0)+' percent. '+on+' pipelines online. '+fmt(X.distinct_after_dedup)+' distinct entities. Box V-RAM '+((_m.box||{}).vram_used_gb||0)+' of 48 gigabytes.');}
+
+/* archon (preserved) */
+function toggleArchon(){archon=!archon;$('archonBtn').classList.toggle('on',archon);
+  jarvisSpeak(archon?'Archon mode engaged. Maximum capability for hard tasks.':'Archon mode off.');}
+
+/* ================= R4: Mac dock — magnify-on-hover + drag-reorder ================= */
+const DOCK=[
+  {k:'talk',   ic:'🎤', t:'Talk',     fn:()=>$('say').focus()},
+  {k:'library',ic:'📚', t:'Library',  fn:()=>setMode('library')},
+  {k:'create', ic:'✨', t:'Create',   fn:()=>{$('say').focus();$('say').value='Create ';}},
+  {k:'image',  ic:'🎨', t:'Image',    fn:()=>quick('image')},
+  {k:'3d',     ic:'🧊', t:'3D',       fn:()=>quick('3d')},
+  {k:'guardian',ic:'🛡',t:'Guardian', fn:()=>setMode('guardian')},
+  {k:'climate', ic:'🌡', t:'Climate',  fn:()=>{flyToBodyByName('climate');}},
+  {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
+  {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
+  {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
+];
+function renderDock(){const d=$('dock');if(!d)return;d.innerHTML='';
+  DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;
+    // iOS tile: icon glyph + a persistent NAME label under it. Pinned items get an unpin (×) chip.
+    e.innerHTML='<div class=gly>'+it.ic+'</div><div class=nm>'+it.t+'</div>'+
+      (it.pinned?'<span class=x title="Unpin">×</span>':'');
+    e.onclick=()=>{try{it.fn();}catch(_){}};
+    if(it.pinned){const xb=e.querySelector('.x');if(xb)xb.onclick=ev=>{ev.stopPropagation();unpinFromDock(it.k);};}
+    d.appendChild(e);});
+  wireDockMagnify(); wireDockDrag();}
+function wireDockMagnify(){const items=[...$('dock').children];
+  $('dock').onmousemove=ev=>{items.forEach(el=>{const r=el.getBoundingClientRect();
+    const dx=Math.abs(ev.clientX-(r.left+r.width/2));const s=Math.max(1,1.55-dx/120); // genie magnify
+    el.style.transform='scale('+s+') translateY('+(-(s-1)*16)+'px)';});};
+  $('dock').onmouseleave=()=>items.forEach(el=>el.style.transform='');}
+/* ===== R4 DRAG-TO-PIN: drag a 3D body OUT of the universe and DROP it on the dock → pinned shortcut =====
+   Bridges WebGL → the DOM dock. pinBodyToDock() adds a {pinned} entry that flies to that body on click;
+   it persists in localStorage and is removable (the × chip / unpinFromDock). */
+function _iconForBody(name){const n=(name||'');
+  if(n.startsWith('pipe:'))return '⚙';if(n.startsWith('tier:'))return '🧠';if(n.startsWith('kpi:'))return '📊';
+  if(n.startsWith('infra:'))return '🖥';if(n.startsWith('sys:'))return '🔗';
+  return ({guardian:'🛡',climate:'🌡',agentos:'🤖',selfdev:'🛠'})[n]||'🪐';}
+function pinBodyToDock(name,label){
+  if(!name)return false; const key='pin:'+name;
+  if(DOCK.some(d=>d.k===key)){flyToBodyByName(name);return false;}   // already pinned → just fly
+  const t=(label||name.split(':').pop()||'Pin').slice(0,12);
+  DOCK.push({k:key,ic:_iconForBody(name),t:t,pinned:true,body:name,fn:()=>flyToBodyByName(name)});
+  _savePins(); renderDock();
+  const dk=$('dock');if(dk){dk.classList.remove('pinReady');}
+  try{jarvisSpeak(t+' pinned to the dock.');}catch(_){}
+  return true;}
+function unpinFromDock(key){const i=DOCK.findIndex(d=>d.k===key);if(i<0)return;
+  DOCK.splice(i,1);_savePins();renderDock();}
+function _savePins(){try{
+  localStorage.setItem('jarvisDockPins',JSON.stringify(DOCK.filter(d=>d.pinned).map(d=>({k:d.k,t:d.t,body:d.body,ic:d.ic}))));
+  localStorage.setItem('jarvisDock',JSON.stringify(DOCK.map(d=>d.k)));}catch(_){}}
+let _dragI=null;
+function wireDockDrag(){[...$('dock').children].forEach(el=>{
+  el.ondragstart=e=>{_dragI=+el.dataset.i;el.classList.add('drag');e.dataTransfer.effectAllowed='move';};
+  el.ondragend=()=>{el.classList.remove('drag');[...$('dock').children].forEach(x=>x.classList.remove('over'));};
+  el.ondragover=e=>{e.preventDefault();el.classList.add('over');};
+  el.ondragleave=()=>el.classList.remove('over');
+  el.ondrop=e=>{e.preventDefault();const to=+el.dataset.i;if(_dragI==null||_dragI===to)return;
+    const [mv]=DOCK.splice(_dragI,1);DOCK.splice(to,0,mv);_dragI=null;
+    _savePins();   // persists both order AND the pin set
+    renderDock();};});}
+// restore saved pins (drag-to-pin survivors) + saved order
+(function(){try{
+  const pins=JSON.parse(localStorage.getItem('jarvisDockPins')||'[]');
+  pins.forEach(p=>{ if(p&&p.k&&!DOCK.some(d=>d.k===p.k))
+    DOCK.push({k:p.k,ic:p.ic||'🪐',t:p.t||'Pin',pinned:true,body:p.body,fn:()=>flyToBodyByName(p.body)}); });
+  const o=JSON.parse(localStorage.getItem('jarvisDock')||'[]');
+  if(o.length){DOCK.sort((a,b)=>{const ia=o.indexOf(a.k),ib=o.indexOf(b.k);return (ia<0?999:ia)-(ib<0?999:ib);});}
+}catch(_){}})();
+// helper used by dock + controls: fly to a named body if it exists
+function flyToBodyByName(n){const b=bodyMap.get(n);if(b){selectBody(b);return true;}return false;}
+
+/* ====== SECOND DOCK — self-development: AI suggestions of "what to build next" ======
+   GET /suggestions -> blocks (title+detail+styled hyperlink+BUILD). The link opens the formatted
+   /proposal text; BUILD POSTs /upgrade (Claude executes on the VPS) then auto-refreshes the bar with
+   new suggestions. Never empty (the server falls back to a grounded seed list). */
+let _sdevBusy=false, _sdevItems=[];
+function toggleSdev(){const s=$('sdev');if(!s)return;const min=s.classList.toggle('min');
+  $('sdevChevron').textContent=min?'▴':'▾';try{localStorage.setItem('sdevMin',min?'1':'0');}catch(_){}}
+async function loadSuggestions(force){const body=$('sdevBody');if(!body)return;
+  if(force){body.innerHTML='<div class=sd-empty>Re-analysing the system…</div>';}
+  try{const r=await(await fetch('suggestions'+(force?'?force=1':''))).json();
+    _sdevItems=(r&&r.suggestions)||[];renderSuggestions();}
+  catch(e){body.innerHTML='<div class=sd-empty>Couldn’t reach the suggestion engine — retrying…</div>';}}
+function renderSuggestions(){const body=$('sdevBody');if(!body)return;
+  if(!_sdevItems.length){body.innerHTML='<div class=sd-empty>No suggestions yet.</div>';return;}
+  body.innerHTML=_sdevItems.map(s=>
+    '<div class=sd-block data-id="'+esc(s.id)+'">'+
+      '<div class=bt>'+esc(s.title||'Untitled')+'</div>'+
+      '<div class=bd>'+esc(s.detail||'')+'</div>'+
+      '<div class=row>'+
+        '<a class=sd-link data-id="'+esc(s.id)+'">Read the proposal</a>'+
+        '<button class=sd-build data-id="'+esc(s.id)+'">⚡ BUILD</button>'+
+      '</div>'+
+    '</div>').join('');
+  body.querySelectorAll('.sd-link').forEach(a=>a.onclick=()=>openProposal(a.dataset.id));
+  body.querySelectorAll('.sd-build').forEach(b=>b.onclick=()=>buildSuggestion(b.dataset.id,b));}
+async function openProposal(id){
+  $('propTitle').textContent='Loading proposal…';$('propText').textContent='';
+  $('prop').classList.add('open');
+  $('propBuild').onclick=()=>{closeProp();buildSuggestion(id);};
+  try{const d=await(await fetch('proposal?id='+encodeURIComponent(id))).json();
+    if(!d||!d.ok){$('propTitle').textContent='Proposal unavailable';$('propText').textContent=(d&&d.error)||'Not found.';return;}
+    $('propTitle').textContent=d.title||'Proposal';
+    $('propText').textContent=d.text||d.proposal||'(no detail)';
+  }catch(e){$('propTitle').textContent='Proposal unavailable';$('propText').textContent='Connection error.';}}
+function closeProp(){$('prop').classList.remove('open');}
+async function buildSuggestion(id,btn){
+  if(_sdevBusy)return;_sdevBusy=true;
+  const b=btn||$('sdevBody').querySelector('.sd-build[data-id="'+id+'"]');
+  if(b){b.classList.add('busy');b.textContent='⏳ BUILDING';}
+  const item=_sdevItems.find(s=>s.id===id);
+  window.firePulseSpike&&window.firePulseSpike(0.95);             // the organism reacts to a build
+  jarvisSpeak('Beginning the build'+(item?(': '+item.title):'')+'. I will research the approach and implement it end to end.');
+  try{await fetch('upgrade?key='+encodeURIComponent(id)+'&token='+CT+(archon?'&archon=1':''),{method:'POST'});}catch(e){}
+  // give the builder a moment to spawn, then refresh the bar with fresh suggestions (R1: keeps refreshing)
+  setTimeout(()=>{if(b){b.classList.remove('busy');b.textContent='⚡ BUILD';}_sdevBusy=false;
+    loadSuggestions(true);loadLib&&loadLib();},2600);}
+// restore collapsed state
+(function(){try{if(localStorage.getItem('sdevMin')==='1'){const s=$('sdev');if(s){s.classList.add('min');$('sdevChevron').textContent='▴';}}}catch(_){}})();
+
+/* ================= System Vitals — proactive health score + alerts (in the card) ================= */
+function openVitals(){
+  const h=(_m&&_m.health)||{}, a=h.alerts||[], gz=h.gauges||{};
+  const ic={critical:'⛔',warn:'⚠',ok:'✓'};
+  const lines=a.length
+    ? a.map(x=>(ic[x.level]||'•')+'  '+x.title+' — '+x.detail+(x.hint?'   ·   '+x.hint:''))
+    : ['✓  All systems nominal — nothing needs your attention.'];
+  const g=(p)=>p==null?'—':p+'%';
+  const props=[
+    {k:'health score', v:(h.score!=null?h.score+' / 100':'—')},
+    {k:'disk',         v:g(gz.disk_pct)},
+    {k:'memory',       v:g(gz.mem_pct)},
+    {k:'cpu',          v:g(gz.cpu_pct)},
+    {k:'gpu VRAM',     v:g(gz.vram_pct)},
+    {k:'daemons up',   v:(gz.daemons_up!=null?gz.daemons_up+' / '+gz.daemons_total:'—')},
+  ];
+  showCard({title:'🩺 System Vitals',
+    subtitle:(h.level||'—').toUpperCase()+(h.summary?' · '+h.summary:''),
+    props:props, lines:lines, bar:h.score,
+    actions:[{label:'↻ Run all',kind:'task',arg:'run all'},
+             {label:'📄 dashboard.py',kind:'file',arg:'server/dashboard.py'}]});
+}
+
+/* ================= mic (preserved verbatim) ================= */
+let _rec=null;
+async function startMicAnalyser(){try{const s=await navigator.mediaDevices.getUserMedia({audio:true});
+   const ac=new(window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(s);
+   analyser=ac.createAnalyser();analyser.fftSize=128;micData=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);}catch(e){}}
+function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
+  if(_rec){try{_rec.stop();}catch(e){}_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');return;}
+  startMicAnalyser();
+  _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
+  $('mic').classList.add('live');document.body.classList.add('listening');jarvisSpeak('Listening.');
+  _rec.onresult=e=>{const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
+    $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
+  _rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvisSpeak('Please allow microphone access.');_rec=null;$('mic').classList.remove('live');}};
+  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
+  _rec.start();}
+
+/* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
+function setMode(mode,arg){
+  ['ovGuardian','ovLib'].forEach(id=>$(id).classList.remove('open'));
+  if(mode==='guardian'){if(!$('guardFrame').src)$('guardFrame').src='guardian?room=mum';$('ovGuardian').classList.add('open');jarvisSpeak('Opening the Guardian monitor for your mother.');}
+  else if(mode==='library'){loadLib();$('ovLib').classList.add('open');}
+  // 'live' just closes overlays
+  // FINDING2: hide the dock while a fullscreen overlay covers the universe; restore it on return to live
+  const overlayOpen=(mode==='guardian'||mode==='library');
+  const dk=$('dock');if(dk)dk.classList.toggle('hidden',overlayOpen);
+  const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
+}
+async function loadLib(){try{const lib=await(await fetch('library')).json();
+   $('libgrid').innerHTML=(lib&&lib.length)?lib.map(m=>m.file.endsWith('.glb')
+     ?'<div class=it><model-viewer src="media/'+m.file+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
+     :'<div class=it><a href=media/'+m.file+' target=_blank><img src=media/'+m.file+'></a><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>').join('')
+     :'<div style="color:var(--dim);margin-top:60px">Empty — say "image of a glowing city" or "3d model of a helmet".</div>';}catch(e){}}
+
+/* ================= contextual info card (single, NASA-Eyes style) ================= */
+let _cardDrilled=false;   // true while a drill (/detail) or file view fills the card → pause live refresh so it isn't wiped
+function cardEl(sel){return $('card').querySelector(sel);}
+function closeCard(){$('card').classList.remove('open');_cardDrilled=false;
+  if(_selected){_selected.userData.selected=false;_selected=null;}
+  flyHome();}   // always return home (incl. constellation-node cards, which never set _selected)
+function showCard(o){
+  $('card').classList.add('open');
+  cardEl('.t').textContent=o.title||'';
+  cardEl('.s').textContent=o.subtitle||'';
+  cardEl('.props').innerHTML=(o.props||[]).map(p=>'<div class=prop><span class=k>'+esc(p.k)+'</span><b>'+esc(String(p.v))+'</b></div>').join('');
+  let lines=(o.lines||[]).map(l=>'<div class=l>'+esc(l)+'</div>').join('');
+  if(o.bar!=null)lines+='<div class=bar2><div class=fill style="width:'+Math.max(0,Math.min(100,o.bar))+'%"></div></div>';
+  cardEl('.lines').innerHTML=lines;
+  cardEl('.filewrap').innerHTML='';
+  const acts=o.actions||[];
+  cardEl('.acts').innerHTML=acts.map((a,i)=>'<span class=act data-i="'+i+'">'+esc(a.label||a.arg||'open')+'</span>').join('');
+  cardEl('.acts').querySelectorAll('.act').forEach((el,i)=>el.onclick=()=>doAction(acts[i]));
+}
+// async drill via /detail (kind=runner|type|module) — fills the SAME card
+async function openDetail(kind,name){
+  _cardDrilled=true;                                  // pause live refresh so the drill results survive
+  showCard({title:name||kind,subtitle:'loading…'});
+  try{const d=await(await fetch('detail?kind='+encodeURIComponent(kind)+'&name='+encodeURIComponent(name||''))).json();
+   const acts=[].concat((d.links||[]).map(x=>Object.assign({},x,{_link:1})),(d.actions||[]));
+   showCard({title:d.title||name||kind,subtitle:d.subtitle||'',props:d.props||[],lines:d.lines||[],actions:acts});
+  }catch(e){showCard({title:name||kind,subtitle:'no detail available'});}}
+function doAction(a){if(!a)return;const k=a.kind,arg=a.arg;
+  if(k==='drill'){const [kk,...r]=String(arg).split(':');openDetail(kk,r.join(':'));}
+  else if(k==='file')openFile(arg);
+  else if(k==='media'){window.open('media/'+arg,'_blank');}
+  else if(k==='url'){window.open(arg,'_blank');}
+  else if(k==='graph'){flyToNode(arg);}                 // graph action flies to constellation node (no iframe)
+  else if(k==='task'){$('say').value=arg;askJarvis();}
+  else if(k==='open'){window.open(arg,'_blank');}}
+async function openFile(path){_cardDrilled=true;                 // pause live refresh so the file body isn't wiped
+  try{const d=await(await fetch('file?path='+encodeURIComponent(path))).json();
+   showCard({title:d.path||path,subtitle:(d.lang||'')+' · '+fmt(d.size)+' bytes'});
+   cardEl('.filewrap').innerHTML='<div id=filebody></div>';$('filebody').textContent=d.content||'(empty / unreadable)';
+  }catch(e){cardEl('.filewrap').innerHTML='<div style="color:var(--dim)">could not open file</div>';}}
+
+/* ================= live data tick (preserved cadence; now drives 3D bodies) ================= */
+function tick(){fetch('metrics?_='+Date.now()).then(r=>r.json()).then(m=>{_m=m;_ts=m.ts||0;_metricsSignature(m);
+  // status chip now reflects overall System Vitals (disk/mem/cpu/brain/daemons/pipeline), not just VRAM.
+  const h=m.health;
+  if(h&&h.level==='critical'){$('status').className='chip bad';$('status').textContent='⛔ '+(h.summary||'critical');}
+  else if(h&&h.level==='warn'){$('status').className='chip warn';$('status').textContent='⚠ '+(h.summary||'warning');}
+  else{$('status').className='chip ok';$('status').textContent='● ONLINE';
+    const b=m.box||{},vt=b.vram_total_gb||48,vu=b.vram_used_gb||0,vp=vu/vt*100;   // VRAM fallback until health warms up
+    if(!h&&vp>92){$('status').className='chip bad';$('status').textContent='⚠ VRAM '+vp.toFixed(0)+'%';}}
+  try{layoutFromMetrics(m);}catch(e){console.warn('layout',e);}
+  if(_selected&&_selected.userData.refresh){try{_selected.userData.refresh();}catch(e){}}
+ }).catch(e=>{$('status').className='chip bad';$('status').textContent='● reconnecting';});}
+function budgetTick(){fetch('budget').then(r=>r.json()).then(s=>{
+  $('budget').innerHTML='budget <b>$'+(s.spent_usd_today||0).toFixed(2)+'</b>/$'+(s.daily_cap||0)+(s.economy_forced?' · economy':'');}).catch(e=>{});}
+function ageTick(){if(_ts)$('age').textContent=Math.max(0,(Date.now()/1000|0)-_ts)+'s ago';}
+
+/* ====================================================================== */
+/* ===================   THE 3D UNIVERSE (three.js)   =================== */
+/* ====================================================================== */
+const THREE=window.THREE;
+let scene,camera,renderer,controls,composer,bloom,smaa,brain,coreMesh=null,torus=null,beamMat=null;
+let envRT=null, liquid=null, liquidGeoBase=null, beamCore=null, beamGlow=null;
+let grid=null, gridMat=null;
+let godrays=null, bokeh=null, filmPass=null;          // (a) cinematic post passes
+let faceMesh=null, faceMat=null;                       // (b) oversized morphing holographic visage
+let _macroLines=null;                                  // (c) glowing connections between related macro bodies
+let bodies=[],bodyMap=new Map(),_selected=null,flying=false,clock=null;
+let home={pos:new THREE.Vector3(0,60,320),tgt:new THREE.Vector3(0,0,0)};
+let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
+const ASSET=n=>'asset/'+n;
+const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
+
+function initUniverse(){
+  const canvas=$('uni');
+  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
+  catch(e){ return false; }                                   // no WebGL → caller keeps boot text, never blanks
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  try{renderer.outputEncoding=THREE.sRGBEncoding;}catch(e){}                    // correct colour = no banding/grain
+  try{renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;}catch(e){}
+  scene=new THREE.Scene();
+  // PMREM env map: gives the chrome liquid-metal smooth, grain-free reflections (R3)
+  try{
+    const pmrem=new THREE.PMREMGenerator(renderer); pmrem.compileEquirectangularShader();
+    // a soft cyan studio gradient as the reflected world (no external HDR needed)
+    const gradTex=(()=>{const c=document.createElement('canvas');c.width=4;c.height=256;
+      const x=c.getContext('2d');const g=x.createLinearGradient(0,0,0,256);
+      g.addColorStop(0,'#0a2230');g.addColorStop(.45,'#103a4d');g.addColorStop(.7,'#29e7ff');g.addColorStop(1,'#02040a');
+      x.fillStyle=g;x.fillRect(0,0,4,256);
+      const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;return t;})();
+    envRT=pmrem.fromEquirectangular(gradTex);
+    scene.environment=envRT.texture;          // every PBR material now reflects this
+    gradTex.dispose(); pmrem.dispose();
+  }catch(e){}
+  try{scene.fog=new THREE.FogExp2(0x02040a,0.0012);}catch(e){}
+  camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,4000);
+  camera.position.copy(home.pos);
+  controls=new THREE.OrbitControls(camera,canvas);
+  controls.enableDamping=true;controls.dampingFactor=.06;
+  controls.minDistance=60;controls.maxDistance=1400;controls.target.copy(home.tgt);
+
+  // ---- HOLLYWOOD-CINEMATIC POST STACK ----
+  // RenderPass -> Bloom -> God-rays -> Bokeh DOF -> Film(grain+vignette+chromatic aberration) -> AA(SMAA/FXAA)->screen
+  composer=new THREE.EffectComposer(renderer);
+  composer.addPass(new THREE.RenderPass(scene,camera));
+  try{ bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.4,0.82,0.0);
+       composer.addPass(bloom); }catch(e){ bloom=null; }
+
+  // VOLUMETRIC GOD-RAYS from the reactor — screen-space radial light-shafts that scatter from the central
+  // Sun/beam-tube (GPU-Gems "volumetric light scattering": radial decay-march along the screen vector to
+  // the Sun). Occlusion is sampled from the post-bloom buffer where it is BRIGHT *and* CYAN (the reactor's
+  // own colour) so the shafts emanate from the core, not from stray bright planets, and are weighted by
+  // nearness to the Sun. Intensity is gated by PULSE in the render loop (uExposure ← PULSE.amp) so the
+  // rays bloom when JARVIS speaks. three@0.136 + ACES + sRGB are untouched (renderer-level, below).
+  // /*GODRAYS_PASS_BEGIN*/  headless proof (server/services/godrays_headless.mjs) extracts the god-ray
+  //   pass constructor between these markers, evaluates it against a vendored r136, and asserts it lands
+  //   in composer.passes right after UnrealBloomPass. Keep the markers and the assignment shape intact.
+  try{ godrays=new THREE.ShaderPass({
+    uniforms:{ tDiffuse:{value:null}, uSun:{value:new THREE.Vector2(0.5,0.55)}, uAspect:{value:16/9},
+               uExposure:{value:0.18}, uDecay:{value:0.95}, uDensity:{value:0.85}, uWeight:{value:0.5},
+               uTint:{value:new THREE.Color(0.16,0.90,1.0)} },
+    vertexShader:`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`uniform sampler2D tDiffuse; uniform vec2 uSun; uniform float uAspect,uExposure,uDecay,uDensity,uWeight; uniform vec3 uTint;
+      varying vec2 vUv; const int N=56;
+      void main(){ vec3 base=texture2D(tDiffuse,vUv).rgb;
+        vec2 dir=vUv-uSun; float r0=length(dir*vec2(uAspect,1.0));         // aspect-correct radius from the Sun
+        vec2 march=dir*(uDensity/float(N)); vec2 uv=vUv; float illum=1.0; vec3 acc=vec3(0.0);
+        for(int i=0;i<N;i++){ uv-=march; vec3 s=texture2D(tDiffuse,uv).rgb;
+          float lum=dot(s,vec3(0.299,0.587,0.114));
+          float cyan=clamp((s.g+s.b)*0.5-s.r,0.0,1.0);                     // reactor light is cyan, not white
+          float occ=smoothstep(0.45,0.9,lum)*(0.35+0.65*cyan);            // bright AND cyan = the beam occluder
+          acc+=s*occ*illum*uWeight; illum*=uDecay; }
+        float core=smoothstep(0.9,0.0,r0);                                // shafts strongest near the core
+        vec3 rays=acc*uExposure*uTint*(0.55+core);
+        float edge=smoothstep(1.3,0.55,length((vUv-0.5)*vec2(uAspect,1.0)));// soft fade at the frame borders
+        gl_FragColor=vec4(base+rays*edge,1.0); }` });
+    composer.addPass(godrays); }catch(e){ godrays=null; }
+  // /*GODRAYS_PASS_END*/
+
+  // DEPTH-OF-FIELD — cinematic soft-focus toward the frame edges, sharp at the focal point.
+  // NOTE: three r136's legacy BokehPass only composites when it is the LAST (renderToScreen) pass, so it
+  // is a no-op mid-chain. We use a self-contained screen-space CoC blur ShaderPass instead (chains cleanly
+  // before film+AA, drives uFocus from selection on fly-to). uFocus∈[0,1] = screen-space focal radius.
+  try{ bokeh=new THREE.ShaderPass({
+    uniforms:{ tDiffuse:{value:null}, uRes:{value:new THREE.Vector2(innerWidth,innerHeight)},
+               uFocus:{value:0.34}, uMax:{value:2.4} },
+    vertexShader:`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`uniform sampler2D tDiffuse; uniform vec2 uRes; uniform float uFocus,uMax; varying vec2 vUv;
+      void main(){ float d=length((vUv-0.5)*vec2(uRes.x/uRes.y,1.0));
+        float coc=smoothstep(uFocus,uFocus+0.5,d)*uMax;            // 0 at focus → blur toward edges
+        vec2 px=coc/uRes;
+        vec3 c=texture2D(tDiffuse,vUv).rgb*0.296;
+        c+=texture2D(tDiffuse,vUv+vec2( px.x, px.y)).rgb*0.118; c+=texture2D(tDiffuse,vUv+vec2(-px.x,-px.y)).rgb*0.118;
+        c+=texture2D(tDiffuse,vUv+vec2( px.x,-px.y)).rgb*0.118; c+=texture2D(tDiffuse,vUv+vec2(-px.x, px.y)).rgb*0.118;
+        c+=texture2D(tDiffuse,vUv+vec2( px.x*1.6,0.0)).rgb*0.058; c+=texture2D(tDiffuse,vUv+vec2(-px.x*1.6,0.0)).rgb*0.058;
+        c+=texture2D(tDiffuse,vUv+vec2(0.0, px.y*1.6)).rgb*0.058; c+=texture2D(tDiffuse,vUv+vec2(0.0,-px.y*1.6)).rgb*0.058;
+        gl_FragColor=vec4(c,1.0); }` });
+    composer.addPass(bokeh); }catch(e){ bokeh=null; }
+
+  // FILM GRAIN + VIGNETTE + CHROMATIC ABERRATION — tasteful, ANIMATED grain (not static dirt)
+  try{ filmPass=new THREE.ShaderPass({
+    uniforms:{ tDiffuse:{value:null}, uTime:{value:0}, uGrain:{value:0.035},
+               uVignette:{value:1.12}, uAberr:{value:0.0015} },
+    vertexShader:`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`uniform sampler2D tDiffuse; uniform float uTime,uGrain,uVignette,uAberr; varying vec2 vUv;
+      float rnd(vec2 c){return fract(sin(dot(c,vec2(12.9898,78.233)))*43758.5453);}
+      void main(){ vec2 dir=vUv-0.5;
+        vec3 col; col.r=texture2D(tDiffuse,vUv+dir*uAberr).r;
+        col.g=texture2D(tDiffuse,vUv).g; col.b=texture2D(tDiffuse,vUv-dir*uAberr).b;
+        float g=(rnd(vUv+fract(uTime))-0.5)*uGrain; col+=g;
+        float vig=smoothstep(0.9,0.25,length(dir)*uVignette); col*=mix(0.8,1.0,vig);
+        gl_FragColor=vec4(col,1.0); }` });
+    composer.addPass(filmPass); }catch(e){ filmPass=null; }
+
+  // AA LAST = final pass to screen. SMAA (shader-complete after the SMAAShader.js fix); FXAA fallback if it throws.
+  try{ smaa=new THREE.SMAAPass(innerWidth*renderer.getPixelRatio(), innerHeight*renderer.getPixelRatio());
+       smaa.renderToScreen=true; composer.addPass(smaa); }
+  catch(e){ try{ const fx=new THREE.ShaderPass(THREE.FXAAShader);
+       fx.material.uniforms.resolution.value.set(1/innerWidth,1/innerHeight); fx.renderToScreen=true;
+       composer.addPass(fx); smaa=fx; }catch(e2){ smaa=null; } }
+
+  scene.add(new THREE.AmbientLight(0x223344,0.7));
+  const key=new THREE.PointLight(0x29e7ff,2.2,800);key.position.set(0,140,160);scene.add(key);
+  const rim=new THREE.PointLight(0x7af3ff,1.1,900);rim.position.set(-160,40,-120);scene.add(rim);
+
+  // starfield (depth)
+  const sg=new THREE.BufferGeometry();const sp=new Float32Array(6000*3);
+  for(let i=0;i<sp.length;i++)sp[i]=(Math.random()-.5)*3200;
+  sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0x6fd0e0,size:1.5,sizeAttenuation:true,transparent:true,opacity:.6})));
+
+  /* ---- R6: living pinstripe grid floor (flow + pointer ripple + pulse brighten) ---- */
+  gridMat=new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, side:THREE.DoubleSide, dithering:true,
+    uniforms:{uTime:{value:0}, uAmp:{value:0}, uFlow:{value:0},
+              uPtr:{value:new THREE.Vector2(9999,9999)}, uColor:{value:new THREE.Color(0x29e7ff)}},
+    vertexShader:`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`uniform float uTime,uAmp,uFlow; uniform vec2 uPtr; uniform vec3 uColor; varying vec2 vUv;
+      float lines(float v,float n){float g=abs(fract(v*n)-0.5);return smoothstep(0.5,0.5-0.012*n,g);}
+      void main(){
+        vec2 gp=vUv*2.0-1.0;
+        float grd=max(lines(vUv.x,40.0),lines(vUv.y,40.0));     // pinstripe lattice
+        float flow=sin((vUv.y+uFlow*0.08)*60.0 - uTime*2.2)*0.5+0.5; // energy travelling along lines
+        float d=distance(vUv,uPtr*0.5+0.5);                       // pointer ripple
+        float ripple=smoothstep(0.18,0.0,abs(d-fract(uTime*0.4)))*smoothstep(0.5,0.0,d);
+        float fade=smoothstep(1.0,0.2,length(gp));                // soft round vignette
+        float b=grd*(0.18+0.45*uAmp)*(0.55+0.45*flow)+ripple*0.6;
+        gl_FragColor=vec4(uColor*(1.0+uAmp), b*fade);
+      }`});
+  grid=new THREE.Mesh(new THREE.PlaneGeometry(1600,1600,1,1),gridMat);
+  grid.rotation.x=-Math.PI/2; grid.position.y=-70; scene.add(grid);
+
+  buildBrain();
+  clock=new THREE.Clock();
+  addEventListener('resize',onResize);
+  $('uni').addEventListener('pointerdown',e=>{userDragging=true;_pinDragStart(e);});
+  $('uni').addEventListener('pointermove',e=>{ if(gridMat)
+      gridMat.uniforms.uPtr.value.set((e.clientX/innerWidth)*2-1, -((e.clientY/innerHeight)*2-1));
+    _pinDragMove(e); });
+  addEventListener('pointerup',e=>{userDragging=false;_pinDragEnd(e);});
+  $('uni').addEventListener('click',onCanvasClick);
+  uniReady=true;
+  requestAnimationFrame(tickFrame);
+  // first data builds the bodies + constellation
+  buildConstellation();
+  return true;
+}
+function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+  if(composer)composer.setSize(innerWidth,innerHeight);
+  if(smaa&&smaa.setSize)smaa.setSize(innerWidth*renderer.getPixelRatio(),innerHeight*renderer.getPixelRatio());
+  if(smaa&&smaa.material&&smaa.material.uniforms&&smaa.material.uniforms.resolution)   // FXAA fallback resolution
+    smaa.material.uniforms.resolution.value.set(1/innerWidth,1/innerHeight);
+  if(bokeh&&bokeh.uniforms&&bokeh.uniforms.uRes)bokeh.uniforms.uRes.value.set(innerWidth,innerHeight);}
+
+/* ---- the central neural-brain GLB (audio-reactive) ---- */
+function buildBrain(){
+  brain=new THREE.Group();scene.add(brain);
+  const loader=new THREE.GLTFLoader();
+  function loadGLB(file,onLoad){glbsTried++;
+    loader.load(ASSET(file),g=>{glbsOk++;try{onLoad(g.scene);}catch(e){}},
+      undefined,()=>{ if(glbsOk===0 && glbsTried>=2 && !fellBack) brainFallback(); });}
+  // HOUSING (preserved GLBs): dais at base + containment torus rings (R1)
+  loadGLB('jarvis_projector_dais.glb',s=>{s.position.y=-26;s.scale.setScalar(20);brain.add(s);});
+  loadGLB('jarvis_fusion_core_containment_torus.glb',s=>{s.scale.setScalar(24);torus=s;brain.add(s);});
+
+  /* ---- R1: VOLUMETRIC CONTAINMENT BEAM-TUBE (vertical column of light) ---- */
+  // outer soft glow shell — fresnel-bright at the rim, faint in the middle, additive
+  const beamH=120, beamR=18;
+  beamMat=new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, side:THREE.DoubleSide, blending:THREE.AdditiveBlending, dithering:true,
+    uniforms:{uAmp:{value:0}, uTime:{value:0}, uColor:{value:new THREE.Color(0x29e7ff)}},
+    vertexShader:`varying vec3 vN; varying vec2 vUv; varying vec3 vView;
+      void main(){vUv=uv; vN=normalize(normalMatrix*normal);
+        vec4 mv=modelViewMatrix*vec4(position,1.0); vView=normalize(-mv.xyz);
+        gl_Position=projectionMatrix*mv;}`,
+    fragmentShader:`uniform float uAmp; uniform float uTime; uniform vec3 uColor;
+      varying vec3 vN; varying vec2 vUv; varying vec3 vView;
+      void main(){
+        float fres=pow(1.0-abs(dot(normalize(vN),normalize(vView))),2.0);   // bright at silhouette
+        float rise=sin(vUv.y*22.0 - uTime*3.0)*0.5+0.5;                      // energy travelling up
+        float ends=smoothstep(0.0,0.12,vUv.y)*smoothstep(1.0,0.78,vUv.y);    // fade top/bottom caps
+        float a=(0.10+0.30*uAmp)*ends*(0.45+0.55*fres)*(0.7+0.3*rise);
+        gl_FragColor=vec4(uColor*(1.2+uAmp),a);
+      }`});
+  beamGlow=new THREE.Mesh(new THREE.CylinderGeometry(beamR,beamR*1.06,beamH,40,1,true),beamMat);
+  beamGlow.position.y=beamH*0.18; brain.add(beamGlow);
+  // inner bright core cylinder (the "beam" you see straight on)
+  beamCore=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,beamH,16,1,true),
+    new THREE.MeshBasicMaterial({color:0x9af6ff,transparent:true,opacity:.5,
+      blending:THREE.AdditiveBlending,depthWrite:false}));
+  beamCore.position.y=beamH*0.18; brain.add(beamCore);
+
+  /* ---- R1: CHROME / MERCURY LIQUID-METAL BLOB churning INSIDE the tube ---- */
+  // high-poly icosphere; per-frame vertex displacement (organic flow) + chrome PBR + PMREM env reflection
+  liquidGeoBase=new THREE.IcosahedronGeometry(13,5);                 // dense enough to morph smoothly
+  liquidGeoBase.userData.orig=liquidGeoBase.attributes.position.array.slice(0); // freeze rest pose
+  const liquidGeo=liquidGeoBase.clone();
+  const liquidMat=new THREE.MeshStandardMaterial({
+    color:0xdfefff, metalness:1.0, roughness:0.06, dithering:true,   // mercury chrome
+    envMap:(envRT&&envRT.texture)||null, envMapIntensity:1.6,
+    emissive:0x0a2a38, emissiveIntensity:0.25});
+  liquid=new THREE.Mesh(liquidGeo,liquidMat);
+  liquid.position.y=10; liquid.geometry.computeVertexNormals();
+  brain.add(liquid);
+  coreMesh=liquid;                                                   // <-- pulse loop morphs THIS now
+
+  /* ---- (b) R-FACE: OVERSIZED holographic liquid-metal JARVIS visage — the LARGEST object ----
+     A high-res plane displaced by a crude face SDF-field (eyes/brow/jaw). uForm rises while speaking so
+     the visage ASSEMBLES from a faint sheet; collapses when idle. Billboards to the viewer, scaled to
+     dwarf every planet (≈120×150 units vs the biggest planet Ø≈36). Drives off the ONE PULSE. */
+  const faceGeo=new THREE.PlaneGeometry(120,150,160,200);
+  faceMat=new THREE.ShaderMaterial({ transparent:true, depthWrite:false, side:THREE.DoubleSide,
+    blending:THREE.AdditiveBlending, dithering:true,
+    uniforms:{ uTime:{value:0}, uForm:{value:0}, uAmp:{value:0}, uColor:{value:new THREE.Color(0x7af3ff)} },
+    vertexShader:`uniform float uTime,uForm,uAmp; varying vec2 vUv; varying float vRim;
+      float faceZ(vec2 p){ float eyes=exp(-32.0*pow(length(p-vec2(-0.18,0.12)),2.0))
+                                    +exp(-32.0*pow(length(p-vec2(0.18,0.12)),2.0));
+        float jaw=smoothstep(0.55,0.0,length(p*vec2(1.0,0.78)));
+        float brow=exp(-40.0*pow(p.y-0.26,2.0))*smoothstep(0.4,0.0,abs(p.x));
+        return (jaw*1.0 - eyes*0.7 + brow*0.25); }
+      void main(){ vUv=uv; vec2 p=uv*2.0-1.0;
+        float churn=sin(p.x*6.0+uTime*2.0)*cos(p.y*5.0-uTime*1.7)*0.06*(0.4+uAmp);
+        float z=(faceZ(p)*22.0 + churn*22.0)*uForm;        // flat sheet when silent -> 3D visage when speaking
+        vec3 pos=vec3(position.xy, position.z+z);
+        vRim=1.0-abs(z)/24.0;
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.0); }`,
+    fragmentShader:`uniform float uForm,uAmp; uniform vec3 uColor; varying vec2 vUv; varying float vRim;
+      void main(){
+        float scan=0.5+0.5*sin(vUv.y*240.0);               // holographic scanlines
+        float edge=smoothstep(0.0,0.18,vUv.x)*smoothstep(1.0,0.82,vUv.x)
+                  *smoothstep(0.0,0.12,vUv.y)*smoothstep(1.0,0.9,vUv.y);
+        float a=uForm*edge*(0.18+0.5*vRim)*(0.7+0.3*scan)*(0.5+0.7*uAmp);
+        gl_FragColor=vec4(uColor*(1.3+uAmp), a); }` });
+  faceMesh=new THREE.Mesh(faceGeo,faceMat);
+  faceMesh.position.set(0,46,-6); faceMesh.renderOrder=2; brain.add(faceMesh);
+}
+function brainFallback(){fellBack=true;
+  const ico=new THREE.Mesh(new THREE.IcosahedronGeometry(22,1),
+    new THREE.MeshStandardMaterial({color:0x0a3a4a,emissive:0x29e7ff,emissiveIntensity:1.0,metalness:.9,roughness:.2}));
+  coreMesh=ico;brain.add(ico);
+}
+
+/* morph the liquid-metal surface to the ONE pulse (speak -> churn/rise; idle -> gentle flow) */
+let _nrmTick=0;
+function morphLiquid(dt){
+  if(!liquid||fellBack||!liquidGeoBase||!liquidGeoBase.userData.orig)return;
+  const pos=liquid.geometry.attributes.position, orig=liquidGeoBase.userData.orig;
+  const f=PULSE.flow, amp=PULSE.amp, churn=PULSE.speak+PULSE.spike;     // organism inputs
+  const big=0.10+churn*0.9, fast=1.0+churn*2.2;
+  for(let i=0;i<pos.count;i++){
+    const ox=orig[i*3], oy=orig[i*3+1], oz=orig[i*3+2];
+    const r=Math.sqrt(ox*ox+oy*oy+oz*oz)||1, nx=ox/r,ny=oy/r,nz=oz/r;
+    // layered trig "noise" along the surface normal -> liquid-metal undulation
+    const d=Math.sin(nx*3.1+f*1.3)*Math.cos(ny*2.7-f)*0.6
+           +Math.sin(ny*4.3+f*fast)*Math.cos(nz*3.9+f*0.7)*0.4
+           +Math.sin(nz*5.1+f*1.7)*0.3;
+    const disp = r*(1+amp*0.10) + d*r*big*0.18;                        // breathe + churn
+    pos.setXYZ(i, nx*disp, ny*disp + churn*0.6, nz*disp);              // +rise when speaking
+  }
+  pos.needsUpdate=true;
+  if((_nrmTick=(_nrmTick+1)%2)===0) liquid.geometry.computeVertexNormals(); // every 2nd frame = smooth + cheap
+  liquid.rotation.y+=dt*(0.15+amp*0.5);
+}
+
+/* ---- selectable bodies + deterministic layout + sprite labels ---- */
+function makeLabel(text){
+  const c=document.createElement('canvas');c.width=256;c.height=64;
+  const x=c.getContext('2d');x.font='600 26px Inter,system-ui,monospace';x.fillStyle='#eafcff';
+  x.textAlign='center';x.textBaseline='middle';x.shadowColor='#29e7ff';x.shadowBlur=8;x.fillText(text,128,34);
+  const tx=new THREE.CanvasTexture(c);tx.needsUpdate=true;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,depthTest:false}));
+  sp.scale.set(36,9,1);return sp;
+}
+function setLabel(mesh,text){
+  mesh.userData.labelText=text;                       // keep the visible label searchable (flyToQuery)
+  const sp=mesh.userData.label;if(!sp)return;
+  const c=document.createElement('canvas');c.width=256;c.height=64;
+  const x=c.getContext('2d');x.font='600 26px Inter,system-ui,monospace';x.fillStyle='#eafcff';
+  x.textAlign='center';x.textBaseline='middle';x.shadowColor='#29e7ff';x.shadowBlur=8;x.fillText(text,128,34);
+  if(sp.material.map)sp.material.map.dispose();
+  sp.material.map=new THREE.CanvasTexture(c);sp.material.needsUpdate=true;
+}
+/* ---- (c) DETERMINISTIC asset map: each macro body → the RIGHT GLB for its type/topic ----
+   Every name maps to a curated GLB that exists on disk (verified). Used for both the shaded GLB body
+   and its preview-PNG texture so NOTHING is ever a flat white dot. */
+const GLB_FOR={
+  'kpi:Topic':'jarvis_intel_graph_constellation','kpi:Ontology':'jarvis_intel_graph_primary_entity_ring',
+  'kpi:Document':'jarvis_document_vault_book','kpi:Note':'jarvis_ai_core_memory_context_panel',
+  'kpi:Measurement':'jarvis_ai_core_component_radial_gauge_92','kpi:GLBs':'jarvis_kit_data_orb',
+  'infra:vast':'jarvis_data_fusion_reactor_core','infra:vps':'jarvis_ops_mission_table_hero',
+  'sys:corr':'jarvis_simulation_branching_tree','sys:router':'jarvis_ai_core_reasoning_orb',
+  'guardian':'jarvis_security_core_shield','selfdev':'jarvis_ai_core_approval_panel',
+  'climate':'jarvis_ai_core_component_radial_gauge_92','agentos':'jarvis_ai_core_reasoning_orb',
+  '_pipe':'jarvis_command_atrium_data_orb','_tier':'jarvis_kit_reactor_core_tower'};
+function glbForName(name){ if(GLB_FOR[name])return GLB_FOR[name];
+  if(name.indexOf('pipe:')===0)return GLB_FOR._pipe; if(name.indexOf('tier:')===0)return GLB_FOR._tier;
+  return 'jarvis_kit_data_orb'; }
+const _glbLoader=new THREE.GLTFLoader(), _texLoader=new THREE.TextureLoader();
+const _texCache=new Map();
+function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
+  const t=_texLoader.load('asset/'+asset+'.preview.png',()=>{},undefined,()=>{});
+  try{t.encoding=THREE.sRGBEncoding;}catch(e){} _texCache.set(asset,t); return t; }
+
+function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
+  const sz=o.size||4.4, asset=glbForName(o.name);
+  // PBR fallback body — textured (its preview PNG) + emissive + bloom + PMREM reflections, NEVER a flat dot.
+  // The shaded GLB swaps in over this when it loads; on a 404 the textured PBR sphere stays (still graphical).
+  const m=new THREE.Mesh(new THREE.SphereGeometry(sz,32,32),
+    new THREE.MeshStandardMaterial({color:0xffffff, map:previewTex(asset), emissive:o.color, emissiveIntensity:0.55,
+      metalness:0.5, roughness:0.35, envMap:(envRT&&envRT.texture)||null, envMapIntensity:1.0, dithering:true}));
+  m.position.set(Math.cos(o.angle)*o.radius,o.y||0,Math.sin(o.angle)*o.radius);
+  m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
+    _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null};
+  const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
+  scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
+  // upgrade to the real shaded GLB when it arrives (added as a child; keep transform + label + raycast)
+  _glbLoader.load('asset/'+asset+'.glb', g=>{ try{ const s=g.scene; s.scale.setScalar(sz*0.9);
+      s.traverse(c=>{ if(c.isMesh&&c.material){ try{c.material.emissive=new THREE.Color(o.color);
+        c.material.emissiveIntensity=0.4; c.material.envMap=(envRT&&envRT.texture)||null;
+        c.material.envMapIntensity=1.0; c.material.needsUpdate=true;}catch(_){}}});
+      m.material.opacity=0; m.material.transparent=true;   // hide the proxy sphere; GLB now renders
+      m.add(s); m.userData.glb=s; }catch(_){}}, undefined, ()=>{}); // 404 → keep the textured PBR sphere
+  return m;
+}
+function upsertBody(name,createFn,updateFn){
+  let m=bodyMap.get(name);
+  if(!m){m=createFn();}
+  if(updateFn)updateFn(m);
+  return m;
+}
+function setBodyColor(m,color){m.userData.color=color;
+  try{m.material.emissive.setHex(color);}catch(e){}                 // proxy (kept for the colour state)
+  if(m.userData.glb){m.userData.glb.traverse(c=>{if(c.isMesh&&c.material){try{c.material.emissive=new THREE.Color(color);c.material.needsUpdate=true;}catch(_){}}});}}
+// R2: resize a body when its underlying data changes (planets GROW with activity). Rescales the GLB child
+// (if loaded) or rebuilds the proxy sphere, and re-floats its label — only when the size actually changed.
+function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
+  m.userData.baseScale=sz;
+  if(m.userData.glb){m.userData.glb.scale.setScalar(sz*0.9);}        // shaded GLB present → scale it
+  else{m.geometry.dispose();m.geometry=new THREE.SphereGeometry(sz,32,32);}
+  if(m.userData.label)m.userData.label.position.set(0,sz+4,0);}
+
+/* ---- (d) φ / FRACTAL / RELATIONSHIP LAYOUT ----
+   Golden-angle (137.5°) phyllotaxis for even, no-clump angular spacing; distance from the Sun ∝ INVERSE
+   importance (closer = more related/important — functions & features sit innermost); a per-type cluster
+   phase keeps similar bodies grouped (similarity clustering); a self-similar vertical spread gives the
+   fractal feel. importance ∈ [0,1]. */
+const GOLDEN=Math.PI*(3-Math.sqrt(5));                  // 137.50776° in radians
+const CLUSTER_PHASE={kpi:0.0, sys:1.0, infra:2.0, pipe:3.2, tier:4.2, guardian:5.0, selfdev:5.6, climate:0.6, agentos:4.8};
+function phyllo(i, importance, type){
+  const base=120, span=210;                            // Sun-proximity band (inner..outer; clears the giant face)
+  const imp=Math.max(0,Math.min(1,importance));
+  const r=base + span*(1-imp);                         // closer = more important
+  const a=(CLUSTER_PHASE[type]||0) + i*GOLDEN;         // golden-angle within the type cluster
+  const y=Math.sin(i*GOLDEN*1.7)*34*(0.5+imp);        // self-similar vertical spread
+  return {radius:r, angle:a, y:y};
+}
+
+/* ---- build/refresh ALL bodies from /metrics (deterministic; relationship-driven placement) ---- */
+function layoutFromMetrics(m){
+  if(!scene)return;
+  const c=m.completion||{},g={};((m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
+  const corr=m.correlation||{},rout=m.routing||{},box=m.box||{},vps=m.vps||{};
+  const vt=box.vram_total_gb||48,vu=box.vram_used_gb||0;
+
+  // ---- inner KPI ring (r=92), golden-angle spacing ----
+  const kpi=[
+    {name:'kpi:Topic',lab:'Build '+(c.pct||0)+'%',drill:'type:Topic',magnitude:(c.total||0),
+      card:()=>({title:'Knowledge Build',subtitle:'ontology completion',bar:(c.pct||0),
+        props:[{k:'Completion',v:(c.pct||0)+'%'},{k:'Enriched',v:fmt(c.enriched)},{k:'Topics total',v:fmt(c.total)}],
+        actions:[{label:'▸ Recent Topics',kind:'drill',arg:'type:Topic'},{label:'◈ Focus in graph',kind:'graph',arg:'Topic'}]})},
+    {name:'kpi:Measurement',lab:'Measure '+fmt((g['Measurements']||{}).total),drill:'type:Measurement',magnitude:((g['Measurements']||{}).total||0),
+      card:()=>({title:'Measurements',subtitle:'live ingest stream',
+        props:[{k:'Total',v:fmt((g['Measurements']||{}).total)},{k:'Per hour',v:'+'+fmt((g['Measurements']||{}).h||0)}],
+        actions:[{label:'▸ Recent',kind:'drill',arg:'type:Measurement'}]})},
+    {name:'kpi:Document',lab:'Docs '+fmt((g['Documents']||{}).total),drill:'type:Document',magnitude:((g['Documents']||{}).total||0),
+      card:()=>({title:'Documents',subtitle:'ingested corpus',
+        props:[{k:'Total',v:fmt((g['Documents']||{}).total)},{k:'Per hour',v:'+'+fmt((g['Documents']||{}).h||0)}],
+        actions:[{label:'▸ Recent',kind:'drill',arg:'type:Document'}]})},
+    {name:'kpi:Note',lab:'Notes '+fmt((g['Notes learned']||{}).total),drill:'type:Note',magnitude:((g['Notes learned']||{}).total||0),
+      card:()=>({title:'Notes learned',subtitle:'self-learning loop',
+        props:[{k:'Total',v:fmt((g['Notes learned']||{}).total)},{k:'Per hour',v:'+'+fmt((g['Notes learned']||{}).h||0)}],
+        actions:[{label:'▸ Recent',kind:'drill',arg:'type:Note'}]})},
+    {name:'kpi:Ontology',lab:'Ontology '+fmt((g['Ontology objects']||{}).total),drill:'type:Topic',magnitude:((g['Ontology objects']||{}).total||0),
+      card:()=>({title:'Ontology objects',subtitle:'entities + relationships',
+        props:[{k:'Objects',v:fmt((g['Ontology objects']||{}).total)},{k:'Distinct entities',v:fmt(corr.distinct_after_dedup)},
+               {k:'Topics linked',v:fmt(corr.topics_connected)+'/'+fmt(corr.topics_total)}],
+        actions:[{label:'◈ Focus in graph',kind:'graph',arg:'Topic'}]})},
+    {name:'kpi:GLBs',lab:'GLBs '+fmt((m.glb||{}).total),magnitude:((m.glb||{}).total||0),
+      card:()=>({title:'GLB Library',subtitle:fmt((m.glb||{}).total)+' models',
+        actions:[{label:'🖼 Open Studio',kind:'open',arg:'#studio'}]})},
+  ];
+  kpi.forEach((k,i)=>{
+    const mag=Math.log10(1+(k.magnitude||0));                        // headline magnitude -> size (R2)
+    const sz=5.5+Math.min(6,mag*1.4);                                // topics/headlines sized by magnitude
+    const imp=Math.min(1,0.45+mag*0.09);                             // importance by magnitude (KPIs sit inner)
+    const P=phyllo(i,imp,'kpi');
+    const m2=upsertBody(k.name,()=>addBody({name:k.name,label:k.lab,color:COLORS.kpi,radius:P.radius,angle:P.angle,y:P.y,
+      size:sz,getCard:k.card}),mm=>{setLabel(mm,k.lab);mm.userData.getCard=k.card;resizeBody(mm,sz);});
+  });
+
+  // ---- infra (r=160) — R2: machines are big functional bodies that GROW with live load ----
+  const vastSz=9+Math.min(5,(vu/vt)*5);                              // VRAM utilisation grows the GPU body
+  const Pvast=phyllo(0,0.85,'infra');                                // infra serves everything → fairly central
+  upsertBody('infra:vast',()=>addBody({name:'infra:vast',label:'Vast GPU',color:COLORS.infra,radius:Pvast.radius,angle:Pvast.angle,y:Pvast.y,size:vastSz,
+    getCard:()=>({title:'Vast GPU · 2×4090',subtitle:(box.endpoint||'').replace(/^https?:\/\//,'')||'inference box',bar:vu/vt*100,
+      props:[{k:'VRAM',v:vu+'/'+vt+' GB'},{k:'Reachable',v:box.reachable?'yes':'no'},
+             {k:'Models',v:((box.models||[]).map(x=>x.name).join(', ')||'idle').slice(0,40)}]})}),
+    mm=>{setLabel(mm,'Vast '+Math.round(vu/vt*100)+'%');setBodyColor(mm,vu/vt>0.92?COLORS.pipeOff:COLORS.infra);resizeBody(mm,vastSz);});
+  const vpsSz=9+Math.min(5,((vps.cpu_pct||0)/100)*5);               // CPU load grows the VPS body
+  const Pvps=phyllo(1,0.82,'infra');
+  upsertBody('infra:vps',()=>addBody({name:'infra:vps',label:'VPS',color:COLORS.infra,radius:Pvps.radius,angle:Pvps.angle,y:Pvps.y,size:vpsSz,
+    getCard:()=>({title:'VPS · Hostinger',subtitle:'application host',
+      props:[{k:'CPU',v:(vps.cpu_pct||0)+'% · '+(vps.cores||'?')+'c'},{k:'RAM',v:vps.mem_used_gb+'/'+vps.mem_total_gb+' GB'},
+             {k:'Disk',v:vps.disk_used_gb+'/'+vps.disk_total_gb+' GB'},{k:'Load',v:vps.load}]})}),
+    mm=>{setLabel(mm,'VPS '+(vps.cpu_pct||0)+'%');resizeBody(mm,vpsSz);});
+
+  // ---- systems: cross-correlation + LLM router (r=160) — R2: big function bodies, grow by throughput ----
+  const corrSz=8+Math.min(5,Math.log10(1+(corr.distinct_after_dedup||0))*1.3);   // entities deduped grows it
+  const Pcorr=phyllo(0,0.9,'sys');                                  // core systems → innermost ring
+  upsertBody('sys:corr',()=>addBody({name:'sys:corr',label:'Correlation',color:COLORS.sys,radius:Pcorr.radius,angle:Pcorr.angle,y:Pcorr.y,size:corrSz,
+    getCard:()=>({title:'Cross-Correlation',subtitle:'entity dedup + linking',
+      props:Object.entries(corr).slice(0,8).map(([k,v])=>({k,v:fmt(v)}))})}),
+    mm=>{mm.userData.getCard=()=>({title:'Cross-Correlation',subtitle:'entity dedup + linking',
+      props:Object.entries(_m.correlation||{}).slice(0,8).map(([k,v])=>({k,v:fmt(v)}))});resizeBody(mm,corrSz);});
+  const routCalls=Object.values(rout).reduce((s,v)=>s+(+v||0),0);                 // total routed calls grows it
+  const routSz=8+Math.min(5,Math.log10(1+routCalls)*1.3);
+  const Prout=phyllo(1,0.9,'sys');
+  upsertBody('sys:router',()=>addBody({name:'sys:router',label:'LLM Router',color:COLORS.sys,radius:Prout.radius,angle:Prout.angle,y:Prout.y,size:routSz,
+    getCard:()=>({title:'LLM Router',subtitle:'inference routing',
+      props:Object.entries(rout).slice(0,8).map(([k,v])=>({k,v:fmt(v)}))})}),
+    mm=>{mm.userData.getCard=()=>({title:'LLM Router',subtitle:'inference routing',
+      props:Object.entries(_m.routing||{}).slice(0,8).map(([k,v])=>({k,v:fmt(v)}))});resizeBody(mm,routSz);});
+
+  // ---- pipelines (toggleable workers) — arc at r=215 ----
+  // R2: these ARE the functions/runners → the LARGEST bodies in the scene, and they GROW with live
+  // worker activity (cpu, falling back to memory). A busy pipeline visibly swells; an idle one stays at base.
+  const pipeSize=wk=>{const live=wk.status==='online';if(!live)return 9;        // stopped runner = base (still a big function body)
+    const act=(wk.cpu!=null?wk.cpu/100:0)||(wk.mem_mb!=null?Math.min(1,wk.mem_mb/2048):0);
+    return 12+Math.min(6,act*6);};                                             // online floor 12 > KPI cap 11.5; busy runners are the biggest planets in the scene
+  const pipes=(m.workers||[]).filter(w=>w.toggleable);
+  pipes.forEach((w,i)=>{const name='pipe:'+w.name, ok=w.status==='online';
+    const P=phyllo(i,1.0,'pipe'); const a=P.angle;                  // functions/runners = importance≈1 → innermost
+    const card=()=>{const wk=(_m.workers||[]).find(x=>x.name===w.name)||w;const live=wk.status==='online';
+      return {title:wk.label||wk.name,subtitle:'pipeline · '+(wk.status||'unknown'),
+        props:[{k:'Status',v:live?'online':'stopped'},{k:'CPU',v:(wk.cpu!=null?wk.cpu+'%':'—')},{k:'Mem',v:(wk.mem_mb!=null?wk.mem_mb+' MB':'—')}],
+        actions:[
+          {label:live?'⏹ Stop':'▶ Start',kind:'_fn',fn:()=>ctl(live?'stop':'start',wk.name)},
+          {label:'↻ Restart',kind:'_fn',fn:()=>ctl('restart',wk.name)},
+          {label:live?'◉ ON':'○ OFF',kind:'_fn',fn:()=>ctl(live?'stop':'start',wk.name)},  // toggle
+          {label:'📄 Logs',kind:'drill',arg:'runner:'+wk.name}]};};
+    upsertBody(name,()=>addBody({name:name,label:(w.label||w.name).slice(0,16),color:ok?COLORS.pipe:COLORS.pipeOff,
+      radius:P.radius,angle:a,y:P.y,size:pipeSize(w),getCard:card}),
+      mm=>{const wk=(m.workers||[]).find(x=>x.name===w.name)||w;const live=wk.status==='online';
+        setBodyColor(mm,live?COLORS.pipe:COLORS.pipeOff);setLabel(mm,(wk.label||wk.name).slice(0,16));mm.userData.getCard=card;resizeBody(mm,pipeSize(wk));});
+  });
+
+  // ---- inference tiers — arc at r=255 — R2: sized by call magnitude (busy tiers grow) ----
+  const tierSz=t=>7+Math.min(6,Math.log10(1+(+t.calls||0))*1.5);
+  (m.tiers||[]).forEach((t,i)=>{const name='tier:'+(t.tier||i);
+    const imp=Math.min(0.7,0.2+Math.log10(1+(+t.calls||0))*0.12);   // busy tiers pulled inward; quiet ones outer
+    const P=phyllo(i,imp,'tier'); const a=P.angle;
+    const card=()=>({title:'Tier '+(t.tier!=null?t.tier:i),subtitle:t.model||'inference model',
+      props:[{k:'Model',v:t.model||'—'},{k:'Calls',v:fmt(t.calls)}]});
+    upsertBody(name,()=>addBody({name:name,label:'T'+(t.tier!=null?t.tier:i),color:COLORS.tier,
+      radius:P.radius,angle:a,y:P.y,size:tierSz(t),getCard:card}),
+      mm=>{const tt=(m.tiers||[])[i]||t;mm.userData.getCard=()=>({title:'Tier '+(tt.tier!=null?tt.tier:i),subtitle:tt.model||'inference model',
+        props:[{k:'Model',v:tt.model||'—'},{k:'Calls',v:fmt(tt.calls)}]});setLabel(mm,'T'+(tt.tier!=null?tt.tier:i)+' '+fmt(tt.calls));resizeBody(mm,tierSz(tt));});
+  });
+
+  // ---- Guardian special body (opens WebRTC overlay) ----
+  upsertBody('guardian',()=>addBody({name:'guardian',label:'🛡 Guardian',color:COLORS.guardian,radius:120,angle:Math.PI*1.5,y:-46,size:5.5,
+    getCard:()=>({title:'Guardian',subtitle:'two-way video to mum',lines:['Click Open to start the secure call.'],
+      actions:[{label:'🛡 Open Guardian',kind:'open',arg:'#guardian'}]})}));
+
+  // ---- Self-Development planet (one-touch upgrades; Claude executes end-to-end) ----
+  upsertBody('selfdev',()=>addBody({name:'selfdev',label:'⚙ Self-Dev',color:COLORS.tier,radius:120,angle:Math.PI*0.5,y:46,size:5.5,
+    getCard:()=>({title:'Self-Development',subtitle:'one-touch upgrades (Claude executes end-to-end)',
+      lines:['Pick an upgrade — JARVIS researches & builds it hands-free.'],
+      actions:[
+        {label:'↩ Rollback',  kind:'_fn',fn:()=>doUpgrade('rollback')},
+        {label:'🗓 Scheduler', kind:'_fn',fn:()=>doUpgrade('scheduler')},
+        {label:'📈 Forecaster',kind:'_fn',fn:()=>doUpgrade('forecaster')},
+        {label:'🛡 Approvals', kind:'_fn',fn:()=>doUpgrade('approvals')},
+        {label:'⏪ Replay',    kind:'_fn',fn:()=>doUpgrade('replay')}]})}));
+
+  // ---- CLIMATE planet (AirTouch/Daikin — "I'm cold" routes server-side via /chat climate-intent) ----
+  upsertBody('climate',()=>addBody({name:'climate',label:'🌡 Climate',color:COLORS.infra,radius:120,angle:Math.PI*1.0,y:30,size:5.5,
+    getCard:()=>({title:'Home Climate',subtitle:'AirTouch 5 · Daikin (her zone)',
+      lines:['Say “I’m cold” and JARVIS warms her zone.','Bridge runs on a home device on her network.'],
+      actions:[{label:'🔥 Warm her zone',kind:'task',arg:'I am cold, please warm the room'},
+               {label:'❄ Cool her zone', kind:'task',arg:'I am too warm, please cool the room'}]})}));
+
+  // ---- AGENT OS planet (17-tool registry; /agent/tools + /agent/run, token-gated) ----
+  upsertBody('agentos',()=>addBody({name:'agentos',label:'🤖 Agent OS',color:COLORS.tier,radius:120,angle:Math.PI*0.0,y:-30,size:6.0,
+    getCard:()=>({title:'Agent OS',subtitle:'tool registry · action executor',
+      lines:['Loading the tool palette…'],
+      actions:[{label:'🛠 Tools',kind:'_fn',fn:()=>openAgentTools()}]})}));
+
+  // ---- (c) glowing CONNECTIONS between related macro bodies (curated relationship graph) ----
+  rebuildMacroConnections();
+}
+
+/* ---- (c) connection lines between RELATED macro bodies (glow with the pulse) ----
+   /graphdata edges are between ontology node-ids (drawn by the 600-node constellation). At the MACRO
+   level the relationships are the system topology: tiers→router, pipelines→correlation, infra serves
+   everything, KPIs feed the brain centre, etc. Drawn as visible glowing additive lines. */
+function macroEdges(){
+  const E=[]; const has=n=>bodyMap.has(n);
+  const push=(a,b)=>{ if(has(a)&&has(b))E.push([a,b]); };
+  // KPIs orbit + feed the centre (brain at origin) — link each KPI to the Ontology hub
+  ['kpi:Topic','kpi:Document','kpi:Note','kpi:Measurement','kpi:GLBs'].forEach(k=>push(k,'kpi:Ontology'));
+  push('kpi:Ontology','sys:corr');                         // ontology ← correlation
+  push('sys:corr','sys:router'); push('sys:router','infra:vast');  // router routes to the GPU box
+  push('infra:vast','infra:vps');
+  // inference tiers all hang off the router; pipelines feed correlation
+  bodyMap.forEach((m,name)=>{ if(name.indexOf('tier:')===0)push(name,'sys:router');
+    if(name.indexOf('pipe:')===0)push(name,'sys:corr'); });
+  push('infra:vps','guardian'); push('infra:vps','selfdev'); push('infra:vps','climate'); push('infra:vps','agentos');
+  return E;
+}
+function rebuildMacroConnections(){
+  if(!scene)return;
+  const E=macroEdges();
+  if(_macroLines){scene.remove(_macroLines);_macroLines.geometry.dispose();_macroLines=null;}
+  const pts=[];
+  E.forEach(([s,t])=>{const a=bodyMap.get(s),b=bodyMap.get(t);
+    if(a&&b)pts.push(a.position.x,a.position.y,a.position.z, b.position.x,b.position.y,b.position.z);});
+  if(!pts.length)return;
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+  _macroLines=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x29e7ff,transparent:true,
+    opacity:0.26,blending:THREE.AdditiveBlending,depthWrite:false}));
+  _macroLines.renderOrder=-1; scene.add(_macroLines);
+}
+
+/* ---- constellation from /graphdata (instanced spheres + line segments, fixed layout) ---- */
+let _constellation=null;
+function buildConstellation(){
+  fetch('graphdata').then(r=>r.json()).then(d=>{
+    if(!scene)return;
+    const nodes=d.nodes||[],N=nodes.length;if(!N)return;const R=330;
+    const geo=new THREE.SphereGeometry(2.4,10,10);
+    const mat=new THREE.MeshBasicMaterial();
+    const inst=new THREE.InstancedMesh(geo,mat,N);
+    const m4=new THREE.Matrix4(),idx={},pos=[];
+    nodes.forEach((n,i)=>{const phi=Math.acos(1-2*(i+.5)/N),th=Math.PI*(1+Math.sqrt(5))*i;
+      const p=new THREE.Vector3(Math.cos(th)*Math.sin(phi),Math.cos(phi),Math.sin(th)*Math.sin(phi)).multiplyScalar(R);
+      pos[i]=p;idx[n.id]=i;m4.setPosition(p);inst.setMatrixAt(i,m4);
+      try{inst.setColorAt(i,new THREE.Color(n.color||0x9bd4e6));}catch(e){}});
+    inst.instanceMatrix.needsUpdate=true;if(inst.instanceColor)inst.instanceColor.needsUpdate=true;
+    scene.add(inst);
+    const lp=[];(d.edges||[]).forEach(e=>{if(idx[e.s]!=null&&idx[e.t]!=null){
+      lp.push(...pos[idx[e.s]].toArray(),...pos[idx[e.t]].toArray());}});
+    const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(lp,3));
+    scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x5faad2,transparent:true,opacity:0.12})));
+    _constellation={inst,idx,pos,nodes}; window.firePulseSpike(0.7);  // graph data arrival = birth pulse
+  }).catch(e=>{console.warn('graphdata',e);});
+}
+
+/* ---- camera fly-to / return tweening (no extra lib) ---- */
+let userDragging=false;
+function tween(toPos,toTgt,ms,then){flying=true;const p0=camera.position.clone(),t0=controls.target.clone(),t=performance.now();
+  (function step(){const k=Math.min(1,(performance.now()-t)/(ms||900));const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    camera.position.lerpVectors(p0,toPos,e);controls.target.lerpVectors(t0,toTgt,e);controls.update();
+    if(k<1)requestAnimationFrame(step);else{flying=false;if(then)then();}})();}
+function flyToBody(b){const bp=b.position.clone();const dir=camera.position.clone().sub(bp);
+  if(dir.lengthSq()<1)dir.set(0,0,1);dir.normalize();
+  tween(bp.clone().add(dir.multiplyScalar(46)),bp);}
+function flyHome(){tween(home.pos.clone(),home.tgt.clone(),800);}
+function selectNode(i){if(!_constellation||i==null||i<0)return false;
+  const ns=_constellation.nodes,n=ns[i];if(!n)return false;
+  // a graph star is not in `bodies` → clear any body selection so closeCard()'s fly-home still fires
+  if(_selected){_selected.userData.selected=false;_selected=null;}
+  _cardDrilled=false;
+  const p=_constellation.pos[i];
+  const dir=camera.position.clone().sub(p).normalize();
+  tween(p.clone().add(dir.multiplyScalar(30)),p);
+  showCard({title:n.label||n.id,subtitle:(n.type||'node')+' · knowledge graph',
+    actions:[{label:'◈ Open full graph',kind:'url',arg:'graph?focus='+encodeURIComponent(n.label||n.id)}]});
+  return true;}
+function flyToNode(label){if(!_constellation)return false;
+  const ns=_constellation.nodes,lo=(label||'').toLowerCase();
+  let i=ns.findIndex(n=>(n.label||'').toLowerCase()===lo||String(n.id).toLowerCase()===lo||(n.type||'').toLowerCase()===lo);
+  if(i<0)i=ns.findIndex(n=>(n.label||'').toLowerCase().includes(lo));
+  if(i<0)return false;
+  return selectNode(i);}
+function flyToQuery(q){q=(q||'').trim();if(!q)return;const lo=q.toLowerCase();
+  // try a body — match BOTH the internal id AND the visible on-screen label (NASA-Eyes search-to-fly)
+  for(const b of bodies){
+    if(b.userData.name.toLowerCase().includes(lo)||(b.userData.labelText||'').toLowerCase().includes(lo)){selectBody(b);return;}}
+  // then a constellation node
+  if(flyToNode(q))return;
+  // else hand to chat
+  $('say').value=q;askJarvis();}
+
+/* ---- raycast click → select body (fly + card) / empty → return ---- */
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();
+let _downXY=null;
+/* ----- DRAG-TO-PIN bridge (WebGL → DOM dock) -----
+   pointerdown on a 3D body, then drag onto the dock, then release → pinBodyToDock(). A ghost chip follows
+   the cursor; the dock glows (.pinReady) while the cursor is over it. OrbitControls still gets normal drags
+   (we only treat it as a pin-drag once the cursor leaves the body region and a body was grabbed). */
+let _pinGrab=null,_pinGhost=null;
+function _bodyAt(e){ if(!uniReady)return null;
+  mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mouse,camera);
+  const hit=ray.intersectObjects(bodies.slice(),true)[0];
+  if(!hit)return null; let o=hit.object;while(o&&!o.userData.name)o=o.parent;return o||null;}
+function _overDock(e){const d=$('dock');if(!d)return false;const r=d.getBoundingClientRect();
+  return e.clientX>=r.left-20&&e.clientX<=r.right+20&&e.clientY>=r.top-20&&e.clientY<=r.bottom+20;}
+function _pinDragStart(e){const b=_bodyAt(e);
+  if(b&&b.userData.name){_pinGrab={name:b.userData.name,label:b.userData.labelText||'',startX:e.clientX,startY:e.clientY,armed:false};}
+  else _pinGrab=null;}
+function _pinDragMove(e){ if(!_pinGrab)return;
+  const moved=Math.hypot(e.clientX-_pinGrab.startX,e.clientY-_pinGrab.startY);
+  if(!_pinGrab.armed&&moved>26){_pinGrab.armed=true;            // arm a pin-drag after a clear drag gesture
+    controls&&(controls.enabled=false);                         // stop OrbitControls fighting the drag
+    _pinGhost=document.createElement('div');
+    _pinGhost.style.cssText='position:fixed;z-index:60;pointer-events:none;font-size:11px;font-weight:700;'+
+      'padding:5px 10px;border-radius:10px;background:rgba(41,231,255,.16);border:1px solid var(--cy);'+
+      'color:#eafcff;backdrop-filter:blur(8px);box-shadow:0 0 22px rgba(41,231,255,.5)';
+    _pinGhost.textContent='📌 '+(_pinGrab.label||_pinGrab.name.split(':').pop());
+    document.body.appendChild(_pinGhost);}
+  if(_pinGrab.armed&&_pinGhost){_pinGhost.style.left=(e.clientX+12)+'px';_pinGhost.style.top=(e.clientY+12)+'px';
+    $('dock')&&$('dock').classList.toggle('pinReady',_overDock(e));}}
+function _pinDragEnd(e){ if(_pinGrab&&_pinGrab.armed){
+    if(_overDock(e)){pinBodyToDock(_pinGrab.name,_pinGrab.label);}
+    if(_pinGhost){_pinGhost.remove();_pinGhost=null;}
+    $('dock')&&$('dock').classList.remove('pinReady');controls&&(controls.enabled=true);}
+  _pinGrab=null;}
+function onCanvasClick(e){
+  if(!uniReady)return;
+  mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mouse,camera);
+  // raycast the macro bodies AND the knowledge-graph constellation (InstancedMesh) together, nearest wins
+  const targets=bodies.slice();
+  if(_constellation&&_constellation.inst)targets.push(_constellation.inst);
+  const hit=ray.intersectObjects(targets,true)[0];
+  if(hit){
+    if(_constellation&&hit.object===_constellation.inst&&hit.instanceId!=null){selectNode(hit.instanceId);return;}
+    let o=hit.object;while(o&&!o.userData.name)o=o.parent;if(o){selectBody(o);return;}
+  }
+  closeCard();
+}
+function selectBody(b){
+  if(_selected)_selected.userData.selected=false;
+  _selected=b;b.userData.selected=true;
+  flyToBody(b);
+  const gc=b.userData.getCard;
+  if(gc){const o=gc();
+    // refresh the card live on each tick while this body stays selected — but NOT while a drill/file view is up
+    b.userData.refresh=()=>{ if(_selected===b && !_cardDrilled){const oo=b.userData.getCard&&b.userData.getCard();if(oo)showCardKeepActions(oo);} };
+    // handle special card actions that route to overlays
+    if(o.actions)o.actions=o.actions.map(a=>{
+      if(a.kind==='open'&&a.arg==='#guardian')return {label:a.label,kind:'_fn',fn:()=>setMode('guardian')};
+      if(a.kind==='open'&&a.arg==='#studio')return {label:a.label,kind:'_fn',fn:()=>setMode('library')};
+      return a;});
+    showCardWithFns(o);
+  }
+}
+function showCardWithFns(o){
+  _cardDrilled=false;                                 // fresh top-level body card → live refresh resumes
+  showCard(o);
+  // rebind _fn actions (showCard wired doAction; override those that are functions)
+  const acts=o.actions||[];const els=$('card').querySelector('.acts').querySelectorAll('.act');
+  acts.forEach((a,i)=>{if(a.kind==='_fn'&&els[i])els[i].onclick=a.fn;});
+}
+function showCardKeepActions(o){ // live refresh of props/bar without disturbing focus
+  cardEl('.t').textContent=o.title||'';cardEl('.s').textContent=o.subtitle||'';
+  cardEl('.props').innerHTML=(o.props||[]).map(p=>'<div class=prop><span class=k>'+esc(p.k)+'</span><b>'+esc(String(p.v))+'</b></div>').join('');
+  let lines=(o.lines||[]).map(l=>'<div class=l>'+esc(l)+'</div>').join('');
+  if(o.bar!=null)lines+='<div class=bar2><div class=fill style="width:'+Math.max(0,Math.min(100,o.bar))+'%"></div></div>';
+  cardEl('.lines').innerHTML=lines;
+}
+
+/* ---- the render loop — NEVER throws (guarded) ---- */
+function tickFrame(){
+  requestAnimationFrame(tickFrame);
+  if(!renderer)return;
+  try{
+    const dt=Math.min(0.05,clock.getDelta()), t=clock.elapsedTime;
+    updatePulse(dt);                       // ONE heartbeat for the whole organism
+    const A=PULSE.amp, SPK=PULSE.speak, SPIKE=PULSE.spike;
+
+    // --- CENTRE: liquid metal + beam tube ---
+    morphLiquid(dt);
+    if(beamMat&&beamMat.uniforms){beamMat.uniforms.uAmp.value=A;beamMat.uniforms.uTime.value=PULSE.flow;}
+    if(beamCore)beamCore.material.opacity=0.3+SPK*0.5;
+    if(torus){torus.rotation.z+=dt*(0.4+A*0.6);torus.rotation.x+=dt*0.12;}
+    if(fellBack&&coreMesh){coreMesh.rotation.y+=dt*0.3;coreMesh.scale.setScalar(22*(1+A*0.18));
+      if(coreMesh.material&&'emissiveIntensity' in coreMesh.material)coreMesh.material.emissiveIntensity=0.8+A*2.4;}
+
+    // --- PLANETS: pulse/scale + spike-brighten + birth pop (subscribe to PULSE) ---
+    for(const b of bodies){const u=b.userData;
+      const beat=Math.sin(t*2+u.ph)*0.16;
+      const born=u._bornAt?Math.max(0,1-(t-u._bornAt)*1.5):0;      // pop when newly created
+      const sc=(1+A*0.12+SPIKE*0.18+born*0.6);
+      b.scale.setScalar(sc);
+      const ei=(u.selected?1.9:1.0)+beat+SPIKE*0.9;
+      if(u.glb){const k=0.35+ei*0.25;u.glb.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=k;});}
+      else{try{b.material.emissiveIntensity=ei;}catch(e){}}}
+
+    // --- GRID: flow + brighten to pulse ---
+    if(gridMat){gridMat.uniforms.uTime.value=t;gridMat.uniforms.uAmp.value=A;gridMat.uniforms.uFlow.value=PULSE.flow;}
+
+    // --- CONSTELLATION: gentle shared breathing ---
+    if(_constellation&&_constellation.inst)_constellation.inst.rotation.y+=dt*0.01;
+
+    // --- BLOOM tracks the organism ---
+    if(bloom)bloom.strength=1.25+A*0.9+SPIKE*0.5;
+
+    // --- CINEMATIC POST: god-rays from the Sun, animated grain, focus pull on fly-to ---
+    if(godrays&&godrays.uniforms){const s=new THREE.Vector3(0,30,0).project(camera);   // beam/face column
+      godrays.uniforms.uSun.value.set((s.x+1)/2,(s.y+1)/2);
+      godrays.uniforms.uAspect.value=camera.aspect||(innerWidth/innerHeight);           // keep shafts aspect-correct
+      godrays.uniforms.uExposure.value=0.14+A*0.22+SPIKE*0.1;}                          // rays bloom when he speaks (PULSE.amp)
+    if(filmPass&&filmPass.uniforms)filmPass.uniforms.uTime.value=PULSE.flow;
+    if(bokeh&&bokeh.uniforms&&bokeh.uniforms.uFocus){const want=_selected?0.22:0.4;   // pull focus tighter on fly-to
+      bokeh.uniforms.uFocus.value+=(want-bokeh.uniforms.uFocus.value)*Math.min(1,dt*3.0);}
+
+    // --- (b) oversized morphing FACE forms/morphs to the ONE pulse ---
+    if(faceMat&&faceMat.uniforms){faceMat.uniforms.uTime.value=PULSE.flow;faceMat.uniforms.uAmp.value=A;
+      const want=Math.min(1, SPK*1.8 + SPIKE*0.6);                                       // assembles while speaking
+      faceMat.uniforms.uForm.value+=(want-faceMat.uniforms.uForm.value)*Math.min(1,dt*4.0);
+      if(faceMesh){faceMesh.lookAt(camera.position);}}                                    // billboard toward viewer
+
+    // --- (c) macro connection lines glow with the pulse ---
+    if(_macroLines)_macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25;
+
+    // preserved camera idle-orbit
+    if(!userDragging&&!flying){const rad=Math.hypot(camera.position.x,camera.position.z);
+      const a=Math.atan2(camera.position.x,camera.position.z)+dt*0.04;
+      camera.position.x=Math.sin(a)*rad;camera.position.z=Math.cos(a)*rad;}
+    controls.update();
+    if(composer)composer.render();else renderer.render(scene,camera);
+  }catch(e){ /* never blank the page */ }
+}
+
+/* ---- cinematic FX self-check: the volumetric god-ray pass, surfaced as an ACCESSIBLE HUD chip ----
+   The rays are a visual effect; blind/low-vision users can't see them, so we announce their state via a
+   role=status aria-live chip (keyboard-focusable, Enter/Space speaks the proof). Polls /godrays/selfcheck:
+   the server confirms the pass statically AND (cached) proves it sits in composer.passes headless. */
+let _fxGodrays=null;
+async function loadGodrays(){
+  try{
+    const d=await (await fetch('godrays/selfcheck')).json(); _fxGodrays=d;
+    const el=$('fxgodrays'); if(!el)return;
+    const active=!!d.active, proven=d.proof==='headless'&&d.headless&&d.headless.pass;
+    el.style.display=active?'':'none';
+    el.className='chip '+(active?'ok':'bad');
+    el.textContent='✦ GOD-RAYS'+(active?(proven?'':' •'):' ✕');         // bullet = static-only (proof warming)
+    el.setAttribute('aria-label', active
+      ? ('Volumetric god-rays from the reactor: active'+(proven?', proven in the composer passes':', verifying'))
+      : 'Volumetric god-rays: unavailable');
+  }catch(e){ /* HUD chip is optional — never break the page */ }
+}
+function readGodrays(){
+  const d=_fxGodrays; let msg='Volumetric god-rays from the reactor are active and pulse when I speak.';
+  if(d&&d.headless&&d.headless.pass&&d.headless.composerPasses)
+    msg+=' Proven in the composer: '+d.headless.composerPasses.join(', then ')+'. The god-ray pass is at index '+d.headless.godRaysIndex+'.';
+  else if(d&&!d.active) msg='The god-ray effect is currently unavailable.';
+  if(window.jarvisSpeak)jarvisSpeak(msg);
+}
+
+/* ================= boot ================= */
+function engage(){if(_engaged)return;_engaged=true;
+  unlockAudio();                                            // unlock playback within the user gesture
+  // greet BEFORE any camera work (preserved ordering)
+  setTimeout(()=>jarvisSpeak('JARVIS online. All systems live. How can I help?'),700);
+  $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
+  if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
+}
+addEventListener('pointerdown',engage,{once:true});
+
+// start data loops immediately; build the scene on first gesture (autoplay policy) OR auto after 2.2s
+tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();
+loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
+loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
+setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();}},2200);
+</script>
+</body></html>

@@ -42,17 +42,27 @@ def _done_titles() -> set:
     return s
 
 
-def enrich_one(topic: str, tier: str) -> bool:
-    r = T.complete(
+def enrich_one(topic: str, tier: str = "base") -> bool:
+    """Topic enrichment routed through the gated control plane (llm_gate): Tier 2 (base/8B) by policy,
+    escalates to Tier 3 ONLY if the note fails validation, and every decision is logged with its reason."""
+    from . import llm_gate
+    r = llm_gate.gated_complete(
+        "knowledge_builder",
         f"Topic: {topic}\nWrite exactly 2 factual, specific sentences about it for an intelligence "
         f"knowledge base, then a new line 'CATEGORY: <one lowercase word>'.",
-        system="You are a precise analyst. No preamble, no markdown.", tier=tier, max_tokens=400)
+        task_type="enrich", system="You are a precise analyst. No preamble, no markdown.",
+        max_tokens=400, validator=lambda t: len(t.strip()) >= 30)
     if not (r.get("ok") and r.get("content")):
+        try:
+            from . import feedback_bus as _fb
+            _fb.record("server/services/batch_loader.py", "llm_fail", f"no content for '{topic[:50]}'", "warn")
+        except Exception:  # noqa: BLE001
+            pass
         return False
     try:
         from . import second_brain as sb
         sb.upsert_note("concept", topic, r["content"].strip(),
-                       {"batch_loader": True, "tier": r.get("tier"), "model": r.get("model")}, 0.6)
+                       {"batch_loader": True, "tier": r.get("tier_used"), "model": r.get("model")}, 0.6)
         return True
     except Exception:  # noqa: BLE001
         return False
@@ -63,16 +73,16 @@ def run_forever(conc: int = 12, chunk: int = 200) -> None:
     lock = threading.Lock()
 
     def work(topic: str, i: int) -> None:
-        ok = enrich_one(topic, TIER_MIX[i % len(TIER_MIX)])
+        ok = enrich_one(topic)   # task-appropriate: base, escalates to strong only on failure
         with lock:
             st["ok" if ok else "fail"] += 1
             n = st["ok"] + st["fail"]
             if n % 20 == 0:
                 el = time.time() - st["start"]
-                print(f"[batch_loader] +{st['ok']} ok / {st['fail']} fail this run | "
-                      f"{st['ok']/max(el,1)*60:.0f} topics/min", flush=True)
+                print(f"[batch_loader] +{st['ok']} ok / {st['fail']} fail | {st['ok']/max(el,1)*60:.0f}/min", flush=True)
 
-    print(f"[batch_loader] starting — tier mix {TIER_MIX}, concurrency {conc}", flush=True)
+    print(f"[batch_loader] starting — Tier 2 (base/8B) default, Tier 3 (strong/32B) for complex only, "
+          f"concurrency {conc}", flush=True)
     while True:
         try:
             total = len(_all_topics())

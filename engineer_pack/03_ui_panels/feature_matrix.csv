@@ -1,0 +1,74 @@
+id,area,feature,summary,needs_live_data,needs_image_asset,needs_glb_pbr,needs_animation_vfx,needs_backend
+FEAT-001,Global,Command Bar,"Header with status, search, Run All, Pause All, Stop All, Sleep Mode",yes,yes,no,yes,yes
+FEAT-002,Global,Left Navigation,"Overview, Pipelines, Cross-Correlation, Infrastructure, Knowledge, Agents, Coding, Voice, Alerts, Assets, Settings",yes,yes,no,yes,yes
+FEAT-003,Global,Quality Mode Selector,Cinematic/Balanced/Performance/Safe mode,yes,no,no,yes,yes
+FEAT-004,Global,Emergency Mode Banner,Critical CPU/disk/VRAM banner with action buttons,yes,no,no,yes,yes
+FEAT-005,Global,Universal Why Button,Each task row can explain why it ran and which tiers were blocked,yes,no,no,yes,yes
+FEAT-006,KPI,Knowledge Build Card,"97.4%, 6,851/7,031 progress",yes,yes,no,yes,yes
+FEAT-007,KPI,Live Velocity Card,+7.2/min and sparkline,yes,yes,no,yes,yes
+FEAT-008,KPI,Measurements Card,"88,382 +4,727/h",yes,yes,no,yes,yes
+FEAT-009,KPI,Documents Card,"34,331 indexed documents",yes,yes,no,yes,yes
+FEAT-010,KPI,Notes Learned Card,"19,408 notes learned",yes,yes,no,yes,yes
+FEAT-011,KPI,Ontology Objects Card,"241,920 +4,727/h",yes,yes,no,yes,yes
+FEAT-012,KPI,GLB Models Card,"1,638 existing generated models",yes,yes,yes,yes,yes
+FEAT-013,Inference,Six-Tier Ladder,Tier 0-5 with HOT/WARM/COLD/OFF,yes,yes,yes,yes,yes
+FEAT-014,Inference,Model Call Counts,base/strong/kimi/claude/openai call counts,yes,no,no,yes,yes
+FEAT-015,Inference,Model Residency,VRAM per model and residency state,yes,no,yes,yes,yes
+FEAT-016,Inference,Blocked Escalations,Counts of Qwen/70B calls blocked,yes,no,yes,yes,yes
+FEAT-017,Inference,Avoided GPU Scoreboard,Tier 0/1 savings stats,yes,no,yes,yes,yes
+FEAT-018,Inference,Router Decision Feed,last 50 routing decisions,yes,no,no,yes,yes
+FEAT-019,Inference,Validator Results,schema/code/source validation pass/fail,yes,no,yes,yes,yes
+FEAT-020,Infrastructure,Vast GPU Summary,"VRAM used/free, GPU util, temp, power",yes,yes,yes,yes,yes
+FEAT-021,Infrastructure,GPU Process/Model Table,PID/model/VRAM mapping,yes,no,no,yes,yes
+FEAT-022,Infrastructure,VRAM by Model Chart,"qwen 28.6, llama8 9.6, llama3.2 6.3",yes,no,yes,yes,yes
+FEAT-023,Infrastructure,Hostinger Summary,"CPU, RAM, disk, load",yes,yes,yes,yes,yes
+FEAT-024,Infrastructure,Per-Core CPU Bars,8 core utilisation bars,yes,no,no,yes,yes
+FEAT-025,Infrastructure,Docker Health Panel,container statuses and restart loops,yes,no,yes,yes,yes
+FEAT-026,Infrastructure,Network/IO Panel,"bandwidth, IOPS, swap",yes,no,yes,yes,yes
+FEAT-027,Pipelines,Pipeline Control Table,"Name, purpose, status, uptime, resource, controls",yes,yes,yes,yes,yes
+FEAT-028,Pipelines,Animated ON/OFF Toggle,text ON/OFF sliding toggle,yes,no,no,yes,yes
+FEAT-029,Pipelines,Run Button,start allowed pipeline now,yes,no,no,yes,yes
+FEAT-030,Pipelines,Pause Button,hold queue/state without killing progress,yes,no,no,yes,yes
+FEAT-031,Pipelines,Stop Button,hard stop active worker/job,yes,no,no,yes,yes
+FEAT-032,Pipelines,Re-run Button,restart last job or pipeline checkpoint,yes,no,no,yes,yes
+FEAT-033,Pipelines,Bulk Actions,Run All/Pause All/Stop All with confirmation,yes,no,no,yes,yes
+FEAT-034,Cross-Correlation,Daemon Overview,what it scrapes and what it does,yes,yes,yes,yes,yes
+FEAT-035,Cross-Correlation,Scrape Sources,"official APIs, vendor sites, standards, DNSP, PDFs, forums, GitHub, news",yes,yes,yes,yes,yes
+FEAT-036,Cross-Correlation,Entity Resolution Graph,dedupe/canonical links,yes,no,yes,yes,yes
+FEAT-037,Cross-Correlation,Conflict Detector,show conflicting sources and confidence,yes,no,yes,yes,yes
+FEAT-038,Cross-Correlation,Rebuild Index Control,rebuild entity/search/vector indexes,yes,no,yes,yes,yes
+FEAT-039,Cross-Correlation,Reconcile Duplicates Control,batch merge duplicates safely,yes,no,yes,yes,yes
+FEAT-040,Cross-Correlation,Sleep Mode Research Policy,3-source verification display,yes,yes,yes,yes,yes
+FEAT-041,Live Activity,Newest-first Event Feed,"LLM calls, price updates, lessons, entity changes",yes,no,no,yes,yes
+FEAT-042,Live Activity,Event Detail Drawer,click an event to inspect payload/decision,yes,no,no,yes,yes
+FEAT-043,Knowledge,Ontology Register,entity counts table/grid,yes,yes,yes,yes,yes
+FEAT-044,Knowledge,Just Learned List,newest facts,yes,no,yes,yes,yes
+FEAT-045,Knowledge,Newest Topics List,newest topics,yes,no,yes,yes,yes
+FEAT-046,Knowledge,Holographic Knowledge Graph,3D lattice overlay,yes,yes,yes,yes,yes
+FEAT-047,Coding,Claude Agent Frame,Chat/Diff/Files/Terminal/Browser tabs,yes,yes,yes,yes,yes
+FEAT-048,Coding,Coding Task Queue,Currently Working On with percent done,yes,no,yes,yes,yes
+FEAT-049,Coding,Approval Controls,"Approve, Queue, Auto-Continue, Request Review",yes,no,yes,yes,yes
+FEAT-050,Coding,Sleep Mode Autonomy Rules,safe continuation rules,yes,yes,yes,yes,yes
+FEAT-051,Coding,Browser Automation View,Claude can operate preview/browser with approval/audit,yes,no,yes,yes,yes
+FEAT-052,Voice,Voice Active Mic,natural voice command state,yes,yes,yes,yes,yes
+FEAT-053,Voice,Waveform Visualiser,input/output voice waveform,yes,yes,yes,yes,yes
+FEAT-054,Voice,Spoken Alerts,audio alerts and voice summaries,yes,no,no,yes,yes
+FEAT-055,Voice,Voice Reply Controls,Speak/Mute/Listen/Broadcast,yes,no,no,yes,yes
+FEAT-056,Alerts,Active Alerts Panel,VRAM/disk/restart/research alert cards,yes,yes,yes,yes,yes
+FEAT-057,Alerts,Notification Preferences,"channels, severity, mute windows",yes,no,no,yes,yes
+FEAT-058,Asset Forge,Asset Forge Drawer,image/GLB generator widget,yes,yes,yes,yes,yes
+FEAT-059,Asset Forge,Text-to-Image Mode,prompt GPT Image 2,yes,yes,no,yes,yes
+FEAT-060,Asset Forge,Image Edit Mode,edit existing images,yes,yes,no,yes,yes
+FEAT-061,Asset Forge,Text-to-GLB Mode,Tripo3D text-to-3D,yes,yes,yes,yes,yes
+FEAT-062,Asset Forge,Image-to-GLB Mode,Tripo3D image-to-3D,yes,yes,yes,yes,yes
+FEAT-063,Asset Forge,PBR Material Preview,inspect metalness/roughness/emissive maps,yes,no,yes,yes,yes
+FEAT-064,Asset Forge,Scene Placement,Add to scene / replace existing,yes,no,yes,yes,yes
+FEAT-065,Asset Forge,Asset Approval Flow,draft/generated/reviewed/approved/live/archive,yes,no,yes,yes,yes
+FEAT-066,Map,Holographic Map Visual,global data source/route visual,yes,yes,yes,yes,yes
+FEAT-067,Map,Source Verification Pins,official/direct/forum status pins,yes,yes,yes,yes,yes
+FEAT-068,Brain,Jarvis Neural Brain Visualiser,morphs when Jarvis talks/thinks/alerts,yes,yes,yes,yes,yes
+FEAT-069,Brain,Audio-Reactive Morph Targets,voice-driven brain movement,yes,no,yes,yes,yes
+FEAT-070,Brain,Mode-Aware Colour System,normal/busy/degraded/critical/sleep colours,yes,no,yes,yes,yes
+FEAT-071,Settings,Approval Matrix,what can auto-run vs what needs approval,yes,no,no,yes,yes
+FEAT-072,Settings,Budget Guardrails,image/GLB/external model spend limits,yes,no,no,yes,yes
+FEAT-073,Settings,Audit Timeline,session replay and all actions,yes,no,yes,yes,yes

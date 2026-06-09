@@ -1,0 +1,57 @@
+{
+  "_doc": "Gated 6-tier LLM router policy for BOTH apps (Jarvis tiered_llm + Underworld tools/llm). The rule: route by TASK, run the cheapest tier that fits, escalate ONLY on a real failure — never preemptively, never by percentage. Most work must die at Tier 0 (no LLM). Heavy tiers stay cold and are hard-gated by VRAM.",
+
+  "tiers": {
+    "0_none":   {"model": "(deterministic CPU/DB/regex/hash)", "residency": "always", "use": "ingest, metrics, dedup-by-id/hash, routing, db upserts, dashboard, glb-load, queue scheduling"},
+    "1_micro":  {"model": "llama3.2", "residency": "warm", "use": "tiny classification, JSON cleanup, tag/title rewrite, yes/no routing"},
+    "2_base":   {"model": "llama3.1:8b", "residency": "hot", "use": "DEFAULT LLM — normal enrichment, short summaries, basic descriptions"},
+    "3_strong": {"model": "qwen2.5:32b", "residency": "hot", "use": "complex reasoning, technical synthesis, multi-step planning, code analysis, hard ontology merges"},
+    "4_heavy":  {"model": "llama3.3:70b-q", "residency": "cold", "use": "rare difficult multi-doc synthesis — load-on-demand / burst GPU only"},
+    "5_extreme":{"model": "llama3.3:70b-full | claude | kimi | openai", "residency": "external/disabled", "use": "critical code repair, architecture, repeated lower-tier failure, human-requested premium"}
+  },
+
+  "principle": [
+    "Decide the task TYPE first; pick the cheapest tier that completes it.",
+    "Escalate exactly ONE tier and ONLY on an explicit failure reason (error, empty output, low confidence).",
+    "Never escalate on vague uncertainty, never by a target percentage, never auto-escalate batch jobs to heavy.",
+    "Heavy (Tier 4/5) is cold by default and only runs when priority is high AND resources are healthy."
+  ],
+
+  "resource_gates": {
+    "vram_pct_block_heavy": 85,
+    "vram_pct_pause_strong": 92,
+    "cpu_pct_reduce_concurrency": 90,
+    "disk_pct_pause_ingest": 85,
+    "disk_pct_critical": 90,
+    "note": "VRAM% is of the shared 2x4090 box (48GB). Gates apply to LOADING a non-resident model — a resident model is free to use."
+  },
+
+  "residency_policy": {
+    "hot": ["llama3.1:8b", "qwen2.5:32b"],
+    "warm_optional": ["llama3.2"],
+    "cold": ["llama3.3:70b-q"],
+    "disabled_on_2x4090": ["llama3.3:70b-full"],
+    "rule": "Keep at most two local tiers hot. 70B never resident on the 2x4090 — burst GPU or external only."
+  },
+
+  "workers": {
+    "live_data":         {"default": "0_none", "max": "0_none"},
+    "dashboard":         {"default": "0_none", "max": "0_none"},
+    "glb_loader":        {"default": "0_none", "max": "0_none"},
+    "glb_generator":     {"default": "0_none", "max": "2_base"},
+    "document_ingestor": {"default": "0_none", "max": "3_strong"},
+    "knowledge_builder": {"default": "2_base", "max": "4_heavy"},
+    "cross_correlator":  {"default": "0_none", "max": "3_strong"},
+    "self_learning":     {"default": "2_base", "max": "5_extreme", "note": "Tier 5 only on real repeated failure"},
+    "coding_workspace":  {"default": "3_strong", "max": "5_extreme"},
+    "api":               {"default": "0_none", "max": "3_strong"},
+    "underworld_overmind": {"default": "3_strong", "max": "4_heavy"},
+    "underworld_minion":   {"default": "2_base", "max": "3_strong"}
+  },
+
+  "anti_escalation": [
+    "Never 70B for: live measurements, dashboard/system metrics, GLB loading, basic OCR, dedup (unless deterministic+embedding both fail on a high-value entity).",
+    "Never run heavy tiers inside infinite loops.",
+    "Self-learning must not recursively call bigger models for every small error — dedup issues, one lesson per (module,kind)."
+  ]
+}

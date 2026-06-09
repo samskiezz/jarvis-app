@@ -69,9 +69,18 @@ def improve_issue(issue: dict) -> dict:
 
 
 def run_once(limit: int = 12) -> int:
-    issues = fb.open_issues(limit)
-    n = 0
+    # pull more, then DEDUP by (module, kind): one lesson per distinct issue-type, collapse repeats
+    # so a recurring failure can't spam thousands of lessons
+    issues = fb.open_issues(60)
+    seen, n = set(), 0
     for it in issues:
+        key = (it.get("module"), it.get("kind"))
+        if key in seen:
+            fb.mark_resolved(it["id"])
+            continue
+        seen.add(key)
+        if n >= limit:
+            break
         try:
             r = improve_issue(it)
             if r.get("ok"):
@@ -82,13 +91,55 @@ def run_once(limit: int = 12) -> int:
     return n
 
 
+def scout() -> dict:
+    """Proactive self-review — analyse real system signals and write ONE improvement lesson.
+    This is what makes self-learning visibly ACTIVE even when nothing is erroring."""
+    signals = []
+    try:
+        for r in T.stats():
+            if isinstance(r, dict) and r.get("calls"):
+                fail = (r.get("calls") or 0) - (r.get("ok") or 0)
+                if fail > 0 or (r.get("avg_ms") or 0) > 8000:
+                    signals.append(f"LLM tier {r.get('tier')} ({r.get('model')}): {fail}/{r.get('calls')} "
+                                   f"calls failed, avg {r.get('avg_ms')}ms")
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        from . import correlator as C
+        cs = C.stats()
+        if cs.get("top"):
+            t = cs["top"][0]
+            signals.append(f"worst duplication: '{t['name']}' stored {t['members']}x as {t['types']} — "
+                           f"ingestion isn't deduping at insert time")
+        signals.append(f"{cs.get('raw_objects')} objects collapse to {cs.get('distinct_after_dedup')} distinct entities")
+    except Exception:  # noqa: BLE001
+        pass
+    if not signals:
+        return {"ok": False}
+    p = ("Real signals from the live intelligence pipeline:\n" + "\n".join(f"- {s}" for s in signals[:6])
+         + "\nGive ONE concrete, actionable engineering improvement (one sentence).")
+    r = T.complete(p, system=_SYS, tier="base", max_tokens=200)
+    draft = (r.get("content") or "").strip() if r.get("ok") else ""
+    if not draft:
+        return {"ok": False}
+    lesson, chain = _critique({"module": "system", "detail": "; ".join(signals[:3])}, draft)
+    fb.lesson("system", lesson, trigger="self-review", source_tier=chain)
+    return {"ok": True, "lesson": lesson, "tier": chain}
+
+
 def run_forever(interval_s: float = 45.0) -> None:
-    print(f"[improver] started — Llama→Kimi→Claude conference, every {interval_s}s", flush=True)
+    print(f"[improver] started — Llama→Kimi→Claude conference + proactive scout, every {interval_s}s", flush=True)
+    passes = 0
     while True:
         try:
             done = run_once()
+            passes += 1
             if done:
                 print(f"[improver] wrote {done} lesson(s) this pass", flush=True)
+            if passes == 1 or passes % 7 == 0:  # proactive self-review every ~7 passes
+                s = scout()
+                if s.get("ok"):
+                    print(f"[improver] scout [{s['tier']}]: {s['lesson'][:100]}", flush=True)
         except Exception as e:  # noqa: BLE001
             print(f"[improver] loop error: {str(e)[:140]}", flush=True)
         time.sleep(interval_s)

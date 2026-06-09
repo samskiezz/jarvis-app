@@ -1,0 +1,750 @@
+{
+  "_meta": {
+    "generator": "scripts/build_world_glb_manifest.py",
+    "purpose": "Deterministic ontology-domain -> GLB assignment for the JARVIS 3D universe.",
+    "deterministic": true,
+    "sources": {
+      "domains": "brain.db ont_object (counts + keywords)",
+      "topics": "brain.db ont_object type=Topic (31 named master topics, ranked by pagerank)",
+      "curated_glbs": "jarvis_assets/*.glb (48) served at /asset/<file>",
+      "generated_glbs": "media.db kind='glb' (1638 Tripo) served at /media/<file>"
+    },
+    "matching": {
+      "domains": "curated overrides (spec-aligned, validated)",
+      "topics": "weighted keyword-overlap scoring vs all candidate GLBs (deterministic tie-break)",
+      "tie_break": "(score desc, src prio asc [asset<media], file name asc)"
+    },
+    "counts": {
+      "candidate_glbs": 1686,
+      "curated_assets": 48,
+      "generated_glbs": 1638,
+      "domains": 16,
+      "topics": 31
+    }
+  },
+  "sun": {
+    "glb": "jarvis_iron_man_helmet.glb",
+    "url": "/asset/jarvis_iron_man_helmet.glb",
+    "reason": "central morphing JARVIS / Iron-Man face — the star of the universe"
+  },
+  "reactor": [
+    {
+      "glb": "jarvis_fusion_reactor_core.glb",
+      "url": "/asset/jarvis_fusion_reactor_core.glb"
+    },
+    {
+      "glb": "jarvis_arc_reactor.glb",
+      "url": "/asset/jarvis_arc_reactor.glb"
+    },
+    {
+      "glb": "jarvis_projector_dais.glb",
+      "url": "/asset/jarvis_projector_dais.glb"
+    },
+    {
+      "glb": "jarvis_fusion_core_containment_torus.glb",
+      "url": "/asset/jarvis_fusion_core_containment_torus.glb"
+    },
+    {
+      "glb": "jarvis_data_fusion_reactor_core.glb",
+      "url": "/asset/jarvis_data_fusion_reactor_core.glb"
+    },
+    {
+      "glb": "jarvis_kit_reactor_core_tower.glb",
+      "url": "/asset/jarvis_kit_reactor_core_tower.glb"
+    }
+  ],
+  "domains": {
+    "Measurement": {
+      "glb": "gen_tripo__balance_scale_lab.glb",
+      "url": "/media/gen_tripo__balance_scale_lab.glb",
+      "src": "media",
+      "count": 111558,
+      "size": 1.0,
+      "match": "curated",
+      "reason": "lab balance/scale — the act of measuring"
+    },
+    "DataSource": {
+      "glb": "jarvis_kit_data_orb.glb",
+      "url": "/asset/jarvis_kit_data_orb.glb",
+      "src": "asset",
+      "count": 92000,
+      "size": 0.9834,
+      "match": "curated",
+      "reason": "data orb — the feeds/sources fabric"
+    },
+    "Document": {
+      "glb": "jarvis_docvault_hero_document_book.glb",
+      "url": "/asset/jarvis_docvault_hero_document_book.glb",
+      "src": "asset",
+      "count": 34331,
+      "size": 0.8986,
+      "match": "curated",
+      "reason": "document vault hero book — reports/filings"
+    },
+    "DomainSubject": {
+      "glb": "jarvis_ai_core_reasoning_orb.glb",
+      "url": "/asset/jarvis_ai_core_reasoning_orb.glb",
+      "src": "asset",
+      "count": 10000,
+      "size": 0.7925,
+      "match": "curated",
+      "reason": "reasoning orb — ontology subjects/neurons"
+    },
+    "Topic": {
+      "glb": "jarvis_intel_graph_constellation_core.glb",
+      "url": "/asset/jarvis_intel_graph_constellation_core.glb",
+      "src": "asset",
+      "count": 7031,
+      "size": 0.7622,
+      "match": "curated",
+      "reason": "graph constellation core — topic hub"
+    },
+    "SpeciesOccurrence": {
+      "glb": "gen_tripo__fossil_ammonite.glb",
+      "url": "/media/gen_tripo__fossil_ammonite.glb",
+      "src": "media",
+      "count": 3136,
+      "size": 0.6927,
+      "match": "curated",
+      "reason": "fossil ammonite — species occurrence records"
+    },
+    "ScientificPublication": {
+      "glb": "gen_tripo__citation_graph_display.glb",
+      "url": "/media/gen_tripo__citation_graph_display.glb",
+      "src": "media",
+      "count": 3100,
+      "size": 0.6917,
+      "match": "curated",
+      "reason": "citation graph display — publications"
+    },
+    "Vulnerability": {
+      "glb": "jarvis_security_core_shield.glb",
+      "url": "/asset/jarvis_security_core_shield.glb",
+      "src": "asset",
+      "count": 1260,
+      "size": 0.6142,
+      "match": "curated",
+      "reason": "security core shield — CVE vulnerabilities"
+    },
+    "AcquisitionPoint": {
+      "glb": "gen_uw_urban__ground_satellite_dish.glb",
+      "url": "/media/gen_uw_urban__ground_satellite_dish.glb",
+      "src": "media",
+      "count": 1000,
+      "size": 0.5944,
+      "match": "curated",
+      "reason": "ground satellite dish — acquisition/ingest feeds"
+    },
+    "Place": {
+      "glb": "jarvis_world_control_holo_earth.glb",
+      "url": "/asset/jarvis_world_control_holo_earth.glb",
+      "src": "asset",
+      "count": 544,
+      "size": 0.542,
+      "match": "curated",
+      "reason": "holo earth — places/cities"
+    },
+    "Asset": {
+      "glb": "gen_tripo__nuclear_reactor_pile.glb",
+      "url": "/media/gen_tripo__nuclear_reactor_pile.glb",
+      "src": "media",
+      "count": 430,
+      "size": 0.5217,
+      "match": "curated",
+      "reason": "nuclear reactor pile — power-plant assets"
+    },
+    "Concept": {
+      "glb": "gen_tripo__agi_core.glb",
+      "url": "/media/gen_tripo__agi_core.glb",
+      "src": "media",
+      "count": 309,
+      "size": 0.4933,
+      "match": "curated",
+      "reason": "agi core — abstract concepts"
+    },
+    "EarthquakeEvent": {
+      "glb": "gen_tripo__fault_rift_terrain.glb",
+      "url": "/media/gen_tripo__fault_rift_terrain.glb",
+      "src": "media",
+      "count": 269,
+      "size": 0.4814,
+      "match": "curated",
+      "reason": "fault rift terrain — earthquakes"
+    },
+    "Event": {
+      "glb": "gen_tripo__volcano_cone.glb",
+      "url": "/media/gen_tripo__volcano_cone.glb",
+      "src": "media",
+      "count": 86,
+      "size": 0.3833,
+      "match": "curated",
+      "reason": "volcano cone — geophysical events"
+    },
+    "Sensor": {
+      "glb": "gen_tripo__radio_tower.glb",
+      "url": "/media/gen_tripo__radio_tower.glb",
+      "src": "media",
+      "count": 25,
+      "size": 0.277,
+      "match": "curated",
+      "reason": "radio tower — monitoring sensor stations"
+    },
+    "AppPage": {
+      "glb": "jarvis_holo_panel_frame.glb",
+      "url": "/asset/jarvis_holo_panel_frame.glb",
+      "src": "asset",
+      "count": 17,
+      "size": 0.2438,
+      "match": "curated",
+      "reason": "holo panel frame — app pages/UI routes"
+    }
+  },
+  "topics": [
+    {
+      "title": "Technology & engineering",
+      "glb": "gen_uw_interior__engineering_cad_workstation.glb",
+      "url": "/media/gen_uw_interior__engineering_cad_workstation.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "engineering CAD workstation",
+      "pagerank": 0.05691,
+      "keywords": [
+        "technology",
+        "engineering",
+        "software",
+        "hardware",
+        "api",
+        "system"
+      ]
+    },
+    {
+      "title": "Science & research",
+      "glb": "gen_uw_interior__lab_experiment_bench.glb",
+      "url": "/media/gen_uw_interior__lab_experiment_bench.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "lab experiment bench",
+      "pagerank": 0.0416,
+      "keywords": [
+        "science",
+        "scientific",
+        "research",
+        "experiment",
+        "dataset"
+      ]
+    },
+    {
+      "title": "Knowledge & education",
+      "glb": "gen_tripo__university.glb",
+      "url": "/media/gen_tripo__university.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "university — knowledge/education",
+      "pagerank": 0.03859,
+      "keywords": [
+        "education",
+        "research",
+        "academic",
+        "university",
+        "scholarly",
+        "publication"
+      ]
+    },
+    {
+      "title": "Politics & governance",
+      "glb": "gen_tripo__republic_senate_house.glb",
+      "url": "/media/gen_tripo__republic_senate_house.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "senate house — politics/governance",
+      "pagerank": 0.02936,
+      "keywords": [
+        "politics",
+        "governance",
+        "election",
+        "policy",
+        "parliament"
+      ]
+    },
+    {
+      "title": "Classification & metadata itself",
+      "glb": "jarvis_intel_graph_constellation.glb",
+      "url": "/asset/jarvis_intel_graph_constellation.glb",
+      "src": "asset",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "graph constellation — taxonomy/ontology",
+      "pagerank": 0.02806,
+      "keywords": [
+        "metadata",
+        "taxonomy",
+        "classification",
+        "schema",
+        "ontology"
+      ]
+    },
+    {
+      "title": "Government & public administration",
+      "glb": "gen_tripo__courthouse.glb",
+      "url": "/media/gen_tripo__courthouse.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "courthouse — government/public admin",
+      "pagerank": 0.02325,
+      "keywords": [
+        "government",
+        "public administration",
+        "agency",
+        "federal",
+        "ministry"
+      ]
+    },
+    {
+      "title": "Earth systems",
+      "glb": "gen_uw_sky__earth.glb",
+      "url": "/media/gen_uw_sky__earth.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "earth — earth systems",
+      "pagerank": 0.01704,
+      "keywords": [
+        "earth",
+        "ocean",
+        "atmosphere",
+        "weather",
+        "seismic",
+        "geology",
+        "buoy",
+        "tide"
+      ]
+    },
+    {
+      "title": "Human body & health",
+      "glb": "gen_tripo__hospital.glb",
+      "url": "/media/gen_tripo__hospital.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "hospital — human body/health",
+      "pagerank": 0.01539,
+      "keywords": [
+        "health",
+        "disease",
+        "clinical",
+        "medical",
+        "patient",
+        "epidemiology"
+      ]
+    },
+    {
+      "title": "Law & regulation",
+      "glb": "gen_tripo__law_stele.glb",
+      "url": "/media/gen_tripo__law_stele.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "law stele — law/regulation",
+      "pagerank": 0.01439,
+      "keywords": [
+        "law",
+        "legal",
+        "regulation",
+        "statute",
+        "legislation",
+        "compliance"
+      ]
+    },
+    {
+      "title": "Geography & location",
+      "glb": "jarvis_world_control_earth_graticule.glb",
+      "url": "/asset/jarvis_world_control_earth_graticule.glb",
+      "src": "asset",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "earth graticule — geography/location",
+      "pagerank": 0.01426,
+      "keywords": [
+        "geography",
+        "location",
+        "geospatial",
+        "coordinates",
+        "boundary"
+      ]
+    },
+    {
+      "title": "Security & conflict",
+      "glb": "jarvis_security_core_shield.glb",
+      "url": "/asset/jarvis_security_core_shield.glb",
+      "src": "asset",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "security shield — security/conflict",
+      "pagerank": 0.01394,
+      "keywords": [
+        "security",
+        "conflict",
+        "defence",
+        "military",
+        "threat",
+        "vulnerability",
+        "sanctions"
+      ]
+    },
+    {
+      "title": "Economy & industry",
+      "glb": "gen_uw_interior__economics_market_data_wall.glb",
+      "url": "/media/gen_uw_interior__economics_market_data_wall.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "market data wall — economy/industry",
+      "pagerank": 0.01316,
+      "keywords": [
+        "economy",
+        "economic",
+        "industry",
+        "gdp",
+        "trade",
+        "manufacturing"
+      ]
+    },
+    {
+      "title": "Business & organisations",
+      "glb": "gen_uw_interior__economics_trading_terminal.glb",
+      "url": "/media/gen_uw_interior__economics_trading_terminal.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "trading terminal — business/orgs",
+      "pagerank": 0.0118,
+      "keywords": [
+        "business",
+        "company",
+        "organisation",
+        "corporate",
+        "enterprise"
+      ]
+    },
+    {
+      "title": "Extended Intelligence & Operations",
+      "glb": "jarvis_intel_graph_constellation_core.glb",
+      "url": "/asset/jarvis_intel_graph_constellation_core.glb",
+      "src": "asset",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "intel graph core — intelligence/ops",
+      "pagerank": 0.01134,
+      "keywords": [
+        "intelligence",
+        "operations",
+        "surveillance",
+        "reconnaissance"
+      ]
+    },
+    {
+      "title": "Information & communication",
+      "glb": "gen_tripo__network_switch_node.glb",
+      "url": "/media/gen_tripo__network_switch_node.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "network switch — information/comms",
+      "pagerank": 0.01085,
+      "keywords": [
+        "communication",
+        "telecom",
+        "network",
+        "internet",
+        "broadcast"
+      ]
+    },
+    {
+      "title": "Finance & ownership",
+      "glb": "gen_uw_interior__economics_ledger_analytics_desk.glb",
+      "url": "/media/gen_uw_interior__economics_ledger_analytics_desk.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "ledger analytics desk — finance/ownership",
+      "pagerank": 0.01054,
+      "keywords": [
+        "finance",
+        "financial",
+        "ownership",
+        "shareholder",
+        "securities",
+        "sec",
+        "edgar"
+      ]
+    },
+    {
+      "title": "Society & culture",
+      "glb": "gen_tripo__theatre_stage.glb",
+      "url": "/media/gen_tripo__theatre_stage.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "theatre stage — society/culture",
+      "pagerank": 0.01021,
+      "keywords": [
+        "society",
+        "culture",
+        "heritage",
+        "social"
+      ]
+    },
+    {
+      "title": "Environment & ecology",
+      "glb": "gen_uw_interior__ecology_biodiversity_camera_trap.glb",
+      "url": "/media/gen_uw_interior__ecology_biodiversity_camera_trap.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "biodiversity camera trap — environment/ecology",
+      "pagerank": 0.01016,
+      "keywords": [
+        "environment",
+        "ecology",
+        "biodiversity",
+        "species",
+        "pollution",
+        "emissions"
+      ]
+    },
+    {
+      "title": "Climate & hazards",
+      "glb": "gen_uw_interior__atmoschem_ozone_monitor.glb",
+      "url": "/media/gen_uw_interior__atmoschem_ozone_monitor.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "ozone monitor — climate/hazards",
+      "pagerank": 0.00941,
+      "keywords": [
+        "climate",
+        "hazard",
+        "disaster",
+        "wildfire",
+        "drought",
+        "flood"
+      ]
+    },
+    {
+      "title": "Energy & resources",
+      "glb": "gen_tripo__power_grid_substation.glb",
+      "url": "/media/gen_tripo__power_grid_substation.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "power grid substation — energy/resources",
+      "pagerank": 0.00783,
+      "keywords": [
+        "energy",
+        "electricity",
+        "oil",
+        "gas",
+        "renewable",
+        "power grid",
+        "fuel"
+      ]
+    },
+    {
+      "title": "Urban & built environment",
+      "glb": "gen_uw_urban__city_street.glb",
+      "url": "/media/gen_uw_urban__city_street.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "city street — urban/built environment",
+      "pagerank": 0.00769,
+      "keywords": [
+        "urban",
+        "city",
+        "building",
+        "construction",
+        "infrastructure"
+      ]
+    },
+    {
+      "title": "Agriculture & food systems",
+      "glb": "gen_tripo__guild_agriculture_barn.glb",
+      "url": "/media/gen_tripo__guild_agriculture_barn.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "agriculture barn — agriculture/food",
+      "pagerank": 0.0072,
+      "keywords": [
+        "agriculture",
+        "farming",
+        "crop",
+        "food",
+        "livestock"
+      ]
+    },
+    {
+      "title": "People & demographics",
+      "glb": "gen_uw_interior__epidemiology_contact_tracing_wall.glb",
+      "url": "/media/gen_uw_interior__epidemiology_contact_tracing_wall.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "contact tracing wall — people/demographics",
+      "pagerank": 0.007,
+      "keywords": [
+        "demographic",
+        "population",
+        "census",
+        "migration"
+      ]
+    },
+    {
+      "title": "Products & commodities",
+      "glb": "gen_tripo__market_stall.glb",
+      "url": "/media/gen_tripo__market_stall.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "market stall — products/commodities",
+      "pagerank": 0.00659,
+      "keywords": [
+        "commodity",
+        "product",
+        "goods",
+        "manufacturing"
+      ]
+    },
+    {
+      "title": "Transport & mobility",
+      "glb": "gen_tripo__maglev_pod.glb",
+      "url": "/media/gen_tripo__maglev_pod.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "maglev pod — transport/mobility",
+      "pagerank": 0.00615,
+      "keywords": [
+        "transport",
+        "mobility",
+        "aviation",
+        "rail",
+        "maritime",
+        "shipping",
+        "flight",
+        "vessel"
+      ]
+    },
+    {
+      "title": "Infrastructure & utilities",
+      "glb": "gen_tripo__water_tower.glb",
+      "url": "/media/gen_tripo__water_tower.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "water tower — infrastructure/utilities",
+      "pagerank": 0.00479,
+      "keywords": [
+        "infrastructure",
+        "utility",
+        "water supply",
+        "sanitation",
+        "pipeline"
+      ]
+    },
+    {
+      "title": "Universe & cosmology",
+      "glb": "gen_uw_interior__astronomy_observatory_telescope.glb",
+      "url": "/media/gen_uw_interior__astronomy_observatory_telescope.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "observatory telescope — universe/cosmology",
+      "pagerank": 0.00446,
+      "keywords": [
+        "universe",
+        "cosmology",
+        "astronomy",
+        "solar",
+        "orbital",
+        "satellite",
+        "space weather"
+      ]
+    },
+    {
+      "title": "Work & labour",
+      "glb": "gen_tripo__assembly_line_conveyor.glb",
+      "url": "/media/gen_tripo__assembly_line_conveyor.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "assembly line — work/labour",
+      "pagerank": 0.00419,
+      "keywords": [
+        "labour",
+        "labor",
+        "employment",
+        "workforce",
+        "jobs"
+      ]
+    },
+    {
+      "title": "Life & biology",
+      "glb": "gen_uw_interior__biology_compound_microscope.glb",
+      "url": "/media/gen_uw_interior__biology_compound_microscope.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "compound microscope — life/biology",
+      "pagerank": 0.00322,
+      "keywords": [
+        "biology",
+        "genome",
+        "organism",
+        "ecosystem",
+        "molecular"
+      ]
+    },
+    {
+      "title": "Consumption & lifestyle",
+      "glb": "gen_tripo__market_hall.glb",
+      "url": "/media/gen_tripo__market_hall.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "market hall — consumption/lifestyle",
+      "pagerank": 0.00278,
+      "keywords": [
+        "consumption",
+        "lifestyle",
+        "consumer",
+        "retail"
+      ]
+    },
+    {
+      "title": "Ethics & philosophy",
+      "glb": "gen_tripo__philosophy_agora.glb",
+      "url": "/media/gen_tripo__philosophy_agora.glb",
+      "src": "media",
+      "score": 0.0,
+      "match": "curated",
+      "reason": "philosophy agora — ethics/philosophy",
+      "pagerank": 0.00168,
+      "keywords": [
+        "ethics",
+        "philosophy",
+        "moral"
+      ]
+    }
+  ],
+  "fallback": {
+    "glb": "jarvis_command_atrium_data_orb.glb",
+    "url": "/asset/jarvis_command_atrium_data_orb.glb",
+    "reason": "neutral data orb for any object without a specific match"
+  }
+}

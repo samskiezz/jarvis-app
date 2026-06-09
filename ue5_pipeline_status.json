@@ -1,0 +1,75 @@
+{
+  "name": "Underworld \u2192 UE5 render",
+  "pid": 2323195,
+  "started_at": 1781020374.8623269,
+  "updated_at": 1781020434.7937393,
+  "overall_pct": 100,
+  "eta_s": 0,
+  "status": "ready",
+  "steps": [
+    {
+      "id": "mesh",
+      "label": "Add a visible minion mesh (code)",
+      "est_s": 120,
+      "status": "done",
+      "started": 1781020375.1185515,
+      "ended": 1781020375.1512098,
+      "detail": "minion mesh already present \u2014 skip"
+    },
+    {
+      "id": "module",
+      "label": "Compile the game module (with the mesh)",
+      "est_s": 1800,
+      "status": "done",
+      "started": 1781020375.1517074,
+      "ended": 1781020379.6378353,
+      "detail": "inish current processes)\n------ Building 2 action(s) started ------\n[1/2] WriteMetadata UnrealEditor.version (UnderworldEditor) (UBA disabled)\n[2/2] WriteMetadata UnderworldEditor.target (UBA disabled)\nTrace file written to /opt/UnrealEngine/Engine/Programs/UnrealBuildTool/Log.uba with size 1.4kb\nTotal time in Unreal Build Accelerator local executor: 0.76 seconds\nTotal execution time: 4.32 seconds"
+    },
+    {
+      "id": "level",
+      "label": "Author the UE5 level (sun \u00b7 ground \u00b7 minions)",
+      "est_s": 2400,
+      "status": "done",
+      "started": 1781020379.6382182,
+      "ended": 1781020379.6382184,
+      "detail": "level already authored (Underworld.umap present) \u2014 skipped"
+    },
+    {
+      "id": "package",
+      "label": "Build + cook + package (Linux Shipping)",
+      "est_s": 10800,
+      "status": "done",
+      "started": 1781020381.6655545,
+      "ended": 1781020434.7932894,
+      "detail": "/Linux\nStage command time: 14.00 s\n********** STAGE COMMAND COMPLETED **********\n********** ARCHIVE COMMAND STARTED **********\nArchiving to /opt/jarvis-app-1/underworld/deploy/pixelstream/game\nArchive command time: 3.74 s\n********** ARCHIVE COMMAND COMPLETED **********\nBuildCookRun time: 49.89 s\nBUILD SUCCESSFUL\nAutomationTool executed for 0h 0m 50s\nAutomationTool exiting with ExitCode=0 (Success)"
+    },
+    {
+      "id": "transfer",
+      "label": "Ship the build to the Vast 2\u00d74090 box",
+      "est_s": 1200,
+      "status": "pending",
+      "started": null,
+      "ended": null,
+      "detail": "awaiting GPU-deploy approval (press DEPLOY TO GPU)"
+    },
+    {
+      "id": "vram",
+      "label": "Free GPU VRAM on Vast (pause the LLM)",
+      "est_s": 60,
+      "status": "pending",
+      "started": null,
+      "ended": null,
+      "detail": "awaiting GPU-deploy approval (press DEPLOY TO GPU)"
+    },
+    {
+      "id": "stream",
+      "label": "Launch Pixel Streaming on the 4090",
+      "est_s": 600,
+      "status": "pending",
+      "started": null,
+      "ended": null,
+      "detail": "awaiting GPU-deploy approval (press DEPLOY TO GPU)"
+    }
+  ],
+  "note": "build complete \u2014 Shipping client cooked + archived. Press DEPLOY TO GPU to stream on the 4090."
+}

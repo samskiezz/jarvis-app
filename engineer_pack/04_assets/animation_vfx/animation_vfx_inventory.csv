@@ -1,0 +1,117 @@
+id,category,module_name,trigger,target,tech_hint,status
+ANIM-001,global,Command bar reveal,page load,top command bar,Framer Motion,required
+ANIM-002,global,Sidebar active glow,route change,left nav,Framer Motion,required
+ANIM-003,global,Sleep Mode transition,sleep button,whole app,GSAP timeline,required
+ANIM-004,global,Cinematic safe-mode fade,quality mode change,global scene,GSAP,required
+ANIM-005,global,Background parallax,mouse move,background layers,CSS/R3F,required
+ANIM-006,global,Panel hover lift,hover,all panels,Framer Motion,required
+ANIM-007,global,Glass refraction shimmer,idle,panel skins,CSS shader,required
+ANIM-008,global,HUD scanline pass,idle every 8s,whole viewport,CSS,required
+ANIM-009,global,Notification stack slide,new alert,alerts,Framer Motion,required
+ANIM-010,global,Reduced motion switch,settings change,all effects,CSS/React state,required
+ANIM-011,kpi,Knowledge build radial progress,data update,KPI 1,SVG/Framer,required
+ANIM-012,kpi,Live velocity sparkline draw,data update,KPI 2,Chart lib,required
+ANIM-013,kpi,Measurement counter odometer,data update,KPI 3,Framer,required
+ANIM-014,kpi,Document counter pulse,new doc,KPI 4,Framer,required
+ANIM-015,kpi,Notes learned shimmer,new note,KPI 5,CSS,required
+ANIM-016,kpi,Ontology growth burst,new object,KPI 6,Particle sprite,required
+ANIM-017,kpi,GLB model counter cube spin,new GLB,KPI 7,R3F,required
+ANIM-018,kpi,Overload warning color shift,threshold crossed,KPI strip,CSS,required
+ANIM-019,kpi,Sparkline live append,every sample,all KPI graphs,Chart lib,required
+ANIM-020,kpi,Tooltip microchart,hover,all KPI cards,Framer,required
+ANIM-021,inference,Tier route particle path,new LLM task,Inference Fabric,R3F particles,required
+ANIM-022,inference,Tier blocked barrier flash,blocked escalation,Inference Fabric,R3F/GSAP,required
+ANIM-023,inference,Model residency chip heat,state change,model chips,CSS,required
+ANIM-024,inference,Six-tier ladder pulse,selected tier,tier ladder GLB,R3F,required
+ANIM-025,inference,Validator shield stamp,validation pass/fail,validator icon,R3F,required
+ANIM-026,inference,Cold 70B vault unlock,approved Tier 4 job,Tier 4 GLB,GSAP/R3F,required
+ANIM-027,inference,External portal ripple,external escalation,Tier 5 GLB,R3F shader,required
+ANIM-028,inference,Call count odometer,call update,call table,Framer,required
+ANIM-029,inference,KV cache ring rotation,cache hit update,KV rings,R3F,required
+ANIM-030,inference,Avoided GPU score burst,tier 0 completion,savings widget,CSS/particles,required
+ANIM-031,infrastructure,VRAM donut sweep,data update,GPU panel,SVG/R3F,required
+ANIM-032,infrastructure,Per-GPU heat bars,data update,GPU panel,Chart lib,required
+ANIM-033,infrastructure,Fan/thermal shimmer,temp high,GPU prop,R3F shader,required
+ANIM-034,infrastructure,Power arc glow,power draw update,GPU panel,SVG,required
+ANIM-035,infrastructure,PCIe pulse line,data transfer,GPU detail,CSS,required
+ANIM-036,infrastructure,Server rack heartbeat,VPS update,VPS GLB,R3F,required
+ANIM-037,infrastructure,Per-core bars animate,CPU update,Hostinger panel,Chart lib,required
+ANIM-038,infrastructure,Disk critical shake,disk threshold,Hostinger panel,Framer,required
+ANIM-039,infrastructure,Docker cube restart flash,restart count,Docker cubes,R3F,required
+ANIM-040,infrastructure,Network pipe flow,network IO update,network GLB,R3F particles,required
+ANIM-041,pipelines,ON/OFF toggle slide,toggle click,pipeline rows,Framer,required
+ANIM-042,pipelines,Run button ignition,Run click,row action,CSS/SFX,required
+ANIM-043,pipelines,Pause freeze overlay,Pause click,row action,Framer,required
+ANIM-044,pipelines,Stop red cutoff,Stop click,row action,Framer,required
+ANIM-045,pipelines,Rerun loop spin,Rerun click,row action,Framer,required
+ANIM-046,pipelines,Progress bar fill,job progress,pipeline row,Framer,required
+ANIM-047,pipelines,Pipeline degraded amber pulse,status degraded,row status,CSS,required
+ANIM-048,pipelines,Pipeline stopped dim,status stopped,row status,CSS,required
+ANIM-049,pipelines,Pipeline node active orbit,working,pipeline GLB,R3F,required
+ANIM-050,pipelines,Bulk Run All cascade,Run All click,all rows,GSAP stagger,required
+ANIM-051,cross_correlation,Entity merge bridge animation,merge completed,daemon panel,R3F,required
+ANIM-052,cross_correlation,Duplicate detection blink,duplicate found,daemon panel,CSS,required
+ANIM-053,cross_correlation,Source scrape beam,source poll,source chips,GSAP,required
+ANIM-054,cross_correlation,Confidence meter sweep,score update,confidence chart,SVG,required
+ANIM-055,cross_correlation,Rebuild index vortex,Rebuild click,daemon panel,R3F,required
+ANIM-056,cross_correlation,Reconcile duplicates waterfall,Reconcile click,daemon panel,GSAP,required
+ANIM-057,cross_correlation,Forum/community marker pulse,forum scrape,source map,R3F,required
+ANIM-058,cross_correlation,Official source verified stamp,source verified,source card,CSS,required
+ANIM-059,cross_correlation,Conflict alert split-glow,conflict detected,entity card,CSS,required
+ANIM-060,cross_correlation,Canonical entity lock-in,canonical save,entity graph,R3F,required
+ANIM-061,brain,Brain idle breathing,idle,central brain,R3F morph,required
+ANIM-062,brain,Brain talks pulse,JARVIS speaking,central brain,audio analysis,required
+ANIM-063,brain,Neural burst on alert,new critical alert,central brain,particles,required
+ANIM-064,brain,Thinking spiral,LLM task queued,central brain,R3F,required
+ANIM-065,brain,Model-tier color morph,tier selected,central brain,shader uniforms,required
+ANIM-066,brain,User voice ripple,user speech,central brain,audio analysis,required
+ANIM-067,brain,Sleep mode calm fade,sleep active,central brain,GSAP,required
+ANIM-068,brain,Emergency red neuron spike,critical mode,central brain,shader,required
+ANIM-069,brain,Source-research orbit,3-source verification,brain orbits,R3F,required
+ANIM-070,brain,Success green synapse wave,task complete,central brain,R3F,required
+ANIM-071,live_activity,Activity row slide-in,new event,activity feed,Framer,required
+ANIM-072,live_activity,LLM call lightning icon,LLM event,activity row,CSS,required
+ANIM-073,live_activity,Price event chart pulse,price event,activity row,CSS,required
+ANIM-074,live_activity,System lesson glow,lesson event,activity row,CSS,required
+ANIM-075,live_activity,Filter/search reveal,user filter,activity panel,Framer,required
+ANIM-076,live_activity,Row detail drawer,row click,activity details,Framer,required
+ANIM-077,knowledge,Ontology lattice rotate,idle,knowledge panel,R3F,required
+ANIM-078,knowledge,New topic cube spawn,new topic,knowledge GLB,R3F,required
+ANIM-079,knowledge,Document shard insert,new document,knowledge graph,R3F,required
+ANIM-080,knowledge,Measurement droplet fall,new measurement,knowledge graph,R3F,required
+ANIM-081,knowledge,Fact learned badge flash,new fact,just learned list,CSS,required
+ANIM-082,knowledge,Newest topics ticker,new topic,topic list,Framer,required
+ANIM-083,knowledge,Entity count odometer,count update,ontology counts,Framer,required
+ANIM-084,knowledge,Graph link pulse,linked entity,knowledge graph,R3F,required
+ANIM-085,coding,Claude chat bubble appear,message,Coding Workspace,Framer,required
+ANIM-086,coding,Diff tab slide,tab click,Diff tab,Framer,required
+ANIM-087,coding,Terminal cursor blink,terminal active,Terminal tab,CSS,required
+ANIM-088,coding,Browser automation highlight,browser action,Browser tab,CSS,required
+ANIM-089,coding,Progress bar percent fill,coding task update,Currently Working On,Framer,required
+ANIM-090,coding,Approve shield glow,Approve click,approval button,CSS/SFX,required
+ANIM-091,coding,Auto-Continue moon pulse,Auto-Continue click,sleep policy,CSS,required
+ANIM-092,coding,Request Review ping,Request Review click,review queue,CSS,required
+ANIM-093,voice,Mic orb wake,voice active,Voice panel,R3F,required
+ANIM-094,voice,Waveform live animation,audio input,Voice panel,Web Audio API,required
+ANIM-095,voice,Speech output ring,JARVIS speaking,Voice panel,Web Audio API,required
+ANIM-096,voice,Mute compression fade,mute click,Voice panel,Framer,required
+ANIM-097,voice,Broadcast summary sweep,broadcast click,Voice panel,GSAP,required
+ANIM-098,voice,Voice command transcript typing,recognized speech,Voice panel,Framer,required
+ANIM-099,voice,Alert spoken badge,spoken alert,Alert card,CSS,required
+ANIM-100,voice,Noise gate indicator,audio threshold,Voice panel,CSS,required
+ANIM-101,asset_forge,Drawer open fabricator reveal,open Asset Forge,Asset Forge,Framer,required
+ANIM-102,asset_forge,Image generation loading shimmer,image generating,Asset Forge,CSS,required
+ANIM-103,asset_forge,GLB generation build rings,GLB generating,Asset Forge,R3F,required
+ANIM-104,asset_forge,PBR material preview spin,material preview,Asset Forge,R3F,required
+ANIM-105,asset_forge,Add-to-scene teleport,asset approved,Asset Forge/scene,GSAP/R3F,required
+ANIM-106,asset_forge,Regenerate rewind,regenerate click,Asset Forge,Framer,required
+ANIM-107,asset_forge,Asset approved stamp,approve asset,Asset Library,CSS,required
+ANIM-108,asset_forge,Cost budget gauge sweep,generation queued,Asset Forge,SVG,required
+ANIM-109,alerts,VRAM critical siren glow,VRAM > 92,Alerts,CSS/SFX,required
+ANIM-110,alerts,Disk throttle amber pulse,Disk > 85,Alerts,CSS/SFX,required
+ANIM-111,alerts,CPU overload red wave,CPU > 90,Alerts,CSS/SFX,required
+ANIM-112,alerts,Restart loop strobe,container restart loop,Alerts,CSS/SFX,required
+ANIM-113,alerts,3-source verified green stamp,verification done,Alerts,CSS,required
+ANIM-114,alerts,Alert acknowledge collapse,acknowledge,Alerts,Framer,required
+ANIM-115,alerts,Critical modal interrupt,critical alert,Global modal,Framer,required
+ANIM-116,alerts,Recovery success pulse,health restored,Alerts,CSS,required

@@ -1,0 +1,317 @@
+<!doctype html><html><head><meta charset=utf-8><title>JARVIS · Live Automation v2.0</title>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#04070e;--pan:#0a1320;--ln:#13314a;--cy:#22d3ee;--gd:#34d399;--am:#f5b942;--rd:#f87171;--pu:#a78bfa;--tx:#cfe9f5;--dim:#5f7e94}
+*{box-sizing:border-box;font-family:ui-monospace,Menlo,Consolas,monospace}
+body{margin:0;background:radial-gradient(1200px 600px at 60% -10%,#0b1f30 0,var(--bg) 55%);color:var(--tx);font-size:11.5px}
+.app{display:flex;min-height:100vh}
+.nav{width:78px;background:linear-gradient(180deg,#0a1422,#070d16);border-right:1px solid var(--ln);padding:14px 0;display:flex;flex-direction:column;gap:3px;align-items:center;flex:0 0 auto;position:sticky;top:0;height:100vh}
+.nav .logo{color:var(--cy);font-size:22px;margin-bottom:14px;text-shadow:0 0 16px #22d3ee99}
+.nav a{color:var(--dim);text-decoration:none;font-size:8.5px;text-align:center;padding:8px 4px;width:66px;border-radius:8px;line-height:1.5;cursor:pointer}
+.nav a:hover,.nav a.on{background:#102234;color:var(--cy)}.nav a .i{font-size:15px;display:block}
+.main{flex:1;min-width:0;padding:13px 15px 26px}
+.bar{display:flex;align-items:center;gap:13px;margin-bottom:13px;flex-wrap:wrap}
+.bar h1{font-size:16px;letter-spacing:2px;color:#eafcff;margin:0;text-shadow:0 0 14px #22d3ee44}
+.ver{color:var(--gd);font-size:11px;margin-left:7px}
+.badge{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--gd);color:var(--gd)}
+.sub{color:var(--dim);font-size:9.5px;max-width:430px}
+.spacer{flex:1}
+.search{background:#0a1626;border:1px solid var(--ln);border-radius:8px;padding:7px 12px;color:var(--tx);width:180px}
+.btn{border:1px solid var(--ln);background:#0c1a2b;color:var(--tx);border-radius:8px;padding:7px 13px;cursor:pointer;font-size:11px;font-weight:600}
+.btn.g{border-color:#1e6e52;color:var(--gd)}.btn.a{border-color:#7a5a1e;color:var(--am)}.btn.r{border-color:#7a2330;color:var(--rd)}.btn.b{border-color:#1d4a63;color:var(--cy)}
+.btn:hover{filter:brightness(1.35)}
+.kpis{display:grid;grid-template-columns:repeat(7,1fr);gap:9px;margin-bottom:13px}
+.kpi{background:linear-gradient(180deg,var(--pan),#070d16);border:1px solid var(--ln);border-radius:11px;padding:10px 11px}
+.kpi .t{font-size:8.5px;color:var(--dim);letter-spacing:.5px;text-transform:uppercase;display:flex;gap:5px;align-items:center}
+.kpi .v{font-size:19px;font-weight:700;color:#eafcff;margin-top:3px}.kpi .d{font-size:8.5px;color:var(--dim);margin-top:1px}.gd{color:var(--gd)}
+.grid{display:grid;grid-template-columns:1fr 1.05fr 1.25fr;gap:11px;margin-bottom:11px}
+.grid4{display:grid;grid-template-columns:1.1fr 0.85fr 1fr 1.05fr;gap:11px;margin-bottom:11px}
+.grid2{display:grid;grid-template-columns:1fr 1.35fr;gap:11px;margin-bottom:11px}
+.card{background:linear-gradient(180deg,var(--pan),#070d16);border:1px solid var(--ln);border-radius:11px;padding:12px}
+.card h2{font-size:10.5px;letter-spacing:1.2px;color:var(--cy);margin:0 0 10px;text-transform:uppercase}
+.row{display:flex;justify-content:space-between;gap:8px;padding:2.5px 0;border-bottom:1px solid #0d1d2b;font-size:10.5px}
+.row b{color:#eafcff}.k{color:var(--dim)}
+.li{font-size:10.5px;padding:2.5px 0;color:#bfe6f2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li:before{content:"▸ ";color:var(--cy)}.tag{font-size:8.5px;color:#3a5a70}.mono{font-size:9.5px;color:var(--dim)}.scroll{max-height:228px;overflow:auto}
+.tier{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #0d1d2b}
+.tier .n{width:24px;height:24px;border-radius:6px;background:#0e2233;color:var(--cy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:0 0 auto}
+.tier .nm{flex:1}.tier .nm b{color:#eafcff;font-size:10.5px}.tier .nm div{color:var(--dim);font-size:8.5px}
+.st{font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:5px}
+.st.HOT{background:#3a1320;color:#ff9aa6}.st.WARM{background:#3a2a10;color:var(--am)}.st.COLD{background:#0e2436;color:#7fb0c4}.st.DISABLED{background:#1a1320;color:#8a7a90}
+table{width:100%;border-collapse:collapse;font-size:10px}
+th{color:var(--dim);text-align:left;font-weight:600;padding:4px 5px;border-bottom:1px solid var(--ln);font-size:8.5px;text-transform:uppercase}
+td{padding:4px 5px;border-bottom:1px solid #0d1d2b}
+.pstat{font-size:8.5px;font-weight:700;padding:1px 6px;border-radius:4px}
+.pstat.WORKING{background:#0e2e22;color:var(--gd)}.pstat.STOPPED{background:#0e2436;color:#7fb0c4}.pstat.DEGRADED{background:#3a2a10;color:var(--am)}.pstat.PAUSED{background:#1a1320;color:#c0a0d0}
+.tgl{width:28px;height:14px;border-radius:9px;display:inline-block;position:relative;cursor:pointer;border:1px solid var(--ln);vertical-align:middle}
+.tgl.on{background:#0e7a5f}.tgl.off{background:#3a1320}.tgl:after{content:'';position:absolute;top:1px;width:10px;height:10px;border-radius:50%;background:#eafcff;transition:left .2s}.tgl.on:after{left:15px}.tgl.off:after{left:1px}
+.act{cursor:pointer;color:var(--dim);padding:1px 4px;border:1px solid var(--ln);border-radius:4px;margin-left:1px;font-size:9px}.act:hover{color:var(--cy);border-color:var(--cy)}
+.cap{font-size:9.5px;color:var(--cy);text-transform:uppercase;letter-spacing:1px;margin:6px 0 3px}
+.cores{display:flex;gap:2px;align-items:flex-end;height:26px}.core{flex:1;background:#0e2233;border-radius:1px;min-height:2px}
+.alert{display:flex;gap:7px;align-items:center;padding:4px 0;border-bottom:1px solid #0d1d2b;font-size:10px}.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.bar2{height:6px;background:#0c1c2b;border-radius:4px;overflow:hidden;margin:3px 0;border:1px solid #14324a}.fill{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cy))}
+.up{background:#0a1626;border:1px solid var(--ln);border-radius:10px;padding:10px;text-align:center}.up .i{font-size:17px;color:var(--cy)}.up b{font-size:10.5px}.up .mono{margin-top:3px}
+.tabs{display:flex;gap:4px;margin-bottom:8px}.tabb{font-size:9.5px;padding:3px 9px;border:1px solid var(--ln);border-radius:6px;cursor:pointer;color:var(--dim)}.tabb.on{background:#102234;color:var(--cy);border-color:var(--cy)}
+.prog{margin:5px 0}.prog .l{display:flex;justify-content:space-between;font-size:10px}
+.mic{width:54px;height:54px;border-radius:50%;background:#0e2e22;border:2px solid var(--gd);color:var(--gd);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin:0 auto}
+.mic.live{animation:pulse 1.2s infinite}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #34d39977}50%{box-shadow:0 0 0 9px #34d39900}}
+#toast{position:fixed;bottom:18px;right:18px;background:#0c1a2b;border:1px solid var(--cy);border-radius:8px;padding:10px 14px;color:var(--cy);display:none;z-index:9}
+.section{scroll-margin-top:12px}
+</style></head><body>
+<div class=app>
+ <div class=nav>
+   <div class=logo>◈</div>
+   <a class=on data-go=top><span class=i>🏠</span>Overview</a>
+   <a data-go=studio><span class=i>🎙</span>Studio</a>
+   <a data-go=graph><span class=i>◈</span>3D Graph</a>
+   <a data-go=pipes><span class=i>⚙</span>Pipelines</a>
+   <a data-go=corr><span class=i>🔗</span>Correlation</a>
+   <a data-go=infra><span class=i>🖥</span>Infra</a>
+   <a data-go=know><span class=i>🧠</span>Knowledge</a>
+   <a data-go=fabric><span class=i>🪜</span>Inference</a>
+   <a data-go=coding><span class=i>💻</span>Coding</a>
+   <a data-go=voice><span class=i>🎙</span>Voice</a>
+   <a data-go=voice><span class=i>🔔</span>Alerts</a>
+ </div>
+ <div class=main>
+  <div class=bar id=top>
+    <h1>JARVIS · LIVE AUTOMATION<span class=ver id=ver>v2.0</span></h1>
+    <span class=badge id=status>● ONLINE</span>
+    <span class=sub>data updated <span id=age>—</span> ago · Unified orchestration · inference routing · infrastructure intelligence</span>
+    <span class=spacer></span>
+    <input class=search placeholder="Search anything…">
+    <button class="btn g" onclick="all('run')">▶ Run All</button>
+    <button class="btn a" onclick="all('pause')">⏸ Pause All</button>
+    <button class="btn r" onclick="all('stop')">⏹ Stop All</button>
+    <button class="btn b" onclick="all('sleep')">🌙 Sleep Mode</button>
+  </div>
+
+  <div class=kpis>
+    <div class=kpi><div class=t>🎯 7,000-Topic Knowledge Build</div><div class=v><span id=k_pct>0</span>%</div><div class=d><span id=k_enr>0</span> / <span id=k_tot>0</span> · topics enriched</div></div>
+    <div class=kpi><div class=t>📈 Live Velocity</div><div class="v gd" id=k_vel>—</div><div class=d>ingest velocity</div></div>
+    <div class=kpi><div class=t>📊 Measurements</div><div class=v id=k_meas>0</div><div class="d gd" id=k_meash>total measurements</div></div>
+    <div class=kpi><div class=t>📑 Documents</div><div class=v id=k_doc>0</div><div class=d>indexed documents</div></div>
+    <div class=kpi><div class=t>🧠 Notes Learned</div><div class=v id=k_notes>0</div><div class=d>knowledge notes</div></div>
+    <div class=kpi><div class=t>🕸 Ontology Objects</div><div class=v id=k_ont>0</div><div class="d gd" id=k_onth>entities in ontology</div></div>
+    <div class=kpi><div class=t>🎨 GLB Models</div><div class=v id=k_glb>0</div><div class=d>3D models generated</div></div>
+  </div>
+
+  <div class=card section id=graph style="padding:0;overflow:hidden;height:440px;position:relative;margin-bottom:11px">
+    <div style="position:absolute;top:11px;left:15px;z-index:2;pointer-events:none">
+      <span style="font-size:10.5px;letter-spacing:1.2px;color:#22d3ee;text-transform:uppercase">◈ Holographic Knowledge Graph · live 3D</span>
+      <span class=mono> · glowing nodes by type · beams = data flow · drag to orbit</span></div>
+    <a href=graph target=_blank style="position:absolute;top:9px;right:14px;z-index:2;font-size:10px;color:#22d3ee;text-decoration:none;border:1px solid #1d4a63;border-radius:6px;padding:3px 9px">⛶ Fullscreen</a>
+    <iframe src=graph loading=lazy style="width:100%;height:100%;border:0;display:block;background:#02040a"></iframe>
+  </div>
+
+  <div class=card section id=studio style="margin-bottom:11px">
+    <h2>🎙 Jarvis Studio · talk · create · run — hands-free, never times out</h2>
+    <div aria-live=assertive id=announce style="position:absolute;left:-9999px;height:1px;overflow:hidden"></div>
+    <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:12px">
+      <div>
+        <div id=chat role=log aria-live=polite style="height:150px;overflow:auto;background:#070f1a;border:1px solid var(--ln);border-radius:8px;padding:8px;font-size:11px"><div class=mono>Talk to Jarvis / Claude Code — type or press Talk. It acts for you (full power) and never times out.</div></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <input id=say class=search style="flex:1" placeholder="Ask Jarvis / Claude Code anything…" aria-label="Message to Jarvis" onkeydown="if(event.key=='Enter')askJarvis()">
+          <button class="btn b" onclick=askJarvis()>Send</button>
+          <button class="btn g" id=micbtn onclick=micToggle() aria-label="Hands-free voice — talk to Jarvis">🎤 Talk</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input id=imgp class=search style="flex:1" placeholder="Describe an image or 3D model…" aria-label="Image or 3D prompt">
+          <button class="btn b" onclick=genImage() aria-label="Generate image with gpt-image-2">🎨 Image</button>
+          <button class="btn a" onclick=gen3d() aria-label="Generate 3D GLB model with Tripo">🧊 3D GLB</button>
+        </div>
+      </div>
+      <div>
+        <div class=cap>Running Jobs · never time out · pause anytime</div>
+        <div id=ticker class=scroll style=max-height:158px aria-live=polite></div>
+        <div style=margin-top:5px><span class=act onclick=clearTasks()>🧹 Clear finished</span> <span class=act onclick=speakStatus()>🔊 Read status aloud</span></div>
+      </div>
+    </div>
+    <div class=cap>Library · saved images &amp; 3D models (read/write memory)</div>
+    <div id=libgrid style="display:flex;gap:8px;flex-wrap:wrap;max-height:170px;overflow:auto"></div>
+  </div>
+
+  <div class=grid>
+    <div class=card section id=fabric><h2>🪜 Inference Fabric · 6-Tier LLM Routing</h2><div id=fabricrows></div>
+      <div class=cap>Model Call Counts (since boot)</div><div id=callcounts class=mono></div>
+      <div class=mono style=margin-top:7px;color:#7fb0c4 id=fabinsight>Target: most jobs should stop at Tier 0–2. Strong &amp; 70B tiers are protected by resource gates.</div></div>
+    <div class=card section id=infra><h2>🖥 Infrastructure</h2>
+      <div class=cap>Vast GPU Box · 2×4090 <span id=box_pressure style=color:var(--am)></span></div>
+      <div class=row><span class=k>Total / Used / Free VRAM</span><b><span id=g_vt>48</span> / <span id=g_vu>0</span> / <span id=g_vf>0</span> GB</b></div>
+      <div class=bar2><div class=fill id=g_vbar style=width:0%></div></div>
+      <div class=row><span class=k>GPU 0 / GPU 1 Util</span><b id=g_util>—</b></div>
+      <div class=row><span class=k>GPU Temp · Power</span><b id=g_temp>—</b></div>
+      <div class=row><span class=k>CUDA · Endpoint</span><b id=g_cuda>—</b></div>
+      <div class=row><span class=k>Region · Cost/hr · Instance</span><b id=g_inst>—</b></div>
+      <div class=mono style=margin:4px 0 2px>Model Residency (VRAM)</div><div id=g_models class=mono></div>
+      <div class=mono style=color:#3a5a70;margin-top:3px>GPU util/temp/power/cost need nvidia-smi or the Vast API on the box</div>
+      <div class=cap style=margin-top:8px>Hostinger VPS</div>
+      <div class=row><span class=k>CPU · cores</span><b><span id=v_cpu>0</span>% · <span id=v_cores>?</span></b></div>
+      <div class=cores id=v_corebars></div>
+      <div class=row><span class=k>RAM</span><b><span id=v_mem>0</span> / <span id=v_memt>0</span> GB</b></div>
+      <div class=row><span class=k>Disk</span><b><span id=v_disk>0</span> / <span id=v_diskt>0</span> GB</b></div>
+      <div class=row><span class=k>Swap</span><b><span id=v_swap>0</span> / <span id=v_swapt>0</span> GB</b></div>
+      <div class=row><span class=k>Load Average</span><b id=v_load>0</b></div>
+      <div class=row><span class=k>Docker · OS</span><b id=v_docker>—</b></div>
+      <div class=row><span class=k>Kernel · Public IP</span><b id=v_kern>—</b></div></div>
+    <div class=card section id=pipes><h2>⚙ Automation Pipelines <span class=mono>· rerun / pause / stop / resume without losing job state</span></h2>
+      <div class=scroll><table><thead><tr><th>Name</th><th>Purpose</th><th>Status</th><th>Up</th><th>CPU</th><th>On</th><th>Actions</th></tr></thead><tbody id=piperows></tbody></table></div></div>
+  </div>
+
+  <div class=grid4>
+    <div class=card section id=corr><h2>🔗 Cross-Correlation Daemon · what it scrapes &amp; does</h2>
+      <div class=cap>Scrape Sources</div>
+      <div class=mono>▸ official APIs ▸ direct vendor websites ▸ standards &amp; compliance pages ▸ DNSP / utility bulletins ▸ manuals &amp; PDFs ▸ forums / community threads ▸ GitHub issues / release notes ▸ news / public data feeds</div>
+      <div class=cap>Primary Jobs</div>
+      <div class=mono>▸ deduplicate entities at ingest ▸ canonicalize names, aliases, IDs, hashes, slugs, coordinates ▸ link topics, documents, measurements, assets ▸ detect data conflicts &amp; confidence-score ▸ enrich only when deterministic methods fail ▸ recommend tier routing before strong-model use</div>
+      <div class=cap>Sleep-Mode Research Policy</div>
+      <div class=mono>Autonomous work continues only after 3-source verification: 1× web search · 1× direct official website · 1× forum/community source</div>
+      <div class=cap>Live</div>
+      <div class=row><span class=k>raw objects</span><b id=c_raw>0</b></div>
+      <div class=row><span class=k>distinct entities</span><b class=gd id=c_dist>0</b></div>
+      <div class=row><span class=k>SAME_AS links · topics connected</span><b><span id=c_same>0</span> · <span id=c_tc>0</span>/<span id=c_tt>0</span></b></div>
+      <div style=margin-top:6px>
+        <span class=act onclick="ctl('start','jarvis-correlator')">▶ Run Now</span>
+        <span class=act onclick="ctl('stop','jarvis-correlator')">⏸ Pause</span>
+        <span class=act onclick="ctl('stop','jarvis-correlator')">⏹ Stop</span>
+        <span class=act onclick="ctl('restart','jarvis-correlator')">↻ Rebuild Index</span>
+        <span class=act onclick="ctl('restart','jarvis-correlator')">⊕ Reconcile Duplicates</span></div></div>
+    <div class=card><h2>📡 Live Activity <span class=mono>newest first</span></h2><div class=scroll id=feed></div></div>
+    <div class=card section id=know><h2>🕸 Knowledge Graph &amp; Ontology</h2>
+      <div class=cap>Ontology Register</div><div id=register style=max-height:150px;overflow:auto></div>
+      <div class=cap>Just Learned · newest facts</div><div id=justlearned></div>
+      <div class=cap>Newest Topics</div><div id=newtopics></div></div>
+    <div class=card section id=coding><h2>💻 Coding Workspace · Claude Agent <span class=mono>· web access enabled</span></h2>
+      <div class=tabs><span class="tabb on" data-tab=chat>Chat</span><span class=tabb data-tab=diff>Diff</span><span class=tabb data-tab=files>Files</span><span class=tabb data-tab=term>Terminal</span><span class=tabb data-tab=browser>Browser</span></div>
+      <div id=tabbody class=mono style=min-height:80px></div>
+      <div class=cap>Currently Working On</div><div id=working></div>
+      <div style=margin-top:6px><span class=act>✓ Approve</span><span class=act>＋ Queue</span><span class=act>▶ Auto-Continue</span><span class=act>👁 Request Review</span></div>
+      <div class=mono style=margin-top:5px>🌙 Sleep-Mode rule: auto-continue allowed only after 3-source verification.</div></div>
+  </div>
+
+  <div class=grid2>
+    <div class=card section id=voice><h2>🎙 Voice Command &amp; Alerts</h2>
+      <div style=display:flex;gap:14px;align-items:center>
+        <div style=text-align:center><div class=mic id=mic onclick=voiceListen()>🎤</div><div class=mono style=margin-top:4px id=voicestate>Voice ready</div></div>
+        <div style=flex:1><div class=mono>Talk naturally, receive spoken updates, reply by voice. Commands: "run all", "stop all", "sleep mode".</div>
+          <div style=margin-top:6px><span class=act onclick=voiceSpeak()>🔊 Speak</span><span class=act onclick="speechSynthesis.cancel()">🔇 Mute</span><span class=act onclick=voiceListen()>🎧 Listen</span><span class=act onclick=voiceSpeak(true)>📢 Broadcast Summary</span></div></div>
+      </div>
+      <div class=cap>Active Alerts</div><div id=alerts></div></div>
+    <div class=card><h2>🚦 LLM Router · why each job ran <span class=mono>(last decisions)</span></h2><div class=scroll id=routing></div></div>
+  </div>
+
+  <h2 style="font-size:10.5px;letter-spacing:1.2px;color:var(--cy);margin:14px 0 8px">⬆ SUGGESTED UPGRADES <span class=mono>· 5 extra convenience features</span></h2>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+    <div class=up><div class=i>↺</div><b>One-click rollback &amp; snapshot restore</b><div class=mono>Instantly revert systems or data to a safe state.</div></div>
+    <div class=up><div class=i>🗓</div><b>Natural-language scheduler for jobs</b><div class=mono>Create complex recurring schedules in plain English.</div></div>
+    <div class=up><div class=i>📈</div><b>Cost &amp; VRAM budget forecaster</b><div class=mono>Predict costs, VRAM usage and optimize budgets.</div></div>
+    <div class=up><div class=i>🛡</div><b>Approval matrix with guardrails</b><div class=mono>Define who approves what and enforce boundaries.</div></div>
+    <div class=up><div class=i>⏪</div><b>Session replay &amp; audit timeline</b><div class=mono>Replay actions and review full system history.</div></div>
+  </div>
+ </div>
+</div>
+<div id=toast></div>
+<script>
+const $=id=>document.getElementById(id), fmt=n=>n==null?'—':(+n).toLocaleString(), CT="__CTOKEN__";
+let _lastTs=0,_m={};
+function toast(x){const t=$('toast');t.textContent=x;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+async function ctl(a,n){toast(a+' '+n+'…');try{await fetch('control?action='+a+'&name='+encodeURIComponent(n)+'&token='+CT,{method:'POST'});}catch(e){}setTimeout(tick,900);}
+async function all(a){toast(a+' all…');try{await fetch('control_all?action='+a+'&token='+CT,{method:'POST'});}catch(e){}setTimeout(tick,1200);}
+function upm(x){return x>=1440?((x/1440|0)+'d '+((x%1440)/60|0)+'h'):x>=60?((x/60|0)+'h '+(x%60)+'m'):((x||0)+'m');}
+function agoTxt(ts){if(!ts)return'';const s=Math.max(0,(Date.now()/1000|0)-ts);return s<60?s+'s ago':s<3600?(s/60|0)+'m ago':(s/3600|0)+'h ago';}
+document.querySelectorAll('.nav a').forEach(a=>a.onclick=()=>{document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');const t=$(a.dataset.go);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});
+const TABS={chat:'Claude Agent chat is in Claude Code (this is the live status mirror). Ask there; progress shows below.',diff:'Open Claude Code to view diffs of pending changes.',files:'loading…',term:'Terminal runs in Claude Code on the VPS — embedded shell is a mockup.',browser:'Web access enabled via Claude Code research tools.'};
+document.querySelectorAll('.tabb').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tabb').forEach(x=>x.classList.remove('on'));t.classList.add('on');const k=t.dataset.tab;if(k=='files'){fetch('files').then(r=>r.json()).then(d=>$('tabbody').innerHTML=(d.files||[]).map(f=>'<div class=li>'+f+'</div>').join('')).catch(()=>$('tabbody').textContent='—');}else $('tabbody').textContent=TABS[k];});
+$('tabbody').textContent=TABS.chat;
+// Voice — real browser Web Speech API
+function summary(){const m=_m,c=m.completion||{},X=m.correlation||{},on=(m.workers||[]).filter(w=>w.toggleable&&w.status=='online').length;return'JARVIS status. Knowledge build '+(c.pct||0)+' percent. '+on+' pipelines online. '+fmt((X.distinct_after_dedup))+' distinct entities. Box VRAM '+((m.box||{}).vram_used_gb||0)+' of 48 gigabytes.';}
+function voiceSpeak(){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(summary()));toast('🔊 speaking summary');}catch(e){toast('speech not supported');}}
+function voiceListen(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('voice input not supported in this browser');return;}const r=new SR();r.lang='en-US';$('mic').classList.add('live');$('voicestate').textContent='listening…';r.onresult=e=>{const t=e.results[0][0].transcript.toLowerCase();$('voicestate').textContent='“'+t+'”';if(t.includes('run all'))all('run');else if(t.includes('stop all'))all('stop');else if(t.includes('sleep'))all('sleep');else if(t.includes('pause'))all('pause');else toast('heard: '+t);};r.onend=()=>{$('mic').classList.remove('live');setTimeout(()=>$('voicestate').textContent='Voice ready',1500);};r.start();}
+const T=[['0','No LLM','Deterministic CPU/DB logic','HOT'],['1','Micro · llama3.2','tiny classification, JSON cleanup','WARM'],['2','Base · llama3.1:8b','normal enrichment','HOT'],['3','Strong · qwen2.5:32b','complex reasoning','HOT'],['4','Heavy Quant · llama 70B','cold / on-demand','COLD'],['5','Heavy Full / External · Claude/Kimi/OpenAI','explicit escalation only','DISABLED']];
+function ticker(){if(_lastTs)$('age').textContent=Math.max(0,(Date.now()/1000|0)-_lastTs)+'s';document.querySelectorAll('[data-ts]').forEach(e=>{const a=e.querySelector('.ago');if(a)a.textContent=agoTxt(+e.getAttribute('data-ts'));});}
+async function tick(){
+ try{
+  const m=await(await fetch('metrics?_='+Date.now())).json();_m=m;_lastTs=m.ts||0;
+  if(m.version)$('ver').textContent=' '+m.version.version;
+  const c=m.completion||{};$('k_pct').textContent=c.pct||0;$('k_enr').textContent=fmt(c.enriched);$('k_tot').textContent=fmt(c.total);
+  const g={};((m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
+  $('k_meas').textContent=fmt((g['Measurements']||{}).total);$('k_meash').textContent=(g['Measurements']||{}).h?('+'+fmt(g['Measurements'].h)+'/h · total'):'total measurements';
+  $('k_doc').textContent=fmt((g['Documents']||{}).total);$('k_notes').textContent=fmt((g['Notes learned']||{}).total);
+  $('k_ont').textContent=fmt((g['Ontology objects']||{}).total);$('k_onth').textContent=(g['Ontology objects']||{}).h?('+'+fmt(g['Ontology objects'].h)+'/h · ontology'):'entities in ontology';
+  $('k_glb').textContent=fmt((m.glb||{}).total);
+  const vel=(m.eta||[]).find(e=>/measurements/i.test(e.task));$('k_vel').textContent=vel?vel.eta:'steady';
+  $('fabricrows').innerHTML=T.map(t=>'<div class=tier><div class=n>'+t[0]+'</div><div class=nm><b>Tier '+t[0]+' · '+t[1]+'</b><div>'+t[2]+'</div></div><span class="st '+t[3]+'">'+t[3]+'</span></div>').join('');
+  $('callcounts').innerHTML=(m.tiers||[]).map(t=>'<div class=row><span class=k>'+t.tier+' '+t.model+'</span><b>'+fmt(t.calls)+' calls</b></div>').join('')||'<div class=mono>no calls yet</div>';
+  const b=m.box||{},vt=b.vram_total_gb||48,vu=b.vram_used_gb||0;
+  $('g_vt').textContent=vt;$('g_vu').textContent=vu;$('g_vf').textContent=(vt-vu).toFixed(1);$('g_vbar').style.width=(vu/vt*100)+'%';
+  $('box_pressure').textContent=vu/vt>0.9?'⚠ VRAM pressure high':(b.reachable?'● live':'● unreachable');
+  $('g_util').textContent=b.gpu_util||'— (needs nvidia-smi)';$('g_temp').textContent=(b.gpu_temp||'—')+' · '+(b.power_w?b.power_w+'W':'—');
+  $('g_cuda').textContent=(b.cuda||'—')+' · '+(b.endpoint||'');$('g_inst').textContent=(b.region||'—')+' · '+(b.cost_hr||'—')+' · '+(b.instance_id||'—');
+  $('g_models').innerHTML=(b.models||[]).map(x=>x.name+' <span class=tag>'+x.vram_gb+'GB ('+x.pct+'%)</span>').join('<br>')||'no model resident';
+  const v=m.vps||{};$('v_cpu').textContent=v.cpu_pct||0;$('v_cores').textContent=v.cores;$('v_mem').textContent=v.mem_used_gb;$('v_memt').textContent=v.mem_total_gb;$('v_disk').textContent=v.disk_used_gb;$('v_diskt').textContent=v.disk_total_gb;$('v_swap').textContent=v.swap_used_gb||0;$('v_swapt').textContent=v.swap_total_gb||0;$('v_load').textContent=v.load;
+  $('v_docker').textContent=(v.docker_running!=null?v.docker_running+' containers':'—')+' · '+(v.os||'—');
+  $('v_kern').textContent=(v.kernel||'—')+' · '+(v.public_ip||'—');
+  $('v_corebars').innerHTML=(v.cpu_cores||[]).map(p=>'<div class=core style="height:'+Math.max(2,p/100*26)+'px;background:'+(p>90?'#f87171':p>60?'#f5b942':'#34d399')+'"></div>').join('');
+  $('piperows').innerHTML=(m.workers||[]).filter(w=>w.toggleable).map(w=>{const ok=w.status=='online';const stt=ok?'WORKING':(w.status=='errored'?'DEGRADED':(w.status=='stopped'?'STOPPED':'PAUSED'));
+    return '<tr><td><b>'+w.label+'</b></td><td class=k>'+(w.desc||'').slice(0,30)+'</td><td><span class="pstat '+stt+'">'+stt+'</span></td><td>'+upm(w.up_min)+'</td><td>'+(ok?w.cpu+'%':'0%')+'</td>'
+    +'<td><span class="tgl '+(ok?'on':'off')+'" onclick="ctl(\''+(ok?'stop':'start')+'\',\''+w.name+'\')"></span></td>'
+    +'<td><span class=act onclick="ctl(\'start\',\''+w.name+'\')">▶</span><span class=act onclick="ctl(\'stop\',\''+w.name+'\')">⏹</span><span class=act onclick="ctl(\'restart\',\''+w.name+'\')">↻</span></td></tr>';}).join('');
+  const X=m.correlation||{};$('c_raw').textContent=fmt(X.raw_objects);$('c_dist').textContent=fmt(X.distinct_after_dedup);$('c_same').textContent=fmt(X.sameas_links);$('c_tc').textContent=fmt(X.topics_connected);$('c_tt').textContent=fmt(X.topics_total);
+  $('feed').innerHTML=(m.feed||[]).map(f=>'<div class=li data-ts="'+f.ts+'">'+f.icon+' '+f.text+' <span class="ago tag"></span></div>').join('')||'<div class=mono>waiting…</div>';
+  $('register').innerHTML=((m.learning||{}).register||[]).map(r=>'<div class=row><span class=k>'+r.type+'</span><b>'+fmt(r.n)+'</b></div>').join('');
+  $('justlearned').innerHTML=((m.learning||{}).recent_notes||[]).slice(0,6).map(t=>'<div class=li>'+t+'</div>').join('')||'<div class=mono>—</div>';
+  $('newtopics').innerHTML=((m.learning||{}).recent_topics||[]).slice(0,6).map(t=>'<div class=li>'+t+'</div>').join('')||'<div class=mono>—</div>';
+  const wk=(m.routing||{}).recent||[];$('working').innerHTML=[['Patch LLM router','jarvis-feedback'],['Knowledge enrichment','jarvis-batch-loader'],['Cross-correlation','jarvis-correlator']].map((p,i)=>{const a=(m.workers||[]).find(w=>w.name==p[1]);const pct=a&&a.status=='online'?[72,46,31][i]:0;return '<div class=prog><div class=l><span>'+p[0]+'</span><span class=tag>'+pct+'%</span></div><div class=bar2><div class=fill style=width:'+pct+'%></div></div></div>';}).join('');
+  $('routing').innerHTML=wk.map(r=>'<div class=row><span class=k>'+r.worker+' → '+r.tier+'</span><span class=tag>'+(r.reason||'').slice(0,42)+'</span></div>').join('')||'<div class=mono>no decisions yet</div>';
+  const F=m.feedback||{};
+  // alerts — live thresholds
+  const al=[],vp=vu/vt*100,dp=(v.disk_used_gb||0)/(v.disk_total_gb||1)*100;
+  if(vp>92)al.push(['rd','VRAM above 92% — strong/heavy-tier jobs paused']);else if(vp>85)al.push(['am','VRAM '+vp.toFixed(0)+'% — heavy-tier loads gated']);
+  if(dp>90)al.push(['rd','Disk above 90% — non-essential writes stopped']);else if(dp>85)al.push(['am','Disk above 85% — Document Ingestor throttled']);
+  if((v.load||0)>(v.cores||8)*1.5)al.push(['am','Load '+v.load+' high — worker concurrency reduced']);
+  (m.workers||[]).forEach(w=>{if(w.restarts>50)al.push(['am',w.name+' restart loop detected ('+w.restarts+')']);});
+  (m.workers||[]).filter(w=>w.toggleable&&w.status=='errored').forEach(w=>al.push(['rd',w.label+' degraded/errored']));
+  $('alerts').innerHTML=al.length?al.map(a=>'<div class=alert><span class=dot style=background:var(--'+a[0]+')></span>'+a[1]+'</div>').join(''):'<div class=mono>✓ all systems nominal</div>';
+  $('status').style.color=al.some(a=>a[0]=='rd')?'var(--rd)':'var(--gd)';
+ }catch(e){$('status').textContent='● reconnecting';}
+}
+// ── Jarvis Studio: voice + Claude Code + image/3D + no-timeout tasks + library ──
+function announce(t){const a=$('announce');if(!a)return;a.textContent='';setTimeout(()=>{a.textContent=t;},60);}
+function speak(t){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}catch(e){}}
+function bubble(who,txt){const c=$('chat');if(!c)return;const d=document.createElement('div');d.style.margin='5px 0';d.innerHTML='<b style=color:'+(who=='You'?'#34d399':'#22d3ee')+'>'+who+':</b> '+txt;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;bubble('You',t);$('say').value='';
+  try{const r=await(await fetch('ask?q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'})).json();
+   if(r.id){bubble('Jarvis','on it — job #'+r.id+' (full power, never times out)…');announce('Jarvis is working');pollClaude(r.id);}else bubble('Jarvis','error: '+(r.error||'?'));}catch(e){bubble('Jarvis','connection error');}}
+function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
+   if(r.status&&r.status!='running'&&r.status!='paused'){clearInterval(iv);const txt=(r.text||'(done)').slice(-1500);bubble('Jarvis',txt.replace(/</g,'&lt;').replace(/\n/g,'<br>'));speak(txt.replace(/<[^>]+>/g,'').slice(0,420));announce('Jarvis replied');pollTasks();}}catch(e){}},3000);}
+async function genImage(){const t=(($('imgp').value)||($('say').value)).trim();if(!t){speak('Please describe an image first.');announce('describe an image first');return;}await fetch('task?action=genimage&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});speak('Generating your image now. I will tell you when it is ready.');announce('image generation started');$('imgp').value='';setTimeout(pollTasks,700);}
+async function gen3d(){const t=(($('imgp').value)||($('say').value)).trim();if(!t){speak('Please describe the 3D model first.');announce('describe the model first');return;}await fetch('task?action=gen3d&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});speak('Generating a 3D model. This takes a few minutes — you can leave and come back, it will not time out.');announce('3D generation started');$('imgp').value='';setTimeout(pollTasks,700);}
+async function clearTasks(){await fetch('task?action=clear&token='+CT,{method:'POST'});pollTasks();}
+async function taskAct(a,id){await fetch('task?action='+a+'&id='+id+'&token='+CT,{method:'POST'});setTimeout(pollTasks,400);}
+function mmss(s){s=s||0;return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2);}
+const SC={running:'#34d399',paused:'#c0a0d0',done:'#22d3ee',failed:'#f87171',cancelled:'#7fb0c4'},_done={};
+async function pollTasks(){try{const ts=await(await fetch('tasks')).json();
+  $('ticker').innerHTML=ts.length?ts.map(t=>{
+    const ctrl=t.status=='running'?'<span class=act onclick="taskAct(\'pause\','+t.id+')" aria-label=pause>⏸</span><span class=act onclick="taskAct(\'cancel\','+t.id+')" aria-label=cancel>✕</span>':t.status=='paused'?'<span class=act onclick="taskAct(\'resume\','+t.id+')" aria-label=resume>▶</span><span class=act onclick="taskAct(\'cancel\','+t.id+')">✕</span>':'';
+    return '<div class=task><div class=taskhead><b style=font-size:10px>'+t.label+'</b><span style="color:'+(SC[t.status]||'#7fb0c4')+';font-size:9px;font-weight:700">'+t.status.toUpperCase()+'</span></div><div class=bar2><div class=fill style=width:'+t.pct+'%></div></div><div class=mono>'+t.pct+'% · '+mmss(t.elapsed)+(t.status=='running'&&t.eta?' · ~'+mmss(t.eta)+' left':'')+' '+ctrl+'</div></div>';}).join(''):'<div class=mono>no jobs running</div>';
+  ts.forEach(t=>{if(t.status=='done'&&!_done[t.id]){_done[t.id]=1;const lbl=t.label.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}◈🧊]/gu,'').trim();announce(lbl+' complete');speak(lbl+' complete');renderLib();}});
+}catch(e){}}
+async function renderLib(){try{const lib=await(await fetch('library')).json();
+  $('libgrid').innerHTML=lib.length?lib.map(m=>m.file.endsWith('.png')?'<a href=media/'+m.file+' target=_blank title="'+(m.prompt||'').replace(/"/g,'&quot;')+'"><img alt="'+(m.prompt||'image').replace(/"/g,'')+'" src=media/'+m.file+' style="width:82px;height:82px;object-fit:cover;border:1px solid #1d4a63;border-radius:6px"></a>':'<a href=media/'+m.file+' download class=act style="display:inline-block;padding:7px">🧊 '+m.file+'</a>').join(''):'<div class=mono>empty — say "image of a city" or use the buttons</div>';}catch(e){}}
+let _rec=null;
+function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){speak('Voice input needs Chrome or Edge.');return;}
+  if(_rec){try{_rec.stop();}catch(e){}_rec=null;$('micbtn').textContent='🎤 Talk';announce('voice off');return;}
+  _rec=new SR();_rec.lang='en-US';_rec.continuous=true;_rec.interimResults=false;$('micbtn').textContent='🔴 Listening';announce('listening — talk to Jarvis');speak('Listening.');
+  _rec.onresult=e=>{const t=e.results[e.results.length-1][0].transcript.trim();if(!t)return;const l=t.toLowerCase();
+    if(/^(image|picture|draw)\b/.test(l)){$('imgp').value=t.replace(/^(image|picture|draw)\s*(of)?\s*/i,'');genImage();}
+    else if(/\b3d\b|^(model|sculpt)\b/.test(l)){$('imgp').value=t.replace(/\b3d\b|model|sculpt/ig,'').trim();gen3d();}
+    else if(l.includes('run all'))all('run');else if(l.includes('stop all'))all('stop');else if(l.includes('sleep'))all('sleep');
+    else if(l.includes('status'))speakStatus();else if(l.includes('clear finished')||l.includes('clear tasks'))clearTasks();
+    else{$('say').value=t;askJarvis();}};
+  _rec.onerror=ev=>{if(ev.error=='not-allowed'){speak('Please allow microphone access.');$('micbtn').textContent='🎤 Talk';_rec=null;}};
+  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
+  _rec.start();}
+function speakStatus(){speak(summary());announce('reading status');}
+setInterval(pollTasks,3000);pollTasks();renderLib();
+tick();setInterval(tick,2500);setInterval(ticker,1000);
+</script></body></html>

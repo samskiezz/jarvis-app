@@ -60,6 +60,13 @@ def _job_ingest_all() -> dict:
     return ingestion.ingest_all()
 
 
+def _job_scrape_feeds() -> dict:
+    """Run every enabled declarative feed once (offline-tolerant)."""
+    from . import feed_scraper
+
+    return feed_scraper.scrape_feeds()
+
+
 def _job_pipeline_refresh() -> dict:
     """Re-run the registered connectors for every catalog dataset that was
     sourced from a live connector. Offline-tolerant; never raises."""
@@ -85,6 +92,7 @@ def _job_pipeline_refresh() -> dict:
 # fn_key -> callable. The ONLY jobs a schedule may run.
 _JOBS: dict[str, Callable[[], object]] = {
     "ingest_all": _job_ingest_all,
+    "scrape_feeds": _job_scrape_feeds,
     "pipeline_refresh": _job_pipeline_refresh,
 }
 

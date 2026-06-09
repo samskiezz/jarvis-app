@@ -100,10 +100,13 @@ export default function CinematicHome() {
       onToll: () => setToll((t) => t + 1),
       onNote: () => setNoteFlash((n) => n + 1),
     });
-    // give the user the full audio-visual boot (video loops + theme plays), then hand to :5180.
-    const onPlaying = () => { setTimeout(go, 6000); };
+    // Let the theme play its FULL build before handing off. 6s cut it off mid-swell ("stops early"):
+    // the rewritten bed tolls at 0 / 4.5 / 8.5s and walks the Am–F–C–Em pad arc, so it only resolves
+    // around ~12s. Give the loading scene that whole musical phrase; the :5180 GameLoader then carries
+    // the SAME video seamlessly (its own audio takes over after the page nav stops this WebAudio bed).
+    const onPlaying = () => { setTimeout(go, 12000); };
     v?.addEventListener("playing", onPlaying);
-    const fallback = setTimeout(go, 8000);            // never get stuck if the video can't decode
+    const fallback = setTimeout(go, 14000);           // never get stuck if the video can't decode
     return () => { v?.removeEventListener("playing", onPlaying); clearTimeout(fallback); uwAudio.stop(300); };
   }, [entering]);
 

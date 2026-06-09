@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS // NEURAL CORE</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g:#00c878;--b:#0096d4;--bg:#020608;
+  --panel:rgba(4,10,18,0.88);--hi:#a8bcc8;--dim:#566878;--ghost:#2a3840;
+  --border:rgba(0,200,120,0.10);
+  --font:'JetBrains Mono','Courier New',monospace;
+}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--hi);font-family:var(--font);overflow:hidden}
+canvas{position:fixed;inset:0}
+.scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.032) 1px,rgba(0,0,0,.032) 2px);pointer-events:none;z-index:90}
+.vignette{position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 38%,rgba(0,0,0,.6) 100%);pointer-events:none;z-index:91}
+
+/* ── TOP BAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--panel);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);z-index:80}
+.tb-left{display:flex;align-items:center;gap:14px}
+.live{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:.18em;color:var(--g);text-transform:uppercase}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 5px var(--g)}50%{opacity:.3;box-shadow:none}}
+.brand{font-size:13px;font-weight:700;letter-spacing:.26em;color:var(--g);text-shadow:0 0 14px rgba(0,200,120,.5);text-transform:uppercase}
+.brand-sub{font-size:9px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.clock-wrap{text-align:right}
+.clock-time{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--hi)}
+.clock-label{font-size:8px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase}
+
+/* ── METRICS ── */
+.metrics{position:fixed;top:44px;left:0;right:0;display:flex;background:rgba(2,6,8,.72);border-bottom:1px solid rgba(0,200,120,.05);backdrop-filter:blur(8px);z-index:80}
+.mc{flex:1;padding:6px 20px;border-right:1px solid rgba(0,200,120,.05)}
+.mc:last-child{border-right:none}
+.mc-label{font-size:7px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin-bottom:2px;white-space:nowrap}
+.mc-val{font-size:13px;font-weight:700;white-space:nowrap}
+.mc-val.g{color:var(--g);text-shadow:0 0 8px rgba(0,200,120,.45)}
+.mc-val.b{color:var(--b);text-shadow:0 0 8px rgba(0,150,212,.45)}
+
+/* ── EVENT LOG ── */
+.elog{position:fixed;bottom:20px;left:22px;width:370px;z-index:80}
+.elog-hdr{font-size:7px;letter-spacing:.22em;color:var(--ghost);text-transform:uppercase;padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid rgba(0,200,120,.05)}
+.elog-line{font-size:10px;line-height:1.72;display:flex;gap:8px;opacity:0;animation:lf .45s ease forwards}
+@keyframes lf{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.ets{color:var(--ghost);flex-shrink:0}
+.etag{flex-shrink:0}
+.etag.g{color:var(--g)}
+.etag.b{color:var(--b)}
+.emsg{color:var(--dim)}
+
+/* ── CORNER STATS ── */
+.cstats{position:fixed;bottom:20px;right:22px;text-align:right;z-index:80}
+.cline{font-size:9px;line-height:1.9;color:var(--ghost)}
+.cline span{color:var(--dim)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<div class="topbar">
+  <div class="tb-left">
+    <div class="live"><div class="live-dot"></div>LIVE</div>
+    <span class="brand">JARVIS</span>
+    <span class="brand-sub">// Cognitive Architecture</span>
+  </div>
+  <div class="clock-wrap">
+    <div class="clock-time" id="clk">00:00:00</div>
+    <div class="clock-label">UTC</div>
+  </div>
+</div>
+
+<div class="metrics">
+  <div class="mc"><div class="mc-label">Active Nodes</div><div class="mc-val g" id="m0">—</div></div>
+  <div class="mc"><div class="mc-label">Data Flow</div><div class="mc-val b" id="m1">—</div></div>
+  <div class="mc"><div class="mc-label">Inference / s</div><div class="mc-val g" id="m2">—</div></div>
+  <div class="mc"><div class="mc-label">Neural Load</div><div class="mc-val b" id="m3">—</div></div>
+  <div class="mc"><div class="mc-label">Uptime</div><div class="mc-val g" id="m4">—</div></div>
+</div>
+
+<div class="elog">
+  <div class="elog-hdr">// event stream</div>
+  <div id="log"></div>
+</div>
+
+<div class="cstats">
+  <div class="cline"><span>SYNTHESIS</span> &mdash; pathway active</div>
+  <div class="cline"><span>MEMORY</span> &mdash; 94.2k vectors indexed</div>
+  <div class="cline"><span>COGNITION</span> &mdash; inference depth 12</div>
+  <div class="cline"><span>AWARENESS</span> &mdash; self-model coherent</div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d'),logEl=document.getElementById('log');
+let W,H,cx,cy,frame=0,bgFlash=0;
+const mouse={x:-9999,y:-9999};
+
+const SUBS=['PERCEPTION','MEMORY','COGNITION','INFERENCE','SYNTHESIS','LANGUAGE','VISION','AWARENESS'];
+const CDIST=148, N_AMB=62;
+
+let core,mains=[],ambs=[],all=[],packets=[],waves=[];
+
+// ── Node ──────────────────────────────────────────────────
+class Node{
+  constructor(x,y,r,label,isCore,isMain){
+    this.x=x;this.y=y;this.ox=x;this.oy=y;
+    this.vx=(isCore||isMain)?0:(Math.random()-.5)*.5;
+    this.vy=(isCore||isMain)?0:(Math.random()-.5)*.5;
+    this.r=r;this.label=label||null;
+    this.isCore=!!isCore;this.isMain=!!isMain;
+    this.phase=Math.random()*Math.PI*2;
+    this.flash=0;
+  }
+  update(){
+    if(this.isCore)return;
+    if(this.isMain){
+      this.x=this.ox+Math.sin(frame*.008+this.phase)*10;
+      this.y=this.oy+Math.cos(frame*.011+this.phase*1.3)*7;
+      if(this.flash>0)this.flash=Math.max(0,this.flash-.025);
+      return;
+    }
+    const mdx=this.x-mouse.x,mdy=this.y-mouse.y,md=Math.hypot(mdx,mdy);
+    if(md<110&&md>0){const f=((110-md)/110)*.65;this.vx+=(mdx/md)*f;this.vy+=(mdy/md)*f;}
+    this.vx+=(cx-this.x)*6e-5;this.vy+=(cy-this.y)*6e-5;
+    const spd=Math.hypot(this.vx,this.vy);
+    if(spd>.9){this.vx*=.9/spd;this.vy*=.9/spd;}
+    this.x+=this.vx;this.y+=this.vy;
+    const pad=52,tp=108;
+    if(this.x<pad)this.vx+=.13;if(this.x>W-pad)this.vx-=.13;
+    if(this.y<tp)this.vy+=.13;if(this.y>H-pad)this.vy-=.13;
+    if(this.flash>0)this.flash=Math.max(0,this.flash-.03);
+  }
+  draw(){
+    if(this.isCore){drawCore(this);}
+    else if(this.isMain){drawMain(this);}
+    else{drawAmb(this);}
+  }
+  activate(){this.flash=1;}
+}
+
+function drawCore(n){
+  const pulse=Math.sin(frame*.036)*.5+.5;
+  for(let i=4;i>=1;i--){
+    const rr=n.r+i*16+pulse*10,a=(1-i/5)*.11*(pulse*.5+.5);
+    ctx.beginPath();ctx.arc(n.x,n.y,rr,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(0,200,120,${a})`;ctx.lineWidth=1;ctx.stroke();
+  }
+  const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*4.5);
+  g.addColorStop(0,'rgba(0,200,120,.75)');g.addColorStop(.4,'rgba(0,200,120,.18)');g.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(n.x,n.y,n.r*4.5,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  ctx.save();ctx.shadowColor='#00c878';ctx.shadowBlur=30+pulse*18;
+  ctx.fillStyle='#00c878';ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.font='700 9px monospace';ctx.fillStyle='rgba(0,200,120,.45)';ctx.textAlign='center';
+  ctx.fillText('CORE',n.x,n.y+n.r+16);
+}
+
+function drawMain(n){
+  const f=n.flash;
+  const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*2.8);
+  g.addColorStop(0,`rgba(0,150,212,${.55+f*.3})`);g.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(n.x,n.y,n.r*2.8,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  ctx.save();ctx.shadowColor='#0096d4';ctx.shadowBlur=10+f*18;
+  ctx.fillStyle=`rgba(0,150,212,${.88+f*.12})`;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.font='700 8px monospace';ctx.fillStyle=`rgba(168,188,200,${.52+f*.42})`;ctx.textAlign='center';
+  ctx.fillText(n.label,n.x,n.y+n.r+13);
+}
+
+function drawAmb(n){
+  const a=.18+n.flash*.45;
+  ctx.fillStyle=n.flash>.25?`rgba(0,200,120,${a})`:`rgba(0,200,120,.14)`;
+  ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();
+}
+
+// ── Packet ────────────────────────────────────────────────
+class Packet{
+  constructor(a,b){
+    this.a=a;this.b=b;this.t=0;
+    this.spd=.004+Math.random()*.007;
+    this.blue=Math.random()>.55;
+    this.sz=1.4+Math.random()*1.5;
+  }
+  update(){this.t+=this.spd;if(this.t>=1){this.b.activate();return true;}return false;}
+  draw(){
+    const x=this.a.x+(this.b.x-this.a.x)*this.t,y=this.a.y+(this.b.y-this.a.y)*this.t;
+    const col=this.blue?'#0096d4':'#00c878';
+    ctx.save();ctx.shadowColor=col;ctx.shadowBlur=9;ctx.fillStyle=col;
+    ctx.beginPath();ctx.arc(x,y,this.sz,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+}
+
+// ── Wave ──────────────────────────────────────────────────
+class Wave{
+  constructor(x,y){this.x=x;this.y=y;this.r=4;this.life=1;}
+  update(){this.r+=5;this.life-=.03;return this.life<=0;}
+  draw(){
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(0,200,120,${this.life*.22})`;ctx.lineWidth=1.5;ctx.stroke();
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────
+function init(){
+  W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;
+  cx=W/2;cy=H/2;
+  all=[];mains=[];ambs=[];packets=[];waves=[];
+  const orbR=Math.min(W,H)*.285;
+  core=new Node(cx,cy,7,null,true,false);all.push(core);
+  SUBS.forEach((lbl,i)=>{
+    const a=(i/SUBS.length)*Math.PI*2-Math.PI/2;
+    const x=cx+Math.cos(a)*orbR,y=cy+Math.sin(a)*orbR;
+    const n=new Node(x,y,4.5,lbl,false,true);n.ox=x;n.oy=y;
+    mains.push(n);all.push(n);
+  });
+  for(let i=0;i<N_AMB;i++){
+    const a=Math.random()*Math.PI*2,d=40+Math.random()*orbR*1.72;
+    const n=new Node(cx+Math.cos(a)*d,cy+Math.sin(a)*d,.8+Math.random()*1.6);
+    ambs.push(n);all.push(n);
+  }
+}
+
+// ── Connections ───────────────────────────────────────────
+function drawConnections(){
+  for(let i=0;i<all.length;i++){
+    const a=all[i];
+    for(let j=i+1;j<all.length;j++){
+      const b=all[j];
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d>=CDIST)continue;
+      const base=(1-d/CDIST)*.17,boost=Math.max(a.flash,b.flash)*.22;
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=`rgba(0,200,120,${base+boost})`;
+      ctx.lineWidth=(a.isCore||b.isCore||a.isMain||b.isMain)?1:.5;
+      ctx.stroke();
+    }
+  }
+}
+
+function drawGrid(){
+  ctx.lineWidth=.5;ctx.strokeStyle='rgba(0,200,120,.02)';
+  for(let x=0;x<=W;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+}
+
+// ── Spawning ──────────────────────────────────────────────
+let lastSpawn=0,lastPulse=0;
+
+function maybeSpawn(){
+  if(frame-lastSpawn<20||packets.length>24)return;
+  lastSpawn=frame;
+  const roll=Math.random();
+  if(roll<.48){
+    const m=mains[Math.floor(Math.random()*mains.length)];
+    packets.push(new Packet(core,m));
+  }else if(roll<.74){
+    const i=Math.floor(Math.random()*mains.length);
+    let j;do{j=Math.floor(Math.random()*mains.length);}while(j===i);
+    packets.push(new Packet(mains[i],mains[j]));
+  }else{
+    const a=ambs[Math.floor(Math.random()*ambs.length)];
+    const b=ambs[Math.floor(Math.random()*ambs.length)];
+    if(a!==b)packets.push(new Packet(a,b));
+  }
+}
+
+function maybePulse(){
+  if(frame-lastPulse<160)return;
+  lastPulse=frame;bgFlash=.08;
+  waves.push(new Wave(core.x,core.y));
+  core.activate();
+  mains.forEach(m=>{
+    const delay=Math.random()*350;
+    setTimeout(()=>{packets.push(new Packet(core,m));},delay);
+  });
+}
+
+// ── Metrics ───────────────────────────────────────────────
+let mv=[0,0,0,0],mt=[68,847,12400,67];
+const upBase=Date.now()-(72*3600+14*60+33)*1000;
+let lastLog=0;
+
+const LOGS=[
+  ['COGNITION','g','inference cycle completed — depth 12'],
+  ['MEMORY','b','episodic consolidation +18 vectors'],
+  ['PERCEPTION','g','sensory stream calibrated (4 modalities)'],
+  ['VISION','b','scene graph refreshed — 23 objects tracked'],
+  ['LANGUAGE','g','token stream online — 32k vocab loaded'],
+  ['SYNTHESIS','b','output pipeline ready — latency 48ms'],
+  ['AWARENESS','g','self-model divergence: 0.003%'],
+  ['INFERENCE','b','posterior updated — 94.7% confidence'],
+  ['CORE','g','heartbeat nominal — 847ms interval'],
+  ['MEMORY','b','long-term retrieval: 94.2k vectors'],
+  ['COGNITION','g','attention allocation optimized (16 heads)'],
+  ['VISION','b','optical flow estimated — 0.04px/frame'],
+  ['INFERENCE','g','causal chain traced — 7 hops resolved'],
+  ['AWARENESS','b','task priority rebalanced — 3 queues active'],
+];
+
+function addLog(){
+  const now=Date.now();if(now-lastLog<2300)return;lastLog=now;
+  const e=LOGS[Math.floor(Math.random()*LOGS.length)];
+  const d=new Date();
+  const ts=`${d.getUTCHours().toString().padStart(2,'0')}:${d.getUTCMinutes().toString().padStart(2,'0')}:${d.getUTCSeconds().toString().padStart(2,'0')}`;
+  const el=document.createElement('div');el.className='elog-line';
+  el.innerHTML=`<span class="ets">${ts}</span><span class="etag ${e[1]}">[${e[0]}]</span><span class="emsg">${e[2]}</span>`;
+  logEl.appendChild(el);
+  const lines=logEl.querySelectorAll('.elog-line');
+  if(lines.length>6)lines[0].remove();
+}
+
+function updateDOM(){
+  if(frame%90===0){
+    mt[0]=58+Math.floor(Math.random()*22);mt[1]=500+Math.random()*700;
+    mt[2]=9000+Math.floor(Math.random()*9000);mt[3]=40+Math.floor(Math.random()*45);
+  }
+  const L=.04;
+  mv[0]+=(mt[0]-mv[0])*L;mv[1]+=(mt[1]-mv[1])*(L*.7);
+  mv[2]+=(mt[2]-mv[2])*L;mv[3]+=(mt[3]-mv[3])*L;
+  document.getElementById('m0').textContent=Math.round(mv[0]);
+  document.getElementById('m1').textContent=mv[1].toFixed(1)+' Mb/s';
+  document.getElementById('m2').textContent=(mv[2]/1000).toFixed(1)+'k';
+  document.getElementById('m3').textContent=Math.round(mv[3])+'%';
+  const up=Math.floor((Date.now()-upBase)/1000);
+  const ud=Math.floor(up/86400),uh=Math.floor((up%86400)/3600),um=Math.floor((up%3600)/60);
+  document.getElementById('m4').textContent=`${ud}d ${uh}h ${um}m`;
+  const n=new Date();
+  document.getElementById('clk').textContent=
+    `${n.getUTCHours().toString().padStart(2,'0')}:${n.getUTCMinutes().toString().padStart(2,'0')}:${n.getUTCSeconds().toString().padStart(2,'0')}`;
+  addLog();
+}
+
+// ── Boot fade-in ──────────────────────────────────────────
+let boot=0;
+
+// ── Main loop ─────────────────────────────────────────────
+function draw(){
+  requestAnimationFrame(draw);frame++;
+  if(boot<1)boot=Math.min(1,boot+.012);
+
+  const bg=2+bgFlash*9;
+  ctx.fillStyle=`rgb(${bg},${bg+4},${bg+6})`;
+  ctx.fillRect(0,0,W,H);
+  bgFlash=Math.max(0,bgFlash-.003);
+
+  ctx.globalAlpha=boot;
+  drawGrid();
+  waves=waves.filter(w=>!w.update());waves.forEach(w=>w.draw());
+  drawConnections();
+  all.forEach(n=>{n.update();n.draw();});
+  maybeSpawn();maybePulse();
+  packets=packets.filter(p=>!p.update());packets.forEach(p=>p.draw());
+  ctx.globalAlpha=1;
+
+  if(frame%12===0)updateDOM();
+}
+
+window.addEventListener('resize',init);
+window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+init();draw();
+})();
+</script>
+</body>
+</html>

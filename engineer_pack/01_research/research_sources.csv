@@ -1,0 +1,11 @@
+id,name,why,url
+R1,OpenAI Image Generation API,GPT Image generation/editing including gpt-image-2,https://developers.openai.com/api/docs/guides/image-generation
+R2,Tripo / 3D AI Studio API docs,"text-to-3D, image-to-3D, GLB output, optional PBR textures/remesh/low-poly",https://www.3daistudio.com/Platform/API/Documentation/3d-generation/tripo
+R3,Three.js GLTFLoader docs,browser GLB/glTF loading and disposal considerations,https://threejs.org/docs/pages/GLTFLoader.html
+R4,React Postprocessing Bloom docs,selective bloom / HDR glow behaviour for holographic scene,https://react-postprocessing.docs.pmnd.rs/effects/bloom
+R5,LiteLLM routing/load balancing docs,"central LLM gateway, routing, load balancing, fallbacks",https://docs.litellm.ai/docs/routing-load-balancing
+R6,vLLM Production Stack KV-cache-aware routing docs,cache-aware routing pattern for production inference,https://docs.vllm.ai/projects/production-stack/en/latest/use_cases/kv-cache-aware-routing.html
+R7,RouteLLM GitHub,weak-vs-strong LLM routing and OpenAI-compatible/LiteLLM support,https://github.com/lm-sys/RouteLLM
+R8,BullMQ pausing queues docs,pause/resume queues and worker behaviour,https://docs.bullmq.io/guide/workers/pausing-queues
+R9,Temporal TypeScript workflow docs,durable long-running workflow orchestration option,https://docs.temporal.io/develop/typescript/workflows/basics
+R10,OpenTelemetry JS docs,"metrics, logs and traces for Node/browser instrumentation",https://opentelemetry.io/docs/languages/js/

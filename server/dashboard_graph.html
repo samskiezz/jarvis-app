@@ -1,0 +1,55 @@
+<!doctype html><html><head><meta charset=utf-8><title>JARVIS · Holographic Knowledge Graph</title>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<style>
+body{margin:0;background:#02040a;overflow:hidden;font-family:ui-monospace,Menlo,Consolas,monospace}
+#g{width:100vw;height:100vh}
+#hud{position:fixed;top:14px;left:16px;z-index:5;pointer-events:none}
+#hud h1{font-size:15px;letter-spacing:2px;color:#22d3ee;margin:0;text-shadow:0 0 16px #22d3eeaa}
+#hud .s{font-size:11px;color:#5f7e94}
+#stat{position:fixed;top:14px;right:16px;color:#7fb0c4;font-size:11px;text-align:right;z-index:5}
+#legend{position:fixed;bottom:14px;left:16px;z-index:5;font-size:11px;color:#cfe9f5;display:flex;gap:13px;flex-wrap:wrap;max-width:84vw}
+#legend span{display:flex;gap:5px;align-items:center}
+.sw{width:9px;height:9px;border-radius:50%;display:inline-block;box-shadow:0 0 8px currentColor}
+#err{position:fixed;inset:0;display:none;align-items:center;justify-content:center;color:#f87171;font-size:14px}
+</style></head><body>
+<div id=g></div>
+<div id=hud><h1>◈ HOLOGRAPHIC KNOWLEDGE GRAPH</h1><div class=s>live entities + relationships · beams = data flow · drag to orbit · scroll to zoom</div></div>
+<div id=stat>loading…</div>
+<div id=legend></div>
+<div id=err>graph engine failed to load (CDN blocked?) — data is fine at /graphdata</div>
+<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://unpkg.com/three@0.149.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://unpkg.com/3d-force-graph@1.70.19/dist/3d-force-graph.min.js"></script>
+<script>
+function boot(){
+ if(typeof ForceGraph3D==='undefined'){document.getElementById('err').style.display='flex';return;}
+ fetch('graphdata').then(r=>r.json()).then(d=>{
+  const data={nodes:d.nodes||[],links:(d.edges||[]).map(e=>({source:e.s,target:e.t}))};
+  document.getElementById('stat').textContent=data.nodes.length+' nodes · '+data.links.length+' links · '+(Object.keys(d.colors||{}).length)+' types';
+  const seen={};data.nodes.forEach(n=>{seen[n.type]=n.color;});
+  document.getElementById('legend').innerHTML=Object.entries(seen).map(([t,c])=>'<span style=color:'+c+'><i class=sw style=color:'+c+'></i>'+t+'</span>').join('');
+  const G=ForceGraph3D()(document.getElementById('g'))
+    .backgroundColor('#02040a')
+    .graphData(data)
+    .nodeColor(n=>n.color||'#9bd4e6')
+    .nodeOpacity(0.95).nodeRelSize(4).nodeResolution(12)
+    .nodeLabel(n=>'<div style="background:#0a1320e6;border:1px solid #1d4a63;border-radius:6px;padding:4px 9px;color:#eafcff;font-family:monospace;font-size:12px">'+n.label+' <span style=color:#5f7e94>· '+n.type+'</span></div>')
+    .linkColor(()=>'rgba(95,170,210,0.14)').linkWidth(0.4).linkOpacity(0.22)
+    .linkDirectionalParticles(2).linkDirectionalParticleWidth(1.7).linkDirectionalParticleSpeed(0.006)
+    .linkDirectionalParticleColor(l=>(typeof l.source==='object'&&l.source.color)||'#22d3ee')
+    .warmupTicks(50).cooldownTicks(220).showNavInfo(false);
+  try{const bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),2.4,0.9,0.0);G.postProcessingComposer().addPass(bloom);}catch(e){console.log('bloom unavailable, particles+glow only',e);}
+  try{G.scene().fog=new THREE.FogExp2('#02040a',0.0015);}catch(e){}
+  let a=0,drag=false;G.onNodeDragEnd(()=>{});document.getElementById('g').addEventListener('pointerdown',()=>drag=true);
+  addEventListener('pointerup',()=>{drag=false;});
+  const dist=Math.max(280,data.nodes.length*0.7);
+  setInterval(()=>{if(!drag){a+=0.0011;G.cameraPosition({x:dist*Math.sin(a),y:dist*0.18,z:dist*Math.cos(a)});}},33);
+ }).catch(e=>{document.getElementById('stat').textContent='data error';console.log(e);});
+}
+boot();
+</script></body></html>

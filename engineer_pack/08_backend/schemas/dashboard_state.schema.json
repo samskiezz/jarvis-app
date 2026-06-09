@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DashboardState",
+  "type": "object",
+  "required": [
+    "status",
+    "kpis",
+    "infrastructure",
+    "pipelines",
+    "inference"
+  ],
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "kpis": {
+      "type": "object"
+    },
+    "infrastructure": {
+      "type": "object"
+    },
+    "pipelines": {
+      "type": "array"
+    },
+    "inference": {
+      "type": "object"
+    }
+  }
+}

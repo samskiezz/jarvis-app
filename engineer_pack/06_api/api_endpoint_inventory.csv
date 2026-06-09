@@ -1,0 +1,83 @@
+id,method,path,area,purpose,auth_required,audit_log
+API-001,GET,/api/health,core,overall health normal/busy/degraded/critical,yes,yes
+API-002,GET,/api/dashboard/state,core,one snapshot for initial render,yes,yes
+API-003,GET,/api/events/stream,core,SSE live updates,yes,yes
+API-004,GET,/api/ws,core,websocket live channel,yes,yes
+API-005,GET,/api/audit,core,audit event list,yes,yes
+API-006,POST,/api/search,core,global dashboard search,yes,yes
+API-007,GET,/api/kpis,kpi,KPI strip data,yes,yes
+API-008,GET,/api/live-activity,activity,newest events,yes,yes
+API-009,GET,/api/live-activity/:id,activity,event detail,yes,yes
+API-010,GET,/api/inference/tiers,inference,6-tier config and state,yes,yes
+API-011,GET,/api/inference/residency,inference,model hot/warm/cold/off,yes,yes
+API-012,GET,/api/inference/calls,inference,call counts by tier/model,yes,yes
+API-013,GET,/api/inference/decisions,inference,last routing decisions,yes,yes
+API-014,GET,/api/inference/decision/:id,inference,why did this run,yes,yes
+API-015,POST,/api/inference/route/test,inference,dry-run router decision,yes,yes
+API-016,POST,/api/inference/model/unload,inference,request model unload,yes,yes
+API-017,POST,/api/inference/model/warm,inference,warm model if allowed,yes,yes
+API-018,GET,/api/inference/validators,inference,validation stats,yes,yes
+API-019,GET,/api/infra/vast,infrastructure,Vast GPU details,yes,yes
+API-020,GET,/api/infra/vast/gpus,infrastructure,per GPU metrics,yes,yes
+API-021,GET,/api/infra/vast/processes,infrastructure,GPU PIDs/model mapping,yes,yes
+API-022,GET,/api/infra/hostinger,infrastructure,Hostinger VPS metrics,yes,yes
+API-023,GET,/api/infra/hostinger/cores,infrastructure,per-core CPU,yes,yes
+API-024,GET,/api/infra/docker,infrastructure,containers/status/resources,yes,yes
+API-025,GET,/api/infra/docker/:name/logs,infrastructure,tail logs safely,yes,yes
+API-026,POST,/api/infra/docker/:name/restart,infrastructure,restart container with guardrails,yes,yes
+API-027,POST,/api/infra/docker/:name/stop,infrastructure,stop container with guardrails,yes,yes
+API-028,GET,/api/pipelines,pipelines,list pipeline states,yes,yes
+API-029,GET,/api/pipelines/:id,pipelines,pipeline detail,yes,yes
+API-030,POST,/api/pipelines/:id/toggle,pipelines,set enabled true/false,yes,yes
+API-031,POST,/api/pipelines/:id/run,pipelines,run now,yes,yes
+API-032,POST,/api/pipelines/:id/pause,pipelines,pause statefully,yes,yes
+API-033,POST,/api/pipelines/:id/stop,pipelines,stop active job,yes,yes
+API-034,POST,/api/pipelines/:id/rerun,pipelines,rerun safely,yes,yes
+API-035,POST,/api/pipelines/run-all,pipelines,bulk run all allowed,yes,yes
+API-036,POST,/api/pipelines/pause-all,pipelines,bulk pause all,yes,yes
+API-037,POST,/api/pipelines/stop-all,pipelines,bulk stop all,yes,yes
+API-038,GET,/api/pipelines/:id/jobs,pipelines,pipeline job history,yes,yes
+API-039,GET,/api/correlation/state,cross-correlation,daemon status,yes,yes
+API-040,GET,/api/correlation/sources,cross-correlation,scrape source list,yes,yes
+API-041,POST,/api/correlation/run,cross-correlation,run now,yes,yes
+API-042,POST,/api/correlation/pause,cross-correlation,pause,yes,yes
+API-043,POST,/api/correlation/stop,cross-correlation,stop,yes,yes
+API-044,POST,/api/correlation/rebuild-index,cross-correlation,rebuild index,yes,yes
+API-045,POST,/api/correlation/reconcile,cross-correlation,reconcile duplicates,yes,yes
+API-046,GET,/api/correlation/conflicts,cross-correlation,current conflicts,yes,yes
+API-047,GET,/api/correlation/entities/:id,cross-correlation,entity detail,yes,yes
+API-048,POST,/api/correlation/entities/:id/merge,cross-correlation,merge canonical entity,yes,yes
+API-049,GET,/api/knowledge/ontology,knowledge,ontology counts,yes,yes
+API-050,GET,/api/knowledge/just-learned,knowledge,new facts,yes,yes
+API-051,GET,/api/knowledge/topics/newest,knowledge,newest topics,yes,yes
+API-052,GET,/api/knowledge/graph,knowledge,graph data,yes,yes
+API-053,GET,/api/coding/tasks,coding,coding task queue,yes,yes
+API-054,POST,/api/coding/tasks,coding,create coding task,yes,yes
+API-055,POST,/api/coding/tasks/:id/approve,coding,approve task/action,yes,yes
+API-056,POST,/api/coding/tasks/:id/queue,coding,queue task,yes,yes
+API-057,POST,/api/coding/tasks/:id/auto-continue,coding,enable auto-continue if policy passes,yes,yes
+API-058,POST,/api/coding/tasks/:id/request-review,coding,request human review,yes,yes
+API-059,GET,/api/coding/files,coding,safe file browser,yes,yes
+API-060,GET,/api/coding/diff/:taskId,coding,diff preview,yes,yes
+API-061,POST,/api/coding/terminal,coding,guarded terminal command,yes,yes
+API-062,POST,/api/voice/session/start,voice,start listening,yes,yes
+API-063,POST,/api/voice/session/stop,voice,stop listening,yes,yes
+API-064,POST,/api/voice/transcribe,voice,speech to text,yes,yes
+API-065,POST,/api/voice/speak,voice,text to speech,yes,yes
+API-066,GET,/api/alerts,alerts,alerts list,yes,yes
+API-067,POST,/api/alerts/:id/ack,alerts,acknowledge alert,yes,yes
+API-068,POST,/api/alerts/broadcast-summary,alerts,speak summary,yes,yes
+API-069,GET,/api/assets,asset-forge,asset library,yes,yes
+API-070,GET,/api/assets/:id,asset-forge,asset detail,yes,yes
+API-071,POST,/api/assets/image/generate,asset-forge,GPT Image 2 text-to-image,yes,yes
+API-072,POST,/api/assets/image/edit,asset-forge,GPT Image 2 image edit,yes,yes
+API-073,POST,/api/assets/glb/text-to-3d,asset-forge,Tripo text-to-3D,yes,yes
+API-074,POST,/api/assets/glb/image-to-3d,asset-forge,Tripo image-to-3D,yes,yes
+API-075,POST,/api/assets/glb/optimize,asset-forge,compress/LOD/texture optimize,yes,yes
+API-076,POST,/api/assets/:id/approve,asset-forge,approve asset,yes,yes
+API-077,POST,/api/assets/:id/add-to-scene,asset-forge,add GLB/image to scene,yes,yes
+API-078,DELETE,/api/assets/:id,asset-forge,delete/archive asset,yes,yes
+API-079,GET,/api/settings/approval-matrix,settings,approval rules,yes,yes
+API-080,PUT,/api/settings/approval-matrix,settings,update approval rules,yes,yes
+API-081,GET,/api/settings/budgets,settings,budget limits,yes,yes
+API-082,PUT,/api/settings/budgets,settings,update budgets,yes,yes

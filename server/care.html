@@ -1,0 +1,192 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<title>JARVIS · Care Link</title>
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name=theme-color content="#02040a">
+<style>
+:root{--cy:#22d3ee;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--bg:#02040a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:#eafcff;
+ font-family:ui-rounded,'SF Pro Rounded',system-ui,Segoe UI,Roboto,sans-serif;overflow:hidden}
+#bg{position:fixed;inset:0;background:radial-gradient(900px 600px at 50% -10%,#0a2433 0%,#02040a 60%);z-index:0}
+.grid{position:fixed;inset:0;z-index:0;opacity:.18;background-image:linear-gradient(#0e3a4e55 1px,transparent 1px),linear-gradient(90deg,#0e3a4e55 1px,transparent 1px);background-size:46px 46px;animation:drift 22s linear infinite}
+@keyframes drift{to{background-position:46px 46px}}
+#wrap{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:12px;padding:16px 18px}
+.orb{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#a8f0ff,#22d3ee 55%,#0b6b86);box-shadow:0 0 26px #22d3eecc;animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 22px #22d3ee99}50%{transform:scale(1.08);box-shadow:0 0 40px #22d3eeff}}
+header h1{font-size:18px;letter-spacing:2px;margin:0;color:#bdf3ff}
+header .rm{font-size:12px;color:#5f7e94;letter-spacing:1px}
+#pill{margin-left:auto;font-size:13px;font-weight:700;padding:8px 16px;border-radius:999px;background:#0c2331;border:1px solid #1d4a63;color:var(--warn);letter-spacing:.5px;white-space:nowrap}
+#pill.ok{color:var(--ok);border-color:#1c5b46;box-shadow:0 0 18px #34d39955}
+#pill.bad{color:var(--bad);border-color:#5b1c1c}
+#stage{position:relative;flex:1;margin:4px 14px 0;border-radius:22px;overflow:hidden;background:#04101a;border:1px solid #103247;box-shadow:inset 0 0 60px #00000080}
+#remote{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#04101a}
+#remoteOff{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#4b6b7e;text-align:center;padding:24px}
+#remoteOff .big{font-size:22px;color:#7fb0c4}
+#selfBox{position:absolute;right:14px;bottom:14px;width:33%;max-width:200px;aspect-ratio:3/4;border-radius:16px;overflow:hidden;border:2px solid #22d3ee88;box-shadow:0 0 24px #00000099;background:#03222e}
+#self{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+#selfTag{position:absolute;left:8px;bottom:7px;font-size:11px;color:#bdf3ff;text-shadow:0 1px 4px #000}
+.scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#22d3ee,transparent);box-shadow:0 0 14px #22d3ee;animation:scan 4s ease-in-out infinite;z-index:3}
+@keyframes scan{0%,100%{top:6%}50%{top:94%}}
+#live{position:absolute;left:14px;top:12px;font-size:12px;color:#bdf3ff;background:#02131bcc;border:1px solid #18415a;padding:6px 12px;border-radius:999px;max-width:70%}
+#controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}
+.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+ min-height:84px;border-radius:18px;border:1px solid #1d4a63;background:linear-gradient(180deg,#0a2230,#06151f);
+ color:#dff6ff;font-size:17px;font-weight:700;letter-spacing:.4px;cursor:pointer;user-select:none;
+ transition:transform .08s,box-shadow .2s,background .2s}
+.btn .ic{font-size:30px;line-height:1}
+.btn:active{transform:scale(.96)}
+.btn.on{background:linear-gradient(180deg,#0c3a2c,#072018);border-color:#1c5b46;color:#9af7cf;box-shadow:0 0 22px #34d39944}
+.btn.off{background:linear-gradient(180deg,#3a1212,#1d0808);border-color:#5b1c1c;color:#ffb4b4}
+#sos{grid-column:1/3;min-height:108px;font-size:26px;letter-spacing:2px;border-radius:22px;
+ background:linear-gradient(180deg,#ff4d4d,#b30f0f);border:none;color:#fff;
+ box-shadow:0 0 34px #ff3b3b88;animation:sospulse 2.2s ease-in-out infinite}
+#sos .ic{font-size:38px}
+@keyframes sospulse{0%,100%{box-shadow:0 0 26px #ff3b3b66}50%{box-shadow:0 0 52px #ff3b3bcc}}
+#sos:active{transform:scale(.97)}
+#gate{position:fixed;inset:0;z-index:20;background:radial-gradient(800px 600px at 50% 35%,#0a2433,#02040a 70%);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;padding:30px}
+#gate h2{font-size:24px;color:#bdf3ff;margin:0;letter-spacing:1px}
+#gate p{color:#7fb0c4;max-width:420px;margin:0;font-size:15px;line-height:1.5}
+#start{min-width:260px;min-height:92px;font-size:22px;font-weight:800;letter-spacing:1px;border:none;border-radius:24px;
+ background:linear-gradient(180deg,#33e0ff,#0b86a6);color:#021018;box-shadow:0 0 40px #22d3eeaa;cursor:pointer}
+#start:active{transform:scale(.97)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+</style></head>
+<body>
+<div id=bg></div><div class=grid></div>
+<div id=wrap>
+ <header>
+  <div class=orb></div>
+  <div><h1>JARVIS CARE LINK</h1><div class=rm id=rmlbl>room —</div></div>
+  <div id=pill>starting…</div>
+ </header>
+ <div id=stage>
+  <video id=remote autoplay playsinline></video>
+  <div id=remoteOff><div class=big>Waiting for your family to connect…</div><div>You are safe. Jarvis is watching over you.</div></div>
+  <div class=scan></div>
+  <div id=live aria-live=polite>Connecting…</div>
+  <div id=selfBox><video id=self autoplay playsinline muted></video><div id=selfTag>You</div></div>
+ </div>
+ <div id=controls>
+  <button class="btn on" id=camBtn onclick="toggleCam()"><span class=ic>📷</span><span id=camTxt>Camera On</span></button>
+  <button class="btn on" id=micBtn onclick="toggleMic()"><span class=ic>🎙️</span><span id=micTxt>Mic On</span></button>
+  <button class=btn id=flipBtn onclick="flipCam()"><span class=ic>🔄</span>Flip Camera</button>
+  <button class=btn id=callBtn onclick="callFamily()"><span class=ic>📞</span>Call Family</button>
+  <button id=sos onclick="sos()"><span class=ic>🆘</span>I NEED HELP</button>
+ </div>
+</div>
+<div id=gate>
+ <div class=orb style="width:60px;height:60px"></div>
+ <h2>Hello — this is Jarvis</h2>
+ <p>Tap the big button below once. I will turn on your camera and microphone so your family can see you, talk to you, and make sure you are safe.</p>
+ <button id=start onclick="begin()">TAP TO CONNECT</button>
+ <p style="font-size:12px;color:#4b6b7e">Your video stays private between you and your family.</p>
+</div>
+<div class=sr aria-live=assertive id=srlog></div>
+<script>
+const ROOM=(new URLSearchParams(location.search).get('room')||'mum').toLowerCase();
+const ROLE='patient';
+document.getElementById('rmlbl').textContent='room · '+ROOM;
+const ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'},
+ {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+ {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+ {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}];
+let pc,local,since=0,facing='user',pendingIce=[],haveRemote=false,connected=false;
+
+/* ---- British "Jarvis" voice ---- */
+let VOICES=[];function loadVoices(){VOICES=speechSynthesis.getVoices()||[];}
+loadVoices();if('onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){const pref=['Daniel','Google UK English Male','Microsoft Ryan','Microsoft George','Arthur','Oliver'];
+ for(const p of pref){const v=VOICES.find(v=>v.name&&v.name.includes(p));if(v)return v;}
+ return VOICES.find(v=>/en[-_]?GB/i.test(v.lang))||VOICES.find(v=>/^en/i.test(v.lang))||VOICES[0];}
+function jarvis(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}else u.lang='en-GB';u.rate=.98;u.pitch=.9;u.volume=1;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}
+ document.getElementById('srlog').textContent=t;}
+function status(t){document.getElementById('live').textContent=t;}
+function pill(t,c){const p=document.getElementById('pill');p.textContent=t;p.className=c||'';}
+
+async function sig(to,kind,payload){try{await fetch('rtc',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({room:ROOM,from:ROLE,to:to,kind:kind,payload:payload})});}catch(e){}}
+
+async function getMedia(face){
+ const s=await navigator.mediaDevices.getUserMedia({audio:true,video:{facingMode:face,width:{ideal:1280},height:{ideal:720}}});
+ return s;}
+
+function newPeer(){
+ if(pc){try{pc.close()}catch(e){}}
+ pendingIce=[];haveRemote=false;
+ pc=new RTCPeerConnection({iceServers:ICE});
+ local.getTracks().forEach(t=>pc.addTrack(t,local));
+ pc.onicecandidate=e=>{if(e.candidate)sig('guardian','ice',e.candidate);};
+ pc.ontrack=e=>{const r=document.getElementById('remote');if(r.srcObject!==e.streams[0]){r.srcObject=e.streams[0];}
+  document.getElementById('remoteOff').style.display='none';};
+ pc.onconnectionstatechange=()=>{const st=pc.connectionState;
+  if(st==='connected'){connected=true;pill('● LIVE with family','ok');status('You are connected. Your family can see and hear you.');}
+  else if(st==='failed'||st==='disconnected'){connected=false;pill('reconnecting…','');document.getElementById('remoteOff').style.display='flex';}};
+ return pc;}
+
+async function onMsg(m){
+ const k=m.kind,p=m.payload;
+ if(k==='offer'){newPeer();await pc.setRemoteDescription(p);haveRemote=true;
+  for(const c of pendingIce){try{await pc.addIceCandidate(c)}catch(e){}}pendingIce=[];
+  const ans=await pc.createAnswer();await pc.setLocalDescription(ans);sig('guardian','answer',ans);
+  status('Your family is connecting to you…');}
+ else if(k==='ice'){if(pc&&haveRemote){try{await pc.addIceCandidate(p)}catch(e){}}else pendingIce.push(p);}
+ else if(k==='hello'){pill('family is here','ok');jarvis('Your family is here. One moment.');sig('guardian','hello',{role:ROLE});}
+ else if(k==='ctrl')applyCtrl(p);}
+
+function applyCtrl(p){
+ if(!p)return;
+ if(p.cam!==undefined){setCam(p.cam);jarvis(p.cam?'Your family turned your camera on.':'Your camera is now off for privacy.');}
+ if(p.mic!==undefined){setMic(p.mic);jarvis(p.mic?'Your microphone is on.':'Your microphone is muted.');}
+ if(p.flip)flipCam();
+ if(p.speak)jarvis(p.speak);
+ if(p.ring){jarvis('Your family is calling you. I am connecting you now.');try{beep()}catch(e){}}
+}
+
+function setCam(on){const t=local&&local.getVideoTracks()[0];if(t)t.enabled=on;
+ const b=document.getElementById('camBtn');b.className='btn '+(on?'on':'off');document.getElementById('camTxt').textContent=on?'Camera On':'Camera Off';}
+function setMic(on){const t=local&&local.getAudioTracks()[0];if(t)t.enabled=on;
+ const b=document.getElementById('micBtn');b.className='btn '+(on?'on':'off');document.getElementById('micTxt').textContent=on?'Mic On':'Mic Off';}
+function toggleCam(){const t=local&&local.getVideoTracks()[0];setCam(t?!t.enabled:true);}
+function toggleMic(){const t=local&&local.getAudioTracks()[0];setMic(t?!t.enabled:true);}
+
+async function flipCam(){try{facing=facing==='user'?'environment':'user';
+ const ns=await getMedia(facing);const nv=ns.getVideoTracks()[0];
+ const old=local.getVideoTracks()[0];if(old){local.removeTrack(old);old.stop();}
+ local.addTrack(nv);
+ if(pc){const snd=pc.getSenders().find(s=>s.track&&s.track.kind==='video');if(snd)await snd.replaceTrack(nv);}
+ document.getElementById('self').srcObject=local;jarvis(facing==='environment'?'Showing the room camera.':'Showing the front camera.');
+}catch(e){jarvis('I could not switch the camera.');}}
+
+function callFamily(){sig('guardian','hello',{role:ROLE,call:true});sig('guardian','ctrl',{ring:true});
+ jarvis('Calling your family now. Please wait.');pill('calling family…','');}
+function sos(){sig('guardian','ctrl',{sos:true,ts:Date.now()});sig('guardian','hello',{role:ROLE,sos:true});
+ jarvis('Do not worry. I have sent an alert to your family right now. Help is coming.');pill('🆘 ALERT SENT','bad');
+ try{beep();setTimeout(beep,600);setTimeout(beep,1200);}catch(e){}}
+
+let actx;function beep(){actx=actx||new(window.AudioContext||window.webkitAudioContext)();
+ const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);
+ o.frequency.value=880;g.gain.value=.15;o.start();o.stop(actx.currentTime+.25);}
+
+async function poll(){try{const r=await fetch('rtc/poll?room='+ROOM+'&role='+ROLE+'&since='+since);
+ const d=await r.json();since=d.seq||since;
+ if(d.peer_online&&!connected)pill('family online','ok');
+ for(const m of (d.msgs||[]))await onMsg(m);}catch(e){}finally{setTimeout(poll,800);}}
+
+async function begin(){
+ try{
+  document.getElementById('gate').style.display='none';
+  pill('turning on camera…','');
+  local=await getMedia(facing);
+  document.getElementById('self').srcObject=local;
+  jarvis('Hello. This is Jarvis. Your camera and microphone are on. Your family can see you and keep you safe now.');
+  pill('ready · waiting for family','ok');status('You are online. Waiting for your family to connect.');
+  sig('guardian','hello',{role:ROLE});  // announce so guardian can offer
+  poll();
+ }catch(e){pill('camera blocked','bad');status('Please allow the camera and microphone, then tap again.');
+  document.getElementById('gate').style.display='flex';
+  jarvis('I need permission to use the camera and microphone. Please tap allow.');}
+}
+</script>
+</body></html>

@@ -55,9 +55,17 @@ export default function JarvisLoader({
       });
       kick();
       heroV.addEventListener("ended", fireComplete);
-      // resume audio on the first interaction if the browser blocked unmuted autoplay.
-      const onGesture = () => { heroV.muted = false; heroV.play().catch(() => {}); window.removeEventListener("pointerdown", onGesture); };
+      // resume audio on the first interaction ONLY if the browser blocked unmuted autoplay AND the
+      // lady hasn't already finished her line. Once completed, the clip loops muted forever — a
+      // later click (e.g. picking a home tile) must NEVER un-mute it and replay the voice.
+      const onGesture = () => {
+        window.removeEventListener("pointerdown", onGesture);
+        if (completed.current) return;            // already spoke once → never speak again
+        heroV.muted = false; heroV.play().catch(() => {});
+      };
       window.addEventListener("pointerdown", onGesture);
+      // belt-and-suspenders: when fireComplete runs, drop the gesture hook so it can't re-arm.
+      heroV.addEventListener("ended", () => window.removeEventListener("pointerdown", onGesture));
       // safety net: never hang the boot — if `ended` never fires (stall/decode), complete after the
       // clip's duration + a margin, or a hard 40s cap.
       let cap = setTimeout(fireComplete, 40000);

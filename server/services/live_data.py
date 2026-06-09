@@ -84,7 +84,10 @@ def _city_task(city: dict, now: int):
 
 
 def _crypto(now: int):
-    coins = "bitcoin,ethereum,solana,cardano,ripple,polkadot,chainlink,litecoin,dogecoin,avalanche-2"
+    coins = ("bitcoin,ethereum,solana,cardano,ripple,polkadot,chainlink,litecoin,dogecoin,avalanche-2,"
+             "binancecoin,tron,polygon,uniswap,cosmos,stellar,monero,algorand,vechain,filecoin,aptos,"
+             "arbitrum,optimism,near,injective,sui,render-token,the-graph,maker,aave,fantom,hedera,"
+             "internet-computer,quant-network,immutable-x,kaspa,bittensor,celestia,litecoin,tezos")
     d = _get(f"https://api.coingecko.com/api/v3/simple/price?ids={coins}&vs_currencies=usd")
     objs = []
     for coin, px in (d or {}).items():
@@ -169,6 +172,11 @@ def run_forever(interval_s: float = None) -> None:
                 print(f"[live_data] fast cycle {time.time()-t:.0f}s | +{n} measurements (crypto/quakes)", flush=True)
         except Exception as e:  # noqa: BLE001
             print(f"[live_data] error: {str(e)[:160]}", flush=True)
+            try:
+                from . import feedback_bus as _fb
+                _fb.record("server/services/live_data.py", "exception", str(e)[:200], "error")
+            except Exception:  # noqa: BLE001
+                pass
         time.sleep(fast)
 
 

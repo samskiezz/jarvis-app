@@ -1,0 +1,71 @@
+id,phase,area,ticket,definition_of_done,priority
+TASK-001,Phase 1,Backend,Create canonical DashboardState schema,/api/dashboard/state returns typed snapshot,P0
+TASK-002,Phase 1,Backend,Create PipelineState model,all pipeline rows can render from state,P0
+TASK-003,Phase 1,Backend,Implement pipeline control endpoints,toggle/run/pause/stop/rerun work on test workers,P0
+TASK-004,Phase 1,Backend,Implement Vast GPU telemetry collector,per GPU and per model process metrics present,P0
+TASK-005,Phase 1,Backend,Implement Hostinger telemetry collector,CPU/RAM/disk/load/per-core present,P0
+TASK-006,Phase 1,Backend,Implement Docker stats/restart monitor,restart loop detection working,P0
+TASK-007,Phase 1,Backend,Add audit log model,every control action logged,P0
+TASK-008,Phase 1,Backend,Add SSE/WebSocket stream,UI receives live updates,P0
+TASK-009,Phase 1,Backend,Add resource mode engine,normal/busy/degraded/critical computed,P0
+TASK-010,Phase 1,Backend,Add safe command guardrails,no destructive command without approval,P0
+TASK-011,Phase 2,Frontend,Build app shell and command bar,command bar with global actions,P0
+TASK-012,Phase 2,Frontend,Build left sidebar,all nav routes present,P0
+TASK-013,Phase 2,Frontend,Build KPI strip,7 KPI cards animated,P0
+TASK-014,Phase 2,Frontend,Build Infrastructure panel,GPU+Hostinger live data displayed,P0
+TASK-015,Phase 2,Frontend,Build Automation Pipelines table,all controls present per row,P0
+TASK-016,Phase 2,Frontend,Build Inference Fabric panel,6 tiers and call counts displayed,P0
+TASK-017,Phase 2,Frontend,Build Cross-Correlation panel,sources/jobs/control cards present,P0
+TASK-018,Phase 2,Frontend,Build Knowledge Graph panel,ontology + learned facts displayed,P0
+TASK-019,Phase 2,Frontend,Build Live Activity feed,new events append live,P0
+TASK-020,Phase 2,Frontend,Build Alerts panel,alerts render with acknowledge,P0
+TASK-021,Phase 3,3D,Create R3F scene root,Canvas renders without blocking UI,P1
+TASK-022,Phase 3,3D,Add quality modes,cinematic/balanced/performance/safe switch works,P1
+TASK-023,Phase 3,3D,Add brain placeholder GLB loader,brain prop loads or fallback appears,P1
+TASK-024,Phase 3,3D,Add holographic brain shader,emissive/fresnel/scanline visible,P1
+TASK-025,Phase 3,3D,Add audio-reactive morph controller,voice input drives brain pulse,P1
+TASK-026,Phase 3,3D,Add map visual placeholder,globe/map mesh renders,P1
+TASK-027,Phase 3,3D,Add route particle system,particles show inference/data routes,P1
+TASK-028,Phase 3,3D,Add GLB asset registry loader,assets loaded by scene manifest,P1
+TASK-029,Phase 3,3D,Add asset disposal lifecycle,no memory leak after unmount,P1
+TASK-030,Phase 3,3D,Add FPS/performance monitor,visible in developer mode,P1
+TASK-031,Phase 4,Assets,Create Asset Forge backend image route,GPT Image 2 job creates asset record,P1
+TASK-032,Phase 4,Assets,Create Asset Forge backend GLB route,Tripo job creates asset record,P1
+TASK-033,Phase 4,Assets,Create asset library DB table,metadata persisted,P1
+TASK-034,Phase 4,Assets,Create image preview viewer,image assets preview,P1
+TASK-035,Phase 4,Assets,Create GLB preview viewer,GLB assets preview,P1
+TASK-036,Phase 4,Assets,Create Add to Scene workflow,approved asset can be placed,P1
+TASK-037,Phase 4,Assets,Create approval states,draft/generated/reviewed/approved/live/archive,P1
+TASK-038,Phase 4,Assets,Add budget guardrails,generation limits enforced,P1
+TASK-039,Phase 4,Assets,Add prompt templates,prompts from inventory available,P1
+TASK-040,Phase 4,Assets,Add optimize GLB command,compress/LOD/texture pipeline documented,P1
+TASK-041,Phase 5,LLM,Install LiteLLM proxy config,all model calls can use gateway,P1
+TASK-042,Phase 5,LLM,Implement hard policy gate,Tier 0 deterministic tasks never hit LLM,P1
+TASK-043,Phase 5,LLM,Implement router 3B client,ambiguous tasks get JSON route,P1
+TASK-044,Phase 5,LLM,Implement RouteLLM optional lane,base-vs-strong route test works,P1
+TASK-045,Phase 5,LLM,Implement validators,JSON/source/code validators logged,P1
+TASK-046,Phase 5,LLM,Implement blocked escalation logs,blocked tiers shown in dashboard,P1
+TASK-047,Phase 5,LLM,Implement model residency controller,hot/warm/cold/off states displayed,P1
+TASK-048,Phase 5,LLM,Implement vLLM server config docs,8B/32B/70B serving paths documented,P1
+TASK-049,Phase 5,LLM,Implement Why Did This Run modal,decision details visible,P1
+TASK-050,Phase 5,LLM,Implement router savings metrics,avoided GPU calls calculated,P1
+TASK-051,Phase 6,Voice,Implement voice session controls,start/stop/mute/listen work,P1
+TASK-052,Phase 6,Voice,Implement waveform visualizer,audio drives waveform,P1
+TASK-053,Phase 6,Voice,Implement spoken alerts,alerts can be spoken,P1
+TASK-054,Phase 6,Voice,Implement voice replies,recognized transcript triggers commands,P1
+TASK-055,Phase 6,Voice,Implement broadcast summary,summary spoken on demand,P1
+TASK-056,Phase 6,Coding,Create Claude Agent frame shell,Chat/Diff/Files/Terminal/Browser tabs,P1
+TASK-057,Phase 6,Coding,Create coding task queue,progress bars and statuses render,P1
+TASK-058,Phase 6,Coding,Implement approval matrix,risky code/infra actions require approval,P1
+TASK-059,Phase 6,Coding,Implement sleep-mode rule check,3-source verification required when needed,P1
+TASK-060,Phase 6,Coding,Implement browser automation audit,browser actions logged,P1
+TASK-061,Phase 7,QA,Build asset count validator,counts match inventory,P1
+TASK-062,Phase 7,QA,Build API contract tests,endpoints have typed responses,P1
+TASK-063,Phase 7,QA,Build UI snapshot tests,key panels render,P1
+TASK-064,Phase 7,QA,Build accessibility checklist,contrast/keyboard/reduced motion pass,P1
+TASK-065,Phase 7,QA,Build performance budgets,FPS/memory/load limits checked,P1
+TASK-066,Phase 7,QA,Build security review,secrets/terminal/destructive operations guarded,P1
+TASK-067,Phase 7,QA,Build deployment runbook,deploy and rollback documented,P1
+TASK-068,Phase 7,QA,Build final acceptance checklist,engineer can verify feature by feature,P1
+TASK-069,Phase 7,QA,Build monitoring dashboards,Prometheus/Grafana or equivalent,P1
+TASK-070,Phase 7,QA,Final line-by-line signoff,all files reviewed and manifest generated,P1

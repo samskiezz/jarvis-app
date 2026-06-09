@@ -1,0 +1,55 @@
+{
+  "_doc": "Declarative feed specs for server/services/feed_scraper.py. Copy this to server/data/feeds.json (or point $FEEDS_CONFIG at it) and edit. Entries here OVERRIDE the built-in DEFAULT_FEEDS by 'name'. Each feed writes a time-series into the History Lake (history_lake.db) as series (source, entity, metric, unit, freq) with idempotent observations. Run: python -m server.services.feed_scraper list | once [name...] | forever | selftest",
+  "feeds": [
+    {
+      "name": "worldbank_co2_aus",
+      "source": "worldbank",
+      "entity": "AUS",
+      "metric": "co2_emissions",
+      "unit": "kt",
+      "freq": "1y",
+      "url": "https://api.worldbank.org/v2/country/AUS/indicator/EN.ATM.CO2E.KT?format=json&per_page=300",
+      "records_path": "1",
+      "time_field": "date",
+      "time_format": "year",
+      "value_field": "value",
+      "ttl": 86400,
+      "enabled": true
+    },
+    {
+      "name": "_example_epoch_api",
+      "_doc": "Template for a generic JSON API whose records carry an epoch-seconds timestamp. Disabled by default — set a real url and flip enabled to true.",
+      "source": "example",
+      "entity": "demo",
+      "metric": "value",
+      "unit": null,
+      "freq": "1h",
+      "url": "https://api.example.com/v1/series?metric=demo",
+      "records_path": "data.points",
+      "time_field": "timestamp",
+      "time_format": "epoch_s",
+      "value_field": "value",
+      "entity_field": null,
+      "ttl": 300,
+      "enabled": false,
+      "headers": {}
+    },
+    {
+      "name": "_example_multi_entity",
+      "_doc": "Template for an API returning many entities in one response. entity_field splits records into one series per entity (e.g. per-station, per-symbol). Disabled by default.",
+      "source": "example_multi",
+      "entity": "unknown",
+      "metric": "reading",
+      "unit": "units",
+      "freq": "irregular",
+      "url": "https://api.example.com/v1/stations/readings",
+      "records_path": "readings",
+      "time_field": "observed_at",
+      "time_format": "iso",
+      "value_field": "metrics.temperature",
+      "entity_field": "station_id",
+      "ttl": 600,
+      "enabled": false
+    }
+  ]
+}
