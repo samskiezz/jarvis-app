@@ -13,3 +13,4 @@
 2026-06-09 F14 DocumentSearch.jsx — /v1/reports + /knowledge/ combined catalog; src-filter tabs (all/reports/knowledge); search input; click result triggers JARVIS TTS summary; isDocumentQuery wired in JarvisBrain; DOCS toggle at left:596 bottom-left; build PASSED.
 2026-06-09 F15 SkillScorecard.jsx — /v1/aip/skill scorecard panel; score bars + level badges + filter; avg score stat; isSkillQuery + buildSkillScript TTS wired in JarvisBrain; SKILLS toggle at left:700 bottom-left; auto-refreshes 60s; build PASSED.
 2026-06-09 F16 BrainGrowthSparkline.jsx — rolling 40-pt Recharts AreaChart for nodes+synapses from /v1/cinematic/brain; BRAIN toggle + TTS intent; build PASSED
+2026-06-09 F17 SceneAnchorDrillDown: per-scene anchor drill-down panel; fetches /v1/cinematic/scene/{id}; clickable anchor list + recursive detail tree; isAnchorQuery+buildAnchorScript TTS wired in JarvisBrain; ⚓ ANCHORS toggle left:908 + Alt+A; build PASSED.

@@ -16,6 +16,7 @@ import { isScenarioQuery, buildScenarioScript } from "@/components/cinematic/Sce
 import { isDocumentQuery, buildDocumentScript } from "@/components/cinematic/DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "@/components/cinematic/SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "@/components/cinematic/BrainGrowthSparkline";
+import { isAnchorQuery, buildAnchorScript } from "@/components/cinematic/SceneAnchorDrillDown";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -201,6 +202,17 @@ export default function JarvisBrain() {
     if (isBrainQuery(q)) {
       try {
         const answer = await buildBrainScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isAnchorQuery(q)) {
+      try {
+        const answer = await buildAnchorScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
