@@ -4,6 +4,11 @@ import { apiBase } from "@/api/cinematicDataAdapters";
 import SceneKeyboardNav from "@/components/cinematic/SceneKeyboardNav";
 import { isStatusQuery, buildStatusScript } from "@/components/cinematic/SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "@/components/cinematic/MarketsTicker";
+import {
+  isEntitySearchQuery,
+  extractEntitySearchTerm,
+  buildEntityDossierScript,
+} from "@/components/cinematic/EntityQuickSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -107,6 +112,19 @@ export default function JarvisBrain() {
       return;
     }
 
+    if (isEntitySearchQuery(q)) {
+      const term = extractEntitySearchTerm(q);
+      window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term: term || q } }));
+      try {
+        const answer = await buildEntityDossierScript(term || q);
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
     let answer = "";
     try {
       const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
@@ -129,6 +147,19 @@ export default function JarvisBrain() {
     const onAsk = (e) => { const q = e?.detail?.text || e?.detail?.query; if (q) ask(q); };
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const onDossier = (e) => {
+      const t = e?.detail?.text;
+      if (!t) return;
+      clearTimeout(hideT.current);
+      setOpen(true); typeOut(t); speak(t);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, t.length * 70));
+    };
+    window.addEventListener("jarvis:speak-dossier", onDossier);
+    return () => window.removeEventListener("jarvis:speak-dossier", onDossier);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

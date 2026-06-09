@@ -15,6 +15,7 @@ import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
 import MarketsTicker from '@/components/cinematic/MarketsTicker';
+import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -38,6 +39,7 @@ function App() {
             <JarvisBrain />
             <WorldIncidentFeed />
             <MarketsTicker />
+            <EntityQuickSearch />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
