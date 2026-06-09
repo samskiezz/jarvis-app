@@ -17,6 +17,7 @@ import { isDocumentQuery, buildDocumentScript } from "@/components/cinematic/Doc
 import { isSkillQuery, buildSkillScript } from "@/components/cinematic/SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "@/components/cinematic/BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "@/components/cinematic/SceneAnchorDrillDown";
+import { isAmbientQuery } from "@/components/cinematic/AmbientReactorHum";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -218,6 +219,14 @@ export default function JarvisBrain() {
       } catch (_) {
         setThinking(false); setOpen(false);
       }
+      return;
+    }
+
+    if (isAmbientQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
+      const answer = "Ambient reactor hum toggled, sir.";
+      setThinking(false); typeOut(answer); speak(answer);
+      hideT.current = setTimeout(() => setOpen(false), 6000);
       return;
     }
 

@@ -15,3 +15,4 @@
 2026-06-09 F16 BrainGrowthSparkline.jsx — rolling 40-pt Recharts AreaChart for nodes+synapses from /v1/cinematic/brain; BRAIN toggle + TTS intent; build PASSED
 2026-06-09 F17 SceneAnchorDrillDown: per-scene anchor drill-down panel; fetches /v1/cinematic/scene/{id}; clickable anchor list + recursive detail tree; isAnchorQuery+buildAnchorScript TTS wired in JarvisBrain; ⚓ ANCHORS toggle left:908 + Alt+A; build PASSED.
 2026-06-09 F18 JarvisBootSequence.jsx — sessionStorage-gated cinematic boot overlay; fetches /v1/jarvis/system/status + /v1/cinematic/brain for real counts; animates boot lines; speaks JARVIS online via /v1/voice/tts on user click; mounted in App.jsx; build PASSED.
+2026-06-09 F19 AmbientReactorHum.jsx — WebAudio reactor hum synthesizer: 60Hz sawtooth + 120Hz harmonic + 30Hz sub-bass + bandpass noise + 0.7Hz LFO tremolo; ◇ HUM toggle at left:1012 bottom strip; isAmbientQuery + jarvis:ambient-toggle event wired in JarvisBrain; build PASSED.
