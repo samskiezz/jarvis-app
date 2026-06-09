@@ -14,6 +14,7 @@ import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
+import MarketsTicker from '@/components/cinematic/MarketsTicker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -36,6 +37,7 @@ function App() {
             <FirstRunSetup />
             <JarvisBrain />
             <WorldIncidentFeed />
+            <MarketsTicker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
