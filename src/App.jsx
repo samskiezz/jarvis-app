@@ -24,6 +24,7 @@ import DocumentSearch from '@/components/cinematic/DocumentSearch';
 import SkillScorecard from '@/components/cinematic/SkillScorecard';
 import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
 import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
+import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -56,6 +57,7 @@ function App() {
             <SkillScorecard />
             <BrainGrowthSparkline />
             <SceneAnchorDrillDown />
+            <JarvisBootSequence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
