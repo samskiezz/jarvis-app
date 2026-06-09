@@ -11,6 +11,7 @@ import {
 } from "@/components/cinematic/EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "@/components/cinematic/RiskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "@/components/cinematic/DatasetsBrowser";
+import { isInvestigationsQuery, buildInvestigationsScript } from "@/components/cinematic/InvestigationsList";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -141,6 +142,17 @@ export default function JarvisBrain() {
     if (isDatasetsQuery(q)) {
       try {
         const answer = await buildDatasetsScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isInvestigationsQuery(q)) {
+      try {
+        const answer = await buildInvestigationsScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {

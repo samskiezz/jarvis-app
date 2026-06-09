@@ -29,7 +29,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards (critical/high/medium/low) with red pulse on critical; severity filter tabs; "JARVIS, risks" opens board via isRiskQuery + buildRiskScript TTS; mounted in App.jsx; build PASSED. *(2026-06-09)*
 - [x] F10 Task board — /entities/Task → CRUD task board with kanban columns (TODO/IN_PROGRESS/DONE), new-task form, stat tiles; registered as TaskManager in pageRegistry.js jarvis group. *(2026-06-08)*
 - [x] F11 Datasets browser — /v1/datasets → catalog list with row counts, filter input, row-count badges; "JARVIS, datasets" intent wired in JarvisBrain; DATA toggle button bottom-left strip; build PASSED. *(2026-06-09)*
-- [ ] F12 Investigations list — /v1/investigations → open cases panel.
+- [x] F12 Investigations list — /v1/investigations → open cases panel; status-sorted cards (open/in-progress/pending/closed), priority badge, lead/assignee, filter input; "JARVIS, investigations" opens panel + TTS brief via isInvestigationsQuery in JarvisBrain; INTEL toggle button bottom-left strip; build PASSED. *(2026-06-09)*
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
 - [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
