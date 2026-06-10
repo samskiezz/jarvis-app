@@ -1,0 +1,269 @@
+/**
+ * ACCESSIBILITY CORE — a11y.css
+ * Stage 5 M0: Visual + overlay contract
+ * Loaded by all three pages; toggled by A11Y.apply()
+ */
+
+:root {
+  --a11y-scale: 1;
+  --a11y-target: 64px;
+  --a11y-dwell-ms: 900ms;
+  --a11y-cap-fs: 22px;
+  --a11y-z: 2147483000;
+}
+
+/* ── P4 Visual Contrast & Scale ─────────────────────────── */
+
+/* Extend voice-page HC to all pages */
+body.hc {
+  --text-primary: #000;
+  --bg-primary: #fff;
+  --border-primary: #000;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+body.hc * {
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Auto high-contrast on system preference */
+@media (prefers-contrast: more) {
+  body.a11y-contrast-auto {
+    --text-primary: #000;
+    --bg-primary: #fff;
+    --border-primary: #000;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+  }
+}
+
+@media (forced-colors: active) {
+  body.a11y-contrast-auto {
+    color: CanvasText;
+    background-color: Canvas;
+    border-color: CanvasText;
+  }
+}
+
+/* Text scale 100–220% */
+body.a11y-scale {
+  font-size: calc(100% * var(--a11y-scale));
+}
+
+/* Reduce motion on system preference or explicit toggle */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* ── P3 Extra-Large Touch Targets ──────────────────────── */
+
+body.xl-targets a,
+body.xl-targets button,
+body.xl-targets [role="button"],
+body.xl-targets input[type="button"],
+body.xl-targets input[type="submit"],
+body.xl-targets input[type="checkbox"],
+body.xl-targets input[type="radio"],
+body.xl-targets input[type="text"],
+body.xl-targets textarea,
+body.xl-targets .card,
+body.xl-targets .eb {
+  min-width: var(--a11y-target);
+  min-height: var(--a11y-target);
+  padding: 8px !important;
+}
+
+/* ── P6 Calm Mode (D7: density reduction + spacing + urgency hide) ───────────────────────────────────────── */
+
+body.calm {
+  --saturate: 0.7;
+  --brightness: 1.1;
+  filter: saturate(var(--saturate)) brightness(var(--brightness));
+  --a11y-scale: 1.15; /* bump up calm mode text by default */
+}
+
+body.calm * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Density reduction: increased spacing, less clutter */
+body.calm .card,
+body.calm .eb,
+body.calm [role="button"],
+body.calm button,
+body.calm a {
+  margin: 12px !important;
+  padding: 16px !important;
+  line-height: 1.6;
+}
+
+/* Hide non-emergency urgency badges */
+body.calm .urgency-badge:not(.a11y-emergency) {
+  opacity: 0.2;
+  font-size: 0.8em;
+}
+
+/* Simplify form inputs */
+body.calm input,
+body.calm textarea,
+body.calm select {
+  padding: 12px !important;
+  font-size: 16px !important;
+  line-height: 1.5;
+}
+
+/* ── A11Y Layer Overlays ────────────────────────────────── */
+
+#a11y-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--a11y-z);
+  pointer-events: none;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Caption bar */
+#a11y-captions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  font-size: var(--a11y-cap-fs);
+  line-height: 1.4;
+  padding: 12px 16px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-top: 2px solid #00d4ff;
+  aria-live: polite;
+  aria-atomic: true;
+}
+
+#a11y-captions.hidden {
+  display: none;
+}
+
+/* Scanning highlight */
+.a11y-scan-hl {
+  outline: 4px solid #73f4ff !important;
+  outline-offset: 2px;
+}
+
+/* Dwell ring countdown */
+#a11y-dwell-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #73f4ff;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: a11y-dwell-pulse var(--a11y-dwell-ms) ease-in forwards;
+}
+
+@keyframes a11y-dwell-pulse {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* Gaze cursor */
+#a11y-gaze-cursor {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ff00ff;
+  border-radius: 50%;
+  pointer-events: none;
+  display: none;
+  z-index: calc(var(--a11y-z) + 1);
+}
+
+#a11y-gaze-cursor.active {
+  display: block;
+}
+
+/* On-screen keyboard */
+#a11y-kbd {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  padding: 8px;
+  max-height: 40vh;
+  z-index: calc(var(--a11y-z) + 2);
+  pointer-events: auto;
+  display: none;
+}
+
+#a11y-kbd.active {
+  display: grid;
+}
+
+#a11y-kbd button {
+  background: #333;
+  color: #fff;
+  border: 1px solid #666;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  min-height: 44px;
+  font-size: 16px;
+}
+
+#a11y-kbd button:hover,
+#a11y-kbd button.highlighted {
+  background: #73f4ff;
+  color: #000;
+}
+
+/* Number badges for scanning */
+.a11y-numbadge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background: #ff00ff;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: calc(var(--a11y-z) + 1);
+}
+
+/* Suppress overlays under reduce-motion / calm */
+body.reduce-motion #a11y-dwell-ring,
+body.calm #a11y-dwell-ring {
+  animation: none !important;
+}
+
+/* Emergency alert: always visible, high priority */
+.a11y-emergency {
+  background: #ff0000 !important;
+  color: #fff !important;
+  font-weight: bold;
+}

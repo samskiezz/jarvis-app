@@ -715,6 +715,91 @@ def _h_knowledge_stats(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
 
 
 # --------------------------------------------------------------------------- #
+# D1: Accessibility Core handlers
+# --------------------------------------------------------------------------- #
+def _h_a11y_status(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Get current accessibility state and capabilities."""
+    from server import dashboard as D
+    ctx.progress(50, "reading a11y state")
+    cur = D._a11y_read()
+    ctx.progress(100, "done")
+    return {
+        "state": cur,
+        "summary": f"HC: {cur.get('hc', False)}, scale: {cur.get('scale', 100)}%, captions: {cur.get('captions', False)}, calm: {cur.get('calm', False)}"
+    }
+
+
+def _h_a11y_set_mode(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Set an accessibility mode (calm, hc, reduce_motion, scan, dwell, gaze, predict)."""
+    from server import dashboard as D
+    mode = args.get("mode", "").lower()
+    on = args.get("on", True)
+    valid = {"calm", "hc", "reduce_motion", "scan", "dwell", "gaze", "predict"}
+    if mode not in valid:
+        return {"error": f"invalid mode {mode!r}; must be one of {valid}", "summary": "invalid mode"}
+
+    ctx.progress(50, f"setting {mode}={on}")
+    D._a11y_write({"state": {mode: on}}, "agent")
+    ctx.progress(100, "done")
+    return {"mode": mode, "on": on, "summary": f"{mode}: {'on' if on else 'off'}"}
+
+
+def _h_a11y_text_scale(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Set text scale (100–220%)."""
+    from server import dashboard as D
+    scale = int(args.get("scale", 100))
+    if scale < 100 or scale > 220:
+        return {"error": f"scale {scale}% out of range 100–220", "summary": "invalid scale"}
+
+    ctx.progress(50, f"setting scale {scale}%")
+    D._a11y_write({"state": {"scale": scale}}, "agent")
+    ctx.progress(100, "done")
+    return {"scale": scale, "summary": f"text scale: {scale}%"}
+
+
+def _h_a11y_read_screen(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Queue a read-screen command via the _cmd channel."""
+    from server import dashboard as D
+    import secrets
+    import time as time_mod
+
+    region = args.get("region", "body")
+    nonce = f"{int(time_mod.time() * 1_000_000)}-{secrets.token_hex(8)}"
+    ctx.progress(50, f"queueing read-screen {region!r}")
+    D._a11y_write({}, "agent", cmd={"action": "read_screen", "region": region, "nonce": nonce, "ts": int(time_mod.time() * 1000)})
+    ctx.progress(100, "done")
+    return {"action": "read_screen", "region": region, "summary": f"queued: read {region}"}
+
+
+def _h_a11y_captions(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Toggle captions on/off."""
+    from server import dashboard as D
+    on = args.get("on", True)
+    ctx.progress(50, f"setting captions={on}")
+    D._a11y_write({"state": {"captions": on, "captionVideo": on}}, "agent")
+    ctx.progress(100, "done")
+    return {"captions": on, "summary": f"captions: {'on' if on else 'off'}"}
+
+
+def _h_a11y_speak(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Queue a speak command via the _cmd channel."""
+    from server import dashboard as D
+    import secrets
+    import time as time_mod
+
+    text = args.get("text", "")
+    priority = args.get("priority", "normal")
+    if not text:
+        return {"error": "text is required", "summary": "no text"}
+
+    nonce = f"{int(time_mod.time() * 1_000_000)}-{secrets.token_hex(8)}"
+    ctx.progress(50, f"queueing speak ({priority})")
+    D._a11y_write({}, "agent", cmd={"action": "speak", "text": text, "priority": priority, "nonce": nonce, "ts": int(time_mod.time() * 1000)})
+    ctx.progress(100, "done")
+    return {"text": text[:50], "priority": priority, "summary": f"queued: {text[:50]}..."}
+
+
+# --------------------------------------------------------------------------- #
 # Register the catalog (idempotent)
 # --------------------------------------------------------------------------- #
 def register_catalog() -> List[str]:
@@ -852,6 +937,54 @@ def register_catalog() -> List[str]:
         input_schema={"type": "object", "properties": {}},
         tags=["brain", "knowledge"], handler=_h_knowledge_stats))
 
+    # D1: Accessibility Core agent tools
+    register(Tool(
+        id="accessibility.status", name="A11Y status", risk="safe_read", timeout=5,
+        description="Get current accessibility mode state and capabilities (HC, scale, captions, gaze, etc.).",
+        input_schema={"type": "object", "properties": {}},
+        tags=["accessibility", "a11y"], handler=_h_a11y_status))
+
+    register(Tool(
+        id="accessibility.set_mode", name="A11Y set mode", risk="safe_write", timeout=5,
+        description="Set accessibility mode (calm, hc, reduce_motion, scan, dwell, gaze, predict).",
+        input_schema={"type": "object", "properties": {
+            "mode": {"type": "string", "enum": ["calm", "hc", "reduce_motion", "scan", "dwell", "gaze", "predict"]},
+            "on": {"type": "boolean", "default": True}},
+            "required": ["mode"]},
+        tags=["accessibility", "a11y"], handler=_h_a11y_set_mode))
+
+    register(Tool(
+        id="accessibility.text_scale", name="A11Y text scale", risk="safe_write", timeout=5,
+        description="Set text scale from 100–220%.",
+        input_schema={"type": "object", "properties": {
+            "scale": {"type": "integer", "minimum": 100, "maximum": 220, "default": 100}},
+            "required": ["scale"]},
+        tags=["accessibility", "a11y"], handler=_h_a11y_text_scale))
+
+    register(Tool(
+        id="accessibility.read_screen", name="A11Y read screen", risk="safe_write", timeout=10,
+        description="Read the entire screen aloud (from body or optional region selector).",
+        input_schema={"type": "object", "properties": {
+            "region": {"type": "string", "description": "CSS selector for region to read (default: body)"}}},
+        tags=["accessibility", "a11y"], handler=_h_a11y_read_screen))
+
+    register(Tool(
+        id="accessibility.captions", name="A11Y captions", risk="safe_write", timeout=5,
+        description="Toggle captions on/off (both bar and video).",
+        input_schema={"type": "object", "properties": {
+            "on": {"type": "boolean", "default": True}},
+            "required": ["on"]},
+        tags=["accessibility", "a11y"], handler=_h_a11y_captions))
+
+    register(Tool(
+        id="accessibility.speak", name="A11Y speak", risk="safe_write", timeout=5,
+        description="Speak a text message with optional priority (barge-in interrupts current speech).",
+        input_schema={"type": "object", "properties": {
+            "text": {"type": "string"},
+            "priority": {"type": "string", "enum": ["emergency", "barge-in", "normal", "background"], "default": "normal"}},
+            "required": ["text"]},
+        tags=["accessibility", "a11y"], handler=_h_a11y_speak))
+
     return [
         "server.disk.audit", "server.cpu.inspect", "server.logs.read",
         "docker.usage.inspect", "docker.prune.safe",
@@ -859,6 +992,8 @@ def register_catalog() -> List[str]:
         "storage.folder.compress", "storage.manifest.create", "storage.restore",
         "gpu.status.inspect", "file.search", "file.read", "file.write",
         "agent.memory.search", "agent.memory.write", "knowledge.stats",
+        "accessibility.status", "accessibility.set_mode", "accessibility.text_scale",
+        "accessibility.read_screen", "accessibility.captions", "accessibility.speak",
     ]
 
 
