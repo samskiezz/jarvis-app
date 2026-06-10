@@ -37,6 +37,7 @@ import { isPathQuery, buildPathScript } from "@/components/cinematic/GraphPathEx
 import { isReportSummariserQuery, buildReportSummariserScript } from "@/components/cinematic/ReportSummariser";
 import { isAcquisitionQuery, buildAcquisitionScript } from "@/components/cinematic/DataAcquisitionMonitor";
 import { isEntityRegistryQuery, buildEntityRegistryScript } from "@/components/cinematic/EntityRegistryOverview";
+import { isTimelineQuery, buildTimelineScript } from "@/components/cinematic/ThreatTimeline";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -435,6 +436,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:registry-toggle"));
       try {
         const answer = await buildEntityRegistryScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isTimelineQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:timeline-toggle"));
+      try {
+        const answer = await buildTimelineScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
