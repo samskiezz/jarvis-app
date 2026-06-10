@@ -27,6 +27,7 @@ import { isCentralityQuery, buildCentralityScript } from "@/components/cinematic
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "@/components/cinematic/ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "@/components/cinematic/CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
+import { isTourQuery, buildTourScript } from "@/components/cinematic/SceneAutoTour";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -318,6 +319,14 @@ export default function JarvisBrain() {
     if (isVoiceQuery(q)) {
       const newVoice = applyVoiceFromQuery(q);
       const answer = `Voice profile switched to ${newVoice}, sir. All subsequent speech will use the ${newVoice} voice engine.`;
+      setThinking(false); typeOut(answer); speak(answer);
+      hideT.current = setTimeout(() => setOpen(false), 7000);
+      return;
+    }
+
+    if (isTourQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tour-start"));
+      const answer = buildTourScript();
       setThinking(false); typeOut(answer); speak(answer);
       hideT.current = setTimeout(() => setOpen(false), 7000);
       return;
