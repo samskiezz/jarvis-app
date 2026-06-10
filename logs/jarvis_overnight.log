@@ -23,3 +23,4 @@
 2026-06-09 F25 Swarm jobs monitor — SwarmJobsMonitor.jsx; /entities/SwarmJob; stat tiles (running/queued/failed/done), progress bars, filter tabs, 20s auto-refresh, red pulse on failures; ⬡ SWARM toggle at left:1324; isSwarmQuery+buildSwarmScript TTS wired in JarvisBrain; build PASSED
 2026-06-09 F26 GraphCentralityView.jsx — /v1/graph/centrality ranked influence view; isCentralityQuery+buildCentralityScript TTS; ◈ GRAPH toggle left:1428; build PASSED
 2026-06-10 F27 ServiceDiagnostics.jsx — /v1/jarvis/system/status per-service health panel; extracts services[]/components[] or synthesises CPU/mem/load tiles; isDiagnosticsQuery+buildDiagnosticsScript TTS wired in JarvisBrain; ⬡ DIAG toggle at left:1532 bottom strip; mounted in App.jsx; build PASSED
+2026-06-10T01:10:00Z F28 CommandHistory.jsx — localStorage command log (max 50) with replay + filter; ◷ HIST toggle left:1636; Alt+H shortcut; isHistoryQuery+buildHistoryScript in JarvisBrain; build PASSED

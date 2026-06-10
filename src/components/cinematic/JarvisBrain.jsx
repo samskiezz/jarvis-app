@@ -25,6 +25,7 @@ import { isContactsQuery, buildContactsScript } from "@/components/cinematic/Con
 import { isSwarmQuery, buildSwarmScript } from "@/components/cinematic/SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "@/components/cinematic/GraphCentralityView";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "@/components/cinematic/ServiceDiagnostics";
+import { isHistoryQuery, buildHistoryScript } from "@/components/cinematic/CommandHistory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -303,6 +304,13 @@ export default function JarvisBrain() {
       } catch (_) {
         setThinking(false); setOpen(false);
       }
+      return;
+    }
+
+    if (isHistoryQuery(q)) {
+      const answer = buildHistoryScript();
+      setThinking(false); typeOut(answer); speak(answer);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, answer.length * 70));
       return;
     }
 
