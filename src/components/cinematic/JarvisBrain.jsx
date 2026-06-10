@@ -31,6 +31,7 @@ import { isTourQuery, buildTourScript } from "@/components/cinematic/SceneAutoTo
 import { isIntelProfileQuery, buildIntelProfileScript } from "@/components/cinematic/IntelProfileDirectory";
 import { isSceneHealthQuery, buildSceneHealthScript } from "@/components/cinematic/SceneHealthHeatmap";
 import { isBriefingQuery, buildBriefingScript } from "@/components/cinematic/MorningBriefing";
+import { isKnowledgeQuery, buildKnowledgeScript } from "@/components/cinematic/KnowledgeBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -363,6 +364,17 @@ export default function JarvisBrain() {
         const answer = await buildBriefingScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(12000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isKnowledgeQuery(q)) {
+      try {
+        const answer = await buildKnowledgeScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
         setThinking(false); setOpen(false);
       }
