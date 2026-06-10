@@ -28,6 +28,7 @@ import { isDiagnosticsQuery, buildDiagnosticsScript } from "@/components/cinemat
 import { isHistoryQuery, buildHistoryScript } from "@/components/cinematic/CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "@/components/cinematic/SceneAutoTour";
+import { isIntelProfileQuery, buildIntelProfileScript } from "@/components/cinematic/IntelProfileDirectory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -329,6 +330,17 @@ export default function JarvisBrain() {
       const answer = buildTourScript();
       setThinking(false); typeOut(answer); speak(answer);
       hideT.current = setTimeout(() => setOpen(false), 7000);
+      return;
+    }
+
+    if (isIntelProfileQuery(q)) {
+      try {
+        const answer = await buildIntelProfileScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
       return;
     }
 
