@@ -37,6 +37,7 @@ import CommandHistory from '@/components/cinematic/CommandHistory';
 import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
 import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
 import IntelProfileDirectory from '@/components/cinematic/IntelProfileDirectory';
+import SceneHealthHeatmap from '@/components/cinematic/SceneHealthHeatmap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -82,6 +83,7 @@ function App() {
             <MultiVoiceToggle />
             <SceneAutoTour />
             <IntelProfileDirectory />
+            <SceneHealthHeatmap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
