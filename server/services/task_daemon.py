@@ -228,7 +228,8 @@ def list_tasks(limit: int = 40) -> list:
         for tid, name, label, status, pct, st, fin, est in rows:
             elapsed = (fin or now) - (st or now)
             out.append({"id": tid, "name": name, "label": label, "status": status, "pct": pct or 0,
-                        "elapsed": elapsed, "eta": max(0, (est or 0) - elapsed) if status == "running" else 0})
+                        "elapsed": elapsed, "eta": max(0, (est or 0) - elapsed) if status == "running" else 0,
+                        "est": est or 0})
         return out
     except Exception:  # noqa: BLE001
         return []
@@ -533,19 +534,13 @@ def swarm_pipeline(title: str, brief: str = "", archon: bool = False) -> dict:
     def P(s):
         return base + s
     plan = [
-        {"label": "research", "prompt": P("STAGE 1 RESEARCH — read the relevant repo code AND web-search (a) the LATEST 2026 tech + foundational approaches for this task, and (b) how a top-tier billion-dollar company — Apple / Meta / Palantir / Google / NVIDIA — would architect and execute it (their patterns, design systems, libraries, performance + scale practices, data/ontology depth). Output concrete findings + the recommended best-in-class approach to adopt.")},
-        {"label": "draft", "prompt": P("STAGE 2 DRAFT — write a clear first-draft design/spec of exactly what to build and where. This draft is the reference for the final comparison (stage 9).")},
-        {"label": "engineer", "prompt": P("STAGE 3 ENGINEER — turn the draft into a concrete engineering plan: files, functions, data flow, wiring into server/dashboard.py + the page, edge cases, accessibility, and how it never breaks the lifeline.")},
-        {"label": "review-plan", "prompt": P("STAGE 4 REVIEW (plan) — adversarially review the engineering plan: flaws, lifeline risks, missing cases. Output the concrete required changes.")},
-        {"label": "code", "archon": True, "prompt": P("STAGE 5 CODE — implement it for real (write files/code, wire it in). REAL + functional, no fake data. Preserve all existing features; never leave a page with a JS error or break the dashboard.")},
-        {"label": "review-code", "prompt": P("STAGE 6 REVIEW (code) — adversarially review the implementation vs the plan + review notes. List every defect + required fix.")},
-        {"label": "revise", "archon": True, "prompt": P("STAGE 7 REVISE — apply ALL the review fixes. Re-check it runs cleanly.")},
-        {"label": "final-review", "prompt": P("STAGE 8 FINAL REVIEW — final pass: correctness, accessibility, lifeline safety, completeness vs the original task. Approve or list blockers + fix them.")},
-        {"label": "standards-gate", "archon": True, "prompt": P("STAGE 9 STANDARDS GATE (billion-dollar bar) — audit the result against how Apple / Meta / Palantir / Google / NVIDIA would ship it: design fidelity + polish, architecture + scale, accessibility, performance (incl. her mobile), data/ontology depth, graphics quality, and use of the latest 2026 foundations. If ANY layer falls short, RAISE it now — fix it up to that top-tier production bar and re-verify. Only pass when it genuinely meets billion-dollar-company quality; otherwise keep elevating.")},
-        {"label": "publish-compare", "prompt": P("STAGE 10 PUBLISH + COMPARE — it serves live from disk; compare the result to the STAGE 2 DRAFT in memory — did it deliver the original intent at the top-tier bar? Note + close any gaps.")},
-        {"label": "production", "prompt": P("STAGE 10 PRODUCTION — production-harden: edge cases, mobile performance, error handling; verify end-to-end with curl / node .proof/render_check.cjs.")},
-        {"label": "master-smoketest", "prompt": P("STAGE 11 MASTER SMOKE-TEST — as the master engineer, smoke-test the whole thing, debug any issue, confirm GET / is 200, /talk + /guardian 200, and the feature works. Fix anything. Report a clear PASS or FAIL with evidence.")},
-        {"label": "finalize", "prompt": P("STAGE 13 FINALIZE (no PR) — the work is already LIVE (served from disk). Do a final smoke-test (GET / is 200, /talk + /guardian 200, the feature works on mobile AND desktop), confirm the lifeline is intact, and write a concise summary of exactly what shipped (it surfaces in the in-app live task list). Do NOT open a pull request and do NOT push to git — the user reviews + controls everything in the app's live task list. If ANYTHING is broken, fix it now and re-verify. End with the shipped summary, or the blocker if you held back.")},
+        {"label": "plan", "prompt": P("STAGE 1 PLAN — in ONE thorough pass: (a) READ the relevant repo code; (b) WEB-RESEARCH the latest 2026 tech + how a top-tier billion-dollar company (Apple/Meta/Palantir/Google/NVIDIA) would architect it, from real GitHub/npm/official sources; (c) produce a concrete buildable engineering plan (files, functions, data flow, wiring into server/dashboard.py + the page, edge cases, accessibility, mobile, lifeline-safety) WITH explicit acceptance criteria; (d) adversarially self-review the plan and fix its flaws. Output the final plan + acceptance criteria.")},
+        {"label": "code", "archon": True, "prompt": P("STAGE 2 CODE — implement the plan for REAL and COMPLETE: write all files/code, wire it in, NO stubs / NO placeholders / NO fake data. Preserve all existing features; never leave a page with a JS error or break the dashboard. Run the relevant check as you go.")},
+        {"label": "review", "prompt": P("STAGE 3 REVIEW — adversarially review the implementation (focus on the git diff) vs the plan + acceptance criteria: list EVERY defect, stub, lifeline risk and missing case with severity. Do NOT self-filter.")},
+        {"label": "revise", "archon": True, "prompt": P("STAGE 4 REVISE — apply ALL the review fixes fully; remove any stub/placeholder; re-run the check until it runs cleanly.")},
+        {"label": "standards-gate", "archon": True, "prompt": P("STAGE 5 STANDARDS GATE (billion-dollar bar) — audit vs how Apple/Meta/Palantir/Google/NVIDIA would ship it: design fidelity + polish, architecture, accessibility (hands-free for a disabled user), mobile performance, data/ontology depth, graphics, latest-2026 foundations, ZERO stubs. If ANY layer falls short, fix it to that bar now and re-verify. Only pass at genuine top-tier quality.")},
+        {"label": "verify", "prompt": P("STAGE 6 VERIFY + PRODUCTION — production-harden (edge cases, mobile, errors) and PROVE it end-to-end: curl endpoints / node .proof/render_check.cjs; confirm GET / is 200, /talk + /guardian 200, the feature works on mobile AND desktop, the lifeline is intact, and it delivers the original task intent. Fix anything. Report PASS/FAIL with evidence.")},
+        {"label": "finalize", "prompt": P("STAGE 7 FINALIZE (no PR) — the work is LIVE (served from disk). Write a concise summary of exactly what shipped (surfaces in the in-app live task list). Do NOT open a PR or push to git — the user reviews + controls everything in the app. If anything is still broken, fix it now. End with the shipped summary.")},
     ]
     return swarm_enqueue(title[:48], plan, archon=archon, lane=_swarm_lane(title))
 

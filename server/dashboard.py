@@ -1938,7 +1938,13 @@ class _H(http.server.BaseHTTPRequestHandler):
             self._send(json.dumps(TD.swarm_list()).encode(), "application/json")
         elif self.path.startswith("/swarm"):
             from server.services import task_daemon as TD
-            self._send(json.dumps(TD.swarm_get(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                sid = int(q.get("id", ["0"])[0] or 0)
+                self._send(json.dumps(TD.swarm_get(sid)).encode(), "application/json")
+            except Exception as e:
+                self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
         elif self.path.startswith("/library"):
             from server.services import media_gen as MG
             self._send(json.dumps(MG.library()).encode(), "application/json")
