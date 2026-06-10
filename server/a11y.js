@@ -277,6 +277,25 @@ window.A11Y = (function(){
       this._speaking = true;
 
       const item = this._queue.shift();
+      let isDone = false;
+
+      // Force-drain timeout: if speech doesn't finish in 30s, resume queue
+      const timeout = setTimeout(() => {
+        if (!isDone && this._speaking) {
+          console.warn('[A11Y] TTS timeout; forcing drain');
+          isDone = true;
+          this._speaking = false;
+          this._drain();
+        }
+      }, 30000);
+
+      const clearTimeout_ = () => {
+        if (!isDone) {
+          clearTimeout(timeout);
+          isDone = true;
+        }
+      };
+
       const doSpeak = () => {
         try {
           const rate = state.rate || 0.98;
@@ -284,20 +303,28 @@ window.A11Y = (function(){
 
           // Prefer jarvis() if available; fallback to speechSynthesis
           if (typeof jarvis === 'function') {
-            jarvis(item.text, { rate, pitch });
+            Promise.resolve(jarvis(item.text, { rate, pitch }))
+              .then(() => { clearTimeout_(); this._speaking = false; this._drain(); })
+              .catch((e) => { console.error('[A11Y] jarvis() failed:', e); clearTimeout_(); this._speaking = false; this._drain(); });
+            return;
           } else if (typeof jarvisSpeak === 'function') {
-            jarvisSpeak(item.text);
+            Promise.resolve(jarvisSpeak(item.text))
+              .then(() => { clearTimeout_(); this._speaking = false; this._drain(); })
+              .catch((e) => { console.error('[A11Y] jarvisSpeak() failed:', e); clearTimeout_(); this._speaking = false; this._drain(); });
+            return;
           } else if (window.speechSynthesis) {
             const utterance = new SpeechSynthesisUtterance(item.text);
             utterance.rate = rate;
             utterance.pitch = pitch;
-            utterance.onend = () => { this._speaking = false; this._drain(); };
+            utterance.onend = () => { clearTimeout_(); this._speaking = false; this._drain(); };
+            utterance.onerror = () => { clearTimeout_(); this._speaking = false; this._drain(); };
             window.speechSynthesis.speak(utterance);
             return;
           }
         } catch (e) {
           console.error('[A11Y] TTS.speak failed:', e);
         }
+        clearTimeout_();
         this._speaking = false;
         this._drain();
       };
@@ -351,11 +378,47 @@ window.A11Y = (function(){
   }
 
   function readFeed() {
-    unavailable('read feed', 'not implemented');
+    try {
+      TTS.speak('Reading feed...', { priority: 'barge-in' });
+      fetch('/feed?limit=3')
+        .then(r => r.json())
+        .then(data => {
+          if (data?.items && data.items.length) {
+            const list = data.items.map((item, i) => `${i + 1}. ${item.author || 'Someone'}: ${item.caption || '(no caption)'}`).join('. ');
+            TTS.speak(list);
+          } else {
+            TTS.speak('No feed items yet.');
+          }
+        })
+        .catch(() => {
+          unavailable('read feed', 'server unavailable');
+        });
+    } catch (e) {
+      console.error('[A11Y] readFeed failed:', e);
+      unavailable('read feed', e.message);
+    }
   }
 
   function readNotifications() {
-    unavailable('read notifications', 'not implemented');
+    try {
+      TTS.speak('Reading notifications...', { priority: 'barge-in' });
+      fetch('/notifications?limit=5')
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.length) {
+            const list = data.map((n, i) => `${i + 1}. ${n.title || 'Notification'}`).join('. ');
+            TTS.speak(list);
+          } else {
+            TTS.speak('No new notifications.');
+          }
+        })
+        .catch(() => {
+          unavailable('read notifications', 'server unavailable');
+        });
+    } catch (e) {
+      console.error('[A11Y] readNotifications failed:', e);
+      unavailable('read notifications', e.message);
+    }
   }
 
   /* D6: SelectionCore — the ONE primitive voice/scan/dwell/gaze all resolve into */
@@ -457,9 +520,20 @@ window.A11Y = (function(){
   function reconcile(remote) {
     if (!remote || !remote.ts) return;
     if (remote.ts <= state._ts) return; // echo suppression
-    const activeDragField = null; // TODO: detect if user is actively dragging a slider
+
+    // Detect actively dragging fields (don't yank sliders mid-drag)
+    const activeDragFields = [];
+    try {
+      document.querySelectorAll('input[type="range"]:active, [draggable="true"]:active').forEach(el => {
+        if (el.name) activeDragFields.push(el.name);
+        if (el.id) activeDragFields.push(el.id);
+      });
+    } catch (e) {
+      // ignore
+    }
+
     for (const k of Object.keys(remote.state || {})) {
-      if (k === activeDragField) continue; // don't yank slider
+      if (activeDragFields.some(f => k.includes(f))) continue; // skip dragging fields
       if (k.startsWith('_')) continue; // skip internal fields
       state[k] = remote.state[k];
     }
@@ -472,29 +546,56 @@ window.A11Y = (function(){
   function startMirror() {
     if (!opts.mirror) return;
     let pollFails = 0;
+    let pollInterval = 4000;
+    let _spoken = {};
 
-    _pollInterval = setInterval(async () => {
+    const poll = async () => {
       try {
         const response = await fetch('/a11y');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const remote = await response.json();
         if (remote && remote.ts) {
-          if (pollFails > 0) pollFails = 0; // reset on success
+          if (pollFails > 0) {
+            pollFails = 0;
+            pollInterval = 4000;
+            _spoken = {};
+          }
           reconcile(remote);
         } else {
           pollFails++;
-          if (pollFails === 3) TTS.speak('Sync lost.', { priority: 'normal' });
-          if (pollFails > 10) {
-            clearInterval(_pollInterval);
-            TTS.speak('Stopped syncing.', { priority: 'normal' });
-          }
         }
       } catch (e) {
         pollFails++;
-        if (pollFails === 2) TTS.speak('Connection problem.', { priority: 'normal' });
-        if (pollFails > 10) clearInterval(_pollInterval);
       }
-    }, 4000); // Poll every 4s (D12: no backoff yet, add adaptive backoff in M1b)
+
+      // Feedback: speak once per milestone
+      if (pollFails === 2 && !_spoken['conn']) {
+        TTS.speak('Connection problem.', { priority: 'normal' });
+        _spoken['conn'] = true;
+      }
+      if (pollFails === 3 && !_spoken['lost']) {
+        TTS.speak('Sync lost.', { priority: 'normal' });
+        _spoken['lost'] = true;
+      }
+
+      if (pollFails > 10) {
+        clearInterval(_pollInterval);
+        if (!_spoken['stop']) {
+          TTS.speak('Stopped syncing.', { priority: 'normal' });
+          _spoken['stop'] = true;
+        }
+        return;
+      }
+
+      // Exponential backoff: 4s → 10s → 30s → 120s
+      if (pollFails > 3) {
+        pollInterval = Math.min(120000, 4000 * Math.pow(1.5, pollFails - 3));
+      }
+      clearInterval(_pollInterval);
+      _pollInterval = setInterval(poll, pollInterval);
+    };
+
+    _pollInterval = setInterval(poll, pollInterval);
   }
 
   /* ── helpers ──────────────────────────────────────────── */
@@ -521,12 +622,22 @@ window.A11Y = (function(){
   }
 
   function buildLayer() {
-    // M1+ will build the overlay layer; M0 is just prep
     const existing = document.getElementById('a11y-layer');
     if (!existing) {
       const layer = document.createElement('div');
       layer.id = 'a11y-layer';
       document.body.appendChild(layer);
+    }
+
+    // Create caption bar with proper ARIA attributes (not CSS properties)
+    const captionBar = document.getElementById('a11y-captions');
+    if (!captionBar) {
+      const bar = document.createElement('div');
+      bar.id = 'a11y-captions';
+      bar.setAttribute('aria-live', 'polite');
+      bar.setAttribute('aria-atomic', 'true');
+      bar.className = 'hidden';
+      document.body.appendChild(bar);
     }
   }
 
