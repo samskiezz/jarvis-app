@@ -38,6 +38,7 @@ import { isReportSummariserQuery, buildReportSummariserScript } from "@/componen
 import { isAcquisitionQuery, buildAcquisitionScript } from "@/components/cinematic/DataAcquisitionMonitor";
 import { isEntityRegistryQuery, buildEntityRegistryScript } from "@/components/cinematic/EntityRegistryOverview";
 import { isTimelineQuery, buildTimelineScript } from "@/components/cinematic/ThreatTimeline";
+import { isCommandPaletteQuery } from "@/components/cinematic/JarvisCommandPalette";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -453,6 +454,14 @@ export default function JarvisBrain() {
       } catch (_) {
         setThinking(false); setOpen(false);
       }
+      return;
+    }
+
+    if (isCommandPaletteQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:open-palette"));
+      const answer = "Command palette open, sir. Use the arrow keys to navigate and Enter to execute.";
+      setThinking(false); typeOut(answer); speak(answer);
+      hideT.current = setTimeout(() => setOpen(false), 7000);
       return;
     }
 
