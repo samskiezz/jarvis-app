@@ -44,6 +44,7 @@ import OpsEventStream from '@/components/cinematic/OpsEventStream';
 import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
 import ReportSummariser from '@/components/cinematic/ReportSummariser';
 import DataAcquisitionMonitor from '@/components/cinematic/DataAcquisitionMonitor';
+import EntityRegistryOverview from '@/components/cinematic/EntityRegistryOverview';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -96,6 +97,7 @@ function App() {
             <GraphPathExplorer />
             <ReportSummariser />
             <DataAcquisitionMonitor />
+            <EntityRegistryOverview />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
