@@ -29,6 +29,10 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .tbtn{font-size:11px;font-weight:700;padding:6px 11px;border-radius:9px;border:1px solid var(--ln);background:var(--glass);color:var(--tx);cursor:pointer;backdrop-filter:blur(6px)}
 .tbtn:hover{border-color:var(--cy);color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.3)}
 .tbtn.g{color:var(--ok);border-color:#1c5b46}.tbtn.r{color:var(--rd);border-color:#5b1c2a}.tbtn.a{color:var(--am);border-color:#6b561e}
+/* ---------- breadcrumb nav for hierarchy descents ---------- */
+#crumbs{position:fixed;top:45px;left:0;right:0;z-index:19;display:flex;align-items:center;gap:8px;padding:8px 18px;background:rgba(2,6,12,.7);border-bottom:1px solid rgba(41,231,255,.1);font-size:11px;pointer-events:auto;max-height:32px;overflow-x:auto}
+#crumbs .crumb{background:rgba(41,231,255,.1);border:1px solid rgba(41,231,255,.2);border-radius:6px;padding:4px 9px;color:var(--cy);cursor:pointer;font-weight:600;white-space:nowrap}
+#crumbs .crumb:hover{border-color:var(--cy);box-shadow:0 0 12px rgba(41,231,255,.3)}
 /* ---------- single contextual info card (NASA-Eyes style, NOT side tabs) ---------- */
 #card{position:fixed;left:22px;bottom:96px;z-index:24;width:min(380px,90vw);max-height:64vh;overflow:auto;
  background:var(--glass);border:1px solid var(--cy);border-radius:16px;padding:16px 17px;backdrop-filter:blur(16px);
@@ -81,6 +85,53 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #libgrid .it{width:150px}
 #libgrid img,#libgrid model-viewer{width:150px;height:150px;border:1px solid var(--ln);border-radius:10px;background:#04101a;object-fit:cover}
 .ovtitle{position:absolute;top:18px;left:24px;color:var(--cy);letter-spacing:2px;font-size:13px}
+/* ===== 🛰 LIVE TASKS — Mission Control CSS ===== */
+#ovWork{display:flex;flex-direction:column;overflow:hidden}
+#ovWork.open{display:flex}
+#ovWork .close{position:absolute;top:16px;right:18px;z-index:5;font-size:13px;font-weight:700;color:var(--cy);background:var(--glass);border:1px solid var(--cy);border-radius:9px;padding:7px 13px;cursor:pointer}
+#wlHead{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+#wlCounts{font-size:12px;color:var(--cy);font-weight:600}
+.wlchip{font-size:10px;padding:4px 10px;border-radius:8px;background:rgba(245,185,66,.12);border:1px solid var(--am);color:var(--am);font-weight:600}
+.wlspacer{flex:1}
+.wlbtn{font-size:11px;font-weight:700;padding:8px 14px;border-radius:9px;border:1px solid var(--cy);background:rgba(41,231,255,.12);color:var(--cy);cursor:pointer;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+.wlbtn:hover{box-shadow:0 0 16px rgba(41,231,255,.3)}
+.wlbtn.danger{border-color:var(--rd);color:var(--rd);background:rgba(255,93,108,.12)}
+.wlbtn.danger:hover{box-shadow:0 0 16px rgba(255,93,108,.3)}
+#wlBody{flex:1;overflow:auto;padding:8px 0;max-width:1100px;margin:0 auto;width:100%;border-top:1px solid var(--ln)}
+#wlActive,#wlRecent{display:flex;flex-direction:column;gap:1px}
+#wlRecentWrap{border-top:1px solid var(--ln);margin-top:4px}
+.wlsec{padding:10px 20px;font-size:10px;font-weight:800;letter-spacing:1px;color:var(--dim);text-transform:uppercase;border-bottom:1px solid rgba(41,231,255,.1)}
+#wlEmpty{padding:40px 20px;text-align:center;color:var(--dim);font-size:12px}
+.wlrow{display:grid;grid-template-columns:24px 1fr 200px 120px 100px auto;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid rgba(41,231,255,.08);transition:transform .25s,opacity .25s;min-height:44px}
+.wlrow[role=listitem]{border-bottom-color:var(--ln)}
+.wldot{width:10px;height:10px;border-radius:50%;flex-shrink:0;animation:none;transition:background .3s}
+.wldot.run{background:var(--cy);animation:wlShimmer 1.4s infinite}
+.wldot.paused{background:var(--am)}
+.wldot.done{background:var(--ok)}
+.wldot.fail{background:var(--rd)}
+.wldot.queued{background:var(--dim)}
+@keyframes wlShimmer{0%,100%{opacity:1}50%{opacity:.4}}
+.wlwho{font-size:12px;font-weight:600;color:#eafcff;display:flex;flex-direction:column;gap:1px}
+.wlstage{font-size:10px;color:var(--dim)}
+.wlbar{height:6px;background:rgba(41,231,255,.1);border-radius:3px;overflow:hidden;position:relative}
+.wlfill{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cy));box-shadow:0 0 6px var(--cy);width:0%;transition:width .16s ease;border-radius:2px}
+.wlfill.indet{animation:wlShimmer 1.4s infinite;background:linear-gradient(90deg,rgba(41,231,255,.3),var(--cy),rgba(41,231,255,.3))}
+.wlpct{font-size:11px;color:var(--cy2);font-weight:600;min-width:40px;text-align:right;font-variant-numeric:tabular-nums}
+.wltime{font-size:11px;color:#aebfcd;font-family:'JetBrains Mono',monospace;min-width:98px;font-variant-numeric:tabular-nums}
+.wlctl{display:flex;gap:6px}
+.wltoggle{font-size:13px;padding:6px 10px;border-radius:7px;background:rgba(41,231,255,.1);border:1px solid var(--cy);color:var(--cy);cursor:pointer;font-weight:700;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;transition:background .2s,opacity .2s}
+.wltoggle:hover:not(:disabled){box-shadow:0 0 12px rgba(41,231,255,.4)}
+.wltoggle:disabled{opacity:.5;cursor:not-allowed}
+.wltoggle[aria-pressed=true]{background:var(--am);color:#fff;border-color:var(--am)}
+.wlcancel{font-size:13px;padding:6px 10px;border-radius:7px;background:rgba(255,93,108,.1);border:1px solid var(--rd);color:var(--rd);cursor:pointer;font-weight:700;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.wlcancel:hover:not(:disabled){box-shadow:0 0 12px rgba(255,93,108,.4)}
+.wlcancel:disabled{opacity:.5;cursor:not-allowed}
+.wldetail{background:rgba(41,231,255,.04);border-top:1px solid rgba(41,231,255,.12);padding:12px 16px;margin-top:4px;display:none}
+.wlrow[data-expanded=true] .wldetail{display:block}
+.wlplan,.wlresult{font-size:10px;color:#aebfcd;margin-bottom:8px;line-height:1.5}
+.wlplan b{color:var(--cy)}.wlplan .done{color:var(--ok)}.wlplan .fail{color:var(--rd)}
+@media(prefers-reduced-motion:reduce){.wlrow{transition:none}.wlfill{transition:none}.wldot,.wlfill.indet{animation:none !important}.wldot.run{opacity:.8}.wlfill.indet{opacity:.6}}
+@media(max-width:820px){.wlrow{grid-template-columns:24px 1fr 80px 60px;gap:8px;font-size:10px;padding:8px 12px}.wltime{min-width:0;font-size:9px}.wlctl{gap:4px}.wltoggle,.wlcancel{font-size:11px;padding:4px 8px;min-width:44px;min-height:44px}}
 /* boot */
 #boot{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .9s}
 #boot.gone{opacity:0;pointer-events:none}
@@ -253,7 +304,11 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
 /* hide the side panels on narrow screens so they never cover the world / talk bar */
 @media(max-width:1180px){.gpanel{display:none}}
-</style></head>
+</style>
+<link rel="stylesheet" href="/a11y/a11y.css">
+<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
+<script defer src="/a11y/a11y.js"></script>
+</head>
 <body>
 <!-- the ONE immersive WebGL universe -->
 <canvas id=uni></canvas>
@@ -292,6 +347,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
  <button class="tbtn r" onclick="cmdAll('stop')">⏹ Stop</button>
  <button class=tbtn onclick="cmdAll('sleep')">🌙 Sleep</button>
 </div>
+<nav id=crumbs aria-label="Universe location" aria-live=polite style="display:none"></nav>
 
 <!-- single contextual info card (hidden until a body is clicked) -->
 <div id=card>
@@ -354,6 +410,26 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   <div class=ovtitle>🎨 JARVIS STUDIO · LIBRARY <span style="color:var(--dim)">· images &amp; 3D models you created</span></div>
   <div id=libgrid></div></div>
 
+<!-- 🛰 LIVE TASKS — Mission Control overlay -->
+<div class=ov id=ovWork>
+  <button class=close onclick="setMode('live')">✕ Close</button>
+  <div class=ovtitle>🛰 LIVE TASKS <span style="color:var(--dim)">· mission control</span></div>
+  <div id=wlHead>
+    <span id=wlCounts aria-live=off>—</span>
+    <span id=wlChip class=wlchip hidden>⟳ reconnecting…</span>
+    <span class=wlspacer></span>
+    <button id=wlPauseAll class=wlbtn title="Pause all running tasks">⏸ Pause all</button>
+    <button id=wlCancelAll class="wlbtn danger" title="Cancel all tasks (destructive)">⨯ Cancel all</button>
+    <button id=wlClear class=wlbtn title="Clear finished tasks">🧹 Clear</button>
+  </div>
+  <div id=wlLive class=sr aria-live=polite aria-atomic=true></div>
+  <div id=wlBody role=list aria-label="Live tasks">
+    <div id=wlActive></div>
+    <div id=wlRecentWrap hidden><div class=wlsec>RECENT</div><div id=wlRecent></div></div>
+    <div id=wlEmpty class=wlempty hidden>No active tasks — JARVIS is idle.</div>
+  </div>
+</div>
+
 <!-- boot -->
 <div id=boot><div class=ring></div><div class=t>INITIALIZING JARVIS</div><div class=tap>tap anywhere to engage the universe</div></div>
 <div class=sr aria-live=assertive id=srlog></div>
@@ -408,7 +484,7 @@ function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window
   _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
   if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
 function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.99;u.pitch=1.0;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}
-window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}
+window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   try{ if(!_ttsCtx)unlockAudio();
     speakStart();
@@ -486,6 +562,7 @@ function hideCrystal(delay){clearTimeout(_crystalHide);
   _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
 async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   const l=t.toLowerCase();$('say').value='';
+  try{if(window.A11Y){const r=A11Y.intent(t,'text');if(r&&r.handled)return;}}catch(_){}
   // voice/command shortcuts (preserved)
   if(/^(image|picture|draw)\b/.test(l)){return runMedia('genimage',t.replace(/^(image|picture|draw)\s*(of)?\s*/i,''));}
   if(/\b3d\b|^(model|sculpt)\b/.test(l)){return runMedia('gen3d',t.replace(/\b3d\b|model|sculpt/ig,'').trim());}
@@ -561,6 +638,7 @@ const DOCK=[
   {k:'3d',     ic:'🧊', t:'3D',       fn:()=>quick('3d')},
   {k:'guardian',ic:'🛡',t:'Guardian', fn:()=>setMode('guardian')},
   {k:'climate', ic:'🌡', t:'Climate',  fn:()=>{flyToBodyByName('climate');}},
+  {k:'worklist',ic:'🛰',t:'Live Tasks',fn:()=>setMode('worklist')},
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
@@ -796,6 +874,233 @@ function openVitals(){
              {label:'📄 dashboard.py',kind:'file',arg:'server/dashboard.py'}]});
 }
 
+/* ===== 🛰 LIVE TASKS — Mission Control ===== */
+let WL_OPEN=false, WL_TIMER=null, WL_RAF=null, WL_ABORT=null;
+let WL_BACKOFF=3000, WL_INFLIGHT=false, WL_LASTTICK=0;
+let WL_MEDIAN=390;
+const WL_PLANCACHE=new Map(), WL_ROWS=new Map(), WL_EL=new Map(), WL_DISP=new Map();
+const WL_PEND=new Map(), WL_PREVETA=new Map();
+let WL_EXPANDED=new Set(), WL_LIVE_REGION=null;
+const _SWARM_BASE="You are JARVIS's autonomous build engi";   // signature for detecting swarm steps
+
+function median(nums){if(!nums||!nums.length)return null;const s=[...nums].sort((a,b)=>a-b);return s[Math.floor(s.length/2)];}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,k){return a+(b-a)*k;}
+function fmtDur(s){if(s==null||s<0)return'—';const m=Math.floor(s/60),sec=Math.round(s%60);return m?m+'m '+sec+'s':sec+'s';}
+function fmtEta(s){if(s==null||s<0)return'—';if(s<10)return'few sec';if(s<90)return s<60?'<1 min':Math.round(s/10)*10+'s';return'~'+Math.round(s/60)+'m';}
+function wlToast(msg,kind){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:30px;left:20px;z-index:31;background:var(--glass);border:1px solid '+(kind==='error'?'var(--rd)':'var(--cy)')+';color:'+(kind==='error'?'var(--rd)':'var(--cy)')+';padding:10px 14px;border-radius:8px;font-size:12px;font-weight:700;backdrop-filter:blur(10px)';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
+
+function worklistStart(){
+  if(WL_OPEN)return;WL_OPEN=true;
+  const ov=$('ovWork');if(!ov)return;
+  ov.classList.add('open');
+  WL_LIVE_REGION=$('wlLive');
+  // Master buttons
+  const pauseAll=$('wlPauseAll');if(pauseAll)pauseAll.onclick=()=>{
+    WL_ROWS.forEach((item,id)=>{if(item.status==='running'&&item.canToggle)doAction('toggle',id);});};
+  const cancelAll=$('wlCancelAll');if(cancelAll)cancelAll.onclick=()=>{
+    if(!confirm('Cancel all tasks? This is irreversible.'))return;
+    WL_ROWS.forEach((item,id)=>{if(item.status!=='done'&&item.status!=='failed'&&item.status!=='cancelled')
+      fetch(`${item.cancelTarget.type==='swarm'?'/swarm':'/task'}?action=cancel&id=${item.cancelTarget.id}&token=${CT}`,{method:'POST'}).then(r=>r.json()).catch(e=>{});});};
+  const clear=$('wlClear');if(clear)clear.onclick=()=>{
+    fetch(`/task?action=clear&token=${CT}`,{method:'POST'}).then(r=>r.json()).then(r=>{if(r.ok)wlToast('Finished tasks cleared');}).catch(e=>{});};
+  // Keyboard nav (M2 blocker fix: scoped, no hijacking)
+  const keyHandler=e=>{if(!WL_OPEN||e.target.matches('input,textarea,[contenteditable]'))return;
+    if(e.key==='Escape'){e.preventDefault();setMode('live');return;}
+    if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();navRows(e.key==='ArrowDown');}
+    else if(e.key===' '||e.key==='Enter'){const row=document.activeElement.closest('.wlrow');if(row){e.preventDefault();
+      if(e.key===' ')doAction('toggle',row);else toggleDetail(row.dataset.row);}}};
+  document.addEventListener('keydown',keyHandler);
+  WL_KEYHANDLER=keyHandler;
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollTick();});
+  pollTick();
+}
+
+function worklistStop(){
+  WL_OPEN=false;
+  clearTimeout(WL_TIMER);if(WL_RAF)cancelAnimationFrame(WL_RAF);
+  if(WL_ABORT)WL_ABORT.abort();
+  if(WL_KEYHANDLER)document.removeEventListener('keydown',WL_KEYHANDLER);
+  WL_KEYHANDLER=null;
+}
+
+let WL_KEYHANDLER=null;
+
+async function pollTick(){
+  if(!WL_OPEN||document.hidden||WL_INFLIGHT)return;
+  WL_INFLIGHT=true;
+  try{
+    WL_ABORT=new AbortController();
+    const {tasks,swarms,details}=await fetchAll(WL_ABORT.signal);
+    WL_MEDIAN=computeMedian(tasks);
+    const items=joinModel(tasks,swarms,details);
+    reconcile(items);
+    WL_LASTTICK=performance.now();
+    WL_BACKOFF=3000;
+    const chip=$('wlChip');if(chip)chip.hidden=true;
+  }catch(e){if(e.name!=='AbortError'){
+    WL_BACKOFF=Math.min(30000,WL_BACKOFF*1.5);
+    const chip=$('wlChip');if(chip)chip.hidden=false;}}
+  finally{WL_INFLIGHT=false;WL_TIMER=setTimeout(pollTick,WL_BACKOFF+Math.random()*100-50);}
+}
+
+async function fetchAll(signal){
+  const tasks=await(await fetch('/tasks',{signal})).json();
+  const swarms=await(await fetch('/swarms',{signal})).json();
+  const running=(swarms||[]).filter(s=>s.status==='running').sort((a,b)=>(b.updated||0)-(a.updated||0)).slice(0,6);
+  const details=new Map();
+  for(const s of running){
+    try{const d=await(await fetch(`/swarm?id=${s.id}`,{signal})).json();
+      if(d&&d.ok!==false)details.set(s.id,d);}catch(e){}}
+  return {tasks,swarms,details};
+}
+
+function computeMedian(tasks){
+  const done=(tasks||[]).filter(t=>t.name==='claude'&&t.status==='done'&&t.elapsed>60&&!t.label.startsWith(_SWARM_BASE)).map(t=>t.elapsed);
+  const m=median(done);if(m!=null)WL_MEDIAN=clamp(0.2*m+0.8*WL_MEDIAN,120,1200);
+  return WL_MEDIAN;
+}
+
+function laneOf(title){const t=(title||'').toLowerCase();
+  if(t.includes('jarvis_voice')||t.includes('guardian.html')||t.trimStart().startsWith('care'))return'care';
+  if(t.includes('dashboard.py')||t.includes('endpoint')||t.includes('/vitals')||t.includes('/vpn')||t.includes('/solar')||t.includes('producer')||t.includes('backend')||t.includes('services')||t.includes('live-data'))return'backend';
+  return'universe';}
+
+function joinModel(tasks,swarms,details){
+  const tasksById=new Map((tasks||[]).map(t=>[t.id,t]));
+  const curSet=new Set();
+  const items=[];
+  (swarms||[]).forEach(s=>{if(s.status!=='running')return;
+    const D=details.get(s.id);
+    if(!D||D.ok===false){
+      items.push({type:'swarm',id:s.id,status:'queued',who:`Swarm #${s.id} · syncing…`,pct:s.pct||0,eta:null,elapsed:0,stage:'queued',canToggle:false,controlId:null});
+      return;}
+    if(D.status && D.status !== 'running'){
+      items.push({type:'swarm',id:s.id,status:D.status,who:`Swarm #${s.id}`,pct:100,eta:null,elapsed:0,stage:'done',canToggle:false,controlId:null,cancelTarget:{type:'swarm',id:s.id},indeterminate:false});
+      return;}
+    const plan=D.plan||[];if(!plan.length)return;
+    const steps=plan.length;const stepLabel=D.step<steps?plan[D.step].label:'finalizing';
+    const tk=D.cur_task?tasksById.get(D.cur_task):null;
+    let pct,eta,status='running',indeterminate=false,canToggle=false,controlId=null;
+    if(D.cur_task){curSet.add(D.cur_task);
+      status=tk&&tk.status==='paused'?'paused':'running';
+      const elapsed=(tk?tk.elapsed:clamp(performance.now()/1000-s.updated,0,6*WL_MEDIAN))||0;
+      const frac=clamp(elapsed/WL_MEDIAN,0,0.99);
+      pct=clamp((D.step+frac)/steps*100,0,100);
+      eta=Math.max(0,WL_MEDIAN-elapsed)+(steps-D.step-1)*WL_MEDIAN;
+      canToggle=true;controlId=D.cur_task;}else{
+      pct=D.step/steps*100;indeterminate=true;status='running';}
+    items.push({type:'swarm',id:s.id,status,who:`Swarm #${s.id} · ${laneOf(D.title||s.title)}`,pct,eta,elapsed:tk?tk.elapsed:0,stage:`step ${D.step+1}/${steps} · ${stepLabel}`,canToggle,controlId,cancelTarget:{type:'swarm',id:s.id},indeterminate});
+  });
+  (tasks||[]).forEach(t=>{if(t.status!=='running'&&t.status!=='paused')return;if(curSet.has(t.id))return;
+    if(t.name==='claude'){
+      if(t.label && t.label.startsWith(_SWARM_BASE)) return;
+      const elapsed=t.elapsed;const frac=clamp(elapsed/WL_MEDIAN,0,0.99);const pct=frac*100;
+      const indeterminate=elapsed>1.5*WL_MEDIAN;const eta=indeterminate?null:Math.max(0,WL_MEDIAN-elapsed);
+      items.push({type:'task',id:t.id,name:'claude',status:t.status,who:'Claude agent',pct,eta,elapsed,stage:t.label||'claude',canToggle:true,controlId:t.id,cancelTarget:{type:'task',id:t.id},indeterminate});}
+    else if(t.name){
+      items.push({type:'task',id:t.id,name:t.name,status:t.status,who:(t.label||t.name).replace(/_/g,' ').slice(0,24),pct:t.pct,eta:t.eta,elapsed:t.elapsed,stage:t.label||t.name,canToggle:true,controlId:t.id,cancelTarget:{type:'task',id:t.id},indeterminate:false});}});
+  const active=items.filter(x=>x.status!=='done'&&x.status!=='failed'&&x.status!=='cancelled');
+  const recent=items.filter(x=>x.status==='done'||x.status==='failed'||x.status==='cancelled').sort((a,b)=>b.id-a.id);
+  const result=active.concat(recent);
+  WL_ROWS.clear();result.forEach(item=>{
+    const rowId=item.type==='swarm'?'sw:'+item.id:'tk:'+item.id;
+    WL_ROWS.set(rowId,item);});
+  return result;
+}
+
+function reconcile(items){
+  const active=items.filter(x=>x.status!=='done'&&x.status!=='failed'&&x.status!=='cancelled');
+  const recent=items.filter(x=>x.status==='done'||x.status==='failed'||x.status==='cancelled');
+  $('wlEmpty').hidden=!!(active.length||recent.length);
+  $('wlRecentWrap').hidden=!recent.length;
+  const counts={running:active.filter(x=>x.status==='running').length,paused:active.filter(x=>x.status==='paused').length,done:recent.length};
+  $('wlCounts').textContent=`${counts.running} running · ${counts.paused} paused · ${counts.done} done`;
+  const desiredIds=new Set(items.map(item=>item.type==='swarm'?'sw:'+item.id:'tk:'+item.id));
+  Array.from(WL_EL.keys()).forEach(id=>{if(!desiredIds.has(id)){const el=WL_EL.get(id);if(el){el.root.style.opacity='0';
+    setTimeout(()=>{el.root.remove();WL_EL.delete(id);WL_DISP.delete(id);WL_PREVETA.delete(id);},300);}}});
+  [active,recent].forEach((list,sec)=>{
+    const cont=sec?$('wlRecent'):$('wlActive');if(!cont)return;
+    let prevNode=null;
+    list.forEach((item,idx)=>{
+      const rowId=item.type==='swarm'?'sw:'+item.id:'tk:'+item.id;
+      let el=WL_EL.get(rowId);
+      if(!el){
+        const div=document.createElement('div');div.className='wlrow';div.role='listitem';div.dataset.row=rowId;
+        div.innerHTML=`<div class=wldot></div><div class=wlwho><div></div><div class=wlstage></div></div><div class=wlbar role=progressbar aria-valuemin=0 aria-valuemax=100><div class=wlfill></div></div><div class=wlpct></div><div class=wltime></div><div class=wlctl></div>`;
+        el={root:div,dot:div.querySelector('.wldot'),who:div.querySelector('.wlwho>div:first-child'),stage:div.querySelector('.wlstage'),bar:div.querySelector('[role=progressbar]'),fill:div.querySelector('.wlfill'),pct:div.querySelector('.wlpct'),time:div.querySelector('.wltime'),ctl:div.querySelector('.wlctl')};
+        const toggle=document.createElement('button');toggle.className='wltoggle';toggle.setAttribute('aria-label',`${item.status==='paused'?'Resume':'Pause'} ${item.who}`);toggle.addEventListener('click',()=>doAction('toggle',rowId));
+        const cancel=document.createElement('button');cancel.className='wlcancel';cancel.setAttribute('aria-label',`Cancel ${item.who}`);cancel.textContent='⨯';cancel.addEventListener('click',()=>doAction('cancel',rowId));
+        el.ctl.appendChild(toggle);el.ctl.appendChild(cancel);
+        WL_EL.set(rowId,el);WL_DISP.set(rowId,{pct:0,eta:0,elapsed:0});}
+      const st=item.status;
+      el.dot.className='wldot '+st;el.who.textContent=item.who;el.stage.textContent=item.stage;
+      el.bar.setAttribute('aria-valuenow',Math.round(item.pct||0));
+      el.bar.setAttribute('aria-valuetext',`${item.stage} · ${fmtEta(item.eta)}`);
+      const toggle=el.ctl.querySelector('.wltoggle');
+      if(toggle){toggle.disabled=!item.canToggle;toggle.setAttribute('aria-pressed',st==='paused'?'true':'false');
+        const pend=WL_PEND.get(item.controlId);toggle.textContent=pend?((pend.want==='paused'?'⏸':'▶')+' …'):(st==='paused'?'▶':'⏸');
+        toggle.setAttribute('aria-label',`${st==='paused'?'Resume':'Pause'} ${item.who}`);toggle.classList.toggle('pending',!!pend);}
+      el.root.target={pct:Math.round(item.pct||0),eta:item.eta,elapsed:item.elapsed,indeterminate:item.indeterminate};
+      if(!prevNode){if(cont.firstChild !== el.root)cont.insertBefore(el.root,cont.firstChild);}
+      else{if(prevNode.nextSibling !== el.root)prevNode.parentNode.insertBefore(el.root,prevNode.nextSibling);}
+      prevNode=el.root;});});
+  if(!WL_RAF)WL_RAF=requestAnimationFrame(rafFrame);
+}
+
+function rafFrame(){
+  const now=performance.now();const dt=(now-(_lastFrameTime||now))/1000;_lastFrameTime=now;
+  WL_EL.forEach((refs,id)=>{const disp=WL_DISP.get(id);if(!disp||!refs.root.target)return;
+    const target=refs.root.target,pref=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(!pref){disp.pct=lerp(disp.pct,target.pct,Math.min(1,6*dt));}else{disp.pct=target.pct;}
+    refs.fill.style.width=(disp.pct||0)+'%';
+    if(target.indeterminate){refs.fill.classList.add('indet');refs.pct.textContent='—';}else{refs.fill.classList.remove('indet');refs.pct.textContent=Math.round(disp.pct)+'%';}
+    const elapsed=target.elapsed+(now-WL_LASTTICK)/1000;
+    const prevEta=WL_PREVETA.get(id);let eta=target.eta;
+    if(prevEta!=null&&eta!=null&&eta>prevEta+(now-WL_LASTTICK)/1000){eta=prevEta+(now-WL_LASTTICK)/1000;}
+    WL_PREVETA.set(id,eta);
+    refs.time.textContent=fmtDur(elapsed)+' · '+fmtEta(eta);});
+  WL_RAF=requestAnimationFrame(rafFrame);
+}
+
+let _lastFrameTime=0;
+
+function doAction(kind,rowOrId){
+  const rowId=typeof rowOrId==='string'?rowOrId:rowOrId.dataset.row;if(!rowId)return;
+  const item=WL_ROWS.get(rowId);if(!item)return;
+  if(kind==='toggle'&&item.canToggle&&item.controlId){
+    const pend=WL_PEND.get(item.controlId);if(pend&&performance.now()-pend.ts<8000)return;
+    const want=item.status==='paused'?'running':'paused';
+    const action=want==='paused'?'pause':'resume';
+    WL_PEND.set(item.controlId,{want,ts:performance.now()});
+    const refs=WL_EL.get(rowId);if(refs&&refs.ctl){const toggle=refs.ctl.querySelector('.wltoggle');
+      if(toggle)toggle.textContent=want==='paused'?'⏸':'▶';toggle.disabled=true;}
+    fetch(`/task?action=${action}&id=${item.controlId}&token=${CT}`,{method:'POST'}).then(r=>r.json()).then(r=>{
+      if(!r.ok){wlToast(`Failed to ${action}`,`error`);WL_PEND.delete(item.controlId);const refs=WL_EL.get(rowId);
+        if(refs&&refs.ctl){const toggle=refs.ctl.querySelector('.wltoggle');if(toggle){toggle.textContent=want==='paused'?'▶':'⏸';toggle.disabled=false;}}}}).catch(e=>{
+      wlToast(`Failed to ${action}`,`error`);WL_PEND.delete(item.controlId);const refs=WL_EL.get(rowId);
+      if(refs&&refs.ctl){const toggle=refs.ctl.querySelector('.wltoggle');if(toggle){toggle.textContent=want==='paused'?'▶':'⏸';toggle.disabled=false;}}});}
+  else if(kind==='cancel'&&item){
+    const msg=item.type==='swarm'?`Cancel Swarm ${item.id} (${item.stage})?`:`Cancel ${item.who}?`;
+    if(confirm(msg)){
+      const endpoint=item.cancelTarget.type==='swarm'?'/swarm':'/task';
+      fetch(`${endpoint}?action=cancel&id=${item.cancelTarget.id}&token=${CT}`,{method:'POST'}).then(r=>r.json()).then(r=>{
+        if(!r.ok)wlToast('Cancel failed',`error`);}).catch(e=>wlToast('Cancel failed',`error`));}}
+}
+
+function toggleDetail(rowId){
+  const refs=WL_EL.get(rowId);if(!refs)return;
+  const isExp=refs.root.dataset.expanded==='true';
+  if(isExp){refs.root.dataset.expanded='false';refs.root.classList.remove('expanded');}
+  else{refs.root.dataset.expanded='true';refs.root.classList.add('expanded');}}
+
+function navRows(down){
+  const rows=Array.from(WL_EL.values()).map(r=>r.root);
+  const cur=document.activeElement.closest('.wlrow');
+  if(!cur||!rows.includes(cur))return;
+  const idx=rows.indexOf(cur);const next=rows[down?Math.min(idx+1,rows.length-1):Math.max(idx-1,0)];
+  if(next)next.focus();}
+
 /* ================= mic (preserved verbatim) ================= */
 let _rec=null;
 async function startMicAnalyser(){try{const s=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -815,12 +1120,14 @@ function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecog
 
 /* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
 function setMode(mode,arg){
-  ['ovGuardian','ovLib'].forEach(id=>$(id).classList.remove('open'));
+  ['ovGuardian','ovLib','ovWork'].forEach(id=>$(id)&&$(id).classList.remove('open'));
   if(mode==='guardian'){if(!$('guardFrame').src)$('guardFrame').src='guardian?room=mum';$('ovGuardian').classList.add('open');jarvisSpeak('Opening the Guardian monitor for your mother.');}
   else if(mode==='library'){loadLib();$('ovLib').classList.add('open');}
+  else if(mode==='worklist'){worklistStart();}
   // 'live' just closes overlays
+  if(mode!=='worklist')worklistStop();   // stop the poll/RAF when leaving worklist
   // FINDING2: hide the dock while a fullscreen overlay covers the universe; restore it on return to live
-  const overlayOpen=(mode==='guardian'||mode==='library');
+  const overlayOpen=(mode==='guardian'||mode==='library'||mode==='worklist');
   const dk=$('dock');if(dk)dk.classList.toggle('hidden',overlayOpen);
   const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
   ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
@@ -865,6 +1172,7 @@ function doAction(a){if(!a)return;const k=a.kind,arg=a.arg;
   else if(k==='url'){window.open(arg,'_blank');}
   else if(k==='graph'){flyToNode(arg);}                 // graph action flies to constellation node (no iframe)
   else if(k==='task'){$('say').value=arg;askJarvis();}
+  else if(k==='descend'){const node=bodyNodeMap.get(bodyMap.get('dom:'+arg));if(node)flyInto(node);}
   else if(k==='open'){window.open(arg,'_blank');}}
 async function openFile(path){_cardDrilled=true;                 // pause live refresh so the file body isn't wiped
   try{const d=await(await fetch('file?path='+encodeURIComponent(path))).json();
@@ -900,7 +1208,7 @@ let godrays=null, bokeh=null, filmPass=null;          // (a) cinematic post pass
 let faceMesh=null, faceMat=null;                       // (b) oversized morphing holographic visage
 let sunFace=null;                                      // §1 B: the oversized helmet GLB = the central JARVIS face/sun
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
-let bodies=[],bodyMap=new Map(),_selected=null,flying=false,clock=null;
+let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=false,clock=null;
 let home={pos:new THREE.Vector3(0,60,320),tgt:new THREE.Vector3(0,0,0)};
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
 const ASSET=n=>'asset/'+n;
@@ -913,7 +1221,7 @@ function initUniverse(){
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   renderer.setSize(innerWidth,innerHeight);
   try{renderer.outputEncoding=THREE.sRGBEncoding;}catch(e){}                    // correct colour = no banding/grain
-  try{renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;}catch(e){}
+  try{renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.78;}catch(e){} // U1: 1.05→0.92→0.78. The centre stacks ~5 bright/additive layers (beam glow+core, chrome blob mirror-reflecting the cyan env, holo face plane, emissive helmet, god-rays). Even idle, the overlap clipped to white. ACES luminance L=0.2126R+0.7152G+0.0722B; lowering exposure keeps the OVERLAP region inside [0,1] so the reactor reads CRISP, not as a white wash. Researched: threejs issue #14899 (additive double-brighten) + discourse 57843 (threshold/luma weights).
   scene=new THREE.Scene();
   // PMREM env map: gives the chrome liquid-metal smooth, grain-free reflections (R3)
   try{
@@ -939,7 +1247,13 @@ function initUniverse(){
   // RenderPass -> Bloom -> God-rays -> Bokeh DOF -> Film(grain+vignette+chromatic aberration) -> AA(SMAA/FXAA)->screen
   composer=new THREE.EffectComposer(renderer);
   composer.addPass(new THREE.RenderPass(scene,camera));
-  try{ bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.4,0.82,0.0);
+  // U1 CRISP-CENTRE FIX: UnrealBloomPass(resolution, strength, radius, THRESHOLD). The old threshold=0.0
+  // made EVERY pixel bloom (additive) → the cyan reactor/helmet washed to pure white. In r136 the renderer's
+  // ACES tone-mapping is applied during RenderPass, so bloom sees LDR [0,1]; luminance = 0.2126R+0.7152G+0.0722B
+  // (blue weighted low, so a cyan core triggers bloom easily). threshold≈0.72 = only true highlights glow;
+  // strength 0.85 + radius 0.55 = a tight readable halo, not a white cloud. Researched: threejs issue #14899
+  // (additive double-brighten) + discourse "i-still-dont-get-how-unrealbloompass-works/57843" (threshold/luma).
+  try{ bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.55,0.72);
        composer.addPass(bloom); }catch(e){ bloom=null; }
 
   // VOLUMETRIC GOD-RAYS from the reactor — screen-space radial light-shafts that scatter from the central
@@ -1055,10 +1369,26 @@ function initUniverse(){
     _pinDragMove(e); });
   addEventListener('pointerup',e=>{userDragging=false;_pinDragEnd(e);});
   $('uni').addEventListener('click',onCanvasClick);
+  $('uni').addEventListener('dblclick',onCanvasDbl);
+  addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){const f=currentFrame();if(f?.node?.childrenKind)flyInto(f.node);}
+    else if(e.key==='Escape'||e.key==='Backspace'){if(navStack.length>1)flyOut(navStack.length-2);else closeCard();}
+    else if((e.key==='Tab'||e.key==='ArrowRight'||e.key==='ArrowDown')&&navStack.length>0){
+      const f=currentFrame();if(f?.bodies?.length)f.bodies[0].userData.selected=true;}});
   uniReady=true;
+  // Initialize root frame for hierarchy
+  const rootFrame={node:makeNode({id:'root',label:'Universe',kind:'root',depth:0,childrenKind:null}),
+    group:scene, bodies, swarms:[], targetOpacity:1, home:home||{pos:new THREE.Vector3(0,100,280),tgt:250}};
+  navStack=[rootFrame];
+  // U1: expose render handles for the headless proof harnesses (.proof/*.cjs scan window.* for the scene/bloom)
+  try{window.__scene=scene;window.__bloom=bloom;window.__renderer=renderer;window.__bodies=bodies;}catch(e){}
   requestAnimationFrame(tickFrame);
   // first data builds the bodies + constellation
   buildConstellation();
+  // §1 A FIX: build the 16 ontology-domain planets + topic belt IMMEDIATELY from the embedded
+  // WORLD_MANIFEST — they need NOTHING from the live feed, so they must render even when /metrics
+  // is "reconnecting". Idempotent (_domainPlanetsBuilt guard) so layoutFromMetrics won't double-build.
+  try{buildDomainPlanets();}catch(e){console.warn('domain planets',e);}
   return true;
 }
 function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
@@ -1103,7 +1433,7 @@ function buildBrain(){
   beamGlow.position.y=beamH*0.18; brain.add(beamGlow);
   // inner bright core cylinder (the "beam" you see straight on)
   beamCore=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,beamH,16,1,true),
-    new THREE.MeshBasicMaterial({color:0x9af6ff,transparent:true,opacity:.5,
+    new THREE.MeshBasicMaterial({color:0x2fc9ff,transparent:true,opacity:.32,   // U1: cyan (not near-white 0x9af6ff) + lower opacity → beam reads as a crisp shaft, not a white-clipping additive column
       blending:THREE.AdditiveBlending,depthWrite:false}));
   beamCore.position.y=beamH*0.18; brain.add(beamCore);
 
@@ -1240,14 +1570,49 @@ function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
 /* ---- §1 A: concurrency-capped GLB loader queue (lazy-load; cap concurrent loads for perf) ----
    The manifest planets load REAL GLBs by full /asset|/media URL. We never fire 1,600 loads at once: at most
    MAX_GLB load in flight; the rest queue. enqueueGLB(url, onLoad). Cached so a re-layout never re-fetches. */
-const MAX_GLB=4; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
+const MAX_GLB=6; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
 function _pumpGLB(){ while(_glbInFlight<MAX_GLB && _glbQueue.length){ const job=_glbQueue.shift();
     _glbInFlight++; glbsTried++;
     _glbLoader.load(job.url, g=>{ _glbInFlight--; glbsOk++; try{job.ok(g);}catch(_){}; _pumpGLB(); },
       undefined, ()=>{ _glbInFlight--; try{job.err&&job.err();}catch(_){}; _pumpGLB(); }); } }
-function enqueueGLB(url,onLoad,onErr){ if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
+function enqueueGLB(url,onLoad,onErr){ url=realGLB(url); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
   _glbQueue.push({url, ok:g=>{ try{_glbCache.set(url,g.scene);}catch(_){}; onLoad(g.scene.clone(true)); }, err:onErr});
   _pumpGLB(); }
+/* CRITICAL FIX: all 677 /media/gen_tripo|gen_uw GLBs are broken 0-byte stubs (Tripo ran out of budget),
+   so every topic object was a bare sphere. Until they're regenerated, remap each broken /media/* URL to the
+   best-matching REAL asset in jarvis_assets/ (served by /asset/). Shared assets cache → fewer/lighter loads. */
+const GLB_REMAP={
+ 'gen_tripo__agi_core':'jarvis_ai_core_reasoning_orb','gen_tripo__assembly_line_conveyor':'jarvis_ai_core_execution_queue_row',
+ 'gen_tripo__balance_scale_lab':'jarvis_ai_core_component_radial_gauge_92','gen_tripo__citation_graph_display':'jarvis_intel_graph_constellation',
+ 'gen_tripo__courthouse':'jarvis_ai_core_approval_panel','gen_tripo__fault_rift_terrain':'jarvis_world_control_holo_earth',
+ 'gen_tripo__fossil_ammonite':'jarvis_analytics_globe','gen_tripo__guild_agriculture_barn':'jarvis_kit_holo_earth',
+ 'gen_tripo__hospital':'jarvis_ai_core_health_subbar_stack','gen_tripo__law_stele':'jarvis_ai_core_safety_alignment_panel',
+ 'gen_tripo__maglev_pod':'jarvis_world_control_equatorial_ring','gen_tripo__market_hall':'jarvis_ops_mission_table_hero',
+ 'gen_tripo__market_stall':'jarvis_command_atrium_data_orb','gen_tripo__network_switch_node':'jarvis_intel_graph_constellation_core',
+ 'gen_tripo__nuclear_reactor_pile':'jarvis_data_fusion_reactor_core','gen_tripo__philosophy_agora':'jarvis_ai_core_reasoning_stream_panel',
+ 'gen_tripo__power_grid_substation':'jarvis_arc_reactor','gen_tripo__radio_tower':'jarvis_analytics_observatory_hero_globe',
+ 'gen_tripo__republic_senate_house':'jarvis_war_room_mission_table','gen_tripo__theatre_stage':'jarvis_ai_core_director_avatar_plate',
+ 'gen_tripo__university':'jarvis_document_vault_book','gen_tripo__volcano_cone':'jarvis_analytics_globe',
+ 'gen_tripo__water_tower':'jarvis_kit_reactor_core_tower','gen_uw_interior__astronomy_observatory_telescope':'jarvis_analytics_observatory_hero_globe',
+ 'gen_uw_interior__atmoschem_ozone_monitor':'jarvis_world_control_earth_graticule','gen_uw_interior__biology_compound_microscope':'jarvis_command_atrium_orb_wireframe_lattice',
+ 'gen_uw_interior__ecology_biodiversity_camera_trap':'jarvis_kit_holo_earth','gen_uw_interior__economics_ledger_analytics_desk':'jarvis_ai_core_command_history_panel',
+ 'gen_uw_interior__economics_market_data_wall':'jarvis_war_room_mission_table','gen_uw_interior__economics_trading_terminal':'jarvis_ai_core_command_bar',
+ 'gen_uw_interior__engineering_cad_workstation':'jarvis_ai_core_active_tool_row','gen_uw_interior__epidemiology_contact_tracing_wall':'jarvis_security_core_user_avatar_plinth',
+ 'gen_uw_interior__lab_experiment_bench':'jarvis_ai_core_reasoning_orb','gen_uw_sky__earth':'jarvis_world_control_holo_earth',
+ 'gen_uw_urban__city_street':'jarvis_ops_mission_table_hero','gen_uw_urban__ground_satellite_dish':'jarvis_world_control_equatorial_ring'};
+const _REAL_GLBS=['jarvis_ai_core_reasoning_orb','jarvis_command_atrium_data_orb','jarvis_intel_graph_constellation','jarvis_security_core_shield','jarvis_data_fusion_reactor_core','jarvis_ops_mission_table_hero','jarvis_simulation_branching_tree','jarvis_world_control_holo_earth','jarvis_analytics_globe','jarvis_kit_data_orb','jarvis_kit_holo_shield','jarvis_command_atrium_orb_wireframe_lattice'];
+const _MOBILE=(window.innerWidth||999)<820||(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
+function realGLB(url){ if(!url) return url; if(url.indexOf('/asset/')>=0) return url;   // already a real light asset
+  const base=url.split('/').pop().replace('.glb','');
+  // /media now serves the REAL high-grade models. tripo ones are ~15MB — fine on desktop, but 32 of them
+  // would crash her phone, so on MOBILE swap the heavy tripo for a light real /asset substitute. The
+  // ~3MB gen_uw_* and all desktop loads pass through to the real high-grade GLB (custom per body).
+  if(_MOBILE && base.indexOf('gen_tripo__')===0){
+    if(GLB_REMAP[base]) return '/asset/'+GLB_REMAP[base]+'.glb';
+    let h=0; for(let i=0;i<base.length;i++) h=(h*31+base.charCodeAt(i))>>>0;
+    return '/asset/'+_REAL_GLBS[h%_REAL_GLBS.length]+'.glb';
+  }
+  return url; }
 
 function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
   const sz=o.size||4.4, asset=glbForName(o.name);
@@ -1340,6 +1705,50 @@ function vogel(i, importance, R0, k){
   return {radius:Math.max(150,r), angle:a, y:y};
 }
 
+/* ===== NASA-Eyes recursive hierarchy: Node model + nav stack (Stage 5) ===== */
+const PHI_CONJ = 0.381966011;                         // 1/φ² — recursive self-similar scale per level
+function makeNode(o){ return Object.assign({
+  id:o.id, label:o.label, kind:o.kind||'planet', depth:o.depth||0, parent:o.parent||null,
+  color:o.color||COLORS.kpi, glbUrl:o.glbUrl||null, count:o.count??null,
+  importance:o.importance??0.5, childrenKind:o.childrenKind||null,
+  card:o.card||null, mesh:null, _hydrated:false, _children:null }, o); }
+let navStack = [];                                    // navStack[0] = root universe frame
+function currentFrame(){ return navStack[navStack.length-1]; }
+async function hydrate(node){
+  if(node._hydrated) return node._children||[];
+  try{
+    const q=new URLSearchParams({id:node.id, kind:node.childrenKind||'', exclude:node.parent?.id||''});
+    const res=await fetch('/children?'+q);
+    const data=await res.json();
+    if(data.children){
+      node._children=(data.children||[]).map(c=>makeNode({
+        id:c.id, label:c.label, kind:node.depth>0?'satellite':'moon', depth:node.depth+1, parent:node,
+        color:c.color, rel:c.rel, dir:c.dir, isLeaf:c.isLeaf||false,
+        childrenKind:c.isLeaf?null:('obj:'+c.id), glbUrl:null, count:c.count }));
+    }
+    node._hydrated=true;
+  }catch(e){ node._hydrated=true; }
+  return node._children||[];
+}
+function makeRootNodes(){
+  const doms=WORLD_MANIFEST.domains||{};
+  return Object.entries(doms).map(([dom,info])=>makeNode({
+    id:'dom:'+dom, label:dom, kind:'planet', depth:0, parent:null,
+    color:(GRAPH_COLORS||{})[dom]||'#9bd4e6', count:info.count,
+    childrenKind:'type:'+dom, glbUrl:info.url }));
+}
+function setLevelOpacity(frame, target){
+  if(!frame||!frame.bodies) return;
+  frame.targetOpacity=target;
+}
+function framingFor(frame){
+  if(!frame||!frame.bodies||!frame.bodies.length) return {pos:new THREE.Vector3(0,0,0), tgt:300};
+  let bb=new THREE.Box3();
+  frame.bodies.forEach(b=>bb.expandByObject(b));
+  const sz=bb.getSize(new THREE.Vector3()).length();
+  return {pos:new THREE.Vector3(0,30,sz*0.8), tgt:sz*0.6};
+}
+
 /* ---- §1 A: the 16 MAJOR ONTOLOGY-DOMAIN PLANETS (the white-dot killer) ----
    Built ONCE from the embedded deterministic manifest. Each domain → its CORRECT curated GLB (per
    manifest.domains), placed by the φ/Vogel law, SIZED log-scaled by its real ont_object count, carrying
@@ -1357,13 +1766,17 @@ function buildDomainPlanets(){
     const sz=9+imp*16;                                           // 9..25 — domains are the MAJOR planets (> KPI/tier sizes)
     const P=vogel(i,imp,300,30);
     const name='dom:'+dom, count=info.count||0;
+    const node=makeNode({id:name,label:dom,kind:'planet',depth:0,parent:null,
+      color:COLORS.kpi,count:count,childrenKind:'type:'+dom,glbUrl:info.url});
     const card=()=>({title:dom,subtitle:'ontology domain · '+(info.reason||''),
       bar:Math.round(imp*100),
       props:[{k:'Objects',v:fmt(count)},{k:'Importance',v:Math.round(imp*100)+'%'},{k:'GLB',v:(info.url||'').split('/').pop()}],
       lines:['One of the 16 real ontology domains from brain.db.','Sized by its real object count; placed by the golden-angle φ law.'],
-      actions:[{label:'◈ Focus in graph',kind:'graph',arg:dom}]});
-    addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
+      actions:[{label:'◈ Focus in graph',kind:'graph',arg:dom},
+        {label:'⏎ Enter system',kind:'descend',arg:dom}]});
+    const b=addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
       radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
+    bodyNodeMap.set(b,node);
   });
   // a lighter outer belt of the 31 master TOPIC planets (ranked by pagerank) — keeps depth without 1,600 loads
   const topics=(WORLD_MANIFEST.topics||[]).slice(0,16);          // cap concurrent/visible heavy GLB topic planets
@@ -1624,6 +2037,102 @@ function flyToQuery(q){q=(q||'').trim();if(!q)return;const lo=q.toLowerCase();
   // else hand to chat
   $('say').value=q;askJarvis();}
 
+/* ---- NASA-Eyes hierarchy: fly into nested systems (Stage 5) ---- */
+function addBodyLocal(node, parentGroup, pos){
+  const proxy=new THREE.Mesh(
+    new THREE.SphereGeometry(node.importance*2+0.8,26,26),
+    new THREE.MeshBasicMaterial({color:new THREE.Color(node.color)})
+  );
+  proxy.position.set(pos.x, pos.y, pos.z);
+  proxy.userData={
+    name:node.id, labelText:node.label, selected:false, color:node.color, baseScale:node.importance*2+0.8,
+    getCard:()=>{
+      const props=[{k:'Kind',v:node.kind||'object'},{k:'Depth',v:String(node.depth||0)}];
+      if(node.rel) props.push({k:'Relation',v:node.rel});
+      const actions=[];
+      if(node.childrenKind) actions.push({label:'Enter system ⏎',kind:'descend',arg:node.id});
+      return {title:node.label||node.id, subtitle:node.kind||'object', props, actions};
+    }
+  };
+  parentGroup.add(proxy);
+  enqueueGLB(node.glbUrl||WORLD_MANIFEST.fallback.url, glb=>{
+    if(!glb) return;
+    glb.position.set(0,0,0);glb.scale.setScalar((node.importance*2+0.8)*0.9);
+    proxy.add(glb);proxy.userData.glb=glb;proxy.userData.glb.userData=proxy.userData;
+  });
+  return proxy;
+}
+function buildSatSwarm(satellites, parentGroup, scale){
+  if(!satellites.length) return null;
+  const geo=new THREE.SphereGeometry(1.6*scale,10,10);
+  const inst=new THREE.InstancedMesh(geo, new THREE.MeshBasicMaterial({transparent:true}), satellites.length);
+  const pos=new THREE.Vector3();
+  satellites.forEach((s,i)=>{
+    const phi=i*2.39996;const r=3+Math.random()*2;
+    pos.set(Math.cos(phi)*r, (Math.random()-0.5)*2, Math.sin(phi)*r);
+    inst.setMatrixAt(i, new THREE.Matrix4().compose(pos, new THREE.Quaternion(), new THREE.Vector3(1,1,1)));
+    inst.setColorAt(i, new THREE.Color(s.color||'#9bd4e6'));
+  });
+  inst.instanceMatrix.needsUpdate=true;
+  if(inst.instanceColor) inst.instanceColor.needsUpdate=true;
+  parentGroup.add(inst);
+  return {inst, nodes:satellites, pos:satellites.map((s,i)=>{const phi=i*2.39996;return new THREE.Vector3(Math.cos(phi)*(3+Math.random()*2), (Math.random()-0.5)*2, Math.sin(phi)*(3+Math.random()*2))})};
+}
+async function buildSystem(node, frame){
+  if(!node.childrenKind) return;
+  const children=await hydrate(node);
+  const s=Math.pow(PHI_CONJ, node.depth);
+  const moons=children.filter(c=>c.childrenKind), sats=children.filter(c=>!c.childrenKind);
+  frame.bodies=frame.bodies||[];
+  moons.forEach((m,i)=>{
+    const {radius, angle, y}=vogel(i, m.importance||Math.log10(1+i), 300*s+40, 30*s);
+    const pos=new THREE.Vector3(Math.cos(angle)*radius, y, Math.sin(angle)*radius);
+    const mesh=addBodyLocal(m, frame.group, pos);
+    m.mesh=mesh;
+    frame.bodies.push(mesh);
+  });
+  if(sats.length) frame.swarms=frame.swarms||[];
+  if(sats.length) frame.swarms.push(buildSatSwarm(sats, frame.group, s));
+  frame.home=framingFor(frame);
+  firePulseSpike(0.6);
+}
+async function flyInto(node){
+  if(flying || !node.childrenKind) return;
+  flying=true;
+  const newFrame={node, group:new THREE.Group(), bodies:[], swarms:[], targetOpacity:1};
+  scene.add(newFrame.group);
+  await buildSystem(node, newFrame);
+  const h=newFrame.home||{pos:new THREE.Vector3(0,0,300), tgt:300};
+  tween(h.pos, h.tgt, 600, ()=>{navStack.push(newFrame);renderCrumbs();setLevelOpacity(navStack[navStack.length-2], 0.12);flying=false;});
+}
+function flyOut(toDepth){
+  if(flying) return;
+  toDepth=Math.max(0, Math.min(toDepth||navStack.length-2, navStack.length-1));
+  flying=true;
+  const popped=navStack.splice(toDepth+1);
+  popped.forEach(f=>{f.group.traverse(o=>{if(o.geometry) o.geometry.dispose();if(o.material) o.material.dispose();});scene.remove(f.group);});
+  const frame=navStack[toDepth];
+  const h=frame?.home||home||{pos:new THREE.Vector3(0,100,280), tgt:250};
+  setLevelOpacity(frame, 1);
+  tween(h.pos, h.tgt, 600, ()=>{renderCrumbs();flying=false;});
+}
+function renderCrumbs(){
+  const cr=$('crumbs');if(!cr || navStack.length<=1) {if(cr) cr.style.display='none'; return;}
+  cr.innerHTML=navStack.map((f,i)=>`<button class=crumb data-depth="${i}">${f.node.label}</button>`).join('<span style="color:var(--dim);margin:0 4px;">›</span>');
+  cr.style.display='flex';
+  cr.querySelectorAll('.crumb').forEach(b=>b.addEventListener('click', e=>{flyOut(parseInt(e.target.dataset.depth));}));
+}
+let _selectPending=null;
+
+function onCanvasDbl(e){
+  clearTimeout(_selectPending);
+  _selectPending=null;
+  const b=_bodyAt(e);
+  if(!b) return;
+  const node=bodyNodeMap.get(b);
+  if(node) flyInto(node);
+}
+
 /* ---- raycast click → select body (fly + card) / empty → return ---- */
 const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();
 let _downXY=null;
@@ -1668,15 +2177,17 @@ function onCanvasClick(e){
   if(!uniReady)return;
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  // raycast the macro bodies AND the knowledge-graph constellation (InstancedMesh) together, nearest wins
   const targets=bodies.slice();
   if(_constellation&&_constellation.inst)targets.push(_constellation.inst);
   const hit=ray.intersectObjects(targets,true)[0];
   if(hit){
     if(_constellation&&hit.object===_constellation.inst&&hit.instanceId!=null){selectNode(hit.instanceId);return;}
-    let o=hit.object;while(o&&!o.userData.name)o=o.parent;if(o){selectBody(o);return;}
+    let o=hit.object;while(o&&!o.userData.name)o=o.parent;if(o){
+      clearTimeout(_selectPending);
+      _selectPending=setTimeout(()=>{selectBody(o);_selectPending=null;},220);
+      return;}
   }
-  closeCard();
+  clearTimeout(_selectPending);_selectPending=null;closeCard();
 }
 function selectBody(b){
   if(_selected)_selected.userData.selected=false;
@@ -1721,7 +2232,7 @@ function tickFrame(){
     // --- CENTRE: liquid metal + beam tube ---
     morphLiquid(dt);
     if(beamMat&&beamMat.uniforms){beamMat.uniforms.uAmp.value=A;beamMat.uniforms.uTime.value=PULSE.flow;}
-    if(beamCore)beamCore.material.opacity=0.3+SPK*0.5;
+    if(beamCore)beamCore.material.opacity=0.20+SPK*0.30;   // U1: lower ceiling so a speaking pulse brightens the beam without re-flooding the centre to white
     if(torus){torus.rotation.z+=dt*(0.4+A*0.6);torus.rotation.x+=dt*0.12;}
     if(fellBack&&coreMesh){coreMesh.rotation.y+=dt*0.3;coreMesh.scale.setScalar(22*(1+A*0.18));
       if(coreMesh.material&&'emissiveIntensity' in coreMesh.material)coreMesh.material.emissiveIntensity=0.8+A*2.4;}
@@ -1742,8 +2253,9 @@ function tickFrame(){
     // --- CONSTELLATION: gentle shared breathing ---
     if(_constellation&&_constellation.inst)_constellation.inst.rotation.y+=dt*0.01;
 
-    // --- BLOOM tracks the organism ---
-    if(bloom)bloom.strength=1.25+A*0.9+SPIKE*0.5;
+    // --- BLOOM tracks the organism (U1: base 0.85 matches the tuned constructor; modest swell so a loud
+    //     PULSE glows without re-blowing the centre to white — was 1.25 base + 0.9*A + 0.5*SPIKE) ---
+    if(bloom)bloom.strength=0.85+A*0.45+SPIKE*0.3;
 
     // --- CINEMATIC POST: god-rays from the Sun, animated grain, focus pull on fly-to ---
     if(godrays&&godrays.uniforms){const s=new THREE.Vector3(0,30,0).project(camera);   // beam/face column
@@ -1764,11 +2276,35 @@ function tickFrame(){
     if(sunFace){ sunFace.rotation.y+=dt*(0.06+A*0.25);                                     // slow majestic spin, faster when speaking
       const k=sunFace.userData._k||1, morph=1+A*0.06+SPK*0.10+SPIKE*0.08;                 // subtle living "breathe/morph" scale
       sunFace.scale.setScalar(k*morph);
-      const ei=0.45+SPK*1.6+SPIKE*1.0+A*0.4;                                              // emissive surges with the voice/pulse
+      const ei=Math.min(1.15, 0.30+SPK*0.7+SPIKE*0.45+A*0.22);                            // U1: capped emissive — the helmet stays a CRISP chrome face that glows cyan, never a white blob (was unclamped → ~3.4)
       sunFace.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=ei;}); }
 
     // --- (c) macro connection lines glow with the pulse ---
     if(_macroLines)_macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25;
+
+    // --- NASA-Eyes hierarchy: per-frame body pulse + LOD crossfade ---
+    try{
+      const cf=currentFrame();
+      if(cf&&cf.bodies){
+        for(const b of cf.bodies){const u=b.userData;
+          const beat=Math.sin(t*2+(u.ph||0))*0.16;
+          const sc=(1+A*0.12+SPIKE*0.18);
+          b.scale.setScalar(sc);
+          const ei=(u.selected?1.9:1.0)+beat+SPIKE*0.9;
+          if(u.glb){const k=0.35+ei*0.25;u.glb.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=k;});}
+          else{try{b.material.emissiveIntensity=ei;}catch(e){}}}}
+      // LOD crossfade: lerp each frame toward its target opacity
+      for(let i=0;i<navStack.length;i++){
+        const f=navStack[i];if(!f||!f.group)continue;
+        const target=f.targetOpacity??1;
+        const curr=f.group.userData.opacity||1;
+        f.group.userData.opacity=curr+Math.min(0.3,dt*1.5)*(target-curr);
+        f.group.traverse(o=>{if(o.isMesh){
+          o.material.transparent=f.group.userData.opacity<0.99;
+          if(o.userData.glb){o.material.opacity=0;o.userData.glb.traverse(c=>{if(c.isMesh&&c.material)c.material.opacity=f.group.userData.opacity;});}
+          else{o.material.opacity=f.group.userData.opacity;}}});
+      }
+    }catch(e){}
 
     // preserved camera idle-orbit
     if(!userDragging&&!flying){const rad=Math.hypot(camera.position.x,camera.position.z);

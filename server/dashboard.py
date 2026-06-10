@@ -25,6 +25,7 @@ import secrets
 import sqlite3
 import sys
 import subprocess
+import tempfile
 import threading
 import time
 import urllib.request
@@ -354,7 +355,8 @@ def _routing() -> dict:
 GRAPH_COLORS = {"Topic": "#22d3ee", "Concept": "#34d399", "DataSource": "#f5b942", "Document": "#a78bfa",
                 "Place": "#f87171", "Measurement": "#38bdf8", "DomainSubject": "#fb7185", "Asset": "#fbbf24",
                 "Vulnerability": "#fb7185", "Event": "#c084fc", "ScientificPublication": "#a78bfa",
-                "EarthquakeEvent": "#f97316", "SpeciesOccurrence": "#4ade80", "AcquisitionPoint": "#60a5fa"}
+                "EarthquakeEvent": "#f97316", "SpeciesOccurrence": "#4ade80", "AcquisitionPoint": "#60a5fa",
+                "Sensor": "#6366f1", "AppPage": "#ec4899"}
 
 
 def _graph_data(max_nodes: int = 600, max_edges: int = 1800) -> dict:
@@ -395,6 +397,121 @@ def _graph_data(max_nodes: int = 600, max_edges: int = 1800) -> dict:
         except Exception as e:  # noqa: BLE001
             return {"nodes": [], "edges": [], "error": str(e)[:120]}
     return _cached("graph", 30.0, build)
+
+
+# ── global ontology search — NASA "Eyes" search-to-fly over the WHOLE brain.db ─
+# The 16 ontology domains (mirrors WORLD_MANIFEST.domains in jarvis_live.html) so a
+# query that names a domain flies straight to its planet.
+_ONT_DOMAINS = ("Measurement", "DataSource", "Document", "DomainSubject", "Topic",
+                "SpeciesOccurrence", "ScientificPublication", "Vulnerability",
+                "AcquisitionPoint", "Place", "Asset", "Concept", "EarthquakeEvent",
+                "Event", "Sensor", "AppPage")
+# Title field varies by type — resolve in priority order, then fall back.
+_TITLE_KEYS = ("label", "title", "name", "topic_name", "metric", "place",
+               "scientific_name", "subject", "headline", "cve_id", "cve",
+               "question", "summary", "source", "url")
+# Modest per-type salience: a named Place/Earthquake/Vulnerability is more interesting
+# than a generic Measurement when both merely contain the query string.
+_TYPE_WEIGHT = {"EarthquakeEvent": 14, "Vulnerability": 14, "Place": 12, "Event": 12,
+                "Topic": 10, "Concept": 10, "ScientificPublication": 9, "Document": 8,
+                "SpeciesOccurrence": 8, "Asset": 8, "Sensor": 7, "DomainSubject": 6,
+                "AcquisitionPoint": 5, "DataSource": 4, "AppPage": 4, "Measurement": 2}
+
+
+def _ont_title(j: dict):
+    for k in _TITLE_KEYS:
+        v = j.get(k)
+        if v not in (None, ""):
+            return str(v)
+    for v in j.values():  # last resort: first short scalar
+        if isinstance(v, (str, int, float)) and str(v).strip():
+            return str(v)
+    return None
+
+
+def _label(props_json: str) -> str:
+    """Extract a short label from ont_object.props JSON, guarded against parse errors (P0-2)."""
+    try:
+        j = json.loads(props_json) if isinstance(props_json, str) else props_json
+        return _ont_title(j) or ""
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _ont_context(j: dict, title: str) -> str:
+    """A short human subtitle from a couple of the most telling extra props."""
+    bits = []
+    for k in ("magnitude", "country", "kingdom", "depth_km", "severity", "score",
+              "year", "status", "source"):
+        v = j.get(k)
+        if v not in (None, "") and str(v) != title:
+            bits.append(f"{k} {v}")
+        if len(bits) >= 2:
+            break
+    return " · ".join(bits)
+
+
+def _search_ontology(q: str, limit: int = 24) -> dict:
+    """Rank matches for `q` across all ~265k ont_objects in brain.db. Returns each hit's
+    real title, type and the `dom:<type>` planet the universe can fly to. Cached 45s."""
+    q = (q or "").strip()
+    if len(q) < 2:
+        return {"q": q, "count": 0, "results": []}
+    limit = max(1, min(60, limit))
+    lo = q.lower()
+
+    def build():
+        results = []
+        for dom in _ONT_DOMAINS:                              # domain-name shortcut → top
+            if lo in dom.lower():
+                results.append({"id": "dom:" + dom, "type": dom, "title": dom,
+                                "subtitle": "ontology domain planet", "planet": "dom:" + dom,
+                                "domain": True, "_uts": 1 << 62,
+                                "score": 1000 + (40 if dom.lower() == lo else 0)})
+        try:
+            c = sqlite3.connect(BRAIN_DB, timeout=6)
+            cur = c.execute("SELECT id,type,props,updated_ts FROM ont_object "
+                            "WHERE props LIKE ? LIMIT 1600", ("%" + q + "%",))
+            for oid, typ, props, uts in cur:
+                try:
+                    j = json.loads(props)
+                except Exception:  # noqa: BLE001
+                    continue
+                title = _ont_title(j)
+                if not title:
+                    continue
+                tl = title.lower()
+                if tl == lo:
+                    s = 90
+                elif tl.startswith(lo):
+                    s = 60
+                elif (" " + lo) in (" " + tl):
+                    s = 45                                    # word-boundary hit
+                elif lo in tl:
+                    s = 30
+                else:
+                    s = 6                                     # matched only in other props
+                s += _TYPE_WEIGHT.get(typ, 3)
+                ctx = _ont_context(j, title)
+                results.append({"id": oid, "type": typ, "title": title[:90],
+                                "subtitle": typ + (" · " + ctx if ctx else ""),
+                                "planet": "dom:" + typ, "score": s, "_uts": uts or 0})
+            c.close()
+        except Exception as e:  # noqa: BLE001
+            return {"q": q, "count": 0, "results": [], "error": str(e)[:140]}
+        results.sort(key=lambda r: (r["score"], r["_uts"]), reverse=True)
+        out, per = [], {}                                     # diversify: cap any one type
+        for r in results:
+            if not r.get("domain") and per.get(r["type"], 0) >= 8:
+                continue
+            per[r["type"]] = per.get(r["type"], 0) + 1
+            r.pop("_uts", None)
+            out.append(r)
+            if len(out) >= limit:
+                break
+        return {"q": q, "count": len(out), "results": out}
+
+    return _cached("search:" + lo + ":" + str(limit), 45.0, build)
 
 
 # ── rate + ETA tracking (the "time remaining" ticker) ─────────────────────────
@@ -583,6 +700,61 @@ def _health(m: dict) -> dict:
                        "daemons_total": len(workers)}}
 
 
+def _vitals() -> dict:
+    """The REAL, self-contained System Vitals payload for the /vitals endpoint and the universe Vitals
+    app — never the HTML page (the old /vitals path fell through to the catch-all and served HTML, so a
+    JSON consumer got nothing: exactly the 'loads nothing' module the contract flags).
+
+    Every datum here is genuinely measured: CPU/mem/disk/load from /proc + statvfs (psutil-equivalent),
+    GPU/LLM reachability + VRAM from the Ollama box (Ollama /api/ps), pm2 service health from `pm2 jlist`,
+    and the derived 0-100 health score + alerts. Anything we truly can't reach is reported with an
+    explicit not-connected flag — it is NEVER fabricated.
+    """
+    m = _SNAP
+    # Snapshot still warming up (first ~2s after a restart) — say so honestly, don't invent numbers.
+    if not m or m.get("loading") or not m.get("ts"):
+        return {"ok": False, "connected": False, "reason": "warming up",
+                "summary": "System vitals are initialising — first snapshot not ready yet.",
+                "ts": int(time.time())}
+    v = m.get("vps", {}) or {}
+    b = m.get("box", {}) or {}
+    h = m.get("health") or _health(m)
+    workers = m.get("workers") or []
+    mine = [w for w in workers if w.get("toggleable")]
+    return {
+        "ok": True, "connected": True, "ts": m.get("ts"), "age_s": max(0, int(time.time()) - int(m.get("ts") or 0)),
+        "score": h.get("score"), "level": h.get("level"), "summary": h.get("summary"),
+        "alerts": h.get("alerts", []), "gauges": h.get("gauges", {}),
+        # Raw, real numbers (units) so a monitor can graph them without re-deriving %s.
+        "system": {
+            "cpu_pct": v.get("cpu_pct"), "cores": v.get("cores"), "load": v.get("load"),
+            "mem_used_gb": v.get("mem_used_gb"), "mem_total_gb": v.get("mem_total_gb"),
+            "swap_used_gb": v.get("swap_used_gb"), "swap_total_gb": v.get("swap_total_gb"),
+            "disk_used_gb": v.get("disk_used_gb"), "disk_total_gb": v.get("disk_total_gb"),
+            "os": v.get("os"), "kernel": v.get("kernel"), "public_ip": v.get("public_ip"),
+            "docker_running": v.get("docker_running"), "docker_total": v.get("docker_total"),
+        },
+        # GPU/LLM brain — reachable is REAL; metrics we can't get without nvidia-smi are null, not faked.
+        "brain": {
+            "endpoint": b.get("endpoint"), "reachable": b.get("reachable"),
+            "vram_used_gb": b.get("vram_used_gb"), "vram_total_gb": b.get("vram_total_gb"),
+            "models": b.get("models", []), "gpu_util": b.get("gpu_util"),
+            "gpu_temp": b.get("gpu_temp"), "power_w": b.get("power_w"),
+        },
+        # pm2 service health (real, from `pm2 jlist`): our daemons + the lifeline dashboard itself.
+        "services": {
+            "up": sum(1 for w in mine if w.get("status") == "online"),
+            "total": len(mine),
+            "list": [{"name": w.get("name"), "label": w.get("label"), "status": w.get("status"),
+                      "cpu": w.get("cpu"), "mem_mb": w.get("mem_mb"), "restarts": w.get("restarts"),
+                      "up_min": w.get("up_min")} for w in mine],
+        },
+        "budget": m.get("budget") or {},
+        "uptime_min": max((w.get("up_min", 0) for w in workers if w.get("name") == "jarvis-dashboard"), default=None),
+        "version": m.get("version") or {},
+    }
+
+
 def _version() -> dict:
     def go():
         try:
@@ -682,6 +854,87 @@ def _detail(kind: str, name: str) -> dict:
     except Exception as e:  # noqa: BLE001
         return {"title": name, "lines": [f"error: {str(e)[:140]}"]}
     return {"title": name, "lines": ["no detail available"]}
+
+
+def _children(node_id: str, node_kind: str, exclude_id: str = "", limit: int = 14) -> dict:
+    """REAL children for the recursive NASA-Eyes hierarchy. Pure read; index-backed; capped.
+    P0-1: biased to connected objects via EXISTS semi-join (not recency alone).
+    P0-2: per-row try/except so one malformed props doesn't blank the planet.
+    P1-2: rank informative relations first (SAME_AS last)."""
+    def build():
+        try:
+            c = sqlite3.connect(BRAIN_DB, timeout=5)
+            c.execute("PRAGMA query_only=1")
+            out, seen = [], set()
+            if node_kind.startswith("type:"):
+                typ = node_kind.split(":", 1)[1]
+                total = _count(BRAIN_DB, "SELECT COUNT(*) FROM ont_object WHERE type=?", typ) or 0
+                # P0-1: SELECT connected objects via EXISTS, fall back to recency
+                rows = c.execute(
+                    "SELECT id,props FROM ont_object WHERE type=? "
+                    "AND (EXISTS(SELECT 1 FROM ont_link WHERE from_id=id) OR "
+                    "EXISTS(SELECT 1 FROM ont_link WHERE to_id=id)) "
+                    "ORDER BY rowid DESC LIMIT ?",
+                    (typ, limit)).fetchall()
+                # Backfill with recent if not enough connected
+                if len(rows) < limit:
+                    remain = limit - len(rows)
+                    seen_ids = {r[0] for r in rows}
+                    extra = c.execute(
+                        "SELECT id,props FROM ont_object WHERE type=? "
+                        "ORDER BY rowid DESC LIMIT ?",
+                        (typ, remain * 3)).fetchall()
+                    for r in extra:
+                        if r[0] not in seen_ids and len(rows) < limit:
+                            rows.append(r)
+                            seen_ids.add(r[0])
+                # P0-2: per-row try/except for _label
+                for oid, props in rows:
+                    if oid in seen:
+                        continue
+                    seen.add(oid)
+                    label = _label(props) or oid
+                    has_links = bool(c.execute("SELECT 1 FROM ont_link WHERE from_id=? LIMIT 1", (oid,)).fetchone()) or \
+                                bool(c.execute("SELECT 1 FROM ont_link WHERE to_id=? LIMIT 1", (oid,)).fetchone())
+                    out.append({"id": oid, "type": typ, "label": str(label)[:70],
+                                "color": GRAPH_COLORS.get(typ, "#9bd4e6"), "rel": "instance", "dir": "down",
+                                "isLeaf": not has_links})
+            else:  # 'obj:<id>' — bidirectional indexed neighbor walk
+                oid = node_kind.split(":", 1)[1] if ":" in node_kind else node_id
+                # Rank relations: informative first, SAME_AS last (P1-2)
+                REL_RANK = {"DESCRIBES": 1, "RELATES_TO": 2, "IN_TOPIC": 3, "MEASURED_AT": 4,
+                            "SERVES": 5, "powers": 6, "SAME_AS": 999}
+                from_count = _count(BRAIN_DB, "SELECT COUNT(*) FROM ont_link WHERE from_id=?", oid) or 0
+                to_count = _count(BRAIN_DB, "SELECT COUNT(*) FROM ont_link WHERE to_id=?", oid) or 0
+                total = from_count + to_count
+                rows = []
+                rows += c.execute(
+                    "SELECT o.id,o.type,o.props,l.type rel,'out' dir FROM ont_link l "
+                    "JOIN ont_object o ON o.id=l.to_id WHERE l.from_id=? LIMIT ? ", (oid, limit)).fetchall()
+                rows += c.execute(
+                    "SELECT o.id,o.type,o.props,l.type rel,'in' dir FROM ont_link l "
+                    "JOIN ont_object o ON o.id=l.from_id WHERE l.to_id=? LIMIT ? ", (oid, limit)).fetchall()
+                rows.sort(key=lambda r: REL_RANK.get(r[3], 999))
+                for cid, ctyp, props, rel, dr in rows:
+                    if cid == oid or cid == exclude_id or cid in seen:
+                        continue
+                    seen.add(cid)
+                    label = _label(props) or cid
+                    out.append({"id": cid, "type": ctyp, "label": str(label)[:70],
+                                "color": GRAPH_COLORS.get(ctyp, "#9bd4e6"), "rel": rel, "dir": dr})
+                    if len(out) >= limit:
+                        break
+            c.close()
+            return {"parent": node_id, "kind": node_kind, "children": out,
+                    "total": total, "truncated": total > len(out)}
+        except Exception as e:  # noqa: BLE001
+            return {"parent": node_id, "kind": node_kind, "children": [], "total": 0,
+                    "truncated": False, "error": str(e)[:120]}
+    # P0-3: don't cache obj: branch (high cardinality); cache type: only
+    if node_kind.startswith("type:"):
+        return _cached(f"children::{node_kind}", 30.0, build)
+    else:
+        return build()
 
 
 def metrics() -> dict:
@@ -1108,6 +1361,69 @@ def _climate_say_state(query: str, st: dict, address: str = "ma'am") -> str:
     return sent[:1].upper() + sent[1:] + ", " + addr + "."
 
 
+# ── ACCESSIBILITY CORE ────────────────────────────────────────────────────────
+
+_A11Y_PATH = os.path.join(ROOT, "server", "data", "a11y_state.json")
+_A11Y_LOCK = threading.Lock()
+
+
+def _a11y_read() -> dict:
+    """Read the a11y mirror state (or empty dict if not yet initialized)."""
+    try:
+        with open(_A11Y_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:  # noqa: BLE001
+        return {"state": {}, "ts": 0, "source": "local", "_cmd": None}
+
+
+def _a11y_write(patch: dict, source: str = "local", cmd: dict | None = None) -> dict:
+    """Merge a partial state (and/or a one-shot _cmd) into the mirror, atomically. Never raises."""
+    with _A11Y_LOCK:
+        cur = _a11y_read()
+        st = dict(cur.get("state") or {})
+        st.update(patch or {})
+        out = {"state": st, "ts": int(time.time() * 1000), "source": source,
+               "_cmd": cmd if cmd is not None else cur.get("_cmd")}
+        try:
+            os.makedirs(os.path.dirname(_A11Y_PATH), exist_ok=True)
+            fd, tmp = tempfile.mkstemp(dir=os.path.dirname(_A11Y_PATH), suffix=".tmp")
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                json.dump(out, f)
+            os.replace(tmp, _A11Y_PATH)               # atomic swap (POSIX)
+        except Exception:  # noqa: BLE001
+            pass
+        return out
+
+
+def _a11y_handle(qtext: str, address: str = "ma'am") -> dict | None:
+    """Accessibility chat intents → mutate mirror → spoken confirmation. None for non-a11y → falls through.
+    Regexes are ANCHORED to a11y vocabulary so they never steal a climate/build phrase. Never raises."""
+    import re
+    l = (qtext or "").lower()
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "love"
+    def done(patch, say, **extra):
+        _a11y_write(patch, "chat")
+        return {"a11y": True, "reply": say, "state": patch, **extra}
+    if re.search(r"\b(captions?|subtitles?)\b.*\b(on|off)\b", l):
+        on = "off" not in l
+        return done({"captions": on}, f"Captions {'on' if on else 'off'}, {addr}.")
+    if re.search(r"\b(high|more)\s+contrast\b", l):
+        return done({"hc": True}, f"High contrast on, {addr}.")
+    if re.search(r"\b(bigger|larger)\s+text\b", l):
+        return done({"scale": 140}, f"Larger text, {addr}.")
+    if re.search(r"\bsmaller\s+text\b", l):
+        return done({"scale": 100}, f"Smaller text, {addr}.")
+    if re.search(r"\b(reduce|less|stop)\s+motion\b", l):
+        return done({"reduceMotion": True}, f"Motion reduced, {addr}.")
+    if re.search(r"\b(calm|simple|gentle)\s+mode\b", l):
+        return done({"calm": True}, f"Calm mode on, {addr}.")
+    if re.search(r"\b(read (the )?(screen|page)|read (it|this)( to me| out)?|read everything)\b", l):
+        _a11y_write({}, "chat", cmd={"action": "read_screen", "text": "", "ts": int(time.time()*1000),
+                                     "nonce": f"{int(time.time()*1000)}-{secrets.token_hex(4)}"})
+        return {"a11y": True, "reply": f"Reading the screen for you, {addr}."}
+    return None
+
+
 def _climate_handle(qtext: str, address: str = "ma'am") -> dict | None:
     """If `qtext` is a climate request, action it via the relay and return {reply, climate:True,...};
     else None so the caller falls through to normal chat. This is what keeps 'I am cold', 'set the
@@ -1288,8 +1604,9 @@ def _system_brief() -> str:
 # generation so /proposal?id= can return the full formatted text the user clicked. A deterministic
 # seed list guarantees the dock is NEVER empty / "pending" even if the LLM is unreachable (HR: no
 # bare-minimum, scrape-on-gap — here, fall back to a real curated list grounded in the contract).
-_SUGGEST: dict = {"ts": 0, "items": [], "by_id": {}}
+_SUGGEST: dict = {"ts": 0, "items": [], "by_id": {}, "generating": False, "source": "seed"}
 _SUGGEST_TTL = 600.0  # regenerate at most every 10 min (builds complete on the order of minutes)
+_SUGGEST_LOCK = threading.Lock()  # guards the background-generation flag so only one LLM call runs
 
 _SUGGEST_SEED = [
     {"title": "Volumetric god-rays from the reactor",
@@ -1315,10 +1632,15 @@ def _suggest_fallback() -> list:
     return out
 
 
-def _gen_suggestions() -> list:
+def _gen_suggestions() -> tuple:
     """Ask the box LLM (via the tiered seam) to propose build ideas from the live system brief, as a
     JSON array of {title,detail,proposal}. Falls back to the curated seed list on any failure so the
-    self-development dock is never empty. Each item gets a stable id for /proposal lookup."""
+    self-development dock is never empty. Each item gets a stable id for /proposal lookup.
+
+    Returns (items, source) where source is "llm" when the live brain produced them, else "seed" —
+    so the UI / endpoint can honestly say whether the brain was reachable (NEVER fakes a live source).
+    This is BLOCKING (the LLM seam can take a while when the box is cold), so callers run it OFF the
+    request path — see _suggestions() which kicks it onto a background thread."""
     items = None
     try:
         from server.services import tiered_llm as _T
@@ -1338,7 +1660,7 @@ def _gen_suggestions() -> list:
     except Exception:  # noqa: BLE001
         items = None
     if not items:
-        return _suggest_fallback()
+        return _suggest_fallback(), "seed"
     out = []
     for i, s in enumerate(items[:6]):
         if not isinstance(s, dict):
@@ -1349,7 +1671,7 @@ def _gen_suggestions() -> list:
         out.append({"id": f"sug{i}", "title": title,
                     "detail": str(s.get("detail") or "").strip()[:200],
                     "proposal": str(s.get("proposal") or s.get("detail") or "").strip()[:1200]})
-    return out or _suggest_fallback()
+    return (out, "llm") if out else (_suggest_fallback(), "seed")
 
 
 def _parse_suggestions(text: str) -> list:
@@ -1379,15 +1701,42 @@ def _parse_suggestions(text: str) -> list:
     return []
 
 
-def _suggestions(force: bool = False) -> dict:
-    """Cached suggestions for the self-development dock. Regenerates at most every _SUGGEST_TTL."""
-    now = time.time()
-    if force or not _SUGGEST["items"] or (now - _SUGGEST["ts"]) > _SUGGEST_TTL:
-        items = _gen_suggestions()
+def _suggest_regen():
+    """Run ONE blocking LLM generation in the background and atomically swap in the result. Guarded by
+    _SUGGEST_LOCK so only a single generation is ever in flight; the request thread never waits on this."""
+    try:
+        items, source = _gen_suggestions()
         _SUGGEST["items"] = items
         _SUGGEST["by_id"] = {s["id"]: s for s in items}
-        _SUGGEST["ts"] = now
+        _SUGGEST["ts"] = time.time()
+        _SUGGEST["source"] = source
+    except Exception:  # noqa: BLE001
+        pass
+    finally:
+        _SUGGEST["generating"] = False
+
+
+def _suggestions(force: bool = False) -> dict:
+    """Cached suggestions for the self-development dock. NON-BLOCKING: the response always returns the
+    current best list (curated seed list on a cold start) INSTANTLY, and a stale/forced refresh is
+    handed to a background thread — so the dock can NEVER show 'Couldn't reach the suggestion engine'
+    just because the GPU box is cold (the LLM seam can hang for up to its 120s socket timeout). The
+    'generating' flag lets the UI show a quiet 're-analysing' hint without blocking."""
+    now = time.time()
+    # Cold start: seed the list synchronously (instant, no network) so the dock is never empty.
+    if not _SUGGEST["items"]:
+        _SUGGEST["items"] = _suggest_fallback()
+        _SUGGEST["by_id"] = {s["id"]: s for s in _SUGGEST["items"]}
+        _SUGGEST["ts"] = 0.0  # 0 => "never generated by the brain yet" (drives an immediate bg refresh)
+        _SUGGEST["source"] = "seed"
+    stale = (now - (_SUGGEST["ts"] or 0)) > _SUGGEST_TTL
+    if (force or stale) and not _SUGGEST["generating"]:
+        with _SUGGEST_LOCK:
+            if not _SUGGEST["generating"]:  # double-checked: don't spawn a second generator
+                _SUGGEST["generating"] = True
+                threading.Thread(target=_suggest_regen, daemon=True).start()
     return {"ts": int(_SUGGEST["ts"]), "ttl": int(_SUGGEST_TTL),
+            "generating": bool(_SUGGEST["generating"]), "source": _SUGGEST["source"],
             "suggestions": [{"id": s["id"], "title": s["title"], "detail": s["detail"]}
                             for s in _SUGGEST["items"]]}
 
@@ -1549,8 +1898,26 @@ class _H(http.server.BaseHTTPRequestHandler):
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(_detail(q.get("kind", [""])[0], q.get("name", [""])[0])).encode(),
                        "application/json")
+        elif self.path.startswith("/children"):
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            def _i(k, d):
+                try: return int(q.get(k, [str(d)])[0] or d)
+                except Exception: return d
+            self._send(json.dumps(_children(
+                q.get("id", [""])[0], q.get("kind", [""])[0],
+                q.get("exclude", [""])[0], min(40, _i("limit", 14)))).encode(), "application/json")
         elif self.path.startswith("/graphdata"):
             self._send(json.dumps(_graph_data()).encode(), "application/json")
+        elif self.path.startswith("/search"):
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                lim = int(q.get("limit", ["24"])[0] or 24)
+            except Exception:  # noqa: BLE001
+                lim = 24
+            self._send(json.dumps(_search_ontology(q.get("q", [""])[0], lim)).encode(),
+                       "application/json")
         elif self.path.startswith("/graph"):
             try:
                 with open(os.path.join(os.path.dirname(__file__), "dashboard_graph.html"), encoding="utf-8") as f:
@@ -1566,6 +1933,12 @@ class _H(http.server.BaseHTTPRequestHandler):
         elif self.path.startswith("/tasks"):
             from server.services import task_daemon as TD
             self._send(json.dumps(TD.list_tasks()).encode(), "application/json")
+        elif self.path.startswith("/swarms"):
+            from server.services import task_daemon as TD
+            self._send(json.dumps(TD.swarm_list()).encode(), "application/json")
+        elif self.path.startswith("/swarm"):
+            from server.services import task_daemon as TD
+            self._send(json.dumps(TD.swarm_get(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
         elif self.path.startswith("/library"):
             from server.services import media_gen as MG
             self._send(json.dumps(MG.library()).encode(), "application/json")
@@ -1639,6 +2012,28 @@ class _H(http.server.BaseHTTPRequestHandler):
             from server.services import task_daemon as TD
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(TD.result(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
+        elif self.path.startswith("/a11y/"):
+            # Accessibility Core static bundle (engine + css + keyboard layout + vendored models).
+            # Allowlisted; served from server/. Distinct from the bare /a11y JSON mirror (checked separately).
+            rel = self.path.split("/a11y/", 1)[1].split("?", 1)[0].lstrip("/")
+            base = os.path.dirname(__file__)          # = ROOT/server
+            allow = {"a11y.js", "a11y.css", "a11y_keyboard.json"}
+            full = os.path.realpath(os.path.join(base, "a11y_assets", rel)) if rel.startswith("vendor/") \
+                   else os.path.realpath(os.path.join(base, {"keyboard.json": "a11y_keyboard.json"}.get(rel, rel)))
+            ok = (rel in allow or rel.startswith("vendor/")) and full.startswith(os.path.realpath(base)) \
+                 and os.path.isfile(full)
+            if ok:
+                ct = mimetypes.guess_type(full)[0] or "application/octet-stream"
+                with open(full, "rb") as f: data = f.read()
+                self.send_response(200); self.send_header("Content-Type", ct)
+                self.send_header("Content-Length", str(len(data)))
+                self.send_header("Cache-Control", "public, max-age=86400")
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+            else:
+                self.send_response(404); self.end_headers()
+        elif self.path.split("?", 1)[0] == "/a11y":
+            # Accessibility mirror — read-only (token-free); see POST below for writes
+            self._send(json.dumps(_a11y_read()).encode(), "application/json")
         elif self.path.startswith("/asset/"):
             name = os.path.basename(self.path.split("/asset/", 1)[1].split("?")[0])
             p = os.path.join(ROOT, "jarvis_assets", name)
@@ -1662,6 +2057,14 @@ class _H(http.server.BaseHTTPRequestHandler):
         elif self.path.startswith("/media/"):
             name = os.path.basename(self.path.split("/media/", 1)[1].split("?")[0])
             p = os.path.join(ROOT, "server", "data", "media", name)
+            # Serve the REAL high-grade GLB: the server/data/media/gen_* files are broken 0-byte stubs; the
+            # real ~3-15MB models live in GLB_DIR under <prefix>/<name> (gen_tripo__X -> tripo/X.glb,
+            # gen_uw_interior__X -> uw/interior/X.glb). Fall back to the legacy path if not found.
+            if name.startswith("gen_") and "__" in name:
+                _pre, _rest = name[4:].split("__", 1)
+                _real = os.path.join(GLB_DIR, _pre.replace("_", "/"), _rest)
+                if os.path.exists(_real) and os.path.getsize(_real) > 1024:
+                    p = _real
             if name and os.path.exists(p):
                 with open(p, "rb") as f:
                     data = f.read()
@@ -1686,6 +2089,12 @@ class _H(http.server.BaseHTTPRequestHandler):
             # "what is the temperature / which zones" answers instantly without a bridge round-trip.
             from server.services import climate_relay as CR
             self._send(json.dumps(CR.state()).encode(), "application/json")
+        elif self.path.startswith("/vitals"):
+            # REAL System Vitals — full self-contained JSON (CPU/mem/disk via /proc+statvfs, GPU/LLM
+            # reachability + VRAM via Ollama, pm2 service health via `pm2 jlist`, derived score+alerts).
+            # Previously /vitals fell through to the catch-all and served HTML (the "loads nothing"
+            # module). Reads only the background snapshot, so it returns instantly.
+            self._send(json.dumps(_vitals()).encode(), "application/json")
         elif self.path.startswith("/healthreport"):
             # System Vitals — the proactive health score + alert list (lightweight; the cinematic page,
             # the Care/Guardian view, or an external uptime monitor can poll just this slice).
@@ -1768,7 +2177,16 @@ class _H(http.server.BaseHTTPRequestHandler):
             except Exception:  # noqa: BLE001
                 body = {}
             qtext = body.get("q", "") or body.get("prompt", "")
-            # CLIMATE FIRST: "I am cold", "set the lounge to 23", "what is the temperature",
+            # ACCESSIBILITY FIRST: "captions on", "high contrast", "read the screen" must go to the
+            # a11y engine, not the Claude builder. _a11y_handle returns None for non-a11y phrases.
+            try:
+                _a = _a11y_handle(qtext, body.get("address", "ma'am"))
+            except Exception:  # noqa: BLE001
+                _a = None
+            if _a is not None:
+                self._send(json.dumps({"ok": True, **_a}).encode(), "application/json")
+                return
+            # CLIMATE SECOND: "I am cold", "set the lounge to 23", "what is the temperature",
             # "which zones", "turn off the study" must control the home aircon — NOT the Claude
             # builder. _climate_handle returns None for non-climate phrases so chat falls through.
             try:
@@ -1799,6 +2217,19 @@ class _H(http.server.BaseHTTPRequestHandler):
             reply = _jarvis_chat(qtext, body.get("history"), body.get("address", "ma'am"))
             self._send(json.dumps({"ok": True, "reply": reply}).encode(), "application/json")
             return
+        if self.path.split("?", 1)[0] == "/a11y":
+            # Accessibility mirror write — token-gated
+            if q.get("token", [""])[0] != CONTROL_TOKEN:
+                self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
+                return
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            merged = _a11y_write(body.get("state") or {}, body.get("source") or "local")
+            self._send(json.dumps({"ok": True, **merged}).encode(), "application/json")
+            return
         if q.get("token", [""])[0] != CONTROL_TOKEN:
             self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
             return
@@ -1812,6 +2243,18 @@ class _H(http.server.BaseHTTPRequestHandler):
             self._send(json.dumps(TD.ask_claude(q.get("q", [""])[0] or q.get("prompt", [""])[0],
                                                 archon=q.get("archon", ["0"])[0] == "1")).encode(),
                        "application/json")
+        elif self.path.startswith("/swarm"):
+            # JARVIS SWARM ABILITY — run a build request as a DURABLE multi-agent swarm on the
+            # watchdog-guarded daemon (design→implement→verify→expand), checkpointed + resumable.
+            from server.services import task_daemon as TD
+            a = q.get("action", [""])[0]
+            sid = int(q.get("id", ["0"])[0] or 0)
+            if a == "cancel":
+                res = TD.swarm_cancel(sid)
+            else:
+                req = q.get("q", [""])[0] or q.get("prompt", [""])[0]
+                res = TD.swarm_build(req, archon=q.get("archon", ["0"])[0] == "1")
+            self._send(json.dumps(res).encode(), "application/json")
         elif self.path.startswith("/task"):
             from server.services import task_daemon as TD
             a = q.get("action", [""])[0]

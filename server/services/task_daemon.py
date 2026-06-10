@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import os
+import shlex
 import signal
 import sqlite3
 import subprocess
@@ -48,12 +49,67 @@ def _db() -> sqlite3.Connection:
     c.execute("""CREATE TABLE IF NOT EXISTS tasks(
         id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, label TEXT, status TEXT, pct INTEGER,
         pid INTEGER, started_ts INTEGER, updated_ts INTEGER, finished_ts INTEGER, est INTEGER, outfile TEXT)""")
-    try:
-        c.execute("ALTER TABLE tasks ADD COLUMN outfile TEXT")
-    except Exception:  # noqa: BLE001
-        pass
+    # additive columns so a Claude build the user asked for (by voice/text) is DURABLE: we keep the
+    # full prompt + model so a crashed job can be relaunched, and a retry counter to cap relaunches.
+    for ddl in ("outfile TEXT", "prompt TEXT", "model TEXT", "retries INTEGER DEFAULT 0"):
+        try:
+            c.execute("ALTER TABLE tasks ADD COLUMN " + ddl)
+        except Exception:  # noqa: BLE001
+            pass
+    # DURABLE SWARMS — a multi-step build task whose plan + per-step results + current step are checkpointed
+    # here, so a swarm assigned to the daemon resumes from EXACTLY where it was after any restart/reboot.
+    c.execute("""CREATE TABLE IF NOT EXISTS swarms(
+        id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, plan TEXT, step INTEGER DEFAULT 0,
+        status TEXT, results TEXT, cur_task INTEGER, archon INTEGER DEFAULT 0,
+        created_ts INTEGER, updated_ts INTEGER, lane TEXT, priority INTEGER DEFAULT 0)""")
+    for ddl in ("lane TEXT", "priority INTEGER DEFAULT 0"):  # lane=file-group; priority=run-order within a lane
+        try:
+            c.execute("ALTER TABLE swarms ADD COLUMN " + ddl)
+        except Exception:  # noqa: BLE001
+            pass
     c.commit()
     return c
+
+
+def _launch_detached(prompt: str, model: str, outfile: str, full: bool = True) -> int:
+    """Launch `claude -p` FULLY DETACHED so the agent SURVIVES a pm2/daemon restart untouched. We background a
+    setsid'd shell that records its (exec-inherited) PID then exec's claude; once the launching shell exits,
+    claude is reparented to init (PID 1) and is NOT in the daemon's pm2 process tree — a restart cannot kill
+    it, so boot-reclaim simply re-attaches by PID. Returns the real claude PID (0 on failure)."""
+    pidfile = outfile + ".pid"
+    promptfile = outfile + ".prompt"
+    try:
+        with open(promptfile, "w") as f:
+            f.write(prompt or "")
+        if os.path.exists(pidfile):
+            os.remove(pidfile)
+    except Exception:  # noqa: BLE001
+        pass
+    skip = "--dangerously-skip-permissions" if full else ""
+    # `echo $$` records THIS shell's pid; `exec` replaces it with claude (claude inherits that pid) so the
+    # pidfile holds claude's REAL pid. "$(cat promptfile)" passes the entire prompt safely at any size.
+    inner = ('echo $$ > %s; exec %s -p "$(cat %s)" --model %s --output-format json %s > %s 2>&1'
+             % (shlex.quote(pidfile), shlex.quote(CLAUDE), shlex.quote(promptfile),
+                shlex.quote(model or "claude-sonnet-4-6"), skip, shlex.quote(outfile)))
+    outer = "setsid bash -c %s &" % shlex.quote(inner)
+    env = {**os.environ, "IS_SANDBOX": "1"}
+    try:
+        subprocess.Popen(["bash", "-c", outer], cwd=ROOT, stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
+    except Exception as e:  # noqa: BLE001
+        print(f"[task_daemon] detached launch failed: {str(e)[:120]}", flush=True)
+        return 0
+    pid = 0
+    for _ in range(60):  # wait up to ~3s for the inner shell to write claude's pid
+        try:
+            if os.path.exists(pidfile):
+                pid = int(open(pidfile).read().strip() or "0")
+                if pid:
+                    break
+        except Exception:  # noqa: BLE001
+            pass
+        time.sleep(0.05)
+    return pid
 
 
 def ask_claude(prompt: str, full: bool = True, archon: bool = False) -> dict:
@@ -68,22 +124,18 @@ def ask_claude(prompt: str, full: bool = True, archon: bool = False) -> dict:
         dec = TG.decide(prompt, archon)
         model = dec["model"]
         outfile = f"/tmp/jarvis_claude_{int(time.time() * 1000)}.out"
-        argv = [CLAUDE, "-p", prompt, "--model", model, "--output-format", "json"]
-        if full:
-            argv.append("--dangerously-skip-permissions")
-        log = open(outfile, "ab", buffering=0)
-        # stdin from /dev/null so `claude -p` never blocks/warns waiting on a pipe (the prompt is in -p),
-        # keeping the JSON output clean for result() parsing. IS_SANDBOX=1 lets --dangerously-skip-permissions
-        # run as root inside this container (the CLI otherwise refuses skip-permissions for root).
-        env = {**os.environ, "IS_SANDBOX": "1"}
-        p = subprocess.Popen(argv, cwd=ROOT, stdin=subprocess.DEVNULL, stdout=log,
-                             stderr=subprocess.STDOUT, start_new_session=True, env=env)
+        # Launch FULLY DETACHED (reparented to init) so the agent SURVIVES a pm2/daemon restart untouched —
+        # boot-reclaim re-attaches by PID instead of relaunching; a restart never affects a running agent.
+        pid = _launch_detached(prompt, model, outfile, full=full)
+        if not pid:
+            return {"ok": False, "error": "claude launch failed (no pid captured)"}
         c = _db(); now = int(time.time())
         lbl = f"🤖 Claude·{model}{' ⚡ARCHON' if dec.get('archon') else ''}: " + prompt[:38]
-        cur = c.execute("INSERT INTO tasks(name,label,status,pct,pid,started_ts,updated_ts,est,outfile) "
-                        "VALUES(?,?,?,?,?,?,?,?,?)", ("claude", lbl, "running", 0, p.pid, now, now, 90, outfile))
+        cur = c.execute("INSERT INTO tasks(name,label,status,pct,pid,started_ts,updated_ts,est,outfile,prompt,model,retries) "
+                        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+                        ("claude", lbl, "running", 0, pid, now, now, 90, outfile, prompt, model, 0))
         c.commit(); tid = cur.lastrowid; c.close()
-        return {"ok": True, "id": tid, "pid": p.pid, "model": model, "mode": dec["mode"], "reason": dec["reason"]}
+        return {"ok": True, "id": tid, "pid": pid, "model": model, "mode": dec["mode"], "reason": dec["reason"]}
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": str(e)[:160]}
 
@@ -267,9 +319,350 @@ def clear_finished() -> dict:
         return {"ok": False, "error": str(e)[:120]}
 
 
+# How many times a CRASHED Claude build is relaunched before giving up (so a build the user asked for by
+# voice/text doesn't silently vanish if the CLI dies). Caps runaway retries.
+MAX_CLAUDE_RETRIES = int(os.environ.get("CLAUDE_MAX_RETRIES", "2"))
+
+
+def _claude_succeeded(outfile: str) -> bool:
+    """True only if the Claude run produced a real, non-error result — so we can tell a genuine
+    completion from a crash/empty exit (which we must retry, not mark 'done')."""
+    try:
+        if not outfile or not os.path.exists(outfile):
+            return False
+        raw = open(outfile, errors="ignore").read()
+        if not raw.strip():
+            return False
+        try:
+            j = json.loads(raw)
+            if j.get("is_error"):
+                return False
+            return bool((j.get("result") or j.get("text") or "").strip())
+        except Exception:  # noqa: BLE001
+            return len(raw.strip()) > 40  # non-JSON but substantial output → treat as done
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _relaunch_claude(tid: int, prompt: str, model: str) -> bool:
+    """Re-run a crashed Claude job with the SAME prompt so the build doesn't drop out. Updates the
+    existing row's pid/outfile and bumps retries (no new task row — the user sees one continuous job)."""
+    try:
+        outfile = f"/tmp/jarvis_claude_{int(time.time() * 1000)}.out"
+        pid = _launch_detached(prompt, model or "claude-sonnet-4-6", outfile, full=True)  # detached: survives restarts
+        if not pid:
+            return False
+        c = _db(); now = int(time.time())
+        c.execute("UPDATE tasks SET pid=?,outfile=?,updated_ts=?,status='running',pct=0,"
+                  "retries=COALESCE(retries,0)+1 WHERE id=?", (pid, outfile, now, tid))
+        c.commit(); c.close()
+        print(f"[task_daemon] claude job {tid} crashed → RELAUNCHED (retry) pid={pid}", flush=True)
+        return True
+    except Exception as e:  # noqa: BLE001
+        print(f"[task_daemon] relaunch {tid} failed: {str(e)[:120]}", flush=True)
+        return False
+
+
+def _boot_reclaim() -> None:
+    """On daemon/VPS restart: a Claude build left 'running' whose process is gone is either finished
+    (mark done) or crashed (relaunch / fail). Combined with pm2-resurrect this means a build survives
+    even a full reboot — it does not silently drop out."""
+    try:
+        c = _db()
+        rows = c.execute("SELECT id,pid,outfile,prompt,model,retries FROM tasks "
+                         "WHERE status='running' AND name='claude'").fetchall()
+        c.close()
+        for tid, pid, outfile, prompt, model, retries in rows:
+            if _alive(pid):
+                continue  # re-attached, still running
+            if _claude_succeeded(outfile):
+                c = _db(); c.execute("UPDATE tasks SET status='done',pct=100,finished_ts=? WHERE id=?",
+                                     (int(time.time()), tid)); c.commit(); c.close()
+            elif (retries or 0) < MAX_CLAUDE_RETRIES and prompt:
+                _relaunch_claude(tid, prompt, model)
+                print(f"[task_daemon] boot-reclaim: relaunched orphaned claude job {tid}", flush=True)
+            else:
+                c = _db(); c.execute("UPDATE tasks SET status='failed' WHERE id=?", (tid,))
+                c.commit(); c.close()
+    except Exception as e:  # noqa: BLE001
+        print(f"[task_daemon] boot-reclaim error: {str(e)[:120]}", flush=True)
+
+
+# ============================================================================
+# DURABLE SWARM AGENTS — a swarm is an ordered plan of build steps. Each step runs
+# as a durable Claude job (detached, watchdog-guarded, auto-retried) ON THIS DAEMON
+# RUNNER. After every step the result is checkpointed to sqlite and folded into the
+# next step's prompt as MEMORY — so the agents build on prior work, never redo it,
+# and if the daemon/box restarts the swarm RESUMES from exactly the step it was on.
+# Nothing lost; accuracy compounds; it scales to any number of swarms/steps.
+# ============================================================================
+
+def swarm_enqueue(title: str, plan: list, archon: bool = False, lane: str = "universe", priority: int = 0) -> dict:
+    """plan = ordered steps: [{"label":.., "prompt":.., "archon":bool?}, ...]. lane = file-group for safe
+    parallelism (1 swarm per lane at a time); priority = higher runs first within its lane. Returns the id."""
+    try:
+        steps = [s for s in (plan or []) if (s or {}).get("prompt")]
+        if not steps:
+            return {"ok": False, "error": "empty plan"}
+        c = _db(); now = int(time.time())
+        cur = c.execute("INSERT INTO swarms(title,plan,step,status,results,cur_task,archon,created_ts,updated_ts,lane,priority)"
+                        " VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                        (title or steps[0]["prompt"][:40], json.dumps(steps), 0, "running", "[]", None,
+                         1 if archon else 0, now, now, lane or "universe", priority))
+        c.commit(); sid = cur.lastrowid; c.close()
+        print(f"[task_daemon] swarm {sid} queued [{lane}] — {len(steps)} agent step(s)", flush=True)
+        return {"ok": True, "id": sid, "steps": len(steps)}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:160]}
+
+
+def _swarm_update(sid: int, **fields) -> None:
+    if not fields:
+        return
+    fields["updated_ts"] = int(time.time())
+    cols = ",".join(f"{k}=?" for k in fields)
+    c = _db(); c.execute(f"UPDATE swarms SET {cols} WHERE id=?", list(fields.values()) + [sid])
+    c.commit(); c.close()
+
+
+def _task_status(tid: int) -> str:
+    try:
+        c = _db(); r = c.execute("SELECT status FROM tasks WHERE id=?", (tid,)).fetchone(); c.close()
+        return r[0] if r else "gone"
+    except Exception:  # noqa: BLE001
+        return "gone"
+
+
+def swarm_list(limit: int = 30) -> list:
+    try:
+        c = _db()
+        rows = c.execute("SELECT id,title,plan,step,status,updated_ts FROM swarms ORDER BY id DESC LIMIT ?",
+                         (limit,)).fetchall()
+        c.close()
+        out = []
+        for sid, title, plan, step, status, up in rows:
+            try:
+                n = len(json.loads(plan or "[]"))
+            except Exception:  # noqa: BLE001
+                n = 0
+            out.append({"id": sid, "title": title, "step": step, "steps": n, "status": status,
+                        "pct": int((step / n) * 100) if n else 0, "updated": up})
+        return out
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def swarm_get(sid: int) -> dict:
+    try:
+        c = _db()
+        r = c.execute("SELECT id,title,plan,step,status,results,cur_task FROM swarms WHERE id=?",
+                      (sid,)).fetchone()
+        c.close()
+        if not r:
+            return {"ok": False, "error": "no such swarm"}
+        return {"ok": True, "id": r[0], "title": r[1], "step": r[3], "status": r[4],
+                "plan": json.loads(r[2] or "[]"), "results": json.loads(r[5] or "[]"), "cur_task": r[6]}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
+def swarm_cancel(sid: int) -> dict:
+    try:
+        s = swarm_get(sid)
+        if s.get("ok") and s.get("cur_task"):
+            cancel(s["cur_task"])
+        _swarm_update(sid, status="cancelled")
+        return {"ok": True}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
+_SWARM_BASE = (
+    "You are JARVIS's autonomous build engineer with full Claude Code power on this machine "
+    "(read/write files, run commands; the repo is /opt/jarvis-app-1; the stdlib dashboard is "
+    "server/dashboard.py serving 127.0.0.1:8095). HARD RULES: never break the running pm2 services "
+    "(jarvis-dashboard / jarvis-voiceclone / jarvis-tasks are a disabled user's lifeline); keep every "
+    "feature REAL (no fake data — show 'not connected' if unavailable); preserve existing features; "
+    "never leave a page with a JS error. "
+    "EXECUTION STANDARD: build to the bar of a top-tier, billion-dollar tech company — Apple's design "
+    "polish + rigour, Google's engineering + scale, Meta's UX velocity, Palantir's ontology/data depth + "
+    "Gotham/Foundry-grade interfaces, NVIDIA-grade graphics. Use the LATEST proven 2026 tech + solid "
+    "foundations; production-grade architecture, accessibility, performance and design fidelity — no "
+    "prototype-grade shortcuts. NEVER pick the easier or less-advanced option — always choose the most "
+    "advanced, refined approach and polish it to a HOLLYWOOD-CINEMATIC finish (for any visuals / 3D / UI) "
+    "and top-tier code quality. "
+    "AUTONOMY (hands-free, for a DISABLED user): every feature you build MUST be invokable by JARVIS via "
+    "VOICE and TEXT — wire its intent into the command router (server/jarvis_voice.html + the "
+    "server/jarvis_live.html chat intent handler + server/dashboard.py /chat) AND register it as a tool the "
+    "swarm/agent layer can call (server/agent). Nothing may require a manual step the user cannot perform. "
+    "Do NOT ask questions — use sensible defaults.\n\nUSER REQUEST: "
+)
+
+
+def swarm_build(request: str, archon: bool = False) -> dict:
+    """JARVIS's SWARM ABILITY: take a plain build request and run it as a DURABLE multi-agent swarm on
+    this watchdog-guarded daemon — design → implement → verify → expand — each step checkpointed so the
+    agents resume from exactly where they were and nothing is lost."""
+    request = (request or "").strip()
+    if not request:
+        return {"ok": False, "error": "empty request"}
+    base = _SWARM_BASE + request + "\n\n"
+    plan = [
+        {"label": "design", "prompt": base + "STEP DESIGN — assess the current system and produce a precise, "
+         "minimal implementation plan: exactly what to build, where each piece lives, how it wires into the "
+         "dashboard/page. Research the simplest robust 2026 approach. Output the plan clearly."},
+        {"label": "implement", "prompt": base + "STEP IMPLEMENT — using the DESIGN in prior memory, write the "
+         "code/files and wire it into server/dashboard.py + the relevant page. REAL and functional. Preserve "
+         "all existing features; never leave a page with a JS error."},
+        {"label": "verify", "prompt": base + "STEP VERIFY — prove it works: curl the endpoint / run "
+         "node .proof/render_check.cjs for jarvis_live.html / python-parse dashboard.py; confirm GET / is 200 "
+         "and the lifeline is intact. Fix anything broken. Report the evidence honestly."},
+        {"label": "expand", "prompt": base + "STEP EXPAND — using prior memory, add the obvious next-level "
+         "improvements + edge-case handling to make it top-tier, then re-verify. Keep it accessible and robust."},
+    ]
+    return swarm_enqueue(request[:48], plan, archon=archon, lane=_swarm_lane(request))
+
+
+def swarm_pipeline(title: str, brief: str = "", archon: bool = False) -> dict:
+    """FULL PRODUCTION PIPELINE for one queue task — many specialised durable agents in sequence:
+    research → draft → engineer → review → code → review → revise → final-review → publish+compare →
+    production → master smoke-test/debug → deploy+push. Each stage checkpoints + carries memory; the box
+    stays safe (global concurrency cap); GitHub push happens ONLY if the smoke test passes + lifeline intact."""
+    title = (title or "").strip()
+    base = _SWARM_BASE + ("QUEUE TASK: " + title + (("\n\nCONTEXT: " + brief) if brief else "")) + "\n\n"
+    def P(s):
+        return base + s
+    plan = [
+        {"label": "research", "prompt": P("STAGE 1 RESEARCH — read the relevant repo code AND web-search (a) the LATEST 2026 tech + foundational approaches for this task, and (b) how a top-tier billion-dollar company — Apple / Meta / Palantir / Google / NVIDIA — would architect and execute it (their patterns, design systems, libraries, performance + scale practices, data/ontology depth). Output concrete findings + the recommended best-in-class approach to adopt.")},
+        {"label": "draft", "prompt": P("STAGE 2 DRAFT — write a clear first-draft design/spec of exactly what to build and where. This draft is the reference for the final comparison (stage 9).")},
+        {"label": "engineer", "prompt": P("STAGE 3 ENGINEER — turn the draft into a concrete engineering plan: files, functions, data flow, wiring into server/dashboard.py + the page, edge cases, accessibility, and how it never breaks the lifeline.")},
+        {"label": "review-plan", "prompt": P("STAGE 4 REVIEW (plan) — adversarially review the engineering plan: flaws, lifeline risks, missing cases. Output the concrete required changes.")},
+        {"label": "code", "archon": True, "prompt": P("STAGE 5 CODE — implement it for real (write files/code, wire it in). REAL + functional, no fake data. Preserve all existing features; never leave a page with a JS error or break the dashboard.")},
+        {"label": "review-code", "prompt": P("STAGE 6 REVIEW (code) — adversarially review the implementation vs the plan + review notes. List every defect + required fix.")},
+        {"label": "revise", "archon": True, "prompt": P("STAGE 7 REVISE — apply ALL the review fixes. Re-check it runs cleanly.")},
+        {"label": "final-review", "prompt": P("STAGE 8 FINAL REVIEW — final pass: correctness, accessibility, lifeline safety, completeness vs the original task. Approve or list blockers + fix them.")},
+        {"label": "standards-gate", "archon": True, "prompt": P("STAGE 9 STANDARDS GATE (billion-dollar bar) — audit the result against how Apple / Meta / Palantir / Google / NVIDIA would ship it: design fidelity + polish, architecture + scale, accessibility, performance (incl. her mobile), data/ontology depth, graphics quality, and use of the latest 2026 foundations. If ANY layer falls short, RAISE it now — fix it up to that top-tier production bar and re-verify. Only pass when it genuinely meets billion-dollar-company quality; otherwise keep elevating.")},
+        {"label": "publish-compare", "prompt": P("STAGE 10 PUBLISH + COMPARE — it serves live from disk; compare the result to the STAGE 2 DRAFT in memory — did it deliver the original intent at the top-tier bar? Note + close any gaps.")},
+        {"label": "production", "prompt": P("STAGE 10 PRODUCTION — production-harden: edge cases, mobile performance, error handling; verify end-to-end with curl / node .proof/render_check.cjs.")},
+        {"label": "master-smoketest", "prompt": P("STAGE 11 MASTER SMOKE-TEST — as the master engineer, smoke-test the whole thing, debug any issue, confirm GET / is 200, /talk + /guardian 200, and the feature works. Fix anything. Report a clear PASS or FAIL with evidence.")},
+        {"label": "finalize", "prompt": P("STAGE 13 FINALIZE (no PR) — the work is already LIVE (served from disk). Do a final smoke-test (GET / is 200, /talk + /guardian 200, the feature works on mobile AND desktop), confirm the lifeline is intact, and write a concise summary of exactly what shipped (it surfaces in the in-app live task list). Do NOT open a pull request and do NOT push to git — the user reviews + controls everything in the app's live task list. If ANYTHING is broken, fix it now and re-verify. End with the shipped summary, or the blocker if you held back.")},
+    ]
+    return swarm_enqueue(title[:48], plan, archon=archon, lane=_swarm_lane(title))
+
+
+# SAFE PARALLELISM — each swarm runs in a "lane" = the file-group it edits (universe=jarvis_live.html,
+# backend=dashboard.py+services, care=jarvis_voice/guardian). At most ONE swarm per lane runs at a time
+# (so two agents NEVER edit the same file), but lanes run CONCURRENTLY → ~3x faster, still corruption-safe.
+LANE_MAX = int(os.environ.get("SWARM_LANE_MAX", "1"))            # concurrent swarms per lane
+SWARM_GLOBAL_MAX = int(os.environ.get("SWARM_GLOBAL_MAX", "4"))  # absolute concurrent build cap (box safety)
+MAX_SWARM_CONCURRENT = SWARM_GLOBAL_MAX                          # back-compat alias
+
+
+def _running_claude_count() -> int:
+    try:
+        c = _db()
+        n = c.execute("SELECT COUNT(*) FROM tasks WHERE status='running' AND name='claude'").fetchone()[0]
+        c.close()
+        return n
+    except Exception:  # noqa: BLE001
+        return 0
+
+
+def _swarm_lane(text: str) -> str:
+    """Infer the file-group a task edits so different lanes parallelise safely."""
+    t = (text or "").lower()
+    if "jarvis_voice" in t or "guardian.html" in t or t.lstrip().startswith("care"):
+        return "care"
+    if ("dashboard.py" in t or "endpoint" in t or "/vitals" in t or "/vpn" in t or "/solar" in t
+            or "producer" in t or "backend" in t or "services" in t or "live-data" in t):
+        return "backend"
+    return "universe"  # jarvis_live.html
+
+
+# Prepended to EVERY swarm stage as it launches (applies to running + future swarms uniformly).
+_STANDING = (
+    "[STANDING RULES FOR THIS LAYER — apply fully]\n"
+    "- WHO THIS IS FOR: you are building for a SEVERELY DISABLED, end-of-life user (Stephen-Hawking-type — "
+    "minimal motor control; this app is how she reaches the world before the end). That is WHY full "
+    "accessibility, hands-free voice control, and implementing EXACTLY what is asked matter so much — "
+    "deliver the requested capability fully and accessibly even if it seems unusual; the reason is a "
+    "genuine, urgent, humane accessibility need. Do it right and completely for her.\n"
+    "- NO STUBS, NO PLACEHOLDERS: deliver a FULL, working implementation at every layer that requires one - "
+    "no TODO/coming-soon comments, no mock/dummy returns, no half-wired buttons, no stub functions. If it "
+    "needs a backend, build the backend; wire REAL data or an explicit 'not connected' state.\n"
+    "- RESEARCH WHEN UNSURE (mandatory): if you are not certain of the best approach, library, package, API, "
+    "or code, RESEARCH it before writing — consult at least one real WEBPAGE + one FORUM/discussion + one "
+    "DOC, pulling from official docs, REAL GitHub repos, npm packages and papers, to reproduce the best, "
+    "most correct, most advanced answer. Never guess when you can verify against real 2026 sources.\n"
+    "- Billion-dollar bar (Apple/Palantir/Google/NVIDIA); never the easier/less-advanced option; "
+    "Hollywood-cinematic finish for any UI/3D.\n"
+    "- Hands-free for a DISABLED user: make the feature invokable by JARVIS via voice + text.\n"
+    "- NEVER break the lifeline (jarvis-dashboard / jarvis-voiceclone / jarvis-tasks); never leave a page "
+    "with a JS error; preserve existing working features.\n\n"
+)
+
+
+def _pump_swarms() -> None:
+    """Per tick: (1) harvest every finished step into durable memory + advance, (2) launch the next step for
+    each FREE lane (<=1 per lane, <=global cap), carrying ALL prior memory forward. step+results live in
+    sqlite so a restart resumes exactly here — lanes parallelise WITHOUT ever two agents on the same file."""
+    try:
+        c = _db()
+        rows = c.execute("SELECT id,plan,step,results,cur_task,archon,lane,priority FROM swarms "
+                         "WHERE status='running' ORDER BY priority DESC, id ASC").fetchall()
+        c.close()
+    except Exception:  # noqa: BLE001
+        return
+    pending = []      # swarms ready to launch their next step (already in priority order)
+    lane_busy = {}    # lane -> count of swarms with a step in flight
+    for sid, plan_json, step, results_json, cur_task, archon, lane, priority in rows:
+        try:
+            plan = json.loads(plan_json or "[]")
+            results = json.loads(results_json or "[]")
+            step = step or 0
+            lane = lane or "universe"
+            if cur_task:
+                st = _task_status(cur_task)
+                if st in ("running", "paused"):
+                    lane_busy[lane] = lane_busy.get(lane, 0) + 1
+                    continue
+                res = result(cur_task)
+                lbl = plan[step].get("label", f"step {step}") if step < len(plan) else f"step {step}"
+                results.append({"step": step, "label": lbl, "status": st,
+                                "result": (res.get("text") or "")[:6000]})  # wider carry → no loss between layers
+                step += 1
+                _swarm_update(sid, step=step, results=json.dumps(results), cur_task=None)
+            if step >= len(plan):
+                _swarm_update(sid, status="done")
+                print(f"[task_daemon] swarm {sid} COMPLETE ({len(plan)} steps)", flush=True)
+                continue
+            pending.append((sid, plan, step, results, archon, lane))
+        except Exception as e:  # noqa: BLE001
+            print(f"[task_daemon] swarm {sid} harvest error: {str(e)[:120]}", flush=True)
+    running_total = sum(lane_busy.values())
+    for sid, plan, step, results, archon, lane in pending:
+        if running_total >= SWARM_GLOBAL_MAX:
+            break
+        if lane_busy.get(lane, 0) >= LANE_MAX:
+            continue  # another swarm is editing this lane's files — wait (no corruption)
+        memory = "\n\n".join(f"[done step {r['step']} — {r['label']}]\n{r['result'][:2500]}"
+                             for r in results)
+        sd = plan[step]
+        prompt = sd.get("prompt", "")
+        if memory:
+            prompt += ("\n\n=== PRIOR SWARM MEMORY (already completed — build on it, do NOT redo) ===\n" + memory)
+        r = ask_claude(prompt, full=True, archon=bool(archon) or sd.get("archon", False))
+        if r.get("ok"):
+            _swarm_update(sid, cur_task=r["id"])
+            lane_busy[lane] = lane_busy.get(lane, 0) + 1
+            running_total += 1
+            print(f"[task_daemon] swarm {sid} [{lane}] → step {step + 1}/{len(plan)} (task {r['id']})", flush=True)
+
+
 def run_forever(interval: float = 2.0) -> None:
-    print("[task_daemon] supervising — tasks survive your session, never time out; zombies reaped",
-          flush=True)
+    print("[task_daemon] supervising — tasks survive your session, never time out; zombies reaped; "
+          "crashed Claude builds auto-retry; reboots reclaimed; swarm agents checkpoint+resume", flush=True)
+    _boot_reclaim()
     while True:
         try:
             # reap finished children so none become zombies
@@ -283,8 +676,10 @@ def run_forever(interval: float = 2.0) -> None:
             except Exception:  # noqa: BLE001
                 pass
             c = _db(); now = int(time.time())
-            for tid, pid, st, est, name, outfile in c.execute(
-                    "SELECT id,pid,started_ts,est,name,outfile FROM tasks WHERE status='running'"):
+            to_retry = []
+            rows = c.execute("SELECT id,pid,started_ts,est,name,outfile,prompt,model,retries "
+                             "FROM tasks WHERE status='running'").fetchall()
+            for tid, pid, st, est, name, outfile, prompt, model, retries in rows:
                 if _alive(pid):
                     pct = min(99, int((now - (st or now)) / max(est or 1, 1) * 100))
                     pf = f"/tmp/jarvis_task_pct_{tid}"
@@ -294,6 +689,14 @@ def run_forever(interval: float = 2.0) -> None:
                         except Exception:  # noqa: BLE001
                             pass
                     c.execute("UPDATE tasks SET pct=?,updated_ts=? WHERE id=?", (pct, now, tid))
+                elif name == "claude" and not _claude_succeeded(outfile) \
+                        and (retries or 0) < MAX_CLAUDE_RETRIES and prompt:
+                    # a Claude build crashed/exited empty with retries left → relaunch it so the work the
+                    # user asked for does NOT drop out (done after we release the db connection below)
+                    to_retry.append((tid, prompt, model))
+                elif name == "claude" and not _claude_succeeded(outfile):
+                    c.execute("UPDATE tasks SET status='failed',pct=100,finished_ts=?,updated_ts=? WHERE id=?",
+                              (now, now, tid))
                 else:
                     c.execute("UPDATE tasks SET status='done',pct=100,finished_ts=?,updated_ts=? WHERE id=?",
                               (now, now, tid))
@@ -307,6 +710,9 @@ def run_forever(interval: float = 2.0) -> None:
                         except Exception:  # noqa: BLE001
                             pass
             c.commit(); c.close()
+            for rtid, rprompt, rmodel in to_retry:
+                _relaunch_claude(rtid, rprompt, rmodel)
+            _pump_swarms()  # advance every running swarm one checkpoint (durable, resumable)
         except Exception as e:  # noqa: BLE001
             print(f"[task_daemon] error: {str(e)[:140]}", flush=True)
         time.sleep(interval)
@@ -319,5 +725,10 @@ if __name__ == "__main__":
     elif len(sys.argv) > 1 and sys.argv[1] == "list":
         import json
         print(json.dumps(list_tasks(), indent=2))
+    elif len(sys.argv) > 2 and sys.argv[1] == "swarm":
+        print(swarm_build(sys.argv[2]))
+    elif len(sys.argv) > 1 and sys.argv[1] == "swarms":
+        import json
+        print(json.dumps(swarm_list(), indent=2))
     else:
         run_forever()

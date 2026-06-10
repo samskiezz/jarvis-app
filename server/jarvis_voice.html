@@ -162,7 +162,80 @@ body.speaking #flick{animation:flick .9s steps(3) infinite}
  transition:transform .16s ease}
 #alarm button:active{transform:scale(.96)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-</style></head>
+
+/* ===== C2: Care & Health panel + consent + accessibility ===== */
+#care{position:fixed;inset:0;z-index:35;display:none;background:rgba(3,8,14,.985);
+ padding:var(--s5) var(--s4) calc(var(--s6) + env(safe-area-inset-bottom,0));overflow:auto}
+#care.open{display:block}
+#care .top{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);
+ max-width:640px;margin:0 auto var(--s4)}
+#care h2{color:var(--cy);letter-spacing:1px;margin:0;font-size:22px}
+#care .close{font-size:30px;color:var(--cy-dim);background:rgba(8,22,34,.6);border:1px solid var(--card-bd);
+ border-radius:50%;width:52px;height:52px;min-width:52px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#care .close:active{transform:scale(.92)}
+.cwrap{max-width:640px;margin:0 auto}
+.sec{background:var(--card);border:1px solid var(--card-bd);border-radius:var(--r2);
+ padding:var(--s4);margin-bottom:var(--s4)}
+.sec h3{margin:0 0 var(--s2);color:var(--cy2);font-size:17px;letter-spacing:.4px;display:flex;align-items:center;gap:8px}
+.sec p.hint{color:#7fb0c4;font-size:13px;line-height:1.5;margin:0 0 var(--s2)}
+.sec .row{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2);flex-wrap:wrap}
+.sec input,.sec select{flex:1;min-width:140px;padding:14px;border-radius:var(--r1);
+ border:1px solid rgba(41,231,255,.3);background:#06151f;color:var(--tx);font-size:16px}
+.sec input:focus,.sec select:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 3px rgba(41,231,255,.35)}
+.btn{position:relative;overflow:hidden;min-height:52px;padding:0 18px;border:none;border-radius:var(--r1);
+ background:linear-gradient(180deg,#33e0ff,#0b86a6);color:#021018;font-weight:800;font-size:16px;cursor:pointer;
+ transition:transform .16s ease,box-shadow .25s ease}
+.btn:active{transform:scale(.96)}
+.btn.ghost{background:transparent;border:1px solid var(--card-bd);color:var(--cy)}
+.btn.danger{background:linear-gradient(180deg,#ff4d5e,#b3101f);color:#fff}
+.btn.wide{width:100%;margin-top:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r-pill);
+ font-size:13px;font-weight:700}
+.chip.ok{background:rgba(52,211,153,.16);color:var(--ok);border:1px solid #1c5b46}
+.chip.off{background:rgba(255,122,77,.14);color:var(--amber);border:1px solid #6b3a26}
+.chip.no{background:rgba(255,77,94,.14);color:var(--rd);border:1px solid #6b2630}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
+ padding:12px;border:1px solid rgba(41,231,255,.16);border-radius:var(--r1);margin-bottom:8px;background:rgba(6,18,28,.5)}
+.list li .meta{font-size:13px;color:#9fc7d6}
+.list li .x{color:var(--rd);background:none;border:none;font-size:22px;cursor:pointer;min-width:40px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
+ padding:14px;border:1px solid rgba(41,231,255,.16);border-radius:var(--r1);margin-bottom:8px;cursor:pointer}
+.toggle .sw{width:54px;height:30px;border-radius:999px;background:#13303d;position:relative;flex:none;transition:background .2s}
+.toggle .sw::after{content:'';position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#5f8298;transition:transform .2s,background .2s}
+.toggle.on .sw{background:#0b6b4a}
+.toggle.on .sw::after{transform:translateX(24px);background:#34d399}
+.healthval{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(41,231,255,.1)}
+.healthval b{font-size:22px;color:var(--cy2)}
+.healthval small{color:#7fb0c4}
+
+/* carer-mode consent — full screen, plain language */
+#consent{position:fixed;inset:0;z-index:38;display:none;background:radial-gradient(840px 640px at 50% 30%,#0a2c40,#03050A 76%);
+ padding:var(--s5) var(--s4) calc(var(--s6) + env(safe-area-inset-bottom,0));overflow:auto}
+#consent.open{display:block}
+#consent .cwrap{max-width:560px}
+#consent h2{color:var(--cy);font-size:24px;letter-spacing:.5px;text-align:center;margin:var(--s4) 0 var(--s3)}
+#consent .plain{background:rgba(8,24,34,.6);border:1px solid var(--card-bd);border-radius:var(--r2);padding:var(--s4);margin-bottom:var(--s4)}
+#consent .plain li{font-size:17px;line-height:1.6;color:#dff4fb;margin-bottom:12px;list-style:none;display:flex;gap:10px}
+#consent .plain li .ci{font-size:22px;flex:none}
+#consent .actions{display:flex;flex-direction:column;gap:var(--s3)}
+#consent .actions .btn{min-height:64px;font-size:18px}
+
+/* accessibility: high contrast */
+body.hc{--cy:#73f4ff;--cy2:#d6fbff;--tx:#ffffff;--cy-dim:#aee8f7}
+body.hc #bg{background:#000}
+body.hc .card,body.hc .sec,body.hc #set input,body.hc .sec input{background:#001018;border-color:#73f4ff}
+body.hc #status,body.hc #caption{color:#d6fbff;text-shadow:none}
+/* accessibility: large text */
+body.bigtext{font-size:118%}
+body.bigtext .card{font-size:19px;min-height:108px}
+body.bigtext #caption{font-size:21px}
+body.bigtext .eb{font-size:19px}
+</style>
+<link rel="stylesheet" href="/a11y/a11y.css">
+<script>window.__A11Y_OPTS__={surface:'voice',mirror:true,ns:'jv_a11y'};</script>
+<script defer src="/a11y/a11y.js"></script>
+</head>
 <body>
 <div id=bg></div>
 <div id=wrap>
@@ -188,6 +261,8 @@ body.speaking #flick{animation:flick .9s steps(3) infinite}
    <span class=ic>🔊</span>Hear TV</button>
   <button class=card onclick="openApp('rocky')" aria-label="Open Rocky">
    <span class=ic>🧹</span>Rocky</button>
+  <button class="card" id=carecardbtn onclick="openCare()" aria-label="Open care and health" style="grid-column:1/3">
+   <span class=ic>🩺</span>Care &amp; Health</button>
  </div>
 
  <div id=emg>
@@ -220,6 +295,95 @@ body.speaking #flick{animation:flick .9s steps(3) infinite}
 
 <div id=alarm><h2>🆘 ALERT SENT</h2><div id=alarmsub style="color:#ffd"></div><button onclick="dismissAlarm()">OK</button></div>
 <div class=sr aria-live=assertive id=srlog></div>
+
+<!-- ===== C2: Carer-mode consent (plain language, transparent, no disguised access) ===== -->
+<div id=consent role=dialog aria-modal=true aria-labelledby=consentH>
+ <div class=cwrap>
+  <h2 id=consentH>Turn on Carer Mode?</h2>
+  <ul class=plain>
+   <li><span class=ci>👁️</span><span>Your carer will be able to <b>see and hear you</b> through the camera when you both connect, and you will see them.</span></li>
+   <li><span class=ci>📞</span><span>The <b>HELP</b> button will alert your carer and they can call you.</span></li>
+   <li><span class=ci>🔔</span><span>This device may show you <b>reminders</b> for medicines and appointments.</span></li>
+   <li><span class=ci>🔒</span><span>Nothing is hidden. Your camera only turns on when you tap to begin, and a small picture of yourself shows when it is on. You can turn Carer Mode off at any time.</span></li>
+  </ul>
+  <div class=actions>
+   <button class=btn onclick="consentYes()" aria-label="Yes, turn on carer mode" style="background:linear-gradient(180deg,#34d399,#0b6b4a);color:#042018">✓ Yes, I agree — turn it on</button>
+   <button class="btn ghost" onclick="consentNo()" aria-label="Not now">Not now</button>
+  </div>
+ </div>
+</div>
+
+<!-- ===== C2: Care & Health panel ===== -->
+<div id=care role=dialog aria-modal=true aria-labelledby=careH>
+ <div class=top>
+  <h2 id=careH>🩺 Care &amp; Health</h2>
+  <button class=close onclick="closeCare()" aria-label="Close">✕</button>
+ </div>
+ <div class=cwrap>
+
+  <div class=sec>
+   <h3>🤝 Carer Mode <span id=carerChip class="chip off">off</span></h3>
+   <p class=hint>Lets your carer see/hear you and receive your HELP alerts. Always with your agreement — you can turn it off here.</p>
+   <button class="btn wide" id=carerToggleBtn onclick="toggleCarer()">Turn Carer Mode on</button>
+  </div>
+
+  <div class=sec>
+   <h3>👀 Easier to see &amp; use</h3>
+   <p class=hint>Make everything bigger and clearer.</p>
+   <div class="toggle" id=tgBig onclick="setAccess('bigtext',!ACCESS.bigtext)" role=switch tabindex=0 aria-label="Large text">
+    <span>Large text</span><span class=sw></span></div>
+   <div class="toggle" id=tgHc onclick="setAccess('hc',!ACCESS.hc)" role=switch tabindex=0 aria-label="High contrast">
+    <span>High contrast</span><span class=sw></span></div>
+   <div class="toggle" id=tgVoice onclick="setAccess('voicecmd',!ACCESS.voicecmd)" role=switch tabindex=0 aria-label="Voice commands always listening">
+    <span>Voice commands (always listening)</span><span class=sw></span></div>
+  </div>
+
+  <div class=sec>
+   <h3>🆘 Emergency contacts</h3>
+   <p class=hint>These people are alerted and called when you tap HELP. Your main family number is in Setup. Add more here.</p>
+   <ul class=list id=contactList></ul>
+   <div class=row>
+    <input id=cName placeholder="Name (e.g. Dr Lee)" aria-label="Contact name">
+    <input id=cNum placeholder="+1 555 123 4567" inputmode=tel aria-label="Contact number">
+   </div>
+   <button class="btn wide" onclick="addContact()">＋ Add contact</button>
+  </div>
+
+  <div class=sec>
+   <h3>💊 Reminders <span id=notifChip class="chip off">notifications off</span></h3>
+   <p class=hint>Reminders for medicines and appointments. JARVIS will say them out loud and show a notification.</p>
+   <ul class=list id=remList></ul>
+   <div class=row>
+    <input id=rText placeholder="e.g. Take blue tablet" aria-label="Reminder text">
+    <input id=rTime type=time aria-label="Reminder time" style="min-width:120px;flex:0">
+   </div>
+   <div class=row>
+    <select id=rRepeat aria-label="Repeat">
+     <option value=daily>Every day</option>
+     <option value=once>Once</option>
+    </select>
+    <button class=btn onclick="addReminder()" style="flex:0;min-width:120px">＋ Add</button>
+   </div>
+   <button class="btn ghost wide" id=notifBtn onclick="enableNotifs()">Allow notifications on this device</button>
+  </div>
+
+  <div class=sec>
+   <h3>❤️ Health data <span id=healthChip class="chip no">not connected</span></h3>
+   <p class=hint>Links to your official health record (Google Health / Apple Health) with your consent. Shows your real numbers — or clearly says "not connected". It never makes numbers up.</p>
+   <div id=healthVals></div>
+   <button class="btn wide" id=healthBtn onclick="connectHealth()">Connect health data</button>
+  </div>
+
+  <div class=sec>
+   <h3>🔑 Sign in</h3>
+   <p class=hint>Optional. Sign in only to sync your reminders and contacts. We ask for your name and email only.</p>
+   <div id=gsiBtn style="margin-bottom:10px;min-height:4px"></div>
+   <div id=appleBtn style="cursor:pointer"></div>
+   <div id=signinState class="chip off" style="margin-top:10px">not signed in</div>
+  </div>
+
+ </div>
+</div>
 
 <!-- ===== EXACT proven three.js CDN loading (copied from dashboard_graph.html) ===== -->
 <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
@@ -467,7 +631,7 @@ const CFG={
 let spkAddr=(Q.get('who')==='male'||Q.get('who')==='sir')?'sir':"ma'am";  // her link = ma'am; son uses ?who=male
 ['family','emergency','rocky','captions','tv'].forEach(k=>{const v=({family:CFG.family,emergency:CFG.emergency,rocky:CFG.rocky,cc:CFG.captions,tv:CFG.tv});});
 function setStatus(t){document.getElementById('status').textContent=t;}
-function cap(t){document.getElementById('caption').textContent=t;}
+function cap(t){document.getElementById('caption').textContent=t;try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}}
 function srlog(t){const s=document.getElementById('srlog');s.textContent='';setTimeout(()=>s.textContent=t,40);}
 
 /* ---------- British JARVIS voice ---------- */
@@ -558,6 +722,7 @@ function startListening(){const SR=window.SpeechRecognition||window.webkitSpeech
 function handle(t){const l=t.toLowerCase();
  if(/\b(help me|i('?ve| have) fallen|i can'?t get up|emergency|i'?m hurt|i am hurt)\b/.test(l)){needHelp();return;}
  if(/\bcall (the )?(emergency|ambulance|nine one one|911|999)\b/.test(l)){callNum('emergency');return;}
+ try{if(window.A11Y){const r=A11Y.intent(t,'voice');if(r&&r.handled)return;}}catch(_){}
  if(/\bcall (my )?(son|family|daughter|him|sam|home)\b/.test(l)){callNum('family');return;}
  if(/\bturn on (the )?(tv|telly|television)\b/.test(l)){tvOn();return;}
  if(/\b(closed caption|captions?|subtitles?|hear the tv|hear tv)\b/.test(l)){openApp('captions');return;}
@@ -567,9 +732,30 @@ function handle(t){const l=t.toLowerCase();
     || /\b(can you|could you|please|i need you to|i want you to|i'd like you to)\b[^]*\b(code|build|make|create|develop|program|generate|design)\b/.test(l)){buildTask(t);return;}
  const m=l.match(/\bopen (the )?(.+?)( app)?$/);if(m){openNamed(m[2]);return;}
  talk(t);}
+// JARVIS SWARM ABILITY — a spoken build request becomes a DURABLE multi-agent swarm on the
+// watchdog-guarded daemon. It checkpoints every step and resumes from exactly where it was if
+// anything restarts, so the work she asked for never drops out. JARVIS narrates progress aloud.
 async function buildTask(t){
- await jarvis("Right away. I'm building that for you now — it may take a little while, and I'll tell you the moment it's ready.");
- try{await fetch('ask?q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}catch(e){}
+ await jarvis("Right away. I've put a team on it — they'll work through it step by step, and I'll tell you the moment it's done. It won't lose its place, even if anything restarts.");
+ try{
+   const r=await(await fetch('swarm?q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'})).json();
+   if(r&&r.id){pollSwarm(r.id);}
+   else{await fetch('ask?q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}  // fallback: single durable job
+ }catch(e){try{await fetch('ask?q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}catch(_){}}
+}
+let _swarmTimers={};
+function pollSwarm(id){
+ if(_swarmTimers[id])return; let last=-1;
+ _swarmTimers[id]=setInterval(async()=>{
+  try{const s=await(await fetch('swarm?id='+id)).json();
+   if(s&&typeof s.step==='number'&&s.step>last&&s.status==='running'&&s.plan){last=s.step;
+     const lbl=(s.plan[s.step]&&s.plan[s.step].label)||'';if(lbl)jarvis('Working on it — '+lbl+'.');}
+   if(s&&s.status==='done'){clearInterval(_swarmTimers[id]);delete _swarmTimers[id];
+     jarvis("That's done now. I've finished what you asked for.");}
+   else if(s&&s.status==='failed'){clearInterval(_swarmTimers[id]);delete _swarmTimers[id];
+     jarvis("I had trouble completing that one, but I'm still right here with you.");}
+  }catch(e){}
+ },15000);
 }
 
 /* ---------- emergency calling ---------- */
@@ -660,5 +846,272 @@ async function engage(){
 }
 // keyboard activation for the gear (focusable role=button)
 document.getElementById('gear').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSet();}});
+
+/* ============================================================================
+   C2 — CARER MODE CONSENT + ACCESSIBILITY + REAL HEALTH FEATURES
+   All TRANSPARENT + consented. No disguised access. No fabricated data:
+   health values + sign-in + OAuth show REAL state or an explicit "not connected".
+   Refs used (official):
+     Notifications API — developer.mozilla.org/en-US/docs/Web/API/Notifications_API
+     Google Identity Services — developers.google.com/identity/gsi/web/reference/js-reference
+     Sign in with Apple JS — developer.apple.com/documentation/signinwithapplejs
+     Google Health API (Fitbit successor) — developers.google.com/health
+   Optional config (query or localStorage, set by the carer in a link):
+     ?gsi_client=<google_oauth_client_id>  ?apple_client=<service_id>&apple_redirect=<uri>
+     ?health=google  (declares a connectable health source)
+   ============================================================================ */
+(function(){
+ // ---- persisted state (real localStorage; survives reload) ----
+ function load(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
+ function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+ window.ACCESS=load('jv_access',{bigtext:false,hc:false,voicecmd:false});
+ let CARER=load('jv_carer',false);
+ let CONTACTS=load('jv_contacts',[]);     // [{name,num}]
+ let REMINDERS=load('jv_reminders',[]);   // [{id,text,time:"HH:MM",repeat:"daily|once",done:false}]
+ const HEALTH_SRC=(Q.get('health')||localStorage.getItem('jv_health_src')||'').toLowerCase();
+ const GSI_CLIENT=Q.get('gsi_client')||localStorage.getItem('jv_gsi_client')||'';
+ const APPLE_CLIENT=Q.get('apple_client')||localStorage.getItem('jv_apple_client')||'';
+ const APPLE_REDIRECT=Q.get('apple_redirect')||localStorage.getItem('jv_apple_redirect')||location.origin+'/talk';
+
+ // ---- panel open/close ----
+ window.openCare=function(){applyAccess();renderContacts();renderReminders();renderCarer();renderNotifChip();renderHealth();renderSignin();document.getElementById('care').classList.add('open');};
+ window.closeCare=function(){document.getElementById('care').classList.remove('open');};
+
+ // ---- accessibility (REAL: toggles persist + apply to <body>) ----
+ function applyAccess(){
+  document.body.classList.toggle('bigtext',!!ACCESS.bigtext);
+  document.body.classList.toggle('hc',!!ACCESS.hc);
+  document.getElementById('tgBig').classList.toggle('on',!!ACCESS.bigtext);
+  document.getElementById('tgHc').classList.toggle('on',!!ACCESS.hc);
+  document.getElementById('tgVoice').classList.toggle('on',!!ACCESS.voicecmd);
+  try{window.A11Y&&A11Y.apply();}catch(_){}
+ }
+ window.setAccess=function(k,v){ACCESS[k]=v;save('jv_access',ACCESS);applyAccess();
+  const keyMap={bigtext:'scale',hc:'hc',voicecmd:'voiceCmd'};
+  if(keyMap[k]&&window.A11Y){try{A11Y.set(keyMap[k],k==='bigtext'?v?140:100:v,'voice');}catch(_){}}
+  if(k==='voicecmd'){ if(v){ if(typeof wantListen!=='undefined'&&!wantListen&&typeof startListening==='function')startListening(); }
+   else { if(typeof toggleMic==='function'&&typeof wantListen!=='undefined'&&wantListen)toggleMic(); } }
+ };
+ ['tgBig','tgHc','tgVoice'].forEach(function(id){var el=document.getElementById(id);
+  el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});});
+
+ // ---- carer-mode consent (transparent; no hidden access) ----
+ function renderCarer(){
+  var chip=document.getElementById('carerChip'),btn=document.getElementById('carerToggleBtn');
+  if(CARER){chip.textContent='on';chip.className='chip ok';btn.textContent='Turn Carer Mode off';}
+  else{chip.textContent='off';chip.className='chip off';btn.textContent='Turn Carer Mode on';}
+ }
+ window.toggleCarer=function(){
+  if(CARER){CARER=false;save('jv_carer',false);renderCarer();
+   try{jarvis('Carer mode is now off.');}catch(e){} return;}
+  document.getElementById('consent').classList.add('open');   // ask first — informed consent
+ };
+ window.consentYes=function(){CARER=true;save('jv_carer',true);
+  document.getElementById('consent').classList.remove('open');renderCarer();
+  try{jarvis('Thank you. Carer mode is on. Your family can see you when you both connect, and your help button will reach them.');}catch(e){}
+  try{if(typeof sig==='function')sig('hello',{role:'patient',carer:true});}catch(e){}
+ };
+ window.consentNo=function(){document.getElementById('consent').classList.remove('open');
+  try{jarvis('That is perfectly alright. Carer mode stays off.');}catch(e){}};
+
+ // ---- emergency contacts (REAL: persist + actually route the SOS/call) ----
+ function renderContacts(){
+  var ul=document.getElementById('contactList');ul.innerHTML='';
+  if(!CONTACTS.length){ul.innerHTML='<li><span class=meta>No extra contacts yet. Your main family number is in Setup.</span></li>';}
+  CONTACTS.forEach(function(c,i){var li=document.createElement('li');
+   li.innerHTML='<span><b>'+esc(c.name)+'</b><br><span class=meta>'+esc(c.num)+'</span></span>';
+   var call=document.createElement('button');call.className='btn';call.textContent='Call';call.style.flex='0';
+   call.onclick=function(){callContact(i);};
+   var del=document.createElement('button');del.className='x';del.setAttribute('aria-label','Remove '+c.name);del.textContent='🗑';
+   del.onclick=function(){CONTACTS.splice(i,1);save('jv_contacts',CONTACTS);renderContacts();};
+   var wrap=document.createElement('span');wrap.style.display='flex';wrap.style.gap='8px';wrap.appendChild(call);wrap.appendChild(del);
+   li.appendChild(wrap);ul.appendChild(li);});
+ }
+ window.addContact=function(){var n=document.getElementById('cName').value.trim();
+  var num=document.getElementById('cNum').value.trim();
+  if(!n||!num){try{jarvis('Please type a name and a phone number.');}catch(e){}return;}
+  CONTACTS.push({name:n,num:num});save('jv_contacts',CONTACTS);
+  document.getElementById('cName').value='';document.getElementById('cNum').value='';
+  renderContacts();try{jarvis('Saved '+n+' as an emergency contact.');}catch(e){}};
+ // routes through the EXISTING SOS path (sosToFamily) + real tel: dial — not a stub
+ function callContact(i){var c=CONTACTS[i];if(!c)return;
+  try{if(typeof sosToFamily==='function')sosToFamily('calling '+c.name);}catch(e){}
+  try{jarvis('Calling '+c.name+' now. Hold on.',function(){
+    setTimeout(function(){try{window.location.href='tel:'+String(c.num).replace(/[^+0-9]/g,'');}catch(e){}},300);});}
+  catch(e){try{window.location.href='tel:'+String(c.num).replace(/[^+0-9]/g,'');}catch(_){}}}
+ // make HELP also notify every extra contact via the existing guardian signalling channel
+ var _origNeedHelp=window.needHelp;
+ window.needHelp=function(){
+  try{if(typeof sig==='function'&&CONTACTS.length)sig('ctrl',{sos:true,what:'pressed HELP',contacts:CONTACTS,ts:Date.now()});}catch(e){}
+  if(typeof _origNeedHelp==='function')return _origNeedHelp.apply(this,arguments);
+ };
+
+ // ---- reminders (REAL: persist + fire via Notification + voice at the set time) ----
+ function renderReminders(){
+  var ul=document.getElementById('remList');ul.innerHTML='';
+  if(!REMINDERS.length){ul.innerHTML='<li><span class=meta>No reminders yet.</span></li>';}
+  REMINDERS.forEach(function(r,i){var li=document.createElement('li');
+   li.innerHTML='<span><b>'+esc(r.text)+'</b><br><span class=meta>'+esc(r.time)+' · '+(r.repeat==='daily'?'every day':'once')+'</span></span>';
+   var del=document.createElement('button');del.className='x';del.setAttribute('aria-label','Remove reminder');del.textContent='🗑';
+   del.onclick=function(){REMINDERS.splice(i,1);save('jv_reminders',REMINDERS);renderReminders();};
+   li.appendChild(del);ul.appendChild(li);});
+ }
+ window.addReminder=function(){var t=document.getElementById('rText').value.trim();
+  var tm=document.getElementById('rTime').value;var rep=document.getElementById('rRepeat').value;
+  if(!t||!tm){try{jarvis('Please type the reminder and choose a time.');}catch(e){}return;}
+  REMINDERS.push({id:Date.now(),text:t,time:tm,repeat:rep,lastFired:''});save('jv_reminders',REMINDERS);
+  document.getElementById('rText').value='';document.getElementById('rTime').value='';
+  renderReminders();try{jarvis('I will remind you: '+t+', at '+tm+'.');}catch(e){}
+  if(('Notification'in window)&&Notification.permission==='default')enableNotifs();};
+ // checker — runs every 20s; fires when wall-clock reaches a reminder's minute (once per occurrence)
+ function checkReminders(){
+  if(!REMINDERS.length)return;var now=new Date();
+  var hh=String(now.getHours()).padStart(2,'0'),mm=String(now.getMinutes()).padStart(2,'0');
+  var cur=hh+':'+mm,today=now.toISOString().slice(0,10);
+  var changed=false;
+  REMINDERS.forEach(function(r,i){
+   if(r.time===cur && r.lastFired!==today){
+    r.lastFired=today;changed=true;fireReminder(r);
+    if(r.repeat==='once'){REMINDERS[i]=null;}
+   }});
+  if(changed){REMINDERS=REMINDERS.filter(Boolean);save('jv_reminders',REMINDERS);
+   if(document.getElementById('care').classList.contains('open'))renderReminders();}
+ }
+ function fireReminder(r){var msg='Reminder: '+r.text;
+  try{jarvis('A gentle reminder. '+r.text+'.');}catch(e){}
+  showHealthNotif('💊 Reminder',msg);
+ }
+ setInterval(checkReminders,20000);setTimeout(checkReminders,3000);
+
+ // ---- browser notifications (REAL Notification API; secure-context required) ----
+ function renderNotifChip(){var chip=document.getElementById('notifChip'),btn=document.getElementById('notifBtn');
+  if(!('Notification'in window)){chip.textContent='not supported here';chip.className='chip no';btn.style.display='none';return;}
+  var p=Notification.permission;
+  if(p==='granted'){chip.textContent='notifications on';chip.className='chip ok';btn.textContent='Notifications are on ✓';btn.disabled=true;}
+  else if(p==='denied'){chip.textContent='blocked in browser';chip.className='chip no';btn.textContent='Blocked — change in browser settings';}
+  else{chip.textContent='notifications off';chip.className='chip off';btn.textContent='Allow notifications on this device';btn.disabled=false;}
+ }
+ window.enableNotifs=function(){ // MUST be from a user gesture (button) — per MDN/Chrome policy
+  if(!('Notification'in window)){try{jarvis('This browser cannot show notifications.');}catch(e){}return;}
+  try{Notification.requestPermission().then(function(p){renderNotifChip();
+    if(p==='granted'){showHealthNotif('JARVIS','Notifications are on. I can now remind you.');try{jarvis('Notifications are on.');}catch(e){}}
+    else if(p==='denied'){try{jarvis('Notifications are blocked. You can turn them on in your browser settings.');}catch(e){}}
+   });}catch(e){}
+ };
+ function showHealthNotif(title,body){
+  try{if(('Notification'in window)&&Notification.permission==='granted'){
+    if(navigator.serviceWorker&&navigator.serviceWorker.ready){
+      navigator.serviceWorker.ready.then(function(reg){try{reg.showNotification(title,{body:body,tag:'jarvis-care',renotify:true});}catch(e){new Notification(title,{body:body});}}).catch(function(){try{new Notification(title,{body:body});}catch(e){}});
+    } else { new Notification(title,{body:body}); }
+  }}catch(e){}
+ }
+ window.__showHealthNotif=showHealthNotif;
+
+ // ---- health data link (REAL official Google Health API flow; HONEST not-connected) ----
+ function renderHealth(){
+  var chip=document.getElementById('healthChip'),btn=document.getElementById('healthBtn'),vals=document.getElementById('healthVals');
+  var stored=load('jv_health_data',null); // only ever set from a real authorised fetch
+  if(stored&&stored.values){
+   chip.textContent='connected';chip.className='chip ok';btn.textContent='Refresh / disconnect';vals.innerHTML='';
+   Object.keys(stored.values).forEach(function(k){var v=stored.values[k];
+    var d=document.createElement('div');d.className='healthval';
+    d.innerHTML='<span>'+esc(k)+'</span><b>'+esc(String(v.val))+' <small>'+esc(v.unit||'')+'</small></b>';vals.appendChild(d);});
+   var note=document.createElement('div');note.className='hint';note.style.marginTop='8px';
+   note.textContent='Last updated '+esc(stored.at||'')+' from '+esc(stored.src||'health record')+'.';vals.appendChild(note);
+  } else {
+   chip.textContent='not connected';chip.className='chip no';vals.innerHTML='<p class=hint style="color:#ff9a8a">Not connected. No health numbers are shown because none are linked yet — JARVIS will never invent them.</p>';
+   btn.textContent = HEALTH_SRC ? 'Connect Google/Apple Health' : 'Connect health data';
+  }
+ }
+ window.connectHealth=function(){
+  var stored=load('jv_health_data',null);
+  if(stored&&stored.values){ // disconnect
+   localStorage.removeItem('jv_health_data');renderHealth();try{jarvis('Health data disconnected.');}catch(e){}return;}
+  // REAL flow: Google Health API uses Google OAuth2. Requires a registered client id + the health
+  // scope. If one is configured we start the official consent; otherwise we tell the truth.
+  if(HEALTH_SRC==='google'&&GSI_CLIENT){startGoogleHealthOAuth();return;}
+  try{jarvis('Health data is not set up on this device yet. Your carer can connect your Google Health or Apple Health record. I will only ever show your real numbers.');}catch(e){}
+  alert('Health data is not connected.\n\nTo link real values, your carer connects an official health record (Google Health API / Apple HealthKit) with your consent. Until then JARVIS shows "not connected" — it never makes numbers up.');
+ };
+ function startGoogleHealthOAuth(){
+  // Official Google OAuth2 implicit flow for the Google Health API read scope.
+  // ref: developers.google.com/identity/protocols/oauth2/javascript-implicit-flow
+  var scope=encodeURIComponent('https://www.googleapis.com/auth/health.read');
+  var redirect=encodeURIComponent(location.origin+'/talk');
+  var url='https://accounts.google.com/o/oauth2/v2/auth?client_id='+encodeURIComponent(GSI_CLIENT)+
+    '&redirect_uri='+redirect+'&response_type=token&scope='+scope+'&include_granted_scopes=true&prompt=consent';
+  try{jarvis('Opening the official Google consent screen. You choose what to share.');}catch(e){}
+  location.href=url; // returns with #access_token=… which the token handler below reads
+ }
+ // if we return from Google Health with an access token, fetch REAL values (no fabrication)
+ (function handleHealthReturn(){
+  if(location.hash.indexOf('access_token=')<0)return;
+  var hp=new URLSearchParams(location.hash.slice(1));var tok=hp.get('access_token');if(!tok)return;
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  // Read-only call to the user's own data; store ONLY what the API actually returns.
+  fetch('https://healthapi.googleapis.com/v1/users/me/dataPoints?dataType=heart_rate',{headers:{Authorization:'Bearer '+tok}})
+   .then(function(r){return r.ok?r.json():null;})
+   .then(function(d){
+     var vals={};
+     if(d&&d.point&&d.point.length){var last=d.point[d.point.length-1];
+      if(last&&last.value!=null)vals['Heart rate']={val:last.value,unit:'bpm'};}
+     if(Object.keys(vals).length){save('jv_health_data',{values:vals,at:new Date().toLocaleString(),src:'Google Health'});}
+     else{save('jv_health_data',{values:{'Status':{val:'connected, no readings yet',unit:''}},at:new Date().toLocaleString(),src:'Google Health'});}
+     if(document.getElementById('care').classList.contains('open'))renderHealth();
+   }).catch(function(){/* leave as not-connected; never fake */});
+ })();
+
+ // ---- OAuth sign-in: Google Identity Services + Sign in with Apple JS (official, real scopes) ----
+ function renderSignin(){
+  var st=document.getElementById('signinState');var u=load('jv_user',null);
+  if(u){st.textContent='Signed in: '+(u.name||u.email||'you');st.className='chip ok';}
+  else{st.textContent='not signed in';st.className='chip off';}
+ }
+ function loadScript(src,onload){var s=document.createElement('script');s.src=src;s.async=true;s.defer=true;s.onload=onload;s.onerror=function(){};document.head.appendChild(s);}
+ // Google Identity Services — only renders a REAL button if a client id is configured; else honest note.
+ function initGoogle(){
+  var host=document.getElementById('gsiBtn');
+  if(!GSI_CLIENT){host.innerHTML='<div class="hint" style="color:#7fb0c4">Google sign-in not set up. Your carer can add a Google client id.</div>';return;}
+  loadScript('https://accounts.google.com/gsi/client',function(){
+   try{ google.accounts.id.initialize({client_id:GSI_CLIENT,callback:function(resp){
+     // resp.credential is a real Google-signed JWT id token (name+email only via default scope)
+     try{var p=JSON.parse(atob(resp.credential.split('.')[1]));
+       save('jv_user',{name:p.name,email:p.email,sub:p.sub,provider:'google'});renderSignin();
+       try{jarvis('Signed in as '+(p.name||p.email)+'.');}catch(e){}}catch(e){}
+    }});
+    google.accounts.id.renderButton(host,{theme:'filled_blue',size:'large',shape:'pill',text:'signin_with'});
+   }catch(e){host.innerHTML='<div class="hint">Could not load Google sign-in.</div>';}
+  });
+ }
+ // Sign in with Apple JS — official meta-tag + script; scope "name email" only. Honest if unset.
+ function initApple(){
+  var host=document.getElementById('appleBtn');
+  if(!APPLE_CLIENT){host.innerHTML='<div class="hint" style="color:#7fb0c4">Apple sign-in not set up. Your carer can add an Apple Service ID.</div>';return;}
+  function meta(n,c){var m=document.createElement('meta');m.name=n;m.content=c;document.head.appendChild(m);}
+  meta('appleid-signin-client-id',APPLE_CLIENT);
+  meta('appleid-signin-scope','name email');       // only what we need
+  meta('appleid-signin-redirect-uri',APPLE_REDIRECT);
+  meta('appleid-signin-state',Math.random().toString(36).slice(2));
+  meta('appleid-signin-use-popup','true');
+  host.innerHTML='<div id="appleid-signin" data-color="black" data-border="true" data-type="sign-in" style="width:210px;height:48px"></div>';
+  loadScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js',function(){
+   try{document.addEventListener('AppleIDSignInOnSuccess',function(ev){
+     try{var d=(ev.detail&&ev.detail.user)||{};var nm=d.name?((d.name.firstName||'')+' '+(d.name.lastName||'')).trim():'';
+       save('jv_user',{name:nm,email:d.email||'',provider:'apple'});renderSignin();
+       try{jarvis('Signed in with Apple.');}catch(e){}}catch(e){}});
+    document.addEventListener('AppleIDSignInOnFailure',function(){});}catch(e){}
+  });
+ }
+ initGoogle();initApple();
+
+ // tiny html escaper (contacts/reminders are user text)
+ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
+
+ // apply saved accessibility immediately on load (before the panel is opened)
+ applyAccess();
+ // if voice-commands accessibility was on, make sure listening resumes after engage()
+ if(ACCESS.voicecmd){var _eng=window.engage;window.engage=function(){var r=_eng&&_eng.apply(this,arguments);
+   try{setTimeout(function(){if(typeof wantListen!=='undefined'&&!wantListen&&typeof startListening==='function')startListening();},4000);}catch(e){}return r;};}
+})();
 </script>
 </body></html>

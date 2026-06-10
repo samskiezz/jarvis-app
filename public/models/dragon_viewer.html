@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>JARVIS · Dragon</title>
+<style>
+  html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 30%,#0a1622,#02060b 70%);
+    font:13px/1.5 ui-monospace,Menlo,monospace;color:#7fe9ff}
+  model-viewer{width:100vw;height:100vh;--poster-color:transparent}
+  .hud{position:fixed;left:16px;top:14px;z-index:9;letter-spacing:.12em;text-transform:uppercase;
+    text-shadow:0 0 8px #0ff6}
+  .hud b{color:#e8fbff}
+</style>
+<div class="hud"><b>JARVIS</b> · procedural dragon · drag to orbit · scroll to zoom</div>
+<model-viewer src="dragon.glb" camera-controls auto-rotate touch-action="pan-y"
+  shadow-intensity="1" exposure="1.15" environment-image="neutral"
+  camera-orbit="38deg 78deg 16m" field-of-view="32deg" interaction-prompt="none">
+</model-viewer>
+<script type="module"
+  src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>

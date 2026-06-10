@@ -118,3 +118,52 @@ persistent control token · /chat 32B brain · build-routing · greet-before-cam
 
 ## INTEGRATION PASS (🔄 swarm: builds ON the proven universe foundation) — applies §1 governing principle + refinements
 living-organism coupling (one shared pulse) · importance-sizing (functions/features = biggest planets) · similarity clustering · Mac dock · crystal caption bubble (rainbow ring) · smooth render (SMAA+ACES+PMREM+pixelratio+dither) · animated/interactive pinstripe grid · wire WORKING controls (toggles, runner Run/Stop/Restart, Run-All/Pause/Stop/Sleep) · keep three@0.136 + GLB brain + greeting + two-way video.
+
+## 8. SWARM ENGINE & RESILIENCE (✅ built+proven this session — the autonomous build system)
+- ✅ WATCHDOG (jarvis-watchdog pm2): auto-heals hung/crashed lifeline services (proven: healed jarvis-tasks in 26s); `pm2 save` keeps reboot-resurrect current.
+- ✅ AGENTS SURVIVE RESTARTS (proven, parent=init): every Claude agent launches fully DETACHED + reparented to init via setsid, so a pm2/daemon restart can't kill it — boot-reclaim re-attaches by PID. Also survives crashes (auto-retry ×2), reboots (boot-reclaim + pm2 resurrect), and your session closing (server-side daemon).
+- ✅ DURABLE SWARM RUNNER: each swarm = an ordered 13-stage pipeline; plan+per-stage results+position checkpointed to sqlite (swarms table) → resumes from EXACTLY where it was after any restart; prior-stage memory carried forward (no loss between layers).
+- ✅ 13-STAGE PIPELINE per task: research → draft → engineer → review-plan → code → review-code → revise → final-review → STANDARDS-GATE → publish+compare-to-draft → production → master-smoke-test → finalize.
+- ✅ LANE-PARALLEL (file-safe): swarms run in lanes (universe=jarvis_live.html, backend=dashboard.py+services, care=jarvis_voice/guardian); ≤1 swarm per lane at once (never 2 agents on the same file) but lanes run concurrently (~4×). PRIORITY field orders run within a lane.
+- ✅ STANDING RULES injected into EVERY stage of EVERY swarm: WHO-THIS-IS-FOR (severely disabled, Stephen-Hawking-type, end-of-life — build it right + accessible for her) · NO STUBS/full implementations · RESEARCH-WHEN-UNSURE (≥1 webpage + 1 forum + 1 doc, from real GitHub/npm/official/patent 2026 sources) · billion-dollar bar (Apple/Palantir/Google/NVIDIA) · Hollywood-cinematic / never-easier-option · hands-free voice+text access for every feature · never break the lifeline.
+- ✅ MODEL TIERING (better+faster, from research): Opus forced on code/revise/standards-gate; lighter stages auto-tier to faster models via the token governor.
+- ✅ JARVIS SWARM ABILITY: voice/text "build me X" → /swarm → durable pipeline, JARVIS narrates progress + completion.
+- 🔄 NO PRs — IN-APP REVIEW (replaces deploy-PR): work ships live; you review + Approve/Decline in the app's live task list. Approve→commit+push+merge to main needs YOUR git permission rule (I cannot self-grant it).
+
+## 9. UNIVERSE ADDITIONS (this session — on top of §1)
+- 🔴 NASA-EYES 1:1 REPLICA (eyes.nasa.gov/apps/asteroids/#/home): PLANETS=features/functions · MOONS=sub-features · SATELLITES=orbiting subtopic/sub-sub info · METEORITES=minor analogies — all rendered as their topic-assigned semantic GLBs (the 4,132 real GLBs found, or created).
+- ✅ GLB FIX: the 677 /media gen_tripo stubs were broken 0-byte files; /media now serves the REAL high-grade models (tripo 14.5MB, uw 3.3MB) custom per body; mobile swaps the heavy tripo for light /asset GLBs.
+- 🔴 EVERY MINI-APP + PANEL WORKS END-TO-END (no stubs): Talk/Library/Create/Image/3D/Guardian/Climate/Agent OS/Vitals/Upgrades/Status/Studio + the 4 glass panels + self-dev — each completes its real task, wired to real backend + JARVIS voice.
+- 🔴 DOCK CAROUSEL: slide/blend carousel of mini-apps; GLOBAL animation + interaction layer applied to ALL apps/pages/panels where missing.
+- 🔴 HYPER-REAL RENDER (HDRP-grade → three.js): + subsurface scattering, decals, hair/fabric/eye shaders, MeshPhysicalMaterial clearcoat/sheen/anisotropy, SSAO/GTAO+SSR, BokehPass DOF, physically-based light units, volumetric, AOV image-seq → ffmpeg H.265 master.
+- 🔴 HIGH-END THREE.JS STACK (researched refs): three.js official examples (LOD world-streaming, GPU particles, instancing), Codrops Blender→web pipeline, THREE.js PathTracing renderer (GI/glass/metal), Bruno Simon nav; KTX2 textures + Draco/Meshopt compression + BVH collision + WebGPU renderer with WebGL fallback; React-Three-Fiber where it helps.
+- 🔴 MOBILE RESPONSIVE (her phone): dock fits/scrolls, the 4 panels reachable on mobile (not hidden <1180px); ADAPTIVE PERF tier for Samsung S25 (auto-scale DPR/particles/post-FX + low-power 2D fallback).
+- 🔴 PWA: install to home screen + auto-reconnect + offline so her lifeline survives network drops.
+- 🔴 HIDE the 86 legacy pages behind the universe.
+
+## 10. ACCESSIBILITY CORE (for a Stephen-Hawking-type user — foundational)
+- 🔴 FULL VOICE-ONLY operation (every action by speech) · READ-EVERYTHING-ALOUD (screen, Instagram feed, S25 notifications, captions, task list) · SWITCH-ACCESS + dwell-click + extra-large targets + one-tap · HIGH-CONTRAST + large-text + reduce-motion · ALWAYS-ON CAPTIONS (JARVIS speech + two-way video) · CALM/simplified mode (psychosis-safe, never patronising) · webcam EYE-GAZE/head-tracking pointer · predictive text/word-completion.
+- 🔴 JARVIS gets VOICE+TEXT access to EVERY feature (unified intent router); every capability also a tool the swarm/agent layer can call.
+
+## 11. CARE ADDITIONS (this session — on top of §3)
+- 🔴 SECURE REMOTE SUPPORT: WireGuard VPN + remote CO-CONTROL (carer operates her device when she can't tap) — transparent, no MITM.
+- 🔴 HEALTH: emergency contacts · medication/appointment reminders · health alerts · health-data link (HealthKit / Google Health Connect) · OAuth sign-in (consented, legit only — NO disguised access).
+- 🔴 SOLAR/BATTERY monitor on HER OWN system (official inverter API) + medical-backup reserve + low-power alert (keeps CPAP/heating/med-fridge powered).
+- 🔴 READ-ALOUD her Instagram feed + Samsung S25 notifications on open · control Rocky mobility (anti-fall) · CC captions (hear TV) · TV via Samsung remote/SmartThings.
+
+## 12. PLATFORM / AGENT-OS ARCHITECTURE (this session)
+- 🔴 GPU OFFLOAD to Vast 2×4090 (embeddings/heavy compute, CPU fallback) · Palantir Gotham/Foundry AIP INVESTIGATION mode (graph link-analysis over 570k ont_link) · ANYWHERE-SHORTCUTS launcher (pin files/folders/images/docs/links).
+- 🔴 AGENT OS beyond the 17 tools: State Engine · Automation Runner · GPU Worker Control · Live Event Stream UI · File/Server Control · UI Command Centre · token/cost UI.
+- 🔴 DATA: restart producers (live_data/live_docs/correlator/enrich) so the KB grows (+/h>0, currently OFF) · scrape-on-gap (no 'pending') · brain.db/data-store backup & failover (hard-protect) · regenerate 677 Tripo GLBs + GLB v2 'script-code' handling.
+- 🔴 BACKEND REAL: /vitals (CPU/mem/disk/GPU/pm2) · /vpn (WireGuard) · /solar · /tasks pause/cancel/clear · fix /swarm?id= empty bug · fix 'reconnecting' + suggestion engine · hunt every fake/non-loading module.
+
+## 13. LIVE SWARM STATUS (server-side, durable)
+- ~27 swarms running lane-parallel, 13 stages each, priority-ordered. Key: #13 universe hierarchy/semantic-GLBs (boosted) · #33 control-surface in-app review · #40 every-app-end-to-end · #37 accessibility · #38 carousel+animation · #39 high-end three.js · #34 theme · #35 Agent-OS · #36 JARVIS-access · #19/#20 backend+data · #21/#22 care · plus #14-#18 universe + #24-#31.
+
+## 14. 🟡 NEEDS YOU (cannot be done autonomously)
+- ADD the git-push permission rule in YOUR Claude Code settings (`Bash(git push:*)` etc.) → enables one-click Approve→main. I am blocked from self-granting it.
+- Run the Daikin/AirTouch5 HOME-BRIDGE on her network · give her inverter brand+model+login (solar) · top up the Tripo budget (GLB regen).
+
+
+## CAPTURED REQUESTS (auto-logged from chat — explicit make/do/run, execute accordingly)
+- 🔴 [2026-06-10 04:01] make a test feature and run it
