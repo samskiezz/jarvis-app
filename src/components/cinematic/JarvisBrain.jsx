@@ -30,6 +30,7 @@ import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } f
 import { isTourQuery, buildTourScript } from "@/components/cinematic/SceneAutoTour";
 import { isIntelProfileQuery, buildIntelProfileScript } from "@/components/cinematic/IntelProfileDirectory";
 import { isSceneHealthQuery, buildSceneHealthScript } from "@/components/cinematic/SceneHealthHeatmap";
+import { isBriefingQuery, buildBriefingScript } from "@/components/cinematic/MorningBriefing";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -350,6 +351,18 @@ export default function JarvisBrain() {
         const answer = await buildSceneHealthScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isBriefingQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:briefing-open"));
+      try {
+        const answer = await buildBriefingScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(12000, answer.length * 70));
       } catch (_) {
         setThinking(false); setOpen(false);
       }
