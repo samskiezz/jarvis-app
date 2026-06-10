@@ -34,6 +34,7 @@ import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
 import GraphCentralityView from '@/components/cinematic/GraphCentralityView';
 import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
 import CommandHistory from '@/components/cinematic/CommandHistory';
+import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -76,6 +77,7 @@ function App() {
             <GraphCentralityView />
             <ServiceDiagnostics />
             <CommandHistory />
+            <MultiVoiceToggle />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

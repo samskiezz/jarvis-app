@@ -26,6 +26,7 @@ import { isSwarmQuery, buildSwarmScript } from "@/components/cinematic/SwarmJobs
 import { isCentralityQuery, buildCentralityScript } from "@/components/cinematic/GraphCentralityView";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "@/components/cinematic/ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "@/components/cinematic/CommandHistory";
+import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -80,7 +81,7 @@ export default function JarvisBrain() {
     try {
       const r = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: answer }),
+        body: JSON.stringify({ text: answer, voice: getActiveVoice() }),
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
@@ -311,6 +312,14 @@ export default function JarvisBrain() {
       const answer = buildHistoryScript();
       setThinking(false); typeOut(answer); speak(answer);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, answer.length * 70));
+      return;
+    }
+
+    if (isVoiceQuery(q)) {
+      const newVoice = applyVoiceFromQuery(q);
+      const answer = `Voice profile switched to ${newVoice}, sir. All subsequent speech will use the ${newVoice} voice engine.`;
+      setThinking(false); typeOut(answer); speak(answer);
+      hideT.current = setTimeout(() => setOpen(false), 7000);
       return;
     }
 
