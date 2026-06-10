@@ -35,6 +35,7 @@ import { isKnowledgeQuery, buildKnowledgeScript } from "@/components/cinematic/K
 import { isOpsQuery, buildOpsScript } from "@/components/cinematic/OpsEventStream";
 import { isPathQuery, buildPathScript } from "@/components/cinematic/GraphPathExplorer";
 import { isReportSummariserQuery, buildReportSummariserScript } from "@/components/cinematic/ReportSummariser";
+import { isAcquisitionQuery, buildAcquisitionScript } from "@/components/cinematic/DataAcquisitionMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -409,6 +410,18 @@ export default function JarvisBrain() {
     if (isPathQuery(q)) {
       try {
         const answer = await buildPathScript(q);
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isAcquisitionQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:acquisition-toggle"));
+      try {
+        const answer = await buildAcquisitionScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
