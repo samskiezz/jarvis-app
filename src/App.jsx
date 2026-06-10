@@ -41,6 +41,7 @@ import SceneHealthHeatmap from '@/components/cinematic/SceneHealthHeatmap';
 import MorningBriefing from '@/components/cinematic/MorningBriefing';
 import KnowledgeBrowser from '@/components/cinematic/KnowledgeBrowser';
 import OpsEventStream from '@/components/cinematic/OpsEventStream';
+import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -90,6 +91,7 @@ function App() {
             <MorningBriefing />
             <KnowledgeBrowser />
             <OpsEventStream />
+            <GraphPathExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

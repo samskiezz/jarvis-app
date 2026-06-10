@@ -31,3 +31,4 @@
 [2026-06-10] F33 DONE — MorningBriefing.jsx: parallel-fetch system/status + brain + getLiveIntel → real spoken briefing; ☀ BRIEF toggle left:2156; isBriefingQuery+buildBriefingScript wired in JarvisBrain; build PASSED.
 2026-06-10 F34 KnowledgeBrowser.jsx — /knowledge/ browse panel + agent/chat AI summary on click + TTS; isKnowledgeQuery wired in JarvisBrain; KNOW toggle left:2260; build PASSED
 2026-06-10 F35 OpsEventStream.jsx — /v1/ops/events event log panel; 15s auto-poll; severity filter tabs (ALL/CRITICAL/HIGH/MEDIUM/LOW); new critical events (sev≥90) spoken via /v1/voice/tts; seenIds dedup ref; ⬡ OPS toggle at left:2364 bottom strip with red critical badge; isOpsQuery+buildOpsScript wired in JarvisBrain; mounted in App.jsx; build PASSED
+2026-06-10 F36 GraphPathExplorer — /v1/graph/path source+target picker, hop-chain panel, agent/chat+TTS narration; isPathQuery+buildPathScript in JarvisBrain; jarvis:path-query event; build PASSED.

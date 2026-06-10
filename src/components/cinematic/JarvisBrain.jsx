@@ -33,6 +33,7 @@ import { isSceneHealthQuery, buildSceneHealthScript } from "@/components/cinemat
 import { isBriefingQuery, buildBriefingScript } from "@/components/cinematic/MorningBriefing";
 import { isKnowledgeQuery, buildKnowledgeScript } from "@/components/cinematic/KnowledgeBrowser";
 import { isOpsQuery, buildOpsScript } from "@/components/cinematic/OpsEventStream";
+import { isPathQuery, buildPathScript } from "@/components/cinematic/GraphPathExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -385,6 +386,17 @@ export default function JarvisBrain() {
     if (isOpsQuery(q)) {
       try {
         const answer = await buildOpsScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isPathQuery(q)) {
+      try {
+        const answer = await buildPathScript(q);
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
