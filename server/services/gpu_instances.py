@@ -94,6 +94,7 @@ def list_instances() -> dict:
             out.append({
                 "id": it.get("id"), "status": it.get("actual_status") or it.get("cur_state"),
                 "gpu": it.get("gpu_name"), "num_gpus": it.get("num_gpus"),
+                "vram_gb": round(float(it.get("gpu_ram") or 0) * float(it.get("num_gpus") or 1) / 1024, 1),
                 "price": round(float(it.get("dph_total") or 0), 3),
                 "image": it.get("image_uuid") or it.get("image"),
                 "ssh_host": it.get("ssh_host"), "ssh_port": it.get("ssh_port"),
@@ -186,14 +187,22 @@ def copy_instance(instance_id: int, max_price: float = None) -> dict:
     if not src:
         return {"ok": False, "error": "source instance not found"}
     recoup = sync_results(int(instance_id), "/workspace")   # pull EVERYTHING (results + checkpoints) down first
-    off = cheapest_offer(gpu_name=src.get("gpu"), max_price=max_price)
+    # CHEAPEST WITH SIMILAR SPECS: match the source's total VRAM (any GPU), pick the cheapest that fits —
+    # so we migrate off an expensive box onto a cheaper equivalent automatically.
+    src_vram = src.get("vram_gb") or 0
+    off = cheapest_offer(max_price=max_price, min_vram_gb=max(0, src_vram * 0.95))
     if not off.get("ok"):
         return off
     new = create_instance(off["offer"]["id"], image=src.get("image"),
                           label="jarvis-gpu-copy", disk_gb=DEFAULT_DISK_GB)
     new["copied_from"] = int(instance_id)
+    new["source_specs"] = {"gpu": src.get("gpu"), "vram_gb": src_vram, "price": src.get("price")}
+    new["new_specs"] = off.get("offer")
+    if src.get("price") and off.get("offer", {}).get("price"):
+        new["saving_per_hr"] = round(src["price"] - off["offer"]["price"], 3)
     new["data_recouped"] = bool(recoup.get("ok"))
     new["recoup_dir"] = recoup.get("dest")
+    new["recoup_note"] = None if recoup.get("ok") else "source is stopped — start it to migrate live /workspace files"
     return new
 
 
