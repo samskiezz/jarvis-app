@@ -15,7 +15,24 @@
 
 AJarvisHudManager::AJarvisHudManager()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;   // idle motion (yaw + hover) on the chamber props
+}
+
+void AJarvisHudManager::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	// Slow yaw + per-prop phase-offset hover: the chamber breathes instead of sitting frozen.
+	const double T = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0;
+	for (int32 i = 0; i < CurrentChamber.Num(); ++i)
+	{
+		AStaticMeshActor* Prop = CurrentChamber[i];
+		if (!IsValid(Prop)) { continue; }
+		Prop->AddActorLocalRotation(FRotator(0.f, IdleYawDegPerSec * DeltaSeconds, 0.f));
+		const double Phase = (2.0 * PI) * (T / HoverPeriodSec + i * 0.13);
+		FVector Loc = Prop->GetActorLocation();
+		Loc.Z += HoverAmplitude * FMath::Sin(Phase) * DeltaSeconds;   // gentle integrated bob
+		Prop->SetActorLocation(Loc);
+	}
 }
 
 void AJarvisHudManager::BeginPlay()

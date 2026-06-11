@@ -43,8 +43,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "JARVIS HUD")
 	void GetChamberList(TArray<FString>& OutChambers) const;
 
+	/** Idle motion: slow yaw + hover bob so the chamber reads ALIVE, not a static diorama. */
+	UPROPERTY(EditAnywhere, Category = "JARVIS HUD") float IdleYawDegPerSec = 6.f;
+	UPROPERTY(EditAnywhere, Category = "JARVIS HUD") float HoverAmplitude = 6.f;
+	UPROPERTY(EditAnywhere, Category = "JARVIS HUD") float HoverPeriodSec = 5.f;
+
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 
 private:

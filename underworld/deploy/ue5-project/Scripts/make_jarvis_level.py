@@ -140,7 +140,36 @@ def build_level(mat, chamber):
         try: sky.skylight_component.set_editor_property("intensity", 1.2)
         except Exception: pass
     spawn(unreal.SkyAtmosphere, (0, 0, 0))
-    spawn(unreal.ExponentialHeightFog, (0, 0, 0))
+    fog = spawn(unreal.ExponentialHeightFog, (0, 0, 0))
+    if fog:
+        try:
+            fc = fog.component
+            fc.set_editor_property("volumetric_fog", True)            # god rays through the holograms
+            fc.set_editor_property("volumetric_fog_scattering_distribution", 0.35)
+            fc.set_editor_property("fog_density", 0.035)
+        except Exception as e:
+            unreal.log_warning(f"[level] volumetric fog props: {e}")
+
+    # — FILM GRADE: the unbound PostProcessVolume (the GTA5-class look) —
+    ppv = spawn(unreal.PostProcessVolume, (0, 0, 0))
+    if ppv:
+        ppv.set_editor_property("unbound", True)
+        s = ppv.settings
+        try:
+            s.bloom_intensity = 1.15;            s.override_bloom_intensity = True
+            s.vignette_intensity = 0.45;          s.override_vignette_intensity = True
+            s.scene_fringe_intensity = 0.6;       s.override_scene_fringe_intensity = True
+            s.film_toe = 0.55;                    s.override_film_toe = True
+            s.color_saturation = unreal.Vector4(1.05, 1.05, 1.12, 1.0); s.override_color_saturation = True
+            s.color_contrast   = unreal.Vector4(1.06, 1.06, 1.06, 1.0); s.override_color_contrast = True
+            s.auto_exposure_method = unreal.AutoExposureMethod.AEM_MANUAL; s.override_auto_exposure_method = True
+            s.auto_exposure_bias = 0.4;           s.override_auto_exposure_bias = True
+            s.depth_of_field_fstop = 2.2;         s.override_depth_of_field_fstop = True
+            s.depth_of_field_focal_distance = 900.0; s.override_depth_of_field_focal_distance = True
+            ppv.set_editor_property("settings", s)
+            unreal.log("[level] PostProcessVolume grade applied (bloom/vignette/CA/filmic/DOF)")
+        except Exception as e:
+            unreal.log_warning(f"[level] PPV grade partial: {e}")
 
     # — Pixel-Streaming view: an orbit camera auto-activated for Player0, + a PlayerStart —
     cam = spawn(unreal.CameraActor, (-820, -560, 360), (-14, 35, 0))
