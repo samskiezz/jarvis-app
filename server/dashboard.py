@@ -1293,6 +1293,50 @@ def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
     return ""
 
 
+_BRAIN_OK = {"ts": 0.0, "up": False}
+def _brain_reachable(timeout: float = 1.2) -> bool:
+    """Fast TCP check of the Vast LLM host so a DOWN brain never hangs her chat for 25s. Cached 15s."""
+    import socket, time as _t
+    now = _t.time()
+    if now - _BRAIN_OK["ts"] < 15:
+        return _BRAIN_OK["up"]
+    up = False
+    try:
+        hostport = JARVIS_LLM.split("://", 1)[-1].split("/", 1)[0]
+        h, _, p = hostport.partition(":")
+        socket.create_connection((h, int(p or 80)), timeout=timeout).close()
+        up = True
+    except Exception:  # noqa: BLE001
+        up = False
+    _BRAIN_OK.update(ts=now, up=up)
+    return up
+
+
+def _local_reply(prompt: str, address: str = "") -> str:
+    """Warm, instant, on-Hostinger reply when the Vast brain (serious computation) is unreachable —
+    so JARVIS is NEVER silent or slow for her. Handles the common things; stays in persona, never robotic."""
+    p = (prompt or "").lower().strip()
+    a = (" " + address) if address in ("sir", "ma'am") else ""
+    def has(*ws): return any(w in p for w in ws)
+    if has("help", "fallen", "fall", "emergency", "ambulance", "can't breathe", "cant breathe", "hurt", "pain", "scared", "911", "000"):
+        return f"I'm here{a}. If this is an emergency I can call for help — say 'call my son' or 'call emergency'. I'm not leaving you."
+    if has("hello", "hi ", "hey", "you there", "are you there", "jarvis"):
+        return f"Yes{a}, I'm right here. What can I do for you?"
+    if has("how are you", "you ok", "you okay"):
+        return f"All systems steady and watching over you{a}. More to the point — how are you feeling?"
+    if has("thank", "cheers", "appreciate"):
+        return f"Always{a}. That's what I'm here for."
+    if has("love you", "good night", "goodnight", "night night"):
+        return f"Rest easy{a}. I'll be right here through the night."
+    if has("who are you", "what are you", "your name"):
+        return f"I'm JARVIS{a} — your assistant, here with you and looking after things."
+    if has("time", "what day", "date"):
+        import datetime as _d
+        return f"It's {_d.datetime.now().strftime('%A, %-d %B, %-I:%M %p')}{a}."
+    return (f"I'm with you{a}. My deeper reasoning is offline for a moment, but I can still hear you, "
+            f"speak, show your photos and files, watch over you and call your family — just tell me what you need.")
+
+
 def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
     """Synchronous, resilient conversational reply in the JARVIS persona (loaded from jarvis_persona.md).
     Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:32b),
@@ -1300,6 +1344,10 @@ def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
     or empty we fall back to the original direct box loop, and finally to a reassuring fixed line — so
     the mum's lifeline reply is NEVER blank. `address` is 'sir' (male) or 'ma'am' (female)."""
     sysmsg = _persona_sysmsg(address)
+    # FAST PATH: if the Vast brain (serious computation) is unreachable, don't hang 25s on dead sockets —
+    # reply instantly & warmly from Hostinger. Vast is used ONLY when it's actually up.
+    if not _brain_reachable():
+        return _local_reply(prompt, address)
     # PRIMARY: the tiered seam. strong = qwen2.5:32b on the box; on failure tiered_llm logs it and
     # returns {ok:False}, so we drop to the direct box loop below (which also tries 32b first).
     try:
@@ -1316,8 +1364,8 @@ def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
     txt = _chat_direct_box(sysmsg, prompt, history)
     if txt:
         return txt
-    # FALLBACK 2: never leave her without a voice.
-    return "I'm right here with you. I'm having a little trouble hearing the network just now, but I'm not going anywhere. Take a breath — you're safe."
+    # FALLBACK 2: never leave her without a voice (warm, context-aware, on-Hostinger).
+    return _local_reply(prompt, address)
 
 
 def _zone_phrase(name) -> str:

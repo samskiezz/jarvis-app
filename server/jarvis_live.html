@@ -671,6 +671,7 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(/\b3d\b|^(model|sculpt)\b/.test(l)){return runMedia('gen3d',t.replace(/\b3d\b|model|sculpt/ig,'').trim());}
   if(l.includes('run all'))return cmdAll('run');if(l==='stop'||l.includes('stop all'))return cmdAll('stop');
   if(l.includes('sleep'))return cmdAll('sleep');if(l==='status'||l.includes('read status'))return readStatus();
+  if(/\b(my )?(files?|photos?|pictures?|videos?|documents?)\b/.test(l)&&/\b(open|show|see|view|my|find|add)\b/.test(l)){return openFiles();}
   if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');
   if(l.includes('graph'))return flyToQuery('graph');
   unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
@@ -743,9 +744,52 @@ const DOCK=[
   {k:'climate', ic:'🌡', t:'Climate',  fn:()=>{flyToBodyByName('climate');}},
   {k:'worklist',ic:'🛰',t:'Live Tasks',fn:()=>setMode('worklist')},
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
+  {k:'files',  ic:'📁', t:'Files',    fn:()=>openFiles()},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
 ];
+/* FILES — her photos/videos/documents from ANY device, opened inside JARVIS. Universal: a file input
+   (works on iOS Safari + Android + desktop; folder pick where supported). She can view them, and JARVIS
+   can help (vision/doc analysis runs on Vast when it's up). Voice: "show my photos / open my files". */
+let _userFiles=[];
+function openFiles(folder){
+  const inp=document.createElement('input'); inp.type='file'; inp.multiple=true;
+  inp.accept='image/*,video/*,audio/*,.pdf,.txt,.doc,.docx,.csv';
+  if(folder){ inp.setAttribute('webkitdirectory',''); inp.setAttribute('directory',''); }
+  inp.onchange=()=>{ const fs=[...(inp.files||[])]; if(fs.length) showFiles(fs); };
+  inp.click();
+}
+function showFiles(fs){
+  _userFiles=fs;
+  let ov=$('filesOv');
+  if(!ov){ ov=document.createElement('div'); ov.id='filesOv';
+    ov.style.cssText='position:fixed;inset:0;z-index:70;background:rgba(2,6,12,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);overflow:auto;padding:54px 14px 90px';
+    ov.innerHTML='<button onclick="$(\'filesOv\').remove()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:20px;background:#0a2230;color:#eafcff;border:1px solid #29e7ff;border-radius:10px;padding:6px 14px">✕ Close</button>'
+      +'<div style="display:flex;gap:10px;justify-content:center;margin:0 0 14px"><button onclick="openFiles()" style="background:#0a2230;color:#9feaff;border:1px solid #29e7ff;border-radius:10px;padding:9px 16px;font-weight:700">＋ Add files</button><button onclick="openFiles(true)" style="background:#0a2230;color:#9feaff;border:1px solid #29e7ff;border-radius:10px;padding:9px 16px;font-weight:700">📂 Add a folder</button></div>'
+      +'<div id=filesGrid style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:980px;margin:0 auto"></div>';
+    document.body.appendChild(ov);
+  }
+  const g=ov.querySelector('#filesGrid'); g.innerHTML='';
+  fs.forEach(f=>{ const url=URL.createObjectURL(f); const card=document.createElement('div');
+    card.style.cssText='background:rgba(10,34,52,.5);border:1px solid rgba(80,220,255,.3);border-radius:12px;padding:8px;text-align:center;font-size:11px;color:#dff6ff;overflow:hidden';
+    let media='';
+    if(f.type.startsWith('image/')) media='<img src="'+url+'" style="width:100%;height:120px;object-fit:cover;border-radius:8px">';
+    else if(f.type.startsWith('video/')) media='<video src="'+url+'" controls playsinline style="width:100%;height:120px;object-fit:cover;border-radius:8px"></video>';
+    else if(f.type.startsWith('audio/')) media='<audio src="'+url+'" controls style="width:100%"></audio>';
+    else media='<div style="height:120px;display:flex;align-items:center;justify-content:center;font-size:40px">📄</div>';
+    card.innerHTML=media+'<div style="margin-top:6px;word-break:break-word">'+esc(f.name)+'</div>'
+      +'<button onclick="jarvisHelpWithFile('+_userFiles.indexOf(f)+')" style="margin-top:6px;background:#11324a;color:#9feaff;border:1px solid #29e7ff;border-radius:8px;padding:5px 8px;font-size:11px;width:100%">🤖 Ask JARVIS</button>';
+    g.appendChild(card);
+  });
+  try{ jarvisSpeak("I've opened your "+fs.length+(fs.length===1?" file. ":" files. ")+"Tap 'Ask JARVIS' on any of them and I'll help."); }catch(_){}
+}
+function jarvisHelpWithFile(i){ const f=_userFiles[i]; if(!f)return;
+  bubble('You','📎 '+f.name);
+  // images/docs → analysis needs the Vast brain (vision); acknowledge + queue. Text files: read inline.
+  if(f.type.startsWith('text/')||/\.(txt|csv|md)$/i.test(f.name)){ const rd=new FileReader();
+    rd.onload=()=>{ $('say').value='Help me with this file "'+f.name+'": '+String(rd.result).slice(0,1500); askJarvis(); }; rd.readAsText(f); return; }
+  $('say').value='I opened my file "'+f.name+'" ('+(f.type||'file')+'). Help me with it.'; askJarvis();
+}
 function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
   [...d.querySelectorAll('.di')].forEach(el=>el.remove());
