@@ -77,7 +77,7 @@ def _record(tier, model, engine, ok, latency_ms, usage, err=""):
         pass
 
 
-def _post(url, payload, headers, timeout=120):
+def _post(url, payload, headers, timeout=15):   # LIFELINE: never let a dead GPU box hang chat for minutes — fail fast → next tier/fallback
     req = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST",
                                  headers={"Content-Type": "application/json", **headers})
     with urllib.request.urlopen(req, timeout=timeout) as r:

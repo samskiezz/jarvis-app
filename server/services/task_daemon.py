@@ -62,11 +62,16 @@ def _db() -> sqlite3.Connection:
         id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, plan TEXT, step INTEGER DEFAULT 0,
         status TEXT, results TEXT, cur_task INTEGER, archon INTEGER DEFAULT 0,
         created_ts INTEGER, updated_ts INTEGER, lane TEXT, priority INTEGER DEFAULT 0)""")
-    for ddl in ("lane TEXT", "priority INTEGER DEFAULT 0"):  # lane=file-group; priority=run-order within a lane
+    for ddl in ("lane TEXT", "priority INTEGER DEFAULT 0", "review_state TEXT"):  # lane=file-group; priority=run-order; review_state=JSON {approved_ts, declined_ts, notes}
         try:
             c.execute("ALTER TABLE swarms ADD COLUMN " + ddl)
         except Exception:  # noqa: BLE001
             pass
+    # Tasks review state (for approve/decline buttons on Live Tasks)
+    try:
+        c.execute("ALTER TABLE tasks ADD COLUMN review_state TEXT")
+    except Exception:  # noqa: BLE001
+        pass
     c.commit()
     return c
 
@@ -478,6 +483,121 @@ def swarm_cancel(sid: int) -> dict:
         return {"ok": False, "error": str(e)[:120]}
 
 
+def task_artifacts(tid: int) -> dict:
+    """GET /task/artifacts — ALL outputs for a task (plan, logs, model, prompt). Returns 50KB max."""
+    try:
+        c = _db()
+        r = c.execute("SELECT id,label,status,pct,outfile,prompt,model FROM tasks WHERE id=?", (tid,)).fetchone()
+        c.close()
+        if not r:
+            return {"ok": False, "error": "no such task"}
+        tid, label, status, pct, outfile, prompt, model = r
+        outfile_content = ""
+        if outfile and os.path.exists(outfile):
+            raw = open(outfile, errors="ignore").read(50000)
+            try:  # claude --output-format json → pull the assistant text out
+                j = json.loads(raw)
+                outfile_content = (j.get("result") or j.get("text") or "").strip() or raw
+            except Exception:  # noqa: BLE001
+                outfile_content = raw.strip()
+        return {"ok": True, "id": tid, "label": label, "status": status, "pct": pct or 0,
+                "outfile_content": outfile_content, "model": model, "prompt": prompt[:500] if prompt else ""}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
+def swarm_artifacts(sid: int) -> dict:
+    """GET /swarm/artifacts — ALL stage results for a swarm (plan + each step's output). Returns condensed."""
+    try:
+        c = _db()
+        r = c.execute("SELECT id,title,plan,step,status,results,cur_task FROM swarms WHERE id=?", (sid,)).fetchone()
+        c.close()
+        if not r:
+            return {"ok": False, "error": "no such swarm"}
+        sid, title, plan_json, step, status, results_json, cur_task = r
+        plan = json.loads(plan_json or "[]")
+        results = json.loads(results_json or "[]")
+        # Truncate results to first 2KB per stage to keep payload under 50KB total
+        for r in results:
+            if "output" in r and len(r["output"]) > 2000:
+                r["output"] = r["output"][:2000] + "\n... (truncated)"
+        cur_task_detail = None
+        if cur_task:
+            cr = c.execute("SELECT id,label,pct,status FROM tasks WHERE id=?", (cur_task,)).fetchone()
+            if cr:
+                cur_task_detail = {"id": cr[0], "label": cr[1], "pct": cr[2] or 0, "status": cr[3]}
+        return {"ok": True, "id": sid, "title": title, "step": step, "status": status,
+                "plan": plan, "results": results, "cur_task_detail": cur_task_detail}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
+def record_review(task_id: int, decision: str, notes: str = "") -> dict:
+    """POST /task/review — record user's approve/decline decision, persist to sqlite. Handles both tasks + swarms."""
+    if decision not in ("approved", "declined"):
+        return {"ok": False, "error": "decision must be 'approved' or 'declined'"}
+    try:
+        c = _db(); now = int(time.time())
+        review_state = json.dumps({
+            f"{decision}_ts": now,
+            "notes": (notes or "").strip()[:200]
+        })
+        # Try to update as a task first
+        cur = c.execute("UPDATE tasks SET review_state=? WHERE id=?", (review_state, task_id))
+        if cur.rowcount > 0:
+            c.commit(); c.close()
+            return {"ok": True, "id": task_id, "kind": "task", "decision": decision, "ts": now}
+        # Otherwise try as a swarm
+        cur = c.execute("UPDATE swarms SET review_state=? WHERE id=?", (review_state, task_id))
+        if cur.rowcount > 0:
+            c.commit(); c.close()
+            return {"ok": True, "id": task_id, "kind": "swarm", "decision": decision, "ts": now}
+        c.close()
+        return {"ok": False, "error": "no such task or swarm"}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
+def tasks_poll(since: int = 0) -> dict:
+    """GET /tasks/poll?since=<unix_ms> — delta polling: only changed tasks (minimal 3-field delta)."""
+    try:
+        c = _db()
+        # Return only tasks updated after 'since' timestamp; minimal fields to preserve bandwidth
+        rows = c.execute("SELECT id,status,pct,elapsed FROM ("
+                        "SELECT id,status,pct,(CAST((julianday('now')-julianday(datetime(updated_ts,'unixepoch')))*86400 AS INT)) as elapsed "
+                        "FROM tasks WHERE updated_ts>?" ")",
+                        (since // 1000,)).fetchall()
+        c.close()
+        return {"ok": True, "tasks": [{"id": r[0], "status": r[1], "pct": r[2] or 0, "elapsed": r[3] or 0} for r in rows]}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
+def swarms_detail(since: int = 0) -> dict:
+    """GET /swarms/detail?since=<unix_ms> — only new/changed swarms; minimal payload."""
+    try:
+        c = _db()
+        rows = c.execute("SELECT id,title,step,status,updated_ts,plan,cur_task,lane,priority "
+                        "FROM swarms WHERE updated_ts>?", (since // 1000,)).fetchall()
+        c.close()
+        swarms = []
+        for r in rows:
+            sid, title, step, status, uts, plan_json, cur_task, lane, priority = r
+            plan = json.loads(plan_json or "[]")
+            # Estimate progress: step/total_steps * 100
+            pct = (step / max(len(plan), 1) * 100) if plan else 0
+            # Build step preview: "step1/step2/step3..."
+            plan_preview = "/".join([str(p).split("\n")[0][:20] if isinstance(p, str) else str(p)[:20] for p in plan[:5]])
+            swarms.append({
+                "id": sid, "title": title, "step": step, "status": status, "pct": round(pct),
+                "updated_ts": uts, "plan_preview": plan_preview, "cur_task": cur_task,
+                "lane": lane, "priority": priority or 0
+            })
+        return {"ok": True, "swarms": swarms}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
 _SWARM_BASE = (
     "You are JARVIS's autonomous build engineer with full Claude Code power on this machine "
     "(read/write files, run commands; the repo is /opt/jarvis-app-1; the stdlib dashboard is "
@@ -593,7 +713,17 @@ _STANDING = (
     "Hollywood-cinematic finish for any UI/3D.\n"
     "- Hands-free for a DISABLED user: make the feature invokable by JARVIS via voice + text.\n"
     "- NEVER break the lifeline (jarvis-dashboard / jarvis-voiceclone / jarvis-tasks); never leave a page "
-    "with a JS error; preserve existing working features.\n\n"
+    "with a JS error; preserve existing working features.\n"
+    "- BUILD PER THE SPEC: for the universe READ /opt/jarvis-app-1/UNIVERSE_SPEC.md (canonical). The LAYOUT is "
+    "OBJECT + TOPIC + SIZE + DISTANCE based: every object maps to a REAL thing (feature/dataset/service/event/"
+    "workflow); DISTANCE from the AI-core = dependency/relationship strength; SIZE = importance/usage/data-weight; "
+    "ORBIT SPEED = activity/urgency; positions by golden-angle 137.50776 + Vogel R0+k*sqrt(i) + the relationship "
+    "rules in the spec — NEVER random.\n"
+    "- SURGICAL ADDITIVE EDITS ONLY: make targeted additive edits; NEVER rewrite/replace/delete an existing "
+    "WORKING section; PRESERVE all prior work; build ON the foundation, do not overwrite it.\n"
+    "- VISUAL GATE: in the VERIFY stage you MUST run `node .proof/visual_gate.cjs` — the page must be "
+    "INTERACTIVE (no full-screen overlay swallowing clicks), NOT dark, objects laid out by the algorithm, dock "
+    "visible; FIX any failure before passing.\n\n"
 )
 
 

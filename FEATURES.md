@@ -165,5 +165,19 @@ living-organism coupling (one shared pulse) · importance-sizing (functions/feat
 - Run the Daikin/AirTouch5 HOME-BRIDGE on her network · give her inverter brand+model+login (solar) · top up the Tripo budget (GLB regen).
 
 
+## DONE 2026-06-10 (verified live — honest audit)
+- ✅ DEPLOY-PATH FIX: /jarvis/ 404 trap (fetch/XHR/EventSource prefix wrapper) — planets/moons/satellites load on the public URL
+- ✅ SERVICE-WORKER CACHE FIX (solar-flow2 sw.js v3): /jarvis/ navigations bypass stale cache — always loads fresh
+- ✅ BLUE-ORB ROOT CAUSE: brainFallback double-scale (22×22≈484u giant faceted ball) — fixed + holographic fallback
+- ✅ FUNCTIONAL HIERARCHY (user model): app PLANETS sized by importance (Talk 660 > … > Upgrades 564) ▸ MOONS = real sub-features (each opens its real fn) ▸ SATELLITES = real pm2 services under Vitals▸Services ▸ METEORITES = live alerts under Vitals▸Alerts — STRICT containment, nothing floats free
+- ✅ SIZE RATIO CHAIN (user spec): planet = 50× moon · moon = 25× meteorite · meteorite = 20× satellite; CORE SUPREME (×60, nothing bigger than the AI core)
+- ✅ φ ALGORITHM VERIFIED LIVE: golden angle 137.50776° measured 15/15 between galaxies; Vogel radii; relRadius (most-related innermost); recursive self-similar at moon level
+- ✅ VAST SPACE: galaxy field 25k–60k · app ring 12k · telemetry band off the core (4.5k–10.5k) · topic belt → 200k backdrop · stars 220k · zoom 6→150k · core-POV start (camera at core looking out)
+- ✅ VISUALS: holographic everything (translucent core + wireframe grid + fresnel 3D depth) · dashed orbit lines · full orbital motion every tier · hover/select glow + selection ring + SFX (off by default) · open black space (no enclosing orb) · glow restored (bloom 0.9/0.62)
+- ✅ REAL PANELS: bodies pickable; cards fetch real ont_link relationships; satellite cards = real pm2 restart/logs; progressive disclosure (galaxy→planets→moons drill-in); lock-on camera follow
+- ✅ VOICE (the big one): XTTS clone now conditions on the DESIGNED JARVIS refs (jarvis_01/02 — Cockney moved to ref_backup_cockney) · greeting pre-warmed (4ms cached, plays in HIS voice on tap) · web fallback can never sound female (deep pitch if no male voice) · GENDER-DETECT from live mic pitch → ma'am/sir (was hardcoded 'sir'!) · NEUTRAL until voice assessed · butler-refinement persona · always-on listening + barge-in
+- ✅ DATA PRODUCERS RESTARTED (§12): stopped knowledge daemons started; vitals warnings 4→2
+- 🔴 STILL OPEN (next): 2K/H265 guardian video · PWA install+offline · WireGuard/co-control · health reminders/OAuth · solar monitor · NASA parity (time scrubber/filters/tours/events) · dock carousel + global animation layer · hyper-real render pass · GPU offload · mobile adaptive perf tiers
+
 ## CAPTURED REQUESTS (auto-logged from chat — explicit make/do/run, execute accordingly)
 - 🔴 [2026-06-10 04:01] make a test feature and run it

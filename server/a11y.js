@@ -491,6 +491,9 @@ window.A11Y = (function(){
   function execCmd(cmd) {
     if (!cmd || !cmd.nonce || cmd.nonce === _lastCmdNonce) return;
     _lastCmdNonce = cmd.nonce;
+    // NEVER replay a stale persisted command (an hours-old read_screen was re-firing on EVERY page
+    // load, barging in over the boot greeting in the wrong voice). Commands are live: >15s old = skip.
+    if (cmd.ts && (Date.now() - cmd.ts) > 15000) return;
     try {
       if (cmd.action === 'read_screen') {
         readScreen(cmd.region);

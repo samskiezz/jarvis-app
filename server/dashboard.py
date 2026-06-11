@@ -2194,6 +2194,18 @@ class _H(http.server.BaseHTTPRequestHandler):
             # "what is the temperature / which zones" answers instantly without a bridge round-trip.
             from server.services import climate_relay as CR
             self._send(json.dumps(CR.state()).encode(), "application/json")
+        elif self.path.startswith("/voiceupload"):
+            self._send(("""<!doctype html><meta name=viewport content="width=device-width,initial-scale=1">
+<body style="background:#02040a;color:#eafcff;font-family:system-ui;padding:24px;text-align:center">
+<h2>🎙 Upload your voice recording</h2><p>Pick the MP3 (saved from QuickShare to this phone).</p>
+<input id=f type=file accept="audio/*" style="margin:12px"><br>
+<button id=b style="font-size:18px;padding:12px 26px;border-radius:12px;border:1px solid #29e7ff;background:#0a2230;color:#eafcff">Upload to JARVIS</button>
+<div id=s style="margin-top:14px;color:#7ad7ff"></div>
+<script>b.onclick=async()=>{const file=f.files[0];if(!file){s.textContent='pick the file first';return;}
+s.textContent='uploading '+(file.size/1048576).toFixed(1)+' MB…';
+try{const r=await fetch('voiceupload',{method:'POST',body:file});const d=await r.json();
+s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' bytes)'):('✗ '+d.error);}catch(e){s.textContent='✗ '+e;}};
+</script>""").encode(), "text/html; charset=utf-8")
         elif self.path.startswith("/vitals"):
             # REAL System Vitals — full self-contained JSON (CPU/mem/disk via /proc+statvfs, GPU/LLM
             # reachability + VRAM via Ollama, pm2 service health via `pm2 jlist`, derived score+alerts).
@@ -2228,6 +2240,29 @@ class _H(http.server.BaseHTTPRequestHandler):
         # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
         # SDP/ICE/control within a room (the room name is the shared secret) and never touches pm2 or
         # tasks — so mum's phone link carries no admin rights.
+        if self.path.startswith("/voiceupload"):
+            # Direct voice-sample upload (QuickShare blocks server-side download). Raw audio body →
+            # server/voices/raw_user/recording_<n>.mp3, then run scripts/voice_pipeline.py to build the
+            # cleaned dataset + swap the XTTS refs to the REAL voice. Capped 300MB; audio only.
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                if ln <= 0 or ln > 300 * 1024 * 1024:
+                    self._send(json.dumps({"ok": False, "error": "bad size"}).encode(), "application/json"); return
+                raw = b""
+                while len(raw) < ln:
+                    chunk = self.rfile.read(min(1 << 20, ln - len(raw)))
+                    if not chunk:
+                        break
+                    raw += chunk
+                d = os.path.join(ROOT, "server", "voices", "raw_user"); os.makedirs(d, exist_ok=True)
+                n = len([f for f in os.listdir(d) if f.startswith("recording_")]) + 1
+                fp = os.path.join(d, f"recording_{n}.mp3")
+                with open(fp, "wb") as f:
+                    f.write(raw)
+                self._send(json.dumps({"ok": True, "saved": fp, "bytes": len(raw)}).encode(), "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
+            return
         if self.path.startswith("/rtc"):
             from server.services import care_signal as CS
             try:
