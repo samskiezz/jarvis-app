@@ -660,9 +660,9 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 .holo2036-glb-badge::after{padding:1px;inset:-7px;opacity:calc(.32 + var(--holo-prox)*.24 + var(--holo-burst)*.32)}
 /* === JARVIS_HOLLYWOOD_HOLO_RINGS_END === */
 </style>
-<link rel="stylesheet" href="/a11y/a11y.css">
+<link rel="stylesheet" href="/jarvis/a11y/a11y.css">
 <script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
-<script defer src="/a11y/a11y.js"></script>
+<script defer src="/jarvis/a11y/a11y.js"></script>
 </head>
 <body>
 <!-- the ONE immersive WebGL universe -->
@@ -2061,7 +2061,8 @@ let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=
 let _starField=null,_nebula=null;
 let home={pos:new THREE.Vector3(2200,260,0),tgt:new THREE.Vector3(4600,220,0)};  // CAMERA LOCK: wider JARVIS POV looking OUT into the 3D menu; keeps the core behind without trapping the view inside it
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
-const ASSET=n=>'asset/'+n;
+const APP_MOUNT=(location.pathname.indexOf('/jarvis')===0)?'/jarvis':'';
+const ASSET=n=>(APP_MOUNT?APP_MOUNT+'/':'')+'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
 
 function initUniverse(){
@@ -2480,8 +2481,16 @@ function glbForName(name){ if(GLB_FOR[name])return GLB_FOR[name];
   return 'jarvis_kit_data_orb'; }
 const _glbLoader=new THREE.GLTFLoader(), _texLoader=new THREE.TextureLoader();
 const _texCache=new Map();
+const _APP_MOUNT=APP_MOUNT;
+function mountedAssetUrl(u){
+  if(!u||/^[a-z][a-z0-9+.-]*:/i.test(u)||u.slice(0,2)==='//')return u;
+  let s=String(u);
+  if(s.charAt(0)!=='/'&&/^(asset|media|a11y)\//.test(s))s='/'+s;
+  if(_APP_MOUNT&&s.charAt(0)==='/'&&s.indexOf(_APP_MOUNT+'/')!==0)return _APP_MOUNT+s;
+  return s;
+}
 function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
-  const t=_texLoader.load('asset/'+asset+'.preview.png',()=>{},undefined,()=>{});
+  const t=_texLoader.load(mountedAssetUrl('/asset/'+asset+'.preview.png'),()=>{},undefined,()=>{});
   try{t.encoding=THREE.sRGBEncoding;}catch(e){} _texCache.set(asset,t); return t; }
 
 /* ---- §1 A: concurrency-capped GLB loader queue (lazy-load; cap concurrent loads for perf) ----
@@ -2501,7 +2510,7 @@ function _pumpGLB(){
     _glbInFlight++; glbsTried++;
     _glbLoader.load(job.url, g=>{ _glbInFlight--; glbsOk++; try{job.ok(g);}catch(_){}; _pumpGLB(); },
       undefined, ()=>{ _glbInFlight--; try{job.err&&job.err();}catch(_){}; _pumpGLB(); }); } }
-function enqueueGLB(url,onLoad,onErr,node){ url=realGLB(url); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
+function enqueueGLB(url,onLoad,onErr,node){ url=mountedAssetUrl(realGLB(url)); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
   _glbQueue.push({url, node, seq:_glbSeq++, ok:g=>{ try{_glbCache.set(url,g.scene);}catch(_){}; onLoad(g.scene.clone(true)); }, err:onErr});
   _pumpGLB(); }
 // re-prioritise the queue as the camera moves, so wherever she flies, the nearest unloaded objects load next.
