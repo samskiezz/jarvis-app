@@ -2359,9 +2359,10 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                                                label=b.get("label", "jarvis-task"))
                 elif sub == "start":   out = GI.set_state(b.get("id"), True)
                 elif sub == "stop":    out = GI.set_state(b.get("id"), False)
-                elif sub == "destroy": out = GI.safe_dispose(b.get("id"))     # RECOUP everything to Hostinger, THEN destroy
+                elif sub == "destroy": out = GI.safe_dispose(b.get("id"), force=bool(b.get("force")))   # recoup→destroy; force bypasses the recoup-refusal (user-authorised)
                 elif sub == "forcedestroy": out = GI.destroy_instance(b.get("id"))
                 elif sub == "copy":    out = GI.copy_instance(b.get("id"), max_price=b.get("max_price"))
+                elif sub == "provisionbrain": out = GI.provision_brain(max_price=b.get("max_price"))
                 elif sub == "run":     out = GI.run_on_instance(b.get("id"), b.get("cmd", "nvidia-smi"))
                 elif sub == "sync":    out = GI.sync_results(b.get("id"), b.get("path", "/workspace/results"))
                 else: out = {"ok": False, "error": "unknown gpu action"}

@@ -255,7 +255,7 @@ def copy_instance(instance_id: int, max_price: float = None) -> dict:
     new = create_instance(off["offer"]["id"], image=src.get("image"),
                           label="jarvis-gpu-copy", disk_gb=DEFAULT_DISK_GB)
     new["copied_from"] = int(instance_id)
-    new["source_specs"] = {"gpu": src.get("gpu"), "vram_gb": src_vram, "price": src.get("price")}
+    new["source_specs"] = {"gpu": src.get("gpu"), "vram_gb": src.get("vram_gb"), "price": src.get("price")}
     new["new_specs"] = off.get("offer")
     if src.get("price") and off.get("offer", {}).get("price"):
         new["saving_per_hr"] = round(src["price"] - off["offer"]["price"], 3)
@@ -265,16 +265,21 @@ def copy_instance(instance_id: int, max_price: float = None) -> dict:
     return new
 
 
-def safe_dispose(instance_id: int) -> dict:
-    """RECOUP-THEN-DESTROY: sync the full /workspace (results + any saved checkpoints / VRAM-dumped state)
-    down to Hostinger, THEN destroy. Nothing is ever destroyed without first recouping everything."""
+def safe_dispose(instance_id: int, force: bool = False) -> dict:
+    """RECOUP-THEN-DESTROY: try to sync the full /workspace (results + checkpoints) to Hostinger, then
+    destroy. By default REFUSES if recoup fails (nothing lost). force=True (user-authorised) destroys
+    anyway — used when the box is stopped/empty or the user explicitly wants it gone regardless."""
     g = _guard()
     if g: return g
+    if force:
+        d = destroy_instance(int(instance_id))   # user-authorised: destroy NOW, no slow SSH recoup (which hangs on a booting/stopped box)
+        d["forced"] = True; d["recoup_ok"] = False
+        return d
     recoup = sync_results(int(instance_id), "/workspace")
     if not recoup.get("ok"):
-        return {"ok": False, "error": "REFUSED to destroy — recoup failed (" + str(recoup.get("error") or recoup.get("stderr") or "")[:120] + "). Data not lost; try Save→Hostinger then dispose.", "recoup": recoup}
+        return {"ok": False, "error": "REFUSED to destroy — recoup failed (" + str(recoup.get("error") or recoup.get("stderr") or "")[:120] + "). Data not lost; try Save→Hostinger then dispose, or force.", "recoup": recoup}
     d = destroy_instance(int(instance_id))
-    d["recouped_to"] = recoup.get("dest")
+    d["recouped_to"] = recoup.get("dest"); d["recoup_ok"] = bool(recoup.get("ok")); d["forced"] = force
     return d
 
 
@@ -338,6 +343,23 @@ def launch_disposable(task_cmd: str, gpu_name: str = None, max_price: float = No
         created["offer"] = off["offer"]
         created["vram_needed_gb"] = vram["gb"]; created["sized_for"] = vram["why"]
     return created
+
+
+BRAIN_PROFILE = {"vram_gb": 48, "dlperf": 140, "cpu_ram_gb": 48, "cpu_cores": 24,
+                 "disk_gb": 40, "inet_down": 500, "compute_cap": 800, "price": 1.0}
+def provision_brain(max_price: float = None) -> dict:
+    """Create the PERSISTENT brain box: cheapest box matching the 3090×4-class brain profile (48GB VRAM,
+    strong DL-perf, modern CUDA), with the sglang LLM image. User-initiated (it bills), labelled jarvis-brain."""
+    g = _guard()
+    if g: return g
+    off = cheapest_similar(BRAIN_PROFILE, max_price=max_price or 1.0)
+    if not off.get("ok"):
+        return off
+    r = create_instance(off["offer"]["id"], image=os.environ.get("BRAIN_IMAGE", "vastai/sglang:v0.5.12-cuda-13.0"),
+                        label="jarvis-brain", disk_gb=40)
+    if r.get("ok"):
+        r["offer"] = off["offer"]
+    return r
 
 
 # ── JARVIS brain: detect a running GPU instance serving an LLM (ollama), point JARVIS at it ──────────

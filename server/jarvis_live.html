@@ -742,6 +742,7 @@ async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).js
     try{ const br=await(await fetch('gpu/brain')).json();
       if(br&&br.brain){ banner='<div style="background:rgba(52,211,153,.12);border:1px solid #34d399;border-radius:10px;padding:10px;margin-bottom:6px">🧠 Brain online — JARVIS full AI.</div>'; }
       else if(br&&(br.stopped||[]).length){ const s=br.stopped[0]; banner='<div style="background:rgba(245,185,66,.12);border:1px solid #f5b942;border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 Brain stopped — <button onclick="gpuStart('+s.id+')" style="background:#0a3a2a;color:#34d399;border:1px solid #34d399;border-radius:8px;padding:5px 10px;font-weight:700">▶ Start brain → full AI</button></div>'; }
+      else { banner='<div style="background:rgba(41,231,255,.10);border:1px solid var(--cy);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 No brain running — <button onclick="gpuProvisionBrain()" style="background:#0a3a4a;color:var(--cy);border:1px solid var(--cy);border-radius:8px;padding:6px 12px;font-weight:700">🧠 Provision brain (cheapest 48GB)</button> <span style="color:var(--dim);font-size:11px">persistent · ~$0.6/hr · full AI</span></div>'; }
     }catch(_){}
     const it=r.instances||[];
     list.innerHTML = banner + (it.length? it.map(i=>{const on=(i.status||'').indexOf('running')>=0;
@@ -760,6 +761,14 @@ async function gpuRun(){ const task=($('gpuTask').value||'').trim(); if(!task){$
   }catch(e){$('gpuMsg').textContent='✗ '+e;}
 }
 async function gpuStart(id){ try{await fetch('gpu/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});gpuRefresh();}catch(_){}}
+async function gpuProvisionBrain(){ if(!confirm('Provision the permanent brain (cheapest 48GB / 3090×4-class, ~$0.6/hr)?\nIt bills until you dispose it.'))return;
+  $('gpuMsg').textContent='Provisioning the cheapest brain box…';
+  try{ const r=await(await fetch('gpu/provisionbrain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})).json();
+    $('gpuMsg').textContent = r.ok? ('✓ Brain provisioned: '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB, DLp'+r.offer.dlperf+') @ $'+r.offer.price+'/hr':'')+' — booting…') : ('✗ '+(r.error||'failed'));
+    try{jarvisSpeak(r.ok?'Provisioning the brain now.':'Could not provision the brain.');}catch(_){}
+    gpuRefresh();
+  }catch(e){$('gpuMsg').textContent='✗ '+e;}
+}
 async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to Hostinger first, then removes it.'))return;
   $('gpuMsg').textContent='Disposing #'+id+'…';
   try{ await fetch('gpu/destroy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
