@@ -10,7 +10,9 @@
   var BASE=location.pathname.replace(/[^/]*$/,'');           // "/jarvis/" or "/"
   if(BASE==='/'||BASE===''){return;}
   var fix=function(u){ try{ if(typeof u==='string' && !/^[a-z][a-z0-9+.-]*:/i.test(u) && u.slice(0,2)!=='//'){
-    return u.charAt(0)==='/' ? BASE.replace(/\/$/,'')+u : BASE+u; } }catch(e){} return u; };
+    var root=BASE.replace(/\/$/,'');
+    if(root&&u.indexOf(root+'/')===0)return u;
+    return u.charAt(0)==='/' ? root+u : BASE+u; } }catch(e){} return u; };
   if(window.fetch){ var _f=window.fetch; window.fetch=function(u,o){ return _f.call(this, (u&&u.url)?u:fix(u), o); }; }
   if(window.XMLHttpRequest){ var _o=XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open=function(m,u){ var a=[m,fix(u)].concat([].slice.call(arguments,2)); return _o.apply(this,a); }; }
@@ -1291,9 +1293,9 @@ function worklistStart(){
   const cancelAll=$('wlCancelAll');if(cancelAll)cancelAll.onclick=()=>{
     if(!confirm('Cancel all tasks? This is irreversible.'))return;
     WL_ROWS.forEach((item,id)=>{if(item.status!=='done'&&item.status!=='failed'&&item.status!=='cancelled')
-      fetch(`${item.cancelTarget.type==='swarm'?'/swarm':'/task'}?action=cancel&id=${item.cancelTarget.id}&token=${CT}`,{method:'POST'}).then(r=>r.json()).catch(e=>{});});};
+      fetch(APP_URL(`${item.cancelTarget.type==='swarm'?'/swarm':'/task'}?action=cancel&id=${item.cancelTarget.id}&token=${CT}`),{method:'POST'}).then(r=>r.json()).catch(e=>{});});};
   const clear=$('wlClear');if(clear)clear.onclick=()=>{
-    fetch(`/task?action=clear&token=${CT}`,{method:'POST'}).then(r=>r.json()).then(r=>{if(r.ok)wlToast('Finished tasks cleared');}).catch(e=>{});};
+    fetch(APP_URL(`/task?action=clear&token=${CT}`),{method:'POST'}).then(r=>r.json()).then(r=>{if(r.ok)wlToast('Finished tasks cleared');}).catch(e=>{});};
   // Keyboard nav (M2 blocker fix: scoped, no hijacking)
   const keyHandler=e=>{if(!WL_OPEN||e.target.matches('input,textarea,[contenteditable]'))return;
     if(e.key==='Escape'){e.preventDefault();setMode('live');return;}
@@ -1339,12 +1341,12 @@ async function pollTick(){
 }
 
 async function fetchAll(signal){
-  const tasks=await(await fetch('/tasks',{signal})).json();
-  const swarms=await(await fetch('/swarms',{signal})).json();
+  const tasks=await(await fetch(APP_URL('/tasks'),{signal})).json();
+  const swarms=await(await fetch(APP_URL('/swarms'),{signal})).json();
   const running=(swarms||[]).filter(s=>s.status==='running').sort((a,b)=>(b.updated||0)-(a.updated||0)).slice(0,6);
   const details=new Map();
   for(const s of running){
-    try{const d=await(await fetch(`/swarm?id=${s.id}`,{signal})).json();
+    try{const d=await(await fetch(APP_URL(`/swarm?id=${s.id}`),{signal})).json();
       if(d&&d.ok!==false)details.set(s.id,d);}catch(e){}}
   return {tasks,swarms,details};
 }
@@ -1474,7 +1476,7 @@ function doAction(kind,rowOrId){
     WL_PEND.set(item.controlId,{want,ts:performance.now()});
     const refs=WL_EL.get(rowId);if(refs&&refs.ctl){const toggle=refs.ctl.querySelector('.wltoggle');
       if(toggle)toggle.textContent=want==='paused'?'⏸':'▶';toggle.disabled=true;}
-    fetch(`/task?action=${action}&id=${item.controlId}&token=${CT}`,{method:'POST'}).then(r=>r.json()).then(r=>{
+    fetch(APP_URL(`/task?action=${action}&id=${item.controlId}&token=${CT}`),{method:'POST'}).then(r=>r.json()).then(r=>{
       if(!r.ok){wlToast(`Failed to ${action}`,`error`);WL_PEND.delete(item.controlId);const refs=WL_EL.get(rowId);
         if(refs&&refs.ctl){const toggle=refs.ctl.querySelector('.wltoggle');if(toggle){toggle.textContent=want==='paused'?'▶':'⏸';toggle.disabled=false;}}}}).catch(e=>{
       wlToast(`Failed to ${action}`,`error`);WL_PEND.delete(item.controlId);const refs=WL_EL.get(rowId);
@@ -1483,7 +1485,7 @@ function doAction(kind,rowOrId){
     const msg=item.type==='swarm'?`Cancel Swarm ${item.id} (${item.stage})?`:`Cancel ${item.who}?`;
     if(confirm(msg)){
       const endpoint=item.cancelTarget.type==='swarm'?'/swarm':'/task';
-      fetch(`${endpoint}?action=cancel&id=${item.cancelTarget.id}&token=${CT}`,{method:'POST'}).then(r=>r.json()).then(r=>{
+      fetch(APP_URL(`${endpoint}?action=cancel&id=${item.cancelTarget.id}&token=${CT}`),{method:'POST'}).then(r=>r.json()).then(r=>{
         if(!r.ok)wlToast('Cancel failed',`error`);}).catch(e=>wlToast('Cancel failed',`error`));}}
 }
 
@@ -2285,7 +2287,7 @@ async function hydrate(node){
   if(node._hydrated) return node._children||[];
   try{
     const q=new URLSearchParams({id:node.id, kind:node.childrenKind||'', exclude:node.parent?.id||''});
-    const res=await fetch('/children?'+q);
+    const res=await fetch(APP_URL('/children?'+q));
     const data=await res.json();
     if(data.children){
       node._children=(data.children||[]).map(c=>makeNode({
@@ -2841,7 +2843,7 @@ function _celAdoptDomains(knowledge){
 }
 async function buildCelestialOS(){
   if(_celBuilt)return; _celBuilt=true;
-  try{const r=await fetch('/celestial');_CEL=await r.json();}catch(e){_CEL={};}
+  try{const r=await fetch(APP_URL('/celestial'));_CEL=await r.json();}catch(e){_CEL={};}
   const lanes={};
   CEL_PLANETS.forEach(p=>{
     const pr=_celPR(p.I), name='cel:'+p.id;
@@ -3872,7 +3874,7 @@ function recordReview(swarmId,decision){
   const btn=row&&row.querySelector(`.wl${decision==='approved'?'approve':'decline'}`);
   const other=row&&row.querySelector(`.wl${decision==='approved'?'decline':'approve'}`);
   if(btn)btn.disabled=true;
-  fetch(`/task/review?token=${CT}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task_id:swarmId,decision,notes:'',kind:'swarm'})})
+  fetch(APP_URL(`/task/review?token=${CT}`),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task_id:swarmId,decision,notes:'',kind:'swarm'})})
     .then(r=>r.json())
     .then(d=>{
       if(btn)btn.disabled=false;
