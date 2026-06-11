@@ -734,6 +734,16 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 <script src="https://unpkg.com/three@0.136.0/examples/js/shaders/FXAAShader.js"></script>
 <script>
 const $=id=>document.getElementById(id), CT="__CTOKEN__";
+/* UI state lock: old browser localStorage can resurrect broken dock order/position,
+   pinned clutter, expanded panels, or a hidden self-dev bar after the code is fixed. */
+(function(){
+  try{
+    const ver='jarvis-celestial-v2-ui-reset-20260611-2';
+    if(localStorage.getItem('jarvisUiStateVersion')===ver)return;
+    ['jarvisDockPos','jarvisDock','jarvisDockPins','gp:pInfra','gp:pPipe','gp:pKnow','gp:pFab','sdevMin'].forEach(k=>localStorage.removeItem(k));
+    localStorage.setItem('jarvisUiStateVersion',ver);
+  }catch(_){}
+})();
 const fmt=n=>n==null?'—':(+n).toLocaleString();
 function esc(s){return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 /* ================= WORLD GLB MANIFEST (embedded — deterministic, from scripts/build_world_glb_manifest.py) =================
@@ -2691,7 +2701,8 @@ const CEL_MOONS={
   {id:'app-library', label:'📚 Library',   I:0.68,fn:()=>setMode('library'),     sats:[['Gallery',()=>setMode('library')],['Refresh Media',()=>loadLib()]]},
   {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>flyToBodyByName('climate')]]},
   {id:'app-agent',   label:'🤖 Agent OS',  I:0.60,gateway:'agentos',             sats:[['Tool Palette',()=>openAgentTools()]]},
-  {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]}],
+  {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]},
+  {id:'app-gpu',     label:'🎛 GPU',       I:0.54,fn:()=>openGPU(),              sats:[['Run GPU Task',()=>openGPU()],['Brain Box',()=>openGPU()],['Dispose Instances',()=>openGPU()]]}],
  knowledge:[],   // the 16 dom:* galaxies are ADOPTED here at build time — GLBs + recursive systems intact
  automation:[
   {id:'run-builder',   label:'🧠 Knowledge Builder', I:0.90,alias:['pipe:🧠 Knowledge Builder'],  dust:19421,sats:[['Detail','drill:runner:🧠 Knowledge Builder']]},
