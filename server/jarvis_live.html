@@ -2550,6 +2550,108 @@ function _celTick(dt){
   _celDots.geometry.attributes.position.needsUpdate=true;
 }
 
+/* ===== CAMERA SYSTEM — exactly 3 views =====
+   1 MAIN_EQUATOR_VIEW (default): the camera rides an invisible EQUATOR RAIL around the WORLD CORE
+     (the centre orb), lens ALWAYS facing outward — the world core stays behind the camera; left =
+     anti-clockwise, right = clockwise; vertical drag never tilts; pinch/wheel nudges the rail radius.
+   2 UNIVERSE_EXPLORE_VIEW: smooth pull-back so the entire universe is visible; full free
+     orbit / pan / zoom; double-click a celestial body to enter Focus Command View.
+   3 FOCUS_COMMAND_VIEW: the selected CELESTIAL BODY is framed in command focus and its command UI
+     opens; selecting any celestial body auto-enters this view; back/✕ returns to the equator rail.
+   One toggle button cycles Equator → Explore → Focus → Equator. No other camera modes. */
+const CameraMode={MAIN_EQUATOR_VIEW:'main_equator_view',UNIVERSE_EXPLORE_VIEW:'universe_explore_view',FOCUS_COMMAND_VIEW:'focus_command_view'};
+let cameraMode=CameraMode.MAIN_EQUATOR_VIEW;
+let selectedCelestialBody=null;
+const worldCorePosition=new THREE.Vector3(0,0,0);
+let _eqTheta=0,_eqTargetTheta=0,equatorOrbitRadius=1250;            // rail just outside the ~780u core surface
+const equatorOffsetY=260,_eqRotSpeed=1.2,_eqDamp=6,_eqDir=1;        // flip _eqDir to -1 if a device feels reversed
+const _camInput={horizontal:0};
+function _eqRailPoint(){return new THREE.Vector3(
+  worldCorePosition.x+Math.cos(_eqTheta)*equatorOrbitRadius,
+  worldCorePosition.y+equatorOffsetY,
+  worldCorePosition.z+Math.sin(_eqTheta)*equatorOrbitRadius);}
+function _eqLookTarget(p){const out=new THREE.Vector3(p.x-worldCorePosition.x,0,p.z-worldCorePosition.z).normalize();
+  return p.clone().add(out.multiplyScalar(1000));}
+function updateMainEquatorView(dt){
+  _eqTargetTheta+=(_camInput.horizontal||0)*_eqDir*_eqRotSpeed*dt;
+  _eqTheta=THREE.MathUtils.damp(_eqTheta,_eqTargetTheta,_eqDamp,dt);
+  const p=_eqRailPoint();
+  camera.position.copy(p);
+  const look=_eqLookTarget(p);
+  camera.lookAt(look);
+  try{controls.target.copy(look);}catch(_){}
+}
+function _camBtnLabel(){const b=document.getElementById('camBtn');if(b)b.textContent=
+  cameraMode===CameraMode.MAIN_EQUATOR_VIEW?'🎥 Equator':cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW?'🌌 Explore':'🎯 Focus';}
+function enterMainEquatorView(){
+  cameraMode=CameraMode.MAIN_EQUATOR_VIEW; selectedCelestialBody=null;
+  try{controls.enabled=false;}catch(_){}
+  const p=_eqRailPoint(); tween(p,_eqLookTarget(p),1100);
+  _camBtnLabel();
+}
+function enterUniverseExploreView(){
+  cameraMode=CameraMode.UNIVERSE_EXPLORE_VIEW;
+  tween(new THREE.Vector3(0,26000,42000),worldCorePosition.clone(),1400,()=>{ try{
+    controls.enabled=true;controls.enableRotate=true;controls.enableZoom=true;controls.enablePan=true;
+    controls.target.copy(worldCorePosition);}catch(_){}});
+  _camBtnLabel();
+}
+function getBestCelestialBodyForFocus(){
+  const ks=Object.keys(_celMets).filter(k=>k.indexOf('alert:')===0);  // 1: active critical state
+  return (ks.length&&_celMets[ks[0]])||selectedCelestialBody||_selected   // 2: current selection
+    ||bodyMap.get('cel:app-worklist')                                  // 3-4: live process / current task area
+    ||bodyMap.get('cel:miniapps')||null;                               // 5-6: most relevant planet / core fallback
+}
+function enterFocusCommandView(b){
+  b=b||getBestCelestialBodyForFocus(); if(!b)return;
+  cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=b;
+  try{controls.enabled=true;}catch(_){}
+  try{selectBody(b);}catch(_){try{flyToBody(b);}catch(__){}}          // frames the celestial body + opens its command UI
+  _camBtnLabel();
+}
+function toggleCameraMode(){
+  if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW){enterUniverseExploreView();return;}
+  if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW){enterFocusCommandView(selectedCelestialBody||getBestCelestialBodyForFocus());return;}
+  enterMainEquatorView();
+}
+function _camTick(dt){
+  // selection observer: picking any celestial body (in equator view) = Focus Command View
+  if(_selected&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW){
+    cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=_selected;
+    try{controls.enabled=true;}catch(_){} _camBtnLabel();}
+  if(!_selected&&cameraMode===CameraMode.FOCUS_COMMAND_VIEW){enterMainEquatorView();return;}
+  if(flying)return;                                                   // smooth transitions own the camera
+  if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW){try{controls.enabled=false;}catch(_){} updateMainEquatorView(dt);}
+}
+/* input: keyboard (←/A anti-clockwise, →/D clockwise), horizontal drag, wheel/pinch = rail radius */
+(function _camBindInput(){
+  const typing=()=>{const a=document.activeElement;return a&&/INPUT|TEXTAREA/.test(a.tagName);};
+  addEventListener('keydown',e=>{ if(typing())return;
+    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')_camInput.horizontal=-1;
+    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')_camInput.horizontal=1; });
+  addEventListener('keyup',e=>{ if(['ArrowLeft','ArrowRight','a','A','d','D'].indexOf(e.key)>=0)_camInput.horizontal=0; });
+  let dragX=null,pinchD=null;const pts={};
+  addEventListener('pointerdown',e=>{ pts[e.pointerId]=e;
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&e.target&&e.target.tagName==='CANVAS')dragX=e.clientX; });
+  addEventListener('pointermove',e=>{ pts[e.pointerId]=e; const ids=Object.keys(pts);
+    if(ids.length===2){ const a=pts[ids[0]],b=pts[ids[1]];
+      const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+      if(pinchD!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW)
+        equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+(pinchD-d)*2));
+      pinchD=d; return; }
+    if(dragX!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying){
+      const dx=e.clientX-dragX; dragX=e.clientX;
+      _eqTargetTheta+=dx*0.004*_eqDir; }});                          // horizontal only — vertical never tilts
+  addEventListener('pointerup',e=>{ delete pts[e.pointerId]; dragX=null; pinchD=null; });
+  addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)
+    equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+e.deltaY*0.5)); },{passive:true});
+  addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
+  try{ const cb=document.createElement('button'); cb.id='camBtn';
+    cb.setAttribute('aria-label','Toggle camera view (Equator / Explore / Focus)');
+    cb.style.cssText='position:fixed;right:14px;bottom:88px;z-index:60;background:rgba(8,34,52,.6);color:#9feaff;border:1px solid rgba(80,220,255,.45);border-radius:10px;padding:8px 12px;font:600 12px ui-sans-serif,system-ui;cursor:pointer;backdrop-filter:blur(6px)';
+    cb.onclick=()=>toggleCameraMode(); document.body.appendChild(cb); _camBtnLabel(); }catch(_){}
+})();
+
 /* ---- build/refresh ALL bodies from /metrics (deterministic; relationship-driven placement) ---- */
 function layoutFromMetrics(m){
   if(!scene)return;
@@ -2772,7 +2874,10 @@ function flyToBody(b){
   tween(bp.clone().add(dir.multiplyScalar(off)),bp);}
 function _collapseSystems(){ for(let i=0;i<_systemGroups.length;i++)_systemGroups[i].visible=false; }   // back to clean overview
 function _showSystemLayer(){ for(let i=0;i<_systemGroups.length;i++){const g=_systemGroups[i]; if(g.userData&&g.userData.systemLayer)g.visible=true;} }   // reveal satellites + meteors on Vitals drill-in
-function flyHome(){_collapseSystems();tween(home.pos.clone(),home.tgt.clone(),800);}
+function flyHome(){_collapseSystems();
+  if(typeof cameraMode!=='undefined'&&cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW){tween(home.pos.clone(),home.tgt.clone(),800);return;}
+  if(typeof enterMainEquatorView==='function'){enterMainEquatorView();return;}   // home = the equator rail, lens outward
+  tween(home.pos.clone(),home.tgt.clone(),800);}
 /* CAMERA LOCK: 'frame all' / reset no longer computes an into-the-world overview that looked back AT
    the core — the JARVIS POV (at the core, looking OUT) is the one home, so any reset returns there. */
 function _frameAll(animate){
@@ -3113,6 +3218,7 @@ function tickFrame(){
     if(_nebula&&_nebula.material.uniforms)_nebula.material.uniforms.uTime.value=t;
     for(let _gi=0;_gi<_galaxyOrbiters.length;_gi++){const _o=_galaxyOrbiters[_gi],u=_o.userData;u.oa+=dt*u.os;_o.position.set(Math.cos(u.oa)*u.orr,u.oy,Math.sin(u.oa)*u.orr);}  // galaxies orbit the core
     try{_celTick(dt);}catch(_){}  // CELESTIAL OS: spec orbits + NASA-Eyes dot cloud + apparent-size LOD
+    try{_camTick(dt);}catch(_){}  // CAMERA SYSTEM: equator rail / explore / focus state machine
 
     // --- BLOOM tracks the organism (U1: base 0.85 matches the tuned constructor; modest swell so a loud
     //     PULSE glows without re-blowing the centre to white — was 1.25 base + 0.9*A + 0.5*SPIKE) ---
@@ -3387,6 +3493,13 @@ function engage(){if(_engaged)return;_engaged=true;
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
   try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
   try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
+  // UPFRONT ACCESS (carer setup, within this gesture): request EVERYTHING the web platform allows now —
+  // camera+mic (care video/voice), notifications (alerts), persistent storage (lifeline survives cleanup) —
+  // so mum never faces a permission prompt she can't tap later. (Root/native device control is impossible
+  // from a web page by browser design — that tier needs the native companion app.)
+  try{ navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
+  try{ if(window.Notification&&Notification.permission==='default')Notification.requestPermission().catch(()=>{}); }catch(_){}
+  try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
