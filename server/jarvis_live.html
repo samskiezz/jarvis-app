@@ -51,7 +51,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #top .sp{flex:1}
 #search{width:min(280px,40vw);background:rgba(2,10,16,.7);border:1px solid var(--ln);border-radius:12px;color:#eafcff;padding:8px 13px;font-size:13px;outline:none}
 #search:focus{border-color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.25)}
-.tbtn{font-size:11px;font-weight:700;padding:6px 11px;border-radius:9px;border:1px solid var(--ln);background:var(--glass);color:var(--tx);cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.tbtn{font-size:11px;font-weight:700;padding:6px 11px;border-radius:9px;border:1px solid var(--ln);background:var(--glass);color:var(--tx);cursor:pointer;backdrop-filter:blur(6px)}
 .tbtn:hover{border-color:var(--cy);color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.3)}
 .tbtn.g{color:var(--ok);border-color:#1c5b46}.tbtn.r{color:var(--rd);border-color:#5b1c2a}.tbtn.a{color:var(--am);border-color:#6b561e}
 /* ---------- breadcrumb nav for hierarchy descents ---------- */
@@ -60,7 +60,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #crumbs .crumb:hover{border-color:var(--cy);box-shadow:0 0 12px rgba(41,231,255,.3)}
 /* ---------- single contextual info card (NASA-Eyes style, NOT side tabs) ---------- */
 #card{position:fixed;left:22px;bottom:96px;z-index:24;width:min(380px,90vw);max-height:64vh;overflow:auto;
- background:var(--glass);border:1px solid var(--cy);border-radius:16px;padding:16px 17px;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+ background:var(--glass);border:1px solid var(--cy);border-radius:16px;padding:16px 17px;backdrop-filter:blur(16px);
  box-shadow:0 0 0 1px rgba(0,0,0,.4),0 18px 60px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.16);
  transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;transition:transform .32s cubic-bezier(.22,1,.36,1),opacity .28s}
 #card.open{transform:none;opacity:1;pointer-events:auto}
@@ -80,7 +80,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 /* ---------- bottom talk bar (preserved voice) ---------- */
 #cmd{position:fixed;left:0;right:0;bottom:0;z-index:25;width:100%;
  background:var(--glass);border:none;border-top:1px solid var(--ln);border-radius:0;
- padding:10px 18px calc(10px + env(safe-area-inset-bottom,0));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+ padding:10px 18px calc(10px + env(safe-area-inset-bottom,0));backdrop-filter:blur(14px);
  box-shadow:0 -8px 40px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.12)}
 #cmd .row1{max-width:1100px;margin:0 auto}#cmd .row2{max-width:1100px;margin:8px auto 0}
 #cmd .row1{display:flex;gap:8px;align-items:center}
@@ -102,7 +102,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #coreSay{position:fixed;left:50%;bottom:108px;transform:translateX(-50%);z-index:23;font-size:12px;color:var(--cy2);
  max-width:60vw;text-align:center;min-height:14px;text-shadow:0 0 12px rgba(41,231,255,.5);pointer-events:none}
 /* ---------- WebRTC / studio overlays (preserved) ---------- */
-.ov{position:fixed;inset:0;z-index:30;display:none;background:rgba(3,5,10,.92);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.ov{position:fixed;inset:0;z-index:30;display:none;background:rgba(3,5,10,.92);backdrop-filter:blur(4px)}
 .ov.open{display:block}
 .ov iframe{width:100%;height:100%;border:0;display:block}
 .ov .close{position:absolute;top:16px;right:18px;z-index:5;font-size:13px;font-weight:700;color:var(--cy);background:var(--glass);border:1px solid var(--cy);border-radius:9px;padding:7px 13px;cursor:pointer}
@@ -168,7 +168,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .wlapprove:disabled,.wldecline:disabled{opacity:.5;cursor:not-allowed}
 .wlrow[data-review="approved"]{background:rgba(52,211,153,.08);border-left:3px solid var(--ok)}
 .wlrow[data-review="declined"]{background:rgba(255,93,108,.08);border-left:3px solid var(--rd)}
-.wlwindow{position:fixed;background:var(--glass);border:1px solid var(--cy);border-radius:12px;padding:12px;z-index:40;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 12px 50px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.25);resize:both;overflow:auto;min-width:320px;min-height:200px;max-width:90vw;max-height:90vh}
+.wlwindow{position:fixed;background:var(--glass);border:1px solid var(--cy);border-radius:12px;padding:12px;z-index:40;backdrop-filter:blur(16px);box-shadow:0 12px 50px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.25);resize:both;overflow:auto;min-width:320px;min-height:200px;max-width:90vw;max-height:90vh}
 .wlwindow-head{display:flex;align-items:center;gap:8px;padding:8px;cursor:grab;user-select:none;border-bottom:1px solid rgba(41,231,255,.2);margin:-12px -12px 8px -12px;padding:8px 12px}
 .wlwindow-head:active{cursor:grabbing}
 .wlwindow-title{color:var(--cy);font-weight:700;font-size:12px}
@@ -195,7 +195,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    and JS hides it while a fullscreen overlay is open (setMode). No more layout collision. */
 #dock{position:fixed;right:18px;bottom:130px;z-index:26;display:flex;gap:10px;
   padding:9px 14px;border-radius:20px;background:rgba(8,22,34,.5);border:1px solid var(--ln);
-  -webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
+  backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
   align-items:flex-end;transition:opacity .3s,transform .3s}
 #dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
 /* §1 D: drag-grip — grab here to move the WHOLE dock anywhere (position persists in localStorage) */
@@ -230,7 +230,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
   max-width:min(70vw,640px);padding:14px 22px;border-radius:22px;text-align:center;
   font-size:15px;line-height:1.4;color:#eafcff;text-shadow:0 0 14px rgba(41,231,255,.6);
-  background:rgba(10,26,40,.28);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);
+  background:rgba(10,26,40,.28);backdrop-filter:blur(14px) saturate(1.3);
   opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
 #crystal.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
 #crystal::before{content:'';position:absolute;inset:-2px;border-radius:24px;padding:2px;z-index:-1;
@@ -249,7 +249,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    collides with the centred talk bar, and hides while a fullscreen overlay is open (setMode). */
 #sdev{position:fixed;right:18px;bottom:184px;z-index:26;width:min(372px,calc(100vw - 36px));
   border-radius:18px;background:rgba(8,22,34,.46);border:1px solid var(--ln);
-  -webkit-backdrop-filter:blur(20px) saturate(1.25);backdrop-filter:blur(20px) saturate(1.25);
+  backdrop-filter:blur(20px) saturate(1.25);
   box-shadow:0 14px 54px rgba(0,0,0,.55),0 0 44px rgba(167,139,250,.12),inset 0 1px 0 rgba(255,255,255,.06);
   transition:opacity .3s,transform .3s;overflow:hidden}
 #sdev.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
@@ -284,10 +284,10 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 @media(max-width:820px){#sdev{right:50%;transform:translateX(50%);bottom:182px;width:min(372px,94vw)}
   #sdev.hidden{transform:translateX(50%) translateY(14px)}}
 /* proposal reader (formatted text the hyperlink opens) — reuses the glass card look */
-#prop{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:rgba(3,5,10,.78);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+#prop{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:rgba(3,5,10,.78);backdrop-filter:blur(5px)}
 #prop.open{display:flex}
 #prop .pp{width:min(680px,92vw);max-height:84vh;overflow:auto;border-radius:18px;padding:22px 24px;
-  background:var(--glass);border:1px solid var(--pu);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  background:var(--glass);border:1px solid var(--pu);backdrop-filter:blur(18px);
   box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 50px rgba(167,139,250,.2)}
 #prop .pp .x{float:right;cursor:pointer;color:var(--dim);font-size:20px;line-height:1}
 #prop .pp .x:hover{color:var(--cy)}
@@ -303,7 +303,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel{position:fixed;z-index:18;width:248px;max-height:calc(100vh - 188px);overflow:hidden;
   border-radius:18px;padding:0;color:var(--tx);
   background:linear-gradient(150deg,rgba(12,30,46,.30),rgba(6,16,26,.20));
-  border:1px solid var(--ln);-webkit-backdrop-filter:blur(15px) saturate(1.25);backdrop-filter:blur(15px) saturate(1.25);
+  border:1px solid var(--ln);backdrop-filter:blur(15px) saturate(1.25);
   box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 40px rgba(41,231,255,.10),inset 0 1px 0 rgba(255,255,255,.07);
   transition:width .42s cubic-bezier(.22,1,.36,1),transform .42s cubic-bezier(.22,1,.36,1),opacity .3s,box-shadow .25s}
 .gpanel.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
@@ -763,7 +763,7 @@ function showFiles(fs){
   _userFiles=fs;
   let ov=$('filesOv');
   if(!ov){ ov=document.createElement('div'); ov.id='filesOv';
-    ov.style.cssText='position:fixed;inset:0;z-index:70;background:rgba(2,6,12,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);overflow:auto;padding:54px 14px 90px';
+    ov.style.cssText='position:fixed;inset:0;z-index:70;background:rgba(2,6,12,.92);backdrop-filter:blur(14px);overflow:auto;padding:54px 14px 90px';
     ov.innerHTML='<button onclick="$(\'filesOv\').remove()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:20px;background:#0a2230;color:#eafcff;border:1px solid #29e7ff;border-radius:10px;padding:6px 14px">✕ Close</button>'
       +'<div style="display:flex;gap:10px;justify-content:center;margin:0 0 14px"><button onclick="openFiles()" style="background:#0a2230;color:#9feaff;border:1px solid #29e7ff;border-radius:10px;padding:9px 16px;font-weight:700">＋ Add files</button><button onclick="openFiles(true)" style="background:#0a2230;color:#9feaff;border:1px solid #29e7ff;border-radius:10px;padding:9px 16px;font-weight:700">📂 Add a folder</button></div>'
       +'<div id=filesGrid style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:980px;margin:0 auto"></div>';
@@ -1036,7 +1036,7 @@ function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
 function lerp(a,b,k){return a+(b-a)*k;}
 function fmtDur(s){if(s==null||s<0)return'—';const m=Math.floor(s/60),sec=Math.round(s%60);return m?m+'m '+sec+'s':sec+'s';}
 function fmtEta(s){if(s==null||s<0)return'—';if(s<10)return'few sec';if(s<90)return s<60?'<1 min':Math.round(s/10)*10+'s';return'~'+Math.round(s/60)+'m';}
-function wlToast(msg,kind){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:30px;left:20px;z-index:31;background:var(--glass);border:1px solid '+(kind==='error'?'var(--rd)':'var(--cy)')+';color:'+(kind==='error'?'var(--rd)':'var(--cy)')+';padding:10px 14px;border-radius:8px;font-size:12px;font-weight:700;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
+function wlToast(msg,kind){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:30px;left:20px;z-index:31;background:var(--glass);border:1px solid '+(kind==='error'?'var(--rd)':'var(--cy)')+';color:'+(kind==='error'?'var(--rd)':'var(--cy)')+';padding:10px 14px;border-radius:8px;font-size:12px;font-weight:700;backdrop-filter:blur(10px)';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
 
 function worklistStart(){
   if(WL_OPEN)return;WL_OPEN=true;
@@ -2738,7 +2738,7 @@ function _camTick(dt){
   addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
   try{ const cb=document.createElement('button'); cb.id='camBtn';
     cb.setAttribute('aria-label','Toggle camera view (Equator / Explore / Focus)');
-    cb.style.cssText='position:fixed;right:14px;bottom:88px;z-index:60;background:rgba(8,34,52,.6);color:#9feaff;border:1px solid rgba(80,220,255,.45);border-radius:10px;padding:8px 12px;font:600 12px ui-sans-serif,system-ui;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)';
+    cb.style.cssText='position:fixed;right:14px;bottom:88px;z-index:60;background:rgba(8,34,52,.6);color:#9feaff;border:1px solid rgba(80,220,255,.45);border-radius:10px;padding:8px 12px;font:600 12px ui-sans-serif,system-ui;cursor:pointer;backdrop-filter:blur(6px)';
     cb.onclick=()=>toggleCameraMode(); document.body.appendChild(cb); _camBtnLabel(); }catch(_){}
 })();
 
@@ -3123,7 +3123,7 @@ function _pinDragMove(e){ if(!_pinGrab)return;
     _pinGhost=document.createElement('div');
     _pinGhost.style.cssText='position:fixed;z-index:60;pointer-events:none;font-size:11px;font-weight:700;'+
       'padding:5px 10px;border-radius:10px;background:rgba(41,231,255,.16);border:1px solid var(--cy);'+
-      'color:#eafcff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 0 22px rgba(41,231,255,.5)';
+      'color:#eafcff;backdrop-filter:blur(8px);box-shadow:0 0 22px rgba(41,231,255,.5)';
     _pinGhost.textContent='📌 '+(_pinGrab.label||_pinGrab.name.split(':').pop());
     document.body.appendChild(_pinGhost);}
   if(_pinGrab.armed&&_pinGhost){_pinGhost.style.left=(e.clientX+12)+'px';_pinGhost.style.top=(e.clientY+12)+'px';
