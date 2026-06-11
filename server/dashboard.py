@@ -30,6 +30,7 @@ import threading
 import time
 import urllib.error
 import urllib.request
+from urllib.parse import parse_qs, urlparse
 
 PORT = int(os.environ.get("DASHBOARD_PORT", "8095"))
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -2172,6 +2173,65 @@ def _celestial_payload() -> dict:
 
 
 class _H(http.server.BaseHTTPRequestHandler):
+    def _live_theme(self) -> str:
+        try:
+            ui = (parse_qs(urlparse(self.path).query).get("ui", [""])[0] or "").strip().lower()
+        except Exception:
+            ui = ""
+        if ui in {"modern", "current", "new"}:
+            return "modern"
+        return "classic"
+
+    def _inject_live_theme_picker(self, html: str, theme: str) -> str:
+        picker = f"""
+<style id="jarvis-theme-picker-style">
+#jarvisThemePicker{{position:fixed;top:58px;right:18px;z-index:29;display:flex;gap:6px;padding:8px 10px;
+background:rgba(6,16,26,.52);border:1px solid rgba(122,243,255,.20);border-radius:14px;
+backdrop-filter:blur(14px);box-shadow:0 10px 36px rgba(0,0,0,.35)}}
+#jarvisThemePicker button{{appearance:none;border:1px solid rgba(122,243,255,.18);background:rgba(255,255,255,.04);
+color:#dff6ff;border-radius:999px;padding:6px 10px;font:700 11px/1.1 Inter,system-ui,sans-serif;cursor:pointer}}
+#jarvisThemePicker button.active{{border-color:#29E7FF;color:#29E7FF;box-shadow:0 0 0 1px rgba(41,231,255,.18) inset}}
+@media (max-width: 820px){{#jarvisThemePicker{{top:54px;right:12px;padding:6px 8px}}#jarvisThemePicker button{{padding:6px 8px;font-size:10px}}}}
+</style>
+<div id="jarvisThemePicker" aria-label="UI theme">
+  <button type="button" data-theme="classic" class="{'active' if theme == 'classic' else ''}">Classic UI</button>
+  <button type="button" data-theme="modern" class="{'active' if theme != 'classic' else ''}">Current UI</button>
+</div>
+<script id="jarvis-theme-picker-script">
+(function(){{
+  try {{
+    var KEY='jarvis.uiTheme';
+    var params=new URLSearchParams(location.search);
+    var current=(params.get('ui')||'{theme}').toLowerCase();
+    current=(current==='classic'||current==='legacy'||current==='old')?'classic':'modern';
+    var saved=(localStorage.getItem(KEY)||'').toLowerCase();
+    if(saved==='classic'||saved==='modern'){{
+      if(saved!==current){{
+        params.set('ui', saved);
+        location.replace(location.pathname + '?' + params.toString() + location.hash);
+        return;
+      }}
+    }} else {{
+      localStorage.setItem(KEY,current);
+    }}
+    var root=document.getElementById('jarvisThemePicker');
+    if(!root)return;
+    root.querySelectorAll('button[data-theme]').forEach(function(btn){{
+      btn.addEventListener('click', function(){{
+        var next=btn.getAttribute('data-theme')||'modern';
+        localStorage.setItem(KEY,next);
+        params.set('ui', next);
+        location.assign(location.pathname + '?' + params.toString() + location.hash);
+      }});
+    }});
+  }} catch(e) {{}}
+}})();
+</script>
+"""
+        if "</body>" in html:
+            return html.replace("</body>", picker + "\n</body>")
+        return html + picker
+
     def _route_path(self) -> str:
         """Serve the same dashboard routes at / and behind the public /jarvis/ mount."""
         if self.path == "/jarvis":
@@ -2234,7 +2294,13 @@ class _H(http.server.BaseHTTPRequestHandler):
         """Read an html template from server/ and inject the control token."""
         try:
             with open(os.path.join(os.path.dirname(__file__), name), encoding="utf-8") as f:
-                return f.read().replace("__CTOKEN__", CONTROL_TOKEN)
+                html = f.read().replace("__CTOKEN__", CONTROL_TOKEN)
+                if name in {"jarvis_live.html", "jarvis_live_theme_classic.html"}:
+                    html = self._inject_live_theme_picker(
+                        html,
+                        "classic" if name == "jarvis_live_theme_classic.html" else "modern",
+                    )
+                return html
         except Exception as e:  # noqa: BLE001
             return f"<h1>template {name} missing</h1><pre>{e}</pre>"
 
@@ -2243,12 +2309,10 @@ class _H(http.server.BaseHTTPRequestHandler):
         if self.path.startswith("/metrics"):
             self._send(json.dumps(_SNAP).encode(), "application/json")
         elif self.path.startswith("/detail"):
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(_detail(q.get("kind", [""])[0], q.get("name", [""])[0])).encode(),
                        "application/json")
         elif self.path.startswith("/children"):
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             def _i(k, d):
                 try: return int(q.get(k, [str(d)])[0] or d)
@@ -2597,7 +2661,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             self._send(self._tmpl("dashboard_v2.html").encode(), "text/html; charset=utf-8")
         else:
             # Jarvis Live — the cinematic Iron-Man holographic JARVIS. Falls back to v2 then inline HTML.
-            page = self._tmpl("jarvis_live.html")
+            page = self._tmpl("jarvis_live_theme_classic.html" if self._live_theme() == "classic" else "jarvis_live.html")
             if page.startswith("<h1>template"):
                 page = self._tmpl("dashboard_v2.html")
             if page.startswith("<h1>template"):
