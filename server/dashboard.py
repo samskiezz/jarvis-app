@@ -2191,6 +2191,30 @@ backdrop-filter:blur(14px);box-shadow:0 10px 36px rgba(0,0,0,.35)}}
 #jarvisThemePicker button{{appearance:none;border:1px solid rgba(122,243,255,.18);background:rgba(255,255,255,.04);
 color:#dff6ff;border-radius:999px;padding:6px 10px;font:700 11px/1.1 Inter,system-ui,sans-serif;cursor:pointer}}
 #jarvisThemePicker button.active{{border-color:#29E7FF;color:#29E7FF;box-shadow:0 0 0 1px rgba(41,231,255,.18) inset}}
+html[data-ui-theme="classic"] #jarvisThemePicker{{background:rgba(5,12,20,.60);border-color:rgba(122,243,255,.16)}}
+html[data-ui-theme="classic"] #top{{background:linear-gradient(180deg,rgba(2,6,12,.78),rgba(2,6,12,.18) 58%,transparent)}}
+html[data-ui-theme="classic"] #top .brand{{letter-spacing:5.5px;text-shadow:0 0 16px rgba(41,231,255,.38)}}
+html[data-ui-theme="classic"] .chip,
+html[data-ui-theme="classic"] .tbtn,
+html[data-ui-theme="classic"] .mini,
+html[data-ui-theme="classic"] #search,
+html[data-ui-theme="classic"] #say,
+html[data-ui-theme="classic"] .send,
+html[data-ui-theme="classic"] #mic,
+html[data-ui-theme="classic"] #card,
+html[data-ui-theme="classic"] #cmd,
+html[data-ui-theme="classic"] #dock,
+html[data-ui-theme="classic"] #sdev,
+html[data-ui-theme="classic"] #celIndex,
+html[data-ui-theme="classic"] #ovAccess .accCard,
+html[data-ui-theme="classic"] #ovAssist .accCard{{backdrop-filter:blur(18px) saturate(1.16)}}
+html[data-ui-theme="classic"] #dock{{background:rgba(7,20,31,.44);box-shadow:0 12px 48px rgba(0,0,0,.54),0 0 28px rgba(41,231,255,.08)}}
+html[data-ui-theme="classic"] #dock .di .gly{{background:rgba(41,231,255,.055)}}
+html[data-ui-theme="classic"] #dockPrev,
+html[data-ui-theme="classic"] #dockNext{{display:none !important}}
+html[data-ui-theme="classic"] #cmd{{background:rgba(8,22,34,.56);box-shadow:0 -8px 34px rgba(0,0,0,.52),0 0 30px rgba(41,231,255,.10)}}
+html[data-ui-theme="classic"] #crystal::before{{opacity:.72;filter:blur(.35px) saturate(1.15)}}
+html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);border-color:rgba(41,231,255,.26);box-shadow:0 0 16px rgba(41,231,255,.12)}}
 @media (max-width: 820px){{#jarvisThemePicker{{top:54px;right:12px;padding:6px 8px}}#jarvisThemePicker button{{padding:6px 8px;font-size:10px}}}}
 </style>
 <div id="jarvisThemePicker" aria-label="UI theme">
@@ -2202,10 +2226,23 @@ color:#dff6ff;border-radius:999px;padding:6px 10px;font:700 11px/1.1 Inter,syste
   try {{
     var KEY='jarvis.uiTheme';
     var params=new URLSearchParams(location.search);
-    var current=(params.get('ui')||'{theme}').toLowerCase();
+    var hasExplicitTheme=params.has('ui');
+    var current=((hasExplicitTheme ? params.get('ui') : '{theme}')||'{theme}').toLowerCase();
     current=(current==='classic'||current==='legacy'||current==='old')?'classic':'modern';
+    function applyTheme(next){{
+      var html=document.documentElement;
+      if(html) html.setAttribute('data-ui-theme', next);
+      var badge=document.querySelector('#top .brand span');
+      if(badge) badge.textContent = next==='classic' ? 'v2·φ-hierarchy' : 'v2·3D menu';
+      var root=document.getElementById('jarvisThemePicker');
+      if(root){{
+        root.querySelectorAll('button[data-theme]').forEach(function(btn){{
+          btn.classList.toggle('active', (btn.getAttribute('data-theme')||'modern')===next);
+        }});
+      }}
+    }}
     var saved=(localStorage.getItem(KEY)||'').toLowerCase();
-    if(saved==='classic'||saved==='modern'){{
+    if(!hasExplicitTheme && (saved==='classic'||saved==='modern')){{
       if(saved!==current){{
         params.set('ui', saved);
         location.replace(location.pathname + '?' + params.toString() + location.hash);
@@ -2214,6 +2251,7 @@ color:#dff6ff;border-radius:999px;padding:6px 10px;font:700 11px/1.1 Inter,syste
     }} else {{
       localStorage.setItem(KEY,current);
     }}
+    applyTheme(current);
     var root=document.getElementById('jarvisThemePicker');
     if(!root)return;
     root.querySelectorAll('button[data-theme]').forEach(function(btn){{
@@ -2295,11 +2333,8 @@ color:#dff6ff;border-radius:999px;padding:6px 10px;font:700 11px/1.1 Inter,syste
         try:
             with open(os.path.join(os.path.dirname(__file__), name), encoding="utf-8") as f:
                 html = f.read().replace("__CTOKEN__", CONTROL_TOKEN)
-                if name in {"jarvis_live.html", "jarvis_live_theme_classic.html"}:
-                    html = self._inject_live_theme_picker(
-                        html,
-                        "classic" if name == "jarvis_live_theme_classic.html" else "modern",
-                    )
+                if name == "jarvis_live.html":
+                    html = self._inject_live_theme_picker(html, self._live_theme())
                 return html
         except Exception as e:  # noqa: BLE001
             return f"<h1>template {name} missing</h1><pre>{e}</pre>"
@@ -2661,7 +2696,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             self._send(self._tmpl("dashboard_v2.html").encode(), "text/html; charset=utf-8")
         else:
             # Jarvis Live — the cinematic Iron-Man holographic JARVIS. Falls back to v2 then inline HTML.
-            page = self._tmpl("jarvis_live_theme_classic.html" if self._live_theme() == "classic" else "jarvis_live.html")
+            page = self._tmpl("jarvis_live.html")
             if page.startswith("<h1>template"):
                 page = self._tmpl("dashboard_v2.html")
             if page.startswith("<h1>template"):
