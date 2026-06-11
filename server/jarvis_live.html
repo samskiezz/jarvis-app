@@ -586,8 +586,13 @@ window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A
     if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
     _ttsAudio.play().catch(_fail);
   }catch(e){webSpeakFallback(t);} }
-function speakStart(){document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
-function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);}
+// _jspeaking gates the mic so JARVIS never hears + answers his OWN TTS voice (the feedback loop that
+// made it sound like two agents talking over each other and spammed the chat). Released a beat AFTER
+// the audio ends so the trailing echo isn't transcribed as a new user turn.
+window._jspeaking=false; let _jspkClear=null;
+function speakStart(){window._jspeaking=true;if(_jspkClear){clearTimeout(_jspkClear);_jspkClear=null;}document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
+function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);
+  if(_jspkClear)clearTimeout(_jspkClear);_jspkClear=setTimeout(()=>{window._jspeaking=false;_jspkClear=null;},700);}
 
 /* ================= voice amp envelope (consumed by the brain via currentAmp/setAmp) ================= */
 let spkAmp=0, micAmp=0, analyser=null, micData=null, _ampExt=0;
@@ -652,7 +657,9 @@ function showCrystal(txt){const c=$('crystal');if(!c)return;
   c.classList.add('show');clearTimeout(_crystalHide);}
 function hideCrystal(delay){clearTimeout(_crystalHide);
   _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
+let _chatBusy=false;
 async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
+  if(_chatBusy)return;                                    // one turn at a time — overlapping voice finals must not stack replies that talk over each other
   const l=t.toLowerCase();$('say').value='';
   try{if(window.A11Y){const r=A11Y.intent(t,'text');if(r&&r.handled)return;}}catch(_){}
   // voice/command shortcuts (preserved)
@@ -663,11 +670,14 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');
   if(l.includes('graph'))return flyToQuery('graph');
   unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
-  try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},
+  _chatBusy=true;
+  const _ac=new AbortController();const _to=setTimeout(()=>_ac.abort(),45000);   // never hang the UI forever
+  try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},signal:_ac.signal,
       body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:_spkWho||''})})).json();   // address from DETECTED voice gender (neutral until known)
     const reply=(r&&r.reply)||"I'm here.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
     bubble('JARVIS',esc(reply));jarvisSpeak(reply);
-  }catch(e){bubble('JARVIS','connection error');}}
+  }catch(e){bubble('JARVIS',_ac.signal.aborted?'That took too long — try again.':'connection error');}
+  finally{clearTimeout(_to);_chatBusy=false;}}
 function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
    if(r.status&&r.status!=='running'&&r.status!=='paused'){clearInterval(iv);
      const txt=(r.text||'(done)').slice(-2000);bubble('JARVIS',esc(txt));
@@ -1305,7 +1315,9 @@ function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecog
   startMicAnalyser();
   _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
   $('mic').classList.add('live');document.body.classList.add('listening');   // always-on listening — no "Listening." announce (natural conversation)
-  _rec.onresult=e=>{const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
+  _rec.onresult=e=>{
+    if(window._jspeaking)return;                          // ignore JARVIS's own voice while he speaks (no self-answer loop)
+    const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
     _detectGender();                                      // assess speaker pitch while they talk → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
   _rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvisSpeak('Please allow microphone access.');_rec=null;$('mic').classList.remove('live');}};
