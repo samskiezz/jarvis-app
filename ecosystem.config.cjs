@@ -20,7 +20,7 @@ module.exports = {
         // ── LLM brain: Llama on the vast.ai GPU box (Ollama @ 211.72.13.201,
         //    container :8080 -> external :41137). Native API drives llm_research;
         //    the OpenAI-compatible /v1 drives the analyst chat (kimi client).
-        OLLAMA_HOST: 'http://211.72.13.201:41137',
+        OLLAMA_HOST: 'http://127.0.0.1:11434',
         OLLAMA_MODEL: 'llama3.1:8b',
         // Semantic-index embeddings on the GPU (Ollama /api/embed). Unset => the
         // offline hashing-TF-IDF embedder (CPU) is used, unchanged.
@@ -46,7 +46,7 @@ module.exports = {
         OCR_ENGINE: 'auto',
         OCR_LANG: 'en',
         OCR_VISION_MODEL: 'minicpm-v',
-        KIMI_BASE_URL: 'http://211.72.13.201:41137/v1',
+        KIMI_BASE_URL: 'http://127.0.0.1:11434/v1',
         KIMI_API_KEY: 'ollama',
         KIMI_MODEL: 'llama3.1:8b',
         // The GPU-busy research autopilot also runs in the WORKER, not the API (robust API boot).
@@ -80,7 +80,7 @@ module.exports = {
       env: {
         PYTHONPATH: '/opt/jarvis-app-1',          // so `import underworld` resolves in the sim tick
         UNDERWORLD_API_KEY: 'dev-key',
-        UNDERWORLD_LLM_BASE_URL: 'http://211.72.13.201:41137/v1',
+        UNDERWORLD_LLM_BASE_URL: 'http://127.0.0.1:11434/v1',
         UNDERWORLD_LLM_MODEL: 'llama3.1:8b',
         UNDERWORLD_LLM_API_KEY: 'ollama',
         // The aliveness loop: Global-Workspace cognition + sentience arc over hot minions.

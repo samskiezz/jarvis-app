@@ -55,7 +55,7 @@ say "SSH to GPU OK ✓ ($U@$H:$P)"
 
 # 3) ensure Ollama is up on the box, bound to all interfaces, model present
 ssh $SSHO -p "$P" "$U@$H" \
-  'command -v ollama >/dev/null 2>&1 && { pgrep -f "ollama serve" >/dev/null 2>&1 || (OLLAMA_HOST=0.0.0.0:11434 nohup ollama serve >/tmp/ollama.log 2>&1 &); sleep 2; (ollama list 2>/dev/null | grep -q . || ollama pull '"$MODEL"') >/dev/null 2>&1 & }' 2>/dev/null || true
+  'export HOME=/root; command -v ollama >/dev/null 2>&1 || { curl -fsSL https://ollama.com/install.sh -o /root/ollama_install.sh && sh /root/ollama_install.sh; }; pgrep -x ollama >/dev/null 2>&1 || (OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &); sleep 3; (ollama list 2>/dev/null | grep -q . || ollama pull '"$MODEL"') >/dev/null 2>&1 &' 2>/dev/null || true
 
 # 4) self-healing tunnel → 127.0.0.1:11434
 if ! pgrep -f "ssh.*-L *11434:localhost:$OP.*$H" >/dev/null 2>&1; then

@@ -40,7 +40,7 @@ VEC_DB = os.path.join(ROOT, "server/data/vectors.db")
 TL_DB = os.path.join(ROOT, "server/data/tiered_llm.db")
 FB_DB = os.path.join(ROOT, "server/data/feedback.db")
 GLB_DIR = os.path.join(ROOT, "underworld/web/public/models/generated")
-BOX = os.environ.get("OLLAMA_HOST", "http://211.72.13.201:41137").rstrip("/")
+BOX = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
 def _control_token() -> str:
     """Stable control token — persisted so it survives dashboard restarts (otherwise every already-open
     tab goes stale and every Claude/task/control button returns 'unauthorized')."""
@@ -1196,7 +1196,7 @@ def _control_all(action: str) -> dict:
             "targets": targets, "done": sum(1 for r in res if r.get("ok"))}
 
 
-_LLM_HOST = (os.environ.get("OLLAMA_HOST") or "http://211.72.13.201:41137").rstrip("/")
+_LLM_HOST = (os.environ.get("OLLAMA_HOST") or "http://127.0.0.1:11434").rstrip("/")
 JARVIS_LLM = _LLM_HOST if _LLM_HOST.endswith("/v1") else _LLM_HOST + "/v1"  # OpenAI-compat path
 JARVIS_PERSONA = (
     "You are JARVIS, the AI from Iron Man — an articulate, composed, quietly witty British intelligence. "
@@ -1294,18 +1294,23 @@ def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
 
 
 _BRAIN_OK = {"ts": 0.0, "up": False}
-def _brain_reachable(timeout: float = 1.2) -> bool:
-    """Fast TCP check of the Vast LLM host so a DOWN brain never hangs her chat for 25s. Cached 15s."""
-    import socket, time as _t
+def _brain_reachable(timeout: float = 2.0) -> bool:
+    """Is the Vast LLM brain ACTUALLY serving? A plain TCP check is a false-positive when the box is
+    reached over the self-healing SSH tunnel — the local 127.0.0.1:11434 listener always accepts even
+    when the remote Ollama is cold, down, or mid-load, which made her chat 'flicker' (try the GPU, hang,
+    fall back, retry). So we hit Ollama's HTTP /api/tags and require a real 200 with a models list.
+    Cached 15s so a DOWN brain never re-hangs every call."""
+    import urllib.request, json as _j, time as _t
     now = _t.time()
     if now - _BRAIN_OK["ts"] < 15:
         return _BRAIN_OK["up"]
     up = False
     try:
-        hostport = JARVIS_LLM.split("://", 1)[-1].split("/", 1)[0]
-        h, _, p = hostport.partition(":")
-        socket.create_connection((h, int(p or 80)), timeout=timeout).close()
-        up = True
+        base = JARVIS_LLM[:-3] if JARVIS_LLM.endswith("/v1") else JARVIS_LLM  # Ollama /api/tags lives off the ROOT, not /v1
+        req = urllib.request.Request(base.rstrip("/") + "/api/tags")
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            d = _j.loads(r.read().decode() or "{}")
+            up = isinstance(d.get("models"), list) and len(d["models"]) > 0
     except Exception:  # noqa: BLE001
         up = False
     _BRAIN_OK.update(ts=now, up=up)
@@ -2542,7 +2547,8 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             except Exception:  # noqa: BLE001
                 body = {}
             res = TD.record_review(body.get("task_id") or body.get("id") or 0,
-                                  body.get("decision") or "", body.get("notes") or "")
+                                  body.get("decision") or "", body.get("notes") or "",
+                                  kind=body.get("kind") or "")
             self._send(json.dumps(res).encode(), "application/json")
         elif self.path.startswith("/task"):
             from server.services import task_daemon as TD

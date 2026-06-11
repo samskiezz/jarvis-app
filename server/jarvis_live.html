@@ -37,7 +37,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 /* the ONE universe */
 #uni{position:fixed;inset:0;z-index:0;display:block;width:100vw;height:100vh;touch-action:none}
 /* ---------- thin top bar ---------- */
-#top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:12px;
+#top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
  padding:11px 18px;background:linear-gradient(180deg,rgba(2,6,12,.82),transparent);pointer-events:none}
 #top>*{pointer-events:auto}
 #top .brand{font-weight:800;letter-spacing:5px;font-size:15px;color:#eafcff;text-shadow:0 0 18px var(--cy)}
@@ -346,12 +346,34 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel .gp-row b{color:#eafcff;text-align:right;white-space:nowrap}
 .gpanel .gp-row .st{width:7px;height:7px;border-radius:50%;flex:none;align-self:center;margin-right:5px}
 .gpanel .gp-empty{font-size:10.5px;color:var(--dim);padding:10px 2px;text-align:center}
+/* runner on/off toggle switch (restored daemon control — start/stop any daemon from the panel) */
+.gprow2{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid rgba(41,231,255,.08);font-size:11px}
+.gprow2 .nm{flex:1;color:#eafcff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gprow2 .vl{color:var(--dim);font-size:9.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.gpsw{flex:none;width:34px;height:18px;border-radius:10px;border:1px solid var(--ln);background:rgba(255,93,108,.18);position:relative;cursor:pointer;transition:background .2s;padding:0}
+.gpsw[data-on="1"]{background:rgba(52,211,153,.3);border-color:#1c5b46}
+.gpsw::after{content:'';position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;background:#ff5d6c;transition:transform .2s,background .2s}
+.gpsw[data-on="1"]::after{transform:translateX(16px);background:#34d399}
+.gpsw[data-busy="1"]{opacity:.55;cursor:wait}
 .gpanel.dropReady{border-color:var(--pu);box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 50px rgba(167,139,250,.5)}
 .gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
 /* hide the side panels on narrow screens so they never cover the world / talk bar */
 @media(max-width:1180px){ /* phones/tablets: the 4 glass panels STAY (compact), never hidden — 3-state toggle still works */
   .gpanel{width:44vw;max-height:30vh;font-size:10px}
   .gpanel.mid{width:46vw}.gpanel.full{width:48vw}
+}
+/* PHONES (portrait): keep everything ON-screen — the toolbar wraps + shrinks (search no longer clipped),
+   and the two lower panels are pulled up + capped so they never collide with the floating dock/chat bar. */
+@media(max-width:760px){
+  #top{gap:7px;padding:8px 10px}
+  #top .brand{letter-spacing:2px;font-size:12px}
+  .chip{font-size:9px;padding:3px 7px}
+  #top .sp{flex-basis:100%;height:0;order:5}   /* force the search onto its own full-width line */
+  #search{order:6;width:100%;flex:1 1 100%;box-sizing:border-box}
+  /* top panels shorter; bottom panels start lower-mid and are capped well above the dock zone */
+  .gpanel{width:46vw;max-height:26vh}
+  #pInfra,#pKnow{top:84px}
+  #pPipe,#pFab{top:calc(50vh + 24px);max-height:22vh}
 }
 </style>
 <link rel="stylesheet" href="/a11y/a11y.css">
@@ -535,7 +557,8 @@ function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window
   _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
   _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
   if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
-function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
+function webSpeakFallback(t){try{try{_ttsAudio.pause();}catch(_){}{}  // STOP the clone first so the male /tts and the female web voice can NEVER overlap
+  const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
@@ -546,6 +569,10 @@ const _preTTS={};
     .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
+  // SINGLE VOICE: barge-in — kill any in-flight line (clone audio AND web-speech) before starting a new
+  // one, so two lines (e.g. greeting + status, or a retry) can never play over each other as a man+woman.
+  try{speechSynthesis.cancel();}catch(_){}
+  try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
   try{ if(!_ttsCtx)unlockAudio();
     speakStart();
     _ttsAudio.onended=()=>speakEnd();
@@ -903,11 +930,23 @@ function renderInfraPanel(){const b=_m.box||{},v=_m.vps||{},gz=(_m.health||{}).g
 function renderPipePanel(){const ws=(_m.workers||[]).filter(w=>w.toggleable);
   if(!ws.length)return '<div class=gp-empty>no runners reported</div>';
   const on=ws.filter(w=>w.status==='online').length;
-  let h='<div class=gp-row><span class=k>online</span><b>'+on+' / '+ws.length+'</b></div>';
-  h+=ws.map(w=>{const live=w.status==='online';
+  // header + a REAL on/off switch per daemon (start/stop from here, like before). The list scrolls.
+  let h='<div class=gp-row><span class=k>online · tap a switch to run/stop</span><b>'+on+' / '+ws.length+'</b></div>';
+  h+=ws.map(w=>{const live=w.status==='online';const busy=_DAEMON_BUSY.has(w.name);
     const val=live?((w.cpu!=null?w.cpu+'%':'')+(w.mem_mb!=null?' · '+w.mem_mb+'MB':'')||'online'):'stopped';
-    return _gprow((w.label||w.name).replace(/^jarvis-/,'').slice(0,18),val,live?'#34d399':'#ff5d6c');}).join('');
+    const nm=(w.label||w.name).replace(/^jarvis-/,'').slice(0,20);
+    return `<div class=gprow2><span class=nm title="${esc(w.name)}">${esc(nm)}</span><span class=vl>${esc(val)}</span>`+
+      `<button class=gpsw data-on="${live?1:0}"${busy?' data-busy=1':''} title="${live?'Stop':'Run'} ${esc(w.name)}" aria-label="${live?'Stop':'Run'} ${esc(nm)}" onclick="toggleDaemon('${esc(w.name)}',event)"></button></div>`;
+  }).join('');
   return h;}
+const _DAEMON_BUSY=new Set();
+window.toggleDaemon=function(name,ev){if(ev){ev.preventDefault();ev.stopPropagation();}
+  if(_DAEMON_BUSY.has(name))return;
+  const w=(_m.workers||[]).find(x=>x.name===name);const live=w&&w.status==='online';
+  _DAEMON_BUSY.add(name);                                    // lock until the next metrics tick reflects the new state
+  const sw=ev&&ev.currentTarget;if(sw){sw.setAttribute('data-busy','1');sw.setAttribute('data-on',live?0:1);}
+  ctl(live?'stop':'start',name);                            // existing control path: POST /control?action&name&token=CT
+  setTimeout(()=>{_DAEMON_BUSY.delete(name);try{tick();}catch(_){}},2600);};
 function renderKnowPanel(){const c=_m.completion||{},corr=_m.correlation||{},g={};
   ((_m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
   let h=_gauge('Knowledge build',c.pct||0,(c.pct||0)+'%');
@@ -1101,13 +1140,18 @@ function joinModel(tasks,swarms,details){
   const tasksById=new Map((tasks||[]).map(t=>[t.id,t]));
   const curSet=new Set();
   const items=[];
-  (swarms||[]).forEach(s=>{if(s.status!=='running')return;
+  (swarms||[]).forEach(s=>{
+    // FINISHED swarms (done/failed/cancelled) stay in the list as a REVIEW QUEUE — the user scrolls
+    // through them all and approves/declines each (self-healing pipeline). review state persists.
+    if(s.status!=='running'){
+      items.push({type:'swarm',id:s.id,status:s.status,who:`Swarm #${s.id} · ${laneOf(s.title)}`,pct:s.pct||100,eta:null,elapsed:0,stage:s.status,canToggle:false,controlId:null,cancelTarget:{type:'swarm',id:s.id},indeterminate:false,review:s.review||null});
+      return;}
     const D=details.get(s.id);
     if(!D||D.ok===false){
-      items.push({type:'swarm',id:s.id,status:'queued',who:`Swarm #${s.id} · syncing…`,pct:s.pct||0,eta:null,elapsed:0,stage:'queued',canToggle:false,controlId:null});
+      items.push({type:'swarm',id:s.id,status:'queued',who:`Swarm #${s.id} · syncing…`,pct:s.pct||0,eta:null,elapsed:0,stage:'queued',canToggle:false,controlId:null,review:s.review||null});
       return;}
     if(D.status && D.status !== 'running'){
-      items.push({type:'swarm',id:s.id,status:D.status,who:`Swarm #${s.id}`,pct:100,eta:null,elapsed:0,stage:'done',canToggle:false,controlId:null,cancelTarget:{type:'swarm',id:s.id},indeterminate:false});
+      items.push({type:'swarm',id:s.id,status:D.status,who:`Swarm #${s.id}`,pct:100,eta:null,elapsed:0,stage:'done',canToggle:false,controlId:null,cancelTarget:{type:'swarm',id:s.id},indeterminate:false,review:s.review||null});
       return;}
     const plan=D.plan||[];if(!plan.length)return;
     const steps=plan.length;const stepLabel=D.step<steps?plan[D.step].label:'finalizing';
@@ -1121,7 +1165,7 @@ function joinModel(tasks,swarms,details){
       eta=Math.max(0,WL_MEDIAN-elapsed)+(steps-D.step-1)*WL_MEDIAN;
       canToggle=true;controlId=D.cur_task;}else{
       pct=D.step/steps*100;indeterminate=true;status='running';}
-    items.push({type:'swarm',id:s.id,status,who:`Swarm #${s.id} · ${laneOf(D.title||s.title)}`,pct,eta,elapsed:tk?tk.elapsed:0,stage:`step ${D.step+1}/${steps} · ${stepLabel}`,canToggle,controlId,cancelTarget:{type:'swarm',id:s.id},indeterminate});
+    items.push({type:'swarm',id:s.id,status,who:`Swarm #${s.id} · ${laneOf(D.title||s.title)}`,pct,eta,elapsed:tk?tk.elapsed:0,stage:`step ${D.step+1}/${steps} · ${stepLabel}`,canToggle,controlId,cancelTarget:{type:'swarm',id:s.id},indeterminate,review:s.review||null});
   });
   (tasks||[]).forEach(t=>{if(t.status!=='running'&&t.status!=='paused')return;if(curSet.has(t.id))return;
     if(t.name==='claude'){
@@ -3507,15 +3551,16 @@ reconcile=function(items){
       docLink.title='View task/swarm artifacts and output';
       el.ctl.insertBefore(docLink,el.ctl.firstChild);
     }
-    // Add approval buttons for swarms
+    // Add approve/decline buttons for swarms (the self-healing review pipeline)
     if(rowId.startsWith('sw:')){
+      const sid=parseInt(rowId.split(':')[1]);
       if(!el.ctl.querySelector('.wlapprove')){
         const approve=document.createElement('button');
         approve.className='wlapprove';
         approve.type='button';
         approve.textContent='✓';
         approve.title='Approve this swarm';
-        approve.onclick=(e)=>{e.preventDefault();recordReview(parseInt(rowId.split(':')[1]),'approved');};
+        approve.onclick=(e)=>{e.preventDefault();recordReview(sid,'approved');};
         el.ctl.appendChild(approve);
 
         const decline=document.createElement('button');
@@ -3523,29 +3568,42 @@ reconcile=function(items){
         decline.type='button';
         decline.textContent='✗';
         decline.title='Decline this swarm';
-        decline.onclick=(e)=>{e.preventDefault();recordReview(parseInt(rowId.split(':')[1]),'declined');};
+        decline.onclick=(e)=>{e.preventDefault();recordReview(sid,'declined');};
         el.ctl.appendChild(decline);
       }
+      // reflect the PERSISTED decision (from /swarms review state) so it survives reloads/polls
+      const item=WL_ROWS.get(rowId), rv=item&&item.review;
+      const ap=el.ctl.querySelector('.wlapprove'), dc=el.ctl.querySelector('.wldecline');
+      if(rv){el.root.dataset.review=rv;
+        ap&&ap.setAttribute('data-pressed', rv==='approved'?'true':'false');
+        dc&&dc.setAttribute('data-pressed', rv==='declined'?'true':'false');}
+      else if(el.root.dataset.review){delete el.root.dataset.review;
+        ap&&ap.removeAttribute('data-pressed');dc&&dc.removeAttribute('data-pressed');}
     }
   });
 };
 
-function recordReview(taskId,decision){
-  const rowId=`tk:${taskId}`;  // assume tasks first; swarms will be sw:taskId
-  const btn=document.querySelector(`[data-row="${rowId}"] .wl${decision==='approved'?'approve':'decline'}`);
+function recordReview(swarmId,decision){
+  // swarms are keyed sw:<id> in the worklist; reviews ONLY exist on swarm rows.
+  const rowId=`sw:${swarmId}`;
+  const row=document.querySelector(`[data-row="${rowId}"]`);
+  const btn=row&&row.querySelector(`.wl${decision==='approved'?'approve':'decline'}`);
+  const other=row&&row.querySelector(`.wl${decision==='approved'?'decline':'approve'}`);
   if(btn)btn.disabled=true;
-  fetch(`/task/review`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task_id:taskId,decision,notes:''})})
+  fetch(`/task/review?token=${CT}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task_id:swarmId,decision,notes:'',kind:'swarm'})})
     .then(r=>r.json())
     .then(d=>{
+      if(btn)btn.disabled=false;
       if(d.ok){
-        const row=document.querySelector(`[data-row="${rowId}"]`);
+        // optimistic local state so the toggle reads correctly until the next poll refreshes from disk
+        const item=WL_ROWS.get(rowId);if(item)item.review=decision;
         if(row){
           row.dataset.review=decision;
           if(btn)btn.setAttribute('data-pressed','true');
-          wlToast(`${decision==='approved'?'Approved':'Declined'}`,decision==='approved'?'success':'');
+          if(other)other.setAttribute('data-pressed','false');
         }
+        wlToast(`${decision==='approved'?'Approved':'Declined'} Swarm #${swarmId}`,decision==='approved'?'success':'');
       }else{
-        if(btn)btn.disabled=false;
         wlToast(`Review failed: ${d.error||'unknown'}`,`error`);
       }
     })

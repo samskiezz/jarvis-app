@@ -442,17 +442,27 @@ def _task_status(tid: int) -> str:
 def swarm_list(limit: int = 30) -> list:
     try:
         c = _db()
-        rows = c.execute("SELECT id,title,plan,step,status,updated_ts FROM swarms ORDER BY id DESC LIMIT ?",
+        rows = c.execute("SELECT id,title,plan,step,status,updated_ts,review_state FROM swarms ORDER BY id DESC LIMIT ?",
                          (limit,)).fetchall()
         c.close()
         out = []
-        for sid, title, plan, step, status, up in rows:
+        for sid, title, plan, step, status, up, review_state in rows:
             try:
                 n = len(json.loads(plan or "[]"))
             except Exception:  # noqa: BLE001
                 n = 0
+            # surface the persisted approve/decline decision so the UI shows it (and never re-prompts)
+            review = None
+            try:
+                rs = json.loads(review_state or "{}")
+                if rs.get("approved_ts"):
+                    review = "approved"
+                elif rs.get("declined_ts"):
+                    review = "declined"
+            except Exception:  # noqa: BLE001
+                review = None
             out.append({"id": sid, "title": title, "step": step, "steps": n, "status": status,
-                        "pct": int((step / n) * 100) if n else 0, "updated": up})
+                        "pct": int((step / n) * 100) if n else 0, "updated": up, "review": review})
         return out
     except Exception:  # noqa: BLE001
         return []
@@ -532,8 +542,10 @@ def swarm_artifacts(sid: int) -> dict:
         return {"ok": False, "error": str(e)[:120]}
 
 
-def record_review(task_id: int, decision: str, notes: str = "") -> dict:
-    """POST /task/review — record user's approve/decline decision, persist to sqlite. Handles both tasks + swarms."""
+def record_review(task_id: int, decision: str, notes: str = "", kind: str = "") -> dict:
+    """POST /task/review — record user's approve/decline decision, persist to sqlite. Handles both tasks +
+    swarms. `kind` ('swarm'|'task') disambiguates: task and swarm ids share a numeric space, so without it
+    a swarm review would wrongly land on a same-numbered task. When omitted we fall back to task-first."""
     if decision not in ("approved", "declined"):
         return {"ok": False, "error": "decision must be 'approved' or 'declined'"}
     try:
@@ -542,16 +554,13 @@ def record_review(task_id: int, decision: str, notes: str = "") -> dict:
             f"{decision}_ts": now,
             "notes": (notes or "").strip()[:200]
         })
-        # Try to update as a task first
-        cur = c.execute("UPDATE tasks SET review_state=? WHERE id=?", (review_state, task_id))
-        if cur.rowcount > 0:
-            c.commit(); c.close()
-            return {"ok": True, "id": task_id, "kind": "task", "decision": decision, "ts": now}
-        # Otherwise try as a swarm
-        cur = c.execute("UPDATE swarms SET review_state=? WHERE id=?", (review_state, task_id))
-        if cur.rowcount > 0:
-            c.commit(); c.close()
-            return {"ok": True, "id": task_id, "kind": "swarm", "decision": decision, "ts": now}
+        order = ("swarms",) if kind == "swarm" else \
+                ("tasks",) if kind == "task" else ("tasks", "swarms")
+        for tbl in order:
+            cur = c.execute(f"UPDATE {tbl} SET review_state=? WHERE id=?", (review_state, task_id))
+            if cur.rowcount > 0:
+                c.commit(); c.close()
+                return {"ok": True, "id": task_id, "kind": tbl[:-1], "decision": decision, "ts": now}
         c.close()
         return {"ok": False, "error": "no such task or swarm"}
     except Exception as e:  # noqa: BLE001

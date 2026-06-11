@@ -347,16 +347,36 @@ def launch_disposable(task_cmd: str, gpu_name: str = None, max_price: float = No
 
 BRAIN_PROFILE = {"vram_gb": 48, "dlperf": 140, "cpu_ram_gb": 48, "cpu_cores": 24,
                  "disk_gb": 40, "inet_down": 500, "compute_cap": 800, "price": 1.0}
+
+# On-start bootstrap: a freshly provisioned box has NO LLM server. This installs Ollama, binds it to
+# 0.0.0.0:11434 (so the Hostinger tunnel can reach it), and pulls the brain's model ladder — so the box
+# self-heals into a working brain on boot with no manual SSH. Idempotent + survives reboots (setsid +
+# the wait-for-serve loop). Must finish the FULL installer before `serve`, else llama-server is missing
+# and Ollama falls back to CPU-only. Models pull in the background so /api/tags answers fast.
+BRAIN_MODELS = os.environ.get("BRAIN_MODELS", "llama3.1:8b qwen2.5:32b nomic-embed-text")
+BRAIN_ONSTART = r"""#!/bin/bash
+export HOME=/root
+command -v ollama >/dev/null 2>&1 || { curl -fsSL https://ollama.com/install.sh -o /root/ollama_install.sh && sh /root/ollama_install.sh; }
+pkill -x ollama 2>/dev/null; sleep 1   # -x (exact comm), NOT -f 'ollama serve' — the latter matches THIS script's own cmdline and self-kills
+OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &
+for i in $(seq 1 30); do curl -sf -m2 http://127.0.0.1:11434/api/tags >/dev/null 2>&1 && break; sleep 2; done
+for m in %s; do ollama pull "$m"; done
+echo BRAIN_READY
+""" % BRAIN_MODELS
+
+
 def provision_brain(max_price: float = None) -> dict:
     """Create the PERSISTENT brain box: cheapest box matching the 3090×4-class brain profile (48GB VRAM,
-    strong DL-perf, modern CUDA), with the sglang LLM image. User-initiated (it bills), labelled jarvis-brain."""
+    strong DL-perf, modern CUDA). The on-start bootstrap installs Ollama, binds it to 0.0.0.0:11434, and
+    pulls the model ladder so the box comes up as a working brain with no manual setup. User-initiated
+    (it bills), labelled jarvis-brain."""
     g = _guard()
     if g: return g
     off = cheapest_similar(BRAIN_PROFILE, max_price=max_price or 1.0)
     if not off.get("ok"):
         return off
     r = create_instance(off["offer"]["id"], image=os.environ.get("BRAIN_IMAGE", "vastai/sglang:v0.5.12-cuda-13.0"),
-                        label="jarvis-brain", disk_gb=40)
+                        label="jarvis-brain", disk_gb=40, onstart=BRAIN_ONSTART)
     if r.get("ok"):
         r["offer"] = off["offer"]
     return r
