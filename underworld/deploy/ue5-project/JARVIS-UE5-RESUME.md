@@ -25,9 +25,16 @@ Cook: `Scripts/cook-jarvis.sh` (RunUAT BuildCookRun, `-map=/Game/Maps/JarvisHUD`
 ## To RESUME → stream
 1. **Free the box of any other UE5 cook** (the #1 blocker). Check `ps -eo args | grep -iE 'BuildCookRun|UnrealEditor.*Cook'`. Cooking on a contended 31GB box is the anti-pattern — prefer cooking on the Vast 4090 box (more RAM + the GPU that renders it).
 2. `sudo -u ueuser -H bash -c 'export UE_ROOT=/opt/UnrealEngine HOME=/home/ueuser PROJ=… MAP=/Game/Maps/JarvisHUD ARCHIVE=$PROJ/Packaged CONFIG=Development; bash Scripts/cook-jarvis.sh'` → produces `Packaged/Linux/`.
-3. **Provision the Vast render node** (`deploy/pixelstream/provision-render-node.sh`): Vulkan ICD + NVENC + `PixelStreamingInfrastructure` (UE5.5).
-4. `rsync Packaged/Linux/ → vast:…/deploy/pixelstream/game/` then `deploy/pixelstream/run-jarvis-stream.sh` (GPU1; GPU0 stays for the Ollama brain) → `-RenderOffscreen -vulkan` + Pixel Streaming.
-5. Set the web frontend's stream URL to the Vast player port.
+3. **ONE COMMAND** (from the Hostinger box) — ships the package, frees a GPU, provisions, and streams:
+   ```
+   VAST_SSH_HOST=<host> VAST_SSH_PORT=<port> bash deploy/pixelstream/deploy-jarvis-to-vast.sh
+   ```
+4. Then set the web app's UE5 stream URL to `http://<vast-host>/` (player port 80).
+
+### ⚠️ Blocker as of last attempt: the Vast GPU box was UNREACHABLE
+- Proxy `ssh8.vast.ai:12157` AND direct `211.72.13.201:41154` both timed out (no ping). It was up ~10 min prior. **Vast SSH ports ROTATE** — when the instance reconnects, get the *current* host/port from the vast.ai dashboard (Instances → SSH) and pass them to the deploy command above.
+- The render REQUIRES a GPU; the Hostinger box has none — so the stream cannot run until Vast is back. The cook is done and the package is ready; this is purely a "bring Vast online + run one command" step.
+- **GPU VRAM**: both 4090s were VRAM-full (~22G each, 0% util) from 3 idle Ollama models spanning both GPUs. `deploy-jarvis-to-vast.sh` step [2/5] unloads the largest idle model (reversible — Ollama reloads on demand) to free ~14G on GPU1 for the render.
 
 ## BACKUP GAP (action needed for true "pick up anytime")
 - The **48 source GLBs in `jarvis_assets/` (775M) are gitignored** → NOT on GitHub. They're the expensive Tripo-generated assets. Back them up to object storage (R2) — they are not reproducible for free.
