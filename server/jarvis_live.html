@@ -197,7 +197,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   align-items:flex-end;transition:opacity .3s,transform .3s}
 #dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
 /* §1 D: drag-grip — grab here to move the WHOLE dock anywhere (position persists in localStorage) */
-#dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.7;font-size:20px;line-height:1;min-width:26px;min-height:44px;display:flex;align-items:center;justify-content:center;touch-action:none;
+#dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.55;font-size:18px;line-height:1;
   padding:0 4px 0 2px;margin-right:2px;user-select:none;letter-spacing:-2px;transition:opacity .15s}
 #dock .dgrip:hover{opacity:1;text-shadow:0 0 10px var(--cy)}
 #dock .dgrip:active{cursor:grabbing}
@@ -298,7 +298,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    Glassmorphic crystal bubbles bound to /metrics. Each has a TOP-RIGHT 3-state toggle (grey/dark/light)
    that cycles the panel width slide-in→mid→full (full slides toward page centre). Drag-drop target for
    planets. State persists in localStorage. They flank the central world and clear the full-width #cmd. */
-.gpanel{position:fixed;z-index:18;width:min(330px,33vw);max-height:44vh;overflow:hidden;   /* default = QUARTER state */
+.gpanel{position:fixed;z-index:18;width:248px;max-height:calc(100vh - 188px);overflow:hidden;
   border-radius:18px;padding:0;color:var(--tx);
   background:linear-gradient(150deg,rgba(12,30,46,.30),rgba(6,16,26,.20));
   border:1px solid var(--ln);backdrop-filter:blur(15px) saturate(1.25);
@@ -310,15 +310,13 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
   filter:blur(.4px) saturate(1.3);opacity:.55;animation:irid 9s linear infinite}
 /* edge anchoring — 2 stacked left, 2 stacked right (top below the thin top bar; clear of #cmd ~96px) */
-/* PERFECTLY SYMMETRIC: 2 stacked left, 2 stacked right; each capped to its vertical HALF (≤46vh) so the
-   top + bottom on each side butt up at 50vh and never overlap. Left/right mirror each other exactly. */
-#pInfra{left:12px;top:54px}
-#pPipe{left:12px;top:calc(50vh + 2px)}
-#pKnow{right:12px;top:54px}
-#pFab{right:12px;top:calc(50vh + 2px)}
-/* 3 states: COLLAPSED (header only) · QUARTER (base above) · HALF (inner edge reaches screen centre, ~48vw — left grows right, right grows left, they meet at centre, never overlap). */
-.gpanel.collapsed{max-height:48px;width:min(250px,30vw)}
-.gpanel.half{width:48vw;max-height:46vh}
+#pInfra{left:14px;top:60px}
+#pPipe{left:14px;top:calc(50vh + 6px)}
+#pKnow{right:14px;top:60px}
+#pFab{right:14px;top:calc(50vh + 6px)}
+/* 3-state widths. mid + full both grow; full slides toward page centre (left panels grow right, right panels grow left → no transform needed since they're edge-anchored). */
+.gpanel.mid{width:312px}
+.gpanel.full{width:392px;max-height:calc(100vh - 150px)}
 .gpanel .gp-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:grab;user-select:none;
   border-bottom:1px solid rgba(41,231,255,.14);background:linear-gradient(90deg,rgba(41,231,255,.08),transparent)}
 .gpanel .gp-head:active{cursor:grabbing}
@@ -351,19 +349,13 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
 /* hide the side panels on narrow screens so they never cover the world / talk bar */
 @media(max-width:1180px){ /* phones/tablets: the 4 glass panels STAY (compact), never hidden — 3-state toggle still works */
-  .gpanel{width:46vw;max-height:42vh;font-size:10px}
-  .gpanel.collapsed{max-height:46px;width:42vw}.gpanel.half{width:48vw;max-height:44vh}
+  .gpanel{width:44vw;max-height:30vh;font-size:10px}
+  .gpanel.mid{width:46vw}.gpanel.full{width:92vw;max-height:46vh}
 }
 </style>
-<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};
-// a11y + PWA injection — load with the DEPLOY-DIR prefix; static "/a11y/..." + <base href="/"> resolves to
-// the domain root under /jarvis/ → 404 (the accessibility layer never loads). Inject prefixed so it always does.
-(function(){var p=location.pathname.replace(/[^/]*$/,'');
-  var l=document.createElement('link');l.rel='stylesheet';l.href=p+'a11y/a11y.css';document.head.appendChild(l);
-  var s=document.createElement('script');s.src=p+'a11y/a11y.js';s.defer=true;document.head.appendChild(s);
-  var mf=document.querySelector('link[rel=manifest]'); if(!mf){mf=document.createElement('link');mf.rel='manifest';document.head.appendChild(mf);} mf.href=p+'manifest.webmanifest';
-  if('serviceWorker'in navigator){ navigator.serviceWorker.register(p+'appsw.js',{scope:p}).catch(function(){}); }
-})();</script>
+<link rel="stylesheet" href="/a11y/a11y.css">
+<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
+<script defer src="/a11y/a11y.js"></script>
 </head>
 <body>
 <!-- the ONE immersive WebGL universe -->
@@ -714,74 +706,62 @@ const DOCK=[
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
-  {k:'gpu',    ic:'🎛', t:'GPU Instance', fn:()=>openGPU()},
+  {k:'gpu',     ic:'🎛', t:'GPU',      fn:()=>openGPU()},
 ];
-/* ===== GPU INSTANCE manager — disposable Vast.ai GPUs, A→Z, from the dock. Matches the app overlay style. */
+/* ===== GPU — SIMPLE 2-button system: type what you want → ⚡ Run (auto-sizes the GPU, picks the cheapest
+   matching box, runs, saves results to Hostinger, disposes). Each running box has one 🗑 Dispose. ===== */
 let _gpuTimer=null;
-function openGPU(){
-  let ov=$('gpuOv');
+function openGPU(){ let ov=$('gpuOv');
   if(!ov){ ov=document.createElement('div'); ov.id='gpuOv'; ov.className='ov';
-    ov.style.cssText='position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;background:rgba(2,6,12,.94);overflow:auto;padding:54px 16px 90px;color:var(--tx);font-size:13px';
+    ov.style.cssText='position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;background:rgba(2,6,12,.94);overflow:auto;padding:54px 16px 90px;color:var(--tx)';
     ov.innerHTML=
-      '<button onclick="closeGPU()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:18px;background:var(--glass);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:6px 14px">✕ Close</button>'
-     +'<div style="max-width:900px;margin:0 auto;width:100%">'
-     +'<h2 style="color:var(--cy);text-shadow:0 0 14px var(--cy);letter-spacing:1px">🎛 GPU Instances</h2>'
-     +'<div id=gpuKey style="display:none;background:rgba(255,93,108,.12);border:1px solid var(--rd);border-radius:12px;padding:14px;margin:10px 0;line-height:1.5"></div>'
-     +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">'
-       +'<input id=gpuTask placeholder="GPU task command (e.g. python train.py)" style="flex:1;min-width:240px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:10px;color:var(--tx)">'
-       +'<input id=gpuType placeholder="GPU (optional, e.g. RTX_4090)" style="width:170px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:10px;color:var(--tx)">'
-       +'<button onclick="gpuLaunch()" style="background:linear-gradient(135deg,#0a3a4a,#11324a);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:10px 18px;font-weight:700">⚡ Launch disposable</button>'
+      '<button onclick="closeGPU()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:18px;background:var(--glass);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:6px 14px">✕</button>'
+     +'<div style="max-width:760px;margin:0 auto;width:100%">'
+     +'<h2 style="color:var(--cy);text-shadow:0 0 14px var(--cy)">🎛 GPU</h2>'
+     +'<p style="color:var(--dim);font-size:12px;margin:0 0 12px">Say what you need. It picks the cheapest GPU with the right power, runs it, saves everything to Hostinger, and disposes — automatically.</p>'
+     +'<div id=gpuKey style="display:none;background:rgba(255,93,108,.12);border:1px solid var(--rd);border-radius:12px;padding:14px;margin-bottom:10px"></div>'
+     +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">'
+       +'<input id=gpuTask placeholder="e.g. fine-tune a 13B model / run whisper / nvidia-smi" style="flex:1;min-width:220px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:12px;color:var(--tx);font-size:14px">'
+       +'<button onclick="gpuRun()" style="background:linear-gradient(135deg,#0a3a4a,#11324a);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:12px 22px;font-weight:800;font-size:14px">⚡ Run</button>'
      +'</div>'
-     +'<div id=gpuOffer style="font-size:11px;color:var(--dim);margin-bottom:8px"></div>'
-     +'<div id=gpuList style="display:flex;flex-direction:column;gap:10px"></div>'
-     +'<p style="color:var(--dim);font-size:11px;margin-top:16px">Every task = a fresh disposable instance. Results auto-sync to Hostinger storage, then the box is destroyed. Use ⧉ Copy to clone one anywhere. Multiple can run at once.</p>'
+     +'<div id=gpuMsg style="font-size:12px;color:#7af3ff;min-height:16px;margin-bottom:12px"></div>'
+     +'<div id=gpuList style="display:flex;flex-direction:column;gap:8px"></div>'
      +'</div>';
     document.body.appendChild(ov);
   }
   ov.style.display='flex'; try{$('dock').classList.add('hidden');}catch(_){}
-  gpuRefresh(); if(_gpuTimer)clearInterval(_gpuTimer); _gpuTimer=setInterval(gpuRefresh,6000);
+  gpuRefresh(); if(_gpuTimer)clearInterval(_gpuTimer); _gpuTimer=setInterval(gpuRefresh,7000);
 }
 function closeGPU(){const o=$('gpuOv');if(o)o.style.display='none';try{$('dock').classList.remove('hidden');}catch(_){}if(_gpuTimer){clearInterval(_gpuTimer);_gpuTimer=null;}}
-async function gpuRefresh(){
-  try{ const r=await(await fetch('gpu/instances')).json();
-    const key=$('gpuKey'), list=$('gpuList');
-    if(r.need_key){ key.style.display='block'; key.innerHTML='⚠ <b>Vast.ai API key needed.</b> Get it at <b>console.vast.ai → Account → API Key</b>, then add <code>VAST_API_KEY=…</code> to the server env and restart. Everything else is wired and ready.'; list.innerHTML=''; return; }
+async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).json();
+    const key=$('gpuKey'), list=$('gpuList'); if(!list)return;
+    if(r.need_key){ key.style.display='block'; key.innerHTML='⚠ Add your Vast.ai API key (console.vast.ai → Account → API Key).'; list.innerHTML=''; return; }
     key.style.display='none';
-    const items=r.instances||[];
-    let brainBanner='';
+    let banner='';
     try{ const br=await(await fetch('gpu/brain')).json();
-      if(br.brain){ brainBanner='<div style="background:rgba(52,211,153,.12);border:1px solid #34d399;border-radius:12px;padding:12px;margin-bottom:10px">🧠 <b>Brain ONLINE</b> — '+(br.brain.gpu||'GPU')+' ×'+(br.brain.num_gpus||1)+' running. JARVIS uses full AI when reachable.</div>'; }
-      else if((br.stopped||[]).length){ const s=br.stopped[0];
-        brainBanner='<div style="background:rgba(245,185,66,.12);border:1px solid #f5b942;border-radius:12px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">🧠 <b>Brain is STOPPED</b> ('+(s.gpu||'GPU')+' ×'+(s.num_gpus||1)+') — that\'s why JARVIS is on local replies. <button onclick="gpuAct(\'start\','+s.id+')" style="background:#0a3a2a;color:#34d399;border:1px solid #34d399;border-radius:8px;padding:6px 12px;font-weight:700">▶ Start brain → full AI</button></div>'; }
+      if(br&&br.brain){ banner='<div style="background:rgba(52,211,153,.12);border:1px solid #34d399;border-radius:10px;padding:10px;margin-bottom:6px">🧠 Brain online — JARVIS full AI.</div>'; }
+      else if(br&&(br.stopped||[]).length){ const s=br.stopped[0]; banner='<div style="background:rgba(245,185,66,.12);border:1px solid #f5b942;border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 Brain stopped — <button onclick="gpuStart('+s.id+')" style="background:#0a3a2a;color:#34d399;border:1px solid #34d399;border-radius:8px;padding:5px 10px;font-weight:700">▶ Start brain → full AI</button></div>'; }
     }catch(_){}
-    list.innerHTML = brainBanner + (items.length? items.map(gpuCard).join('') :
-      '<div style="color:var(--dim);padding:20px;text-align:center">No instances. Launch one above — it auto-sizes the GPU to your task, boots the cheapest match, runs it, saves results to Hostinger, then disposes.</div>');
+    const it=r.instances||[];
+    list.innerHTML = banner + (it.length? it.map(i=>{const on=(i.status||'').indexOf('running')>=0;
+      return '<div style="background:rgba(10,26,40,.5);border:1px solid var(--ln);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px">'
+       +'<span>'+(on?'🟢':'⚪')+'</span><div style="flex:1;font-size:13px"><b>'+(i.gpu||'GPU')+'</b> ×'+(i.num_gpus||1)+' · '+(i.vram_gb||0)+'GB <span style="color:var(--dim)">· $'+(i.price||0)+'/hr · '+(i.status||'')+'</span></div>'
+       +'<button onclick="gpuDispose('+i.id+')" style="background:#2a1216;color:var(--rd);border:1px solid var(--rd);border-radius:8px;padding:7px 12px;font-weight:700">🗑 Dispose</button></div>';}).join('')
+      : '<div style="color:var(--dim);text-align:center;padding:18px">No GPU running. Type a task and hit ⚡ Run.</div>');
   }catch(e){}
 }
-function gpuCard(i){const on=(i.status||'').indexOf('running')>=0;
-  return '<div style="background:rgba(10,26,40,.5);border:1px solid var(--ln);border-radius:12px;padding:12px;display:flex;flex-wrap:wrap;align-items:center;gap:10px">'
-   +'<span style="font-size:18px">'+(on?'🟢':'⚪')+'</span>'
-   +'<div style="flex:1;min-width:160px"><b>'+(i.gpu||'GPU')+'</b> ×'+(i.num_gpus||1)+'  <span style="color:var(--dim)">· $'+(i.price||0)+'/hr · '+(i.status||'?')+'</span><br><span style="color:var(--dim);font-size:11px">#'+i.id+(i.ssh_host?(' · '+i.ssh_host+':'+i.ssh_port):'')+'</span></div>'
-   +'<button onclick="gpuAct(\''+(on?'stop':'start')+'\','+i.id+')" style="background:#11324a;color:var(--cy);border:1px solid var(--ln);border-radius:8px;padding:6px 10px">'+(on?'⏸ Stop':'▶ Start')+'</button>'
-   +'<button onclick="gpuAct(\'copy\','+i.id+')" style="background:#11324a;color:#a78bfa;border:1px solid var(--ln);border-radius:8px;padding:6px 10px">⧉ Copy</button>'
-   +'<button onclick="gpuAct(\'sync\','+i.id+')" style="background:#11324a;color:#34d399;border:1px solid var(--ln);border-radius:8px;padding:6px 10px">⬇ Save→Hostinger</button>'
-   +'<button onclick="gpuAct(\'destroy\','+i.id+')" style="background:#2a1216;color:var(--rd);border:1px solid var(--rd);border-radius:8px;padding:6px 10px">🗑 Dispose</button>'
-   +'</div>';
-}
-async function gpuAct(action,id){ if(action==='destroy'&&!confirm('Dispose instance #'+id+'?\nEverything (results + checkpoints) is auto-recouped to Hostinger FIRST, then it is destroyed.'))return;
-  try{ const r=await(await fetch('gpu/'+action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})})).json();
-    if(!r.ok)jarvisSpeak('GPU '+action+' failed.'); gpuRefresh(); }catch(e){}
-}
-async function gpuLaunch(){ const task=($('gpuTask').value||'nvidia-smi').trim(), gpu=($('gpuType').value||'').trim()||null;
-  $('gpuOffer').textContent='Finding the cheapest matching GPU…';
-  try{ const r=await(await fetch('gpu/launch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task,gpu})})).json();
-    if(r.need_key){gpuRefresh();return;}
-    $('gpuOffer').textContent = r.ok
-      ? ('✓ Task needs ~'+r.vram_needed_gb+'GB VRAM ('+(r.sized_for||'')+') → picked '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB) @ $'+r.offer.price+'/hr':'instance')+' (#'+r.id+') — booting + running…')
-      : ('✗ '+(r.error||'launch failed')+(r.vram_needed_gb?(' (needs ~'+r.vram_needed_gb+'GB)'):''));
-    try{jarvisSpeak(r.ok?'GPU instance launching.':'Could not launch the GPU.');}catch(_){}
+async function gpuRun(){ const task=($('gpuTask').value||'').trim(); if(!task){$('gpuMsg').textContent='Type what you want to run.';return;}
+  $('gpuMsg').textContent='Finding the cheapest GPU with the right power…';
+  try{ const r=await(await fetch('gpu/launch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task})})).json();
+    $('gpuMsg').textContent = r.ok? ('✓ '+(r.sized_for||'')+' → '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB) @ $'+r.offer.price+'/hr':'')+' — running…') : ('✗ '+(r.error||'failed'));
+    try{jarvisSpeak(r.ok?'Running on the GPU now.':'Could not start the GPU.');}catch(_){}
     gpuRefresh();
-  }catch(e){$('gpuOffer').textContent='✗ '+e;}
+  }catch(e){$('gpuMsg').textContent='✗ '+e;}
+}
+async function gpuStart(id){ try{await fetch('gpu/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});gpuRefresh();}catch(_){}}
+async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to Hostinger first, then removes it.'))return;
+  $('gpuMsg').textContent='Disposing #'+id+'…';
+  try{ await fetch('gpu/destroy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
 }
 function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
@@ -850,26 +830,21 @@ function _applyDockPos(p){const d=$('dock');if(!d||!p)return;
   // clamp into the viewport so it can never be dragged off-screen / under the talk bar
   const w=d.offsetWidth||220,h=d.offsetHeight||80;
   const x=Math.max(6,Math.min(innerWidth-w-6,p.x)), y=Math.max(52,Math.min(innerHeight-h-94,p.y));
-  d.style.right='auto';d.style.bottom='auto';d.style.transform='none';   // release CSS anchors so left/top fully control position (this is what blocked mobile dragging)
   d.style.left=x+'px';d.style.top=y+'px';}
 function _saveDockPos(){const d=$('dock');if(!d||!d.classList.contains('moved'))return;
   try{localStorage.setItem('jarvisDockPos',JSON.stringify({x:parseFloat(d.style.left)||0,y:parseFloat(d.style.top)||0}));}catch(_){}}
 function wireDockMove(){const d=$('dock'),g=$('dockGrip');if(!d||!g)return;
-  let sx=0,sy=0,ox=0,oy=0,drag=false;
-  // SMOOTH DRAG: pointer-capture on the grip routes every move to it (never loses tracking), rAF-throttled,
-  // clamped on-screen. Grab the ⠿ handle and slide the dock anywhere.
-  const move=e=>{ if(!drag)return; e.preventDefault();
-    _applyDockPos({x:ox+(e.clientX-sx), y:oy+(e.clientY-sy)}); };
-  const up=e=>{ if(!drag)return; drag=false;_dockMoving=false; d.classList.remove('dragging');
-    try{g.releasePointerCapture(e.pointerId);}catch(_){}
-    g.removeEventListener('pointermove',move); _saveDockPos(); };
-  g.addEventListener('pointerdown',e=>{ e.preventDefault();e.stopPropagation();
-    drag=true;_dockMoving=true; d.classList.add('dragging','moved');
-    const r=d.getBoundingClientRect(); ox=r.left;oy=r.top; sx=e.clientX;sy=e.clientY;
-    try{g.setPointerCapture(e.pointerId);}catch(_){}
-    g.addEventListener('pointermove',move);
-    g.addEventListener('pointerup',up,{once:true}); g.addEventListener('pointercancel',up,{once:true}); });
-  g.style.touchAction='none';}   // let the grip own touch gestures (no page scroll fighting the drag)
+  let sx=0,sy=0,ox=0,oy=0;
+  const move=e=>{const cx=(e.touches?e.touches[0].clientX:e.clientX),cy=(e.touches?e.touches[0].clientY:e.clientY);
+    _applyDockPos({x:ox+(cx-sx),y:oy+(cy-sy)});};
+  const up=()=>{_dockMoving=false;d.classList.remove('dragging');
+    removeEventListener('pointermove',move);removeEventListener('pointerup',up);_saveDockPos();};
+  const down=e=>{e.preventDefault();e.stopPropagation();_dockMoving=true;d.classList.add('dragging','moved');
+    const r=d.getBoundingClientRect();ox=r.left;oy=r.top;
+    sx=(e.touches?e.touches[0].clientX:e.clientX);sy=(e.touches?e.touches[0].clientY:e.clientY);
+    if(!d.style.left){d.style.left=r.left+'px';d.style.top=r.top+'px';}
+    addEventListener('pointermove',move);addEventListener('pointerup',up,{once:true});};
+  g.addEventListener('pointerdown',down);}
 (function(){try{const p=JSON.parse(localStorage.getItem('jarvisDockPos')||'null');
   if(p&&typeof p.x==='number'){addEventListener('load',()=>_applyDockPos(p));setTimeout(()=>_applyDockPos(p),60);}}catch(_){}})();
 
@@ -877,9 +852,9 @@ function wireDockMove(){const d=$('dock'),g=$('dockGrip');if(!d||!g)return;
    Each panel renders a live slice of /metrics (Infrastructure · Pipelines/Runners · Knowledge & Ontology ·
    Inference Fabric). The TOP-RIGHT 3-state toggle (image of 3 grey bars) cycles slide-in(0)→mid(1)→full(2);
    state persists. Planets dragged out of the 3D world can be DROPPED on a panel to inspect them. */
-const GP_STATES=['collapsed','','half'];   // 0=collapsed(header only) · 1=quarter(default) · 2=half(reaches centre)
+const GP_STATES=['','mid','full'];
 function setPanelState(id,st){const p=$(id);if(!p)return;st=((st%3)+3)%3;
-  p.dataset.state=st;p.classList.remove('collapsed','half');if(GP_STATES[st])p.classList.add(GP_STATES[st]);
+  p.dataset.state=st;p.classList.remove('mid','full');if(GP_STATES[st])p.classList.add(GP_STATES[st]);
   try{localStorage.setItem('gp:'+id,String(st));}catch(_){}}
 function wireGlassPanels(){
   [['pInfra',renderInfraPanel],['pPipe',renderPipePanel],['pKnow',renderKnowPanel],['pFab',renderFabPanel]].forEach(([id])=>{
@@ -1385,7 +1360,7 @@ let sunFace=null;                                      // §1 B: the oversized h
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
 let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=false,clock=null;
 let _starField=null,_nebula=null;
-let home={pos:new THREE.Vector3(0,16000,34000),tgt:new THREE.Vector3(0,0,0)};  // free-orbit overview: pivot on the core/centre so drag orbits the whole spread universe (camera-spacing edit)
+let home={pos:new THREE.Vector3(1250,260,0),tgt:new THREE.Vector3(2650,220,0)};  // CAMERA LOCK: JARVIS POV — standing ON the core (just outside its ~780u surface, core BEHIND you) looking OUT into space (+x: telemetry, apps, domains, celestial field all ahead); near pivot (~1400u) so dragging = look-around, never an into-the-core orbit
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
 const ASSET=n=>'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
@@ -1941,7 +1916,7 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
 const GOLDEN=Math.PI*(3-Math.sqrt(5));                  // 137.50776° in radians
 const CLUSTER_PHASE={kpi:0.0, sys:1.0, infra:2.0, pipe:3.2, tier:4.2, guardian:5.0, selfdev:5.6, climate:0.6, agentos:4.8};
 function phyllo(i, importance, type){
-  const base=6000, span=24000;                         // SPACING: telemetry spread 6k-30k (was cramped 4.5-10.5k shell) — nothing bunches near the core
+  const base=4500, span=6000;                          // telemetry band pushed OFF the giant core (4.5k-10.5k, inside the 12k app ring) — no more dots crowding the centre
   const imp=Math.max(0,Math.min(1,importance));
   const r=base + span*(1-imp);                         // closer = more important
   const a=(CLUSTER_PHASE[type]||0) + i*GOLDEN;         // golden-angle within the type cluster
@@ -2232,9 +2207,10 @@ const APP_MOONS={   // real sub-features only — each fn is the actual existing
 function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined')return; _appBuilt=true;
   if(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)return;   // retired: the 🧩 Mini Apps planet carries the dock apps now (same fns, no duplicates)
   const apps=DOCK.filter(d=>d&&d.fn&&!d.pinned).slice(0,12);
-  const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);
+  const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);   // wide app ring: 780-radius planets never crowd
+  _orbitRing(grp, R, 0.34);
   apps.forEach((app,i)=>{ try{
-    const a=i*GOLDEN, r=5000+i*1900;   // SPACING: app planets spread on a φ-spiral 5k→24k (was bunched at one 12k ring)
+    const a=i*GOLDEN, r=R*(0.9+0.02*i);
     const imp=(APP_PRIORITY[app.k]||50)/100;
     const psz=240+imp*420;                                          // PLANET = 50× moon; max ~660 — ALWAYS smaller than the AI core (~780)
     const b=_orbBody(psz, 0x4fe9ff, 'app', (app.ic?app.ic+' ':'')+app.t, 'app:'+app.k, 'app');
