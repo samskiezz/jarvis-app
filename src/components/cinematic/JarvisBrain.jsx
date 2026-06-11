@@ -40,6 +40,7 @@ import { isEntityRegistryQuery, buildEntityRegistryScript } from "@/components/c
 import { isTimelineQuery, buildTimelineScript } from "@/components/cinematic/ThreatTimeline";
 import { isCommandPaletteQuery } from "@/components/cinematic/JarvisCommandPalette";
 import { isSituationQuery, buildSituationScript } from "@/components/cinematic/SituationRoom";
+import { isIntelDigestQuery, buildIntelDigestScript } from "@/components/cinematic/IntelDigest";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -470,6 +471,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:situation-toggle"));
       try {
         const answer = await buildSituationScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isIntelDigestQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:intel-digest-toggle"));
+      try {
+        const answer = await buildIntelDigestScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
       } catch (_) {
