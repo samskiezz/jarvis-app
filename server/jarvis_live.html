@@ -1341,12 +1341,13 @@ async function openDoctor(){window.firePulseSpike&&window.firePulseSpike(0.65);
       lines:checks.map(x=>(x.ok?'✓ ':'✗ ')+x.label+' · '+(x.status||((x.pm2||{}).status)||'')+(x.error?' · '+x.error:'')),
       actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')},
                {label:'🩺 Vitals',kind:'_fn',fn:()=>openVitals()},
-               {label:'📋 Missing 20',kind:'_fn',fn:()=>showMissingPlan(d)}]});
+               {label:'📋 Delivery Ledger',kind:'_fn',fn:()=>showMissingPlan(d)}]});
   }catch(e){showCard({title:'🧰 System Doctor',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
 function showMissingPlan(d){
+  const total=(d.missing_features||[]).length + (d.missing_functions||[]).length;
   const lines=['MISSING FEATURES'].concat((d.missing_features||[]).map((x,i)=>(i+1)+'. '+x),
     ['MISSING FUNCTION FIXES']).concat((d.missing_functions||[]).map((x,i)=>(i+1)+'. '+x));
-  showCard({title:'📋 Missing Features / Functions',subtitle:'tracked after-task list',lines,
+  showCard({title:'📋 Delivery Ledger',subtitle:total+' tracked gaps from the live build',lines,
     actions:[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});
 }
 
