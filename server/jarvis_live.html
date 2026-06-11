@@ -2595,7 +2595,7 @@ function buildDomainPlanets(){
     b.userData.oa=P.angle; b.userData.orr=P.radius; b.userData.oy=P.y; b.userData.os=0.013*Math.min(2.0,1400/P.radius); _galaxyOrbiters.push(b);  // galaxy slowly orbits the core (inner faster)
   });
   // a lighter outer belt of the 31 master TOPIC planets (ranked by pagerank) — keeps depth without 1,600 loads
-  const topics=(WORLD_MANIFEST.topics||[]).slice(0,16);          // cap concurrent/visible heavy GLB topic planets
+  const topics=(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)?[]:(WORLD_MANIFEST.topics||[]).slice(0,16);          // Celestial OS owns the menu; legacy topic belt stays off
   const maxPr=Math.max(...topics.map(t=>t.pagerank||0))||1;
   topics.forEach((t,i)=>{const imp=Math.max(0,Math.min(1,(t.pagerank||0)/maxPr));
     const sz=sizeFor('topic',imp);                              // GLOBAL SIZE LAW: nebula/topic tier — below planets
@@ -3058,10 +3058,7 @@ function _camTick(dt){
   addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)
     equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+e.deltaY*0.5)); },{passive:true});
   addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
-  try{ const cb=document.createElement('button'); cb.id='camBtn';
-    cb.setAttribute('aria-label','Toggle camera view (Equator / Explore / Focus)');
-    cb.style.cssText='position:fixed;right:14px;bottom:88px;z-index:60;background:rgba(8,34,52,.6);color:#9feaff;border:1px solid rgba(80,220,255,.45);border-radius:10px;padding:8px 12px;font:600 12px ui-sans-serif,system-ui;cursor:pointer;backdrop-filter:blur(6px)';
-    cb.onclick=()=>toggleCameraMode(); document.body.appendChild(cb); _camBtnLabel(); }catch(_){}
+  _camBtnLabel();
 })();
 
 /* ---- build/refresh ALL bodies from /metrics (deterministic; relationship-driven placement) ---- */
@@ -3069,6 +3066,7 @@ function layoutFromMetrics(m){
   if(!scene)return;
   try{buildDomainPlanets();}catch(e){}                  // §1 A: the 16 real domain planets (built once)
   try{celHydrateLive(m);}catch(e){}                     // CELESTIAL: live meteorites (alerts, newest GLBs) spawn/expire
+  if(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)return;  // Celestial OS replaces the old crammed KPI/infra/system visual layer.
   const c=m.completion||{},g={};((m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
   const corr=m.correlation||{},rout=m.routing||{},box=m.box||{},vps=m.vps||{};
   const vt=box.vram_total_gb||48,vu=box.vram_used_gb||0;
@@ -3251,6 +3249,7 @@ function rebuildMacroConnections(){
 /* ---- constellation from /graphdata (instanced spheres + line segments, fixed layout) ---- */
 let _constellation=null;
 function buildConstellation(){
+  if(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)return;  // Celestial OS owns the 3D menu; keep the legacy graph sphere from bleeding through.
   fetch('graphdata').then(r=>r.json()).then(d=>{
     if(!scene)return;
     const nodes=d.nodes||[],N=nodes.length;if(!N)return;const R=330;
