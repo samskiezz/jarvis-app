@@ -245,10 +245,10 @@ CAPABILITIES: List[Capability] = [
         id="swarm.build", name="Start a build swarm", category="swarm",
         description="Spin up a durable, checkpointed multi-agent swarm to build a feature she describes.",
         patterns=[
-            r"\b(?:build|code|make|create|develop|program|generate|design|write|add|implement)\b[^]*?"
+            r"\b(?:build|code|make|create|develop|program|generate|design|write|add|implement)\b[\s\S]*?"
             r"\b(feature|function|glb|3d ?model|model|scraper|tool|app|page|widget|website|web ?app|"
             r"game|program|script|button|dashboard|panel|integration|something|that|it)\b(?P<request>.*)$",
-            r"\b(?:can you|could you|please|i need you to|i want you to|i'?d like you to|would you)\b[^]*?"
+            r"\b(?:can you|could you|please|i need you to|i want you to|i'?d like you to|would you)\b[\s\S]*?"
             r"\b(?:build|code|make|create|develop|program|generate|design|implement)\b(?P<request>.*)$",
         ],
         examples=["build me a weather widget", "code a new dashboard page", "create an app that tracks my pills",

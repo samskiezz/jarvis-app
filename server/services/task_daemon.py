@@ -521,14 +521,16 @@ def swarm_artifacts(sid: int) -> dict:
     try:
         c = _db()
         r = c.execute("SELECT id,title,plan,step,status,results,cur_task FROM swarms WHERE id=?", (sid,)).fetchone()
-        c.close()
         if not r:
+            c.close()
             return {"ok": False, "error": "no such swarm"}
         sid, title, plan_json, step, status, results_json, cur_task = r
         plan = json.loads(plan_json or "[]")
         results = json.loads(results_json or "[]")
         # Truncate results to first 2KB per stage to keep payload under 50KB total
         for r in results:
+            if "output" not in r and "result" in r:
+                r["output"] = r.get("result") or ""
             if "output" in r and len(r["output"]) > 2000:
                 r["output"] = r["output"][:2000] + "\n... (truncated)"
         cur_task_detail = None
@@ -536,6 +538,7 @@ def swarm_artifacts(sid: int) -> dict:
             cr = c.execute("SELECT id,label,pct,status FROM tasks WHERE id=?", (cur_task,)).fetchone()
             if cr:
                 cur_task_detail = {"id": cr[0], "label": cr[1], "pct": cr[2] or 0, "status": cr[3]}
+        c.close()
         return {"ok": True, "id": sid, "title": title, "step": step, "status": status,
                 "plan": plan, "results": results, "cur_task_detail": cur_task_detail}
     except Exception as e:  # noqa: BLE001

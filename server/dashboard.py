@@ -1912,6 +1912,11 @@ def _doctor() -> dict:
         "GPU instance lifecycle monitor with cost and VRAM warnings",
         "Chat action transcript showing what JARVIS actually executed",
         "Mini-app self-test runner for every dock item",
+        "Brain status mini app showing whether Vast/Ollama is actually serving",
+        "GPU offer estimator mini app before spending money",
+        "Document dust viewer for indexed repo/doc records",
+        "Voice phrase cache viewer for lifeline speech",
+        "Swarm/task overview mini app separate from the full Live Tasks overlay",
     ]
     missing_functions = [
         "Public CORS allowlist for app.projectsolar.cloud",
@@ -1924,6 +1929,11 @@ def _doctor() -> dict:
         "Fast route probes for /guardian, /library, /agent/tools and /tasks",
         "No-duplicate celestial/dock registration guard",
         "Production smoke test after deploy covering mobile/tablet/desktop",
+        "Speech bubble persistence while JARVIS is actively talking",
+        "Access popup must reappear until mic and camera are actually granted",
+        "Agent chat endpoint must not block the FastAPI event loop",
+        "GPU dispose should recoup files to Hostinger before destroy",
+        "Celestial feature labels should map to closest real GLB instead of one fallback orb",
     ]
     ok_count = sum(1 for c in checks if c.get("ok"))
     return {"ok": True, "score": round(ok_count / max(1, len(checks)) * 100), "checks": checks,

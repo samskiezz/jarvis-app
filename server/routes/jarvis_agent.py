@@ -15,6 +15,7 @@ threaded through so proposals/audit carry a real identity.
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends
@@ -36,11 +37,12 @@ class AgentChatRequest(BaseModel):
 async def agent_chat(req: AgentChatRequest, token: str | None = Depends(optional_bearer)):
     """Run one agentic turn: plan -> call tools (governed) -> synthesise answer."""
     actor = token or "anonymous"
-    return jarvis_agent.run_agent(
+    return await asyncio.to_thread(
+        jarvis_agent.run_agent,
         req.message,
         history=req.history,
         actor=actor,
-        max_steps=req.max_steps or jarvis_agent.MAX_STEPS_DEFAULT,
+        max_steps=min(max(req.max_steps or jarvis_agent.MAX_STEPS_DEFAULT, 1), 6),
     )
 
 
