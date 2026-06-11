@@ -119,9 +119,23 @@ def make_holo_material():
 def build_level(mat, chamber):
     les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
     eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-    les.new_level(MAP_PKG)
+    # Re-runs must PATCH the existing map, not recreate it (new_level fails on an existing asset).
+    rebuilding = EAL.does_asset_exist(MAP_PKG)
+    if rebuilding:
+        les.load_level(MAP_PKG)
+        existing = {type(a).__name__ for a in eas.get_all_level_actors()}
+        unreal.log(f"[level] patching existing map; actors present: {sorted(existing)}")
+    else:
+        les.new_level(MAP_PKG)
+        existing = set()
+
+    def have(cls):
+        return cls.__name__ in existing
 
     def spawn(cls, loc, rot=(0, 0, 0)):
+        # idempotent: never duplicate an actor class on re-runs (earlier runs stacked 7 SkyLights)
+        if have(cls):
+            return None
         return eas.spawn_actor_from_class(cls, unreal.Vector(*loc), unreal.Rotator(*rot))
 
     # — the chamber assembler —
@@ -130,8 +144,6 @@ def build_level(mat, chamber):
         hud.set_editor_property("HolographicMasterMaterial", mat)
         hud.set_editor_property("DefaultChamber", chamber)
         unreal.log(f"[level] JarvisHudManager placed; chamber='{chamber}'")
-    else:
-        unreal.log_warning("[level] FAILED to spawn JarvisHudManager (class not compiled?)")
 
     # — atmosphere & light so Lumen + bloom read the holo rims —
     spawn(unreal.DirectionalLight, (0, 0, 600), (-50, -45, 0))
@@ -141,14 +153,22 @@ def build_level(mat, chamber):
         except Exception: pass
     spawn(unreal.SkyAtmosphere, (0, 0, 0))
     fog = spawn(unreal.ExponentialHeightFog, (0, 0, 0))
+    if fog is None and have(unreal.ExponentialHeightFog):
+        fog = next((a for a in eas.get_all_level_actors()
+                    if isinstance(a, unreal.ExponentialHeightFog)), None)
     if fog:
-        try:
-            fc = fog.component
-            fc.set_editor_property("volumetric_fog", True)            # god rays through the holograms
-            fc.set_editor_property("volumetric_fog_scattering_distribution", 0.35)
-            fc.set_editor_property("fog_density", 0.035)
-        except Exception as e:
-            unreal.log_warning(f"[level] volumetric fog props: {e}")
+        fc = fog.component
+        # bool UPROPERTY bEnableVolumetricFog -> python strips the 'b' prefix
+        for name in ("enable_volumetric_fog", "b_enable_volumetric_fog", "volumetric_fog"):
+            try:
+                fc.set_editor_property(name, True)
+                unreal.log(f"[level] volumetric fog ON (prop '{name}')")
+                break
+            except Exception:
+                continue
+        for name, val in (("volumetric_fog_scattering_distribution", 0.35), ("fog_density", 0.035)):
+            try: fc.set_editor_property(name, val)
+            except Exception: pass
 
     # — FILM GRADE: the unbound PostProcessVolume (the GTA5-class look) —
     ppv = spawn(unreal.PostProcessVolume, (0, 0, 0))
