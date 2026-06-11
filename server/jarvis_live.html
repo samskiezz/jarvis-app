@@ -92,7 +92,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #card .fill{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cy));box-shadow:0 0 10px var(--cy)}
 #filebody{white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:#bfe6f2;max-height:42vh;overflow:auto;background:rgba(2,10,16,.6);border:1px solid var(--ln);border-radius:8px;padding:10px;margin-top:8px}
 /* ---------- bottom talk bar (preserved voice) ---------- */
-#cmd{position:fixed;left:0;right:0;bottom:0;z-index:25;width:100%;
+#cmd{position:fixed;left:0;right:0;bottom:0;z-index:27;width:100%;
  background:var(--glass);border:none;border-top:1px solid var(--ln);border-radius:0;
  padding:10px 18px calc(10px + env(safe-area-inset-bottom,0));backdrop-filter:blur(14px);
  box-shadow:0 -8px 40px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.12)}
@@ -182,7 +182,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .wlapprove:disabled,.wldecline:disabled{opacity:.5;cursor:not-allowed}
 .wlrow[data-review="approved"]{background:rgba(52,211,153,.08);border-left:3px solid var(--ok)}
 .wlrow[data-review="declined"]{background:rgba(255,93,108,.08);border-left:3px solid var(--rd)}
-.wlwindow{position:fixed;background:var(--glass);border:1px solid var(--cy);border-radius:12px;padding:12px;z-index:40;backdrop-filter:blur(16px);box-shadow:0 12px 50px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.25);resize:both;overflow:auto;min-width:320px;min-height:200px;max-width:90vw;max-height:90vh}
+.wlwindow{position:fixed;background:var(--glass);border:1px solid var(--cy);border-radius:12px;padding:12px;z-index:40;backdrop-filter:blur(16px);box-shadow:0 12px 50px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.25);resize:both;overflow:auto;min-width:320px;min-height:200px;max-width:90vw;max-height:90vh;pointer-events:auto}
 .wlwindow-head{display:flex;align-items:center;gap:8px;padding:8px;cursor:grab;user-select:none;border-bottom:1px solid rgba(41,231,255,.2);margin:-12px -12px 8px -12px;padding:8px 12px}
 .wlwindow-head:active{cursor:grabbing}
 .wlwindow-title{color:var(--cy);font-weight:700;font-size:12px}
@@ -1001,16 +1001,16 @@ async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).js
 }
 async function gpuRun(){ const task=($('gpuTask').value||'').trim(); if(!task){$('gpuMsg').textContent='Type what you want to run.';return;}
   $('gpuMsg').textContent='Finding the cheapest GPU with the right power…';
-  try{ const r=await(await fetch('gpu/launch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task})})).json();
+  try{ const r=await(await fetch('gpu/launch?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task})})).json();
     $('gpuMsg').textContent = r.ok? ('✓ '+(r.sized_for||'')+' → '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB) @ $'+r.offer.price+'/hr':'')+' — running…') : ('✗ '+(r.error||'failed'));
     try{jarvisSpeak(r.ok?'Running on the GPU now.':'Could not start the GPU.');}catch(_){}
     gpuRefresh();
   }catch(e){$('gpuMsg').textContent='✗ '+e;}
 }
-async function gpuStart(id){ try{await fetch('gpu/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});gpuRefresh();}catch(_){}}
+async function gpuStart(id){ try{await fetch('gpu/start?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});gpuRefresh();}catch(_){}}
 async function gpuProvisionBrain(){ if(!confirm('Provision the permanent brain (cheapest 48GB / 3090×4-class, ~$0.6/hr)?\nIt bills until you dispose it.'))return;
   $('gpuMsg').textContent='Provisioning the cheapest brain box…';
-  try{ const r=await(await fetch('gpu/provisionbrain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})).json();
+  try{ const r=await(await fetch('gpu/provisionbrain?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})).json();
     $('gpuMsg').textContent = r.ok? ('✓ Brain provisioned: '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB, DLp'+r.offer.dlperf+') @ $'+r.offer.price+'/hr':'')+' — booting…') : ('✗ '+(r.error||'failed'));
     try{jarvisSpeak(r.ok?'Provisioning the brain now.':'Could not provision the brain.');}catch(_){}
     gpuRefresh();
@@ -1018,7 +1018,7 @@ async function gpuProvisionBrain(){ if(!confirm('Provision the permanent brain (
 }
 async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to Hostinger first, then removes it.'))return;
   $('gpuMsg').textContent='Disposing #'+id+'…';
-  try{ await fetch('gpu/destroy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
+  try{ await fetch('gpu/destroy?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
 }
 function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
@@ -1302,19 +1302,23 @@ function worklistStart(){
       if(e.key===' ')doAction('toggle',row);else toggleDetail(row.dataset.row);}}};
   document.addEventListener('keydown',keyHandler);
   WL_KEYHANDLER=keyHandler;
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollTick();});
+  WL_VISIBILITYHANDLER=()=>{if(!document.hidden)pollTick();};
+  document.addEventListener('visibilitychange',WL_VISIBILITYHANDLER);
   pollTick();
 }
 
 function worklistStop(){
   WL_OPEN=false;
-  clearTimeout(WL_TIMER);if(WL_RAF)cancelAnimationFrame(WL_RAF);
+  clearTimeout(WL_TIMER);if(WL_RAF){cancelAnimationFrame(WL_RAF);WL_RAF=null;}
   if(WL_ABORT)WL_ABORT.abort();
   if(WL_KEYHANDLER)document.removeEventListener('keydown',WL_KEYHANDLER);
   WL_KEYHANDLER=null;
+  if(WL_VISIBILITYHANDLER)document.removeEventListener('visibilitychange',WL_VISIBILITYHANDLER);
+  WL_VISIBILITYHANDLER=null;
 }
 
 let WL_KEYHANDLER=null;
+let WL_VISIBILITYHANDLER=null;
 
 async function pollTick(){
   if(!WL_OPEN||document.hidden||WL_INFLIGHT)return;
@@ -1584,7 +1588,7 @@ async function openDetail(kind,name){
 function orbControl(name, action){   // real pm2 start/restart for a satellite body
   const b=_selected;
   showCardKeepActions({title:name,subtitle:action+'ing…',props:[{k:'Action',v:action}],lines:['Sending real pm2 '+action+' …']});
-  fetch('control?action='+encodeURIComponent(action)+'&name='+encodeURIComponent(name),{method:'POST'})
+  fetch('control?action='+encodeURIComponent(action)+'&name='+encodeURIComponent(name)+'&token='+CT,{method:'POST'})
    .then(r=>r.json()).then(res=>{
      showCardKeepActions({title:name,subtitle:res.ok?('✓ '+action+'ed'):('✗ '+(res.error||'failed')),
        props:[{k:'Action',v:action},{k:'OK',v:String(!!res.ok)}], lines:[(res.msg||res.error||'').slice(0,160)]});

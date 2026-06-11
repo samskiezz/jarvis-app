@@ -231,7 +231,8 @@ def _workers() -> list:
             mine = nm.startswith("jarvis-") or nm.startswith("underworld-")
             label, desc = TASKS.get(nm, (nm, "other app on this box"))
             e = p.get("pm2_env", {}); m = p.get("monit", {})
-            out.append({"name": nm, "label": label, "desc": desc, "toggleable": mine,
+            out.append({"name": nm, "label": label, "desc": desc,
+                        "toggleable": mine and not nm.startswith("underworld-"),
                         "status": e.get("status"), "cpu": m.get("cpu"),
                         "mem_mb": round((m.get("memory") or 0) / 1e6),
                         "restarts": e.get("restart_time"),
@@ -1165,7 +1166,9 @@ def _control(action: str, name: str) -> dict:
     """Start/stop/restart a pm2 daemon — whitelisted to our own processes only (safety)."""
     if action not in ("start", "stop", "restart"):
         return {"ok": False, "error": "bad action"}
-    if not (name.startswith("jarvis-") or name.startswith("underworld-")):
+    if name.startswith("underworld-"):
+        return {"ok": False, "error": "underworld shared services are protected"}
+    if not name.startswith("jarvis-"):
         return {"ok": False, "error": "name not allowed"}
     try:
         r = subprocess.run(["pm2", action, name], capture_output=True, text=True, timeout=25)
@@ -1999,6 +2002,14 @@ def _celestial_payload() -> dict:
 
 
 class _H(http.server.BaseHTTPRequestHandler):
+    def _route_path(self) -> str:
+        """Serve the same dashboard routes at / and behind the public /jarvis/ mount."""
+        if self.path == "/jarvis":
+            return "/"
+        if self.path.startswith("/jarvis/") or self.path.startswith("/jarvis?"):
+            return self.path[len("/jarvis"):] or "/"
+        return self.path
+
     def _send(self, body: bytes, ctype: str):
         self.send_response(200)
         self.send_header("Content-Type", ctype)
@@ -2021,6 +2032,7 @@ class _H(http.server.BaseHTTPRequestHandler):
             return f"<h1>template {name} missing</h1><pre>{e}</pre>"
 
     def do_GET(self):
+        self.path = self._route_path()
         if self.path.startswith("/metrics"):
             self._send(json.dumps(_SNAP).encode(), "application/json")
         elif self.path.startswith("/detail"):
@@ -2370,6 +2382,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             self._send(page.encode(), "text/html; charset=utf-8")
 
     def do_POST(self):
+        self.path = self._route_path()
         from urllib.parse import urlparse, parse_qs
         q = parse_qs(urlparse(self.path).query)
         # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
@@ -2377,6 +2390,9 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
         # tasks — so mum's phone link carries no admin rights.
         if self.path.startswith("/gpu/"):
             # GPU INSTANCE MANAGER (control side): launch disposable / start / stop / destroy / copy / run / sync.
+            if q.get("token", [""])[0] != CONTROL_TOKEN:
+                self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
+                return
             from server.services import gpu_instances as GI
             sub = self.path.split("?", 1)[0].split("/gpu/", 1)[1]
             try:
