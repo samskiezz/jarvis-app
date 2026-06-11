@@ -2629,7 +2629,7 @@ function buildDomainPlanets(){
    are ABSORBED via CEL_ALIAS so their LIVE updates (labels/colors) keep flowing into the new bodies;
    the old 12k app ring is retired (Mini Apps planet carries the dock apps); dom:* galaxies become
    Knowledge's moons with their recursive entity systems intact. Dock bar / panels / swarm untouched. */
-var CEL_K=24, CEL_LOD=0.0065, CEL_REPLACES_APPRING=true;
+var CEL_K=16, CEL_LOD=0.0048, CEL_REPLACES_APPRING=true;
 var CEL_ALIAS={};                // old body name -> cel body name (absorption; resolved in upsertBody)
 const CEL_LANES=['ui','automation','knowledge','intelligence','infrastructure','guardian','media','voice','budget','underworld'];
 const CEL_LANE_INDEX={}; CEL_LANES.forEach((lane,i)=>CEL_LANE_INDEX[lane]=i);
@@ -2642,7 +2642,7 @@ let _CEL=null,_celDots=null,_celDotPos=null,_celBuilt=false;
 function _celHash(s){let h=0;for(let i=0;i<String(s).length;i++)h=(h*31+String(s).charCodeAt(i))>>>0;return (h%1000)/1000*6.28318;}
 const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
 /* spec scale contract (user tier order), spec units — ×CEL_K at render time */
-const _celPR =I=>_cl(10,34,Math.pow(I,0.72));                       // planet
+const _celPR =I=>_cl(9,30,Math.pow(I,0.72));                        // planet
 const _celMR =(pr,I)=>pr*_cl(0.26,0.42,Math.pow(I,0.72));           // moon
 const _celSR =(mr,I)=>mr*_cl(0.12,0.22,Math.pow(I,0.72));           // satellite (flow page/control)
 const _celD  =I=>260+Math.pow(1-Math.max(0,Math.min(1,I)),1.25)*520;// planet distance from apex
@@ -2655,9 +2655,9 @@ function _celPlanetPosition(p,idx,famMax){
   const lane=CEL_LANE_INDEX[p.lane]??0, mid=(CEL_LANES.length-1)/2;
   const importance=1-Math.max(0,Math.min(1,p.I||0));
   const slotJitter=(_celHash(p.id)-Math.PI)/Math.PI;
-  const x=Math.max(5200+famMax*0.72, 5900+importance*5200+idx*520);
-  const y=(lane-mid)*470 + ((idx%2)?190:-190) + slotJitter*120;
-  const z=(lane-mid)*1260 + idx*640 + slotJitter*360;
+  const x=Math.max(6200+famMax*1.05, 6400+importance*14500+idx*3600);
+  const y=((idx%3)-1)*820 + slotJitter*220;
+  const z=(lane-mid)*4600 + idx*1550 + slotJitter*620;
   return new THREE.Vector3(x,y,z);
 }
 
@@ -2832,8 +2832,9 @@ function _celAdoptDomains(knowledge){
   const kidNames=[];
   doms.forEach((g,i)=>{
     for(let j=_galaxyOrbiters.length-1;j>=0;j--)if(_galaxyOrbiters[j]===g)_galaxyOrbiters.splice(j,1);
-    const orbR=(knowledge.userData.baseScale||900)+(g.userData.baseScale||400)+700+(i%4)*460;
-    _celOrbit(g,knowledge,orbR,0.008/Math.sqrt(1+(i%4)),g.userData.name,0.9);
+    const ring=Math.floor(i/4), slot=i%4;
+    const orbR=(knowledge.userData.baseScale||640)+(g.userData.baseScale||420)+1500+ring*1350+slot*260;
+    _celOrbit(g,knowledge,orbR,0.0045/Math.sqrt(1+ring),g.userData.name,0.9);
     if(_celBodies.indexOf(g)<0)_celBodies.push(g);
     const dom=(g.userData.name||'').slice(4), cnt=((WORLD_MANIFEST.domains||{})[dom]||{}).count||0;
     if(cnt)_celDustCloud(g,Math.min(2400,Math.round(Math.log10(1+cnt)*420)),fmt(cnt));
@@ -2856,7 +2857,7 @@ async function buildCelestialOS(){
     b.position.copy(pp);                                             // PS5-style lane-slot menu: spaced, visible, no spiral clumping
     b.userData.oa=Math.atan2(b.position.z,b.position.x);
     b.userData.orr=Math.hypot(b.position.x,b.position.z);
-    b.userData.oy=b.position.y; b.userData.os=0.00028+p.I*0.00034; _galaxyOrbiters.push(b);
+    b.userData.oy=b.position.y; b.userData.os=0;
     p._kidNames=[];
     moons.forEach((mn,mi)=>{
       const mr=_celMR(pr,mn.I), mname='cel:'+mn.id;
@@ -2884,6 +2885,7 @@ async function buildCelestialOS(){
     (p.alias||[]).forEach(a=>_celAbsorb(a,name));
   });
   _celDotsRebuild();
+  _celUpdateMenuBounds();
   try{rebuildMacroConnections();}catch(_){}
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
     ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
@@ -2895,6 +2897,28 @@ function _celDotsRebuild(){                                          // NASA-Eye
   _celDots=new THREE.Points(g,new THREE.PointsMaterial({color:0x9feaff,size:3.5,sizeAttenuation:false,
     transparent:true,opacity:0.85,depthTest:true,depthWrite:false}));
   _celDots.frustumCulled=false; scene.add(_celDots);
+}
+const _celBounds={center:new THREE.Vector3(8200,0,0),radius:26000};
+function _celUpdateMenuBounds(){
+  if(!_celBodies.length)return _celBounds;
+  const box=new THREE.Box3();
+  for(let i=0;i<_celBodies.length;i++){
+    const b=_celBodies[i]; if(!b||!b.position)continue;
+    const pad=Math.max(120,b.userData&&b.userData.baseScale||120);
+    box.expandByPoint(new THREE.Vector3(b.position.x-pad,b.position.y-pad,b.position.z-pad));
+    box.expandByPoint(new THREE.Vector3(b.position.x+pad,b.position.y+pad,b.position.z+pad));
+  }
+  if(!box.isEmpty()){
+    box.getCenter(_celBounds.center);
+    _celBounds.radius=Math.max(18000,box.getSize(new THREE.Vector3()).length()*0.62);
+    try{celestialMenuCenter.copy(_celBounds.center);}catch(_){}
+  }
+  return _celBounds;
+}
+function _celExploreEye(){
+  const b=_celUpdateMenuBounds();
+  const r=Math.max(32000,Math.min(95000,b.radius*1.42));
+  return b.center.clone().add(new THREE.Vector3(r*0.12,r*0.42,r*1.05));
 }
 /* live METEORITES — spawned/expired on every /metrics poll (alerts, newest GLBs); expire back to dust */
 function celHydrateLive(m){
@@ -2979,7 +3003,7 @@ function enterMainEquatorView(){
 }
 function enterUniverseExploreView(){
   cameraMode=CameraMode.UNIVERSE_EXPLORE_VIEW;
-  tween(new THREE.Vector3(8200,21000,36000),celestialMenuCenter.clone(),1400,()=>{ try{
+  tween(_celExploreEye(),celestialMenuCenter.clone(),1400,()=>{ try{
     controls.enabled=true;controls.enableRotate=true;controls.enableZoom=true;controls.enablePan=true;
     controls.target.copy(celestialMenuCenter);}catch(_){}});
   _camBtnLabel();
