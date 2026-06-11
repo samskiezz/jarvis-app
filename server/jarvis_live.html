@@ -2589,15 +2589,15 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
   tuneBodyLabel(m,sz,{always:!!m.userData.celKind});}
 
 /* ---- (d) FIXED SLOT / LANE LAYOUT ----
-   Console-menu placement: predictable rows/rings and stable angular slots. No phi/golden spiral. */
-const GOLDEN=(Math.PI*2)/12;                            // legacy callers now get 12 clear menu slots, not phi
+   Console-menu placement: predictable rows/rings and stable angular slots. */
+const SLOT_STEP=(Math.PI*2)/12;                         // 12 clear menu slots
 const CLUSTER_PHASE={kpi:0.0, sys:0.7, infra:1.4, pipe:2.1, tier:2.8, guardian:3.5, selfdev:4.2, climate:4.9, agentos:5.6};
 function phyllo(i, importance, type){
   const base=4500, span=6000;                          // telemetry band pushed OFF the giant core (4.5k-10.5k, inside the 12k app ring) — no more dots crowding the centre
   const imp=Math.max(0,Math.min(1,importance));
   const ring=Math.floor(i/12), slot=i%12;
   const r=base + span*(1-imp) + ring*720;              // closer = more important; extra rows never overlap
-  const a=(CLUSTER_PHASE[type]||0) + slot*GOLDEN;
+  const a=(CLUSTER_PHASE[type]||0) + slot*SLOT_STEP;
   const y=(ring-0.5)*210;
   return {radius:r, angle:a, y:y};
 }
@@ -2795,10 +2795,10 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
     const pRing=galaxySize*2.6; _orbitRing(galaxy,pRing,0.28);   // planets orbit clear of the (now-big) galaxy hub
     const pgrp=new THREE.Group(); galaxy.add(pgrp); pgrp.userData.spin=0.10; _moonGroups.push(pgrp); galaxy.userData.planetGroup=pgrp;  // planets ALWAYS visible, orbiting their galaxy (solar-system look); only moons drill-in
     planets.forEach((pl,i)=>{ try{
-      const a=i*GOLDEN, r=relRadius(pRing, i, planets.length);
+      const a=i*SLOT_STEP, r=relRadius(pRing, i, planets.length);
       const psz=Math.min(galaxySize*MENU_CHILD_SCALE*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);
       const pm=_orbBody(psz, pl.color, 'planet', pl.label, pl.id, 'type:'+domain);
-      pm.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*galaxySize*0.2, Math.sin(a)*r);
+      pm.position.set(Math.cos(a)*r, Math.sin(i*SLOT_STEP*0.7)*galaxySize*0.2, Math.sin(a)*r);
       pgrp.add(pm);
       // MOONS — this planet's own linked entities (recursive children) → truly "part of" the planet
       fetch('children?id='+encodeURIComponent(pl.id)+'&kind=type:'+encodeURIComponent(domain)+'&exclude='+encodeURIComponent(pl.id)+'&limit=4')
@@ -2807,10 +2807,10 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
           const mRing=psz*2.6; _orbitRing(pm,mRing,0.22);   // moons orbit clearly outside their planet
           const mgrp=new THREE.Group(); pm.add(mgrp); mgrp.userData.spin=0.22; mgrp.visible=false; _moonGroups.push(mgrp); _systemGroups.push(mgrp); pm.userData.moonGroup=mgrp;  // moons HIDDEN until planet focused
           moons.forEach((mn,j)=>{ try{
-            const aa=j*GOLDEN, rr=relRadius(mRing, j, moons.length);
+            const aa=j*SLOT_STEP, rr=relRadius(mRing, j, moons.length);
             const msz=Math.max(1.5,psz/50);                                                // RATIO: moon = planet ÷ 50
             const mm=_orbBody(msz, mn.color, 'moon', mn.label, mn.id, 'type:'+domain);
-            mm.position.set(Math.cos(aa)*rr, Math.sin(j*GOLDEN*0.7)*psz*0.28, Math.sin(aa)*rr);
+            mm.position.set(Math.cos(aa)*rr, Math.sin(j*SLOT_STEP*0.7)*psz*0.28, Math.sin(aa)*rr);
             mgrp.add(mm);
           }catch(e){} });
         }).catch(e=>{});
@@ -2826,7 +2826,7 @@ function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
     const R=1000; _orbitRing(scene,R,0.2);
     const grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.16; grp.visible=false; grp.userData.systemLayer=true; _moonGroups.push(grp); _systemGroups.push(grp);  // service ring — DRILL-IN (revealed via Vitals)
     list.forEach((s,i)=>{ try{
-      const a=i*GOLDEN, r=R*(0.95+0.018*i), on=(s.status==='online');
+      const a=i*SLOT_STEP, r=R*(0.95+0.018*i), on=(s.status==='online');
       const sz=sizeFor('satellite', on?0.85:0.3)*2.4, col=on?0x39ffd0:0x67727d;
       const m=_orbBody(sz, col, 'satellite', s.label||s.name, s.name, 'service');
       m.userData.getCard=()=>({title:(s.label||s.name),subtitle:'Docker/pm2 service · '+s.status,
@@ -2838,7 +2838,7 @@ function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
           {label:(s.status==='online'?'↻ Restart':'▶ Start'),kind:'_fn',
             fn:()=>orbControl(s.name, s.status==='online'?'restart':'start')},
           {label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});
-      m.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*7, Math.sin(a)*r); grp.add(m);
+      m.position.set(Math.cos(a)*r, Math.sin(i*SLOT_STEP*0.7)*7, Math.sin(a)*r); grp.add(m);
     }catch(e){} });
   }).catch(e=>{});
 }
@@ -2850,7 +2850,7 @@ function buildMeteors(){ if(_metBuilt||!scene)return; _metBuilt=true;
     const al=((v&&v.alerts)||[]); if(!al.length) return;
     const grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.3; grp.visible=false; grp.userData.systemLayer=true; _moonGroups.push(grp); _systemGroups.push(grp);  // meteors — DRILL-IN (revealed via Vitals)
     al.forEach((alert,i)=>{ try{
-      const a=i*GOLDEN, r=480+i*50, crit=(alert.level==='critical');
+      const a=i*SLOT_STEP, r=480+i*50, crit=(alert.level==='critical');
       const col=crit?0xff3b3b:0xffb02e, sz=crit?1.15:0.85;
       const m=_orbBody(sz, col, 'meteor', alert.title, alert.title, 'event');
       try{ m.material.emissiveIntensity=1.7; }catch(_){}
@@ -2888,7 +2888,7 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
   const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);   // wide app ring: 780-radius planets never crowd
   _orbitRing(grp, R, 0.34);
   apps.forEach((app,i)=>{ try{
-    const a=i*GOLDEN, r=R*(0.9+0.02*i);
+    const a=i*SLOT_STEP, r=R*(0.9+0.02*i);
     const imp=(APP_PRIORITY[app.k]||50)/100;
     const psz=240+imp*420;                                          // PLANET = 50× moon; max ~660 — ALWAYS smaller than the AI core (~780)
     const b=_orbBody(psz, 0x4fe9ff, 'app', (app.ic?app.ic+' ':'')+app.t, 'app:'+app.k, 'app');
@@ -2897,18 +2897,18 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
       lines:['Open the '+app.t+' app — or fly its sub-feature moons.'],
       actions:[{label:'▶ Open '+app.t, kind:'_fn', fn:app.fn},
                {label:'◈ Focus here', kind:'_fn', fn:()=>flyToBody(b)}]});
-    b.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*120, Math.sin(a)*r);
+    b.position.set(Math.cos(a)*r, Math.sin(i*SLOT_STEP*0.7)*120, Math.sin(a)*r);
     grp.add(b);
     // MOONS = this app's real sub-features (collapsed inside the planet's system)
     const moons=APP_MOONS[app.k]||[];
     if(moons.length){ const mR=psz*2.2; _orbitRing(b,mR,0.24);
       const mg=new THREE.Group(); b.add(mg); mg.userData.spin=0.2; _moonGroups.push(mg);
       moons.forEach((mn,j)=>{ try{
-        const aa=j*GOLDEN, msz=psz/50;                              // RATIO: moon = planet ÷ 50
+        const aa=j*SLOT_STEP, msz=psz/50;                              // RATIO: moon = planet ÷ 50
         const mm=_orbBody(msz, 0x7af3ff, 'moon', mn.n, 'feature:'+app.k+':'+j, 'sub-feature');
         mm.userData.getCard=()=>({title:mn.n, subtitle:app.t+' · sub-feature',
           actions:[{label:'▶ Open '+mn.n, kind:'_fn', fn:mn.f}]});
-        mm.position.set(Math.cos(aa)*mR, Math.sin(j*GOLDEN*0.7)*psz*0.5, Math.sin(aa)*mR);
+        mm.position.set(Math.cos(aa)*mR, Math.sin(j*SLOT_STEP*0.7)*psz*0.5, Math.sin(aa)*mR);
         mg.add(mm);
         // SATELLITES = sub-features of THIS moon (real data: Vitals▸Services▸each pm2 service; Alerts▸each live alert)
         if(mn.sats==='services'){ fetch('vitals').then(r=>r.json()).then(v=>{ try{
@@ -2920,7 +2920,7 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
               props:[{k:'CPU',v:(s.cpu||0)+'%'},{k:'Mem',v:(s.mem_mb||0)+'MB'}],
               actions:[{label:(s.status==='online'?'↻ Restart':'▶ Start'),kind:'_fn',fn:()=>orbControl(s.name,s.status==='online'?'restart':'start')},
                        {label:'📜 Logs',kind:'drill',arg:'runner:'+s.name}]});
-            ss.position.set(Math.cos(k*GOLDEN)*sR, Math.sin(k*GOLDEN*0.7)*msz, Math.sin(k*GOLDEN)*sR); sg.add(ss); });
+            ss.position.set(Math.cos(k*SLOT_STEP)*sR, Math.sin(k*SLOT_STEP*0.7)*msz, Math.sin(k*SLOT_STEP)*sR); sg.add(ss); });
         }catch(_){} }).catch(()=>{}); }
         if(mn.sats==='alerts'){ fetch('vitals').then(r=>r.json()).then(v=>{ try{
           const al=((v&&v.alerts)||[]).slice(0,6); if(!al.length)return;
@@ -2929,7 +2929,7 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
             const ss=_orbBody(msz*0.3, crit?0xff3b3b:0xffb02e, 'meteor', alert.title, alert.title, 'alert');
             ss.userData.getCard=()=>({title:alert.title,subtitle:'⚠ '+alert.level,lines:[alert.detail||''].filter(Boolean),
               actions:[{label:'🩺 Open Vitals',kind:'_fn',fn:()=>openVitals()}]});
-            ss.position.set(Math.cos(k*GOLDEN)*sR, Math.sin(k*1.7)*msz, Math.sin(k*GOLDEN)*sR); sg.add(ss); });
+            ss.position.set(Math.cos(k*SLOT_STEP)*sR, Math.sin(k*1.7)*msz, Math.sin(k*SLOT_STEP)*sR); sg.add(ss); });
         }catch(_){} }).catch(()=>{}); }
       }catch(e){} });
     }
@@ -2947,7 +2947,7 @@ function buildDomainPlanets(){
     const imp=(maxLog>minLog)?(lg-minLog)/(maxLog-minLog):0.5;   // 0..1 importance, normalized across real min..max
     const sz=sizeFor('galaxy',imp);                             // SIZE ∝ importance: most important ≈19, least ≈5 (clear ~3.8× hierarchy)
     const cols=4, col=i%cols, row=Math.floor(i/cols), x=18000+row*8200, z=(col-(cols-1)/2)*6400;
-    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:(1-row)*2600};   // explicit console-menu lanes; no phi spiral
+    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:(1-row)*2600};   // explicit console-menu lanes
     const name='dom:'+dom, count=info.count||0;
     const node=makeNode({id:name,label:dom,kind:'planet',depth:0,parent:null,
       color:COLORS.kpi,count:count,childrenKind:'type:'+dom,glbUrl:info.url});
@@ -2969,7 +2969,7 @@ function buildDomainPlanets(){
   topics.forEach((t,i)=>{const imp=Math.max(0,Math.min(1,(t.pagerank||0)/maxPr));
     const sz=sizeFor('topic',imp);                              // GLOBAL SIZE LAW: nebula/topic tier — below planets
     const cols=4, col=i%cols, row=Math.floor(i/cols), x=52000+row*7600, z=(col-(cols-1)/2)*7200;
-    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:-9800-row*1600};  // far backdrop grid, not a phi belt
+    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:-9800-row*1600};  // far backdrop grid
     const name='topic:'+i;
     const card=()=>({title:t.title,subtitle:'master topic · pagerank '+(t.pagerank||0).toFixed(4),
       props:[{k:'PageRank',v:(t.pagerank||0).toFixed(4)},{k:'GLB',v:(t.url||'').split('/').pop()}],
@@ -3470,7 +3470,7 @@ async function buildCelestialOS(){
     const pr=_celPR(p.I), name='cel:'+p.id;
     const moons=CEL_MOONS[p.id]||[];
     const b=_celAdd(name,p,'planet',pr,p.lane,null);
-    // Console-menu layout: fixed rows/lanes, no phi spiral, no drift animation.
+    // Console-menu layout: fixed rows/lanes, no drift animation.
     b.position.copy(_celPlanetPos(rank,sortedPlanets.length,p));
     b.userData.repoNodeRef=p;
     if(repoPlanet)_celRememberRepo(repoPlanet.id,name);
@@ -3888,8 +3888,8 @@ function buildConstellation(){
     const mat=new THREE.MeshBasicMaterial();
     const inst=new THREE.InstancedMesh(geo,mat,N);
     const m4=new THREE.Matrix4(),idx={},pos=[];
-    nodes.forEach((n,i)=>{const phi=Math.acos(1-2*(i+.5)/N),th=Math.PI*(1+Math.sqrt(5))*i;
-      const p=new THREE.Vector3(Math.cos(th)*Math.sin(phi),Math.cos(phi),Math.sin(th)*Math.sin(phi)).multiplyScalar(R);
+    nodes.forEach((n,i)=>{const polar=Math.acos(1-2*(i+.5)/N),th=Math.PI*(1+Math.sqrt(5))*i;
+      const p=new THREE.Vector3(Math.cos(th)*Math.sin(polar),Math.cos(polar),Math.sin(th)*Math.sin(polar)).multiplyScalar(R);
       pos[i]=p;idx[n.id]=i;m4.setPosition(p);inst.setMatrixAt(i,m4);
       try{inst.setColorAt(i,new THREE.Color(n.color||0x9bd4e6));}catch(e){}});
     inst.instanceMatrix.needsUpdate=true;if(inst.instanceColor)inst.instanceColor.needsUpdate=true;
@@ -4017,15 +4017,15 @@ function buildSatSwarm(satellites, parentGroup, scale){
   const inst=new THREE.InstancedMesh(geo, new THREE.MeshBasicMaterial({transparent:true}), satellites.length);
   const pos=new THREE.Vector3();
   satellites.forEach((s,i)=>{
-    const phi=i*2.39996;const r=3+Math.random()*2;
-    pos.set(Math.cos(phi)*r, (Math.random()-0.5)*2, Math.sin(phi)*r);
+    const angle=i*SLOT_STEP;const r=3+Math.random()*2;
+    pos.set(Math.cos(angle)*r, (Math.random()-0.5)*2, Math.sin(angle)*r);
     inst.setMatrixAt(i, new THREE.Matrix4().compose(pos, new THREE.Quaternion(), new THREE.Vector3(1,1,1)));
     inst.setColorAt(i, new THREE.Color(s.color||'#9bd4e6'));
   });
   inst.instanceMatrix.needsUpdate=true;
   if(inst.instanceColor) inst.instanceColor.needsUpdate=true;
   parentGroup.add(inst);
-  return {inst, nodes:satellites, pos:satellites.map((s,i)=>{const phi=i*2.39996;return new THREE.Vector3(Math.cos(phi)*(3+Math.random()*2), (Math.random()-0.5)*2, Math.sin(phi)*(3+Math.random()*2))})};
+  return {inst, nodes:satellites, pos:satellites.map((s,i)=>{const angle=i*SLOT_STEP;return new THREE.Vector3(Math.cos(angle)*(3+Math.random()*2), (Math.random()-0.5)*2, Math.sin(angle)*(3+Math.random()*2))})};
 }
 async function buildSystem(node, frame){
   if(!node.childrenKind) return;
