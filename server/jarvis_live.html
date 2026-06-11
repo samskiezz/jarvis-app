@@ -2056,14 +2056,27 @@ function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
 /* ---- §1 A: concurrency-capped GLB loader queue (lazy-load; cap concurrent loads for perf) ----
    The manifest planets load REAL GLBs by full /asset|/media URL. We never fire 1,600 loads at once: at most
    MAX_GLB load in flight; the rest queue. enqueueGLB(url, onLoad). Cached so a re-layout never re-fetches. */
+// LAZY-LOAD NEAREST-FIRST: the world has ~1,600 GLBs. We never fire them all at once (MAX_GLB in flight),
+// and — the key to a fast world — the queue is sorted by distance from the CAMERA each pump, so the closest
+// objects load first and the far galaxies stream in afterwards (and re-prioritise as she flies around).
 const MAX_GLB=6; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
-function _pumpGLB(){ while(_glbInFlight<MAX_GLB && _glbQueue.length){ const job=_glbQueue.shift();
+const _glbV=new THREE.Vector3();
+function _jobDist(job){ if(job.node&&typeof camera!=='undefined'&&camera){ try{job.node.getWorldPosition(_glbV);return _glbV.distanceTo(camera.position);}catch(_){ } }
+  return (job.seq||0); }                                  // no node/camera yet → fall back to insertion order
+let _glbSeq=0;
+function _pumpGLB(){
+  if(_glbQueue.length>1) _glbQueue.sort((a,b)=>_jobDist(a)-_jobDist(b));   // nearest-first
+  while(_glbInFlight<MAX_GLB && _glbQueue.length){ const job=_glbQueue.shift();
     _glbInFlight++; glbsTried++;
     _glbLoader.load(job.url, g=>{ _glbInFlight--; glbsOk++; try{job.ok(g);}catch(_){}; _pumpGLB(); },
       undefined, ()=>{ _glbInFlight--; try{job.err&&job.err();}catch(_){}; _pumpGLB(); }); } }
-function enqueueGLB(url,onLoad,onErr){ url=realGLB(url); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
-  _glbQueue.push({url, ok:g=>{ try{_glbCache.set(url,g.scene);}catch(_){}; onLoad(g.scene.clone(true)); }, err:onErr});
+function enqueueGLB(url,onLoad,onErr,node){ url=realGLB(url); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
+  _glbQueue.push({url, node, seq:_glbSeq++, ok:g=>{ try{_glbCache.set(url,g.scene);}catch(_){}; onLoad(g.scene.clone(true)); }, err:onErr});
   _pumpGLB(); }
+// re-prioritise the queue as the camera moves, so wherever she flies, the nearest unloaded objects load next.
+let _lastPumpAt=0;
+function repumpByCamera(){ if(!_glbQueue.length)return; const n=(typeof performance!=='undefined'?performance.now():0);
+  if(n-_lastPumpAt<400)return; _lastPumpAt=n; _pumpGLB(); }
 /* CRITICAL FIX: all 677 /media/gen_tripo|gen_uw GLBs are broken 0-byte stubs (Tripo ran out of budget),
    so every topic object was a bare sphere. Until they're regenerated, remap each broken /media/* URL to the
    best-matching REAL asset in jarvis_assets/ (served by /asset/). Shared assets cache → fewer/lighter loads. */
@@ -2169,7 +2182,7 @@ function addManifestBody(o){
         c.material.envMap=(envRT&&envRT.texture)||null; c.material.needsUpdate=true; }catch(_){}}});
       m.material.opacity=0.45;                       // KEEP the glowing orb visible (was 0 = invisible); GLB is a faint detail overlay
       m.add(s); m.userData.glb=s;
-    }catch(_){}}, ()=>{/* 404 → keep the glowing proxy orb (still graphical, labelled, selectable) */});
+    }catch(_){}}, ()=>{/* 404 → keep the glowing proxy orb (still graphical, labelled, selectable) */}, m);   // m = the body's mesh → load nearest-first
   return m;
 }
 function upsertBody(name,createFn,updateFn){
@@ -3273,7 +3286,7 @@ function addBodyLocal(node, parentGroup, pos){
     if(!glb) return;
     glb.position.set(0,0,0);glb.scale.setScalar((node.importance*2+0.8)*0.9);
     proxy.add(glb);proxy.userData.glb=glb;proxy.userData.glb.userData=proxy.userData;
-  });
+  }, undefined, proxy);                                    // proxy = this node → load nearest-first
   return proxy;
 }
 function buildSatSwarm(satellites, parentGroup, scale){
@@ -3512,6 +3525,7 @@ function tickFrame(){
   // ambient scene) so the GPU isn't pinned at 60fps on a small mobile chip.
   if(document.hidden)return;
   if(_LOWFPS){ const _n=performance.now(); if(_n-_lastDraw<32)return; _lastDraw=_n; }
+  try{repumpByCamera();}catch(_){}                          // keep loading the world nearest-first as she flies
   try{
     const dt=Math.min(0.05,clock.getDelta()), t=clock.elapsedTime;
     updatePulse(dt);                       // ONE heartbeat for the whole organism
