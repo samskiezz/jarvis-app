@@ -1391,6 +1391,90 @@ async function openAssistStatusMini(){showCard({title:'📲 Assist Link',subtitl
       lines:d.connected?['Phone companion is reporting.']:['Open Control to set up the phone companion.'],
       actions:[{label:'📲 Control',kind:'_fn',fn:()=>openAssist()}]});}
   catch(e){showCard({title:'📲 Assist Link',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function _miniJSON(url){const r=await fetch(url),ct=(r.headers.get('content-type')||'').toLowerCase();
+  if(!r.ok||ct.indexOf('json')<0)throw new Error(url+' '+r.status); return await r.json();}
+async function openArchitectureMini(){showCard({title:'🏛 Architecture',subtitle:'loading platform layers…'});
+  try{const d=await _miniJSON('v1/jarvis/architecture');const layers=d.layers||[];
+    const native=layers.filter(x=>String(x.status||'').toLowerCase()==='native').length;
+    const ready=layers.filter(x=>!/unavailable|missing|error/i.test(String(x.status||''))).length;
+    showCard({title:'🏛 Architecture',subtitle:layers.length+' live platform layers',
+      props:[{k:'Layers',v:layers.length},{k:'Native',v:native},{k:'Ready',v:ready+'/'+layers.length}],
+      lines:layers.length?layers.slice(0,12).map(l=>'• '+(l.layer||l.key||'layer')+' · '+(l.status||'unknown')+' · '+((l.present||l.modules||[]).length||0)+' modules'):
+        ['No platform layers returned.'],
+      actions:[{label:'🤖 Agent OS',kind:'_fn',fn:()=>openAgentTools()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
+  catch(e){showCard({title:'🏛 Architecture',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openMemoryMini(){showCard({title:'🗃 Memory',subtitle:'loading memory recall…'});
+  try{const d=await _miniJSON('v1/jarvis/memory?user_id=anonymous&limit=12');const rows=d.memories||[];
+    showCard({title:'🗃 Memory',subtitle:rows.length?'recent recalled memories':'no stored memories yet',
+      props:[{k:'User',v:'anonymous'},{k:'Rows',v:rows.length}],
+      lines:rows.length?rows.slice(0,12).map(m=>'• '+(m.key||m.title||'memory')+' · '+String(m.value||m.text||m.summary||'').slice(0,96)):
+        ['No stored memories are available for the current user yet.'],
+      actions:[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()},{label:'🤖 Agent OS',kind:'_fn',fn:()=>openAgentTools()}]});}
+  catch(e){showCard({title:'🗃 Memory',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openInboxMini(){showCard({title:'🔔 Inbox',subtitle:'loading proactive notifications…'});
+  try{const d=await _miniJSON('v1/jarvis/notifications?user_id=anonymous&limit=12');const rows=d.notifications||[];
+    showCard({title:'🔔 Inbox',subtitle:rows.length?'proactive notifications waiting':'nothing waiting right now',
+      props:[{k:'Notifications',v:rows.length},{k:'User',v:'anonymous'}],
+      lines:rows.length?rows.slice(0,12).map(n=>'• '+(n.title||n.label||n.kind||'notification')+' · '+String(n.body||n.text||n.detail||n.status||'').slice(0,96)):
+        ['No proactive notifications are waiting right now.'],
+      actions:[{label:'📲 Assist',kind:'_fn',fn:()=>openAssistStatusMini()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
+  catch(e){showCard({title:'🔔 Inbox',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openDatasetsMini(){showCard({title:'🧬 Datasets',subtitle:'loading dataset catalog…'});
+  try{const d=await _miniJSON('v1/datasets');const rows=d.items||[];
+    showCard({title:'🧬 Datasets',subtitle:rows.length+' registered datasets',
+      props:[{k:'Count',v:d.count??rows.length},{k:'Showing',v:Math.min(rows.length,12)}],
+      lines:rows.length?rows.slice(0,12).map(x=>'• '+(x.name||x.id||'dataset')+' · '+(x.kind||'dataset')+' · '+(x.owner||'unknown')):
+        ['No datasets are registered yet.'],
+      actions:[{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()},{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
+  catch(e){showCard({title:'🧬 Datasets',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openReportsMini(){showCard({title:'📑 Reports',subtitle:'loading saved reports…'});
+  try{const d=await _miniJSON('v1/reports');const rows=d.items||[];
+    showCard({title:'📑 Reports',subtitle:rows.length?'saved intelligence briefs':'no saved reports yet',
+      props:[{k:'Count',v:d.count??rows.length}],
+      lines:rows.length?rows.slice(0,12).map(r=>'• '+(r.title||('Report #'+(r.id||'—')))+' · #'+(r.id||'—')):
+        ['No saved reports are available yet.'],
+      actions:[{label:'📊 Boards',kind:'_fn',fn:()=>openDashboardsMini()},{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()}]});}
+  catch(e){showCard({title:'📑 Reports',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openDashboardsMini(){showCard({title:'📊 Boards',subtitle:'loading saved dashboards…'});
+  try{const d=await _miniJSON('v1/dashboards');const rows=d.items||[];
+    showCard({title:'📊 Boards',subtitle:rows.length?'saved dashboard boards':'no saved dashboards yet',
+      props:[{k:'Count',v:d.count??rows.length}],
+      lines:rows.length?rows.slice(0,12).map(b=>'• '+(b.name||('Board #'+(b.id||'—')))+' · '+((b.widgets||[]).length||0)+' widgets'):
+        ['No saved dashboards are available yet.'],
+      actions:[{label:'📑 Reports',kind:'_fn',fn:()=>openReportsMini()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
+  catch(e){showCard({title:'📊 Boards',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openAlertsMini(){showCard({title:'🚨 Alerts',subtitle:'loading live alerts…'});
+  try{const d=await _miniJSON('v1/alerts');const rows=d.items||[];
+    showCard({title:'🚨 Alerts',subtitle:rows.length?'active or recent alerts':'no alerts right now',
+      props:[{k:'Count',v:d.count??rows.length}],
+      lines:rows.length?rows.slice(0,12).map(a=>'• '+(a.title||a.name||'alert')+' · '+(a.status||'open')+' · severity '+(a.severity??'—')):
+        ['No alerts are active right now.'],
+      actions:[{label:'🛡 Health',kind:'_fn',fn:()=>openHealth()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
+  catch(e){showCard({title:'🚨 Alerts',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openCasesMini(){showCard({title:'📁 Cases',subtitle:'loading investigation cases…'});
+  try{const d=await _miniJSON('v1/cases');const rows=d.items||[];
+    showCard({title:'📁 Cases',subtitle:rows.length?'tracked investigation cases':'no open cases yet',
+      props:[{k:'Count',v:d.count??rows.length}],
+      lines:rows.length?rows.slice(0,12).map(c=>'• '+(c.title||('Case #'+(c.id||'—')))+' · '+(c.status||'open')+' · '+((c.entity_ids||[]).length||0)+' entities'):
+        ['No cases are tracked right now.'],
+      actions:[{label:'🚨 Alerts',kind:'_fn',fn:()=>openAlertsMini()},{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});}
+  catch(e){showCard({title:'📁 Cases',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openAssetsMini(){showCard({title:'🧱 Assets',subtitle:'loading render asset pipeline…'});
+  try{const st=await _miniJSON('v1/jarvis/assets/status');const gp=await _miniJSON('v1/jarvis/assets/gaps');const gaps=gp.gaps||[];
+    showCard({title:'🧱 Assets',subtitle:(st.library_models||0)+' library models · '+(st.gaps??gaps.length)+' gaps',
+      props:[{k:'Library',v:st.library_models??'—'},{k:'Wired',v:st.wired_models??'—'},{k:'Gaps',v:st.gaps??gaps.length}],
+      lines:gaps.length?gaps.slice(0,12).map(g=>'• '+(g.name||g.label||g.id||g.surface||String(g).slice(0,80))):['No asset wiring gaps are reported right now.'],
+      actions:[{label:'📚 Library',kind:'_fn',fn:()=>setMode('library')},{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
+  catch(e){showCard({title:'🧱 Assets',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+async function openLabsMini(){showCard({title:'🧪 Labs',subtitle:'loading research lab capabilities…'});
+  try{const d=await _miniJSON('v1/labs/catalog');const rows=d.capabilities||[];
+    const ready=rows.filter(x=>x.available!==false && String(x.status||'available').toLowerCase()!=='unavailable').length;
+    showCard({title:'🧪 Labs',subtitle:ready+' of '+rows.length+' lab capabilities available',
+      props:[{k:'Ready',v:ready},{k:'Total',v:rows.length}],
+      lines:rows.length?rows.slice(0,12).map(x=>'• '+(x.capability||x.name||'capability')+' · '+(x.module||'lab')+' · '+((x.available===false||String(x.status||'').toLowerCase()==='unavailable')?'offline':'ready')):
+        ['No lab capabilities were returned.'],
+      actions:[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()},{label:'💎 Offers',kind:'_fn',fn:()=>openGpuOffers()}]});}
+  catch(e){showCard({title:'🧪 Labs',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
 
 function readStatus(){const c=_m.completion||{},X=_m.correlation||{},on=(_m.workers||[]).filter(w=>w.toggleable&&w.status==='online').length;
   jarvisSpeak('Status. Knowledge build '+(c.pct||0)+' percent. '+on+' pipelines online. '+fmt(X.distinct_after_dedup)+' distinct entities. Box V-RAM '+((_m.box||{}).vram_used_gb||0)+' of 48 gigabytes.');}
@@ -1414,6 +1498,9 @@ const DOCK=[
   {k:'climate', ic:'🌡', t:'Climate',  fn:()=>openClimate()},
   {k:'worklist',ic:'🛰',t:'Live Tasks',fn:()=>setMode('worklist')},
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
+  {k:'arch',   ic:'🏛', t:'Arch',     fn:()=>openArchitectureMini()},
+  {k:'memory', ic:'🗃', t:'Memory',   fn:()=>openMemoryMini()},
+  {k:'inbox',  ic:'🔔', t:'Inbox',    fn:()=>openInboxMini()},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'index',  ic:'🧭', t:'Index',    fn:()=>openCelIndex()},
   {k:'budget', ic:'💰', t:'Budget',   fn:()=>openBudget()},
@@ -1422,13 +1509,20 @@ const DOCK=[
   {k:'brain',   ic:'🧠', t:'Brain',    fn:()=>openBrain()},
   {k:'offers',  ic:'💎', t:'Offers',   fn:()=>openGpuOffers()},
   {k:'docs',    ic:'📄', t:'Docs',     fn:()=>openDustDocs()},
+  {k:'datasets',ic:'🧬', t:'Datasets', fn:()=>openDatasetsMini()},
+  {k:'reports', ic:'📑', t:'Reports',  fn:()=>openReportsMini()},
+  {k:'boards',  ic:'📊', t:'Boards',   fn:()=>openDashboardsMini()},
   {k:'files',   ic:'🗂', t:'Files',    fn:()=>openFilesMini()},
   {k:'phrases', ic:'💬', t:'Phrases',  fn:()=>openPhrasesMini()},
   {k:'swarms',  ic:'🐝', t:'Swarms',   fn:()=>openSwarmsMini()},
   {k:'ideas',   ic:'💡', t:'Ideas',    fn:()=>openSuggestionsMini()},
   {k:'godrays', ic:'✦', t:'God-rays', fn:()=>openGodraysMini()},
   {k:'health',  ic:'🛡', t:'Health',   fn:()=>openHealth()},
+  {k:'alerts',  ic:'🚨', t:'Alerts',   fn:()=>openAlertsMini()},
+  {k:'cases',   ic:'📁', t:'Cases',    fn:()=>openCasesMini()},
   {k:'assist',  ic:'📲', t:'Assist',   fn:()=>openAssistStatusMini()},
+  {k:'assets',  ic:'🧱', t:'Assets',   fn:()=>openAssetsMini()},
+  {k:'labs',    ic:'🧪', t:'Labs',     fn:()=>openLabsMini()},
 ];
 /* ===== GPU — SIMPLE 2-button system: type what you want → ⚡ Run (auto-sizes the GPU, picks the cheapest
    matching box, runs, saves results to Hostinger, disposes). Each running box has one 🗑 Dispose. ===== */
@@ -3424,15 +3518,21 @@ const CELESTIAL_GLB={
  'app-create':'/asset/jarvis_ai_core_active_tool_row.glb','app-image':'/asset/jarvis_kit_data_orb.glb',
  'app-3d':'/asset/jarvis_holo_panel_frame.glb','app-library':'/asset/jarvis_docvault_hero_document_book.glb',
  'app-climate':'/media/gen_uw_sky__storm_supercell.glb','app-agent':'/asset/jarvis_ai_core_reasoning_orb.glb',
+ 'app-arch':'/asset/jarvis_holo_panel_frame.glb','app-memory':'/asset/jarvis_ai_core_command_history_panel.glb',
+ 'app-inbox':'/asset/jarvis_ai_core_director_avatar_plate.glb',
  'app-index':'/asset/jarvis_intel_graph_constellation.glb','app-budget':'/asset/jarvis_ai_core_context_usage_bar.glb',
  'app-upgrades':'/asset/jarvis_ai_core_approval_panel.glb','app-gpu':'/asset/jarvis_data_fusion_reactor_core.glb',
  'app-control':'/asset/jarvis_world_control_equatorial_ring.glb','app-care':'/asset/jarvis_security_core_user_avatar_plinth.glb',
  'app-brain':'/asset/jarvis_ai_core_reasoning_orb.glb',
  'app-offers':'/asset/jarvis_data_fusion_reactor_core.glb','app-docs':'/asset/jarvis_docvault_hero_document_book.glb',
+ 'app-datasets':'/asset/jarvis_data_fusion_reactor_core.glb','app-reports':'/asset/jarvis_docvault_hero_document_book.glb',
+ 'app-boards':'/asset/jarvis_ai_core_component_radial_gauge_92.glb',
  'app-files':'/asset/jarvis_ai_core_command_history_panel.glb','app-phrases':'/asset/jarvis_ai_core_director_avatar_plate.glb',
  'app-swarms':'/asset/jarvis_simulation_branching_tree.glb','app-ideas':'/asset/jarvis_ai_core_reasoning_stream_panel.glb',
  'app-godrays':'/asset/jarvis_arc_reactor.glb','app-health':'/asset/jarvis_security_core_shield.glb',
- 'app-assist':'/asset/jarvis_world_control_equatorial_ring.glb'};
+ 'app-alerts':'/asset/jarvis_security_core_shield.glb','app-cases':'/asset/jarvis_world_control_equatorial_ring.glb',
+ 'app-assist':'/asset/jarvis_world_control_equatorial_ring.glb','app-assets':'/asset/jarvis_holo_panel_frame.glb',
+ 'app-labs':'/asset/jarvis_analytics_observatory_hero_globe.glb'};
 const CELESTIAL_KIND_GLB={planet:'/media/gen_uw_sky__exoplanet.glb',moon:'/media/gen_uw_sky__moon_full.glb',
  meteorite:'/media/gen_uw_sky__meteor.glb',satellite:'/media/gen_uw_sky__satellite.glb',dust:'/media/gen_uw_sky__space_debris.glb'};
 /* moons per planet: {id,label,I,fn?,gateway?,sats:[[label,fnOrDrillOrTier],…],dust?,alias?} */
@@ -3452,6 +3552,9 @@ const CEL_MOONS={
   {id:'app-library', label:'📚 Library',   I:0.68,fn:()=>setMode('library'),     sats:[['Gallery',()=>setMode('library')],['Refresh Media',()=>loadLib()]]},
   {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>openClimate()],['Warm',()=>climateSay('I am cold, please warm the room')]]},
   {id:'app-agent',   label:'🤖 Agent OS',  I:0.60,gateway:'agentos',             sats:[['Tool Palette',()=>openAgentTools()]]},
+  {id:'app-arch',    label:'🏛 Arch',      I:0.59,fn:()=>openArchitectureMini(), sats:[['Architecture',()=>openArchitectureMini()],['Doctor',()=>openDoctor()]]},
+  {id:'app-memory',  label:'🗃 Memory',    I:0.585,fn:()=>openMemoryMini(),      sats:[['Recall',()=>openMemoryMini()],['Brain',()=>openBrain()]]},
+  {id:'app-inbox',   label:'🔔 Inbox',     I:0.58,fn:()=>openInboxMini(),        sats:[['Notifications',()=>openInboxMini()],['Assist',()=>openAssistStatusMini()]]},
   {id:'app-index',   label:'🧭 Index',     I:0.58,fn:()=>openCelIndex(),         sats:[['Open Index',()=>openCelIndex()]]},
   {id:'app-budget',  label:'💰 Budget',    I:0.57,fn:()=>openBudget(),           sats:[['Governor',()=>openBudget()],['Archon',()=>toggleArchon()]]},
   {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]},
@@ -3459,13 +3562,20 @@ const CEL_MOONS={
   {id:'app-brain',   label:'🧠 Brain',     I:0.54,fn:()=>openBrain(),            sats:[['Brain Status',()=>openBrain()],['GPU',()=>openGPU()]]},
   {id:'app-offers',  label:'💎 Offers',    I:0.53,fn:()=>openGpuOffers(),        sats:[['Estimate',()=>openGpuOffers()],['GPU',()=>openGPU()]]},
   {id:'app-docs',    label:'📄 Docs',      I:0.52,fn:()=>openDustDocs(),         sats:[['Dust Docs',()=>openDustDocs()],['Index',()=>openCelIndex()]]},
+  {id:'app-datasets',label:'🧬 Datasets',  I:0.515,fn:()=>openDatasetsMini(),    sats:[['Catalog',()=>openDatasetsMini()],['Docs',()=>openDustDocs()]]},
+  {id:'app-reports', label:'📑 Reports',   I:0.512,fn:()=>openReportsMini(),     sats:[['Reports',()=>openReportsMini()],['Boards',()=>openDashboardsMini()]]},
+  {id:'app-boards',  label:'📊 Boards',    I:0.508,fn:()=>openDashboardsMini(),  sats:[['Dashboards',()=>openDashboardsMini()],['Reports',()=>openReportsMini()]]},
   {id:'app-files',   label:'🗂 Files',     I:0.51,fn:()=>openFilesMini(),        sats:[['Service Files',()=>openFilesMini()]]},
   {id:'app-phrases', label:'💬 Phrases',   I:0.50,fn:()=>openPhrasesMini(),      sats:[['Cached Voice',()=>openPhrasesMini()]]},
   {id:'app-swarms',  label:'🐝 Swarms',    I:0.49,fn:()=>openSwarmsMini(),       sats:[['Live Tasks',()=>setMode('worklist')]]},
   {id:'app-ideas',   label:'💡 Ideas',     I:0.48,fn:()=>openSuggestionsMini(),  sats:[['Suggestions',()=>openSuggestionsMini()],['Upgrades',()=>openUpgrades()]]},
   {id:'app-godrays', label:'✦ God-rays',  I:0.47,fn:()=>openGodraysMini(),      sats:[['Self Check',()=>openGodraysMini()]]},
   {id:'app-health',  label:'🛡 Health',    I:0.46,fn:()=>openHealth(),           sats:[['Health',()=>openHealth()],['Doctor',()=>openDoctor()]]},
-  {id:'app-assist',  label:'📲 Assist',    I:0.45,fn:()=>openAssistStatusMini(), sats:[['Assist Link',()=>openAssistStatusMini()],['Control',()=>openAssist()]]}],
+  {id:'app-alerts',  label:'🚨 Alerts',    I:0.455,fn:()=>openAlertsMini(),      sats:[['Alerts',()=>openAlertsMini()],['Health',()=>openHealth()]]},
+  {id:'app-assist',  label:'📲 Assist',    I:0.45,fn:()=>openAssistStatusMini(), sats:[['Assist Link',()=>openAssistStatusMini()],['Control',()=>openAssist()]]},
+  {id:'app-cases',   label:'📁 Cases',     I:0.445,fn:()=>openCasesMini(),       sats:[['Cases',()=>openCasesMini()],['Alerts',()=>openAlertsMini()]]},
+  {id:'app-assets',  label:'🧱 Assets',    I:0.44,fn:()=>openAssetsMini(),       sats:[['Asset Status',()=>openAssetsMini()],['Library',()=>setMode('library')]]},
+  {id:'app-labs',    label:'🧪 Labs',      I:0.435,fn:()=>openLabsMini(),        sats:[['Capabilities',()=>openLabsMini()],['Brain',()=>openBrain()]]}],
  knowledge:[],   // the 16 dom:* galaxies are ADOPTED here at build time — GLBs + recursive systems intact
  automation:[
   {id:'run-builder',   label:'🧠 Knowledge Builder', I:0.90,alias:['pipe:🧠 Knowledge Builder'],  dust:19421,sats:[['Detail','drill:runner:🧠 Knowledge Builder']]},

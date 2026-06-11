@@ -28,6 +28,7 @@ import subprocess
 import tempfile
 import threading
 import time
+import urllib.error
 import urllib.request
 
 PORT = int(os.environ.get("DASHBOARD_PORT", "8095"))
@@ -41,6 +42,28 @@ TL_DB = os.path.join(ROOT, "server/data/tiered_llm.db")
 FB_DB = os.path.join(ROOT, "server/data/feedback.db")
 GLB_DIR = os.path.join(ROOT, "underworld/web/public/models/generated")
 BOX = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+BACKEND_BASE = os.environ.get("JARVIS_BACKEND_URL", "http://127.0.0.1:8001").rstrip("/")
+BACKEND_GET_PROXY_PREFIXES = (
+    "/v1/jarvis/architecture",
+    "/v1/jarvis/memory",
+    "/v1/jarvis/notifications",
+    "/v1/datasets",
+    "/v1/reports",
+    "/v1/dashboards",
+    "/v1/alerts",
+    "/v1/cases",
+    "/v1/jarvis/assets",
+    "/v1/labs/catalog",
+    "/v1/forge/status",
+)
+
+
+def _allow_backend_get_proxy(path: str) -> bool:
+    bare = (path or "").split("?", 1)[0]
+    for prefix in BACKEND_GET_PROXY_PREFIXES:
+        if bare == prefix or bare.startswith(prefix + "/"):
+            return True
+    return False
 def _control_token() -> str:
     """Stable control token — persisted so it survives dashboard restarts (otherwise every already-open
     tab goes stale and every Claude/task/control button returns 'unauthorized')."""
@@ -1889,7 +1912,7 @@ def _doctor() -> dict:
         {"id": "dashboard", "label": "Dashboard /jarvis", **_http_probe("http://127.0.0.1:%s/" % PORT, 4)},
         {"id": "chat", "label": "JARVIS chat", **_http_probe("http://127.0.0.1:%s/chat" % PORT, 12, "POST",
                                                              chat_body, {"Content-Type": "application/json"})},
-        {"id": "backend", "label": "FastAPI backend", **_http_probe("http://127.0.0.1:8001/", 4)},
+        {"id": "backend", "label": "FastAPI backend", **_http_probe("http://127.0.0.1:8001/health", 4)},
         {"id": "cors", "label": "Public app CORS", **cors},
         {"id": "brain", "label": "Ollama / Vast brain", **_http_probe("http://127.0.0.1:11434/api/tags", 4)},
         {"id": "underworld", "label": "Underworld API", **_http_probe("http://127.0.0.1:8091/", 4)},
@@ -2164,9 +2187,9 @@ class _H(http.server.BaseHTTPRequestHandler):
         except (BrokenPipeError, ConnectionResetError, TimeoutError):
             return False
 
-    def _send(self, body: bytes, ctype: str):
+    def _send_status(self, body: bytes, ctype: str, status: int = 200, extra: dict | None = None):
         try:
-            self.send_response(200)
+            self.send_response(status)
             self.send_header("Content-Type", ctype)
             self.send_header("Access-Control-Allow-Origin", "*")
             # Live app: HTML + JSON are always dynamic — never let a browser/proxy serve a stale copy.
@@ -2174,11 +2197,38 @@ class _H(http.server.BaseHTTPRequestHandler):
             self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
             self.send_header("Pragma", "no-cache")
             self.send_header("Expires", "0")
+            for k, v in (extra or {}).items():
+                self.send_header(k, v)
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self._write_body(body)
         except (BrokenPipeError, ConnectionResetError, TimeoutError):
             return
+
+    def _send(self, body: bytes, ctype: str):
+        self._send_status(body, ctype, 200)
+
+    def _proxy_backend_get(self) -> bool:
+        if not _allow_backend_get_proxy(self.path):
+            return False
+        headers = {}
+        auth = self.headers.get("Authorization")
+        if auth:
+            headers["Authorization"] = auth
+        try:
+            req = urllib.request.Request(BACKEND_BASE + self.path, method="GET", headers=headers)
+            with urllib.request.urlopen(req, timeout=15) as r:
+                body = r.read()
+                ctype = r.headers.get("Content-Type", "application/json")
+                self._send_status(body, ctype, int(getattr(r, "status", 200)))
+        except urllib.error.HTTPError as e:
+            body = e.read() or json.dumps({"ok": False, "error": f"backend {e.code}"}).encode()
+            ctype = e.headers.get("Content-Type", "application/json") if e.headers else "application/json"
+            self._send_status(body, ctype, int(e.code))
+        except Exception as e:  # noqa: BLE001
+            self._send_status(json.dumps({"ok": False, "error": str(e)[:180]}).encode(),
+                              "application/json", 502)
+        return True
 
     def _tmpl(self, name: str) -> str:
         """Read an html template from server/ and inject the control token."""
@@ -2240,6 +2290,11 @@ class _H(http.server.BaseHTTPRequestHandler):
                 self._send(json.dumps({"files": [f for f in fs if f.endswith(".py")][:40]}).encode(), "application/json")
             except Exception:  # noqa: BLE001
                 self._send(b'{"files":[]}', "application/json")
+        elif self.path.startswith("/v1/"):
+            if self._proxy_backend_get():
+                return
+            self._send_status(b'{"ok":false,"error":"backend route not exposed by dashboard"}',
+                              "application/json", 404)
         elif self.path.startswith("/tasks/poll"):
             from server.services import task_daemon as TD
             from urllib.parse import urlparse, parse_qs

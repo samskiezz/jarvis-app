@@ -327,6 +327,10 @@ def create_app() -> FastAPI:
     async def root():
         return {"service": "jarvis-backend", "status": "ok"}
 
+    @app.get("/health")
+    async def health():
+        return {"service": "jarvis-backend", "status": "ok"}
+
     return app
 
 
