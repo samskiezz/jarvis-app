@@ -714,7 +714,67 @@ const DOCK=[
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
+  {k:'gpu',    ic:'🎛', t:'GPU Instance', fn:()=>openGPU()},
 ];
+/* ===== GPU INSTANCE manager — disposable Vast.ai GPUs, A→Z, from the dock. Matches the app overlay style. */
+let _gpuTimer=null;
+function openGPU(){
+  let ov=$('gpuOv');
+  if(!ov){ ov=document.createElement('div'); ov.id='gpuOv'; ov.className='ov';
+    ov.style.cssText='position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;background:rgba(2,6,12,.94);overflow:auto;padding:54px 16px 90px;color:var(--tx);font-size:13px';
+    ov.innerHTML=
+      '<button onclick="closeGPU()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:18px;background:var(--glass);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:6px 14px">✕ Close</button>'
+     +'<div style="max-width:900px;margin:0 auto;width:100%">'
+     +'<h2 style="color:var(--cy);text-shadow:0 0 14px var(--cy);letter-spacing:1px">🎛 GPU Instances</h2>'
+     +'<div id=gpuKey style="display:none;background:rgba(255,93,108,.12);border:1px solid var(--rd);border-radius:12px;padding:14px;margin:10px 0;line-height:1.5"></div>'
+     +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">'
+       +'<input id=gpuTask placeholder="GPU task command (e.g. python train.py)" style="flex:1;min-width:240px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:10px;color:var(--tx)">'
+       +'<input id=gpuType placeholder="GPU (optional, e.g. RTX_4090)" style="width:170px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:10px;color:var(--tx)">'
+       +'<button onclick="gpuLaunch()" style="background:linear-gradient(135deg,#0a3a4a,#11324a);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:10px 18px;font-weight:700">⚡ Launch disposable</button>'
+     +'</div>'
+     +'<div id=gpuOffer style="font-size:11px;color:var(--dim);margin-bottom:8px"></div>'
+     +'<div id=gpuList style="display:flex;flex-direction:column;gap:10px"></div>'
+     +'<p style="color:var(--dim);font-size:11px;margin-top:16px">Every task = a fresh disposable instance. Results auto-sync to Hostinger storage, then the box is destroyed. Use ⧉ Copy to clone one anywhere. Multiple can run at once.</p>'
+     +'</div>';
+    document.body.appendChild(ov);
+  }
+  ov.style.display='flex'; try{$('dock').classList.add('hidden');}catch(_){}
+  gpuRefresh(); if(_gpuTimer)clearInterval(_gpuTimer); _gpuTimer=setInterval(gpuRefresh,6000);
+}
+function closeGPU(){const o=$('gpuOv');if(o)o.style.display='none';try{$('dock').classList.remove('hidden');}catch(_){}if(_gpuTimer){clearInterval(_gpuTimer);_gpuTimer=null;}}
+async function gpuRefresh(){
+  try{ const r=await(await fetch('gpu/instances')).json();
+    const key=$('gpuKey'), list=$('gpuList');
+    if(r.need_key){ key.style.display='block'; key.innerHTML='⚠ <b>Vast.ai API key needed.</b> Get it at <b>console.vast.ai → Account → API Key</b>, then add <code>VAST_API_KEY=…</code> to the server env and restart. Everything else is wired and ready.'; list.innerHTML=''; return; }
+    key.style.display='none';
+    const items=r.instances||[];
+    list.innerHTML = items.length? items.map(gpuCard).join('') :
+      '<div style="color:var(--dim);padding:20px;text-align:center">No instances running. Launch one above — it boots the cheapest matching GPU, runs your task, saves results to Hostinger, then disposes.</div>';
+  }catch(e){}
+}
+function gpuCard(i){const on=(i.status||'').indexOf('running')>=0;
+  return '<div style="background:rgba(10,26,40,.5);border:1px solid var(--ln);border-radius:12px;padding:12px;display:flex;flex-wrap:wrap;align-items:center;gap:10px">'
+   +'<span style="font-size:18px">'+(on?'🟢':'⚪')+'</span>'
+   +'<div style="flex:1;min-width:160px"><b>'+(i.gpu||'GPU')+'</b> ×'+(i.num_gpus||1)+'  <span style="color:var(--dim)">· $'+(i.price||0)+'/hr · '+(i.status||'?')+'</span><br><span style="color:var(--dim);font-size:11px">#'+i.id+(i.ssh_host?(' · '+i.ssh_host+':'+i.ssh_port):'')+'</span></div>'
+   +'<button onclick="gpuAct(\''+(on?'stop':'start')+'\','+i.id+')" style="background:#11324a;color:var(--cy);border:1px solid var(--ln);border-radius:8px;padding:6px 10px">'+(on?'⏸ Stop':'▶ Start')+'</button>'
+   +'<button onclick="gpuAct(\'copy\','+i.id+')" style="background:#11324a;color:#a78bfa;border:1px solid var(--ln);border-radius:8px;padding:6px 10px">⧉ Copy</button>'
+   +'<button onclick="gpuAct(\'sync\','+i.id+')" style="background:#11324a;color:#34d399;border:1px solid var(--ln);border-radius:8px;padding:6px 10px">⬇ Save→Hostinger</button>'
+   +'<button onclick="gpuAct(\'destroy\','+i.id+')" style="background:#2a1216;color:var(--rd);border:1px solid var(--rd);border-radius:8px;padding:6px 10px">🗑 Dispose</button>'
+   +'</div>';
+}
+async function gpuAct(action,id){ if(action==='destroy'&&!confirm('Dispose instance #'+id+'? (results should be saved first)'))return;
+  try{ const r=await(await fetch('gpu/'+action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})})).json();
+    if(!r.ok)jarvisSpeak('GPU '+action+' failed.'); gpuRefresh(); }catch(e){}
+}
+async function gpuLaunch(){ const task=($('gpuTask').value||'nvidia-smi').trim(), gpu=($('gpuType').value||'').trim()||null;
+  $('gpuOffer').textContent='Finding the cheapest matching GPU…';
+  try{ const r=await(await fetch('gpu/launch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task,gpu})})).json();
+    if(r.need_key){gpuRefresh();return;}
+    $('gpuOffer').textContent = r.ok? ('✓ Launching '+(r.offer?r.offer.gpu+' @ $'+r.offer.price+'/hr':'instance')+' (#'+r.id+') — booting + running your task…') : ('✗ '+(r.error||'launch failed'));
+    try{jarvisSpeak(r.ok?'GPU instance launching.':'Could not launch the GPU.');}catch(_){}
+    gpuRefresh();
+  }catch(e){$('gpuOffer').textContent='✗ '+e;}
+}
 function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
   [...d.querySelectorAll('.di')].forEach(el=>el.remove());

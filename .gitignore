@@ -97,3 +97,5 @@ server/data/celestial_index.generated.csv
 .proof/
 *.bak_*
 server/voices/raw_user/
+server/data/.vast_key
+server/data/gpu_results/

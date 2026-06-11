@@ -2168,6 +2168,25 @@ class _H(http.server.BaseHTTPRequestHandler):
         elif self.path.split("?", 1)[0] == "/phrases":
             # The canned lifeline phrases — the client pre-warms these into his cloned voice so they're instant.
             self._send(json.dumps(CANNED_PHRASES).encode(), "application/json")
+        elif self.path.startswith("/gpu/"):
+            # GPU INSTANCE MANAGER (read side): list live instances + cheapest offers.
+            from urllib.parse import urlparse, parse_qs
+            from server.services import gpu_instances as GI
+            sub = self.path.split("?", 1)[0].split("/gpu/", 1)[1]
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                if sub == "instances":
+                    out = GI.list_instances()
+                elif sub == "offers":
+                    out = GI.cheapest_offer(gpu_name=(q.get("gpu", [None])[0]) or None,
+                                            max_price=float(q.get("max", ["0"])[0]) or None)
+                elif sub == "configured":
+                    out = {"ok": True, "configured": GI.configured(), "results_dir": GI.RESULTS_DIR}
+                else:
+                    out = {"ok": False, "error": "unknown gpu route"}
+            except Exception as e:  # noqa: BLE001
+                out = {"ok": False, "error": str(e)[:200]}
+            self._send(json.dumps(out).encode(), "application/json")
         elif self.path.split("?", 1)[0] in ("/manifest.webmanifest", "/manifest.json"):
             # PWA manifest — makes "Install app" / "Add to Home Screen" work so her lifeline lives on the
             # home screen and launches full-screen. Icons use the existing SVG (any-size + maskable).
@@ -2320,6 +2339,31 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
         # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
         # SDP/ICE/control within a room (the room name is the shared secret) and never touches pm2 or
         # tasks — so mum's phone link carries no admin rights.
+        if self.path.startswith("/gpu/"):
+            # GPU INSTANCE MANAGER (control side): launch disposable / start / stop / destroy / copy / run / sync.
+            from server.services import gpu_instances as GI
+            sub = self.path.split("?", 1)[0].split("/gpu/", 1)[1]
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                b = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                b = {}
+            try:
+                if sub == "launch":
+                    out = GI.launch_disposable(b.get("task", "nvidia-smi"), gpu_name=b.get("gpu"),
+                                               max_price=b.get("max_price"), image=b.get("image"),
+                                               label=b.get("label", "jarvis-task"))
+                elif sub == "start":   out = GI.set_state(b.get("id"), True)
+                elif sub == "stop":    out = GI.set_state(b.get("id"), False)
+                elif sub == "destroy": out = GI.destroy_instance(b.get("id"))
+                elif sub == "copy":    out = GI.copy_instance(b.get("id"), max_price=b.get("max_price"))
+                elif sub == "run":     out = GI.run_on_instance(b.get("id"), b.get("cmd", "nvidia-smi"))
+                elif sub == "sync":    out = GI.sync_results(b.get("id"), b.get("path", "/workspace/results"))
+                else: out = {"ok": False, "error": "unknown gpu action"}
+            except Exception as e:  # noqa: BLE001
+                out = {"ok": False, "error": str(e)[:200]}
+            self._send(json.dumps(out).encode(), "application/json")
+            return
         if self.path.startswith("/voiceupload"):
             # Direct voice-sample upload (QuickShare blocks server-side download). Raw audio body →
             # server/voices/raw_user/recording_<n>.mp3, then run scripts/voice_pipeline.py to build the
