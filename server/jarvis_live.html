@@ -688,7 +688,7 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 
 <!-- thin top bar -->
 <div id=top>
- <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·φ-hierarchy</span></div>
+ <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·3D menu</span></div>
  <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts">● ONLINE</span>
  <span class="chip mono" id=age>—</span>
  <span class="chip mono" id=celStream style="display:none" onclick="openCelIndex()" title="Celestial streaming status">🌌 —</span>
@@ -2588,28 +2588,26 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
   else{m.geometry.dispose();m.geometry=new THREE.SphereGeometry(sz,32,32);}
   tuneBodyLabel(m,sz,{always:!!m.userData.celKind});}
 
-/* ---- (d) φ / FRACTAL / RELATIONSHIP LAYOUT ----
-   Golden-angle (137.5°) phyllotaxis for even, no-clump angular spacing; distance from the Sun ∝ INVERSE
-   importance (closer = more related/important — functions & features sit innermost); a per-type cluster
-   phase keeps similar bodies grouped (similarity clustering); a self-similar vertical spread gives the
-   fractal feel. importance ∈ [0,1]. */
-const GOLDEN=Math.PI*(3-Math.sqrt(5));                  // 137.50776° in radians
-const CLUSTER_PHASE={kpi:0.0, sys:1.0, infra:2.0, pipe:3.2, tier:4.2, guardian:5.0, selfdev:5.6, climate:0.6, agentos:4.8};
+/* ---- (d) FIXED SLOT / LANE LAYOUT ----
+   Console-menu placement: predictable rows/rings and stable angular slots. No phi/golden spiral. */
+const GOLDEN=(Math.PI*2)/12;                            // legacy callers now get 12 clear menu slots, not phi
+const CLUSTER_PHASE={kpi:0.0, sys:0.7, infra:1.4, pipe:2.1, tier:2.8, guardian:3.5, selfdev:4.2, climate:4.9, agentos:5.6};
 function phyllo(i, importance, type){
   const base=4500, span=6000;                          // telemetry band pushed OFF the giant core (4.5k-10.5k, inside the 12k app ring) — no more dots crowding the centre
   const imp=Math.max(0,Math.min(1,importance));
-  const r=base + span*(1-imp);                         // closer = more important
-  const a=(CLUSTER_PHASE[type]||0) + i*GOLDEN;         // golden-angle within the type cluster
-  const y=Math.sin(i*GOLDEN*1.7)*34*(0.5+imp);        // self-similar vertical spread
+  const ring=Math.floor(i/12), slot=i%12;
+  const r=base + span*(1-imp) + ring*720;              // closer = more important; extra rows never overlap
+  const a=(CLUSTER_PHASE[type]||0) + slot*GOLDEN;
+  const y=(ring-0.5)*210;
   return {radius:r, angle:a, y:y};
 }
-/* §1 F: Vogel/sunflower placement for the MAJOR planets — golden-angle θ=i·137.50776° + radius R0+k·√i,
-   scaled so high-importance (bigger count) planets sit CLOSER to the Sun. Self-similar at every nest level. */
+/* §1 F: fixed-slot placement for generated/legacy planets. */
 function vogel(i, importance, R0, k){
   const imp=Math.max(0,Math.min(1,importance));
-  const a=i*GOLDEN;                                    // golden angle — no clumping
-  const r=(R0||300) + (k||26)*Math.sqrt(i+0.5) - imp*70;   // bigger/important → pulled inward
-  const y=Math.sin(i*GOLDEN*0.7)*44*(0.4+0.6*(1-imp));     // gentle self-similar vertical spread
+  const slots=12, ring=Math.floor(i/slots), slot=i%slots;
+  const a=slot*(Math.PI*2/slots)+(ring%2)*(Math.PI/slots);
+  const r=(R0||300) + (k||26)*(ring+1) - imp*70;
+  const y=(ring-0.5)*Math.max(34,(k||26)*0.8);
   return {radius:Math.max(150,r), angle:a, y:y};
 }
 
@@ -2646,7 +2644,7 @@ function sizeFor(tier, importance){
 function impFromCount(c){ return Math.max(0,Math.min(1, c?Math.log10(1+c)/5:0.4)); }   // log-scaled real count → 0..1
 
 /* ===== NASA-Eyes recursive hierarchy: Node model + nav stack (Stage 5) ===== */
-const PHI_CONJ = 0.381966011;                         // 1/φ² — recursive self-similar scale per level
+const MENU_CHILD_SCALE = 0.382;                       // recursive inspect scale per level
 function makeNode(o){ return Object.assign({
   id:o.id, label:o.label, kind:o.kind||'planet', depth:o.depth||0, parent:o.parent||null,
   color:o.color||COLORS.kpi, glbUrl:o.glbUrl||null, count:o.count??null,
@@ -2691,12 +2689,12 @@ function framingFor(frame){
 
 /* ---- §1 A: the 16 MAJOR ONTOLOGY-DOMAIN PLANETS (the white-dot killer) ----
    Built ONCE from the embedded deterministic manifest. Each domain → its CORRECT curated GLB (per
-   manifest.domains), placed by the φ/Vogel law, SIZED log-scaled by its real ont_object count, carrying
+   manifest.domains), placed into fixed 3D menu lanes, SIZED log-scaled by its real ont_object count, carrying
    its TITLE label. Lazy-loaded through the concurrency-capped queue. Clicking flies to it + opens a card. */
 let _domainPlanetsBuilt=false;
-/* ---- ALGORITHM · MOON TIER (fractal/self-similar) ----
+/* ---- ALGORITHM · MOON TIER ----
    Each planet's REAL child entities (from /children → brain.db) are placed as MOONS on a visible ORBIT RING
-   around it, by the SAME golden-angle φ law applied at the moon scale (self-similar / fractal). Size = small
+   around it, by fixed menu slots. Size = small
    (sub-features); distance = on the relationship ring. REAL ontology entities only — never decorative. */
 const _moonGroups=[];        // every orbiting system group (planets/moons/satellites/meteors); each carries userData.spin
 const _systemGroups=[];      // planet/moon groups hidden by default — revealed on drill-in (progressive disclosure)
@@ -2715,7 +2713,7 @@ function _orbitRing(parent, R, op){ try{
 /* one orbiting body — HOLOGRAPHIC, not solid: a translucent additive glow core + a wireframe data-grid shell
    + a fresnel rim halo, all in the body's colour, self-rotating. (JARVIS hologram look; no opaque/CAD surfaces.) */
 /* §8 closest-related sit innermost. baseRing = ring radius; rank 0 = most related (server ont_link order).
-   Only RADIUS encodes relationship strength; the golden-angle φ ANGLE is untouched (even spread preserved). */
+   Only RADIUS encodes relationship strength; angle uses fixed slots so objects remain scannable. */
 function relRadius(baseRing, rank, total){
   const n=Math.max(1,(total||1)-1);
   const t=Math.min(1,(rank||0)/n);
@@ -2787,9 +2785,9 @@ function findOrbByEntity(id){ if(!id)return null;
 function findOrbByLabel(lab){ if(!lab)return null; const lo=String(lab).toLowerCase();
   for(let i=0;i<_pickBodies.length;i++){if((_pickBodies[i].userData.label||'').toLowerCase()===lo)return _pickBodies[i];} return null; }
 function openCardLive(g, card){ if(_selected!==g)return; _cardDrilled=false; showCardWithFns(card); }
-/* RECURSIVE φ HIERARCHY (real data only): galaxy ▸ PLANETS (the domain's top entities) ▸ MOONS (each planet's
-   linked entities) ▸ SATELLITES (each moon's services/actions). Same golden-angle law at every level
-   (self-similar / fractal); sizes & ring distances STRICTLY descend galaxy > planet > moon > satellite. */
+/* RECURSIVE INSPECT HIERARCHY (real data only): galaxy ▸ PLANETS (the domain's top entities) ▸ MOONS
+   (each planet's linked entities) ▸ SATELLITES (each moon's services/actions). Fixed slots at every level;
+   sizes & ring distances STRICTLY descend galaxy > planet > moon > satellite. */
 function buildGalaxySystem(galaxy, domain, galaxySize){
   if(!galaxy||!domain||typeof THREE==='undefined') return;
   fetch('children?kind=type:'+encodeURIComponent(domain)+'&limit=5').then(r=>r.json()).then(d=>{
@@ -2798,7 +2796,7 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
     const pgrp=new THREE.Group(); galaxy.add(pgrp); pgrp.userData.spin=0.10; _moonGroups.push(pgrp); galaxy.userData.planetGroup=pgrp;  // planets ALWAYS visible, orbiting their galaxy (solar-system look); only moons drill-in
     planets.forEach((pl,i)=>{ try{
       const a=i*GOLDEN, r=relRadius(pRing, i, planets.length);
-      const psz=Math.min(galaxySize*PHI_CONJ*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);  // FRACTAL CASCADE: planet = galaxy × 1/φ² (self-similar golden-ratio step) ± importance
+      const psz=Math.min(galaxySize*MENU_CHILD_SCALE*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);
       const pm=_orbBody(psz, pl.color, 'planet', pl.label, pl.id, 'type:'+domain);
       pm.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*galaxySize*0.2, Math.sin(a)*r);
       pgrp.add(pm);
@@ -2820,7 +2818,7 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
   }).catch(e=>{});
 }
 /* SATELLITES — the REAL pm2/Docker services (/vitals.services.list) on a ring hugging the AI Core (they power
-   the whole brain). Golden-angle spacing, satellite tier size, coloured by LIVE status (online=cyan, stopped=grey). */
+   the whole brain). Fixed-slot spacing, satellite tier size, coloured by LIVE status (online=cyan, stopped=grey). */
 let _satBuilt=false;
 function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
   fetch('vitals').then(r=>r.json()).then(v=>{
@@ -2845,7 +2843,7 @@ function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
   }).catch(e=>{});
 }
 /* METEORS — the REAL live alerts/events (/vitals.alerts), innermost near the brain (urgent = closest).
-   Small but HOT (alerts must be noticed); red=critical, amber=warning. Golden-angle spacing. */
+   Small but HOT (alerts must be noticed); red=critical, amber=warning. Fixed-slot spacing. */
 let _metBuilt=false;
 function buildMeteors(){ if(_metBuilt||!scene)return; _metBuilt=true;
   fetch('vitals').then(r=>r.json()).then(v=>{
@@ -2948,21 +2946,21 @@ function buildDomainPlanets(){
     const lg=Math.log10(1+(info.count||1));
     const imp=(maxLog>minLog)?(lg-minLog)/(maxLog-minLog):0.5;   // 0..1 importance, normalized across real min..max
     const sz=sizeFor('galaxy',imp);                             // SIZE ∝ importance: most important ≈19, least ≈5 (clear ~3.8× hierarchy)
-    // DISTANCE: Vogel √i golden-angle spiral — most important (rank i=0) sits INNERMOST near the core; least important farthest out
-    const P={angle:i*GOLDEN, radius:25000+9000*Math.sqrt(i), y:Math.sin(i*GOLDEN*0.7)*3000*(0.4+0.6*(1-imp))};   // VAST field 25k-60k, OUTSIDE the 12k app ring; systems (~2.6k) can never touch (~26k gaps)
+    const cols=4, col=i%cols, row=Math.floor(i/cols), x=18000+row*8200, z=(col-(cols-1)/2)*6400;
+    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:(1-row)*2600};   // explicit console-menu lanes; no phi spiral
     const name='dom:'+dom, count=info.count||0;
     const node=makeNode({id:name,label:dom,kind:'planet',depth:0,parent:null,
       color:COLORS.kpi,count:count,childrenKind:'type:'+dom,glbUrl:info.url});
     const card=()=>({title:dom,subtitle:'ontology domain · '+(info.reason||''),
       bar:Math.round(imp*100),
       props:[{k:'Objects',v:fmt(count)},{k:'Importance',v:Math.round(imp*100)+'%'},{k:'GLB',v:(info.url||'').split('/').pop()}],
-      lines:['One of the 16 real ontology domains from brain.db.','Sized by its real object count; placed by the golden-angle φ law.'],
+      lines:['One of the 16 real ontology domains from brain.db.','Sized by its real object count; placed in a fixed 3D menu lane.'],
       actions:[{label:'◈ Focus in graph',kind:'graph',arg:dom},
         {label:'⏎ Enter system',kind:'descend',arg:dom}]});
     const b=addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
       radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
     bodyNodeMap.set(b,node);
-    buildGalaxySystem(b,dom,sz);        // RECURSIVE φ: galaxy ▸ planets ▸ moons (real entities; sizes & distances descend, self-similar)
+    buildGalaxySystem(b,dom,sz);        // recursive domain inspect system: galaxy ▸ planets ▸ moons
     b.userData.oa=P.angle; b.userData.orr=P.radius; b.userData.oy=P.y; b.userData.os=0.013*Math.min(2.0,1400/P.radius); _galaxyOrbiters.push(b);  // galaxy slowly orbits the core (inner faster)
   });
   // a lighter outer belt of the 31 master TOPIC planets (ranked by pagerank) — keeps depth without 1,600 loads
@@ -2970,7 +2968,8 @@ function buildDomainPlanets(){
   const maxPr=Math.max(...topics.map(t=>t.pagerank||0))||1;
   topics.forEach((t,i)=>{const imp=Math.max(0,Math.min(1,(t.pagerank||0)/maxPr));
     const sz=sizeFor('topic',imp);                              // GLOBAL SIZE LAW: nebula/topic tier — below planets
-    const P=vogel(i,imp*0.5,200000,3000);                        // topic belt pushed to the FAR backdrop — no more confining yellow ring
+    const cols=4, col=i%cols, row=Math.floor(i/cols), x=52000+row*7600, z=(col-(cols-1)/2)*7200;
+    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:-9800-row*1600};  // far backdrop grid, not a phi belt
     const name='topic:'+i;
     const card=()=>({title:t.title,subtitle:'master topic · pagerank '+(t.pagerank||0).toFixed(4),
       props:[{k:'PageRank',v:(t.pagerank||0).toFixed(4)},{k:'GLB',v:(t.url||'').split('/').pop()}],
@@ -3021,24 +3020,21 @@ const _celFamilyBias={miniapps:-1350,automation:-1120,knowledge:-940,infrastruct
 const _celRepoBody={};           // repo seed id -> rendered body name
 let _celRepo=null;
 function _celPlanetPos(rank,total,p){
-  const I=_celImportance(p.I), laneBase=CEL_LANE_ANG[p.lane]||0;
   const cols=5, col=rank%cols, row=Math.floor(rank/cols);
-  const shell=3300+row*1180+Math.pow(1-I,1.2)*620+Math.max(-520,Math.min(700,(_celFamilyBias[p.id]||0)*0.18));
-  const theta=laneBase+rank*GOLDEN*0.18;
   const colMid=(cols-1)/2;
   return new THREE.Vector3(
-    Math.max(2600,shell),
-    (1-row)*780+Math.sin(theta)*180,
-    (col-colMid)*1450+Math.cos(theta)*260
+    4300+row*2600,
+    (1-row)*1180,
+    (col-colMid)*2350
   );
 }
 function _celOrbitRadius(parentWorld,childWorld,index,total,tier){
   const group=Math.max(1,total||1), i=Number(index)||0;
-  const ring=(tier==='satellite')?Math.ceil((i+1)/8):Math.ceil((i+1)/5);
-  const lane=(tier==='satellite')?(i%8):(i%5);
-  const gap=(tier==='satellite')?150:320;
-  const familyPad=(tier==='satellite')?Math.min(680,group*16):Math.min(1400,group*44);
-  return parentWorld+childWorld*2.35+familyPad+gap*ring+lane*((tier==='satellite')?46:92);
+  const ring=(tier==='satellite')?Math.ceil((i+1)/10):Math.ceil((i+1)/8);
+  const lane=(tier==='satellite')?(i%10):(i%8);
+  const gap=(tier==='satellite')?260:520;
+  const familyPad=(tier==='satellite')?Math.min(1200,group*28):Math.min(2400,group*76);
+  return parentWorld+childWorld*2.8+familyPad+gap*ring+lane*((tier==='satellite')?72:150);
 }
 function _celKey(s){return String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'');}
 const _celKnownPlanetIds={
@@ -3302,7 +3298,19 @@ function _celDustCloud(mesh,cnt,trueCount){                          // count-tr
   mesh.userData.dustTrue=trueCount;
 }
 function _celOrbit(b,parent,orbR,om,seed,rel){
-  _celOrbiters.push({m:b,parent:parent,a:_celHash(seed),om:om,orbR:orbR,phase:_celHash(seed),rel:rel==null?1:rel});
+  const kind=(b&&b.userData&&b.userData.celKind)||'moon';
+  const slots=kind==='satellite'?10:(kind==='dust'?14:8);
+  const ringKey=kind+':'+Math.max(0,Math.round((Number(orbR)||0)/900));
+  parent.userData._celSlots=parent.userData._celSlots||{};
+  const slot=parent.userData._celSlots[ringKey]||0;
+  parent.userData._celSlots[ringKey]=slot+1;
+  const ring=Math.floor(slot/slots), lane=slot%slots;
+  const baseA=(lane/slots)*6.28318+(ring%2)*(3.14159/slots);
+  const speed=kind==='moon'?0.0028:kind==='meteorite'?0.0036:kind==='satellite'?0.0044:0.0022;
+  try{b.position.set(parent.position.x+Math.cos(baseA)*orbR,
+    parent.position.y+Math.sin(baseA*1.7)*orbR*0.16,
+    parent.position.z+Math.sin(baseA)*orbR*(1-0.18*(1-(rel==null?1:rel))));}catch(_){}
+  _celOrbiters.push({m:b,parent:parent,a:baseA,om:speed,orbR:orbR,phase:baseA,rel:rel==null?1:rel});
 }
 /* absorb an OLD body: remove its mesh, alias its name so live upserts keep flowing into the cel body */
 function _celAbsorb(oldName,celName){
@@ -3321,6 +3329,7 @@ function _celAdoptDomains(knowledge){
   const kidNames=[];
   doms.forEach((g,i)=>{
     for(let j=_galaxyOrbiters.length-1;j>=0;j--)if(_galaxyOrbiters[j]===g)_galaxyOrbiters.splice(j,1);
+    g.userData.celKind='moon';
     const orbR=(knowledge.userData.baseScale||900)+(g.userData.baseScale||400)+700+(i%4)*460;
     _celOrbit(g,knowledge,orbR,0.008/Math.sqrt(1+(i%4)),g.userData.name,0.9);
     if(_celBodies.indexOf(g)<0)_celBodies.push(g);
@@ -3461,11 +3470,8 @@ async function buildCelestialOS(){
     const pr=_celPR(p.I), name='cel:'+p.id;
     const moons=CEL_MOONS[p.id]||[];
     const b=_celAdd(name,p,'planet',pr,p.lane,null);
-    // centre-priority shell: important feature planets sit closest to the core; lower priority systems fan outward.
+    // Console-menu layout: fixed rows/lanes, no phi spiral, no drift animation.
     b.position.copy(_celPlanetPos(rank,sortedPlanets.length,p));
-    b.userData.oa=Math.atan2(b.position.z,b.position.x);
-    b.userData.orr=Math.hypot(b.position.x,b.position.z);
-    b.userData.oy=b.position.y; b.userData.os=0.0018+p.I*0.0016; _galaxyOrbiters.push(b);
     b.userData.repoNodeRef=p;
     if(repoPlanet)_celRememberRepo(repoPlanet.id,name);
     p._kidNames=[];
@@ -3697,7 +3703,7 @@ function layoutFromMetrics(m){
   const corr=m.correlation||{},rout=m.routing||{},box=m.box||{},vps=m.vps||{};
   const vt=box.vram_total_gb||48,vu=box.vram_used_gb||0;
 
-  // ---- inner KPI ring (r=92), golden-angle spacing ----
+  // ---- inner KPI ring, fixed-slot spacing ----
   const kpi=[
     {name:'kpi:Topic',lab:'Build '+(c.pct||0)+'%',drill:'type:Topic',magnitude:(c.total||0),
       card:()=>({title:'Knowledge Build',subtitle:'ontology completion',bar:(c.pct||0),
@@ -4024,7 +4030,7 @@ function buildSatSwarm(satellites, parentGroup, scale){
 async function buildSystem(node, frame){
   if(!node.childrenKind) return;
   const children=await hydrate(node);
-  const s=Math.pow(PHI_CONJ, node.depth);
+  const s=Math.pow(MENU_CHILD_SCALE, node.depth);
   const moons=children.filter(c=>c.childrenKind), sats=children.filter(c=>!c.childrenKind);
   frame.bodies=frame.bodies||[];
   moons.forEach((m,i)=>{

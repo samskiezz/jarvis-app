@@ -1965,7 +1965,7 @@ def _godrays_selfcheck() -> dict:
 # particles client-side, so only counts cross the wire. Regenerate the scan after every merge:
 #   python3 scripts/scan_repo_to_celestial_index.py
 _CELESTIAL = {"payload": None, "ts": 0.0}
-_CELESTIAL_INDEX = {"nodes": None, "generated_at": None, "ts": 0.0}
+_CELESTIAL_INDEX = {"nodes": None, "generated_at": None, "dust_by_parent": None, "ts": 0.0}
 
 
 def _celestial_index_nodes() -> list:
@@ -1975,7 +1975,15 @@ def _celestial_index_nodes() -> list:
     with open(os.path.join(here, "data", "celestial_index.generated.json"), encoding="utf-8") as f:
         gen = json.load(f)
     nodes = gen.get("nodes", [])
+    dust_by_parent: dict = {}
+    for n in nodes:
+        if n.get("kind") == "dust":
+            dust_by_parent.setdefault(n.get("parent", ""), []).append(
+                {"id": n.get("id"), "label": n.get("label"), "repo": n.get("repo"),
+                 "parent": n.get("parent"), "importance": n.get("importance", 0.12)}
+            )
     _CELESTIAL_INDEX["nodes"] = nodes
+    _CELESTIAL_INDEX["dust_by_parent"] = dust_by_parent
     _CELESTIAL_INDEX["generated_at"] = gen.get("generated_at")
     _CELESTIAL_INDEX["ts"] = time.time()
     return nodes
@@ -1987,17 +1995,13 @@ def _celestial_dust(parent: str = "", q: str = "", offset: int = 0, limit: int =
     offset = max(0, int(offset or 0))
     limit = max(1, min(120, int(limit or 40)))
     try:
-        rows = []
-        for n in _celestial_index_nodes():
-            if n.get("kind") != "dust":
-                continue
-            if parent and n.get("parent") != parent:
-                continue
-            hay = (str(n.get("label", "")) + " " + str(n.get("repo", ""))).lower()
-            if q and q not in hay:
-                continue
-            rows.append({"id": n.get("id"), "label": n.get("label"), "repo": n.get("repo"),
-                         "parent": n.get("parent"), "importance": n.get("importance", 0.12)})
+        _celestial_index_nodes()
+        if parent:
+            rows = list((_CELESTIAL_INDEX.get("dust_by_parent") or {}).get(parent, []))
+        else:
+            rows = [r for bucket in (_CELESTIAL_INDEX.get("dust_by_parent") or {}).values() for r in bucket]
+        if q:
+            rows = [r for r in rows if q in (str(r.get("label", "")) + " " + str(r.get("repo", ""))).lower()]
         total = len(rows)
         return {"ok": True, "parent": parent, "q": q, "offset": offset, "limit": limit,
                 "total": total, "rows": rows[offset:offset + limit]}
