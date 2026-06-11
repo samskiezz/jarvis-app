@@ -17,6 +17,7 @@ Run:  cd /opt/jarvis-app-1 && .venv/bin/python -m server.dashboard   (DASHBOARD_
 from __future__ import annotations
 
 import glob
+import concurrent.futures
 import http.server
 import json
 import mimetypes
@@ -1370,6 +1371,19 @@ def _local_reply(prompt: str, address: str = "") -> str:
             f"speak, show your photos and files, watch over you and call your family — just tell me what you need.")
 
 
+def _local_reply_fast_path(prompt: str) -> bool:
+    p = (prompt or "").lower().strip()
+    phrases = (
+        "hello", "hi ", "hey", "you there", "are you there", "jarvis",
+        "help", "fallen", "fall", "emergency", "ambulance", "can't breathe",
+        "cant breathe", "hurt", "pain", "scared", "911", "000",
+        "how are you", "you ok", "you okay", "thank", "cheers", "appreciate",
+        "love you", "good night", "goodnight", "night night",
+        "who are you", "what are you", "your name", "time", "what day", "date",
+    )
+    return any(x in p for x in phrases)
+
+
 def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
     """Synchronous, resilient conversational reply in the JARVIS persona (loaded from jarvis_persona.md).
     Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:32b),
@@ -1399,6 +1413,21 @@ def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
         return txt
     # FALLBACK 2: never leave her without a voice (warm, context-aware, on-Hostinger).
     return _local_reply(prompt, address)
+
+
+def _jarvis_chat_bounded(prompt: str, history=None, address: str = "ma'am") -> str:
+    """User-facing chat must never hang the dashboard request thread."""
+    if _local_reply_fast_path(prompt):
+        return _local_reply(prompt, address)
+    timeout_s = float(os.environ.get("JARVIS_DASHBOARD_CHAT_TIMEOUT_S", "7"))
+    executor = concurrent.futures.ThreadPoolExecutor(max_workers=1, thread_name_prefix="jarvis-chat")
+    fut = executor.submit(_jarvis_chat, prompt, history, address)
+    try:
+        return fut.result(timeout=timeout_s)
+    except concurrent.futures.TimeoutError:
+        return _local_reply(prompt, address)
+    finally:
+        executor.shutdown(wait=False, cancel_futures=True)
 
 
 def _zone_phrase(name) -> str:
@@ -2892,7 +2921,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                                                                     "what is blocking it.",
                                            "error": str(e)[:160]}).encode(), "application/json")
                     return
-            reply = _jarvis_chat(qtext, body.get("history"), body.get("address", "ma'am"))
+            reply = _jarvis_chat_bounded(qtext, body.get("history"), body.get("address", "ma'am"))
             self._send(json.dumps({"ok": True, "reply": reply}).encode(), "application/json")
             return
         if self.path.split("?", 1)[0] == "/a11y":
