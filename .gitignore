@@ -94,3 +94,6 @@ server/data/celestial_index.generated.csv
 
 # TTS virtualenv (1.9GB model.pth + torch — never commit)
 .venv-tts/
+.proof/
+*.bak_*
+server/voices/raw_user/
