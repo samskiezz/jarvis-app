@@ -53,6 +53,7 @@ import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
 import PriorityActionQueue from '@/components/cinematic/PriorityActionQueue';
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import AgentChatTranscript from '@/components/cinematic/AgentChatTranscript';
+import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEngine';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -114,6 +115,7 @@ function App() {
             <PriorityActionQueue />
             <SkillGapAdvisor />
             <AgentChatTranscript />
+            <ThreatCorrelationEngine />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
