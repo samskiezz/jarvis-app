@@ -28,10 +28,10 @@ This queue is the live recovery list from the current thread. Do not mark an ite
    Status: partial. The live renderer now uses lane-slot placement, mounted asset/media URLs, Explore camera framing, and verified public Three.js boot. The full repo-wide menu taxonomy is still pending.
 
 6. Fix celestial body spacing, labels, importance order, orbit grouping, lazy loading, camera modes, and space dust GLBs.
-   Status: partial. Verified public browser boot shows 183 celestial bodies, instanced 3D dust, mounted GLB loading, zero 404s, and no forbidden UI theme markers. Remaining work: complete taxonomy, duplicate prevention, all camera-mode usability checks, and full label/shortcut audit.
+   Status: partial. Verified public browser boot shows the celestial scene builds, mounted GLB/media loading works, 3D dust instancing is present, zero 404s/page errors, and no forbidden UI theme markers. Remaining work: complete taxonomy, duplicate prevention, all camera-mode usability checks, and full label/shortcut audit.
 
 7. Ensure every repo feature/document/function maps to a scalable celestial menu object or documented shortcut without duplicates.
-   Status: pending.
+   Status: partial. The `/jarvis/celestial` payload now represents generated repo files plus live database records as aggregate dust counts instead of pretending only the 13,966 generated file nodes exist. Public payload currently reports 1,364,189 represented records. Remaining work: full feature/function taxonomy, duplicate checks, and document-viewer/search drilldown from dust samples.
 
 8. Fix Underworld/backend batching so GPU/LLM workloads do not overload VRAM or block Hostinger/Vast.ai flows.
    Status: pending.
@@ -56,3 +56,5 @@ This queue is the live recovery list from the current thread. Do not mark an ite
 - `/jarvis/a11y/a11y.css` and `/jarvis/a11y/a11y.js` return 200.
 - `/jarvis/chat` returns a greeting response in under 0.1s for `hello jarvis`.
 - Chromium mobile probe: no page errors, no 404s, `window.A11Y` loaded, access overlay exists, Celestial OS built, 183 celestial bodies present, 3D dust instancing present, forbidden unapproved UI theme markers absent.
+- `/jarvis/celestial` now reports `total_records` over 1.36M by merging repo scan nodes with live DB aggregate dust counts for knowledge graph, document vault, GLB library, LLM router, knowledge builder, guardian monitor, and Underworld.
+- Browser route audit verified mounted URLs for tasks, swarms, swarm details, children, task review, celestial, assets, media, and a11y with no 404s while opening the Worklist overlay.

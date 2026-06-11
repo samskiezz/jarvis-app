@@ -349,7 +349,7 @@ window.A11Y = (function(){
   function readTasks() {
     try {
       TTS.speak('Reading task list...', { priority: 'barge-in' });
-      fetch('/tasks').then(r => r.json()).then(data => {
+      fetch(A11Y_URL('/tasks')).then(r => r.json()).then(data => {
         if (data && data.length) {
           const list = data.slice(0, 5).map((t, i) => `${i + 1}. ${t.title}`).join('. ');
           TTS.speak(list);
@@ -380,7 +380,7 @@ window.A11Y = (function(){
   function readFeed() {
     try {
       TTS.speak('Reading feed...', { priority: 'barge-in' });
-      fetch('/feed?limit=3')
+      fetch(A11Y_URL('/feed?limit=3'))
         .then(r => r.json())
         .then(data => {
           if (data?.items && data.items.length) {
@@ -402,7 +402,7 @@ window.A11Y = (function(){
   function readNotifications() {
     try {
       TTS.speak('Reading notifications...', { priority: 'barge-in' });
-      fetch('/notifications?limit=5')
+      fetch(A11Y_URL('/notifications?limit=5'))
         .then(r => r.json())
         .then(data => {
           if (data && data.length) {

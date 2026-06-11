@@ -2188,6 +2188,46 @@ def _celestial_dust(parent: str = "", q: str = "", offset: int = 0, limit: int =
         return {"ok": False, "error": str(e)[:160], "rows": [], "total": 0}
 
 
+def _celestial_db_dust_counts() -> dict:
+    """Aggregate live database records into the existing celestial dust parents.
+
+    The client renders dust as capped instanced geometry, so these stay as counts
+    instead of sending hundreds of thousands of rows over the wire.
+    """
+    counts = {
+        "moon:knowledge-graph": 0,
+        "moon:document-vault": 0,
+        "moon:glb-library": 0,
+        "moon:llm-router": 0,
+        "moon:knowledge-builder": 0,
+        "moon:guardian-monitor": 0,
+        "moon:underworld-web": 0,
+    }
+    pairs = [
+        ("moon:knowledge-graph", BRAIN_DB, "SELECT COUNT(*) FROM ont_object"),
+        ("moon:knowledge-graph", BRAIN_DB, "SELECT COUNT(*) FROM ont_link"),
+        ("moon:knowledge-graph", BRAIN_DB, "SELECT COUNT(*) FROM corr_entity"),
+        ("moon:document-vault", BRAIN_DB, "SELECT COUNT(*) FROM ont_object WHERE type='Document'"),
+        ("moon:document-vault", DOCS_DB, "SELECT COUNT(*) FROM document"),
+        ("moon:glb-library", os.path.join(ROOT, "server/data/media.db"), "SELECT COUNT(*) FROM media"),
+        ("moon:llm-router", TL_DB, "SELECT COUNT(*) FROM llm_routing"),
+        ("moon:llm-router", TL_DB, "SELECT COUNT(*) FROM tiered_llm_calls"),
+        ("moon:knowledge-builder", BRAIN_DB, "SELECT COUNT(*) FROM note"),
+        ("moon:knowledge-builder", BRAIN_DB, "SELECT COUNT(*) FROM world_ingestion_job"),
+        ("moon:guardian-monitor", os.path.join(ROOT, "server/data/tasks.db"), "SELECT COUNT(*) FROM tasks"),
+    ]
+    for parent, db, sql in pairs:
+        n = _count(db, sql)
+        if isinstance(n, int):
+            counts[parent] = counts.get(parent, 0) + n
+    try:
+        counts["moon:underworld-web"] += sum(1 for _ in glob.iglob(os.path.join(ROOT, "underworld", "**", "*"), recursive=True)
+                                             if os.path.isfile(_))
+    except Exception:  # noqa: BLE001
+        pass
+    return {k: v for k, v in counts.items() if v}
+
+
 def _celestial_payload() -> dict:
     if _CELESTIAL["payload"] is not None and (time.time() - _CELESTIAL["ts"]) < 300:
         return _CELESTIAL["payload"]
@@ -2226,8 +2266,13 @@ def _celestial_payload() -> dict:
                 if len(bucket) < 12:
                     bucket.append({"id": n.get("id"), "label": n.get("label"), "repo": n.get("repo"),
                                    "importance": n.get("importance", 0.18)})
+        db_dust_counts = _celestial_db_dust_counts()
+        for parent, total in db_dust_counts.items():
+            dust_counts[parent] = dust_counts.get(parent, 0) + total
         out["generated"] = {"generated_at": gen.get("generated_at"),
                             "total_nodes": len(gen.get("nodes", [])),
+                            "total_records": len(gen.get("nodes", [])) + sum(db_dust_counts.values()),
+                            "db_dust_counts": db_dust_counts,
                             "dust_counts": dust_counts, "dust_samples": dust_samples,
                             "file_moons": file_moons, "file_moon_samples": file_moon_samples}
     except Exception as e:  # noqa: BLE001
