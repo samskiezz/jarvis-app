@@ -2343,6 +2343,17 @@ function makeLabel(text){
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,depthTest:false}));
   sp.scale.set(36,9,1);return sp;
 }
+function tuneBodyLabel(mesh,bodyRadius,opts){
+  const sp=mesh&&mesh.userData&&mesh.userData.label;
+  if(!sp)return;
+  const r=Math.max(8,Number(bodyRadius)||((mesh.userData&&mesh.userData.baseScale)||24));
+  const labelW=Math.max(40,Math.min(180,r*0.28));
+  sp.scale.set(labelW,labelW*0.25,1);
+  sp.position.set(0,r+Math.max(10,Math.min(42,r*0.12)),0);
+  sp.material.opacity=opts&&opts.always?1:sp.material.opacity;
+  sp.visible=opts&&opts.always?true:sp.visible;
+  sp.userData.alwaysLabel=!!(opts&&opts.always);
+}
 function setLabel(mesh,text){
   mesh.userData.labelText=text;                       // keep the visible label searchable (flyToQuery)
   const sp=mesh.userData.label;if(!sp)return;
@@ -2351,6 +2362,7 @@ function setLabel(mesh,text){
   x.textAlign='center';x.textBaseline='middle';x.shadowColor='#29e7ff';x.shadowBlur=8;x.fillText(text,128,34);
   if(sp.material.map)sp.material.map.dispose();
   sp.material.map=new THREE.CanvasTexture(c);sp.material.needsUpdate=true;
+  tuneBodyLabel(mesh,mesh.userData&&mesh.userData.baseScale,{always:mesh.userData&&mesh.userData.celKind});
 }
 /* ---- (c) DETERMINISTIC asset map: each macro body → the RIGHT GLB for its type/topic ----
    Every name maps to a curated GLB that exists on disk (verified). Used for both the shaded GLB body
@@ -2379,7 +2391,7 @@ function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
 // LAZY-LOAD NEAREST-FIRST: the world has ~1,600 GLBs. We never fire them all at once (MAX_GLB in flight),
 // and — the key to a fast world — the queue is sorted by distance from the CAMERA each pump, so the closest
 // objects load first and the far galaxies stream in afterwards (and re-prioritise as she flies around).
-const MAX_GLB=6; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
+const MAX_GLB=((window.innerWidth||999)<820)?3:5; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
 const _glbV=new THREE.Vector3();
 function _jobDist(job){ if(job.node&&typeof camera!=='undefined'&&camera){ try{job.node.getWorldPosition(_glbV);return _glbV.distanceTo(camera.position);}catch(_){ } }
   return (job.seq||0); }                                  // no node/camera yet → fall back to insertion order
@@ -2462,17 +2474,20 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
   m.position.set(Math.cos(o.angle)*o.radius,o.y||0,Math.sin(o.angle)*o.radius);
   m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
     _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null};
-  const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
+  if(!o.noLabel){
+    const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
+    tuneBodyLabel(m,sz,{always:!!o.celLabel});
+  }
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
   _holoShell(m,sz,o.color);                              // HOLOGRAPHIC: every body matches the hologram look
   // upgrade to the real shaded GLB when it arrives (added as a child; keep transform + label + raycast)
-  _glbLoader.load('asset/'+asset+'.glb', g=>{ try{ const s=g.scene; s.scale.setScalar(sz*0.9);
+  enqueueGLB('asset/'+asset+'.glb', s=>{ try{ s.scale.setScalar(sz*0.9);
       s.traverse(c=>{ if(c.isMesh&&c.material){ try{c.material.emissive=new THREE.Color(o.color);
         c.material.emissiveIntensity=0.3; c.material.transparent=true; c.material.opacity=0.18;
         c.material.blending=THREE.NormalBlending; c.material.depthWrite=false;
         c.material.envMap=(envRT&&envRT.texture)||null; c.material.needsUpdate=true;}catch(_){}}});
       m.material.opacity=0.4;   // KEEP the glowing orb visible (was 0); GLB is a faint detail overlay
-      m.add(s); m.userData.glb=s; }catch(_){}}, undefined, ()=>{}); // 404 → keep the textured PBR sphere
+      m.add(s); m.userData.glb=s; }catch(_){}}, ()=>{}, m); // 404 → keep the textured PBR sphere
   return m;
 }
 
@@ -2489,6 +2504,7 @@ function addManifestBody(o){
   m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
     _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null,manifest:true};
   const lab=makeLabel(o.label);lab.position.set(0,sz+5,0);m.add(lab);m.userData.label=lab;
+  tuneBodyLabel(m,sz,{always:!!o.celLabel});
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
   _holoShell(m,sz,o.color);                              // HOLOGRAPHIC galaxy (matches every other body)
   if(o.url)enqueueGLB(o.url, s=>{ try{
@@ -2523,7 +2539,7 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
   m.userData.baseScale=sz;
   if(m.userData.glb){m.userData.glb.scale.setScalar(sz*0.9);}        // shaded GLB present → scale it
   else{m.geometry.dispose();m.geometry=new THREE.SphereGeometry(sz,32,32);}
-  if(m.userData.label)m.userData.label.position.set(0,sz+4,0);}
+  tuneBodyLabel(m,sz,{always:!!m.userData.celKind});}
 
 /* ---- (d) φ / FRACTAL / RELATIONSHIP LAYOUT ----
    Golden-angle (137.5°) phyllotaxis for even, no-clump angular spacing; distance from the Sun ∝ INVERSE
@@ -2937,7 +2953,7 @@ function buildDomainPlanets(){
    are ABSORBED via CEL_ALIAS so their LIVE updates (labels/colors) keep flowing into the new bodies;
    the old 12k app ring is retired (Mini Apps planet carries the dock apps); dom:* galaxies become
    Knowledge's moons with their recursive entity systems intact. Dock bar / panels / swarm untouched. */
-var CEL_K=30, CEL_LOD=0.008, CEL_REPLACES_APPRING=true;
+var CEL_K=22, CEL_LOD=0.0022, CEL_REPLACES_APPRING=true;
 var CEL_ALIAS={};                // old body name -> cel body name (absorption; resolved in upsertBody)
 const CEL_LANE_ANG={knowledge:-0.95,automation:-0.35,intelligence:0.25,infrastructure:0.85,guardian:1.45,media:2.05,underworld:2.65,voice:1.75,budget:0.95,ui:-0.05};
 const CEL_COLORS={knowledge:0x29e7ff,automation:0x34d399,intelligence:0xa78bfa,infrastructure:0x7af3ff,
@@ -2949,10 +2965,113 @@ let _CEL=null,_celDots=null,_celDotPos=null,_celBuilt=false;
 function _celHash(s){let h=0;for(let i=0;i<String(s).length;i++)h=(h*31+String(s).charCodeAt(i))>>>0;return (h%1000)/1000*6.28318;}
 const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
 /* spec scale contract (user tier order), spec units — ×CEL_K at render time */
-const _celPR =I=>_cl(10,34,Math.pow(I,0.72));                       // planet
-const _celMR =(pr,I)=>pr*_cl(0.26,0.42,Math.pow(I,0.72));           // moon
-const _celSR =(mr,I)=>mr*_cl(0.12,0.22,Math.pow(I,0.72));           // satellite (flow page/control)
-const _celD  =I=>220+Math.pow(1-Math.max(0,Math.min(1,I)),1.35)*630;// planet distance from apex
+const _celPR =I=>_cl(12,32,Math.pow(I,0.70));                       // planet
+const _celMR =(pr,I)=>pr*_cl(0.24,0.36,Math.pow(I,0.70));           // moon
+const _celSR =(mr,I)=>mr*_cl(0.14,0.24,Math.pow(I,0.70));           // satellite (flow page/control)
+const _celImportance=I=>Math.max(0,Math.min(1,Number(I)||0));
+const _celFamilyBias={miniapps:-1350,automation:-1120,knowledge:-940,infrastructure:-720,inference:-580,agentos:-340,selfdev:-160,
+  documents:160,correlation:320,media:560,guardian:760,voice:980,climate:1160,budget:1340,underworld:1700};
+const _celRepoBody={};           // repo seed id -> rendered body name
+let _celRepo=null;
+function _celPlanetPos(rank,total,p){
+  const I=_celImportance(p.I), laneBase=CEL_LANE_ANG[p.lane]||0;
+  const shell=6400+rank*1120+Math.pow(1-I,1.35)*3600+(_celFamilyBias[p.id]||0);
+  const theta=laneBase+rank*GOLDEN*0.52;
+  const spread=0.26+Math.pow(1-I,0.9)*0.18;
+  return new THREE.Vector3(
+    Math.max(4200,shell),
+    Math.sin(rank*GOLDEN*0.73)*shell*(0.11+spread*0.42),
+    Math.cos(theta)*shell*spread+Math.sin(theta*0.7)*shell*0.08
+  );
+}
+function _celOrbitRadius(parentWorld,childWorld,index,total,tier){
+  const group=Math.max(1,total||1), i=Number(index)||0;
+  const ring=(tier==='satellite')?Math.ceil((i+1)/8):Math.ceil((i+1)/5);
+  const lane=(tier==='satellite')?(i%8):(i%5);
+  const gap=(tier==='satellite')?150:320;
+  const familyPad=(tier==='satellite')?Math.min(680,group*16):Math.min(1400,group*44);
+  return parentWorld+childWorld*2.35+familyPad+gap*ring+lane*((tier==='satellite')?46:92);
+}
+function _celKey(s){return String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'');}
+const _celKnownPlanetIds={
+  miniapps:'planet:jarvis-live-ui',automation:'planet:automation-runners',knowledge:'planet:knowledge-ontology',
+  infrastructure:'planet:infrastructure',agentos:'planet:agent-os',selfdev:'planet:self-development',
+  media:'planet:glb-media-studio',guardian:'planet:guardian',voice:'planet:voice-tts',climate:'planet:climate',
+  budget:'planet:budget-token-governor',inference:'planet:inference-fabric',correlation:'planet:correlation-graph',
+  documents:'planet:documents-ingestion',underworld:'planet:underworld'};
+function _celPrepareRepo(){
+  const nodes=(((_CEL||{}).seed||{}).nodes||[]).slice();
+  const generated=((_CEL||{}).generated)||{};
+  const byId={}, byParent={}, byKindLabel={};
+  nodes.forEach(n=>{
+    if(!n||!n.id)return;
+    byId[n.id]=n;
+    const p=n.parent||'';
+    (byParent[p]=byParent[p]||[]).push(n);
+    byKindLabel[(n.kind||'')+':'+_celKey(n.label)]=n;
+  });
+  return {nodes,byId,byParent,byKindLabel,generated};
+}
+function _celFindRepoNode(kind,label,parentId){
+  if(!_celRepo)return null;
+  const key=kind+':'+_celKey(label);
+  let n=_celRepo.byKindLabel[key];
+  if(n&&(!parentId||n.parent===parentId))return n;
+  const list=parentId?(_celRepo.byParent[parentId]||[]):_celRepo.nodes;
+  const want=_celKey(label);
+  return list.find(x=>x.kind===kind&&(_celKey(x.label)===want||want.indexOf(_celKey(x.label))>=0||_celKey(x.label).indexOf(want)>=0))||n||null;
+}
+function _celAttachRepoStats(n,repoNode){
+  if(!n||!repoNode||!_celRepo)return;
+  n.repoId=repoNode.id;
+  n.repoSource=repoNode.repo||repoNode.source||'repo seed';
+  n.repoChildren=(_celRepo.byParent[repoNode.id]||[]).length;
+  n.repoDust=((_celRepo.generated.dust_counts||{})[repoNode.id]||0);
+  n.repoFileMoons=((_celRepo.generated.file_moons||{})[repoNode.id]||0);
+  if(n.repoDust&&!n.dust)n.dust=n.repoDust;
+}
+function _celSeedBodyName(id){return _celRepoBody[id]||null;}
+function _celRememberRepo(id,name){if(id&&!_celRepoBody[id])_celRepoBody[id]=name;}
+function _celAddShortcut(n,name,label){
+  if(!n||!name)return;
+  const row=name+'|'+(label||name);
+  n._kidNames=n._kidNames||[];
+  if(!n._kidNames.some(x=>String(x).split('|')[0]===name))n._kidNames.push(row);
+}
+const _celStageJobs=[];
+let _celStageRunning=false;
+function _celQueueStage(fn){ if(typeof fn==='function')_celStageJobs.push(fn); }
+function _celPumpStageSlice(){
+  if(!_celStageJobs.length)return;
+  const budget=((window.innerWidth||999)<820)?3:6;
+  for(let done=0;_celStageJobs.length&&done<budget;done++){
+    try{_celStageJobs.shift()();}catch(e){console.warn('celestial stage',e);}
+  }
+  if(!_celStageJobs.length){
+    _celStageRunning=false;
+    _celDotsRebuild();
+    try{rebuildMacroConnections();}catch(_){}
+  }
+}
+function _celRunStageJobs(){
+  if(_celStageRunning)return;
+  _celStageRunning=true;
+  const timer=setInterval(()=>{
+    const start=(typeof performance!=='undefined'?performance.now():0);
+    let done=0, budget=((window.innerWidth||999)<820)?5:12;
+    while(_celStageJobs.length&&done<budget){
+      try{_celStageJobs.shift()();}catch(e){console.warn('celestial stage',e);}
+      done++;
+      if(start&&performance.now()-start>10)break;
+    }
+    if(!_celStageJobs.length){
+      clearInterval(timer);
+      _celStageRunning=false;
+      _celDotsRebuild();
+      try{rebuildMacroConnections();}catch(_){}
+    }
+  },16);
+}
 
 /* ---------- THE CATALOG (celestial/CELESTIAL_CATALOG.md) — real entries only ---------- */
 const CEL_PLANETS=[
@@ -3074,16 +3193,20 @@ function _celCard(n,kindName,parentName){return ()=>{
   return {title:n.label,subtitle:'Celestial OS · '+kindName+(n.lane?' · '+n.lane+' lane':''),
     bar:Math.round((n.I||0)*100),
     props:[{k:'Importance',v:Math.round((n.I||0)*100)+'%'},{k:'Children',v:String(kids.length)}]
-      .concat(n.dust?[{k:'Records (dust)',v:fmt(n.dust)}]:[]),
+      .concat(n.repoChildren!=null?[{k:'Repo children',v:String(n.repoChildren)}]:[])
+      .concat(n.repoFileMoons?[{k:'Repo file moons',v:fmt(n.repoFileMoons)}]:[])
+      .concat(n.dust?[{k:'Records (dust)',v:fmt(n.dust)}]:[])
+      .concat(n.repoSource?[{k:'Source',v:String(n.repoSource).slice(0,42)}]:[]),
     lines:[],actions:acts};};}
 function _celAdd(name,n,kindName,specR,lane,parentName){
   const wr=Math.max(5,specR*CEL_K);
   const b=addBody({name:name,label:n.label,color:CEL_COLORS[lane]||CEL_COLORS.local,
-    radius:10,angle:0,y:0,size:wr/22});                             // addBody ×22 → exactly wr; name label rides on top
+    radius:10,angle:0,y:0,size:wr/22,celLabel:true});                // addBody ×22 → exactly wr; name label rides on top
   if(wr>240){try{ b.geometry.dispose(); b.geometry=new THREE.SphereGeometry(wr,64,48);    // MESH QUALITY: hi-res spheres for planet/moon tier
     b.material.metalness=0.85; b.material.roughness=0.16; b.material.envMapIntensity=1.6; // holographic CHROME (PMREM reflections)
     b.material.emissiveIntensity=0.8; }catch(_){}}                  // bio-illuminescent glow (feeds UnrealBloom)
   b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
+  tuneBodyLabel(b,wr,{always:true});
   b.userData.celLockScale=true; _celBodies.push(b); return b;
 }
 function _celDustCloud(mesh,cnt,trueCount){                          // count-true soft cloud: ONE draw call, tiny, no labels/bloom
@@ -3125,31 +3248,138 @@ function _celAdoptDomains(knowledge){
   });
   return kidNames;
 }
+function _celBuildRepoStages(){
+  if(!_celRepo)return;
+  const earlyFileMoons=(_celRepo.generated&&_celRepo.generated.file_moon_samples)||{};
+  Object.keys(earlyFileMoons).forEach(parentId=>{
+    _celQueueStage(()=>{
+    const parentName=_celSeedBodyName(parentId);
+    const parent=parentName&&bodyMap.get(parentName);
+    if(!parent)return;
+    const list=(earlyFileMoons[parentId]||[]).slice(0,12);
+    list.forEach((n,fi)=>{
+      if(!n||!n.id||_celSeedBodyName(n.id))return;
+      const name='cel:repo:filemoon:'+String(n.id).replace(/[^a-z0-9:_-]/gi,'-');
+      const node={label:'◌ '+(n.label||'File Moon'),I:n.importance||0.18,repoId:n.id,repoSource:n.repo||'generated file moon'};
+      _celAttachRepoStats(node,n);
+      const specR=Math.max(2.2,Math.min(5.5,2.6+(_celImportance(node.I)*4)));
+      const b=_celAdd(name,node,'moon',specR,(parent.userData&&parent.userData.lane)||'local',parentName);
+      b.userData.repoNodeRef=node; _celRememberRepo(n.id,name);
+      _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||50,fi,list.length,'moon')+fi*28,0.025+0.006*(fi%5),n.id,0.82);
+      if(parent.userData&&parent.userData.repoNodeRef)_celAddShortcut(parent.userData.repoNodeRef,name,node.label);
+    });
+    });
+  });
+  const earlyDust=(_celRepo.generated&&_celRepo.generated.dust_samples)||{};
+  Object.keys(earlyDust).forEach(parentId=>{
+    const list=(earlyDust[parentId]||[]).slice(0,8);
+    list.forEach((n,di)=>{
+      _celQueueStage(()=>{
+      if(!n||!n.id||_celSeedBodyName(n.id))return;
+      let parentName=_celSeedBodyName(parentId)||_celSeedBodyName(n.parent_parent);
+      if(!parentName&&_celRepo&&_celRepo.byId[parentId])parentName=_celSeedBodyName(_celRepo.byId[parentId].parent);
+      const parent=parentName&&bodyMap.get(parentName);
+      if(!parent)return;
+      const name='cel:repo:dust:'+String(n.id).replace(/[^a-z0-9:_-]/gi,'-');
+      const size=Math.max(0.9,Math.min(2.4,1.2+(_celImportance(n.importance)*1.8)));
+      const b=addBody({name:name,label:n.label||'dust',color:0x6fe3ff,radius:10,angle:0,y:0,size:size,noLabel:true});
+      b.userData.getCard=()=>({title:n.label||'Dust record',subtitle:'Celestial OS · dust sample',
+        props:[{k:'Parent',v:parent.userData.labelText||parentId},{k:'Source',v:String(n.repo||'repo record').slice(0,42)}],
+        lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)}]});
+      b.userData.celKind='dust'; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
+      _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||20,di,list.length,'satellite')+(di%3)*36,0.11+0.012*(di%5),n.id,0.72);
+      });
+    });
+  });
+  const mets=(_celRepo.nodes||[]).filter(n=>n.kind==='meteorite');
+  mets.forEach((n,mi)=>{
+    _celQueueStage(()=>{
+    const parentName=_celSeedBodyName(n.parent);
+    const parent=parentName&&bodyMap.get(parentName);
+    if(!parent||_celSeedBodyName(n.id))return;
+    const pr=(parent.userData.baseScale||240);
+    const specR=Math.max(3,(pr/CEL_K)*_cl(0.12,0.22,Math.pow(_celImportance(n.importance),0.7)));
+    const node={label:'☄ '+(n.label||'Meteorite'),I:n.importance||0.6,repoId:n.id,repoSource:n.repo||n.source||'repo seed'};
+    _celAttachRepoStats(node,n);
+    const name='cel:repo:met:'+n.id.replace(/[^a-z0-9:_-]/gi,'-');
+    const b=_celAdd(name,node,'meteorite',specR,(parent.userData&&parent.userData.lane)||'local',parentName);
+    _celRememberRepo(n.id,name);
+    _celOrbit(b,parent,_celOrbitRadius(pr,b.userData.baseScale||80,mi,mets.length,'moon'),0.052+0.012*((n.importance||0.5)),n.id,0.86);
+    const parentMesh=parent;
+    if(parentMesh&&parentMesh.userData&&parentMesh.userData.repoNodeRef)_celAddShortcut(parentMesh.userData.repoNodeRef,name,node.label);
+    if(node.repoDust)_celDustCloud(b,Math.min(1800,Math.round(Math.log10(1+node.repoDust)*360)),fmt(node.repoDust));
+    });
+  });
+  const sats=(_celRepo.nodes||[]).filter(n=>n.kind==='satellite');
+  sats.forEach((n,si)=>{
+    _celQueueStage(()=>{
+    const parentName=_celSeedBodyName(n.parent);
+    const parent=parentName&&bodyMap.get(parentName);
+    if(!parent||_celSeedBodyName(n.id))return;
+    const pr=(parent.userData.baseScale||80);
+    const specR=Math.max(1.6,(pr/CEL_K)*_cl(0.08,0.15,Math.pow(_celImportance(n.importance),0.7)));
+    const node={label:n.label||'Action',I:n.importance||0.5,repoId:n.id,repoSource:n.repo||n.source||'repo seed'};
+    _celAttachRepoStats(node,n);
+    const name='cel:repo:sat:'+n.id.replace(/[^a-z0-9:_-]/gi,'-');
+    const b=_celAdd(name,node,'satellite',specR,(parent.userData&&parent.userData.lane)||'local',parentName);
+    _celRememberRepo(n.id,name);
+    _celOrbit(b,parent,_celOrbitRadius(pr,b.userData.baseScale||32,si,(_celRepo.byParent[n.parent]||[]).length,'satellite'),0.082+0.012*(si%4),n.id,0.95);
+    const parentMesh=parent;
+    if(parentMesh&&parentMesh.userData&&parentMesh.userData.repoNodeRef)_celAddShortcut(parentMesh.userData.repoNodeRef,name,node.label);
+    });
+  });
+  const samples=(_celRepo.generated&&_celRepo.generated.dust_samples)||{};
+  Object.keys(samples).forEach(parentId=>{
+    _celQueueStage(()=>{
+    const list=(samples[parentId]||[]).slice(0,8);
+    list.forEach((n,di)=>{
+      if(!n||!n.id||_celSeedBodyName(n.id))return;
+      let parentName=_celSeedBodyName(parentId)||_celSeedBodyName(n.parent_parent);
+      if(!parentName&&_celRepo&&_celRepo.byId[parentId])parentName=_celSeedBodyName(_celRepo.byId[parentId].parent);
+      const parent=parentName&&bodyMap.get(parentName);
+      if(!parent)return;
+      const name='cel:repo:dust:'+String(n.id).replace(/[^a-z0-9:_-]/gi,'-');
+      const size=Math.max(0.9,Math.min(2.4,1.2+(_celImportance(n.importance)*1.8)));
+      const b=addBody({name:name,label:n.label||'dust',color:0x6fe3ff,radius:10,angle:0,y:0,size:size,noLabel:true});
+      b.userData.getCard=()=>({title:n.label||'Dust record',subtitle:'Celestial OS · dust sample',
+        props:[{k:'Parent',v:parent.userData.labelText||parentId},{k:'Source',v:String(n.repo||'repo record').slice(0,42)}],
+        lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)}]});
+      b.userData.celKind='dust'; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
+      _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||20,di,list.length,'satellite')+(di%3)*36,0.11+0.012*(di%5),n.id,0.72);
+    });
+    });
+  });
+  _celRunStageJobs();
+}
 async function buildCelestialOS(){
   if(_celBuilt)return; _celBuilt=true;
   try{const r=await fetch('/celestial');_CEL=await r.json();}catch(e){_CEL={};}
-  const lanes={};
-  CEL_PLANETS.forEach(p=>{
+  _celRepo=_celPrepareRepo();
+  const sortedPlanets=CEL_PLANETS.slice().sort((a,b)=>(_celImportance(b.I)-_celImportance(a.I))||String(a.id).localeCompare(String(b.id)));
+  sortedPlanets.forEach((p,rank)=>{
+    const repoPlanet=_celRepo&&(_celRepo.byId[_celKnownPlanetIds[p.id]]||_celFindRepoNode('planet',p.label,null));
+    _celAttachRepoStats(p,repoPlanet);
     const pr=_celPR(p.I), name='cel:'+p.id;
     const moons=CEL_MOONS[p.id]||[];
-    const famMax=(pr+_celMR(pr,1)+18+4*Math.sqrt(4)+(p.id==='knowledge'?60:8))*CEL_K;  // room for the whole family
-    const li=(lanes[p.lane]=lanes[p.lane]||{i:0}); const idx=li.i++;
-    const theta=(CEL_LANE_ANG[p.lane]||0)+idx*GOLDEN;
-    const Dw=Math.max(_celD(p.I)*CEL_K, 5200+famMax+600);            // apex clear zone respected
-    const spreadX=0.34+(1-p.I)*0.34, spreadY=0.22+(1-p.I)*0.24;
     const b=_celAdd(name,p,'planet',pr,p.lane,null);
-    // spec forward cone is -z; the POV looks +x → rotate so planets sit IN FRONT of the core
-    b.position.set(Dw, Math.sin(theta)*Dw*spreadY, Math.cos(theta)*Dw*spreadX);
+    // centre-priority shell: important feature planets sit closest to the core; lower priority systems fan outward.
+    b.position.copy(_celPlanetPos(rank,sortedPlanets.length,p));
     b.userData.oa=Math.atan2(b.position.z,b.position.x);
     b.userData.orr=Math.hypot(b.position.x,b.position.z);
     b.userData.oy=b.position.y; b.userData.os=0.0018+p.I*0.0016; _galaxyOrbiters.push(b);
+    b.userData.repoNodeRef=p;
+    if(repoPlanet)_celRememberRepo(repoPlanet.id,name);
     p._kidNames=[];
     moons.forEach((mn,mi)=>{
       const mr=_celMR(pr,mn.I), mname='cel:'+mn.id;
+      const repoMoon=_celFindRepoNode('moon',mn.label,repoPlanet&&repoPlanet.id);
+      _celAttachRepoStats(mn,repoMoon);
       mn.lane=p.lane;
       const mb=_celAdd(mname,mn,'moon',mr,p.lane,name);
-      const morb=(pr+mr+18+4*Math.sqrt((mn.sats||[]).length)+(mi%3)*9)*CEL_K;
+      mb.userData.repoNodeRef=mn;
+      const morb=_celOrbitRadius(pr*CEL_K,mr*CEL_K,mi,moons.length,'moon');
       _celOrbit(mb,b,morb,0.02+mn.I*0.012,mn.id,0.9);
+      if(repoMoon)_celRememberRepo(repoMoon.id,mname);
       p._kidNames.push(mname+'|'+mn.label);
       mn._kidNames=[];
       (mn.sats||[]).forEach((sv,si)=>{
@@ -3159,7 +3389,7 @@ async function buildCelestialOS(){
         else if(typeof sa==='string'&&sa.indexOf('drill:')===0)sn.drill=sa.slice(6);
         const sr=_celSR(mr,0.6), sname='cel:sat:'+mn.id+':'+si;
         const sb=_celAdd(sname,sn,'satellite',sr,p.lane,mname);
-        _celOrbit(sb,mb,(mr*2.2+sr+4+(si%2)*7)*CEL_K,0.045+0.01*(si%3),sname,0.95);
+        _celOrbit(sb,mb,_celOrbitRadius(mr*CEL_K,sr*CEL_K,si,(mn.sats||[]).length,'satellite'),0.045+0.01*(si%3),sname,0.95);
         if(typeof sa==='string'&&sa.indexOf('tier:')===0)CEL_ALIAS[sa]=sname;   // tier:* live updates land here
         mn._kidNames.push(sname+'|'+sl);
       });
@@ -3169,6 +3399,7 @@ async function buildCelestialOS(){
     if(p.id==='knowledge')p._kidNames=p._kidNames.concat(_celAdoptDomains(b));
     (p.alias||[]).forEach(a=>_celAbsorb(a,name));
   });
+  _celBuildRepoStages();
   _celDotsRebuild();
   try{rebuildMacroConnections();}catch(_){}
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
@@ -3210,6 +3441,7 @@ function celHydrateLive(m){
     bodyMap.delete('cel:met:'+k); delete _celMets[k]; _celDotsRebuild(); }});
 }
 function _celTick(dt){
+  _celPumpStageSlice();
   for(let i=0;i<_celOrbiters.length;i++){const c=_celOrbiters[i];c.a+=dt*c.om;   // spec orbit eq, parent-relative
     c.m.position.set(c.parent.position.x+Math.cos(c.a)*c.orbR,
       c.parent.position.y+Math.sin(c.a*1.7+c.phase)*c.orbR*0.16,
@@ -3218,7 +3450,7 @@ function _celTick(dt){
   for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
     _celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;
     const d=camera.position.distanceTo(b.position);
-    const want=((b.userData.baseScale||10)/Math.max(1,d))>CEL_LOD;  // graphics get better as you zoom in
+    const want=true;                                                // celestial menu bodies are UI, not background dust: never hide them
     if(b.visible!==want)b.visible=want;}
   _celDots.geometry.attributes.position.needsUpdate=true;
 }

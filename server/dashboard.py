@@ -1984,16 +1984,32 @@ def _celestial_payload() -> dict:
         with open(os.path.join(here, "data", "celestial_index.generated.json"),
                   encoding="utf-8") as f:
             gen = json.load(f)
+        gen_by_id = {n.get("id"): n for n in gen.get("nodes", []) if n.get("id")}
         dust_counts: dict = {}
+        dust_samples: dict = {}
         file_moons: dict = {}
+        file_moon_samples: dict = {}
         for n in gen.get("nodes", []):
             if n.get("kind") == "dust":
-                dust_counts[n.get("parent", "")] = dust_counts.get(n.get("parent", ""), 0) + 1
+                parent = n.get("parent", "")
+                dust_counts[parent] = dust_counts.get(parent, 0) + 1
+                bucket = dust_samples.setdefault(parent, [])
+                if len(bucket) < 8:
+                    pnode = gen_by_id.get(parent, {})
+                    bucket.append({"id": n.get("id"), "label": n.get("label"), "repo": n.get("repo"),
+                                   "importance": n.get("importance", 0.12),
+                                   "parent": parent, "parent_parent": pnode.get("parent", "")})
             elif n.get("kind") == "moon" and str(n.get("id", "")).startswith("moon:file:"):
-                file_moons[n.get("parent", "")] = file_moons.get(n.get("parent", ""), 0) + 1
+                parent = n.get("parent", "")
+                file_moons[parent] = file_moons.get(parent, 0) + 1
+                bucket = file_moon_samples.setdefault(parent, [])
+                if len(bucket) < 12:
+                    bucket.append({"id": n.get("id"), "label": n.get("label"), "repo": n.get("repo"),
+                                   "importance": n.get("importance", 0.18)})
         out["generated"] = {"generated_at": gen.get("generated_at"),
                             "total_nodes": len(gen.get("nodes", [])),
-                            "dust_counts": dust_counts, "file_moons": file_moons}
+                            "dust_counts": dust_counts, "dust_samples": dust_samples,
+                            "file_moons": file_moons, "file_moon_samples": file_moon_samples}
     except Exception as e:  # noqa: BLE001
         out["generated_error"] = str(e)[:160]
     _CELESTIAL["payload"] = out
