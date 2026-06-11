@@ -44,6 +44,7 @@ FB_DB = os.path.join(ROOT, "server/data/feedback.db")
 GLB_DIR = os.path.join(ROOT, "underworld/web/public/models/generated")
 BOX = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
 BACKEND_BASE = os.environ.get("JARVIS_BACKEND_URL", "http://127.0.0.1:8001").rstrip("/")
+DELIVERY_LEDGER_PATH = os.path.join(ROOT, "docs", "JARVIS_EXECUTION_LEDGER_2026-06-11.json")
 BACKEND_GET_PROXY_PREFIXES = (
     "/v1/jarvis/architecture",
     "/v1/jarvis/memory",
@@ -1902,6 +1903,67 @@ def _http_probe(url: str, timeout: float = 4.0, method: str = "GET", data: bytes
         return {"ok": False, "status": 0, "ms": int((time.time() - started) * 1000), "error": str(e)[:180]}
 
 
+def _delivery_ledger() -> dict:
+    def load():
+        try:
+            with open(DELIVERY_LEDGER_PATH, encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception as e:  # noqa: BLE001
+            return {"ok": False, "error": str(e)[:180], "items": [], "summary": {}}
+        items = data.get("items") or []
+        summary = {
+            "total": len(items),
+            "pending": sum(1 for i in items if i.get("status") == "pending"),
+            "in_progress": sum(1 for i in items if i.get("status") == "in_progress"),
+            "done": sum(1 for i in items if i.get("status") == "done"),
+            "p0": sum(1 for i in items if i.get("priority") == "p0"),
+            "p1": sum(1 for i in items if i.get("priority") == "p1"),
+            "p2": sum(1 for i in items if i.get("priority") == "p2"),
+        }
+        data["ok"] = True
+        data["summary"] = summary
+        return data
+    return _cached("delivery_ledger", 2.0, load)
+
+
+def _miniapp_selftest() -> dict:
+    probes = [
+        ("doctor", "System Doctor", "http://127.0.0.1:%s/doctor" % PORT),
+        ("delivery", "Delivery Ledger", "http://127.0.0.1:%s/delivery-ledger" % PORT),
+        ("files", "Files", "http://127.0.0.1:%s/files" % PORT),
+        ("phrases", "Voice Phrases", "http://127.0.0.1:%s/phrases" % PORT),
+        ("swarms", "Swarms", "http://127.0.0.1:%s/swarms" % PORT),
+        ("suggestions", "Suggestions", "http://127.0.0.1:%s/suggestions" % PORT),
+        ("godrays", "God-rays", "http://127.0.0.1:%s/godrays" % PORT),
+        ("assist", "Assist Link", "http://127.0.0.1:%s/assist/status" % PORT),
+        ("architecture", "Architecture", "http://127.0.0.1:%s/v1/jarvis/architecture" % PORT),
+        ("memory", "Memory", "http://127.0.0.1:%s/v1/jarvis/memory?user_id=anonymous&limit=2" % PORT),
+        ("notifications", "Inbox", "http://127.0.0.1:%s/v1/jarvis/notifications?user_id=anonymous&limit=2" % PORT),
+        ("datasets", "Datasets", "http://127.0.0.1:%s/v1/datasets" % PORT),
+        ("reports", "Reports", "http://127.0.0.1:%s/v1/reports" % PORT),
+        ("dashboards", "Boards", "http://127.0.0.1:%s/v1/dashboards" % PORT),
+        ("alerts", "Alerts", "http://127.0.0.1:%s/v1/alerts" % PORT),
+        ("cases", "Cases", "http://127.0.0.1:%s/v1/cases" % PORT),
+        ("assets", "Assets", "http://127.0.0.1:%s/v1/jarvis/assets/status" % PORT),
+        ("labs", "Labs", "http://127.0.0.1:%s/v1/labs/catalog" % PORT),
+        ("brain", "Brain", "http://127.0.0.1:%s/gpu/brain" % PORT),
+        ("health", "Health", "http://127.0.0.1:%s/healthreport" % PORT),
+    ]
+    rows = []
+    for pid, label, url in probes:
+        r = _http_probe(url, 5)
+        rows.append({"id": pid, "label": label, **r})
+    return {
+        "ok": True,
+        "summary": {
+            "total": len(rows),
+            "passing": sum(1 for r in rows if r.get("ok")),
+            "failing": sum(1 for r in rows if not r.get("ok")),
+        },
+        "rows": rows,
+    }
+
+
 def _doctor() -> dict:
     """Production System Doctor for the dock: cheap probes only, never throws, and records the missing
     feature/function list so debugging work does not vanish between sessions."""
@@ -1925,65 +1987,19 @@ def _doctor() -> dict:
     for c in checks:
         if "pm2" in c:
             c["ok"] = c["pm2"].get("status") == "online"
-    missing_features = [
-        "True PS5-style 2026 menu flow across the whole celestial universe, not just partial staged selection",
-        "Production-complete planet -> moon -> meteorite -> satellite -> dust progression for every branch",
-        "Repo-wide assignment of real features, documents, tools and services into the celestial hierarchy",
-        "Dedicated knowledge-base mini app with recall, browse and drill paths beyond popup summaries",
-        "Dedicated document viewer mini app with readable files, not only dust record lists",
-        "Dedicated reports and dashboards mini apps with richer surfaces than row/detail cards",
-        "Dedicated alerts, cases and inbox mini apps with triage workflows",
-        "Dedicated assets mini app with render-gap workflows and validation",
-        "Dedicated datasets mini app with ownership, kinds and drill-down",
-        "Dedicated labs mini app with action-ready capability surfaces",
-        "Dedicated architecture mini app with layers/modules navigation instead of only list output",
-        "Dedicated memory mini app with recall, filtering and follow-up actions",
-        "Dedicated swarms mini app with live progress and drill into each swarm run",
-        "Dedicated GPU/brain operating surface with persistent lifecycle telemetry",
-        "Dedicated climate setup/check surface with clear recovery steps and zone actions",
-        "Dedicated guardian/control surface for disabled-device onboarding and status",
-        "Jarvis execution transcript showing what actions were actually taken after each prompt",
-        "Jarvis conversation reliability pass covering voice, captions, retries and long-run continuity",
-        "6-tier LLM system UI and telemetry that clearly shows routing, fallbacks and model tier use",
-        "Lower-tier batching/queue optimisation surface before 70B expansion work",
-        "Disposable GPU brain orchestration for large-model workloads when needed, without breaking lower tiers",
-        "A real theme/settings surface so classic and modern remain skins over one live app",
-        "Full mobile/tablet/desktop menu polish pass with symmetry and placement QA",
-        "Explore-mode full-universe visibility pass so the scene is usable by a human at once",
-        "Per-mini-app self-test and production checklist surfaced inside the app",
-    ]
-    missing_functions = [
-        "Public CORS allowlist for app.projectsolar.cloud",
-        "Dashboard safe-write handling for cancelled browser requests",
-        "Underworld batching and health isolation so it cannot smash the wider system",
-        "Lower-tier LLM batch runner optimisation to reduce VRAM churn and bad queueing",
-        "Chat request retry with visible backend error detail",
-        "Long task handoff from chat into Live Tasks with status link and resume path",
-        "TTS fallback status when XTTS is slow or unavailable",
-        "Microphone/session recovery so Janic voice start-to-finish does not stall or disconnect",
-        "Access popup must reappear until mic/camera/files are actually granted",
-        "Phone companion setup must reliably prompt and persist on iOS/Android caregiver devices",
-        "Climate bridge disconnected recovery instruction",
-        "Fast route probes for /guardian, /library, /agent/tools and /tasks",
-        "No-duplicate celestial/dock registration guard",
-        "Production smoke test after deploy covering mobile/tablet/desktop",
-        "Speech bubble persistence while JARVIS is actively talking",
-        "Agent chat endpoint must not block the FastAPI event loop",
-        "GPU dispose should recoup files to Hostinger before destroy",
-        "Celestial feature labels should map to closest real GLB instead of one fallback orb",
-        "Camera mode parity so toggle/focus/explore render the same hierarchy correctly",
-        "Top-level planet ordering around the centre based on convenience and importance",
-        "Explore-camera anti-clutter rules so thousands of bodies stay usable and readable",
-        "Dust/file-moon paging and drill flow that remains fast at very large repo counts",
-        "Celestial search and shortcuts that move through the menu like a console UI instead of a loose scene",
-        "Batch/lazy scene loading that behaves like a 2026 game menu and avoids startup overload",
-        "A commit-to-claim ledger so unfinished work is never again reported as production-complete",
-    ]
+    ledger = _delivery_ledger()
+    ledger_items = ledger.get("items") or []
+    missing_features = [i.get("title", "") for i in ledger_items
+                        if i.get("kind") == "feature" and i.get("status") != "done"]
+    missing_functions = [i.get("title", "") for i in ledger_items
+                         if i.get("kind") == "function" and i.get("status") != "done"]
     ok_count = sum(1 for c in checks if c.get("ok"))
     return {"ok": True, "score": round(ok_count / max(1, len(checks)) * 100), "checks": checks,
             "pm2": [_pm2_state(n) for n in ("jarvis-dashboard", "jarvis-backend", "jarvis-tasks",
                                             "jarvis-voiceclone", "underworld-backend")],
-            "missing_features": missing_features, "missing_functions": missing_functions}
+            "missing_features": missing_features, "missing_functions": missing_functions,
+            "ledger_summary": ledger.get("summary") or {}, "ledger_title": ledger.get("title", ""),
+            "selftest_summary": _miniapp_selftest().get("summary") or {}}
 
 
 def _agent_run(command: str, wait_s: float = 8.0) -> dict:
@@ -2500,6 +2516,10 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(json.dumps(_agent_tools()).encode(), "application/json")
         elif self.path.startswith("/doctor"):
             self._send(json.dumps(_doctor()).encode(), "application/json")
+        elif self.path.startswith("/delivery-ledger"):
+            self._send(json.dumps(_delivery_ledger()).encode(), "application/json")
+        elif self.path.startswith("/miniapp-selftest"):
+            self._send(json.dumps(_miniapp_selftest()).encode(), "application/json")
         elif self.path.startswith("/budget"):
             from server.services import token_governor as TG
             self._send(json.dumps(TG.state()).encode(), "application/json")
