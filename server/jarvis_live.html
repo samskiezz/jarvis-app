@@ -355,9 +355,17 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   .gpanel.mid{width:46vw}.gpanel.full{width:92vw;max-height:46vh}
 }
 </style>
-<link rel="stylesheet" href="/a11y/a11y.css">
-<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
-<script defer src="/a11y/a11y.js"></script>
+<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};
+// Load the accessibility layer with the DEPLOY-DIR prefix. Static "/a11y/..." + <base href="/"> resolves
+// to the domain root under /jarvis/ → 404 (the fetch-wrapper can't fix <link>/<script> tags). Inject with
+// the page's own directory so it always loads (/jarvis/a11y/...). This is mum's read-aloud/captions/switch layer.
+(function(){var p=location.pathname.replace(/[^/]*$/,'');
+  var l=document.createElement('link');l.rel='stylesheet';l.href=p+'a11y/a11y.css';document.head.appendChild(l);
+  var s=document.createElement('script');s.src=p+'a11y/a11y.js';s.defer=true;document.head.appendChild(s);
+  // PWA: point the manifest at the prefixed file + register the service worker (install + offline lifeline).
+  var mf=document.querySelector('link[rel=manifest]'); if(mf)mf.href=p+'manifest.webmanifest';
+  if('serviceWorker'in navigator){ navigator.serviceWorker.register(p+'appsw.js',{scope:p}).catch(function(){}); }
+})();</script>
 </head>
 <body>
 <!-- the ONE immersive WebGL universe -->
@@ -3536,13 +3544,11 @@ wireDockMove();              // §1 D: make the whole dock draggable to any posi
 wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
-setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();
-  // auto-engage shows the universe but CANNOT play audio (no user gesture) — so the VOICE part
-  // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
-  addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
-    try{unlockAudio();}catch(_){}
-    try{jarvisSpeak("JARVIS online. How may I help?");}catch(_){}
-    try{if(typeof micToggle==='function'&&!_rec)micToggle();}catch(_){}} ,{once:true});
-}},2200);
+// Pre-render the universe BEHIND the boot screen so it's instant when she taps — but do NOT mark
+// engaged or hide the boot prompt. The tap is REQUIRED by mobile policy for audio + the camera/mic/
+// notification/location prompts, so the "TAP TO START" must stay until she taps → engage() then runs
+// FULLY (requestAllAccess + greeting + listening). The old 2.2s auto-engage set _engaged=true early,
+// which made engage()'s guard skip all the permission prompts — that's why nothing popped up.
+setTimeout(()=>{ if(!_engaged && !uniReady){ try{ initUniverse(); }catch(_){} } }, 1400);
 </script>
 </body></html>

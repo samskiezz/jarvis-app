@@ -2117,6 +2117,35 @@ class _H(http.server.BaseHTTPRequestHandler):
             from server.services import task_daemon as TD
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(TD.result(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
+        elif self.path.split("?", 1)[0] in ("/manifest.webmanifest", "/manifest.json"):
+            # PWA manifest — makes "Install app" / "Add to Home Screen" work so her lifeline lives on the
+            # home screen and launches full-screen. Icons use the existing SVG (any-size + maskable).
+            mani = {
+                "name": "JARVIS", "short_name": "JARVIS",
+                "description": "JARVIS — voice-first lifeline assistant",
+                "start_url": "./", "scope": "./", "display": "standalone",
+                "orientation": "any", "background_color": "#02040a", "theme_color": "#02040a",
+                "icons": [{"src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml",
+                           "purpose": "any maskable"}],
+            }
+            self._send(json.dumps(mani).encode(), "application/manifest+json")
+        elif self.path.split("?", 1)[0] == "/appsw.js":
+            # Service worker (scope = the /jarvis/ deploy dir). NETWORK-FIRST so the live lifeline data is
+            # never stale; falls back to the cached shell ONLY when the network is down, so her page still
+            # opens offline. Dynamic endpoints (tts/chat/metrics/rtc/…) bypass the SW entirely — always live.
+            sw = r"""
+const C='jarvis-shell-v2';
+const LIVE=/\/(tts|chat|metrics|vitals|children|budget|tasks|taskresult|rtc|guardian|talk|control|swarm|godrays|voiceupload|library|suggestions|upgrade|detail|graphdata)\b/;
+self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(['./','./a11y/a11y.css','./a11y/a11y.js']).catch(()=>{})));});
+self.addEventListener('activate',e=>{self.clients.claim();e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>k!==C&&caches.delete(k)))));});
+self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);
+  if(u.origin!==location.origin)return;                 // CDN (three.js) — let the browser handle it
+  if(LIVE.test(u.pathname))return;                       // lifeline endpoints: ALWAYS live, never cached
+  if(r.mode==='navigate'){e.respondWith(fetch(r).then(resp=>{const cp=resp.clone();caches.open(C).then(c=>c.put('./',cp));return resp;}).catch(()=>caches.match('./').then(m=>m||caches.match(r))));return;}
+  e.respondWith(caches.match(r).then(hit=>{const net=fetch(r).then(resp=>{if(resp&&resp.ok){const cp=resp.clone();caches.open(C).then(c=>c.put(r,cp));}return resp;}).catch(()=>hit);return hit||net;}));
+});
+"""
+            self._send(sw.encode(), "application/javascript")
         elif self.path.startswith("/a11y/"):
             # Accessibility Core static bundle (engine + css + keyboard layout + vendored models).
             # Allowlisted; served from server/. Distinct from the bare /a11y JSON mirror (checked separately).
