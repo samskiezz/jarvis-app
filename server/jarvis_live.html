@@ -484,6 +484,7 @@ window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};
    <button class=mini onclick="quick('3d')">🧊 3D GLB</button>
    <button class=mini onclick="readStatus()">🔊 Status</button>
    <button class=mini onclick="openAccess()" aria-label="Device access — allow microphone, camera and files">🔓 Access</button>
+   <button class=mini onclick="openAssist()" aria-label="Set up JARVIS to control your phone">📲 Control</button>
    <button class=mini onclick="setMode('guardian')">🛡 Guardian</button>
    <button class=mini onclick="setMode('library')">🖼 Studio</button>
    <span id=budget class=mono></span>
@@ -639,6 +640,56 @@ window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};
   var _origClose=window.closeAccess;
   window.closeAccess=function(){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
     if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(); };
+})();
+</script>
+<!-- JARVIS CONTROL setup overlay — browser-based install/enable flow for the phone companion. -->
+<div id=ovAssist role=dialog aria-modal=true aria-label="Set up JARVIS phone control" style="display:none">
+  <div class=accCard>
+    <div class=accHead><span>📲 Let JARVIS run your phone</span><button class=accX onclick="closeAssist()" aria-label="Close">✕</button></div>
+    <div id=assistBody></div>
+    <button class=accDone onclick="closeAssist()">Maybe later</button>
+  </div>
+</div>
+<script>
+/* ===== JARVIS Control gateway: detect platform + whether her phone companion is connected, and offer the
+   browser install (Android) or the free built-in path (iOS Voice Control). Auto-offers once if not set up. */
+(function(){
+  var UA=navigator.userAgent||'';
+  var ANDROID=/Android/i.test(UA), IOS=/iP(hone|ad|od)/.test(UA)||(/Mac/.test(navigator.platform||'')&&navigator.maxTouchPoints>1);
+  var APK_URL=(window.__ASSIST_APK__)||'https://github.com/samskiezz/jarvis-app/releases/latest/download/jarvis-assist.apk';
+  function H(html){var b=document.getElementById('assistBody');if(b)b.innerHTML=html;}
+  function androidBody(){return ''+
+    '<div class=accSub>A tiny free app lets me <b>type for you and use your apps</b>. About 30 seconds to set up — no app store, no payment.</div>'+
+    '<div class=accRow><span class=ic>1️⃣</span><span class=tx><span class=nm>Install the app</span>'+
+      '<span class="st un">tap Install, then “Install anyway” if asked</span></span>'+
+      '<a class=accBtn href="'+APK_URL+'" target=_blank rel=noopener>Install</a></div>'+
+    '<div class=accRow><span class=ic>2️⃣</span><span class=tx><span class=nm>Open it &amp; turn on JARVIS</span>'+
+      '<span class="st un">it walks you through ONE switch (Accessibility)</span></span></div>'+
+    '<div class=accRow><span class=ic>3️⃣</span><span class=tx><span class=nm>It links to this JARVIS automatically</span>'+
+      '<span class="st un" id=assistLink>waiting for your phone…</span></span></div>';}
+  function iosBody(){return ''+
+    '<div class=accSub>On iPhone, Apple won’t let apps run other apps — but your phone has a powerful <b>free</b> tool built in that does it by voice. I’ll set it up with you.</div>'+
+    '<div class=accRow><span class=ic>🎙️</span><span class=tx><span class=nm>Turn on Voice Control</span>'+
+      '<span class="st un">Settings → Accessibility → Voice Control</span></span>'+
+      '<button class=accBtn onclick="window.open(\'https://support.apple.com/en-us/118275\',\'_blank\')">Guide</button></div>'+
+    '<div class=accRow><span class=ic>⚡</span><span class=tx><span class=nm>Voice shortcuts I build for you</span>'+
+      '<span class="st un">say a word → JARVIS does the task</span></span></div>';}
+  function desktopBody(){return '<div class=accSub>Open this page on her <b>Android phone</b> to install the helper, or on iPhone to set up Voice Control. From a computer you can also drive an Android phone over USB with WebADB.</div>';}
+  window.openAssist=function(){var o=document.getElementById('ovAssist');if(!o)return;
+    H(ANDROID?androidBody():IOS?iosBody():desktopBody()); o.style.display='flex';
+    if(ANDROID)pollLink(); try{if(typeof jarvisSpeak==='function')jarvisSpeak(ANDROID?'Let’s install the helper so I can use your phone for you.':'Let me help you turn on voice control.');}catch(_){}};
+  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o)o.style.display='none';try{localStorage.setItem('assistSkip','1');}catch(_){}};
+  var _linkTimer=null;
+  function pollLink(){ if(_linkTimer)clearInterval(_linkTimer);
+    _linkTimer=setInterval(function(){ fetch('assist/status').then(function(r){return r.json();}).then(function(d){
+      if(d&&d.connected){ var el=document.getElementById('assistLink'); if(el){el.textContent='Connected ✓'; el.className='st ok';}
+        try{localStorage.setItem('assistOk','1');}catch(_){}
+        try{if(typeof jarvisSpeak==='function')jarvisSpeak('Your phone is linked. I can use it for you now.');}catch(_){}
+        clearInterval(_linkTimer);} }).catch(function(){}); },3000); }
+  window.maybeOfferAssist=function(){ if(!(ANDROID||IOS))return;
+    try{if(localStorage.getItem('assistOk')==='1'||localStorage.getItem('assistSkip')==='1')return;}catch(_){}
+    fetch('assist/status').then(function(r){return r.json();}).then(function(d){ if(!(d&&d.connected))openAssist(); }).catch(function(){});
+  };
 })();
 </script>
 <!-- WebRTC + studio overlays -->

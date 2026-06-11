@@ -2175,6 +2175,17 @@ class _H(http.server.BaseHTTPRequestHandler):
         elif self.path.startswith("/carerooms"):
             from server.services import care_signal as CS
             self._send(json.dumps({"rooms": CS.rooms()}).encode(), "application/json")
+        elif self.path.startswith("/assist/status"):
+            # web asks: is her phone companion connected? (drives the auto-install offer)
+            from server.services import assist_bridge as AB
+            self._send(json.dumps(AB.status()).encode(), "application/json")
+        elif self.path.startswith("/assist/poll"):
+            # the companion app long-ish polls for queued commands (also acts as its heartbeat)
+            from urllib.parse import urlparse, parse_qs
+            from server.services import assist_bridge as AB
+            q = parse_qs(urlparse(self.path).query)
+            self._send(json.dumps(AB.poll(q.get("device_id", [""])[0],
+                                          int(q.get("since", ["0"])[0] or 0))).encode(), "application/json")
         elif self.path.startswith("/talk") or self.path.startswith("/companion"):
             self._send(self._tmpl("jarvis_voice.html").encode(), "text/html; charset=utf-8")
         elif self.path.startswith("/care"):
@@ -2528,6 +2539,32 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 body = {}
             merged = _a11y_write(body.get("state") or {}, body.get("source") or "local")
             self._send(json.dumps({"ok": True, **merged}).encode(), "application/json")
+            return
+        if self.path.startswith("/assist/register") or self.path.startswith("/assist/ack"):
+            # companion app → server (token-free; the device authenticates by its pairing device_id)
+            from server.services import assist_bridge as AB
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                b = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                b = {}
+            if self.path.startswith("/assist/register"):
+                res = AB.register(b.get("device_id", ""), b.get("platform", ""), b.get("name", ""))
+            else:
+                res = AB.ack(b.get("device_id", ""), int(b.get("cmd_id", 0) or 0), b.get("ok", True), b.get("result", ""))
+            self._send(json.dumps(res).encode(), "application/json")
+            return
+        if self.path.startswith("/assist/cmd"):
+            # web brain → phone (token-gated: this drives her device, so only the authed page may queue)
+            if q.get("token", [""])[0] != CONTROL_TOKEN:
+                self._send(b'{"ok":false,"error":"unauthorized"}', "application/json"); return
+            from server.services import assist_bridge as AB
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                b = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                b = {}
+            self._send(json.dumps(AB.queue_cmd(b.get("device_id", ""), b.get("type", ""), b.get("payload") or {})).encode(), "application/json")
             return
         if q.get("token", [""])[0] != CONTROL_TOKEN:
             self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")

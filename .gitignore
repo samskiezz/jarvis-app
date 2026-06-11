@@ -102,3 +102,4 @@ server/voices/ref_backup_*/
 server/voices/clone_cache/
 server/data/.vast_key
 server/data/gpu_results/
+server/data/assist_bridge.json
