@@ -567,24 +567,35 @@ const _preTTS={};
   'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
   fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
     .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
+let _ttsSeq=0;
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   // SINGLE VOICE: barge-in — kill any in-flight line (clone audio AND web-speech) before starting a new
   // one, so two lines (e.g. greeting + status, or a retry) can never play over each other as a man+woman.
   try{speechSynthesis.cancel();}catch(_){}
   try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
+  const myseq=++_ttsSeq;                                   // only the LATEST line may speak/fall back (cancels stale async)
   try{ if(!_ttsCtx)unlockAudio();
     speakStart();
-    _ttsAudio.onended=()=>speakEnd();
-    // RETRY before any web fallback: the first /tts on a novel line can take ~14s (clone synth) and
-    // mobile may abort the stall — but by the retry the server has it CACHED (ms). His voice, not the
-    // device's female default. Web speech only if the retry also fails.
-    const _src='tts?text='+encodeURIComponent(String(t).slice(0,600));
-    let _tried=0; const _fail=()=>{ if(_tried++<1){ setTimeout(()=>{ try{_ttsAudio.src=_src; _ttsAudio.play().catch(_fail);}catch(_){webSpeakFallback(t);} },1800); } else webSpeakFallback(t); };
-    _ttsAudio.onerror=_fail;
-    _ttsAudio.src=_preTTS[t]||_src;   // pre-warmed blob plays instantly in HIS voice
-    if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
-    _ttsAudio.play().catch(_fail);
+    _ttsAudio.onended=()=>{if(myseq===_ttsSeq)speakEnd();};
+    _ttsAudio.onerror=null;                                // we drive playback from the fetched blob, not the element's own loader
+    const play=(url)=>{ if(myseq!==_ttsSeq){try{URL.revokeObjectURL(url);}catch(_){}return;}
+      _ttsAudio.src=url; if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
+      _ttsAudio.play().catch(()=>{ if(myseq===_ttsSeq)webSpeakFallback(t); }); };
+    // INSTANT if pre-warmed (his real voice). Otherwise FETCH the clone as a blob with a patient timeout —
+    // a novel phrase takes ~14s to synth, and the <audio> element's own loader aborts that stall on mobile
+    // and drops to the female web voice. fetch() does NOT abort on slowness, so we WAIT for his voice and
+    // only fall back to web-speech if the clone is genuinely unreachable (network error / non-200), never
+    // just because it's slow. The result is cached server-side, so the same line is instant next time.
+    if(_preTTS[t]){ play(_preTTS[t]); }
+    else{
+      const ac=new AbortController(); const to=setTimeout(()=>ac.abort(),30000);
+      fetch('tts?text='+encodeURIComponent(String(t).slice(0,600)),{signal:ac.signal})
+        .then(r=>{ if(!r.ok)throw new Error('tts '+r.status); return r.blob(); })
+        .then(b=>{ clearTimeout(to); if(!b||b.size<2000)throw new Error('tts empty');
+          const url=URL.createObjectURL(b); _preTTS[t]=url; play(url); })
+        .catch(()=>{ clearTimeout(to); if(myseq===_ttsSeq)webSpeakFallback(t); });   // ONLY real failure → web voice
+    }
   }catch(e){webSpeakFallback(t);} }
 // _jspeaking gates the mic so JARVIS never hears + answers his OWN TTS voice (the feedback loop that
 // made it sound like two agents talking over each other and spammed the chat). Released a beat AFTER
