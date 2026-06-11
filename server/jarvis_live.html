@@ -26,8 +26,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="JARVIS">
-<link rel="apple-touch-icon" href="https://app.projectsolar.cloud/icons/icon.svg">
-<meta name="mobile-web-app-capable" content="yes">
 <script>addEventListener('pageshow',function(e){if(e.persisted)location.reload();});</script>
 <meta name=theme-color content="#03050A">
 <style>
@@ -355,17 +353,9 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   .gpanel.mid{width:46vw}.gpanel.full{width:92vw;max-height:46vh}
 }
 </style>
-<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};
-// Load the accessibility layer with the DEPLOY-DIR prefix. Static "/a11y/..." + <base href="/"> resolves
-// to the domain root under /jarvis/ → 404 (the fetch-wrapper can't fix <link>/<script> tags). Inject with
-// the page's own directory so it always loads (/jarvis/a11y/...). This is mum's read-aloud/captions/switch layer.
-(function(){var p=location.pathname.replace(/[^/]*$/,'');
-  var l=document.createElement('link');l.rel='stylesheet';l.href=p+'a11y/a11y.css';document.head.appendChild(l);
-  var s=document.createElement('script');s.src=p+'a11y/a11y.js';s.defer=true;document.head.appendChild(s);
-  // PWA: point the manifest at the prefixed file + register the service worker (install + offline lifeline).
-  var mf=document.querySelector('link[rel=manifest]'); if(mf)mf.href=p+'manifest.webmanifest';
-  if('serviceWorker'in navigator){ navigator.serviceWorker.register(p+'appsw.js',{scope:p}).catch(function(){}); }
-})();</script>
+<link rel="stylesheet" href="/a11y/a11y.css">
+<script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
+<script defer src="/a11y/a11y.js"></script>
 </head>
 <body>
 <!-- the ONE immersive WebGL universe -->
@@ -404,7 +394,6 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
  <button class="tbtn a" onclick="cmdAll('pause')">⏸ Pause</button>
  <button class="tbtn r" onclick="cmdAll('stop')">⏹ Stop</button>
  <button class=tbtn onclick="cmdAll('sleep')">🌙 Sleep</button>
- <button class=tbtn title="Grant JARVIS camera, microphone, notifications & location — re-asks if a prompt was missed" onclick="requestAllAccess(true)">🔓 Access</button>
 </div>
 <nav id=crumbs aria-label="Universe location" aria-live=polite style="display:none"></nav>
 
@@ -541,48 +530,19 @@ function pickVoice(){const pref=['Daniel','Google UK English Male','Microsoft Ry
  for(const p of pref){const v=VOICES.find(v=>v.name&&v.name.includes(p));if(v)return v;}
  return VOICES.find(v=>/en[-_]?GB/i.test(v.lang))||VOICES.find(v=>/^en/i.test(v.lang))||VOICES[0];}
 let _ttsAudio=null,_ttsCtx=null,_ttsSrc=null,_ttsAn=null,_ttsData=null,_chatHist=[];
-/* UPFRONT DEVICE ACCESS — pop every permission a BROWSER can grant without a native app, SEQUENTIALLY
-   (mobile browsers queue prompts and silently drop simultaneous ones, which is why nothing appeared).
-   For mum (can't tap prompts later), the carer grants them all once on the first tap. Re-triggerable
-   via the 🔓 button. NOTE: full native/root device control is impossible from a web page by browser
-   design — that needs the companion app; this grants the maximal web-possible set. */
-let _accessAsked=false;
-async function requestAllAccess(force){
-  if(_accessAsked && !force) return; _accessAsked=true;
-  const wait=ms=>new Promise(r=>setTimeout(r,ms));
-  // 1) CAMERA + MICROPHONE (care video + voice) — try together, then fall back to each alone
-  try{ const s=await navigator.mediaDevices.getUserMedia({video:true,audio:true}); s.getTracks().forEach(t=>t.stop()); }
-  catch(_){ try{ const a=await navigator.mediaDevices.getUserMedia({audio:true}); a.getTracks().forEach(t=>t.stop()); }catch(__){}
-            await wait(300); try{ const v=await navigator.mediaDevices.getUserMedia({video:true}); v.getTracks().forEach(t=>t.stop()); }catch(__){} }
-  await wait(400);
-  // 2) NOTIFICATIONS (health/safety alerts)
-  try{ if(window.Notification && Notification.permission==='default'){ await Notification.requestPermission(); } }catch(_){}
-  await wait(400);
-  // 3) GEOLOCATION (fall-alert location, "where is mum")
-  try{ await new Promise(res=>{ navigator.geolocation.getCurrentPosition(()=>res(),()=>res(),{timeout:8000,maximumAge:600000}); }); }catch(_){}
-  await wait(300);
-  // 4) PERSISTENT STORAGE (her lifeline survives browser cleanup) + wake-lock probe (screen stays on)
-  try{ if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist(); }catch(_){}
-  try{ if('wakeLock'in navigator){ const wl=await navigator.wakeLock.request('screen'); window._wakeLock=wl; } }catch(_){}
-}
-function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();
-  _ttsAudio.playsInline=true; _ttsAudio.setAttribute('playsinline',''); _ttsAudio.setAttribute('webkit-playsinline',''); _ttsAudio.crossOrigin='anonymous';  // iOS/iPad: audio must be inline + unlocked
-  _ttsCtx=new(window.AudioContext||window.webkitAudioContext)();
+function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window.AudioContext||window.webkitAudioContext)();
   _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
-  _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);
-  // iOS audio unlock: play one silent buffer inside the gesture so Safari permits later programmatic playback
-  try{ const b=_ttsCtx.createBuffer(1,1,22050),s=_ttsCtx.createBufferSource(); s.buffer=b; s.connect(_ttsCtx.destination); s.start(0); }catch(_){}}
+  _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
   if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
 function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
-function _warm(t){ if(!t||_preTTS[t])return; fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
-    .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }
-(function(){ // pre-warm the canned lifeline phrases (server list) → instant, in HIS voice, never female.
-  ['JARVIS online. How may I help?','Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(_warm);
-  fetch('phrases').then(r=>r.ok?r.json():[]).then(list=>{ (list||[]).forEach((t,i)=>setTimeout(()=>_warm(t), i*400)); }).catch(()=>{});
-})();
+(function(){ ['JARVIS online. How may I help?',
+  "I'm right here with you. I'm having a little trouble hearing the network just now, but I'm not going anywhere. Take a breath — you're safe.",
+  'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
+  fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
+    .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   try{ if(!_ttsCtx)unlockAudio();
@@ -672,7 +632,6 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(/\b3d\b|^(model|sculpt)\b/.test(l)){return runMedia('gen3d',t.replace(/\b3d\b|model|sculpt/ig,'').trim());}
   if(l.includes('run all'))return cmdAll('run');if(l==='stop'||l.includes('stop all'))return cmdAll('stop');
   if(l.includes('sleep'))return cmdAll('sleep');if(l==='status'||l.includes('read status'))return readStatus();
-  if(/\b(my )?(files?|photos?|pictures?|videos?|documents?)\b/.test(l)&&/\b(open|show|see|view|my|find|add)\b/.test(l)){return openFiles();}
   if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');
   if(l.includes('graph'))return flyToQuery('graph');
   unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
@@ -748,48 +707,6 @@ const DOCK=[
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
 ];
-/* FILES — her photos/videos/documents from ANY device, opened inside JARVIS. Universal: a file input
-   (works on iOS Safari + Android + desktop; folder pick where supported). She can view them, and JARVIS
-   can help (vision/doc analysis runs on Vast when it's up). Voice: "show my photos / open my files". */
-let _userFiles=[];
-function openFiles(folder){
-  const inp=document.createElement('input'); inp.type='file'; inp.multiple=true;
-  inp.accept='image/*,video/*,audio/*,.pdf,.txt,.doc,.docx,.csv';
-  if(folder){ inp.setAttribute('webkitdirectory',''); inp.setAttribute('directory',''); }
-  inp.onchange=()=>{ const fs=[...(inp.files||[])]; if(fs.length) showFiles(fs); };
-  inp.click();
-}
-function showFiles(fs){
-  _userFiles=fs;
-  let ov=$('filesOv');
-  if(!ov){ ov=document.createElement('div'); ov.id='filesOv';
-    ov.style.cssText='position:fixed;inset:0;z-index:70;background:rgba(2,6,12,.92);backdrop-filter:blur(14px);overflow:auto;padding:54px 14px 90px';
-    ov.innerHTML='<button onclick="$(\'filesOv\').remove()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:20px;background:#0a2230;color:#eafcff;border:1px solid #29e7ff;border-radius:10px;padding:6px 14px">✕ Close</button>'
-      +'<div style="display:flex;gap:10px;justify-content:center;margin:0 0 14px"><button onclick="openFiles()" style="background:#0a2230;color:#9feaff;border:1px solid #29e7ff;border-radius:10px;padding:9px 16px;font-weight:700">＋ Add files</button><button onclick="openFiles(true)" style="background:#0a2230;color:#9feaff;border:1px solid #29e7ff;border-radius:10px;padding:9px 16px;font-weight:700">📂 Add a folder</button></div>'
-      +'<div id=filesGrid style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:980px;margin:0 auto"></div>';
-    document.body.appendChild(ov);
-  }
-  const g=ov.querySelector('#filesGrid'); g.innerHTML='';
-  fs.forEach(f=>{ const url=URL.createObjectURL(f); const card=document.createElement('div');
-    card.style.cssText='background:rgba(10,34,52,.5);border:1px solid rgba(80,220,255,.3);border-radius:12px;padding:8px;text-align:center;font-size:11px;color:#dff6ff;overflow:hidden';
-    let media='';
-    if(f.type.startsWith('image/')) media='<img src="'+url+'" style="width:100%;height:120px;object-fit:cover;border-radius:8px">';
-    else if(f.type.startsWith('video/')) media='<video src="'+url+'" controls playsinline style="width:100%;height:120px;object-fit:cover;border-radius:8px"></video>';
-    else if(f.type.startsWith('audio/')) media='<audio src="'+url+'" controls style="width:100%"></audio>';
-    else media='<div style="height:120px;display:flex;align-items:center;justify-content:center;font-size:40px">📄</div>';
-    card.innerHTML=media+'<div style="margin-top:6px;word-break:break-word">'+esc(f.name)+'</div>'
-      +'<button onclick="jarvisHelpWithFile('+_userFiles.indexOf(f)+')" style="margin-top:6px;background:#11324a;color:#9feaff;border:1px solid #29e7ff;border-radius:8px;padding:5px 8px;font-size:11px;width:100%">🤖 Ask JARVIS</button>';
-    g.appendChild(card);
-  });
-  try{ jarvisSpeak("I've opened your "+fs.length+(fs.length===1?" file. ":" files. ")+"Tap 'Ask JARVIS' on any of them and I'll help."); }catch(_){}
-}
-function jarvisHelpWithFile(i){ const f=_userFiles[i]; if(!f)return;
-  bubble('You','📎 '+f.name);
-  // images/docs → analysis needs the Vast brain (vision); acknowledge + queue. Text files: read inline.
-  if(f.type.startsWith('text/')||/\.(txt|csv|md)$/i.test(f.name)){ const rd=new FileReader();
-    rd.onload=()=>{ $('say').value='Help me with this file "'+f.name+'": '+String(rd.result).slice(0,1500); askJarvis(); }; rd.readAsText(f); return; }
-  $('say').value='I opened my file "'+f.name+'" ('+(f.type||'file')+'). Help me with it.'; askJarvis();
-}
 function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
   [...d.querySelectorAll('.di')].forEach(el=>el.remove());
@@ -1392,13 +1309,6 @@ let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
 const ASSET=n=>'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
 
-// Loader-reveal readiness: count painted frames + track asset (GLB/texture) loads so the boot screen
-// stays up until the universe is actually BUILT, RENDERED and its first asset wave is in — no glitchy pop-in.
-let _frames=0, _lmActive=0;
-const _LM = (function(){ try{ const m=new THREE.LoadingManager();
-  m.onProgress=(u,l,t)=>{ _lmActive=Math.max(0, t-l); };
-  m.onLoad=()=>{ _lmActive=0; }; m.onError=()=>{ _lmActive=Math.max(0,_lmActive-1); };
-  return m; }catch(e){ return undefined; } })();
 function initUniverse(){
   const canvas=$('uni');
   try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
@@ -1635,7 +1545,7 @@ function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;cam
 function buildBrain(){
   brain=new THREE.Group();scene.add(brain);
   brain.scale.setScalar(60);   // SUPREME RULE: the JARVIS AI core is the LARGEST object in the universe (~780u) — nothing exceeds it
-  const loader=new THREE.GLTFLoader(_LM);
+  const loader=new THREE.GLTFLoader();
   function loadGLB(file,onLoad){glbsTried++;
     loader.load(ASSET(file),g=>{glbsOk++;try{onLoad(g.scene);}catch(e){}},
       undefined,()=>{ if(glbsOk===0 && glbsTried>=2 && !fellBack) brainFallback(); });}
@@ -1797,7 +1707,7 @@ const GLB_FOR={
 function glbForName(name){ if(GLB_FOR[name])return GLB_FOR[name];
   if(name.indexOf('pipe:')===0)return GLB_FOR._pipe; if(name.indexOf('tier:')===0)return GLB_FOR._tier;
   return 'jarvis_kit_data_orb'; }
-const _glbLoader=new THREE.GLTFLoader(_LM), _texLoader=new THREE.TextureLoader(_LM);
+const _glbLoader=new THREE.GLTFLoader(), _texLoader=new THREE.TextureLoader();
 const _texCache=new Map();
 function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
   const t=_texLoader.load('asset/'+asset+'.preview.png',()=>{},undefined,()=>{});
@@ -3375,7 +3285,6 @@ function tickFrame(){
     }catch(_){} }
     controls.update();
     if(composer)composer.render();else renderer.render(scene,camera);
-    _frames++;   // painted-frame counter — the loader waits for a stable rendered scene before revealing
   }catch(e){ /* never blank the page */ }
 }
 
@@ -3584,18 +3493,15 @@ function engage(){if(_engaged)return;_engaged=true;
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
   try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
   try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
-  try{ requestAllAccess(); }catch(_){}   // pop EVERY grantable browser permission, one prompt at a time
-  if(!uniReady){ const ok=initUniverse(); if(!ok){ $('boot').querySelector('.t').textContent='WebGL UNAVAILABLE'; $('boot').querySelector('.tap').textContent='voice + chat still work below'; $('boot').style.pointerEvents='none'; return; } }
-  // Reveal as soon as the scene has painted a couple of frames — capped at 2.2s so the loader can NEVER
-  // freeze. (No asset-settle wait; that was the freeze.) Belt-and-braces fixed timer too.
-  const _t0=performance.now(), _f0=_frames;
-  const _hideBoot=()=>{ const b=$('boot'); if(!b||b.classList.contains('gone'))return; b.classList.add('gone'); setTimeout(()=>{ b.style.display='none'; },600); };
-  (function reveal(){
-    const painted=_frames-_f0, waited=performance.now()-_t0;
-    if((painted>=2 && waited>450) || waited>2200){ _hideBoot(); }
-    else requestAnimationFrame(reveal);
-  })();
-  setTimeout(_hideBoot, 2600);   // hard fallback — even if rAF stalls, the loader always clears
+  // UPFRONT ACCESS (carer setup, within this gesture): request EVERYTHING the web platform allows now —
+  // camera+mic (care video/voice), notifications (alerts), persistent storage (lifeline survives cleanup) —
+  // so mum never faces a permission prompt she can't tap later. (Root/native device control is impossible
+  // from a web page by browser design — that tier needs the native companion app.)
+  try{ navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
+  try{ if(window.Notification&&Notification.permission==='default')Notification.requestPermission().catch(()=>{}); }catch(_){}
+  try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
+  $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
+  if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
 addEventListener('pointerdown',engage,{once:true});
 
@@ -3605,11 +3511,13 @@ wireDockMove();              // §1 D: make the whole dock draggable to any posi
 wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
-// Pre-render the universe BEHIND the boot screen so it's instant when she taps — but do NOT mark
-// engaged or hide the boot prompt. The tap is REQUIRED by mobile policy for audio + the camera/mic/
-// notification/location prompts, so the "TAP TO START" must stay until she taps → engage() then runs
-// FULLY (requestAllAccess + greeting + listening). The old 2.2s auto-engage set _engaged=true early,
-// which made engage()'s guard skip all the permission prompts — that's why nothing popped up.
-setTimeout(()=>{ if(!_engaged && !uniReady){ try{ initUniverse(); }catch(_){} } }, 1400);
+setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();
+  // auto-engage shows the universe but CANNOT play audio (no user gesture) — so the VOICE part
+  // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
+  addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
+    try{unlockAudio();}catch(_){}
+    try{jarvisSpeak("JARVIS online. How may I help?");}catch(_){}
+    try{if(typeof micToggle==='function'&&!_rec)micToggle();}catch(_){}} ,{once:true});
+}},2200);
 </script>
 </body></html>
