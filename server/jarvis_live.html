@@ -207,7 +207,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    FINDING2: was centred at bottom:96px → it landed directly on the two-row #cmd talk bar (top ~96px),
    #coreSay (108px) and #card band. Anchored bottom-RIGHT, clear of the centred talk-bar / caption column,
    and JS hides it while a fullscreen overlay is open (setMode). No more layout collision. */
-#dock{position:fixed;right:18px;bottom:180px;z-index:26;display:flex;gap:10px;
+#dock{position:fixed;right:18px;bottom:130px;z-index:26;display:flex;gap:10px;
   padding:9px 14px;border-radius:20px;background:rgba(8,22,34,.5);border:1px solid var(--ln);
   backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
   align-items:flex-end;transition:opacity .3s,transform .3s}
@@ -238,13 +238,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #dock .di.pinned:hover .x{opacity:1}
 /* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
    row above the talk bar + caption band (clears #cmd ~96px top, #coreSay 108px) and centre it. */
-@media(max-width:900px){#dock{left:8px;right:8px;transform:none;bottom:220px;gap:6px;
-  max-width:calc(100vw - 16px);box-sizing:border-box;overflow-x:auto;overflow-y:hidden;
-  justify-content:flex-start;scroll-snap-type:x proximity;scrollbar-width:none}
-  #dock::-webkit-scrollbar{display:none}
-  #dock.hidden{transform:translateY(14px)}
-  #dock .di{width:40px;height:40px;font-size:20px;flex:0 0 40px;scroll-snap-align:center}}
-@media(max-width:560px){#dock{bottom:300px}}
+@media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:128px;gap:6px}
+  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px}}
 /* ---------- R5: crystal caption bubble + iridescent ring ---------- */
 #crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
   max-width:min(70vw,640px);padding:14px 22px;border-radius:22px;text-align:center;
