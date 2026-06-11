@@ -538,6 +538,125 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     0 0 18px rgba(var(--holo-cyan),.72),
     0 0 30px rgba(var(--holo-purple),.5);
 }
+/* Preserve original JARVIS glass design: add iOS-style depth only, no new shapes/sizes/colour language. */
+#dock,#sdev,#cmd{--holo-alpha:.34;--holo-ring-width:1px;--holo-ring-inset:-1px}
+#mic,.send,.mini,.di,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{
+  --holo-alpha:.38;--holo-ring-width:.9px;--holo-ring-inset:-1px;
+  transition:transform .16s cubic-bezier(.22,1,.36,1),filter .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+#mic:hover,.send:hover,.mini:hover,.di:hover,.tbtn:hover,.chip:hover,#sdev .sd-build:hover,#sdev .sd-link:hover,#propBuild:hover,#prop .pbuild:hover,[data-holo-ring]:hover{
+  transform:translateY(-1px);
+  filter:saturate(1.08) brightness(1.04);
+}
+#mic:active,.send:active,.mini:active,.di:active,.tbtn:active,.chip:active,#sdev .sd-build:active,#sdev .sd-link:active,#propBuild:active,#prop .pbuild:active,[data-holo-ring]:active{
+  transform:translateY(0) scale(.985);
+}
+#dock::before,#sdev::before,#cmd::before,#mic::before,.send::before,.mini::before,.di::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before{
+  inset:var(--holo-ring-inset);padding:var(--holo-ring-width);
+  background:conic-gradient(from var(--holoAngle),rgba(var(--holo-ice),.56),rgba(var(--holo-cyan),.50),rgba(var(--holo-purple),.54),rgba(var(--holo-bio),.34),rgba(var(--holo-ice),.56));
+  filter:drop-shadow(0 0 calc(3px + var(--holo-prox)*4px + var(--holo-burst)*6px) rgba(var(--holo-cyan),.28)) drop-shadow(0 0 calc(9px + var(--holo-prox)*6px + var(--holo-burst)*10px) rgba(var(--holo-purple),.18));
+}
+#dock::after,#sdev::after,#cmd::after,#mic::after,.send::after,.mini::after,.di::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after{
+  inset:-3px;padding:.75px;opacity:calc(.16 + var(--holo-prox)*.18 + var(--holo-burst)*.24);
+  background:conic-gradient(from calc(var(--holoAngle)*-1),transparent 0 44deg,rgba(255,255,255,.62) 49deg,rgba(var(--holo-cyan),.30) 60deg,transparent 76deg,transparent 210deg,rgba(var(--holo-purple),.26) 226deg,transparent 244deg);
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.18)) drop-shadow(0 0 14px rgba(var(--holo-cyan),.18));
+}
+#dock .holo2036-corner,#sdev .holo2036-corner,#cmd .holo2036-corner{
+  width:4px;height:4px;opacity:calc(.18 + var(--holo-prox)*.18 + var(--holo-burst)*.20);
+  box-shadow:0 0 7px rgba(var(--holo-cyan),.55),0 0 14px rgba(var(--holo-purple),.32);
+}
+.holo2036-glb-badge{
+  --holo-alpha:.48;--holo-ring-width:1px;--holo-ring-inset:-2px;
+  text-shadow:0 0 5px rgba(var(--holo-ice),.42),0 0 12px rgba(var(--holo-purple),.30);
+}
+.holo2036-glb-badge::before{
+  inset:-2px;padding:1px;
+  filter:drop-shadow(0 0 6px rgba(var(--holo-cyan),.35)) drop-shadow(0 0 14px rgba(var(--holo-purple),.25));
+}
+.holo2036-glb-badge::after{
+  inset:-5px;padding:.75px;opacity:calc(.18 + var(--holo-prox)*.20 + var(--holo-burst)*.26);
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.20)) drop-shadow(0 0 13px rgba(var(--holo-purple),.18));
+}
+#dock .di .gly,.send,#mic,.mini,.tbtn,.chip{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.20),0 8px 18px rgba(0,0,0,.14);
+}
+#dock .di:hover .gly,.send:hover,#mic:hover,.mini:hover,.tbtn:hover,.chip:hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.22),0 10px 22px rgba(0,0,0,.18),0 0 14px rgba(var(--holo-purple),.18);
+}
+.jarvis-busy{cursor:progress!important;opacity:.72}
+.jarvis-busy *{pointer-events:none}
+/* 3D glass material pass: depth/rendering only. Existing layout, icon sizes, radii, emojis and colours stay intact. */
+#dock,#sdev,#cmd,.gpanel,#card,#prop .pp,.wlwindow{
+  background-image:
+    linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.018) 34%,rgba(0,0,0,.16) 100%),
+    radial-gradient(circle at 18% 0%,rgba(167,139,250,.18),transparent 42%),
+    radial-gradient(circle at 82% 12%,rgba(41,231,255,.13),transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.34),
+    inset 0 0 22px rgba(255,255,255,.035),
+    0 18px 42px rgba(0,0,0,.44),
+    0 0 28px rgba(167,139,250,.14),
+    0 0 42px rgba(41,231,255,.08);
+}
+#dock{
+  backdrop-filter:blur(22px) saturate(1.42) contrast(1.04);
+}
+#cmd{
+  backdrop-filter:blur(18px) saturate(1.34) contrast(1.03);
+}
+#dock .di{perspective:520px}
+#dock .di .gly,.send,#mic,.mini,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{
+  background-image:
+    linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,.055) 31%,rgba(0,0,0,.22) 100%),
+    radial-gradient(circle at 26% 12%,rgba(255,255,255,.24),transparent 28%),
+    radial-gradient(circle at 75% 88%,rgba(167,139,250,.18),transparent 44%),
+    radial-gradient(circle at 82% 18%,rgba(41,231,255,.12),transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.30),
+    inset 0 -1px 0 rgba(0,0,0,.42),
+    inset 0 0 12px rgba(255,255,255,.045),
+    0 7px 15px rgba(0,0,0,.30),
+    0 1px 0 rgba(255,255,255,.06);
+  transform-style:preserve-3d;
+}
+#dock .di .gly::before,.send::before,#mic::before,.mini::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before{
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.75) 0%,rgba(255,255,255,.18) 18%,rgba(41,231,255,.18) 33%,transparent 46%),
+    conic-gradient(from var(--holoAngle),rgba(var(--holo-ice),.66),rgba(var(--holo-cyan),.56),rgba(var(--holo-purple),.62),rgba(var(--holo-bio),.34),rgba(var(--holo-ice),.66));
+  filter:
+    drop-shadow(0 0 calc(4px + var(--holo-prox)*7px + var(--holo-burst)*9px) rgba(var(--holo-cyan),.42))
+    drop-shadow(0 0 calc(12px + var(--holo-prox)*9px + var(--holo-burst)*14px) rgba(var(--holo-purple),.30));
+}
+#dock .di .gly::after,.send::after,#mic::after,.mini::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after{
+  background:
+    conic-gradient(from calc(var(--holoAngle)*-1),transparent 0 35deg,rgba(255,255,255,.82) 43deg,rgba(var(--holo-cyan),.38) 57deg,transparent 74deg,transparent 208deg,rgba(var(--holo-purple),.35) 224deg,transparent 244deg),
+    radial-gradient(circle at 28% 8%,rgba(255,255,255,.42),transparent 26%);
+  opacity:calc(.24 + var(--holo-prox)*.26 + var(--holo-burst)*.34);
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.22)) drop-shadow(0 0 18px rgba(var(--holo-purple),.22));
+}
+#dock .di:hover .gly,.send:hover,#mic:hover,.mini:hover,.tbtn:hover,.chip:hover,#sdev .sd-build:hover,#sdev .sd-link:hover,#propBuild:hover,#prop .pbuild:hover,[data-holo-ring]:hover{
+  transform:translateY(-2px) translateZ(8px) rotateX(3deg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.38),
+    inset 0 -1px 0 rgba(0,0,0,.38),
+    inset 0 0 16px rgba(255,255,255,.06),
+    0 12px 24px rgba(0,0,0,.34),
+    0 0 20px rgba(167,139,250,.25),
+    0 0 16px rgba(41,231,255,.14);
+}
+#dock .di:active .gly,.send:active,#mic:active,.mini:active,.tbtn:active,.chip:active,#sdev .sd-build:active,#sdev .sd-link:active,#propBuild:active,#prop .pbuild:active,[data-holo-ring]:active{
+  transform:translateY(1px) scale(.975);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 4px 10px rgba(0,0,0,.28);
+}
+.holo2036-glb-badge{
+  text-shadow:0 1px 0 rgba(0,0,0,.55),0 0 8px rgba(var(--holo-ice),.62),0 0 18px rgba(var(--holo-purple),.38);
+}
+.holo2036-glb-badge::before{padding:1.6px;inset:-3px}
+.holo2036-glb-badge::after{padding:1px;inset:-7px;opacity:calc(.32 + var(--holo-prox)*.24 + var(--holo-burst)*.32)}
 /* === JARVIS_HOLLYWOOD_HOLO_RINGS_END === */
 </style>
 <link rel="stylesheet" href="/a11y/a11y.css">
@@ -650,7 +769,8 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     <div class=accSub>Tap each <b>Allow</b> button, then choose <b>Allow</b> in the popup. This lets JARVIS hear you, see you, and open your photos.</div>
     <div id=accList></div>
     <div id=accNote class=accNote aria-live=polite></div>
-    <button class=accDone onclick="closeAccess()">Done</button>
+    <button class=accDone onclick="closeAccess(true)">Done · Continue</button>
+    <button class="accDone secondary" onclick="openAssist({soft:false})">📲 Set Up Phone Control</button>
   </div>
   <input id=accFile type=file accept="image/*,video/*,audio/*,.pdf,.txt,.doc,.docx" multiple style="position:absolute;left:-9999px" aria-hidden=true>
 </div>
@@ -658,6 +778,12 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 #ovAccess{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;
   background:rgba(2,6,12,.92);backdrop-filter:blur(8px);padding:16px;overscroll-behavior:contain}
 #ovAccess.show{display:flex}
+#ovAssist{position:fixed;inset:0;z-index:119;align-items:center;justify-content:center;background:rgba(2,6,12,.88);backdrop-filter:blur(8px);padding:16px;overscroll-behavior:contain}
+#ovAssist[style*="flex"]{display:flex!important}
+#ovAccess.soft{align-items:flex-start;justify-content:center;background:linear-gradient(180deg,rgba(2,6,12,.72),rgba(2,6,12,0));backdrop-filter:blur(3px);pointer-events:none}
+#ovAccess.soft .accCard{pointer-events:auto;max-height:min(62vh,560px);margin-top:max(14px,env(safe-area-inset-top,0px))}
+#ovAssist.soft{align-items:flex-start;justify-content:center;background:linear-gradient(180deg,rgba(2,6,12,.66),rgba(2,6,12,0));backdrop-filter:blur(3px);pointer-events:none}
+#ovAssist.soft .accCard{pointer-events:auto;max-height:min(58vh,520px);margin-top:max(14px,env(safe-area-inset-top,0px))}
 .accCard{width:min(560px,96vw);max-height:92vh;overflow:auto;background:linear-gradient(160deg,#0b1f30,#06121e);
   border:2px solid var(--cy);border-radius:20px;padding:18px 16px;box-shadow:0 20px 80px rgba(0,0,0,.7),0 0 50px rgba(41,231,255,.25)}
 .accHead{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:21px;color:#eafcff;letter-spacing:.5px}
@@ -679,6 +805,7 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 .accNote.show{display:block}
 .accDone{width:100%;min-height:56px;margin-top:12px;border-radius:14px;border:2px solid var(--cy);
   background:var(--cy);color:#02121a;font-weight:800;font-size:18px;cursor:pointer}
+.accDone.secondary{background:rgba(255,255,255,.07);color:#eafcff;border-color:var(--ln)}
 @media(max-width:560px){.accRow .accBtn{min-width:84px}.accSub{font-size:14px}}
 </style>
 <script>
@@ -749,24 +876,26 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
       setTimeout(refresh,400);
     });
   };
-  window.openAccess=function(){ var o=document.getElementById('ovAccess'); if(!o)return;
-    render(); refresh(); o.classList.add('show'); note('');
+  window.openAccess=function(opts){ opts=opts||{}; var o=document.getElementById('ovAccess'); if(!o)return;
+    render(); refresh(); o.classList.add('show'); o.classList.toggle('soft',!!opts.soft); note('');
     try{spk('Please allow microphone, camera and files so I can help you fully.');}catch(_){}
   };
-  window.closeAccess=function(){ var o=document.getElementById('ovAccess'); if(o)o.classList.remove('show'); };
-  // first run (or until mic+camera are granted): auto-open so the carer sets it up with clear feedback
+  window.closeAccess=function(next){ var o=document.getElementById('ovAccess'); if(o){o.classList.remove('show');o.classList.remove('soft');}
+    if(next&&typeof maybeOfferAssist==='function')setTimeout(maybeOfferAssist,250); };
+  // First-run carer setup: show the permission grant sheet, but as a soft top sheet so chat remains usable.
   window.maybeAutoAccess=function(){
     try{ if(localStorage.getItem('accDone')==='1')return; }catch(_){}
     Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
       if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}return;}
-      openAccess();
+      try{ if(localStorage.getItem('accPromptSeen')==='1')return; localStorage.setItem('accPromptSeen','1'); }catch(_){}
+      openAccess({soft:true});
     });
   };
   // remember once mic+camera are both granted, so we stop auto-popping it
   document.addEventListener('visibilitychange',function(){});
   var _origClose=window.closeAccess;
-  window.closeAccess=function(){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
-    if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(); };
+  window.closeAccess=function(next){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
+    if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(next); };
 })();
 </script>
 <!-- JARVIS CONTROL setup overlay — browser-based install/enable flow for the phone companion. -->
@@ -802,10 +931,11 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     '<div class=accRow><span class=ic>⚡</span><span class=tx><span class=nm>Voice shortcuts I build for you</span>'+
       '<span class="st un">say a word → JARVIS does the task</span></span></div>';}
   function desktopBody(){return '<div class=accSub>Open this page on her <b>Android phone</b> to install the helper, or on iPhone to set up Voice Control. From a computer you can also drive an Android phone over USB with WebADB.</div>';}
-  window.openAssist=function(){var o=document.getElementById('ovAssist');if(!o)return;
+  window.openAssist=function(opts){opts=opts||{};var o=document.getElementById('ovAssist');if(!o)return;
     H(ANDROID?androidBody():IOS?iosBody():desktopBody()); o.style.display='flex';
+    o.classList.toggle('soft',!!opts.soft);
     if(ANDROID)pollLink(); try{if(typeof jarvisSpeak==='function')jarvisSpeak(ANDROID?'Let’s install the helper so I can use your phone for you.':'Let me help you turn on voice control.');}catch(_){}};
-  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o)o.style.display='none';try{localStorage.setItem('assistSkip','1');}catch(_){}};
+  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o){o.style.display='none';o.classList.remove('soft');}try{localStorage.setItem('assistSkip','1');}catch(_){}};
   var _linkTimer=null;
   function pollLink(){ if(_linkTimer)clearInterval(_linkTimer);
     _linkTimer=setInterval(function(){ fetch('assist/status').then(function(r){return r.json();}).then(function(d){
@@ -815,7 +945,7 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
         clearInterval(_linkTimer);} }).catch(function(){}); },3000); }
   window.maybeOfferAssist=function(){ if(!(ANDROID||IOS))return;
     try{if(localStorage.getItem('assistOk')==='1'||localStorage.getItem('assistSkip')==='1')return;}catch(_){}
-    fetch('assist/status').then(function(r){return r.json();}).then(function(d){ if(!(d&&d.connected))openAssist(); }).catch(function(){});
+    fetch('assist/status').then(function(r){return r.json();}).then(function(d){ if(!(d&&d.connected))openAssist({soft:true}); }).catch(function(){});
   };
 })();
 </script>
@@ -904,8 +1034,9 @@ function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window
   _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
   _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
   if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
+function armSpeakWatch(seq,t){if(_speakWatch)clearTimeout(_speakWatch);const ms=Math.min(12000,Math.max(2600,String(t||'').length*70));_speakWatch=setTimeout(()=>{if(seq==null||seq===_ttsSeq)speakEnd();},ms);}
 function webSpeakFallback(t){try{try{_ttsAudio.pause();}catch(_){}{}  // STOP the clone first so the male /tts and the female web voice can NEVER overlap
-  const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
+  const seq=_ttsSeq;const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=()=>{speakStart();armSpeakWatch(seq,t);};u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
@@ -914,7 +1045,7 @@ const _preTTS={};
   'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
   fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
     .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
-let _ttsSeq=0;
+let _ttsSeq=0,_speakWatch=null;
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   // SINGLE VOICE: barge-in — kill any in-flight line (clone audio AND web-speech) before starting a new
@@ -923,10 +1054,10 @@ window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A
   try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
   const myseq=++_ttsSeq;                                   // only the LATEST line may speak/fall back (cancels stale async)
   try{ if(!_ttsCtx)unlockAudio();
-    speakStart();
     _ttsAudio.onended=()=>{if(myseq===_ttsSeq)speakEnd();};
     _ttsAudio.onerror=null;                                // we drive playback from the fetched blob, not the element's own loader
     const play=(url)=>{ if(myseq!==_ttsSeq){try{URL.revokeObjectURL(url);}catch(_){}return;}
+      speakStart();armSpeakWatch(myseq,t);
       _ttsAudio.src=url; if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
       _ttsAudio.play().catch(()=>{ if(myseq===_ttsSeq)webSpeakFallback(t); }); };
     // INSTANT if pre-warmed (his real voice). Otherwise FETCH the clone as a blob with a patient timeout —
@@ -950,6 +1081,7 @@ window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A
 window._jspeaking=false; let _jspkClear=null;
 function speakStart(){window._jspeaking=true;if(_jspkClear){clearTimeout(_jspkClear);_jspkClear=null;}document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
 function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);
+  if(_speakWatch){clearTimeout(_speakWatch);_speakWatch=null;}
   if(_jspkClear)clearTimeout(_jspkClear);_jspkClear=setTimeout(()=>{window._jspeaking=false;_jspkClear=null;},700);}
 
 /* ================= voice amp envelope (consumed by the brain via currentAmp/setAmp) ================= */
@@ -1016,6 +1148,8 @@ function showCrystal(txt){const c=$('crystal');if(!c)return;
 function hideCrystal(delay){clearTimeout(_crystalHide);
   _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
 let _chatBusy=false;
+function setBusy(el,on,label){try{if(!el)return;el.classList.toggle('jarvis-busy',!!on);if('disabled'in el)el.disabled=!!on;el.setAttribute('aria-busy',on?'true':'false');if(label!=null)el.dataset.busyLabel=label;}catch(_){}}
+function actionPulse(s){try{window.firePulseSpike&&window.firePulseSpike(s||.45);navigator.vibrate&&navigator.vibrate(8);}catch(_){}}
 async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(_chatBusy)return;                                    // one turn at a time — overlapping voice finals must not stack replies that talk over each other
   const l=t.toLowerCase();$('say').value='';
@@ -1027,31 +1161,39 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(l.includes('sleep'))return cmdAll('sleep');if(l==='status'||l.includes('read status'))return readStatus();
   if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');
   if(l.includes('graph'))return flyToQuery('graph');
-  unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
+  unlockAudio();actionPulse(.45);bubble('You',esc(t));$('coreSay').textContent='…';
   _chatBusy=true;
+  setBusy(document.querySelector('.send'),true);setBusy($('cmd'),true);
   const _ac=new AbortController();const _to=setTimeout(()=>_ac.abort(),45000);   // never hang the UI forever
   try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},signal:_ac.signal,
       body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:_spkWho||''})})).json();   // address from DETECTED voice gender (neutral until known)
     const reply=(r&&r.reply)||"I'm here.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
     bubble('JARVIS',esc(reply));jarvisSpeak(reply);
-  }catch(e){bubble('JARVIS',_ac.signal.aborted?'That took too long — try again.':'connection error');}
-  finally{clearTimeout(_to);_chatBusy=false;}}
+  }catch(e){const msg=_ac.signal.aborted?'That took too long — try again.':'Connection error. I did not lose the text; try again.';bubble('JARVIS',msg);try{jarvisSpeak(msg);}catch(_){}}
+  finally{clearTimeout(_to);_chatBusy=false;setBusy(document.querySelector('.send'),false);setBusy($('cmd'),false);}}
 function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
    if(r.status&&r.status!=='running'&&r.status!=='paused'){clearInterval(iv);
      const txt=(r.text||'(done)').slice(-2000);bubble('JARVIS',esc(txt));
      jarvisSpeak(txt.replace(/<[^>]+>/g,'').slice(0,420));loadLib();}}catch(e){}},3000);}
 
 /* media (preserved) */
-async function quick(kind){const t=prompt(kind==='image'?'Describe the image:':'Describe the 3D model:');if(t)runMedia(kind==='image'?'genimage':'gen3d',t);}
+async function quick(kind){const input=$('say');const pre=(input&&input.value.trim())||'';const t=prompt(kind==='image'?'Describe the image:':'Describe the 3D model:',pre);if(t)runMedia(kind==='image'?'genimage':'gen3d',t);}
+let _mediaLock='';
 async function runMedia(action,t){if(!t)return;bubble('You',(action==='gen3d'?'🧊 ':'🎨 ')+esc(t));
+  const key=action+':'+t.trim().toLowerCase();if(_mediaLock===key){bubble('JARVIS','Already queued. I will not duplicate it.');return;}_mediaLock=key;setTimeout(()=>{if(_mediaLock===key)_mediaLock='';},6000);
+  actionPulse(action==='gen3d'?.7:.55);
   jarvisSpeak(action==='gen3d'?'Generating a 3D model. This can take a few minutes — it will not time out.':'Generating your image now.');
-  try{await fetch('task?action='+action+'&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}catch(e){}
+  try{const r=await fetch('task?action='+action+'&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});if(!r.ok)throw new Error('task '+r.status);}
+  catch(e){bubble('JARVIS','I could not queue that job. Check the task runner, then try again.');try{jarvisSpeak('I could not queue that job.');}catch(_){}}
   setTimeout(loadLib,1500);}
 
 /* commands (preserved) */
 async function cmdAll(a){window.firePulseSpike(0.8);                   // global command -> big pulse
+  actionPulse(.8);document.querySelectorAll('.tbtn').forEach(b=>setBusy(b,true));
   jarvisSpeak(a==='run'?'Running all systems.':a==='stop'?'Stopping all.':a==='sleep'?'Entering sleep mode.':'Pausing.');
-  try{await fetch('control_all?action='+a+'&token='+CT,{method:'POST'});}catch(e){}setTimeout(tick,900);}
+  try{const r=await fetch('control_all?action='+a+'&token='+CT,{method:'POST'});if(!r.ok)throw new Error('control '+r.status);}
+  catch(e){bubble('JARVIS','Control command failed. I left the interface active.');}
+  finally{document.querySelectorAll('.tbtn').forEach(b=>setBusy(b,false));setTimeout(tick,900);}}
 async function ctl(a,n){window.firePulseSpike(0.6);                    // organism reacts to the command
   try{await fetch('control?action='+a+'&name='+encodeURIComponent(n)+'&token='+CT,{method:'POST'});}catch(e){}
   jarvisSpeak((a==='stop'?'Stopping ':a==='restart'?'Restarting ':'Starting ')+n.replace(/^jarvis-/,'').replace(/-/g,' ')+'.');
@@ -1172,10 +1314,13 @@ function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
   [...d.querySelectorAll('.di')].forEach(el=>el.remove());
   DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;
+    e.setAttribute('role','button');e.setAttribute('tabindex','0');e.setAttribute('aria-label',it.t||'Dock item');e.title=it.t||'Dock item';
     // iOS tile: icon glyph + a persistent NAME label under it. Pinned items get an unpin (×) chip.
     e.innerHTML='<div class=gly>'+it.ic+'</div><div class=nm>'+it.t+'</div>'+
       (it.pinned?'<span class=x title="Unpin">×</span>':'');
-    e.onclick=()=>{try{it.fn();}catch(_){}};
+    const run=()=>{try{window.firePulseSpike&&window.firePulseSpike(.35);navigator.vibrate&&navigator.vibrate(8);}catch(_){}try{it.fn();}catch(_){}};
+    e.onclick=run;
+    e.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();run();}};
     if(it.pinned){const xb=e.querySelector('.x');if(xb)xb.onclick=ev=>{ev.stopPropagation();unpinFromDock(it.k);};}
     d.appendChild(e);});
   wireDockMagnify(); wireDockDrag();}
@@ -1682,9 +1827,11 @@ function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecog
     const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
     _detectGender();                                      // assess speaker pitch while they talk → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
-  _rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvisSpeak('Please allow microphone access.');_rec=null;$('mic').classList.remove('live');}};
-  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
-  _rec.start();}
+  _rec.onerror=ev=>{const hard=/not-allowed|service-not-allowed|audio-capture|network|aborted/.test(ev.error||'');
+    if(hard){const msg=ev.error==='not-allowed'?'Please allow microphone access.':'Voice input stopped. Tap the mic to try again.';try{jarvisSpeak(msg);}catch(_){}
+      _rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');}};
+  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');}}};
+  try{_rec.start();}catch(e){_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');try{jarvisSpeak('Voice input could not start.');}catch(_){}}}
 
 /* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
 function setMode(mode,arg){
@@ -1700,6 +1847,31 @@ function setMode(mode,arg){
   const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
   ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
 }
+function closeActiveSurface(){
+  if($('prop')&&$('prop').style.display==='flex'){closeProp();return true;}
+  if($('gpuOv')&&$('gpuOv').style.display==='flex'){closeGPU();return true;}
+  if(document.querySelector('.ov.open')){setMode('live');return true;}
+  if($('card')&&$('card').classList.contains('open')){closeCard();return true;}
+  return false;
+}
+function wireJarvisKeys(){if(window.__jarvisKeys)return;window.__jarvisKeys=true;
+  document.addEventListener('keydown',ev=>{
+    const tag=(ev.target&&ev.target.tagName||'').toLowerCase();
+    const typing=tag==='input'||tag==='textarea'||(ev.target&&ev.target.isContentEditable);
+    if(ev.key==='Escape'&&closeActiveSurface()){ev.preventDefault();return;}
+    if((ev.metaKey||ev.ctrlKey)&&ev.key.toLowerCase()==='k'){ev.preventDefault();$('say')&&$('say').focus();return;}
+    if(!typing&&ev.key==='/'){ev.preventDefault();$('say')&&$('say').focus();return;}
+    if((ev.metaKey||ev.ctrlKey)&&ev.key==='Enter'){ev.preventDefault();askJarvis();return;}
+    if((ev.altKey||ev.metaKey)&&!typing){
+      const k=ev.key.toLowerCase();
+      if(k==='g'){ev.preventDefault();quick('3d');}
+      else if(k==='i'){ev.preventDefault();quick('image');}
+      else if(k==='s'){ev.preventDefault();readStatus();}
+      else if(k==='w'){ev.preventDefault();setMode('worklist');}
+    }
+  },true);
+}
+wireJarvisKeys();
 async function loadLib(){try{const lib=await(await fetch('library')).json();
    $('libgrid').innerHTML=(lib&&lib.length)?lib.map(m=>m.file.endsWith('.glb')
      ?'<div class=it><model-viewer src="media/'+m.file+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
@@ -4021,6 +4193,7 @@ function engage(){if(_engaged)return;_engaged=true;
   try{ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
   try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
   try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}   // first run → show the access panel
+  try{ if(typeof maybeOfferAssist==='function') setTimeout(maybeOfferAssist,4200); }catch(_){}  // then offer phone-control setup if companion is not linked
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
@@ -4033,6 +4206,8 @@ wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
 setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();
+  try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}
+  try{ if(typeof maybeOfferAssist==='function') setTimeout(maybeOfferAssist,5200); }catch(_){}
   // auto-engage shows the universe but CANNOT play audio (no user gesture) — so the VOICE part
   // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
   addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
@@ -4061,16 +4236,16 @@ setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$(
   function makeCanvas(){return;} // no particle/bubble canvas; keep the clean GLB-style ring only
   function resizeCanvas(){if(!canvas||!ctx)return;DPR=Math.min(devicePixelRatio||1,mobile?1.5:2);canvas.width=Math.floor(innerWidth*DPR);canvas.height=Math.floor(innerHeight*DPR);canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
   function rectPoint(r,t){const p=((t%1)+1)%1,per=2*(r.width+r.height);let d=p*per;if(d<r.width)return{x:r.left+d,y:r.top};d-=r.width;if(d<r.height)return{x:r.right,y:r.top+d};d-=r.height;if(d<r.width)return{x:r.right-d,y:r.bottom};d-=r.width;return{x:r.left,y:r.bottom-d};}
-  function spawnParticle(el,boost){if(!el||!el.isConnected)return;const r=el.getBoundingClientRect();if(r.width<4||r.height<4)return;const t=Math.random(),p=rectPoint(r,t);particles.push({el,t,x:p.x,y:p.y,life:1,max:.75+Math.random()*.85,speed:(.055+Math.random()*.12)*(Math.random()<.5?-1:1),size:(mobile?.75:1)*(1.2+Math.random()*2.8)*(boost||1),hue:Math.random(),drift:(Math.random()-.5)*18,burst:boost||1});const max=mobile?90:180;if(particles.length>max)particles.splice(0,particles.length-max);}
-  function pulse(power){const p=Math.max(0,Math.min(1,Number(power)||1));pulsePower=Math.max(pulsePower,p);refreshTargets();for(const el of targets){el.classList.add('holo2036-pulse');setVar(el,'--holo-burst',p.toFixed(3));if(MAJOR.includes(el.id))for(let i=0;i<(mobile?8:16);i++)spawnParticle(el,1.4+p);}setTimeout(()=>{for(const el of targets){el.classList.remove('holo2036-pulse');removeVar(el,'--holo-burst');}},950);}
+  function spawnParticle(){return;} // no floating particles/bubbles; depth stays on the existing glass controls
+  function pulse(power){const p=Math.max(0,Math.min(1,Number(power)||1));pulsePower=Math.max(pulsePower,p);refreshTargets();for(const el of targets){el.classList.add('holo2036-pulse');setVar(el,'--holo-burst',p.toFixed(3));}setTimeout(()=>{for(const el of targets){el.classList.remove('holo2036-pulse');removeVar(el,'--holo-burst');}},950);}
   window.holo2036Pulse=pulse;window.holoRingPulse=pulse;
-  function updateProximity(){const maxD=Math.max(120,Math.min(innerWidth,innerHeight)*(mobile?.34:.25));for(const el of targets){if(!el||!el.isConnected)continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;const d=Math.hypot(mouse.x-(r.left+r.width/2),mouse.y-(r.top+r.height/2));const p=Math.max(0,Math.min(1,1-d/maxD));setVar(el,'--holo-prox',p>.02?p.toFixed(3):'0');if(p>.45&&Math.random()<(mobile?.025:.055))spawnParticle(el,1+p);}}
+  function updateProximity(){const maxD=Math.max(120,Math.min(innerWidth,innerHeight)*(mobile?.34:.25));for(const el of targets){if(!el||!el.isConnected)continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;const d=Math.hypot(mouse.x-(r.left+r.width/2),mouse.y-(r.top+r.height/2));const p=Math.max(0,Math.min(1,1-d/maxD));setVar(el,'--holo-prox',p>.02?p.toFixed(3):'0');}}
   function colorFor(h,a){if(h<.25)return'rgba(41,231,255,'+a+')';if(h<.5)return'rgba(167,139,250,'+a+')';if(h<.75)return'rgba(95,255,193,'+a+')';return'rgba(255,122,217,'+a+')';}
   function drawParticles(dt){if(!ctx||!canvas)return;ctx.clearRect(0,0,innerWidth,innerHeight);pulsePower=Math.max(0,pulsePower-dt*1.25);if(!mobile||Math.random()<.55)for(const id of MAJOR){const el=document.getElementById(id);if(el&&Math.random()<(mobile?.035:.08))spawnParticle(el,1+pulsePower);}ctx.save();ctx.globalCompositeOperation='lighter';for(let i=particles.length-1;i>=0;i--){const p=particles[i];if(!p.el||!p.el.isConnected){particles.splice(i,1);continue;}const r=p.el.getBoundingClientRect();p.t+=p.speed*dt;const pt=rectPoint(r,p.t);p.life-=dt/p.max;const out=Math.sin((1-p.life)*Math.PI)*p.drift;p.x=pt.x+out*.18;p.y=pt.y+out*.18;if(p.life<=0){particles.splice(i,1);continue;}const a=Math.max(0,Math.min(1,p.life))*.55,rad=p.size*(1+(1-p.life)*1.8);const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad*5);g.addColorStop(0,colorFor(p.hue,a));g.addColorStop(.35,colorFor(p.hue,a*.35));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad*5,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(240,255,255,'+(a*.9)+')';ctx.beginPath();ctx.arc(p.x,p.y,Math.max(.7,rad*.55),0,Math.PI*2);ctx.fill();}ctx.restore();}
   function roundedRectPath(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
   function drawDepthLines(now){if(!ctx||!canvas)return;ctx.save();ctx.globalCompositeOperation='lighter';ctx.lineWidth=mobile?.7:.9;for(const id of MAJOR){const el=document.getElementById(id);if(!el)continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;const prox=parseFloat(getComputedStyle(el).getPropertyValue('--holo-prox'))||0;const a=.04+prox*.08+pulsePower*.08;if(a<=.045&&mobile)continue;const off=6+Math.sin(now/900+r.left*.01)*2;ctx.strokeStyle='rgba(41,231,255,'+a+')';ctx.shadowColor='rgba(41,231,255,'+(a*2)+')';ctx.shadowBlur=12+prox*10+pulsePower*16;roundedRectPath(ctx,r.left-off,r.top-off,r.width+off*2,r.height+off*2,22+off);ctx.stroke();ctx.strokeStyle='rgba(167,139,250,'+(a*.75)+')';roundedRectPath(ctx,r.left-off*1.75,r.top-off*1.75,r.width+off*3.5,r.height+off*3.5,24+off);ctx.stroke();}ctx.restore();}
-  function loop(now){if(!lastFrame)lastFrame=now;const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;updateProximity();drawParticles(dt);drawDepthLines(now);raf=requestAnimationFrame(loop);}
-  function startLoop(){return;}function stopLoop(){if(!raf)return;cancelAnimationFrame(raf);raf=0;}
+  function loop(now){if(!lastFrame)lastFrame=now;const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;updateProximity();pulsePower=Math.max(0,pulsePower-dt*1.25);raf=requestAnimationFrame(loop);}
+  function startLoop(){if(reduced||raf)return;lastFrame=0;raf=requestAnimationFrame(loop);}function stopLoop(){if(!raf)return;cancelAnimationFrame(raf);raf=0;}
   function pointer(ev){const t=ev.touches&&ev.touches[0]?ev.touches[0]:ev;mouse.x=t.clientX||mouse.x;mouse.y=t.clientY||mouse.y;mouse.active=true;}
   function patchJarvisHooks(){try{if(window.jarvisSpeak&&!window.jarvisSpeak.__holo2036){const old=window.jarvisSpeak;const wrapped=function(){try{document.body.classList.add('speaking');pulse(.62);setTimeout(()=>document.body.classList.remove('speaking'),1200);}catch(e){}return old.apply(this,arguments);};wrapped.__holo2036=true;window.jarvisSpeak=wrapped;}}catch(e){}try{if(window.firePulseSpike&&!window.firePulseSpike.__holo2036){const old=window.firePulseSpike;const wrapped=function(strength){try{pulse(Math.max(.45,Math.min(1,Number(strength)||.7)));}catch(e){}return old.apply(this,arguments);};wrapped.__holo2036=true;window.firePulseSpike=wrapped;}}catch(e){}}
   function observe(){new MutationObserver(refreshTargets).observe(document.body,{childList:true,subtree:true});if(window.ResizeObserver){const ro=new ResizeObserver(refreshTargets);['dock','sdev','cmd'].forEach(id=>{const el=document.getElementById(id);if(el)ro.observe(el);});}}
