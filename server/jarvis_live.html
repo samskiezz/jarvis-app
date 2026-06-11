@@ -26,7 +26,23 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="JARVIS">
-<script>addEventListener('pageshow',function(e){if(e.persisted)location.reload();});</script>
+<script>
+/* FORCE-FRESH — kill any stale service worker + caches. An old build (commit a5d65409) registered a SW
+   that was later removed from the page but stayed installed on devices, serving the OLD cached app
+   forever — so fixes never reached the user. This unregisters every SW + clears all caches, and reloads
+   ONCE (sessionStorage-guarded, no loop) so the live build always wins. The lifeline is online anyway. */
+(function(){try{
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(function(rs){
+      var had=rs&&rs.length;
+      Promise.all((rs||[]).map(function(r){return r.unregister();})).then(function(){
+        if(window.caches&&caches.keys){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});});}
+        if(had&&!sessionStorage.getItem('__swkilled')){sessionStorage.setItem('__swkilled','1');location.reload();}
+      });
+    }).catch(function(){});
+  } else if(window.caches&&caches.keys){ caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});}); }
+}catch(e){}})();
+addEventListener('pageshow',function(e){if(e.persisted)location.reload();});</script>
 <meta name=theme-color content="#03050A">
 <style>
 :root{--cy:#29E7FF;--cy2:#7af3ff;--ok:#34d399;--am:#f5b942;--rd:#ff5d6c;--pu:#a78bfa;--bg:#02040a;--tx:#dff6ff;--dim:#5f8298;--glass:rgba(8,22,34,.62);--ln:rgba(41,231,255,.22)}

@@ -2225,20 +2225,20 @@ class _H(http.server.BaseHTTPRequestHandler):
             }
             self._send(json.dumps(mani).encode(), "application/manifest+json")
         elif self.path.split("?", 1)[0] == "/appsw.js":
-            # Service worker (scope = the /jarvis/ deploy dir). NETWORK-FIRST so the live lifeline data is
-            # never stale; falls back to the cached shell ONLY when the network is down, so her page still
-            # opens offline. Dynamic endpoints (tts/chat/metrics/rtc/…) bypass the SW entirely — always live.
+            # SELF-DESTROYING service worker. An earlier build registered a caching SW that then stayed
+            # installed on devices and served the OLD cached app forever, so fixes never reached the user.
+            # Browsers re-fetch THIS script from the network for their periodic SW update-check (it bypasses
+            # the SW's own cache), so any device still running the old SW updates to this one, which wipes
+            # all caches, unregisters itself, and reloads every open tab to the live build. The lifeline is
+            # online anyway (chat/voice/brain need the network), so we run NO service worker now.
             sw = r"""
-const C='jarvis-shell-v2';
-const LIVE=/\/(tts|chat|metrics|vitals|children|budget|tasks|taskresult|rtc|guardian|talk|control|swarm|godrays|voiceupload|library|suggestions|upgrade|detail|graphdata)\b/;
-self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(['./','./a11y/a11y.css','./a11y/a11y.js']).catch(()=>{})));});
-self.addEventListener('activate',e=>{self.clients.claim();e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>k!==C&&caches.delete(k)))));});
-self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);
-  if(u.origin!==location.origin)return;                 // CDN (three.js) — let the browser handle it
-  if(LIVE.test(u.pathname))return;                       // lifeline endpoints: ALWAYS live, never cached
-  if(r.mode==='navigate'){e.respondWith(fetch(r).then(resp=>{const cp=resp.clone();caches.open(C).then(c=>c.put('./',cp));return resp;}).catch(()=>caches.match('./').then(m=>m||caches.match(r))));return;}
-  e.respondWith(caches.match(r).then(hit=>{const net=fetch(r).then(resp=>{if(resp&&resp.ok){const cp=resp.clone();caches.open(C).then(c=>c.put(r,cp));}return resp;}).catch(()=>hit);return hit||net;}));
-});
+self.addEventListener('install',e=>self.skipWaiting());
+self.addEventListener('activate',e=>{e.waitUntil((async()=>{
+  try{const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}catch(_){}
+  try{await self.registration.unregister();}catch(_){}
+  try{const cs=await self.clients.matchAll({type:'window'});cs.forEach(c=>{try{c.navigate(c.url);}catch(_){}});}catch(_){}
+})());});
+self.addEventListener('fetch',e=>{});   // pass-through: never intercept, never serve stale
 """
             self._send(sw.encode(), "application/javascript")
         elif self.path.startswith("/a11y/"):
