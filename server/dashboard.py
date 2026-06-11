@@ -1852,6 +1852,86 @@ def _agent_tools() -> dict:
         return {"ok": False, "error": str(e)[:160], "tools": [], "status": {}}
 
 
+def _pm2_state(name: str) -> dict:
+    try:
+        rows = json.loads(subprocess.run(["pm2", "jlist"], capture_output=True, text=True, timeout=6).stdout or "[]")
+        for row in rows:
+            if row.get("name") == name:
+                env = row.get("pm2_env") or {}
+                return {"name": name, "status": env.get("status", "unknown"),
+                        "restarts": env.get("restart_time", 0), "pid": row.get("pid")}
+    except Exception as e:  # noqa: BLE001
+        return {"name": name, "status": "error", "error": str(e)[:120]}
+    return {"name": name, "status": "missing"}
+
+
+def _http_probe(url: str, timeout: float = 4.0, method: str = "GET", data: bytes | None = None,
+                headers: dict | None = None) -> dict:
+    started = time.time()
+    try:
+        req = urllib.request.Request(url, data=data, method=method, headers=headers or {})
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            body = r.read(700)
+            return {"ok": 200 <= int(r.status) < 400, "status": int(r.status),
+                    "ms": int((time.time() - started) * 1000), "sample": body.decode("utf-8", "replace")[:180]}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "status": 0, "ms": int((time.time() - started) * 1000), "error": str(e)[:180]}
+
+
+def _doctor() -> dict:
+    """Production System Doctor for the dock: cheap probes only, never throws, and records the missing
+    feature/function list so debugging work does not vanish between sessions."""
+    chat_body = json.dumps({"q": "hello jarvis", "address": ""}).encode()
+    cors = _http_probe("http://127.0.0.1:8001/v1/jarvis/system/status", timeout=4, method="OPTIONS",
+                       headers={"Origin": "https://app.projectsolar.cloud",
+                                "Access-Control-Request-Method": "GET"})
+    checks = [
+        {"id": "dashboard", "label": "Dashboard /jarvis", **_http_probe("http://127.0.0.1:%s/" % PORT, 4)},
+        {"id": "chat", "label": "JARVIS chat", **_http_probe("http://127.0.0.1:%s/chat" % PORT, 12, "POST",
+                                                             chat_body, {"Content-Type": "application/json"})},
+        {"id": "backend", "label": "FastAPI backend", **_http_probe("http://127.0.0.1:8001/", 4)},
+        {"id": "cors", "label": "Public app CORS", **cors},
+        {"id": "brain", "label": "Ollama / Vast brain", **_http_probe("http://127.0.0.1:11434/api/tags", 4)},
+        {"id": "underworld", "label": "Underworld API", **_http_probe("http://127.0.0.1:8091/", 4)},
+        {"id": "voice", "label": "Voice clone service", "pm2": _pm2_state("jarvis-voiceclone")},
+        {"id": "tasks", "label": "Task daemon", "pm2": _pm2_state("jarvis-tasks")},
+        {"id": "climate", "label": "Climate bridge", **_http_probe("http://127.0.0.1:%s/climate/state" % PORT, 4)},
+        {"id": "agent", "label": "Agent OS tools", **_http_probe("http://127.0.0.1:%s/agent/tools" % PORT, 6)},
+    ]
+    for c in checks:
+        if "pm2" in c:
+            c["ok"] = c["pm2"].get("status") == "online"
+    missing_features = [
+        "System Doctor dock app for one-tap production diagnostics",
+        "Permission readiness panel for mic/camera/files/notifications with plain recovery actions",
+        "Guardian device pairing status surfaced in the main menu",
+        "Document viewer from celestial dust records",
+        "Knowledge-base browser from dust search results",
+        "Agent OS tool palette progress stream in the card",
+        "Climate bridge setup/checklist mini app",
+        "GPU instance lifecycle monitor with cost and VRAM warnings",
+        "Chat action transcript showing what JARVIS actually executed",
+        "Mini-app self-test runner for every dock item",
+    ]
+    missing_functions = [
+        "Public CORS allowlist for app.projectsolar.cloud",
+        "Dashboard safe-write handling for cancelled browser requests",
+        "Underworld auto-restart/health protection when the API aborts",
+        "Chat request retry with visible backend error detail",
+        "Long task handoff from chat into Live Tasks with status link",
+        "TTS fallback status when XTTS is slow or unavailable",
+        "Climate bridge disconnected recovery instruction",
+        "Fast route probes for /guardian, /library, /agent/tools and /tasks",
+        "No-duplicate celestial/dock registration guard",
+        "Production smoke test after deploy covering mobile/tablet/desktop",
+    ]
+    ok_count = sum(1 for c in checks if c.get("ok"))
+    return {"ok": True, "score": round(ok_count / max(1, len(checks)) * 100), "checks": checks,
+            "pm2": [_pm2_state(n) for n in ("jarvis-dashboard", "jarvis-backend", "jarvis-tasks",
+                                            "jarvis-voiceclone", "underworld-backend")],
+            "missing_features": missing_features, "missing_functions": missing_functions}
+
+
 def _agent_run(command: str, wait_s: float = 8.0) -> dict:
     """Plan + execute a natural-language command via the Agent OS core, AUTO-ONLY (only permission='auto'
     steps run; anything destructive is left 'awaiting' rather than executed by a web POST — the token
@@ -2067,18 +2147,28 @@ class _H(http.server.BaseHTTPRequestHandler):
             return self.path[len("/jarvis"):] or "/"
         return self.path
 
+    def _write_body(self, body: bytes) -> bool:
+        try:
+            self.wfile.write(body)
+            return True
+        except (BrokenPipeError, ConnectionResetError, TimeoutError):
+            return False
+
     def _send(self, body: bytes, ctype: str):
-        self.send_response(200)
-        self.send_header("Content-Type", ctype)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        # Live app: HTML + JSON are always dynamic — never let a browser/proxy serve a stale copy.
-        # (Static GLB/asset routes set their own long max-age via a separate sender, so they stay cached.)
-        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-        self.send_header("Pragma", "no-cache")
-        self.send_header("Expires", "0")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.send_response(200)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            # Live app: HTML + JSON are always dynamic — never let a browser/proxy serve a stale copy.
+            # (Static GLB/asset routes set their own long max-age via a separate sender, so they stay cached.)
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self._write_body(body)
+        except (BrokenPipeError, ConnectionResetError, TimeoutError):
+            return
 
     def _tmpl(self, name: str) -> str:
         """Read an html template from server/ and inject the control token."""
@@ -2207,7 +2297,7 @@ class _H(http.server.BaseHTTPRequestHandler):
                 self.send_response(200); self.send_header("Content-Type", "audio/wav")
                 self.send_header("Content-Length", str(len(data)))
                 self.send_header("Cache-Control", "public, max-age=3600")
-                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self._write_body(data)
             else:
                 self.send_response(204); self.end_headers()
         elif self.path.startswith("/suggestions"):
@@ -2224,6 +2314,8 @@ class _H(http.server.BaseHTTPRequestHandler):
         elif self.path.startswith("/agent/tools"):
             # Agent OS tool registry (the 17 real tools) + health snapshot.
             self._send(json.dumps(_agent_tools()).encode(), "application/json")
+        elif self.path.startswith("/doctor"):
+            self._send(json.dumps(_doctor()).encode(), "application/json")
         elif self.path.startswith("/budget"):
             from server.services import token_governor as TG
             self._send(json.dumps(TG.state()).encode(), "application/json")
@@ -2346,7 +2438,7 @@ self.addEventListener('fetch',e=>{});   // pass-through: never intercept, never 
                 self.send_response(200); self.send_header("Content-Type", ct)
                 self.send_header("Content-Length", str(len(data)))
                 self.send_header("Cache-Control", "public, max-age=86400")
-                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self._write_body(data)
             else:
                 self.send_response(404); self.end_headers()
         elif self.path.split("?", 1)[0] == "/a11y":
@@ -2362,7 +2454,7 @@ self.addEventListener('fetch',e=>{});   // pass-through: never intercept, never 
                 self.send_response(200); self.send_header("Content-Type", ct)
                 self.send_header("Content-Length", str(len(data)))
                 self.send_header("Cache-Control", "public, max-age=86400")
-                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self._write_body(data)
             else:
                 self.send_response(404); self.end_headers()
         elif self.path.startswith("/assetlist"):
@@ -2389,7 +2481,7 @@ self.addEventListener('fetch',e=>{});   // pass-through: never intercept, never 
                 ct = mimetypes.guess_type(p)[0] or "application/octet-stream"
                 self.send_response(200); self.send_header("Content-Type", ct)
                 self.send_header("Content-Length", str(len(data)))
-                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self.wfile.write(data)
+                self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self._write_body(data)
             else:
                 self.send_response(404); self.end_headers()
         elif self.path.startswith("/climate/poll"):
@@ -2598,14 +2690,22 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             if is_build:
                 try:  # saying == doing: actually spawn the Claude builder and report it
                     from server.services import task_daemon as TD
-                    tid = TD.ask_claude(qtext).get("id")
+                    launch = TD.ask_claude(qtext)
+                    tid = launch.get("id") if isinstance(launch, dict) else None
+                    if not tid:
+                        raise RuntimeError((launch or {}).get("error", "task launch failed")
+                                           if isinstance(launch, dict) else "task launch failed")
                     self._send(json.dumps({"ok": True, "task_id": tid,
                                            "reply": "Right away. I'm building that for you now — it may take a little "
                                                     "while, and I'll tell you the moment it's ready."}).encode(),
                                "application/json")
                     return
-                except Exception:  # noqa: BLE001
-                    pass
+                except Exception as e:  # noqa: BLE001
+                    self._send(json.dumps({"ok": False, "reply": "I could not start that build task yet. "
+                                                                    "Open Live Tasks or System Doctor and I will show "
+                                                                    "what is blocking it.",
+                                           "error": str(e)[:160]}).encode(), "application/json")
+                    return
             reply = _jarvis_chat(qtext, body.get("history"), body.get("address", "ma'am"))
             self._send(json.dumps({"ok": True, "reply": reply}).encode(), "application/json")
             return

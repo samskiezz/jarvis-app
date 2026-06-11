@@ -14,7 +14,7 @@ CORS_ORIGINS = [
     o.strip()
     for o in os.environ.get(
         "JARVIS_CORS_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
+        "https://app.projectsolar.cloud,https://projectsolar.cloud,http://localhost:5173,http://127.0.0.1:5173",
     ).split(",")
     if o.strip()
 ]

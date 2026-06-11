@@ -239,6 +239,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 /* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
    row above the talk bar + caption band (clears #cmd ~96px top, #coreSay 108px) and centre it. */
 @media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:128px;gap:6px}
+  #dock{max-width:94vw;overflow-x:auto;scrollbar-width:none}#dock::-webkit-scrollbar{display:none}
   #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px}}
 /* ---------- R5: crystal caption bubble + iridescent ring ---------- */
 #crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
@@ -1172,11 +1173,11 @@ function showCrystal(txt){const c=$('crystal');if(!c)return;
   c.classList.add('show');clearTimeout(_crystalHide);}
 function hideCrystal(delay){clearTimeout(_crystalHide);
   _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
-let _chatBusy=false;
+let _chatBusy=false,_chatQueued='';
 function setBusy(el,on,label){try{if(!el)return;el.classList.toggle('jarvis-busy',!!on);if('disabled'in el)el.disabled=!!on;el.setAttribute('aria-busy',on?'true':'false');if(label!=null)el.dataset.busyLabel=label;}catch(_){}}
 function actionPulse(s){try{window.firePulseSpike&&window.firePulseSpike(s||.45);navigator.vibrate&&navigator.vibrate(8);}catch(_){}}
 async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
-  if(_chatBusy)return;                                    // one turn at a time — overlapping voice finals must not stack replies that talk over each other
+  if(_chatBusy){_chatQueued=t;$('say').value='';bubble('JARVIS','I am finishing the current command, then I will run that next.');return;}
   const l=t.toLowerCase();$('say').value='';
   try{if(window.A11Y){const r=A11Y.intent(t,'text');if(r&&r.handled)return;}}catch(_){}
   // voice/command shortcuts (preserved)
@@ -1194,8 +1195,10 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
       body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:_spkWho||''})})).json();   // address from DETECTED voice gender (neutral until known)
     const reply=(r&&r.reply)||"I'm here.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
     bubble('JARVIS',esc(reply));jarvisSpeak(reply);
-  }catch(e){const msg=_ac.signal.aborted?'That took too long — try again.':'Connection error. I did not lose the text; try again.';bubble('JARVIS',msg);try{jarvisSpeak(msg);}catch(_){}}
-  finally{clearTimeout(_to);_chatBusy=false;setBusy(document.querySelector('.send'),false);setBusy($('cmd'),false);}}
+    if(r&&r.task_id){try{setMode('worklist');}catch(_){} pollClaude(r.task_id);}
+  }catch(e){const msg=_ac.signal.aborted?'That took too long — I put your words back so you can send again.':'Connection error. I put your words back so you can send again.';$('say').value=t;bubble('JARVIS',msg);try{jarvisSpeak(msg);}catch(_){}}
+  finally{clearTimeout(_to);_chatBusy=false;setBusy(document.querySelector('.send'),false);setBusy($('cmd'),false);
+    if(_chatQueued){const q=_chatQueued;_chatQueued='';$('say').value=q;setTimeout(()=>askJarvis(),80);}}}
 function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
    if(r.status&&r.status!=='running'&&r.status!=='paused'){clearInterval(iv);
      const txt=(r.text||'(done)').slice(-2000);bubble('JARVIS',esc(txt));
@@ -1246,8 +1249,52 @@ async function openAgentTools(){window.firePulseSpike&&window.firePulseSpike(0.5
   }catch(e){showCard({title:'🤖 Agent OS',subtitle:'registry unavailable',lines:['Could not reach /agent/tools.']});}}
 async function runAgentTool(name){if(!name)return;window.firePulseSpike&&window.firePulseSpike(0.7);
   jarvisSpeak('Running '+String(name).replace(/_/g,' ')+'.');
-  try{await fetch('agent/run?token='+CT+'&q='+encodeURIComponent(name),{method:'POST'});}catch(e){}
-  setTimeout(()=>openAgentTools(),1200);}
+  showCard({title:'🤖 Agent OS',subtitle:'running '+name,lines:['Starting tool run…']});
+  try{const r=await(await fetch('agent/run?token='+CT+'&q='+encodeURIComponent(name),{method:'POST'})).json();
+    const run=r.run||{}, steps=run.steps||[];
+    showCard({title:'🤖 Agent OS',subtitle:(r.ok?'run '+(r.run_id||'')+' · ':'')+(run.status||r.error||'finished'),
+      props:[{k:'Tool',v:name},{k:'Run',v:r.run_id||'—'},{k:'Status',v:run.status||String(!!r.ok)}],
+      lines:steps.length?steps.slice(-8).map(s=>(s.status||'step')+' · '+(s.tool||s.name||'')+' '+(s.error||s.summary||'')):['No step output returned yet. Open Live Tasks for longer runs.'],
+      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')},{label:'↻ Tools',kind:'_fn',fn:()=>openAgentTools()}]});
+  }catch(e){showCard({title:'🤖 Agent OS',subtitle:'run failed',lines:[String(e).slice(0,160)],actions:[{label:'↻ Tools',kind:'_fn',fn:()=>openAgentTools()}]});}}
+
+async function openDoctor(){window.firePulseSpike&&window.firePulseSpike(0.65);
+  showCard({title:'🧰 System Doctor',subtitle:'running production checks…',lines:['Testing chat, API, GPU brain, Underworld, voice, tasks, climate and Agent OS.']});
+  try{const d=await(await fetch('doctor')).json();
+    const checks=(d.checks||[]), bad=checks.filter(x=>!x.ok);
+    showCard({title:'🧰 System Doctor',subtitle:'health '+(d.score||0)+'% · '+bad.length+' blockers',
+      props:[{k:'Checks',v:checks.filter(x=>x.ok).length+' / '+checks.length},{k:'PM2',v:(d.pm2||[]).filter(x=>x.status==='online').length+' online'}],
+      lines:checks.map(x=>(x.ok?'✓ ':'✗ ')+x.label+' · '+(x.status||((x.pm2||{}).status)||'')+(x.error?' · '+x.error:'')),
+      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')},
+               {label:'🩺 Vitals',kind:'_fn',fn:()=>openVitals()},
+               {label:'📋 Missing 20',kind:'_fn',fn:()=>showMissingPlan(d)}]});
+  }catch(e){showCard({title:'🧰 System Doctor',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+function showMissingPlan(d){
+  const lines=['MISSING FEATURES'].concat((d.missing_features||[]).map((x,i)=>(i+1)+'. '+x),
+    ['MISSING FUNCTION FIXES']).concat((d.missing_functions||[]).map((x,i)=>(i+1)+'. '+x));
+  showCard({title:'📋 Missing Features / Functions',subtitle:'tracked after-task list',lines,
+    actions:[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});
+}
+
+async function openClimate(){window.firePulseSpike&&window.firePulseSpike(0.45);
+  showCard({title:'🌡 Climate',subtitle:'loading bridge state…'});
+  try{const d=await(await fetch('climate/state')).json();
+    const st=d.state||d||{}, zones=st.zones||[], connected=!!(d.connected||st.connected||zones.length);
+    showCard({title:'🌡 Climate',subtitle:connected?'bridge connected':'bridge disconnected',
+      props:[{k:'Connected',v:connected?'yes':'no'},{k:'Zones',v:zones.length||'—'},{k:'Updated',v:st.ts||st.updated||'—'}],
+      lines:zones.length?zones.slice(0,10).map(z=>(z.name||z.zone||'zone')+' · '+(z.temp||z.temperature||'—')+'° · '+(z.mode||z.state||'')):
+        ['The home climate bridge is not reporting yet. Chat commands will answer honestly until the bridge connects.'],
+      actions:[{label:'🔥 Warm',kind:'_fn',fn:()=>climateSay('I am cold, please warm the room')},
+               {label:'❄ Cool',kind:'_fn',fn:()=>climateSay('I am too warm, please cool the room')},
+               {label:'↻ Refresh',kind:'_fn',fn:()=>openClimate()}]});
+  }catch(e){showCard({title:'🌡 Climate',subtitle:'state unavailable',lines:[String(e).slice(0,160)]});}}
+function climateSay(q){$('say').value=q;askJarvis();}
+
+function openBudget(){showCard({title:'💰 Budget / Governor',subtitle:'loading…'});
+  fetch('budget').then(r=>r.json()).then(s=>showCard({title:'💰 Budget / Governor',subtitle:s.economy_forced?'economy mode':'normal mode',
+    props:[{k:'Spent today',v:'$'+Number(s.spent_usd_today||0).toFixed(2)},{k:'Daily cap',v:'$'+(s.daily_cap||0)},{k:'Archon',v:archon?'on':'off'}],
+    actions:[{label:archon?'⚡ Archon off':'⚡ Archon on',kind:'_fn',fn:()=>toggleArchon()},{label:'🩺 Vitals',kind:'_fn',fn:()=>openVitals()}]}))
+    .catch(e=>showCard({title:'💰 Budget / Governor',subtitle:'unavailable',lines:[String(e).slice(0,160)]}));}
 
 function readStatus(){const c=_m.completion||{},X=_m.correlation||{},on=(_m.workers||[]).filter(w=>w.toggleable&&w.status==='online').length;
   jarvisSpeak('Status. Knowledge build '+(c.pct||0)+' percent. '+on+' pipelines online. '+fmt(X.distinct_after_dedup)+' distinct entities. Box V-RAM '+((_m.box||{}).vram_used_gb||0)+' of 48 gigabytes.');}
@@ -1259,15 +1306,20 @@ function toggleArchon(){archon=!archon;$('archonBtn').classList.toggle('on',arch
 /* ================= R4: Mac dock — magnify-on-hover + drag-reorder ================= */
 const DOCK=[
   {k:'talk',   ic:'🎤', t:'Talk',     fn:()=>$('say').focus()},
+  {k:'doctor', ic:'🧰', t:'Doctor',   fn:()=>openDoctor()},
   {k:'library',ic:'📚', t:'Library',  fn:()=>setMode('library')},
   {k:'create', ic:'✨', t:'Create',   fn:()=>{$('say').focus();$('say').value='Create ';}},
   {k:'image',  ic:'🎨', t:'Image',    fn:()=>quick('image')},
   {k:'3d',     ic:'🧊', t:'3D',       fn:()=>quick('3d')},
+  {k:'access', ic:'🔓', t:'Access',   fn:()=>openAccess()},
+  {k:'control',ic:'📲', t:'Control',  fn:()=>openAssist()},
   {k:'guardian',ic:'🛡',t:'Guardian', fn:()=>setMode('guardian')},
-  {k:'climate', ic:'🌡', t:'Climate',  fn:()=>{flyToBodyByName('climate');}},
+  {k:'climate', ic:'🌡', t:'Climate',  fn:()=>openClimate()},
   {k:'worklist',ic:'🛰',t:'Live Tasks',fn:()=>setMode('worklist')},
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
+  {k:'index',  ic:'🧭', t:'Index',    fn:()=>openCelIndex()},
+  {k:'budget', ic:'💰', t:'Budget',   fn:()=>openBudget()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
   {k:'gpu',     ic:'🎛', t:'GPU',      fn:()=>openGPU()},
 ];
@@ -3171,15 +3223,19 @@ const CEL_PLANETS=[
 const CEL_MOONS={
  miniapps:[
   {id:'app-talk',    label:'🎤 Talk',      I:1.00,fn:()=>$('say').focus(),       sats:[['Voice Input',()=>micToggle()],['Chat',()=>$('say').focus()]]},
+  {id:'app-doctor',  label:'🧰 Doctor',    I:0.98,fn:()=>openDoctor(),           sats:[['Run Checks',()=>openDoctor()],['Missing 20',()=>fetch('doctor').then(r=>r.json()).then(showMissingPlan).catch(()=>openDoctor())]]},
   {id:'app-guardian',label:'🛡 Guardian',  I:0.95,gateway:'guardian',            sats:[['Live Monitor',()=>setMode('guardian')],['Talk to Room',()=>setMode('guardian')]]},
   {id:'app-worklist',label:'🛰 Live Tasks',I:0.90,fn:()=>setMode('worklist'),    sats:[['Active Tasks',()=>setMode('worklist')],['Approvals',()=>setMode('worklist')]]},
   {id:'app-vitals',  label:'🩺 Vitals',    I:0.85,fn:()=>openVitals(),           sats:[['Alerts',()=>openVitals()],['Services',()=>openVitals()],['Gauges',()=>openVitals()]]},
+  {id:'app-access',  label:'🔓 Access',    I:0.82,fn:()=>openAccess(),           sats:[['Permissions',()=>openAccess()],['Phone Control',()=>openAssist()]]},
   {id:'app-create',  label:'✨ Create',    I:0.78,fn:()=>{$('say').focus();$('say').value='Create ';},sats:[['Image',()=>quick('image')],['3D Model',()=>quick('gen3d')]]},
   {id:'app-image',   label:'🎨 Image',     I:0.74,fn:()=>quick('image'),         sats:[['Generate Image',()=>quick('image')]]},
   {id:'app-3d',      label:'🧊 3D',        I:0.72,fn:()=>quick('3d'),            sats:[['Generate 3D',()=>quick('3d')]]},
   {id:'app-library', label:'📚 Library',   I:0.68,fn:()=>setMode('library'),     sats:[['Gallery',()=>setMode('library')],['Refresh Media',()=>loadLib()]]},
-  {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>flyToBodyByName('climate')]]},
+  {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>openClimate()],['Warm',()=>climateSay('I am cold, please warm the room')]]},
   {id:'app-agent',   label:'🤖 Agent OS',  I:0.60,gateway:'agentos',             sats:[['Tool Palette',()=>openAgentTools()]]},
+  {id:'app-index',   label:'🧭 Index',     I:0.58,fn:()=>openCelIndex(),         sats:[['Open Index',()=>openCelIndex()]]},
+  {id:'app-budget',  label:'💰 Budget',    I:0.57,fn:()=>openBudget(),           sats:[['Governor',()=>openBudget()],['Archon',()=>toggleArchon()]]},
   {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]}],
  knowledge:[],   // the 16 dom:* galaxies are ADOPTED here at build time — GLBs + recursive systems intact
  automation:[

@@ -16,7 +16,7 @@ module.exports = {
       env: {
         JARVIS_API_KEY: 'dev-key',
         JARVIS_CORS_ORIGINS:
-          'https://vscode.projectsolar.cloud,http://76.13.176.135:8001,http://76.13.176.135:5173,http://localhost:5173,http://localhost:8001',
+          'https://app.projectsolar.cloud,https://projectsolar.cloud,https://vscode.projectsolar.cloud,http://76.13.176.135:8001,http://76.13.176.135:5173,http://localhost:5173,http://localhost:8001',
         // ── LLM brain: Llama on the vast.ai GPU box (Ollama @ 211.72.13.201,
         //    container :8080 -> external :41137). Native API drives llm_research;
         //    the OpenAI-compatible /v1 drives the analyst chat (kimi client).
