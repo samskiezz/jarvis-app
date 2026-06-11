@@ -197,7 +197,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   align-items:flex-end;transition:opacity .3s,transform .3s}
 #dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
 /* §1 D: drag-grip — grab here to move the WHOLE dock anywhere (position persists in localStorage) */
-#dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.55;font-size:18px;line-height:1;
+#dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.7;font-size:20px;line-height:1;min-width:26px;min-height:44px;display:flex;align-items:center;justify-content:center;touch-action:none;
   padding:0 4px 0 2px;margin-right:2px;user-select:none;letter-spacing:-2px;transition:opacity .15s}
 #dock .dgrip:hover{opacity:1;text-shadow:0 0 10px var(--cy)}
 #dock .dgrip:active{cursor:grabbing}
@@ -298,7 +298,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    Glassmorphic crystal bubbles bound to /metrics. Each has a TOP-RIGHT 3-state toggle (grey/dark/light)
    that cycles the panel width slide-in→mid→full (full slides toward page centre). Drag-drop target for
    planets. State persists in localStorage. They flank the central world and clear the full-width #cmd. */
-.gpanel{position:fixed;z-index:18;width:248px;max-height:calc(100vh - 188px);overflow:hidden;
+.gpanel{position:fixed;z-index:18;width:min(330px,33vw);max-height:44vh;overflow:hidden;   /* default = QUARTER state */
   border-radius:18px;padding:0;color:var(--tx);
   background:linear-gradient(150deg,rgba(12,30,46,.30),rgba(6,16,26,.20));
   border:1px solid var(--ln);backdrop-filter:blur(15px) saturate(1.25);
@@ -310,13 +310,15 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
   filter:blur(.4px) saturate(1.3);opacity:.55;animation:irid 9s linear infinite}
 /* edge anchoring — 2 stacked left, 2 stacked right (top below the thin top bar; clear of #cmd ~96px) */
-#pInfra{left:14px;top:60px}
-#pPipe{left:14px;top:calc(50vh + 6px)}
-#pKnow{right:14px;top:60px}
-#pFab{right:14px;top:calc(50vh + 6px)}
-/* 3-state widths. mid + full both grow; full slides toward page centre (left panels grow right, right panels grow left → no transform needed since they're edge-anchored). */
-.gpanel.mid{width:312px}
-.gpanel.full{width:392px;max-height:calc(100vh - 150px)}
+/* PERFECTLY SYMMETRIC: 2 stacked left, 2 stacked right; each capped to its vertical HALF (≤46vh) so the
+   top + bottom on each side butt up at 50vh and never overlap. Left/right mirror each other exactly. */
+#pInfra{left:12px;top:54px}
+#pPipe{left:12px;top:calc(50vh + 2px)}
+#pKnow{right:12px;top:54px}
+#pFab{right:12px;top:calc(50vh + 2px)}
+/* 3 states: COLLAPSED (header only) · QUARTER (base above) · HALF (inner edge reaches screen centre, ~48vw — left grows right, right grows left, they meet at centre, never overlap). */
+.gpanel.collapsed{max-height:48px;width:min(250px,30vw)}
+.gpanel.half{width:48vw;max-height:46vh}
 .gpanel .gp-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:grab;user-select:none;
   border-bottom:1px solid rgba(41,231,255,.14);background:linear-gradient(90deg,rgba(41,231,255,.08),transparent)}
 .gpanel .gp-head:active{cursor:grabbing}
@@ -349,8 +351,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
 /* hide the side panels on narrow screens so they never cover the world / talk bar */
 @media(max-width:1180px){ /* phones/tablets: the 4 glass panels STAY (compact), never hidden — 3-state toggle still works */
-  .gpanel{width:44vw;max-height:30vh;font-size:10px}
-  .gpanel.mid{width:46vw}.gpanel.full{width:92vw;max-height:46vh}
+  .gpanel{width:46vw;max-height:42vh;font-size:10px}
+  .gpanel.collapsed{max-height:46px;width:42vw}.gpanel.half{width:48vw;max-height:44vh}
 }
 </style>
 <link rel="stylesheet" href="/a11y/a11y.css">
@@ -774,21 +776,26 @@ function _applyDockPos(p){const d=$('dock');if(!d||!p)return;
   // clamp into the viewport so it can never be dragged off-screen / under the talk bar
   const w=d.offsetWidth||220,h=d.offsetHeight||80;
   const x=Math.max(6,Math.min(innerWidth-w-6,p.x)), y=Math.max(52,Math.min(innerHeight-h-94,p.y));
+  d.style.right='auto';d.style.bottom='auto';d.style.transform='none';   // release CSS anchors so left/top fully control position (this is what blocked mobile dragging)
   d.style.left=x+'px';d.style.top=y+'px';}
 function _saveDockPos(){const d=$('dock');if(!d||!d.classList.contains('moved'))return;
   try{localStorage.setItem('jarvisDockPos',JSON.stringify({x:parseFloat(d.style.left)||0,y:parseFloat(d.style.top)||0}));}catch(_){}}
 function wireDockMove(){const d=$('dock'),g=$('dockGrip');if(!d||!g)return;
-  let sx=0,sy=0,ox=0,oy=0;
-  const move=e=>{const cx=(e.touches?e.touches[0].clientX:e.clientX),cy=(e.touches?e.touches[0].clientY:e.clientY);
-    _applyDockPos({x:ox+(cx-sx),y:oy+(cy-sy)});};
-  const up=()=>{_dockMoving=false;d.classList.remove('dragging');
-    removeEventListener('pointermove',move);removeEventListener('pointerup',up);_saveDockPos();};
-  const down=e=>{e.preventDefault();e.stopPropagation();_dockMoving=true;d.classList.add('dragging','moved');
-    const r=d.getBoundingClientRect();ox=r.left;oy=r.top;
-    sx=(e.touches?e.touches[0].clientX:e.clientX);sy=(e.touches?e.touches[0].clientY:e.clientY);
-    if(!d.style.left){d.style.left=r.left+'px';d.style.top=r.top+'px';}
-    addEventListener('pointermove',move);addEventListener('pointerup',up,{once:true});};
-  g.addEventListener('pointerdown',down);}
+  let sx=0,sy=0,ox=0,oy=0,drag=false;
+  // SMOOTH DRAG: pointer-capture on the grip routes every move to it (never loses tracking), rAF-throttled,
+  // clamped on-screen. Grab the ⠿ handle and slide the dock anywhere.
+  const move=e=>{ if(!drag)return; e.preventDefault();
+    _applyDockPos({x:ox+(e.clientX-sx), y:oy+(e.clientY-sy)}); };
+  const up=e=>{ if(!drag)return; drag=false;_dockMoving=false; d.classList.remove('dragging');
+    try{g.releasePointerCapture(e.pointerId);}catch(_){}
+    g.removeEventListener('pointermove',move); _saveDockPos(); };
+  g.addEventListener('pointerdown',e=>{ e.preventDefault();e.stopPropagation();
+    drag=true;_dockMoving=true; d.classList.add('dragging','moved');
+    const r=d.getBoundingClientRect(); ox=r.left;oy=r.top; sx=e.clientX;sy=e.clientY;
+    try{g.setPointerCapture(e.pointerId);}catch(_){}
+    g.addEventListener('pointermove',move);
+    g.addEventListener('pointerup',up,{once:true}); g.addEventListener('pointercancel',up,{once:true}); });
+  g.style.touchAction='none';}   // let the grip own touch gestures (no page scroll fighting the drag)
 (function(){try{const p=JSON.parse(localStorage.getItem('jarvisDockPos')||'null');
   if(p&&typeof p.x==='number'){addEventListener('load',()=>_applyDockPos(p));setTimeout(()=>_applyDockPos(p),60);}}catch(_){}})();
 
@@ -796,9 +803,9 @@ function wireDockMove(){const d=$('dock'),g=$('dockGrip');if(!d||!g)return;
    Each panel renders a live slice of /metrics (Infrastructure · Pipelines/Runners · Knowledge & Ontology ·
    Inference Fabric). The TOP-RIGHT 3-state toggle (image of 3 grey bars) cycles slide-in(0)→mid(1)→full(2);
    state persists. Planets dragged out of the 3D world can be DROPPED on a panel to inspect them. */
-const GP_STATES=['','mid','full'];
+const GP_STATES=['collapsed','','half'];   // 0=collapsed(header only) · 1=quarter(default) · 2=half(reaches centre)
 function setPanelState(id,st){const p=$(id);if(!p)return;st=((st%3)+3)%3;
-  p.dataset.state=st;p.classList.remove('mid','full');if(GP_STATES[st])p.classList.add(GP_STATES[st]);
+  p.dataset.state=st;p.classList.remove('collapsed','half');if(GP_STATES[st])p.classList.add(GP_STATES[st]);
   try{localStorage.setItem('gp:'+id,String(st));}catch(_){}}
 function wireGlassPanels(){
   [['pInfra',renderInfraPanel],['pPipe',renderPipePanel],['pKnow',renderKnowPanel],['pFab',renderFabPanel]].forEach(([id])=>{
@@ -1304,7 +1311,7 @@ let sunFace=null;                                      // §1 B: the oversized h
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
 let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=false,clock=null;
 let _starField=null,_nebula=null;
-let home={pos:new THREE.Vector3(1250,260,0),tgt:new THREE.Vector3(2650,220,0)};  // CAMERA LOCK: JARVIS POV — standing ON the core (just outside its ~780u surface, core BEHIND you) looking OUT into space (+x: telemetry, apps, domains, celestial field all ahead); near pivot (~1400u) so dragging = look-around, never an into-the-core orbit
+let home={pos:new THREE.Vector3(0,16000,34000),tgt:new THREE.Vector3(0,0,0)};  // free-orbit overview: pivot on the core/centre so drag orbits the whole spread universe (camera-spacing edit)
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
 const ASSET=n=>'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
@@ -1860,7 +1867,7 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
 const GOLDEN=Math.PI*(3-Math.sqrt(5));                  // 137.50776° in radians
 const CLUSTER_PHASE={kpi:0.0, sys:1.0, infra:2.0, pipe:3.2, tier:4.2, guardian:5.0, selfdev:5.6, climate:0.6, agentos:4.8};
 function phyllo(i, importance, type){
-  const base=4500, span=6000;                          // telemetry band pushed OFF the giant core (4.5k-10.5k, inside the 12k app ring) — no more dots crowding the centre
+  const base=6000, span=24000;                         // SPACING: telemetry spread 6k-30k (was cramped 4.5-10.5k shell) — nothing bunches near the core
   const imp=Math.max(0,Math.min(1,importance));
   const r=base + span*(1-imp);                         // closer = more important
   const a=(CLUSTER_PHASE[type]||0) + i*GOLDEN;         // golden-angle within the type cluster
@@ -2151,10 +2158,9 @@ const APP_MOONS={   // real sub-features only — each fn is the actual existing
 function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined')return; _appBuilt=true;
   if(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)return;   // retired: the 🧩 Mini Apps planet carries the dock apps now (same fns, no duplicates)
   const apps=DOCK.filter(d=>d&&d.fn&&!d.pinned).slice(0,12);
-  const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);   // wide app ring: 780-radius planets never crowd
-  _orbitRing(grp, R, 0.34);
+  const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);
   apps.forEach((app,i)=>{ try{
-    const a=i*GOLDEN, r=R*(0.9+0.02*i);
+    const a=i*GOLDEN, r=5000+i*1900;   // SPACING: app planets spread on a φ-spiral 5k→24k (was bunched at one 12k ring)
     const imp=(APP_PRIORITY[app.k]||50)/100;
     const psz=240+imp*420;                                          // PLANET = 50× moon; max ~660 — ALWAYS smaller than the AI core (~780)
     const b=_orbBody(psz, 0x4fe9ff, 'app', (app.ic?app.ic+' ':'')+app.t, 'app:'+app.k, 'app');
