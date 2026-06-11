@@ -43,6 +43,7 @@ import { isSituationQuery, buildSituationScript } from "@/components/cinematic/S
 import { isIntelDigestQuery, buildIntelDigestScript } from "@/components/cinematic/IntelDigest";
 import { isNetworkExplorerQuery, buildNetworkExplorerScript } from "@/components/cinematic/GraphNetworkExplorer";
 import { isPriorityQueueQuery, buildPriorityQueueScript } from "@/components/cinematic/PriorityActionQueue";
+import { isSkillGapQuery, buildSkillGapScript } from "@/components/cinematic/SkillGapAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -509,6 +510,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:queue-toggle"));
       try {
         const answer = await buildPriorityQueueScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isSkillGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skillgap-toggle"));
+      try {
+        const answer = await buildSkillGapScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
       } catch (_) {
