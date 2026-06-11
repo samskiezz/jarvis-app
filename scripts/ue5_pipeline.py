@@ -23,9 +23,14 @@ LOCK = "/tmp/ue5_pipeline.lock"
 MIN_FREE_GB = 15            # below this the cook is hopeless — fail clean instead of ENOSPC-crashing
 HEARTBEAT_S = 20            # bump updated_at this often during long steps so the panel never freezes
 KEY = os.path.expanduser("~/.ssh/id_ed25519")
-VAST = "root@211.72.13.201"
-SSH = (f"ssh -i {KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "
-       f"-o BatchMode=yes -p 41154 {VAST}")
+# Reach the GPU box through the vast.ai SSH PROXY — it survives instance IP/port remaps (the direct
+# IP goes stale when the interruptible instance migrates). Override via env if the proxy moves.
+VAST_HOST = os.environ.get("VAST_SSH_HOST", "ssh5.vast.ai")
+VAST_PORT = os.environ.get("VAST_SSH_PORT", "16798")
+VAST = f"root@{VAST_HOST}"
+SSHBASE = (f"ssh -i {KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "
+           f"-o BatchMode=yes -o ConnectTimeout=20 -p {VAST_PORT}")
+SSH = f"{SSHBASE} {VAST}"
 UPROJECT = f"{PROJ}/Underworld_Render.uproject"
 # Run the editor/cook as 'ueuser' (uid 1003) — the ESTABLISHED build user that owns the project, the
 # engine Intermediate, AND a populated ~/.nuget cache. RunUAT validates its compiled-script-module
@@ -43,9 +48,9 @@ STEPS = [
     ("module",   "Compile the game module (with the mesh)",     1800),
     ("level",    "Author the UE5 level (sun · ground · minions)", 2400),
     ("package",  "Build + cook + package (Linux Shipping)",     10800),
-    ("transfer", "Ship the build to the Vast 2×4090 box",        1200),
-    ("vram",     "Free GPU VRAM on Vast (pause the LLM)",          60),
-    ("stream",   "Launch Pixel Streaming on the 4090",           600),
+    ("transfer", "Ship the slim build to the GPU box",            600),
+    ("vram",     "Prep the GPU box (free GPU · game user)",       120),
+    ("stream",   "Launch the live stream on a free GPU",          600),
 ]
 STATE = {sid: {"status": "pending", "started": None, "ended": None, "detail": ""}
          for sid, _, _ in STEPS}
@@ -53,6 +58,7 @@ START = time.time()
 OVERALL = None  # explicit overall-status override — e.g. the build is done but the Vast/stream tail is
                 # gated, so the run exits cleanly as "ready" (not a misleading "running" that the
                 # staleness check would later flip to "stalled").
+PLAY_URL = None  # public cloudflared player URL, once the stream is live
 
 
 def write():
@@ -74,6 +80,7 @@ def write():
         "overall_pct": 100 if OVERALL in ("ready", "done") else int(100 * done_est / total),
         "eta_s": 0 if OVERALL else int(remaining),
         "status": OVERALL or ("failed" if failed else ("done" if all_done else "running")),
+        "play_url": PLAY_URL,
         "steps": [{"id": sid, "label": label, "est_s": e, **STATE[sid]} for sid, label, e in STEPS],
     }
     tmp = STATUS + ".tmp"
@@ -163,19 +170,44 @@ def archive_ok():
     return False
 
 
-def find_launcher_cmd():
-    """Remote shell snippet that locates the staged launcher/exe on the Vast box and fails LOUDLY if
-    nothing real is there (so we never exec an empty path on the shared GPU)."""
+def prep_box_cmd():
+    """Remote snippet: create the non-root game user (the UE binary REFUSES to run as root), move the
+    build under its home, and pick the GPU with the MOST free VRAM — so we use a spare GPU instead of
+    pausing the shared LLM. Echoes FREEGPU=<index> for the launch step."""
     return (
-        'cd /root/uw_build && '
+        'id uegame >/dev/null 2>&1 || useradd -m -s /bin/bash uegame; '
+        '[ -d /home/uegame/uw_build ] || mv /root/uw_build /home/uegame/uw_build; '
+        'chown -R uegame:uegame /home/uegame/uw_build; '
+        'U=$(id -u uegame); mkdir -p /run/user/$U; chown uegame:uegame /run/user/$U; chmod 700 /run/user/$U; '
+        'FREEGPU=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits '
+        '| sort -t, -k2 -rn | head -1 | cut -d, -f1 | tr -d " "); '
+        'echo "FREEGPU=$FREEGPU"'
+    )
+
+
+def launch_cmd():
+    """Remote snippet: run the game as uegame on the free GPU with Pixel Streaming, then expose the
+    player web port publicly via the pre-installed cloudflared (no vast.ai port mapping needed).
+    Fails LOUDLY if no real binary is staged so we never exec an empty path."""
+    return (
+        'cd /home/uegame/uw_build && '
         'BIN=$(find . \\( -name "Underworld_Render.sh" -o -name "Underworld.sh" \\) -type f | head -1); '
         '[ -n "$BIN" ] || BIN=$(find . -name "Underworld-Linux-Shipping" -type f | head -1); '
-        '[ -n "$BIN" ] || BIN=$(find . -name "Underworld" -type f -size +1M | head -1); '
-        '[ -n "$BIN" ] || { echo "FATAL: no Underworld binary in /root/uw_build"; exit 1; }; '
-        'chmod +x "$BIN"; '
-        'nohup "$BIN" -RenderOffScreen -PixelStreamingIP=0.0.0.0 -PixelStreamingPort=8888 '
-        '-AudioMixer -UnderworldApiUrl=http://76.13.176.135:8091 '
-        '>/root/uw_stream.log 2>&1 & echo launched pid $!'
+        '[ -n "$BIN" ] || { echo "FATAL: no Underworld binary staged"; exit 1; }; '
+        'chmod +x "$BIN"; U=$(id -u uegame); '
+        'FREEGPU=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits '
+        '| sort -t, -k2 -rn | head -1 | cut -d, -f1 | tr -d " "); '
+        'pkill -9 -f Underworld-Linux-Shipping 2>/dev/null; sleep 1; '
+        'setsid runuser -u uegame -- env HOME=/home/uegame XDG_RUNTIME_DIR=/run/user/$U '
+        '"$BIN" -graphicsadapter=${FREEGPU:-0} -RenderOffScreen -AudioMixer '
+        '-PixelStreamingIP=0.0.0.0 -PixelStreamingPort=8888 '
+        '-UnderworldApiUrl=http://76.13.176.135:8091 >/home/uegame/uw_stream.log 2>&1 < /dev/null & '
+        'echo "game launched on GPU ${FREEGPU:-0} pid $!"; '
+        # expose the PS web frontend (8080) publicly — cloudflared ships on vast instances
+        'pkill -f "cloudflared tunnel" 2>/dev/null; '
+        'CF=$(command -v cloudflared || echo /opt/instance-tools/bin/cloudflared); '
+        'nohup "$CF" tunnel --url http://localhost:8080 >/root/cf.log 2>&1 & sleep 6; '
+        'grep -oE "https://[a-z0-9-]+\\.trycloudflare\\.com" /root/cf.log | head -1'
     )
 
 
@@ -276,10 +308,9 @@ def main():
                 if STATE["package"]["status"] != "done" and archive_ok():
                     mark_done("package", "archive present despite cook exit-crash — accepted")
 
-    # Steps 4-6 touch the SHARED Vast box + pause the live LLM — gated behind explicit approval
-    # (UE5_DEPLOY=1, set only when the operator presses "DEPLOY TO GPU" on the panel). They also
-    # re-verify a REAL binary exists (archive_ok) before any Vast/Ollama action, so a partial/stale
-    # archive can never ship a broken build or pause the shared LLM for nothing.
+    # Steps 4-6 touch the SHARED GPU box — gated behind explicit approval (UE5_DEPLOY=1, set only when
+    # the operator presses "DEPLOY TO GPU"). They use a SPARE GPU (most-free VRAM) so the shared LLM is
+    # never paused, and re-verify a REAL binary exists (archive_ok) before touching the box.
     if os.environ.get("UE5_DEPLOY") != "1":
         global OVERALL
         for sid in ("transfer", "vram", "stream"):
@@ -297,20 +328,27 @@ def main():
         write()
         return
 
-    # 4) ship the slim build to the Vast box
+    # 4) ship the SLIM build (drop .debug/.sym — 1.25GB of symbols not needed to RUN) over the proxy
     run("transfer",
-        f'rsync -az --delete -e "ssh -i {KEY} -o StrictHostKeyChecking=no '
-        f'-o UserKnownHostsFile=/dev/null -o BatchMode=yes -p 41154" '
-        f'"{OUT}/" {VAST}:/root/uw_build/', timeout=7200)
+        f'rsync -az --delete --exclude="*.debug" --exclude="*.sym" '
+        f'-e "{SSHBASE}" "{OUT}/Linux/" {VAST}:/root/uw_build/', timeout=7200)
 
-    # 5) free VRAM on the Vast box (pause Ollama) so UE5 + NVENC fit
+    # 5) prep the box: non-root game user (the binary refuses root) + pick the spare GPU (no LLM pause)
     if STATE["transfer"]["status"] == "done":
-        run("vram", f"{SSH} 'pkill -STOP ollama 2>/dev/null; supervisorctl stop ollama 2>/dev/null; "
-                    f"nvidia-smi --query-gpu=memory.used --format=csv,noheader || true'", timeout=120)
+        run("vram", f"{SSH} '{prep_box_cmd()}'", timeout=180)
 
-    # 6) launch the packaged build with Pixel Streaming on the 4090
+    # 6) launch on the free GPU + expose a public player URL via cloudflared
     if STATE["vram"]["status"] == "done":
-        run("stream", f"{SSH} '{find_launcher_cmd()}'", timeout=600)
+        ok = run("stream", f"{SSH} '{launch_cmd()}'", timeout=600)
+        if ok:
+            url = ""
+            for line in (STATE["stream"]["detail"] or "").splitlines():
+                if line.startswith("https://") and "trycloudflare" in line:
+                    url = line.strip()
+            if url:
+                STATE["stream"]["detail"] = f"▶ PLAY: {url}\n" + (STATE["stream"]["detail"] or "")
+                global PLAY_URL; PLAY_URL = url
+                write()
 
     write()
 
