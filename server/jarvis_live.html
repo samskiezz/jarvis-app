@@ -2501,7 +2501,11 @@ function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
 // objects load first and the far galaxies stream in afterwards (and re-prioritise as she flies around).
 const MAX_GLB=((window.innerWidth||999)<820)?3:5; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
 const _glbV=new THREE.Vector3();
-function _jobDist(job){ if(job.node&&typeof camera!=='undefined'&&camera){ try{job.node.getWorldPosition(_glbV);return _glbV.distanceTo(camera.position);}catch(_){ } }
+function _jobDist(job){ if(job.node&&typeof camera!=='undefined'&&camera){ try{
+    job.node.getWorldPosition(_glbV);
+    const hidden=(job.node.visible===false)||(job.node.userData&&job.node.userData.celKind&&_celShouldShowMesh&&!_celShouldShowMesh(job.node));
+    return _glbV.distanceTo(camera.position)+(hidden?500000:0);        // PS5-style streaming: visible menu stage first, deep records later
+  }catch(_){ } }
   return (job.seq||0); }                                  // no node/camera yet → fall back to insertion order
 let _glbSeq=0;
 function _pumpGLB(){
@@ -3167,11 +3171,13 @@ function _celShouldShowMesh(b){
   }
   if(!focus)return false;                                        // PS5 menu load: clean planet selection screen
   const focusBody=bodyMap.get(focus), focusKind=focusBody&&focusBody.userData&&focusBody.userData.celKind;
+  const stageFocus=_celNameOf(selectedCelestialBody), stageBody=bodyMap.get(stageFocus);
+  const stageKind=stageBody&&stageBody.userData&&stageBody.userData.celKind;
   if(name===focus)return true;
   const parent=u.celParentName||'', focusParent=_celParentNameOf(focus);
   const isRepoFileMoon=name.indexOf('cel:repo:filemoon:')===0;
   if(isRepoFileMoon&&focusKind==='planet')return false;          // repo files are deep records, not first-screen menu moons
-  if(kind==='dust')return parent===focus && focusKind!=='planet'; // dust appears inside a drilled branch, never as first-screen fog
+  if(kind==='dust')return !!stageFocus && !!stageKind && stageKind!=='planet' && parent===stageFocus; // dust appears inside a drilled branch, never as first-screen fog
   if(parent===focus){
     if(mobile&&focusKind==='planet'&&kind==='moon')return (u.celStageIndex||0)<10;
     return true;
@@ -3705,11 +3711,11 @@ function _celTick(dt){
     c.m.position.set(c.parent.position.x+Math.cos(c.a)*c.orbR,
       c.parent.position.y+Math.sin(c.a*1.7+c.phase)*c.orbR*0.16,
       c.parent.position.z+Math.sin(c.a)*c.orbR*(1-0.18*(1-c.rel)));}
-  if(!_celDots)return;
   for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
-    _celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;
     const want=_celShouldShowMesh(b);                               // PS5 menu: staged families, full universe remains in dot cloud/index
-    if(b.visible!==want)b.visible=want;}
+    if(b.visible!==want)b.visible=want;
+    if(_celDots&&_celDotPos){_celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;}}
+  if(!_celDots)return;
   _celDots.geometry.attributes.position.needsUpdate=true;
 }
 
