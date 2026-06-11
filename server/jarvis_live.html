@@ -392,9 +392,9 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   #pPipe,#pFab{top:calc(50vh + 24px);max-height:22vh}
 }
 </style>
-<link rel="stylesheet" href="/a11y/a11y.css">
+<link rel="stylesheet" href="/jarvis/a11y/a11y.css">
 <script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
-<script defer src="/a11y/a11y.js"></script>
+<script defer src="/jarvis/a11y/a11y.js"></script>
 </head>
 <body>
 <!-- the ONE immersive WebGL universe -->
@@ -1554,8 +1554,8 @@ function setMode(mode,arg){
 }
 async function loadLib(){try{const lib=await(await fetch('library')).json();
    $('libgrid').innerHTML=(lib&&lib.length)?lib.map(m=>m.file.endsWith('.glb')
-     ?'<div class=it><model-viewer src="media/'+m.file+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
-     :'<div class=it><a href=media/'+m.file+' target=_blank><img src=media/'+m.file+'></a><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>').join('')
+     ?'<div class=it><model-viewer src="'+MEDIA(m.file)+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
+     :'<div class=it><a href="'+MEDIA(m.file)+'" target=_blank><img src="'+MEDIA(m.file)+'"></a><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>').join('')
      :'<div style="color:var(--dim);margin-top:60px">Empty — say "image of a glowing city" or "3d model of a helmet".</div>';}catch(e){}}
 
 /* ================= contextual info card (single, NASA-Eyes style) ================= */
@@ -1598,7 +1598,7 @@ function orbControl(name, action){   // real pm2 start/restart for a satellite b
 function doAction(a){if(!a)return;const k=a.kind,arg=a.arg;
   if(k==='drill'){const [kk,...r]=String(arg).split(':');openDetail(kk,r.join(':'));}
   else if(k==='file')openFile(arg);
-  else if(k==='media'){window.open('media/'+arg,'_blank');}
+  else if(k==='media'){window.open(MEDIA(arg),'_blank');}
   else if(k==='url'){window.open(arg,'_blank');}
   else if(k==='graph'){flyToNode(arg);}                 // graph action flies to constellation node (no iframe)
   else if(k==='task'){$('say').value=arg;askJarvis();}
@@ -1642,7 +1642,16 @@ let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=
 let _starField=null,_nebula=null;
 let home={pos:new THREE.Vector3(1250,260,0),tgt:new THREE.Vector3(2650,220,0)};  // CAMERA LOCK: JARVIS POV — standing ON the core (just outside its ~780u surface, core BEHIND you) looking OUT into space (+x: telemetry, apps, domains, celestial field all ahead); near pivot (~1400u) so dragging = look-around, never an into-the-core orbit
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
-const ASSET=n=>'asset/'+n;
+const APP_BASE=(location.pathname.indexOf('/jarvis')===0)?'/jarvis':'';
+function APP_URL(u){
+  if(!u)return u;
+  if(/^https?:\/\//.test(u))return u;
+  if(u.indexOf(APP_BASE+'/')===0)return u;
+  if(u.charAt(0)==='/')return APP_BASE+u;
+  return APP_BASE+'/'+u;
+}
+const ASSET=n=>APP_URL('/asset/'+String(n).replace(/^\/+/,''));
+const MEDIA=n=>APP_URL('/media/'+String(n).replace(/^\/+/,''));
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
 
 function initUniverse(){
@@ -2050,7 +2059,7 @@ function glbForName(name){ if(GLB_FOR[name])return GLB_FOR[name];
 const _glbLoader=new THREE.GLTFLoader(), _texLoader=new THREE.TextureLoader();
 const _texCache=new Map();
 function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
-  const t=_texLoader.load('asset/'+asset+'.preview.png',()=>{},undefined,()=>{});
+  const t=_texLoader.load(ASSET(asset+'.preview.png'),()=>{},undefined,()=>{});
   try{t.encoding=THREE.sRGBEncoding;}catch(e){} _texCache.set(asset,t); return t; }
 
 /* ---- §1 A: concurrency-capped GLB loader queue (lazy-load; cap concurrent loads for perf) ----
@@ -2101,17 +2110,18 @@ const GLB_REMAP={
  'gen_uw_urban__city_street':'jarvis_ops_mission_table_hero','gen_uw_urban__ground_satellite_dish':'jarvis_world_control_equatorial_ring'};
 const _REAL_GLBS=['jarvis_ai_core_reasoning_orb','jarvis_command_atrium_data_orb','jarvis_intel_graph_constellation','jarvis_security_core_shield','jarvis_data_fusion_reactor_core','jarvis_ops_mission_table_hero','jarvis_simulation_branching_tree','jarvis_world_control_holo_earth','jarvis_analytics_globe','jarvis_kit_data_orb','jarvis_kit_holo_shield','jarvis_command_atrium_orb_wireframe_lattice'];
 const _MOBILE=(window.innerWidth||999)<820||(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
-function realGLB(url){ if(!url) return url; if(url.indexOf('/asset/')>=0) return url;   // already a real light asset
+function realGLB(url){ if(!url) return url;
+  if(url.indexOf('/asset/')>=0||url.indexOf('/media/')>=0||url.indexOf('asset/')===0||url.indexOf('media/')===0) return APP_URL(url);
   const base=url.split('/').pop().replace('.glb','');
   // /media now serves the REAL high-grade models. tripo ones are ~15MB — fine on desktop, but 32 of them
   // would crash her phone, so on MOBILE swap the heavy tripo for a light real /asset substitute. The
   // ~3MB gen_uw_* and all desktop loads pass through to the real high-grade GLB (custom per body).
   if(_MOBILE && base.indexOf('gen_tripo__')===0){
-    if(GLB_REMAP[base]) return '/asset/'+GLB_REMAP[base]+'.glb';
+    if(GLB_REMAP[base]) return ASSET(GLB_REMAP[base]+'.glb');
     let h=0; for(let i=0;i<base.length;i++) h=(h*31+base.charCodeAt(i))>>>0;
-    return '/asset/'+_REAL_GLBS[h%_REAL_GLBS.length]+'.glb';
+    return ASSET(_REAL_GLBS[h%_REAL_GLBS.length]+'.glb');
   }
-  return url; }
+  return APP_URL(url); }
 
 /* turn ANY body holographic (shared look): translucent glowing core + wireframe data-grid + fresnel rim.
    Applied to galaxies + KPI/system bodies so EVERY celestial body matches the hologram aesthetic (no solid balls). */
@@ -2146,7 +2156,7 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
   _holoShell(m,sz,o.color);                              // HOLOGRAPHIC: every body matches the hologram look
   // upgrade to the real shaded GLB when it arrives (added as a child; keep transform + label + raycast)
-  _glbLoader.load('asset/'+asset+'.glb', g=>{ try{ const s=g.scene; s.scale.setScalar(sz*0.9);
+  _glbLoader.load(ASSET(asset+'.glb'), g=>{ try{ const s=g.scene; s.scale.setScalar(sz*0.9);
       s.traverse(c=>{ if(c.isMesh&&c.material){ try{c.material.emissive=new THREE.Color(o.color);
         c.material.emissiveIntensity=0.3; c.material.transparent=true; c.material.opacity=0.18;
         c.material.blending=THREE.NormalBlending; c.material.depthWrite=false;
@@ -2617,9 +2627,10 @@ function buildDomainPlanets(){
    are ABSORBED via CEL_ALIAS so their LIVE updates (labels/colors) keep flowing into the new bodies;
    the old 12k app ring is retired (Mini Apps planet carries the dock apps); dom:* galaxies become
    Knowledge's moons with their recursive entity systems intact. Dock bar / panels / swarm untouched. */
-var CEL_K=30, CEL_LOD=0.008, CEL_REPLACES_APPRING=true;
+var CEL_K=24, CEL_LOD=0.0065, CEL_REPLACES_APPRING=true;
 var CEL_ALIAS={};                // old body name -> cel body name (absorption; resolved in upsertBody)
-const CEL_LANE_ANG={knowledge:-0.95,automation:-0.35,intelligence:0.25,infrastructure:0.85,guardian:1.45,media:2.05,underworld:2.65,voice:1.75,budget:0.95,ui:-0.05};
+const CEL_LANES=['ui','automation','knowledge','intelligence','infrastructure','guardian','media','voice','budget','underworld'];
+const CEL_LANE_INDEX={}; CEL_LANES.forEach((lane,i)=>CEL_LANE_INDEX[lane]=i);
 const CEL_COLORS={knowledge:0x29e7ff,automation:0x34d399,intelligence:0xa78bfa,infrastructure:0x7af3ff,
   guardian:0x34d399,media:0xf5b942,underworld:0xff5d6c,voice:0xf5b942,budget:0xf5b942,ui:0x29e7ff,local:0x7af3ff};
 const _celOrbiters=[];           // {m,parent,a,om,orbR,phase,rel} — spec orbit equation, parent-relative
@@ -2632,7 +2643,21 @@ const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
 const _celPR =I=>_cl(10,34,Math.pow(I,0.72));                       // planet
 const _celMR =(pr,I)=>pr*_cl(0.26,0.42,Math.pow(I,0.72));           // moon
 const _celSR =(mr,I)=>mr*_cl(0.12,0.22,Math.pow(I,0.72));           // satellite (flow page/control)
-const _celD  =I=>220+Math.pow(1-Math.max(0,Math.min(1,I)),1.35)*630;// planet distance from apex
+const _celD  =I=>260+Math.pow(1-Math.max(0,Math.min(1,I)),1.25)*520;// planet distance from apex
+function _celRand(seed){
+  let h=2166136261>>>0, s=String(seed||'');
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+  return ()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};
+}
+function _celPlanetPosition(p,idx,famMax){
+  const lane=CEL_LANE_INDEX[p.lane]??0, mid=(CEL_LANES.length-1)/2;
+  const importance=1-Math.max(0,Math.min(1,p.I||0));
+  const slotJitter=(_celHash(p.id)-Math.PI)/Math.PI;
+  const x=Math.max(5200+famMax*0.72, 5900+importance*5200+idx*520);
+  const y=(lane-mid)*470 + ((idx%2)?190:-190) + slotJitter*120;
+  const z=(lane-mid)*1260 + idx*640 + slotJitter*360;
+  return new THREE.Vector3(x,y,z);
+}
 
 /* ---------- THE CATALOG (celestial/CELESTIAL_CATALOG.md) — real entries only ---------- */
 const CEL_PLANETS=[
@@ -2766,14 +2791,23 @@ function _celAdd(name,n,kindName,specR,lane,parentName){
   b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
   b.userData.celLockScale=true; _celBodies.push(b); return b;
 }
-function _celDustCloud(mesh,cnt,trueCount){                          // count-true soft cloud: ONE draw call, tiny, no labels/bloom
+function _celDustCloud(mesh,cnt,trueCount){                          // count-true tiny 3D shard cloud: one instanced draw call, no labels
   if(!cnt)return;
-  const pos=new Float32Array(cnt*3), r0=(mesh.userData.baseScale||200)*1.7;
-  for(let i=0;i<cnt;i++){const th=Math.random()*6.283,ph=Math.acos(2*Math.random()-1),rr=r0+Math.random()*r0*1.5;
-    pos[i*3]=Math.sin(ph)*Math.cos(th)*rr;pos[i*3+1]=Math.cos(ph)*rr*0.4;pos[i*3+2]=Math.sin(ph)*Math.sin(th)*rr;}
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  mesh.add(new THREE.Points(g,new THREE.PointsMaterial({color:0x6fe3ff,size:2.2,sizeAttenuation:true,
-    transparent:true,opacity:0.15,depthWrite:false})));
+  const base=mesh.userData.baseScale||200, r0=base*1.55, rand=_celRand(mesh.userData.name+'|'+trueCount);
+  const geo=new THREE.OctahedronGeometry(Math.max(2.2,Math.min(8,base*0.018)),1);
+  const mat=new THREE.MeshStandardMaterial({color:0x9feaff,emissive:0x29e7ff,emissiveIntensity:0.48,
+    metalness:0.72,roughness:0.22,transparent:true,opacity:0.36,depthWrite:false,
+    envMap:(envRT&&envRT.texture)||null,envMapIntensity:1.15});
+  const inst=new THREE.InstancedMesh(geo,mat,cnt);
+  const m4=new THREE.Matrix4(), q=new THREE.Quaternion(), p=new THREE.Vector3(), s=new THREE.Vector3();
+  for(let i=0;i<cnt;i++){
+    const th=rand()*6.2831853, ph=Math.acos(2*rand()-1), shell=0.62+rand()*1.22, rr=r0*shell;
+    p.set(Math.sin(ph)*Math.cos(th)*rr, Math.cos(ph)*rr*0.36, Math.sin(ph)*Math.sin(th)*rr);
+    q.setFromEuler(new THREE.Euler(rand()*6.2831853,rand()*6.2831853,rand()*6.2831853));
+    const k=0.52+rand()*1.28; s.set(k,k,k);
+    m4.compose(p,q,s); inst.setMatrixAt(i,m4);
+  }
+  inst.instanceMatrix.needsUpdate=true; inst.frustumCulled=false; inst.userData.celDust=true; mesh.add(inst);
   mesh.userData.dustTrue=trueCount;
 }
 function _celOrbit(b,parent,orbR,om,seed,rel){
@@ -2814,15 +2848,13 @@ async function buildCelestialOS(){
     const moons=CEL_MOONS[p.id]||[];
     const famMax=(pr+_celMR(pr,1)+18+4*Math.sqrt(4)+(p.id==='knowledge'?60:8))*CEL_K;  // room for the whole family
     const li=(lanes[p.lane]=lanes[p.lane]||{i:0}); const idx=li.i++;
-    const theta=(CEL_LANE_ANG[p.lane]||0)+idx*GOLDEN;
     const Dw=Math.max(_celD(p.I)*CEL_K, 5200+famMax+600);            // apex clear zone respected
-    const spreadX=0.34+(1-p.I)*0.34, spreadY=0.22+(1-p.I)*0.24;
     const b=_celAdd(name,p,'planet',pr,p.lane,null);
-    // spec forward cone is -z; the POV looks +x → rotate so planets sit IN FRONT of the core
-    b.position.set(Dw, Math.sin(theta)*Dw*spreadY, Math.cos(theta)*Dw*spreadX);
+    const pp=_celPlanetPosition(p,idx,Math.max(Dw,famMax));
+    b.position.copy(pp);                                             // PS5-style lane-slot menu: spaced, visible, no spiral clumping
     b.userData.oa=Math.atan2(b.position.z,b.position.x);
     b.userData.orr=Math.hypot(b.position.x,b.position.z);
-    b.userData.oy=b.position.y; b.userData.os=0.0018+p.I*0.0016; _galaxyOrbiters.push(b);
+    b.userData.oy=b.position.y; b.userData.os=0.00028+p.I*0.00034; _galaxyOrbiters.push(b);
     p._kidNames=[];
     moons.forEach((mn,mi)=>{
       const mr=_celMR(pr,mn.I), mname='cel:'+mn.id;
@@ -2916,6 +2948,7 @@ const CameraMode={MAIN_EQUATOR_VIEW:'main_equator_view',UNIVERSE_EXPLORE_VIEW:'u
 let cameraMode=CameraMode.MAIN_EQUATOR_VIEW;
 let selectedCelestialBody=null;
 const worldCorePosition=new THREE.Vector3(0,0,0);
+const celestialMenuCenter=new THREE.Vector3(8200,0,0);
 let _eqTheta=0,_eqTargetTheta=0,equatorOrbitRadius=1250;            // rail just outside the ~780u core surface
 const equatorOffsetY=260,_eqRotSpeed=1.2,_eqDamp=6,_eqDir=1;        // flip _eqDir to -1 if a device feels reversed
 const _camInput={horizontal:0};
@@ -2944,9 +2977,9 @@ function enterMainEquatorView(){
 }
 function enterUniverseExploreView(){
   cameraMode=CameraMode.UNIVERSE_EXPLORE_VIEW;
-  tween(new THREE.Vector3(0,26000,42000),worldCorePosition.clone(),1400,()=>{ try{
+  tween(new THREE.Vector3(8200,21000,36000),celestialMenuCenter.clone(),1400,()=>{ try{
     controls.enabled=true;controls.enableRotate=true;controls.enableZoom=true;controls.enablePan=true;
-    controls.target.copy(worldCorePosition);}catch(_){}});
+    controls.target.copy(celestialMenuCenter);}catch(_){}});
   _camBtnLabel();
 }
 function getBestCelestialBodyForFocus(){

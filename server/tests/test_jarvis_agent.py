@@ -82,6 +82,17 @@ def test_empty_message_is_noop():
     assert out["answer"] == "" and out["steps"] == 0
 
 
+def test_greeting_uses_instant_reply_without_backend(monkeypatch):
+    def backend_should_not_run():
+        raise AssertionError("greeting should not wait for backend discovery")
+
+    monkeypatch.setattr(agent._llm, "backend", backend_should_not_run)
+    out = agent.run_agent("hello jarvis")
+    assert out["backend"] == "local-fast-path"
+    assert out["steps"] == 0
+    assert "right here" in out["answer"]
+
+
 def test_timeout_fallback_is_grounded_and_marked(monkeypatch):
     monkeypatch.setattr(agent._llm, "backend", lambda: "ollama")
     out = agent.timeout_fallback("hello jarvis", actor="test")

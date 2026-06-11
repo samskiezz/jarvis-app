@@ -44,6 +44,11 @@ TIMEOUT_FALLBACK_PREAMBLE = (
     "The agent brain took too long to answer, so I stopped waiting and grounded "
     "this with direct search instead."
 )
+_GREETING_RE = re.compile(
+    r"^\s*(hi|hello|hey|yo|are you there|you there|wake up|jarvis)(\s+jarvis)?\s*[!.?]*\s*$",
+    re.I,
+)
+_LIFELINE_RE = re.compile(r"\b(help|emergency|stuck|scared|can't move|cant move|call someone|need help)\b", re.I)
 
 
 # ── Tool catalogue → compact prompt block ────────────────────────────────────────
@@ -115,6 +120,22 @@ def _parse_step(text: Optional[str]) -> Optional[dict]:
         return json.loads(m.group(0))
     except Exception:  # noqa: BLE001
         return None
+
+
+def _instant_reply(message: str) -> Optional[dict]:
+    """Fast path for turns that should never wait for the model/tool planner."""
+    msg = str(message or "").strip()
+    if not msg:
+        return None
+    if _GREETING_RE.match(msg):
+        return {"answer": "Yes, I'm right here. What can I do for you?",
+                "backend": "local-fast-path", "steps": 0, "used_tools": [], "trace": []}
+    if _LIFELINE_RE.search(msg):
+        return {"answer": (
+            "I'm here. If this is urgent, use your local emergency number now. "
+            "I can also help with the next step: tell me what device or room you need help with."
+        ), "backend": "local-fast-path", "steps": 0, "used_tools": [], "trace": []}
+    return None
 
 
 def _dispatch(tool: str, params: dict, actor: Optional[str]) -> dict:
@@ -245,6 +266,9 @@ def run_agent(message: str, history: Optional[list] = None,
     if not message:
         return {"answer": "", "trace": [], "backend": _llm.backend(),
                 "steps": 0, "used_tools": []}
+    fast = _instant_reply(message)
+    if fast:
+        return fast
 
     backend = _llm.backend()
     if backend is None:

@@ -487,6 +487,8 @@ window.A11Y = (function(){
   let _lastCmdNonce = null;
   let _pollInterval = null;
   let _postMirror_logged = false;
+  const A11Y_BASE = (location.pathname.indexOf('/jarvis') === 0) ? '/jarvis' : '';
+  const A11Y_URL = path => A11Y_BASE + path;
 
   function execCmd(cmd) {
     if (!cmd || !cmd.nonce || cmd.nonce === _lastCmdNonce) return;
@@ -508,7 +510,7 @@ window.A11Y = (function(){
   function postMirror(patch) {
     if (!opts.mirror || !window.fetch || !window.CT) return;
     const payload = JSON.stringify({ state: patch, source: state._source });
-    fetch(`/a11y?token=${window.CT}`, {
+    fetch(A11Y_URL(`/a11y?token=${window.CT}`), {
       method: 'POST',
       body: payload,
       headers: { 'Content-Type': 'application/json' }
@@ -554,7 +556,7 @@ window.A11Y = (function(){
 
     const poll = async () => {
       try {
-        const response = await fetch('/a11y');
+        const response = await fetch(A11Y_URL('/a11y'));
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const remote = await response.json();
         if (remote && remote.ts) {
