@@ -3454,16 +3454,27 @@ async function buildCelestialOS(){
       if(repoMoon)_celRememberRepo(repoMoon.id,mname);
       p._kidNames.push(mname+'|'+mn.label);
       mn._kidNames=[];
+      let actionMet=null, actionMetName='';
+      if((mn.sats||[]).length){
+        const metNode={label:'☄ '+mn.label.replace(/^[^ ]+ /,'')+' Actions',I:Math.max(0.58,(mn.I||0.6)*0.76),lane:p.lane};
+        metNode._kidNames=[];
+        actionMetName='cel:met:actions:'+mn.id;
+        actionMet=_celAdd(actionMetName,metNode,'meteorite',Math.max(2.4,_celSR(mr,0.78)*1.35),p.lane,mname);
+        actionMet.userData.repoNodeRef=metNode;
+        _celOrbit(actionMet,mb,_celOrbitRadius(mr*CEL_K,actionMet.userData.baseScale||80,0,1,'moon'),0.038+(mn.I||0.6)*0.012,actionMetName,0.88);
+        mn._kidNames.push(actionMetName+'|'+metNode.label);
+      }
       (mn.sats||[]).forEach((sv,si)=>{
         const sl=sv[0], sa=sv[1];
         const sn={label:sl,I:0.6,lane:p.lane};
         if(typeof sa==='function')sn.fn=sa;
         else if(typeof sa==='string'&&sa.indexOf('drill:')===0)sn.drill=sa.slice(6);
         const sr=_celSR(mr,0.6), sname='cel:sat:'+mn.id+':'+si;
-        const sb=_celAdd(sname,sn,'satellite',sr,p.lane,mname);
-        _celOrbit(sb,mb,_celOrbitRadius(mr*CEL_K,sr*CEL_K,si,(mn.sats||[]).length,'satellite'),0.045+0.01*(si%3),sname,0.95);
+        const satParent=actionMet||mb, satParentName=actionMetName||mname;
+        const sb=_celAdd(sname,sn,'satellite',sr,p.lane,satParentName);
+        _celOrbit(sb,satParent,_celOrbitRadius((satParent.userData.baseScale||mr*CEL_K),sr*CEL_K,si,(mn.sats||[]).length,'satellite'),0.045+0.01*(si%3),sname,0.95);
         if(typeof sa==='string'&&sa.indexOf('tier:')===0)CEL_ALIAS[sa]=sname;   // tier:* live updates land here
-        mn._kidNames.push(sname+'|'+sl);
+        if(actionMet)_celAddShortcut(actionMet.userData.repoNodeRef,sname,sl);
       });
       if(mn.dust)_celDustCloud(mb,Math.min(2400,Math.round(Math.log10(1+mn.dust)*420)),fmt(mn.dust));
       (mn.alias||[]).forEach(a=>_celAbsorb(a,mname));
