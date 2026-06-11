@@ -3906,7 +3906,14 @@ function flyToBody(b){
   b.updateWorldMatrix(true,false);
   const bp=b.getWorldPosition(new THREE.Vector3());
   const dir=camera.position.clone().sub(bp); if(dir.lengthSq()<1)dir.set(0,0,1); dir.normalize();
-  const off=(b.userData.orbBody?Math.max(8,(b.userData.pickMesh?b.userData.pickMesh.geometry.parameters.radius:2)*6):Math.max(46,(b.userData.baseScale||10)*3.5));   // size-aware: never land inside a big galaxy
+  const kind=b.userData&&b.userData.celKind;
+  const base=(b.userData&&b.userData.baseScale)||10;
+  const celOff=kind==='planet'?Math.max(7200,base*7.2):
+    kind==='moon'?Math.max(4600,base*7.6):
+    kind==='meteorite'?Math.max(2600,base*8.4):
+    kind==='satellite'?Math.max(1800,base*9.2):
+    kind==='dust'?Math.max(900,base*12):0;
+  const off=celOff||(b.userData.orbBody?Math.max(8,(b.userData.pickMesh?b.userData.pickMesh.geometry.parameters.radius:2)*6):Math.max(46,base*3.5));   // size-aware: never land inside a big galaxy
   tween(bp.clone().add(dir.multiplyScalar(off)),bp);}
 function _collapseSystems(){ for(let i=0;i<_systemGroups.length;i++)_systemGroups[i].visible=false; }   // back to clean overview
 function _showSystemLayer(){ for(let i=0;i<_systemGroups.length;i++){const g=_systemGroups[i]; if(g.userData&&g.userData.systemLayer)g.visible=true;} }   // reveal satellites + meteors on Vitals drill-in
