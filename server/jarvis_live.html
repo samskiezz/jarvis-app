@@ -444,6 +444,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    <button class=mini onclick="quick('image')">🎨 Image</button>
    <button class=mini onclick="quick('3d')">🧊 3D GLB</button>
    <button class=mini onclick="readStatus()">🔊 Status</button>
+   <button class=mini onclick="openAccess()" aria-label="Device access — allow microphone, camera and files">🔓 Access</button>
    <button class=mini onclick="setMode('guardian')">🛡 Guardian</button>
    <button class=mini onclick="setMode('library')">🖼 Studio</button>
    <span id=budget class=mono></span>
@@ -475,6 +476,134 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   </div>
 </div>
 
+<!-- ACCESSIBLE DEVICE-ACCESS PANEL — big-button, high-contrast permission grants for the carer/user.
+     Each row requests ONE permission on a direct tap (the gesture browsers require), shows live status,
+     and gives device-specific recovery steps when blocked. Works on iOS Safari + Android Chrome. -->
+<div id=ovAccess role=dialog aria-modal=true aria-label="Device access">
+  <div class=accCard>
+    <div class=accHead><span>🔓 Device Access</span><button class=accX onclick="closeAccess()" aria-label="Close">✕</button></div>
+    <div class=accSub>Tap each <b>Allow</b> button, then choose <b>Allow</b> in the popup. This lets JARVIS hear you, see you, and open your photos.</div>
+    <div id=accList></div>
+    <div id=accNote class=accNote aria-live=polite></div>
+    <button class=accDone onclick="closeAccess()">Done</button>
+  </div>
+  <input id=accFile type=file accept="image/*,video/*,audio/*,.pdf,.txt,.doc,.docx" multiple style="position:absolute;left:-9999px" aria-hidden=true>
+</div>
+<style>
+#ovAccess{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;
+  background:rgba(2,6,12,.92);backdrop-filter:blur(8px);padding:16px;overscroll-behavior:contain}
+#ovAccess.show{display:flex}
+.accCard{width:min(560px,96vw);max-height:92vh;overflow:auto;background:linear-gradient(160deg,#0b1f30,#06121e);
+  border:2px solid var(--cy);border-radius:20px;padding:18px 16px;box-shadow:0 20px 80px rgba(0,0,0,.7),0 0 50px rgba(41,231,255,.25)}
+.accHead{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:21px;color:#eafcff;letter-spacing:.5px}
+.accX{width:44px;height:44px;border-radius:12px;border:1px solid var(--ln);background:rgba(255,255,255,.06);color:#eafcff;font-size:18px;cursor:pointer}
+.accSub{font-size:15px;line-height:1.5;color:#cfe6f2;margin:10px 2px 14px}
+.accRow{display:flex;align-items:center;gap:12px;padding:12px;margin:9px 0;border:1px solid var(--ln);border-radius:14px;background:rgba(41,231,255,.05)}
+.accRow .ic{font-size:26px;width:34px;text-align:center;flex:none}
+.accRow .tx{flex:1;min-width:0}
+.accRow .tx .nm{font-weight:800;font-size:17px;color:#eafcff}
+.accRow .tx .st{font-size:13px;margin-top:2px}
+.accRow .st.ok{color:#34d399}.accRow .st.no{color:#ff7d8a}.accRow .st.un{color:#9fb6c4}
+.accBtn{flex:none;min-width:96px;min-height:52px;padding:0 16px;border-radius:13px;border:2px solid var(--cy);
+  background:rgba(41,231,255,.16);color:#eafcff;font-weight:800;font-size:16px;cursor:pointer;transition:background .15s}
+.accBtn:active{background:rgba(41,231,255,.32)}
+.accBtn.done{border-color:#1c5b46;background:rgba(52,211,153,.18);color:#9af7cf}
+.accRow[data-st="ok"]{border-color:#1c5b46;background:rgba(52,211,153,.08)}
+.accNote{font-size:14px;line-height:1.55;color:#ffd9a0;background:rgba(255,170,40,.08);border:1px solid rgba(255,170,40,.3);
+  border-radius:12px;padding:11px 12px;margin:10px 2px;display:none;white-space:pre-line}
+.accNote.show{display:block}
+.accDone{width:100%;min-height:56px;margin-top:12px;border-radius:14px;border:2px solid var(--cy);
+  background:var(--cy);color:#02121a;font-weight:800;font-size:18px;cursor:pointer}
+@media(max-width:560px){.accRow .accBtn{min-width:84px}.accSub{font-size:14px}}
+</style>
+<script>
+/* ===== Accessible Device-Access panel: big-button, gesture-driven permission grants ===== */
+(function(){
+  var IOS = /iP(hone|ad|od)/.test(navigator.platform||'') || (/Mac/.test(navigator.platform||'')&&navigator.maxTouchPoints>1);
+  var STANDALONE = (window.navigator.standalone===true) || (window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
+  function spk(t){try{if(typeof jarvisSpeak==='function')jarvisSpeak(t);}catch(_){}}
+  var lastFiles=[];
+  // each: key, icon, name, request() -> Promise<'ok'|'no'|'un'>, query name for navigator.permissions
+  var PERMS=[
+    {k:'mic', ic:'🎤', nm:'Microphone', q:'microphone', req:function(){return gum({audio:true});}},
+    {k:'cam', ic:'📷', nm:'Camera (front & back)', q:'camera', req:function(){
+        // try the back camera then the front — granting either grants the camera permission for both
+        return gum({video:{facingMode:'environment'}}).then(function(r){return r==='ok'?r:gum({video:{facingMode:'user'}});});}},
+    {k:'files', ic:'📁', nm:'Photos & Files', q:null, req:function(){return pickFiles();}},
+    {k:'notif', ic:'🔔', nm:'Notifications', q:'notifications', req:function(){
+        if(!('Notification'in window))return Promise.resolve('un');
+        try{return Notification.requestPermission().then(function(p){return p==='granted'?'ok':(p==='denied'?'no':'un');});}
+        catch(_){return Promise.resolve('un');}}}
+  ];
+  function gum(c){ // request media, immediately release; map outcome
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return Promise.resolve('un');
+    return navigator.mediaDevices.getUserMedia(c).then(function(s){
+      try{s.getTracks().forEach(function(t){t.stop();});}catch(_){}return 'ok';
+    }).catch(function(e){ return (e&&(e.name==='NotAllowedError'||e.name==='SecurityError'))?'no':'un'; });
+  }
+  function pickFiles(){ return new Promise(function(res){
+    var inp=document.getElementById('accFile'); if(!inp){res('un');return;}
+    var done=false; var fin=function(v){if(done)return;done=true;res(v);};
+    inp.onchange=function(){ lastFiles=Array.prototype.slice.call(inp.files||[]);
+      try{window._jarvisFiles=lastFiles;}catch(_){}
+      fin(lastFiles.length?'ok':'un'); };
+    setTimeout(function(){fin('un');},45000);   // if they cancel, leave as not-granted (no error)
+    try{inp.click();}catch(_){fin('un');}
+  }); }
+  function qStatus(p){ // best-effort live status via Permissions API
+    if(p.k==='notif')return Promise.resolve(('Notification'in window)?(Notification.permission==='granted'?'ok':(Notification.permission==='denied'?'no':'un')):'un');
+    if(p.k==='files')return Promise.resolve(lastFiles.length?'ok':'un');
+    if(navigator.permissions&&p.q){ try{return navigator.permissions.query({name:p.q}).then(function(r){
+      return r.state==='granted'?'ok':(r.state==='denied'?'no':'un'); }).catch(function(){return 'un';}); }catch(_){}}
+    return Promise.resolve('un');
+  }
+  function row(p){
+    var st=p._st||'un', lab=st==='ok'?'Allowed ✓':(st==='no'?'Blocked':'Not set');
+    var cls=st==='ok'?'ok':(st==='no'?'no':'un');
+    var btn=st==='ok'?'<button class="accBtn done" disabled>✓ On</button>':'<button class=accBtn onclick="__acc(\''+p.k+'\')">Allow</button>';
+    return '<div class=accRow data-st="'+st+'" data-k="'+p.k+'"><span class=ic>'+p.ic+'</span>'+
+      '<span class=tx><span class=nm>'+p.nm+'</span><span class="st '+cls+'">'+lab+'</span></span>'+btn+'</div>';
+  }
+  function render(){ var el=document.getElementById('accList'); if(!el)return;
+    el.innerHTML=PERMS.map(row).join(''); }
+  function refresh(){ return Promise.all(PERMS.map(function(p){return qStatus(p).then(function(s){p._st=s;});})).then(render); }
+  function note(msg){ var n=document.getElementById('accNote'); if(!n)return;
+    if(!msg){n.className='accNote';n.textContent='';return;} n.textContent=msg; n.className='accNote show'; }
+  function blockedHelp(){
+    if(IOS&&STANDALONE) return 'If the popup did not appear: this app is on your Home Screen. For camera & microphone on iPhone/iPad, open it in Safari instead (or in Settings → JARVIS, turn on Camera & Microphone).';
+    if(IOS) return 'If it is blocked: tap the “aA” in Safari’s address bar → Website Settings → set Camera and Microphone to Allow. Then tap Allow again here.';
+    return 'If it is blocked: tap the lock/settings icon next to the web address → Permissions → set Camera, Microphone and Files to Allow. Then tap Allow again here.';
+  }
+  window.__acc=function(k){
+    var p=PERMS.filter(function(x){return x.k===k;})[0]; if(!p)return;
+    note('');
+    p.req().then(function(r){ p._st=r; render();
+      if(r==='ok'){spk('Thank you. '+p.nm.split('(')[0].trim()+' is on.');}
+      else if(r==='no'){spk(p.nm.split('(')[0].trim()+' is blocked.');note(blockedHelp());}
+      else {note(blockedHelp());}
+      setTimeout(refresh,400);
+    });
+  };
+  window.openAccess=function(){ var o=document.getElementById('ovAccess'); if(!o)return;
+    render(); refresh(); o.classList.add('show'); note('');
+    try{spk('Please allow microphone, camera and files so I can help you fully.');}catch(_){}
+  };
+  window.closeAccess=function(){ var o=document.getElementById('ovAccess'); if(o)o.classList.remove('show'); };
+  // first run (or until mic+camera are granted): auto-open so the carer sets it up with clear feedback
+  window.maybeAutoAccess=function(){
+    try{ if(localStorage.getItem('accDone')==='1')return; }catch(_){}
+    Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
+      if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}return;}
+      openAccess();
+    });
+  };
+  // remember once mic+camera are both granted, so we stop auto-popping it
+  document.addEventListener('visibilitychange',function(){});
+  var _origClose=window.closeAccess;
+  window.closeAccess=function(){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
+    if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(); };
+})();
+</script>
 <!-- WebRTC + studio overlays -->
 <div class=ov id=ovGuardian><button class=close onclick="setMode('live')">✕ Close</button><iframe id=guardFrame allow="camera;microphone;autoplay"></iframe></div>
 <div class=ov id=ovLib><button class=close onclick="setMode('live')">✕ Close</button>
@@ -544,6 +673,9 @@ function esc(s){return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
    embedded inline. Drives the GLB PLANETS (A) and the morphing-face SUN (B). Counts size the planets. */
 const WORLD_MANIFEST={"sun":{"glb":"jarvis_iron_man_helmet.glb","url":"/asset/jarvis_iron_man_helmet.glb","reason":"central morphing JARVIS / Iron-Man face — the star of the universe"},"domains":{"Measurement":{"url":"/media/gen_tripo__balance_scale_lab.glb","count":111558,"reason":"lab balance/scale — the act of measuring"},"DataSource":{"url":"/asset/jarvis_kit_data_orb.glb","count":92000,"reason":"data orb — the feeds/sources fabric"},"Document":{"url":"/asset/jarvis_docvault_hero_document_book.glb","count":34331,"reason":"document vault hero book — reports/filings"},"DomainSubject":{"url":"/asset/jarvis_ai_core_reasoning_orb.glb","count":10000,"reason":"reasoning orb — ontology subjects/neurons"},"Topic":{"url":"/asset/jarvis_intel_graph_constellation_core.glb","count":7031,"reason":"graph constellation core — topic hub"},"SpeciesOccurrence":{"url":"/media/gen_tripo__fossil_ammonite.glb","count":3136,"reason":"fossil ammonite — species occurrence records"},"ScientificPublication":{"url":"/media/gen_tripo__citation_graph_display.glb","count":3100,"reason":"citation graph display — publications"},"Vulnerability":{"url":"/asset/jarvis_security_core_shield.glb","count":1260,"reason":"security core shield — CVE vulnerabilities"},"AcquisitionPoint":{"url":"/media/gen_uw_urban__ground_satellite_dish.glb","count":1000,"reason":"ground satellite dish — acquisition/ingest feeds"},"Place":{"url":"/asset/jarvis_world_control_holo_earth.glb","count":544,"reason":"holo earth — places/cities"},"Asset":{"url":"/media/gen_tripo__nuclear_reactor_pile.glb","count":430,"reason":"nuclear reactor pile — power-plant assets"},"Concept":{"url":"/media/gen_tripo__agi_core.glb","count":309,"reason":"agi core — abstract concepts"},"EarthquakeEvent":{"url":"/media/gen_tripo__fault_rift_terrain.glb","count":269,"reason":"fault rift terrain — earthquakes"},"Event":{"url":"/media/gen_tripo__volcano_cone.glb","count":86,"reason":"volcano cone — geophysical events"},"Sensor":{"url":"/media/gen_tripo__radio_tower.glb","count":25,"reason":"radio tower — monitoring sensor stations"},"AppPage":{"url":"/asset/jarvis_holo_panel_frame.glb","count":17,"reason":"holo panel frame — app pages/UI routes"}},"topics":[{"title":"Technology & engineering","url":"/media/gen_uw_interior__engineering_cad_workstation.glb","pagerank":0.05691},{"title":"Science & research","url":"/media/gen_uw_interior__lab_experiment_bench.glb","pagerank":0.0416},{"title":"Knowledge & education","url":"/media/gen_tripo__university.glb","pagerank":0.03859},{"title":"Politics & governance","url":"/media/gen_tripo__republic_senate_house.glb","pagerank":0.02936},{"title":"Classification & metadata itself","url":"/asset/jarvis_intel_graph_constellation.glb","pagerank":0.02806},{"title":"Government & public administration","url":"/media/gen_tripo__courthouse.glb","pagerank":0.02325},{"title":"Earth systems","url":"/media/gen_uw_sky__earth.glb","pagerank":0.01704},{"title":"Human body & health","url":"/media/gen_tripo__hospital.glb","pagerank":0.01539},{"title":"Law & regulation","url":"/media/gen_tripo__law_stele.glb","pagerank":0.01439},{"title":"Geography & location","url":"/asset/jarvis_world_control_earth_graticule.glb","pagerank":0.01426},{"title":"Security & conflict","url":"/asset/jarvis_security_core_shield.glb","pagerank":0.01394},{"title":"Economy & industry","url":"/media/gen_uw_interior__economics_market_data_wall.glb","pagerank":0.01316},{"title":"Business & organisations","url":"/media/gen_uw_interior__economics_trading_terminal.glb","pagerank":0.0118},{"title":"Extended Intelligence & Operations","url":"/asset/jarvis_intel_graph_constellation_core.glb","pagerank":0.01134},{"title":"Information & communication","url":"/media/gen_tripo__network_switch_node.glb","pagerank":0.01085},{"title":"Finance & ownership","url":"/media/gen_uw_interior__economics_ledger_analytics_desk.glb","pagerank":0.01054},{"title":"Society & culture","url":"/media/gen_tripo__theatre_stage.glb","pagerank":0.01021},{"title":"Environment & ecology","url":"/media/gen_uw_interior__ecology_biodiversity_camera_trap.glb","pagerank":0.01016},{"title":"Climate & hazards","url":"/media/gen_uw_interior__atmoschem_ozone_monitor.glb","pagerank":0.00941},{"title":"Energy & resources","url":"/media/gen_tripo__power_grid_substation.glb","pagerank":0.00783},{"title":"Urban & built environment","url":"/media/gen_uw_urban__city_street.glb","pagerank":0.00769},{"title":"Agriculture & food systems","url":"/media/gen_tripo__guild_agriculture_barn.glb","pagerank":0.0072},{"title":"People & demographics","url":"/media/gen_uw_interior__epidemiology_contact_tracing_wall.glb","pagerank":0.007},{"title":"Products & commodities","url":"/media/gen_tripo__market_stall.glb","pagerank":0.00659},{"title":"Transport & mobility","url":"/media/gen_tripo__maglev_pod.glb","pagerank":0.00615},{"title":"Infrastructure & utilities","url":"/media/gen_tripo__water_tower.glb","pagerank":0.00479},{"title":"Universe & cosmology","url":"/media/gen_uw_interior__astronomy_observatory_telescope.glb","pagerank":0.00446},{"title":"Work & labour","url":"/media/gen_tripo__assembly_line_conveyor.glb","pagerank":0.00419},{"title":"Life & biology","url":"/media/gen_uw_interior__biology_compound_microscope.glb","pagerank":0.00322},{"title":"Consumption & lifestyle","url":"/media/gen_tripo__market_hall.glb","pagerank":0.00278},{"title":"Ethics & philosophy","url":"/media/gen_tripo__philosophy_agora.glb","pagerank":0.00168}],"fallback":{"glb":"jarvis_command_atrium_data_orb.glb","url":"/asset/jarvis_command_atrium_data_orb.glb","reason":"neutral data orb for any object without a specific match"}};
 let _m={},_ts=0,archon=false,_engaged=false;
+// PERF (mobile lag): on a phone/tablet (_MOBILE, declared below) render at ~30fps + lower pixel-ratio so
+// the small GPU isn't pinned at full retina 60fps (heat→throttle→lag). Reuses the existing _MOBILE flag.
+let _LOWFPS=false, _lastDraw=0;
 function srlog(t){const s=$('srlog');if(s){s.textContent='';setTimeout(()=>s.textContent=t,50);}}
 
 /* ================= PRESERVED: British JARVIS voice (verbatim) ================= */
@@ -1444,9 +1576,13 @@ const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0x
 
 function initUniverse(){
   const canvas=$('uni');
-  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
+  // PERF: antialias is costly on mobile GPUs and the lower pixel-ratio below already smooths edges enough.
+  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:!_MOBILE,alpha:false,powerPreference:'high-performance'}); }
   catch(e){ return false; }                                   // no WebGL → caller keeps boot text, never blanks
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  // Retina phones render 2-3x the pixels (9x the work at dpr=3) — the #1 cause of mobile lag/heat. Cap
+  // hard on mobile: 1.3 looks crisp on a small high-DPI screen but cuts the GPU load by ~2.4x vs dpr=2.
+  renderer.setPixelRatio(Math.min(devicePixelRatio, _MOBILE?1.3:2));
+  _LOWFPS=_MOBILE;   // throttle the render loop to ~30fps on phones (set in tickFrame)
   renderer.setSize(innerWidth,innerHeight);
   try{renderer.outputEncoding=THREE.sRGBEncoding;}catch(e){}                    // correct colour = no banding/grain
   try{renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.95;}catch(e){} // 0.95: 0.78 was too DARK on mobile (objects invisible). KEEP >=0.9 — do not lower. The centre stacks ~5 bright/additive layers (beam glow+core, chrome blob mirror-reflecting the cyan env, holo face plane, emissive helmet, god-rays). Even idle, the overlap clipped to white. ACES luminance L=0.2126R+0.7152G+0.0722B; lowering exposure keeps the OVERLAP region inside [0,1] so the reactor reads CRISP, not as a white wash. Researched: threejs issue #14899 (additive double-brighten) + discourse 57843 (threshold/luma weights).
@@ -3300,6 +3436,11 @@ function _removeSelRing(b){ if(b&&b.userData&&b.userData.selRing){try{b.remove(b
 function tickFrame(){
   requestAnimationFrame(tickFrame);
   if(!renderer)return;
+  // PERF: don't render when the tab/app is hidden or backgrounded (saves battery + stops the phone
+  // heating, which throttles everything → lag). Also throttle to ~30fps on phones (plenty for this
+  // ambient scene) so the GPU isn't pinned at 60fps on a small mobile chip.
+  if(document.hidden)return;
+  if(_LOWFPS){ const _n=performance.now(); if(_n-_lastDraw<32)return; _lastDraw=_n; }
   try{
     const dt=Math.min(0.05,clock.getDelta()), t=clock.elapsedTime;
     updatePulse(dt);                       // ONE heartbeat for the whole organism
@@ -3640,13 +3781,13 @@ function engage(){if(_engaged)return;_engaged=true;
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
   try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
   try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
-  // UPFRONT ACCESS (carer setup, within this gesture): request EVERYTHING the web platform allows now —
-  // camera+mic (care video/voice), notifications (alerts), persistent storage (lifeline survives cleanup) —
-  // so mum never faces a permission prompt she can't tap later. (Root/native device control is impossible
-  // from a web page by browser design — that tier needs the native companion app.)
-  try{ navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
-  try{ if(window.Notification&&Notification.permission==='default')Notification.requestPermission().catch(()=>{}); }catch(_){}
+  // UPFRONT ACCESS (carer setup, within this gesture): pre-warm the MICROPHONE only (so always-on
+  // listening works), then open the accessible Device Access panel so the carer can grant camera/files/
+  // notifications with BIG buttons + clear status + recovery guidance. We request mic ALONE (not combined
+  // video+audio — a combined request fails entirely if either is blocked, which silently killed the mic).
+  try{ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
   try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
+  try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}   // first run → show the access panel
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
