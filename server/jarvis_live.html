@@ -3037,7 +3037,9 @@ function buildDomainPlanets(){
   // visible at the frame edge. (flyHome/_frameAll remain the zoom-out overview.)
   try{ setTimeout(()=>{ home={pos:new THREE.Vector3(2200,260,0), tgt:new THREE.Vector3(4600,220,0)};   // wider default: still JARVIS POV, no close old-core snap
     camera.position.copy(home.pos); controls.target.copy(home.tgt); controls.update(); },60); }catch(_){}
-  try{buildCelestialOS().then(()=>{try{enterUniverseExploreView();}catch(_){}});}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe is the default 3D menu
+  try{buildCelestialOS().then(()=>{try{enterUniverseExploreView();
+    setTimeout(()=>{const b=bodyMap.get('cel:miniapps'); if(b){selectedCelestialBody=b; flyToBody(b);}},420);
+  }catch(_){}});}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe is the default 3D menu
 }
 
 /* ===== CELESTIAL OS — every planet is a FEATURE with its complete interactive family =====
@@ -3128,6 +3130,48 @@ function _celAttachRepoStats(n,repoNode){
 }
 function _celSeedBodyName(id){return _celRepoBody[id]||null;}
 function _celRememberRepo(id,name){if(id&&!_celRepoBody[id])_celRepoBody[id]=name;}
+function _celNameOf(b){return (b&&b.userData&&b.userData.name)||'';}
+function _celParentNameOf(name){
+  const b=bodyMap.get(name);
+  return (b&&b.userData&&b.userData.celParentName)||'';
+}
+function _celFocusName(){
+  const b=(_selected&&_selected.userData&&_selected.userData.celKind)?_selected:selectedCelestialBody;
+  return _celNameOf(b);
+}
+function _celIsAncestorName(ancestor,name){
+  let p=name, guard=0;
+  while(p&&guard++<12){
+    if(p===ancestor)return true;
+    p=_celParentNameOf(p);
+  }
+  return false;
+}
+function _celShouldShowMesh(b){
+  const u=(b&&b.userData)||{}, kind=u.celKind, name=u.name||'';
+  if(!kind)return false;
+  const focus=_celFocusName();
+  const mobile=(window.innerWidth||999)<=820;
+  if(kind==='planet'){
+    if(!mobile)return true;
+    return !focus || name===focus || _celIsAncestorName(name,focus);
+  }
+  if(!focus)return false;                                        // PS5 menu load: clean planet selection screen
+  const focusBody=bodyMap.get(focus), focusKind=focusBody&&focusBody.userData&&focusBody.userData.celKind;
+  if(name===focus)return true;
+  const parent=u.celParentName||'', focusParent=_celParentNameOf(focus);
+  const isRepoFileMoon=name.indexOf('cel:repo:filemoon:')===0;
+  if(isRepoFileMoon&&focusKind==='planet')return false;          // repo files are deep records, not first-screen menu moons
+  if(kind==='dust')return parent===focus && focusKind!=='planet'; // dust appears inside a drilled branch, never as first-screen fog
+  if(parent===focus){
+    if(mobile&&focusKind==='planet'&&kind==='moon')return (u.celStageIndex||0)<10;
+    return true;
+  }                                                             // selected body reveals its next menu stage
+  if(name===focusParent)return true;                              // keep the selected body's parent visible
+  if(_celIsAncestorName(name,focus))return true;                  // keep the breadcrumb chain rendered in 3D
+  if(focusParent&&parent===focusParent&&(kind==='moon'||kind==='meteorite'))return true;  // carousel siblings
+  return false;
+}
 function _celAddShortcut(n,name,label){
   if(!n||!name)return;
   const row=name+'|'+(label||name);
@@ -3340,6 +3384,7 @@ function _celAdd(name,n,kindName,specR,lane,parentName){
     b.material.metalness=0.85; b.material.roughness=0.16; b.material.envMapIntensity=1.6; // holographic CHROME (PMREM reflections)
     b.material.emissiveIntensity=0.8; }catch(_){}}                  // bio-illuminescent glow (feeds UnrealBloom)
   b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
+  b.userData.celParentName=parentName||''; b.userData.celImportance=_celImportance(n.I);
   tuneBodyLabel(b,wr,{always:true});
   b.userData.celLockScale=true; _celBodies.push(b); return b;
 }
@@ -3355,11 +3400,13 @@ function _celDustCloud(mesh,cnt,trueCount){                          // count-tr
 }
 function _celOrbit(b,parent,orbR,om,seed,rel){
   const kind=(b&&b.userData&&b.userData.celKind)||'moon';
+  if(b&&b.userData&&parent&&parent.userData&&!b.userData.celParentName)b.userData.celParentName=parent.userData.name||'';
   const slots=kind==='satellite'?10:(kind==='dust'?14:8);
   const ringKey=kind+':'+Math.max(0,Math.round((Number(orbR)||0)/900));
   parent.userData._celSlots=parent.userData._celSlots||{};
   const slot=parent.userData._celSlots[ringKey]||0;
   parent.userData._celSlots[ringKey]=slot+1;
+  if(b&&b.userData){b.userData.celStageIndex=slot;b.userData.celRingKey=ringKey;}
   const ring=Math.floor(slot/slots), lane=slot%slots;
   const baseA=(lane/slots)*6.28318+(ring%2)*(3.14159/slots);
   const speed=kind==='moon'?0.0028:kind==='meteorite'?0.0036:kind==='satellite'?0.0044:0.0022;
@@ -3386,6 +3433,7 @@ function _celAdoptDomains(knowledge){
   doms.forEach((g,i)=>{
     for(let j=_galaxyOrbiters.length-1;j>=0;j--)if(_galaxyOrbiters[j]===g)_galaxyOrbiters.splice(j,1);
     g.userData.celKind='moon';
+    g.userData.celParentName=knowledge.userData.name||'cel:knowledge';
     const orbR=(knowledge.userData.baseScale||900)+(g.userData.baseScale||400)+700+(i%4)*460;
     _celOrbit(g,knowledge,orbR,0.008/Math.sqrt(1+(i%4)),g.userData.name,0.9);
     if(_celBodies.indexOf(g)<0)_celBodies.push(g);
@@ -3434,6 +3482,7 @@ function _celBuildRepoStages(){
         props:[{k:'Parent',v:parent.userData.labelText||parentId},{k:'Source',v:String(n.repo||'repo record').slice(0,42)}],
         lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)}]});
       b.userData.celKind='dust'; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
+      b.userData.celParentName=parentName;
       _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||20,di,list.length,'satellite')+(di%3)*36,0.11+0.012*(di%5),n.id,0.72);
       });
     });
@@ -3491,7 +3540,7 @@ function _celBuildRepoStages(){
       b.userData.getCard=()=>({title:n.label||'Dust record',subtitle:'Celestial OS · dust sample',
         props:[{k:'Parent',v:parent.userData.labelText||parentId},{k:'Source',v:String(n.repo||'repo record').slice(0,42)}],
         lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)}]});
-      b.userData.celKind='dust'; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
+      b.userData.celKind='dust'; b.userData.celParentName=parentName; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
       _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||20,di,list.length,'satellite')+(di%3)*36,0.11+0.012*(di%5),n.id,0.72);
     });
     });
@@ -3572,6 +3621,7 @@ async function buildCelestialOS(){
     (p.alias||[]).forEach(a=>_celAbsorb(a,name));
   });
   _celBuildRepoStages();
+  selectedCelestialBody=bodyMap.get('cel:miniapps')||selectedCelestialBody;
   _celDotsRebuild();
   try{rebuildMacroConnections();}catch(_){}
   _celSuppressLegacyScene();
@@ -3623,6 +3673,7 @@ function celHydrateLive(m){
     const b=addBody({name:'cel:met:'+key,label:label.slice(0,22),color:color,radius:10,angle:0,y:0,
       size:Math.max(60,(parent.userData.baseScale||300)*0.10)/22});
     b.userData.getCard=card; b.userData.celKind='meteorite'; b.userData.celLockScale=true;
+    b.userData.celParentName=parentName;
     _celBodies.push(b); _celMets[key]=b;
     _celOrbit(b,parent,(parent.userData.baseScale||300)*3.1+(Object.keys(_celMets).length%3)*150,0.09,key,0.85);
     _celDotsRebuild();
@@ -3648,8 +3699,7 @@ function _celTick(dt){
   if(!_celDots)return;
   for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
     _celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;
-    const d=camera.position.distanceTo(b.position);
-    const want=true;                                                // celestial menu bodies are UI, not background dust: never hide them
+    const want=_celShouldShowMesh(b);                               // PS5 menu: staged families, full universe remains in dot cloud/index
     if(b.visible!==want)b.visible=want;}
   _celDots.geometry.attributes.position.needsUpdate=true;
 }
@@ -3709,6 +3759,7 @@ function _camBtnLabel(){const b=document.getElementById('camBtn');if(b)b.textCon
   cameraMode===CameraMode.MAIN_EQUATOR_VIEW?'🎥 Equator':cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW?'🌌 Explore':'🎯 Focus';}
 function enterMainEquatorView(){
   cameraMode=CameraMode.MAIN_EQUATOR_VIEW; selectedCelestialBody=null;
+  if(_selected){try{_selected.userData.selected=false;_removeSelRing(_selected);}catch(_){} _selected=null;}
   try{controls.enabled=false;}catch(_){}
   const p=_eqRailPoint(); tween(p,_eqLookTarget(p),1100);
   _camBtnLabel();
@@ -4237,6 +4288,7 @@ function onCanvasClick(e){
 function selectBody(b){
   if(_selected){_selected.userData.selected=false; _removeSelRing(_selected);}
   _selected=b;b.userData.selected=true; _attachSelRing(b); b.userData.selPulse=1; sfxBlip('select');
+  if(b.userData&&b.userData.celKind)selectedCelestialBody=b;
   // §progressive disclosure: focus a galaxy → reveal its planets; focus a planet → reveal its moons
   try{ if(/^dom:/.test(b.userData.name||'')){ _collapseSystems(); if(b.userData.planetGroup)b.userData.planetGroup.visible=true; }
     else if(b.userData.planet&&b.userData.moonGroup){ b.userData.moonGroup.visible=true; } }catch(_){}
