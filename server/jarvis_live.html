@@ -3518,6 +3518,7 @@ async function buildCelestialOS(){
   _celBuildRepoStages();
   _celDotsRebuild();
   try{rebuildMacroConnections();}catch(_){}
+  _celSuppressLegacyScene();
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
     ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
 }
@@ -3528,6 +3529,32 @@ function _celDotsRebuild(){                                          // NASA-Eye
   _celDots=new THREE.Points(g,new THREE.PointsMaterial({color:0x9feaff,size:3.5,sizeAttenuation:false,
     transparent:true,opacity:0.85,depthTest:true,depthWrite:false}));
   _celDots.frustumCulled=false; scene.add(_celDots);
+}
+function _celOwnsBody(o){
+  const u=(o&&o.userData)||{}, n=String(u.name||'');
+  return !!u.celKind || n.indexOf('cel:')===0;
+}
+function _celHideLabel(o){
+  const u=(o&&o.userData)||{};
+  try{ if(u.label)u.label.visible=false; }catch(_){}
+  try{ if(u.labelSprite)u.labelSprite.visible=false; }catch(_){}
+}
+function _celSuppressLegacyScene(){
+  if(!_celBuilt)return;
+  for(let i=0;i<bodies.length;i++){
+    const b=bodies[i]; if(!b||_celOwnsBody(b))continue;
+    b.visible=false; _celHideLabel(b);
+  }
+  for(let i=0;i<_pickBodies.length;i++){
+    const b=_pickBodies[i]; if(!b||_celOwnsBody(b))continue;
+    b.visible=false; _celHideLabel(b);
+  }
+  for(let i=0;i<_systemGroups.length;i++){
+    const g=_systemGroups[i]; if(g&&!_celOwnsBody(g))g.visible=false;
+  }
+  if(_macroLines){_macroLines.visible=false;try{_macroLines.material.opacity=0;}catch(_){}}
+  if(_constellation){try{if(_constellation.inst)_constellation.inst.visible=false;}catch(_){}
+    try{if(_constellation.lines)_constellation.lines.visible=false;}catch(_){}}
 }
 /* live METEORITES — spawned/expired on every /metrics poll (alerts, newest GLBs); expire back to dust */
 function celHydrateLive(m){
@@ -3839,6 +3866,7 @@ function layoutFromMetrics(m){
 
   // ---- (c) glowing CONNECTIONS between related macro bodies (curated relationship graph) ----
   rebuildMacroConnections();
+  _celSuppressLegacyScene();
 }
 
 /* ---- (c) connection lines between RELATED macro bodies (glow with the pulse) ----
@@ -3876,6 +3904,7 @@ function rebuildMacroConnections(){
   _macroLines=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x29e7ff,transparent:true,
     opacity:0.26,blending:THREE.AdditiveBlending,depthWrite:false}));
   _macroLines.renderOrder=-1; scene.add(_macroLines);
+  if(_celBuilt){_macroLines.visible=false;_macroLines.material.opacity=0;}
 }
 
 /* ---- constellation from /graphdata (instanced spheres + line segments, fixed layout) ---- */
@@ -3897,8 +3926,11 @@ function buildConstellation(){
     const lp=[];(d.edges||[]).forEach(e=>{if(idx[e.s]!=null&&idx[e.t]!=null){
       lp.push(...pos[idx[e.s]].toArray(),...pos[idx[e.t]].toArray());}});
     const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(lp,3));
-    scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x5faad2,transparent:true,opacity:0.12})));
-    _constellation={inst,idx,pos,nodes}; window.firePulseSpike(0.7);  // graph data arrival = birth pulse
+    const lines=new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x5faad2,transparent:true,opacity:0.12}));
+    scene.add(lines);
+    _constellation={inst,lines,idx,pos,nodes};
+    _celSuppressLegacyScene();
+    window.firePulseSpike(0.7);  // graph data arrival = birth pulse
   }).catch(e=>{console.warn('graphdata',e);});
 }
 
@@ -3974,9 +4006,10 @@ function promoteSearchResult3D(r,q){
 async function flyToQuery(q){q=(q||'').trim();if(!q)return;const lo=q.toLowerCase();
   // try a body — match BOTH the internal id AND the visible on-screen label (NASA-Eyes search-to-fly)
   for(const b of bodies){
+    if(!b||b.visible===false)continue;
     if(b.userData.name.toLowerCase().includes(lo)||(b.userData.labelText||'').toLowerCase().includes(lo)){selectBody(b);return;}}
   // then a constellation node
-  if(flyToNode(q))return;
+  if(!_celBuilt&&flyToNode(q))return;
   try{
     const d=await (await fetch('search?q='+encodeURIComponent(q)+'&limit=8')).json();
     const r=(d.results||[])[0];
@@ -4090,10 +4123,16 @@ let _downXY=null;
    the cursor; the dock glows (.pinReady) while the cursor is over it. OrbitControls still gets normal drags
    (we only treat it as a pin-drag once the cursor leaves the body region and a body was grabbed). */
 let _pinGrab=null,_pinGhost=null;
+function _scenePickTargets(){
+  const targets=[];
+  for(let i=0;i<bodies.length;i++){const b=bodies[i];if(b&&b.visible!==false)targets.push(b);}
+  for(let i=0;i<_pickBodies.length;i++){const b=_pickBodies[i];if(b&&b.visible!==false)targets.push(b);}
+  return targets;
+}
 function _bodyAt(e){ if(!uniReady)return null;
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const tg=bodies.slice();for(let i=0;i<_pickBodies.length;i++)tg.push(_pickBodies[i]);
+  const tg=_scenePickTargets();
   const hit=ray.intersectObjects(tg,true)[0];
   if(!hit)return null; let o=hit.object;while(o&&!o.userData.name&&!o.userData.orbBody)o=o.parent;return o||null;}
 function _overDock(e){const d=$('dock');if(!d)return false;const r=d.getBoundingClientRect();
@@ -4127,9 +4166,8 @@ function onCanvasClick(e){
   if(!uniReady)return;
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const targets=bodies.slice();
-  for(let i=0;i<_pickBodies.length;i++)targets.push(_pickBodies[i]);
-  if(_constellation&&_constellation.inst)targets.push(_constellation.inst);
+  const targets=_scenePickTargets();
+  if(_constellation&&_constellation.inst&&_constellation.inst.visible!==false)targets.push(_constellation.inst);
   const hit=ray.intersectObjects(targets,true)[0];
   if(hit){
     if(_constellation&&hit.object===_constellation.inst&&hit.instanceId!=null){selectNode(hit.instanceId);return;}
@@ -4218,7 +4256,7 @@ function _hoverProbe(e){
   const now=performance.now(); if(now-_lastHoverT<55)return; _lastHoverT=now;
   mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const pool=bodies.slice(); for(let i=0;i<_pickBodies.length;i++)pool.push(_pickBodies[i]);
+  const pool=_scenePickTargets();
   const hit=ray.intersectObjects(pool,true)[0];
   let o=hit?hit.object:null; while(o&&!(o.userData&&(o.userData.name||o.userData.orbBody)))o=o.parent;
   if(o===_hovered)return;
@@ -4328,7 +4366,8 @@ function tickFrame(){
       sunFace.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=ei;}); }
 
     // --- (c) macro connection lines glow with the pulse ---
-    if(_macroLines)_macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25;
+    if(_macroLines){ if(_celBuilt){_macroLines.visible=false;_macroLines.material.opacity=0;}
+      else _macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25; }
 
     // --- NASA-Eyes hierarchy: per-frame body pulse + LOD crossfade ---
     try{
