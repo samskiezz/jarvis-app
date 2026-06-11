@@ -709,6 +709,24 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
  <input id=ciSearch placeholder="Filter planets, moons, files…" oninput="renderCelIndex(this.value)">
  <div id=ciMeta></div><div id=ciList></div>
 </div>
+<section id=celHud aria-label="Celestial command menu" data-empty=1>
+ <div class=chMeta>
+  <span class=chKind>MENU</span>
+  <b class=chTitle>Celestial Menu</b>
+  <span class=chPath>Choose a body</span>
+ </div>
+ <div class=chNav>
+  <button onclick="celMenuStep(-1)" aria-label="Previous menu body">‹</button>
+  <button onclick="celMenuParent()" aria-label="Up to parent">⌃</button>
+  <button onclick="celMenuChild()" aria-label="Enter child">⌄</button>
+  <button onclick="celMenuStep(1)" aria-label="Next menu body">›</button>
+ </div>
+ <div class=chActions>
+  <button onclick="celMenuOpenCard()">Open</button>
+  <button onclick="celMenuPin()">Pin</button>
+  <button onclick="openCelIndex()">Index</button>
+ </div>
+</section>
 <style>
 #celIndex{position:fixed;right:14px;top:62px;z-index:85;width:min(390px,calc(100vw - 28px));max-height:min(72vh,680px);
   overflow:hidden;border:1px solid var(--ln);border-radius:16px;background:rgba(4,12,22,.72);
@@ -725,7 +743,28 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 .cirow .k{min-width:76px;color:#9fd7e8;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
 .cirow .n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cirow .s{color:var(--dim);font-size:11px}
+#celHud{position:fixed;left:50%;bottom:158px;z-index:58;transform:translateX(-50%);
+  width:min(720px,calc(100vw - 28px));display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;
+  padding:10px 12px;border:1px solid rgba(41,231,255,.22);border-radius:18px;
+  background:linear-gradient(135deg,rgba(7,18,32,.64),rgba(18,8,42,.52));
+  backdrop-filter:blur(20px) saturate(170%);box-shadow:0 18px 70px rgba(0,0,0,.40),inset 0 1px 0 rgba(255,255,255,.13),0 0 34px rgba(167,139,250,.12);
+  color:#eafcff;transition:opacity .25s,transform .25s}
+#celHud[data-empty="1"]{opacity:.68}
+#celHud .chMeta{min-width:0;display:grid;gap:2px}
+#celHud .chKind{font:800 10px ui-sans-serif,system-ui;letter-spacing:.12em;color:#9feaff;text-transform:uppercase}
+#celHud .chTitle{font:800 15px ui-sans-serif,system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#celHud .chPath{font:600 11px ui-sans-serif,system-ui;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#celHud .chNav,#celHud .chActions{display:flex;align-items:center;gap:7px}
+#celHud button{min-width:38px;height:38px;border-radius:12px;border:1px solid rgba(41,231,255,.28);
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(41,231,255,.08));color:#eafcff;font-weight:900;cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 8px 22px rgba(0,0,0,.20)}
+#celHud button:hover,#celHud button:focus{outline:none;border-color:rgba(159,234,255,.62);box-shadow:0 0 22px rgba(41,231,255,.18),inset 0 1px 0 rgba(255,255,255,.2)}
+#celHud .chActions button{padding:0 13px;font-size:12px}
 @media(max-width:640px){#celIndex{left:10px;right:10px;top:58px;width:auto;max-height:64vh}}
+@media(max-width:760px){#celHud{bottom:148px;grid-template-columns:1fr;gap:8px;align-items:stretch}
+  #celHud .chNav,#celHud .chActions{justify-content:center}
+  #celHud button{height:42px;min-width:42px}
+}
 </style>
 
 <!-- single contextual info card (hidden until a body is clicked) -->
@@ -1908,6 +1947,7 @@ let _cardDrilled=false;   // true while a drill (/detail) or file view fills the
 function cardEl(sel){return $('card').querySelector(sel);}
 function closeCard(){$('card').classList.remove('open');_cardDrilled=false;
   if(_selected){_selected.userData.selected=false; _removeSelRing(_selected); _selected.userData.hoverWant=0; _selected=null;}
+  updateCelHud();
   flyHome();}   // always return home (incl. constellation-node cards, which never set _selected)
 function showCard(o){
   $('card').classList.add('open');
@@ -3430,6 +3470,69 @@ function renderCelIndex(filter){
 }
 function openCelIndex(){const el=document.getElementById('celIndex');if(!el)return;el.classList.add('open');renderCelIndex((document.getElementById('ciSearch')||{}).value||'');}
 function closeCelIndex(){const el=document.getElementById('celIndex');if(el)el.classList.remove('open');}
+function _celMenuText(u){return String((u&&(u.labelText||u.name))||'').replace(/^[\s·]+/,'');}
+function _celParentOf(b){
+  if(!b||!b.userData)return null;
+  const name=b.userData.name;
+  const orb=_celOrbiters.find(o=>o.m===b||(o.m&&o.m.userData&&o.m.userData.name===name));
+  return orb&&orb.parent&&orb.parent.userData?orb.parent:null;
+}
+function _celChildrenOf(b){
+  if(!b||!b.userData)return [];
+  return _celOrbiters.filter(o=>o.parent===b&&o.m&&o.m.userData&&o.m.userData.celKind)
+    .map(o=>o.m).sort((a,b)=>_celKindRank(a.userData.celKind)-_celKindRank(b.userData.celKind)||
+      ((b.userData.baseScale||0)-(a.userData.baseScale||0))||
+      _celMenuText(a.userData).localeCompare(_celMenuText(b.userData)));
+}
+function _celSiblingsOf(b){
+  const p=_celParentOf(b);
+  if(p)return _celChildrenOf(p);
+  return _celBodies.filter(x=>x&&x.userData&&x.userData.celKind==='planet')
+    .sort((a,b)=>_celMenuText(a.userData).localeCompare(_celMenuText(b.userData)));
+}
+function updateCelHud(){
+  const h=document.getElementById('celHud'); if(!h)return;
+  const b=_selected&&_selected.userData&&_selected.userData.celKind?_selected:null;
+  h.dataset.empty=b?'0':'1';
+  const kind=h.querySelector('.chKind'), title=h.querySelector('.chTitle'), path=h.querySelector('.chPath');
+  if(!b){
+    if(kind)kind.textContent='3D MENU';
+    if(title)title.textContent='Celestial Menu';
+    if(path)path.textContent='Click a planet or use Index to jump into the menu';
+    return;
+  }
+  const p=_celParentOf(b), kids=_celChildrenOf(b), sibs=_celSiblingsOf(b);
+  if(kind)kind.textContent=(b.userData.celKind||'body').toUpperCase();
+  if(title)title.textContent=_celMenuText(b.userData);
+  if(path)path.textContent=(p?(_celMenuText(p.userData)+'  /  '):'Core / ')+kids.length+' children · '+sibs.length+' in lane';
+}
+function celMenuFocus(b){
+  if(!b)return false;
+  try{selectBody(b); if(cameraMode!==CameraMode.FOCUS_COMMAND_VIEW)cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=b; _camBtnLabel(); updateCelHud(); return true;}catch(_){return false;}
+}
+function celMenuStep(dir){
+  const b=_selected&&_selected.userData&&_selected.userData.celKind?_selected:null;
+  const list=b?_celSiblingsOf(b):_celBodies.filter(x=>x&&x.userData&&x.userData.celKind==='planet');
+  if(!list.length)return;
+  const i=Math.max(0,list.indexOf(b));
+  celMenuFocus(list[(i+(dir<0?-1:1)+list.length)%list.length]);
+}
+function celMenuParent(){const p=_celParentOf(_selected); if(p)celMenuFocus(p);}
+function celMenuChild(){const kids=_celChildrenOf(_selected); if(kids.length)celMenuFocus(kids[0]);}
+function celMenuOpenCard(){if(_selected&&_selected.userData&&_selected.userData.getCard)showCardWithFns(_selected.userData.getCard());}
+function celMenuPin(){if(_selected&&_selected.userData)pinBodyToDock(_selected.userData.name,_celMenuText(_selected.userData));}
+function _celMenuKeys(e){
+  const a=document.activeElement, typing=a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName);
+  if(typing||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key))return;
+  if(document.getElementById('celIndex')&&document.getElementById('celIndex').classList.contains('open'))return;
+  if(e.key==='ArrowLeft'){e.preventDefault();e.stopImmediatePropagation();celMenuStep(-1);}
+  else if(e.key==='ArrowRight'){e.preventDefault();e.stopImmediatePropagation();celMenuStep(1);}
+  else if(e.key==='ArrowUp'){e.preventDefault();e.stopImmediatePropagation();celMenuParent();}
+  else if(e.key==='ArrowDown'){e.preventDefault();e.stopImmediatePropagation();celMenuChild();}
+  else if(e.key==='Enter'||e.key===' '){if(_selected&&_selected.userData&&_selected.userData.celKind){e.preventDefault();e.stopImmediatePropagation();celMenuOpenCard();}}
+}
+addEventListener('keydown',_celMenuKeys);
 async function buildCelestialOS(){
   if(_celBuilt)return; _celBuilt=true;
   try{const r=await fetch('/celestial');_CEL=await r.json();}catch(e){_CEL={};}
@@ -3492,6 +3595,7 @@ async function buildCelestialOS(){
   _celBuildRepoStages();
   _celDotsRebuild();
   try{rebuildMacroConnections();}catch(_){}
+  try{setTimeout(()=>{const first=bodyMap.get('cel:miniapps')||bodyMap.get('cel:automation')||_celBodies.find(b=>b.userData&&b.userData.celKind==='planet'); if(first&&!_selected)celMenuFocus(first); else updateCelHud();},400);}catch(_){}
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
     ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
 }
@@ -4114,6 +4218,7 @@ function onCanvasClick(e){
 function selectBody(b){
   if(_selected){_selected.userData.selected=false; _removeSelRing(_selected);}
   _selected=b;b.userData.selected=true; _attachSelRing(b); b.userData.selPulse=1; sfxBlip('select');
+  updateCelHud();
   // §progressive disclosure: focus a galaxy → reveal its planets; focus a planet → reveal its moons
   try{ if(/^dom:/.test(b.userData.name||'')){ _collapseSystems(); if(b.userData.planetGroup)b.userData.planetGroup.visible=true; }
     else if(b.userData.planet&&b.userData.moonGroup){ b.userData.moonGroup.visible=true; } }catch(_){}
