@@ -3586,17 +3586,17 @@ function engage(){if(_engaged)return;_engaged=true;
   try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
   try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
   try{ requestAllAccess(); }catch(_){}   // pop EVERY grantable browser permission, one prompt at a time
-  // BUILD FIRST, REVEAL WHEN READY — keep the loader up until the scene is built, rendered (≥6 painted
-  // frames) and its first asset wave is in, so she never sees a half-built/glitchy universe.
   if(!uniReady){ const ok=initUniverse(); if(!ok){ $('boot').querySelector('.t').textContent='WebGL UNAVAILABLE'; $('boot').querySelector('.tap').textContent='voice + chat still work below'; $('boot').style.pointerEvents='none'; return; } }
-  try{ $('boot').querySelector('.t').textContent='ENTERING THE UNIVERSE'; $('boot').querySelector('.tap').textContent='one moment…'; }catch(_){}
-  const _f0=_frames, _t0=performance.now();
+  // Reveal as soon as the scene has painted a couple of frames — capped at 2.2s so the loader can NEVER
+  // freeze. (No asset-settle wait; that was the freeze.) Belt-and-braces fixed timer too.
+  const _t0=performance.now(), _f0=_frames;
+  const _hideBoot=()=>{ const b=$('boot'); if(!b||b.classList.contains('gone'))return; b.classList.add('gone'); setTimeout(()=>{ b.style.display='none'; },600); };
   (function reveal(){
-    const painted=_frames-_f0, settled=(_lmActive<=0), waited=performance.now()-_t0;
-    if((painted>=6 && settled && waited>600) || waited>9000){   // ready, or 9s hard cap (never hang her)
-      $('boot').classList.add('gone'); setTimeout(()=>{ $('boot').style.display='none'; },650);
-    } else requestAnimationFrame(reveal);
+    const painted=_frames-_f0, waited=performance.now()-_t0;
+    if((painted>=2 && waited>450) || waited>2200){ _hideBoot(); }
+    else requestAnimationFrame(reveal);
   })();
+  setTimeout(_hideBoot, 2600);   // hard fallback — even if rAF stalls, the loader always clears
 }
 addEventListener('pointerdown',engage,{once:true});
 
