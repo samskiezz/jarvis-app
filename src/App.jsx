@@ -56,6 +56,7 @@ import AgentChatTranscript from '@/components/cinematic/AgentChatTranscript';
 import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEngine';
 import SceneCompareView from '@/components/cinematic/SceneCompareView';
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
+import DatasetQueryAssistant from '@/components/cinematic/DatasetQueryAssistant';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -120,6 +121,7 @@ function App() {
             <ThreatCorrelationEngine />
             <SceneCompareView />
             <ScenarioImpactMatrix />
+            <DatasetQueryAssistant />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
