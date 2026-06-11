@@ -55,8 +55,8 @@ MOON_RULES = {
     "planet:underworld": ["Underworld Web", "Underworld Backend", "Scene Components"],
 }
 
-DUST_EXT = {'.md', '.txt', '.json', '.csv', '.log', '.pdf', '.sqlite', '.db'}
-CODE_EXT = {'.py', '.js', '.jsx', '.ts', '.tsx', '.mjs', '.html', '.css'}
+DUST_EXT = {'.md', '.txt', '.json', '.csv', '.log', '.pdf', '.sqlite', '.db', '.yaml', '.yml', '.toml'}
+CODE_EXT = {'.py', '.js', '.jsx', '.ts', '.tsx', '.mjs', '.html', '.css', '.sh', '.sql'}
 ACTION_WORDS = ['open', 'run', 'pause', 'stop', 'restart', 'build', 'inspect', 'summarise', 'summarize', 'view logs']
 
 def slug(s): return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')
@@ -87,12 +87,44 @@ def file_kind(path: Path):
         return 'dust'
     return 'dust'
 
+def dust_parent(path: str, planet_id: str) -> str:
+    """Place tiny repo records under the closest functional moon, not one giant catch-all cloud."""
+    low = path.lower()
+    ext = Path(path).suffix.lower()
+    if ext in {'.md', '.txt', '.pdf'} or any(x in low for x in ['docs/', 'document', 'readme', 'report', 'ocr', 'scrape', 'ingest']):
+        return 'moon:document-vault'
+    if any(x in low for x in ['brain.db', 'ontology', 'knowledge', 'graph', 'topic', 'measurement', 'note', 'correlation']):
+        return 'moon:knowledge-graph'
+    if any(x in low for x in ['llm', 'ollama', 'qwen', 'llama', 'claude', 'kimi', 'router', 'tier']):
+        return 'moon:llm-router'
+    if any(x in low for x in ['service', 'daemon', 'worker', 'runner', 'task', 'pm2']):
+        return 'moon:knowledge-builder'
+    if any(x in low for x in ['media/', 'asset/', '.glb', '.png', '.jpg', '.jpeg', '.webp', 'model']):
+        return 'moon:glb-library'
+    if any(x in low for x in ['guardian', 'mum', 'webrtc', 'camera']):
+        return 'moon:guardian-monitor'
+    if any(x in low for x in ['voice', 'tts', 'piper', 'audio']):
+        return 'moon:tts-engine'
+    if any(x in low for x in ['underworld/']):
+        return 'moon:underworld-web'
+    if planet_id == 'planet:documents-ingestion':
+        return 'moon:document-vault'
+    if planet_id == 'planet:knowledge-ontology':
+        return 'moon:knowledge-graph'
+    return 'moon:three-js-universe'
+
 def main():
     files = []
     for p in ROOT.rglob('*'):
         if not p.is_file(): continue
         rel = p.relative_to(ROOT).as_posix()
-        if any(part in rel for part in ['.git/', 'node_modules/', '.venv/', '__pycache__/', 'dist/', 'build/']): continue
+        low_rel = rel.lower()
+        if any(part in low_rel for part in [
+            '.git/', 'node_modules/', '.venv', '__pycache__/', '.pytest_cache/', '.mypy_cache/',
+            'dist/', 'build/', '/saved/cooked/', '/saved/stagedbuilds/', '/intermediate/',
+            '/deriveddatacache/', '.next/', 'coverage/'
+        ]):
+            continue
         files.append(rel)
     max_usage = max(1, max((Path(f).stat().st_size if Path(f).exists() else 1) for f in files[:1000]) if files else 1)
     nodes = []
@@ -112,7 +144,7 @@ def main():
             label = Path(f).stem.replace('_',' ').replace('-',' ').title()
             nodes.append({'id':'moon:file:'+slug(f),'kind':'moon','parent':pid,'label':label,'repo':f,'lane':'local','importance':0.55,'visibility':'planetFocus/search'})
         else:
-            parent = 'moon:document-vault' if 'document' in f.lower() or Path(f).suffix.lower() in DUST_EXT else 'moon:three-js-universe'
+            parent = dust_parent(f, pid)
             nodes.append({'id':'dust:file:'+hashlib.sha1(f.encode()).hexdigest()[:12],'kind':'dust','parent':parent,'label':Path(f).name,'repo':f,'lane':'cloud','importance':0.12,'visibility':'search-promoted-only'})
     # Write outputs into server/data/ so the dashboard can serve them
     out_dir = ROOT / 'server' / 'data' if (ROOT / 'server' / 'data').is_dir() else ROOT

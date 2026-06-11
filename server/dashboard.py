@@ -1965,6 +1965,44 @@ def _godrays_selfcheck() -> dict:
 # particles client-side, so only counts cross the wire. Regenerate the scan after every merge:
 #   python3 scripts/scan_repo_to_celestial_index.py
 _CELESTIAL = {"payload": None, "ts": 0.0}
+_CELESTIAL_INDEX = {"nodes": None, "generated_at": None, "ts": 0.0}
+
+
+def _celestial_index_nodes() -> list:
+    if _CELESTIAL_INDEX["nodes"] is not None and (time.time() - _CELESTIAL_INDEX["ts"]) < 300:
+        return _CELESTIAL_INDEX["nodes"]
+    here = os.path.dirname(__file__)
+    with open(os.path.join(here, "data", "celestial_index.generated.json"), encoding="utf-8") as f:
+        gen = json.load(f)
+    nodes = gen.get("nodes", [])
+    _CELESTIAL_INDEX["nodes"] = nodes
+    _CELESTIAL_INDEX["generated_at"] = gen.get("generated_at")
+    _CELESTIAL_INDEX["ts"] = time.time()
+    return nodes
+
+
+def _celestial_dust(parent: str = "", q: str = "", offset: int = 0, limit: int = 40) -> dict:
+    parent = (parent or "").strip()
+    q = (q or "").strip().lower()
+    offset = max(0, int(offset or 0))
+    limit = max(1, min(120, int(limit or 40)))
+    try:
+        rows = []
+        for n in _celestial_index_nodes():
+            if n.get("kind") != "dust":
+                continue
+            if parent and n.get("parent") != parent:
+                continue
+            hay = (str(n.get("label", "")) + " " + str(n.get("repo", ""))).lower()
+            if q and q not in hay:
+                continue
+            rows.append({"id": n.get("id"), "label": n.get("label"), "repo": n.get("repo"),
+                         "parent": n.get("parent"), "importance": n.get("importance", 0.12)})
+        total = len(rows)
+        return {"ok": True, "parent": parent, "q": q, "offset": offset, "limit": limit,
+                "total": total, "rows": rows[offset:offset + limit]}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:160], "rows": [], "total": 0}
 
 
 def _celestial_payload() -> dict:
@@ -1981,9 +2019,8 @@ def _celestial_payload() -> dict:
     except Exception as e:  # noqa: BLE001
         out["seed_error"] = str(e)[:160]
     try:
-        with open(os.path.join(here, "data", "celestial_index.generated.json"),
-                  encoding="utf-8") as f:
-            gen = json.load(f)
+        gen_nodes = _celestial_index_nodes()
+        gen = {"nodes": gen_nodes, "generated_at": _CELESTIAL_INDEX.get("generated_at")}
         gen_by_id = {n.get("id"): n for n in gen.get("nodes", []) if n.get("id")}
         dust_counts: dict = {}
         dust_samples: dict = {}
@@ -2065,6 +2102,15 @@ class _H(http.server.BaseHTTPRequestHandler):
             self._send(json.dumps(_children(
                 q.get("id", [""])[0], q.get("kind", [""])[0],
                 q.get("exclude", [""])[0], min(40, _i("limit", 14)))).encode(), "application/json")
+        elif self.path.startswith("/celestial/dust"):
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            def _i(k, d):
+                try: return int(q.get(k, [str(d)])[0] or d)
+                except Exception: return d
+            self._send(json.dumps(_celestial_dust(
+                q.get("parent", [""])[0], q.get("q", [""])[0],
+                _i("offset", 0), _i("limit", 40))).encode(), "application/json")
         elif self.path.startswith("/celestial"):
             self._send(json.dumps(_celestial_payload()).encode(), "application/json")
         elif self.path.startswith("/graphdata"):
