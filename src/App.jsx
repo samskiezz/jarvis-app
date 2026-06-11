@@ -47,6 +47,7 @@ import DataAcquisitionMonitor from '@/components/cinematic/DataAcquisitionMonito
 import EntityRegistryOverview from '@/components/cinematic/EntityRegistryOverview';
 import ThreatTimeline from '@/components/cinematic/ThreatTimeline';
 import JarvisCommandPalette from '@/components/cinematic/JarvisCommandPalette';
+import SituationRoom from '@/components/cinematic/SituationRoom';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -102,6 +103,7 @@ function App() {
             <EntityRegistryOverview />
             <ThreatTimeline />
             <JarvisCommandPalette />
+            <SituationRoom />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
