@@ -41,6 +41,7 @@ import { isTimelineQuery, buildTimelineScript } from "@/components/cinematic/Thr
 import { isCommandPaletteQuery } from "@/components/cinematic/JarvisCommandPalette";
 import { isSituationQuery, buildSituationScript } from "@/components/cinematic/SituationRoom";
 import { isIntelDigestQuery, buildIntelDigestScript } from "@/components/cinematic/IntelDigest";
+import { isNetworkExplorerQuery, buildNetworkExplorerScript } from "@/components/cinematic/GraphNetworkExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -483,6 +484,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:intel-digest-toggle"));
       try {
         const answer = await buildIntelDigestScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isNetworkExplorerQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:network-toggle"));
+      try {
+        const answer = await buildNetworkExplorerScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
       } catch (_) {

@@ -49,6 +49,7 @@ import ThreatTimeline from '@/components/cinematic/ThreatTimeline';
 import JarvisCommandPalette from '@/components/cinematic/JarvisCommandPalette';
 import SituationRoom from '@/components/cinematic/SituationRoom';
 import IntelDigest from '@/components/cinematic/IntelDigest';
+import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -106,6 +107,7 @@ function App() {
             <JarvisCommandPalette />
             <SituationRoom />
             <IntelDigest />
+            <GraphNetworkExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
