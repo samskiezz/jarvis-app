@@ -298,7 +298,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    Glassmorphic crystal bubbles bound to /metrics. Each has a TOP-RIGHT 3-state toggle (grey/dark/light)
    that cycles the panel width slide-in→mid→full (full slides toward page centre). Drag-drop target for
    planets. State persists in localStorage. They flank the central world and clear the full-width #cmd. */
-.gpanel{position:fixed;z-index:18;width:248px;max-height:calc(100vh - 188px);overflow:hidden;
+.gpanel{position:fixed;z-index:18;width:248px;max-height:calc(50vh - 70px);overflow:hidden;
   border-radius:18px;padding:0;color:var(--tx);
   background:linear-gradient(150deg,rgba(12,30,46,.30),rgba(6,16,26,.20));
   border:1px solid var(--ln);backdrop-filter:blur(15px) saturate(1.25);
@@ -310,13 +310,14 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
   filter:blur(.4px) saturate(1.3);opacity:.55;animation:irid 9s linear infinite}
 /* edge anchoring — 2 stacked left, 2 stacked right (top below the thin top bar; clear of #cmd ~96px) */
-#pInfra{left:14px;top:60px}
-#pPipe{left:14px;top:calc(50vh + 6px)}
-#pKnow{right:14px;top:60px}
-#pFab{right:14px;top:calc(50vh + 6px)}
+/* SYMMETRIC 2-left / 2-right; each capped to its half so top+bottom butt up at mid-screen, never overlap */
+#pInfra{left:14px;top:56px}
+#pPipe{left:14px;top:calc(50vh + 4px);max-height:calc(50vh - 104px)}
+#pKnow{right:14px;top:56px}
+#pFab{right:14px;top:calc(50vh + 4px);max-height:calc(50vh - 104px)}
 /* 3-state widths. mid + full both grow; full slides toward page centre (left panels grow right, right panels grow left → no transform needed since they're edge-anchored). */
-.gpanel.mid{width:312px}
-.gpanel.full{width:392px;max-height:calc(100vh - 150px)}
+.gpanel.mid{width:min(360px,40vw)}
+.gpanel.full{width:min(460px,48vw)}   /* full reaches the screen centre (no tall max-height override → keeps the half-cap, no fold-over) */
 .gpanel .gp-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:grab;user-select:none;
   border-bottom:1px solid rgba(41,231,255,.14);background:linear-gradient(90deg,rgba(41,231,255,.08),transparent)}
 .gpanel .gp-head:active{cursor:grabbing}
@@ -332,7 +333,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel[data-state="1"] .gp-tog i{width:78%}
 .gpanel[data-state="2"] .gp-tog i{width:100%}
 .gpanel .gp-body{padding:9px 12px 12px;overflow:auto;max-height:calc(100vh - 232px);font-size:11.5px}
-.gpanel.full .gp-body{max-height:calc(100vh - 196px)}
+.gpanel.full .gp-body{max-height:calc(50vh - 132px)}
 .gpanel .gp-gauge{margin:7px 0}
 .gpanel .gp-gauge .lab{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:3px}
 .gpanel .gp-gauge .lab b{color:#eafcff}
@@ -350,7 +351,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 /* hide the side panels on narrow screens so they never cover the world / talk bar */
 @media(max-width:1180px){ /* phones/tablets: the 4 glass panels STAY (compact), never hidden — 3-state toggle still works */
   .gpanel{width:44vw;max-height:30vh;font-size:10px}
-  .gpanel.mid{width:46vw}.gpanel.full{width:92vw;max-height:46vh}
+  .gpanel.mid{width:46vw}.gpanel.full{width:48vw}
 }
 </style>
 <link rel="stylesheet" href="/a11y/a11y.css">
