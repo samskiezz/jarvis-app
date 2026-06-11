@@ -2993,20 +2993,19 @@ function updateMainEquatorView(dt){
   camera.lookAt(look);
   try{controls.target.copy(look);}catch(_){}
 }
-function _camBtnLabel(){const b=document.getElementById('camBtn');if(b)b.textContent=
-  cameraMode===CameraMode.MAIN_EQUATOR_VIEW?'🎥 Equator':cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW?'🌌 Explore':'🎯 Focus';}
+function _cameraModeUpdated(){}
 function enterMainEquatorView(){
   cameraMode=CameraMode.MAIN_EQUATOR_VIEW; selectedCelestialBody=null;
   try{controls.enabled=false;}catch(_){}
   const p=_eqRailPoint(); tween(p,_eqLookTarget(p),1100);
-  _camBtnLabel();
+  _cameraModeUpdated();
 }
 function enterUniverseExploreView(){
   cameraMode=CameraMode.UNIVERSE_EXPLORE_VIEW;
   tween(_celExploreEye(),celestialMenuCenter.clone(),1400,()=>{ try{
     controls.enabled=true;controls.enableRotate=true;controls.enableZoom=true;controls.enablePan=true;
     controls.target.copy(celestialMenuCenter);}catch(_){}});
-  _camBtnLabel();
+  _cameraModeUpdated();
 }
 function getBestCelestialBodyForFocus(){
   const ks=Object.keys(_celMets).filter(k=>k.indexOf('alert:')===0);  // 1: active critical state
@@ -3019,7 +3018,7 @@ function enterFocusCommandView(b){
   cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=b;
   try{controls.enabled=true;}catch(_){}
   try{selectBody(b);}catch(_){try{flyToBody(b);}catch(__){}}          // frames the celestial body + opens its command UI
-  _camBtnLabel();
+  _cameraModeUpdated();
 }
 function toggleCameraMode(){
   if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW){enterUniverseExploreView();return;}
@@ -3030,7 +3029,7 @@ function _camTick(dt){
   // selection observer: picking any celestial body (in equator view) = Focus Command View
   if(_selected&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW){
     cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=_selected;
-    try{controls.enabled=true;}catch(_){} _camBtnLabel();}
+    try{controls.enabled=true;}catch(_){} _cameraModeUpdated();}
   if(!_selected&&cameraMode===CameraMode.FOCUS_COMMAND_VIEW){enterMainEquatorView();return;}
   if(flying)return;                                                   // smooth transitions own the camera
   if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW){try{controls.enabled=false;}catch(_){} updateMainEquatorView(dt);}
@@ -3058,7 +3057,7 @@ function _camTick(dt){
   addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)
     equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+e.deltaY*0.5)); },{passive:true});
   addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
-  _camBtnLabel();
+  _cameraModeUpdated();
 })();
 
 /* ---- build/refresh ALL bodies from /metrics (deterministic; relationship-driven placement) ---- */
