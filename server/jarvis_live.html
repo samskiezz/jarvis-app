@@ -394,6 +394,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
  <button class="tbtn a" onclick="cmdAll('pause')">⏸ Pause</button>
  <button class="tbtn r" onclick="cmdAll('stop')">⏹ Stop</button>
  <button class=tbtn onclick="cmdAll('sleep')">🌙 Sleep</button>
+ <button class=tbtn title="Grant JARVIS camera, microphone, notifications & location — re-asks if a prompt was missed" onclick="requestAllAccess(true)">🔓 Access</button>
 </div>
 <nav id=crumbs aria-label="Universe location" aria-live=polite style="display:none"></nav>
 
@@ -530,6 +531,30 @@ function pickVoice(){const pref=['Daniel','Google UK English Male','Microsoft Ry
  for(const p of pref){const v=VOICES.find(v=>v.name&&v.name.includes(p));if(v)return v;}
  return VOICES.find(v=>/en[-_]?GB/i.test(v.lang))||VOICES.find(v=>/^en/i.test(v.lang))||VOICES[0];}
 let _ttsAudio=null,_ttsCtx=null,_ttsSrc=null,_ttsAn=null,_ttsData=null,_chatHist=[];
+/* UPFRONT DEVICE ACCESS — pop every permission a BROWSER can grant without a native app, SEQUENTIALLY
+   (mobile browsers queue prompts and silently drop simultaneous ones, which is why nothing appeared).
+   For mum (can't tap prompts later), the carer grants them all once on the first tap. Re-triggerable
+   via the 🔓 button. NOTE: full native/root device control is impossible from a web page by browser
+   design — that needs the companion app; this grants the maximal web-possible set. */
+let _accessAsked=false;
+async function requestAllAccess(force){
+  if(_accessAsked && !force) return; _accessAsked=true;
+  const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  // 1) CAMERA + MICROPHONE (care video + voice) — try together, then fall back to each alone
+  try{ const s=await navigator.mediaDevices.getUserMedia({video:true,audio:true}); s.getTracks().forEach(t=>t.stop()); }
+  catch(_){ try{ const a=await navigator.mediaDevices.getUserMedia({audio:true}); a.getTracks().forEach(t=>t.stop()); }catch(__){}
+            await wait(300); try{ const v=await navigator.mediaDevices.getUserMedia({video:true}); v.getTracks().forEach(t=>t.stop()); }catch(__){} }
+  await wait(400);
+  // 2) NOTIFICATIONS (health/safety alerts)
+  try{ if(window.Notification && Notification.permission==='default'){ await Notification.requestPermission(); } }catch(_){}
+  await wait(400);
+  // 3) GEOLOCATION (fall-alert location, "where is mum")
+  try{ await new Promise(res=>{ navigator.geolocation.getCurrentPosition(()=>res(),()=>res(),{timeout:8000,maximumAge:600000}); }); }catch(_){}
+  await wait(300);
+  // 4) PERSISTENT STORAGE (her lifeline survives browser cleanup) + wake-lock probe (screen stays on)
+  try{ if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist(); }catch(_){}
+  try{ if('wakeLock'in navigator){ const wl=await navigator.wakeLock.request('screen'); window._wakeLock=wl; } }catch(_){}
+}
 function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window.AudioContext||window.webkitAudioContext)();
   _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
   _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
@@ -3493,13 +3518,7 @@ function engage(){if(_engaged)return;_engaged=true;
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
   try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
   try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
-  // UPFRONT ACCESS (carer setup, within this gesture): request EVERYTHING the web platform allows now —
-  // camera+mic (care video/voice), notifications (alerts), persistent storage (lifeline survives cleanup) —
-  // so mum never faces a permission prompt she can't tap later. (Root/native device control is impossible
-  // from a web page by browser design — that tier needs the native companion app.)
-  try{ navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
-  try{ if(window.Notification&&Notification.permission==='default')Notification.requestPermission().catch(()=>{}); }catch(_){}
-  try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
+  try{ requestAllAccess(); }catch(_){}   // pop EVERY grantable browser permission, one prompt at a time
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }

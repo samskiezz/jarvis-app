@@ -2259,7 +2259,15 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 fp = os.path.join(d, f"recording_{n}.mp3")
                 with open(fp, "wb") as f:
                     f.write(raw)
-                self._send(json.dumps({"ok": True, "saved": fp, "bytes": len(raw)}).encode(), "application/json")
+                # auto-run the local cloning pipeline (detached — clean→segment→install refs→restart clone)
+                try:
+                    import subprocess
+                    subprocess.Popen([sys.executable, os.path.join(ROOT, "scripts", "voice_pipeline.py")],
+                                     cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    pipe = "started"
+                except Exception:  # noqa: BLE001
+                    pipe = "manual"
+                self._send(json.dumps({"ok": True, "saved": fp, "bytes": len(raw), "pipeline": pipe}).encode(), "application/json")
             except Exception as e:  # noqa: BLE001
                 self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
             return
