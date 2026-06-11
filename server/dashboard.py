@@ -1617,7 +1617,7 @@ def _tts(text: str, semitones: float = None, tempo: float = None) -> bytes:
     # through to the instant Piper path below — the lifeline speech is never blocked.
     cloned = _xtts(text)
     if cloned:
-        if len(_TTS_CACHE) > 80:
+        if len(_TTS_CACHE) > 300:   # raised so canned lifeline phrases never evict
             _TTS_CACHE.clear()
         _TTS_CACHE[key] = cloned
         return cloned
@@ -1632,7 +1632,7 @@ def _tts(text: str, semitones: float = None, tempo: float = None) -> bytes:
             wf.close()
             data = buf.getvalue()
         data = _modulate(data, semi, tmp)   # bend toward the real JARVIS voice
-        if len(_TTS_CACHE) > 80:
+        if len(_TTS_CACHE) > 300:   # raised so canned lifeline phrases never evict
             _TTS_CACHE.clear()
         _TTS_CACHE[key] = data
         return data
@@ -2165,6 +2165,9 @@ class _H(http.server.BaseHTTPRequestHandler):
             from server.services import task_daemon as TD
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(TD.result(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
+        elif self.path.split("?", 1)[0] == "/phrases":
+            # The canned lifeline phrases — the client pre-warms these into his cloned voice so they're instant.
+            self._send(json.dumps(CANNED_PHRASES).encode(), "application/json")
         elif self.path.split("?", 1)[0] in ("/manifest.webmanifest", "/manifest.json"):
             # PWA manifest — makes "Install app" / "Add to Home Screen" work so her lifeline lives on the
             # home screen and launches full-screen. Icons use the existing SVG (any-size + maskable).
@@ -2542,8 +2545,37 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
         pass
 
 
+# Canonical canned replies (NEUTRAL form — must match _local_reply's a="" outputs + the greeting).
+# Pre-warmed into the TTS cache at startup so they play INSTANTLY in his cloned voice: XTTS synth is
+# ~14s per NOVEL phrase on this CPU box, which is exactly what made JARVIS lag and drop to the female
+# web-speech fallback. Cached = 6ms. The client fetches this same list (/phrases) to pre-warm blobs.
+CANNED_PHRASES = [
+    "JARVIS online. How may I help?",
+    "Yes, I'm right here. What can I do for you?",
+    "All systems steady and watching over you. More to the point — how are you feeling?",
+    "Always. That's what I'm here for.",
+    "Rest easy. I'll be right here through the night.",
+    "I'm JARVIS — your assistant, here with you and looking after things.",
+    "I'm here. If this is an emergency I can call for help — say 'call my son' or 'call emergency'. I'm not leaving you.",
+    "I'm with you. My deeper reasoning is offline for a moment, but I can still hear you, speak, "
+    "show your photos and files, watch over you and call your family — just tell me what you need.",
+]
+def _warm_canned():
+    """Background: synthesize each canned phrase once so the cache is hot → instant, never-female replies."""
+    import threading, time as _t
+    def run():
+        _t.sleep(6)
+        for ph in CANNED_PHRASES:
+            try:
+                _tts(ph)
+            except Exception:  # noqa: BLE001
+                pass
+    threading.Thread(target=run, daemon=True).start()
+
+
 def main():
     global _SNAP
+    _warm_canned()   # hot-cache the lifeline phrases in his voice (no lag, no female fallback)
     try:
         from server.services import feedback_bus as fb
         fb.install_global()

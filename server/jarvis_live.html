@@ -577,11 +577,12 @@ function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
-(function(){ ['JARVIS online. How may I help?',
-  "I'm right here with you. I'm having a little trouble hearing the network just now, but I'm not going anywhere. Take a breath — you're safe.",
-  'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
-  fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
-    .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
+function _warm(t){ if(!t||_preTTS[t])return; fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
+    .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }
+(function(){ // pre-warm the canned lifeline phrases (server list) → instant, in HIS voice, never female.
+  ['JARVIS online. How may I help?','Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(_warm);
+  fetch('phrases').then(r=>r.ok?r.json():[]).then(list=>{ (list||[]).forEach((t,i)=>setTimeout(()=>_warm(t), i*400)); }).catch(()=>{});
+})();
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   try{ if(!_ttsCtx)unlockAudio();
