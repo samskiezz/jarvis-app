@@ -3003,13 +3003,14 @@ const _celRepoBody={};           // repo seed id -> rendered body name
 let _celRepo=null;
 function _celPlanetPos(rank,total,p){
   const I=_celImportance(p.I), laneBase=CEL_LANE_ANG[p.lane]||0;
-  const shell=6400+rank*1120+Math.pow(1-I,1.35)*3600+(_celFamilyBias[p.id]||0);
-  const theta=laneBase+rank*GOLDEN*0.52;
-  const spread=0.26+Math.pow(1-I,0.9)*0.18;
+  const cols=5, col=rank%cols, row=Math.floor(rank/cols);
+  const shell=3300+row*1180+Math.pow(1-I,1.2)*620+Math.max(-520,Math.min(700,(_celFamilyBias[p.id]||0)*0.18));
+  const theta=laneBase+rank*GOLDEN*0.18;
+  const colMid=(cols-1)/2;
   return new THREE.Vector3(
-    Math.max(4200,shell),
-    Math.sin(rank*GOLDEN*0.73)*shell*(0.11+spread*0.42),
-    Math.cos(theta)*shell*spread+Math.sin(theta*0.7)*shell*0.08
+    Math.max(2600,shell),
+    (1-row)*780+Math.sin(theta)*180,
+    (col-colMid)*1450+Math.cos(theta)*260
   );
 }
 function _celOrbitRadius(parentWorld,childWorld,index,total,tier){
@@ -3091,6 +3092,19 @@ function _celPumpStageSlice(){
     _celDotsRebuild();
     try{rebuildMacroConnections();}catch(_){}
     try{if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&!flying){const f=_celExploreFrame();tween(f.pos,f.tgt,900);}}catch(_){}
+  }
+  updateCelStreamStatus();
+}
+function _celFlushStage(limit){
+  let n=0, max=limit||360;
+  while(_celStageJobs.length&&n<max){
+    try{_celStageJobs.shift()();}catch(e){console.warn('celestial stage',e);}
+    n++;
+  }
+  if(!_celStageJobs.length){
+    _celStageRunning=false;
+    _celDotsRebuild();
+    try{rebuildMacroConnections();}catch(_){}
   }
   updateCelStreamStatus();
 }
@@ -3564,12 +3578,14 @@ function updateMainEquatorView(dt){
 function _camBtnLabel(){const b=document.getElementById('camBtn');if(b)b.textContent=
   cameraMode===CameraMode.MAIN_EQUATOR_VIEW?'🎥 Equator':cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW?'🌌 Explore':'🎯 Focus';}
 function enterMainEquatorView(){
+  try{_celFlushStage();}catch(_){}
   cameraMode=CameraMode.MAIN_EQUATOR_VIEW; selectedCelestialBody=null;
   try{controls.enabled=false;}catch(_){}
   const p=_eqRailPoint(); tween(p,_eqLookTarget(p),1100);
   _camBtnLabel();
 }
 function enterUniverseExploreView(){
+  try{_celFlushStage();}catch(_){}
   cameraMode=CameraMode.UNIVERSE_EXPLORE_VIEW;
   const f=_celExploreFrame();
   tween(f.pos,f.tgt,1400,()=>{ try{
@@ -3584,6 +3600,7 @@ function getBestCelestialBodyForFocus(){
     ||bodyMap.get('cel:miniapps')||null;                               // 5-6: most relevant planet / core fallback
 }
 function enterFocusCommandView(b){
+  try{_celFlushStage();}catch(_){}
   b=b||getBestCelestialBodyForFocus(); if(!b)return;
   cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=b;
   try{controls.enabled=true;}catch(_){}

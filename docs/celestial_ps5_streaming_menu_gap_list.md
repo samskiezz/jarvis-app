@@ -2,6 +2,19 @@
 
 This list is for the JARVIS celestial UI: not a game, but using modern game-menu streaming discipline so the first screen is usable fast and details stream in progressively.
 
+## Current Acceptance Standard
+
+Only current code and fresh verification count as truth. Older vision docs are background only.
+
+- Every camera mode must render the same loaded celestial hierarchy after the stage queue is flushed.
+- Explore mode must frame the loaded 3D universe, not a static guessed position.
+- The index is only a controller; every result must select or promote a 3D body.
+- Search must remain 3D: select an existing body, select a real domain body, or create a promoted 3D search body.
+- Dust must have visible tiny GLB samples plus aggregate counts; it must not be only abstract text.
+- Planets, moons, meteorites, satellites, file moons, and dust samples must all be selectable where loaded.
+- New repo/database entries must flow through `/celestial`, `/search`, `/children`, `/detail`, or `/metrics` without hand-editing layout coordinates.
+- A camera-mode parity proof must compare Equator, Explore, and Focus counts after streaming is complete.
+
 1. First-playable-screen budget: core, closest planets, dock, chat, and search must be usable before lower detail finishes loading.
 2. Asset priority lanes: planets first, visible moons second, file moons third, meteorites/satellites fourth, dust samples last.
 3. Distance-based GLB priority: camera-nearest queued assets load before far assets.
