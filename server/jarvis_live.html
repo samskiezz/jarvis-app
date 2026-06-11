@@ -126,6 +126,37 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #libgrid .it{width:150px}
 #libgrid img,#libgrid model-viewer{width:150px;height:150px;border:1px solid var(--ln);border-radius:10px;background:#04101a;object-fit:cover}
 .ovtitle{position:absolute;top:18px;left:24px;color:var(--cy);letter-spacing:2px;font-size:13px}
+/* ===== MINI APP SURFACE ===== */
+#ovMini{z-index:72;background:rgba(2,6,12,.94);backdrop-filter:blur(10px)}
+#ovMini.open{display:block}
+.miniSurface{position:absolute;inset:54px 18px 18px;display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;
+  border:1px solid var(--ln);border-radius:22px;background:linear-gradient(180deg,rgba(7,18,30,.88),rgba(4,10,20,.82));
+  box-shadow:0 20px 90px rgba(0,0,0,.58),0 0 42px rgba(41,231,255,.10);backdrop-filter:blur(20px) saturate(145%);overflow:hidden}
+.miniHead{padding:18px 20px 0}.miniEyebrow{color:var(--dim);font-size:10px;letter-spacing:.22em;font-weight:800}
+.miniTitle{margin-top:4px;color:#eafcff;font-size:24px;font-weight:800;letter-spacing:.01em;text-shadow:0 0 18px rgba(41,231,255,.14)}
+.miniSub{margin-top:6px;color:#bde2ef;font-size:13px;line-height:1.45;max-width:980px}
+.miniMeta{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}.miniMeta .chiplet{font-size:10px;font-weight:700;letter-spacing:.04em;padding:5px 10px;border-radius:999px;border:1px solid var(--ln);background:rgba(255,255,255,.04);color:#a9dceb}
+.miniToolbar{display:flex;gap:12px;align-items:center;padding:0 20px}
+#miniSearch{flex:1;min-width:0;background:rgba(2,10,16,.68);border:1px solid var(--ln);border-radius:14px;color:#eafcff;padding:12px 14px;font-size:14px;outline:none}
+#miniSearch:focus{border-color:var(--cy);box-shadow:0 0 0 1px rgba(41,231,255,.16),0 0 20px rgba(41,231,255,.16)}
+.miniCount{flex:none;color:var(--dim);font-size:12px}
+.miniBody{min-height:0;display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:14px;padding:0 20px 0}
+.miniList{min-height:0;overflow:auto;padding:6px;border:1px solid rgba(41,231,255,.10);border-radius:18px;background:rgba(2,10,18,.52)}
+.miniRow{display:block;width:100%;text-align:left;padding:12px 12px 11px;border:1px solid transparent;border-radius:14px;background:transparent;color:#dff8ff;cursor:pointer}
+.miniRow+.miniRow{margin-top:6px}.miniRow:hover,.miniRow.active{background:rgba(41,231,255,.09);border-color:rgba(41,231,255,.18)}
+.miniRowTitle{font-size:13px;font-weight:800;color:#eefcff}.miniRowMeta{margin-top:3px;color:#89b8c9;font-size:11px}
+.miniRowBody{margin-top:6px;color:#b7dbe6;font-size:12px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.miniDetail{min-height:0;overflow:auto;border:1px solid rgba(41,231,255,.10);border-radius:18px;background:rgba(5,14,24,.62);padding:16px 16px 18px}
+.miniEmpty{color:var(--dim);font-size:13px;padding:20px 6px}.miniDT{color:#eefcff;font-size:20px;font-weight:800}.miniDM{margin-top:5px;color:#8dbed1;font-size:12px}
+.miniDB{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.miniDB .prop{border:1px solid rgba(41,231,255,.10);border-radius:12px;padding:10px 11px;background:rgba(255,255,255,.03)}
+.miniDB .k{display:block;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.12em}.miniDB b{display:block;margin-top:4px;color:#eefcff;font-size:13px;word-break:break-word}
+.miniLines{margin-top:14px}.miniLine{padding:8px 0;border-bottom:1px solid rgba(41,231,255,.08);color:#c3e5ef;font-size:12px;line-height:1.5}
+.miniActs{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.miniActs .act,.miniFoot .act{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 12px;border-radius:12px;border:1px solid var(--ln);background:rgba(41,231,255,.10);color:var(--cy);cursor:pointer;font-size:12px;font-weight:800}
+.miniActs .act:hover,.miniFoot .act:hover{box-shadow:0 0 18px rgba(41,231,255,.18)}
+.miniFoot{padding:0 20px 18px;display:flex;gap:8px;flex-wrap:wrap}.miniFoot .act{background:rgba(255,255,255,.05);color:#dff8ff}.miniFoot .act.primary{background:rgba(41,231,255,.10);color:var(--cy)}
+@media(max-width:900px){.miniSurface{inset:52px 10px 10px;border-radius:18px}.miniBody{grid-template-columns:1fr;padding:0 10px 0}.miniDetail{min-height:240px}.miniToolbar,.miniHead,.miniFoot{padding-left:10px;padding-right:10px}}
 /* ===== 🛰 LIVE TASKS — Mission Control CSS ===== */
 #ovWork{flex-direction:column;overflow:hidden}  /* FIX: was display:flex (always-open full-screen overlay that swallowed EVERY click → frozen UI). Hidden by default via .ov; .open shows it. */
 #ovWork.open{display:flex}
@@ -1019,6 +1050,27 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 <!-- Artifact window container (draggable pop-ups for task/swarm documents) -->
 <div id=wlArtifactContainer style="position:fixed;z-index:35;pointer-events:none;inset:0"><!-- child windows inserted here --></div>
 
+<div class=ov id=ovMini>
+  <button class=close onclick="closeMiniSurface()">✕ Close</button>
+  <div class=miniSurface>
+    <div class=miniHead>
+      <div class=miniEyebrow id=miniEyebrow>JARVIS MINI APP</div>
+      <div class=miniTitle id=miniTitle>Loading…</div>
+      <div class=miniSub id=miniSub></div>
+      <div class=miniMeta id=miniMeta></div>
+    </div>
+    <div class=miniToolbar>
+      <input id=miniSearch placeholder="Filter results…" autocomplete=off>
+      <div class=miniCount id=miniCount>—</div>
+    </div>
+    <div class=miniBody>
+      <div class=miniList id=miniList role=listbox aria-label="Mini app items"></div>
+      <div class=miniDetail id=miniDetail><div class=miniEmpty>Select an item.</div></div>
+    </div>
+    <div class=miniFoot id=miniFoot></div>
+  </div>
+</div>
+
 <!-- boot -->
 <div id=boot><div class=ring></div><div class=t>INITIALIZING JARVIS</div><div class=tap>tap anywhere to engage the universe</div></div>
 <div class=sr aria-live=assertive id=srlog></div>
@@ -1351,34 +1403,34 @@ async function openDustDocs(){showCard({title:'📄 Documents',subtitle:'loading
   catch(e){showCard({title:'📄 Documents',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
 async function openFilesMini(){showCard({title:'🗂 Files',subtitle:'loading service files…'});
   try{const d=await(await fetch('files')).json();const fs=d.files||[];
-    showCard({title:'🗂 Files',subtitle:fs.length+' service files',
-      lines:fs.map(f=>'• server/services/'+f),actions:[{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'🗂 Files',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+    openMiniSurface({eyebrow:'SERVICE FILES',title:'🗂 Files',subtitle:'Repo-backed service file browser.',meta:[fs.length+' files'],
+      rows:fs.map(f=>({title:f,meta:'server/services/'+f,body:'Open this service file in the in-app file viewer.',actions:[{label:'Open file',kind:'file',arg:'server/services/'+f}]})),
+      actions:[{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
+  catch(e){openMiniError('🗂 Files','service files unavailable',e,[{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]);}}
 async function openPhrasesMini(){showCard({title:'💬 Voice Phrases',subtitle:'loading pre-warmed phrases…'});
   try{const d=await(await fetch('phrases')).json();const arr=Array.isArray(d)?d:(d.phrases||[]);
-    showCard({title:'💬 Voice Phrases',subtitle:arr.length+' cached lifeline phrases',
-      lines:arr.slice(0,14).map(x=>'• '+String(x).slice(0,120)),
+    openMiniSurface({eyebrow:'VOICE CACHE',title:'💬 Voice Phrases',subtitle:'Pre-warmed voice phrases for fast lifeline playback.',meta:[arr.length+' cached'],
+      rows:arr.slice(0,40).map(x=>({title:String(x).slice(0,72),meta:'cached phrase',body:String(x).slice(0,180),actions:[{label:'Speak now',kind:'_fn',fn:()=>jarvisSpeak(String(x))}]})),
       actions:[{label:'🔊 Status',kind:'_fn',fn:()=>readStatus()}]});}
-  catch(e){showCard({title:'💬 Voice Phrases',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('💬 Voice Phrases','phrase cache unavailable',e,[{label:'🔊 Status',kind:'_fn',fn:()=>readStatus()}]);}}
 async function openSwarmsMini(){showCard({title:'🐝 Swarms',subtitle:'loading active swarms…'});
   try{const d=await(await fetch('swarms')).json();const sw=d.swarms||d.items||[];
-    showCard({title:'🐝 Swarms',subtitle:sw.length+' swarms tracked',
-      lines:sw.length?sw.slice(0,12).map(s=>'• #'+s.id+' · '+(s.status||'')+' · '+(s.title||s.label||'')):['No active swarms.'],
-      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')} ]});}
-  catch(e){showCard({title:'🐝 Swarms',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+    openMiniSurface({eyebrow:'SWARM COORDINATION',title:'🐝 Swarms',subtitle:'Active multi-step swarms and their current state.',meta:[sw.length+' tracked'],
+      rows:sw.length?sw.map(s=>({title:(s.title||s.label||('Swarm #'+s.id)),meta:'#'+(s.id||'—')+' · '+(s.status||'unknown'),body:String(s.summary||s.detail||'Live swarm orchestration state.').slice(0,180),props:[{k:'ID',v:s.id||'—'},{k:'Status',v:s.status||'unknown'}]})):[{title:'No active swarms',meta:'idle',body:'No active swarm runs are being tracked right now.'}],
+      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});}
+  catch(e){openMiniError('🐝 Swarms','swarm registry unavailable',e,[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]);}}
 async function openSuggestionsMini(){showCard({title:'💡 Suggestions',subtitle:'loading build ideas…'});
   try{const d=await(await fetch('suggestions')).json();const items=d.items||d.suggestions||[];
-    showCard({title:'💡 Suggestions',subtitle:(d.source||'seed')+' · '+items.length+' ideas',
-      lines:items.map(x=>'• '+(x.title||x.label||String(x).slice(0,70))+' — '+(x.detail||x.description||'')),
+    openMiniSurface({eyebrow:'SELF-DEVELOPMENT',title:'💡 Suggestions',subtitle:'Build suggestions and next-step ideas from the live system.',meta:[(d.source||'seed')+' source',items.length+' ideas'],
+      rows:items.map(x=>({title:x.title||x.label||'Suggestion',meta:x.kind||d.source||'suggestion',body:String(x.detail||x.description||'').slice(0,220),actions:[{label:'⚙ Upgrades',kind:'_fn',fn:()=>openUpgrades()}]})),
       actions:[{label:'↻ Refresh',kind:'_fn',fn:()=>loadSuggestions(true)},{label:'⚙ Upgrades',kind:'_fn',fn:()=>openUpgrades()}]});}
-  catch(e){showCard({title:'💡 Suggestions',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('💡 Suggestions','suggestions unavailable',e,[{label:'⚙ Upgrades',kind:'_fn',fn:()=>openUpgrades()}]);}}
 async function openGodraysMini(){showCard({title:'✦ God-rays',subtitle:'checking render proof…'});
   try{const d=await(await fetch('godrays')).json();
     const proof=d.headless||d.proof||{}, pass=!!(d.pass||d.ok||proof.pass), running=!!(d.running||d.active||d.generating);
-    showCard({title:'✦ God-rays',subtitle:pass||running?'active':'check failed',
-      props:[{k:'Headless proof',v:pass?'pass':'fail'},{k:'Running',v:running?'yes':'no'}],
-      lines:[d.error||d.summary||proof.summary||'Volumetric render self-check is available.']});}
-  catch(e){showCard({title:'✦ God-rays',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+    openMiniSurface({eyebrow:'RENDER FX',title:'✦ God-rays',subtitle:pass||running?'Volumetric lighting pass is active.':'Volumetric lighting needs attention.',meta:[pass?'proof pass':'proof fail',running?'running':'not running'],
+      rows:[{title:pass||running?'God-rays online':'God-rays check failed',meta:'render self-check',body:String(d.error||d.summary||proof.summary||'Volumetric render self-check is available.').slice(0,220),props:[{k:'Headless proof',v:pass?'pass':'fail'},{k:'Running',v:running?'yes':'no'}]}]});}
+  catch(e){openMiniError('✦ God-rays','render check unavailable',e);}}
 function openCare(){window.open('care?room=mum','_blank','noopener');
   showCard({title:'❤️ Care',subtitle:'lifeline care page opened',
     lines:['If the browser blocks the new tab, press Open Care.'],
@@ -1386,95 +1438,88 @@ function openCare(){window.open('care?room=mum','_blank','noopener');
              {label:'📲 Assist Link',kind:'_fn',fn:()=>openAssistStatusMini()}]});}
 async function openAssistStatusMini(){showCard({title:'📲 Assist Link',subtitle:'checking phone companion…'});
   try{const d=await(await fetch('assist/status')).json();
-    showCard({title:'📲 Assist Link',subtitle:d.connected?'phone linked':'phone not linked',
-      props:[{k:'Connected',v:d.connected?'yes':'no'},{k:'Devices',v:(d.devices||[]).length||'—'}],
-      lines:d.connected?['Phone companion is reporting.']:['Open Control to set up the phone companion.'],
+    openMiniSurface({eyebrow:'PHONE COMPANION',title:'📲 Assist Link',subtitle:d.connected?'Phone companion is linked and reporting.':'Phone companion is not linked yet.',meta:[d.connected?'connected':'not linked',((d.devices||[]).length||0)+' device(s)'],
+      rows:(d.devices||[]).length?(d.devices||[]).map((x,i)=>({title:x.name||x.id||('Device '+(i+1)),meta:(x.platform||'device')+' · '+(x.status||'connected'),body:String(x.detail||x.last_seen||'Phone companion is reporting.').slice(0,180)})):[{title:d.connected?'Phone linked':'Phone not linked',meta:'assist status',body:d.connected?'Phone companion is reporting.':'Open Control to set up the phone companion.'}],
       actions:[{label:'📲 Control',kind:'_fn',fn:()=>openAssist()}]});}
-  catch(e){showCard({title:'📲 Assist Link',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('📲 Assist Link','phone companion unavailable',e,[{label:'📲 Control',kind:'_fn',fn:()=>openAssist()}]);}}
 async function _miniJSON(url){const r=await fetch(url),ct=(r.headers.get('content-type')||'').toLowerCase();
   if(!r.ok||ct.indexOf('json')<0)throw new Error(url+' '+r.status); return await r.json();}
 async function openArchitectureMini(){showCard({title:'🏛 Architecture',subtitle:'loading platform layers…'});
   try{const d=await _miniJSON('v1/jarvis/architecture');const layers=d.layers||[];
     const native=layers.filter(x=>String(x.status||'').toLowerCase()==='native').length;
     const ready=layers.filter(x=>!/unavailable|missing|error/i.test(String(x.status||''))).length;
-    showCard({title:'🏛 Architecture',subtitle:layers.length+' live platform layers',
-      props:[{k:'Layers',v:layers.length},{k:'Native',v:native},{k:'Ready',v:ready+'/'+layers.length}],
-      lines:layers.length?layers.slice(0,12).map(l=>'• '+(l.layer||l.key||'layer')+' · '+(l.status||'unknown')+' · '+((l.present||l.modules||[]).length||0)+' modules'):
-        ['No platform layers returned.'],
+    openMiniSurface({eyebrow:'PLATFORM MAP',title:'🏛 Architecture',subtitle:'Live platform layers and their present modules.',meta:[layers.length+' layers',native+' native',ready+'/'+layers.length+' ready'],
+      rows:layers.length?layers.map(l=>({title:l.layer||l.key||'layer',meta:(l.status||'unknown')+' · '+((l.present||l.modules||[]).length||0)+' modules',body:String(l.summary||l.detail||'Live platform layer.').slice(0,200),props:[{k:'Layer',v:l.layer||l.key||'layer'},{k:'Status',v:l.status||'unknown'},{k:'Modules',v:(l.present||l.modules||[]).length||0}]})):[{title:'No platform layers returned',meta:'empty response',body:'The architecture endpoint returned no layers.'}],
       actions:[{label:'🤖 Agent OS',kind:'_fn',fn:()=>openAgentTools()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🏛 Architecture',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🏛 Architecture','architecture unavailable',e,[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]);}}
 async function openMemoryMini(){showCard({title:'🗃 Memory',subtitle:'loading memory recall…'});
   try{const d=await _miniJSON('v1/jarvis/memory?user_id=anonymous&limit=12');const rows=d.memories||[];
-    showCard({title:'🗃 Memory',subtitle:rows.length?'recent recalled memories':'no stored memories yet',
-      props:[{k:'User',v:'anonymous'},{k:'Rows',v:rows.length}],
-      lines:rows.length?rows.slice(0,12).map(m=>'• '+(m.key||m.title||'memory')+' · '+String(m.value||m.text||m.summary||'').slice(0,96)):
-        ['No stored memories are available for the current user yet.'],
+    openMiniSurface({eyebrow:'RECALL LAYER',title:'🗃 Memory',subtitle:rows.length?'Recent stored memories and recall entries.':'No stored memories yet.',meta:['anonymous',rows.length+' rows'],
+      rows:rows.length?rows.map(m=>({title:m.key||m.title||'memory',meta:m.created_at||m.updated_at||'memory row',body:String(m.value||m.text||m.summary||'').slice(0,220),props:[{k:'Key',v:m.key||m.title||'memory'}]})):[{title:'No stored memories',meta:'empty store',body:'No stored memories are available for the current user yet.'}],
       actions:[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()},{label:'🤖 Agent OS',kind:'_fn',fn:()=>openAgentTools()}]});}
-  catch(e){showCard({title:'🗃 Memory',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🗃 Memory','memory recall unavailable',e,[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()}]);}}
 async function openInboxMini(){showCard({title:'🔔 Inbox',subtitle:'loading proactive notifications…'});
   try{const d=await _miniJSON('v1/jarvis/notifications?user_id=anonymous&limit=12');const rows=d.notifications||[];
-    showCard({title:'🔔 Inbox',subtitle:rows.length?'proactive notifications waiting':'nothing waiting right now',
-      props:[{k:'Notifications',v:rows.length},{k:'User',v:'anonymous'}],
-      lines:rows.length?rows.slice(0,12).map(n=>'• '+(n.title||n.label||n.kind||'notification')+' · '+String(n.body||n.text||n.detail||n.status||'').slice(0,96)):
-        ['No proactive notifications are waiting right now.'],
+    openMiniSurface({eyebrow:'PROACTIVE SIGNALS',title:'🔔 Inbox',subtitle:rows.length?'Proactive notifications are waiting.':'Nothing is waiting right now.',meta:[rows.length+' notifications','anonymous'],
+      rows:rows.length?rows.map(n=>({title:n.title||n.label||n.kind||'notification',meta:(n.status||'new')+' · '+(n.created_at||n.ts||'live'),body:String(n.body||n.text||n.detail||'').slice(0,220),props:[{k:'Status',v:n.status||'new'}]})):[{title:'No notifications',meta:'clear',body:'No proactive notifications are waiting right now.'}],
       actions:[{label:'📲 Assist',kind:'_fn',fn:()=>openAssistStatusMini()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🔔 Inbox',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🔔 Inbox','notifications unavailable',e,[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]);}}
 async function openDatasetsMini(){showCard({title:'🧬 Datasets',subtitle:'loading dataset catalog…'});
   try{const d=await _miniJSON('v1/datasets');const rows=d.items||[];
-    showCard({title:'🧬 Datasets',subtitle:rows.length+' registered datasets',
-      props:[{k:'Count',v:d.count??rows.length},{k:'Showing',v:Math.min(rows.length,12)}],
-      lines:rows.length?rows.slice(0,12).map(x=>'• '+(x.name||x.id||'dataset')+' · '+(x.kind||'dataset')+' · '+(x.owner||'unknown')):
-        ['No datasets are registered yet.'],
+    openMiniSurface({eyebrow:'DATA CATALOG',title:'🧬 Datasets',subtitle:'Registered datasets and ownership.',meta:[String(d.count??rows.length)+' total'],
+      rows:rows.length?rows.map(x=>({title:x.name||x.id||'dataset',meta:(x.kind||'dataset')+' · '+(x.owner||'unknown'),body:String(x.description||x.summary||'Registered dataset catalog entry.').slice(0,220),props:[{k:'Owner',v:x.owner||'unknown'},{k:'Kind',v:x.kind||'dataset'}]})):[{title:'No datasets registered',meta:'empty catalog',body:'No datasets are registered yet.'}],
       actions:[{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()},{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'🧬 Datasets',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🧬 Datasets','dataset catalog unavailable',e,[{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()}]);}}
 async function openReportsMini(){showCard({title:'📑 Reports',subtitle:'loading saved reports…'});
   try{const d=await _miniJSON('v1/reports');const rows=d.items||[];
-    showCard({title:'📑 Reports',subtitle:rows.length?'saved intelligence briefs':'no saved reports yet',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(r=>'• '+(r.title||('Report #'+(r.id||'—')))+' · #'+(r.id||'—')):
-        ['No saved reports are available yet.'],
+    openMiniSurface({eyebrow:'INTELLIGENCE BRIEFS',title:'📑 Reports',subtitle:rows.length?'Saved intelligence briefs and reports.':'No saved reports yet.',meta:[String(d.count??rows.length)+' reports'],
+      rows:rows.length?rows.map(r=>({title:r.title||('Report #'+(r.id||'—')),meta:'#'+(r.id||'—')+' · '+(r.created_at||'saved report'),body:String(r.summary||r.description||'Saved report entry.').slice(0,220),props:[{k:'ID',v:r.id||'—'}]})):[{title:'No saved reports',meta:'empty',body:'No saved reports are available yet.'}],
       actions:[{label:'📊 Boards',kind:'_fn',fn:()=>openDashboardsMini()},{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()}]});}
-  catch(e){showCard({title:'📑 Reports',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('📑 Reports','reports unavailable',e,[{label:'📊 Boards',kind:'_fn',fn:()=>openDashboardsMini()}]);}}
 async function openDashboardsMini(){showCard({title:'📊 Boards',subtitle:'loading saved dashboards…'});
   try{const d=await _miniJSON('v1/dashboards');const rows=d.items||[];
-    showCard({title:'📊 Boards',subtitle:rows.length?'saved dashboard boards':'no saved dashboards yet',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(b=>'• '+(b.name||('Board #'+(b.id||'—')))+' · '+((b.widgets||[]).length||0)+' widgets'):
-        ['No saved dashboards are available yet.'],
+    openMiniSurface({eyebrow:'DASHBOARD BOARDS',title:'📊 Boards',subtitle:rows.length?'Saved dashboard boards and widget counts.':'No saved dashboards yet.',meta:[String(d.count??rows.length)+' boards'],
+      rows:rows.length?rows.map(b=>({title:b.name||('Board #'+(b.id||'—')),meta:((b.widgets||[]).length||0)+' widgets',body:String(b.description||'Saved dashboard board.').slice(0,220),props:[{k:'Board',v:b.id||'—'},{k:'Widgets',v:(b.widgets||[]).length||0}]})):[{title:'No saved dashboards',meta:'empty',body:'No saved dashboards are available yet.'}],
       actions:[{label:'📑 Reports',kind:'_fn',fn:()=>openReportsMini()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'📊 Boards',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('📊 Boards','dashboards unavailable',e,[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]);}}
 async function openAlertsMini(){showCard({title:'🚨 Alerts',subtitle:'loading live alerts…'});
   try{const d=await _miniJSON('v1/alerts');const rows=d.items||[];
-    showCard({title:'🚨 Alerts',subtitle:rows.length?'active or recent alerts':'no alerts right now',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(a=>'• '+(a.title||a.name||'alert')+' · '+(a.status||'open')+' · severity '+(a.severity??'—')):
-        ['No alerts are active right now.'],
+    openMiniSurface({eyebrow:'LIVE ALERTS',title:'🚨 Alerts',subtitle:rows.length?'Active and recent alerts.':'No alerts right now.',meta:[String(d.count??rows.length)+' alerts'],
+      rows:rows.length?rows.map(a=>({title:a.title||a.name||'alert',meta:(a.status||'open')+' · severity '+(a.severity??'—'),body:String(a.detail||a.summary||'Live alert record.').slice(0,220),props:[{k:'Severity',v:a.severity??'—'},{k:'Status',v:a.status||'open'}]})):[{title:'No active alerts',meta:'clear',body:'No alerts are active right now.'}],
       actions:[{label:'🛡 Health',kind:'_fn',fn:()=>openHealth()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🚨 Alerts',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🚨 Alerts','alerts unavailable',e,[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]);}}
 async function openCasesMini(){showCard({title:'📁 Cases',subtitle:'loading investigation cases…'});
   try{const d=await _miniJSON('v1/cases');const rows=d.items||[];
-    showCard({title:'📁 Cases',subtitle:rows.length?'tracked investigation cases':'no open cases yet',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(c=>'• '+(c.title||('Case #'+(c.id||'—')))+' · '+(c.status||'open')+' · '+((c.entity_ids||[]).length||0)+' entities'):
-        ['No cases are tracked right now.'],
+    openMiniSurface({eyebrow:'INVESTIGATION CASES',title:'📁 Cases',subtitle:rows.length?'Tracked investigation cases.':'No open cases yet.',meta:[String(d.count??rows.length)+' cases'],
+      rows:rows.length?rows.map(c=>({title:c.title||('Case #'+(c.id||'—')),meta:(c.status||'open')+' · '+((c.entity_ids||[]).length||0)+' entities',body:String(c.summary||c.description||'Investigation case record.').slice(0,220),props:[{k:'ID',v:c.id||'—'},{k:'Status',v:c.status||'open'}]})):[{title:'No tracked cases',meta:'clear',body:'No cases are tracked right now.'}],
       actions:[{label:'🚨 Alerts',kind:'_fn',fn:()=>openAlertsMini()},{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});}
-  catch(e){showCard({title:'📁 Cases',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('📁 Cases','cases unavailable',e,[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]);}}
 async function openAssetsMini(){showCard({title:'🧱 Assets',subtitle:'loading render asset pipeline…'});
   try{const st=await _miniJSON('v1/jarvis/assets/status');const gp=await _miniJSON('v1/jarvis/assets/gaps');const gaps=gp.gaps||[];
-    showCard({title:'🧱 Assets',subtitle:(st.library_models||0)+' library models · '+(st.gaps??gaps.length)+' gaps',
-      props:[{k:'Library',v:st.library_models??'—'},{k:'Wired',v:st.wired_models??'—'},{k:'Gaps',v:st.gaps??gaps.length}],
-      lines:gaps.length?gaps.slice(0,12).map(g=>'• '+(g.name||g.label||g.id||g.surface||String(g).slice(0,80))):['No asset wiring gaps are reported right now.'],
+    openMiniSurface({eyebrow:'ASSET PIPELINE',title:'🧱 Assets',subtitle:(st.library_models||0)+' library models with '+(st.gaps??gaps.length)+' reported gaps.',meta:['library '+(st.library_models??'—'),'wired '+(st.wired_models??'—'),'gaps '+(st.gaps??gaps.length)],
+      rows:gaps.length?gaps.map(g=>({title:g.name||g.label||g.id||g.surface||'asset gap',meta:g.surface||g.kind||'gap',body:String(g.detail||g.reason||'Asset wiring gap reported.').slice(0,220)})):[{title:'No asset gaps reported',meta:'healthy pipeline',body:'No asset wiring gaps are reported right now.'}],
       actions:[{label:'📚 Library',kind:'_fn',fn:()=>setMode('library')},{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'🧱 Assets',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🧱 Assets','asset pipeline unavailable',e,[{label:'📚 Library',kind:'_fn',fn:()=>setMode('library')}]);}}
 async function openLabsMini(){showCard({title:'🧪 Labs',subtitle:'loading research lab capabilities…'});
   try{const d=await _miniJSON('v1/labs/catalog');const rows=d.capabilities||[];
     const ready=rows.filter(x=>x.available!==false && String(x.status||'available').toLowerCase()!=='unavailable').length;
-    showCard({title:'🧪 Labs',subtitle:ready+' of '+rows.length+' lab capabilities available',
-      props:[{k:'Ready',v:ready},{k:'Total',v:rows.length}],
-      lines:rows.length?rows.slice(0,12).map(x=>'• '+(x.capability||x.name||'capability')+' · '+(x.module||'lab')+' · '+((x.available===false||String(x.status||'').toLowerCase()==='unavailable')?'offline':'ready')):
-        ['No lab capabilities were returned.'],
+    openMiniSurface({eyebrow:'RESEARCH LABS',title:'🧪 Labs',subtitle:ready+' of '+rows.length+' lab capabilities are available.',meta:[ready+' ready',rows.length+' total'],
+      rows:rows.length?rows.map(x=>({title:x.capability||x.name||'capability',meta:(x.module||'lab')+' · '+((x.available===false||String(x.status||'').toLowerCase()==='unavailable')?'offline':'ready'),body:String(x.description||x.summary||'Research capability catalog entry.').slice(0,220),props:[{k:'Module',v:x.module||'lab'},{k:'Status',v:x.status||((x.available===false)?'offline':'ready')}]})):[{title:'No lab capabilities returned',meta:'empty',body:'No lab capabilities were returned.'}],
       actions:[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()},{label:'💎 Offers',kind:'_fn',fn:()=>openGpuOffers()}]});}
-  catch(e){showCard({title:'🧪 Labs',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  catch(e){openMiniError('🧪 Labs','lab catalog unavailable',e,[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()}]);}}
+
+function cycleCelestialPlanet(step){
+  try{
+    const planets=(typeof CEL_PLANETS!=='undefined'?CEL_PLANETS:[]).map(p=>bodyMap.get('cel:'+p.id)).filter(Boolean);
+    if(!planets.length)return false;
+    const cur=((typeof _selected!=='undefined')&&_selected&&_selected.userData&&_selected.userData.celKind==='planet')?_selected:null;
+    let idx=planets.indexOf(cur);
+    if(idx<0)idx=step>0?-1:0;
+    const next=planets[(idx+step+planets.length)%planets.length];
+    if(next){selectBody(next);return true;}
+  }catch(_){}
+  return false;
+}
 
 function readStatus(){const c=_m.completion||{},X=_m.correlation||{},on=(_m.workers||[]).filter(w=>w.toggleable&&w.status==='online').length;
   jarvisSpeak('Status. Knowledge build '+(c.pct||0)+' percent. '+on+' pipelines online. '+fmt(X.distinct_after_dedup)+' distinct entities. Box V-RAM '+((_m.box||{}).vram_used_gb||0)+' of 48 gigabytes.');}
@@ -1547,10 +1592,10 @@ function openGPU(){ let ov=$('gpuOv');
      +'</div>';
     document.body.appendChild(ov);
   }
-  ov.style.display='flex'; try{$('dock').classList.add('hidden');}catch(_){}
+  ov.style.display='flex'; syncSurfaceChrome();
   gpuRefresh(); if(_gpuTimer)clearInterval(_gpuTimer); _gpuTimer=setInterval(gpuRefresh,7000);
 }
-function closeGPU(){const o=$('gpuOv');if(o)o.style.display='none';try{$('dock').classList.remove('hidden');}catch(_){}if(_gpuTimer){clearInterval(_gpuTimer);_gpuTimer=null;}}
+function closeGPU(){const o=$('gpuOv');if(o)o.style.display='none';syncSurfaceChrome();if(_gpuTimer){clearInterval(_gpuTimer);_gpuTimer=null;}}
 async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).json();
     const key=$('gpuKey'), list=$('gpuList'); if(!list)return;
     if(r.need_key){ key.style.display='block'; key.innerHTML='⚠ Add your Vast.ai API key (console.vast.ai → Account → API Key).'; list.innerHTML=''; return; }
@@ -2132,15 +2177,12 @@ function setMode(mode,arg){
   else if(mode==='worklist'){worklistStart();}
   // 'live' just closes overlays
   if(mode!=='worklist')worklistStop();   // stop the poll/RAF when leaving worklist
-  // FINDING2: hide the dock while a fullscreen overlay covers the universe; restore it on return to live
-  const overlayOpen=(mode==='guardian'||mode==='library'||mode==='worklist');
-  const dk=$('dock');if(dk)dk.classList.toggle('hidden',overlayOpen);
-  const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
-  ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
+  syncSurfaceChrome();
 }
 function closeActiveSurface(){
   if($('prop')&&$('prop').style.display==='flex'){closeProp();return true;}
   if($('gpuOv')&&$('gpuOv').style.display==='flex'){closeGPU();return true;}
+  if($('ovMini')&&$('ovMini').classList.contains('open')){closeMiniSurface();return true;}
   if(document.querySelector('.ov.open')){setMode('live');return true;}
   if($('card')&&$('card').classList.contains('open')){closeCard();return true;}
   return false;
@@ -2152,6 +2194,7 @@ function wireJarvisKeys(){if(window.__jarvisKeys)return;window.__jarvisKeys=true
     if(ev.key==='Escape'&&closeActiveSurface()){ev.preventDefault();return;}
     if((ev.metaKey||ev.ctrlKey)&&ev.key.toLowerCase()==='k'){ev.preventDefault();$('say')&&$('say').focus();return;}
     if(!typing&&ev.key==='/'){ev.preventDefault();$('say')&&$('say').focus();return;}
+    if(!typing&&(ev.key==='['||ev.key===']')){ev.preventDefault();cycleCelestialPlanet(ev.key===']'?1:-1);return;}
     if((ev.metaKey||ev.ctrlKey)&&ev.key==='Enter'){ev.preventDefault();askJarvis();return;}
     if((ev.altKey||ev.metaKey)&&!typing){
       const k=ev.key.toLowerCase();
@@ -2168,6 +2211,60 @@ async function loadLib(){try{const lib=await(await fetch('library')).json();
      ?'<div class=it><model-viewer src="media/'+m.file+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
      :'<div class=it><a href=media/'+m.file+' target=_blank><img src=media/'+m.file+'></a><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>').join('')
      :'<div style="color:var(--dim);margin-top:60px">Empty — say "image of a glowing city" or "3d model of a helmet".</div>';}catch(e){}}
+
+/* ================= mini app surface ================= */
+let _miniState=null,_miniSelection=0;
+function setSurfaceChromeHidden(hidden){
+  const dk=$('dock');if(dk)dk.classList.toggle('hidden',hidden);
+  const sd=$('sdev');if(sd)sd.classList.toggle('hidden',hidden);
+  ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',hidden));
+}
+function syncSurfaceChrome(){
+  const hidden=!!(($('gpuOv')&&$('gpuOv').style.display==='flex')||($('ovMini')&&$('ovMini').classList.contains('open'))||document.querySelector('#ovGuardian.open,#ovLib.open,#ovWork.open'));
+  setSurfaceChromeHidden(hidden);
+}
+function closeMiniSurface(){const ov=$('ovMini');if(!ov)return;ov.classList.remove('open');_miniState=null;syncSurfaceChrome();}
+function _miniActsHTML(acts,scope){
+  return (acts||[]).map((a,i)=>'<button class="act'+((a.primary||scope==='foot')?' primary':'')+'" data-scope="'+scope+'" data-i="'+i+'">'+esc(a.label||a.arg||'Open')+'</button>').join('');
+}
+function _miniBindActs(root,acts){
+  root.querySelectorAll('.act').forEach(el=>{const i=Number(el.dataset.i)||0;el.onclick=()=>doAction((acts||[])[i]);});
+}
+function _miniRenderDetail(row){
+  const el=$('miniDetail'); if(!el)return;
+  if(!row){el.innerHTML='<div class=miniEmpty>No matching items.</div>'; return;}
+  el.innerHTML='<div class=miniDT>'+esc(row.title||'Item')+'</div>'
+    +(row.meta?'<div class=miniDM>'+esc(row.meta)+'</div>':'')
+    +((row.props||[]).length?'<div class=miniDB>'+row.props.map(p=>'<div class=prop><span class=k>'+esc(p.k)+'</span><b>'+esc(String(p.v))+'</b></div>').join('')+'</div>':'')
+    +((row.lines||[]).length?'<div class=miniLines>'+row.lines.map(l=>'<div class=miniLine>'+esc(l)+'</div>').join('')+'</div>':'')
+    +(row.body?'<div class=miniLines><div class=miniLine>'+esc(row.body)+'</div></div>':'')
+    +((row.actions||[]).length?'<div class=miniActs>'+_miniActsHTML(row.actions,'detail')+'</div>':'');
+  _miniBindActs(el,row.actions||[]);
+}
+function _miniRender(){
+  const st=_miniState||{}, q=(($('miniSearch')&&$('miniSearch').value)||'').trim().toLowerCase();
+  const rows=(st.rows||[]).filter(r=>!q || [r.title,r.meta,r.body].concat((r.lines||[])).join(' ').toLowerCase().includes(q));
+  if(_miniSelection>=rows.length)_miniSelection=0;
+  $('miniEyebrow').textContent=st.eyebrow||'JARVIS MINI APP';
+  $('miniTitle').textContent=st.title||'Mini App';
+  $('miniSub').textContent=st.subtitle||'';
+  $('miniMeta').innerHTML=(st.meta||[]).map(x=>'<span class=chiplet>'+esc(x)+'</span>').join('');
+  $('miniCount').textContent=rows.length+' item'+(rows.length===1?'':'s');
+  $('miniList').innerHTML=rows.map((r,i)=>'<button class="miniRow'+(i===_miniSelection?' active':'')+'" data-i="'+i+'"><div class=miniRowTitle>'+esc(r.title||'Item')+'</div>'+(r.meta?'<div class=miniRowMeta>'+esc(r.meta)+'</div>':'')+(r.body?'<div class=miniRowBody>'+esc(r.body)+'</div>':'')+'</button>').join('')||'<div class=miniEmpty>No matching items.</div>';
+  $('miniList').querySelectorAll('.miniRow').forEach(btn=>btn.onclick=()=>{_miniSelection=Number(btn.dataset.i)||0;_miniRender();});
+  _miniRenderDetail(rows[_miniSelection]||null);
+  $('miniFoot').innerHTML=_miniActsHTML(st.actions||[],'foot');
+  _miniBindActs($('miniFoot'),st.actions||[]);
+}
+function openMiniSurface(cfg){
+  _miniState=cfg||{}; _miniSelection=0;
+  const ov=$('ovMini'); if(!ov)return;
+  ov.classList.add('open'); syncSurfaceChrome(); _miniRender();
+  const s=$('miniSearch'); if(s){s.value=''; s.oninput=_miniRender; setTimeout(()=>s.focus(),30);}
+}
+function openMiniError(title, subtitle, err, actions){
+  openMiniSurface({title:title,subtitle:subtitle||'unavailable',rows:[{title:'Unavailable',meta:'Request failed',body:String(err||'Unknown error').slice(0,180)}],actions:actions||[]});
+}
 
 /* ================= contextual info card (single, NASA-Eyes style) ================= */
 let _cardDrilled=false;   // true while a drill (/detail) or file view fills the card → pause live refresh so it isn't wiped
