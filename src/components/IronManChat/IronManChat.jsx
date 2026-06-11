@@ -123,7 +123,6 @@ export default function IronManChat({ onClose, embedded = false }) {
   const [thinking, setThinking] = useState(false);
   const [listening, setListening] = useState(false);
   const scrollRef = useRef(null);
-  const abortRef = useRef(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -188,7 +187,7 @@ export default function IronManChat({ onClose, embedded = false }) {
           }
         }
       }
-    } catch (err) {
+    } catch {
       setMessages((m) => {
         const last = m[m.length - 1];
         if (last.role === "jarvis") {

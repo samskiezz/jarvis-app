@@ -10,12 +10,18 @@ set -uo pipefail
 
 APP="${JARVIS_APP_URL:-http://76.13.176.135:8001}"   # the VPS backend (override if elsewhere)
 KEY="${VITE_API_KEY:-dev-key}"
-MODEL="${OLLAMA_MODEL:-llama3.1:8b}"
+MODEL="${OLLAMA_BASE_MODEL:-${OLLAMA_MODEL:-llama3.1:8b}}"
 say(){ printf '\033[36m[vast-register]\033[0m %s\n' "$*"; }
+case "${MODEL,,}:${LLM_ENABLE_70B:-0}:${ENABLE_70B_TIER:-0}" in
+  *70b*:1:*|*70b*:*:1) ;;
+  *70b*) say "Refusing to pull/use 70B without LLM_ENABLE_70B=1; using llama3.1:8b."; MODEL="llama3.1:8b" ;;
+esac
 
 # 1) Ollama serving on all interfaces, model present
 if command -v ollama >/dev/null 2>&1; then
   export OLLAMA_HOST=0.0.0.0:11434
+  export OLLAMA_MAX_LOADED_MODELS="${OLLAMA_MAX_LOADED_MODELS:-2}"
+  export OLLAMA_NUM_PARALLEL="${OLLAMA_NUM_PARALLEL:-2}"
   pgrep -f "ollama serve" >/dev/null 2>&1 || { say "starting ollama (0.0.0.0:11434)…"; nohup ollama serve >/tmp/ollama.log 2>&1 & sleep 3; }
   ollama list 2>/dev/null | grep -q . || { say "pulling $MODEL…"; ollama pull "$MODEL" || true; }
 else

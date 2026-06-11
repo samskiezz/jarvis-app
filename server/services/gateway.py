@@ -18,10 +18,10 @@ Design rules (mirrors ``science_bridge``):
   * No network at import time. ``underworld_configured()`` reports config/intent,
     not live reachability, so importing this module is free.
 
-This is an HTTP reverse-proxy + the existing in-process bridge. Full API-gateway
-features (rate limiting, request re-authentication / token exchange, per-route
-authz, response caching, circuit breaking) are intentionally NOT implemented
-here — they are a later step on pillar P16.
+This is an HTTP reverse-proxy + the existing in-process bridge. It includes a
+small cache/circuit breaker so a down Underworld service cannot pin APEX workers.
+Full API-gateway features (rate limiting, request re-authentication / token
+exchange, per-route authz) remain a later step on pillar P16.
 """
 from __future__ import annotations
 
@@ -44,7 +44,24 @@ except Exception:  # noqa: BLE001
     _HAS_HTTPX = False
 
 
-_DEFAULT_URL = "http://127.0.0.1:8001"
+_DEFAULT_URL = "http://127.0.0.1:8011"
+_FAILURES = 0
+_BREAKER_OPEN_UNTIL = 0.0
+_HEALTH_CACHE: tuple[float, dict] | None = None
+
+
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(os.environ.get(name, str(default)))
+    except Exception:  # noqa: BLE001
+        return default
+
+
+def _env_int(name: str, default: int) -> int:
+    try:
+        return int(os.environ.get(name, str(default)))
+    except Exception:  # noqa: BLE001
+        return default
 
 
 def underworld_url() -> str:
@@ -112,6 +129,24 @@ def _unreachable(url: str, detail: str) -> dict:
     }
 
 
+def _breaker_detail(url: str) -> dict | None:
+    if time.time() < _BREAKER_OPEN_UNTIL:
+        return _unreachable(url, "circuit breaker open after repeated Underworld failures")
+    return None
+
+
+def _record_gateway_result(ok: bool) -> None:
+    global _FAILURES, _BREAKER_OPEN_UNTIL
+    if ok:
+        _FAILURES = 0
+        _BREAKER_OPEN_UNTIL = 0.0
+        return
+    _FAILURES += 1
+    threshold = max(1, _env_int("UNDERWORLD_GATEWAY_BREAKER_THRESHOLD", 3))
+    if _FAILURES >= threshold:
+        _BREAKER_OPEN_UNTIL = time.time() + max(1.0, _env_float("UNDERWORLD_GATEWAY_BREAKER_COOLDOWN_S", 30.0))
+
+
 def proxy(
     method: str,
     path: str,
@@ -128,11 +163,19 @@ def proxy(
     """
     method = (method or "GET").upper()
     url = _build_url(path, params)
+    timeout = min(float(timeout), _env_float("UNDERWORLD_GATEWAY_TIMEOUT_S", timeout))
+    blocked = _breaker_detail(url)
+    if blocked:
+        return blocked
     try:
         if _HAS_HTTPX:
-            return _proxy_httpx(method, url, json_body, timeout)
-        return _proxy_urllib(method, url, json_body, timeout)
+            res = _proxy_httpx(method, url, json_body, timeout)
+        else:
+            res = _proxy_urllib(method, url, json_body, timeout)
+        _record_gateway_result(bool(res.get("ok")) and int(res.get("status", 500)) < 500)
+        return res
     except Exception as exc:  # noqa: BLE001 - gateway must never raise
+        _record_gateway_result(False)
         return _unreachable(url, f"{type(exc).__name__}: {exc}")
 
 
@@ -180,6 +223,11 @@ def underworld_health(timeout: float = 4) -> dict:
     ``GET /`` (its service descriptor). Returns
     ``{reachable: bool, status, latency_ms, url, transport, detail?}``.
     """
+    global _HEALTH_CACHE
+    cache_s = max(0.0, _env_float("UNDERWORLD_HEALTH_CACHE_S", 5.0))
+    now = time.time()
+    if _HEALTH_CACHE and cache_s and now - _HEALTH_CACHE[0] <= cache_s:
+        return dict(_HEALTH_CACHE[1])
     started = time.perf_counter()
     base = underworld_url()
     transport = "httpx" if _HAS_HTTPX else "urllib"
@@ -188,15 +236,17 @@ def underworld_health(timeout: float = 4) -> dict:
         res = proxy("GET", probe, timeout=timeout)
         latency_ms = round((time.perf_counter() - started) * 1000, 1)
         if res.get("ok") and int(res.get("status", 0)) < 500:
-            return {
+            payload = {
                 "reachable": True,
                 "status": res.get("status"),
                 "latency_ms": latency_ms,
                 "url": base + probe,
                 "transport": transport,
             }
+            _HEALTH_CACHE = (now, payload)
+            return payload
         last_detail = res.get("detail") or res.get("error") or last_detail
-    return {
+    payload = {
         "reachable": False,
         "status": 502,
         "latency_ms": round((time.perf_counter() - started) * 1000, 1),
@@ -204,6 +254,8 @@ def underworld_health(timeout: float = 4) -> dict:
         "transport": transport,
         "detail": last_detail or "no probe path responded",
     }
+    _HEALTH_CACHE = (now, payload)
+    return payload
 
 
 # A static-but-honest map of the underworld HTTP endpoints this gateway exposes,

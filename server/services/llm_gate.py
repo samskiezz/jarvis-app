@@ -31,7 +31,37 @@ VRAM_TOTAL_GB = 48.0
 # tier name → the model it runs (matches tiered_llm tiers)
 TIER_MODEL = {"micro": "llama3.2", "base": "llama3.1:8b", "strong": "qwen2.5:32b",
               "heavy": "llama3.3:70b", "claude": "claude", "kimi": "kimi-k2.6", "openai": "gpt-5.5"}
-TIER_RANK = {"none": 0, "micro": 1, "base": 2, "strong": 3, "heavy": 4, "claude": 5, "kimi": 5, "openai": 5}
+TIER_RANK = {
+    "none": 0,
+    "micro": 1,
+    "base": 2,
+    "strong": 3,
+    "heavy": 4,
+    "extreme": 5,
+    "claude": 5,
+    "kimi": 5,
+    "openai": 5,
+}
+
+
+def _tier_name(value: str | None, fallback: str = "base") -> str:
+    """Parse policy values like '3_strong' or '5_extreme' into executable tier names."""
+    raw = (value or fallback).strip()
+    if "_" in raw and raw.split("_", 1)[0].isdigit():
+        raw = raw.split("_", 1)[1]
+    return raw or fallback
+
+
+def _next_allowed_tier(tier: str, max_tier: str) -> str | None:
+    chain = ["micro", "base", "strong", "heavy", "extreme"]
+    if tier not in chain:
+        return None
+    nxt = chain[chain.index(tier) + 1] if chain.index(tier) + 1 < len(chain) else None
+    if not nxt or TIER_RANK.get(nxt, 99) > TIER_RANK.get(max_tier, 3):
+        return None
+    if nxt == "heavy" and os.environ.get("LLM_ENABLE_70B", "0").lower() not in ("1", "true", "yes", "on"):
+        return None
+    return nxt
 
 _cache: dict = {}
 
@@ -91,13 +121,13 @@ def gate(worker: str, task_type: str = "enrich", want_tier: str | None = None) -
     gates = pol.get("resource_gates") or {}
 
     # 1) Tier 0 short-circuit — if the worker's default is no-LLM and the task isn't flagged otherwise
-    default = (wp.get("default") or "2_base").split("_")[-1]
+    default = _tier_name(wp.get("default"), "base")
     if default == "none" and not want_tier:
         return {"tier": "none", "reason": "tier0: worker default is deterministic"}
 
     # 2) start at the requested-or-default tier, cap at the worker's MAX
     tier = want_tier or default
-    maxt = (wp.get("max") or "strong").split("_")[-1]
+    maxt = _tier_name(wp.get("max"), "strong")
     if TIER_RANK.get(tier, 2) > TIER_RANK.get(maxt, 3):
         tier = maxt
         reason = f"capped to worker max ({maxt})"
@@ -164,7 +194,7 @@ def gated_complete(worker: str, prompt: str, *, task_type: str = "enrich", syste
         return {"ok": False, "tier": "none", "reason": g["reason"], "content": ""}
 
     tier, reason = g["tier"], g["reason"]
-    maxt = ((_policy().get("workers") or {}).get(worker, {}).get("max") or "strong").split("_")[-1]
+    maxt = _tier_name(((_policy().get("workers") or {}).get(worker, {}).get("max") or "strong"), "strong")
     if ambiguous and TIER_RANK.get(maxt, 3) >= TIER_RANK.get("strong", 3):
         rr = _route_3b(prompt)
         if rr["confidence"] >= 0.6:
@@ -179,8 +209,8 @@ def gated_complete(worker: str, prompt: str, *, task_type: str = "enrich", syste
     r, ok, valid = _run(tier)
     escalated = ""
     if not valid and escalate:
-        nxt = {"micro": "base", "base": "strong", "strong": "claude"}.get(tier)
-        if nxt and TIER_RANK.get(nxt, 9) <= TIER_RANK.get(maxt, 3):
+        nxt = _next_allowed_tier(tier, maxt)
+        if nxt:
             r2, ok2, valid2 = _run(nxt)
             escalated = f"{tier}→{nxt} (validation failed)"
             if ok2:

@@ -27,6 +27,7 @@ from ..db.models import (
     World,
 )
 from ..db.session import get_session
+from ..config import get_settings
 from ..services import civos as civos_mod
 from ..services import invention_pipeline as invention_mod
 from ..services import electronics
@@ -51,7 +52,6 @@ from ..services import self_driving_lab as lab_mod
 from ..services import virtual_cell as vc_mod
 from ..services import world_model as world_model_mod
 from ..services.factory import SeedingPlan, create_world
-from ..services.simulation import advance_world
 from ..world.seed import derive_seed, heightmap
 from .schemas import (
     AdvanceRequest,
@@ -850,10 +850,17 @@ async def advance(
     _token: str = Depends(require_bearer),
 ):
     world = await _world_or_404(session, world_id)
-    reports = await advance_world(session, world, ticks=body.ticks)
+    settings = get_settings()
+    inline_ticks = 0 if body.background else min(body.ticks, settings.sim_sync_ticks_limit)
+    queued_ticks = body.ticks - inline_ticks
+    reports = await scheduler.run_manual_ticks(world.id, inline_ticks) if inline_ticks else []
+    queued = False
+    if queued_ticks > 0:
+        queue_state = scheduler.enqueue_manual_ticks(world.id, queued_ticks)
+        queued = bool(queue_state.get("queued"))
     return AdvanceResponse(
         world_id=world.id,
-        final_tick=world.tick,
+        final_tick=reports[-1].tick if reports else world.tick,
         reports=[
             {
                 "tick": r.tick,
@@ -871,6 +878,10 @@ async def advance(
             }
             for r in reports
         ],
+        requested_ticks=body.ticks,
+        completed_ticks=len(reports),
+        queued_ticks=queued_ticks if queued else 0,
+        queued=queued,
     )
 
 

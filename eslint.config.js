@@ -11,11 +11,21 @@ export default [
   // don't own. (node_modules / .git are ignored by ESLint by default.)
   {
     ignores: [
+      ".venv/**",
+      ".venv-tts/**",
+      "node_modules/**",
       "vendor/**",
       "world_os/**",
       "underworld/**",
       "dist/**",
+      "dist_prev/**",
       "build/**",
+      "logs/**",
+      "server/data/**",
+      "_old_textfirst_glbs/**",
+      "jarvis_assets/**",
+      "public/immersive/glb/**",
+      "public/immersive/loader/**",
     ],
   },
   {
@@ -56,7 +66,7 @@ export default [
         "warn",
         {
           vars: "all",
-          varsIgnorePattern: "^_",
+          varsIgnorePattern: "^(_|Unused[A-Z])",
           args: "after-used",
           argsIgnorePattern: "^_",
         },

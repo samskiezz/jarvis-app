@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
  * JarvisLoader — the boot/intro that MUST PLAY IN FULL before the cinematic reveals.
  *
  * The clip carries its OWN audio track, so the music is perfectly TIMED TO THE ACTIONS of the
- * video (it's the creator's baked soundtrack). We therefore unmute the hero video and play it at
+ * video. When the browser has a user gesture, we unmute the hero video and play it at
  * native rate, ONCE, to the end — then tell the parent (`onMediaComplete`) it's done. The parent
  * only reveals the scene once BOTH the media has finished AND the scene data is ready, so the intro
  * never gets cut short. After the first full play the hero loops silently (so it isn't a frozen
@@ -43,9 +43,12 @@ export default function JarvisLoader({
       onMediaComplete();
     };
 
-    // Hero: the user's clip WITH its own action-synced audio. Play once, full, then signal done.
+    // Hero: the user's clip WITH its own action-synced audio when user activation exists.
+    // Without activation, browsers require muted playback; the gesture hook restores audio
+    // if the user taps before the one-shot intro has completed.
     if (heroV) {
-      heroV.muted = false;
+      const canStartAudible = !!navigator.userActivation?.hasBeenActive;
+      heroV.muted = !canStartAudible;
       heroV.loop = false;
       heroV.volume = 1.0;
       const kick = () => heroV.play().catch(() => {
@@ -62,6 +65,7 @@ export default function JarvisLoader({
         window.removeEventListener("pointerdown", onGesture);
         if (completed.current) return;            // already spoke once → never speak again
         heroV.muted = false; heroV.play().catch(() => {});
+        if (bed) bed.play?.().catch(() => {});
       };
       window.addEventListener("pointerdown", onGesture);
       // belt-and-suspenders: when fireComplete runs, drop the gesture hook so it can't re-arm.
@@ -80,7 +84,10 @@ export default function JarvisLoader({
     if (backV) { backV.muted = true; backV.loop = true; backV.play?.().catch(() => {}); }
 
     // Quiet riser bed under the clip's own audio (does not gate anything).
-    if (bed) { bed.volume = 0.25; bed.play?.().catch(() => {}); }
+    if (bed) {
+      bed.volume = 0.25;
+      if (navigator.userActivation?.hasBeenActive) bed.play?.().catch(() => {});
+    }
 
     return () => {
       heroV?.removeEventListener("ended", fireComplete);
@@ -94,9 +101,9 @@ export default function JarvisLoader({
     const id = setInterval(() => {
       let allQuiet = true;
       els.forEach((el) => {
-        try { el.volume = Math.max(0, el.volume - 0.08); if (el.volume > 0.01) allQuiet = false; } catch (_) {}
+        try { el.volume = Math.max(0, el.volume - 0.08); if (el.volume > 0.01) allQuiet = false; } catch {}
       });
-      if (allQuiet) { els.forEach((el) => { try { el.pause(); } catch (_) {} }); clearInterval(id); }
+      if (allQuiet) { els.forEach((el) => { try { el.pause(); } catch {} }); clearInterval(id); }
     }, 60);
     return () => clearInterval(id);
   }, [ready]);
@@ -122,7 +129,7 @@ export default function JarvisLoader({
 
       {/* HERO — the clip FILLING the whole phone (object-cover, aspect preserved, no squish), with
           its own action-synced audio (the lady speaks ONCE; on loop it's muted — see fireComplete). */}
-      <video ref={front} src={VID} autoPlay playsInline preload="auto"
+      <video ref={front} src={VID} autoPlay muted playsInline preload="auto"
         style={{ position: "absolute", inset: 0, zIndex: 2, width: "100%", height: "100%",
           objectFit: "cover",
           filter: "contrast(1.12) saturate(1.22) brightness(1.02)" }} />

@@ -10,7 +10,10 @@ export default defineConfig({
   // Keep Vite's dev watcher out of it (and the heavy loader/contact-sheet) so HMR
   // and startup stay fast while the asset batch is writing there.
   server: { watch: { ignored: [
-    '**/jarvis_assets', '**/jarvis_assets/**', '**/dist/**',
+    '**/.venv/**', '**/.venv-tts/**', '**/node_modules/**',
+    '**/jarvis_assets', '**/jarvis_assets/**', '**/dist/**', '**/dist_prev/**',
+    '**/vendor/**', '**/world_os/**', '**/server/data/**', '**/logs/**',
+    '**/_old_textfirst_glbs/**',
     '**/public/immersive/glb/**', '**/public/immersive/loader/**',
     '**/public/immersive/contact_sheet.png', '**/underworld/**',
   ] } },

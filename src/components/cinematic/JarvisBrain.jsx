@@ -59,12 +59,12 @@ export default function JarvisBrain() {
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
-      try { audioRef.current?.pause(); } catch (_) {}
+      try { audioRef.current?.pause(); } catch {}
       const a = new Audio(url); audioRef.current = a;
       a.onplay = () => setSpeaking(true);
       a.onended = () => { setSpeaking(false); URL.revokeObjectURL(url); };
       a.play().catch(() => setSpeaking(false));
-    } catch (_) {}
+    } catch {}
   }
 
   function typeOut(answer) {
@@ -90,7 +90,7 @@ export default function JarvisBrain() {
       });
       const d = await r.json();
       answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
-    } catch (_) {
+    } catch {
       answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
     }
     if (scene && !answer) answer = `Summoning the ${SCENE_LABEL[scene]}, sir.`;
@@ -103,7 +103,6 @@ export default function JarvisBrain() {
     const onAsk = (e) => { const q = e?.detail?.text || e?.detail?.query; if (q) ask(q); };
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function mic() {
@@ -114,7 +113,7 @@ export default function JarvisBrain() {
     r.onresult = (e) => { setListening(false); ask(e.results[0][0].transcript); };
     r.onerror = () => setListening(false);
     r.onend = () => setListening(false);
-    try { r.start(); } catch (_) { setListening(false); }
+    try { r.start(); } catch { setListening(false); }
   }
 
   return (

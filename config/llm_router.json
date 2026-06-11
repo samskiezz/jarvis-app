@@ -40,12 +40,12 @@
     "glb_loader":        {"default": "0_none", "max": "0_none"},
     "glb_generator":     {"default": "0_none", "max": "2_base"},
     "document_ingestor": {"default": "0_none", "max": "3_strong"},
-    "knowledge_builder": {"default": "2_base", "max": "4_heavy"},
+    "knowledge_builder": {"default": "2_base", "max": "3_strong", "note": "70B is disabled for background knowledge batches until lower tiers are proven stable"},
     "cross_correlator":  {"default": "0_none", "max": "3_strong"},
     "self_learning":     {"default": "2_base", "max": "5_extreme", "note": "Tier 5 only on real repeated failure"},
     "coding_workspace":  {"default": "3_strong", "max": "5_extreme"},
     "api":               {"default": "0_none", "max": "3_strong"},
-    "underworld_overmind": {"default": "3_strong", "max": "4_heavy"},
+    "underworld_overmind": {"default": "3_strong", "max": "3_strong", "note": "70B/god-brain is future/manual only; perfect sub-70B first"},
     "underworld_minion":   {"default": "2_base", "max": "3_strong"}
   },
 

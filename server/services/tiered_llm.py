@@ -9,8 +9,9 @@ Ladder (all OpenAI-compatible under the hood):
   micro  → llama3.2:3b   (box)      routing / classify / JSON-repair / cheap bulk
   base   → llama3.1:8b   (box)      everyday research / enrich / chatter
   strong → qwen2.5:32b   (box)      planning, harder summaries, group reasoning
-  heavy  → llama3.3:70b  (BURST)    super-important tasks → disposable Vast 70B; falls back to
-                                    `strong` (32b) when no burst worker exists (graceful, logged)
+  heavy  → llama3.3:70b  (BURST)    future/manual tier only. Disabled by default while the
+                                    sub-70B stack is perfected; falls back to `strong` unless
+                                    LLM_ENABLE_70B=1 or ENABLE_70B_TIER=1.
   kimi   → kimi-k2.6     (Moonshot) cheap high-concurrency cloud reasoning
   openai → gpt-5.5       (OpenAI)   premium reasoning (cost-gated by the caller)
   claude → claude        (Anthropic) top-tier reasoning / orchestration
@@ -27,12 +28,33 @@ import time
 import urllib.error
 import urllib.request
 
+from .llm_runtime import is_70b_blocked, sync_llm_slot
+
 _DB = os.environ.get("TIERED_LLM_DB", os.path.join(os.path.dirname(__file__), "..", "data", "tiered_llm.db"))
 
 
 def _box() -> str:
     ep = os.environ.get("OLLAMA_HOST", "").rstrip("/")
     return (ep + "/v1") if ep and "/v1" not in ep else (ep or "")
+
+
+def _truthy(value: str | None) -> bool:
+    return (value or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _heavy_enabled() -> bool:
+    return _truthy(os.environ.get("LLM_ENABLE_70B")) or _truthy(os.environ.get("ENABLE_70B_TIER"))
+
+
+def _blocks_70b(model: str) -> bool:
+    return is_70b_blocked(model)
+
+
+def _safe_local_model(env_name: str, default: str) -> str:
+    model = os.environ.get(env_name, default)
+    if _blocks_70b(model):
+        return default
+    return model
 
 
 def _tiers() -> dict:
@@ -42,8 +64,8 @@ def _tiers() -> dict:
     kimi_base = "https://api.moonshot.ai/v1"
     return {
         "micro":  {"engine": "openai", "base": box, "model": "llama3.2:latest", "key": "ollama"},
-        "base":   {"engine": "openai", "base": box, "model": os.environ.get("OLLAMA_MODEL", "llama3.1:8b"), "key": "ollama"},
-        "strong": {"engine": "openai", "base": box, "model": "qwen2.5:32b", "key": "ollama"},
+        "base":   {"engine": "openai", "base": box, "model": _safe_local_model("OLLAMA_BASE_MODEL", "llama3.1:8b"), "key": "ollama"},
+        "strong": {"engine": "openai", "base": box, "model": _safe_local_model("OLLAMA_STRONG_MODEL", "qwen2.5:32b"), "key": "ollama"},
         "heavy":  {"engine": "burst", "model": os.environ.get("HEAVY_MODEL", "llama3.3:70b"), "fallback": "strong"},
         "kimi":   {"engine": "openai", "base": kimi_base, "model": os.environ.get("KIMI_MOONSHOT_MODEL", "kimi-k2.6"),
                    "key": kimi_key, "reasoning": True},
@@ -94,7 +116,9 @@ def _call_openai_compat(cfg, system, prompt, max_tokens, fmt):
         payload["temperature"] = 0.3
     if fmt == "json" and not cfg.get("reasoning"):
         payload["response_format"] = {"type": "json_object"}
-    out = _post(cfg["base"] + "/chat/completions", payload, {"Authorization": f"Bearer {cfg.get('key','')}"})
+    provider = "ollama" if cfg.get("key") == "ollama" else cfg.get("engine", "openai")
+    with sync_llm_slot(provider=provider, base_url=cfg.get("base", ""), model=cfg["model"]):
+        out = _post(cfg["base"] + "/chat/completions", payload, {"Authorization": f"Bearer {cfg.get('key','')}"})
     ch = (out.get("choices") or [{}])[0]
     return ch.get("message", {}).get("content") or "", out.get("usage")
 
@@ -132,19 +156,27 @@ def complete(prompt: str, *, system: str = "", tier: str = "base", max_tokens: i
     t0 = time.time()
 
     # heavy → burst endpoint, else graceful fallback to strong (no 70B on the base box)
+    if _blocks_70b(model) and tier != "heavy":
+        fb = "strong" if tier != "strong" else "base"
+        cfg = tiers[fb]; eng = cfg["engine"]; model = cfg["model"]; tier = f"{tier}(70b-blocked)→{fb}"
+
     if eng == "burst":
-        ep = None
-        try:
-            from . import gpu_orchestrator as gpu
-            ep = gpu.resolve_endpoint_sync(tier)
-        except Exception:  # noqa: BLE001
-            ep = None
-        if ep:
-            cfg = {"engine": "openai", "base": ep.rstrip("/"), "model": model, "key": "ollama"}
-            eng = "openai"
-        else:
+        if not _heavy_enabled():
             fb = cfg.get("fallback", "strong")
-            cfg = tiers[fb]; eng = cfg["engine"]; model = cfg["model"]; tier = f"heavy→{fb}"
+            cfg = tiers[fb]; eng = cfg["engine"]; model = cfg["model"]; tier = f"heavy(disabled)→{fb}"
+        else:
+            ep = None
+            try:
+                from . import gpu_orchestrator as gpu
+                ep = gpu.resolve_endpoint_sync(tier)
+            except Exception:  # noqa: BLE001
+                ep = None
+            if ep:
+                cfg = {"engine": "openai", "base": ep.rstrip("/"), "model": model, "key": "ollama"}
+                eng = "openai"
+            else:
+                fb = cfg.get("fallback", "strong")
+                cfg = tiers[fb]; eng = cfg["engine"]; model = cfg["model"]; tier = f"heavy→{fb}"
 
     try:
         if eng == "openai":

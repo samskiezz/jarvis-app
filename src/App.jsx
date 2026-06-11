@@ -28,7 +28,7 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthGate>
             {/* Global first-run install pop-up — shows on the landing page too,
                 so a fresh deploy initialises before you even pick a destination. */}

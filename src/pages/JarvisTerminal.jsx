@@ -27,7 +27,7 @@ const MARK = ({ label, color }) => (
 );
 
 // ── GLASS PANEL ──────────────────────────────────────────────────────────────
-const Glass = ({ children, style, onClick }) => (
+const UnusedGlass = ({ children, style, onClick }) => (
   <div onClick={onClick} style={{ background:"rgba(4,10,16,0.98)", border:`1px solid ${C.border}`, borderRadius:4, boxShadow:"0 4px 24px rgba(0,0,0,0.7)", ...style }}>{children}</div>
 );
 
@@ -67,17 +67,6 @@ function VertexGraph({ selectedObj, onSelect, focusId, isActive = true }) {
   }, [focusId]);
 
   const nodeById = useMemo(() => new Map(nodesRef.current.map((n) => [n.id, n])), []);
-  const linkAdjacency = useMemo(() => {
-    const map = new Map();
-    LINKS.forEach((l) => {
-      if (!map.has(l.a)) map.set(l.a, []);
-      if (!map.has(l.b)) map.set(l.b, []);
-      map.get(l.a).push(l);
-      map.get(l.b).push(l);
-    });
-    return map;
-  }, []);
-
   useEffect(() => {
     const canvas = canvasRef.current; if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -244,7 +233,7 @@ function VertexGraph({ selectedObj, onSelect, focusId, isActive = true }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // GLOBE / MAP with USGS live earthquakes
 // ─────────────────────────────────────────────────────────────────────────────
-function GlobeMap({ selectedCountry, onSelect, earthquakes, liveData }) {
+function UnusedGlobeMap({ selectedCountry, onSelect, earthquakes }) {
   const [tick, setTick] = useState(0);
   useEffect(()=>{ const t=setInterval(()=>setTick(i=>i+1),800); return()=>clearInterval(t); },[]);
 
@@ -730,7 +719,7 @@ function WatchlistPanel({ onFocus }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // MARKETS PANEL — Live Yahoo Finance via backend
 // ─────────────────────────────────────────────────────────────────────────────
-function MarketsPanel({ liveData, loading }) {
+function MarketsPanel({ liveData, loading: _loading }) {
   const markets = Array.isArray(liveData?.markets) && liveData.markets.length > 0 ? liveData.markets : null;
   const displayData = markets || MARKETS_FALLBACK;
   const xrpQ = (markets || []).find(m => (m.display||"").includes("XRP"));
@@ -777,7 +766,7 @@ function MarketsPanel({ liveData, loading }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // AI ANALYST — Chat over real corpus
 // ─────────────────────────────────────────────────────────────────────────────
-function AnalystPanel() {
+function UnusedAnalystPanel() {
   const [msgs, setMsgs] = useState([
     { r:"sys", t:"JARVIS AGENT — TOOL-CALLING (search · ontology · science), governed + audited" },
     { r:"sys", t:`Ontology: ${OBJECTS.length} objects · ${LINKS.length} links · ${RISK_SIGNALS.length} risk signals\nAsk anything — I plan, call real tools, and answer from grounded data. Writes become approval proposals.` },
@@ -850,7 +839,7 @@ function AnalystPanel() {
   );
 }
 
-function StreamStatusPanel({ title, streamUrlEnv, channels = [] }) {
+function UnusedStreamStatusPanel({ title, streamUrlEnv, channels = [] }) {
   const [lastTick, setLastTick] = useState(null);
   const [events, setEvents] = useState(0);
   const [connected, setConnected] = useState(false);
@@ -1138,8 +1127,6 @@ export default function JarvisTerminal() {
   const factTicker = ["PSG NET $120k/wk", `XRP×9,300=${xrpHeld}`, "PANGANI DD ACTIVE", "IFZA FZCO PLANNING", "$100M TARGET 2033", `${earthquakes.length} USGS QUAKES LIVE`];
   const tickerBase = marketTicker.length ? [...marketTicker, ...factTicker] : factTicker;
   const tickerItems = [...tickerBase, ...tickerBase];
-  const closedPanels = Object.entries(panels).filter(([,v])=>!v.visible).map(([k])=>k);
-
   const SIDEBAR_PANELS = PANEL_REGISTRY;
 
   return (

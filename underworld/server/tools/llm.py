@@ -22,6 +22,17 @@ import httpx
 
 from ..config import get_settings
 from ..logging_setup import get_logger
+try:
+    from server.services.llm_runtime import async_llm_slot, is_70b_blocked
+except Exception:  # noqa: BLE001 - Underworld can run outside the Jarvis package.
+    from contextlib import asynccontextmanager
+
+    def is_70b_blocked(model: str | None) -> bool:
+        return "70b" in (model or "").lower()
+
+    @asynccontextmanager
+    async def async_llm_slot(**_kwargs):
+        yield
 
 log = get_logger("llm")
 
@@ -81,13 +92,30 @@ def _llama(s) -> tuple[str, str, str]:
 # Layer→model on the GPU box's Ollama. Env-overridable. 3B = whispers, 8B = individuals,
 # 70B = the colony thinking. Heavy layers fall back to a present model until 70B is pulled.
 import os as _os
+
+
+def _truthy(value: str | None) -> bool:
+    return (value or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _allow_70b() -> bool:
+    return _truthy(_os.environ.get("LLM_ENABLE_70B")) or _truthy(_os.environ.get("ENABLE_70B_TIER")) or _truthy(_os.environ.get("UNDERWORLD_ENABLE_70B"))
+
+
+def _model_or_sub70(env_name: str, default: str, fallback: str = "qwen2.5:32b") -> str:
+    model = _os.environ.get(env_name, default)
+    if is_70b_blocked(model) and not _allow_70b():
+        return fallback
+    return model
+
+
 LAYER_MODELS = {
-    "overmind":      _os.environ.get("UW_MODEL_OVERMIND",  "llama3.3:70b"),   # L1 collective mind
-    "god_brain":     _os.environ.get("UW_MODEL_GODBRAIN",  "llama3.3:70b"),   # L5 major story events
-    "high_minion":   _os.environ.get("UW_MODEL_HIGH",      "llama3.1:8b"),    # L2 named characters
-    "high_major":    _os.environ.get("UW_MODEL_HIGH_MAJOR","llama3.3:70b"),   # L2 escalated
-    "normal_minion": _os.environ.get("UW_MODEL_NORMAL",    "llama3.1:8b"),    # L3 everyday minions
-    "chatter":       _os.environ.get("UW_MODEL_CHATTER",   "llama3.2:latest"),# L4 background whispers
+    "overmind":      _model_or_sub70("UW_MODEL_OVERMIND",   "qwen2.5:32b"),    # L1 collective mind
+    "god_brain":     _model_or_sub70("UW_MODEL_GODBRAIN",   "qwen2.5:32b"),    # L5 major story events
+    "high_minion":   _model_or_sub70("UW_MODEL_HIGH",       "llama3.1:8b", "llama3.1:8b"),  # L2 named characters
+    "high_major":    _model_or_sub70("UW_MODEL_HIGH_MAJOR", "qwen2.5:32b"),    # L2 escalated
+    "normal_minion": _model_or_sub70("UW_MODEL_NORMAL",     "llama3.1:8b", "llama3.1:8b"),  # L3 everyday minions
+    "chatter":       _model_or_sub70("UW_MODEL_CHATTER",    "llama3.2:latest", "llama3.2:latest"),  # L4 background whispers
 }
 # fallbacks to models that ARE pulled, so a missing 70B never breaks the world
 LAYER_FALLBACK = {
@@ -241,10 +269,11 @@ async def chat(
 
     _t0 = time.monotonic()
     try:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
-            resp = await client.post(url, json=payload, headers=headers)
-            resp.raise_for_status()
-            data = resp.json()
+        async with async_llm_slot(provider=provider, base_url=base_url, model=model):
+            async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
+                resp = await client.post(url, json=payload, headers=headers)
+                resp.raise_for_status()
+                data = resp.json()
     except httpx.HTTPError as exc:
         err = f"// LLM error: {exc!r}"
         if _pipe is not None:
@@ -303,25 +332,27 @@ async def chat_stream(messages: list[dict[str, Any]]) -> AsyncIterator[str]:
     }
 
     try:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
-            async with client.stream("POST", url, headers=headers, json=payload) as resp:
-                if resp.status_code != 200:
-                    body = (await resp.aread()).decode("utf-8", errors="replace")
-                    yield f"// LLM {resp.status_code}: {body[:200]}"
-                    return
-                async for line in resp.aiter_lines():
-                    if not line or not line.startswith("data: "):
-                        continue
-                    data = line[6:]
-                    if data == "[DONE]":
+        provider = "ollama" if "11434" in base_url else "openai"
+        async with async_llm_slot(provider=provider, base_url=base_url, model=model):
+            async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
+                async with client.stream("POST", url, headers=headers, json=payload) as resp:
+                    if resp.status_code != 200:
+                        body = (await resp.aread()).decode("utf-8", errors="replace")
+                        yield f"// LLM {resp.status_code}: {body[:200]}"
                         return
-                    try:
-                        evt = json.loads(data)
-                    except json.JSONDecodeError:
-                        continue
-                    delta = (evt.get("choices") or [{}])[0].get("delta", {}).get("content")
-                    if delta:
-                        yield delta
+                    async for line in resp.aiter_lines():
+                        if not line or not line.startswith("data: "):
+                            continue
+                        data = line[6:]
+                        if data == "[DONE]":
+                            return
+                        try:
+                            evt = json.loads(data)
+                        except json.JSONDecodeError:
+                            continue
+                        delta = (evt.get("choices") or [{}])[0].get("delta", {}).get("content")
+                        if delta:
+                            yield delta
     except httpx.HTTPError as exc:
         yield f"// LLM stream error: {exc!r}"
 

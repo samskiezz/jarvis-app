@@ -138,3 +138,17 @@
   border: 1px solid rgba(0, 200, 120, 0.25);
 }
 .leaflet-bar a { background: #0a141c; color: #a8bcc8; border-color: rgba(0,200,120,0.2); }
+
+/* Responsive audit helpers: keep dense APEX tools usable on tablet/phone
+   without changing the established neon-glass visual language. */
+.apex-responsive-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 820px) {
+  .apex-responsive-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

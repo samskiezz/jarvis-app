@@ -130,7 +130,7 @@ export default function PlaneGraph() {
   useEffect(() => { load(); }, [load]);
 
   // Governed graph + radial layout via the ported Drive engine.
-  const { graph, layout, renderEdges, nodeById } = useMemo(() => {
+  const { layout, renderEdges, nodeById } = useMemo(() => {
     const graph = buildGraph(status);
     const layout = radialLayout(graph.nodes, graph.edges, active);
     const byId = new Map(layout.map((n) => [n.id, n]));

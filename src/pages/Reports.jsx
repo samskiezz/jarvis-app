@@ -33,7 +33,7 @@ function Markdown({ text }) {
       s
         .replace(/\*\*(.+?)\*\*/g, "‹b›$1‹/b›")
         .replace(/`(.+?)`/g, "‹c›$1‹/c›");
-    const renderInline = (s, key) => {
+    const renderInline = (s) => {
       const parts = inline(s).split(/(‹b›.*?‹\/b›|‹c›.*?‹\/c›)/g).filter(Boolean);
       return parts.map((p, i) => {
         if (p.startsWith("‹b›")) return <strong key={i} style={{ color: C.textB }}>{p.slice(3, -4)}</strong>;

@@ -62,7 +62,7 @@ export default function Setup() {
   useEffect(() => {
     const h = llm?.connection?.ollama_host;
     if (h && !gpuUrl && !h.includes("127.0.0.1")) setGpuUrl(h);
-  }, [llm]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [llm]);
 
   const connectLlm = async () => {
     const url = (gpuUrl || "").trim();

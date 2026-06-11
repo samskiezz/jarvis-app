@@ -188,12 +188,17 @@ class EventOut(BaseModel):
 
 class AdvanceRequest(BaseModel):
     ticks: int = Field(default=1, ge=1, le=100)
+    background: bool = False
 
 
 class AdvanceResponse(BaseModel):
     world_id: str
     final_tick: int
     reports: list[dict]
+    requested_ticks: int = 1
+    completed_ticks: int = 0
+    queued_ticks: int = 0
+    queued: bool = False
 
 
 class PatentSearchRequest(BaseModel):

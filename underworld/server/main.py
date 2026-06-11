@@ -37,6 +37,10 @@ from .tools import llm as _llm
 _WEB_DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
 
 
+def _workers_enabled() -> bool:
+    return get_settings().runtime_role.lower() in {"worker", "all", "workers"}
+
+
 async def _cognition_loop():
     """The running aliveness loop: every COGNITION_INTERVAL_S, run the Global-Workspace
     cognition + sentience pass over each world's hot minions (memory→reflection→self-
@@ -212,12 +216,14 @@ async def lifespan(_app: FastAPI):
     await seed_knowledge_base()
     try:
         from .services import gpu_orchestrator as _gpu
-        await _gpu.register_base()                          # the always-on Vast Ollama base worker
+        if _workers_enabled():
+            await _gpu.register_base()                      # the always-on Vast Ollama base worker
     except Exception:  # noqa: BLE001
         pass
     tasks: list[asyncio.Task] = []
-    if get_settings().scheduler_enabled:
-        if get_settings().scheduler_autostart_all:
+    settings = get_settings()
+    if settings.scheduler_enabled and _workers_enabled():
+        if settings.scheduler_autostart_all:
             await scheduler.autostart_all_worlds()
         scheduler.start()
         tasks.append(asyncio.create_task(_cognition_loop()))    # the sentience engine
@@ -228,7 +234,7 @@ async def lifespan(_app: FastAPI):
     yield
     for t in tasks:
         t.cancel()
-    if get_settings().scheduler_enabled:
+    if get_settings().scheduler_enabled and _workers_enabled():
         await scheduler.stop()
     await dispose()
 

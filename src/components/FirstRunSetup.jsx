@@ -17,7 +17,7 @@ const KEY = "jarvis_setup_done_v";
 
 export default function FirstRunSetup() {
   const [phase, setPhase] = useState("checking"); // checking|offline|needs_setup|installing|ready
-  const [detail, setDetail] = useState(null);
+  const [, setDetail] = useState(null);
   const [log, setLog] = useState([]);
   const pollRef = useRef(null);
 

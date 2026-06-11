@@ -23,6 +23,8 @@ import os
 import re
 import urllib.request
 
+from .llm_runtime import is_70b_blocked, sync_llm_slot
+
 try:
     from . import brain_sources as bs
 except Exception:  # noqa: BLE001
@@ -87,7 +89,12 @@ def _ollama_model() -> str:
     Critically, this NEVER auto-selects an embedding model (e.g. nomic-embed-text):
     those cannot do chat/generate and would make every llm_complete return nothing.
     Embedding models are filtered out of the auto-pick."""
-    env = _CFG.get("model") or os.environ.get("OLLAMA_MODEL")
+    def sub70(model: str | None) -> str | None:
+        if is_70b_blocked(model):
+            return os.environ.get("OLLAMA_BASE_MODEL", "llama3.1:8b")
+        return model
+
+    env = sub70(_CFG.get("model") or os.environ.get("OLLAMA_MODEL"))
     if env:
         return env
     try:
@@ -97,7 +104,7 @@ def _ollama_model() -> str:
         names = [t.get("name") or t.get("model") for t in tags
                  if (t.get("name") or t.get("model"))]
         # never auto-pick an embedding model — it can't chat.
-        chat = [n for n in names if "embed" not in n.lower()]
+        chat = [n for n in names if "embed" not in n.lower() and sub70(n) == n]
         if chat:
             return chat[0]
         if names:
@@ -147,12 +154,14 @@ def connect(ollama_host: str, *, model: str | None = None) -> dict:
                 "EXTERNAL mapped port for 11434 (not 11434 itself).")}
 
 
-def _post(url: str, payload: dict, headers: dict | None = None, timeout: float = 60.0):
+def _post(url: str, payload: dict, headers: dict | None = None, timeout: float = 60.0,
+          provider: str = "", model: str = ""):
     data = json.dumps(payload).encode()
     req = urllib.request.Request(url, data=data,
                                  headers={"Content-Type": "application/json", **(headers or {})})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return json.loads(r.read().decode("utf-8", errors="ignore"))
+    with sync_llm_slot(provider=provider, base_url=url, model=model):
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.loads(r.read().decode("utf-8", errors="ignore"))
 
 
 def backend() -> str | None:
@@ -200,7 +209,7 @@ def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
                        "options": {"temperature": temperature}}
             if fmt == "json":
                 payload["format"] = "json"
-            out = _post(_ollama_base() + "/api/chat", payload)
+            out = _post(_ollama_base() + "/api/chat", payload, provider="ollama", model=payload["model"])
             return (out.get("message", {}) or {}).get("content")
         if b == "openai-compatible":
             from ..config import KIMI_API_KEY, KIMI_BASE_URL, KIMI_MODEL
@@ -211,7 +220,7 @@ def llm_complete(prompt: str, *, system: str = "", max_tokens: int = 512,
             if fmt == "json":
                 payload["response_format"] = {"type": "json_object"}
             out = _post(KIMI_BASE_URL.rstrip("/") + "/chat/completions", payload,
-                        headers={"Authorization": f"Bearer {KIMI_API_KEY}"})
+                        headers={"Authorization": f"Bearer {KIMI_API_KEY}"}, provider="openai", model=KIMI_MODEL)
             return out.get("choices", [{}])[0].get("message", {}).get("content")
     except Exception:  # noqa: BLE001
         return None
@@ -236,7 +245,7 @@ def _complete_override(prompt: str, system: str, max_tokens: int, fmt: str | Non
                        "options": {"temperature": temperature}}
             if fmt == "json":
                 payload["format"] = "json"
-            out = _post(base + "/api/chat", payload)
+            out = _post(base + "/api/chat", payload, provider="ollama", model=model)
             return (out.get("message", {}) or {}).get("content")
         # OpenAI-compatible (OpenAI gpt-5.x reasoning, or Moonshot Kimi)
         payload = {"model": model, "messages": msgs, "stream": False}
@@ -248,7 +257,8 @@ def _complete_override(prompt: str, system: str, max_tokens: int, fmt: str | Non
         if fmt == "json" and not ov.get("reasoning"):
             payload["response_format"] = {"type": "json_object"}
         out = _post(base + "/chat/completions", payload,
-                    headers={"Authorization": f"Bearer {ov.get('api_key', '')}"}, timeout=120.0)
+                    headers={"Authorization": f"Bearer {ov.get('api_key', '')}"}, timeout=120.0,
+                    provider=kind, model=model)
         try:
             _LAST_USAGE[ov.get("tag", model)] = out.get("usage") or {}
         except Exception:  # noqa: BLE001

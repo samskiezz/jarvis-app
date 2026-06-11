@@ -90,8 +90,24 @@ class Settings(BaseSettings):
 
     # Simulation
     sim_max_ticks_per_request: int = 100
+    sim_sync_ticks_limit: int = Field(
+        default=3,
+        ge=1,
+        le=20,
+        description=(
+            "Maximum ticks an HTTP request may run inline before the remainder "
+            "is handed to the scheduler queue. Keeps API workers responsive."
+        ),
+    )
     sim_default_tick_seconds: float = 0.0
     sim_max_minions: int = 64
+    runtime_role: str = Field(
+        default="api",
+        description=(
+            "Underworld process role: api, worker, or all. API serves HTTP only; "
+            "worker/all may run scheduler, cognition, movement, feedback, and GPU upkeep."
+        ),
+    )
     # The background auto-advance scheduler holds a session and re-runs
     # every tick_resolution_s. In tests we run it on a single shared sqlite
     # file across many TestClients, which causes "database is locked"
@@ -99,7 +115,7 @@ class Settings(BaseSettings):
     scheduler_enabled: bool = True
     # On startup, flip every existing world to auto-advance so the whole system
     # runs in the background with zero manual ticking.
-    scheduler_autostart_all: bool = True
+    scheduler_autostart_all: bool = False
     sim_population_floor_pct: float = Field(
         default=0.10,
         description=(

@@ -130,13 +130,14 @@ const SOUNDS = {
 
 /** Play a named JARVIS sound. Unknown names are ignored. */
 export function play(name) {
-  unlock();
+  if (!ctx) return;
   const fn = SOUNDS[name];
   if (fn) try { fn(); } catch { /* audio best-effort */ }
 }
 
 /** Start/stop the ambient arc-reactor hum (while JARVIS is armed). */
 export function setHum(on) {
+  if (!on && !hum) return;
   const c = ac();
   if (!c) return;
   if (on && !hum && !muted) {

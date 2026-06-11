@@ -37,6 +37,8 @@ log = get_logger("scheduler")
 _TICK_RESOLUTION_S = 1.0
 _loop_task: asyncio.Task | None = None
 _stop_event: asyncio.Event | None = None
+_manual_tasks: set[asyncio.Task] = set()
+_world_locks: dict[str, asyncio.Lock] = {}
 
 
 def _get_stop_event() -> asyncio.Event:
@@ -45,6 +47,14 @@ def _get_stop_event() -> asyncio.Event:
     if _stop_event is None:
         _stop_event = asyncio.Event()
     return _stop_event
+
+
+def _lock_for(world_id: str) -> asyncio.Lock:
+    lock = _world_locks.get(world_id)
+    if lock is None:
+        lock = asyncio.Lock()
+        _world_locks[world_id] = lock
+    return lock
 
 # In-memory event bus — per-world queues for SSE subscribers. Bounded to
 # prevent runaway memory if no client is consuming.
@@ -103,11 +113,10 @@ async def _drain_new_events(session: AsyncSession, world_id: str, since_tick: in
         })
 
 
-async def _tick_one_world(world_id: str) -> TickReport | None:
-    """Advance a single world by one tick. Skips if disabled/missing."""
+async def _tick_one_world_locked(world_id: str, *, require_auto: bool = True) -> TickReport | None:
     async with session_scope() as session:
         world = await session.get(World, world_id)
-        if not world or not world.auto_advance:
+        if not world or (require_auto and not world.auto_advance):
             return None
         previous_tick = world.tick
         reports = await advance_world(session, world, ticks=1)
@@ -127,6 +136,41 @@ async def _tick_one_world(world_id: str) -> TickReport | None:
             })
             return reports[-1]
     return None
+
+
+async def _tick_one_world(world_id: str, *, require_auto: bool = True) -> TickReport | None:
+    """Advance a single world by one tick. Per-world locked; skips if disabled/missing."""
+    async with _lock_for(world_id):
+        return await _tick_one_world_locked(world_id, require_auto=require_auto)
+
+
+async def _run_manual_ticks(world_id: str, ticks: int) -> None:
+    await run_manual_ticks(world_id, ticks)
+
+
+async def run_manual_ticks(world_id: str, ticks: int) -> list[TickReport]:
+    reports: list[TickReport] = []
+    async with _lock_for(world_id):
+        for _ in range(max(0, ticks)):
+            try:
+                report = await _tick_one_world_locked(world_id, require_auto=False)
+                if report:
+                    reports.append(report)
+            except Exception as exc:  # noqa: BLE001
+                log.warning("scheduler.manual_tick_failed", world_id=world_id, error=repr(exc))
+                break
+    return reports
+
+
+def enqueue_manual_ticks(world_id: str, ticks: int) -> dict:
+    """Queue manual ticks after an HTTP request has done its small inline slice."""
+    total = max(0, int(ticks or 0))
+    if total <= 0:
+        return {"queued": False, "queued_ticks": 0}
+    task = asyncio.create_task(_run_manual_ticks(world_id, total), name=f"underworld-manual-{world_id}")
+    _manual_tasks.add(task)
+    task.add_done_callback(_manual_tasks.discard)
+    return {"queued": True, "queued_ticks": total}
 
 
 async def _scheduler_loop() -> None:
@@ -195,7 +239,10 @@ async def stop() -> None:
             # Loop was already closed (test teardown). Best-effort cancel.
             _loop_task.cancel()
         _loop_task = None
+    for task in list(_manual_tasks):
+        task.cancel()
+    _manual_tasks.clear()
     _stop_event = None
 
 
-__all__ = ["start", "stop", "publish", "subscribe"]
+__all__ = ["start", "stop", "publish", "subscribe", "enqueue_manual_ticks", "run_manual_ticks"]

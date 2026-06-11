@@ -51,44 +51,44 @@ async def main() -> None:
         print(f"[jarvis-worker] feedback bus unavailable: {str(e)[:120]}", flush=True)
 
     # 1) self-enrichment BUILD (scrape → GPU-embed → LLM-enrich) on an interval.
-    if os.environ.get("AUTOBUILD_ON_START", "true").lower() in ("1", "true", "yes"):
+    if os.environ.get("AUTOBUILD_ON_START", "false").lower() in ("1", "true", "yes"):
         tasks.append(asyncio.create_task(_periodic(
             ab.run_once, delay=5.0,
             interval=max(60, int(os.environ.get("AUTOBUILD_INTERVAL_S", "900"))),
             label="autobuild",
-            scrape_batches=int(os.environ.get("AUTOBUILD_SCRAPE_BATCHES", "4")),
-            enrich_limit=int(os.environ.get("AUTOBUILD_ENRICH_LIMIT", "24")))))
+            scrape_batches=int(os.environ.get("AUTOBUILD_SCRAPE_BATCHES", "1")),
+            enrich_limit=int(os.environ.get("AUTOBUILD_ENRICH_LIMIT", "8")))))
 
     # 2) continuous deep enrichment over the doc backlog.
-    if os.environ.get("ENRICH_LOOP", "true").lower() in ("1", "true", "yes"):
+    if os.environ.get("ENRICH_LOOP", "false").lower() in ("1", "true", "yes"):
         tasks.append(asyncio.create_task(_periodic(
             le.enrich_documents, delay=20.0,
-            interval=max(10, int(os.environ.get("ENRICH_LOOP_INTERVAL_S", "30"))),
+            interval=max(30, int(os.environ.get("ENRICH_LOOP_INTERVAL_S", "120"))),
             label="enrich",
-            limit=int(os.environ.get("ENRICH_LOOP_BATCH", "24")))))
+            limit=int(os.environ.get("ENRICH_LOOP_BATCH", "8")))))
 
     # 3) the LLM research autopilot — keeps the GPU busy cycling topics through research().
-    if os.environ.get("LLM_AUTOPILOT_ENABLE", "true").lower() in ("1", "true", "yes"):
+    if os.environ.get("LLM_AUTOPILOT_ENABLE", "false").lower() in ("1", "true", "yes"):
         tasks.append(asyncio.create_task(ap.autopilot_loop(
-            concurrency=int(os.environ.get("LLM_AUTOPILOT_CONCURRENCY", "4")),
-            interval_s=float(os.environ.get("LLM_AUTOPILOT_INTERVAL_S", "0.5")))))
+            concurrency=int(os.environ.get("LLM_AUTOPILOT_CONCURRENCY", "1")),
+            interval_s=float(os.environ.get("LLM_AUTOPILOT_INTERVAL_S", "10")))))
 
     # 4) BULK-DATA ENGINE — topic orchestrator: cities × weather/air/marine + earthquakes/flights/
     #    crypto + topic→page mapping. Injects THOUSANDS of live measurements per cycle (the
     #    millions-of-bits source + the new-UI data). Was NEVER wired in production — turn it on.
-    if os.environ.get("ORCHESTRATOR_LOOP", "true").lower() in ("1", "true", "yes"):
+    if os.environ.get("ORCHESTRATOR_LOOP", "false").lower() in ("1", "true", "yes"):
         try:
             from .services import topic_orchestrator as TO
             tasks.append(asyncio.create_task(_periodic(
                 TO.run_all, delay=8.0,
                 interval=max(300, int(os.environ.get("ORCHESTRATOR_INTERVAL_S", "1800"))),
                 label="orchestrator",
-                cities_limit=int(os.environ.get("ORCHESTRATOR_CITIES", "244")))))
+                cities_limit=int(os.environ.get("ORCHESTRATOR_CITIES", "50")))))
         except Exception as e:  # noqa: BLE001
             print(f"[jarvis-worker] orchestrator unavailable: {str(e)[:120]}", flush=True)
 
     # 5) History Lake ingestion (continuous external-feed pull).
-    if os.environ.get("HISTORY_INGEST_ENABLED", "true").lower() in ("1", "true", "yes"):
+    if os.environ.get("HISTORY_INGEST_ENABLED", "false").lower() in ("1", "true", "yes"):
         try:
             from .services.ingestion import ingestion_loop
             tasks.append(asyncio.create_task(
@@ -97,7 +97,7 @@ async def main() -> None:
             print(f"[jarvis-worker] ingestion unavailable: {str(e)[:120]}", flush=True)
 
     # 6) Proactive intelligence (monitor → reason → propose → notify).
-    if os.environ.get("PROACTIVE_LOOP_ENABLED", "true").lower() in ("1", "true", "yes"):
+    if os.environ.get("PROACTIVE_LOOP_ENABLED", "false").lower() in ("1", "true", "yes"):
         try:
             from .services.proactive_loop import proactive_loop
             tasks.append(asyncio.create_task(proactive_loop()))

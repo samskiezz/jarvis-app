@@ -46,13 +46,13 @@ export default function GatewayConsole() {
       {!reachable && (
         <div style={{ marginBottom: 12, fontSize: 10, color: C.text, padding: "8px 12px",
           border: `1px solid ${C.border}`, borderRadius: 4, background: `${C.red}0a` }}>
-          The underworld HTTP backend isn't running (start it on <b>UNDERWORLD_URL</b>, default :8001). The
+          The underworld HTTP backend isn't running (start it on <b>UNDERWORLD_URL</b>, default :8011). The
           in-process science bridge still serves the 489 methods directly — the gateway adds HTTP access to the
           sim/worlds endpoints. This is the honest state, not an error.
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+      <div className="apex-responsive-split">
         <PanelCard title="ENDPOINT CATALOG" accent={ACCENT}>
           <DataState loading={cAsync.loading} empty={!catalog.length} emptyLabel="No catalog">
             <div style={{ display: "flex", flexDirection: "column", gap: 3, maxHeight: 360, overflowY: "auto" }}>
