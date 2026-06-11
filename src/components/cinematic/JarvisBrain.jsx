@@ -44,6 +44,7 @@ import { isIntelDigestQuery, buildIntelDigestScript } from "@/components/cinemat
 import { isNetworkExplorerQuery, buildNetworkExplorerScript } from "@/components/cinematic/GraphNetworkExplorer";
 import { isPriorityQueueQuery, buildPriorityQueueScript } from "@/components/cinematic/PriorityActionQueue";
 import { isSkillGapQuery, buildSkillGapScript } from "@/components/cinematic/SkillGapAdvisor";
+import { isChatQuery, buildChatScript } from "@/components/cinematic/AgentChatTranscript";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -527,6 +528,17 @@ export default function JarvisBrain() {
       } catch (_) {
         setThinking(false); setOpen(false);
       }
+      return;
+    }
+
+    if (isChatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:chat-toggle"));
+      const history = (() => {
+        try { return JSON.parse(localStorage.getItem("jarvis_chat_history") || "[]"); } catch (_) { return []; }
+      })();
+      const answer = buildChatScript(history);
+      setThinking(false); typeOut(answer); speak(answer);
+      hideT.current = setTimeout(() => setOpen(false), 7000);
       return;
     }
 
