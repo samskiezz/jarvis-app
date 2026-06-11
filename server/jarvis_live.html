@@ -1988,7 +1988,7 @@ let sunFace=null;                                      // §1 B: the oversized h
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
 let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=false,clock=null;
 let _starField=null,_nebula=null;
-let home={pos:new THREE.Vector3(1250,260,0),tgt:new THREE.Vector3(2650,220,0)};  // CAMERA LOCK: JARVIS POV — standing ON the core (just outside its ~780u surface, core BEHIND you) looking OUT into space (+x: telemetry, apps, domains, celestial field all ahead); near pivot (~1400u) so dragging = look-around, never an into-the-core orbit
+let home={pos:new THREE.Vector3(2200,260,0),tgt:new THREE.Vector3(4600,220,0)};  // CAMERA LOCK: wider JARVIS POV looking OUT into the 3D menu; keeps the core behind without trapping the view inside it
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
 const ASSET=n=>'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
@@ -2965,9 +2965,9 @@ function buildDomainPlanets(){
   // each belongs to its own moon (Vitals ▸ Services / Vitals ▸ Alerts), each moon to its planet. Nothing floats free.
   // CORE-POV start: stand AT the AI core looking OUT into the universe — the core sits just behind you,
   // visible at the frame edge. (flyHome/_frameAll remain the zoom-out overview.)
-  try{ setTimeout(()=>{ home={pos:new THREE.Vector3(1250,260,0), tgt:new THREE.Vector3(2650,220,0)};   // CAMERA LOCK: standing ON the core looking OUT (core behind you); near pivot ⇒ drag = look-around
+  try{ setTimeout(()=>{ home={pos:new THREE.Vector3(2200,260,0), tgt:new THREE.Vector3(4600,220,0)};   // wider default: still JARVIS POV, no close old-core snap
     camera.position.copy(home.pos); controls.target.copy(home.tgt); controls.update(); },60); }catch(_){}
-  try{buildCelestialOS();}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe (additive layer)
+  try{buildCelestialOS().then(()=>{try{enterUniverseExploreView();}catch(_){}});}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe is the default 3D menu
 }
 
 /* ===== CELESTIAL OS — every planet is a FEATURE with its complete interactive family =====
@@ -3073,12 +3073,19 @@ function _celKindRank(k){return ({planet:0,moon:1,meteorite:2,satellite:3,dust:4
 function _celLoadedCounts(){const c={planet:0,moon:0,meteorite:0,satellite:0,dust:0,total:0};
   for(let i=0;i<_celBodies.length;i++){const k=_celBodies[i].userData.celKind||'domain'; if(c[k]!=null)c[k]++; c.total++;}
   return c;}
+function _celIndexedCounts(){
+  const gen=((_CEL||{}).generated)||{}, out={total:Number(gen.total_nodes)||0,dust:0,fileMoons:0};
+  const dc=gen.dust_counts||{}, fm=gen.file_moons||{};
+  Object.keys(dc).forEach(k=>out.dust+=Number(dc[k])||0);
+  Object.keys(fm).forEach(k=>out.fileMoons+=Number(fm[k])||0);
+  return out;
+}
 function updateCelStreamStatus(){
   const el=document.getElementById('celStream'); if(!el)return;
-  const c=_celLoadedCounts(), q=_celStageJobs.length;
+  const c=_celLoadedCounts(), ix=_celIndexedCounts(), q=_celStageJobs.length;
   el.style.display='inline-flex';
-  el.textContent=q?('🌌 '+c.total+' · +'+q):('🌌 '+c.total+' ready');
-  el.title='Celestial bodies loaded: '+c.total+' · planets '+c.planet+' · moons '+c.moon+' · meteorites '+c.meteorite+' · satellites '+c.satellite+' · dust '+c.dust+' · queued '+q;
+  el.textContent=q?('🌌 '+c.total+' / '+fmt(ix.total||c.total)+' · +'+q):('🌌 '+c.total+' / '+fmt(ix.total||c.total));
+  el.title='Rendered bodies: '+c.total+' · indexed repo records: '+fmt(ix.total||c.total)+' · indexed file moons '+fmt(ix.fileMoons)+' · indexed dust '+fmt(ix.dust)+' · planets '+c.planet+' · moons '+c.moon+' · meteorites '+c.meteorite+' · satellites '+c.satellite+' · rendered dust '+c.dust+' · queued '+q;
 }
 function _celQueueStage(fn){ if(typeof fn==='function'){_celStageJobs.push(fn);_celStageTotal++;updateCelStreamStatus();} }
 function _celPumpStageSlice(){
@@ -3551,24 +3558,28 @@ const CameraMode={MAIN_EQUATOR_VIEW:'main_equator_view',UNIVERSE_EXPLORE_VIEW:'u
 let cameraMode=CameraMode.MAIN_EQUATOR_VIEW;
 let selectedCelestialBody=null;
 const worldCorePosition=new THREE.Vector3(0,0,0);
-let _eqTheta=0,_eqTargetTheta=0,equatorOrbitRadius=1250;            // rail just outside the ~780u core surface
+let _eqTheta=0,_eqTargetTheta=0,equatorOrbitRadius=2200;            // wider rail keeps the GLB menu readable on load
 const equatorOffsetY=260,_eqRotSpeed=1.2,_eqDamp=6,_eqDir=1;        // flip _eqDir to -1 if a device feels reversed
 const _camInput={horizontal:0};
 function _celExploreFrame(){
+  try{_celFlushStage();}catch(_){}
   const box=new THREE.Box3(); let any=false;
   for(let i=0;i<_celBodies.length;i++){
     const b=_celBodies[i]; if(!b||!b.position)continue;
-    const r=Math.max(60,Math.min(2200,(b.userData&&b.userData.baseScale)||120));
-    box.expandByPoint(new THREE.Vector3(b.position.x-r,b.position.y-r,b.position.z-r));
-    box.expandByPoint(new THREE.Vector3(b.position.x+r,b.position.y+r,b.position.z+r));
+    const pos=new THREE.Vector3(); try{b.getWorldPosition(pos);}catch(_){pos.copy(b.position);}
+    const r=Math.max(80,Math.min(2600,(b.userData&&b.userData.baseScale)||120));
+    box.expandByPoint(new THREE.Vector3(pos.x-r,pos.y-r,pos.z-r));
+    box.expandByPoint(new THREE.Vector3(pos.x+r,pos.y+r,pos.z+r));
     any=true;
   }
   if(!any)return {pos:new THREE.Vector3(0,26000,42000),tgt:worldCorePosition.clone()};
   const ctr=box.getCenter(new THREE.Vector3()), size=box.getSize(new THREE.Vector3());
-  const radius=Math.max(size.x,size.y,size.z,6000)*0.5;
+  const radius=Math.max(size.length()*0.5,Math.max(size.x,size.y,size.z)*0.58,9000);
   const fov=(camera&&camera.fov?camera.fov:55)*Math.PI/180;
-  const dist=Math.max(9000,Math.min(130000,(radius/Math.tan(fov/2))*1.42));
-  const dir=new THREE.Vector3(0.28,0.48,0.83).normalize();
+  const aspect=Math.max(0.75,(innerWidth||1440)/Math.max(1,(innerHeight||900)));
+  const fitFov=Math.min(fov,2*Math.atan(Math.tan(fov/2)*aspect));
+  const dist=Math.max(22000,Math.min(220000,(radius/Math.tan(fitFov/2))*1.72));
+  const dir=new THREE.Vector3(0.38,0.62,0.92).normalize();
   return {pos:ctr.clone().add(dir.multiplyScalar(dist)),tgt:ctr};
 }
 function _eqRailPoint(){return new THREE.Vector3(
@@ -3576,7 +3587,7 @@ function _eqRailPoint(){return new THREE.Vector3(
   worldCorePosition.y+equatorOffsetY,
   worldCorePosition.z+Math.sin(_eqTheta)*equatorOrbitRadius);}
 function _eqLookTarget(p){const out=new THREE.Vector3(p.x-worldCorePosition.x,0,p.z-worldCorePosition.z).normalize();
-  return p.clone().add(out.multiplyScalar(1000));}
+  return p.clone().add(out.multiplyScalar(2400));}
 function updateMainEquatorView(dt){
   _eqTargetTheta+=(_camInput.horizontal||0)*_eqDir*_eqRotSpeed*dt;
   _eqTheta=THREE.MathUtils.damp(_eqTheta,_eqTargetTheta,_eqDamp,dt);
@@ -3646,14 +3657,14 @@ function _camTick(dt){
     if(ids.length===2){ const a=pts[ids[0]],b=pts[ids[1]];
       const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
       if(pinchD!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW)
-        equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+(pinchD-d)*2));
+        equatorOrbitRadius=Math.max(1400,Math.min(9000,equatorOrbitRadius+(pinchD-d)*2.4));
       pinchD=d; return; }
     if(dragX!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying){
       const dx=e.clientX-dragX; dragX=e.clientX;
       _eqTargetTheta+=dx*0.004*_eqDir; }});                          // horizontal only — vertical never tilts
   addEventListener('pointerup',e=>{ delete pts[e.pointerId]; dragX=null; pinchD=null; });
   addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)
-    equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+e.deltaY*0.5)); },{passive:true});
+    equatorOrbitRadius=Math.max(1400,Math.min(9000,equatorOrbitRadius+e.deltaY*0.9)); },{passive:true});
   addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
   try{ const cb=document.createElement('button'); cb.id='camBtn';
     cb.setAttribute('aria-label','Toggle camera view (Equator / Explore / Focus)');
