@@ -358,7 +358,8 @@ BRAIN_ONSTART = r"""#!/bin/bash
 export HOME=/root
 command -v ollama >/dev/null 2>&1 || { curl -fsSL https://ollama.com/install.sh -o /root/ollama_install.sh && sh /root/ollama_install.sh; }
 pkill -x ollama 2>/dev/null; sleep 1   # -x (exact comm), NOT -f 'ollama serve' — the latter matches THIS script's own cmdline and self-kills
-OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &
+# CUDA_VISIBLE_DEVICES=0,1,2 reserves the last GPU for the on-box voice clone (XTTS); see scripts/gpu-voice-link.sh
+CUDA_VISIBLE_DEVICES=0,1,2 OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &
 for i in $(seq 1 30); do curl -sf -m2 http://127.0.0.1:11434/api/tags >/dev/null 2>&1 && break; sleep 2; done
 for m in %s; do ollama pull "$m"; done
 echo BRAIN_READY

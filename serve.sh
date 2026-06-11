@@ -46,6 +46,8 @@ export PATH="$HOME/go/bin:$PATH"
 # Optional: tunnel the vast.ai GPU's Ollama to 127.0.0.1:11434 (set GPU_LINK=1 +
 # VAST_SSH_* in .env; needs the VPS to have SSH key access to the GPU box).
 [ "${GPU_LINK:-0}" = "1" ] && bash "$ROOT/scripts/gpu-link.sh" || true
+# Optional: run the XTTS voice clone ON the GPU box (~1.4s/line vs ~14s on CPU) + tunnel it to :8096.
+[ "${VOICE_LINK:-0}" = "1" ] && bash "$ROOT/scripts/gpu-voice-link.sh" || true
 
 # ── 2. backend on 0.0.0.0 ─────────────────────────────────────────────────────
 say "2/4 backend → http://0.0.0.0:$API_PORT (reachable at http://$IP:$API_PORT)…"

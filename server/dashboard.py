@@ -1559,28 +1559,44 @@ _DEF_TEMPO = float(os.environ.get("JARVIS_VOICE_TEMPO", "1.0"))
 # Piper on any failure/slowness, so the mum's lifeline speech is never blocked. CPU synth is slow on
 # this box (RTF ~15 under load); the service disk-caches by text hash and we pre-render common phrases,
 # so the everyday lines are instant. Set XTTS_ENABLED=0 + restart for an instant pure-Piper rollback.
+# Voice-clone endpoints, tried IN ORDER: the GPU service on the Vast box (XTTS-v2 on CUDA, ~1s/novel
+# line) reached over the SSH tunnel at 127.0.0.1:8096, then the local CPU service (~14s) as a fallback,
+# then Piper. The GPU path is what makes her voice instant instead of "glitching" to the female web
+# voice while a slow CPU synth runs. Each is tried with its own timeout; the first that answers wins.
+_XTTS_GPU_URL = os.environ.get("XTTS_GPU_URL", "http://127.0.0.1:8096/synthesize")
 _XTTS_URL = os.environ.get("XTTS_URL", "http://127.0.0.1:8097/synthesize")
-_XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "12"))   # short: novel text falls back to Piper fast; cached phrases return in ~ms
+_XTTS_GPU_TIMEOUT = float(os.environ.get("XTTS_GPU_TIMEOUT", "20"))   # GPU: fast warm, but allow the first call + tunnel
+_XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "12"))           # CPU fallback: novel text is slow → Piper after this
 _XTTS_ENABLED = os.environ.get("XTTS_ENABLED", "1") == "1"
 
 
-def _xtts(text: str) -> bytes:
-    """Try the human voice-clone service. Returns WAV bytes, or b'' on ANY failure/timeout
-    so the caller instantly falls back to Piper. Never raises."""
-    if not _XTTS_ENABLED:
-        return b""
+def _xtts_one(url: str, text: str, timeout: float) -> bytes:
     try:
         import json as _json
         import urllib.request
         req = urllib.request.Request(
-            _XTTS_URL,
+            url,
             data=_json.dumps({"text": text}).encode(),
             headers={"Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=_XTTS_TIMEOUT) as r:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.read() if r.status == 200 else b""
-    except Exception:  # noqa: BLE001  any failure/slowness -> Piper fallback
+    except Exception:  # noqa: BLE001  any failure/slowness -> next endpoint
         return b""
+
+
+def _xtts(text: str) -> bytes:
+    """Try the human voice-clone service(s): GPU box first, then local CPU. Returns WAV bytes, or b''
+    on ANY failure/timeout so the caller instantly falls back to Piper. Never raises."""
+    if not _XTTS_ENABLED:
+        return b""
+    for url, to in ((_XTTS_GPU_URL, _XTTS_GPU_TIMEOUT), (_XTTS_URL, _XTTS_TIMEOUT)):
+        if not url:
+            continue
+        out = _xtts_one(url, text, to)
+        if out:
+            return out
+    return b""
 
 
 def _modulate(wav: bytes, semitones: float, tempo: float) -> bytes:
