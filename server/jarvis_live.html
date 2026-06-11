@@ -907,13 +907,6 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     if(IOS) return 'If it is blocked: tap the “aA” in Safari’s address bar → Website Settings → set Camera and Microphone to Allow. Then tap Allow again here.';
     return 'If it is blocked: tap the lock/settings icon next to the web address → Permissions → set Camera, Microphone and Files to Allow. Then tap Allow again here.';
   }
-  var ACC_SNOOZE_KEY='jarvis.access.snoozeUntil';
-  function nowMs(){return Date.now();}
-  function numStore(k){try{return parseInt(localStorage.getItem(k)||'0',10)||0;}catch(_){return 0;}}
-  function setStore(k,v){try{localStorage.setItem(k,String(v));}catch(_){}}
-  function delStore(k){try{localStorage.removeItem(k);}catch(_){}}
-  function accessSnoozed(){return numStore(ACC_SNOOZE_KEY)>nowMs();}
-  function syncAccessState(s){ if((s[0]==='ok')&&(s[1]==='ok')) delStore(ACC_SNOOZE_KEY); }
   window.__acc=function(k){
     var p=PERMS.filter(function(x){return x.k===k;})[0]; if(!p)return;
     note('');
@@ -932,21 +925,18 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     if(next&&typeof maybeOfferAssist==='function')setTimeout(maybeOfferAssist,250); };
   // First-run carer setup: show the permission grant sheet, but as a soft top sheet so chat remains usable.
   window.maybeAutoAccess=function(force){
+    try{ if(localStorage.getItem('accDone')==='1')return; }catch(_){}
     Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
-      syncAccessState(s);
-      if(s[0]==='ok'&&s[1]==='ok')return;
-      if(!force&&accessSnoozed())return;
+      if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}return;}
       try{ if(!force&&sessionStorage.getItem('accPromptSeen')==='1')return; sessionStorage.setItem('accPromptSeen','1'); }catch(_){}
       openAccess({soft:true});
     });
   };
-  // Revalidate on return so the prompt keeps coming back until access is actually granted.
+  // remember once mic+camera are both granted, so we stop auto-popping it
   document.addEventListener('visibilitychange',function(){});
   var _origClose=window.closeAccess;
   window.closeAccess=function(next){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
-    syncAccessState(s);
-    if(!(s[0]==='ok'&&s[1]==='ok'))setStore(ACC_SNOOZE_KEY,nowMs()+45*60*1000);
-  }).catch(function(){}); _origClose(next); };
+    if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(next); };
 })();
 </script>
 <!-- JARVIS CONTROL setup overlay — browser-based install/enable flow for the phone companion. -->
@@ -964,12 +954,6 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
   var UA=navigator.userAgent||'';
   var ANDROID=/Android/i.test(UA), IOS=/iP(hone|ad|od)/.test(UA)||(/Mac/.test(navigator.platform||'')&&navigator.maxTouchPoints>1);
   var APK_URL=(window.__ASSIST_APK__)||'https://github.com/samskiezz/jarvis-app/releases/latest/download/jarvis-assist.apk';
-  var ASSIST_SNOOZE_KEY='jarvis.assist.snoozeUntil';
-  function nowMs(){return Date.now();}
-  function numStore(k){try{return parseInt(localStorage.getItem(k)||'0',10)||0;}catch(_){return 0;}}
-  function setStore(k,v){try{localStorage.setItem(k,String(v));}catch(_){}}
-  function delStore(k){try{localStorage.removeItem(k);}catch(_){}}
-  function assistSnoozed(){return numStore(ASSIST_SNOOZE_KEY)>nowMs();}
   function H(html){var b=document.getElementById('assistBody');if(b)b.innerHTML=html;}
   function androidBody(){return ''+
     '<div class=accSub>A tiny free app lets me <b>type for you and use your apps</b>. About 30 seconds to set up — no app store, no payment.</div>'+
@@ -992,24 +976,17 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     H(ANDROID?androidBody():IOS?iosBody():desktopBody()); o.style.display='flex';
     o.classList.toggle('soft',!!opts.soft);
     if(ANDROID)pollLink(); try{if(typeof jarvisSpeak==='function')jarvisSpeak(ANDROID?'Let’s install the helper so I can use your phone for you.':'Let me help you turn on voice control.');}catch(_){}};
-  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o){o.style.display='none';o.classList.remove('soft');}
-    setStore(ASSIST_SNOOZE_KEY,nowMs()+6*60*60*1000);
-    try{sessionStorage.setItem('assistPromptSeen','1');}catch(_){}};
+  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o){o.style.display='none';o.classList.remove('soft');}try{localStorage.setItem('assistSkip','1');}catch(_){}};
   var _linkTimer=null;
   function pollLink(){ if(_linkTimer)clearInterval(_linkTimer);
     _linkTimer=setInterval(function(){ fetch('assist/status').then(function(r){return r.json();}).then(function(d){
       if(d&&d.connected){ var el=document.getElementById('assistLink'); if(el){el.textContent='Connected ✓'; el.className='st ok';}
-        delStore(ASSIST_SNOOZE_KEY);
+        try{localStorage.setItem('assistOk','1');}catch(_){}
         try{if(typeof jarvisSpeak==='function')jarvisSpeak('Your phone is linked. I can use it for you now.');}catch(_){}
         clearInterval(_linkTimer);} }).catch(function(){}); },3000); }
   window.maybeOfferAssist=function(){ if(!(ANDROID||IOS))return;
-    if(assistSnoozed())return;
-    try{if(sessionStorage.getItem('assistPromptSeen')==='1')return;}catch(_){}
-    fetch('assist/status').then(function(r){return r.json();}).then(function(d){
-      if(d&&d.connected){delStore(ASSIST_SNOOZE_KEY);return;}
-      try{sessionStorage.setItem('assistPromptSeen','1');}catch(_){}
-      openAssist({soft:true});
-    }).catch(function(){});
+    try{if(localStorage.getItem('assistOk')==='1'||localStorage.getItem('assistSkip')==='1')return;}catch(_){}
+    fetch('assist/status').then(function(r){return r.json();}).then(function(d){ if(!(d&&d.connected))openAssist({soft:true}); }).catch(function(){});
   };
 })();
 </script>
@@ -2109,23 +2086,10 @@ function navRows(down){
 
 /* ================= mic (preserved verbatim) ================= */
 let _rec=null;
-let _micAnalyserStream=null,_micAnalyserCtx=null;
-async function startMicAnalyser(){try{
-   if(analyser&&_micAnalyserStream)return _micAnalyserStream;
-   const s=_micAnalyserStream||await navigator.mediaDevices.getUserMedia({audio:true});
-   const ac=_micAnalyserCtx||new(window.AudioContext||window.webkitAudioContext)();
-   const src=ac.createMediaStreamSource(s);
+async function startMicAnalyser(){try{const s=await navigator.mediaDevices.getUserMedia({audio:true});
+   const ac=new(window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(s);
    analyser=ac.createAnalyser();analyser.fftSize=2048;micData=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);
-   _pitchBuf=new Float32Array(analyser.fftSize);_pitchSR=ac.sampleRate;
-   _micAnalyserStream=s;_micAnalyserCtx=ac;
-   return s;
-}catch(e){}}
-function stopMicAnalyser(){try{
-   if(_micAnalyserStream){try{_micAnalyserStream.getTracks().forEach(t=>t.stop());}catch(_){}
-     _micAnalyserStream=null;}
-   if(_micAnalyserCtx&&_micAnalyserCtx.state!=='closed'){try{_micAnalyserCtx.close();}catch(_){}}
-}catch(_){}
-  _micAnalyserCtx=null;analyser=null;micData=null;_pitchBuf=null;}
+   _pitchBuf=new Float32Array(analyser.fftSize);_pitchSR=ac.sampleRate;}catch(e){}}
 /* GENDER FROM VOICE → ma'am/sir. Autocorrelation pitch (F0) on the live mic while the user speaks:
    ≥165Hz → ma'am, ≤150Hz → sir (needs 3 consistent reads). NEUTRAL until known — JARVIS never guesses. */
 let _pitchBuf=null,_pitchSR=44100,_spkWho='',_genderVotes=[];
@@ -2145,7 +2109,7 @@ function _detectGender(){ try{
 }catch(e){} }
 function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
-  if(_rec){try{_rec.stop();}catch(e){}_rec=null;stopMicAnalyser();$('mic').classList.remove('live');document.body.classList.remove('listening');return;}
+  if(_rec){try{_rec.stop();}catch(e){}_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');return;}
   startMicAnalyser();
   _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
   $('mic').classList.add('live');document.body.classList.add('listening');   // always-on listening — no "Listening." announce (natural conversation)
@@ -2529,7 +2493,6 @@ function initUniverse(){
       const f=currentFrame();if(f?.bodies?.length)f.bodies[0].userData.selected=true;}});
   uniReady=true;
   // Initialize root frame for hierarchy
-  try{scene.userData=scene.userData||{};scene.userData.navFade=false;scene.userData.opacity=1;}catch(_){}
   const rootFrame={node:makeNode({id:'root',label:'Universe',kind:'root',depth:0,childrenKind:null}),
     group:scene, bodies, swarms:[], targetOpacity:1, home:home||{pos:new THREE.Vector3(0,100,280),tgt:250}};
   navStack=[rootFrame];
@@ -2847,9 +2810,7 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard,url|glbUrl
       metalness:0.5, roughness:0.35, envMap:(envRT&&envRT.texture)||null, envMapIntensity:1.0, dithering:true}));
   m.position.set(Math.cos(o.angle)*o.radius,o.y||0,Math.sin(o.angle)*o.radius);
   m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
-    _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null,proxyOpacity:0.4};
-  m.material.transparent=true;
-  m.material.opacity=1;
+    _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null};
   if(!o.noLabel){
     const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
     tuneBodyLabel(m,sz,{always:!!o.celLabel});
@@ -2862,7 +2823,7 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard,url|glbUrl
         c.material.emissiveIntensity=0.3; c.material.transparent=true; c.material.opacity=0.18;
         c.material.blending=THREE.NormalBlending; c.material.depthWrite=false;
         c.material.envMap=(envRT&&envRT.texture)||null; c.material.needsUpdate=true;}catch(_){}}});
-      m.material.opacity=(m.userData&&m.userData.proxyOpacity!=null)?m.userData.proxyOpacity:0.4;   // KEEP a restrained holographic orb behind the GLB
+      m.material.opacity=0.4;   // KEEP the glowing orb visible (was 0); GLB is a faint detail overlay
       m.add(s); m.userData.glb=s; }catch(_){}}, ()=>{}, m); // 404 → keep the textured PBR sphere
   return m;
 }
@@ -3314,7 +3275,9 @@ function buildDomainPlanets(){
   // visible at the frame edge. (flyHome/_frameAll remain the zoom-out overview.)
   try{ setTimeout(()=>{ home={pos:new THREE.Vector3(2200,260,0), tgt:new THREE.Vector3(4600,220,0)};   // wider default: still JARVIS POV, no close old-core snap
     camera.position.copy(home.pos); controls.target.copy(home.tgt); controls.update(); },60); }catch(_){}
-  try{buildCelestialOS().then(()=>{try{_celBootView();}catch(_){}});}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe is the default 3D menu
+  try{buildCelestialOS().then(()=>{try{enterUniverseExploreView();
+    setTimeout(()=>{const b=bodyMap.get('cel:miniapps'); if(b){selectedCelestialBody=b; flyToBody(b);}},420);
+  }catch(_){}});}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe is the default 3D menu
 }
 
 /* ===== CELESTIAL OS — every planet is a FEATURE with its complete interactive family =====
@@ -3340,48 +3303,30 @@ let _CEL=null,_celDots=null,_celDotPos=null,_celBuilt=false;
 function _celHash(s){let h=0;for(let i=0;i<String(s).length;i++)h=(h*31+String(s).charCodeAt(i))>>>0;return (h%1000)/1000*6.28318;}
 const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
 /* spec scale contract (user tier order), spec units — ×CEL_K at render time */
-const _celPR =I=>_cl(9,24,Math.pow(I,0.72));                        // planet — still dominant, but no longer swallows the equator menu
-const _celMR =(pr,I)=>pr*_cl(0.22,0.32,Math.pow(I,0.72));           // moon
-const _celSR =(mr,I)=>mr*_cl(0.12,0.20,Math.pow(I,0.72));           // satellite (flow page/control)
+const _celPR =I=>_cl(12,32,Math.pow(I,0.70));                       // planet
+const _celMR =(pr,I)=>pr*_cl(0.24,0.36,Math.pow(I,0.70));           // moon
+const _celSR =(mr,I)=>mr*_cl(0.14,0.24,Math.pow(I,0.70));           // satellite (flow page/control)
 const _celImportance=I=>Math.max(0,Math.min(1,Number(I)||0));
 const _celFamilyBias={miniapps:-1350,automation:-1120,knowledge:-940,infrastructure:-720,inference:-580,agentos:-340,selfdev:-160,
   documents:160,correlation:320,media:560,guardian:760,voice:980,climate:1160,budget:1340,underworld:1700};
 const _celRepoBody={};           // repo seed id -> rendered body name
 let _celRepo=null;
 function _celPlanetPos(rank,total,p){
-  const ringPlan=(total<=5)?[total]:(total<=10?[4,total-4]:[4,5,total-9]);
-  let ring=0, slot=rank;
-  while(ring<ringPlan.length-1 && slot>=ringPlan[ring]){
-    slot-=ringPlan[ring];
-    ring++;
-  }
-  const count=Math.max(1,ringPlan[ring]||1);
-  const span=(ring===0)?1.10:(ring===1)?1.72:2.24;                // front-facing orbital fan, not a flat grid
-  const rawAngles=[];
-  for(let i=0;i<count;i++)rawAngles.push((count===1)?0:(-span/2)+(span*(i/(count-1))));
-  const order=rawAngles
-    .map((a,i)=>({a,i}))
-    .sort((a,b)=>Math.abs(a.a)-Math.abs(b.a)||a.a-b.a)
-    .map(x=>x.i);
-  const slotIndex=order[Math.min(slot,order.length-1)]||0;
-  const laneBias=(CEL_LANE_ANG[(p&&p.lane)||'ui']||0)*0.12;
-  const theta=(rawAngles[slotIndex]||0)+laneBias;
-  const radius=[3800,6100,8600,10800][ring]||((10800)+(ring-3)*2200);
-  const yBase=[420,90,-260,-520][ring]||(-520-(ring-3)*220);
-  const laneLift={knowledge:220,automation:110,intelligence:70,infrastructure:20,guardian:80,media:40,underworld:-40,voice:95,budget:-15,ui:160,local:0};
+  const cols=5, col=rank%cols, row=Math.floor(rank/cols);
+  const colMid=(cols-1)/2;
   return new THREE.Vector3(
-    Math.cos(theta)*radius,
-    yBase+(laneLift[(p&&p.lane)||'local']||0),
-    Math.sin(theta)*radius*1.18
+    4300+row*2600,
+    (1-row)*1180,
+    (col-colMid)*2350
   );
 }
 function _celOrbitRadius(parentWorld,childWorld,index,total,tier){
   const group=Math.max(1,total||1), i=Number(index)||0;
   const ring=(tier==='satellite')?Math.ceil((i+1)/10):Math.ceil((i+1)/8);
   const lane=(tier==='satellite')?(i%10):(i%8);
-  const gap=(tier==='satellite')?190:360;
-  const familyPad=(tier==='satellite')?Math.min(760,group*18):Math.min(1420,group*42);
-  return parentWorld+childWorld*2.2+familyPad+gap*ring+lane*((tier==='satellite')?54:110);
+  const gap=(tier==='satellite')?260:520;
+  const familyPad=(tier==='satellite')?Math.min(1200,group*28):Math.min(2400,group*76);
+  return parentWorld+childWorld*2.8+familyPad+gap*ring+lane*((tier==='satellite')?72:150);
 }
 function _celKey(s){return String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'');}
 const _celKnownPlanetIds={
@@ -3459,10 +3404,7 @@ function _celShouldShowMesh(b){
   if(isRepoFileMoon&&focusKind==='planet')return false;          // repo files are deep records, not first-screen menu moons
   if(kind==='dust')return !!stageFocus && !!stageKind && stageKind!=='planet' && parent===stageFocus; // dust appears inside a drilled branch, never as first-screen fog
   if(parent===focus){
-    if(focusKind==='planet'&&kind==='moon'){
-      const compactStage=mobile || (typeof CameraMode!=='undefined'&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW);
-      if(compactStage)return (u.celOrbitOrdinal||0)<10;
-    }
+    if(mobile&&focusKind==='planet'&&kind==='moon')return (u.celStageIndex||0)<10;
     return true;
   }                                                             // selected body reveals its next menu stage
   if(name===focusParent)return true;                              // keep the selected body's parent visible
@@ -3735,19 +3677,9 @@ function _celAdd(name,n,kindName,specR,lane,parentName){
   const glbUrl=(n&&n.glbUrl)||CELESTIAL_GLB[cid]||CELESTIAL_KIND_GLB[kindName];
   const b=addBody({name:name,label:n.label,color:CEL_COLORS[lane]||CEL_COLORS.local,
     radius:10,angle:0,y:0,size:wr/22,celLabel:true,glbUrl:glbUrl});  // addBody ×22 → exactly wr; name label rides on top
-  const proxyOpacity=kindName==='planet'?0.16:kindName==='moon'?0.13:kindName==='meteorite'?0.15:kindName==='satellite'?0.12:0.10;
-  try{
-    b.userData.proxyOpacity=proxyOpacity;
-    b.material.transparent=true;
-    b.material.opacity=proxyOpacity;
-    b.material.metalness=0.82;
-    b.material.roughness=0.22;
-    b.material.envMapIntensity=1.25;
-    b.material.emissiveIntensity=kindName==='planet'?0.18:kindName==='moon'?0.14:0.12;
-  }catch(_){}
   if(wr>240){try{ b.geometry.dispose(); b.geometry=new THREE.SphereGeometry(wr,64,48);    // MESH QUALITY: hi-res spheres for planet/moon tier
-    b.material.metalness=0.86; b.material.roughness=0.18; b.material.envMapIntensity=1.28; // holographic CHROME (PMREM reflections)
-    b.material.emissiveIntensity=kindName==='planet'?0.22:0.16; }catch(_){}}               // restrained glow keeps the menu readable while GLBs stream in
+    b.material.metalness=0.85; b.material.roughness=0.16; b.material.envMapIntensity=1.6; // holographic CHROME (PMREM reflections)
+    b.material.emissiveIntensity=0.8; }catch(_){}}                  // bio-illuminescent glow (feeds UnrealBloom)
   b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
   b.userData.celParentName=parentName||''; b.userData.celImportance=_celImportance(n.I);
   tuneBodyLabel(b,wr,{always:true});
@@ -3771,10 +3703,7 @@ function _celOrbit(b,parent,orbR,om,seed,rel){
   parent.userData._celSlots=parent.userData._celSlots||{};
   const slot=parent.userData._celSlots[ringKey]||0;
   parent.userData._celSlots[ringKey]=slot+1;
-  parent.userData._celOrbitOrdinal=parent.userData._celOrbitOrdinal||{};
-  const ordinal=parent.userData._celOrbitOrdinal[kind]||0;
-  parent.userData._celOrbitOrdinal[kind]=ordinal+1;
-  if(b&&b.userData){b.userData.celStageIndex=slot;b.userData.celRingKey=ringKey;b.userData.celOrbitOrdinal=ordinal;}
+  if(b&&b.userData){b.userData.celStageIndex=slot;b.userData.celRingKey=ringKey;}
   const ring=Math.floor(slot/slots), lane=slot%slots;
   const baseA=(lane/slots)*6.28318+(ring%2)*(3.14159/slots);
   const speed=kind==='moon'?0.0028:kind==='meteorite'?0.0036:kind==='satellite'?0.0044:0.0022;
@@ -3995,20 +3924,6 @@ async function buildCelestialOS(){
   _celSuppressLegacyScene();
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
     ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
-}
-function _celBootView(){
-  const focus=bodyMap.get('cel:miniapps')||bodyMap.get('cel:knowledge')||bodyMap.get('cel:automation')||null;
-  if(focus&&focus.position){
-    const orbital=Math.hypot(focus.position.x,focus.position.z);
-    const angle=Math.atan2(focus.position.z,focus.position.x);
-    equatorOrbitRadius=Math.max(1200,Math.min(1800,orbital*0.34));
-    _eqTheta=angle;
-    _eqTargetTheta=angle;
-    const p=_eqRailPoint();
-    home={pos:p.clone(),tgt:_eqLookTarget(p)};
-  }
-  enterMainEquatorView();
-  if(focus)selectedCelestialBody=focus;                          // keep the first-stage menu moons visible on boot
 }
 function _celDotsRebuild(){                                          // NASA-Eyes constant-pixel dots — whole universe always visible
   if(_celDots){try{scene.remove(_celDots);_celDots.geometry.dispose();}catch(_){}}
@@ -4571,7 +4486,6 @@ async function flyInto(node){
   if(flying || !node.childrenKind) return;
   flying=true;
   const newFrame={node, group:new THREE.Group(), bodies:[], swarms:[], targetOpacity:1};
-  try{newFrame.group.userData.navFade=true;newFrame.group.userData.opacity=1;}catch(_){}
   scene.add(newFrame.group);
   await buildSystem(node, newFrame);
   const h=newFrame.home||{pos:new THREE.Vector3(0,0,300), tgt:300};
@@ -4797,21 +4711,8 @@ function tickFrame(){
       const sc=(1+A*0.12+SPIKE*0.18+born*0.6);
       b.scale.setScalar(sc);
       const ei=(u.selected?1.9:1.0)+beat+SPIKE*0.9;
-      if(u.celKind&&b.material){ try{
-        const baseOp=(u.proxyOpacity!=null)?u.proxyOpacity:0.16;
-        b.material.transparent=true;
-        b.material.opacity=baseOp;
-        b.material.depthWrite=false;
-        b.children.forEach(ch=>{ if(ch&&ch.userData&&ch.userData.holoShell&&ch.material&&'opacity' in ch.material){
-          ch.material.opacity=Math.max(0.06,baseOp*0.7);
-        }});
-      }catch(_){}}
       if(u.glb){const k=0.35+ei*0.25;u.glb.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=k;});}
-      else{try{
-        b.material.emissiveIntensity=u.celKind
-          ? ((u.selected?0.30:0.12)+Math.max(0,beat)*0.12+SPIKE*0.10+A*0.05)
-          : ei;
-      }catch(e){}}}
+      else{try{b.material.emissiveIntensity=ei;}catch(e){}}}
 
     // --- GRID: flow + brighten to pulse ---
     if(gridMat){gridMat.uniforms.uTime.value=t;gridMat.uniforms.uAmp.value=A;gridMat.uniforms.uFlow.value=PULSE.flow;}
@@ -4887,7 +4788,6 @@ function tickFrame(){
       // LOD crossfade: lerp each frame toward its target opacity
       for(let i=0;i<navStack.length;i++){
         const f=navStack[i];if(!f||!f.group)continue;
-        if(f.group===scene||!(f.group.userData&&f.group.userData.navFade))continue;
         const target=f.targetOpacity??1;
         const curr=f.group.userData.opacity||1;
         f.group.userData.opacity=curr+Math.min(0.3,dt*1.5)*(target-curr);
@@ -4898,8 +4798,8 @@ function tickFrame(){
       }
     }catch(e){}
 
-    // preserved camera idle-orbit — legacy only. The explicit 3-mode celestial camera owns motion now.
-    if(!_celBuilt&&!userDragging&&!flying){const rad=Math.hypot(camera.position.x,camera.position.z);
+    // preserved camera idle-orbit
+    if(!userDragging&&!flying){const rad=Math.hypot(camera.position.x,camera.position.z);
       const a=Math.atan2(camera.position.x,camera.position.z)+dt*0.02;
       camera.position.x=Math.sin(a)*rad;camera.position.z=Math.cos(a)*rad;}
     // §LOCK-ON: keep the selected body centred as it orbits (camera + target follow its per-frame movement)
@@ -5138,6 +5038,7 @@ function engage(){if(_engaged)return;_engaged=true;
   // listening works), then open the accessible Device Access panel so the carer can grant camera/files/
   // notifications with BIG buttons + clear status + recovery guidance. We request mic ALONE (not combined
   // video+audio — a combined request fails entirely if either is blocked, which silently killed the mic).
+  try{ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
   try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
   try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}   // first run → show the access panel
   try{ if(typeof maybeOfferAssist==='function') setTimeout(maybeOfferAssist,4200); }catch(_){}  // then offer phone-control setup if companion is not linked
