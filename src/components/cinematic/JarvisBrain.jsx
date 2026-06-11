@@ -42,6 +42,7 @@ import { isCommandPaletteQuery } from "@/components/cinematic/JarvisCommandPalet
 import { isSituationQuery, buildSituationScript } from "@/components/cinematic/SituationRoom";
 import { isIntelDigestQuery, buildIntelDigestScript } from "@/components/cinematic/IntelDigest";
 import { isNetworkExplorerQuery, buildNetworkExplorerScript } from "@/components/cinematic/GraphNetworkExplorer";
+import { isPriorityQueueQuery, buildPriorityQueueScript } from "@/components/cinematic/PriorityActionQueue";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -496,6 +497,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:network-toggle"));
       try {
         const answer = await buildNetworkExplorerScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isPriorityQueueQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:queue-toggle"));
+      try {
+        const answer = await buildPriorityQueueScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
       } catch (_) {
