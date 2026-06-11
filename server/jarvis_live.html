@@ -2,8 +2,31 @@
 <!-- mount-agnostic: the server matches ABSOLUTE routes (/asset,/metrics,/tts,/chat,…); this base pins
      every root-relative fetch/GLB to / so the page works even if served at /jarvis or /jarvis/sub -->
 <base href="/">
+<script>/* DEPLOY-PATH FIX — the app is served under /jarvis/ behind nginx, but its requests use root-absolute
+   (/metrics, /children, /media…) and base-relative paths that resolve to the domain ROOT → 404 on the public
+   deploy (only work at localhost where root IS the app). Prefix every SAME-ORIGIN request with the page's own
+   directory so data + GLBs + live stream work at /jarvis/ AND at localhost root. No-op when served at root. */
+(function(){
+  var BASE=location.pathname.replace(/[^/]*$/,'');           // "/jarvis/" or "/"
+  if(BASE==='/'||BASE===''){return;}
+  var fix=function(u){ try{ if(typeof u==='string' && !/^[a-z][a-z0-9+.-]*:/i.test(u) && u.slice(0,2)!=='//'){
+    return u.charAt(0)==='/' ? BASE.replace(/\/$/,'')+u : BASE+u; } }catch(e){} return u; };
+  if(window.fetch){ var _f=window.fetch; window.fetch=function(u,o){ return _f.call(this, (u&&u.url)?u:fix(u), o); }; }
+  if(window.XMLHttpRequest){ var _o=XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open=function(m,u){ var a=[m,fix(u)].concat([].slice.call(arguments,2)); return _o.apply(this,a); }; }
+  if(window.EventSource){ var _E=window.EventSource; window.EventSource=function(u,c){ return new _E(fix(u),c); };
+    try{ window.EventSource.prototype=_E.prototype; }catch(e){} }
+})();
+</script>
 <title>JARVIS · UNIVERSE</title>
 <meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store">
+<link rel="manifest" href='data:application/manifest+json,{"name":"JARVIS","short_name":"JARVIS","start_url":"/jarvis/","scope":"/jarvis/","display":"standalone","orientation":"any","background_color":"%2302040a","theme_color":"%2302040a","icons":[{"src":"https://app.projectsolar.cloud/icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}'>
+<meta name="theme-color" content="#02040a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JARVIS">
+<script>addEventListener('pageshow',function(e){if(e.persisted)location.reload();});</script>
 <meta name=theme-color content="#03050A">
 <style>
 :root{--cy:#29E7FF;--cy2:#7af3ff;--ok:#34d399;--am:#f5b942;--rd:#ff5d6c;--pu:#a78bfa;--bg:#02040a;--tx:#dff6ff;--dim:#5f8298;--glass:rgba(8,22,34,.62);--ln:rgba(41,231,255,.22)}
@@ -86,7 +109,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #libgrid img,#libgrid model-viewer{width:150px;height:150px;border:1px solid var(--ln);border-radius:10px;background:#04101a;object-fit:cover}
 .ovtitle{position:absolute;top:18px;left:24px;color:var(--cy);letter-spacing:2px;font-size:13px}
 /* ===== 🛰 LIVE TASKS — Mission Control CSS ===== */
-#ovWork{display:flex;flex-direction:column;overflow:hidden}
+#ovWork{flex-direction:column;overflow:hidden}  /* FIX: was display:flex (always-open full-screen overlay that swallowed EVERY click → frozen UI). Hidden by default via .ov; .open shows it. */
 #ovWork.open{display:flex}
 #ovWork .close{position:absolute;top:16px;right:18px;z-index:5;font-size:13px;font-weight:700;color:var(--cy);background:var(--glass);border:1px solid var(--cy);border-radius:9px;padding:7px 13px;cursor:pointer}
 #wlHead{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--ln);flex-wrap:wrap}
@@ -130,8 +153,30 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .wlrow[data-expanded=true] .wldetail{display:block}
 .wlplan,.wlresult{font-size:10px;color:#aebfcd;margin-bottom:8px;line-height:1.5}
 .wlplan b{color:var(--cy)}.wlplan .done{color:var(--ok)}.wlplan .fail{color:var(--rd)}
+/* ===== ARTIFACT WINDOW + APPROVAL BUTTONS ===== */
+.wldocument{cursor:pointer;color:var(--cy);font-weight:600;padding:4px 6px;margin:0 4px;text-decoration:underline;font-size:11px}
+.wldocument:hover{color:#eafcff;text-shadow:0 0 8px var(--cy)}
+.wlapprove,.wldecline{font-size:11px;padding:6px 10px;border-radius:7px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;transition:background .2s,opacity .2s;flex-shrink:0}
+.wlapprove{color:var(--ok);border:1px solid var(--ok);background:rgba(52,211,153,.1)}
+.wlapprove:hover:not(:disabled){background:rgba(52,211,153,.2);box-shadow:0 0 12px rgba(52,211,153,.4)}
+.wlapprove[data-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
+.wldecline{color:var(--rd);border:1px solid var(--rd);background:rgba(255,93,108,.1)}
+.wldecline:hover:not(:disabled){background:rgba(255,93,108,.2);box-shadow:0 0 12px rgba(255,93,108,.4)}
+.wldecline[data-pressed="true"]{background:var(--rd);color:#fff;border-color:var(--rd)}
+.wlapprove:disabled,.wldecline:disabled{opacity:.5;cursor:not-allowed}
+.wlrow[data-review="approved"]{background:rgba(52,211,153,.08);border-left:3px solid var(--ok)}
+.wlrow[data-review="declined"]{background:rgba(255,93,108,.08);border-left:3px solid var(--rd)}
+.wlwindow{position:fixed;background:var(--glass);border:1px solid var(--cy);border-radius:12px;padding:12px;z-index:40;backdrop-filter:blur(16px);box-shadow:0 12px 50px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.25);resize:both;overflow:auto;min-width:320px;min-height:200px;max-width:90vw;max-height:90vh}
+.wlwindow-head{display:flex;align-items:center;gap:8px;padding:8px;cursor:grab;user-select:none;border-bottom:1px solid rgba(41,231,255,.2);margin:-12px -12px 8px -12px;padding:8px 12px}
+.wlwindow-head:active{cursor:grabbing}
+.wlwindow-title{color:var(--cy);font-weight:700;font-size:12px}
+.wlwindow-close{margin-left:auto;cursor:pointer;font-size:16px;color:var(--dim)}
+.wlwindow-close:hover{color:var(--cy)}
+.wlwindow-content{font-size:11px;color:#bfe6ff;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-word;max-height:calc(90vh-60px);overflow:auto}
+.wlwindow-content img{max-width:100%;max-height:300px;border-radius:6px;margin:8px 0;border:1px solid rgba(41,231,255,.2)}
+.wlwindow-loading{text-align:center;color:var(--dim);padding:20px}
 @media(prefers-reduced-motion:reduce){.wlrow{transition:none}.wlfill{transition:none}.wldot,.wlfill.indet{animation:none !important}.wldot.run{opacity:.8}.wlfill.indet{opacity:.6}}
-@media(max-width:820px){.wlrow{grid-template-columns:24px 1fr 80px 60px;gap:8px;font-size:10px;padding:8px 12px}.wltime{min-width:0;font-size:9px}.wlctl{gap:4px}.wltoggle,.wlcancel{font-size:11px;padding:4px 8px;min-width:44px;min-height:44px}}
+@media(max-width:820px){.wlrow{grid-template-columns:24px 1fr 80px 60px;gap:8px;font-size:10px;padding:8px 12px}.wltime{min-width:0;font-size:9px}.wlctl{gap:4px}.wltoggle,.wlcancel,.wlapprove,.wldecline{font-size:11px;padding:4px 8px;min-width:44px;min-height:44px}.wldocument{font-size:10px}}
 /* boot */
 #boot{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .9s}
 #boot.gone{opacity:0;pointer-events:none}
@@ -303,7 +348,10 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpanel.dropReady{border-color:var(--pu);box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 50px rgba(167,139,250,.5)}
 .gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
 /* hide the side panels on narrow screens so they never cover the world / talk bar */
-@media(max-width:1180px){.gpanel{display:none}}
+@media(max-width:1180px){ /* phones/tablets: the 4 glass panels STAY (compact), never hidden — 3-state toggle still works */
+  .gpanel{width:44vw;max-height:30vh;font-size:10px}
+  .gpanel.mid{width:46vw}.gpanel.full{width:92vw;max-height:46vh}
+}
 </style>
 <link rel="stylesheet" href="/a11y/a11y.css">
 <script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
@@ -334,7 +382,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 
 <!-- thin top bar -->
 <div id=top>
- <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE</div>
+ <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·φ-hierarchy</span></div>
  <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts">● ONLINE</span>
  <span class="chip mono" id=age>—</span>
  <span class="chip" id=fxgodrays role=status aria-live=polite tabindex=0 style="display:none;cursor:pointer"
@@ -430,6 +478,9 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   </div>
 </div>
 
+<!-- Artifact window container (draggable pop-ups for task/swarm documents) -->
+<div id=wlArtifactContainer style="position:fixed;z-index:35;pointer-events:none;inset:0"><!-- child windows inserted here --></div>
+
 <!-- boot -->
 <div id=boot><div class=ring></div><div class=t>INITIALIZING JARVIS</div><div class=tap>tap anywhere to engage the universe</div></div>
 <div class=sr aria-live=assertive id=srlog></div>
@@ -483,16 +534,29 @@ function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window
   _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
   _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
   if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
-function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.99;u.pitch=1.0;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}
+function webSpeakFallback(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
+/* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
+   (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
+const _preTTS={};
+(function(){ ['JARVIS online. How may I help?',
+  "I'm right here with you. I'm having a little trouble hearing the network just now, but I'm not going anywhere. Take a breath — you're safe.",
+  'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
+  fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
+    .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   try{ if(!_ttsCtx)unlockAudio();
     speakStart();
     _ttsAudio.onended=()=>speakEnd();
-    _ttsAudio.onerror=()=>webSpeakFallback(t);
-    _ttsAudio.src='tts?text='+encodeURIComponent(String(t).slice(0,600));
+    // RETRY before any web fallback: the first /tts on a novel line can take ~14s (clone synth) and
+    // mobile may abort the stall — but by the retry the server has it CACHED (ms). His voice, not the
+    // device's female default. Web speech only if the retry also fails.
+    const _src='tts?text='+encodeURIComponent(String(t).slice(0,600));
+    let _tried=0; const _fail=()=>{ if(_tried++<1){ setTimeout(()=>{ try{_ttsAudio.src=_src; _ttsAudio.play().catch(_fail);}catch(_){webSpeakFallback(t);} },1800); } else webSpeakFallback(t); };
+    _ttsAudio.onerror=_fail;
+    _ttsAudio.src=_preTTS[t]||_src;   // pre-warmed blob plays instantly in HIS voice
     if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
-    _ttsAudio.play().catch(()=>webSpeakFallback(t));
+    _ttsAudio.play().catch(_fail);
   }catch(e){webSpeakFallback(t);} }
 function speakStart(){document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
 function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);}
@@ -572,8 +636,8 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(l.includes('graph'))return flyToQuery('graph');
   unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
   try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:'sir'})})).json();
-    const reply=(r&&r.reply)||"I'm here, sir.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
+      body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:_spkWho||''})})).json();   // address from DETECTED voice gender (neutral until known)
+    const reply=(r&&r.reply)||"I'm here.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
     bubble('JARVIS',esc(reply));jarvisSpeak(reply);
   }catch(e){bubble('JARVIS','connection error');}}
 function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
@@ -853,6 +917,7 @@ async function buildSuggestion(id,btn){
 
 /* ================= System Vitals — proactive health score + alerts (in the card) ================= */
 function openVitals(){
+  try{ _showSystemLayer(); }catch(_){}   // drill-in: reveal the satellite (service) ring + meteor (alert) layer
   const h=(_m&&_m.health)||{}, a=h.alerts||[], gz=h.gauges||{};
   const ic={critical:'⛔',warn:'⚠',ok:'✓'};
   const lines=a.length
@@ -1105,14 +1170,33 @@ function navRows(down){
 let _rec=null;
 async function startMicAnalyser(){try{const s=await navigator.mediaDevices.getUserMedia({audio:true});
    const ac=new(window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(s);
-   analyser=ac.createAnalyser();analyser.fftSize=128;micData=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);}catch(e){}}
+   analyser=ac.createAnalyser();analyser.fftSize=2048;micData=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);
+   _pitchBuf=new Float32Array(analyser.fftSize);_pitchSR=ac.sampleRate;}catch(e){}}
+/* GENDER FROM VOICE → ma'am/sir. Autocorrelation pitch (F0) on the live mic while the user speaks:
+   ≥165Hz → ma'am, ≤150Hz → sir (needs 3 consistent reads). NEUTRAL until known — JARVIS never guesses. */
+let _pitchBuf=null,_pitchSR=44100,_spkWho='',_genderVotes=[];
+function _detectGender(){ try{
+  if(!analyser||!_pitchBuf)return; analyser.getFloatTimeDomainData(_pitchBuf);
+  let rms=0; for(let i=0;i<_pitchBuf.length;i++)rms+=_pitchBuf[i]*_pitchBuf[i]; rms=Math.sqrt(rms/_pitchBuf.length);
+  if(rms<0.012)return;                                   // silence — no vote
+  const minP=Math.floor(_pitchSR/280), maxP=Math.floor(_pitchSR/70);  // 70..280 Hz speech band
+  let best=0,bestLag=0;
+  for(let lag=minP;lag<=maxP&&lag<_pitchBuf.length/2;lag++){ let c=0;
+    for(let i=0;i<_pitchBuf.length-lag;i+=2)c+=_pitchBuf[i]*_pitchBuf[i+lag];
+    if(c>best){best=c;bestLag=lag;} }
+  if(!bestLag)return; const f0=_pitchSR/bestLag; if(f0<70||f0>280)return;
+  _genderVotes.push(f0>=165?'f':(f0<=150?'m':'?')); if(_genderVotes.length>9)_genderVotes.shift();
+  const f=_genderVotes.filter(v=>v==='f').length, m=_genderVotes.filter(v=>v==='m').length;
+  if(f>=3&&f>m)_spkWho="ma'am"; else if(m>=3&&m>f)_spkWho='sir';
+}catch(e){} }
 function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
   if(_rec){try{_rec.stop();}catch(e){}_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');return;}
   startMicAnalyser();
   _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
-  $('mic').classList.add('live');document.body.classList.add('listening');jarvisSpeak('Listening.');
+  $('mic').classList.add('live');document.body.classList.add('listening');   // always-on listening — no "Listening." announce (natural conversation)
   _rec.onresult=e=>{const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
+    _detectGender();                                      // assess speaker pitch while they talk → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
   _rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvisSpeak('Please allow microphone access.');_rec=null;$('mic').classList.remove('live');}};
   _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
@@ -1142,7 +1226,7 @@ async function loadLib(){try{const lib=await(await fetch('library')).json();
 let _cardDrilled=false;   // true while a drill (/detail) or file view fills the card → pause live refresh so it isn't wiped
 function cardEl(sel){return $('card').querySelector(sel);}
 function closeCard(){$('card').classList.remove('open');_cardDrilled=false;
-  if(_selected){_selected.userData.selected=false;_selected=null;}
+  if(_selected){_selected.userData.selected=false; _removeSelRing(_selected); _selected.userData.hoverWant=0; _selected=null;}
   flyHome();}   // always return home (incl. constellation-node cards, which never set _selected)
 function showCard(o){
   $('card').classList.add('open');
@@ -1165,6 +1249,16 @@ async function openDetail(kind,name){
    const acts=[].concat((d.links||[]).map(x=>Object.assign({},x,{_link:1})),(d.actions||[]));
    showCard({title:d.title||name||kind,subtitle:d.subtitle||'',props:d.props||[],lines:d.lines||[],actions:acts});
   }catch(e){showCard({title:name||kind,subtitle:'no detail available'});}}
+function orbControl(name, action){   // real pm2 start/restart for a satellite body
+  const b=_selected;
+  showCardKeepActions({title:name,subtitle:action+'ing…',props:[{k:'Action',v:action}],lines:['Sending real pm2 '+action+' …']});
+  fetch('control?action='+encodeURIComponent(action)+'&name='+encodeURIComponent(name),{method:'POST'})
+   .then(r=>r.json()).then(res=>{
+     showCardKeepActions({title:name,subtitle:res.ok?('✓ '+action+'ed'):('✗ '+(res.error||'failed')),
+       props:[{k:'Action',v:action},{k:'OK',v:String(!!res.ok)}], lines:[(res.msg||res.error||'').slice(0,160)]});
+     setTimeout(()=>{ if(b&&b.userData.refresh)b.userData.refresh(); },1500);
+   }).catch(e=>{showCardKeepActions({title:name,subtitle:'✗ network error',lines:[String(e).slice(0,120)]});});
+}
 function doAction(a){if(!a)return;const k=a.kind,arg=a.arg;
   if(k==='drill'){const [kk,...r]=String(arg).split(':');openDetail(kk,r.join(':'));}
   else if(k==='file')openFile(arg);
@@ -1209,7 +1303,8 @@ let faceMesh=null, faceMat=null;                       // (b) oversized morphing
 let sunFace=null;                                      // §1 B: the oversized helmet GLB = the central JARVIS face/sun
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
 let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=false,clock=null;
-let home={pos:new THREE.Vector3(0,60,320),tgt:new THREE.Vector3(0,0,0)};
+let _starField=null,_nebula=null;
+let home={pos:new THREE.Vector3(1250,260,0),tgt:new THREE.Vector3(2650,220,0)};  // CAMERA LOCK: JARVIS POV — standing ON the core (just outside its ~780u surface, core BEHIND you) looking OUT into space (+x: telemetry, apps, domains, celestial field all ahead); near pivot (~1400u) so dragging = look-around, never an into-the-core orbit
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
 const ASSET=n=>'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
@@ -1221,7 +1316,7 @@ function initUniverse(){
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   renderer.setSize(innerWidth,innerHeight);
   try{renderer.outputEncoding=THREE.sRGBEncoding;}catch(e){}                    // correct colour = no banding/grain
-  try{renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.78;}catch(e){} // U1: 1.05→0.92→0.78. The centre stacks ~5 bright/additive layers (beam glow+core, chrome blob mirror-reflecting the cyan env, holo face plane, emissive helmet, god-rays). Even idle, the overlap clipped to white. ACES luminance L=0.2126R+0.7152G+0.0722B; lowering exposure keeps the OVERLAP region inside [0,1] so the reactor reads CRISP, not as a white wash. Researched: threejs issue #14899 (additive double-brighten) + discourse 57843 (threshold/luma weights).
+  try{renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.95;}catch(e){} // 0.95: 0.78 was too DARK on mobile (objects invisible). KEEP >=0.9 — do not lower. The centre stacks ~5 bright/additive layers (beam glow+core, chrome blob mirror-reflecting the cyan env, holo face plane, emissive helmet, god-rays). Even idle, the overlap clipped to white. ACES luminance L=0.2126R+0.7152G+0.0722B; lowering exposure keeps the OVERLAP region inside [0,1] so the reactor reads CRISP, not as a white wash. Researched: threejs issue #14899 (additive double-brighten) + discourse 57843 (threshold/luma weights).
   scene=new THREE.Scene();
   // PMREM env map: gives the chrome liquid-metal smooth, grain-free reflections (R3)
   try{
@@ -1236,12 +1331,17 @@ function initUniverse(){
     scene.environment=envRT.texture;          // every PBR material now reflects this
     gradTex.dispose(); pmrem.dispose();
   }catch(e){}
-  try{scene.fog=new THREE.FogExp2(0x02040a,0.0012);}catch(e){}
-  camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,4000);
+  try{scene.fog=new THREE.FogExp2(0x02040a,0.000002);}catch(e){}   // bodies stay crisp out to the 60k field
+  camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,1,300000);   // covers the 25k-60k galaxy field + 200k backdrop
   camera.position.copy(home.pos);
   controls=new THREE.OrbitControls(camera,canvas);
-  controls.enableDamping=true;controls.dampingFactor=.06;
-  controls.minDistance=60;controls.maxDistance=1400;controls.target.copy(home.tgt);
+  controls.enableDamping=true;controls.dampingFactor=.08;
+  controls.enablePan=true;controls.panSpeed=0.7;controls.screenSpacePanning=true;
+  controls.rotateSpeed=0.55;controls.zoomSpeed=0.9;
+  controls.minDistance=6;
+  controls.maxDistance=150000;   /* zoom out to the whole 60k field, in to a 0.5u satellite */
+  controls.minPolarAngle=0.12;controls.maxPolarAngle=Math.PI-0.12;
+  controls.target.copy(home.tgt);
 
   // ---- HOLLYWOOD-CINEMATIC POST STACK ----
   // RenderPass -> Bloom -> God-rays -> Bokeh DOF -> Film(grain+vignette+chromatic aberration) -> AA(SMAA/FXAA)->screen
@@ -1253,7 +1353,7 @@ function initUniverse(){
   // (blue weighted low, so a cyan core triggers bloom easily). threshold≈0.72 = only true highlights glow;
   // strength 0.85 + radius 0.55 = a tight readable halo, not a white cloud. Researched: threejs issue #14899
   // (additive double-brighten) + discourse "i-still-dont-get-how-unrealbloompass-works/57843" (threshold/luma).
-  try{ bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.85,0.55,0.72);
+  try{ bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.9,0.6,0.62);   // STRONG holographic glow on every body (threshold 0.62 still keeps whites from blowing out)
        composer.addPass(bloom); }catch(e){ bloom=null; }
 
   // VOLUMETRIC GOD-RAYS from the reactor — screen-space radial light-shafts that scatter from the central
@@ -1293,7 +1393,7 @@ function initUniverse(){
   // before film+AA, drives uFocus from selection on fly-to). uFocus∈[0,1] = screen-space focal radius.
   try{ bokeh=new THREE.ShaderPass({
     uniforms:{ tDiffuse:{value:null}, uRes:{value:new THREE.Vector2(innerWidth,innerHeight)},
-               uFocus:{value:0.34}, uMax:{value:2.4} },
+               uFocus:{value:0.55}, uMax:{value:(typeof _MOBILE!=='undefined'&&_MOBILE?0.0:0.7)} }, /* DOF OFF on mobile (it was blurring the whole frame); subtle on desktop. Do not raise uMax on mobile. */
     vertexShader:`varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
     fragmentShader:`uniform sampler2D tDiffuse; uniform vec2 uRes; uniform float uFocus,uMax; varying vec2 vUv;
       void main(){ float d=length((vUv-0.5)*vec2(uRes.x/uRes.y,1.0));
@@ -1333,11 +1433,51 @@ function initUniverse(){
   const key=new THREE.PointLight(0x29e7ff,2.2,800);key.position.set(0,140,160);scene.add(key);
   const rim=new THREE.PointLight(0x7af3ff,1.1,900);rim.position.set(-160,40,-120);scene.add(rim);
 
-  // starfield (depth)
-  const sg=new THREE.BufferGeometry();const sp=new Float32Array(6000*3);
-  for(let i=0;i<sp.length;i++)sp[i]=(Math.random()-.5)*3200;
-  sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
-  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0x6fd0e0,size:1.5,sizeAttenuation:true,transparent:true,opacity:.6})));
+  // starfield — pure BACKDROP on a FAR shell (R≈6800 > maxDistance 5300, < far 8000); twinkling additive points
+  (function(){
+    const N=(typeof _MOBILE!=='undefined'&&_MOBILE)?4500:6000;
+    const pos=new Float32Array(N*3), asz=new Float32Array(N), aph=new Float32Array(N);
+    for(let i=0;i<N;i++){ const u=Math.random()*2-1, th=Math.random()*6.283185307, s=Math.sqrt(1-u*u);
+      const R=220000+(Math.random()-.5)*15000;   // stars beyond maxDistance 150k, inside far 300k — pure backdrop
+      pos[i*3]=Math.cos(th)*s*R; pos[i*3+1]=u*R; pos[i*3+2]=Math.sin(th)*s*R;
+      asz[i]=1.4+Math.random()*Math.random()*2.6; aph[i]=Math.random()*6.28; }
+    const g=new THREE.BufferGeometry();
+    g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    g.setAttribute('aSize',new THREE.BufferAttribute(asz,1));
+    g.setAttribute('aPh',new THREE.BufferAttribute(aph,1));
+    const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+      uniforms:{uTime:{value:0},uPR:{value:Math.min(devicePixelRatio,2)},uColor:{value:new THREE.Color(0x9fe6ff)}},
+      vertexShader:`attribute float aSize,aPh; uniform float uTime,uPR; varying float vTw;
+        void main(){ vTw=0.6+0.4*sin(uTime*1.3+aPh);
+          vec4 mv=modelViewMatrix*vec4(position,1.0);
+          gl_PointSize=aSize*uPR*vTw; gl_Position=projectionMatrix*mv; }`,
+      fragmentShader:`uniform vec3 uColor; varying float vTw;
+        void main(){ vec2 d=gl_PointCoord-0.5; float r=length(d);
+          float a=smoothstep(0.5,0.0,r)*0.7*vTw;
+          gl_FragColor=vec4(uColor*(0.7+0.6*vTw),a); }`});
+    const stars=new THREE.Points(g,m); stars.frustumCulled=false; stars.renderOrder=-10;
+    scene.add(stars); _starField=stars;
+  })();
+  // §SPACE FABRIC — the smooth HIGH-POLY universe container (camera sits INSIDE; holographic bodies float within).
+  // NORMAL-blended deep-space backdrop (NOT additive) so it never washes the view — bodies pop against it.
+  (function(){
+    const m=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.BackSide,blending:THREE.NormalBlending,
+      uniforms:{uTime:{value:0}},
+      vertexShader:`varying vec3 vP; void main(){vP=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+      fragmentShader:`varying vec3 vP; uniform float uTime;
+        float h(vec3 p){return fract(sin(dot(p,vec3(13.1,71.7,29.3)))*43758.5);}
+        float n(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+          float a=mix(mix(mix(h(i),h(i+vec3(1,0,0)),f.x),mix(h(i+vec3(0,1,0)),h(i+vec3(1,1,0)),f.x),f.y),
+                      mix(mix(h(i+vec3(0,0,1)),h(i+vec3(1,0,1)),f.x),mix(h(i+vec3(0,1,1)),h(i+vec3(1,1,1)),f.x),f.y),f.z);return a;}
+        void main(){ float c=n(vP*3.0)*0.6+n(vP*7.0)*0.3+n(vP*15.0)*0.1;     // smooth flowing fabric structure
+          float band=abs(vP.y);                                              // darkest at the equator (where bodies float)
+          vec3 base=mix(vec3(0.012,0.030,0.060), vec3(0.045,0.105,0.205), band);
+          vec3 col=base + vec3(0.02,0.06,0.13)*smoothstep(0.62,0.97,c);       // faint blue nebular wisps
+          gl_FragColor=vec4(col, 0.95); }`});
+    // REMOVED: the enclosing fabric sphere is NOT added to the scene — the user never wants a visible orb
+    // around the universe. Open black space + the starfield Points + holographic bodies + bloom/god-rays only.
+    void m; _nebula=null;
+  })();
 
   /* ---- R6: living pinstripe grid floor (flow + pointer ripple + pulse brighten) ---- */
   gridMat=new THREE.ShaderMaterial({
@@ -1363,10 +1503,12 @@ function initUniverse(){
   buildBrain();
   clock=new THREE.Clock();
   addEventListener('resize',onResize);
+  addEventListener('orientationchange',()=>setTimeout(onResize,250));   // mobile rotation
+  try{ if(window.visualViewport) visualViewport.addEventListener('resize',onResize); }catch(_){}  // mobile URL-bar show/hide
   $('uni').addEventListener('pointerdown',e=>{userDragging=true;_pinDragStart(e);});
   $('uni').addEventListener('pointermove',e=>{ if(gridMat)
       gridMat.uniforms.uPtr.value.set((e.clientX/innerWidth)*2-1, -((e.clientY/innerHeight)*2-1));
-    _pinDragMove(e); });
+    _pinDragMove(e); _hoverProbe(e); });
   addEventListener('pointerup',e=>{userDragging=false;_pinDragEnd(e);});
   $('uni').addEventListener('click',onCanvasClick);
   $('uni').addEventListener('dblclick',onCanvasDbl);
@@ -1381,7 +1523,7 @@ function initUniverse(){
     group:scene, bodies, swarms:[], targetOpacity:1, home:home||{pos:new THREE.Vector3(0,100,280),tgt:250}};
   navStack=[rootFrame];
   // U1: expose render handles for the headless proof harnesses (.proof/*.cjs scan window.* for the scene/bloom)
-  try{window.__scene=scene;window.__bloom=bloom;window.__renderer=renderer;window.__bodies=bodies;}catch(e){}
+  try{window.__scene=scene;window.__bloom=bloom;window.__renderer=renderer;window.__bodies=bodies;window.__camera=camera;window.__controls=controls;}catch(e){}
   requestAnimationFrame(tickFrame);
   // first data builds the bodies + constellation
   buildConstellation();
@@ -1402,6 +1544,7 @@ function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;cam
 /* ---- the central neural-brain GLB (audio-reactive) ---- */
 function buildBrain(){
   brain=new THREE.Group();scene.add(brain);
+  brain.scale.setScalar(60);   // SUPREME RULE: the JARVIS AI core is the LARGEST object in the universe (~780u) — nothing exceeds it
   const loader=new THREE.GLTFLoader();
   function loadGLB(file,onLoad){glbsTried++;
     loader.load(ASSET(file),g=>{glbsOk++;try{onLoad(g.scene);}catch(e){}},
@@ -1501,9 +1644,12 @@ function buildBrain(){
     }catch(_){}}, ()=>{/* helmet 404 → the liquid-metal blob + procedural visage remain the centre */});
 }
 function brainFallback(){fellBack=true;
-  const ico=new THREE.Mesh(new THREE.IcosahedronGeometry(22,1),
-    new THREE.MeshStandardMaterial({color:0x0a3a4a,emissive:0x29e7ff,emissiveIntensity:1.0,metalness:.9,roughness:.2}));
-  coreMesh=ico;brain.add(ico);
+  const grp=new THREE.Group();
+  grp.add(new THREE.Mesh(new THREE.IcosahedronGeometry(22,3),                       // smooth, not faceted
+    new THREE.MeshBasicMaterial({color:0x29e7ff,transparent:true,opacity:0.10,blending:THREE.AdditiveBlending,depthWrite:false})));
+  grp.add(new THREE.Mesh(new THREE.IcosahedronGeometry(22.2,2),                     // holographic data-grid shell
+    new THREE.MeshBasicMaterial({color:0x4fe9ff,wireframe:true,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false})));
+  coreMesh=grp;brain.add(grp);
 }
 
 /* morph the liquid-metal surface to the ONE pulse (speak -> churn/rise; idle -> gentle flow) */
@@ -1614,8 +1760,27 @@ function realGLB(url){ if(!url) return url; if(url.indexOf('/asset/')>=0) return
   }
   return url; }
 
+/* turn ANY body holographic (shared look): translucent glowing core + wireframe data-grid + fresnel rim.
+   Applied to galaxies + KPI/system bodies so EVERY celestial body matches the hologram aesthetic (no solid balls). */
+/* fresnel = TRUE 3D spherical depth: dim facing the camera, bright at grazing edges (a glowing 3D orb, not a flat disc) */
+function _fresnelMat(col,strength){ return new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  uniforms:{uColor:{value:new THREE.Color(col||0x7af3ff)}, uS:{value:strength||0.55}},
+  vertexShader:`varying vec3 vN,vV; void main(){vN=normalize(normalMatrix*normal); vec4 mv=modelViewMatrix*vec4(position,1.0); vV=normalize(-mv.xyz); gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform vec3 uColor; uniform float uS; varying vec3 vN,vV;
+    void main(){ float f=pow(1.0-abs(dot(normalize(vN),normalize(vV))),2.2); gl_FragColor=vec4(uColor*(0.4+f*1.6), 0.05+f*uS);}`}); }
+function _holoShell(m, sz, color){ try{
+  const col=new THREE.Color(color||0x29e7ff);
+  if(m.material){ m.material.transparent=true; m.material.opacity=0.42; m.material.depthWrite=false;   // visible glowing orb (was 0.08 = near-invisible at overview)
+    try{m.material.metalness=0; m.material.roughness=1; m.material.emissiveIntensity=0.4;}catch(_){}}
+  const wire=new THREE.Mesh(new THREE.SphereGeometry(sz*1.01,40,28),
+    new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:0.42,blending:THREE.AdditiveBlending,depthWrite:false}));
+  wire.userData.holoShell=true; m.add(wire);
+  const rim=new THREE.Mesh(new THREE.SphereGeometry(sz*1.03,44,30), _fresnelMat(col,0.6));   // fresnel 3D depth
+  rim.userData.holoShell=true; m.add(rim);
+}catch(e){} }
+
 function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
-  const sz=o.size||4.4, asset=glbForName(o.name);
+  const sz=(o.size||4.4)*22, asset=glbForName(o.name);   // ×22 so telemetry bodies read at the vast scale (~95-220u, under planets)
   // PBR fallback body — textured (its preview PNG) + emissive + bloom + PMREM reflections, NEVER a flat dot.
   // The shaded GLB swaps in over this when it loads; on a 404 the textured PBR sphere stays (still graphical).
   const m=new THREE.Mesh(new THREE.SphereGeometry(sz,32,32),
@@ -1626,12 +1791,14 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
     _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null};
   const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
+  _holoShell(m,sz,o.color);                              // HOLOGRAPHIC: every body matches the hologram look
   // upgrade to the real shaded GLB when it arrives (added as a child; keep transform + label + raycast)
   _glbLoader.load('asset/'+asset+'.glb', g=>{ try{ const s=g.scene; s.scale.setScalar(sz*0.9);
       s.traverse(c=>{ if(c.isMesh&&c.material){ try{c.material.emissive=new THREE.Color(o.color);
-        c.material.emissiveIntensity=0.4; c.material.envMap=(envRT&&envRT.texture)||null;
-        c.material.envMapIntensity=1.0; c.material.needsUpdate=true;}catch(_){}}});
-      m.material.opacity=0; m.material.transparent=true;   // hide the proxy sphere; GLB now renders
+        c.material.emissiveIntensity=0.3; c.material.transparent=true; c.material.opacity=0.18;
+        c.material.blending=THREE.NormalBlending; c.material.depthWrite=false;
+        c.material.envMap=(envRT&&envRT.texture)||null; c.material.needsUpdate=true;}catch(_){}}});
+      m.material.opacity=0.4;   // KEEP the glowing orb visible (was 0); GLB is a faint detail overlay
       m.add(s); m.userData.glb=s; }catch(_){}}, undefined, ()=>{}); // 404 → keep the textured PBR sphere
   return m;
 }
@@ -1643,28 +1810,32 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
 function addManifestBody(o){
   const sz=o.size||6;
   const m=new THREE.Mesh(new THREE.SphereGeometry(sz,32,32),
-    new THREE.MeshStandardMaterial({color:0x0a3242, emissive:o.color, emissiveIntensity:0.6,
+    new THREE.MeshStandardMaterial({color:0x0a3242, emissive:o.color, emissiveIntensity:1.4,
       metalness:0.55, roughness:0.3, envMap:(envRT&&envRT.texture)||null, envMapIntensity:1.1, dithering:true}));
   m.position.set(Math.cos(o.angle)*o.radius,o.y||0,Math.sin(o.angle)*o.radius);
   m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
     _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null,manifest:true};
   const lab=makeLabel(o.label);lab.position.set(0,sz+5,0);m.add(lab);m.userData.label=lab;
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
+  _holoShell(m,sz,o.color);                              // HOLOGRAPHIC galaxy (matches every other body)
   if(o.url)enqueueGLB(o.url, s=>{ try{
       const box=new THREE.Box3().setFromObject(s); const d=box.getSize(new THREE.Vector3());
       const maxDim=Math.max(d.x,d.y,d.z)||1; const k=(sz*1.8)/maxDim;            // auto-fit to target diameter
       const ctr=box.getCenter(new THREE.Vector3());
       s.scale.setScalar(k); s.position.sub(ctr.multiplyScalar(k));               // recentre on the body origin
       s.traverse(c=>{ if(c.isMesh&&c.material){ try{ c.material.emissive=new THREE.Color(o.color);
-        c.material.emissiveIntensity=0.32; c.material.envMap=(envRT&&envRT.texture)||null;
-        c.material.envMapIntensity=1.1; c.material.needsUpdate=true; }catch(_){}}});
-      m.material.transparent=true; m.material.opacity=0;                          // hide proxy; the real GLB renders
+        c.material.emissiveIntensity=0.3; c.material.transparent=true; c.material.opacity=0.18;
+        c.material.blending=THREE.NormalBlending; c.material.depthWrite=false;
+        c.material.envMap=(envRT&&envRT.texture)||null; c.material.needsUpdate=true; }catch(_){}}});
+      m.material.opacity=0.45;                       // KEEP the glowing orb visible (was 0 = invisible); GLB is a faint detail overlay
       m.add(s); m.userData.glb=s;
     }catch(_){}}, ()=>{/* 404 → keep the glowing proxy orb (still graphical, labelled, selectable) */});
   return m;
 }
 function upsertBody(name,createFn,updateFn){
   let m=bodyMap.get(name);
+  if(!m&&typeof CEL_ALIAS!=='undefined'&&CEL_ALIAS[name]){           // CELESTIAL absorb: old telemetry names land on the new feature bodies
+    const cb=bodyMap.get(CEL_ALIAS[name]); if(cb){bodyMap.set(name,cb);m=cb;}}
   if(!m){m=createFn();}
   if(updateFn)updateFn(m);
   return m;
@@ -1675,6 +1846,7 @@ function setBodyColor(m,color){m.userData.color=color;
 // R2: resize a body when its underlying data changes (planets GROW with activity). Rescales the GLB child
 // (if loaded) or rebuilds the proxy sphere, and re-floats its label — only when the size actually changed.
 function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
+  if(m.userData.celLockScale)return;                                 // CELESTIAL: scale contract is law — live data may relabel/recolor, never resize
   m.userData.baseScale=sz;
   if(m.userData.glb){m.userData.glb.scale.setScalar(sz*0.9);}        // shaded GLB present → scale it
   else{m.geometry.dispose();m.geometry=new THREE.SphereGeometry(sz,32,32);}
@@ -1688,7 +1860,7 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
 const GOLDEN=Math.PI*(3-Math.sqrt(5));                  // 137.50776° in radians
 const CLUSTER_PHASE={kpi:0.0, sys:1.0, infra:2.0, pipe:3.2, tier:4.2, guardian:5.0, selfdev:5.6, climate:0.6, agentos:4.8};
 function phyllo(i, importance, type){
-  const base=120, span=210;                            // Sun-proximity band (inner..outer; clears the giant face)
+  const base=4500, span=6000;                          // telemetry band pushed OFF the giant core (4.5k-10.5k, inside the 12k app ring) — no more dots crowding the centre
   const imp=Math.max(0,Math.min(1,importance));
   const r=base + span*(1-imp);                         // closer = more important
   const a=(CLUSTER_PHASE[type]||0) + i*GOLDEN;         // golden-angle within the type cluster
@@ -1704,6 +1876,38 @@ function vogel(i, importance, R0, k){
   const y=Math.sin(i*GOLDEN*0.7)*44*(0.4+0.6*(1-imp));     // gentle self-similar vertical spread
   return {radius:Math.max(150,r), angle:a, y:y};
 }
+
+/* ===== GLOBAL SIZE LAW — size = importance, descending from the CORE outward =====
+   ONE law for the whole universe so the eye reads the hierarchy at a glance:
+   the CORE (centre) is the largest object; the single most important app/feature/shortcut is the
+   largest FLOATING object below it; and every tier is strictly smaller than the one above, while
+   within a tier size ∝ real importance. Tiers (big→small):
+     planet  = major app / feature / shortcut      (the biggest floating things)
+     topic   = knowledge cluster / nebula
+     moon    = sub-feature / tool
+     satellite = Docker service / executable action
+     asteroid  = dataset / records / logs
+     event   = meteor / comet / probe (alert / workflow / job)
+   Ceilings never overlap, so a moon can never be bigger than the smallest planet, etc. */
+const CORE_SIZE=22;                  // the ONE AI Brain Core — always the largest, dead centre (everything flows down from here)
+const SIZE_TIER={                    // full cosmological ladder (UNIVERSE_SPEC §16); ceilings never overlap; ∝ real importance
+  cluster:[19,21],                   // super-domain region anchor (diffuse)
+  galaxy:[380,700],                  // domain hubs — big, but ALWAYS under the AI core (~780)
+  blackhole:[6,9],                   // a galaxy's central AI controller / routing agent (dense bright centre)
+  star:[6,9],                        // primary app/feature/shortcut of a solar system
+  planet:[5,8],                      // a major feature inside a galaxy — BIGGER than its moons
+  topic:[3.5,5],                     // nebula / knowledge cluster (the master topics)
+  moon:[2,3.4],                      // tool / real child entity — part of a planet, smaller than it
+  satellite:[1.2,1.9],               // Docker service / executable action
+  asteroid:[0.7,1.1],                // dataset / records / log
+  event:[0.4,0.65]                   // meteor / comet / probe (alert · workflow · job)
+};
+function sizeFor(tier, importance){
+  const t=SIZE_TIER[tier]||SIZE_TIER.asteroid;
+  const imp=Math.max(0,Math.min(1, importance||0));
+  return t[0] + (t[1]-t[0])*imp;           // min..max within the tier, scaled by real importance
+}
+function impFromCount(c){ return Math.max(0,Math.min(1, c?Math.log10(1+c)/5:0.4)); }   // log-scaled real count → 0..1
 
 /* ===== NASA-Eyes recursive hierarchy: Node model + nav stack (Stage 5) ===== */
 const PHI_CONJ = 0.381966011;                         // 1/φ² — recursive self-similar scale per level
@@ -1754,17 +1958,262 @@ function framingFor(frame){
    manifest.domains), placed by the φ/Vogel law, SIZED log-scaled by its real ont_object count, carrying
    its TITLE label. Lazy-loaded through the concurrency-capped queue. Clicking flies to it + opens a card. */
 let _domainPlanetsBuilt=false;
+/* ---- ALGORITHM · MOON TIER (fractal/self-similar) ----
+   Each planet's REAL child entities (from /children → brain.db) are placed as MOONS on a visible ORBIT RING
+   around it, by the SAME golden-angle φ law applied at the moon scale (self-similar / fractal). Size = small
+   (sub-features); distance = on the relationship ring. REAL ontology entities only — never decorative. */
+const _moonGroups=[];        // every orbiting system group (planets/moons/satellites/meteors); each carries userData.spin
+const _systemGroups=[];      // planet/moon groups hidden by default — revealed on drill-in (progressive disclosure)
+const _galaxyOrbiters=[];     // galaxy bodies that slowly orbit the AI Core (animated by position each frame)
+/* a faint orbit ring (the visible "orbit" the body travels) in the parent's local frame */
+const _orbitRings=[];   // dashed orbit lines, energised by PULSE in the anim loop
+function _orbitRing(parent, R, op){ try{
+  const seg=200, pos=new Float32Array((seg+1)*3);                      // holographic DASHED orbit (no solid line)
+  for(let i=0;i<=seg;i++){const a=i/seg*6.283185307; pos[i*3]=Math.cos(a)*R; pos[i*3+1]=0; pos[i*3+2]=Math.sin(a)*R;}
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const ring=new THREE.Line(g, new THREE.LineDashedMaterial({color:0x6fe0ff,transparent:true,opacity:Math.min(0.45,op*1.6),
+    dashSize:Math.max(0.6,R*0.045),gapSize:Math.max(0.5,R*0.05),depthWrite:false,blending:THREE.AdditiveBlending}));
+  ring.computeLineDistances();                                        // required for dashes
+  ring.userData.moonRing=true; ring.userData._baseOp=ring.material.opacity; _orbitRings.push(ring); parent.add(ring);
+}catch(e){} }
+/* one orbiting body — HOLOGRAPHIC, not solid: a translucent additive glow core + a wireframe data-grid shell
+   + a fresnel rim halo, all in the body's colour, self-rotating. (JARVIS hologram look; no opaque/CAD surfaces.) */
+/* §8 closest-related sit innermost. baseRing = ring radius; rank 0 = most related (server ont_link order).
+   Only RADIUS encodes relationship strength; the golden-angle φ ANGLE is untouched (even spread preserved). */
+function relRadius(baseRing, rank, total){
+  const n=Math.max(1,(total||1)-1);
+  const t=Math.min(1,(rank||0)/n);
+  return baseRing*(0.80+0.40*t);
+}
+const _spinBodies=[];
+const _pickBodies=[];   // flat list of holographic orb GROUPS for raycasting (they are NOT in `bodies`)
+function _orbBody(size, color, tag, label, entityId, kind){
+  const col=color?new THREE.Color(color):new THREE.Color(0x7af3ff);
+  const g=new THREE.Group();
+  const core=new THREE.Mesh(new THREE.SphereGeometry(size,48,32),                        // FAINT glowing core (not a flat cyan fill)
+    new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.06,blending:THREE.AdditiveBlending,depthWrite:false}));
+  g.add(core);
+  const wire=new THREE.Mesh(new THREE.SphereGeometry(size*1.005,40,28),                  // holographic data-grid — DOMINANT detail when zoomed, high-poly (no facets)
+    new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:0.42,blending:THREE.AdditiveBlending,depthWrite:false}));
+  g.add(wire);
+  const rim=new THREE.Mesh(new THREE.SphereGeometry(size*1.03,44,30), _fresnelMat(col,0.62));  // fresnel = TRUE 3D spherical depth
+  g.add(rim);
+  const _lbl=makeLabel((label||entityId||'').slice(0,40));
+  _lbl.scale.set(22,5.5,1); _lbl.position.set(0, size+size*0.9+1.2, 0);
+  _lbl.material.opacity=0; _lbl.visible=false; g.add(_lbl);
+  g.userData={[tag]:true, label:(label||entityId||'').slice(0,60), entityId:entityId, kind:kind, pickMesh:core,
+    name:'orb:'+tag+':'+(entityId||label||Math.random().toString(36).slice(2)),
+    labelText:(label||entityId||'').slice(0,60), orbBody:true, tier:tag, labelSprite:_lbl,
+    baseScale:1, hover:0, hoverWant:0, selPulse:0, selected:false,
+    spinSelf:0.06+((size*7)%1)*0.22,
+    getCard:()=>orbCard(g)};
+  _spinBodies.push(g); _pickBodies.push(g);
+  return g;
+}
+/* REAL card for an orb body — fetches the entity's ACTUAL ont_link neighbours (no placeholder values). */
+function orbCard(g){
+  const u=g.userData, tag=(u.planet&&'planet')||(u.moon&&'moon')||(u.satellite&&'satellite')||(u.meteor&&'meteor')||'body';
+  const title=(u.label||u.entityId||'').slice(0,48);
+  if(tag==='planet'||tag==='moon'){
+    loadOrbNeighbours(g, tag);
+    return {title, subtitle:tag+' · loading real links…',
+      props:[{k:'Entity',v:(u.entityId||'—').slice(0,40)}],
+      lines:['Fetching this entity’s real relationships from brain.db…'],
+      actions:[{label:'◈ Open in knowledge graph',kind:'graph',arg:(u.label||u.entityId)}]};
+  }
+  return {title, subtitle:tag, props:[{k:'Entity',v:(u.entityId||'—').slice(0,40)}],
+    actions:[{label:'◈ Open in knowledge graph',kind:'graph',arg:(u.label||u.entityId)}]};
+}
+function loadOrbNeighbours(g, tag){
+  const u=g.userData, id=u.entityId; if(!id)return;
+  fetch('children?id='+encodeURIComponent(id)+'&kind=obj:'+encodeURIComponent(id)+'&limit=8')
+   .then(r=>r.json()).then(d=>{
+    if(_selected!==g)return;
+    const kids=(d&&d.children)||[];
+    const props=[{k:'Type', v:(u.kind||'').replace(/^type:/,'')||tag},
+                 {k:'Links', v:String((d&&d.total)||kids.length)+((d&&d.truncated)?'+':'')}];
+    kids.slice(0,4).forEach(c=>props.push({k:(c.rel||'rel').toLowerCase(), v:String(c.label||c.id).slice(0,34)}));
+    const lines = kids.length ? ['Real relationships from the knowledge graph (ont_link).']
+                              : ['No outgoing/incoming links recorded for this entity yet.'];
+    const actions=[];
+    kids.slice(0,3).forEach(c=>{ if(findOrbByEntity(c.id)||findOrbByLabel(c.label))
+      actions.push({label:'→ '+String(c.label||c.id).slice(0,22),kind:'_fn',
+        fn:()=>{const b=findOrbByEntity(c.id)||findOrbByLabel(c.label); if(b)selectBody(b);}}); });
+    actions.push({label:'▸ Recent '+((u.kind||'').replace(/^type:/,'')||tag),kind:'drill',
+                  arg:'type:'+((u.kind||'').replace(/^type:/,'')||tag)});
+    actions.push({label:'◈ Open in knowledge graph',kind:'graph',arg:(u.label||u.entityId)});
+    openCardLive(g,{title:(u.label||u.entityId||'').slice(0,48),
+      subtitle:tag+' · '+((u.kind||'').replace(/^type:/,'')||'entity'), props, lines, actions});
+  }).catch(e=>{});
+}
+function findOrbByEntity(id){ if(!id)return null;
+  for(let i=0;i<_pickBodies.length;i++){if(_pickBodies[i].userData.entityId===id)return _pickBodies[i];} return null; }
+function findOrbByLabel(lab){ if(!lab)return null; const lo=String(lab).toLowerCase();
+  for(let i=0;i<_pickBodies.length;i++){if((_pickBodies[i].userData.label||'').toLowerCase()===lo)return _pickBodies[i];} return null; }
+function openCardLive(g, card){ if(_selected!==g)return; _cardDrilled=false; showCardWithFns(card); }
+/* RECURSIVE φ HIERARCHY (real data only): galaxy ▸ PLANETS (the domain's top entities) ▸ MOONS (each planet's
+   linked entities) ▸ SATELLITES (each moon's services/actions). Same golden-angle law at every level
+   (self-similar / fractal); sizes & ring distances STRICTLY descend galaxy > planet > moon > satellite. */
+function buildGalaxySystem(galaxy, domain, galaxySize){
+  if(!galaxy||!domain||typeof THREE==='undefined') return;
+  fetch('children?kind=type:'+encodeURIComponent(domain)+'&limit=5').then(r=>r.json()).then(d=>{
+    const planets=(d&&d.children)||[]; if(!planets.length) return;
+    const pRing=galaxySize*2.6; _orbitRing(galaxy,pRing,0.28);   // planets orbit clear of the (now-big) galaxy hub
+    const pgrp=new THREE.Group(); galaxy.add(pgrp); pgrp.userData.spin=0.10; _moonGroups.push(pgrp); galaxy.userData.planetGroup=pgrp;  // planets ALWAYS visible, orbiting their galaxy (solar-system look); only moons drill-in
+    planets.forEach((pl,i)=>{ try{
+      const a=i*GOLDEN, r=relRadius(pRing, i, planets.length);
+      const psz=Math.min(galaxySize*PHI_CONJ*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);  // FRACTAL CASCADE: planet = galaxy × 1/φ² (self-similar golden-ratio step) ± importance
+      const pm=_orbBody(psz, pl.color, 'planet', pl.label, pl.id, 'type:'+domain);
+      pm.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*galaxySize*0.2, Math.sin(a)*r);
+      pgrp.add(pm);
+      // MOONS — this planet's own linked entities (recursive children) → truly "part of" the planet
+      fetch('children?id='+encodeURIComponent(pl.id)+'&kind=type:'+encodeURIComponent(domain)+'&exclude='+encodeURIComponent(pl.id)+'&limit=4')
+        .then(r=>r.json()).then(dd=>{
+          const moons=(dd&&dd.children)||[]; if(!moons.length) return;
+          const mRing=psz*2.6; _orbitRing(pm,mRing,0.22);   // moons orbit clearly outside their planet
+          const mgrp=new THREE.Group(); pm.add(mgrp); mgrp.userData.spin=0.22; mgrp.visible=false; _moonGroups.push(mgrp); _systemGroups.push(mgrp); pm.userData.moonGroup=mgrp;  // moons HIDDEN until planet focused
+          moons.forEach((mn,j)=>{ try{
+            const aa=j*GOLDEN, rr=relRadius(mRing, j, moons.length);
+            const msz=Math.max(1.5,psz/50);                                                // RATIO: moon = planet ÷ 50
+            const mm=_orbBody(msz, mn.color, 'moon', mn.label, mn.id, 'type:'+domain);
+            mm.position.set(Math.cos(aa)*rr, Math.sin(j*GOLDEN*0.7)*psz*0.28, Math.sin(aa)*rr);
+            mgrp.add(mm);
+          }catch(e){} });
+        }).catch(e=>{});
+    }catch(e){} });
+  }).catch(e=>{});
+}
+/* SATELLITES — the REAL pm2/Docker services (/vitals.services.list) on a ring hugging the AI Core (they power
+   the whole brain). Golden-angle spacing, satellite tier size, coloured by LIVE status (online=cyan, stopped=grey). */
+let _satBuilt=false;
+function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
+  fetch('vitals').then(r=>r.json()).then(v=>{
+    const list=((v&&v.services&&v.services.list)||[]); if(!list.length) return;
+    const R=1000; _orbitRing(scene,R,0.2);
+    const grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.16; grp.visible=false; grp.userData.systemLayer=true; _moonGroups.push(grp); _systemGroups.push(grp);  // service ring — DRILL-IN (revealed via Vitals)
+    list.forEach((s,i)=>{ try{
+      const a=i*GOLDEN, r=R*(0.95+0.018*i), on=(s.status==='online');
+      const sz=sizeFor('satellite', on?0.85:0.3)*2.4, col=on?0x39ffd0:0x67727d;
+      const m=_orbBody(sz, col, 'satellite', s.label||s.name, s.name, 'service');
+      m.userData.getCard=()=>({title:(s.label||s.name),subtitle:'Docker/pm2 service · '+s.status,
+        props:[{k:'Status',v:s.status},{k:'CPU',v:(s.cpu||0)+'%'},{k:'Mem',v:(s.mem_mb||0)+'MB'},
+               {k:'Uptime',v:(s.up_min||0)+'m'},{k:'Restarts',v:s.restarts||0}],
+        lines:['Real pm2 service powering JARVIS.'],
+        actions:[
+          {label:'📜 Live logs',kind:'drill',arg:'runner:'+s.name},
+          {label:(s.status==='online'?'↻ Restart':'▶ Start'),kind:'_fn',
+            fn:()=>orbControl(s.name, s.status==='online'?'restart':'start')},
+          {label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});
+      m.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*7, Math.sin(a)*r); grp.add(m);
+    }catch(e){} });
+  }).catch(e=>{});
+}
+/* METEORS — the REAL live alerts/events (/vitals.alerts), innermost near the brain (urgent = closest).
+   Small but HOT (alerts must be noticed); red=critical, amber=warning. Golden-angle spacing. */
+let _metBuilt=false;
+function buildMeteors(){ if(_metBuilt||!scene)return; _metBuilt=true;
+  fetch('vitals').then(r=>r.json()).then(v=>{
+    const al=((v&&v.alerts)||[]); if(!al.length) return;
+    const grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.3; grp.visible=false; grp.userData.systemLayer=true; _moonGroups.push(grp); _systemGroups.push(grp);  // meteors — DRILL-IN (revealed via Vitals)
+    al.forEach((alert,i)=>{ try{
+      const a=i*GOLDEN, r=480+i*50, crit=(alert.level==='critical');
+      const col=crit?0xff3b3b:0xffb02e, sz=crit?1.15:0.85;
+      const m=_orbBody(sz, col, 'meteor', alert.title, alert.title, 'event');
+      try{ m.material.emissiveIntensity=1.7; }catch(_){}
+      m.userData.getCard=()=>({title:alert.title,subtitle:'⚠ '+alert.level+' alert',
+        props:[{k:'Level',v:alert.level}],
+        lines:[alert.detail||'',alert.hint||''].filter(Boolean),
+        actions:[{label:'🩺 Open System Vitals',kind:'_fn',fn:()=>openVitals()},
+                 {label:'↻ Run all daemons',kind:'task',arg:'run all'}]});
+      m.position.set(Math.cos(a)*r, 9+Math.sin(i*1.7)*13, Math.sin(a)*r); grp.add(m);
+    }catch(e){} });
+  }).catch(e=>{});
+}
+/* §FUNCTIONAL APP CONSTELLATION — the REAL dock apps as bright holographic bodies in the INNERMOST ring
+   (closest to the brain = what you use most). Sensible titles; clicking opens a card whose primary action
+   RUNS the real app (the dock fn) — complete end-to-end function. Additive; the brain.db data galaxies stay. */
+let _appBuilt=false;
+/* APP PLANETS — planets ARE the apps/features, SIZED BY IMPORTANCE/USAGE. Moons = that planet's real
+   sub-features (each opens/runs the real function). Satellites = sub-features of moons (e.g. Vitals ▸
+   Services ▸ each real pm2 service). Planets may have no moons; every moon belongs to its planet. */
+const APP_PRIORITY={talk:100,guardian:95,worklist:90,vitals:85,create:78,image:74,glb:72,library:68,climate:64,agent:60,upgrades:55};
+const APP_MOONS={   // real sub-features only — each fn is the actual existing function
+  talk:    [{n:'Voice Input',f:()=>micToggle()},{n:'Chat',f:()=>$('say').focus()}],
+  library: [{n:'Gallery',f:()=>setMode('library')},{n:'Refresh Media',f:()=>loadLib()}],
+  create:  [{n:'Image',f:()=>quick('image')},{n:'3D Model',f:()=>quick('gen3d')}],
+  guardian:[{n:'Live Monitor',f:()=>setMode('guardian')},{n:'Talk to Room',f:()=>setMode('guardian')}],
+  climate: [{n:'Zones',f:()=>{flyToBodyByName('climate');}}],
+  worklist:[{n:'Active Tasks',f:()=>setMode('worklist')},{n:'Approvals',f:()=>setMode('worklist')}],
+  agent:   [{n:'Tool Palette',f:()=>openAgentTools()}],
+  vitals:  [{n:'Alerts',f:()=>openVitals(),sats:'alerts'},{n:'Services',f:()=>openVitals(),sats:'services'},{n:'Gauges',f:()=>openVitals()}],
+  upgrades:[{n:'Proposals',f:()=>{try{$('sdev').classList.remove('min');}catch(_){}}},{n:'Build Next',f:()=>openUpgrades()}]
+};
+function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined')return; _appBuilt=true;
+  if(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)return;   // retired: the 🧩 Mini Apps planet carries the dock apps now (same fns, no duplicates)
+  const apps=DOCK.filter(d=>d&&d.fn&&!d.pinned).slice(0,12);
+  const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);   // wide app ring: 780-radius planets never crowd
+  _orbitRing(grp, R, 0.34);
+  apps.forEach((app,i)=>{ try{
+    const a=i*GOLDEN, r=R*(0.9+0.02*i);
+    const imp=(APP_PRIORITY[app.k]||50)/100;
+    const psz=240+imp*420;                                          // PLANET = 50× moon; max ~660 — ALWAYS smaller than the AI core (~780)
+    const b=_orbBody(psz, 0x4fe9ff, 'app', (app.ic?app.ic+' ':'')+app.t, 'app:'+app.k, 'app');
+    b.userData.appFn=app.fn; b.userData.planet=true;                // an APP PLANET
+    b.userData.getCard=()=>({title:(app.ic?app.ic+' ':'')+app.t, subtitle:'app planet · importance '+Math.round(imp*100)+'%',
+      lines:['Open the '+app.t+' app — or fly its sub-feature moons.'],
+      actions:[{label:'▶ Open '+app.t, kind:'_fn', fn:app.fn},
+               {label:'◈ Focus here', kind:'_fn', fn:()=>flyToBody(b)}]});
+    b.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*120, Math.sin(a)*r);
+    grp.add(b);
+    // MOONS = this app's real sub-features (collapsed inside the planet's system)
+    const moons=APP_MOONS[app.k]||[];
+    if(moons.length){ const mR=psz*2.2; _orbitRing(b,mR,0.24);
+      const mg=new THREE.Group(); b.add(mg); mg.userData.spin=0.2; _moonGroups.push(mg);
+      moons.forEach((mn,j)=>{ try{
+        const aa=j*GOLDEN, msz=psz/50;                              // RATIO: moon = planet ÷ 50
+        const mm=_orbBody(msz, 0x7af3ff, 'moon', mn.n, 'feature:'+app.k+':'+j, 'sub-feature');
+        mm.userData.getCard=()=>({title:mn.n, subtitle:app.t+' · sub-feature',
+          actions:[{label:'▶ Open '+mn.n, kind:'_fn', fn:mn.f}]});
+        mm.position.set(Math.cos(aa)*mR, Math.sin(j*GOLDEN*0.7)*psz*0.5, Math.sin(aa)*mR);
+        mg.add(mm);
+        // SATELLITES = sub-features of THIS moon (real data: Vitals▸Services▸each pm2 service; Alerts▸each live alert)
+        if(mn.sats==='services'){ fetch('vitals').then(r=>r.json()).then(v=>{ try{
+          const list=((v&&v.services&&v.services.list)||[]).slice(0,8); if(!list.length)return;
+          const sR=msz*3; _orbitRing(mm,sR,0.2);
+          const sg=new THREE.Group(); mm.add(sg); sg.userData.spin=0.35; _moonGroups.push(sg);
+          list.forEach((s,k)=>{ const ss=_orbBody(Math.max(0.5,msz/500), s.status==='online'?0x39ffd0:0x67727d, 'satellite', s.label||s.name, s.name, 'service');   // RATIO: satellite = meteorite ÷ 20 (= moon ÷ 500)
+            ss.userData.getCard=()=>({title:(s.label||s.name),subtitle:'service · '+s.status,
+              props:[{k:'CPU',v:(s.cpu||0)+'%'},{k:'Mem',v:(s.mem_mb||0)+'MB'}],
+              actions:[{label:(s.status==='online'?'↻ Restart':'▶ Start'),kind:'_fn',fn:()=>orbControl(s.name,s.status==='online'?'restart':'start')},
+                       {label:'📜 Logs',kind:'drill',arg:'runner:'+s.name}]});
+            ss.position.set(Math.cos(k*GOLDEN)*sR, Math.sin(k*GOLDEN*0.7)*msz, Math.sin(k*GOLDEN)*sR); sg.add(ss); });
+        }catch(_){} }).catch(()=>{}); }
+        if(mn.sats==='alerts'){ fetch('vitals').then(r=>r.json()).then(v=>{ try{
+          const al=((v&&v.alerts)||[]).slice(0,6); if(!al.length)return;
+          const sR=msz*3; const sg=new THREE.Group(); mm.add(sg); sg.userData.spin=0.5; _moonGroups.push(sg);
+          al.forEach((alert,k)=>{ const crit=alert.level==='critical';
+            const ss=_orbBody(msz*0.3, crit?0xff3b3b:0xffb02e, 'meteor', alert.title, alert.title, 'alert');
+            ss.userData.getCard=()=>({title:alert.title,subtitle:'⚠ '+alert.level,lines:[alert.detail||''].filter(Boolean),
+              actions:[{label:'🩺 Open Vitals',kind:'_fn',fn:()=>openVitals()}]});
+            ss.position.set(Math.cos(k*GOLDEN)*sR, Math.sin(k*1.7)*msz, Math.sin(k*GOLDEN)*sR); sg.add(ss); });
+        }catch(_){} }).catch(()=>{}); }
+      }catch(e){} });
+    }
+  }catch(e){} });
+}
 function buildDomainPlanets(){
   if(_domainPlanetsBuilt||!scene||!THREE)return; _domainPlanetsBuilt=true;
   const doms=WORLD_MANIFEST.domains||{};
   // rank by count so the biggest domains get the lowest i (innermost, largest)
   const entries=Object.entries(doms).sort((a,b)=>(b[1].count||0)-(a[1].count||0));
-  const maxLog=Math.log10(1+Math.max(...entries.map(([,v])=>v.count||1)));   // ≈ log10(111558)
+  const _logs=entries.map(([,v])=>Math.log10(1+(v.count||1)));
+  const maxLog=Math.max(..._logs), minLog=Math.min(..._logs);                 // normalize importance across the REAL min..max spread → full size range
   entries.forEach(([dom,info],i)=>{
     const lg=Math.log10(1+(info.count||1));
-    const imp=Math.max(0,Math.min(1,lg/maxLog));                 // 0..1 importance from real count
-    const sz=9+imp*16;                                           // 9..25 — domains are the MAJOR planets (> KPI/tier sizes)
-    const P=vogel(i,imp,300,30);
+    const imp=(maxLog>minLog)?(lg-minLog)/(maxLog-minLog):0.5;   // 0..1 importance, normalized across real min..max
+    const sz=sizeFor('galaxy',imp);                             // SIZE ∝ importance: most important ≈19, least ≈5 (clear ~3.8× hierarchy)
+    // DISTANCE: Vogel √i golden-angle spiral — most important (rank i=0) sits INNERMOST near the core; least important farthest out
+    const P={angle:i*GOLDEN, radius:25000+9000*Math.sqrt(i), y:Math.sin(i*GOLDEN*0.7)*3000*(0.4+0.6*(1-imp))};   // VAST field 25k-60k, OUTSIDE the 12k app ring; systems (~2.6k) can never touch (~26k gaps)
     const name='dom:'+dom, count=info.count||0;
     const node=makeNode({id:name,label:dom,kind:'planet',depth:0,parent:null,
       color:COLORS.kpi,count:count,childrenKind:'type:'+dom,glbUrl:info.url});
@@ -1777,13 +2226,15 @@ function buildDomainPlanets(){
     const b=addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
       radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
     bodyNodeMap.set(b,node);
+    buildGalaxySystem(b,dom,sz);        // RECURSIVE φ: galaxy ▸ planets ▸ moons (real entities; sizes & distances descend, self-similar)
+    b.userData.oa=P.angle; b.userData.orr=P.radius; b.userData.oy=P.y; b.userData.os=0.013*Math.min(2.0,1400/P.radius); _galaxyOrbiters.push(b);  // galaxy slowly orbits the core (inner faster)
   });
   // a lighter outer belt of the 31 master TOPIC planets (ranked by pagerank) — keeps depth without 1,600 loads
   const topics=(WORLD_MANIFEST.topics||[]).slice(0,16);          // cap concurrent/visible heavy GLB topic planets
   const maxPr=Math.max(...topics.map(t=>t.pagerank||0))||1;
   topics.forEach((t,i)=>{const imp=Math.max(0,Math.min(1,(t.pagerank||0)/maxPr));
-    const sz=6+imp*6;
-    const P=vogel(i,imp*0.5,470,30);                             // farther belt
+    const sz=sizeFor('topic',imp);                              // GLOBAL SIZE LAW: nebula/topic tier — below planets
+    const P=vogel(i,imp*0.5,200000,3000);                        // topic belt pushed to the FAR backdrop — no more confining yellow ring
     const name='topic:'+i;
     const card=()=>({title:t.title,subtitle:'master topic · pagerank '+(t.pagerank||0).toFixed(4),
       props:[{k:'PageRank',v:(t.pagerank||0).toFixed(4)},{k:'GLB',v:(t.url||'').split('/').pop()}],
@@ -1792,12 +2243,318 @@ function buildDomainPlanets(){
       radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
   });
   rebuildMacroConnections();
+  buildAppConstellation();  // §FUNCTIONAL: app PLANETS (sized by importance) ▸ sub-feature MOONS ▸ satellites/meteorites
+  // buildSatellites()/buildMeteors() retired: satellites + meteorites are STRICTLY CONTAINED —
+  // each belongs to its own moon (Vitals ▸ Services / Vitals ▸ Alerts), each moon to its planet. Nothing floats free.
+  // CORE-POV start: stand AT the AI core looking OUT into the universe — the core sits just behind you,
+  // visible at the frame edge. (flyHome/_frameAll remain the zoom-out overview.)
+  try{ setTimeout(()=>{ home={pos:new THREE.Vector3(1250,260,0), tgt:new THREE.Vector3(2650,220,0)};   // CAMERA LOCK: standing ON the core looking OUT (core behind you); near pivot ⇒ drag = look-around
+    camera.position.copy(home.pos); controls.target.copy(home.tgt); controls.update(); },60); }catch(_){}
+  try{buildCelestialOS();}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe (additive layer)
+}
+
+/* ===== CELESTIAL OS — every planet is a FEATURE with its complete interactive family =====
+   Source of truth: celestial/CELESTIAL_CATALOG.md (built from the REAL data: DOCK, APP_MOONS,
+   WORLD_MANIFEST, /metrics, /agent/tools, /library). Confirmed tier order:
+       Apex Core > PLANET (feature) > MOON (contained thing) > SATELLITE (flow page/control)
+       > METEORITE (live info item) > DUST (records — the smallest, count-true clouds).
+   Everything is ALWAYS visible (constant-pixel dot cloud, NASA-Eyes style); meshes LOD in by apparent
+   size; ONE uniform scale (CEL_K) keeps perspective true; every body carries its name label on top.
+   Old telemetry/feature bodies (kpi:*, infra:*, sys:*, pipe:*, tier:*, guardian/selfdev/climate/agentos)
+   are ABSORBED via CEL_ALIAS so their LIVE updates (labels/colors) keep flowing into the new bodies;
+   the old 12k app ring is retired (Mini Apps planet carries the dock apps); dom:* galaxies become
+   Knowledge's moons with their recursive entity systems intact. Dock bar / panels / swarm untouched. */
+var CEL_K=30, CEL_LOD=0.008, CEL_REPLACES_APPRING=true;
+var CEL_ALIAS={};                // old body name -> cel body name (absorption; resolved in upsertBody)
+const CEL_LANE_ANG={knowledge:-0.95,automation:-0.35,intelligence:0.25,infrastructure:0.85,guardian:1.45,media:2.05,underworld:2.65,voice:1.75,budget:0.95,ui:-0.05};
+const CEL_COLORS={knowledge:0x29e7ff,automation:0x34d399,intelligence:0xa78bfa,infrastructure:0x7af3ff,
+  guardian:0x34d399,media:0xf5b942,underworld:0xff5d6c,voice:0xf5b942,budget:0xf5b942,ui:0x29e7ff,local:0x7af3ff};
+const _celOrbiters=[];           // {m,parent,a,om,orbR,phase,rel} — spec orbit equation, parent-relative
+const _celBodies=[];             // every celestial mesh (dot cloud + LOD pass)
+const _celMets={};               // live meteorites: key -> mesh (spawned/expired by celHydrateLive)
+let _CEL=null,_celDots=null,_celDotPos=null,_celBuilt=false;
+function _celHash(s){let h=0;for(let i=0;i<String(s).length;i++)h=(h*31+String(s).charCodeAt(i))>>>0;return (h%1000)/1000*6.28318;}
+const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
+/* spec scale contract (user tier order), spec units — ×CEL_K at render time */
+const _celPR =I=>_cl(10,34,Math.pow(I,0.72));                       // planet
+const _celMR =(pr,I)=>pr*_cl(0.26,0.42,Math.pow(I,0.72));           // moon
+const _celSR =(mr,I)=>mr*_cl(0.12,0.22,Math.pow(I,0.72));           // satellite (flow page/control)
+const _celD  =I=>220+Math.pow(1-Math.max(0,Math.min(1,I)),1.35)*630;// planet distance from apex
+
+/* ---------- THE CATALOG (celestial/CELESTIAL_CATALOG.md) — real entries only ---------- */
+const CEL_PLANETS=[
+ {id:'miniapps',     label:'🧩 Mini Apps',            lane:'ui',            I:0.96},
+ {id:'knowledge',    label:'🧠 Knowledge / Ontology', lane:'knowledge',     I:0.92, alias:['kpi:Topic','kpi:Note','kpi:Ontology','kpi:Measurement']},
+ {id:'automation',   label:'⚙ Automation / Runners',  lane:'automation',    I:0.93},
+ {id:'infrastructure',label:'🏗 Infrastructure',      lane:'infrastructure',I:0.88},
+ {id:'agentos',      label:'🤖 Agent OS',             lane:'intelligence',  I:0.84, alias:['agentos']},
+ {id:'selfdev',      label:'⚙ Self-Development',      lane:'intelligence',  I:0.80, alias:['selfdev']},
+ {id:'media',        label:'🎨 Media / GLB Studio',   lane:'media',         I:0.70, alias:['kpi:GLBs']},
+ {id:'guardian',     label:'🛡 Guardian',             lane:'guardian',      I:0.68, alias:['guardian']},
+ {id:'voice',        label:'🎙 Voice / TTS',          lane:'voice',         I:0.58},
+ {id:'climate',      label:'🌡 Climate',              lane:'guardian',      I:0.60, alias:['climate']},
+ {id:'budget',       label:'💰 Budget / Governor',    lane:'budget',        I:0.56},
+ {id:'inference',    label:'🧮 Inference Fabric',     lane:'intelligence',  I:0.82},
+ {id:'correlation',  label:'🔗 Correlation / Graph',  lane:'knowledge',     I:0.72, alias:['sys:corr']},
+ {id:'documents',    label:'📄 Documents / Ingestion',lane:'knowledge',     I:0.74, alias:['kpi:Document']},
+ {id:'underworld',   label:'🌋 Underworld',           lane:'underworld',    I:0.50}];
+/* moons per planet: {id,label,I,fn?,gateway?,sats:[[label,fnOrDrillOrTier],…],dust?,alias?} */
+const CEL_MOONS={
+ miniapps:[
+  {id:'app-talk',    label:'🎤 Talk',      I:1.00,fn:()=>$('say').focus(),       sats:[['Voice Input',()=>micToggle()],['Chat',()=>$('say').focus()]]},
+  {id:'app-guardian',label:'🛡 Guardian',  I:0.95,gateway:'guardian',            sats:[['Live Monitor',()=>setMode('guardian')],['Talk to Room',()=>setMode('guardian')]]},
+  {id:'app-worklist',label:'🛰 Live Tasks',I:0.90,fn:()=>setMode('worklist'),    sats:[['Active Tasks',()=>setMode('worklist')],['Approvals',()=>setMode('worklist')]]},
+  {id:'app-vitals',  label:'🩺 Vitals',    I:0.85,fn:()=>openVitals(),           sats:[['Alerts',()=>openVitals()],['Services',()=>openVitals()],['Gauges',()=>openVitals()]]},
+  {id:'app-create',  label:'✨ Create',    I:0.78,fn:()=>{$('say').focus();$('say').value='Create ';},sats:[['Image',()=>quick('image')],['3D Model',()=>quick('gen3d')]]},
+  {id:'app-image',   label:'🎨 Image',     I:0.74,fn:()=>quick('image'),         sats:[['Generate Image',()=>quick('image')]]},
+  {id:'app-3d',      label:'🧊 3D',        I:0.72,fn:()=>quick('3d'),            sats:[['Generate 3D',()=>quick('3d')]]},
+  {id:'app-library', label:'📚 Library',   I:0.68,fn:()=>setMode('library'),     sats:[['Gallery',()=>setMode('library')],['Refresh Media',()=>loadLib()]]},
+  {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>flyToBodyByName('climate')]]},
+  {id:'app-agent',   label:'🤖 Agent OS',  I:0.60,gateway:'agentos',             sats:[['Tool Palette',()=>openAgentTools()]]},
+  {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]}],
+ knowledge:[],   // the 16 dom:* galaxies are ADOPTED here at build time — GLBs + recursive systems intact
+ automation:[
+  {id:'run-builder',   label:'🧠 Knowledge Builder', I:0.90,alias:['pipe:🧠 Knowledge Builder'],  dust:19421,sats:[['Detail','drill:runner:🧠 Knowledge Builder']]},
+  {id:'run-correlator',label:'🔗 Cross-Correlator',  I:0.86,alias:['pipe:🔗 Cross-Correlator'],   sats:[['Detail','drill:runner:🔗 Cross-Correlator']]},
+  {id:'run-ingestor',  label:'📰 Document Ingestor', I:0.82,alias:['pipe:📰 Document Ingestor'],  sats:[['Detail','drill:runner:📰 Document Ingestor']]},
+  {id:'run-producer',  label:'🌍 Live Data Producer',I:0.80,alias:['pipe:🌍 Live Data Producer'], sats:[['Detail','drill:runner:🌍 Live Data Producer']]},
+  {id:'run-feedback',  label:'🤖 Self-Learning Loop',I:0.78,alias:['pipe:🤖 Self-Learning Loop'], sats:[['Detail','drill:runner:🤖 Self-Learning Loop']]},
+  {id:'run-heavy',     label:'⚙ Heavy Worker',       I:0.72,alias:['pipe:⚙ Heavy Worker'],        sats:[['Detail','drill:runner:⚙ Heavy Worker']]}],
+ infrastructure:[
+  {id:'inf-vast',   label:'🎛 Vast GPU Box', I:0.92,alias:['infra:vast'],sats:[['GPU Status',()=>openVitals()]]},
+  {id:'inf-vps',    label:'🖥 VPS Server',   I:0.86,alias:['infra:vps'], sats:[['Vitals',()=>openVitals()]]},
+  {id:'inf-pm2',    label:'🧬 PM2 Processes',I:0.80,sats:[
+     ['jarvis-backend','drill:runner:jarvis-backend'],['jarvis-dashboard','drill:runner:jarvis-dashboard'],
+     ['jarvis-tasks','drill:runner:jarvis-tasks'],['jarvis-voiceclone','drill:runner:jarvis-voiceclone'],
+     ['jarvis-watchdog','drill:runner:jarvis-watchdog'],['underworld-backend','drill:runner:underworld-backend'],
+     ['apex-orchestrator','drill:runner:apex-orchestrator'],['kgik-python','drill:runner:kgik-python'],
+     ['laravel-reverb','drill:runner:laravel-reverb'],['laravel-web','drill:runner:laravel-web'],
+     ['pm2-logrotate','drill:runner:pm2-logrotate']]},
+  {id:'inf-storage',label:'💾 Storage',      I:0.78,sats:[['Disk Audit',()=>openVitals()]]},
+  {id:'inf-network',label:'🌐 Network',      I:0.70,sats:[['Health',()=>openVitals()]]},
+  {id:'inf-swarm',  label:'🐳 Docker / Swarm',I:0.76,sats:[['Swarm Tasks',()=>setMode('worklist')]]}],
+ agentos:[
+  {id:'ag-tools',   label:'🧰 Tool Registry', I:0.86,sats:[
+     ['A11Y captions',()=>openAgentTools()],['A11Y read screen',()=>openAgentTools()],['A11Y set mode',()=>openAgentTools()],
+     ['A11Y speak',()=>openAgentTools()],['A11Y status',()=>openAgentTools()],['A11Y text scale',()=>openAgentTools()],
+     ['Memory search',()=>openAgentTools()],['Memory write',()=>openAgentTools()],
+     ['Docker prune (safe)',()=>openAgentTools()],['Docker usage',()=>openAgentTools()],
+     ['Read file',()=>openAgentTools()],['Search files',()=>openAgentTools()],['Write file',()=>openAgentTools()],
+     ['GPU status',()=>openAgentTools()],['Knowledge stats',()=>openAgentTools()],
+     ['CPU inspect',()=>openAgentTools()],['Disk audit',()=>openAgentTools()],['Read service logs',()=>openAgentTools()],
+     ['Find duplicates',()=>openAgentTools()],['Compress folder',()=>openAgentTools()],['Find large files',()=>openAgentTools()],
+     ['Create manifest',()=>openAgentTools()],['Restore archive',()=>openAgentTools()]]},
+  {id:'ag-planner', label:'🗺 Planner / Executor',I:0.82,sats:[['Open palette',()=>openAgentTools()]]},
+  {id:'ag-approvals',label:'✅ Approvals',    I:0.74,sats:[['Live Tasks',()=>setMode('worklist')]]}],
+ selfdev:[
+  {id:'sd-suggestions',label:'💡 Suggestions',I:0.82,sats:[['Generate',()=>openUpgrades()]]},
+  {id:'sd-proposals',  label:'📋 Proposals',  I:0.76,sats:[['Open panel',()=>{try{$('sdev').classList.remove('min');}catch(_){}}]]},
+  {id:'sd-builder',    label:'🔨 Upgrade Builder',I:0.86,sats:[['Build next',()=>openUpgrades()]]},
+  {id:'sd-rollback',   label:'↩ Rollback / Scheduler',I:0.70,sats:[]}],
+ media:[
+  {id:'md-library', label:'🗃 GLB Library',  I:0.82,dust:1638,sats:[['Open Library',()=>setMode('library')]]},
+  {id:'md-generated',label:'🆕 Generated Models',I:0.76,sats:[['Refresh',()=>loadLib()]]},
+  {id:'md-image',   label:'🖼 Image Studio', I:0.74,sats:[['Open Studio',()=>quick('image')]]},
+  {id:'md-loader',  label:'📦 Model Loader', I:0.70,sats:[]}],
+ guardian:[
+  {id:'gd-monitor', label:'📹 Live Monitor', I:0.86,sats:[['Open Guardian',()=>setMode('guardian')],['Talk to Room',()=>setMode('guardian')]]},
+  {id:'gd-rules',   label:'🚨 Life-Safety Rules',I:0.78,sats:[]}],
+ voice:[
+  {id:'vc-tts',     label:'🔊 TTS Engine',   I:0.84,sats:[['Speak Status',()=>readStatus()]]},
+  {id:'vc-mod',     label:'🎚 Voice Modulator',I:0.76,sats:[['Voice Input',()=>micToggle()]]}],
+ climate:[
+  {id:'cl-zones',   label:'🏠 Zones',        I:0.82,sats:[['Focus Climate',()=>flyToBodyByName('climate')]]},
+  {id:'cl-intent',  label:'🎯 Climate Intent',I:0.74,sats:[]}],
+ budget:[
+  {id:'bg-state',   label:'💵 Budget State', I:0.82,sats:[['Toggle Archon',()=>toggleArchon()]]},
+  {id:'bg-economy', label:'🪙 Economy Mode', I:0.74,sats:[]}],
+ inference:[
+  {id:'if-router',  label:'🔀 LLM Router',   I:0.84,alias:['sys:router'],dust:85173,sats:[]},
+  {id:'if-tiers',   label:'🪜 Tiered Models',I:0.80,sats:[
+     ['base · llama3.1:8b','tier:0'],['strong · qwen2.5:32b','tier:1'],['kimi-k2.6','tier:2'],
+     ['claude-sonnet-4-5','tier:3'],['heavy→strong','tier:4'],['micro · llama3.2','tier:5'],['openai · gpt-5.5','tier:6']]},
+  {id:'if-fallback',label:'🛟 GPU Fallback', I:0.72,sats:[]}],
+ correlation:[
+  {id:'cg-graph',   label:'🕸 Knowledge Graph',I:0.86,sats:[['Open graph',()=>{try{flyToNode('Topic');}catch(_){}}]]},
+  {id:'cg-stream',  label:'📡 Graph Stream', I:0.78,sats:[]},
+  {id:'cg-layout',  label:'📐 Layout Engine',I:0.80,sats:[]},
+  {id:'cg-dedupe',  label:'🧹 Entity Dedupe',I:0.76,sats:[]}],
+ documents:[
+  {id:'dc-vault',   label:'🗄 Document Vault',I:0.78,dust:34331,sats:[['Recent','drill:type:Document']]},
+  {id:'dc-ocr',     label:'🔍 OCR / Scrape Ingest',I:0.82,sats:[['Detail','drill:runner:📰 Document Ingestor']]},
+  {id:'dc-chunks',  label:'🧩 Source Chunks',I:0.70,sats:[]}],
+ underworld:[
+  {id:'uw-web',     label:'🌐 Underworld Web',I:0.80,sats:[['Open',()=>window.open('/underworld/','_blank')]]},
+  {id:'uw-backend', label:'🖧 Backend',       I:0.74,sats:[]},
+  {id:'uw-scenes',  label:'🎬 Scene Components',I:0.70,sats:[]}]};
+
+function _celCard(n,kindName,parentName){return ()=>{
+  const kids=(n._kidNames||[]);
+  const acts=[];
+  if(n.fn)acts.push({label:'⏎ Open '+n.label.replace(/^[^ ]+ /,''),kind:'_fn',fn:n.fn});
+  if(n.gateway)acts.push({label:'🪐 Go to planet',kind:'_fn',fn:()=>{const b=bodyMap.get('cel:'+n.gateway);if(b)flyToBody(b);}});
+  if(typeof n.drill==='string')acts.push({label:'▸ Detail',kind:'drill',arg:n.drill});
+  kids.slice(0,10).forEach(kn=>acts.push({label:'· '+(kn.split('|')[1]||kn),kind:'_fn',
+    fn:()=>{const b=bodyMap.get(kn.split('|')[0]);if(b)flyToBody(b);}}));
+  if(parentName)acts.push({label:'↑ Up to '+((bodyMap.get(parentName)||{userData:{}}).userData.labelText||'parent'),
+    kind:'_fn',fn:()=>{const b=bodyMap.get(parentName);if(b)flyToBody(b);}});
+  return {title:n.label,subtitle:'Celestial OS · '+kindName+(n.lane?' · '+n.lane+' lane':''),
+    bar:Math.round((n.I||0)*100),
+    props:[{k:'Importance',v:Math.round((n.I||0)*100)+'%'},{k:'Children',v:String(kids.length)}]
+      .concat(n.dust?[{k:'Records (dust)',v:fmt(n.dust)}]:[]),
+    lines:[],actions:acts};};}
+function _celAdd(name,n,kindName,specR,lane,parentName){
+  const wr=Math.max(5,specR*CEL_K);
+  const b=addBody({name:name,label:n.label,color:CEL_COLORS[lane]||CEL_COLORS.local,
+    radius:10,angle:0,y:0,size:wr/22});                             // addBody ×22 → exactly wr; name label rides on top
+  if(wr>240){try{ b.geometry.dispose(); b.geometry=new THREE.SphereGeometry(wr,64,48);    // MESH QUALITY: hi-res spheres for planet/moon tier
+    b.material.metalness=0.85; b.material.roughness=0.16; b.material.envMapIntensity=1.6; // holographic CHROME (PMREM reflections)
+    b.material.emissiveIntensity=0.8; }catch(_){}}                  // bio-illuminescent glow (feeds UnrealBloom)
+  b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
+  b.userData.celLockScale=true; _celBodies.push(b); return b;
+}
+function _celDustCloud(mesh,cnt,trueCount){                          // count-true soft cloud: ONE draw call, tiny, no labels/bloom
+  if(!cnt)return;
+  const pos=new Float32Array(cnt*3), r0=(mesh.userData.baseScale||200)*1.7;
+  for(let i=0;i<cnt;i++){const th=Math.random()*6.283,ph=Math.acos(2*Math.random()-1),rr=r0+Math.random()*r0*1.5;
+    pos[i*3]=Math.sin(ph)*Math.cos(th)*rr;pos[i*3+1]=Math.cos(ph)*rr*0.4;pos[i*3+2]=Math.sin(ph)*Math.sin(th)*rr;}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  mesh.add(new THREE.Points(g,new THREE.PointsMaterial({color:0x6fe3ff,size:2.2,sizeAttenuation:true,
+    transparent:true,opacity:0.15,depthWrite:false})));
+  mesh.userData.dustTrue=trueCount;
+}
+function _celOrbit(b,parent,orbR,om,seed,rel){
+  _celOrbiters.push({m:b,parent:parent,a:_celHash(seed),om:om,orbR:orbR,phase:_celHash(seed),rel:rel==null?1:rel});
+}
+/* absorb an OLD body: remove its mesh, alias its name so live upserts keep flowing into the cel body */
+function _celAbsorb(oldName,celName){
+  CEL_ALIAS[oldName]=celName;
+  const old=bodyMap.get(oldName), nb=bodyMap.get(celName);
+  if(old&&nb&&old!==nb){ try{scene.remove(old);}catch(_){}
+    const bi=bodies.indexOf(old); if(bi>=0)bodies.splice(bi,1);
+    for(let j=_galaxyOrbiters.length-1;j>=0;j--)if(_galaxyOrbiters[j]===old)_galaxyOrbiters.splice(j,1);
+    bodyMap.set(oldName,nb); }
+  else if(nb&&!old)bodyMap.set(oldName,nb);
+}
+/* adopt the 16 dom:* domain galaxies as Knowledge's moons — GLBs + recursive systems move with them */
+function _celAdoptDomains(knowledge){
+  const doms=[]; bodyMap.forEach((m,name)=>{if(name.indexOf('dom:')===0&&doms.indexOf(m)<0)doms.push(m);});
+  doms.sort((a,b)=>(b.userData.baseScale||0)-(a.userData.baseScale||0));
+  const kidNames=[];
+  doms.forEach((g,i)=>{
+    for(let j=_galaxyOrbiters.length-1;j>=0;j--)if(_galaxyOrbiters[j]===g)_galaxyOrbiters.splice(j,1);
+    const orbR=(knowledge.userData.baseScale||900)+(g.userData.baseScale||400)+700+(i%4)*460;
+    _celOrbit(g,knowledge,orbR,0.008/Math.sqrt(1+(i%4)),g.userData.name,0.9);
+    if(_celBodies.indexOf(g)<0)_celBodies.push(g);
+    const dom=(g.userData.name||'').slice(4), cnt=((WORLD_MANIFEST.domains||{})[dom]||{}).count||0;
+    if(cnt)_celDustCloud(g,Math.min(2400,Math.round(Math.log10(1+cnt)*420)),fmt(cnt));
+    kidNames.push(g.userData.name+'|'+dom);
+  });
+  return kidNames;
+}
+async function buildCelestialOS(){
+  if(_celBuilt)return; _celBuilt=true;
+  try{const r=await fetch('/celestial');_CEL=await r.json();}catch(e){_CEL={};}
+  const lanes={};
+  CEL_PLANETS.forEach(p=>{
+    const pr=_celPR(p.I), name='cel:'+p.id;
+    const moons=CEL_MOONS[p.id]||[];
+    const famMax=(pr+_celMR(pr,1)+18+4*Math.sqrt(4)+(p.id==='knowledge'?60:8))*CEL_K;  // room for the whole family
+    const li=(lanes[p.lane]=lanes[p.lane]||{i:0}); const idx=li.i++;
+    const theta=(CEL_LANE_ANG[p.lane]||0)+idx*GOLDEN;
+    const Dw=Math.max(_celD(p.I)*CEL_K, 5200+famMax+600);            // apex clear zone respected
+    const spreadX=0.34+(1-p.I)*0.34, spreadY=0.22+(1-p.I)*0.24;
+    const b=_celAdd(name,p,'planet',pr,p.lane,null);
+    // spec forward cone is -z; the POV looks +x → rotate so planets sit IN FRONT of the core
+    b.position.set(Dw, Math.sin(theta)*Dw*spreadY, Math.cos(theta)*Dw*spreadX);
+    b.userData.oa=Math.atan2(b.position.z,b.position.x);
+    b.userData.orr=Math.hypot(b.position.x,b.position.z);
+    b.userData.oy=b.position.y; b.userData.os=0.0018+p.I*0.0016; _galaxyOrbiters.push(b);
+    p._kidNames=[];
+    moons.forEach((mn,mi)=>{
+      const mr=_celMR(pr,mn.I), mname='cel:'+mn.id;
+      mn.lane=p.lane;
+      const mb=_celAdd(mname,mn,'moon',mr,p.lane,name);
+      const morb=(pr+mr+18+4*Math.sqrt((mn.sats||[]).length)+(mi%3)*9)*CEL_K;
+      _celOrbit(mb,b,morb,0.02+mn.I*0.012,mn.id,0.9);
+      p._kidNames.push(mname+'|'+mn.label);
+      mn._kidNames=[];
+      (mn.sats||[]).forEach((sv,si)=>{
+        const sl=sv[0], sa=sv[1];
+        const sn={label:sl,I:0.6,lane:p.lane};
+        if(typeof sa==='function')sn.fn=sa;
+        else if(typeof sa==='string'&&sa.indexOf('drill:')===0)sn.drill=sa.slice(6);
+        const sr=_celSR(mr,0.6), sname='cel:sat:'+mn.id+':'+si;
+        const sb=_celAdd(sname,sn,'satellite',sr,p.lane,mname);
+        _celOrbit(sb,mb,(mr*2.2+sr+4+(si%2)*7)*CEL_K,0.045+0.01*(si%3),sname,0.95);
+        if(typeof sa==='string'&&sa.indexOf('tier:')===0)CEL_ALIAS[sa]=sname;   // tier:* live updates land here
+        mn._kidNames.push(sname+'|'+sl);
+      });
+      if(mn.dust)_celDustCloud(mb,Math.min(2400,Math.round(Math.log10(1+mn.dust)*420)),fmt(mn.dust));
+      (mn.alias||[]).forEach(a=>_celAbsorb(a,mname));
+    });
+    if(p.id==='knowledge')p._kidNames=p._kidNames.concat(_celAdoptDomains(b));
+    (p.alias||[]).forEach(a=>_celAbsorb(a,name));
+  });
+  _celDotsRebuild();
+  try{rebuildMacroConnections();}catch(_){}
+  console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
+    ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
+}
+function _celDotsRebuild(){                                          // NASA-Eyes constant-pixel dots — whole universe always visible
+  if(_celDots){try{scene.remove(_celDots);_celDots.geometry.dispose();}catch(_){}}
+  _celDotPos=new Float32Array(Math.max(1,_celBodies.length)*3);
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(_celDotPos,3));
+  _celDots=new THREE.Points(g,new THREE.PointsMaterial({color:0x9feaff,size:3.5,sizeAttenuation:false,
+    transparent:true,opacity:0.85,depthTest:true,depthWrite:false}));
+  _celDots.frustumCulled=false; scene.add(_celDots);
+}
+/* live METEORITES — spawned/expired on every /metrics poll (alerts, newest GLBs); expire back to dust */
+function celHydrateLive(m){
+  if(!_celBuilt||!scene)return;
+  const want={};
+  const mk=(key,label,parentName,color,card)=>{
+    want[key]=1;
+    if(_celMets[key]){try{_celMets[key].userData.getCard=card;}catch(_){ } return;}
+    const parent=bodyMap.get(parentName); if(!parent)return;
+    const b=addBody({name:'cel:met:'+key,label:label.slice(0,22),color:color,radius:10,angle:0,y:0,
+      size:Math.max(60,(parent.userData.baseScale||300)*0.10)/22});
+    b.userData.getCard=card; b.userData.celKind='meteorite'; b.userData.celLockScale=true;
+    _celBodies.push(b); _celMets[key]=b;
+    _celOrbit(b,parent,(parent.userData.baseScale||300)*3.1+(Object.keys(_celMets).length%3)*150,0.09,key,0.85);
+    _celDotsRebuild();
+  };
+  (((m||{}).health||{}).alerts||[]).forEach(a=>mk('alert:'+a.title,(a.level==='critical'?'☄ ':'⚠ ')+a.title,
+    'cel:infrastructure',a.level==='critical'?0xff5d6c:0xf5b942,
+    ()=>({title:a.title,subtitle:'live '+a.level+' alert',lines:[a.detail||'',a.hint||''],
+          actions:[{label:'🩺 Open Vitals',kind:'_fn',fn:()=>openVitals()}]})));
+  (((m||{}).glb||{}).recent||[]).slice(0,6).forEach(nm=>mk('glb:'+nm,'🆕 '+nm,'cel:md-generated',0xf5b942,
+    ()=>({title:nm,subtitle:'newest generated GLB',actions:[{label:'📚 Open Library',kind:'_fn',fn:()=>setMode('library')}]})));
+  Object.keys(_celMets).forEach(k=>{ if(!want[k]){ const b=_celMets[k];   // expire stale meteorites back to dust
+    try{scene.remove(b);}catch(_){ } const bi=bodies.indexOf(b); if(bi>=0)bodies.splice(bi,1);
+    for(let j=_celOrbiters.length-1;j>=0;j--)if(_celOrbiters[j].m===b)_celOrbiters.splice(j,1);
+    const ci=_celBodies.indexOf(b); if(ci>=0)_celBodies.splice(ci,1);
+    bodyMap.delete('cel:met:'+k); delete _celMets[k]; _celDotsRebuild(); }});
+}
+function _celTick(dt){
+  for(let i=0;i<_celOrbiters.length;i++){const c=_celOrbiters[i];c.a+=dt*c.om;   // spec orbit eq, parent-relative
+    c.m.position.set(c.parent.position.x+Math.cos(c.a)*c.orbR,
+      c.parent.position.y+Math.sin(c.a*1.7+c.phase)*c.orbR*0.16,
+      c.parent.position.z+Math.sin(c.a)*c.orbR*(1-0.18*(1-c.rel)));}
+  if(!_celDots)return;
+  for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
+    _celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;
+    const d=camera.position.distanceTo(b.position);
+    const want=((b.userData.baseScale||10)/Math.max(1,d))>CEL_LOD;  // graphics get better as you zoom in
+    if(b.visible!==want)b.visible=want;}
+  _celDots.geometry.attributes.position.needsUpdate=true;
 }
 
 /* ---- build/refresh ALL bodies from /metrics (deterministic; relationship-driven placement) ---- */
 function layoutFromMetrics(m){
   if(!scene)return;
   try{buildDomainPlanets();}catch(e){}                  // §1 A: the 16 real domain planets (built once)
+  try{celHydrateLive(m);}catch(e){}                     // CELESTIAL: live meteorites (alerts, newest GLBs) spawn/expire
   const c=m.completion||{},g={};((m.learning||{}).growth||[]).forEach(x=>g[x.label]=x);
   const corr=m.correlation||{},rout=m.routing||{},box=m.box||{},vps=m.vps||{};
   const vt=box.vram_total_gb||48,vu=box.vram_used_gb||0;
@@ -2007,10 +2764,22 @@ function tween(toPos,toTgt,ms,then){flying=true;const p0=camera.position.clone()
   (function step(){const k=Math.min(1,(performance.now()-t)/(ms||900));const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
     camera.position.lerpVectors(p0,toPos,e);controls.target.lerpVectors(t0,toTgt,e);controls.update();
     if(k<1)requestAnimationFrame(step);else{flying=false;if(then)then();}})();}
-function flyToBody(b){const bp=b.position.clone();const dir=camera.position.clone().sub(bp);
-  if(dir.lengthSq()<1)dir.set(0,0,1);dir.normalize();
-  tween(bp.clone().add(dir.multiplyScalar(46)),bp);}
-function flyHome(){tween(home.pos.clone(),home.tgt.clone(),800);}
+function flyToBody(b){
+  b.updateWorldMatrix(true,false);
+  const bp=b.getWorldPosition(new THREE.Vector3());
+  const dir=camera.position.clone().sub(bp); if(dir.lengthSq()<1)dir.set(0,0,1); dir.normalize();
+  const off=(b.userData.orbBody?Math.max(8,(b.userData.pickMesh?b.userData.pickMesh.geometry.parameters.radius:2)*6):Math.max(46,(b.userData.baseScale||10)*3.5));   // size-aware: never land inside a big galaxy
+  tween(bp.clone().add(dir.multiplyScalar(off)),bp);}
+function _collapseSystems(){ for(let i=0;i<_systemGroups.length;i++)_systemGroups[i].visible=false; }   // back to clean overview
+function _showSystemLayer(){ for(let i=0;i<_systemGroups.length;i++){const g=_systemGroups[i]; if(g.userData&&g.userData.systemLayer)g.visible=true;} }   // reveal satellites + meteors on Vitals drill-in
+function flyHome(){_collapseSystems();tween(home.pos.clone(),home.tgt.clone(),800);}
+/* CAMERA LOCK: 'frame all' / reset no longer computes an into-the-world overview that looked back AT
+   the core — the JARVIS POV (at the core, looking OUT) is the one home, so any reset returns there. */
+function _frameAll(animate){
+  if(!camera||!controls)return;
+  if(animate){ tween(home.pos.clone(), home.tgt.clone(), 900); }
+  else { try{camera.position.copy(home.pos); controls.target.copy(home.tgt); controls.update();}catch(_){} }
+}
 function selectNode(i){if(!_constellation||i==null||i<0)return false;
   const ns=_constellation.nodes,n=ns[i];if(!n)return false;
   // a graph star is not in `bodies` → clear any body selection so closeCard()'s fly-home still fires
@@ -2144,8 +2913,9 @@ let _pinGrab=null,_pinGhost=null;
 function _bodyAt(e){ if(!uniReady)return null;
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const hit=ray.intersectObjects(bodies.slice(),true)[0];
-  if(!hit)return null; let o=hit.object;while(o&&!o.userData.name)o=o.parent;return o||null;}
+  const tg=bodies.slice();for(let i=0;i<_pickBodies.length;i++)tg.push(_pickBodies[i]);
+  const hit=ray.intersectObjects(tg,true)[0];
+  if(!hit)return null; let o=hit.object;while(o&&!o.userData.name&&!o.userData.orbBody)o=o.parent;return o||null;}
 function _overDock(e){const d=$('dock');if(!d)return false;const r=d.getBoundingClientRect();
   return e.clientX>=r.left-20&&e.clientX<=r.right+20&&e.clientY>=r.top-20&&e.clientY<=r.bottom+20;}
 function _pinDragStart(e){const b=_bodyAt(e);
@@ -2178,11 +2948,12 @@ function onCanvasClick(e){
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
   const targets=bodies.slice();
+  for(let i=0;i<_pickBodies.length;i++)targets.push(_pickBodies[i]);
   if(_constellation&&_constellation.inst)targets.push(_constellation.inst);
   const hit=ray.intersectObjects(targets,true)[0];
   if(hit){
     if(_constellation&&hit.object===_constellation.inst&&hit.instanceId!=null){selectNode(hit.instanceId);return;}
-    let o=hit.object;while(o&&!o.userData.name)o=o.parent;if(o){
+    let o=hit.object;while(o&&!o.userData.name&&!o.userData.orbBody)o=o.parent;if(o){
       clearTimeout(_selectPending);
       _selectPending=setTimeout(()=>{selectBody(o);_selectPending=null;},220);
       return;}
@@ -2190,13 +2961,17 @@ function onCanvasClick(e){
   clearTimeout(_selectPending);_selectPending=null;closeCard();
 }
 function selectBody(b){
-  if(_selected)_selected.userData.selected=false;
-  _selected=b;b.userData.selected=true;
+  if(_selected){_selected.userData.selected=false; _removeSelRing(_selected);}
+  _selected=b;b.userData.selected=true; _attachSelRing(b); b.userData.selPulse=1; sfxBlip('select');
+  // §progressive disclosure: focus a galaxy → reveal its planets; focus a planet → reveal its moons
+  try{ if(/^dom:/.test(b.userData.name||'')){ _collapseSystems(); if(b.userData.planetGroup)b.userData.planetGroup.visible=true; }
+    else if(b.userData.planet&&b.userData.moonGroup){ b.userData.moonGroup.visible=true; } }catch(_){}
   flyToBody(b);
   const gc=b.userData.getCard;
   if(gc){const o=gc();
     // refresh the card live on each tick while this body stays selected — but NOT while a drill/file view is up
-    b.userData.refresh=()=>{ if(_selected===b && !_cardDrilled){const oo=b.userData.getCard&&b.userData.getCard();if(oo)showCardKeepActions(oo);} };
+    b.userData.refresh=(b.userData.orbBody&&(b.userData.planet||b.userData.moon))?null:
+      (()=>{ if(_selected===b && !_cardDrilled){const oo=b.userData.getCard&&b.userData.getCard();if(oo)showCardKeepActions(oo);} });
     // handle special card actions that route to overlays
     if(o.actions)o.actions=o.actions.map(a=>{
       if(a.kind==='open'&&a.arg==='#guardian')return {label:a.label,kind:'_fn',fn:()=>setMode('guardian')};
@@ -2221,6 +2996,69 @@ function showCardKeepActions(o){ // live refresh of props/bar without disturbing
 }
 
 /* ---- the render loop — NEVER throws (guarded) ---- */
+const _LABEL_CAP=18, _labelTmp=new THREE.Vector3(), _followTmp=new THREE.Vector3(), _followDelta=new THREE.Vector3(); let _labelAcc=0;
+function _labelPass(dt){
+  _labelAcc+=dt; if(_labelAcc<0.16) return; _labelAcc=0;
+  const cam=camera.position, cand=[];
+  for(let i=0;i<_spinBodies.length;i++){ const g=_spinBodies[i], sp=g.userData.labelSprite; if(!sp) continue;
+    g.getWorldPosition(_labelTmp); const dist=_labelTmp.distanceTo(cam);
+    const core=g.userData.pickMesh;
+    const wsize=(core&&core.geometry&&core.geometry.parameters&&core.geometry.parameters.radius)||1;
+    const forced=(g.userData.hoverWant>0)||(typeof _selected!=='undefined'&&_selected===g);   // hover/selection forces a label
+    if(dist>30000 && !forced){ _fadeLabel(sp,0,dt); continue; }   // label gate for the vast field
+    cand.push({sp, score: forced?1e9:(wsize/Math.max(1,dist))});
+  }
+  cand.sort((a,b)=>b.score-a.score);
+  for(let i=0;i<cand.length;i++) _fadeLabel(cand[i].sp, i<_LABEL_CAP?1:0, dt);
+}
+function _fadeLabel(sp,target,dt){ const next=sp.material.opacity+(target-sp.material.opacity)*Math.min(1,dt*8);
+  sp.material.opacity=next; sp.visible=next>0.02; }
+/* §D SFX — OFF by default, calm/reduce-motion aware, reuses the TTS AudioContext */
+let _sfxOn=false; try{_sfxOn=localStorage.getItem('jv_sfx')==='1';}catch(_){}
+window.setSfx=(on)=>{_sfxOn=!!on; try{localStorage.setItem('jv_sfx',on?'1':'0');}catch(_){}};
+let _lastBlip=0;
+function sfxBlip(kind){
+  if(!_sfxOn)return;
+  if(document.body.classList.contains('calm')||document.body.classList.contains('reduce-motion'))return;
+  const ctx=(typeof _ttsCtx!=='undefined')?_ttsCtx:null; if(!ctx)return;
+  const now=performance.now(); if(now-_lastBlip<60)return; _lastBlip=now;
+  try{ const tt=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();
+    const f={hover:880,select:1320,fly:660}[kind]||880, vol={hover:0.015,select:0.05,fly:0.04}[kind]||0.02;
+    o.type='sine'; o.frequency.setValueAtTime(f,tt);
+    if(kind==='select')o.frequency.exponentialRampToValueAtTime(f*1.5,tt+0.12);
+    g.gain.setValueAtTime(0,tt); g.gain.linearRampToValueAtTime(vol,tt+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,tt+(kind==='hover'?0.10:0.22));
+    o.connect(g); g.connect(ctx.destination); o.start(tt); o.stop(tt+0.3);
+  }catch(_){}
+}
+/* §D hover probe — sets hoverWant on the body under the cursor (reuses the single _pickBodies registry) */
+let _hovered=null, _lastHoverT=0;
+function _hoverProbe(e){
+  if(!uniReady||userDragging||(_pinGrab&&_pinGrab.armed)||flying)return;
+  const now=performance.now(); if(now-_lastHoverT<55)return; _lastHoverT=now;
+  mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mouse,camera);
+  const pool=bodies.slice(); for(let i=0;i<_pickBodies.length;i++)pool.push(_pickBodies[i]);
+  const hit=ray.intersectObjects(pool,true)[0];
+  let o=hit?hit.object:null; while(o&&!(o.userData&&(o.userData.name||o.userData.orbBody)))o=o.parent;
+  if(o===_hovered)return;
+  if(_hovered&&_hovered.userData)_hovered.userData.hoverWant=0;
+  _hovered=o||null;
+  if(_hovered){_hovered.userData.hoverWant=1; document.body.style.cursor='pointer'; sfxBlip('hover');}
+  else document.body.style.cursor='';
+}
+/* §D selection ring — dashed additive holographic ring; attached on select, removed on deselect */
+function _attachSelRing(b){ try{
+  const sz=(b.userData.pickMesh&&b.userData.pickMesh.geometry.parameters.radius)||b.userData.baseScale||4;
+  const seg=96, pos=new Float32Array((seg+1)*3), R=sz*1.5;
+  for(let i=0;i<=seg;i++){const a=i/seg*6.2831853; pos[i*3]=Math.cos(a)*R; pos[i*3+1]=Math.sin(a)*R; pos[i*3+2]=0;}
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const ring=new THREE.Line(g,new THREE.LineDashedMaterial({color:0x9bffff,transparent:true,opacity:0,
+    dashSize:R*0.16,gapSize:R*0.10,depthWrite:false,blending:THREE.AdditiveBlending}));
+  ring.computeLineDistances(); ring.userData.selRing=true; ring.renderOrder=2;
+  b.add(ring); b.userData.selRing=ring;
+}catch(_){} }
+function _removeSelRing(b){ if(b&&b.userData&&b.userData.selRing){try{b.remove(b.userData.selRing);}catch(_){}; b.userData.selRing=null;} }
 function tickFrame(){
   requestAnimationFrame(tickFrame);
   if(!renderer)return;
@@ -2234,7 +3072,7 @@ function tickFrame(){
     if(beamMat&&beamMat.uniforms){beamMat.uniforms.uAmp.value=A;beamMat.uniforms.uTime.value=PULSE.flow;}
     if(beamCore)beamCore.material.opacity=0.20+SPK*0.30;   // U1: lower ceiling so a speaking pulse brightens the beam without re-flooding the centre to white
     if(torus){torus.rotation.z+=dt*(0.4+A*0.6);torus.rotation.x+=dt*0.12;}
-    if(fellBack&&coreMesh){coreMesh.rotation.y+=dt*0.3;coreMesh.scale.setScalar(22*(1+A*0.18));
+    if(fellBack&&coreMesh){coreMesh.rotation.y+=dt*0.3;coreMesh.scale.setScalar(1+A*0.18);   // BUGFIX: geometry is ALREADY radius 22 — the old 22× double-scale made a ~484u giant faceted "blue orb" engulfing the universe
       if(coreMesh.material&&'emissiveIntensity' in coreMesh.material)coreMesh.material.emissiveIntensity=0.8+A*2.4;}
 
     // --- PLANETS: pulse/scale + spike-brighten + birth pop (subscribe to PULSE) ---
@@ -2252,6 +3090,29 @@ function tickFrame(){
 
     // --- CONSTELLATION: gentle shared breathing ---
     if(_constellation&&_constellation.inst)_constellation.inst.rotation.y+=dt*0.01;
+    for(let _mi=0;_mi<_moonGroups.length;_mi++){const _g=_moonGroups[_mi];_g.rotation.y+=dt*(_g.userData.spin||0.12);}      // each system orbits at its own speed
+    for(let _si=0;_si<_spinBodies.length;_si++)_spinBodies[_si].rotation.y+=dt*(_spinBodies[_si].userData.spinSelf||0.08);   // bodies self-rotate (hologram spin)
+    _labelPass(dt);   // §9 decluttered name labels: nearest/largest ≤18 bodies reveal their real name
+    // --- §D INTERACTION TWEENS + VFX PUMP (orbs scale/glow; selection ring; orbit-ring energy; backdrop) ---
+    const _calm=document.body.classList.contains('reduce-motion')||document.body.classList.contains('calm');
+    const _hoverK=_calm?0.10:0.22, _selScale=_calm?0.08:0.16;
+    for(let _pi=0;_pi<_pickBodies.length;_pi++){ const g=_pickBodies[_pi], u=g.userData;
+      u.hover += ((u.hoverWant||0)-(u.hover||0))*Math.min(1,dt*9);
+      u.selPulse=Math.max(0,(u.selPulse||0)-dt*1.4);
+      const sel=u.selected?1:0, bs=u.baseScale||1;
+      g.scale.setScalar(bs*(1+(u.hover||0)*_hoverK+sel*0.06+u.selPulse*_selScale));
+      if(u.pickMesh&&u.pickMesh.material)u.pickMesh.material.opacity=0.16+(u.hover||0)*0.22+sel*0.18; }
+    if(_selected&&_selected.userData.selRing){const sr=_selected.userData.selRing;
+      sr.lookAt(camera.position);
+      sr.material.opacity += (0.7-sr.material.opacity)*Math.min(1,dt*6);
+      sr.rotation.z += dt*(0.4+(_selected.userData.selPulse||0)*2.0);}
+    for(let _ri=0;_ri<_orbitRings.length;_ri++){const rm=_orbitRings[_ri].material;
+      if('dashOffset' in rm)rm.dashOffset-=dt*(_calm?2:6);
+      rm.opacity=(_orbitRings[_ri].userData._baseOp||rm.opacity)*(0.7+0.5*A);}
+    if(_starField&&!_calm&&_starField.material.uniforms)_starField.material.uniforms.uTime.value=t;
+    if(_nebula&&_nebula.material.uniforms)_nebula.material.uniforms.uTime.value=t;
+    for(let _gi=0;_gi<_galaxyOrbiters.length;_gi++){const _o=_galaxyOrbiters[_gi],u=_o.userData;u.oa+=dt*u.os;_o.position.set(Math.cos(u.oa)*u.orr,u.oy,Math.sin(u.oa)*u.orr);}  // galaxies orbit the core
+    try{_celTick(dt);}catch(_){}  // CELESTIAL OS: spec orbits + NASA-Eyes dot cloud + apparent-size LOD
 
     // --- BLOOM tracks the organism (U1: base 0.85 matches the tuned constructor; modest swell so a loud
     //     PULSE glows without re-blowing the centre to white — was 1.25 base + 0.9*A + 0.5*SPIKE) ---
@@ -2308,8 +3169,14 @@ function tickFrame(){
 
     // preserved camera idle-orbit
     if(!userDragging&&!flying){const rad=Math.hypot(camera.position.x,camera.position.z);
-      const a=Math.atan2(camera.position.x,camera.position.z)+dt*0.04;
+      const a=Math.atan2(camera.position.x,camera.position.z)+dt*0.02;
       camera.position.x=Math.sin(a)*rad;camera.position.z=Math.cos(a)*rad;}
+    // §LOCK-ON: keep the selected body centred as it orbits (camera + target follow its per-frame movement)
+    if(_selected && !flying){ try{
+      _selected.getWorldPosition(_followTmp);
+      _followDelta.copy(_followTmp).sub(controls.target);
+      if(_followDelta.lengthSq()<1e6){ camera.position.add(_followDelta); controls.target.copy(_followTmp); }
+    }catch(_){} }
     controls.update();
     if(composer)composer.render();else renderer.render(scene,camera);
   }catch(e){ /* never blank the page */ }
@@ -2341,11 +3208,185 @@ function readGodrays(){
   if(window.jarvisSpeak)jarvisSpeak(msg);
 }
 
+/* ================= LIVE TASKS ENHANCEMENTS: Artifacts + Review ================= */
+// Global artifact window manager
+const ArtifactWindows=new Map();  // windowId -> {el, taskId, type, pos}
+
+function openArtifactWindow(taskId,type='task'){
+  const winId=`aw-${type}-${taskId}`;
+  if(ArtifactWindows.has(winId)){focusWindow(winId);return;}
+  // Limit to 3 concurrent windows; older ones get a tab switcher
+  if(ArtifactWindows.size>=3){alert('Max 3 artifact windows open');return;}
+  const container=$('wlArtifactContainer');if(!container)return;
+  const win=document.createElement('div');
+  win.className='wlwindow';
+  win.id=winId;
+  win.innerHTML=`
+    <div class=wlwindow-head>
+      <span class=wlwindow-title>${type==='swarm'?'📋 Swarm':'📄 Task'} #${taskId} Documents</span>
+      <span class=wlwindow-close onclick="closeArtifactWindow('${winId}')">✕</span>
+    </div>
+    <div class=wlwindow-content><div class=wlwindow-loading>Loading artifacts…</div></div>
+  `;
+  win.style.left=(50+Math.random()*80)+'px';
+  win.style.top=(50+Math.random()*80)+'px';
+  container.appendChild(win);
+  ArtifactWindows.set(winId,{el:win,taskId,type,dragging:false});
+  makeDraggable(winId);
+  fetchArtifacts(taskId,type,winId);
+  saveWindowState();
+}
+
+function closeArtifactWindow(winId){
+  const w=ArtifactWindows.get(winId);if(!w)return;
+  w.el.style.opacity='0';
+  setTimeout(()=>{w.el.remove();ArtifactWindows.delete(winId);saveWindowState();},300);
+}
+
+function focusWindow(winId){
+  const w=ArtifactWindows.get(winId);if(!w)return;
+  w.el.style.zIndex=41+ArtifactWindows.size;
+}
+
+function makeDraggable(winId){
+  const w=ArtifactWindows.get(winId);if(!w)return;
+  const head=w.el.querySelector('.wlwindow-head');
+  if(!head)return;
+  let startX=0,startY=0,startL=0,startT=0,dragging=false;
+  head.addEventListener('pointerdown',(e)=>{
+    dragging=true;startX=e.clientX;startY=e.clientY;
+    const r=w.el.getBoundingClientRect();startL=r.left;startT=r.top;
+  });
+  document.addEventListener('pointermove',(e)=>{
+    if(!dragging)return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    let newL=Math.max(0,Math.min(startL+dx,window.innerWidth-w.el.offsetWidth));
+    let newT=Math.max(0,Math.min(startT+dy,window.innerHeight-w.el.offsetHeight));
+    w.el.style.left=newL+'px';w.el.style.top=newT+'px';
+  });
+  document.addEventListener('pointerup',()=>{dragging=false;saveWindowState();});
+}
+
+function fetchArtifacts(taskId,type,winId){
+  const endpoint=type==='swarm'?`/swarm/artifacts?id=${taskId}`:`/task/artifacts?id=${taskId}`;
+  fetch(endpoint).then(r=>r.json()).then(d=>{
+    const w=ArtifactWindows.get(winId);if(!w)return;
+    const content=w.el.querySelector('.wlwindow-content');
+    if(!d.ok){content.innerHTML='<div class=wlwindow-loading style=color:var(--rd)>Error loading artifacts</div>';return;}
+    let html='';
+    if(type==='task'){
+      html+=`<strong>Status:</strong> ${d.status}\n`;
+      html+=`<strong>Completion:</strong> ${d.pct}%\n`;
+      if(d.prompt)html+=`\n<strong>Prompt:</strong>\n${d.prompt}\n`;
+      if(d.model)html+=`\n<strong>Model:</strong> ${d.model}\n`;
+      if(d.outfile_content)html+=`\n<strong>Output:</strong>\n${d.outfile_content}\n`;
+    }else{  // swarm
+      html+=`<strong>Status:</strong> ${d.status}\n`;
+      html+=`<strong>Step:</strong> ${d.step}\n`;
+      if(d.plan&&d.plan.length)html+=`\n<strong>Plan:</strong>\n${d.plan.join(' → ')}\n`;
+      if(d.results&&d.results.length){
+        html+=`\n<strong>Results:</strong>\n`;
+        d.results.forEach((r,i)=>{
+          html+=`Step ${i+1}: ${r.label||'step'}\n`;
+          if(r.output)html+=r.output.slice(0,1000)+(r.output.length>1000?'\n... (truncated)':'')+'\n';
+        });
+      }
+    }
+    content.innerHTML='<pre>'+html.replace(/</g,'&lt;')+'</pre>';
+  }).catch(e=>{
+    const w=ArtifactWindows.get(winId);if(!w)return;
+    const content=w.el.querySelector('.wlwindow-content');
+    content.innerHTML='<div class=wlwindow-loading style=color:var(--rd)>Network error</div>';
+  });
+}
+
+function saveWindowState(){
+  const state={};
+  ArtifactWindows.forEach((w,id)=>{
+    const r=w.el.getBoundingClientRect();
+    state[id]={l:w.el.style.left,t:w.el.style.top};
+  });
+  try{sessionStorage.setItem('wl_window_state',JSON.stringify(state));}catch(e){}
+}
+
+function restoreWindowState(){
+  try{
+    const state=JSON.parse(sessionStorage.getItem('wl_window_state')||'{}');
+    ArtifactWindows.forEach((w,id)=>{
+      if(state[id]){w.el.style.left=state[id].l;w.el.style.top=state[id].t;}
+    });
+  }catch(e){}
+}
+
+// Hook into worklist row creation to add Document + approval buttons
+const originalReconcile=reconcile;
+reconcile=function(items){
+  originalReconcile(items);
+  // Inject Document + approval buttons into each row
+  WL_EL.forEach((el,rowId)=>{
+    let docLink=el.ctl.querySelector('.wldocument');
+    if(!docLink){
+      docLink=document.createElement('button');
+      docLink.className='wldocument';
+      docLink.type='button';
+      const [type,id]=rowId.includes(':')?rowId.split(':'):['task',rowId];
+      docLink.textContent='📄 Document';
+      docLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();openArtifactWindow(parseInt(id),type);};
+      docLink.title='View task/swarm artifacts and output';
+      el.ctl.insertBefore(docLink,el.ctl.firstChild);
+    }
+    // Add approval buttons for swarms
+    if(rowId.startsWith('sw:')){
+      if(!el.ctl.querySelector('.wlapprove')){
+        const approve=document.createElement('button');
+        approve.className='wlapprove';
+        approve.type='button';
+        approve.textContent='✓';
+        approve.title='Approve this swarm';
+        approve.onclick=(e)=>{e.preventDefault();recordReview(parseInt(rowId.split(':')[1]),'approved');};
+        el.ctl.appendChild(approve);
+
+        const decline=document.createElement('button');
+        decline.className='wldecline';
+        decline.type='button';
+        decline.textContent='✗';
+        decline.title='Decline this swarm';
+        decline.onclick=(e)=>{e.preventDefault();recordReview(parseInt(rowId.split(':')[1]),'declined');};
+        el.ctl.appendChild(decline);
+      }
+    }
+  });
+};
+
+function recordReview(taskId,decision){
+  const rowId=`tk:${taskId}`;  // assume tasks first; swarms will be sw:taskId
+  const btn=document.querySelector(`[data-row="${rowId}"] .wl${decision==='approved'?'approve':'decline'}`);
+  if(btn)btn.disabled=true;
+  fetch(`/task/review`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task_id:taskId,decision,notes:''})})
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.ok){
+        const row=document.querySelector(`[data-row="${rowId}"]`);
+        if(row){
+          row.dataset.review=decision;
+          if(btn)btn.setAttribute('data-pressed','true');
+          wlToast(`${decision==='approved'?'Approved':'Declined'}`,decision==='approved'?'success':'');
+        }
+      }else{
+        if(btn)btn.disabled=false;
+        wlToast(`Review failed: ${d.error||'unknown'}`,`error`);
+      }
+    })
+    .catch(e=>{if(btn)btn.disabled=false;wlToast('Review error',`error`);});
+}
+
 /* ================= boot ================= */
 function engage(){if(_engaged)return;_engaged=true;
   unlockAudio();                                            // unlock playback within the user gesture
-  // greet BEFORE any camera work (preserved ordering)
-  setTimeout(()=>jarvisSpeak('JARVIS online. All systems live. How can I help?'),700);
+  // greet WITHIN the gesture (no setTimeout) so the male /tts voice plays — a delay drops us to the
+  // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
+  try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
+  try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
@@ -2357,6 +3398,13 @@ wireDockMove();              // §1 D: make the whole dock draggable to any posi
 wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
-setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();}},2200);
+setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();
+  // auto-engage shows the universe but CANNOT play audio (no user gesture) — so the VOICE part
+  // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
+  addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
+    try{unlockAudio();}catch(_){}
+    try{jarvisSpeak("JARVIS online. How may I help?");}catch(_){}
+    try{if(typeof micToggle==='function'&&!_rec)micToggle();}catch(_){}} ,{once:true});
+}},2200);
 </script>
 </body></html>

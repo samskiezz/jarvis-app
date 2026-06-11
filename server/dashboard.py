@@ -1210,7 +1210,10 @@ JARVIS_PERSONA = (
     "briefly and naturally that it is being done. "
     "Ground everything in HER real world — her home, her family, her devices, her day. Do NOT invent "
     "fictional Iron Man elements: no Avengers, no 'the suit', no Pepper, no Tony Stark, no New York labs. "
-    "You are simply her JARVIS, here with her, now. Keep replies under 45 words, conversational, like real speech."
+    "You are simply her JARVIS, here with her, now. Keep replies under 45 words, conversational, like real speech. "
+    "BUTLER REFINEMENT: measured, unhurried cadence; impeccable understated courtesy; anticipate the need behind "
+    "the request and offer the next helpful step in the same breath. Acknowledgements are brief and elegant — "
+    "'At once.', 'Very good.', 'Consider it done.' — never robotic confirmations."
 )
 
 
@@ -1234,7 +1237,12 @@ def _persona_sysmsg(address: str = "ma'am") -> str:
     """The full JARVIS system prompt with the live speaker (sir/ma'am) appended. Shared by every
     conversational path so the persona is identical whether we go through the tiered seam or the
     direct box fallback."""
-    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "ma'am"
+    a = str(address or "").lower()
+    if a in ("", "neutral", "unknown"):
+        # speaker's voice not yet assessed — stay gracious but use NO ma'am/sir until it is
+        return _persona() + ("\n\n[CURRENT SPEAKER] The speaker's voice has not been assessed yet — "
+                             "do NOT use \"ma'am\" or \"sir\"; speak warmly and directly without an honorific.")
+    addr = "sir" if a in ("sir", "male", "man", "m") else "ma'am"
     return _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with " +
                          ("a gentleman; address him as \"sir\"" if addr == "sir"
                           else "a lady; address her as \"ma'am\"") +
@@ -1270,12 +1278,17 @@ def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
                                "temperature": 0.7, "top_p": 0.92, "stream": False}).encode()
             req = urllib.request.Request(JARVIS_LLM + "/chat/completions", data=body, method="POST",
                                          headers={"Content-Type": "application/json", "Authorization": "Bearer ollama"})
-            with urllib.request.urlopen(req, timeout=45) as x:
+            with urllib.request.urlopen(req, timeout=10) as x:   # fail fast per model — she must never wait minutes for a reply
                 d = json.loads(x.read().decode())
             txt = ((d.get("choices") or [{}])[0].get("message") or {}).get("content", "").strip()
             if txt:
                 return txt
-        except Exception:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001
+            # connection-level failure = the BOX itself is down — the other models live on the same box,
+            # so retrying them just multiplies the wait. Break straight to the lifeline fallback.
+            if isinstance(getattr(e, "reason", None), (TimeoutError, ConnectionError)) or "timed out" in str(e).lower() \
+               or "refused" in str(e).lower() or "unreachable" in str(e).lower():
+                break
             continue
     return ""
 
@@ -1873,11 +1886,59 @@ def _godrays_selfcheck() -> dict:
     return out
 
 
+# ── CELESTIAL OS: repo-to-universe index (celestial/ package + generated scan) ───────────────
+# Serves the curated seed map (planets/moons/meteorites/satellites with precomputed importance,
+# radii and orbits) plus AGGREGATES of the generated repo scan (dust counts per parent, file-moon
+# counts per planet). The raw generated index is ~22 MB / 60k dust nodes — dust is GPU-instanced
+# particles client-side, so only counts cross the wire. Regenerate the scan after every merge:
+#   python3 scripts/scan_repo_to_celestial_index.py
+_CELESTIAL = {"payload": None, "ts": 0.0}
+
+
+def _celestial_payload() -> dict:
+    if _CELESTIAL["payload"] is not None and (time.time() - _CELESTIAL["ts"]) < 300:
+        return _CELESTIAL["payload"]
+    here = os.path.dirname(__file__)
+    out = {"ok": False, "seed": None, "generated": None}
+    try:
+        with open(os.path.join(here, "..", "celestial", "jarvis_celestial_seed_map.json"),
+                  encoding="utf-8") as f:
+            seed = json.load(f)
+        out["seed"] = seed
+        out["ok"] = True
+    except Exception as e:  # noqa: BLE001
+        out["seed_error"] = str(e)[:160]
+    try:
+        with open(os.path.join(here, "data", "celestial_index.generated.json"),
+                  encoding="utf-8") as f:
+            gen = json.load(f)
+        dust_counts: dict = {}
+        file_moons: dict = {}
+        for n in gen.get("nodes", []):
+            if n.get("kind") == "dust":
+                dust_counts[n.get("parent", "")] = dust_counts.get(n.get("parent", ""), 0) + 1
+            elif n.get("kind") == "moon" and str(n.get("id", "")).startswith("moon:file:"):
+                file_moons[n.get("parent", "")] = file_moons.get(n.get("parent", ""), 0) + 1
+        out["generated"] = {"generated_at": gen.get("generated_at"),
+                            "total_nodes": len(gen.get("nodes", [])),
+                            "dust_counts": dust_counts, "file_moons": file_moons}
+    except Exception as e:  # noqa: BLE001
+        out["generated_error"] = str(e)[:160]
+    _CELESTIAL["payload"] = out
+    _CELESTIAL["ts"] = time.time()
+    return out
+
+
 class _H(http.server.BaseHTTPRequestHandler):
     def _send(self, body: bytes, ctype: str):
         self.send_response(200)
         self.send_header("Content-Type", ctype)
         self.send_header("Access-Control-Allow-Origin", "*")
+        # Live app: HTML + JSON are always dynamic — never let a browser/proxy serve a stale copy.
+        # (Static GLB/asset routes set their own long max-age via a separate sender, so they stay cached.)
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
@@ -1907,6 +1968,8 @@ class _H(http.server.BaseHTTPRequestHandler):
             self._send(json.dumps(_children(
                 q.get("id", [""])[0], q.get("kind", [""])[0],
                 q.get("exclude", [""])[0], min(40, _i("limit", 14)))).encode(), "application/json")
+        elif self.path.startswith("/celestial"):
+            self._send(json.dumps(_celestial_payload()).encode(), "application/json")
         elif self.path.startswith("/graphdata"):
             self._send(json.dumps(_graph_data()).encode(), "application/json")
         elif self.path.startswith("/search"):
@@ -1930,12 +1993,48 @@ class _H(http.server.BaseHTTPRequestHandler):
                 self._send(json.dumps({"files": [f for f in fs if f.endswith(".py")][:40]}).encode(), "application/json")
             except Exception:  # noqa: BLE001
                 self._send(b'{"files":[]}', "application/json")
+        elif self.path.startswith("/tasks/poll"):
+            from server.services import task_daemon as TD
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                since = int(q.get("since", ["0"])[0] or 0)
+                self._send(json.dumps(TD.tasks_poll(since)).encode(), "application/json")
+            except Exception as e:
+                self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
         elif self.path.startswith("/tasks"):
             from server.services import task_daemon as TD
             self._send(json.dumps(TD.list_tasks()).encode(), "application/json")
+        elif self.path.startswith("/task/artifacts"):
+            from server.services import task_daemon as TD
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                tid = int(q.get("id", ["0"])[0] or 0)
+                self._send(json.dumps(TD.task_artifacts(tid)).encode(), "application/json")
+            except Exception as e:
+                self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
+        elif self.path.startswith("/swarms/detail"):
+            from server.services import task_daemon as TD
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                since = int(q.get("since", ["0"])[0] or 0)
+                self._send(json.dumps(TD.swarms_detail(since)).encode(), "application/json")
+            except Exception as e:
+                self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
         elif self.path.startswith("/swarms"):
             from server.services import task_daemon as TD
             self._send(json.dumps(TD.swarm_list()).encode(), "application/json")
+        elif self.path.startswith("/swarm/artifacts"):
+            from server.services import task_daemon as TD
+            from urllib.parse import urlparse, parse_qs
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                sid = int(q.get("id", ["0"])[0] or 0)
+                self._send(json.dumps(TD.swarm_artifacts(sid)).encode(), "application/json")
+            except Exception as e:
+                self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
         elif self.path.startswith("/swarm"):
             from server.services import task_daemon as TD
             from urllib.parse import urlparse, parse_qs
@@ -2260,6 +2359,17 @@ class _H(http.server.BaseHTTPRequestHandler):
             else:
                 req = q.get("q", [""])[0] or q.get("prompt", [""])[0]
                 res = TD.swarm_build(req, archon=q.get("archon", ["0"])[0] == "1")
+            self._send(json.dumps(res).encode(), "application/json")
+        elif self.path.startswith("/task/review"):
+            # Record user approve/decline decision on a task or swarm
+            from server.services import task_daemon as TD
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            res = TD.record_review(body.get("task_id") or body.get("id") or 0,
+                                  body.get("decision") or "", body.get("notes") or "")
             self._send(json.dumps(res).encode(), "application/json")
         elif self.path.startswith("/task"):
             from server.services import task_daemon as TD
