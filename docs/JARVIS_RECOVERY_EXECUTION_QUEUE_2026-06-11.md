@@ -22,13 +22,13 @@ This queue is the live recovery list from the current thread. Do not mark an ite
    Status: done.
 
 4. Verify the device-access and phone-control popups appear after load and remain usable on mobile.
-   Status: pending.
+   Status: done. Verified public mobile browser smoke loads `window.A11Y`, `#a11y-layer`, `#a11y-captions`, and `#ovAccess` with zero 404s.
 
 5. Rebuild the celestial menu into a usable PS5-style 3D app menu without changing the approved visual theme.
-   Status: pending.
+   Status: partial. The live renderer now uses lane-slot placement, mounted asset/media URLs, Explore camera framing, and verified public Three.js boot. The full repo-wide menu taxonomy is still pending.
 
 6. Fix celestial body spacing, labels, importance order, orbit grouping, lazy loading, camera modes, and space dust GLBs.
-   Status: pending.
+   Status: partial. Verified public browser boot shows 183 celestial bodies, instanced 3D dust, mounted GLB loading, zero 404s, and no forbidden UI theme markers. Remaining work: complete taxonomy, duplicate prevention, all camera-mode usability checks, and full label/shortcut audit.
 
 7. Ensure every repo feature/document/function maps to a scalable celestial menu object or documented shortcut without duplicates.
    Status: pending.
@@ -41,3 +41,18 @@ This queue is the live recovery list from the current thread. Do not mark an ite
 
 10. Produce a missing-features/functions backlog after the smoke tests, grouped by UI, JARVIS agent, LLM/GPU, celestial menu, accessibility, and mini-apps.
     Status: pending.
+
+## Verified Recovery Commits
+
+- `582c48c2 fix(jarvis): restore approved UI and stop agent hangs`
+- `42494c3f fix(jarvis): keep dashboard chat responsive`
+- `605d0915 fix(jarvis): stabilize celestial menu and agent access`
+
+## Latest Public Smoke Results
+
+- `/jarvis/` returns 200.
+- `/jarvis/asset/jarvis_kit_data_orb.glb` returns 200.
+- `/jarvis/media/gen_tripo__balance_scale_lab.glb` returns 200.
+- `/jarvis/a11y/a11y.css` and `/jarvis/a11y/a11y.js` return 200.
+- `/jarvis/chat` returns a greeting response in under 0.1s for `hello jarvis`.
+- Chromium mobile probe: no page errors, no 404s, `window.A11Y` loaded, access overlay exists, Celestial OS built, 183 celestial bodies present, 3D dust instancing present, forbidden unapproved UI theme markers absent.
