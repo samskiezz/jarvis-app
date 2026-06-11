@@ -99,6 +99,12 @@ def list_instances() -> dict:
                 "image": it.get("image_uuid") or it.get("image"),
                 "ssh_host": it.get("ssh_host"), "ssh_port": it.get("ssh_port"),
                 "gpu_util": it.get("gpu_util"), "label": it.get("label"),
+                # FULL spec profile (used to find a genuinely-similar cheaper box, not just same VRAM):
+                "dlperf": round(float(it.get("dlperf") or 0), 1),          # Vast deep-learning perf score
+                "cpu_cores": it.get("cpu_cores"), "cpu_ram_gb": round(float(it.get("cpu_ram") or 0)/1024, 1),
+                "disk_gb": round(float(it.get("disk_space") or 0), 0),
+                "inet_down": round(float(it.get("inet_down") or 0), 0), "inet_up": round(float(it.get("inet_up") or 0), 0),
+                "compute_cap": it.get("compute_cap"),
             })
         return {"ok": True, "instances": out}
     except Exception as e:  # noqa: BLE001
@@ -158,6 +164,60 @@ def create_instance(offer_id: int, image: str = None, disk_gb: int = None, onsta
         return {"ok": False, "error": str(e)[:200]}
 
 
+def cheapest_similar(src: dict, max_price: float = None) -> dict:
+    """Cheapest offer that matches the SOURCE across EVERY key spec Vast exposes — not just VRAM:
+    total VRAM, DL-perf (compute), CPU cores + system RAM, disk, network, and CUDA compute capability.
+    Each must be ≥ a sensible fraction of the source so the cheaper box is genuinely equivalent, not weaker."""
+    g = _guard()
+    if g: return g
+    from urllib.parse import quote
+    cap = max_price or max(float(src.get("price") or 1.0), 0.05)     # never pick something pricier than the source
+    # GPU-capability specs are matched TIGHTLY (these define equivalent compute power); host specs are
+    # adequacy FLOORS (the source is usually wildly over-provisioned on RAM/cores, so requiring ≥source
+    # there would forbid any saving). This is what "similar specs, cheapest" actually means.
+    need = {
+        "vram":   float(src.get("vram_gb") or 0) * 1024 * 0.90,                  # ≥90% total VRAM (tight)
+        "dlperf": float(src.get("dlperf") or 0) * 0.80,                          # ≥80% DL-perf (tight — real GPU power)
+        "cc":     float(src.get("compute_cap") or 0) * 0.85,                     # ≥ same GPU class/CUDA (tight)
+        "cpuram": min(float(src.get("cpu_ram_gb") or 0) * 1024, 32 * 1024),      # adequacy: ≤ source, capped at 32GB
+        "cores":  min(float(src.get("cpu_cores") or 0) * 0.25, 16),             # adequacy floor
+        "disk":   float(src.get("disk_gb") or 0) * 0.8,                          # need room for the data
+        "net":    min(float(src.get("inet_down") or 0) * 0.3, 300),             # adequacy: decent bandwidth
+    }
+    best = None; checked = 0
+    for ng in (1, 2, 4, 8):
+        q = {"verified": {"eq": True}, "rentable": {"eq": True}, "num_gpus": {"eq": ng},
+             "dph_total": {"lte": cap}, "order": [["dph_total", "asc"]], "type": "on-demand", "limit": 96}
+        try:
+            offers = (_req("GET", "/bundles/?q=" + quote(json.dumps(q))).get("offers") or [])
+        except Exception as e:  # noqa: BLE001
+            return {"ok": False, "error": str(e)[:200]}
+        for o in offers:
+            checked += 1
+            ngc = float(o.get("num_gpus") or 1)
+            if not o.get("rentable"): continue
+            if float(o.get("gpu_ram") or 0) * ngc < need["vram"]: continue
+            if float(o.get("dlperf") or 0)        < need["dlperf"]: continue
+            if float(o.get("cpu_ram") or 0)       < need["cpuram"]: continue
+            if float(o.get("cpu_cores") or 0)     < need["cores"]: continue
+            if float(o.get("disk_space") or 0)    < need["disk"]: continue
+            if float(o.get("inet_down") or 0)     < need["net"]: continue
+            if float(o.get("compute_cap") or 0)   < need["cc"]: continue
+            if best is None or float(o.get("dph_total") or 99) < float(best.get("dph_total") or 99):
+                best = o
+    if not best:
+        return {"ok": False, "error": "no box matching ALL source specs (VRAM/DL-perf/CPU/RAM/disk/net/CUDA) under $%.3f/hr (checked %d offers)" % (cap, checked)}
+    return {"ok": True, "offer": {
+        "id": best.get("id"), "gpu": best.get("gpu_name"), "num_gpus": best.get("num_gpus"),
+        "price": round(float(best.get("dph_total") or 0), 3),
+        "total_vram_gb": round(float(best.get("gpu_ram") or 0)*float(best.get("num_gpus") or 1)/1024, 1),
+        "dlperf": round(float(best.get("dlperf") or 0), 1),
+        "cpu_ram_gb": round(float(best.get("cpu_ram") or 0)/1024, 1), "cpu_cores": best.get("cpu_cores"),
+        "disk_gb": round(float(best.get("disk_space") or 0), 0),
+        "inet_down": round(float(best.get("inet_down") or 0), 0), "compute_cap": best.get("compute_cap"),
+        "reliability": round(float(best.get("reliability2") or 0), 3)}}
+
+
 def set_state(instance_id: int, running: bool) -> dict:
     g = _guard()
     if g: return g
@@ -187,10 +247,9 @@ def copy_instance(instance_id: int, max_price: float = None) -> dict:
     if not src:
         return {"ok": False, "error": "source instance not found"}
     recoup = sync_results(int(instance_id), "/workspace")   # pull EVERYTHING (results + checkpoints) down first
-    # CHEAPEST WITH SIMILAR SPECS: match the source's total VRAM (any GPU), pick the cheapest that fits —
-    # so we migrate off an expensive box onto a cheaper equivalent automatically.
-    src_vram = src.get("vram_gb") or 0
-    off = cheapest_offer(max_price=max_price, min_vram_gb=max(0, src_vram * 0.95))
+    # CHEAPEST WITH SIMILAR SPECS — matched across ALL specs (VRAM, DL-perf, CPU, RAM, disk, net, CUDA),
+    # not just VRAM, so the cheaper box is genuinely equivalent.
+    off = cheapest_similar(src, max_price=max_price)
     if not off.get("ok"):
         return off
     new = create_instance(off["offer"]["id"], image=src.get("image"),
