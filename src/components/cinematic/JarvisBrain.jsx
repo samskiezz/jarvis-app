@@ -46,6 +46,7 @@ import { isPriorityQueueQuery, buildPriorityQueueScript } from "@/components/cin
 import { isSkillGapQuery, buildSkillGapScript } from "@/components/cinematic/SkillGapAdvisor";
 import { isChatQuery, buildChatScript } from "@/components/cinematic/AgentChatTranscript";
 import { isThreatCorrelationQuery, buildThreatCorrelationScript } from "@/components/cinematic/ThreatCorrelationEngine";
+import { isSceneCompareQuery, buildSceneCompareScript } from "@/components/cinematic/SceneCompareView";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -540,6 +541,18 @@ export default function JarvisBrain() {
       const answer = buildChatScript(history);
       setThinking(false); typeOut(answer); speak(answer);
       hideT.current = setTimeout(() => setOpen(false), 7000);
+      return;
+    }
+
+    if (isSceneCompareQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:compare-toggle"));
+      try {
+        const answer = await buildSceneCompareScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(10000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
       return;
     }
 
