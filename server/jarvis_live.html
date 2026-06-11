@@ -748,8 +748,14 @@ async function gpuRefresh(){
     if(r.need_key){ key.style.display='block'; key.innerHTML='⚠ <b>Vast.ai API key needed.</b> Get it at <b>console.vast.ai → Account → API Key</b>, then add <code>VAST_API_KEY=…</code> to the server env and restart. Everything else is wired and ready.'; list.innerHTML=''; return; }
     key.style.display='none';
     const items=r.instances||[];
-    list.innerHTML = items.length? items.map(gpuCard).join('') :
-      '<div style="color:var(--dim);padding:20px;text-align:center">No instances running. Launch one above — it boots the cheapest matching GPU, runs your task, saves results to Hostinger, then disposes.</div>';
+    let brainBanner='';
+    try{ const br=await(await fetch('gpu/brain')).json();
+      if(br.brain){ brainBanner='<div style="background:rgba(52,211,153,.12);border:1px solid #34d399;border-radius:12px;padding:12px;margin-bottom:10px">🧠 <b>Brain ONLINE</b> — '+(br.brain.gpu||'GPU')+' ×'+(br.brain.num_gpus||1)+' running. JARVIS uses full AI when reachable.</div>'; }
+      else if((br.stopped||[]).length){ const s=br.stopped[0];
+        brainBanner='<div style="background:rgba(245,185,66,.12);border:1px solid #f5b942;border-radius:12px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">🧠 <b>Brain is STOPPED</b> ('+(s.gpu||'GPU')+' ×'+(s.num_gpus||1)+') — that\'s why JARVIS is on local replies. <button onclick="gpuAct(\'start\','+s.id+')" style="background:#0a3a2a;color:#34d399;border:1px solid #34d399;border-radius:8px;padding:6px 12px;font-weight:700">▶ Start brain → full AI</button></div>'; }
+    }catch(_){}
+    list.innerHTML = brainBanner + (items.length? items.map(gpuCard).join('') :
+      '<div style="color:var(--dim);padding:20px;text-align:center">No instances. Launch one above — it auto-sizes the GPU to your task, boots the cheapest match, runs it, saves results to Hostinger, then disposes.</div>');
   }catch(e){}
 }
 function gpuCard(i){const on=(i.status||'').indexOf('running')>=0;
@@ -762,7 +768,7 @@ function gpuCard(i){const on=(i.status||'').indexOf('running')>=0;
    +'<button onclick="gpuAct(\'destroy\','+i.id+')" style="background:#2a1216;color:var(--rd);border:1px solid var(--rd);border-radius:8px;padding:6px 10px">🗑 Dispose</button>'
    +'</div>';
 }
-async function gpuAct(action,id){ if(action==='destroy'&&!confirm('Dispose instance #'+id+'? (results should be saved first)'))return;
+async function gpuAct(action,id){ if(action==='destroy'&&!confirm('Dispose instance #'+id+'?\nEverything (results + checkpoints) is auto-recouped to Hostinger FIRST, then it is destroyed.'))return;
   try{ const r=await(await fetch('gpu/'+action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})})).json();
     if(!r.ok)jarvisSpeak('GPU '+action+' failed.'); gpuRefresh(); }catch(e){}
 }
@@ -770,7 +776,9 @@ async function gpuLaunch(){ const task=($('gpuTask').value||'nvidia-smi').trim()
   $('gpuOffer').textContent='Finding the cheapest matching GPU…';
   try{ const r=await(await fetch('gpu/launch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task,gpu})})).json();
     if(r.need_key){gpuRefresh();return;}
-    $('gpuOffer').textContent = r.ok? ('✓ Launching '+(r.offer?r.offer.gpu+' @ $'+r.offer.price+'/hr':'instance')+' (#'+r.id+') — booting + running your task…') : ('✗ '+(r.error||'launch failed'));
+    $('gpuOffer').textContent = r.ok
+      ? ('✓ Task needs ~'+r.vram_needed_gb+'GB VRAM ('+(r.sized_for||'')+') → picked '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB) @ $'+r.offer.price+'/hr':'instance')+' (#'+r.id+') — booting + running…')
+      : ('✗ '+(r.error||'launch failed')+(r.vram_needed_gb?(' (needs ~'+r.vram_needed_gb+'GB)'):''));
     try{jarvisSpeak(r.ok?'GPU instance launching.':'Could not launch the GPU.');}catch(_){}
     gpuRefresh();
   }catch(e){$('gpuOffer').textContent='✗ '+e;}

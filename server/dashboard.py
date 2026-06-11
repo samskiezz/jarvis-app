@@ -2182,6 +2182,10 @@ class _H(http.server.BaseHTTPRequestHandler):
                                             max_price=float(q.get("max", ["0"])[0]) or None)
                 elif sub == "configured":
                     out = {"ok": True, "configured": GI.configured(), "results_dir": GI.RESULTS_DIR}
+                elif sub == "brain":
+                    out = GI.brain_instance()
+                elif sub == "estimate":
+                    out = {"ok": True, **GI.estimate_task_vram(q.get("task", [""])[0])}
                 else:
                     out = {"ok": False, "error": "unknown gpu route"}
             except Exception as e:  # noqa: BLE001
@@ -2355,7 +2359,8 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                                                label=b.get("label", "jarvis-task"))
                 elif sub == "start":   out = GI.set_state(b.get("id"), True)
                 elif sub == "stop":    out = GI.set_state(b.get("id"), False)
-                elif sub == "destroy": out = GI.destroy_instance(b.get("id"))
+                elif sub == "destroy": out = GI.safe_dispose(b.get("id"))     # RECOUP everything to Hostinger, THEN destroy
+                elif sub == "forcedestroy": out = GI.destroy_instance(b.get("id"))
                 elif sub == "copy":    out = GI.copy_instance(b.get("id"), max_price=b.get("max_price"))
                 elif sub == "run":     out = GI.run_on_instance(b.get("id"), b.get("cmd", "nvidia-smi"))
                 elif sub == "sync":    out = GI.sync_results(b.get("id"), b.get("path", "/workspace/results"))
