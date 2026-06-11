@@ -140,13 +140,20 @@ async def _agent_sse_chat(message: str, page_context: str | None, session_id: st
     history = _chat_memory.get(sid, [])
 
     # Run agent (sync call inside async; llm_research blocks the loop briefly)
-    result = await asyncio.to_thread(
-        _agent.run_agent,
-        message,
-        history=history,
-        actor="anonymous",
-        max_steps=_agent.MAX_STEPS_DEFAULT,
-    )
+    try:
+        timeout_s = float(os.environ.get("JARVIS_AGENT_CHAT_TIMEOUT_S", "8"))
+        result = await asyncio.wait_for(
+            asyncio.to_thread(
+                _agent.run_agent,
+                message,
+                history=history,
+                actor="anonymous",
+                max_steps=_agent.MAX_STEPS_DEFAULT,
+            ),
+            timeout=timeout_s,
+        )
+    except asyncio.TimeoutError:
+        result = _agent.timeout_fallback(message, actor="anonymous")
 
     answer = result.get("answer", "")
     trace = result.get("trace", [])

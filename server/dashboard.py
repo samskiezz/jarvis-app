@@ -2369,13 +2369,12 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         try:
             with open(os.path.join(os.path.dirname(__file__), name), encoding="utf-8") as f:
                 html = f.read().replace("__CTOKEN__", CONTROL_TOKEN)
-                if name == "jarvis_live.html":
-                    html = self._inject_live_theme_picker(html, self._live_theme())
                 return html
         except Exception as e:  # noqa: BLE001
             return f"<h1>template {name} missing</h1><pre>{e}</pre>"
 
     def do_GET(self):
+
         self.path = self._route_path()
         if self.path.startswith("/metrics"):
             self._send(json.dumps(_SNAP).encode(), "application/json")
@@ -2392,7 +2391,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                 q.get("id", [""])[0], q.get("kind", [""])[0],
                 q.get("exclude", [""])[0], min(40, _i("limit", 14)))).encode(), "application/json")
         elif self.path.startswith("/celestial/dust"):
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             def _i(k, d):
                 try: return int(q.get(k, [str(d)])[0] or d)
@@ -2405,7 +2403,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         elif self.path.startswith("/graphdata"):
             self._send(json.dumps(_graph_data()).encode(), "application/json")
         elif self.path.startswith("/search"):
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             try:
                 lim = int(q.get("limit", ["24"])[0] or 24)
@@ -2432,7 +2429,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                               "application/json", 404)
         elif self.path.startswith("/tasks/poll"):
             from server.services import task_daemon as TD
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             try:
                 since = int(q.get("since", ["0"])[0] or 0)
@@ -2444,7 +2440,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(json.dumps(TD.list_tasks()).encode(), "application/json")
         elif self.path.startswith("/task/artifacts"):
             from server.services import task_daemon as TD
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             try:
                 tid = int(q.get("id", ["0"])[0] or 0)
@@ -2453,7 +2448,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                 self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
         elif self.path.startswith("/swarms/detail"):
             from server.services import task_daemon as TD
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             try:
                 since = int(q.get("since", ["0"])[0] or 0)
@@ -2465,7 +2459,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(json.dumps(TD.swarm_list()).encode(), "application/json")
         elif self.path.startswith("/swarm/artifacts"):
             from server.services import task_daemon as TD
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             try:
                 sid = int(q.get("id", ["0"])[0] or 0)
@@ -2474,7 +2467,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                 self._send(json.dumps({"ok": False, "error": str(e)[:120]}).encode(), "application/json")
         elif self.path.startswith("/swarm"):
             from server.services import task_daemon as TD
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             try:
                 sid = int(q.get("id", ["0"])[0] or 0)
@@ -2485,7 +2477,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             from server.services import media_gen as MG
             self._send(json.dumps(MG.library()).encode(), "application/json")
         elif self.path.startswith("/tts"):
-            from urllib.parse import urlparse, parse_qs
             _q = parse_qs(urlparse(self.path).query)
             def _f(name):
                 try:
@@ -2502,13 +2493,11 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                 self.send_response(204); self.end_headers()
         elif self.path.startswith("/suggestions"):
             # Self-development dock: box-LLM "what to build next" ideas from the live system brief.
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(_suggestions(force=q.get("force", ["0"])[0] == "1")).encode(),
                        "application/json")
         elif self.path.startswith("/proposal"):
             # Formatted proposal text for a clicked suggestion id (?id=sugN).
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(_proposal(q.get("id", [""])[0])).encode(), "application/json")
         elif self.path.startswith("/agent/tools"):
@@ -2524,7 +2513,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             from server.services import token_governor as TG
             self._send(json.dumps(TG.state()).encode(), "application/json")
         elif self.path.startswith("/file"):
-            from urllib.parse import urlparse, parse_qs
             q = parse_qs(urlparse(self.path).query)
             rel = (q.get("path", [""])[0] or "").lstrip("/")
             try:
@@ -2541,7 +2529,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             except Exception as e:  # noqa: BLE001
                 self._send(json.dumps({"ok": False, "error": str(e)[:80]}).encode(), "application/json")
         elif self.path.startswith("/rtc/poll"):
-            from urllib.parse import urlparse, parse_qs
             from server.services import care_signal as CS
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(CS.poll(q.get("room", ["mum"])[0], q.get("role", ["?"])[0],
@@ -2555,7 +2542,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(json.dumps(AB.status()).encode(), "application/json")
         elif self.path.startswith("/assist/poll"):
             # the companion app long-ish polls for queued commands (also acts as its heartbeat)
-            from urllib.parse import urlparse, parse_qs
             from server.services import assist_bridge as AB
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(AB.poll(q.get("device_id", [""])[0],
@@ -2567,7 +2553,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         elif self.path.startswith("/guardian"):
             self._send(self._tmpl("guardian.html").encode(), "text/html; charset=utf-8")
         elif self.path.startswith("/taskresult"):
-            from urllib.parse import urlparse, parse_qs
             from server.services import task_daemon as TD
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(TD.result(int(q.get("id", ["0"])[0] or 0))).encode(), "application/json")
@@ -2576,7 +2561,6 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(json.dumps(CANNED_PHRASES).encode(), "application/json")
         elif self.path.startswith("/gpu/"):
             # GPU INSTANCE MANAGER (read side): list live instances + cheapest offers.
-            from urllib.parse import urlparse, parse_qs
             from server.services import gpu_instances as GI
             sub = self.path.split("?", 1)[0].split("/gpu/", 1)[1]
             q = parse_qs(urlparse(self.path).query)
@@ -2691,7 +2675,6 @@ self.addEventListener('fetch',e=>{});   // pass-through: never intercept, never 
         elif self.path.startswith("/climate/poll"):
             # The HOME-LAN AirTouch bridge long-polls this OUTBOUND to collect queued commands.
             # Authed with the bridge key (NOT the web token) so a browser can never drain the queue.
-            from urllib.parse import urlparse, parse_qs
             from server.services import climate_relay as CR
             q = parse_qs(urlparse(self.path).query)
             if q.get("key", [""])[0] != CLIMATE_BRIDGE_KEY:
@@ -2745,7 +2728,6 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
 
     def do_POST(self):
         self.path = self._route_path()
-        from urllib.parse import urlparse, parse_qs
         q = parse_qs(urlparse(self.path).query)
         # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
         # SDP/ICE/control within a room (the room name is the shared secret) and never touches pm2 or

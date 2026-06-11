@@ -40,6 +40,10 @@ except Exception:  # noqa: BLE001
     _audit = None  # type: ignore[assignment]
 
 MAX_STEPS_DEFAULT = 4
+TIMEOUT_FALLBACK_PREAMBLE = (
+    "The agent brain took too long to answer, so I stopped waiting and grounded "
+    "this with direct search instead."
+)
 
 
 # ── Tool catalogue → compact prompt block ────────────────────────────────────────
@@ -175,6 +179,33 @@ def _fallback(message: str, actor: Optional[str], *, preamble: str = "") -> dict
              "params": {"query": message, "k": 4}, "observation": onto},
         ],
     }
+
+
+def timeout_fallback(message: str, actor: Any = None) -> dict:
+    """Public instant fallback for HTTP routes when the planner thread is too slow.
+
+    Deliberately avoids calling tools: the timeout path must never enter another
+    possibly-slow dependency after the user already waited.
+    """
+    actor_id = actor.get("id") if isinstance(actor, dict) else actor
+    out = {
+        "answer": (
+            TIMEOUT_FALLBACK_PREAMBLE
+            + " I can still take the next command, open tools, and keep the UI responsive. "
+            "Try the request again in smaller steps while I keep the backend from hanging."
+        ),
+        "backend": None,
+        "steps": 0,
+        "used_tools": [],
+        "trace": [{"thought": "agent route timed out", "tool": None, "params": {},
+                   "observation": {"actor": actor_id, "message": str(message or "")[:120]}}],
+        "timeout": True,
+    }
+    try:
+        out["backend"] = _llm.backend()
+    except Exception:  # noqa: BLE001
+        pass
+    return out
 
 
 def _synthesise_from_trace(message: str, trace: list[dict], backend: Optional[str],

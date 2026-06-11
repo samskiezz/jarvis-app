@@ -115,8 +115,6 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #budget b{color:var(--ok)}
 #coreSay{position:fixed;left:50%;bottom:108px;transform:translateX(-50%);z-index:23;font-size:12px;color:var(--cy2);
  max-width:60vw;text-align:center;min-height:14px;text-shadow:0 0 12px rgba(41,231,255,.5);pointer-events:none}
-#coreSay.talking{font-size:13px;color:#eafcff;background:rgba(8,22,34,.38);border:1px solid rgba(41,231,255,.30);
- border-radius:999px;padding:7px 14px;box-shadow:0 0 22px rgba(41,231,255,.18);backdrop-filter:blur(14px)}
 /* ---------- WebRTC / studio overlays (preserved) ---------- */
 .ov{position:fixed;inset:0;z-index:30;display:none;background:rgba(3,5,10,.92);backdrop-filter:blur(4px)}
 .ov.open{display:block}
@@ -212,9 +210,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #dock{position:fixed;right:18px;bottom:130px;z-index:26;display:flex;gap:10px;
   padding:9px 14px;border-radius:20px;background:rgba(8,22,34,.5);border:1px solid var(--ln);
   backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
-  align-items:flex-end;transition:opacity .3s,transform .3s;max-width:min(720px,calc(100vw - 88px));overflow-x:auto;
-  scrollbar-width:none;scroll-snap-type:x proximity}
-#dock::-webkit-scrollbar{display:none}
+  align-items:flex-end;transition:opacity .3s,transform .3s}
 #dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
 /* §1 D: drag-grip — grab here to move the WHOLE dock anywhere (position persists in localStorage) */
 #dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.55;font-size:18px;line-height:1;
@@ -228,7 +224,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    NAME label under it"). The dock itself stays a drop-zone for DRAG-TO-PIN from the 3D world. */
 #dock .di{width:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;
   cursor:pointer;transition:transform .16s cubic-bezier(.22,1,.36,1),margin .16s;
-  transform-origin:bottom center;user-select:none;position:relative;flex:none;scroll-snap-align:center}
+  transform-origin:bottom center;user-select:none;position:relative}
 #dock .di .gly{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
   font-size:23px;background:rgba(41,231,255,.07);border:1px solid transparent;transition:background .2s,border-color .2s}
 #dock .di:hover .gly{background:rgba(41,231,255,.16);border-color:var(--cy)}
@@ -240,17 +236,10 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #dock .di .x{position:absolute;top:-4px;right:6px;width:15px;height:15px;border-radius:50%;font-size:10px;
   line-height:13px;text-align:center;background:rgba(255,90,90,.85);color:#fff;opacity:0;transition:.15s;cursor:pointer}
 #dock .di.pinned:hover .x{opacity:1}
-#dockPrev,#dockNext{position:fixed;bottom:137px;z-index:29;width:28px;height:42px;border-radius:12px;border:1px solid var(--ln);
- background:rgba(8,22,34,.58);color:var(--cy);font-size:18px;font-weight:900;backdrop-filter:blur(14px);cursor:pointer;
- box-shadow:0 8px 30px rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center}
-#dockPrev{right:calc(18px + min(720px,calc(100vw - 88px)) + 7px)}#dockNext{right:10px}
-#dockPrev:hover,#dockNext:hover{border-color:var(--cy);box-shadow:0 0 20px rgba(41,231,255,.25)}
 /* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
    row above the talk bar + caption band (clears #cmd ~96px top, #coreSay 108px) and centre it. */
 @media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:128px;gap:6px}
-  #dock{max-width:94vw;overflow-x:auto;scrollbar-width:none}#dock::-webkit-scrollbar{display:none}
-  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px}
-  #dockPrev,#dockNext{bottom:133px;width:24px;height:38px}#dockPrev{left:6px;right:auto}#dockNext{right:6px}}
+  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px}}
 /* ---------- R5: crystal caption bubble + iridescent ring ---------- */
 #crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
   max-width:min(70vw,640px);padding:14px 22px;border-radius:22px;text-align:center;
@@ -402,280 +391,10 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   #pInfra,#pKnow{top:84px}
   #pPipe,#pFab{top:calc(50vh + 24px);max-height:22vh}
 }
-/* === JARVIS_HOLLYWOOD_HOLO_RINGS_START === */
-/* JARVIS 2036 Holographic Ring Engine - additive only, preserves existing UI. */
-@property --holoAngle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
-:root{
-  --holo-cyan:41,231,255;--holo-ice:175,250,255;--holo-purple:167,139,250;
-  --holo-bio:95,255,193;--holo-pink:255,122,217;--holo-amber:245,185,66;--holo-red:255,93,108;
-}
-#dock,#sdev,#cmd,#mic,.send,.mini,.di,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{
-  isolation:isolate;overflow:visible;--holo-prox:0;--holo-burst:0;--holo-alert:0;
-  --holo-alpha:.72;--holo-ring-width:1.15px;--holo-ring-inset:-1px;--holo-radius:inherit;
-}
-#mic,.send,.mini,.di,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{position:relative}
-#dock,#sdev,#cmd{--holo-alpha:.92;--holo-ring-width:1.85px;--holo-ring-inset:-3px}
-#mic,.send,.mini,.di,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{--holo-alpha:.68;--holo-ring-width:1.1px;--holo-ring-inset:-1.5px}
-#dock::before,#sdev::before,#cmd::before,#mic::before,.send::before,.mini::before,.di::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before{
-  content:"";position:absolute;inset:var(--holo-ring-inset);border-radius:var(--holo-radius);padding:var(--holo-ring-width);pointer-events:none;z-index:6;
-  background:conic-gradient(from var(--holoAngle),rgba(var(--holo-cyan),.98),rgba(var(--holo-ice),.62),rgba(var(--holo-purple),.92),rgba(var(--holo-pink),.58),rgba(var(--holo-bio),.88),rgba(var(--holo-cyan),.98));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
-  opacity:calc(var(--holo-alpha) + var(--holo-prox)*.20 + var(--holo-burst)*.28 + var(--holo-alert)*.22);
-  filter:drop-shadow(0 0 calc(5px + var(--holo-prox)*7px + var(--holo-burst)*12px) rgba(var(--holo-cyan),.66)) drop-shadow(0 0 calc(13px + var(--holo-prox)*10px + var(--holo-burst)*18px) rgba(var(--holo-purple),.42)) drop-shadow(0 0 calc(23px + var(--holo-prox)*15px + var(--holo-burst)*25px) rgba(var(--holo-bio),.28));
-  animation:holo2036Spin 13s linear infinite,holo2036Breath 4.2s ease-in-out infinite;
-}
-#dock::after,#sdev::after,#cmd::after,#mic::after,.send::after,.mini::after,.di::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after{
-  content:"";position:absolute;inset:calc(var(--holo-ring-inset) + 1px);border-radius:var(--holo-radius);padding:calc(var(--holo-ring-width) + .55px);pointer-events:none;z-index:7;
-  background:conic-gradient(from calc(var(--holoAngle)*-1),transparent 0deg,transparent 32deg,rgba(255,255,255,.92) 42deg,rgba(var(--holo-ice),.62) 49deg,transparent 64deg,transparent 148deg,rgba(255,255,255,.28) 158deg,transparent 172deg,transparent 360deg);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
-  opacity:calc(.22 + var(--holo-prox)*.34 + var(--holo-burst)*.50);filter:drop-shadow(0 0 7px rgba(255,255,255,.38)) drop-shadow(0 0 14px rgba(var(--holo-cyan),.32));animation:holo2036Reverse 6.4s linear infinite;
-}
-#dock,#sdev,#cmd{box-shadow:0 18px 44px rgba(0,0,0,.46),0 0 calc(18px + var(--holo-burst)*18px) rgba(var(--holo-cyan),.10),0 0 calc(38px + var(--holo-burst)*26px) rgba(var(--holo-purple),.08),0 0 calc(58px + var(--holo-burst)*32px) rgba(var(--holo-bio),.05)}
-#dock .holo2036-scan,#sdev .holo2036-scan,#cmd .holo2036-scan{position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;z-index:5;opacity:calc(.16 + var(--holo-prox)*.14 + var(--holo-burst)*.25)}
-#dock .holo2036-scan::before,#sdev .holo2036-scan::before,#cmd .holo2036-scan::before{content:"";position:absolute;top:-30%;left:-45%;width:38%;height:160%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),rgba(var(--holo-cyan),.20),transparent);transform:skewX(-24deg);filter:blur(3px);animation:holo2036Scan 5.8s ease-in-out infinite}
-#dock .holo2036-corner,#sdev .holo2036-corner,#cmd .holo2036-corner{position:absolute;width:7px;height:7px;border-radius:999px;pointer-events:none;z-index:8;background:rgba(var(--holo-ice),.88);box-shadow:0 0 8px rgba(var(--holo-cyan),.8),0 0 17px rgba(var(--holo-purple),.42),0 0 26px rgba(var(--holo-bio),.22);opacity:calc(.44 + var(--holo-prox)*.25 + var(--holo-burst)*.35);animation:holo2036Node 2.8s ease-in-out infinite}
-.holo2036-corner.tl{left:10px;top:8px}.holo2036-corner.tr{right:10px;top:8px}.holo2036-corner.bl{left:10px;bottom:8px}.holo2036-corner.br{right:10px;bottom:8px}
-#dock:hover,#sdev:hover,#cmd:hover,#mic:hover,.send:hover,.mini:hover,.di:hover,.tbtn:hover,.chip:hover,#sdev .sd-build:hover,#sdev .sd-link:hover,#propBuild:hover,#prop .pbuild:hover,[data-holo-ring]:hover{--holo-prox:.75}
-#mic:focus-visible,.send:focus-visible,.mini:focus-visible,.di:focus-visible,.tbtn:focus-visible,.chip:focus-visible,#sdev .sd-build:focus-visible,#sdev .sd-link:focus-visible,#propBuild:focus-visible,#prop .pbuild:focus-visible,[data-holo-ring]:focus-visible{outline:none;--holo-prox:1;--holo-burst:.35}
-body.speaking #dock,body.speaking #sdev,body.speaking #cmd,body.speaking #mic,body.speaking .send,body.speaking .mini,body.speaking .di,body.speaking .tbtn,body.speaking .chip,body.speaking [data-holo-ring]{--holo-burst:.55}
-#mic.live{--holo-burst:.85;--holo-alpha:1}.chip.bad{--holo-alert:.9}.chip.warn{--holo-alert:.65}
-.chip.bad::before{background:conic-gradient(from var(--holoAngle),rgba(var(--holo-red),.98),rgba(var(--holo-amber),.75),rgba(var(--holo-purple),.82),rgba(var(--holo-red),.98))}
-.chip.warn::before{background:conic-gradient(from var(--holoAngle),rgba(var(--holo-amber),.98),rgba(var(--holo-cyan),.70),rgba(var(--holo-purple),.72),rgba(var(--holo-amber),.98))}
-body.archon-critical #dock,body.archon-critical #sdev,body.archon-critical #cmd,body.archon-critical #mic,body.archon-critical .send,body.archon-critical .mini,body.archon-critical .di,body.archon-critical .tbtn,body.archon-critical .chip,body.archon-critical [data-holo-ring]{--holo-alert:1;--holo-burst:.9}
-body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archon-critical #cmd::before,body.archon-critical #mic::before,body.archon-critical .send::before,body.archon-critical .mini::before,body.archon-critical .di::before,body.archon-critical .tbtn::before,body.archon-critical .chip::before,body.archon-critical [data-holo-ring]::before{background:conic-gradient(from var(--holoAngle),rgba(var(--holo-red),.98),rgba(var(--holo-amber),.82),rgba(var(--holo-purple),.92),rgba(var(--holo-red),.98))}
-#sdev,#sdev .sd-build{--holo-alpha:.95}#sdev::before,#sdev .sd-build::before{background:conic-gradient(from var(--holoAngle),rgba(var(--holo-purple),.98),rgba(var(--holo-pink),.76),rgba(var(--holo-cyan),.86),rgba(var(--holo-bio),.82),rgba(var(--holo-purple),.98))}
-.holo2036-pulse{--holo-burst:1!important}
-#holo2036Canvas{display:none!important}
-@keyframes holo2036Spin{to{--holoAngle:360deg}}@keyframes holo2036Reverse{to{--holoAngle:-360deg}}@keyframes holo2036Breath{0%,100%{opacity:.72}50%{opacity:1}}
-@keyframes holo2036Scan{0%,18%{left:-55%;opacity:0}32%{opacity:.92}52%,100%{left:125%;opacity:0}}
-@keyframes holo2036Node{0%,100%{transform:scale(.8);opacity:.45}50%{transform:scale(1.35);opacity:1}}
-@media(max-width:820px){#holo2036Canvas{opacity:.56}#dock,#sdev,#cmd{--holo-ring-width:1.35px;--holo-ring-inset:-2px}#dock::before,#sdev::before,#cmd::before{filter:drop-shadow(0 0 7px rgba(var(--holo-cyan),.56)) drop-shadow(0 0 16px rgba(var(--holo-purple),.34)) drop-shadow(0 0 24px rgba(var(--holo-bio),.18))}#dock::after,#sdev::after,#cmd::after{opacity:.30}#dock .holo2036-corner,#sdev .holo2036-corner,#cmd .holo2036-corner{width:5px;height:5px}}
-@media(prefers-reduced-motion:reduce){#holo2036Canvas{display:none}#dock::before,#sdev::before,#cmd::before,#mic::before,.send::before,.mini::before,.di::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before,#dock::after,#sdev::after,#cmd::after,#mic::after,.send::after,.mini::after,.di::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after,#dock .holo2036-scan::before,#sdev .holo2036-scan::before,#cmd .holo2036-scan::before,#dock .holo2036-corner,#sdev .holo2036-corner,#cmd .holo2036-corner{animation:none!important}}
-/* GLB-reference tuning: thick segmented neon/chrome rails, not thin utility outlines. */
-#dock,#sdev,#cmd{--holo-alpha:1;--holo-ring-width:2.8px;--holo-ring-inset:-7px}
-#dock::before,#sdev::before,#cmd::before{
-  background:
-    conic-gradient(from var(--holoAngle),
-      rgba(var(--holo-cyan),1) 0 28deg,transparent 30deg 43deg,
-      rgba(var(--holo-purple),.96) 47deg 76deg,transparent 79deg 96deg,
-      rgba(var(--holo-bio),.96) 101deg 132deg,transparent 136deg 152deg,
-      rgba(var(--holo-cyan),1) 158deg 207deg,transparent 210deg 225deg,
-      rgba(var(--holo-pink),.92) 231deg 259deg,transparent 263deg 282deg,
-      rgba(var(--holo-ice),1) 288deg 336deg,transparent 340deg 360deg);
-  filter:
-    drop-shadow(0 0 5px rgba(var(--holo-ice),.95))
-    drop-shadow(0 0 15px rgba(var(--holo-cyan),.86))
-    drop-shadow(0 0 32px rgba(var(--holo-purple),.58))
-    drop-shadow(0 0 52px rgba(var(--holo-bio),.32));
-}
-#dock::after,#sdev::after,#cmd::after{
-  inset:-13px;padding:1.4px;opacity:calc(.54 + var(--holo-prox)*.28 + var(--holo-burst)*.42);
-  background:
-    conic-gradient(from calc(var(--holoAngle)*-1),
-      transparent 0 18deg,rgba(255,255,255,.95) 21deg 28deg,rgba(var(--holo-cyan),.65) 31deg 44deg,transparent 48deg 112deg,
-      rgba(var(--holo-purple),.82) 117deg 132deg,transparent 137deg 199deg,
-      rgba(255,255,255,.82) 205deg 213deg,rgba(var(--holo-bio),.65) 216deg 232deg,transparent 238deg 360deg);
-  filter:drop-shadow(0 0 10px rgba(255,255,255,.6)) drop-shadow(0 0 24px rgba(var(--holo-cyan),.48));
-}
-#mic::before,.send::before,.mini::before,.di::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before{
-  padding:2px;inset:-4px;
-  background:
-    conic-gradient(from var(--holoAngle),
-      rgba(var(--holo-cyan),1) 0 72deg,rgba(var(--holo-purple),.96) 86deg 152deg,
-      rgba(var(--holo-bio),.96) 168deg 230deg,rgba(var(--holo-pink),.85) 244deg 296deg,
-      rgba(var(--holo-ice),1) 312deg 360deg);
-  filter:drop-shadow(0 0 7px rgba(var(--holo-cyan),.78)) drop-shadow(0 0 19px rgba(var(--holo-purple),.5));
-}
-#mic::after,.send::after,.mini::after,.di::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after{
-  inset:-8px;padding:1px;opacity:calc(.34 + var(--holo-prox)*.3 + var(--holo-burst)*.46);
-  background:conic-gradient(from calc(var(--holoAngle)*-1),transparent 0 32deg,rgba(255,255,255,.9) 38deg 48deg,transparent 54deg 180deg,rgba(var(--holo-pink),.75) 190deg 208deg,transparent 216deg 360deg);
-}
-#dock .holo2036-scan::before,#sdev .holo2036-scan::before,#cmd .holo2036-scan::before{
-  width:24%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),rgba(var(--holo-cyan),.34),rgba(var(--holo-pink),.22),transparent);
-}
-#dock .holo2036-corner,#sdev .holo2036-corner,#cmd .holo2036-corner{
-  width:10px;height:10px;background:radial-gradient(circle,rgba(255,255,255,1),rgba(var(--holo-cyan),.95) 36%,rgba(var(--holo-purple),.72) 68%,transparent 72%);
-  box-shadow:0 0 10px rgba(var(--holo-cyan),.95),0 0 24px rgba(var(--holo-purple),.72),0 0 44px rgba(var(--holo-bio),.42);
-}
-.holo2036-glb-badge{
-  --holo-alpha:1;
-  --holo-ring-width:2.6px;
-  --holo-ring-inset:-7px;
-  text-shadow:
-    0 0 6px rgba(var(--holo-ice),.92),
-    0 0 16px rgba(var(--holo-cyan),.72),
-    0 0 28px rgba(var(--holo-purple),.48);
-}
-.holo2036-glb-badge::before{
-  inset:-8px;
-  padding:3px;
-  background:
-    conic-gradient(from var(--holoAngle),
-      rgba(var(--holo-cyan),1) 0 34deg, transparent 37deg 51deg,
-      rgba(var(--holo-purple),1) 55deg 104deg, transparent 108deg 123deg,
-      rgba(var(--holo-bio),.98) 128deg 178deg, transparent 181deg 198deg,
-      rgba(var(--holo-cyan),1) 204deg 256deg, transparent 260deg 278deg,
-      rgba(var(--holo-pink),.95) 284deg 318deg,
-      rgba(var(--holo-ice),1) 326deg 360deg);
-  filter:
-    drop-shadow(0 0 7px rgba(var(--holo-ice),.95))
-    drop-shadow(0 0 18px rgba(var(--holo-cyan),.86))
-    drop-shadow(0 0 36px rgba(var(--holo-purple),.66))
-    drop-shadow(0 0 56px rgba(var(--holo-bio),.34));
-}
-.holo2036-glb-badge::after{
-  inset:-15px;
-  padding:1.6px;
-  opacity:calc(.62 + var(--holo-prox)*.28 + var(--holo-burst)*.52);
-  background:
-    conic-gradient(from calc(var(--holoAngle)*-1),
-      transparent 0 22deg,
-      rgba(255,255,255,.98) 26deg 36deg,
-      rgba(var(--holo-cyan),.72) 40deg 58deg,
-      transparent 64deg 156deg,
-      rgba(var(--holo-pink),.88) 164deg 186deg,
-      transparent 194deg 274deg,
-      rgba(var(--holo-bio),.78) 282deg 302deg,
-      transparent 310deg 360deg);
-  filter:
-    drop-shadow(0 0 9px rgba(255,255,255,.72))
-    drop-shadow(0 0 24px rgba(var(--holo-cyan),.58))
-    drop-shadow(0 0 42px rgba(var(--holo-purple),.34));
-}
-.holo2036-glb-badge .gly,
-.holo2036-glb-badge .nm{
-  text-shadow:
-    0 0 7px rgba(var(--holo-ice),.95),
-    0 0 18px rgba(var(--holo-cyan),.72),
-    0 0 30px rgba(var(--holo-purple),.5);
-}
-/* Preserve original JARVIS glass design: add iOS-style depth only, no new shapes/sizes/colour language. */
-#dock,#sdev,#cmd{--holo-alpha:.34;--holo-ring-width:1px;--holo-ring-inset:-1px}
-#mic,.send,.mini,.di,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{
-  --holo-alpha:.38;--holo-ring-width:.9px;--holo-ring-inset:-1px;
-  transition:transform .16s cubic-bezier(.22,1,.36,1),filter .18s ease,box-shadow .18s ease,border-color .18s ease;
-}
-#mic:hover,.send:hover,.mini:hover,.di:hover,.tbtn:hover,.chip:hover,#sdev .sd-build:hover,#sdev .sd-link:hover,#propBuild:hover,#prop .pbuild:hover,[data-holo-ring]:hover{
-  transform:translateY(-1px);
-  filter:saturate(1.08) brightness(1.04);
-}
-#mic:active,.send:active,.mini:active,.di:active,.tbtn:active,.chip:active,#sdev .sd-build:active,#sdev .sd-link:active,#propBuild:active,#prop .pbuild:active,[data-holo-ring]:active{
-  transform:translateY(0) scale(.985);
-}
-#dock::before,#sdev::before,#cmd::before,#mic::before,.send::before,.mini::before,.di::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before{
-  inset:var(--holo-ring-inset);padding:var(--holo-ring-width);
-  background:conic-gradient(from var(--holoAngle),rgba(var(--holo-ice),.56),rgba(var(--holo-cyan),.50),rgba(var(--holo-purple),.54),rgba(var(--holo-bio),.34),rgba(var(--holo-ice),.56));
-  filter:drop-shadow(0 0 calc(3px + var(--holo-prox)*4px + var(--holo-burst)*6px) rgba(var(--holo-cyan),.28)) drop-shadow(0 0 calc(9px + var(--holo-prox)*6px + var(--holo-burst)*10px) rgba(var(--holo-purple),.18));
-}
-#dock::after,#sdev::after,#cmd::after,#mic::after,.send::after,.mini::after,.di::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after{
-  inset:-3px;padding:.75px;opacity:calc(.16 + var(--holo-prox)*.18 + var(--holo-burst)*.24);
-  background:conic-gradient(from calc(var(--holoAngle)*-1),transparent 0 44deg,rgba(255,255,255,.62) 49deg,rgba(var(--holo-cyan),.30) 60deg,transparent 76deg,transparent 210deg,rgba(var(--holo-purple),.26) 226deg,transparent 244deg);
-  filter:drop-shadow(0 0 8px rgba(255,255,255,.18)) drop-shadow(0 0 14px rgba(var(--holo-cyan),.18));
-}
-#dock .holo2036-corner,#sdev .holo2036-corner,#cmd .holo2036-corner{
-  width:4px;height:4px;opacity:calc(.18 + var(--holo-prox)*.18 + var(--holo-burst)*.20);
-  box-shadow:0 0 7px rgba(var(--holo-cyan),.55),0 0 14px rgba(var(--holo-purple),.32);
-}
-.holo2036-glb-badge{
-  --holo-alpha:.48;--holo-ring-width:1px;--holo-ring-inset:-2px;
-  text-shadow:0 0 5px rgba(var(--holo-ice),.42),0 0 12px rgba(var(--holo-purple),.30);
-}
-.holo2036-glb-badge::before{
-  inset:-2px;padding:1px;
-  filter:drop-shadow(0 0 6px rgba(var(--holo-cyan),.35)) drop-shadow(0 0 14px rgba(var(--holo-purple),.25));
-}
-.holo2036-glb-badge::after{
-  inset:-5px;padding:.75px;opacity:calc(.18 + var(--holo-prox)*.20 + var(--holo-burst)*.26);
-  filter:drop-shadow(0 0 8px rgba(255,255,255,.20)) drop-shadow(0 0 13px rgba(var(--holo-purple),.18));
-}
-#dock .di .gly,.send,#mic,.mini,.tbtn,.chip{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.20),0 8px 18px rgba(0,0,0,.14);
-}
-#dock .di:hover .gly,.send:hover,#mic:hover,.mini:hover,.tbtn:hover,.chip:hover{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.22),0 10px 22px rgba(0,0,0,.18),0 0 14px rgba(var(--holo-purple),.18);
-}
-.jarvis-busy{cursor:progress!important;opacity:.72}
-.jarvis-busy *{pointer-events:none}
-/* 3D glass material pass: depth/rendering only. Existing layout, icon sizes, radii, emojis and colours stay intact. */
-#dock,#sdev,#cmd,.gpanel,#card,#prop .pp,.wlwindow{
-  background-image:
-    linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.018) 34%,rgba(0,0,0,.16) 100%),
-    radial-gradient(circle at 18% 0%,rgba(167,139,250,.18),transparent 42%),
-    radial-gradient(circle at 82% 12%,rgba(41,231,255,.13),transparent 46%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.18),
-    inset 0 -1px 0 rgba(0,0,0,.34),
-    inset 0 0 22px rgba(255,255,255,.035),
-    0 18px 42px rgba(0,0,0,.44),
-    0 0 28px rgba(167,139,250,.14),
-    0 0 42px rgba(41,231,255,.08);
-}
-#dock{
-  backdrop-filter:blur(22px) saturate(1.42) contrast(1.04);
-  overflow-x:auto;
-  overflow-y:visible;
-  scrollbar-width:none;
-}
-#cmd{
-  backdrop-filter:blur(18px) saturate(1.34) contrast(1.03);
-}
-#dock .di{perspective:520px}
-#dock .di .gly,.send,#mic,.mini,.tbtn,.chip,#sdev .sd-build,#sdev .sd-link,#propBuild,#prop .pbuild,[data-holo-ring]{
-  background-image:
-    linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,.055) 31%,rgba(0,0,0,.22) 100%),
-    radial-gradient(circle at 26% 12%,rgba(255,255,255,.24),transparent 28%),
-    radial-gradient(circle at 75% 88%,rgba(167,139,250,.18),transparent 44%),
-    radial-gradient(circle at 82% 18%,rgba(41,231,255,.12),transparent 36%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.30),
-    inset 0 -1px 0 rgba(0,0,0,.42),
-    inset 0 0 12px rgba(255,255,255,.045),
-    0 7px 15px rgba(0,0,0,.30),
-    0 1px 0 rgba(255,255,255,.06);
-  transform-style:preserve-3d;
-}
-#dock .di .gly::before,.send::before,#mic::before,.mini::before,.tbtn::before,.chip::before,#sdev .sd-build::before,#sdev .sd-link::before,#propBuild::before,#prop .pbuild::before,[data-holo-ring]::before{
-  background:
-    linear-gradient(135deg,rgba(255,255,255,.75) 0%,rgba(255,255,255,.18) 18%,rgba(41,231,255,.18) 33%,transparent 46%),
-    conic-gradient(from var(--holoAngle),rgba(var(--holo-ice),.66),rgba(var(--holo-cyan),.56),rgba(var(--holo-purple),.62),rgba(var(--holo-bio),.34),rgba(var(--holo-ice),.66));
-  filter:
-    drop-shadow(0 0 calc(4px + var(--holo-prox)*7px + var(--holo-burst)*9px) rgba(var(--holo-cyan),.42))
-    drop-shadow(0 0 calc(12px + var(--holo-prox)*9px + var(--holo-burst)*14px) rgba(var(--holo-purple),.30));
-}
-#dock .di .gly::after,.send::after,#mic::after,.mini::after,.tbtn::after,.chip::after,#sdev .sd-build::after,#sdev .sd-link::after,#propBuild::after,#prop .pbuild::after,[data-holo-ring]::after{
-  background:
-    conic-gradient(from calc(var(--holoAngle)*-1),transparent 0 35deg,rgba(255,255,255,.82) 43deg,rgba(var(--holo-cyan),.38) 57deg,transparent 74deg,transparent 208deg,rgba(var(--holo-purple),.35) 224deg,transparent 244deg),
-    radial-gradient(circle at 28% 8%,rgba(255,255,255,.42),transparent 26%);
-  opacity:calc(.24 + var(--holo-prox)*.26 + var(--holo-burst)*.34);
-  filter:drop-shadow(0 0 10px rgba(255,255,255,.22)) drop-shadow(0 0 18px rgba(var(--holo-purple),.22));
-}
-#dock .di:hover .gly,.send:hover,#mic:hover,.mini:hover,.tbtn:hover,.chip:hover,#sdev .sd-build:hover,#sdev .sd-link:hover,#propBuild:hover,#prop .pbuild:hover,[data-holo-ring]:hover{
-  transform:translateY(-2px) translateZ(8px) rotateX(3deg);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.38),
-    inset 0 -1px 0 rgba(0,0,0,.38),
-    inset 0 0 16px rgba(255,255,255,.06),
-    0 12px 24px rgba(0,0,0,.34),
-    0 0 20px rgba(167,139,250,.25),
-    0 0 16px rgba(41,231,255,.14);
-}
-#dock .di:active .gly,.send:active,#mic:active,.mini:active,.tbtn:active,.chip:active,#sdev .sd-build:active,#sdev .sd-link:active,#propBuild:active,#prop .pbuild:active,[data-holo-ring]:active{
-  transform:translateY(1px) scale(.975);
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,.32),
-    inset 0 1px 0 rgba(255,255,255,.16),
-    0 4px 10px rgba(0,0,0,.28);
-}
-.holo2036-glb-badge{
-  text-shadow:0 1px 0 rgba(0,0,0,.55),0 0 8px rgba(var(--holo-ice),.62),0 0 18px rgba(var(--holo-purple),.38);
-}
-.holo2036-glb-badge::before{padding:1.6px;inset:-3px}
-.holo2036-glb-badge::after{padding:1px;inset:-7px;opacity:calc(.32 + var(--holo-prox)*.24 + var(--holo-burst)*.32)}
-/* === JARVIS_HOLLYWOOD_HOLO_RINGS_END === */
 </style>
-<link rel="stylesheet" href="/jarvis/a11y/a11y.css">
+<link rel="stylesheet" href="/a11y/a11y.css">
 <script>window.__A11Y_OPTS__={surface:'live',mirror:true,ns:'jv_a11y'};</script>
-<script defer src="/jarvis/a11y/a11y.js"></script>
+<script defer src="/a11y/a11y.js"></script>
 </head>
 <body>
 <!-- the ONE immersive WebGL universe -->
@@ -702,10 +421,9 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 
 <!-- thin top bar -->
 <div id=top>
- <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·3D menu</span></div>
+ <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·φ-hierarchy</span></div>
  <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts">● ONLINE</span>
  <span class="chip mono" id=age>—</span>
- <span class="chip mono" id=celStream style="display:none" onclick="openCelIndex()" title="Celestial streaming status">🌌 —</span>
  <span class="chip" id=fxgodrays role=status aria-live=polite tabindex=0 style="display:none;cursor:pointer"
        title="Cinematic post-FX: volumetric god-rays from the reactor"
        onclick="readGodrays()" onkeydown="if(event.key==='Enter'||event.key===' ')readGodrays()"></span>
@@ -714,33 +432,9 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
  <button class="tbtn g" onclick="cmdAll('run')">▶ Run</button>
  <button class="tbtn a" onclick="cmdAll('pause')">⏸ Pause</button>
  <button class="tbtn r" onclick="cmdAll('stop')">⏹ Stop</button>
- <button class=tbtn onclick="openCelIndex()">🌌 Index</button>
  <button class=tbtn onclick="cmdAll('sleep')">🌙 Sleep</button>
 </div>
 <nav id=crumbs aria-label="Universe location" aria-live=polite style="display:none"></nav>
-<div id=celIndex role=dialog aria-modal=false aria-label="Celestial index" style="display:none">
- <div class=cih><span>🌌 Celestial Index</span><button onclick="closeCelIndex()" aria-label="Close">✕</button></div>
- <input id=ciSearch placeholder="Filter planets, moons, files…" oninput="renderCelIndex(this.value)">
- <div id=ciMeta></div><div id=ciList></div>
-</div>
-<style>
-#celIndex{position:fixed;right:14px;top:62px;z-index:85;width:min(390px,calc(100vw - 28px));max-height:min(72vh,680px);
-  overflow:hidden;border:1px solid var(--ln);border-radius:16px;background:rgba(4,12,22,.72);
-  backdrop-filter:blur(18px) saturate(160%);box-shadow:0 20px 70px rgba(0,0,0,.48),0 0 34px rgba(41,231,255,.12)}
-#celIndex.open{display:block!important}
-#celIndex .cih{display:flex;align-items:center;gap:10px;padding:11px 12px;border-bottom:1px solid var(--ln);font-weight:800;color:#eafcff}
-#celIndex .cih span{flex:1}
-#celIndex .cih button{width:34px;height:34px;border-radius:10px;border:1px solid var(--ln);background:rgba(255,255,255,.07);color:#eafcff;cursor:pointer}
-#ciSearch{width:calc(100% - 20px);margin:10px;border:1px solid var(--ln);border-radius:12px;background:rgba(0,0,0,.28);color:#eafcff;padding:11px 12px;outline:none}
-#ciMeta{padding:0 12px 8px;color:var(--dim);font-size:12px}
-#ciList{max-height:calc(min(72vh,680px) - 112px);overflow:auto;padding:0 8px 10px}
-.cirow{display:flex;align-items:center;gap:9px;padding:9px 8px;border-radius:12px;cursor:pointer;color:#dff8ff}
-.cirow:hover,.cirow:focus{background:rgba(41,231,255,.10);outline:none}
-.cirow .k{min-width:76px;color:#9fd7e8;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-.cirow .n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cirow .s{color:var(--dim);font-size:11px}
-@media(max-width:640px){#celIndex{left:10px;right:10px;top:58px;width:auto;max-height:64vh}}
-</style>
 
 <!-- single contextual info card (hidden until a body is clicked) -->
 <div id=card>
@@ -778,8 +472,6 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 <!-- R4: Mac-style dock (magnify on hover + drag-reorder; clicking flies to / opens the function)
      §1 D: the WHOLE dock is draggable to any position via the grip handle (left/top persisted). -->
 <div id=dock><span class=dgrip id=dockGrip title="Drag the dock anywhere">⠿</span></div>
-<button id=dockPrev aria-label="Scroll dock left" title="Dock left">‹</button>
-<button id=dockNext aria-label="Scroll dock right" title="Dock right">›</button>
 
 <!-- SECOND DOCK — self-development bar: AI "what to build next" blocks (GET /suggestions) -->
 <div id=sdev>
@@ -810,8 +502,7 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     <div class=accSub>Tap each <b>Allow</b> button, then choose <b>Allow</b> in the popup. This lets JARVIS hear you, see you, and open your photos.</div>
     <div id=accList></div>
     <div id=accNote class=accNote aria-live=polite></div>
-    <button class=accDone onclick="closeAccess(true)">Done · Continue</button>
-    <button class="accDone secondary" onclick="openAssist({soft:false})">📲 Set Up Phone Control</button>
+    <button class=accDone onclick="closeAccess()">Done</button>
   </div>
   <input id=accFile type=file accept="image/*,video/*,audio/*,.pdf,.txt,.doc,.docx" multiple style="position:absolute;left:-9999px" aria-hidden=true>
 </div>
@@ -819,12 +510,6 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 #ovAccess{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;
   background:rgba(2,6,12,.92);backdrop-filter:blur(8px);padding:16px;overscroll-behavior:contain}
 #ovAccess.show{display:flex}
-#ovAssist{position:fixed;inset:0;z-index:119;align-items:center;justify-content:center;background:rgba(2,6,12,.88);backdrop-filter:blur(8px);padding:16px;overscroll-behavior:contain}
-#ovAssist[style*="flex"]{display:flex!important}
-#ovAccess.soft{align-items:flex-start;justify-content:center;background:linear-gradient(180deg,rgba(2,6,12,.72),rgba(2,6,12,0));backdrop-filter:blur(3px);pointer-events:none}
-#ovAccess.soft .accCard{pointer-events:auto;max-height:min(62vh,560px);margin-top:max(14px,env(safe-area-inset-top,0px))}
-#ovAssist.soft{align-items:flex-start;justify-content:center;background:linear-gradient(180deg,rgba(2,6,12,.66),rgba(2,6,12,0));backdrop-filter:blur(3px);pointer-events:none}
-#ovAssist.soft .accCard{pointer-events:auto;max-height:min(58vh,520px);margin-top:max(14px,env(safe-area-inset-top,0px))}
 .accCard{width:min(560px,96vw);max-height:92vh;overflow:auto;background:linear-gradient(160deg,#0b1f30,#06121e);
   border:2px solid var(--cy);border-radius:20px;padding:18px 16px;box-shadow:0 20px 80px rgba(0,0,0,.7),0 0 50px rgba(41,231,255,.25)}
 .accHead{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:21px;color:#eafcff;letter-spacing:.5px}
@@ -846,7 +531,6 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
 .accNote.show{display:block}
 .accDone{width:100%;min-height:56px;margin-top:12px;border-radius:14px;border:2px solid var(--cy);
   background:var(--cy);color:#02121a;font-weight:800;font-size:18px;cursor:pointer}
-.accDone.secondary{background:rgba(255,255,255,.07);color:#eafcff;border-color:var(--ln)}
 @media(max-width:560px){.accRow .accBtn{min-width:84px}.accSub{font-size:14px}}
 </style>
 <script>
@@ -917,26 +601,24 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
       setTimeout(refresh,400);
     });
   };
-  window.openAccess=function(opts){ opts=opts||{}; var o=document.getElementById('ovAccess'); if(!o)return;
-    render(); refresh(); o.classList.add('show'); o.classList.toggle('soft',!!opts.soft); note('');
+  window.openAccess=function(){ var o=document.getElementById('ovAccess'); if(!o)return;
+    render(); refresh(); o.classList.add('show'); note('');
     try{spk('Please allow microphone, camera and files so I can help you fully.');}catch(_){}
   };
-  window.closeAccess=function(next){ var o=document.getElementById('ovAccess'); if(o){o.classList.remove('show');o.classList.remove('soft');}
-    if(next&&typeof maybeOfferAssist==='function')setTimeout(maybeOfferAssist,250); };
-  // First-run carer setup: show the permission grant sheet, but as a soft top sheet so chat remains usable.
-  window.maybeAutoAccess=function(force){
+  window.closeAccess=function(){ var o=document.getElementById('ovAccess'); if(o)o.classList.remove('show'); };
+  // first run (or until mic+camera are granted): auto-open so the carer sets it up with clear feedback
+  window.maybeAutoAccess=function(){
     try{ if(localStorage.getItem('accDone')==='1')return; }catch(_){}
     Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
       if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}return;}
-      try{ if(!force&&sessionStorage.getItem('accPromptSeen')==='1')return; sessionStorage.setItem('accPromptSeen','1'); }catch(_){}
-      openAccess({soft:true});
+      openAccess();
     });
   };
   // remember once mic+camera are both granted, so we stop auto-popping it
   document.addEventListener('visibilitychange',function(){});
   var _origClose=window.closeAccess;
-  window.closeAccess=function(next){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
-    if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(next); };
+  window.closeAccess=function(){ Promise.all([qStatus(PERMS[0]),qStatus(PERMS[1])]).then(function(s){
+    if(s[0]==='ok'&&s[1]==='ok'){try{localStorage.setItem('accDone','1');}catch(_){}} }); _origClose(); };
 })();
 </script>
 <!-- JARVIS CONTROL setup overlay — browser-based install/enable flow for the phone companion. -->
@@ -972,11 +654,10 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
     '<div class=accRow><span class=ic>⚡</span><span class=tx><span class=nm>Voice shortcuts I build for you</span>'+
       '<span class="st un">say a word → JARVIS does the task</span></span></div>';}
   function desktopBody(){return '<div class=accSub>Open this page on her <b>Android phone</b> to install the helper, or on iPhone to set up Voice Control. From a computer you can also drive an Android phone over USB with WebADB.</div>';}
-  window.openAssist=function(opts){opts=opts||{};var o=document.getElementById('ovAssist');if(!o)return;
+  window.openAssist=function(){var o=document.getElementById('ovAssist');if(!o)return;
     H(ANDROID?androidBody():IOS?iosBody():desktopBody()); o.style.display='flex';
-    o.classList.toggle('soft',!!opts.soft);
     if(ANDROID)pollLink(); try{if(typeof jarvisSpeak==='function')jarvisSpeak(ANDROID?'Let’s install the helper so I can use your phone for you.':'Let me help you turn on voice control.');}catch(_){}};
-  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o){o.style.display='none';o.classList.remove('soft');}try{localStorage.setItem('assistSkip','1');}catch(_){}};
+  window.closeAssist=function(){var o=document.getElementById('ovAssist');if(o)o.style.display='none';try{localStorage.setItem('assistSkip','1');}catch(_){}};
   var _linkTimer=null;
   function pollLink(){ if(_linkTimer)clearInterval(_linkTimer);
     _linkTimer=setInterval(function(){ fetch('assist/status').then(function(r){return r.json();}).then(function(d){
@@ -986,7 +667,7 @@ body.archon-critical #dock::before,body.archon-critical #sdev::before,body.archo
         clearInterval(_linkTimer);} }).catch(function(){}); },3000); }
   window.maybeOfferAssist=function(){ if(!(ANDROID||IOS))return;
     try{if(localStorage.getItem('assistOk')==='1'||localStorage.getItem('assistSkip')==='1')return;}catch(_){}
-    fetch('assist/status').then(function(r){return r.json();}).then(function(d){ if(!(d&&d.connected))openAssist({soft:true}); }).catch(function(){});
+    fetch('assist/status').then(function(r){return r.json();}).then(function(d){ if(!(d&&d.connected))openAssist(); }).catch(function(){});
   };
 })();
 </script>
@@ -1063,9 +744,6 @@ let _m={},_ts=0,archon=false,_engaged=false;
 // the small GPU isn't pinned at full retina 60fps (heat→throttle→lag). Reuses the existing _MOBILE flag.
 let _LOWFPS=false, _lastDraw=0;
 function srlog(t){const s=$('srlog');if(s){s.textContent='';setTimeout(()=>s.textContent=t,50);}}
-function setSpokenBubble(t){const el=$('coreSay');if(!el)return;
-  const clean=(t||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().slice(0,180);
-  el.textContent=clean;el.classList.toggle('talking',!!clean);}
 
 /* ================= PRESERVED: British JARVIS voice (verbatim) ================= */
 let VOICES=[];function loadVoices(){VOICES=speechSynthesis.getVoices()||[];}
@@ -1078,9 +756,8 @@ function unlockAudio(){try{if(!_ttsCtx){_ttsAudio=new Audio();_ttsCtx=new(window
   _ttsSrc=_ttsCtx.createMediaElementSource(_ttsAudio);_ttsAn=_ttsCtx.createAnalyser();_ttsAn.fftSize=128;
   _ttsSrc.connect(_ttsAn);_ttsAn.connect(_ttsCtx.destination);_ttsData=new Uint8Array(_ttsAn.frequencyBinCount);}
   if(_ttsCtx.resume)_ttsCtx.resume();}catch(e){}}
-function armSpeakWatch(seq,t){if(_speakWatch)clearTimeout(_speakWatch);const ms=Math.min(12000,Math.max(2600,String(t||'').length*70));_speakWatch=setTimeout(()=>{if(seq==null||seq===_ttsSeq)speakEnd();},ms);}
 function webSpeakFallback(t){try{try{_ttsAudio.pause();}catch(_){}{}  // STOP the clone first so the male /tts and the female web voice can NEVER overlap
-  const seq=_ttsSeq;const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=()=>{speakStart(t);armSpeakWatch(seq,t);};u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
+  const u=new SpeechSynthesisUtterance(t);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang||'en-GB';}u.rate=.97;u.pitch=0.62;u.onstart=speakStart;u.onend=speakEnd;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){speakEnd();}}   // ALWAYS deep pitch: Samsung TTS ignores voice selection and defaults female — 0.62 reads male on any engine
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
@@ -1089,7 +766,7 @@ const _preTTS={};
   'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
   fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
     .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
-let _ttsSeq=0,_speakWatch=null;
+let _ttsSeq=0;
 window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
   // SINGLE VOICE: barge-in — kill any in-flight line (clone audio AND web-speech) before starting a new
@@ -1098,10 +775,10 @@ window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A
   try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
   const myseq=++_ttsSeq;                                   // only the LATEST line may speak/fall back (cancels stale async)
   try{ if(!_ttsCtx)unlockAudio();
+    speakStart();
     _ttsAudio.onended=()=>{if(myseq===_ttsSeq)speakEnd();};
     _ttsAudio.onerror=null;                                // we drive playback from the fetched blob, not the element's own loader
     const play=(url)=>{ if(myseq!==_ttsSeq){try{URL.revokeObjectURL(url);}catch(_){}return;}
-      speakStart(t);armSpeakWatch(myseq,t);
       _ttsAudio.src=url; if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
       _ttsAudio.play().catch(()=>{ if(myseq===_ttsSeq)webSpeakFallback(t); }); };
     // INSTANT if pre-warmed (his real voice). Otherwise FETCH the clone as a blob with a patient timeout —
@@ -1123,10 +800,8 @@ window.jarvisSpeak=function(t){if(!t)return;try{srlog(t);}catch(e){}try{window.A
 // made it sound like two agents talking over each other and spammed the chat). Released a beat AFTER
 // the audio ends so the trailing echo isn't transcribed as a new user turn.
 window._jspeaking=false; let _jspkClear=null;
-function speakStart(t){window._jspeaking=true;if(_jspkClear){clearTimeout(_jspkClear);_jspkClear=null;}document.body.classList.add('speaking');spkAmp=.7;setSpokenBubble(t||$('coreSay').textContent||'');}
+function speakStart(){window._jspeaking=true;if(_jspkClear){clearTimeout(_jspkClear);_jspkClear=null;}document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
 function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);
-  setTimeout(()=>{if(!document.body.classList.contains('speaking')){$('coreSay')&&$('coreSay').classList.remove('talking');}},1600);
-  if(_speakWatch){clearTimeout(_speakWatch);_speakWatch=null;}
   if(_jspkClear)clearTimeout(_jspkClear);_jspkClear=setTimeout(()=>{window._jspeaking=false;_jspkClear=null;},700);}
 
 /* ================= voice amp envelope (consumed by the brain via currentAmp/setAmp) ================= */
@@ -1192,11 +867,9 @@ function showCrystal(txt){const c=$('crystal');if(!c)return;
   c.classList.add('show');clearTimeout(_crystalHide);}
 function hideCrystal(delay){clearTimeout(_crystalHide);
   _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
-let _chatBusy=false,_chatQueued='';
-function setBusy(el,on,label){try{if(!el)return;el.classList.toggle('jarvis-busy',!!on);if('disabled'in el)el.disabled=!!on;el.setAttribute('aria-busy',on?'true':'false');if(label!=null)el.dataset.busyLabel=label;}catch(_){}}
-function actionPulse(s){try{window.firePulseSpike&&window.firePulseSpike(s||.45);navigator.vibrate&&navigator.vibrate(8);}catch(_){}}
+let _chatBusy=false;
 async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
-  if(_chatBusy){_chatQueued=t;$('say').value='';bubble('JARVIS','I am finishing the current command, then I will run that next.');return;}
+  if(_chatBusy)return;                                    // one turn at a time — overlapping voice finals must not stack replies that talk over each other
   const l=t.toLowerCase();$('say').value='';
   try{if(window.A11Y){const r=A11Y.intent(t,'text');if(r&&r.handled)return;}}catch(_){}
   // voice/command shortcuts (preserved)
@@ -1206,44 +879,31 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(l.includes('sleep'))return cmdAll('sleep');if(l==='status'||l.includes('read status'))return readStatus();
   if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');
   if(l.includes('graph'))return flyToQuery('graph');
-  unlockAudio();actionPulse(.45);bubble('You',esc(t));$('coreSay').textContent='…';
+  unlockAudio();bubble('You',esc(t));$('coreSay').textContent='…';
   _chatBusy=true;
-  setBusy(document.querySelector('.send'),true);setBusy($('cmd'),true);
   const _ac=new AbortController();const _to=setTimeout(()=>_ac.abort(),45000);   // never hang the UI forever
-  try{const resp=await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},signal:_ac.signal,
-      body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:_spkWho||''})});   // address from DETECTED voice gender (neutral until known)
-    const ct=(resp.headers.get('content-type')||'').toLowerCase();if(!resp.ok||ct.indexOf('json')<0)throw new Error('chat '+resp.status);
-    const r=await resp.json();
-    const reply=(r&&r.ok===false?(r.reply||r.error):(r&&r.reply)||(r&&r.answer)||(r&&r.text))||"I'm here.";
-    _chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
+  try{const r=await(await fetch('chat',{method:'POST',headers:{'Content-Type':'application/json'},signal:_ac.signal,
+      body:JSON.stringify({q:t,history:_chatHist.slice(-8),address:_spkWho||''})})).json();   // address from DETECTED voice gender (neutral until known)
+    const reply=(r&&r.reply)||"I'm here.";_chatHist.push({role:'user',content:t});_chatHist.push({role:'assistant',content:reply});
     bubble('JARVIS',esc(reply));jarvisSpeak(reply);
-    if(r&&r.task_id){try{setMode('worklist');}catch(_){} pollClaude(r.task_id);}
-  }catch(e){const msg=_ac.signal.aborted?'That took too long — I put your words back so you can send again.':'Connection error. I put your words back so you can send again.';$('say').value=t;bubble('JARVIS',msg);try{jarvisSpeak(msg);}catch(_){}}
-  finally{clearTimeout(_to);_chatBusy=false;setBusy(document.querySelector('.send'),false);setBusy($('cmd'),false);
-    if(_chatQueued){const q=_chatQueued;_chatQueued='';$('say').value=q;setTimeout(()=>askJarvis(),80);}}}
+  }catch(e){bubble('JARVIS',_ac.signal.aborted?'That took too long — try again.':'connection error');}
+  finally{clearTimeout(_to);_chatBusy=false;}}
 function pollClaude(id){const iv=setInterval(async()=>{try{const r=await(await fetch('taskresult?id='+id)).json();
    if(r.status&&r.status!=='running'&&r.status!=='paused'){clearInterval(iv);
      const txt=(r.text||'(done)').slice(-2000);bubble('JARVIS',esc(txt));
      jarvisSpeak(txt.replace(/<[^>]+>/g,'').slice(0,420));loadLib();}}catch(e){}},3000);}
 
 /* media (preserved) */
-async function quick(kind){const input=$('say');const pre=(input&&input.value.trim())||'';const t=prompt(kind==='image'?'Describe the image:':'Describe the 3D model:',pre);if(t)runMedia(kind==='image'?'genimage':'gen3d',t);}
-let _mediaLock='';
+async function quick(kind){const t=prompt(kind==='image'?'Describe the image:':'Describe the 3D model:');if(t)runMedia(kind==='image'?'genimage':'gen3d',t);}
 async function runMedia(action,t){if(!t)return;bubble('You',(action==='gen3d'?'🧊 ':'🎨 ')+esc(t));
-  const key=action+':'+t.trim().toLowerCase();if(_mediaLock===key){bubble('JARVIS','Already queued. I will not duplicate it.');return;}_mediaLock=key;setTimeout(()=>{if(_mediaLock===key)_mediaLock='';},6000);
-  actionPulse(action==='gen3d'?.7:.55);
   jarvisSpeak(action==='gen3d'?'Generating a 3D model. This can take a few minutes — it will not time out.':'Generating your image now.');
-  try{const r=await fetch('task?action='+action+'&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});if(!r.ok)throw new Error('task '+r.status);}
-  catch(e){bubble('JARVIS','I could not queue that job. Check the task runner, then try again.');try{jarvisSpeak('I could not queue that job.');}catch(_){}}
+  try{await fetch('task?action='+action+'&q='+encodeURIComponent(t)+'&token='+CT,{method:'POST'});}catch(e){}
   setTimeout(loadLib,1500);}
 
 /* commands (preserved) */
 async function cmdAll(a){window.firePulseSpike(0.8);                   // global command -> big pulse
-  actionPulse(.8);document.querySelectorAll('.tbtn').forEach(b=>setBusy(b,true));
   jarvisSpeak(a==='run'?'Running all systems.':a==='stop'?'Stopping all.':a==='sleep'?'Entering sleep mode.':'Pausing.');
-  try{const r=await fetch('control_all?action='+a+'&token='+CT,{method:'POST'});if(!r.ok)throw new Error('control '+r.status);}
-  catch(e){bubble('JARVIS','Control command failed. I left the interface active.');}
-  finally{document.querySelectorAll('.tbtn').forEach(b=>setBusy(b,false));setTimeout(tick,900);}}
+  try{await fetch('control_all?action='+a+'&token='+CT,{method:'POST'});}catch(e){}setTimeout(tick,900);}
 async function ctl(a,n){window.firePulseSpike(0.6);                    // organism reacts to the command
   try{await fetch('control?action='+a+'&name='+encodeURIComponent(n)+'&token='+CT,{method:'POST'});}catch(e){}
   jarvisSpeak((a==='stop'?'Stopping ':a==='restart'?'Restarting ':'Starting ')+n.replace(/^jarvis-/,'').replace(/-/g,' ')+'.');
@@ -1267,214 +927,12 @@ async function openAgentTools(){window.firePulseSpike&&window.firePulseSpike(0.5
     const tools=(d&&d.tools)||[];
     showCard({title:'🤖 Agent OS',subtitle:(tools.length||0)+' tools · '+((d&&d.status)||'ready'),
       lines:tools.map(t=>'• '+(t.name||t.id||'tool')+(t.risk?'  ['+t.risk+']':'')+(t.desc?' — '+String(t.desc).slice(0,48):'')),
-      actions:tools.slice(0,24).map(t=>({label:'▸ '+((t.name||t.id||'tool').replace(/_/g,' ').slice(0,18)),kind:'_fn',fn:()=>runAgentTool(t.name||t.id)}))});
+      actions:tools.slice(0,8).map(t=>({label:'▸ '+((t.name||t.id||'tool').replace(/_/g,' ').slice(0,18)),kind:'_fn',fn:()=>runAgentTool(t.name||t.id)}))});
   }catch(e){showCard({title:'🤖 Agent OS',subtitle:'registry unavailable',lines:['Could not reach /agent/tools.']});}}
 async function runAgentTool(name){if(!name)return;window.firePulseSpike&&window.firePulseSpike(0.7);
   jarvisSpeak('Running '+String(name).replace(/_/g,' ')+'.');
-  showCard({title:'🤖 Agent OS',subtitle:'running '+name,lines:['Starting tool run…']});
-  try{const r=await(await fetch('agent/run?token='+CT+'&q='+encodeURIComponent(name),{method:'POST'})).json();
-    const run=r.run||{}, steps=run.steps||[];
-    showCard({title:'🤖 Agent OS',subtitle:(r.ok?'run '+(r.run_id||'')+' · ':'')+(run.status||r.error||'finished'),
-      props:[{k:'Tool',v:name},{k:'Run',v:r.run_id||'—'},{k:'Status',v:run.status||String(!!r.ok)}],
-      lines:steps.length?steps.slice(-8).map(s=>(s.status||'step')+' · '+(s.tool||s.name||'')+' '+(s.error||s.summary||'')):['No step output returned yet. Open Live Tasks for longer runs.'],
-      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')},{label:'↻ Tools',kind:'_fn',fn:()=>openAgentTools()}]});
-  }catch(e){showCard({title:'🤖 Agent OS',subtitle:'run failed',lines:[String(e).slice(0,160)],actions:[{label:'↻ Tools',kind:'_fn',fn:()=>openAgentTools()}]});}}
-
-async function openDoctor(){window.firePulseSpike&&window.firePulseSpike(0.65);
-  showCard({title:'🧰 System Doctor',subtitle:'running production checks…',lines:['Testing chat, API, GPU brain, Underworld, voice, tasks, climate and Agent OS.']});
-  try{const d=await(await fetch('doctor')).json();
-    const checks=(d.checks||[]), bad=checks.filter(x=>!x.ok);
-    showCard({title:'🧰 System Doctor',subtitle:'health '+(d.score||0)+'% · '+bad.length+' blockers',
-      props:[{k:'Checks',v:checks.filter(x=>x.ok).length+' / '+checks.length},{k:'PM2',v:(d.pm2||[]).filter(x=>x.status==='online').length+' online'}],
-      lines:checks.map(x=>(x.ok?'✓ ':'✗ ')+x.label+' · '+(x.status||((x.pm2||{}).status)||'')+(x.error?' · '+x.error:'')),
-      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')},
-               {label:'🩺 Vitals',kind:'_fn',fn:()=>openVitals()},
-               {label:'📋 Missing 20',kind:'_fn',fn:()=>showMissingPlan(d)}]});
-  }catch(e){showCard({title:'🧰 System Doctor',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-function showMissingPlan(d){
-  const lines=['MISSING FEATURES'].concat((d.missing_features||[]).map((x,i)=>(i+1)+'. '+x),
-    ['MISSING FUNCTION FIXES']).concat((d.missing_functions||[]).map((x,i)=>(i+1)+'. '+x));
-  showCard({title:'📋 Missing Features / Functions',subtitle:'tracked after-task list',lines,
-    actions:[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});
-}
-
-async function openClimate(){window.firePulseSpike&&window.firePulseSpike(0.45);
-  showCard({title:'🌡 Climate',subtitle:'loading bridge state…'});
-  try{const d=await(await fetch('climate/state')).json();
-    const st=d.state||d||{}, zones=st.zones||[], connected=!!(d.connected||st.connected||zones.length);
-    showCard({title:'🌡 Climate',subtitle:connected?'bridge connected':'bridge disconnected',
-      props:[{k:'Connected',v:connected?'yes':'no'},{k:'Zones',v:zones.length||'—'},{k:'Updated',v:st.ts||st.updated||'—'}],
-      lines:zones.length?zones.slice(0,10).map(z=>(z.name||z.zone||'zone')+' · '+(z.temp||z.temperature||'—')+'° · '+(z.mode||z.state||'')):
-        ['The home climate bridge is not reporting yet. Chat commands will answer honestly until the bridge connects.'],
-      actions:[{label:'🔥 Warm',kind:'_fn',fn:()=>climateSay('I am cold, please warm the room')},
-               {label:'❄ Cool',kind:'_fn',fn:()=>climateSay('I am too warm, please cool the room')},
-               {label:'↻ Refresh',kind:'_fn',fn:()=>openClimate()}]});
-  }catch(e){showCard({title:'🌡 Climate',subtitle:'state unavailable',lines:[String(e).slice(0,160)]});}}
-function climateSay(q){$('say').value=q;askJarvis();}
-
-function openBudget(){showCard({title:'💰 Budget / Governor',subtitle:'loading…'});
-  fetch('budget').then(r=>r.json()).then(s=>showCard({title:'💰 Budget / Governor',subtitle:s.economy_forced?'economy mode':'normal mode',
-    props:[{k:'Spent today',v:'$'+Number(s.spent_usd_today||0).toFixed(2)},{k:'Daily cap',v:'$'+(s.daily_cap||0)},{k:'Archon',v:archon?'on':'off'}],
-    actions:[{label:archon?'⚡ Archon off':'⚡ Archon on',kind:'_fn',fn:()=>toggleArchon()},{label:'🩺 Vitals',kind:'_fn',fn:()=>openVitals()}]}))
-    .catch(e=>showCard({title:'💰 Budget / Governor',subtitle:'unavailable',lines:[String(e).slice(0,160)]}));}
-
-async function openHealth(){showCard({title:'🛡 Health',subtitle:'loading live health report…'});
-  try{const d=await(await fetch('healthreport')).json();
-    const alerts=d.alerts||[];
-    showCard({title:'🛡 Health',subtitle:(d.level||'unknown')+' · score '+(d.score??'—'),
-      props:[{k:'Score',v:d.score??'—'},{k:'Level',v:d.level||'unknown'},{k:'Alerts',v:alerts.length}],
-      lines:alerts.length?alerts.slice(0,12).map(a=>(a.level||'alert')+' · '+(a.title||'')+' · '+(a.detail||'')):['No current health alerts reported.'],
-      actions:[{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()},{label:'🩺 Vitals',kind:'_fn',fn:()=>openVitals()}]});}
-  catch(e){showCard({title:'🛡 Health',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openBrain(){showCard({title:'🧠 Brain',subtitle:'checking Vast/Ollama brain…'});
-  try{const d=await(await fetch('gpu/brain')).json(), b=d.brain;
-    showCard({title:'🧠 Brain',subtitle:b?'running on '+(b.gpu||'GPU'):'no running brain instance',
-      props:[{k:'Configured',v:d.need_key?'no Vast key':'yes'},{k:'Endpoint',v:d.endpoint?d.endpoint.join(':'):'—'},{k:'Stopped',v:(d.stopped||[]).length}],
-      lines:b?[('Instance #'+b.id+' · '+(b.status||'')+' · '+(b.vram_gb||'—')+'GB · $'+(b.price||0)+'/hr')]:
-        [d.error||'Provision or start a brain box from GPU when you need heavier reasoning.'],
-      actions:[{label:'🎛 GPU',kind:'_fn',fn:()=>openGPU()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🧠 Brain',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openGpuOffers(){showCard({title:'💎 GPU Offers',subtitle:'finding cheapest sensible offer…'});
-  try{const task=($('say').value||'general 12GB GPU task').trim();const est=await(await fetch('gpu/estimate?task='+encodeURIComponent(task))).json();
-    const d=await(await fetch('gpu/offers?max=1.5')).json();
-    showCard({title:'💎 GPU Offers',subtitle:d.ok?'cheapest available match':'offer search unavailable',
-      props:[{k:'Task VRAM',v:(est.gb||'—')+'GB'},{k:'Reason',v:est.why||'—'}],
-      lines:d.offer?[(d.offer.gpu+' ×'+(d.offer.num_gpus||1)+' · '+d.offer.total_vram_gb+'GB · $'+d.offer.price+'/hr · reliability '+d.offer.reliability)]:
-        [d.error||'No offer returned. Add a Vast key or widen the price cap.'],
-      actions:[{label:'🎛 Open GPU',kind:'_fn',fn:()=>openGPU()}]});}
-  catch(e){showCard({title:'💎 GPU Offers',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openDustDocs(){showCard({title:'📄 Documents',subtitle:'loading indexed dust records…'});
-  try{const d=await(await fetch('celestial/dust?parent=cel:dc-vault&limit=18')).json();const rows=d.rows||d.items||[];
-    showCard({title:'📄 Documents',subtitle:(d.total??rows.length)+' indexed records',
-      lines:rows.length?rows.map(r=>'• '+(r.label||r.repo||r.id)):['No document dust returned for this branch.'],
-      actions:[{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'📄 Documents',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openFilesMini(){showCard({title:'🗂 Files',subtitle:'loading service files…'});
-  try{const d=await(await fetch('files')).json();const fs=d.files||[];
-    showCard({title:'🗂 Files',subtitle:fs.length+' service files',
-      lines:fs.map(f=>'• server/services/'+f),actions:[{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'🗂 Files',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openPhrasesMini(){showCard({title:'💬 Voice Phrases',subtitle:'loading pre-warmed phrases…'});
-  try{const d=await(await fetch('phrases')).json();const arr=Array.isArray(d)?d:(d.phrases||[]);
-    showCard({title:'💬 Voice Phrases',subtitle:arr.length+' cached lifeline phrases',
-      lines:arr.slice(0,14).map(x=>'• '+String(x).slice(0,120)),
-      actions:[{label:'🔊 Status',kind:'_fn',fn:()=>readStatus()}]});}
-  catch(e){showCard({title:'💬 Voice Phrases',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openSwarmsMini(){showCard({title:'🐝 Swarms',subtitle:'loading active swarms…'});
-  try{const d=await(await fetch('swarms')).json();const sw=d.swarms||d.items||[];
-    showCard({title:'🐝 Swarms',subtitle:sw.length+' swarms tracked',
-      lines:sw.length?sw.slice(0,12).map(s=>'• #'+s.id+' · '+(s.status||'')+' · '+(s.title||s.label||'')):['No active swarms.'],
-      actions:[{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')} ]});}
-  catch(e){showCard({title:'🐝 Swarms',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openSuggestionsMini(){showCard({title:'💡 Suggestions',subtitle:'loading build ideas…'});
-  try{const d=await(await fetch('suggestions')).json();const items=d.items||d.suggestions||[];
-    showCard({title:'💡 Suggestions',subtitle:(d.source||'seed')+' · '+items.length+' ideas',
-      lines:items.map(x=>'• '+(x.title||x.label||String(x).slice(0,70))+' — '+(x.detail||x.description||'')),
-      actions:[{label:'↻ Refresh',kind:'_fn',fn:()=>loadSuggestions(true)},{label:'⚙ Upgrades',kind:'_fn',fn:()=>openUpgrades()}]});}
-  catch(e){showCard({title:'💡 Suggestions',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openGodraysMini(){showCard({title:'✦ God-rays',subtitle:'checking render proof…'});
-  try{const d=await(await fetch('godrays')).json();
-    const proof=d.headless||d.proof||{}, pass=!!(d.pass||d.ok||proof.pass), running=!!(d.running||d.active||d.generating);
-    showCard({title:'✦ God-rays',subtitle:pass||running?'active':'check failed',
-      props:[{k:'Headless proof',v:pass?'pass':'fail'},{k:'Running',v:running?'yes':'no'}],
-      lines:[d.error||d.summary||proof.summary||'Volumetric render self-check is available.']});}
-  catch(e){showCard({title:'✦ God-rays',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-function openCare(){window.open('care?room=mum','_blank','noopener');
-  showCard({title:'❤️ Care',subtitle:'lifeline care page opened',
-    lines:['If the browser blocks the new tab, press Open Care.'],
-    actions:[{label:'❤️ Open Care',kind:'_fn',fn:()=>window.open('care?room=mum','_blank','noopener')},
-             {label:'📲 Assist Link',kind:'_fn',fn:()=>openAssistStatusMini()}]});}
-async function openAssistStatusMini(){showCard({title:'📲 Assist Link',subtitle:'checking phone companion…'});
-  try{const d=await(await fetch('assist/status')).json();
-    showCard({title:'📲 Assist Link',subtitle:d.connected?'phone linked':'phone not linked',
-      props:[{k:'Connected',v:d.connected?'yes':'no'},{k:'Devices',v:(d.devices||[]).length||'—'}],
-      lines:d.connected?['Phone companion is reporting.']:['Open Control to set up the phone companion.'],
-      actions:[{label:'📲 Control',kind:'_fn',fn:()=>openAssist()}]});}
-  catch(e){showCard({title:'📲 Assist Link',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function _miniJSON(url){const r=await fetch(url),ct=(r.headers.get('content-type')||'').toLowerCase();
-  if(!r.ok||ct.indexOf('json')<0)throw new Error(url+' '+r.status); return await r.json();}
-async function openArchitectureMini(){showCard({title:'🏛 Architecture',subtitle:'loading platform layers…'});
-  try{const d=await _miniJSON('v1/jarvis/architecture');const layers=d.layers||[];
-    const native=layers.filter(x=>String(x.status||'').toLowerCase()==='native').length;
-    const ready=layers.filter(x=>!/unavailable|missing|error/i.test(String(x.status||''))).length;
-    showCard({title:'🏛 Architecture',subtitle:layers.length+' live platform layers',
-      props:[{k:'Layers',v:layers.length},{k:'Native',v:native},{k:'Ready',v:ready+'/'+layers.length}],
-      lines:layers.length?layers.slice(0,12).map(l=>'• '+(l.layer||l.key||'layer')+' · '+(l.status||'unknown')+' · '+((l.present||l.modules||[]).length||0)+' modules'):
-        ['No platform layers returned.'],
-      actions:[{label:'🤖 Agent OS',kind:'_fn',fn:()=>openAgentTools()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🏛 Architecture',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openMemoryMini(){showCard({title:'🗃 Memory',subtitle:'loading memory recall…'});
-  try{const d=await _miniJSON('v1/jarvis/memory?user_id=anonymous&limit=12');const rows=d.memories||[];
-    showCard({title:'🗃 Memory',subtitle:rows.length?'recent recalled memories':'no stored memories yet',
-      props:[{k:'User',v:'anonymous'},{k:'Rows',v:rows.length}],
-      lines:rows.length?rows.slice(0,12).map(m=>'• '+(m.key||m.title||'memory')+' · '+String(m.value||m.text||m.summary||'').slice(0,96)):
-        ['No stored memories are available for the current user yet.'],
-      actions:[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()},{label:'🤖 Agent OS',kind:'_fn',fn:()=>openAgentTools()}]});}
-  catch(e){showCard({title:'🗃 Memory',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openInboxMini(){showCard({title:'🔔 Inbox',subtitle:'loading proactive notifications…'});
-  try{const d=await _miniJSON('v1/jarvis/notifications?user_id=anonymous&limit=12');const rows=d.notifications||[];
-    showCard({title:'🔔 Inbox',subtitle:rows.length?'proactive notifications waiting':'nothing waiting right now',
-      props:[{k:'Notifications',v:rows.length},{k:'User',v:'anonymous'}],
-      lines:rows.length?rows.slice(0,12).map(n=>'• '+(n.title||n.label||n.kind||'notification')+' · '+String(n.body||n.text||n.detail||n.status||'').slice(0,96)):
-        ['No proactive notifications are waiting right now.'],
-      actions:[{label:'📲 Assist',kind:'_fn',fn:()=>openAssistStatusMini()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🔔 Inbox',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openDatasetsMini(){showCard({title:'🧬 Datasets',subtitle:'loading dataset catalog…'});
-  try{const d=await _miniJSON('v1/datasets');const rows=d.items||[];
-    showCard({title:'🧬 Datasets',subtitle:rows.length+' registered datasets',
-      props:[{k:'Count',v:d.count??rows.length},{k:'Showing',v:Math.min(rows.length,12)}],
-      lines:rows.length?rows.slice(0,12).map(x=>'• '+(x.name||x.id||'dataset')+' · '+(x.kind||'dataset')+' · '+(x.owner||'unknown')):
-        ['No datasets are registered yet.'],
-      actions:[{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()},{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'🧬 Datasets',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openReportsMini(){showCard({title:'📑 Reports',subtitle:'loading saved reports…'});
-  try{const d=await _miniJSON('v1/reports');const rows=d.items||[];
-    showCard({title:'📑 Reports',subtitle:rows.length?'saved intelligence briefs':'no saved reports yet',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(r=>'• '+(r.title||('Report #'+(r.id||'—')))+' · #'+(r.id||'—')):
-        ['No saved reports are available yet.'],
-      actions:[{label:'📊 Boards',kind:'_fn',fn:()=>openDashboardsMini()},{label:'📄 Docs',kind:'_fn',fn:()=>openDustDocs()}]});}
-  catch(e){showCard({title:'📑 Reports',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openDashboardsMini(){showCard({title:'📊 Boards',subtitle:'loading saved dashboards…'});
-  try{const d=await _miniJSON('v1/dashboards');const rows=d.items||[];
-    showCard({title:'📊 Boards',subtitle:rows.length?'saved dashboard boards':'no saved dashboards yet',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(b=>'• '+(b.name||('Board #'+(b.id||'—')))+' · '+((b.widgets||[]).length||0)+' widgets'):
-        ['No saved dashboards are available yet.'],
-      actions:[{label:'📑 Reports',kind:'_fn',fn:()=>openReportsMini()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'📊 Boards',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openAlertsMini(){showCard({title:'🚨 Alerts',subtitle:'loading live alerts…'});
-  try{const d=await _miniJSON('v1/alerts');const rows=d.items||[];
-    showCard({title:'🚨 Alerts',subtitle:rows.length?'active or recent alerts':'no alerts right now',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(a=>'• '+(a.title||a.name||'alert')+' · '+(a.status||'open')+' · severity '+(a.severity??'—')):
-        ['No alerts are active right now.'],
-      actions:[{label:'🛡 Health',kind:'_fn',fn:()=>openHealth()},{label:'🧰 Doctor',kind:'_fn',fn:()=>openDoctor()}]});}
-  catch(e){showCard({title:'🚨 Alerts',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openCasesMini(){showCard({title:'📁 Cases',subtitle:'loading investigation cases…'});
-  try{const d=await _miniJSON('v1/cases');const rows=d.items||[];
-    showCard({title:'📁 Cases',subtitle:rows.length?'tracked investigation cases':'no open cases yet',
-      props:[{k:'Count',v:d.count??rows.length}],
-      lines:rows.length?rows.slice(0,12).map(c=>'• '+(c.title||('Case #'+(c.id||'—')))+' · '+(c.status||'open')+' · '+((c.entity_ids||[]).length||0)+' entities'):
-        ['No cases are tracked right now.'],
-      actions:[{label:'🚨 Alerts',kind:'_fn',fn:()=>openAlertsMini()},{label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});}
-  catch(e){showCard({title:'📁 Cases',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openAssetsMini(){showCard({title:'🧱 Assets',subtitle:'loading render asset pipeline…'});
-  try{const st=await _miniJSON('v1/jarvis/assets/status');const gp=await _miniJSON('v1/jarvis/assets/gaps');const gaps=gp.gaps||[];
-    showCard({title:'🧱 Assets',subtitle:(st.library_models||0)+' library models · '+(st.gaps??gaps.length)+' gaps',
-      props:[{k:'Library',v:st.library_models??'—'},{k:'Wired',v:st.wired_models??'—'},{k:'Gaps',v:st.gaps??gaps.length}],
-      lines:gaps.length?gaps.slice(0,12).map(g=>'• '+(g.name||g.label||g.id||g.surface||String(g).slice(0,80))):['No asset wiring gaps are reported right now.'],
-      actions:[{label:'📚 Library',kind:'_fn',fn:()=>setMode('library')},{label:'🧭 Index',kind:'_fn',fn:()=>openCelIndex()}]});}
-  catch(e){showCard({title:'🧱 Assets',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
-async function openLabsMini(){showCard({title:'🧪 Labs',subtitle:'loading research lab capabilities…'});
-  try{const d=await _miniJSON('v1/labs/catalog');const rows=d.capabilities||[];
-    const ready=rows.filter(x=>x.available!==false && String(x.status||'available').toLowerCase()!=='unavailable').length;
-    showCard({title:'🧪 Labs',subtitle:ready+' of '+rows.length+' lab capabilities available',
-      props:[{k:'Ready',v:ready},{k:'Total',v:rows.length}],
-      lines:rows.length?rows.slice(0,12).map(x=>'• '+(x.capability||x.name||'capability')+' · '+(x.module||'lab')+' · '+((x.available===false||String(x.status||'').toLowerCase()==='unavailable')?'offline':'ready')):
-        ['No lab capabilities were returned.'],
-      actions:[{label:'🧠 Brain',kind:'_fn',fn:()=>openBrain()},{label:'💎 Offers',kind:'_fn',fn:()=>openGpuOffers()}]});}
-  catch(e){showCard({title:'🧪 Labs',subtitle:'unavailable',lines:[String(e).slice(0,160)]});}}
+  try{await fetch('agent/run?token='+CT+'&q='+encodeURIComponent(name),{method:'POST'});}catch(e){}
+  setTimeout(()=>openAgentTools(),1200);}
 
 function readStatus(){const c=_m.completion||{},X=_m.correlation||{},on=(_m.workers||[]).filter(w=>w.toggleable&&w.status==='online').length;
   jarvisSpeak('Status. Knowledge build '+(c.pct||0)+' percent. '+on+' pipelines online. '+fmt(X.distinct_after_dedup)+' distinct entities. Box V-RAM '+((_m.box||{}).vram_used_gb||0)+' of 48 gigabytes.');}
@@ -1486,43 +944,17 @@ function toggleArchon(){archon=!archon;$('archonBtn').classList.toggle('on',arch
 /* ================= R4: Mac dock — magnify-on-hover + drag-reorder ================= */
 const DOCK=[
   {k:'talk',   ic:'🎤', t:'Talk',     fn:()=>$('say').focus()},
-  {k:'doctor', ic:'🧰', t:'Doctor',   fn:()=>openDoctor()},
   {k:'library',ic:'📚', t:'Library',  fn:()=>setMode('library')},
   {k:'create', ic:'✨', t:'Create',   fn:()=>{$('say').focus();$('say').value='Create ';}},
   {k:'image',  ic:'🎨', t:'Image',    fn:()=>quick('image')},
   {k:'3d',     ic:'🧊', t:'3D',       fn:()=>quick('3d')},
-  {k:'access', ic:'🔓', t:'Access',   fn:()=>openAccess()},
-  {k:'control',ic:'📲', t:'Control',  fn:()=>openAssist()},
-  {k:'care',   ic:'❤️', t:'Care',     fn:()=>openCare()},
   {k:'guardian',ic:'🛡',t:'Guardian', fn:()=>setMode('guardian')},
-  {k:'climate', ic:'🌡', t:'Climate',  fn:()=>openClimate()},
+  {k:'climate', ic:'🌡', t:'Climate',  fn:()=>{flyToBodyByName('climate');}},
   {k:'worklist',ic:'🛰',t:'Live Tasks',fn:()=>setMode('worklist')},
   {k:'agent',  ic:'🤖', t:'Agent OS', fn:()=>{flyToBodyByName('agentos')||openAgentTools();}},
-  {k:'arch',   ic:'🏛', t:'Arch',     fn:()=>openArchitectureMini()},
-  {k:'memory', ic:'🗃', t:'Memory',   fn:()=>openMemoryMini()},
-  {k:'inbox',  ic:'🔔', t:'Inbox',    fn:()=>openInboxMini()},
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
-  {k:'index',  ic:'🧭', t:'Index',    fn:()=>openCelIndex()},
-  {k:'budget', ic:'💰', t:'Budget',   fn:()=>openBudget()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
   {k:'gpu',     ic:'🎛', t:'GPU',      fn:()=>openGPU()},
-  {k:'brain',   ic:'🧠', t:'Brain',    fn:()=>openBrain()},
-  {k:'offers',  ic:'💎', t:'Offers',   fn:()=>openGpuOffers()},
-  {k:'docs',    ic:'📄', t:'Docs',     fn:()=>openDustDocs()},
-  {k:'datasets',ic:'🧬', t:'Datasets', fn:()=>openDatasetsMini()},
-  {k:'reports', ic:'📑', t:'Reports',  fn:()=>openReportsMini()},
-  {k:'boards',  ic:'📊', t:'Boards',   fn:()=>openDashboardsMini()},
-  {k:'files',   ic:'🗂', t:'Files',    fn:()=>openFilesMini()},
-  {k:'phrases', ic:'💬', t:'Phrases',  fn:()=>openPhrasesMini()},
-  {k:'swarms',  ic:'🐝', t:'Swarms',   fn:()=>openSwarmsMini()},
-  {k:'ideas',   ic:'💡', t:'Ideas',    fn:()=>openSuggestionsMini()},
-  {k:'godrays', ic:'✦', t:'God-rays', fn:()=>openGodraysMini()},
-  {k:'health',  ic:'🛡', t:'Health',   fn:()=>openHealth()},
-  {k:'alerts',  ic:'🚨', t:'Alerts',   fn:()=>openAlertsMini()},
-  {k:'cases',   ic:'📁', t:'Cases',    fn:()=>openCasesMini()},
-  {k:'assist',  ic:'📲', t:'Assist',   fn:()=>openAssistStatusMini()},
-  {k:'assets',  ic:'🧱', t:'Assets',   fn:()=>openAssetsMini()},
-  {k:'labs',    ic:'🧪', t:'Labs',     fn:()=>openLabsMini()},
 ];
 /* ===== GPU — SIMPLE 2-button system: type what you want → ⚡ Run (auto-sizes the GPU, picks the cheapest
    matching box, runs, saves results to Hostinger, disposes). Each running box has one 🗑 Dispose. ===== */
@@ -1539,8 +971,6 @@ function openGPU(){ let ov=$('gpuOv');
      +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">'
        +'<input id=gpuTask placeholder="e.g. fine-tune a 13B model / run whisper / nvidia-smi" style="flex:1;min-width:220px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:12px;color:var(--tx);font-size:14px">'
        +'<button onclick="gpuRun()" style="background:linear-gradient(135deg,#0a3a4a,#11324a);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:12px 22px;font-weight:800;font-size:14px">⚡ Run</button>'
-       +'<button onclick="openGpuOffers()" style="background:rgba(255,255,255,.07);color:#eafcff;border:1px solid var(--ln);border-radius:10px;padding:12px 16px;font-weight:800;font-size:14px">💎 Offers</button>'
-       +'<button onclick="openBrain()" style="background:rgba(255,255,255,.07);color:#eafcff;border:1px solid var(--ln);border-radius:10px;padding:12px 16px;font-weight:800;font-size:14px">🧠 Brain</button>'
      +'</div>'
      +'<div id=gpuMsg style="font-size:12px;color:#7af3ff;min-height:16px;margin-bottom:12px"></div>'
      +'<div id=gpuList style="display:flex;flex-direction:column;gap:8px"></div>'
@@ -1565,7 +995,7 @@ async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).js
     list.innerHTML = banner + (it.length? it.map(i=>{const on=(i.status||'').indexOf('running')>=0;
       return '<div style="background:rgba(10,26,40,.5);border:1px solid var(--ln);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px">'
        +'<span>'+(on?'🟢':'⚪')+'</span><div style="flex:1;font-size:13px"><b>'+(i.gpu||'GPU')+'</b> ×'+(i.num_gpus||1)+' · '+(i.vram_gb||0)+'GB <span style="color:var(--dim)">· $'+(i.price||0)+'/hr · '+(i.status||'')+'</span></div>'
-       +'<button onclick="gpuDispose('+i.id+')" style="background:#2a1216;color:var(--rd);border:1px solid var(--rd);border-radius:8px;padding:7px 12px;font-weight:700">💾 Save + Dispose</button></div>';}).join('')
+       +'<button onclick="gpuDispose('+i.id+')" style="background:#2a1216;color:var(--rd);border:1px solid var(--rd);border-radius:8px;padding:7px 12px;font-weight:700">🗑 Dispose</button></div>';}).join('')
       : '<div style="color:var(--dim);text-align:center;padding:18px">No GPU running. Type a task and hit ⚡ Run.</div>');
   }catch(e){}
 }
@@ -1588,33 +1018,19 @@ async function gpuProvisionBrain(){ if(!confirm('Provision the permanent brain (
 }
 async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to Hostinger first, then removes it.'))return;
   $('gpuMsg').textContent='Disposing #'+id+'…';
-  try{ const r=await(await fetch('gpu/destroy?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:false})})).json();
-    $('gpuMsg').textContent=r.ok?'Saved to Hostinger and disposed #'+id+'.':'Not destroyed: '+(r.error||'recoup failed');
-    gpuRefresh(); }catch(e){$('gpuMsg').textContent='Dispose failed: '+e;}
+  try{ await fetch('gpu/destroy?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
 }
 function renderDock(){const d=$('dock');if(!d)return;
   // §1 D: keep the drag-grip handle; only clear the icon tiles
   [...d.querySelectorAll('.di')].forEach(el=>el.remove());
   DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;
-    e.setAttribute('role','button');e.setAttribute('tabindex','0');e.setAttribute('aria-label',it.t||'Dock item');e.title=it.t||'Dock item';
     // iOS tile: icon glyph + a persistent NAME label under it. Pinned items get an unpin (×) chip.
     e.innerHTML='<div class=gly>'+it.ic+'</div><div class=nm>'+it.t+'</div>'+
       (it.pinned?'<span class=x title="Unpin">×</span>':'');
-    const run=()=>{try{window.firePulseSpike&&window.firePulseSpike(.35);navigator.vibrate&&navigator.vibrate(8);}catch(_){}try{it.fn();}catch(_){}};
-    e.onclick=run;
-    e.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();run();}};
+    e.onclick=()=>{try{it.fn();}catch(_){}};
     if(it.pinned){const xb=e.querySelector('.x');if(xb)xb.onclick=ev=>{ev.stopPropagation();unpinFromDock(it.k);};}
     d.appendChild(e);});
-  wireDockMagnify(); wireDockDrag(); wireDockCarousel();}
-function wireDockCarousel(){const d=$('dock'),prev=$('dockPrev'),next=$('dockNext');if(!d||!prev||!next)return;
-  const step=()=>Math.max(150,Math.floor(d.clientWidth*.72));
-  const go=dir=>{const target=Math.max(0,Math.min(d.scrollWidth-d.clientWidth,d.scrollLeft+dir*step()));
-    try{d.scrollTo({left:target,behavior:'smooth'});}catch(_){d.scrollLeft=target;}
-    setTimeout(()=>{if(Math.abs(d.scrollLeft-target)>2)d.scrollLeft=target;},120);};
-  prev.onclick=()=>go(-1);
-  next.onclick=()=>go(1);
-  d.onwheel=ev=>{if(Math.abs(ev.deltaY)>Math.abs(ev.deltaX)){ev.preventDefault();d.scrollLeft=Math.max(0,Math.min(d.scrollWidth-d.clientWidth,d.scrollLeft+ev.deltaY));}};
-}
+  wireDockMagnify(); wireDockDrag();}
 function wireDockMagnify(){const items=[...$('dock').querySelectorAll('.di')];
   $('dock').onmousemove=ev=>{if(_dockMoving)return;items.forEach(el=>{const r=el.getBoundingClientRect();
     const dx=Math.abs(ev.clientX-(r.left+r.width/2));const s=Math.max(1,1.55-dx/120); // genie magnify
@@ -2118,11 +1534,9 @@ function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecog
     const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
     _detectGender();                                      // assess speaker pitch while they talk → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
-  _rec.onerror=ev=>{const hard=/not-allowed|service-not-allowed|audio-capture|network|aborted/.test(ev.error||'');
-    if(hard){const msg=ev.error==='not-allowed'?'Please allow microphone access.':'Voice input stopped. Tap the mic to try again.';try{jarvisSpeak(msg);}catch(_){}
-      _rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');}};
-  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');}}};
-  try{_rec.start();}catch(e){_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');try{jarvisSpeak('Voice input could not start.');}catch(_){}}}
+  _rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvisSpeak('Please allow microphone access.');_rec=null;$('mic').classList.remove('live');}};
+  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
+  _rec.start();}
 
 /* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
 function setMode(mode,arg){
@@ -2138,31 +1552,6 @@ function setMode(mode,arg){
   const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
   ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
 }
-function closeActiveSurface(){
-  if($('prop')&&$('prop').style.display==='flex'){closeProp();return true;}
-  if($('gpuOv')&&$('gpuOv').style.display==='flex'){closeGPU();return true;}
-  if(document.querySelector('.ov.open')){setMode('live');return true;}
-  if($('card')&&$('card').classList.contains('open')){closeCard();return true;}
-  return false;
-}
-function wireJarvisKeys(){if(window.__jarvisKeys)return;window.__jarvisKeys=true;
-  document.addEventListener('keydown',ev=>{
-    const tag=(ev.target&&ev.target.tagName||'').toLowerCase();
-    const typing=tag==='input'||tag==='textarea'||(ev.target&&ev.target.isContentEditable);
-    if(ev.key==='Escape'&&closeActiveSurface()){ev.preventDefault();return;}
-    if((ev.metaKey||ev.ctrlKey)&&ev.key.toLowerCase()==='k'){ev.preventDefault();$('say')&&$('say').focus();return;}
-    if(!typing&&ev.key==='/'){ev.preventDefault();$('say')&&$('say').focus();return;}
-    if((ev.metaKey||ev.ctrlKey)&&ev.key==='Enter'){ev.preventDefault();askJarvis();return;}
-    if((ev.altKey||ev.metaKey)&&!typing){
-      const k=ev.key.toLowerCase();
-      if(k==='g'){ev.preventDefault();quick('3d');}
-      else if(k==='i'){ev.preventDefault();quick('image');}
-      else if(k==='s'){ev.preventDefault();readStatus();}
-      else if(k==='w'){ev.preventDefault();setMode('worklist');}
-    }
-  },true);
-}
-wireJarvisKeys();
 async function loadLib(){try{const lib=await(await fetch('library')).json();
    $('libgrid').innerHTML=(lib&&lib.length)?lib.map(m=>m.file.endsWith('.glb')
      ?'<div class=it><model-viewer src="media/'+m.file+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
@@ -2174,7 +1563,7 @@ let _cardDrilled=false;   // true while a drill (/detail) or file view fills the
 function cardEl(sel){return $('card').querySelector(sel);}
 function closeCard(){$('card').classList.remove('open');_cardDrilled=false;
   if(_selected){_selected.userData.selected=false; _removeSelRing(_selected); _selected.userData.hoverWant=0; _selected=null;}
-  if(typeof cameraMode==='undefined'||cameraMode!==CameraMode.UNIVERSE_EXPLORE_VIEW)flyHome();}   // Explore stays where the user is navigating
+  flyHome();}   // always return home (incl. constellation-node cards, which never set _selected)
 function showCard(o){
   $('card').classList.add('open');
   cardEl('.t').textContent=o.title||'';
@@ -2209,39 +1598,17 @@ function orbControl(name, action){   // real pm2 start/restart for a satellite b
 function doAction(a){if(!a)return;const k=a.kind,arg=a.arg;
   if(k==='drill'){const [kk,...r]=String(arg).split(':');openDetail(kk,r.join(':'));}
   else if(k==='file')openFile(arg);
-  else if(k==='dust')openDustBrowser(arg,0);
   else if(k==='media'){window.open('media/'+arg,'_blank');}
   else if(k==='url'){window.open(arg,'_blank');}
   else if(k==='graph'){flyToNode(arg);}                 // graph action flies to constellation node (no iframe)
   else if(k==='task'){$('say').value=arg;askJarvis();}
   else if(k==='descend'){const node=bodyNodeMap.get(bodyMap.get('dom:'+arg));if(node)flyInto(node);}
-  else if(k==='open'){window.open(arg,'_blank');}
-  else if(k==='_fn'&&typeof a.fn==='function'){a.fn();}
-  else showCardKeepActions({title:'Action unavailable',subtitle:a.label||a.arg||'No handler',
-    props:[{k:'Kind',v:String(k||'none')}],lines:['This celestial menu item is mapped, but no real action handler is wired yet.']});}
+  else if(k==='open'){window.open(arg,'_blank');}}
 async function openFile(path){_cardDrilled=true;                 // pause live refresh so the file body isn't wiped
   try{const d=await(await fetch('file?path='+encodeURIComponent(path))).json();
    showCard({title:d.path||path,subtitle:(d.lang||'')+' · '+fmt(d.size)+' bytes'});
    cardEl('.filewrap').innerHTML='<div id=filebody></div>';$('filebody').textContent=d.content||'(empty / unreadable)';
   }catch(e){cardEl('.filewrap').innerHTML='<div style="color:var(--dim)">could not open file</div>';}}
-async function openDustBrowser(parent,offset,q){_cardDrilled=true;
-  parent=parent||''; offset=Math.max(0,Number(offset)||0); q=q||'';
-  showCard({title:'Dust Records',subtitle:'loading indexed repo records…'});
-  try{
-    const d=await(await fetch('celestial/dust?parent='+encodeURIComponent(parent)+'&offset='+offset+'&limit=40&q='+encodeURIComponent(q))).json();
-    const rows=d.rows||[], total=d.total||0, next=offset+rows.length, prev=Math.max(0,offset-40);
-    const acts=[];
-    if(offset>0)acts.push({label:'‹ Previous',kind:'_fn',fn:()=>openDustBrowser(parent,prev,q)});
-    if(next<total)acts.push({label:'Next ›',kind:'_fn',fn:()=>openDustBrowser(parent,next,q)});
-    showCardWithFns({title:parent||'All dust records',subtitle:fmt(total)+' indexed records · '+(offset+1)+'-'+Math.min(next,total),
-      props:[{k:'Parent',v:parent||'all'},{k:'Rendered as',v:'tiny dust / paged viewer'}],
-      lines:rows.length?rows.map(r=>'• '+(r.label||r.repo||r.id)):['No dust records found.'],actions:acts});
-    cardEl('.filewrap').innerHTML='<div id=filebody>'+rows.map((r,i)=>
-      '<button class=act data-dusti="'+i+'" style="margin:4px 6px 4px 0">'+esc((r.repo||r.label||r.id||'record').slice(0,80))+'</button>'
-    ).join('')+'</div>';
-    cardEl('.filewrap').querySelectorAll('[data-dusti]').forEach(btn=>btn.onclick=()=>openFile(rows[Number(btn.dataset.dusti)]&&rows[Number(btn.dataset.dusti)].repo||''));
-  }catch(e){showCard({title:'Dust Records',subtitle:'could not load dust index',lines:[String(e).slice(0,120)]});}
-}
 
 /* ================= live data tick (preserved cadence; now drives 3D bodies) ================= */
 function tick(){fetch('metrics?_='+Date.now()).then(r=>r.json()).then(m=>{_m=m;_ts=m.ts||0;_metricsSignature(m);
@@ -2273,10 +1640,9 @@ let sunFace=null;                                      // §1 B: the oversized h
 let _macroLines=null;                                  // (c) glowing connections between related macro bodies
 let bodies=[],bodyMap=new Map(),bodyNodeMap=new WeakMap(),_selected=null,flying=false,clock=null;
 let _starField=null,_nebula=null;
-let home={pos:new THREE.Vector3(2200,260,0),tgt:new THREE.Vector3(4600,220,0)};  // CAMERA LOCK: wider JARVIS POV looking OUT into the 3D menu; keeps the core behind without trapping the view inside it
+let home={pos:new THREE.Vector3(1250,260,0),tgt:new THREE.Vector3(2650,220,0)};  // CAMERA LOCK: JARVIS POV — standing ON the core (just outside its ~780u surface, core BEHIND you) looking OUT into space (+x: telemetry, apps, domains, celestial field all ahead); near pivot (~1400u) so dragging = look-around, never an into-the-core orbit
 let glbsOk=0,glbsTried=0,fellBack=false,uniReady=false;
-const APP_MOUNT=(location.pathname.indexOf('/jarvis')===0)?'/jarvis':'';
-const ASSET=n=>(APP_MOUNT?APP_MOUNT+'/':'')+'asset/'+n;
+const ASSET=n=>'asset/'+n;
 const COLORS={core:0x29e7ff,kpi:0x29e7ff,infra:0x7af3ff,pipe:0x34d399,pipeOff:0xff5d6c,tier:0xa78bfa,sys:0xf5b942,guardian:0x34d399};
 
 function initUniverse(){
@@ -2657,17 +2023,6 @@ function makeLabel(text){
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,depthTest:false}));
   sp.scale.set(36,9,1);return sp;
 }
-function tuneBodyLabel(mesh,bodyRadius,opts){
-  const sp=mesh&&mesh.userData&&mesh.userData.label;
-  if(!sp)return;
-  const r=Math.max(8,Number(bodyRadius)||((mesh.userData&&mesh.userData.baseScale)||24));
-  const labelW=Math.max(40,Math.min(180,r*0.28));
-  sp.scale.set(labelW,labelW*0.25,1);
-  sp.position.set(0,r+Math.max(10,Math.min(42,r*0.12)),0);
-  sp.material.opacity=opts&&opts.always?1:sp.material.opacity;
-  sp.visible=opts&&opts.always?true:sp.visible;
-  sp.userData.alwaysLabel=!!(opts&&opts.always);
-}
 function setLabel(mesh,text){
   mesh.userData.labelText=text;                       // keep the visible label searchable (flyToQuery)
   const sp=mesh.userData.label;if(!sp)return;
@@ -2676,7 +2031,6 @@ function setLabel(mesh,text){
   x.textAlign='center';x.textBaseline='middle';x.shadowColor='#29e7ff';x.shadowBlur=8;x.fillText(text,128,34);
   if(sp.material.map)sp.material.map.dispose();
   sp.material.map=new THREE.CanvasTexture(c);sp.material.needsUpdate=true;
-  tuneBodyLabel(mesh,mesh.userData&&mesh.userData.baseScale,{always:mesh.userData&&mesh.userData.celKind});
 }
 /* ---- (c) DETERMINISTIC asset map: each macro body → the RIGHT GLB for its type/topic ----
    Every name maps to a curated GLB that exists on disk (verified). Used for both the shaded GLB body
@@ -2695,16 +2049,8 @@ function glbForName(name){ if(GLB_FOR[name])return GLB_FOR[name];
   return 'jarvis_kit_data_orb'; }
 const _glbLoader=new THREE.GLTFLoader(), _texLoader=new THREE.TextureLoader();
 const _texCache=new Map();
-const _APP_MOUNT=APP_MOUNT;
-function mountedAssetUrl(u){
-  if(!u||/^[a-z][a-z0-9+.-]*:/i.test(u)||u.slice(0,2)==='//')return u;
-  let s=String(u);
-  if(s.charAt(0)!=='/'&&/^(asset|media|a11y)\//.test(s))s='/'+s;
-  if(_APP_MOUNT&&s.charAt(0)==='/'&&s.indexOf(_APP_MOUNT+'/')!==0)return _APP_MOUNT+s;
-  return s;
-}
 function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
-  const t=_texLoader.load(mountedAssetUrl('/asset/'+asset+'.preview.png'),()=>{},undefined,()=>{});
+  const t=_texLoader.load('asset/'+asset+'.preview.png',()=>{},undefined,()=>{});
   try{t.encoding=THREE.sRGBEncoding;}catch(e){} _texCache.set(asset,t); return t; }
 
 /* ---- §1 A: concurrency-capped GLB loader queue (lazy-load; cap concurrent loads for perf) ----
@@ -2713,34 +2059,19 @@ function previewTex(asset){ if(_texCache.has(asset))return _texCache.get(asset);
 // LAZY-LOAD NEAREST-FIRST: the world has ~1,600 GLBs. We never fire them all at once (MAX_GLB in flight),
 // and — the key to a fast world — the queue is sorted by distance from the CAMERA each pump, so the closest
 // objects load first and the far galaxies stream in afterwards (and re-prioritise as she flies around).
-const MAX_GLB=((window.innerWidth||999)<820)?2:4; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map(), _glbPending=new Map();
+const MAX_GLB=6; let _glbInFlight=0; const _glbQueue=[]; const _glbCache=new Map();
 const _glbV=new THREE.Vector3();
-function _nodeDist(node,fallback){ if(node&&typeof camera!=='undefined'&&camera){ try{
-    node.getWorldPosition(_glbV);
-    const hidden=(node.visible===false)||(node.userData&&node.userData.celKind&&_celShouldShowMesh&&!_celShouldShowMesh(node));
-    return _glbV.distanceTo(camera.position)+(hidden?500000:0);        // PS5-style streaming: visible menu stage first, deep records later
-  }catch(_){ } }
-  return (fallback||0); }                                  // no node/camera yet → fall back to insertion order
-function _jobDist(job){return _nodeDist(job.node,job.seq);}
+function _jobDist(job){ if(job.node&&typeof camera!=='undefined'&&camera){ try{job.node.getWorldPosition(_glbV);return _glbV.distanceTo(camera.position);}catch(_){ } }
+  return (job.seq||0); }                                  // no node/camera yet → fall back to insertion order
 let _glbSeq=0;
 function _pumpGLB(){
   if(_glbQueue.length>1) _glbQueue.sort((a,b)=>_jobDist(a)-_jobDist(b));   // nearest-first
   while(_glbInFlight<MAX_GLB && _glbQueue.length){ const job=_glbQueue.shift();
     _glbInFlight++; glbsTried++;
-    _glbLoader.load(job.url, g=>{ _glbInFlight--; glbsOk++; _glbPending.delete(job.url);
-        try{_glbCache.set(job.url,g.scene);}catch(_){}
-        (job.callbacks||[]).forEach(cb=>{try{cb.onLoad(g.scene.clone(true));}catch(_){}}); _pumpGLB(); },
-      undefined, ()=>{ _glbInFlight--; _glbPending.delete(job.url);
-        (job.callbacks||[]).forEach(cb=>{try{cb.onErr&&cb.onErr();}catch(_){}}); _pumpGLB(); }); } }
-function enqueueGLB(url,onLoad,onErr,node){ url=mountedAssetUrl(realGLB(url)); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
-  const pending=_glbPending.get(url);
-  if(pending){
-    pending.callbacks.push({onLoad,onErr,node});
-    if(_nodeDist(node,pending.seq)<_nodeDist(pending.node,pending.seq))pending.node=node; // shared asset follows the most visible requester
-    return;
-  }
-  const job={url, node, seq:_glbSeq++, callbacks:[{onLoad,onErr,node}]};
-  _glbPending.set(url,job); _glbQueue.push(job);
+    _glbLoader.load(job.url, g=>{ _glbInFlight--; glbsOk++; try{job.ok(g);}catch(_){}; _pumpGLB(); },
+      undefined, ()=>{ _glbInFlight--; try{job.err&&job.err();}catch(_){}; _pumpGLB(); }); } }
+function enqueueGLB(url,onLoad,onErr,node){ url=realGLB(url); if(_glbCache.has(url)){ try{onLoad(_glbCache.get(url).clone(true));}catch(_){}; return; }
+  _glbQueue.push({url, node, seq:_glbSeq++, ok:g=>{ try{_glbCache.set(url,g.scene);}catch(_){}; onLoad(g.scene.clone(true)); }, err:onErr});
   _pumpGLB(); }
 // re-prioritise the queue as the camera moves, so wherever she flies, the nearest unloaded objects load next.
 let _lastPumpAt=0;
@@ -2801,8 +2132,8 @@ function _holoShell(m, sz, color){ try{
   rim.userData.holoShell=true; m.add(rim);
 }catch(e){} }
 
-function addBody(o){ // {name,label,color,radius,angle,y,size,getCard,url|glbUrl}
-  const sz=(o.size||4.4)*22, asset=glbForName(o.name), bodyUrl=o.url||o.glbUrl;   // ×22 so telemetry bodies read at the vast scale (~95-220u, under planets)
+function addBody(o){ // {name,label,color,radius,angle,y,size,getCard}
+  const sz=(o.size||4.4)*22, asset=glbForName(o.name);   // ×22 so telemetry bodies read at the vast scale (~95-220u, under planets)
   // PBR fallback body — textured (its preview PNG) + emissive + bloom + PMREM reflections, NEVER a flat dot.
   // The shaded GLB swaps in over this when it loads; on a 404 the textured PBR sphere stays (still graphical).
   const m=new THREE.Mesh(new THREE.SphereGeometry(sz,32,32),
@@ -2811,20 +2142,17 @@ function addBody(o){ // {name,label,color,radius,angle,y,size,getCard,url|glbUrl
   m.position.set(Math.cos(o.angle)*o.radius,o.y||0,Math.sin(o.angle)*o.radius);
   m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
     _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null};
-  if(!o.noLabel){
-    const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
-    tuneBodyLabel(m,sz,{always:!!o.celLabel});
-  }
+  const lab=makeLabel(o.label);lab.position.set(0,sz+4,0);m.add(lab);m.userData.label=lab;
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
   _holoShell(m,sz,o.color);                              // HOLOGRAPHIC: every body matches the hologram look
   // upgrade to the real shaded GLB when it arrives (added as a child; keep transform + label + raycast)
-  enqueueGLB(bodyUrl||('asset/'+asset+'.glb'), s=>{ try{ s.scale.setScalar(sz*0.9);
+  _glbLoader.load('asset/'+asset+'.glb', g=>{ try{ const s=g.scene; s.scale.setScalar(sz*0.9);
       s.traverse(c=>{ if(c.isMesh&&c.material){ try{c.material.emissive=new THREE.Color(o.color);
         c.material.emissiveIntensity=0.3; c.material.transparent=true; c.material.opacity=0.18;
         c.material.blending=THREE.NormalBlending; c.material.depthWrite=false;
         c.material.envMap=(envRT&&envRT.texture)||null; c.material.needsUpdate=true;}catch(_){}}});
       m.material.opacity=0.4;   // KEEP the glowing orb visible (was 0); GLB is a faint detail overlay
-      m.add(s); m.userData.glb=s; }catch(_){}}, ()=>{}, m); // 404 → keep the textured PBR sphere
+      m.add(s); m.userData.glb=s; }catch(_){}}, undefined, ()=>{}); // 404 → keep the textured PBR sphere
   return m;
 }
 
@@ -2841,7 +2169,6 @@ function addManifestBody(o){
   m.userData={name:o.name,labelText:o.label,base:1.0,baseScale:sz,ph:Math.random()*6.28,getCard:o.getCard,refresh:null,selected:false,
     _bornAt:(clock?clock.elapsedTime:0),color:o.color,glb:null,manifest:true};
   const lab=makeLabel(o.label);lab.position.set(0,sz+5,0);m.add(lab);m.userData.label=lab;
-  tuneBodyLabel(m,sz,{always:!!o.celLabel});
   scene.add(m);bodies.push(m);bodyMap.set(o.name,m);
   _holoShell(m,sz,o.color);                              // HOLOGRAPHIC galaxy (matches every other body)
   if(o.url)enqueueGLB(o.url, s=>{ try{
@@ -2876,28 +2203,30 @@ function resizeBody(m,sz){if(!m||m.userData.baseScale===sz)return;
   m.userData.baseScale=sz;
   if(m.userData.glb){m.userData.glb.scale.setScalar(sz*0.9);}        // shaded GLB present → scale it
   else{m.geometry.dispose();m.geometry=new THREE.SphereGeometry(sz,32,32);}
-  tuneBodyLabel(m,sz,{always:!!m.userData.celKind});}
+  if(m.userData.label)m.userData.label.position.set(0,sz+4,0);}
 
-/* ---- (d) FIXED SLOT / LANE LAYOUT ----
-   Console-menu placement: predictable rows/rings and stable angular slots. */
-const SLOT_STEP=(Math.PI*2)/12;                         // 12 clear menu slots
-const CLUSTER_PHASE={kpi:0.0, sys:0.7, infra:1.4, pipe:2.1, tier:2.8, guardian:3.5, selfdev:4.2, climate:4.9, agentos:5.6};
+/* ---- (d) φ / FRACTAL / RELATIONSHIP LAYOUT ----
+   Golden-angle (137.5°) phyllotaxis for even, no-clump angular spacing; distance from the Sun ∝ INVERSE
+   importance (closer = more related/important — functions & features sit innermost); a per-type cluster
+   phase keeps similar bodies grouped (similarity clustering); a self-similar vertical spread gives the
+   fractal feel. importance ∈ [0,1]. */
+const GOLDEN=Math.PI*(3-Math.sqrt(5));                  // 137.50776° in radians
+const CLUSTER_PHASE={kpi:0.0, sys:1.0, infra:2.0, pipe:3.2, tier:4.2, guardian:5.0, selfdev:5.6, climate:0.6, agentos:4.8};
 function phyllo(i, importance, type){
   const base=4500, span=6000;                          // telemetry band pushed OFF the giant core (4.5k-10.5k, inside the 12k app ring) — no more dots crowding the centre
   const imp=Math.max(0,Math.min(1,importance));
-  const ring=Math.floor(i/12), slot=i%12;
-  const r=base + span*(1-imp) + ring*720;              // closer = more important; extra rows never overlap
-  const a=(CLUSTER_PHASE[type]||0) + slot*SLOT_STEP;
-  const y=(ring-0.5)*210;
+  const r=base + span*(1-imp);                         // closer = more important
+  const a=(CLUSTER_PHASE[type]||0) + i*GOLDEN;         // golden-angle within the type cluster
+  const y=Math.sin(i*GOLDEN*1.7)*34*(0.5+imp);        // self-similar vertical spread
   return {radius:r, angle:a, y:y};
 }
-/* §1 F: fixed-slot placement for generated/legacy planets. */
+/* §1 F: Vogel/sunflower placement for the MAJOR planets — golden-angle θ=i·137.50776° + radius R0+k·√i,
+   scaled so high-importance (bigger count) planets sit CLOSER to the Sun. Self-similar at every nest level. */
 function vogel(i, importance, R0, k){
   const imp=Math.max(0,Math.min(1,importance));
-  const slots=12, ring=Math.floor(i/slots), slot=i%slots;
-  const a=slot*(Math.PI*2/slots)+(ring%2)*(Math.PI/slots);
-  const r=(R0||300) + (k||26)*(ring+1) - imp*70;
-  const y=(ring-0.5)*Math.max(34,(k||26)*0.8);
+  const a=i*GOLDEN;                                    // golden angle — no clumping
+  const r=(R0||300) + (k||26)*Math.sqrt(i+0.5) - imp*70;   // bigger/important → pulled inward
+  const y=Math.sin(i*GOLDEN*0.7)*44*(0.4+0.6*(1-imp));     // gentle self-similar vertical spread
   return {radius:Math.max(150,r), angle:a, y:y};
 }
 
@@ -2934,7 +2263,7 @@ function sizeFor(tier, importance){
 function impFromCount(c){ return Math.max(0,Math.min(1, c?Math.log10(1+c)/5:0.4)); }   // log-scaled real count → 0..1
 
 /* ===== NASA-Eyes recursive hierarchy: Node model + nav stack (Stage 5) ===== */
-const MENU_CHILD_SCALE = 0.382;                       // recursive inspect scale per level
+const PHI_CONJ = 0.381966011;                         // 1/φ² — recursive self-similar scale per level
 function makeNode(o){ return Object.assign({
   id:o.id, label:o.label, kind:o.kind||'planet', depth:o.depth||0, parent:o.parent||null,
   color:o.color||COLORS.kpi, glbUrl:o.glbUrl||null, count:o.count??null,
@@ -2979,12 +2308,12 @@ function framingFor(frame){
 
 /* ---- §1 A: the 16 MAJOR ONTOLOGY-DOMAIN PLANETS (the white-dot killer) ----
    Built ONCE from the embedded deterministic manifest. Each domain → its CORRECT curated GLB (per
-   manifest.domains), placed into fixed 3D menu lanes, SIZED log-scaled by its real ont_object count, carrying
+   manifest.domains), placed by the φ/Vogel law, SIZED log-scaled by its real ont_object count, carrying
    its TITLE label. Lazy-loaded through the concurrency-capped queue. Clicking flies to it + opens a card. */
 let _domainPlanetsBuilt=false;
-/* ---- ALGORITHM · MOON TIER ----
+/* ---- ALGORITHM · MOON TIER (fractal/self-similar) ----
    Each planet's REAL child entities (from /children → brain.db) are placed as MOONS on a visible ORBIT RING
-   around it, by fixed menu slots. Size = small
+   around it, by the SAME golden-angle φ law applied at the moon scale (self-similar / fractal). Size = small
    (sub-features); distance = on the relationship ring. REAL ontology entities only — never decorative. */
 const _moonGroups=[];        // every orbiting system group (planets/moons/satellites/meteors); each carries userData.spin
 const _systemGroups=[];      // planet/moon groups hidden by default — revealed on drill-in (progressive disclosure)
@@ -3003,7 +2332,7 @@ function _orbitRing(parent, R, op){ try{
 /* one orbiting body — HOLOGRAPHIC, not solid: a translucent additive glow core + a wireframe data-grid shell
    + a fresnel rim halo, all in the body's colour, self-rotating. (JARVIS hologram look; no opaque/CAD surfaces.) */
 /* §8 closest-related sit innermost. baseRing = ring radius; rank 0 = most related (server ont_link order).
-   Only RADIUS encodes relationship strength; angle uses fixed slots so objects remain scannable. */
+   Only RADIUS encodes relationship strength; the golden-angle φ ANGLE is untouched (even spread preserved). */
 function relRadius(baseRing, rank, total){
   const n=Math.max(1,(total||1)-1);
   const t=Math.min(1,(rank||0)/n);
@@ -3075,9 +2404,9 @@ function findOrbByEntity(id){ if(!id)return null;
 function findOrbByLabel(lab){ if(!lab)return null; const lo=String(lab).toLowerCase();
   for(let i=0;i<_pickBodies.length;i++){if((_pickBodies[i].userData.label||'').toLowerCase()===lo)return _pickBodies[i];} return null; }
 function openCardLive(g, card){ if(_selected!==g)return; _cardDrilled=false; showCardWithFns(card); }
-/* RECURSIVE INSPECT HIERARCHY (real data only): galaxy ▸ PLANETS (the domain's top entities) ▸ MOONS
-   (each planet's linked entities) ▸ SATELLITES (each moon's services/actions). Fixed slots at every level;
-   sizes & ring distances STRICTLY descend galaxy > planet > moon > satellite. */
+/* RECURSIVE φ HIERARCHY (real data only): galaxy ▸ PLANETS (the domain's top entities) ▸ MOONS (each planet's
+   linked entities) ▸ SATELLITES (each moon's services/actions). Same golden-angle law at every level
+   (self-similar / fractal); sizes & ring distances STRICTLY descend galaxy > planet > moon > satellite. */
 function buildGalaxySystem(galaxy, domain, galaxySize){
   if(!galaxy||!domain||typeof THREE==='undefined') return;
   fetch('children?kind=type:'+encodeURIComponent(domain)+'&limit=5').then(r=>r.json()).then(d=>{
@@ -3085,10 +2414,10 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
     const pRing=galaxySize*2.6; _orbitRing(galaxy,pRing,0.28);   // planets orbit clear of the (now-big) galaxy hub
     const pgrp=new THREE.Group(); galaxy.add(pgrp); pgrp.userData.spin=0.10; _moonGroups.push(pgrp); galaxy.userData.planetGroup=pgrp;  // planets ALWAYS visible, orbiting their galaxy (solar-system look); only moons drill-in
     planets.forEach((pl,i)=>{ try{
-      const a=i*SLOT_STEP, r=relRadius(pRing, i, planets.length);
-      const psz=Math.min(galaxySize*MENU_CHILD_SCALE*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);
+      const a=i*GOLDEN, r=relRadius(pRing, i, planets.length);
+      const psz=Math.min(galaxySize*PHI_CONJ*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);  // FRACTAL CASCADE: planet = galaxy × 1/φ² (self-similar golden-ratio step) ± importance
       const pm=_orbBody(psz, pl.color, 'planet', pl.label, pl.id, 'type:'+domain);
-      pm.position.set(Math.cos(a)*r, Math.sin(i*SLOT_STEP*0.7)*galaxySize*0.2, Math.sin(a)*r);
+      pm.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*galaxySize*0.2, Math.sin(a)*r);
       pgrp.add(pm);
       // MOONS — this planet's own linked entities (recursive children) → truly "part of" the planet
       fetch('children?id='+encodeURIComponent(pl.id)+'&kind=type:'+encodeURIComponent(domain)+'&exclude='+encodeURIComponent(pl.id)+'&limit=4')
@@ -3097,10 +2426,10 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
           const mRing=psz*2.6; _orbitRing(pm,mRing,0.22);   // moons orbit clearly outside their planet
           const mgrp=new THREE.Group(); pm.add(mgrp); mgrp.userData.spin=0.22; mgrp.visible=false; _moonGroups.push(mgrp); _systemGroups.push(mgrp); pm.userData.moonGroup=mgrp;  // moons HIDDEN until planet focused
           moons.forEach((mn,j)=>{ try{
-            const aa=j*SLOT_STEP, rr=relRadius(mRing, j, moons.length);
+            const aa=j*GOLDEN, rr=relRadius(mRing, j, moons.length);
             const msz=Math.max(1.5,psz/50);                                                // RATIO: moon = planet ÷ 50
             const mm=_orbBody(msz, mn.color, 'moon', mn.label, mn.id, 'type:'+domain);
-            mm.position.set(Math.cos(aa)*rr, Math.sin(j*SLOT_STEP*0.7)*psz*0.28, Math.sin(aa)*rr);
+            mm.position.set(Math.cos(aa)*rr, Math.sin(j*GOLDEN*0.7)*psz*0.28, Math.sin(aa)*rr);
             mgrp.add(mm);
           }catch(e){} });
         }).catch(e=>{});
@@ -3108,7 +2437,7 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
   }).catch(e=>{});
 }
 /* SATELLITES — the REAL pm2/Docker services (/vitals.services.list) on a ring hugging the AI Core (they power
-   the whole brain). Fixed-slot spacing, satellite tier size, coloured by LIVE status (online=cyan, stopped=grey). */
+   the whole brain). Golden-angle spacing, satellite tier size, coloured by LIVE status (online=cyan, stopped=grey). */
 let _satBuilt=false;
 function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
   fetch('vitals').then(r=>r.json()).then(v=>{
@@ -3116,7 +2445,7 @@ function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
     const R=1000; _orbitRing(scene,R,0.2);
     const grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.16; grp.visible=false; grp.userData.systemLayer=true; _moonGroups.push(grp); _systemGroups.push(grp);  // service ring — DRILL-IN (revealed via Vitals)
     list.forEach((s,i)=>{ try{
-      const a=i*SLOT_STEP, r=R*(0.95+0.018*i), on=(s.status==='online');
+      const a=i*GOLDEN, r=R*(0.95+0.018*i), on=(s.status==='online');
       const sz=sizeFor('satellite', on?0.85:0.3)*2.4, col=on?0x39ffd0:0x67727d;
       const m=_orbBody(sz, col, 'satellite', s.label||s.name, s.name, 'service');
       m.userData.getCard=()=>({title:(s.label||s.name),subtitle:'Docker/pm2 service · '+s.status,
@@ -3128,19 +2457,19 @@ function buildSatellites(){ if(_satBuilt||!scene)return; _satBuilt=true;
           {label:(s.status==='online'?'↻ Restart':'▶ Start'),kind:'_fn',
             fn:()=>orbControl(s.name, s.status==='online'?'restart':'start')},
           {label:'🛰 Live Tasks',kind:'_fn',fn:()=>setMode('worklist')}]});
-      m.position.set(Math.cos(a)*r, Math.sin(i*SLOT_STEP*0.7)*7, Math.sin(a)*r); grp.add(m);
+      m.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*7, Math.sin(a)*r); grp.add(m);
     }catch(e){} });
   }).catch(e=>{});
 }
 /* METEORS — the REAL live alerts/events (/vitals.alerts), innermost near the brain (urgent = closest).
-   Small but HOT (alerts must be noticed); red=critical, amber=warning. Fixed-slot spacing. */
+   Small but HOT (alerts must be noticed); red=critical, amber=warning. Golden-angle spacing. */
 let _metBuilt=false;
 function buildMeteors(){ if(_metBuilt||!scene)return; _metBuilt=true;
   fetch('vitals').then(r=>r.json()).then(v=>{
     const al=((v&&v.alerts)||[]); if(!al.length) return;
     const grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.3; grp.visible=false; grp.userData.systemLayer=true; _moonGroups.push(grp); _systemGroups.push(grp);  // meteors — DRILL-IN (revealed via Vitals)
     al.forEach((alert,i)=>{ try{
-      const a=i*SLOT_STEP, r=480+i*50, crit=(alert.level==='critical');
+      const a=i*GOLDEN, r=480+i*50, crit=(alert.level==='critical');
       const col=crit?0xff3b3b:0xffb02e, sz=crit?1.15:0.85;
       const m=_orbBody(sz, col, 'meteor', alert.title, alert.title, 'event');
       try{ m.material.emissiveIntensity=1.7; }catch(_){}
@@ -3178,7 +2507,7 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
   const R=12000, grp=new THREE.Group(); scene.add(grp); grp.userData.spin=0.05; _moonGroups.push(grp);   // wide app ring: 780-radius planets never crowd
   _orbitRing(grp, R, 0.34);
   apps.forEach((app,i)=>{ try{
-    const a=i*SLOT_STEP, r=R*(0.9+0.02*i);
+    const a=i*GOLDEN, r=R*(0.9+0.02*i);
     const imp=(APP_PRIORITY[app.k]||50)/100;
     const psz=240+imp*420;                                          // PLANET = 50× moon; max ~660 — ALWAYS smaller than the AI core (~780)
     const b=_orbBody(psz, 0x4fe9ff, 'app', (app.ic?app.ic+' ':'')+app.t, 'app:'+app.k, 'app');
@@ -3187,18 +2516,18 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
       lines:['Open the '+app.t+' app — or fly its sub-feature moons.'],
       actions:[{label:'▶ Open '+app.t, kind:'_fn', fn:app.fn},
                {label:'◈ Focus here', kind:'_fn', fn:()=>flyToBody(b)}]});
-    b.position.set(Math.cos(a)*r, Math.sin(i*SLOT_STEP*0.7)*120, Math.sin(a)*r);
+    b.position.set(Math.cos(a)*r, Math.sin(i*GOLDEN*0.7)*120, Math.sin(a)*r);
     grp.add(b);
     // MOONS = this app's real sub-features (collapsed inside the planet's system)
     const moons=APP_MOONS[app.k]||[];
     if(moons.length){ const mR=psz*2.2; _orbitRing(b,mR,0.24);
       const mg=new THREE.Group(); b.add(mg); mg.userData.spin=0.2; _moonGroups.push(mg);
       moons.forEach((mn,j)=>{ try{
-        const aa=j*SLOT_STEP, msz=psz/50;                              // RATIO: moon = planet ÷ 50
+        const aa=j*GOLDEN, msz=psz/50;                              // RATIO: moon = planet ÷ 50
         const mm=_orbBody(msz, 0x7af3ff, 'moon', mn.n, 'feature:'+app.k+':'+j, 'sub-feature');
         mm.userData.getCard=()=>({title:mn.n, subtitle:app.t+' · sub-feature',
           actions:[{label:'▶ Open '+mn.n, kind:'_fn', fn:mn.f}]});
-        mm.position.set(Math.cos(aa)*mR, Math.sin(j*SLOT_STEP*0.7)*psz*0.5, Math.sin(aa)*mR);
+        mm.position.set(Math.cos(aa)*mR, Math.sin(j*GOLDEN*0.7)*psz*0.5, Math.sin(aa)*mR);
         mg.add(mm);
         // SATELLITES = sub-features of THIS moon (real data: Vitals▸Services▸each pm2 service; Alerts▸each live alert)
         if(mn.sats==='services'){ fetch('vitals').then(r=>r.json()).then(v=>{ try{
@@ -3210,7 +2539,7 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
               props:[{k:'CPU',v:(s.cpu||0)+'%'},{k:'Mem',v:(s.mem_mb||0)+'MB'}],
               actions:[{label:(s.status==='online'?'↻ Restart':'▶ Start'),kind:'_fn',fn:()=>orbControl(s.name,s.status==='online'?'restart':'start')},
                        {label:'📜 Logs',kind:'drill',arg:'runner:'+s.name}]});
-            ss.position.set(Math.cos(k*SLOT_STEP)*sR, Math.sin(k*SLOT_STEP*0.7)*msz, Math.sin(k*SLOT_STEP)*sR); sg.add(ss); });
+            ss.position.set(Math.cos(k*GOLDEN)*sR, Math.sin(k*GOLDEN*0.7)*msz, Math.sin(k*GOLDEN)*sR); sg.add(ss); });
         }catch(_){} }).catch(()=>{}); }
         if(mn.sats==='alerts'){ fetch('vitals').then(r=>r.json()).then(v=>{ try{
           const al=((v&&v.alerts)||[]).slice(0,6); if(!al.length)return;
@@ -3219,7 +2548,7 @@ function buildAppConstellation(){ if(_appBuilt||!scene||typeof DOCK==='undefined
             const ss=_orbBody(msz*0.3, crit?0xff3b3b:0xffb02e, 'meteor', alert.title, alert.title, 'alert');
             ss.userData.getCard=()=>({title:alert.title,subtitle:'⚠ '+alert.level,lines:[alert.detail||''].filter(Boolean),
               actions:[{label:'🩺 Open Vitals',kind:'_fn',fn:()=>openVitals()}]});
-            ss.position.set(Math.cos(k*SLOT_STEP)*sR, Math.sin(k*1.7)*msz, Math.sin(k*SLOT_STEP)*sR); sg.add(ss); });
+            ss.position.set(Math.cos(k*GOLDEN)*sR, Math.sin(k*1.7)*msz, Math.sin(k*GOLDEN)*sR); sg.add(ss); });
         }catch(_){} }).catch(()=>{}); }
       }catch(e){} });
     }
@@ -3236,21 +2565,21 @@ function buildDomainPlanets(){
     const lg=Math.log10(1+(info.count||1));
     const imp=(maxLog>minLog)?(lg-minLog)/(maxLog-minLog):0.5;   // 0..1 importance, normalized across real min..max
     const sz=sizeFor('galaxy',imp);                             // SIZE ∝ importance: most important ≈19, least ≈5 (clear ~3.8× hierarchy)
-    const cols=4, col=i%cols, row=Math.floor(i/cols), x=18000+row*8200, z=(col-(cols-1)/2)*6400;
-    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:(1-row)*2600};   // explicit console-menu lanes
+    // DISTANCE: Vogel √i golden-angle spiral — most important (rank i=0) sits INNERMOST near the core; least important farthest out
+    const P={angle:i*GOLDEN, radius:25000+9000*Math.sqrt(i), y:Math.sin(i*GOLDEN*0.7)*3000*(0.4+0.6*(1-imp))};   // VAST field 25k-60k, OUTSIDE the 12k app ring; systems (~2.6k) can never touch (~26k gaps)
     const name='dom:'+dom, count=info.count||0;
     const node=makeNode({id:name,label:dom,kind:'planet',depth:0,parent:null,
       color:COLORS.kpi,count:count,childrenKind:'type:'+dom,glbUrl:info.url});
     const card=()=>({title:dom,subtitle:'ontology domain · '+(info.reason||''),
       bar:Math.round(imp*100),
       props:[{k:'Objects',v:fmt(count)},{k:'Importance',v:Math.round(imp*100)+'%'},{k:'GLB',v:(info.url||'').split('/').pop()}],
-      lines:['One of the 16 real ontology domains from brain.db.','Sized by its real object count; placed in a fixed 3D menu lane.'],
+      lines:['One of the 16 real ontology domains from brain.db.','Sized by its real object count; placed by the golden-angle φ law.'],
       actions:[{label:'◈ Focus in graph',kind:'graph',arg:dom},
         {label:'⏎ Enter system',kind:'descend',arg:dom}]});
     const b=addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
       radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
     bodyNodeMap.set(b,node);
-    buildGalaxySystem(b,dom,sz);        // recursive domain inspect system: galaxy ▸ planets ▸ moons
+    buildGalaxySystem(b,dom,sz);        // RECURSIVE φ: galaxy ▸ planets ▸ moons (real entities; sizes & distances descend, self-similar)
     b.userData.oa=P.angle; b.userData.orr=P.radius; b.userData.oy=P.y; b.userData.os=0.013*Math.min(2.0,1400/P.radius); _galaxyOrbiters.push(b);  // galaxy slowly orbits the core (inner faster)
   });
   // a lighter outer belt of the 31 master TOPIC planets (ranked by pagerank) — keeps depth without 1,600 loads
@@ -3258,8 +2587,7 @@ function buildDomainPlanets(){
   const maxPr=Math.max(...topics.map(t=>t.pagerank||0))||1;
   topics.forEach((t,i)=>{const imp=Math.max(0,Math.min(1,(t.pagerank||0)/maxPr));
     const sz=sizeFor('topic',imp);                              // GLOBAL SIZE LAW: nebula/topic tier — below planets
-    const cols=4, col=i%cols, row=Math.floor(i/cols), x=52000+row*7600, z=(col-(cols-1)/2)*7200;
-    const P={angle:Math.atan2(z,x), radius:Math.hypot(x,z), y:-9800-row*1600};  // far backdrop grid
+    const P=vogel(i,imp*0.5,200000,3000);                        // topic belt pushed to the FAR backdrop — no more confining yellow ring
     const name='topic:'+i;
     const card=()=>({title:t.title,subtitle:'master topic · pagerank '+(t.pagerank||0).toFixed(4),
       props:[{k:'PageRank',v:(t.pagerank||0).toFixed(4)},{k:'GLB',v:(t.url||'').split('/').pop()}],
@@ -3273,11 +2601,9 @@ function buildDomainPlanets(){
   // each belongs to its own moon (Vitals ▸ Services / Vitals ▸ Alerts), each moon to its planet. Nothing floats free.
   // CORE-POV start: stand AT the AI core looking OUT into the universe — the core sits just behind you,
   // visible at the frame edge. (flyHome/_frameAll remain the zoom-out overview.)
-  try{ setTimeout(()=>{ home={pos:new THREE.Vector3(2200,260,0), tgt:new THREE.Vector3(4600,220,0)};   // wider default: still JARVIS POV, no close old-core snap
+  try{ setTimeout(()=>{ home={pos:new THREE.Vector3(1250,260,0), tgt:new THREE.Vector3(2650,220,0)};   // CAMERA LOCK: standing ON the core looking OUT (core behind you); near pivot ⇒ drag = look-around
     camera.position.copy(home.pos); controls.target.copy(home.tgt); controls.update(); },60); }catch(_){}
-  try{buildCelestialOS().then(()=>{try{enterUniverseExploreView();
-    setTimeout(()=>{const b=bodyMap.get('cel:miniapps'); if(b){selectedCelestialBody=b; flyToBody(b);}},420);
-  }catch(_){}});}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe is the default 3D menu
+  try{buildCelestialOS();}catch(e){console.warn('celestial',e);}   // CELESTIAL OS repo universe (additive layer)
 }
 
 /* ===== CELESTIAL OS — every planet is a FEATURE with its complete interactive family =====
@@ -3291,7 +2617,7 @@ function buildDomainPlanets(){
    are ABSORBED via CEL_ALIAS so their LIVE updates (labels/colors) keep flowing into the new bodies;
    the old 12k app ring is retired (Mini Apps planet carries the dock apps); dom:* galaxies become
    Knowledge's moons with their recursive entity systems intact. Dock bar / panels / swarm untouched. */
-var CEL_K=22, CEL_LOD=0.0022, CEL_REPLACES_APPRING=true;
+var CEL_K=30, CEL_LOD=0.008, CEL_REPLACES_APPRING=true;
 var CEL_ALIAS={};                // old body name -> cel body name (absorption; resolved in upsertBody)
 const CEL_LANE_ANG={knowledge:-0.95,automation:-0.35,intelligence:0.25,infrastructure:0.85,guardian:1.45,media:2.05,underworld:2.65,voice:1.75,budget:0.95,ui:-0.05};
 const CEL_COLORS={knowledge:0x29e7ff,automation:0x34d399,intelligence:0xa78bfa,infrastructure:0x7af3ff,
@@ -3303,188 +2629,10 @@ let _CEL=null,_celDots=null,_celDotPos=null,_celBuilt=false;
 function _celHash(s){let h=0;for(let i=0;i<String(s).length;i++)h=(h*31+String(s).charCodeAt(i))>>>0;return (h%1000)/1000*6.28318;}
 const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
 /* spec scale contract (user tier order), spec units — ×CEL_K at render time */
-const _celPR =I=>_cl(12,32,Math.pow(I,0.70));                       // planet
-const _celMR =(pr,I)=>pr*_cl(0.24,0.36,Math.pow(I,0.70));           // moon
-const _celSR =(mr,I)=>mr*_cl(0.14,0.24,Math.pow(I,0.70));           // satellite (flow page/control)
-const _celImportance=I=>Math.max(0,Math.min(1,Number(I)||0));
-const _celFamilyBias={miniapps:-1350,automation:-1120,knowledge:-940,infrastructure:-720,inference:-580,agentos:-340,selfdev:-160,
-  documents:160,correlation:320,media:560,guardian:760,voice:980,climate:1160,budget:1340,underworld:1700};
-const _celRepoBody={};           // repo seed id -> rendered body name
-let _celRepo=null;
-function _celPlanetPos(rank,total,p){
-  const cols=5, col=rank%cols, row=Math.floor(rank/cols);
-  const colMid=(cols-1)/2;
-  return new THREE.Vector3(
-    4300+row*2600,
-    (1-row)*1180,
-    (col-colMid)*2350
-  );
-}
-function _celOrbitRadius(parentWorld,childWorld,index,total,tier){
-  const group=Math.max(1,total||1), i=Number(index)||0;
-  const ring=(tier==='satellite')?Math.ceil((i+1)/10):Math.ceil((i+1)/8);
-  const lane=(tier==='satellite')?(i%10):(i%8);
-  const gap=(tier==='satellite')?260:520;
-  const familyPad=(tier==='satellite')?Math.min(1200,group*28):Math.min(2400,group*76);
-  return parentWorld+childWorld*2.8+familyPad+gap*ring+lane*((tier==='satellite')?72:150);
-}
-function _celKey(s){return String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'');}
-const _celKnownPlanetIds={
-  miniapps:'planet:jarvis-live-ui',automation:'planet:automation-runners',knowledge:'planet:knowledge-ontology',
-  infrastructure:'planet:infrastructure',agentos:'planet:agent-os',selfdev:'planet:self-development',
-  media:'planet:glb-media-studio',guardian:'planet:guardian',voice:'planet:voice-tts',climate:'planet:climate',
-  budget:'planet:budget-token-governor',inference:'planet:inference-fabric',correlation:'planet:correlation-graph',
-  documents:'planet:documents-ingestion',underworld:'planet:underworld'};
-function _celPrepareRepo(){
-  const nodes=(((_CEL||{}).seed||{}).nodes||[]).slice();
-  const generated=((_CEL||{}).generated)||{};
-  const byId={}, byParent={}, byKindLabel={};
-  nodes.forEach(n=>{
-    if(!n||!n.id)return;
-    byId[n.id]=n;
-    const p=n.parent||'';
-    (byParent[p]=byParent[p]||[]).push(n);
-    byKindLabel[(n.kind||'')+':'+_celKey(n.label)]=n;
-  });
-  return {nodes,byId,byParent,byKindLabel,generated};
-}
-function _celFindRepoNode(kind,label,parentId){
-  if(!_celRepo)return null;
-  const key=kind+':'+_celKey(label);
-  let n=_celRepo.byKindLabel[key];
-  if(n&&(!parentId||n.parent===parentId))return n;
-  const list=parentId?(_celRepo.byParent[parentId]||[]):_celRepo.nodes;
-  const want=_celKey(label);
-  return list.find(x=>x.kind===kind&&(_celKey(x.label)===want||want.indexOf(_celKey(x.label))>=0||_celKey(x.label).indexOf(want)>=0))||n||null;
-}
-function _celAttachRepoStats(n,repoNode){
-  if(!n||!repoNode||!_celRepo)return;
-  n.repoId=repoNode.id;
-  n.repoSource=repoNode.repo||repoNode.source||'repo seed';
-  n.repoChildren=(_celRepo.byParent[repoNode.id]||[]).length;
-  n.repoDust=((_celRepo.generated.dust_counts||{})[repoNode.id]||0);
-  n.repoFileMoons=((_celRepo.generated.file_moons||{})[repoNode.id]||0);
-  if(n.repoDust&&!n.dust)n.dust=n.repoDust;
-}
-function _celSeedBodyName(id){return _celRepoBody[id]||null;}
-function _celRememberRepo(id,name){if(id&&!_celRepoBody[id])_celRepoBody[id]=name;}
-function _celNameOf(b){return (b&&b.userData&&b.userData.name)||'';}
-function _celParentNameOf(name){
-  const b=bodyMap.get(name);
-  return (b&&b.userData&&b.userData.celParentName)||'';
-}
-function _celFocusName(){
-  const b=(_selected&&_selected.userData&&_selected.userData.celKind)?_selected:selectedCelestialBody;
-  return _celNameOf(b);
-}
-function _celIsAncestorName(ancestor,name){
-  let p=name, guard=0;
-  while(p&&guard++<12){
-    if(p===ancestor)return true;
-    p=_celParentNameOf(p);
-  }
-  return false;
-}
-function _celShouldShowMesh(b){
-  const u=(b&&b.userData)||{}, kind=u.celKind, name=u.name||'';
-  if(!kind)return false;
-  const focus=_celFocusName();
-  const mobile=(window.innerWidth||999)<=820;
-  if(kind==='planet'){
-    if(!mobile)return true;
-    return !focus || name===focus || _celIsAncestorName(name,focus);
-  }
-  if(!focus)return false;                                        // PS5 menu load: clean planet selection screen
-  const focusBody=bodyMap.get(focus), focusKind=focusBody&&focusBody.userData&&focusBody.userData.celKind;
-  const stageFocus=_celNameOf(selectedCelestialBody), stageBody=bodyMap.get(stageFocus);
-  const stageKind=stageBody&&stageBody.userData&&stageBody.userData.celKind;
-  if(name===focus)return true;
-  const parent=u.celParentName||'', focusParent=_celParentNameOf(focus);
-  const isRepoFileMoon=name.indexOf('cel:repo:filemoon:')===0;
-  if(isRepoFileMoon&&focusKind==='planet')return false;          // repo files are deep records, not first-screen menu moons
-  if(kind==='dust')return !!stageFocus && !!stageKind && stageKind!=='planet' && parent===stageFocus; // dust appears inside a drilled branch, never as first-screen fog
-  if(parent===focus){
-    if(mobile&&focusKind==='planet'&&kind==='moon')return (u.celStageIndex||0)<10;
-    return true;
-  }                                                             // selected body reveals its next menu stage
-  if(name===focusParent)return true;                              // keep the selected body's parent visible
-  if(_celIsAncestorName(name,focus))return true;                  // keep the breadcrumb chain rendered in 3D
-  if(focusParent&&parent===focusParent&&(kind==='moon'||kind==='meteorite'))return true;  // carousel siblings
-  return false;
-}
-function _celAddShortcut(n,name,label){
-  if(!n||!name)return;
-  const row=name+'|'+(label||name);
-  n._kidNames=n._kidNames||[];
-  if(!n._kidNames.some(x=>String(x).split('|')[0]===name))n._kidNames.push(row);
-}
-const _celStageJobs=[];
-let _celStageRunning=false,_celStageTotal=0;
-function _celKindRank(k){return ({planet:0,moon:1,meteorite:2,satellite:3,dust:4})[k]??9;}
-function _celLoadedCounts(){const c={planet:0,moon:0,meteorite:0,satellite:0,dust:0,total:0};
-  for(let i=0;i<_celBodies.length;i++){const k=_celBodies[i].userData.celKind||'domain'; if(c[k]!=null)c[k]++; c.total++;}
-  return c;}
-function _celIndexedCounts(){
-  const gen=((_CEL||{}).generated)||{}, out={total:Number(gen.total_nodes)||0,dust:0,fileMoons:0};
-  const dc=gen.dust_counts||{}, fm=gen.file_moons||{};
-  Object.keys(dc).forEach(k=>out.dust+=Number(dc[k])||0);
-  Object.keys(fm).forEach(k=>out.fileMoons+=Number(fm[k])||0);
-  return out;
-}
-function updateCelStreamStatus(){
-  const el=document.getElementById('celStream'); if(!el)return;
-  const c=_celLoadedCounts(), ix=_celIndexedCounts(), q=_celStageJobs.length;
-  el.style.display='inline-flex';
-  el.textContent=q?('🌌 '+c.total+' / '+fmt(ix.total||c.total)+' · +'+q):('🌌 '+c.total+' / '+fmt(ix.total||c.total));
-  el.title='Rendered bodies: '+c.total+' · indexed repo records: '+fmt(ix.total||c.total)+' · indexed file moons '+fmt(ix.fileMoons)+' · indexed dust '+fmt(ix.dust)+' · planets '+c.planet+' · moons '+c.moon+' · meteorites '+c.meteorite+' · satellites '+c.satellite+' · rendered dust '+c.dust+' · queued '+q;
-}
-function _celQueueStage(fn){ if(typeof fn==='function'){_celStageJobs.push(fn);_celStageTotal++;updateCelStreamStatus();} }
-function _celPumpStageSlice(){
-  if(!_celStageJobs.length)return;
-  const budget=((window.innerWidth||999)<820)?3:6;
-  for(let done=0;_celStageJobs.length&&done<budget;done++){
-    try{_celStageJobs.shift()();}catch(e){console.warn('celestial stage',e);}
-  }
-  if(!_celStageJobs.length){
-    _celStageRunning=false;
-    _celDotsRebuild();
-    try{rebuildMacroConnections();}catch(_){}
-    try{if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&!flying){const f=_celExploreFrame();tween(f.pos,f.tgt,900);}}catch(_){}
-  }
-  updateCelStreamStatus();
-}
-function _celFlushStage(limit){
-  let n=0, max=limit||360;
-  while(_celStageJobs.length&&n<max){
-    try{_celStageJobs.shift()();}catch(e){console.warn('celestial stage',e);}
-    n++;
-  }
-  if(!_celStageJobs.length){
-    _celStageRunning=false;
-    _celDotsRebuild();
-    try{rebuildMacroConnections();}catch(_){}
-  }
-  updateCelStreamStatus();
-}
-function _celRunStageJobs(){
-  if(_celStageRunning)return;
-  _celStageRunning=true;
-  const timer=setInterval(()=>{
-    const start=(typeof performance!=='undefined'?performance.now():0);
-    let done=0, budget=((window.innerWidth||999)<820)?5:12;
-    while(_celStageJobs.length&&done<budget){
-      try{_celStageJobs.shift()();}catch(e){console.warn('celestial stage',e);}
-      done++;
-      if(start&&performance.now()-start>10)break;
-    }
-    if(!_celStageJobs.length){
-      clearInterval(timer);
-      _celStageRunning=false;
-      _celDotsRebuild();
-      try{rebuildMacroConnections();}catch(_){}
-    }
-  },16);
-}
+const _celPR =I=>_cl(10,34,Math.pow(I,0.72));                       // planet
+const _celMR =(pr,I)=>pr*_cl(0.26,0.42,Math.pow(I,0.72));           // moon
+const _celSR =(mr,I)=>mr*_cl(0.12,0.22,Math.pow(I,0.72));           // satellite (flow page/control)
+const _celD  =I=>220+Math.pow(1-Math.max(0,Math.min(1,I)),1.35)*630;// planet distance from apex
 
 /* ---------- THE CATALOG (celestial/CELESTIAL_CATALOG.md) — real entries only ---------- */
 const CEL_PLANETS=[
@@ -3503,79 +2651,20 @@ const CEL_PLANETS=[
  {id:'correlation',  label:'🔗 Correlation / Graph',  lane:'knowledge',     I:0.72, alias:['sys:corr']},
  {id:'documents',    label:'📄 Documents / Ingestion',lane:'knowledge',     I:0.74, alias:['kpi:Document']},
  {id:'underworld',   label:'🌋 Underworld',           lane:'underworld',    I:0.50}];
-const CELESTIAL_GLB={
- miniapps:'/asset/jarvis_holo_panel_frame.glb',knowledge:'/asset/jarvis_intel_graph_constellation_core.glb',
- automation:'/asset/jarvis_ai_core_execution_queue_row.glb',infrastructure:'/asset/jarvis_data_fusion_reactor_core.glb',
- agentos:'/asset/jarvis_ai_core_reasoning_orb.glb',selfdev:'/asset/jarvis_ai_core_approval_panel.glb',
- media:'/asset/jarvis_kit_data_orb.glb',guardian:'/asset/jarvis_security_core_shield.glb',
- voice:'/asset/jarvis_ai_core_command_bar.glb',climate:'/media/gen_uw_sky__storm_supercell.glb',
- budget:'/asset/jarvis_ai_core_context_usage_bar.glb',inference:'/asset/jarvis_kit_reactor_core_tower.glb',
- correlation:'/asset/jarvis_simulation_branching_tree.glb',documents:'/asset/jarvis_docvault_hero_document_book.glb',
- underworld:'/media/gen_uw_sky__black_hole.glb',
- 'app-talk':'/asset/jarvis_ai_core_command_bar.glb','app-doctor':'/asset/jarvis_ai_core_health_subbar_stack.glb',
- 'app-guardian':'/asset/jarvis_security_core_shield.glb','app-worklist':'/asset/jarvis_ai_core_execution_queue_row.glb',
- 'app-vitals':'/asset/jarvis_ai_core_component_radial_gauge_92.glb','app-access':'/asset/jarvis_ai_core_approval_panel.glb',
- 'app-create':'/asset/jarvis_ai_core_active_tool_row.glb','app-image':'/asset/jarvis_kit_data_orb.glb',
- 'app-3d':'/asset/jarvis_holo_panel_frame.glb','app-library':'/asset/jarvis_docvault_hero_document_book.glb',
- 'app-climate':'/media/gen_uw_sky__storm_supercell.glb','app-agent':'/asset/jarvis_ai_core_reasoning_orb.glb',
- 'app-arch':'/asset/jarvis_holo_panel_frame.glb','app-memory':'/asset/jarvis_ai_core_command_history_panel.glb',
- 'app-inbox':'/asset/jarvis_ai_core_director_avatar_plate.glb',
- 'app-index':'/asset/jarvis_intel_graph_constellation.glb','app-budget':'/asset/jarvis_ai_core_context_usage_bar.glb',
- 'app-upgrades':'/asset/jarvis_ai_core_approval_panel.glb','app-gpu':'/asset/jarvis_data_fusion_reactor_core.glb',
- 'app-control':'/asset/jarvis_world_control_equatorial_ring.glb','app-care':'/asset/jarvis_security_core_user_avatar_plinth.glb',
- 'app-brain':'/asset/jarvis_ai_core_reasoning_orb.glb',
- 'app-offers':'/asset/jarvis_data_fusion_reactor_core.glb','app-docs':'/asset/jarvis_docvault_hero_document_book.glb',
- 'app-datasets':'/asset/jarvis_data_fusion_reactor_core.glb','app-reports':'/asset/jarvis_docvault_hero_document_book.glb',
- 'app-boards':'/asset/jarvis_ai_core_component_radial_gauge_92.glb',
- 'app-files':'/asset/jarvis_ai_core_command_history_panel.glb','app-phrases':'/asset/jarvis_ai_core_director_avatar_plate.glb',
- 'app-swarms':'/asset/jarvis_simulation_branching_tree.glb','app-ideas':'/asset/jarvis_ai_core_reasoning_stream_panel.glb',
- 'app-godrays':'/asset/jarvis_arc_reactor.glb','app-health':'/asset/jarvis_security_core_shield.glb',
- 'app-alerts':'/asset/jarvis_security_core_shield.glb','app-cases':'/asset/jarvis_world_control_equatorial_ring.glb',
- 'app-assist':'/asset/jarvis_world_control_equatorial_ring.glb','app-assets':'/asset/jarvis_holo_panel_frame.glb',
- 'app-labs':'/asset/jarvis_analytics_observatory_hero_globe.glb'};
-const CELESTIAL_KIND_GLB={planet:'/media/gen_uw_sky__exoplanet.glb',moon:'/media/gen_uw_sky__moon_full.glb',
- meteorite:'/media/gen_uw_sky__meteor.glb',satellite:'/media/gen_uw_sky__satellite.glb',dust:'/media/gen_uw_sky__space_debris.glb'};
 /* moons per planet: {id,label,I,fn?,gateway?,sats:[[label,fnOrDrillOrTier],…],dust?,alias?} */
 const CEL_MOONS={
  miniapps:[
   {id:'app-talk',    label:'🎤 Talk',      I:1.00,fn:()=>$('say').focus(),       sats:[['Voice Input',()=>micToggle()],['Chat',()=>$('say').focus()]]},
-  {id:'app-doctor',  label:'🧰 Doctor',    I:0.98,fn:()=>openDoctor(),           sats:[['Run Checks',()=>openDoctor()],['Missing 20',()=>fetch('doctor').then(r=>r.json()).then(showMissingPlan).catch(()=>openDoctor())]]},
   {id:'app-guardian',label:'🛡 Guardian',  I:0.95,gateway:'guardian',            sats:[['Live Monitor',()=>setMode('guardian')],['Talk to Room',()=>setMode('guardian')]]},
   {id:'app-worklist',label:'🛰 Live Tasks',I:0.90,fn:()=>setMode('worklist'),    sats:[['Active Tasks',()=>setMode('worklist')],['Approvals',()=>setMode('worklist')]]},
   {id:'app-vitals',  label:'🩺 Vitals',    I:0.85,fn:()=>openVitals(),           sats:[['Alerts',()=>openVitals()],['Services',()=>openVitals()],['Gauges',()=>openVitals()]]},
-  {id:'app-access',  label:'🔓 Access',    I:0.82,fn:()=>openAccess(),           sats:[['Permissions',()=>openAccess()],['Phone Control',()=>openAssist()]]},
-  {id:'app-control', label:'📲 Control',   I:0.81,fn:()=>openAssist(),           sats:[['Phone Control',()=>openAssist()],['Assist Link',()=>openAssistStatusMini()]]},
-  {id:'app-care',    label:'❤️ Care',      I:0.80,fn:()=>openCare(),             sats:[['Care Page',()=>openCare()],['Assist Link',()=>openAssistStatusMini()]]},
   {id:'app-create',  label:'✨ Create',    I:0.78,fn:()=>{$('say').focus();$('say').value='Create ';},sats:[['Image',()=>quick('image')],['3D Model',()=>quick('gen3d')]]},
   {id:'app-image',   label:'🎨 Image',     I:0.74,fn:()=>quick('image'),         sats:[['Generate Image',()=>quick('image')]]},
   {id:'app-3d',      label:'🧊 3D',        I:0.72,fn:()=>quick('3d'),            sats:[['Generate 3D',()=>quick('3d')]]},
   {id:'app-library', label:'📚 Library',   I:0.68,fn:()=>setMode('library'),     sats:[['Gallery',()=>setMode('library')],['Refresh Media',()=>loadLib()]]},
-  {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>openClimate()],['Warm',()=>climateSay('I am cold, please warm the room')]]},
+  {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>flyToBodyByName('climate')]]},
   {id:'app-agent',   label:'🤖 Agent OS',  I:0.60,gateway:'agentos',             sats:[['Tool Palette',()=>openAgentTools()]]},
-  {id:'app-arch',    label:'🏛 Arch',      I:0.59,fn:()=>openArchitectureMini(), sats:[['Architecture',()=>openArchitectureMini()],['Doctor',()=>openDoctor()]]},
-  {id:'app-memory',  label:'🗃 Memory',    I:0.585,fn:()=>openMemoryMini(),      sats:[['Recall',()=>openMemoryMini()],['Brain',()=>openBrain()]]},
-  {id:'app-inbox',   label:'🔔 Inbox',     I:0.58,fn:()=>openInboxMini(),        sats:[['Notifications',()=>openInboxMini()],['Assist',()=>openAssistStatusMini()]]},
-  {id:'app-index',   label:'🧭 Index',     I:0.58,fn:()=>openCelIndex(),         sats:[['Open Index',()=>openCelIndex()]]},
-  {id:'app-budget',  label:'💰 Budget',    I:0.57,fn:()=>openBudget(),           sats:[['Governor',()=>openBudget()],['Archon',()=>toggleArchon()]]},
-  {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]},
-  {id:'app-gpu',     label:'🎛 GPU',       I:0.545,fn:()=>openGPU(),             sats:[['GPU Panel',()=>openGPU()],['Offers',()=>openGpuOffers()],['Brain',()=>openBrain()]]},
-  {id:'app-brain',   label:'🧠 Brain',     I:0.54,fn:()=>openBrain(),            sats:[['Brain Status',()=>openBrain()],['GPU',()=>openGPU()]]},
-  {id:'app-offers',  label:'💎 Offers',    I:0.53,fn:()=>openGpuOffers(),        sats:[['Estimate',()=>openGpuOffers()],['GPU',()=>openGPU()]]},
-  {id:'app-docs',    label:'📄 Docs',      I:0.52,fn:()=>openDustDocs(),         sats:[['Dust Docs',()=>openDustDocs()],['Index',()=>openCelIndex()]]},
-  {id:'app-datasets',label:'🧬 Datasets',  I:0.515,fn:()=>openDatasetsMini(),    sats:[['Catalog',()=>openDatasetsMini()],['Docs',()=>openDustDocs()]]},
-  {id:'app-reports', label:'📑 Reports',   I:0.512,fn:()=>openReportsMini(),     sats:[['Reports',()=>openReportsMini()],['Boards',()=>openDashboardsMini()]]},
-  {id:'app-boards',  label:'📊 Boards',    I:0.508,fn:()=>openDashboardsMini(),  sats:[['Dashboards',()=>openDashboardsMini()],['Reports',()=>openReportsMini()]]},
-  {id:'app-files',   label:'🗂 Files',     I:0.51,fn:()=>openFilesMini(),        sats:[['Service Files',()=>openFilesMini()]]},
-  {id:'app-phrases', label:'💬 Phrases',   I:0.50,fn:()=>openPhrasesMini(),      sats:[['Cached Voice',()=>openPhrasesMini()]]},
-  {id:'app-swarms',  label:'🐝 Swarms',    I:0.49,fn:()=>openSwarmsMini(),       sats:[['Live Tasks',()=>setMode('worklist')]]},
-  {id:'app-ideas',   label:'💡 Ideas',     I:0.48,fn:()=>openSuggestionsMini(),  sats:[['Suggestions',()=>openSuggestionsMini()],['Upgrades',()=>openUpgrades()]]},
-  {id:'app-godrays', label:'✦ God-rays',  I:0.47,fn:()=>openGodraysMini(),      sats:[['Self Check',()=>openGodraysMini()]]},
-  {id:'app-health',  label:'🛡 Health',    I:0.46,fn:()=>openHealth(),           sats:[['Health',()=>openHealth()],['Doctor',()=>openDoctor()]]},
-  {id:'app-alerts',  label:'🚨 Alerts',    I:0.455,fn:()=>openAlertsMini(),      sats:[['Alerts',()=>openAlertsMini()],['Health',()=>openHealth()]]},
-  {id:'app-assist',  label:'📲 Assist',    I:0.45,fn:()=>openAssistStatusMini(), sats:[['Assist Link',()=>openAssistStatusMini()],['Control',()=>openAssist()]]},
-  {id:'app-cases',   label:'📁 Cases',     I:0.445,fn:()=>openCasesMini(),       sats:[['Cases',()=>openCasesMini()],['Alerts',()=>openAlertsMini()]]},
-  {id:'app-assets',  label:'🧱 Assets',    I:0.44,fn:()=>openAssetsMini(),       sats:[['Asset Status',()=>openAssetsMini()],['Library',()=>setMode('library')]]},
-  {id:'app-labs',    label:'🧪 Labs',      I:0.435,fn:()=>openLabsMini(),        sats:[['Capabilities',()=>openLabsMini()],['Brain',()=>openBrain()]]}],
+  {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]}],
  knowledge:[],   // the 16 dom:* galaxies are ADOPTED here at build time — GLBs + recursive systems intact
  automation:[
   {id:'run-builder',   label:'🧠 Knowledge Builder', I:0.90,alias:['pipe:🧠 Knowledge Builder'],  dust:19421,sats:[['Detail','drill:runner:🧠 Knowledge Builder']]},
@@ -3658,7 +2747,6 @@ function _celCard(n,kindName,parentName){return ()=>{
   if(n.fn)acts.push({label:'⏎ Open '+n.label.replace(/^[^ ]+ /,''),kind:'_fn',fn:n.fn});
   if(n.gateway)acts.push({label:'🪐 Go to planet',kind:'_fn',fn:()=>{const b=bodyMap.get('cel:'+n.gateway);if(b)flyToBody(b);}});
   if(typeof n.drill==='string')acts.push({label:'▸ Detail',kind:'drill',arg:n.drill});
-  if((n.dust||n.repoDust||0)>0)acts.push({label:'· Browse dust records',kind:'dust',arg:n.repoId||''});
   kids.slice(0,10).forEach(kn=>acts.push({label:'· '+(kn.split('|')[1]||kn),kind:'_fn',
     fn:()=>{const b=bodyMap.get(kn.split('|')[0]);if(b)flyToBody(b);}}));
   if(parentName)acts.push({label:'↑ Up to '+((bodyMap.get(parentName)||{userData:{}}).userData.labelText||'parent'),
@@ -3666,23 +2754,16 @@ function _celCard(n,kindName,parentName){return ()=>{
   return {title:n.label,subtitle:'Celestial OS · '+kindName+(n.lane?' · '+n.lane+' lane':''),
     bar:Math.round((n.I||0)*100),
     props:[{k:'Importance',v:Math.round((n.I||0)*100)+'%'},{k:'Children',v:String(kids.length)}]
-      .concat(n.repoChildren!=null?[{k:'Repo children',v:String(n.repoChildren)}]:[])
-      .concat(n.repoFileMoons?[{k:'Repo file moons',v:fmt(n.repoFileMoons)}]:[])
-      .concat(n.dust?[{k:'Records (dust)',v:fmt(n.dust)}]:[])
-      .concat(n.repoSource?[{k:'Source',v:String(n.repoSource).slice(0,42)}]:[]),
+      .concat(n.dust?[{k:'Records (dust)',v:fmt(n.dust)}]:[]),
     lines:[],actions:acts};};}
 function _celAdd(name,n,kindName,specR,lane,parentName){
   const wr=Math.max(5,specR*CEL_K);
-  const cid=String((n&&n.id)||name.replace(/^cel:/,''));
-  const glbUrl=(n&&n.glbUrl)||CELESTIAL_GLB[cid]||CELESTIAL_KIND_GLB[kindName];
   const b=addBody({name:name,label:n.label,color:CEL_COLORS[lane]||CEL_COLORS.local,
-    radius:10,angle:0,y:0,size:wr/22,celLabel:true,glbUrl:glbUrl});  // addBody ×22 → exactly wr; name label rides on top
+    radius:10,angle:0,y:0,size:wr/22});                             // addBody ×22 → exactly wr; name label rides on top
   if(wr>240){try{ b.geometry.dispose(); b.geometry=new THREE.SphereGeometry(wr,64,48);    // MESH QUALITY: hi-res spheres for planet/moon tier
     b.material.metalness=0.85; b.material.roughness=0.16; b.material.envMapIntensity=1.6; // holographic CHROME (PMREM reflections)
     b.material.emissiveIntensity=0.8; }catch(_){}}                  // bio-illuminescent glow (feeds UnrealBloom)
   b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
-  b.userData.celParentName=parentName||''; b.userData.celImportance=_celImportance(n.I);
-  tuneBodyLabel(b,wr,{always:true});
   b.userData.celLockScale=true; _celBodies.push(b); return b;
 }
 function _celDustCloud(mesh,cnt,trueCount){                          // count-true soft cloud: ONE draw call, tiny, no labels/bloom
@@ -3696,21 +2777,7 @@ function _celDustCloud(mesh,cnt,trueCount){                          // count-tr
   mesh.userData.dustTrue=trueCount;
 }
 function _celOrbit(b,parent,orbR,om,seed,rel){
-  const kind=(b&&b.userData&&b.userData.celKind)||'moon';
-  if(b&&b.userData&&parent&&parent.userData&&!b.userData.celParentName)b.userData.celParentName=parent.userData.name||'';
-  const slots=kind==='satellite'?10:(kind==='dust'?14:8);
-  const ringKey=kind+':'+Math.max(0,Math.round((Number(orbR)||0)/900));
-  parent.userData._celSlots=parent.userData._celSlots||{};
-  const slot=parent.userData._celSlots[ringKey]||0;
-  parent.userData._celSlots[ringKey]=slot+1;
-  if(b&&b.userData){b.userData.celStageIndex=slot;b.userData.celRingKey=ringKey;}
-  const ring=Math.floor(slot/slots), lane=slot%slots;
-  const baseA=(lane/slots)*6.28318+(ring%2)*(3.14159/slots);
-  const speed=kind==='moon'?0.0028:kind==='meteorite'?0.0036:kind==='satellite'?0.0044:0.0022;
-  try{b.position.set(parent.position.x+Math.cos(baseA)*orbR,
-    parent.position.y+Math.sin(baseA*1.7)*orbR*0.16,
-    parent.position.z+Math.sin(baseA)*orbR*(1-0.18*(1-(rel==null?1:rel))));}catch(_){}
-  _celOrbiters.push({m:b,parent:parent,a:baseA,om:speed,orbR:orbR,phase:baseA,rel:rel==null?1:rel});
+  _celOrbiters.push({m:b,parent:parent,a:_celHash(seed),om:om,orbR:orbR,phase:_celHash(seed),rel:rel==null?1:rel});
 }
 /* absorb an OLD body: remove its mesh, alias its name so live upserts keep flowing into the cel body */
 function _celAbsorb(oldName,celName){
@@ -3729,8 +2796,6 @@ function _celAdoptDomains(knowledge){
   const kidNames=[];
   doms.forEach((g,i)=>{
     for(let j=_galaxyOrbiters.length-1;j>=0;j--)if(_galaxyOrbiters[j]===g)_galaxyOrbiters.splice(j,1);
-    g.userData.celKind='moon';
-    g.userData.celParentName=knowledge.userData.name||'cel:knowledge';
     const orbR=(knowledge.userData.baseScale||900)+(g.userData.baseScale||400)+700+(i%4)*460;
     _celOrbit(g,knowledge,orbR,0.008/Math.sqrt(1+(i%4)),g.userData.name,0.9);
     if(_celBodies.indexOf(g)<0)_celBodies.push(g);
@@ -3740,176 +2805,43 @@ function _celAdoptDomains(knowledge){
   });
   return kidNames;
 }
-function _celBuildRepoStages(){
-  if(!_celRepo)return;
-  const earlyFileMoons=(_celRepo.generated&&_celRepo.generated.file_moon_samples)||{};
-  Object.keys(earlyFileMoons).forEach(parentId=>{
-    _celQueueStage(()=>{
-    const parentName=_celSeedBodyName(parentId);
-    const parent=parentName&&bodyMap.get(parentName);
-    if(!parent)return;
-    const list=(earlyFileMoons[parentId]||[]).slice(0,12);
-    list.forEach((n,fi)=>{
-      if(!n||!n.id||_celSeedBodyName(n.id))return;
-      const name='cel:repo:filemoon:'+String(n.id).replace(/[^a-z0-9:_-]/gi,'-');
-      const node={label:'◌ '+(n.label||'File Moon'),I:n.importance||0.18,repoId:n.id,repoSource:n.repo||'generated file moon'};
-      _celAttachRepoStats(node,n);
-      const specR=Math.max(2.2,Math.min(5.5,2.6+(_celImportance(node.I)*4)));
-      const b=_celAdd(name,node,'moon',specR,(parent.userData&&parent.userData.lane)||'local',parentName);
-      b.userData.repoNodeRef=node; _celRememberRepo(n.id,name);
-      _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||50,fi,list.length,'moon')+fi*28,0.025+0.006*(fi%5),n.id,0.82);
-      if(parent.userData&&parent.userData.repoNodeRef)_celAddShortcut(parent.userData.repoNodeRef,name,node.label);
-    });
-    });
-  });
-  const earlyDust=(_celRepo.generated&&_celRepo.generated.dust_samples)||{};
-  Object.keys(earlyDust).forEach(parentId=>{
-    const list=(earlyDust[parentId]||[]).slice(0,8);
-    list.forEach((n,di)=>{
-      _celQueueStage(()=>{
-      if(!n||!n.id||_celSeedBodyName(n.id))return;
-      let parentName=_celSeedBodyName(parentId)||_celSeedBodyName(n.parent_parent);
-      if(!parentName&&_celRepo&&_celRepo.byId[parentId])parentName=_celSeedBodyName(_celRepo.byId[parentId].parent);
-      const parent=parentName&&bodyMap.get(parentName);
-      if(!parent)return;
-      const name='cel:repo:dust:'+String(n.id).replace(/[^a-z0-9:_-]/gi,'-');
-      const size=Math.max(0.9,Math.min(2.4,1.2+(_celImportance(n.importance)*1.8)));
-      const b=addBody({name:name,label:n.label||'dust',color:0x6fe3ff,radius:10,angle:0,y:0,size:size,noLabel:true,glbUrl:CELESTIAL_KIND_GLB.dust});
-      b.userData.getCard=()=>({title:n.label||'Dust record',subtitle:'Celestial OS · dust sample',
-        props:[{k:'Parent',v:parent.userData.labelText||parentId},{k:'Source',v:String(n.repo||'repo record').slice(0,42)}],
-        lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)}]});
-      b.userData.celKind='dust'; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
-      b.userData.celParentName=parentName;
-      _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||20,di,list.length,'satellite')+(di%3)*36,0.11+0.012*(di%5),n.id,0.72);
-      });
-    });
-  });
-  const mets=(_celRepo.nodes||[]).filter(n=>n.kind==='meteorite');
-  mets.forEach((n,mi)=>{
-    _celQueueStage(()=>{
-    const parentName=_celSeedBodyName(n.parent);
-    const parent=parentName&&bodyMap.get(parentName);
-    if(!parent||_celSeedBodyName(n.id))return;
-    const pr=(parent.userData.baseScale||240);
-    const specR=Math.max(3,(pr/CEL_K)*_cl(0.12,0.22,Math.pow(_celImportance(n.importance),0.7)));
-    const node={label:'☄ '+(n.label||'Meteorite'),I:n.importance||0.6,repoId:n.id,repoSource:n.repo||n.source||'repo seed'};
-    _celAttachRepoStats(node,n);
-    const name='cel:repo:met:'+n.id.replace(/[^a-z0-9:_-]/gi,'-');
-    const b=_celAdd(name,node,'meteorite',specR,(parent.userData&&parent.userData.lane)||'local',parentName);
-    _celRememberRepo(n.id,name);
-    _celOrbit(b,parent,_celOrbitRadius(pr,b.userData.baseScale||80,mi,mets.length,'moon'),0.052+0.012*((n.importance||0.5)),n.id,0.86);
-    const parentMesh=parent;
-    if(parentMesh&&parentMesh.userData&&parentMesh.userData.repoNodeRef)_celAddShortcut(parentMesh.userData.repoNodeRef,name,node.label);
-    if(node.repoDust)_celDustCloud(b,Math.min(1800,Math.round(Math.log10(1+node.repoDust)*360)),fmt(node.repoDust));
-    });
-  });
-  const sats=(_celRepo.nodes||[]).filter(n=>n.kind==='satellite');
-  sats.forEach((n,si)=>{
-    _celQueueStage(()=>{
-    const parentName=_celSeedBodyName(n.parent);
-    const parent=parentName&&bodyMap.get(parentName);
-    if(!parent||_celSeedBodyName(n.id))return;
-    const pr=(parent.userData.baseScale||80);
-    const specR=Math.max(1.6,(pr/CEL_K)*_cl(0.08,0.15,Math.pow(_celImportance(n.importance),0.7)));
-    const node={label:n.label||'Action',I:n.importance||0.5,repoId:n.id,repoSource:n.repo||n.source||'repo seed'};
-    _celAttachRepoStats(node,n);
-    const name='cel:repo:sat:'+n.id.replace(/[^a-z0-9:_-]/gi,'-');
-    const b=_celAdd(name,node,'satellite',specR,(parent.userData&&parent.userData.lane)||'local',parentName);
-    _celRememberRepo(n.id,name);
-    _celOrbit(b,parent,_celOrbitRadius(pr,b.userData.baseScale||32,si,(_celRepo.byParent[n.parent]||[]).length,'satellite'),0.082+0.012*(si%4),n.id,0.95);
-    const parentMesh=parent;
-    if(parentMesh&&parentMesh.userData&&parentMesh.userData.repoNodeRef)_celAddShortcut(parentMesh.userData.repoNodeRef,name,node.label);
-    });
-  });
-  const samples=(_celRepo.generated&&_celRepo.generated.dust_samples)||{};
-  Object.keys(samples).forEach(parentId=>{
-    _celQueueStage(()=>{
-    const list=(samples[parentId]||[]).slice(0,8);
-    list.forEach((n,di)=>{
-      if(!n||!n.id||_celSeedBodyName(n.id))return;
-      let parentName=_celSeedBodyName(parentId)||_celSeedBodyName(n.parent_parent);
-      if(!parentName&&_celRepo&&_celRepo.byId[parentId])parentName=_celSeedBodyName(_celRepo.byId[parentId].parent);
-      const parent=parentName&&bodyMap.get(parentName);
-      if(!parent)return;
-      const name='cel:repo:dust:'+String(n.id).replace(/[^a-z0-9:_-]/gi,'-');
-      const size=Math.max(0.9,Math.min(2.4,1.2+(_celImportance(n.importance)*1.8)));
-      const b=addBody({name:name,label:n.label||'dust',color:0x6fe3ff,radius:10,angle:0,y:0,size:size,noLabel:true,glbUrl:CELESTIAL_KIND_GLB.dust});
-      b.userData.getCard=()=>({title:n.label||'Dust record',subtitle:'Celestial OS · dust sample',
-        props:[{k:'Parent',v:parent.userData.labelText||parentId},{k:'Source',v:String(n.repo||'repo record').slice(0,42)}],
-        lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)}]});
-      b.userData.celKind='dust'; b.userData.celParentName=parentName; b.userData.celLockScale=true; _celBodies.push(b); _celRememberRepo(n.id,name);
-      _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||120,b.userData.baseScale||20,di,list.length,'satellite')+(di%3)*36,0.11+0.012*(di%5),n.id,0.72);
-    });
-    });
-  });
-  _celRunStageJobs();
-}
-function renderCelIndex(filter){
-  const list=document.getElementById('ciList'), meta=document.getElementById('ciMeta'); if(!list||!meta)return;
-  const q=_celKey(filter||''), rows=[];
-  for(let i=0;i<_celBodies.length;i++){
-    const b=_celBodies[i], u=b&&b.userData||{}, name=u.name||'', label=u.labelText||name, kind=u.celKind||'domain';
-    if(q&&_celKey(label+' '+name).indexOf(q)<0)continue;
-    rows.push({b,kind,label,name,scale:u.baseScale||0});
-  }
-  rows.sort((a,b)=>_celKindRank(a.kind)-_celKindRank(b.kind)||b.scale-a.scale||String(a.label).localeCompare(String(b.label)));
-  const shown=rows.slice(0,180);
-  meta.textContent=shown.length+' shown · '+_celBodies.length+' loaded · '+_celStageJobs.length+' streaming';
-  list.innerHTML=shown.map((r,i)=>'<div class=cirow tabindex=0 data-i="'+i+'"><span class=k>'+esc(r.kind)+'</span><span class=n>'+esc(r.label)+'</span><span class=s>↗</span></div>').join('');
-  list.querySelectorAll('.cirow').forEach((el,i)=>{const go=()=>{const b=shown[i].b;closeCelIndex();if(b)selectBody(b);};
-    el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
-}
-function openCelIndex(){const el=document.getElementById('celIndex');if(!el)return;el.classList.add('open');renderCelIndex((document.getElementById('ciSearch')||{}).value||'');}
-function closeCelIndex(){const el=document.getElementById('celIndex');if(el)el.classList.remove('open');}
 async function buildCelestialOS(){
   if(_celBuilt)return; _celBuilt=true;
   try{const r=await fetch('/celestial');_CEL=await r.json();}catch(e){_CEL={};}
-  _celRepo=_celPrepareRepo();
-  const sortedPlanets=CEL_PLANETS.slice().sort((a,b)=>(_celImportance(b.I)-_celImportance(a.I))||String(a.id).localeCompare(String(b.id)));
-  sortedPlanets.forEach((p,rank)=>{
-    const repoPlanet=_celRepo&&(_celRepo.byId[_celKnownPlanetIds[p.id]]||_celFindRepoNode('planet',p.label,null));
-    _celAttachRepoStats(p,repoPlanet);
+  const lanes={};
+  CEL_PLANETS.forEach(p=>{
     const pr=_celPR(p.I), name='cel:'+p.id;
     const moons=CEL_MOONS[p.id]||[];
+    const famMax=(pr+_celMR(pr,1)+18+4*Math.sqrt(4)+(p.id==='knowledge'?60:8))*CEL_K;  // room for the whole family
+    const li=(lanes[p.lane]=lanes[p.lane]||{i:0}); const idx=li.i++;
+    const theta=(CEL_LANE_ANG[p.lane]||0)+idx*GOLDEN;
+    const Dw=Math.max(_celD(p.I)*CEL_K, 5200+famMax+600);            // apex clear zone respected
+    const spreadX=0.34+(1-p.I)*0.34, spreadY=0.22+(1-p.I)*0.24;
     const b=_celAdd(name,p,'planet',pr,p.lane,null);
-    // Console-menu layout: fixed rows/lanes, no drift animation.
-    b.position.copy(_celPlanetPos(rank,sortedPlanets.length,p));
-    b.userData.repoNodeRef=p;
-    if(repoPlanet)_celRememberRepo(repoPlanet.id,name);
+    // spec forward cone is -z; the POV looks +x → rotate so planets sit IN FRONT of the core
+    b.position.set(Dw, Math.sin(theta)*Dw*spreadY, Math.cos(theta)*Dw*spreadX);
+    b.userData.oa=Math.atan2(b.position.z,b.position.x);
+    b.userData.orr=Math.hypot(b.position.x,b.position.z);
+    b.userData.oy=b.position.y; b.userData.os=0.0018+p.I*0.0016; _galaxyOrbiters.push(b);
     p._kidNames=[];
     moons.forEach((mn,mi)=>{
       const mr=_celMR(pr,mn.I), mname='cel:'+mn.id;
-      const repoMoon=_celFindRepoNode('moon',mn.label,repoPlanet&&repoPlanet.id);
-      _celAttachRepoStats(mn,repoMoon);
       mn.lane=p.lane;
       const mb=_celAdd(mname,mn,'moon',mr,p.lane,name);
-      mb.userData.repoNodeRef=mn;
-      const morb=_celOrbitRadius(pr*CEL_K,mr*CEL_K,mi,moons.length,'moon');
+      const morb=(pr+mr+18+4*Math.sqrt((mn.sats||[]).length)+(mi%3)*9)*CEL_K;
       _celOrbit(mb,b,morb,0.02+mn.I*0.012,mn.id,0.9);
-      if(repoMoon)_celRememberRepo(repoMoon.id,mname);
       p._kidNames.push(mname+'|'+mn.label);
       mn._kidNames=[];
-      let actionMet=null, actionMetName='';
-      if((mn.sats||[]).length){
-        const metNode={label:'☄ '+mn.label.replace(/^[^ ]+ /,'')+' Actions',I:Math.max(0.58,(mn.I||0.6)*0.76),lane:p.lane};
-        metNode._kidNames=[];
-        actionMetName='cel:met:actions:'+mn.id;
-        actionMet=_celAdd(actionMetName,metNode,'meteorite',Math.max(2.4,_celSR(mr,0.78)*1.35),p.lane,mname);
-        actionMet.userData.repoNodeRef=metNode;
-        _celOrbit(actionMet,mb,_celOrbitRadius(mr*CEL_K,actionMet.userData.baseScale||80,0,1,'moon'),0.038+(mn.I||0.6)*0.012,actionMetName,0.88);
-        mn._kidNames.push(actionMetName+'|'+metNode.label);
-      }
       (mn.sats||[]).forEach((sv,si)=>{
         const sl=sv[0], sa=sv[1];
         const sn={label:sl,I:0.6,lane:p.lane};
         if(typeof sa==='function')sn.fn=sa;
         else if(typeof sa==='string'&&sa.indexOf('drill:')===0)sn.drill=sa.slice(6);
         const sr=_celSR(mr,0.6), sname='cel:sat:'+mn.id+':'+si;
-        const satParent=actionMet||mb, satParentName=actionMetName||mname;
-        const sb=_celAdd(sname,sn,'satellite',sr,p.lane,satParentName);
-        _celOrbit(sb,satParent,_celOrbitRadius((satParent.userData.baseScale||mr*CEL_K),sr*CEL_K,si,(mn.sats||[]).length,'satellite'),0.045+0.01*(si%3),sname,0.95);
+        const sb=_celAdd(sname,sn,'satellite',sr,p.lane,mname);
+        _celOrbit(sb,mb,(mr*2.2+sr+4+(si%2)*7)*CEL_K,0.045+0.01*(si%3),sname,0.95);
         if(typeof sa==='string'&&sa.indexOf('tier:')===0)CEL_ALIAS[sa]=sname;   // tier:* live updates land here
-        if(actionMet)_celAddShortcut(actionMet.userData.repoNodeRef,sname,sl);
+        mn._kidNames.push(sname+'|'+sl);
       });
       if(mn.dust)_celDustCloud(mb,Math.min(2400,Math.round(Math.log10(1+mn.dust)*420)),fmt(mn.dust));
       (mn.alias||[]).forEach(a=>_celAbsorb(a,mname));
@@ -3917,11 +2849,8 @@ async function buildCelestialOS(){
     if(p.id==='knowledge')p._kidNames=p._kidNames.concat(_celAdoptDomains(b));
     (p.alias||[]).forEach(a=>_celAbsorb(a,name));
   });
-  _celBuildRepoStages();
-  selectedCelestialBody=bodyMap.get('cel:miniapps')||selectedCelestialBody;
   _celDotsRebuild();
   try{rebuildMacroConnections();}catch(_){}
-  _celSuppressLegacyScene();
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
     ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
 }
@@ -3932,32 +2861,6 @@ function _celDotsRebuild(){                                          // NASA-Eye
   _celDots=new THREE.Points(g,new THREE.PointsMaterial({color:0x9feaff,size:3.5,sizeAttenuation:false,
     transparent:true,opacity:0.85,depthTest:true,depthWrite:false}));
   _celDots.frustumCulled=false; scene.add(_celDots);
-}
-function _celOwnsBody(o){
-  const u=(o&&o.userData)||{}, n=String(u.name||'');
-  return !!u.celKind || n.indexOf('cel:')===0;
-}
-function _celHideLabel(o){
-  const u=(o&&o.userData)||{};
-  try{ if(u.label)u.label.visible=false; }catch(_){}
-  try{ if(u.labelSprite)u.labelSprite.visible=false; }catch(_){}
-}
-function _celSuppressLegacyScene(){
-  if(!_celBuilt)return;
-  for(let i=0;i<bodies.length;i++){
-    const b=bodies[i]; if(!b||_celOwnsBody(b))continue;
-    b.visible=false; _celHideLabel(b);
-  }
-  for(let i=0;i<_pickBodies.length;i++){
-    const b=_pickBodies[i]; if(!b||_celOwnsBody(b))continue;
-    b.visible=false; _celHideLabel(b);
-  }
-  for(let i=0;i<_systemGroups.length;i++){
-    const g=_systemGroups[i]; if(g&&!_celOwnsBody(g))g.visible=false;
-  }
-  if(_macroLines){_macroLines.visible=false;try{_macroLines.material.opacity=0;}catch(_){}}
-  if(_constellation){try{if(_constellation.inst)_constellation.inst.visible=false;}catch(_){}
-    try{if(_constellation.lines)_constellation.lines.visible=false;}catch(_){}}
 }
 /* live METEORITES — spawned/expired on every /metrics poll (alerts, newest GLBs); expire back to dust */
 function celHydrateLive(m){
@@ -3970,7 +2873,6 @@ function celHydrateLive(m){
     const b=addBody({name:'cel:met:'+key,label:label.slice(0,22),color:color,radius:10,angle:0,y:0,
       size:Math.max(60,(parent.userData.baseScale||300)*0.10)/22});
     b.userData.getCard=card; b.userData.celKind='meteorite'; b.userData.celLockScale=true;
-    b.userData.celParentName=parentName;
     _celBodies.push(b); _celMets[key]=b;
     _celOrbit(b,parent,(parent.userData.baseScale||300)*3.1+(Object.keys(_celMets).length%3)*150,0.09,key,0.85);
     _celDotsRebuild();
@@ -3988,16 +2890,16 @@ function celHydrateLive(m){
     bodyMap.delete('cel:met:'+k); delete _celMets[k]; _celDotsRebuild(); }});
 }
 function _celTick(dt){
-  _celPumpStageSlice();
   for(let i=0;i<_celOrbiters.length;i++){const c=_celOrbiters[i];c.a+=dt*c.om;   // spec orbit eq, parent-relative
     c.m.position.set(c.parent.position.x+Math.cos(c.a)*c.orbR,
       c.parent.position.y+Math.sin(c.a*1.7+c.phase)*c.orbR*0.16,
       c.parent.position.z+Math.sin(c.a)*c.orbR*(1-0.18*(1-c.rel)));}
-  for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
-    const want=_celShouldShowMesh(b);                               // PS5 menu: staged families, full universe remains in dot cloud/index
-    if(b.visible!==want)b.visible=want;
-    if(_celDots&&_celDotPos){_celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;}}
   if(!_celDots)return;
+  for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
+    _celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;
+    const d=camera.position.distanceTo(b.position);
+    const want=((b.userData.baseScale||10)/Math.max(1,d))>CEL_LOD;  // graphics get better as you zoom in
+    if(b.visible!==want)b.visible=want;}
   _celDots.geometry.attributes.position.needsUpdate=true;
 }
 
@@ -4014,35 +2916,15 @@ const CameraMode={MAIN_EQUATOR_VIEW:'main_equator_view',UNIVERSE_EXPLORE_VIEW:'u
 let cameraMode=CameraMode.MAIN_EQUATOR_VIEW;
 let selectedCelestialBody=null;
 const worldCorePosition=new THREE.Vector3(0,0,0);
-let _eqTheta=0,_eqTargetTheta=0,equatorOrbitRadius=2200;            // wider rail keeps the GLB menu readable on load
+let _eqTheta=0,_eqTargetTheta=0,equatorOrbitRadius=1250;            // rail just outside the ~780u core surface
 const equatorOffsetY=260,_eqRotSpeed=1.2,_eqDamp=6,_eqDir=1;        // flip _eqDir to -1 if a device feels reversed
 const _camInput={horizontal:0};
-function _celExploreFrame(){
-  const box=new THREE.Box3(); let any=false;
-  for(let i=0;i<_celBodies.length;i++){
-    const b=_celBodies[i]; if(!b||!b.position)continue;
-    const pos=new THREE.Vector3(); try{b.getWorldPosition(pos);}catch(_){pos.copy(b.position);}
-    const r=Math.max(80,Math.min(2600,(b.userData&&b.userData.baseScale)||120));
-    box.expandByPoint(new THREE.Vector3(pos.x-r,pos.y-r,pos.z-r));
-    box.expandByPoint(new THREE.Vector3(pos.x+r,pos.y+r,pos.z+r));
-    any=true;
-  }
-  if(!any)return {pos:new THREE.Vector3(0,26000,42000),tgt:worldCorePosition.clone()};
-  const ctr=box.getCenter(new THREE.Vector3()), size=box.getSize(new THREE.Vector3());
-  const radius=Math.max(size.length()*0.5,Math.max(size.x,size.y,size.z)*0.58,9000);
-  const fov=(camera&&camera.fov?camera.fov:55)*Math.PI/180;
-  const aspect=Math.max(0.75,(innerWidth||1440)/Math.max(1,(innerHeight||900)));
-  const fitFov=Math.min(fov,2*Math.atan(Math.tan(fov/2)*aspect));
-  const dist=Math.max(22000,Math.min(220000,(radius/Math.tan(fitFov/2))*1.72));
-  const dir=new THREE.Vector3(0.38,0.62,0.92).normalize();
-  return {pos:ctr.clone().add(dir.multiplyScalar(dist)),tgt:ctr};
-}
 function _eqRailPoint(){return new THREE.Vector3(
   worldCorePosition.x+Math.cos(_eqTheta)*equatorOrbitRadius,
   worldCorePosition.y+equatorOffsetY,
   worldCorePosition.z+Math.sin(_eqTheta)*equatorOrbitRadius);}
 function _eqLookTarget(p){const out=new THREE.Vector3(p.x-worldCorePosition.x,0,p.z-worldCorePosition.z).normalize();
-  return p.clone().add(out.multiplyScalar(2400));}
+  return p.clone().add(out.multiplyScalar(1000));}
 function updateMainEquatorView(dt){
   _eqTargetTheta+=(_camInput.horizontal||0)*_eqDir*_eqRotSpeed*dt;
   _eqTheta=THREE.MathUtils.damp(_eqTheta,_eqTargetTheta,_eqDamp,dt);
@@ -4056,17 +2938,15 @@ function _camBtnLabel(){const b=document.getElementById('camBtn');if(b)b.textCon
   cameraMode===CameraMode.MAIN_EQUATOR_VIEW?'🎥 Equator':cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW?'🌌 Explore':'🎯 Focus';}
 function enterMainEquatorView(){
   cameraMode=CameraMode.MAIN_EQUATOR_VIEW; selectedCelestialBody=null;
-  if(_selected){try{_selected.userData.selected=false;_removeSelRing(_selected);}catch(_){} _selected=null;}
   try{controls.enabled=false;}catch(_){}
   const p=_eqRailPoint(); tween(p,_eqLookTarget(p),1100);
   _camBtnLabel();
 }
 function enterUniverseExploreView(){
   cameraMode=CameraMode.UNIVERSE_EXPLORE_VIEW;
-  const f=_celExploreFrame();
-  tween(f.pos,f.tgt,1400,()=>{ try{
+  tween(new THREE.Vector3(0,26000,42000),worldCorePosition.clone(),1400,()=>{ try{
     controls.enabled=true;controls.enableRotate=true;controls.enableZoom=true;controls.enablePan=true;
-    controls.target.copy(f.tgt);controls.update();}catch(_){}});
+    controls.target.copy(worldCorePosition);}catch(_){}});
   _camBtnLabel();
 }
 function getBestCelestialBodyForFocus(){
@@ -4110,18 +2990,18 @@ function _camTick(dt){
     if(ids.length===2){ const a=pts[ids[0]],b=pts[ids[1]];
       const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
       if(pinchD!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW)
-        equatorOrbitRadius=Math.max(1400,Math.min(9000,equatorOrbitRadius+(pinchD-d)*2.4));
+        equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+(pinchD-d)*2));
       pinchD=d; return; }
     if(dragX!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying){
       const dx=e.clientX-dragX; dragX=e.clientX;
       _eqTargetTheta+=dx*0.004*_eqDir; }});                          // horizontal only — vertical never tilts
   addEventListener('pointerup',e=>{ delete pts[e.pointerId]; dragX=null; pinchD=null; });
   addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)
-    equatorOrbitRadius=Math.max(1400,Math.min(9000,equatorOrbitRadius+e.deltaY*0.9)); },{passive:true});
+    equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+e.deltaY*0.5)); },{passive:true});
   addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
   try{ const cb=document.createElement('button'); cb.id='camBtn';
     cb.setAttribute('aria-label','Toggle camera view (Equator / Explore / Focus)');
-    cb.style.cssText='position:fixed;right:14px;top:104px;z-index:120;background:rgba(8,34,52,.72);color:#9feaff;border:1px solid rgba(80,220,255,.45);border-radius:10px;padding:8px 12px;font:600 12px ui-sans-serif,system-ui;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 10px 34px rgba(0,0,0,.36)';
+    cb.style.cssText='position:fixed;right:14px;bottom:88px;z-index:60;background:rgba(8,34,52,.6);color:#9feaff;border:1px solid rgba(80,220,255,.45);border-radius:10px;padding:8px 12px;font:600 12px ui-sans-serif,system-ui;cursor:pointer;backdrop-filter:blur(6px)';
     cb.onclick=()=>toggleCameraMode(); document.body.appendChild(cb); _camBtnLabel(); }catch(_){}
 })();
 
@@ -4134,7 +3014,7 @@ function layoutFromMetrics(m){
   const corr=m.correlation||{},rout=m.routing||{},box=m.box||{},vps=m.vps||{};
   const vt=box.vram_total_gb||48,vu=box.vram_used_gb||0;
 
-  // ---- inner KPI ring, fixed-slot spacing ----
+  // ---- inner KPI ring (r=92), golden-angle spacing ----
   const kpi=[
     {name:'kpi:Topic',lab:'Build '+(c.pct||0)+'%',drill:'type:Topic',magnitude:(c.total||0),
       card:()=>({title:'Knowledge Build',subtitle:'ontology completion',bar:(c.pct||0),
@@ -4270,7 +3150,6 @@ function layoutFromMetrics(m){
 
   // ---- (c) glowing CONNECTIONS between related macro bodies (curated relationship graph) ----
   rebuildMacroConnections();
-  _celSuppressLegacyScene();
 }
 
 /* ---- (c) connection lines between RELATED macro bodies (glow with the pulse) ----
@@ -4308,7 +3187,6 @@ function rebuildMacroConnections(){
   _macroLines=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x29e7ff,transparent:true,
     opacity:0.26,blending:THREE.AdditiveBlending,depthWrite:false}));
   _macroLines.renderOrder=-1; scene.add(_macroLines);
-  if(_celBuilt){_macroLines.visible=false;_macroLines.material.opacity=0;}
 }
 
 /* ---- constellation from /graphdata (instanced spheres + line segments, fixed layout) ---- */
@@ -4321,8 +3199,8 @@ function buildConstellation(){
     const mat=new THREE.MeshBasicMaterial();
     const inst=new THREE.InstancedMesh(geo,mat,N);
     const m4=new THREE.Matrix4(),idx={},pos=[];
-    nodes.forEach((n,i)=>{const polar=Math.acos(1-2*(i+.5)/N),th=Math.PI*(1+Math.sqrt(5))*i;
-      const p=new THREE.Vector3(Math.cos(th)*Math.sin(polar),Math.cos(polar),Math.sin(th)*Math.sin(polar)).multiplyScalar(R);
+    nodes.forEach((n,i)=>{const phi=Math.acos(1-2*(i+.5)/N),th=Math.PI*(1+Math.sqrt(5))*i;
+      const p=new THREE.Vector3(Math.cos(th)*Math.sin(phi),Math.cos(phi),Math.sin(th)*Math.sin(phi)).multiplyScalar(R);
       pos[i]=p;idx[n.id]=i;m4.setPosition(p);inst.setMatrixAt(i,m4);
       try{inst.setColorAt(i,new THREE.Color(n.color||0x9bd4e6));}catch(e){}});
     inst.instanceMatrix.needsUpdate=true;if(inst.instanceColor)inst.instanceColor.needsUpdate=true;
@@ -4330,11 +3208,8 @@ function buildConstellation(){
     const lp=[];(d.edges||[]).forEach(e=>{if(idx[e.s]!=null&&idx[e.t]!=null){
       lp.push(...pos[idx[e.s]].toArray(),...pos[idx[e.t]].toArray());}});
     const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(lp,3));
-    const lines=new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x5faad2,transparent:true,opacity:0.12}));
-    scene.add(lines);
-    _constellation={inst,lines,idx,pos,nodes};
-    _celSuppressLegacyScene();
-    window.firePulseSpike(0.7);  // graph data arrival = birth pulse
+    scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x5faad2,transparent:true,opacity:0.12})));
+    _constellation={inst,idx,pos,nodes}; window.firePulseSpike(0.7);  // graph data arrival = birth pulse
   }).catch(e=>{console.warn('graphdata',e);});
 }
 
@@ -4348,14 +3223,7 @@ function flyToBody(b){
   b.updateWorldMatrix(true,false);
   const bp=b.getWorldPosition(new THREE.Vector3());
   const dir=camera.position.clone().sub(bp); if(dir.lengthSq()<1)dir.set(0,0,1); dir.normalize();
-  const kind=b.userData&&b.userData.celKind;
-  const base=(b.userData&&b.userData.baseScale)||10;
-  const celOff=kind==='planet'?Math.max(7200,base*7.2):
-    kind==='moon'?Math.max(4600,base*7.6):
-    kind==='meteorite'?Math.max(2600,base*8.4):
-    kind==='satellite'?Math.max(1800,base*9.2):
-    kind==='dust'?Math.max(900,base*12):0;
-  const off=celOff||(b.userData.orbBody?Math.max(8,(b.userData.pickMesh?b.userData.pickMesh.geometry.parameters.radius:2)*6):Math.max(46,base*3.5));   // size-aware: never land inside a big galaxy
+  const off=(b.userData.orbBody?Math.max(8,(b.userData.pickMesh?b.userData.pickMesh.geometry.parameters.radius:2)*6):Math.max(46,(b.userData.baseScale||10)*3.5));   // size-aware: never land inside a big galaxy
   tween(bp.clone().add(dir.multiplyScalar(off)),bp);}
 function _collapseSystems(){ for(let i=0;i<_systemGroups.length;i++)_systemGroups[i].visible=false; }   // back to clean overview
 function _showSystemLayer(){ for(let i=0;i<_systemGroups.length;i++){const g=_systemGroups[i]; if(g.userData&&g.userData.systemLayer)g.visible=true;} }   // reveal satellites + meteors on Vitals drill-in
@@ -4387,39 +3255,12 @@ function flyToNode(label){if(!_constellation)return false;
   if(i<0)i=ns.findIndex(n=>(n.label||'').toLowerCase().includes(lo));
   if(i<0)return false;
   return selectNode(i);}
-function promoteSearchResult3D(r,q){
-  if(!r)return null;
-  const parent=bodyMap.get(r.planet)||bodyMap.get(CEL_ALIAS&&CEL_ALIAS[r.planet])||bodyMap.get('cel:knowledge')||bodyMap.get('cel:documents')||bodyMap.get('cel:miniapps');
-  if(!parent)return null;
-  const safe=String(r.id||q||r.title||'result').replace(/[^a-z0-9:_-]/gi,'-').slice(0,80);
-  const name='cel:search:'+safe;
-  let b=bodyMap.get(name);
-  if(!b){
-    b=addBody({name:name,label:'⌕ '+(r.title||q||'Result').slice(0,32),color:0x29e7ff,radius:10,angle:0,y:0,size:Math.max(1.8,Math.min(4.2,2.2+(Number(r.score)||20)/45)),celLabel:true});
-    b.userData.celKind='meteorite'; b.userData.celLockScale=true;
-    b.userData.getCard=()=>({title:r.title||q,subtitle:(r.subtitle||'database search result')+' · promoted 3D result',
-      props:[{k:'Type',v:r.type||'result'},{k:'Parent',v:parent.userData.labelText||r.planet||'domain'}],
-      lines:[],actions:[{label:'↑ Up to '+(parent.userData.labelText||'parent'),kind:'_fn',fn:()=>flyToBody(parent)},
-        {label:'▸ Detail',kind:'drill',arg:'type:'+(r.type||'Topic')}]});
-    _celBodies.push(b);
-    _celOrbit(b,parent,_celOrbitRadius(parent.userData.baseScale||160,b.userData.baseScale||42,(_celBodies.length%9),9,'moon'),0.075,safe,0.84);
-    _celDotsRebuild();
-  }
-  return b;
-}
-async function flyToQuery(q){q=(q||'').trim();if(!q)return;const lo=q.toLowerCase();
+function flyToQuery(q){q=(q||'').trim();if(!q)return;const lo=q.toLowerCase();
   // try a body — match BOTH the internal id AND the visible on-screen label (NASA-Eyes search-to-fly)
   for(const b of bodies){
-    if(!b||b.visible===false)continue;
     if(b.userData.name.toLowerCase().includes(lo)||(b.userData.labelText||'').toLowerCase().includes(lo)){selectBody(b);return;}}
   // then a constellation node
-  if(!_celBuilt&&flyToNode(q))return;
-  try{
-    const d=await (await fetch('search?q='+encodeURIComponent(q)+'&limit=8')).json();
-    const r=(d.results||[])[0];
-    const b=promoteSearchResult3D(r,q);
-    if(b){selectBody(b);return;}
-  }catch(_){}
+  if(flyToNode(q))return;
   // else hand to chat
   $('say').value=q;askJarvis();}
 
@@ -4454,20 +3295,20 @@ function buildSatSwarm(satellites, parentGroup, scale){
   const inst=new THREE.InstancedMesh(geo, new THREE.MeshBasicMaterial({transparent:true}), satellites.length);
   const pos=new THREE.Vector3();
   satellites.forEach((s,i)=>{
-    const angle=i*SLOT_STEP;const r=3+Math.random()*2;
-    pos.set(Math.cos(angle)*r, (Math.random()-0.5)*2, Math.sin(angle)*r);
+    const phi=i*2.39996;const r=3+Math.random()*2;
+    pos.set(Math.cos(phi)*r, (Math.random()-0.5)*2, Math.sin(phi)*r);
     inst.setMatrixAt(i, new THREE.Matrix4().compose(pos, new THREE.Quaternion(), new THREE.Vector3(1,1,1)));
     inst.setColorAt(i, new THREE.Color(s.color||'#9bd4e6'));
   });
   inst.instanceMatrix.needsUpdate=true;
   if(inst.instanceColor) inst.instanceColor.needsUpdate=true;
   parentGroup.add(inst);
-  return {inst, nodes:satellites, pos:satellites.map((s,i)=>{const angle=i*SLOT_STEP;return new THREE.Vector3(Math.cos(angle)*(3+Math.random()*2), (Math.random()-0.5)*2, Math.sin(angle)*(3+Math.random()*2))})};
+  return {inst, nodes:satellites, pos:satellites.map((s,i)=>{const phi=i*2.39996;return new THREE.Vector3(Math.cos(phi)*(3+Math.random()*2), (Math.random()-0.5)*2, Math.sin(phi)*(3+Math.random()*2))})};
 }
 async function buildSystem(node, frame){
   if(!node.childrenKind) return;
   const children=await hydrate(node);
-  const s=Math.pow(MENU_CHILD_SCALE, node.depth);
+  const s=Math.pow(PHI_CONJ, node.depth);
   const moons=children.filter(c=>c.childrenKind), sats=children.filter(c=>!c.childrenKind);
   frame.bodies=frame.bodies||[];
   moons.forEach((m,i)=>{
@@ -4527,16 +3368,10 @@ let _downXY=null;
    the cursor; the dock glows (.pinReady) while the cursor is over it. OrbitControls still gets normal drags
    (we only treat it as a pin-drag once the cursor leaves the body region and a body was grabbed). */
 let _pinGrab=null,_pinGhost=null;
-function _scenePickTargets(){
-  const targets=[];
-  for(let i=0;i<bodies.length;i++){const b=bodies[i];if(b&&b.visible!==false)targets.push(b);}
-  for(let i=0;i<_pickBodies.length;i++){const b=_pickBodies[i];if(b&&b.visible!==false)targets.push(b);}
-  return targets;
-}
 function _bodyAt(e){ if(!uniReady)return null;
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const tg=_scenePickTargets();
+  const tg=bodies.slice();for(let i=0;i<_pickBodies.length;i++)tg.push(_pickBodies[i]);
   const hit=ray.intersectObjects(tg,true)[0];
   if(!hit)return null; let o=hit.object;while(o&&!o.userData.name&&!o.userData.orbBody)o=o.parent;return o||null;}
 function _overDock(e){const d=$('dock');if(!d)return false;const r=d.getBoundingClientRect();
@@ -4570,8 +3405,9 @@ function onCanvasClick(e){
   if(!uniReady)return;
   mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const targets=_scenePickTargets();
-  if(_constellation&&_constellation.inst&&_constellation.inst.visible!==false)targets.push(_constellation.inst);
+  const targets=bodies.slice();
+  for(let i=0;i<_pickBodies.length;i++)targets.push(_pickBodies[i]);
+  if(_constellation&&_constellation.inst)targets.push(_constellation.inst);
   const hit=ray.intersectObjects(targets,true)[0];
   if(hit){
     if(_constellation&&hit.object===_constellation.inst&&hit.instanceId!=null){selectNode(hit.instanceId);return;}
@@ -4585,7 +3421,6 @@ function onCanvasClick(e){
 function selectBody(b){
   if(_selected){_selected.userData.selected=false; _removeSelRing(_selected);}
   _selected=b;b.userData.selected=true; _attachSelRing(b); b.userData.selPulse=1; sfxBlip('select');
-  if(b.userData&&b.userData.celKind)selectedCelestialBody=b;
   // §progressive disclosure: focus a galaxy → reveal its planets; focus a planet → reveal its moons
   try{ if(/^dom:/.test(b.userData.name||'')){ _collapseSystems(); if(b.userData.planetGroup)b.userData.planetGroup.visible=true; }
     else if(b.userData.planet&&b.userData.moonGroup){ b.userData.moonGroup.visible=true; } }catch(_){}
@@ -4661,7 +3496,7 @@ function _hoverProbe(e){
   const now=performance.now(); if(now-_lastHoverT<55)return; _lastHoverT=now;
   mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
   ray.setFromCamera(mouse,camera);
-  const pool=_scenePickTargets();
+  const pool=bodies.slice(); for(let i=0;i<_pickBodies.length;i++)pool.push(_pickBodies[i]);
   const hit=ray.intersectObjects(pool,true)[0];
   let o=hit?hit.object:null; while(o&&!(o.userData&&(o.userData.name||o.userData.orbBody)))o=o.parent;
   if(o===_hovered)return;
@@ -4771,8 +3606,7 @@ function tickFrame(){
       sunFace.traverse(c=>{if(c.isMesh&&c.material&&'emissiveIntensity' in c.material)c.material.emissiveIntensity=ei;}); }
 
     // --- (c) macro connection lines glow with the pulse ---
-    if(_macroLines){ if(_celBuilt){_macroLines.visible=false;_macroLines.material.opacity=0;}
-      else _macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25; }
+    if(_macroLines)_macroLines.material.opacity=0.16+A*0.34+SPIKE*0.25;
 
     // --- NASA-Eyes hierarchy: per-frame body pulse + LOD crossfade ---
     try{
@@ -4918,9 +3752,8 @@ function fetchArtifacts(taskId,type,winId){
       if(d.results&&d.results.length){
         html+=`\n<strong>Results:</strong>\n`;
         d.results.forEach((r,i)=>{
-          const out=r.output||r.result||'';
           html+=`Step ${i+1}: ${r.label||'step'}\n`;
-          if(out)html+=out.slice(0,1000)+(out.length>1000?'\n... (truncated)':'')+'\n';
+          if(r.output)html+=r.output.slice(0,1000)+(r.output.length>1000?'\n... (truncated)':'')+'\n';
         });
       }
     }
@@ -4961,8 +3794,7 @@ reconcile=function(items){
       docLink=document.createElement('button');
       docLink.className='wldocument';
       docLink.type='button';
-      let [type,id]=rowId.includes(':')?rowId.split(':'):['task',rowId];
-      if(type==='sw')type='swarm';
+      const [type,id]=rowId.includes(':')?rowId.split(':'):['task',rowId];
       docLink.textContent='📄 Document';
       docLink.onclick=(e)=>{e.preventDefault();e.stopPropagation();openArtifactWindow(parseInt(id),type);};
       docLink.title='View task/swarm artifacts and output';
@@ -5041,7 +3873,6 @@ function engage(){if(_engaged)return;_engaged=true;
   try{ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
   try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
   try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}   // first run → show the access panel
-  try{ if(typeof maybeOfferAssist==='function') setTimeout(maybeOfferAssist,4200); }catch(_){}  // then offer phone-control setup if companion is not linked
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
@@ -5054,8 +3885,6 @@ wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
 setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();
-  try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}
-  try{ if(typeof maybeOfferAssist==='function') setTimeout(maybeOfferAssist,5200); }catch(_){}
   // auto-engage shows the universe but CANNOT play audio (no user gesture) — so the VOICE part
   // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
   addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
@@ -5064,43 +3893,4 @@ setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$(
     try{if(typeof micToggle==='function'&&!_rec)micToggle();}catch(_){}} ,{once:true});
 }},2200);
 </script>
-<!-- JARVIS_HOLLYWOOD_HOLO_RINGS_JS_START -->
-<script>
-(function(){
-  const SEL=['#dock','#sdev','#cmd','#mic','.send','.mini','.di','.tbtn','.chip','#sdev .sd-build','#sdev .sd-link','#propBuild','#prop .pbuild','[data-holo-ring]'];
-  const MAJOR=['dock','sdev','cmd'];
-  let targets=[],particles=[],raf=0,canvas,ctx,DPR=1,lastFrame=0,pulsePower=0;
-  let mouse={x:innerWidth/2,y:innerHeight/2,active:false};
-  let mobile=window.matchMedia?matchMedia('(max-width: 820px)').matches:false;
-  const reduced=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
-  let holoMode='full';try{holoMode=localStorage.getItem('holo2036Mode')||'full';}catch(e){}
-  if(holoMode==='off')return;if(holoMode==='lite')mobile=true;
-  function qsa(s){try{return Array.from(document.querySelectorAll(s));}catch(e){return[];}}
-  function uniq(a){return[...new Set(a.filter(Boolean))];}
-  function refreshTargets(){targets=uniq(SEL.flatMap(qsa)).filter(el=>el&&el.isConnected&&!el.hasAttribute('data-holo-off'));for(const el of targets){try{(/\b(GLB|3D)\b/i.test(el.textContent||''))?el.classList.add('holo2036-glb-badge'):el.classList.remove('holo2036-glb-badge');}catch(e){}}enhanceMajorBars();}
-  function enhanceMajorBars(){for(const id of MAJOR){const el=document.getElementById(id);if(!el||el.__holo2036)continue;el.__holo2036=true;const scan=document.createElement('span');scan.className='holo2036-scan';scan.setAttribute('aria-hidden','true');el.appendChild(scan);['tl','tr','bl','br'].forEach(c=>{const n=document.createElement('span');n.className='holo2036-corner '+c;n.setAttribute('aria-hidden','true');el.appendChild(n);});}}
-  function setVar(el,k,v){try{el.style.setProperty(k,v);}catch(e){}}
-  function removeVar(el,k){try{el.style.removeProperty(k);}catch(e){}}
-  function makeCanvas(){return;} // no particle/bubble canvas; keep the clean GLB-style ring only
-  function resizeCanvas(){if(!canvas||!ctx)return;DPR=Math.min(devicePixelRatio||1,mobile?1.5:2);canvas.width=Math.floor(innerWidth*DPR);canvas.height=Math.floor(innerHeight*DPR);canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
-  function rectPoint(r,t){const p=((t%1)+1)%1,per=2*(r.width+r.height);let d=p*per;if(d<r.width)return{x:r.left+d,y:r.top};d-=r.width;if(d<r.height)return{x:r.right,y:r.top+d};d-=r.height;if(d<r.width)return{x:r.right-d,y:r.bottom};d-=r.width;return{x:r.left,y:r.bottom-d};}
-  function spawnParticle(){return;} // no floating particles/bubbles; depth stays on the existing glass controls
-  function pulse(power){const p=Math.max(0,Math.min(1,Number(power)||1));pulsePower=Math.max(pulsePower,p);refreshTargets();for(const el of targets){el.classList.add('holo2036-pulse');setVar(el,'--holo-burst',p.toFixed(3));}setTimeout(()=>{for(const el of targets){el.classList.remove('holo2036-pulse');removeVar(el,'--holo-burst');}},950);}
-  window.holo2036Pulse=pulse;window.holoRingPulse=pulse;
-  function updateProximity(){const maxD=Math.max(120,Math.min(innerWidth,innerHeight)*(mobile?.34:.25));for(const el of targets){if(!el||!el.isConnected)continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;const d=Math.hypot(mouse.x-(r.left+r.width/2),mouse.y-(r.top+r.height/2));const p=Math.max(0,Math.min(1,1-d/maxD));setVar(el,'--holo-prox',p>.02?p.toFixed(3):'0');}}
-  function colorFor(h,a){if(h<.25)return'rgba(41,231,255,'+a+')';if(h<.5)return'rgba(167,139,250,'+a+')';if(h<.75)return'rgba(95,255,193,'+a+')';return'rgba(255,122,217,'+a+')';}
-  function drawParticles(dt){if(!ctx||!canvas)return;ctx.clearRect(0,0,innerWidth,innerHeight);pulsePower=Math.max(0,pulsePower-dt*1.25);if(!mobile||Math.random()<.55)for(const id of MAJOR){const el=document.getElementById(id);if(el&&Math.random()<(mobile?.035:.08))spawnParticle(el,1+pulsePower);}ctx.save();ctx.globalCompositeOperation='lighter';for(let i=particles.length-1;i>=0;i--){const p=particles[i];if(!p.el||!p.el.isConnected){particles.splice(i,1);continue;}const r=p.el.getBoundingClientRect();p.t+=p.speed*dt;const pt=rectPoint(r,p.t);p.life-=dt/p.max;const out=Math.sin((1-p.life)*Math.PI)*p.drift;p.x=pt.x+out*.18;p.y=pt.y+out*.18;if(p.life<=0){particles.splice(i,1);continue;}const a=Math.max(0,Math.min(1,p.life))*.55,rad=p.size*(1+(1-p.life)*1.8);const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad*5);g.addColorStop(0,colorFor(p.hue,a));g.addColorStop(.35,colorFor(p.hue,a*.35));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad*5,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(240,255,255,'+(a*.9)+')';ctx.beginPath();ctx.arc(p.x,p.y,Math.max(.7,rad*.55),0,Math.PI*2);ctx.fill();}ctx.restore();}
-  function roundedRectPath(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
-  function drawDepthLines(now){if(!ctx||!canvas)return;ctx.save();ctx.globalCompositeOperation='lighter';ctx.lineWidth=mobile?.7:.9;for(const id of MAJOR){const el=document.getElementById(id);if(!el)continue;const r=el.getBoundingClientRect();if(!r.width||!r.height)continue;const prox=parseFloat(getComputedStyle(el).getPropertyValue('--holo-prox'))||0;const a=.04+prox*.08+pulsePower*.08;if(a<=.045&&mobile)continue;const off=6+Math.sin(now/900+r.left*.01)*2;ctx.strokeStyle='rgba(41,231,255,'+a+')';ctx.shadowColor='rgba(41,231,255,'+(a*2)+')';ctx.shadowBlur=12+prox*10+pulsePower*16;roundedRectPath(ctx,r.left-off,r.top-off,r.width+off*2,r.height+off*2,22+off);ctx.stroke();ctx.strokeStyle='rgba(167,139,250,'+(a*.75)+')';roundedRectPath(ctx,r.left-off*1.75,r.top-off*1.75,r.width+off*3.5,r.height+off*3.5,24+off);ctx.stroke();}ctx.restore();}
-  function loop(now){if(!lastFrame)lastFrame=now;const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;updateProximity();pulsePower=Math.max(0,pulsePower-dt*1.25);raf=requestAnimationFrame(loop);}
-  function startLoop(){if(reduced||raf)return;lastFrame=0;raf=requestAnimationFrame(loop);}function stopLoop(){if(!raf)return;cancelAnimationFrame(raf);raf=0;}
-  function pointer(ev){const t=ev.touches&&ev.touches[0]?ev.touches[0]:ev;mouse.x=t.clientX||mouse.x;mouse.y=t.clientY||mouse.y;mouse.active=true;}
-  function patchJarvisHooks(){try{if(window.jarvisSpeak&&!window.jarvisSpeak.__holo2036){const old=window.jarvisSpeak;const wrapped=function(){try{document.body.classList.add('speaking');pulse(.62);setTimeout(()=>document.body.classList.remove('speaking'),1200);}catch(e){}return old.apply(this,arguments);};wrapped.__holo2036=true;window.jarvisSpeak=wrapped;}}catch(e){}try{if(window.firePulseSpike&&!window.firePulseSpike.__holo2036){const old=window.firePulseSpike;const wrapped=function(strength){try{pulse(Math.max(.45,Math.min(1,Number(strength)||.7)));}catch(e){}return old.apply(this,arguments);};wrapped.__holo2036=true;window.firePulseSpike=wrapped;}}catch(e){}}
-  function observe(){new MutationObserver(refreshTargets).observe(document.body,{childList:true,subtree:true});if(window.ResizeObserver){const ro=new ResizeObserver(refreshTargets);['dock','sdev','cmd'].forEach(id=>{const el=document.getElementById(id);if(el)ro.observe(el);});}}
-  function bindEvents(){addEventListener('resize',()=>{mobile=window.matchMedia?matchMedia('(max-width: 820px)').matches:false;if(holoMode==='lite')mobile=true;resizeCanvas();refreshTargets();},{passive:true});addEventListener('pointermove',pointer,{passive:true});addEventListener('touchmove',pointer,{passive:true});addEventListener('pointerdown',()=>pulse(.48),{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopLoop();else startLoop();});}
-  function init(){refreshTargets();makeCanvas();bindEvents();observe();patchJarvisHooks();setInterval(patchJarvisHooks,1600);startLoop();setTimeout(()=>pulse(.85),550);setTimeout(()=>pulse(.45),1450);}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-})();
-</script>
-<!-- JARVIS_HOLLYWOOD_HOLO_RINGS_JS_END -->
 </body></html>

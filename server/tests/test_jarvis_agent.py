@@ -80,3 +80,13 @@ def test_write_tool_is_proposed_not_executed(monkeypatch):
 def test_empty_message_is_noop():
     out = agent.run_agent("   ")
     assert out["answer"] == "" and out["steps"] == 0
+
+
+def test_timeout_fallback_is_grounded_and_marked(monkeypatch):
+    monkeypatch.setattr(agent._llm, "backend", lambda: "ollama")
+    out = agent.timeout_fallback("hello jarvis", actor="test")
+    assert out["timeout"] is True
+    assert out["backend"] == "ollama"
+    assert out["used_tools"] == []
+    assert out["steps"] == 0
+    assert "took too long" in out["answer"]

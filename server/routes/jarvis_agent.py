@@ -16,6 +16,7 @@ threaded through so proposals/audit carry a real identity.
 from __future__ import annotations
 
 import asyncio
+import os
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends
@@ -37,13 +38,20 @@ class AgentChatRequest(BaseModel):
 async def agent_chat(req: AgentChatRequest, token: str | None = Depends(optional_bearer)):
     """Run one agentic turn: plan -> call tools (governed) -> synthesise answer."""
     actor = token or "anonymous"
-    return await asyncio.to_thread(
-        jarvis_agent.run_agent,
-        req.message,
-        history=req.history,
-        actor=actor,
-        max_steps=min(max(req.max_steps or jarvis_agent.MAX_STEPS_DEFAULT, 1), 6),
-    )
+    timeout_s = float(os.environ.get("JARVIS_AGENT_CHAT_TIMEOUT_S", "8"))
+    try:
+        return await asyncio.wait_for(
+            asyncio.to_thread(
+                jarvis_agent.run_agent,
+                req.message,
+                history=req.history,
+                actor=actor,
+                max_steps=min(max(req.max_steps or jarvis_agent.MAX_STEPS_DEFAULT, 1), 6),
+            ),
+            timeout=timeout_s,
+        )
+    except asyncio.TimeoutError:
+        return jarvis_agent.timeout_fallback(req.message, actor=actor)
 
 
 @router.get("/tools")
