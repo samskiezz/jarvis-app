@@ -393,6 +393,14 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
   .chip{font-size:9px;padding:3px 7px}
   #top .sp{flex-basis:100%;height:0;order:5}   /* force the search onto its own full-width line */
   #search{order:6;width:100%;flex:1 1 100%;box-sizing:border-box}
+  #cmd{padding:8px 12px calc(8px + env(safe-area-inset-bottom,0))}
+  #cmd .row1{gap:7px}
+  #say{padding:10px 12px;font-size:14px}
+  #mic,.send{width:44px;height:44px}
+  #cmd .row2{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:2px;scrollbar-width:none}
+  #cmd .row2::-webkit-scrollbar{display:none}
+  #cmd .mini{flex:0 0 auto;white-space:nowrap;padding:5px 9px!important;min-height:0!important;margin-left:0!important;display:inline-flex;align-items:center;justify-content:center}
+  #cmd .mini.archon{margin-left:0!important}
   /* top panels shorter; bottom panels start lower-mid and are capped well above the dock zone */
   .gpanel{width:46vw;max-height:26vh}
   #pInfra,#pKnow{top:84px}
@@ -743,7 +751,7 @@ const $=id=>document.getElementById(id), CT="__CTOKEN__";
    pinned clutter, expanded panels, or a hidden self-dev bar after the code is fixed. */
 (function(){
   try{
-    const ver='jarvis-reference-theme-reset-20260612-1';
+    const ver='jarvis-ios-cyan-theme-reset-20260612-3';
     if(localStorage.getItem('jarvisUiStateVersion')===ver)return;
     ['jarvisDockPos','jarvisDock','jarvisDockPins','gp:pInfra','gp:pPipe','gp:pKnow','gp:pFab','sdevMin'].forEach(k=>localStorage.removeItem(k));
     localStorage.setItem('jarvisUiStateVersion',ver);
