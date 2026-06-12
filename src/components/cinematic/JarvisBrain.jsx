@@ -52,6 +52,7 @@ import { isDatasetQueryQuery, buildDatasetQueryScript } from "@/components/cinem
 import { isICWSQuery, buildICWSScript } from "@/components/cinematic/InvestigationCaseWorkspace";
 import { isInvRiskOverlayQuery, buildInvRiskOverlayScript } from "@/components/cinematic/InvestmentRiskOverlay";
 import { isContactThreatQuery, buildContactThreatScript } from "@/components/cinematic/ContactThreatLinker";
+import { isWatchlistQuery, buildWatchlistScript } from "@/components/cinematic/EntityWatchlist";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -625,6 +626,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:contact-threat-toggle"));
       try {
         const answer = await buildContactThreatScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isWatchlistQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:watchlist-toggle"));
+      try {
+        const answer = await buildWatchlistScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
