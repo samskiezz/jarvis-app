@@ -1890,6 +1890,7 @@ function initUniverse(){
   $('uni').addEventListener('click',onCanvasClick);
   $('uni').addEventListener('dblclick',onCanvasDbl);
   addEventListener('keydown',e=>{
+    if(typeof cameraMode!=='undefined'&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&['ArrowLeft','ArrowRight','a','A','d','D','Enter',' '].indexOf(e.key)>=0)return;
     if(e.key==='Enter'||e.key===' '){const f=currentFrame();if(f?.node?.childrenKind)flyInto(f.node);}
     else if(e.key==='Escape'||e.key==='Backspace'){if(navStack.length>1)flyOut(navStack.length-2);else closeCard();}
     else if((e.key==='Tab'||e.key==='ArrowRight'||e.key==='ArrowDown')&&navStack.length>0){
@@ -3113,10 +3114,10 @@ function _camTick(dt){
 (function _camBindInput(){
   const typing=()=>{const a=document.activeElement;return a&&/INPUT|TEXTAREA/.test(a.tagName);};
   addEventListener('keydown',e=>{ if(typing())return;
-    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')){e.preventDefault();_menuStep(-1);return;}
-    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='ArrowRight'||e.key==='d'||e.key==='D')){e.preventDefault();_menuStep(1);return;}
-    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='Enter'||e.key===' ')){e.preventDefault();enterFocusCommandView(selectedCelestialBody||getBestCelestialBodyForFocus());return;}
-    if(e.key==='Escape'&&cameraMode!==CameraMode.MAIN_EQUATOR_VIEW){e.preventDefault();enterMainEquatorView();return;} });
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')){e.preventDefault();e.stopImmediatePropagation();_menuStep(-1);return;}
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='ArrowRight'||e.key==='d'||e.key==='D')){e.preventDefault();e.stopImmediatePropagation();_menuStep(1);return;}
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='Enter'||e.key===' ')){e.preventDefault();e.stopImmediatePropagation();enterFocusCommandView(selectedCelestialBody||getBestCelestialBodyForFocus());return;}
+    if(e.key==='Escape'&&cameraMode!==CameraMode.MAIN_EQUATOR_VIEW){e.preventDefault();e.stopImmediatePropagation();enterMainEquatorView();return;} });
   addEventListener('keyup',e=>{ if(['ArrowLeft','ArrowRight','a','A','d','D'].indexOf(e.key)>=0)_camInput.horizontal=0; });
   let dragX=null,dragStartX=null,pinchD=null;const pts={};
   addEventListener('pointerdown',e=>{ pts[e.pointerId]=e;
