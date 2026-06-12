@@ -2433,8 +2433,8 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
   if(!galaxy||!domain||typeof THREE==='undefined') return;
   fetch('children?kind=type:'+encodeURIComponent(domain)+'&limit=5').then(r=>r.json()).then(d=>{
     const planets=(d&&d.children)||[]; if(!planets.length) return;
-    const pRing=galaxySize*2.6; _orbitRing(galaxy,pRing,0.28);   // planets orbit clear of the (now-big) galaxy hub
-    const pgrp=new THREE.Group(); galaxy.add(pgrp); pgrp.userData.spin=0.10; _moonGroups.push(pgrp); galaxy.userData.planetGroup=pgrp;  // planets ALWAYS visible, orbiting their galaxy (solar-system look); only moons drill-in
+    const pRing=galaxySize*5.2; _orbitRing(galaxy,pRing,0.28);   // next-stage menu ring: wide, hidden until this galaxy/domain is focused
+    const pgrp=new THREE.Group(); galaxy.add(pgrp); pgrp.userData.spin=0.08; pgrp.visible=false; _moonGroups.push(pgrp); _systemGroups.push(pgrp); galaxy.userData.planetGroup=pgrp;  // planets are the next PS5 menu stage, not first-load clutter
     planets.forEach((pl,i)=>{ try{
       const a=i*GOLDEN, r=relRadius(pRing, i, planets.length);
       const psz=Math.min(galaxySize*PHI_CONJ*(0.85+0.3*impFromCount(pl.count)), galaxySize*0.5);  // FRACTAL CASCADE: planet = galaxy × 1/φ² (self-similar golden-ratio step) ± importance
@@ -2445,7 +2445,7 @@ function buildGalaxySystem(galaxy, domain, galaxySize){
       fetch('children?id='+encodeURIComponent(pl.id)+'&kind=type:'+encodeURIComponent(domain)+'&exclude='+encodeURIComponent(pl.id)+'&limit=4')
         .then(r=>r.json()).then(dd=>{
           const moons=(dd&&dd.children)||[]; if(!moons.length) return;
-          const mRing=psz*2.6; _orbitRing(pm,mRing,0.22);   // moons orbit clearly outside their planet
+          const mRing=psz*4.2; _orbitRing(pm,mRing,0.22);   // moons orbit clearly outside their planet
           const mgrp=new THREE.Group(); pm.add(mgrp); mgrp.userData.spin=0.22; mgrp.visible=false; _moonGroups.push(mgrp); _systemGroups.push(mgrp); pm.userData.moonGroup=mgrp;  // moons HIDDEN until planet focused
           moons.forEach((mn,j)=>{ try{
             const aa=j*GOLDEN, rr=relRadius(mRing, j, moons.length);
@@ -2874,7 +2874,7 @@ async function buildCelestialOS(){
       const mr=_celMR(pr,mn.I), mname='cel:'+mn.id;
       mn.lane=p.lane;
       const mb=_celAdd(mname,mn,'moon',mr,p.lane,name);
-      const morb=(pr+mr+18+4*Math.sqrt((mn.sats||[]).length)+(mi%3)*9)*CEL_K;
+      const morb=(pr+mr+42+8*Math.sqrt((mn.sats||[]).length)+(mi%4)*18+Math.floor(mi/4)*55)*CEL_K;
       _celOrbit(mb,b,morb,0.02+mn.I*0.012,mn.id,0.9);
       p._kidNames.push(mname+'|'+mn.label);
       mn._kidNames=[];
@@ -2885,7 +2885,7 @@ async function buildCelestialOS(){
         else if(typeof sa==='string'&&sa.indexOf('drill:')===0)sn.drill=sa.slice(6);
         const sr=_celSR(mr,0.6), sname='cel:sat:'+mn.id+':'+si;
         const sb=_celAdd(sname,sn,'satellite',sr,p.lane,mname);
-        _celOrbit(sb,mb,(mr*2.2+sr+4+(si%2)*7)*CEL_K,0.045+0.01*(si%3),sname,0.95);
+        _celOrbit(sb,mb,(mr*3.8+sr+10+(si%3)*10)*CEL_K,0.045+0.01*(si%3),sname,0.95);
         if(typeof sa==='string'&&sa.indexOf('tier:')===0)CEL_ALIAS[sa]=sname;   // tier:* live updates land here
         mn._kidNames.push(sname+'|'+sl);
       });
