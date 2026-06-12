@@ -2818,7 +2818,7 @@ function _celAdd(name,n,kindName,specR,lane,parentName){
   if(wr>240){try{ b.geometry.dispose(); b.geometry=new THREE.SphereGeometry(wr,64,48);    // MESH QUALITY: hi-res spheres for planet/moon tier
     b.material.metalness=0.85; b.material.roughness=0.16; b.material.envMapIntensity=1.6; // holographic CHROME (PMREM reflections)
     b.material.emissiveIntensity=0.8; }catch(_){}}                  // bio-illuminescent glow (feeds UnrealBloom)
-  b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName;
+  b.userData.getCard=_celCard(n,kindName,parentName); b.userData.celKind=kindName; b.userData.parentName=parentName||'';
   b.userData.celLockScale=true; _celBodies.push(b); return b;
 }
 function _celDustCloud(mesh,cnt,trueCount){                          // count-true tiny 3D shard cloud: one instanced draw call, no labels
@@ -2863,6 +2863,7 @@ function _celAdoptDomains(knowledge){
     const ring=Math.floor(i/4), slot=i%4;
     const orbR=(knowledge.userData.baseScale||640)+(g.userData.baseScale||420)+1500+ring*1350+slot*260;
     _celOrbit(g,knowledge,orbR,0.0045/Math.sqrt(1+ring),g.userData.name,0.9);
+    g.userData.parentName='cel:knowledge'; g.userData.celKind='moon';
     if(_celBodies.indexOf(g)<0)_celBodies.push(g);
     const dom=(g.userData.name||'').slice(4), cnt=((WORLD_MANIFEST.domains||{})[dom]||{}).count||0;
     if(cnt)_celDustCloud(g,Math.min(2400,Math.round(Math.log10(1+cnt)*420)),fmt(cnt));
@@ -2914,6 +2915,7 @@ async function buildCelestialOS(){
   });
   _celDotsRebuild();
   _celUpdateMenuBounds();
+  setTimeout(()=>{try{if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW)_menuFocusBody(bodyMap.get('cel:miniapps')||bodyMap.get('cel:knowledge'),false,false);}catch(_){}},120);
   try{rebuildMacroConnections();}catch(_){}
   console.log('[celestial] feature universe online:',_celBodies.length,'bodies;',
     ((_CEL.generated||{}).total_nodes||0),'scanned repo records as dust counts');
@@ -2976,6 +2978,7 @@ function celHydrateLive(m){
     bodyMap.delete('cel:met:'+k); delete _celMets[k]; _celDotsRebuild(); }});
 }
 function _celTick(dt){
+  if(_celDots)_celDots.visible=(typeof cameraMode!=='undefined'&&cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW);
   for(let i=0;i<_celOrbiters.length;i++){const c=_celOrbiters[i];c.a+=dt*c.om;   // spec orbit eq, parent-relative
     c.m.position.set(c.parent.position.x+Math.cos(c.a)*c.orbR,
       c.parent.position.y+Math.sin(c.a*1.7+c.phase)*c.orbR*0.16,
@@ -2984,9 +2987,55 @@ function _celTick(dt){
   for(let i=0;i<_celBodies.length;i++){const b=_celBodies[i];
     _celDotPos[i*3]=b.position.x;_celDotPos[i*3+1]=b.position.y;_celDotPos[i*3+2]=b.position.z;
     const d=camera.position.distanceTo(b.position);
-    const want=((b.userData.baseScale||10)/Math.max(1,d))>CEL_LOD;  // graphics get better as you zoom in
+    const want=_celFamilyVisible(b)&&(((b.userData.baseScale||10)/Math.max(1,d))>CEL_LOD||b.userData.name===_celFocusedName);  // graphics get better as you zoom in
     if(b.visible!==want)b.visible=want;}
   _celDots.geometry.attributes.position.needsUpdate=true;
+}
+
+let _celFocusedName='cel:miniapps',_menuFocusIndex=0,_menuWheelAt=0;
+const _menuCamOffset=new THREE.Vector3();
+function _menuBodies(){return CEL_PLANETS.map(p=>bodyMap.get('cel:'+p.id)).filter(Boolean);}
+function _celFamilyVisible(b){
+  if(!b||!b.userData)return true;
+  const n=b.userData.name||'',p=b.userData.parentName||'';
+  if(!/^cel:|^dom:/.test(n))return true;
+  if(!p)return true;                                      // top-level planets are the home menu
+  if(p===_celFocusedName)return true;                     // focused planet/moon reveals its next stage
+  const f=bodyMap.get(_celFocusedName),fp=f&&f.userData&&f.userData.parentName;
+  return !!(fp&&p===fp);                                  // keep siblings visible inside the current stage
+}
+function _menuFrameFor(b){
+  b.updateWorldMatrix(true,false);
+  const bp=b.getWorldPosition(new THREE.Vector3());
+  const bs=b.userData.baseScale||420;
+  const dist=Math.max(2600,bs*4.8);
+  _menuCamOffset.set(-dist,Math.max(520,bs*.45),dist*.32);
+  return {pos:bp.clone().add(_menuCamOffset),tgt:bp.clone().add(new THREE.Vector3(0,bs*.08,0))};
+}
+function _menuHighlight(b){
+  if(!b)return;
+  if(_selected&&_selected!==b){_selected.userData.selected=false;_removeSelRing(_selected);}
+  _selected=b;b.userData.selected=true;_attachSelRing(b);b.userData.selPulse=1;
+  selectedCelestialBody=b;_celFocusedName=b.userData.name||_celFocusedName;
+}
+function _menuFocusBody(b,animate,openCard){
+  if(!b)return false;
+  const top=_menuBodies(),idx=top.indexOf(b);
+  if(idx>=0)_menuFocusIndex=idx;
+  cameraMode=CameraMode.MAIN_EQUATOR_VIEW;
+  try{controls.enabled=false;}catch(_){}
+  _collapseSystems();_menuHighlight(b);
+  const f=_menuFrameFor(b);
+  if(animate===false){try{camera.position.copy(f.pos);controls.target.copy(f.tgt);controls.update();}catch(_){}}
+  else tween(f.pos,f.tgt,650);
+  if(openCard&&b.userData.getCard)showCardWithFns(b.userData.getCard());
+  return true;
+}
+function _menuStep(dir){
+  const top=_menuBodies(); if(!top.length)return false;
+  _menuFocusIndex=(top.indexOf(selectedCelestialBody)>=0?top.indexOf(selectedCelestialBody):_menuFocusIndex);
+  _menuFocusIndex=(_menuFocusIndex+dir+top.length)%top.length;
+  sfxBlip('select');return _menuFocusBody(top[_menuFocusIndex],true,false);
 }
 
 /* ===== CAMERA SYSTEM — exactly 3 views =====
@@ -3013,19 +3062,21 @@ function _eqRailPoint(){return new THREE.Vector3(
 function _eqLookTarget(p){const out=new THREE.Vector3(p.x-worldCorePosition.x,0,p.z-worldCorePosition.z).normalize();
   return p.clone().add(out.multiplyScalar(1000));}
 function updateMainEquatorView(dt){
-  _eqTargetTheta+=(_camInput.horizontal||0)*_eqDir*_eqRotSpeed*dt;
-  _eqTheta=THREE.MathUtils.damp(_eqTheta,_eqTargetTheta,_eqDamp,dt);
-  const p=_eqRailPoint();
-  camera.position.copy(p);
-  const look=_eqLookTarget(p);
-  camera.lookAt(look);
-  try{controls.target.copy(look);}catch(_){}
+  if(selectedCelestialBody&&selectedCelestialBody.isObject3D&&!flying){
+    const f=_menuFrameFor(selectedCelestialBody);
+    camera.position.lerp(f.pos,Math.min(1,dt*5));
+    controls.target.lerp(f.tgt,Math.min(1,dt*5));
+    camera.lookAt(controls.target);
+    try{controls.update();}catch(_){}
+  }
 }
 function _cameraModeUpdated(){}
 function enterMainEquatorView(){
-  cameraMode=CameraMode.MAIN_EQUATOR_VIEW; selectedCelestialBody=null;
+  cameraMode=CameraMode.MAIN_EQUATOR_VIEW;
   try{controls.enabled=false;}catch(_){}
-  const p=_eqRailPoint(); tween(p,_eqLookTarget(p),1100);
+  const b=selectedCelestialBody||bodyMap.get('cel:miniapps')||bodyMap.get('cel:knowledge');
+  if(b){_menuFocusBody(b,true,false);}
+  else{const p=_eqRailPoint(); tween(p,_eqLookTarget(p),900);}
   _cameraModeUpdated();
 }
 function enterUniverseExploreView(){
@@ -3054,10 +3105,6 @@ function toggleCameraMode(){
   enterMainEquatorView();
 }
 function _camTick(dt){
-  // selection observer: picking any celestial body (in equator view) = Focus Command View
-  if(_selected&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW){
-    cameraMode=CameraMode.FOCUS_COMMAND_VIEW; selectedCelestialBody=_selected;
-    try{controls.enabled=true;}catch(_){} _cameraModeUpdated();}
   if(!_selected&&cameraMode===CameraMode.FOCUS_COMMAND_VIEW){enterMainEquatorView();return;}
   if(flying)return;                                                   // smooth transitions own the camera
   if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW){try{controls.enabled=false;}catch(_){} updateMainEquatorView(dt);}
@@ -3066,24 +3113,27 @@ function _camTick(dt){
 (function _camBindInput(){
   const typing=()=>{const a=document.activeElement;return a&&/INPUT|TEXTAREA/.test(a.tagName);};
   addEventListener('keydown',e=>{ if(typing())return;
-    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')_camInput.horizontal=-1;
-    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')_camInput.horizontal=1; });
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')){e.preventDefault();_menuStep(-1);return;}
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='ArrowRight'||e.key==='d'||e.key==='D')){e.preventDefault();_menuStep(1);return;}
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(e.key==='Enter'||e.key===' ')){e.preventDefault();enterFocusCommandView(selectedCelestialBody||getBestCelestialBodyForFocus());return;}
+    if(e.key==='Escape'&&cameraMode!==CameraMode.MAIN_EQUATOR_VIEW){e.preventDefault();enterMainEquatorView();return;} });
   addEventListener('keyup',e=>{ if(['ArrowLeft','ArrowRight','a','A','d','D'].indexOf(e.key)>=0)_camInput.horizontal=0; });
-  let dragX=null,pinchD=null;const pts={};
+  let dragX=null,dragStartX=null,pinchD=null;const pts={};
   addEventListener('pointerdown',e=>{ pts[e.pointerId]=e;
-    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&e.target&&e.target.tagName==='CANVAS')dragX=e.clientX; });
+    if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&e.target&&e.target.tagName==='CANVAS'){dragX=e.clientX;dragStartX=e.clientX;} });
   addEventListener('pointermove',e=>{ pts[e.pointerId]=e; const ids=Object.keys(pts);
     if(ids.length===2){ const a=pts[ids[0]],b=pts[ids[1]];
       const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
       if(pinchD!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW)
         equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+(pinchD-d)*2));
       pinchD=d; return; }
-    if(dragX!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying){
-      const dx=e.clientX-dragX; dragX=e.clientX;
-      _eqTargetTheta+=dx*0.004*_eqDir; }});                          // horizontal only — vertical never tilts
-  addEventListener('pointerup',e=>{ delete pts[e.pointerId]; dragX=null; pinchD=null; });
-  addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)
-    equatorOrbitRadius=Math.max(950,Math.min(3200,equatorOrbitRadius+e.deltaY*0.5)); },{passive:true});
+    if(dragX!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying)dragX=e.clientX; });
+  addEventListener('pointerup',e=>{ delete pts[e.pointerId];
+    if(dragStartX!=null&&cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying){
+      const dx=e.clientX-dragStartX;if(Math.abs(dx)>44){e.preventDefault();_menuStep(dx>0?-1:1);} }
+    dragX=null;dragStartX=null;pinchD=null; });
+  addEventListener('wheel',e=>{ if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&!flying){
+    const now=performance.now();if(now-_menuWheelAt>260){_menuWheelAt=now;_menuStep((e.deltaY||e.deltaX)>0?1:-1);} } },{passive:true});
   addEventListener('dblclick',()=>{ if(cameraMode===CameraMode.UNIVERSE_EXPLORE_VIEW&&_selected)enterFocusCommandView(_selected); });
   _cameraModeUpdated();
 })();
@@ -3497,6 +3547,9 @@ function onCanvasClick(e){
   if(hit){
     if(_constellation&&hit.object===_constellation.inst&&hit.instanceId!=null){selectNode(hit.instanceId);return;}
     let o=hit.object;while(o&&!o.userData.name&&!o.userData.orbBody)o=o.parent;if(o){
+      if(cameraMode===CameraMode.MAIN_EQUATOR_VIEW&&(/^cel:|^dom:/.test(o.userData.name||''))){
+        _menuFocusBody(o,true,true);return;
+      }
       clearTimeout(_selectPending);
       _selectPending=setTimeout(()=>{selectBody(o);_selectPending=null;},220);
       return;}
