@@ -2600,6 +2600,7 @@ function buildDomainPlanets(){
         {label:'⏎ Enter system',kind:'descend',arg:dom}]});
     const b=addManifestBody({name:name,label:dom,color:COLORS.kpi,url:info.url,
       radius:P.radius,angle:P.angle,y:P.y,size:sz,getCard:card});
+    if(typeof CEL_REPLACES_APPRING!=='undefined'&&CEL_REPLACES_APPRING)b.visible=false;  // staging only until Knowledge adopts it into the celestial menu
     bodyNodeMap.set(b,node);
     buildGalaxySystem(b,dom,sz);        // RECURSIVE φ: galaxy ▸ planets ▸ moons (real entities; sizes & distances descend, self-similar)
     b.userData.oa=P.angle; b.userData.orr=P.radius; b.userData.oy=P.y; b.userData.os=0.013*Math.min(2.0,1400/P.radius); _galaxyOrbiters.push(b);  // galaxy slowly orbits the core (inner faster)
