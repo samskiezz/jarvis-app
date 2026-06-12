@@ -54,6 +54,7 @@ import { isInvRiskOverlayQuery, buildInvRiskOverlayScript } from "@/components/c
 import { isContactThreatQuery, buildContactThreatScript } from "@/components/cinematic/ContactThreatLinker";
 import { isWatchlistQuery, buildWatchlistScript } from "@/components/cinematic/EntityWatchlist";
 import { isHealthScoreQuery, buildHealthScoreScript } from "@/components/cinematic/SystemHealthScorecard";
+import { isTaskAlignQuery, buildTaskAlignScript } from "@/components/cinematic/TaskSkillAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -651,6 +652,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:healthscore-toggle"));
       try {
         const answer = await buildHealthScoreScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isTaskAlignQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:taskalign-toggle"));
+      try {
+        const answer = await buildTaskAlignScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
