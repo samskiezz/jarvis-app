@@ -44,7 +44,19 @@
     }).catch(function(){});
   } else if(window.caches&&caches.keys){ caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});}); }
 }catch(e){}})();
-addEventListener('pageshow',function(e){if(e.persisted)location.reload();});</script>
+addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
+/* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
+   cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
+(function(){try{
+  var KEY='__jv',VER='6';
+  var params=new URLSearchParams(location.search);
+  if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
+    sessionStorage.setItem(KEY+VER,'1');
+    params.set(KEY,VER);
+    location.replace(location.pathname+'?'+params.toString()+location.hash);
+  }
+}catch(e){}})();
+</script>
 <meta name=theme-color content="#03050A">
 <style>
 /* ========== iOS DESIGN SYSTEM v2 — Billion-Dollar Architecture ========== */
@@ -751,7 +763,7 @@ html.low-power #mic.live{animation:none}
 
 <!-- thin top bar -->
 <div id=top role=banner aria-label="JARVIS live controls">
- <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·φ-hierarchy</span></div>
+ <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·φ-hierarchy</span><span id=uiVer title="UI version 6" style="font-size:7px;opacity:.55;margin-left:6px;color:var(--cyan2)">v6</span></div>
  <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts" role=status aria-live=polite>● ONLINE</span><span id=freshness class=live>live</span>
  <span class="chip mono" id=age aria-label="Metrics age">—</span>
  <button class="tbtn hamburger" aria-label="Open system controls menu" aria-expanded=false aria-controls=hamburgerMenu>☰</button>
