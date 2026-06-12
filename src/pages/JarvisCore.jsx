@@ -15,8 +15,13 @@ const PLANES = ["jarvis", "aip", "foundry", "gotham", "apollo"];
 
 export default function JarvisCore() {
   const [status, setStatus] = useState(null);
+  const [error, setError] = useState(null);
   const [plane, setPlane] = useState("jarvis");
-  useEffect(() => { apiGet("/v1/jarvis/system/status").then(setStatus).catch(() => {}); }, []);
+  useEffect(() => {
+    apiGet("/v1/jarvis/system/status")
+      .then((s) => { setStatus(s); setError(null); })
+      .catch((e) => setError(e?.message || "Failed to load system status"));
+  }, []);
   const g = status?.gotham || {};
   const pm = PLANE_MODELS[plane];
   const ms = manifestSummary();
@@ -25,6 +30,11 @@ export default function JarvisCore() {
     <PageShell title="JARVIS CORE" subtitle="HOLOGRAPHIC COMMAND CORE · WEBGL · ACES+BLOOM · TRIPO GLB" accent={pm.color}
       actions={<Badge color={pm.color}>{ms.wired} wired · {ms.available} available · {ms.gap} gaps</Badge>}>
 
+      {error && (
+        <div style={{ color: C.red, fontSize: 12, padding: 12, marginBottom: 12, background: "rgba(255,0,0,0.08)", borderRadius: 6 }}>
+          ⚠ {error}
+        </div>
+      )}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
         {PLANES.map((p) => {
           const m = PLANE_MODELS[p]; const on = plane === p;

@@ -24,6 +24,7 @@ from pydantic import BaseModel
 
 from ..auth import optional_bearer
 from ..services import jarvis_agent
+from ..services import llm_router as _llm_router
 
 router = APIRouter(prefix="/v1/jarvis/agent", tags=["jarvis-agent"])
 
@@ -32,6 +33,7 @@ class AgentChatRequest(BaseModel):
     message: str
     history: Optional[list[dict[str, Any]]] = None
     max_steps: Optional[int] = None
+    page_context: Optional[Any] = None
 
 
 @router.post("/chat")
@@ -47,6 +49,7 @@ async def agent_chat(req: AgentChatRequest, token: str | None = Depends(optional
                 history=req.history,
                 actor=actor,
                 max_steps=min(max(req.max_steps or jarvis_agent.MAX_STEPS_DEFAULT, 1), 6),
+                page_context=req.page_context,
             ),
             timeout=timeout_s,
         )
@@ -59,3 +62,9 @@ async def agent_tools(_token: str | None = Depends(optional_bearer)):
     """The tool catalogue the agent reasons over (UI can show what JARVIS can do)."""
     from ..services import aip_tools
     return {"tools": aip_tools.list_tools()}
+
+
+@router.get("/llm/health")
+async def llm_health(_token: str | None = Depends(optional_bearer)):
+    """Live provider health: configured, reachable, latency."""
+    return await _llm_router.health_summary_async()

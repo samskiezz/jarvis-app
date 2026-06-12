@@ -119,13 +119,15 @@ export default function PlaneGraph() {
   const [active, setActive] = useState("Foundry");
   const [status, setStatus] = useState(null);
   const [llm, setLlm] = useState(null);
+  const [llmError, setLlmError] = useState(null);
   const [selected, setSelected] = useState(null);
   const stAsync = useAsync();
 
   const load = useCallback(async () => {
     const s = await stAsync.run(() => apiGet("/v1/jarvis/system/status"));
     setStatus(s);
-    apiGet("/v1/jarvis/research/status").then(setLlm).catch(() => {});
+    setLlmError(null);
+    apiGet("/v1/jarvis/research/status").then(setLlm).catch((e) => setLlmError(e?.message || "LLM status unavailable"));
   }, [stAsync]);
   useEffect(() => { load(); }, [load]);
 
@@ -159,7 +161,9 @@ export default function PlaneGraph() {
       accent={planeColor(active)}
       actions={
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Badge color={llm?.available ? C.neon : C.text}>AIP: {llm?.backend || "offline"}</Badge>
+          <Badge color={llmError ? C.red : llm?.available ? C.neon : C.text}>
+            AIP: {llmError ? "status error" : llm?.backend || "offline"}
+          </Badge>
           <button onClick={load} disabled={stAsync.loading}
             style={{ background: planeColor(active) + "1a", border: `1px solid ${planeColor(active)}55`,
               color: planeColor(active), fontFamily: "inherit", fontSize: 10, letterSpacing: 2,

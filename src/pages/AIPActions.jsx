@@ -27,6 +27,7 @@ export default function AIPActions() {
   const [callResult, setCallResult] = useState(null);
   const [planSteps, setPlanSteps] = useState('[\n  { "tool": "search", "params": { "q": "risk" } }\n]');
   const [planResult, setPlanResult] = useState(null);
+  const [decidingId, setDecidingId] = useState(null);
   const toolsAsync = useAsync();
   const callAsync = useAsync();
   const propAsync = useAsync();
@@ -50,7 +51,12 @@ export default function AIPActions() {
     setCallResult(r);
   };
   const decide = async (id, action) => {
-    await actAsync.run(() => apiPost(`/v1/aip/proposals/${encodeURIComponent(id)}/${action}`, {}));
+    setDecidingId(id);
+    try {
+      await actAsync.run(() => apiPost(`/v1/aip/proposals/${encodeURIComponent(id)}/${action}`, {}));
+    } finally {
+      setDecidingId(null);
+    }
     loadProposals();
   };
   const runPlan = async () => {
@@ -118,8 +124,8 @@ export default function AIPActions() {
                       <span style={{ color: C.text }}>→ {p.object_id}</span>
                       {st === "pending" && (
                         <span style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
-                          <Btn accent={C.neon} onClick={() => decide(p.id, "approve")}>APPROVE</Btn>
-                          <Btn accent={C.red} onClick={() => decide(p.id, "reject")}>REJECT</Btn>
+                          <Btn accent={C.neon} disabled={decidingId === p.id} onClick={() => decide(p.id, "approve")}>APPROVE</Btn>
+                          <Btn accent={C.red} disabled={decidingId === p.id} onClick={() => decide(p.id, "reject")}>REJECT</Btn>
                         </span>
                       )}
                     </div>

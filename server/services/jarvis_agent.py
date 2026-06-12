@@ -28,11 +28,16 @@ stdlib + existing services only.
 from __future__ import annotations
 
 import json
+import os
 import re
 from typing import Any, Optional
 
 from . import aip_tools as _tools
-from . import llm_research as _llm
+
+if os.environ.get("JARVIS_AGENT_USE_RESEARCH", "").lower() in ("1", "true", "yes"):
+    from . import llm_research as _llm
+else:
+    from . import llm_router as _llm
 
 try:
     from . import audit as _audit
@@ -40,6 +45,7 @@ except Exception:  # noqa: BLE001
     _audit = None  # type: ignore[assignment]
 
 MAX_STEPS_DEFAULT = 4
+MAX_STEPS_HARD_LIMIT = 8
 TIMEOUT_FALLBACK_PREAMBLE = (
     "The agent brain took too long to answer, so I stopped waiting and grounded "
     "this with direct search instead."
@@ -67,7 +73,7 @@ def _tool_brief() -> list[dict]:
     return out
 
 
-def _system_prompt(tools: list[dict]) -> str:
+def _system_prompt(tools: list[dict], page_context: Any = None) -> str:
     from . import jarvis_persona
     lines = [
         jarvis_persona.AGENT_PREAMBLE,
@@ -76,6 +82,9 @@ def _system_prompt(tools: list[dict]) -> str:
     ]
     for t in tools:
         lines.append(f"  - {t['name']} ({t['kind']}): {t['desc']} params={json.dumps(t['params'])}")
+    if page_context:
+        ctx = page_context if isinstance(page_context, str) else json.dumps(page_context, default=str)
+        lines += ["", f"[PAGE CONTEXT] {ctx}", "Use this context only if it is relevant to the user's request."]
     lines += [
         "",
         "Respond with ONE JSON object and nothing else. Two shapes:",
@@ -88,8 +97,11 @@ def _system_prompt(tools: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def _scratchpad(message: str, history: list[dict], trace: list[dict]) -> str:
+def _scratchpad(message: str, history: list[dict], trace: list[dict], page_context: Any = None) -> str:
     parts = []
+    if page_context:
+        ctx = page_context if isinstance(page_context, str) else json.dumps(page_context, default=str)
+        parts.append(f"[PAGE CONTEXT] {ctx}")
     for h in history[-6:]:
         role = "Operator" if h.get("role") in ("user", "sam") else "JARVIS"
         parts.append(f"{role}: {h.get('text') or h.get('content') or ''}")
@@ -257,12 +269,14 @@ def _synthesise_from_trace(message: str, trace: list[dict], backend: Optional[st
 
 
 def run_agent(message: str, history: Optional[list] = None,
-              actor: Any = None, max_steps: int = MAX_STEPS_DEFAULT) -> dict:
+              actor: Any = None, max_steps: int = MAX_STEPS_DEFAULT,
+              page_context: Any = None) -> dict:
     """Run the planner/executor loop. Returns
     ``{answer, trace, backend, steps, used_tools}``. Never raises."""
     message = str(message or "").strip()
     history = history if isinstance(history, list) else []
     actor_id = actor.get("id") if isinstance(actor, dict) else actor
+    max_steps = max(1, min(int(max_steps or MAX_STEPS_DEFAULT), MAX_STEPS_HARD_LIMIT))
     if not message:
         return {"answer": "", "trace": [], "backend": _llm.backend(),
                 "steps": 0, "used_tools": []}
@@ -275,15 +289,16 @@ def run_agent(message: str, history: Optional[list] = None,
         return _fallback(message, actor_id)
 
     tools = _tool_brief()
-    system = _system_prompt(tools)
+    system = _system_prompt(tools, page_context=page_context)
     trace: list[dict] = []
     used: list[str] = []
     answer: Optional[str] = None
     llm_failed = False
+    tool_errors: dict[str, int] = {}
 
-    for _ in range(max(1, max_steps)):
-        prompt = _scratchpad(message, history, trace)
-        raw = _llm.llm_complete(prompt, system=system, fmt="json", max_tokens=512)
+    for _ in range(max_steps):
+        prompt = _scratchpad(message, history, trace, page_context=page_context)
+        raw = _llm.complete(prompt, system_prompt=system, fmt="json", max_tokens=512)
         if raw is None:
             # Backend advertised but inference failed (e.g. model crash/timeout).
             llm_failed = True
@@ -305,12 +320,23 @@ def run_agent(message: str, history: Optional[list] = None,
         used.append(tool)
         trace.append({"thought": str(step.get("thought") or ""),
                       "tool": tool, "params": params, "observation": obs})
+        # Treat failed / unknown tool calls as control-flow errors. Do not let the
+        # loop burn every step repeating a tool that does not exist or keeps failing.
+        if isinstance(obs, dict) and not obs.get("ok"):
+            tool_errors[tool] = tool_errors.get(tool, 0) + 1
+            if tool_errors[tool] >= 2:
+                answer = (
+                    f"I tried the '{tool}' tool twice but it is unavailable or failed "
+                    f"({obs.get('error', 'unknown error')}). Please rephrase your request "
+                    "or check that the tool name is correct."
+                )
+                break
 
     if answer is None and not llm_failed:
         # Ran out of steps — try one LLM synthesis from what we gathered.
-        synth_prompt = (_scratchpad(message, history, trace)
+        synth_prompt = (_scratchpad(message, history, trace, page_context=page_context)
                         + '\nGive the final answer now as {"action":"final","answer":"..."}.')
-        raw = _llm.llm_complete(synth_prompt, system=system, fmt="json", max_tokens=512)
+        raw = _llm.complete(synth_prompt, system_prompt=system, fmt="json", max_tokens=512)
         if raw is None:
             llm_failed = True
         else:

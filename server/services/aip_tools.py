@@ -36,12 +36,19 @@ The proposal store lives in its own SQLite DB at env ``AIP_DB`` (default
 
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import sqlite3
+import subprocess
 import time
 import uuid
 from typing import Any, Optional
+
+try:
+    from . import llm_router as _llm_router
+except Exception:  # noqa: BLE001
+    _llm_router = None  # type: ignore[assignment]
 
 from . import audit as _audit
 from . import ontology_store as _ont
@@ -246,6 +253,47 @@ def _science_tools() -> list[dict]:
     return tools
 
 
+def _pm2_summary() -> dict | list:
+    """Best-effort snapshot of JARVIS PM2 services."""
+    try:
+        out = subprocess.run(["pm2", "jlist"], capture_output=True, text=True, timeout=5).stdout
+        rows = json.loads(out or "[]")
+        names = {r.get("name") for r in rows if r.get("name")}
+        jarvis = [r for r in rows if str(r.get("name", "")).startswith("jarvis-")]
+        if not jarvis:
+            return {"count": len(names), "services": sorted(names)[:30]}
+        return [
+            {
+                "name": r.get("name"),
+                "status": (r.get("pm2_env") or {}).get("status"),
+                "pid": r.get("pid"),
+                "cpu": (r.get("monit") or {}).get("cpu"),
+                "memory": (r.get("monit") or {}).get("memory"),
+            }
+            for r in jarvis[:40]
+        ]
+    except Exception as exc:  # noqa: BLE001
+        return {"error": f"{type(exc).__name__}: {exc}"}
+
+
+def _live_data_read(params: Optional[dict]) -> dict:
+    """Fresh live data read tool for the agent."""
+    topic = str((params or {}).get("topic") or "").lower()
+    result: dict[str, Any] = {
+        "utc": datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z"),
+        "version": os.environ.get("JARVIS_UI_VER", "17"),
+    }
+    if topic in ("", "status"):
+        try:
+            result["backend"] = _llm_router.backend() if _llm_router else "unknown"
+        except Exception:  # noqa: BLE001
+            result["backend"] = "unknown"
+        result["pm2"] = _pm2_summary()
+    if topic in ("", "weather"):
+        result["weather"] = "weather source not configured"
+    return {"ok": True, "result": result}
+
+
 def list_tools() -> list[dict]:
     """Return the catalog of callable tools — never raises, never empty.
 
@@ -300,6 +348,18 @@ def list_tools() -> list[dict]:
                 "description": ("Full-text search over the SCRAPED document store — the actual "
                                 "page content the platform downloaded. Use to quote/cite real "
                                 "fetched documents."),
+            }
+        )
+        tools.append(
+            {
+                "name": "live_data.read",
+                "kind": "read",
+                "params_schema": {"topic": "str?  # status|time|weather"},
+                "description": (
+                    "Read fresh live data: current UTC time, JARVIS version/cache buster, "
+                    "selected LLM backend status, PM2 service summary, and weather placeholder. "
+                    "Use this for 'latest', 'status', 'what time is it', 'date' questions instead of stale corpus."
+                ),
             }
         )
         tools.extend(_science_tools())

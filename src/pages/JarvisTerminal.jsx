@@ -793,7 +793,8 @@ function UnusedAnalystPanel() {
       // Real planner/executor turn: LLM plans → governed tool dispatch (search /
       // ontology / science) → step memory → synthesised, grounded answer.
       const history = msgs.map((m) => ({ role: m.r === "user" ? "sam" : "jarvis", text: m.t }));
-      const res = await agentChat(q, { history });
+      const pageContext = { route: typeof window !== "undefined" ? window.location.pathname : "/terminal" };
+      const res = await agentChat(q, { history, pageContext });
       const tools = res.used_tools || [];
       const trace = tools.length
         ? `\n\n— ${(res.backend || "grounded").toUpperCase()} · ${res.steps || tools.length} step(s) · tools: ${tools.join(", ")}`

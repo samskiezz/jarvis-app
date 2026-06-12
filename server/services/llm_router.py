@@ -21,13 +21,22 @@ Env overrides:
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
+import threading
+import time
 from typing import AsyncIterator
 
 import httpx
 
 from ..config import KIMI_API_KEY, KIMI_BASE_URL, KIMI_MODEL
+
+# Telemetry for fallback non-streaming completions (same DB as tiered_llm)
+try:
+    from . import tiered_llm as _tl
+except Exception:  # noqa: BLE001
+    _tl = None  # type: ignore[assignment]
 
 _OLLAMA_BASE = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434").rstrip("/")
 _OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "")
@@ -71,7 +80,7 @@ def _available_providers() -> list[str]:
     return avail
 
 
-async def _stream_kimi(message: str, system_prompt: str) -> AsyncIterator[str]:
+async def _stream_kimi(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
     url = f"{KIMI_BASE_URL.rstrip('/')}/chat/completions"
     payload = {
         "model": KIMI_MODEL,
@@ -81,6 +90,10 @@ async def _stream_kimi(message: str, system_prompt: str) -> AsyncIterator[str]:
             {"role": "user", "content": message},
         ],
     }
+    if max_tokens:
+        payload["max_tokens"] = max_tokens
+    if fmt == "json":
+        payload["response_format"] = {"type": "json_object"}
     headers = {
         "Authorization": f"Bearer {KIMI_API_KEY}",
         "Content-Type": "application/json",
@@ -107,7 +120,7 @@ async def _stream_kimi(message: str, system_prompt: str) -> AsyncIterator[str]:
                     yield delta
 
 
-async def _stream_openai(message: str, system_prompt: str) -> AsyncIterator[str]:
+async def _stream_openai(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
     url = "https://api.openai.com/v1/chat/completions"
     payload = {
         "model": "gpt-4o",
@@ -117,6 +130,10 @@ async def _stream_openai(message: str, system_prompt: str) -> AsyncIterator[str]
             {"role": "user", "content": message},
         ],
     }
+    if max_tokens:
+        payload["max_tokens"] = max_tokens
+    if fmt == "json":
+        payload["response_format"] = {"type": "json_object"}
     headers = {
         "Authorization": f"Bearer {_OPENAI_KEY}",
         "Content-Type": "application/json",
@@ -143,11 +160,11 @@ async def _stream_openai(message: str, system_prompt: str) -> AsyncIterator[str]
                     yield delta
 
 
-async def _stream_anthropic(message: str, system_prompt: str) -> AsyncIterator[str]:
+async def _stream_anthropic(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
     url = "https://api.anthropic.com/v1/messages"
     payload = {
         "model": "claude-3-5-sonnet-20241022",
-        "max_tokens": 4096,
+        "max_tokens": max_tokens or 4096,
         "system": system_prompt,
         "messages": [{"role": "user", "content": message}],
         "stream": True,
@@ -181,7 +198,7 @@ async def _stream_anthropic(message: str, system_prompt: str) -> AsyncIterator[s
                         yield text
 
 
-async def _stream_ollama(message: str, system_prompt: str) -> AsyncIterator[str]:
+async def _stream_ollama(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
     model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
     payload = {
         "model": model,
@@ -191,6 +208,8 @@ async def _stream_ollama(message: str, system_prompt: str) -> AsyncIterator[str]
         ],
         "stream": True,
     }
+    if max_tokens:
+        payload["options"] = {"num_predict": max_tokens}
     url = f"{_OLLAMA_BASE}/api/chat"
     async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
         async with client.stream("POST", url, json=payload) as resp:
@@ -214,7 +233,7 @@ async def _stream_ollama(message: str, system_prompt: str) -> AsyncIterator[str]
                     return
 
 
-async def _stream_gpu(message: str, system_prompt: str) -> AsyncIterator[str]:
+async def _stream_gpu(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
     """Stream from the Vast.ai GPU SGLang server (2x RTX 4090).
 
     If the GPU is unreachable or returns an error diagnostic (starts with '//'),
@@ -251,6 +270,8 @@ async def stream_chat(
     message: str,
     provider: str | None = None,
     system_prompt: str = "",
+    fmt: str | None = None,
+    max_tokens: int | None = None,
 ) -> AsyncIterator[str]:
     """Yield token chunks from the chosen LLM provider, with auto-fallback.
 
@@ -272,7 +293,7 @@ async def stream_chat(
             continue
         try:
             yielded = False
-            async for chunk in streamer(message, system):
+            async for chunk in streamer(message, system, fmt, max_tokens):
                 yielded = True
                 yield chunk
             if yielded:
@@ -322,3 +343,151 @@ async def health_check(provider: str) -> dict:
         return {"provider": provider, "healthy": True}
     except Exception as exc:  # noqa: BLE001
         return {"provider": provider, "healthy": False, "error": str(exc)}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Non-streaming fallback completion + provider health (sync-friendly)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _run_sync(coro):
+    """Run an async coroutine from sync code safely, even if a loop is running."""
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+    # Already inside a running event loop: run in a fresh thread and wait.
+    result = [None]
+    exception = [None]
+
+    def _runner():
+        try:
+            result[0] = asyncio.run(coro)
+        except Exception as exc:  # noqa: BLE001
+            exception[0] = exc
+
+    t = threading.Thread(target=_runner)
+    t.start()
+    t.join(timeout=120)
+    if exception[0]:
+        raise exception[0]
+    return result[0]
+
+
+async def _collect_stream(provider: str, message: str, system: str, fmt: str | None, max_tokens: int | None) -> dict:
+    """Collect a full non-streaming response from one provider."""
+    streamer = _PROVIDER_STREAMERS.get(provider)
+    if streamer is None:
+        return {"ok": False, "text": "", "error": f"unknown provider: {provider}"}
+    chunks: list[str] = []
+    t0 = time.time()
+    try:
+        async for chunk in streamer(message, system, fmt, max_tokens):
+            if isinstance(chunk, str):
+                chunks.append(chunk)
+        text = "".join(chunks).strip()
+        dt = int((time.time() - t0) * 1000)
+        if not text:
+            return {"ok": False, "text": "", "error": "no content", "latency_ms": dt}
+        if text.startswith("//"):
+            # Diagnostic from streamer itself means this provider did not produce real output.
+            return {"ok": False, "text": "", "error": text, "latency_ms": dt}
+        return {"ok": True, "text": text, "latency_ms": dt}
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "text": "", "error": f"{type(exc).__name__}: {exc}", "latency_ms": int((time.time() - t0) * 1000)}
+
+
+def complete(
+    message: str,
+    system_prompt: str = "",
+    provider: str | None = None,
+    fmt: str | None = "json",
+    max_tokens: int = 512,
+) -> str | None:
+    """Non-streaming completion with full provider fallback.
+
+    Returns the concatenated text from the first provider that yields content,
+    or None if every provider fails. This lets sync callers (jarvis_agent,
+    enrich, autopilot) get the same fallback chain that stream_chat enjoys.
+    """
+    message = str(message or "").strip()
+    system = str(system_prompt or "")
+    forced = provider or _provider_from_env()
+    chain = [forced] if forced else [p for p in _DEFAULT_CHAIN if p in _available_providers()]
+
+    last_error = ""
+    started = time.time()
+    for p in chain:
+        res = _run_sync(_collect_stream(p, message, system, fmt, max_tokens))
+        model = ""
+        for meta in list_providers():
+            if meta.get("id") == p:
+                model = meta.get("model", "")
+                break
+        if res.get("ok"):
+            try:
+                if _tl is not None:
+                    _tl._record(p, model, p, True, res.get("latency_ms", 0), None, "")
+            except Exception:  # noqa: BLE001
+                pass
+            return res["text"]
+        err = res.get("error") or "failed"
+        last_error = f"{p}: {err}"
+        try:
+            if _tl is not None:
+                _tl._record(p, model, p, False, res.get("latency_ms", 0), None, last_error[:200])
+        except Exception:  # noqa: BLE001
+            pass
+
+    total_ms = int((time.time() - started) * 1000)
+    try:
+        if _tl is not None:
+            _tl._record("router", "", "router", False, total_ms, None, f"all providers failed: {last_error}"[:200])
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
+def backend() -> str | None:
+    """Return the first configured provider in the current fallback chain."""
+    for meta in list_providers():
+        if meta.get("configured"):
+            return meta.get("id")
+    return None
+
+
+# In-process health cache
+_HEALTH_CACHE: dict | None = None
+_HEALTH_AT = 0.0
+_HEALTH_TTL = 30.0
+
+
+async def health_summary_async(force: bool = False) -> dict:
+    """Live provider health: configured + reachable + latency."""
+    global _HEALTH_CACHE, _HEALTH_AT
+    if not force and _HEALTH_CACHE and (time.time() - _HEALTH_AT) < _HEALTH_TTL:
+        return _HEALTH_CACHE
+
+    providers = list_providers()
+    results = []
+    for meta in providers:
+        pid = meta.get("id", "")
+        t0 = time.time()
+        check = await health_check(pid)
+        dt = int((time.time() - t0) * 1000)
+        results.append({
+            "id": pid,
+            "model": meta.get("model"),
+            "configured": bool(meta.get("configured")),
+            "reachable": bool(check.get("healthy")),
+            "latency_ms": dt,
+            "error": check.get("error"),
+        })
+
+    _HEALTH_CACHE = {"providers": results, "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    _HEALTH_AT = time.time()
+    return _HEALTH_CACHE
+
+
+def health_summary(force: bool = False) -> dict:
+    """Sync entrypoint for provider health."""
+    return _run_sync(health_summary_async(force=force))

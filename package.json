@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "audit:responsive": "node scripts/responsive-audit.mjs",
+    "test:break": "node scripts/browser_break_test.mjs",
     "preview": "vite preview",
     "assets:scrape": "node scripts/scrape-assets.mjs"
   },

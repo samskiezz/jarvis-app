@@ -16,11 +16,15 @@ const PLANE_COLOR = { jarvis: "#3ad8ff", foundry: "#00d4ff", gotham: "#ff3b6b",
 export default function AutoConsole() {
   const [spec, setSpec] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [error, setError] = useState(null);
 
-  const load = () => apiGet("/v1/jarvis/ui/spec").then((s) => {
-    setSpec(s);
-    setSelected((cur) => cur || (s?.modules?.[0]?.id ?? null));
-  }).catch(() => {});
+  const load = () => {
+    setError(null);
+    apiGet("/v1/jarvis/ui/spec").then((s) => {
+      setSpec(s);
+      setSelected((cur) => cur || (s?.modules?.[0]?.id ?? null));
+    }).catch((e) => setError(e?.message || "Failed to load self-building UI spec"));
+  };
   useEffect(() => { load(); const t = setInterval(load, 30000); return () => clearInterval(t); }, []);
 
   const byPlane = useMemo(() => {
@@ -35,7 +39,11 @@ export default function AutoConsole() {
       accent="#3ad8ff"
       actions={spec && <Badge color="#3ad8ff">{spec.object_types} windows · {spec.renders_assigned} renders · {spec.render_gaps?.length || 0} gaps</Badge>}>
 
-      {!spec ? <div style={{ color: C.text, fontSize: 11 }}>Building interface from live data…</div> : (
+      {error ? (
+        <div style={{ color: C.red, fontSize: 12, padding: 12, background: "rgba(255,0,0,0.08)", borderRadius: 6 }}>
+          ⚠ {error}
+        </div>
+      ) : !spec ? <div style={{ color: C.text, fontSize: 11 }}>Building interface from live data…</div> : (
         <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(300px,420px)", gap: 14, alignItems: "start" }}>
           {/* auto-built windows, grouped by plane */}
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>

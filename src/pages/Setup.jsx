@@ -53,10 +53,12 @@ export default function Setup() {
   };
   useEffect(() => () => clearInterval(poll.current), []);
 
-  const startGpu = () => { addLog("Starting GPU autopilot — continuous LLM research…");
-    apiPost("/v1/jarvis/research/autopilot/start", {}).then(refresh).catch(() => {}); };
-  const stopGpu = () => { addLog("Stopping GPU autopilot.");
-    apiPost("/v1/jarvis/research/autopilot/stop", {}).then(refresh).catch(() => {}); };
+  const startGpu = async () => { addLog("Starting GPU autopilot — continuous LLM research…");
+    try { await apiPost("/v1/jarvis/research/autopilot/start", {}); refresh(); }
+    catch (e) { addLog(`GPU autopilot start failed: ${e?.message || "error"}`); } };
+  const stopGpu = async () => { addLog("Stopping GPU autopilot.");
+    try { await apiPost("/v1/jarvis/research/autopilot/stop", {}); refresh(); }
+    catch (e) { addLog(`GPU autopilot stop failed: ${e?.message || "error"}`); } };
 
   // Seed the input with the currently-configured host (unless the user is typing).
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function Setup() {
       if (r?.ok) {
         setConnectMsg({ ok: true, text: `Connected ✓  models: ${(r.models || []).join(", ") || "(none pulled yet — run: ollama pull llama3.1:8b)"}` });
         addLog("✓ LLM connected — GPU autopilot will start hammering.");
-        apiPost("/v1/jarvis/research/autopilot/start", {}).catch(() => {});
+        apiPost("/v1/jarvis/research/autopilot/start", {}).catch((e) => addLog(`Autopilot auto-start failed: ${e?.message || "error"}`));
       } else {
         setConnectMsg({ ok: false, text: r?.hint || r?.error || "Not reachable from the backend." });
       }

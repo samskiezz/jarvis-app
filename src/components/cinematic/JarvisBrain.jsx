@@ -83,10 +83,11 @@ export default function JarvisBrain() {
     if (scene) navigate(`/cinematic/${scene}`);
     let answer = "";
     try {
+      const pageContext = { route: window.location.pathname, scene };
       const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: q }),
+        body: JSON.stringify({ message: q, page_context: pageContext }),
       });
       const d = await r.json();
       answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
@@ -100,7 +101,12 @@ export default function JarvisBrain() {
   }
 
   useEffect(() => {
-    const onAsk = (e) => { const q = e?.detail?.text || e?.detail?.query; if (q) ask(q); };
+    const onAsk = (e) => {
+      // JarvisAssistant owns chat on /apex routes; avoid duplicate handling there.
+      if (typeof window !== "undefined" && window.location.pathname.startsWith("/apex")) return;
+      const q = e?.detail?.text || e?.detail?.query;
+      if (q) ask(q);
+    };
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
   }, []);
