@@ -47,76 +47,194 @@
 addEventListener('pageshow',function(e){if(e.persisted)location.reload();});</script>
 <meta name=theme-color content="#03050A">
 <style>
-:root{--cy:#29E7FF;--cy2:#7af3ff;--ok:#34d399;--am:#f5b942;--rd:#ff5d6c;--pu:#a78bfa;--bg:#02040a;--tx:#dff6ff;--dim:#5f8298;--glass:rgba(8,22,34,.62);--ln:rgba(41,231,255,.22)}
+/* ========== iOS DESIGN SYSTEM v2 — Billion-Dollar Architecture ========== */
+:root{
+  /* PRIMARY COLORS — JARVIS Brand + iOS System */
+  --green: #00c878;
+  --blue: #0096d4;
+  --cyan: #29e7ff;
+  --cyan2: #7af3ff;
+  --purple: #a855f7;
+  --pink: #ec4899;
+  --red: #ff5d6c;
+  --amber: #f5b942;
+  --teal: #0d9488;
+  --indigo: #4f46e5;
+
+  /* SEMANTIC STATUS */
+  --ok: #34d399;
+  --warn: #f5b942;
+  --error: #ff5d6c;
+  --info: #29e7ff;
+  
+  /* BACKGROUNDS — Dark mode (void-black base) */
+  --bg: #020408;
+  --bg-secondary: #040a12;
+  --bg-tertiary: #06111b;
+  
+  /* TEXT HIERARCHY */
+  --text-primary: #eafcff;
+  --text-secondary: #a8bcc8;
+  --text-tertiary: #9ab7c2;
+  --text-dim: #566878;
+  
+  /* GLASS LAYERS (iOS Stratification) */
+  --glass-tertiary: rgba(72, 96, 106, 0.35);
+  --glass-secondary: rgba(72, 96, 106, 0.5);
+  --glass-primary: rgba(72, 96, 106, 0.65);
+  --border-line: rgba(91, 230, 255, 0.28);
+  
+  /* ELEVATION SHADOWS (Z-stack) */
+  --shadow-z0: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-z1: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-z2: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --shadow-z3: 0 16px 32px rgba(0, 0, 0, 0.25);
+  
+  /* GLASS BLUR SCALES (iOS standard) */
+  --blur-light: blur(4px);
+  --blur-medium: blur(14px);
+  --blur-heavy: blur(30px);
+  
+  /* ANIMATION — Spring Physics */
+  --spring-standard: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-snappy: cubic-bezier(0.35, 1.6, 0.65, 1);
+  --duration-quick: 250ms;
+  --duration-std: 300ms;
+  --duration-slow: 350ms;
+  
+  /* CORNER RADIUS SCALE (iOS 12+) */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  
+  /* LEGACY COMPAT */
+  --cy: #29e7ff;
+  --cy2: #7af3ff;
+  --pu: #a855f7;
+  --am: #f5b942;
+  --rd: #ff5d6c;
+  --tx: #eafcff;
+  --dim: #9ab7c2;
+  --glass: rgba(72, 96, 106, 0.5);
+  --ln: rgba(91, 230, 255, 0.28);
+}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hidden;
  font-family:'Inter',ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:13px}
 .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
-/* the ONE universe */
+
+/* ========== WebGL Canvas (unchanged) ========== */
 #uni{position:fixed;inset:0;z-index:0;display:block;width:100vw;height:100vh;touch-action:none}
-/* ---------- thin top bar ---------- */
+
+/* ========== TOP BAR — iOS Spring Glass + Responsive ========== */
 #top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
- padding:11px 18px;background:linear-gradient(180deg,rgba(2,6,12,.82),transparent);pointer-events:none}
+ padding:11px 18px;background:var(--glass-primary);backdrop-filter:var(--blur-medium);
+ box-shadow: var(--shadow-z1), 0 0 40px rgba(41, 231, 255, 0.08);
+ border-bottom: 1px solid rgba(41, 231, 255, 0.1);
+ pointer-events:none;
+ transition: background var(--duration-quick), backdrop-filter var(--duration-quick);}
 #top>*{pointer-events:auto}
-#top .brand{font-weight:800;letter-spacing:5px;font-size:15px;color:#eafcff;text-shadow:0 0 18px var(--cy)}
-#top .brand b{color:var(--cy)}
-.chip{font-size:11px;font-weight:700;letter-spacing:.5px;padding:4px 11px;border-radius:999px;background:var(--glass);border:1px solid var(--ln);color:var(--cy)}
-.chip.ok{color:var(--ok);border-color:#1c5b46}.chip.bad{color:var(--rd);border-color:#5b1c2a;animation:bl .8s steps(2) infinite}
-.chip.warn{color:var(--am);border-color:#6b561e}#status{cursor:pointer}
-@keyframes bl{50%{opacity:.4}}
+
+#top .brand{font-weight:800;letter-spacing:5px;font-size:15px;color:var(--text-primary);text-shadow:0 0 18px var(--cyan);
+ transition: all var(--duration-quick);}
+#top .brand b{color:var(--green)}
+
+.chip{font-size:11px;font-weight:700;letter-spacing:.5px;padding:6px 13px;border-radius:999px;background:var(--glass-secondary);
+ border:1px solid var(--border-line);color:var(--cyan);
+ backdrop-filter:var(--blur-light);transition:all var(--duration-quick);}
+.chip.ok{color:var(--ok);border-color:#1c5b46}.chip.bad{color:var(--red);border-color:#5b1c2a;animation:blinkBad .8s steps(2) infinite}
+.chip.warn{color:var(--warn);border-color:#6b561e}#status{cursor:pointer}
+
+@keyframes blinkBad{50%{opacity:.4}}
+
 #top .sp{flex:1}
-#search{width:min(280px,40vw);background:rgba(2,10,16,.7);border:1px solid var(--ln);border-radius:12px;color:#eafcff;padding:8px 13px;font-size:13px;outline:none}
-#search:focus{border-color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.25)}
-.tbtn{font-size:11px;font-weight:700;padding:6px 11px;border-radius:9px;border:1px solid var(--ln);background:var(--glass);color:var(--tx);cursor:pointer;backdrop-filter:blur(6px)}
-.tbtn:hover{border-color:var(--cy);color:var(--cy);box-shadow:0 0 16px rgba(41,231,255,.3)}
-.tbtn.g{color:var(--ok);border-color:#1c5b46}.tbtn.r{color:var(--rd);border-color:#5b1c2a}.tbtn.a{color:var(--am);border-color:#6b561e}
-/* ---------- breadcrumb nav for hierarchy descents ---------- */
-#crumbs{position:fixed;top:45px;left:0;right:0;z-index:19;display:flex;align-items:center;gap:8px;padding:8px 18px;background:rgba(2,6,12,.7);border-bottom:1px solid rgba(41,231,255,.1);font-size:11px;pointer-events:auto;max-height:32px;overflow-x:auto}
-#crumbs .crumb{background:rgba(41,231,255,.1);border:1px solid rgba(41,231,255,.2);border-radius:6px;padding:4px 9px;color:var(--cy);cursor:pointer;font-weight:600;white-space:nowrap}
-#crumbs .crumb:hover{border-color:var(--cy);box-shadow:0 0 12px rgba(41,231,255,.3)}
-/* ---------- single contextual info card (NASA-Eyes style, NOT side tabs) ---------- */
+
+#search{width:min(280px,40vw);background:var(--glass-secondary);border:1px solid var(--border-line);border-radius:var(--radius-lg);
+ color:var(--text-primary);padding:10px 15px;font-size:13px;outline:none;
+ backdrop-filter:var(--blur-light);
+ transition:all var(--duration-quick);}
+#search:focus{border-color:var(--cyan);box-shadow:0 0 16px rgba(41, 231, 255, 0.3), var(--shadow-z2);}
+
+.tbtn{font-size:11px;font-weight:700;padding:10px 16px;border-radius:var(--radius-lg);border:1px solid var(--border-line);
+ background:var(--glass-secondary);color:var(--tx);cursor:pointer;backdrop-filter:var(--blur-light);
+ min-height: 44px;min-width: 44px;display:flex;align-items:center;justify-content:center;
+ transition:all var(--duration-quick);
+ transform: translateZ(0);}
+.tbtn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(41, 231, 255, 0.3), var(--shadow-z2);
+ transform: scale(1.02);}
+.tbtn:active{transform:scale(0.98);transition:transform 120ms var(--spring-standard);}
+.tbtn.g{color:var(--ok);border-color:#1c5b46}.tbtn.r{color:var(--red);border-color:#5b1c2a}.tbtn.a{color:var(--warn);border-color:#6b561e}
+/* ---------- BREADCRUMB NAV — iOS Minimal, Hidden on Mobile ========== */
+#crumbs{position:fixed;top:48px;left:0;right:0;z-index:19;display:flex;align-items:center;gap:8px;padding:8px 18px;background:var(--glass-tertiary);border-bottom:1px solid rgba(41,231,255,.1);font-size:11px;pointer-events:auto;max-height:36px;overflow-x:auto;backdrop-filter:var(--blur-light);transition:all var(--duration-quick);}
+#crumbs .crumb{background:var(--glass-secondary);border:1px solid rgba(41,231,255,.2);border-radius:var(--radius-sm);padding:6px 11px;color:var(--cyan);cursor:pointer;font-weight:600;white-space:nowrap;min-height:32px;display:flex;align-items:center;transition:all var(--duration-quick);}
+#crumbs .crumb:hover{border-color:var(--cyan);box-shadow:0 0 12px rgba(41,231,255,.3);transform:scale(1.02);}
+#crumbs .crumb:active{transform:scale(0.98);}
+@media(max-width:560px){#crumbs{display:none;}}
+/* ========== INFO CARD — iOS Glass + Spring Animation ========== */
 #card{position:fixed;left:22px;bottom:96px;z-index:24;width:min(380px,90vw);max-height:64vh;overflow:auto;
- background:var(--glass);border:1px solid var(--cy);border-radius:16px;padding:16px 17px;backdrop-filter:blur(16px);
- box-shadow:0 0 0 1px rgba(0,0,0,.4),0 18px 60px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.16);
- transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;transition:transform .32s cubic-bezier(.22,1,.36,1),opacity .28s}
-#card.open{transform:none;opacity:1;pointer-events:auto}
-#card .x{position:absolute;top:12px;right:14px;cursor:pointer;color:var(--dim);font-size:18px;line-height:1}
-#card .x:hover{color:var(--cy)}
-#card .t{font-size:15px;color:var(--cy);margin:0 28px 3px 0;letter-spacing:.5px;font-weight:700}
-#card .s{font-size:10.5px;color:var(--dim);letter-spacing:.4px;margin-bottom:10px}
-#card .prop{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(41,231,255,.1);font-size:12px}
-#card .prop .k{color:var(--dim)}#card .prop b{color:#eafcff;text-align:right;word-break:break-word}
-#card .l{font-size:11.5px;color:#bfe6f2;padding:3px 0;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-word;cursor:default}
-#card .acts{margin-top:9px}
-#card .act{display:inline-block;margin:5px 6px 0 0;font-size:11px;font-weight:700;padding:7px 11px;border-radius:9px;border:1px solid var(--ln);background:rgba(41,231,255,.1);color:var(--cy);cursor:pointer}
-#card .act:hover{box-shadow:0 0 16px rgba(41,231,255,.3)}
-#card .bar2{height:7px;background:rgba(41,231,255,.1);border-radius:4px;overflow:hidden;margin:7px 0}
-#card .fill{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cy));box-shadow:0 0 10px var(--cy)}
+ background:var(--glass-primary);border:1px solid var(--cyan);border-radius:var(--radius-lg);padding:18px;backdrop-filter:var(--blur-medium);
+ box-shadow: var(--shadow-z3), 0 0 40px rgba(41,231,255,.16);
+ transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;transition:transform var(--duration-std) var(--spring-standard), opacity var(--duration-std);}
+#card.open{transform:none;opacity:1;pointer-events:auto;}
+#card .x{position:absolute;top:16px;right:16px;cursor:pointer;color:var(--text-dim);font-size:20px;line-height:1;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md);transition:all var(--duration-quick);}
+#card .x:hover{color:var(--cyan);background:var(--glass-secondary);}
+#card .x:active{transform:scale(0.95);}
+#card .t{font-size:17px;color:var(--cyan);margin:0 28px 3px 0;letter-spacing:.5px;font-weight:700;}
+#card .s{font-size:11px;color:var(--text-tertiary);letter-spacing:.4px;margin-bottom:12px;}
+#card .prop{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(41,231,255,.1);font-size:12px;}
+#card .prop .k{color:var(--text-tertiary);}#card .prop b{color:var(--text-primary);text-align:right;word-break:break-word;}
+#card .l{font-size:11px;color:var(--text-secondary);padding:6px 0;font-family:'JetBrains Mono',monospace;white-space:pre-wrap;word-break:break-word;cursor:default;line-height:1.5;}
+#card .acts{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;}
+#card .act{display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;padding:10px 14px;border-radius:var(--radius-md);border:1px solid var(--border-line);background:var(--glass-secondary);color:var(--cyan);cursor:pointer;min-height:36px;transition:all var(--duration-quick);}
+#card .act:hover{box-shadow:0 0 16px rgba(41,231,255,.3);border-color:var(--cyan);}
+#card .act:active{transform:scale(0.95);}
+#card .bar2{height:6px;background:var(--glass-secondary);border-radius:var(--radius-xs);overflow:hidden;margin:10px 0;}
+#card .fill{height:100%;background:linear-gradient(90deg,#0ea5b7,var(--cyan));box-shadow:0 0 10px var(--cyan);border-radius:var(--radius-xs);}
 #filebody{white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:#bfe6f2;max-height:42vh;overflow:auto;background:rgba(2,10,16,.6);border:1px solid var(--ln);border-radius:8px;padding:10px;margin-top:8px}
-/* ---------- bottom talk bar (preserved voice) ---------- */
+/* ========== BOTTOM TALK BAR — iOS Glass + Spring Spring + Mobile Responsive ========== */
 #cmd{position:fixed;left:0;right:0;bottom:0;z-index:27;width:100%;
- background:var(--glass);border:none;border-top:1px solid var(--ln);border-radius:0;
- padding:10px 18px calc(10px + env(safe-area-inset-bottom,0));backdrop-filter:blur(14px);
- box-shadow:0 -8px 40px rgba(0,0,0,.6),0 0 40px rgba(41,231,255,.12)}
-#cmd .row1{max-width:1100px;margin:0 auto}#cmd .row2{max-width:1100px;margin:8px auto 0}
-#cmd .row1{display:flex;gap:8px;align-items:center}
-#say{flex:1;background:rgba(2,10,16,.7);border:1px solid var(--ln);border-radius:12px;color:#eafcff;
- padding:13px 15px;font-size:15px;outline:none}
-#say:focus{border-color:var(--cy);box-shadow:0 0 18px rgba(41,231,255,.25)}
-#mic{width:52px;height:52px;flex:none;border-radius:50%;border:2px solid var(--cy);background:rgba(41,231,255,.1);
- color:var(--cy);font-size:23px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-#mic.live{background:rgba(52,211,153,.18);border-color:var(--ok);color:var(--ok);animation:micp 1.2s infinite}
-@keyframes micp{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 12px rgba(52,211,153,0)}}
-.send{width:52px;height:52px;flex:none;border-radius:14px;border:1px solid var(--ln);background:rgba(41,231,255,.12);color:var(--cy);font-size:19px;cursor:pointer}
-.send:hover{box-shadow:0 0 18px rgba(41,231,255,.3)}
-#cmd .row2{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap}
-.mini{font-size:10.5px;font-weight:700;padding:6px 10px;border-radius:9px;border:1px solid var(--ln);background:rgba(2,10,16,.5);color:var(--tx);cursor:pointer}
-.mini:hover{border-color:var(--cy);color:var(--cy)}
-.mini.archon{margin-left:auto}.mini.archon.on{background:linear-gradient(90deg,#7a3bff33,#29e7ff22);border-color:var(--pu);color:#cdb4ff;box-shadow:0 0 16px rgba(167,139,250,.4)}
-#budget{font-size:9.5px;color:var(--dim)}
-#budget b{color:var(--ok)}
-#coreSay{position:fixed;left:50%;bottom:108px;transform:translateX(-50%);z-index:23;font-size:12px;color:var(--cy2);
- max-width:60vw;text-align:center;min-height:14px;text-shadow:0 0 12px rgba(41,231,255,.5);pointer-events:none}
+ background:var(--glass-primary);border:none;border-top:1px solid rgba(41,231,255,.1);border-radius:0;
+ padding:12px 18px calc(12px + env(safe-area-inset-bottom,0));backdrop-filter:var(--blur-medium);
+ box-shadow:0 -8px 40px rgba(0,0,0,.6), 0 0 40px rgba(41,231,255,.12);
+ transition: all var(--duration-quick);}
+#cmd .row1{max-width:1100px;margin:0 auto; display:flex;gap:10px;align-items:center;}
+#cmd .row2{max-width:1100px;margin:10px auto 0;display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;}
+
+#say{flex:1;background:var(--glass-secondary);border:1px solid var(--border-line);border-radius:var(--radius-lg);color:var(--text-primary);
+ padding:14px 16px;font-size:15px;outline:none;min-height:48px;
+ backdrop-filter:var(--blur-light);transition:all var(--duration-quick);}
+#say::placeholder{color:var(--text-dim);}
+#say:focus{border-color:var(--cyan);box-shadow:0 0 18px rgba(41,231,255,.3), var(--shadow-z2);}
+
+#mic{width:48px;height:48px;flex:none;border-radius:50%;border:2px solid var(--cyan);background:var(--glass-secondary);
+ color:var(--cyan);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+ transition: all var(--duration-quick); transform: translateZ(0);}
+#mic:hover{box-shadow:0 0 16px rgba(41,231,255,.4);transform:scale(1.05);}
+#mic:active{transform:scale(0.95);transition:transform 120ms var(--spring-standard);}
+#mic.live{background:rgba(52,211,153,.2);border-color:var(--ok);color:var(--ok);animation:micPulse 1.2s cubic-bezier(0.34,1.56,0.64,1) infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 12px rgba(52,211,153,0)}}
+
+.send{width:48px;height:48px;flex:none;border-radius:var(--radius-md);border:1px solid var(--border-line);background:var(--glass-secondary);color:var(--cyan);font-size:20px;cursor:pointer;
+ min-height: 48px;display:flex;align-items:center;justify-content:center;
+ transition: all var(--duration-quick); transform: translateZ(0);}
+.send:hover{box-shadow:0 0 18px rgba(41,231,255,.3);border-color:var(--cyan);}
+.send:active{transform:scale(0.95);transition:transform 120ms var(--spring-standard);}
+
+.mini{font-size:10px;font-weight:700;padding:8px 13px;border-radius:var(--radius-md);border:1px solid var(--border-line);background:var(--glass-secondary);color:var(--text-primary);cursor:pointer;
+ min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;transition:all var(--duration-quick); transform: translateZ(0);}
+.mini:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(41,231,255,.3);}
+.mini:active{transform:scale(0.95);transition:transform 120ms var(--spring-standard);}
+.mini.archon{margin-left:auto;}.mini.archon.on{background:linear-gradient(135deg,rgba(122,59,255,.25),rgba(41,231,255,.15));border-color:var(--purple);color:#cdb4ff;box-shadow:0 0 16px rgba(167,139,250,.4);}
+
+#budget{font-size:9px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;}
+#budget b{color:var(--ok);font-weight:700;}
+
+#coreSay{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:23;font-size:13px;color:var(--cyan2);
+ max-width:60vw;text-align:center;min-height:16px;text-shadow:0 0 12px rgba(41,231,255,.5);pointer-events:none;transition: all var(--duration-quick);}
 /* ---------- WebRTC / studio overlays (preserved) ---------- */
 .ov{position:fixed;inset:0;z-index:30;display:none;background:rgba(3,5,10,.92);backdrop-filter:blur(4px)}
 .ov.open{display:block}
@@ -205,48 +323,73 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 ::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-thumb{background:rgba(41,231,255,.25);border-radius:4px}
 @media(max-width:820px){#search{width:34vw}#card{width:88vw}}
-/* ---------- R4: Mac-style glass dock ----------
-   FINDING2: was centred at bottom:96px → it landed directly on the two-row #cmd talk bar (top ~96px),
-   #coreSay (108px) and #card band. Anchored bottom-RIGHT, clear of the centred talk-bar / caption column,
-   and JS hides it while a fullscreen overlay is open (setMode). No more layout collision. */
-#dock{position:fixed;right:18px;bottom:130px;z-index:26;display:flex;gap:10px;
-  padding:9px 14px;border-radius:20px;background:rgba(8,22,34,.5);border:1px solid var(--ln);
-  backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 40px rgba(41,231,255,.1);
-  align-items:flex-end;transition:opacity .3s,transform .3s}
-#dock.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
-/* §1 D: drag-grip — grab here to move the WHOLE dock anywhere (position persists in localStorage) */
-#dock .dgrip{align-self:center;cursor:grab;color:var(--cy2);opacity:.55;font-size:18px;line-height:1;
-  padding:0 4px 0 2px;margin-right:2px;user-select:none;letter-spacing:-2px;transition:opacity .15s}
-#dock .dgrip:hover{opacity:1;text-shadow:0 0 10px var(--cy)}
-#dock .dgrip:active{cursor:grabbing}
-#dock.dragging{transition:none;box-shadow:0 18px 60px rgba(0,0,0,.6),0 0 60px rgba(41,231,255,.45)}
+/* ========== R4: iOS-Style Glass Dock — Spring Physics + Touch ========== */
+#dock{position:fixed;right:18px;bottom:230px;z-index:26;display:flex;gap:10px;
+  padding:12px 16px;border-radius:var(--radius-xl);background:var(--glass-primary);border:1px solid rgba(91,230,255,.28);
+  backdrop-filter:var(--blur-medium) saturate(1.25);
+  box-shadow: var(--shadow-z3), 0 0 30px rgba(41,231,255,.12), inset 0 1px 0 rgba(255,255,255,.13);
+  align-items:flex-end;transition:opacity var(--duration-quick), transform var(--duration-quick);
+  transform: translateZ(0);}
+#dock.hidden{opacity:0;pointer-events:none;transform:translateY(16px);}
+
+/* Drag grip — grab here to move the dock (persists in localStorage) */
+#dock .dgrip{align-self:center;cursor:grab;color:var(--cyan2);opacity:.6;font-size:18px;line-height:1;
+  padding:0 4px 0 2px;margin-right:2px;user-select:none;letter-spacing:-2px;transition:opacity var(--duration-quick);}
+#dock .dgrip:hover{opacity:1;text-shadow:0 0 10px var(--cyan);transform:scale(1.1);}
+#dock .dgrip:active{cursor:grabbing;}
+#dock.dragging{transition:none;box-shadow: var(--shadow-z3), 0 0 60px rgba(41,231,255,.45);}
+
 #dock .dockRail{display:flex;gap:10px;align-items:flex-end;max-width:min(calc(100vw - 92px),720px);overflow-x:auto;overflow-y:visible;
-  scroll-snap-type:x proximity;scroll-behavior:smooth;padding:4px 2px 2px;overscroll-behavior-x:contain}
-#dock .dockRail::-webkit-scrollbar{display:none}
-#dock .dockRail{scrollbar-width:none}
-/* when the user has pinned a custom position we drop the bottom/right anchors via inline left/top */
-#dock.moved{right:auto;bottom:auto}
-/* iOS-style tile: icon glyph on top + a persistent NAME label underneath (R4 "icon tile with a short
-   NAME label under it"). The dock itself stays a drop-zone for DRAG-TO-PIN from the 3D world. */
-#dock .di{width:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;
-  cursor:pointer;transition:transform .16s cubic-bezier(.22,1,.36,1),margin .16s;
-  transform-origin:bottom center;user-select:none;position:relative;flex:0 1 54px;min-width:34px;scroll-snap-align:center}
-#dock .di .gly{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
-  font-size:23px;background:rgba(41,231,255,.07);border:1px solid transparent;transition:background .2s,border-color .2s}
-#dock .di:hover .gly{background:rgba(41,231,255,.16);border-color:var(--cy)}
-#dock .di .nm{font-size:9.5px;font-weight:700;letter-spacing:.3px;color:var(--cy2);opacity:.85;
-  white-space:nowrap;text-shadow:0 0 6px rgba(41,231,255,.4);max-width:58px;overflow:hidden;text-overflow:ellipsis}
-#dock .di.drag{opacity:.4}#dock .di.over{margin:0 12px}
-#dock.pinReady{border-color:var(--cy);box-shadow:0 12px 50px rgba(0,0,0,.55),0 0 60px rgba(41,231,255,.45)}
-#dock .di.pinned .gly{border-color:var(--pu);box-shadow:0 0 12px rgba(167,139,250,.5)}
+  scroll-snap-type:x proximity;scroll-behavior:smooth;padding:4px 2px 2px;overscroll-behavior-x:contain;scrollbar-width:none;}
+#dock .dockRail::-webkit-scrollbar{display:none;}
+
+/* Position persistence (if user moves dock, override anchors) */
+#dock.moved{right:auto;bottom:auto;}
+
+/* iOS-Style Dock Item: icon tile + name label */
+#dock .di{width:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;
+  cursor:pointer;transition:transform var(--duration-std) var(--spring-standard), margin var(--duration-std);
+  transform-origin:bottom center;user-select:none;position:relative;flex:0 1 54px;min-width:34px;scroll-snap-align:center;
+  transform:translateZ(0);}
+
+#dock .di:hover{transform:scale(1.08) translateZ(0);}
+#dock .di:active{transform:scale(0.95) translateZ(0);}
+
+/* Dock icon glyph container */
+#dock .di .gly{width:46px;height:46px;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;
+  font-size:23px;background:var(--glass-secondary);border:1px solid rgba(122,243,255,.15);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 8px 18px rgba(0,0,0,.20);
+  transition:all var(--duration-quick);
+  transform:translateZ(0);}
+
+#dock .di:hover .gly{background:var(--glass-primary);border-color:var(--cyan);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 10px 24px rgba(0,0,0,.25), 0 0 20px rgba(41,231,255,.24);}
+
+/* Dock item name label */
+#dock .di .nm{font-size:9.5px;font-weight:700;letter-spacing:.3px;color:var(--cyan2);opacity:.85;
+  white-space:nowrap;text-shadow:0 0 6px rgba(41,231,255,.4);max-width:58px;overflow:hidden;text-overflow:ellipsis;
+  transition:opacity var(--duration-quick);}
+
+#dock .di.drag{opacity:.4;}
+#dock .di.over{margin:0 12px;}
+
+/* Ready to pin state */
+#dock.pinReady{border-color:var(--cyan);box-shadow: var(--shadow-z3), 0 0 60px rgba(41,231,255,.45);}
+#dock .di.pinned .gly{border-color:var(--purple);box-shadow:0 0 12px rgba(167,139,250,.5);}
+
+/* Close button (X) for unpinning */
 #dock .di .x{position:absolute;top:-4px;right:6px;width:15px;height:15px;border-radius:50%;font-size:10px;
-  line-height:13px;text-align:center;background:rgba(255,90,90,.85);color:#fff;opacity:0;transition:.15s;cursor:pointer}
-#dock .di.pinned:hover .x{opacity:1}
+  line-height:13px;text-align:center;background:rgba(255,90,90,.85);color:#fff;opacity:0;transition:opacity var(--duration-quick);cursor:pointer;}
+#dock .di.pinned:hover .x{opacity:1;}
 /* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
    row above the talk bar + caption band (clears #cmd ~96px top, #coreSay 108px) and centre it. */
-@media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:128px;gap:6px}
-  #dock .dockRail{max-width:min(calc(100vw - 72px),420px);gap:4px}
-  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px;flex-basis:40px;min-width:20px}}
+@media(max-width:1180px){#dock{bottom:330px}}
+@media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:192px;gap:7px;padding:9px 13px;border-radius:21px}
+  #dock .dockRail{max-width:min(calc(100vw - 68px),430px);gap:7px;padding:4px 1px 3px}
+  #dock.hidden{transform:translateX(50%) translateY(14px)}
+  #dock .di{width:50px;height:auto;flex-basis:50px;min-width:50px;gap:3px}
+  #dock .di .gly{width:42px;height:42px;border-radius:13px;font-size:21px}
+  #dock .di .nm{font-size:8.8px;max-width:52px}}
 /* ---------- R5: crystal caption bubble + iridescent ring ---------- */
 #crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
   max-width:min(70vw,640px);padding:14px 22px;border-radius:22px;text-align:center;
@@ -268,10 +411,10 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    /upgrade (Claude executes on the VPS) then auto-refreshes. Anchored bottom-RIGHT, stacked UNDER the
    iOS dock (which sits at bottom:130px) and above the caption band; it collapses to a tab so it never
    collides with the centred talk bar, and hides while a fullscreen overlay is open (setMode). */
-#sdev{position:fixed;right:18px;bottom:184px;z-index:26;width:min(372px,calc(100vw - 36px));
-  border-radius:18px;background:rgba(8,22,34,.46);border:1px solid var(--ln);
-  backdrop-filter:blur(20px) saturate(1.25);
-  box-shadow:0 14px 54px rgba(0,0,0,.55),0 0 44px rgba(167,139,250,.12),inset 0 1px 0 rgba(255,255,255,.06);
+#sdev{position:fixed;right:18px;bottom:328px;z-index:26;width:min(372px,calc(100vw - 36px));
+  border-radius:18px;background:rgba(82,102,110,.54);border:1px solid rgba(91,230,255,.24);
+  backdrop-filter:blur(22px) saturate(1.22);
+  box-shadow:0 16px 58px rgba(0,0,0,.42),0 0 34px rgba(167,139,250,.10),inset 0 1px 0 rgba(255,255,255,.13);
   transition:opacity .3s,transform .3s;overflow:hidden}
 #sdev.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
 #sdev.min .sd-body{display:none}
@@ -302,7 +445,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .sd-build:active{transform:scale(.96)}
 .sd-build.busy{opacity:.6;pointer-events:none;color:var(--ok);border-color:#1c5b46}
 .sd-empty{font-size:11px;color:var(--dim);padding:14px 6px;text-align:center}
-@media(max-width:820px){#sdev{right:50%;transform:translateX(50%);bottom:182px;width:min(372px,94vw)}
+@media(max-width:1180px){#sdev{bottom:428px}}
+@media(max-width:820px){#sdev{right:50%;transform:translateX(50%);bottom:282px;width:min(372px,94vw)}
   #sdev.hidden{transform:translateX(50%) translateY(14px)}}
 /* proposal reader (formatted text the hyperlink opens) — reuses the glass card look */
 #prop{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;background:rgba(3,5,10,.78);backdrop-filter:blur(5px)}
@@ -323,15 +467,12 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    planets. State persists in localStorage. They flank the central world and clear the full-width #cmd. */
 .gpanel{position:fixed;z-index:18;width:248px;max-height:calc(50vh - 70px);overflow:hidden;
   border-radius:18px;padding:0;color:var(--tx);
-  background:linear-gradient(150deg,rgba(12,30,46,.30),rgba(6,16,26,.20));
-  border:1px solid var(--ln);backdrop-filter:blur(15px) saturate(1.25);
-  box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 40px rgba(41,231,255,.10),inset 0 1px 0 rgba(255,255,255,.07);
+  background:var(--glass);
+  border:1px solid var(--ln);backdrop-filter:var(--blur-medium) saturate(1.22);
+  box-shadow:0 16px 58px rgba(0,0,0,.42),0 0 34px rgba(41,231,255,.10),inset 0 1px 0 rgba(255,255,255,.12);
   transition:width .42s cubic-bezier(.22,1,.36,1),transform .42s cubic-bezier(.22,1,.36,1),opacity .3s,box-shadow .25s}
 .gpanel.hidden{opacity:0;pointer-events:none;transform:translateY(14px)}
-.gpanel::before{content:'';position:absolute;inset:-1px;border-radius:19px;padding:1px;z-index:-1;pointer-events:none;
-  background:conic-gradient(from var(--gang,0deg),rgba(255,93,108,.5),rgba(245,185,66,.5),rgba(52,211,153,.5),rgba(41,231,255,.6),rgba(167,139,250,.5),rgba(255,93,108,.5));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
-  filter:blur(.4px) saturate(1.3);opacity:.55;animation:irid 9s linear infinite}
+.gpanel::before{display:none}
 /* edge anchoring — 2 stacked left, 2 stacked right (top below the thin top bar; clear of #cmd ~96px) */
 /* SYMMETRIC 2-left / 2-right; each capped to its half so top+bottom butt up at mid-screen, never overlap */
 #pInfra{left:14px;top:56px}
@@ -341,13 +482,18 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 /* 3-state widths. mid + full both grow; full slides toward page centre (left panels grow right, right panels grow left → no transform needed since they're edge-anchored). */
 .gpanel.mid{width:min(360px,40vw)}
 .gpanel.full{width:min(460px,48vw)}   /* full reaches the screen centre (no tall max-height override → keeps the half-cap, no fold-over) */
-.gpanel .gp-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:grab;user-select:none;
-  border-bottom:1px solid rgba(41,231,255,.14);background:linear-gradient(90deg,rgba(41,231,255,.08),transparent)}
+.gpanel .gp-head{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:pointer;user-select:none;
+  border-bottom:1px solid rgba(41,231,255,.14);background:linear-gradient(90deg,rgba(41,231,255,.08),transparent);
+  min-height:44px;position:relative;transition:background var(--duration-quick),box-shadow var(--duration-quick);
+  touch-action:manipulation}
+.gpanel .gp-head:hover{background:linear-gradient(90deg,rgba(41,231,255,.14),transparent);box-shadow:0 0 14px rgba(41,231,255,.12)}
+.gpanel .gp-head:active{transform:scale(0.995)}
+.gpanel .gp-head:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
 .gpanel .gp-head:active{cursor:grabbing}
 .gpanel .gp-head .gi{font-size:13px;filter:drop-shadow(0 0 6px var(--cy))}
 .gpanel .gp-head .gt{font-weight:800;letter-spacing:1.2px;font-size:9.5px;color:var(--cy2);text-shadow:0 0 10px rgba(41,231,255,.45);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* TOP-RIGHT 3-state toggle: an interactive image (3 stacked bars in 3 greys) cycling slide-in/normal→mid→full */
-.gp-tog{width:22px;height:16px;flex:none;border:none;background:transparent;cursor:pointer;padding:0;display:flex;flex-direction:column;justify-content:center;gap:2px}
+/* TOP-RIGHT 3-state toggle: visual indicator only; the whole .gp-head is the tappable zone */
+.gp-tog{width:22px;height:16px;flex:none;border:none;background:transparent;cursor:pointer;padding:0;display:flex;flex-direction:column;justify-content:center;gap:2px;pointer-events:none}
 .gp-tog i{display:block;height:3px;border-radius:2px;transition:background .2s,width .2s;width:60%;margin-left:auto}
 .gp-tog i:nth-child(1){background:#8aa0ad}
 .gp-tog i:nth-child(2){background:#3c4f5b}
@@ -380,31 +526,196 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 .gpsw[data-busy="1"]{opacity:.55;cursor:wait}
 .gpanel.dropReady{border-color:var(--pu);box-shadow:0 14px 54px rgba(0,0,0,.5),0 0 50px rgba(167,139,250,.5)}
 .gpanel .gp-drop{margin-top:8px;font-size:10px;color:var(--pu);border:1px dashed rgba(167,139,250,.4);border-radius:9px;padding:7px;text-align:center}
-/* hide the side panels on narrow screens so they never cover the world / talk bar */
-@media(max-width:1180px){ /* phones/tablets: the 4 glass panels STAY (compact), never hidden — 3-state toggle still works */
-  .gpanel{width:44vw;max-height:30vh;font-size:10px}
-  .gpanel.mid{width:46vw}.gpanel.full{width:48vw}
+/* ========== RESPONSIVE DESIGN — iOS Mobile-First Architecture ========== */
+
+/* TABLET (Large) — 1024px+: Desktop experience, all panels visible */
+@media(min-width:1025px){
+  #top{padding:13px 20px;}
+  #search{width:280px;}
+  .tbtn{padding:11px 16px;min-height:44px;}
+  .gpanel{width:248px;}
+  .gpanel.mid{width:min(360px,40vw);}
+  .gpanel.full{width:min(460px,48vw);}
+  #dock{right:18px;bottom:230px;}
+  #sdev{right:18px;bottom:328px;}
 }
-/* PHONES (portrait): keep everything ON-screen — the toolbar wraps + shrinks (search no longer clipped),
-   and the two lower panels are pulled up + capped so they never collide with the floating dock/chat bar. */
-@media(max-width:760px){
-  #top{gap:7px;padding:8px 10px}
-  #top .brand{letter-spacing:2px;font-size:12px}
-  .chip{font-size:9px;padding:3px 7px}
-  #top .sp{flex-basis:100%;height:0;order:5}   /* force the search onto its own full-width line */
-  #search{order:6;width:100%;flex:1 1 100%;box-sizing:border-box}
-  #cmd{padding:8px 12px calc(8px + env(safe-area-inset-bottom,0))}
-  #cmd .row1{gap:7px}
-  #say{padding:10px 12px;font-size:14px}
-  #mic,.send{width:44px;height:44px}
-  #cmd .row2{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:2px;scrollbar-width:none}
-  #cmd .row2::-webkit-scrollbar{display:none}
-  #cmd .mini{flex:0 0 auto;white-space:nowrap;padding:5px 9px!important;min-height:0!important;margin-left:0!important;display:inline-flex;align-items:center;justify-content:center}
-  #cmd .mini.archon{margin-left:0!important}
-  /* top panels shorter; bottom panels start lower-mid and are capped well above the dock zone */
-  .gpanel{width:46vw;max-height:26vh}
-  #pInfra,#pKnow{top:84px}
-  #pPipe,#pFab{top:calc(50vh + 24px);max-height:22vh}
+
+/* Panel drawer tabs — used on tablet to collapse panels into tabs */
+.panel-tabs{position:fixed;top:70px;z-index:18;display:none;flex-direction:column;gap:6px;pointer-events:auto}
+.panel-tabs.left{left:10px}
+.panel-tabs.right{right:10px}
+.panel-tab{width:44px;height:44px;border-radius:var(--radius-md);background:var(--glass-secondary);border:1px solid var(--border-line);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all var(--duration-quick)}
+.panel-tab:hover{background:var(--glass-primary);box-shadow:0 0 14px rgba(41,231,255,.3);transform:scale(1.05)}
+.panel-tab:active{transform:scale(0.95)}
+.panel-tab[aria-pressed=true]{background:var(--glass-primary);border-color:var(--cyan);box-shadow:0 0 16px rgba(41,231,255,.4)}
+
+/* TABLET (Medium) — 821px-1024px: iPad Air, iPad Pro 11" */
+@media(max-width:1024px) and (min-width:821px){
+  #top{gap:10px;padding:12px 16px;}
+  #search{width:min(240px,35vw);}
+  .tbtn{padding:9px 14px;font-size:10px;min-height:40px;}
+  .panel-tabs{display:flex}
+  .gpanel{width:40vw;max-height:32vh;transition:transform var(--duration-std) var(--spring-standard),opacity var(--duration-std),visibility var(--duration-std)}
+  .gpanel.collapsed{opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-12px)}
+  .gpanel.collapsed.right{transform:translateX(12px)}
+  .gpanel.mid{width:42vw;}
+  .gpanel.full{width:45vw;}
+  #pInfra,#pKnow{top:70px;}
+  #pPipe,#pFab{top:calc(50vh + 16px);max-height:24vh;}
+  #dock{right:50%;transform:translateX(50%);bottom:220px;gap:8px;padding:9px 14px;}
+  #dock .di{width:48px;}
+  #dock .di .gly{width:40px;height:40px;font-size:20px;}
+  #dock .di .nm{font-size:8.5px;}
+  #sdev{right:50%;transform:translateX(50%);bottom:310px;width:min(360px,94vw);}
+}
+
+/* TABLET (Small) — 561px-820px: iPad Mini, landscape phones */
+@media(max-width:820px) and (min-width:561px){
+  #top{gap:8px;padding:10px 14px;flex-wrap:nowrap;overflow-x:auto;}
+  #top .brand{letter-spacing:2px;font-size:13px;}
+  #search{width:min(200px,28vw);}
+  .tbtn{padding:8px 12px;font-size:10px;min-height:40px;padding:8px 12px;}
+  .chip{font-size:9px;padding:4px 10px;}
+  #crumbs{top:46px;padding:6px 12px;gap:6px;}
+  #cmd{padding:10px 14px calc(10px + env(safe-area-inset-bottom,0));}
+  #cmd .row1{gap:8px;}
+  #say{min-height:44px;padding:11px 14px;font-size:14px;}
+  #mic,.send{width:44px;height:44px;flex-shrink:0;}
+  #cmd .row2{gap:7px;margin-top:8px;}
+  .mini{min-height:44px;min-width:44px;padding:7px 11px;font-size:9px;}
+  .gpanel{width:44vw;max-height:28vh;font-size:10px;}
+  .gpanel.mid{width:46vw;}
+  .gpanel.full{width:48vw;}
+  #pInfra,#pKnow{top:68px;}
+  #pPipe,#pFab{top:calc(50vh + 18px);max-height:24vh;}
+  #dock{right:50%;transform:translateX(50%);bottom:200px;gap:7px;padding:9px 13px;border-radius:20px;}
+  #dock.hidden{transform:translateX(50%) translateY(14px);}
+  #dock .dockRail{max-width:min(calc(100vw - 60px),420px);gap:7px;}
+  #dock .di{width:48px;flex-basis:48px;min-width:48px;}
+  #dock .di .gly{width:40px;height:40px;border-radius:12px;font-size:20px;}
+  #dock .di .nm{font-size:8.5px;max-width:50px;}
+  #sdev{right:50%;transform:translateX(50%);bottom:280px;width:min(360px,92vw);}
+  #sdev.hidden{transform:translateX(50%) translateY(14px);}
+  #card{left:16px;bottom:100px;width:92vw;}
+  #coreSay{bottom:112px;font-size:12px;}
+  #crystal{bottom:150px;max-width:85vw;}
+  @media(prefers-reduced-motion:reduce){
+    #cmd,#dock,#sdev,#card,#crystal{transition:none;}
+    .mini:active{transform:none;}
+  }
+}
+
+/* MOBILE (Portrait) — max-width 560px: iPhone 15 Pro (430px), Samsung S24 (360px) */
+@media(max-width:560px){
+  /* === TOP BAR === Hamburger menu for control buttons */
+  #top{gap:6px;padding:9px 12px;flex-wrap:nowrap;overflow-x:visible;}
+  #top .brand{letter-spacing:1px;font-size:12px;}
+  #top .sp{flex:1;}
+  .chip{font-size:8px;padding:3px 9px;}
+  #search{width:min(140px,24vw);order:3;}
+  .tbtn{display:none;} /* Hide Run/Pause/Stop/Sleep; move to hamburger menu */
+  .tbtn.hamburger{display:flex;order:4;font-size:16px;padding:0;width:44px;height:44px;align-items:center;justify-content:center} /* Hamburger icon visible on mobile */
+  .hamburger-menu{position:fixed;top:52px;right:10px;z-index:21;display:none;flex-direction:column;gap:6px;
+    min-width:160px;padding:8px;border-radius:var(--radius-lg);background:var(--glass-primary);
+    border:1px solid var(--border-line);backdrop-filter:var(--blur-medium);box-shadow:var(--shadow-z3),0 0 30px rgba(41,231,255,.12)}
+  .hamburger-menu.open{display:flex}
+  .hamburger-menu .tbtn{display:flex !important} /* override mobile .tbtn hide */
+  .hamburger-menu button{width:100%;justify-content:flex-start;text-align:left;padding:10px 12px}
+  .hamburger-menu button .sym{width:24px;display:inline-block;text-align:center}
+  
+  /* === BREADCRUMB === Hidden on mobile */
+  #crumbs{display:none;}
+  
+  /* === TALK BAR === Single row, optimized for mobile */
+  #cmd{padding:8px 10px calc(8px + env(safe-area-inset-bottom,0));gap:0;}
+  #cmd .row1{gap:6px;width:100%;flex-wrap:nowrap;}
+  #say{min-height:44px;padding:10px 12px;font-size:14px;flex:1;}
+  #say::placeholder{font-size:12px;}
+  #mic{width:44px;height:44px;flex-shrink:0;}
+  .send{width:44px;height:44px;flex-shrink:0;}
+  
+  /* === QUICK ACTIONS === Priority-based (P0 always visible; P1 in "More" menu) */
+  #cmd .row2{gap:5px;margin-top:6px;flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
+  #cmd .row2::-webkit-scrollbar{display:none;}
+  .mini{flex:0 0 auto;min-height:44px;min-width:44px;padding:6px 10px;font-size:9px;white-space:nowrap;scroll-snap-align:start;}
+  .mini.p1{display:none;} /* P1 actions hidden; shown in menu */
+  .mini.p0{display:inline-flex;} /* P0: Image, Status, Access, ARCHON always visible */
+  .mini.archon{margin-left:auto;flex-shrink:0;}
+  
+  /* === GLASS PANELS === Compressed, or hidden with drawer tabs */
+  .gpanel{width:46vw;max-height:24vh;font-size:9px;border-radius:14px;}
+  .gpanel.mid{width:48vw;}
+  .gpanel.full{width:50vw;}
+  #pInfra,#pKnow{top:76px;}
+  #pPipe,#pFab{top:calc(50vh + 22px);max-height:20vh;}
+  .gp-tog{width:20px;height:14px;}
+  .gp-tog i{height:2px;width:50%;}
+  
+  /* === DOCK === Bottom horizontal scroll, simplified */
+  #dock{right:auto;left:0;right:0;bottom:0;transform:none;z-index:25;display:flex;justify-content:center;gap:4px;
+   padding:6px 8px 12px;max-height:72px;
+   border-radius:20px 20px 0 0;background:var(--glass-primary);border:none;border-top:1px solid rgba(41,231,255,.1);}
+  #dock.moved{right:auto;bottom:0;left:0;} /* Bottom dock ignores localStorage positioning */
+  #dock.hidden{opacity:0;pointer-events:none;transform:translateY(12px);}
+  #dock .dgrip{display:none;} /* Hide grip on mobile; dock is fixed at bottom */
+  #dock .dockRail{max-width:100%;gap:5px;padding:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
+  #dock .dockRail::-webkit-scrollbar{display:none;}
+  #dock .di{width:44px;flex-basis:44px;min-width:44px;gap:2px;scroll-snap-align:center;}
+  #dock .di .gly{width:38px;height:38px;border-radius:11px;font-size:18px;}
+  #dock .di .nm{font-size:7.5px;max-width:44px;}
+  #dock .di .x{top:-6px;right:4px;width:14px;height:14px;font-size:9px;line-height:12px;}
+  
+  /* === SELF-DEV BAR === Hidden on mobile (too much clutter) */
+  #sdev{display:none;}
+  
+  /* === INFO CARD === Smaller, repositioned */
+  #card{left:8px;right:8px;bottom:100px;width:auto;max-height:50vh;border-radius:14px;padding:14px;}
+  
+  /* === SPOKEN LINE === Repositioned above dock */
+  #coreSay{bottom:104px;font-size:11px;max-width:85vw;}
+  
+  /* === CRYSTAL CAPTION === Preserved, repositioned */
+  #crystal{bottom:148px;max-width:90vw;border-radius:20px;padding:12px 18px;font-size:13px;}
+  
+  /* === LIVE TASKS === Modal-style on mobile */
+  #ovWork{position:fixed;inset:0;z-index:50;background:var(--bg);}
+  #wlHead{padding:10px 16px;font-size:11px;}
+  .wlrow{grid-template-columns:20px 1fr 60px 50px;gap:10px;padding:8px 12px;font-size:9px;}
+  .wltime{font-size:8px;min-width:50px;}
+  .wltoggle,.wlcancel{min-width:40px;min-height:40px;font-size:10px;padding:3px 7px;}
+  
+  /* === P0/P1 Quick Actions === */
+  .mini.more{min-width:44px;padding:6px 10px;background:var(--glass-primary);border-style:dashed}
+  .mini.more[aria-pressed=true]{border-style:solid;border-color:var(--cyan);color:var(--cyan)}
+  .mini.p1.open{display:inline-flex}
+
+  /* === UTILITIES === Reduce animations for performance */
+  @media(prefers-reduced-motion:reduce){
+    #top,#cmd,#dock,#card,#crystal,#coreSay{transition:none;}
+    .mini:active,.tbtn:active,.send:active{transform:none;}
+  }
+}
+
+/* === Low-power mode: disable blur & heavy animations === */
+html.low-power,html.low-power body{--blur-medium:none}
+html.low-power #dock,html.low-power #top,html.low-power #cmd,html.low-power .gpanel,html.low-power #sdev,html.low-power #card{backdrop-filter:none !important}
+html.low-power #crystal::before{animation:none}
+html.low-power #mic.live{animation:none}
+
+/* === Freshness indicator === */
+#freshness{font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;margin-left:6px;
+  background:var(--glass-secondary);border:1px solid var(--border-line);color:var(--text-tertiary);
+  transition:all var(--duration-quick)}
+#freshness.live{color:var(--ok);border-color:#1c5b46;background:rgba(52,211,153,.12)}
+#freshness.stale{color:var(--warn);border-color:#6b561e;background:rgba(245,185,66,.12)}
+
+/* === ACCESSIBILITY: Reduced Motion === */
+@media(prefers-reduced-motion:reduce){
+  * {animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+  #crystal::before{animation:none;}
+  .wldot.run,.wlfill.indet{animation:none;opacity:.8;}
+  #boot .ring{animation:none;}
 }
 </style>
 <link rel="stylesheet" href="/jarvis/a11y/a11y.css">
@@ -417,37 +728,48 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 
 <!-- §1 C: 4 see-through glass crystal panels flanking the world (2 left · 2 right), bound to /metrics.
      Each has a TOP-RIGHT 3-state toggle (slide-in→mid→full) and is a drag-drop target for planets. -->
-<div class=gpanel id=pInfra data-state=0>
-  <div class=gp-head><span class=gi>🖥</span><span class=gt>INFRASTRUCTURE</span>
-    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+<div class=gpanel id=pInfra data-state=0 role=region aria-label="Infrastructure metrics">
+  <div class=gp-head tabindex=0 role=button aria-label="Cycle Infrastructure panel size"><span class=gi>🖥</span><span class=gt>INFRASTRUCTURE</span>
+    <span class=gp-tog aria-hidden=true><i></i><i></i><i></i></span></div>
   <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
-<div class=gpanel id=pPipe data-state=0>
-  <div class=gp-head><span class=gi>⚙</span><span class=gt>PIPELINES · RUNNERS</span>
-    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+<div class=gpanel id=pPipe data-state=0 role=region aria-label="Pipeline and runner metrics">
+  <div class=gp-head tabindex=0 role=button aria-label="Cycle Pipelines panel size"><span class=gi>⚙</span><span class=gt>PIPELINES · RUNNERS</span>
+    <span class=gp-tog aria-hidden=true><i></i><i></i><i></i></span></div>
   <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
-<div class=gpanel id=pKnow data-state=0>
-  <div class=gp-head><span class=gi>🧠</span><span class=gt>KNOWLEDGE · ONTOLOGY</span>
-    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+<div class=gpanel id=pKnow data-state=0 role=region aria-label="Knowledge and ontology metrics">
+  <div class=gp-head tabindex=0 role=button aria-label="Cycle Knowledge panel size"><span class=gi>🧠</span><span class=gt>KNOWLEDGE · ONTOLOGY</span>
+    <span class=gp-tog aria-hidden=true><i></i><i></i><i></i></span></div>
   <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
-<div class=gpanel id=pFab data-state=0>
-  <div class=gp-head><span class=gi>🔮</span><span class=gt>INFERENCE FABRIC</span>
-    <button class=gp-tog title="Cycle size (slide-in → mid → full)" aria-label="Cycle panel size"><i></i><i></i><i></i></button></div>
+<div class=gpanel id=pFab data-state=0 role=region aria-label="Inference fabric metrics">
+  <div class=gp-head tabindex=0 role=button aria-label="Cycle Inference panel size"><span class=gi>🔮</span><span class=gt>INFERENCE FABRIC</span>
+    <span class=gp-tog aria-hidden=true><i></i><i></i><i></i></span></div>
   <div class=gp-body><div class=gp-empty>warming up…</div></div></div>
 
+<!-- Tablet panel drawer tabs (left + right) -->
+<div class="panel-tabs left" id=panelTabsLeft aria-label="Left panels" role=tablist></div>
+<div class="panel-tabs right" id=panelTabsRight aria-label="Right panels" role=tablist></div>
+
 <!-- thin top bar -->
-<div id=top>
+<div id=top role=banner aria-label="JARVIS live controls">
  <div class=brand>J<b>A</b>RVIS<b>·</b>LIVE <span style="font-size:9px;opacity:.7;letter-spacing:.5px;color:#39ffd0;font-weight:700">v2·φ-hierarchy</span></div>
- <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts">● ONLINE</span>
- <span class="chip mono" id=age>—</span>
+ <span class="chip ok" id=status onclick="openVitals()" title="System vitals & alerts" role=status aria-live=polite>● ONLINE</span><span id=freshness class=live>live</span>
+ <span class="chip mono" id=age aria-label="Metrics age">—</span>
+ <button class="tbtn hamburger" aria-label="Open system controls menu" aria-expanded=false aria-controls=hamburgerMenu>☰</button>
  <span class="chip" id=fxgodrays role=status aria-live=polite tabindex=0 style="display:none;cursor:pointer"
        title="Cinematic post-FX: volumetric god-rays from the reactor"
        onclick="readGodrays()" onkeydown="if(event.key==='Enter'||event.key===' ')readGodrays()"></span>
  <input id=search placeholder="Search / fly to…" autocomplete=off onkeydown="if(event.key==='Enter')flyToQuery(this.value)">
  <span class=sp></span>
- <button class="tbtn g" onclick="cmdAll('run')">▶ Run</button>
- <button class="tbtn a" onclick="cmdAll('pause')">⏸ Pause</button>
- <button class="tbtn r" onclick="cmdAll('stop')">⏹ Stop</button>
- <button class=tbtn onclick="cmdAll('sleep')">🌙 Sleep</button>
+ <button class="tbtn g" onclick="cmdAll('run')" aria-label="Run all systems">▶ Run</button>
+ <button class="tbtn a" onclick="cmdAll('pause')" aria-label="Pause all systems">⏸ Pause</button>
+ <button class="tbtn r" onclick="cmdAll('stop')" aria-label="Stop all systems">⏹ Stop</button>
+ <button class=tbtn onclick="cmdAll('sleep')" aria-label="Sleep all systems">🌙 Sleep</button>
+</div>
+<div id=hamburgerMenu class=hamburger-menu aria-hidden=true role=menu>
+  <button class="tbtn g" onclick="cmdAll('run');toggleHamburger()" role=menuitem><span class=sym>▶</span> Run</button>
+  <button class="tbtn a" onclick="cmdAll('pause');toggleHamburger()" role=menuitem><span class=sym>⏸</span> Pause</button>
+  <button class="tbtn r" onclick="cmdAll('stop');toggleHamburger()" role=menuitem><span class=sym>⏹</span> Stop</button>
+  <button class=tbtn onclick="cmdAll('sleep');toggleHamburger()" role=menuitem><span class=sym>🌙</span> Sleep</button>
 </div>
 <nav id=crumbs aria-label="Universe location" aria-live=polite style="display:none"></nav>
 
@@ -465,6 +787,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 <div id=crystal aria-live=polite></div>
 
 <!-- bottom talk-to-JARVIS bar (voice preserved) -->
+<div role=region aria-label="Voice input and quick actions">
 <div id=cmd>
  <div class=row1>
    <input id=say placeholder="Talk to JARVIS…" aria-label="Talk to Jarvis" autocomplete=off onkeydown="if(event.key==='Enter')askJarvis()">
@@ -472,21 +795,25 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
    <button class=send onclick=askJarvis() aria-label=Send title=Send>➤</button>
  </div>
  <div class=row2>
-   <button class=mini onclick="quick('image')">🎨 Image</button>
-   <button class=mini onclick="quick('3d')">🧊 3D GLB</button>
-   <button class=mini onclick="readStatus()">🔊 Status</button>
-   <button class=mini onclick="openAccess()" aria-label="Device access — allow microphone, camera and files">🔓 Access</button>
-   <button class=mini onclick="openAssist()" aria-label="Set up JARVIS to control your phone">📲 Control</button>
-   <button class=mini onclick="setMode('guardian')">🛡 Guardian</button>
-   <button class=mini onclick="setMode('library')">🖼 Studio</button>
+   <button class="mini p0" onclick="quick('image')" aria-label="Generate image">🎨 Image</button>
+   <button class="mini p0" onclick="readStatus()" aria-label="Read system status">🔊 Status</button>
+   <button class="mini p0" onclick="openAccess()" aria-label="Device access — allow microphone, camera and files">🔓 Access</button>
+   <button class="mini p1" onclick="quick('3d')" aria-label="Generate 3D model">🧊 3D GLB</button>
+   <button class="mini p1" onclick="openAssist()" aria-label="Set up JARVIS to control your phone">📲 Control</button>
+   <button class="mini p1" onclick="setMode('guardian')" aria-label="Open guardian mode">🛡 Guardian</button>
+   <button class="mini p1" onclick="setMode('library')" aria-label="Open media studio">🖼 Studio</button>
+   <button class="mini more" id=moreBtn onclick="toggleMoreActions()" aria-label="Show more quick actions" aria-expanded=false aria-pressed=false>⋯ More</button>
    <span id=budget class=mono></span>
-   <button class="mini archon" id=archonBtn onclick=toggleArchon() title="Archon: max tokens / Opus for hard tasks">⚡ ARCHON</button>
+   <button class="mini archon p0" id=archonBtn onclick=toggleArchon() title="Archon: max tokens / Opus for hard tasks" aria-label="Toggle Archon mode">⚡ ARCHON</button>
  </div>
+</div>
 </div>
 
 <!-- R4: Mac-style dock (magnify on hover + drag-reorder; clicking flies to / opens the function)
      §1 D: the WHOLE dock is draggable to any position via the grip handle (left/top persisted). -->
-<div id=dock><span class=dgrip id=dockGrip title="Drag the dock anywhere">⠿</span></div>
+<div role=toolbar aria-label="Application dock">
+<div id=dock><span class=dgrip id=dockGrip title="Drag the dock anywhere" aria-hidden=true>⠿</span></div>
+</div>
 
 <!-- SECOND DOCK — self-development bar: AI "what to build next" blocks (GET /suggestions) -->
 <div id=sdev>
@@ -751,7 +1078,7 @@ const $=id=>document.getElementById(id), CT="__CTOKEN__";
    pinned clutter, expanded panels, or a hidden self-dev bar after the code is fixed. */
 (function(){
   try{
-    const ver='jarvis-ios-cyan-theme-reset-20260612-3';
+    const ver='jarvis-ios-cyan-theme-reset-20260612-6';
     if(localStorage.getItem('jarvisUiStateVersion')===ver)return;
     ['jarvisDockPos','jarvisDock','jarvisDockPins','gp:pInfra','gp:pPipe','gp:pKnow','gp:pFab','sdevMin'].forEach(k=>localStorage.removeItem(k));
     localStorage.setItem('jarvisUiStateVersion',ver);
@@ -1152,8 +1479,12 @@ function setPanelState(id,st){const p=$(id);if(!p)return;st=((st%3)+3)%3;
 function wireGlassPanels(){
   [['pInfra',renderInfraPanel],['pPipe',renderPipePanel],['pKnow',renderKnowPanel],['pFab',renderFabPanel]].forEach(([id])=>{
     const p=$(id);if(!p)return;
-    const tog=p.querySelector('.gp-tog');
-    if(tog)tog.onclick=ev=>{ev.stopPropagation();setPanelState(id,(+p.dataset.state||0)+1);};
+    const head=p.querySelector('.gp-head');
+    const togglePanel=ev=>{if(ev)ev.stopPropagation();setPanelState(id,(+p.dataset.state||0)+1);};
+    if(head){
+      head.onclick=togglePanel;
+      head.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();togglePanel(ev);}};
+    }
     try{const s=localStorage.getItem('gp:'+id);if(s!=null)setPanelState(id,+s);}catch(_){}
     // drop a dragged planet here → fly to it + inspect (bridges WebGL → DOM, like the dock)
     p.addEventListener('pointerup',()=>{ if(_pinGrab&&_pinGrab.armed&&_pinGrab.name){
@@ -1225,6 +1556,68 @@ function refreshGlassPanels(){
       const drop=body.querySelector('.gp-drop');                 // preserve any active drop note
       body.innerHTML=(drop?drop.outerHTML:'')+fn();});
   }catch(e){}
+}
+
+/* ================= Mobile hamburger menu ================= */
+function toggleHamburger(){
+  const m=$('hamburgerMenu'),b=$('.tbtn.hamburger');
+  if(!m)return;
+  const open=m.classList.toggle('open');
+  m.setAttribute('aria-hidden',String(!open));
+  if(b){b.setAttribute('aria-expanded',String(open));b.setAttribute('aria-pressed',String(open));}
+}
+function closeHamburger(ev){const m=$('hamburgerMenu');if(!m||!m.classList.contains('open'))return;if(ev&&m.contains(ev.target))return;toggleHamburger();}
+
+/* ================= P0/P1 quick actions on mobile ================= */
+function toggleMoreActions(){
+  const btn=$('moreBtn');if(!btn)return;
+  const open=btn.getAttribute('aria-pressed')!=='true';
+  btn.setAttribute('aria-pressed',String(open));btn.setAttribute('aria-expanded',String(open));
+  btn.classList.toggle('open',open);
+  document.querySelectorAll('#cmd .mini.p1').forEach(el=>{el.classList.toggle('open',open);});
+}
+
+/* ================= Tablet panel drawer tabs ================= */
+const _PANEL_TAB_ICONS={'pInfra':'🖥','pPipe':'⚙','pKnow':'🧠','pFab':'🔮'};
+function buildPanelTabs(){
+  const left=$('panelTabsLeft'),right=$('panelTabsRight');if(!left||!right)return;
+  left.innerHTML='';right.innerHTML='';
+  [['pInfra','Infrastructure'],['pPipe','Pipelines'],['pKnow','Knowledge'],['pFab','Inference']].forEach(([id,label])=>{
+    const p=$(id);if(!p)return;
+    const tab=document.createElement('button');tab.className='panel-tab';tab.setAttribute('role','tab');
+    tab.setAttribute('aria-label',label);tab.setAttribute('aria-controls',id);tab.setAttribute('aria-pressed','true');
+    tab.textContent=_PANEL_TAB_ICONS[id]||'◆';
+    tab.onclick=()=>togglePanelTab(id);
+    if(id==='pInfra'||id==='pPipe')left.appendChild(tab);else right.appendChild(tab);
+  });
+}
+function togglePanelTab(id){
+  const p=$(id);if(!p)return;
+  const tab=document.querySelector('.panel-tab[aria-controls="'+id+'"]');
+  p.classList.toggle('collapsed');p.classList.toggle('right',id==='pKnow'||id==='pFab');
+  const collapsed=p.classList.contains('collapsed');
+  if(tab){tab.setAttribute('aria-pressed',String(!collapsed));tab.setAttribute('aria-label',(collapsed?'Show ':'Hide ')+(tab.getAttribute('aria-controls')==='pInfra'?'Infrastructure':tab.getAttribute('aria-controls')==='pPipe'?'Pipelines':tab.getAttribute('aria-controls')==='pKnow'?'Knowledge':'Inference'));
+    tab.style.opacity=collapsed?'.6':'1';}
+}
+
+/* ================= Low-power mode (Battery API) ================= */
+function initLowPowerMode(){
+  if(!navigator.getBattery)return;
+  try{
+    navigator.getBattery().then(bat=>{
+      function apply(){const low=bat.level<0.2;if(low)document.documentElement.classList.add('low-power');else document.documentElement.classList.remove('low-power');}
+      apply();bat.addEventListener('levelchange',apply);
+    });
+  }catch(_){}
+}
+
+/* ================= Freshness indicator ================= */
+let _lastMetricsTs=0;
+function updateFreshness(){
+  const el=$('freshness');if(!el)return;
+  const age=_lastMetricsTs?Math.max(0,Date.now()-_lastMetricsTs):0;
+  if(age>35000){el.textContent='stale';el.className='stale';el.title='Metrics older than 35 seconds';}
+  else{el.textContent='live';el.className='live';el.title='Metrics fresh';}
 }
 
 /* ====== SECOND DOCK — self-development: AI suggestions of "what to build next" ======
@@ -1647,7 +2040,7 @@ async function openFile(path){_cardDrilled=true;                 // pause live r
   }catch(e){cardEl('.filewrap').innerHTML='<div style="color:var(--dim)">could not open file</div>';}}
 
 /* ================= live data tick (preserved cadence; now drives 3D bodies) ================= */
-function tick(){fetch('metrics?_='+Date.now()).then(r=>r.json()).then(m=>{_m=m;_ts=m.ts||0;_metricsSignature(m);
+function tick(){fetch('metrics?_='+Date.now()).then(r=>r.json()).then(m=>{_m=m;_ts=m.ts||0;_metricsSignature(m);_lastMetricsTs=Date.now();updateFreshness();
   // status chip now reflects overall System Vitals (disk/mem/cpu/brain/daemons/pipeline), not just VRAM.
   const h=m.health;
   if(h&&h.level==='critical'){$('status').className='chip bad';$('status').textContent='⛔ '+(h.summary||'critical');}
@@ -1658,10 +2051,10 @@ function tick(){fetch('metrics?_='+Date.now()).then(r=>r.json()).then(m=>{_m=m;_
   try{layoutFromMetrics(m);}catch(e){console.warn('layout',e);}
   try{refreshGlassPanels();}catch(e){}                         // §1 C: feed the 4 flanking glass panels
   if(_selected&&_selected.userData.refresh){try{_selected.userData.refresh();}catch(e){}}
- }).catch(e=>{$('status').className='chip bad';$('status').textContent='● reconnecting';});}
+ }).catch(e=>{$('status').className='chip bad';$('status').textContent='● reconnecting';updateFreshness();});}
 function budgetTick(){fetch('budget').then(r=>r.json()).then(s=>{
   $('budget').innerHTML='budget <b>$'+(s.spent_usd_today||0).toFixed(2)+'</b>/$'+(s.daily_cap||0)+(s.economy_forced?' · economy':'');}).catch(e=>{});}
-function ageTick(){if(_ts)$('age').textContent=Math.max(0,(Date.now()/1000|0)-_ts)+'s ago';}
+function ageTick(){if(_ts)$('age').textContent=Math.max(0,(Date.now()/1000|0)-_ts)+'s ago';updateFreshness();}
 
 /* ====================================================================== */
 /* ===================   THE 3D UNIVERSE (three.js)   =================== */
@@ -2665,7 +3058,7 @@ function buildDomainPlanets(){
    are ABSORBED via CEL_ALIAS so their LIVE updates (labels/colors) keep flowing into the new bodies;
    the old 12k app ring is retired (Mini Apps planet carries the dock apps); dom:* galaxies become
    Knowledge's moons with their recursive entity systems intact. Dock bar / panels / swarm untouched. */
-var CEL_K=16, CEL_LOD=0.0048, CEL_REPLACES_APPRING=true;
+var CEL_K=14, CEL_LOD=0.0026, CEL_REPLACES_APPRING=true;
 var CEL_ALIAS={};                // old body name -> cel body name (absorption; resolved in upsertBody)
 const CEL_LANES=['ui','automation','knowledge','intelligence','infrastructure','guardian','media','voice','budget','underworld'];
 const CEL_LANE_INDEX={}; CEL_LANES.forEach((lane,i)=>CEL_LANE_INDEX[lane]=i);
@@ -2681,7 +3074,7 @@ const _cl=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
 const _celPR =I=>_cl(9,30,Math.pow(I,0.72));                        // planet
 const _celMR =(pr,I)=>pr*_cl(0.26,0.42,Math.pow(I,0.72));           // moon
 const _celSR =(mr,I)=>mr*_cl(0.12,0.22,Math.pow(I,0.72));           // satellite (flow page/control)
-const _celD  =I=>260+Math.pow(1-Math.max(0,Math.min(1,I)),1.25)*520;// planet distance from apex
+const _celD  =I=>360+Math.pow(1-Math.max(0,Math.min(1,I)),1.25)*760;// planet distance from apex
 function _celRand(seed){
   let h=2166136261>>>0, s=String(seed||'');
   for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
@@ -2691,9 +3084,9 @@ function _celPlanetPosition(p,idx,famMax){
   const lane=CEL_LANE_INDEX[p.lane]??0, mid=(CEL_LANES.length-1)/2;
   const importance=1-Math.max(0,Math.min(1,p.I||0));
   const slotJitter=(_celHash(p.id)-Math.PI)/Math.PI;
-  const x=Math.max(6200+famMax*1.05, 6400+importance*14500+idx*3600);
-  const y=((idx%3)-1)*820 + slotJitter*220;
-  const z=(lane-mid)*4600 + idx*1550 + slotJitter*620;
+  const x=Math.max(7800+famMax*1.28, 8200+importance*18500+idx*5200);
+  const y=((idx%3)-1)*980 + slotJitter*280;
+  const z=(lane-mid)*6200 + idx*2200 + slotJitter*820;
   return new THREE.Vector3(x,y,z);
 }
 
@@ -2933,8 +3326,8 @@ function _celDotsRebuild(){                                          // NASA-Eye
   if(_celDots){try{scene.remove(_celDots);_celDots.geometry.dispose();}catch(_){}}
   _celDotPos=new Float32Array(Math.max(1,_celBodies.length)*3);
   const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(_celDotPos,3));
-  _celDots=new THREE.Points(g,new THREE.PointsMaterial({color:0x9feaff,size:3.5,sizeAttenuation:false,
-    transparent:true,opacity:0.85,depthTest:true,depthWrite:false}));
+  _celDots=new THREE.Points(g,new THREE.PointsMaterial({color:0x9feaff,size:4.25,sizeAttenuation:false,
+    transparent:true,opacity:0.92,depthTest:true,depthWrite:false}));
   _celDots.frustumCulled=false; scene.add(_celDots);
 }
 const _celBounds={center:new THREE.Vector3(8200,0,0),radius:26000};
@@ -2949,15 +3342,15 @@ function _celUpdateMenuBounds(){
   }
   if(!box.isEmpty()){
     box.getCenter(_celBounds.center);
-    _celBounds.radius=Math.max(18000,box.getSize(new THREE.Vector3()).length()*0.62);
+    _celBounds.radius=Math.max(26000,box.getSize(new THREE.Vector3()).length()*0.70);
     try{celestialMenuCenter.copy(_celBounds.center);}catch(_){}
   }
   return _celBounds;
 }
 function _celExploreEye(){
   const b=_celUpdateMenuBounds();
-  const r=Math.max(32000,Math.min(95000,b.radius*1.42));
-  return b.center.clone().add(new THREE.Vector3(r*0.12,r*0.42,r*1.05));
+  const r=Math.max(42000,Math.min(130000,b.radius*1.62));
+  return b.center.clone().add(new THREE.Vector3(r*0.18,r*0.46,r*1.10));
 }
 /* live METEORITES — spawned/expired on every /metrics poll (alerts, newest GLBs); expire back to dust */
 function celHydrateLive(m){
@@ -3017,9 +3410,9 @@ function _menuFrameFor(b){
   b.updateWorldMatrix(true,false);
   const bp=b.getWorldPosition(new THREE.Vector3());
   const bs=b.userData.baseScale||420;
-  const dist=Math.max(2600,bs*4.8);
-  _menuCamOffset.set(-dist,Math.max(520,bs*.45),dist*.32);
-  return {pos:bp.clone().add(_menuCamOffset),tgt:bp.clone().add(new THREE.Vector3(0,bs*.08,0))};
+  const dist=Math.max(4200,bs*6.8);
+  _menuCamOffset.set(-dist,Math.max(820,bs*.62),dist*.52);
+  return {pos:bp.clone().add(_menuCamOffset),tgt:bp.clone().add(new THREE.Vector3(0,bs*.12,0))};
 }
 function _menuHighlight(b){
   if(!b)return;
@@ -4029,6 +4422,9 @@ addEventListener('pointerdown',engage,{once:true});
 tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();
 wireDockMove();              // §1 D: make the whole dock draggable to any position
 wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
+buildPanelTabs();            // tablet drawer tabs for collapsing panels
+initLowPowerMode();          // Battery API: disable blur when battery < 20%
+document.addEventListener('click',closeHamburger); // close hamburger menu on outside click
 loadSuggestions();setInterval(()=>{if(!_sdevBusy)loadSuggestions();},120000);   // self-dev bar: load + refresh every 2 min (server caches 10 min)
 loadGodrays();setInterval(loadGodrays,60000);   // FX self-check: announce the volumetric god-ray pass (accessible)
 setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';if(!uniReady)initUniverse();},950);_engaged=true;unlockAudio();
