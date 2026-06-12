@@ -220,13 +220,17 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #dock .dgrip:hover{opacity:1;text-shadow:0 0 10px var(--cy)}
 #dock .dgrip:active{cursor:grabbing}
 #dock.dragging{transition:none;box-shadow:0 18px 60px rgba(0,0,0,.6),0 0 60px rgba(41,231,255,.45)}
+#dock .dockRail{display:flex;gap:10px;align-items:flex-end;max-width:min(72vw,720px);overflow-x:auto;overflow-y:visible;
+  scroll-snap-type:x proximity;scroll-behavior:smooth;padding:4px 2px 2px;overscroll-behavior-x:contain}
+#dock .dockRail::-webkit-scrollbar{display:none}
+#dock .dockRail{scrollbar-width:none}
 /* when the user has pinned a custom position we drop the bottom/right anchors via inline left/top */
 #dock.moved{right:auto;bottom:auto}
 /* iOS-style tile: icon glyph on top + a persistent NAME label underneath (R4 "icon tile with a short
    NAME label under it"). The dock itself stays a drop-zone for DRAG-TO-PIN from the 3D world. */
 #dock .di{width:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;
   cursor:pointer;transition:transform .16s cubic-bezier(.22,1,.36,1),margin .16s;
-  transform-origin:bottom center;user-select:none;position:relative}
+  transform-origin:bottom center;user-select:none;position:relative;flex:0 0 54px;scroll-snap-align:center}
 #dock .di .gly{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
   font-size:23px;background:rgba(41,231,255,.07);border:1px solid transparent;transition:background .2s,border-color .2s}
 #dock .di:hover .gly{background:rgba(41,231,255,.16);border-color:var(--cy)}
@@ -241,7 +245,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 /* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
    row above the talk bar + caption band (clears #cmd ~96px top, #coreSay 108px) and centre it. */
 @media(max-width:820px){#dock{right:50%;transform:translateX(50%);bottom:128px;gap:6px}
-  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px}}
+  #dock .dockRail{max-width:min(68vw,420px);gap:6px}
+  #dock.hidden{transform:translateX(50%) translateY(14px)}#dock .di{width:40px;height:40px;font-size:20px;flex-basis:40px}}
 /* ---------- R5: crystal caption bubble + iridescent ring ---------- */
 #crystal{position:fixed;left:50%;bottom:152px;transform:translateX(-50%) translateY(12px) scale(.96);z-index:24;
   max-width:min(70vw,640px);padding:14px 22px;border-radius:22px;text-align:center;
@@ -1033,16 +1038,27 @@ async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to
   try{ await fetch('gpu/destroy?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
 }
 function renderDock(){const d=$('dock');if(!d)return;
-  // §1 D: keep the drag-grip handle; only clear the icon tiles
-  [...d.querySelectorAll('.di')].forEach(el=>el.remove());
+  // §1 D: keep the drag-grip handle; rebuild only the app carousel content
+  [...d.querySelectorAll('.dockRail')].forEach(el=>el.remove());
+  const rail=document.createElement('div');rail.className='dockRail';rail.id='dockRail';
+  d.appendChild(rail);
   DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;
     // iOS tile: icon glyph + a persistent NAME label under it. Pinned items get an unpin (×) chip.
     e.innerHTML='<div class=gly>'+it.ic+'</div><div class=nm>'+it.t+'</div>'+
       (it.pinned?'<span class=x title="Unpin">×</span>':'');
     e.onclick=()=>{try{it.fn();}catch(_){}};
     if(it.pinned){const xb=e.querySelector('.x');if(xb)xb.onclick=ev=>{ev.stopPropagation();unpinFromDock(it.k);};}
-    d.appendChild(e);});
-  wireDockMagnify(); wireDockDrag();}
+    rail.appendChild(e);});
+  wireDockCarousel(); wireDockMagnify(); wireDockDrag();}
+function wireDockCarousel(){const rail=$('dockRail');
+  if(!rail)return;
+  rail.onwheel=e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){rail.scrollLeft+=e.deltaY;e.preventDefault();}};
+  let down=false,sx=0,sl=0,moved=false,blockClick=false;
+  rail.onpointerdown=e=>{if(_dockMoving||e.target.closest('.x'))return;down=true;moved=false;sx=e.clientX;sl=rail.scrollLeft;rail.setPointerCapture&&rail.setPointerCapture(e.pointerId);};
+  rail.onpointermove=e=>{if(!down||_dockMoving)return;const dx=e.clientX-sx;if(Math.abs(dx)>4)moved=true;rail.scrollLeft=sl-dx;};
+  rail.onpointerup=e=>{down=false;if(moved){blockClick=true;e.preventDefault();e.stopPropagation();setTimeout(()=>{blockClick=false;},80);}};
+  rail.onpointercancel=()=>{down=false;};
+  rail.addEventListener('click',e=>{if(blockClick){e.preventDefault();e.stopPropagation();}},true);}
 function wireDockMagnify(){const items=[...$('dock').querySelectorAll('.di')];
   $('dock').onmousemove=ev=>{if(_dockMoving)return;items.forEach(el=>{const r=el.getBoundingClientRect();
     const dx=Math.abs(ev.clientX-(r.left+r.width/2));const s=Math.max(1,1.55-dx/120); // genie magnify
@@ -1072,7 +1088,7 @@ function _savePins(){try{
 let _dragI=null;
 function wireDockDrag(){[...$('dock').querySelectorAll('.di')].forEach(el=>{
   el.ondragstart=e=>{_dragI=+el.dataset.i;el.classList.add('drag');e.dataTransfer.effectAllowed='move';};
-  el.ondragend=()=>{el.classList.remove('drag');[...$('dock').children].forEach(x=>x.classList.remove('over'));};
+  el.ondragend=()=>{el.classList.remove('drag');[...$('dock').querySelectorAll('.di')].forEach(x=>x.classList.remove('over'));};
   el.ondragover=e=>{e.preventDefault();el.classList.add('over');};
   el.ondragleave=()=>el.classList.remove('over');
   el.ondrop=e=>{e.preventDefault();const to=+el.dataset.i;if(_dragI==null||_dragI===to)return;
