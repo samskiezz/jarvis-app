@@ -35,6 +35,29 @@ from urllib.parse import parse_qs, urlparse
 
 PORT = int(os.environ.get("DASHBOARD_PORT", "8095"))
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _inventory_counts() -> dict:
+    """Live single-source-of-truth counts from the full A-Z inventory CSV."""
+    counts = {"total": 0, "api_endpoints": 0, "services": 0, "frontend_functions": 0,
+              "overlays": 0, "dock_apps": 0, "db_tables": 0, "planes": 0, "modules": 0}
+    try:
+        csv_path = os.path.join(ROOT, "docs", "JARVIS_FULL_FEATURE_INVENTORY.csv")
+        import csv
+        with open(csv_path, encoding="utf-8") as f:
+            rows = list(csv.DictReader(f))
+        counts["total"] = len(rows)
+        counts["api_endpoints"] = sum(1 for r in rows if r.get("category") == "API Endpoint")
+        counts["services"] = sum(1 for r in rows if "Service" in (r.get("category") or "") or "Core Backend" in (r.get("category") or ""))
+        counts["frontend_functions"] = sum(1 for r in rows if r.get("category") == "Frontend / JARVIS Live" and r.get("type") == "javascript-function")
+        counts["overlays"] = sum(1 for r in rows if r.get("category") == "Frontend / Overlay or Mini-app")
+        counts["dock_apps"] = sum(1 for r in rows if r.get("category") == "Frontend / Dock App")
+        counts["db_tables"] = sum(1 for r in rows if r.get("category") == "Database Table")
+        counts["planes"] = sum(1 for r in rows if "Runtime Plane" in (r.get("category") or ""))
+        counts["modules"] = sum(1 for r in rows if "Runtime Module" in (r.get("category") or ""))
+    except Exception as e:  # noqa: BLE001
+        counts["error"] = str(e)
+    return counts
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)  # so `from server.services import ...` works for task/media endpoints
 BRAIN_DB = os.path.join(ROOT, "server/data/brain.db")
@@ -67,6 +90,87 @@ def _allow_backend_get_proxy(path: str) -> bool:
         if bare == prefix or bare.startswith(prefix + "/"):
             return True
     return False
+
+
+from server.services._http import external_json as _external_json
+
+
+def _higgsfield_run(body: dict) -> dict:
+    mode = body.get("mode", "api")
+    credential = (body.get("credential") or "").strip()
+    prompt = (body.get("prompt") or "").strip()
+    if not credential:
+        return {"ok": False, "error": "missing credential"}
+    if not prompt:
+        return {"ok": False, "error": "missing prompt"}
+    payload = {
+        "prompt": prompt,
+        "model": body.get("model", "dop-lite"),
+        "seed": body.get("seed", 42),
+        "motions_id": body.get("motions_id") or "generic",
+        "motions_strength": body.get("motions_strength", 0.7),
+        "input_images": [u.strip() for u in [body.get("image_url")] if u and str(u).strip()] or [],
+        "enhance_prompt": bool(body.get("enhance_prompt")),
+    }
+    url = "https://gateway.pixazo.ai/ai-model-api/v1/image-to-video"
+    headers: dict = {}
+    if mode == "api":
+        headers["Ocp-Apim-Subscription-Key"] = credential
+    else:
+        headers["Cookie"] = credential
+    return _external_json("POST", url, payload, headers)
+
+
+def _higgsfield_status(request_id: str, q: dict) -> dict:
+    credential = (q.get("credential", [""])[0] or "").strip()
+    mode = (q.get("mode", ["api"])[0] or "api").strip()
+    if not credential:
+        return {"ok": False, "error": "missing credential"}
+    url = f"https://gateway.pixazo.ai/ai-model-api/v2/requests/status/{request_id}"
+    headers: dict = {}
+    if mode == "api":
+        headers["Ocp-Apim-Subscription-Key"] = credential
+    else:
+        headers["Cookie"] = credential
+    return _external_json("GET", url, None, headers)
+
+
+def _tripo3d_run(body: dict) -> dict:
+    mode = body.get("mode", "api")
+    credential = (body.get("credential") or "").strip()
+    prompt = (body.get("prompt") or "").strip()
+    image_url = (body.get("image_url") or "").strip()
+    if not credential:
+        return {"ok": False, "error": "missing credential"}
+    if not prompt and not image_url:
+        return {"ok": False, "error": "missing prompt or image_url"}
+    ttype = "image_to_model" if image_url else "text_to_model"
+    payload: dict = {"type": ttype, "prompt": prompt, "model_version": body.get("model_version", "v2.5")}
+    if image_url:
+        payload["image_url"] = image_url
+    url = "https://api.tripo3d.ai/v2/openapi/task"
+    headers: dict = {"Content-Type": "application/json"}
+    if mode == "api":
+        headers["Authorization"] = f"Bearer {credential}"
+    else:
+        headers["Cookie"] = credential
+    return _external_json("POST", url, payload, headers)
+
+
+def _tripo3d_status(task_id: str, q: dict) -> dict:
+    credential = (q.get("credential", [""])[0] or "").strip()
+    mode = (q.get("mode", ["api"])[0] or "api").strip()
+    if not credential:
+        return {"ok": False, "error": "missing credential"}
+    url = f"https://api.tripo3d.ai/v2/openapi/task/{task_id}"
+    headers: dict = {}
+    if mode == "api":
+        headers["Authorization"] = f"Bearer {credential}"
+    else:
+        headers["Cookie"] = credential
+    return _external_json("GET", url, None, headers)
+
+
 def _control_token() -> str:
     """Stable control token — persisted so it survives dashboard restarts (otherwise every already-open
     tab goes stale and every Claude/task/control button returns 'unauthorized')."""
@@ -262,6 +366,7 @@ def _workers() -> list:
                         "status": e.get("status"), "cpu": m.get("cpu"),
                         "mem_mb": round((m.get("memory") or 0) / 1e6),
                         "restarts": e.get("restart_time"),
+                        "unstable_restarts": e.get("unstable_restarts") or 0,
                         "up_min": round((now - e.get("pm_uptime", now)) / 60000)})
         out.sort(key=lambda w: (not w["toggleable"], w["name"]))  # our daemons first
         return out
@@ -674,7 +779,7 @@ def _health(m: dict) -> dict:
     if "reachable" in b:
         if not b.get("reachable"):
             add("critical", "GPU brain offline", f"the Vast box ({b.get('endpoint')}) is unreachable",
-                "Enrichment + chat fall back to local models until it returns.")
+                "Open the Speed Optimiser to provision or tunnel to a brain GPU.")
         else:
             vpct = _pct(b.get("vram_used_gb"), b.get("vram_total_gb"))
             if vpct is not None and vpct >= 92:
@@ -688,11 +793,11 @@ def _health(m: dict) -> dict:
         add("warn", f"{len(down)} daemon{'s' if len(down) != 1 else ''} stopped",
             ", ".join((w.get("label") or w.get("name") or "?") for w in down[:6]),
             "Press Run, or use the toggles, to bring them back.")
-    storm = [w for w in workers if (w.get("restarts") or 0) >= 25]
+    storm = [w for w in workers if (w.get("unstable_restarts") or 0) >= 3]
     if storm:
         add("warn", "Daemon crash-looping",
-            ", ".join(f"{(w.get('label') or w.get('name'))} (↺{w.get('restarts')})" for w in storm[:5]),
-            "Open its logs — it keeps restarting.")
+            ", ".join(f"{(w.get('label') or w.get('name'))} (↺{w.get('unstable_restarts')})" for w in storm[:5]),
+            "Open the Speed Optimiser to reset crash counters and stabilise the service.")
 
     # PIPELINE STALL — producers online but NOTHING grew in the last hour = a silent gap (HR: surface it).
     growth = (m.get("learning") or {}).get("growth") or []
@@ -700,7 +805,7 @@ def _health(m: dict) -> dict:
         if not any((g.get("h") or 0) > 0 for g in growth):
             add("warn", "Knowledge pipeline idle",
                 "no new topics, notes or measurements in the last hour",
-                "Producers are up but adding nothing — check the ingestor/orchestrator logs.")
+                "Open the Speed Optimiser to wake producers and drain any stalled batches.")
 
     # BUDGET — economy mode means Claude is forced to the cheapest model.
     bud = m.get("budget") or {}
@@ -774,6 +879,7 @@ def _vitals() -> dict:
             "total": len(mine),
             "list": [{"name": w.get("name"), "label": w.get("label"), "status": w.get("status"),
                       "cpu": w.get("cpu"), "mem_mb": w.get("mem_mb"), "restarts": w.get("restarts"),
+                      "unstable_restarts": w.get("unstable_restarts") or 0,
                       "up_min": w.get("up_min")} for w in mine],
         },
         "budget": m.get("budget") or {},
@@ -1322,6 +1428,15 @@ def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
     return ""
 
 
+def _ensure_brain_tunnel():
+    """Keep a self-healing SSH tunnel open to a running Vast brain so local Ollama calls hit the GPU."""
+    try:
+        from server.services import gpu_instances as _GI
+        _GI.ensure_brain_tunnel()
+    except Exception:  # noqa: BLE001
+        pass
+
+
 _BRAIN_OK = {"ts": 0.0, "up": False}
 def _brain_reachable(timeout: float = 2.0) -> bool:
     """Is the Vast LLM brain ACTUALLY serving? A plain TCP check is a false-positive when the box is
@@ -1333,6 +1448,7 @@ def _brain_reachable(timeout: float = 2.0) -> bool:
     now = _t.time()
     if now - _BRAIN_OK["ts"] < 15:
         return _BRAIN_OK["up"]
+    _ensure_brain_tunnel()
     up = False
     try:
         base = JARVIS_LLM[:-3] if JARVIS_LLM.endswith("/v1") else JARVIS_LLM  # Ollama /api/tags lives off the ROOT, not /v1
@@ -1746,6 +1862,25 @@ def _system_brief() -> str:
 _SUGGEST: dict = {"ts": 0, "items": [], "by_id": {}, "generating": False, "source": "seed"}
 _SUGGEST_TTL = 600.0  # regenerate at most every 10 min (builds complete on the order of minutes)
 _SUGGEST_LOCK = threading.Lock()  # guards the background-generation flag so only one LLM call runs
+_SDEV_REVIEWS_PATH = os.path.join(ROOT, "server", "data", "sdev_reviews.json")
+
+
+def _load_sdev_reviews() -> dict:
+    try:
+        with open(_SDEV_REVIEWS_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _save_sdev_review(sid: str, decision: str) -> None:
+    try:
+        reviews = _load_sdev_reviews()
+        reviews[sid] = {"decision": decision, "ts": int(time.time())}
+        with open(_SDEV_REVIEWS_PATH, "w", encoding="utf-8") as f:
+            json.dump(reviews, f, indent=2)
+    except Exception:  # noqa: BLE001
+        pass
 
 _SUGGEST_SEED = [
     {"title": "Volumetric god-rays from the reactor",
@@ -1874,10 +2009,19 @@ def _suggestions(force: bool = False) -> dict:
             if not _SUGGEST["generating"]:  # double-checked: don't spawn a second generator
                 _SUGGEST["generating"] = True
                 threading.Thread(target=_suggest_regen, daemon=True).start()
+    reviews = _load_sdev_reviews()
+    visible = [s for s in _SUGGEST["items"] if s["id"] not in reviews]
+    # If everything has been reviewed, surface the seed list so the dock never empties.
+    if not visible:
+        visible = _suggest_fallback()
+        _SUGGEST["items"] = visible
+        _SUGGEST["by_id"] = {s["id"]: s for s in visible}
+        _SUGGEST["source"] = "seed-refill"
     return {"ts": int(_SUGGEST["ts"]), "ttl": int(_SUGGEST_TTL),
             "generating": bool(_SUGGEST["generating"]), "source": _SUGGEST["source"],
+            "reviews": len(reviews),
             "suggestions": [{"id": s["id"], "title": s["title"], "detail": s["detail"]}
-                            for s in _SUGGEST["items"]]}
+                            for s in visible]}
 
 
 def _proposal(sid: str) -> dict:
@@ -2031,18 +2175,19 @@ def _doctor() -> dict:
             "selftest_summary": _miniapp_selftest().get("summary") or {}}
 
 
-def _agent_run(command: str, wait_s: float = 8.0) -> dict:
-    """Plan + execute a natural-language command via the Agent OS core, AUTO-ONLY (only permission='auto'
-    steps run; anything destructive is left 'awaiting' rather than executed by a web POST — the token
-    authorises starting a run, not bypassing the permission engine). Returns the run record after a
-    short bounded wait so the caller gets results inline; the run continues streaming on the BUS either
-    way. Never raises."""
+def _agent_run(command: str, wait_s: float = 8.0, auto_approve: bool = False) -> dict:
+    """Plan + execute a natural-language command via the Agent OS core.
+
+    By default only permission='auto' steps execute; destructive steps are left
+    'awaiting'. Pass auto_approve=True (authenticated owner) to give the agent full
+    authority over the app: it will run 'confirm' steps as well (but still refuses
+    hard-deny patterns). Returns the run record after a short bounded wait. Never raises."""
     command = (command or "").strip()
     if not command:
         return {"ok": False, "error": "empty command"}
     try:
         from server import agent as _A
-        run_id = _A.CORE.execute(command, auto_only=True)
+        run_id = _A.CORE.execute(command, auto_only=not auto_approve)
         deadline = time.time() + max(0.0, min(wait_s, 25.0))
         run = _A.CORE.get_run(run_id)
         terminal = {"completed", "failed", "awaiting", "rejected", "unknown"}
@@ -2789,6 +2934,93 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             self._send(json.dumps(_godrays_selfcheck()).encode(), "application/json")
         elif self.path.startswith("/health"):
             self._send(b'{"ok":true}', "application/json")
+        elif self.path.startswith("/inventory/counts"):
+            self._send(json.dumps(_inventory_counts()).encode(), "application/json")
+        elif self.path.startswith("/higgsfield/status/"):
+            rid = self.path.split("/higgsfield/status/", 1)[1].split("?", 1)[0]
+            self._send(json.dumps(_higgsfield_status(rid, parse_qs(urlparse(self.path).query))).encode(), "application/json")
+        elif self.path.startswith("/tripo3d/status/"):
+            tid = self.path.split("/tripo3d/status/", 1)[1].split("?", 1)[0]
+            self._send(json.dumps(_tripo3d_status(tid, parse_qs(urlparse(self.path).query))).encode(), "application/json")
+        elif self.path.startswith("/debugger/diagnose"):
+            from server.services import system_debugger as SD
+            self._send(json.dumps({"ok": True, "issues": SD.diagnose()}).encode(), "application/json")
+        elif self.path.startswith("/optimizer/status"):
+            tid = self.path.split("?", 1)[0].split("/optimizer/status/", 1)[1] if "/optimizer/status/" in self.path else ""
+            from server.services import speed_optimizer as SO
+            if tid:
+                self._send(json.dumps(SO.task_status(tid)).encode(), "application/json")
+            else:
+                self._send(json.dumps(SO.latest_status()).encode(), "application/json")
+        elif self.path.startswith("/claw/status"):
+            from server.services import openclaw_manager as CM
+            self._send(json.dumps({"ok": True, **CM.status()}).encode(), "application/json")
+        elif self.path.startswith("/claw/logs"):
+            from server.services import openclaw_manager as CM
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                lines = max(10, min(200, int(q.get("lines", ["50"])[0] or 50)))
+            except Exception:  # noqa: BLE001
+                lines = 50
+            self._send(json.dumps({"ok": True, **CM.logs(lines)}).encode(), "application/json")
+        elif self.path.startswith("/settings/state"):
+            from server.services import system_settings as SS
+            self._send(json.dumps(SS.state()).encode(), "application/json")
+        elif self.path.startswith("/maintenance/log"):
+            from server.services import speed_optimizer as SO
+            self._send(json.dumps({"ok": True, "runs": SO.maintenance_log()}).encode(), "application/json")
+        elif self.path.startswith("/panickey/state"):
+            from server.services import panickey as PK
+            self._send(json.dumps(PK.state()).encode(), "application/json")
+        elif self.path.startswith("/panickey/events"):
+            from server.services import panickey as PK
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                limit = max(1, min(200, int(q.get("limit", ["40"])[0] or 40)))
+            except Exception:  # noqa: BLE001
+                limit = 40
+            self._send(json.dumps({"ok": True, "events": PK._events(limit)}).encode(), "application/json")
+        elif self.path.startswith("/panickey/calls"):
+            from server.services import panickey as PK
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                limit = max(1, min(200, int(q.get("limit", ["40"])[0] or 40)))
+            except Exception:  # noqa: BLE001
+                limit = 40
+            self._send(json.dumps({"ok": True, "calls": PK._calls(limit)}).encode(), "application/json")
+        elif self.path.startswith("/panickey/files"):
+            from server.services import panickey as PK
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                limit = max(1, min(200, int(q.get("limit", ["40"])[0] or 40)))
+            except Exception:  # noqa: BLE001
+                limit = 40
+            self._send(json.dumps({"ok": True, "files": PK._files(q.get("path", [""])[0], limit)}).encode(), "application/json")
+        elif self.path.startswith("/panickey/jobs"):
+            from server.services import panickey as PK
+            self._send(json.dumps({"ok": True, "jobs": PK._jobs()}).encode(), "application/json")
+        elif self.path.startswith("/panickey/stats"):
+            from server.services import panickey as PK
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                hours = max(1, min(168, int(q.get("hours", ["24"])[0] or 24)))
+            except Exception:  # noqa: BLE001
+                hours = 24
+            self._send(json.dumps({"ok": True, "stats": PK._call_stats(hours)}).encode(), "application/json")
+        elif self.path.startswith("/panickey/learning"):
+            from server.services import panickey as PK
+            self._send(json.dumps({"ok": True, **PK._learning()}).encode(), "application/json")
+        elif self.path.startswith("/panickey/rules"):
+            from server.services import panickey as PK
+            self._send(json.dumps({"ok": True, "rules": PK.rules()}).encode(), "application/json")
+        elif self.path.startswith("/panickey/audit"):
+            from server.services import panickey as PK
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                limit = max(1, min(500, int(q.get("limit", ["100"])[0] or 100)))
+            except Exception:  # noqa: BLE001
+                limit = 100
+            self._send(json.dumps({"ok": True, "audit": PK.audit_log(limit)}).encode(), "application/json")
         elif self.path.startswith("/legacy") or self.path.startswith("/v2"):
             self._send(self._tmpl("dashboard_v2.html").encode(), "text/html; charset=utf-8")
         else:
@@ -2823,12 +3055,16 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                     out = GI.launch_disposable(b.get("task", "nvidia-smi"), gpu_name=b.get("gpu"),
                                                max_price=b.get("max_price"), image=b.get("image"),
                                                label=b.get("label", "jarvis-task"))
-                elif sub == "start":   out = GI.set_state(b.get("id"), True)
+                elif sub == "start":
+                    out = GI.set_state(b.get("id"), True)
+                    GI.ensure_brain_tunnel()
                 elif sub == "stop":    out = GI.set_state(b.get("id"), False)
                 elif sub == "destroy": out = GI.safe_dispose(b.get("id"), force=bool(b.get("force")))   # recoup→destroy; force bypasses the recoup-refusal (user-authorised)
                 elif sub == "forcedestroy": out = GI.destroy_instance(b.get("id"))
                 elif sub == "copy":    out = GI.copy_instance(b.get("id"), max_price=b.get("max_price"))
-                elif sub == "provisionbrain": out = GI.provision_brain(max_price=b.get("max_price"))
+                elif sub == "provisionbrain":
+                    out = GI.provision_brain(max_price=b.get("max_price"))
+                    GI.ensure_brain_tunnel()
                 elif sub == "run":     out = GI.run_on_instance(b.get("id"), b.get("cmd", "nvidia-smi"))
                 elif sub == "sync":    out = GI.sync_results(b.get("id"), b.get("path", "/workspace/results"))
                 else: out = {"ok": False, "error": "unknown gpu action"}
@@ -3058,17 +3294,20 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                    .get(a, lambda: {"ok": False, "error": "bad action"}))()
             self._send(json.dumps(res).encode(), "application/json")
         elif self.path.startswith("/agent/run"):
-            # Agent OS: plan + execute a natural-language command via server.agent.core (auto-only;
-            # destructive steps stay 'awaiting', never auto-run from a web POST). Token-authed above.
+            # Agent OS: plan + execute a natural-language command via server.agent.core.
+            # auto=1 gives the agent full authority (runs confirm steps too) for the authenticated owner.
             cmd = q.get("q", [""])[0] or q.get("command", [""])[0] or q.get("prompt", [""])[0]
-            if not cmd:
+            auto = q.get("auto", [""])[0] == "1"
+            body = {}
+            if not cmd or not auto:
                 try:
                     ln = int(self.headers.get("Content-Length", 0) or 0)
                     body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
-                    cmd = body.get("q") or body.get("command") or body.get("prompt") or ""
+                    cmd = cmd or body.get("q") or body.get("command") or body.get("prompt") or ""
+                    auto = auto or bool(body.get("auto") or body.get("auto_approve"))
                 except Exception:  # noqa: BLE001
-                    cmd = ""
-            self._send(json.dumps(_agent_run(cmd)).encode(), "application/json")
+                    pass
+            self._send(json.dumps(_agent_run(cmd, auto_approve=auto)).encode(), "application/json")
         elif self.path.startswith("/upgrade"):
             # one-touch self-development: brief current system -> web research -> Claude executes.
             # When the key is a DYNAMIC AI suggestion id (sugN from /suggestions), fold that suggestion's
@@ -3089,6 +3328,98 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 pass
             res = TD.run_upgrade(key, brief, archon=q.get("archon", ["0"])[0] == "1")
             self._send(json.dumps(res).encode(), "application/json")
+        elif self.path.startswith("/suggestion/review"):
+            sid = (q.get("id", [""])[0] or "").strip()
+            decision = (q.get("decision", [""])[0] or "").strip().lower()
+            if sid and decision in ("approved", "declined"):
+                _save_sdev_review(sid, decision)
+                self._send(json.dumps({"ok": True, "id": sid, "decision": decision}).encode(), "application/json")
+            else:
+                self._send(json.dumps({"ok": False, "error": "need id and decision"}).encode(), "application/json")
+        elif self.path.startswith("/higgsfield/run"):
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            self._send(json.dumps(_higgsfield_run(body)).encode(), "application/json")
+        elif self.path.startswith("/tripo3d/run"):
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            self._send(json.dumps(_tripo3d_run(body)).encode(), "application/json")
+        elif self.path.startswith("/theme/generate"):
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            from server.services import theme_generator as TG
+            self._send(json.dumps({"ok": True, "theme": TG.generate_theme(body.get("prompt", ""), body.get("style"))}).encode(), "application/json")
+        elif self.path.startswith("/debugger/fix"):
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            from server.services import system_debugger as SD
+            res = SD.run_fix(body.get("id"), fix_name=body.get("fix"), fix_args=body.get("args"),
+                             auto_approve=bool(body.get("auto") or body.get("auto_approve")))
+            self._send(json.dumps(res).encode(), "application/json")
+        elif self.path.startswith("/debugger/auto"):
+            from server.services import system_debugger as SD
+            self._send(json.dumps(SD.run_auto_fixes(auto_approve=True)).encode(), "application/json")
+        elif self.path.startswith("/optimizer/run"):
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            from server.services import speed_optimizer as SO
+            self._send(json.dumps(SO.run_optimize(body)).encode(), "application/json")
+        elif self.path.startswith("/optimizer/auto"):
+            from server.services import speed_optimizer as SO
+            tid = SO.run_optimize({"resume": True}).get("task_id")
+            self._send(json.dumps({"ok": True, "task_id": tid, "note": "Optimisation started with automatic safe fixes."}).encode(), "application/json")
+        elif self.path.startswith("/claw/"):
+            from server.services import openclaw_manager as CM
+            sub = self.path.split("?", 1)[0].split("/claw/", 1)[1]
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            if sub == "restart":
+                self._send(json.dumps({"ok": True, **CM.restart_container()}).encode(), "application/json")
+            elif sub == "bridge/restart":
+                self._send(json.dumps({"ok": True, **CM.restart_bridge()}).encode(), "application/json")
+            elif sub == "gateway/restart":
+                self._send(json.dumps({"ok": True, **CM.restart_gateway()}).encode(), "application/json")
+            elif sub == "chat":
+                self._send(json.dumps({"ok": True, **CM.chat(body.get("message", ""))}).encode(), "application/json")
+            else:
+                self._send(b'{"ok":false,"error":"unknown claw action"}', "application/json")
+        elif self.path.startswith("/settings/action"):
+            from server.services import system_settings as SS
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            self._send(json.dumps(SS.run_action(body.get("action", ""), body.get("payload", {}))).encode(), "application/json")
+        elif self.path.startswith("/panickey/action"):
+            if q.get("token", [""])[0] != CONTROL_TOKEN:
+                self._send(b'{"ok":false,"error":"unauthorized"}', "application/json")
+                return
+            from server.services import panickey as PK
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            self._send(json.dumps(PK.run_action(body.get("action", ""), body.get("payload", {}))).encode(), "application/json")
         else:
             self._send(b'{"ok":false}', "application/json")
 
@@ -3124,9 +3455,38 @@ def _warm_canned():
     threading.Thread(target=run, daemon=True).start()
 
 
+def _start_maintenance_loop():
+    """Lightweight background maintenance: brain tunnel, disk cleanup, log trim — no visible UI."""
+    def loop():
+        from server.services import speed_optimizer as SO
+        interval = max(60, int(os.environ.get("MAINTENANCE_INTERVAL_SEC", "600")))
+        while True:
+            try:
+                time.sleep(interval)
+                SO.run_maintenance()
+            except Exception:  # noqa: BLE001
+                pass
+    threading.Thread(target=loop, daemon=True).start()
+
+
+def _start_panickey_guardian():
+    """PanicKey autonomous guardian — evaluates rules every minute and enforces safe reactions."""
+    def loop():
+        from server.services import panickey as PK
+        while True:
+            try:
+                time.sleep(60)
+                PK.guardian_tick()
+            except Exception:  # noqa: BLE001
+                pass
+    threading.Thread(target=loop, daemon=True).start()
+
+
 def main():
     global _SNAP
     _warm_canned()   # hot-cache the lifeline phrases in his voice (no lag, no female fallback)
+    _start_maintenance_loop()
+    _start_panickey_guardian()
     try:
         from server.services import feedback_bus as fb
         fb.install_global()

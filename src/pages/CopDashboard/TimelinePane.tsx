@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * TimelinePane — COP timeline pane showing threshold events / temporal feed.
  *

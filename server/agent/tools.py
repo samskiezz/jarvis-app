@@ -65,7 +65,7 @@ BRAIN_DB = os.path.join(_ROOT, "server", "data", "brain.db")
 STORAGE_ROOT = "/opt"
 
 # Box LLM / Ollama host — same default the dashboard uses.
-BOX = (os.environ.get("OLLAMA_HOST") or "http://211.72.13.201:41137").rstrip("/")
+BOX = (os.environ.get("OLLAMA_HOST") or "http://127.0.0.1:11434").rstrip("/")
 
 
 # --------------------------------------------------------------------------- #

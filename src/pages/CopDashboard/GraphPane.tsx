@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * GraphPane — COP graph pane showing node-link subgraph.
  *

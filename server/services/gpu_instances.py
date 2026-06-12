@@ -20,6 +20,7 @@ RESULTS_DIR = os.path.join(ROOT, "server", "data", "gpu_results")     # Hostinge
 STATE_PATH  = os.path.join(ROOT, "server", "data", "gpu_instances.json")
 SSH_KEY     = os.path.expanduser(os.environ.get("VAST_SSH_KEY", "~/.ssh/id_ed25519"))
 API_BASE    = "https://console.vast.ai/api/v0"
+_TUNNEL_PROC = None  # persistent SSH tunnel to a running brain's Ollama
 
 # default disposable image + on-start: CUDA + python, ready for compute; cheap + fast to boot.
 DEFAULT_IMAGE   = os.environ.get("GPU_IMAGE", "pytorch/pytorch:2.4.1-cuda12.1-cudnn9-runtime")
@@ -383,16 +384,92 @@ def provision_brain(max_price: float = None) -> dict:
     return r
 
 
+# ── self-healing SSH tunnel to the brain's Ollama (so JARVIS actually uses the GPU) ─────────────────
+def _ollama_up(host: str = "127.0.0.1", port: int = 11434, timeout: float = 2.0) -> bool:
+    """True if Ollama is answering with at least one model at the given endpoint."""
+    try:
+        req = urllib.request.Request(f"http://{host}:{port}/api/tags")
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            d = json.loads(r.read().decode() or "{}")
+        return isinstance(d.get("models"), list) and len(d["models"]) > 0
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _kill_tunnel():
+    """Stop any existing local Ollama tunnel."""
+    global _TUNNEL_PROC
+    try:
+        if _TUNNEL_PROC and _TUNNEL_PROC.poll() is None:
+            _TUNNEL_PROC.terminate()
+            try:
+                _TUNNEL_PROC.wait(timeout=3)
+            except Exception:  # noqa: BLE001
+                _TUNNEL_PROC.kill()
+    except Exception:  # noqa: BLE001
+        pass
+    _TUNNEL_PROC = None
+
+
+def ensure_brain_tunnel() -> dict:
+    """If a running brain instance exists, make sure its Ollama port is forwarded to local 127.0.0.1:11434.
+    This is what lets dashboard.py _brain_reachable() and _box() see the GPU as the JARVIS brain."""
+    global _TUNNEL_PROC
+    g = _guard()
+    if g:
+        return {**g, "tunnel": "no_key"}
+    # Fast path: tunnel already healthy
+    if _TUNNEL_PROC and _TUNNEL_PROC.poll() is None and _ollama_up():
+        return {"ok": True, "tunnel": "up", "local": "127.0.0.1:11434"}
+    # Find the best candidate: labelled jarvis-brain, else the biggest running instance
+    insts = list_instances().get("instances") or []
+    running = [i for i in insts if "running" in (i.get("status") or "")]
+    brain = next((i for i in running if (i.get("label") or "").startswith("jarvis-brain")), None)
+    if not brain and running:
+        running.sort(key=lambda i: -(i.get("num_gpus") or 1))
+        brain = running[0]
+    if not brain:
+        _kill_tunnel()
+        return {"ok": True, "tunnel": "no_brain", "local": "127.0.0.1:11434"}
+    # If Ollama is already up locally but the tunnel process died, just restart the tunnel.
+    # Otherwise kill any stale tunnel first.
+    _kill_tunnel()
+    host = brain.get("ssh_host")
+    port = brain.get("ssh_port")
+    if not host or not port:
+        return {"ok": False, "tunnel": "no_ssh", "brain": brain}
+    try:
+        proc = subprocess.Popen(
+            ["ssh", "-i", SSH_KEY, "-p", str(port), "-o", "StrictHostKeyChecking=no",
+             "-o", "UserKnownHostsFile=/dev/null", "-o", "ServerAliveInterval=30",
+             "-o", "ServerAliveCountMax=3", "-o", "ExitOnForwardFailure=yes",
+             "-N", "-L", f"127.0.0.1:11434:127.0.0.1:11434", f"root@{host}"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
+            start_new_session=True)
+        _TUNNEL_PROC = proc
+        # Wait briefly for the forward to come up
+        for _ in range(10):
+            if proc.poll() is not None:
+                break
+            if _ollama_up(timeout=1.5):
+                return {"ok": True, "tunnel": "up", "brain": brain, "local": "127.0.0.1:11434"}
+            time.sleep(0.5)
+        return {"ok": True, "tunnel": "starting", "brain": brain, "local": "127.0.0.1:11434"}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "tunnel": "error", "error": str(e)[:200]}
+
+
 # ── JARVIS brain: detect a running GPU instance serving an LLM (ollama), point JARVIS at it ──────────
 def brain_instance() -> dict:
     """Find a RUNNING instance that can host the LLM brain (the GPU box), so JARVIS can flip from local
-    replies to full AI. Returns the instance + its ollama endpoint hint."""
+    replies to full AI. Returns the instance + its ollama endpoint hint. Also keeps the SSH tunnel up."""
     g = _guard()
     if g: return g
     insts = list_instances().get("instances") or []
     running = [i for i in insts if "running" in (i.get("status") or "")]
+    tunnel = ensure_brain_tunnel()
     if not running:
-        return {"ok": True, "brain": None, "stopped": [i for i in insts if i.get("id")][:3]}
+        return {"ok": True, "brain": None, "stopped": [i for i in insts if i.get("id")][:3], "tunnel": tunnel}
     running.sort(key=lambda i: -(i.get("num_gpus") or 1))   # biggest box = the brain
     b = running[0]
-    return {"ok": True, "brain": b, "endpoint": (b.get("ssh_host"), b.get("ssh_port"))}
+    return {"ok": True, "brain": b, "endpoint": (b.get("ssh_host"), b.get("ssh_port")), "tunnel": tunnel}

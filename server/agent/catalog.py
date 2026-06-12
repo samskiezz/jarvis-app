@@ -40,6 +40,8 @@ import shutil
 import sqlite3
 import subprocess
 import time
+import urllib.request
+import urllib.error
 from typing import Any, Dict, List, Optional
 
 from . import memory as _memory
@@ -56,7 +58,7 @@ from .tools import (  # reuse the real helpers + registry
 # /opt sandbox root for the storage-scanning tools (the task scopes them to /opt).
 OPT_ROOT = "/opt"
 # Box host for the Ollama GPU/model status (same default the dashboard/core use).
-BOX = (os.environ.get("OLLAMA_HOST") or "http://211.72.13.201:41137").rstrip("/")
+BOX = (os.environ.get("OLLAMA_HOST") or "http://127.0.0.1:11434").rstrip("/")
 if BOX.endswith("/v1"):
     BOX = BOX[: -len("/v1")]
 
@@ -985,6 +987,129 @@ def register_catalog() -> List[str]:
             "required": ["text"]},
         tags=["accessibility", "a11y"], handler=_h_a11y_speak))
 
+    # --------------------------------------------------------------------------- #
+    # App-wide authority tools (read + control the whole JARVIS app)
+    # --------------------------------------------------------------------------- #
+    def _control_token() -> str:
+        t = os.environ.get("DASH_CONTROL_TOKEN") or os.environ.get("CONTROL_TOKEN", "")
+        if t:
+            return t
+        try:
+            with open(os.path.join(REPO_ROOT, "server", "data", ".control_token")) as f:
+                return f.read().strip()
+        except Exception:  # noqa: BLE001
+            return ""
+
+    def _dash_port() -> int:
+        try:
+            return int(os.environ.get("DASHBOARD_PORT", "8095"))
+        except Exception:  # noqa: BLE001
+            return 8095
+
+    def _api_call(method: str, path: str, body: Any = None, timeout: int = 30) -> Dict[str, Any]:
+        base = f"http://127.0.0.1:{_dash_port()}"
+        url = base + path
+        token = _control_token()
+        sep = "&" if "?" in path else "?"
+        if token and "token=" not in path:
+            url += sep + "token=" + token
+        data = json.dumps(body).encode() if body is not None else None
+        req = urllib.request.Request(url, data=data, method=method.upper(),
+                                     headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310 — local dashboard
+                raw = r.read().decode("utf-8", "replace")
+            return {"ok": True, "status": r.status, "json": json.loads(raw), "url": url.split("?")[0]}
+        except urllib.error.HTTPError as e:
+            return {"ok": False, "status": e.code, "error": (e.read().decode("utf-8", "replace")[:500]), "url": url.split("?")[0]}
+        except Exception as e:  # noqa: BLE001
+            return {"ok": False, "error": str(e)[:300], "url": url.split("?")[0]}
+
+    def _h_app_status(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+        ctx.progress(30, "fetching health report")
+        health = _api_call("GET", "/healthreport")
+        ctx.progress(70, "fetching metrics snapshot")
+        metrics = _api_call("GET", "/metrics")
+        return {
+            "health": health.get("json") or health,
+            "metrics_summary": {
+                "workers": len((metrics.get("json") or {}).get("workers", [])),
+                "learning": (metrics.get("json") or {}).get("learning", {}),
+            },
+            "summary": ("App health: " + str(((health.get("json") or {}).get("level") or "unknown"))),
+        }
+
+    def _h_app_api_call(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+        method = str(args.get("method") or "GET").upper()
+        path = str(args.get("path") or "")
+        body = args.get("body")
+        if not path.startswith("/"):
+            return {"ok": False, "error": "path must start with /"}
+        ctx.progress(20, f"{method} {path}")
+        res = _api_call(method, path, body)
+        ctx.progress(100, "done")
+        return res
+
+    def _h_pm2_control(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+        action = str(args.get("action") or "").lower()
+        service = str(args.get("service") or "").strip()
+        if action not in ("start", "stop", "restart", "reload"):
+            return {"ok": False, "error": "action must be start/stop/restart/reload"}
+        if not service or not all(ch.isalnum() or ch in "._-" for ch in service):
+            return {"ok": False, "error": "invalid service name"}
+        ctx.progress(30, f"pm2 {action} {service}")
+        res = _run(["pm2", action, service], timeout=60)
+        ctx.progress(100, f"rc={res['rc']}")
+        return {"ok": res["rc"] == 0, "rc": res["rc"], "stdout": res["stdout"], "stderr": res["stderr"]}
+
+    def _h_shell_exec(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+        cmd = str(args.get("command") or "").strip()
+        if not cmd:
+            return {"ok": False, "error": "empty command"}
+        bad = ("rm -rf /", "mkfs", ":(){:|:&};:", "> /dev/sda", "dd if=/dev/zero of=/dev/")
+        low = cmd.lower()
+        if any(b in low for b in bad):
+            return {"ok": False, "error": "refused: destructive pattern"}
+        ctx.progress(20, "executing")
+        res = _run(["bash", "-lc", cmd], timeout=int(args.get("timeout") or 30))
+        ctx.progress(100, "done")
+        return {"ok": res["rc"] == 0, "rc": res["rc"], "stdout": res["stdout"], "stderr": res["stderr"]}
+
+    register(Tool(
+        id="app.status", name="App status", risk="safe_read", timeout=15,
+        description="Read the live JARVIS health report + metrics snapshot.",
+        input_schema={"type": "object", "properties": {}},
+        tags=["app", "status"], handler=_h_app_status))
+
+    register(Tool(
+        id="app.api.call", name="App API call", risk="system_change", timeout=30,
+        description="Call any JARVIS dashboard endpoint (GET/POST) with optional JSON body. "
+                    "Use this to control runners, GPU, upgrades, etc.",
+        input_schema={"type": "object", "properties": {
+            "method": {"type": "string", "enum": ["GET", "POST"], "default": "GET"},
+            "path": {"type": "string", "description": "e.g. /control?action=restart&name=jarvis-dashboard"},
+            "body": {"type": "object"}},
+            "required": ["path"]},
+        tags=["app", "api"], handler=_h_app_api_call))
+
+    register(Tool(
+        id="pm2.control", name="PM2 control", risk="system_change", timeout=60,
+        description="Start, stop, restart or reload a PM2 service by name.",
+        input_schema={"type": "object", "properties": {
+            "action": {"type": "string", "enum": ["start", "stop", "restart", "reload"]},
+            "service": {"type": "string"}},
+            "required": ["action", "service"]},
+        tags=["pm2", "services"], handler=_h_pm2_control))
+
+    register(Tool(
+        id="shell.exec", name="Shell command", risk="system_change", timeout=60,
+        description="Run a shell command on the host (destructive patterns are refused).",
+        input_schema={"type": "object", "properties": {
+            "command": {"type": "string"},
+            "timeout": {"type": "integer", "default": 30}},
+            "required": ["command"]},
+        tags=["shell"], handler=_h_shell_exec))
+
     return [
         "server.disk.audit", "server.cpu.inspect", "server.logs.read",
         "docker.usage.inspect", "docker.prune.safe",
@@ -994,6 +1119,7 @@ def register_catalog() -> List[str]:
         "agent.memory.search", "agent.memory.write", "knowledge.stats",
         "accessibility.status", "accessibility.set_mode", "accessibility.text_scale",
         "accessibility.read_screen", "accessibility.captions", "accessibility.speak",
+        "app.status", "app.api.call", "pm2.control", "shell.exec",
     ]
 
 

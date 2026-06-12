@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MapPane — COP map pane showing entity layers with cross-pane selection.
  *

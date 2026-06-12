@@ -234,7 +234,7 @@ if __name__ == "__main__":
 
     print(f"smoke test -> {DB_PATH}")
 
-    rid = write("fact", "box_llm", "http://211.72.13.201:41137/v1", tags=["infra", "llm"])
+    rid = write("fact", "box_llm", "http://127.0.0.1:11434/v1", tags=["infra", "llm"])
     _check("write returns positive id", isinstance(rid, int) and rid > 0)
 
     jid = write("tool_result", "gpu.status", {"vram_gb": 41.4, "models": 3}, tags="gpu,box")
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     _check("tags normalized to comma string",
            bool(get(rid)) and get(rid)["tags"] == "infra,llm")
 
-    hits = search("211.72")
+    hits = search("127.0.0.1")
     _check("search finds by value substring",
            any(h["id"] == rid for h in hits))
 

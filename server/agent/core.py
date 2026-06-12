@@ -74,10 +74,16 @@ except ImportError:  # pragma: no cover — allow `python server/agent/core.py`
 # --------------------------------------------------------------------------- #
 # Box LLM configuration (same defaults the dashboard / tools use)
 # --------------------------------------------------------------------------- #
-BOX = (os.environ.get("OLLAMA_HOST") or "http://211.72.13.201:41137").rstrip("/")
+BOX = (os.environ.get("OLLAMA_HOST") or "http://127.0.0.1:11434").rstrip("/")
 # Chat completions base: BOX already ends in /v1 -> use as-is, else append /v1.
 _LLM_BASE = BOX if BOX.endswith("/v1") else BOX + "/v1"
-PLANNER_MODEL = os.environ.get("AGENT_PLANNER_MODEL") or "llama3.1:8b"
+PLANNER_MODEL = os.environ.get("AGENT_PLANNER_MODEL") or "qwen2.5:32b"
+
+# Use the tiered LLM seam for planning so the agent can use the GPU brain, Moonshot/Kimi, etc.
+try:
+    from ..services import tiered_llm as _T
+except Exception:  # noqa: BLE001
+    _T = None  # type: ignore[assignment]
 
 # Bound the plan size so a chatty model can't queue a hundred jobs.
 _MAX_STEPS = 8
@@ -210,7 +216,7 @@ class AgentCore:
     # Planning
     # ------------------------------------------------------------------ #
     def _llm_plan(self, command: str) -> Optional[Dict[str, Any]]:
-        """Ask the box LLM for a JSON plan. Returns a normalized plan or None."""
+        """Ask the tiered LLM seam for a JSON plan. Returns a normalized plan or None."""
         ids = self._registered_ids()
         if not ids:
             return None
@@ -227,34 +233,42 @@ class AgentCore:
             "AND gpu) include a step for each; never invent tools or args.\n\n"
             "Registered tools:\n" + catalog
         )
-        body = json.dumps({
-            "model": PLANNER_MODEL,
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": str(command)},
-            ],
-            "temperature": 0.1,
-            "max_tokens": 700,
-            "stream": False,
-        }).encode("utf-8")
-        url = _LLM_BASE + "/chat/completions"
-        try:
-            req = urllib.request.Request(
-                url, data=body,
-                headers={
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer ollama",
-                },
-                method="POST",
-            )
-            with urllib.request.urlopen(req, timeout=40) as r:  # noqa: S310 — fixed internal host
-                raw = r.read().decode("utf-8", "replace")
-        except Exception:  # noqa: BLE001
-            return None
-        try:
-            payload = json.loads(raw)
-            content = payload["choices"][0]["message"]["content"]
-        except Exception:  # noqa: BLE001
+        content = None
+        # PRIMARY: tiered seam (GPU/Moonshot/OpenAI/Anthropic), strong tier, JSON mode
+        if _T is not None:
+            try:
+                r = _T.complete(prompt=str(command), system=system, tier="strong", fmt="json",
+                                module="server/agent/core")
+                if r and r.get("ok"):
+                    content = (r.get("content") or "").strip()
+            except Exception:  # noqa: BLE001
+                content = None
+        # FALLBACK: direct box call if tiered seam unavailable
+        if not content:
+            body = json.dumps({
+                "model": PLANNER_MODEL,
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": str(command)},
+                ],
+                "temperature": 0.1,
+                "max_tokens": 700,
+                "stream": False,
+            }).encode("utf-8")
+            url = _LLM_BASE + "/chat/completions"
+            try:
+                req = urllib.request.Request(
+                    url, data=body,
+                    headers={"Content-Type": "application/json", "Authorization": "Bearer ollama"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req, timeout=20) as r:  # noqa: S310 — fixed internal host
+                    raw = r.read().decode("utf-8", "replace")
+                payload = json.loads(raw)
+                content = payload["choices"][0]["message"]["content"]
+            except Exception:  # noqa: BLE001
+                return None
+        if not content:
             return None
         parsed = _parse_llm_json(content)
         if parsed is None:
