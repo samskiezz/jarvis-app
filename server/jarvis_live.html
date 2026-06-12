@@ -743,7 +743,7 @@ const $=id=>document.getElementById(id), CT="__CTOKEN__";
    pinned clutter, expanded panels, or a hidden self-dev bar after the code is fixed. */
 (function(){
   try{
-    const ver='jarvis-celestial-v2-ui-reset-20260611-2';
+    const ver='jarvis-reference-theme-reset-20260612-1';
     if(localStorage.getItem('jarvisUiStateVersion')===ver)return;
     ['jarvisDockPos','jarvisDock','jarvisDockPins','gp:pInfra','gp:pPipe','gp:pKnow','gp:pFab','sdevMin'].forEach(k=>localStorage.removeItem(k));
     localStorage.setItem('jarvisUiStateVersion',ver);
