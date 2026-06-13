@@ -70,6 +70,7 @@ import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvestigationLinker';
 import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import AdaptiveThreatReport from '@/components/cinematic/AdaptiveThreatReport';
+import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -148,6 +149,7 @@ function App() {
             <KnowledgeInvestigationLinker />
             <SwarmRiskCoverageMap />
             <AdaptiveThreatReport />
+            <SkillContactGapAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
