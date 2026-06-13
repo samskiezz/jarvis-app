@@ -50,6 +50,18 @@ def library(limit: int = 5000) -> list:  # raised from 60 so /library returns th
         return []
 
 
+def save_library_item(kind: str, url: str, prompt: str = "", source: str = "") -> dict:
+    """Record an external asset URL in the media library without downloading it."""
+    if not url or not str(url).strip().startswith(("http://", "https://")):
+        return {"ok": False, "error": "invalid url"}
+    label = f"[{source}] {prompt}".strip() if source or prompt else url
+    try:
+        _record(kind, label[:300], url)
+        return {"ok": True, "file": url, "kind": kind}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:120]}
+
+
 def generate_image(prompt: str) -> str:
     key = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENAI_KEY")
     model = os.environ.get("OPENAI_IMAGE_MODEL", "gpt-image-2")

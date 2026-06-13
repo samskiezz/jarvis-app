@@ -3350,6 +3350,19 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             except Exception:  # noqa: BLE001
                 body = {}
             self._send(json.dumps(_tripo3d_run(body)).encode(), "application/json")
+        elif self.path.startswith("/library/save"):
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            from server.services import media_gen as MG
+            self._send(json.dumps(MG.save_library_item(
+                body.get("kind", "unknown"),
+                body.get("url", ""),
+                body.get("prompt", ""),
+                body.get("source", ""),
+            )).encode(), "application/json")
         elif self.path.startswith("/theme/generate"):
             try:
                 ln = int(self.headers.get("Content-Length", 0) or 0)
