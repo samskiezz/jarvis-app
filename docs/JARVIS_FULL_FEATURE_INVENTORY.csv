@@ -2916,6 +2916,7 @@ Frontend / Overlay or Mini-app,Mini App: Reports,mini-app,server/jarvis_live.htm
 Frontend / Overlay or Mini-app,Mini App: Alerts,mini-app,server/jarvis_live.html,ovAppSheet:alerts,Alerts list mini app
 Frontend / Overlay or Mini-app,Mini App: Cases,mini-app,server/jarvis_live.html,ovAppSheet:cases,Case management mini app
 Frontend / Overlay or Mini-app,Mini App: Assets,mini-app,server/jarvis_live.html,ovAppSheet:assets,Asset library status mini app
+Frontend / Overlay or Mini-app,Mini App: Boards,mini-app,server/jarvis_live.html,ovAppSheet:boards,Saved dashboards + live widget resolution mini app
 Frontend / Overlay or Mini-app,Mini App: Higgsfield,mini-app,server/jarvis_live.html,ovAppSheet:higgsfield,Higgsfield image-to-video mini app with API/user login
 Frontend / Overlay or Mini-app,Mini App: Tripo 3D,mini-app,server/jarvis_live.html,ovAppSheet:tripo3d,Tripo3D text/image-to-3D mini app with API/user login
 API Endpoint,POST /higgsfield/run,api-endpoint,server/dashboard.py,/higgsfield/run,Proxy Higgsfield image-to-video generation (API key or user session)

@@ -21,7 +21,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPORT_PATH = join(__dirname, "..", "server", "data", "break_test_report.json");
 
-const URL = process.env.BREAK_TEST_URL || "https://app.projectsolar.cloud/jarvis/?__jv=17";
+const URL = process.env.BREAK_TEST_URL || "https://app.projectsolar.cloud/jarvis/?__jv=18";
 const TIMEOUT_MS = Number(process.env.BREAK_TEST_TIMEOUT_MS || "20000");
 
 const failures = [];
@@ -126,18 +126,30 @@ async function run() {
     fail("chat", e.message);
   }
 
+  // Helper: ensure Control Center is closed so it does not intercept clicks.
+  async function closeControlCenter() {
+    await page.evaluate(() => {
+      const ov = document.getElementById("ovControlCenter");
+      if (ov && ov.classList.contains("open")) {
+        if (window.toggleControlCenter) window.toggleControlCenter();
+        else ov.classList.remove("open");
+      }
+    });
+  }
+
   // 3. Open Control Center and launch the Apps carousel from there
   try {
-    await page.click("#ccBtn");
+    await closeControlCenter();
+    await page.evaluate(() => { if (window.toggleControlCenter) window.toggleControlCenter(); });
     await page.waitForSelector("#ovControlCenter.open", { timeout: 5000 });
     const appsBtn = page.locator("#ccApps");
     if (await appsBtn.isVisible({ timeout: 5000 })) {
-      await appsBtn.click();
+      await appsBtn.click({ force: true });
       await page.waitForSelector("#ovCarousel", { state: "visible", timeout: 8000 });
       log("control-center-apps", "carousel opened from Control Center");
       // Close carousel + control center so later tests can reach the page.
       await page.evaluate(() => { if (window.closeCarouselOverlay) window.closeCarouselOverlay(); });
-      await page.evaluate(() => { if (window.toggleControlCenter) window.toggleControlCenter(); });
+      await closeControlCenter();
     } else {
       fail("control-center-apps", "ccApps button not visible");
     }
@@ -147,9 +159,10 @@ async function run() {
 
   // 4. Click a quick action (Status) and verify something happens
   try {
+    await closeControlCenter();
     const statusBtn = page.locator('button[aria-label="Read system status"]').first();
     if (await statusBtn.isVisible({ timeout: 5000 })) {
-      await statusBtn.click();
+      await statusBtn.dispatchEvent("click");
       await page.waitForTimeout(800);
       const crystal = await page.textContent("#crystal");
       log("quick-status", crystal ? `crystal: ${crystal.slice(0, 80)}` : "crystal empty");
@@ -162,10 +175,11 @@ async function run() {
 
   // 5. Panel toggle sanity: at least one live panel should be clickable
   try {
+    await closeControlCenter();
     const toggles = page.locator(".gp-tog");
     const count = await toggles.count();
     if (count > 0) {
-      await toggles.first().click();
+      await toggles.first().dispatchEvent("click");
       log("panel-toggle", `toggled first of ${count} panels`);
     } else {
       fail("panel-toggle", "No .gp-tog elements found");

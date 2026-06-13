@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='17';
+  var KEY='__jv',VER='18';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2310,6 +2310,7 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\balerts\b/.test(l)){openAppSheet('alerts');return true;}
   if(/\bopen\b.*\bcases\b/.test(l)){openAppSheet('cases');return true;}
   if(/\bopen\b.*\bassets\b/.test(l)){openAppSheet('assets');return true;}
+  if(/\bopen\b.*\b(boards|dashboards)\b/.test(l)){openAppSheet('boards');return true;}
   if(/\bopen\b.*\bhiggsfield\b/.test(l)){openAppSheet('higgsfield');return true;}
   if(/\bopen\b.*\btripo\b/.test(l)){openAppSheet('tripo3d');return true;}
   if(/\bopen\b.*\btheme\b/.test(l)){openAppSheet('theme');return true;}
@@ -2365,15 +2366,8 @@ function openUpgrades(){ if(flyToBodyByName('selfdev'))return;          // fly t
   // rebind _fn actions (showCard wired doAction; override with the upgrade calls)
   const acts=$('card').querySelector('.acts').querySelectorAll('.act');
   acts.forEach((el,i)=>el.onclick=()=>doUpgrade(ks[i]));}
-/* Agent OS — render the 17-tool registry palette (GET /agent/tools); pick → POST /agent/run (token-gated) */
-async function openAgentTools(){window.firePulseSpike&&window.firePulseSpike(0.5);
-  showCard({title:'🤖 Agent OS',subtitle:'loading tool registry…'});
-  try{const d=await(await fetch('agent/tools')).json();
-    const tools=(d&&d.tools)||[];
-    showCard({title:'🤖 Agent OS',subtitle:(tools.length||0)+' tools · '+((d&&d.status)||'ready'),
-      lines:tools.map(t=>'• '+(t.name||t.id||'tool')+(t.risk?'  ['+t.risk+']':'')+(t.desc?' — '+String(t.desc).slice(0,48):'')),
-      actions:tools.slice(0,8).map(t=>({label:'▸ '+((t.name||t.id||'tool').replace(/_/g,' ').slice(0,18)),kind:'_fn',fn:()=>runAgentTool(t.name||t.id)}))});
-  }catch(e){showCard({title:'🤖 Agent OS',subtitle:'registry unavailable',lines:['Could not reach /agent/tools.']});}}
+/* Agent OS — real mini-app surface via the generic sheet (GET /agent/tools) */
+function openAgentTools(){window.firePulseSpike&&window.firePulseSpike(0.5);openAppSheet('agent');}
 async function runAgentTool(name){if(!name)return;window.firePulseSpike&&window.firePulseSpike(0.7);
   jarvisSpeak('Running '+String(name).replace(/_/g,' ')+'.');
   try{await fetch('agent/run?token='+CT+'&auto=1&q='+encodeURIComponent(name),{method:'POST'});}catch(e){}
@@ -3011,28 +3005,10 @@ async function buildSuggestion(id,btn,param){
 // restore collapsed state
 (function(){try{if(localStorage.getItem('sdevMin')==='1'){const s=$('sdev');if(s){s.classList.add('min');$('sdevChevron').textContent='▴';}}}catch(_){}})();
 
-/* ================= System Vitals — proactive health score + alerts (in the card) ================= */
+/* ================= System Vitals — real mini-app surface via the generic sheet ================= */
 function openVitals(){
   try{ _showSystemLayer(); }catch(_){}   // drill-in: reveal the satellite (service) ring + meteor (alert) layer
-  const h=(_m&&_m.health)||{}, a=h.alerts||[], gz=h.gauges||{};
-  const ic={critical:'⛔',warn:'⚠',ok:'✓'};
-  const lines=a.length
-    ? a.map(x=>(ic[x.level]||'•')+'  '+x.title+' — '+x.detail+(x.hint?'   ·   '+x.hint:''))
-    : ['✓  All systems nominal — nothing needs your attention.'];
-  const g=(p)=>p==null?'—':p+'%';
-  const props=[
-    {k:'health score', v:(h.score!=null?h.score+' / 100':'—')},
-    {k:'disk',         v:g(gz.disk_pct)},
-    {k:'memory',       v:g(gz.mem_pct)},
-    {k:'cpu',          v:g(gz.cpu_pct)},
-    {k:'gpu VRAM',     v:g(gz.vram_pct)},
-    {k:'daemons up',   v:(gz.daemons_up!=null?gz.daemons_up+' / '+gz.daemons_total:'—')},
-  ];
-  showCard({title:'🩺 System Vitals',
-    subtitle:(h.level||'—').toUpperCase()+(h.summary?' · '+h.summary:''),
-    props:props, lines:lines, bar:h.score,
-    actions:[{label:'↻ Run all',kind:'task',arg:'run all'},
-             {label:'📄 dashboard.py',kind:'file',arg:'server/dashboard.py'}]});
+  openAppSheet('vitals');
 }
 
 /* ===== 🛰 LIVE TASKS — Mission Control ===== */
@@ -5962,6 +5938,7 @@ const MINI_APPS=[
   {id:'alerts',ic:'🚨',t:'Alerts',d:'Alert list'},
   {id:'cases',ic:'🧰',t:'Cases',d:'Case-management list'},
   {id:'assets',ic:'🎨',t:'Assets',d:'Asset library status'},
+  {id:'boards',ic:'📊',t:'Boards',d:'Saved dashboards + live widget resolution'},
   {id:'higgsfield',ic:'🎬',t:'Higgsfield',d:'Image-to-video via API key or user login'},
   {id:'tripo3d',ic:'🧊',t:'Tripo 3D',d:'Text/image-to-3D via API key or user login'},
   {id:'theme',ic:'🎨',t:'Theme',d:'Generate UI themes for bar, dock and panels'},
@@ -6125,6 +6102,7 @@ const APP_ENDPOINTS={
   doctor:'/doctor',budget:'/budget',brain:'/gpu/brain',architecture:'/v1/jarvis/architecture',
   memory:'/v1/jarvis/memory?user_id=anonymous&limit=20',inbox:'/v1/jarvis/notifications?user_id=anonymous&limit=20',
   datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',assets:'/v1/jarvis/assets/status',
+  boards:'/v1/dashboards',
   claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state'
 };
 
@@ -6237,7 +6215,7 @@ function renderSettingsServices(list){if(!list.length)return '<div class=as-empt
 function renderAppData(id,d){
   if(!d||typeof d!=='object')return '<div class=as-empty>No data</div>';
   if(id==='agent'){const tools=(d.tools||[]);return '<div class=as-empty>'+tools.length+' tools registered</div>'+tools.map(t=>'<div class=as-card><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}
-  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='library'||id==='suggestions'){
+  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='library'||id==='suggestions'||id==='boards'){
     let items=d.items||d.results||d.tasks||d.swarms||d.notifications||d.data||d.rows||[];
     if(!Array.isArray(items))items=[];
     if(!items.length)return '<div class=as-empty>No items</div>';
