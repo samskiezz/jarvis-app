@@ -74,6 +74,7 @@ import { isSwarmTaskQuery, buildSwarmTaskScript } from "@/components/cinematic/S
 import { isRiskRepQuery, buildRiskRepScript } from "@/components/cinematic/RiskReportMapper";
 import { isInvScenPlanQuery, buildInvScenPlanScript } from "@/components/cinematic/InvestmentScenarioPlanner";
 import { isDailyObjectivesQuery, buildDailyObjectivesScript } from "@/components/cinematic/DailyObjectivesPlanner";
+import { isOpsCoverageQuery, buildOpsCoverageScript } from "@/components/cinematic/OpsTaskCoverageChecker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -900,6 +901,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:daily-objectives-toggle"));
       try {
         const answer = await buildDailyObjectivesScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isOpsCoverageQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-coverage-toggle"));
+      try {
+        const answer = await buildOpsCoverageScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
