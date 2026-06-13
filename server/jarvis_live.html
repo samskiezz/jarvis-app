@@ -2328,6 +2328,7 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\basset\b/.test(l)||/\basset\b.*\bdna\b/.test(l)){openAppSheet('asset');return true;}
   if(/\bopen\b.*\britual\b/.test(l)){openAppSheet('ritual');return true;}
   if(/\bopen\b.*\bmode\b/.test(l)||/\bmode\b.*\bmixer\b/.test(l)){openAppSheet('mode');return true;}
+  if(/\bopen\b.*\bspec\b/.test(l)||/\bspec\b.*\bforge\b/.test(l)){openAppSheet('spec');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -5961,6 +5962,7 @@ const MINI_APPS=[
   {id:'asset',ic:'🧬',t:'AssetDNA',d:'Identity cards for repo assets'},
   {id:'ritual',ic:'🃏',t:'RitualDeck',d:'Repeatable routine launcher'},
   {id:'mode',ic:'🎛',t:'ModeMixer',d:'Behaviour mode profiles'},
+  {id:'spec',ic:'📐',t:'SpecForge',d:'Idea → build-ready spec'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6119,7 +6121,7 @@ const APP_ENDPOINTS={
   boards:'/v1/dashboards',
   claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state',forgekey:'/v1/forge/status',
   intent:'/v1/intent/list',decision:'/v1/decision/list',compress:'/v1/compress/list',asset:'/v1/asset/list',
-  ritual:'/v1/ritual/list',mode:'/v1/mode/active'
+  ritual:'/v1/ritual/list',mode:'/v1/mode/active',spec:'/v1/spec/list'
 };
 
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;body.innerHTML='<div class=as-empty>Loading…</div>';
@@ -6139,6 +6141,7 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='asset'){body.innerHTML=renderAssetSheet();loadAssetDNA();return;}
   if(_appSheetId==='ritual'){body.innerHTML=renderRitualSheet();loadRitualDeck();return;}
   if(_appSheetId==='mode'){body.innerHTML=renderModeSheet();loadModeMixer();return;}
+  if(_appSheetId==='spec'){body.innerHTML=renderSpecSheet();loadSpecForge();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -6418,6 +6421,21 @@ function renderModeSheet(){return `<div class=as-form>
 async function loadModeMixer(){const aOut=$('modeActive'),pOut=$('modeList');if(!aOut||!pOut)return;try{const ar=await fetch('/v1/mode/active');const ad=await ar.json();const pr=await fetch('/v1/mode/profiles');const pd=await pr.json();const active=ad.profile||{};aOut.innerHTML='<div class=as-card><b>Active mode:</b> '+escapeHtml(active.name||ad.active_id)+'<br><span style="font-size:11px;color:var(--text-dim)">detail '+escapeHtml(active.detail)+' · cost '+escapeHtml(active.cost)+' · safety '+escapeHtml(active.safety)+' · autonomy '+escapeHtml(String(active.autonomy))+'</span></div>';const presets=Object.values(pd.presets||{});pOut.innerHTML=presets.map(p=>'<div class=as-card style="display:flex;justify-content:space-between;align-items:center"><span><b>'+escapeHtml(p.name)+'</b><br><span style="font-size:10px;color:var(--text-dim)">'+escapeHtml(p.detail)+' · '+escapeHtml(p.cost)+' · '+escapeHtml(p.safety)+'</span></span><button class=as-run onclick="modeApply(\''+escapeHtml(p.id)+'\')">Apply</button></div>').join('');}catch(e){aOut.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function modeApply(id){try{const r=await fetch('/v1/mode/apply/'+encodeURIComponent(id)+'?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Mode applied':'Failed');loadModeMixer();}catch(e){showInplaceAlert('Mode error: '+e);}}
 async function modeMix(){const base=$('modeBase'),det=$('modeDetail'),cost=$('modeCost'),safety=$('modeSafety');if(!base)return;try{const body={base_id:base.value,overrides:{detail:det.value,cost:cost.value,safety:safety.value}};const r=await fetch('/v1/mode/mix?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();showInplaceAlert(d.ok?'Mixed mode applied':'Failed');loadModeMixer();}catch(e){showInplaceAlert('Mode mix error: '+e);}}
+
+/* ================ SpecForge ================ */
+function renderSpecSheet(){return `<div class=as-form>
+  <label>Rough idea</label>
+  <textarea id=specIdea style="min-height:80px" placeholder="Build a mini app that…"></textarea>
+  <label>Context (optional)</label>
+  <input id=specContext placeholder="Existing features, constraints, links…">
+  <button class=as-run onclick="specCreate()" style="margin:8px 0">Generate spec</button>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=tbtn onclick="loadSpecForge()">🔄 Specs</button></div>
+  <div id=specList><div class=as-empty>Loading specs…</div></div>
+</div>`;}
+async function specCreate(){const idea=$('specIdea'),ctx=$('specContext');if(!idea||!idea.value.trim())return;try{const r=await fetch('/v1/spec/create?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idea:idea.value.trim(),context:ctx?ctx.value.trim():''})});const d=await r.json();showInplaceAlert(d.ok?'Spec generated':'Failed');if(d.ok){idea.value='';if(ctx)ctx.value='';loadSpecForge();}}catch(e){showInplaceAlert('Spec error: '+e);}}
+async function loadSpecForge(){const out=$('specList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/spec/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No specs</div>';return;}out.innerHTML=items.map(s=>{const fm=s.frontmatter||{};const st=fm.structured||{};return '<div class=as-card><b>'+escapeHtml(s.title)+'</b> <span style="color:var(--text-dim)">'+(fm.status||'draft')+'</span><br><span style="font-size:11px">'+escapeHtml(st.description||(s.body_md||'').slice(0,160))+'</span><div class=as-row-inline style="margin-top:6px"><button class=tbtn onclick="specView(\''+escapeHtml(s.id)+'\')">View</button><button class=as-run onclick="specApprove(\''+escapeHtml(s.id)+'\')">Approve</button></div><div id=specOut_'+s.id+'></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function specView(id){const out=$('specOut_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/spec/'+encodeURIComponent(id));const d=await r.json();const st=((d.spec||{}).frontmatter||{}).structured||{};let html='<div style="font-size:11px;margin-top:6px">';['screens','controls','backend_routes','data_model','events','guardrails','tests','mvp','future','clashes'].forEach(sec=>{const arr=st[sec];if(arr&&arr.length){html+='<div><b>'+escapeHtml(sec.replace(/_/g,' '))+'</b>'+arr.map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';}});html+='</div>';out.innerHTML=html||'<div class=as-empty>No structured output</div>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function specApprove(id){try{const r=await fetch('/v1/spec/'+encodeURIComponent(id)+'/approve?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Approved':'Failed');loadSpecForge();}catch(e){showInplaceAlert('Spec approve error: '+e);}}
 
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>

@@ -51,6 +51,7 @@ from .routes import thought_compressor as thought_compressor_routes
 from .routes import asset_dna as asset_dna_routes
 from .routes import ritual_deck as ritual_deck_routes
 from .routes import mode_mixer as mode_mixer_routes
+from .routes import spec_forge as spec_forge_routes
 from .routes import functions as functions_routes
 from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
@@ -318,6 +319,7 @@ def create_app() -> FastAPI:
     app.include_router(asset_dna_routes.router)
     app.include_router(ritual_deck_routes.router)
     app.include_router(mode_mixer_routes.router)
+    app.include_router(spec_forge_routes.router)
     app.include_router(jarvis_os_routes.router)
     app.include_router(jarvis_ontology_routes.router)
     app.include_router(jarvis_er_routes.router)
