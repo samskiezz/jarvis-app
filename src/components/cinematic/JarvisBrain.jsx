@@ -65,6 +65,7 @@ import { isAthrepQuery, buildAthrepScript } from "@/components/cinematic/Adaptiv
 import { isSkillContactQuery, buildSkillContactScript } from "@/components/cinematic/SkillContactGapAdvisor";
 import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "@/components/cinematic/GraphAnomalyDetector";
 import { isMissionReadyQuery, buildMissionReadyScript } from "@/components/cinematic/MissionReadinessIndex";
+import { isInvScenarioQuery, buildInvScenarioScript } from "@/components/cinematic/InvestigationScenarioRecommender";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -786,6 +787,17 @@ export default function JarvisBrain() {
     if (isMissionReadyQuery(q)) {
       try {
         const answer = await buildMissionReadyScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isInvScenarioQuery(q)) {
+      try {
+        const answer = await buildInvScenarioScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
