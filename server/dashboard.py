@@ -3525,11 +3525,34 @@ def _start_panickey_guardian():
     threading.Thread(target=loop, daemon=True).start()
 
 
+def _start_brain_watch():
+    """SALVAGE WATCHER (always-on): continuously bring any provisioned jarvis-brain box fully online —
+    wait for it to become reachable, open the tunnel, start Ollama — and keep it healthy, WITHOUT ever
+    disposing it. Cheap when the brain is already up (ensure_brain_tunnel short-circuits on a fast
+    /api/tags check); only does real work while a box is booting or has dropped. This is what makes a
+    GPU instance 'just work' after provisioning, and self-heal if Vast restarts/reassigns it."""
+    def loop():
+        from server.services import gpu_instances as GI
+        while True:
+            delay = 45
+            try:
+                r = GI.ensure_brain_tunnel()
+                t = (r or {}).get("tunnel") if isinstance(r, dict) else None
+                if t == "up":            delay = 60     # healthy — relax
+                elif t == "no_brain":    delay = 300    # nothing provisioned — don't hammer the Vast API
+                else:                    delay = 20      # onboarding/healing — check often
+            except Exception:  # noqa: BLE001
+                delay = 60
+            time.sleep(delay)
+    threading.Thread(target=loop, daemon=True).start()
+
+
 def main():
     global _SNAP
     _warm_canned()   # hot-cache the lifeline phrases in his voice (no lag, no female fallback)
     _start_maintenance_loop()
     _start_panickey_guardian()
+    _start_brain_watch()
     try:
         from server.services import feedback_bus as fb
         fb.install_global()

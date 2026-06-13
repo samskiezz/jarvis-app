@@ -429,8 +429,8 @@ def provision_brain_verified(tier: str = "basic", attempts: int = 4, max_price: 
         iid = r.get("id")
         host = port = None
         ok = False
-        for _ in range(30):                       # wait up to ~2.5 min for running + reachable SSH
-            time.sleep(5)
+        for _ in range(72):                       # wait up to ~6 min — Vast boxes can take a few minutes
+            time.sleep(5)                         # after "running" for the SSH port to actually come live
             inst = next((i for i in (list_instances().get("instances") or []) if i.get("id") == iid), None)
             if not inst:
                 continue
@@ -533,6 +533,16 @@ def ensure_brain_tunnel() -> dict:
         running.sort(key=lambda i: -(i.get("num_gpus") or 1))
         brain = running[0]
     if not brain:
+        # No RUNNING brain — but if a stopped jarvis-brain box exists, START it (disposable safety-layer
+        # auto-restart) and let the next watch tick tunnel to it once it's up. Never disposes here.
+        stopped = next((i for i in insts if (i.get("label") or "").startswith("jarvis-brain")
+                        and "running" not in (i.get("status") or "")), None)
+        if stopped:
+            try:
+                set_state(stopped.get("id"), True)
+            except Exception:  # noqa: BLE001
+                pass
+            return {"ok": True, "tunnel": "starting_box", "brain": stopped, "local": "127.0.0.1:11434"}
         return {"ok": True, "tunnel": "no_brain", "local": "127.0.0.1:11434"}
     host = brain.get("ssh_host")
     port = brain.get("ssh_port")
