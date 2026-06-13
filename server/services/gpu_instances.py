@@ -380,6 +380,10 @@ echo BRAIN_READY
 # persist on the VPS, because every GPU box is a DISPOSABLE safety layer.
 BRAIN_OLLAMA_ONSTART = r"""#!/bin/bash
 export HOME=/root
+# Pin the brain to GPU0 (override with BRAIN_GPU). On a single-GPU box this is a no-op; on a multi-GPU
+# box it leaves GPU1+ entirely free for the voice clone + embeddings + parallel agent jobs (the pinned
+# architecture). The always-on brain models (8b/14b/32b-q4) each fit on one card, so one GPU is enough.
+export CUDA_VISIBLE_DEVICES=${BRAIN_GPU:-0}
 pgrep -x ollama >/dev/null 2>&1 || (OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &)
 for i in $(seq 1 30); do curl -sf -m2 http://127.0.0.1:11434/api/tags >/dev/null 2>&1 && break; sleep 2; done
 for m in %s; do ollama pull "$m"; done
@@ -391,12 +395,13 @@ echo BRAIN_READY
 BRAIN_TIERS = {
     "basic":    {"min_vram_gb": 12, "max_price": 0.06, "disk_gb": 40, "models": "llama3.1:8b nomic-embed-text"},
     "standard": {"min_vram_gb": 24, "max_price": 0.20, "disk_gb": 60, "models": "qwen2.5:14b llama3.1:8b nomic-embed-text"},
-    "heavy":    {"min_vram_gb": 48, "max_price": 0.60, "disk_gb": 80, "models": "qwen2.5:32b llama3.1:8b nomic-embed-text"},
+    "heavy":    {"min_vram_gb": 48, "max_price": 0.60, "disk_gb": 80, "models": "qwen2.5:14b qwen2.5:32b llama3.1:8b nomic-embed-text"},
 }
 
 
 def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: float = None,
-                    models: str = None, prefer_direct: bool = True, exclude_machines=None) -> dict:
+                    models: str = None, prefer_direct: bool = True, exclude_machines=None,
+                    gpu_name: str = None) -> dict:
     """Provision a DISPOSABLE brain box that boots straight into a working Ollama server — no manual SSH,
     no `curl|sh` install (uses the official ollama image). Default tier 'basic' = cheapest ~12GB box for
     llama3.1:8b. Labelled jarvis-brain so ensure_brain_tunnel() auto-discovers, tunnels, and keeps Ollama
@@ -408,7 +413,7 @@ def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: f
     vram = float(min_vram_gb or t["min_vram_gb"])
     cap = float(max_price or t["max_price"])
     mdl = models or t["models"]
-    off = cheapest_offer(max_price=cap, min_vram_gb=vram, require_direct=prefer_direct, exclude_machines=exclude_machines)
+    off = cheapest_offer(gpu_name=gpu_name, max_price=cap, min_vram_gb=vram, require_direct=prefer_direct, exclude_machines=exclude_machines)
     if not off.get("ok"):
         return off
     r = create_instance(off["offer"]["id"], image=os.environ.get("BRAIN_IMAGE", "ollama/ollama"),
@@ -419,7 +424,7 @@ def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: f
     return r
 
 
-def provision_brain_verified(tier: str = "basic", attempts: int = 4, max_price: float = None) -> dict:
+def provision_brain_verified(tier: str = "basic", attempts: int = 4, max_price: float = None, gpu_name: str = None) -> dict:
     """Provision a brain on a REACHABLE box. Vast assigns the proxy host (sshN.vast.ai) only AFTER rental
     and some are blocked from this VPS (e.g. ssh5 times out), which silently leaves the brain unreachable.
     So: create a direct-capable box, wait for it to boot, TEST SSH reachability, and if it's unreachable
@@ -430,7 +435,7 @@ def provision_brain_verified(tier: str = "basic", attempts: int = 4, max_price: 
     tried = []
     failed = set()                                # machine_ids that turned out unreachable — never re-pick them
     for n in range(max(1, attempts)):
-        r = provision_brain(tier=tier, max_price=max_price, prefer_direct=True, exclude_machines=failed)
+        r = provision_brain(tier=tier, max_price=max_price, prefer_direct=True, exclude_machines=failed, gpu_name=gpu_name)
         if not r.get("ok"):
             tried.append({"attempt": n + 1, "error": r.get("error")}); break   # no more candidate machines
         iid = r.get("id")
