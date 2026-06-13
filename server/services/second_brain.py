@@ -49,7 +49,7 @@ _DEFAULT_DB = os.path.join(
 )
 
 # Valid note kinds (kept liberal — anything else degrades to 'concept').
-KINDS = ("entity", "concept", "project", "daily", "log", "synthesis", "decision", "task",
+KINDS = ("entity", "concept", "project", "daily", "log", "synthesis", "decision", "task", "intent",
          # LLM self-enrichment note kinds (document intelligence) — preserved so the UI
          # can surface them distinctly instead of collapsing them into "concept".
          "document_summary", "document_entities", "document_relations", "document_questions")
