@@ -68,6 +68,15 @@ async def _build_system_prompt(page_context: str | None = None, query: str = "")
             persona = persona.replace("{ontology}", _ontology_summary(30))
         parts.append(persona)
 
+    # 1b. Active behaviour mode (ModeMixer) — shapes tone/detail/safety/tool-use.
+    try:
+        from ..services import mode_mixer as _mm
+        _md = _mm.prompt_directive()
+        if _md:
+            parts.append(_md)
+    except Exception:  # noqa: BLE001
+        pass
+
     # 2. RAG grounding
     if query:
         try:

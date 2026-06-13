@@ -51,6 +51,10 @@ module.exports = {
         KIMI_MODEL: 'llama3.1:8b',
         // The GPU-busy research autopilot also runs in the WORKER, not the API (robust API boot).
         LLM_AUTOPILOT_ENABLE: 'false',
+        // Conservative autopilot: proactive notifications are the one always-on essential
+        // (cheap, rule-based). The optional LLM synthesis stays off unless PROACTIVE_LLM_SUMMARY=1.
+        PROACTIVE_LOOP_ENABLED: 'true',
+        PROACTIVE_LOOP_INTERVAL: '180',
       },
     },
     {

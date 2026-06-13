@@ -125,6 +125,40 @@ def run_status(run_id: str) -> dict[str, Any]:
     return {"ok": True, "run": run, "routine": routine}
 
 
+# Steps whose visible effect is handled by the frontend (open a sheet, read aloud).
+_UI_ACTIONS = {"vitals", "status_speak", "open_tasks", "open_active", "speak", "open_app", "open"}
+
+
+def _dispatch_action(action: str) -> dict[str, Any]:
+    """Turn a step's ``action`` string into a real, safe effect and return a result
+    record. UI actions return a marker the frontend acts on; system actions reuse the
+    existing lifeline-guarded handlers (mode_mixer / panickey). Anything not in the
+    allow-list is recorded only — never executed — so a routine can never run an
+    unknown or unsafe operation. Never raises; never blocks on slow pm2 calls."""
+    a = (action or "").strip().lower()
+    if not a:
+        return {"result": "done"}
+    if a in _UI_ACTIONS:
+        return {"result": "done", "ui": a}
+    if a.startswith("mode_"):
+        try:
+            from . import mode_mixer as MM
+            return {"result": "done", "effect": MM.apply(a[5:])}
+        except Exception as e:  # noqa: BLE001
+            return {"result": "error", "error": str(e)[:160]}
+    if a in ("optimise", "optimize"):
+        # run_optimizer spawns a background thread and returns immediately.
+        try:
+            from . import panickey as PK
+            return {"result": "done", "effect": PK.run_action("run_optimizer")}
+        except Exception as e:  # noqa: BLE001
+            return {"result": "error", "error": str(e)[:160]}
+    # Destructive/expensive actions (pause_nonessential, stop_workers, snapshot, …)
+    # are intentionally NOT auto-executed: they stay gated behind the routine's
+    # destructive-step approval and are recorded only.
+    return {"result": "logged", "note": "no auto-handler (gated / record-only)"}
+
+
 def advance_run(run_id: str, action: str = "next") -> dict[str, Any]:
     """Advance, skip, or stop a run. Pauses on destructive steps unless safe=False."""
     s = _state()
@@ -158,7 +192,8 @@ def advance_run(run_id: str, action: str = "next") -> dict[str, Any]:
             run["paused_on"] = idx
             mas.save(APP, s)
             return {"ok": True, "run": run, "needs_approval": True, "step": step}
-        run["completed_steps"].append({"step": idx, "result": "done", "action": step.get("action")})
+        res = _dispatch_action(step.get("action"))
+        run["completed_steps"].append({"step": idx, "action": step.get("action"), **res})
         idx += 1
         run["paused_on"] = None
 

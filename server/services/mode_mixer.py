@@ -131,3 +131,34 @@ def mix(base_id: str, overrides: dict[str, Any]) -> dict[str, Any]:
     s["activated_at"] = int(time.time())
     mas.save(APP, s)
     return {"ok": True, "active": get_active()}
+
+
+def prompt_directive() -> str:
+    """A concise behaviour instruction derived from the ACTIVE mode profile, for
+    injection into the chat/agent system prompt so the chosen mode actually shapes
+    Jarvis's replies (tone/detail/safety/tool-use). Returns "" when nothing
+    meaningful is set, so callers can append it unconditionally. Never raises."""
+    try:
+        active = get_active()
+        p = active.get("profile") or {}
+        name = p.get("name") or active.get("active_id") or "Default"
+        bits: list[str] = []
+        if p.get("tone"):
+            bits.append(f"tone {p['tone']}")
+        if p.get("detail") == "low" or p.get("speed") == "fast":
+            bits.append("be brief and get to the point")
+        elif p.get("detail") == "high":
+            bits.append("be thorough and explain your reasoning")
+        if p.get("tool_use") == "ask":
+            bits.append("ask before any action with side effects")
+        elif p.get("tool_use") == "limited":
+            bits.append("avoid running tools unless clearly needed")
+        if p.get("safety") in ("high", "very_high"):
+            bits.append("prioritise safety and double-check destructive steps")
+        if p.get("voice_style"):
+            bits.append(f"voice style {p['voice_style']}")
+        if not bits:
+            return ""
+        return "\n\n[ACTIVE MODE] " + name + " — " + "; ".join(bits) + "."
+    except Exception:  # noqa: BLE001
+        return ""

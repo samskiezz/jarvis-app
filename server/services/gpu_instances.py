@@ -112,7 +112,7 @@ def list_instances() -> dict:
         return {"ok": False, "error": str(e)[:200]}
 
 
-def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int = 1, min_vram_gb: float = 0) -> dict:
+def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int = 1, min_vram_gb: float = 0, require_direct: bool = False) -> dict:
     """Cheapest reliable offer that ALSO has enough total VRAM for the task (min_vram_gb). Auto-scales to
     multi-GPU if a single card can't hold it, so we never assign too little VRAM. gpu_ram is per-card MB."""
     g = _guard()
@@ -128,6 +128,8 @@ def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int 
     for ng in (1, 2, 4):
         q = {"verified": {"eq": True}, "rentable": {"eq": True}, "num_gpus": {"eq": ng},
              "dph_total": {"lte": cap}, "order": [["dph_total", "asc"]], "type": "on-demand", "limit": 64}
+        if require_direct:
+            q["direct_port_count"] = {"gte": 2}   # open ports = reliable DIRECT SSH (the sshN proxy can be blocked from our VPS)
         if gpu_name:
             q["gpu_name"] = {"eq": gpu_name}
         try:
@@ -367,21 +369,83 @@ echo BRAIN_READY
 """ % BRAIN_MODELS
 
 
-def provision_brain(max_price: float = None) -> dict:
-    """Create the PERSISTENT brain box: cheapest box matching the 3090×4-class brain profile (48GB VRAM,
-    strong DL-perf, modern CUDA). The on-start bootstrap installs Ollama, binds it to 0.0.0.0:11434, and
-    pulls the model ladder so the box comes up as a working brain with no manual setup. User-initiated
-    (it bills), labelled jarvis-brain."""
+# Reliable brain bootstrap via the OFFICIAL ollama image (Ollama PRE-INSTALLED — no `curl|sh` install
+# that can fail/stall on a bare box, the exact failure mode that left the brain cold). Serves on
+# 0.0.0.0:11434 + pulls the tier's model ladder. Disk stays minimal (weights only); all results/data
+# persist on the VPS, because every GPU box is a DISPOSABLE safety layer.
+BRAIN_OLLAMA_ONSTART = r"""#!/bin/bash
+export HOME=/root
+pgrep -x ollama >/dev/null 2>&1 || (OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &)
+for i in $(seq 1 30); do curl -sf -m2 http://127.0.0.1:11434/api/tags >/dev/null 2>&1 && break; sleep 2; done
+for m in %s; do ollama pull "$m"; done
+echo BRAIN_READY
+"""
+
+# Brain size tiers — 'basic' (default) is the cheapest box that runs the chat model. Every tier is
+# DISPOSABLE: if the box dies (Vast can reclaim a slot), just re-provision — nothing is lost.
+BRAIN_TIERS = {
+    "basic":    {"min_vram_gb": 12, "max_price": 0.06, "disk_gb": 40, "models": "llama3.1:8b nomic-embed-text"},
+    "standard": {"min_vram_gb": 24, "max_price": 0.20, "disk_gb": 60, "models": "qwen2.5:14b llama3.1:8b nomic-embed-text"},
+    "heavy":    {"min_vram_gb": 48, "max_price": 0.60, "disk_gb": 80, "models": "qwen2.5:32b llama3.1:8b nomic-embed-text"},
+}
+
+
+def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: float = None,
+                    models: str = None, prefer_direct: bool = True) -> dict:
+    """Provision a DISPOSABLE brain box that boots straight into a working Ollama server — no manual SSH,
+    no `curl|sh` install (uses the official ollama image). Default tier 'basic' = cheapest ~12GB box for
+    llama3.1:8b. Labelled jarvis-brain so ensure_brain_tunnel() auto-discovers, tunnels, and keeps Ollama
+    serving. Disk is minimal (weights only); persistent data lives on the VPS. Re-provision freely — it's
+    a disposable safety layer, not a pet."""
     g = _guard()
     if g: return g
-    off = cheapest_similar(BRAIN_PROFILE, max_price=max_price or 1.0)
+    t = BRAIN_TIERS.get(tier, BRAIN_TIERS["basic"])
+    vram = float(min_vram_gb or t["min_vram_gb"])
+    cap = float(max_price or t["max_price"])
+    mdl = models or t["models"]
+    off = cheapest_offer(max_price=cap, min_vram_gb=vram, require_direct=prefer_direct)
     if not off.get("ok"):
         return off
-    r = create_instance(off["offer"]["id"], image=os.environ.get("BRAIN_IMAGE", "vastai/sglang:v0.5.12-cuda-13.0"),
-                        label="jarvis-brain", disk_gb=40, onstart=BRAIN_ONSTART)
+    r = create_instance(off["offer"]["id"], image=os.environ.get("BRAIN_IMAGE", "ollama/ollama"),
+                        label="jarvis-brain", disk_gb=int(t["disk_gb"]), onstart=BRAIN_OLLAMA_ONSTART % mdl)
     if r.get("ok"):
-        r["offer"] = off["offer"]
+        r["offer"] = off["offer"]; r["tier"] = tier; r["models"] = mdl
     return r
+
+
+def provision_brain_verified(tier: str = "basic", attempts: int = 4, max_price: float = None) -> dict:
+    """Provision a brain on a REACHABLE box. Vast assigns the proxy host (sshN.vast.ai) only AFTER rental
+    and some are blocked from this VPS (e.g. ssh5 times out), which silently leaves the brain unreachable.
+    So: create a direct-capable box, wait for it to boot, TEST SSH reachability, and if it's unreachable
+    dispose it in seconds and retry. Bounded so it never runs away. This is what makes 'provision a brain'
+    actually result in working chat instead of a box nothing can reach."""
+    g = _guard()
+    if g: return g
+    tried = []
+    for n in range(max(1, attempts)):
+        r = provision_brain(tier=tier, max_price=max_price, prefer_direct=True)
+        if not r.get("ok"):
+            tried.append({"attempt": n + 1, "error": r.get("error")}); continue
+        iid = r.get("id")
+        host = port = None
+        ok = False
+        for _ in range(30):                       # wait up to ~2.5 min for running + reachable SSH
+            time.sleep(5)
+            inst = next((i for i in (list_instances().get("instances") or []) if i.get("id") == iid), None)
+            if not inst:
+                continue
+            if "running" in (inst.get("status") or ""):
+                host, port = inst.get("ssh_host"), inst.get("ssh_port")
+                if host and port and _port_open(host, int(port), timeout=6.0):
+                    ok = True
+                    break
+        if ok:
+            ensure_brain_tunnel()
+            return {"ok": True, "id": iid, "tier": tier, "ssh_host": host, "ssh_port": port,
+                    "reachable": True, "attempt": n + 1, "offer": r.get("offer"), "tried": tried}
+        destroy_instance(iid)   # unreachable proxy host — dispose + try another
+        tried.append({"attempt": n + 1, "id": iid, "ssh_host": host, "unreachable": True})
+    return {"ok": False, "error": "no reachable box after %d attempts" % attempts, "tried": tried}
 
 
 # ── self-healing SSH tunnel to the brain's Ollama (so JARVIS actually uses the GPU) ─────────────────
@@ -411,17 +475,57 @@ def _kill_tunnel():
     _TUNNEL_PROC = None
 
 
+def _port_open(host: str, port: int, timeout: float = 1.5) -> bool:
+    """True if something is listening on host:port (e.g. an existing SSH forward) —
+    even if the upstream service behind it isn't answering yet."""
+    import socket
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _ensure_ollama_on_box(host: str, port: int) -> dict:
+    """The MISSING HALF of the auto-heal: SSH to the live GPU box and guarantee
+    ``ollama serve`` is actually running (install + model-pull if needed). Idempotent,
+    best-effort, never raises. ensure_brain_tunnel() forwards the port; this makes sure
+    something is listening behind it after a Vast instance restart — without it the tunnel
+    is up but cold and JARVIS chat silently falls back to canned replies."""
+    # The box is already provisioned (Ollama + model installed) — we ONLY (re)start the
+    # already-installed `ollama serve` if it isn't running. No installs, no external
+    # downloads: just bring an existing, set-up service back up after an instance restart.
+    remote = (
+        "export HOME=/root; command -v ollama >/dev/null 2>&1 || exit 3; "
+        "pgrep -x ollama >/dev/null 2>&1 || (OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h "
+        "OLLAMA_MAX_LOADED_MODELS=2 OLLAMA_NUM_PARALLEL=2 OLLAMA_FLASH_ATTENTION=1 "
+        "setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null & sleep 4)"
+    )
+    try:
+        r = subprocess.run(
+            ["ssh", "-i", SSH_KEY, "-p", str(port), "-o", "StrictHostKeyChecking=no",
+             "-o", "UserKnownHostsFile=/dev/null", "-o", "BatchMode=yes",
+             "-o", "ConnectTimeout=10", f"root@{host}", remote],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=45)
+        return {"ok": r.returncode == 0, "rc": r.returncode}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:160]}
+
+
 def ensure_brain_tunnel() -> dict:
-    """If a running brain instance exists, make sure its Ollama port is forwarded to local 127.0.0.1:11434.
-    This is what lets dashboard.py _brain_reachable() and _box() see the GPU as the JARVIS brain."""
+    """Make the live Vast brain's Ollama reachable at local 127.0.0.1:11434:
+    (1) discover the running GPU box via the Vast API, (2) forward its port (reusing an
+    existing/orphaned forward if one is already bound), (3) GUARANTEE Ollama is serving on
+    the box. Step 3 was the missing half — after a Vast instance restart the tunnel was up
+    but nothing listened behind it, so chat fell back to canned replies."""
     global _TUNNEL_PROC
     g = _guard()
     if g:
         return {**g, "tunnel": "no_key"}
-    # Fast path: tunnel already healthy
-    if _TUNNEL_PROC and _TUNNEL_PROC.poll() is None and _ollama_up():
+    # Already serving (our tunnel, a manual/orphaned one, or direct) — nothing to do.
+    if _ollama_up():
         return {"ok": True, "tunnel": "up", "local": "127.0.0.1:11434"}
-    # Find the best candidate: labelled jarvis-brain, else the biggest running instance
+    # Discover the live brain box: labelled jarvis-brain, else the biggest running instance.
     insts = list_instances().get("instances") or []
     running = [i for i in insts if "running" in (i.get("status") or "")]
     brain = next((i for i in running if (i.get("label") or "").startswith("jarvis-brain")), None)
@@ -429,34 +533,41 @@ def ensure_brain_tunnel() -> dict:
         running.sort(key=lambda i: -(i.get("num_gpus") or 1))
         brain = running[0]
     if not brain:
-        _kill_tunnel()
         return {"ok": True, "tunnel": "no_brain", "local": "127.0.0.1:11434"}
-    # If Ollama is already up locally but the tunnel process died, just restart the tunnel.
-    # Otherwise kill any stale tunnel first.
-    _kill_tunnel()
     host = brain.get("ssh_host")
     port = brain.get("ssh_port")
     if not host or not port:
         return {"ok": False, "tunnel": "no_ssh", "brain": brain}
-    try:
-        proc = subprocess.Popen(
-            ["ssh", "-i", SSH_KEY, "-p", str(port), "-o", "StrictHostKeyChecking=no",
-             "-o", "UserKnownHostsFile=/dev/null", "-o", "ServerAliveInterval=30",
-             "-o", "ServerAliveCountMax=3", "-o", "ExitOnForwardFailure=yes",
-             "-N", "-L", f"127.0.0.1:11434:127.0.0.1:11434", f"root@{host}"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
-            start_new_session=True)
-        _TUNNEL_PROC = proc
-        # Wait briefly for the forward to come up
-        for _ in range(10):
-            if proc.poll() is not None:
-                break
-            if _ollama_up(timeout=1.5):
-                return {"ok": True, "tunnel": "up", "brain": brain, "local": "127.0.0.1:11434"}
-            time.sleep(0.5)
-        return {"ok": True, "tunnel": "starting", "brain": brain, "local": "127.0.0.1:11434"}
-    except Exception as e:  # noqa: BLE001
-        return {"ok": False, "tunnel": "error", "error": str(e)[:200]}
+    # Ensure the port is forwarded. Reuse an existing forward (manual/orphaned) if the local
+    # port is already bound; only (re)create our own tunnel when nothing is listening.
+    if not _port_open("127.0.0.1", 11434):
+        _kill_tunnel()
+        try:
+            proc = subprocess.Popen(
+                ["ssh", "-i", SSH_KEY, "-p", str(port), "-o", "StrictHostKeyChecking=no",
+                 "-o", "UserKnownHostsFile=/dev/null", "-o", "ServerAliveInterval=30",
+                 "-o", "ServerAliveCountMax=3", "-o", "ExitOnForwardFailure=yes",
+                 "-N", "-L", "127.0.0.1:11434:127.0.0.1:11434", f"root@{host}"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
+                start_new_session=True)
+            _TUNNEL_PROC = proc
+            for _ in range(10):
+                if proc.poll() is not None:
+                    break
+                if _port_open("127.0.0.1", 11434):
+                    break
+                time.sleep(0.5)
+        except Exception as e:  # noqa: BLE001
+            return {"ok": False, "tunnel": "error", "error": str(e)[:200]}
+    # Port is forwarded — now GUARANTEE Ollama is actually serving behind it.
+    if _ollama_up():
+        return {"ok": True, "tunnel": "up", "brain": brain, "local": "127.0.0.1:11434"}
+    serve = _ensure_ollama_on_box(host, port)
+    for _ in range(12):
+        if _ollama_up(timeout=2.0):
+            return {"ok": True, "tunnel": "up", "brain": brain, "serve": serve, "local": "127.0.0.1:11434"}
+        time.sleep(1.0)
+    return {"ok": True, "tunnel": "starting", "brain": brain, "serve": serve, "local": "127.0.0.1:11434"}
 
 
 # ── JARVIS brain: detect a running GPU instance serving an LLM (ollama), point JARVIS at it ──────────

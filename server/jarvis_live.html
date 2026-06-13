@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='19';
+  var KEY='__jv',VER='21';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -1797,7 +1797,6 @@ html.low-power #mic.live{animation:none}
    <button class="mini p1" onclick="openAssist()" aria-label="Set up JARVIS to control your phone">📲 Control</button>
    <button class="mini p1" onclick="setMode('guardian')" aria-label="Open guardian mode">🛡 Guardian</button>
    <button class="mini p1" onclick="setMode('library')" aria-label="Open media studio">🖼 Studio</button>
-   <button class="mini p0" onclick="openTranslate()" aria-label="Live translation">🌐 Translate</button>
    <button class="mini more" id=moreBtn onclick="toggleMoreActions()" aria-label="Show more quick actions" aria-expanded=false aria-pressed=false>⋯ More</button>
    <span id=budget class=mono></span>
    <button class="mini archon p0" id=archonBtn onclick=toggleArchon() title="Archon: max tokens / Opus for hard tasks" aria-label="Toggle Archon mode">⚡ ARCHON</button>
@@ -2305,6 +2304,8 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bgame\b/.test(l)){openGameOverlay();return true;}
   if(/\bopen\b.*\b(scale|monitor)\b/.test(l)){openScaleOverlay();return true;}
   if(/\bopen\b.*\b(apps|carousel|mini apps)\b/.test(l)){openCarouselOverlay();return true;}
+  if(/\bopen\b.*\b(system health|sys health|health hub)\b/.test(l)){openAppSheet('syshealth');return true;}
+  if(/\bopen\b.*\b(intelligence|intel hub)\b/.test(l)){openAppSheet('intel');return true;}
   if(/\bopen\b.*\bvitals\b/.test(l)){openAppSheet('vitals');return true;}
   if(/\bopen\b.*\bhealth\b/.test(l)){openAppSheet('health');return true;}
   if(/\bopen\b.*\bagent\b/.test(l)){openAgentTools();return true;}
@@ -2456,7 +2457,7 @@ function openGPU(){ let ov=$('gpuOv');
       '<button onclick="closeGPU()" style="position:fixed;top:12px;right:14px;z-index:71;font-size:18px;background:var(--glass);color:var(--cy);border:1px solid var(--cy);border-radius:10px;padding:6px 14px">✕</button>'
      +'<div style="max-width:760px;margin:0 auto;width:100%">'
      +'<h2 style="color:var(--cy);text-shadow:0 0 14px var(--cy)">🎛 GPU</h2>'
-     +'<p style="color:var(--dim);font-size:12px;margin:0 0 12px">Say what you need. It picks the cheapest GPU with the right power, runs it, saves everything to Hostinger, and disposes — automatically.</p>'
+     +'<p style="color:var(--dim);font-size:12px;margin:0 0 12px">Say what you need (sized up to 70B). It picks the cheapest GPU with the right VRAM, runs it, saves results to the VPS, and disposes — automatically. Every GPU box is a disposable safety layer: don\'t Stop (Vast can reclaim the slot) — Dispose + re-provision instead.</p>'
      +'<div id=gpuKey style="display:none;background:rgba(255,93,108,.12);border:1px solid var(--rd);border-radius:12px;padding:14px;margin-bottom:10px"></div>'
      +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">'
        +'<input id=gpuTask placeholder="e.g. fine-tune a 13B model / run whisper / nvidia-smi" style="flex:1;min-width:220px;background:rgba(8,22,34,.6);border:1px solid var(--ln);border-radius:10px;padding:12px;color:var(--tx);font-size:14px">'
@@ -2480,7 +2481,7 @@ async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).js
     try{ const br=await(await fetch('gpu/brain')).json();
       if(br&&br.brain){ const t=(br.tunnel||{}); banner='<div style="background:rgba(52,211,153,.12);border:1px solid #34d399;border-radius:10px;padding:10px;margin-bottom:6px">🧠 Brain online — JARVIS full AI'+(t.tunnel==='up'?' · tunnel up':' · tunnel '+((t.tunnel||'off')))+'</div>'; }
       else if(br&&(br.stopped||[]).length){ const s=br.stopped[0]; banner='<div style="background:rgba(245,185,66,.12);border:1px solid #f5b942;border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 Brain stopped — <button onclick="gpuStart('+s.id+')" style="background:#0a3a2a;color:#34d399;border:1px solid #34d399;border-radius:8px;padding:5px 10px;font-weight:700">▶ Start brain → full AI</button></div>'; }
-      else { banner='<div style="background:rgba(41,231,255,.10);border:1px solid var(--cy);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 No brain running — <button onclick="gpuProvisionBrain()" style="background:#0a3a4a;color:var(--cy);border:1px solid var(--cy);border-radius:8px;padding:6px 12px;font-weight:700">🧠 Provision brain (cheapest 48GB)</button> <span style="color:var(--dim);font-size:11px">persistent · ~$0.6/hr · full AI</span></div>'; }
+      else { banner='<div style="background:rgba(41,231,255,.10);border:1px solid var(--cy);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 No brain running — <button onclick="gpuProvisionBrain()" style="background:#0a3a4a;color:var(--cy);border:1px solid var(--cy);border-radius:8px;padding:6px 12px;font-weight:700">🧠 Provision brain (cheapest)</button> <span style="color:var(--dim);font-size:11px">disposable · auto-saves to VPS · ~$0.03/hr</span></div>'; }
     }catch(_){}
     const it=r.instances||[];
     list.innerHTML = banner + (it.length? it.map(i=>{const on=(i.status||'').indexOf('running')>=0;
@@ -2500,10 +2501,10 @@ async function gpuRun(){ const task=($('gpuTask').value||'').trim(); if(!task){$
   }catch(e){$('gpuMsg').textContent='✗ '+e;}
 }
 async function gpuStart(id){ try{await fetch('gpu/start?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});gpuRefresh();}catch(_){}}
-async function gpuProvisionBrain(){ if(!confirm('Provision the permanent brain (cheapest 48GB / 3090×4-class, ~$0.6/hr)?\nIt bills until you dispose it.'))return;
-  $('gpuMsg').textContent='Provisioning the cheapest brain box…';
-  try{ const r=await(await fetch('gpu/provisionbrain?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})).json();
-    $('gpuMsg').textContent = r.ok? ('✓ Brain provisioned: '+(r.offer?r.offer.gpu+' ×'+(r.offer.num_gpus||1)+' ('+r.offer.total_vram_gb+'GB, DLp'+r.offer.dlperf+') @ $'+r.offer.price+'/hr':'')+' — booting…') : ('✗ '+(r.error||'failed'));
+async function gpuProvisionBrain(){ if(!confirm('Provision a disposable basic brain (cheapest ~12GB box, ~$0.03/hr, official ollama image — no install)?\nIt bills until disposed; results auto-save to the VPS, so dispose + re-provision anytime.'))return;
+  $('gpuMsg').textContent='Provisioning the cheapest brain box (ollama image, no install)…';
+  try{ const r=await(await fetch('gpu/provisionbrain?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tier:'basic'})})).json();
+    $('gpuMsg').textContent = r.ok? (r.msg||'✓ Provisioning a reachable brain — verifying connectivity + booting…') : ('✗ '+(r.error||'failed'));
     try{jarvisSpeak(r.ok?'Provisioning the brain now.':'Could not provision the brain.');}catch(_){}
     gpuRefresh();
   }catch(e){$('gpuMsg').textContent='✗ '+e;}
@@ -5824,7 +5825,7 @@ function renderPhoneScreen(tab){const s=$('phoneSheet');if(!s)return;
     });
   }else{
     rows[tab].forEach(r=>html+='<div class=ph-row onclick="jarvisSpeak(\'Calling '+r.n.replace(/'/g,'\\\'')+'\')">'+'<div class=av>'+r.ic+'</div><div class=tx><b>'+r.n+'</b><div style="font-size:11px;color:var(--text-dim)">'+r.t+'</div></div><span style="font-size:11px;color:var(--tint)">'+r.a+'</span></div>');
-    if(tab==='recents')html+='<div class=ph-action-row><button onclick="jarvisSpeak(\'Call Screening active\')">Screen</button><button onclick="showInplaceAlert(\'Unknown callers silenced\')">Silence</button><button onclick="openPlaygroundOverlay()">More</button></div>';
+    if(tab==='recents')html+='<div class=ph-action-row><button onclick="jarvisSpeak(\'Call Screening active\')">Screen</button><button onclick="showInplaceAlert(\'Unknown callers silenced\')">Silence</button></div>';
   }
   s.innerHTML=html+'</div>';
 }
@@ -5920,7 +5921,7 @@ function initWave3Interactions(){
     if(e.key.toLowerCase()==='n'&&e.altKey){e.preventDefault();openRemindersOverlay();}
   });
   document.addEventListener('keyup',e=>{if(e.key==='Alt'){show=false;if(loupe)loupe.classList.remove('show');}});
-  document.addEventListener('contextmenu',e=>{if(e.target.closest('#top,.gpanel')){e.preventDefault();showContextMenu(e.clientX,e.clientY,[{ic:'🔍',label:'Inspect',fn:'showInplaceAlert(\'Inspect mode\')'},{ic:'📱',label:'Open Phone',fn:'openPhoneOverlay()'},{ic:'💬',label:'Open Messages',fn:'openMessagesOverlay()'}]);}});
+  document.addEventListener('contextmenu',e=>{if(e.target.closest('#top,.gpanel')){e.preventDefault();showContextMenu(e.clientX,e.clientY,[{ic:'🔍',label:'Inspect',fn:'showInplaceAlert(\'Inspect mode\')'}]);}});
   document.addEventListener('click',e=>{if(!e.target.closest('.ctx-menu'))closeContextMenu();});
 }
 function triggerAutoMix(){const r=$('autoMixRing');if(!r)return;r.classList.remove('active');void r.offsetWidth;r.classList.add('active');showInplaceAlert('AutoMix transition');}
@@ -5945,20 +5946,12 @@ initWave3Interactions();codePulseStartPoll();
    ========================================================= */
 
 const MINI_APPS=[
-  {id:'phone',ic:'📱',t:'Phone',d:'Recents, Favorites, Keypad, Voicemail, Call Screening'},
-  {id:'messages',ic:'💬',t:'Messages',d:'Bubbles, polls, backgrounds, spam filters'},
-  {id:'photos',ic:'🖼',t:'Photos',d:'Library, Collections, Spatial scenes'},
-  {id:'maps',ic:'🗺',t:'Maps',d:'Preferred routes, visited places, AutoMix'},
-  {id:'reminders',ic:'📝',t:'Capture',d:'Reminders, notes, passwords quick capture'},
-  {id:'playground',ic:'🎨',t:'Playground',d:'Genmoji, Image Playground, styles'},
-  {id:'reader',ic:'📖',t:'Reader',d:'Accessibility Reader simplifed view'},
-  {id:'translate',ic:'🌐',t:'Translate',d:'Live Translation between languages'},
-  {id:'visual',ic:'🔍',t:'Visual Intel',d:'Inspect objects in the universe'},
-  {id:'call',ic:'📞',t:'Call',d:'Active glass call overlay'},
-  {id:'game',ic:'🎮',t:'Game HUD',d:'GPU/Inference game overlay'},
+  // iOS-style apps removed from the mini-app surface per owner request ("forget the iOS apps").
+  // Their overlay functions are kept for hotkeys / context-menu / control-centre / 3D "Look Up".
+  // Hubs consolidate overlapping apps under one tabbed sheet (opening a child id deep-links its tab).
+  {id:'syshealth',ic:'🩺',t:'System Health',d:'Vitals, health, doctor, debugger, optimiser, GPU brain'},
+  {id:'intel',ic:'🛰',t:'Intelligence',d:'Datasets, reports, alerts, cases, boards'},
   {id:'scale',ic:'📊',t:'Scale',d:'Live A-Z feature counter'},
-  {id:'vitals',ic:'🩺',t:'Vitals',d:'System health score + gauges'},
-  {id:'health',ic:'🏥',t:'Health',d:'Health report + alerts'},
   {id:'agent',ic:'🤖',t:'Agent OS',d:'Tool registry + run commands'},
   {id:'tasks',ic:'📋',t:'Tasks',d:'Live task daemon list'},
   {id:'swarms',ic:'🐝',t:'Swarms',d:'Swarm mission control'},
@@ -5966,23 +5959,14 @@ const MINI_APPS=[
   {id:'search',ic:'🔎',t:'Graph Search',d:'Ontology search across the brain'},
   {id:'celestial',ic:'🌌',t:'Celestial',d:'Repo-to-universe map'},
   {id:'suggestions',ic:'💡',t:'Suggestions',d:'AI self-dev ideas'},
-  {id:'doctor',ic:'🩺',t:'Doctor',d:'System doctor probes'},
   {id:'budget',ic:'💰',t:'Budget',d:'Token governor state'},
-  {id:'brain',ic:'🧠',t:'GPU Brain',d:'Brain instance status'},
   {id:'architecture',ic:'🏛',t:'Architecture',d:'10-layer JARVIS map'},
   {id:'memory',ic:'🧠',t:'Memory',d:'User memory recall'},
   {id:'inbox',ic:'📥',t:'Inbox',d:'Proactive notifications'},
-  {id:'datasets',ic:'📦',t:'Datasets',d:'Dataset catalog'},
-  {id:'reports',ic:'📄',t:'Reports',d:'Saved intelligence briefs'},
-  {id:'alerts',ic:'🚨',t:'Alerts',d:'Alert list'},
-  {id:'cases',ic:'🧰',t:'Cases',d:'Case-management list'},
   {id:'assets',ic:'🎨',t:'Assets',d:'Asset library status'},
-  {id:'boards',ic:'📊',t:'Boards',d:'Saved dashboards + live widget resolution'},
   {id:'higgsfield',ic:'🎬',t:'Higgsfield',d:'Image-to-video via API key or user login'},
   {id:'tripo3d',ic:'🧊',t:'Tripo 3D',d:'Text/image-to-3D via API key or user login'},
   {id:'theme',ic:'🎨',t:'Theme',d:'Generate UI themes for bar, dock and panels'},
-  {id:'debugger',ic:'🐞',t:'Debugger',d:'System diagnostics + safe fixes'},
-  {id:'optimizer',ic:'⚡',t:'Optimiser',d:'One-push speed, storage and GPU tune-up'},
   {id:'claw',ic:'🦞',t:'Kimi Claw',d:'OpenClaw agent bridge manager'},
   {id:'settings',ic:'⚙️',t:'Settings',d:'System controls, theme, voice, services'},
   {id:'panickey',ic:'🚨',t:'PanicKey',d:'Universal control, memory, optimisation & learning'},
@@ -6042,50 +6026,102 @@ function carouselNext(){_carouselIndex=(_carouselIndex+1)%MINI_APPS.length;updat
 function carouselPrev(){_carouselIndex=(_carouselIndex-1+MINI_APPS.length)%MINI_APPS.length;updateCarousel();}
 function carouselOpenApp(id){
   closeCarouselOverlay();
-  const map={phone:openPhoneOverlay,messages:openMessagesOverlay,photos:openPhotosOverlay,maps:openMapsOverlay,reminders:openRemindersOverlay,playground:openPlaygroundOverlay,reader:openAccReader,translate:openTranslate,visual:openVisualIntel,call:openCallOverlay,game:openGameOverlay,scale:openScaleOverlay};
+  const map={scale:openScaleOverlay};
   if(map[id])return map[id]();
   openAppSheet(id);
 }
 
 let _appSheetId=null;
-function openAppSheet(id){const app=MINI_APPS.find(m=>m.id===id);if(!app)return;_appSheetId=id;$('asTitle').textContent=app.ic+' '+app.t;$('ovAppSheet').classList.add('open');renderAppSheet();}
+// Consolidated apps open their parent hub on the matching tab — keeps voice/text/dock access working.
+const HUB_OF={vitals:'syshealth',health:'syshealth',doctor:'syshealth',brain:'syshealth',debugger:'syshealth',optimizer:'syshealth',datasets:'intel',reports:'intel',alerts:'intel',cases:'intel',boards:'intel'};
+let _hubTab='';
+function openAppSheet(id){if(HUB_OF[id]){_hubTab=id;id=HUB_OF[id];}else{_hubTab='';}const app=MINI_APPS.find(m=>m.id===id);if(!app)return;_appSheetId=id;$('asTitle').textContent=app.ic+' '+app.t;$('ovAppSheet').classList.add('open');renderAppSheet();}
 let _sheetPoll=null;
-function closeAppSheet(){$('ovAppSheet').classList.remove('open');_appSheetId=null;if(_hfPoll){clearInterval(_hfPoll);_hfPoll=null;}if(_tripoPoll){clearInterval(_tripoPoll);_tripoPoll=null;}if(_optPoll){clearInterval(_optPoll);_optPoll=null;}if(_sheetPoll){clearInterval(_sheetPoll);_sheetPoll=null;}}
+function closeAppSheet(){$('ovAppSheet').classList.remove('open');_appSheetId=null;if(_hfPoll){clearInterval(_hfPoll);_hfPoll=null;}if(_tripoPoll){clearInterval(_tripoPoll);_tripoPoll=null;}if(_optPoll){clearInterval(_optPoll);_optPoll=null;}if(_uwPoll){clearInterval(_uwPoll);_uwPoll=null;}if(_sheetPoll){clearInterval(_sheetPoll);_sheetPoll=null;}}
 function refreshAppSheet(){renderAppSheet();}
 
 function _asCred(k,def){try{return localStorage.getItem('jarvisCred:'+k)||def||'';}catch(_){return '';}}
 function _asSetCred(k,v){try{localStorage.setItem('jarvisCred:'+k,v);}catch(_){}}
 
-let _hfPoll=null,_tripoPoll=null;
+let _hfPoll=null,_tripoPoll=null,_uwPoll=null,_uwWorldId=null,_uwWorld=null,_uwWorlds=[],_uwMotions=[],_uwEvents=[],_uwAssets=[],_uwBudget=null;
 function _extractTaskId(d){if(!d)return null;return d.request_id||d.id||d.task_id||(d.data&&_extractTaskId(d.data));}
 
 function renderHiggsfieldSheet(){
   const cred=escapeHtml(_asCred('higgsfield',''));
   return `<div class=as-form>
     <div class=as-mode>
-      <label><input type=radio name=hfMode value=api checked onchange="higgsfieldModeChange()"> API key</label>
-      <label><input type=radio name=hfMode value=user onchange="higgsfieldModeChange()"> User login</label>
+      <label><input type=radio name=hfTab value=manual checked onchange="higgsfieldTabChange()"> Manual</label>
+      <label><input type=radio name=hfTab value=underworld onchange="higgsfieldTabChange()"> Underworld Live</label>
     </div>
-    <label id=hfCredLabel>API key</label>
-    <input id=hfCred class=as-in type=text placeholder="Paste Ocp-Apim-Subscription-Key or session cookie" value="${cred}">
-    <label>Prompt</label>
-    <textarea id=hfPrompt class=as-ta rows=3 placeholder="Describe the motion…"></textarea>
-    <label>Input image URL</label>
-    <input id=hfImage class=as-in type=text placeholder="https://… (optional)">
-    <div class=as-row-inline>
-      <label>Model <select id=hfModel><option value=dop-lite>dop-lite</option><option value=dop-preview>dop-preview</option><option value=dop-turbo>dop-turbo</option></select></label>
-      <label>Motion <input id=hfMotion type=text value=generic placeholder="motion id"></label>
-      <label>Motion strength <input id=hfStrength type=number min=0 max=1 step=0.1 value=0.7></label>
-      <label>Seed <input id=hfSeed type=number value=42></label>
+    <div id=hfPanelManual class=as-form>
+      <div class=as-mode>
+        <label><input type=radio name=hfMode value=api checked onchange="higgsfieldModeChange()"> API key</label>
+        <label><input type=radio name=hfMode value=user onchange="higgsfieldModeChange()"> User login</label>
+      </div>
+      <label id=hfCredLabel>API key</label>
+      <input id=hfCred class=as-in type=text placeholder="Paste Ocp-Apim-Subscription-Key or session cookie" value="${cred}">
+      <label>Prompt</label>
+      <textarea id=hfPrompt class=as-ta rows=3 placeholder="Describe the motion…"></textarea>
+      <label>Input image URL</label>
+      <input id=hfImage class=as-in type=text placeholder="https://… (optional)">
+      <div class=as-row-inline>
+        <label>Model <select id=hfModel><option value=dop-lite>dop-lite</option><option value=dop-preview>dop-preview</option><option value=dop-turbo>dop-turbo</option></select></label>
+        <label>Motion <input id=hfMotion type=text value=generic placeholder="motion id"></label>
+        <label>Motion strength <input id=hfStrength type=number min=0 max=1 step=0.1 value=0.7></label>
+        <label>Seed <input id=hfSeed type=number value=42></label>
+      </div>
+      <label><input id=hfEnhance type=checkbox> Enhance prompt</label>
+      <button class=as-run onclick="higgsfieldRun()">▶ Generate video</button>
+      <div id=asOut></div>
     </div>
-    <label><input id=hfEnhance type=checkbox> Enhance prompt</label>
-    <button class=as-run onclick="higgsfieldRun()">▶ Generate video</button>
-    <div id=asOut></div>
+    <div id=hfPanelUnderworld class=as-form style="display:none">
+      <div class=as-row-inline>
+        <label style="flex:2">World <select id=uwWorld class=as-in onchange="underworldSelectWorld(this.value)"><option value="">Select a world…</option></select></label>
+        <button class=tbtn onclick="underworldLoadWorlds()">🔄 Refresh</button>
+      </div>
+      <div id=uwWorldInfo class=as-card style="display:none"></div>
+      <div id=uwBudget class=as-card style="display:none"></div>
+      <div class=as-row-inline>
+        <span id=uwPending class=as-out style="flex:1;margin-top:0">Pending: —</span>
+        <button class=as-run onclick="underworldPollNow()">Poll now</button>
+      </div>
+      <h4 style="margin:6px 0 2px;font-size:12px;color:var(--text-dim)">Recent Events</h4>
+      <div id=uwEvents><div class=as-empty>Choose a world</div></div>
+      <h4 style="margin:6px 0 2px;font-size:12px;color:var(--text-dim)">Gallery</h4>
+      <div id=uwGallery><div class=as-empty>Choose a world</div></div>
+      <div class=as-card>
+        <b>Manual trigger</b>
+        <label>Prompt</label>
+        <textarea id=uwPrompt class=as-ta rows=2 placeholder="Describe the scene…"></textarea>
+        <div class=as-row-inline>
+          <label>Kind <select id=uwKind class=as-in><option value=image>image</option><option value=video>video</option></select></label>
+          <label>Model <input id=uwModel class=as-in type=text placeholder="e.g. dop-lite"></label>
+          <label>Motion <select id=uwMotion class=as-in><option value="">(none)</option></select></label>
+        </div>
+        <button class=as-run onclick="underworldGenerate()">▶ Generate</button>
+        <div id=uwOut></div>
+      </div>
+    </div>
   </div>`;
 }
 function higgsfieldModeChange(){const mode=(document.querySelector('input[name=hfMode]:checked')||{}).value||'api';$('hfCredLabel').textContent=mode==='api'?'API key':'User session cookie';}
 async function higgsfieldRun(){const mode=(document.querySelector('input[name=hfMode]:checked')||{}).value||'api';const cred=$('hfCred').value||'';const prompt=$('hfPrompt').value.trim();const image=$('hfImage').value.trim();const out=$('asOut');if(!cred){out.innerHTML='<div class=as-err>Enter a credential</div>';return;}if(!prompt){out.innerHTML='<div class=as-err>Enter a prompt</div>';return;}_asSetCred('higgsfield',cred);out.innerHTML='Submitting…';try{const body={mode,credential:cred,prompt,image_url:image,model:$('hfModel').value,seed:+$('hfSeed').value||42,motions_id:($('hfMotion')&&$('hfMotion').value.trim())||'generic',motions_strength:+$('hfStrength').value||0.7,enhance_prompt:!!$('hfEnhance').checked};const r=await fetch('/higgsfield/run?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!d.ok){out.innerHTML='<div class=as-err>'+escapeHtml(d.error||'failed')+'</div>';return;}const id=_extractTaskId(d.data);out.innerHTML='<div class=as-out>Submitted. Request id: '+escapeHtml(String(id||'—'))+'</div>';if(id){higgsfieldStatus(id,mode,cred);if(_hfPoll)clearInterval(_hfPoll);_hfPoll=setInterval(()=>higgsfieldStatus(id,mode,cred),5000);}}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function higgsfieldStatus(id,mode,cred){try{const r=await fetch('/higgsfield/status/'+encodeURIComponent(id)+'?token='+CT+'&mode='+encodeURIComponent(mode)+'&credential='+encodeURIComponent(cred));const d=await r.json();const out=$('asOut');if(!out)return;if(!d.ok){out.innerHTML+='<div class=as-err>status: '+escapeHtml(d.error||'unknown')+'</div>';return;}const s=d.data||{};const status=s.status||s.state||'pending';const url=s.output_url||s.video_url||s.url||(s.output&&s.output.video)||'';const prompt=$('hfPrompt')?$('hfPrompt').value.trim():'';let html='<div class=as-out><b>'+escapeHtml(status)+'</b>';if(url){html+='<br><a href="'+escapeHtml(url)+'" target="_blank">Open result</a> <button class=tbtn onclick="saveToLibrary(\'video\',\''+escapeHtml(url)+'\',\''+escapeHtml(prompt)+'\',\'higgsfield\')">💾 Save to Library</button>';}html+='<br><pre style="margin:4px 0 0;font-size:10px;color:var(--text-dim);white-space:pre-wrap">'+escapeHtml(JSON.stringify(s,null,2))+'</pre></div>';out.innerHTML=html;if(/success|done|completed|ready/i.test(status)&&_hfPoll){clearInterval(_hfPoll);_hfPoll=null;}}catch(e){}}
+
+function higgsfieldTabChange(){const tab=(document.querySelector('input[name=hfTab]:checked')||{}).value||'manual';const man=$('hfPanelManual'),uw=$('hfPanelUnderworld');if(man)man.style.display=tab==='manual'?'flex':'none';if(uw)uw.style.display=tab==='underworld'?'flex':'none';if(_uwPoll){clearInterval(_uwPoll);_uwPoll=null;}if(tab==='underworld'){underworldLoadWorlds();_uwPoll=setInterval(underworldRefresh,10000);}}
+async function underworldLoadWorlds(){const sel=$('uwWorld');if(!sel)return;try{const r=await fetch('/worlds?token='+CT);const d=await r.json();if(!Array.isArray(d))throw new Error('unexpected response');_uwWorlds=d;const prev=_uwWorldId;sel.innerHTML='<option value="">Select a world…</option>'+d.map(w=>'<option value="'+escapeHtml(w.id)+'">'+escapeHtml(w.name||w.id)+' (tick '+escapeHtml(String(w.tick||0))+')</option>').join('');if(prev&&d.find(w=>w.id===prev)){sel.value=prev;underworldSelectWorld(prev);}else if(d.length){sel.value=d[0].id;underworldSelectWorld(d[0].id);}else{underworldRender();}}catch(e){const out=$('uwOut');if(out)out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+function underworldSelectWorld(id){_uwWorldId=id;_uwWorld=(_uwWorlds||[]).find(w=>w.id===id)||null;_uwEvents=[];_uwAssets=[];_uwBudget=null;underworldRender();if(_uwWorld){underworldLoadMotions();underworldRefresh();}}
+async function underworldLoadWorldInfo(){if(!_uwWorldId)return;try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'?token='+CT);const d=await r.json();if(d&&d.id){_uwWorld=d;const w=_uwWorlds.find(x=>x.id===d.id);if(w)Object.assign(w,d);}}catch(_){}}
+async function underworldLoadMotions(){const sel=$('uwMotion');if(!sel||!_uwWorldId)return;try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'/media/motions?token='+CT);const d=await r.json();const motions=(d&&d.motions)||[];_uwMotions=motions;sel.innerHTML='<option value="">'+(motions.length?'(none)':'No motions')+'</option>'+motions.map(m=>'<option value="'+escapeHtml(m.id)+'">'+escapeHtml(m.name||m.id)+'</option>').join('');}catch(e){_uwMotions=[];}}
+async function underworldLoadBudget(){if(!_uwWorldId)return;try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'/media/budget?token='+CT);const d=await r.json();_uwBudget=d||{};}catch(e){_uwBudget={error:String(e)};}}
+async function underworldLoadEvents(){if(!_uwWorldId)return;try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'/events?token='+CT+'&limit=20');const d=await r.json();_uwEvents=Array.isArray(d)?d:[];}catch(e){_uwEvents=[];}}
+async function underworldLoadGallery(){if(!_uwWorldId)return;try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'/media?token='+CT+'&limit=12');const d=await r.json();_uwAssets=(d&&d.assets)||[];}catch(e){_uwAssets=[];}}
+async function underworldRefresh(){if(!_uwWorldId)return;await underworldLoadWorldInfo();await Promise.allSettled([underworldLoadBudget(),underworldLoadEvents(),underworldLoadGallery()]);underworldRender();}
+async function underworldPollNow(){if(!_uwWorldId){showInplaceAlert('Select a world');return;}const out=$('uwOut');if(out)out.innerHTML='<div class=as-empty>Polling…</div>';try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'/media/poll?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await r.json();const polled=(d&&d.assets)||[];if(out)out.innerHTML='<div class=as-out>Polled '+escapeHtml(String(polled.length))+' completed job(s)</div>';await underworldLoadGallery();underworldRender();}catch(e){if(out)out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function underworldTrigger(body){if(!_uwWorldId){showInplaceAlert('Select a world');return;}const out=$('uwOut');if(!out)return;out.innerHTML='Submitting…';try{const r=await fetch('/worlds/'+encodeURIComponent(_uwWorldId)+'/media/trigger?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(d.error){out.innerHTML='<div class=as-err>'+escapeHtml(d.error)+'</div>';return;}out.innerHTML='<div class=as-out>Triggered asset '+escapeHtml(String(d.asset_id||'—'))+' · '+escapeHtml(String(d.status||'—'))+'</div>';await underworldLoadGallery();underworldRender();}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+function underworldGenerate(){const prompt=$('uwPrompt').value.trim();if(!prompt){$('uwOut').innerHTML='<div class=as-err>Enter a prompt</div>';return;}underworldTrigger({kind:$('uwKind').value,prompt,model:$('uwModel').value||undefined,motion_id:$('uwMotion').value||undefined,event_kind:'manual'});}
+function underworldGenerateEvent(idx){const e=_uwEvents[idx];if(!e||!_uwWorld)return;const prompt='Underworld event: '+e.kind+' at tick '+e.tick+(e.actor_id?' · actor '+e.actor_id:'');underworldTrigger({kind:$('uwKind').value,prompt,event_kind:e.kind,model:$('uwModel').value||undefined,motion_id:$('uwMotion').value||undefined});}
+function underworldRender(){const wi=$('uwWorldInfo');if(wi){if(_uwWorld){wi.style.display='block';wi.innerHTML='<b>'+escapeHtml(_uwWorld.name||_uwWorld.id)+'</b><div class=as-row><span class=as-k>era</span><span class=as-v>'+escapeHtml(_uwWorld.era||'—')+'</span></div><div class=as-row><span class=as-k>tick</span><span class=as-v>'+escapeHtml(String(_uwWorld.tick))+'</span></div><div class=as-row><span class=as-k>alive</span><span class=as-v>'+escapeHtml(String(_uwWorld.alive_count))+'</span></div>';}else{wi.style.display='none';wi.innerHTML='';}}const ub=$('uwBudget');if(ub){if(_uwBudget&&!_uwBudget.error){ub.style.display='block';ub.innerHTML='<b>Budget</b><div class=as-row><span class=as-k>Used</span><span class=as-v>'+escapeHtml(String(_uwBudget.daily_used))+' / '+escapeHtml(String(_uwBudget.daily_budget))+'</span></div><div class=as-row><span class=as-k>Remaining</span><span class=as-v>'+escapeHtml(String(_uwBudget.remaining))+'</span></div>';}else if(_uwBudget&&_uwBudget.error){ub.style.display='block';ub.innerHTML='<div class=as-err>'+escapeHtml(_uwBudget.error)+'</div>';}else{ub.style.display='none';}}const pending=(_uwAssets||[]).filter(a=>/pending|processing|queued|running/i.test(a.status||'')).length;const up=$('uwPending');if(up)up.textContent='Pending: '+pending;const ev=$('uwEvents');if(ev){if(!_uwWorldId){ev.innerHTML='<div class=as-empty>Choose a world</div>';}else if(!_uwEvents.length){ev.innerHTML='<div class=as-empty>No recent events</div>';}else{ev.innerHTML=_uwEvents.map((e,i)=>'<div class=as-card><div class=as-row><span class=as-k>tick '+escapeHtml(String(e.tick))+'</span><span class=as-v>'+escapeHtml(e.kind)+'</span></div>'+(e.actor_id?'<div style="font-size:11px;color:var(--text-dim)">actor: '+escapeHtml(e.actor_id)+'</div>':'')+'<div class=as-row-inline style="margin-top:6px"><button class=tbtn onclick="underworldGenerateEvent('+i+')">Generate media</button></div></div>').join('');}}const gal=$('uwGallery');if(gal){if(!_uwWorldId){gal.innerHTML='<div class=as-empty>Choose a world</div>';}else{const completed=(_uwAssets||[]).filter(a=>a.status==='completed'&&a.url);if(!completed.length){gal.innerHTML='<div class=as-empty>No completed media</div>';}else{gal.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;">'+completed.map(a=>{const isVideo=(a.kind||'').toLowerCase()==='video';const caption=escapeHtml((a.prompt||'').slice(0,40)).replace(/"/g,'&quot;');const media=isVideo?'<video src="'+escapeHtml(a.url)+'" controls style="width:100%;border-radius:8px;background:#000;" preload=metadata></video>':'<img src="'+escapeHtml(a.url)+'" style="width:100%;border-radius:8px;object-fit:cover;" loading=lazy alt="'+caption+'" title="'+caption+'">';return '<div class=as-card style="padding:6px;margin:0;">'+media+'<div style="font-size:10px;color:var(--text-dim);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+escapeHtml(a.prompt||'').replace(/"/g,'&quot;')+'">'+escapeHtml((a.prompt||'').slice(0,40))+'</div><div style="font-size:10px;color:var(--text-dim)">'+escapeHtml(a.kind||'media')+' · tick '+escapeHtml(String(a.tick||'—'))+'</div></div>';}).join('')+'</div>';}}}}
 
 function renderTripo3dSheet(){
   const cred=escapeHtml(_asCred('tripo3d',''));
@@ -6165,7 +6201,11 @@ const APP_ENDPOINTS={
 
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;frictionLog('open_app',{app:_appSheetId});body.innerHTML='<div class=as-empty>Loading…</div>';
   const app=MINI_APPS.find(m=>m.id===_appSheetId);
-  if(_appSheetId==='higgsfield'){body.innerHTML=renderHiggsfieldSheet();higgsfieldModeChange();return;}
+  if(_appSheetId==='syshealth'){body.innerHTML=renderSysHealthSheet();sysHealthTab(['vitals','health','doctor','brain','debugger','optimizer'].includes(_hubTab)?_hubTab:'vitals');return;}
+  if(_appSheetId==='intel'){body.innerHTML=renderIntelSheet();intelTab(['datasets','reports','alerts','cases','boards'].includes(_hubTab)?_hubTab:'datasets');return;}
+  if(_appSheetId==='memory'){body.innerHTML=renderMemorySheet();loadMemory();return;}
+  if(_appSheetId==='agent'){body.innerHTML=renderAgentSheet();loadAgentSheet();return;}
+  if(_appSheetId==='higgsfield'){body.innerHTML=renderHiggsfieldSheet();higgsfieldModeChange();higgsfieldTabChange();return;}
   if(_appSheetId==='tripo3d'){body.innerHTML=renderTripo3dSheet();tripo3dModeChange();return;}
   if(_appSheetId==='theme'){body.innerHTML=renderThemeSheet();updateThemeAccent();return;}
   if(_appSheetId==='debugger'){body.innerHTML=renderDebuggerSheet();return;}
@@ -6282,24 +6322,120 @@ function renderSettingsServices(list){if(!list.length)return '<div class=as-empt
   return '<div class=as-card><b style="color:'+color+'">'+escapeHtml(s.name)+'</b> '+escapeHtml(s.status||'—')+' · '+escapeHtml(String(s.mem_mb||0))+' MB · ↺'+escapeHtml(String(s.unstable_restarts||0))+'<div style="margin-top:4px">'+controls+'</div></div>';
 }).join('');}
 
+// Render any JSON value (scalar / array / nested object) as glass cards. Previously
+// renderAppData dropped every nested object/array, which made vitals/health/doctor/
+// brain/architecture render empty despite real backend data. depth-limited to 2.
+function _asVal(k,v,depth){
+  if(v===null||v===undefined||v==='')return '<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>—</span></div>';
+  if(Array.isArray(v)){
+    if(!v.length)return '<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>none</span></div>';
+    const items=v.slice(0,30).map(it=>{
+      if(it&&typeof it==='object'){
+        const t=it.title||it.name||it.label||it.id||(it.rule&&it.rule.name)||it.check||it.layer||'';
+        let s=it.status||it.detail||it.description||it.severity||it.level||it.note||'';
+        if(s===''&&it.ok!==undefined)s=it.ok?'ok':'fail';
+        return '<div style="margin:3px 0 0 8px;font-size:11px">• '+escapeHtml(String(t||JSON.stringify(it).slice(0,70)))+(s!==''?' <span style="color:var(--text-dim)">— '+escapeHtml(String(s))+'</span>':'')+'</div>';
+      }
+      return '<div style="margin:3px 0 0 8px;font-size:11px">• '+escapeHtml(String(it))+'</div>';
+    }).join('');
+    return '<div class=as-card><b>'+escapeHtml(k)+'</b> <span style="color:var(--text-dim)">('+v.length+')</span>'+items+'</div>';
+  }
+  if(typeof v==='object'){
+    if(depth>=2)return '<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>'+escapeHtml(JSON.stringify(v).slice(0,80))+'</span></div>';
+    const inner=Object.entries(v).map(([k2,v2])=>_asVal(k2,v2,depth+1)).join('');
+    return '<div class=as-card><b>'+escapeHtml(k)+'</b>'+(inner||'<span style="color:var(--text-dim)"> empty</span>')+'</div>';
+  }
+  return '<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>'+escapeHtml(String(v))+'</span></div>';
+}
 function renderAppData(id,d){
   if(!d||typeof d!=='object')return '<div class=as-empty>No data</div>';
   if(id==='agent'){const tools=(d.tools||[]);return '<div class=as-empty>'+tools.length+' tools registered</div>'+tools.map(t=>'<div class=as-card><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}
-  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='library'||id==='suggestions'||id==='boards'){
+  if(id==='memory'){const ms=d.memories||[];if(!ms.length)return '<div class=as-empty>No memories yet</div>';return ms.map(m=>'<div class=as-card><b>'+escapeHtml(String(m.key||m.id||'memory'))+'</b> <span style="color:var(--text-dim)">'+(m.importance!=null?Math.round(m.importance*100)+'%':'')+'</span><span>'+escapeHtml(String(m.value||''))+'</span></div>').join('');}
+  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='library'||id==='suggestions'||id==='boards'||id==='inbox'){
     let items=d.items||d.results||d.tasks||d.swarms||d.notifications||d.data||d.rows||[];
     if(!Array.isArray(items))items=[];
     if(!items.length)return '<div class=as-empty>No items</div>';
     return items.slice(0,40).map(it=>{
       const title=it.title||it.name||it.label||it.id||JSON.stringify(it).slice(0,60);
-      const sub=it.detail||it.description||it.status||it.type||'';
+      const sub=it.detail||it.description||it.status||it.type||it.body||'';
       return '<div class=as-card><b>'+escapeHtml(String(title))+'</b><span>'+escapeHtml(String(sub))+'</span></div>';
     }).join('');
   }
-  // key/value cards for objects
-  const rows=[]; for(const [k,v] of Object.entries(d)){if(typeof v==='object'&&v!==null)continue; rows.push('<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>'+escapeHtml(String(v))+'</span></div>');}
-  if(!rows.length)return '<div class=as-empty>Empty</div>';
-  return rows.join('');
+  // rich object render — show nested objects/arrays instead of dropping them
+  const html=Object.entries(d).map(([k,v])=>_asVal(k,v,0)).join('');
+  return html||'<div class=as-empty>Empty</div>';
 }
+
+/* ================ System Health hub (vitals/health/doctor/brain/debugger/optimiser) ================ */
+let _shTab='vitals';
+function renderSysHealthSheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px;flex-wrap:wrap">
+    <button class=tbtn onclick="sysHealthTab('vitals')">🩺 Vitals</button>
+    <button class=tbtn onclick="sysHealthTab('health')">🏥 Health</button>
+    <button class=tbtn onclick="sysHealthTab('doctor')">🔬 Doctor</button>
+    <button class=tbtn onclick="sysHealthTab('brain')">🧠 Brain</button>
+    <button class=tbtn onclick="sysHealthTab('debugger')">🐞 Debugger</button>
+    <button class=tbtn onclick="sysHealthTab('optimizer')">⚡ Optimiser</button>
+  </div>
+  <div id=shTab></div>
+</div>`;}
+async function sysHealthTab(tab){_shTab=tab;const out=$('shTab');if(!out)return;
+  if(tab==='debugger'){out.innerHTML=renderDebuggerSheet();loadDebugger();return;}
+  if(tab==='optimizer'){out.innerHTML=renderOptimizerSheet();return;}
+  const ep={vitals:'/vitals',health:'/healthreport',doctor:'/doctor',brain:'/gpu/brain'}[tab]||'/vitals';
+  out.innerHTML='<div class=as-empty>Loading '+tab+'…</div>';
+  try{const r=await fetch(ep);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();out.innerHTML=renderAppData(tab,d);}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}
+}
+/* ================ Intelligence hub (datasets/reports/alerts/cases/boards) ================ */
+let _intelTab='datasets';
+function renderIntelSheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px;flex-wrap:wrap">
+    <button class=tbtn onclick="intelTab('datasets')">📦 Datasets</button>
+    <button class=tbtn onclick="intelTab('reports')">📄 Reports</button>
+    <button class=tbtn onclick="intelTab('alerts')">🚨 Alerts</button>
+    <button class=tbtn onclick="intelTab('cases')">🧰 Cases</button>
+    <button class=tbtn onclick="intelTab('boards')">📊 Boards</button>
+  </div>
+  <div id=intelActions></div>
+  <div id=intelBody></div>
+</div>`;}
+async function intelTab(tab){_intelTab=tab;const out=$('intelBody'),act=$('intelActions');if(!out)return;
+  if(act){
+    if(tab==='reports')act.innerHTML='<button class=as-run onclick="intelGenerateReport()">✨ Generate brief</button>';
+    else if(tab==='cases')act.innerHTML='<button class=as-run onclick="intelNewCase()">＋ New case</button>';
+    else act.innerHTML='';
+  }
+  const ep={datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',boards:'/v1/dashboards'}[tab]||'/v1/datasets';
+  out.innerHTML='<div class=as-empty>Loading '+tab+'…</div>';
+  try{const r=await fetch(ep);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();out.innerHTML=renderAppData(tab,d);}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}
+}
+async function intelGenerateReport(){const out=$('intelBody');if(out)out.innerHTML='<div class=as-empty>Generating brief…</div>';try{const r=await fetch('/v1/reports/generate?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:'system status and recent activity',save:true})});const d=await r.json();showInplaceAlert(d&&(d.brief||d.ok)?'Brief generated':'Generate failed');intelTab('reports');}catch(e){if(out)out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function intelNewCase(){const name=prompt('Case title:');if(!name)return;try{const r=await fetch('/v1/cases?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:name})});const d=await r.json();showInplaceAlert(d&&(d.ok||d.id||d.case)?'Case created':'Create failed');intelTab('cases');}catch(e){showInplaceAlert('Case error: '+e);}}
+
+/* ================ Memory (recall + capture) ================ */
+function renderMemorySheet(){return `<div class=as-form>
+  <details style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:700">+ Remember something</summary>
+    <label>Key</label><input id=memKey class=as-in type=text placeholder="e.g. favourite_topic">
+    <label>Value</label><textarea id=memVal class=as-ta rows=2 placeholder="What should JARVIS remember?"></textarea>
+    <button class=as-run onclick="memoryAdd()">💾 Remember</button>
+  </details>
+  <div id=memList><div class=as-empty>Loading…</div></div>
+</div>`;}
+async function loadMemory(){const out=$('memList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/jarvis/memory?user_id=anonymous&limit=50');const d=await r.json();out.innerHTML=renderAppData('memory',d);}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function memoryAdd(){const k=$('memKey'),v=$('memVal');if(!k||!k.value.trim()||!v||!v.value.trim()){showInplaceAlert('Enter a key and value');return;}try{const r=await fetch('/v1/jarvis/memory?user_id=anonymous&token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k.value.trim(),value:v.value.trim(),importance:0.6})});const d=await r.json();showInplaceAlert(d&&d.ok?'Remembered':'Failed');if(d&&d.ok){k.value='';v.value='';loadMemory();}}catch(e){showInplaceAlert('Memory error: '+e);}}
+
+/* ================ Agent OS console (tool registry + run commands) ================ */
+function renderAgentSheet(){return `<div class=as-form>
+  <label>Run a command (full agent authority)</label>
+  <div class=as-row-inline>
+    <input id=agentCmd class=as-in type=text placeholder="e.g. check disk space, restart jarvis-worker" style="flex:1" onkeydown="if(event.key==='Enter')agentSheetRun()">
+    <button class=as-run onclick="agentSheetRun()">▶ Run</button>
+  </div>
+  <div id=agentOut></div>
+  <div id=agentTools><div class=as-empty>Loading tools…</div></div>
+</div>`;}
+async function loadAgentSheet(){const out=$('agentTools');if(!out)return;try{const r=await fetch('/agent/tools');const d=await r.json();const tools=(d.tools||[]);out.innerHTML='<div class=as-empty>'+tools.length+' tools — click to run</div>'+tools.map(t=>'<div class=as-card style="cursor:pointer" onclick="agentSheetRun('+JSON.stringify(t.id)+')"><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function agentSheetRun(cmd){const inp=$('agentCmd');const command=cmd||(inp&&inp.value.trim());if(!command){showInplaceAlert('Enter a command');return;}const out=$('agentOut');if(out)out.innerHTML='<div class=as-empty>Running…</div>';try{const r=await fetch('agent/run?token='+CT+'&auto=1&q='+encodeURIComponent(command),{method:'POST'});const d=await r.json();const run=(d&&d.run)||d||{};const steps=(run.steps||run.results||[]);let html='<div class=as-card><b>'+escapeHtml(String(command))+'</b>';const summary=run.summary||run.result||d.reply;if(summary)html+='<br><span style="font-size:12px">'+escapeHtml(String(summary).slice(0,500))+'</span>';if(Array.isArray(steps)&&steps.length)html+=steps.map(s=>'<div style="margin:3px 0 0 8px;font-size:11px">• '+escapeHtml(String(s.tool||s.name||s.action||'step'))+' <span style="color:var(--text-dim)">'+escapeHtml(String(s.status!==undefined?s.status:(s.ok!==undefined?(s.ok?'ok':'fail'):'')))+'</span>'+(s.output?(' — '+escapeHtml(String(s.output).slice(0,140))):'')+'</div>').join('');html+='</div>';if(out)out.innerHTML=html;}catch(e){if(out)out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 
 /* ================ PanicKey ================ */
 function renderPanicKeySheet(){return `<div class=as-form>
@@ -6527,12 +6663,13 @@ async function loadVoiceForge(){const st=$('vfStatus'),li=$('vfList');if(!st||!l
 async function voiceForgeCreateProfile(){const n=$('vfName'),d=$('vfDesc');if(!n||!n.value.trim())return;try{const r=await fetch('/v1/voiceforge/profile?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n.value.trim(),description:d?d.value.trim():''})});const res=await r.json();showInplaceAlert(res.ok?'Profile created':'Failed');if(res.ok){n.value='';if(d)d.value='';loadVoiceForge();}}catch(e){showInplaceAlert('VoiceForge create error: '+e);}}
 async function voiceForgeUpload(id,input){if(!input||!input.files||!input.files[0])return;const f=input.files[0];const fd=new FormData();fd.append('file',f);try{const r=await fetch('/v1/voiceforge/profiles/'+encodeURIComponent(id)+'/upload?token='+CT,{method:'POST',body:fd});const d=await r.json();showInplaceAlert(d.ok?('Uploaded '+d.filename):'Upload failed');loadVoiceForge();}catch(e){showInplaceAlert('VoiceForge upload error: '+e);}}
 async function voiceForgeBuild(id){const out=$('vfOut_'+id);if(out)out.innerHTML='<div class=as-empty>Building…</div>';try{const r=await fetch('/v1/voiceforge/profiles/'+encodeURIComponent(id)+'/build?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?('Built '+d.refs_count+' refs'):('Build failed: '+escapeHtml(d.error||'')));if(out)out.innerHTML='<div class=as-out>'+(d.ok?'Built '+d.refs_count+' reference clips':'failed')+'</div>';}catch(e){showInplaceAlert('VoiceForge build error: '+e);}}
-async function voiceForgeTest(id){try{const text=prompt('Test phrase:','VoiceForge profile test.')||'VoiceForge profile test.';const r=await fetch('/v1/voiceforge/test?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});const d=await r.json();if(d.ok&&d.audio_url)jarvisSpeak(text);showInplaceAlert(d.ok?'Playing test':'Test failed');}catch(e){showInplaceAlert('VoiceForge test error: '+e);}}
+async function voiceForgeTest(id){try{const text=prompt('Test phrase:','VoiceForge profile test.')||'VoiceForge profile test.';const r=await fetch('/v1/voiceforge/test?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,profile_id:id})});const d=await r.json();if(d.ok&&d.audio_url){try{new Audio(d.audio_url).play();}catch(_){jarvisSpeak(text);}}showInplaceAlert(d.ok?(d.note||'Playing test'):'Test failed');}catch(e){showInplaceAlert('VoiceForge test error: '+e);}}
 async function voiceForgeActivate(id){if(!confirm('Activate profile? This replaces the active voice references and restarts the clone service.'))return;try{const r=await fetch('/v1/voiceforge/activate/'+encodeURIComponent(id)+'?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Activated':'Activate failed');loadVoiceForge();}catch(e){showInplaceAlert('VoiceForge activate error: '+e);}}
 async function voiceForgeDelete(id){if(!confirm('Delete profile?'))return;try{const r=await fetch('/v1/voiceforge/profiles/'+encodeURIComponent(id)+'?token='+CT,{method:'DELETE'});const d=await r.json();showInplaceAlert(d.ok?'Deleted':'Delete failed');loadVoiceForge();}catch(e){showInplaceAlert('VoiceForge delete error: '+e);}}
 
 /* ================ CodePulse ================ */
 function renderCodePulseSheet(){return `<div class=as-form>
+  <div class=as-card style="border-color:var(--am)"><b>⚠ Preview</b> <span style="color:var(--text-dim)">The VS Code bridge has no peer yet — approvals are recorded but don't execute. Explain (LLM) and Stop (safe-mode) are live.</span></div>
   <div id=cpStatus><div class=as-empty>Loading…</div></div>
   <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">+ Connect workspace</summary>
     <label>Workspace path</label><input id=cpWorkspace placeholder="/path/to/repo">
@@ -6613,8 +6750,6 @@ document.addEventListener('keydown',e=>{
       <button class=cc-cell id=ccDense onclick="toggleDenseLayout();updateCC()" aria-pressed=false aria-label="Toggle dense layout"><span class=ic>⊞</span><span class=lb>Dense</span></button>
       <button class=cc-cell id=ccSpatial onclick="toggleSpatialWallpaper();updateCC()" aria-pressed=false aria-label="Toggle spatial wallpaper"><span class=ic>🌌</span><span class=lb>Spatial</span></button>
       <button class=cc-cell id=ccPanelTint onclick="togglePanelTint();updateCC()" aria-pressed=false aria-label="Toggle panel tint"><span class=ic>🎨</span><span class=lb>Panel Tint</span></button>
-      <button class=cc-cell id=ccGame onclick="openGameOverlay();updateCC()" aria-pressed=false aria-label="Open game overlay"><span class=ic>🎮</span><span class=lb>Game</span></button>
-      <button class=cc-cell id=ccCall onclick="openCallOverlay();updateCC()" aria-pressed=false aria-label="Open call overlay"><span class=ic>📞</span><span class=lb>Call</span></button>
       <button class=cc-cell id=ccApps onclick="openCarouselOverlay();updateCC()" aria-pressed=false aria-label="Open mini app carousel"><span class=ic>🎠</span><span class=lb>Apps</span></button>
     </div>
     <h3>Glass Tint</h3>
@@ -6668,7 +6803,6 @@ document.addEventListener('keydown',e=>{
     <div class=call-actions>
       <button class=call-btn onclick="toggleVoiceOut();updateCC()" title="Mute voice" aria-label="Mute">🔇</button>
       <button class=call-btn end onclick="closeCallOverlay()" title="End call" aria-label="End call">📞</button>
-      <button class=call-btn onclick="openTranslate()" title="Live translate" aria-label="Live translate">🌐</button>
     </div>
   </div>
 </div>

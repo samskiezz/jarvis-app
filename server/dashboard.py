@@ -80,7 +80,21 @@ BACKEND_GET_PROXY_PREFIXES = (
     "/v1/cases",
     "/v1/jarvis/assets",
     "/v1/labs/catalog",
-    "/v1/forge/status",
+    "/v1/forge",
+    # Mini-app GET endpoints (lists/status/detail) — the backend serves them; the
+    # dashboard must forward the GET so the live UI can load them (POSTs already proxy).
+    "/v1/intent",
+    "/v1/decision",
+    "/v1/compress",
+    "/v1/asset",
+    "/v1/spec",
+    "/v1/ritual",
+    "/v1/mode",
+    "/v1/friction",
+    "/v1/deadzone",
+    "/v1/proofpack",
+    "/v1/codepulse",
+    "/v1/voiceforge",
 )
 
 
@@ -1368,20 +1382,32 @@ def _persona() -> str:
         return JARVIS_PERSONA
 
 
+def _mode_directive() -> str:
+    """The active ModeMixer profile as a behaviour directive, so the chosen mode
+    actually shapes Jarvis's replies. Safe: returns '' if mode_mixer is unavailable."""
+    try:
+        from server.services import mode_mixer as _mm
+        return _mm.prompt_directive()
+    except Exception:  # noqa: BLE001
+        return ""
+
+
 def _persona_sysmsg(address: str = "ma'am") -> str:
     """The full JARVIS system prompt with the live speaker (sir/ma'am) appended. Shared by every
     conversational path so the persona is identical whether we go through the tiered seam or the
-    direct box fallback."""
+    direct box fallback. The active ModeMixer profile is appended so behaviour modes take effect."""
     a = str(address or "").lower()
     if a in ("", "neutral", "unknown"):
         # speaker's voice not yet assessed — stay gracious but use NO ma'am/sir until it is
-        return _persona() + ("\n\n[CURRENT SPEAKER] The speaker's voice has not been assessed yet — "
+        base = _persona() + ("\n\n[CURRENT SPEAKER] The speaker's voice has not been assessed yet — "
                              "do NOT use \"ma'am\" or \"sir\"; speak warmly and directly without an honorific.")
-    addr = "sir" if a in ("sir", "male", "man", "m") else "ma'am"
-    return _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with " +
-                         ("a gentleman; address him as \"sir\"" if addr == "sir"
-                          else "a lady; address her as \"ma'am\"") +
-                         " — used naturally and sparingly, not in every sentence.")
+    else:
+        addr = "sir" if a in ("sir", "male", "man", "m") else "ma'am"
+        base = _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with " +
+                             ("a gentleman; address him as \"sir\"" if addr == "sir"
+                              else "a lady; address her as \"ma'am\"") +
+                             " — used naturally and sparingly, not in every sentence.")
+    return base + _mode_directive()
 
 
 def _history_to_prompt(prompt: str, history=None) -> str:
@@ -3063,8 +3089,12 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 elif sub == "forcedestroy": out = GI.destroy_instance(b.get("id"))
                 elif sub == "copy":    out = GI.copy_instance(b.get("id"), max_price=b.get("max_price"))
                 elif sub == "provisionbrain":
-                    out = GI.provision_brain(max_price=b.get("max_price"))
-                    GI.ensure_brain_tunnel()
+                    # Robust VERIFIED provision: direct-capable offer → boot → test SSH reachability →
+                    # dispose+retry unreachable proxy hosts (e.g. ssh5) → tunnel + start Ollama. Runs in a
+                    # thread so the UI returns instantly; gpuRefresh polls /gpu/instances to show the box.
+                    _tier = b.get("tier", "basic")
+                    threading.Thread(target=lambda: GI.provision_brain_verified(tier=_tier, max_price=b.get("max_price")), daemon=True).start()
+                    out = {"ok": True, "started": True, "msg": "Provisioning a reachable %s brain (verifying connectivity — ~1-3 min)…" % _tier}
                 elif sub == "run":     out = GI.run_on_instance(b.get("id"), b.get("cmd", "nvidia-smi"))
                 elif sub == "sync":    out = GI.sync_results(b.get("id"), b.get("path", "/workspace/results"))
                 else: out = {"ok": False, "error": "unknown gpu action"}

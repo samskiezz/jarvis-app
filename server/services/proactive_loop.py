@@ -25,6 +25,10 @@ from typing import Any, Optional
 # ── Config ───────────────────────────────────────────────────────────────────
 _ENABLED = os.environ.get("PROACTIVE_LOOP_ENABLED", "").lower() in ("1", "true", "yes")
 _INTERVAL = max(10, int(os.environ.get("PROACTIVE_LOOP_INTERVAL", "60")))
+# Conservative default: the proactive loop's monitors are all cheap/rule-based. Its one
+# optional LLM call (a 128-token summary when >=3 alerts pile up) stays OFF unless this is
+# set, so the always-on "essential" loop never quietly hits the GPU.
+_LLM_SUMMARY = os.environ.get("PROACTIVE_LLM_SUMMARY", "").lower() in ("1", "true", "yes")
 
 _DEFAULT_DB = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "proactive.db"
@@ -120,14 +124,18 @@ async def list_notifications(
         def _query():
             c = _conn()
             try:
+                # A notification is visible to a user if it is addressed to them
+                # OR is a global broadcast (user_id='all', the proactive loop's
+                # default). Without the 'all' fallback the UI (which asks for a
+                # specific user_id) never sees the loop's own notifications.
                 if severity:
                     rows = c.execute(
-                        "SELECT * FROM proactive_notification WHERE user_id=? AND severity=? AND acked=? ORDER BY ts DESC LIMIT ?",
+                        "SELECT * FROM proactive_notification WHERE (user_id=? OR user_id='all') AND severity=? AND acked=? ORDER BY ts DESC LIMIT ?",
                         (uid, severity, 1 if acked else 0, lim),
                     ).fetchall()
                 else:
                     rows = c.execute(
-                        "SELECT * FROM proactive_notification WHERE user_id=? AND acked=? ORDER BY ts DESC LIMIT ?",
+                        "SELECT * FROM proactive_notification WHERE (user_id=? OR user_id='all') AND acked=? ORDER BY ts DESC LIMIT ?",
                         (uid, 1 if acked else 0, lim),
                     ).fetchall()
             finally:
@@ -274,8 +282,9 @@ async def _reason_and_notify(alerts: list[dict]) -> None:
             severity=a.get("severity", "info"),
             category=a.get("category", "general"),
         )
-    # If we have many alerts, try to synthesize a single summary via LLM
-    if len(alerts) >= 3:
+    # If we have many alerts, optionally synthesize a single summary via LLM. Off by
+    # default (conservative) — set PROACTIVE_LLM_SUMMARY=1 to allow this GPU/LLM call.
+    if _LLM_SUMMARY and len(alerts) >= 3:
         try:
             from ..services import llm_research as _llm
 
