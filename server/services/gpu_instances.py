@@ -99,6 +99,7 @@ def list_instances() -> dict:
                 "price": round(float(it.get("dph_total") or 0), 3),
                 "image": it.get("image_uuid") or it.get("image"),
                 "ssh_host": it.get("ssh_host"), "ssh_port": it.get("ssh_port"),
+                "public_ipaddr": it.get("public_ipaddr"), "ports": it.get("ports"),  # for _direct_ssh()
                 "gpu_util": it.get("gpu_util"), "label": it.get("label"),
                 # FULL spec profile (used to find a genuinely-similar cheaper box, not just same VRAM):
                 "dlperf": round(float(it.get("dlperf") or 0), 1),          # Vast deep-learning perf score
@@ -112,12 +113,14 @@ def list_instances() -> dict:
         return {"ok": False, "error": str(e)[:200]}
 
 
-def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int = 1, min_vram_gb: float = 0, require_direct: bool = False) -> dict:
+def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int = 1, min_vram_gb: float = 0, require_direct: bool = False, exclude_machines=None) -> dict:
     """Cheapest reliable offer that ALSO has enough total VRAM for the task (min_vram_gb). Auto-scales to
-    multi-GPU if a single card can't hold it, so we never assign too little VRAM. gpu_ram is per-card MB."""
+    multi-GPU if a single card can't hold it, so we never assign too little VRAM. gpu_ram is per-card MB.
+    exclude_machines: machine_ids to skip (so a retry never re-picks a machine that already failed)."""
     g = _guard()
     if g: return g
     max_price = max_price or DEFAULT_MAXPRICE
+    excl = set(exclude_machines or [])
     if gpu_name:
         gpu_name = gpu_name.replace("_", " ").strip()   # UI sends RTX_4090 → Vast uses "RTX 4090"
     from urllib.parse import quote
@@ -137,6 +140,8 @@ def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int 
         except Exception as e:  # noqa: BLE001
             return {"ok": False, "error": str(e)[:200]}
         for o in (d.get("offers") or []):
+            if o.get("machine_id") in excl:        # skip machines a retry already found unreachable
+                continue
             tot_mb = float(o.get("gpu_ram") or 0) * float(o.get("num_gpus") or 1)
             if o.get("rentable") and float(o.get("dph_total") or 99) <= cap and tot_mb >= need_mb \
                and (not gpu_name or o.get("gpu_name") == gpu_name):
@@ -145,17 +150,17 @@ def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int 
         return {"ok": False, "error": "no offer with ≥%gGB VRAM under $%.2f/hr%s" % (min_vram_gb, cap, " ("+gpu_name+")" if gpu_name else "")}
     candidates.sort(key=lambda o: float(o.get("dph_total") or 99))
     o = candidates[0]
-    return {"ok": True, "offer": {"id": o.get("id"), "gpu": o.get("gpu_name"), "num_gpus": o.get("num_gpus"),
+    return {"ok": True, "offer": {"id": o.get("id"), "machine_id": o.get("machine_id"), "gpu": o.get("gpu_name"), "num_gpus": o.get("num_gpus"),
             "price": round(float(o.get("dph_total") or 0), 3),
             "total_vram_gb": round(float(o.get("gpu_ram") or 0)*float(o.get("num_gpus") or 1)/1024, 1),
             "reliability": round(float(o.get("reliability2") or 0), 3)}}
 
 
-def create_instance(offer_id: int, image: str = None, disk_gb: int = None, onstart: str = "", label: str = "jarvis-gpu") -> dict:
+def create_instance(offer_id: int, image: str = None, disk_gb: int = None, onstart: str = "", label: str = "jarvis-gpu", runtype: str = "ssh") -> dict:
     g = _guard()
     if g: return g
     body = {"client_id": "me", "image": image or DEFAULT_IMAGE,
-            "disk": disk_gb or DEFAULT_DISK_GB, "label": label, "runtype": "ssh"}
+            "disk": disk_gb or DEFAULT_DISK_GB, "label": label, "runtype": runtype}
     if onstart:
         body["onstart"] = onstart
     try:
@@ -391,7 +396,7 @@ BRAIN_TIERS = {
 
 
 def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: float = None,
-                    models: str = None, prefer_direct: bool = True) -> dict:
+                    models: str = None, prefer_direct: bool = True, exclude_machines=None) -> dict:
     """Provision a DISPOSABLE brain box that boots straight into a working Ollama server — no manual SSH,
     no `curl|sh` install (uses the official ollama image). Default tier 'basic' = cheapest ~12GB box for
     llama3.1:8b. Labelled jarvis-brain so ensure_brain_tunnel() auto-discovers, tunnels, and keeps Ollama
@@ -403,11 +408,12 @@ def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: f
     vram = float(min_vram_gb or t["min_vram_gb"])
     cap = float(max_price or t["max_price"])
     mdl = models or t["models"]
-    off = cheapest_offer(max_price=cap, min_vram_gb=vram, require_direct=prefer_direct)
+    off = cheapest_offer(max_price=cap, min_vram_gb=vram, require_direct=prefer_direct, exclude_machines=exclude_machines)
     if not off.get("ok"):
         return off
     r = create_instance(off["offer"]["id"], image=os.environ.get("BRAIN_IMAGE", "ollama/ollama"),
-                        label="jarvis-brain", disk_gb=int(t["disk_gb"]), onstart=BRAIN_OLLAMA_ONSTART % mdl)
+                        label="jarvis-brain", disk_gb=int(t["disk_gb"]), onstart=BRAIN_OLLAMA_ONSTART % mdl,
+                        runtype="ssh_direct")   # ssh_direct = real direct port on the public IP (proxy is unreliable)
     if r.get("ok"):
         r["offer"] = off["offer"]; r["tier"] = tier; r["models"] = mdl
     return r
@@ -422,29 +428,34 @@ def provision_brain_verified(tier: str = "basic", attempts: int = 4, max_price: 
     g = _guard()
     if g: return g
     tried = []
+    failed = set()                                # machine_ids that turned out unreachable — never re-pick them
     for n in range(max(1, attempts)):
-        r = provision_brain(tier=tier, max_price=max_price, prefer_direct=True)
+        r = provision_brain(tier=tier, max_price=max_price, prefer_direct=True, exclude_machines=failed)
         if not r.get("ok"):
-            tried.append({"attempt": n + 1, "error": r.get("error")}); continue
+            tried.append({"attempt": n + 1, "error": r.get("error")}); break   # no more candidate machines
         iid = r.get("id")
+        mid = (r.get("offer") or {}).get("machine_id")
         host = port = None
         ok = False
-        for _ in range(72):                       # wait up to ~6 min — Vast boxes can take a few minutes
-            time.sleep(5)                         # after "running" for the SSH port to actually come live
+        for _ in range(40):                       # ~3-4 min for the box to boot + its SSH to come live
+            time.sleep(5)
             inst = next((i for i in (list_instances().get("instances") or []) if i.get("id") == iid), None)
-            if not inst:
+            if not inst or "running" not in (inst.get("status") or ""):
                 continue
-            if "running" in (inst.get("status") or ""):
-                host, port = inst.get("ssh_host"), inst.get("ssh_port")
-                if host and port and _port_open(host, int(port), timeout=6.0):
-                    ok = True
-                    break
+            dh, dp = _direct_ssh(inst)            # prefer a real direct IP; fall back to the proxy
+            if dh and dp and "vast.ai" not in str(dh) and _port_open(dh, int(dp), timeout=4.0):
+                host, port, ok = dh, dp, True; break
+            ph, pp = inst.get("ssh_host"), inst.get("ssh_port")
+            if ph and pp and _port_open(ph, int(pp), timeout=4.0):
+                host, port, ok = ph, pp, True; break
         if ok:
             ensure_brain_tunnel()
-            return {"ok": True, "id": iid, "tier": tier, "ssh_host": host, "ssh_port": port,
+            return {"ok": True, "id": iid, "tier": tier, "ssh_host": host, "ssh_port": port, "machine_id": mid,
                     "reachable": True, "attempt": n + 1, "offer": r.get("offer"), "tried": tried}
-        destroy_instance(iid)   # unreachable proxy host — dispose + try another
-        tried.append({"attempt": n + 1, "id": iid, "ssh_host": host, "unreachable": True})
+        destroy_instance(iid)                     # unreachable (bad proxy + no direct port) — dispose + exclude
+        if mid:
+            failed.add(mid)
+        tried.append({"attempt": n + 1, "id": iid, "machine_id": mid, "ssh_host": host or "?", "unreachable": True})
     return {"ok": False, "error": "no reachable box after %d attempts" % attempts, "tried": tried}
 
 
@@ -512,6 +523,27 @@ def _ensure_ollama_on_box(host: str, port: int) -> dict:
         return {"ok": False, "error": str(e)[:160]}
 
 
+def _direct_ssh(inst):
+    """Most RELIABLE SSH endpoint for an instance: the DIRECT public-IP mapping (host = public_ipaddr,
+    port = the host port mapped to container 22) when available, else the sshN.vast.ai proxy. Vast's
+    proxy is frequently unreachable from our VPS; the direct path over the machine's public IP works.
+    Returns (host, port) or (None, None)."""
+    try:
+        if not isinstance(inst, dict):
+            return None, None
+        pub = inst.get("public_ipaddr")
+        ports = inst.get("ports")
+        m = ports.get("22/tcp") or ports.get("22") if isinstance(ports, dict) else None
+        if pub and isinstance(m, list) and m and (m[0] or {}).get("HostPort"):
+            return pub, int(m[0]["HostPort"])
+        sh, sp = inst.get("ssh_host"), inst.get("ssh_port")
+        if sh and "vast.ai" not in str(sh) and sp:        # ssh_host already a direct public IP
+            return sh, int(sp)
+        return sh, (int(sp) if sp else None)              # proxy fallback
+    except Exception:  # noqa: BLE001
+        return inst.get("ssh_host"), inst.get("ssh_port")
+
+
 def ensure_brain_tunnel() -> dict:
     """Make the live Vast brain's Ollama reachable at local 127.0.0.1:11434:
     (1) discover the running GPU box via the Vast API, (2) forward its port (reusing an
@@ -544,8 +576,7 @@ def ensure_brain_tunnel() -> dict:
                 pass
             return {"ok": True, "tunnel": "starting_box", "brain": stopped, "local": "127.0.0.1:11434"}
         return {"ok": True, "tunnel": "no_brain", "local": "127.0.0.1:11434"}
-    host = brain.get("ssh_host")
-    port = brain.get("ssh_port")
+    host, port = _direct_ssh(brain)
     if not host or not port:
         return {"ok": False, "tunnel": "no_ssh", "brain": brain}
     # Ensure the port is forwarded. Reuse an existing forward (manual/orphaned) if the local
