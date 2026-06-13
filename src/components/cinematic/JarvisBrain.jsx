@@ -69,6 +69,7 @@ import { isInvScenarioQuery, buildInvScenarioScript } from "@/components/cinemat
 import { isScenarioReadinessQuery, buildScenarioReadinessScript } from "@/components/cinematic/ScenarioSkillReadiness";
 import { isDatasetReportQuery, buildDatasetReportScript } from "@/components/cinematic/DatasetReportCrossRef";
 import { isKsrecQuery, buildKsrecScript } from "@/components/cinematic/KnowledgeSkillRecommender";
+import { isContactInvQuery, buildContactInvScript } from "@/components/cinematic/ContactInvestigationLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -835,6 +836,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ksrec-toggle"));
       try {
         const answer = await buildKsrecScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isContactInvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:contact-inv-toggle"));
+      try {
+        const answer = await buildContactInvScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {

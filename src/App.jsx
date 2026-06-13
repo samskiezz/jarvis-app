@@ -77,6 +77,7 @@ import InvestigationScenarioRecommender from '@/components/cinematic/Investigati
 import ScenarioSkillReadiness from '@/components/cinematic/ScenarioSkillReadiness';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
+import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -162,6 +163,7 @@ function App() {
             <ScenarioSkillReadiness />
             <DatasetReportCrossRef />
             <KnowledgeSkillRecommender />
+            <ContactInvestigationLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
