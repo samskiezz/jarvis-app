@@ -57,6 +57,7 @@ import { isHealthScoreQuery, buildHealthScoreScript } from "@/components/cinemat
 import { isTaskAlignQuery, buildTaskAlignScript } from "@/components/cinematic/TaskSkillAlignment";
 import { isIntelPulseQuery, buildIntelPulseScript } from "@/components/cinematic/LiveIntelPulse";
 import { isThreatVelocityQuery, buildThreatVelocityScript } from "@/components/cinematic/ThreatVelocityMonitor";
+import { isRunbookQuery, buildRunbookScript } from "@/components/cinematic/OpsRunbookGenerator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -690,6 +691,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:velocity-toggle"));
       try {
         const answer = await buildThreatVelocityScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isRunbookQuery(q)) {
+      try {
+        const answer = await buildRunbookScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
