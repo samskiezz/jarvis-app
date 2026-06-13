@@ -56,6 +56,7 @@ from .routes import friction_map as friction_map_routes
 from .routes import dead_zone_finder as dead_zone_finder_routes
 from .routes import proof_pack as proof_pack_routes
 from .routes import voice_forge as voice_forge_routes
+from .routes import codepulse as codepulse_routes
 from .routes import functions as functions_routes
 from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
@@ -328,6 +329,7 @@ def create_app() -> FastAPI:
     app.include_router(dead_zone_finder_routes.router)
     app.include_router(proof_pack_routes.router)
     app.include_router(voice_forge_routes.router)
+    app.include_router(codepulse_routes.router)
     app.include_router(jarvis_os_routes.router)
     app.include_router(jarvis_ontology_routes.router)
     app.include_router(jarvis_er_routes.router)
