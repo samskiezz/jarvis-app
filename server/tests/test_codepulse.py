@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib
+from pathlib import Path
 
 import pytest
 from fastapi import FastAPI
@@ -11,8 +12,20 @@ TOKEN = "test-key"
 AUTH = {"Authorization": f"Bearer {TOKEN}"}
 
 
+ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = ROOT / "server" / "data"
+
+
+def _clean_state():
+    try:
+        (DATA_DIR / "codepulse_state.json").unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
+    _clean_state()
     monkeypatch.setenv("BRAIN_DB", str(tmp_path / "brain.db"))
     monkeypatch.setenv("ONTOLOGY_DB", str(tmp_path / "ont.db"))
     monkeypatch.setenv("VECTOR_DB", str(tmp_path / "vectors.db"))
@@ -35,7 +48,8 @@ def client(tmp_path, monkeypatch):
 
     app = FastAPI()
     app.include_router(routes.router)
-    return TestClient(app)
+    yield TestClient(app)
+    _clean_state()
 
 
 def test_codepulse_status_open(client):
