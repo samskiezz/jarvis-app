@@ -2329,6 +2329,8 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\britual\b/.test(l)){openAppSheet('ritual');return true;}
   if(/\bopen\b.*\bmode\b/.test(l)||/\bmode\b.*\bmixer\b/.test(l)){openAppSheet('mode');return true;}
   if(/\bopen\b.*\bspec\b/.test(l)||/\bspec\b.*\bforge\b/.test(l)){openAppSheet('spec');return true;}
+  if(/\bopen\b.*\bfriction\b/.test(l)){openAppSheet('friction');return true;}
+  if(/\bopen\b.*\bdead\b.*\bzone\b/.test(l)||/\bdeadzone\b/.test(l)){openAppSheet('deadzone');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -5963,6 +5965,8 @@ const MINI_APPS=[
   {id:'ritual',ic:'🃏',t:'RitualDeck',d:'Repeatable routine launcher'},
   {id:'mode',ic:'🎛',t:'ModeMixer',d:'Behaviour mode profiles'},
   {id:'spec',ic:'📐',t:'SpecForge',d:'Idea → build-ready spec'},
+  {id:'friction',ic:'🧱',t:'FrictionMap',d:'Detect repeated workflow friction'},
+  {id:'deadzone',ic:'💀',t:'DeadZoneFinder',d:'Find stale, duplicate, dead code'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6121,10 +6125,11 @@ const APP_ENDPOINTS={
   boards:'/v1/dashboards',
   claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state',forgekey:'/v1/forge/status',
   intent:'/v1/intent/list',decision:'/v1/decision/list',compress:'/v1/compress/list',asset:'/v1/asset/list',
-  ritual:'/v1/ritual/list',mode:'/v1/mode/active',spec:'/v1/spec/list'
+  ritual:'/v1/ritual/list',mode:'/v1/mode/active',spec:'/v1/spec/list',
+  friction:'/v1/friction/scan',deadzone:'/v1/deadzone/scan'
 };
 
-async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;body.innerHTML='<div class=as-empty>Loading…</div>';
+async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;frictionLog('open_app',{app:_appSheetId});body.innerHTML='<div class=as-empty>Loading…</div>';
   const app=MINI_APPS.find(m=>m.id===_appSheetId);
   if(_appSheetId==='higgsfield'){body.innerHTML=renderHiggsfieldSheet();higgsfieldModeChange();return;}
   if(_appSheetId==='tripo3d'){body.innerHTML=renderTripo3dSheet();tripo3dModeChange();return;}
@@ -6142,6 +6147,8 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='ritual'){body.innerHTML=renderRitualSheet();loadRitualDeck();return;}
   if(_appSheetId==='mode'){body.innerHTML=renderModeSheet();loadModeMixer();return;}
   if(_appSheetId==='spec'){body.innerHTML=renderSpecSheet();loadSpecForge();return;}
+  if(_appSheetId==='friction'){body.innerHTML=renderFrictionSheet();loadFrictionMap();return;}
+  if(_appSheetId==='deadzone'){body.innerHTML=renderDeadZoneSheet();loadDeadZoneFinder();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -6436,6 +6443,21 @@ async function specCreate(){const idea=$('specIdea'),ctx=$('specContext');if(!id
 async function loadSpecForge(){const out=$('specList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/spec/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No specs</div>';return;}out.innerHTML=items.map(s=>{const fm=s.frontmatter||{};const st=fm.structured||{};return '<div class=as-card><b>'+escapeHtml(s.title)+'</b> <span style="color:var(--text-dim)">'+(fm.status||'draft')+'</span><br><span style="font-size:11px">'+escapeHtml(st.description||(s.body_md||'').slice(0,160))+'</span><div class=as-row-inline style="margin-top:6px"><button class=tbtn onclick="specView(\''+escapeHtml(s.id)+'\')">View</button><button class=as-run onclick="specApprove(\''+escapeHtml(s.id)+'\')">Approve</button></div><div id=specOut_'+s.id+'></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function specView(id){const out=$('specOut_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/spec/'+encodeURIComponent(id));const d=await r.json();const st=((d.spec||{}).frontmatter||{}).structured||{};let html='<div style="font-size:11px;margin-top:6px">';['screens','controls','backend_routes','data_model','events','guardrails','tests','mvp','future','clashes'].forEach(sec=>{const arr=st[sec];if(arr&&arr.length){html+='<div><b>'+escapeHtml(sec.replace(/_/g,' '))+'</b>'+arr.map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';}});html+='</div>';out.innerHTML=html||'<div class=as-empty>No structured output</div>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function specApprove(id){try{const r=await fetch('/v1/spec/'+encodeURIComponent(id)+'/approve?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Approved':'Failed');loadSpecForge();}catch(e){showInplaceAlert('Spec approve error: '+e);}}
+async function frictionLog(action,detail){try{await fetch('/v1/friction/log?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,detail})});}catch(_){}}
+
+/* ================ FrictionMap ================ */
+function renderFrictionSheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=as-run onclick="loadFrictionMap()">🔄 Scan friction</button><span style="color:var(--text-dim);font-size:11px">Last 24h of actions, duplicate prompts, repeat errors</span></div>
+  <div id=frictionOut><div class=as-empty>Loading…</div></div>
+</div>`;}
+async function loadFrictionMap(){const out=$('frictionOut');if(!out)return;out.innerHTML='<div class=as-empty>Scanning…</div>';try{const r=await fetch('/v1/friction/scan');const d=await r.json();const findings=(d.findings||[]);let html='<div class=as-card><b>Friction score:</b> '+escapeHtml(String(d.score||0))+'/100 · actions: '+escapeHtml(JSON.stringify(d.action_summary||{}))+'</div>';if(!findings.length){html+='<div class=as-empty>No friction detected</div>';}else{html+=findings.map(f=>'<div class=as-card style="border-left:3px solid var(--am)"><b>'+escapeHtml(f.label)+'</b> <span style="color:var(--text-dim)">x'+escapeHtml(String(f.count||1))+'</span><br><span style="font-size:11px">💡 '+escapeHtml(f.suggestion)+'</span></div>').join('');}out.innerHTML=html;}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+
+/* ================ DeadZoneFinder ================ */
+function renderDeadZoneSheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=as-run onclick="loadDeadZoneFinder()">🔄 Scan repo</button><span style="color:var(--text-dim);font-size:11px">Stale files, missing inventory links, untracked routes, overlaps</span></div>
+  <div id=deadzoneOut><div class=as-empty>Loading…</div></div>
+</div>`;}
+async function loadDeadZoneFinder(){const out=$('deadzoneOut');if(!out)return;out.innerHTML='<div class=as-empty>Scanning…</div>';try{const r=await fetch('/v1/deadzone/scan');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No dead zones found</div>';return;}out.innerHTML=items.map(z=>{const color=z.kind==='missing_file'?'var(--warn)':z.kind==='stale_file'?'var(--am)':'var(--text-dim)';return '<div class=as-card style="border-left:3px solid '+color+'"><b>'+escapeHtml(z.label)+'</b><br><span style="font-size:11px">💡 '+escapeHtml(z.suggestion)+(z.age_days!=null?' · age '+escapeHtml(String(z.age_days))+'d':'')+'</span></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>
