@@ -37,11 +37,15 @@ scp $SSHO -i "$KEY" -P "$P" server/voices/ref/*.wav "$U@$H:/root/voices/ref/" >/
 ssh $SSHO -i "$KEY" -p "$P" "$U@$H" 'bash -s' <<'REMOTE' 2>/dev/null || true
 export HOME=/root COQUI_TOS_AGREED=1 TTS_HOME=/root/tts_cache
 if ! /root/tts-venv/bin/python -c "import torch,TTS" 2>/dev/null; then
+  # Minimal images (e.g. ollama/ollama) ship python3 but no pip/venv — install them first.
+  python3 -c "import ensurepip" 2>/dev/null || { apt-get update -qq; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3-venv python3-pip >/dev/null 2>&1; }
   python3 -m venv /root/tts-venv
   . /root/tts-venv/bin/activate
   pip install -q --upgrade pip
   pip install -q torch==2.7.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
-  pip install -q coqui-tts==0.27.5 "transformers==4.57.1"
+  # cu128 wheels run fine on newer drivers (e.g. CUDA 13.x) via backward-compat. Pin numpy<2.3 +
+  # install scipy explicitly — coqui-tts needs them and a partial dep-resolve left numpy missing once.
+  pip install -q coqui-tts==0.27.5 "transformers==4.57.1" "numpy<2.3" scipy
 fi
 REMOTE
 
