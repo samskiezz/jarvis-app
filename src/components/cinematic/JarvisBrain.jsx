@@ -77,6 +77,7 @@ import { isDailyObjectivesQuery, buildDailyObjectivesScript } from "@/components
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "@/components/cinematic/OpsTaskCoverageChecker";
 import { isGeoSeismicQuery, buildGeoSeismicScript } from "@/components/cinematic/GeoSeismicAnalyst";
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "@/components/cinematic/CrisisEarlyWarning";
+import { isOpsInvCorrQuery, buildOpsInvCorrScript } from "@/components/cinematic/OpsInvCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -939,6 +940,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crisis-warning-toggle"));
       try {
         const answer = await buildCrisisWarningScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isOpsInvCorrQuery(q)) {
+      try {
+        const answer = await buildOpsInvCorrScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
