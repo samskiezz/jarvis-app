@@ -2321,6 +2321,7 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bclaw\b/.test(l)||/\bopen\b.*\bkimi\b/.test(l)){openAppSheet('claw');return true;}
   if(/\bopen\b.*\bsettings\b/.test(l)){openAppSheet('settings');return true;}
   if(/\bopen\b.*\bpanickey\b/.test(l)||/\bpanic\b.*\bkey\b/.test(l)){openAppSheet('panickey');return true;}
+  if(/\bopen\b.*\bforgekey\b/.test(l)||/\bforge\b.*\bkey\b/.test(l)){openAppSheet('forgekey');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -5947,6 +5948,7 @@ const MINI_APPS=[
   {id:'claw',ic:'🦞',t:'Kimi Claw',d:'OpenClaw agent bridge manager'},
   {id:'settings',ic:'⚙️',t:'Settings',d:'System controls, theme, voice, services'},
   {id:'panickey',ic:'🚨',t:'PanicKey',d:'Universal control, memory, optimisation & learning'},
+  {id:'forgekey',ic:'🔨',t:'ForgeKey',d:'Forge code-evolution approval queue'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6103,7 +6105,7 @@ const APP_ENDPOINTS={
   memory:'/v1/jarvis/memory?user_id=anonymous&limit=20',inbox:'/v1/jarvis/notifications?user_id=anonymous&limit=20',
   datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',assets:'/v1/jarvis/assets/status',
   boards:'/v1/dashboards',
-  claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state'
+  claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state',forgekey:'/v1/forge/status'
 };
 
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;body.innerHTML='<div class=as-empty>Loading…</div>';
@@ -6116,6 +6118,7 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='claw'){body.innerHTML=renderClawSheet();loadClawStatus();return;}
   if(_appSheetId==='settings'){body.innerHTML=renderSettingsSheet();loadSettings();return;}
   if(_appSheetId==='panickey'){body.innerHTML=renderPanicKeySheet();panickeyTab('command');return;}
+  if(_appSheetId==='forgekey'){body.innerHTML=renderForgeKeySheet();loadForgeKey();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -6235,6 +6238,7 @@ function renderAppData(id,d){
 function renderPanicKeySheet(){return `<div class=as-form>
   <div class=as-row-inline style="margin-bottom:8px">
     <button class=tbtn onclick="panickeyTab('command')">🎯 Command</button>
+    <button class=tbtn onclick="panickeyTab('active')">⚡ Active</button>
     <button class=tbtn onclick="panickeyTab('calls')">📞 Calls</button>
     <button class=tbtn onclick="panickeyTab('files')">📁 Files</button>
     <button class=tbtn onclick="panickeyTab('jobs')">⚙ Jobs</button>
@@ -6247,6 +6251,7 @@ function renderPanicKeySheet(){return `<div class=as-form>
 let _pkTab='command';
 async function panickeyTab(tab){_pkTab=tab;const out=$('pkTab');if(!out)return;out.innerHTML='<div class=as-empty>Loading '+tab+'…</div>';try{
   if(tab==='command'){const r=await fetch('/panickey/state');const d=await r.json();out.innerHTML=renderPanicKeyCommand(d);}
+  else if(tab==='active'){const [r1,r2]=await Promise.all([fetch('/v1/panickey/active'),fetch('/v1/panickey/snapshots')]);const d=await r1.json();const snaps=await r2.json();d.snapshots=(snaps&&snaps.items)||[];out.innerHTML=renderPanicKeyActive(d);}
   else if(tab==='calls'){const r=await fetch('/panickey/calls');const d=await r.json();out.innerHTML=renderPanicKeyCalls(d.calls||[]);}
   else if(tab==='files'){const r=await fetch('/panickey/files');const d=await r.json();out.innerHTML=renderPanicKeyFiles(d.files||[]);}
   else if(tab==='jobs'){const r=await fetch('/panickey/jobs');const d=await r.json();out.innerHTML=renderPanicKeyJobs(d.jobs||[]);}
@@ -6262,6 +6267,8 @@ function renderPanicKeyCommand(d){const h=d.health||{};const s=d.stats||{};const
   html+='<button class=tbtn onclick="panickeyAction(\'set_mode\',{mode:\'recovery\'})">Recovery</button>';
   html+='</div></div>';
   html+='<div class=as-row-inline style="margin:8px 0">';
+  html+='<button class=as-run onclick="panickeySnapshot()">📸 Snapshot</button>';
+  html+='<button class=tbtn onclick="panickeySafeMode()">🛡 Safe Mode</button>';
   html+='<button class=as-run onclick="panickeyAction(\'run_debugger_auto\')">🛡 Auto-fix</button>';
   html+='<button class=as-run onclick="panickeyAction(\'run_optimizer\')">⚡ Optimise</button>';
   html+='<button class=tbtn onclick="panickeyAction(\'run_maintenance\')">🔧 Maintenance</button>';
@@ -6271,6 +6278,14 @@ function renderPanicKeyCommand(d){const h=d.health||{};const s=d.stats||{};const
   const alerts=(h.alerts||[]);html+='<div class=as-card><b>Alerts</b> '+(alerts.length?alerts.map(a=>'<br>⚠ '+escapeHtml(a.rule.name)+' · '+escapeHtml(JSON.stringify(a.context))):'<span style="color:var(--ok)">No active alerts</span>')+'</div>';
   const evts=(d.recent_events||[]);html+='<div class=as-card><b>Recent Events</b>'+(evts.length?evts.map(e=>'<br><span style="color:var(--text-dim)">['+new Date((e.t||0)*1000).toLocaleTimeString()+']</span> '+escapeHtml(e.source)+' · '+escapeHtml(e.kind)+' · '+escapeHtml(String(e.detail||'').slice(0,80))):'<br>No events')+'</div>';
   return html;}
+function renderPanicKeyActive(d){
+  let html='<div class=as-row-inline style="margin-bottom:8px"><button class=as-run onclick="panickeySnapshot()">📸 Snapshot now</button><button class=tbtn onclick="panickeySafeMode()">🛡 Safe mode</button></div>';
+  html+='<div class=as-card><b>Mode</b> '+escapeHtml(d.mode||'—')+' · <span style="color:var(--text-dim)">'+new Date((d.ts||0)*1000).toLocaleString()+'</span></div>';
+  const sv=d.services||[];html+='<div class=as-card><b>Active Services</b> '+sv.length+(sv.length?sv.map(x=>'<br><span style="color:'+(x.status==='online'?'var(--ok)':'var(--warn)')+'">●</span> '+escapeHtml(x.name)+' '+escapeHtml(x.status)+' · cpu '+escapeHtml(String(x.cpu||0))+'% · mem '+escapeHtml(String(x.mem_mb||0))+'MB</span>').join(''):'')+'</div>';
+  const jobs=(d.jobs||[]);html+='<div class=as-card><b>Active Jobs</b> '+jobs.length+(jobs.length?jobs.map(j=>'<br>• '+escapeHtml(j.name||j.id||'job')+' · '+escapeHtml(j.status||'—')).join(''):'<br><span style="color:var(--text-dim)">No active jobs</span>')+'</div>';
+  const calls=d.calls||{};html+='<div class=as-card><b>Recent Calls (1h)</b> '+escapeHtml(String(calls.total||0))+' total · '+escapeHtml(String(calls.ok||0))+' ok · '+escapeHtml(String(calls.fail||0))+' fail</div>';
+  const snaps=(d.snapshots||[]);html+='<div class=as-card><b>Snapshots</b> '+(snaps.length?snaps.map(s=>'<br>• '+escapeHtml(s.label||s.id)+' · '+escapeHtml(s.t||'')+' <button class=tbtn onclick="panickeyRestore(\''+escapeHtml(s.id)+'\')">↩ Restore</button>').join(''):'<span style="color:var(--text-dim)">No snapshots</span>')+'</div>';
+  return html;}
 function renderPanicKeyCalls(list){if(!list.length)return '<div class=as-empty>No calls</div>';return list.map(c=>'<div class=as-card style="border-left:3px solid '+(c.ok?'var(--ok)':'var(--warn)')+'"><b>'+escapeHtml(c.tier)+' / '+escapeHtml(c.model)+'</b> · '+(c.ok?'✓':'✗')+' · '+escapeHtml(String(c.latency_ms||0))+'ms · '+escapeHtml(String((c.prompt_tokens||0)+(c.completion_tokens||0)))+' tokens<br><span style="color:var(--text-dim)">'+escapeHtml(c.err||'')+'</span></div>').join('');}
 function renderPanicKeyFiles(list){if(!list.length)return '<div class=as-empty>No files</div>';return list.map(f=>'<div class=as-card><b>'+escapeHtml(f.path)+'</b> · '+escapeHtml(f.type)+' · '+Math.round((f.size||0)/1024)+' KB · '+new Date((f.mtime||0)*1000).toLocaleString()+'</div>').join('');}
 function renderPanicKeyJobs(list){if(!list.length)return '<div class=as-empty>No jobs</div>';return list.map(j=>'<div class=as-card><b>'+escapeHtml(j.name||j.id||'?')+'</b> · '+escapeHtml(j.status||'—')+(j.error?'<br><span style="color:var(--warn)">'+escapeHtml(j.error)+'</span>':'')+'</div>').join('');}
@@ -6278,6 +6293,31 @@ function renderPanicKeyLearning(d){let html='<div class=as-card><b>Best route</b
 function renderPanicKeyRules(list){if(!list.length)return '<div class=as-empty>No rules</div>';return list.map(r=>'<div class=as-card><b>'+escapeHtml(r.name)+'</b> '+(r.enabled?'On':'Off')+'<br><span style="color:var(--text-dim)">'+escapeHtml(r.condition)+' → '+escapeHtml(r.action)+'</span><br>'+escapeHtml(r.description||'')+'<br><button class=tbtn onclick="panickeyAction(\'set_rule\',{id:\''+r.id+'\',enabled:'+(!r.enabled)+'})">'+(r.enabled?'Disable':'Enable')+'</button></div>').join('');}
 function renderPanicKeyAudit(list){if(!list.length)return '<div class=as-empty>No audit entries</div>';return list.slice(-30).map(a=>'<div class=as-card><span style="color:var(--text-dim)">'+escapeHtml(a.t)+'</span> · '+escapeHtml(a.action)+' · '+escapeHtml(JSON.stringify(a.detail||{}).slice(0,120))+'</div>').join('');}
 async function panickeyAction(action,payload){try{const body={action};if(payload)body.payload=payload;const r=await fetch('/panickey/action?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();showInplaceAlert(action+': '+(d.ok?'done':'failed'));panickeyTab(_pkTab);}catch(e){showInplaceAlert('PanicKey action error: '+e);}}
+async function panickeySnapshot(){try{const r=await fetch('/v1/panickey/snapshot?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({label:'manual'})});const d=await r.json();showInplaceAlert(d.ok?'Snapshot saved':'Snapshot failed');panickeyTab('active');}catch(e){showInplaceAlert('Snapshot error: '+e);}}
+async function panickeySafeMode(){try{const r=await fetch('/v1/panickey/safemode?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert('Safe mode: '+d.mode);panickeyTab('command');}catch(e){showInplaceAlert('Safe mode error: '+e);}}
+async function panickeyRestore(id){if(!id)return;try{const r=await fetch('/v1/panickey/snapshot/'+encodeURIComponent(id)+'/restore?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Restored':'Restore failed');panickeyTab('command');}catch(e){showInplaceAlert('Restore error: '+e);}}
+
+/* ================ ForgeKey ================ */
+function renderForgeKeySheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px">
+    <button class=as-run onclick="loadForgeKey()">🔄 Refresh</button>
+    <span style="color:var(--text-dim);font-size:11px">Approve or reject Forge code-evolution proposals</span>
+  </div>
+  <div id=fkStatus><div class=as-empty>Loading Forge status…</div></div>
+  <div id=fkQueue style="margin-top:10px"><div class=as-empty>Loading approval queue…</div></div>
+</div>`;}
+async function loadForgeKey(){const st=$('fkStatus'),qu=$('fkQueue');if(!st||!qu)return;
+  try{
+    const sr=await fetch('/v1/forge/status');const sd=await sr.json();
+    st.innerHTML='<div class=as-card><b>Forge Status</b> · available: '+(sd.available?'yes':'no')+' · pending: '+escapeHtml(String(sd.pending_approvals||0))+' · model: '+escapeHtml(String((sd.config||{}).model||'—'))+'</div>';
+    const ar=await fetch('/v1/forge/approvals?status=pending');const ad=await ar.json();
+    const items=(ad&&ad.items)||[];
+    if(!items.length){qu.innerHTML='<div class=as-empty>No pending approvals</div>';return;}
+    qu.innerHTML=items.map(c=>'<div class=as-card><b>'+escapeHtml(c.path||c.id)+'</b> <span style="color:var(--text-dim)">'+escapeHtml(c.status)+' · '+escapeHtml(String(c.diff_lines||0))+' lines</span><br><span style="color:var(--text-dim);font-size:11px">'+escapeHtml(String(c.by||'forge'))+' · '+escapeHtml(String(c.created_at||''))+'</span><div class=as-row-inline style="margin-top:6px"><button class=as-run onclick="forgeKeyApprove(\''+escapeHtml(c.id)+'\')">✓ Approve</button><button class=tbtn onclick="forgeKeyReject(\''+escapeHtml(c.id)+'\')">✗ Reject</button><button class=tbtn onclick="forgeKeyView(\''+escapeHtml(c.id)+'\')">👁 View diff</button></div><div id=fkDiff_'+c.id+'></div></div>').join('');
+  }catch(e){st.innerHTML='<div class=as-err>Forge unavailable: '+escapeHtml(String(e))+'</div>';qu.innerHTML='';}}
+async function forgeKeyApprove(id){try{const r=await fetch('/v1/forge/approvals/'+encodeURIComponent(id)+'/approve?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Approved':'Approve failed');loadForgeKey();}catch(e){showInplaceAlert('Forge approve error: '+e);}}
+async function forgeKeyReject(id){try{const r=await fetch('/v1/forge/approvals/'+encodeURIComponent(id)+'/reject?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Rejected':'Reject failed');loadForgeKey();}catch(e){showInplaceAlert('Forge reject error: '+e);}}
+async function forgeKeyView(id){const out=$('fkDiff_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading diff…</div>';try{const r=await fetch('/v1/forge/approvals/'+encodeURIComponent(id));const d=await r.json();out.innerHTML='<pre style="max-height:260px;overflow:auto;background:var(--liquid-regular);border:1px solid var(--border-line);border-radius:var(--radius-lg);padding:10px;font-size:10px;color:var(--text-primary)">'+escapeHtml(d.diff||'(no diff)')+'</pre>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>

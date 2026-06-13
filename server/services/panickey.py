@@ -387,6 +387,63 @@ def rules() -> list[dict[str, Any]]:
     return _ensure_state().get("rules", [])
 
 
+def active_snapshot() -> dict[str, Any]:
+    """Return currently active work: pm2 services, recent LLM calls, task daemon jobs."""
+    return {
+        "ts": int(time.time()),
+        "mode": _ensure_state().get("mode", "normal"),
+        "services": _pm2_list(),
+        "calls": _call_stats(1),
+        "jobs": _jobs(),
+        "events": _events(10),
+    }
+
+
+def snapshot(label: str | None = None) -> dict[str, Any]:
+    """Capture a system snapshot and persist it."""
+    s = _ensure_state()
+    snaps = s.setdefault("snapshots", [])
+    snap = {
+        "id": f"snap-{int(time.time()*1000)}",
+        "t": _now(),
+        "label": label or "manual snapshot",
+        "mode": s.get("mode", "normal"),
+        "services": _pm2_list(),
+        "disk": _disk(),
+        "calls": _call_stats(24),
+        "rules": [r.copy() for r in s.get("rules", [])],
+    }
+    snaps.append(snap)
+    s["snapshots"] = snaps[-20:]
+    _save_state(s)
+    _audit("snapshot", {"id": snap["id"], "label": snap["label"]})
+    return {"ok": True, "snapshot": snap}
+
+
+def list_snapshots(limit: int = 20) -> list[dict[str, Any]]:
+    return _ensure_state().get("snapshots", [])[-limit:]
+
+
+def restore_snapshot(snap_id: str) -> dict[str, Any]:
+    """Restore mode/rules from a snapshot. Does not restart services automatically."""
+    s = _ensure_state()
+    for snap in s.get("snapshots", []):
+        if snap.get("id") == snap_id:
+            old_mode = s.get("mode", "normal")
+            s["mode"] = snap.get("mode", old_mode)
+            if "rules" in snap:
+                s["rules"] = [r.copy() for r in snap["rules"]]
+            _save_state(s)
+            _audit("restore_snapshot", {"id": snap_id, "mode": s["mode"]})
+            return {"ok": True, "mode": s["mode"], "restored_from": snap_id}
+    return {"ok": False, "error": "snapshot not found"}
+
+
+def safe_mode() -> dict[str, Any]:
+    """Enter safe mode and stop non-lifeline background work."""
+    return set_mode("safe")
+
+
 def guardian_tick() -> dict[str, Any]:
     """Autonomous rule enforcement — runs frequently to prevent runaway issues."""
     s = _ensure_state()

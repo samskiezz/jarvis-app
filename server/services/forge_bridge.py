@@ -109,3 +109,15 @@ def get_change(change_id: str) -> Optional[dict]:
         return _change_to_dict(c, with_diff=True) if c is not None else None
     except Exception:  # noqa: BLE001
         return None
+
+
+def set_status(change_id: str, status: str) -> Optional[dict]:
+    """Approve or reject a queued change. Returns the updated change or None."""
+    store = _store()
+    if store is None:
+        return None
+    try:
+        store.set_status(change_id, status)
+        return get_change(change_id)
+    except Exception:  # noqa: BLE001
+        return None
