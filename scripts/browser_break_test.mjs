@@ -141,7 +141,10 @@ async function run() {
   try {
     await closeControlCenter();
     await page.evaluate(() => { if (window.toggleControlCenter) window.toggleControlCenter(); });
-    await page.waitForSelector("#ovControlCenter.open", { timeout: 5000 });
+    await page.waitForFunction(() => {
+      const ov = document.getElementById("ovControlCenter");
+      return ov && ov.classList.contains("open") && getComputedStyle(ov).display !== "none";
+    }, { timeout: 10000 });
     const appsBtn = page.locator("#ccApps");
     if (await appsBtn.isVisible({ timeout: 5000 })) {
       await appsBtn.click({ force: true });
