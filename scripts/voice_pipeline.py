@@ -19,6 +19,7 @@ Usage:
   python3 scripts/voice_pipeline.py            # process everything in raw_user/
   python3 scripts/voice_pipeline.py --no-restart
 """
+import argparse
 import os, sys, re, json, shutil, subprocess, datetime
 
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,6 +27,7 @@ RAW_DIR   = os.path.join(ROOT, "server", "voices", "raw_user")
 WORK_DIR  = os.path.join(ROOT, "server", "voices", "dataset")
 REF_DIR   = os.path.join(ROOT, "server", "voices", "ref")
 QC_PATH   = os.path.join(ROOT, "server", "voices", "QC_REPORT.md")
+CACHE_DIR = os.path.join(ROOT, "server", "voices", "clone_cache")
 
 # XTTS likes ~6-12s clean clips at 24 kHz mono. We keep the best few as refs.
 TARGET_SR   = 24000
@@ -123,8 +125,26 @@ def _maybe_transcribe(clips):
     return len(rows)
 
 
-def main():
-    no_restart = "--no-restart" in sys.argv
+def _parse_args(argv=None):
+    p = argparse.ArgumentParser(description="JARVIS voice-clone pipeline")
+    p.add_argument("--raw-dir", default=RAW_DIR, help="Directory containing raw user recordings")
+    p.add_argument("--ref-dir", default=REF_DIR, help="Directory to install active reference clips")
+    p.add_argument("--work-dir", default=WORK_DIR, help="Scratch working directory")
+    p.add_argument("--cache-dir", default=CACHE_DIR, help="Synth cache directory to clear on restart")
+    p.add_argument("--qc-path", default=QC_PATH, help="Where to write QC report")
+    p.add_argument("--no-restart", action="store_true", help="Do not restart jarvis-voiceclone")
+    return p.parse_args(argv)
+
+
+def main(argv=None):
+    global RAW_DIR, REF_DIR, WORK_DIR, QC_PATH, CACHE_DIR
+    args = _parse_args(argv)
+    RAW_DIR = args.raw_dir
+    REF_DIR = args.ref_dir
+    WORK_DIR = args.work_dir
+    QC_PATH = args.qc_path
+    CACHE_DIR = args.cache_dir
+    no_restart = args.no_restart
     os.makedirs(RAW_DIR, exist_ok=True)
     raws = [os.path.join(RAW_DIR, f) for f in sorted(os.listdir(RAW_DIR))
             if f.lower().endswith((".mp3", ".m4a", ".wav", ".ogg", ".opus", ".aac", ".flac"))]
@@ -200,7 +220,7 @@ def main():
     if not no_restart:
         _run(["pm2", "restart", "jarvis-voiceclone"])
         # clear the old synth cache so new requests re-render in the new voice
-        cache = os.path.join(ROOT, "server", "voices", "clone_cache")
+        cache = CACHE_DIR
         if os.path.isdir(cache):
             for f in os.listdir(cache):
                 if f.endswith(".wav"):
