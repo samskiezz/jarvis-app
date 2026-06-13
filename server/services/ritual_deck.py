@@ -107,6 +107,24 @@ def get_run(run_id: str) -> Optional[dict[str, Any]]:
     return None
 
 
+def pause_run(run_id: str) -> dict[str, Any]:
+    s = _state()
+    for r in s.get("runs", []):
+        if r.get("id") == run_id:
+            r["status"] = "paused"
+            mas.save(APP, s)
+            return {"ok": True, "run": r}
+    return {"ok": False, "error": "run not found"}
+
+
+def run_status(run_id: str) -> dict[str, Any]:
+    run = get_run(run_id)
+    if run is None:
+        return {"ok": False, "error": "run not found"}
+    routine = get_routine(run.get("routine_id"))
+    return {"ok": True, "run": run, "routine": routine}
+
+
 def advance_run(run_id: str, action: str = "next") -> dict[str, Any]:
     """Advance, skip, or stop a run. Pauses on destructive steps unless safe=False."""
     s = _state()

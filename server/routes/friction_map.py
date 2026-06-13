@@ -23,6 +23,12 @@ async def friction_scan(hours: int = 24, _token: str | None = Depends(optional_b
     return fm.scan(hours=hours)
 
 
+@router.post("/scan")
+async def friction_scan_post(hours: int = 24, _token: str = Depends(require_bearer)):
+    """Plan-compatible alias for POST /v1/friction/scan."""
+    return fm.scan(hours=hours)
+
+
 @router.post("/log")
 async def friction_log(body: LogBody, _token: str = Depends(require_bearer)):
     return fm.log_action(body.action, body.detail or {})

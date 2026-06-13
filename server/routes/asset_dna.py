@@ -28,3 +28,9 @@ async def asset_get(asset_id: str, _token: str | None = Depends(optional_bearer)
 @router.post("/scan")
 async def asset_scan(_token: str = Depends(require_bearer)):
     return {"items": ad.scan_assets(limit=200)}
+
+
+@router.post("/register")
+async def asset_register(_token: str = Depends(require_bearer)):
+    """Plan-compatible alias for POST /v1/asset/register."""
+    return {"items": ad.scan_assets(limit=200)}

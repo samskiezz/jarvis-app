@@ -38,6 +38,24 @@ async def ritual_list(_token: str | None = Depends(optional_bearer)):
     return {"items": rd.list_routines()}
 
 
+@router.get("/status/{run_id}")
+async def ritual_status(run_id: str, _token: str | None = Depends(optional_bearer)):
+    result = rd.run_status(run_id)
+    if not result.get("ok"):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail=result.get("error", "run not found"))
+    return result
+
+
+@router.post("/pause/{run_id}")
+async def ritual_pause(run_id: str, _token: str = Depends(require_bearer)):
+    result = rd.pause_run(run_id)
+    if not result.get("ok"):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail=result.get("error", "run not found"))
+    return result
+
+
 @router.get("/{routine_id}")
 async def ritual_get(routine_id: str, _token: str | None = Depends(optional_bearer)):
     r = rd.get_routine(routine_id)

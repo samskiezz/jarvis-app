@@ -33,6 +33,12 @@ class MixBody(BaseModel):
     overrides: dict[str, Any] = Field(default_factory=dict)
 
 
+@router.get("/")
+async def mode_root(_token: str | None = Depends(optional_bearer)):
+    """Plan-compatible alias for GET /v1/mode."""
+    return mm.get_active()
+
+
 @router.get("/active")
 async def mode_active(_token: str | None = Depends(optional_bearer)):
     return mm.get_active()

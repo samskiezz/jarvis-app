@@ -36,6 +36,12 @@ async def decision_list(limit: int = 50, _token: str | None = Depends(optional_b
     return {"items": dl.list_decisions(limit=limit)}
 
 
+@router.post("/")
+async def decision_create_root(body: CreateBody, _token: str = Depends(require_bearer)):
+    """Plan-compatible alias for POST /v1/decision."""
+    return await decision_create(body, _token)
+
+
 @router.post("/create")
 async def decision_create(body: CreateBody, _token: str = Depends(require_bearer)):
     return dl.create_decision(
