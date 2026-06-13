@@ -1894,6 +1894,21 @@ html.low-power #mic.live{animation:none}
 .accDone:active{transform:scale(.99);}
 @media(max-width:560px){.accRow .accBtn{min-width:84px}.accSub{font-size:14px}}
 </style>
+<style>
+#cpPopup{position:fixed;top:14px;right:14px;z-index:130;width:min(380px,92vw);display:none;
+  border-radius:var(--radius-sheet);background:var(--liquid-thick);border:1px solid var(--border-line);
+  box-shadow:var(--sheen),0 24px 80px rgba(0,0,0,.45),0 0 55px var(--tint-soft);
+  backdrop-filter:var(--blur-heavy) saturate(1.4);padding:14px 16px;pointer-events:auto;}
+#cpPopup.show{display:block}
+#cpPopup .cp-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:var(--text-primary);margin-bottom:8px}
+#cpPopup .cp-body{font-size:13px;line-height:1.5;color:var(--text-secondary);max-height:180px;overflow:auto}
+#cpPopup .cp-diff{font-size:11px;color:var(--text-dim);background:var(--liquid-regular);border:1px solid var(--border-line);border-radius:var(--radius-lg);padding:8px;margin-top:8px;white-space:pre-wrap;max-height:120px;overflow:auto;display:none}
+#cpPopup .cp-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+#cpPopup .cp-btns button{flex:1;min-height:38px;border-radius:var(--radius-lg);border:1px solid var(--border-line);background:var(--liquid-regular);color:var(--text-primary);font-weight:700;font-size:13px;cursor:pointer;box-shadow:var(--sheen)}
+#cpPopup .cp-yes{background:rgba(52,211,153,.22);border-color:rgba(52,211,153,.45)}
+#cpPopup .cp-no{background:rgba(255,90,90,.15);border-color:rgba(255,90,90,.4)}
+#cpPopup .cp-stop{background:rgba(255,170,40,.15);border-color:rgba(255,170,40,.4)}
+</style>
 <script>
 /* ===== Accessible Device-Access panel: big-button, gesture-driven permission grants ===== */
 (function(){
@@ -2331,6 +2346,9 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bspec\b/.test(l)||/\bspec\b.*\bforge\b/.test(l)){openAppSheet('spec');return true;}
   if(/\bopen\b.*\bfriction\b/.test(l)){openAppSheet('friction');return true;}
   if(/\bopen\b.*\bdead\b.*\bzone\b/.test(l)||/\bdeadzone\b/.test(l)){openAppSheet('deadzone');return true;}
+  if(/\bopen\b.*\bproof\b.*\bpack\b/.test(l)||/\bproofpack\b/.test(l)){openAppSheet('proofpack');return true;}
+  if(/\bopen\b.*\bvoice\b.*\bforge\b/.test(l)||/\bvoiceforge\b/.test(l)){openAppSheet('voiceforge');return true;}
+  if(/\bopen\b.*\bcode\b.*\bpulse\b/.test(l)||/\bcodepulse\b/.test(l)){openAppSheet('codepulse');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -5762,7 +5780,7 @@ function engage(){if(_engaged)return;_engaged=true;
 addEventListener('pointerdown',engage,{once:true});
 
 // start data loops immediately; build the scene on first gesture (autoplay policy) OR auto after 2.2s
-tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();
+tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();codePulseStartPoll();
 wireDockMove();              // §1 D: make the whole dock draggable to any position
 wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
 buildPanelTabs();            // tablet drawer tabs for collapsing panels
@@ -5910,6 +5928,16 @@ function triggerDirtyLens(){const a=$('lensAlert');if(!a)return;a.classList.add(
 function escapeHtml(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 async function saveToLibrary(kind,url,prompt,source){try{const r=await fetch('/library/save?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind,url,prompt,source})});const d=await r.json();showInplaceAlert(d.ok?'Saved to library':('Save failed: '+escapeHtml(d.error||'')));if(d.ok)loadLib();}catch(e){showInplaceAlert('Library save error: '+e);}}
 
+/* ================ CodePulse VS Code popup ================ */
+let _cpItem=null,_cpPoll=null;
+function codePulseStartPoll(){if(_cpPoll)return;_cpPoll=setInterval(codePulsePoll,5000);codePulsePoll();}
+async function codePulsePoll(){try{const r=await fetch('/v1/codepulse/pending?status=pending');const d=await r.json();const items=(d&&d.items)||[];if(items.length){if(!_cpItem||_cpItem.id!==items[0].id){_cpItem=items[0];codePulseRender(_cpItem);}}else{codePulseHide();_cpItem=null;}}catch(_){}}
+function codePulseRender(item){const popup=$('cpPopup');if(!popup)return;popup.classList.add('show');$('cpType').textContent=(item.type||'act')+' '+(item.file||'');let body=escapeHtml(item.description||'An action is waiting for approval.');if(item.workspace)body+='<br><span style="color:var(--text-dim)">workspace: '+escapeHtml(item.workspace)+'</span>';if(item.safe_option)body+='<br><span style="color:var(--ok)">Safe option:</span> '+escapeHtml(item.safe_option);$('cpBody').innerHTML=body;const diff=$('cpDiff');if(item.diff){diff.textContent=item.diff;diff.style.display='block';}else{diff.style.display='none';}}
+function codePulseHide(){const popup=$('cpPopup');if(popup)popup.classList.remove('show');}
+async function codePulseResolve(action){if(!_cpItem)return;const id=_cpItem.id;try{let url=null;if(action==='approve')url='/v1/codepulse/pending/'+encodeURIComponent(id)+'/approve';else if(action==='reject')url='/v1/codepulse/pending/'+encodeURIComponent(id)+'/reject';else if(action==='explain')url='/v1/codepulse/pending/'+encodeURIComponent(id)+'/explain';else if(action==='safe'){if(!_cpItem.safe_option){showInplaceAlert('No safe option offered');return;}url='/v1/codepulse/pending/'+encodeURIComponent(id)+'/approve';}
+  if(!url)return;const r=await fetch(url+'?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await r.json();showInplaceAlert(d.ok?(action+' done'):('failed: '+escapeHtml(d.error||'')));codePulseHide();_cpItem=null;codePulsePoll();}catch(e){showInplaceAlert('CodePulse resolve error: '+e);}}
+async function codePulseStop(){try{const r=await fetch('/v1/codepulse/stop?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'PanicKey safe mode activated':'Stop failed');codePulseHide();_cpItem=null;}catch(e){showInplaceAlert('CodePulse stop error: '+e);}}
+
 initWave3Interactions();
 
 /* =========================================================
@@ -5968,6 +5996,9 @@ const MINI_APPS=[
   {id:'spec',ic:'📐',t:'SpecForge',d:'Idea → build-ready spec'},
   {id:'friction',ic:'🧱',t:'FrictionMap',d:'Detect repeated workflow friction'},
   {id:'deadzone',ic:'💀',t:'DeadZoneFinder',d:'Find stale, duplicate, dead code'},
+  {id:'proofpack',ic:'📦',t:'ProofPack',d:'Evidence packs for specs, diffs, tests, risks'},
+  {id:'voiceforge',ic:'🎙',t:'VoiceForge',d:'Record, build, test and switch voice profiles'},
+  {id:'codepulse',ic:'🧑‍💻',t:'CodePulse',d:'VS Code bridge + approvals'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6128,7 +6159,8 @@ const APP_ENDPOINTS={
   claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state',forgekey:'/v1/forge/status',
   intent:'/v1/intent/list',decision:'/v1/decision/list',compress:'/v1/compress/list',asset:'/v1/asset/list',
   ritual:'/v1/ritual/list',mode:'/v1/mode/active',spec:'/v1/spec/list',
-  friction:'/v1/friction/scan',deadzone:'/v1/deadzone/scan'
+  friction:'/v1/friction/scan',deadzone:'/v1/deadzone/scan',
+  proofpack:'/v1/proofpack/list',voiceforge:'/v1/voiceforge/profiles',codepulse:'/v1/codepulse/status'
 };
 
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;frictionLog('open_app',{app:_appSheetId});body.innerHTML='<div class=as-empty>Loading…</div>';
@@ -6151,6 +6183,9 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='spec'){body.innerHTML=renderSpecSheet();loadSpecForge();return;}
   if(_appSheetId==='friction'){body.innerHTML=renderFrictionSheet();loadFrictionMap();return;}
   if(_appSheetId==='deadzone'){body.innerHTML=renderDeadZoneSheet();loadDeadZoneFinder();return;}
+  if(_appSheetId==='proofpack'){body.innerHTML=renderProofPackSheet();loadProofPack();return;}
+  if(_appSheetId==='voiceforge'){body.innerHTML=renderVoiceForgeSheet();loadVoiceForge();return;}
+  if(_appSheetId==='codepulse'){body.innerHTML=renderCodePulseSheet();loadCodePulse();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -6461,6 +6496,66 @@ function renderDeadZoneSheet(){return `<div class=as-form>
 </div>`;}
 async function loadDeadZoneFinder(){const out=$('deadzoneOut');if(!out)return;out.innerHTML='<div class=as-empty>Scanning…</div>';try{const r=await fetch('/v1/deadzone/scan');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No dead zones found</div>';return;}out.innerHTML=items.map(z=>{const color=z.kind==='missing_file'?'var(--warn)':z.kind==='stale_file'?'var(--am)':'var(--text-dim)';return '<div class=as-card style="border-left:3px solid '+color+'"><b>'+escapeHtml(z.label)+'</b><br><span style="font-size:11px">💡 '+escapeHtml(z.suggestion)+(z.age_days!=null?' · age '+escapeHtml(String(z.age_days))+'d':'')+'</span></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 
+/* ================ ProofPack ================ */
+function renderProofPackSheet(){return `<div class=as-form>
+  <details style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:700">+ New proof pack</summary>
+    <label>Title</label><input id=ppTitle placeholder="What changed?">
+    <label>Linked spec id (optional)</label><input id=ppSpec placeholder="spec id">
+    <label>Screenshot URL (optional)</label><input id=ppShot placeholder="https://…">
+    <label><input id=ppDiff type=checkbox checked> Include diff excerpt</label>
+    <button class=as-run onclick="proofPackCreate()" style="margin-top:6px">Create pack</button>
+  </details>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=tbtn onclick="loadProofPack()">🔄 Packs</button></div>
+  <div id=ppList><div class=as-empty>Loading…</div></div>
+</div>`;}
+async function proofPackCreate(){const t=$('ppTitle'),s=$('ppSpec'),sh=$('ppShot');if(!t||!t.value.trim())return;try{const body={title:t.value.trim(),spec_id:s?s.value.trim():'',screenshot_url:sh?sh.value.trim():'',include_diff:!!$('ppDiff').checked};const r=await fetch('/v1/proofpack/create?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();showInplaceAlert(d.ok?'Pack created':'Failed');if(d.ok){t.value='';if(s)s.value='';if(sh)sh.value='';loadProofPack();}}catch(e){showInplaceAlert('ProofPack error: '+e);}}
+async function loadProofPack(){const out=$('ppList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/proofpack/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No proof packs</div>';return;}out.innerHTML=items.map(p=>{const fm=p.frontmatter||{};return '<div class=as-card><b>'+escapeHtml(p.title)+'</b> <span style="color:var(--text-dim)">'+escapeHtml(fm.commit||'')+'</span><br><span style="font-size:11px;color:var(--text-dim)">risks: '+escapeHtml(String((fm.risks||[]).length))+' · dead zones: '+escapeHtml(String(fm.dead_zone_count||0))+'</span><div class=as-row-inline style="margin-top:6px"><button class=tbtn onclick="proofPackView(\''+escapeHtml(p.id)+'\')">View</button><button class=tbtn onclick="proofPackExport(\''+escapeHtml(p.id)+'\')">Export</button></div><div id=ppOut_'+p.id+'></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function proofPackView(id){const out=$('ppOut_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/proofpack/'+encodeURIComponent(id));const d=await r.json();const p=d.pack||{};out.innerHTML='<pre style="max-height:240px;overflow:auto;font-size:10px;color:var(--text-dim);white-space:pre-wrap">'+escapeHtml(p.body_md||'')+'</pre>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function proofPackExport(id){try{const r=await fetch('/v1/proofpack/'+encodeURIComponent(id)+'/export?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({format:'markdown'})});const d=await r.json();if(!d.ok){showInplaceAlert('Export failed');return;}const blob=new Blob([d.markdown],{type:'text/markdown'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(d.title||'proof-pack')+'.md';a.click();}catch(e){showInplaceAlert('Export error: '+e);}}
+
+/* ================ VoiceForge ================ */
+function renderVoiceForgeSheet(){return `<div class=as-form>
+  <div id=vfStatus style="margin-bottom:10px"><div class=as-empty>Loading…</div></div>
+  <details style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:700">+ New voice profile</summary>
+    <label>Name</label><input id=vfName placeholder="e.g. JARVIS Cockney">
+    <label>Description</label><input id=vfDesc placeholder="Tone, use case…">
+    <button class=as-run onclick="voiceForgeCreateProfile()" style="margin-top:6px">Create profile</button>
+  </details>
+  <div id=vfList><div class=as-empty>Loading profiles…</div></div>
+</div>`;}
+async function loadVoiceForge(){const st=$('vfStatus'),li=$('vfList');if(!st||!li)return;try{const r=await fetch('/v1/voiceforge/profiles');const d=await r.json();const active=d.active_profile_id||'';const xtts=d.xtts||{};st.innerHTML='<div class=as-card><b>VoiceForge</b> · active: '+escapeHtml(active||'—')+' · XTTS: '+(xtts.available?'ready':'unavailable')+'</div>';const profiles=d.profiles||[];if(!profiles.length){li.innerHTML='<div class=as-empty>No profiles</div>';return;}li.innerHTML=profiles.map(p=>'<div class=as-card style="border-left:3px solid '+(p.id===active?'var(--ok)':'var(--text-dim)')+'"><b>'+escapeHtml(p.name)+'</b> '+(p.id===active?'<span style="color:var(--ok)">● active</span>':'')+'<br><span style="font-size:11px;color:var(--text-dim)">'+escapeHtml(p.description||'')+'</span><div class=as-row-inline style="margin-top:6px"><label class=tbtn style="cursor:pointer">📁 Upload<input type=file id=vfFile_'+p.id+' style="display:none" onchange="voiceForgeUpload(\''+escapeHtml(p.id)+'\',this)"></label><button class=tbtn onclick="voiceForgeBuild(\''+escapeHtml(p.id)+'\')">Build</button><button class=tbtn onclick="voiceForgeTest(\''+escapeHtml(p.id)+'\')">Test</button><button class=as-run onclick="voiceForgeActivate(\''+escapeHtml(p.id)+'\')">Activate</button><button class=tbtn onclick="voiceForgeDelete(\''+escapeHtml(p.id)+'\')">🗑</button></div><div id=vfOut_'+p.id+'></div></div>').join('');}catch(e){st.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function voiceForgeCreateProfile(){const n=$('vfName'),d=$('vfDesc');if(!n||!n.value.trim())return;try{const r=await fetch('/v1/voiceforge/profile?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n.value.trim(),description:d?d.value.trim():''})});const res=await r.json();showInplaceAlert(res.ok?'Profile created':'Failed');if(res.ok){n.value='';if(d)d.value='';loadVoiceForge();}}catch(e){showInplaceAlert('VoiceForge create error: '+e);}}
+async function voiceForgeUpload(id,input){if(!input||!input.files||!input.files[0])return;const f=input.files[0];const fd=new FormData();fd.append('file',f);try{const r=await fetch('/v1/voiceforge/profiles/'+encodeURIComponent(id)+'/upload?token='+CT,{method:'POST',body:fd});const d=await r.json();showInplaceAlert(d.ok?('Uploaded '+d.filename):'Upload failed');loadVoiceForge();}catch(e){showInplaceAlert('VoiceForge upload error: '+e);}}
+async function voiceForgeBuild(id){const out=$('vfOut_'+id);if(out)out.innerHTML='<div class=as-empty>Building…</div>';try{const r=await fetch('/v1/voiceforge/profiles/'+encodeURIComponent(id)+'/build?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?('Built '+d.refs_count+' refs'):('Build failed: '+escapeHtml(d.error||'')));if(out)out.innerHTML='<div class=as-out>'+(d.ok?'Built '+d.refs_count+' reference clips':'failed')+'</div>';}catch(e){showInplaceAlert('VoiceForge build error: '+e);}}
+async function voiceForgeTest(id){try{const text=prompt('Test phrase:','VoiceForge profile test.')||'VoiceForge profile test.';const r=await fetch('/v1/voiceforge/test?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});const d=await r.json();if(d.ok&&d.audio_url)jarvisSpeak(text);showInplaceAlert(d.ok?'Playing test':'Test failed');}catch(e){showInplaceAlert('VoiceForge test error: '+e);}}
+async function voiceForgeActivate(id){if(!confirm('Activate profile? This replaces the active voice references and restarts the clone service.'))return;try{const r=await fetch('/v1/voiceforge/activate/'+encodeURIComponent(id)+'?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Activated':'Activate failed');loadVoiceForge();}catch(e){showInplaceAlert('VoiceForge activate error: '+e);}}
+async function voiceForgeDelete(id){if(!confirm('Delete profile?'))return;try{const r=await fetch('/v1/voiceforge/profiles/'+encodeURIComponent(id)+'?token='+CT,{method:'DELETE'});const d=await r.json();showInplaceAlert(d.ok?'Deleted':'Delete failed');loadVoiceForge();}catch(e){showInplaceAlert('VoiceForge delete error: '+e);}}
+
+/* ================ CodePulse ================ */
+function renderCodePulseSheet(){return `<div class=as-form>
+  <div id=cpStatus><div class=as-empty>Loading…</div></div>
+  <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">+ Connect workspace</summary>
+    <label>Workspace path</label><input id=cpWorkspace placeholder="/path/to/repo">
+    <button class=as-run onclick="codePulseConnect()" style="margin-top:6px">Connect</button>
+    <button class=tbtn onclick="codePulseDisconnect()">Disconnect</button>
+  </details>
+  <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">+ Simulate VS Code action</summary>
+    <label>Type <select id=cpActType><option value=edit>edit</option><option value=create>create</option><option value=delete>delete</option><option value=shell>shell</option><option value=refactor>refactor</option></select></label>
+    <label>File</label><input id=cpActFile placeholder="app.py">
+    <label>Description</label><input id=cpActDesc placeholder="Add error handling">
+    <label>Safe option</label><input id=cpActSafe placeholder="Log instead of throwing">
+    <button class=as-run onclick="codePulseSimulate()" style="margin-top:6px">Send action</button>
+  </details>
+  <div class=as-row-inline style="margin:10px 0"><button class=tbtn onclick="loadCodePulse()">🔄 Refresh</button><button class=cp-stop onclick="codePulseStopSheet()">Stop (safe mode)</button></div>
+  <div id=cpQueue><div class=as-empty>Loading queue…</div></div>
+</div>`;}
+async function loadCodePulse(){const st=$('cpStatus'),qu=$('cpQueue');if(!st||!qu)return;try{const r=await fetch('/v1/codepulse/status');const d=await r.json();st.innerHTML='<div class=as-card><b>VS Code bridge</b> · '+((d.connected?'connected':'offline'))+(d.workspace?' · '+escapeHtml(d.workspace):'')+' · pending: '+escapeHtml(String(d.pending_count||0))+'</div>';const items=(d.pending||[]);if(!items.length){qu.innerHTML='<div class=as-empty>No pending actions</div>';return;}qu.innerHTML=items.map(i=>'<div class=as-card><b>'+escapeHtml(i.type)+'</b> '+escapeHtml(i.file||'')+'<br><span style="font-size:11px;color:var(--text-dim)">'+escapeHtml(i.description||'')+'</span><div class=as-row-inline style="margin-top:6px"><button class=as-run onclick="codePulseSheetResolve(\''+escapeHtml(i.id)+'\',\'approve\')">Yes</button><button class=tbtn onclick="codePulseSheetResolve(\''+escapeHtml(i.id)+'\',\'reject\')">No</button><button class=tbtn onclick="codePulseSheetResolve(\''+escapeHtml(i.id)+'\',\'explain\')">Explain</button></div></div>').join('');}catch(e){st.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function codePulseConnect(){const w=$('cpWorkspace');if(!w||!w.value.trim())return;try{const r=await fetch('/v1/codepulse/connect?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({workspace:w.value.trim()})});const d=await r.json();showInplaceAlert(d.ok?'Connected':'Failed');loadCodePulse();}catch(e){showInplaceAlert('Connect error: '+e);}}
+async function codePulseDisconnect(){try{const r=await fetch('/v1/codepulse/disconnect?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Disconnected':'Failed');loadCodePulse();}catch(e){showInplaceAlert('Disconnect error: '+e);}}
+async function codePulseSimulate(){const t=$('cpActType'),f=$('cpActFile'),d=$('cpActDesc'),s=$('cpActSafe');try{const body={type:'action_request',payload:{type:t?t.value:'edit',file:f?f.value.trim():'',description:d?d.value.trim():'',safe_option:s?s.value.trim():''}};const r=await fetch('/v1/codepulse/command?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const res=await r.json();showInplaceAlert(res.ok?'Action sent':'Failed');loadCodePulse();}catch(e){showInplaceAlert('Simulate error: '+e);}}
+async function codePulseSheetResolve(id,action){try{let url='/v1/codepulse/pending/'+encodeURIComponent(id)+'/'+(action==='explain'?'explain':action);const r=await fetch(url+'?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await r.json();showInplaceAlert(d.ok?(action+' done'):'Failed');loadCodePulse();}catch(e){showInplaceAlert('Resolve error: '+e);}}
+async function codePulseStopSheet(){try{const r=await fetch('/v1/codepulse/stop?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Safe mode activated':'Stop failed');}catch(e){showInplaceAlert('Stop error: '+e);}}
+
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>
   <div class=as-row-inline>
@@ -6644,5 +6739,19 @@ document.addEventListener('keydown',e=>{
 
 <!-- WAVE 4 — Mini-app Carousel -->
 <div id=ovCarousel onclick="if(event.target===this)closeCarouselOverlay()" role=dialog aria-modal=true aria-label="Mini app carousel"><button class=carousel-close onclick="closeCarouselOverlay()">✕</button><div id=carouselStage></div><div class=carousel-nav><button onclick="carouselPrev()">◀</button><button onclick="carouselNext()">▶</button></div><div class=carousel-dots id=carouselDots></div></div>
+
+<!-- CodePulse VS Code approval popup -->
+<div id=cpPopup role=dialog aria-live=polite aria-label="VS Code action approval">
+  <div class=cp-head>🧑‍💻 VS Code wants to <span id=cpType>act</span></div>
+  <div class=cp-body id=cpBody>Waiting for details…</div>
+  <pre class=cp-diff id=cpDiff></pre>
+  <div class=cp-btns>
+    <button class=cp-yes onclick="codePulseResolve('approve')">Yes</button>
+    <button class=cp-no onclick="codePulseResolve('reject')">No</button>
+    <button onclick="codePulseResolve('explain')">Explain</button>
+    <button onclick="codePulseResolve('safe')">Safe option</button>
+    <button class=cp-stop onclick="codePulseStop()">Stop</button>
+  </div>
+</div>
 
 </body></html>
