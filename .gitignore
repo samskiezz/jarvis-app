@@ -100,6 +100,7 @@ server/voices/raw_user/
 server/voices/dataset/
 server/voices/ref_backup_*/
 server/voices/clone_cache/
+server/voices/profiles/
 server/data/.vast_key
 server/data/gpu_results/
 server/data/assist_bridge.json
