@@ -61,6 +61,7 @@ import { isRunbookQuery, buildRunbookScript } from "@/components/cinematic/OpsRu
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "@/components/cinematic/ScenarioRiskAdvisor";
 import { isKnowledgeInvQuery, buildKnowledgeInvScript } from "@/components/cinematic/KnowledgeInvestigationLinker";
 import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "@/components/cinematic/SwarmRiskCoverageMap";
+import { isAthrepQuery, buildAthrepScript } from "@/components/cinematic/AdaptiveThreatReport";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -738,6 +739,17 @@ export default function JarvisBrain() {
     if (isSwarmCoverageQuery(q)) {
       try {
         const answer = await buildSwarmCoverageScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isAthrepQuery(q)) {
+      try {
+        const answer = await buildAthrepScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
