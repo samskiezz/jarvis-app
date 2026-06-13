@@ -86,6 +86,7 @@ import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecke
 import GeoSeismicAnalyst from '@/components/cinematic/GeoSeismicAnalyst';
 import CrisisEarlyWarning from '@/components/cinematic/CrisisEarlyWarning';
 import OpsInvCorrelator from '@/components/cinematic/OpsInvCorrelator';
+import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -180,6 +181,7 @@ function App() {
             <GeoSeismicAnalyst />
             <CrisisEarlyWarning />
             <OpsInvCorrelator />
+            <InvestmentContactMapper />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
