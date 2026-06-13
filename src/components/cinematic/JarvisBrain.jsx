@@ -78,6 +78,7 @@ import { isOpsCoverageQuery, buildOpsCoverageScript } from "@/components/cinemat
 import { isGeoSeismicQuery, buildGeoSeismicScript } from "@/components/cinematic/GeoSeismicAnalyst";
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "@/components/cinematic/CrisisEarlyWarning";
 import { isOpsInvCorrQuery, buildOpsInvCorrScript } from "@/components/cinematic/OpsInvCorrelator";
+import { isKrgapQuery, buildKrgapScript } from "@/components/cinematic/KnowledgeReportAuditor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -951,6 +952,17 @@ export default function JarvisBrain() {
     if (isOpsInvCorrQuery(q)) {
       try {
         const answer = await buildOpsInvCorrScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isKrgapQuery(q)) {
+      try {
+        const answer = await buildKrgapScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
