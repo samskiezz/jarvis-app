@@ -67,6 +67,7 @@ import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "@/components/cinem
 import { isMissionReadyQuery, buildMissionReadyScript } from "@/components/cinematic/MissionReadinessIndex";
 import { isInvScenarioQuery, buildInvScenarioScript } from "@/components/cinematic/InvestigationScenarioRecommender";
 import { isScenarioReadinessQuery, buildScenarioReadinessScript } from "@/components/cinematic/ScenarioSkillReadiness";
+import { isDatasetReportQuery, buildDatasetReportScript } from "@/components/cinematic/DatasetReportCrossRef";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -810,6 +811,17 @@ export default function JarvisBrain() {
     if (isScenarioReadinessQuery(q)) {
       try {
         const answer = await buildScenarioReadinessScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isDatasetReportQuery(q)) {
+      try {
+        const answer = await buildDatasetReportScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
