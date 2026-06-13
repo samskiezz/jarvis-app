@@ -64,6 +64,7 @@ import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "@/components/cin
 import { isAthrepQuery, buildAthrepScript } from "@/components/cinematic/AdaptiveThreatReport";
 import { isSkillContactQuery, buildSkillContactScript } from "@/components/cinematic/SkillContactGapAdvisor";
 import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "@/components/cinematic/GraphAnomalyDetector";
+import { isMissionReadyQuery, buildMissionReadyScript } from "@/components/cinematic/MissionReadinessIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -774,6 +775,17 @@ export default function JarvisBrain() {
     if (isGraphAnomalyQuery(q)) {
       try {
         const answer = await buildGraphAnomalyScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isMissionReadyQuery(q)) {
+      try {
+        const answer = await buildMissionReadyScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {

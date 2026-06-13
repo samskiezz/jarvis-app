@@ -72,6 +72,7 @@ import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import AdaptiveThreatReport from '@/components/cinematic/AdaptiveThreatReport';
 import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
 import GraphAnomalyDetector from '@/components/cinematic/GraphAnomalyDetector';
+import MissionReadinessIndex from '@/components/cinematic/MissionReadinessIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -152,6 +153,7 @@ function App() {
             <AdaptiveThreatReport />
             <SkillContactGapAdvisor />
             <GraphAnomalyDetector />
+            <MissionReadinessIndex />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
