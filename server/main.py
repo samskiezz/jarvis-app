@@ -47,6 +47,8 @@ from .routes import forge as forge_routes
 from .routes import panickey as panickey_routes
 from .routes import intent_inbox as intent_inbox_routes
 from .routes import decision_ledger as decision_ledger_routes
+from .routes import thought_compressor as thought_compressor_routes
+from .routes import asset_dna as asset_dna_routes
 from .routes import functions as functions_routes
 from .routes import gateway as gateway_routes
 from .routes import geo as geo_routes
@@ -310,6 +312,8 @@ def create_app() -> FastAPI:
     app.include_router(panickey_routes.router)
     app.include_router(intent_inbox_routes.router)
     app.include_router(decision_ledger_routes.router)
+    app.include_router(thought_compressor_routes.router)
+    app.include_router(asset_dna_routes.router)
     app.include_router(jarvis_os_routes.router)
     app.include_router(jarvis_ontology_routes.router)
     app.include_router(jarvis_er_routes.router)

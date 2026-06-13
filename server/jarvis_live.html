@@ -2324,6 +2324,8 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bforgekey\b/.test(l)||/\bforge\b.*\bkey\b/.test(l)){openAppSheet('forgekey');return true;}
   if(/\bopen\b.*\bintent\b/.test(l)){openAppSheet('intent');return true;}
   if(/\bopen\b.*\bdecision\b/.test(l)){openAppSheet('decision');return true;}
+  if(/\bopen\b.*\bcompress\b/.test(l)||/\bcompress\b.*\bthought\b/.test(l)){openAppSheet('compress');return true;}
+  if(/\bopen\b.*\basset\b/.test(l)||/\basset\b.*\bdna\b/.test(l)){openAppSheet('asset');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -5953,6 +5955,8 @@ const MINI_APPS=[
   {id:'forgekey',ic:'🔨',t:'ForgeKey',d:'Forge code-evolution approval queue'},
   {id:'intent',ic:'📥',t:'Intent Inbox',d:'Capture raw ideas before they become work'},
   {id:'decision',ic:'⚖️',t:'Decision Ledger',d:'Record decisions, reasoning, and outcomes'},
+  {id:'compress',ic:'🗜',t:'ThoughtCompressor',d:'Compress messy info into reusable packs'},
+  {id:'asset',ic:'🧬',t:'AssetDNA',d:'Identity cards for repo assets'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6110,7 +6114,7 @@ const APP_ENDPOINTS={
   datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',assets:'/v1/jarvis/assets/status',
   boards:'/v1/dashboards',
   claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state',forgekey:'/v1/forge/status',
-  intent:'/v1/intent/list',decision:'/v1/decision/list'
+  intent:'/v1/intent/list',decision:'/v1/decision/list',compress:'/v1/compress/list',asset:'/v1/asset/list'
 };
 
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;body.innerHTML='<div class=as-empty>Loading…</div>';
@@ -6126,6 +6130,8 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='forgekey'){body.innerHTML=renderForgeKeySheet();loadForgeKey();return;}
   if(_appSheetId==='intent'){body.innerHTML=renderIntentSheet();loadIntentInbox();return;}
   if(_appSheetId==='decision'){body.innerHTML=renderDecisionSheet();loadDecisionLedger();return;}
+  if(_appSheetId==='compress'){body.innerHTML=renderCompressSheet();return;}
+  if(_appSheetId==='asset'){body.innerHTML=renderAssetSheet();loadAssetDNA();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -6352,6 +6358,30 @@ async function decisionCreate(){const t=$('decTitle'),r=$('decReason'),o=$('decO
 async function loadDecisionLedger(){const out=$('decList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/decision/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No decisions</div>';return;}out.innerHTML=items.map(x=>{const fm=x.frontmatter||{};return '<div class=as-card><b>'+escapeHtml(x.title)+'</b> <span style="color:var(--text-dim)">'+escapeHtml(fm.state||'draft')+'</span><br><span style="font-size:11px;color:var(--text-dim)">'+escapeHtml((x.body_md||'').slice(0,160))+'</span><div class=as-row-inline style="margin-top:6px"><button class=tbtn onclick="decisionFinalize(\''+escapeHtml(x.id)+'\')">Finalize</button><button class=tbtn onclick="decisionReview(\''+escapeHtml(x.id)+'\')">Review</button></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function decisionFinalize(id){try{const r=await fetch('/v1/decision/'+encodeURIComponent(id)+'/finalize?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Finalized':'Failed');loadDecisionLedger();}catch(e){showInplaceAlert('Finalize error: '+e);}}
 async function decisionReview(id){const outcome=prompt('Actual outcome:')||'';if(!outcome)return;try{const r=await fetch('/v1/decision/'+encodeURIComponent(id)+'/review?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({actual_outcome:outcome})});const d=await r.json();showInplaceAlert(d.ok?'Review saved':'Failed');loadDecisionLedger();}catch(e){showInplaceAlert('Review error: '+e);}}
+
+/* ================ ThoughtCompressor ================ */
+function renderCompressSheet(){return `<div class=as-form>
+  <label>Paste messy text / chat / log</label>
+  <textarea id=compressInput style="min-height:120px" placeholder="Long chat, log dump, transcript, repo output…"></textarea>
+  <div style="display:flex;gap:8px;margin:8px 0">
+    <button class=as-run onclick="compressCreate()">Compress</button>
+    <select id=compressSource><option value=text>Text</option><option value=chat>Chat</option><option value=log>Log</option><option value=transcript>Transcript</option><option value=repo>Repo output</option></select>
+  </div>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=tbtn onclick="loadCompressPacks()">🔄 Packs</button></div>
+  <div id=compressList><div class=as-empty>Loading packs…</div></div>
+</div>`;}
+async function compressCreate(){const inp=$('compressInput'),src=$('compressSource');if(!inp||!inp.value.trim())return;try{const r=await fetch('/v1/compress/create?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:inp.value.trim(),source_type:src?src.value:'text'})});const d=await r.json();showInplaceAlert(d.ok?'Pack created':'Compress failed');if(d.ok){inp.value='';loadCompressPacks();}}catch(e){showInplaceAlert('Compress error: '+e);}}
+async function loadCompressPacks(){const out=$('compressList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/compress/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No packs</div>';return;}out.innerHTML=items.map(p=>{const fm=p.frontmatter||{};const s=(fm.structured||{});return '<div class=as-card><b>'+escapeHtml(p.title)+'</b> <span style="color:var(--text-dim)">'+escapeHtml(fm.source_type||'text')+'</span><br><span style="font-size:11px">'+escapeHtml(s.short_summary||(p.body_md||'').slice(0,160))+'</span><div class=as-row-inline style="margin-top:6px"><button class=tbtn onclick="compressView(\''+escapeHtml(p.id)+'\')">Read</button><button class=tbtn onclick="compressRefresh(\''+escapeHtml(p.id)+'\')">Refresh</button></div><div id=compressOut_'+p.id+'></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function compressView(id){const out=$('compressOut_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/compress/'+encodeURIComponent(id));const d=await r.json();const s=((d.pack||{}).frontmatter||{}).structured||{};let html='<div style="font-size:11px;margin-top:6px">';if(s.short_summary)html+='<div><b>Summary:</b> '+escapeHtml(s.short_summary)+'</div>';if(s.key_facts&&s.key_facts.length)html+='<div><b>Facts:</b> '+s.key_facts.map(f=>'<br>• '+escapeHtml(String(f))).join('')+'</div>';if(s.next_actions&&s.next_actions.length)html+='<div><b>Actions:</b> '+s.next_actions.map(a=>'<br>• '+escapeHtml(String(a))).join('')+'</div>';if(s.risks&&s.risks.length)html+='<div><b>Risks:</b> '+s.risks.map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';html+='</div>';out.innerHTML=html||'<div class=as-empty>No structured output</div>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function compressRefresh(id){try{const r=await fetch('/v1/compress/'+encodeURIComponent(id)+'/refresh?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Refreshed':'Refresh failed');loadCompressPacks();}catch(e){showInplaceAlert('Refresh error: '+e);}}
+
+/* ================ AssetDNA ================ */
+function renderAssetSheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=as-run onclick="loadAssetDNA()">🔄 Scan repo</button><span style="color:var(--text-dim);font-size:11px">Health/risk cards for files and inventory features</span></div>
+  <div id=assetList><div class=as-empty>Loading…</div></div>
+</div>`;}
+async function loadAssetDNA(){const out=$('assetList');if(!out)return;out.innerHTML='<div class=as-empty>Scanning…</div>';try{const r=await fetch('/v1/asset/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No assets found</div>';return;}out.innerHTML=items.map(a=>{const color=a.health==='ok'?'var(--ok)':a.health==='warn'?'var(--am)':'var(--warn)';return '<div class=as-card style="border-left:3px solid '+color+'"><b>'+escapeHtml(a.name)+'</b> <span style="color:var(--text-dim)">'+escapeHtml(a.kind)+' · '+escapeHtml(a.type)+'</span><br><span style="font-size:11px;color:var(--text-dim)">'+escapeHtml(a.path)+'</span><br><span style="color:'+color+'">● '+escapeHtml(a.health)+'</span> · risk <span style="color:'+(a.risk==='high'?'var(--warn)':'var(--text-dim)')+'">'+escapeHtml(a.risk)+'</span>'+(a.meta.age_days!=null?' · age '+escapeHtml(String(a.meta.age_days))+'d':'')+'<div class=as-row-inline style="margin-top:4px"><button class=tbtn onclick="assetView(\''+escapeHtml(a.id)+'\')">Details</button></div><div id=assetOut_'+a.id+'></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function assetView(id){const out=$('assetOut_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/asset/'+encodeURIComponent(id));const d=await r.json();const a=d.asset||{};let html='<div style="font-size:11px;margin-top:6px">';html+='<div><b>Health:</b> '+escapeHtml(a.health)+' · <b>Risk:</b> '+escapeHtml(a.risk)+'</div>';if(a.deps&&a.deps.length)html+='<div><b>Dependencies:</b> '+a.deps.slice(0,5).map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';if(a.dependents&&a.dependents.length)html+='<div><b>Dependents:</b> '+a.dependents.slice(0,5).map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';if(d.recommendations&&d.recommendations.length)html+='<div><b>Recommendations:</b> '+d.recommendations.map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';html+='</div>';out.innerHTML=html;}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>
