@@ -110,6 +110,7 @@ server/data/panickey_state.json
 server/data/sdev_reviews.json
 server/data/watchdog_status.json
 server/data/break_test_report.json
+server/data/*_state.json
 *.optimiser.bak
 server/data/media/*.preview.png
 server/jarvis_live.html.bak.*

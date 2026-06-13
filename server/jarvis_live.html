@@ -2326,6 +2326,8 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bdecision\b/.test(l)){openAppSheet('decision');return true;}
   if(/\bopen\b.*\bcompress\b/.test(l)||/\bcompress\b.*\bthought\b/.test(l)){openAppSheet('compress');return true;}
   if(/\bopen\b.*\basset\b/.test(l)||/\basset\b.*\bdna\b/.test(l)){openAppSheet('asset');return true;}
+  if(/\bopen\b.*\britual\b/.test(l)){openAppSheet('ritual');return true;}
+  if(/\bopen\b.*\bmode\b/.test(l)||/\bmode\b.*\bmixer\b/.test(l)){openAppSheet('mode');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -5957,6 +5959,8 @@ const MINI_APPS=[
   {id:'decision',ic:'⚖️',t:'Decision Ledger',d:'Record decisions, reasoning, and outcomes'},
   {id:'compress',ic:'🗜',t:'ThoughtCompressor',d:'Compress messy info into reusable packs'},
   {id:'asset',ic:'🧬',t:'AssetDNA',d:'Identity cards for repo assets'},
+  {id:'ritual',ic:'🃏',t:'RitualDeck',d:'Repeatable routine launcher'},
+  {id:'mode',ic:'🎛',t:'ModeMixer',d:'Behaviour mode profiles'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6114,7 +6118,8 @@ const APP_ENDPOINTS={
   datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',assets:'/v1/jarvis/assets/status',
   boards:'/v1/dashboards',
   claw:'/claw/status',settings:'/settings/state',panickey:'/panickey/state',forgekey:'/v1/forge/status',
-  intent:'/v1/intent/list',decision:'/v1/decision/list',compress:'/v1/compress/list',asset:'/v1/asset/list'
+  intent:'/v1/intent/list',decision:'/v1/decision/list',compress:'/v1/compress/list',asset:'/v1/asset/list',
+  ritual:'/v1/ritual/list',mode:'/v1/mode/active'
 };
 
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;body.innerHTML='<div class=as-empty>Loading…</div>';
@@ -6132,6 +6137,8 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='decision'){body.innerHTML=renderDecisionSheet();loadDecisionLedger();return;}
   if(_appSheetId==='compress'){body.innerHTML=renderCompressSheet();return;}
   if(_appSheetId==='asset'){body.innerHTML=renderAssetSheet();loadAssetDNA();return;}
+  if(_appSheetId==='ritual'){body.innerHTML=renderRitualSheet();loadRitualDeck();return;}
+  if(_appSheetId==='mode'){body.innerHTML=renderModeSheet();loadModeMixer();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -6382,6 +6389,35 @@ function renderAssetSheet(){return `<div class=as-form>
 </div>`;}
 async function loadAssetDNA(){const out=$('assetList');if(!out)return;out.innerHTML='<div class=as-empty>Scanning…</div>';try{const r=await fetch('/v1/asset/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No assets found</div>';return;}out.innerHTML=items.map(a=>{const color=a.health==='ok'?'var(--ok)':a.health==='warn'?'var(--am)':'var(--warn)';return '<div class=as-card style="border-left:3px solid '+color+'"><b>'+escapeHtml(a.name)+'</b> <span style="color:var(--text-dim)">'+escapeHtml(a.kind)+' · '+escapeHtml(a.type)+'</span><br><span style="font-size:11px;color:var(--text-dim)">'+escapeHtml(a.path)+'</span><br><span style="color:'+color+'">● '+escapeHtml(a.health)+'</span> · risk <span style="color:'+(a.risk==='high'?'var(--warn)':'var(--text-dim)')+'">'+escapeHtml(a.risk)+'</span>'+(a.meta.age_days!=null?' · age '+escapeHtml(String(a.meta.age_days))+'d':'')+'<div class=as-row-inline style="margin-top:4px"><button class=tbtn onclick="assetView(\''+escapeHtml(a.id)+'\')">Details</button></div><div id=assetOut_'+a.id+'></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function assetView(id){const out=$('assetOut_'+id);if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/asset/'+encodeURIComponent(id));const d=await r.json();const a=d.asset||{};let html='<div style="font-size:11px;margin-top:6px">';html+='<div><b>Health:</b> '+escapeHtml(a.health)+' · <b>Risk:</b> '+escapeHtml(a.risk)+'</div>';if(a.deps&&a.deps.length)html+='<div><b>Dependencies:</b> '+a.deps.slice(0,5).map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';if(a.dependents&&a.dependents.length)html+='<div><b>Dependents:</b> '+a.dependents.slice(0,5).map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';if(d.recommendations&&d.recommendations.length)html+='<div><b>Recommendations:</b> '+d.recommendations.map(x=>'<br>• '+escapeHtml(String(x))).join('')+'</div>';html+='</div>';out.innerHTML=html;}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+
+/* ================ RitualDeck ================ */
+function renderRitualSheet(){return `<div class=as-form>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=tbtn onclick="loadRitualDeck()">🔄 Routines</button><button class=tbtn onclick="loadRitualRuns()">Runs</button></div>
+  <div id=ritualList><div class=as-empty>Loading…</div></div>
+  <div id=ritualRun style="margin-top:10px"></div>
+</div>`;}
+async function loadRitualDeck(){const out=$('ritualList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/ritual/list');const d=await r.json();const items=(d&&d.items)||[];if(!items.length){out.innerHTML='<div class=as-empty>No routines</div>';return;}out.innerHTML=items.map(rt=>{const steps=(rt.steps||[]).map((s,i)=>'<span style="color:var(--text-dim);font-size:10px">'+(i+1)+'. '+escapeHtml(s.label)+(s.destructive?' ⚠':'')+'</span>').join('<br>');return '<div class=as-card><b>'+escapeHtml(rt.name)+'</b><div style="margin:4px 0">'+steps+'</div><div class=as-row-inline><button class=as-run onclick="ritualStart(\''+escapeHtml(rt.id)+'\')">▶ Run safe</button><button class=tbtn onclick="ritualStart(\''+escapeHtml(rt.id)+'\',false)">Run full</button></div></div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function loadRitualRuns(){const out=$('ritualList');if(!out)return;out.innerHTML='<div class=as-empty>Loading runs…</div>';}
+async function ritualStart(id,safe=true){try{const r=await fetch('/v1/ritual/'+encodeURIComponent(id)+'/start?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({safe})});const d=await r.json();if(!d.ok){showInplaceAlert('Start failed');return;}renderRitualRun(d.run,d.routine);}catch(e){showInplaceAlert('Ritual error: '+e);}}
+function renderRitualRun(run,routine){const out=$('ritualRun');if(!out)return;const steps=routine.steps||[];const idx=run.current_step||0;const step=steps[idx];out.innerHTML='<div class=as-card><b>Running: '+escapeHtml(routine.name)+'</b><div style="margin:6px 0">Step '+(idx+1)+'/'+steps.length+(step?': '+escapeHtml(step.label):'')+(step&&step.destructive?' ⚠ destructive':'')+'</div><div class=as-row-inline><button class=as-run onclick="ritualAdvance(\''+escapeHtml(run.id)+'\',\'next\')">Next</button><button class=tbtn onclick="ritualAdvance(\''+escapeHtml(run.id)+'\',\'skip\')">Skip</button><button class=tbtn onclick="ritualAdvance(\''+escapeHtml(run.id)+'\',\'stop\')">Stop</button></div></div>';}
+async function ritualAdvance(runId,action){try{const r=await fetch('/v1/ritual/run/'+encodeURIComponent(runId)+'/advance?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action})});const d=await r.json();if(!d.ok){showInplaceAlert('Advance failed');return;}if(d.needs_approval){if(!confirm('Destructive step: '+escapeHtml(d.step.label)+'\n\nApprove?')){showInplaceAlert('Paused for approval');return;}await ritualAdvance(runId,'next');return;}if(d.run.status==='completed'){showInplaceAlert('Routine complete');$('ritualRun').innerHTML='';loadRitualDeck();}else{const rr=await fetch('/v1/ritual/'+encodeURIComponent(d.run.routine_id));const rd=await rr.json();renderRitualRun(d.run,rd.routine);}}catch(e){showInplaceAlert('Ritual advance error: '+e);}}
+
+/* ================ ModeMixer ================ */
+function renderModeSheet(){return `<div class=as-form>
+  <div id=modeActive style="margin-bottom:10px"><div class=as-empty>Loading active mode…</div></div>
+  <div class=as-row-inline style="margin-bottom:8px"><button class=tbtn onclick="loadModeMixer()">🔄 Refresh</button></div>
+  <div id=modeList><div class=as-empty>Loading profiles…</div></div>
+  <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">+ Mix custom mode</summary>
+    <label>Base preset</label><select id=modeBase><option value=quiet>Quiet</option><option value=detailed>Detailed</option><option value=careful>Careful</option><option value=fast>Fast</option></select>
+    <label>Detail</label><select id=modeDetail><option value=low>Low</option><option value=normal selected>Normal</option><option value=high>High</option></select>
+    <label>Cost</label><select id=modeCost><option value=low>Low</option><option value=normal selected>Normal</option></select>
+    <label>Safety</label><select id=modeSafety><option value=normal>Normal</option><option value=high selected>High</option><option value=very_high>Very High</option></select>
+    <button class=as-run onclick="modeMix()" style="margin-top:6px">Mix & apply</button>
+  </details>
+</div>`;}
+async function loadModeMixer(){const aOut=$('modeActive'),pOut=$('modeList');if(!aOut||!pOut)return;try{const ar=await fetch('/v1/mode/active');const ad=await ar.json();const pr=await fetch('/v1/mode/profiles');const pd=await pr.json();const active=ad.profile||{};aOut.innerHTML='<div class=as-card><b>Active mode:</b> '+escapeHtml(active.name||ad.active_id)+'<br><span style="font-size:11px;color:var(--text-dim)">detail '+escapeHtml(active.detail)+' · cost '+escapeHtml(active.cost)+' · safety '+escapeHtml(active.safety)+' · autonomy '+escapeHtml(String(active.autonomy))+'</span></div>';const presets=Object.values(pd.presets||{});pOut.innerHTML=presets.map(p=>'<div class=as-card style="display:flex;justify-content:space-between;align-items:center"><span><b>'+escapeHtml(p.name)+'</b><br><span style="font-size:10px;color:var(--text-dim)">'+escapeHtml(p.detail)+' · '+escapeHtml(p.cost)+' · '+escapeHtml(p.safety)+'</span></span><button class=as-run onclick="modeApply(\''+escapeHtml(p.id)+'\')">Apply</button></div>').join('');}catch(e){aOut.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function modeApply(id){try{const r=await fetch('/v1/mode/apply/'+encodeURIComponent(id)+'?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Mode applied':'Failed');loadModeMixer();}catch(e){showInplaceAlert('Mode error: '+e);}}
+async function modeMix(){const base=$('modeBase'),det=$('modeDetail'),cost=$('modeCost'),safety=$('modeSafety');if(!base)return;try{const body={base_id:base.value,overrides:{detail:det.value,cost:cost.value,safety:safety.value}};const r=await fetch('/v1/mode/mix?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();showInplaceAlert(d.ok?'Mixed mode applied':'Failed');loadModeMixer();}catch(e){showInplaceAlert('Mode mix error: '+e);}}
 
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>
