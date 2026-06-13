@@ -58,6 +58,7 @@ import { isTaskAlignQuery, buildTaskAlignScript } from "@/components/cinematic/T
 import { isIntelPulseQuery, buildIntelPulseScript } from "@/components/cinematic/LiveIntelPulse";
 import { isThreatVelocityQuery, buildThreatVelocityScript } from "@/components/cinematic/ThreatVelocityMonitor";
 import { isRunbookQuery, buildRunbookScript } from "@/components/cinematic/OpsRunbookGenerator";
+import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "@/components/cinematic/ScenarioRiskAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -702,6 +703,17 @@ export default function JarvisBrain() {
     if (isRunbookQuery(q)) {
       try {
         const answer = await buildRunbookScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isScenarioRiskAdvisorQuery(q)) {
+      try {
+        const answer = await buildScenarioRiskAdvisorScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {
