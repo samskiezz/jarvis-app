@@ -67,6 +67,7 @@ import LiveIntelPulse from '@/components/cinematic/LiveIntelPulse';
 import ThreatVelocityMonitor from '@/components/cinematic/ThreatVelocityMonitor';
 import OpsRunbookGenerator from '@/components/cinematic/OpsRunbookGenerator';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
+import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -142,6 +143,7 @@ function App() {
             <ThreatVelocityMonitor />
             <OpsRunbookGenerator />
             <ScenarioRiskAdvisor />
+            <KnowledgeInvestigationLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
