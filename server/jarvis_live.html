@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='18';
+  var KEY='__jv',VER='19';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -5780,7 +5780,7 @@ function engage(){if(_engaged)return;_engaged=true;
 addEventListener('pointerdown',engage,{once:true});
 
 // start data loops immediately; build the scene on first gesture (autoplay policy) OR auto after 2.2s
-tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();codePulseStartPoll();
+tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();
 wireDockMove();              // §1 D: make the whole dock draggable to any position
 wireGlassPanels();           // §1 C: 4 glass panels — 3-state toggles + drag-drop targets (live data via tick→refreshGlassPanels)
 buildPanelTabs();            // tablet drawer tabs for collapsing panels
@@ -5938,7 +5938,7 @@ async function codePulseResolve(action){if(!_cpItem)return;const id=_cpItem.id;t
   if(!url)return;const r=await fetch(url+'?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await r.json();showInplaceAlert(d.ok?(action+' done'):('failed: '+escapeHtml(d.error||'')));codePulseHide();_cpItem=null;codePulsePoll();}catch(e){showInplaceAlert('CodePulse resolve error: '+e);}}
 async function codePulseStop(){try{const r=await fetch('/v1/codepulse/stop?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'PanicKey safe mode activated':'Stop failed');codePulseHide();_cpItem=null;}catch(e){showInplaceAlert('CodePulse stop error: '+e);}}
 
-initWave3Interactions();
+initWave3Interactions();codePulseStartPoll();
 
 /* =========================================================
    WAVE 4 — Scale Monitor + Mini-app Carousel
