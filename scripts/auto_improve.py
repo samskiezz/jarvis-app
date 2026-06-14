@@ -239,6 +239,33 @@ def _implement_claude(feat: dict, timeout=1800) -> bool:
     return rc == 0
 
 
+def revise(feat: dict, required_fixes: list, timeout=1800) -> bool:
+    """ONE bounded revision pass on a near-miss (audit verdict NEEDS_REVISION, 700-849): apply the audit's
+    required fixes IN PLACE, then self-gate. Same safety envelope as a fresh build — the caller re-gates and
+    re-audits afterwards and only lands if it now clears 850."""
+    fixes = "\n- ".join([str(x) for x in (required_fixes or [])][:8]) or \
+        "Improve completeness, add pytest tests, and harden input validation."
+    prompt = (
+        mission_brief() + "\n\n"
+        "A previous attempt at THIS feature scored JUST BELOW the merge bar. Apply the REQUIRED FIXES below "
+        "COMPLETELY and SAFELY, keeping everything that already works.\n\n"
+        "FEATURE: %s\n%s\n\nREQUIRED FIXES:\n- %s\n\n"
+        "RULES: complete the WHOLE feature (UI + backend + any voice wiring described); add pytest TESTS under "
+        "server/tests/; validate/sanitise ALL inputs (no SSRF, no secret leaks); do NOT break existing code or "
+        "touch server/auth.py, server/config.py, or scripts/auto_improve*.py; if you edit jarvis_live.html keep "
+        "it valid + theme-locked + bump VER. BEFORE FINISHING run `python3 scripts/auto_improve_gate.py "
+        "--changed-only` and fix until it reports pass=true.\n"
+        % (feat["title"], feat.get("brief", ""), fixes)
+    )
+    pf = "/tmp/_ai_prompt.txt"
+    open(pf, "w").write(prompt)
+    of = "/tmp/_ai_out.json"
+    cmd = ("%s -p \"$(cat %s)\" --model %s --output-format json --dangerously-skip-permissions > %s 2>&1"
+           % (shlex.quote(CLAUDE), shlex.quote(pf), shlex.quote("claude-sonnet-4-6"), shlex.quote(of)))
+    rc, _ = run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})
+    return rc == 0
+
+
 def gate() -> dict:
     rc, out = run([PY, os.path.join(ROOT, "scripts", "auto_improve_gate.py"), "--changed-only"], timeout=480)
     try:
@@ -379,6 +406,25 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
             continue
         # The 1,000-pt Claude audit is the merge decider: gate proves it BOOTS, audit proves it's WORTH it.
         au = audit_score(feat, feature_files, g)
+        # ONE revision pass for promising NEAR-MISSES (700-849): apply the audit's required fixes, then
+        # re-gate + re-audit. Converts "so close" features into clean lands instead of discarding them.
+        if (not dry and not au.get("merge_ok") and au.get("verdict") == "NEEDS_REVISION"
+                and not au.get("hard_blockers")):
+            if revise(feat, au.get("required_fixes"), int(os.environ.get("AUTO_IMPL_TIMEOUT", "1800"))):
+                ff2 = sorted(_tracked_state() - before)
+                if ff2:
+                    g2 = gate()
+                    if g2.get("pass"):
+                        au2 = audit_score(feat, ff2, g2)
+                        log({"event": "feature_revised", "title": feat["title"],
+                             "score_before": au.get("final_score"), "score_after": au2.get("final_score"),
+                             "verdict_after": au2.get("verdict")})
+                        au, g, feature_files = au2, g2, ff2
+                    else:
+                        failed = [k for k, v in (g2.get("checks") or {}).items() if not v.get("ok")]
+                        log({"event": "feature_revision_gate_fail", "title": feat["title"], "failed": failed})
+                        discard(ff2)
+                        continue
         common = {
             "title": feat["title"], "category": feat.get("category", "other"),
             "builder": feat.get("_builder", builder), "pass_prob": feat.get("_viab"),
