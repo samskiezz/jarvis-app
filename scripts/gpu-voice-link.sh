@@ -67,11 +67,17 @@ REMOTE
 scp $SSHO -i "$KEY" -P "$P" server/services/voice_clone_gpu.py "$U@$H:/root/voice_clone_gpu.py" >/dev/null 2>&1 || true
 
 # 4) self-healing tunnel  box:$TPORT -> 127.0.0.1:$TPORT
-if ! pgrep -f "L *$TPORT:localhost:$TPORT" >/dev/null 2>&1; then
-  nohup bash -c "while true; do ssh -N -C $SSHO -i '$KEY' -o ServerAliveInterval=15 -o ServerAliveCountMax=3 \
-    -o ExitOnForwardFailure=yes -o TCPKeepAlive=yes \
-    -p $P -L $TPORT:localhost:$TPORT $U@$H; sleep 3; done" >/tmp/tts-tunnel.log 2>&1 &
-  say "voice tunnel keepalive started ✓"
+# autossh (purpose-built: monitors + reconnects fast) is FAR steadier than a bash retry loop on this
+# box's high-latency route — that flapping was the real cause of the voice "ringing in and out".
+TOPTS="-o ServerAliveInterval=10 -o ServerAliveCountMax=3 -o ExitOnForwardFailure=yes -o TCPKeepAlive=yes -o GSSAPIAuthentication=no -o PreferredAuthentications=publickey"
+if ! pgrep -f "$TPORT:localhost:$TPORT" >/dev/null 2>&1; then
+  if command -v autossh >/dev/null 2>&1; then
+    AUTOSSH_GATETIME=0 autossh -M 0 -f -N -C $SSHO $TOPTS -i "$KEY" -p "$P" -L $TPORT:localhost:$TPORT "$U@$H" >/tmp/tts-tunnel.log 2>&1
+    say "voice tunnel via autossh ✓"
+  else
+    nohup bash -c "while true; do ssh -N -C $SSHO $TOPTS -i '$KEY' -p $P -L $TPORT:localhost:$TPORT $U@$H; sleep 3; done" >/tmp/tts-tunnel.log 2>&1 &
+    say "voice tunnel keepalive (bash) started ✓"
+  fi
   sleep 3
 fi
 curl -s -m4 http://127.0.0.1:$TPORT/health 2>/dev/null | grep -q '"ready": *true' \

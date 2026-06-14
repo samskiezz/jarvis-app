@@ -489,6 +489,12 @@ def _kill_tunnel():
     except Exception:  # noqa: BLE001
         pass
     _TUNNEL_PROC = None
+    # also clear any DETACHED autossh/ssh forwarding 11434 (autossh daemonizes, so it isn't in _TUNNEL_PROC)
+    try:
+        subprocess.run(["pkill", "-f", "11434:127.0.0.1:11434"],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5)
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def _port_open(host: str, port: int, timeout: float = 1.5) -> bool:
@@ -588,19 +594,26 @@ def ensure_brain_tunnel() -> dict:
     # port is already bound; only (re)create our own tunnel when nothing is listening.
     if not _port_open("127.0.0.1", 11434):
         _kill_tunnel()
+        import shutil as _sh
+        _opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null",
+                 "-o", "ServerAliveInterval=10", "-o", "ServerAliveCountMax=3",
+                 "-o", "ExitOnForwardFailure=yes", "-o", "TCPKeepAlive=yes",
+                 "-o", "GSSAPIAuthentication=no", "-o", "PreferredAuthentications=publickey"]
+        _fwd = ["-N", "-L", "127.0.0.1:11434:127.0.0.1:11434", f"root@{host}"]
         try:
-            proc = subprocess.Popen(
-                ["ssh", "-i", SSH_KEY, "-p", str(port), "-o", "StrictHostKeyChecking=no",
-                 "-o", "UserKnownHostsFile=/dev/null", "-o", "ServerAliveInterval=15",
-                 "-o", "ServerAliveCountMax=3", "-o", "ExitOnForwardFailure=yes",
-                 "-o", "TCPKeepAlive=yes",
-                 "-N", "-L", "127.0.0.1:11434:127.0.0.1:11434", f"root@{host}"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
-                start_new_session=True)
-            _TUNNEL_PROC = proc
-            for _ in range(10):
-                if proc.poll() is not None:
-                    break
+            if _sh.which("autossh"):
+                # autossh monitors + reconnects fast — far steadier than a one-shot ssh on this box's
+                # high-latency route (the flapping that pinned chat to canned replies). -f daemonizes.
+                subprocess.run(["autossh", "-M", "0", "-f", "-i", SSH_KEY, "-p", str(port)] + _opts + _fwd,
+                               env={**os.environ, "AUTOSSH_GATETIME": "0"},
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+                _TUNNEL_PROC = None   # detached daemon; nothing for us to hold
+            else:
+                _TUNNEL_PROC = subprocess.Popen(
+                    ["ssh", "-i", SSH_KEY, "-p", str(port)] + _opts + _fwd,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
+                    start_new_session=True)
+            for _ in range(12):
                 if _port_open("127.0.0.1", 11434):
                     break
                 time.sleep(0.5)
