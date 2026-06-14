@@ -8,3 +8,4 @@
 2026-06-14 F08 DONE — EntityQuickSearch.jsx mounted in App.jsx; Ctrl+Shift+E + voice "find/search/who is <term>" opens search panel; queries /v1/graph/subgraph + /entities/IntelProfile; click speaks one-line dossier via JarvisBrain TTS; build exit 0
 2026-06-14 F11 DONE — DatasetsBrowser.jsx mounted in App.jsx; /v1/datasets catalog with row counts; button repositioned to left:420; vite build exit 0.
 [2026-06-14] F12 Investigations list — InvestigationsPanel.jsx mounted in App.jsx; polls /v1/investigations every 90s; status+priority sorted open-cases panel; CASES toggle button at left:554 (after DATA); red pulse on open cases; voice trigger on 'investigations'/'cases'; vite build exit 0.
+2026-06-14 F15 DONE — SkillScorecard.jsx mounted in App.jsx; polls /v1/aip/skill every 60s; SKILLS toggle button at left:700; score bars + avg + filter; isSkillQuery/buildSkillScript wired in JarvisBrain; vite build exit 0.
