@@ -90,9 +90,10 @@ def ideate(n: int, tier: str) -> list[dict]:
         "LLM brain). Briefly RESEARCH current app/UX best practices on the web/forums, then propose %d NEW, "
         "genuinely useful, SMALL user-facing UX features or functions that fit the existing design and would "
         "help a disabled owner use the app more easily. Avoid duplicating existing apps. %s\n\nReturn ONLY a "
-        "JSON array of objects with keys: title (short), brief (2-3 sentences: what it does, where it lives "
-        "in the app, and the gist of how to build it using existing patterns — a mini-app in MINI_APPS + "
-        "renderAppData/render*Sheet and/or a /v1 route). No markdown fences." % (n, ctx)
+        "JSON array of objects with keys: title (short), category (one of: accessibility, productivity, "
+        "voice, ui, automation, communication, health, other), brief (2-3 sentences: what it does, where it "
+        "lives in the app, and the gist of how to build it using existing patterns — a mini-app in MINI_APPS "
+        "+ renderAppData/render*Sheet and/or a /v1 route). No markdown fences." % (n, ctx)
     )
     try:
         import re
@@ -105,7 +106,8 @@ def ideate(n: int, tier: str) -> list[dict]:
         m = re.search(r"\[.*\]", out, re.S) or re.search(r"\{.*\}", out, re.S)
         data = json.loads(m.group(0) if m else out)
         items = data.get("features", data.get("items", [])) if isinstance(data, dict) else data
-        feats = [{"title": str(x.get("title", "")).strip(), "brief": str(x.get("brief", "")).strip()}
+        feats = [{"title": str(x.get("title", "")).strip(), "brief": str(x.get("brief", "")).strip(),
+                  "category": str(x.get("category", "other")).strip().lower()}
                  for x in items if isinstance(x, dict) and x.get("title")]
         if not feats:
             raise ValueError("no features parsed from: " + out[:200])
@@ -202,6 +204,38 @@ def discard(feature_files: list[str]):
                 pass
 
 
+def score_change(feat: dict, files: list[str]) -> dict:
+    """Judge the just-implemented change: helpfulness 0-100 + category + one-line reason (via the brain)."""
+    diff = ""
+    try:
+        diff = run(["git", "diff", "HEAD", "--", *files], timeout=30)[1][:6000]
+    except Exception:  # noqa: BLE001
+        pass
+    if not diff:
+        return {"score": None, "category": feat.get("category", "other"), "reason": "no diff to score"}
+    prompt = (
+        "Rate this just-implemented app feature for a DISABLED owner who relies on the app. "
+        "Feature: %s — %s\n\nUnified diff (truncated):\n%s\n\n"
+        "Return ONLY JSON: {\"score\": <integer 0-100, how helpful/impactful for the owner>, "
+        "\"category\": \"<accessibility|productivity|voice|ui|automation|communication|health|other>\", "
+        "\"reason\": \"<one short sentence>\"}." % (feat["title"], feat.get("brief", "")[:300], diff)
+    )
+    try:
+        body = json.dumps({"message": prompt, "tier": "strong", "max_tokens": 300}).encode()
+        req = urllib.request.Request("http://127.0.0.1:8095/llm/chat", data=body,
+                                     headers={"Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            out = json.loads(resp.read()).get("reply", "")
+        import re
+        m = re.search(r"\{.*\}", out, re.S)
+        d = json.loads(m.group(0) if m else out)
+        return {"score": int(d.get("score", 0)),
+                "category": str(d.get("category", feat.get("category", "other"))).lower(),
+                "reason": str(d.get("reason", ""))[:160]}
+    except Exception as e:  # noqa: BLE001
+        return {"score": None, "category": feat.get("category", "other"), "reason": "score failed: " + str(e)[:80]}
+
+
 def cycle(n: int, dry: bool, tier: str):
     log({"event": "cycle_start", "features": n, "dry": dry, "tier": tier})
     feats = ideate(n, tier)
@@ -223,13 +257,27 @@ def cycle(n: int, dry: bool, tier: str):
             log({"event": "feature_gate_fail", "title": feat["title"], "failed": failed, "files": feature_files})
             discard(feature_files)
             continue
+        sc = score_change(feat, feature_files)
         if dry:
-            log({"event": "feature_gate_pass_dryrun", "title": feat["title"], "files": feature_files})
+            log({"event": "feature_gate_pass_dryrun", "title": feat["title"], "category": sc.get("category"),
+                 "score": sc.get("score"), "reason": sc.get("reason"), "files": feature_files})
             discard(feature_files)
             continue
         res = land(feat, feature_files)
-        log({"event": "feature_land", "title": feat["title"], "files": feature_files, **res})
+        log({"event": "feature_land", "title": feat["title"], "category": sc.get("category"),
+             "score": sc.get("score"), "reason": sc.get("reason"), "files": feature_files, **res})
     log({"event": "cycle_end"})
+
+
+def _lock():
+    """Single-instance lock so two cycles can never run at once and collide on git/restart."""
+    import fcntl
+    lf = open("/tmp/auto_improve.lock", "w")
+    try:
+        fcntl.flock(lf, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        return lf
+    except Exception:  # noqa: BLE001
+        return None
 
 
 if __name__ == "__main__":
@@ -237,4 +285,18 @@ if __name__ == "__main__":
     nfeat = int(a[a.index("--features") + 1]) if "--features" in a else 5
     dry = "--dry-run" in a
     tier = a[a.index("--tier") + 1] if "--tier" in a else "strong"
-    cycle(nfeat, dry, tier)
+    held = _lock()
+    if not held:
+        log({"event": "abort", "reason": "another auto_improve instance is running"})
+        sys.exit(0)
+    if "--loop" in a:
+        interval = float(os.environ.get("AUTO_INTERVAL_HRS", "3")) * 3600   # rest between cycles; 24/7 always-on
+        log({"event": "loop_start", "interval_hrs": interval / 3600, "features": nfeat, "tier": tier})
+        while True:
+            try:
+                cycle(nfeat, dry, tier)
+            except Exception as e:  # noqa: BLE001
+                log({"event": "cycle_crash", "error": str(e)[:300]})
+            time.sleep(interval)
+    else:
+        cycle(nfeat, dry, tier)

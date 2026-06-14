@@ -139,13 +139,54 @@ def gate_boot() -> dict:
                 proc.kill()
 
 
+def gate_boot_dashboard() -> dict:
+    """Boot the stdlib dashboard (serves jarvis_live.html + the mini-app endpoints) on a throwaway port and
+    confirm it serves the page AND a JSON endpoint — so dashboard/UI changes are proven to actually work."""
+    port = int(os.environ.get("GATE_DASH_PORT", "8986"))
+    log = "/tmp/_gate_dash.log"
+    env = dict(os.environ, DASHBOARD_PORT=str(port))
+    proc = None
+    try:
+        with open(log, "w") as lf:
+            proc = subprocess.Popen([PY, os.path.join(ROOT, "server", "dashboard.py")], cwd=ROOT,
+                                    stdout=lf, stderr=lf, env=env)
+        import urllib.request
+        served_page = served_json = False
+        for _ in range(35):
+            time.sleep(1)
+            if proc.poll() is not None:
+                break
+            try:
+                with urllib.request.urlopen(f"http://127.0.0.1:{port}/jarvis_live.html", timeout=2) as r:
+                    served_page = r.status == 200 and b"VER=" in r.read(6000)
+                with urllib.request.urlopen(f"http://127.0.0.1:{port}/budget", timeout=2) as r:
+                    served_json = r.status == 200
+                if served_page and served_json:
+                    break
+            except Exception:  # noqa: BLE001
+                continue
+        ok = served_page and served_json
+        return {"ok": ok, "page": served_page, "json": served_json,
+                "detail": "" if ok else open(log).read()[-800:]}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "detail": str(e)}
+    finally:
+        if proc and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=10)
+            except Exception:  # noqa: BLE001
+                proc.kill()
+
+
 def run_gate(changed_only=False, full_tests=False) -> dict:
     checks = {}
     checks["pycompile"] = gate_pycompile(changed_only)
     checks["js"] = gate_js()
     checks["theme_lock"] = gate_theme_lock()
     checks["tests"] = gate_tests(full_tests)
-    checks["boot"] = gate_boot()
+    checks["boot_backend"] = gate_boot()
+    checks["boot_dashboard"] = gate_boot_dashboard()
     passed = all(c.get("ok") for c in checks.values())
     return {"pass": passed, "checks": checks, "ts": int(time.time())}
 
