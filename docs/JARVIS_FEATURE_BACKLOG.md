@@ -26,7 +26,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. [2026-06-14] WorldIncidentFeed.jsx mounted in App.jsx; mini Three.js globe with earthquake pins + scrolling list; polls getLiveIntel every 60s; bottom-left INCIDENTS toggle; vite build exit 0.
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers. [2026-06-14] Mounted MarketsTicker.jsx in App.jsx; scrolling bottom strip + expandable grid; voice handled by JarvisBrain (isMarketsQuery/buildMarketsScript already wired); vite build exit 0.
 - [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. (2026-06-14: EntityQuickSearch.jsx mounted in App.jsx; Ctrl+Shift+E or "JARVIS, find <term>" triggers panel; /v1/graph/subgraph + /entities/IntelProfile; click result speaks dossier via jarvis:speak-dossier → JarvisBrain TTS; vite build exit 0)
-- [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
+- [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-06-14] RiskBoard.jsx (pre-built, fully wired) mounted in App.jsx; polls /entities/RiskSignal every 90s; severity-sorted cards (critical/high/medium/low); red pulse animation on criticals; RISKS toggle button + "JARVIS, risks" voice trigger; isRiskQuery/buildRiskScript already imported in JarvisBrain; vite build exit 0.
 - [ ] F10 Task board — /entities/Task → live mission cards with status.
 - [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
