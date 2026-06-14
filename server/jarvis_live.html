@@ -2149,7 +2149,7 @@ function webSpeakFallback(t){try{try{_ttsAudio.pause();}catch(_){}{}  // STOP th
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
-(function(){ ["JARVIS 'ere — online and all yours. What can I do for ya?",
+(function(){ ["Systems online. Ready when you are, sir.",
   "I'm right 'ere with ya. Bit of trouble 'earing the network just now, but I ain't going anywhere. Take a breath — you're safe.",
   'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
   fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
@@ -2188,9 +2188,9 @@ window.jarvisSpeak=function(t){if(window._voiceOut===false)return;if(!t)return;t
 // made it sound like two agents talking over each other and spammed the chat). Released a beat AFTER
 // the audio ends so the trailing echo isn't transcribed as a new user turn.
 window._jspeaking=false; let _jspkClear=null;
-function speakStart(){window._jspeaking=true;if(_jspkClear){clearTimeout(_jspkClear);_jspkClear=null;}document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';const st=$('callStatus');if(st&&$('ovCall').classList.contains('open'))st.textContent='JARVIS is speaking…';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
+function speakStart(){window._jspeaking=true;try{_micPauseForSpeech();}catch(_){}if(_jspkClear){clearTimeout(_jspkClear);_jspkClear=null;}document.body.classList.add('speaking');spkAmp=.7;$('coreSay').textContent='';const st=$('callStatus');if(st&&$('ovCall').classList.contains('open'))st.textContent='JARVIS is speaking…';}  // FINDING1: dropped the broken empty-string crystal guard (textContent was just cleared → always false). jarvisSpeak() now raises the crystal with the real text.
 function speakEnd(){document.body.classList.remove('speaking');spkAmp=0;if(typeof hideCrystal==='function')hideCrystal(900);const st=$('callStatus');if(st&&$('ovCall').classList.contains('open'))st.textContent='JARVIS is listening…';
-  if(_jspkClear)clearTimeout(_jspkClear);_jspkClear=setTimeout(()=>{window._jspeaking=false;_jspkClear=null;},700);}
+  if(_jspkClear)clearTimeout(_jspkClear);_jspkClear=setTimeout(()=>{window._jspeaking=false;_jspkClear=null;try{_micResumeAfterSpeech();}catch(_){}},700);}
 
 /* ================= voice amp envelope (consumed by the brain via currentAmp/setAmp) ================= */
 let spkAmp=0, micAmp=0, analyser=null, micData=null, _ampExt=0;
@@ -3281,7 +3281,7 @@ function navRows(down){
 
 /* ================= mic (preserved verbatim) ================= */
 let _rec=null;
-async function startMicAnalyser(){try{const s=await navigator.mediaDevices.getUserMedia({audio:true});
+async function startMicAnalyser(){try{const s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
    const ac=new(window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(s);
    analyser=ac.createAnalyser();analyser.fftSize=2048;micData=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);
    _pitchBuf=new Float32Array(analyser.fftSize);_pitchSR=ac.sampleRate;}catch(e){}}
@@ -3304,23 +3304,53 @@ function _detectGender(){ try{
 }catch(e){} }
 function _micSecureHelp(){var u='https://app.projectsolar.cloud/jarvis/';try{showInplaceAlert('🎤 Microphone needs the secure link — open '+u+' (not the plain http address).');}catch(_){}try{srlog('Microphone blocked: open the secure https link '+u);}catch(_){}}
 function _micDeniedHelp(){try{showInplaceAlert('🎤 Microphone is blocked. Tap the lock icon in your browser bar (or the 🔓 Access button) and allow the microphone, then tap the mic again.');}catch(_){}try{if(typeof openAccess==='function')openAccess();}catch(_){}}
-function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!window.isSecureContext){_micSecureHelp();return;}   // browsers BLOCK the mic on insecure http://<ip> origins (no prompt) — guide to the https link
-  if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
-  if(_rec){try{_rec.stop();}catch(e){}_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');return;}
-  // Explicitly request mic permission so the browser shows its prompt (SpeechRecognition alone often won't trigger it).
-  try{if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){try{s.getTracks().forEach(function(t){t.stop();});}catch(_){}}).catch(function(){_micDeniedHelp();});}catch(_){}
-  startMicAnalyser();
+/* ===== Smooth always-on voice: a small state machine for flawless back-and-forth =====
+   _micOn = the user wants to be heard.  _micSpeaking = paused because JARVIS is talking (so he never
+   hears himself → no feedback, no "two agents" loop).  Restarts are DEBOUNCED so the mic indicator
+   never flickers in/out, and recognition is fully paused while he speaks then resumed a beat after. */
+let _micOn=false,_micSpeaking=false,_micRestartT=null;
+function _micStartRec(){
+  if(!_micOn||_micSpeaking)return;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition; if(!SR)return;
+  try{if(_rec){_rec.onend=null;_rec.onresult=null;_rec.onerror=null;_rec.abort();}}catch(_){}
   _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
-  $('mic').classList.add('live');document.body.classList.add('listening');   // always-on listening — no "Listening." announce (natural conversation)
   _rec.onresult=e=>{
-    if(window._jspeaking)return;                          // ignore JARVIS's own voice while he speaks (no self-answer loop)
+    if(window._jspeaking||_micSpeaking)return;             // never transcribe JARVIS's own voice
     const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
-    _detectGender();                                      // assess speaker pitch while they talk → ma'am/sir
-    $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
-  _rec.onerror=ev=>{if(ev.error==='not-allowed'){_micDeniedHelp();_rec=null;$('mic').classList.remove('live');}};
-  _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
-  _rec.start();}
+    _detectGender();                                       // assess speaker pitch → ma'am/sir
+    $('coreSay').textContent=t;showCrystal(t);
+    if(res.isFinal&&t){$('say').value=t;askJarvis();}};
+  _rec.onerror=ev=>{                                       // not-allowed = real permission block; the rest (no-speech/network/aborted) just recycle
+    if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){_micOn=false;_micDeniedHelp();$('mic').classList.remove('live');document.body.classList.remove('listening');try{_rec=null;}catch(_){}}};
+  _rec.onend=()=>{_micScheduleRestart();};                 // debounced so it never flickers in/out
+  try{_rec.start();}catch(_){_micScheduleRestart();}
+}
+function _micScheduleRestart(){
+  if(_micRestartT){clearTimeout(_micRestartT);_micRestartT=null;}
+  if(!_micOn||_micSpeaking)return;
+  _micRestartT=setTimeout(()=>{_micRestartT=null;_micStartRec();},350);
+}
+function _micPauseForSpeech(){                             // called from speakStart — stop listening while he talks
+  _micSpeaking=true;if(_micRestartT){clearTimeout(_micRestartT);_micRestartT=null;}
+  try{if(_rec){_rec.onend=null;_rec.onresult=null;_rec.onerror=null;_rec.abort();_rec=null;}}catch(_){}
+}
+function _micResumeAfterSpeech(){_micSpeaking=false;_micStartRec();}   // called a beat after speakEnd
+function micToggle(){
+  if(!window.isSecureContext){_micSecureHelp();return;}    // browsers BLOCK the mic on insecure http://<ip> origins
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
+  if(_micOn){                                              // turn OFF cleanly (no auto-restart)
+    _micOn=false;if(_micRestartT){clearTimeout(_micRestartT);_micRestartT=null;}
+    try{if(_rec){_rec.onend=null;_rec.abort();}}catch(_){}_rec=null;
+    $('mic').classList.remove('live');document.body.classList.remove('listening');return;}
+  _micOn=true;
+  // Explicit, echo-cancelled permission request so the browser shows its prompt AND he won't hear himself.
+  try{navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})
+       .then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{_micOn=false;_micDeniedHelp();});}catch(_){}
+  startMicAnalyser();
+  $('mic').classList.add('live');document.body.classList.add('listening');
+  _micStartRec();
+}
 
 /* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
 function setMode(mode,arg){
@@ -5774,8 +5804,8 @@ function engage(){if(_engaged)return;_engaged=true;
   unlockAudio();                                            // unlock playback within the user gesture
   // greet WITHIN the gesture (no setTimeout) so the male /tts voice plays — a delay drops us to the
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
-  try{ jarvisSpeak("JARVIS 'ere — online and all yours. What can I do for ya?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
-  try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
+  try{ jarvisSpeak("Systems online. Ready when you are, sir."); }catch(_){}   // boot greeting (owner = sir)
+  // Mic is NOT auto-started — JARVIS just announces he's ready; the user taps the 🎤 button to start talking.
   // UPFRONT ACCESS (carer setup, within this gesture): pre-warm the MICROPHONE only (so always-on
   // listening works), then open the accessible Device Access panel so the carer can grant camera/files/
   // notifications with BIG buttons + clear status + recovery guidance. We request mic ALONE (not combined
@@ -5806,8 +5836,7 @@ setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$(
   // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
   addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
     try{unlockAudio();}catch(_){}
-    try{jarvisSpeak("JARVIS 'ere — online and all yours. What can I do for ya?");}catch(_){}
-    try{if(typeof micToggle==='function'&&!_rec)micToggle();}catch(_){}} ,{once:true});
+    try{jarvisSpeak("Systems online. Ready when you are, sir.");}catch(_){}} ,{once:true});
 }},2200);
 
 /* =========================================================
