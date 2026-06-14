@@ -2191,19 +2191,54 @@ function _speakQueue(parts,myseq,fullText){
   };
   step();
 }
+let _streamSrcs=[];
+// STREAMING INFERENCE playback: pulls raw PCM int16 (24kHz mono) from /tts_stream as XTTS generates it
+// and schedules each chunk on the Web-Audio clock — first audio ~0.2-0.6s. Rejects on any failure so
+// jarvisSpeak falls back to the sentence-streamed mp3 path. Honours barge-in via myseq + _streamSrcs.
+async function _streamSpeak(t,myseq){
+  if(!_ttsCtx)unlockAudio();
+  const ctx=_ttsCtx;
+  const resp=await fetch('tts_stream?text='+encodeURIComponent(String(t).slice(0,600)));
+  if(!resp.ok||!resp.body)throw new Error('no stream');
+  const reader=resp.body.getReader();
+  let playT=0,started=false,leftover=new Uint8Array(0);
+  for(;;){
+    const {done,value}=await reader.read();
+    if(myseq!==_ttsSeq){try{reader.cancel();}catch(_){}return;}
+    if(done)break;
+    const buf=new Uint8Array(leftover.length+value.length);buf.set(leftover);buf.set(value,leftover.length);
+    const n=buf.length>>1;
+    if(n>0){
+      const i16=new Int16Array(buf.buffer,0,n);
+      const ab=ctx.createBuffer(1,n,24000);const ch=ab.getChannelData(0);
+      for(let i=0;i<n;i++)ch[i]=i16[i]/32768;
+      const src=ctx.createBufferSource();src.buffer=ab;src.connect(ctx.destination);try{src.connect(_ttsAn);}catch(_){}
+      if(!started){if(ctx.resume)ctx.resume();playT=ctx.currentTime+0.10;started=true;}
+      if(playT<ctx.currentTime)playT=ctx.currentTime+0.02;
+      src.start(playT);playT+=ab.duration;_streamSrcs.push(src);
+      leftover=(buf.length-n*2)?buf.slice(n*2):new Uint8Array(0);
+    } else leftover=buf;
+  }
+  if(!started)throw new Error('empty stream');
+  const endMs=Math.max(0,(playT-ctx.currentTime)*1000)+150;
+  setTimeout(()=>{if(myseq===_ttsSeq)speakEnd();},endMs);
+}
 window.jarvisSpeak=function(t){if(window._voiceOut===false)return;if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}
   try{speechSynthesis.cancel();}catch(_){}                    // barge-in: kill any in-flight line first
   try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
+  try{_streamSrcs.forEach(s=>{try{s.stop();}catch(_){}});_streamSrcs=[];}catch(_){}   // barge-in: stop streamed PCM too
   const myseq=++_ttsSeq;                                      // only the LATEST line may speak (cancels stale async)
   try{ if(!_ttsCtx)unlockAudio();
     speakStart();
     _ttsAudio.onerror=null;
     if(_preTTS[t]){ _playClip(_preTTS[t],myseq,()=>speakEnd(),t); return; }   // whole line pre-warmed → instant
-    const parts=_splitSentences(t);
-    if(parts.length<=1){ _fetchTTS(t).then(url=>{ if(myseq!==_ttsSeq)return;
-        if(url===null){ webSpeakFallback(t); return; } _playClip(url,myseq,()=>speakEnd(),t); }); return; }
-    _speakQueue(parts,myseq,t);                               // multi-sentence → sentence-level streaming
+    // STREAMING INFERENCE first (~0.2-0.6s first audio); fall back to sentence-streamed mp3 on any failure.
+    _streamSpeak(t,myseq).catch(()=>{ if(myseq!==_ttsSeq)return;
+      const parts=_splitSentences(t);
+      if(parts.length<=1){ _fetchTTS(t).then(url=>{ if(myseq!==_ttsSeq)return; if(url===null){webSpeakFallback(t);return;} _playClip(url,myseq,()=>speakEnd(),t); }); }
+      else _speakQueue(parts,myseq,t);
+    });
   }catch(e){webSpeakFallback(t);} }
 // _jspeaking gates the mic so JARVIS never hears + answers his OWN TTS voice (the feedback loop that
 // made it sound like two agents talking over each other and spammed the chat). Released a beat AFTER

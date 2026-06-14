@@ -2815,6 +2815,43 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         elif self.path.startswith("/library"):
             from server.services import media_gen as MG
             self._send(json.dumps(MG.library()).encode(), "application/json")
+        elif self.path.startswith("/tts_stream"):
+            # STREAMING voice: proxy the GPU box's /synthesize_stream (raw PCM int16 24kHz mono) straight
+            # to the browser as it generates — first audio ~0.2s. Browser plays via Web Audio. On any
+            # failure the client falls back to the regular /tts (sentence-streamed mp3).
+            import urllib.request as _u
+            _q = parse_qs(urlparse(self.path).query)
+            _txt = (_q.get("text", [""])[0] or "").strip()[:600]
+            up = None
+            if _txt and _XTTS_ENABLED and _xtts_alive(_XTTS_GPU_URL):
+                try:
+                    base = _XTTS_GPU_URL.split("?")[0].rsplit("/", 1)[0]      # -> http://127.0.0.1:8096
+                    req = _u.Request(base + "/synthesize_stream",
+                                     data=json.dumps({"text": _txt}).encode(),
+                                     headers={"Content-Type": "application/json"})
+                    up = _u.urlopen(req, timeout=30)
+                except Exception:  # noqa: BLE001
+                    up = None
+            if up is None:
+                self.send_response(502); self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); return
+            self.send_response(200)
+            self.send_header("Content-Type", "audio/L16;rate=24000;channels=1")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Connection", "close")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            try:
+                while True:
+                    chunk = up.read(8192)
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk); self.wfile.flush()
+            except Exception:  # noqa: BLE001
+                pass
+            finally:
+                try: up.close()
+                except Exception: pass
+            return
         elif self.path.startswith("/tts"):
             _q = parse_qs(urlparse(self.path).query)
             def _f(name):
