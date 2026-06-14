@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='40'; window.__JV_VER=VER;
+  var KEY='__jv',VER='41'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6773,7 +6773,9 @@ async function loadSelfDev(){
       +_sdKV('Avg score',(m.avg_score==null?'—':m.avg_score+'/1000'))+_sdKV('Per day',(m.landed_per_day==null?'—':m.landed_per_day))
       +_sdKV('Cycles',(m.cycles!=null?m.cycles:0))+_sdKV('Rejected',(m.rejected!=null?m.rejected:0))
       +_sdKV('Gate-failed',(m.gate_failed!=null?m.gate_failed:0))+_sdKV('Rolled back',(m.rolled_back!=null?m.rolled_back:0))
-      +'</div></div>';
+      +'</div>'
+      +(function(){var v=m.viability_model;if(!v)return '';var acc=(v.accuracy_lower!=null?Math.round(v.accuracy_lower*100)+'%':'—');var on=v.gating;return '<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);font-size:12px">🔮 Pre-build predictor: '+(on?'<b style="color:#3fb950">GATING</b>':'learning')+' · accuracy '+acc+' / 90% target · '+(v.n_samples!=null?v.n_samples:0)+' samples'+(on?'':' (advisory until ≥90% repeatable)')+'</div>';})()
+      +'</div>';
     const items=d.items||[];
     l.innerHTML=items.length?items.map(function(it){
       var col=it.landed?'#3fb950':(it.rejected?'#f85149':'#d29922');

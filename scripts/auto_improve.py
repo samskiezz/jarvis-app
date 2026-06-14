@@ -34,6 +34,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from audit_score import audit_score  # noqa: E402  (the 1,000-pt Claude scoring/merge-decision engine)
+import viability_model as viab  # noqa: E402  (learned pre-filter; gates only once it is ≥90% repeatable)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = os.path.join(ROOT, ".venv", "bin", "python")
@@ -41,9 +42,11 @@ PY = PY if os.path.exists(PY) else sys.executable
 CLAUDE = os.environ.get("CLAUDE_BIN", "/root/.local/bin/claude")
 LOGFILE = os.path.join(ROOT, "server", "data", "auto_improve.log.jsonl")
 PROTECTED = {"scripts/auto_improve.py", "scripts/auto_improve_gate.py", "scripts/audit_score.py",
-             "server/auth.py", "server/config.py"}
+             "scripts/viability_model.py", "server/auth.py", "server/config.py"}
 # Minimum 1,000-pt audit score required to auto-merge (the spec's auto-pass gate).
 MERGE_MIN_SCORE = int(os.environ.get("AUTO_MERGE_MIN", "850"))
+# A feature is only SKIPPED pre-build when the predictor is validated (≥90%) AND its pass-prob is below this.
+VIAB_MIN = float(os.environ.get("VIAB_MIN_PROB", "0.45"))
 MISSION_FILE = os.path.join(ROOT, "config", "jarvis_mission.md")
 
 
@@ -321,6 +324,14 @@ def score_change(feat: dict, files: list[str]) -> dict:
 
 def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
     log({"event": "cycle_start", "features": n, "dry": dry, "tier": tier, "builder": builder})
+    # Refresh the learned viability predictor from the growing journal; it only GATES once ≥90% repeatable.
+    try:
+        vr = viab.train()
+        log({"event": "viability_model", "acc_mean": vr.get("accuracy_mean"), "acc_std": vr.get("accuracy_std"),
+             "acc_lower": vr.get("accuracy_lower"), "n": vr.get("n_samples"), "gating": bool(vr.get("gating")),
+             "status": vr.get("status")})
+    except Exception as e:  # noqa: BLE001
+        log({"event": "viability_model_error", "error": str(e)[:160]})
     feats = ideate(n, tier)
     if not feats:
         log({"event": "cycle_end", "reason": "no ideas generated"})
@@ -331,6 +342,14 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
         if builder == "alternate":
             b = "kimi" if (feat.get("target") or feat.get("file")) else "claude"
         feat["_builder"] = b
+        # PRE-BUILD FILTER: once the predictor is validated (≥90% repeatable), skip ideas it judges likely to
+        # fail BEFORE spending build tokens. Advisory (prob logged, nothing skipped) until then.
+        prob = viab.predict(feat)
+        feat["_viab"] = prob
+        if viab.gate_ready() and prob is not None and prob < VIAB_MIN:
+            log({"event": "viability_skip", "title": feat["title"], "pass_prob": round(prob, 3),
+                 "builder": b, "category": feat.get("category", "other")})
+            continue
         before = _tracked_state()
         ran = implement(feat, timeout=int(os.environ.get("AUTO_IMPL_TIMEOUT", "1800")), builder=b)
         after = _tracked_state()
@@ -349,7 +368,7 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
         au = audit_score(feat, feature_files, g)
         common = {
             "title": feat["title"], "category": feat.get("category", "other"),
-            "builder": feat.get("_builder", builder),
+            "builder": feat.get("_builder", builder), "pass_prob": feat.get("_viab"),
             "score": au.get("final_score"), "verdict": au.get("verdict"),
             "advancement": au.get("advancement_score"),
             "delta": (au.get("delta") or {}).get("delta"),

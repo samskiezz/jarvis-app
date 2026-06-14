@@ -2230,7 +2230,7 @@ def _auto_improve_feed(limit: int = 25) -> dict:
     builders = {}                     # builder -> {attempts, landed}
     counts = {"landed": 0, "rejected": 0, "gate_failed": 0, "skipped": 0, "rolled_back": 0, "dry_run": 0}
     cycles, land_ts = 0, []
-    last_cycle, first_ts, last_ts = None, None, None
+    last_cycle, first_ts, last_ts, viability, skipped_pre = None, None, None, None, 0
     try:
         with open(path, encoding="utf-8") as fh:
             for line in fh:
@@ -2285,6 +2285,10 @@ def _auto_improve_feed(limit: int = 25) -> dict:
                     counts["gate_failed"] += 1
                 elif ev == "feature_skip":
                     counts["skipped"] += 1
+                elif ev == "viability_skip":
+                    skipped_pre += 1
+                elif ev == "viability_model":
+                    viability = e
                 elif ev in ("ideate_failed", "cycle_crash"):
                     errors += 1
     except FileNotFoundError:
@@ -2297,12 +2301,19 @@ def _auto_improve_feed(limit: int = 25) -> dict:
     pass_rate = round(100.0 * counts["landed"] / attempts, 1) if attempts else None
     span_days = ((last_ts - first_ts) / 86400.0) if (first_ts and last_ts and last_ts > first_ts) else 0
     per_day = round(counts["landed"] / span_days, 2) if span_days >= 0.25 else None
+    viab_out = None
+    if viability:
+        viab_out = {
+            "accuracy_mean": viability.get("acc_mean"), "accuracy_lower": viability.get("acc_lower"),
+            "n_samples": viability.get("n"), "gating": bool(viability.get("gating")),
+            "status": viability.get("status"), "target": 0.90,
+        }
     baseline = {
         "landed": counts["landed"], "rejected": counts["rejected"], "gate_failed": counts["gate_failed"],
-        "rolled_back": counts["rolled_back"], "skipped": counts["skipped"],
+        "rolled_back": counts["rolled_back"], "skipped": counts["skipped"], "pre_filtered": skipped_pre,
         "attempts": attempts, "pass_rate_pct": pass_rate, "cycles": cycles,
         "landed_per_day": per_day, "avg_score": avg, "by_builder": builders,
-        "tracking_days": round(span_days, 2),
+        "tracking_days": round(span_days, 2), "viability_model": viab_out,
     }
     return {"ok": True, "items": items[:limit],
             "summary": {"total": len(items), "avg_score": avg, "by_category": cats, "errors": errors,
