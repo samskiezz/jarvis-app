@@ -5862,13 +5862,17 @@ function engage(){if(_engaged)return;_engaged=true;
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
   try{ jarvisSpeak("Systems online. Ready when you are, sir."); }catch(_){}   // boot greeting (owner = sir)
   // Mic is NOT auto-started — JARVIS just announces he's ready; the user taps the 🎤 button to start talking.
-  // UPFRONT ACCESS (carer setup, within this gesture): pre-warm the MICROPHONE only (so always-on
-  // listening works), then open the accessible Device Access panel so the carer can grant camera/files/
-  // notifications with BIG buttons + clear status + recovery guidance. We request mic ALONE (not combined
-  // video+audio — a combined request fails entirely if either is blocked, which silently killed the mic).
-  try{ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
+  // UPFRONT ACCESS — fire ALL permission prompts within THIS entry tap, so granting happens once when you
+  // tap to enter and nothing re-asks later. mic + camera requested SEPARATELY (a combined audio+video
+  // request fails entirely if either is blocked). Only works on a secure origin (https); no-ops otherwise.
+  if(window.isSecureContext && navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    try{ navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){}
+    try{ navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}})
+         .catch(()=>{ try{ navigator.mediaDevices.getUserMedia({video:true}).then(s=>{try{s.getTracks().forEach(t=>t.stop());}catch(_){}}).catch(()=>{}); }catch(_){} }); }catch(_){}
+  }
+  try{ if('Notification' in window && Notification.permission==='default') Notification.requestPermission().catch(()=>{}); }catch(_){}
   try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist().catch(()=>{}); }catch(_){}
-  try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,1200); }catch(_){}   // first run → show the access panel
+  try{ if(typeof maybeAutoAccess==='function') setTimeout(maybeAutoAccess,2500); }catch(_){}   // fallback panel only if something's still ungranted
   $('boot').classList.add('gone');setTimeout(()=>{$('boot').style.display='none';},950);
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
