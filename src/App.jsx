@@ -24,6 +24,7 @@ import TaskBoard from '@/components/cinematic/TaskBoard';
 import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 import InvestigationsPanel from '@/components/cinematic/InvestigationsPanel';
 import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
+import DocumentSearch from '@/components/cinematic/DocumentSearch';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -63,6 +64,8 @@ function App() {
             <InvestigationsPanel />
             {/* F13: scenario launcher — /v1/scenario/list → pick + run; show outcome */}
             <ScenarioLauncher />
+            {/* F14: document search — /v1/reports + /knowledge/ → JARVIS summarizes */}
+            <DocumentSearch />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
