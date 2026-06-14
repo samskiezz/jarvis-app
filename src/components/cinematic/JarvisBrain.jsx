@@ -81,6 +81,7 @@ import { isOpsInvCorrQuery, buildOpsInvCorrScript } from "@/components/cinematic
 import { isKrgapQuery, buildKrgapScript } from "@/components/cinematic/KnowledgeReportAuditor";
 import { isEntityActivityQuery, buildEntityActivityScript } from "@/components/cinematic/EntityActivityHeatmap";
 import { isThreatActorNetworkQuery, buildThreatActorNetworkScript } from "@/components/cinematic/ThreatActorNetwork";
+import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "@/components/cinematic/SwarmDatasetTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -987,6 +988,17 @@ export default function JarvisBrain() {
     if (isThreatActorNetworkQuery(q)) {
       try {
         const answer = await buildThreatActorNetworkScript();
+        setThinking(false); typeOut(answer); speak(answer);
+        hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
+      } catch (_) {
+        setThinking(false); setOpen(false);
+      }
+      return;
+    }
+
+    if (isSwarmDatasetQuery(q)) {
+      try {
+        const answer = await buildSwarmDatasetScript();
         setThinking(false); typeOut(answer); speak(answer);
         hideT.current = setTimeout(() => setOpen(false), Math.max(9000, answer.length * 70));
       } catch (_) {

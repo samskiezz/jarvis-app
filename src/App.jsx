@@ -90,6 +90,7 @@ import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMap
 import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
 import EntityActivityHeatmap from '@/components/cinematic/EntityActivityHeatmap';
 import ThreatActorNetwork from '@/components/cinematic/ThreatActorNetwork';
+import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -188,6 +189,7 @@ function App() {
             <KnowledgeReportAuditor />
             <EntityActivityHeatmap />
             <ThreatActorNetwork />
+            <SwarmDatasetTracker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
