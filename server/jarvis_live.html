@@ -3302,9 +3302,14 @@ function _detectGender(){ try{
   const f=_genderVotes.filter(v=>v==='f').length, m=_genderVotes.filter(v=>v==='m').length;
   if(f>=3&&f>m)_spkWho="ma'am"; else if(m>=3&&m>f)_spkWho='sir';
 }catch(e){} }
+function _micSecureHelp(){var u='https://app.projectsolar.cloud/jarvis/';try{showInplaceAlert('🎤 Microphone needs the secure link — open '+u+' (not the plain http address).');}catch(_){}try{srlog('Microphone blocked: open the secure https link '+u);}catch(_){}}
+function _micDeniedHelp(){try{showInplaceAlert('🎤 Microphone is blocked. Tap the lock icon in your browser bar (or the 🔓 Access button) and allow the microphone, then tap the mic again.');}catch(_){}try{if(typeof openAccess==='function')openAccess();}catch(_){}}
 function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!window.isSecureContext){_micSecureHelp();return;}   // browsers BLOCK the mic on insecure http://<ip> origins (no prompt) — guide to the https link
   if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
   if(_rec){try{_rec.stop();}catch(e){}_rec=null;$('mic').classList.remove('live');document.body.classList.remove('listening');return;}
+  // Explicitly request mic permission so the browser shows its prompt (SpeechRecognition alone often won't trigger it).
+  try{if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){try{s.getTracks().forEach(function(t){t.stop();});}catch(_){}}).catch(function(){_micDeniedHelp();});}catch(_){}
   startMicAnalyser();
   _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
   $('mic').classList.add('live');document.body.classList.add('listening');   // always-on listening — no "Listening." announce (natural conversation)
@@ -3313,7 +3318,7 @@ function micToggle(){const SR=window.SpeechRecognition||window.webkitSpeechRecog
     const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
     _detectGender();                                      // assess speaker pitch while they talk → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);if(res.isFinal&&t){$('say').value=t;askJarvis();}};
-  _rec.onerror=ev=>{if(ev.error==='not-allowed'){jarvisSpeak('Please allow microphone access.');_rec=null;$('mic').classList.remove('live');}};
+  _rec.onerror=ev=>{if(ev.error==='not-allowed'){_micDeniedHelp();_rec=null;$('mic').classList.remove('live');}};
   _rec.onend=()=>{if(_rec){try{_rec.start();}catch(e){}}};
   _rec.start();}
 
@@ -5782,6 +5787,7 @@ function engage(){if(_engaged)return;_engaged=true;
   if(!uniReady){const ok=initUniverse();if(!ok){$('boot').querySelector('.t').textContent='WebGL UNAVAILABLE';$('boot').classList.remove('gone');$('boot').style.display='flex';$('boot').querySelector('.tap').textContent='voice + chat still work below';$('boot').style.pointerEvents='none';}}
 }
 addEventListener('pointerdown',engage,{once:true});
+try{ if(!window.isSecureContext) setTimeout(_micSecureHelp, 2500); }catch(_){}   // insecure http://<ip> origin → mic/camera blocked by the browser; show the https link on load
 
 // start data loops immediately; build the scene on first gesture (autoplay policy) OR auto after 2.2s
 tick();setInterval(tick,2500);setInterval(ageTick,1000);budgetTick();setInterval(budgetTick,8000);loadLib();setInterval(loadLib,15000);renderDock();
