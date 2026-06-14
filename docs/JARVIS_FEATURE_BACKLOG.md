@@ -22,8 +22,8 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-06-14] HeyJarvisListener.jsx mounts in App.jsx; uses createVoice() wake-word engine + WakeWordToggle pill UI; armed state starts reactor hum; on detection dispatches jarvis:ask to open JarvisBrain; no-ops on unsupported browsers; vite build green.
 - [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. [2026-06-14] TelemetryTicker.jsx polls both endpoints every 15s; displays CPU/MEM/LOAD/NODES/SYN inline in Layout.jsx sticky top strip; vite build green.
 - [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. [2026-06-14] SceneKeyboardNav.jsx (pre-built) mounted in App.jsx; 1–9 jump to scenes 01–09, 0 → scene 10, Esc → /; HUD badge confirms jump; ignored while typing; vite build green.
-- [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
-- [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
+- [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [2026-06-14] SpokenStatusReport.jsx (isStatusQuery + buildStatusScript) wired in JarvisBrain.jsx; fetches /v1/jarvis/system/status + /v1/cinematic/brain; speaks CPU/mem/load/nodes/synapses via /v1/voice/tts; verified present in codebase.
+- [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. [2026-06-14] WorldIncidentFeed.jsx mounted in App.jsx; mini Three.js globe with earthquake pins + scrolling list; polls getLiveIntel every 60s; bottom-left INCIDENTS toggle; vite build exit 0.
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
 - [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
