@@ -31,12 +31,18 @@ import sys
 import time
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from audit_score import audit_score  # noqa: E402  (the 1,000-pt Claude scoring/merge-decision engine)
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = os.path.join(ROOT, ".venv", "bin", "python")
 PY = PY if os.path.exists(PY) else sys.executable
 CLAUDE = os.environ.get("CLAUDE_BIN", "/root/.local/bin/claude")
 LOGFILE = os.path.join(ROOT, "server", "data", "auto_improve.log.jsonl")
-PROTECTED = {"scripts/auto_improve.py", "scripts/auto_improve_gate.py", "server/auth.py", "server/config.py"}
+PROTECTED = {"scripts/auto_improve.py", "scripts/auto_improve_gate.py", "scripts/audit_score.py",
+             "server/auth.py", "server/config.py"}
+# Minimum 1,000-pt audit score required to auto-merge (the spec's auto-pass gate).
+MERGE_MIN_SCORE = int(os.environ.get("AUTO_MERGE_MIN", "850"))
 HEALTH = [("http://127.0.0.1:8001/health", 200), ("http://127.0.0.1:8095/jarvis_live.html", 200)]
 
 
@@ -93,7 +99,10 @@ def ideate(n: int, tier: str) -> list[dict]:
         "JSON array of objects with keys: title (short), category (one of: accessibility, productivity, "
         "voice, ui, automation, communication, health, other), brief (2-3 sentences: what it does, where it "
         "lives in the app, and the gist of how to build it using existing patterns — a mini-app in MINI_APPS "
-        "+ renderAppData/render*Sheet and/or a /v1 route). No markdown fences." % (n, ctx)
+        "+ renderAppData/render*Sheet and/or a /v1 route), and OPTIONALLY target (the single small existing "
+        "backend file the change is fully contained to, e.g. server/routes/xyz.py — ONLY set target when the "
+        "whole feature fits one small backend file; omit it for UI/HTML features). No markdown fences."
+        % (n, ctx)
     )
     try:
         import re
@@ -107,7 +116,8 @@ def ideate(n: int, tier: str) -> list[dict]:
         data = json.loads(m.group(0) if m else out)
         items = data.get("features", data.get("items", [])) if isinstance(data, dict) else data
         feats = [{"title": str(x.get("title", "")).strip(), "brief": str(x.get("brief", "")).strip(),
-                  "category": str(x.get("category", "other")).strip().lower()}
+                  "category": str(x.get("category", "other")).strip().lower(),
+                  "target": (str(x.get("target", "")).strip() or None)}
                  for x in items if isinstance(x, dict) and x.get("title")]
         if not feats:
             raise ValueError("no features parsed from: " + out[:200])
@@ -117,7 +127,64 @@ def ideate(n: int, tier: str) -> list[dict]:
         return []
 
 
-def implement(feat: dict, timeout=1800) -> bool:
+def implement(feat: dict, timeout=1800, builder: str = "claude") -> bool:
+    """Dispatch to a builder. 'claude' = the claude -p tool loop (can edit any/large file surgically);
+    'kimi' = the local/cheap kimi tier doing a full-file rewrite of ONE small target file. Whoever builds,
+    the SAME crash-proof gate + 1,000-pt Claude audit decide whether it lands — so a weak builder is safe."""
+    if builder == "kimi":
+        return _implement_kimi(feat)
+    return _implement_claude(feat, timeout)
+
+
+def _strip_fences(text: str) -> str:
+    t = (text or "").strip()
+    if t.startswith("```"):
+        t = re.sub(r"^```[a-zA-Z0-9_-]*\n", "", t)
+        t = re.sub(r"\n```\s*$", "", t)
+    return t.strip("\n")
+
+
+def _implement_kimi(feat: dict) -> bool:
+    """Kimi builder: it cannot do blind diffs (it fabricates context lines), so we give it the REAL contents
+    of one small target file and write back a full rewrite. Big files (jarvis_live.html) must use 'claude'."""
+    target = feat.get("target") or feat.get("file")
+    if not target:
+        log({"event": "kimi_skip", "title": feat.get("title"), "reason": "no small target file specified"})
+        return False
+    path = os.path.join(ROOT, target)
+    rel = os.path.relpath(path, ROOT)
+    if rel in PROTECTED or not os.path.exists(path):
+        log({"event": "kimi_skip", "title": feat.get("title"), "reason": "target missing or protected", "target": rel})
+        return False
+    src = open(path, encoding="utf-8").read()
+    if len(src) > 60000:            # too big to rewrite reliably within the token ceiling → leave to claude
+        log({"event": "kimi_skip", "title": feat.get("title"), "reason": "target too large for rewrite", "target": rel})
+        return False
+    prompt = (
+        "You are editing the JARVIS app. Implement this feature by returning the COMPLETE, updated contents "
+        "of the file below and NOTHING else — no prose, no markdown fences.\n"
+        "Rules: smallest correct change; do NOT break existing code; keep all imports/exports intact; match "
+        "the existing style. Output the entire file from first line to last.\n\n"
+        "FEATURE: %s\n%s\n\n=== FILE %s ===\n%s" % (feat["title"], feat.get("brief", ""), rel, src)
+    )
+    try:
+        body = json.dumps({"message": prompt, "tier": "kimi", "max_tokens": 16000}).encode()
+        req = urllib.request.Request("http://127.0.0.1:8095/llm/chat", data=body,
+                                     headers={"Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(req, timeout=420) as resp:
+            out = _strip_fences(json.loads(resp.read()).get("reply", ""))
+    except Exception as e:  # noqa: BLE001
+        log({"event": "kimi_error", "title": feat.get("title"), "error": str(e)[:160]})
+        return False
+    if len(out) < len(src) * 0.6:   # truncated / refused → reject so the gate never even sees garbage
+        log({"event": "kimi_skip", "title": feat.get("title"), "reason": "rewrite too short (likely truncated)",
+             "target": rel, "got": len(out), "src": len(src)})
+        return False
+    open(path, "w", encoding="utf-8").write(out)
+    return True
+
+
+def _implement_claude(feat: dict, timeout=1800) -> bool:
     """Claude Code implements the feature in place. Returns True if it ran (changes may or may not exist)."""
     prompt = (
         "Autonomously implement this NEW user-facing feature in the JARVIS app, COMPLETELY and SAFELY.\n\n"
@@ -236,15 +303,20 @@ def score_change(feat: dict, files: list[str]) -> dict:
         return {"score": None, "category": feat.get("category", "other"), "reason": "score failed: " + str(e)[:80]}
 
 
-def cycle(n: int, dry: bool, tier: str):
-    log({"event": "cycle_start", "features": n, "dry": dry, "tier": tier})
+def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
+    log({"event": "cycle_start", "features": n, "dry": dry, "tier": tier, "builder": builder})
     feats = ideate(n, tier)
     if not feats:
         log({"event": "cycle_end", "reason": "no ideas generated"})
         return
     for i, feat in enumerate(feats):
+        # 'alternate' = use the cheap local kimi builder when the idea names a small target file, else claude.
+        b = builder
+        if builder == "alternate":
+            b = "kimi" if (feat.get("target") or feat.get("file")) else "claude"
+        feat["_builder"] = b
         before = _tracked_state()
-        ran = implement(feat, timeout=int(os.environ.get("AUTO_IMPL_TIMEOUT", "1800")))
+        ran = implement(feat, timeout=int(os.environ.get("AUTO_IMPL_TIMEOUT", "1800")), builder=b)
         after = _tracked_state()
         feature_files = sorted(after - before)        # only files Claude newly touched (not pre-existing dirt)
         if not ran or not feature_files:
@@ -257,15 +329,33 @@ def cycle(n: int, dry: bool, tier: str):
             log({"event": "feature_gate_fail", "title": feat["title"], "failed": failed, "files": feature_files})
             discard(feature_files)
             continue
-        sc = score_change(feat, feature_files)
+        # The 1,000-pt Claude audit is the merge decider: gate proves it BOOTS, audit proves it's WORTH it.
+        au = audit_score(feat, feature_files, g)
+        common = {
+            "title": feat["title"], "category": feat.get("category", "other"),
+            "builder": feat.get("_builder", builder),
+            "score": au.get("final_score"), "verdict": au.get("verdict"),
+            "advancement": au.get("advancement_score"),
+            "delta": (au.get("delta") or {}).get("delta"),
+            "reason": (au.get("improvement_proven") or au.get("error") or "")[:200],
+            "audit": {"breakdown": au.get("breakdown"), "penalties": au.get("penalties"),
+                      "penalty_total": au.get("penalty_total"), "hard_blockers": au.get("hard_blockers"),
+                      "rollback_confidence": au.get("rollback_confidence"),
+                      "required_fixes": au.get("required_fixes"), "next_action": au.get("next_action"),
+                      "risk_depth": au.get("risk_depth")},
+            "files": feature_files,
+        }
         if dry:
-            log({"event": "feature_gate_pass_dryrun", "title": feat["title"], "category": sc.get("category"),
-                 "score": sc.get("score"), "reason": sc.get("reason"), "files": feature_files})
+            log({"event": "feature_gate_pass_dryrun", **common})
+            discard(feature_files)
+            continue
+        if not au.get("merge_ok"):
+            # gate green but audit says don't merge (score below threshold, hard blocker, or unproven gain)
+            log({"event": "feature_reject", **common})
             discard(feature_files)
             continue
         res = land(feat, feature_files)
-        log({"event": "feature_land", "title": feat["title"], "category": sc.get("category"),
-             "score": sc.get("score"), "reason": sc.get("reason"), "files": feature_files, **res})
+        log({"event": "feature_land", **common, **res})
     log({"event": "cycle_end"})
 
 
@@ -285,18 +375,20 @@ if __name__ == "__main__":
     nfeat = int(a[a.index("--features") + 1]) if "--features" in a else 5
     dry = "--dry-run" in a
     tier = a[a.index("--tier") + 1] if "--tier" in a else "strong"
+    builder = a[a.index("--builder") + 1] if "--builder" in a else "claude"
     held = _lock()
     if not held:
         log({"event": "abort", "reason": "another auto_improve instance is running"})
         sys.exit(0)
     if "--loop" in a:
         interval = float(os.environ.get("AUTO_INTERVAL_HRS", "3")) * 3600   # rest between cycles; 24/7 always-on
-        log({"event": "loop_start", "interval_hrs": interval / 3600, "features": nfeat, "tier": tier})
+        log({"event": "loop_start", "interval_hrs": interval / 3600, "features": nfeat, "tier": tier,
+             "builder": builder})
         while True:
             try:
-                cycle(nfeat, dry, tier)
+                cycle(nfeat, dry, tier, builder)
             except Exception as e:  # noqa: BLE001
                 log({"event": "cycle_crash", "error": str(e)[:300]})
             time.sleep(interval)
     else:
-        cycle(nfeat, dry, tier)
+        cycle(nfeat, dry, tier, builder)
