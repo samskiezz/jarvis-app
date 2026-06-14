@@ -13,3 +13,4 @@
 [2026-06-14] F18 JARVIS boot sequence — JarvisBootSequence.jsx mounted in App.jsx; fetches /v1/jarvis/system/status + /v1/cinematic/brain; cinematic terminal + click-to-speak /v1/voice/tts; sessionStorage single-run guard; vite build exit 0.
 [2026-06-14] F19 Ambient reactor hum toggle — AmbientReactorHum.jsx mounted in App.jsx; WebAudio 60Hz sawtooth+harmonics+noise+LFO; HUM toggle at left:1012; voice: isAmbientQuery → jarvis:ambient-toggle → JarvisBrain; vite build exit 0.
 [2026-06-14] F20 DONE — ShowMeNavigation.jsx SHOW_ME_MAP extended from 10 to 69 entries; covers all cinematic panels; shortcodes used where natural-language queries conflict with earlier JarvisBrain handlers; vite build exit 0.
+2026-06-14 F22 DONE — AlertToasts.jsx mounted in App.jsx; polls /v1/alerts?status=open every 20s; severity-sorted toasts top-right; criticals (≥90) spoken via /v1/voice/tts; 12s auto-dismiss; vite build exit 0.
