@@ -121,27 +121,33 @@ def ideate(n: int, tier: str) -> list[dict]:
         "whole feature fits one small backend file; omit it for UI/HTML features). No markdown fences."
         % (n, ctx)
     )
-    try:
-        import re
-        # Use the env-loaded live brain via /llm/chat (the implementer Claude later researches + expands each).
-        body = json.dumps({"message": prompt, "tier": tier, "max_tokens": 900}).encode()
-        req = urllib.request.Request("http://127.0.0.1:8095/llm/chat", data=body,
-                                     headers={"Content-Type": "application/json"}, method="POST")
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            out = json.loads(resp.read()).get("reply", "")
-        m = re.search(r"\[.*\]", out, re.S) or re.search(r"\{.*\}", out, re.S)
-        data = json.loads(m.group(0) if m else out)
-        items = data.get("features", data.get("items", [])) if isinstance(data, dict) else data
-        feats = [{"title": str(x.get("title", "")).strip(), "brief": str(x.get("brief", "")).strip(),
-                  "category": str(x.get("category", "other")).strip().lower(),
-                  "target": (str(x.get("target", "")).strip() or None)}
-                 for x in items if isinstance(x, dict) and x.get("title")]
-        if not feats:
-            raise ValueError("no features parsed from: " + out[:200])
-        return feats[:n]
-    except Exception as e:  # noqa: BLE001
-        log({"event": "ideate_failed", "error": str(e)[:200]})
-        return []
+    # Retry on transient brain hiccups (empty/unparseable response) so one flaky reply never wastes a cycle.
+    last_err = ""
+    for attempt in range(3):
+        try:
+            # Use the env-loaded live brain via /llm/chat (the implementer Claude later researches + expands).
+            body = json.dumps({"message": prompt, "tier": tier, "max_tokens": 900}).encode()
+            req = urllib.request.Request("http://127.0.0.1:8095/llm/chat", data=body,
+                                         headers={"Content-Type": "application/json"}, method="POST")
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                out = json.loads(resp.read()).get("reply", "")
+            if not (out or "").strip():
+                raise ValueError("empty brain response")
+            m = re.search(r"\[.*\]", out, re.S) or re.search(r"\{.*\}", out, re.S)
+            data = json.loads(m.group(0) if m else out)
+            items = data.get("features", data.get("items", [])) if isinstance(data, dict) else data
+            feats = [{"title": str(x.get("title", "")).strip(), "brief": str(x.get("brief", "")).strip(),
+                      "category": str(x.get("category", "other")).strip().lower(),
+                      "target": (str(x.get("target", "")).strip() or None)}
+                     for x in items if isinstance(x, dict) and x.get("title")]
+            if not feats:
+                raise ValueError("no features parsed from: " + out[:200])
+            return feats[:n]
+        except Exception as e:  # noqa: BLE001
+            last_err = str(e)[:200]
+            time.sleep(5)
+    log({"event": "ideate_failed", "error": last_err, "attempts": 3})
+    return []
 
 
 def implement(feat: dict, timeout=1800, builder: str = "claude") -> bool:
@@ -256,6 +262,33 @@ def revise(feat: dict, required_fixes: list, timeout=1800) -> bool:
         "it valid + theme-locked + bump VER. BEFORE FINISHING run `python3 scripts/auto_improve_gate.py "
         "--changed-only` and fix until it reports pass=true.\n"
         % (feat["title"], feat.get("brief", ""), fixes)
+    )
+    pf = "/tmp/_ai_prompt.txt"
+    open(pf, "w").write(prompt)
+    of = "/tmp/_ai_out.json"
+    cmd = ("%s -p \"$(cat %s)\" --model %s --output-format json --dangerously-skip-permissions > %s 2>&1"
+           % (shlex.quote(CLAUDE), shlex.quote(pf), shlex.quote("claude-sonnet-4-6"), shlex.quote(of)))
+    rc, _ = run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})
+    return rc == 0
+
+
+def gate_repair(feat: dict, failed: list, detail: dict, timeout=1800) -> bool:
+    """ONE orchestrator-driven gate-repair: hand the builder the EXACT failing checks + their error output
+    and let it fix in place; the caller re-gates afterwards. This is the reliable fix for the recurring
+    jarvis_live.html JS-syntax failures (and broken tests / boot errors) — we don't rely on the builder to
+    have self-gated; we drive the repair with the real gate output."""
+    det = "\n".join("- %s: %s" % (k, str(v)[:500]) for k, v in (detail or {}).items()) or ", ".join(failed)
+    prompt = (
+        mission_brief() + "\n\n"
+        "Your previous edit for this feature FAILED the crash-proof gate and must be fixed before it can land. "
+        "Fix the EXACT failures below IN PLACE, keeping the feature complete and not breaking anything else.\n\n"
+        "FEATURE: %s\n%s\n\nFAILED CHECKS: %s\n\nERROR OUTPUT:\n%s\n\n"
+        "Likely causes: a JS syntax error in server/jarvis_live.html (a duplicate top-level const/let/function "
+        "name, or an unbalanced brace/backtick) fails `js`; a bad import or failing assertion fails `tests`; an "
+        "import error or startup exception fails `boot_backend`/`boot_dashboard`; theme drift fails `theme_lock`. "
+        "After fixing, RUN `python3 scripts/auto_improve_gate.py --changed-only` and keep fixing until it "
+        "reports pass=true. Do NOT touch server/auth.py, server/config.py, or scripts/auto_improve*.py.\n"
+        % (feat["title"], feat.get("brief", ""), ", ".join(failed), det)
     )
     pf = "/tmp/_ai_prompt.txt"
     open(pf, "w").write(prompt)
@@ -399,11 +432,20 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
         if not g.get("pass"):
             checks = g.get("checks") or {}
             failed = [k for k, v in checks.items() if not v.get("ok")]
-            detail = {k: (v.get("detail", "") or "")[:300] for k, v in checks.items() if not v.get("ok")}
+            detail = {k: (v.get("detail", "") or "")[:400] for k, v in checks.items() if not v.get("ok")}
             log({"event": "feature_gate_fail", "title": feat["title"], "failed": failed,
                  "detail": detail, "builder": feat.get("_builder", builder), "files": feature_files})
-            discard(feature_files)
-            continue
+            # ONE orchestrator-driven gate-repair before giving up: feed the builder the real errors and re-gate.
+            if not dry and gate_repair(feat, failed, detail, int(os.environ.get("AUTO_IMPL_TIMEOUT", "1800"))):
+                ff2 = sorted(_tracked_state() - before)
+                if ff2:
+                    feature_files = ff2
+                    g = gate()
+                    log({"event": "feature_gate_repair", "title": feat["title"], "passed": bool(g.get("pass")),
+                         "failed_after": [k for k, v in (g.get("checks") or {}).items() if not v.get("ok")]})
+            if not g.get("pass"):
+                discard(feature_files)
+                continue
         # The 1,000-pt Claude audit is the merge decider: gate proves it BOOTS, audit proves it's WORTH it.
         au = audit_score(feat, feature_files, g)
         # ONE revision pass for promising NEAR-MISSES (700-849): apply the audit's required fixes, then
