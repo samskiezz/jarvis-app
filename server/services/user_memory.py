@@ -149,13 +149,16 @@ def extract_and_store(user_msg: str, reply: str = "", *, user: str = "owner") ->
         return 0
     try:
         from server.services import tiered_llm as T
-        p = ("From this exchange, extract 0-3 DURABLE facts about the USER worth remembering for months "
-             "(preferences, people/relationships, routines, health, home, important context). IGNORE "
-             "one-off or transient chatter, questions, and anything about JARVIS himself. Write each as a "
-             "terse third-person statement (e.g. 'Prefers the lounge warm', 'Son is called Tom'). "
-             "If there is nothing durable, output exactly NONE.\n\n"
-             f"USER: {user_msg[:600]}\nJARVIS: {(reply or '')[:300]}")
-        r = T.complete(p, tier="base", max_tokens=140, module="server/services/user_memory.py")
+        p = ("Extract durable facts about the USER from their message — things worth remembering for months: "
+             "preferences, people in their life, routines, health, home, work. Output each fact on its own "
+             "line as a short third-person statement. Do NOT include questions, commands, or facts about "
+             "JARVIS. Output exactly NONE only if there is genuinely nothing personal to remember.\n\n"
+             "EXAMPLE\n"
+             "USER: my daughter Sarah visits every Sunday and I take heart tablets each morning\n"
+             "FACTS:\nDaughter Sarah visits every Sunday\nTakes heart tablets each morning\n\n"
+             "NOW\n"
+             f"USER: {user_msg[:600]}\nFACTS:")
+        r = T.complete(p, tier="strong", max_tokens=140, module="server/services/user_memory.py")
         if not (isinstance(r, dict) and r.get("ok")):
             return 0
         n = 0

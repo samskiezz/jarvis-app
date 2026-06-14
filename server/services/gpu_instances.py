@@ -591,8 +591,9 @@ def ensure_brain_tunnel() -> dict:
         try:
             proc = subprocess.Popen(
                 ["ssh", "-i", SSH_KEY, "-p", str(port), "-o", "StrictHostKeyChecking=no",
-                 "-o", "UserKnownHostsFile=/dev/null", "-o", "ServerAliveInterval=30",
+                 "-o", "UserKnownHostsFile=/dev/null", "-o", "ServerAliveInterval=15",
                  "-o", "ServerAliveCountMax=3", "-o", "ExitOnForwardFailure=yes",
+                 "-o", "TCPKeepAlive=yes",
                  "-N", "-L", "127.0.0.1:11434:127.0.0.1:11434", f"root@{host}"],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL,
                 start_new_session=True)

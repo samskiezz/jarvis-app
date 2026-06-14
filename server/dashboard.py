@@ -1465,26 +1465,36 @@ def _ensure_brain_tunnel():
 
 
 _BRAIN_OK = {"ts": 0.0, "up": False}
-def _brain_reachable(timeout: float = 2.0) -> bool:
-    """Is the Vast LLM brain ACTUALLY serving? A plain TCP check is a false-positive when the box is
-    reached over the self-healing SSH tunnel — the local 127.0.0.1:11434 listener always accepts even
-    when the remote Ollama is cold, down, or mid-load, which made her chat 'flicker' (try the GPU, hang,
-    fall back, retry). So we hit Ollama's HTTP /api/tags and require a real 200 with a models list.
-    Cached 15s so a DOWN brain never re-hangs every call."""
+def _brain_reachable(timeout: float = 2.5) -> bool:
+    """Is the Vast LLM brain ACTUALLY serving? We hit Ollama's /api/tags and require a 200 with a models
+    list (a plain TCP check is a false-positive over the SSH tunnel — the local listener always accepts).
+
+    The cache is ASYMMETRIC because the box network is flaky: a confirmed-UP brain is trusted for 30s
+    (few probes, fast chat), but a DOWN result is only trusted for ~4s and, on a miss, we heal the tunnel
+    and probe AGAIN before declaring it down. This stops a single network blip from pinning chat to the
+    canned cockney fallback for many seconds."""
     import urllib.request, json as _j, time as _t
     now = _t.time()
-    if now - _BRAIN_OK["ts"] < 15:
-        return _BRAIN_OK["up"]
-    _ensure_brain_tunnel()
-    up = False
-    try:
-        base = JARVIS_LLM[:-3] if JARVIS_LLM.endswith("/v1") else JARVIS_LLM  # Ollama /api/tags lives off the ROOT, not /v1
-        req = urllib.request.Request(base.rstrip("/") + "/api/tags")
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            d = _j.loads(r.read().decode() or "{}")
-            up = isinstance(d.get("models"), list) and len(d["models"]) > 0
-    except Exception:  # noqa: BLE001
-        up = False
+    age = now - _BRAIN_OK["ts"]
+    if _BRAIN_OK["up"] and age < 30:
+        return True
+    if (not _BRAIN_OK["up"]) and age < 4:
+        return False
+
+    def _probe() -> bool:
+        try:
+            base = JARVIS_LLM[:-3] if JARVIS_LLM.endswith("/v1") else JARVIS_LLM  # /api/tags lives off ROOT
+            req = urllib.request.Request(base.rstrip("/") + "/api/tags")
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                d = _j.loads(r.read().decode() or "{}")
+            return isinstance(d.get("models"), list) and len(d["models"]) > 0
+        except Exception:  # noqa: BLE001
+            return False
+
+    up = _probe()
+    if not up:                       # heal the tunnel and try once more before giving up to the fallback
+        _ensure_brain_tunnel()
+        up = _probe()
     _BRAIN_OK.update(ts=now, up=up)
     return up
 
@@ -3257,7 +3267,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
             except Exception:  # noqa: BLE001
                 body = {}
-            qtext = body.get("q", "") or body.get("prompt", "")
+            qtext = body.get("q", "") or body.get("prompt", "") or body.get("message", "")
             # ACCESSIBILITY FIRST: "captions on", "high contrast", "read the screen" must go to the
             # a11y engine, not the Claude builder. _a11y_handle returns None for non-a11y phrases.
             try:
