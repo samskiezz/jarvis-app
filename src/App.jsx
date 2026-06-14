@@ -13,84 +13,7 @@ import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
-import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
-import MarketsTicker from '@/components/cinematic/MarketsTicker';
-import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
-import RiskBoard from '@/components/cinematic/RiskBoard';
-import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
-import InvestigationsList from '@/components/cinematic/InvestigationsList';
-import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
-import DocumentSearch from '@/components/cinematic/DocumentSearch';
-import SkillScorecard from '@/components/cinematic/SkillScorecard';
-import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
-import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
-import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
-import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
-import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
-import AlertToasts from '@/components/cinematic/AlertToasts';
-import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
-import ContactsDirectory from '@/components/cinematic/ContactsDirectory';
-import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
-import GraphCentralityView from '@/components/cinematic/GraphCentralityView';
-import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
-import CommandHistory from '@/components/cinematic/CommandHistory';
-import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
-import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
-import IntelProfileDirectory from '@/components/cinematic/IntelProfileDirectory';
-import SceneHealthHeatmap from '@/components/cinematic/SceneHealthHeatmap';
-import MorningBriefing from '@/components/cinematic/MorningBriefing';
-import KnowledgeBrowser from '@/components/cinematic/KnowledgeBrowser';
-import OpsEventStream from '@/components/cinematic/OpsEventStream';
-import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
-import ReportSummariser from '@/components/cinematic/ReportSummariser';
-import DataAcquisitionMonitor from '@/components/cinematic/DataAcquisitionMonitor';
-import EntityRegistryOverview from '@/components/cinematic/EntityRegistryOverview';
-import ThreatTimeline from '@/components/cinematic/ThreatTimeline';
-import JarvisCommandPalette from '@/components/cinematic/JarvisCommandPalette';
-import SituationRoom from '@/components/cinematic/SituationRoom';
-import IntelDigest from '@/components/cinematic/IntelDigest';
-import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
-import PriorityActionQueue from '@/components/cinematic/PriorityActionQueue';
-import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
-import AgentChatTranscript from '@/components/cinematic/AgentChatTranscript';
-import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEngine';
-import SceneCompareView from '@/components/cinematic/SceneCompareView';
-import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
-import DatasetQueryAssistant from '@/components/cinematic/DatasetQueryAssistant';
-import InvestigationCaseWorkspace from '@/components/cinematic/InvestigationCaseWorkspace';
-import InvestmentRiskOverlay from '@/components/cinematic/InvestmentRiskOverlay';
-import ContactThreatLinker from '@/components/cinematic/ContactThreatLinker';
-import EntityWatchlist from '@/components/cinematic/EntityWatchlist';
-import SystemHealthScorecard from '@/components/cinematic/SystemHealthScorecard';
-import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
-import LiveIntelPulse from '@/components/cinematic/LiveIntelPulse';
-import ThreatVelocityMonitor from '@/components/cinematic/ThreatVelocityMonitor';
-import OpsRunbookGenerator from '@/components/cinematic/OpsRunbookGenerator';
-import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
-import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvestigationLinker';
-import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
-import AdaptiveThreatReport from '@/components/cinematic/AdaptiveThreatReport';
-import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
-import GraphAnomalyDetector from '@/components/cinematic/GraphAnomalyDetector';
-import MissionReadinessIndex from '@/components/cinematic/MissionReadinessIndex';
-import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
-import ScenarioSkillReadiness from '@/components/cinematic/ScenarioSkillReadiness';
-import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
-import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
-import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
-import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
-import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
-import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
-import DailyObjectivesPlanner from '@/components/cinematic/DailyObjectivesPlanner';
-import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
-import GeoSeismicAnalyst from '@/components/cinematic/GeoSeismicAnalyst';
-import CrisisEarlyWarning from '@/components/cinematic/CrisisEarlyWarning';
-import OpsInvCorrelator from '@/components/cinematic/OpsInvCorrelator';
-import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
-import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
-import EntityActivityHeatmap from '@/components/cinematic/EntityActivityHeatmap';
-import ThreatActorNetwork from '@/components/cinematic/ThreatActorNetwork';
-import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
+import GlobalCommandPalette from '@/components/cinematic/GlobalCommandPalette';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -106,90 +29,13 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthGate>
             {/* Global first-run install pop-up — shows on the landing page too,
                 so a fresh deploy initialises before you even pick a destination. */}
             <FirstRunSetup />
             <JarvisBrain />
-            <WorldIncidentFeed />
-            <MarketsTicker />
-            <EntityQuickSearch />
-            <RiskBoard />
-            <DatasetsBrowser />
-            <InvestigationsList />
-            <ScenarioLauncher />
-            <DocumentSearch />
-            <SkillScorecard />
-            <BrainGrowthSparkline />
-            <SceneAnchorDrillDown />
-            <JarvisBootSequence />
-            <AmbientReactorHum />
-            <LiveClockUptime />
-            <AlertToasts />
-            <InvestmentWidget />
-            <ContactsDirectory />
-            <SwarmJobsMonitor />
-            <GraphCentralityView />
-            <ServiceDiagnostics />
-            <CommandHistory />
-            <MultiVoiceToggle />
-            <SceneAutoTour />
-            <IntelProfileDirectory />
-            <SceneHealthHeatmap />
-            <MorningBriefing />
-            <KnowledgeBrowser />
-            <OpsEventStream />
-            <GraphPathExplorer />
-            <ReportSummariser />
-            <DataAcquisitionMonitor />
-            <EntityRegistryOverview />
-            <ThreatTimeline />
-            <JarvisCommandPalette />
-            <SituationRoom />
-            <IntelDigest />
-            <GraphNetworkExplorer />
-            <PriorityActionQueue />
-            <SkillGapAdvisor />
-            <AgentChatTranscript />
-            <ThreatCorrelationEngine />
-            <SceneCompareView />
-            <ScenarioImpactMatrix />
-            <DatasetQueryAssistant />
-            <InvestigationCaseWorkspace />
-            <InvestmentRiskOverlay />
-            <ContactThreatLinker />
-            <EntityWatchlist />
-            <SystemHealthScorecard />
-            <TaskSkillAlignment />
-            <LiveIntelPulse />
-            <ThreatVelocityMonitor />
-            <OpsRunbookGenerator />
-            <ScenarioRiskAdvisor />
-            <KnowledgeInvestigationLinker />
-            <SwarmRiskCoverageMap />
-            <AdaptiveThreatReport />
-            <SkillContactGapAdvisor />
-            <GraphAnomalyDetector />
-            <MissionReadinessIndex />
-            <InvestigationScenarioRecommender />
-            <ScenarioSkillReadiness />
-            <DatasetReportCrossRef />
-            <KnowledgeSkillRecommender />
-            <ContactInvestigationLinker />
-            <SwarmTaskAdvisor />
-            <RiskReportMapper />
-            <InvestmentScenarioPlanner />
-            <DailyObjectivesPlanner />
-            <OpsTaskCoverageChecker />
-            <GeoSeismicAnalyst />
-            <CrisisEarlyWarning />
-            <OpsInvCorrelator />
-            <InvestmentContactMapper />
-            <KnowledgeReportAuditor />
-            <EntityActivityHeatmap />
-            <ThreatActorNetwork />
-            <SwarmDatasetTracker />
+            <GlobalCommandPalette />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
