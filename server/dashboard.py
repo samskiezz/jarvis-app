@@ -1808,6 +1808,27 @@ def _xtts_one(url: str, text: str, timeout: float) -> bytes:
         return b""
 
 
+_XTTS_ALIVE = {"u": "", "ok": False, "ts": 0.0}
+def _xtts_alive(synth_url: str, timeout: float = 2.0) -> bool:
+    """Quick health probe of a voice-clone service (cached 8s). Lets a DEAD/stale GPU tunnel be skipped
+    in ~2s instead of hanging on the long synth timeout — which is what made JARVIS go fully silent when
+    the 127.0.0.1:8096 tunnel went stale (the local listener accepts but never forwards)."""
+    import time as _t
+    now = _t.time()
+    if _XTTS_ALIVE["u"] == synth_url and now - _XTTS_ALIVE["ts"] < 8:
+        return _XTTS_ALIVE["ok"]
+    ok = False
+    try:
+        import urllib.request
+        health = synth_url.rsplit("/", 1)[0] + "/health"
+        with urllib.request.urlopen(health, timeout=timeout) as r:
+            ok = r.status == 200 and b'"ready"' in r.read()[:300]
+    except Exception:  # noqa: BLE001
+        ok = False
+    _XTTS_ALIVE.update(u=synth_url, ok=ok, ts=now)
+    return ok
+
+
 def _xtts(text: str) -> bytes:
     """Try the human voice-clone service(s): GPU box first, then local CPU. Returns WAV bytes, or b''
     on ANY failure/timeout so the caller instantly falls back to Piper. Never raises."""
@@ -1815,6 +1836,10 @@ def _xtts(text: str) -> bytes:
         return b""
     for url, to in ((_XTTS_GPU_URL, _XTTS_GPU_TIMEOUT), (_XTTS_URL, _XTTS_TIMEOUT)):
         if not url:
+            continue
+        # Fail fast on a dead/stale GPU tunnel: probe health (2s) before committing to the long synth
+        # timeout, so a broken :8096 falls straight through to the CPU clone instead of hanging ~20s.
+        if url == _XTTS_GPU_URL and not _xtts_alive(url):
             continue
         out = _xtts_one(url, text, to)
         if out:

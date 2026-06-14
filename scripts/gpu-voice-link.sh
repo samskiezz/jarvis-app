@@ -66,7 +66,7 @@ scp $SSHO -i "$KEY" -P "$P" server/services/voice_clone_gpu.py "$U@$H:/root/voic
 
 # 4) self-healing tunnel  box:$TPORT -> 127.0.0.1:$TPORT
 if ! pgrep -f "L *$TPORT:localhost:$TPORT" >/dev/null 2>&1; then
-  nohup bash -c "while true; do ssh -N $SSHO -i '$KEY' -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+  nohup bash -c "while true; do ssh -N -C $SSHO -i '$KEY' -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
     -p $P -L $TPORT:localhost:$TPORT $U@$H; sleep 5; done" >/tmp/tts-tunnel.log 2>&1 &
   say "voice tunnel keepalive started ✓"
   sleep 3
