@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='31';
+  var KEY='__jv',VER='32';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -88,7 +88,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
   --text-primary: #eafcff;
   --text-secondary: #a8bcc8;
   --text-tertiary: #9ab7c2;
-  --text-dim: #566878;
+  --text-dim: #7d93a1;
 
   /* LIQUID GLASS MATERIAL SYSTEM — iOS 26 / macOS Tahoe */
   /* Low-opacity layers tint from the background; high saturation mimics refraction. */
@@ -434,7 +434,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);overflow:hid
 #dock .di.pinned .gly{border-color:var(--purple);box-shadow:0 0 12px rgba(167,139,250,.5);}
 
 /* Close button (X) for unpinning */
-#dock .di .x{position:absolute;top:-4px;right:6px;width:15px;height:15px;border-radius:50%;font-size:10px;
+#dock .di .x{position:absolute;top:-4px;right:6px;width:22px;height:22px;border-radius:50%;font-size:12px;
   line-height:13px;text-align:center;background:rgba(255,90,90,.85);color:#fff;opacity:0;transition:opacity var(--duration-quick);cursor:pointer;}
 #dock .di.pinned:hover .x{opacity:1;}
 /* narrow screens: the talk bar spans ~94vw so there is no room beside it — lift the dock to its OWN
@@ -1644,9 +1644,9 @@ html.panel-tint #pKnow::after,html.panel-tint #sdev::after{opacity:.14;}
 #appSheet .as-mode{display:flex;gap:14px;font-size:11px;}
 #appSheet .as-mode label{display:flex;align-items:center;gap:5px;cursor:pointer;}
 #appSheet .as-form>label{font-size:11px;color:var(--text-dim);}
-#appSheet .as-in,#appSheet .as-ta,#appSheet .as-form select{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--border-line);border-radius:8px;color:var(--text-primary);padding:8px 10px;font-size:12px;outline:none;box-sizing:border-box;}
+#appSheet .as-in,#appSheet .as-ta,#appSheet .as-form select{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--border-line);border-radius:8px;color:var(--text-primary);padding:8px 10px;font-size:16px;outline:none;box-sizing:border-box;}
 /* Fallback: any bare text input/textarea/select inside an app sheet inherits the glass style (no more white boxes). */
-#appSheet input[type=text],#appSheet input:not([type]),#appSheet input[type=number],#appSheet input[type=url],#appSheet input[type=password],#appSheet input[type=search],#appSheet textarea,#appSheet select{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--border-line);border-radius:8px;color:var(--text-primary);padding:8px 10px;font-size:12px;outline:none;box-sizing:border-box;}
+#appSheet input[type=text],#appSheet input:not([type]),#appSheet input[type=number],#appSheet input[type=url],#appSheet input[type=password],#appSheet input[type=search],#appSheet textarea,#appSheet select{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--border-line);border-radius:8px;color:var(--text-primary);padding:8px 10px;font-size:16px;outline:none;box-sizing:border-box;}
 #appSheet input::placeholder,#appSheet textarea::placeholder{color:var(--text-dim);opacity:.8}
 #appSheet .as-ta{resize:vertical;min-height:60px;}
 #appSheet .as-row-inline{display:flex;gap:10px;flex-wrap:wrap;}
@@ -2623,11 +2623,11 @@ function renderDock(){const d=$('dock');if(!d)return;
   d.appendChild(left);
   const rail=document.createElement('div');rail.className='dockRail';rail.id='dockRail';
   d.appendChild(rail);
-  DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;
+  DOCK.forEach((it,i)=>{const e=document.createElement('div');e.className='di'+(it.pinned?' pinned':'');e.draggable=true;e.dataset.i=i;e.tabIndex=0;e.setAttribute('role','button');e.setAttribute('aria-label',it.t);
     // iOS tile: icon glyph + a persistent NAME label under it. Pinned items get an unpin (×) chip.
     e.innerHTML='<div class=gly>'+it.ic+'</div><div class=nm>'+it.t+'</div>'+
       (it.pinned?'<span class=x title="Unpin">×</span>':'');
-    e.onclick=()=>{try{it.fn();}catch(_){}};
+    e.onclick=()=>{try{it.fn();}catch(_){}};e.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();try{it.fn();}catch(_){}}};
     if(it.pinned){const xb=e.querySelector('.x');if(xb)xb.onclick=ev=>{ev.stopPropagation();unpinFromDock(it.k);};}
     rail.appendChild(e);});
   d.appendChild(rail);
@@ -6101,6 +6101,7 @@ function initWave3Interactions(){
     if(e.key==='Alt'){show=true;if(loupe)loupe.classList.add('show');}
     if(e.key.toLowerCase()==='r'&&e.altKey){e.preventDefault();openAccReader();}
     if(e.key.toLowerCase()==='n'&&e.altKey){e.preventDefault();openRemindersOverlay();}
+    if(e.key==='Escape'){var o=document.querySelector('[id^=ov].open, [id^=ov].show, .ov.open');if(o&&o.id){e.preventDefault();var base=o.id.slice(2);var fn=window['close'+base]||window['close'+base+'Overlay'];if(typeof fn==='function')fn();else{o.classList.remove('open');o.classList.remove('show');}return;}}
   });
   document.addEventListener('keyup',e=>{if(e.key==='Alt'){show=false;if(loupe)loupe.classList.remove('show');}});
   document.addEventListener('contextmenu',e=>{if(e.target.closest('#top,.gpanel')){e.preventDefault();showContextMenu(e.clientX,e.clientY,[{ic:'🔍',label:'Inspect',fn:'showInplaceAlert(\'Inspect mode\')'}]);}});
@@ -6200,8 +6201,8 @@ function toggleScaleMonitor(){const b=$('btnMonitor');if(_carouselMonitor){clear
 function triggerScaleUp(){showInplaceAlert('Scale +1: simulated growth tick');}
 
 function renderCarousel(){const stage=$('carouselStage'),dots=$('carouselDots');if(!stage)return;_carouselIndex=0;
-  stage.innerHTML=MINI_APPS.map((m,i)=>'<div class=carousel-card data-i='+i+' onclick="carouselOpenApp(\''+m.id+'\')"><div class=ic>'+m.ic+'</div><div class=tt>'+m.t+'</div><div class=ds>'+m.d+'</div></div>').join('');
-  dots.innerHTML=MINI_APPS.map((_,i)=>'<i data-i='+i+'></i>').join('');
+  stage.innerHTML=MINI_APPS.map((m,i)=>'<div class=carousel-card tabindex=0 role=button aria-label="'+m.t+'" data-i='+i+' onclick="carouselOpenApp(\''+m.id+'\')"><div class=ic>'+m.ic+'</div><div class=tt>'+m.t+'</div><div class=ds>'+m.d+'</div></div>').join('');
+  try{stage.querySelectorAll('.carousel-card').forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}}));}catch(_){}dots.innerHTML=MINI_APPS.map((_,i)=>'<i data-i='+i+'></i>').join('');
   updateCarousel();
 }
 function updateCarousel(){const cards=[...document.querySelectorAll('.carousel-card')];const dots=[...document.querySelectorAll('.carousel-dots i')];const n=cards.length;if(!n)return;cards.forEach((c,i)=>{const offset=i-_carouselIndex;const abs=Math.abs(offset);c.style.transform='translateX('+offset*260+'px) translateZ('+(abs?-120:60)+'px) rotateY('+(offset*-18)+'deg)';c.style.opacity=abs>2?0:1-abs*.25;c.style.filter=abs>0?'blur('+abs*2+'px)':'none';c.style.zIndex=10-abs;});dots.forEach((d,i)=>d.classList.toggle('active',i===_carouselIndex));}
