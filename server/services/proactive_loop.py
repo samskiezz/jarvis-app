@@ -297,6 +297,8 @@ async def _monitor_pending_alerts() -> list[dict]:
     try:
         pending = await list_notifications(acked=False, severity="action", limit=5)
         for p in pending:
+            if (p.get("category") or "") == "escalation":   # never re-escalate our own escalations
+                continue                                     # (this was the "Unresolved action: Unresolved action:…" compounding loop)
             age_hours = (time.time() - p["ts"]) / 3600
             if age_hours > 1:
                 alerts.append({

@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='33';
+  var KEY='__jv',VER='34';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6639,7 +6639,9 @@ function renderSearchSheet(){return `<div class=as-form>
   <div id=gsOut><div class=as-empty>Type a query and press Search.</div></div>
 </div>`;}
 async function doGraphSearch(){var q=(($('gsQ')||{}).value||'').trim();var out=$('gsOut');if(!out)return;if(!q){out.innerHTML='<div class=as-empty>Type a query.</div>';return;}out.innerHTML='<div class=as-empty>Searching\u2026</div>';try{var r=await fetch('search?q='+encodeURIComponent(q));var d=await r.json();var items=(d.results||d.items||[]);if(!Array.isArray(items)||!items.length){out.innerHTML='<div class=as-empty>No matches for \"'+escapeHtml(q)+'\"</div>';return;}out.innerHTML='<div class=as-empty>'+items.length+' result(s)</div>'+items.slice(0,40).map(function(it){var t=it.title||it.name||it.label||it.id||'';var sub=it.type||it.kind||it.detail||'';return '<div class=as-card><b>'+escapeHtml(String(t))+'</b>'+(sub?'<span>'+escapeHtml(String(sub))+'</span>':'')+'</div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function doInboxAck(nid){try{await fetch('/v1/jarvis/notifications/ack?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({notification_id:nid})});}catch(_){}try{renderAppSheet();}catch(_){}}
 function renderAppData(id,d){
+  if(id==='inbox'){var items=(d.notifications||d.items||[]);if(!Array.isArray(items)||!items.length)return '<div class=as-empty>No notifications</div>';return items.slice(0,40).map(function(it){return '<div class=as-card><b>'+escapeHtml(String(it.title||''))+'</b> <span style="color:var(--text-dim);font-size:10px">'+escapeHtml(String(it.severity||'info'))+'</span><span>'+escapeHtml(String(it.body||''))+'</span>'+(it.id?'<div style="margin-top:6px"><button class=tbtn onclick="doInboxAck(\''+escapeHtml(String(it.id))+'\')">\u2713 Acknowledge</button></div>':'')+'</div>';}).join('');}
   if(!d||typeof d!=='object')return '<div class=as-empty>No data</div>';
   if(id==='agent'){const tools=(d.tools||[]);return '<div class=as-empty>'+tools.length+' tools registered</div>'+tools.map(t=>'<div class=as-card><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}
   if(id==='memory'){const ms=d.memories||[];if(!ms.length)return '<div class=as-empty>No memories yet</div>';return ms.map(m=>'<div class=as-card><b>'+escapeHtml(String(m.key||m.id||'memory'))+'</b> <span style="color:var(--text-dim)">'+(m.importance!=null?Math.round(m.importance*100)+'%':'')+'</span><span>'+escapeHtml(String(m.value||''))+'</span></div>').join('');}
@@ -6648,7 +6650,7 @@ function renderAppData(id,d){
     if(!items.length)return '<div class=as-empty>Nothing in your library yet</div>';
     return '<div class=as-empty>'+items.length+' items</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px">'+items.slice(0,40).map(it=>{const f=escapeHtml(String(it.file||it.url||''));const p=escapeHtml(String(it.prompt||it.title||''));const media=(it.kind==='image')?'<img src="'+f+'" loading=lazy style="width:100%;height:90px;object-fit:cover;border-radius:8px">':'<div style="height:90px;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--liquid-regular);border-radius:8px">'+(it.kind==='glb'?'🧊':'📄')+'</div>';return '<div class=as-card style="padding:6px"><a href="'+f+'" target=_blank>'+media+'</a><span style="font-size:10px;display:block;margin-top:4px">'+p+'</span></div>';}).join('')+'</div>';
   }
-  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='suggestions'||id==='boards'||id==='inbox'){
+  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='suggestions'||id==='boards'){
     let items=Array.isArray(d)?d:(d.items||d.results||d.tasks||d.swarms||d.notifications||d.data||d.rows||[]);
     if(!Array.isArray(items))items=[];
     if(!items.length)return '<div class=as-empty>No items</div>';
