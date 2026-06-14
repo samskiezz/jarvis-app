@@ -10,3 +10,4 @@
 [2026-06-14] F12 Investigations list — InvestigationsPanel.jsx mounted in App.jsx; polls /v1/investigations every 90s; status+priority sorted open-cases panel; CASES toggle button at left:554 (after DATA); red pulse on open cases; voice trigger on 'investigations'/'cases'; vite build exit 0.
 2026-06-14 F15 DONE — SkillScorecard.jsx mounted in App.jsx; polls /v1/aip/skill every 60s; SKILLS toggle button at left:700; score bars + avg + filter; isSkillQuery/buildSkillScript wired in JarvisBrain; vite build exit 0.
 [2026-06-14] F16 BrainGrowthSparkline mounted in App.jsx — /v1/cinematic/brain rolling nodes/synapses sparklines; vite build exit 0.
+[2026-06-14] F18 JARVIS boot sequence — JarvisBootSequence.jsx mounted in App.jsx; fetches /v1/jarvis/system/status + /v1/cinematic/brain; cinematic terminal + click-to-speak /v1/voice/tts; sessionStorage single-run guard; vite build exit 0.
