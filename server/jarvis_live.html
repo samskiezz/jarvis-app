@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='35';
+  var KEY='__jv',VER='36';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2452,6 +2452,7 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bcode\b.*\bpulse\b/.test(l)||/\bcodepulse\b/.test(l)){openAppSheet('codepulse');return true;}
   if(/\bopen\b.*\bcelestial\b/.test(l)){openAppSheet('celestial');return true;}
   if(/\b(twelve|12)\s*labs\b/.test(l)||/\b(voice studio|text to speech|read this out|say this)\b/.test(l)){openAppSheet('voiceforge');return true;}
+  if(/\b(ai console|llm console|code with|chat with .*(llm|model|claude|kimi))\b/.test(l)){openAppSheet('aiconsole');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -6166,6 +6167,7 @@ const MINI_APPS=[
   {id:'proofpack',ic:'📦',t:'ProofPack',d:'Evidence packs for specs, diffs, tests, risks'},
   {id:'voiceforge',ic:'🗣',t:'12LABS',d:'Speak any text in your cloned voice + build/switch voice profiles. Free, like ElevenLabs.'},
   {id:'codepulse',ic:'🧑‍💻',t:'CodePulse',d:'VS Code bridge + approvals'},
+  {id:'aiconsole',ic:'🧠',t:'AI Console',d:'Chat & code with any LLM, switch models, approve & run a reply'},
   {id:'notes',ic:'📝',t:'Notes',d:'Quick notes, saved on this device'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
@@ -6489,6 +6491,7 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='voiceforge'){body.innerHTML=renderVoiceForgeSheet();loadVoiceForge();return;}
   if(_appSheetId==='codepulse'){body.innerHTML=renderCodePulseSheet();loadCodePulse();return;}
   if(_appSheetId==='search'){body.innerHTML=renderSearchSheet();setTimeout(function(){var e=$('gsQ');if(e)e.focus();},50);return;}
+  if(_appSheetId==='aiconsole'){body.innerHTML=renderAiConsoleSheet();loadAiModels();return;}
   if(_appSheetId==='notes'){body.innerHTML=renderNotesSheet();loadNotes();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep;
@@ -6630,6 +6633,19 @@ function _asVal(k,v,depth){
   }
   return '<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>'+escapeHtml(String(v))+'</span></div>';
 }
+function renderAiConsoleSheet(){return `<div class=as-form>
+  <div class=as-card><b>\u{1F9E0} AI Console</b><span>Chat & code with any model. Pick a model, send, and Approve a reply to run it as a build.</span></div>
+  <div style="display:flex;gap:6px;align-items:center"><label style="font-size:11px;color:var(--text-dim)">Model</label><select id=aiModel class=as-in style="flex:1"><option>Loading…</option></select></div>
+  <div id=aiOut style="max-height:46vh;overflow:auto"><div class=as-empty>Ask anything — code, ideas, questions.</div></div>
+  <textarea id=aiIn class=as-ta rows=3 placeholder="Ask or paste code… (Ctrl/Cmd+Enter to send)" onkeydown="if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();aiConsoleSend();}"></textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class=as-run onclick="aiConsoleSend()">▶ Send</button><button class=tbtn onclick="var o=$('aiOut');if(o)o.innerHTML='';">Clear</button></div>
+</div>`;}
+async function loadAiModels(){var sel=$('aiModel');if(!sel)return;try{var d=await(await fetch('llm/models')).json();var ms=(d.models||[]).filter(function(m){return m.available;});if(!ms.length){sel.innerHTML='<option value=strong>Local · strong</option>';return;}sel.innerHTML=ms.map(function(m){return '<option value="'+m.tier+'"'+(m.tier===(d.default||'strong')?' selected':'')+'>'+escapeHtml(m.label)+'</option>';}).join('');}catch(e){sel.innerHTML='<option value=strong>Local · strong</option>';}}
+async function aiConsoleSend(){var inp=$('aiIn'),out=$('aiOut'),sel=$('aiModel');if(!inp||!out)return;var msg=(inp.value||'').trim();if(!msg)return;var tier=(sel&&sel.value)||'strong';inp.value='';var uid='ac'+Date.now();if(out.querySelector('.as-empty'))out.innerHTML='';out.insertAdjacentHTML('beforeend','<div class=as-card style="border-left:3px solid var(--text-dim)"><b>You</b><span style="white-space:pre-wrap">'+escapeHtml(msg)+'</span></div><div class=as-card id="'+uid+'"><span class=as-empty>Thinking…</span></div>');out.scrollTop=out.scrollHeight;try{var r=await fetch('llm/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,tier:tier})});var d=await r.json();var card=$(uid);if(!card)return;if(!d.ok){card.innerHTML='<div class=as-err>'+escapeHtml(d.error||'failed')+'</div>';return;}card.dataset.reply=d.reply||'';card.innerHTML='<b>'+escapeHtml(String(d.model||tier))+' <span style="color:var(--text-dim);font-size:10px">'+(d.latency_ms||0)+'ms</span></b><span style="white-space:pre-wrap">'+escapeHtml(d.reply||'')+'</span><div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><button class=tbtn onclick="aiConsoleApprove(\''+uid+'\')">✓ Approve & run</button><button class=tbtn onclick="aiConsoleSpeak(\''+uid+'\')">🔊 Speak</button></div>';out.scrollTop=out.scrollHeight;}catch(e){var c=$(uid);if(c)c.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function aiConsoleApprove(uid){var card=$(uid);if(!card)return;var brief=(card.dataset.reply||'').trim();if(!brief)return;if(!confirm('Approve & run — Claude will execute this as a build on the server. Continue?'))return;try{var r=await fetch('upgrade?key=aiconsole&token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({brief:brief})});var d=await r.json();showInplaceAlert(d.ok?'Approved — building now. Track it in Tasks.':'Build failed: '+escapeHtml(d.error||'unknown'));try{jarvisSpeak(d.ok?'Approved, sir. Building it now.':'I could not start that build.');}catch(_){}}catch(e){showInplaceAlert('Approve error: '+e);}}
+function aiConsoleSpeak(uid){var card=$(uid);if(card&&card.dataset.reply){try{jarvisSpeak(card.dataset.reply.slice(0,600));}catch(_){}}}
+async function sugApprove(sid){if(!sid)return;if(!confirm('Approve & build this idea? Claude will execute it on the server.'))return;try{await fetch('suggestion/review?id='+encodeURIComponent(sid)+'&decision=approved&token='+CT,{method:'POST'});var r=await fetch('upgrade?key='+encodeURIComponent(sid)+'&token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});var d=await r.json();showInplaceAlert(d.ok?'Approved — building now. Track it in Tasks.':'Build failed: '+escapeHtml(d.error||''));try{jarvisSpeak(d.ok?'Approved, sir. Building it now.':'I could not start that build.');}catch(_){}}catch(e){showInplaceAlert('Approve error: '+e);}}
+async function sugDecline(sid){if(!sid)return;try{await fetch('suggestion/review?id='+encodeURIComponent(sid)+'&decision=declined&token='+CT,{method:'POST'});showInplaceAlert('Declined.');try{renderAppSheet();}catch(_){}}catch(e){showInplaceAlert('Decline error: '+e);}}
 function renderSearchSheet(){return `<div class=as-form>
   <label>Search the knowledge graph</label>
   <div style="display:flex;gap:6px">
@@ -6645,12 +6661,13 @@ function renderAppData(id,d){
   if(!d||typeof d!=='object')return '<div class=as-empty>No data</div>';
   if(id==='agent'){const tools=(d.tools||[]);return '<div class=as-empty>'+tools.length+' tools registered</div>'+tools.map(t=>'<div class=as-card><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}
   if(id==='memory'){const ms=d.memories||[];if(!ms.length)return '<div class=as-empty>No memories yet</div>';return ms.map(m=>'<div class=as-card><b>'+escapeHtml(String(m.key||m.id||'memory'))+'</b> <span style="color:var(--text-dim)">'+(m.importance!=null?Math.round(m.importance*100)+'%':'')+'</span><span>'+escapeHtml(String(m.value||''))+'</span></div>').join('');}
+  if(id==='suggestions'){var items=(d.items||[]);if(!items.length)return '<div class=as-empty>No suggestions yet (generating\u2026)</div>';return items.slice(0,30).map(function(it){var sid=escapeHtml(String(it.id||''));return '<div class=as-card><b>'+escapeHtml(String(it.title||it.label||''))+'</b>'+(it.detail||it.body?'<span>'+escapeHtml(String(it.detail||it.body||''))+'</span>':'')+'<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><button class=as-run onclick="sugApprove(\''+sid+'\')">\u2713 Approve & build</button><button class=tbtn onclick="sugDecline(\''+sid+'\')">Decline</button></div></div>';}).join('');}
   if(id==='library'){
     const items=Array.isArray(d)?d:(d.items||[]);
     if(!items.length)return '<div class=as-empty>Nothing in your library yet</div>';
     return '<div class=as-empty>'+items.length+' items</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px">'+items.slice(0,40).map(it=>{const f=escapeHtml(String(it.file||it.url||''));const p=escapeHtml(String(it.prompt||it.title||''));const media=(it.kind==='image')?'<img src="'+f+'" loading=lazy style="width:100%;height:90px;object-fit:cover;border-radius:8px">':'<div style="height:90px;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--liquid-regular);border-radius:8px">'+(it.kind==='glb'?'🧊':'📄')+'</div>';return '<div class=as-card style="padding:6px"><a href="'+f+'" target=_blank>'+media+'</a><span style="font-size:10px;display:block;margin-top:4px">'+p+'</span></div>';}).join('')+'</div>';
   }
-  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='suggestions'||id==='boards'){
+  if(id==='search'||id==='datasets'||id==='reports'||id==='alerts'||id==='cases'||id==='tasks'||id==='swarms'||id==='boards'){
     let items=Array.isArray(d)?d:(d.items||d.results||d.tasks||d.swarms||d.notifications||d.data||d.rows||[]);
     if(!Array.isArray(items))items=[];
     if(!items.length)return '<div class=as-empty>No items</div>';

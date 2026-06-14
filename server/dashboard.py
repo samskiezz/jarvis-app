@@ -2980,6 +2980,25 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         elif self.path.startswith("/budget"):
             from server.services import token_governor as TG
             self._send(json.dumps(TG.state()).encode(), "application/json")
+        elif self.path.startswith("/llm/models"):
+            try:
+                from server.services import tiered_llm as _T
+                box_ok = _brain_reachable()
+                labels = {"micro": "Local · micro (fast)", "base": "Local · base", "strong": "Local · strong (default)",
+                          "heavy": "Heavy 70B (burst)", "kimi": "Kimi", "openai": "OpenAI", "claude": "Claude"}
+                out = []
+                for tid, cfg in _T._tiers().items():
+                    eng = cfg.get("engine")
+                    if eng == "burst":
+                        avail = os.environ.get("LLM_ENABLE_70B", "") == "1"
+                    elif cfg.get("key") == "ollama":
+                        avail = bool(box_ok)
+                    else:
+                        avail = bool(cfg.get("key"))
+                    out.append({"tier": tid, "label": labels.get(tid, tid), "model": cfg.get("model", ""), "available": avail})
+                self._send(json.dumps({"ok": True, "models": out, "default": "strong"}).encode(), "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)[:160]}).encode(), "application/json")
         elif self.path.startswith("/file"):
             q = parse_qs(urlparse(self.path).query)
             rel = (q.get("path", [""])[0] or "").lstrip("/")
@@ -3418,6 +3437,27 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 from server.services import climate_relay as CR
                 self._send(json.dumps(CR.enqueue(body)).encode(), "application/json")
             return
+        if self.path.startswith("/llm/chat"):
+            # AI Console: chat/code with ANY chosen LLM tier (micro/base/strong/kimi/openai/claude).
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                b = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                b = {}
+            msg = str(b.get("message") or b.get("q") or "").strip()
+            tier = str(b.get("tier") or b.get("model") or "strong").strip()
+            system = str(b.get("system") or "You are an expert coding and reasoning assistant. Be accurate and concise; show code when relevant.")
+            if not msg:
+                self._send(json.dumps({"ok": False, "error": "empty message"}).encode(), "application/json"); return
+            try:
+                from server.services import tiered_llm as _T
+                r = _T.complete(msg, system=system, tier=tier, max_tokens=1200)
+                self._send(json.dumps({"ok": bool(r.get("ok")), "reply": r.get("content", ""), "tier": r.get("tier"),
+                                       "model": r.get("model"), "latency_ms": r.get("latency_ms"), "error": r.get("error", "")}).encode(),
+                           "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)[:160]}).encode(), "application/json")
+            return
         if self.path.startswith("/chat"):
             # Conversational JARVIS for the vulnerable user — local LLM, British persona, no root, no system
             # control. Token-free so her companion page carries no admin rights.
@@ -3586,6 +3626,14 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             from server.services import task_daemon as TD
             key = q.get("key", [""])[0]
             brief = _system_brief()
+            try:                                   # AI Console / arbitrary "approve & run": a free-text brief in the body
+                _ln = int(self.headers.get("Content-Length", 0) or 0)
+                _ub = json.loads(self.rfile.read(_ln).decode() or "{}") if _ln else {}
+            except Exception:  # noqa: BLE001
+                _ub = {}
+            _custom = str(_ub.get("brief") or "").strip()
+            if _custom:
+                brief = "BUILD / EXECUTE THIS:\n" + _custom + "\n\n--- LIVE SYSTEM ---\n" + brief
             try:
                 if not _SUGGEST["by_id"]:
                     _suggestions()
