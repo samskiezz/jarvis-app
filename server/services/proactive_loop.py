@@ -80,6 +80,39 @@ async def init_db() -> None:
 
 # ── Notification CRUD ────────────────────────────────────────────────────────
 
+# Notification discipline (2026 research: a proactive assistant that over-notifies gets muted by Friday).
+# CRITICAL/safety always go through (vital for the care use-case); everything else respects QUIET HOURS
+# and a small DAILY BUDGET so JARVIS stays calm and trusted instead of spammy.
+_CRITICAL_SEV = {"critical", "emergency", "safety", "danger", "alert", "urgent", "high"}
+
+
+def _quiet_hours_now() -> bool:
+    import datetime
+    try:
+        qs = int(os.environ.get("PROACTIVE_QUIET_START", "21"))   # 21:00
+        qe = int(os.environ.get("PROACTIVE_QUIET_END", "8"))      # 08:00
+    except Exception:  # noqa: BLE001
+        qs, qe = 21, 8
+    h = datetime.datetime.now().hour
+    return (qs <= h or h < qe) if qs > qe else (qs <= h < qe)
+
+
+def _today_noncritical_count() -> int:
+    import datetime
+    start = int(datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+    c = _conn()
+    try:
+        placeholders = ",".join("?" for _ in _CRITICAL_SEV)
+        row = c.execute(
+            f"SELECT COUNT(*) FROM proactive_notification WHERE ts>=? AND lower(severity) NOT IN ({placeholders})",
+            (start, *(s for s in _CRITICAL_SEV))).fetchone()
+        return int(row[0]) if row else 0
+    except Exception:  # noqa: BLE001
+        return 0
+    finally:
+        c.close()
+
+
 async def store_notification(
     title: str,
     body: str,
@@ -91,6 +124,17 @@ async def store_notification(
     await init_db()
     nid = uuid.uuid4().hex[:16]
     now = int(time.time())
+    # DISCIPLINE: critical always fires; non-critical honours quiet hours + a daily budget.
+    sev = (severity or "info").lower()
+    if sev not in _CRITICAL_SEV:
+        if _quiet_hours_now():
+            return {"ok": True, "suppressed": "quiet_hours", "id": None}
+        try:
+            budget = int(os.environ.get("PROACTIVE_DAILY_BUDGET", "5"))
+        except Exception:  # noqa: BLE001
+            budget = 5
+        if await asyncio.to_thread(_today_noncritical_count) >= budget:
+            return {"ok": True, "suppressed": "daily_budget", "id": None}
     try:
 
         def _insert():
