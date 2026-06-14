@@ -3461,7 +3461,11 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 self._send(json.dumps({"ok": False, "error": "empty message"}).encode(), "application/json"); return
             try:
                 from server.services import tiered_llm as _T
-                r = _T.complete(msg, system=system, tier=tier, max_tokens=1200)
+                try: _temp = float(b.get("temperature")) if b.get("temperature") is not None else None
+                except Exception: _temp = None
+                try: _mt = max(64, min(4000, int(b.get("max_tokens") or 1200)))
+                except Exception: _mt = 1200
+                r = _T.complete(msg, system=system, tier=tier, max_tokens=_mt, temperature=_temp)
                 self._send(json.dumps({"ok": bool(r.get("ok")), "reply": r.get("content", ""), "tier": r.get("tier"),
                                        "model": r.get("model"), "latency_ms": r.get("latency_ms"), "error": r.get("error", "")}).encode(),
                            "application/json")

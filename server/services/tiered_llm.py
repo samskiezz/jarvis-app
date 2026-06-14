@@ -106,14 +106,14 @@ def _post(url, payload, headers, timeout=15):   # LIFELINE: never let a dead GPU
         return json.loads(r.read().decode())
 
 
-def _call_openai_compat(cfg, system, prompt, max_tokens, fmt):
+def _call_openai_compat(cfg, system, prompt, max_tokens, fmt, temperature=None):
     msgs = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
     payload = {"model": cfg["model"], "messages": msgs, "stream": False}
     if cfg.get("reasoning"):
         payload["max_completion_tokens"] = max(max_tokens, 2000)
     else:
         payload["max_tokens"] = max_tokens
-        payload["temperature"] = 0.3
+        payload["temperature"] = 0.3 if temperature is None else float(temperature)
     if fmt == "json" and not cfg.get("reasoning"):
         payload["response_format"] = {"type": "json_object"}
     provider = "ollama" if cfg.get("key") == "ollama" else cfg.get("engine", "openai")
@@ -123,9 +123,11 @@ def _call_openai_compat(cfg, system, prompt, max_tokens, fmt):
     return ch.get("message", {}).get("content") or "", out.get("usage")
 
 
-def _call_anthropic(cfg, system, prompt, max_tokens):
+def _call_anthropic(cfg, system, prompt, max_tokens, temperature=None):
     payload = {"model": cfg["model"], "max_tokens": max_tokens,
                "messages": [{"role": "user", "content": prompt}]}
+    if temperature is not None:
+        payload["temperature"] = float(temperature)
     if system:
         payload["system"] = system
     out = _post(cfg["base"] + "/messages", payload,
@@ -136,7 +138,7 @@ def _call_anthropic(cfg, system, prompt, max_tokens):
 
 
 def complete(prompt: str, *, system: str = "", tier: str = "base", max_tokens: int = 1024,
-             fmt: str | None = None, module: str = "") -> dict:
+             fmt: str | None = None, module: str = "", temperature: float | None = None) -> dict:
     """Run a completion at the given tier. Returns {ok, content, tier, model, engine, latency_ms}.
     `heavy` resolves the disposable Vast burst; with none, it falls back to `strong` (logged).
     `module` (a repo path) primes the call with that module's learned lessons and routes any failure
@@ -182,11 +184,11 @@ def complete(prompt: str, *, system: str = "", tier: str = "base", max_tokens: i
         if eng == "openai":
             if not cfg.get("base") or not cfg.get("key"):
                 raise RuntimeError(f"tier '{tier}' not configured (base/key missing)")
-            content, usage = _call_openai_compat(cfg, system, prompt, max_tokens, fmt)
+            content, usage = _call_openai_compat(cfg, system, prompt, max_tokens, fmt, temperature)
         elif eng == "anthropic":
             if not cfg.get("key"):
                 raise RuntimeError("claude tier: ANTHROPIC_API_KEY missing")
-            content, usage = _call_anthropic(cfg, system, prompt, max_tokens)
+            content, usage = _call_anthropic(cfg, system, prompt, max_tokens, temperature)
         else:
             raise RuntimeError(f"unknown engine {eng}")
         dt = int((time.time() - t0) * 1000)

@@ -156,6 +156,17 @@ def _dispatch_action(action: str) -> dict[str, Any]:
     # Destructive/expensive actions (pause_nonessential, stop_workers, snapshot, …)
     # are intentionally NOT auto-executed: they stay gated behind the routine's
     # destructive-step approval and are recorded only.
+    pk_map = {"pause_nonessential": ("set_mode", {"mode": "safe"}),
+             "stop_workers": ("set_mode", {"mode": "safe"}),
+             "snapshot": ("snapshot", None)}
+    if action in pk_map:
+        try:
+            from . import panickey as PK
+            act, pl = pk_map[action]
+            eff = PK.snapshot() if act == "snapshot" else PK.run_action(act, pl)
+            return {"result": "done", "effect": eff}
+        except Exception as e:  # noqa: BLE001
+            return {"result": "error", "error": str(e)[:160]}
     return {"result": "logged", "note": "no auto-handler (gated / record-only)"}
 
 
