@@ -133,7 +133,7 @@ export default function DatasetsBrowser() {
         onClick={() => setOpen(v => !v)}
         title="Datasets Browser"
         style={{
-          position: "fixed", left: 286, bottom: 18, zIndex: 68,
+          position: "fixed", left: 420, bottom: 18, zIndex: 68,
           background: open ? GRN + "cc" : "rgba(5,8,13,0.78)",
           border: `1px solid ${GRN}55`,
           borderRadius: 8,

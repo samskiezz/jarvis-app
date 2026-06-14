@@ -21,6 +21,7 @@ import MarketsTicker from '@/components/cinematic/MarketsTicker';
 import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
 import RiskBoard from '@/components/cinematic/RiskBoard';
 import TaskBoard from '@/components/cinematic/TaskBoard';
+import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -54,6 +55,8 @@ function App() {
             <RiskBoard />
             {/* F10: task board — /entities/Task → status-sorted mission cards */}
             <TaskBoard />
+            {/* F11: datasets browser — /v1/datasets → catalog with row counts */}
+            <DatasetsBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
