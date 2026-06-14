@@ -74,7 +74,7 @@ def convert(intent_id: str, target: str, actor: Optional[str] = None) -> dict[st
         return {"ok": False, "error": "unsupported target"}
     body = note.get("body_md", "").strip()
     title = body.split("\n")[0][:80] or f"{target} from intent"
-    kind_map = {"spec": "concept", "reminder": "task", "task": "task", "decision": "decision"}
+    kind_map = {"spec": "spec", "reminder": "task", "task": "task", "decision": "decision"}
     new_note = sb.upsert_note(
         kind=kind_map[target],
         title=title,

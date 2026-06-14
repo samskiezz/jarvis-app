@@ -155,6 +155,16 @@ def prompt_directive() -> str:
             bits.append("avoid running tools unless clearly needed")
         if p.get("safety") in ("high", "very_high"):
             bits.append("prioritise safety and double-check destructive steps")
+        autonomy = p.get("autonomy")
+        if isinstance(autonomy, (int, float)):
+            if autonomy <= 0.3:
+                bits.append("act conservatively — confirm before any non-trivial or side-effecting action")
+            elif autonomy >= 0.7:
+                bits.append("act autonomously — proceed without asking on low-risk steps")
+        if p.get("cost") == "low":
+            bits.append("prefer the cheapest model/approach that completes the task")
+        elif p.get("cost") == "high":
+            bits.append("use the most capable model when it materially improves the result")
         if p.get("voice_style"):
             bits.append(f"voice style {p['voice_style']}")
         if not bits:

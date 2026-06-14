@@ -101,7 +101,7 @@ def scan(hours: int = 24) -> dict[str, Any]:
     for d in dupes:
         findings.append({
             "kind": "duplicate_prompt",
-            "label": f"Duplicate prompt bucket ({d['bucket']} tokens)",
+            "label": f"Repeated call pattern (~{d['bucket']} tokens, content not stored)",
             "count": d["count"],
             "suggestion": "Use ThoughtCompressor to create a reusable pack.",
         })

@@ -184,6 +184,8 @@ def create_pack(
     body += f"## Commit\n\n- `{commit}`\n\n"
     body += f"## Git diff stat\n\n```\n{diff_stat or '(no diff)'}\n```\n\n"
     body += f"## Working tree status\n\n```\n{status_short or '(clean)'}\n```\n\n"
+    if screenshot_url:
+        body += f"## Screenshot\n\n![screenshot]({screenshot_url})\n\n"
     if endpoints:
         body += "## Changed endpoints / services\n\n"
         for ep in endpoints:

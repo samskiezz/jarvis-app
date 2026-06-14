@@ -65,6 +65,8 @@ def create_spec(
 
     if not isinstance(structured, dict):
         structured = {}
+    if not structured:
+        return {"ok": False, "error": "spec generation failed (LLM unavailable) — not saving an empty spec"}
 
     title = structured.get("title") or f"spec:{_now_ms()}:{_slug(raw.split('\\n')[0])}"
     body = f"# {title}\n\n## Description\n\n{structured.get('description', raw[:500])}\n\n"

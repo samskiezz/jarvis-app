@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='34';
+  var KEY='__jv',VER='35';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6660,6 +6660,7 @@ function renderAppData(id,d){
       return '<div class=as-card><b>'+escapeHtml(String(title))+'</b><span>'+escapeHtml(String(sub))+'</span></div>';
     }).join('');
   }
+  if(id==='architecture'){var L=(d.layers||[]);if(!L.length)return '<div class=as-empty>No architecture data</div>';var col={native:'var(--ok)',partial:'var(--warn)',interface:'var(--cyan)',missing:'var(--warn)'};return (d.summary?'<div class=as-empty>'+escapeHtml(JSON.stringify(d.summary).slice(0,80))+'</div>':'')+L.map(function(x){var st=String(x.status||'');return '<div class=as-card><b>'+escapeHtml(String(x.layer||x.key||''))+'</b> <span style=\"background:'+(col[st]||'var(--text-dim)')+';color:#02121a;border-radius:10px;padding:1px 8px;font-size:10px;font-weight:700\">'+escapeHtml(st)+'</span>'+(x.note?'<span>'+escapeHtml(String(x.note))+'</span>':'')+'</div>';}).join('');}
   // rich object render — show nested objects/arrays instead of dropping them
   const html=Object.entries(d).map(([k,v])=>_asVal(k,v,0)).join('');
   return html||'<div class=as-empty>Empty</div>';

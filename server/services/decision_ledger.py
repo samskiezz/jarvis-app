@@ -106,6 +106,12 @@ def finalize(decision_id: str) -> dict[str, Any]:
 
 
 def review(decision_id: str, actual_outcome: str, score: Optional[float] = None) -> dict[str, Any]:
+    if score is None and actual_outcome:
+        t = actual_outcome.lower()
+        pos = sum(w in t for w in ("success", "worked", "good", "improved", "resolved", "faster", "fixed", "win", "great"))
+        neg = sum(w in t for w in ("fail", "worse", "broke", "regression", "slower", "bug", "mistake", "wrong", "bad"))
+        if pos or neg:
+            score = round(max(0.0, min(1.0, 0.5 + 0.15 * pos - 0.2 * neg)), 2)
     return update_decision(
         decision_id,
         {"state": "reviewed", "actual_outcome": actual_outcome, "score": score},
