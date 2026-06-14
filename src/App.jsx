@@ -27,6 +27,7 @@ import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
 import DocumentSearch from '@/components/cinematic/DocumentSearch';
 import SkillScorecard from '@/components/cinematic/SkillScorecard';
 import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
+import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -72,6 +73,8 @@ function App() {
             <SkillScorecard />
             {/* F16: brain-growth sparkline — /v1/cinematic/brain → rolling nodes/synapses chart */}
             <BrainGrowthSparkline />
+            {/* F17: per-scene anchor drill-down — /v1/cinematic/scene/{id} → anchors list + expanded detail */}
+            <SceneAnchorDrillDown />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
