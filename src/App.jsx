@@ -17,6 +17,7 @@ import GlobalCommandPalette from '@/components/cinematic/GlobalCommandPalette';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
+import MarketsTicker from '@/components/cinematic/MarketsTicker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -42,6 +43,8 @@ function App() {
             <HeyJarvisListener />
             <SceneKeyboardNav />
             <WorldIncidentFeed />
+            {/* F07: markets ticker strip — crypto + FX from getLiveIntel */}
+            <MarketsTicker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
