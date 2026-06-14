@@ -2223,7 +2223,7 @@ async function _streamSpeak(t,myseq){
   const endMs=Math.max(0,(playT-ctx.currentTime)*1000)+150;
   setTimeout(()=>{if(myseq===_ttsSeq)speakEnd();},endMs);
 }
-window.jarvisSpeak=function(t){if(window._voiceOut===false)return;if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
+window.jarvisSpeak=function(t){if(window._voiceOut===false)return;if(!t)return;window._jspokenText=String(t||'').toLowerCase();try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
   try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}
   try{speechSynthesis.cancel();}catch(_){}                    // barge-in: kill any in-flight line first
   try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
@@ -3360,37 +3360,50 @@ function _detectGender(){ try{
 }catch(e){} }
 function _micSecureHelp(){var u='https://app.projectsolar.cloud/jarvis/';try{showInplaceAlert('🎤 Microphone needs the secure link — open '+u+' (not the plain http address).');}catch(_){}try{srlog('Microphone blocked: open the secure https link '+u);}catch(_){}}
 function _micDeniedHelp(){try{showInplaceAlert('🎤 Microphone is blocked. Tap the lock icon in your browser bar (or the 🔓 Access button) and allow the microphone, then tap the mic again.');}catch(_){}try{if(typeof openAccess==='function')openAccess();}catch(_){}}
-/* ===== Smooth always-on voice: a small state machine for flawless back-and-forth =====
-   _micOn = the user wants to be heard.  _micSpeaking = paused because JARVIS is talking (so he never
-   hears himself → no feedback, no "two agents" loop).  Restarts are DEBOUNCED so the mic indicator
-   never flickers in/out, and recognition is fully paused while he speaks then resumed a beat after. */
-let _micOn=false,_micSpeaking=false,_micRestartT=null;
+/* ===== Smooth always-on voice + BARGE-IN state machine =====
+   _micOn = the user wants to be heard.  _micSpeaking = JARVIS is currently talking.  Recognition keeps
+   running during speech so the user can INTERRUPT (barge-in) — but to stop JARVIS hearing himself, a
+   transcript during speech only interrupts if it's a confident, multi-word, NON-echo phrase (few of its
+   words appear in what JARVIS is currently saying) after a short grace. Restarts are debounced (no flicker).
+   Set window._bargeIn=false to disable interruption (mic then just ignores everything while he speaks). */
+let _micOn=false,_micSpeaking=false,_micRestartT=null,_speakStartT=0;
 function _micStartRec(){
-  if(!_micOn||_micSpeaking)return;
+  if(!_micOn)return;                                       // recognition runs even during speech (for barge-in)
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition; if(!SR)return;
   try{if(_rec){_rec.onend=null;_rec.onresult=null;_rec.onerror=null;_rec.abort();}}catch(_){}
   _rec=new SR();_rec.lang='en-GB';_rec.continuous=true;_rec.interimResults=true;
   _rec.onresult=e=>{
-    if(window._jspeaking||_micSpeaking)return;             // never transcribe JARVIS's own voice
     const res=e.results[e.results.length-1];const t=res[0].transcript.trim();
+    if(window._jspeaking||_micSpeaking){                   // JARVIS is talking → only a real interruption counts
+      if(window._bargeIn!==false && res.isFinal && t){
+        const w=t.toLowerCase().split(/\s+/).filter(x=>x.length>3);
+        const said=window._jspokenText||'';
+        const echo=w.filter(x=>said.indexOf(x)>=0).length;
+        if(w.length>=2 && (Date.now()-_speakStartT)>700 && echo<Math.ceil(w.length*0.6)){
+          try{speechSynthesis.cancel();}catch(_){}try{_ttsAudio.pause();}catch(_){}
+          try{_streamSrcs.forEach(s=>{try{s.stop();}catch(_){}});_streamSrcs=[];}catch(_){}
+          window._jspeaking=false;_micSpeaking=false;document.body.classList.remove('speaking');
+          try{if(typeof hideCrystal==='function')hideCrystal(200);}catch(_){}
+          $('say').value=t;askJarvis();                    // act on the interruption
+        }
+      }
+      return;                                              // otherwise ignore JARVIS's own echo + interim
+    }
     _detectGender();                                       // assess speaker pitch → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);
     if(res.isFinal&&t){$('say').value=t;askJarvis();}};
-  _rec.onerror=ev=>{                                       // not-allowed = real permission block; the rest (no-speech/network/aborted) just recycle
+  _rec.onerror=ev=>{
     if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){_micOn=false;_micDeniedHelp();$('mic').classList.remove('live');document.body.classList.remove('listening');try{_rec=null;}catch(_){}}};
   _rec.onend=()=>{_micScheduleRestart();};                 // debounced so it never flickers in/out
   try{_rec.start();}catch(_){_micScheduleRestart();}
 }
 function _micScheduleRestart(){
   if(_micRestartT){clearTimeout(_micRestartT);_micRestartT=null;}
-  if(!_micOn||_micSpeaking)return;
+  if(!_micOn)return;
   _micRestartT=setTimeout(()=>{_micRestartT=null;_micStartRec();},350);
 }
-function _micPauseForSpeech(){                             // called from speakStart — stop listening while he talks
-  _micSpeaking=true;if(_micRestartT){clearTimeout(_micRestartT);_micRestartT=null;}
-  try{if(_rec){_rec.onend=null;_rec.onresult=null;_rec.onerror=null;_rec.abort();_rec=null;}}catch(_){}
-}
-function _micResumeAfterSpeech(){_micSpeaking=false;_micStartRec();}   // called a beat after speakEnd
+function _micPauseForSpeech(){ _micSpeaking=true;_speakStartT=Date.now(); }   // keep listening for barge-in
+function _micResumeAfterSpeech(){_micSpeaking=false;if(_micOn&&!_rec)_micStartRec();}
 function micToggle(){
   if(!window.isSecureContext){_micSecureHelp();return;}    // browsers BLOCK the mic on insecure http://<ip> origins
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
