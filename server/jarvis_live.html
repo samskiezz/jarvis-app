@@ -2155,34 +2155,55 @@ const _preTTS={};
   fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
     .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
 let _ttsSeq=0;
+// STREAMING VOICE: a long reply is split into sentences; the FIRST one is synthesized + played the
+// instant it's ready while the rest render in the background — so first-audio is ~first-sentence time
+// (~1s) instead of waiting for the whole clip (~2.7s). Single sentences + pre-warmed lines take the
+// original instant path. Network round-trip to the box (~0.75s) is the floor; streaming hides the rest.
+function _splitSentences(t){
+  const raw=String(t||'').match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[String(t||'')];
+  const out=[]; let buf='';
+  for(const s of raw){ buf+=s; if(buf.trim().length>=14){ out.push(buf.trim()); buf=''; } }
+  if(buf.trim()) out.push(buf.trim());
+  return out.length?out:[String(t||'')];
+}
+function _fetchTTS(seg){                                       // -> Promise<objectURL | null>
+  if(_preTTS[seg]) return Promise.resolve(_preTTS[seg]);
+  const ac=new AbortController(); const to=setTimeout(()=>ac.abort(),30000);
+  return fetch('tts?text='+encodeURIComponent(String(seg).slice(0,600)),{signal:ac.signal})
+    .then(r=>{ if(!r.ok)throw 0; return r.blob(); })
+    .then(b=>{ clearTimeout(to); if(!b||b.size<1200)throw 0; const u=URL.createObjectURL(b); _preTTS[seg]=u; return u; })
+    .catch(()=>{ clearTimeout(to); return null; });
+}
+function _playClip(url,myseq,onend,fullText){
+  if(myseq!==_ttsSeq)return;
+  _ttsAudio.onended=()=>{ if(myseq===_ttsSeq) onend(); };
+  _ttsAudio.src=url; if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
+  _ttsAudio.play().catch(()=>{ if(myseq===_ttsSeq)webSpeakFallback(fullText); });
+}
+function _speakQueue(parts,myseq,fullText){
+  let i=0, nextP=_fetchTTS(parts[0]);                         // prefetch sentence 0
+  const step=()=>{ if(myseq!==_ttsSeq)return;
+    nextP.then(url=>{ if(myseq!==_ttsSeq)return;
+      if(url===null){ if(i===0)webSpeakFallback(fullText); else speakEnd(); return; }
+      i++; if(i<parts.length) nextP=_fetchTTS(parts[i]);      // prefetch the NEXT sentence while this one plays
+      _playClip(url,myseq,()=>{ if(i<parts.length) step(); else speakEnd(); }, fullText);
+    });
+  };
+  step();
+}
 window.jarvisSpeak=function(t){if(window._voiceOut===false)return;if(!t)return;try{srlog(t);}catch(e){}try{window.A11Y&&A11Y.caption(t,'jarvis');}catch(_){}
-  try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}   // FINDING1: raise the crystal for EVERY spoken line (greeting/status/control/upgrade narration)
-  // SINGLE VOICE: barge-in — kill any in-flight line (clone audio AND web-speech) before starting a new
-  // one, so two lines (e.g. greeting + status, or a retry) can never play over each other as a man+woman.
-  try{speechSynthesis.cancel();}catch(_){}
+  try{if(typeof showCrystal==='function')showCrystal(t);}catch(e){}
+  try{speechSynthesis.cancel();}catch(_){}                    // barge-in: kill any in-flight line first
   try{_ttsAudio.pause();_ttsAudio.currentTime=0;}catch(_){}
-  const myseq=++_ttsSeq;                                   // only the LATEST line may speak/fall back (cancels stale async)
+  const myseq=++_ttsSeq;                                      // only the LATEST line may speak (cancels stale async)
   try{ if(!_ttsCtx)unlockAudio();
     speakStart();
-    _ttsAudio.onended=()=>{if(myseq===_ttsSeq)speakEnd();};
-    _ttsAudio.onerror=null;                                // we drive playback from the fetched blob, not the element's own loader
-    const play=(url)=>{ if(myseq!==_ttsSeq){try{URL.revokeObjectURL(url);}catch(_){}return;}
-      _ttsAudio.src=url; if(_ttsCtx&&_ttsCtx.resume)_ttsCtx.resume();
-      _ttsAudio.play().catch(()=>{ if(myseq===_ttsSeq)webSpeakFallback(t); }); };
-    // INSTANT if pre-warmed (his real voice). Otherwise FETCH the clone as a blob with a patient timeout —
-    // a novel phrase takes ~14s to synth, and the <audio> element's own loader aborts that stall on mobile
-    // and drops to the female web voice. fetch() does NOT abort on slowness, so we WAIT for his voice and
-    // only fall back to web-speech if the clone is genuinely unreachable (network error / non-200), never
-    // just because it's slow. The result is cached server-side, so the same line is instant next time.
-    if(_preTTS[t]){ play(_preTTS[t]); }
-    else{
-      const ac=new AbortController(); const to=setTimeout(()=>ac.abort(),30000);
-      fetch('tts?text='+encodeURIComponent(String(t).slice(0,600)),{signal:ac.signal})
-        .then(r=>{ if(!r.ok)throw new Error('tts '+r.status); return r.blob(); })
-        .then(b=>{ clearTimeout(to); if(!b||b.size<2000)throw new Error('tts empty');
-          const url=URL.createObjectURL(b); _preTTS[t]=url; play(url); })
-        .catch(()=>{ clearTimeout(to); if(myseq===_ttsSeq)webSpeakFallback(t); });   // ONLY real failure → web voice
-    }
+    _ttsAudio.onerror=null;
+    if(_preTTS[t]){ _playClip(_preTTS[t],myseq,()=>speakEnd(),t); return; }   // whole line pre-warmed → instant
+    const parts=_splitSentences(t);
+    if(parts.length<=1){ _fetchTTS(t).then(url=>{ if(myseq!==_ttsSeq)return;
+        if(url===null){ webSpeakFallback(t); return; } _playClip(url,myseq,()=>speakEnd(),t); }); return; }
+    _speakQueue(parts,myseq,t);                               // multi-sentence → sentence-level streaming
   }catch(e){webSpeakFallback(t);} }
 // _jspeaking gates the mic so JARVIS never hears + answers his OWN TTS voice (the feedback loop that
 // made it sound like two agents talking over each other and spammed the chat). Released a beat AFTER
