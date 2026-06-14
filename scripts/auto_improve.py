@@ -218,6 +218,16 @@ def _implement_claude(feat: dict, timeout=1800) -> bool:
         "keep the theme lock intact (scripts/check_ui_theme_lock.py must pass), and bump the VER number by 1.\n"
         "- Ensure `python3 -m py_compile` passes for any .py you change and the app still boots.\n"
         "- No new heavy dependencies. Keep it self-contained.\n"
+        "- COMPLETE the WHOLE feature end-to-end (UI + backend + any voice/intent wiring described) — never "
+        "ship a backend-only stub or leave the user-facing surface unbuilt; it must be usable as described.\n"
+        "- Add pytest TESTS under server/tests/ for any new backend logic (cover the happy path + edge/"
+        "failure cases). Changes with no test evidence are rejected by the audit.\n"
+        "- SECURITY: validate and sanitise ALL inputs; for any URL/webhook reject non-http(s) and block "
+        "loopback/link-local/internal targets (no SSRF); never expose secrets or weaken auth.\n"
+        "- SELF-VERIFY BEFORE FINISHING (mandatory): run `python3 scripts/auto_improve_gate.py --changed-only` "
+        "and FIX everything until it reports pass=true. A JS syntax error in jarvis_live.html (e.g. a "
+        "duplicate top-level const/let/function name, or an unbalanced brace/backtick) is the most common "
+        "failure — re-read your edit and make the <script> blocks pass `node --check` before you finish.\n"
         % (feat["title"], feat["brief"])
     )
     pf = "/tmp/_ai_prompt.txt"
@@ -360,8 +370,11 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
             continue
         g = gate()
         if not g.get("pass"):
-            failed = [k for k, v in (g.get("checks") or {}).items() if not v.get("ok")]
-            log({"event": "feature_gate_fail", "title": feat["title"], "failed": failed, "files": feature_files})
+            checks = g.get("checks") or {}
+            failed = [k for k, v in checks.items() if not v.get("ok")]
+            detail = {k: (v.get("detail", "") or "")[:300] for k, v in checks.items() if not v.get("ok")}
+            log({"event": "feature_gate_fail", "title": feat["title"], "failed": failed,
+                 "detail": detail, "builder": feat.get("_builder", builder), "files": feature_files})
             discard(feature_files)
             continue
         # The 1,000-pt Claude audit is the merge decider: gate proves it BOOTS, audit proves it's WORTH it.

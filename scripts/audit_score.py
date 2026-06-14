@@ -63,8 +63,7 @@ HARD_BLOCKER_KEYS = {
     "auth_data_deploy_db_weakened", "rollback_impossible", "bypasses_review", "improvement_not_implemented",
 }
 
-MODEL = os.environ.get("AUDIT_MODEL", "claude-opus-4-8")          # heavyweight judge for risky changes
-MODEL_LIGHT = os.environ.get("AUDIT_MODEL_LIGHT", "claude-sonnet-4-6")  # cheaper judge for normal changes
+MODEL = os.environ.get("AUDIT_MODEL", "claude-opus-4-8")          # strong judge for ALL changes (max accuracy)
 # minimum final score required to auto-merge (spec's auto-pass gate = 850)
 MERGE_MIN = int(os.environ.get("AUTO_MERGE_MIN", "850"))
 MISSION_FILE = os.path.join(ROOT, "config", "jarvis_mission.md")
@@ -297,8 +296,8 @@ def audit_score(feat: dict, files: list, gate_report=None) -> dict:
                 "hard_blockers": [{"key": "improvement_not_implemented", "reason": "no change on disk"}],
                 "gate_passed": gate_passed}
     depth, note = _risk_depth(diff, files or [])
-    # token economy: normal-risk changes are judged by the cheaper model; high/critical use the opus judge.
-    model = MODEL_LIGHT if depth == "normal" else MODEL
+    # always use the strong judge for maximum audit accuracy (token-tiering reverted per owner).
+    model = MODEL
     text = _claude_judge(_prompt(feat, diff, gate_report, note), model=model)
     judgment = _parse(text)
     if not judgment:
