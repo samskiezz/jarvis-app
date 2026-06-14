@@ -98,30 +98,54 @@ def _wav_bytes(pcm_float, sr=24000):
     return buf.getvalue()
 
 
-def synth(text: str) -> bytes:
+def _to_mp3(wav: bytes) -> bytes:
+    """Compress WAV -> MP3 (64k mono) so the clip crosses a slow VPS tunnel ~6x faster. WAV unchanged on failure."""
+    try:
+        import subprocess
+        p = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "pipe:0",
+                            "-ac", "1", "-b:a", "64k", "-f", "mp3", "pipe:1"],
+                           input=wav, capture_output=True, timeout=20)
+        return p.stdout if p.returncode == 0 and p.stdout else wav
+    except Exception:
+        return wav
+
+
+def synth(text: str, fmt: str = "wav") -> bytes:
     text = (text or "").strip()[:600]
     if not text:
         return b""
+    ext = "mp3" if fmt == "mp3" else "wav"
     key = hashlib.md5(("xtts|" + _REF_TAG + "|" + LANG + "|" + text).encode()).hexdigest()
-    fp = os.path.join(CACHE_DIR, key + ".wav")
+    fp = os.path.join(CACHE_DIR, key + "." + ext)
     if os.path.exists(fp):
         with open(fp, "rb") as f:
             return f.read()
-    with _LOCK:
-        _load()
-        out = _M["model"].inference(
-            text=text,
-            language=LANG,
-            gpt_cond_latent=_M["gpt_lat"],
-            speaker_embedding=_M["spk"],
-            temperature=0.7,
-            enable_text_splitting=True,
-        )
-    data = _wav_bytes(out["wav"], sr=24000)
-    tmp = fp + ".tmp"
-    with open(tmp, "wb") as f:
-        f.write(data)
-    os.replace(tmp, fp)
+    wfp = os.path.join(CACHE_DIR, key + ".wav")               # reuse the WAV cache if it exists
+    if os.path.exists(wfp):
+        with open(wfp, "rb") as f:
+            data = f.read()
+    else:
+        with _LOCK:
+            _load()
+            out = _M["model"].inference(
+                text=text,
+                language=LANG,
+                gpt_cond_latent=_M["gpt_lat"],
+                speaker_embedding=_M["spk"],
+                temperature=0.7,
+                enable_text_splitting=True,
+            )
+        data = _wav_bytes(out["wav"], sr=24000)
+        tmp = wfp + ".tmp"
+        with open(tmp, "wb") as f:
+            f.write(data)
+        os.replace(tmp, wfp)
+    if ext == "mp3":
+        data = _to_mp3(data)
+        tmp = fp + ".tmp"
+        with open(tmp, "wb") as f:
+            f.write(data)
+        os.replace(tmp, fp)
     return data
 
 
@@ -153,15 +177,16 @@ class Handler(BaseHTTPRequestHandler):
             text = json.loads(body).get("text", "")
         except Exception:
             text = parse_qs(body).get("text", [""])[0]
+        fmt = parse_qs(urlparse(self.path).query).get("fmt", ["wav"])[0]
         try:
-            data = synth(text)
+            data = synth(text, fmt)
         except Exception as e:  # noqa: BLE001
             sys.stderr.write(f"[voiceclone-gpu] synth error: {e}\n")
             sys.stderr.flush()
             data = b""
         if data:
             self.send_response(200)
-            self.send_header("Content-Type", "audio/wav")
+            self.send_header("Content-Type", "audio/mpeg" if fmt == "mp3" else "audio/wav")
             self.send_header("Content-Length", str(len(data)))
             self.end_headers()
             self.wfile.write(data)

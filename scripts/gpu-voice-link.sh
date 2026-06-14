@@ -36,6 +36,8 @@ scp $SSHO -i "$KEY" -P "$P" server/voices/ref/*.wav "$U@$H:/root/voices/ref/" >/
 # 2) ensure the venv + deps on the box (idempotent — the import check skips the multi-GB install if present)
 ssh $SSHO -i "$KEY" -p "$P" "$U@$H" 'bash -s' <<'REMOTE' 2>/dev/null || true
 export HOME=/root COQUI_TOS_AGREED=1 TTS_HOME=/root/tts_cache
+# ffmpeg: encodes the cloned WAV -> MP3 on-box so the clip crosses a slow VPS tunnel ~6x faster.
+command -v ffmpeg >/dev/null 2>&1 || { apt-get update -qq; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null 2>&1; }
 if ! /root/tts-venv/bin/python -c "import torch,TTS" 2>/dev/null; then
   # Minimal images (e.g. ollama/ollama) ship python3 but no pip/venv — install them first.
   python3 -c "import ensurepip" 2>/dev/null || { apt-get update -qq; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3-venv python3-pip >/dev/null 2>&1; }
@@ -66,8 +68,9 @@ scp $SSHO -i "$KEY" -P "$P" server/services/voice_clone_gpu.py "$U@$H:/root/voic
 
 # 4) self-healing tunnel  box:$TPORT -> 127.0.0.1:$TPORT
 if ! pgrep -f "L *$TPORT:localhost:$TPORT" >/dev/null 2>&1; then
-  nohup bash -c "while true; do ssh -N -C $SSHO -i '$KEY' -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
-    -p $P -L $TPORT:localhost:$TPORT $U@$H; sleep 5; done" >/tmp/tts-tunnel.log 2>&1 &
+  nohup bash -c "while true; do ssh -N -C $SSHO -i '$KEY' -o ServerAliveInterval=15 -o ServerAliveCountMax=3 \
+    -o ExitOnForwardFailure=yes -o TCPKeepAlive=yes \
+    -p $P -L $TPORT:localhost:$TPORT $U@$H; sleep 3; done" >/tmp/tts-tunnel.log 2>&1 &
   say "voice tunnel keepalive started ✓"
   sleep 3
 fi

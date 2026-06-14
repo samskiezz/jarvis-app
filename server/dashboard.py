@@ -1786,7 +1786,7 @@ _DEF_TEMPO = float(os.environ.get("JARVIS_VOICE_TEMPO", "1.0"))
 # line) reached over the SSH tunnel at 127.0.0.1:8096, then the local CPU service (~14s) as a fallback,
 # then Piper. The GPU path is what makes her voice instant instead of "glitching" to the female web
 # voice while a slow CPU synth runs. Each is tried with its own timeout; the first that answers wins.
-_XTTS_GPU_URL = os.environ.get("XTTS_GPU_URL", "http://127.0.0.1:8096/synthesize")
+_XTTS_GPU_URL = os.environ.get("XTTS_GPU_URL", "http://127.0.0.1:8096/synthesize?fmt=mp3")   # mp3 = ~6x smaller over the slow box tunnel
 _XTTS_URL = os.environ.get("XTTS_URL", "http://127.0.0.1:8097/synthesize")
 _XTTS_GPU_TIMEOUT = float(os.environ.get("XTTS_GPU_TIMEOUT", "20"))   # GPU: fast warm, but allow the first call + tunnel
 _XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "30"))           # CPU clone is slow but it's the REAL (cloned) voice — wait for it before falling back to Piper
@@ -2779,7 +2779,8 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                     return None
             data = _tts(_q.get("text", [""])[0], _f("semitones"), _f("tempo"))
             if data:
-                self.send_response(200); self.send_header("Content-Type", "audio/wav")
+                ctype = "audio/wav" if data[:4] == b"RIFF" else "audio/mpeg"   # GPU path returns mp3; CPU/Piper return wav
+                self.send_response(200); self.send_header("Content-Type", ctype)
                 self.send_header("Content-Length", str(len(data)))
                 self.send_header("Cache-Control", "public, max-age=3600")
                 self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self._write_body(data)
