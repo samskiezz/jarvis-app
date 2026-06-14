@@ -14,6 +14,7 @@ import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
 import GlobalCommandPalette from '@/components/cinematic/GlobalCommandPalette';
+import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -36,6 +37,7 @@ function App() {
             <FirstRunSetup />
             <JarvisBrain />
             <GlobalCommandPalette />
+            <HeyJarvisListener />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

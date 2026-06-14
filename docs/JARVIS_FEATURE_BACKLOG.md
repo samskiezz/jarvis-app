@@ -19,7 +19,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 
 ## Backlog (real features)
 - [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-06-14] GlobalCommandPalette.jsx mounts in App.jsx; covers cinematic+home routes (AppLayout already owns /apex); lists 10 scenes + all APEX pages + global nav + JARVIS ask fallback; vite build green.
-- [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
+- [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-06-14] HeyJarvisListener.jsx mounts in App.jsx; uses createVoice() wake-word engine + WakeWordToggle pill UI; armed state starts reactor hum; on detection dispatches jarvis:ask to open JarvisBrain; no-ops on unsupported browsers; vite build green.
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
 - [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).

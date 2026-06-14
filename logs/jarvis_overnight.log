@@ -1,1 +1,2 @@
 2026-06-14 F01 GlobalCommandPalette: ⌘K/Ctrl+K palette for cinematic+home routes; lists 10 cinematic scenes + all APEX pages + global nav + JARVIS ask fallback; mounted in App.jsx; vite build green.
+2026-06-14 F02 HeyJarvisListener: always-listening wake word toggle; uses createVoice() SpeechRecognition engine + WakeWordToggle pill; armed state starts reactor hum; on "JARVIS" detection dispatches jarvis:ask to open JarvisBrain; no-ops gracefully on unsupported browsers; mounted in App.jsx; vite build green.
