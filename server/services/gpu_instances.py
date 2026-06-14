@@ -26,6 +26,14 @@ _TUNNEL_PROC = None  # persistent SSH tunnel to a running brain's Ollama
 DEFAULT_IMAGE   = os.environ.get("GPU_IMAGE", "pytorch/pytorch:2.4.1-cuda12.1-cudnn9-runtime")
 DEFAULT_DISK_GB = int(os.environ.get("GPU_DISK_GB", "30"))
 DEFAULT_MAXPRICE= float(os.environ.get("GPU_MAX_PRICE", "0.50"))      # $/hr ceiling — cheap by default
+# REGION POLICY: only rent GPU boxes in ASIA — low latency to the KL VPS (Taiwan ~70ms, US/EU ~250ms+ ruins
+# voice/chat). Vast's cheap supply is mostly US/EU, so we MUST filter by region. Country codes near KL first.
+# Override with env GPU_GEO (comma-separated ISO codes); set GPU_GEO="" to disable the region lock.
+GPU_GEO = [c.strip().upper() for c in os.environ.get(
+    "GPU_GEO", "MY,SG,TH,VN,ID,PH,HK,TW,KH,LA,CN,KR,JP,IN,BD").split(",") if c.strip()]
+def _offer_cc(o) -> str:
+    """Vast offer geolocation is a string like 'Taiwan, TW' or ', CN' — return the trailing ISO code."""
+    return (o.get("geolocation") or "").split(",")[-1].strip().upper()
 
 
 def estimate_task_vram(task: str) -> dict:
@@ -142,12 +150,15 @@ def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int 
         for o in (d.get("offers") or []):
             if o.get("machine_id") in excl:        # skip machines a retry already found unreachable
                 continue
+            if GPU_GEO and _offer_cc(o) not in GPU_GEO:   # REGION LOCK: Asia only (low latency to KL VPS)
+                continue
             tot_mb = float(o.get("gpu_ram") or 0) * float(o.get("num_gpus") or 1)
             if o.get("rentable") and float(o.get("dph_total") or 99) <= cap and tot_mb >= need_mb \
                and (not gpu_name or o.get("gpu_name") == gpu_name):
                 candidates.append(o)
     if not candidates:
-        return {"ok": False, "error": "no offer with ≥%gGB VRAM under $%.2f/hr%s" % (min_vram_gb, cap, " ("+gpu_name+")" if gpu_name else "")}
+        return {"ok": False, "error": "no offer with ≥%gGB VRAM under $%.2f/hr in region %s%s" % (
+            min_vram_gb, cap, "/".join(GPU_GEO) if GPU_GEO else "any", " ("+gpu_name+")" if gpu_name else "")}
     candidates.sort(key=lambda o: float(o.get("dph_total") or 99))
     o = candidates[0]
     return {"ok": True, "offer": {"id": o.get("id"), "machine_id": o.get("machine_id"), "gpu": o.get("gpu_name"), "num_gpus": o.get("num_gpus"),
@@ -394,7 +405,7 @@ echo BRAIN_READY
 # DISPOSABLE: if the box dies (Vast can reclaim a slot), just re-provision — nothing is lost.
 BRAIN_TIERS = {
     "basic":    {"min_vram_gb": 12, "max_price": 0.06, "disk_gb": 40, "models": "llama3.1:8b nomic-embed-text"},
-    "standard": {"min_vram_gb": 24, "max_price": 0.20, "disk_gb": 60, "models": "qwen2.5:14b llama3.1:8b nomic-embed-text"},
+    "standard": {"min_vram_gb": 24, "max_price": 0.25, "disk_gb": 60, "models": "qwen2.5:14b llama3.1:8b nomic-embed-text"},
     "heavy":    {"min_vram_gb": 48, "max_price": 0.60, "disk_gb": 80, "models": "qwen2.5:14b qwen2.5:32b llama3.1:8b nomic-embed-text"},
 }
 

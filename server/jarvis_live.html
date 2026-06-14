@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='30';
+  var KEY='__jv',VER='31';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2583,7 +2583,7 @@ async function gpuRefresh(){ try{ const r=await(await fetch('gpu/instances')).js
     try{ const br=await(await fetch('gpu/brain')).json();
       if(br&&br.brain){ const t=(br.tunnel||{}); banner='<div style="background:rgba(52,211,153,.12);border:1px solid #34d399;border-radius:10px;padding:10px;margin-bottom:6px">🧠 Brain online — JARVIS full AI'+(t.tunnel==='up'?' · tunnel up':' · tunnel '+((t.tunnel||'off')))+'</div>'; }
       else if(br&&(br.stopped||[]).length){ const s=br.stopped[0]; banner='<div style="background:rgba(245,185,66,.12);border:1px solid #f5b942;border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 Brain stopped — <button onclick="gpuStart('+s.id+')" style="background:#0a3a2a;color:#34d399;border:1px solid #34d399;border-radius:8px;padding:5px 10px;font-weight:700">▶ Start brain → full AI</button></div>'; }
-      else { banner='<div style="background:rgba(41,231,255,.10);border:1px solid var(--cy);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 No brain running — <button onclick="gpuProvisionBrain()" style="background:#0a3a4a;color:var(--cy);border:1px solid var(--cy);border-radius:8px;padding:6px 12px;font-weight:700">🧠 Provision brain (cheapest)</button> <span style="color:var(--dim);font-size:11px">disposable · auto-saves to VPS · ~$0.03/hr</span></div>'; }
+      else { banner='<div style="background:rgba(41,231,255,.10);border:1px solid var(--cy);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">🧠 No brain running — <button onclick="gpuProvisionBrain()" style="background:#0a3a4a;color:var(--cy);border:1px solid var(--cy);border-radius:8px;padding:6px 12px;font-weight:700">🧠 Provision brain (Asia · 24GB · 14b)</button> <span style="color:var(--dim);font-size:11px">disposable · Asia low-latency · 24GB · runs 14b on GPU · ~$0.18/hr</span></div>'; }
     }catch(_){}
     const it=r.instances||[];
     list.innerHTML = banner + (it.length? it.map(i=>{const on=(i.status||'').indexOf('running')>=0;
@@ -2603,9 +2603,9 @@ async function gpuRun(){ const task=($('gpuTask').value||'').trim(); if(!task){$
   }catch(e){$('gpuMsg').textContent='✗ '+e;}
 }
 async function gpuStart(id){ try{await fetch('gpu/start?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});gpuRefresh();}catch(_){}}
-async function gpuProvisionBrain(){ if(!confirm('Provision a disposable basic brain (cheapest ~12GB box, ~$0.03/hr, official ollama image — no install)?\nIt bills until disposed; results auto-save to the VPS, so dispose + re-provision anytime.'))return;
-  $('gpuMsg').textContent='Provisioning the cheapest brain box (ollama image, no install)…';
-  try{ const r=await(await fetch('gpu/provisionbrain?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tier:'basic'})})).json();
+async function gpuProvisionBrain(){ if(!confirm('Provision the STANDARD brain — an Asia (low-latency) 24GB box running qwen2.5:14b on GPU, ≤$0.25/hr, official ollama image (no install)?\nDisposable; bills until disposed; re-provision anytime.'))return;
+  $('gpuMsg').textContent='Provisioning the standard Asia brain (24GB · 14b · ≤$0.25/hr)…';
+  try{ const r=await(await fetch('gpu/provisionbrain?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tier:'standard'})})).json();
     $('gpuMsg').textContent = r.ok? (r.msg||'✓ Provisioning a reachable brain — verifying connectivity + booting…') : ('✗ '+(r.error||'failed'));
     try{jarvisSpeak(r.ok?'Provisioning the brain now.':'Could not provision the brain.');}catch(_){}
     gpuRefresh();
