@@ -1408,6 +1408,9 @@ def _persona_sysmsg(address: str = "ma'am") -> str:
                               if addr == "sir"
                               else "a lady; address her cockney-style as \"madam\", \"miss\", \"m'lady\" or \"ma'am\"") +
                              " — mixed up, used naturally and sparingly, and never the same one twice in a row.")
+    import datetime as _dt
+    now = _dt.datetime.now().strftime("%A, %-d %B %Y, %-I:%M %p")
+    base += f"\n\n[CURRENT DATE & TIME] It is {now}. Use this when asked the time/date — never guess it."
     return base + _mode_directive()
 
 
@@ -1536,7 +1539,7 @@ def _local_reply(prompt: str, address: str = "") -> str:
         return pick([f"I'm JARVIS{a} — your man about the 'ouse, lookin' after the lot.",
                      f"JARVIS{a}, at your service — I keep everything ticking for ya.",
                      f"Name's JARVIS{a}. I'm 'ere to run things and watch over ya."])
-    if has("time", "what day", "date"):
+    if __import__("re").search(r"\b(what'?s? the time|what time|the time|what day|what'?s? the date|today'?s date)\b", p):
         import datetime as _d
         return pick([f"It's {_d.datetime.now().strftime('%A, %-d %B, %-I:%M %p')}{a}.",
                      f"Just gone {_d.datetime.now().strftime('%-I:%M %p')}{a} — {_d.datetime.now().strftime('%A the %-d')}."])
@@ -1548,16 +1551,21 @@ def _local_reply(prompt: str, address: str = "") -> str:
 
 
 def _local_reply_fast_path(prompt: str) -> bool:
+    """True only for true greetings / safety / status one-liners — WORD-BOUNDARY matched so a real
+    question ('what is 17 times 23') is NOT hijacked by a substring ('time' in 'times') and instead
+    reaches the LLM. These are the only phrases worth answering instantly without the brain."""
+    import re as _re
     p = (prompt or "").lower().strip()
-    phrases = (
-        "hello", "hi ", "hey", "you there", "are you there", "jarvis",
-        "help", "fallen", "fall", "emergency", "ambulance", "can't breathe",
-        "cant breathe", "hurt", "pain", "scared", "911", "000",
-        "how are you", "you ok", "you okay", "thank", "cheers", "appreciate",
-        "love you", "good night", "goodnight", "night night",
-        "who are you", "what are you", "your name", "time", "what day", "date",
+    pats = (
+        r"\bhello\b", r"\bhi\b", r"\bhey\b", r"\byou there\b", r"\bare you there\b", r"\bjarvis\b",
+        r"\bhelp\b", r"\bfallen?\b", r"\bemergency\b", r"\bambulance\b", r"can'?t breathe",
+        r"\bhurt\b", r"\bin pain\b", r"\bscared\b", r"\b911\b", r"\b000\b",
+        r"\bhow are you\b", r"\byou ok(ay)?\b", r"\bthank", r"\bcheers\b", r"\bappreciate\b",
+        r"\blove you\b", r"\bgood ?night\b", r"\bnight night\b",
+        r"\bwho are you\b", r"\bwhat are you\b", r"\byour name\b",
+        r"\bwhat('?s)? the time\b", r"\bwhat time\b", r"\bwhat day\b", r"\bwhat('?s)? the date\b",
     )
-    return any(x in p for x in phrases)
+    return any(_re.search(x, p) for x in pats)
 
 
 def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
@@ -1748,6 +1756,12 @@ def _climate_handle(qtext: str, address: str = "ma'am") -> dict | None:
     """If `qtext` is a climate request, action it via the relay and return {reply, climate:True,...};
     else None so the caller falls through to normal chat. This is what keeps 'I am cold', 'set the
     lounge to 23', 'what is the temperature', 'which zones' OFF the Claude builder."""
+    import re as _re
+    # Don't hijack general conversation that merely MENTIONS warmth/cold (e.g. "a tip for staying warm
+    # in winter", "tell me about the weather") — only real climate commands/queries should be actioned.
+    if _re.search(r"\b(tip|tips|advice|suggest|recommend|how (do|can|to)|good way|idea|ideas|joke|story|"
+                  r"weather|why|explain|mean)\b", (qtext or "").lower()):
+        return None
     from server.services import climate_relay as CR
     intent = CR.parse_intent(qtext or "")
     if not intent:
