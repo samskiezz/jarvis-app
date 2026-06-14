@@ -22,6 +22,7 @@ import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
 import RiskBoard from '@/components/cinematic/RiskBoard';
 import TaskBoard from '@/components/cinematic/TaskBoard';
 import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
+import InvestigationsPanel from '@/components/cinematic/InvestigationsPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -57,6 +58,8 @@ function App() {
             <TaskBoard />
             {/* F11: datasets browser — /v1/datasets → catalog with row counts */}
             <DatasetsBrowser />
+            {/* F12: investigations panel — /v1/investigations → open cases */}
+            <InvestigationsPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
