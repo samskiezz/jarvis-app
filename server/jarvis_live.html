@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='32';
+  var KEY='__jv',VER='33';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6178,7 +6178,7 @@ function closeCarouselOverlay(){$('ovCarousel').classList.remove('open');}
 async function fetchScaleCounts(){try{const r=await fetch('/inventory/counts');if(!r.ok)throw new Error('http '+r.status);return await r.json();}catch(e){return {total:MINI_APPS.length,error:String(e.message||e)};}}
 
 async function renderScaleMonitor(){const s=$('scaleSheet');if(!s)return;
-  s.innerHTML='<h3>Scale Monitor <span style="font-size:11px;color:var(--text-dim)">live A-Z counter</span></h3><div class=scale-grid id=scaleGrid><div class=scale-card><div class=n>…</div><div class=l>Loading</div></div></div><div class=scale-btns><button onclick="refreshScaleMonitor()">🔄 Refresh</button><button id=btnMonitor onclick="toggleScaleMonitor()">⏵ Monitor</button><button onclick="triggerScaleUp()">⬆ Scale +1</button><button onclick="closeScaleOverlay()">✕ Close</button></div>';
+  s.innerHTML='<h3>Scale Monitor <span style="font-size:11px;color:var(--text-dim)">live A-Z counter</span></h3><div class=scale-grid id=scaleGrid><div class=scale-card><div class=n>…</div><div class=l>Loading</div></div></div><div class=scale-btns><button onclick="refreshScaleMonitor()">🔄 Refresh</button><button id=btnMonitor onclick="toggleScaleMonitor()">⏵ Monitor</button><button onclick="closeScaleOverlay()">✕ Close</button></div>';
   await refreshScaleMonitor();
 }
 
@@ -6198,7 +6198,7 @@ async function refreshScaleMonitor(){const c=await fetchScaleCounts();const g=$(
 }
 
 function toggleScaleMonitor(){const b=$('btnMonitor');if(_carouselMonitor){clearInterval(_carouselMonitor);_carouselMonitor=null;if(b){b.textContent='⏵ Monitor';b.classList.remove('active');}}else{refreshScaleMonitor();_carouselMonitor=setInterval(refreshScaleMonitor,5000);if(b){b.textContent='⏹ Monitoring';b.classList.add('active');}}}
-function triggerScaleUp(){showInplaceAlert('Scale +1: simulated growth tick');}
+/* triggerScaleUp removed — was a placebo (simulated tick), not a real action */
 
 function renderCarousel(){const stage=$('carouselStage'),dots=$('carouselDots');if(!stage)return;_carouselIndex=0;
   stage.innerHTML=MINI_APPS.map((m,i)=>'<div class=carousel-card tabindex=0 role=button aria-label="'+m.t+'" data-i='+i+' onclick="carouselOpenApp(\''+m.id+'\')"><div class=ic>'+m.ic+'</div><div class=tt>'+m.t+'</div><div class=ds>'+m.d+'</div></div>').join('');
@@ -6402,7 +6402,7 @@ function updateThemeAccent(){const key=$('themeAccent').value||'none';const prev
 let _lastThemePrompt='';
 function _loadTheme(){try{const s=localStorage.getItem('jarvisTheme');return s?JSON.parse(s):null;}catch(_){return null;}}
 function _saveTheme(t){try{localStorage.setItem('jarvisTheme',JSON.stringify(t));}catch(_){}}
-function applyTheme(t){if(!t||!t.vars)return;let s=$('liveTheme');if(!s){s=document.createElement('style');s.id='liveTheme';document.head.appendChild(s);}s.textContent=':root{ '+Object.entries(t.vars).map(([k,v])=>k+':'+v+';').join(' ')+' }';_saveTheme(t);}
+function applyTheme(t){if(!t||!t.vars)return;let s=$('liveTheme');if(!s){s=document.createElement('style');s.id='liveTheme';document.head.appendChild(s);}var _ex=(t.vars['--text-primary']&&!t.vars['--tx'])?('--tx:'+t.vars['--text-primary']+';'):'';s.textContent=':root{ '+Object.entries(t.vars).map(([k,v])=>k+':'+v+';').join(' ')+' '+_ex+' }';_saveTheme(t);}
 function revertTheme(){let s=$('liveTheme');if(s)s.textContent='';try{localStorage.removeItem('jarvisTheme');}catch(_){}const out=$('asOut');if(out)out.innerHTML='<div class=as-out>Reverted to default theme.</div>';}
 async function generateTheme(style){const prompt=$('themePrompt')?($('themePrompt').value||''):'';_lastThemePrompt=prompt;const out=$('asOut');if(!out)return;out.innerHTML='<div class=as-empty>Generating theme…</div>';try{let t=null;if(!style&&!prompt){const themes=[{name:'iOS 26 Cyan',description:'Apple Liquid Glass — cyan tint, soft blur, rounded sheets',vars:{'--cyan':'#29e7ff','--cyan2':'#7af3ff','--cy':'#29e7ff','--cy2':'#7af3ff','--bg':'#020408','--bg-secondary':'#040a12','--bg-tertiary':'#06111b','--text-primary':'#eafcff','--text-secondary':'#c4f1f7','--text-dim':'#7ad7ff','--tint-h':'191','--radius-xl':'22px','--blur-medium':'blur(22px)','--duration-quick':'160ms'}},{name:'Android 15 Aurora',description:'Material You — muted purple/indigo with tonal surfaces',vars:{'--cyan':'#a78bfa','--cyan2':'#c4b5fd','--cy':'#a78bfa','--cy2':'#c4b5fd','--bg':'#0a0712','--bg-secondary':'#120c1f','--bg-tertiary':'#1a122b','--text-primary':'#f3efff','--text-secondary':'#d8d0f0','--text-dim':'#a69ac9','--tint-h':'263','--radius-xl':'26px','--blur-medium':'blur(24px)','--duration-quick':'180ms'}},{name:'Cyberpunk Neon',description:'High-contrast magenta/cyan glow with sharp edges',vars:{'--cyan':'#ff00ff','--cyan2':'#00ffff','--cy':'#ff00ff','--cy2':'#00ffff','--bg':'#050005','--bg-secondary':'#0f0014','--bg-tertiary':'#190020','--text-primary':'#ffeaff','--text-secondary':'#ffb3ff','--text-dim':'#c96bc9','--tint-h':'300','--radius-xl':'12px','--blur-medium':'blur(14px)','--duration-quick':'120ms'}},{name:'Warm Amber Glass',description:'Soft amber tint on dark bronze — calm and premium',vars:{'--cyan':'#f5b942','--cyan2':'#ffd96e','--cy':'#f5b942','--cy2':'#ffd96e','--bg':'#0d0802','--bg-secondary':'#161007','--bg-tertiary':'#1f160b','--text-primary':'#fff7e8','--text-secondary':'#f0d9b0','--text-dim':'#b89b70','--tint-h':'38','--radius-xl':'24px','--blur-medium':'blur(20px)','--duration-quick':'200ms'}},{name:'Forest Mint',description:'Dark emerald with mint accents — easy on the eyes',vars:{'--cyan':'#34d399','--cyan2':'#6ee7b7','--cy':'#34d399','--cy2':'#6ee7b7','--bg':'#020a06','--bg-secondary':'#05140d','--bg-tertiary':'#081d14','--text-primary':'#eafff4','--text-secondary':'#c9f5df','--text-dim':'#7dd3a8','--tint-h':'152','--radius-xl':'20px','--blur-medium':'blur(22px)','--duration-quick':'170ms'}}];t=themes[Math.floor(Math.random()*themes.length)];}
     else if(style){const map={'iOS 26':'iOS 26 Cyan','Android 15':'Android 15 Aurora','Cyberpunk Neon':'Cyberpunk Neon'};const themes=[{name:'iOS 26 Cyan',description:'Apple Liquid Glass — cyan tint, soft blur, rounded sheets',vars:{'--cyan':'#29e7ff','--cyan2':'#7af3ff','--cy':'#29e7ff','--cy2':'#7af3ff','--bg':'#020408','--bg-secondary':'#040a12','--bg-tertiary':'#06111b','--text-primary':'#eafcff','--text-secondary':'#c4f1f7','--text-dim':'#7ad7ff','--tint-h':'191','--radius-xl':'22px','--blur-medium':'blur(22px)','--duration-quick':'160ms'}},{name:'Android 15 Aurora',description:'Material You — muted purple/indigo with tonal surfaces',vars:{'--cyan':'#a78bfa','--cyan2':'#c4b5fd','--cy':'#a78bfa','--cy2':'#c4b5fd','--bg':'#0a0712','--bg-secondary':'#120c1f','--bg-tertiary':'#1a122b','--text-primary':'#f3efff','--text-secondary':'#d8d0f0','--text-dim':'#a69ac9','--tint-h':'263','--radius-xl':'26px','--blur-medium':'blur(24px)','--duration-quick':'180ms'}},{name:'Cyberpunk Neon',description:'High-contrast magenta/cyan glow with sharp edges',vars:{'--cyan':'#ff00ff','--cyan2':'#00ffff','--cy':'#ff00ff','--cy2':'#00ffff','--bg':'#050005','--bg-secondary':'#0f0014','--bg-tertiary':'#190020','--text-primary':'#ffeaff','--text-secondary':'#ffb3ff','--text-dim':'#c96bc9','--tint-h':'300','--radius-xl':'12px','--blur-medium':'blur(14px)','--duration-quick':'120ms'}}];t=themes.find(x=>x.name===map[style])||themes[0];}
@@ -6488,9 +6488,10 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='proofpack'){body.innerHTML=renderProofPackSheet();loadProofPack();return;}
   if(_appSheetId==='voiceforge'){body.innerHTML=renderVoiceForgeSheet();loadVoiceForge();return;}
   if(_appSheetId==='codepulse'){body.innerHTML=renderCodePulseSheet();loadCodePulse();return;}
+  if(_appSheetId==='search'){body.innerHTML=renderSearchSheet();setTimeout(function(){var e=$('gsQ');if(e)e.focus();},50);return;}
   if(_appSheetId==='notes'){body.innerHTML=renderNotesSheet();loadNotes();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
-  let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
+  let url=ep;
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
     if(ep&&_appSheetId!=='search'){if(_sheetPoll)clearInterval(_sheetPoll);_sheetPoll=setInterval(()=>{if(_appSheetId)renderAppSheet();},30000);}
   }catch(e){body.innerHTML='<div class=as-err>Failed to load '+app.t+': '+escapeHtml(String(e))+'</div>';}}
@@ -6534,7 +6535,7 @@ function renderClawSheet(){return `<div class=as-form>
 </div>`;}
 async function loadClawStatus(){const out=$('clawStatus');if(!out)return;try{const r=await fetch('/claw/status');const d=await r.json();if(!d.ok){out.innerHTML='<div class=as-err>'+escapeHtml(d.error||'failed')+'</div>';return;}const h=d.health||{};const ch=(h.channels||{}).kimi_claw||{};const probe=ch.probe||{};out.innerHTML='<div class=as-card><b>Kimi Claw</b> '+escapeHtml(probe.state||'unknown')+'<br><span style="color:var(--text-dim)">Container: '+!!d.container_running+' · Bridge: '+escapeHtml(d.bridge.status||'—')+' · Gateway: '+escapeHtml(d.gateway.status||'—')+'</span></div>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function clawRestart(kind){try{const r=await fetch('/claw/'+kind+'/restart?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert('Kimi Claw '+kind+': '+(d.ok?'restarted':'failed'));}catch(e){showInplaceAlert('Kimi Claw restart error: '+e);}}
-async function clawChat(){const inp=$('clawMsg');const out=$('clawChatOut');if(!inp||!out||!inp.value.trim())return;const msg=inp.value.trim();inp.value='';out.innerHTML='<div class=as-empty>Sending…</div>';try{const r=await fetch('/claw/chat?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});const d=await r.json();if(!d.ok){out.innerHTML='<div class=as-err>'+escapeHtml(d.error||'failed')+'</div>';return;}const reply=(d.data&&d.data.message)||JSON.stringify(d.data||d);out.innerHTML='<div class=as-out><b>Claw:</b> '+escapeHtml(String(reply))+'</div>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+async function clawChat(){const inp=$('clawMsg');const out=$('clawChatOut');if(!inp||!out||!inp.value.trim())return;const msg=inp.value.trim();inp.value='';out.innerHTML='<div class=as-empty>Sending…</div>';try{const r=await fetch('/claw/chat?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});const d=await r.json();if(!d.ok){out.innerHTML='<div class=as-err>'+escapeHtml(d.error||'failed')+'</div>';return;}const reply=(d.data&&d.data.result&&d.data.result.payloads&&d.data.result.payloads[0]&&d.data.result.payloads[0].text)||(d.data&&d.data.message)||JSON.stringify(d.data||d);out.innerHTML='<div class=as-out><b>Claw:</b> '+escapeHtml(String(reply))+'</div>';}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function clawLogs(){const out=$('clawLogs');if(!out)return;try{const r=await fetch('/claw/logs?lines=40');const d=await r.json();out.textContent=d.ok?(d.logs||[]).join('\n'):(d.error||'failed');}catch(e){out.textContent=String(e);}}
 
 /* ================ System Settings ================ */
@@ -6581,7 +6582,7 @@ function _setVoiceEnabled(v){try{localStorage.setItem('jarvisVoiceEnabled',v?'tr
 function settingsToggleVoice(){const v=!_voiceEnabled();_setVoiceEnabled(v);const b=$('btnVoiceToggle');if(b)b.textContent=v?'🔊 On':'🔇 Off';}
 function settingsApplyTheme(key){const t=SETTINGS_PRESETS[key];if(t)applyTheme(t);}
 function settingsResetTheme(){revertTheme();}
-async function testVoice(){if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance('Voice output is working.');u.rate=1;u.pitch=1;try{const voices=window.speechSynthesis.getVoices();const en=voices.find(v=>v.lang&&v.lang.startsWith('en'))||voices[0];if(en)u.voice=en;}catch(_){}window.speechSynthesis.speak(u);}
+function testVoice(){try{jarvisSpeak('Voice output is working, sir.');}catch(_){try{if(window.speechSynthesis)window.speechSynthesis.speak(new SpeechSynthesisUtterance('Voice output is working.'));}catch(__){}}}
 function confirmSetting(action,msg){if(!confirm(msg))return;settingsAction(action);}
 async function settingsAction(action,payload){try{const body={action};if(payload)body.payload=payload;const r=await fetch('/settings/action?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(d.client_action){if(d.client_action==='clear_local_storage'){try{localStorage.clear();}catch(_){}}else if(d.client_action==='reset_dock'){try{localStorage.removeItem('jarvisDock');}catch(_){}}else if(d.client_action==='reset_theme'){revertTheme();}}
     if(action==='run_diagnostics'&&d.issues){$('settingsDiag').innerHTML=renderIssues(d.issues);}
@@ -6629,6 +6630,15 @@ function _asVal(k,v,depth){
   }
   return '<div class=as-row><span class=as-k>'+escapeHtml(k)+'</span><span class=as-v>'+escapeHtml(String(v))+'</span></div>';
 }
+function renderSearchSheet(){return `<div class=as-form>
+  <label>Search the knowledge graph</label>
+  <div style="display:flex;gap:6px">
+    <input id=gsQ class=as-in placeholder="e.g. solar compliance, GPU, voice…" onkeydown="if(event.key==='Enter')doGraphSearch()">
+    <button class=as-run onclick="doGraphSearch()">Search</button>
+  </div>
+  <div id=gsOut><div class=as-empty>Type a query and press Search.</div></div>
+</div>`;}
+async function doGraphSearch(){var q=(($('gsQ')||{}).value||'').trim();var out=$('gsOut');if(!out)return;if(!q){out.innerHTML='<div class=as-empty>Type a query.</div>';return;}out.innerHTML='<div class=as-empty>Searching\u2026</div>';try{var r=await fetch('search?q='+encodeURIComponent(q));var d=await r.json();var items=(d.results||d.items||[]);if(!Array.isArray(items)||!items.length){out.innerHTML='<div class=as-empty>No matches for \"'+escapeHtml(q)+'\"</div>';return;}out.innerHTML='<div class=as-empty>'+items.length+' result(s)</div>'+items.slice(0,40).map(function(it){var t=it.title||it.name||it.label||it.id||'';var sub=it.type||it.kind||it.detail||'';return '<div class=as-card><b>'+escapeHtml(String(t))+'</b>'+(sub?'<span>'+escapeHtml(String(sub))+'</span>':'')+'</div>';}).join('');}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 function renderAppData(id,d){
   if(!d||typeof d!=='object')return '<div class=as-empty>No data</div>';
   if(id==='agent'){const tools=(d.tools||[]);return '<div class=as-empty>'+tools.length+' tools registered</div>'+tools.map(t=>'<div class=as-card><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}
