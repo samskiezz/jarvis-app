@@ -2312,6 +2312,29 @@ function showCrystal(txt){const c=$('crystal');if(!c)return;
 function hideCrystal(delay){clearTimeout(_crystalHide);
   _crystalHide=setTimeout(()=>$('crystal')&&$('crystal').classList.remove('show'),delay||1400);}
 let _chatBusy=false;
+// VISION: grab a camera frame and have JARVIS describe it (the box's vision model). Triggered by
+// "what do you see", "look", "describe this", etc., or window.jarvisVision('your prompt').
+async function jarvisVision(prompt){
+  if(!window.isSecureContext){ jarvisSpeak("I need the secure link to use the camera, sir."); return; }
+  let stream;
+  try{ stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}); }
+  catch(e){ try{ stream=await navigator.mediaDevices.getUserMedia({video:true}); }
+            catch(e2){ jarvisSpeak("I can't reach the camera, sir — tap the Access button and allow it."); return; } }
+  try{
+    const v=document.createElement('video'); v.srcObject=stream; v.muted=true; v.playsInline=true;
+    await v.play().catch(()=>{}); await new Promise(r=>setTimeout(r,350));   // let the camera expose
+    const sw=v.videoWidth||640, sh=v.videoHeight||480, w=Math.min(sw,640), h=Math.round(sh*(w/sw));
+    const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(v,0,0,w,h);
+    const img=c.toDataURL('image/jpeg',0.7);
+    try{stream.getTracks().forEach(t=>t.stop());}catch(_){}
+    jarvisSpeak("Let me have a look.");
+    const r=await fetch('vision',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:img, prompt:(prompt&&prompt.length>4)?prompt:''})});
+    const d=await r.json();
+    if(d&&d.reply) jarvisSpeak(d.reply); else jarvisSpeak("I couldn't make that out just now, sir.");
+  }catch(e){ try{stream.getTracks().forEach(t=>t.stop());}catch(_){} jarvisSpeak("I couldn't use the camera just now, sir."); }
+}
+window.jarvisVision=jarvisVision;
 async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   if(_chatBusy)return;                                    // one turn at a time — overlapping voice finals must not stack replies that talk over each other
   const l=t.toLowerCase();$('say').value='';
@@ -2319,6 +2342,7 @@ async function askJarvis(){const t=($('say').value||'').trim();if(!t)return;
   // voice/command shortcuts (preserved)
   if(/^(image|picture|draw)\b/.test(l)){return runMedia('genimage',t.replace(/^(image|picture|draw)\s*(of)?\s*/i,''));}
   if(/\b3d\b|^(model|sculpt)\b/.test(l)){return runMedia('gen3d',t.replace(/\b3d\b|model|sculpt/ig,'').trim());}
+  if(/\b(what (do|can) you see|look (at|around|here)|can you see|describe (what|this|that|the|my)|use your eyes|what'?s (in front|around|this|that)|what am i (looking at|holding)|what is this)\b/.test(l)){return jarvisVision(t);}  // VISION
   if(l.includes('run all'))return cmdAll('run');if(l==='stop'||l.includes('stop all'))return cmdAll('stop');
   if(l.includes('sleep'))return cmdAll('sleep');if(l==='status'||l.includes('read status'))return readStatus();
   if(l.includes('guardian')||l.includes('mum')||l.includes('mother'))return setMode('guardian');

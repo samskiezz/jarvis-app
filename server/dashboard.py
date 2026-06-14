@@ -1568,6 +1568,28 @@ def _local_reply_fast_path(prompt: str) -> bool:
     return any(_re.search(x, p) for x in pats)
 
 
+def _vision_describe(img_b64: str, prompt: str = "") -> str:
+    """Run a camera/screen frame through the box's VISION model (Ollama /api/chat with images[]). Tries the
+    vision models in order; returns a JARVIS-style description or '' on failure. Never raises."""
+    import urllib.request
+    base = JARVIS_LLM[:-3] if JARVIS_LLM.endswith("/v1") else JARVIS_LLM
+    prompt = (prompt or "Describe what you can see, briefly and naturally, as JARVIS — one or two sentences.").strip()
+    for model in ("qwen2.5vl:7b", "llava:7b", "llama3.2-vision:11b", "moondream"):
+        try:
+            body = json.dumps({"model": model, "stream": False,
+                               "messages": [{"role": "user", "content": prompt, "images": [img_b64]}]}).encode()
+            req = urllib.request.Request(base.rstrip("/") + "/api/chat", data=body, method="POST",
+                                         headers={"Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=45) as r:
+                d = json.loads(r.read().decode())
+            txt = ((d.get("message") or {}).get("content") or "").strip()
+            if txt:
+                return txt
+        except Exception:  # noqa: BLE001
+            continue
+    return ""
+
+
 def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
     """Synchronous, resilient conversational reply in the JARVIS persona (loaded from jarvis_persona.md).
     Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:32b),
@@ -3196,6 +3218,21 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
         # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
         # SDP/ICE/control within a room (the room name is the shared secret) and never touches pm2 or
         # tasks — so mum's phone link carries no admin rights.
+        if self.path.startswith("/vision"):
+            # VISION: browser posts a camera/screen frame (base64) + optional prompt; run it through the
+            # box's vision model and return a spoken-style description. Token-free user feature.
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                b = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                b = {}
+            img = (b.get("image") or "").split(",", 1)[-1]   # strip any data:image/...;base64, prefix
+            if not img:
+                self._send(b'{"ok":false,"error":"no image"}', "application/json"); return
+            out = _vision_describe(img, b.get("prompt") or "")
+            self._send(json.dumps({"ok": bool(out), "reply": out or "I couldn't quite make that out, sir."}).encode(),
+                       "application/json")
+            return
         if self.path.startswith("/gpu/"):
             # GPU INSTANCE MANAGER (control side): launch disposable / start / stop / destroy / copy / run / sync.
             if q.get("token", [""])[0] != CONTROL_TOKEN:
