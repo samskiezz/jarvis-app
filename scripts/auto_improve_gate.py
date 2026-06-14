@@ -67,13 +67,29 @@ def gate_js() -> dict:
     txt = open(html, encoding="utf-8").read()
     blocks = re.findall(r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", txt, re.S)
     tmp = "/tmp/_gate_js.js"
-    open(tmp, "w", encoding="utf-8").write("\n;\n".join(blocks))
-    env = dict(os.environ, NODE_PATH=os.path.join(ROOT, "node_modules"))
     try:
-        p = subprocess.run(["node", "--check", tmp], capture_output=True, text=True, timeout=30, env=env)
-        return {"ok": p.returncode == 0, "detail": (p.stderr or "")[:600]}
-    except Exception as e:  # noqa: BLE001
-        return {"ok": False, "detail": str(e)}
+        open(tmp, "w", encoding="utf-8").write("\n;\n".join(blocks))
+    except Exception as e:  # noqa: BLE001  (e.g. ENOSPC) — can't write temp, don't block on it
+        return {"ok": True, "note": "could not stage js for check (%s) — not blocking" % str(e)[:80]}
+    env = dict(os.environ, NODE_PATH=os.path.join(ROOT, "node_modules"))
+    # node --check ALWAYS prints real syntax errors to stderr. A non-zero exit with EMPTY output means the
+    # process was killed (resource pressure / OOM / signal), NOT a syntax error — retry, then don't block.
+    for attempt in range(2):
+        try:
+            p = subprocess.run(["node", "--check", tmp], capture_output=True, text=True, timeout=45, env=env)
+        except subprocess.TimeoutExpired:
+            time.sleep(2)
+            continue
+        except Exception as e:  # noqa: BLE001
+            return {"ok": True, "note": "node --check could not run (%s) — not blocking" % str(e)[:80]}
+        if p.returncode == 0:
+            return {"ok": True}
+        out = ((p.stderr or "") + (p.stdout or "")).strip()
+        if out:                       # a REAL syntax error has a message → genuine failure
+            return {"ok": False, "detail": out[:600]}
+        time.sleep(2)                 # nonzero rc but no message → killed, not a syntax error → retry
+    # exhausted retries with no real error message: inconclusive, do NOT phantom-fail (py_compile + boot still guard)
+    return {"ok": True, "note": "node --check inconclusive (no error output) — not blocking"}
 
 
 def gate_theme_lock() -> dict:

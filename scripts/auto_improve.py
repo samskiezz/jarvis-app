@@ -394,6 +394,14 @@ def score_change(feat: dict, files: list[str]) -> dict:
 
 def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
     log({"event": "cycle_start", "features": n, "dry": dry, "tier": tier, "builder": builder})
+    # Self-heal: the daemon's integration files must equal HEAD between cycles. A build killed mid-edit (or a
+    # discard skipped by an interruption) can leave these dirty — e.g. main.py importing a route whose file was
+    # discarded — which then breaks boot_backend/tests/js for EVERY later cycle regardless of what it touched.
+    # Reset any orphaned, uncommitted WIP in these so a stale/broken integration file never blocks the loop.
+    for orphan in ("server/jarvis_live.html", "server/main.py", "server/dashboard.py"):
+        if orphan not in PROTECTED and run(["git", "status", "--porcelain", orphan], timeout=15)[1].strip():
+            run(["git", "checkout", "--", orphan], timeout=30)
+            log({"event": "worktree_reset", "file": orphan})
     # Refresh the learned viability predictor from the growing journal; it only GATES once ≥90% repeatable.
     try:
         vr = viab.train()
