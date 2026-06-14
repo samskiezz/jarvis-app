@@ -210,6 +210,8 @@ async def _stream_ollama(message: str, system_prompt: str, fmt: str | None = Non
     }
     if max_tokens:
         payload["options"] = {"num_predict": max_tokens}
+    if fmt == "json":
+        payload["format"] = "json"   # constrain Ollama to valid JSON so structured callers (compress/spec/…) parse
     url = f"{_OLLAMA_BASE}/api/chat"
     async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
         async with client.stream("POST", url, json=payload) as resp:

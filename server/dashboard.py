@@ -82,7 +82,7 @@ BACKEND_GET_PROXY_PREFIXES = (
     "/v1/labs/catalog",
     "/v1/forge",
     # Mini-app GET endpoints (lists/status/detail) — the backend serves them; the
-    # dashboard must forward the GET so the live UI can load them (POSTs already proxy).
+    # dashboard must forward the GET so the live UI can load them (writes go via _proxy_backend_post).
     "/v1/intent",
     "/v1/decision",
     "/v1/compress",
@@ -101,6 +101,25 @@ BACKEND_GET_PROXY_PREFIXES = (
 def _allow_backend_get_proxy(path: str) -> bool:
     bare = (path or "").split("?", 1)[0]
     for prefix in BACKEND_GET_PROXY_PREFIXES:
+        if bare == prefix or bare.startswith(prefix + "/"):
+            return True
+    return False
+
+
+# WRITE endpoints the live UI POSTs to — the dashboard must forward these to the backend (:8001),
+# injecting the bearer token, or every mini-app Save/Create/Run/Approve button is a silent no-op.
+BACKEND_POST_PROXY_PREFIXES = (
+    "/v1/jarvis/memory", "/v1/jarvis/notifications", "/v1/jarvis/assets",
+    "/v1/reports", "/v1/cases", "/v1/dashboards", "/v1/alerts",
+    "/v1/intent", "/v1/decision", "/v1/compress", "/v1/asset", "/v1/spec",
+    "/v1/ritual", "/v1/mode", "/v1/friction", "/v1/proofpack", "/v1/forge",
+)
+BACKEND_API_KEY = os.environ.get("JARVIS_API_KEY", "dev-key")  # matches server/config.py API_KEY
+
+
+def _allow_backend_post_proxy(path: str) -> bool:
+    bare = (path or "").split("?", 1)[0]
+    for prefix in BACKEND_POST_PROXY_PREFIXES:
         if bare == prefix or bare.startswith(prefix + "/"):
             return True
     return False
@@ -2744,6 +2763,37 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                               "application/json", 502)
         return True
 
+    def _proxy_backend_post(self) -> bool:
+        """Forward an allow-listed /v1/* POST (write) to the backend (:8001), passing the body and
+        injecting the bearer token, so mini-app Save/Create/Run actions actually persist. Returns False
+        for non-allow-listed paths so the normal do_POST handlers still run."""
+        if not _allow_backend_post_proxy(self.path):
+            return False
+        try:
+            n = int(self.headers.get("Content-Length", 0) or 0)
+        except Exception:  # noqa: BLE001
+            n = 0
+        body = self.rfile.read(n) if n else b""
+        ctype_in = self.headers.get("Content-Type", "application/json")
+        # strip the dashboard's own ?token= (the backend wants a Bearer header, not a query token)
+        path = self.path.split("?", 1)[0]
+        auth = self.headers.get("Authorization") or ("Bearer " + BACKEND_API_KEY)
+        try:
+            req = urllib.request.Request(BACKEND_BASE + path, data=body, method="POST",
+                                         headers={"Content-Type": ctype_in, "Authorization": auth})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                out = r.read()
+                ctype = r.headers.get("Content-Type", "application/json")
+                self._send_status(out, ctype, int(getattr(r, "status", 200)))
+        except urllib.error.HTTPError as e:
+            out = e.read() or json.dumps({"ok": False, "error": f"backend {e.code}"}).encode()
+            ctype = e.headers.get("Content-Type", "application/json") if e.headers else "application/json"
+            self._send_status(out, ctype, int(e.code))
+        except Exception as e:  # noqa: BLE001
+            self._send_status(json.dumps({"ok": False, "error": str(e)[:180]}).encode(),
+                              "application/json", 502)
+        return True
+
     def _tmpl(self, name: str) -> str:
         """Read an html template from server/ and inject the control token."""
         try:
@@ -3233,6 +3283,8 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
 
     def do_POST(self):
         self.path = self._route_path()
+        if self._proxy_backend_post():   # forward allow-listed /v1/* writes to the backend (mini-app save/create/run)
+            return
         q = parse_qs(urlparse(self.path).query)
         # WebRTC signalling for the Care/Guardian feature is intentionally token-free: it only relays
         # SDP/ICE/control within a room (the room name is the shared secret) and never touches pm2 or

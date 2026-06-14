@@ -57,7 +57,9 @@ def compress(
             max_tokens=1024,
         )
         if out:
-            structured = json.loads(out)
+            import re as _re
+            m = _re.search(r"\{.*\}", out, _re.S)   # tolerate code fences / prose around the JSON
+            structured = json.loads(m.group(0) if m else out)
     except Exception:  # noqa: BLE001
         structured = {}
 
