@@ -29,6 +29,7 @@ import SkillScorecard from '@/components/cinematic/SkillScorecard';
 import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
 import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
+import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -78,6 +79,8 @@ function App() {
             <SceneAnchorDrillDown />
             {/* F18: boot sequence — first load fetches real counts + speaks "all systems online" via TTS */}
             <JarvisBootSequence />
+            {/* F19: ambient reactor hum toggle — WebAudio loop; on/off in the assistant */}
+            <AmbientReactorHum />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
