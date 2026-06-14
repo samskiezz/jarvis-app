@@ -2450,6 +2450,7 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bproof\b.*\bpack\b/.test(l)||/\bproofpack\b/.test(l)){openAppSheet('proofpack');return true;}
   if(/\bopen\b.*\bvoice\b.*\bforge\b/.test(l)||/\bvoiceforge\b/.test(l)){openAppSheet('voiceforge');return true;}
   if(/\bopen\b.*\bcode\b.*\bpulse\b/.test(l)||/\bcodepulse\b/.test(l)){openAppSheet('codepulse');return true;}
+  if(/\bopen\b.*\bcelestial\b/.test(l)){openAppSheet('celestial');return true;}
   if(/\b(twelve|12)\s*labs\b/.test(l)||/\b(voice studio|text to speech|read this out|say this)\b/.test(l)){openAppSheet('voiceforge');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
@@ -6138,6 +6139,7 @@ const MINI_APPS=[
   {id:'swarms',ic:'🐝',t:'Swarms',d:'Swarm mission control'},
   {id:'library',ic:'📚',t:'Library',d:'Generated images & GLB models'},
   {id:'search',ic:'🔎',t:'Graph Search',d:'Ontology search across the brain'},
+  {id:'celestial',ic:'🌌',t:'Celestial',d:'Repo-to-universe map'},
   {id:'suggestions',ic:'💡',t:'Suggestions',d:'AI self-dev ideas'},
   {id:'budget',ic:'💰',t:'Budget',d:'Token governor state'},
   {id:'architecture',ic:'🏛',t:'Architecture',d:'10-layer JARVIS map'},
@@ -6163,6 +6165,7 @@ const MINI_APPS=[
   {id:'proofpack',ic:'📦',t:'ProofPack',d:'Evidence packs for specs, diffs, tests, risks'},
   {id:'voiceforge',ic:'🗣',t:'12LABS',d:'Speak any text in your cloned voice + build/switch voice profiles. Free, like ElevenLabs.'},
   {id:'codepulse',ic:'🧑‍💻',t:'CodePulse',d:'VS Code bridge + approvals'},
+  {id:'notes',ic:'📝',t:'Notes',d:'Quick notes, saved on this device'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6410,7 +6413,7 @@ async function generateTheme(style){const prompt=$('themePrompt')?($('themePromp
 
 const APP_ENDPOINTS={
   vitals:'/vitals',health:'/healthreport',agent:'/agent/tools',tasks:'/tasks',swarms:'/swarms',
-  library:'/library',search:'/search?q=',suggestions:'/suggestions',
+  library:'/library',search:'/search?q=',celestial:'/celestial',suggestions:'/suggestions',
   doctor:'/doctor',budget:'/budget',brain:'/gpu/brain',architecture:'/v1/jarvis/architecture',
   memory:'/v1/jarvis/memory?user_id=anonymous&limit=20',inbox:'/v1/jarvis/notifications?user_id=anonymous&limit=20',
   datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',assets:'/v1/jarvis/assets/status',
@@ -6484,11 +6487,31 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='proofpack'){body.innerHTML=renderProofPackSheet();loadProofPack();return;}
   if(_appSheetId==='voiceforge'){body.innerHTML=renderVoiceForgeSheet();loadVoiceForge();return;}
   if(_appSheetId==='codepulse'){body.innerHTML=renderCodePulseSheet();loadCodePulse();return;}
+  if(_appSheetId==='notes'){body.innerHTML=renderNotesSheet();loadNotes();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep; if(_appSheetId==='search'){url='/search?q='+(prompt('Search the graph:')||'jarvis');}
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
     if(ep&&_appSheetId!=='search'){if(_sheetPoll)clearInterval(_sheetPoll);_sheetPoll=setInterval(()=>{if(_appSheetId)renderAppSheet();},30000);}
   }catch(e){body.innerHTML='<div class=as-err>Failed to load '+app.t+': '+escapeHtml(String(e))+'</div>';}}
+
+/* ================ Notes (local, on-device) ================ */
+const NOTES_KEY='jarvisNotes';
+function notesRead(){try{const v=JSON.parse(localStorage.getItem(NOTES_KEY)||'[]');return Array.isArray(v)?v:[];}catch(e){return [];}}
+function notesWrite(list){try{localStorage.setItem(NOTES_KEY,JSON.stringify(list));return true;}catch(e){showInplaceAlert('Could not save note (storage full or blocked)');return false;}}
+function noteTitle(n){const first=(n.text||'').split('\n')[0].trim();return first||'Untitled note';}
+function notePreview(n){const rest=(n.text||'').split('\n').slice(1).join(' ').trim();return rest||'No additional text';}
+function noteDate(ts){try{return new Date(ts).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+function renderNotesSheet(){return `<div class=as-form>
+  <label>New note</label>
+  <textarea id=noteInput class=as-ta rows=3 placeholder="Type a note… the first line becomes the title."></textarea>
+  <div class=as-row-inline><button class=as-run onclick="noteSave()">Save note</button></div>
+  <label>Saved notes</label>
+  <input id=noteSearch class=as-in type=text placeholder="Search notes…" oninput="loadNotes()">
+  <div id=notesList><div class=as-empty>Loading…</div></div>
+</div>`;}
+function noteSave(){const inp=$('noteInput');if(!inp)return;const text=inp.value.trim();if(!text){showInplaceAlert('Nothing to save');return;}const list=notesRead();const id='n'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);list.push({id,text,updated:Date.now()});if(notesWrite(list)){inp.value='';showInplaceAlert('Note saved');loadNotes();}}
+function noteDelete(id){const n=notesRead().find(x=>x.id===id);if(!n)return;if(!confirm('Delete “'+noteTitle(n)+'”?'))return;notesWrite(notesRead().filter(x=>x.id!==id));loadNotes();}
+function loadNotes(){const out=$('notesList');if(!out)return;const q=(($('noteSearch')||{}).value||'').trim().toLowerCase();const list=notesRead().slice().sort((a,b)=>b.updated-a.updated).filter(n=>!q||(n.text||'').toLowerCase().indexOf(q)!==-1);if(!list.length){out.innerHTML='<div class=as-empty>'+(q?'No notes match your search.':'No notes yet — write one above.')+'</div>';return;}out.innerHTML=list.map(n=>'<div class=as-card><b>'+escapeHtml(noteTitle(n))+'</b><span>'+escapeHtml(notePreview(n).slice(0,160))+'</span><div class=as-row-inline style="margin-top:6px"><span style="flex:1;font-size:10px;color:var(--text-dim)">'+escapeHtml(noteDate(n.updated))+'</span><button class=tbtn onclick="noteDelete(\''+n.id+'\')">Delete</button></div></div>').join('');}
 
 /* ================ Kimi Claw Manager ================ */
 function renderClawSheet(){return `<div class=as-form>
