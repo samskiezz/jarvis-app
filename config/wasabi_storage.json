@@ -7,10 +7,10 @@
     "primary": "jarvis-store",
     "immutable": "jarvis-vault"
   },
-  "_bucket_note": "Two buckets only (Wasabi allows 1000 but prefixes scale better). 'primary' = normal hot/cold data via prefixes. 'immutable' = Object-Lock-enabled bucket for backups that must never be altered (MUST be created with Object Lock ON — cannot be added later).",
+  "_bucket_note": "Two buckets only (Wasabi allows 1000 but prefixes scale better). 'primary' = normal hot/cold data via prefixes. 'immutable' = Object-Lock-enabled bucket for backups that must never be altered (MUST be created with Object Lock ON \u2014 cannot be added later).",
   "integrity": {
     "checksum": "MD5",
-    "_checksum_note": "Force MD5 — AWS SDK/CLI v2 default CRC64NVME ERRORS against Wasabi. rclone uses MD5 natively.",
+    "_checksum_note": "Force MD5 \u2014 AWS SDK/CLI v2 default CRC64NVME ERRORS against Wasabi. rclone uses MD5 natively.",
     "multipart_threshold_mb": 64,
     "multipart_chunk_mb": 16,
     "verify_after_upload": true
@@ -18,26 +18,173 @@
   "sorting_rules": {
     "_doc": "Evaluated top-to-bottom; first match wins. 'when' matches by ext (lowercased) and/or path substring (case-insensitive). 'to' = bucket:prefix. {cat} is filled from the path for UnderworldAssets categories; {yyyy}/{mm} from the file mtime.",
     "rules": [
-      {"name": "db-backups",      "when": {"ext": [".db", ".sqlite", ".sqlite3", ".dump", ".bak"], "path_any": ["backup", "snapshot", "/data/"]}, "to": "immutable:db-backups/{yyyy}/{mm}/", "object_lock_days": 365},
-      {"name": "ue5-archives",    "when": {"ext": [".zip", ".tar", ".gz", ".7z", ".pak", ".utoc", ".ucas"]}, "to": "primary:archives/{yyyy}/{mm}/"},
-      {"name": "underworld-assets","when": {"path_any": ["underworldassets/"]}, "to": "primary:assets/{cat}/"},
-      {"name": "renders-video",   "when": {"ext": [".mp4", ".mov", ".webm", ".mkv", ".exr"], "path_any": ["render", "media_assets", "higgsfield", "ue5"]}, "to": "primary:renders/{yyyy}/{mm}/"},
-      {"name": "models-3d",       "when": {"ext": [".glb", ".gltf", ".fbx", ".obj", ".usd", ".usdz"]}, "to": "primary:models3d/"},
-      {"name": "images",          "when": {"ext": [".png", ".jpg", ".jpeg", ".webp", ".tiff", ".tga"]}, "to": "primary:media/images/{yyyy}/{mm}/"},
-      {"name": "audio",           "when": {"ext": [".wav", ".mp3", ".flac", ".ogg", ".m4a"]}, "to": "primary:media/audio/{yyyy}/{mm}/"},
-      {"name": "video-generic",   "when": {"ext": [".mp4", ".mov", ".webm", ".mkv"]}, "to": "primary:media/video/{yyyy}/{mm}/"},
-      {"name": "datasets",        "when": {"ext": [".jsonl", ".csv", ".parquet", ".npy", ".npz"]}, "to": "primary:datasets/{yyyy}/{mm}/"},
-      {"name": "logs",            "when": {"ext": [".log"], "path_any": ["log"]}, "to": "primary:logs/{yyyy}/{mm}/"},
-      {"name": "default",         "when": {}, "to": "primary:misc/{yyyy}/{mm}/"}
+      {
+        "name": "db-backups",
+        "when": {
+          "ext": [
+            ".db",
+            ".sqlite",
+            ".sqlite3",
+            ".dump",
+            ".bak"
+          ],
+          "path_any": [
+            "backup",
+            "snapshot",
+            "/data/"
+          ]
+        },
+        "to": "immutable:db-backups/{yyyy}/{mm}/",
+        "object_lock_days": 365
+      },
+      {
+        "name": "ue5-archives",
+        "when": {
+          "ext": [
+            ".zip",
+            ".tar",
+            ".gz",
+            ".7z",
+            ".pak",
+            ".utoc",
+            ".ucas"
+          ]
+        },
+        "to": "primary:archives/{yyyy}/{mm}/"
+      },
+      {
+        "name": "underworld-assets",
+        "when": {
+          "path_any": [
+            "underworldassets/"
+          ]
+        },
+        "to": "primary:assets/{cat}/"
+      },
+      {
+        "name": "renders-video",
+        "when": {
+          "ext": [
+            ".mp4",
+            ".mov",
+            ".webm",
+            ".mkv",
+            ".exr"
+          ],
+          "path_any": [
+            "render",
+            "media_assets",
+            "higgsfield",
+            "ue5"
+          ]
+        },
+        "to": "primary:renders/{yyyy}/{mm}/"
+      },
+      {
+        "name": "models-3d",
+        "when": {
+          "ext": [
+            ".glb",
+            ".gltf",
+            ".fbx",
+            ".obj",
+            ".usd",
+            ".usdz"
+          ]
+        },
+        "to": "primary:models3d/"
+      },
+      {
+        "name": "images",
+        "when": {
+          "ext": [
+            ".png",
+            ".jpg",
+            ".jpeg",
+            ".webp",
+            ".tiff",
+            ".tga"
+          ]
+        },
+        "to": "primary:media/images/{yyyy}/{mm}/"
+      },
+      {
+        "name": "audio",
+        "when": {
+          "ext": [
+            ".wav",
+            ".mp3",
+            ".flac",
+            ".ogg",
+            ".m4a"
+          ]
+        },
+        "to": "primary:media/audio/{yyyy}/{mm}/"
+      },
+      {
+        "name": "video-generic",
+        "when": {
+          "ext": [
+            ".mp4",
+            ".mov",
+            ".webm",
+            ".mkv"
+          ]
+        },
+        "to": "primary:media/video/{yyyy}/{mm}/"
+      },
+      {
+        "name": "datasets",
+        "when": {
+          "ext": [
+            ".jsonl",
+            ".csv",
+            ".parquet",
+            ".npy",
+            ".npz"
+          ]
+        },
+        "to": "primary:datasets/{yyyy}/{mm}/"
+      },
+      {
+        "name": "logs",
+        "when": {
+          "ext": [
+            ".log"
+          ],
+          "path_any": [
+            "log"
+          ]
+        },
+        "to": "primary:logs/{yyyy}/{mm}/"
+      },
+      {
+        "name": "default",
+        "when": {},
+        "to": "primary:misc/{yyyy}/{mm}/"
+      }
     ]
   },
   "lifecycle": {
-    "_doc": "Prefix lifecycle rules. Mind Wasabi's 90-day minimum storage charge — do NOT expire sooner than 90d. Versions kept for safety; old noncurrent versions expired after retention.",
+    "_doc": "Prefix lifecycle rules. Mind Wasabi's 90-day minimum storage charge \u2014 do NOT expire sooner than 90d. Versions kept for safety; old noncurrent versions expired after retention.",
     "rules": [
-      {"prefix": "logs/",    "expire_days": 180, "noncurrent_version_expire_days": 30},
-      {"prefix": "renders/", "noncurrent_version_expire_days": 90},
-      {"prefix": "media/",   "noncurrent_version_expire_days": 90},
-      {"prefix": "misc/",    "expire_days": 365}
+      {
+        "prefix": "logs/",
+        "expire_days": 180,
+        "noncurrent_version_expire_days": 30
+      },
+      {
+        "prefix": "renders/",
+        "noncurrent_version_expire_days": 90
+      },
+      {
+        "prefix": "media/",
+        "noncurrent_version_expire_days": 90
+      },
+      {
+        "prefix": "misc/",
+        "expire_days": 365
+      }
     ],
     "versioning": true
   },
@@ -45,21 +192,31 @@
     "_doc": "What the migration scans. include = dirs eligible to move to cloud (cold/archival). exclude = NEVER move (live, active, code, engine). dry_run_default true so nothing moves without explicit --apply.",
     "include": [
       "underworld/data/media_assets",
-      "server/data/media",
-      "server/data/archive",
-      "server/data/gpu_results"
+      "server/data/archive"
     ],
     "exclude": [
-      ".git", "node_modules", ".venv", ".venv-tts",
+      ".git",
+      "node_modules",
+      ".venv",
+      ".venv-tts",
       "/opt/UnrealEngine",
       "underworld/deploy/ue5-project/Saved",
       "underworld/deploy/ue5-project/Intermediate",
-      "server/data/*.db", "server/data/*.sqlite", "server/auth.py", "server/config.py",
-      "scripts/auto_improve.py", "scripts/auto_improve_gate.py", "scripts/audit_score.py"
+      "server/data/*.db",
+      "server/data/*.sqlite",
+      "server/auth.py",
+      "server/config.py",
+      "scripts/auto_improve.py",
+      "scripts/auto_improve_gate.py",
+      "scripts/audit_score.py"
     ],
-    "exclude_note": "Live UE5 PROJECT files (Content the editor reads), live DBs, code, secrets and the engine are NEVER migrated — only confirmed cold/archival output. Add dirs to 'include' deliberately.",
-    "after_verify": "keep_local",
-    "after_verify_options": ["keep_local", "replace_with_pointer", "delete_local"],
+    "exclude_note": "Live UE5 PROJECT files (Content the editor reads), live DBs, code, secrets and the engine are NEVER migrated \u2014 only confirmed cold/archival output. Add dirs to 'include' deliberately.",
+    "after_verify": "replace_with_pointer",
+    "after_verify_options": [
+      "keep_local",
+      "replace_with_pointer",
+      "delete_local"
+    ],
     "after_verify_note": "Default keep_local (safest): upload + verify, leave originals untouched. Switch to replace_with_pointer (leaves a .cloudref json) or delete_local ONLY after you trust the migration and have verified checksums."
   }
 }

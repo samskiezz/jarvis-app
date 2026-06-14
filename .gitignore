@@ -115,3 +115,6 @@ server/data/*_state.json
 *.optimiser.bak
 server/data/media/*.preview.png
 server/jarvis_live.html.bak.*
+
+# real secrets — gitignored override of the .env.* commit convention
+.env.secrets
