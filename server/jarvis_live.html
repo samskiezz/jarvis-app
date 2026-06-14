@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='29';
+  var KEY='__jv',VER='30';
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2414,7 +2414,6 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bswarms\b/.test(l)){openAppSheet('swarms');return true;}
   if(/\bopen\b.*\blibrary\b/.test(l)){setMode('library');return true;}
   if(/\bopen\b.*\b(graph )?search\b/.test(l)){openAppSheet('search');return true;}
-  if(/\bopen\b.*\bcelestial\b/.test(l)){openAppSheet('celestial');return true;}
   if(/\bopen\b.*\bsuggestions\b/.test(l)){openAppSheet('suggestions');return true;}
   if(/\bopen\b.*\bdoctor\b/.test(l)){openAppSheet('doctor');return true;}
   if(/\bopen\b.*\bbudget\b/.test(l)){openAppSheet('budget');return true;}
@@ -6139,7 +6138,6 @@ const MINI_APPS=[
   {id:'swarms',ic:'🐝',t:'Swarms',d:'Swarm mission control'},
   {id:'library',ic:'📚',t:'Library',d:'Generated images & GLB models'},
   {id:'search',ic:'🔎',t:'Graph Search',d:'Ontology search across the brain'},
-  {id:'celestial',ic:'🌌',t:'Celestial',d:'Repo-to-universe map'},
   {id:'suggestions',ic:'💡',t:'Suggestions',d:'AI self-dev ideas'},
   {id:'budget',ic:'💰',t:'Budget',d:'Token governor state'},
   {id:'architecture',ic:'🏛',t:'Architecture',d:'10-layer JARVIS map'},
@@ -6217,7 +6215,11 @@ let _appSheetId=null;
 // Consolidated apps open their parent hub on the matching tab — keeps voice/text/dock access working.
 const HUB_OF={vitals:'syshealth',health:'syshealth',doctor:'syshealth',brain:'syshealth',debugger:'syshealth',optimizer:'syshealth',datasets:'intel',reports:'intel',alerts:'intel',cases:'intel',boards:'intel'};
 let _hubTab='';
-function openAppSheet(id){if(HUB_OF[id]){_hubTab=id;id=HUB_OF[id];}else{_hubTab='';}const app=MINI_APPS.find(m=>m.id===id);if(!app)return;_appSheetId=id;$('asTitle').textContent=app.ic+' '+app.t;$('ovAppSheet').classList.add('open');renderAppSheet();}
+function openAppSheet(id){
+  // SAFETY: the loader (#boot, z-index 200) must never sit on top of an open app — otherwise every
+  // button in the sheet is unclickable. Force it gone here so apps opened by tap OR voice are always live.
+  try{var _b=document.getElementById('boot'); if(_b&&_b.style.display!=='none'){_b.classList.add('gone');_b.style.display='none';_engaged=true;}}catch(_){}
+  if(HUB_OF[id]){_hubTab=id;id=HUB_OF[id];}else{_hubTab='';}const app=MINI_APPS.find(m=>m.id===id);if(!app)return;_appSheetId=id;$('asTitle').textContent=app.ic+' '+app.t;$('ovAppSheet').classList.add('open');renderAppSheet();}
 let _sheetPoll=null;
 function closeAppSheet(){$('ovAppSheet').classList.remove('open');_appSheetId=null;if(_hfPoll){clearInterval(_hfPoll);_hfPoll=null;}if(_tripoPoll){clearInterval(_tripoPoll);_tripoPoll=null;}if(_optPoll){clearInterval(_optPoll);_optPoll=null;}if(_uwPoll){clearInterval(_uwPoll);_uwPoll=null;}if(_sheetPoll){clearInterval(_sheetPoll);_sheetPoll=null;}try{if(window._tlAudio){window._tlAudio.pause();}}catch(_){}}
 function refreshAppSheet(){renderAppSheet();}
@@ -6408,7 +6410,7 @@ async function generateTheme(style){const prompt=$('themePrompt')?($('themePromp
 
 const APP_ENDPOINTS={
   vitals:'/vitals',health:'/healthreport',agent:'/agent/tools',tasks:'/tasks',swarms:'/swarms',
-  library:'/library',search:'/search?q=',celestial:'/celestial',suggestions:'/suggestions',
+  library:'/library',search:'/search?q=',suggestions:'/suggestions',
   doctor:'/doctor',budget:'/budget',brain:'/gpu/brain',architecture:'/v1/jarvis/architecture',
   memory:'/v1/jarvis/memory?user_id=anonymous&limit=20',inbox:'/v1/jarvis/notifications?user_id=anonymous&limit=20',
   datasets:'/v1/datasets',reports:'/v1/reports',alerts:'/v1/alerts',cases:'/v1/cases',assets:'/v1/jarvis/assets/status',
@@ -6621,14 +6623,6 @@ function renderAppData(id,d){
       const sub=it.detail||it.description||it.status||it.type||it.body||'';
       return '<div class=as-card><b>'+escapeHtml(String(title))+'</b><span>'+escapeHtml(String(sub))+'</span></div>';
     }).join('');
-  }
-  if(id==='celestial'){
-    const seed=d.seed||{},gen=d.generated||{};const nodes=(gen.nodes||[]).length;
-    const sys=(seed.scale&&(seed.scale.systems||seed.scale.count))||'';
-    return '<div class=as-card><b>🌌 Celestial map</b><span>Your system rendered as a living universe — explore it in 3D behind this panel.</span></div>'+
-      '<div class=as-row><span class=as-k>Bodies mapped</span><span class=as-v>'+escapeHtml(String(nodes||sys||'—'))+'</span></div>'+
-      (seed.generated_at?'<div class=as-row><span class=as-k>Generated</span><span class=as-v>'+escapeHtml(String(seed.generated_at).slice(0,10))+'</span></div>':'')+
-      '<button class=as-run style="margin-top:12px" onclick="closeAppSheet()">🌌 View the 3D universe</button>';
   }
   // rich object render — show nested objects/arrays instead of dropping them
   const html=Object.entries(d).map(([k,v])=>_asVal(k,v,0)).join('');
