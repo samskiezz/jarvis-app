@@ -1556,7 +1556,7 @@ def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
     which itself records telemetry and escalates/falls back per the ladder. If the seam is unavailable
     or empty we fall back to the original direct box loop, and finally to a reassuring fixed line — so
     the mum's lifeline reply is NEVER blank. `address` is 'sir' (male) or 'ma'am' (female)."""
-    sysmsg = _persona_sysmsg(address)
+    sysmsg = _persona_sysmsg(address) + _user_mem_preamble(prompt)   # remember the person across sessions
     # FAST PATH: if the Vast brain (serious computation) is unreachable, don't hang 25s on dead sockets —
     # reply instantly & warmly from Hostinger. Vast is used ONLY when it's actually up.
     if not _brain_reachable():
@@ -1570,15 +1570,36 @@ def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
         if isinstance(r, dict) and r.get("ok"):
             txt = (r.get("content") or "").strip()
             if txt:
+                _remember_async(prompt, txt)            # learn durable facts about the user from this turn
                 return txt
     except Exception:  # noqa: BLE001
         pass
     # FALLBACK 1: direct box ladder (the proven original path).
     txt = _chat_direct_box(sysmsg, prompt, history)
     if txt:
+        _remember_async(prompt, txt)
         return txt
     # FALLBACK 2: never leave her without a voice (warm, context-aware, on-Hostinger).
     return _local_reply(prompt, address)
+
+
+def _user_mem_preamble(prompt: str) -> str:
+    """Inject what JARVIS remembers about the user into his system prompt (never raises)."""
+    try:
+        from server.services import user_memory as _UM
+        return _UM.preamble(prompt)
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _remember_async(prompt: str, reply: str) -> None:
+    """Fire-and-forget extraction of durable user facts so the chat reply is never slowed."""
+    try:
+        import threading
+        from server.services import user_memory as _UM
+        threading.Thread(target=lambda: _UM.extract_and_store(prompt, reply), daemon=True).start()
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def _jarvis_chat_bounded(prompt: str, history=None, address: str = "ma'am") -> str:
