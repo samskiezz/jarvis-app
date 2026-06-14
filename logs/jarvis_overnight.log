@@ -5,3 +5,4 @@
 2026-06-14 F05 SpokenStatusReport: already wired in JarvisBrain.jsx (SpokenStatusReport.jsx); isStatusQuery + buildStatusScript fetch /v1/jarvis/system/status + /v1/cinematic/brain; speaks CPU/mem/load/nodes/synapses via /v1/voice/tts; backlog marked done.
 2026-06-14 F06 WorldIncidentFeed: mounted in App.jsx; mini Three.js globe + earthquake list from getLiveIntel; INCIDENTS toggle bottom-left; 60s poll; vite build exit 0.
 [2026-06-14] F07 Markets ticker: mounted MarketsTicker.jsx in App.jsx; scrolling crypto+FX ticker strip + expandable grid; voice intent wired via JarvisBrain; build exit 0.
+2026-06-14 F08 DONE — EntityQuickSearch.jsx mounted in App.jsx; Ctrl+Shift+E + voice "find/search/who is <term>" opens search panel; queries /v1/graph/subgraph + /entities/IntelProfile; click speaks one-line dossier via JarvisBrain TTS; build exit 0
