@@ -89,6 +89,7 @@ import OpsInvCorrelator from '@/components/cinematic/OpsInvCorrelator';
 import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
 import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
 import EntityActivityHeatmap from '@/components/cinematic/EntityActivityHeatmap';
+import ThreatActorNetwork from '@/components/cinematic/ThreatActorNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -186,6 +187,7 @@ function App() {
             <InvestmentContactMapper />
             <KnowledgeReportAuditor />
             <EntityActivityHeatmap />
+            <ThreatActorNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
