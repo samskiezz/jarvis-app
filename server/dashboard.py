@@ -2980,6 +2980,16 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         elif self.path.startswith("/budget"):
             from server.services import token_governor as TG
             self._send(json.dumps(TG.state()).encode(), "application/json")
+        elif self.path.startswith("/version"):
+            ver = ""
+            try:
+                import re as _re
+                with open(os.path.join(os.path.dirname(__file__), "jarvis_live.html"), encoding="utf-8") as _f:
+                    m = _re.search(r"VER='(\d+)'", _f.read(8000))
+                    ver = m.group(1) if m else ""
+            except Exception:  # noqa: BLE001
+                ver = ""
+            self._send(json.dumps({"ver": ver}).encode(), "application/json")
         elif self.path.startswith("/llm/models"):
             try:
                 from server.services import tiered_llm as _T

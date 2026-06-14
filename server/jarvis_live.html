@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='36';
+  var KEY='__jv',VER='37'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -56,6 +56,15 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
     location.replace(location.pathname+'?'+params.toString()+location.hash);
   }
 }catch(e){}})();
+/* AUTO-BUST: if a service worker / PWA cache is serving an OLDER build than the server, force ONE fresh
+   reload (unregister SWs + clear caches). Fixes "the app looks stale/broken after an update" with no manual clear. */
+(function(){try{fetch('version?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+  var sv=(d&&d.ver)?String(d.ver):'';var cur=String(window.__JV_VER||'');
+  if(sv&&cur&&sv!==cur&&!sessionStorage.getItem('verfix'+sv)){sessionStorage.setItem('verfix'+sv,'1');
+    try{if('serviceWorker'in navigator)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(x){try{x.unregister();}catch(_){}});});}catch(_){}
+    try{if(window.caches){caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k);}));}).then(function(){location.reload(true);});}else{location.reload(true);}}catch(_){location.reload(true);}
+  }
+}).catch(function(){});}catch(e){}})();
 </script>
 <meta name=theme-color content="#03050A">
 <style>
