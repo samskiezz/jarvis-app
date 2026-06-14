@@ -2149,8 +2149,8 @@ function webSpeakFallback(t){try{try{_ttsAudio.pause();}catch(_){}{}  // STOP th
 /* PRE-WARMED phrases: fetched as blobs at page load so they play INSTANTLY in his real voice on tap
    (the clone takes ~8s on a novel phrase — without this the greeting timed out → female web voice). */
 const _preTTS={};
-(function(){ ['JARVIS online. How may I help?',
-  "I'm right here with you. I'm having a little trouble hearing the network just now, but I'm not going anywhere. Take a breath — you're safe.",
+(function(){ ["JARVIS 'ere — online and all yours. What can I do for ya?",
+  "I'm right 'ere with ya. Bit of trouble 'earing the network just now, but I ain't going anywhere. Take a breath — you're safe.",
   'Volumetric god-rays from the reactor are active and pulse when I speak.'].forEach(t=>{
   fetch('tts?text='+encodeURIComponent(t)).then(r=>r.ok?r.blob():null)
     .then(b=>{ if(b&&b.size>4000)_preTTS[t]=URL.createObjectURL(b); }).catch(()=>{}); }); })();
@@ -5769,7 +5769,7 @@ function engage(){if(_engaged)return;_engaged=true;
   unlockAudio();                                            // unlock playback within the user gesture
   // greet WITHIN the gesture (no setTimeout) so the male /tts voice plays — a delay drops us to the
   // device's default (female) Web-Speech voice on mobile. British-butler tone, addresses her directly.
-  try{ jarvisSpeak("JARVIS online. How may I help?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
+  try{ jarvisSpeak("JARVIS 'ere — online and all yours. What can I do for ya?"); }catch(_){}   // NEUTRAL greeting — no ma'am/sir until the user speaks and their voice gender is assessed
   try{ if(typeof micToggle==='function'&&!_rec) micToggle(); }catch(_){}   // ALWAYS-ON continuous listening + barge-in, started within the gesture
   // UPFRONT ACCESS (carer setup, within this gesture): pre-warm the MICROPHONE only (so always-on
   // listening works), then open the accessible Device Access panel so the carer can grant camera/files/
@@ -5800,7 +5800,7 @@ setTimeout(()=>{if(!_engaged){$('boot').classList.add('gone');setTimeout(()=>{$(
   // (greeting + always-on listening) runs on the FIRST tap instead of being silently skipped forever.
   addEventListener('pointerdown',function _voiceOnce(){removeEventListener('pointerdown',_voiceOnce);
     try{unlockAudio();}catch(_){}
-    try{jarvisSpeak("JARVIS online. How may I help?");}catch(_){}
+    try{jarvisSpeak("JARVIS 'ere — online and all yours. What can I do for ya?");}catch(_){}
     try{if(typeof micToggle==='function'&&!_rec)micToggle();}catch(_){}} ,{once:true});
 }},2200);
 

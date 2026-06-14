@@ -1404,9 +1404,10 @@ def _persona_sysmsg(address: str = "ma'am") -> str:
     else:
         addr = "sir" if a in ("sir", "male", "man", "m") else "ma'am"
         base = _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with " +
-                             ("a gentleman; address him as \"sir\"" if addr == "sir"
-                              else "a lady; address her as \"ma'am\"") +
-                             " — used naturally and sparingly, not in every sentence.")
+                             ("a gentleman; address him cockney-style as \"guv\", \"guv'nor\", \"boss\" or \"sir\""
+                              if addr == "sir"
+                              else "a lady; address her cockney-style as \"madam\", \"miss\", \"m'lady\" or \"ma'am\"") +
+                             " — mixed up, used naturally and sparingly, and never the same one twice in a row.")
     return base + _mode_directive()
 
 
@@ -1491,26 +1492,49 @@ def _brain_reachable(timeout: float = 2.0) -> bool:
 def _local_reply(prompt: str, address: str = "") -> str:
     """Warm, instant, on-Hostinger reply when the Vast brain (serious computation) is unreachable —
     so JARVIS is NEVER silent or slow for her. Handles the common things; stays in persona, never robotic."""
+    import random as _r
     p = (prompt or "").lower().strip()
-    a = (" " + address) if address in ("sir", "ma'am") else ""
+    al = str(address or "").lower()
+    # cockney address, picked fresh each time so it never sounds like a loop
+    a = (" " + _r.choice(["guv", "guv'nor", "boss"])) if al in ("sir", "male", "man", "m") else \
+        (" " + _r.choice(["madam", "miss", "m'lady"])) if al in ("ma'am", "female", "woman", "f") else ""
     def has(*ws): return any(w in p for w in ws)
+    def pick(opts): return _r.choice(opts)
+    # SAFETY first — stays clear about the action every time, just varies the wording.
     if has("help", "fallen", "fall", "emergency", "ambulance", "can't breathe", "cant breathe", "hurt", "pain", "scared", "911", "000"):
-        return f"I'm here{a}. If this is an emergency I can call for help — say 'call my son' or 'call emergency'. I'm not leaving you."
+        return pick([
+            f"I'm right 'ere{a}. If it's an emergency I'll get help this second — say 'call my son' or 'call emergency'. I ain't going anywhere.",
+            f"I've got ya{a}. If you need help, just say 'call my son' or 'call emergency' and I'll do it now — I'm not leaving you.",
+            f"Steady{a}, I'm with ya. Say the word — 'call my son' or 'call emergency' — and help's on its way. I'm staying put.",
+        ])
     if has("hello", "hi ", "hey", "you there", "are you there", "jarvis"):
-        return f"Yes{a}, I'm right here. What can I do for you?"
+        return pick([f"'Ello{a} — what can I do for ya?", f"Right 'ere{a}. What's first?",
+                     f"Yes{a}, I'm about. What d'you need?", f"All ears{a}. What's the job?",
+                     f"'Ere I am{a}. Go on, then — what'll it be?"])
     if has("how are you", "you ok", "you okay"):
-        return f"All systems steady and watching over you{a}. More to the point — how are you feeling?"
+        return pick([f"Ticking over lovely{a} — more to the point, how you keepin'?",
+                     f"Steady as you like{a}, eyes on everything. How you feelin'?",
+                     f"Right as rain{a}. Never mind me — how's yourself?",
+                     f"All sorted my end{a}. How are you doin'?"])
     if has("thank", "cheers", "appreciate"):
-        return f"Always{a}. That's what I'm here for."
+        return pick([f"Anytime{a} — that's what I'm 'ere for.", f"Don't mention it{a}.",
+                     f"Pleasure's all mine{a}.", f"Any time at all{a}, no bother."])
     if has("love you", "good night", "goodnight", "night night"):
-        return f"Rest easy{a}. I'll be right here through the night."
+        return pick([f"Night{a} — I've got the place, sleep sound.", f"Rest easy{a}, I'll be right 'ere all night.",
+                     f"Sweet dreams{a}. I'm keepin' watch.", f"Off you pop{a} — I'll mind everything till morning."])
     if has("who are you", "what are you", "your name"):
-        return f"I'm JARVIS{a} — your assistant, here with you and looking after things."
+        return pick([f"I'm JARVIS{a} — your man about the 'ouse, lookin' after the lot.",
+                     f"JARVIS{a}, at your service — I keep everything ticking for ya.",
+                     f"Name's JARVIS{a}. I'm 'ere to run things and watch over ya."])
     if has("time", "what day", "date"):
         import datetime as _d
-        return f"It's {_d.datetime.now().strftime('%A, %-d %B, %-I:%M %p')}{a}."
-    return (f"I'm with you{a}. My deeper reasoning is offline for a moment, but I can still hear you, "
-            f"speak, show your photos and files, watch over you and call your family — just tell me what you need.")
+        return pick([f"It's {_d.datetime.now().strftime('%A, %-d %B, %-I:%M %p')}{a}.",
+                     f"Just gone {_d.datetime.now().strftime('%-I:%M %p')}{a} — {_d.datetime.now().strftime('%A the %-d')}."])
+    return pick([
+        f"I'm with ya{a}. Me deeper thinkin's havin' a quick breather, but I can still 'ear ya, talk, show your photos and files, keep watch and ring the family — just say the word.",
+        f"Right 'ere{a}. Brain's just catchin' its breath for a tick, but I can still listen, chat, pull up your photos and files and call your people — what d'you need?",
+        f"Gotcha{a}. Me clever bits are reconnectin', but I'm still 'ere — talk to me, and I'll show you things, keep an eye out, or ring the family if you like.",
+    ])
 
 
 def _local_reply_fast_path(prompt: str) -> bool:
@@ -1765,7 +1789,7 @@ _DEF_TEMPO = float(os.environ.get("JARVIS_VOICE_TEMPO", "1.0"))
 _XTTS_GPU_URL = os.environ.get("XTTS_GPU_URL", "http://127.0.0.1:8096/synthesize")
 _XTTS_URL = os.environ.get("XTTS_URL", "http://127.0.0.1:8097/synthesize")
 _XTTS_GPU_TIMEOUT = float(os.environ.get("XTTS_GPU_TIMEOUT", "20"))   # GPU: fast warm, but allow the first call + tunnel
-_XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "12"))           # CPU fallback: novel text is slow → Piper after this
+_XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "30"))           # CPU clone is slow but it's the REAL (cloned) voice — wait for it before falling back to Piper
 _XTTS_ENABLED = os.environ.get("XTTS_ENABLED", "1") == "1"
 
 
