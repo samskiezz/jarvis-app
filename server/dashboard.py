@@ -2221,12 +2221,16 @@ def _proposal(sid: str) -> dict:
 
 # ── AUTONOMOUS ENGINE observability feed (what the 24/7 loop actually landed) ─
 def _auto_improve_feed(limit: int = 25) -> dict:
-    """Read the autonomous self-improvement journal and surface recent activity so the owner can SEE
-    every change the loop made (title + category + helpfulness score + outcome) and revert if needed.
-    Pure read of server/data/auto_improve.log.jsonl — never mutates anything."""
+    """Read the autonomous self-improvement journal and surface recent activity + the BASELINE/velocity
+    metrics so the owner can SEE every change the loop made (title, category, builder, 1,000-pt score,
+    verdict, outcome) AND the rate it is improving the app at. Pure read of
+    server/data/auto_improve.log.jsonl — never mutates anything."""
     path = os.path.join(ROOT, "server", "data", "auto_improve.log.jsonl")
-    lands, errors, cats, scores = [], 0, {}, []
-    last_cycle = None
+    items, errors, cats, scores = [], 0, {}, []
+    builders = {}                     # builder -> {attempts, landed}
+    counts = {"landed": 0, "rejected": 0, "gate_failed": 0, "skipped": 0, "rolled_back": 0, "dry_run": 0}
+    cycles, land_ts = 0, []
+    last_cycle, first_ts, last_ts = None, None, None
     try:
         with open(path, encoding="utf-8") as fh:
             for line in fh:
@@ -2238,34 +2242,72 @@ def _auto_improve_feed(limit: int = 25) -> dict:
                 except Exception:  # noqa: BLE001
                     continue
                 ev = e.get("event")
-                if ev in ("cycle_start", "cycle_end", "loop_start"):
+                ts = e.get("ts")
+                if isinstance(ts, (int, float)):
+                    first_ts = ts if first_ts is None else min(first_ts, ts)
+                    last_ts = ts if last_ts is None else max(last_ts, ts)
+                if ev == "cycle_start":
+                    cycles += 1
                     last_cycle = e
-                elif ev in ("feature_land", "feature_gate_pass_dryrun"):
+                elif ev in ("cycle_end", "loop_start"):
+                    last_cycle = e
+                elif ev in ("feature_land", "feature_gate_pass_dryrun", "feature_reject"):
                     sc = e.get("score")
                     if isinstance(sc, (int, float)):
                         scores.append(sc)
                     cat = (e.get("category") or "other")
                     cats[cat] = cats.get(cat, 0) + 1
-                    lands.append({
-                        "title": e.get("title", "?"),
-                        "category": cat,
-                        "score": sc,
-                        "reason": e.get("reason", ""),
-                        "landed": ev == "feature_land" and bool(e.get("landed", e.get("ok", True))),
-                        "dry_run": ev == "feature_gate_pass_dryrun",
-                        "ts": e.get("ts"),
+                    b = e.get("builder") or "claude"
+                    builders.setdefault(b, {"attempts": 0, "landed": 0})
+                    builders[b]["attempts"] += 1
+                    landed = ev == "feature_land" and bool(e.get("landed", True)) and not e.get("rolled_back")
+                    if ev == "feature_land":
+                        if e.get("rolled_back"):
+                            counts["rolled_back"] += 1
+                        elif landed:
+                            counts["landed"] += 1
+                            builders[b]["landed"] += 1
+                            if isinstance(ts, (int, float)):
+                                land_ts.append(ts)
+                    elif ev == "feature_reject":
+                        counts["rejected"] += 1
+                    else:
+                        counts["dry_run"] += 1
+                    items.append({
+                        "title": e.get("title", "?"), "category": cat, "builder": b,
+                        "score": sc, "verdict": e.get("verdict"), "advancement": e.get("advancement"),
+                        "delta": e.get("delta"), "reason": e.get("reason", ""),
+                        "landed": landed, "rolled_back": bool(e.get("rolled_back")),
+                        "dry_run": ev == "feature_gate_pass_dryrun", "rejected": ev == "feature_reject",
+                        "ts": ts,
                     })
-                elif ev in ("ideate_failed", "cycle_crash", "rollback"):
+                elif ev == "feature_gate_fail":
+                    counts["gate_failed"] += 1
+                elif ev == "feature_skip":
+                    counts["skipped"] += 1
+                elif ev in ("ideate_failed", "cycle_crash"):
                     errors += 1
     except FileNotFoundError:
-        return {"ok": True, "items": [], "note": "engine has not run yet", "summary": {}}
+        return {"ok": True, "items": [], "note": "engine has not run yet", "summary": {}, "baseline": {}}
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": str(e)[:160], "items": []}
-    lands.reverse()
+    items.reverse()
     avg = round(sum(scores) / len(scores), 1) if scores else None
-    return {"ok": True, "items": lands[:limit],
-            "summary": {"total": len(lands), "avg_score": avg, "by_category": cats, "errors": errors,
-                        "last_cycle": last_cycle}}
+    attempts = counts["landed"] + counts["rejected"] + counts["gate_failed"] + counts["rolled_back"]
+    pass_rate = round(100.0 * counts["landed"] / attempts, 1) if attempts else None
+    span_days = ((last_ts - first_ts) / 86400.0) if (first_ts and last_ts and last_ts > first_ts) else 0
+    per_day = round(counts["landed"] / span_days, 2) if span_days >= 0.25 else None
+    baseline = {
+        "landed": counts["landed"], "rejected": counts["rejected"], "gate_failed": counts["gate_failed"],
+        "rolled_back": counts["rolled_back"], "skipped": counts["skipped"],
+        "attempts": attempts, "pass_rate_pct": pass_rate, "cycles": cycles,
+        "landed_per_day": per_day, "avg_score": avg, "by_builder": builders,
+        "tracking_days": round(span_days, 2),
+    }
+    return {"ok": True, "items": items[:limit],
+            "summary": {"total": len(items), "avg_score": avg, "by_category": cats, "errors": errors,
+                        "last_cycle": last_cycle},
+            "baseline": baseline}
 
 
 # ── AGENT OS exposure (the 17-tool registry + the planner/executor core) ──────

@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='39'; window.__JV_VER=VER;
+  var KEY='__jv',VER='40'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6146,6 +6146,7 @@ const MINI_APPS=[
   {id:'intel',ic:'🛰',t:'Intelligence',d:'Datasets, reports, alerts, cases, boards'},
   {id:'scale',ic:'📊',t:'Scale',d:'Live A-Z feature counter'},
   {id:'agent',ic:'🤖',t:'Agent OS',d:'Tool registry + run commands'},
+  {id:'selfdev',ic:'🧬',t:'Self-Improve',d:'Autonomous engine: scores, categories & improvement rate'},
   {id:'tasks',ic:'📋',t:'Tasks',d:'Live task daemon list'},
   {id:'swarms',ic:'🐝',t:'Swarms',d:'Swarm mission control'},
   {id:'library',ic:'📚',t:'Library',d:'Generated images & GLB models'},
@@ -6477,6 +6478,7 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='syshealth'){body.innerHTML=renderSysHealthSheet();sysHealthTab(['vitals','health','doctor','brain','debugger','optimizer'].includes(_hubTab)?_hubTab:'vitals');return;}
   if(_appSheetId==='intel'){body.innerHTML=renderIntelSheet();intelTab(['datasets','reports','alerts','cases','boards'].includes(_hubTab)?_hubTab:'datasets');return;}
   if(_appSheetId==='memory'){body.innerHTML=renderMemorySheet();loadMemory();return;}
+  if(_appSheetId==='selfdev'){body.innerHTML=renderSelfDevSheet();loadSelfDev();return;}
   if(_appSheetId==='agent'){body.innerHTML=renderAgentSheet();loadAgentSheet();return;}
   if(_appSheetId==='higgsfield'){body.innerHTML=renderHiggsfieldSheet();higgsfieldModeChange();higgsfieldTabChange();return;}
   if(_appSheetId==='tripo3d'){body.innerHTML=renderTripo3dSheet();tripo3dModeChange();return;}
@@ -6750,6 +6752,41 @@ function renderMemorySheet(){return `<div class=as-form>
 </div>`;}
 async function loadMemory(){const out=$('memList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/jarvis/memory?user_id=anonymous&limit=50');const d=await r.json();out.innerHTML=renderAppData('memory',d);}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
 async function memoryAdd(){const k=$('memKey'),v=$('memVal');if(!k||!k.value.trim()||!v||!v.value.trim()){showInplaceAlert('Enter a key and value');return;}try{const r=await fetch('/v1/jarvis/memory?user_id=anonymous&token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k.value.trim(),value:v.value.trim(),importance:0.6})});const d=await r.json();showInplaceAlert(d&&d.ok?'Remembered':'Failed');if(d&&d.ok){k.value='';v.value='';loadMemory();}}catch(e){showInplaceAlert('Memory error: '+e);}}
+
+/* ================ Self-Improve (autonomous engine: scores, categories, rate) ================ */
+function renderSelfDevSheet(){return `<div class=as-form>
+  <div id=selfdevBaseline><div class=as-empty>Loading…</div></div>
+  <div style="font-weight:700;margin:12px 0 6px">Recent changes</div>
+  <div id=selfdevList></div>
+</div>`;}
+function _sdKV(k,v){return '<div style="flex:1 1 30%;min-width:90px"><div style="opacity:.6;font-size:11px">'+k+'</div><div style="font-weight:700;font-size:15px">'+v+'</div></div>';}
+async function loadSelfDev(){
+  const b=$('selfdevBaseline'),l=$('selfdevList'); if(!b)return;
+  b.innerHTML='<div class=as-empty>Loading…</div>';
+  try{
+    const r=await fetch('/auto_improve?limit=25'); const d=await r.json();
+    const m=d.baseline||{};
+    b.innerHTML='<div style="border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px">'
+      +'<div style="font-weight:700;margin-bottom:8px">🧬 Baseline &amp; improvement rate</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:10px">'
+      +_sdKV('Landed',(m.landed!=null?m.landed:0))+_sdKV('Pass rate',(m.pass_rate_pct==null?'—':m.pass_rate_pct+'%'))
+      +_sdKV('Avg score',(m.avg_score==null?'—':m.avg_score+'/1000'))+_sdKV('Per day',(m.landed_per_day==null?'—':m.landed_per_day))
+      +_sdKV('Cycles',(m.cycles!=null?m.cycles:0))+_sdKV('Rejected',(m.rejected!=null?m.rejected:0))
+      +_sdKV('Gate-failed',(m.gate_failed!=null?m.gate_failed:0))+_sdKV('Rolled back',(m.rolled_back!=null?m.rolled_back:0))
+      +'</div></div>';
+    const items=d.items||[];
+    l.innerHTML=items.length?items.map(function(it){
+      var col=it.landed?'#3fb950':(it.rejected?'#f85149':'#d29922');
+      var tag=it.landed?'✅ landed':(it.rejected?'✋ rejected':(it.dry_run?'🧪 dry-run':(it.rolled_back?'↩ rolled back':'')));
+      return '<div style="border-left:3px solid '+col+';padding:6px 10px;margin-bottom:6px;background:rgba(255,255,255,.03);border-radius:6px">'
+        +'<div style="font-weight:600">'+escapeHtml(it.title||'?')+'</div>'
+        +'<div style="opacity:.7;font-size:12px">'+escapeHtml(it.category||'')+' · '+escapeHtml(it.builder||'')+' · '
+        +(it.score==null?'—':it.score+'/1000')+(it.verdict?' · '+escapeHtml(it.verdict):'')+(tag?' · '+tag:'')+'</div>'
+        +(it.reason?'<div style="opacity:.65;font-size:12px;margin-top:2px">'+escapeHtml(String(it.reason).slice(0,160))+'</div>':'')
+        +'</div>';
+    }).join(''):'<div class=as-empty>No changes recorded yet — the engine runs continuously (every ~3h).</div>';
+  }catch(e){b.innerHTML='<div class=as-err>'+escapeHtml(String(e&&e.message||e))+'</div>';}
+}
 
 /* ================ Agent OS console (tool registry + run commands) ================ */
 function renderAgentSheet(){return `<div class=as-form>
