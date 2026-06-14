@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -43,6 +44,18 @@ PROTECTED = {"scripts/auto_improve.py", "scripts/auto_improve_gate.py", "scripts
              "server/auth.py", "server/config.py"}
 # Minimum 1,000-pt audit score required to auto-merge (the spec's auto-pass gate).
 MERGE_MIN_SCORE = int(os.environ.get("AUTO_MERGE_MIN", "850"))
+MISSION_FILE = os.path.join(ROOT, "config", "jarvis_mission.md")
+
+
+def mission_brief() -> str:
+    """The compact mission/goal directive injected into every builder/ideator prompt so all LLMs share
+    the same understanding: the date, who they serve, and that fewer tokens = more capability for the owner."""
+    try:
+        t = open(MISSION_FILE, encoding="utf-8").read()
+        m = re.search(r"<!--INJECT-->(.*?)<!--/INJECT-->", t, re.S)
+        return (m.group(1) if m else t).strip()[:1100]
+    except Exception:  # noqa: BLE001
+        return ""
 HEALTH = [("http://127.0.0.1:8001/health", 200), ("http://127.0.0.1:8095/jarvis_live.html", 200)]
 
 
@@ -91,6 +104,7 @@ def ideate(n: int, tier: str) -> list[dict]:
     except Exception:  # noqa: BLE001
         ctx = ""
     prompt = (
+        mission_brief() + "\n\n"
         "You are the product brain of the JARVIS assistant app (FastAPI backend + a single-page "
         "glassmorphic dashboard server/jarvis_live.html with mini-apps, a 3D universe, voice, and an "
         "LLM brain). Briefly RESEARCH current app/UX best practices on the web/forums, then propose %d NEW, "
@@ -161,6 +175,7 @@ def _implement_kimi(feat: dict) -> bool:
         log({"event": "kimi_skip", "title": feat.get("title"), "reason": "target too large for rewrite", "target": rel})
         return False
     prompt = (
+        mission_brief() + "\n\n"
         "You are editing the JARVIS app. Implement this feature by returning the COMPLETE, updated contents "
         "of the file below and NOTHING else — no prose, no markdown fences.\n"
         "Rules: smallest correct change; do NOT break existing code; keep all imports/exports intact; match "
@@ -187,6 +202,7 @@ def _implement_kimi(feat: dict) -> bool:
 def _implement_claude(feat: dict, timeout=1800) -> bool:
     """Claude Code implements the feature in place. Returns True if it ran (changes may or may not exist)."""
     prompt = (
+        mission_brief() + "\n\n"
         "Autonomously implement this NEW user-facing feature in the JARVIS app, COMPLETELY and SAFELY.\n\n"
         "FEATURE: %s\n%s\n\n"
         "RULES (follow exactly):\n"

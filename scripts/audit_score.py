@@ -63,9 +63,20 @@ HARD_BLOCKER_KEYS = {
     "auth_data_deploy_db_weakened", "rollback_impossible", "bypasses_review", "improvement_not_implemented",
 }
 
-MODEL = os.environ.get("AUDIT_MODEL", "claude-opus-4-8")
+MODEL = os.environ.get("AUDIT_MODEL", "claude-opus-4-8")          # heavyweight judge for risky changes
+MODEL_LIGHT = os.environ.get("AUDIT_MODEL_LIGHT", "claude-sonnet-4-6")  # cheaper judge for normal changes
 # minimum final score required to auto-merge (spec's auto-pass gate = 850)
 MERGE_MIN = int(os.environ.get("AUTO_MERGE_MIN", "850"))
+MISSION_FILE = os.path.join(ROOT, "config", "jarvis_mission.md")
+
+
+def _mission() -> str:
+    try:
+        t = open(MISSION_FILE, encoding="utf-8").read()
+        m = re.search(r"<!--INJECT-->(.*?)<!--/INJECT-->", t, re.S)
+        return (m.group(1) if m else t).strip()[:1100]
+    except Exception:  # noqa: BLE001
+        return ""
 
 
 def _run(cmd, timeout=120, cwd=ROOT, env=None):
@@ -112,7 +123,9 @@ SCHEMA_HINT = (
 
 def _prompt(feat, diff, gate_report, depth_note) -> str:
     gate_txt = json.dumps(gate_report, indent=2)[:2000] if gate_report else "no gate report supplied"
+    mission = _mission()
     return (
+        (mission + "\n\n" if mission else "") +
         "You are Claude acting as the senior audit and scoring engine for AI-generated code changes for a "
         "self-hosted app (FastAPI + a stdlib dashboard) used daily by a DISABLED owner who depends on it. "
         "Score whether this change GENUINELY advances the app or damages it. Do NOT reward claimed "
@@ -152,12 +165,12 @@ def _prompt(feat, diff, gate_report, depth_note) -> str:
     )
 
 
-def _claude_judge(prompt: str, timeout: int = 360) -> str:
+def _claude_judge(prompt: str, model: str = MODEL, timeout: int = 360) -> str:
     pf = "/tmp/_audit_prompt.txt"
     of = "/tmp/_audit_out.json"
     with open(pf, "w", encoding="utf-8") as fh:
         fh.write(prompt)
-    cmd = ('claude -p "$(cat %s)" --model %s --output-format json > %s 2>&1' % (pf, MODEL, of))
+    cmd = ('claude -p "$(cat %s)" --model %s --output-format json > %s 2>&1' % (pf, model, of))
     _run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})
     try:
         raw = open(of, encoding="utf-8").read()
@@ -284,14 +297,17 @@ def audit_score(feat: dict, files: list, gate_report=None) -> dict:
                 "hard_blockers": [{"key": "improvement_not_implemented", "reason": "no change on disk"}],
                 "gate_passed": gate_passed}
     depth, note = _risk_depth(diff, files or [])
-    text = _claude_judge(_prompt(feat, diff, gate_report, note))
+    # token economy: normal-risk changes are judged by the cheaper model; high/critical use the opus judge.
+    model = MODEL_LIGHT if depth == "normal" else MODEL
+    text = _claude_judge(_prompt(feat, diff, gate_report, note), model=model)
     judgment = _parse(text)
     if not judgment:
         return {"verdict": "FAIL", "merge_ok": False, "final_score": 0,
                 "error": "audit judge returned unparseable output", "raw": (text or "")[:400],
-                "risk_depth": depth, "gate_passed": gate_passed}
+                "risk_depth": depth, "audit_model": model, "gate_passed": gate_passed}
     result = compute(judgment, gate_passed)
     result["risk_depth"] = depth
+    result["audit_model"] = model
     result["title"] = feat.get("title", "?")
     return result
 
