@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='37'; window.__JV_VER=VER;
+  var KEY='__jv',VER='38'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6670,7 +6670,7 @@ function renderAppData(id,d){
   if(!d||typeof d!=='object')return '<div class=as-empty>No data</div>';
   if(id==='agent'){const tools=(d.tools||[]);return '<div class=as-empty>'+tools.length+' tools registered</div>'+tools.map(t=>'<div class=as-card><b>'+escapeHtml(t.id)+'</b><span>'+escapeHtml(t.description||'')+' · risk '+escapeHtml(t.risk||'')+'</span></div>').join('');}
   if(id==='memory'){const ms=d.memories||[];if(!ms.length)return '<div class=as-empty>No memories yet</div>';return ms.map(m=>'<div class=as-card><b>'+escapeHtml(String(m.key||m.id||'memory'))+'</b> <span style="color:var(--text-dim)">'+(m.importance!=null?Math.round(m.importance*100)+'%':'')+'</span><span>'+escapeHtml(String(m.value||''))+'</span></div>').join('');}
-  if(id==='suggestions'){var items=(d.items||[]);if(!items.length)return '<div class=as-empty>No suggestions yet (generating\u2026)</div>';return items.slice(0,30).map(function(it){var sid=escapeHtml(String(it.id||''));return '<div class=as-card><b>'+escapeHtml(String(it.title||it.label||''))+'</b>'+(it.detail||it.body?'<span>'+escapeHtml(String(it.detail||it.body||''))+'</span>':'')+'<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><button class=as-run onclick="sugApprove(\''+sid+'\')">\u2713 Approve & build</button><button class=tbtn onclick="sugDecline(\''+sid+'\')">Decline</button></div></div>';}).join('');}
+  if(id==='suggestions'){var items=(d.suggestions||d.items||[]);if(!items.length)return '<div class=as-empty>No suggestions yet (generating\u2026)</div>';return items.slice(0,30).map(function(it){var sid=escapeHtml(String(it.id||''));return '<div class=as-card><b>'+escapeHtml(String(it.title||it.label||''))+'</b>'+(it.detail||it.body?'<span>'+escapeHtml(String(it.detail||it.body||''))+'</span>':'')+'<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><button class=as-run onclick="sugApprove(\''+sid+'\')">\u2713 Approve & build</button><button class=tbtn onclick="sugDecline(\''+sid+'\')">Decline</button></div></div>';}).join('');}
   if(id==='library'){
     const items=Array.isArray(d)?d:(d.items||[]);
     if(!items.length)return '<div class=as-empty>Nothing in your library yet</div>';
