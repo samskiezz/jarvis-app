@@ -149,6 +149,28 @@ def synth(text: str, fmt: str = "wav") -> bytes:
     return data
 
 
+def synth_stream(text: str):
+    """Yield raw PCM int16 (24kHz mono) chunks AS XTTS generates them — first chunk in ~0.3-0.5s, so the
+    browser can start playing long before the full clip is done (the path to sub-300ms-ish first audio)."""
+    text = (text or "").strip()[:600]
+    if not text:
+        return
+    with _LOCK:
+        _load()
+        try:
+            it = _M["model"].inference_stream(text, LANG, _M["gpt_lat"], _M["spk"],
+                                              temperature=0.7, enable_text_splitting=True, stream_chunk_size=20)
+        except Exception as e:  # noqa: BLE001
+            sys.stderr.write(f"[voiceclone-gpu] inference_stream unsupported: {e}\n"); sys.stderr.flush()
+            return
+        for chunk in it:
+            try:
+                pcm = np.clip(np.asarray(chunk.detach().cpu().numpy(), dtype=np.float32), -1.0, 1.0)
+                yield (pcm * 32767.0).astype("<i2").tobytes()
+            except Exception:  # noqa: BLE001
+                break
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -167,7 +189,8 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        if urlparse(self.path).path != "/synthesize":
+        p = urlparse(self.path).path
+        if p not in ("/synthesize", "/synthesize_stream"):
             self.send_response(404)
             self.end_headers()
             return
@@ -177,6 +200,18 @@ class Handler(BaseHTTPRequestHandler):
             text = json.loads(body).get("text", "")
         except Exception:
             text = parse_qs(body).get("text", [""])[0]
+        if p == "/synthesize_stream":
+            self.send_response(200)
+            self.send_header("Content-Type", "audio/L16;rate=24000;channels=1")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Connection", "close")
+            self.end_headers()
+            try:
+                for pcm in synth_stream(text):
+                    self.wfile.write(pcm); self.wfile.flush()
+            except Exception:  # noqa: BLE001
+                pass
+            return
         fmt = parse_qs(urlparse(self.path).query).get("fmt", ["wav"])[0]
         try:
             data = synth(text, fmt)
