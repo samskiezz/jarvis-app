@@ -42,10 +42,18 @@ def _token() -> str:
     raise RuntimeError("OpenClaw gateway token not available")
 
 
-def _bridge(method: str, path: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
+def _bridge(method: str, path: str, body: dict[str, Any] | None = None, _retry: bool = True) -> dict[str, Any]:
+    global _TOKEN
     url = BRIDGE_URL.rstrip("/") + path
     headers = {"Authorization": f"Bearer {_token()}"}
-    return _external_json(method, url, payload=body, headers=headers)
+    r = _external_json(method, url, payload=body, headers=headers)
+    # Self-heal: the gateway token can rotate (container restart / re-provision) and leave the 60s
+    # cache stale, so the bridge returns {"error":"unauthorized"}. Bust the cache, re-read the token
+    # fresh from the container, and retry ONCE — otherwise the mini-app stays broken for up to 60s.
+    if _retry and isinstance(r, dict) and str(r.get("error", "")).strip().lower() == "unauthorized":
+        _TOKEN = None
+        return _bridge(method, path, body, _retry=False)
+    return r
 
 
 def _container_running() -> bool:
