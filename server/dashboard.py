@@ -2219,6 +2219,55 @@ def _proposal(sid: str) -> dict:
             "proposal": s["proposal"], "text": body}
 
 
+# ── AUTONOMOUS ENGINE observability feed (what the 24/7 loop actually landed) ─
+def _auto_improve_feed(limit: int = 25) -> dict:
+    """Read the autonomous self-improvement journal and surface recent activity so the owner can SEE
+    every change the loop made (title + category + helpfulness score + outcome) and revert if needed.
+    Pure read of server/data/auto_improve.log.jsonl — never mutates anything."""
+    path = os.path.join(ROOT, "server", "data", "auto_improve.log.jsonl")
+    lands, errors, cats, scores = [], 0, {}, []
+    last_cycle = None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    e = json.loads(line)
+                except Exception:  # noqa: BLE001
+                    continue
+                ev = e.get("event")
+                if ev in ("cycle_start", "cycle_end", "loop_start"):
+                    last_cycle = e
+                elif ev in ("feature_land", "feature_gate_pass_dryrun"):
+                    sc = e.get("score")
+                    if isinstance(sc, (int, float)):
+                        scores.append(sc)
+                    cat = (e.get("category") or "other")
+                    cats[cat] = cats.get(cat, 0) + 1
+                    lands.append({
+                        "title": e.get("title", "?"),
+                        "category": cat,
+                        "score": sc,
+                        "reason": e.get("reason", ""),
+                        "landed": ev == "feature_land" and bool(e.get("landed", e.get("ok", True))),
+                        "dry_run": ev == "feature_gate_pass_dryrun",
+                        "ts": e.get("ts"),
+                    })
+                elif ev in ("ideate_failed", "cycle_crash", "rollback"):
+                    errors += 1
+    except FileNotFoundError:
+        return {"ok": True, "items": [], "note": "engine has not run yet", "summary": {}}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:160], "items": []}
+    lands.reverse()
+    avg = round(sum(scores) / len(scores), 1) if scores else None
+    return {"ok": True, "items": lands[:limit],
+            "summary": {"total": len(lands), "avg_score": avg, "by_category": cats, "errors": errors,
+                        "last_cycle": last_cycle}}
+
+
 # ── AGENT OS exposure (the 17-tool registry + the planner/executor core) ──────
 def _agent_tools() -> dict:
     """The Agent OS tool palette + a cheap health snapshot. Import is lazy + best-effort so a broken
@@ -2968,6 +3017,14 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             # Formatted proposal text for a clicked suggestion id (?id=sugN).
             q = parse_qs(urlparse(self.path).query)
             self._send(json.dumps(_proposal(q.get("id", [""])[0])).encode(), "application/json")
+        elif self.path.startswith("/auto_improve"):
+            # Observability feed for the 24/7 autonomous engine: recent landings + helpfulness score + category.
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                lim = max(1, min(100, int(q.get("limit", ["25"])[0])))
+            except Exception:  # noqa: BLE001
+                lim = 25
+            self._send(json.dumps(_auto_improve_feed(lim)).encode(), "application/json")
         elif self.path.startswith("/agent/tools"):
             # Agent OS tool registry (the 17 real tools) + health snapshot.
             self._send(json.dumps(_agent_tools()).encode(), "application/json")
