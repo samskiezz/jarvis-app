@@ -89,7 +89,9 @@ def _load():
     sys.stderr.write(f"[voiceclone] conditioning on {len(_REFS)} ref clip(s): {_REF_TAG}\n")
     sys.stderr.flush()
     # Averages the conditioning across all reference clips -> more robust speaker.
-    gpt_lat, spk = model.get_conditioning_latents(audio_path=_REFS)
+    gpt_lat, spk = model.get_conditioning_latents(
+        audio_path=_REFS, gpt_cond_len=int(os.environ.get("XTTS_GPT_COND_LEN", "24")),
+        max_ref_length=30, sound_norm_refs=True)
 
     _M.update(model=model, gpt_lat=gpt_lat, spk=spk, ready=True)
     sys.stderr.write("[voiceclone] ready.\n")
@@ -113,7 +115,9 @@ def synth(text: str) -> bytes:
     text = (text or "").strip()[:600]
     if not text:
         return b""
-    key = hashlib.md5(("xtts|" + _REF_TAG + "|" + LANG + "|" + text).encode()).hexdigest()
+    # Match the GPU service's tuning so the fallback voice sounds the same (natural, lower/older).
+    ver = os.environ.get("XTTS_CACHE_VER", "v2-alfred-low")
+    key = hashlib.md5(("xtts|" + ver + "|" + _REF_TAG + "|" + LANG + "|" + text).encode()).hexdigest()
     fp = os.path.join(CACHE_DIR, key + ".wav")
     if os.path.exists(fp):
         with open(fp, "rb") as f:
@@ -125,7 +129,11 @@ def synth(text: str) -> bytes:
             language=LANG,
             gpt_cond_latent=_M["gpt_lat"],
             speaker_embedding=_M["spk"],
-            temperature=0.7,
+            temperature=float(os.environ.get("XTTS_TEMP", "0.70")),
+            repetition_penalty=float(os.environ.get("XTTS_REP_PENALTY", "5.0")),
+            top_p=float(os.environ.get("XTTS_TOP_P", "0.85")),
+            top_k=int(os.environ.get("XTTS_TOP_K", "50")),
+            speed=float(os.environ.get("XTTS_SPEED", "0.92")),
             enable_text_splitting=True,  # split long text -> shorter chunks (CPU-friendlier)
         )
     data = _wav_bytes(out["wav"], sr=24000)

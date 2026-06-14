@@ -1392,22 +1392,19 @@ def _mode_directive() -> str:
         return ""
 
 
-def _persona_sysmsg(address: str = "ma'am") -> str:
+def _persona_sysmsg(address: str = "sir") -> str:
     """The full JARVIS system prompt with the live speaker (sir/ma'am) appended. Shared by every
     conversational path so the persona is identical whether we go through the tiered seam or the
     direct box fallback. The active ModeMixer profile is appended so behaviour modes take effect."""
     a = str(address or "").lower()
-    if a in ("", "neutral", "unknown"):
-        # speaker's voice not yet assessed — stay gracious but use NO ma'am/sir until it is
-        base = _persona() + ("\n\n[CURRENT SPEAKER] The speaker's voice has not been assessed yet — "
-                             "do NOT use \"ma'am\" or \"sir\"; speak warmly and directly without an honorific.")
+    if a in ("ma'am", "female", "woman", "f"):
+        base = _persona() + ("\n\n[CURRENT SPEAKER] A lady is speaking — address her as \"madam\" or \"ma'am\", "
+                             "used naturally and sparingly, never the same one twice in a row.")
     else:
-        addr = "sir" if a in ("sir", "male", "man", "m") else "ma'am"
-        base = _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with " +
-                             ("a gentleman; address him cockney-style as \"guv\", \"guv'nor\", \"boss\" or \"sir\""
-                              if addr == "sir"
-                              else "a lady; address her cockney-style as \"madam\", \"miss\", \"m'lady\" or \"ma'am\"") +
-                             " — mixed up, used naturally and sparingly, and never the same one twice in a row.")
+        # Default: Alfred's master, Mr Sam Kazangas.
+        base = _persona() + ("\n\n[CURRENT SPEAKER] You are speaking with Mr Sam Kazangas — address him as "
+                             "\"sir\", and occasionally \"Master Kazangas\" for warmth or weight; used naturally "
+                             "and sparingly, never the same one twice in a row.")
     import datetime as _dt
     now = _dt.datetime.now().strftime("%A, %-d %B %Y, %-I:%M %p")
     base += f"\n\n[CURRENT DATE & TIME] It is {now}. Use this when asked the time/date — never guess it."
@@ -1503,50 +1500,46 @@ def _brain_reachable(timeout: float = 2.5) -> bool:
 
 
 def _local_reply(prompt: str, address: str = "") -> str:
-    """Warm, instant, on-Hostinger reply when the Vast brain (serious computation) is unreachable —
-    so JARVIS is NEVER silent or slow for her. Handles the common things; stays in persona, never robotic."""
+    """Refined, instant, on-Hostinger reply when the Vast brain is unreachable — Alfred is NEVER silent or
+    slow. Handles the common things; stays in the Alfred persona, varied so it never sounds canned."""
     import random as _r
     p = (prompt or "").lower().strip()
     al = str(address or "").lower()
-    # cockney address, picked fresh each time so it never sounds like a loop
-    a = (" " + _r.choice(["guv", "guv'nor", "boss"])) if al in ("sir", "male", "man", "m") else \
-        (" " + _r.choice(["madam", "miss", "m'lady"])) if al in ("ma'am", "female", "woman", "f") else ""
+    # Alfred address: sir / occasionally Master Kazangas; madam for a lady. Picked fresh so it never loops.
+    a = (", " + _r.choice(["madam", "ma'am"])) if al in ("ma'am", "female", "woman", "f") \
+        else (", " + _r.choice(["sir", "sir", "Master Kazangas"]))
     def has(*ws): return any(w in p for w in ws)
     def pick(opts): return _r.choice(opts)
     # SAFETY first — stays clear about the action every time, just varies the wording.
     if has("help", "fallen", "fall", "emergency", "ambulance", "can't breathe", "cant breathe", "hurt", "pain", "scared", "911", "000"):
         return pick([
-            f"I'm right 'ere{a}. If it's an emergency I'll get help this second — say 'call my son' or 'call emergency'. I ain't going anywhere.",
-            f"I've got ya{a}. If you need help, just say 'call my son' or 'call emergency' and I'll do it now — I'm not leaving you.",
-            f"Steady{a}, I'm with ya. Say the word — 'call my son' or 'call emergency' — and help's on its way. I'm staying put.",
+            f"I'm right here{a}. If this is an emergency, say 'call my son' or 'call emergency' and I'll see to it at once. I'm not leaving you.",
+            f"Steady{a}. Say the word — 'call my son' or 'call emergency' — and help is on its way this instant. I'm staying with you.",
+            f"I have you{a}. If you need help, just say 'call emergency' and I'll attend to it immediately.",
         ])
-    if has("hello", "hi ", "hey", "you there", "are you there", "jarvis"):
-        return pick([f"'Ello{a} — what can I do for ya?", f"Right 'ere{a}. What's first?",
-                     f"Yes{a}, I'm about. What d'you need?", f"All ears{a}. What's the job?",
-                     f"'Ere I am{a}. Go on, then — what'll it be?"])
+    if has("hello", "hi ", "hey", "you there", "are you there", "alfred", "jarvis"):
+        return pick([f"At your service{a}. How may I help?", f"Yes{a}. What do you need?",
+                     f"Right here{a}. Where shall we begin?", f"Good to hear you{a}. What's first?"])
     if has("how are you", "you ok", "you okay"):
-        return pick([f"Ticking over lovely{a} — more to the point, how you keepin'?",
-                     f"Steady as you like{a}, eyes on everything. How you feelin'?",
-                     f"Right as rain{a}. Never mind me — how's yourself?",
-                     f"All sorted my end{a}. How are you doin'?"])
+        return pick([f"In good order{a}, thank you — and more to the point, how are you?",
+                     f"Steady and ready{a}. How are you keeping?",
+                     f"All in hand{a}. Never mind me — how are you faring?"])
     if has("thank", "cheers", "appreciate"):
-        return pick([f"Anytime{a} — that's what I'm 'ere for.", f"Don't mention it{a}.",
-                     f"Pleasure's all mine{a}.", f"Any time at all{a}, no bother."])
+        return pick([f"My pleasure{a}.", f"Not at all{a}.", f"Always{a} — that is what I'm here for.", f"Think nothing of it{a}."])
     if has("love you", "good night", "goodnight", "night night"):
-        return pick([f"Night{a} — I've got the place, sleep sound.", f"Rest easy{a}, I'll be right 'ere all night.",
-                     f"Sweet dreams{a}. I'm keepin' watch.", f"Off you pop{a} — I'll mind everything till morning."])
+        return pick([f"Rest well{a}. I'll mind everything through the night.",
+                     f"Goodnight{a}. You're quite safe — I'm watching over things.", f"Sleep soundly{a}. I shall be right here."])
     if has("who are you", "what are you", "your name"):
-        return pick([f"I'm JARVIS{a} — your man about the 'ouse, lookin' after the lot.",
-                     f"JARVIS{a}, at your service — I keep everything ticking for ya.",
-                     f"Name's JARVIS{a}. I'm 'ere to run things and watch over ya."])
+        return pick([f"Alfred{a}, at your service — I keep everything in order for you.",
+                     f"I'm Alfred{a}, your man for the lot.", f"Alfred{a}. I'm here to run things and watch over you."])
     if __import__("re").search(r"\b(what'?s? the time|what time|the time|what day|what'?s? the date|today'?s date)\b", p):
         import datetime as _d
         return pick([f"It's {_d.datetime.now().strftime('%A, %-d %B, %-I:%M %p')}{a}.",
-                     f"Just gone {_d.datetime.now().strftime('%-I:%M %p')}{a} — {_d.datetime.now().strftime('%A the %-d')}."])
+                     f"Just gone {_d.datetime.now().strftime('%-I:%M %p')}{a}, on {_d.datetime.now().strftime('%A the %-d')}."])
     return pick([
-        f"I'm with ya{a}. Me deeper thinkin's havin' a quick breather, but I can still 'ear ya, talk, show your photos and files, keep watch and ring the family — just say the word.",
-        f"Right 'ere{a}. Brain's just catchin' its breath for a tick, but I can still listen, chat, pull up your photos and files and call your people — what d'you need?",
-        f"Gotcha{a}. Me clever bits are reconnectin', but I'm still 'ere — talk to me, and I'll show you things, keep an eye out, or ring the family if you like.",
+        f"I'm with you{a}. My deeper reasoning is reconnecting for a moment, but I can still hear you, speak, bring up your files and watch over things — just say the word.",
+        f"Right here{a}. My clever half is catching its breath, but I can still listen, talk and attend to the essentials. What do you need?",
+        f"At your service{a}. The heavy thinking is a moment away, but I'm still here and ready to help.",
     ])
 
 
@@ -1590,7 +1583,7 @@ def _vision_describe(img_b64: str, prompt: str = "") -> str:
     return ""
 
 
-def _jarvis_chat(prompt: str, history=None, address: str = "ma'am") -> str:
+def _jarvis_chat(prompt: str, history=None, address: str = "sir") -> str:
     """Synchronous, resilient conversational reply in the JARVIS persona (loaded from jarvis_persona.md).
     Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:32b),
     which itself records telemetry and escalates/falls back per the ladder. If the seam is unavailable
@@ -1642,7 +1635,7 @@ def _remember_async(prompt: str, reply: str) -> None:
         pass
 
 
-def _jarvis_chat_bounded(prompt: str, history=None, address: str = "ma'am") -> str:
+def _jarvis_chat_bounded(prompt: str, history=None, address: str = "sir") -> str:
     """User-facing chat must never hang the dashboard request thread."""
     if _local_reply_fast_path(prompt):
         return _local_reply(prompt, address)
@@ -1668,10 +1661,10 @@ def _zone_phrase(name) -> str:
     return "the " + n
 
 
-def _climate_say_state(query: str, st: dict, address: str = "ma'am") -> str:
+def _climate_say_state(query: str, st: dict, address: str = "sir") -> str:
     """Phrase a spoken answer to a climate QUERY ('temperature' / 'zones' / 'status') from cached
     state. Honest when no bridge is connected."""
-    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "love"
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "madam"
     if not st.get("connected"):
         return ("I can't reach the heating just now, " + addr +
                 " — the home control link isn't connected yet. I'll keep trying.")
@@ -1745,12 +1738,12 @@ def _a11y_write(patch: dict, source: str = "local", cmd: dict | None = None) -> 
         return out
 
 
-def _a11y_handle(qtext: str, address: str = "ma'am") -> dict | None:
+def _a11y_handle(qtext: str, address: str = "sir") -> dict | None:
     """Accessibility chat intents → mutate mirror → spoken confirmation. None for non-a11y → falls through.
     Regexes are ANCHORED to a11y vocabulary so they never steal a climate/build phrase. Never raises."""
     import re
     l = (qtext or "").lower()
-    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "love"
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "madam"
     def done(patch, say, **extra):
         _a11y_write(patch, "chat")
         return {"a11y": True, "reply": say, "state": patch, **extra}
@@ -1774,7 +1767,7 @@ def _a11y_handle(qtext: str, address: str = "ma'am") -> dict | None:
     return None
 
 
-def _climate_handle(qtext: str, address: str = "ma'am") -> dict | None:
+def _climate_handle(qtext: str, address: str = "sir") -> dict | None:
     """If `qtext` is a climate request, action it via the relay and return {reply, climate:True,...};
     else None so the caller falls through to normal chat. This is what keeps 'I am cold', 'set the
     lounge to 23', 'what is the temperature', 'which zones' OFF the Claude builder."""
@@ -1788,7 +1781,7 @@ def _climate_handle(qtext: str, address: str = "ma'am") -> dict | None:
     intent = CR.parse_intent(qtext or "")
     if not intent:
         return None
-    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "love"
+    addr = "sir" if str(address).lower() in ("sir", "male", "man", "m") else "madam"
     st = CR.state()
     connected = bool(st.get("connected"))
 
@@ -1934,6 +1927,28 @@ def _modulate(wav: bytes, semitones: float, tempo: float) -> bytes:
         return wav
 
 
+def _modulate_clone(data: bytes, semitones: float, tempo: float) -> bytes:
+    """Formant-preserving pitch/speed shift for the CLONED voice — powers the 12LABS studio depth/speed
+    sliders. Uses ffmpeg `rubberband` so it stays NATURAL (no chipmunk/demonic). Returns mp3; the original
+    bytes on any failure or no-op. Only called when the caller passes a non-default semitones/tempo, so the
+    everyday Alfred voice (already tuned on the box) is never touched."""
+    if not data:
+        return data
+    if abs(semitones) < 0.05 and abs(tempo - 1.0) < 0.02:
+        return data
+    try:
+        import subprocess
+        ratio = 2 ** (semitones / 12.0)
+        tp = max(0.5, min(2.0, tempo))
+        af = f"rubberband=pitch={ratio:.5f}:tempo={tp:.4f}:formant=preserved"
+        p = subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "pipe:0",
+                            "-af", af, "-ac", "1", "-b:a", "64k", "-f", "mp3", "pipe:1"],
+                           input=data, capture_output=True, timeout=30)
+        return p.stdout if p.returncode == 0 and p.stdout else data
+    except Exception:  # noqa: BLE001
+        return data
+
+
 def _tts(text: str, semitones: float = None, tempo: float = None) -> bytes:
     """Natural neural British voice via Piper (loaded once) + JARVIS voice modulation. Returns WAV bytes;
     '' on failure so the browser falls back to Web Speech."""
@@ -1953,6 +1968,10 @@ def _tts(text: str, semitones: float = None, tempo: float = None) -> bytes:
     # through to the instant Piper path below — the lifeline speech is never blocked.
     cloned = _xtts(text)
     if cloned:
+        # 12LABS studio: when the caller asks for a depth/speed shift, bend the cloned voice
+        # (formant-preserving). The default voice path passes 0/1.0 → this is a no-op.
+        if abs(semi) >= 0.05 or abs(tmp - 1.0) >= 0.02:
+            cloned = _modulate_clone(cloned, semi, tmp)
         if len(_TTS_CACHE) > 300:   # raised so canned lifeline phrases never evict
             _TTS_CACHE.clear()
         _TTS_CACHE[key] = cloned
@@ -3340,7 +3359,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                 body = {}
             text = body.get("q") or body.get("prompt")
             if text:
-                res = _climate_handle(text, body.get("address", "ma'am")) or \
+                res = _climate_handle(text, body.get("address") or "sir") or \
                     {"climate": False, "reply": "That isn't a heating request."}
                 self._send(json.dumps({"ok": True, **res}).encode(), "application/json")
             else:
@@ -3359,7 +3378,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             # ACCESSIBILITY FIRST: "captions on", "high contrast", "read the screen" must go to the
             # a11y engine, not the Claude builder. _a11y_handle returns None for non-a11y phrases.
             try:
-                _a = _a11y_handle(qtext, body.get("address", "ma'am"))
+                _a = _a11y_handle(qtext, body.get("address") or "sir")
             except Exception:  # noqa: BLE001
                 _a = None
             if _a is not None:
@@ -3369,7 +3388,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             # "which zones", "turn off the study" must control the home aircon — NOT the Claude
             # builder. _climate_handle returns None for non-climate phrases so chat falls through.
             try:
-                _cl = _climate_handle(qtext, body.get("address", "ma'am"))
+                _cl = _climate_handle(qtext, body.get("address") or "sir")
             except Exception:  # noqa: BLE001
                 _cl = None
             if _cl is not None:
@@ -3391,8 +3410,8 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                         raise RuntimeError((launch or {}).get("error", "task launch failed")
                                            if isinstance(launch, dict) else "task launch failed")
                     self._send(json.dumps({"ok": True, "task_id": tid,
-                                           "reply": "Right away. I'm building that for you now — it may take a little "
-                                                    "while, and I'll tell you the moment it's ready."}).encode(),
+                                           "reply": "Right away, sir. I'm building that for you now — it may take a "
+                                                    "little while, and I'll tell you the moment it's ready."}).encode(),
                                "application/json")
                     return
                 except Exception as e:  # noqa: BLE001
@@ -3401,7 +3420,7 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                                                                     "what is blocking it.",
                                            "error": str(e)[:160]}).encode(), "application/json")
                     return
-            reply = _jarvis_chat_bounded(qtext, body.get("history"), body.get("address", "ma'am"))
+            reply = _jarvis_chat_bounded(qtext, body.get("history"), body.get("address") or "sir")
             self._send(json.dumps({"ok": True, "reply": reply}).encode(), "application/json")
             return
         if self.path.split("?", 1)[0] == "/a11y":

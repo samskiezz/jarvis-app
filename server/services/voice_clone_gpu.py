@@ -37,10 +37,52 @@ LANG = os.environ.get("XTTS_LANG", "en")
 MODEL_NAME = "tts_models/multilingual/multi-dataset/xtts_v2"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
+# ── Inference tuning (research-backed defaults for a NATURAL, non-robotic clone) ──────────────
+# All overridable by env so the voice can be re-tuned without code edits + a redeploy.
+#   temperature : lower = steadier/less wobbly (0.6-0.75 sweet spot; <0.5 flat, >0.85 artifacts)
+#   repetition_penalty : guards stutter/drone; ~5 is a safe middle (method default 10 can clip/rush)
+#   speed : <1.0 = slower, older, weightier cadence (0.88-0.95; far from 1.0 artifacts)
+#   stream_chunk_size : bigger = smoother streamed audio, slightly later first chunk (20 choppy → 40)
+#   gpt_cond_len : seconds of reference used for prosody conditioning (more = steadier)
+TEMP = float(os.environ.get("XTTS_TEMP", "0.70"))
+REP_PEN = float(os.environ.get("XTTS_REP_PENALTY", "5.0"))
+TOP_P = float(os.environ.get("XTTS_TOP_P", "0.85"))
+TOP_K = int(os.environ.get("XTTS_TOP_K", "50"))
+SPEED = float(os.environ.get("XTTS_SPEED", "0.92"))
+STREAM_CHUNK = int(os.environ.get("XTTS_STREAM_CHUNK", "40"))
+GPT_COND_LEN = int(os.environ.get("XTTS_GPT_COND_LEN", "24"))
+# Bump when refs/params change so old cached clips are NOT reused (kept in the disk cache key).
+CACHE_VER = os.environ.get("XTTS_CACHE_VER", "v2-alfred-low")
+
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 _LOCK = threading.Lock()  # XTTS inference is not thread-safe; serialize (GPU is fast anyway)
 _M = {"model": None, "gpt_lat": None, "spk": None, "ready": False}
+
+
+import re as _re
+
+_EMOJI = _re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF←-⇿✀-➿]")
+
+
+def _clean_for_tts(text: str) -> str:
+    """Strip the things XTTS reads as garbage / that cause robotic output, and shape punctuation for prosody.
+    XTTS has no SSML; punctuation IS the pacing. Markdown/emoji/URLs read literally → clean them first."""
+    t = text or ""
+    t = _re.sub(r"```.*?```", " ", t, flags=_re.S)            # fenced code blocks
+    t = _re.sub(r"`([^`]*)`", r"\1", t)                        # inline code ticks
+    t = _re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", t)               # images
+    t = _re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)            # links → link text
+    t = _re.sub(r"https?://\S+", " ", t)                        # bare URLs
+    t = _re.sub(r"[*_#>`~|]+", " ", t)                          # markdown punctuation
+    t = _EMOJI.sub("", t)                                       # emoji
+    t = t.replace("…", ". ").replace("...", ". ")              # ellipses destabilize XTTS splitting
+    t = t.replace("—", ", ").replace("–", ", ")               # em/en dashes → commas
+    t = _re.sub(r"^\s*[-•]\s*", "", t, flags=_re.M)            # list bullets
+    t = _re.sub(r"[ \t]+", " ", t).strip()
+    if t and t[-1] not in ".!?,;:":                             # unterminated text → XTTS hallucinates
+        t += "."
+    return t
 
 
 def _ref_wavs():
@@ -79,7 +121,9 @@ def _load():
         raise RuntimeError(f"no reference WAVs found in {REF_DIR}")
     sys.stderr.write(f"[voiceclone-gpu] conditioning on {len(_REFS)} ref clip(s): {_REF_TAG}\n")
     sys.stderr.flush()
-    gpt_lat, spk = model.get_conditioning_latents(audio_path=_REFS)
+    # More reference + loudness-normalized refs = a steadier, less robotic clone (research-backed).
+    gpt_lat, spk = model.get_conditioning_latents(
+        audio_path=_REFS, gpt_cond_len=GPT_COND_LEN, max_ref_length=30, sound_norm_refs=True)
     _M.update(model=model, gpt_lat=gpt_lat, spk=spk, ready=True)
     sys.stderr.write("[voiceclone-gpu] ready.\n")
     sys.stderr.flush()
@@ -111,11 +155,13 @@ def _to_mp3(wav: bytes) -> bytes:
 
 
 def synth(text: str, fmt: str = "wav") -> bytes:
-    text = (text or "").strip()[:600]
+    text = _clean_for_tts(text).strip()[:600]
     if not text:
         return b""
     ext = "mp3" if fmt == "mp3" else "wav"
-    key = hashlib.md5(("xtts|" + _REF_TAG + "|" + LANG + "|" + text).encode()).hexdigest()
+    # CACHE_VER + tuning in the key so changing refs/params never serves a stale (robotic) clip.
+    sig = f"{CACHE_VER}|{TEMP}|{REP_PEN}|{SPEED}|{TOP_P}"
+    key = hashlib.md5(("xtts|" + sig + "|" + _REF_TAG + "|" + LANG + "|" + text).encode()).hexdigest()
     fp = os.path.join(CACHE_DIR, key + "." + ext)
     if os.path.exists(fp):
         with open(fp, "rb") as f:
@@ -132,7 +178,11 @@ def synth(text: str, fmt: str = "wav") -> bytes:
                 language=LANG,
                 gpt_cond_latent=_M["gpt_lat"],
                 speaker_embedding=_M["spk"],
-                temperature=0.7,
+                temperature=TEMP,
+                repetition_penalty=REP_PEN,
+                top_p=TOP_P,
+                top_k=TOP_K,
+                speed=SPEED,
                 enable_text_splitting=True,
             )
         data = _wav_bytes(out["wav"], sr=24000)
@@ -152,14 +202,16 @@ def synth(text: str, fmt: str = "wav") -> bytes:
 def synth_stream(text: str):
     """Yield raw PCM int16 (24kHz mono) chunks AS XTTS generates them — first chunk in ~0.3-0.5s, so the
     browser can start playing long before the full clip is done (the path to sub-300ms-ish first audio)."""
-    text = (text or "").strip()[:600]
+    text = _clean_for_tts(text).strip()[:600]
     if not text:
         return
     with _LOCK:
         _load()
         try:
             it = _M["model"].inference_stream(text, LANG, _M["gpt_lat"], _M["spk"],
-                                              temperature=0.7, enable_text_splitting=True, stream_chunk_size=20)
+                                              temperature=TEMP, repetition_penalty=REP_PEN,
+                                              top_p=TOP_P, top_k=TOP_K, speed=SPEED,
+                                              enable_text_splitting=True, stream_chunk_size=STREAM_CHUNK)
         except Exception as e:  # noqa: BLE001
             sys.stderr.write(f"[voiceclone-gpu] inference_stream unsupported: {e}\n"); sys.stderr.flush()
             return
