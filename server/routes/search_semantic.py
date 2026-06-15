@@ -55,12 +55,14 @@ async def retrieve_endpoint(
     k: int = Query(10, ge=1, le=100),
     kind: Optional[str] = Query(None, description="filter by doc kind"),
     graph: bool = Query(True, description="include 1-hop relationship context"),
+    as_of: Optional[int] = Query(None, description="unix time: temporal graph — relationships valid THEN"),
     _token: str | None = Depends(optional_bearer),
 ):
     """Storage Router: unified, cited, multi-store retrieval (vector + full-text + graph + object
-    manifest), merged and re-ranked by relevance × authority × freshness. The 'data OS' seam."""
+    manifest), merged and re-ranked by relevance × authority × freshness. The 'data OS' seam.
+    Pass as_of (unix seconds) for the temporal graph — what was connected at that moment."""
     from server.services import storage_router
-    return storage_router.retrieve(q, k=k, kind=kind, expand_graph=graph)
+    return storage_router.retrieve(q, k=k, kind=kind, expand_graph=graph, as_of=as_of)
 
 
 class RagBody(BaseModel):

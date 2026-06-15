@@ -69,8 +69,10 @@ def _fts(query: str, k: int):
         return []
 
 
-def _graph_neighbours(ids, limit: int = 12):
-    """1-hop relationship context from brain.db ont_link for the top object hits (best-effort)."""
+def _graph_neighbours(ids, limit: int = 12, as_of=None):
+    """1-hop relationship context from brain.db ont_link for the top object hits (best-effort).
+    If as_of (unix seconds/ms) is given, returns only edges that were VALID AT THAT TIME — the temporal
+    graph: COALESCE(valid_from, ts) <= as_of AND (valid_to IS NULL OR valid_to > as_of)."""
     db = os.path.join(ROOT, "server", "data", "brain.db")
     if not os.path.exists(db) or not ids:
         return []
@@ -78,15 +80,25 @@ def _graph_neighbours(ids, limit: int = 12):
         con = sqlite3.connect(db, timeout=8)
         con.row_factory = sqlite3.Row
         qmarks = ",".join("?" * len(ids))
-        rows = con.execute(
-            "SELECT from_id, to_id, type FROM ont_link "
-            "WHERE from_id IN (%s) OR to_id IN (%s) LIMIT ?" % (qmarks, qmarks),
-            (*ids, *ids, limit)).fetchall()
+        sql = ("SELECT from_id, to_id, type, COALESCE(valid_from, ts) AS vstart, valid_to "
+               "FROM ont_link WHERE (from_id IN (%s) OR to_id IN (%s))" % (qmarks, qmarks))
+        params = [*ids, *ids]
+        if as_of is not None:
+            asof_ms = as_of * 1000 if as_of < 1e11 else as_of   # ts in brain.db is ms
+            sql += " AND COALESCE(valid_from, ts) <= ? AND (valid_to IS NULL OR valid_to > ?)"
+            params += [asof_ms, asof_ms]
+        sql += " LIMIT ?"
+        params.append(limit)
+        rows = con.execute(sql, params).fetchall()
         con.close()
         edges = []
         for r in rows:
             other = r["to_id"] if r["from_id"] in ids else r["from_id"]
-            edges.append({"neighbour": other, "relation": r["type"], "store": "graph"})
+            e = {"neighbour": other, "relation": r["type"], "store": "graph"}
+            if as_of is not None:
+                e["valid_from"] = r["vstart"]
+                e["valid_to"] = r["valid_to"]
+            edges.append(e)
         return edges
     except Exception:  # noqa: BLE001
         return []
@@ -120,7 +132,7 @@ def _rerank(hits: list, now: int) -> list:
     return sorted(hits, key=lambda x: x.get("final_score", 0), reverse=True)
 
 
-def retrieve(query: str, k: int = 10, kind=None, expand_graph: bool = True) -> dict:
+def retrieve(query: str, k: int = 10, kind=None, expand_graph: bool = True, as_of=None) -> dict:
     """Unified, cited, multi-store retrieval. Returns merged+reranked hits with provenance, plus
     relationship context and (when applicable) cloud object locations."""
     now = _now()
@@ -146,7 +158,9 @@ def retrieve(query: str, k: int = 10, kind=None, expand_graph: bool = True) -> d
         result["store_errors"] = errs
     if expand_graph:
         top_ids = [h["id"] for h in ranked[:5] if h.get("id")]
-        result["relationships"] = _graph_neighbours(top_ids)
+        result["relationships"] = _graph_neighbours(top_ids, as_of=as_of)
+        if as_of is not None:
+            result["as_of"] = as_of
     return result
 
 
