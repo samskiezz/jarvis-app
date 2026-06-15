@@ -191,8 +191,7 @@
   "migration": {
     "_doc": "What the migration scans. include = dirs eligible to move to cloud (cold/archival). exclude = NEVER move (live, active, code, engine). dry_run_default true so nothing moves without explicit --apply.",
     "include": [
-      "underworld/data/media_assets",
-      "server/data/archive"
+      "underworld/web/dist/models/generated"
     ],
     "exclude": [
       ".git",

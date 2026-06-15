@@ -50,6 +50,8 @@ def _walk(include: list, excludes: list):
                 dirnames[:] = []
                 continue
             for f in files:
+                if f.endswith(".cloudref"):          # never re-migrate a pointer to an already-migrated file
+                    continue
                 full = os.path.join(dirpath, f)
                 rel = os.path.relpath(full, ROOT)
                 if not _excluded(rel, excludes):

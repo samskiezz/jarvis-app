@@ -3278,7 +3278,22 @@ self.addEventListener('fetch',e=>{});   // pass-through: never intercept, never 
                 self.send_header("Content-Length", str(len(data)))
                 self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers(); self._write_body(data)
             else:
-                self.send_response(404); self.end_headers()
+                # cloud-aware: if this media file was migrated to Wasabi (a <name>.cloudref pointer remains),
+                # 302-redirect to a presigned URL so it still serves while the disk is freed.
+                url = None
+                ref = os.path.join(ROOT, "server", "data", "media", name + ".cloudref")
+                if name and os.path.exists(ref):
+                    try:
+                        from server.services import cloud_storage as _cs
+                        _d = json.loads(open(ref, encoding="utf-8").read())
+                        url = _cs.presigned_url_for(_d["bucket"], _d["key"])
+                    except Exception:  # noqa: BLE001
+                        url = None
+                if url:
+                    self.send_response(302); self.send_header("Location", url)
+                    self.send_header("Access-Control-Allow-Origin", "*"); self.end_headers()
+                else:
+                    self.send_response(404); self.end_headers()
         elif self.path.startswith("/climate/poll"):
             # The HOME-LAN AirTouch bridge long-polls this OUTBOUND to collect queued commands.
             # Authed with the bridge key (NOT the web token) so a browser can never drain the queue.
