@@ -358,6 +358,14 @@ def discard(feature_files: list[str]):
                 os.remove(fp)
             except Exception:  # noqa: BLE001
                 pass
+    # ALWAYS reset integration files to HEAD on discard, even if not in feature_files. A feature commonly
+    # registers a route in main.py / a tile in jarvis_live.html then gets discarded; if main.py was already
+    # dirty from a PRIOR orphan it won't appear in this feature's diff, so its import would survive and break
+    # boot for every later cycle (the compounding-orphan bug). Resetting to HEAD keeps landed/committed
+    # changes and drops only uncommitted orphans.
+    for integ in ("server/main.py", "server/dashboard.py", "server/jarvis_live.html"):
+        if integ not in PROTECTED and run(["git", "status", "--porcelain", integ], timeout=15)[1].strip():
+            run(["git", "checkout", "--", integ], timeout=30)
 
 
 def score_change(feat: dict, files: list[str]) -> dict:
