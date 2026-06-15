@@ -181,8 +181,15 @@ def presigned_url(original_path: str, expires: int = 3600):
     loc = locate(original_path)
     if not loc or not enabled():
         return None
+    return presigned_url_for(loc["bucket"], loc["key"], expires)
+
+
+def presigned_url_for(bucket: str, key: str, expires: int = 3600):
+    """A temporary download URL for a known bucket/key (used by cloud-aware serving via .cloudref)."""
+    if not enabled():
+        return None
     try:
         return _client().generate_presigned_url(
-            "get_object", Params={"Bucket": loc["bucket"], "Key": loc["key"]}, ExpiresIn=expires)
+            "get_object", Params={"Bucket": bucket, "Key": key}, ExpiresIn=expires)
     except Exception:  # noqa: BLE001
         return None

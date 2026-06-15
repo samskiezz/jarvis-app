@@ -286,11 +286,40 @@ def create_app() -> FastAPI:
                 name="web-assets",
             )
         if (_WEB_DIST / "models").is_dir():
-            app.mount(
-                "/models",
-                StaticFiles(directory=str(_WEB_DIST / "models")),
-                name="web-models",
-            )
+            # Cloud-aware model serving: serve the local file when present (same as StaticFiles); if it was
+            # migrated to Wasabi (a <file>.cloudref pointer is left in its place), 302-redirect to a presigned
+            # URL so the 3D app keeps working while the disk is freed. Falls back to 404 on a true miss.
+            @app.get("/models/{mpath:path}", include_in_schema=False)
+            async def models_cloud_aware(mpath: str):
+                from fastapi import HTTPException
+                from fastapi.responses import RedirectResponse
+                local = _WEB_DIST / "models" / mpath
+                if local.is_file():
+                    return FileResponse(local)
+                # migrated to Wasabi → a <file>.cloudref pointer remains; presign + redirect. Self-contained
+                # (no cross-package import — 'server' is ambiguous in this app's namespace).
+                ref = _WEB_DIST / "models" / (mpath + ".cloudref")
+                if ref.is_file():
+                    try:
+                        import json as _json
+                        import os as _os
+                        import boto3
+                        from botocore.config import Config
+                        d = _json.loads(ref.read_text())
+                        ak, sk = _os.environ.get("WASABI_KEY"), _os.environ.get("WASABI_SECRET")
+                        if ak and sk:
+                            ep = _os.environ.get("WASABI_ENDPOINT", "https://s3.ap-southeast-2.wasabisys.com")
+                            rg = _os.environ.get("WASABI_REGION", "ap-southeast-2")
+                            cl = boto3.client("s3", endpoint_url=ep, region_name=rg,
+                                              aws_access_key_id=ak, aws_secret_access_key=sk,
+                                              config=Config(signature_version="s3v4",
+                                                            s3={"addressing_style": "path"}))
+                            url = cl.generate_presigned_url(
+                                "get_object", Params={"Bucket": d["bucket"], "Key": d["key"]}, ExpiresIn=3600)
+                            return RedirectResponse(url, status_code=302)
+                    except Exception:  # noqa: BLE001
+                        pass
+                raise HTTPException(status_code=404, detail="model not found")
 
         @app.get("/", include_in_schema=False)
         async def index():
