@@ -117,8 +117,13 @@ def _call_openai_compat(cfg, system, prompt, max_tokens, fmt, temperature=None):
     if fmt == "json" and not cfg.get("reasoning"):
         payload["response_format"] = {"type": "json_object"}
     provider = "ollama" if cfg.get("key") == "ollama" else cfg.get("engine", "openai")
+    # Local GPU (ollama) keeps the 15s fail-fast lifeline (a dead box must not hang chat). Reliable CLOUD
+    # providers (Kimi/Moonshot, OpenAI) get a generous timeout — code/reasoning legitimately take >15s and
+    # were timing out to an EMPTY reply ("Kimi code doesn't work").
+    to = 15 if cfg.get("key") == "ollama" else int(os.environ.get("LLM_CLOUD_TIMEOUT", "120"))
     with sync_llm_slot(provider=provider, base_url=cfg.get("base", ""), model=cfg["model"]):
-        out = _post(cfg["base"] + "/chat/completions", payload, {"Authorization": f"Bearer {cfg.get('key','')}"})
+        out = _post(cfg["base"] + "/chat/completions", payload,
+                    {"Authorization": f"Bearer {cfg.get('key','')}"}, timeout=to)
     ch = (out.get("choices") or [{}])[0]
     return ch.get("message", {}).get("content") or "", out.get("usage")
 
@@ -131,7 +136,8 @@ def _call_anthropic(cfg, system, prompt, max_tokens, temperature=None):
     if system:
         payload["system"] = system
     out = _post(cfg["base"] + "/messages", payload,
-                {"x-api-key": cfg.get("key", ""), "anthropic-version": "2023-06-01"})
+                {"x-api-key": cfg.get("key", ""), "anthropic-version": "2023-06-01"},
+                timeout=int(os.environ.get("LLM_CLOUD_TIMEOUT", "120")))
     blocks = out.get("content") or []
     text = "".join(b.get("text", "") for b in blocks if isinstance(b, dict))
     return text, out.get("usage")
