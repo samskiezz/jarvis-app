@@ -1453,7 +1453,7 @@ def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
         if isinstance(h, dict) and h.get("role") in ("user", "assistant") and h.get("content"):
             msgs.append({"role": h["role"], "content": str(h["content"])[:600]})
     msgs.append({"role": "user", "content": (prompt or "").strip()[:1000]})
-    for model in ("qwen2.5:32b", "qwen2.5:14b", "llama3.1:8b"):  # smartest-first for a human, intelligent feel
+    for model in ("qwen2.5:14b", "llama3.1:8b"):  # smartest-first for a human, intelligent feel (32b not on the box)
         try:
             body = json.dumps({"model": model, "messages": msgs, "max_tokens": 240,
                                "temperature": 0.7, "top_p": 0.92, "stream": False}).encode()
@@ -1604,7 +1604,7 @@ def _vision_describe(img_b64: str, prompt: str = "") -> str:
 
 def _jarvis_chat(prompt: str, history=None, address: str = "sir") -> str:
     """Synchronous, resilient conversational reply in the JARVIS persona (loaded from jarvis_persona.md).
-    Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:32b),
+    Routed THROUGH the tiered LLM seam (server/services/tiered_llm.py) at tier='strong' (qwen2.5:14b),
     which itself records telemetry and escalates/falls back per the ladder. If the seam is unavailable
     or empty we fall back to the original direct box loop, and finally to a reassuring fixed line — so
     the mum's lifeline reply is NEVER blank. `address` is 'sir' (male) or 'ma'am' (female)."""
@@ -1613,8 +1613,8 @@ def _jarvis_chat(prompt: str, history=None, address: str = "sir") -> str:
     # reply instantly & warmly from Hostinger. Vast is used ONLY when it's actually up.
     if not _brain_reachable():
         return _local_reply(prompt, address)
-    # PRIMARY: the tiered seam. strong = qwen2.5:32b on the box; on failure tiered_llm logs it and
-    # returns {ok:False}, so we drop to the direct box loop below (which also tries 32b first).
+    # PRIMARY: the tiered seam. strong = qwen2.5:14b on the box; on failure tiered_llm logs it and
+    # returns {ok:False}, so we drop to the direct box loop below (which also tries 14b first).
     try:
         from server.services import tiered_llm as _T
         r = _T.complete(_history_to_prompt(prompt, history), system=sysmsg,
@@ -1871,6 +1871,46 @@ _XTTS_GPU_TIMEOUT = float(os.environ.get("XTTS_GPU_TIMEOUT", "20"))   # GPU: fas
 _XTTS_TIMEOUT = float(os.environ.get("XTTS_TIMEOUT", "30"))           # CPU clone is slow but it's the REAL (cloned) voice — wait for it before falling back to Piper
 _XTTS_ENABLED = os.environ.get("XTTS_ENABLED", "1") == "1"
 
+# PRIMARY VOICE = ElevenLabs Flash v2.5 (MP3). Researched against the live API (June 2026):
+# flash_v2_5 is the current low-latency model (~75ms inference, 40k char limit, 32 langs) and the
+# recommended choice for real-time/agent use; turbo_v2_5 is deprecated in its favour. _tts() tries
+# ElevenLabs FIRST for normal speech and returns b'' on ANY failure so the cloned-voice and Piper
+# fallbacks still cover the mum's lifeline speech (never blocked). Set ELEVENLABS_PRIMARY=0 + restart
+# for an instant rollback to the previous clone-first behaviour. The key resolves from .env.secrets
+# via server.routes.voice (pm2 does not carry secrets in its env).
+_ELEVEN_PRIMARY = os.environ.get("ELEVENLABS_PRIMARY", "1") != "0"
+_ELEVEN_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2_5")
+_ELEVEN_FORMAT = os.environ.get("ELEVENLABS_OUTPUT_FORMAT", "mp3_44100_128")
+_ELEVEN_TIMEOUT = float(os.environ.get("ELEVENLABS_TIMEOUT", "8"))    # per-sentence; flash returns <1s, cap guards a hang
+
+
+def _elevenlabs_tts(text: str) -> bytes:
+    """Synthesize one line via ElevenLabs Flash (MP3). Returns b'' on any failure/absence
+    of a key, so callers fall through to the cloned voice / Piper without blocking speech."""
+    if not _ELEVEN_PRIMARY:
+        return b""
+    try:
+        from server.routes.voice import _elevenlabs_key, _elevenlabs_voice
+        key = _elevenlabs_key()
+        if not key:
+            return b""
+        vid = _elevenlabs_voice()
+        import urllib.request as _u
+        url = f"https://api.elevenlabs.io/v1/text-to-speech/{vid}?output_format={_ELEVEN_FORMAT}"
+        body = json.dumps({
+            "text": text,
+            "model_id": _ELEVEN_MODEL,
+            "voice_settings": {"stability": 0.5, "similarity_boost": 0.75, "style": 0.0, "use_speaker_boost": True},
+        }).encode()
+        req = _u.Request(url, data=body, headers={
+            "xi-api-key": key, "Content-Type": "application/json", "Accept": "audio/mpeg",
+        })
+        with _u.urlopen(req, timeout=_ELEVEN_TIMEOUT) as r:
+            data = r.read()
+        return data or b""
+    except Exception:  # noqa: BLE001
+        return b""
+
 
 def _xtts_one(url: str, text: str, timeout: float) -> bytes:
     try:
@@ -1982,7 +2022,17 @@ def _tts(text: str, semitones: float = None, tempo: float = None) -> bytes:
     key = hashlib.md5((text + f"|{semi}|{tmp}").encode()).hexdigest()
     if key in _TTS_CACHE:
         return _TTS_CACHE[key]
-    # FIRST try the human voice-clone (XTTS-v2 Cockney). The cloned voice already IS the target
+    # PRIMARY: ElevenLabs Flash (MP3) for normal speech. Skipped when a voice-studio pitch/tempo
+    # shift is requested (semi/tmp ≠ default) because ElevenLabs cannot pitch-shift — those calls
+    # fall through to the clone/Piper path which modulates. b'' on failure → graceful fallback.
+    if abs(semi) < 0.05 and abs(tmp - 1.0) < 0.02:
+        el = _elevenlabs_tts(text)
+        if el:
+            if len(_TTS_CACHE) > 300:
+                _TTS_CACHE.clear()
+            _TTS_CACHE[key] = el
+            return el
+    # FALLBACK: the human voice-clone (XTTS-v2 Cockney). The cloned voice already IS the target
     # timbre, so do NOT run _modulate on it. On any failure/slowness this returns b'' and we fall
     # through to the instant Piper path below — the lifeline speech is never blocked.
     cloned = _xtts(text)
@@ -3143,6 +3193,18 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
         elif self.path.startswith("/carerooms"):
             from server.services import care_signal as CS
             self._send(json.dumps({"rooms": CS.rooms()}).encode(), "application/json")
+        elif self.path.startswith("/careaudit"):
+            # Read-only caregiver accountability trail: consent + every remote co-control action
+            # (cam/mic/flip/ring/speak/sos), speak-text redacted. Append-only; no edit/delete surface.
+            from server.services import care_signal as CS
+            q = parse_qs(urlparse(self.path).query)
+            since = 0.0
+            try:
+                since = float(q.get("since", ["0"])[0] or 0)
+            except Exception:  # noqa: BLE001
+                since = 0.0
+            self._send(json.dumps({"audit": CS.audit(q.get("room", ["mum"])[0], since)}).encode(),
+                       "application/json")
         elif self.path.startswith("/assist/status"):
             # web asks: is her phone companion connected? (drives the auto-install offer)
             from server.services import assist_bridge as AB

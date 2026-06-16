@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='41'; window.__JV_VER=VER;
+  var KEY='__jv',VER='42'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2462,6 +2462,8 @@ function tryCommandShortcuts(l,t){
   if(/\bopen\b.*\bcelestial\b/.test(l)){openAppSheet('celestial');return true;}
   if(/\b(twelve|12)\s*labs\b/.test(l)||/\b(voice studio|text to speech|read this out|say this)\b/.test(l)){openAppSheet('voiceforge');return true;}
   if(/\b(ai console|llm console|code with|chat with .*(llm|model|claude|kimi))\b/.test(l)){openAppSheet('aiconsole');return true;}
+  if(/\b(voice commands?|what can i say|voice help|voice guide)\b/.test(l)){openAppSheet('voicecmd');return true;}
+  if(/\bopen\b.*\bvoice\b.*\bcommands?\b/.test(l)){openAppSheet('voicecmd');return true;}
   if(/\bopen\b.*\b(control center|cc)\b/.test(l)){toggleControlCenter();return true;}
   if(/\bopen\b.*\b(vitals|health)\b/.test(l)){openVitals();return true;}
   if(/\bopen\b.*\bgpu\b/.test(l)){openGPU();return true;}
@@ -3444,7 +3446,7 @@ function _micStartRec(){
     }
     _detectGender();                                       // assess speaker pitch → ma'am/sir
     $('coreSay').textContent=t;showCrystal(t);
-    if(res.isFinal&&t){$('say').value=t;askJarvis();}};
+    if(res.isFinal&&t){$('say').value=t;try{var _vl=$('vcLastText');if(_vl)_vl.textContent=t;}catch(_){}askJarvis();}};
   _rec.onerror=ev=>{
     if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){_micOn=false;_micDeniedHelp();$('mic').classList.remove('live');document.body.classList.remove('listening');try{_rec=null;}catch(_){}}};
   _rec.onend=()=>{_micScheduleRestart();};                 // debounced so it never flickers in/out
@@ -3457,10 +3459,42 @@ function _micScheduleRestart(){
 }
 function _micPauseForSpeech(){ _micSpeaking=true;_speakStartT=Date.now(); }   // keep listening for barge-in
 function _micResumeAfterSpeech(){_micSpeaking=false;if(_micOn&&!_rec)_micStartRec();}
+/* Server-side STT fallback (press-to-talk) for browsers WITHOUT the Web Speech API
+   (iOS Safari, Firefox). Records one utterance with MediaRecorder, POSTs it to the
+   server Whisper endpoint, then feeds the transcript into the normal ask flow. */
+var _sttRec=null,_sttChunks=[];
+function _blobToB64(blob){return new Promise(function(res,rej){var fr=new FileReader();fr.onload=function(){var s=String(fr.result||'');res(s.slice(s.indexOf(',')+1));};fr.onerror=rej;fr.readAsDataURL(blob);});}
+async function _sttRecordToggle(){
+  if(_sttRec&&_sttRec.state&&_sttRec.state!=='inactive'){try{_sttRec.stop();}catch(_){}return;}   // tap again = finish
+  if(!navigator.mediaDevices||!window.MediaRecorder){jarvisSpeak('Voice input is not supported on this browser.');return;}
+  var stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});}
+  catch(_){_micDeniedHelp();return;}
+  _sttChunks=[];
+  try{_sttRec=new MediaRecorder(stream,{mimeType:'audio/webm'});}
+  catch(_){try{_sttRec=new MediaRecorder(stream);}catch(__){jarvisSpeak('Voice input is not supported on this browser.');try{stream.getTracks().forEach(function(t){t.stop();});}catch(e){}return;}}
+  _sttRec.ondataavailable=function(e){if(e.data&&e.data.size)_sttChunks.push(e.data);};
+  _sttRec.onstop=async function(){
+    try{stream.getTracks().forEach(function(t){t.stop();});}catch(_){}
+    document.body.classList.remove('listening');try{$('mic').classList.remove('live');}catch(_){}
+    var blob=new Blob(_sttChunks,{type:'audio/webm'});_sttChunks=[];
+    if(blob.size<1200){return;}                            // nothing meaningful captured
+    try{
+      var b64=await _blobToB64(blob);
+      var r=await fetch('/v1/voice/stt',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio_base64:b64,language:'en'})});
+      var d=await r.json();var txt=((d&&d.text)||'').trim();
+      if(txt){$('say').value=txt;try{var _vl=$('vcLastText');if(_vl)_vl.textContent=txt;}catch(_){}askJarvis();}
+      else{jarvisSpeak('Sorry, I didn’t catch that.');}
+    }catch(_){jarvisSpeak('Voice input failed. Please try again.');}
+  };
+  try{_sttRec.start();}catch(_){jarvisSpeak('Could not start recording.');return;}
+  document.body.classList.add('listening');try{$('mic').classList.add('live');}catch(_){}
+  jarvisSpeak('Listening. Tap the mic again when you’re done.');
+}
 function micToggle(){
   if(!window.isSecureContext){_micSecureHelp();return;}    // browsers BLOCK the mic on insecure http://<ip> origins
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){jarvisSpeak('Voice input needs Chrome or Edge.');return;}
+  if(!SR){_sttRecordToggle();return;}                       // no Web Speech (iOS Safari/Firefox) → server Whisper STT
   if(_micOn){                                              // turn OFF cleanly (no auto-restart)
     _micOn=false;if(_micRestartT){clearTimeout(_micRestartT);_micRestartT=null;}
     try{if(_rec){_rec.onend=null;_rec.abort();}}catch(_){}_rec=null;
@@ -6179,6 +6213,7 @@ const MINI_APPS=[
   {id:'codepulse',ic:'🧑‍💻',t:'CodePulse',d:'VS Code bridge + approvals'},
   {id:'aiconsole',ic:'🧠',t:'AI Console',d:'Chat & code with any LLM, switch models, approve & run a reply'},
   {id:'notes',ic:'📝',t:'Notes',d:'Quick notes, saved on this device'},
+  {id:'voicecmd',ic:'🎙',t:'Voice Commands',d:'Command reference & mic controls for hands-free navigation'},
 ];
 let _carouselIndex=0,_carouselMonitor=null;
 
@@ -6504,6 +6539,7 @@ async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)re
   if(_appSheetId==='search'){body.innerHTML=renderSearchSheet();setTimeout(function(){var e=$('gsQ');if(e)e.focus();},50);return;}
   if(_appSheetId==='aiconsole'){body.innerHTML=renderAiConsoleSheet();loadAiModels();return;}
   if(_appSheetId==='notes'){body.innerHTML=renderNotesSheet();loadNotes();return;}
+  if(_appSheetId==='voicecmd'){body.innerHTML=renderVoiceCmdSheet();loadVoiceCommands();return;}
   const ep=APP_ENDPOINTS[_appSheetId]||'';
   let url=ep;
   try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();body.innerHTML=renderAppData(_appSheetId,d);
@@ -7077,6 +7113,28 @@ async function codePulseDisconnect(){try{const r=await fetch('/v1/codepulse/disc
 async function codePulseSimulate(){const t=$('cpActType'),f=$('cpActFile'),d=$('cpActDesc'),s=$('cpActSafe');try{const body={type:'action_request',payload:{type:t?t.value:'edit',file:f?f.value.trim():'',description:d?d.value.trim():'',safe_option:s?s.value.trim():''}};const r=await fetch('/v1/codepulse/command?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const res=await r.json();showInplaceAlert(res.ok?'Action sent':'Failed');loadCodePulse();}catch(e){showInplaceAlert('Simulate error: '+e);}}
 async function codePulseSheetResolve(id,action){try{let url='/v1/codepulse/pending/'+encodeURIComponent(id)+'/'+(action==='explain'?'explain':action);const r=await fetch(url+'?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});const d=await r.json();showInplaceAlert(d.ok?(action+' done'):'Failed');loadCodePulse();}catch(e){showInplaceAlert('Resolve error: '+e);}}
 async function codePulseStopSheet(){try{const r=await fetch('/v1/codepulse/stop?token='+CT,{method:'POST'});const d=await r.json();showInplaceAlert(d.ok?'Safe mode activated':'Stop failed');}catch(e){showInplaceAlert('Stop error: '+e);}}
+
+/* ================ Voice Commands (reference + mic status) ================ */
+/* Mic state is read from the DOM (the #mic 'live' class / body 'listening' class) because
+   the underlying _micOn flag is script-scoped and not exposed on window. */
+function _vcMicOn(){var m=$('mic');return !!(m&&m.classList.contains('live'))||document.body.classList.contains('listening');}
+function renderVoiceCmdSheet(){const on=_vcMicOn();return `<div class=as-form>
+  <div class=as-card><b>🎙 Hands-free Control</b><span>Tap the mic button or say any command below. Works in Chrome, Edge, and Chromium-based browsers via the Web Speech API.</span></div>
+  <div class=as-row-inline>
+    <button id=vcMicBtn class="${on?'as-run':'tbtn'}" onclick="vcToggleMic()">${on?'🔴 Mic is ON — tap to stop':'🎤 Start listening'}</button>
+    <button class=tbtn onclick="loadVoiceCommands()">🔄 Refresh</button>
+  </div>
+  <div id=vcLastCmd style="min-height:28px;padding:6px 10px;border-radius:8px;background:var(--liquid-regular);font-size:12px;color:var(--text-dim);margin:4px 0">Last command: <span id=vcLastText>—</span></div>
+  <label>Filter commands</label>
+  <input id=vcSearch class=as-in placeholder="e.g. open, memory, voice…" oninput="vcFilterCmds()">
+  <div id=vcCmdList><div class=as-empty>Loading…</div></div>
+</div>`;}
+function _vcSyncMicBtn(){const btn=$('vcMicBtn');if(!btn)return;const on=_vcMicOn();btn.className=on?'as-run':'tbtn';btn.textContent=on?'🔴 Mic is ON — tap to stop':'🎤 Start listening';}
+function vcToggleMic(){micToggle();_vcSyncMicBtn();setTimeout(_vcSyncMicBtn,350);}
+var _vcAllCmds=[];
+function vcFilterCmds(){const q=(($('vcSearch')||{}).value||'').trim().toLowerCase();const out=$('vcCmdList');if(!out||!_vcAllCmds.length)return;const cats=_vcAllCmds.map(function(cat){const cmds=cat.commands.filter(function(c){return !q||(c.phrase+c.example+c.description).toLowerCase().indexOf(q)!==-1;});return {name:cat.name,commands:cmds};}).filter(function(cat){return cat.commands.length>0;});if(!cats.length){out.innerHTML='<div class=as-empty>No commands match "'+escapeHtml(q)+'"</div>';return;}out.innerHTML=cats.map(function(cat){return '<div class=as-card><b>'+escapeHtml(cat.name)+'</b>'+cat.commands.map(function(c){var ex=c.example?'<div style="margin:1px 0 0 8px;font-size:10px;color:var(--text-dim)">e.g. <i>'+escapeHtml(c.example)+'</i> <button class=tbtn style="font-size:10px;padding:1px 6px" onclick="vcTryCommand(decodeURIComponent(\''+encodeURIComponent(c.example).replace(/'/g,'%27')+'\'))">Say this</button></div>':'';return '<div style="margin:5px 0 0 4px"><span style="color:var(--cyan);font-size:12px;font-weight:600">'+escapeHtml(c.phrase)+'</span> <span style="color:var(--text-dim);font-size:11px">— '+escapeHtml(c.description)+'</span>'+ex+'</div>';}).join('')+'</div>';}).join('');}
+async function loadVoiceCommands(){const out=$('vcCmdList');if(!out)return;out.innerHTML='<div class=as-empty>Loading…</div>';try{const r=await fetch('/v1/voice/commands');const d=await r.json();if(!d.ok||!d.categories){out.innerHTML='<div class=as-err>Could not load commands</div>';return;}_vcAllCmds=d.categories;vcFilterCmds();}catch(e){out.innerHTML='<div class=as-err>'+escapeHtml(String(e))+'</div>';}}
+function vcTryCommand(phrase){if(!phrase)return;const inp=$('say');if(inp){inp.value=phrase;askJarvis();}else{try{jarvisSpeak('Trying: '+phrase);}catch(_){}}}
 
 /* ================ System Debugger ================ */
 function renderDebuggerSheet(){return `<div class=as-form>
