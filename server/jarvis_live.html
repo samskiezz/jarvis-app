@@ -6174,6 +6174,7 @@ const MINI_APPS=[
   // iOS-style apps removed from the mini-app surface per owner request ("forget the iOS apps").
   // Their overlay functions are kept for hotkeys / context-menu / control-centre / 3D "Look Up".
   // Hubs consolidate overlapping apps under one tabbed sheet (opening a child id deep-links its tab).
+  {id:'nexus',ic:'🧬',t:'NEXUS',d:'Live brain map of the whole system — codebase, infra, memory, embeddings, lessons firing across synapses'},
   {id:'syshealth',ic:'🩺',t:'System Health',d:'Vitals, health, doctor, debugger, optimiser, GPU brain'},
   {id:'intel',ic:'🛰',t:'Intelligence',d:'Datasets, reports, alerts, cases, boards'},
   {id:'scale',ic:'📊',t:'Scale',d:'Live A-Z feature counter'},
@@ -6508,6 +6509,7 @@ async function _12labsDownload(){
 }
 async function renderAppSheet(){const body=$('asBody');if(!body||!_appSheetId)return;frictionLog('open_app',{app:_appSheetId});body.innerHTML='<div class=as-empty>Loading…</div>';
   const app=MINI_APPS.find(m=>m.id===_appSheetId);
+  if(_appSheetId==='nexus'){body.innerHTML=renderNexusSheet();setTimeout(loadNexus,30);return;}
   if(_appSheetId==='syshealth'){body.innerHTML=renderSysHealthSheet();sysHealthTab(['vitals','health','doctor','brain','debugger','optimizer'].includes(_hubTab)?_hubTab:'vitals');return;}
   if(_appSheetId==='intel'){body.innerHTML=renderIntelSheet();intelTab(['datasets','reports','alerts','cases','boards'].includes(_hubTab)?_hubTab:'datasets');return;}
   if(_appSheetId==='memory'){body.innerHTML=renderMemorySheet();loadMemory();return;}
@@ -6692,6 +6694,170 @@ async function aiConsoleApprove(uid){var card=$(uid);if(!card)return;var brief=(
 function aiConsoleSpeak(uid){var card=$(uid);if(card&&card.dataset.reply){try{jarvisSpeak(card.dataset.reply.slice(0,600));}catch(_){}}}
 async function sugApprove(sid){if(!sid)return;if(!confirm('Approve & build this idea? Claude will execute it on the server.'))return;try{await fetch('suggestion/review?id='+encodeURIComponent(sid)+'&decision=approved&token='+CT,{method:'POST'});var r=await fetch('upgrade?key='+encodeURIComponent(sid)+'&token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});var d=await r.json();showInplaceAlert(d.ok?'Approved — building now. Track it in Tasks.':'Build failed: '+escapeHtml(d.error||''));try{jarvisSpeak(d.ok?'Approved, sir. Building it now.':'I could not start that build.');}catch(_){}}catch(e){showInplaceAlert('Approve error: '+e);}}
 async function sugDecline(sid){if(!sid)return;try{await fetch('suggestion/review?id='+encodeURIComponent(sid)+'&decision=declined&token='+CT,{method:'POST'});showInplaceAlert('Declined.');try{renderAppSheet();}catch(_){}}catch(e){showInplaceAlert('Decline error: '+e);}}
+/* ============================================================================
+   NEXUS — live brain visualisation of the whole system
+   ============================================================================
+   2.66M-node knowledge graph rendered as a synapsing neural mass.
+
+   Layout: nodes positioned inside an ellipsoid (brain shape) with cluster zones
+   per kind (file/func/svc/port/vast/model/mem/...). Each kind occupies a region
+   of the brain — like real cortical specialisation. Edges are "synapses" with
+   travelling glow pulses (firing animation). Node sizes pulse on activation.
+
+   Data: GET /graph/everything?force=0 — we SAMPLE down to ~3000 nodes for the
+   live render (browser canvas can't paint 2.66M @ 60fps). Full graph still
+   queryable for inspection. Cluster centroids re-derived per render. */
+
+const NEXUS_KIND_COLOR = {
+  file:'#22d3ee', func:'#a78bfa', svc:'#34d399', port:'#f5b942',
+  vast:'#f87171', model:'#f472b6', mem:'#facc15', jsfn:'#7dd3fc',
+  cppsym:'#fb923c', pkg:'#c084fc', db:'#10b981', tbl:'#6ee7b7',
+  envfile:'#fcd34d', envvar:'#fde68a', commit:'#94a3b8', gitref:'#cbd5e1',
+  installed:'#a3e635', row:'#5eead4', loc:'#94a3b8',
+};
+const NEXUS_KIND_GLOW = {
+  file:'#5be6ff', func:'#c4b5fd', svc:'#6ee7b7', port:'#fcd34d',
+  vast:'#fda4af', model:'#f9a8d4', mem:'#fde047', jsfn:'#bae6fd',
+  cppsym:'#fdba74', pkg:'#d8b4fe', db:'#34d399', tbl:'#a7f3d0',
+  envfile:'#fde68a', envvar:'#fef3c7', commit:'#cbd5e1', gitref:'#e2e8f0',
+  installed:'#bef264', row:'#99f6e4', loc:'#cbd5e1',
+};
+/* Brain regions: each kind gets a centre + radius inside the brain ellipse.
+   Right hemisphere = data / static structure, left = active / runtime. */
+const NEXUS_REGIONS = {
+  file:    {cx: 0.28, cy: 0.38, r: 0.18},   // right-frontal
+  func:    {cx: 0.32, cy: 0.62, r: 0.16},   // right-temporal
+  jsfn:    {cx: 0.22, cy: 0.50, r: 0.13},   // right-parietal
+  cppsym:  {cx: 0.18, cy: 0.32, r: 0.12},   // right-occipital
+  pkg:     {cx: 0.42, cy: 0.30, r: 0.08},   // right-prefrontal
+  installed:{cx: 0.40, cy: 0.72, r: 0.08},  // right-cerebellum
+  db:      {cx: 0.50, cy: 0.50, r: 0.05},   // corpus callosum (centre)
+  tbl:     {cx: 0.55, cy: 0.50, r: 0.10},
+  row:     {cx: 0.60, cy: 0.45, r: 0.12},
+  envfile: {cx: 0.50, cy: 0.18, r: 0.06},
+  envvar:  {cx: 0.50, cy: 0.10, r: 0.10},
+  svc:     {cx: 0.72, cy: 0.30, r: 0.08},   // left-frontal
+  port:    {cx: 0.74, cy: 0.42, r: 0.07},   // left-motor
+  vast:    {cx: 0.78, cy: 0.58, r: 0.10},   // left-temporal
+  model:   {cx: 0.72, cy: 0.72, r: 0.08},   // left-cerebellum
+  mem:     {cx: 0.62, cy: 0.68, r: 0.10},   // hippocampus
+  commit:  {cx: 0.30, cy: 0.85, r: 0.08},   // right-base
+  gitref:  {cx: 0.30, cy: 0.92, r: 0.06},
+  loc:     {cx: 0.50, cy: 0.80, r: 0.20},
+};
+
+let _nx = null;  // master state {nodes, edges, anim, ctx, ...}
+
+function renderNexusSheet(){
+  return `<div id=nxRoot style="position:relative;width:100%;height:min(78vh,720px);background:radial-gradient(800px 500px at 50% 40%,#0b1f30 0,#04070e 60%,#020409 100%);overflow:hidden;border-radius:14px;border:1px solid rgba(91,230,255,.18);box-shadow:inset 0 0 80px rgba(91,230,255,.06)">
+    <div id=nxTop style="position:absolute;top:10px;left:14px;right:14px;display:flex;align-items:center;gap:10px;z-index:5;pointer-events:none">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:3px;color:#5be6ff;text-shadow:0 0 14px rgba(91,230,255,.9)">NEXUS · LIVE BRAIN</div>
+      <div style="flex:1"></div>
+      <div id=nxStats style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#7fb0c4">loading…</div>
+    </div>
+    <canvas id=nxCanvas style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+    <div id=nxLegend style="position:absolute;bottom:10px;left:14px;display:flex;flex-wrap:wrap;gap:6px;z-index:5;font-family:ui-monospace,Menlo,monospace;font-size:9px;pointer-events:none"></div>
+    <div id=nxHover style="position:absolute;display:none;background:rgba(4,7,14,.92);border:1px solid rgba(91,230,255,.35);border-radius:8px;padding:7px 10px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:#eafcff;pointer-events:none;z-index:6;backdrop-filter:blur(8px);box-shadow:0 8px 36px rgba(0,0,0,.6)"></div>
+  </div>`;
+}
+
+async function loadNexus(){
+  if(_nx&&_nx.raf){cancelAnimationFrame(_nx.raf);_nx.raf=0;}
+  const cnv=document.getElementById('nxCanvas');if(!cnv)return;
+  const stats=document.getElementById('nxStats');
+  if(stats)stats.textContent='fetching graph…';
+  let data=null;
+  try{const r=await fetch('/graph/everything');if(r.ok)data=await r.json();}catch(_){}
+  if(!data||!data.nodes){if(stats)stats.textContent='failed to load /graph/everything';return;}
+  /* Sample down — browser cannot paint 2.66M nodes @ 60fps. Take top-N per kind. */
+  const TARGET=parseInt(localStorage.getItem('nxSample')||'3000');
+  const byKind={};for(const n of data.nodes){(byKind[n.kind]=byKind[n.kind]||[]).push(n);}
+  const sampled=[];const kinds=Object.keys(byKind);
+  const perKind=Math.max(8,Math.floor(TARGET/Math.max(1,kinds.length)));
+  for(const k of kinds){const arr=byKind[k];if(arr.length<=perKind){sampled.push(...arr);}else{for(let i=0;i<perKind;i++)sampled.push(arr[Math.floor(Math.random()*arr.length)]);}}
+  const ids=new Set(sampled.map(n=>n.id));
+  const edges=data.edges.filter(e=>ids.has(e.src)&&ids.has(e.dst));
+  /* Position each node inside its region with jitter. */
+  const positions=new Map();
+  for(const n of sampled){
+    const reg=NEXUS_REGIONS[n.kind]||{cx:0.5,cy:0.5,r:0.3};
+    const a=Math.random()*Math.PI*2;
+    const r=Math.sqrt(Math.random())*reg.r;
+    positions.set(n.id,{u:reg.cx+Math.cos(a)*r,v:reg.cy+Math.sin(a)*r,fire:0,kind:n.kind,label:n.label});
+  }
+  /* Legend swatches per kind. */
+  const leg=document.getElementById('nxLegend');
+  if(leg){leg.innerHTML=kinds.filter(k=>byKind[k].length>0).slice(0,18).map(k=>`<span style="display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:11px;background:rgba(10,20,34,.55);border:1px solid rgba(91,230,255,.12)"><span style="width:7px;height:7px;border-radius:50%;background:${NEXUS_KIND_COLOR[k]||'#fff'};box-shadow:0 0 7px ${NEXUS_KIND_GLOW[k]||'#fff'}"></span>${k}·${byKind[k].length.toLocaleString()}</span>`).join('');}
+  if(stats)stats.textContent=`${data.stats.nodes.toLocaleString()} nodes · ${data.stats.edges.toLocaleString()} edges · rendering ${sampled.length.toLocaleString()}`;
+  /* Pre-pick which edges will "fire" — keep a rolling cohort lit. */
+  const FIRING_CAP=Math.min(120,Math.floor(edges.length*0.04));
+  const firingPool=[];for(let i=0;i<FIRING_CAP;i++){firingPool.push({eIdx:Math.floor(Math.random()*edges.length),t:Math.random(),speed:0.0035+Math.random()*0.006});}
+  _nx={nodes:sampled,edges,positions,firingPool,canvas:cnv,ctx:cnv.getContext('2d'),
+       hoverId:null,raf:0,t0:performance.now()};
+  function fit(){const rect=cnv.getBoundingClientRect();const dpr=Math.min(2,devicePixelRatio||1);cnv.width=Math.max(1,Math.floor(rect.width*dpr));cnv.height=Math.max(1,Math.floor(rect.height*dpr));_nx.ctx.setTransform(dpr,0,0,dpr,0,0);_nx.W=rect.width;_nx.H=rect.height;}
+  fit();window.addEventListener('resize',fit,{passive:true});
+  cnv.onmousemove=(ev)=>{const rect=cnv.getBoundingClientRect();const mx=ev.clientX-rect.left,my=ev.clientY-rect.top;
+    const cx=_nx.W/2,cy=_nx.H/2,rx=_nx.W*0.42,ry=_nx.H*0.40;
+    /* find nearest node within 14px */
+    let bestId=null,bestD=14*14;
+    for(const n of _nx.nodes){const p=_nx.positions.get(n.id);const x=cx+(p.u-0.5)*rx*2,y=cy+(p.v-0.5)*ry*2;const dx=x-mx,dy=y-my;const d=dx*dx+dy*dy;if(d<bestD){bestD=d;bestId=n.id;}}
+    _nx.hoverId=bestId;
+    const hover=document.getElementById('nxHover');
+    if(bestId){const p=_nx.positions.get(bestId);const n=_nx.nodes.find(x=>x.id===bestId)||{};hover.innerHTML=`<div style="color:${NEXUS_KIND_COLOR[p.kind]||'#fff'};font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase">${p.kind}</div><div style="color:#eafcff;font-size:11px;margin-top:2px;max-width:340px;word-break:break-all">${(p.label||'').slice(0,180)}</div>${n.path?`<div style="color:#7fb0c4;font-size:9px;margin-top:3px">${n.path.slice(0,200)}</div>`:''}`;hover.style.display='block';hover.style.left=(mx+14)+'px';hover.style.top=(my+14)+'px';}else{hover.style.display='none';}
+  };
+  cnv.onmouseleave=()=>{_nx.hoverId=null;document.getElementById('nxHover').style.display='none';};
+  function brainOutline(ctx,W,H){
+    /* Two overlapping ellipses = top-down brain silhouette + central sulcus line. */
+    const cx=W/2,cy=H/2,rx=W*0.40,ry=H*0.40;
+    ctx.save();ctx.lineWidth=1.4;ctx.strokeStyle='rgba(91,230,255,.18)';
+    /* outer brain */
+    ctx.beginPath();for(let i=0;i<=64;i++){const a=i/64*Math.PI*2;const r=1+Math.sin(a*4)*0.025+Math.sin(a*9)*0.015;ctx.lineTo(cx+Math.cos(a)*rx*r,cy+Math.sin(a)*ry*r);}ctx.closePath();ctx.stroke();
+    /* central sulcus */
+    ctx.beginPath();ctx.moveTo(cx,cy-ry*0.9);ctx.quadraticCurveTo(cx-W*0.01,cy,cx,cy+ry*0.9);ctx.stroke();
+    /* inner bloom */
+    const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(rx,ry));grad.addColorStop(0,'rgba(91,230,255,.05)');grad.addColorStop(1,'rgba(91,230,255,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
+  function frame(now){
+    const ctx=_nx.ctx,W=_nx.W,H=_nx.H;
+    ctx.clearRect(0,0,W,H);
+    brainOutline(ctx,W,H);
+    const cx=W/2,cy=H/2,rx=W*0.42,ry=H*0.40;
+    /* edges: faint baseline + firing pulses */
+    ctx.lineWidth=0.5;
+    for(const e of _nx.edges){const a=_nx.positions.get(e.src),b=_nx.positions.get(e.dst);if(!a||!b)continue;const ax=cx+(a.u-0.5)*rx*2,ay=cy+(a.v-0.5)*ry*2,bx=cx+(b.u-0.5)*rx*2,by=cy+(b.v-0.5)*ry*2;
+      ctx.strokeStyle='rgba(91,230,255,.05)';ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();}
+    /* firing pulses travelling along their assigned edges */
+    for(let i=0;i<_nx.firingPool.length;i++){const f=_nx.firingPool[i];f.t+=f.speed;if(f.t>=1){f.t=0;f.eIdx=Math.floor(Math.random()*_nx.edges.length);f.speed=0.0035+Math.random()*0.006;}
+      const e=_nx.edges[f.eIdx];if(!e)continue;const a=_nx.positions.get(e.src),b=_nx.positions.get(e.dst);if(!a||!b)continue;
+      const ax=cx+(a.u-0.5)*rx*2,ay=cy+(a.v-0.5)*ry*2,bx=cx+(b.u-0.5)*rx*2,by=cy+(b.v-0.5)*ry*2;
+      const px=ax+(bx-ax)*f.t,py=ay+(by-ay)*f.t;
+      const col=NEXUS_KIND_GLOW[a.kind]||'#5be6ff';
+      ctx.save();ctx.shadowColor=col;ctx.shadowBlur=10;ctx.strokeStyle=col;ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.moveTo(ax+(bx-ax)*Math.max(0,f.t-0.07),ay+(by-ay)*Math.max(0,f.t-0.07));ctx.lineTo(px,py);ctx.stroke();
+      ctx.fillStyle=col;ctx.beginPath();ctx.arc(px,py,1.6,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+      /* mark target node as 'firing' so it pulses on arrival */
+      if(f.t>0.85){b.fire=1.0;}
+    }
+    /* nodes with pulsing fire decay */
+    const tt=(now-_nx.t0)/1000;
+    for(const n of _nx.nodes){const p=_nx.positions.get(n.id);if(!p)continue;
+      const x=cx+(p.u-0.5)*rx*2,y=cy+(p.v-0.5)*ry*2;
+      const base=NEXUS_KIND_COLOR[p.kind]||'#fff';const glow=NEXUS_KIND_GLOW[p.kind]||base;
+      const breath=0.85+0.15*Math.sin(tt*1.6+(p.u+p.v)*9);const pulse=p.fire>0?p.fire:0;
+      const r=(1.4+breath*0.6+pulse*2.4)*(_nx.hoverId===n.id?2:1);
+      ctx.save();ctx.shadowColor=glow;ctx.shadowBlur=6+pulse*16;ctx.fillStyle=base;ctx.globalAlpha=0.75+pulse*0.25;
+      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+      if(pulse>0.4){ctx.globalAlpha=pulse*0.5;ctx.strokeStyle=glow;ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,r+pulse*5,0,Math.PI*2);ctx.stroke();}
+      ctx.restore();
+      p.fire=Math.max(0,p.fire-0.025);
+    }
+    _nx.raf=requestAnimationFrame(frame);
+  }
+  _nx.raf=requestAnimationFrame(frame);
+}
+
 function renderSearchSheet(){return `<div class=as-form>
   <label>Search the knowledge graph</label>
   <div style="display:flex;gap:6px">
