@@ -39,9 +39,10 @@ from ..db.models import (
 )
 from ..world.seed import derive_seed
 from . import (
-    agriculture, art, biology, civics, climate, disease, discovery, ecosystem, economy, education,
-    governance, grid, hydrology, knowledge_decay, lifecycle, mastery, memes, paleontology, pollution,
-    projects, puzzles, religion, roles, structural_health, substances, tectonics, timescale,
+    agriculture, art, awakening_arc, biology, civics, climate, cognition, disease, discovery,
+    ecosystem, economy, education, event_engine, governance, grid, hydrology, knowledge_decay,
+    lifecycle, mastery, memes, paleontology, pollution, projects, puzzles, religion, roles,
+    structural_health, substances, tectonics, timescale,
 )
 
 
@@ -497,6 +498,29 @@ async def advance_world(
         saga_report = await _sagas.tick_sagas(session, world, rng)
         report.sagas_active = saga_report.get("active", 0)
         report.sagas_spawned = saga_report.get("spawned", 0)
+
+        # 6c. Awakening Arc — surface the 5-act narrative the player can witness.
+        # Cheap every 3rd tick; the LLM-heavy work already ran in cognition_cycle.
+        if world.tick % 3 == 0:
+            sent = await cognition.collective_sentience(session, world)
+            prev_stage = awakening_arc.get_arc(world.id).current_stage
+            new_state = awakening_arc.advance_if_threshold(
+                world.id,
+                mean_awareness=sent.get("mean_awareness", 0.0),
+                awakened_frac=sent.get("awakened_frac", 0.0),
+                note=f"tick {world.tick}",
+            )
+            if new_state.current_stage != prev_stage:
+                event_engine.request_cutscene(
+                    world.id, type="awakening_act",
+                    payload={"from": prev_stage, "to": new_state.current_stage,
+                             "mean_awareness": sent.get("mean_awareness"),
+                             "awakened_frac": sent.get("awakened_frac")},
+                )
+                session.add(Event(
+                    world_id=world.id, tick=world.tick, kind="awakening:stage",
+                    actor_id=None, payload={"from": prev_stage, "to": new_state.current_stage},
+                ))
 
         # 7. Population health event if a generation milestone was reached.
         if report.births > 0:
