@@ -3042,6 +3042,24 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                 lim = 24
             self._send(json.dumps(_search_ontology(q.get("q", [""])[0], lim)).encode(),
                        "application/json")
+        elif self.path.startswith("/graph/positions"):
+            # NEXUS slim payload — used by the brain visualiser to render ALL nodes (not a sample).
+            # Each node carries ONLY id + kind + label (no path/preview/extra fields) so the browser
+            # can pull the full 2.66M-node graph without the 1.2GB JSON parse hit. Edges as [src,dst]
+            # tuples. Returns counts so the UI can show "rendering N of M" honestly.
+            try:
+                from server.services.repo_graph import get_graph
+                g = get_graph(force=False)
+                nodes = [{"id": n["id"], "kind": n.get("kind"), "label": n.get("label")}
+                         for n in g.get("nodes", [])]
+                edges = [[e["src"], e["dst"]] for e in g.get("edges", [])]
+                payload = {"generated_at": g.get("generated_at"), "stats": g.get("stats"),
+                           "nodes": nodes, "edges": edges}
+                self._send(json.dumps(payload).encode(), "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)[:200]}).encode(),
+                           "application/json", code=500)
+            return
         elif self.path.startswith("/graph/everything"):
             # NEXUS — whole-system knowledge graph JSON. MUST be matched BEFORE the bare /graph route
             # below (which serves the 3D viewer HTML and would otherwise shadow this path because of

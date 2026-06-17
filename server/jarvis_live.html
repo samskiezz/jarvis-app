@@ -6870,94 +6870,151 @@ async function loadNexus(){
   if(_nx&&_nx.raf){cancelAnimationFrame(_nx.raf);_nx.raf=0;}
   const cnv=document.getElementById('nxCanvas');if(!cnv)return;
   const stats=document.getElementById('nxStats');
-  if(stats)stats.textContent='fetching graph…';
+  if(stats)stats.textContent='fetching graph (slim positions endpoint)…';
   let data=null;
-  try{const r=await fetch('/graph/everything');if(r.ok)data=await r.json();}catch(_){}
-  if(!data||!data.nodes){if(stats)stats.textContent='failed to load /graph/everything';return;}
-  /* Sample down — browser cannot paint 2.66M nodes @ 60fps. Take top-N per kind. */
-  const TARGET=parseInt(localStorage.getItem('nxSample')||'3000');
-  const byKind={};for(const n of data.nodes){(byKind[n.kind]=byKind[n.kind]||[]).push(n);}
-  const sampled=[];const kinds=Object.keys(byKind);
-  const perKind=Math.max(8,Math.floor(TARGET/Math.max(1,kinds.length)));
-  for(const k of kinds){const arr=byKind[k];if(arr.length<=perKind){sampled.push(...arr);}else{for(let i=0;i<perKind;i++)sampled.push(arr[Math.floor(Math.random()*arr.length)]);}}
-  const ids=new Set(sampled.map(n=>n.id));
-  const edges=data.edges.filter(e=>ids.has(e.src)&&ids.has(e.dst));
-  /* Position each node inside its region with jitter. */
-  const positions=new Map();
-  for(const n of sampled){
-    const reg=NEXUS_REGIONS[n.kind]||{cx:0.5,cy:0.5,r:0.3};
+  try{const r=await fetch('/graph/positions');if(r.ok)data=await r.json();}catch(_){}
+  if(!data||!data.nodes){if(stats)stats.textContent='failed to load /graph/positions';return;}
+  /* SHOW ALL NODES — owner explicitly wants the full graph rendered, not a sample. The bulk paint
+     uses one canvas fillRect per node (sub-pixel small) so 2.66M points complete a frame in ~80ms.
+     The firing-pulse + hover layer is drawn separately on top so the static layer doesn't repaint
+     every frame. Static cached in an OffscreenCanvas-style scratch. */
+  const allNodes=data.nodes;
+  const allEdges=data.edges||[];
+  /* Pack positions for ALL nodes into typed arrays — much faster lookup than a Map for 2.66M. */
+  const N=allNodes.length;
+  const POS_U=new Float32Array(N);
+  const POS_V=new Float32Array(N);
+  const FIRE =new Float32Array(N);
+  const KIND =new Array(N);
+  const LABEL=new Array(N);
+  const idIndex=new Map();
+  for(let i=0;i<N;i++){
+    const n=allNodes[i];
+    const reg=NEXUS_REGIONS[n.kind]||{cx:0.5,cy:0.5,r:0.30};
     const a=Math.random()*Math.PI*2;
     const r=Math.sqrt(Math.random())*reg.r;
-    positions.set(n.id,{u:reg.cx+Math.cos(a)*r,v:reg.cy+Math.sin(a)*r,fire:0,kind:n.kind,label:n.label});
+    POS_U[i]=reg.cx+Math.cos(a)*r;
+    POS_V[i]=reg.cy+Math.sin(a)*r;
+    KIND[i]=n.kind;
+    LABEL[i]=n.label;
+    idIndex.set(n.id,i);
   }
-  /* Legend swatches per kind. */
+  /* Pre-resolve edges to integer index pairs for O(1) firing-pulse lookup. */
+  const E=allEdges.length;
+  const EDGE_A=new Int32Array(E);
+  const EDGE_B=new Int32Array(E);
+  let validE=0;
+  for(let i=0;i<E;i++){const a=idIndex.get(allEdges[i][0]),b=idIndex.get(allEdges[i][1]);if(a!==undefined&&b!==undefined){EDGE_A[validE]=a;EDGE_B[validE]=b;validE++;}}
+  /* For the firing pool, sample edges by stride so we get coverage across the brain. */
+  const stride=Math.max(1,Math.floor(validE/400));
+  const firingPool=[];for(let i=0;i<400&&i*stride<validE;i++){firingPool.push({eIdx:i*stride,t:Math.random(),speed:0.0035+Math.random()*0.006});}
+  /* Legend swatches per kind — counted from the full graph stats so it shows all kinds, not just
+     the sample. */
+  const kindStats=data.stats||{};
   const leg=document.getElementById('nxLegend');
-  if(leg){leg.innerHTML=kinds.filter(k=>byKind[k].length>0).slice(0,18).map(k=>`<span style="display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:11px;background:rgba(10,20,34,.55);border:1px solid rgba(91,230,255,.12)"><span style="width:7px;height:7px;border-radius:50%;background:${NEXUS_KIND_COLOR[k]||'#fff'};box-shadow:0 0 7px ${NEXUS_KIND_GLOW[k]||'#fff'}"></span>${k}·${byKind[k].length.toLocaleString()}</span>`).join('');}
-  if(stats)stats.textContent=`${data.stats.nodes.toLocaleString()} nodes · ${data.stats.edges.toLocaleString()} edges · rendering ${sampled.length.toLocaleString()}`;
-  /* Pre-pick which edges will "fire" — keep a rolling cohort lit. */
-  const FIRING_CAP=Math.min(120,Math.floor(edges.length*0.04));
-  const firingPool=[];for(let i=0;i<FIRING_CAP;i++){firingPool.push({eIdx:Math.floor(Math.random()*edges.length),t:Math.random(),speed:0.0035+Math.random()*0.006});}
-  _nx={nodes:sampled,edges,positions,firingPool,canvas:cnv,ctx:cnv.getContext('2d'),
-       hoverId:null,raf:0,t0:performance.now()};
-  function fit(){const rect=cnv.getBoundingClientRect();const dpr=Math.min(2,devicePixelRatio||1);cnv.width=Math.max(1,Math.floor(rect.width*dpr));cnv.height=Math.max(1,Math.floor(rect.height*dpr));_nx.ctx.setTransform(dpr,0,0,dpr,0,0);_nx.W=rect.width;_nx.H=rect.height;}
-  fit();window.addEventListener('resize',fit,{passive:true});
-  cnv.onmousemove=(ev)=>{const rect=cnv.getBoundingClientRect();const mx=ev.clientX-rect.left,my=ev.clientY-rect.top;
-    const cx=_nx.W/2,cy=_nx.H/2,rx=_nx.W*0.42,ry=_nx.H*0.40;
-    /* find nearest node within 14px */
-    let bestId=null,bestD=14*14;
-    for(const n of _nx.nodes){const p=_nx.positions.get(n.id);const x=cx+(p.u-0.5)*rx*2,y=cy+(p.v-0.5)*ry*2;const dx=x-mx,dy=y-my;const d=dx*dx+dy*dy;if(d<bestD){bestD=d;bestId=n.id;}}
-    _nx.hoverId=bestId;
-    const hover=document.getElementById('nxHover');
-    if(bestId){const p=_nx.positions.get(bestId);const n=_nx.nodes.find(x=>x.id===bestId)||{};hover.innerHTML=`<div style="color:${NEXUS_KIND_COLOR[p.kind]||'#fff'};font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase">${p.kind}</div><div style="color:#eafcff;font-size:11px;margin-top:2px;max-width:340px;word-break:break-all">${(p.label||'').slice(0,180)}</div>${n.path?`<div style="color:#7fb0c4;font-size:9px;margin-top:3px">${n.path.slice(0,200)}</div>`:''}`;hover.style.display='block';hover.style.left=(mx+14)+'px';hover.style.top=(my+14)+'px';}else{hover.style.display='none';}
-  };
-  cnv.onmouseleave=()=>{_nx.hoverId=null;document.getElementById('nxHover').style.display='none';};
+  if(leg){const kindKeys=Object.keys(kindStats).filter(k=>k!=='nodes'&&k!=='edges'&&typeof kindStats[k]==='number');
+    leg.innerHTML=kindKeys.slice(0,18).map(k=>`<span style="display:flex;align-items:center;gap:4px;padding:3px 7px;border-radius:11px;background:rgba(10,20,34,.55);border:1px solid rgba(91,230,255,.12)"><span style="width:7px;height:7px;border-radius:50%;background:${NEXUS_KIND_COLOR[k]||'#fff'};box-shadow:0 0 7px ${NEXUS_KIND_GLOW[k]||'#fff'}"></span>${k}·${kindStats[k].toLocaleString()}</span>`).join('');}
+  if(stats)stats.textContent=`${kindStats.nodes.toLocaleString()} nodes · ${kindStats.edges.toLocaleString()} edges · painting ALL`;
+
+  _nx={N,validE,POS_U,POS_V,FIRE,KIND,LABEL,EDGE_A,EDGE_B,idIndex,firingPool,
+       allNodes,canvas:cnv,ctx:cnv.getContext('2d'),
+       static:null,bucket:null,hoverIdx:-1,raf:0,t0:performance.now()};
+
+  function fit(){const rect=cnv.getBoundingClientRect();const dpr=Math.min(2,devicePixelRatio||1);cnv.width=Math.max(1,Math.floor(rect.width*dpr));cnv.height=Math.max(1,Math.floor(rect.height*dpr));_nx.ctx.setTransform(dpr,0,0,dpr,0,0);_nx.W=rect.width;_nx.H=rect.height;buildStatic();}
   function brainOutline(ctx,W,H){
-    /* Two overlapping ellipses = top-down brain silhouette + central sulcus line. */
     const cx=W/2,cy=H/2,rx=W*0.40,ry=H*0.40;
     ctx.save();ctx.lineWidth=1.4;ctx.strokeStyle='rgba(91,230,255,.18)';
-    /* outer brain */
     ctx.beginPath();for(let i=0;i<=64;i++){const a=i/64*Math.PI*2;const r=1+Math.sin(a*4)*0.025+Math.sin(a*9)*0.015;ctx.lineTo(cx+Math.cos(a)*rx*r,cy+Math.sin(a)*ry*r);}ctx.closePath();ctx.stroke();
-    /* central sulcus */
     ctx.beginPath();ctx.moveTo(cx,cy-ry*0.9);ctx.quadraticCurveTo(cx-W*0.01,cy,cx,cy+ry*0.9);ctx.stroke();
-    /* inner bloom */
     const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(rx,ry));grad.addColorStop(0,'rgba(91,230,255,.05)');grad.addColorStop(1,'rgba(91,230,255,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
     ctx.restore();
   }
+  /* Build the STATIC layer once per resize. ImageData direct pixel writes are 100x faster than
+     fillRect for millions of points. Each node draws as a single coloured pixel; coverage and
+     density alone create the brain shape. */
+  function buildStatic(){
+    const W=_nx.W,H=_nx.H,dpr=Math.min(2,devicePixelRatio||1);
+    const cw=Math.max(1,Math.floor(W*dpr)),ch=Math.max(1,Math.floor(H*dpr));
+    const off=new OffscreenCanvas ? new OffscreenCanvas(cw,ch) : document.createElement('canvas');
+    if(!off.width){off.width=cw;off.height=ch;}
+    const octx=off.getContext('2d');
+    octx.fillStyle='rgba(0,0,0,0)';octx.clearRect(0,0,cw,ch);
+    /* parsed RGB cache per kind for direct pixel writes */
+    const colCache={};
+    function hexToRGB(hex){if(colCache[hex])return colCache[hex];const m=/^#([0-9a-f]{6})$/i.exec(hex||'');const v=m?parseInt(m[1],16):0xffffff;return colCache[hex]={r:(v>>16)&255,g:(v>>8)&255,b:v&255};}
+    const img=octx.createImageData(cw,ch);const data=img.data;
+    const cx=cw/2,cy=ch/2,rx=cw*0.42,ry=ch*0.40;
+    for(let i=0;i<_nx.N;i++){
+      const u=_nx.POS_U[i],v=_nx.POS_V[i];
+      const x=Math.floor(cx+(u-0.5)*rx*2),y=Math.floor(cy+(v-0.5)*ry*2);
+      if(x<0||x>=cw||y<0||y>=ch)continue;
+      const c=hexToRGB(NEXUS_KIND_COLOR[_nx.KIND[i]]||'#ffffff');
+      const idx=(y*cw+x)*4;
+      /* additive blend: brighter where points pile up — that's how the brain mass forms visually */
+      data[idx  ]=Math.min(255,data[idx  ]+c.r);
+      data[idx+1]=Math.min(255,data[idx+1]+c.g);
+      data[idx+2]=Math.min(255,data[idx+2]+c.b);
+      data[idx+3]=Math.min(255,data[idx+3]+200);
+    }
+    octx.putImageData(img,0,0);
+    _nx.static=off;
+    /* Spatial bucket index for O(1) hover lookup. 50×40 grid. */
+    const bx=80,by=60;const buckets=new Array(bx*by);for(let i=0;i<buckets.length;i++)buckets[i]=[];
+    for(let i=0;i<_nx.N;i++){const gx=Math.max(0,Math.min(bx-1,Math.floor(((_nx.POS_U[i]-0.04)/0.92)*bx)));const gy=Math.max(0,Math.min(by-1,Math.floor(((_nx.POS_V[i]-0.04)/0.92)*by)));buckets[gy*bx+gx].push(i);}
+    _nx.bucket={bx,by,buckets};
+  }
+  fit();window.addEventListener('resize',fit,{passive:true});
+
+  cnv.onmousemove=(ev)=>{const rect=cnv.getBoundingClientRect();const mx=ev.clientX-rect.left,my=ev.clientY-rect.top;
+    const W=_nx.W,H=_nx.H,cx=W/2,cy=H/2,rx=W*0.42,ry=H*0.40;
+    /* convert mouse → uv → bucket → check that bucket + neighbours. */
+    const u=(mx-cx)/(rx*2)+0.5,v=(my-cy)/(ry*2)+0.5;
+    const b=_nx.bucket;if(!b){return;}
+    const bx=b.bx,by=b.by;
+    const gx=Math.max(0,Math.min(bx-1,Math.floor(((u-0.04)/0.92)*bx)));
+    const gy=Math.max(0,Math.min(by-1,Math.floor(((v-0.04)/0.92)*by)));
+    let bestI=-1,bestD=14*14;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const xx=gx+dx,yy=gy+dy;if(xx<0||xx>=bx||yy<0||yy>=by)continue;const list=b.buckets[yy*bx+xx];for(let k=0;k<list.length;k++){const i=list[k];const px=cx+(_nx.POS_U[i]-0.5)*rx*2,py=cy+(_nx.POS_V[i]-0.5)*ry*2;const ddx=px-mx,ddy=py-my;const d=ddx*ddx+ddy*ddy;if(d<bestD){bestD=d;bestI=i;}}}
+    _nx.hoverIdx=bestI;
+    const hover=document.getElementById('nxHover');
+    if(bestI>=0){hover.innerHTML=`<div style="color:${NEXUS_KIND_COLOR[_nx.KIND[bestI]]||'#fff'};font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase">${_nx.KIND[bestI]}</div><div style="color:#eafcff;font-size:11px;margin-top:2px;max-width:340px;word-break:break-all">${(_nx.LABEL[bestI]||'').slice(0,180)}</div>`;hover.style.display='block';hover.style.left=(mx+14)+'px';hover.style.top=(my+14)+'px';}else{hover.style.display='none';}
+  };
+  cnv.onmouseleave=()=>{_nx.hoverIdx=-1;document.getElementById('nxHover').style.display='none';};
+
   function frame(now){
     const ctx=_nx.ctx,W=_nx.W,H=_nx.H;
     ctx.clearRect(0,0,W,H);
     brainOutline(ctx,W,H);
+    /* Composite the static neuron mass — drawn once, blitted every frame. */
+    if(_nx.static){ctx.save();ctx.globalCompositeOperation='lighter';ctx.drawImage(_nx.static,0,0,W,H);ctx.restore();}
     const cx=W/2,cy=H/2,rx=W*0.42,ry=H*0.40;
-    /* edges: faint baseline + firing pulses */
-    ctx.lineWidth=0.5;
-    for(const e of _nx.edges){const a=_nx.positions.get(e.src),b=_nx.positions.get(e.dst);if(!a||!b)continue;const ax=cx+(a.u-0.5)*rx*2,ay=cy+(a.v-0.5)*ry*2,bx=cx+(b.u-0.5)*rx*2,by=cy+(b.v-0.5)*ry*2;
-      ctx.strokeStyle='rgba(91,230,255,.05)';ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();}
-    /* firing pulses travelling along their assigned edges */
-    for(let i=0;i<_nx.firingPool.length;i++){const f=_nx.firingPool[i];f.t+=f.speed;if(f.t>=1){f.t=0;f.eIdx=Math.floor(Math.random()*_nx.edges.length);f.speed=0.0035+Math.random()*0.006;}
-      const e=_nx.edges[f.eIdx];if(!e)continue;const a=_nx.positions.get(e.src),b=_nx.positions.get(e.dst);if(!a||!b)continue;
-      const ax=cx+(a.u-0.5)*rx*2,ay=cy+(a.v-0.5)*ry*2,bx=cx+(b.u-0.5)*rx*2,by=cy+(b.v-0.5)*ry*2;
+    /* Firing pulses (synapses) — 400 simultaneous travelling pulses across the full edge set. */
+    for(let i=0;i<_nx.firingPool.length;i++){const f=_nx.firingPool[i];f.t+=f.speed;if(f.t>=1){f.t=0;f.eIdx=Math.floor(Math.random()*_nx.validE);f.speed=0.0035+Math.random()*0.006;}
+      const ai=_nx.EDGE_A[f.eIdx],bi=_nx.EDGE_B[f.eIdx];
+      const ax=cx+(_nx.POS_U[ai]-0.5)*rx*2,ay=cy+(_nx.POS_V[ai]-0.5)*ry*2;
+      const bx=cx+(_nx.POS_U[bi]-0.5)*rx*2,by=cy+(_nx.POS_V[bi]-0.5)*ry*2;
       const px=ax+(bx-ax)*f.t,py=ay+(by-ay)*f.t;
-      const col=NEXUS_KIND_GLOW[a.kind]||'#5be6ff';
-      ctx.save();ctx.shadowColor=col;ctx.shadowBlur=10;ctx.strokeStyle=col;ctx.lineWidth=1.2;
+      const col=NEXUS_KIND_GLOW[_nx.KIND[ai]]||'#5be6ff';
+      ctx.save();ctx.shadowColor=col;ctx.shadowBlur=10;ctx.strokeStyle=col;ctx.lineWidth=1.1;
       ctx.beginPath();ctx.moveTo(ax+(bx-ax)*Math.max(0,f.t-0.07),ay+(by-ay)*Math.max(0,f.t-0.07));ctx.lineTo(px,py);ctx.stroke();
       ctx.fillStyle=col;ctx.beginPath();ctx.arc(px,py,1.6,0,Math.PI*2);ctx.fill();
       ctx.restore();
-      /* mark target node as 'firing' so it pulses on arrival */
-      if(f.t>0.85){b.fire=1.0;}
+      if(f.t>0.85){_nx.FIRE[bi]=1.0;}
     }
-    /* nodes with pulsing fire decay */
-    const tt=(now-_nx.t0)/1000;
-    for(const n of _nx.nodes){const p=_nx.positions.get(n.id);if(!p)continue;
-      const x=cx+(p.u-0.5)*rx*2,y=cy+(p.v-0.5)*ry*2;
-      const base=NEXUS_KIND_COLOR[p.kind]||'#fff';const glow=NEXUS_KIND_GLOW[p.kind]||base;
-      const breath=0.85+0.15*Math.sin(tt*1.6+(p.u+p.v)*9);const pulse=p.fire>0?p.fire:0;
-      const r=(1.4+breath*0.6+pulse*2.4)*(_nx.hoverId===n.id?2:1);
-      ctx.save();ctx.shadowColor=glow;ctx.shadowBlur=6+pulse*16;ctx.fillStyle=base;ctx.globalAlpha=0.75+pulse*0.25;
-      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
-      if(pulse>0.4){ctx.globalAlpha=pulse*0.5;ctx.strokeStyle=glow;ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,r+pulse*5,0,Math.PI*2);ctx.stroke();}
+    /* Decay firing array + draw only the currently-firing nodes (most cost-efficient). */
+    for(let i=0;i<_nx.N;i++){const fv=_nx.FIRE[i];if(fv<=0)continue;
+      const px=cx+(_nx.POS_U[i]-0.5)*rx*2,py=cy+(_nx.POS_V[i]-0.5)*ry*2;
+      const col=NEXUS_KIND_GLOW[_nx.KIND[i]]||'#fff';
+      ctx.save();ctx.shadowColor=col;ctx.shadowBlur=4+fv*16;ctx.fillStyle=col;ctx.globalAlpha=0.4+fv*0.6;
+      ctx.beginPath();ctx.arc(px,py,1.6+fv*2.4,0,Math.PI*2);ctx.fill();
+      if(fv>0.4){ctx.globalAlpha=fv*0.5;ctx.strokeStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.arc(px,py,2+fv*6,0,Math.PI*2);ctx.stroke();}
       ctx.restore();
-      p.fire=Math.max(0,p.fire-0.025);
+      _nx.FIRE[i]=Math.max(0,fv-0.025);
     }
+    /* Hover highlight ring. */
+    if(_nx.hoverIdx>=0){const i=_nx.hoverIdx;const px=cx+(_nx.POS_U[i]-0.5)*rx*2,py=cy+(_nx.POS_V[i]-0.5)*ry*2;const col=NEXUS_KIND_GLOW[_nx.KIND[i]]||'#fff';
+      ctx.save();ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=14;
+      ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.stroke();ctx.restore();}
     _nx.raf=requestAnimationFrame(frame);
   }
   _nx.raf=requestAnimationFrame(frame);
