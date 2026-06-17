@@ -56,6 +56,32 @@ def runs(limit: int = 200, archived: int = 1, _t: str | None = Depends(optional_
     return {"ok": True, "open": open_n, "total": len(items), "items": items}
 
 
+@router.get("/stats")
+def stats(_t: str | None = Depends(optional_bearer)):
+    """Summarise every whip run: counts by status/outcome + average elapsed seconds."""
+    items = list_runs(limit=1000, include_archived=True)
+    by_status: dict = {}
+    by_outcome: dict = {}
+    elapsed_total = 0
+    elapsed_n = 0
+    for it in items:
+        by_status[it.get("status", "?")] = by_status.get(it.get("status", "?"), 0) + 1
+        if it.get("archived"):
+            by_outcome[it.get("outcome", "?")] = by_outcome.get(it.get("outcome", "?"), 0) + 1
+        if it.get("elapsed"):
+            elapsed_total += int(it["elapsed"])
+            elapsed_n += 1
+    return {
+        "ok": True,
+        "total": len(items),
+        "open": sum(1 for it in items if it.get("status") == "active" and not it.get("archived")),
+        "archived": sum(1 for it in items if it.get("archived")),
+        "by_status": by_status,
+        "by_outcome": by_outcome,
+        "avg_elapsed_s": (elapsed_total // elapsed_n) if elapsed_n else 0,
+    }
+
+
 @router.get("/run/{run_id}")
 def run_detail(run_id: str, _t: str | None = Depends(optional_bearer)):
     data = get_run(run_id)
