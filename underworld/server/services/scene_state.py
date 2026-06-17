@@ -335,6 +335,13 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
             world.id, {v["id"]: v["position"] for v in visuals})
     except Exception:  # noqa: BLE001
         presence_frame = {"attention_hotspots": [], "creator_present": False}
+    # GOD-LAYER avatar — pos/yaw/pitch/mode of the watching creator so the renderer draws the
+    # avatar body (free / god-camera). Omitted entirely when nobody is connected to this world.
+    try:
+        from underworld.server.services import player_avatar as _pa
+        player_avatar_block = _pa.primary_avatar_block(world.id)
+    except Exception:  # noqa: BLE001
+        player_avatar_block = None
     return {
         "world_id": world.id, "tick": world.tick, "era": world.era,
         "sim_year": round(world.sim_year, 1),
@@ -348,6 +355,7 @@ def build_scene_state(world, seed, minions, *, heightmap=None, weather: str = "c
             "god_beat": director_frame.get("god_beat"),
             "possessed_id": possessed_id,
             "presence": presence_frame,
+            "player_avatar": player_avatar_block,
         },
         "terrain": {
             "seed": seed_int,

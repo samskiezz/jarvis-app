@@ -22,6 +22,7 @@ from .routes import knowledge as knowledge_routes
 from .routes import minions as minion_routes
 from .routes import patents as patent_routes
 from .routes import physics as physics_routes
+from .routes import player as player_routes
 from .routes import projects as project_routes
 from .routes import safety as safety_routes
 from .routes import science as science_routes
@@ -263,6 +264,7 @@ def create_app() -> FastAPI:
     app.include_router(auth_routes.router)
     app.include_router(world_routes.router)
     app.include_router(god_routes.router)
+    app.include_router(player_routes.router)
     app.include_router(minion_routes.router)
     app.include_router(patent_routes.router)
     app.include_router(invention_routes.router)
