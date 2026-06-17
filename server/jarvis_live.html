@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='42'; window.__JV_VER=VER;
+  var KEY='__jv',VER='43'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2074,6 +2074,31 @@ html.low-power #mic.live{animation:none}
   <div class=ovtitle>🎨 JARVIS STUDIO · LIBRARY <span style="color:var(--dim)">· images &amp; 3D models you created</span></div>
   <div id=libgrid></div></div>
 
+<!-- 🔧 CLAUDE CODE — interactive whip viewer (lists every Claude job + live tail; new interactive runs) -->
+<div class=ov id=ovClaudeEnv>
+  <button class=close onclick="setMode('live')">✕ Close</button>
+  <div class=ovtitle>🔧 CLAUDE CODE <span style="color:var(--dim)">· whip transcripts &amp; interactive shell</span></div>
+  <div id=ccHead style="display:flex;gap:8px;align-items:center;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.06)">
+    <span id=ccCounts style="color:var(--dim);font-size:11px">—</span>
+    <span class=wlspacer style="flex:1"></span>
+    <label style="font-size:11px;color:var(--dim);display:flex;gap:4px;align-items:center"><input type=checkbox id=ccShowArchived checked> show archived</label>
+    <button class=wlbtn id=ccRefresh title="Refresh list">↻ Refresh</button>
+  </div>
+  <div id=ccBody style="display:grid;grid-template-columns:320px 1fr;gap:10px;padding:10px;height:calc(100% - 88px);overflow:hidden">
+    <div id=ccList style="overflow:auto;border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:6px"></div>
+    <div id=ccView style="display:flex;flex-direction:column;gap:8px;overflow:hidden">
+      <div id=ccDetail style="flex:1;overflow:auto;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;white-space:pre-wrap">Select a run on the left, or start a new interactive run below.</div>
+      <div style="display:flex;gap:6px;align-items:flex-end">
+        <textarea id=ccPrompt placeholder="Type a prompt for an interactive Claude Code run (requires API key)…" rows=3 style="flex:1;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;padding:8px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <input id=ccApiKey type=password placeholder="Bearer token" style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#fff;padding:6px;font-size:11px;width:170px">
+          <button class=wlbtn id=ccRun title="Start interactive Claude Code run">▶ Run</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 🛰 LIVE TASKS — Mission Control overlay -->
 <div class=ov id=ovWork>
   <button class=close onclick="setMode('live')">✕ Close</button>
@@ -3205,6 +3230,81 @@ function worklistStop(){
   WL_VISIBILITYHANDLER=null;
 }
 
+/* ============ Claude Code mini-app: lists every whip run, live-tails the selected one, can start an interactive run ============ */
+let CC_TIMER=null, CC_ES=null, CC_SEL=null;
+function _ccFmtElapsed(s){s=Number(s||0);if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m'+(s%60)+'s';return Math.floor(s/3600)+'h'+Math.floor((s%3600)/60)+'m';}
+function _ccBadge(st){const c={active:'#3fa9ff',ok:'#46d39a',landed:'#46d39a',idle_kill:'#e9883b',hard_cap:'#e9883b',cli_error:'#ff5c75',rolled_back:'#ff5c75',discarded:'#888',exited:'#888'}[st]||'#aaa';return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+c+';margin-right:6px"></span>';}
+async function claudeEnvOpen(){
+  await ccRefreshList();
+  if(CC_TIMER)clearInterval(CC_TIMER);
+  CC_TIMER=setInterval(ccRefreshList,5000);
+  const r=document.getElementById('ccRefresh');if(r)r.onclick=ccRefreshList;
+  const sa=document.getElementById('ccShowArchived');if(sa)sa.onchange=ccRefreshList;
+  const run=document.getElementById('ccRun');if(run)run.onclick=ccStartRun;
+}
+function claudeEnvClose(){
+  if(CC_TIMER){clearInterval(CC_TIMER);CC_TIMER=null;}
+  if(CC_ES){try{CC_ES.close();}catch(_){}CC_ES=null;}
+}
+async function ccRefreshList(){
+  try{
+    const showArc=document.getElementById('ccShowArchived');
+    const ar=(showArc&&showArc.checked)?1:0;
+    const r=await fetch('/v1/claude_code/runs?archived='+ar+'&limit=200');
+    if(!r.ok)return;
+    const j=await r.json();
+    const list=document.getElementById('ccList');if(!list)return;
+    const c=document.getElementById('ccCounts');if(c)c.textContent=(j.open||0)+' open · '+(j.total||0)+' total';
+    list.innerHTML=(j.items||[]).map(it=>{
+      const st=it.archived?(it.outcome||'archived'):(it.status||'?');
+      const lbl=(it.label||it.stage||it.run_id||'').replace(/</g,'&lt;');
+      const el=_ccFmtElapsed(it.elapsed||0);
+      return '<div class=ccrow data-id="'+it.run_id+'" style="cursor:pointer;padding:6px 8px;border-radius:6px;margin-bottom:4px;background:'+(CC_SEL===it.run_id?'rgba(63,169,255,0.18)':'transparent')+'">'
+            +_ccBadge(st)+'<b style="font-size:11px">'+lbl.slice(0,38)+'</b>'
+            +'<div style="color:var(--dim);font-size:10px;margin-top:2px">'+(it.stage||'')+' · '+st+' · '+el+(it.archived?' · archived':'')+'</div>'
+            +'</div>';
+    }).join('')||'<div style="color:var(--dim);padding:10px;font-size:11px">No Claude runs yet — interactive runs and self-improvement jobs will appear here.</div>';
+    list.querySelectorAll('.ccrow').forEach(el=>el.onclick=()=>ccSelect(el.dataset.id));
+  }catch(_){}
+}
+async function ccSelect(run_id){
+  CC_SEL=run_id;
+  const view=document.getElementById('ccDetail');
+  if(view)view.textContent='Loading…';
+  if(CC_ES){try{CC_ES.close();}catch(_){}CC_ES=null;}
+  try{
+    const r=await fetch('/v1/claude_code/run/'+encodeURIComponent(run_id));
+    if(!r.ok){view.textContent='Failed to load run.';return;}
+    const j=await r.json();
+    const st=j.status||{},hb=j.heartbeat||{};
+    const head='— '+(st.stage||'')+' · '+(st.label||'')+' · '+(st.status||'?')+(st.archived?' (archived: '+(st.outcome||'')+')':'')+' · '+_ccFmtElapsed(hb.elapsed||st.elapsed||0)+'\n\nPROMPT:\n'+(j.prompt||'').slice(0,4000)+'\n\nOUTPUT:\n';
+    view.textContent=head+(j.output||'');
+    view.scrollTop=view.scrollHeight;
+    if((st.status||'')==='active'){
+      try{
+        CC_ES=new EventSource('/v1/claude_code/stream/'+encodeURIComponent(run_id));
+        CC_ES.addEventListener('output',ev=>{try{const d=JSON.parse(ev.data);view.textContent+=d.chunk;view.scrollTop=view.scrollHeight;}catch(_){}});
+        CC_ES.addEventListener('end',()=>{try{CC_ES.close();}catch(_){}CC_ES=null;ccRefreshList();});
+      }catch(_){}
+    }
+  }catch(_){if(view)view.textContent='Error loading run.';}
+  ccRefreshList();
+}
+async function ccStartRun(){
+  const p=(document.getElementById('ccPrompt')||{}).value||'';
+  const k=(document.getElementById('ccApiKey')||{}).value||'';
+  if(!p.trim()){alert('Enter a prompt');return;}
+  if(!k.trim()){alert('Enter your bearer token (interactive runs require auth).');return;}
+  try{
+    const r=await fetch('/v1/claude_code/run',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({prompt:p,model:'claude-sonnet-4-6',label:p.slice(0,48)})});
+    const j=await r.json();
+    if(!r.ok||!j.run_id){alert('Run failed: '+(j.detail||j.error||r.status));return;}
+    document.getElementById('ccPrompt').value='';
+    await ccRefreshList();
+    await ccSelect(j.run_id);
+  }catch(e){alert('Run failed: '+(e.message||e));}
+}
+
 let WL_KEYHANDLER=null;
 let WL_VISIBILITYHANDLER=null;
 
@@ -3508,14 +3608,16 @@ function micToggle(){
 
 /* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
 function setMode(mode,arg){
-  ['ovGuardian','ovLib','ovWork'].forEach(id=>$(id)&&$(id).classList.remove('open'));
+  ['ovGuardian','ovLib','ovWork','ovClaudeEnv'].forEach(id=>$(id)&&$(id).classList.remove('open'));
   if(mode==='guardian'){if(!$('guardFrame').src)$('guardFrame').src='guardian?room=mum';$('ovGuardian').classList.add('open');jarvisSpeak('Opening the Guardian monitor for your mother.');}
   else if(mode==='library'){loadLib();$('ovLib').classList.add('open');}
   else if(mode==='worklist'){worklistStart();}
+  else if(mode==='claude_env'){try{claudeEnvOpen();}catch(_){}$('ovClaudeEnv').classList.add('open');}
   // 'live' just closes overlays
   if(mode!=='worklist')worklistStop();   // stop the poll/RAF when leaving worklist
+  if(mode!=='claude_env')try{claudeEnvClose();}catch(_){}
   // FINDING2: hide the dock while a fullscreen overlay covers the universe; restore it on return to live
-  const overlayOpen=(mode==='guardian'||mode==='library'||mode==='worklist');
+  const overlayOpen=(mode==='guardian'||mode==='library'||mode==='worklist'||mode==='claude_env');
   const dk=$('dock');if(dk)dk.classList.toggle('hidden',overlayOpen);
   const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
   ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
@@ -4651,6 +4753,7 @@ const CEL_PLANETS=[
 const CEL_MOONS={
  miniapps:[
   {id:'app-talk',    label:'🎤 Talk',      I:1.00,fn:()=>$('say').focus(),       sats:[['Voice Input',()=>micToggle()],['Chat',()=>$('say').focus()]]},
+  {id:'app-claude-env',label:'🔧 Claude Code',I:0.97,fn:()=>setMode('claude_env'),sats:[['Open environment',()=>setMode('claude_env')],['Live transcripts',()=>setMode('claude_env')]]},
   {id:'app-guardian',label:'🛡 Guardian',  I:0.95,gateway:'guardian',            sats:[['Live Monitor',()=>setMode('guardian')],['Talk to Room',()=>setMode('guardian')]]},
   {id:'app-worklist',label:'🛰 Live Tasks',I:0.90,fn:()=>setMode('worklist'),    sats:[['Active Tasks',()=>setMode('worklist')],['Approvals',()=>setMode('worklist')]]},
   {id:'app-vitals',  label:'🩺 Vitals',    I:0.85,fn:()=>openVitals(),           sats:[['Alerts',()=>openVitals()],['Services',()=>openVitals()],['Gauges',()=>openVitals()]]},
@@ -6174,6 +6277,7 @@ const MINI_APPS=[
   // iOS-style apps removed from the mini-app surface per owner request ("forget the iOS apps").
   // Their overlay functions are kept for hotkeys / context-menu / control-centre / 3D "Look Up".
   // Hubs consolidate overlapping apps under one tabbed sheet (opening a child id deep-links its tab).
+  {id:'claude_env',ic:'🔧',t:'Claude Code',d:'Interactive Claude Code environment + every whip transcript (open chats archive when done)'},
   {id:'nexus',ic:'🧬',t:'NEXUS',d:'Live brain map of the whole system — codebase, infra, memory, embeddings, lessons firing across synapses'},
   {id:'syshealth',ic:'🩺',t:'System Health',d:'Vitals, health, doctor, debugger, optimiser, GPU brain'},
   {id:'intel',ic:'🛰',t:'Intelligence',d:'Datasets, reports, alerts, cases, boards'},

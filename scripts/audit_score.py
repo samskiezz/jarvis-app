@@ -203,17 +203,15 @@ def _claude_judge(prompt: str, model: str = MODEL, timeout: int = 360) -> str:
     # Free-by-default: route via local bridge unless the owner explicitly opts in to paid Claude.
     if not ALLOW_CLAUDE:
         return _local_judge(prompt, timeout=timeout)
-    pf = "/tmp/_audit_prompt.txt"
-    of = "/tmp/_audit_out.json"
-    with open(pf, "w", encoding="utf-8") as fh:
-        fh.write(prompt)
-    cmd = ('claude -p "$(cat %s)" --model %s --output-format json > %s 2>&1' % (pf, model, of))
-    _run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})
+    # MANDATORY whip on every Claude invocation — no direct subprocess calls allowed.
     try:
-        raw = open(of, encoding="utf-8").read()
-    except Exception:  # noqa: BLE001
-        return ""
-    # claude --output-format json wraps the reply; pull the assistant text then the inner JSON object.
+        from claude_whip import whip_claude  # local import: scripts/ is on sys.path in callers
+    except ImportError:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from claude_whip import whip_claude
+    res = whip_claude(prompt=prompt, model=model, stage="audit", label="audit_judge",
+                      soft_timeout=timeout)
+    raw = res.get("out_text") or ""
     try:
         wrap = json.loads(raw)
         return wrap.get("result") or wrap.get("text") or raw

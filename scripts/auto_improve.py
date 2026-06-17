@@ -35,6 +35,7 @@ import urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from audit_score import audit_score  # noqa: E402  (the 1,000-pt Claude scoring/merge-decision engine)
 import viability_model as viab  # noqa: E402  (learned pre-filter; gates only once it is ≥90% repeatable)
+from claude_whip import whip_claude, archive_run  # noqa: E402  (MANDATORY whip on every Claude call)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = os.path.join(ROOT, ".venv", "bin", "python")
@@ -299,13 +300,13 @@ def _implement_claude(feat: dict, timeout=1800) -> bool:
         "failure — re-read your edit and make the <script> blocks pass `node --check` before you finish.\n"
         % (feat["title"], feat["brief"])
     )
-    pf = "/tmp/_ai_prompt.txt"
-    open(pf, "w").write(prompt)
-    of = "/tmp/_ai_out.json"
-    cmd = ("%s -p \"$(cat %s)\" --model %s --output-format json --dangerously-skip-permissions > %s 2>&1"
-           % (shlex.quote(CLAUDE), shlex.quote(pf), shlex.quote("claude-sonnet-4-6"), shlex.quote(of)))
-    rc, _ = run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})  # allow claude skip-perms as root
-    return rc == 0
+    res = whip_claude(prompt=prompt, model="claude-sonnet-4-6", stage="implement",
+                      label=feat.get("title", ""), soft_timeout=timeout)
+    feat["_last_run_id"] = res.get("run_id")
+    log({"event": "claude_run", "stage": "implement", "title": feat.get("title"),
+         "run_id": res.get("run_id"), "rc": res.get("rc"), "elapsed": res.get("elapsed"),
+         "status": res.get("status")})
+    return res.get("rc") == 0
 
 
 def revise(feat: dict, required_fixes: list, timeout=1800) -> bool:
@@ -330,13 +331,13 @@ def revise(feat: dict, required_fixes: list, timeout=1800) -> bool:
         "--changed-only` and fix until it reports pass=true.\n"
         % (feat["title"], feat.get("brief", ""), fixes)
     )
-    pf = "/tmp/_ai_prompt.txt"
-    open(pf, "w").write(prompt)
-    of = "/tmp/_ai_out.json"
-    cmd = ("%s -p \"$(cat %s)\" --model %s --output-format json --dangerously-skip-permissions > %s 2>&1"
-           % (shlex.quote(CLAUDE), shlex.quote(pf), shlex.quote("claude-sonnet-4-6"), shlex.quote(of)))
-    rc, _ = run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})
-    return rc == 0
+    res = whip_claude(prompt=prompt, model="claude-sonnet-4-6", stage="revise",
+                      label=feat.get("title", ""), soft_timeout=timeout)
+    feat["_last_run_id"] = res.get("run_id")
+    log({"event": "claude_run", "stage": "revise", "title": feat.get("title"),
+         "run_id": res.get("run_id"), "rc": res.get("rc"), "elapsed": res.get("elapsed"),
+         "status": res.get("status")})
+    return res.get("rc") == 0
 
 
 def gate_repair(feat: dict, failed: list, detail: dict, timeout=1800) -> bool:
@@ -361,13 +362,13 @@ def gate_repair(feat: dict, failed: list, detail: dict, timeout=1800) -> bool:
         "reports pass=true. Do NOT touch server/auth.py, server/config.py, or scripts/auto_improve*.py.\n"
         % (feat["title"], feat.get("brief", ""), ", ".join(failed), det)
     )
-    pf = "/tmp/_ai_prompt.txt"
-    open(pf, "w").write(prompt)
-    of = "/tmp/_ai_out.json"
-    cmd = ("%s -p \"$(cat %s)\" --model %s --output-format json --dangerously-skip-permissions > %s 2>&1"
-           % (shlex.quote(CLAUDE), shlex.quote(pf), shlex.quote("claude-sonnet-4-6"), shlex.quote(of)))
-    rc, _ = run(["bash", "-c", cmd], timeout=timeout, env={"IS_SANDBOX": "1"})
-    return rc == 0
+    res = whip_claude(prompt=prompt, model="claude-sonnet-4-6", stage="gate_repair",
+                      label=feat.get("title", ""), soft_timeout=timeout)
+    feat["_last_run_id"] = res.get("run_id")
+    log({"event": "claude_run", "stage": "gate_repair", "title": feat.get("title"),
+         "run_id": res.get("run_id"), "rc": res.get("rc"), "elapsed": res.get("elapsed"),
+         "status": res.get("status")})
+    return res.get("rc") == 0
 
 
 def gate() -> dict:
@@ -394,10 +395,21 @@ def restart_services():
     time.sleep(8)
 
 
+def _archive_feat_runs(feat: dict, outcome: str, detail: dict | None = None):
+    """Mark every claude_runs/* tied to this feature as archived so the UI clears it from open chats."""
+    rid = (feat or {}).get("_last_run_id")
+    if rid:
+        try:
+            archive_run(rid, outcome=outcome, detail=detail or {})
+        except Exception:  # noqa: BLE001
+            pass
+
+
 def land(feat: dict, feature_files: list[str]) -> dict:
     safe = [f for f in feature_files
             if f not in PROTECTED and in_code_scope(f) and os.path.exists(os.path.join(ROOT, f))]
     if not safe:
+        _archive_feat_runs(feat, outcome="no_committable_files")
         return {"landed": False, "reason": "no committable feature files"}
     run(["git", "add", *safe], timeout=60)
     msg = "auto: %s\n\nAutonomous self-improvement (gated: compile+js+theme+tests+boot).\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>" % feat["title"][:72]
@@ -410,15 +422,17 @@ def land(feat: dict, feature_files: list[str]) -> dict:
         return {"landed": False, "reason": "push failed: " + out[-200:]}
     restart_services()
     if health_ok():
+        _archive_feat_runs(feat, outcome="landed", detail={"files": safe})
         return {"landed": True}
     # AUTO-ROLLBACK: the live app is unhealthy after landing → revert the feature commit.
     run(["git", "revert", "--no-edit", "HEAD"], timeout=60)
     run(["git", "push", "origin", "main"], timeout=120)
     restart_services()
+    _archive_feat_runs(feat, outcome="rolled_back", detail={"reason": "post-land health fail"})
     return {"landed": False, "reason": "health-check FAILED after land — auto-reverted", "rolled_back": True}
 
 
-def discard(feature_files: list[str]):
+def discard(feature_files: list[str], feat: dict | None = None, reason: str = "gate_failed"):
     # Belt-and-suspenders: discard runs `git checkout` / `os.remove`, so it must NEVER act on a file
     # outside the code scope (no data/media/runtime asset can ever be reverted or deleted here).
     safe = [f for f in feature_files if f not in PROTECTED and in_code_scope(f)]
@@ -440,6 +454,8 @@ def discard(feature_files: list[str]):
     for integ in ("server/main.py", "server/dashboard.py", "server/jarvis_live.html"):
         if integ not in PROTECTED and run(["git", "status", "--porcelain", integ], timeout=15)[1].strip():
             run(["git", "checkout", "--", integ], timeout=30)
+    if feat:
+        _archive_feat_runs(feat, outcome="discarded", detail={"reason": reason})
 
 
 def score_change(feat: dict, files: list[str]) -> dict:
@@ -522,12 +538,12 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
             log({"event": "feature_pollution_abort", "title": feat["title"], "raw_count": len(raw_changed),
                  "in_scope": len(feature_files), "out_of_scope": len(out_of_scope),
                  "out_of_scope_sample": out_of_scope[:10], "builder": b})
-            discard(feature_files)
+            discard(feature_files, feat, reason="pollution")
             continue
         if not ran or not feature_files:
             log({"event": "feature_skip", "title": feat["title"], "reason": "claude made no tracked change",
                  "ran": ran, "out_of_scope": len(out_of_scope)})
-            discard(feature_files)
+            discard(feature_files, feat, reason="no_tracked_change")
             continue
         g = gate()
         if not g.get("pass"):
@@ -545,7 +561,7 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
                     log({"event": "feature_gate_repair", "title": feat["title"], "passed": bool(g.get("pass")),
                          "failed_after": [k for k, v in (g.get("checks") or {}).items() if not v.get("ok")]})
             if not g.get("pass"):
-                discard(feature_files)
+                discard(feature_files, feat, reason="gate_failed")
                 continue
         # The 1,000-pt Claude audit is the merge decider: gate proves it BOOTS, audit proves it's WORTH it.
         au = audit_score(feat, feature_files, g)
@@ -566,7 +582,7 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
                     else:
                         failed = [k for k, v in (g2.get("checks") or {}).items() if not v.get("ok")]
                         log({"event": "feature_revision_gate_fail", "title": feat["title"], "failed": failed})
-                        discard(ff2)
+                        discard(ff2, feat, reason="revision_gate_failed")
                         continue
         common = {
             "title": feat["title"], "category": feat.get("category", "other"),
@@ -584,12 +600,12 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
         }
         if dry:
             log({"event": "feature_gate_pass_dryrun", **common})
-            discard(feature_files)
+            discard(feature_files, feat, reason="dry_run")
             continue
         if not au.get("merge_ok"):
             # gate green but audit says don't merge (score below threshold, hard blocker, or unproven gain)
             log({"event": "feature_reject", **common})
-            discard(feature_files)
+            discard(feature_files, feat, reason="audit_rejected")
             continue
         res = land(feat, feature_files)
         log({"event": "feature_land", **common, **res})

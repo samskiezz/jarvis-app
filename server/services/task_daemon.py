@@ -22,6 +22,7 @@ import shlex
 import signal
 import sqlite3
 import subprocess
+import sys
 import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -114,6 +115,15 @@ def _launch_detached(prompt: str, model: str, outfile: str, full: bool = True) -
         except Exception:  # noqa: BLE001
             pass
         time.sleep(0.05)
+    # Register this detached job with the mandatory whip viewer so the UI can see it.
+    try:
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        from claude_whip import register_detached_run  # type: ignore
+        register_detached_run(stage="task_daemon", label=(prompt[:48] if prompt else "task"),
+                              model=model or "claude-sonnet-4-6", pid=pid,
+                              outfile=outfile, prompt=prompt or "")
+    except Exception:  # noqa: BLE001
+        pass
     return pid
 
 
