@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='43'; window.__JV_VER=VER;
+  var KEY='__jv',VER='44'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2571,6 +2571,7 @@ function toggleArchon(){archon=!archon;$('archonBtn').classList.toggle('on',arch
 /* ================= R4: Mac dock — magnify-on-hover + drag-reorder ================= */
 const DOCK=[
   {k:'apps',    ic:'🎠', t:'Apps',     fn:()=>openCarouselOverlay()},
+  {k:'claude_env',ic:'🔧',t:'Claude Code',fn:()=>setMode('claude_env')},
   {k:'talk',   ic:'🎤', t:'Talk',     fn:()=>$('say').focus()},
   {k:'library',ic:'📚', t:'Library',  fn:()=>setMode('library')},
   {k:'create', ic:'✨', t:'Create',   fn:()=>{$('say').focus();$('say').value='Create ';}},
