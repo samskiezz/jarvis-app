@@ -152,3 +152,8 @@ underworld/data/design/*.csv
 # Underworld sim DB
 underworld/data/*.db-wal
 underworld/data/*.db-shm
+
+# Live runtime state written by services on the box
+server/data/brain_health.json
+# Claude-Whip transcripts (per-run heartbeat + output, regenerable)
+server/data/claude_runs/

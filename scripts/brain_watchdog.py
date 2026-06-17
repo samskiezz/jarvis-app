@@ -12,11 +12,11 @@ Three actionable behaviours, each gated to STAY OWNER-SAFE:
    (11434/tcp not bound — protocol breach), unreachable (box up but ollama
    refuses).
 
-2. **AUTO-DISPOSE** (default ON for clearly-dead boxes): when a brain has been
-   `offline` for >DISPOSE_AFTER_S seconds AND ports/11434 is unmapped, destroy
-   it to release the Vast slot reservation. Destroy is FREE on Vast (only
-   running time is billed); this stops the slot leak without spending money.
-   Disable with BRAIN_WATCHDOG_NO_DISPOSE=1.
+2. **AUTO-DISPOSE** (default OFF — destroying a box is irreversible): when a
+   brain has been `offline` for >DISPOSE_AFTER_S seconds AND ports/11434 is
+   unmapped, destroy it to release the Vast slot reservation. Owner must
+   explicitly opt in with BRAIN_WATCHDOG_ALLOW_DISPOSE=1 — an offline box may
+   be one the owner intends to start later.
 
 3. **AUTO-PROVISION** (default OFF — costs money): only if env
    BRAIN_WATCHDOG_AUTO_PROVISION=1 is explicitly set, the watchdog will call
@@ -44,7 +44,10 @@ EVENTS_PATH = "/opt/jarvis-app-1/server/data/vast_events.jsonl"
 CHECK_S = int(os.environ.get("BRAIN_WATCHDOG_INTERVAL_S", "60"))
 DISPOSE_AFTER_S = int(os.environ.get("BRAIN_WATCHDOG_DISPOSE_AFTER_S", "300"))
 LOCAL_DASH = os.environ.get("JARVIS_DASHBOARD_URL", "http://127.0.0.1:8095")
-ALLOW_DISPOSE = os.environ.get("BRAIN_WATCHDOG_NO_DISPOSE", "") not in ("1", "true", "yes")
+# Default OFF — destroying a Vast box is irreversible (you lose the slot reservation). The owner must
+# explicitly opt in with BRAIN_WATCHDOG_ALLOW_DISPOSE=1. Even though Vast doesn't bill stopped boxes,
+# an offline brain box may be one the owner intends to start later.
+ALLOW_DISPOSE = os.environ.get("BRAIN_WATCHDOG_ALLOW_DISPOSE", "") in ("1", "true", "yes")
 ALLOW_PROVISION = os.environ.get("BRAIN_WATCHDOG_AUTO_PROVISION", "") in ("1", "true", "yes")
 
 # Per-instance offline-since timestamps — reset when state flips back to running.
