@@ -298,4 +298,43 @@ export const api = {
 
   // event stream
   streamUrl: (worldId: string) => `${API_BASE_URL}/worlds/${worldId}/stream`,
+
+  // god-layer + awakening + status (Phase 6 god-layer surfacing)
+  awakeningArc: (worldId: string) =>
+    request<{
+      ok: boolean; world_id: string; current_stage: string; stage_entered_ts: number;
+      events_log: Array<{ ts: number; from: string; to: string; note: string }>;
+      mean_awareness: number; awakened_frac: number; creator_pressure: number;
+      stage_index: number; stage_count: number; elapsed_in_stage_s: number;
+    }>(`/worlds/${worldId}/awakening/arc`),
+  awakeningCutscenes: (worldId: string) =>
+    request<{
+      ok: boolean;
+      pending: Array<{ beat_id: string; world_id: string; type: string; payload: Record<string, unknown>; ts: number; consumed: boolean }>;
+    }>(`/worlds/${worldId}/awakening/cutscenes`),
+  eulogies: (worldId: string, limit = 20) =>
+    request<{
+      ok: boolean;
+      eulogies: Array<{
+        minion_id: string; world_id: string; name: string; cause: string;
+        last_action: string; age_ticks: number; generation: number;
+        knowledge_contribution: string; relationships: string[]; lineage: string[];
+        died_at_tick: number; ts: number;
+      }>;
+    }>(`/worlds/${worldId}/eulogies?limit=${limit}`),
+  serviceStatus: () =>
+    request<{
+      ok: boolean; service: string; version: string; uptime_s: number; worlds: number;
+      last_world_id: string | null; last_tick: number; tick_lag_s: number | null;
+      scheduler_running: boolean; last_error_ts: number | null; last_error_msg: string | null;
+    }>("/status"),
+  knownIssues: () =>
+    request<{ ok: boolean; markdown: string; found: boolean; mtime?: number }>(
+      "/status/known-issues",
+    ),
+  godAct: (worldId: string, verb: string, targetId: string | null, params: Record<string, unknown> = {}) =>
+    request<{ ok: boolean; verb: string; target_id: string | null; summary: string; tick: number }>(
+      `/worlds/${worldId}/player/act`,
+      { method: "POST", body: JSON.stringify({ verb, target_id: targetId, params }) },
+    ),
 };

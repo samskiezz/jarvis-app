@@ -18,6 +18,12 @@ import Tabs from "@/components/ui/Tabs";
 import WorldSystems from "@/components/WorldSystems";
 import WorldScene3D from "@/components/scene/WorldScene3D";
 import PixelStreamingViewer from "@/components/scene/PixelStreamingViewer";
+import AwarenessGauge from "@/components/AwarenessGauge";
+import AwakeningTimeline from "@/components/AwakeningTimeline";
+import ChatterFeed from "@/components/ChatterFeed";
+import EulogyFeed from "@/components/EulogyCard";
+import InterventionPanel from "@/components/InterventionPanel";
+import StatusBanner from "@/components/StatusBanner";
 import { useWorldStream } from "@/lib/hooks";
 import type { Guild, Mood, SwarmRole, TaskStatus } from "@/lib/types";
 
@@ -384,6 +390,22 @@ export default function WorldDetail() {
           fill="rgba(245,158,11,0.15)"
           accent="amber"
         />
+      </section>
+
+      {/* GOD-LAYER SIDE PANEL (Phase 6) — opt-in, additive to the existing layout.
+          Surfaces the 5-act awakening arc, awareness, chatter, eulogies, and the
+          intervention verbs against the currently-selected minion. */}
+      <section className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+        <StatusBanner className="lg:col-span-3" />
+        <AwarenessGauge worldId={id} />
+        <AwakeningTimeline worldId={id} />
+        <ChatterFeed chatter={[]} />
+        <InterventionPanel
+          worldId={id}
+          selectedMinionId={selectedMinion}
+          className="rounded-lg border border-glow-purple/20 bg-zinc-950/40 p-3 lg:col-span-2"
+        />
+        <EulogyFeed worldId={id} limit={6} />
       </section>
 
       {/* TABS */}
