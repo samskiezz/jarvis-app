@@ -19,11 +19,15 @@ public class Underworld : ModuleRules
 			"Engine",
 			"InputCore",
 			"EnhancedInput",
-			"HTTP",          // SceneStateClient polls the backend
-			"Json",          // parse the scene-state contract
+			"HTTP",            // SceneStateClient polls the backend
+			"Json",            // parse the scene-state contract
 			"JsonUtilities",
-			"UMG",           // optional in-engine HUD overlay
-			"PixelStreaming" // expose the stream + receive input
+			"UMG",             // in-engine HUD overlay
+			"CommonUI",        // Phase 6 god-layer UMG widgets
+			"GameplayAbilities", // GAS for intervention verbs (Phase 4)
+			"GameplayTags",
+			"GameplayTasks",
+			"PixelStreaming"   // expose the stream + receive input
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
