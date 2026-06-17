@@ -83,6 +83,7 @@ def step_minion(m, *, seed_int: int, town_radius: float, dt: float,
         kin["target"] = [tx, tz]
         kin["state"] = "walk"
         kin["dwell"] = 0
+        kin["path_start"] = [px, pz]
     tx, tz = kin["target"]
     dx, dz = tx - px, tz - pz
     dist = math.hypot(dx, dz)
@@ -98,6 +99,17 @@ def step_minion(m, *, seed_int: int, town_radius: float, dt: float,
         kin["vel"] = [0.0, 0.0]
         kin["state"] = "occupy" if want_fn != "home" else "idle"
         kin["dwell"] = int(kin.get("dwell", 0)) + 1
+    # path progress 0..1 from where the steer began toward the slot — renderers and the UE5
+    # AnimBP read this to blend walk→occupy without a hitch on arrival.
+    start = kin.get("path_start") or [px, pz]
+    total = math.hypot(tx - start[0], tz - start[1])
+    if total <= 1e-3:
+        kin["path_progress"] = 1.0
+    else:
+        travelled = math.hypot(kin["pos"][0] - start[0], kin["pos"][1] - start[1])
+        kin["path_progress"] = round(min(1.0, max(0.0, travelled / total)), 3)
+    # building id alias for renderers/clients that key off (function, world_seed).
+    kin["target_building_id"] = f"{want_fn}@{seed_int}"
     brain["kin"] = kin
     m.brain = {**brain}      # new identity so the JSON column is detected as dirty
     try:
@@ -114,4 +126,6 @@ def kin_visual(m) -> dict | None:
         return None
     return {"pos": kin["pos"], "vel": kin.get("vel", [0.0, 0.0]),
             "move_state": kin.get("state", "idle"), "speed": kin.get("speed", WALK_SPEED),
-            "target": kin.get("target"), "target_fn": kin.get("target_fn", "home")}
+            "target": kin.get("target"), "target_fn": kin.get("target_fn", "home"),
+            "target_building_id": kin.get("target_building_id"),
+            "path_progress": kin.get("path_progress", 0.0)}

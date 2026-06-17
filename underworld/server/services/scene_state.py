@@ -248,6 +248,18 @@ def minion_visual(m, *, seed_int: int, heightmap=None, town_radius: float = 60.0
         "facing": (round(math.degrees(math.atan2(kin["vel"][1], kin["vel"][0])), 1)
                    if kin and (kin["vel"][0] or kin["vel"][1]) else round((_h(m.id) % 360), 1)),
         "anim": ("walk" if kin and kin.get("move_state") == "walk" else anim),
+        # KINEMATIC v2 contract — additive, identical on every renderer. pos/vel are 3D for
+        # the UE5 CharacterMovement bridge; anim_state mirrors `anim` so AnimBPs can switch on
+        # one signal. target_building_id + path_progress give the AnimBP a hitchless walk→occupy
+        # blend cue. Pre-existing 2D fields stay so the WebGL renderer is untouched.
+        "kinematic": {
+            "pos": [x, y, z],
+            "vel": [(kin or {}).get("vel", [0.0, 0.0])[0], 0.0,
+                    (kin or {}).get("vel", [0.0, 0.0])[1]],
+            "target_building_id": (kin or {}).get("target_building_id"),
+            "path_progress": (kin or {}).get("path_progress", 0.0),
+            "anim_state": ("walk" if kin and kin.get("move_state") == "walk" else anim),
+        },
         # what the minion is REALLY doing this tick + the building they head to.
         "action": action,
         "target_building": target_building,

@@ -89,7 +89,11 @@ async def _movement_loop():
     from .services import movement, possession
     from .services.scene_state import _action_target
 
-    if os.environ.get("MOVEMENT_LOOP", "1").lower() in ("0", "false", "no"):
+    # KEYSTONE — default ON. Both env names accepted (UNDERWORLD_MOVEMENT_LOOP is the
+    # documented spelling in the MASTER-PLAN, MOVEMENT_LOOP is the older one).
+    _flag = os.environ.get("UNDERWORLD_MOVEMENT_LOOP",
+                           os.environ.get("MOVEMENT_LOOP", "1")).lower()
+    if _flag in ("0", "false", "no"):
         return
     dt = max(0.25, float(os.environ.get("MOVEMENT_INTERVAL_S", "1.0")))
     max_n = int(os.environ.get("MOVEMENT_MAX_PER_WORLD", "600"))
