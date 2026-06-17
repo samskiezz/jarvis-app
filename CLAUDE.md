@@ -639,3 +639,26 @@ What's most important is the reader understanding your output without mental ove
 - Only use emojis if the user explicitly requests it. Avoid using emojis in all communication unless asked.
 - When referencing specific functions or pieces of code include the pattern file_path:line_number to allow the user to easily navigate to the source code location.
 - When referencing GitHub issues or pull requests, use the owner/repo#123 format (e.g. anthropics/claude-code#100) so they render as clickable links.
+
+## ECC Integration (additive — does NOT override the rules above)
+
+This repo has the full [Everything Claude Code](https://github.com/affaan-m/ECC) (MIT) toolkit vendored and wired into the harness. Use the new capabilities WHERE THEY HELP, but the project rules above remain authoritative.
+
+**Project-scoped resources** (under `.claude/`):
+- `agents/` — 67 specialized subagents (planner, architect, code-reviewer, security-reviewer, fastapi-reviewer, python-reviewer, typescript-reviewer, react-reviewer, mle-reviewer, performance-optimizer, a11y-architect, harness-optimizer, loop-operator, e2e-runner, refactor-cleaner, doc-updater, silent-failure-hunter, type-design-analyzer, comment-analyzer, code-explorer, code-architect, code-simplifier, spec-miner, pr-test-analyzer, agent-evaluator, conversation-analyzer, opensource-{forker,sanitizer,packager}, gan-{planner,generator,evaluator}, healthcare-reviewer, database-reviewer, network-architect/troubleshooter, homelab-architect, chief-of-staff, marketing-agent, plus per-language reviewers/build-resolvers)
+- `commands/` — 92 slash commands (most useful for this repo: `/code-review`, `/feature-dev`, `/refactor-clean`, `/security-scan`, `/harness-audit`, `/multi-execute`, `/loop-start`, `/loop-status`, `/evolve`, `/learn`, `/checkpoint`, `/test-coverage`, `/update-codemaps`, `/python-review`, `/react-review`, `/save-session`, `/resume-session`)
+- `skills/` — 384 skill packs. Most relevant to Jarvis: `agentic-os`, `autonomous-agent-harness`, `autonomous-loops`, `continuous-learning-v2`, `agent-architecture-audit`, `agent-eval`, `agent-self-evaluation`, `agent-introspection-debugging`, `architecture-decision-records`, `fastapi-patterns`, `python-patterns`, `react-patterns`, `react-performance`, `react-testing`, `cost-tracking`, `cost-aware-llm-pipeline`, `knowledge-ops`, `mcp-server-patterns`, `production-audit`, `verification-loop`, `eval-harness`, `safety-guard`.
+- `scripts/` — 200 utilities (Node.js) — reference code, nothing auto-runs
+- `rules/` — language guardrails (common, python, typescript, react)
+- `hooks/` — ECC plugin hooks (NOT auto-wired; they require the ECC plugin-bootstrap infra to be installed first)
+- `ECC_LICENSE`, `ECC_AGENTS.md`, `ECC_RULES.md`, `ECC_SOUL.md` — provenance + reference docs
+
+**User-scoped mirror** (`~/.claude/`): same agents/commands/skills/scripts/rules also installed user-level, so they're available in every Claude Code session, not just Jarvis.
+
+**Vendored upstream** (`vendor/ecc/`): full upstream snapshot (3,244 files, 54MB) including the ecc2 subcodebase, multilingual docs, branding assets, examples, tests, schemas, plugins, manifests. Reference only; nothing in here is on the live runtime path.
+
+**Cross-harness IDE configs** (`.cursor/`, `.kiro/`, `.zed/`, `.gemini/`, `.qwen/`, `.trae/`, `.opencode/`, `.codex/`, `.codebuddy/`, `.claude-plugin/`, `.codex-plugin/`, `.agents/`) — for anyone opening this repo in a non-Claude tool.
+
+**MCP**: `.mcp.json` registers `chrome-devtools` (via `chrome-devtools-mcp`). Useful for browser-driven verification of `server/jarvis_live.html` and the Underworld web shell.
+
+**Conflict rule**: if any ECC rule/agent/skill recommends an approach that contradicts the project rules above (e.g. UI-theme lock, runtime-status-file prohibition, JARVIS preservation), **the project rules win**. The ECC toolkit is a force multiplier, not an override.
