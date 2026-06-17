@@ -40,9 +40,9 @@ from ..db.models import (
 from ..world.seed import derive_seed
 from . import (
     agriculture, art, awakening_arc, biology, civics, climate, cognition, disease, discovery,
-    ecosystem, economy, education, event_engine, governance, grid, hydrology, knowledge_decay,
-    lifecycle, mastery, memes, paleontology, pollution, projects, puzzles, religion, roles,
-    structural_health, substances, tectonics, timescale,
+    ecosystem, economy, education, eulogy, event_engine, governance, grid, hydrology,
+    knowledge_decay, lifecycle, mastery, memes, paleontology, pollution, projects, puzzles,
+    religion, roles, structural_health, substances, tectonics, timescale,
 )
 
 
@@ -180,6 +180,16 @@ async def _process_deaths(
         cause = lifecycle.determine_death(m, world_tick=world.tick, rng=rng)
         if cause is not None:
             await lifecycle.kill(session, m, cause=cause, world_tick=world.tick)
+            eulogy.record_death(
+                world.id, m.id,
+                name=f"{m.name} {m.surname}".strip() or m.name,
+                cause=cause,
+                last_action=(m.brain or {}).get("last_action", ""),
+                age_ticks=max(0, world.tick - m.born_tick),
+                generation=m.generation,
+                knowledge_contribution=(m.brain or {}).get("knowledge_legacy", ""),
+                died_at_tick=world.tick,
+            )
             deaths += 1
     return deaths
 
