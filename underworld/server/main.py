@@ -15,6 +15,8 @@ from .db.session import dispose, init_db
 from .knowledge.seed import seed_knowledge_base
 from .logging_setup import configure_logging
 from .routes import auth as auth_routes
+from .routes import awakening as awakening_routes
+from .routes import eulogy as eulogy_routes
 from .routes import god as god_routes
 from .routes import guilds as guild_routes
 from .routes import inventions as invention_routes
@@ -26,6 +28,7 @@ from .routes import player as player_routes
 from .routes import projects as project_routes
 from .routes import safety as safety_routes
 from .routes import science as science_routes
+from .routes import status as status_routes
 from .routes import substrate as substrate_routes
 from .routes import worlds as world_routes
 from .services import scheduler
@@ -275,6 +278,9 @@ def create_app() -> FastAPI:
     app.include_router(project_routes.router)
     app.include_router(substrate_routes.router)
     app.include_router(science_routes.router)
+    app.include_router(awakening_routes.router)
+    app.include_router(eulogy_routes.router)
+    app.include_router(status_routes.router)
 
     @app.get("/healthz")
     async def healthz():
