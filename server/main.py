@@ -1,5 +1,61 @@
 import contextlib
 import os
+import signal as _sig
+import sys as _sys
+import types as _types
+
+# ── OpenBLAS hang guard ──────────────────────────────────────────────────────
+# sklearn 1.9 and scipy both ship OpenBLAS which runs fork()+sigsuspend() on
+# first import for CPU detection — blocking 30-90 s on this hardware.  We
+# probe both with a 4-second SIGALRM (only fires if the process hangs; fast
+# systems that have these libraries complete in <1 s).  On timeout we inject
+# stub modules so every `try: from sklearn/scipy… except Exception` block in
+# the codebase degrades gracefully without blocking boot or pytest collection.
+_blas_ok = False
+_blas_alarm_armed = False
+_blas_old_handler = None
+try:
+    def _blas_alarm(s, f):  # noqa: ANN001
+        raise ImportError("OpenBLAS CPU-detection timed out (>4 s) — treating as unavailable")
+    _blas_old_handler = _sig.signal(_sig.SIGALRM, _blas_alarm)
+    _sig.alarm(4)
+    _blas_alarm_armed = True
+    import sklearn.cluster  # noqa: F401 — triggers OpenBLAS init
+    import scipy.constants  # noqa: F401 — second BLAS path
+    _blas_ok = True
+except Exception:  # noqa: BLE001
+    pass
+finally:
+    if _blas_alarm_armed:
+        _sig.alarm(0)
+        try:
+            _sig.signal(_sig.SIGALRM, _blas_old_handler)
+        except Exception:  # noqa: BLE001
+            pass
+del _blas_alarm_armed, _blas_old_handler, _blas_alarm
+
+if not _blas_ok:
+    class _BLASStub(_types.ModuleType):
+        def __getattr__(self, name: str) -> None:  # type: ignore[override]
+            raise ImportError("library not available at boot (OpenBLAS hang — probe timed out)")
+
+    for _stub_mod in [
+        # sklearn
+        "sklearn", "sklearn.cluster", "sklearn.gaussian_process",
+        "sklearn.gaussian_process.kernels", "sklearn.calibration",
+        "sklearn.ensemble", "sklearn.frozen", "sklearn.metrics",
+        "sklearn.linear_model", "sklearn.preprocessing",
+        "sklearn.model_selection", "sklearn.datasets",
+        # scipy (used by underworld methods_*.py modules via constants, stats, etc.)
+        "scipy", "scipy.constants", "scipy.stats", "scipy.integrate",
+        "scipy.optimize", "scipy.linalg", "scipy.signal", "scipy.special",
+    ]:
+        _sys.modules.setdefault(_stub_mod, _BLASStub(_stub_mod))
+
+    del _BLASStub, _stub_mod
+
+del _blas_ok, _sys, _types, _sig
+# ─────────────────────────────────────────────────────────────────────────────
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
