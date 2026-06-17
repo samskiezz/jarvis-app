@@ -157,3 +157,6 @@ underworld/data/*.db-shm
 server/data/brain_health.json
 # Claude-Whip transcripts (per-run heartbeat + output, regenerable)
 server/data/claude_runs/
+
+# Local settings backup created when wiring ECC hooks (kept on box as safety net)
+.claude/settings.local.json.bak
