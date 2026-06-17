@@ -1614,7 +1614,18 @@ def _jarvis_chat(prompt: str, history=None, address: str = "sir") -> str:
     which itself records telemetry and escalates/falls back per the ladder. If the seam is unavailable
     or empty we fall back to the original direct box loop, and finally to a reassuring fixed line — so
     the mum's lifeline reply is NEVER blank. `address` is 'sir' (male) or 'ma'am' (female)."""
-    sysmsg = _persona_sysmsg(address) + _user_mem_preamble(prompt)   # remember the person across sessions
+    # CONTEXT ROUTER: before this line, the brain saw persona + 7 memories and NOTHING ELSE despite
+    # 2.3M rows across 30+ databases (200K embeddings, 174K ontology objects, 66 distilled lessons,
+    # decisions, …). build_preamble aggregates every retrieval surface that already exists in the
+    # repo into one capped preamble so the LLM actually USES what the system has accumulated.
+    sysmsg = _persona_sysmsg(address) + _user_mem_preamble(prompt)
+    try:
+        from server.services import context_router as _CR
+        extra = _CR.build_preamble(prompt)
+        if extra:
+            sysmsg = sysmsg + "\n\n" + extra
+    except Exception:  # noqa: BLE001 - context routing must never break chat
+        pass
     # FAST PATH: if the Vast brain (serious computation) is unreachable, don't hang 25s on dead sockets —
     # reply instantly & warmly from Hostinger. Vast is used ONLY when it's actually up.
     if not _brain_reachable():
