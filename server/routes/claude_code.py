@@ -172,3 +172,4 @@ async def stream(run_id: str, _t: str | None = Depends(optional_bearer)):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+# e2e-proof: this comment was landed by an auto-cycle through claude_whip (20260617T161027Z, 20260617T161026_implement_e2e-proof)
