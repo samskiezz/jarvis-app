@@ -26,19 +26,22 @@ if [[ -d "${PSI_DIR}/SignallingWebServer" ]]; then
   echo "Starting signalling (player :${PLAYER_PORT}, streamer :${STREAMER_PORT})…"
   ( cd "${PSI_DIR}/SignallingWebServer" && \
     (npm ci --omit=dev >/tmp/psi_install.log 2>&1 || true) && \
+    bash "${HERE}/signalling-compat-patch.sh" "${PSI_DIR}" && \
     HTTP_PORT="${PLAYER_PORT}" STREAMER_PORT="${STREAMER_PORT}" \
     node ./dist/index.js >/tmp/signalling.log 2>&1 & )
   sleep 3
 fi
 
-# 2) UE5 headless render → NVENC H264 → signalling. Vulkan offscreen (no X11).
-echo "Launching Underworld (Vulkan -RenderOffscreen, NVENC) → world ${UNDERWORLD_WORLD_ID}"
+# 2) UE5 headless render → VP9 software encoding → signalling. Vulkan offscreen (no X11).
+# NVENC is unavailable on this Vast instance; VP9 is the best supported software codec.
+echo "Launching Underworld (Vulkan -RenderOffscreen, VP9) → world ${UNDERWORLD_WORLD_ID}"
 exec "${GAME_SH}" \
-  -RenderOffscreen -Unattended -ForceRes -ResX=1920 -ResY=1080 \
+  -RenderOffscreen -Unattended -ForceRes -ResX=1280 -ResY=720 \
   -vulkan \
   -PixelStreamingIP=127.0.0.1 -PixelStreamingPort="${STREAMER_PORT}" \
-  -PixelStreamingEncoderCodec=H264 -AllowPixelStreamingCommands \
+  -PixelStreamingEncoderCodec=VP9 -AllowPixelStreamingCommands \
   -graphicsadapter=0 \
+  -t.MaxFPS=60 \
   -UnderworldApiUrl="${UNDERWORLD_API_URL}" \
   -UnderworldWorldId="${UNDERWORLD_WORLD_ID}" \
   -UnderworldApiKey="${UNDERWORLD_API_KEY}"

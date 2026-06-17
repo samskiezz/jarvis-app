@@ -64,6 +64,51 @@ BRAIN_DB = os.path.join(_ROOT, "server", "data", "brain.db")
 # Storage tools are sandboxed to this root (the box's app/data tree).
 STORAGE_ROOT = "/opt"
 
+# Backups taken before a destructive op live here so the op is genuinely reversible.
+# (Must be excluded from the disk-guard auto-purge — see ops notes.)
+BACKUP_ROOT = os.path.join(_ROOT, "server", "data", "agent_backups")
+BACKUP_MAX_BYTES = int(os.environ.get("AGENT_BACKUP_MAX_BYTES", str(2 * 1024 * 1024 * 1024)))  # 2 GB cap
+
+
+def backup_paths(targets, reason: str = ""):
+    """Copy the CURRENT bytes of files/dirs about to be destroyed into a timestamped
+    backup dir, so a destructive op is reversible. Returns
+    {backup_dir, items:[{src, backup, bytes}], reason, [error]}. Never raises.
+
+    Refuses (per-item) anything over BACKUP_MAX_BYTES so the copy can't itself fill the disk.
+    """
+    import datetime
+    import shutil
+
+    stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-") + os.urandom(3).hex()
+    bdir = os.path.join(BACKUP_ROOT, stamp)
+    items = []
+    try:
+        os.makedirs(bdir, exist_ok=True)
+        for src in (targets or []):
+            try:
+                if not src or not os.path.exists(src):
+                    continue
+                if os.path.isdir(src):
+                    sz = sum(os.path.getsize(os.path.join(d, f))
+                             for d, _, fs in os.walk(src) for f in fs)
+                else:
+                    sz = os.path.getsize(src)
+                if sz > BACKUP_MAX_BYTES:
+                    items.append({"src": src, "skipped": "exceeds backup size cap", "bytes": sz})
+                    continue
+                dst = os.path.join(bdir, os.path.basename(src.rstrip(os.sep)) or "root")
+                if os.path.isdir(src):
+                    shutil.copytree(src, dst, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(src, dst)
+                items.append({"src": src, "backup": dst, "bytes": sz})
+            except Exception as e:  # noqa: BLE001
+                items.append({"src": src, "error": str(e)})
+    except Exception as e:  # noqa: BLE001
+        return {"backup_dir": bdir, "items": items, "reason": reason, "error": str(e)}
+    return {"backup_dir": bdir, "items": items, "reason": reason}
+
 # Box LLM / Ollama host — same default the dashboard uses.
 BOX = (os.environ.get("OLLAMA_HOST") or "http://127.0.0.1:11434").rstrip("/")
 

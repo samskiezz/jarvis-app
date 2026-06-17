@@ -57,10 +57,24 @@ _PATH_KEYS = (
 # first across all string/number args.
 _HARD_DENY_SUBSTRINGS = (
     "rm -rf /",
+    "rm -rf ~",
+    "rm -rf /opt",
+    "rm -rf /etc",
+    "rm -rf /var",
+    "rm -rf /home",
+    "rm -rf *",
     "mkfs",
     ":(){:|:&};:",  # fork bomb
     "> /dev/sda",
     "dd if=/dev/zero of=/dev/",
+    "chmod -r 000",
+    "chmod 000 /",
+    "git reset --hard",
+    "git clean -fd",
+    "git checkout -- .",
+    "truncate -s 0",
+    "shred ",
+    "mv / ",
 )
 
 

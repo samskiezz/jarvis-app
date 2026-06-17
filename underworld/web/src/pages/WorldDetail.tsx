@@ -67,7 +67,7 @@ export default function WorldDetail() {
   // live there, and shows a clear error if the GPU host is down.
   const pixelStreamUrl =
     (import.meta.env.VITE_UNDERWORLD_PIXELSTREAM_URL as string | undefined) ||
-    "https://projectsolar.cloud/pixelstream/";
+    "https://app.projectsolar.cloud/jarvis/UnderworldUE5/";
 
   const world = useQuery({
     queryKey: ["world", id],

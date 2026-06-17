@@ -17,7 +17,7 @@
       "use": "DEFAULT LLM \u2014 normal enrichment, short summaries, basic descriptions"
     },
     "3_strong": {
-      "model": "qwen2.5:32b",
+      "model": "qwen2.5:14b",
       "residency": "hot",
       "use": "complex reasoning, technical synthesis, multi-step planning, code analysis, hard ontology merges"
     },
@@ -39,24 +39,22 @@
     "Heavy (Tier 4/5) is cold by default and only runs when priority is high AND resources are healthy."
   ],
   "resource_gates": {
-    "vram_pct_block_heavy": 85,
+    "vram_pct_block_heavy": 0,
     "vram_pct_pause_strong": 92,
     "cpu_pct_reduce_concurrency": 90,
-    "disk_pct_pause_ingest": 85,
-    "disk_pct_critical": 90,
+    "disk_pct_pause_ingest": 80,
+    "disk_pct_critical": 85,
     "note": "VRAM% is of the shared 2x4090 box (48GB). Gates apply to LOADING a non-resident model \u2014 a resident model is free to use."
   },
   "residency_policy": {
     "hot": [
       "llama3.1:8b",
-      "qwen2.5:32b"
+      "qwen2.5:14b"
     ],
     "warm_optional": [
       "llama3.2"
     ],
-    "cold": [
-      "llama3.3:70b-q"
-    ],
+    "cold": [],
     "disabled_on_2x4090": [
       "llama3.3:70b-full"
     ],

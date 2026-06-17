@@ -1,0 +1,871 @@
+﻿Billion-Dollar Game Design Architecture - Blizzard & Tencent UE5 Implementation Blueprint - Audited 2026
+Billion-Dollar Game Design Architecture
+Blizzard & Tencent UE5 Implementation Blueprint
+Comprehensive technical manual for AI and game design architects: UI, gameplay features, playability, narrative depth, backend systems, live-service operations, and Unreal Engine 5 production architecture for AAA products in 2026.
+
+
+Audit note: This document includes a post-draft audit layer against current public Blizzard release material. A specific public written “Major Nerds” review of the latest Blizzard release could not be verified through web search; TheMajorNerd appears as a creator/social presence, not an indexed written Blizzard gameplay review. The audit therefore uses official Blizzard release material, patch notes, PC Gamer release listing context, and public game-review coverage as the verifiable review layer.
+________________
+
+
+Table of Contents
+* 1. Executive Summary: The Game-as-Operating-System Model
+* 2. Publisher Design DNA: Blizzard and Tencent
+* 3. Core UI Architecture from Launcher to Endgame
+* 4. Menu-by-Menu Feature Checklist
+* 5. Genre Study and UE5 Implementation Patterns
+* 6. Gameplay Functions and Playability Systems
+* 7. Storyline Depth Without Story Retelling
+* 8. Step-by-Step Player Journeys by Genre
+* 9. Social, Commerce, Esports and Live Operations
+* 10. Accessibility, Onboarding and Quality-of-Life
+* 11. Unreal Engine 5 Engineering Stack Deep-Dive
+* 12. AI and Machine Learning Systems
+* 13. Microservices Backend Architecture
+* 14. Encyclopedia of Missing Features and Edge Cases
+* 15. Economic Depth and Monetisation Compliance
+* 16. UE5 Implementation Roadmap
+* 17. Audit Layer: Latest Blizzard Release Depth Check
+* 18. Practical Final Blueprint and Source Notes
+________________
+
+
+1. Executive Summary: The Game-as-Operating-System Model
+A modern billion-dollar game is not a single feature. It is a coordinated operating system composed of interface layers, player actions, feedback loops, content delivery, economy, progression, social structure, identity, combat readability, safety tools, platform services, and live-operations machinery. The game must behave like a service, a social network, a cinematic delivery system, a competitive sport, a storefront, a progression engine, a support desk, and a toy box at the same time.
+The largest lesson from Blizzard-scale and Tencent-scale games is that the user interface is not decoration. The interface is the contract between the player and the system. When a player sees a health bar, cooldown, party frame, quest marker, loot beam, minimap ping, battle-pass tier, inventory tooltip, ability tag or store bundle, the game is making a promise about rules, value, priority and feedback. If those promises are unclear, the player does not merely dislike the menu; the player loses trust in the whole product.
+The second lesson is that playability is broader than controls. Playability means input responsiveness, readable objectives, reliable camera behaviour, fair failure states, low-friction recovery, clear rewards, understandable progression, consistent matchmaking, useful tutorials, and meaningful long-term goals. A game can look expensive and still fail if players do not know what to do next, why they died, why a reward matters, why a queue is taking time, or how to return after weeks away.
+The third lesson is that narrative depth is delivered through mechanics. A deep game world is not only cutscenes. It is delivered through quest structure, environmental changes, NPC reactions, faction reputation, collection logs, seasonal events, UI labels, character voice barks, map states, unlock order, enemy placement and the consequences the player can see. The goal of this document is not to retell storylines. It is to identify the systems needed to make story feel playable.
+A true AAA live-service product in 2026 also needs engineering discipline. Data should not be hardcoded. Balance values, store offers, seasonal events, reward tables, ability tuning, item affixes and mission rules should be authored through DataAssets, config, data tables or backend-controlled live data. Critical gameplay should be server-authoritative, with client prediction and reconciliation where needed. UI should be built for keyboard, mouse, gamepad, touch and accessibility from day one, not patched later.
+The architectural target is simple to state but difficult to execute: client, dedicated server, backend services, telemetry pipeline, content-management pipeline and live-operations team must behave as one product. The client shows the experience. The dedicated server protects the rules. The backend owns identity, economy and persistence. Telemetry reveals friction. Live operations refresh motivation. Design production turns ideas into sustainable cadence. A billion-dollar game is never finished; it is continuously curated.
+* Every feature must answer: what can the player do, why does it matter, what feedback confirms success, and what long-term system does it feed?
+* Every menu must have a primary action, secondary action, safe exit, error handling, controller/mobile equivalence, and states for new, returning, expert and lapsed players.
+* Every gameplay loop must include anticipation, action, feedback, reward, evaluation and next-step guidance.
+* Every live-service feature must survive events, patches, store updates, new characters, new seasons, balance shifts and account edge cases.
+* Every economy must be auditable, reversible where legally required, protected from exploits, and understandable to players.
+* Every social system must include safety, privacy, moderation, blocking, reporting and platform policy compliance.
+* Every major system must emit telemetry so designers can see where the experience succeeds or breaks.
+Layer
+	Purpose
+	UE5 / Backend Implementation
+	Client UI
+	Menus, HUD, feedback, input, navigation
+	CommonUI, UMG, Enhanced Input, Slate styling, UI data assets
+	Client gameplay
+	Prediction, animation, visual effects, local responsiveness
+	Gameplay Ability System, Niagara, MetaSounds, animation blueprints
+	Server authority
+	Combat rules, AI, physics, match rules, rewards
+	Dedicated server, GameMode, replicated properties, server RPCs
+	Backend services
+	Account, inventory, economy, store, matchmaking, progression
+	API gateway, microservices, Redis, PostgreSQL, Kafka, cloud storage
+	Data pipeline
+	Telemetry, balancing, fraud detection, experimentation
+	Event schemas, data lake, dashboards, feature flags, A/B tests
+	2. Publisher Design DNA: Blizzard and Tencent
+Blizzard’s signature design language is clarity under spectacle. Their strongest games use instantly recognisable silhouettes, strong faction fantasy, readable combat feedback, iconic sound design, class identity and long-term mastery. World of Warcraft teaches how an MMO can turn maps, quests, raids, professions, social grouping and long-form progression into a persistent home. Diablo teaches how an ARPG can compress power fantasy into combat rhythm, loot comparison, build construction and seasonal re-entry. Overwatch teaches how a shooter can make team composition, hero identity, voice lines, kill feed and ultimate charge part of moment-to-moment readability.
+Tencent and Level Infinite-style design adds the scale layer. The strongest Tencent-connected games understand dense live-ops cadence, mobile-first navigation, low-friction daily return, event red-dot logic, regional payment preferences, social sharing, short-session loops, cross-promotion, esports conversion and fast entry into play. The design pressure is different. Blizzard often asks players to emotionally invest in a world. Tencent-scale games often ask players to return today, claim, queue, complete, share, rank and repeat. A 2026 global product needs both.
+The convergence is obvious: PC and console players expect depth, build expression, cinematic quality, controller support and fair endgame. Mobile players expect convenience, touch readability, claim-all, fast loading, short tasks, clear reward paths and event density. Cross-platform players expect their account, inventory, friends, battle pass, entitlements and settings to follow them. The architect must design a game that can be deep without being slow, dense without being unreadable, monetised without feeling predatory, and social without becoming unsafe.
+Blizzard’s current public release context reinforces this. Official Diablo IV material for Lord of Hatred lists a new region, new classes, loot-filter and skill updates, launch timing and expansion entitlements. Official Overwatch material for 2026 highlights a connected year-long narrative arc, five heroes in Season 1 and a refreshed live-service structure. Official World of Warcraft material for Midnight highlights housing, neighbourhoods and player customisation. These are not isolated features; they are evidence that major games now compete on systems, cadence, identity and long-term ownership.
+* Blizzard lesson: make mechanics emotionally legible through faction, class, combat sound, art silhouettes and long-term mastery.
+* Tencent lesson: make activity constant, accessible, regionalised and operationally measurable.
+* Combined 2026 target: build a premium world with mobile-grade retention tools and cross-platform account continuity.
+* Design implication: every feature needs design rules, UI states, backend ownership, telemetry, localisation and operational control.
+3. Core UI Architecture from Launcher to Endgame
+The UI begins before the title screen. A premium game needs platform detection, account sign-in, age gate, region selection, language selection, terms acceptance, privacy preference, parental controls, seizure warning, accessibility defaults, data download status, server status and error recovery. The first technical mistake many new game designers make is thinking the game starts when the player can move. It starts when the player launches the executable or taps the app icon.
+The launcher layer handles account identity, update state and trust. It must show version mismatch, patch size, disk space, network problems, maintenance windows, region latency and support links. It should also protect the player from wasting time: if servers are down, say so early. If a patch is required, explain size and progress. If login fails, give a recoverable reason. If parental permission is required, route correctly. A luxury game experience collapses when the player cannot even enter cleanly.
+The home screen is the command centre. It should support play, character selection, active event, missions, party state, messages, store, battle pass, settings, news, support and profile. The mistake is overloading it with everything at equal priority. The correct approach is state-based prioritisation. A first-time player sees onboarding. A daily player sees current missions and quick play. A lapsed player sees recap and catch-up. An expert sees queue shortcuts and loadouts. A player in a party sees readiness and team composition.
+The mode-select layer explains what each mode is, how long it takes, what rewards it gives, whether it is solo or group, whether gear matters, whether rank is affected, and whether the player meets requirements. The preparation layer lets players choose class, hero, deck, build, loadout, consumables, cosmetics, difficulty, party role, queue and map preferences. The session layer is gameplay itself: HUD, camera, objectives, combat feedback, chat, ping, inventory, map and pause menu. The result layer closes the loop with rewards, XP, rank, mastery, loot, statistics, learning feedback, commend/report and next recommended action.
+Every screen must handle default, loading, empty, locked, expired, maintenance, offline, network-error and permission-error states. Many small games skip these states and ship screenshots instead of systems. AAA products cannot. The more global and cross-platform the game becomes, the more edge cases exist: console entitlement delay, mobile store purchase delay, region migration, name moderation, account merge conflict, duplicate items, full inventory, expired event currency and connection recovery.
+In Unreal Engine 5, CommonUI and UMG can provide layered screen stacks, focus management, button prompts and platform-specific navigation. Enhanced Input should map actions to keyboard, mouse, controller and touch contexts. Menus should be data-driven where possible so events, labels, tabs and offers can update without a full patch. UI should not poll constantly for gameplay state; it should subscribe to replicated attributes, gameplay tags, inventory events and backend responses.
+* Launcher: sign-in, update, region, server status, account linking, privacy, language, accessibility, error recovery.
+* Home: quick play, character, party, missions, event, battle pass, store, social, news, profile and settings.
+* Mode select: description, duration, reward, difficulty, party size, rank impact, requirements and queue state.
+* Preparation: loadout, class, hero, deck, build, cosmetics, consumables, role selection, ready check and tips.
+* Gameplay HUD: health, resource, cooldowns, objective, minimap, compass, team state, damage, loot, chat and ping.
+* Result: emotional outcome, personal contribution, progression, rewards, learning, social actions and next step.
+4. Menu-by-Menu Feature Checklist
+This section is written as a production checklist. It is not enough to say a game needs an inventory. A production inventory includes item cards, rarity, slot, comparison, sorting, filtering, search, lock, favourite, equip, unequip, salvage, sell, dismantle, split stack, move, preview, transmog, source tooltip, crafting use, upgrade path, stat ranges, loadout association and error state. Every menu has this kind of hidden depth.
+Account and identity menus should include profile name, avatar, title, banner, account level, platform links, email verification, two-factor authentication, age status, parental controls, data export, data deletion request, privacy settings, communication preferences, session history, login devices, region selection, name-change cooldown, block list, report history and entitlement status. For cross-platform games, account merge and platform conflicts are major UI problems. The player must know which platform owns which purchase and which account is primary.
+Character and hero menus should include class/hero roster, role, difficulty rating, unlock state, biography summary, ability preview, skin preview, emotes, sprays, voice lines, banners, victory poses, mastery challenges, loadouts, stat page, recommended builds, recent match performance, training access and hero-specific settings. The same screen should support curiosity, mastery and monetisation without hiding gameplay information behind cosmetics.
+Inventory and loot menus should include search by name, rarity, class, stat, affix, source, power level and equipped status. High-density loot games need loot filters. Without filters, item volume becomes fatigue. A proper loot filter supports rarity, item type, class restriction, affix presence, item power thresholds, aspect upgrades, socket count, ancestral/unique states, sound cues, ground labels and saved presets. It should also allow new players to use recommended presets while experts create rule stacks.
+Skill and talent menus need far more than icons. They need prerequisites, costs, cooldowns, resource costs, scaling, tags, damage type, synergy highlights, refund rules, build import/export, compare before/after, recommended builds, training-dummy link, tooltip glossary, controller navigation and confirmation when expensive changes occur. Skill trees often fail when they show possibilities without explaining practical consequences. A good skill UI teaches build logic as the player clicks.
+Quest and journal menus should separate main campaign, side quests, repeatable tasks, seasonal objectives, guild tasks, daily/weekly missions, hidden discoveries and completed archive. Each quest needs objective, location, reward preview, party compatibility, difficulty, time estimate, story recap, abandon/reset rules and dependency tree. Returning players need a “previously” summary, especially in games with multi-month content cadence.
+Map and navigation menus should include zoom levels, region layers, player marker, party markers, quest areas, fast travel, discovered/undiscovered points, danger level, resource overlays, custom pings, waypoints, dungeon status, world events, fog of war, territory control, filter toggles, underground/overworld layers and controller-friendly cursor handling. The map is both navigation and goal selection.
+Crafting and upgrade menus should include recipe discovery, material source tracking, ingredient preview, success chance, affix reroll odds where legally and ethically appropriate, upgrade path, preview at next level, batch crafting, dismantle outcomes, locked item protection, economy cost, craft history and undo protection for irreversible actions. Crafting is an economy system disguised as a menu.
+Store and monetisation menus must be clear and compliant. They need owned state, preview, bundle contents, expiry, currency balance, local price, premium currency conversion, gift rules, refund history, parental locks, region restrictions and probability disclosure for chance-based content. A store should never make the player feel tricked. Trust is monetisation infrastructure.
+Battle pass menus need free and premium tracks, tier list, claim-all, unclaimed indicators, XP sources, catch-up mechanics, weekly challenges, season expiry, prestige tiers, purchase confirmation, reward preview, duplicate conversion, parental limits and time-to-complete estimate. The battle pass is a retention calendar, not just a reward bar.
+Social menus include friends, recent players, party, guild, clan, chat, voice, invite history, LFG, mentorship, guild calendar, clan hall, message board, mail, gift inbox, commendations, report, block, mute and privacy. A social feature without safety tools is unfinished. In competitive games, social friction can become the main reason players leave.
+Ranked and competitive menus need placement state, role rank, season rank, MMR explanation at a high level, rank-protection rules, leaver penalty, map pool, hero bans, leaderboard filters, match history, performance trends, team composition warnings, tournament lobby and spectator settings. Players do not need exact hidden MMR formulas, but they do need to understand what actions affect their status.
+Replay and learning menus include match replay, timeline scrubber, player POV, free camera, bookmarks, highlight generation, death recap, damage breakdown, heatmap, objective timeline, build recommendations and export. A game that wants mastery should help players understand what happened.
+Menu Category
+	Critical Functions
+	Account & Platform
+	2FA setup, device management, account linking, entitlement list, region migration, data export, deletion request, parental settings, session history.
+	Lobby & Social
+	party finder, role requirements, invite history, persistent chat, clan recruitment, guild calendar, mail, emote wheel, title selector, banner customisation.
+	Inventory & Economy
+	stash folders, affix search, item source tooltip, currency wallet, quick compare, sockets, transmog unlocks, wardrobe, material bank, item protection.
+	Progression & Mastery
+	account level, character level, weapon mastery, hero mastery, profession rank, achievements, reputation, prestige, weekly caps, catch-up XP.
+	Combat & Abilities
+	cooldowns, charges, cancels, interrupts, combat text, buff/debuff timers, resource bars, ultimate meters, threat, stagger, shields and resistances.
+	World & Map
+	waypoints, POIs, dynamic events, quest areas, weather/time widget, population heatmap, dungeon completion, regional threat and layered map views.
+	Accessibility
+	subtitle size/background, UI scaling, colourblind filters, high contrast, text-to-speech, speech-to-text, hold/toggle, aim assist slider and simplified HUD.
+	Replay & Spectator
+	speed controls, POV switching, free camera, highlight bookmarks, export, metadata, observer overlays, player outlines and tournament lobby support.
+	Moderation & Safety
+	block list, mute all, report with evidence, ban appeal, voice/chat abuse capture, AFK detection, known issues board and service status.
+	5. Genre Study and UE5 Implementation Patterns
+MMO design, using World of Warcraft as the reference pattern, is about persistent identity and long-form social coordination. Required features include character creation, class/race selection, world map, quest tracker, party frames, raid frames, threat awareness, guild system, dungeon finder, raid finder, professions, auction/economy, bank, collections, mounts, pets, transmog, reputation, achievements, seasonal events, housing or player-owned spaces, and expansion recap. The UI must support solo questing and forty-player coordination without becoming unreadable.
+In UE5, an MMO-scale world would lean on World Partition, level streaming, interest management, server zoning, replication relevance, ability components and backend persistence. A WoW-style UI is not just a HUD; it is a productivity suite for combat and social logistics. Raid frames must show health, debuffs, role, distance, dispel priority and threat. Quest UI must support shared objectives and phased world state. Housing adds object placement, permissions, decoration inventory, neighbourhood selection, visiting rules and performance budgets.
+ARPG design, using Diablo as the reference pattern, is about the kill-loot-build loop. Required features include class select, skill tree, resource bar, cooldowns, item comparison, rarity beams, loot filter, stash, crafting, socketing, affixes, codex/aspect system, dungeon modifiers, difficulty tiers, seasonal characters, endgame board, nightmare/key systems, boss ladders, crafting materials and build experimentation. Moment-to-moment play must be fast, readable and rewarding. The UI must explain thousands of item outcomes without drowning the player.
+In UE5, an ARPG can use GAS for skills, GameplayTags for damage types and status effects, Niagara for loot explosions, MetaSounds for hit feedback, data assets for item definitions, and server-authoritative item generation. The loot filter is critical: it should run client-side for presentation but rely on server-owned item truth. Endgame systems such as War Plans or dungeon modifiers need map UI, reward previews, reset rules and failure recovery.
+Hero shooter design, using Overwatch as the reference pattern, is about team readability. Required features include hero selection, role queue, team composition warnings, ultimate charge, kill feed, objective progress, respawn timer, scoreboard, ping, voice, replay, highlight, training range, ranked ladder, hero mastery, map pool, patch notes and hero-specific ability documentation. The UI must communicate ten players, dozens of abilities and objective state in seconds.
+In UE5, a hero shooter can use Enhanced Input for hero-specific bindings, GAS for abilities and ultimates, animation blueprints/motion matching for movement identity, replication graph for network optimisation and CommonUI for lobby and hero-select stacks. The main design challenge is not ability count. It is collision, latency, aim feel, audio priority, silhouette readability, spectator clarity and balance communication.
+Card game design, using Hearthstone as the reference pattern, is about state clarity. Required features include hand, deck, graveyard/history, mana/resource, turn timer, card keywords, animation queue, targeting, mulligan, collection, deck builder, crafting/dust, ranked ladder, casual modes, events, shop and replay/log. The player must always understand whose turn it is, what can be played, what targets are legal, what just happened and why an effect resolved.
+MOBA design, using Honor of Kings/TiMi-style mobile patterns as reference, is about fast strategic readability on constrained screens. Required features include joystick or click movement, ability buttons, cooldowns, minimap, pings, shop, quick-buy, lanes, jungle objectives, score, death timer, surrender, role selection, hero build recommendations, skins, ranked ladder and anti-grief systems. Mobile MOBA UI must place high-value actions under thumbs without hiding map awareness.
+Battle royale design, using PUBG-style patterns, is about tension, survival and spatial risk. Required features include drop planning, inventory grid, attachments, ammo, armour, compass, map circle, vehicle UI, team revive, kill feed, spectate, ping, backpack capacity, loot rarity and extraction/evac variations. The UI must keep combat clear while supporting rapid inventory decisions. The worst BR UI problem is forcing players to manage grids while vulnerable.
+Extraction shooter design, using Delta Force-style risk loops as reference, is about persistence under threat. Required features include loadout value, insurance, raid timer, extraction zone, stash, market, faction missions, gear loss, team comms, map intel, risk rating, post-raid recovery and secure container rules. The interface must communicate what the player risks before entering and what is permanently gained or lost after leaving.
+Genre
+	Core Loop
+	Key UI / System Requirements
+	MMO
+	Explore, quest, group, raid, collect, return
+	World map, quest tracker, guild, raid frames, professions, housing, collections
+	ARPG
+	Kill, loot, compare, build, optimise
+	Loot filter, item cards, skill tree, stash, crafting, endgame board
+	Hero Shooter
+	Pick hero, coordinate, fight objective, adapt
+	Hero select, ultimate charge, kill feed, team status, replay
+	Card Game
+	Draw, plan, play, resolve, collect
+	Hand, mana, legal targets, history log, collection, deck builder
+	MOBA
+	Lane, farm, rotate, objective, team fight
+	Minimap, pings, shop, build guide, cooldowns, score
+	Battle Royale
+	Drop, loot, survive, rotate, fight
+	Inventory grid, circle, compass, attachments, team revive
+	Extraction
+	Prepare, infiltrate, loot, extract, persist
+	Risk value, stash, insurance, extraction timer, faction tasks
+	6. Gameplay Functions and Playability Systems
+Gameplay functions are the verbs and rules the player touches directly. Movement includes walking, running, sprinting, crouching, sliding, mantling, climbing, swimming, flying, mounting, teleporting, wall-running, dodging and knockback recovery. The architect must define camera rules for each state. A sprint is not just speed; it changes FOV, animation, stamina, audio, collision, input priority and combat availability. A mount is not just faster movement; it creates summon rules, dismount rules, obstacle rules, combat transitions and world traversal balance.
+Combat includes targeting, hit detection, damage types, critical hits, cooldowns, resources, ammo, reload, recoil, spread, projectile speed, shields, healing, buffs, debuffs, crowd control, threat, aggro, stagger, armour, resistances, weak points, ultimates, interrupts, cancels and invulnerability windows. Each of these needs UI. A player needs to see when an ability is ready, why it cannot be used, who it affects, what it cost, whether it hit, why damage was reduced and how long the effect lasts.
+Progression includes account level, character level, class level, battle pass, ranked tier, weapon mastery, hero mastery, profession skill, collection completion, achievement score, reputation, faction standing, seasonal prestige and event progress. Each progression track needs its own pacing logic, reward table, cap rules, catch-up rules and reset rules. Too many progress bars can become noise; the UI must explain which progress matters now and which is long-term.
+Failure and recovery systems are where premium design shows. Death can lead to respawn, revive, checkpoint, durability loss, rank loss, gear loss, mission failure or story consequence. A good death recap explains damage source, timeline, enemy ability, positioning error and counterplay. In extraction games, failure must distinguish lost gear, insured gear, secured loot, completed objectives and recoverable reputation. In ARPGs, failure should point to build, resistance, positioning, difficulty and upgrade opportunities.
+Playability is also latency tolerance. Online games must account for ping, packet loss, prediction, rollback, reconciliation and server tick rate. UI should expose network graph, server region and connection warnings. Competitive players need to know whether a bad experience is their input, their network, the server or the game rules. A hidden network problem feels like unfair combat.
+Feedback systems include animation, sound, VFX, camera shake, controller rumble, hit markers, damage numbers, health chunks, status icons, screen edges, music stingers, loot beams and narration. Feedback must be layered. The most important information gets the strongest signal. If every reward glows, nothing matters. If every enemy attack is red, players cannot read priority. Billion-dollar games spend enormous effort on feedback hierarchy.
+* Movement must define input, acceleration, camera, collision, stamina/resource use, animation, audio and network prediction.
+* Combat must define cost, cooldown, target legality, effect, feedback, replication, cancellation, counterplay and tooltip language.
+* Progression must define XP source, cap, reward, reset, catch-up, monetisation relationship and display priority.
+* Failure must define what is lost, what is learned, how the player recovers and what the next recommended action is.
+* Feedback must define which channel carries which priority: UI, sound, VFX, animation, camera or haptics.
+7. Storyline Depth Without Story Retelling
+Storyline depth can be designed without retelling plot. The architect should think in delivery layers. Surface narrative is objective text, minimap marker, NPC name, location title and mission framing. Optional narrative is codex, dialogue log, audio log, item flavour text and character biography. Discovery narrative is hidden rooms, environmental set-pieces, enemy placement, ruins, graffiti, changed music and secret collectibles. Systemic narrative is what changes after the player acts: vendors move, factions react, weather shifts, enemies occupy new zones, housing trophies unlock, quest hubs change and characters address the player differently.
+Blizzard-style world depth often comes from strong identity systems. Class names, spell names, zone names, factions, cinematics and item flavour text make mechanics feel attached to a world. Tencent-style live-service depth often comes from event framing, character releases, seasonal themes, limited-time modes, region-specific events and collaboration content. A 2026 architect should plan both: permanent world foundations and temporary event layers.
+A quest system should support main quests, side quests, repeatable quests, dynamic events, seasonal quests, faction quests, tutorial quests and hidden quests. Each quest needs state: unavailable, available, accepted, progressed, completed, failed, abandoned, expired and replayable. Each state needs UI copy and backend truth. If a seasonal quest expires, the UI must explain whether rewards convert, disappear or move to archive.
+Environmental storytelling requires coordination between level design, art, audio, UI and progression. A dungeon that tells a story through props should also reflect that story through enemy types, objective order, boss mechanics, loot themes and map labels. A player should not need to read a lore wall to feel the place. Good world design makes the player ask questions and then rewards curiosity.
+Returning-player narrative is increasingly important. A live-service game with expansions cannot assume the player remembers everything. The returning flow should summarise changed systems, expired seasons, converted currencies, unclaimed rewards, new characters, map changes and recommended next content. It should offer a safe re-entry path rather than dropping the player into a crowded home screen full of red dots.
+* Layer 1: objective text, HUD alerts, mission markers and location names.
+* Layer 2: codex, dialogue log, faction profile, character biography and item flavour.
+* Layer 3: environmental clues, hidden rooms, audio logs, enemy placement and visual set-pieces.
+* Layer 4: world state changes, NPC reactions, unlocked vendors, changed zones and seasonal consequences.
+* Layer 5: account memory, recap, archive and returning-player guidance.
+8. Step-by-Step Player Journeys by Genre
+ARPG / Diablo-style
+Launcher validation -> character select -> realm selection -> difficulty/world tier -> town hub -> quest or dungeon selection -> combat -> loot drop -> item compare -> stash/craft/salvage -> XP/reward -> endgame board or next objective.
+MMO / WoW-style
+Launcher -> character select -> realm/world -> quest hub -> accept objective -> travel -> combat/gather -> return or auto-complete -> reputation/XP -> dungeon finder or social group -> raid/event -> collection or housing reward.
+Hero Shooter / Overwatch-style
+Launcher -> home -> mode select -> queue -> hero select -> team composition -> spawn room -> objective fight -> death/respawn/adapt -> round transition -> post-match progression -> highlight/replay/social.
+MOBA / Honor of Kings-style
+Home -> hero selection -> lane/role -> loading tips -> minion wave -> farm -> rotate -> objective fight -> item purchase -> team fight -> base push -> result -> rank/progression.
+Battle Royale / PUBG-style
+Lobby -> squad -> map/loadout -> aircraft/drop -> landing -> loot -> rotate with circle -> fight/survive -> revive/spectate -> final zone -> result -> XP/pass/replay.
+Extraction Shooter / Delta Force-style
+Stash -> faction task -> loadout value -> insurance -> raid entry -> loot/intel/combat -> extraction decision -> escape/fail -> stash update -> market/crafting -> next risk.
+Card Game / Hearthstone-style
+Home -> deck select -> matchmaking -> mulligan -> turn cycle -> resource spend -> card resolution -> board state -> lethal/fatigue/concede -> rewards -> collection/deck edit.
+9. Social, Commerce, Esports and Live Operations
+Social systems convert games into communities. Friends, party, guild, clan, chat, voice, recent players, LFG, mentorship, mail, gifting, housing visits, leaderboards and custom lobbies are not optional for long-term retention. But social systems also create risk. They require blocking, muting, reporting, privacy settings, parental controls, chat filters, voice moderation, reputation controls and platform compliance. The architect should never approve a social feature without the matching safety feature.
+Commerce systems must be trustworthy. Store UX should show what is included, what is already owned, what is time-limited, what is discounted, what currency is used, what local price applies, what refund rules exist and what parental permissions are required. Cosmetics should have 3D preview, animation preview and compatibility warnings. Battle pass and event pass screens should show time remaining, XP sources, free/premium separation, unclaimed rewards, duplicate conversion and catch-up options.
+Esports systems include ranked ladder, tournament lobby, spectator controller, observer UI, draft/ban, team colours, player outlines, replay export, anti-cheat, latency rules, disconnect policies, match pause, admin tools and broadcast overlays. Esports is not created by adding a ranked mode. It requires that viewers can read the game as clearly as players. The spectator UI often needs different information hierarchy than the player HUD.
+Live operations is the content factory. A AAA service needs seasonal calendars, event templates, store rotations, login campaigns, collaboration content, balance patches, compensation grants, server maintenance, known-issue boards, feature flags, A/B tests, telemetry dashboards, community messaging and customer-support tooling. Every new event should be authorable without engineering rewriting the UI. Every reward should be traceable. Every bugged reward should be compensatable.
+* Live-ops calendar: season launch, mid-season update, event week, collaboration week, ranked reset, economy tune and patch window.
+* Event authoring: event name, dates, eligible regions, mode rules, reward table, mission list, store offers, notification copy and expiry behaviour.
+* Support tools: grant item, revoke item, view purchase, inspect inventory, ban/mute, restore character, compensate affected cohort and track appeal.
+* Community tools: patch notes, known issues, service status, roadmap, surveys and in-game message-of-the-day.
+10. Accessibility, Onboarding and Quality-of-Life
+Accessibility is production infrastructure. A 2026 game should support remapping, controller layouts, hold/toggle settings, subtitle size, subtitle background, colourblind filters, high-contrast mode, UI scale, text-to-speech, speech-to-text, screen-reader-friendly menus where feasible, aim assist settings, camera shake reduction, motion blur controls, photosensitivity options, simplified HUD and audio cues for critical events. Accessibility should be shown during first launch, not buried after the player struggles.
+Onboarding should teach through action. A tutorial should introduce camera, movement, attack, objective, inventory, upgrade, social safety, settings and first reward without becoming a lecture. It should let experts skip, but still provide optional training. Good onboarding is layered: beginner prompts, contextual tooltips, training range, codex glossary, recommended builds and returning-player recap. A game with complex systems needs a learning architecture, not one tutorial mission.
+Quality-of-life features are retention multipliers. Search boxes, claim-all, favourite, loadout save, compare, auto-sort, map filters, quick travel, ping wheel, redo/undo, confirmation on destructive actions, profile export, settings search, performance presets and inventory protection can matter as much as new content. Players forgive hard games more than they forgive repetitive friction.
+11. Unreal Engine 5 Engineering Stack Deep-Dive
+The Unreal Engine 5 implementation layer maps design intent into maintainable systems. For a billion-dollar product, the key UE5 pillars are Gameplay Ability System, Enhanced Input, CommonUI, network replication, dedicated servers, World Partition, Niagara, MetaSounds, Mass Entity, animation blueprints, motion matching and data-driven content. The goal is to avoid fragile one-off blueprints for core rules. Combat, inventory, UI and progression should be structured enough to support years of change.
+Gameplay Ability System is the spine of complex combat. UAbilitySystemComponent owns abilities and effects. UGameplayAbility defines activation logic, costs, targeting and cooldown. UGameplayEffect defines stat changes, buffs, debuffs, damage over time and temporary modifiers. GameplayTags describe states such as silenced, stunned, burning, vulnerable, ultimate-ready or cannot-cast. UI should query cooldowns, tags and attributes through the ability system rather than duplicating logic.
+Enhanced Input should define InputActions, MappingContexts, modifiers and triggers. This allows keyboard, mouse, controller and touch to coexist. A hero shooter may push a hero-specific context after selection. An ARPG may use click, hold and modifier contexts. A mobile MOBA may use virtual joystick and drag-release skill targeting. The input layer should support remapping, glyph display and accessibility toggle/hold behaviour.
+CommonUI should manage activatable widgets, modal stacks, controller focus, platform prompts and back behaviour. A common mistake is to build separate UI paths for mouse and controller. The correct approach is to build input-agnostic menu logic with platform-specific presentation. Every modal should know how to accept, cancel, restore focus and block underlying input.
+Network architecture should be server-authoritative for critical state. Health, damage, ability activation, item generation, rank changes, currency changes and quest completion should not be trusted from the client. Client prediction can make movement and abilities feel responsive, but the server must reconcile. UI should be prepared for correction. If an ability appears to fire but the server rejects it, the player needs a clear reason, not silent failure.
+World Partition supports large worlds by streaming cells rather than manually loading entire maps. For open-world RPG, MMO-like zones and battle royale maps, streaming must be coordinated with minimap, quest markers, AI spawning, navmesh, HLOD and memory budgets. The UI should show loading or streaming transitions only when needed; a premium game hides streaming through world design, not constant popups.
+Niagara and MetaSounds create combat feedback. A hit is not a particle alone. It is animation response, sound transient, damage number, enemy health change, controller vibration, camera impulse and possibly UI state change. Designers should build feedback recipes per damage type, rarity, ability class and reward tier. Reusable feedback data assets prevent every class from inventing inconsistent effects.
+Mass Entity is useful for crowds, herds, open-world ambient life, traffic, low-priority AI and horde behaviours. It should not replace bespoke boss AI or hero combat logic. The architect should decide which actors need full Actor overhead and which can be data-oriented entities. UI such as health bars should only attach to important targets; thousands of floating widgets will destroy readability and performance.
+DataAssets and DataTables should define items, abilities, quests, enemies, rewards, store offers, event missions and XP curves. Backend config should define seasonal timing, event eligibility, store rotation and live balance values where safe. The principle is simple: if designers need to tune it weekly, do not bury it inside compiled code.
+UE5 System
+	Use
+	Design Payoff
+	GAS
+	Abilities, cooldowns, buffs, debuffs, attributes
+	Consistent combat and UI state
+	Enhanced Input
+	Input actions and mapping contexts
+	Cross-device control abstraction
+	CommonUI
+	Menu stacks and platform prompts
+	Reliable UI navigation
+	Replication
+	Server-owned gameplay state
+	Fairness and cheat resistance
+	World Partition
+	Large map streaming
+	Scalable open-world production
+	Niagara / MetaSounds
+	VFX and procedural audio
+	Readable feedback and polish
+	Mass Entity
+	Crowds and data-oriented AI
+	Performance at scale
+	DataAssets
+	Authorable definitions
+	Faster balancing and content updates
+	12. AI and Machine Learning Systems
+AI systems in a 2026 AAA product should be separated into gameplay AI, production AI, moderation AI, analytics AI and optional generative AI. Gameplay AI includes NPC decision-making, bots, enemy tactics, navigation and dynamic encounters. Production AI can assist QA, test generation, bug clustering and localisation checks. Moderation AI can support chat detection, voice abuse triage and behavioural anomaly detection. Analytics AI can identify churn risk, matchmaking imbalance, economy inflation and exploit patterns.
+Anti-cheat behavioural analysis should look for impossible movement, recoil anomalies, suspicious accuracy, economy duplication, teleporting, impossible input cadence and coordinated bot behaviour. It should not blindly ban without review pathways. The UI needs clear enforcement messages, appeal status and safety language. Security systems must be paired with customer support because false positives destroy trust.
+Dynamic difficulty adjustment is useful in PvE and onboarding but dangerous in competitive PvP. In PvE, the game can adjust bot aggression, enemy density, health, assist prompts or recommended difficulty. In PvP, hidden difficulty manipulation can feel unfair. The safer approach is transparent matchmaking, practice bots, recommended modes and skill-based tutorials. If DDA exists, designers must define where it is allowed and how it is disclosed.
+Procedural content generation can assist dungeons, loot placement, encounter variation, resource nodes and environmental dressing. It should be constrained by authored rules. Random content without composition feels cheap. A PCG dungeon still needs pacing: entrance, teaching encounter, variation, pressure spike, relief, elite/boss, reward and exit. UI must handle generated objective locations, minimap reveal and quest text gracefully.
+LLM-driven dialogue and quest support should be used carefully. For premium games, authored narrative remains the quality anchor. LLM systems can support ambient NPC chatter, dynamic hints, customer support summaries or prototype quest variants, but they need lore constraints, safety filters, localisation review, fallback lines and caching. A live game cannot rely on unpredictable text generation for critical quest progression.
+13. Microservices Backend Architecture
+The backend architecture for a global live-service game should be service-oriented but not chaotic. Typical services include auth, profile, inventory, economy, matchmaking, session orchestration, store, entitlement, battle pass, missions, guild, chat, telemetry, support and experimentation. The client should not talk directly to databases. It should communicate through authenticated APIs and platform SDKs. High-risk transactions must use idempotency keys so retries do not duplicate purchases or rewards.
+Inventory and economy services require strict audit logs. Every item grant, currency spend, reward claim, purchase, refund, rollback and compensation should be traceable. This is critical for fraud detection, customer support and legal compliance. Redis can cache hot state, but the source of truth should be durable storage such as PostgreSQL or another transactional database. Large-scale analytics can flow through Kafka or a similar stream into a data lake.
+Matchmaking services should consider skill rating, role, party size, latency, platform, input method, region, queue time, avoid lists, new-player protection and mode rules. Competitive games may use TrueSkill-like systems or other rating models, but UI should avoid overpromising exact fairness. The player needs understandable expectations: estimated wait, role selected, region, crossplay state and penalty risk.
+Dedicated server orchestration must support session creation, health checks, crash recovery, scale-up, scale-down, log shipping, build version matching and region allocation. Kubernetes, container fleets or managed game server platforms can be used, but the design requirement is the same: players should not enter a match that cannot complete. Backend must prevent version mismatch and preserve match results even if post-match screens fail.
+Telemetry should capture funnel events, combat events, UI clicks, economy transactions, reward claims, session length, queue time, crash context, tutorial completion, churn signals and accessibility settings usage. Telemetry without a question becomes noise. Each event should exist because a designer, producer, economy analyst, engineer or support lead will use it to improve the game.
+Client (UE5) -> API Gateway -> Auth / Profile / Inventory / Economy / Matchmaking / Session / Telemetry
+Dedicated Server -> Match Result -> Progression Service -> Inventory Grant -> Telemetry Stream -> Data Lake
+Live Ops Tool -> Feature Flag / Event Config / Store Rotation -> Client UI + Backend Eligibility
+14. Encyclopedia of Missing Features and Edge Cases
+The following catalogue captures features often missed by early design documents. The point is not that every game needs every item on day one. The point is that a billion-dollar architecture must know where these features fit if the product grows. Missing edge cases become expensive when the game is already live.
+Account and Platform
+* device logout, 2FA QR setup, account deletion cooling-off, cross-progression status, social linking
+* region migration, privacy export, platform entitlement conflict, parental restrictions, age gates
+* name moderation, support tickets, session history, beta reward claim, founder-pack delivery
+Lobby and Social
+* party finder, role-based LFG, voice activation, push-to-talk, invite history
+* recent chat, clan emblem, clan recruitment, mailbox, gift inbox
+* emote wheel, spray selector, title selector, banner frame, mentor queue
+Inventory and Economy
+* stash folders, affix search, item source tooltip, currency wallet, auto-use consumables
+* quick compare, socket system, upgrade preview, transmog unlock, wardrobe
+* material bank, salvage all, protect item, duplicate conversion, trade restriction
+Progression and Mastery
+* prestige, class challenges, lifetime stats, weekly caps, catch-up XP
+* hero mastery, weapon mastery, profession rank, reputation, season archive
+* achievement tracking, collection completion, rank decay warning, returning player bonus, mentor rewards
+Combat and Abilities
+* ability charges, cancel windows, interrupts, damage text, healing text
+* absorb text, enemy resistance, buff timers, debuff timers, ultimate charge
+* resource warnings, cooldown pings, target preview, threat indicator, death recap
+World and Map
+* fast travel, completion counter, weather widget, time of day, population heatmap
+* quest area, custom markers, danger zones, resource overlays, underground layers
+* event timers, world boss tracker, fog of war, party route, safe zone
+Accessibility
+* subtitle background, critical audio cues, simple HUD, high contrast, chat text-to-speech
+* voice speech-to-text, UI magnifier, toggle/hold, aim assist slider, rarity labels
+* camera shake reduction, motion blur toggle, photosensitivity mode, font scaling, controller remap
+Replay and Learning
+* speed control, POV switch, free camera, auto highlight, bookmark
+* export video, match metadata, heatmap, damage timeline, objective timeline
+* build recommendation, coach tips, clip sharing, spectator delay, anti-stream-snipe tools
+Moderation and Safety
+* audio abuse report, text abuse report, AFK detection, visible self reputation, block list
+* mute all, ban appeal, known issues, service status, fraud review
+* chat filters, parent report, voice capture consent, match throw detection, smurf detection
+15. Economic Depth and Monetisation Compliance
+Economy design must protect trust. Currency tiers typically include soft currency earned through play, premium currency purchased with real money, event currency earned during a limited period, crafting materials, ranked tokens, guild resources and account-bound versus tradable items. Each currency needs source, sink, cap, expiry, conversion rule, refund rule and display priority. If players cannot understand where a currency came from or why it disappeared, the economy feels hostile.
+Inflation control requires sinks. Soft currency sinks include repairs, crafting, rerolls, consumables, cosmetics, housing decor, travel, guild contributions and prestige resets. Premium currency should not be mixed into gameplay power in a way that destroys fairness. If the game sells convenience, it must avoid pay-to-win perception and legal risk. Store design should show exact contents and avoid dark patterns.
+Chance-based rewards require probability disclosure where applicable, pity timers where used, age gating in regions that require it, duplicate conversion and spending controls. The UI should show exact odds, not vague words like rare or ultra. Battle pass design should show how many hours remain, how XP is earned, what is free, what is premium and what happens to unclaimed rewards at season end.
+Monetisation also includes collaboration events, founder packs, edition upgrades, cosmetics, mounts, pets, housing decor, emotes, voice packs, sprays, battle passes, character slots, stash tabs and server transfers. Each of these has entitlement, refund, ownership and cross-platform delivery implications.
+16. UE5 Implementation Roadmap
+Phase 0 is the vertical slice. Build one playable character or class, one map, one enemy type, one objective, one reward, one menu flow and one backend stub. The goal is to prove combat feel, camera, input, HUD readability, reward loop and technical replication. Do not build twenty classes before one class feels good.
+Phase 1 is foundation. Add account, profile, inventory, progression, data assets, basic matchmaking, dedicated server, telemetry and UI shell. Build a complete loop: lobby to gameplay to reward to upgrade to next objective. This is where architecture debt becomes visible. If every new item or ability requires engineering intervention, the content factory will fail.
+Phase 2 is live-service preparation. Add battle pass, event system, store, mission system, support hooks, feature flags, analytics dashboards, known-issue flow, patcher and content management. Build live-ops tools before launch because post-launch speed determines survival.
+Phase 3 is scaling and optimisation. Load-test matchmaking, backend, inventory grants, telemetry, servers and login. Optimise GPU, CPU, memory, network bandwidth, shader compilation, streaming and UI performance. Complete console certification, mobile performance tiers and accessibility testing.
+Phase 4 is live operations. Run seasons, patches, economy tuning, balance changes, customer support, anti-cheat reviews, content drops, community messaging and post-launch roadmap. The game becomes a service pipeline. A launch is not the finish line; it is when the real operating model begins.
+Phase
+	Goal
+	Deliverables
+	0. Vertical Slice
+	Prove feel and loop
+	1 character, 1 map, 1 quest, GAS setup, HUD, replication basics
+	1. Foundation
+	Complete repeatable loop
+	Auth, inventory, progression, matchmaking stub, DataAssets, map streaming
+	2. Live-Service Prep
+	Prepare seasons and economy
+	Battle pass, event JSON, store, analytics, support, feature flags
+	3. Scale
+	Global launch readiness
+	Dedicated server fleet, load testing, console cert, optimisation, localisation
+	4. Live Ops
+	Operate forever
+	Season cadence, patches, economy tuning, moderation, roadmap, content drops
+	17. Audit Layer: Latest Blizzard Release Depth Check
+This audit layer was added after the blueprint draft. The instruction was to review the latest Blizzard release and add missing depth before delivering the final document. The latest major Blizzard release context found in public sources is Diablo IV: Lord of Hatred, with official Blizzard material listing launch on April 27 at 4:00 p.m. PDT and availability on April 28, 2026. Official material highlights Skovos, new classes, loot filter, skill updates, seasonal/eternal realm play and patch 3.0.1 notes. Blizzard’s current Diablo IV patch notes also show ongoing post-launch fixes through June 10, 2026, which is critical evidence of live-service maintenance rather than one-time release.
+The requested “Major Nerds” written review could not be verified in public indexed results. Searches found TheMajorNerd as a creator presence and Twitch/YouTube identity, but not a public written full review of Lord of Hatred or another latest Blizzard release. Because the instruction required a review audit, the document uses verifiable review coverage and official release material instead of inventing a non-existent source. The public review coverage located emphasised presentation, Skovos as a varied new region, refined ARPG gameplay, skill-tree overhaul, endgame direction and quality-of-life options. These review points expose areas the earlier draft needed to deepen.
+Missing depth one: loot filters are not a small quality-of-life feature. In a high-density ARPG, loot filtering is core playability. It controls cognitive load, reward excitement, inventory fatigue, build discovery and endgame efficiency. The UI needs beginner presets, expert rule editing, ground-label styling, sound cues, rarity thresholds, affix matching, item-power thresholds, class-specific rules, aspect-upgrade detection and safe preview. The filter must never hide a genuinely valuable item without clear rule explanation. Patch notes mentioning a loot-filter issue around higher aspect rolls show why this feature must be treated as gameplay-critical.
+Missing depth two: skill-tree refreshes are not only balance changes. They reshape onboarding, early-game viability and build fantasy. A good skill-tree UI should show immediate power, future synergy, refundable paths, tag glossary, recommended starter builds, endgame build import, controller navigation, before/after comparison and warning when a change breaks gear synergy. Early-game viability matters because players decide whether a class feels good before they understand endgame theory.
+Missing depth three: endgame boards such as War Plans require strategic UI, not only rewards. The player needs to see path, node effects, reset cost, reward claim state, blocked progression, difficulty impact, currency cost and recommended next node. Patch notes referring to War Plan progression bugs show that endgame systems must have robust recovery after disconnects and reward-claim failures. Every progression board needs transaction-safe claiming.
+Missing depth four: new class releases require onboarding, cosmetics, balance communication and mastery paths. Lord of Hatred official material highlights Paladin and Warlock. A new class is not just abilities. It requires class fantasy, tutorial scenarios, recommended builds, unique resources, itemisation support, cosmetics, voice, achievements, class-specific balance telemetry, PvP tuning, party role clarity and returning-player marketing.
+Missing depth five: new regions need UI-integrated exploration. Skovos is presented as a major new region, and review coverage describes varied presentation. The design takeaway is that new areas require map layers, POI density, discovery rewards, environmental storytelling, region completion, fast-travel logic, enemy-family introductions, dungeon entrances, public events, campaign routing and endgame reuse. A beautiful area that does not feed systems becomes a tourist zone; a strong live-service area feeds campaign, dungeons, bosses, farming, events and achievements.
+Missing depth six: live post-launch patching is part of the product. A release with patch notes weeks later proves that the operating model must include telemetry, crash reports, bug triage, hotfix process, patch communication, compensation capability and known-issues messaging. The UI should include service status and known issues so players know whether a problem is recognised.
+World of Warcraft: Midnight and Overwatch 2026 updates add further audit depth. WoW housing shows that lifestyle systems need placement grids, decor inventory, permissions, neighbourhoods, export/import, storage, exterior controls and social visiting. Overwatch’s connected narrative arc and five Season 1 heroes show that live-service narrative now demands season-level planning, hero pipeline, refreshed UI/UX, in-game events and cross-media storytelling. These systems should be reflected in any 2026 blueprint for a billion-dollar game.
+* Audit addition: add loot filter as a first-class ARPG subsystem with presets, expert rules, sound, labels, safety and patch-tested edge cases.
+* Audit addition: add skill-tree readability, early build viability, import/export and before/after comparison.
+* Audit addition: add endgame-board transaction safety, disconnect recovery and reward-claim resilience.
+* Audit addition: add new-class launch pipeline: tutorial, itemisation, cosmetics, achievements, telemetry and balance.
+* Audit addition: add new-region system reuse across campaign, endgame, events, achievements and exploration.
+* Audit addition: add live patching, known issues, service status, compensation and rollback support.
+* Audit addition: add housing/lifestyle systems and year-long narrative live-ops as 2026 AAA requirements.
+18. Practical Final Blueprint and Source Notes
+The final architecture mandate is this: build the game as a platform. The UI is the nervous system. The gameplay ability system is the combat spine. The backend is the skeleton. Telemetry is the diagnostic layer. Live operations is the heartbeat. Narrative is not a separate department; it is encoded into objectives, worlds, UI labels, rewards, characters and events. Economy is not a store; it is a trust system. Social is not chat; it is community plus safety.
+The minimum viable AAA architecture is: UE5 client, CommonUI/Enhanced Input interface layer, GAS-driven ability framework, server-authoritative dedicated servers, backend profile/inventory/economy/matchmaking services, telemetry pipeline, live-ops config system, support tools, moderation tools and content authoring pipeline. Without these, the product may still be a game, but it is not a sustainable billion-dollar live-service platform.
+Final engineering checklist: GAS for all abilities and effects; CommonUI for menu stacks; Enhanced Input for keyboard, mouse, controller and touch; server authority for combat and economy; replicated properties for critical state; dedicated server build; World Partition for large maps; DataAssets for items, quests and abilities; telemetry for critical actions; idempotent backend transactions; loot filter for high-density item games; settings search; accessibility first-run flow; and live-ops tools before launch.
+Source notes used for audit and grounding: Official Blizzard Lord of Hatred pre-purchase and launch articles; official Diablo IV patch notes; official Warlock article; official Overwatch 2026 Reign of Talon article; official World of Warcraft Midnight housing articles; Epic Unreal Engine documentation for CommonUI with Enhanced Input, World Partition, Mass Entity and MetaSounds; public review/search coverage from Bleacher Report and public search results where accessible. A specific public written Major Nerds Blizzard review was not found, so the document does not claim to have read one.
+Bibliography / Public Sources
+* Blizzard Entertainment. “Prepare for the Reckoning: Lord of Hatred Draws Near.” April 23, 2026.
+* Blizzard Entertainment. “Stand Against Mephisto: Pre-Purchase Lord of Hatred.” December 11, 2025.
+* Blizzard Entertainment. “Diablo IV Patch Notes.” Updated through June 10, 2026 during research.
+* Blizzard Entertainment. “Master Hell Itself with the Warlock.” 2026.
+* Blizzard Entertainment. “Overwatch Spotlight: The Reign of Talon Begins.” February 4, 2026.
+* Blizzard Entertainment. “World of Warcraft: Midnight Goes Live March 2!” November 26, 2025.
+* Blizzard Entertainment. “Come Home to Azeroth with Housing in Midnight.” February 24, 2026.
+* Epic Games. Unreal Engine documentation: CommonUI with Enhanced Input, World Partition, Mass Entity, MetaSounds.
+* Bleacher Report. “Diablo IV Lord of Hatred Review, Gameplay Impressions, Videos and Top Features.” April 22, 2026.
+* Public search verification for TheMajorNerd/TheMajorNerds; no indexed written Blizzard gameplay review located during research.
+
+
+Approximate document word count generated in this file: 8,575 words. Microsoft Word may count hyphenated and code-style terms slightly differently.
+21. Source Bibliography, Visual Evidence Register, and Claim Audit Matrix
+Audit correction: The previous document contained architecture, gameplay, and UE5 implementation analysis, but it did not include enough direct source traceability or visual evidence. This appendix fixes that gap. It separates official product sources, official press/media assets, third-party gameplay/review sources, engine documentation, and online visual references. It also marks where a claim is directly evidenced, inferred from visible UI/gameplay, or requires live in-game capture from an owned client for absolute confirmation.
+Important image note: This document does not redistribute copyrighted Blizzard/Tencent gameplay screenshots as embedded assets unless they are supplied with permission or downloaded from official press kits. Instead, it provides a source-locked visual evidence register pointing to official media galleries, press kits, and review pages that contain the real UI/gameplay images. For a production research pack, the correct next step is to download authorized press-kit images and insert them as labelled figures with captions and license notes.
+21.1 Official Source Index
+S-BLZ-01 - Blizzard official Diablo IV: Lord of Hatred page. Official product page for Lord of Hatred features such as loot filter, skill variants, crafting, and Talismans. Source: https://diablo4.blizzard.com/lord-of-hatred
+S-BLZ-02 - Blizzard News: Prepare for the Reckoning: Lord of Hatred Draws Near. Official release/date and expansion overview. Source: https://news.blizzard.com/en-us/article/24267729/prepare-for-the-reckoning-lord-of-hatred-draws-near
+S-BLZ-03 - Blizzard Press Center: Diablo IV assets. Official screenshot, packshot, video, artwork, and document asset hub. Source: https://blizzard.gamespress.com/Diablo-IV
+S-BLZ-04 - Blizzard Press Center: Diablo IV Launch Press Kit. Official Diablo IV gameplay/shop/class screenshots and b-roll asset packs. Source: https://blizzard.gamespress.com/Kit/Details/Diablo-IV-Launch-Press-Kit
+S-BLZ-05 - World of Warcraft Housing Virtual Tour. Official World of Warcraft housing visual reference and feature preview. Source: https://worldofwarcraft.blizzard.com/en-us/housing
+S-BLZ-06 - Blizzard Press Center: World of Warcraft Midnight Housing Early Access. Official housing screenshot pack, icons, logos, and concept art. Source: https://blizzard.gamespress.com/Kit/Details/midnighthousing
+S-BLZ-07 - Overwatch Media Gallery. Official Overwatch videos, screenshots, and artwork for UI/gameplay visual reference. Source: https://overwatch.blizzard.com/media/
+S-BLZ-08 - Blizzard Press Center: Overwatch assets. Official Overwatch 2026/UI/UX/cosmetics/screenshots press asset hub. Source: https://blizzard.gamespress.com/overwatch
+S-BLZ-09 - Hearthstone official game site. Official reference for fast-paced strategy card game positioning and supported platforms. Source: https://hearthstone.blizzard.com/
+S-BLZ-10 - Blizzard Press Center: Hearthstone assets. Official Hearthstone press kits with screenshots, videos, logos, and artwork. Source: https://blizzard.gamespress.com/Hearthstone
+S-TEN-01 - Delta Force official site. Official Level Infinite/TiMi tactical shooter site: 64-player PvP, extraction, Black Hawk Down campaign. Source: https://www.playdeltaforce.com/
+S-TEN-02 - Level Infinite Pass: Delta Force. Official Level Infinite listing for Delta Force modes and platforms. Source: https://pass.levelinfinite.com/games/detail?area=Global&game=30029&lang=en
+S-TEN-03 - Honor of Kings official site. Official Honor of Kings global page for 5v5 mobile MOBA and hero-skill structure. Source: https://www.honorofkings.com/
+S-TEN-04 - Honor of Kings Google Play listing. Platform-store visual screenshots and Tencent TiMi/Level Infinite publisher reference. Source: https://play.google.com/store/apps/details?hl=en-US&id=com.levelinfinite.sgameGlobal
+S-TEN-05 - Honor of Kings: World official site. Official cross-platform multiplayer action RPG reference, character development, combat, exploration. Source: https://honorofkingsworld.com/en/index.html
+S-UE-01 - Epic Games documentation: Common UI. Official documentation for cross-platform multilayered UI, input routing, controller glyphs, and gamepad navigation. Source: https://dev.epicgames.com/documentation/unreal-engine/common-ui-plugin-for-advanced-user-interfaces-in-unreal-engine?lang=en-US
+S-UE-02 - Epic Games documentation: Gameplay Ability System. Official GAS framework for attributes, abilities, and interactions. Source: https://dev.epicgames.com/documentation/unreal-engine/gameplay-ability-system-for-unreal-engine?lang=en-US
+S-UE-03 - Epic Games documentation: Enhanced Input. Official Enhanced Input Plugin documentation. Source: https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine?lang=en-US
+S-UE-04 - Epic Games documentation: World Partition. Official World Partition documentation for large map streaming. Source: https://dev.epicgames.com/documentation/unreal-engine/world-partition-in-unreal-engine?lang=en-US
+S-UE-05 - Epic Games documentation: Niagara. Official Niagara VFX system overview. Source: https://dev.epicgames.com/documentation/unreal-engine/overview-of-niagara-effects-for-unreal-engine?lang=en-US
+S-UE-06 - Epic Games documentation: MetaSounds. Official high-performance DSP graph audio system documentation. Source: https://dev.epicgames.com/documentation/unreal-engine/metasounds-the-next-generation-sound-sources-in-unreal-engine?lang=en-US
+S-UE-07 - Epic Games documentation: Mass Entity. Official MassEntity data-oriented framework reference. Source: https://dev.epicgames.com/documentation/unreal-engine/mass-entity-in-unreal-engine?lang=en-US
+S-UE-08 - Epic Games documentation: Networking and Multiplayer. Official replication/multiplayer documentation for synchronizing data and procedure calls between clients and servers. Source: https://dev.epicgames.com/documentation/unreal-engine/networking-and-multiplayer-in-unreal-engine?lang=en-US
+21.2 Online Visual Evidence Register
+Use this table as the proof map for every real gameplay/UI image reference. In a production edition, authorized images should be downloaded from the official press kits and inserted directly with figure captions that cite these IDs.
+ID
+	Visual item
+	What to inspect
+	Source
+	URL
+	Claims supported
+	V-D4-01
+	Diablo IV loot filter rule editor UI
+	Visible menu list, add condition button, visibility/recolor controls, rarity/affix/item-power checkboxes and numeric fields.
+	4Fansites Diablo 4 loot filter guide
+	https://diablo.4fansites.de/diablo-4-lootfilter.php
+	Supports loot filter, rule editor, condition builder, color/recolor, rarity and item power filtering claims.
+	V-D4-02
+	Diablo IV loot filter overview screenshot
+	Enable/disable buttons, rule rows, filter management and action controls.
+	4Fansites loot filter news article
+	https://diablo.4fansites.de/news%2C14499%2CDiablo-4-Lootfilter-richtig-einstellen-und-nutzen.html
+	Supports filter profile management and screen-clutter/QoL analysis.
+	V-D4-03
+	Diablo IV HUD, loot labels, quest tracker, skill bar
+	Health globe, resource globe, active skills, dropped loot labels, zone indicator, quest objective.
+	Ordinary Gaming Diablo IV quest walkthrough
+	https://www.ordinarygaming.com/diablo-4-what-lies-ahead-quest-walkthrough/
+	Supports ARPG HUD, loot feedback, quest objective and ability hotbar analysis.
+	V-D4-04
+	Official Lord of Hatred marketing/feature proof
+	Expansion page references loot filter, skill variants, Horadric Cube/crafting and Talisman set bonuses.
+	Blizzard official Lord of Hatred page
+	https://diablo4.blizzard.com/lord-of-hatred
+	Supports latest Blizzard feature claims from official source.
+	V-WOW-01
+	WoW Midnight housing exterior screenshot
+	Character UI, action bars, house exterior, world-space house placement and player housing context.
+	GamesRadar housing hands-on/image
+	https://www.gamesradar.com/games/world-of-warcraft/after-21-years-of-feeling-at-home-in-world-of-warcraft-midnight-finally-gives-me-a-real-place-to-call-home/
+	Supports housing, action bar UI, player-space personalization claims.
+	V-WOW-02
+	WoW Midnight housing interior screenshot
+	Furnishings, fireplace, room decor, interior customization environment.
+	Game Informer housing preview
+	https://gameinformer.com/hands-on-preview/2025/05/16/world-of-warcrafts-player-housing-is-deeper-than-i-imagined-hands-on
+	Supports interior decoration, placement/customization depth, social/home-space claims.
+	V-WOW-03
+	Official WoW housing virtual tour
+	Official Blizzard virtual tour and preview warning that in-game experience/items may differ.
+	World of Warcraft housing virtual tour
+	https://worldofwarcraft.blizzard.com/en-us/housing
+	Supports official housing visual proof and source integrity.
+	V-WOW-04
+	Official WoW Midnight housing press screenshots
+	Official screenshot pack with multiple housing images, icons, logos and concept art.
+	Blizzard Press Center housing early access
+	https://blizzard.gamespress.com/Kit/Details/midnighthousing
+	Best source for authorized embedded figures in a final research pack.
+	V-OW-01
+	Overwatch official media gallery
+	Screenshots/video/artwork for hero shooter HUD, combat readability and team-based interface reference.
+	Overwatch Media Gallery
+	https://overwatch.blizzard.com/media/
+	Supports visual reference for hero shooter presentation and team-combat clarity.
+	V-OW-02
+	Overwatch press assets including UI/UX refresh category
+	Official asset hub lists Reign of Talon season, events, cosmetics, upcoming maps, UI/UX refresh.
+	Blizzard Press Center Overwatch assets
+	https://blizzard.gamespress.com/overwatch
+	Supports Overwatch UI/UX and live-service season system audit.
+	V-HS-01
+	Hearthstone official visual and press-kit sources
+	Official card game media/press kits for board, hand, mana, card text and collection UI references.
+	Hearthstone official site and press center
+	https://blizzard.gamespress.com/Hearthstone
+	Supports digital card-game UI and card interaction claims.
+	V-TEN-01
+	Delta Force official game-mode previews
+	Official site describes 64-player PvP, extraction, and Black Hawk Down campaign with visual previews.
+	Delta Force official site
+	https://www.playdeltaforce.com/
+	Supports Tencent/Level Infinite shooter mode and extraction UI study claims.
+	V-TEN-02
+	Honor of Kings app-store screenshots and official page
+	5v5 hero battle game, mobile screenshots, hero skills, ranked/mobile MOBA presentation.
+	Honor of Kings official/store sources
+	https://www.honorofkings.com/
+	Supports Tencent mobile-first MOBA UI and hero-skill system claims.
+	21.3 Claim-to-Source Audit Matrix
+Feature / claim area
+	Evidence basis
+	Source IDs
+	Confidence level
+	Launcher/account/login/region/status
+	Battle.net and Blizzard official pages prove the account/platform layer; engine-side implementation should map to auth/session backend.
+	S-BLZ-01, S-BLZ-02, S-BLZ-03
+	Direct product source + architecture inference
+	Diablo IV loot filter
+	Official Lord of Hatred page states a new loot filter; Blizzard Watch, Icy Veins, Dot Esports and 4Fansites provide gameplay/UI explanations and screenshots.
+	S-BLZ-01, V-D4-01, V-D4-02
+	Direct official feature + visual UI proof
+	Diablo IV HUD and loot labels
+	Gameplay screenshot shows health/resource globes, skill bar, loot labels and quest tracker.
+	V-D4-03
+	Direct visual proof
+	Diablo IV crafting / Horadric Cube / Talisman set bonuses
+	Official Lord of Hatred page references crafting systems like the Horadric Cube and Talisman set bonuses.
+	S-BLZ-01
+	Direct official feature source
+	ARPG inventory filters, item comparison and salvage flow
+	Supported by Diablo ARPG visible inventory/loot-management patterns; exact sub-functions vary by patch and must be verified in live client.
+	S-BLZ-01, V-D4-01, V-D4-03
+	Mixed: direct + design extrapolation
+	World of Warcraft player housing
+	Official housing virtual tour and Blizzard Press Center housing screenshots prove housing, house visuals and press assets.
+	S-BLZ-05, S-BLZ-06, V-WOW-01 to V-WOW-04
+	Direct official + visual proof
+	WoW action bars / MMORPG HUD
+	Housing screenshots and longstanding WoW UI show action bar, unit frame, world space and character UI.
+	V-WOW-01
+	Direct visual proof
+	Overwatch hero shooter UI/live seasons
+	Overwatch official media gallery and press center assets provide screenshot/video proof; press center lists 2026 UI/UX refresh category.
+	S-BLZ-07, S-BLZ-08, V-OW-01, V-OW-02
+	Direct official media source
+	Hearthstone card game UI
+	Hearthstone official site and press center provide the board/hand/card/collection visual references required for UI study.
+	S-BLZ-09, S-BLZ-10, V-HS-01
+	Direct official media source
+	Delta Force 64-player PvP, extraction, campaign modes
+	Official Delta Force site states massive 64-player PvP warfare, next-gen extraction and Black Hawk Down campaign.
+	S-TEN-01, S-TEN-02, V-TEN-01
+	Direct official source
+	Honor of Kings 5v5 mobile MOBA
+	Official site and store listing state 5v5 battles, hero selection and distinct hero skills.
+	S-TEN-03, S-TEN-04, V-TEN-02
+	Direct official source
+	Cross-platform UI implementation with controller glyphs/input routing
+	Epic Common UI documentation explicitly supports multilayered UI, input routing, controller icons and gamepad navigation.
+	S-UE-01
+	Direct engine documentation
+	Abilities, cooldowns, buffs/debuffs and attributes in UE5
+	Epic GAS documentation defines a framework for attributes, abilities and interactions.
+	S-UE-02
+	Direct engine documentation
+	Keyboard/mouse/controller/touch abstraction
+	Epic Enhanced Input documentation supports the input framework; Common UI supports cross-platform interface routing.
+	S-UE-01, S-UE-03
+	Direct engine documentation
+	Large open worlds / streaming maps
+	Epic World Partition documentation describes the large-map streaming replacement for manual sublevel division.
+	S-UE-04
+	Direct engine documentation
+	VFX / combat impact feedback
+	Epic Niagara documentation covers UE5 next-generation visual effects.
+	S-UE-05
+	Direct engine documentation
+	Procedural/reactive audio and gameplay sound design
+	Epic MetaSounds documentation defines a high-performance DSP graph audio system.
+	S-UE-06
+	Direct engine documentation
+	Crowds/hordes/high-count AI entities
+	Epic Mass Entity documentation describes data-oriented calculations and gameplay-focused framework.
+	S-UE-07
+	Direct engine documentation
+	Server-client replication and multiplayer state sync
+	Epic networking docs describe replication as synchronizing data and procedure calls between clients and servers.
+	S-UE-08
+	Direct engine documentation
+	Major Nerds review audit
+	No publicly indexed “Major Nerds” review was verified during the web audit. Do not cite it until the URL/video/transcript is provided or found.
+	Audit limitation
+	Not verified
+	21.4 What Must Be Visually Captured for a True AAA Research Binder
+* Launcher and account flow: Capture login, region select, version mismatch, maintenance, server selection, cross-platform account link, entitlements and parental controls.
+* First-time user flow: Capture accessibility prompt, brightness/safe-area setup, controller calibration, tutorial selection, privacy consent and default settings.
+* Home lobby: Capture news carousel, play button hierarchy, event banner, battle pass tile, store tile, social/friends panel, notifications and claim-all/red-dot logic.
+* Combat HUD: Capture health/resource, ability cooldowns, target frames, objective tracker, minimap, ping/comms, buffs/debuffs, damage numbers, warnings and kill feed.
+* Inventory/economy: Capture item compare, stash, filters, sorting, lock/protect, salvage, crafting preview, currency wallet and transaction confirmation.
+* Progression: Capture skill/talent tree, account level, battle pass, achievements, reputation/faction, mastery tracks and catch-up screens.
+* Social and safety: Capture friends, party finder, guild/clan, chat channels, voice controls, report/block/mute, appeal/ticket status and code of conduct prompts.
+* Replay/learning: Capture death recap, replay scrubber, heatmap if available, spectator/observer UI and training ground metrics.
+* Settings/accessibility: Capture video/audio/input/network/accessibility tabs, controller remap, colorblind modes, subtitle size/background, text-to-speech and streamer mode.
+* Live-ops/store: Capture battle pass, event missions, cosmetics preview, bundle pricing, premium currency purchase, refund policy and regional disclosures.
+21.5 Full Bibliography with Access Notes
+Access date for this appendix: 16 June 2026. Official publisher and engine documentation should be treated as primary evidence. Third-party review, guide and article sources should be treated as secondary evidence unless they include direct screenshots, video footage or quoted official statements.
+S-BLZ-01. Blizzard official Diablo IV: Lord of Hatred page. Official product page for Lord of Hatred features such as loot filter, skill variants, crafting, and Talismans. URL: https://diablo4.blizzard.com/lord-of-hatred
+S-BLZ-02. Blizzard News: Prepare for the Reckoning: Lord of Hatred Draws Near. Official release/date and expansion overview. URL: https://news.blizzard.com/en-us/article/24267729/prepare-for-the-reckoning-lord-of-hatred-draws-near
+S-BLZ-03. Blizzard Press Center: Diablo IV assets. Official screenshot, packshot, video, artwork, and document asset hub. URL: https://blizzard.gamespress.com/Diablo-IV
+S-BLZ-04. Blizzard Press Center: Diablo IV Launch Press Kit. Official Diablo IV gameplay/shop/class screenshots and b-roll asset packs. URL: https://blizzard.gamespress.com/Kit/Details/Diablo-IV-Launch-Press-Kit
+S-BLZ-05. World of Warcraft Housing Virtual Tour. Official World of Warcraft housing visual reference and feature preview. URL: https://worldofwarcraft.blizzard.com/en-us/housing
+S-BLZ-06. Blizzard Press Center: World of Warcraft Midnight Housing Early Access. Official housing screenshot pack, icons, logos, and concept art. URL: https://blizzard.gamespress.com/Kit/Details/midnighthousing
+S-BLZ-07. Overwatch Media Gallery. Official Overwatch videos, screenshots, and artwork for UI/gameplay visual reference. URL: https://overwatch.blizzard.com/media/
+S-BLZ-08. Blizzard Press Center: Overwatch assets. Official Overwatch 2026/UI/UX/cosmetics/screenshots press asset hub. URL: https://blizzard.gamespress.com/overwatch
+S-BLZ-09. Hearthstone official game site. Official reference for fast-paced strategy card game positioning and supported platforms. URL: https://hearthstone.blizzard.com/
+S-BLZ-10. Blizzard Press Center: Hearthstone assets. Official Hearthstone press kits with screenshots, videos, logos, and artwork. URL: https://blizzard.gamespress.com/Hearthstone
+S-TEN-01. Delta Force official site. Official Level Infinite/TiMi tactical shooter site: 64-player PvP, extraction, Black Hawk Down campaign. URL: https://www.playdeltaforce.com/
+S-TEN-02. Level Infinite Pass: Delta Force. Official Level Infinite listing for Delta Force modes and platforms. URL: https://pass.levelinfinite.com/games/detail?area=Global&game=30029&lang=en
+S-TEN-03. Honor of Kings official site. Official Honor of Kings global page for 5v5 mobile MOBA and hero-skill structure. URL: https://www.honorofkings.com/
+S-TEN-04. Honor of Kings Google Play listing. Platform-store visual screenshots and Tencent TiMi/Level Infinite publisher reference. URL: https://play.google.com/store/apps/details?hl=en-US&id=com.levelinfinite.sgameGlobal
+S-TEN-05. Honor of Kings: World official site. Official cross-platform multiplayer action RPG reference, character development, combat, exploration. URL: https://honorofkingsworld.com/en/index.html
+S-UE-01. Epic Games documentation: Common UI. Official documentation for cross-platform multilayered UI, input routing, controller glyphs, and gamepad navigation. URL: https://dev.epicgames.com/documentation/unreal-engine/common-ui-plugin-for-advanced-user-interfaces-in-unreal-engine?lang=en-US
+S-UE-02. Epic Games documentation: Gameplay Ability System. Official GAS framework for attributes, abilities, and interactions. URL: https://dev.epicgames.com/documentation/unreal-engine/gameplay-ability-system-for-unreal-engine?lang=en-US
+S-UE-03. Epic Games documentation: Enhanced Input. Official Enhanced Input Plugin documentation. URL: https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine?lang=en-US
+S-UE-04. Epic Games documentation: World Partition. Official World Partition documentation for large map streaming. URL: https://dev.epicgames.com/documentation/unreal-engine/world-partition-in-unreal-engine?lang=en-US
+S-UE-05. Epic Games documentation: Niagara. Official Niagara VFX system overview. URL: https://dev.epicgames.com/documentation/unreal-engine/overview-of-niagara-effects-for-unreal-engine?lang=en-US
+S-UE-06. Epic Games documentation: MetaSounds. Official high-performance DSP graph audio system documentation. URL: https://dev.epicgames.com/documentation/unreal-engine/metasounds-the-next-generation-sound-sources-in-unreal-engine?lang=en-US
+S-UE-07. Epic Games documentation: Mass Entity. Official MassEntity data-oriented framework reference. URL: https://dev.epicgames.com/documentation/unreal-engine/mass-entity-in-unreal-engine?lang=en-US
+S-UE-08. Epic Games documentation: Networking and Multiplayer. Official replication/multiplayer documentation for synchronizing data and procedure calls between clients and servers. URL: https://dev.epicgames.com/documentation/unreal-engine/networking-and-multiplayer-in-unreal-engine?lang=en-US
+R-D4-01. Blizzard Watch: How to use Loot Filters in Diablo 4: Lord of Hatred. Secondary gameplay guide source for loot filter purpose and player utility. URL: https://blizzardwatch.com/2026/04/29/embargo-loot-filter-diablo-4-lord-hatred-use/
+R-D4-02. Icy Veins: Goodbye Screen Clutter, Diablo 4 is getting a loot filter. Secondary gameplay guide describing hide/highlight/recolor behavior. URL: https://www.icy-veins.com/d4/news/goodbye-screen-clutter-diablo-4-is-getting-a-loot-filter/
+R-D4-03. Dot Esports: How to use loot filter in Diablo 4. Secondary gameplay guide noting PC/console support and rule count. URL: https://dotesports.com/diablo/news/how-to-use-loot-filter-in-diablo-4
+R-D4-04. Checkpoint Gaming: Diablo IV Lord of Hatred review. Secondary review source on systems overhaul, classes, region and build crafting. URL: https://checkpointgaming.net/reviews/2026/04/diablo-iv-lord-of-hatred-review-hell-learns-new-tricks/
+R-D4-05. Gamer Guides: Diablo IV Lord of Hatred review. Secondary review source on campaign/runtime/narrative pacing and lore depth. URL: https://www.gamerguides.com/diablo-iv/reviews/lord-of-hatred
+V-D4-01. 4Fansites Diablo 4 loot filter guide. Visual reference source for loot filter UI and rule editor. URL: https://diablo.4fansites.de/diablo-4-lootfilter.php
+V-D4-02. 4Fansites Diablo 4 loot filter news article. Visual reference source for selected loot filter screen and rule management. URL: https://diablo.4fansites.de/news%2C14499%2CDiablo-4-Lootfilter-richtig-einstellen-und-nutzen.html
+V-D4-03. Ordinary Gaming Diablo IV quest walkthrough. Visual reference source for HUD, loot labels, quest objective and skill bar. URL: https://www.ordinarygaming.com/diablo-4-what-lies-ahead-quest-walkthrough/
+R-WOW-01. Game Informer: World of Warcraft player housing hands-on preview. Secondary preview and visual source for interior housing customization. URL: https://gameinformer.com/hands-on-preview/2025/05/16/world-of-warcrafts-player-housing-is-deeper-than-i-imagined-hands-on
+R-WOW-02. GamesRadar: WoW Midnight player housing hands-on. Secondary preview and visual source for housing exterior and UI. URL: https://www.gamesradar.com/games/world-of-warcraft/after-21-years-of-feeling-at-home-in-world-of-warcraft-midnight-finally-gives-me-a-real-place-to-call-home/
+R-WOW-03. Windows Central: WoW player housing preview. Secondary preview and visual source for housing building tools and neighborhood presentation. URL: https://www.windowscentral.com/gaming/hands-on-world-of-warcrafts-new-player-housing-system-might-be-its-most-important-new-feature
+R-WOW-04. Wowhead: WoW housing virtual tour article. Secondary source pointing to housing virtual tour and early access details. URL: https://www.wowhead.com/news/experience-wows-new-housing-system-first-hand-with-virtual-tour-early-access-in-378253
+R-TEN-01. GDC Vault: Tencent Games Developer Summit - Large Scale PvP Level Design in Delta Force. Professional conference source for Tencent large-scale PvP level and gameplay design. URL: https://gdcvault.com/play/1035407/Tencent-Games-Developer-Summit-Large
+21.6 Source Standard for the Next Revision
+1. Every screenshot or visual reference must have a figure number, source ID, source URL, access date, copyright/licensing note, and a one-sentence explanation of what UI/function it proves.
+2. Every design claim must be tagged as Official, Third-party visual, Third-party review, Engine documentation, or Design inference.
+3. Design inference is allowed only when it is clearly labelled and connected to visible patterns across multiple games.
+4. Latest-release audit must not cite “Major Nerds” unless a public URL, transcript, video ID, or uploaded review file is provided.
+5. For a production binder, use official press-kit images first, then publisher media galleries, then review screenshots only when press-kit images do not show the required UI state.
+6. Any image inserted into the Word document must use a caption in the form: Figure X - Game / UI state / feature proved / source ID / URL / access date.
+22. Embedded Visual Proof Appendix - Online UI Evidence Plates
+This appendix corrects the missing proof layer. Each figure is an online-sourced visual reference linked to a specific UI/gameplay function discussed in the blueprint. Images remain the property of their respective publishers/rights holders and are used here only as critical, educational reference evidence for design analysis.
+  
+
+Figure VP-01 - World of Warcraft: Midnight base UI Damage Meter and HUD Edit Mode; proves built-in performance meter, configurable HUD panels, server-side combat readout concept; Source ID: V-WOW-UI-01.
+Source image URL: https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/VBZIL39YQ7TH1756523701202.png
+Parent article/source page: https://news.blizzard.com/en-us/article/24223311/midnight-get-up-to-speed-with-user-interface-updates
+Design claim supported: Damage meter menu, HUD editor, player performance feedback, live combat analysis becoming part of base UI instead of external add-on dependency.
+  
+
+Figure VP-02 - World of Warcraft: Midnight lethal cast/nameplate readability examples; proves enemy cast priority, health/nameplate treatment, combat readability upgrades; Source ID: V-WOW-UI-02.
+Source image URL: https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/W1FS0K8RYAVA1756523701809.png
+Parent article/source page: https://news.blizzard.com/en-us/article/24223311/midnight-get-up-to-speed-with-user-interface-updates
+Design claim supported: Nameplate/castbar visual priority, lethal ability cueing, high-priority interrupt readability, PvE/PvP combat feedback.
+  
+
+Figure VP-03 - World of Warcraft: Midnight Personal Resource Display and HUD Edit Mode; proves movable/scalable HUD widgets and personal resource bars; Source ID: V-WOW-UI-03.
+Source image URL: https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/MXUFTELVQP0Y1756523701966.png
+Parent article/source page: https://news.blizzard.com/en-us/article/24223311/midnight-get-up-to-speed-with-user-interface-updates
+Design claim supported: HUD customization, personal resources, buff display, party frames, minimap, quest tracker and edit-mode menu patterns.
+  
+
+Figure VP-04 - World of Warcraft: Midnight Advanced Cooldown Settings; proves cooldown manager, aura tracking, profile-style configuration and ability icon taxonomy; Source ID: V-WOW-UI-04.
+Source image URL: https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/H61NVKCMCU551756523699864.png
+Parent article/source page: https://news.blizzard.com/en-us/article/24223311/midnight-get-up-to-speed-with-user-interface-updates
+Design claim supported: Cooldown configuration, essential/utility/not-displayed categorisation, selected aura tracking, UI sound-alert design implications.
+  
+
+Figure VP-05 - Overwatch Stadium Armory item screen; proves round economy, purchasable item tiers, hero build slots, stat upgrades and power/item separation; Source ID: V-OW-STADIUM-01.
+Source image URL: https://bnetcmsus-a.akamaihd.net/cms/page_media/DOLQ26T35AVV1744681398334.png
+Parent article/source page: https://news.blizzard.com/en-us/article/24191424/enter-the-stadium-keys-to-victory
+Design claim supported: Armory/shop UX, Common/Rare/Epic item tiers, build cost, power slots, stat bars, hero-specific build drafting.
+  
+
+Figure VP-06 - Overwatch 2 ping wheel and contextual marker; proves non-voice communication, radial command menu, map/context pinging and accessibility/safety communication layer; Source ID: V-OW-PING-01.
+Source image URL: https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/a4/A4CSBRLQLPPD1648140815878.png
+Parent article/source page: https://overwatch.blizzard.com/en-gb/news/23785337/an-inside-look-at-the-pi/
+Design claim supported: Contextual pings, radial communication wheel, team safety, low-friction callouts, spam-control/moderation UX.
+  
+
+Figure VP-07 - Honor of Kings official battlefield/base/lane reference; proves MOBA lane, base, turret and battleground structure used in Tencent-style mobile UX analysis; Source ID: V-HOK-MAP-01.
+Source image URL: https://www.honorofkings.com/img/map_bigimg5.jpg
+Parent article/source page: https://www.honorofkings.com/
+Design claim supported: Three-lane/base/tower battlefield structure, mobile MOBA map readability, spatial progression from base through lane to enemy crystal.
+  
+
+Figure VP-08 - Honor of Kings official jungle/monster reference; proves jungle monster, river, objective-contest and map-resource systems; Source ID: V-HOK-MAP-02.
+Source image URL: https://www.honorofkings.com/img/map_bigimg2.jpg
+Parent article/source page: https://www.honorofkings.com/
+Design claim supported: Jungle objectives, river control, monster camp risk/reward, mobile MOBA objective design and map-driven team decisions.
+23. Source-Linked Claim Audit Matrix
+This matrix ties major blueprint claims to evidence classes. Anything not directly visible in official screens is labelled as engine documentation or design inference. No claim should be treated as a private Blizzard/Tencent implementation detail unless the source is official.
+Claim / System
+	Evidence class
+	Primary source(s)
+	What the source proves
+	WoW Midnight integrates base UI damage meters and boss-alert style encounter information.
+	Official Blizzard article + embedded visual
+	V-WOW-UI-01, V-WOW-UI-02; Blizzard Midnight UI article
+	Damage meters, nameplate improvements, boss alerts/timelines, personal resource display and cooldown manager are official UI update areas.
+	Diablo IV has deep build customisation through skill tree, paragon, itemisation, legendary powers, crafting and transmog systems.
+	Official Blizzard article + official Diablo IV Lord of Hatred/patch sources
+	Blizzard Diablo IV customisation article; Lord of Hatred launch/pre-purchase pages; Diablo IV patch notes
+	Skill tree, paragon, transmog, item modification, loot filter, skill tree overhaul and crafting/endgame claims.
+	Overwatch uses communication systems beyond voice chat, including contextual pings and radial commands.
+	Official Overwatch article + embedded visual
+	V-OW-PING-01; Overwatch ping-system article
+	Contextual pings, last-known-location pings, radial wheel, spam/block/squelch safety considerations.
+	Overwatch Stadium introduces round economy, powers, items, item tiers and hero build strategy.
+	Official Blizzard article + embedded visual
+	V-OW-STADIUM-01; Overwatch Stadium Keys to Victory article; Season 16 article
+	Build cost, item categories, Common/Rare/Epic item tiers, Stadium Cash, round-based build progression.
+	Honor of Kings represents Tencent/Level Infinite mobile MOBA structure: 5v5, lanes, roles, jungle, towers, base/crystal objective, mobile-first UI patterns.
+	Official Level Infinite/Honor of Kings page + embedded visuals
+	V-HOK-MAP-01, V-HOK-MAP-02; Honor of Kings official site and Level Infinite page
+	5v5 battle, roles/lanes, base/crystal, towers, river, monster/jungle map objects.
+	Delta Force and PUBG Mobile support Tencent-style live-service shooter analysis: extraction/warfare modes, mobile controls, voice chat, training/custom controls.
+	Official store/site + secondary public sources
+	Delta Force official site/Steam; PUBG Mobile Google Play and official events page
+	Extraction/full-scale warfare modes, mobile control customisation, voice/social features, maps and events.
+	UE5 implementation recommendations should be treated as production architecture recommendations, not proof Blizzard/Tencent use UE5 for these titles.
+	Engine documentation
+	Epic Games GAS, CommonUI, Enhanced Input, World Partition, Mass Entity docs
+	Official engine capabilities that map design requirements to implementation patterns.
+	Backend architecture recommendations are design architecture, not direct proof of Blizzard/Tencent internals.
+	Cloud/vendor documentation and architecture inference
+	AWS GameLift docs; Kubernetes, Kafka, Redis, PostgreSQL references
+	Dedicated server fleet and scalable service concepts for live-service implementation.
+	24. Corrected Bibliography with Direct Visual References
+ID
+	Publisher / Author
+	Source title
+	URL
+	Used for
+	B-WOW-01
+	Blizzard Entertainment
+	Midnight: Get up to Speed with User Interface Updates
+	https://news.blizzard.com/en-us/article/24223311/midnight-get-up-to-speed-with-user-interface-updates
+	Official source for WoW Midnight nameplates, damage meters, boss alerts, personal resource bar, cooldown manager.
+	V-WOW-UI-01
+	Blizzard CDN
+	WoW Midnight Damage Meter image
+	https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/VBZIL39YQ7TH1756523701202.png
+	Embedded Figure VP-01.
+	V-WOW-UI-02
+	Blizzard CDN
+	WoW Midnight nameplate/castbar image
+	https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/W1FS0K8RYAVA1756523701809.png
+	Embedded Figure VP-02.
+	V-WOW-UI-03
+	Blizzard CDN
+	WoW Midnight personal resource display image
+	https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/MXUFTELVQP0Y1756523701966.png
+	Embedded Figure VP-03.
+	V-WOW-UI-04
+	Blizzard CDN
+	WoW Midnight cooldown manager image
+	https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/H61NVKCMCU551756523699864.png
+	Embedded Figure VP-04.
+	B-D4-01
+	Blizzard Entertainment
+	Prepare for the Reckoning: Lord of Hatred Draws Near
+	https://news.blizzard.com/en-us/article/24267729/prepare-for-the-reckoning-lord-of-hatred-draws-near
+	Official Lord of Hatred launch/features page.
+	B-D4-02
+	Blizzard Entertainment
+	Stand Against Mephisto: Pre-Purchase Lord of Hatred
+	https://news.blizzard.com/en-us/article/24247511/stand-against-mephisto-pre-purchase-lord-of-hatred
+	Official source for loot filter and skill tree overhaul claims.
+	B-D4-03
+	Blizzard Entertainment
+	Diablo IV Patch Notes 2.6 / Lord of Hatred pre-download references
+	https://news.blizzard.com/en-us/article/24266869/diablo-iv-patch-notes-2-6
+	Official patch source for loot filter bug fixes and 3.0.0 pre-download context.
+	B-D4-04
+	Blizzard Entertainment
+	Diablo IV customization article - play your way
+	https://news.blizzard.com/pt-br/article/23938756/transforme-santuario-jogue-diablo-iv-do-seu-jeito
+	Official source for skill tree, paragon, transmog, mounts, legendary item extraction and item crafting.
+	V-D4-01
+	Blizzard CDN
+	Diablo IV skill tree visual
+	https://bnetcmsus-a.akamaihd.net/cms/page_media/Y5MD912HV7ZE1681938450007.jpg
+	Direct visual source for Diablo skill-tree UI; not embedded because CDN served AVIF in this environment.
+	V-D4-02
+	Blizzard CDN
+	Diablo IV paragon visual
+	https://bnetcmsus-a.akamaihd.net/cms/page_media/Z7BXLZCE0O8B1681938450009.jpg
+	Direct visual source for Diablo paragon board UI; not embedded because CDN served AVIF in this environment.
+	B-OW-01
+	Blizzard Entertainment
+	An inside look at the ping system in Overwatch 2
+	https://overwatch.blizzard.com/en-gb/news/23785337/an-inside-look-at-the-pi/
+	Official ping system design, contextual pings, communication wheel, spam/block controls.
+	V-OW-PING-01
+	Blizzard CDN
+	Overwatch 2 ping wheel visual
+	https://bnetcmsus-a.akamaihd.net/cms/content_entry_media/a4/A4CSBRLQLPPD1648140815878.png
+	Embedded Figure VP-06.
+	B-OW-02
+	Blizzard Entertainment
+	Enter the Stadium - Keys to Victory
+	https://news.blizzard.com/en-us/article/24191424/enter-the-stadium-keys-to-victory
+	Official source for Stadium powers, items, item categories and Stadium Cash systems.
+	B-OW-03
+	Blizzard Entertainment
+	A New Mode, New Hero, and New Rules In Season 16
+	https://news.blizzard.com/en-gb/article/24178102/a-new-mode-new-hero-and-new-rules-in-season-16
+	Official source for Stadium as a pillar, third-person option, Hero Bans and competitive changes.
+	V-OW-STADIUM-01
+	Blizzard CDN
+	Overwatch Stadium Armory item screen
+	https://bnetcmsus-a.akamaihd.net/cms/page_media/DOLQ26T35AVV1744681398334.png
+	Embedded Figure VP-05.
+	B-OW-04
+	Blizzard Entertainment
+	Hero Mastery Mode
+	https://overwatch.blizzard.com/en-us/news/23994441/master-your-skills-in-hero-mastery-mode/
+	Official source for hero mastery courses, score, emblems, time multipliers, difficulty courses and leaderboards.
+	B-HOK-01
+	Honor of Kings official site
+	Welcome to Honor of Kings
+	https://www.honorofkings.com/
+	Official source for 5v5 MOBA, roles, lanes, crystal, monsters, towers, river, base and game features.
+	B-HOK-02
+	Level Infinite
+	Honor of Kings game page
+	https://www.levelinfinite.com/game/honor-of-kings/
+	Official publisher page for Honor of Kings positioning and hero/skill variety.
+	V-HOK-MAP-01
+	Honor of Kings official image
+	Battlefield/base/lane visual
+	https://www.honorofkings.com/img/map_bigimg5.jpg
+	Embedded Figure VP-07.
+	V-HOK-MAP-02
+	Honor of Kings official image
+	Jungle/monster objective visual
+	https://www.honorofkings.com/img/map_bigimg2.jpg
+	Embedded Figure VP-08.
+	B-PUBG-01
+	PUBG Mobile official site
+	PUBG Mobile events and game overview
+	https://www.pubgmobile.com/en-US/events.shtml
+	Official source for maps, playzone, events and live-service structure.
+	B-PUBG-02
+	Google Play
+	PUBG Mobile listing
+	https://play.google.com/store/apps/details?id=com.tencent.ig
+	Source for mobile custom controls, training mode and voice chat with friends.
+	B-DF-01
+	Delta Force official site
+	Delta Force official game site
+	https://www.playdeltaforce.com/
+	Official source for 64-player PvP, extraction and campaign positioning.
+	B-DF-02
+	Steam
+	Delta Force Steam page
+	https://store.steampowered.com/app/2507950/Delta_Force/
+	Source for operator-based extraction, combined arms warfare and weapon customization.
+	B-TEN-01
+	Tencent
+	Tencent 2025 Annual and Q4 Results PDF
+	https://static.www.tencent.com/uploads/2026/03/18/c5a080d9b669f63b4e55182acee96bc2.pdf
+	Official financial source for Tencent game segment and titles referenced.
+	B-UE-01
+	Epic Games
+	Gameplay Ability System for Unreal Engine
+	https://dev.epicgames.com/documentation/unreal-engine/gameplay-ability-system-for-unreal-engine
+	Engine source for abilities, attributes and gameplay interactions.
+	B-UE-02
+	Epic Games
+	Common UI Plugin for Advanced User Interfaces
+	https://dev.epicgames.com/documentation/unreal-engine/common-ui-plugin-for-advanced-user-interfaces-in-unreal-engine
+	Engine source for multi-layer cross-platform UI, widgets, styles and input routing.
+	B-UE-03
+	Epic Games
+	Enhanced Input in Unreal Engine
+	https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine
+	Engine source for action/context input abstraction.
+	B-UE-04
+	Epic Games
+	World Partition in Unreal Engine
+	https://dev.epicgames.com/documentation/unreal-engine/world-partition-in-unreal-engine
+	Engine source for large map streaming/partitioning.
+	B-UE-05
+	Epic Games
+	Mass Entity in Unreal Engine
+	https://dev.epicgames.com/documentation/unreal-engine/mass-entity-in-unreal-engine
+	Engine source for data-oriented entity framework.
+	B-AWS-01
+	AWS
+	Amazon GameLift Servers Documentation
+	https://docs.aws.amazon.com/gameliftservers/
+	Cloud source for managed multiplayer dedicated server hosting.
+	25. Missing Evidence Now Corrected
+The earlier blueprint version lacked a hard bibliography and did not embed visual proof. This version corrects that by adding official Blizzard and Tencent/Level Infinite visuals, direct source URLs, and a claim-to-source audit matrix. It also explicitly separates official source facts from design inference. Claims about internal engine choices remain recommendations unless public sources state otherwise.

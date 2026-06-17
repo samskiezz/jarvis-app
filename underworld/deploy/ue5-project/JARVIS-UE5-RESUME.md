@@ -25,11 +25,17 @@ Cook: `Scripts/cook-jarvis.sh` (RunUAT BuildCookRun, `-map=/Game/Maps/JarvisHUD`
 ## To RESUME → stream
 1. **Free the box of any other UE5 cook** (the #1 blocker). Check `ps -eo args | grep -iE 'BuildCookRun|UnrealEditor.*Cook'`. Cooking on a contended 31GB box is the anti-pattern — prefer cooking on the Vast 4090 box (more RAM + the GPU that renders it).
 2. `sudo -u ueuser -H bash -c 'export UE_ROOT=/opt/UnrealEngine HOME=/home/ueuser PROJ=… MAP=/Game/Maps/JarvisHUD ARCHIVE=$PROJ/Packaged CONFIG=Development; bash Scripts/cook-jarvis.sh'` → produces `Packaged/Linux/`.
-3. **ONE COMMAND** (from the Hostinger box) — ships the package, frees a GPU, provisions, and streams:
+3. **ONE COMMAND** (from the Hostinger box) — ships the package, provisions the render node, and streams:
    ```
-   VAST_SSH_HOST=<host> VAST_SSH_PORT=<port> bash deploy/pixelstream/deploy-jarvis-to-vast.sh
+   VAST_SSH_HOST=<host> VAST_SSH_PORT=<port> USE_CLOUDFLARED=1 bash deploy/pixelstream/deploy-jarvis-to-vast.sh
    ```
-4. Then set the web app's UE5 stream URL to `http://<vast-host>/` (player port 80).
+   The script now runs the UE5 game as a non-root `uegame` user (UE5 refuses root), fixes the signalling server's Linux `http_root`, enables reverse-proxy trust for Cloudflare tunnels, and prints a public `trycloudflare.com` URL.
+4. Open the printed URL in a browser. It loads the Epic Pixel Streaming player; click to connect.
+
+### Current deploy caveats
+- The UE5 binary **refuses to run as root**; the deploy script creates/runs a `uegame` user for the game process while the signalling server stays root (port 80).
+- Some Vast instances expose an RTX 3090 instead of the expected 2×4090, and NVENC may not be available inside the container. In that case the stream falls back to **VP8 software encoding** at 1280×720.
+- The Vast direct IP usually does **not** expose port 80 publicly, so `USE_CLOUDFLARED=1` is recommended for a quick playable URL.
 
 ### ⚠️ Blocker as of last attempt: the Vast GPU box was UNREACHABLE
 - Proxy `ssh8.vast.ai:12157` AND direct `211.72.13.201:41154` both timed out (no ping). It was up ~10 min prior. **Vast SSH ports ROTATE** — when the instance reconnects, get the *current* host/port from the vast.ai dashboard (Instances → SSH) and pass them to the deploy command above.

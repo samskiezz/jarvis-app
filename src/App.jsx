@@ -40,6 +40,10 @@ function App() {
                     The 86-page APEX wall is preserved under /apex but is no longer
                     the entry point. The old portal chooser stays at /portal. */}
                 <Route path="/" element={<CinematicHome />} />
+                {/* Public clean URL: app.projectsolar.cloud/jarvis/Home serves the same
+                    launcher (nginx proxies /jarvis/Home + the app's /assets,/immersive,/models,
+                    /cinematic,/apex,/portal paths to this SPA on :5173). */}
+                <Route path="/jarvis/Home" element={<CinematicHome />} />
                 <Route path="/portal" element={<Launcher />} />
 
                 {/* The 10 render-locked immersive scenes (the JARVIS experience). */}

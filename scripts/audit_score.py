@@ -23,6 +23,7 @@ import os
 import re
 import subprocess
 import sys
+import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -64,6 +65,9 @@ HARD_BLOCKER_KEYS = {
 }
 
 MODEL = os.environ.get("AUDIT_MODEL", "claude-opus-4-8")          # strong judge for ALL changes (max accuracy)
+# Hard gate: automation must NEVER burn paid Claude credits unless explicitly opted-in. Owner rule: all
+# background automation runs on free local Ollama. Set JARVIS_AUTOMATION_ALLOW_CLAUDE=1 for a one-off run.
+ALLOW_CLAUDE = os.environ.get("JARVIS_AUTOMATION_ALLOW_CLAUDE", "") in ("1", "true", "yes")
 # minimum final score required to auto-merge (spec's auto-pass gate = 850)
 MERGE_MIN = int(os.environ.get("AUTO_MERGE_MIN", "850"))
 MISSION_FILE = os.path.join(ROOT, "config", "jarvis_mission.md")
@@ -92,6 +96,21 @@ def _run(cmd, timeout=120, cwd=ROOT, env=None):
 def _diff(files):
     rc, out = _run(["git", "diff", "HEAD", "--", *files], timeout=40)
     return out if rc == 0 else ""
+
+
+def _is_unscorable(diff: str, files) -> str:
+    """Detect a diff that a judge cannot meaningfully score — so we return a DISTINCT 'unscorable' signal
+    instead of a confident all-zeros reject. This is what should have stopped the 1,638-binary-file
+    incident at the audit boundary: a diff dominated by binary blobs, or spanning an implausible number of
+    files, is never a real reviewable feature. Returns a reason string, or '' if the diff is scorable."""
+    n_files = len(list(files or []))
+    if n_files > int(os.environ.get("AUDIT_MAX_FILES", "60")):
+        return f"diff spans {n_files} files (> max) — not a single reviewable feature"
+    binary = diff.count("Binary files ")
+    hunks = diff.count("diff --git ")
+    if binary >= 3 and binary >= max(1, hunks) * 0.5:
+        return f"diff is mostly binary ({binary} binary files / {hunks} hunks) — nothing to review"
+    return ""
 
 
 def _risk_depth(diff: str, files) -> tuple:
@@ -164,7 +183,26 @@ def _prompt(feat, diff, gate_report, depth_note) -> str:
     )
 
 
+def _local_judge(prompt: str, timeout: int = 360) -> str:
+    """Free-infra judge via the local OpenClaw bridge (Kimi/Ollama on :8095). The bridge speaks the same
+    {message, tier, max_tokens} contract used by auto_improve.py's kimi builder, so audit scoring runs
+    on free local infra by default. Returns "" on any error (caller treats as unscorable)."""
+    base = os.environ.get("LOCAL_LLM_CHAT_URL", "http://127.0.0.1:8095/llm/chat")
+    tier = os.environ.get("AUDIT_LOCAL_TIER", "kimi")    # 'kimi' (strong) > 'strong' > 'base'
+    try:
+        body = json.dumps({"message": prompt, "tier": tier, "max_tokens": 4096}).encode()
+        req = urllib.request.Request(base, data=body,
+                                     headers={"Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read() or b"{}").get("reply", "")
+    except Exception:  # noqa: BLE001
+        return ""
+
+
 def _claude_judge(prompt: str, model: str = MODEL, timeout: int = 360) -> str:
+    # Free-by-default: route via local bridge unless the owner explicitly opts in to paid Claude.
+    if not ALLOW_CLAUDE:
+        return _local_judge(prompt, timeout=timeout)
     pf = "/tmp/_audit_prompt.txt"
     of = "/tmp/_audit_out.json"
     with open(pf, "w", encoding="utf-8") as fh:
@@ -294,6 +332,14 @@ def audit_score(feat: dict, files: list, gate_report=None) -> dict:
         return {"verdict": "FAIL", "merge_ok": False, "final_score": 0,
                 "error": "no diff to audit",
                 "hard_blockers": [{"key": "improvement_not_implemented", "reason": "no change on disk"}],
+                "gate_passed": gate_passed}
+    unscorable = _is_unscorable(diff, files or [])
+    if unscorable:
+        # Do NOT call the judge and do NOT emit a real-looking all-zeros breakdown — signal unscorable so
+        # the caller skips/discards safely rather than treating garbage input as a confident rejection.
+        return {"verdict": "FAIL", "merge_ok": False, "final_score": 0, "unscorable": True,
+                "error": "unscorable_input: " + unscorable,
+                "hard_blockers": [{"key": "improvement_not_implemented", "reason": unscorable}],
                 "gate_passed": gate_passed}
     depth, note = _risk_depth(diff, files or [])
     # always use the strong judge for maximum audit accuracy (token-tiering reverted per owner).

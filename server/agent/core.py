@@ -486,23 +486,42 @@ class AgentCore:
             pass
 
     def _record_backup_manifest(self, run_id: str, step: Dict[str, Any]) -> None:
-        """For destructive steps: record a backup/manifest memory row + progress
-        event BEFORE the step launches (the permission contract's backup-first)."""
+        """For destructive steps: take a REAL backup of the path(s) about to be
+        destroyed BEFORE the step launches (the permission contract's backup-first),
+        and record the manifest. The backup makes the op genuinely reversible."""
+        args = step.get("args") or {}
+        targets = [str(args[k]) for k in ("dest", "path", "target", "out") if args.get(k)]
+        real = None
+        if targets:
+            try:
+                from . import tools as _t
+                real = _t.backup_paths(targets, reason=f"{step.get('tool')}@{run_id}")
+            except Exception:  # noqa: BLE001
+                real = None
         manifest = {
             "run_id": run_id,
             "tool": step.get("tool"),
-            "args": step.get("args"),
+            "args": args,
             "ts": time.time(),
-            "note": "pre-destructive snapshot of intended operation",
+            "backup": real,
+            "note": "real pre-destructive backup" if real else "no path target to back up",
         }
         try:
             _memory.write("backup_manifest", f"{step.get('tool')}@{run_id}",
                           manifest, tags=["backup_manifest", run_id])
         except Exception:  # noqa: BLE001
             pass
+        try:
+            from . import audit as _audit
+            _audit.record("backup", run_id=run_id, tool=step.get("tool"),
+                          risk=step.get("risk"), args=args,
+                          backup_dir=(real or {}).get("backup_dir"))
+        except Exception:  # noqa: BLE001
+            pass
         BUS.emit("tool.progress", {
             "tool": step.get("tool"), "pct": 1, "run_id": run_id,
-            "msg": "recorded backup manifest before destructive step",
+            "msg": (f"backed up to {real['backup_dir']}" if real
+                    else "no path target to back up before destructive step"),
         })
 
     # ------------------------------------------------------------------ #
@@ -624,25 +643,39 @@ class AgentCore:
 
             approvals = approvals or {}
 
-            def _approved(idx: int) -> bool:
+            # High-risk steps FAIL CLOSED: a missing/implicit decision rejects, it
+            # never auto-approves. Benign confirm steps keep the prior default-approve.
+            _HIGH_RISK = {"destructive", "system_change", "deployment", "financial",
+                          "security_sensitive"}
+
+            def _approved(step: Dict[str, Any]) -> bool:
+                idx = step.get("index")
                 if idx in approvals:
                     return bool(approvals[idx])
                 if str(idx) in approvals:
                     return bool(approvals[str(idx)])
-                return True  # default approve
+                if step.get("requires_backup") or step.get("risk") in _HIGH_RISK:
+                    return False  # fail closed — a dangerous step must be named to run
+                return True  # benign confirm steps keep prior default
 
             run["status"] = "running"
             self._save_run(run)
             for step in run["steps"]:
                 if step.get("status") != "awaiting":
                     continue
-                if not _approved(step["index"]):
+                if not _approved(step):
                     step["status"] = "rejected"
                     step["reason"] = "rejected by approver"
                     BUS.emit("tool.failed", {
                         "tool": step["tool"], "error": "rejected by approver",
                         "run_id": run_id,
                     })
+                    try:
+                        from . import audit as _audit
+                        _audit.record("rejected", run_id=run_id, tool=step.get("tool"),
+                                      risk=step.get("risk"), args=step.get("args"))
+                    except Exception:  # noqa: BLE001
+                        pass
                     self._save_run(run)
                     continue
                 if step.get("requires_backup"):

@@ -1,0 +1,27 @@
+# Caddy reverse proxy on the GPU box.
+# Serves the Pixel Streaming signalling frontend under the public path
+# https://app.projectsolar.cloud/jarvis/UnderworldUE5/
+# Cloudflare Tunnel forwards requests for /jarvis/UnderworldUE5/* to :8081;
+# Caddy strips the prefix and reverse-proxies to the local Epic signalling server.
+# A root (`/*`) proxy is also kept so temporary tunnels work at the bare URL.
+:8081 {
+    handle_path /jarvis/UnderworldUE5/* {
+        reverse_proxy localhost:80 {
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    handle /* {
+        reverse_proxy localhost:80 {
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    respond 404
+}

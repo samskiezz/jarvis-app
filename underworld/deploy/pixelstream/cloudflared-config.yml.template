@@ -1,0 +1,22 @@
+# Cloudflare Tunnel config for app.projectsolar.cloud
+# 1. Run: cloudflared tunnel login
+# 2. Run: cloudflared tunnel create jarvis-ue5
+# 3. Replace __TUNNEL_ID__ and __TUNNEL_CREDENTIALS_FILE__ below.
+# 4. Create a CNAME DNS record:
+#      app.projectsolar.cloud -> __TUNNEL_ID__.cfargotunnel.com (orange-cloud ON)
+# 5. Start: cloudflared tunnel --config /workspace/pixelstream/cloudflared-config.yml run
+#
+# Traffic for /jarvis/UnderworldUE5/* goes to the local Pixel Stream.
+# All other traffic goes to the Hostinger control box (existing PHP/web app).
+tunnel: __TUNNEL_ID__
+credentials-file: __TUNNEL_CREDENTIALS_FILE__
+
+ingress:
+  - hostname: app.projectsolar.cloud
+    path: /jarvis/UnderworldUE5(/.*)?
+    service: http://localhost:8081
+
+  - hostname: app.projectsolar.cloud
+    service: http://76.13.176.135
+
+  - service: http_status:404

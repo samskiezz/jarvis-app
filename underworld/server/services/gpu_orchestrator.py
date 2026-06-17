@@ -121,8 +121,25 @@ def _search_offer() -> Optional[dict]:
         return None
 
 
+def _under_cap() -> bool:
+    """Hard guard against the 50-instance pileup: never create a new burst worker while we are at or
+    above the account cap. Owner rule: 1 persistent base brain + N disposable, never let orphans
+    accumulate. Override per-run via env GPU_FORCE_PROVISION=1."""
+    if os.environ.get("GPU_FORCE_PROVISION", "") in ("1", "true", "yes"):
+        return True
+    cap = int(os.environ.get("GPU_MAX_INSTANCES", "2"))
+    try:
+        res = _vast("GET", "/instances/")
+        n = len(res.get("instances") or [])
+        return n < cap
+    except Exception:  # noqa: BLE001
+        return False    # if we cannot count, fail closed — no spawning
+
+
 def _create_instance(offer_id: int) -> Optional[str]:
     """Launch a llama.cpp/Ollama server-cuda instance on an offer. Returns vast instance id."""
+    if not _under_cap():
+        return None
     model = os.environ.get("VAST_120B_MODEL", "llama3.1:120b")
     onstart = (f"ollama serve & sleep 8; ollama pull {model}; "
                "echo READY")

@@ -625,14 +625,28 @@ def _h_file_read(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
 def _h_file_write(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
     path = _safe_repo_path(args.get("path") or "")
     content = args.get("content") or ""
+    if args.get("dry_run"):
+        existed = os.path.isfile(path)
+        return {"path": path, "dry_run": True, "would_overwrite": existed,
+                "current_bytes": os.path.getsize(path) if existed else 0,
+                "new_bytes": len(content.encode("utf-8")),
+                "summary": f"DRY-RUN: would {'overwrite' if existed else 'create'} {path}"}
+    backup = None
+    if os.path.isfile(path):                       # back up the bytes we're about to clobber
+        try:
+            from .tools import backup_paths
+            backup = backup_paths([path], reason="file.write overwrite")
+        except Exception:  # noqa: BLE001
+            backup = None
     ctx.progress(30, f"writing {path}")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
     ctx.progress(100, "done")
     n = len(content.encode("utf-8"))
-    return {"path": path, "bytes_written": n,
-            "summary": f"wrote {n} byte(s) to {path}"}
+    return {"path": path, "bytes_written": n, "backup": backup,
+            "summary": f"wrote {n} byte(s) to {path}"
+                       + (f" (backed up to {backup['backup_dir']})" if backup else "")}
 
 
 # --------------------------------------------------------------------------- #

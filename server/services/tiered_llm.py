@@ -8,7 +8,7 @@ not a claim (the lesson from the broken counter).
 Ladder (all OpenAI-compatible under the hood):
   micro  → llama3.2:3b   (box)      routing / classify / JSON-repair / cheap bulk
   base   → llama3.1:8b   (box)      everyday research / enrich / chatter
-  strong → qwen2.5:32b   (box)      planning, harder summaries, group reasoning
+  strong → qwen2.5:14b   (box)      planning, harder summaries, group reasoning
   heavy  → llama3.3:70b  (BURST)    future/manual tier only. Disabled by default while the
                                     sub-70B stack is perfected; falls back to `strong` unless
                                     LLM_ENABLE_70B=1 or ENABLE_70B_TIER=1.
@@ -38,6 +38,43 @@ def _box() -> str:
     return (ep + "/v1") if ep and "/v1" not in ep else (ep or "")
 
 
+def _local_box() -> str:
+    """Local CPU Ollama on the VPS (free, low-latency for micro tasks). Set LOCAL_OLLAMA_HOST or it
+    defaults to 127.0.0.1:11435 (the standalone CPU instance, kept off the SSH-tunneled 11434)."""
+    ep = (os.environ.get("LOCAL_OLLAMA_HOST") or "http://127.0.0.1:11435").rstrip("/")
+    return (ep + "/v1") if "/v1" not in ep else ep
+
+
+def _vps_cpu_pct() -> float:
+    """Rolling VPS CPU percentage. Used to gate auto-escalation from local CPU → GPU brain at the
+    LOCAL_ESCALATE_CPU_PCT threshold (default 75). Best-effort: returns 0.0 if psutil isn't available
+    or /proc/loadavg is unreadable, which forces conservative routing (stays local)."""
+    try:
+        import psutil  # noqa: F401
+        return float(psutil.cpu_percent(interval=0.05))
+    except Exception:  # noqa: BLE001
+        try:
+            with open("/proc/loadavg", encoding="utf-8") as fh:
+                la1 = float(fh.read().split()[0])
+            cores = os.cpu_count() or 1
+            return max(0.0, min(100.0, (la1 / cores) * 100.0))
+        except Exception:  # noqa: BLE001
+            return 0.0
+
+
+def _route_base_locally() -> bool:
+    """For the 'base' tier (everyday research / chatter), decide between local CPU Ollama and the GPU
+    brain. Owner rule: prefer local (free, free) unless VPS CPU is hot — then escalate to GPU. Override
+    threshold via LOCAL_ESCALATE_CPU_PCT (default 75); disable hybrid entirely via LOCAL_HYBRID=0."""
+    if os.environ.get("LOCAL_HYBRID", "1").strip().lower() in ("0", "false", "no", "off"):
+        return False
+    try:
+        thresh = float(os.environ.get("LOCAL_ESCALATE_CPU_PCT", "75"))
+    except Exception:  # noqa: BLE001
+        thresh = 75.0
+    return _vps_cpu_pct() < thresh
+
+
 def _truthy(value: str | None) -> bool:
     return (value or "").strip().lower() in {"1", "true", "yes", "on"}
 
@@ -58,14 +95,20 @@ def _safe_local_model(env_name: str, default: str) -> str:
 
 
 def _tiers() -> dict:
-    box = _box()
+    box = _box()                                # GPU brain (Vast 4090, OLLAMA_HOST → tunnel on 11434)
+    local = _local_box()                        # local CPU Ollama on the VPS (free, 11435 by default)
+    # Hybrid routing: micro ALWAYS local (cheap, fast on CPU at small models). base goes local while
+    # VPS CPU is under threshold (default 75%) and auto-escalates to the GPU brain when CPU is hot,
+    # so the VPS never gets choked by chat traffic. strong / heavy always GPU — those models can't run
+    # at usable speed on CPU. Owner rule: free first, scale to paid GPU only on real load pressure.
+    base_endpoint = local if _route_base_locally() else box
     kimi_key = os.environ.get("KIMI_MOONSHOT_KEY") or (
         os.environ.get("KIMI_API_KEY", "") if "moonshot" in os.environ.get("KIMI_BASE_URL", "") else "")
     kimi_base = "https://api.moonshot.ai/v1"
     return {
-        "micro":  {"engine": "openai", "base": box, "model": "llama3.2:latest", "key": "ollama"},
-        "base":   {"engine": "openai", "base": box, "model": _safe_local_model("OLLAMA_BASE_MODEL", "llama3.1:8b"), "key": "ollama"},
-        "strong": {"engine": "openai", "base": box, "model": _safe_local_model("OLLAMA_STRONG_MODEL", "qwen2.5:32b"), "key": "ollama"},
+        "micro":  {"engine": "openai", "base": local, "model": os.environ.get("OLLAMA_MICRO_MODEL", "llama3.2:1b"), "key": "ollama"},
+        "base":   {"engine": "openai", "base": base_endpoint, "model": _safe_local_model("OLLAMA_BASE_MODEL", "llama3.1:8b"), "key": "ollama"},
+        "strong": {"engine": "openai", "base": box, "model": _safe_local_model("OLLAMA_STRONG_MODEL", "qwen2.5:14b"), "key": "ollama"},
         "heavy":  {"engine": "burst", "model": os.environ.get("HEAVY_MODEL", "llama3.3:70b"), "fallback": "strong"},
         "kimi":   {"engine": "openai", "base": kimi_base, "model": os.environ.get("KIMI_MOONSHOT_MODEL", "kimi-k2.6"),
                    "key": kimi_key, "reasoning": True},

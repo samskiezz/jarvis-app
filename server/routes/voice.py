@@ -6,6 +6,10 @@ from __future__ import annotations
 
 import contextlib
 import os
+import sqlite3
+import threading
+import time
+from pathlib import Path
 from typing import AsyncIterator
 
 from fastapi import APIRouter, HTTPException
@@ -43,6 +47,46 @@ class VoiceStatus(BaseModel):
     tts_available: bool
     stt_available: bool
     stt_engine: str
+
+
+class HistoryEntry(BaseModel):
+    command: str
+    source: str = "voice"
+
+
+class VoiceModeRequest(BaseModel):
+    session_id: str = "default"
+    enabled: bool
+
+
+# ── simplified voice mode — in-memory store (session-scoped) ──────────────────
+_mode_lock = threading.Lock()
+_simplified_modes: dict[str, bool] = {}   # session_id → enabled
+
+
+# ── voice history storage ─────────────────────────────────────────────────────
+
+_HISTORY_DB = Path(__file__).resolve().parents[1] / "data" / "voice_history.db"
+_db_lock = threading.Lock()
+
+
+def _init_history_db() -> None:
+    with _db_lock:
+        con = sqlite3.connect(str(_HISTORY_DB))
+        try:
+            con.execute(
+                "CREATE TABLE IF NOT EXISTS voice_history "
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                " ts REAL NOT NULL, "
+                " command TEXT NOT NULL, "
+                " source TEXT DEFAULT 'voice')"
+            )
+            con.commit()
+        finally:
+            con.close()
+
+
+_init_history_db()
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -327,6 +371,8 @@ async def voice_commands():
                     {"phrase": "spatial", "example": "spatial", "description": "Toggle spatial wallpaper"},
                     {"phrase": "panel tint", "example": "panel tint", "description": "Toggle panel tint"},
                     {"phrase": "generate theme", "example": "generate theme", "description": "Generate a new UI theme"},
+                    {"phrase": "simplified voice", "example": "simplified voice", "description": "Switch to simplified voice mode (accessibility)"},
+                    {"phrase": "full voice mode", "example": "full voice mode", "description": "Switch back to full voice command set"},
                 ],
             },
             {
@@ -391,3 +437,142 @@ async def speech_to_text(req: STTRequest):
     finally:
         with contextlib.suppress(Exception):
             os.remove(tmp_path)
+
+
+# ── voice history ─────────────────────────────────────────────────────────────
+
+@router.post("/v1/voice/history")
+async def voice_history_add(entry: HistoryEntry):
+    """Log a voice or text command to the persistent history store."""
+    cmd = entry.command.strip()[:500]
+    if not cmd:
+        raise HTTPException(status_code=400, detail="command must not be empty")
+    src = (entry.source or "voice").strip()[:32]
+    ts = time.time()
+    with _db_lock:
+        con = sqlite3.connect(str(_HISTORY_DB))
+        try:
+            con.execute(
+                "INSERT INTO voice_history (ts, command, source) VALUES (?, ?, ?)",
+                (ts, cmd, src),
+            )
+            con.commit()
+        finally:
+            con.close()
+    return {"ok": True}
+
+
+@router.get("/v1/voice/history")
+async def voice_history_get(limit: int = 50, offset: int = 0):
+    """Return recent voice command history, newest first."""
+    limit = max(1, min(limit, 200))
+    offset = max(0, offset)
+    with _db_lock:
+        con = sqlite3.connect(str(_HISTORY_DB))
+        try:
+            rows = con.execute(
+                "SELECT id, ts, command, source FROM voice_history "
+                "ORDER BY ts DESC LIMIT ? OFFSET ?",
+                (limit, offset),
+            ).fetchall()
+        finally:
+            con.close()
+    items = [{"id": r[0], "ts": r[1], "command": r[2], "source": r[3]} for r in rows]
+    return {"ok": True, "items": items, "count": len(items)}
+
+
+@router.delete("/v1/voice/history")
+async def voice_history_clear():
+    """Delete all stored voice command history."""
+    with _db_lock:
+        con = sqlite3.connect(str(_HISTORY_DB))
+        try:
+            con.execute("DELETE FROM voice_history")
+            con.commit()
+        finally:
+            con.close()
+    return {"ok": True, "cleared": True}
+
+
+# ── simplified voice mode endpoints ──────────────────────────────────────────
+
+_SIMPLIFIED_COMMANDS = [
+    {
+        "name": "Essential Navigation",
+        "commands": [
+            {"phrase": "home", "example": "home", "description": "Return to the main view"},
+            {"phrase": "help", "example": "help", "description": "Hear the list of available simplified commands"},
+            {"phrase": "stop", "example": "stop", "description": "Stop JARVIS talking immediately"},
+            {"phrase": "repeat", "example": "repeat", "description": "JARVIS repeats the last thing it said"},
+        ],
+    },
+    {
+        "name": "Key Apps",
+        "commands": [
+            {"phrase": "health", "example": "health", "description": "Open the health dashboard"},
+            {"phrase": "tasks", "example": "tasks", "description": "Open the task list"},
+            {"phrase": "settings", "example": "settings", "description": "Open system settings"},
+        ],
+    },
+    {
+        "name": "Emergency & Care",
+        "commands": [
+            {"phrase": "guardian", "example": "guardian", "description": "Switch to Guardian care monitor for mum"},
+            {"phrase": "emergency", "example": "emergency", "description": "Open Guardian mode immediately"},
+            {"phrase": "call for help", "example": "call for help", "description": "Open Guardian alert mode"},
+        ],
+    },
+    {
+        "name": "Responses",
+        "commands": [
+            {"phrase": "yes", "example": "yes", "description": "Confirm a pending action"},
+            {"phrase": "no", "example": "no", "description": "Cancel a pending action"},
+        ],
+    },
+    {
+        "name": "Voice Mode",
+        "commands": [
+            {
+                "phrase": "full voice mode",
+                "example": "full voice mode",
+                "description": "Switch back to the full set of voice commands",
+            },
+        ],
+    },
+]
+
+
+@router.get("/v1/voice/simplified-commands")
+async def voice_simplified_commands():
+    """Return the curated simplified-mode command catalog.
+
+    Designed for users with cognitive or motor impairments: a small, memorable
+    set of short trigger words covering the most important daily actions.
+    """
+    return {
+        "ok": True,
+        "mic_tip": "Say one of these short commands clearly. JARVIS will confirm what it heard.",
+        "categories": _SIMPLIFIED_COMMANDS,
+    }
+
+
+@router.post("/v1/voice/mode")
+async def voice_mode_set(req: VoiceModeRequest):
+    """Store simplified-voice-mode preference for a session.
+
+    The client also persists this in localStorage for instant startup; this
+    endpoint lets server-side logic and tests query/set the mode reliably.
+    """
+    sid = req.session_id.strip()[:64] or "default"
+    with _mode_lock:
+        _simplified_modes[sid] = bool(req.enabled)
+    return {"ok": True, "session_id": sid, "simplified_mode": req.enabled}
+
+
+@router.get("/v1/voice/mode")
+async def voice_mode_get(session_id: str = "default"):
+    """Return the current simplified-voice-mode state for a session."""
+    sid = session_id.strip()[:64] or "default"
+    with _mode_lock:
+        enabled = _simplified_modes.get(sid, False)
+    return {"ok": True, "session_id": sid, "simplified_mode": enabled}

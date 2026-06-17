@@ -1,0 +1,334 @@
+<!doctype html>
+<html><head><meta charset=utf-8>
+<title>JARVIS · NEXUS — whole-system knowledge graph</title>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#04070e; --pan:#0a1320; --ln:#13314a; --cy:#22d3ee; --cy2:#5be6ff;
+    --gd:#34d399; --am:#f5b942; --rd:#f87171; --pu:#a78bfa; --pk:#f472b6;
+    --tx:#cfe9f5; --dim:#5f7e94;
+  }
+  *{box-sizing:border-box;font-family:ui-monospace,Menlo,Consolas,monospace}
+  html,body{margin:0;padding:0;height:100%;background:radial-gradient(1400px 700px at 70% -8%,#0b1f30 0,var(--bg) 55%);color:var(--tx);overflow:hidden}
+  #top{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;gap:14px;padding:0 18px;
+       background:linear-gradient(180deg,rgba(10,20,34,.92),rgba(7,13,22,.78));border-bottom:1px solid var(--ln);
+       backdrop-filter:blur(12px);z-index:5}
+  #top h1{font-size:14px;letter-spacing:3px;margin:0;color:#eafcff;text-shadow:0 0 16px #22d3ee99}
+  #top .v{font-size:10px;color:var(--gd);letter-spacing:1.5px}
+  #top .sub{font-size:10px;color:var(--dim);max-width:540px}
+  #top .stats{flex:1;font-size:11px;color:var(--cy2);text-align:right;letter-spacing:1px}
+  #sidebar{position:fixed;top:56px;bottom:0;left:0;width:220px;padding:14px 14px;
+           background:linear-gradient(180deg,#0a1422,#070d16);border-right:1px solid var(--ln);
+           overflow-y:auto;font-size:11px;z-index:4}
+  #sidebar h3{font-size:10px;letter-spacing:1.5px;color:var(--cy);margin:12px 0 6px;text-transform:uppercase}
+  .toggle{display:flex;align-items:center;gap:8px;padding:5px 8px;margin:3px 0;border-radius:6px;cursor:pointer;
+          background:#0b1a2a;border:1px solid #122436;color:var(--tx);user-select:none}
+  .toggle:hover{background:#102234;border-color:var(--cy)}
+  .toggle.off{opacity:.35}
+  .toggle .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .toggle .ct{flex:1;font-size:10px;color:var(--dim);text-align:right}
+  .btn{display:block;width:100%;padding:7px 9px;margin:5px 0;background:#0c1a2b;border:1px solid var(--ln);
+       color:var(--tx);border-radius:6px;cursor:pointer;font-size:10.5px;font-weight:600;letter-spacing:.5px}
+  .btn:hover{background:#102234;border-color:var(--cy);color:var(--cy)}
+  #canvas{position:fixed;top:56px;left:220px;right:0;bottom:0;cursor:grab;display:block}
+  #canvas:active{cursor:grabbing}
+  #inspector{position:fixed;top:80px;right:14px;width:280px;background:rgba(10,20,34,.92);
+             border:1px solid var(--ln);border-radius:12px;padding:14px 16px;font-size:11px;
+             backdrop-filter:blur(14px);display:none;z-index:6;box-shadow:0 16px 56px rgba(0,0,0,.55)}
+  #inspector.show{display:block}
+  #inspector .lab{color:var(--dim);font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;margin-top:8px}
+  #inspector .v{color:#eafcff;font-size:12px;margin-top:2px;word-break:break-all}
+  #inspector .x{float:right;cursor:pointer;color:var(--dim);font-size:18px;line-height:1}
+  #inspector .x:hover{color:var(--cy)}
+  #inspector h2{font-size:12.5px;color:var(--cy);margin:0 24px 8px 0;letter-spacing:1px}
+  #loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+          background:rgba(4,7,14,.85);z-index:10;color:var(--cy);font-size:13px;letter-spacing:3px}
+  #loader.hide{display:none}
+  #loader .ring{width:54px;height:54px;border:2px solid var(--ln);border-top-color:var(--cy);
+                border-radius:50%;animation:spin 1s linear infinite;margin-bottom:18px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #search{margin:6px 0;padding:7px 11px;width:100%;background:#0c1a2b;border:1px solid var(--ln);
+          color:var(--tx);border-radius:6px;font-size:11px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  #search:focus{outline:none;border-color:var(--cy);box-shadow:0 0 12px rgba(34,211,238,.3)}
+</style>
+</head><body>
+
+<div id=top>
+  <h1>JARVIS · NEXUS</h1>
+  <span class=v>v1</span>
+  <span class=sub>Whole-system knowledge graph — codebase, services, ports, GPU instances, models, memory.</span>
+  <span class=stats id=stats>loading…</span>
+</div>
+
+<div id=sidebar>
+  <h3>FILTER BY KIND</h3>
+  <div class=toggle data-kind=file><span class=dot style="background:#22d3ee"></span>file<span class=ct id=ct-file></span></div>
+  <div class=toggle data-kind=func><span class=dot style="background:#a78bfa"></span>func<span class=ct id=ct-func></span></div>
+  <div class=toggle data-kind=svc><span class=dot style="background:#34d399"></span>svc<span class=ct id=ct-svc></span></div>
+  <div class=toggle data-kind=port><span class=dot style="background:#f5b942"></span>port<span class=ct id=ct-port></span></div>
+  <div class=toggle data-kind=vast><span class=dot style="background:#f87171"></span>vast<span class=ct id=ct-vast></span></div>
+  <div class=toggle data-kind=model><span class=dot style="background:#f472b6"></span>model<span class=ct id=ct-model></span></div>
+  <div class=toggle data-kind=mem><span class=dot style="background:#facc15"></span>mem<span class=ct id=ct-mem></span></div>
+
+  <h3>SEARCH</h3>
+  <input id=search placeholder="filter nodes by label…" autocomplete=off>
+
+  <h3>VIEW</h3>
+  <button class=btn onclick=fitAll()>FIT TO SCREEN</button>
+  <button class=btn onclick=reload(true)>REBUILD (force)</button>
+  <button class=btn onclick=relayout()>RE-LAYOUT</button>
+  <button class=btn onclick=togglePhysics()>PAUSE/RESUME PHYSICS</button>
+</div>
+
+<canvas id=canvas></canvas>
+
+<div id=inspector>
+  <span class=x onclick="document.getElementById('inspector').classList.remove('show')">✕</span>
+  <h2 id=insp-label>—</h2>
+  <div id=insp-body></div>
+</div>
+
+<div id=loader><div style="display:flex;flex-direction:column;align-items:center"><div class=ring></div>BUILDING GRAPH…</div></div>
+
+<script>
+/* ───────── data ───────── */
+const KIND_COLOR = {file:'#22d3ee', func:'#a78bfa', svc:'#34d399', port:'#f5b942',
+                    vast:'#f87171', model:'#f472b6', mem:'#facc15'};
+const KIND_SIZE  = {file:3.2, func:1.8, svc:6, port:5, vast:5, model:5, mem:5};
+let GRAPH = {nodes:[], edges:[]};
+let POSITIONS = new Map();
+let DISABLED_KINDS = new Set();
+let SEARCH = '';
+let DRAGGING = null;
+let PANNING = false;
+let LAST_MOUSE = null;
+let CAMERA = {x:0, y:0, zoom:1};
+let PHYSICS_ON = true;
+let SELECTED = null;
+
+/* ───────── canvas ───────── */
+const cnv = document.getElementById('canvas');
+const ctx = cnv.getContext('2d');
+function resize(){ cnv.width = innerWidth - 220; cnv.height = innerHeight - 56; }
+resize(); addEventListener('resize', resize);
+
+/* ───────── fetch ───────── */
+async function reload(force=false){
+  document.getElementById('loader').classList.remove('hide');
+  try{
+    const r = await fetch('/graph/everything' + (force?'?force=1':''));
+    GRAPH = await r.json();
+    POSITIONS.clear();
+    initPositions();
+    updateStats();
+    document.getElementById('loader').classList.add('hide');
+  }catch(e){
+    document.getElementById('loader').innerHTML = 'fetch failed: ' + e;
+  }
+}
+
+function updateStats(){
+  const s = GRAPH.stats || {};
+  document.getElementById('stats').textContent =
+    `${s.nodes||0} nodes · ${s.edges||0} edges · cached ${new Date((GRAPH.generated_at||0)*1000).toLocaleTimeString()}`;
+  for (const k of Object.keys(KIND_COLOR)){
+    document.getElementById('ct-'+k).textContent = s[k+'s'] || s[k] || 0;
+  }
+}
+
+/* ───────── layout (force-directed) ───────── */
+function initPositions(){
+  const cx = cnv.width/2, cy = cnv.height/2;
+  for (const n of GRAPH.nodes){
+    const a = Math.random() * Math.PI * 2;
+    const r = 50 + Math.sqrt(Math.random()) * Math.min(cnv.width, cnv.height) * 0.4;
+    POSITIONS.set(n.id, {x: cx + Math.cos(a)*r, y: cy + Math.sin(a)*r, vx:0, vy:0});
+  }
+}
+function relayout(){ initPositions(); }
+function togglePhysics(){ PHYSICS_ON = !PHYSICS_ON; }
+
+/* Simple Barnes-Hut-light: O(n^2) repulsion is fine for 5K nodes if we throttle to 10fps */
+let TICK = 0;
+function step(){
+  if (!PHYSICS_ON) return;
+  TICK++;
+  const nodes = GRAPH.nodes.filter(n => !DISABLED_KINDS.has(n.kind));
+  const REP = 220, SPRING = 0.02, REST = 90, DAMP = 0.82, GRAV = 0.003;
+  const cx = cnv.width/2, cy = cnv.height/2;
+  // Repulsion (sampled neighbors only for speed)
+  for (let i=0;i<nodes.length;i++){
+    const a = POSITIONS.get(nodes[i].id); if (!a) continue;
+    a.vx += (cx - a.x) * GRAV;
+    a.vy += (cy - a.y) * GRAV;
+    // Sample 30 random others for repulsion — keeps the layout dynamic without n² cost.
+    for (let s=0;s<30;s++){
+      const j = (i + 1 + Math.floor(Math.random()*(nodes.length-1))) % nodes.length;
+      const b = POSITIONS.get(nodes[j].id); if (!b) continue;
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const d2 = dx*dx + dy*dy + 0.01;
+      const f = REP / d2;
+      a.vx += dx * f; a.vy += dy * f;
+    }
+  }
+  // Springs (edges)
+  for (const e of GRAPH.edges){
+    const a = POSITIONS.get(e.src), b = POSITIONS.get(e.dst);
+    if (!a || !b) continue;
+    if (DISABLED_KINDS.has(nodeKind(e.src)) || DISABLED_KINDS.has(nodeKind(e.dst))) continue;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const d = Math.sqrt(dx*dx + dy*dy) + 0.01;
+    const f = (d - REST) * SPRING;
+    const fx = dx / d * f, fy = dy / d * f;
+    a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy;
+  }
+  for (const n of nodes){
+    const p = POSITIONS.get(n.id); if (!p) continue;
+    if (DRAGGING && DRAGGING.id === n.id) continue;
+    p.vx *= DAMP; p.vy *= DAMP;
+    p.x += p.vx; p.y += p.vy;
+  }
+}
+
+const KIND_OF = new Map();
+function nodeKind(id){ return KIND_OF.get(id); }
+
+/* ───────── render ───────── */
+function render(){
+  ctx.clearRect(0,0,cnv.width,cnv.height);
+  ctx.save();
+  ctx.translate(cnv.width/2, cnv.height/2);
+  ctx.scale(CAMERA.zoom, CAMERA.zoom);
+  ctx.translate(-cnv.width/2 + CAMERA.x, -cnv.height/2 + CAMERA.y);
+
+  // Edges
+  ctx.lineWidth = 0.6;
+  for (const e of GRAPH.edges){
+    const a = POSITIONS.get(e.src), b = POSITIONS.get(e.dst);
+    if (!a || !b) continue;
+    if (DISABLED_KINDS.has(nodeKind(e.src)) || DISABLED_KINDS.has(nodeKind(e.dst))) continue;
+    const c = e.kind === 'imports' ? 'rgba(91,230,255,0.18)'
+            : e.kind === 'contains' ? 'rgba(167,139,250,0.16)'
+            : e.kind === 'binds' ? 'rgba(52,211,153,0.30)'
+            : e.kind === 'runs_at' ? 'rgba(244,114,182,0.36)'
+            : e.kind === 'mentions' ? 'rgba(250,204,21,0.22)'
+            : 'rgba(255,255,255,0.10)';
+    ctx.strokeStyle = c;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+
+  // Nodes
+  for (const n of GRAPH.nodes){
+    if (DISABLED_KINDS.has(n.kind)) continue;
+    const p = POSITIONS.get(n.id); if (!p) continue;
+    const matchSearch = !SEARCH || (n.label||'').toLowerCase().includes(SEARCH);
+    const r = (KIND_SIZE[n.kind]||3) * (SELECTED === n.id ? 2 : 1) * (matchSearch?1:0.4);
+    ctx.fillStyle = KIND_COLOR[n.kind] || '#fff';
+    ctx.globalAlpha = matchSearch ? 1 : 0.18;
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI*2); ctx.fill();
+    if (SELECTED === n.id){
+      ctx.strokeStyle = '#eafcff';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r+3, 0, Math.PI*2); ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+/* ───────── interaction ───────── */
+function worldFromScreen(x, y){
+  return {
+    x: (x - cnv.width/2) / CAMERA.zoom + cnv.width/2 - CAMERA.x,
+    y: (y - cnv.height/2) / CAMERA.zoom + cnv.height/2 - CAMERA.y,
+  };
+}
+
+function nodeAt(sx, sy){
+  const w = worldFromScreen(sx, sy);
+  for (let i=GRAPH.nodes.length-1; i>=0; i--){
+    const n = GRAPH.nodes[i];
+    if (DISABLED_KINDS.has(n.kind)) continue;
+    const p = POSITIONS.get(n.id); if (!p) continue;
+    const r = (KIND_SIZE[n.kind]||3) + 4;
+    if ((p.x - w.x)**2 + (p.y - w.y)**2 < r*r) return n;
+  }
+  return null;
+}
+
+cnv.addEventListener('mousedown', ev => {
+  const rect = cnv.getBoundingClientRect();
+  const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+  const hit = nodeAt(x, y);
+  if (hit){
+    DRAGGING = hit;
+    inspect(hit);
+    SELECTED = hit.id;
+  } else {
+    PANNING = true;
+    LAST_MOUSE = {x, y};
+  }
+});
+cnv.addEventListener('mousemove', ev => {
+  const rect = cnv.getBoundingClientRect();
+  const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+  if (DRAGGING){
+    const w = worldFromScreen(x, y);
+    const p = POSITIONS.get(DRAGGING.id);
+    if (p){ p.x = w.x; p.y = w.y; p.vx = 0; p.vy = 0; }
+  } else if (PANNING && LAST_MOUSE){
+    CAMERA.x += (x - LAST_MOUSE.x) / CAMERA.zoom;
+    CAMERA.y += (y - LAST_MOUSE.y) / CAMERA.zoom;
+    LAST_MOUSE = {x, y};
+  }
+});
+addEventListener('mouseup', () => { DRAGGING = null; PANNING = false; LAST_MOUSE = null; });
+cnv.addEventListener('wheel', ev => {
+  ev.preventDefault();
+  const zoom = ev.deltaY < 0 ? 1.12 : 1/1.12;
+  CAMERA.zoom = Math.max(0.2, Math.min(6, CAMERA.zoom * zoom));
+}, {passive: false});
+
+function fitAll(){
+  CAMERA = {x:0, y:0, zoom:1};
+}
+
+function inspect(n){
+  document.getElementById('insp-label').textContent = n.label;
+  const fields = ['id','kind','path','ext','size_b','line','status','gpu','dph',
+                  'host','params','size_gb','restarts','memory','cpu','proc','title','lifetime_s'];
+  let html = '';
+  for (const f of fields){
+    if (n[f] === undefined || n[f] === null) continue;
+    html += `<div class=lab>${f}</div><div class=v>${String(n[f]).slice(0,300)}</div>`;
+  }
+  document.getElementById('insp-body').innerHTML = html;
+  document.getElementById('inspector').classList.add('show');
+}
+
+/* ───────── sidebar ───────── */
+document.querySelectorAll('.toggle').forEach(t => {
+  t.addEventListener('click', () => {
+    const k = t.dataset.kind;
+    if (DISABLED_KINDS.has(k)){ DISABLED_KINDS.delete(k); t.classList.remove('off'); }
+    else { DISABLED_KINDS.add(k); t.classList.add('off'); }
+  });
+});
+document.getElementById('search').addEventListener('input', ev => {
+  SEARCH = ev.target.value.trim().toLowerCase();
+});
+
+/* ───────── loop ───────── */
+function frame(){
+  step();
+  render();
+  requestAnimationFrame(frame);
+}
+
+(async () => {
+  await reload();
+  for (const n of GRAPH.nodes) KIND_OF.set(n.id, n.kind);
+  frame();
+})();
+</script>
+</body></html>

@@ -118,3 +118,37 @@ server/jarvis_live.html.bak.*
 
 # real secrets — gitignored override of the .env.* commit convention
 .env.secrets
+
+# CLIP embedding virtualenv (sibling to .venv-tts — regenerable, gigabytes)
+.venv-clip/
+
+# Large regenerable caches + DB dumps (rebuilt by services on boot)
+server/data/repo_graph_cache.json
+server/data/*.db.gz
+
+# Piper voice ONNX models (downloaded from CDN; not source of truth)
+server/voices/*.onnx
+server/voices/*.json
+
+# UE5 build outputs (binaries + intermediate + cooked) — huge, regenerable from Source/
+underworld/deploy/ue5-project/Binaries/
+underworld/deploy/ue5-project/Intermediate/
+underworld/deploy/ue5-project/Saved/
+underworld/deploy/ue5-project/DerivedDataCache/
+underworld/deploy/ue5-project/Packaged/
+
+# UE5 imported asset binaries (27GB+ — belong in cloud storage / LFS, not git)
+underworld/deploy/ue5-project/Content/UnderworldAssets/
+
+# Underworld web GLB heroes (large binaries — served via /media cloud-aware route)
+underworld/web/dist/models/hero/*.glb
+underworld/web/public/models/hero/*.glb
+underworld/web/dist/models/generated/
+underworld/web/public/models/generated/
+
+# Underworld design CSVs (regenerated from source-of-truth)
+underworld/data/design/*.csv
+
+# Underworld sim DB
+underworld/data/*.db-wal
+underworld/data/*.db-shm

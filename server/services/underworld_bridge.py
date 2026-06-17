@@ -23,24 +23,73 @@ from __future__ import annotations
 from typing import Any
 
 # ── Best-effort import of the underworld platform modules ────────────────────
-# A single try/except: if any of these are missing the whole bridge degrades
-# gracefully rather than half-importing.
+# Lazy + timeout-guarded: sklearn/scipy (pulled in by real_optimizer) triggers
+# OpenBLAS CPU detection via fork()+sigsuspend() which can block for 30-90 s.
+# We wrap the attempt in a SIGALRM so the hang aborts in ≤8 s and the bridge
+# degrades gracefully — FastAPI boot and pytest collection must never hang.
 _IMPORT_ERROR: str | None = None
-try:  # pragma: no cover - exercised both ways across environments
-    import numpy as _np
-    from underworld.server.services import knowledge_graph as _kg
-    from underworld.server.services import graph_extras as _gx
-    from underworld.server.services import world_model as _wm
-    from underworld.server.services import real_optimizer as _opt
-    from underworld.server.services import temporal_nodes as _tn
-except Exception as exc:  # noqa: BLE001 - any failure must degrade, not raise
-    _np = None
-    _kg = None
-    _gx = None
-    _wm = None
-    _opt = None
-    _tn = None
-    _IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
+_np = None
+_kg = None
+_gx = None
+_wm = None
+_opt = None
+_tn = None
+_import_attempted = False
+
+
+def _ensure_import() -> None:
+    """Idempotent, timeout-guarded import of the underworld platform modules."""
+    global _np, _kg, _gx, _wm, _opt, _tn, _IMPORT_ERROR, _import_attempted
+    if _import_attempted:
+        return
+    _import_attempted = True
+
+    import signal as _sig
+    import sys as _sys
+
+    _armed = False
+    _old_h = None
+    try:
+        def _on_alarm(s, f):  # noqa: ANN001
+            raise ImportError("underworld platform import timed out (>8s) — treating as unavailable")
+        _old_h = _sig.signal(_sig.SIGALRM, _on_alarm)
+        _sig.alarm(5)
+        _armed = True
+    except (ValueError, OSError, AttributeError):
+        pass  # not in main thread, or SIGALRM unavailable — proceed without alarm
+
+    try:  # pragma: no cover - exercised both ways across environments
+        import numpy as _np_i
+        from underworld.server.services import knowledge_graph as _kg_i
+        from underworld.server.services import graph_extras as _gx_i
+        from underworld.server.services import world_model as _wm_i
+        from underworld.server.services import real_optimizer as _opt_i
+        from underworld.server.services import temporal_nodes as _tn_i
+        _np, _kg, _gx, _wm, _opt, _tn = _np_i, _kg_i, _gx_i, _wm_i, _opt_i, _tn_i
+    except Exception as exc:  # noqa: BLE001 - any failure must degrade, not raise
+        _np = None
+        _kg = None
+        _gx = None
+        _wm = None
+        _opt = None
+        _tn = None
+        _IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
+        for _k in list(_sys.modules):
+            if _k.startswith("underworld") or "real_optimizer" in _k:
+                _sys.modules.pop(_k, None)
+    finally:
+        if _armed:
+            try:
+                _sig.alarm(0)
+                if _old_h is not None:
+                    _sig.signal(_sig.SIGALRM, _old_h)
+            except Exception:  # noqa: BLE001
+                pass
+
+
+# Attempt import at module load — this is best-effort; if it hangs or fails the
+# module degrades gracefully.  The SIGALRM guard limits the hang to ≤8 s.
+_ensure_import()
 
 
 def available() -> bool:

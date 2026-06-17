@@ -1,0 +1,13 @@
+[Unit]
+Description=Cloudflare Tunnel for JARVIS Underworld UE5 Pixel Stream
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/cloudflared tunnel --config /workspace/pixelstream/cloudflared-config.yml run
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

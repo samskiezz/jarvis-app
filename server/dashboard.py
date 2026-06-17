@@ -1529,12 +1529,15 @@ def _local_reply(prompt: str, address: str = "") -> str:
         else (", " + _r.choice(["sir", "sir", "Master Kazangas"]))
     def has(*ws): return any(w in p for w in ws)
     def pick(opts): return _r.choice(opts)
-    # SAFETY first — stays clear about the action every time, just varies the wording.
+    # Safety triggers — Alfred stays a butler: calm, single sentence, no patronising scripts.
+    # Persona rule 5 = concise; rule 7 = "Quietly make sure help is on its way if needed" — so the help
+    # offer is folded into a single composed remark rather than the previous over-fussing dialogue.
     if has("help", "fallen", "fall", "emergency", "ambulance", "can't breathe", "cant breathe", "hurt", "pain", "scared", "911", "000"):
         return pick([
-            f"I'm right here{a}. If this is an emergency, say 'call my son' or 'call emergency' and I'll see to it at once. I'm not leaving you.",
-            f"Steady{a}. Say the word — 'call my son' or 'call emergency' — and help is on its way this instant. I'm staying with you.",
-            f"I have you{a}. If you need help, just say 'call emergency' and I'll attend to it immediately.",
+            f"At once{a}. Say the word and I'll have help on its way.",
+            f"With you{a}. A word from you and the line is dialled.",
+            f"Quite so{a}. Tell me the word and assistance is summoned.",
+            f"Steady{a}. One word and the matter is in hand.",
         ])
     if has("hello", "hi ", "hey", "you there", "are you there", "alfred", "jarvis"):
         return pick([f"At your service{a}. How may I help?", f"Yes{a}. What do you need?",
@@ -1556,9 +1559,12 @@ def _local_reply(prompt: str, address: str = "") -> str:
         return pick([f"It's {_d.datetime.now().strftime('%A, %-d %B, %-I:%M %p')}{a}.",
                      f"Just gone {_d.datetime.now().strftime('%-I:%M %p')}{a}, on {_d.datetime.now().strftime('%A the %-d')}."])
     return pick([
-        f"I'm with you{a}. My deeper reasoning is reconnecting for a moment, but I can still hear you, speak, bring up your files and watch over things — just say the word.",
-        f"Right here{a}. My clever half is catching its breath, but I can still listen, talk and attend to the essentials. What do you need?",
-        f"At your service{a}. The heavy thinking is a moment away, but I'm still here and ready to help.",
+        f"Sir.",
+        f"Very good{a}.",
+        f"At your service{a}.",
+        f"Sir, you have me.",
+        f"Quite so{a}. How may I be of use?",
+        f"Yes{a}.",
     ])
 
 
@@ -2270,6 +2276,39 @@ def _proposal(sid: str) -> dict:
 
 
 # ── AUTONOMOUS ENGINE observability feed (what the 24/7 loop actually landed) ─
+def _vast_events_feed(limit: int = 100) -> dict:
+    """Read the Vast instance lifecycle JSONL written by scripts/vast_kill_switch.py and return the
+    most recent N events + a rollup of currently-live (first_seen without a matching killed/disappeared)
+    instances. The UE5 dashboard renders this so spawn-leaks are visible in real time."""
+    path = os.path.join(ROOT, "server", "data", "vast_events.jsonl")
+    events: list[dict] = []
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    events.append(json.loads(line))
+                except Exception:  # noqa: BLE001
+                    continue
+    except FileNotFoundError:
+        return {"events": [], "live": [], "killed_total": 0, "first_seen_total": 0}
+    # Roll up: an instance is "live" if its last event for that id is first_seen.
+    last_for: dict = {}
+    for e in events:
+        last_for[e.get("id")] = e
+    live = [e for e in last_for.values() if e.get("kind") == "first_seen"]
+    killed_total = sum(1 for e in events if e.get("kind") == "killed")
+    first_seen_total = sum(1 for e in events if e.get("kind") == "first_seen")
+    return {
+        "events": events[-limit:],
+        "live": live,
+        "killed_total": killed_total,
+        "first_seen_total": first_seen_total,
+    }
+
+
 def _auto_improve_feed(limit: int = 25) -> dict:
     """Read the autonomous self-improvement journal and surface recent activity + the BASELINE/velocity
     metrics so the owner can SEE every change the loop made (title, category, builder, 1,000-pt score,
@@ -2992,6 +3031,18 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                 lim = 24
             self._send(json.dumps(_search_ontology(q.get("q", [""])[0], lim)).encode(),
                        "application/json")
+        elif self.path.startswith("/graph/everything"):
+            # NEXUS — whole-system knowledge graph JSON. MUST be matched BEFORE the bare /graph route
+            # below (which serves the 3D viewer HTML and would otherwise shadow this path because of
+            # the startswith prefix).
+            try:
+                from server.services.repo_graph import get_graph
+                q = parse_qs(urlparse(self.path).query)
+                force = q.get("force", ["0"])[0] == "1"
+                self._send(json.dumps(get_graph(force=force)).encode(), "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)[:200]}).encode(),
+                           "application/json", code=500)
         elif self.path.startswith("/graph"):
             try:
                 with open(os.path.join(os.path.dirname(__file__), "dashboard_graph.html"), encoding="utf-8") as f:
@@ -3128,6 +3179,16 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             except Exception:  # noqa: BLE001
                 lim = 25
             self._send(json.dumps(_auto_improve_feed(lim)).encode(), "application/json")
+        elif self.path.startswith("/vast/events"):
+            # Live Vast.ai instance lifecycle feed for the UE5 dashboard. Surfaces every spawn we observe
+            # (incl. ones spawned by external services with the same API key), with first_seen / killed /
+            # disappeared kinds + the kill-switch lifetime so the owner can SEE leaks happen in real time.
+            q = parse_qs(urlparse(self.path).query)
+            try:
+                lim = max(1, min(500, int(q.get("limit", ["100"])[0])))
+            except Exception:  # noqa: BLE001
+                lim = 100
+            self._send(json.dumps(_vast_events_feed(lim)).encode(), "application/json")
         elif self.path.startswith("/agent/tools"):
             # Agent OS tool registry (the 17 real tools) + health snapshot.
             self._send(json.dumps(_agent_tools()).encode(), "application/json")
@@ -3488,6 +3549,10 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             self._send(json.dumps({"ok": True, "audit": PK.audit_log(limit)}).encode(), "application/json")
         elif self.path.startswith("/legacy") or self.path.startswith("/v2"):
             self._send(self._tmpl("dashboard_v2.html").encode(), "text/html; charset=utf-8")
+        elif self.path.startswith("/nexus") or self.path.startswith("/jarvis/nexus"):
+            # NEXUS — the whole-system knowledge graph viewer (server/nexus.html) backed by
+            # /graph/everything. The HTML is a single self-contained page; no static assets.
+            self._send(self._tmpl("nexus.html").encode(), "text/html; charset=utf-8")
         else:
             # Jarvis Live — the cinematic Iron-Man holographic JARVIS. Falls back to v2 then inline HTML.
             page = self._tmpl("jarvis_live.html")
@@ -3964,15 +4029,14 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
 # ~14s per NOVEL phrase on this CPU box, which is exactly what made JARVIS lag and drop to the female
 # web-speech fallback. Cached = 6ms. The client fetches this same list (/phrases) to pre-warm blobs.
 CANNED_PHRASES = [
-    "JARVIS online. How may I help?",
-    "Yes, I'm right here. What can I do for you?",
-    "All systems steady and watching over you. More to the point — how are you feeling?",
-    "Always. That's what I'm here for.",
-    "Rest easy. I'll be right here through the night.",
-    "I'm JARVIS — your assistant, here with you and looking after things.",
-    "I'm here. If this is an emergency I can call for help — say 'call my son' or 'call emergency'. I'm not leaving you.",
-    "I'm with you. My deeper reasoning is offline for a moment, but I can still hear you, speak, "
-    "show your photos and files, watch over you and call your family — just tell me what you need.",
+    "At your service.",
+    "Yes, sir.",
+    "Very good, sir.",
+    "Quite right, sir.",
+    "Consider it handled, sir.",
+    "Leave it with me, sir.",
+    "I shall see to it.",
+    "Sir.",
 ]
 def _warm_canned():
     """Background: synthesize each canned phrase once so the cache is hot → instant, never-female replies."""

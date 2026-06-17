@@ -13,7 +13,7 @@ PSI_DIR="${PSI_DIR:-${WORKDIR:-/workspace}/PixelStreamingInfrastructure}"
 [ -d "$PSI_DIR" ] || PSI_DIR=/root/PixelStreamingInfrastructure
 STREAMER_PORT="${STREAMER_PORT:-8888}"
 PLAYER_PORT="${PLAYER_PORT:-80}"
-GRAPHICSADAPTER="${GRAPHICSADAPTER:-1}"   # GPU1 free; GPU0 runs the Ollama brain
+GRAPHICSADAPTER="${GRAPHICSADAPTER:-0}"   # GPU0 on single-GPU Vast boxes
 
 if [[ -z "${GAME_SH}" ]]; then
   echo "ERROR: no packaged build under ${GAME_DIR:-${HERE}/game}/ (expected <Project>.sh)." >&2
@@ -27,6 +27,7 @@ if [[ -d "${PSI_DIR}/SignallingWebServer" ]]; then
   echo "Signalling up (player :${PLAYER_PORT}, streamer :${STREAMER_PORT})…"
   ( cd "${PSI_DIR}/SignallingWebServer" && \
     (npm ci --omit=dev >/tmp/psi_install.log 2>&1 || true) && \
+    bash "${HERE}/signalling-compat-patch.sh" "${PSI_DIR}" && \
     HTTP_PORT="${PLAYER_PORT}" STREAMER_PORT="${STREAMER_PORT}" \
     node ./dist/index.js >/tmp/jarvis_signalling.log 2>&1 & )
   sleep 3
@@ -34,11 +35,14 @@ else
   echo "WARN: no SignallingWebServer at ${PSI_DIR} — run provision-render-node.sh first." >&2
 fi
 
-# 2) UE5 headless render of the JARVIS HUD → NVENC H264 → signalling. Vulkan offscreen (no X11).
-echo "Launching JARVIS HUD (Vulkan -RenderOffscreen, NVENC, GPU${GRAPHICSADAPTER}) → streamer :${STREAMER_PORT}"
+# 2) UE5 headless render of the JARVIS HUD → VP9 software encoding → signalling.
+# NVENC H264/H265 is unavailable on this Vast instance, so VP9 is the best
+# supported software codec (better compression than VP8).
+echo "Launching JARVIS HUD (Vulkan -RenderOffscreen, VP9, GPU${GRAPHICSADAPTER}) → streamer :${STREAMER_PORT}"
 exec "${GAME_SH}" \
-  -RenderOffscreen -Unattended -ForceRes -ResX=1920 -ResY=1080 -vulkan \
+  -RenderOffscreen -Unattended -ForceRes -ResX=1280 -ResY=720 -vulkan \
   -graphicsadapter="${GRAPHICSADAPTER}" \
   -PixelStreamingIP=127.0.0.1 -PixelStreamingPort="${STREAMER_PORT}" \
-  -PixelStreamingEncoderCodec=H264 -AllowPixelStreamingCommands \
+  -PixelStreamingEncoderCodec=VP9 -AllowPixelStreamingCommands \
+  -t.MaxFPS=60 \
   ${EXTRA_UE_ARGS:-}

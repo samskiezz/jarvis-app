@@ -29,11 +29,34 @@ _import_attempted = False
 
 
 def _ensure_import() -> None:
-    """Idempotent lazy import of the underworld registry."""
+    """Idempotent lazy import of the underworld registry.
+
+    The underworld C-extension stack can HANG (not just raise) during import
+    when the SO files exist but are partially initialised or GPU-locked.  We
+    therefore arm a SIGALRM before the import so a stuck load fails in ≤8 s
+    instead of blocking the FastAPI boot indefinitely.  SIGALRM only works in
+    the main thread; in worker threads we fall through to the bare try/except
+    and the worst-case is the pre-existing behaviour (slow, not crashing).
+    """
     global _ROUTES, _lookup, _run, _IMPORT_ERROR, _import_attempted
     if _import_attempted:
         return
     _import_attempted = True
+
+    import signal as _sig
+    import sys as _sys
+
+    _armed = False
+    _old_h = None
+    try:
+        def _on_alarm(s, f):  # noqa: ANN001
+            raise ImportError("underworld import timed out (>8s) — treating as unavailable")
+        _old_h = _sig.signal(_sig.SIGALRM, _on_alarm)
+        _sig.alarm(5)
+        _armed = True
+    except (ValueError, OSError, AttributeError):
+        pass  # not in main thread, or platform lacks SIGALRM — proceed without alarm
+
     try:  # pragma: no cover - exercised both ways across environments
         from underworld.server.services.methods_registry import (
             ROUTES as _ROUTES_IMPORTED,
@@ -48,6 +71,19 @@ def _ensure_import() -> None:
         _lookup = None
         _run = None
         _IMPORT_ERROR = f"{type(exc).__name__}: {exc}"
+        # Purge any partially-initialised underworld modules from the import cache
+        # so a later successful import (e.g. after a GPU restart) can succeed.
+        for _k in list(_sys.modules):
+            if _k.startswith("underworld"):
+                _sys.modules.pop(_k, None)
+    finally:
+        if _armed:
+            try:
+                _sig.alarm(0)
+                if _old_h is not None:
+                    _sig.signal(_sig.SIGALRM, _old_h)
+            except Exception:  # noqa: BLE001
+                pass
 
 
 _UNAVAILABLE = {

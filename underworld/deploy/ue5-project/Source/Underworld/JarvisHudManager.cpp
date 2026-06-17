@@ -86,6 +86,14 @@ UStaticMesh* AJarvisHudManager::ResolveMesh(const FString& GamePath)
 		return *Cached;
 	}
 	UStaticMesh* Mesh = LoadObject<UStaticMesh>(nullptr, *GamePath);
+	if (!Mesh)
+	{
+		// Interchange imports each GLB into its own folder and creates a package
+		// named after the source file, so the full asset path is <folder>/<name>.
+		const FString BaseName = FPaths::GetBaseFilename(GamePath);
+		const FString FullPath = GamePath / BaseName;
+		Mesh = LoadObject<UStaticMesh>(nullptr, *FullPath);
+	}
 	if (Mesh)
 	{
 		MeshCache.Add(GamePath, Mesh);

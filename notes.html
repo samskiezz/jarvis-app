@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Notes</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1e222b;
+    --text: #e6e8ec;
+    --muted: #8b91a0;
+    --accent: #4f9dff;
+    --danger: #ff5d5d;
+    --border: #2a2f3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+  header .count { color: var(--muted); font-size: 13px; }
+  .layout { flex: 1; display: flex; min-height: 0; }
+  .sidebar {
+    width: 300px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+  }
+  .toolbar { padding: 12px; display: flex; gap: 8px; border-bottom: 1px solid var(--border); }
+  .toolbar input {
+    flex: 1;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 8px 12px;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  button:hover { background: #262b36; }
+  button.primary { background: var(--accent); color: #fff; border-color: transparent; }
+  button.primary:hover { background: #3d8bef; }
+  .list { overflow-y: auto; flex: 1; }
+  .note-item {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .note-item:hover { background: var(--panel-2); }
+  .note-item.active { background: var(--panel-2); border-left: 3px solid var(--accent); }
+  .note-item .title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .note-item .preview { color: var(--muted); font-size: 12px; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .note-item .date { color: var(--muted); font-size: 11px; margin-top: 4px; }
+  .empty { color: var(--muted); padding: 24px; text-align: center; font-size: 13px; }
+  .editor { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .editor-bar { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .editor-bar .saved { color: var(--muted); font-size: 12px; }
+  .editor textarea {
+    flex: 1;
+    resize: none;
+    border: none;
+    outline: none;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: inherit;
+  }
+  .no-selection { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+  @media (max-width: 640px) {
+    .sidebar { width: 100%; }
+    .layout.has-selection .sidebar { display: none; }
+    .layout:not(.has-selection) .editor { display: none; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>📝 Quick Notes</h1>
+    <span class="count" id="count"></span>
+  </header>
+  <div class="layout" id="layout">
+    <aside class="sidebar">
+      <div class="toolbar">
+        <input type="text" id="search" placeholder="Search notes…" aria-label="Search notes" />
+        <button class="primary" id="newBtn" aria-label="New note">+ New</button>
+      </div>
+      <div class="list" id="list"></div>
+    </aside>
+    <main class="editor" id="editorPane">
+      <div class="no-selection" id="noSelection">Select a note or create a new one.</div>
+      <div id="editor" style="display:none; flex:1; flex-direction:column;">
+        <div class="editor-bar">
+          <span class="saved" id="savedStatus"></span>
+          <button class="danger" id="deleteBtn" style="color:var(--danger);">Delete</button>
+        </div>
+        <textarea id="content" placeholder="Start typing… the first line becomes the title."></textarea>
+      </div>
+    </main>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+  var STORAGE_KEY = "quick_notes_v1";
+  var notes = [];
+  var activeId = null;
+  var saveTimer = null;
+
+  var listEl = document.getElementById("list");
+  var searchEl = document.getElementById("search");
+  var contentEl = document.getElementById("content");
+  var editorEl = document.getElementById("editor");
+  var noSelectionEl = document.getElementById("noSelection");
+  var savedStatusEl = document.getElementById("savedStatus");
+  var countEl = document.getElementById("count");
+  var layoutEl = document.getElementById("layout");
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      notes = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(notes)) notes = [];
+    } catch (e) {
+      notes = [];
+    }
+  }
+
+  function persist() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+      return true;
+    } catch (e) {
+      savedStatusEl.textContent = "⚠ Could not save (storage full or blocked)";
+      return false;
+    }
+  }
+
+  function uid() {
+    return Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36);
+  }
+
+  function titleOf(note) {
+    var firstLine = (note.text || "").split("\n")[0].trim();
+    return firstLine || "Untitled note";
+  }
+
+  function previewOf(note) {
+    var rest = (note.text || "").split("\n").slice(1).join(" ").trim();
+    return rest || "No additional text";
+  }
+
+  function fmtDate(ts) {
+    var d = new Date(ts);
+    return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+
+  function sorted() {
+    return notes.slice().sort(function (a, b) { return b.updated - a.updated; });
+  }
+
+  function render() {
+    var q = searchEl.value.trim().toLowerCase();
+    var items = sorted().filter(function (n) {
+      return !q || (n.text || "").toLowerCase().indexOf(q) !== -1;
+    });
+
+    countEl.textContent = notes.length + (notes.length === 1 ? " note" : " notes");
+    listEl.innerHTML = "";
+
+    if (items.length === 0) {
+      var empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = q ? "No notes match your search." : "No notes yet. Click “+ New” to start.";
+      listEl.appendChild(empty);
+    }
+
+    items.forEach(function (n) {
+      var div = document.createElement("div");
+      div.className = "note-item" + (n.id === activeId ? " active" : "");
+      var title = document.createElement("div");
+      title.className = "title";
+      title.textContent = titleOf(n);
+      var preview = document.createElement("div");
+      preview.className = "preview";
+      preview.textContent = previewOf(n);
+      var date = document.createElement("div");
+      date.className = "date";
+      date.textContent = fmtDate(n.updated);
+      div.appendChild(title);
+      div.appendChild(preview);
+      div.appendChild(date);
+      div.addEventListener("click", function () { selectNote(n.id); });
+      listEl.appendChild(div);
+    });
+
+    if (activeId && getNote(activeId)) {
+      editorEl.style.display = "flex";
+      noSelectionEl.style.display = "none";
+      layoutEl.classList.add("has-selection");
+    } else {
+      editorEl.style.display = "none";
+      noSelectionEl.style.display = "flex";
+      layoutEl.classList.remove("has-selection");
+    }
+  }
+
+  function getNote(id) {
+    for (var i = 0; i < notes.length; i++) if (notes[i].id === id) return notes[i];
+    return null;
+  }
+
+  function selectNote(id) {
+    activeId = id;
+    var note = getNote(id);
+    if (note) {
+      contentEl.value = note.text || "";
+      savedStatusEl.textContent = "Edited " + fmtDate(note.updated);
+    }
+    render();
+    if (note) contentEl.focus();
+  }
+
+  function newNote() {
+    var note = { id: uid(), text: "", updated: Date.now() };
+    notes.push(note);
+    persist();
+    selectNote(note.id);
+  }
+
+  function scheduleSave() {
+    var note = getNote(activeId);
+    if (!note) return;
+    savedStatusEl.textContent = "Saving…";
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      note.text = contentEl.value;
+      note.updated = Date.now();
+      if (persist()) savedStatusEl.textContent = "Saved " + fmtDate(note.updated);
+      render();
+    }, 400);
+  }
+
+  function deleteActive() {
+    var note = getNote(activeId);
+    if (!note) return;
+    if (!confirm("Delete “" + titleOf(note) + "”? This cannot be undone.")) return;
+    notes = notes.filter(function (n) { return n.id !== activeId; });
+    activeId = null;
+    contentEl.value = "";
+    persist();
+    render();
+  }
+
+  document.getElementById("newBtn").addEventListener("click", newNote);
+  document.getElementById("deleteBtn").addEventListener("click", deleteActive);
+  searchEl.addEventListener("input", render);
+  contentEl.addEventListener("input", scheduleSave);
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>

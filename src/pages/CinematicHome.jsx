@@ -13,6 +13,7 @@ import * as uwAudio from "@/lib/underworldLoaderMusic";
 
 const CY = "#29E7FF";
 const VIOLET = "#7A5CFF";
+const AMBER = "#FFB020";
 const BG = "#05080D";
 const TEXT = "#DCEBF5";
 const MUTED = "#6E8AA0";
@@ -157,17 +158,30 @@ export default function CinematicHome() {
         <div style={{ fontSize: 11, color: MUTED, letterSpacing: 2 }}>SELECT DESTINATION · {now} UTC</div>
       </div>
 
-      <div style={{ flex: 1, display: "flex", gap: 22, padding: "0 28px 28px", zIndex: 1 }}>
-        <Portal title="JARVIS" color={CY}
-          subtitle="Immersive command HUD — 10 render-locked cinematic scenes. Every database, document and live feed routed into the hologram."
-          image="/immersive/renders/web/01_command_atrium.jpg"
-          video="/immersive/loader/loader_src.mp4"
-          onClick={() => navigate("/cinematic/01_command_atrium")} />
-        <Portal title="UNDERWORLD" color={VIOLET}
-          subtitle="The 3D UE5 world — server-authoritative simulation, possession & the watched-creator loop. Pixel-streamed."
-          image="/immersive/renders/web/08_simulation_theatre.jpg"
-          video="/immersive/loader/underworld_bootloader.mp4"
-          onClick={enterUnderworld} />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 22, padding: "0 28px 28px", zIndex: 1, overflowY: "auto" }}>
+        <div style={{ display: "flex", gap: 22 }}>
+          <Portal title="JARVIS" color={CY}
+            subtitle="Immersive command HUD — 10 render-locked cinematic scenes. Every database, document and live feed routed into the hologram."
+            image="/immersive/renders/web/01_command_atrium.jpg"
+            video="/immersive/loader/loader_src.mp4"
+            onClick={() => navigate("/cinematic/01_command_atrium")} />
+          <Portal title="UNDERWORLD" color={VIOLET}
+            subtitle="The 3D UE5 world — server-authoritative simulation, possession & the watched-creator loop. Pixel-streamed."
+            image="/immersive/renders/web/08_simulation_theatre.jpg"
+            video="/immersive/loader/underworld_bootloader.mp4"
+            onClick={enterUnderworld} />
+        </div>
+        {/* AGENT — third destination, a 1:1 replica of the two loaders above, placed below.
+            Uses the JARVIS loader video; opens the live JARVIS HUD. The flex spacer keeps the
+            tile the exact same width as a single top tile. */}
+        <div style={{ display: "flex", gap: 22 }}>
+          <Portal title="AGENT" color={AMBER}
+            subtitle="Agentic console — chat, code and run with any model, wired straight into the live JARVIS HUD."
+            image="/immersive/renders/web/01_command_atrium.jpg"
+            video="/immersive/loader/loader_src.mp4"
+            onClick={() => { window.location.href = "https://app.projectsolar.cloud/jarvis/?__jv=19"; }} />
+          <div style={{ flex: 1 }} aria-hidden="true" />
+        </div>
       </div>
 
       <div style={{ textAlign: "center", padding: "0 0 16px", fontSize: 10, color: MUTED, letterSpacing: 2, zIndex: 1 }}>

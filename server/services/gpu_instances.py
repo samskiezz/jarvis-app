@@ -170,6 +170,12 @@ def cheapest_offer(gpu_name: str = None, max_price: float = None, num_gpus: int 
 def create_instance(offer_id: int, image: str = None, disk_gb: int = None, onstart: str = "", label: str = "jarvis-gpu", runtype: str = "ssh") -> dict:
     g = _guard()
     if g: return g
+    # HARD ORPHAN-CAP — EVERY caller routes through this function, so the cap belongs here. Without
+    # this, provision_brain/launch_disposable/burst paths can each pile up to N instances and we
+    # repeat the 50-instance leak. Override per-call via env GPU_FORCE_PROVISION=1.
+    cap = assert_under_cap()
+    if not cap.get("ok"):
+        return cap
     body = {"client_id": "me", "image": image or DEFAULT_IMAGE,
             "disk": disk_gb or DEFAULT_DISK_GB, "label": label, "runtype": runtype}
     if onstart:
@@ -257,6 +263,52 @@ def destroy_instance(instance_id: int) -> dict:
         return {"ok": False, "error": str(e)[:200]}
 
 
+# ── orphan-spawn guardrail ──────────────────────────────────────────────────────────────
+# A 50-instance pileup happened because provision/reprovision retries failed silently and the
+# previous attempt never got cleaned up. This cap blocks any new provision when the account is
+# already at MAX_INSTANCES total (default 2: 1 base brain + 1 burst). Override per-call via env
+# GPU_MAX_INSTANCES, or set GPU_FORCE_PROVISION=1 to bypass for a single deliberate run.
+def _active_instance_count() -> int:
+    """How many Vast instances exist on this account right now, in any state."""
+    d = list_instances()
+    if not d.get("ok", True):
+        return -1
+    return len(d.get("instances") or [])
+
+
+def assert_under_cap() -> dict:
+    """Return {"ok": True} if a new provision is allowed; {"ok": False, "error": ...} otherwise."""
+    if os.environ.get("GPU_FORCE_PROVISION", "") in ("1", "true", "yes"):
+        return {"ok": True, "bypassed": True}
+    cap = int(os.environ.get("GPU_MAX_INSTANCES", "2"))
+    n = _active_instance_count()
+    if n < 0:
+        return {"ok": False, "error": "could not list existing instances (API down?) — refusing to provision"}
+    if n >= cap:
+        return {"ok": False, "error": ("already %d active Vast instance(s) >= cap %d — "
+                                       "destroy unused ones or set GPU_FORCE_PROVISION=1") % (n, cap),
+                "active": n, "cap": cap}
+    return {"ok": True, "active": n, "cap": cap}
+
+
+def destroy_all_instances(confirm: bool = False) -> dict:
+    """One-shot cleanup helper: destroy every Vast instance on this account. Requires confirm=True.
+    Used by the dashboard/cli to recover from an orphan pileup. Returns per-id results."""
+    if not confirm:
+        return {"ok": False, "error": "destroy_all_instances requires confirm=True"}
+    d = list_instances()
+    if not d.get("ok", True):
+        return d
+    results = []
+    for it in (d.get("instances") or []):
+        iid = it.get("id")
+        if iid is None:
+            continue
+        r = destroy_instance(int(iid))
+        results.append({"id": iid, "ok": r.get("ok"), "error": r.get("error")})
+    return {"ok": True, "destroyed": len([r for r in results if r["ok"]]), "results": results}
+
+
 def copy_instance(instance_id: int, max_price: float = None) -> dict:
     """COPY ACROSS = recoup the old instance's workspace to Hostinger FIRST (so nothing is lost), then
     create a new same-GPU instance whose on-start pulls that saved workspace back in — the data moves with it."""
@@ -284,10 +336,32 @@ def copy_instance(instance_id: int, max_price: float = None) -> dict:
     return new
 
 
+def _promote_recoup_to_wasabi(local_dir: str) -> dict:
+    """Push every recouped file from the VPS staging dir up to Wasabi via cloud_storage.upload(), so
+    /workspace survives BOTH the Vast instance death AND a VPS disk loss. Best-effort: a missing
+    boto3/secret returns {ok:False, skipped:True} without raising — the local recoup is still on disk."""
+    try:
+        from . import cloud_storage as cs
+    except Exception:  # noqa: BLE001
+        return {"ok": False, "skipped": True, "reason": "cloud_storage import failed"}
+    if not cs.enabled():
+        return {"ok": False, "skipped": True, "reason": "wasabi not configured (set WASABI_KEY/SECRET)"}
+    uploaded, failed = [], []
+    for root, _dirs, files in os.walk(local_dir):
+        for fn in files:
+            fp = os.path.join(root, fn)
+            try:
+                r = cs.upload(fp)
+                (uploaded if r.get("ok") else failed).append({"path": fp, **{k: v for k, v in r.items() if k != "ok"}})
+            except Exception as e:  # noqa: BLE001
+                failed.append({"path": fp, "error": str(e)[:120]})
+    return {"ok": not failed, "uploaded": len(uploaded), "failed": len(failed), "details": (failed[:5] if failed else None)}
+
+
 def safe_dispose(instance_id: int, force: bool = False) -> dict:
-    """RECOUP-THEN-DESTROY: try to sync the full /workspace (results + checkpoints) to Hostinger, then
-    destroy. By default REFUSES if recoup fails (nothing lost). force=True (user-authorised) destroys
-    anyway — used when the box is stopped/empty or the user explicitly wants it gone regardless."""
+    """RECOUP-THEN-DESTROY: sync /workspace down to Hostinger AND push it on to Wasabi, then destroy.
+    By default REFUSES if local recoup fails (nothing lost on disk). force=True (user-authorised)
+    destroys anyway — used when the box is stopped/empty or the user explicitly wants it gone."""
     g = _guard()
     if g: return g
     if force:
@@ -297,8 +371,10 @@ def safe_dispose(instance_id: int, force: bool = False) -> dict:
     recoup = sync_results(int(instance_id), "/workspace")
     if not recoup.get("ok"):
         return {"ok": False, "error": "REFUSED to destroy — recoup failed (" + str(recoup.get("error") or recoup.get("stderr") or "")[:120] + "). Data not lost; try Save→Hostinger then dispose, or force.", "recoup": recoup}
+    wasabi = _promote_recoup_to_wasabi(recoup.get("dest") or "")
     d = destroy_instance(int(instance_id))
     d["recouped_to"] = recoup.get("dest"); d["recoup_ok"] = bool(recoup.get("ok")); d["forced"] = force
+    d["wasabi"] = wasabi
     return d
 
 
@@ -420,6 +496,9 @@ def provision_brain(max_price: float = None, tier: str = "basic", min_vram_gb: f
     a disposable safety layer, not a pet."""
     g = _guard()
     if g: return g
+    cap = assert_under_cap()
+    if not cap.get("ok"):
+        return cap
     t = BRAIN_TIERS.get(tier, BRAIN_TIERS["basic"])
     vram = float(min_vram_gb or t["min_vram_gb"])
     cap = float(max_price or t["max_price"])

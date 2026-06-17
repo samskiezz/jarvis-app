@@ -40,6 +40,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = os.path.join(ROOT, ".venv", "bin", "python")
 PY = PY if os.path.exists(PY) else sys.executable
 CLAUDE = os.environ.get("CLAUDE_BIN", "/root/.local/bin/claude")
+# Hard gate: automation must NEVER burn paid Claude credits unless explicitly opted-in for this run.
+# Owner rule: all background automation runs on free local Ollama (Kimi builder). To re-enable the
+# paid Claude builder for a one-off run, export JARVIS_AUTOMATION_ALLOW_CLAUDE=1.
+ALLOW_CLAUDE = os.environ.get("JARVIS_AUTOMATION_ALLOW_CLAUDE", "") in ("1", "true", "yes")
 LOGFILE = os.path.join(ROOT, "server", "data", "auto_improve.log.jsonl")
 PROTECTED = {"scripts/auto_improve.py", "scripts/auto_improve_gate.py", "scripts/audit_score.py",
              "scripts/viability_model.py", "server/auth.py", "server/config.py"}
@@ -48,6 +52,61 @@ MERGE_MIN_SCORE = int(os.environ.get("AUTO_MERGE_MIN", "850"))
 # A feature is only SKIPPED pre-build when the predictor is validated (≥90%) AND its pass-prob is below this.
 VIAB_MIN = float(os.environ.get("VIAB_MIN_PROB", "0.45"))
 MISSION_FILE = os.path.join(ROOT, "config", "jarvis_mission.md")
+
+# ── BLAST-RADIUS SAFETY ──────────────────────────────────────────────────────────────────────────
+# A self-improvement FEATURE may only ever touch CODE. Anything outside these code areas — above all
+# server/data/** (runtime state + the 3D media assets) — is NOT this feature's work: it is pre-existing
+# churn or a CONCURRENT process. (This is the exact failure that broke the system once: a media→cloud
+# migration deleted ~1,638 *.glb files mid-build, the before/after git-status diff mis-attributed every
+# deletion to a "Quick Access Buttons" feature, the audit was handed a 1,638-file binary diff it scored
+# 0/ROLLBACK_BLOCK, and discard() then git-checkout-thrashed those files against the migration.)
+# We scope every changed-file set to code, refuse to commit OR discard anything outside it, and treat an
+# implausibly large / out-of-scope set as POLLUTION — skip the feature, never run git over data/assets.
+SCOPE_ALLOW_PREFIXES = (
+    "server/routes/", "server/services/", "server/tests/", "server/templates/",
+    "server/static/", "scripts/tests/", "config/",
+)
+SCOPE_ALLOW_EXACT = {"server/jarvis_live.html", "server/main.py", "server/dashboard.py"}
+SCOPE_DENY_PREFIXES = ("server/data/", ".venv", "node_modules/", ".git/", "underworld/")
+SCOPE_DENY_SUFFIXES = (
+    ".glb", ".cloudref", ".bin", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg",
+    ".mp4", ".mov", ".wav", ".mp3", ".pt", ".onnx", ".db", ".sqlite", ".log",
+    ".jsonl", ".lock", ".tmp", ".pyc",
+)
+# A single small self-improvement feature should never legitimately touch more files than this. Beyond
+# it we assume the working tree is polluted (concurrent process / pre-existing churn) and refuse to act.
+MAX_FEATURE_FILES = int(os.environ.get("AUTO_MAX_FEATURE_FILES", "40"))
+# More than a handful of out-of-scope (non-code) changes in one build window also means pollution.
+MAX_OUT_OF_SCOPE = int(os.environ.get("AUTO_MAX_OUT_OF_SCOPE", "5"))
+
+
+def in_code_scope(path: str) -> bool:
+    """True only for source/code/test/config files a self-improvement feature is allowed to change."""
+    p = (path or "").strip().strip('"')
+    if not p or "__pycache__" in p or "/.pytest_cache/" in p:
+        return False
+    if any(p.endswith(suf) for suf in SCOPE_DENY_SUFFIXES):
+        return False
+    if any(p.startswith(pre) for pre in SCOPE_DENY_PREFIXES):
+        return False
+    if p in SCOPE_ALLOW_EXACT:
+        return True
+    return any(p.startswith(pre) for pre in SCOPE_ALLOW_PREFIXES)  # default-deny everything else
+
+
+def scope_feature_files(files):
+    """Split a raw changed-file set into (in_scope_code, rejected_out_of_scope), both sorted."""
+    keep, reject = [], []
+    for f in files:
+        (keep if in_code_scope(f) else reject).append(f)
+    return sorted(keep), sorted(reject)
+
+
+def is_polluted(raw_files, out_of_scope) -> bool:
+    """The working tree looks polluted (concurrent mutation / pre-existing churn) when the raw changed
+    set is implausibly large, or carries more than a handful of out-of-scope (non-code) changes — so it
+    must never be trusted as one feature's diff, audited, or fed to a destructive git checkout."""
+    return len(list(raw_files)) > MAX_FEATURE_FILES or len(list(out_of_scope)) > MAX_OUT_OF_SCOPE
 
 
 def mission_brief() -> str:
@@ -150,7 +209,7 @@ def ideate(n: int, tier: str) -> list[dict]:
     return []
 
 
-def implement(feat: dict, timeout=1800, builder: str = "claude") -> bool:
+def implement(feat: dict, timeout=1800, builder: str = "kimi") -> bool:
     """Dispatch to a builder. 'claude' = the claude -p tool loop (can edit any/large file surgically);
     'kimi' = the local/cheap kimi tier doing a full-file rewrite of ONE small target file. Whoever builds,
     the SAME crash-proof gate + 1,000-pt Claude audit decide whether it lands — so a weak builder is safe."""
@@ -210,6 +269,10 @@ def _implement_kimi(feat: dict) -> bool:
 
 def _implement_claude(feat: dict, timeout=1800) -> bool:
     """Claude Code implements the feature in place. Returns True if it ran (changes may or may not exist)."""
+    if not ALLOW_CLAUDE:
+        log({"event": "claude_blocked", "stage": "implement", "title": feat.get("title"),
+             "reason": "JARVIS_AUTOMATION_ALLOW_CLAUDE not set — automation runs on free local Kimi only"})
+        return False
     prompt = (
         mission_brief() + "\n\n"
         "Autonomously implement this NEW user-facing feature in the JARVIS app, COMPLETELY and SAFELY.\n\n"
@@ -249,6 +312,10 @@ def revise(feat: dict, required_fixes: list, timeout=1800) -> bool:
     """ONE bounded revision pass on a near-miss (audit verdict NEEDS_REVISION, 700-849): apply the audit's
     required fixes IN PLACE, then self-gate. Same safety envelope as a fresh build — the caller re-gates and
     re-audits afterwards and only lands if it now clears 850."""
+    if not ALLOW_CLAUDE:
+        log({"event": "claude_blocked", "stage": "revise", "title": feat.get("title"),
+             "reason": "JARVIS_AUTOMATION_ALLOW_CLAUDE not set — automation runs on free local Kimi only"})
+        return False
     fixes = "\n- ".join([str(x) for x in (required_fixes or [])][:8]) or \
         "Improve completeness, add pytest tests, and harden input validation."
     prompt = (
@@ -277,6 +344,10 @@ def gate_repair(feat: dict, failed: list, detail: dict, timeout=1800) -> bool:
     and let it fix in place; the caller re-gates afterwards. This is the reliable fix for the recurring
     jarvis_live.html JS-syntax failures (and broken tests / boot errors) — we don't rely on the builder to
     have self-gated; we drive the repair with the real gate output."""
+    if not ALLOW_CLAUDE:
+        log({"event": "claude_blocked", "stage": "gate_repair", "title": feat.get("title"),
+             "reason": "JARVIS_AUTOMATION_ALLOW_CLAUDE not set — automation runs on free local Kimi only"})
+        return False
     det = "\n".join("- %s: %s" % (k, str(v)[:500]) for k, v in (detail or {}).items()) or ", ".join(failed)
     prompt = (
         mission_brief() + "\n\n"
@@ -324,7 +395,8 @@ def restart_services():
 
 
 def land(feat: dict, feature_files: list[str]) -> dict:
-    safe = [f for f in feature_files if f not in PROTECTED and os.path.exists(os.path.join(ROOT, f))]
+    safe = [f for f in feature_files
+            if f not in PROTECTED and in_code_scope(f) and os.path.exists(os.path.join(ROOT, f))]
     if not safe:
         return {"landed": False, "reason": "no committable feature files"}
     run(["git", "add", *safe], timeout=60)
@@ -347,7 +419,9 @@ def land(feat: dict, feature_files: list[str]) -> dict:
 
 
 def discard(feature_files: list[str]):
-    safe = [f for f in feature_files if f not in PROTECTED]
+    # Belt-and-suspenders: discard runs `git checkout` / `os.remove`, so it must NEVER act on a file
+    # outside the code scope (no data/media/runtime asset can ever be reverted or deleted here).
+    safe = [f for f in feature_files if f not in PROTECTED and in_code_scope(f)]
     # restore tracked, delete new untracked — discard Claude's failed attempt
     run(["git", "checkout", "--", *safe], timeout=60)
     for f in safe:
@@ -439,9 +513,20 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
         before = _tracked_state()
         ran = implement(feat, timeout=int(os.environ.get("AUTO_IMPL_TIMEOUT", "1800")), builder=b)
         after = _tracked_state()
-        feature_files = sorted(after - before)        # only files Claude newly touched (not pre-existing dirt)
+        raw_changed = sorted(after - before)          # everything newly dirty in this build window
+        feature_files, out_of_scope = scope_feature_files(raw_changed)   # CODE only; data/assets never count
+        # POLLUTION GUARD: if the build window picked up an implausibly large or out-of-scope change set, a
+        # concurrent process (or pre-existing churn) mutated the tree — this is NOT the feature's diff. Never
+        # audit or git-checkout it; revert only the in-scope code we own and move on.
+        if is_polluted(raw_changed, out_of_scope):
+            log({"event": "feature_pollution_abort", "title": feat["title"], "raw_count": len(raw_changed),
+                 "in_scope": len(feature_files), "out_of_scope": len(out_of_scope),
+                 "out_of_scope_sample": out_of_scope[:10], "builder": b})
+            discard(feature_files)
+            continue
         if not ran or not feature_files:
-            log({"event": "feature_skip", "title": feat["title"], "reason": "claude made no tracked change", "ran": ran})
+            log({"event": "feature_skip", "title": feat["title"], "reason": "claude made no tracked change",
+                 "ran": ran, "out_of_scope": len(out_of_scope)})
             discard(feature_files)
             continue
         g = gate()
@@ -527,7 +612,7 @@ if __name__ == "__main__":
     nfeat = int(a[a.index("--features") + 1]) if "--features" in a else 5
     dry = "--dry-run" in a
     tier = a[a.index("--tier") + 1] if "--tier" in a else "strong"
-    builder = a[a.index("--builder") + 1] if "--builder" in a else "claude"
+    builder = a[a.index("--builder") + 1] if "--builder" in a else "kimi"
     held = _lock()
     if not held:
         log({"event": "abort", "reason": "another auto_improve instance is running"})
