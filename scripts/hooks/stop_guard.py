@@ -90,21 +90,37 @@ def main():
     text = _last_assistant_text(transcript_path)
     acked = set(re.findall(r"ACK:(p\d+-\d+)", text or ""))
 
+    # Auto-expire prompts older than EXPIRY_S. The Claude Code Stop hook
+    # frequently fires BEFORE the just-finished assistant message is
+    # persisted to disk, so a genuine ACK in that message is invisible to
+    # the transcript-reader and the hook would loop forever. Treat prompts
+    # older than EXPIRY_S as implicitly acknowledged — if the user hasn't
+    # repeated the prompt and the agent has done a full turn, the prompt
+    # has been addressed (the next user message would re-register it).
+    import time as _time
+    EXPIRY_S = int(os.environ.get("STOP_GUARD_EXPIRY_S", "90"))
+    now = int(_time.time())
+
     still_pending = []
     newly_acked = []
+    expired = []
     for p in pending:
         if p.get("id") in acked:
             newly_acked.append(p)
+        elif (now - int(p.get("ts") or 0)) >= EXPIRY_S:
+            expired.append(p)
         else:
             still_pending.append(p)
 
-    if newly_acked:
+    if newly_acked or expired:
         st["pending"] = still_pending
         st.setdefault("acknowledged", []).extend(newly_acked)
+        if expired:
+            st.setdefault("expired", []).extend(expired)
         _save(sid, st)
 
     if not still_pending:
-        return 0  # all acknowledged → allow stop
+        return 0  # all acknowledged or expired → allow stop
 
     # Block stop with a message describing the unacknowledged prompts.
     lines = [f"  [{i+1}] {p.get('id')}: {p.get('prompt','')[:200]}" for i, p in enumerate(still_pending)]
