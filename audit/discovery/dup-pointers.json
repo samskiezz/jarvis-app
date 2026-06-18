@@ -1,0 +1,3824 @@
+[
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/architecture-decision-records/SKILL.md",
+    "canonical_slug": "architecture-decision-records",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/architecture-decision-records/SKILL.md",
+    "dup_slug": "architecture-decision-records",
+    "sha256": "525e51b4ed98222cd49ea7d2e42b51a010ecab391b25022a86164258c14b8bb0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/architecture-decision-records/SKILL.md",
+    "canonical_slug": "architecture-decision-records",
+    "dup_path": "/root/.claude/skills/architecture-decision-records/SKILL.md",
+    "dup_slug": "architecture-decision-records",
+    "sha256": "525e51b4ed98222cd49ea7d2e42b51a010ecab391b25022a86164258c14b8bb0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/video-editing/SKILL.md",
+    "canonical_slug": "video-editing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/video-editing/SKILL.md",
+    "dup_slug": "video-editing",
+    "sha256": "828d210fa227d83dfdc234f89e39b0b2a5ce4883494e3a5049acea754b0986cc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/video-editing/SKILL.md",
+    "canonical_slug": "video-editing",
+    "dup_path": "/root/.claude/skills/video-editing/SKILL.md",
+    "dup_slug": "video-editing",
+    "sha256": "828d210fa227d83dfdc234f89e39b0b2a5ce4883494e3a5049acea754b0986cc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swift-actor-persistence/SKILL.md",
+    "canonical_slug": "swift-actor-persistence",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/swift-actor-persistence/SKILL.md",
+    "dup_slug": "swift-actor-persistence",
+    "sha256": "b1613a695a77eb513a62f0af0686313fc1e14a1ee6b3139b0c12740d978474da"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swift-actor-persistence/SKILL.md",
+    "canonical_slug": "swift-actor-persistence",
+    "dup_path": "/root/.claude/skills/swift-actor-persistence/SKILL.md",
+    "dup_slug": "swift-actor-persistence",
+    "sha256": "b1613a695a77eb513a62f0af0686313fc1e14a1ee6b3139b0c12740d978474da"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/videodb/SKILL.md",
+    "canonical_slug": "videodb",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/videodb/SKILL.md",
+    "dup_slug": "videodb",
+    "sha256": "514e9cc1d5735b6a0810f0d76a261bb9d37a49fd6b8e76d9fe5d7821dfb955b9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/videodb/SKILL.md",
+    "canonical_slug": "videodb",
+    "dup_path": "/root/.claude/skills/videodb/SKILL.md",
+    "dup_slug": "videodb",
+    "sha256": "514e9cc1d5735b6a0810f0d76a261bb9d37a49fd6b8e76d9fe5d7821dfb955b9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/visa-doc-translate/SKILL.md",
+    "canonical_slug": "visa-doc-translate",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/visa-doc-translate/SKILL.md",
+    "dup_slug": "visa-doc-translate",
+    "sha256": "9c429c2c57789cc6631c9a9d244c40026d96b65f8a6c927e44abc152c463320a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/visa-doc-translate/SKILL.md",
+    "canonical_slug": "visa-doc-translate",
+    "dup_path": "/root/.claude/skills/visa-doc-translate/SKILL.md",
+    "dup_slug": "visa-doc-translate",
+    "sha256": "9c429c2c57789cc6631c9a9d244c40026d96b65f8a6c927e44abc152c463320a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/terminal-ops/SKILL.md",
+    "canonical_slug": "terminal-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/terminal-ops/SKILL.md",
+    "dup_slug": "terminal-ops",
+    "sha256": "f26e518e6922fe0796f5b6a55349a409f5b03745c4eeed9be80b4c66d890d852"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/terminal-ops/SKILL.md",
+    "canonical_slug": "terminal-ops",
+    "dup_path": "/root/.claude/skills/terminal-ops/SKILL.md",
+    "dup_slug": "terminal-ops",
+    "sha256": "f26e518e6922fe0796f5b6a55349a409f5b03745c4eeed9be80b4c66d890d852"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/codebase-onboarding/SKILL.md",
+    "canonical_slug": "codebase-onboarding",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/codebase-onboarding/SKILL.md",
+    "dup_slug": "codebase-onboarding",
+    "sha256": "ef88873a4b0d0fe155c0a196ffecd5c7b5e28edd00fbbdb5c1fd2ca8fd0eb6f0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/codebase-onboarding/SKILL.md",
+    "canonical_slug": "codebase-onboarding",
+    "dup_path": "/root/.claude/skills/codebase-onboarding/SKILL.md",
+    "dup_slug": "codebase-onboarding",
+    "sha256": "ef88873a4b0d0fe155c0a196ffecd5c7b5e28edd00fbbdb5c1fd2ca8fd0eb6f0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/competitive-platform-analysis/SKILL.md",
+    "canonical_slug": "competitive-platform-analysis",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/competitive-platform-analysis/SKILL.md",
+    "dup_slug": "competitive-platform-analysis",
+    "sha256": "060f50513003731e9c0e7f78e6a6a9b8cb178a74a2ec2a6ca75cdae804f0d564"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/competitive-platform-analysis/SKILL.md",
+    "canonical_slug": "competitive-platform-analysis",
+    "dup_path": "/root/.claude/skills/competitive-platform-analysis/SKILL.md",
+    "dup_slug": "competitive-platform-analysis",
+    "sha256": "060f50513003731e9c0e7f78e6a6a9b8cb178a74a2ec2a6ca75cdae804f0d564"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/competitive-platform-analysis/SKILL.md",
+    "canonical_slug": "competitive-platform-analysis",
+    "dup_path": "/opt/jarvis-app-1/.agents/skills/competitive-platform-analysis/SKILL.md",
+    "dup_slug": "competitive-platform-analysis",
+    "sha256": "060f50513003731e9c0e7f78e6a6a9b8cb178a74a2ec2a6ca75cdae804f0d564"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/rules-distill/SKILL.md",
+    "canonical_slug": "rules-distill",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/rules-distill/SKILL.md",
+    "dup_slug": "rules-distill",
+    "sha256": "76e1512f6810e1d00e42a2f0fbc639cbd50c0f567bf25080c534c7c946caf1eb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/rules-distill/SKILL.md",
+    "canonical_slug": "rules-distill",
+    "dup_path": "/root/.claude/skills/rules-distill/SKILL.md",
+    "dup_slug": "rules-distill",
+    "sha256": "76e1512f6810e1d00e42a2f0fbc639cbd50c0f567bf25080c534c7c946caf1eb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-phi-compliance/SKILL.md",
+    "canonical_slug": "healthcare-phi-compliance",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/healthcare-phi-compliance/SKILL.md",
+    "dup_slug": "healthcare-phi-compliance",
+    "sha256": "8e341c0cc2e62c27db772818455f4f30a4a60dafe18897ceb3c26fd9c556ed2e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-phi-compliance/SKILL.md",
+    "canonical_slug": "healthcare-phi-compliance",
+    "dup_path": "/root/.claude/skills/healthcare-phi-compliance/SKILL.md",
+    "dup_slug": "healthcare-phi-compliance",
+    "sha256": "8e341c0cc2e62c27db772818455f4f30a4a60dafe18897ceb3c26fd9c556ed2e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dotnet-patterns/SKILL.md",
+    "canonical_slug": "dotnet-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/dotnet-patterns/SKILL.md",
+    "dup_slug": "dotnet-patterns",
+    "sha256": "526fd468b2e05cdcd4058318921e817ba0f8cef021470e30bbbc24e0195bfa98"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dotnet-patterns/SKILL.md",
+    "canonical_slug": "dotnet-patterns",
+    "dup_path": "/root/.claude/skills/dotnet-patterns/SKILL.md",
+    "dup_slug": "dotnet-patterns",
+    "sha256": "526fd468b2e05cdcd4058318921e817ba0f8cef021470e30bbbc24e0195bfa98"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-security/SKILL.md",
+    "canonical_slug": "springboot-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/springboot-security/SKILL.md",
+    "dup_slug": "springboot-security",
+    "sha256": "7e38f1d5302a5f436c5a2031147303bbaf377800256950cef8a856534c5aeb18"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-security/SKILL.md",
+    "canonical_slug": "springboot-security",
+    "dup_path": "/root/.claude/skills/springboot-security/SKILL.md",
+    "dup_slug": "springboot-security",
+    "sha256": "7e38f1d5302a5f436c5a2031147303bbaf377800256950cef8a856534c5aeb18"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/article-writing/SKILL.md",
+    "canonical_slug": "article-writing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/article-writing/SKILL.md",
+    "dup_slug": "article-writing",
+    "sha256": "4aa61709450a2148ef4036896d870da748e93ad68528bb7679b74f3597ffb021"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/article-writing/SKILL.md",
+    "canonical_slug": "article-writing",
+    "dup_path": "/root/.claude/skills/article-writing/SKILL.md",
+    "dup_slug": "article-writing",
+    "sha256": "4aa61709450a2148ef4036896d870da748e93ad68528bb7679b74f3597ffb021"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/codehealth-mcp/SKILL.md",
+    "canonical_slug": "codehealth-mcp",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/codehealth-mcp/SKILL.md",
+    "dup_slug": "codehealth-mcp",
+    "sha256": "c5943c4c353b02dcd87b751de15bb087caae2f11c36e84a74e181fe2eadee394"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/codehealth-mcp/SKILL.md",
+    "canonical_slug": "codehealth-mcp",
+    "dup_path": "/root/.claude/skills/codehealth-mcp/SKILL.md",
+    "dup_slug": "codehealth-mcp",
+    "sha256": "c5943c4c353b02dcd87b751de15bb087caae2f11c36e84a74e181fe2eadee394"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-cdss-patterns/SKILL.md",
+    "canonical_slug": "healthcare-cdss-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/healthcare-cdss-patterns/SKILL.md",
+    "dup_slug": "healthcare-cdss-patterns",
+    "sha256": "39ce80ba8c71bfb8068f2dfee7fc536b3140b665c1141a680046de209998f9e0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-cdss-patterns/SKILL.md",
+    "canonical_slug": "healthcare-cdss-patterns",
+    "dup_path": "/root/.claude/skills/healthcare-cdss-patterns/SKILL.md",
+    "dup_slug": "healthcare-cdss-patterns",
+    "sha256": "39ce80ba8c71bfb8068f2dfee7fc536b3140b665c1141a680046de209998f9e0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-patterns/SKILL.md",
+    "canonical_slug": "quarkus-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/quarkus-patterns/SKILL.md",
+    "dup_slug": "quarkus-patterns",
+    "sha256": "feacf215030c376a80d58a8c51feda0b58a36bd8a55c91e857cd9f1a6256913a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-patterns/SKILL.md",
+    "canonical_slug": "quarkus-patterns",
+    "dup_path": "/root/.claude/skills/quarkus-patterns/SKILL.md",
+    "dup_slug": "quarkus-patterns",
+    "sha256": "feacf215030c376a80d58a8c51feda0b58a36bd8a55c91e857cd9f1a6256913a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/network-bgp-diagnostics/SKILL.md",
+    "canonical_slug": "network-bgp-diagnostics",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/network-bgp-diagnostics/SKILL.md",
+    "dup_slug": "network-bgp-diagnostics",
+    "sha256": "37e90f85b4e1ff964d804782e63a1b5bb3c388acb61ac343b1c7286316f048dc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/network-bgp-diagnostics/SKILL.md",
+    "canonical_slug": "network-bgp-diagnostics",
+    "dup_path": "/root/.claude/skills/network-bgp-diagnostics/SKILL.md",
+    "dup_slug": "network-bgp-diagnostics",
+    "sha256": "37e90f85b4e1ff964d804782e63a1b5bb3c388acb61ac343b1c7286316f048dc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/database-migrations/SKILL.md",
+    "canonical_slug": "database-migrations",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/database-migrations/SKILL.md",
+    "dup_slug": "database-migrations",
+    "sha256": "de9f2c26474639d7962f14e3b6dd7b271d7253debf9f840f63ae3e026a283141"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/database-migrations/SKILL.md",
+    "canonical_slug": "database-migrations",
+    "dup_path": "/root/.claude/skills/database-migrations/SKILL.md",
+    "dup_slug": "database-migrations",
+    "sha256": "de9f2c26474639d7962f14e3b6dd7b271d7253debf9f840f63ae3e026a283141"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hermes-imports/SKILL.md",
+    "canonical_slug": "hermes-imports",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/hermes-imports/SKILL.md",
+    "dup_slug": "hermes-imports",
+    "sha256": "4e425b32c9830c936f845b3f63352f6f199d869eb27eef484ce28ddc8ce4f3b4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hermes-imports/SKILL.md",
+    "canonical_slug": "hermes-imports",
+    "dup_path": "/root/.claude/skills/hermes-imports/SKILL.md",
+    "dup_slug": "hermes-imports",
+    "sha256": "4e425b32c9830c936f845b3f63352f6f199d869eb27eef484ce28ddc8ce4f3b4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/exa-search/SKILL.md",
+    "canonical_slug": "exa-search",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/exa-search/SKILL.md",
+    "dup_slug": "exa-search",
+    "sha256": "cfab0ee1af18b56cd2e2726febb023ab77205bf5c082cce5331aadff6e02e7f5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/exa-search/SKILL.md",
+    "canonical_slug": "exa-search",
+    "dup_path": "/root/.claude/skills/exa-search/SKILL.md",
+    "dup_slug": "exa-search",
+    "sha256": "cfab0ee1af18b56cd2e2726febb023ab77205bf5c082cce5331aadff6e02e7f5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/opensource-pipeline/SKILL.md",
+    "canonical_slug": "opensource-pipeline",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/opensource-pipeline/SKILL.md",
+    "dup_slug": "opensource-pipeline",
+    "sha256": "f1fba87f0eab7b9edeb1fe7d202fefba860e86582ca0b7d4a7b3fd7f6a099061"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/opensource-pipeline/SKILL.md",
+    "canonical_slug": "opensource-pipeline",
+    "dup_path": "/root/.claude/skills/opensource-pipeline/SKILL.md",
+    "dup_slug": "opensource-pipeline",
+    "sha256": "f1fba87f0eab7b9edeb1fe7d202fefba860e86582ca0b7d4a7b3fd7f6a099061"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cpp-coding-standards/SKILL.md",
+    "canonical_slug": "cpp-coding-standards",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/cpp-coding-standards/SKILL.md",
+    "dup_slug": "cpp-coding-standards",
+    "sha256": "f870b47d3493b0ad0b6e3808a679ac3c429b60f03193af6c9dc0e0d9e6981436"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cpp-coding-standards/SKILL.md",
+    "canonical_slug": "cpp-coding-standards",
+    "dup_path": "/root/.claude/skills/cpp-coding-standards/SKILL.md",
+    "dup_slug": "cpp-coding-standards",
+    "sha256": "f870b47d3493b0ad0b6e3808a679ac3c429b60f03193af6c9dc0e0d9e6981436"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-trade-planner/SKILL.md",
+    "canonical_slug": "ito-trade-planner",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ito-trade-planner/SKILL.md",
+    "dup_slug": "ito-trade-planner",
+    "sha256": "45dc43a4b67432ce12512c5f18b9cc4f521a04f0e158a4aeadf8b160c7d5bb0e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-trade-planner/SKILL.md",
+    "canonical_slug": "ito-trade-planner",
+    "dup_path": "/root/.claude/skills/ito-trade-planner/SKILL.md",
+    "dup_slug": "ito-trade-planner",
+    "sha256": "45dc43a4b67432ce12512c5f18b9cc4f521a04f0e158a4aeadf8b160c7d5bb0e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-data-atlas-agent/SKILL.md",
+    "canonical_slug": "ito-data-atlas-agent",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ito-data-atlas-agent/SKILL.md",
+    "dup_slug": "ito-data-atlas-agent",
+    "sha256": "c3ce06ee779e869776d621cd50fbaf38bbdee8df96685eabfc0842b4df61f65a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-data-atlas-agent/SKILL.md",
+    "canonical_slug": "ito-data-atlas-agent",
+    "dup_path": "/root/.claude/skills/ito-data-atlas-agent/SKILL.md",
+    "dup_slug": "ito-data-atlas-agent",
+    "sha256": "c3ce06ee779e869776d621cd50fbaf38bbdee8df96685eabfc0842b4df61f65a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/api-connector-builder/SKILL.md",
+    "canonical_slug": "api-connector-builder",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/api-connector-builder/SKILL.md",
+    "dup_slug": "api-connector-builder",
+    "sha256": "3887da5d7268e5e53037ba9f518d9aba993c42a15e9fd3910149c8fbef15b0ee"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/api-connector-builder/SKILL.md",
+    "canonical_slug": "api-connector-builder",
+    "dup_path": "/root/.claude/skills/api-connector-builder/SKILL.md",
+    "dup_slug": "api-connector-builder",
+    "sha256": "3887da5d7268e5e53037ba9f518d9aba993c42a15e9fd3910149c8fbef15b0ee"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/mcp-server-patterns/SKILL.md",
+    "canonical_slug": "mcp-server-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/mcp-server-patterns/SKILL.md",
+    "dup_slug": "mcp-server-patterns",
+    "sha256": "0d2d77ff4cffabd26a8db9a54fd16ae29063519fc2d7d2da3539c5e391a3973a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/mcp-server-patterns/SKILL.md",
+    "canonical_slug": "mcp-server-patterns",
+    "dup_path": "/root/.claude/skills/mcp-server-patterns/SKILL.md",
+    "dup_slug": "mcp-server-patterns",
+    "sha256": "0d2d77ff4cffabd26a8db9a54fd16ae29063519fc2d7d2da3539c5e391a3973a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ai-regression-testing/SKILL.md",
+    "canonical_slug": "ai-regression-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ai-regression-testing/SKILL.md",
+    "dup_slug": "ai-regression-testing",
+    "sha256": "0b4c44ab049756255b26e5ca93240fe5add2bc308df0e0b34e483ddfa1ef50ef"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ai-regression-testing/SKILL.md",
+    "canonical_slug": "ai-regression-testing",
+    "dup_path": "/root/.claude/skills/ai-regression-testing/SKILL.md",
+    "dup_slug": "ai-regression-testing",
+    "sha256": "0b4c44ab049756255b26e5ca93240fe5add2bc308df0e0b34e483ddfa1ef50ef"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/team-agent-orchestration/SKILL.md",
+    "canonical_slug": "team-agent-orchestration",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/team-agent-orchestration/SKILL.md",
+    "dup_slug": "team-agent-orchestration",
+    "sha256": "8aefe5ef412e55ffdcb5d2977e809f732f5e476294f5fdcb0ad727e9d1b5fac1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/team-agent-orchestration/SKILL.md",
+    "canonical_slug": "team-agent-orchestration",
+    "dup_path": "/root/.claude/skills/team-agent-orchestration/SKILL.md",
+    "dup_slug": "team-agent-orchestration",
+    "sha256": "8aefe5ef412e55ffdcb5d2977e809f732f5e476294f5fdcb0ad727e9d1b5fac1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/project-flow-ops/SKILL.md",
+    "canonical_slug": "project-flow-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/project-flow-ops/SKILL.md",
+    "dup_slug": "project-flow-ops",
+    "sha256": "6d59e4118a91419fdc66cf51925371a3f9fad66881c5a1720ed1c5cc490df1f7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/project-flow-ops/SKILL.md",
+    "canonical_slug": "project-flow-ops",
+    "dup_path": "/root/.claude/skills/project-flow-ops/SKILL.md",
+    "dup_slug": "project-flow-ops",
+    "sha256": "6d59e4118a91419fdc66cf51925371a3f9fad66881c5a1720ed1c5cc490df1f7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-design-direction/SKILL.md",
+    "canonical_slug": "frontend-design-direction",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/frontend-design-direction/SKILL.md",
+    "dup_slug": "frontend-design-direction",
+    "sha256": "fa254de821f708e5791c4c80d30309ac7da89c2888301e967becb3b21ac73331"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-design-direction/SKILL.md",
+    "canonical_slug": "frontend-design-direction",
+    "dup_path": "/root/.claude/skills/frontend-design-direction/SKILL.md",
+    "dup_slug": "frontend-design-direction",
+    "sha256": "fa254de821f708e5791c4c80d30309ac7da89c2888301e967becb3b21ac73331"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/uncloud/SKILL.md",
+    "canonical_slug": "uncloud",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/uncloud/SKILL.md",
+    "dup_slug": "uncloud",
+    "sha256": "cc2383ca4459a686ccda87ac08b2a1953028d91076e6a83f29e4c99de5f2fb7f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/uncloud/SKILL.md",
+    "canonical_slug": "uncloud",
+    "dup_path": "/root/.claude/skills/uncloud/SKILL.md",
+    "dup_slug": "uncloud",
+    "sha256": "cc2383ca4459a686ccda87ac08b2a1953028d91076e6a83f29e4c99de5f2fb7f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-market-intelligence/SKILL.md",
+    "canonical_slug": "ito-market-intelligence",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ito-market-intelligence/SKILL.md",
+    "dup_slug": "ito-market-intelligence",
+    "sha256": "038f0f6f81df8e07af60a91e0aab5d392faeb6af1cde320e35875c3539482fcb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-market-intelligence/SKILL.md",
+    "canonical_slug": "ito-market-intelligence",
+    "dup_path": "/root/.claude/skills/ito-market-intelligence/SKILL.md",
+    "dup_slug": "ito-market-intelligence",
+    "sha256": "038f0f6f81df8e07af60a91e0aab5d392faeb6af1cde320e35875c3539482fcb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/angular-developer/SKILL.md",
+    "canonical_slug": "angular-developer",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/angular-developer/SKILL.md",
+    "dup_slug": "angular-developer",
+    "sha256": "28ee37a8cf63add48fffc7c8676c6368aee35f3042525e79769b5a3d4e01aed1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/angular-developer/SKILL.md",
+    "canonical_slug": "angular-developer",
+    "dup_path": "/root/.claude/skills/angular-developer/SKILL.md",
+    "dup_slug": "angular-developer",
+    "sha256": "28ee37a8cf63add48fffc7c8676c6368aee35f3042525e79769b5a3d4e01aed1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-build-mvp/SKILL.md",
+    "canonical_slug": "orch-build-mvp",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/orch-build-mvp/SKILL.md",
+    "dup_slug": "orch-build-mvp",
+    "sha256": "1b6b149c2388c9ebb91d3a226cb1712329baeb843279e1c3496d889d625ab561"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-build-mvp/SKILL.md",
+    "canonical_slug": "orch-build-mvp",
+    "dup_path": "/root/.claude/skills/orch-build-mvp/SKILL.md",
+    "dup_slug": "orch-build-mvp",
+    "sha256": "1b6b149c2388c9ebb91d3a226cb1712329baeb843279e1c3496d889d625ab561"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/claude-devfleet/SKILL.md",
+    "canonical_slug": "claude-devfleet",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/claude-devfleet/SKILL.md",
+    "dup_slug": "claude-devfleet",
+    "sha256": "8c93a07c7ae4a1c3139d401ec8f2a4c5ef9cbfe1b33988ae7b85e28e97e45268"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/claude-devfleet/SKILL.md",
+    "canonical_slug": "claude-devfleet",
+    "dup_path": "/root/.claude/skills/claude-devfleet/SKILL.md",
+    "dup_slug": "claude-devfleet",
+    "sha256": "8c93a07c7ae4a1c3139d401ec8f2a4c5ef9cbfe1b33988ae7b85e28e97e45268"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/skill-comply/SKILL.md",
+    "canonical_slug": "skill-comply",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/skill-comply/SKILL.md",
+    "dup_slug": "skill-comply",
+    "sha256": "a9861c0d5cdba7543ffdd3ed73d3a999c0997c1ed41a562d163a4b4ff4d5de6e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/skill-comply/SKILL.md",
+    "canonical_slug": "skill-comply",
+    "dup_path": "/root/.claude/skills/skill-comply/SKILL.md",
+    "dup_slug": "skill-comply",
+    "sha256": "a9861c0d5cdba7543ffdd3ed73d3a999c0997c1ed41a562d163a4b4ff4d5de6e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/fsharp-testing/SKILL.md",
+    "canonical_slug": "fsharp-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/fsharp-testing/SKILL.md",
+    "dup_slug": "fsharp-testing",
+    "sha256": "471fe2024a83592f8dad0862f75d6b1c83bb36fda1bec2180ca3167fde7ee940"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/fsharp-testing/SKILL.md",
+    "canonical_slug": "fsharp-testing",
+    "dup_path": "/root/.claude/skills/fsharp-testing/SKILL.md",
+    "dup_slug": "fsharp-testing",
+    "sha256": "471fe2024a83592f8dad0862f75d6b1c83bb36fda1bec2180ca3167fde7ee940"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-emr-patterns/SKILL.md",
+    "canonical_slug": "healthcare-emr-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/healthcare-emr-patterns/SKILL.md",
+    "dup_slug": "healthcare-emr-patterns",
+    "sha256": "d620a17804bf94a9f42767a5759b36f1d63401bcdac8f2564b07b3ad3dcf5754"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-emr-patterns/SKILL.md",
+    "canonical_slug": "healthcare-emr-patterns",
+    "dup_path": "/root/.claude/skills/healthcare-emr-patterns/SKILL.md",
+    "dup_slug": "healthcare-emr-patterns",
+    "sha256": "d620a17804bf94a9f42767a5759b36f1d63401bcdac8f2564b07b3ad3dcf5754"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/compose-multiplatform-patterns/SKILL.md",
+    "canonical_slug": "compose-multiplatform-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/compose-multiplatform-patterns/SKILL.md",
+    "dup_slug": "compose-multiplatform-patterns",
+    "sha256": "09e2469a462de36f39393cb7b53b019909b39f2d488eec0f8ca5627152ccdeec"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/compose-multiplatform-patterns/SKILL.md",
+    "canonical_slug": "compose-multiplatform-patterns",
+    "dup_path": "/root/.claude/skills/compose-multiplatform-patterns/SKILL.md",
+    "dup_slug": "compose-multiplatform-patterns",
+    "sha256": "09e2469a462de36f39393cb7b53b019909b39f2d488eec0f8ca5627152ccdeec"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/jpa-patterns/SKILL.md",
+    "canonical_slug": "jpa-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/jpa-patterns/SKILL.md",
+    "dup_slug": "jpa-patterns",
+    "sha256": "0e5e82029d158a8a27357ff23c7bdcd155743943fbd34a4a771cc7c8098e0e79"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/jpa-patterns/SKILL.md",
+    "canonical_slug": "jpa-patterns",
+    "dup_path": "/root/.claude/skills/jpa-patterns/SKILL.md",
+    "dup_slug": "jpa-patterns",
+    "sha256": "0e5e82029d158a8a27357ff23c7bdcd155743943fbd34a4a771cc7c8098e0e79"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hookify-rules/SKILL.md",
+    "canonical_slug": "hookify-rules",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/hookify-rules/SKILL.md",
+    "dup_slug": "hookify-rules",
+    "sha256": "b604608e30ac2b8f4f62dea3023efe2d3247b41a38c4156a6b6297173f2405a8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hookify-rules/SKILL.md",
+    "canonical_slug": "hookify-rules",
+    "dup_path": "/root/.claude/skills/hookify-rules/SKILL.md",
+    "dup_slug": "hookify-rules",
+    "sha256": "b604608e30ac2b8f4f62dea3023efe2d3247b41a38c4156a6b6297173f2405a8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ck/SKILL.md",
+    "canonical_slug": "ck",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ck/SKILL.md",
+    "dup_slug": "ck",
+    "sha256": "1c855c392c88d118610c6b18fc62a62bf811525be8e813bcd554a8b1d72f0ec2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ck/SKILL.md",
+    "canonical_slug": "ck",
+    "dup_path": "/root/.claude/skills/ck/SKILL.md",
+    "dup_slug": "ck",
+    "sha256": "1c855c392c88d118610c6b18fc62a62bf811525be8e813bcd554a8b1d72f0ec2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/plankton-code-quality/SKILL.md",
+    "canonical_slug": "plankton-code-quality",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/plankton-code-quality/SKILL.md",
+    "dup_slug": "plankton-code-quality",
+    "sha256": "306527379ae5c4233a0a9149d60e5b247be2b5a9b96f0c4dc2a5d615ad60827b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/plankton-code-quality/SKILL.md",
+    "canonical_slug": "plankton-code-quality",
+    "dup_path": "/root/.claude/skills/plankton-code-quality/SKILL.md",
+    "dup_slug": "plankton-code-quality",
+    "sha256": "306527379ae5c4233a0a9149d60e5b247be2b5a9b96f0c4dc2a5d615ad60827b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/remotion-video-creation/SKILL.md",
+    "canonical_slug": "remotion-video-creation",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/remotion-video-creation/SKILL.md",
+    "dup_slug": "remotion-video-creation",
+    "sha256": "94b0e5591d26670c3c3a98b993140354296918b1f103dc489e0dbb413fb6803a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/remotion-video-creation/SKILL.md",
+    "canonical_slug": "remotion-video-creation",
+    "dup_path": "/root/.claude/skills/remotion-video-creation/SKILL.md",
+    "dup_slug": "remotion-video-creation",
+    "sha256": "94b0e5591d26670c3c3a98b993140354296918b1f103dc489e0dbb413fb6803a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/energy-procurement/SKILL.md",
+    "canonical_slug": "energy-procurement",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/energy-procurement/SKILL.md",
+    "dup_slug": "energy-procurement",
+    "sha256": "a45fda35470aef3de4521abb8080c634ded138edaa6cb2529bc271943fc8f566"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/energy-procurement/SKILL.md",
+    "canonical_slug": "energy-procurement",
+    "dup_path": "/root/.claude/skills/energy-procurement/SKILL.md",
+    "dup_slug": "energy-procurement",
+    "sha256": "a45fda35470aef3de4521abb8080c634ded138edaa6cb2529bc271943fc8f566"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-wireguard-vpn/SKILL.md",
+    "canonical_slug": "homelab-wireguard-vpn",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/homelab-wireguard-vpn/SKILL.md",
+    "dup_slug": "homelab-wireguard-vpn",
+    "sha256": "f6f8cc2d0efc0873e4c153b3ebba9e4c4efc367244dca9316886d7f2a54dad0f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-wireguard-vpn/SKILL.md",
+    "canonical_slug": "homelab-wireguard-vpn",
+    "dup_path": "/root/.claude/skills/homelab-wireguard-vpn/SKILL.md",
+    "dup_slug": "homelab-wireguard-vpn",
+    "sha256": "f6f8cc2d0efc0873e4c153b3ebba9e4c4efc367244dca9316886d7f2a54dad0f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/market-research/SKILL.md",
+    "canonical_slug": "market-research",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/market-research/SKILL.md",
+    "dup_slug": "market-research",
+    "sha256": "b50a353512a01190e48e0792a6f1fdaf2983cfcb38c7966db751a8c6a98dad55"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/market-research/SKILL.md",
+    "canonical_slug": "market-research",
+    "dup_path": "/root/.claude/skills/market-research/SKILL.md",
+    "dup_slug": "market-research",
+    "sha256": "b50a353512a01190e48e0792a6f1fdaf2983cfcb38c7966db751a8c6a98dad55"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/error-handling/SKILL.md",
+    "canonical_slug": "error-handling",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/error-handling/SKILL.md",
+    "dup_slug": "error-handling",
+    "sha256": "1a51e35867707709b51c2ab93fe225b721f2da49aea8cb54248bc791aab1419a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/error-handling/SKILL.md",
+    "canonical_slug": "error-handling",
+    "dup_path": "/root/.claude/skills/error-handling/SKILL.md",
+    "dup_slug": "error-handling",
+    "sha256": "1a51e35867707709b51c2ab93fe225b721f2da49aea8cb54248bc791aab1419a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/eval-harness/SKILL.md",
+    "canonical_slug": "eval-harness",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/eval-harness/SKILL.md",
+    "dup_slug": "eval-harness",
+    "sha256": "2b0b5256a043ea57f9463cc29a572d9612312e0827ef75724e39283c8d23edb1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/eval-harness/SKILL.md",
+    "canonical_slug": "eval-harness",
+    "dup_path": "/root/.claude/skills/eval-harness/SKILL.md",
+    "dup_slug": "eval-harness",
+    "sha256": "2b0b5256a043ea57f9463cc29a572d9612312e0827ef75724e39283c8d23edb1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/investor-outreach/SKILL.md",
+    "canonical_slug": "investor-outreach",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/investor-outreach/SKILL.md",
+    "dup_slug": "investor-outreach",
+    "sha256": "e5d4918dcbc62eb25d42829b56683ae6befe3a623f7ce6ed66bef37ce1a57c65"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/investor-outreach/SKILL.md",
+    "canonical_slug": "investor-outreach",
+    "dup_path": "/root/.claude/skills/investor-outreach/SKILL.md",
+    "dup_slug": "investor-outreach",
+    "sha256": "e5d4918dcbc62eb25d42829b56683ae6befe3a623f7ce6ed66bef37ce1a57c65"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/latency-critical-systems/SKILL.md",
+    "canonical_slug": "latency-critical-systems",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/latency-critical-systems/SKILL.md",
+    "dup_slug": "latency-critical-systems",
+    "sha256": "64b6cfef02269e5ef8d478baee42cacba832f89f1d9a2900c8f938e4511d0bc0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/latency-critical-systems/SKILL.md",
+    "canonical_slug": "latency-critical-systems",
+    "dup_path": "/root/.claude/skills/latency-critical-systems/SKILL.md",
+    "dup_slug": "latency-critical-systems",
+    "sha256": "64b6cfef02269e5ef8d478baee42cacba832f89f1d9a2900c8f938e4511d0bc0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/mle-workflow/SKILL.md",
+    "canonical_slug": "mle-workflow",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/mle-workflow/SKILL.md",
+    "dup_slug": "mle-workflow",
+    "sha256": "273324a7f019107b5ea25e57c4ca29a2e636798e8742b33b48eb83dd50cff428"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/mle-workflow/SKILL.md",
+    "canonical_slug": "mle-workflow",
+    "dup_path": "/root/.claude/skills/mle-workflow/SKILL.md",
+    "dup_slug": "mle-workflow",
+    "sha256": "273324a7f019107b5ea25e57c4ca29a2e636798e8742b33b48eb83dd50cff428"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/brand-voice/SKILL.md",
+    "canonical_slug": "brand-voice",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/brand-voice/SKILL.md",
+    "dup_slug": "brand-voice",
+    "sha256": "57c7f8440b7bd4c91c0d325640b5c6fb7a3dc7fc05595946c7bc705761a987a7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/brand-voice/SKILL.md",
+    "canonical_slug": "brand-voice",
+    "dup_path": "/root/.claude/skills/brand-voice/SKILL.md",
+    "dup_slug": "brand-voice",
+    "sha256": "57c7f8440b7bd4c91c0d325640b5c6fb7a3dc7fc05595946c7bc705761a987a7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prisma-patterns/SKILL.md",
+    "canonical_slug": "prisma-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/prisma-patterns/SKILL.md",
+    "dup_slug": "prisma-patterns",
+    "sha256": "df15bad1e90c70d173063b2f311b9858f3e3721fe4ab439688cdf80063c4059c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prisma-patterns/SKILL.md",
+    "canonical_slug": "prisma-patterns",
+    "dup_path": "/root/.claude/skills/prisma-patterns/SKILL.md",
+    "dup_slug": "prisma-patterns",
+    "sha256": "df15bad1e90c70d173063b2f311b9858f3e3721fe4ab439688cdf80063c4059c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/csharp-testing/SKILL.md",
+    "canonical_slug": "csharp-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/csharp-testing/SKILL.md",
+    "dup_slug": "csharp-testing",
+    "sha256": "159069144b290e87027e72e44761428e40a6e18e10532aa2c5182d6668ad34bd"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/csharp-testing/SKILL.md",
+    "canonical_slug": "csharp-testing",
+    "dup_path": "/root/.claude/skills/csharp-testing/SKILL.md",
+    "dup_slug": "csharp-testing",
+    "sha256": "159069144b290e87027e72e44761428e40a6e18e10532aa2c5182d6668ad34bd"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nodejs-keccak256/SKILL.md",
+    "canonical_slug": "nodejs-keccak256",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/nodejs-keccak256/SKILL.md",
+    "dup_slug": "nodejs-keccak256",
+    "sha256": "fa647bd76412bba16ea7faa6f96c4f7a603cdf99faf834dcde185657499a0a5f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nodejs-keccak256/SKILL.md",
+    "canonical_slug": "nodejs-keccak256",
+    "dup_path": "/root/.claude/skills/nodejs-keccak256/SKILL.md",
+    "dup_slug": "nodejs-keccak256",
+    "sha256": "fa647bd76412bba16ea7faa6f96c4f7a603cdf99faf834dcde185657499a0a5f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/crosspost/SKILL.md",
+    "canonical_slug": "crosspost",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/crosspost/SKILL.md",
+    "dup_slug": "crosspost",
+    "sha256": "e5366ab70222c8f36903e8a0c0e39731e2973917f7a14b962047513fa894547a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/crosspost/SKILL.md",
+    "canonical_slug": "crosspost",
+    "dup_path": "/root/.claude/skills/crosspost/SKILL.md",
+    "dup_slug": "crosspost",
+    "sha256": "e5366ab70222c8f36903e8a0c0e39731e2973917f7a14b962047513fa894547a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swift-protocol-di-testing/SKILL.md",
+    "canonical_slug": "swift-protocol-di-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/swift-protocol-di-testing/SKILL.md",
+    "dup_slug": "swift-protocol-di-testing",
+    "sha256": "70bce652669518159a88c144ff9d6ea1c6ee784cfdbb664f36acf3c6528cc217"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swift-protocol-di-testing/SKILL.md",
+    "canonical_slug": "swift-protocol-di-testing",
+    "dup_path": "/root/.claude/skills/swift-protocol-di-testing/SKILL.md",
+    "dup_slug": "swift-protocol-di-testing",
+    "sha256": "70bce652669518159a88c144ff9d6ea1c6ee784cfdbb664f36acf3c6528cc217"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/react-patterns/SKILL.md",
+    "canonical_slug": "react-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/react-patterns/SKILL.md",
+    "dup_slug": "react-patterns",
+    "sha256": "f3208d44a5d553038c42e046cec4dc16e4a3d90a9dbf931f883a2e21919a64a9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/react-patterns/SKILL.md",
+    "canonical_slug": "react-patterns",
+    "dup_path": "/root/.claude/skills/react-patterns/SKILL.md",
+    "dup_slug": "react-patterns",
+    "sha256": "f3208d44a5d553038c42e046cec4dc16e4a3d90a9dbf931f883a2e21919a64a9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/postgres-patterns/SKILL.md",
+    "canonical_slug": "postgres-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/postgres-patterns/SKILL.md",
+    "dup_slug": "postgres-patterns",
+    "sha256": "54ee9b00e9423d1c788647063122937e2625292d0b1fae032fd43185127beba9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/postgres-patterns/SKILL.md",
+    "canonical_slug": "postgres-patterns",
+    "dup_path": "/root/.claude/skills/postgres-patterns/SKILL.md",
+    "dup_slug": "postgres-patterns",
+    "sha256": "54ee9b00e9423d1c788647063122937e2625292d0b1fae032fd43185127beba9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/product-capability/SKILL.md",
+    "canonical_slug": "product-capability",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/product-capability/SKILL.md",
+    "dup_slug": "product-capability",
+    "sha256": "c26114356edb15f0340e5af66b6f4444892bdf376b053a7152312fd04d22aced"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/product-capability/SKILL.md",
+    "canonical_slug": "product-capability",
+    "dup_path": "/root/.claude/skills/product-capability/SKILL.md",
+    "dup_slug": "product-capability",
+    "sha256": "c26114356edb15f0340e5af66b6f4444892bdf376b053a7152312fd04d22aced"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-patterns/SKILL.md",
+    "canonical_slug": "kotlin-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/kotlin-patterns/SKILL.md",
+    "dup_slug": "kotlin-patterns",
+    "sha256": "737fc9e0bbc1f518e4fd2223f1356f1f86e865c49f8e56c4dc247ac631625056"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-patterns/SKILL.md",
+    "canonical_slug": "kotlin-patterns",
+    "dup_path": "/root/.claude/skills/kotlin-patterns/SKILL.md",
+    "dup_slug": "kotlin-patterns",
+    "sha256": "737fc9e0bbc1f518e4fd2223f1356f1f86e865c49f8e56c4dc247ac631625056"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/github-ops/SKILL.md",
+    "canonical_slug": "github-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/github-ops/SKILL.md",
+    "dup_slug": "github-ops",
+    "sha256": "0688938f4d45a66108de4d64c5400c60f5a4fd00141ec254acd55b4bd7f127e8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/github-ops/SKILL.md",
+    "canonical_slug": "github-ops",
+    "dup_path": "/root/.claude/skills/github-ops/SKILL.md",
+    "dup_slug": "github-ops",
+    "sha256": "0688938f4d45a66108de4d64c5400c60f5a4fd00141ec254acd55b4bd7f127e8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/gan-style-harness/SKILL.md",
+    "canonical_slug": "gan-style-harness",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/gan-style-harness/SKILL.md",
+    "dup_slug": "gan-style-harness",
+    "sha256": "b41a7845cc0eb3c10448fbd46387fe2fcb831d7b83a64d1aaa418a1bb15c9bba"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/gan-style-harness/SKILL.md",
+    "canonical_slug": "gan-style-harness",
+    "dup_path": "/root/.claude/skills/gan-style-harness/SKILL.md",
+    "dup_slug": "gan-style-harness",
+    "sha256": "b41a7845cc0eb3c10448fbd46387fe2fcb831d7b83a64d1aaa418a1bb15c9bba"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-payment-x402/SKILL.md",
+    "canonical_slug": "agent-payment-x402",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-payment-x402/SKILL.md",
+    "dup_slug": "agent-payment-x402",
+    "sha256": "bf756036b1a391ef55fb91d84f2b063befd87cdd2f09ddcf4388168fd2159ad2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-payment-x402/SKILL.md",
+    "canonical_slug": "agent-payment-x402",
+    "dup_path": "/root/.claude/skills/agent-payment-x402/SKILL.md",
+    "dup_slug": "agent-payment-x402",
+    "sha256": "bf756036b1a391ef55fb91d84f2b063befd87cdd2f09ddcf4388168fd2159ad2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/automation-audit-ops/SKILL.md",
+    "canonical_slug": "automation-audit-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/automation-audit-ops/SKILL.md",
+    "dup_slug": "automation-audit-ops",
+    "sha256": "71aa878fd06ef02f0c8ca50eaaee0ec45995981d769d8701806b9b83ca8a2f2c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/automation-audit-ops/SKILL.md",
+    "canonical_slug": "automation-audit-ops",
+    "dup_path": "/root/.claude/skills/automation-audit-ops/SKILL.md",
+    "dup_slug": "automation-audit-ops",
+    "sha256": "71aa878fd06ef02f0c8ca50eaaee0ec45995981d769d8701806b9b83ca8a2f2c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/iterative-retrieval/SKILL.md",
+    "canonical_slug": "iterative-retrieval",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/iterative-retrieval/SKILL.md",
+    "dup_slug": "iterative-retrieval",
+    "sha256": "ee0055a7728c33a47238364c0662485b839c74d27cba5ce0da592e9e5c72e501"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/iterative-retrieval/SKILL.md",
+    "canonical_slug": "iterative-retrieval",
+    "dup_path": "/root/.claude/skills/iterative-retrieval/SKILL.md",
+    "dup_slug": "iterative-retrieval",
+    "sha256": "ee0055a7728c33a47238364c0662485b839c74d27cba5ce0da592e9e5c72e501"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/inherit-legacy-style/SKILL.md",
+    "canonical_slug": "inherit-legacy-style",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/inherit-legacy-style/SKILL.md",
+    "dup_slug": "inherit-legacy-style",
+    "sha256": "14e7b20424f123b594d3ee3d6ac3e722b21e5a6816fe90bacf8a23e6c3af5b6d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/inherit-legacy-style/SKILL.md",
+    "canonical_slug": "inherit-legacy-style",
+    "dup_path": "/root/.claude/skills/inherit-legacy-style/SKILL.md",
+    "dup_slug": "inherit-legacy-style",
+    "sha256": "14e7b20424f123b594d3ee3d6ac3e722b21e5a6816fe90bacf8a23e6c3af5b6d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/continuous-learning/SKILL.md",
+    "canonical_slug": "continuous-learning",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/continuous-learning/SKILL.md",
+    "dup_slug": "continuous-learning",
+    "sha256": "86d2836d72263bb838ee8adf8a148d441d47e204eb17ab7b16f0f76cfde67882"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/continuous-learning/SKILL.md",
+    "canonical_slug": "continuous-learning",
+    "dup_path": "/root/.claude/skills/continuous-learning/SKILL.md",
+    "dup_slug": "continuous-learning",
+    "sha256": "86d2836d72263bb838ee8adf8a148d441d47e204eb17ab7b16f0f76cfde67882"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/tinystruct-patterns/SKILL.md",
+    "canonical_slug": "tinystruct-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/tinystruct-patterns/SKILL.md",
+    "dup_slug": "tinystruct-patterns",
+    "sha256": "6f5d16090aa5b1913002480ecfb00feb3ad894a05c9b84d8f3645e2297b6024b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/tinystruct-patterns/SKILL.md",
+    "canonical_slug": "tinystruct-patterns",
+    "dup_path": "/root/.claude/skills/tinystruct-patterns/SKILL.md",
+    "dup_slug": "tinystruct-patterns",
+    "sha256": "6f5d16090aa5b1913002480ecfb00feb3ad894a05c9b84d8f3645e2297b6024b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-refine-code/SKILL.md",
+    "canonical_slug": "orch-refine-code",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/orch-refine-code/SKILL.md",
+    "dup_slug": "orch-refine-code",
+    "sha256": "5f0f468ffa4e220bd8f76684b3df6a14b67b34333e1ae52e0de49ed2c16fa17b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-refine-code/SKILL.md",
+    "canonical_slug": "orch-refine-code",
+    "dup_path": "/root/.claude/skills/orch-refine-code/SKILL.md",
+    "dup_slug": "orch-refine-code",
+    "sha256": "5f0f468ffa4e220bd8f76684b3df6a14b67b34333e1ae52e0de49ed2c16fa17b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/blender-motion-state-inspection/SKILL.md",
+    "canonical_slug": "blender-motion-state-inspection",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/blender-motion-state-inspection/SKILL.md",
+    "dup_slug": "blender-motion-state-inspection",
+    "sha256": "97b8aee8822a8603e2fc930f66b4bd18507c11ca756accd1419a2a3526196f5c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/blender-motion-state-inspection/SKILL.md",
+    "canonical_slug": "blender-motion-state-inspection",
+    "dup_path": "/root/.claude/skills/blender-motion-state-inspection/SKILL.md",
+    "dup_slug": "blender-motion-state-inspection",
+    "sha256": "97b8aee8822a8603e2fc930f66b4bd18507c11ca756accd1419a2a3526196f5c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/verification-loop/SKILL.md",
+    "canonical_slug": "verification-loop",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/verification-loop/SKILL.md",
+    "dup_slug": "verification-loop",
+    "sha256": "685117c714142cf94704fc6850a2fd9ecacb7f725f649af20eb49af422d7f5bf"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/verification-loop/SKILL.md",
+    "canonical_slug": "verification-loop",
+    "dup_path": "/root/.claude/skills/verification-loop/SKILL.md",
+    "dup_slug": "verification-loop",
+    "sha256": "685117c714142cf94704fc6850a2fd9ecacb7f725f649af20eb49af422d7f5bf"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/perl-patterns/SKILL.md",
+    "canonical_slug": "perl-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/perl-patterns/SKILL.md",
+    "dup_slug": "perl-patterns",
+    "sha256": "288958ce4e753b797f64ced6a123c0d6cc30633076fa1a8462a4b6477e32688f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/perl-patterns/SKILL.md",
+    "canonical_slug": "perl-patterns",
+    "dup_path": "/root/.claude/skills/perl-patterns/SKILL.md",
+    "dup_slug": "perl-patterns",
+    "sha256": "288958ce4e753b797f64ced6a123c0d6cc30633076fa1a8462a4b6477e32688f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ecc-tools-cost-audit/SKILL.md",
+    "canonical_slug": "ecc-tools-cost-audit",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ecc-tools-cost-audit/SKILL.md",
+    "dup_slug": "ecc-tools-cost-audit",
+    "sha256": "d5c4c7925166703eb5fca83c0f1dcdeffb9c5808dc3cc08c337136f512fddbac"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ecc-tools-cost-audit/SKILL.md",
+    "canonical_slug": "ecc-tools-cost-audit",
+    "dup_path": "/root/.claude/skills/ecc-tools-cost-audit/SKILL.md",
+    "dup_slug": "ecc-tools-cost-audit",
+    "sha256": "d5c4c7925166703eb5fca83c0f1dcdeffb9c5808dc3cc08c337136f512fddbac"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/blueprint/SKILL.md",
+    "canonical_slug": "blueprint",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/blueprint/SKILL.md",
+    "dup_slug": "blueprint",
+    "sha256": "bc7118400659cfffbfd238c529baf597a9a726bd8dd6bb956d29fe263037d502"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/blueprint/SKILL.md",
+    "canonical_slug": "blueprint",
+    "dup_path": "/root/.claude/skills/blueprint/SKILL.md",
+    "dup_slug": "blueprint",
+    "sha256": "bc7118400659cfffbfd238c529baf597a9a726bd8dd6bb956d29fe263037d502"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-verification/SKILL.md",
+    "canonical_slug": "springboot-verification",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/springboot-verification/SKILL.md",
+    "dup_slug": "springboot-verification",
+    "sha256": "6797bb91f5b122f84a8490099d997d7339cf8c65f66b15049a9cfa6e8ce213d0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-verification/SKILL.md",
+    "canonical_slug": "springboot-verification",
+    "dup_path": "/root/.claude/skills/springboot-verification/SKILL.md",
+    "dup_slug": "springboot-verification",
+    "sha256": "6797bb91f5b122f84a8490099d997d7339cf8c65f66b15049a9cfa6e8ce213d0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-basket-compare/SKILL.md",
+    "canonical_slug": "ito-basket-compare",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ito-basket-compare/SKILL.md",
+    "dup_slug": "ito-basket-compare",
+    "sha256": "3d26d13ac354d1e43b6500c9068489295aac2fe84ebfda8ebf6f75588242fc59"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ito-basket-compare/SKILL.md",
+    "canonical_slug": "ito-basket-compare",
+    "dup_path": "/root/.claude/skills/ito-basket-compare/SKILL.md",
+    "dup_slug": "ito-basket-compare",
+    "sha256": "3d26d13ac354d1e43b6500c9068489295aac2fe84ebfda8ebf6f75588242fc59"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/skill-stocktake/SKILL.md",
+    "canonical_slug": "skill-stocktake",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/skill-stocktake/SKILL.md",
+    "dup_slug": "skill-stocktake",
+    "sha256": "aa8f287c48c5a33bf15094358ffccbe0d4faff9eee9fa2ffcd70c8e9f3d22cdd"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/skill-stocktake/SKILL.md",
+    "canonical_slug": "skill-stocktake",
+    "dup_path": "/root/.claude/skills/skill-stocktake/SKILL.md",
+    "dup_slug": "skill-stocktake",
+    "sha256": "aa8f287c48c5a33bf15094358ffccbe0d4faff9eee9fa2ffcd70c8e9f3d22cdd"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/workspace-surface-audit/SKILL.md",
+    "canonical_slug": "workspace-surface-audit",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/workspace-surface-audit/SKILL.md",
+    "dup_slug": "workspace-surface-audit",
+    "sha256": "ca6eadae6bd303713da56344bedbd8b246fe07bde1d20a26c9f21844d919cd6f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/workspace-surface-audit/SKILL.md",
+    "canonical_slug": "workspace-surface-audit",
+    "dup_path": "/root/.claude/skills/workspace-surface-audit/SKILL.md",
+    "dup_slug": "workspace-surface-audit",
+    "sha256": "ca6eadae6bd303713da56344bedbd8b246fe07bde1d20a26c9f21844d919cd6f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/plan-orchestrate/SKILL.md",
+    "canonical_slug": "plan-orchestrate",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/plan-orchestrate/SKILL.md",
+    "dup_slug": "plan-orchestrate",
+    "sha256": "e9d9aa9eeff9800793cbf852e60c6829ffd79bf89b0eb16e39bdceac10a2eb5e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/plan-orchestrate/SKILL.md",
+    "canonical_slug": "plan-orchestrate",
+    "dup_path": "/root/.claude/skills/plan-orchestrate/SKILL.md",
+    "dup_slug": "plan-orchestrate",
+    "sha256": "e9d9aa9eeff9800793cbf852e60c6829ffd79bf89b0eb16e39bdceac10a2eb5e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-security/SKILL.md",
+    "canonical_slug": "django-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/django-security/SKILL.md",
+    "dup_slug": "django-security",
+    "sha256": "9a7aa9fc3b569eea8309769a63df05ab3246e7d370a03e54341f5a889af9ba6f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-security/SKILL.md",
+    "canonical_slug": "django-security",
+    "dup_path": "/root/.claude/skills/django-security/SKILL.md",
+    "dup_slug": "django-security",
+    "sha256": "9a7aa9fc3b569eea8309769a63df05ab3246e7d370a03e54341f5a889af9ba6f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/messages-ops/SKILL.md",
+    "canonical_slug": "messages-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/messages-ops/SKILL.md",
+    "dup_slug": "messages-ops",
+    "sha256": "c2036d3ff01fd13258a2d8af88c04b94f68a10808c799be4e62b975874b263af"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/messages-ops/SKILL.md",
+    "canonical_slug": "messages-ops",
+    "dup_path": "/root/.claude/skills/messages-ops/SKILL.md",
+    "dup_slug": "messages-ops",
+    "sha256": "c2036d3ff01fd13258a2d8af88c04b94f68a10808c799be4e62b975874b263af"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/investor-materials/SKILL.md",
+    "canonical_slug": "investor-materials",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/investor-materials/SKILL.md",
+    "dup_slug": "investor-materials",
+    "sha256": "e2c8d64412e2af9a2def3144b3d1e32f0fd69c724f2d17615fcf5a9bfa5f01cc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/investor-materials/SKILL.md",
+    "canonical_slug": "investor-materials",
+    "dup_path": "/root/.claude/skills/investor-materials/SKILL.md",
+    "dup_slug": "investor-materials",
+    "sha256": "e2c8d64412e2af9a2def3144b3d1e32f0fd69c724f2d17615fcf5a9bfa5f01cc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-sort/SKILL.md",
+    "canonical_slug": "agent-sort",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-sort/SKILL.md",
+    "dup_slug": "agent-sort",
+    "sha256": "5847fc20cf0fd0d00c0c2dbacca03472c5a43af429978cf874dd41ecc144dc53"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-sort/SKILL.md",
+    "canonical_slug": "agent-sort",
+    "dup_path": "/root/.claude/skills/agent-sort/SKILL.md",
+    "dup_slug": "agent-sort",
+    "sha256": "5847fc20cf0fd0d00c0c2dbacca03472c5a43af429978cf874dd41ecc144dc53"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/carrier-relationship-management/SKILL.md",
+    "canonical_slug": "carrier-relationship-management",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/carrier-relationship-management/SKILL.md",
+    "dup_slug": "carrier-relationship-management",
+    "sha256": "a697623273d2fff3a6245e8b43b231f30bc67f9adc8025122813a549ce8e8234"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/carrier-relationship-management/SKILL.md",
+    "canonical_slug": "carrier-relationship-management",
+    "dup_path": "/root/.claude/skills/carrier-relationship-management/SKILL.md",
+    "dup_slug": "carrier-relationship-management",
+    "sha256": "a697623273d2fff3a6245e8b43b231f30bc67f9adc8025122813a549ce8e8234"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cpp-testing/SKILL.md",
+    "canonical_slug": "cpp-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/cpp-testing/SKILL.md",
+    "dup_slug": "cpp-testing",
+    "sha256": "a92fb5da9b7e3cd1b4dee185b3eb9d0a55352af6396bf996d2eef72d683784df"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cpp-testing/SKILL.md",
+    "canonical_slug": "cpp-testing",
+    "dup_path": "/root/.claude/skills/cpp-testing/SKILL.md",
+    "dup_slug": "cpp-testing",
+    "sha256": "a92fb5da9b7e3cd1b4dee185b3eb9d0a55352af6396bf996d2eef72d683784df"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/strategic-compact/SKILL.md",
+    "canonical_slug": "strategic-compact",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/strategic-compact/SKILL.md",
+    "dup_slug": "strategic-compact",
+    "sha256": "3eb441c2aa3aba2a9d6f80d3c51a37398f7a4742ee87542f8d9819a525f4b595"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/strategic-compact/SKILL.md",
+    "canonical_slug": "strategic-compact",
+    "dup_path": "/root/.claude/skills/strategic-compact/SKILL.md",
+    "dup_slug": "strategic-compact",
+    "sha256": "3eb441c2aa3aba2a9d6f80d3c51a37398f7a4742ee87542f8d9819a525f4b595"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/openclaw-persona-forge/SKILL.md",
+    "canonical_slug": "openclaw-persona-forge",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/openclaw-persona-forge/SKILL.md",
+    "dup_slug": "openclaw-persona-forge",
+    "sha256": "d5878059ca40ee2d42ca9dfb55100d3ed4438f4268aa7be61b47ee76789ed12a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/openclaw-persona-forge/SKILL.md",
+    "canonical_slug": "openclaw-persona-forge",
+    "dup_path": "/root/.claude/skills/openclaw-persona-forge/SKILL.md",
+    "dup_slug": "openclaw-persona-forge",
+    "sha256": "d5878059ca40ee2d42ca9dfb55100d3ed4438f4268aa7be61b47ee76789ed12a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/java-coding-standards/SKILL.md",
+    "canonical_slug": "java-coding-standards",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/java-coding-standards/SKILL.md",
+    "dup_slug": "java-coding-standards",
+    "sha256": "e37b682a763aa25846d035a950c4bdb2f85805b99e0e8dcc52ce5b248ef7fc95"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/java-coding-standards/SKILL.md",
+    "canonical_slug": "java-coding-standards",
+    "dup_path": "/root/.claude/skills/java-coding-standards/SKILL.md",
+    "dup_slug": "java-coding-standards",
+    "sha256": "e37b682a763aa25846d035a950c4bdb2f85805b99e0e8dcc52ce5b248ef7fc95"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark-methodology/SKILL.md",
+    "canonical_slug": "benchmark-methodology",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/benchmark-methodology/SKILL.md",
+    "dup_slug": "benchmark-methodology",
+    "sha256": "a4ac232387a4dec4df2e28dae9578ea7f73f848925096f0c335753ca257934ec"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark-methodology/SKILL.md",
+    "canonical_slug": "benchmark-methodology",
+    "dup_path": "/root/.claude/skills/benchmark-methodology/SKILL.md",
+    "dup_slug": "benchmark-methodology",
+    "sha256": "a4ac232387a4dec4df2e28dae9578ea7f73f848925096f0c335753ca257934ec"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark-methodology/SKILL.md",
+    "canonical_slug": "benchmark-methodology",
+    "dup_path": "/opt/jarvis-app-1/.agents/skills/benchmark-methodology/SKILL.md",
+    "dup_slug": "benchmark-methodology",
+    "sha256": "a4ac232387a4dec4df2e28dae9578ea7f73f848925096f0c335753ca257934ec"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/deep-research/SKILL.md",
+    "canonical_slug": "deep-research",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/deep-research/SKILL.md",
+    "dup_slug": "deep-research",
+    "sha256": "f85e06874ffd0fcfea6051b4292f45fc2b7e4cd47586659817ddbafd6bea3ede"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/deep-research/SKILL.md",
+    "canonical_slug": "deep-research",
+    "dup_path": "/root/.claude/skills/deep-research/SKILL.md",
+    "dup_slug": "deep-research",
+    "sha256": "f85e06874ffd0fcfea6051b4292f45fc2b7e4cd47586659817ddbafd6bea3ede"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/click-path-audit/SKILL.md",
+    "canonical_slug": "click-path-audit",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/click-path-audit/SKILL.md",
+    "dup_slug": "click-path-audit",
+    "sha256": "662fc5d02483bcd8ff799d6d3109a38da673182341cfc14445e9076fcd920162"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/click-path-audit/SKILL.md",
+    "canonical_slug": "click-path-audit",
+    "dup_path": "/root/.claude/skills/click-path-audit/SKILL.md",
+    "dup_slug": "click-path-audit",
+    "sha256": "662fc5d02483bcd8ff799d6d3109a38da673182341cfc14445e9076fcd920162"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/bun-runtime/SKILL.md",
+    "canonical_slug": "bun-runtime",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/bun-runtime/SKILL.md",
+    "dup_slug": "bun-runtime",
+    "sha256": "8015a977827ddd8536e89c4693a575b8deb5b04073b8a483c320c5419abc35da"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/bun-runtime/SKILL.md",
+    "canonical_slug": "bun-runtime",
+    "dup_path": "/root/.claude/skills/bun-runtime/SKILL.md",
+    "dup_slug": "bun-runtime",
+    "sha256": "8015a977827ddd8536e89c4693a575b8deb5b04073b8a483c320c5419abc35da"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/inventory-demand-planning/SKILL.md",
+    "canonical_slug": "inventory-demand-planning",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/inventory-demand-planning/SKILL.md",
+    "dup_slug": "inventory-demand-planning",
+    "sha256": "c75afe057456978e865fbfa3e491cf2a024004018b8a3eb3096404bbf1f1257f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/inventory-demand-planning/SKILL.md",
+    "canonical_slug": "inventory-demand-planning",
+    "dup_path": "/root/.claude/skills/inventory-demand-planning/SKILL.md",
+    "dup_slug": "inventory-demand-planning",
+    "sha256": "c75afe057456978e865fbfa3e491cf2a024004018b8a3eb3096404bbf1f1257f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/defi-amm-security/SKILL.md",
+    "canonical_slug": "defi-amm-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/defi-amm-security/SKILL.md",
+    "dup_slug": "defi-amm-security",
+    "sha256": "84a24f80f8cef46cf6f50adedfd8045bf7c25363fc160d2985d6b49d6603c559"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/defi-amm-security/SKILL.md",
+    "canonical_slug": "defi-amm-security",
+    "dup_path": "/root/.claude/skills/defi-amm-security/SKILL.md",
+    "dup_slug": "defi-amm-security",
+    "sha256": "84a24f80f8cef46cf6f50adedfd8045bf7c25363fc160d2985d6b49d6603c559"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/mysql-patterns/SKILL.md",
+    "canonical_slug": "mysql-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/mysql-patterns/SKILL.md",
+    "dup_slug": "mysql-patterns",
+    "sha256": "0c50db279485854d462008da6519eb6c0efa9a97b6f9ba6bd89a3c56e72fdac2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/mysql-patterns/SKILL.md",
+    "canonical_slug": "mysql-patterns",
+    "dup_path": "/root/.claude/skills/mysql-patterns/SKILL.md",
+    "dup_slug": "mysql-patterns",
+    "sha256": "0c50db279485854d462008da6519eb6c0efa9a97b6f9ba6bd89a3c56e72fdac2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/perl-testing/SKILL.md",
+    "canonical_slug": "perl-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/perl-testing/SKILL.md",
+    "dup_slug": "perl-testing",
+    "sha256": "e4859a9610a44b4224305826107c116310db7b7ddc81f5e677f22880366871f4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/perl-testing/SKILL.md",
+    "canonical_slug": "perl-testing",
+    "dup_path": "/root/.claude/skills/perl-testing/SKILL.md",
+    "dup_slug": "perl-testing",
+    "sha256": "e4859a9610a44b4224305826107c116310db7b7ddc81f5e677f22880366871f4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-a11y/SKILL.md",
+    "canonical_slug": "frontend-a11y",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/frontend-a11y/SKILL.md",
+    "dup_slug": "frontend-a11y",
+    "sha256": "62afdfd4e616ed21bf9037d47f771f3504d21838c898b9e9de8ac0da9b0bf3f7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-a11y/SKILL.md",
+    "canonical_slug": "frontend-a11y",
+    "dup_path": "/root/.claude/skills/frontend-a11y/SKILL.md",
+    "dup_slug": "frontend-a11y",
+    "sha256": "62afdfd4e616ed21bf9037d47f771f3504d21838c898b9e9de8ac0da9b0bf3f7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dart-flutter-patterns/SKILL.md",
+    "canonical_slug": "dart-flutter-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/dart-flutter-patterns/SKILL.md",
+    "dup_slug": "dart-flutter-patterns",
+    "sha256": "c29c1fd3e9f42c3cd39702a39decd88b4d60d223651fb9be5e177a389fbd8b44"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dart-flutter-patterns/SKILL.md",
+    "canonical_slug": "dart-flutter-patterns",
+    "dup_path": "/root/.claude/skills/dart-flutter-patterns/SKILL.md",
+    "dup_slug": "dart-flutter-patterns",
+    "sha256": "c29c1fd3e9f42c3cd39702a39decd88b4d60d223651fb9be5e177a389fbd8b44"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/logistics-exception-management/SKILL.md",
+    "canonical_slug": "logistics-exception-management",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/logistics-exception-management/SKILL.md",
+    "dup_slug": "logistics-exception-management",
+    "sha256": "ce6cf3c1ee154d881622e85ed87531f528829059dc9e37bcf308bad5024b4fa6"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/logistics-exception-management/SKILL.md",
+    "canonical_slug": "logistics-exception-management",
+    "dup_path": "/root/.claude/skills/logistics-exception-management/SKILL.md",
+    "dup_slug": "logistics-exception-management",
+    "sha256": "ce6cf3c1ee154d881622e85ed87531f528829059dc9e37bcf308bad5024b4fa6"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cost-tracking/SKILL.md",
+    "canonical_slug": "cost-tracking",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/cost-tracking/SKILL.md",
+    "dup_slug": "cost-tracking",
+    "sha256": "9bdf7b7e7b7f72839081a5b081e54a5c23ab9a1ffece6398f4bf92fc69dcdbf8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cost-tracking/SKILL.md",
+    "canonical_slug": "cost-tracking",
+    "dup_path": "/root/.claude/skills/cost-tracking/SKILL.md",
+    "dup_slug": "cost-tracking",
+    "sha256": "9bdf7b7e7b7f72839081a5b081e54a5c23ab9a1ffece6398f4bf92fc69dcdbf8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/product-lens/SKILL.md",
+    "canonical_slug": "product-lens",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/product-lens/SKILL.md",
+    "dup_slug": "product-lens",
+    "sha256": "d082be7c3dd9fed8523ce757a6e2b823a53003d57d2488ead5cec5d5e0a4270f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/product-lens/SKILL.md",
+    "canonical_slug": "product-lens",
+    "dup_path": "/root/.claude/skills/product-lens/SKILL.md",
+    "dup_slug": "product-lens",
+    "sha256": "d082be7c3dd9fed8523ce757a6e2b823a53003d57d2488ead5cec5d5e0a4270f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/recursive-decision-ledger/SKILL.md",
+    "canonical_slug": "recursive-decision-ledger",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/recursive-decision-ledger/SKILL.md",
+    "dup_slug": "recursive-decision-ledger",
+    "sha256": "ae0af4f1a443ab9b7608a70966d965f3dba025905cf2dcaa08dcf9e8cd11bdf5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/recursive-decision-ledger/SKILL.md",
+    "canonical_slug": "recursive-decision-ledger",
+    "dup_path": "/root/.claude/skills/recursive-decision-ledger/SKILL.md",
+    "dup_slug": "recursive-decision-ledger",
+    "sha256": "ae0af4f1a443ab9b7608a70966d965f3dba025905cf2dcaa08dcf9e8cd11bdf5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/vite-patterns/SKILL.md",
+    "canonical_slug": "vite-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/vite-patterns/SKILL.md",
+    "dup_slug": "vite-patterns",
+    "sha256": "2238d353196b6732ba897e32f1872078fde7a9d11f5aca43b53da8bfc7e3917d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/vite-patterns/SKILL.md",
+    "canonical_slug": "vite-patterns",
+    "dup_path": "/root/.claude/skills/vite-patterns/SKILL.md",
+    "dup_slug": "vite-patterns",
+    "sha256": "2238d353196b6732ba897e32f1872078fde7a9d11f5aca43b53da8bfc7e3917d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-thinking-scholar-evaluation/SKILL.md",
+    "canonical_slug": "scholar-evaluation",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/scientific-thinking-scholar-evaluation/SKILL.md",
+    "dup_slug": "scholar-evaluation",
+    "sha256": "1d2b4ab0b81f14c22320004321bae9f7bdcce071d2ee8cc4c93e7bde83ca44bc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-thinking-scholar-evaluation/SKILL.md",
+    "canonical_slug": "scholar-evaluation",
+    "dup_path": "/root/.claude/skills/scientific-thinking-scholar-evaluation/SKILL.md",
+    "dup_slug": "scholar-evaluation",
+    "sha256": "1d2b4ab0b81f14c22320004321bae9f7bdcce071d2ee8cc4c93e7bde83ca44bc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-slides/SKILL.md",
+    "canonical_slug": "frontend-slides",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/frontend-slides/SKILL.md",
+    "dup_slug": "frontend-slides",
+    "sha256": "9d58ad7d4555a9d6ea1944a5084fd0428ee44276ac13ee8df02c1c4e63925291"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-slides/SKILL.md",
+    "canonical_slug": "frontend-slides",
+    "dup_path": "/root/.claude/skills/frontend-slides/SKILL.md",
+    "dup_slug": "frontend-slides",
+    "sha256": "9d58ad7d4555a9d6ea1944a5084fd0428ee44276ac13ee8df02c1c4e63925291"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/content-hash-cache-pattern/SKILL.md",
+    "canonical_slug": "content-hash-cache-pattern",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/content-hash-cache-pattern/SKILL.md",
+    "dup_slug": "content-hash-cache-pattern",
+    "sha256": "9f49e775bd0acc955d4c701643da34b91e1cbb88d9b88af56a82c8ef6e5802be"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/content-hash-cache-pattern/SKILL.md",
+    "canonical_slug": "content-hash-cache-pattern",
+    "dup_path": "/root/.claude/skills/content-hash-cache-pattern/SKILL.md",
+    "dup_slug": "content-hash-cache-pattern",
+    "sha256": "9f49e775bd0acc955d4c701643da34b91e1cbb88d9b88af56a82c8ef6e5802be"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ai-first-engineering/SKILL.md",
+    "canonical_slug": "ai-first-engineering",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ai-first-engineering/SKILL.md",
+    "dup_slug": "ai-first-engineering",
+    "sha256": "e0b23c464de3a42fc39cab41d7431cdac6068e49fe4460f316d455d564b4bc2b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ai-first-engineering/SKILL.md",
+    "canonical_slug": "ai-first-engineering",
+    "dup_path": "/root/.claude/skills/ai-first-engineering/SKILL.md",
+    "dup_slug": "ai-first-engineering",
+    "sha256": "e0b23c464de3a42fc39cab41d7431cdac6068e49fe4460f316d455d564b4bc2b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-patterns/SKILL.md",
+    "canonical_slug": "laravel-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/laravel-patterns/SKILL.md",
+    "dup_slug": "laravel-patterns",
+    "sha256": "4490c5c984f684c0b8878ce4b283c0f187ec1e509d2e908027ec6378c2fe8488"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-patterns/SKILL.md",
+    "canonical_slug": "laravel-patterns",
+    "dup_path": "/root/.claude/skills/laravel-patterns/SKILL.md",
+    "dup_slug": "laravel-patterns",
+    "sha256": "4490c5c984f684c0b8878ce4b283c0f187ec1e509d2e908027ec6378c2fe8488"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/security-bounty-hunter/SKILL.md",
+    "canonical_slug": "security-bounty-hunter",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/security-bounty-hunter/SKILL.md",
+    "dup_slug": "security-bounty-hunter",
+    "sha256": "7b3163f0ba54946ea007b556fff8430e3711772b8019575d23b18c6a30112ea1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/security-bounty-hunter/SKILL.md",
+    "canonical_slug": "security-bounty-hunter",
+    "dup_path": "/root/.claude/skills/security-bounty-hunter/SKILL.md",
+    "dup_slug": "security-bounty-hunter",
+    "sha256": "7b3163f0ba54946ea007b556fff8430e3711772b8019575d23b18c6a30112ea1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-security/SKILL.md",
+    "canonical_slug": "laravel-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/laravel-security/SKILL.md",
+    "dup_slug": "laravel-security",
+    "sha256": "dccf356e6d8bc2da13409bb4afa5bbdce36ebcffa1927e71c8c27c2b17c25dd0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-security/SKILL.md",
+    "canonical_slug": "laravel-security",
+    "dup_path": "/root/.claude/skills/laravel-security/SKILL.md",
+    "dup_slug": "laravel-security",
+    "sha256": "dccf356e6d8bc2da13409bb4afa5bbdce36ebcffa1927e71c8c27c2b17c25dd0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/evm-token-decimals/SKILL.md",
+    "canonical_slug": "evm-token-decimals",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/evm-token-decimals/SKILL.md",
+    "dup_slug": "evm-token-decimals",
+    "sha256": "ebdb10585aa627c2a634472dc866f1ffe03b44f22582f390819b8c0de6f07b14"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/evm-token-decimals/SKILL.md",
+    "canonical_slug": "evm-token-decimals",
+    "dup_path": "/root/.claude/skills/evm-token-decimals/SKILL.md",
+    "dup_slug": "evm-token-decimals",
+    "sha256": "ebdb10585aa627c2a634472dc866f1ffe03b44f22582f390819b8c0de6f07b14"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/generating-python-installer/SKILL.md",
+    "canonical_slug": "generating-python-installer",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/generating-python-installer/SKILL.md",
+    "dup_slug": "generating-python-installer",
+    "sha256": "b214c00051ee872e01f4007a1fdcaf993af5aede1e6497a0740ea4afc1c6f0b1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/generating-python-installer/SKILL.md",
+    "canonical_slug": "generating-python-installer",
+    "dup_path": "/root/.claude/skills/generating-python-installer/SKILL.md",
+    "dup_slug": "generating-python-installer",
+    "sha256": "b214c00051ee872e01f4007a1fdcaf993af5aede1e6497a0740ea4afc1c6f0b1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-patterns/SKILL.md",
+    "canonical_slug": "frontend-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/frontend-patterns/SKILL.md",
+    "dup_slug": "frontend-patterns",
+    "sha256": "ab63402f3ecb3ea4078ade5785ef9c20fb44ba9c02b6976c080adfbd2b3094ac"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/frontend-patterns/SKILL.md",
+    "canonical_slug": "frontend-patterns",
+    "dup_path": "/root/.claude/skills/frontend-patterns/SKILL.md",
+    "dup_slug": "frontend-patterns",
+    "sha256": "ab63402f3ecb3ea4078ade5785ef9c20fb44ba9c02b6976c080adfbd2b3094ac"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/knowledge-ops/SKILL.md",
+    "canonical_slug": "knowledge-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/knowledge-ops/SKILL.md",
+    "dup_slug": "knowledge-ops",
+    "sha256": "958529713af2ab29c7b31b3cb758953271174b8909c94f1238dd7c78671672c2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/knowledge-ops/SKILL.md",
+    "canonical_slug": "knowledge-ops",
+    "dup_path": "/root/.claude/skills/knowledge-ops/SKILL.md",
+    "dup_slug": "knowledge-ops",
+    "sha256": "958529713af2ab29c7b31b3cb758953271174b8909c94f1238dd7c78671672c2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/android-clean-architecture/SKILL.md",
+    "canonical_slug": "android-clean-architecture",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/android-clean-architecture/SKILL.md",
+    "dup_slug": "android-clean-architecture",
+    "sha256": "5d1e0b6142bbebe3bc17fbedd5dbeccdd3eee2f8a4c47857f254fb0a95847113"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/android-clean-architecture/SKILL.md",
+    "canonical_slug": "android-clean-architecture",
+    "dup_path": "/root/.claude/skills/android-clean-architecture/SKILL.md",
+    "dup_slug": "android-clean-architecture",
+    "sha256": "5d1e0b6142bbebe3bc17fbedd5dbeccdd3eee2f8a4c47857f254fb0a95847113"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-tdd/SKILL.md",
+    "canonical_slug": "laravel-tdd",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/laravel-tdd/SKILL.md",
+    "dup_slug": "laravel-tdd",
+    "sha256": "ceabcc7f27bbc3aea7cf496211b265fb0bb505698c6aabd2ca2c25b460b91cf4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-tdd/SKILL.md",
+    "canonical_slug": "laravel-tdd",
+    "dup_path": "/root/.claude/skills/laravel-tdd/SKILL.md",
+    "dup_slug": "laravel-tdd",
+    "sha256": "ceabcc7f27bbc3aea7cf496211b265fb0bb505698c6aabd2ca2c25b460b91cf4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-thinking-literature-review/SKILL.md",
+    "canonical_slug": "literature-review",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/scientific-thinking-literature-review/SKILL.md",
+    "dup_slug": "literature-review",
+    "sha256": "f2ad5e2d1f6304c1fb05aaa1fc9cab08b0545dd4eb813377b31603cd385c023e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-thinking-literature-review/SKILL.md",
+    "canonical_slug": "literature-review",
+    "dup_path": "/root/.claude/skills/scientific-thinking-literature-review/SKILL.md",
+    "dup_slug": "literature-review",
+    "sha256": "f2ad5e2d1f6304c1fb05aaa1fc9cab08b0545dd4eb813377b31603cd385c023e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/liquid-glass-design/SKILL.md",
+    "canonical_slug": "liquid-glass-design",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/liquid-glass-design/SKILL.md",
+    "dup_slug": "liquid-glass-design",
+    "sha256": "024aa207eb3d4d31d868954a7352a40b78c61f2fd007ab8b452afb6217070f84"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/liquid-glass-design/SKILL.md",
+    "canonical_slug": "liquid-glass-design",
+    "dup_path": "/root/.claude/skills/liquid-glass-design/SKILL.md",
+    "dup_slug": "liquid-glass-design",
+    "sha256": "024aa207eb3d4d31d868954a7352a40b78c61f2fd007ab8b452afb6217070f84"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-foundations/SKILL.md",
+    "canonical_slug": "motion-foundations",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/motion-foundations/SKILL.md",
+    "dup_slug": "motion-foundations",
+    "sha256": "6755da297a2c0bcee7c9c83ec23153cf443e8bf44ef854c83c9acc1e9bd0b811"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-foundations/SKILL.md",
+    "canonical_slug": "motion-foundations",
+    "dup_path": "/root/.claude/skills/motion-foundations/SKILL.md",
+    "dup_slug": "motion-foundations",
+    "sha256": "6755da297a2c0bcee7c9c83ec23153cf443e8bf44ef854c83c9acc1e9bd0b811"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/returns-reverse-logistics/SKILL.md",
+    "canonical_slug": "returns-reverse-logistics",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/returns-reverse-logistics/SKILL.md",
+    "dup_slug": "returns-reverse-logistics",
+    "sha256": "12a0d79160e8562c92342063b11931da99ecee049376679c415c259235ddd8e2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/returns-reverse-logistics/SKILL.md",
+    "canonical_slug": "returns-reverse-logistics",
+    "dup_path": "/root/.claude/skills/returns-reverse-logistics/SKILL.md",
+    "dup_slug": "returns-reverse-logistics",
+    "sha256": "12a0d79160e8562c92342063b11931da99ecee049376679c415c259235ddd8e2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/accessibility/SKILL.md",
+    "canonical_slug": "accessibility",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/accessibility/SKILL.md",
+    "dup_slug": "accessibility",
+    "sha256": "98a64f7ea191284e6d12322328b0576bb4b002a049872cda319e9a39e9e1f961"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/accessibility/SKILL.md",
+    "canonical_slug": "accessibility",
+    "dup_path": "/root/.claude/skills/accessibility/SKILL.md",
+    "dup_slug": "accessibility",
+    "sha256": "98a64f7ea191284e6d12322328b0576bb4b002a049872cda319e9a39e9e1f961"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/competitive-report-structure/SKILL.md",
+    "canonical_slug": "competitive-report-structure",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/competitive-report-structure/SKILL.md",
+    "dup_slug": "competitive-report-structure",
+    "sha256": "fe3ad1b5b6caa4709b2a75e22772771946f36c9592c281012e5d2df087412800"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/competitive-report-structure/SKILL.md",
+    "canonical_slug": "competitive-report-structure",
+    "dup_path": "/root/.claude/skills/competitive-report-structure/SKILL.md",
+    "dup_slug": "competitive-report-structure",
+    "sha256": "fe3ad1b5b6caa4709b2a75e22772771946f36c9592c281012e5d2df087412800"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/competitive-report-structure/SKILL.md",
+    "canonical_slug": "competitive-report-structure",
+    "dup_path": "/opt/jarvis-app-1/.agents/skills/competitive-report-structure/SKILL.md",
+    "dup_slug": "competitive-report-structure",
+    "sha256": "fe3ad1b5b6caa4709b2a75e22772771946f36c9592c281012e5d2df087412800"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-celery/SKILL.md",
+    "canonical_slug": "django-celery",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/django-celery/SKILL.md",
+    "dup_slug": "django-celery",
+    "sha256": "1f9189ece910eb90a5d2cd520a9a6238ccb89a3e48629ac1ad9b55ec3eb21f88"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-celery/SKILL.md",
+    "canonical_slug": "django-celery",
+    "dup_path": "/root/.claude/skills/django-celery/SKILL.md",
+    "dup_slug": "django-celery",
+    "sha256": "1f9189ece910eb90a5d2cd520a9a6238ccb89a3e48629ac1ad9b55ec3eb21f88"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/taste/SKILL.md",
+    "canonical_slug": "taste",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/taste/SKILL.md",
+    "dup_slug": "taste",
+    "sha256": "0b8683366ab51d4d45882710c9086ca43123eae25484838c7c290bdd4568bb32"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/taste/SKILL.md",
+    "canonical_slug": "taste",
+    "dup_path": "/root/.claude/skills/taste/SKILL.md",
+    "dup_slug": "taste",
+    "sha256": "0b8683366ab51d4d45882710c9086ca43123eae25484838c7c290bdd4568bb32"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-testing/SKILL.md",
+    "canonical_slug": "kotlin-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/kotlin-testing/SKILL.md",
+    "dup_slug": "kotlin-testing",
+    "sha256": "5e7a41ee97fafba5d53e99eb3a4cc1925c469d05e0516cfc8e1defbdc10e62c6"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-testing/SKILL.md",
+    "canonical_slug": "kotlin-testing",
+    "dup_path": "/root/.claude/skills/kotlin-testing/SKILL.md",
+    "dup_slug": "kotlin-testing",
+    "sha256": "5e7a41ee97fafba5d53e99eb3a4cc1925c469d05e0516cfc8e1defbdc10e62c6"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hexagonal-architecture/SKILL.md",
+    "canonical_slug": "hexagonal-architecture",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/hexagonal-architecture/SKILL.md",
+    "dup_slug": "hexagonal-architecture",
+    "sha256": "53a76ce2255051df5c538b5a690517b7987d1a1c0d3ef57f30d2ddc35258e7f8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hexagonal-architecture/SKILL.md",
+    "canonical_slug": "hexagonal-architecture",
+    "dup_path": "/root/.claude/skills/hexagonal-architecture/SKILL.md",
+    "dup_slug": "hexagonal-architecture",
+    "sha256": "53a76ce2255051df5c538b5a690517b7987d1a1c0d3ef57f30d2ddc35258e7f8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-network-setup/SKILL.md",
+    "canonical_slug": "homelab-network-setup",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/homelab-network-setup/SKILL.md",
+    "dup_slug": "homelab-network-setup",
+    "sha256": "3dbe0a5ad0d5a62773366df746318b62e2557e35c3ef13b95618613c8cdf8050"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-network-setup/SKILL.md",
+    "canonical_slug": "homelab-network-setup",
+    "dup_path": "/root/.claude/skills/homelab-network-setup/SKILL.md",
+    "dup_slug": "homelab-network-setup",
+    "sha256": "3dbe0a5ad0d5a62773366df746318b62e2557e35c3ef13b95618613c8cdf8050"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/data-scraper-agent/SKILL.md",
+    "canonical_slug": "data-scraper-agent",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/data-scraper-agent/SKILL.md",
+    "dup_slug": "data-scraper-agent",
+    "sha256": "f5efab367741dbfae96105d4cc983842f28baa69b2b17dcf9216f1f6ef0e9a9f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/data-scraper-agent/SKILL.md",
+    "canonical_slug": "data-scraper-agent",
+    "dup_path": "/root/.claude/skills/data-scraper-agent/SKILL.md",
+    "dup_slug": "data-scraper-agent",
+    "sha256": "f5efab367741dbfae96105d4cc983842f28baa69b2b17dcf9216f1f6ef0e9a9f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/docker-patterns/SKILL.md",
+    "canonical_slug": "docker-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/docker-patterns/SKILL.md",
+    "dup_slug": "docker-patterns",
+    "sha256": "6ccf7f6a54a0e4038c8d3159f9e52917bb0868f589d42de8bbe8023d3c0e1851"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/docker-patterns/SKILL.md",
+    "canonical_slug": "docker-patterns",
+    "dup_path": "/root/.claude/skills/docker-patterns/SKILL.md",
+    "dup_slug": "docker-patterns",
+    "sha256": "6ccf7f6a54a0e4038c8d3159f9e52917bb0868f589d42de8bbe8023d3c0e1851"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/unified-notifications-ops/SKILL.md",
+    "canonical_slug": "unified-notifications-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/unified-notifications-ops/SKILL.md",
+    "dup_slug": "unified-notifications-ops",
+    "sha256": "0ade130619dfc73781d6a4beaf79b65b6d3ac70f0751dce0844a8f9fd39167aa"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/unified-notifications-ops/SKILL.md",
+    "canonical_slug": "unified-notifications-ops",
+    "dup_path": "/root/.claude/skills/unified-notifications-ops/SKILL.md",
+    "dup_slug": "unified-notifications-ops",
+    "sha256": "0ade130619dfc73781d6a4beaf79b65b6d3ac70f0751dce0844a8f9fd39167aa"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quality-nonconformance/SKILL.md",
+    "canonical_slug": "quality-nonconformance",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/quality-nonconformance/SKILL.md",
+    "dup_slug": "quality-nonconformance",
+    "sha256": "342398885dc2e11d3c7a00726242d43bceb2bec1b386e1277005df5ea104282f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quality-nonconformance/SKILL.md",
+    "canonical_slug": "quality-nonconformance",
+    "dup_path": "/root/.claude/skills/quality-nonconformance/SKILL.md",
+    "dup_slug": "quality-nonconformance",
+    "sha256": "342398885dc2e11d3c7a00726242d43bceb2bec1b386e1277005df5ea104282f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-vlan-segmentation/SKILL.md",
+    "canonical_slug": "homelab-vlan-segmentation",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/homelab-vlan-segmentation/SKILL.md",
+    "dup_slug": "homelab-vlan-segmentation",
+    "sha256": "ca63415c5aefad1b12039196a0d043188cb81c416ec10a3cb976e59273a5dcfb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-vlan-segmentation/SKILL.md",
+    "canonical_slug": "homelab-vlan-segmentation",
+    "dup_path": "/root/.claude/skills/homelab-vlan-segmentation/SKILL.md",
+    "dup_slug": "homelab-vlan-segmentation",
+    "sha256": "ca63415c5aefad1b12039196a0d043188cb81c416ec10a3cb976e59273a5dcfb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/safety-guard/SKILL.md",
+    "canonical_slug": "safety-guard",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/safety-guard/SKILL.md",
+    "dup_slug": "safety-guard",
+    "sha256": "9247b4a05dde847b93d28997477fd3be53dfed967a6279f5d0fc9fab104528ee"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/safety-guard/SKILL.md",
+    "canonical_slug": "safety-guard",
+    "dup_path": "/root/.claude/skills/safety-guard/SKILL.md",
+    "dup_slug": "safety-guard",
+    "sha256": "9247b4a05dde847b93d28997477fd3be53dfed967a6279f5d0fc9fab104528ee"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/seo/SKILL.md",
+    "canonical_slug": "seo",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/seo/SKILL.md",
+    "dup_slug": "seo",
+    "sha256": "4b744d2ff5c9313e903e4e5139322cc98adb9f9778a7231d4826216ab0f6873a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/seo/SKILL.md",
+    "canonical_slug": "seo",
+    "dup_path": "/root/.claude/skills/seo/SKILL.md",
+    "dup_slug": "seo",
+    "sha256": "4b744d2ff5c9313e903e4e5139322cc98adb9f9778a7231d4826216ab0f6873a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-pipeline/SKILL.md",
+    "canonical_slug": "orch-pipeline",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/orch-pipeline/SKILL.md",
+    "dup_slug": "orch-pipeline",
+    "sha256": "7fe50c8b83c33a63cfe061b5b8948dfadf5e45f1f75771e8b0499bade3fbe357"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-pipeline/SKILL.md",
+    "canonical_slug": "orch-pipeline",
+    "dup_path": "/root/.claude/skills/orch-pipeline/SKILL.md",
+    "dup_slug": "orch-pipeline",
+    "sha256": "7fe50c8b83c33a63cfe061b5b8948dfadf5e45f1f75771e8b0499bade3fbe357"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-verification/SKILL.md",
+    "canonical_slug": "laravel-verification",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/laravel-verification/SKILL.md",
+    "dup_slug": "laravel-verification",
+    "sha256": "8178081886442875498a118deb35b1a41283cb1f151fb4b8dcc6e8c42ac7b6be"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-verification/SKILL.md",
+    "canonical_slug": "laravel-verification",
+    "dup_path": "/root/.claude/skills/laravel-verification/SKILL.md",
+    "dup_slug": "laravel-verification",
+    "sha256": "8178081886442875498a118deb35b1a41283cb1f151fb4b8dcc6e8c42ac7b6be"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/canary-watch/SKILL.md",
+    "canonical_slug": "canary-watch",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/canary-watch/SKILL.md",
+    "dup_slug": "canary-watch",
+    "sha256": "d2cb536f8ccb201266e094542cb20af8a4d6474feb5b16116cfb4497c2b8149f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/canary-watch/SKILL.md",
+    "canonical_slug": "canary-watch",
+    "dup_path": "/root/.claude/skills/canary-watch/SKILL.md",
+    "dup_slug": "canary-watch",
+    "sha256": "d2cb536f8ccb201266e094542cb20af8a4d6474feb5b16116cfb4497c2b8149f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/browser-qa/SKILL.md",
+    "canonical_slug": "browser-qa",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/browser-qa/SKILL.md",
+    "dup_slug": "browser-qa",
+    "sha256": "c501257d2c9ca711342b56d7adfb04897f17c6946dc6cdb88a5c75c87e4aa951"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/browser-qa/SKILL.md",
+    "canonical_slug": "browser-qa",
+    "dup_path": "/root/.claude/skills/browser-qa/SKILL.md",
+    "dup_slug": "browser-qa",
+    "sha256": "c501257d2c9ca711342b56d7adfb04897f17c6946dc6cdb88a5c75c87e4aa951"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/python-patterns/SKILL.md",
+    "canonical_slug": "python-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/python-patterns/SKILL.md",
+    "dup_slug": "python-patterns",
+    "sha256": "bcdc0e72c463c9714d0eb7c5cd1f8dd0d44e54400e22a2f4835f0b2f5e6c2559"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/python-patterns/SKILL.md",
+    "canonical_slug": "python-patterns",
+    "dup_path": "/root/.claude/skills/python-patterns/SKILL.md",
+    "dup_slug": "python-patterns",
+    "sha256": "bcdc0e72c463c9714d0eb7c5cd1f8dd0d44e54400e22a2f4835f0b2f5e6c2559"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-fix-defect/SKILL.md",
+    "canonical_slug": "orch-fix-defect",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/orch-fix-defect/SKILL.md",
+    "dup_slug": "orch-fix-defect",
+    "sha256": "399e142bbf3751b5a0fdec1ae450f5673bd1a038304a221748c865280e885b2d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-fix-defect/SKILL.md",
+    "canonical_slug": "orch-fix-defect",
+    "dup_path": "/root/.claude/skills/orch-fix-defect/SKILL.md",
+    "dup_slug": "orch-fix-defect",
+    "sha256": "399e142bbf3751b5a0fdec1ae450f5673bd1a038304a221748c865280e885b2d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/google-workspace-ops/SKILL.md",
+    "canonical_slug": "google-workspace-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/google-workspace-ops/SKILL.md",
+    "dup_slug": "google-workspace-ops",
+    "sha256": "93ab16b44764e3c00472c7dfb0b58cf59a3c7493ac99ab93fcabf280f164b6a1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/google-workspace-ops/SKILL.md",
+    "canonical_slug": "google-workspace-ops",
+    "dup_path": "/root/.claude/skills/google-workspace-ops/SKILL.md",
+    "dup_slug": "google-workspace-ops",
+    "sha256": "93ab16b44764e3c00472c7dfb0b58cf59a3c7493ac99ab93fcabf280f164b6a1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/production-scheduling/SKILL.md",
+    "canonical_slug": "production-scheduling",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/production-scheduling/SKILL.md",
+    "dup_slug": "production-scheduling",
+    "sha256": "148fc095bd4ca76a7fca919a0afc32aba480172b838fd669397c60d9fbfed561"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/production-scheduling/SKILL.md",
+    "canonical_slug": "production-scheduling",
+    "dup_path": "/root/.claude/skills/production-scheduling/SKILL.md",
+    "dup_slug": "production-scheduling",
+    "sha256": "148fc095bd4ca76a7fca919a0afc32aba480172b838fd669397c60d9fbfed561"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dashboard-builder/SKILL.md",
+    "canonical_slug": "dashboard-builder",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/dashboard-builder/SKILL.md",
+    "dup_slug": "dashboard-builder",
+    "sha256": "cfb1a28e6c1f7c061c872cc64c727af99cecbceb8de2e8a89e855766b474c336"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dashboard-builder/SKILL.md",
+    "canonical_slug": "dashboard-builder",
+    "dup_path": "/root/.claude/skills/dashboard-builder/SKILL.md",
+    "dup_slug": "dashboard-builder",
+    "sha256": "cfb1a28e6c1f7c061c872cc64c727af99cecbceb8de2e8a89e855766b474c336"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/continuous-learning-v2/SKILL.md",
+    "canonical_slug": "continuous-learning-v2",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/continuous-learning-v2/SKILL.md",
+    "dup_slug": "continuous-learning-v2",
+    "sha256": "75485ddb37e2d1d6f056b404d9939bf46a2b409b1286aec209a510112e5b64b1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/continuous-learning-v2/SKILL.md",
+    "canonical_slug": "continuous-learning-v2",
+    "dup_path": "/root/.claude/skills/continuous-learning-v2/SKILL.md",
+    "dup_slug": "continuous-learning-v2",
+    "sha256": "75485ddb37e2d1d6f056b404d9939bf46a2b409b1286aec209a510112e5b64b1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/skill-scout/SKILL.md",
+    "canonical_slug": "skill-scout",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/skill-scout/SKILL.md",
+    "dup_slug": "skill-scout",
+    "sha256": "71b1e8a4aedebeaf4468838389c0a93e4d3bf4e2779bd0a99e0396b045f82d32"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/skill-scout/SKILL.md",
+    "canonical_slug": "skill-scout",
+    "dup_path": "/root/.claude/skills/skill-scout/SKILL.md",
+    "dup_slug": "skill-scout",
+    "sha256": "71b1e8a4aedebeaf4468838389c0a93e4d3bf4e2779bd0a99e0396b045f82d32"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-tdd/SKILL.md",
+    "canonical_slug": "quarkus-tdd",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/quarkus-tdd/SKILL.md",
+    "dup_slug": "quarkus-tdd",
+    "sha256": "556d1c2d04e3e0ef10f474ed413013646088ff057f9be02d3a3c4f833ccc33c5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-tdd/SKILL.md",
+    "canonical_slug": "quarkus-tdd",
+    "dup_path": "/root/.claude/skills/quarkus-tdd/SKILL.md",
+    "dup_slug": "quarkus-tdd",
+    "sha256": "556d1c2d04e3e0ef10f474ed413013646088ff057f9be02d3a3c4f833ccc33c5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/social-graph-ranker/SKILL.md",
+    "canonical_slug": "social-graph-ranker",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/social-graph-ranker/SKILL.md",
+    "dup_slug": "social-graph-ranker",
+    "sha256": "24657648f76eb7b835fa71275980e704ebf798853565856623c1e3cd4fd7a183"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/social-graph-ranker/SKILL.md",
+    "canonical_slug": "social-graph-ranker",
+    "dup_path": "/root/.claude/skills/social-graph-ranker/SKILL.md",
+    "dup_slug": "social-graph-ranker",
+    "sha256": "24657648f76eb7b835fa71275980e704ebf798853565856623c1e3cd4fd7a183"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/react-testing/SKILL.md",
+    "canonical_slug": "react-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/react-testing/SKILL.md",
+    "dup_slug": "react-testing",
+    "sha256": "51c18b4e28285bb876ef469e47c6f53108b5a9f900950a60e897c3c24826a65e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/react-testing/SKILL.md",
+    "canonical_slug": "react-testing",
+    "dup_path": "/root/.claude/skills/react-testing/SKILL.md",
+    "dup_slug": "react-testing",
+    "sha256": "51c18b4e28285bb876ef469e47c6f53108b5a9f900950a60e897c3c24826a65e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hipaa-compliance/SKILL.md",
+    "canonical_slug": "hipaa-compliance",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/hipaa-compliance/SKILL.md",
+    "dup_slug": "hipaa-compliance",
+    "sha256": "58d1e18f502bba3f76aaac1fc72dbc70b28c9b2c4d4b866fe6f25a4dca9c1b6f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/hipaa-compliance/SKILL.md",
+    "canonical_slug": "hipaa-compliance",
+    "dup_path": "/root/.claude/skills/hipaa-compliance/SKILL.md",
+    "dup_slug": "hipaa-compliance",
+    "sha256": "58d1e18f502bba3f76aaac1fc72dbc70b28c9b2c4d4b866fe6f25a4dca9c1b6f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/network-config-validation/SKILL.md",
+    "canonical_slug": "network-config-validation",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/network-config-validation/SKILL.md",
+    "dup_slug": "network-config-validation",
+    "sha256": "d92d129d517470d35c6a6be6899afbfea9ab0bf170323af9fd1992c805ef91f3"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/network-config-validation/SKILL.md",
+    "canonical_slug": "network-config-validation",
+    "dup_path": "/root/.claude/skills/network-config-validation/SKILL.md",
+    "dup_slug": "network-config-validation",
+    "sha256": "d92d129d517470d35c6a6be6899afbfea9ab0bf170323af9fd1992c805ef91f3"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/security-scan/SKILL.md",
+    "canonical_slug": "security-scan",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/security-scan/SKILL.md",
+    "dup_slug": "security-scan",
+    "sha256": "36c34d020eef3c386a82a409f8e3e47edbed441eaf83ae6055d6a029828511e8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/security-scan/SKILL.md",
+    "canonical_slug": "security-scan",
+    "dup_path": "/root/.claude/skills/security-scan/SKILL.md",
+    "dup_slug": "security-scan",
+    "sha256": "36c34d020eef3c386a82a409f8e3e47edbed441eaf83ae6055d6a029828511e8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nestjs-patterns/SKILL.md",
+    "canonical_slug": "nestjs-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/nestjs-patterns/SKILL.md",
+    "dup_slug": "nestjs-patterns",
+    "sha256": "984df44b40cdb5aca50e6c8271b894d3bbe51d1cd619266391b2bf07080b33bc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nestjs-patterns/SKILL.md",
+    "canonical_slug": "nestjs-patterns",
+    "dup_path": "/root/.claude/skills/nestjs-patterns/SKILL.md",
+    "dup_slug": "nestjs-patterns",
+    "sha256": "984df44b40cdb5aca50e6c8271b894d3bbe51d1cd619266391b2bf07080b33bc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/fastapi-patterns/SKILL.md",
+    "canonical_slug": "fastapi-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/fastapi-patterns/SKILL.md",
+    "dup_slug": "fastapi-patterns",
+    "sha256": "135114c01b9b348be89de2d17f0fc1ac14f2183d47f96bd08020bebf00196309"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/fastapi-patterns/SKILL.md",
+    "canonical_slug": "fastapi-patterns",
+    "dup_path": "/root/.claude/skills/fastapi-patterns/SKILL.md",
+    "dup_slug": "fastapi-patterns",
+    "sha256": "135114c01b9b348be89de2d17f0fc1ac14f2183d47f96bd08020bebf00196309"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-coroutines-flows/SKILL.md",
+    "canonical_slug": "kotlin-coroutines-flows",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/kotlin-coroutines-flows/SKILL.md",
+    "dup_slug": "kotlin-coroutines-flows",
+    "sha256": "5974919b91be4da05e3677be7a420a64df6b631ea31933bac6cf5a75a46b240a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-coroutines-flows/SKILL.md",
+    "canonical_slug": "kotlin-coroutines-flows",
+    "dup_path": "/root/.claude/skills/kotlin-coroutines-flows/SKILL.md",
+    "dup_slug": "kotlin-coroutines-flows",
+    "sha256": "5974919b91be4da05e3677be7a420a64df6b631ea31933bac6cf5a75a46b240a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-add-feature/SKILL.md",
+    "canonical_slug": "orch-add-feature",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/orch-add-feature/SKILL.md",
+    "dup_slug": "orch-add-feature",
+    "sha256": "6ba858d94cfaa05f3b1e63ad09656285a4a33009e9cd837ebcaf093d39d29a25"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-add-feature/SKILL.md",
+    "canonical_slug": "orch-add-feature",
+    "dup_path": "/root/.claude/skills/orch-add-feature/SKILL.md",
+    "dup_slug": "orch-add-feature",
+    "sha256": "6ba858d94cfaa05f3b1e63ad09656285a4a33009e9cd837ebcaf093d39d29a25"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-security/SKILL.md",
+    "canonical_slug": "quarkus-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/quarkus-security/SKILL.md",
+    "dup_slug": "quarkus-security",
+    "sha256": "2f031a50bf3ff9279df08529e6e933b30f850e7e294f3acf37b9221ee95025da"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-security/SKILL.md",
+    "canonical_slug": "quarkus-security",
+    "dup_path": "/root/.claude/skills/quarkus-security/SKILL.md",
+    "dup_slug": "quarkus-security",
+    "sha256": "2f031a50bf3ff9279df08529e6e933b30f850e7e294f3acf37b9221ee95025da"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ui-demo/SKILL.md",
+    "canonical_slug": "ui-demo",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ui-demo/SKILL.md",
+    "dup_slug": "ui-demo",
+    "sha256": "893eee77f98f52d28bffa6bbababa7481300cc13535dea519fa0cc1b0168b2f8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ui-demo/SKILL.md",
+    "canonical_slug": "ui-demo",
+    "dup_path": "/root/.claude/skills/ui-demo/SKILL.md",
+    "dup_slug": "ui-demo",
+    "sha256": "893eee77f98f52d28bffa6bbababa7481300cc13535dea519fa0cc1b0168b2f8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/git-workflow/SKILL.md",
+    "canonical_slug": "git-workflow",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/git-workflow/SKILL.md",
+    "dup_slug": "git-workflow",
+    "sha256": "707999138b92f4769ac09ebaeace34b4e5bf295bd8f558903d4186748401b0eb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/git-workflow/SKILL.md",
+    "canonical_slug": "git-workflow",
+    "dup_path": "/root/.claude/skills/git-workflow/SKILL.md",
+    "dup_slug": "git-workflow",
+    "sha256": "707999138b92f4769ac09ebaeace34b4e5bf295bd8f558903d4186748401b0eb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/recsys-pipeline-architect/SKILL.md",
+    "canonical_slug": "recsys-pipeline-architect",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/recsys-pipeline-architect/SKILL.md",
+    "dup_slug": "recsys-pipeline-architect",
+    "sha256": "309fe65f0ffdb44b62005c63ab9f460ddbe813f994e010316f7a2e55fc52e436"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/recsys-pipeline-architect/SKILL.md",
+    "canonical_slug": "recsys-pipeline-architect",
+    "dup_path": "/root/.claude/skills/recsys-pipeline-architect/SKILL.md",
+    "dup_slug": "recsys-pipeline-architect",
+    "sha256": "309fe65f0ffdb44b62005c63ab9f460ddbe813f994e010316f7a2e55fc52e436"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-eval-harness/SKILL.md",
+    "canonical_slug": "healthcare-eval-harness",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/healthcare-eval-harness/SKILL.md",
+    "dup_slug": "healthcare-eval-harness",
+    "sha256": "e6a44cdd7df7ac8fea76090bd7b4cb241aecdd4c6039575c0d525bcd85a4313d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/healthcare-eval-harness/SKILL.md",
+    "canonical_slug": "healthcare-eval-harness",
+    "dup_path": "/root/.claude/skills/healthcare-eval-harness/SKILL.md",
+    "dup_slug": "healthcare-eval-harness",
+    "sha256": "e6a44cdd7df7ac8fea76090bd7b4cb241aecdd4c6039575c0d525bcd85a4313d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nutrient-document-processing/SKILL.md",
+    "canonical_slug": "nutrient-document-processing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/nutrient-document-processing/SKILL.md",
+    "dup_slug": "nutrient-document-processing",
+    "sha256": "d515283f27afcd400c654a5673dea68985031df2af0623461fd6af010b1a22cc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nutrient-document-processing/SKILL.md",
+    "canonical_slug": "nutrient-document-processing",
+    "dup_path": "/root/.claude/skills/nutrient-document-processing/SKILL.md",
+    "dup_slug": "nutrient-document-processing",
+    "sha256": "d515283f27afcd400c654a5673dea68985031df2af0623461fd6af010b1a22cc"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dynamic-workflow-mode/SKILL.md",
+    "canonical_slug": "dynamic-workflow-mode",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/dynamic-workflow-mode/SKILL.md",
+    "dup_slug": "dynamic-workflow-mode",
+    "sha256": "f2c74fa482ed65e36b9bfd8434dcb5b022b1d70a7b851ba68401e080d318e7e4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dynamic-workflow-mode/SKILL.md",
+    "canonical_slug": "dynamic-workflow-mode",
+    "dup_path": "/root/.claude/skills/dynamic-workflow-mode/SKILL.md",
+    "dup_slug": "dynamic-workflow-mode",
+    "sha256": "f2c74fa482ed65e36b9bfd8434dcb5b022b1d70a7b851ba68401e080d318e7e4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-network-readiness/SKILL.md",
+    "canonical_slug": "homelab-network-readiness",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/homelab-network-readiness/SKILL.md",
+    "dup_slug": "homelab-network-readiness",
+    "sha256": "056835b13ab04b672bd8e6c19376b58afb2893b5411428c1588fd07b19571c9d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-network-readiness/SKILL.md",
+    "canonical_slug": "homelab-network-readiness",
+    "dup_path": "/root/.claude/skills/homelab-network-readiness/SKILL.md",
+    "dup_slug": "homelab-network-readiness",
+    "sha256": "056835b13ab04b672bd8e6c19376b58afb2893b5411428c1588fd07b19571c9d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kubernetes-patterns/SKILL.md",
+    "canonical_slug": "kubernetes-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/kubernetes-patterns/SKILL.md",
+    "dup_slug": "kubernetes-patterns",
+    "sha256": "aab718a045a380c544439b62104527064cce2ef48660cafc4cc2b987be287b63"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kubernetes-patterns/SKILL.md",
+    "canonical_slug": "kubernetes-patterns",
+    "dup_path": "/root/.claude/skills/kubernetes-patterns/SKILL.md",
+    "dup_slug": "kubernetes-patterns",
+    "sha256": "aab718a045a380c544439b62104527064cce2ef48660cafc4cc2b987be287b63"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/repo-scan/SKILL.md",
+    "canonical_slug": "repo-scan",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/repo-scan/SKILL.md",
+    "dup_slug": "repo-scan",
+    "sha256": "691cb6f303166544694ab0029673cd366aa27734a6eb7bc849d2eaf33c1dcfed"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/repo-scan/SKILL.md",
+    "canonical_slug": "repo-scan",
+    "dup_path": "/root/.claude/skills/repo-scan/SKILL.md",
+    "dup_slug": "repo-scan",
+    "sha256": "691cb6f303166544694ab0029673cd366aa27734a6eb7bc849d2eaf33c1dcfed"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/intent-driven-development/SKILL.md",
+    "canonical_slug": "intent-driven-development",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/intent-driven-development/SKILL.md",
+    "dup_slug": "intent-driven-development",
+    "sha256": "e34045f7b3bf6a6fbd364f85c7bc81d8208e18bb929ceff80bbc987f78aadea8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/intent-driven-development/SKILL.md",
+    "canonical_slug": "intent-driven-development",
+    "dup_path": "/root/.claude/skills/intent-driven-development/SKILL.md",
+    "dup_slug": "intent-driven-development",
+    "sha256": "e34045f7b3bf6a6fbd364f85c7bc81d8208e18bb929ceff80bbc987f78aadea8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/flox-environments/SKILL.md",
+    "canonical_slug": "flox-environments",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/flox-environments/SKILL.md",
+    "dup_slug": "flox-environments",
+    "sha256": "d15e0af4d6f57ea085482f163d0d1658279301202b161087e9e6f66e7f4b91c9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/flox-environments/SKILL.md",
+    "canonical_slug": "flox-environments",
+    "dup_path": "/root/.claude/skills/flox-environments/SKILL.md",
+    "dup_slug": "flox-environments",
+    "sha256": "d15e0af4d6f57ea085482f163d0d1658279301202b161087e9e6f66e7f4b91c9"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/flutter-dart-code-review/SKILL.md",
+    "canonical_slug": "flutter-dart-code-review",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/flutter-dart-code-review/SKILL.md",
+    "dup_slug": "flutter-dart-code-review",
+    "sha256": "0527bcb3151d06277f84e7be54b48f2c6785d9464ee5d586b9527b3e6525866a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/flutter-dart-code-review/SKILL.md",
+    "canonical_slug": "flutter-dart-code-review",
+    "dup_path": "/root/.claude/skills/flutter-dart-code-review/SKILL.md",
+    "dup_slug": "flutter-dart-code-review",
+    "sha256": "0527bcb3151d06277f84e7be54b48f2c6785d9464ee5d586b9527b3e6525866a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-self-evaluation/SKILL.md",
+    "canonical_slug": "agent-self-evaluation",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-self-evaluation/SKILL.md",
+    "dup_slug": "agent-self-evaluation",
+    "sha256": "96bb21eb37760f596789f84ec0a5dad4ef92fc2255e35cd7b88dc4234062b8c1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-self-evaluation/SKILL.md",
+    "canonical_slug": "agent-self-evaluation",
+    "dup_path": "/root/.claude/skills/agent-self-evaluation/SKILL.md",
+    "dup_slug": "agent-self-evaluation",
+    "sha256": "96bb21eb37760f596789f84ec0a5dad4ef92fc2255e35cd7b88dc4234062b8c1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/production-audit/SKILL.md",
+    "canonical_slug": "production-audit",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/production-audit/SKILL.md",
+    "dup_slug": "production-audit",
+    "sha256": "4b5d2bf0530ca5ba7dad0dece7a4c14e028334e9d54066025171ac2ff28f3375"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/production-audit/SKILL.md",
+    "canonical_slug": "production-audit",
+    "dup_path": "/root/.claude/skills/production-audit/SKILL.md",
+    "dup_slug": "production-audit",
+    "sha256": "4b5d2bf0530ca5ba7dad0dece7a4c14e028334e9d54066025171ac2ff28f3375"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-eval/SKILL.md",
+    "canonical_slug": "agent-eval",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-eval/SKILL.md",
+    "dup_slug": "agent-eval",
+    "sha256": "f304aa5f061109b0511acb6f2e18ad795a029dfc8e8159a56a97ef8a37820c3b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-eval/SKILL.md",
+    "canonical_slug": "agent-eval",
+    "dup_path": "/root/.claude/skills/agent-eval/SKILL.md",
+    "dup_slug": "agent-eval",
+    "sha256": "f304aa5f061109b0511acb6f2e18ad795a029dfc8e8159a56a97ef8a37820c3b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/x-api/SKILL.md",
+    "canonical_slug": "x-api",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/x-api/SKILL.md",
+    "dup_slug": "x-api",
+    "sha256": "1316fb056cc7671fcba367eee5b375ba80b678e1601ffedb15b1c946d06ae8cb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/x-api/SKILL.md",
+    "canonical_slug": "x-api",
+    "dup_path": "/root/.claude/skills/x-api/SKILL.md",
+    "dup_slug": "x-api",
+    "sha256": "1316fb056cc7671fcba367eee5b375ba80b678e1601ffedb15b1c946d06ae8cb"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/golang-patterns/SKILL.md",
+    "canonical_slug": "golang-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/golang-patterns/SKILL.md",
+    "dup_slug": "golang-patterns",
+    "sha256": "4733a52f63d51d46a4db4b6caa572711137b7f6a3441c01af4bf6c335b18f505"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/golang-patterns/SKILL.md",
+    "canonical_slug": "golang-patterns",
+    "dup_path": "/root/.claude/skills/golang-patterns/SKILL.md",
+    "dup_slug": "golang-patterns",
+    "sha256": "4733a52f63d51d46a4db4b6caa572711137b7f6a3441c01af4bf6c335b18f505"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/parallel-execution-optimizer/SKILL.md",
+    "canonical_slug": "parallel-execution-optimizer",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/parallel-execution-optimizer/SKILL.md",
+    "dup_slug": "parallel-execution-optimizer",
+    "sha256": "edb842946b5201e6c544df9aee3c30535e25196dc8d62b210e5eda286e293da0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/parallel-execution-optimizer/SKILL.md",
+    "canonical_slug": "parallel-execution-optimizer",
+    "dup_path": "/root/.claude/skills/parallel-execution-optimizer/SKILL.md",
+    "dup_slug": "parallel-execution-optimizer",
+    "sha256": "edb842946b5201e6c544df9aee3c30535e25196dc8d62b210e5eda286e293da0"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/fal-ai-media/SKILL.md",
+    "canonical_slug": "fal-ai-media",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/fal-ai-media/SKILL.md",
+    "dup_slug": "fal-ai-media",
+    "sha256": "84df7b48ef1dd67a6dff5bb7e00059ee12e7f3b6b02c25e143ecd7c984342143"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/fal-ai-media/SKILL.md",
+    "canonical_slug": "fal-ai-media",
+    "dup_path": "/root/.claude/skills/fal-ai-media/SKILL.md",
+    "dup_slug": "fal-ai-media",
+    "sha256": "84df7b48ef1dd67a6dff5bb7e00059ee12e7f3b6b02c25e143ecd7c984342143"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/security-review/SKILL.md",
+    "canonical_slug": "security-review",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/security-review/SKILL.md",
+    "dup_slug": "security-review",
+    "sha256": "4fa53039763be74020c422e73e79f9e0f485259676dbabb606be3def3c6ebb9b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/security-review/SKILL.md",
+    "canonical_slug": "security-review",
+    "dup_path": "/root/.claude/skills/security-review/SKILL.md",
+    "dup_slug": "security-review",
+    "sha256": "4fa53039763be74020c422e73e79f9e0f485259676dbabb606be3def3c6ebb9b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/api-design/SKILL.md",
+    "canonical_slug": "api-design",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/api-design/SKILL.md",
+    "dup_slug": "api-design",
+    "sha256": "ad7230f931b6d81a22e13c3bd41d97529fd15be8de2d91de19868a58f1b300b2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/api-design/SKILL.md",
+    "canonical_slug": "api-design",
+    "dup_path": "/root/.claude/skills/api-design/SKILL.md",
+    "dup_slug": "api-design",
+    "sha256": "ad7230f931b6d81a22e13c3bd41d97529fd15be8de2d91de19868a58f1b300b2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-advanced/SKILL.md",
+    "canonical_slug": "motion-advanced",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/motion-advanced/SKILL.md",
+    "dup_slug": "motion-advanced",
+    "sha256": "0a113074ee06ea13b581011acfe93b6950f9129bb999042cb8f19187acda97ca"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-advanced/SKILL.md",
+    "canonical_slug": "motion-advanced",
+    "dup_path": "/root/.claude/skills/motion-advanced/SKILL.md",
+    "dup_slug": "motion-advanced",
+    "sha256": "0a113074ee06ea13b581011acfe93b6950f9129bb999042cb8f19187acda97ca"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ralphinho-rfc-pipeline/SKILL.md",
+    "canonical_slug": "ralphinho-rfc-pipeline",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ralphinho-rfc-pipeline/SKILL.md",
+    "dup_slug": "ralphinho-rfc-pipeline",
+    "sha256": "54aa0108c87f1352f5c780e57ff21f84dcad82c3385f6441d66e06691de7fd18"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ralphinho-rfc-pipeline/SKILL.md",
+    "canonical_slug": "ralphinho-rfc-pipeline",
+    "dup_path": "/root/.claude/skills/ralphinho-rfc-pipeline/SKILL.md",
+    "dup_slug": "ralphinho-rfc-pipeline",
+    "sha256": "54aa0108c87f1352f5c780e57ff21f84dcad82c3385f6441d66e06691de7fd18"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-tdd/SKILL.md",
+    "canonical_slug": "springboot-tdd",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/springboot-tdd/SKILL.md",
+    "dup_slug": "springboot-tdd",
+    "sha256": "e4bd145484d93fb569eb0e1a09ffeb5cca68533d63c83805146b111c48bba172"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-tdd/SKILL.md",
+    "canonical_slug": "springboot-tdd",
+    "dup_path": "/root/.claude/skills/springboot-tdd/SKILL.md",
+    "dup_slug": "springboot-tdd",
+    "sha256": "e4bd145484d93fb569eb0e1a09ffeb5cca68533d63c83805146b111c48bba172"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/redis-patterns/SKILL.md",
+    "canonical_slug": "redis-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/redis-patterns/SKILL.md",
+    "dup_slug": "redis-patterns",
+    "sha256": "7b47078087d20cb7b505eca70a1032def6c466d921c58f9a9d887b684ad35f88"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/redis-patterns/SKILL.md",
+    "canonical_slug": "redis-patterns",
+    "dup_path": "/root/.claude/skills/redis-patterns/SKILL.md",
+    "dup_slug": "redis-patterns",
+    "sha256": "7b47078087d20cb7b505eca70a1032def6c466d921c58f9a9d887b684ad35f88"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nanoclaw-repl/SKILL.md",
+    "canonical_slug": "nanoclaw-repl",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/nanoclaw-repl/SKILL.md",
+    "dup_slug": "nanoclaw-repl",
+    "sha256": "b8ed7ce2874dd29c83dc4ed4047e7f6a4c79aa84e85630ff2cbbce0871a93985"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nanoclaw-repl/SKILL.md",
+    "canonical_slug": "nanoclaw-repl",
+    "dup_path": "/root/.claude/skills/nanoclaw-repl/SKILL.md",
+    "dup_slug": "nanoclaw-repl",
+    "sha256": "b8ed7ce2874dd29c83dc4ed4047e7f6a4c79aa84e85630ff2cbbce0871a93985"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-plugin-discovery/SKILL.md",
+    "canonical_slug": "laravel-plugin-discovery",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/laravel-plugin-discovery/SKILL.md",
+    "dup_slug": "laravel-plugin-discovery",
+    "sha256": "6cf2b48ae39f26df7f8d17cf6480635b5203f6942a756a290efa27cf339169d3"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/laravel-plugin-discovery/SKILL.md",
+    "canonical_slug": "laravel-plugin-discovery",
+    "dup_path": "/root/.claude/skills/laravel-plugin-discovery/SKILL.md",
+    "dup_slug": "laravel-plugin-discovery",
+    "sha256": "6cf2b48ae39f26df7f8d17cf6480635b5203f6942a756a290efa27cf339169d3"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cisco-ios-patterns/SKILL.md",
+    "canonical_slug": "cisco-ios-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/cisco-ios-patterns/SKILL.md",
+    "dup_slug": "cisco-ios-patterns",
+    "sha256": "d75e92ae14795f605a86b75c1623695931bb4f89b603195adfd9d2b34278e087"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cisco-ios-patterns/SKILL.md",
+    "canonical_slug": "cisco-ios-patterns",
+    "dup_path": "/root/.claude/skills/cisco-ios-patterns/SKILL.md",
+    "dup_slug": "cisco-ios-patterns",
+    "sha256": "d75e92ae14795f605a86b75c1623695931bb4f89b603195adfd9d2b34278e087"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/code-tour/SKILL.md",
+    "canonical_slug": "code-tour",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/code-tour/SKILL.md",
+    "dup_slug": "code-tour",
+    "sha256": "b115de452cfd3463902be87c272cc265703a623bc55d3a57d1428996c3145739"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/code-tour/SKILL.md",
+    "canonical_slug": "code-tour",
+    "dup_path": "/root/.claude/skills/code-tour/SKILL.md",
+    "dup_slug": "code-tour",
+    "sha256": "b115de452cfd3463902be87c272cc265703a623bc55d3a57d1428996c3145739"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prompt-optimizer/SKILL.md",
+    "canonical_slug": "prompt-optimizer",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/prompt-optimizer/SKILL.md",
+    "dup_slug": "prompt-optimizer",
+    "sha256": "464830d3c067d212d478874e6a2a85966c77744ccceef565a7c451dd6b6a01cf"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prompt-optimizer/SKILL.md",
+    "canonical_slug": "prompt-optimizer",
+    "dup_path": "/root/.claude/skills/prompt-optimizer/SKILL.md",
+    "dup_slug": "prompt-optimizer",
+    "sha256": "464830d3c067d212d478874e6a2a85966c77744ccceef565a7c451dd6b6a01cf"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/brand-discovery/SKILL.md",
+    "canonical_slug": "brand-discovery",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/brand-discovery/SKILL.md",
+    "dup_slug": "brand-discovery",
+    "sha256": "0c6ef1b72b0fe635d1681abf3857ec34214fd6580fad7708a96a8f4abc096ef5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/brand-discovery/SKILL.md",
+    "canonical_slug": "brand-discovery",
+    "dup_path": "/root/.claude/skills/brand-discovery/SKILL.md",
+    "dup_slug": "brand-discovery",
+    "sha256": "0c6ef1b72b0fe635d1681abf3857ec34214fd6580fad7708a96a8f4abc096ef5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/brand-discovery/SKILL.md",
+    "canonical_slug": "brand-discovery",
+    "dup_path": "/opt/jarvis-app-1/.agents/skills/brand-discovery/SKILL.md",
+    "dup_slug": "brand-discovery",
+    "sha256": "0c6ef1b72b0fe635d1681abf3857ec34214fd6580fad7708a96a8f4abc096ef5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swift-concurrency-6-2/SKILL.md",
+    "canonical_slug": "swift-concurrency-6-2",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/swift-concurrency-6-2/SKILL.md",
+    "dup_slug": "swift-concurrency-6-2",
+    "sha256": "f12ca9feeed25834fc06f59a70c679629962a4653c8354ecd833b68403da652c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swift-concurrency-6-2/SKILL.md",
+    "canonical_slug": "swift-concurrency-6-2",
+    "dup_path": "/root/.claude/skills/swift-concurrency-6-2/SKILL.md",
+    "dup_slug": "swift-concurrency-6-2",
+    "sha256": "f12ca9feeed25834fc06f59a70c679629962a4653c8354ecd833b68403da652c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swiftui-patterns/SKILL.md",
+    "canonical_slug": "swiftui-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/swiftui-patterns/SKILL.md",
+    "dup_slug": "swiftui-patterns",
+    "sha256": "c27f90145101dd77d64e9f9b70297c4167af26abb8a924f2a91326289bc3ec2c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/swiftui-patterns/SKILL.md",
+    "canonical_slug": "swiftui-patterns",
+    "dup_path": "/root/.claude/skills/swiftui-patterns/SKILL.md",
+    "dup_slug": "swiftui-patterns",
+    "sha256": "c27f90145101dd77d64e9f9b70297c4167af26abb8a924f2a91326289bc3ec2c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/team-builder/SKILL.md",
+    "canonical_slug": "team-builder",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/team-builder/SKILL.md",
+    "dup_slug": "team-builder",
+    "sha256": "00961fe2499b454af5fdcc44916c62b8824a550aceeae2aea039b2790ecd69e6"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/team-builder/SKILL.md",
+    "canonical_slug": "team-builder",
+    "dup_path": "/root/.claude/skills/team-builder/SKILL.md",
+    "dup_slug": "team-builder",
+    "sha256": "00961fe2499b454af5fdcc44916c62b8824a550aceeae2aea039b2790ecd69e6"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/search-first/SKILL.md",
+    "canonical_slug": "search-first",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/search-first/SKILL.md",
+    "dup_slug": "search-first",
+    "sha256": "d66d744228b9cf860acf35f8a90cbbe8195e61367860da9d3632f9fc65706733"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/search-first/SKILL.md",
+    "canonical_slug": "search-first",
+    "dup_path": "/root/.claude/skills/search-first/SKILL.md",
+    "dup_slug": "search-first",
+    "sha256": "d66d744228b9cf860acf35f8a90cbbe8195e61367860da9d3632f9fc65706733"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-verification/SKILL.md",
+    "canonical_slug": "django-verification",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/django-verification/SKILL.md",
+    "dup_slug": "django-verification",
+    "sha256": "cb1b6c5938c8c41dffb1f7bb752e307df6ced2577af2fc40786bde4c53799cea"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-verification/SKILL.md",
+    "canonical_slug": "django-verification",
+    "dup_path": "/root/.claude/skills/django-verification/SKILL.md",
+    "dup_slug": "django-verification",
+    "sha256": "cb1b6c5938c8c41dffb1f7bb752e307df6ced2577af2fc40786bde4c53799cea"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-harness-construction/SKILL.md",
+    "canonical_slug": "agent-harness-construction",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-harness-construction/SKILL.md",
+    "dup_slug": "agent-harness-construction",
+    "sha256": "139f8fa249c74edebf117f03a258b23a228e9401fafc124a98059ebacec6deda"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-harness-construction/SKILL.md",
+    "canonical_slug": "agent-harness-construction",
+    "dup_path": "/root/.claude/skills/agent-harness-construction/SKILL.md",
+    "dup_slug": "agent-harness-construction",
+    "sha256": "139f8fa249c74edebf117f03a258b23a228e9401fafc124a98059ebacec6deda"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/vue-patterns/SKILL.md",
+    "canonical_slug": "vue-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/vue-patterns/SKILL.md",
+    "dup_slug": "vue-patterns",
+    "sha256": "1513dffa6a574e01e5acf489220a991b3d94a186d7f79982be8c3fb8f3db92ab"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/vue-patterns/SKILL.md",
+    "canonical_slug": "vue-patterns",
+    "dup_path": "/root/.claude/skills/vue-patterns/SKILL.md",
+    "dup_slug": "vue-patterns",
+    "sha256": "1513dffa6a574e01e5acf489220a991b3d94a186d7f79982be8c3fb8f3db92ab"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-db-uspto-database/SKILL.md",
+    "canonical_slug": "uspto-database",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/scientific-db-uspto-database/SKILL.md",
+    "dup_slug": "uspto-database",
+    "sha256": "39d07ed2b7a8390dbaf994d39c02a327ce9d3919f9124bca78adfe41726c71ed"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-db-uspto-database/SKILL.md",
+    "canonical_slug": "uspto-database",
+    "dup_path": "/root/.claude/skills/scientific-db-uspto-database/SKILL.md",
+    "dup_slug": "uspto-database",
+    "sha256": "39d07ed2b7a8390dbaf994d39c02a327ce9d3919f9124bca78adfe41726c71ed"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/research-ops/SKILL.md",
+    "canonical_slug": "research-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/research-ops/SKILL.md",
+    "dup_slug": "research-ops",
+    "sha256": "114d0e5480ce3ad263316c639ce0c401396e1d9fbec3cf15b3c962ae16f376db"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/research-ops/SKILL.md",
+    "canonical_slug": "research-ops",
+    "dup_path": "/root/.claude/skills/research-ops/SKILL.md",
+    "dup_slug": "research-ops",
+    "sha256": "114d0e5480ce3ad263316c639ce0c401396e1d9fbec3cf15b3c962ae16f376db"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/enterprise-agent-ops/SKILL.md",
+    "canonical_slug": "enterprise-agent-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/enterprise-agent-ops/SKILL.md",
+    "dup_slug": "enterprise-agent-ops",
+    "sha256": "4d688b4c166c642ef447ce263199416cd1ebcea94e71f46bb1d0f84f2a25c48a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/enterprise-agent-ops/SKILL.md",
+    "canonical_slug": "enterprise-agent-ops",
+    "dup_path": "/root/.claude/skills/enterprise-agent-ops/SKILL.md",
+    "dup_slug": "enterprise-agent-ops",
+    "sha256": "4d688b4c166c642ef447ce263199416cd1ebcea94e71f46bb1d0f84f2a25c48a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-exposed-patterns/SKILL.md",
+    "canonical_slug": "kotlin-exposed-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/kotlin-exposed-patterns/SKILL.md",
+    "dup_slug": "kotlin-exposed-patterns",
+    "sha256": "c33bf21d5cd1a979c116140a1778b2ad8807596f2513cf7b0d0de5818b5f1d49"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-exposed-patterns/SKILL.md",
+    "canonical_slug": "kotlin-exposed-patterns",
+    "dup_path": "/root/.claude/skills/kotlin-exposed-patterns/SKILL.md",
+    "dup_slug": "kotlin-exposed-patterns",
+    "sha256": "c33bf21d5cd1a979c116140a1778b2ad8807596f2513cf7b0d0de5818b5f1d49"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/autonomous-agent-harness/SKILL.md",
+    "canonical_slug": "autonomous-agent-harness",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/autonomous-agent-harness/SKILL.md",
+    "dup_slug": "autonomous-agent-harness",
+    "sha256": "4de9a47cdeb0ad2c3838878f13c676db4fbe4a68b4cdda54a6851b28e6facdaa"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/autonomous-agent-harness/SKILL.md",
+    "canonical_slug": "autonomous-agent-harness",
+    "dup_path": "/root/.claude/skills/autonomous-agent-harness/SKILL.md",
+    "dup_slug": "autonomous-agent-harness",
+    "sha256": "4de9a47cdeb0ad2c3838878f13c676db4fbe4a68b4cdda54a6851b28e6facdaa"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/perl-security/SKILL.md",
+    "canonical_slug": "perl-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/perl-security/SKILL.md",
+    "dup_slug": "perl-security",
+    "sha256": "94f7c7eab50125d8af5e148bc3776dfc904b4baa95f32218d2293296e923ba5c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/perl-security/SKILL.md",
+    "canonical_slug": "perl-security",
+    "dup_path": "/root/.claude/skills/perl-security/SKILL.md",
+    "dup_slug": "perl-security",
+    "sha256": "94f7c7eab50125d8af5e148bc3776dfc904b4baa95f32218d2293296e923ba5c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-architecture-audit/SKILL.md",
+    "canonical_slug": "agent-architecture-audit",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-architecture-audit/SKILL.md",
+    "dup_slug": "agent-architecture-audit",
+    "sha256": "9b75d0e17edf80a55ad0a723aeb451ef715ea51d56ded92b0f05d43ee4bf7b1b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-architecture-audit/SKILL.md",
+    "canonical_slug": "agent-architecture-audit",
+    "dup_path": "/root/.claude/skills/agent-architecture-audit/SKILL.md",
+    "dup_slug": "agent-architecture-audit",
+    "sha256": "9b75d0e17edf80a55ad0a723aeb451ef715ea51d56ded92b0f05d43ee4bf7b1b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/make-interfaces-feel-better/SKILL.md",
+    "canonical_slug": "make-interfaces-feel-better",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/make-interfaces-feel-better/SKILL.md",
+    "dup_slug": "make-interfaces-feel-better",
+    "sha256": "aff91aef917cba9c65681ae77197cee93ce9b697ee8916ea684ef8537c99fb52"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/make-interfaces-feel-better/SKILL.md",
+    "canonical_slug": "make-interfaces-feel-better",
+    "dup_path": "/root/.claude/skills/make-interfaces-feel-better/SKILL.md",
+    "dup_slug": "make-interfaces-feel-better",
+    "sha256": "aff91aef917cba9c65681ae77197cee93ce9b697ee8916ea684ef8537c99fb52"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/autonomous-loops/SKILL.md",
+    "canonical_slug": "autonomous-loops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/autonomous-loops/SKILL.md",
+    "dup_slug": "autonomous-loops",
+    "sha256": "3cbe14cdf3850e2de80269f91d3a160b2419440ec8052f3a4fee8ead961eee2e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/autonomous-loops/SKILL.md",
+    "canonical_slug": "autonomous-loops",
+    "dup_path": "/root/.claude/skills/autonomous-loops/SKILL.md",
+    "dup_slug": "autonomous-loops",
+    "sha256": "3cbe14cdf3850e2de80269f91d3a160b2419440ec8052f3a4fee8ead961eee2e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prediction-market-risk-review/SKILL.md",
+    "canonical_slug": "prediction-market-risk-review",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/prediction-market-risk-review/SKILL.md",
+    "dup_slug": "prediction-market-risk-review",
+    "sha256": "19195e218716ed298fd8de9743e78462d17d95233b14e052c3bd1d1d7df31f91"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prediction-market-risk-review/SKILL.md",
+    "canonical_slug": "prediction-market-risk-review",
+    "dup_path": "/root/.claude/skills/prediction-market-risk-review/SKILL.md",
+    "dup_slug": "prediction-market-risk-review",
+    "sha256": "19195e218716ed298fd8de9743e78462d17d95233b14e052c3bd1d1d7df31f91"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/lead-intelligence/SKILL.md",
+    "canonical_slug": "lead-intelligence",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/lead-intelligence/SKILL.md",
+    "dup_slug": "lead-intelligence",
+    "sha256": "878fdcca964382f9ae8058310d08a84617c13d6154c626253ee6f397935a7f5d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/lead-intelligence/SKILL.md",
+    "canonical_slug": "lead-intelligence",
+    "dup_path": "/root/.claude/skills/lead-intelligence/SKILL.md",
+    "dup_slug": "lead-intelligence",
+    "sha256": "878fdcca964382f9ae8058310d08a84617c13d6154c626253ee6f397935a7f5d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/rust-testing/SKILL.md",
+    "canonical_slug": "rust-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/rust-testing/SKILL.md",
+    "dup_slug": "rust-testing",
+    "sha256": "643221493b5cb370eaf290ab6ac215656a9b70917691e92a972335a015286621"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/rust-testing/SKILL.md",
+    "canonical_slug": "rust-testing",
+    "dup_path": "/root/.claude/skills/rust-testing/SKILL.md",
+    "dup_slug": "rust-testing",
+    "sha256": "643221493b5cb370eaf290ab6ac215656a9b70917691e92a972335a015286621"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/context-budget/SKILL.md",
+    "canonical_slug": "context-budget",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/context-budget/SKILL.md",
+    "dup_slug": "context-budget",
+    "sha256": "755adb765d26f1e06376b12101b2c0c0dd4671a1d66394a66716500d4a92f2c5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/context-budget/SKILL.md",
+    "canonical_slug": "context-budget",
+    "dup_path": "/root/.claude/skills/context-budget/SKILL.md",
+    "dup_slug": "context-budget",
+    "sha256": "755adb765d26f1e06376b12101b2c0c0dd4671a1d66394a66716500d4a92f2c5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/python-testing/SKILL.md",
+    "canonical_slug": "python-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/python-testing/SKILL.md",
+    "dup_slug": "python-testing",
+    "sha256": "76549eacc2215542b89745383fc47bebcbacd89e51352cc1b8b1b489b728db40"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/python-testing/SKILL.md",
+    "canonical_slug": "python-testing",
+    "dup_path": "/root/.claude/skills/python-testing/SKILL.md",
+    "dup_slug": "python-testing",
+    "sha256": "76549eacc2215542b89745383fc47bebcbacd89e51352cc1b8b1b489b728db40"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/tdd-workflow/SKILL.md",
+    "canonical_slug": "tdd-workflow",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/tdd-workflow/SKILL.md",
+    "dup_slug": "tdd-workflow",
+    "sha256": "9f6bdf7f468a08e285e05b78a304420d90edfe4d79258bda8ee854d56bbedcc2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/tdd-workflow/SKILL.md",
+    "canonical_slug": "tdd-workflow",
+    "dup_path": "/root/.claude/skills/tdd-workflow/SKILL.md",
+    "dup_slug": "tdd-workflow",
+    "sha256": "9f6bdf7f468a08e285e05b78a304420d90edfe4d79258bda8ee854d56bbedcc2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/marketing-campaign/SKILL.md",
+    "canonical_slug": "marketing-campaign",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/marketing-campaign/SKILL.md",
+    "dup_slug": "marketing-campaign",
+    "sha256": "b98525afe54fcc69d78f61ad2ec5ce9c2533b7f7de1182b7aa9cef5ed7e0fe56"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/marketing-campaign/SKILL.md",
+    "canonical_slug": "marketing-campaign",
+    "dup_path": "/root/.claude/skills/marketing-campaign/SKILL.md",
+    "dup_slug": "marketing-campaign",
+    "sha256": "b98525afe54fcc69d78f61ad2ec5ce9c2533b7f7de1182b7aa9cef5ed7e0fe56"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-db-pubmed-database/SKILL.md",
+    "canonical_slug": "pubmed-database",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/scientific-db-pubmed-database/SKILL.md",
+    "dup_slug": "pubmed-database",
+    "sha256": "9ded7ae522c8893da3dce383022d80beb9745d1a311d948034a75d4568ebd0d5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-db-pubmed-database/SKILL.md",
+    "canonical_slug": "pubmed-database",
+    "dup_path": "/root/.claude/skills/scientific-db-pubmed-database/SKILL.md",
+    "dup_slug": "pubmed-database",
+    "sha256": "9ded7ae522c8893da3dce383022d80beb9745d1a311d948034a75d4568ebd0d5"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nextjs-turbopack/SKILL.md",
+    "canonical_slug": "nextjs-turbopack",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/nextjs-turbopack/SKILL.md",
+    "dup_slug": "nextjs-turbopack",
+    "sha256": "44b68f7c74b237742bee4f39660f8a9160f755004cab0658594fdf494a42e681"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nextjs-turbopack/SKILL.md",
+    "canonical_slug": "nextjs-turbopack",
+    "dup_path": "/root/.claude/skills/nextjs-turbopack/SKILL.md",
+    "dup_slug": "nextjs-turbopack",
+    "sha256": "44b68f7c74b237742bee4f39660f8a9160f755004cab0658594fdf494a42e681"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prediction-market-oracle-research/SKILL.md",
+    "canonical_slug": "prediction-market-oracle-research",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/prediction-market-oracle-research/SKILL.md",
+    "dup_slug": "prediction-market-oracle-research",
+    "sha256": "86d9ceb6abb8dd5c219017e8593811e67be061cc436956c8166faf576cd40ad1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/prediction-market-oracle-research/SKILL.md",
+    "canonical_slug": "prediction-market-oracle-research",
+    "dup_path": "/root/.claude/skills/prediction-market-oracle-research/SKILL.md",
+    "dup_slug": "prediction-market-oracle-research",
+    "sha256": "86d9ceb6abb8dd5c219017e8593811e67be061cc436956c8166faf576cd40ad1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agentic-engineering/SKILL.md",
+    "canonical_slug": "agentic-engineering",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agentic-engineering/SKILL.md",
+    "dup_slug": "agentic-engineering",
+    "sha256": "6acdfaa7486726805cf4d9af4ff2adb6e0dc1fc75cb82cfa906e60d776dad3ee"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agentic-engineering/SKILL.md",
+    "canonical_slug": "agentic-engineering",
+    "dup_path": "/root/.claude/skills/agentic-engineering/SKILL.md",
+    "dup_slug": "agentic-engineering",
+    "sha256": "6acdfaa7486726805cf4d9af4ff2adb6e0dc1fc75cb82cfa906e60d776dad3ee"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dmux-workflows/SKILL.md",
+    "canonical_slug": "dmux-workflows",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/dmux-workflows/SKILL.md",
+    "dup_slug": "dmux-workflows",
+    "sha256": "6e4028d61a556d58fa2cdc6162d6837c082974a7161b2d703967bec472308c56"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/dmux-workflows/SKILL.md",
+    "canonical_slug": "dmux-workflows",
+    "dup_path": "/root/.claude/skills/dmux-workflows/SKILL.md",
+    "dup_slug": "dmux-workflows",
+    "sha256": "6e4028d61a556d58fa2cdc6162d6837c082974a7161b2d703967bec472308c56"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/backend-patterns/SKILL.md",
+    "canonical_slug": "backend-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/backend-patterns/SKILL.md",
+    "dup_slug": "backend-patterns",
+    "sha256": "3a0abd916f3e9a65d0c811a4591bd9c23f6ebf7c4aca47c8d36c294bea2d687a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/backend-patterns/SKILL.md",
+    "canonical_slug": "backend-patterns",
+    "dup_path": "/root/.claude/skills/backend-patterns/SKILL.md",
+    "dup_slug": "backend-patterns",
+    "sha256": "3a0abd916f3e9a65d0c811a4591bd9c23f6ebf7c4aca47c8d36c294bea2d687a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/jira-integration/SKILL.md",
+    "canonical_slug": "jira-integration",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/jira-integration/SKILL.md",
+    "dup_slug": "jira-integration",
+    "sha256": "4cabafb56cf071653740cfe1b1a416dd859a736623dd92cc674a3bbb83238b41"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/jira-integration/SKILL.md",
+    "canonical_slug": "jira-integration",
+    "dup_path": "/root/.claude/skills/jira-integration/SKILL.md",
+    "dup_slug": "jira-integration",
+    "sha256": "4cabafb56cf071653740cfe1b1a416dd859a736623dd92cc674a3bbb83238b41"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/connections-optimizer/SKILL.md",
+    "canonical_slug": "connections-optimizer",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/connections-optimizer/SKILL.md",
+    "dup_slug": "connections-optimizer",
+    "sha256": "499c7e7e361ec17afdad57b725b4d105efb21f707b5724115f71152fe1755c67"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/connections-optimizer/SKILL.md",
+    "canonical_slug": "connections-optimizer",
+    "dup_path": "/root/.claude/skills/connections-optimizer/SKILL.md",
+    "dup_slug": "connections-optimizer",
+    "sha256": "499c7e7e361ec17afdad57b725b4d105efb21f707b5724115f71152fe1755c67"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-introspection-debugging/SKILL.md",
+    "canonical_slug": "agent-introspection-debugging",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agent-introspection-debugging/SKILL.md",
+    "dup_slug": "agent-introspection-debugging",
+    "sha256": "b69b9dddc469279807f363cd61432edad0901db1b0393b0c41257f18a6b667d8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agent-introspection-debugging/SKILL.md",
+    "canonical_slug": "agent-introspection-debugging",
+    "dup_path": "/root/.claude/skills/agent-introspection-debugging/SKILL.md",
+    "dup_slug": "agent-introspection-debugging",
+    "sha256": "b69b9dddc469279807f363cd61432edad0901db1b0393b0c41257f18a6b667d8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/golang-testing/SKILL.md",
+    "canonical_slug": "golang-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/golang-testing/SKILL.md",
+    "dup_slug": "golang-testing",
+    "sha256": "6056559e12e933a3a2aecb6754e8d938fcc840a46ebeaaae47218c7e6f0da75b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/golang-testing/SKILL.md",
+    "canonical_slug": "golang-testing",
+    "dup_path": "/root/.claude/skills/golang-testing/SKILL.md",
+    "dup_slug": "golang-testing",
+    "sha256": "6056559e12e933a3a2aecb6754e8d938fcc840a46ebeaaae47218c7e6f0da75b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/manim-video/SKILL.md",
+    "canonical_slug": "manim-video",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/manim-video/SKILL.md",
+    "dup_slug": "manim-video",
+    "sha256": "bb890b019664a995ca2bf6c08add444a85099caf4c0085de50e9ad6f62d62d5f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/manim-video/SKILL.md",
+    "canonical_slug": "manim-video",
+    "dup_path": "/root/.claude/skills/manim-video/SKILL.md",
+    "dup_slug": "manim-video",
+    "sha256": "bb890b019664a995ca2bf6c08add444a85099caf4c0085de50e9ad6f62d62d5f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nuxt4-patterns/SKILL.md",
+    "canonical_slug": "nuxt4-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/nuxt4-patterns/SKILL.md",
+    "dup_slug": "nuxt4-patterns",
+    "sha256": "ab8eacfbbae693b40878118316cdd5534b99ad09535a85af367319d7cdee6101"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/nuxt4-patterns/SKILL.md",
+    "canonical_slug": "nuxt4-patterns",
+    "dup_path": "/root/.claude/skills/nuxt4-patterns/SKILL.md",
+    "dup_slug": "nuxt4-patterns",
+    "sha256": "ab8eacfbbae693b40878118316cdd5534b99ad09535a85af367319d7cdee6101"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/netmiko-ssh-automation/SKILL.md",
+    "canonical_slug": "netmiko-ssh-automation",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/netmiko-ssh-automation/SKILL.md",
+    "dup_slug": "netmiko-ssh-automation",
+    "sha256": "5a354a6c66f377883abcf1e432a67983008a7097824a0a3e0accf01bd09f2d3c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/netmiko-ssh-automation/SKILL.md",
+    "canonical_slug": "netmiko-ssh-automation",
+    "dup_path": "/root/.claude/skills/netmiko-ssh-automation/SKILL.md",
+    "dup_slug": "netmiko-ssh-automation",
+    "sha256": "5a354a6c66f377883abcf1e432a67983008a7097824a0a3e0accf01bd09f2d3c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/council/SKILL.md",
+    "canonical_slug": "council",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/council/SKILL.md",
+    "dup_slug": "council",
+    "sha256": "2104d002d301a061a16d21ea2e00292f80b66b20c9883a33525a7de404153502"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/council/SKILL.md",
+    "canonical_slug": "council",
+    "dup_path": "/root/.claude/skills/council/SKILL.md",
+    "dup_slug": "council",
+    "sha256": "2104d002d301a061a16d21ea2e00292f80b66b20c9883a33525a7de404153502"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-ui/SKILL.md",
+    "canonical_slug": "motion-ui",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/motion-ui/SKILL.md",
+    "dup_slug": "motion-ui",
+    "sha256": "0c43aa186d64c5e094de946927581683e986fee496b744bc29433bbad3d169d2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-ui/SKILL.md",
+    "canonical_slug": "motion-ui",
+    "dup_path": "/root/.claude/skills/motion-ui/SKILL.md",
+    "dup_slug": "motion-ui",
+    "sha256": "0c43aa186d64c5e094de946927581683e986fee496b744bc29433bbad3d169d2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agentic-os/SKILL.md",
+    "canonical_slug": "agentic-os",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/agentic-os/SKILL.md",
+    "dup_slug": "agentic-os",
+    "sha256": "c5f6c806ffedb21087ba337ecd578fff9b644f022624f2d436b1783eedc5b89b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/agentic-os/SKILL.md",
+    "canonical_slug": "agentic-os",
+    "dup_path": "/root/.claude/skills/agentic-os/SKILL.md",
+    "dup_slug": "agentic-os",
+    "sha256": "c5f6c806ffedb21087ba337ecd578fff9b644f022624f2d436b1783eedc5b89b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/coding-standards/SKILL.md",
+    "canonical_slug": "coding-standards",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/coding-standards/SKILL.md",
+    "dup_slug": "coding-standards",
+    "sha256": "7f336ca1d1507de298f5a0b1047afe1ba5cd4d1a518b3bcebec12f0316b20282"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/coding-standards/SKILL.md",
+    "canonical_slug": "coding-standards",
+    "dup_path": "/root/.claude/skills/coding-standards/SKILL.md",
+    "dup_slug": "coding-standards",
+    "sha256": "7f336ca1d1507de298f5a0b1047afe1ba5cd4d1a518b3bcebec12f0316b20282"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/social-publisher/SKILL.md",
+    "canonical_slug": "social-publisher",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/social-publisher/SKILL.md",
+    "dup_slug": "social-publisher",
+    "sha256": "7476e2b3cb225689c0759bc20fb73be19752dcf468afb51c32e611aa9ed2711d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/social-publisher/SKILL.md",
+    "canonical_slug": "social-publisher",
+    "dup_path": "/root/.claude/skills/social-publisher/SKILL.md",
+    "dup_slug": "social-publisher",
+    "sha256": "7476e2b3cb225689c0759bc20fb73be19752dcf468afb51c32e611aa9ed2711d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-change-feature/SKILL.md",
+    "canonical_slug": "orch-change-feature",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/orch-change-feature/SKILL.md",
+    "dup_slug": "orch-change-feature",
+    "sha256": "d35ee5dfdf5f64e60e8905124eccf73267bc59852e7d11ba5ca5acf7d765c6f8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/orch-change-feature/SKILL.md",
+    "canonical_slug": "orch-change-feature",
+    "dup_path": "/root/.claude/skills/orch-change-feature/SKILL.md",
+    "dup_slug": "orch-change-feature",
+    "sha256": "d35ee5dfdf5f64e60e8905124eccf73267bc59852e7d11ba5ca5acf7d765c6f8"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/react-performance/SKILL.md",
+    "canonical_slug": "react-performance",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/react-performance/SKILL.md",
+    "dup_slug": "react-performance",
+    "sha256": "ac76e8694d4f802a7bccc3c07a73ac68ace6d82a65ea10f10d8b7384dda61a8f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/react-performance/SKILL.md",
+    "canonical_slug": "react-performance",
+    "dup_path": "/root/.claude/skills/react-performance/SKILL.md",
+    "dup_slug": "react-performance",
+    "sha256": "ac76e8694d4f802a7bccc3c07a73ac68ace6d82a65ea10f10d8b7384dda61a8f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/continuous-agent-loop/SKILL.md",
+    "canonical_slug": "continuous-agent-loop",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/continuous-agent-loop/SKILL.md",
+    "dup_slug": "continuous-agent-loop",
+    "sha256": "204d907b5a36368539c3f460cfb674c9b847cd833d3210e029ecfb30406efc8d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/continuous-agent-loop/SKILL.md",
+    "canonical_slug": "continuous-agent-loop",
+    "dup_path": "/root/.claude/skills/continuous-agent-loop/SKILL.md",
+    "dup_slug": "continuous-agent-loop",
+    "sha256": "204d907b5a36368539c3f460cfb674c9b847cd833d3210e029ecfb30406efc8d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/e2e-testing/SKILL.md",
+    "canonical_slug": "e2e-testing",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/e2e-testing/SKILL.md",
+    "dup_slug": "e2e-testing",
+    "sha256": "de79b897a7b99b98e325ece0eccb78645b2a9cac88bb0ca0c97ee3f24530eb24"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/e2e-testing/SKILL.md",
+    "canonical_slug": "e2e-testing",
+    "dup_path": "/root/.claude/skills/e2e-testing/SKILL.md",
+    "dup_slug": "e2e-testing",
+    "sha256": "de79b897a7b99b98e325ece0eccb78645b2a9cac88bb0ca0c97ee3f24530eb24"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ecc-guide/SKILL.md",
+    "canonical_slug": "ecc-guide",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ecc-guide/SKILL.md",
+    "dup_slug": "ecc-guide",
+    "sha256": "b6e30828406e562ef65d323f1366629239313f076a7a53ba7e8dbaec0e96b203"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ecc-guide/SKILL.md",
+    "canonical_slug": "ecc-guide",
+    "dup_path": "/root/.claude/skills/ecc-guide/SKILL.md",
+    "dup_slug": "ecc-guide",
+    "sha256": "b6e30828406e562ef65d323f1366629239313f076a7a53ba7e8dbaec0e96b203"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-ktor-patterns/SKILL.md",
+    "canonical_slug": "kotlin-ktor-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/kotlin-ktor-patterns/SKILL.md",
+    "dup_slug": "kotlin-ktor-patterns",
+    "sha256": "feeaf135f17888c0af781461fb86d0d7b7969a03ad8fc4df6bdfd0c9264dcdac"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/kotlin-ktor-patterns/SKILL.md",
+    "canonical_slug": "kotlin-ktor-patterns",
+    "dup_path": "/root/.claude/skills/kotlin-ktor-patterns/SKILL.md",
+    "dup_slug": "kotlin-ktor-patterns",
+    "sha256": "feeaf135f17888c0af781461fb86d0d7b7969a03ad8fc4df6bdfd0c9264dcdac"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-tdd/SKILL.md",
+    "canonical_slug": "django-tdd",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/django-tdd/SKILL.md",
+    "dup_slug": "django-tdd",
+    "sha256": "28cc3578bb8136f9782ac03d000cdfd1d2fb86ea8b651b4210069aa988301b6b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-tdd/SKILL.md",
+    "canonical_slug": "django-tdd",
+    "dup_path": "/root/.claude/skills/django-tdd/SKILL.md",
+    "dup_slug": "django-tdd",
+    "sha256": "28cc3578bb8136f9782ac03d000cdfd1d2fb86ea8b651b4210069aa988301b6b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/clickhouse-io/SKILL.md",
+    "canonical_slug": "clickhouse-io",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/clickhouse-io/SKILL.md",
+    "dup_slug": "clickhouse-io",
+    "sha256": "e76691365760f873267fe328edb349a49ca656d80e82d79c91fcad29c3a6e022"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/clickhouse-io/SKILL.md",
+    "canonical_slug": "clickhouse-io",
+    "dup_path": "/root/.claude/skills/clickhouse-io/SKILL.md",
+    "dup_slug": "clickhouse-io",
+    "sha256": "e76691365760f873267fe328edb349a49ca656d80e82d79c91fcad29c3a6e022"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/documentation-lookup/SKILL.md",
+    "canonical_slug": "documentation-lookup",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/documentation-lookup/SKILL.md",
+    "dup_slug": "documentation-lookup",
+    "sha256": "81ad2b5b4acbe02259f4b6cbfd9111d81d5cfe51025051b6048959c45f6516c1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/documentation-lookup/SKILL.md",
+    "canonical_slug": "documentation-lookup",
+    "dup_path": "/root/.claude/skills/documentation-lookup/SKILL.md",
+    "dup_slug": "documentation-lookup",
+    "sha256": "81ad2b5b4acbe02259f4b6cbfd9111d81d5cfe51025051b6048959c45f6516c1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark/SKILL.md",
+    "canonical_slug": "benchmark",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/benchmark/SKILL.md",
+    "dup_slug": "benchmark",
+    "sha256": "39a375523e5965a1dfd60132db813180e5660e9f2a9b9432219df5ade46c7176"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark/SKILL.md",
+    "canonical_slug": "benchmark",
+    "dup_path": "/root/.claude/skills/benchmark/SKILL.md",
+    "dup_slug": "benchmark",
+    "sha256": "39a375523e5965a1dfd60132db813180e5660e9f2a9b9432219df5ade46c7176"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/token-budget-advisor/SKILL.md",
+    "canonical_slug": "token-budget-advisor",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/token-budget-advisor/SKILL.md",
+    "dup_slug": "token-budget-advisor",
+    "sha256": "d092defef257ce470bf364c55a2f2a51cdb37655779a66f1993cbd4295317d03"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/token-budget-advisor/SKILL.md",
+    "canonical_slug": "token-budget-advisor",
+    "dup_path": "/root/.claude/skills/token-budget-advisor/SKILL.md",
+    "dup_slug": "token-budget-advisor",
+    "sha256": "d092defef257ce470bf364c55a2f2a51cdb37655779a66f1993cbd4295317d03"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/content-engine/SKILL.md",
+    "canonical_slug": "content-engine",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/content-engine/SKILL.md",
+    "dup_slug": "content-engine",
+    "sha256": "a1ccc0ecfe30ae53db26a73159a80ecad8c63a6a96c461a297789d889bf9ad2c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/content-engine/SKILL.md",
+    "canonical_slug": "content-engine",
+    "dup_path": "/root/.claude/skills/content-engine/SKILL.md",
+    "dup_slug": "content-engine",
+    "sha256": "a1ccc0ecfe30ae53db26a73159a80ecad8c63a6a96c461a297789d889bf9ad2c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/windows-desktop-e2e/SKILL.md",
+    "canonical_slug": "windows-desktop-e2e",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/windows-desktop-e2e/SKILL.md",
+    "dup_slug": "windows-desktop-e2e",
+    "sha256": "5e4d77753b581b825361bb53e8adb4fcf611141425333084c5e2ba8c2a4fe5e4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/windows-desktop-e2e/SKILL.md",
+    "canonical_slug": "windows-desktop-e2e",
+    "dup_path": "/root/.claude/skills/windows-desktop-e2e/SKILL.md",
+    "dup_slug": "windows-desktop-e2e",
+    "sha256": "5e4d77753b581b825361bb53e8adb4fcf611141425333084c5e2ba8c2a4fe5e4"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/pytorch-patterns/SKILL.md",
+    "canonical_slug": "pytorch-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/pytorch-patterns/SKILL.md",
+    "dup_slug": "pytorch-patterns",
+    "sha256": "78ff85f10f9538e6956c2b74784c006179b750cf4e0344d3e4676b2fc60d99e3"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/pytorch-patterns/SKILL.md",
+    "canonical_slug": "pytorch-patterns",
+    "dup_path": "/root/.claude/skills/pytorch-patterns/SKILL.md",
+    "dup_slug": "pytorch-patterns",
+    "sha256": "78ff85f10f9538e6956c2b74784c006179b750cf4e0344d3e4676b2fc60d99e3"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-patterns/SKILL.md",
+    "canonical_slug": "motion-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/motion-patterns/SKILL.md",
+    "dup_slug": "motion-patterns",
+    "sha256": "2aa9a4b783e83871fe3ebbc677f9d09e2f3bf64f675f24980beed262d00369b7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/motion-patterns/SKILL.md",
+    "canonical_slug": "motion-patterns",
+    "dup_path": "/root/.claude/skills/motion-patterns/SKILL.md",
+    "dup_slug": "motion-patterns",
+    "sha256": "2aa9a4b783e83871fe3ebbc677f9d09e2f3bf64f675f24980beed262d00369b7"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/network-interface-health/SKILL.md",
+    "canonical_slug": "network-interface-health",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/network-interface-health/SKILL.md",
+    "dup_slug": "network-interface-health",
+    "sha256": "7811a643ffb81b2b6af0dd208e35b6feb21f3ff878fbd9eee3e116b0411d0975"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/network-interface-health/SKILL.md",
+    "canonical_slug": "network-interface-health",
+    "dup_path": "/root/.claude/skills/network-interface-health/SKILL.md",
+    "dup_slug": "network-interface-health",
+    "sha256": "7811a643ffb81b2b6af0dd208e35b6feb21f3ff878fbd9eee3e116b0411d0975"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-pihole-dns/SKILL.md",
+    "canonical_slug": "homelab-pihole-dns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/homelab-pihole-dns/SKILL.md",
+    "dup_slug": "homelab-pihole-dns",
+    "sha256": "132b838063475caac0eedca0ed0ab3b7b5f0e4394f94126da1711cde982d532a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/homelab-pihole-dns/SKILL.md",
+    "canonical_slug": "homelab-pihole-dns",
+    "dup_path": "/root/.claude/skills/homelab-pihole-dns/SKILL.md",
+    "dup_slug": "homelab-pihole-dns",
+    "sha256": "132b838063475caac0eedca0ed0ab3b7b5f0e4394f94126da1711cde982d532a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/regex-vs-llm-structured-text/SKILL.md",
+    "canonical_slug": "regex-vs-llm-structured-text",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/regex-vs-llm-structured-text/SKILL.md",
+    "dup_slug": "regex-vs-llm-structured-text",
+    "sha256": "35ba82a9b1b7253fd84b6873c4350b974528c744ffd825544f2a4f8ccbef6d44"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/regex-vs-llm-structured-text/SKILL.md",
+    "canonical_slug": "regex-vs-llm-structured-text",
+    "dup_path": "/root/.claude/skills/regex-vs-llm-structured-text/SKILL.md",
+    "dup_slug": "regex-vs-llm-structured-text",
+    "sha256": "35ba82a9b1b7253fd84b6873c4350b974528c744ffd825544f2a4f8ccbef6d44"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/finance-billing-ops/SKILL.md",
+    "canonical_slug": "finance-billing-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/finance-billing-ops/SKILL.md",
+    "dup_slug": "finance-billing-ops",
+    "sha256": "823a1b8f75495022227bb9af4537eb5c0b1c62793d68b74c6bd1af14eea79786"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/finance-billing-ops/SKILL.md",
+    "canonical_slug": "finance-billing-ops",
+    "dup_path": "/root/.claude/skills/finance-billing-ops/SKILL.md",
+    "dup_slug": "finance-billing-ops",
+    "sha256": "823a1b8f75495022227bb9af4537eb5c0b1c62793d68b74c6bd1af14eea79786"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/santa-method/SKILL.md",
+    "canonical_slug": "santa-method",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/santa-method/SKILL.md",
+    "dup_slug": "santa-method",
+    "sha256": "1dfb6ecf99268978cc5f8e168db08fc5a364b55ffa86d0fb6ce43bae7fc9015b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/santa-method/SKILL.md",
+    "canonical_slug": "santa-method",
+    "dup_path": "/root/.claude/skills/santa-method/SKILL.md",
+    "dup_slug": "santa-method",
+    "sha256": "1dfb6ecf99268978cc5f8e168db08fc5a364b55ffa86d0fb6ce43bae7fc9015b"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark-optimization-loop/SKILL.md",
+    "canonical_slug": "benchmark-optimization-loop",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/benchmark-optimization-loop/SKILL.md",
+    "dup_slug": "benchmark-optimization-loop",
+    "sha256": "33d1b47c19cdf5e9e890e5771701d78f75d2dff5aaf39951a1c2758e03136576"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/benchmark-optimization-loop/SKILL.md",
+    "canonical_slug": "benchmark-optimization-loop",
+    "dup_path": "/root/.claude/skills/benchmark-optimization-loop/SKILL.md",
+    "dup_slug": "benchmark-optimization-loop",
+    "sha256": "33d1b47c19cdf5e9e890e5771701d78f75d2dff5aaf39951a1c2758e03136576"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/llm-trading-agent-security/SKILL.md",
+    "canonical_slug": "llm-trading-agent-security",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/llm-trading-agent-security/SKILL.md",
+    "dup_slug": "llm-trading-agent-security",
+    "sha256": "7e78ba37dddd81be5148e0618844ad6305b59913eff5e8f879e53b4384bc0753"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/llm-trading-agent-security/SKILL.md",
+    "canonical_slug": "llm-trading-agent-security",
+    "dup_path": "/root/.claude/skills/llm-trading-agent-security/SKILL.md",
+    "dup_slug": "llm-trading-agent-security",
+    "sha256": "7e78ba37dddd81be5148e0618844ad6305b59913eff5e8f879e53b4384bc0753"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/customer-billing-ops/SKILL.md",
+    "canonical_slug": "customer-billing-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/customer-billing-ops/SKILL.md",
+    "dup_slug": "customer-billing-ops",
+    "sha256": "4214d79be7d1bcb62587cf6364e96ed3b70b875ec41871ac632e827ef96b370e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/customer-billing-ops/SKILL.md",
+    "canonical_slug": "customer-billing-ops",
+    "dup_path": "/root/.claude/skills/customer-billing-ops/SKILL.md",
+    "dup_slug": "customer-billing-ops",
+    "sha256": "4214d79be7d1bcb62587cf6364e96ed3b70b875ec41871ac632e827ef96b370e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ml-adoption-playbook/SKILL.md",
+    "canonical_slug": "ml-adoption-playbook",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ml-adoption-playbook/SKILL.md",
+    "dup_slug": "ml-adoption-playbook",
+    "sha256": "e9f47c82e710276fb395a08651e83f1191347bb84433aa536a768fed02abea06"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ml-adoption-playbook/SKILL.md",
+    "canonical_slug": "ml-adoption-playbook",
+    "dup_path": "/root/.claude/skills/ml-adoption-playbook/SKILL.md",
+    "dup_slug": "ml-adoption-playbook",
+    "sha256": "e9f47c82e710276fb395a08651e83f1191347bb84433aa536a768fed02abea06"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cost-aware-llm-pipeline/SKILL.md",
+    "canonical_slug": "cost-aware-llm-pipeline",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/cost-aware-llm-pipeline/SKILL.md",
+    "dup_slug": "cost-aware-llm-pipeline",
+    "sha256": "9da2da14f7868c34a71ec73c5c74105304f250f41cd6f40fcc42eeba8188af97"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/cost-aware-llm-pipeline/SKILL.md",
+    "canonical_slug": "cost-aware-llm-pipeline",
+    "dup_path": "/root/.claude/skills/cost-aware-llm-pipeline/SKILL.md",
+    "dup_slug": "cost-aware-llm-pipeline",
+    "sha256": "9da2da14f7868c34a71ec73c5c74105304f250f41cd6f40fcc42eeba8188af97"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/rust-patterns/SKILL.md",
+    "canonical_slug": "rust-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/rust-patterns/SKILL.md",
+    "dup_slug": "rust-patterns",
+    "sha256": "43612099e89f361a3f3e0114ffb8b5ff6fb3b2987edb84bc0fae2a275ffeea66"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/rust-patterns/SKILL.md",
+    "canonical_slug": "rust-patterns",
+    "dup_path": "/root/.claude/skills/rust-patterns/SKILL.md",
+    "dup_slug": "rust-patterns",
+    "sha256": "43612099e89f361a3f3e0114ffb8b5ff6fb3b2987edb84bc0fae2a275ffeea66"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/customs-trade-compliance/SKILL.md",
+    "canonical_slug": "customs-trade-compliance",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/customs-trade-compliance/SKILL.md",
+    "dup_slug": "customs-trade-compliance",
+    "sha256": "58f400b5544e8b00ed956e972c986a248e60cee6a399e909e5e9ddb51df21929"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/customs-trade-compliance/SKILL.md",
+    "canonical_slug": "customs-trade-compliance",
+    "dup_path": "/root/.claude/skills/customs-trade-compliance/SKILL.md",
+    "dup_slug": "customs-trade-compliance",
+    "sha256": "58f400b5544e8b00ed956e972c986a248e60cee6a399e909e5e9ddb51df21929"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/data-throughput-accelerator/SKILL.md",
+    "canonical_slug": "data-throughput-accelerator",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/data-throughput-accelerator/SKILL.md",
+    "dup_slug": "data-throughput-accelerator",
+    "sha256": "5bc1e41e8bd1f1f71bacfffa1f0d7157eaf7c707b92dc1e4dd1baa28ff5f00e2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/data-throughput-accelerator/SKILL.md",
+    "canonical_slug": "data-throughput-accelerator",
+    "dup_path": "/root/.claude/skills/data-throughput-accelerator/SKILL.md",
+    "dup_slug": "data-throughput-accelerator",
+    "sha256": "5bc1e41e8bd1f1f71bacfffa1f0d7157eaf7c707b92dc1e4dd1baa28ff5f00e2"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/config-gc/SKILL.md",
+    "canonical_slug": "config-gc",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/config-gc/SKILL.md",
+    "dup_slug": "config-gc",
+    "sha256": "e8ade5c8d48728db6c1137e4392308b6d56290a19d4f78d365122d7ab05276a1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/config-gc/SKILL.md",
+    "canonical_slug": "config-gc",
+    "dup_path": "/root/.claude/skills/config-gc/SKILL.md",
+    "dup_slug": "config-gc",
+    "sha256": "e8ade5c8d48728db6c1137e4392308b6d56290a19d4f78d365122d7ab05276a1"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ios-icon-gen/SKILL.md",
+    "canonical_slug": "ios-icon-gen",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ios-icon-gen/SKILL.md",
+    "dup_slug": "ios-icon-gen",
+    "sha256": "893627c44e6d209f9b2e02de2f4879188649d22ae9723cd5b9445de6df3d6482"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ios-icon-gen/SKILL.md",
+    "canonical_slug": "ios-icon-gen",
+    "dup_path": "/root/.claude/skills/ios-icon-gen/SKILL.md",
+    "dup_slug": "ios-icon-gen",
+    "sha256": "893627c44e6d209f9b2e02de2f4879188649d22ae9723cd5b9445de6df3d6482"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-patterns/SKILL.md",
+    "canonical_slug": "springboot-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/springboot-patterns/SKILL.md",
+    "dup_slug": "springboot-patterns",
+    "sha256": "d9fd662f99df39175d86d6c5435c469a9a87447885466bf4e8cc3906eccab771"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/springboot-patterns/SKILL.md",
+    "canonical_slug": "springboot-patterns",
+    "dup_path": "/root/.claude/skills/springboot-patterns/SKILL.md",
+    "dup_slug": "springboot-patterns",
+    "sha256": "d9fd662f99df39175d86d6c5435c469a9a87447885466bf4e8cc3906eccab771"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/email-ops/SKILL.md",
+    "canonical_slug": "email-ops",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/email-ops/SKILL.md",
+    "dup_slug": "email-ops",
+    "sha256": "627bc4a72c07b00ba7f5e3d78457a6d80e0817cb8a6507e8513abe46586586df"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/email-ops/SKILL.md",
+    "canonical_slug": "email-ops",
+    "dup_path": "/root/.claude/skills/email-ops/SKILL.md",
+    "dup_slug": "email-ops",
+    "sha256": "627bc4a72c07b00ba7f5e3d78457a6d80e0817cb8a6507e8513abe46586586df"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-pkg-gget/SKILL.md",
+    "canonical_slug": "gget",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/scientific-pkg-gget/SKILL.md",
+    "dup_slug": "gget",
+    "sha256": "8ec1e7e3ba70f3d4fbd02906c53e6c69c53da31689ef008b0746eea93856075d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/scientific-pkg-gget/SKILL.md",
+    "canonical_slug": "gget",
+    "dup_path": "/root/.claude/skills/scientific-pkg-gget/SKILL.md",
+    "dup_slug": "gget",
+    "sha256": "8ec1e7e3ba70f3d4fbd02906c53e6c69c53da31689ef008b0746eea93856075d"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/foundation-models-on-device/SKILL.md",
+    "canonical_slug": "foundation-models-on-device",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/foundation-models-on-device/SKILL.md",
+    "dup_slug": "foundation-models-on-device",
+    "sha256": "8efee7e392b39990e4ed58d85ac0783c1cbaac8e1cd87e7a4ef502f15987963e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/foundation-models-on-device/SKILL.md",
+    "canonical_slug": "foundation-models-on-device",
+    "dup_path": "/root/.claude/skills/foundation-models-on-device/SKILL.md",
+    "dup_slug": "foundation-models-on-device",
+    "sha256": "8efee7e392b39990e4ed58d85ac0783c1cbaac8e1cd87e7a4ef502f15987963e"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/design-system/SKILL.md",
+    "canonical_slug": "design-system",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/design-system/SKILL.md",
+    "dup_slug": "design-system",
+    "sha256": "c23c219b21e65bfc0990a65444a78bc29e53d338e34ee4b64006bb728eb3b13a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/design-system/SKILL.md",
+    "canonical_slug": "design-system",
+    "dup_path": "/root/.claude/skills/design-system/SKILL.md",
+    "dup_slug": "design-system",
+    "sha256": "c23c219b21e65bfc0990a65444a78bc29e53d338e34ee4b64006bb728eb3b13a"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ui-to-vue/SKILL.md",
+    "canonical_slug": "ui-to-vue",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/ui-to-vue/SKILL.md",
+    "dup_slug": "ui-to-vue",
+    "sha256": "cb6c17f7ae28a53b31fb2904180521ccdaa31ad0deafa96c6b4f5b2f4bfea480"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/ui-to-vue/SKILL.md",
+    "canonical_slug": "ui-to-vue",
+    "dup_path": "/root/.claude/skills/ui-to-vue/SKILL.md",
+    "dup_slug": "ui-to-vue",
+    "sha256": "cb6c17f7ae28a53b31fb2904180521ccdaa31ad0deafa96c6b4f5b2f4bfea480"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/deployment-patterns/SKILL.md",
+    "canonical_slug": "deployment-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/deployment-patterns/SKILL.md",
+    "dup_slug": "deployment-patterns",
+    "sha256": "37c9c9f20dafb2280783dcb0b339f4eb4ba0fe343ac48a37566b783016b5df54"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/deployment-patterns/SKILL.md",
+    "canonical_slug": "deployment-patterns",
+    "dup_path": "/root/.claude/skills/deployment-patterns/SKILL.md",
+    "dup_slug": "deployment-patterns",
+    "sha256": "37c9c9f20dafb2280783dcb0b339f4eb4ba0fe343ac48a37566b783016b5df54"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-verification/SKILL.md",
+    "canonical_slug": "quarkus-verification",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/quarkus-verification/SKILL.md",
+    "dup_slug": "quarkus-verification",
+    "sha256": "bf85844f5597251464f654bc4ac505c3bb16f35fb75610913049d95261cb733f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/quarkus-verification/SKILL.md",
+    "canonical_slug": "quarkus-verification",
+    "dup_path": "/root/.claude/skills/quarkus-verification/SKILL.md",
+    "dup_slug": "quarkus-verification",
+    "sha256": "bf85844f5597251464f654bc4ac505c3bb16f35fb75610913049d95261cb733f"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/configure-ecc/SKILL.md",
+    "canonical_slug": "configure-ecc",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/configure-ecc/SKILL.md",
+    "dup_slug": "configure-ecc",
+    "sha256": "5ec5308c5231823b3e99bff096b523698d3088ecea1e027d3e4d0fcb13f48f07"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/configure-ecc/SKILL.md",
+    "canonical_slug": "configure-ecc",
+    "dup_path": "/root/.claude/skills/configure-ecc/SKILL.md",
+    "dup_slug": "configure-ecc",
+    "sha256": "5ec5308c5231823b3e99bff096b523698d3088ecea1e027d3e4d0fcb13f48f07"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-patterns/SKILL.md",
+    "canonical_slug": "django-patterns",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/django-patterns/SKILL.md",
+    "dup_slug": "django-patterns",
+    "sha256": "f3de3bcb277a59cbf163cc95b450d182c46811de0ad3b58f7b1df15c876c601c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/django-patterns/SKILL.md",
+    "canonical_slug": "django-patterns",
+    "dup_path": "/root/.claude/skills/django-patterns/SKILL.md",
+    "dup_slug": "django-patterns",
+    "sha256": "f3de3bcb277a59cbf163cc95b450d182c46811de0ad3b58f7b1df15c876c601c"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/gateguard/SKILL.md",
+    "canonical_slug": "gateguard",
+    "dup_path": "/opt/jarvis-app-1/vendor/ecc/skills/gateguard/SKILL.md",
+    "dup_slug": "gateguard",
+    "sha256": "6e211fbe12b2daeb74ac564d2060686b78c97e66e19757df3acb9c44260bbfad"
+  },
+  {
+    "canonical_path": "/opt/jarvis-app-1/.claude/skills/gateguard/SKILL.md",
+    "canonical_slug": "gateguard",
+    "dup_path": "/root/.claude/skills/gateguard/SKILL.md",
+    "dup_slug": "gateguard",
+    "sha256": "6e211fbe12b2daeb74ac564d2060686b78c97e66e19757df3acb9c44260bbfad"
+  }
+]

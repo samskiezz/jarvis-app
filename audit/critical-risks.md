@@ -1,0 +1,92 @@
+# Critical risks
+
+Skills flagged as p0 OR adversarial severity 3/3 OR app-break-test severity high/critical: **40**
+
+## App-break-test high/critical (24)
+
+- **ai-regression-testing**: Severity=2/3. 1 secret-related reference(s): .env (L77)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **api-connector-builder**: Severity=1/3. 2 external service reference(s): webhook (L57), slack (L25)
+- **audit-route-bas-rea**: Severity=0/3. Pattern scan clean.
+- **audit-route-rea**: Severity=0/3. Pattern scan clean.
+- **cost-aware-llm-pipeline**: Severity=2/3. 1 secret-related reference(s): token (L55)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **ecc-tools-cost-audit**: Severity=2/3. 1 secret-related reference(s): token (L73)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **github-ops**: Severity=1/3. 2 external service reference(s): github api (L24), gh pr (L60)
+- **hermes-imports**: Severity=2/3. 3 secret-related reference(s): api key (L36), token (L27), credentials (L3)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **hipaa-compliance**: Severity=0/3. Pattern scan clean.
+- **ito-trade-planner**: Severity=2/3. 3 secret-related reference(s): api_key (L31), password (L21), credentials (L22)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **laravel-plugin-discovery**: Severity=2/3. 1 secret-related reference(s): api key (L31)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **latency-critical-systems**: Severity=0/3. Pattern scan clean.
+- **literature-review**: Severity=0/3. Pattern scan clean.
+- **llm-trading-agent-security**: Severity=2/3. 3 secret-related reference(s): private_key (L118), token (L47), .env (L118)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **netmiko-ssh-automation**: Severity=2/3. 3 secret-related reference(s): password (L48), credentials (L26), .env (L47)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **orch-add-feature**: Severity=0/3. Pattern scan clean.
+- **orch-pipeline**: Severity=2/3. 1 secret-related reference(s): credentials (L104)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **other-route-bas-rea-age**: Severity=0/3. Pattern scan clean.
+- **postgres-patterns**: Severity=0/3. Pattern scan clean.
+- **ralphinho-rfc-pipeline**: Severity=0/3. Pattern scan clean.
+- **scholar-evaluation**: Severity=0/3. Pattern scan clean.
+- **skill-stocktake**: Severity=0/3. Pattern scan clean.
+- **terminal-ops**: Guardrails section (lines 30-36, 99-105) explicitly forbids destructive operations. Skill does not execute code itself; it is guidance for operator discipline.
+  - fix: Add explicit pre-execution check: refuse to run commands matching patterns like `rm -rf`, `git reset --hard`, `git push --force*`
+  - fix: Define and document what 'evidence' means: e.g., requires passing test, git log entry, or verification command output
+- **uspto-database**: Severity=2/3. 3 secret-related reference(s): api_key (L50), api key (L44), .env (L77)
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+
+## Severity 3/3 destructive content (16)
+
+- **build-mcp-app**: Severity=3/3. 1 destructive verb(s): truncate (L390)
+  - fix: Wrap 'truncate' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **configure-ecc**: Severity=3/3. 1 destructive verb(s): rm -rf (L32)
+  - fix: Wrap 'rm -rf' usage in explicit user-confirmation gate; document blast radius.
+- **content-hash-cache-pattern**: Severity=3/3. 1 destructive verb(s): truncate (L132)
+  - fix: Wrap 'truncate' usage in explicit user-confirmation gate; document blast radius.
+- **content-hash-cache-pattern**: Severity=3/3. 1 destructive verb(s): truncate (L131)
+  - fix: Wrap 'truncate' usage in explicit user-confirmation gate; document blast radius.
+- **data-scraper-agent**: Severity=3/3. 1 destructive verb(s): truncate (L695)
+  - fix: Wrap 'truncate' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **gateguard**: Severity=3/3. 4 destructive verb(s): rm -rf (L77), git reset --hard (L77), git push --force (L77)
+  - fix: Wrap 'rm -rf' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Wrap 'git reset --hard' usage in explicit user-confirmation gate; document blast radius.
+- **git-workflow**: Severity=3/3. 2 destructive verb(s): git reset --hard (L605), git push --force (L205)
+  - fix: Wrap 'git reset --hard' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Wrap 'git push --force' usage in explicit user-confirmation gate; document blast radius.
+- **golang-testing**: Severity=3/3. 1 destructive verb(s): exec( (L242)
+  - fix: Wrap 'exec(' usage in explicit user-confirmation gate; document blast radius.
+- **hookify-rules**: Severity=3/3. 1 destructive verb(s): rm -rf (L96)
+  - fix: Wrap 'rm -rf' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **perl-security**: Severity=3/3. 2 destructive verb(s): rm -rf (L179), delete from (L485)
+  - fix: Wrap 'rm -rf' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Wrap 'delete from' usage in explicit user-confirmation gate; document blast radius.
+- **pytorch-patterns**: Severity=3/3. 1 destructive verb(s): eval( (L184)
+  - fix: Wrap 'eval(' usage in explicit user-confirmation gate; document blast radius.
+- **pytorch-patterns**: Severity=3/3. 1 destructive verb(s): eval( (L183)
+  - fix: Wrap 'eval(' usage in explicit user-confirmation gate; document blast radius.
+- **redis-patterns**: Severity=3/3. 1 destructive verb(s): eval( (L187)
+  - fix: Wrap 'eval(' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Ensure SKILL.md instructs to read secrets from env, never to print or commit them.
+- **safety-guard**: Severity=3/3. 4 destructive verb(s): rm -rf (L27), git reset --hard (L29), git push --force (L28)
+  - fix: Wrap 'rm -rf' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Wrap 'git reset --hard' usage in explicit user-confirmation gate; document blast radius.
+- **security-bounty-hunter**: Severity=3/3. 2 destructive verb(s): exec( (L42), eval( (L42)
+  - fix: Wrap 'exec(' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Wrap 'eval(' usage in explicit user-confirmation gate; document blast radius.
+- **writing-hookify-rules**: Severity=3/3. 3 destructive verb(s): rm -rf (L247), exec( (L249), eval( (L249)
+  - fix: Wrap 'rm -rf' usage in explicit user-confirmation gate; document blast radius.
+  - fix: Wrap 'exec(' usage in explicit user-confirmation gate; document blast radius.

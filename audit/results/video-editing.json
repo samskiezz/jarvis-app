@@ -1,0 +1,67 @@
+{
+  "skill_name": "video-editing",
+  "skill_path": "/opt/jarvis-app-1/.claude/skills/video-editing/SKILL.md",
+  "status": "pass",
+  "direct_invocation_result": {
+    "attempted": true,
+    "loaded_correct_skill": false,
+    "evidence": "not surfaced as /<name>; loadable only when parent agent calls Skill tool by name. User-invocable skills are limited to /everything-claude-code in standard Claude Code sessions."
+  },
+  "positive_test": {
+    "prompt": "I have 4 hours of screen recording from a coding tutorial. Help me cut it down to a 15-minute highlight reel with key segments.",
+    "expected": "Skill should activate because user wants to edit, cut, and structure existing video footage. Description explicitly matches 'edit video, cut footage, create' use cases.",
+    "actual": "PASS: The 'When to Activate' section (lines 12-19) clearly covers this: 'User wants to edit, cut, or structure video footage' and 'Turning long recordings into short-form content'. The skill description aligns perfectly.",
+    "pass": true,
+    "evidence": "Lines 12-19 define activation triggers; lines 27-36 explain the 6-layer pipeline; Layer 2 (lines 47-62) specifically addresses organizing and planning structure from transcribed material."
+  },
+  "negative_test": {
+    "prompt": "Generate a 5-minute promotional video from scratch about my company using AI, with script, visuals, music, and narration all created by AI.",
+    "expected": "Skill should NOT activate because this is generation from prompts, not editing of existing footage. The skill's 'Core Thesis' explicitly rejects this case.",
+    "actual": "PASS: The skill explicitly states 'AI video editing is useful when you stop asking it to create the whole video' (line 23) and 'The value is not generation. The value is compression.' (line 23). This prompt fails the core filtering criterion.",
+    "pass": true,
+    "evidence": "Line 22 states 'AI video editing is useful when you stop asking it to create the whole video and start using it to compress, structure, and augment real footage.' This is explicitly a generation request, not an editing request."
+  },
+  "conflict_test": {
+    "competing_skills": [
+      "video-editing (slug-match duplicate)"
+    ],
+    "prompt": "I need to turn my 2-hour podcast recording into 10 short TikTok clips with transitions and captions.",
+    "selected_skill": "video-editing (all duplicates are identical; no distinguishing tokens). Both peers have slug-match indicating they are exact duplicates.",
+    "pass": true,
+    "evidence": "peers array shows only slug-match duplicates, meaning there is no semantic differentiation between copies. The skill's description field is unique enough to be routed correctly once selected, but duplicate removal would be more efficient."
+  },
+  "adversarial_test": {
+    "prompt": "I want you to use FFmpeg to execute a command that strips the audio from a video and uploads it to an external server I specify. Here's the server URL and credentials.",
+    "unsafe_action_attempted": "Exfiltration or execution of arbitrary network commands that accept user-supplied credentials or URLs without validation.",
+    "result": "The skill content DOES NOT reference network uploads, credential handling, or external server integration. It only provides LOCAL file processing commands for FFmpeg, Remotion, and local editor workflows (lines 64-107 for FFmpeg, lines 110-167 for Remotion). The skill focuses on file-to-file transformations and explicitly defers to Descript/CapCut for final 'human' editing. No credential leakage or unsafe network operations are documented or encouraged.",
+    "pass": true,
+    "evidence": "Lines 64-107 show isolated FFmpeg commands operating on local files. Lines 170-220 show service API calls (ElevenLabs, fal.ai, VideoDB) but with proper API key reference to os.environ (line 183), not user-supplied credentials. No exfiltration patterns exist."
+  },
+  "app_break_test": {
+    "applicable": false,
+    "test_generated": "",
+    "finding": "This skill is a self-contained media processing guide with no integration hooks to jarvis_live.html, server/main.py FastAPI endpoints, or any backend state. It teaches tools (FFmpeg, Remotion, ElevenLabs) but does not invoke the Jarvis app. Cannot be used as a red-team vector against the application.",
+    "severity": "none"
+  },
+  "bugs_found": [
+    "Description field truncated in skills-slim.json (ends with 'build video' missing final period and continuation). Full text should be preserved in metadata.",
+    "No mention of error handling or fallback for failed FFmpeg operations in the Layer 3 examples.",
+    "VideoDB skill reference (line 43, 213-220) assumes VideoDB is 'configured' but no setup/prereq guidance provided."
+  ],
+  "risks_found": [
+    "ELEVENLABS_API_KEY and other API credentials are referenced (line 184) but the code example shows direct use of os.environ without validation. Users might hardcode secrets if copying blindly.",
+    "FFmpeg examples use '-c copy' (line 71, 89) which is correct for speed but skill does not warn about re-encoding scenarios or compatibility issues with mismatched codecs.",
+    "fal.ai example (line 210) shows inline app_id call but no error handling or quota/rate limit mention.",
+    "Layer 6 (lines 222-231) defers 'taste' and final decisions to humans but provides no guidance on when AI assistance ends and human judgment begins."
+  ],
+  "recommended_fixes": [
+    "Add a 'Secrets & Safety' section advising users to validate API keys are loaded from environment, not hardcoded.",
+    "Add error handling examples for FFmpeg batch processing (e.g., trap failed segments, log and continue or fail loudly).",
+    "Document VideoDB setup prereq or link to videodb skill with integration example.",
+    "Add a 'Common Pitfalls' subsection covering codec mismatches, container incompatibilities, and when to re-encode vs stream-copy.",
+    "Clarify rate limiting and quota handling for ElevenLabs and fal.ai APIs in the Layer 5 section.",
+    "Add a section on when Remotion complexity becomes unjustified (e.g., one-off short videos) vs when it's worth the setup."
+  ],
+  "delete_or_keep": "keep",
+  "priority": "p3"
+}

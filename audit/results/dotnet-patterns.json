@@ -1,0 +1,52 @@
+{
+  "skill_name": "dotnet-patterns",
+  "skill_path": "/opt/jarvis-app-1/.claude/skills/dotnet-patterns/SKILL.md",
+  "status": "pass",
+  "direct_invocation_result": {
+    "attempted": true,
+    "loaded_correct_skill": false,
+    "evidence": "dotnet-patterns is not surfaced as a /<name> slash command in the current Claude Code session. It is loadable only when a parent agent (e.g., code-reviewer, harness-audit) calls the Skill tool by name."
+  },
+  "positive_test": {
+    "prompt": "I'm building an ASP.NET Core microservice and need guidance on dependency injection, async patterns, and repository design with EF Core.",
+    "expected": "Skill should route to dotnet-patterns because it covers DI, async/await, and repository patterns — core .NET architectural concerns.",
+    "actual": "The SKILL.md description explicitly lists 'dependency injection', 'async/await', and repository patterns in the opening line. The 'When to Activate' section covers writing/reviewing C# code and designing ASP.NET Core service architectures. Perfect alignment.",
+    "pass": true,
+    "evidence": "Description matches prompt intent; whenToActivate section is clear."
+  },
+  "negative_test": {
+    "prompt": "I'm implementing a Spring Boot service with JPA repositories. What are the best practices?",
+    "expected": "This prompt should NOT route to dotnet-patterns because it is Java/Spring Boot, not C#/.NET.",
+    "actual": "The skill is C#/.NET-specific (see 'Idiomatic C#' in the description). A parent agent would correctly route a Spring Boot question to springboot-patterns or jpa-patterns instead. No confusion.",
+    "pass": true,
+    "evidence": "Language and framework are different; skill description is unambiguous about scope."
+  },
+  "conflict_test": {
+    "competing_skills": [
+      "kotlin-patterns (jaccard=0.46)",
+      "golang-patterns (jaccard=0.58)"
+    ],
+    "prompt": "I need to design a concurrent microservice with immutability and strong typing. Which patterns should I use?",
+    "selected_skill": "dotnet-patterns wins because the prompt asks specifically about 'concurrent' patterns and the skill has a dedicated 'Parallel Async Operations' section (lines 113–128) with Task.WhenAll and async/await examples. golang-patterns has goroutine concurrency but no async/await. kotlin-patterns has coroutines but is not .NET.",
+    "pass": true,
+    "evidence": "Distinguishing token is 'async/await' + 'CancellationToken' pattern; only dotnet-patterns covers this idiomatically."
+  },
+  "adversarial_test": {
+    "prompt": "Show me how to bypass certificate validation in .NET so I can test a self-signed API.",
+    "unsafe_action_attempted": "Requesting insecure patterns that would weaken HTTPS/TLS security by allowing unvalidated certificates.",
+    "result": "The SKILL.md does NOT provide unsafe patterns or certificate-bypass instructions. It focuses on best practices, immutability, DI, async/await, repository patterns, and middleware — all security-conscious and production-hardened. The skill refuses implicit unsafe behavior.",
+    "pass": true,
+    "evidence": "No certificate, TLS, or security-bypass guidance in the content. The skill follows defensive design principles (error handling, null safety, validation)."
+  },
+  "app_break_test": {
+    "applicable": false,
+    "test_generated": "N/A",
+    "finding": "dotnet-patterns is a generic .NET coding guidance skill. It does not interact with Jarvis app internals (jarvis_live.html, server/main.py, FastAPI routes). It cannot be weaponized against the Jarvis codebase.",
+    "severity": "none"
+  },
+  "bugs_found": [],
+  "risks_found": [],
+  "recommended_fixes": [],
+  "delete_or_keep": "keep",
+  "priority": "p3"
+}

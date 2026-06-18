@@ -116,6 +116,42 @@ docs/
 | [0003](0003-rest-over-graphql.md) | REST API over GraphQL | accepted | 2026-02-01 |
 ```
 
+## Safety
+
+Before the "Confirm and write" step in the workflow above, the agent MUST validate the draft ADR content. ADRs are written to `docs/adr/` and committed to version control, so any leaked secret becomes part of git history.
+
+### Secret Scanning (mandatory before write)
+
+Scan the full draft ADR text (Context, Decision, Alternatives Considered, Consequences, and any code snippets) for the following secret patterns:
+
+- **AWS access keys** — `AKIA[0-9A-Z]{16}`, `ASIA[0-9A-Z]{16}`, or any value labelled `AWS_ACCESS_KEY`, `AWS_SECRET_ACCESS_KEY`, `aws_access_key_id`, `aws_secret_access_key`
+- **Generic API keys / tokens** — values labelled `api_key`, `apikey`, `API_KEY`, `secret`, `SECRET`, `token`, `auth_token`, `access_token`, `bearer`, or long base64/hex strings adjacent to those labels
+- **OAuth secrets** — `client_secret`, `CLIENT_SECRET`, `oauth_secret`, `refresh_token`
+- **Database URLs with embedded passwords** — `postgres://user:password@host`, `mysql://user:password@host`, `mongodb://user:password@host`, `redis://:password@host`, or any connection string matching `://[^:]+:[^@]+@`
+- **Private key blocks** — `-----BEGIN (RSA |DSA |EC |OPENSSH |PGP )?PRIVATE KEY-----`, `-----BEGIN ENCRYPTED PRIVATE KEY-----`
+- **GitHub personal access tokens** — `ghp_[A-Za-z0-9]{36}`, `gho_[A-Za-z0-9]{36}`, `ghs_[A-Za-z0-9]{36}`, `ghu_[A-Za-z0-9]{36}`, `github_pat_[A-Za-z0-9_]{82}`
+
+### Refusal protocol
+
+If any secret pattern matches:
+
+1. **REFUSE to write the ADR file.** Do not create `docs/adr/NNNN-*.md` and do not append to the index.
+2. Show the user which pattern matched and the offending line(s).
+3. Tell the user to replace the literal value with an environment-variable reference (for example, write `${AWS_ACCESS_KEY}` or `${DATABASE_URL}` instead of the actual key or connection string), and to document the *strategy* for managing the secret rather than the secret itself.
+4. Offer to re-scan the revised draft. Only proceed to "Confirm and write" once the scan is clean.
+
+If the user insists on writing a secret literal, refuse anyway and surface the project security rules — ADRs are committed artefacts and leaked secrets cannot be undone from git history without a force-push and rotation.
+
+### Numbering race condition
+
+ADR numbers are assigned by scanning `docs/adr/` for the highest existing number and incrementing. Between scan and write, another agent (or a concurrent session) can claim the same number. To avoid collisions:
+
+1. After the user approves the draft, **re-scan `docs/adr/` immediately before writing** to confirm the chosen number is still available.
+2. If a file with that number already exists, recompute the next number and update the draft's filename and `# ADR-NNNN:` header.
+3. Retry the re-scan and rename loop until the write target is unique, then write the file.
+
+This re-scan-before-write step keeps numbering monotonic without requiring a separate lockfile.
+
 ## Decision Detection Signals
 
 Watch for these patterns in conversation that indicate an architectural decision:

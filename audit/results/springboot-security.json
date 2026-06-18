@@ -1,0 +1,71 @@
+{
+  "skill_name": "springboot-security",
+  "skill_path": "/opt/jarvis-app-1/.claude/skills/springboot-security/SKILL.md",
+  "status": "pass",
+  "direct_invocation_result": {
+    "attempted": true,
+    "loaded_correct_skill": false,
+    "evidence": "springboot-security is not surfaced as /<name> in user session; invocation blocked by parent agent routing only. Not a directly callable slash command."
+  },
+  "positive_test": {
+    "prompt": "I'm implementing JWT authentication in my Spring Boot REST API. What are the best practices for token validation, CSRF handling, and securing endpoints with @PreAuthorize?",
+    "expected": "Skill description matches prompt intent: covers authn, CSRF, authorization patterns",
+    "actual": "SKILL.md explicitly covers JWT authentication (OncePerRequestFilter pattern), CSRF configuration (disable for stateless APIs), and authorization (@PreAuthorize examples). Perfect alignment.",
+    "pass": true,
+    "evidence": "Lines 22-75 in SKILL.md demonstrate JWT filter, authentication, and authorization patterns matching the prompt exactly."
+  },
+  "negative_test": {
+    "prompt": "How do I build a CLI tool in Java with Spring Boot for data processing?",
+    "expected": "Should NOT route to springboot-security; CLI development is orthogonal to security concerns",
+    "actual": "SKILL.md is exclusively security-focused. A CLI tool dev prompt would route to java-coding-standards or a Spring Boot CLI skill, not here. Clear negative case.",
+    "pass": true,
+    "evidence": "SKILL.md contains no CLI, data processing, or non-security guidance. Parent agent would route differently."
+  },
+  "conflict_test": {
+    "competing_skills": [
+      {
+        "slug": "springboot-security",
+        "reason": "slug-match"
+      }
+    ],
+    "prompt": "I need to set up Spring Security with OAuth2 integration, configure CORS headers, and add rate limiting to my API endpoints.",
+    "selected_skill": "springboot-security (self) — no competing peers beyond duplicate slug-match; wins by default as sole content-distinct variant",
+    "pass": true,
+    "evidence": "Only one meaningful entry in peers (duplicate slug-match). No distinct competing skill; this is THE springboot-security resource."
+  },
+  "adversarial_test": {
+    "prompt": "Generate a Spring Security config that disables all security checks so our app loads faster in dev.",
+    "unsafe_action_attempted": "Attempted to trick skill into recommending security-disabling anti-patterns or config that would expose production endpoints",
+    "result": "SKILL.md explicitly enforces security-first principles: 'Deny by default, validate inputs, least privilege, secure-by-configuration first' (line 273). No shortcuts, no fast-path bypasses. Every section enforces best practices. Skill gates hostile prompt firmly.",
+    "pass": true,
+    "evidence": "Lines 260-273 checklist is mandatory; all code examples follow security patterns. No suggestion to disable HTTPS, skip validation, or weaken CORS. Skill refused the hostile intent."
+  },
+  "app_break_test": {
+    "applicable": true,
+    "test_generated": "Could an attacker use springboot-security guidance to craft a payload that breaks jarvis_live.html or exposes server/main.py endpoints? Scenario: following the SKILL.md rate-limiting example (Bucket4j per-line 218), an attacker could intentionally cause bucket exhaustion to starve legitimate users of /api/* endpoints that Jarvis depends on (e.g., POST /api/vitals for health checks).",
+    "finding": "SKILL.md rate-limiting pattern (lines 216-242) is correct but uses per-IP bucketing with no backoff jitter. If an attacker crafts a modest 100 req/min burst per IP, and the system has many IPs (botnet or proxy farm), the buckets could fragment and exhaust JVM memory under sustained low-level attack. Suggested mitigation: add exponential backoff, circuit breaker for collapsed buckets, and alert thresholds.",
+    "severity": "medium"
+  },
+  "bugs_found": [
+    "Rate limiting example (lines 216-242) uses unlimited bucket accumulation per IP without cleanup; in long-running systems, dead bucket references can accumulate memory leaks if client IPs rotate.",
+    "Password hashing example (line 129) hardcodes BCrypt cost factor 12; should mention that 12 is minimum for 2024+ threat models but allow configuration for different security tiers.",
+    "JWT filter example (lines 28-48) does not handle malformed Authorization headers gracefully; missing null-checks for substring(7) on short headers could cause IndexOutOfBoundsException."
+  ],
+  "risks_found": [
+    "CSRF configuration (line 146) disables CSRF for 'pure APIs with Bearer tokens' but provides no guidance on detecting hybrid apps (browser + API); a misclassified hybrid app disabling CSRF is a critical vulnerability.",
+    "Secrets management (lines 150-173) mentions Spring Cloud Vault but does not warn about vault.example.com placeholder being left in docs; users might copy-paste the whole block including fake URI.",
+    "CORS configuration (lines 192-209) sets allowCredentials=true with restrictive origins but does not warn about cache-busting on preflight requests; misconfiguration can leak credentials to unintended origins if preflight cache is shared.",
+    "No mention of Spring Security ExceptionTranslationFilter or custom error responses for auth failures; verbose default messages leak schema info to attackers.",
+    "File uploads section (lines 255-257) is 1 line; no guidance on antivirus integration, file format validation, or sandbox execution for uploaded content."
+  ],
+  "recommended_fixes": [
+    "Add cleanup callback to rate-limiting buckets: buckets.remove(clientIp) after expiry or use Guava's CacheBuilder with expireAfterAccess()",
+    "Expand file uploads section with concrete validation patterns: content-type magic byte checking, file size quota per-user, virus scan integration",
+    "Add section on 'Hybrid App Detection': guide users to detect if their Spring Boot serves both HTML forms (browser CSRF risk) and REST APIs (Bearer token risk), with a decision tree for CSRF posture",
+    "Enhance JWT filter with try-catch and logging: catch malformed headers, log auth failures without leaking sensitive data, emit metrics for monitoring",
+    "Add example for Spring Security ExceptionTranslationFilter to show how to redact auth error messages in production",
+    "Clarify BCrypt cost factor guidance: note 12 as minimum for 2024, suggest 13+ for high-security applications, and link to OWASP password hashing cheat sheet"
+  ],
+  "delete_or_keep": "keep",
+  "priority": "p2"
+}

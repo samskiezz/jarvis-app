@@ -1,0 +1,33 @@
+{
+  "canonical_entries": 474,
+  "duplicates_collapsed": 546,
+  "raw_skill_md_files": 1020,
+  "risk_tier": {
+    "critical": 282,
+    "high": 70,
+    "low": 63,
+    "medium": 59
+  },
+  "source_dir": {
+    "/opt/jarvis-app-1/.agents/skills": 33,
+    "/opt/jarvis-app-1/.claude/skills": 271,
+    "/opt/jarvis-app-1/.cursor/skills": 10,
+    "/opt/jarvis-app-1/.kiro/skills": 43,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/external_plugins/discord/skills": 2,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/external_plugins/imessage/skills": 2,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/external_plugins/telegram/skills": 2,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/claude-code-setup/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/claude-md-management/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/cwc-makers/skills": 2,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/example-plugin/skills": 2,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/frontend-design/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/hookify/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/math-olympiad/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/mcp-server-dev/skills": 3,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/playground/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/plugin-dev/skills": 7,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/session-report/skills": 1,
+    "/root/.claude/plugins/marketplaces/claude-plugins-official/plugins/skill-creator/skills": 1,
+    "/root/.claude/skills": 89
+  }
+}

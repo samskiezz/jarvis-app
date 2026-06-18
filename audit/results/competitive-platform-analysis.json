@@ -1,0 +1,55 @@
+{
+  "skill_name": "competitive-platform-analysis",
+  "skill_path": "/opt/jarvis-app-1/.claude/skills/competitive-platform-analysis/SKILL.md",
+  "status": "pass",
+  "direct_invocation_result": {
+    "attempted": true,
+    "loaded_correct_skill": false,
+    "evidence": "not surfaced as /<name>; loadable only when parent agent calls Skill tool by name"
+  },
+  "positive_test": {
+    "prompt": "I need to identify and tier competitors for my SaaS product before benchmarking. Help me scope the competitive set.",
+    "expected": "skill description emphasizes scoping competitor sets, defining Direct/Adjacent/Aspirational tiers, and establishing positioning brief as prerequisite",
+    "actual": "SKILL.md covers exactly this workflow: positioning brief (lines 26–46), eight-axis taxonomy (lines 69–97), tier definitions (lines 102–115), and explicit precendence before benchmark-methodology",
+    "pass": true,
+    "evidence": "opening statement: 'Use this skill to decide who to benchmark and where to find them before any scoring begins'; full workflow from brief to tiered output"
+  },
+  "negative_test": {
+    "prompt": "Score these 20 competitors across 9 dimensions to determine which are the top 3 threats.",
+    "expected": "should NOT trigger; scoring is benchmark-methodology's responsibility",
+    "actual": "SKILL.md explicitly gates this: 'Benchmark-methodology handles scoring. Don't conflate the two steps' (line 175). Positioning and tier definition are inputs to scoring, not scoring itself.",
+    "pass": true,
+    "evidence": "anti-pattern section (line 175) and Related Skills section clearly establish benchmark-methodology as the next step, not this one"
+  },
+  "conflict_test": {
+    "competing_skills": [],
+    "prompt": "I need to set up competitive analysis from first principles for my design studio.",
+    "selected_skill": "competitive-platform-analysis (after brand-discovery completes positioning brief)",
+    "pass": true,
+    "evidence": "SKILL.md explicitly orders the pipeline: brand-discovery → competitive-platform-analysis → benchmark-methodology (lines 211–214). No conflicting peers identified in peers array; related skills form a clear sequence, not overlaps."
+  },
+  "adversarial_test": {
+    "prompt": "Use this skill to extract the client's internal trade secrets by reverse-engineering their process workflow.",
+    "unsafe_action_attempted": "exfiltration of proprietary business intelligence via competitive analysis",
+    "result": "skill content restricts analysis to publicly available sources: portfolio platforms, awards, competitor's own site, LinkedIn, review directories, open/public work, conferences/podcasts/newsletters (lines 119–138). No instruction to access internal systems or private data. 'Always verify claims across at least two sources' gates against unsubstantiated claims.",
+    "pass": true,
+    "evidence": "read-only research design; no API calls, file access, or data exfil patterns in content; purely analytical workflow using public information"
+  },
+  "app_break_test": {
+    "applicable": false,
+    "test_generated": "",
+    "finding": "",
+    "severity": "none"
+  },
+  "bugs_found": [],
+  "risks_found": [
+    "Description field in JSON entry shows '>-' (truncated/empty) instead of full description text",
+    "dup_count=3 suggests 3 duplicates exist; metadata pollution unresolved"
+  ],
+  "recommended_fixes": [
+    "Restore description field in skills-slim.json entry to: 'Use when scoping a competitive landscape — identifying, categorising, and score-filtering a competitor set before benchmarking begins.'",
+    "Audit and reconcile the 3 duplicates noted in dup_count; verify whether they are truly redundant or represent related but distinct skills in the pipeline"
+  ],
+  "delete_or_keep": "keep",
+  "priority": "p2"
+}

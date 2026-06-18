@@ -1,0 +1,221 @@
+# App break-tests (red-team toolkit)
+
+Skills usable to test/audit/break the Jarvis app: **417**
+
+## high severity (24)
+
+- **ai-regression-testing** — Apply ai-regression-testing against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L358); relevant to Jarvis attack surface.
+- **api-connector-builder** — Apply api-connector-builder against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L17); relevant to Jarvis attack surface.
+- **audit-route-bas-rea** — Apply audit-route-bas-rea against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L32); relevant to Jarvis attack surface.
+- **audit-route-rea** — Apply audit-route-rea against server/jarvis_live.html or server/main.py — could test SSRF guards
+  - finding: Skill mentions 'ssrf' (SKILL.md:L28); relevant to Jarvis attack surface.
+- **cost-aware-llm-pipeline** — Apply cost-aware-llm-pipeline against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L82); relevant to Jarvis attack surface.
+- **ecc-tools-cost-audit** — Apply ecc-tools-cost-audit against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L22); relevant to Jarvis attack surface.
+- **github-ops** — Apply github-ops against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L25); relevant to Jarvis attack surface.
+- **hermes-imports** — Apply hermes-imports against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L27); relevant to Jarvis attack surface.
+- **hipaa-compliance** — Apply hipaa-compliance against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L15); relevant to Jarvis attack surface.
+- **ito-trade-planner** — Apply ito-trade-planner against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L42); relevant to Jarvis attack surface.
+- **laravel-plugin-discovery** — Apply laravel-plugin-discovery against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L14); relevant to Jarvis attack surface.
+- **latency-critical-systems** — Apply latency-critical-systems against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L13); relevant to Jarvis attack surface.
+- **literature-review** — Apply literature-review against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L94); relevant to Jarvis attack surface.
+- **llm-trading-agent-security** — Apply llm-trading-agent-security against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **netmiko-ssh-automation** — Apply netmiko-ssh-automation against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L39); relevant to Jarvis attack surface.
+- **orch-add-feature** — Apply orch-add-feature against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L41); relevant to Jarvis attack surface.
+- **orch-pipeline** — Apply orch-pipeline against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L102); relevant to Jarvis attack surface.
+- **other-route-bas-rea-age** — Apply other-route-bas-rea-age against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L27); relevant to Jarvis attack surface.
+- **postgres-patterns** — Apply postgres-patterns-54ee9b00 against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L67); relevant to Jarvis attack surface.
+- **ralphinho-rfc-pipeline** — Apply ralphinho-rfc-pipeline against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L38); relevant to Jarvis attack surface.
+- **scholar-evaluation** — Apply scholar-evaluation against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L160); relevant to Jarvis attack surface.
+- **skill-stocktake** — Apply skill-stocktake against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L193); relevant to Jarvis attack surface.
+- **terminal-ops** — Example hostile test: An operator could use terminal-ops to run `rm -rf /opt/jarvis-app-1/server/jarvis_live.html && git reset --hard HEAD~5` to destroy the Jarvis UI and history
+  - finding: The skill's guardrails forbid destructive commands, but the skill is a guidance document without runtime code injection protection. A rogue operator could override guardrails. Risk is high because terminal-ops has privileged repo/command access.
+- **uspto-database** — Apply uspto-database against server/jarvis_live.html or server/main.py — could test auth flow
+  - finding: Skill mentions 'auth' (SKILL.md:L42); relevant to Jarvis attack surface.
+
+## medium severity (30)
+
+- **api-design** — Apply api-design-7a0ca9c3 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L12); relevant to Jarvis attack surface.
+- **api-design** — Apply api-design-ad7230f9 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L14); relevant to Jarvis attack surface.
+- **api-design** — Apply api-design against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L15); relevant to Jarvis attack surface.
+- **backend-patterns** — Apply backend-patterns-3a0abd91 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L14); relevant to Jarvis attack surface.
+- **backend-patterns** — Apply backend-patterns-f1bc0f30 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L12); relevant to Jarvis attack surface.
+- **backend-patterns** — Apply backend-patterns against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L15); relevant to Jarvis attack surface.
+- **benchmark** — Apply benchmark against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L44); relevant to Jarvis attack surface.
+- **canary-watch** — Apply canary-watch against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L59); relevant to Jarvis attack surface.
+- **click-path-audit** — Apply click-path-audit against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L124); relevant to Jarvis attack surface.
+- **django-patterns** — Apply django-patterns-f3de3bcb against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L727); relevant to Jarvis attack surface.
+- **django-patterns** — Apply django-patterns against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L726); relevant to Jarvis attack surface.
+- **django-security** — Apply django-security-9a7aa9fc against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L589); relevant to Jarvis attack surface.
+- **django-security** — Apply django-security against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L588); relevant to Jarvis attack surface.
+- **django-tdd** — Apply django-tdd against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L455); relevant to Jarvis attack surface.
+- **dmux-workflows** — Apply dmux-workflows-6e4028d6 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L66); relevant to Jarvis attack surface.
+- **dmux-workflows** — Apply dmux-workflows against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L64); relevant to Jarvis attack surface.
+- **enterprise-agent-ops** — Apply enterprise-agent-ops against server/jarvis_live.html or server/main.py — could test access controls
+  - finding: Skill mentions 'permission' (SKILL.md:L16); relevant to Jarvis attack surface.
+- **iterative-retrieval** — Apply iterative-retrieval against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L167); relevant to Jarvis attack surface.
+- **jira-integration** — Apply jira-integration against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L181); relevant to Jarvis attack surface.
+- **laravel-tdd** — Apply laravel-tdd against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L15); relevant to Jarvis attack surface.
+- **prompt-optimizer** — Apply prompt-optimizer against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L322); relevant to Jarvis attack surface.
+- **redis-patterns** — Apply redis-patterns against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L373); relevant to Jarvis attack surface.
+- **security-review** — Apply security-review-4fa53039 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **security-review** — Apply security-review-e60a179e against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **security-review** — Apply security-review against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L4); relevant to Jarvis attack surface.
+- **springboot-security** — Could an attacker use springboot-security guidance to craft a payload that breaks jarvis_live.html or exposes server/main.py endpoints? Scenario: following the SKILL.md rate-limiting example (Bucket4j per-line 218), an attacker could intentionally cause bucket exhaustion to starve legitimate users of /api/* endpoints that Jarvis depends on (e.g., POST /api/vitals for health checks).
+  - finding: SKILL.md rate-limiting pattern (lines 216-242) is correct but uses per-IP bucketing with no backoff jitter. If an attacker crafts a modest 100 req/min burst per IP, and the system has many IPs (botnet or proxy farm), the buckets could fragment and exhaust JVM memory under sustained low-level attack. Suggested mitigation: add exponential backoff, circuit breaker for collapsed buckets, and alert thresholds.
+- **tdd-workflow** — Apply tdd-workflow-27cfe714 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L15); relevant to Jarvis attack surface.
+- **tdd-workflow** — Apply tdd-workflow-9f6bdf7f against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L18); relevant to Jarvis attack surface.
+- **tdd-workflow** — Apply tdd-workflow against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L20); relevant to Jarvis attack surface.
+- **x-api** — Apply x-api-1316fb05 against server/jarvis_live.html or server/main.py — could fuzz endpoints
+  - finding: Skill mentions 'api endpoint' (SKILL.md:L10); relevant to Jarvis attack surface.
+
+## low severity (363)
+
+- **access** — Apply access-4fc3da87 against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L38); relevant to Jarvis attack surface.
+- **access** — Apply access-c499635e against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L131); relevant to Jarvis attack surface.
+- **access** — Apply access against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L134); relevant to Jarvis attack surface.
+- **accessibility** — Apply accessibility against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L4); relevant to Jarvis attack surface.
+- **add-route-rea-bas** — Apply add-route-rea-bas against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L25); relevant to Jarvis attack surface.
+- **agent-architecture-audit** — Apply agent-architecture-audit against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L33); relevant to Jarvis attack surface.
+- **agent-development** — Apply agent-development against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L15); relevant to Jarvis attack surface.
+- **agent-eval** — Apply agent-eval against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L16); relevant to Jarvis attack surface.
+- **agent-harness-construction** — Apply agent-harness-construction against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **agent-introspection-debugging** — Apply agent-introspection-debugging-b69b9ddd against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L143); relevant to Jarvis attack surface.
+- **agent-introspection-debugging** — Apply agent-introspection-debugging against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L141); relevant to Jarvis attack surface.
+- **agent-payment-x402** — Apply agent-payment-x402 against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L191); relevant to Jarvis attack surface.
+- **agent-self-evaluation** — Apply agent-self-evaluation against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L102); relevant to Jarvis attack surface.
+- **agent-sort** — Apply agent-sort-5847fc20 against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L104); relevant to Jarvis attack surface.
+- **agent-sort** — Apply agent-sort against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L102); relevant to Jarvis attack surface.
+- **agentic-engineering** — Apply agentic-engineering-6acdfaa7 against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L10); relevant to Jarvis attack surface.
+- **agentic-engineering** — Apply agentic-engineering against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L5); relevant to Jarvis attack surface.
+- **agentic-os** — Apply agentic-os against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L87); relevant to Jarvis attack surface.
+- **ai-first-engineering** — Apply ai-first-engineering against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L18); relevant to Jarvis attack surface.
+- **android-clean-architecture** — Apply android-clean-architecture against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **angular-developer** — Apply angular-developer against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **article-writing** — Apply article-writing-4aa61709 against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **article-writing** — Apply article-writing-fc1d006c against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **article-writing** — Apply article-writing against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **audit-mini-app-bas-rea** — Apply audit-mini-app-bas-rea against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L34); relevant to Jarvis attack surface.
+- **audit-route-rea-bas-age** — Apply audit-route-rea-bas-age against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L25); relevant to Jarvis attack surface.
+- **audit-route-rea-bas** — Apply audit-route-rea-bas against server/jarvis_live.html or server/main.py — could test FastAPI endpoints
+  - finding: Skill mentions 'fastapi' (SKILL.md:L26); relevant to Jarvis attack surface.
+- **automation-audit-ops** — Apply automation-audit-ops against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L22); relevant to Jarvis attack surface.
+- **autonomous-agent-harness** — Apply autonomous-agent-harness against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **autonomous-loops** — Apply autonomous-loops-3cbe14cd against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L376); relevant to Jarvis attack surface.
+- **autonomous-loops** — Apply autonomous-loops against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L375); relevant to Jarvis attack surface.
+- **benchmark-methodology** — Apply benchmark-methodology against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L4); relevant to Jarvis attack surface.
+- **benchmark-optimization-loop** — Apply benchmark-optimization-loop against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L67); relevant to Jarvis attack surface.
+- **blender-motion-state-inspection** — Apply blender-motion-state-inspection against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L20); relevant to Jarvis attack surface.
+- **blueprint** — Apply blueprint against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L71); relevant to Jarvis attack surface.
+- **brand-discovery** — Apply brand-discovery against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L32); relevant to Jarvis attack surface.
+- **brand-voice** — Apply brand-voice-57c7f844 against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L28); relevant to Jarvis attack surface.
+- **brand-voice** — Apply brand-voice against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L26); relevant to Jarvis attack surface.
+- **browser-qa** — Apply browser-qa against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L14); relevant to Jarvis attack surface.
+- **build-mcp-app** — Apply build-mcp-app against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L3); relevant to Jarvis attack surface.
+- **build-mcp-server** — Apply build-mcp-server against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L9); relevant to Jarvis attack surface.
+- **build-mcpb** — Apply build-mcpb against server/jarvis_live.html or server/main.py — could test form validation
+  - finding: Skill mentions 'form' (SKILL.md:L64); relevant to Jarvis attack surface.
+- **build-service-bas-rea-edi** — Apply build-service-bas-rea-edi against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-bas-rea-wri** — Apply build-service-bas-rea-wri against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-bas-rea** — Apply build-service-bas-rea against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-bas-wri-rea** — Apply build-service-bas-wri-rea against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-bas** — Apply build-service-bas against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-rea-bas-age** — Apply build-service-rea-bas-age against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-rea-bas-edi** — Apply build-service-rea-bas-edi against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- **build-service-rea-bas-wri** — Apply build-service-rea-bas-wri against server/jarvis_live.html or server/main.py — could test UI
+  - finding: Skill mentions 'ui' (SKILL.md:L2); relevant to Jarvis attack surface.
+- _...and 313 more_
