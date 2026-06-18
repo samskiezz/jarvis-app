@@ -1,0 +1,21 @@
+{
+  "planes": {
+    "ontology-plane":         { "default": "read_only", "reason": "24M+ entities; mutation requires owner approval" },
+    "aip-plane":              { "default": "discover_only" },
+    "control-plane":          { "default": "discover_only" },
+    "data-plane":             { "default": "discover_only" },
+    "event-plane":            { "default": "discover_only" },
+    "observability-plane":    { "default": "discover_only" },
+    "security-plane":         { "default": "discover_only", "block_write": true },
+    "entity-resolution-plane":{ "default": "discover_only" },
+    "simulation-plane":       { "default": "discover_only" },
+    "workflow-plane":         { "default": "discover_only" },
+    "action-plane":           { "default": "discover_only" }
+  },
+  "subsystems": {
+    "underworld":     { "default": "read_only", "reason": "never touch cognition loop" },
+    "forge":          { "default": "write_through_approvals", "reason": "forge owns approvals" },
+    "assurance":      { "default": "append_only", "reason": "history is append-only" },
+    "apollo":         { "default": "owner_only", "reason": "deploys require owner via /apollo/release" }
+  }
+}

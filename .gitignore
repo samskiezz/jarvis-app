@@ -167,3 +167,16 @@ assurance/reports/*.md
 assurance/fuzz/crashes/*.json
 server/data/assurance/reports/*.json
 .coverage
+
+# Autopilot generated artifacts
+autopilot/intelligence/*.json
+autopilot/intelligence/*.md
+autopilot/state/*.json
+autopilot/state/*.jsonl
+autopilot/blackboard/*.jsonl
+autopilot/reports/*.json
+autopilot/reports/*.md
+autopilot/reports/proposals/*.md
+autopilot/roadmap/*.json
+autopilot/roadmap/*.md
+!autopilot/**/.gitkeep

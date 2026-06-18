@@ -1,0 +1,16 @@
+{
+  "paths": [
+    "autopilot/reports/",
+    "autopilot/state/",
+    "autopilot/blackboard/",
+    "autopilot/intelligence/",
+    "autopilot/roadmap/",
+    ".proof/"
+  ],
+  "forbidden_paths": [
+    "/etc/", "/usr/", "/var/", "/root/.ssh/", "/root/.aws/",
+    "server/data/*.db", "server/data/assurance/audit.jsonl",
+    "underworld/data/", "forge/forge.db", "forge/approvals.db",
+    ".git/", ".env", ".env.secrets", ".env.local"
+  ]
+}

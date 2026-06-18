@@ -1,0 +1,36 @@
+{
+  "patterns": [
+    "rm\\s+-rf",
+    "git\\s+reset\\s+--hard",
+    "git\\s+clean\\s+-fd",
+    "git\\s+push\\s+--force",
+    "git\\s+push\\s+-f\\b",
+    "DROP\\s+TABLE",
+    "TRUNCATE\\s+TABLE",
+    "DROP\\s+DATABASE",
+    "chmod\\s+-R\\s+/",
+    "chown\\s+-R\\s+/",
+    "pm2\\s+delete\\s+\\*",
+    "pm2\\s+kill\\b",
+    "docker\\s+system\\s+prune\\s+-a",
+    "mkfs\\.",
+    "dd\\s+if=/dev/zero",
+    ">/dev/sd[a-z]",
+    "shutdown\\s+now",
+    "reboot\\s+",
+    "echo\\s+.*>\\s*/etc/",
+    "cat\\s+/root/.env",
+    "cat\\s+.*\\.env\\.secrets",
+    "export\\s+KIMI_API_KEY",
+    "export\\s+ANTHROPIC_API_KEY",
+    "printenv\\s*$"
+  ],
+  "commands": [
+    "gpu.dispose", "gpu.destroy", "gpu.launch_disposable",
+    "storage.delete", "storage.purge", "wasabi.delete",
+    "process.kill", "pm2.delete",
+    "deploy.production", "deploy.rollback",
+    "fs.rmtree", "fs.truncate",
+    "payment.execute", "sms.send", "email.send", "slack.send"
+  ]
+}

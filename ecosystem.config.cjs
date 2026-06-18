@@ -189,5 +189,27 @@ module.exports = {
         ASSURANCE_INTERVAL_S: '60',
       },
     },
+    {
+      // Autopilot loop: every 15 min runs perception → planning → action
+      // (safe class only) → evaluation → improvement. Writes proposals to
+      // autopilot/reports/proposals/ — never auto-edits code outside autopilot/.
+      // See AUTOPILOT.md for the full safety model.
+      name: 'autopilot-loop',
+      cwd: '/opt/jarvis-app-1',
+      script: '.venv/bin/python',
+      args: '-m autopilot.cli loop --continuous --safe',
+      interpreter: 'none',
+      autorestart: true,
+      max_restarts: 50,
+      env: {
+        AUTOPILOT_INTERVAL_S: '900',
+        AUTOPILOT_MAX_REPAIRS_PER_RUN: '3',
+        AUTOPILOT_MAX_FILES_CHANGED: '5',
+        AUTOPILOT_MAX_COMMAND_RUNTIME_S: '120',
+        AUTOPILOT_ALLOW_EXTERNAL_READ: 'false',
+        AUTOPILOT_ALLOW_EXTERNAL_WRITE: 'false',
+        AUTOPILOT_ALLOW_PAID_RESOURCES: 'false',
+      },
+    },
   ],
 };

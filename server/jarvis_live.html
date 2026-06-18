@@ -2130,6 +2130,18 @@ html.low-power #mic.live{animation:none}
       <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Workflows</div>
       <div id=mcWorkflowsBody>—</div>
     </div>
+    <div id=mcAutopilot style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto;grid-column:1 / span 2">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">🤖 Autopilot</div>
+      <div id=mcAutopilotBody>—</div>
+    </div>
+    <div id=mcAutopilotRoadmap style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Roadmap (next actions)</div>
+      <div id=mcAutopilotRoadmapBody>—</div>
+    </div>
+    <div id=mcAutopilotProposals style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Pending proposals</div>
+      <div id=mcAutopilotProposalsBody>—</div>
+    </div>
   </div>
 </div>
 
@@ -3341,6 +3353,43 @@ async function mcRefresh(){
         (w.states||[]).map(s=>w.terminal&&w.terminal.indexOf(s)>=0?'<span style="color:#46d39a">'+s+'</span>':s).join(' → ')+
         ' <span style="color:var(--dim)">('+ (w.transitions||[]).length +' transitions)</span></div>';
     }).join('');
+    // Autopilot (separate fetches — fail open)
+    try{
+      const [stRes, rmRes, pRes] = await Promise.all([
+        fetch('assurance/autopilot/status').then(r=>r.json()).catch(()=>null),
+        fetch('assurance/autopilot/roadmap').then(r=>r.json()).catch(()=>null),
+        fetch('assurance/autopilot/proposals').then(r=>r.json()).catch(()=>null),
+      ]);
+      if(stRes){
+        const score=stRes.health_score==null?'?':stRes.health_score;
+        const issues=(stRes.issues||[]);
+        const subs=(stRes.subsystems||{}).by_status||{};
+        const res=(stRes.resources||{});
+        $('mcAutopilotBody').innerHTML=
+          '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px">'+
+          '<div><span style="color:var(--dim)">Health</span> <b style="color:'+(score>=70?'#46d39a':(score>=40?'#e9883b':'#ff5c75'))+'">'+score+'/100</b></div>'+
+          '<div><span style="color:var(--dim)">pm2</span> '+(res.pm2_online||0)+'/'+(res.pm2_total||0)+'</div>'+
+          '<div><span style="color:var(--dim)">brain</span> '+_mcEscape(res.brain_state||'?')+'</div>'+
+          '<div><span style="color:var(--dim)">subsystems</span> alive='+(subs.alive_routed||0)+' dormant='+(subs.dormant_scaffold||0)+'</div>'+
+          '</div>'+
+          (issues.length? '<div style="color:var(--dim);margin-bottom:4px">Issues:</div>'+
+            issues.map(i=>'<div>'+_mcBadge(false)+' '+_mcEscape(i)+'</div>').join(''):'');
+      } else {
+        $('mcAutopilotBody').innerHTML='<span style="color:var(--dim)">autopilot status offline</span>';
+      }
+      if(rmRes){
+        const next=((rmRes.next||{}).next||[]).slice(0,8);
+        $('mcAutopilotRoadmapBody').innerHTML=next.length?
+          next.map(a=>'<div style="padding:2px 0">'+(a.requires_approval?'⚠ ':'· ')+_mcEscape(a.title)+' <span style="color:var(--dim)">('+_mcEscape(a.kind||'')+', risk='+_mcEscape(a.risk||'?')+')</span></div>').join(''):
+          '<span style="color:var(--dim)">no roadmap items</span>';
+      }
+      if(pRes){
+        const items=(pRes.proposals||[]).slice(0,10);
+        $('mcAutopilotProposalsBody').innerHTML=
+          '<div style="color:var(--dim);margin-bottom:4px">'+(pRes.count||0)+' pending</div>'+
+          items.map(p=>'<div style="padding:2px 0">📄 <span style="color:#aaa">'+_mcEscape(p.name.replace(/\.md$/,''))+'</span></div>').join('');
+      }
+    }catch(_){/* autopilot is optional */}
   }catch(e){
     $('mcStatus').textContent='error: '+(e.message||e);
   }

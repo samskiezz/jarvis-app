@@ -1,0 +1,20 @@
+{
+  "classes": {
+    "read_only":            { "auto": true,  "block": false, "audit": "always" },
+    "safe_write":           { "auto": true,  "block": false, "audit": "always", "path_check": "allowed_write_paths" },
+    "generated_write":      { "auto": true,  "block": false, "audit": "always", "path_check": ["autopilot/intelligence/","autopilot/reports/","autopilot/roadmap/"] },
+    "code_modify":          { "auto": false, "block": false, "audit": "always", "route": "forge" },
+    "external_read":        { "auto_if_config": "allow_external_read", "block_otherwise": false, "audit": "always" },
+    "external_write":       { "auto": false, "block": false, "audit": "always", "route": "approval" },
+    "worker_start":         { "auto": false, "block": false, "audit": "always", "fallback": "dry_run" },
+    "worker_stop":          { "auto": false, "block": false, "audit": "always", "route": "approval" },
+    "database_read":        { "auto": true,  "block": false, "audit": "always", "constraint": "SELECT_only" },
+    "database_write":       { "auto": false, "block": true,  "audit": "always" },
+    "destructive":          { "auto": false, "block": true,  "audit": "always" },
+    "deploy":               { "auto": false, "block": true,  "audit": "always", "note": "owner uses /apollo/release directly" },
+    "publish":              { "auto": false, "block": true,  "audit": "always" },
+    "secret_access":        { "auto": false, "block": true,  "audit": "always", "redaction": "enforced" },
+    "production_mutation":  { "auto": false, "block": true,  "audit": "always" },
+    "paid_resource_launch": { "auto_if_config": "allow_paid_resources", "block_otherwise": true, "audit": "always" }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "version": "0.1.0",
+  "interval_minutes": 15,
+  "max_iterations_per_invoke": 1,
+  "max_repairs_per_run": 3,
+  "max_files_changed_per_run": 5,
+  "max_command_runtime_s": 120,
+  "allowed_write_paths": [
+    "autopilot/reports/",
+    "autopilot/state/",
+    "autopilot/blackboard/",
+    "autopilot/intelligence/",
+    "autopilot/roadmap/",
+    ".proof/"
+  ],
+  "forbidden_actions": [
+    "destructive", "deploy", "publish",
+    "secret_access", "production_mutation", "database_write"
+  ],
+  "allowed_improvement_categories": [
+    "doc", "test_stub", "wrapper", "health_check", "report", "proposal"
+  ],
+  "allow_external_read": false,
+  "allow_external_write": false,
+  "allow_paid_resources": false,
+  "max_cost_class": "free",
+  "respect_brain_throttle": true,
+  "brain_revival_cooldown_s": 900
+}

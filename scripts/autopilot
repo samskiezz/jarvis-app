@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Thin launcher for `autopilot <subcommand>`
+set -euo pipefail
+ROOT="/opt/jarvis-app-1"
+exec "${ROOT}/.venv/bin/python" -m autopilot.cli "$@"

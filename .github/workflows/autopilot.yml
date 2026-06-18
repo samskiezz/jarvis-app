@@ -1,0 +1,63 @@
+name: autopilot
+
+on:
+  push:
+    paths:
+      - 'autopilot/**'
+      - 'tests/test_autopilot/**'
+      - 'server/routes/assurance.py'
+      - '.github/workflows/autopilot.yml'
+  pull_request:
+    paths:
+      - 'autopilot/**'
+      - 'tests/test_autopilot/**'
+
+jobs:
+  autopilot-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pydantic fastapi pytest httpx pytest-cov
+
+      - name: Run autopilot test suite
+        run: pytest tests/test_autopilot/ -q
+
+      - name: Discover (always — produces intelligence/*.json)
+        run: python -m autopilot.cli discover
+
+      - name: Graph
+        run: python -m autopilot.cli graph
+
+      - name: Verify (delegates to assurance gate)
+        run: python -m autopilot.cli verify
+        continue-on-error: true
+
+      - name: Dry-run loop
+        run: python -m autopilot.cli loop --once --safe
+
+      - name: Status report
+        run: python -m autopilot.cli status
+
+      - name: Health score
+        run: python -m autopilot.cli health
+
+      - name: Upload generated intelligence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autopilot-intelligence
+          path: |
+            autopilot/intelligence/*.json
+            autopilot/intelligence/*.md
+            autopilot/reports/*.json
+            autopilot/reports/*.md
+            autopilot/reports/proposals/*.md
+            autopilot/state/*.json
+          retention-days: 14

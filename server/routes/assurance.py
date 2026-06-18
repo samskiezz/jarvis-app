@@ -133,3 +133,118 @@ def report(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
         "audit_recent": read_audit(limit=50),
         "telemetry": get_snapshot(),
     }
+
+
+# ── Autopilot endpoints (read-only) ────────────────────────────────────────
+import json as _json
+import os as _os
+
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+_AP_REPORTS = _os.path.join(_ROOT, "autopilot", "reports")
+_AP_INTEL = _os.path.join(_ROOT, "autopilot", "intelligence")
+_AP_STATE = _os.path.join(_ROOT, "autopilot", "state")
+_AP_ROADMAP = _os.path.join(_ROOT, "autopilot", "roadmap")
+
+
+def _read_json_safe(path: str, default: Any = None) -> Any:
+    if not _os.path.exists(path):
+        return default
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return _json.load(fh)
+    except (OSError, _json.JSONDecodeError):
+        return default
+
+
+@router.get("/autopilot/status")
+def autopilot_status(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    return _read_json_safe(_os.path.join(_AP_REPORTS, "system-status.json"),
+                           default={"ok": False, "error": "no status yet"})
+
+
+@router.get("/autopilot/reports/{name}")
+def autopilot_reports(name: str, _t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    safe = _os.path.basename(name)
+    if not safe.endswith(".json"):
+        safe = safe + ".json"
+    p = _os.path.join(_AP_REPORTS, safe)
+    data = _read_json_safe(p)
+    if data is None:
+        raise HTTPException(status_code=404, detail=f"no report {safe}")
+    return data
+
+
+@router.get("/autopilot/roadmap")
+def autopilot_roadmap(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    return {
+        "next": _read_json_safe(_os.path.join(_AP_ROADMAP, "next-actions.json"),
+                                  default={"next": []}),
+        "backlog": _read_json_safe(_os.path.join(_AP_ROADMAP, "backlog.json"),
+                                    default=[]),
+    }
+
+
+@router.get("/autopilot/resources")
+def autopilot_resources(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    return _read_json_safe(_os.path.join(_AP_INTEL, "resource-map.json"),
+                           default={"ok": False})
+
+
+@router.get("/autopilot/unknowns")
+def autopilot_unknowns(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    return _read_json_safe(_os.path.join(_AP_INTEL, "unknown-systems.json"),
+                           default={"ok": False})
+
+
+@router.get("/autopilot/subsystems")
+def autopilot_subsystems(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    return _read_json_safe(_os.path.join(_AP_INTEL, "subsystem-registry.json"),
+                           default={"ok": False})
+
+
+@router.get("/autopilot/proposals")
+def autopilot_proposals(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
+    prop_dir = _os.path.join(_AP_REPORTS, "proposals")
+    if not _os.path.isdir(prop_dir):
+        return {"proposals": [], "count": 0}
+    items: list[dict[str, Any]] = []
+    try:
+        for f in sorted(_os.listdir(prop_dir), reverse=True)[:50]:
+            if f.endswith(".md"):
+                p = _os.path.join(prop_dir, f)
+                try:
+                    st = _os.stat(p)
+                except OSError:
+                    continue
+                items.append({"name": f, "size": st.st_size, "mtime": st.st_mtime})
+    except OSError:
+        pass
+    return {"proposals": items, "count": len(items)}
+
+
+class _ApproveBody(BaseModel):
+    proposal_id: str
+    decision: str  # "approve" | "reject"
+    note: str | None = None
+
+
+@router.post("/autopilot/approve")
+def autopilot_approve(body: _ApproveBody, _t: str = Depends(require_bearer)) -> dict[str, Any]:
+    history_path = _os.path.join(_AP_STATE, "approval-history.jsonl")
+    _os.makedirs(_AP_STATE, exist_ok=True)
+    import time as _time
+    entry = {
+        "ts": _time.time(),
+        "proposal_id": body.proposal_id,
+        "decision": body.decision,
+        "note": body.note or "",
+    }
+    try:
+        with open(history_path, "a", encoding="utf-8") as fh:
+            fh.write(_json.dumps(entry) + "\n")
+    except OSError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+    append_audit(action="autopilot.approval", actor="bearer",
+                 outcome=body.decision,
+                 detail={"proposal_id": body.proposal_id})
+    return {"ok": True, "recorded": entry}
