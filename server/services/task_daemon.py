@@ -115,15 +115,30 @@ def _launch_detached(prompt: str, model: str, outfile: str, full: bool = True) -
         except Exception:  # noqa: BLE001
             pass
         time.sleep(0.05)
-    # Register this detached job with the mandatory whip viewer so the UI can see it.
+    # AUDIT FIX #4: register this detached job with the mandatory whip viewer AND persist the
+    # whip run_id to a sidecar so the two systems agree on the same Claude process.
+    #
+    # Previously the registration silently swallowed errors, leaving the whip viewer blind to
+    # daemon-launched jobs (and the daemon blind to whip transcripts) — boot-reclaim would
+    # re-attach by PID but couldn't find the matching transcript, sometimes producing orphans.
+    run_id = ""
     try:
         sys.path.insert(0, os.path.join(ROOT, "scripts"))
         from claude_whip import register_detached_run  # type: ignore
-        register_detached_run(stage="task_daemon", label=(prompt[:48] if prompt else "task"),
-                              model=model or "claude-sonnet-4-6", pid=pid,
-                              outfile=outfile, prompt=prompt or "")
-    except Exception:  # noqa: BLE001
-        pass
+        run_id = register_detached_run(
+            stage="task_daemon", label=(prompt[:48] if prompt else "task"),
+            model=model or "claude-sonnet-4-6", pid=pid,
+            outfile=outfile, prompt=prompt or "") or ""
+    except Exception as e:  # noqa: BLE001
+        # Make registration failure visible — silent swallow was the original bug.
+        print(f"[task_daemon] whip register failed (pid={pid}): {str(e)[:120]}", flush=True)
+    if run_id:
+        # Sidecar lets boot-reclaim / status endpoints map outfile -> whip transcript.
+        try:
+            with open(outfile + ".whip_run", "w") as f:
+                f.write(run_id)
+        except Exception:  # noqa: BLE001
+            pass
     return pid
 
 
