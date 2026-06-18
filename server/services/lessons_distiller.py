@@ -185,5 +185,19 @@ def distill_once() -> dict:
 
 
 if __name__ == "__main__":
-    out = distill_once()
-    print(json.dumps(out, indent=2))
+    import sys
+    if "--loop" in sys.argv:
+        # Hourly tick (override with LESSONS_INTERVAL_S). Runs forever; pm2 manages restarts.
+        interval = float(os.environ.get("LESSONS_INTERVAL_S", "3600"))
+        print(f"[lessons_distiller] loop mode, interval={interval}s", flush=True)
+        while True:
+            try:
+                out = distill_once()
+                print(f"[lessons_distiller] tick: {out.get('written')} written / "
+                      f"{out.get('rows_seen')} rows scanned", flush=True)
+            except Exception as e:  # noqa: BLE001
+                print(f"[lessons_distiller] tick crashed: {e}", flush=True)
+            time.sleep(interval)
+    else:
+        out = distill_once()
+        print(json.dumps(out, indent=2))
