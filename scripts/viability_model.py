@@ -28,8 +28,12 @@ MODEL_PATH = os.path.join(ROOT, "server", "data", "viability_model.joblib")
 META_PATH = os.path.join(ROOT, "server", "data", "viability_model.json")
 
 TARGET_ACC = float(os.environ.get("VIAB_TARGET_ACC", "0.90"))   # the ≥90% bar
-MIN_SAMPLES = int(os.environ.get("VIAB_MIN_SAMPLES", "60"))      # don't trust tiny samples
-MIN_PER_CLASS = int(os.environ.get("VIAB_MIN_PER_CLASS", "12"))
+# GAP-AUDIT FIX #32: previously MIN_SAMPLES=60 / MIN_PER_CLASS=12 meant the predictor
+# ran advisory-only for the FIRST 60 cycles — wasting tokens on 60 features the model
+# couldn't gate. Lowered to 20/5 to start gating sooner with a smaller statistical margin.
+# Both are env-tunable for ops who want the old conservative behaviour.
+MIN_SAMPLES = int(os.environ.get("VIAB_MIN_SAMPLES", "20"))      # don't trust tiny samples
+MIN_PER_CLASS = int(os.environ.get("VIAB_MIN_PER_CLASS", "5"))
 
 
 def _read_outcomes() -> list:
