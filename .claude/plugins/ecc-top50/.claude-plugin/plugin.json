@@ -1,0 +1,10 @@
+{
+  "name": "ecc-top50",
+  "version": "1.0.0",
+  "description": "Top 50 ECC skills picked for the Jarvis repo (Python/FastAPI + Three.js + multi-LLM agent system). Covers planning, code review, testing, security, performance, agent ops, Python/FastAPI, React/frontend, knowledge/research, DevOps, AI/ML, and repo hygiene. Picked from the 474-skill audit at /opt/jarvis-app-1/audit/.",
+  "author": {
+    "name": "Sam Kazangas",
+    "email": "samkazangas@gmail.com"
+  },
+  "homepage": "file:///opt/jarvis-app-1/audit/top50.md"
+}
