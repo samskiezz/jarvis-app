@@ -1752,7 +1752,18 @@ def _a11y_read() -> dict:
         with open(_A11Y_PATH, encoding="utf-8") as f:
             return json.load(f)
     except Exception:  # noqa: BLE001
-        return {"state": {}, "ts": 0, "source": "local", "_cmd": None}
+        try:
+            with open(_A11Y_PATH + ".bak", encoding="utf-8") as f:
+                restored = json.load(f)
+            try:
+                os.makedirs(os.path.dirname(_A11Y_PATH), exist_ok=True)
+                with open(_A11Y_PATH, "w", encoding="utf-8") as f:
+                    json.dump(restored, f)
+            except Exception:  # noqa: BLE001
+                pass
+            return restored
+        except Exception:  # noqa: BLE001
+            return {"state": {}, "ts": 0, "source": "local", "_cmd": None}
 
 
 def _a11y_write(patch: dict, source: str = "local", cmd: dict | None = None) -> dict:
@@ -1769,6 +1780,11 @@ def _a11y_write(patch: dict, source: str = "local", cmd: dict | None = None) -> 
             with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(out, f)
             os.replace(tmp, _A11Y_PATH)               # atomic swap (POSIX)
+            try:
+                with open(_A11Y_PATH + ".bak", "w", encoding="utf-8") as f:
+                    json.dump(out, f)
+            except Exception:  # noqa: BLE001
+                pass
         except Exception:  # noqa: BLE001
             pass
         return out

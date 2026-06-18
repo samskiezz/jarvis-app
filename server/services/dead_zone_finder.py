@@ -137,6 +137,27 @@ def scan(limit: int = 100) -> list[dict[str, Any]]:
     return findings[:limit]
 
 
+def scan_assets() -> dict:
+    """Real dead-zone scan: parse MINI_APPS from jarvis_live.html, ping each backend route, return {scanned, dead, alive}."""
+    import urllib.request
+    html_path = os.path.join(ROOT, "server", "jarvis_live.html")
+    dead, alive = [], []
+    try:
+        html = open(html_path, encoding="utf-8").read(300000)
+    except Exception as e:
+        return {"scanned": 0, "dead": [], "alive": [], "error": str(e)[:120]}
+    apps = re.findall(r"\{id:'([^']+)'", html)
+    for app_id in sorted(set(apps))[:60]:
+        url = f"http://127.0.0.1:8001/v1/{app_id}/health"
+        try:
+            r = urllib.request.urlopen(url, timeout=1)
+            (alive if r.status < 400 else dead).append(app_id)
+        except Exception:
+            dead.append(app_id)
+    return {"scanned": len(set(apps)), "dead": dead, "alive": alive,
+            "dead_count": len(dead), "alive_count": len(alive)}
+
+
 def get_finding(finding_id: str) -> Optional[dict[str, Any]]:
     for f in scan(limit=500):
         if f.get("id") == finding_id:

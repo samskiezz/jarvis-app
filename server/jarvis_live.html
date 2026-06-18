@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='46'; window.__JV_VER=VER;
+  var KEY='__jv',VER='47'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -68,6 +68,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 </script>
 <meta name=theme-color content="#03050A">
 <style>
+html.calm *,body.calm *,html.reduce-motion *,body.reduce-motion *{animation-duration:0.01ms !important;transition-duration:0.01ms !important;animation-iteration-count:1 !important;scroll-behavior:auto !important}
 /* ========== iOS DESIGN SYSTEM v2 — Billion-Dollar Architecture ========== */
 :root{
   /* PRIMARY COLORS — JARVIS Brand + iOS System */
@@ -6219,6 +6220,14 @@ function openRemindersOverlay(){const s=$('remindSheet');if(!s)return;s.innerHTM
 function closeRemindersOverlay(){$('ovReminders').classList.remove('open');}
 async function saveReminder(){const v=$('remindText')&&$('remindText').value.trim();if(!v)return;try{const r=await fetch('/reminders/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:v,kind:'note'})});if(r.ok){const j=await r.json();showInplaceAlert('Reminder saved (#'+j.id+')');closeRemindersOverlay();}else{showInplaceAlert('Save failed: '+r.status);}}catch(e){showInplaceAlert('Save failed: '+(e.message||e));}}
 async function loadAwakening(worldId){try{const r=await fetch('/v1/underworld/proxy/worlds/'+encodeURIComponent(worldId||'default')+'/awakening/arc');if(!r.ok)return null;const j=await r.json();return j&&j.ok!==false?j:null;}catch(_){return null;}}
+/* gap-fix #28: recent minion eulogies from the Underworld backend */
+async function loadEulogies(worldId){try{const r=await fetch('/v1/underworld/proxy/worlds/'+encodeURIComponent(worldId||'default')+'/eulogies');if(!r.ok)return null;const j=await r.json();return j&&j.ok!==false?j:null;}catch(_){return null;}}
+/* gap-fix #30: underworld backend reachability + latency probe (returns {ok, latency_ms, …}) */
+async function loadUnderworldHealth(){try{const r=await fetch('/v1/underworld/health');if(!r.ok)return null;return await r.json();}catch(_){return null;}}
+/* gap-fix #41 (UI): GPU/Claude daily-spend status for the header pill */
+async function loadGpuSpend(){try{const r=await fetch('/v1/token-governor/spend_status');if(!r.ok)return null;return await r.json();}catch(_){return null;}}
+/* gap-fix #40 (UI): dispose the current Vast brain (calls the new POST /v1/gpu/dispose) */
+async function disposeBrain(){if(!confirm('Dispose the current Vast brain? This is IRREVERSIBLE.'))return;try{const r=await fetch('/v1/gpu/dispose',{method:'POST'});const j=await r.json().catch(()=>({}));showInplaceAlert(r.ok?'Brain disposed (id #'+(j.id||'?')+')':'Dispose failed: '+r.status);}catch(e){showInplaceAlert('Dispose failed: '+(e.message||e));}}
 
 function openPlaygroundOverlay(){const s=$('playSheet');if(!s)return;renderPlayground();$('ovPlayground').classList.add('open');}
 function closePlaygroundOverlay(){$('ovPlayground').classList.remove('open');}

@@ -142,6 +142,21 @@ def _record(tier, model, engine, ok, latency_ms, usage, err=""):
         pass
 
 
+def _budget_guard(stream_gen, max_tokens: int):
+    """Yield chunks from stream_gen until approximate output tokens exceeds max_tokens, then close. ~4 chars/token estimate."""
+    total_chars = 0
+    cap_chars = int(max_tokens * 4) if max_tokens else 0
+    try:
+        for chunk in stream_gen:
+            if cap_chars and total_chars >= cap_chars:
+                yield "[budget-cut]"
+                break
+            total_chars += len(chunk) if isinstance(chunk, str) else 0
+            yield chunk
+    finally:
+        pass
+
+
 def _post(url, payload, headers, timeout=15):   # LIFELINE: never let a dead GPU box hang chat for minutes — fail fast → next tier/fallback
     req = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST",
                                  headers={"Content-Type": "application/json", **headers})

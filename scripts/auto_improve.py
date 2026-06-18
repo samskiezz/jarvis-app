@@ -164,6 +164,11 @@ def ideate(n: int, tier: str) -> list[dict]:
         import re
         html = open(os.path.join(ROOT, "server", "jarvis_live.html"), encoding="utf-8").read(120000)
         apps = re.findall(r"\{id:'([^']+)',ic:'[^']*',t:'([^']+)'", html)
+        if not apps:
+            apps = re.findall(r"\{id:'([^']+)',label:'([^']+)'", html)
+            apps = [(i, l) for i, l in apps]
+        if not apps:
+            log({"event": "ideator_no_grounding", "warn": "MINI_APPS regex matched zero apps"})
         ctx = "Existing mini-apps: " + ", ".join(f"{t}" for _, t in apps[:40])
     except Exception:  # noqa: BLE001
         ctx = ""
@@ -512,6 +517,28 @@ def score_change(feat: dict, files: list[str]) -> dict:
         return {"score": None, "category": feat.get("category", "other"), "reason": "score failed: " + str(e)[:80]}
 
 
+def _post_land_health_check(feature_files: list[str]) -> dict:
+    """If a feature added a new mini-app to jarvis_live.html, attempt to ping its route. Returns {checked, failed}."""
+    failed = []
+    if not any(f.endswith("jarvis_live.html") for f in feature_files):
+        return {"checked": 0, "failed": []}
+    try:
+        import urllib.request, re as _re
+        html = open(os.path.join(ROOT, "server", "jarvis_live.html"), encoding="utf-8").read(200000)
+        new_apps = _re.findall(r"\{id:'([^']+)'", html)
+        for app_id in set(new_apps[:30]):
+            url = f"http://127.0.0.1:8001/v1/{app_id}/health"
+            try:
+                r = urllib.request.urlopen(url, timeout=2)
+                if r.status >= 400:
+                    failed.append(app_id)
+            except Exception:
+                failed.append(app_id)
+        return {"checked": len(set(new_apps[:30])), "failed": failed}
+    except Exception as e:
+        return {"checked": 0, "failed": [], "error": str(e)[:120]}
+
+
 def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
     log({"event": "cycle_start", "features": n, "dry": dry, "tier": tier, "builder": builder})
     # Self-heal: the daemon's integration files must equal HEAD between cycles. A build killed mid-edit (or a
@@ -631,6 +658,8 @@ def cycle(n: int, dry: bool, tier: str, builder: str = "claude"):
             continue
         res = land(feat, feature_files)
         log({"event": "feature_land", **common, **res})
+        hc = _post_land_health_check(feature_files)
+        log({"event": "post_land_health", "title": feat["title"], **hc})
     log({"event": "cycle_end"})
 
 

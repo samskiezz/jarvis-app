@@ -60,6 +60,27 @@ _HASH_DIM = DIM  # alias: the dimension the offline hashing embedder uses
 # dimension and remember it (reset on module reload, so tests stay deterministic).
 _resolved: dict = {"backend": None, "dim": None}
 
+_DIM_MARKER = os.path.join(os.path.dirname(__file__), "..", "data", "embed_dim.json")
+
+
+def _check_and_flag_dim_change(current_dim: int) -> None:
+    """Persist the active dim; if it changed since last write, flag the corpus for reindex."""
+    try:
+        prev = None
+        if os.path.exists(_DIM_MARKER):
+            with open(_DIM_MARKER) as f:
+                prev = json.load(f).get("dim")
+        if prev is not None and prev != current_dim:
+            with open(_DIM_MARKER, "w") as f:
+                json.dump({"dim": current_dim, "previous": prev, "reindex_needed": True,
+                           "flagged_at": int(time.time())}, f)
+        else:
+            with open(_DIM_MARKER, "w") as f:
+                json.dump({"dim": current_dim, "reindex_needed": False,
+                           "updated_at": int(time.time())}, f)
+    except Exception:
+        pass
+
 # SGLang GPU tier (Vast.ai 2x RTX 4090) — PRIMARY
 _GPU_BASE_URL = os.environ.get("GPU_BASE_URL", "").strip().rstrip("/")
 _GPU_AUTH_TOKEN = os.environ.get("GPU_AUTH_TOKEN", "").strip()
@@ -275,6 +296,7 @@ def embed_batch(texts: list, *, batch: int = 64) -> list:
         if vecs is not None and len(vecs) == len(sub):
             if not _resolved["dim"] and vecs[0].size:
                 _resolved["backend"], _resolved["dim"] = "gpu", int(vecs[0].size)
+                _check_and_flag_dim_change(_resolved["dim"])
             for j, v in enumerate(vecs):
                 out[start + j] = v
         else:
@@ -329,6 +351,7 @@ def embed(text: str) -> np.ndarray:
             if v is not None and v.size > 0:
                 if not _resolved["dim"]:
                     _resolved["backend"], _resolved["dim"] = "gpu", int(v.size)
+                    _check_and_flag_dim_change(_resolved["dim"])
                 return v
         # blank text, or GPU unreachable → hashing fallback at the GPU width when
         # known (so dims match), else probe once to learn it, else the hashing dim.
@@ -337,6 +360,7 @@ def embed(text: str) -> np.ndarray:
             probe = _gpu_embed_raw("dimension probe")
             if probe is not None and probe.size > 0:
                 _resolved["backend"], _resolved["dim"] = "gpu", int(probe.size)
+                _check_and_flag_dim_change(_resolved["dim"])
                 dim = _resolved["dim"]
         return _hash_embed(text, int(dim or _HASH_DIM))
     return _hash_embed(text, _HASH_DIM)

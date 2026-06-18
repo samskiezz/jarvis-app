@@ -223,6 +223,47 @@ async def post_gpu_embed(request: dict, _token: str = Depends(require_bearer)):
     return {"status": "ok", "embeddings": result, "count": len(result)}
 
 
+@router.post("/v1/gpu/dispose")
+async def post_gpu_dispose(_token: str = Depends(require_bearer)):
+    """Destroy the currently-running Vast brain instance (irreversible).
+
+    Reuses brain_watchdog helpers (_api_key, _vast_req) to locate the
+    'jarvis-brain*' box and call Vast DELETE /instances/{id}/. Defensive:
+    returns ok=false when credentials are missing or no brain is found,
+    never raises 500."""
+    try:
+        import sys as _sys
+        if "/opt/jarvis-app-1/scripts" not in _sys.path:
+            _sys.path.insert(0, "/opt/jarvis-app-1/scripts")
+        from brain_watchdog import _api_key, _vast_req
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"brain_watchdog import failed: {str(exc)[:160]}"}
+
+    if not _api_key():
+        return {"ok": False, "error": "vast credentials missing (set VAST_API_KEY or .vast_key)"}
+
+    try:
+        d = _vast_req("GET", "/instances/")
+        instances = d.get("instances") or []
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"vast list failed: {str(exc)[:160]}"}
+
+    brains = [i for i in instances
+              if "brain" in (i.get("label") or "").lower()]
+    if not brains:
+        return {"ok": False, "error": "no brain instance running"}
+
+    target = brains[0]
+    iid = str(target.get("id"))
+    try:
+        _vast_req("DELETE", f"/instances/{iid}/")
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "id": iid, "error": f"dispose failed: {str(exc)[:160]}"}
+
+    return {"ok": True, "id": iid, "label": target.get("label"),
+            "message": f"disposed brain instance {iid}"}
+
+
 # ── admin summary ────────────────────────────────────────────────────────────────
 @router.get("/v1/admin/summary")
 async def get_admin_summary(_token: str = Depends(require_bearer)):
@@ -413,3 +454,13 @@ async def pipeline_deploy(_token: str = Depends(require_bearer)):
            "> /tmp/ue5_pipeline.log 2>&1 < /dev/null &")
     _os.system(cmd)
     return {"ok": True, "deploying": True}
+
+
+@router.get("/v1/token-governor/spend_status")
+async def token_governor_spend_status(_token: str | None = Depends(optional_bearer)):
+    """Daily Claude/Archon spend snapshot for dashboard alerts."""
+    try:
+        from ..services import token_governor as _TG
+        return _TG.spend_status()
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": str(exc)}

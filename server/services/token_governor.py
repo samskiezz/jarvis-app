@@ -101,6 +101,16 @@ def state() -> dict:
             "economy_forced": s >= DAILY_USD}
 
 
+def spend_status() -> dict:
+    """Current daily spend + cap + percent_used. Used by dashboard alerts."""
+    spent = spent_today()
+    return {"spent_usd": round(spent, 2), "daily_cap_usd": float(DAILY_USD),
+            "archon_cap_usd": float(ARCHON_USD),
+            "pct_used": round(100.0 * spent / DAILY_USD, 1) if DAILY_USD else 0.0,
+            "ceiling_hit": spent >= DAILY_USD,
+            "ts": int(time.time())}
+
+
 if __name__ == "__main__":
     import json
     import sys

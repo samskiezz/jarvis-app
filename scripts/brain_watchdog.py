@@ -53,6 +53,21 @@ ALLOW_PROVISION = os.environ.get("BRAIN_WATCHDOG_AUTO_PROVISION", "") in ("1", "
 # Per-instance offline-since timestamps — reset when state flips back to running.
 _OFFLINE_SINCE: dict[str, float] = {}
 
+# Newly-provisioned instances need grace before Vast boots them; suppress degraded alerts.
+_PROVISION_PENDING: dict[str, float] = {}
+PROVISION_GRACE_S = 600.0
+
+
+def _in_provision_grace(instance_id: str) -> bool:
+    ts = _PROVISION_PENDING.get(str(instance_id))
+    if not ts:
+        return False
+    age = time.time() - ts
+    if age > PROVISION_GRACE_S:
+        _PROVISION_PENDING.pop(str(instance_id), None)
+        return False
+    return True
+
 
 def _api_key() -> str:
     k = os.environ.get("VAST_API_KEY", "")
@@ -176,8 +191,13 @@ def sweep() -> dict:
         state = "alive"
         alert = None
     elif has_running and any_port_ok:
-        state = "degraded"
-        alert = "brain box is up but local dashboard cannot reach /llm/chat — check tunnel"
+        warming = any(_in_provision_grace(s["id"]) for s in summaries if s["status"] in ("running", "active"))
+        if warming:
+            state = "warming_up"
+            alert = None
+        else:
+            state = "degraded"
+            alert = "brain box is up but local dashboard cannot reach /llm/chat — check tunnel"
     elif has_running and not any_port_ok:
         state = "port_unmapped"
         alert = "brain box running but port 11434/tcp not mapped — protocol breach, re-provision required"
@@ -201,6 +221,9 @@ def _try_provision():
             j = json.loads(r.read() or b"{}")
         _log(f"AUTO-PROVISION basic brain → {str(j)[:240]}")
         _emit_event("brain_auto_provision_attempt", result=j)
+        new_id = j.get("instance_id") or j.get("id") or (j.get("instance") or {}).get("id")
+        if new_id:
+            _PROVISION_PENDING[str(new_id)] = time.time()
     except Exception as e:
         _log(f"AUTO-PROVISION failed: {str(e)[:140]}")
 

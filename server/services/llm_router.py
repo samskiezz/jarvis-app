@@ -288,24 +288,29 @@ async def stream_chat(
     chain = [forced] if forced else [p for p in _DEFAULT_CHAIN if p in _available_providers()]
 
     last_error = ""
-    for p in chain:
-        streamer = _PROVIDER_STREAMERS.get(p)
-        if streamer is None:
-            last_error = f"// Unknown provider: {p}"
-            continue
-        try:
-            yielded = False
-            async for chunk in streamer(message, system, fmt, max_tokens):
-                yielded = True
-                yield chunk
-            if yielded:
-                return
-        except (httpx.HTTPError, httpx.TimeoutException) as exc:
-            last_error = f"// {p} network error: {exc!r}"
-        except Exception as exc:  # noqa: BLE001
-            last_error = f"// {p} error: {exc!r}"
+    try:
+        for p in chain:
+            streamer = _PROVIDER_STREAMERS.get(p)
+            if streamer is None:
+                last_error = f"// Unknown provider: {p}"
+                continue
+            try:
+                yielded = False
+                async for chunk in streamer(message, system, fmt, max_tokens):
+                    yielded = True
+                    yield chunk
+                if yielded:
+                    yield "event: end\ndata: {\"ok\":true}\n\n"
+                    return
+            except (httpx.HTTPError, httpx.TimeoutException) as exc:
+                last_error = f"// {p} network error: {exc!r}"
+            except Exception as exc:  # noqa: BLE001
+                last_error = f"// {p} error: {exc!r}"
 
-    yield last_error or "// No LLM provider available. Set KIMI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, or start Ollama."
+        yield last_error or "// No LLM provider available. Set KIMI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, or start Ollama."
+        yield "event: end\ndata: {\"ok\":true}\n\n"
+    except Exception as e:  # noqa: BLE001
+        yield f"event: error\ndata: {json.dumps({'error': str(e)[:160]})}\n\n"
 
 
 def list_providers() -> list[dict]:
