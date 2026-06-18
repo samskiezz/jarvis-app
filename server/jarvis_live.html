@@ -2100,6 +2100,39 @@ html.low-power #mic.live{animation:none}
   </div>
 </div>
 
+<!-- 🛡 MISSION CONTROL — repo-wide assurance dashboard (read-only) -->
+<div class=ov id=ovMissionControl>
+  <button class=close onclick="setMode('live')">✕ Close</button>
+  <div class=ovtitle>🛡 MISSION CONTROL <span style="color:var(--dim)">· command bus · event bus · audit · invariants</span></div>
+  <div id=mcHead style="display:flex;gap:8px;align-items:center;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.06)">
+    <span id=mcStatus style="color:var(--dim);font-size:11px">loading…</span>
+    <span class=wlspacer style="flex:1"></span>
+    <button class=wlbtn id=mcRefresh title="Refresh">↻ Refresh</button>
+  </div>
+  <div id=mcBody style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px;height:calc(100% - 88px);overflow:auto">
+    <div id=mcInvariants style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Invariants</div>
+      <div id=mcInvariantsBody>—</div>
+    </div>
+    <div id=mcTelemetry style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Telemetry</div>
+      <div id=mcTelemetryBody>—</div>
+    </div>
+    <div id=mcCommands style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto;max-height:280px">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Recent Commands</div>
+      <div id=mcCommandsBody>—</div>
+    </div>
+    <div id=mcEvents style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto;max-height:280px">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Recent Events</div>
+      <div id=mcEventsBody>—</div>
+    </div>
+    <div id=mcWorkflows style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;font-family:ui-monospace,monospace;font-size:11px;overflow:auto;grid-column:1 / span 2">
+      <div style="color:var(--dim);font-weight:600;margin-bottom:6px">Workflows</div>
+      <div id=mcWorkflowsBody>—</div>
+    </div>
+  </div>
+</div>
+
 <!-- 🛰 LIVE TASKS — Mission Control overlay -->
 <div class=ov id=ovWork>
   <button class=close onclick="setMode('live')">✕ Close</button>
@@ -2585,6 +2618,7 @@ const DOCK=[
   {k:'vitals', ic:'🩺', t:'Vitals',   fn:()=>openVitals()},
   {k:'upgrades',ic:'⚙', t:'Upgrades', fn:()=>openUpgrades()},
   {k:'gpu',     ic:'🎛', t:'GPU',      fn:()=>openGPU()},
+  {k:'mctrl',  ic:'🛡', t:'Mission Control', fn:()=>setMode('mission_control')},
 ];
 /* ===== GPU — SIMPLE 2-button system: type what you want → ⚡ Run (auto-sizes the GPU, picks the cheapest
    matching box, runs, saves results to Hostinger, disposes). Each running box has one 🗑 Dispose. ===== */
@@ -3255,6 +3289,62 @@ async function claudeEnvOpen(){
   const sa=document.getElementById('ccShowArchived');if(sa)sa.onchange=ccRefreshList;
   const run=document.getElementById('ccRun');if(run)run.onclick=ccStartRun;
 }
+/* ============ Mission Control mini-app: assurance dashboard (read-only) ============ */
+let MC_TIMER=null;
+async function missionControlOpen(){
+  await mcRefresh();
+  if(MC_TIMER)clearInterval(MC_TIMER);
+  MC_TIMER=setInterval(mcRefresh,7000);
+  const r=document.getElementById('mcRefresh');if(r)r.onclick=mcRefresh;
+}
+function missionControlClose(){
+  if(MC_TIMER){clearInterval(MC_TIMER);MC_TIMER=null;}
+}
+function _mcEscape(s){return String(s||'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
+function _mcBadge(ok){return ok?'<span style="color:#46d39a">●</span>':'<span style="color:#ff5c75">●</span>';}
+async function mcRefresh(){
+  try{
+    const r=await fetch('assurance/report');
+    if(!r.ok){$('mcStatus').textContent='offline ('+r.status+')';return;}
+    const data=await r.json();
+    $('mcStatus').textContent='ok · '+new Date().toLocaleTimeString();
+    // Invariants
+    const inv=data.invariants||{};
+    const results=inv.results||[];
+    const passed=inv.passed||0, total=inv.total||0;
+    $('mcInvariantsBody').innerHTML=
+      '<div style="margin-bottom:6px">'+_mcBadge(inv.overall_ok)+' '+passed+'/'+total+' passing</div>'+
+      results.map(r=>'<div style="padding:2px 0">'+_mcBadge(r.passed)+' <span style="color:#aaa">'+_mcEscape(r.name)+'</span> <span style="color:var(--dim)">'+_mcEscape(r.evidence).slice(0,120)+'</span></div>').join('');
+    // Telemetry
+    const t=data.telemetry||{};
+    const h=t.health||{};
+    $('mcTelemetryBody').innerHTML=
+      '<div>uptime: '+Math.round((h.uptime_s||0))+'s</div>'+
+      '<div>commands: '+((h.commands||{}).total||0)+' · failures: '+((h.commands||{}).failures||0)+'</div>'+
+      '<div>events: '+((h.events||{}).total||0)+'</div>'+
+      '<div>audit entries: '+((h.audit||{}).total||0)+'</div>';
+    // Recent Commands
+    const cmds=(data.commands_recent||[]).slice(-20).reverse();
+    $('mcCommandsBody').innerHTML=cmds.map(c=>
+      '<div style="padding:2px 0">'+_mcBadge(c.ok)+' <span style="color:#aaa">'+_mcEscape(c.name)+'</span> <span style="color:var(--dim)">'+_mcEscape(c.actor||'')+' · '+(c.dry_run?'dry':'live')+'</span></div>'
+    ).join('')||'—';
+    // Recent Events
+    const evts=(data.events_recent||[]).slice(-20).reverse();
+    $('mcEventsBody').innerHTML=evts.map(e=>
+      '<div style="padding:2px 0">· <span style="color:#aaa">'+_mcEscape(e.name)+'</span> <span style="color:var(--dim)">'+_mcEscape(e.source||'')+'</span></div>'
+    ).join('')||'—';
+    // Workflows
+    const wf=data.workflows||{};
+    $('mcWorkflowsBody').innerHTML=Object.keys(wf).map(name=>{
+      const w=wf[name];
+      return '<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><b>'+_mcEscape(name)+'</b>: '+
+        (w.states||[]).map(s=>w.terminal&&w.terminal.indexOf(s)>=0?'<span style="color:#46d39a">'+s+'</span>':s).join(' → ')+
+        ' <span style="color:var(--dim)">('+ (w.transitions||[]).length +' transitions)</span></div>';
+    }).join('');
+  }catch(e){
+    $('mcStatus').textContent='error: '+(e.message||e);
+  }
+}
 function claudeEnvClose(){
   if(CC_TIMER){clearInterval(CC_TIMER);CC_TIMER=null;}
   if(CC_ES){try{CC_ES.close();}catch(_){}CC_ES=null;}
@@ -3622,16 +3712,18 @@ function micToggle(){
 
 /* ================= PRESERVED: overlays / Guardian WebRTC (negotiation untouched) ================= */
 function setMode(mode,arg){
-  ['ovGuardian','ovLib','ovWork','ovClaudeEnv'].forEach(id=>$(id)&&$(id).classList.remove('open'));
+  ['ovGuardian','ovLib','ovWork','ovClaudeEnv','ovMissionControl'].forEach(id=>$(id)&&$(id).classList.remove('open'));
   if(mode==='guardian'){if(!$('guardFrame').src)$('guardFrame').src='guardian?room=mum';$('ovGuardian').classList.add('open');jarvisSpeak('Opening the Guardian monitor for your mother.');}
   else if(mode==='library'){loadLib();$('ovLib').classList.add('open');}
   else if(mode==='worklist'){worklistStart();}
   else if(mode==='claude_env'){try{claudeEnvOpen();}catch(_){}$('ovClaudeEnv').classList.add('open');}
+  else if(mode==='mission_control'){try{missionControlOpen();}catch(_){}$('ovMissionControl').classList.add('open');}
   // 'live' just closes overlays
   if(mode!=='worklist')worklistStop();   // stop the poll/RAF when leaving worklist
   if(mode!=='claude_env')try{claudeEnvClose();}catch(_){}
+  if(mode!=='mission_control')try{missionControlClose();}catch(_){}
   // FINDING2: hide the dock while a fullscreen overlay covers the universe; restore it on return to live
-  const overlayOpen=(mode==='guardian'||mode==='library'||mode==='worklist'||mode==='claude_env');
+  const overlayOpen=(mode==='guardian'||mode==='library'||mode==='worklist'||mode==='claude_env'||mode==='mission_control');
   const dk=$('dock');if(dk)dk.classList.toggle('hidden',overlayOpen);
   const sd=$('sdev');if(sd)sd.classList.toggle('hidden',overlayOpen);   // self-dev bar follows the iOS dock
   ['pInfra','pPipe','pKnow','pFab'].forEach(id=>$(id)&&$(id).classList.toggle('hidden',overlayOpen)); // §1 C: glass panels follow too
@@ -6301,6 +6393,7 @@ const MINI_APPS=[
   // Their overlay functions are kept for hotkeys / context-menu / control-centre / 3D "Look Up".
   // Hubs consolidate overlapping apps under one tabbed sheet (opening a child id deep-links its tab).
   {id:'claude_env',ic:'🔧',t:'Claude Code',d:'Interactive Claude Code environment + every whip transcript (open chats archive when done)'},
+  {id:'mission_control',ic:'🛡',t:'Mission Control',d:'Repo-wide assurance: command bus, event bus, audit, telemetry, workflows, invariants (read-only)'},
   {id:'nexus',ic:'🧬',t:'NEXUS',d:'Live brain map of the whole system — codebase, infra, memory, embeddings, lessons firing across synapses'},
   {id:'syshealth',ic:'🩺',t:'System Health',d:'Vitals, health, doctor, debugger, optimiser, GPU brain'},
   {id:'intel',ic:'🛰',t:'Intelligence',d:'Datasets, reports, alerts, cases, boards'},

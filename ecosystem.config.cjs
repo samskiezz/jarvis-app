@@ -174,5 +174,20 @@ module.exports = {
         BURST_WATCHER_INTERVAL_S: '60',
       },
     },
+    {
+      // Assurance invariant runner: every N seconds runs all 10 invariants
+      // and writes server/data/assurance/reports/latest_invariants.json.
+      // The Mission Control mini-app reads from that report.
+      name: 'assurance-runner',
+      cwd: '/opt/jarvis-app-1',
+      script: '.venv/bin/python',
+      args: 'scripts/assurance_runner.py',
+      interpreter: 'none',
+      autorestart: true,
+      max_restarts: 50,
+      env: {
+        ASSURANCE_INTERVAL_S: '60',
+      },
+    },
   ],
 };

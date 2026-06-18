@@ -142,6 +142,7 @@ from .routes import search_semantic as search_semantic_routes
 from .routes import security as security_routes
 from .routes import streams as streams_routes
 from .routes import claude_code as claude_code_routes
+from .routes import assurance as assurance_routes
 from .routes import temporal as temporal_routes
 from .routes import vault as vault_routes
 from .routes import voice as voice_routes
@@ -346,6 +347,7 @@ def create_app() -> FastAPI:
     app.include_router(entities_routes.router)
     app.include_router(streams_routes.router)
     app.include_router(claude_code_routes.router)
+    app.include_router(assurance_routes.router)
     app.include_router(history_routes.router)
     app.include_router(ontology_routes.router)
     app.include_router(search_routes.router)

@@ -396,6 +396,21 @@ def _sync_ollama_cache_to_wasabi(instance_id: int) -> dict:
             "wasabi": wasabi, "dest": dest}
 
 
+def _assurance_emit(name: str, payload: dict, *, source: str = "server.services.gpu_instances") -> str | None:
+    """Best-effort event emit to the assurance bus. Returns correlation_id or None."""
+    try:
+        import sys as _sys
+        _root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        if _root not in _sys.path:
+            _sys.path.insert(0, _root)
+        from assurance.events.bus import get_bus as _evt_bus  # type: ignore
+        from assurance.events.types import Event as _Event  # type: ignore
+        evt = _evt_bus().append(_Event(name=name, actor="system", source=source, payload=payload))
+        return evt.correlation_id
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def safe_dispose(instance_id: int, force: bool = False) -> dict:
     """RECOUP-THEN-DESTROY: sync /workspace down to Hostinger AND push it on to Wasabi, then destroy.
     By default REFUSES if local recoup fails (nothing lost on disk). force=True (user-authorised)
@@ -404,12 +419,15 @@ def safe_dispose(instance_id: int, force: bool = False) -> dict:
     (skip with env BRAIN_DISPOSE_SKIP_MODEL_SYNC=1)."""
     g = _guard()
     if g: return g
+    corr = _assurance_emit("gpu.dispose.started", {"instance_id": int(instance_id), "force": bool(force)})
     if force:
         d = destroy_instance(int(instance_id))   # user-authorised: destroy NOW, no slow SSH recoup (which hangs on a booting/stopped box)
         d["forced"] = True; d["recoup_ok"] = False
+        _assurance_emit("gpu.dispose.completed", {"instance_id": int(instance_id), "ok": bool(d.get("ok")), "forced": True})
         return d
     recoup = sync_results(int(instance_id), "/workspace")
     if not recoup.get("ok"):
+        _assurance_emit("gpu.dispose.refused", {"instance_id": int(instance_id), "reason": "recoup_failed"})
         return {"ok": False, "error": "REFUSED to destroy — recoup failed (" + str(recoup.get("error") or recoup.get("stderr") or "")[:120] + "). Data not lost; try Save→Hostinger then dispose, or force.", "recoup": recoup}
     wasabi = _promote_recoup_to_wasabi(recoup.get("dest") or "")
     # NEW: sync the Ollama model cache so the next provision can restore from Wasabi
@@ -419,6 +437,11 @@ def safe_dispose(instance_id: int, force: bool = False) -> dict:
     d["recouped_to"] = recoup.get("dest"); d["recoup_ok"] = bool(recoup.get("ok")); d["forced"] = force
     d["wasabi"] = wasabi
     d["model_cache_wasabi"] = model_cache_wasabi
+    if corr:
+        d["assurance_correlation_id"] = corr
+    _assurance_emit("gpu.dispose.completed", {"instance_id": int(instance_id),
+                                              "ok": bool(d.get("ok")),
+                                              "wasabi_uploaded": (wasabi or {}).get("uploaded", 0)})
     return d
 
 
@@ -483,6 +506,10 @@ def launch_disposable(task_cmd: str, gpu_name: str = None, max_price: float = No
     if created.get("ok"):
         created["offer"] = off["offer"]
         created["vram_needed_gb"] = vram["gb"]; created["sized_for"] = vram["why"]
+    _assurance_emit("gpu.launch_disposable", {"ok": bool(created.get("ok")),
+                                              "instance_id": created.get("new_contract") or created.get("id"),
+                                              "label": label,
+                                              "max_price": max_price})
     return created
 
 

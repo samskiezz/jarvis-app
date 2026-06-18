@@ -312,6 +312,23 @@ def archive_run(run_id: str, outcome: str, detail: dict | None = None) -> bool:
     if detail:
         data["outcome_detail"] = detail
     _write(p, data)
+    # Additive: emit an assurance event so the event bus + audit log see archival.
+    try:
+        import sys as _sys
+        _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if _root not in _sys.path:
+            _sys.path.insert(0, _root)
+        from assurance.events.bus import get_bus as _evt_bus  # type: ignore
+        from assurance.events.types import Event as _Event  # type: ignore
+        _evt_bus().append(_Event(
+            name="claude.run.archived",
+            actor=data.get("actor") or "system",
+            source="scripts.claude_whip",
+            payload={"run_id": run_id, "outcome": outcome,
+                     "stage": data.get("stage"), "label": data.get("label")},
+        ))
+    except Exception:  # noqa: BLE001
+        pass
     return True
 
 

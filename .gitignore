@@ -160,3 +160,9 @@ server/data/claude_runs/
 
 # Local settings backup created when wiring ECC hooks (kept on box as safety net)
 .claude/settings.local.json.bak
+
+# Assurance generated artifacts
+assurance/reports/*.json
+assurance/reports/*.md
+assurance/fuzz/crashes/*.json
+server/data/assurance/reports/*.json

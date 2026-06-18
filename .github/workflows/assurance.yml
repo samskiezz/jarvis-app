@@ -1,0 +1,46 @@
+name: assurance
+
+on:
+  push:
+    paths:
+      - 'assurance/**'
+      - 'tests/test_assurance/**'
+      - 'server/routes/assurance.py'
+      - '.github/workflows/assurance.yml'
+  pull_request:
+    paths:
+      - 'assurance/**'
+      - 'tests/test_assurance/**'
+      - 'server/routes/assurance.py'
+
+jobs:
+  assurance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install minimal deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pydantic fastapi pytest httpx
+      - name: Lint (ruff if installed)
+        run: |
+          pip install ruff || true
+          ruff check assurance/ tests/test_assurance/ || echo "ruff warnings ignored in CI"
+        continue-on-error: true
+      - name: Type-check (mypy if installed)
+        run: |
+          pip install mypy || true
+          mypy --ignore-missing-imports assurance/ || echo "mypy warnings ignored in CI"
+        continue-on-error: true
+      - name: Run assurance test suite
+        run: pytest tests/test_assurance/ -q
+      - name: Run invariant runner
+        run: python -m assurance.invariants.runner --once --fail-on-violation
+      - name: Run fuzz smoke
+        run: python -m assurance.fuzz.api_fuzzer --seed 42 --iter 200
+      - name: Run invariant fuzz
+        run: python -m assurance.fuzz.invariant_fuzz --walks 500
