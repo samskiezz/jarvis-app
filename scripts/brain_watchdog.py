@@ -44,6 +44,14 @@ EVENTS_PATH = "/opt/jarvis-app-1/server/data/vast_events.jsonl"
 CHECK_S = int(os.environ.get("BRAIN_WATCHDOG_INTERVAL_S", "60"))
 DISPOSE_AFTER_S = int(os.environ.get("BRAIN_WATCHDOG_DISPOSE_AFTER_S", "300"))
 LOCAL_DASH = os.environ.get("JARVIS_DASHBOARD_URL", "http://127.0.0.1:8095")
+# Cost ceiling on auto-provision: minimum gap between provisioning attempts so a flapping API
+# can't burn money. Default 900s = ≤4 provisions/hr.
+PROVISION_COOLDOWN_S = int(os.environ.get("BRAIN_WATCHDOG_PROVISION_COOLDOWN_S", "900"))
+# Per-attempt $/hr cap forwarded to /gpu/provisionbrain. Defaults match BRAIN_TIERS["standard"].
+PROVISION_MAX_PRICE = float(os.environ.get("BRAIN_PROVISION_MAX_PRICE", "0.25"))
+PROVISION_TIER = os.environ.get("BRAIN_DEFAULT_TIER", "standard")
+# Last successful (or attempted) provision timestamp — used to enforce PROVISION_COOLDOWN_S.
+_LAST_PROVISION_TS: float = 0.0
 # Default OFF — destroying a Vast box is irreversible (you lose the slot reservation). The owner must
 # explicitly opt in with BRAIN_WATCHDOG_ALLOW_DISPOSE=1. Even though Vast doesn't bill stopped boxes,
 # an offline brain box may be one the owner intends to start later.
@@ -181,6 +189,19 @@ def sweep() -> dict:
                 _OFFLINE_SINCE.pop(iid, None)
             except Exception as e:
                 _log(f"FAILED to dispose dead brain id={iid}: {str(e)[:140]}")
+        # Vast slot reclaim guard: a "stopped" box (owner clicked Stop, or Vast reclaimed
+        # the slot) MUST be auto-disposed — keeping it costs the slot reservation while
+        # serving nothing. Per the protocol: "never Stop, always Dispose + re-provision".
+        elif ALLOW_DISPOSE and status == "stopped":
+            try:
+                _vast_req("DELETE", f"/instances/{iid}/")
+                _log(f"AUTO-DISPOSED stopped brain id={iid} label={inst.get('label')!r} "
+                     f"(slot reclaim — protocol requires dispose, not stop)")
+                _emit_event("brain_stopped_disposed", id=iid, label=inst.get("label"))
+                summary["disposed"] = True
+                _OFFLINE_SINCE.pop(iid, None)
+            except Exception as e:
+                _log(f"FAILED to dispose stopped brain id={iid}: {str(e)[:140]}")
 
     # Compute overall state
     has_running = any(s["status"] in ("running", "active") for s in summaries)
@@ -196,8 +217,20 @@ def sweep() -> dict:
             state = "warming_up"
             alert = None
         else:
+            # Degraded: a running box exists with port mapped but local /llm/chat fails.
+            # Try a tunnel/ollama re-establish via gpu_instances.ensure_brain_tunnel before
+            # alerting. This is the canonical self-heal for proxy timeout + dead-ssh cases.
             state = "degraded"
             alert = "brain box is up but local dashboard cannot reach /llm/chat — check tunnel"
+            try:
+                # Local import: gpu_instances pulls FastAPI deps we don't want at module load.
+                sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+                from server.services import gpu_instances as gi  # type: ignore
+                repair = gi.ensure_brain_tunnel()
+                _log(f"BRAIN_TUNNEL_REPAIR attempted → {str(repair)[:200]}")
+                _emit_event("brain_tunnel_repair", result=repair)
+            except Exception as e:
+                _log(f"tunnel-repair attempt failed: {str(e)[:140]}")
     elif has_running and not any_port_ok:
         state = "port_unmapped"
         alert = "brain box running but port 11434/tcp not mapped — protocol breach, re-provision required"
@@ -212,15 +245,23 @@ def sweep() -> dict:
 
 
 def _try_provision():
-    """Owner-gated auto-provision via the local backend route (basic tier)."""
+    """Owner-gated auto-provision via the local backend route. Honors cooldown + max-price."""
+    global _LAST_PROVISION_TS
+    now = time.time()
+    if now - _LAST_PROVISION_TS < PROVISION_COOLDOWN_S:
+        wait = int(PROVISION_COOLDOWN_S - (now - _LAST_PROVISION_TS))
+        _log(f"AUTO-PROVISION throttled (cooldown {wait}s remaining; tier={PROVISION_TIER})")
+        _emit_event("brain_provision_throttled", cooldown_remaining_s=wait)
+        return
+    _LAST_PROVISION_TS = now
     try:
-        body = json.dumps({"tier": "basic"}).encode()
+        body = json.dumps({"tier": PROVISION_TIER, "max_price": PROVISION_MAX_PRICE}).encode()
         req = urllib.request.Request(f"{LOCAL_DASH}/gpu/provisionbrain", data=body,
                                      headers={"Content-Type": "application/json"}, method="POST")
         with urllib.request.urlopen(req, timeout=180) as r:
             j = json.loads(r.read() or b"{}")
-        _log(f"AUTO-PROVISION basic brain → {str(j)[:240]}")
-        _emit_event("brain_auto_provision_attempt", result=j)
+        _log(f"AUTO-PROVISION tier={PROVISION_TIER} max_price=${PROVISION_MAX_PRICE}/hr → {str(j)[:240]}")
+        _emit_event("brain_auto_provision_attempt", tier=PROVISION_TIER, max_price=PROVISION_MAX_PRICE, result=j)
         new_id = j.get("instance_id") or j.get("id") or (j.get("instance") or {}).get("id")
         if new_id:
             _PROVISION_PENDING[str(new_id)] = time.time()

@@ -191,15 +191,22 @@
   "migration": {
     "_doc": "What the migration scans. include = dirs eligible to move to cloud (cold/archival). exclude = NEVER move (live, active, code, engine). dry_run_default true so nothing moves without explicit --apply.",
     "include": [
-      "server/data/media"
+      "server/data/media",
+      "underworld/deploy/ue5-project/Saved",
+      "underworld/deploy/ue5-project/Content",
+      "underworld/deploy/ue5-project/Binaries"
     ],
+    "external_paths": [
+      "/opt/UnrealEngine",
+      "/opt/jarvis-backups",
+      "/opt/solarflow"
+    ],
+    "external_paths_note": "Sibling-of-repo cold dirs. Migration only walks these when WASABI_MIGRATE_EXTERNAL_PATHS=1 is set. Each path is treated as its own scan root in the manifest under prefix `external/<basename>/`.",
     "exclude": [
       ".git",
       "node_modules",
       ".venv",
       ".venv-tts",
-      "/opt/UnrealEngine",
-      "underworld/deploy/ue5-project/Saved",
       "underworld/deploy/ue5-project/Intermediate",
       "server/data/*.db",
       "server/data/*.sqlite",
@@ -209,7 +216,7 @@
       "scripts/auto_improve_gate.py",
       "scripts/audit_score.py"
     ],
-    "exclude_note": "Live UE5 PROJECT files (Content the editor reads), live DBs, code, secrets and the engine are NEVER migrated \u2014 only confirmed cold/archival output. Add dirs to 'include' deliberately.",
+    "exclude_note": "Live DBs, code, secrets and regenerable build cache (Intermediate) are NEVER migrated. UE5 Saved/Content/Binaries are now eligible cold storage. External paths (UnrealEngine etc) are opt-in via env flag.",
     "after_verify": "replace_with_pointer",
     "after_verify_options": [
       "keep_local",

@@ -358,10 +358,50 @@ def _promote_recoup_to_wasabi(local_dir: str) -> dict:
     return {"ok": not failed, "uploaded": len(uploaded), "failed": len(failed), "details": (failed[:5] if failed else None)}
 
 
+def _sync_ollama_cache_to_wasabi(instance_id: int) -> dict:
+    """Sync the GPU box's /root/.ollama (model cache) to Wasabi so the next provision can
+    skip the 9 GB qwen pull. Best-effort: scp's the dir to the VPS staging area (reusing the
+    same path convention as sync_results), then promotes to Wasabi via cloud_storage.upload.
+    Returns {ok, scp_ok, bytes_synced, wasabi}. Skippable via BRAIN_DISPOSE_SKIP_MODEL_SYNC=1."""
+    if os.environ.get("BRAIN_DISPOSE_SKIP_MODEL_SYNC", "") in ("1", "true", "yes"):
+        return {"ok": True, "skipped": True, "reason": "BRAIN_DISPOSE_SKIP_MODEL_SYNC set"}
+    g = _guard()
+    if g: return g
+    inst = next((i for i in (list_instances().get("instances") or []) if i["id"] == int(instance_id)), None)
+    if not inst or not inst.get("ssh_host"):
+        return {"ok": False, "error": "instance has no SSH endpoint — cannot sync model cache"}
+    dest = os.path.join(RESULTS_DIR, f"{instance_id}-ollama")
+    os.makedirs(dest, exist_ok=True)
+    try:
+        # scp -r the .ollama dir down; 9 GB takes ~5-10 min depending on link.
+        r = subprocess.run(["scp", "-i", SSH_KEY, "-P", str(inst["ssh_port"]), "-r",
+                            "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null",
+                            "root@%s:/root/.ollama/." % inst["ssh_host"], dest],
+                           capture_output=True, text=True, timeout=1800)
+        scp_ok = r.returncode == 0
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "scp_ok": False, "error": str(e)[:200]}
+    if not scp_ok:
+        return {"ok": False, "scp_ok": False, "stderr": r.stderr[-500:]}
+    # Reuse the same uploader as result-recoup: best-effort upload + manifest record.
+    wasabi = _promote_recoup_to_wasabi(dest)
+    bytes_synced = 0
+    for root, _dirs, files in os.walk(dest):
+        for fn in files:
+            try:
+                bytes_synced += os.path.getsize(os.path.join(root, fn))
+            except OSError:
+                pass
+    return {"ok": wasabi.get("ok", False), "scp_ok": True, "bytes_synced": bytes_synced,
+            "wasabi": wasabi, "dest": dest}
+
+
 def safe_dispose(instance_id: int, force: bool = False) -> dict:
     """RECOUP-THEN-DESTROY: sync /workspace down to Hostinger AND push it on to Wasabi, then destroy.
     By default REFUSES if local recoup fails (nothing lost on disk). force=True (user-authorised)
-    destroys anyway — used when the box is stopped/empty or the user explicitly wants it gone."""
+    destroys anyway — used when the box is stopped/empty or the user explicitly wants it gone.
+    Also syncs /root/.ollama model cache to Wasabi so reprovision can skip the 9 GB pull
+    (skip with env BRAIN_DISPOSE_SKIP_MODEL_SYNC=1)."""
     g = _guard()
     if g: return g
     if force:
@@ -372,9 +412,13 @@ def safe_dispose(instance_id: int, force: bool = False) -> dict:
     if not recoup.get("ok"):
         return {"ok": False, "error": "REFUSED to destroy — recoup failed (" + str(recoup.get("error") or recoup.get("stderr") or "")[:120] + "). Data not lost; try Save→Hostinger then dispose, or force.", "recoup": recoup}
     wasabi = _promote_recoup_to_wasabi(recoup.get("dest") or "")
+    # NEW: sync the Ollama model cache so the next provision can restore from Wasabi
+    # instead of re-pulling 9 GB of qwen2.5:14b. Best-effort, doesn't block destroy.
+    model_cache_wasabi = _sync_ollama_cache_to_wasabi(int(instance_id))
     d = destroy_instance(int(instance_id))
     d["recouped_to"] = recoup.get("dest"); d["recoup_ok"] = bool(recoup.get("ok")); d["forced"] = force
     d["wasabi"] = wasabi
+    d["model_cache_wasabi"] = model_cache_wasabi
     return d
 
 
@@ -431,8 +475,10 @@ def launch_disposable(task_cmd: str, gpu_name: str = None, max_price: float = No
         off["vram_needed_gb"] = vram["gb"]; off["why"] = vram["why"]
         return off
     # onstart: stage the task + always run it INTO /workspace (which safe_dispose/copy recoup wholesale).
+    # Writes /workspace/.done as a completion sentinel so burst_watcher.py can auto-dispose.
     onstart = ("mkdir -p /workspace/results && cd /workspace && echo %s > task.sh && chmod +x task.sh && "
-               "(bash task.sh > /workspace/results/run.log 2>&1; echo done > /workspace/results/STATUS) &") % json.dumps(task_cmd)
+               "(bash task.sh > /workspace/results/run.log 2>&1; rc=$?; echo done > /workspace/results/STATUS; "
+               "echo \"rc=$rc ts=$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ)\" > /workspace/.done) &") % json.dumps(task_cmd)
     created = create_instance(off["offer"]["id"], image=image, onstart=onstart, label=label)
     if created.get("ok"):
         created["offer"] = off["offer"]

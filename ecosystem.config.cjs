@@ -114,5 +114,65 @@ module.exports = {
       autorestart: true,
       max_restarts: 50,
     },
+    {
+      // Brain auto-recovery: detects dead/offline Vast brain box, auto-disposes clearly-dead
+      // boxes (offline + port unmapped), auto-provisions a replacement up to the cost cap.
+      // Cost gates: BRAIN_PROVISION_MAX_PRICE caps per-attempt $/hr; PROVISION_COOLDOWN_S
+      // throttles to ≤4 provisions/hr. Default tier = standard (24GB qwen2.5:14b ~$0.18/hr).
+      name: 'brain-watchdog',
+      cwd: '/opt/jarvis-app-1',
+      script: 'scripts/brain_watchdog.py',
+      interpreter: 'python3',
+      autorestart: true,
+      max_restarts: 50,
+      env: {
+        BRAIN_WATCHDOG_AUTO_PROVISION: '1',
+        BRAIN_WATCHDOG_ALLOW_DISPOSE: '1',
+        BRAIN_WATCHDOG_PROVISION_COOLDOWN_S: '900',
+        BRAIN_WATCHDOG_INTERVAL_S: '60',
+        BRAIN_WATCHDOG_DISPOSE_AFTER_S: '300',
+        BRAIN_PROVISION_MAX_PRICE: '0.25',
+        BRAIN_DEFAULT_TIER: 'standard',
+      },
+    },
+    {
+      // Vast orphan-spawn kill-switch: external kgik.base44.app holds the same VAST_API_KEY
+      // and spawns clustering instances on its own; this kills every non-whitelisted box
+      // within ~30s. Whitelist via VAST_KEEP_IDS or label substrings (ue5/pixelstream/brain).
+      name: 'vast-kill-switch',
+      cwd: '/opt/jarvis-app-1',
+      script: 'scripts/vast_kill_switch.py',
+      interpreter: 'python3',
+      autorestart: true,
+      max_restarts: 50,
+      env: {
+        VAST_KILL_INTERVAL_S: '30',
+      },
+    },
+    {
+      // Generic health probe runner — 13+ critical surfaces (backend, dashboard, ollama,
+      // claude_code_runs API, underworld.db integrity, disk free, watchdog freshness, etc).
+      // Writes server/data/health.json and appends state changes to vast_events.jsonl.
+      name: 'health-watchdog',
+      cwd: '/opt/jarvis-app-1',
+      script: 'scripts/health_watchdog.py',
+      interpreter: 'python3',
+      autorestart: true,
+      max_restarts: 50,
+    },
+    {
+      // Burst-disposable watcher: detects burst (non-brain, non-ue5) Vast boxes that have
+      // signalled completion via /workspace/.done and auto-disposes them after Wasabi sync.
+      // Prevents the 70b/140b burst boxes from lingering and billing after task end.
+      name: 'burst-watcher',
+      cwd: '/opt/jarvis-app-1',
+      script: 'scripts/burst_watcher.py',
+      interpreter: 'python3',
+      autorestart: true,
+      max_restarts: 50,
+      env: {
+        BURST_WATCHER_INTERVAL_S: '60',
+      },
+    },
   ],
 };
