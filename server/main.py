@@ -123,6 +123,7 @@ from .routes import ontology_ext as ontology_ext_routes
 from .routes import ops as ops_routes
 from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
+from .routes import reminders as reminders_routes
 from .routes import reports as reports_routes
 from .routes import scenario as scenario_routes
 from .routes import sci_3d as sci_3d_routes
@@ -324,6 +325,7 @@ def create_app() -> FastAPI:
     app.include_router(functions_routes.router)
     app.include_router(science_routes.router)
     app.include_router(predict_routes.router)
+    app.include_router(reminders_routes.router)
     app.include_router(entities_routes.router)
     app.include_router(streams_routes.router)
     app.include_router(claude_code_routes.router)

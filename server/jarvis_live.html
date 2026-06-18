@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='45'; window.__JV_VER=VER;
+  var KEY='__jv',VER='46'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -6217,7 +6217,8 @@ function renderMaps(){const s=$('mapSheet');if(!s)return;
 
 function openRemindersOverlay(){const s=$('remindSheet');if(!s)return;s.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:16px;font-weight:800">Capture</span><button class=tbtn onclick="closeRemindersOverlay()">✕</button></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Notes · Reminders · Passwords</div><textarea id=remindText style="width:100%;min-height:120px;background:var(--liquid-regular);border:1px solid var(--border-line);border-radius:var(--radius-lg);padding:10px;color:var(--text-primary);outline:none;font-size:13px;resize:vertical;" placeholder="Type a reminder or secure note…"></textarea><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;"><button class=tbtn onclick="closeRemindersOverlay()">Cancel</button><button class=tbtn onclick="saveReminder()" style="color:var(--tint)">Save</button></div>';$('ovReminders').classList.add('open');}
 function closeRemindersOverlay(){$('ovReminders').classList.remove('open');}
-function saveReminder(){const v=$('remindText')&&$('remindText').value.trim();if(v){showInplaceAlert('Reminder saved');closeRemindersOverlay();}}
+async function saveReminder(){const v=$('remindText')&&$('remindText').value.trim();if(!v)return;try{const r=await fetch('/reminders/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:v,kind:'note'})});if(r.ok){const j=await r.json();showInplaceAlert('Reminder saved (#'+j.id+')');closeRemindersOverlay();}else{showInplaceAlert('Save failed: '+r.status);}}catch(e){showInplaceAlert('Save failed: '+(e.message||e));}}
+async function loadAwakening(worldId){try{const r=await fetch('/v1/underworld/proxy/worlds/'+encodeURIComponent(worldId||'default')+'/awakening/arc');if(!r.ok)return null;const j=await r.json();return j&&j.ok!==false?j:null;}catch(_){return null;}}
 
 function openPlaygroundOverlay(){const s=$('playSheet');if(!s)return;renderPlayground();$('ovPlayground').classList.add('open');}
 function closePlaygroundOverlay(){$('ovPlayground').classList.remove('open');}

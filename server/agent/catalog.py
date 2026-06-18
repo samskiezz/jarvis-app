@@ -676,6 +676,49 @@ def _h_agent_memory_write(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
 
 
 # --------------------------------------------------------------------------- #
+# user.remember / user.recall  (gap-audit #42 — wraps services/user_memory.py)
+# --------------------------------------------------------------------------- #
+def _h_user_remember(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Store a durable fact about the USER (preferences, people, routines, health).
+    Wraps services.user_memory.remember() so the agent can explicitly capture
+    facts the chat-time auto-extractor would miss."""
+    from ..services import user_memory as _UM
+    text = (args.get("text") or "").strip()
+    if not text:
+        return {"stored": False, "summary": "user.remember needs `text`"}
+    ctx.progress(40, "writing user memory")
+    user = args.get("user") or "owner"
+    kind = args.get("kind") or "fact"
+    try:
+        weight = float(args.get("weight") or 1.0)
+    except (TypeError, ValueError):
+        weight = 1.0
+    stored = bool(_UM.remember(text, user=user, kind=kind, weight=weight))
+    ctx.progress(100, "stored" if stored else "duplicate")
+    return {"stored": stored, "user": user, "kind": kind,
+            "summary": (f"remembered: {text[:60]!r}" if stored
+                        else f"already knew: {text[:60]!r}")}
+
+
+def _h_user_recall(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
+    """Recall facts about the user matching a query (keyword + recency).
+    Returns the top N most-relevant facts. Empty query returns the recents."""
+    from ..services import user_memory as _UM
+    q = (args.get("query") or "").strip()
+    user = args.get("user") or "owner"
+    limit = int(args.get("limit") or 6)
+    ctx.progress(40, "recalling user memory")
+    try:
+        facts = _UM.recall(q, user=user, limit=limit) if q else _UM.recent(user=user, limit=limit)
+    except Exception as e:  # noqa: BLE001
+        return {"query": q, "facts": [], "count": 0,
+                "summary": f"user.recall failed: {str(e)[:120]}"}
+    ctx.progress(100, f"{len(facts)} facts")
+    return {"query": q, "user": user, "facts": facts, "count": len(facts),
+            "summary": f"{len(facts)} fact(s) about {user}"}
+
+
+# --------------------------------------------------------------------------- #
 # knowledge.stats   (counts from BRAIN_DB; path read from dashboard.py)
 # --------------------------------------------------------------------------- #
 def _h_knowledge_stats(args: Dict[str, Any], ctx: Any) -> Dict[str, Any]:
@@ -945,6 +988,32 @@ def register_catalog() -> List[str]:
             "kind": {"type": "string", "default": "fact"}, "tags": {"type": "string", "default": ""}},
             "required": ["value"]},
         tags=["memory"], handler=_h_agent_memory_write))
+
+    # gap-audit #42: durable USER memory (preferences, people, routines, health).
+    # Separate from agent.memory.* which stores agent-side facts.
+    register(Tool(
+        id="user.remember", name="Remember about the user", risk="safe_write", timeout=10,
+        description="Store a durable fact about the user (preferences/people/routines/health). "
+                    "Persists to server/data/user_memory.db; dedupes by normalized text.",
+        input_schema={"type": "object", "properties": {
+            "text": {"type": "string", "description": "The fact in natural language."},
+            "kind": {"type": "string", "default": "fact",
+                     "description": "Category: fact / preference / person / routine / health / context"},
+            "weight": {"type": "number", "default": 1.0,
+                       "description": "Importance multiplier for recall ranking."},
+            "user": {"type": "string", "default": "owner"}},
+            "required": ["text"]},
+        tags=["memory", "user"], handler=_h_user_remember))
+
+    register(Tool(
+        id="user.recall", name="Recall about the user", risk="safe_read", timeout=10,
+        description="Recall up to `limit` user facts matching a query "
+                    "(keyword + recency). Empty query returns recents.",
+        input_schema={"type": "object", "properties": {
+            "query": {"type": "string", "default": ""},
+            "limit": {"type": "integer", "default": 6},
+            "user": {"type": "string", "default": "owner"}}},
+        tags=["memory", "user"], handler=_h_user_recall))
 
     register(Tool(
         id="knowledge.stats", name="Knowledge stats", risk="safe_read", timeout=20,
