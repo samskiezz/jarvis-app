@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='44'; window.__JV_VER=VER;
+  var KEY='__jv',VER='45'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -3295,7 +3295,8 @@ async function ccStartRun(){
   const p=(document.getElementById('ccPrompt')||{}).value||'';
   const k=(document.getElementById('ccApiKey')||{}).value||'';
   if(!p.trim()){alert('Enter a prompt');return;}
-  if(!k.trim()){alert('Enter your bearer token (interactive runs require auth).');return;}
+  if(!k.trim()){alert('Enter your Anthropic API bearer token.\n\nGet one at https://console.anthropic.com/settings/keys — paste it (without the "Bearer " prefix) in the Bearer Token field. Interactive runs require auth.');return;}
+  if(/^Bearer\s/i.test(k.trim())){alert('Remove the "Bearer " prefix — paste only the raw token (starts with sk-ant-).');return;}
   try{
     const r=await fetch('/v1/claude_code/run',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({prompt:p,model:'claude-sonnet-4-6',label:p.slice(0,48)})});
     const j=await r.json();
@@ -3627,7 +3628,7 @@ async function loadLib(){try{const lib=await(await fetch('library')).json();
    $('libgrid').innerHTML=(lib&&lib.length)?lib.map(m=>m.file.endsWith('.glb')
      ?'<div class=it><model-viewer src="'+MEDIA(m.file)+'" camera-controls auto-rotate ar interaction-prompt=none style="--poster-color:transparent"></model-viewer><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>'
      :'<div class=it><a href="'+MEDIA(m.file)+'" target=_blank><img src="'+MEDIA(m.file)+'"></a><div style="color:var(--dim);font-size:9.5px">'+esc((m.prompt||'').slice(0,40))+'</div></div>').join('')
-     :'<div style="color:var(--dim);margin-top:60px">Empty — say "image of a glowing city" or "3d model of a helmet".</div>';}catch(e){}}
+     :'<div style="color:var(--dim);margin-top:60px">Empty — say "image of a glowing city" or "3d model of a helmet".</div>';}catch(e){$('libgrid').innerHTML='<div style="color:#ff6b6b;margin-top:60px;text-align:center">Couldn’t load the library.<br><span style="color:var(--dim);font-size:11px">'+esc(String(e&&e.message||e).slice(0,160))+'</span><br><button class=tbtn style="margin-top:14px" onclick="loadLib()">Retry</button></div>';}}
 
 /* ================= contextual info card (single, NASA-Eyes style) ================= */
 let _cardDrilled=false;   // true while a drill (/detail) or file view fills the card → pause live refresh so it isn't wiped
