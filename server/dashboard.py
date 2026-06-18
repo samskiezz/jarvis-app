@@ -1495,7 +1495,10 @@ def _brain_reachable(timeout: float = 2.5) -> bool:
     import urllib.request, json as _j, time as _t
     now = _t.time()
     age = now - _BRAIN_OK["ts"]
-    if _BRAIN_OK["up"] and age < 30:
+    # UP cache shortened from 30s → 3s so the brain-status banner reflects fresh
+    # provisioning quickly (Phase 1.7 of GPU lifecycle automation plan). The DOWN
+    # cache stays at 4s so a single network blip doesn't pin chat to canned fallback.
+    if _BRAIN_OK["up"] and age < 3:
         return True
     if (not _BRAIN_OK["up"]) and age < 4:
         return False

@@ -48,7 +48,7 @@ addEventListener('pageshow',function(e){if(e.persisted)location.reload();});
 /* CACHE BUST — append a build-specific query param once per session so stubborn browser/proxy caches
    cannot serve an older jarvis_live.html. This param is ignored by the app; it only forces a fresh fetch. */
 (function(){try{
-  var KEY='__jv',VER='47'; window.__JV_VER=VER;
+  var KEY='__jv',VER='48'; window.__JV_VER=VER;
   var params=new URLSearchParams(location.search);
   if(params.get(KEY)!==VER && !sessionStorage.getItem(KEY+VER)){
     sessionStorage.setItem(KEY+VER,'1');
@@ -2648,9 +2648,20 @@ async function gpuProvisionBrain(){ if(!confirm('Provision the STANDARD brain �
     gpuRefresh();
   }catch(e){$('gpuMsg').textContent='✗ '+e;}
 }
-async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to Hostinger first, then removes it.'))return;
-  $('gpuMsg').textContent='Disposing #'+id+'…';
-  try{ await fetch('gpu/destroy?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:true})}); $('gpuMsg').textContent='Disposed #'+id+'.'; gpuRefresh(); }catch(e){}
+async function gpuDispose(id){ if(!confirm('Dispose #'+id+'? Saves everything to Hostinger AND Wasabi first, then removes it.'))return;
+  $('gpuMsg').textContent='Disposing #'+id+' (recoup + Wasabi sync + destroy)…';
+  try{
+    const resp=await fetch('gpu/destroy?token='+CT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,force:false})});
+    const j=await resp.json().catch(()=>({}));
+    const w=j.wasabi||{},mc=j.model_cache_wasabi||{};
+    const parts=['Disposed #'+id+'.'];
+    if(w.uploaded!==undefined)parts.push('Recoup→Wasabi: '+(w.uploaded||0)+'/'+((w.uploaded||0)+(w.failed||0))+' files'+(w.failed?' ('+w.failed+' failed)':' ✓'));
+    if(mc.scp_ok)parts.push('Model cache: '+(mc.bytes_synced?Math.round(mc.bytes_synced/1e9*10)/10+'GB synced':'sync skipped'));
+    else if(mc.skipped)parts.push('Model cache sync: skipped (env)');
+    else if(mc.error||mc.stderr)parts.push('Model cache sync FAILED');
+    $('gpuMsg').textContent=parts.join(' · ');
+    gpuRefresh();
+  }catch(e){$('gpuMsg').textContent='✗ '+e;}
 }
 function dockScroll(dir){const rail=$('dockRail');if(!rail)return;const item=rail.querySelector('.di');const step=item?(item.offsetWidth+10):64;rail.scrollBy({left:dir*step,behavior:'smooth'});}
 function renderDock(){const d=$('dock');if(!d)return;
@@ -7667,5 +7678,57 @@ document.addEventListener('keydown',e=>{
     <button class=cp-stop onclick="codePulseStop()">Stop</button>
   </div>
 </div>
+
+<script>
+/* MOTOR-INTENT PREDICTOR HOOK (gap-fix #3, additive only).
+   Wraps openAppSheet so every dock-app open is logged to /v1/motor/record,
+   feeding the sklearn next-action model. Pre-highlights the predicted next
+   target by adding the .motor-hint class to its tile (CSS is optional —
+   scan/dwell loops can read window._motorHint instead). Fully defensive:
+   any error is swallowed so the dock never breaks. */
+(function(){
+  try{
+    if(window.__motorHookInstalled) return; window.__motorHookInstalled=true;
+    window._motorRecent = window._motorRecent || [];
+    window._motorHint = null;
+    var _orig = window.openAppSheet;
+    if(typeof _orig !== 'function') return;
+    function _logOpen(id){
+      try{
+        var aid = String(id||'').slice(0,64).toLowerCase(); if(!aid) return;
+        window._motorRecent.push(aid); if(window._motorRecent.length>10) window._motorRecent.shift();
+        fetch('/v1/motor/record',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({action_id:aid,ts:Date.now()/1000})}).catch(function(){});
+      }catch(_){}
+    }
+    function _refreshHint(){
+      try{
+        var q = (window._motorRecent||[]).slice(-5).join(',');
+        fetch('/v1/motor/predict?top_k=3&recent='+encodeURIComponent(q))
+          .then(function(r){return r.ok?r.json():null;})
+          .then(function(j){
+            if(!j||!j.candidates||!j.candidates.length) return;
+            window._motorHint = j; // {candidates:[{action_id,confidence,source}], gate_ready}
+            try{
+              document.querySelectorAll('.motor-hint').forEach(function(el){el.classList.remove('motor-hint');});
+              var top = j.candidates[0]; if(!top) return;
+              var sel='[data-app="'+CSS.escape(top.action_id)+'"]';
+              document.querySelectorAll(sel).forEach(function(el){el.classList.add('motor-hint');});
+            }catch(_){}
+            try{window.dispatchEvent(new CustomEvent('motor-hint',{detail:j}));}catch(_){}
+          }).catch(function(){});
+      }catch(_){}
+    }
+    window.openAppSheet = function(id){
+      _logOpen(id);
+      var r = _orig.apply(this, arguments);
+      setTimeout(_refreshHint, 50);
+      return r;
+    };
+    // Prime the hint on load so scan/dwell has a target before the first open.
+    setTimeout(_refreshHint, 1500);
+  }catch(_){}
+})();
+</script>
 
 </body></html>

@@ -517,9 +517,30 @@ export HOME=/root
 # box it leaves GPU1+ entirely free for the voice clone + embeddings + parallel agent jobs (the pinned
 # architecture). The always-on brain models (8b/14b/32b-q4) each fit on one card, so one GPU is enough.
 export CUDA_VISIBLE_DEVICES=${BRAIN_GPU:-0}
+# WASABI MODEL CACHE RESTORE (Phase 1.4): if a prior dispose synced /root/.ollama to Wasabi,
+# pull it back BEFORE Ollama starts — saves the 9 GB qwen pull on reprovision.
+# Skipped silently if rclone or Wasabi creds are not configured on this box.
+if [ -n "${WASABI_KEY:-}" ] && [ -n "${WASABI_SECRET:-}" ] && [ -n "${WASABI_BUCKET:-}" ]; then
+  command -v rclone >/dev/null 2>&1 || (curl -fsSL https://rclone.org/install.sh | bash >/dev/null 2>&1)
+  if command -v rclone >/dev/null 2>&1; then
+    mkdir -p /root/.config/rclone
+    cat > /root/.config/rclone/rclone.conf <<EOF
+[wasabi]
+type = s3
+provider = Wasabi
+access_key_id = ${WASABI_KEY}
+secret_access_key = ${WASABI_SECRET}
+endpoint = ${WASABI_ENDPOINT:-https://s3.us-east-1.wasabisys.com}
+EOF
+    rclone copy "wasabi:${WASABI_BUCKET}/brain-cache/.ollama" /root/.ollama --transfers 8 >/tmp/rclone_restore.log 2>&1 && echo "RESTORED model cache from Wasabi" || echo "Wasabi restore skipped (cache missing or unreachable)"
+  fi
+fi
 pgrep -x ollama >/dev/null 2>&1 || (OLLAMA_HOST=0.0.0.0:11434 OLLAMA_KEEP_ALIVE=24h OLLAMA_MAX_LOADED_MODELS=3 OLLAMA_FLASH_ATTENTION=1 setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &)
 for i in $(seq 1 30); do curl -sf -m2 http://127.0.0.1:11434/api/tags >/dev/null 2>&1 && break; sleep 2; done
+# Pull-first health gate: only mark ready AFTER all models in the tier are listed,
+# so the VPS tunnel-watcher won't route to a half-ready brain.
 for m in %s; do ollama pull "$m"; done
+for i in $(seq 1 30); do ollama list 2>/dev/null | grep -qE "qwen2\.5|llama3\.1|nomic-embed" && break; sleep 2; done
 echo BRAIN_READY
 """
 

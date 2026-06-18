@@ -100,6 +100,27 @@ PROBES: list[dict] = [
      "target": os.path.join(DATA, "auto_improve.log.jsonl"),
      "expect": "<86400", "timeout_s": 2, "interval_s": 3600, "severity": "P2",
      "fix_hint": "auto_improve hasn't run in 24h — check cron + scripts/auto_improve.py"},
+
+    # Phase 1.6 — disk free on the GPU brain box (over SSH). Reuses gpu_instances._direct_ssh
+    # to resolve the brain's public IP + container port, then df's the box. Skips silently
+    # if no brain is reachable (no false alarms when the brain is intentionally provisioned-down).
+    {"name": "disk_free_on_gpu", "kind": "cmd", "target":
+        "python3 -c 'import sys,subprocess,os; sys.path.insert(0,\"/opt/jarvis-app-1\");"
+        " from server.services import gpu_instances as gi;"
+        " brains=[i for i in (gi.list_instances().get(\"instances\") or [])"
+        "  if (i.get(\"label\") or \"\").lower().startswith(\"jarvis-brain\")"
+        "  and (i.get(\"actual_status\") or i.get(\"status\") or \"\").lower() in (\"running\",\"active\")];"
+        " print(0) if not brains else None;"
+        " inst=brains[0] if brains else None;"
+        " host,port=gi._direct_ssh(inst) if inst else (None,None);"
+        " r=subprocess.run([\"ssh\",\"-i\",gi.SSH_KEY,\"-p\",str(port),"
+        "  \"-o\",\"StrictHostKeyChecking=no\",\"-o\",\"UserKnownHostsFile=/dev/null\","
+        "  \"-o\",\"ConnectTimeout=8\",f\"root@{host}\","
+        "  \"df --output=pcent /root | tail -1 | tr -d \\\" %%\\\"\"],"
+        "  capture_output=True,text=True,timeout=15) if inst else None;"
+        " print((r.stdout.strip() if r and r.returncode==0 else 0))' 2>/dev/null",
+     "expect": "<95", "timeout_s": 25, "interval_s": 600, "severity": "P0",
+     "fix_hint": "GPU box disk > 95% — ollama model pulls will hang; ssh in and clean /root/.ollama or /workspace, or re-provision"},
 ]
 
 _STATE: dict = {}
