@@ -62,7 +62,7 @@ PROBES: list[dict] = [
      "fix_hint": "FastAPI route or whip module broken — check pm2 logs jarvis-backend"},
 
     {"name": "underworld_db_integrity", "kind": "sqlite",
-     "target": os.path.join(ROOT, "underworld", "underworld.db"),
+     "target": os.path.join(ROOT, "underworld", "data", "underworld.db"),
      "expect": "ok", "timeout_s": 30, "interval_s": 600, "severity": "P0",
      "fix_hint": "DB integrity FAILED — stop underworld-backend, restore from latest .bak, investigate WAL"},
 
@@ -86,10 +86,10 @@ PROBES: list[dict] = [
      "expect": "<180", "timeout_s": 2, "interval_s": 180, "severity": "P1",
      "fix_hint": "brain_health.json not refreshed in 3min — pm2 status brain-watchdog"},
 
-    {"name": "vast_kill_switch_alive", "kind": "file_age",
-     "target": os.path.join(DATA, "vast_kill_switch.log"),
-     "expect": "<600", "timeout_s": 2, "interval_s": 300, "severity": "P1",
-     "fix_hint": "vast-kill-switch log not updated in 10min — pm2 restart vast-kill-switch"},
+    {"name": "vast_kill_switch_alive", "kind": "cmd",
+     "target": "pm2 jlist 2>/dev/null | python3 -c \"import sys,json; d=json.load(sys.stdin); print([p['pm2_env']['status'] for p in d if p['name']=='vast-kill-switch'][0])\"",
+     "expect": "online", "timeout_s": 5, "interval_s": 120, "severity": "P1",
+     "fix_hint": "vast-kill-switch pm2 process not online — pm2 restart vast-kill-switch"},
 
     {"name": "voice_history_db_size_under_1gb", "kind": "file_size",
      "target": os.path.join(DATA, "voice_history.db"),
