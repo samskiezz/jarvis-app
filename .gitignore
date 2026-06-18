@@ -166,3 +166,4 @@ assurance/reports/*.json
 assurance/reports/*.md
 assurance/fuzz/crashes/*.json
 server/data/assurance/reports/*.json
+.coverage

@@ -241,6 +241,27 @@ def sweep() -> dict:
     health = {"ok": state == "alive", "state": state, "alert": alert, "brains": summaries,
               "dispose_enabled": ALLOW_DISPOSE, "auto_provision_enabled": ALLOW_PROVISION}
     _write_health(health)
+    # Additive: run invariants pass + emit assurance event. Best-effort.
+    try:
+        import sys as _sys
+        _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if _root not in _sys.path:
+            _sys.path.insert(0, _root)
+        from assurance.invariants.runner import run_all as _run_inv, write_report as _write_rep  # type: ignore
+        from assurance.events.bus import get_bus as _evt_bus  # type: ignore
+        from assurance.events.types import Event as _Event  # type: ignore
+        _rep = _run_inv()
+        _write_rep(_rep)
+        health["assurance_inv_ok"] = _rep.overall_ok
+        _evt_bus().append(_Event(
+            name="watchdog.invariants_checked",
+            actor="brain_watchdog",
+            source="scripts.brain_watchdog",
+            payload={"overall_ok": _rep.overall_ok, "passed": _rep.passed, "total": _rep.total,
+                     "brain_state": state},
+        ))
+    except Exception:  # noqa: BLE001
+        pass
     return health
 
 

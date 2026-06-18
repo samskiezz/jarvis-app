@@ -142,6 +142,22 @@ def _emit_event(kind: str, **rec):
             f.write(json.dumps({"ts": time.time(), "kind": kind, **rec}) + "\n")
     except Exception:
         pass
+    # Additive: tee to the assurance EventBus so Mission Control sees it.
+    try:
+        import sys as _sys
+        _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if _root not in _sys.path:
+            _sys.path.insert(0, _root)
+        from assurance.events.bus import get_bus as _evt_bus  # type: ignore
+        from assurance.events.types import Event as _Event  # type: ignore
+        _evt_bus().append(_Event(
+            name=f"probe.{kind}" if not kind.startswith("probe.") else kind,
+            actor="health_watchdog",
+            source="scripts.health_watchdog",
+            payload=dict(rec),
+        ))
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def _probe_http(p: dict) -> tuple[bool, str]:

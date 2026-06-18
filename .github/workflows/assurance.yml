@@ -6,6 +6,7 @@ on:
       - 'assurance/**'
       - 'tests/test_assurance/**'
       - 'server/routes/assurance.py'
+      - 'scripts/assurance_runner.py'
       - '.github/workflows/assurance.yml'
   pull_request:
     paths:
@@ -22,25 +23,61 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-      - name: Install minimal deps
+
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install pydantic fastapi pytest httpx
-      - name: Lint (ruff if installed)
+          pip install pydantic fastapi pytest httpx pytest-cov
+
+      - name: Lint (ruff)
         run: |
-          pip install ruff || true
-          ruff check assurance/ tests/test_assurance/ || echo "ruff warnings ignored in CI"
+          pip install ruff
+          ruff check assurance/ tests/test_assurance/ || echo "::warning::ruff issues found"
         continue-on-error: true
-      - name: Type-check (mypy if installed)
+
+      - name: Run assurance tests with coverage
         run: |
-          pip install mypy || true
-          mypy --ignore-missing-imports assurance/ || echo "mypy warnings ignored in CI"
-        continue-on-error: true
-      - name: Run assurance test suite
-        run: pytest tests/test_assurance/ -q
-      - name: Run invariant runner
+          pytest tests/test_assurance/ -q --cov=assurance --cov-report=term --cov-fail-under=65
+
+      - name: Run invariant runner (hard fail on violation)
         run: python -m assurance.invariants.runner --once --fail-on-violation
-      - name: Run fuzz smoke
+
+      - name: Run API fuzz smoke (200 iters, hard fail on crash/leak/violation)
         run: python -m assurance.fuzz.api_fuzzer --seed 42 --iter 200
-      - name: Run invariant fuzz
+
+      - name: Run workflow fuzz (500 walks)
         run: python -m assurance.fuzz.invariant_fuzz --walks 500
+
+      - name: Run Z3 examples (formal-method consistency)
+        run: |
+          pip install z3-solver
+          python -m assurance.formal.z3_examples
+
+      - name: Bandit security scan
+        run: |
+          pip install bandit
+          bandit -r assurance/ -ll -f txt -x assurance/fuzz/corpus || echo "::warning::bandit issues found"
+        continue-on-error: true
+
+      - name: Secret scan in JSONL sinks
+        run: |
+          python -c "
+          from assurance.audit.redact import has_secret
+          import os, sys
+          leaks = 0
+          for root, _, files in os.walk('server/data/assurance'):
+              for f in files:
+                  if not f.endswith('.jsonl'): continue
+                  p = os.path.join(root, f)
+                  with open(p) as fh:
+                      for i, line in enumerate(fh, 1):
+                          if has_secret(line):
+                              print(f'SECRET LEAK {p}:{i}', file=sys.stderr); leaks += 1
+          sys.exit(2 if leaks else 0)
+          "
+
+      - name: server.main import sanity
+        run: python -c "import server.main; print('server.main OK')"
+
+      - name: UI theme lock
+        run: python scripts/check_ui_theme_lock.py
