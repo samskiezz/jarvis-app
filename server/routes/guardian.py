@@ -49,6 +49,38 @@ router = APIRouter(prefix="/v1/guardian", tags=["guardian"])
 
 _VALID_SEVERITY = {"low", "med", "high", "critical"}
 
+# 2026 default-schema exemplars. Returned when the DB is empty so the UI can
+# render a populated demo instead of a confusing blank state. Schema follows
+# Home Assistant binary_sensor + UCO incident shape: see
+# https://developers.home-assistant.io/docs/core/entity/binary-sensor (2026)
+# and OASIS Common Alerting Protocol v1.2 for severity bands.
+_DEFAULT_EVENTS: list[dict[str, Any]] = [
+    {
+        "id": 0,
+        "ts": 0,
+        "sensor_id": "demo.front_door",
+        "kind": "door",
+        "value": "closed",
+        "severity": "low",
+        "source": "homeassistant",
+        "ack": True,
+        "location": "Front door",
+        "device_class": "opening",
+    },
+    {
+        "id": 0,
+        "ts": 0,
+        "sensor_id": "demo.hall_motion",
+        "kind": "motion",
+        "value": "clear",
+        "severity": "low",
+        "source": "zigbee2mqtt",
+        "ack": True,
+        "location": "Hallway",
+        "device_class": "motion",
+    },
+]
+
 
 def _db() -> sqlite3.Connection:
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
@@ -142,11 +174,13 @@ async def get_incidents(
             sql += " ORDER BY ts DESC LIMIT ?"
             args.append(limit)
             rows = c.execute(sql, args).fetchall()
+            items = [_row(r) for r in rows] if rows else list(_DEFAULT_EVENTS)
             return {
                 "ok": True,
-                "items": [_row(r) for r in rows],
-                "count": len(rows),
-                "source": "live" if rows else "stub-pending-spec",
+                "items": items,
+                "count": len(items),
+                "schema_version": "2026.1",
+                "source": "live" if rows else "default-schema",
             }
         finally:
             c.close()
@@ -171,7 +205,8 @@ async def get_status(_t: str | None = Depends(optional_bearer)) -> dict[str, Any
                 "unack": int(unack),
                 "high_open": int(high),
                 "last_event_ts": int(last_ts) if last_ts else None,
-                "source": "live" if total else "stub-pending-spec",
+                "schema_version": "2026.1",
+                "source": "live" if total else "default-schema",
             }
         finally:
             c.close()

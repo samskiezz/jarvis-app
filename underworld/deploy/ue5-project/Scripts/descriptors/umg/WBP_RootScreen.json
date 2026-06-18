@@ -1,0 +1,38 @@
+{
+  "package_path": "/Game/UI",
+  "asset_name":   "WBP_RootScreen",
+  "parent_class": "/Script/UMG.UserWidget",
+  "root": {
+    "type": "CanvasPanel",
+    "name": "RootCanvas",
+    "children": [
+      {
+        "type": "VerticalBox",
+        "name": "MainColumn",
+        "children": [
+          {
+            "type": "TextBlock",
+            "name": "TitleText",
+            "properties": { "text": "JARVIS" }
+          },
+          {
+            "type": "TextBlock",
+            "name": "SubtitleText",
+            "properties": { "text": "Underworld online." }
+          },
+          {
+            "type": "Button",
+            "name": "EngageButton",
+            "children": [
+              {
+                "type": "TextBlock",
+                "name": "EngageLabel",
+                "properties": { "text": "Engage" }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

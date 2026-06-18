@@ -1,0 +1,28 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0.0",
+  "FriendlyName": "Jarvis Niagara Helper",
+  "Description": "Editor-only UFUNCTIONs that expose UNiagaraSystem emitter-handle and module-stack manipulation to Python. Required by underworld/deploy/ue5-project/Scripts/niagara_automation.py Path B.",
+  "Category": "Jarvis FX",
+  "CreatedBy": "Jarvis Underworld team",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "CanContainContent": false,
+  "IsBetaVersion": false,
+  "Installed": false,
+  "EnabledByDefault": true,
+  "Modules": [
+    {
+      "Name": "JarvisNiagaraHelper",
+      "Type": "Editor",
+      "LoadingPhase": "PostEngineInit"
+    }
+  ],
+  "Plugins": [
+    { "Name": "Niagara", "Enabled": true },
+    { "Name": "PythonScriptPlugin", "Enabled": true }
+  ]
+}

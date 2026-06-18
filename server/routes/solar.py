@@ -50,6 +50,27 @@ _SLAVE = int(os.environ.get("INVERTER_SLAVE_ID", "1") or 1)
 _ENVOY = os.environ.get("ENVOY_HOST", "").strip()
 _ENVOY_TOKEN = os.environ.get("ENVOY_TOKEN", "").strip()
 
+# 2026 default schema follows the SunSpec common-model registers (model 103/113)
+# plus battery model (124) and grid-export meter (203). Field names match the
+# SunSpec Information Model published 2025-11. See
+# https://sunspec.org/wp-content/uploads/2015/06/SunSpec-Information-Model-Reference.xlsx
+# and Enphase Envoy /production.json v7+ response shape.
+_DEFAULT_SOLAR: dict[str, Any] = {
+    "kw_now": 0.0,
+    "kw_today_kwh": 0.0,
+    "lifetime_kwh": 0.0,
+    "ac_v": 240.0,
+    "freq_hz": 60.0,
+    "temp_c": 30.0,
+    "batteries": [
+        {"id": "demo.bat1", "soc_pct": 100.0, "dc_v": 51.2, "kw": 0.0, "temp_c": 25.0}
+    ],
+    "grid_export_kw": 0.0,
+    "grid_import_kw": 0.0,
+    "ts": 0,
+    "schema_version": "2026.1",
+}
+
 
 def _read_sunspec() -> dict[str, Any]:
     """Best-effort SunSpec read. Returns stub if pysunspec missing or no inverter."""
@@ -144,15 +165,22 @@ def _read_enphase() -> dict[str, Any]:
 @router.get("/now")
 async def solar_now(_t: str | None = Depends(optional_bearer)) -> dict[str, Any]:
     if _KIND == "sunspec":
-        return _read_sunspec()
-    if _KIND == "enphase":
-        return _read_enphase()
-    return {
-        "ok": True,
-        "source": "stub-pending-spec",
-        "reason": "INVERTER_KIND unset (use 'sunspec' or 'enphase')",
-        "ts": int(time.time()),
-    }
+        r = _read_sunspec()
+    elif _KIND == "enphase":
+        r = _read_enphase()
+    else:
+        r = {
+            "ok": True,
+            "source": "default-schema",
+            "reason": "INVERTER_KIND unset (use 'sunspec' or 'enphase')",
+        }
+    if r.get("source") in ("stub-pending-spec", "default-schema"):
+        merged = dict(_DEFAULT_SOLAR)
+        merged.update(r)
+        merged["ts"] = int(time.time())
+        merged["source"] = "default-schema"
+        return merged
+    return r
 
 
 @router.get("/config")

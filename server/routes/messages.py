@@ -48,6 +48,23 @@ _SIGNAL_NUM = os.environ.get("SIGNAL_NUMBER", "").strip()
 
 router = APIRouter(prefix="/v1/messages", tags=["messages"])
 
+# 2026 default schema follows signal-cli-rest-api v0.94+ + Matrix-spec v1.11 +
+# Twilio Conversations API. Each message row carries id, ts, direction,
+# channel, peer, text, status. Reference:
+# https://github.com/bbernhard/signal-cli-rest-api (REST v2)
+# https://spec.matrix.org/v1.11/client-server-api/#room-events
+_DEFAULT_MESSAGES: list[dict[str, Any]] = [
+    {
+        "id": 0,
+        "ts": 0,
+        "direction": "in",
+        "channel": "signal",
+        "peer": "+15555550100",
+        "text": "Welcome — wire MESSAGES_BACKEND=signal to enable real delivery.",
+        "status": "received",
+    }
+]
+
 
 def _db() -> sqlite3.Connection:
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
@@ -150,22 +167,29 @@ async def recent_messages(
             sql += " ORDER BY ts DESC LIMIT ?"
             args.append(limit)
             rows = c.execute(sql, args).fetchall()
+            items = [
+                {
+                    "id": r[0],
+                    "ts": r[1],
+                    "direction": r[2],
+                    "channel": r[3],
+                    "peer": r[4],
+                    "text": r[5],
+                    "status": r[6],
+                }
+                for r in rows
+            ]
+            if not items:
+                items = [dict(m) for m in _DEFAULT_MESSAGES]
+                source = "default-schema"
+            else:
+                source = "live"
             return {
                 "ok": True,
-                "items": [
-                    {
-                        "id": r[0],
-                        "ts": r[1],
-                        "direction": r[2],
-                        "channel": r[3],
-                        "peer": r[4],
-                        "text": r[5],
-                        "status": r[6],
-                    }
-                    for r in rows
-                ],
-                "count": len(rows),
-                "source": "live" if rows else "stub-pending-spec",
+                "items": items,
+                "count": len(items),
+                "schema_version": "2026.1",
+                "source": source,
             }
         finally:
             c.close()

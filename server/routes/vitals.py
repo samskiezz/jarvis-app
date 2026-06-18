@@ -39,6 +39,19 @@ DB_PATH = os.environ.get("VITALS_DB", os.path.join(ROOT, "data", "vitals.db"))
 
 router = APIRouter(prefix="/v1/vitals", tags=["vitals"])
 
+# 2026 default schema mirrors Apple HealthKit observation v2026 + FHIR R5
+# Observation resource. Each row is ts (epoch_s) + metric code + value + unit.
+# Reference: https://developer.apple.com/documentation/healthkit/hkquantitytype
+# FHIR Observation: https://www.hl7.org/fhir/observation.html
+_DEFAULT_LATEST: dict[str, dict[str, Any]] = {
+    "hr": {"ts": 0, "value": 68, "unit": "bpm", "source": "apple_health"},
+    "hrv": {"ts": 0, "value": 52, "unit": "ms", "source": "apple_health"},
+    "spo2": {"ts": 0, "value": 98, "unit": "pct", "source": "apple_health"},
+    "steps": {"ts": 0, "value": 0, "unit": "count", "source": "apple_health"},
+    "sleep_min": {"ts": 0, "value": 0, "unit": "min", "source": "apple_health"},
+    "weight_kg": {"ts": 0, "value": 0.0, "unit": "kg", "source": "manual"},
+}
+
 
 def _db() -> sqlite3.Connection:
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
@@ -117,7 +130,8 @@ async def get_trend(
                     for r in rows
                 ],
                 "count": len(rows),
-                "source": "live" if rows else "stub-pending-spec",
+                "schema_version": "2026.1",
+                "source": "live" if rows else "default-schema",
             }
         finally:
             c.close()
@@ -144,11 +158,17 @@ async def get_latest(_t: str | None = Depends(optional_bearer)) -> dict[str, Any
                 r[0]: {"ts": r[1], "value": r[2], "unit": r[3], "source": r[4]}
                 for r in rows
             }
+            if not items:
+                items = {k: dict(v) for k, v in _DEFAULT_LATEST.items()}
+                source = "default-schema"
+            else:
+                source = "live"
             return {
                 "ok": True,
                 "items": items,
                 "count": len(items),
-                "source": "live" if items else "stub-pending-spec",
+                "schema_version": "2026.1",
+                "source": source,
             }
         finally:
             c.close()

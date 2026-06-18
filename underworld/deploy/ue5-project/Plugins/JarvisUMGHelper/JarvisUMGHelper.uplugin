@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "Jarvis UMG Helper",
+	"Description": "Editor-only BlueprintCallable helpers that expose the UMG widget-tree mutation operations (construct/parent/save/mark-modified) to Python. Disproves the 'Python cannot wire UMG node graphs' claim by giving the Python layer the last few C++-only verbs needed to write a Widget Blueprint end-to-end.",
+	"Category": "Editor",
+	"CreatedBy": "Jarvis",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"EnabledByDefault": true,
+	"Modules": [
+		{
+			"Name": "JarvisUMGHelper",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
+		}
+	]
+}

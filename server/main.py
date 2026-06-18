@@ -154,6 +154,9 @@ from .routes import vitals as vitals_routes
 from .routes import vpn as vpn_routes
 from .routes import solar as solar_routes
 from .routes import messages as messages_routes
+from .routes import run_builder as run_builder_routes
+from .routes import run_correlator as run_correlator_routes
+from .routes import inf_swarm as inf_swarm_routes
 
 
 def _ingest_enabled() -> bool:
@@ -430,6 +433,9 @@ def create_app() -> FastAPI:
     app.include_router(vpn_routes.router)
     app.include_router(solar_routes.router)
     app.include_router(messages_routes.router)
+    app.include_router(run_builder_routes.router)
+    app.include_router(run_correlator_routes.router)
+    app.include_router(inf_swarm_routes.router)
 
     @app.get("/")
     async def root():

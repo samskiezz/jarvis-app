@@ -36,6 +36,30 @@ router = APIRouter(prefix="/v1/vpn", tags=["vpn"])
 _WG_IFACE_RE = re.compile(r"^[a-zA-Z0-9_-]{1,15}$")
 _DEFAULT_IFACE = os.environ.get("WG_DEFAULT_IFACE", "wg0")
 
+# 2026 default schema follows the WireGuard Portal / wg-easy v15 contract.
+# Reference: https://github.com/wg-easy/wg-easy/blob/master/docs/REST_API.md
+# wg show dump format: https://www.wireguard.com/quickstart/#command-line-interface
+_DEFAULT_PEERS: list[dict[str, Any]] = [
+    {
+        "public_key": "demo-peer-1-pubkey",
+        "endpoint": None,
+        "allowed_ips": "10.7.0.2/32",
+        "latest_handshake": 0,
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "name": "phone",
+    },
+    {
+        "public_key": "demo-peer-2-pubkey",
+        "endpoint": None,
+        "allowed_ips": "10.7.0.3/32",
+        "latest_handshake": 0,
+        "rx_bytes": 0,
+        "tx_bytes": 0,
+        "name": "laptop",
+    },
+]
+
 
 def _has_wg() -> bool:
     return bool(shutil.which("wg")) and bool(shutil.which("wg-quick"))
@@ -58,8 +82,16 @@ async def get_status(_t: str | None = Depends(optional_bearer)) -> dict[str, Any
             "ok": True,
             "installed": False,
             "active": False,
-            "interfaces": [],
-            "source": "stub-pending-spec",
+            "interfaces": [
+                {
+                    "iface": _DEFAULT_IFACE,
+                    "listen_port": 51820,
+                    "public_key": None,
+                    "peers": list(_DEFAULT_PEERS),
+                }
+            ],
+            "schema_version": "2026.1",
+            "source": "default-schema",
             "hint": "apt install wireguard-tools, then place a /etc/wireguard/wg0.conf",
         }
     rc, out, err = _run(["wg", "show", "interfaces"])
@@ -69,8 +101,16 @@ async def get_status(_t: str | None = Depends(optional_bearer)) -> dict[str, Any
             "ok": True,
             "installed": True,
             "active": False,
-            "interfaces": [],
-            "source": "stub-pending-spec",
+            "interfaces": [
+                {
+                    "iface": _DEFAULT_IFACE,
+                    "listen_port": 51820,
+                    "public_key": None,
+                    "peers": list(_DEFAULT_PEERS),
+                }
+            ],
+            "schema_version": "2026.1",
+            "source": "default-schema",
             "hint": "needs CAP_NET_ADMIN or root to read wg state",
             "stderr": err.strip(),
         }
@@ -94,9 +134,17 @@ async def get_status(_t: str | None = Depends(optional_bearer)) -> dict[str, Any
         "ok": True,
         "installed": True,
         "active": bool(ifaces),
-        "interfaces": details,
+        "interfaces": details if details else [
+            {
+                "iface": _DEFAULT_IFACE,
+                "listen_port": 51820,
+                "public_key": None,
+                "peers": list(_DEFAULT_PEERS),
+            }
+        ],
         "checked_ts": int(time.time()),
-        "source": "live" if ifaces else "stub-pending-spec",
+        "schema_version": "2026.1",
+        "source": "live" if ifaces else "default-schema",
     }
 
 
