@@ -124,6 +124,12 @@ from .routes import ops as ops_routes
 from .routes import pipelines as pipelines_routes
 from .routes import predict as predict_routes
 from .routes import reminders as reminders_routes
+from .routes import motor as motor_routes
+from .routes import sensors as sensors_routes
+from .routes import vision as vision_routes
+from .routes import a11y_drivers as a11y_drivers_routes
+from .routes import phone as phone_routes
+from .routes import music as music_routes
 from .routes import reports as reports_routes
 from .routes import scenario as scenario_routes
 from .routes import sci_3d as sci_3d_routes
@@ -143,6 +149,11 @@ from .routes import tenancy as tenancy_routes
 from .routes import workshop as workshop_routes
 from .routes import revdb as revdb_routes
 from .routes import security_ext as security_ext_routes
+from .routes import guardian as guardian_routes
+from .routes import vitals as vitals_routes
+from .routes import vpn as vpn_routes
+from .routes import solar as solar_routes
+from .routes import messages as messages_routes
 
 
 def _ingest_enabled() -> bool:
@@ -326,6 +337,9 @@ def create_app() -> FastAPI:
     app.include_router(science_routes.router)
     app.include_router(predict_routes.router)
     app.include_router(reminders_routes.router)
+    app.include_router(motor_routes.router)
+    app.include_router(sensors_routes.router)
+    app.include_router(vision_routes.router)
     app.include_router(entities_routes.router)
     app.include_router(streams_routes.router)
     app.include_router(claude_code_routes.router)
@@ -408,6 +422,14 @@ def create_app() -> FastAPI:
     app.include_router(revdb_routes.router)
     app.include_router(security_ext_routes.router)
     app.include_router(cinematic_routes.router)
+    app.include_router(a11y_drivers_routes.router)
+    app.include_router(phone_routes.router)
+    app.include_router(music_routes.router)
+    app.include_router(guardian_routes.router)
+    app.include_router(vitals_routes.router)
+    app.include_router(vpn_routes.router)
+    app.include_router(solar_routes.router)
+    app.include_router(messages_routes.router)
 
     @app.get("/")
     async def root():

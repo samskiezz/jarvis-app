@@ -1,0 +1,123 @@
+{
+  "blueprints": [
+    {
+      "folder": "/Game/Characters",
+      "name": "BP_PlayableMinion",
+      "parent_class": "Character",
+      "skeleton_path": ""
+    },
+    {
+      "folder": "/Game/Characters",
+      "name": "AnimBP_Minion",
+      "parent_class": "",
+      "skeleton_path": "/Game/Characters/Mesh/SK_Minion_Skeleton"
+    }
+  ],
+  "niagara": [
+    {
+      "folder": "/Game/FX",
+      "name": "NS_Awakening_Spark",
+      "notes": "Particle burst on awakening trigger",
+      "template_hint": "Fountain"
+    },
+    {
+      "folder": "/Game/FX",
+      "name": "NS_Ascend_Glow",
+      "notes": "Sustained ascend halo",
+      "template_hint": "Aura"
+    },
+    {
+      "folder": "/Game/FX",
+      "name": "NS_FireTrail",
+      "notes": "Minion trail FX",
+      "template_hint": "Ribbon"
+    }
+  ],
+  "sequences": [
+    {
+      "duration_frames": 660,
+      "folder": "/Game/Cinematics/Awakening",
+      "frame_rate": 30,
+      "name": "SEQ_AwakeningAct1",
+      "shots": [
+        "SH_01_01",
+        "SH_01_02",
+        "SH_01_03"
+      ]
+    },
+    {
+      "duration_frames": 720,
+      "folder": "/Game/Cinematics/Awakening",
+      "frame_rate": 30,
+      "name": "SEQ_AwakeningAct2",
+      "shots": [
+        "SH_02_01",
+        "SH_02_02",
+        "SH_02_03"
+      ]
+    },
+    {
+      "duration_frames": 780,
+      "folder": "/Game/Cinematics/Awakening",
+      "frame_rate": 30,
+      "name": "SEQ_AwakeningAct3",
+      "shots": [
+        "SH_03_01",
+        "SH_03_02",
+        "SH_03_03"
+      ]
+    },
+    {
+      "duration_frames": 840,
+      "folder": "/Game/Cinematics/Awakening",
+      "frame_rate": 30,
+      "name": "SEQ_AwakeningAct4",
+      "shots": [
+        "SH_04_01",
+        "SH_04_02",
+        "SH_04_03"
+      ]
+    },
+    {
+      "duration_frames": 900,
+      "folder": "/Game/Cinematics/Awakening",
+      "frame_rate": 30,
+      "name": "SEQ_AwakeningAct5",
+      "shots": [
+        "SH_05_01",
+        "SH_05_02",
+        "SH_05_03"
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "folder": "/Game/UI",
+      "layout_hint": "CanvasPanel",
+      "name": "WBP_HUD_Main",
+      "notes": "Top-level HUD overlay; health, awakening prompt",
+      "parent_class": "UserWidget"
+    },
+    {
+      "folder": "/Game/UI",
+      "layout_hint": "VerticalBox",
+      "name": "WBP_AwakeningPrompt",
+      "notes": "Modal shown during Act 1 (gap #42 awakening surface)",
+      "parent_class": "UserWidget"
+    },
+    {
+      "folder": "/Game/UI",
+      "layout_hint": "VerticalBox",
+      "name": "WBP_AscendMenu",
+      "notes": "End-of-act ascend choices",
+      "parent_class": "UserWidget"
+    },
+    {
+      "folder": "/Game/UI/Accessibility",
+      "layout_hint": "GridPanel",
+      "name": "WBP_AccessibilityDock",
+      "notes": "8-pillar a11y dock (already shipped in web shell)",
+      "parent_class": "EditorUtilityWidget"
+    }
+  ]
+}
