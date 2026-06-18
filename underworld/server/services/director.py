@@ -37,16 +37,39 @@ def latest(world_id: str) -> dict[str, Any]:
     return _LATEST.get(world_id, {})
 
 
+GOD_BEAT_TTL_S = 90.0
+
+
+def _evict_stale_god_beat(d: dict[str, Any]) -> None:
+    """AUDIT FIX #2: in-place eviction of expired god_beat.
+
+    Previously frame() only locally nulled the god_beat; the stale entry remained
+    in _LATEST and director_cycle would re-read it on the next tick, causing the
+    same cinematic to replay forever. Now both frame() and director_cycle call
+    this to clear the cache entry whenever the TTL is exceeded."""
+    if not d:
+        return
+    if not d.get("god_beat"):
+        return
+    god_beat_at = d.get("god_beat_at")
+    if not god_beat_at:
+        # treat missing/zero timestamp as stale — never let it linger forever
+        d["god_beat"] = None
+        d["god_beat_at"] = None
+        return
+    if (time.time() - float(god_beat_at)) > GOD_BEAT_TTL_S:
+        d["god_beat"] = None
+        d["god_beat_at"] = None
+
+
 def frame(world_id: str) -> dict[str, Any]:
     """The slice that hangs on the scene `frame` for renderers."""
     d = _LATEST.get(world_id)
     if not d:
         return {"overmind": None, "chatter": [], "god_beat": None}
-    # a god-beat lingers ~90s then clears so the renderer can show it then move on
-    god = d.get("god_beat")
-    if god and (time.time() - d.get("god_beat_at", 0)) > 90:
-        god = None
-    return {"overmind": d.get("overmind"), "chatter": d.get("chatter", []), "god_beat": god}
+    _evict_stale_god_beat(d)
+    return {"overmind": d.get("overmind"), "chatter": d.get("chatter", []),
+            "god_beat": d.get("god_beat")}
 
 
 async def _snapshot(s, world: World) -> dict[str, Any]:
@@ -132,8 +155,11 @@ async def director_cycle(s, world: World) -> dict[str, Any]:
         era=era, weather=weather, awakened=int(snap.get("awakened", 0)), n=3)
 
     prev = _LATEST.get(world.id, {})
+    # AUDIT FIX #2: evict stale god_beat from prev BEFORE reusing it. Otherwise the
+    # cinematic re-fires every cycle until a new trigger overwrites it.
+    _evict_stale_god_beat(prev)
     god_beat = prev.get("god_beat")
-    god_beat_at = prev.get("god_beat_at", 0.0)
+    god_beat_at = prev.get("god_beat_at") or 0.0
     trig = _god_trigger(snap, recent)
     if trig:
         key, event = trig
