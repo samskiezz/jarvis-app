@@ -581,6 +581,37 @@ def _load_disk_cache() -> dict | None:
     return None
 
 
+_DISK_CACHE_SLIM_GZ = os.environ.get(
+    "REPO_GRAPH_DISK_CACHE_SLIM_GZ",
+    "/opt/jarvis-app-1/server/data/repo_graph_positions.json.gz",
+)
+
+
+def _save_slim_gz(data: dict) -> None:
+    """Pre-serialize the slim positions payload to gzipped JSON on disk so /graph/positions can
+    sendfile it in ~1s instead of re-serializing 2.66M nodes (~19s) on every cold request."""
+    try:
+        import gzip
+        slim = {
+            "generated_at": data.get("generated_at"),
+            "stats": data.get("stats"),
+            "nodes": [{"id": n["id"], "kind": n.get("kind"), "label": n.get("label")}
+                      for n in (data.get("nodes") or [])],
+            "edges": [[e["src"], e["dst"]] for e in (data.get("edges") or [])],
+        }
+        tmp = _DISK_CACHE_SLIM_GZ + ".tmp"
+        with gzip.open(tmp, "wt", encoding="utf-8", compresslevel=6) as fh:
+            json.dump(slim, fh)
+        os.replace(tmp, _DISK_CACHE_SLIM_GZ)
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def slim_gz_path() -> str | None:
+    """Path to the pre-serialized gzipped slim positions payload, or None if it doesn't exist."""
+    return _DISK_CACHE_SLIM_GZ if os.path.exists(_DISK_CACHE_SLIM_GZ) else None
+
+
 def _save_disk_cache(data: dict) -> None:
     try:
         os.makedirs(os.path.dirname(_DISK_CACHE), exist_ok=True)
@@ -590,6 +621,8 @@ def _save_disk_cache(data: dict) -> None:
         os.replace(tmp, _DISK_CACHE)
     except Exception:  # noqa: BLE001
         pass
+    # Always refresh the slim gz alongside the full cache.
+    _save_slim_gz(data)
 
 
 def get_graph(force: bool = False) -> dict:

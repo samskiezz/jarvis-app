@@ -3043,12 +3043,18 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(json.dumps(_search_ontology(q.get("q", [""])[0], lim)).encode(),
                        "application/json")
         elif self.path.startswith("/graph/positions"):
-            # NEXUS slim payload — used by the brain visualiser to render ALL nodes (not a sample).
-            # Each node carries ONLY id + kind + label (no path/preview/extra fields) so the browser
-            # can pull the full 2.66M-node graph without the 1.2GB JSON parse hit. Edges as [src,dst]
-            # tuples. Returns counts so the UI can show "rendering N of M" honestly.
+            # NEXUS slim payload. Fast path: stream the pre-serialized gzipped file written next to
+            # the disk cache by _save_slim_gz() — drops serve time from ~19s (re-serializing 2.66M
+            # nodes per request) to ~1s for the whole 860MB-uncompressed / ~80MB-compressed body.
+            # Slow path: fall back to re-serialize on the fly if the gz isn't present yet.
             try:
-                from server.services.repo_graph import get_graph
+                from server.services.repo_graph import get_graph, slim_gz_path
+                gzp = slim_gz_path()
+                if gzp:
+                    with open(gzp, "rb") as fh:
+                        body = fh.read()
+                    self._send_status(body, "application/json", 200, extra={"Content-Encoding": "gzip"})
+                    return
                 g = get_graph(force=False)
                 nodes = [{"id": n["id"], "kind": n.get("kind"), "label": n.get("label")}
                          for n in g.get("nodes", [])]
@@ -3057,8 +3063,8 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                            "nodes": nodes, "edges": edges}
                 self._send(json.dumps(payload).encode(), "application/json")
             except Exception as e:  # noqa: BLE001
-                self._send(json.dumps({"ok": False, "error": str(e)[:200]}).encode(),
-                           "application/json", code=500)
+                self._send_status(json.dumps({"ok": False, "error": str(e)[:200]}).encode(),
+                                  "application/json", 500)
             return
         elif self.path.startswith("/graph/everything"):
             # NEXUS — whole-system knowledge graph JSON. MUST be matched BEFORE the bare /graph route
