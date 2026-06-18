@@ -23,6 +23,7 @@ Usage:  python3 scripts/auto_improve.py [--features N] [--dry-run] [--tier claud
 """
 from __future__ import annotations
 
+import ast
 import json
 import os
 import re
@@ -264,6 +265,27 @@ def _implement_kimi(feat: dict) -> bool:
         log({"event": "kimi_skip", "title": feat.get("title"), "reason": "rewrite too short (likely truncated)",
              "target": rel, "got": len(out), "src": len(src)})
         return False
+    # AUDIT FIX #5: for Python targets, the 0.6x length heuristic is too coarse — Kimi can drop entire
+    # method bodies or top-level defs while still producing >60% length and valid syntax. The gate may
+    # pass (file parses, tests don't run that path), and the truncated code lands on main. Walk both ASTs
+    # and require every top-level def/class in src to still appear in out by name.
+    if rel.endswith(".py"):
+        try:
+            src_ast = ast.parse(src)
+            out_ast = ast.parse(out)
+        except SyntaxError as e:
+            log({"event": "kimi_skip", "title": feat.get("title"),
+                 "reason": f"rewrite has invalid Python syntax: {str(e)[:120]}",
+                 "target": rel})
+            return False
+        src_names = {n.name for n in src_ast.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+        out_names = {n.name for n in out_ast.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+        missing = src_names - out_names
+        if missing:
+            log({"event": "kimi_skip", "title": feat.get("title"),
+                 "reason": f"rewrite dropped {len(missing)} top-level def/class: {sorted(missing)[:5]}",
+                 "target": rel})
+            return False
     open(path, "w", encoding="utf-8").write(out)
     return True
 
