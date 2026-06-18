@@ -775,6 +775,18 @@ def _pump_swarms() -> None:
                     continue
                 res = result(cur_task)
                 lbl = plan[step].get("label", f"step {step}") if step < len(plan) else f"step {step}"
+                # AUDIT FIX #3: distinguish success from failure. Previously every non-running
+                # status (failed/error/gone) was harvested as if "done" — corrupting downstream
+                # steps with empty/garbage text and silently shipping broken work.
+                if st not in ("done",):
+                    results.append({"step": step, "label": lbl, "status": st,
+                                    "result": (res.get("text") or "")[:6000],
+                                    "error": f"task {cur_task} ended in status={st!r}"})
+                    _swarm_update(sid, status="paused", cur_task=None,
+                                  results=json.dumps(results),
+                                  review_state=f"failed_step_{step}:{st}")
+                    print(f"[task_daemon] swarm {sid} PAUSED at step {step} — task {cur_task} status={st}", flush=True)
+                    continue
                 results.append({"step": step, "label": lbl, "status": st,
                                 "result": (res.get("text") or "")[:6000]})  # wider carry → no loss between layers
                 step += 1
