@@ -237,6 +237,35 @@ def _parse(text: str):
         return None
 
 
+def _validate_judgment(judgment) -> tuple[bool, str]:
+    """AUDIT FIX #1: schema-check the parsed judgment before compute() trusts it.
+
+    Returns (ok, error_msg). The judge can return well-formed JSON that's still
+    semantically empty (e.g. {} or {"breakdown": "not a dict"}). Previously compute()
+    silently coerced missing/garbage fields to 0, producing a confident low-score
+    rejection of work that was actually unscorable.
+    """
+    if not isinstance(judgment, dict):
+        return False, f"judgment is not an object (got {type(judgment).__name__})"
+    bd = judgment.get("breakdown")
+    if not isinstance(bd, dict):
+        return False, "judgment.breakdown missing or not an object"
+    # Must have at least 6 of the 10 categories with numeric (or numeric-coercible) values.
+    numeric_keys = 0
+    for k in CAPS.keys():
+        v = bd.get(k)
+        if v is None:
+            continue
+        try:
+            float(v)
+            numeric_keys += 1
+        except (TypeError, ValueError):
+            return False, f"judgment.breakdown[{k!r}] is not numeric (got {v!r})"
+    if numeric_keys < 6:
+        return False, f"judgment.breakdown has only {numeric_keys}/10 numeric categories"
+    return True, ""
+
+
 def _band(score: int) -> str:
     if score >= 900:
         return "ELITE"
@@ -342,11 +371,25 @@ def audit_score(feat: dict, files: list, gate_report=None) -> dict:
     depth, note = _risk_depth(diff, files or [])
     # always use the strong judge for maximum audit accuracy (token-tiering reverted per owner).
     model = MODEL
+    # AUDIT FIX #7: refuse to invoke the judge if there is no gate evidence.
+    # Previously a placeholder "no gate report supplied" string was injected into the
+    # prompt, letting Claude hallucinate gate findings against fictional evidence.
+    if gate_report is None:
+        return {"verdict": "FAIL", "merge_ok": False, "final_score": 0,
+                "error": "no gate report supplied — refusing to audit without real test evidence",
+                "hard_blockers": [{"key": "build_fails", "reason": "gate did not run"}],
+                "risk_depth": depth, "audit_model": model, "gate_passed": False}
     text = _claude_judge(_prompt(feat, diff, gate_report, note), model=model)
     judgment = _parse(text)
     if not judgment:
         return {"verdict": "FAIL", "merge_ok": False, "final_score": 0,
                 "error": "audit judge returned unparseable output", "raw": (text or "")[:400],
+                "risk_depth": depth, "audit_model": model, "gate_passed": gate_passed}
+    # AUDIT FIX #1: validate judgment schema before compute() trusts it.
+    ok, err = _validate_judgment(judgment)
+    if not ok:
+        return {"verdict": "FAIL", "merge_ok": False, "final_score": 0,
+                "error": f"invalid_judgment_schema: {err}", "raw": (text or "")[:400],
                 "risk_depth": depth, "audit_model": model, "gate_passed": gate_passed}
     result = compute(judgment, gate_passed)
     result["risk_depth"] = depth
