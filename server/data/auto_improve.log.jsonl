@@ -137,3 +137,9 @@
 {"event": "viability_model", "acc_mean": null, "acc_std": null, "acc_lower": null, "n": 15, "gating": false, "status": "insufficient_data", "ts": 1781655907}
 {"event": "ideate_failed", "error": "empty brain response", "attempts": 3, "ts": 1781655922}
 {"event": "cycle_end", "reason": "no ideas generated", "ts": 1781655922}
+{"event": "cycle_start", "features": 1, "dry": true, "tier": "strong", "builder": "kimi", "ts": 1781788926}
+{"event": "worktree_reset", "file": "server/jarvis_live.html", "ts": 1781788926}
+{"event": "viability_model", "acc_mean": null, "acc_std": null, "acc_lower": null, "n": 15, "gating": false, "status": "insufficient_data", "ts": 1781788926}
+{"event": "ideator_no_grounding", "warn": "MINI_APPS regex matched zero apps", "ts": 1781788926}
+{"event": "ideate_failed", "error": "empty brain response", "attempts": 3, "ts": 1781788941}
+{"event": "cycle_end", "reason": "no ideas generated", "ts": 1781788941}

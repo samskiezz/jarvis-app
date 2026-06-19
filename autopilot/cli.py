@@ -169,7 +169,8 @@ def cmd_loop(args: argparse.Namespace) -> int:
     n = 0
     while True:
         n += 1
-        rc = _run_module("autopilot.loops.perception")
+        rc = _run_module("autopilot.loops.proposal_triage")
+        rc |= _run_module("autopilot.loops.perception")
         rc |= _run_module("autopilot.loops.planning")
         rc |= _run_module("autopilot.loops.autonomic")
         if safe or not args.unsafe:

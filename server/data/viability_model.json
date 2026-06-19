@@ -1,1 +1,1 @@
-{"n_samples": 15, "positives": 0, "negatives": 15, "target_acc": 0.9, "status": "insufficient_data", "ready": false, "note": "need >=60 samples and >=12/class; the engine is still accruing labelled outcomes (have 15: 0 landed / 15 rejected).", "gating": false}
+{"n_samples": 15, "positives": 0, "negatives": 15, "target_acc": 0.9, "status": "insufficient_data", "ready": false, "note": "need >=20 samples and >=5/class; the engine is still accruing labelled outcomes (have 15: 0 landed / 15 rejected).", "gating": false}

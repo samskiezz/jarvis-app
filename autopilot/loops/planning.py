@@ -152,6 +152,44 @@ def run() -> dict[str, Any]:
             body, kind="design", risk="low",
         ))
 
+
+    # LLM-driven planning: ask the brain to reorder + recommend the single highest-impact safe
+    # action, append it to the auto-action queue. Owner consent 2026-06-19 — no separate approval.
+    if os.environ.get("JARVIS_AUTOMATION_ALLOW_CLAUDE", "0") == "1":
+        try:
+            from autopilot.control.llm_client import generate, is_reachable
+            if is_reachable(timeout=2.0):
+                brain_summary = str(perception.get("brain") or {})
+                health_summary = str(perception.get("health") or {})
+                titles = [p.get("title", "") for p in proposals][:10]
+                prompt = (
+                    "You are JARVIS's autopilot planner. Given this perception summary "
+                    "and these candidate proposals, return ONLY a JSON array of the form "
+                    '[{"action_id":"...","name":"...","reason":"...","priority":1}] '
+                    "with the top 3 highest-impact SAFE actions ranked by priority.\n\n"
+                    "Perception summary: " + brain_summary + " " + health_summary + "\n"
+                    "Proposals: " + json.dumps(titles) + "\n"
+                )
+                resp = generate(prompt, max_tokens=400, timeout=30)
+                if resp:
+                    import re as _re
+                    m = _re.search(r"\[.*\]", resp, _re.DOTALL)
+                    if m:
+                        try:
+                            ranked = json.loads(m.group(0))
+                            for r in ranked[:1]:
+                                if isinstance(r, dict) and r.get("name"):
+                                    reason_txt = ("LLM ranked: " + str(r.get("reason", "")))[:200]
+                                    actions.append(_new_action(
+                                        r["name"], reason=reason_txt,
+                                        klass="generated_write",
+                                        target="autopilot/reports/", risk="low",
+                                    ))
+                        except (json.JSONDecodeError, KeyError, TypeError):
+                            pass
+        except Exception:
+            pass
+
     finished = time.time()
     plan = {
         "run_id": run_id,

@@ -18,6 +18,7 @@ import os, json, time, subprocess, urllib.request, urllib.error
 ROOT        = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RESULTS_DIR = os.path.join(ROOT, "server", "data", "gpu_results")     # Hostinger storage landing zone
 STATE_PATH  = os.path.join(ROOT, "server", "data", "gpu_instances.json")
+VAST_EVENTS_PATH = os.path.join(ROOT, "server", "data", "vast_events.jsonl")
 SSH_KEY     = os.path.expanduser(os.environ.get("VAST_SSH_KEY", "~/.ssh/id_ed25519"))
 API_BASE    = "https://console.vast.ai/api/v0"
 _TUNNEL_PROC = None  # persistent SSH tunnel to a running brain's Ollama
@@ -433,15 +434,33 @@ def safe_dispose(instance_id: int, force: bool = False) -> dict:
     # NEW: sync the Ollama model cache so the next provision can restore from Wasabi
     # instead of re-pulling 9 GB of qwen2.5:14b. Best-effort, doesn't block destroy.
     model_cache_wasabi = _sync_ollama_cache_to_wasabi(int(instance_id))
+    # Stop GPU workloads cleanly so VRAM is released BEFORE Vast force-kills the box.
+    # Without this, ollama serve is killed mid-flight and host VRAM stays pinned.
+    vram_freed = _ensure_vram_free(int(instance_id))
     d = destroy_instance(int(instance_id))
     d["recouped_to"] = recoup.get("dest"); d["recoup_ok"] = bool(recoup.get("ok")); d["forced"] = force
     d["wasabi"] = wasabi
     d["model_cache_wasabi"] = model_cache_wasabi
+    d["vram_freed"] = vram_freed
     if corr:
         d["assurance_correlation_id"] = corr
     _assurance_emit("gpu.dispose.completed", {"instance_id": int(instance_id),
                                               "ok": bool(d.get("ok")),
-                                              "wasabi_uploaded": (wasabi or {}).get("uploaded", 0)})
+                                              "wasabi_uploaded": (wasabi or {}).get("uploaded", 0),
+                                              "vram_freed": bool(vram_freed.get("ok"))})
+    # Final-state JSONL log line so dispose flow is end-to-end verifiable in vast_events.jsonl.
+    try:
+        with open(VAST_EVENTS_PATH, "a", encoding="utf-8") as fp:
+            fp.write(json.dumps({
+                "ts": time.time(), "kind": "dispose_complete",
+                "id": str(instance_id), "destroyed": bool(d.get("ok")),
+                "recoup_ok": bool(recoup.get("ok")),
+                "wasabi_uploaded": (wasabi or {}).get("uploaded", 0),
+                "vram_freed": bool(vram_freed.get("ok")),
+                "forced": bool(force),
+            }) + "\n")
+    except Exception:  # noqa: BLE001
+        pass
     return d
 
 
@@ -462,6 +481,30 @@ def run_on_instance(instance_id: int, command: str, timeout: float = 600) -> dic
         r = subprocess.run(_ssh_base(inst["ssh_host"], inst["ssh_port"]) + [command],
                            capture_output=True, text=True, timeout=timeout)
         return {"ok": r.returncode == 0, "stdout": r.stdout[-4000:], "stderr": r.stderr[-1500:], "code": r.returncode}
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:200]}
+
+
+def _ensure_vram_free(instance_id: int, timeout: float = 25) -> dict:
+    """Pre-destroy GPU teardown: stop ollama + docker workloads so VRAM is released
+    cleanly before Vast force-kills the box. Best-effort — never blocks destroy."""
+    inst = next((i for i in (list_instances().get("instances") or []) if i["id"] == int(instance_id)), None)
+    if not inst or not inst.get("ssh_host"):
+        return {"ok": False, "reason": "no_ssh_endpoint"}
+    # Stop loaded ollama models, then ollama serve, then docker, then GPU reset (best-effort).
+    cmd = (
+        "ollama ps 2>/dev/null | awk 'NR>1{print $1}' | xargs -r -I{} ollama stop {} 2>/dev/null; "
+        "pkill -x ollama 2>/dev/null; "
+        "docker ps -q 2>/dev/null | xargs -r docker stop -t 5 2>/dev/null; "
+        "sleep 2; "
+        "nvidia-smi --gpu-reset 2>/dev/null || true; "
+        "echo vram_free_done"
+    )
+    try:
+        r = subprocess.run(_ssh_base(inst["ssh_host"], inst["ssh_port"]) + [cmd],
+                           capture_output=True, text=True, timeout=timeout)
+        return {"ok": r.returncode == 0 and "vram_free_done" in (r.stdout or ""),
+                "stdout": (r.stdout or "")[-400:], "stderr": (r.stderr or "")[-400:]}
     except Exception as e:  # noqa: BLE001
         return {"ok": False, "error": str(e)[:200]}
 
@@ -753,12 +796,15 @@ def ensure_brain_tunnel() -> dict:
     if _ollama_up():
         return {"ok": True, "tunnel": "up", "local": "127.0.0.1:11434"}
     # Discover the live brain box: labelled jarvis-brain, else the biggest running instance.
+    # Never fall back to jarvis-ue5-render — that's the render box, not the brain.
     insts = list_instances().get("instances") or []
     running = [i for i in insts if "running" in (i.get("status") or "")]
     brain = next((i for i in running if (i.get("label") or "").startswith("jarvis-brain")), None)
     if not brain and running:
-        running.sort(key=lambda i: -(i.get("num_gpus") or 1))
-        brain = running[0]
+        non_brain = ("jarvis-ue5-render",)
+        candidates = [i for i in running if not (i.get("label") or "").startswith(non_brain)]
+        candidates.sort(key=lambda i: -(i.get("num_gpus") or 1))
+        brain = candidates[0] if candidates else None
     if not brain:
         # No RUNNING brain — but if a stopped jarvis-brain box exists, START it (disposable safety-layer
         # auto-restart) and let the next watch tick tunnel to it once it's up. Never disposes here.
@@ -816,8 +862,10 @@ def ensure_brain_tunnel() -> dict:
 
 # ── JARVIS brain: detect a running GPU instance serving an LLM (ollama), point JARVIS at it ──────────
 def brain_instance() -> dict:
-    """Find a RUNNING instance that can host the LLM brain (the GPU box), so JARVIS can flip from local
-    replies to full AI. Returns the instance + its ollama endpoint hint. Also keeps the SSH tunnel up."""
+    """Find the RUNNING brain box, so JARVIS can flip from local replies to full AI.
+    Label-driven: prefer instances explicitly labelled jarvis-brain, NEVER return non-brain boxes
+    (e.g. jarvis-ue5-render) as the brain even if they have more GPUs. Returns the instance + its
+    ollama endpoint hint. Also keeps the SSH tunnel up."""
     g = _guard()
     if g: return g
     insts = list_instances().get("instances") or []
@@ -825,6 +873,15 @@ def brain_instance() -> dict:
     tunnel = ensure_brain_tunnel()
     if not running:
         return {"ok": True, "brain": None, "stopped": [i for i in insts if i.get("id")][:3], "tunnel": tunnel}
-    running.sort(key=lambda i: -(i.get("num_gpus") or 1))   # biggest box = the brain
-    b = running[0]
+    # 1) Explicit jarvis-brain label wins regardless of size.
+    b = next((i for i in running if (i.get("label") or "").startswith("jarvis-brain")), None)
+    # 2) Fall back to "biggest box" but never confuse the UE5 render box (or any non-brain label)
+    #    for the brain — that would report gpu_util=0 and look like the brain was dead.
+    if not b:
+        non_brain = ("jarvis-ue5-render",)
+        candidates = [i for i in running if not (i.get("label") or "").startswith(non_brain)]
+        candidates.sort(key=lambda i: -(i.get("num_gpus") or 1))
+        b = candidates[0] if candidates else None
+    if not b:
+        return {"ok": True, "brain": None, "stopped": [i for i in insts if i.get("id")][:3], "tunnel": tunnel}
     return {"ok": True, "brain": b, "endpoint": (b.get("ssh_host"), b.get("ssh_port")), "tunnel": tunnel}

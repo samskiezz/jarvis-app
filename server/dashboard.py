@@ -1446,16 +1446,49 @@ def _history_to_prompt(prompt: str, history=None) -> str:
     return "\n".join(lines)
 
 
+_BRAIN_MODELS = {"ts": 0.0, "set": set()}
+def _box_models(timeout: float = 2.0) -> set:
+    """Cached snapshot of which models are resident on the brain box (60s TTL).
+    Stops _chat_direct_box from wasting a 404 round-trip on a model that isn't loaded —
+    that was the silent reason chat felt 'dumb': it kept calling qwen2.5:14b which wasn't pulled,
+    fell back to llama3.1:8b, but the user only saw the small-model reply."""
+    import urllib.request, json as _j, time as _t
+    now = _t.time()
+    if _BRAIN_MODELS["set"] and (now - _BRAIN_MODELS["ts"]) < 60:
+        return _BRAIN_MODELS["set"]
+    try:
+        base = JARVIS_LLM[:-3] if JARVIS_LLM.endswith("/v1") else JARVIS_LLM
+        req = urllib.request.Request(base.rstrip("/") + "/api/tags")
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            d = _j.loads(r.read().decode() or "{}")
+        names = {m.get("name") or m.get("model") for m in (d.get("models") or []) if isinstance(m, dict)}
+        names.discard(None)
+        if names:
+            _BRAIN_MODELS["set"] = names
+            _BRAIN_MODELS["ts"] = now
+    except Exception:  # noqa: BLE001
+        pass
+    return _BRAIN_MODELS["set"]
+
+
 def _chat_direct_box(sysmsg: str, prompt: str, history=None) -> str:
     """Direct box-LLM fallback (the original proven path) — used only if the tiered seam returns
-    nothing. Smartest-first model ladder; never raises."""
+    nothing. Smartest-first model ladder; skip models not resident on the box; never raises."""
     import urllib.request
     msgs = [{"role": "system", "content": sysmsg}]
     for h in (history or [])[-8:]:
         if isinstance(h, dict) and h.get("role") in ("user", "assistant") and h.get("content"):
             msgs.append({"role": h["role"], "content": str(h["content"])[:600]})
     msgs.append({"role": "user", "content": (prompt or "").strip()[:1000]})
-    for model in ("qwen2.5:14b", "llama3.1:8b"):  # smartest-first for a human, intelligent feel (32b not on the box)
+    # Smartest-first ladder. _box_models() removes models not actually pulled to the box,
+    # so we don't burn a 10s round-trip on a 404 before falling through to the resident model.
+    ladder = ("qwen2.5:32b", "qwen2.5:14b", "llama3.1:8b")
+    resident = _box_models()
+    if resident:
+        filtered = tuple(m for m in ladder if any(m == r or r.startswith(m + ":") or m == r.split(":")[0] for r in resident))
+        if filtered:
+            ladder = filtered
+    for model in ladder:
         try:
             body = json.dumps({"model": model, "messages": msgs, "max_tokens": 240,
                                "temperature": 0.7, "top_p": 0.92, "stream": False}).encode()

@@ -203,6 +203,10 @@ def respond() -> dict[str, Any]:
     return out
 
 
+def run():
+    return respond()
+
+
 if __name__ == "__main__":
     o = respond()
     n = len(o["actions"])

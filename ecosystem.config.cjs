@@ -267,5 +267,21 @@ module.exports = {
         HISTORY_INGEST_INTERVAL_S: '900',
       },
     },
+    {
+      // Vast cost watchdog — polls /users/current/ every 30 min, emits
+      // cost.alert event + writes autopilot/reports/cost-alert-*.md when
+      // monthly projection exceeds threshold OR credit drops below floor.
+      name: 'vast-cost-watchdog',
+      cwd: '/opt/jarvis-app-1',
+      script: 'scripts/vast_cost_watchdog.py',
+      interpreter: 'python3',
+      autorestart: true,
+      max_restarts: 30,
+      env: {
+        VAST_COST_INTERVAL_S: '1800',
+        VAST_COST_ALERT_MONTHLY_USD: '50',
+        VAST_LOW_CREDIT_USD: '5',
+      },
+    },
   ],
 };
