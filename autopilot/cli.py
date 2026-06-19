@@ -114,6 +114,7 @@ def cmd_run_safe() -> int:
     """Perception + planning + action (safe class only)."""
     rc = _run_module("autopilot.loops.perception")
     rc |= _run_module("autopilot.loops.planning")
+    rc |= _run_module("autopilot.loops.autonomic")
     rc |= _run_module("autopilot.loops.action")
     return rc
 
@@ -170,6 +171,7 @@ def cmd_loop(args: argparse.Namespace) -> int:
         n += 1
         rc = _run_module("autopilot.loops.perception")
         rc |= _run_module("autopilot.loops.planning")
+        rc |= _run_module("autopilot.loops.autonomic")
         if safe or not args.unsafe:
             rc |= _run_module("autopilot.loops.action")
             rc |= _run_module("autopilot.loops.evaluation")
