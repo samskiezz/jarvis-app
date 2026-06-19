@@ -265,10 +265,24 @@ def sweep() -> dict:
     return health
 
 
+_UNAUTHORIZED_STREAK = 0
+_UNAUTHORIZED_BACKOFF_UNTIL = 0.0
+_UNAUTHORIZED_TRIP_AT = 3
+_UNAUTHORIZED_BACKOFF_S = 6 * 3600
+
+
 def _try_provision():
-    """Owner-gated auto-provision via the local backend route. Honors cooldown + max-price."""
-    global _LAST_PROVISION_TS
+    """Owner-gated auto-provision via the local backend route. Honors cooldown + max-price.
+    Circuit-breaks for 6h after 3 consecutive `unauthorized` responses so the watchdog
+    stops hammering Vast when the API key needs rotation (audit/power/AFTER_OPTIMIZATION.md)."""
+    global _LAST_PROVISION_TS, _UNAUTHORIZED_STREAK, _UNAUTHORIZED_BACKOFF_UNTIL
     now = time.time()
+    if now < _UNAUTHORIZED_BACKOFF_UNTIL:
+        wait = int(_UNAUTHORIZED_BACKOFF_UNTIL - now)
+        _log(f"AUTO-PROVISION circuit-open (unauthorized backoff {wait}s remaining)")
+        _emit_event("brain_provision_circuit_open", backoff_remaining_s=wait,
+                    streak=_UNAUTHORIZED_STREAK)
+        return
     if now - _LAST_PROVISION_TS < PROVISION_COOLDOWN_S:
         wait = int(PROVISION_COOLDOWN_S - (now - _LAST_PROVISION_TS))
         _log(f"AUTO-PROVISION throttled (cooldown {wait}s remaining; tier={PROVISION_TIER})")
@@ -283,6 +297,17 @@ def _try_provision():
             j = json.loads(r.read() or b"{}")
         _log(f"AUTO-PROVISION tier={PROVISION_TIER} max_price=${PROVISION_MAX_PRICE}/hr → {str(j)[:240]}")
         _emit_event("brain_auto_provision_attempt", tier=PROVISION_TIER, max_price=PROVISION_MAX_PRICE, result=j)
+        err = str(j.get("error") or "").lower()
+        if "unauthorized" in err or "401" in err:
+            _UNAUTHORIZED_STREAK += 1
+            if _UNAUTHORIZED_STREAK >= _UNAUTHORIZED_TRIP_AT:
+                _UNAUTHORIZED_BACKOFF_UNTIL = now + _UNAUTHORIZED_BACKOFF_S
+                _log(f"AUTO-PROVISION circuit TRIPPED (unauthorized streak={_UNAUTHORIZED_STREAK}); "
+                     f"backing off {_UNAUTHORIZED_BACKOFF_S//3600}h — rotate VAST_API_KEY")
+                _emit_event("brain_provision_circuit_tripped",
+                            streak=_UNAUTHORIZED_STREAK, backoff_s=_UNAUTHORIZED_BACKOFF_S)
+        else:
+            _UNAUTHORIZED_STREAK = 0
         new_id = j.get("instance_id") or j.get("id") or (j.get("instance") or {}).get("id")
         if new_id:
             _PROVISION_PENDING[str(new_id)] = time.time()

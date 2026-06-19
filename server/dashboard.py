@@ -1104,12 +1104,14 @@ def _children(node_id: str, node_kind: str, exclude_id: str = "", limit: int = 1
 
 
 def metrics() -> dict:
-    total = _count(BRAIN_DB, "SELECT COUNT(*) FROM ont_object WHERE type='Topic'") or 0
-    enr = _count(BRAIN_DB, "SELECT COUNT(*) FROM note WHERE frontmatter_json LIKE '%\"batch_loader\"%'") or 0
+    def _counts() -> dict:
+        total = _count(BRAIN_DB, "SELECT COUNT(*) FROM ont_object WHERE type='Topic'") or 0
+        enr = _count(BRAIN_DB, "SELECT COUNT(*) FROM note WHERE frontmatter_json LIKE '%\"batch_loader\"%'") or 0
+        return {"enriched": enr, "total": total, "pct": round(enr / max(total, 1) * 100, 1)}
     return {
         "ts": int(time.time()),
-        "completion": {"enriched": enr, "total": total, "pct": round(enr / max(total, 1) * 100, 1)},
-        "runners": _runners(),
+        "completion": _cached("completion", 30.0, _counts),
+        "runners": _cached("runners", 5.0, _runners),
         "learning": _cached("learning", 6.0, _learning),
         "glb": _glb(),
         "box": _cached("box", 8.0, _box), "vps": _vps(),
@@ -1117,7 +1119,7 @@ def metrics() -> dict:
         "feedback": _cached("feedback", 4.0, _feedback),
         "correlation": _cached("correlation", 5.0, _correlation),
         "routing": _cached("routing", 4.0, _routing),
-        "feed": _feed(),
+        "feed": _cached("feed", 5.0, _feed),
     }
 
 
