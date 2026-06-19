@@ -55,6 +55,9 @@ module.exports = {
         // (cheap, rule-based). The optional LLM synthesis stays off unless PROACTIVE_LLM_SUMMARY=1.
         PROACTIVE_LOOP_ENABLED: 'true',
         PROACTIVE_LOOP_INTERVAL: '180',
+        // Owner approved 2026-06-19: turn on the LLM-summary side of the
+        // proactive loop now that the brain is alive.
+        PROACTIVE_LLM_SUMMARY: '1',
       },
     },
     {
@@ -211,6 +214,35 @@ module.exports = {
         AUTOPILOT_ALLOW_PAID_RESOURCES: 'false',
         // Owner explicitly approved whip-driven planning ("the whip approved").
         JARVIS_AUTOMATION_ALLOW_CLAUDE: '1',
+      },
+    },
+    {
+      // jarvis-worker: out-of-process host for the heavy LLM loops that would
+      // GIL-starve the API if run in jarvis-backend. server/worker.py is the
+      // documented robustness escape hatch.
+      name: 'jarvis-worker',
+      cwd: '/opt/jarvis-app-1',
+      script: '.venv/bin/python',
+      args: '-m server.worker',
+      interpreter: 'none',
+      autorestart: true,
+      max_restarts: 30,
+      env: {
+        OLLAMA_HOST: 'http://127.0.0.1:11434',
+        OLLAMA_MODEL: 'llama3.1:8b',
+        OLLAMA_EMBED_MODEL: 'nomic-embed-text',
+        // Owner approved 2026-06-19 ("yes all on working functioning"):
+        AUTOBUILD_ON_START: 'true',
+        AUTOBUILD_INTERVAL_S: '900',
+        AUTOBUILD_SCRAPE_BATCHES: '2',
+        AUTOBUILD_ENRICH_LIMIT: '12',
+        ENRICH_LOOP: 'true',
+        ENRICH_LOOP_INTERVAL_S: '120',
+        ENRICH_LOOP_BATCH: '8',
+        ENRICH_DEPTH: '2',
+        ENRICH_WORKERS: '2',
+        LLM_AUTOPILOT_ENABLE: 'true',
+        PROACTIVE_LLM_SUMMARY: '1',
       },
     },
   ],
