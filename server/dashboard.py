@@ -3371,6 +3371,89 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(self._tmpl("care.html").encode(), "text/html; charset=utf-8")
         elif self.path.startswith("/guardian"):
             self._send(self._tmpl("guardian.html").encode(), "text/html; charset=utf-8")
+        elif self.path.startswith("/predictions"):
+            self._send(self._tmpl("wc2026_predictions.html").encode(), "text/html; charset=utf-8")
+        elif self.path.split("?", 1)[0] == "/data/wc2026_predictions_audit":
+            # Audit trail: last N predictions logged by every WC2026 model run, straight
+            # out of server/data/wc2026_predictions.db. Read-only; lets the owner verify
+            # ("ensure your not lying") what was predicted, when, and against what actuals.
+            try:
+                # scripts/ isn't a package — load by file path so dashboard.py
+                # doesn't require adding an __init__.py that could affect
+                # standalone script execution elsewhere.
+                import importlib.util as _ilu, sys as _sys
+                _wdb = _sys.modules.get("wc2026_db_module")
+                if _wdb is None:
+                    _wdb_path = os.path.join(ROOT, "scripts", "wc2026_db.py")
+                    _spec = _ilu.spec_from_file_location("wc2026_db_module", _wdb_path)
+                    _wdb = _ilu.module_from_spec(_spec)
+                    _spec.loader.exec_module(_wdb)
+                    _sys.modules["wc2026_db_module"] = _wdb
+                q = parse_qs(urlparse(self.path).query)
+                try:
+                    lim = max(1, min(500, int(q.get("limit", ["50"])[0])))
+                except Exception:  # noqa: BLE001
+                    lim = 50
+                model = (q.get("model", [""])[0] or "").strip() or None
+                # ?summary=1 returns the per-model live accuracy snapshot
+                # used by the WC2026 HTML to render dynamic "X/N verified"
+                # badges instead of hardcoded backtest counts.
+                summary_flag = (q.get("summary", [""])[0] or "").strip()
+                if summary_flag in ("1", "true", "yes"):
+                    try:
+                        summary_rows = _wdb.query_model_accuracy_summary()
+                    except AttributeError:
+                        summary_rows = []
+                    self._send(json.dumps({
+                        "ok": True,
+                        "db": _wdb.DB_PATH,
+                        "mode": "summary",
+                        "count": len(summary_rows),
+                        "models": summary_rows,
+                    }).encode(), "application/json")
+                    return
+                # ?locked=1 returns the T-8h frozen prediction table instead
+                # of the rolling predictions log. Lets the UI render a 🔒
+                # icon next to any fixture whose prediction is locked.
+                locked_flag = (q.get("locked", [""])[0] or "").strip()
+                if locked_flag in ("1", "true", "yes"):
+                    try:
+                        locks = _wdb.query_locked_predictions(limit=lim)
+                    except AttributeError:
+                        locks = []
+                    self._send(json.dumps({
+                        "ok": True,
+                        "db": _wdb.DB_PATH,
+                        "mode": "locked",
+                        "count": len(locks),
+                        "locked": locks,
+                    }).encode(), "application/json")
+                else:
+                    preds = _wdb.query_recent_predictions(limit=lim, model=model)
+                    runs = _wdb.query_recent_runs(limit=20)
+                    self._send(json.dumps({
+                        "ok": True,
+                        "db": _wdb.DB_PATH,
+                        "count": len(preds),
+                        "predictions": preds,
+                        "runs": runs,
+                    }).encode(), "application/json")
+            except Exception as _e:  # noqa: BLE001
+                self._send_status(
+                    json.dumps({"ok": False, "error": str(_e)[:240]}).encode(),
+                    "application/json", 500,
+                )
+        elif self.path.split("?", 1)[0].startswith("/data/wc2026_") and self.path.split("?", 1)[0].endswith((".json", ".csv")):
+            _name = os.path.basename(self.path.split("?", 1)[0])
+            _path = os.path.join(os.path.dirname(__file__), "data", _name)
+            try:
+                with open(_path, "rb") as _f:
+                    _ct = "text/csv; charset=utf-8" if _name.endswith(".csv") else "application/json; charset=utf-8"
+                    self._send(_f.read(), _ct)
+            except FileNotFoundError:
+                self._send(json.dumps({"error": "not_found", "file": _name}).encode(), "application/json", code=404)
+            except Exception as _e:
+                self._send(json.dumps({"error": str(_e)}).encode(), "application/json", code=500)
         elif self.path.startswith("/taskresult"):
             from server.services import task_daemon as TD
             q = parse_qs(urlparse(self.path).query)
@@ -3395,6 +3478,14 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
                     out = GI.brain_instance()
                 elif sub == "estimate":
                     out = {"ok": True, **GI.estimate_task_vram(q.get("task", [""])[0])}
+                elif sub == "burst":
+                    # Live state of tier-burst brains (strong/pro/heavy) — what's alive, idle for
+                    # how long, when they'll be reaped. Renders in the GPU mini-app banner.
+                    try:
+                        from server.services import gpu_orchestrator as ORCH
+                        out = ORCH.status()
+                    except Exception as exc:  # noqa: BLE001
+                        out = {"ok": False, "error": str(exc)[:200], "tiers": {}, "enabled": []}
                 else:
                     out = {"ok": False, "error": "unknown gpu route"}
             except Exception as e:  # noqa: BLE001
@@ -3813,6 +3904,23 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
             except Exception as e:  # noqa: BLE001
                 self._send(json.dumps({"ok": False, "error": str(e)[:160]}).encode(), "application/json")
             return
+        if self.path.startswith("/chat/rate"):
+            # Owner thumbs-up/down on a JARVIS reply. Body: {id:int, rating: 1|-1|0, comment?:str}.
+            # MUST be checked before /chat (which is a prefix-match and would otherwise swallow this).
+            try:
+                ln = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(ln).decode() or "{}") if ln else {}
+            except Exception:  # noqa: BLE001
+                body = {}
+            try:
+                from server.services import chat_judge as _CJ
+                ok = _CJ.set_rating(int(body.get("id") or 0),
+                                    int(body.get("rating") or 0),
+                                    (body.get("comment") or "")[:500])
+            except Exception:  # noqa: BLE001
+                ok = False
+            self._send(json.dumps({"ok": bool(ok)}).encode(), "application/json")
+            return
         if self.path.startswith("/chat"):
             # Conversational JARVIS for the vulnerable user — local LLM, British persona, no root, no system
             # control. Token-free so her companion page carries no admin rights.
@@ -3868,7 +3976,16 @@ s.textContent=d.ok?('✓ uploaded — JARVIS will learn this voice ('+d.bytes+' 
                                            "error": str(e)[:160]}).encode(), "application/json")
                     return
             reply = _jarvis_chat_bounded(qtext, body.get("history"), body.get("address") or "sir")
-            self._send(json.dumps({"ok": True, "reply": reply}).encode(), "application/json")
+            # Persist the turn so the UI can rate it (closes the self-improvement loop).
+            turn_id = 0
+            try:
+                from server.services import chat_judge as _CJ
+                turn_id = _CJ.record_turn(body.get("session_id"), qtext, reply,
+                                          tier="dashboard_chat", backend="ollama")
+            except Exception:  # noqa: BLE001
+                pass
+            self._send(json.dumps({"ok": True, "reply": reply, "turn_id": turn_id}).encode(),
+                       "application/json")
             return
         if self.path.split("?", 1)[0] == "/a11y":
             # Accessibility mirror write — token-gated

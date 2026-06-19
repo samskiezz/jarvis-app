@@ -1,0 +1,41 @@
+# WC2026 prediction pipeline cron schedule.
+# Install with: crontab -e   (then paste the lines below — they assume the .venv at /opt/jarvis-app-1/.venv)
+
+# 1. Live result fetch — every 5 min during matches.
+*/5 * * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_fetch_results.py >> /var/log/wc2026_fetch.log 2>&1
+
+# 2. Predictor full re-run — daily at 04:00 UTC. Reads latest results, updates Elo, re-predicts.
+0 4 * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_predictor.py >> /var/log/wc2026_predictor.log 2>&1
+
+# 3. Lineup confirmation hook — hourly (script self-checks if any kickoff is within 90 min).
+0 * * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_lineup_hook.py >> /var/log/wc2026_lineup.log 2>&1
+
+# 4. Bookmaker odds scraper — every 6h. Refreshes value-bet flags.
+0 */6 * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_odds_scraper.py >> /var/log/wc2026_odds.log 2>&1
+
+# 5. Player profiles refresh — weekly Sunday 03:00 UTC.
+0 3 * * 0 OLLAMA_HOST=http://127.0.0.1:11434 /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_player_profiles.py >> /var/log/wc2026_profiles.log 2>&1
+
+# 6. Historical data refresh — monthly on the 1st at 02:00 UTC.
+0 2 1 * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_historical_data.py >> /var/log/wc2026_history.log 2>&1
+
+# 7. Wasabi snapshot backup — hourly. Syncs server/data/wc2026_*.{json,csv,db} to s3://jarvis-wc2026/snapshots/<iso>/
+0 * * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_wasabi_backup.py >> /var/log/wc2026_wasabi.log 2>&1
+
+# 8. T-8h prediction locker — every 15 min. For every fixture whose kickoff
+#    is within the next 8 hours, freezes the current model prediction into
+#    server/data/wc2026_predictions.db so it cannot be rewritten retroactively.
+*/15 * * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_lock_predictions.py >> /var/log/wc2026_lock.log 2>&1
+
+# 9. Knockout bracket filler — every 4 hours during the tournament. Reads
+#    group standings + completed knockout results from wc2026_results.json
+#    and rewrites the 'Winner X' / 'Runner-up X' / 'Winner 73' placeholders
+#    in wc2026_fixtures_all.json with concrete team names, then re-runs
+#    wc2026_predictor.py so the new bracket gets predicted.
+0 */4 * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_knockout_filler.py >> /var/log/wc2026_filler.log 2>&1
+
+# Notes:
+# - All scripts are tolerant of network failures — they log and exit clean without crashing.
+# - Dashboard polls /jarvis/data/wc2026_results.json every 60s, so updates surface within ~5-65 sec of cron firing.
+# - To install: `crontab -l > /tmp/c; cat /opt/jarvis-app-1/scripts/wc2026_cron.txt >> /tmp/c; crontab /tmp/c`
+# - To verify: `crontab -l | grep wc2026`
