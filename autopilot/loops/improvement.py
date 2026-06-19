@@ -78,6 +78,40 @@ def run() -> dict[str, Any]:
     with open(roadmap_path, "w") as fh:
         json.dump(backlog, fh, indent=2)
 
+    # LLM-driven brief: actually USE the brain
+    brief_path: str | None = None
+    try:
+        from autopilot.control.llm_client import generate, is_reachable
+        if is_reachable(timeout=2.0):
+            status_path = os.path.join(REPORTS_DIR, "system-status.json")
+            if os.path.exists(status_path):
+                with open(status_path) as fh:
+                    snap = json.load(fh)
+                prompt = (
+                    "You are JARVIS's autopilot. In 3 short bullets, summarise the "
+                    "current system health and recommend the single most impactful "
+                    "next safe action. Be concrete.\n\n"
+                    f"Health score: {snap.get('health_score')}/100\n"
+                    f"Issues: {snap.get('issues')}\n"
+                    f"Planes alive/dormant: {snap.get('planes', {}).get('alive')}/{snap.get('planes', {}).get('dormant')}\n"
+                    f"Subsystems by status: {snap.get('subsystems', {}).get('by_status', {})}\n"
+                    f"pm2 online/total: {snap.get('resources', {}).get('pm2_online')}/{snap.get('resources', {}).get('pm2_total')}\n"
+                    f"Brain: {snap.get('resources', {}).get('brain_state')}\n"
+                )
+                resp = generate(prompt, max_tokens=300, timeout=45)
+                if resp:
+                    brief_path = os.path.join(REPORTS_DIR,
+                                               f"brain-brief-{int(time.time())}.md")
+                    with open(brief_path, "w", encoding="utf-8") as fh:
+                        fh.write(f"# Brain-generated brief ({int(started)})\n\n")
+                        fh.write(f"_Model: llama3.1:8b · Run: {run_id}_\n\n")
+                        fh.write(resp + "\n")
+                    state_store.learn(run_id, "brain.brief_generated",
+                                       {"path": brief_path, "chars": len(resp)})
+    except Exception as exc:  # noqa: BLE001
+        state_store.learn(run_id, "brain.brief_failed",
+                           {"error": f"{type(exc).__name__}: {exc}"})
+
     finished = time.time()
     out = {
         "run_id": run_id,
@@ -86,6 +120,7 @@ def run() -> dict[str, Any]:
         "duration_ms": (finished - started) * 1000.0,
         "n_improvements": len(improvements),
         "improvements": improvements,
+        "brain_brief": brief_path,
     }
     with open(os.path.join(REPORTS_DIR, "improvement-report.json"), "w") as fh:
         json.dump(out, fh, indent=2)
