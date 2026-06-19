@@ -259,6 +259,12 @@ module.exports = {
         ENRICH_WORKERS: '2',
         LLM_AUTOPILOT_ENABLE: 'true',
         PROACTIVE_LLM_SUMMARY: '1',
+        // Owner approved 2026-06-19 — feed the brain real work:
+        ORCHESTRATOR_LOOP: 'true',
+        ORCHESTRATOR_INTERVAL_S: '1800',
+        ORCHESTRATOR_CITIES: '50',
+        HISTORY_INGEST_ENABLED: 'true',
+        HISTORY_INGEST_INTERVAL_S: '900',
       },
     },
   ],
