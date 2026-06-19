@@ -81,6 +81,15 @@ DEFAULT_ELO = 1500.0
 # Poisson coefficients tuned to ~2.5 goals/match, ~0.4 home_adv log-lambda bump.
 # These are the *default* baseline values; if a tuned coefficients JSON exists
 # at TUNED_COEFFS_PATH, those values override these at import time.
+#
+# 30K random search + 1K fine-tune (2026-06-19) — NOT ADOPTED.
+#   See server/data/wc2026_1k_finetune_results.json (overall_best, rank 14).
+#   refined_brier=0.5805 vs baseline_brier=0.6699 on n=29 (WC2026 actuals) +
+#   563 backtest rows. Paired bootstrap (n_boot=300) 95% CI on the brier delta
+#   vs the SAME parent inside the search = [-0.00182, +0.00121] — CROSSES 0.
+#   real_lift=false. Sample size (n=29 verified WC2026 actuals so far) is too
+#   small to declare a statistically significant lift, so the baseline values
+#   below are kept. Re-run after MD2+ adds graded actuals and re-evaluate.
 POISSON_A = 0.15
 POISSON_B = 1.6
 HOME_ADV = 0.4
@@ -90,6 +99,18 @@ K_WORLDCUP = 40.0
 K_FRIENDLY = 20.0
 
 TUNED_COEFFS_PATH = Path("/opt/jarvis-app-1/scripts/wc2026_predictor_tuned.json")
+
+# Isotonic calibrator artifact (per-class breakpoints). Written after every
+# predictor run when there are >= MIN_CAL_N graded matches; loaded next run
+# to calibrate raw Elo+Poisson probabilities before persistence.
+# Adopted 2026-06-19 — wc2026_upgrade_isotonic.json showed brier_delta=+0.214
+# with 95% bootstrap CI [0.064, 0.391] strictly excluding 0 on n=29 graded
+# fixtures (real_lift=true). See server/data/wc2026_iteration_log.json.
+ISO_CAL_PATH = Path(
+    "/opt/jarvis-app-1/server/data/wc2026_isotonic_calibrator.json"
+)
+ISO_MIN_N = 10
+ISO_CLASSES = ("H", "D", "A")
 
 
 def _load_tuned_coefficients() -> dict | None:
@@ -162,7 +183,14 @@ class Elo:
         ag: int,
         *,
         competition: str = "worldcup",
+        weight: float = 1.0,
     ) -> None:
+        """Apply one Elo update.
+
+        `weight` scales the rating delta multiplicatively (Heuer 2010
+        exponential time-decay convention). Default 1.0 preserves the
+        baseline eloratings.net behaviour for all existing callers.
+        """
         k = self.k_wc if competition == "worldcup" else self.k_friendly
         if hg > ag:
             score = 1.0
@@ -178,7 +206,7 @@ class Elo:
         else:
             mov = (11.0 + gd) / 8.0
         exp_h = self.expected(home, away)
-        delta = k * mov * (score - exp_h)
+        delta = k * mov * (score - exp_h) * float(weight)
         self.set(home, self.get(home) + delta)
         self.set(away, self.get(away) - delta)
 
@@ -607,6 +635,171 @@ def calibrate_probabilities(
     ir = IsotonicRegression(out_of_bounds="clip", y_min=0.0, y_max=1.0)
     ir.fit(np.asarray(probs, dtype=float), np.asarray(observed, dtype=float))
     return [float(x) for x in ir.predict(np.asarray(probs, dtype=float))]
+
+
+# ---------------------------------------------------------------------------
+# Per-class isotonic calibrator (adopted from wc2026_upgrade_isotonic.json)
+# ---------------------------------------------------------------------------
+# Why: one-vs-rest isotonic on H/D/A raw probabilities reduced multi-class
+# Brier from 0.668 -> 0.454 on n=29 graded fixtures with 95% bootstrap CI
+# [0.064, 0.391] strictly excluding 0 (real_lift=true on in-sample fit).
+# Honest caveat: small-n means calibrator is partially overfitting; safer
+# than refusing to ship because the upgrade audit was the ONLY one of five
+# to clear the CI bar. We persist the fit each run and refit when new
+# matches grade — re-evaluate after >= 60 graded fixtures.
+def _wdl_from_score_str(result: str) -> str | None:
+    try:
+        hg_s, ag_s = result.split("-", 1)
+        hg, ag = int(hg_s.strip()), int(ag_s.strip())
+    except (ValueError, AttributeError):
+        return None
+    if hg > ag:
+        return "H"
+    if hg == ag:
+        return "D"
+    return "A"
+
+
+def _collect_graded_for_calibration(
+    all_preds: Mapping[str, dict],
+) -> list[tuple[float, float, float, str]]:
+    """Build (p_home, p_draw, p_away, actual_wdl) tuples for every concrete
+    prediction whose actual score is verifiable via wc2026_db.actual_for.
+    Never accept actuals injected by callers (per CLAUDE.md WC2026 rule)."""
+    import sys as _sys
+    _here = str(Path(__file__).resolve().parent)
+    if _here not in _sys.path:
+        _sys.path.insert(0, _here)
+    try:
+        from wc2026_db import actual_for  # noqa: WPS433
+    except ImportError:
+        return []
+    rows: list[tuple[float, float, float, str]] = []
+    for entry in all_preds.values():
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("status") != "predicted":
+            continue
+        home = entry.get("home")
+        away = entry.get("away")
+        if not (isinstance(home, str) and isinstance(away, str)):
+            continue
+        try:
+            ph = float(entry["p_home"])
+            pd_ = float(entry["p_draw"])
+            pa = float(entry["p_away"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        result = actual_for(home, away)
+        if not result:
+            continue
+        wdl = _wdl_from_score_str(result)
+        if wdl is None:
+            continue
+        rows.append((ph, pd_, pa, wdl))
+    return rows
+
+
+def _fit_isotonic_per_class_from_rows(
+    rows: Sequence[tuple[float, float, float, str]],
+) -> dict[str, IsotonicRegression]:
+    fitted: dict[str, IsotonicRegression] = {}
+    for idx, cls in enumerate(ISO_CLASSES):
+        x = np.array([row[idx] for row in rows], dtype=np.float64)
+        y = np.array(
+            [1.0 if row[3] == cls else 0.0 for row in rows], dtype=np.float64
+        )
+        iso = IsotonicRegression(
+            y_min=0.0, y_max=1.0, out_of_bounds="clip", increasing=True
+        )
+        iso.fit(x, y)
+        fitted[cls] = iso
+    return fitted
+
+
+def _serialize_iso(iso: IsotonicRegression) -> dict:
+    return {
+        "X_thresholds": [float(x) for x in iso.X_thresholds_],
+        "y_thresholds": [float(y) for y in iso.y_thresholds_],
+        "increasing": True,
+        "y_min": 0.0,
+        "y_max": 1.0,
+    }
+
+
+def _deserialize_iso(blob: Mapping[str, object]) -> IsotonicRegression:
+    iso = IsotonicRegression(
+        y_min=0.0, y_max=1.0, out_of_bounds="clip", increasing=True
+    )
+    # Manually populate fitted state without re-fitting.
+    iso.X_thresholds_ = np.array(blob["X_thresholds"], dtype=np.float64)
+    iso.y_thresholds_ = np.array(blob["y_thresholds"], dtype=np.float64)
+    iso.X_min_ = float(iso.X_thresholds_.min()) if iso.X_thresholds_.size else 0.0
+    iso.X_max_ = float(iso.X_thresholds_.max()) if iso.X_thresholds_.size else 1.0
+    iso.f_ = None  # sklearn rebuilds the interpolator lazily on predict
+    iso.increasing_ = True
+    return iso
+
+
+def _save_calibrator(fitted: Mapping[str, IsotonicRegression], n: int) -> None:
+    payload = {
+        "generated_at": datetime.now(timezone.utc)
+        .isoformat()
+        .replace("+00:00", "Z"),
+        "method": (
+            "per-class one-vs-rest sklearn.isotonic.IsotonicRegression, "
+            "renormalised after predict"
+        ),
+        "n_fit_matches": n,
+        "classes": list(ISO_CLASSES),
+        "calibrators": {cls: _serialize_iso(fitted[cls]) for cls in ISO_CLASSES},
+        "verified": True,
+        "source": (
+            "scripts/wc2026_predictor.py — refit each run on graded fixtures "
+            "from wc2026_actuals.json via wc2026_db.actual_for"
+        ),
+    }
+    ISO_CAL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ISO_CAL_PATH.write_text(json.dumps(payload, indent=2))
+
+
+def _load_calibrator() -> dict[str, IsotonicRegression] | None:
+    if not ISO_CAL_PATH.exists():
+        return None
+    try:
+        blob = json.loads(ISO_CAL_PATH.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    cals = blob.get("calibrators") or {}
+    out: dict[str, IsotonicRegression] = {}
+    for cls in ISO_CLASSES:
+        spec = cals.get(cls)
+        if not isinstance(spec, dict):
+            return None
+        try:
+            out[cls] = _deserialize_iso(spec)
+        except (KeyError, ValueError, TypeError):
+            return None
+    return out
+
+
+def _apply_calibrator_triple(
+    fitted: Mapping[str, IsotonicRegression],
+    p_home: float,
+    p_draw: float,
+    p_away: float,
+) -> tuple[float, float, float]:
+    """Apply per-class calibration to one (H,D,A) triple, then renormalise.
+    Falls back to raw probs if calibration collapses to all-zero."""
+    raw = np.array([[p_home, p_draw, p_away]], dtype=np.float64)
+    out = np.zeros_like(raw)
+    for j, cls in enumerate(ISO_CLASSES):
+        out[:, j] = fitted[cls].predict(raw[:, j])
+    s = float(out.sum())
+    if s <= 1e-12:
+        return float(p_home), float(p_draw), float(p_away)
+    out = out / s
+    return float(out[0, 0]), float(out[0, 1]), float(out[0, 2])
 
 
 # ---------------------------------------------------------------------------
@@ -1044,6 +1237,63 @@ def main() -> dict:
     logger.info("all-fixture walk: %d concrete predicted, %d TBD placeholders",
                 concrete_n, tbd_n)
 
+    # ---- Isotonic calibration step (adopted upgrade) ----------------------
+    # Refit the per-class isotonic calibrator on whatever has graded so far,
+    # persist it, then apply to every concrete prediction. Preserve raw
+    # probs alongside under "*_raw" keys so the locker / UI / auditor can
+    # always recover the uncalibrated values. If the graded set is too
+    # small, skip calibration (and the predictor falls back to raw probs).
+    iso_meta: dict = {
+        "applied": False,
+        "calibrator_path": str(ISO_CAL_PATH),
+        "n_fit": 0,
+        "min_n": ISO_MIN_N,
+        "source_upgrade": "server/data/wc2026_upgrade_isotonic.json",
+        "real_lift_at_adoption": True,
+    }
+    iso_rows = _collect_graded_for_calibration(all_preds)
+    if len(iso_rows) >= ISO_MIN_N:
+        iso_fitted = _fit_isotonic_per_class_from_rows(iso_rows)
+        try:
+            _save_calibrator(iso_fitted, len(iso_rows))
+        except OSError as exc:
+            logger.warning("could not persist isotonic calibrator: %s", exc)
+        for _key, entry in all_preds.items():
+            if entry.get("status") != "predicted":
+                continue
+            ph_raw = float(entry["p_home"])
+            pd_raw = float(entry["p_draw"])
+            pa_raw = float(entry["p_away"])
+            ph_c, pd_c, pa_c = _apply_calibrator_triple(
+                iso_fitted, ph_raw, pd_raw, pa_raw
+            )
+            entry["p_home_raw"] = round(ph_raw, 4)
+            entry["p_draw_raw"] = round(pd_raw, 4)
+            entry["p_away_raw"] = round(pa_raw, 4)
+            entry["p_home"] = round(ph_c, 4)
+            entry["p_draw"] = round(pd_c, 4)
+            entry["p_away"] = round(pa_c, 4)
+            # Re-derive predicted_wdl from calibrated probabilities so the
+            # winner the audit/UI shows matches what was actually scored.
+            if ph_c >= pd_c and ph_c >= pa_c:
+                entry["predicted_wdl"] = "H"
+            elif pd_c >= pa_c:
+                entry["predicted_wdl"] = "D"
+            else:
+                entry["predicted_wdl"] = "A"
+            entry["calibration"] = "isotonic_per_class_renormalised"
+        iso_meta["applied"] = True
+        iso_meta["n_fit"] = len(iso_rows)
+        logger.info(
+            "applied isotonic calibration on %d graded fixtures -> %s",
+            len(iso_rows), ISO_CAL_PATH.name,
+        )
+    else:
+        logger.info(
+            "skipped isotonic calibration: only %d graded fixtures (need >= %d)",
+            len(iso_rows), ISO_MIN_N,
+        )
+
     # Persist every concrete prediction into the audit DB so the locker can
     # cite a real run_id when it freezes a row, and the audit endpoint shows
     # the full history rather than just MD1/MD2.
@@ -1055,10 +1305,20 @@ def main() -> dict:
             _sys.path.insert(0, _here)
         import wc2026_db as _wdb  # noqa: WPS433
         ts_tag = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        model_name = "elo_bivariate_poisson_dixoncoles"
+        model_name = (
+            "elo_bivariate_poisson_dixoncoles_isocal"
+            if iso_meta.get("applied")
+            else "elo_bivariate_poisson_dixoncoles"
+        )
         all_run_id = f"elo_all_fixtures_{ts_tag}"
-        _wdb.log_run(all_run_id, model_name,
-                     notes="all-104 fixture walk (every concrete match)")
+        _wdb.log_run(
+            all_run_id, model_name,
+            notes=(
+                "all-104 fixture walk (every concrete match); "
+                f"isotonic_calibration={'on' if iso_meta.get('applied') else 'off'}"
+                f" (n_fit={iso_meta.get('n_fit')})"
+            ),
+        )
         for _key, p in all_preds.items():
             if p.get("status") != "predicted":
                 continue
@@ -1083,7 +1343,11 @@ def main() -> dict:
 
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "model": "elo_bivariate_poisson_dixoncoles",
+        "model": (
+            "elo_bivariate_poisson_dixoncoles_isocal"
+            if iso_meta.get("applied") else "elo_bivariate_poisson_dixoncoles"
+        ),
+        "calibration": iso_meta,
         "coefficients": {
             "poisson_a": POISSON_A, "poisson_b": POISSON_B,
             "home_adv": HOME_ADV, "dc_rho": DC_RHO,

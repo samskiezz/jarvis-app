@@ -1,0 +1,39 @@
+{
+  "model": "groll_rf_poisson_hybrid_2018",
+  "baseline_model": "elo_bivariate_poisson_dixoncoles",
+  "generated_at": "2026-06-19T21:41:23+00:00",
+  "n_train": 551,
+  "n_eval": 29,
+  "brier": 0.656959,
+  "baseline_brier": 0.795292,
+  "brier_delta": -0.138333,
+  "ci_95": [
+    -0.343169,
+    0.063564
+  ],
+  "ci_method": "paired bootstrap on per-match Brier deltas, 10000 reps",
+  "real_lift": false,
+  "feature_importances": {
+    "elo_diff": 0.27266,
+    "fifa_rank_diff": 0.22379,
+    "home_form": 0.16272,
+    "away_form": 0.16032,
+    "continental_coeff_diff": 0.18051
+  },
+  "feature_order": [
+    "elo_diff",
+    "fifa_rank_diff",
+    "home_form",
+    "away_form",
+    "continental_coeff_diff"
+  ],
+  "rf_params": {
+    "n_estimators": 500,
+    "max_depth": 10,
+    "min_samples_leaf": 3,
+    "random_state": 20260619
+  },
+  "audit_run_id": "groll-67774f29d1",
+  "source": "Groll, Ley, Schauberger, Van Eetvelde (2018) \u2014 RF+Poisson hybrid; FIFA ranks: WebSearch 2026-06-19 (ESPN + Wikipedia + whereig.com June 2026 update).",
+  "verified": true
+}

@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-06-19T21:41:39.968868Z",
+  "method": "Heuer 2010 exponential time-decay Elo (w=exp(-age_days/decay_days))",
+  "decay_days": 90.0,
+  "now_date": "2026-06-19",
+  "corpus_size": 563,
+  "graded_matches": 29,
+  "bootstrap_reps": 300,
+  "brier": 0.651562,
+  "brier_baseline": 0.668054,
+  "brier_delta": -0.016493,
+  "brier_delta_bootstrap_mean": -0.016493,
+  "ci_95": [
+    -0.111355,
+    0.06479
+  ],
+  "winner_accuracy_heuer": 0.62069,
+  "winner_accuracy_baseline": 0.586207,
+  "winner_delta_pp": 3.4483,
+  "winner_delta_pp_bootstrap_mean": 3.4483,
+  "winner_ci_95_pp": [
+    0.0,
+    10.3448
+  ],
+  "real_lift_brier": false,
+  "real_lift_winner": false,
+  "audit_runs": {
+    "heuer": {
+      "run_id": "heuer_decay90d_warm_20260619T214139Z",
+      "rows_logged": 29
+    },
+    "baseline": {
+      "run_id": "heuer_baseline_warm_20260619T214139Z",
+      "rows_logged": 29
+    }
+  },
+  "notes": "real_lift_* is True only if the 95% bootstrap CI strictly excludes 0 (brier_delta upper bound < 0 → genuine improvement; winner_delta_pp lower bound > 0 → genuine improvement)."
+}

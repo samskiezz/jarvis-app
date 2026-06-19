@@ -1,0 +1,329 @@
+{
+  "schema": "wc2026_htr_tree.v1",
+  "verified": true,
+  "source": "scripts/wc2026_htr_build_tree.py synthesised from wc2026_upgrade_{heuer,isotonic,bookmaker,karlis,groll}.json + wc2026_ensemble_comparison.json + wc2026_methods_comparison.json + wc2026_30k_search_results.json; all evidence files carry their own verified:true + source per WC2026 data-integrity rule",
+  "meta": {
+    "last_walked_at": "2026-06-19T22:30:00Z",
+    "total_nodes": 12,
+    "adopted_nodes": 0,
+    "rejected_nodes": 11,
+    "pruned_nodes": 0,
+    "current_best_node_id": "h-001",
+    "best_selection_rule": "current_best = node with strongest evidence of genuine Brier lift vs the production baseline (h-001) under ci_95[1] < 0 on brier_delta where lower=better. No child node strictly excludes 0 on the favourable side against the production metric under honest OOS evaluation on n=29 graded matches, so the production baseline (h-001) remains champion. h-010 shows ci_95[1] < 0 but only relative to its direct parent h-002, which itself is rejected vs h-001, so promotion to production would not be a real lift.",
+    "brier_sign_convention": "brier_delta = brier_candidate - brier_baseline. Lower Brier is better, so genuine lift requires ci_95[1] < 0 (the entire 95% bootstrap CI lies below zero).",
+    "winner_sign_convention": "winner_delta_pp = (winner_acc_candidate - winner_acc_baseline) * 100. Higher is better, so genuine lift requires winner_ci_95[0] > 0."
+  },
+  "nodes": [
+    {
+      "id": "h-001",
+      "parent_id": null,
+      "hypothesis": "Production Elo+log-linear-Poisson with Dixon-Coles low-score adjustment is the strongest forecaster available for WC2026 fixtures.",
+      "artifact_path": "server/data/wc2026_model_predictions.json",
+      "evidence_path": "server/data/wc2026_methods_comparison.json",
+      "evidence_summary": {
+        "brier": 0.6835,
+        "brier_delta": 0.0,
+        "ci_95": [0.0, 0.0],
+        "winner_pct": 54.87,
+        "winner_delta_pp": 0.0,
+        "n": 226
+      },
+      "distilled_insight": "Baseline is the reference point — every child node is judged against this OOS Brier and winner accuracy.",
+      "status": "adopted",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T22:00:00Z",
+      "next_children_seeds": [
+        "Replace constant home_adv with continent/host-specific home_adv prior",
+        "Re-fit Elo K-factor on rolling 4-year window instead of global constant",
+        "Add neutral-venue penalty term distinct from home_adv"
+      ]
+    },
+    {
+      "id": "h-002",
+      "parent_id": "h-001",
+      "hypothesis": "Exponential time-decay Elo (Heuer 2010, w=exp(-age_days/decay_days), decay=90d) produces better-calibrated WC2026 forecasts than unweighted Elo updates.",
+      "artifact_path": "scripts/wc2026_upgrade_heuer.py",
+      "evidence_path": "server/data/wc2026_upgrade_heuer.json",
+      "evidence_summary": {
+        "brier": 0.651562,
+        "brier_delta": -0.016493,
+        "ci_95": [-0.111355, 0.06479],
+        "winner_pct": 62.069,
+        "winner_delta_pp": 3.4483,
+        "n": 29
+      },
+      "distilled_insight": "Point estimate moves in the right direction (Brier down, winner up) but the 95% CI straddles zero on only n=29 — promising signal that needs more graded matches to confirm.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T21:41:39Z",
+      "realised_children": ["h-010", "h-011"],
+      "next_children_seeds": [
+        "Sweep decay_days over {30, 60, 90, 180, 365} on full historical corpus (n=580) instead of just WC2026 graded matches",
+        "Try a sigmoid recency weight instead of exponential",
+        "Apply decay only to friendlies; keep competitive matches at full weight"
+      ]
+    },
+    {
+      "id": "h-003",
+      "parent_id": "h-001",
+      "hypothesis": "Per-class isotonic regression calibration of the baseline Elo+Poisson probabilities reduces Brier on WC2026 fixtures.",
+      "artifact_path": "scripts/wc2026_upgrade_isotonic.py",
+      "evidence_path": "server/data/wc2026_upgrade_isotonic.json",
+      "evidence_summary": {
+        "brier": 0.453868,
+        "brier_delta": 0.214186,
+        "ci_95": [0.063674, 0.391212],
+        "winner_pct": null,
+        "winner_delta_pp": null,
+        "n": 29
+      },
+      "distilled_insight": "AGENT SIGN-CONVENTION ERROR — the artifact records real_lift=true because brier dropped from 0.668 to 0.454, but the recorded brier_delta is +0.214 (candidate minus baseline) and the CI is [+0.064, +0.391], so under the correct convention (ci_95[1] < 0 = lift) this CI lies entirely on the WORSE side. The underlying calibration almost certainly helps (raw Brier fell), but the JSON's delta sign was inverted relative to every other upgrade file. Re-run with brier_delta = brier_candidate - brier_baseline before adopting.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "agent_error_flag": {
+        "kind": "sign_convention_inversion",
+        "description": "Artifact reports real_lift=true with brier_delta=+0.214 and ci_95=[+0.064, +0.391]. Across every other upgrade file (heuer, karlis, groll, bookmaker, methods_comparison), brier_delta is signed candidate-minus-baseline so negative=better and 'real_lift' = ci_95[1] < 0. The isotonic artifact reverses this and is the only file flagging itself as a lift on positive-CI evidence.",
+        "recommended_fix": "Recompute brier_delta = brier_calibrated - brier_baseline = 0.453868 - 0.668054 = -0.214186; bootstrap with the same sign so ci_95 lies on the negative side; only then is real_lift_brier evaluable as ci_95[1] < 0.",
+        "fixed_in_node": "h-012"
+      },
+      "created_at": "2026-06-19T21:40:00Z",
+      "realised_children": ["h-012"],
+      "next_children_seeds": [
+        "Re-run isotonic upgrade with corrected sign convention and confirm real_lift under ci_95[1] < 0 rule",
+        "Try Platt scaling (logistic) instead of isotonic — fewer parameters, less overfit on n=29",
+        "Combine recency-decay (h-002) with calibration so the Elo update and the probability mapping are both refined"
+      ]
+    },
+    {
+      "id": "h-004",
+      "parent_id": "h-001",
+      "hypothesis": "Blending bookmaker-implied probabilities (devig of Pinnacle 1X2 odds) with the production model via learned weight improves WC2026 Brier.",
+      "artifact_path": "scripts/wc2026_upgrade_bookmaker.py",
+      "evidence_path": "server/data/wc2026_upgrade_bookmaker.json",
+      "evidence_summary": {
+        "brier": 0.579844,
+        "brier_delta": 0.133007,
+        "ci_95": [-0.048937, 0.324192],
+        "winner_pct": 55.17,
+        "winner_delta_pp": -3.4483,
+        "n": 29
+      },
+      "distilled_insight": "Pipeline confirms the shrinkage code runs end-to-end, but the odds source is placeholder (uniform 1.91/3.70/3.80 across every match because the host IP is 403-blocked from Pinnacle), so the lift number is an infrastructure artefact, not a market-edge measurement.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T21:39:00Z",
+      "next_children_seeds": [
+        "Route Pinnacle scrape through a residential proxy / Vast box and refit weight on real per-match odds",
+        "Try Betfair Exchange odds (often closer to fair) instead of Pinnacle",
+        "Learn a per-confederation blend weight rather than a single global weight"
+      ]
+    },
+    {
+      "id": "h-005",
+      "parent_id": "h-001",
+      "hypothesis": "Karlis-Ntzoufras (2003) bivariate Poisson with EM-fit common-shock parameter λ₃ captures goal correlation better than the production Dixon-Coles low-score correction.",
+      "artifact_path": "scripts/wc2026_fit_karlis.py",
+      "evidence_path": "server/data/wc2026_upgrade_karlis.json",
+      "evidence_summary": {
+        "brier": 0.684523,
+        "brier_delta": 0.000982,
+        "ci_95": [-0.001493, 0.003455],
+        "winner_pct": 54.87,
+        "winner_delta_pp": 0.0,
+        "n": 226
+      },
+      "distilled_insight": "EM converges to λ₃ ≈ 1e-5 (essentially zero common shock) on this corpus, so the model collapses to independent Poissons and provides no measurable lift over the production Dixon-Coles ρ. The data does not support a positive goal-correlation parameter at international level.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T21:40:45Z",
+      "next_children_seeds": [
+        "Allow λ₃ to be a function of match importance (knockouts vs friendlies) instead of a single global value",
+        "Switch to Karlis-Ntzoufras inflated-bivariate variant which adds an explicit draw inflation term",
+        "Fit Skellam-distributed goal-difference model directly instead of bivariate Poisson"
+      ]
+    },
+    {
+      "id": "h-006",
+      "parent_id": "h-001",
+      "hypothesis": "Random-Forest + Poisson hybrid (Groll/Ley/Schauberger/Van Eetvelde 2018) using elo_diff, fifa_rank_diff, form, and continental coefficient features outperforms the pure Elo baseline.",
+      "artifact_path": "scripts/wc2026_fit_groll.py",
+      "evidence_path": "server/data/wc2026_upgrade_groll.json",
+      "evidence_summary": {
+        "brier": 0.656959,
+        "brier_delta": -0.138333,
+        "ci_95": [-0.343169, 0.063564],
+        "winner_pct": null,
+        "winner_delta_pp": null,
+        "n": 29
+      },
+      "distilled_insight": "Largest negative point estimate of any upgrade (-0.138 Brier), but CI [-0.343, +0.064] still includes zero on n=29 — the strongest 'maybe' on the board. Worth re-evaluating once n grows past 50 graded matches.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T21:41:23Z",
+      "next_children_seeds": [
+        "Re-evaluate after WC2026 group stage completes (n should roughly double to ~60)",
+        "Add XG-based form feature and squad market-value feature (Groll's 2024 follow-up)",
+        "Swap RandomForest for XGBoost with monotonic constraints on elo_diff"
+      ]
+    },
+    {
+      "id": "h-007",
+      "parent_id": "h-001",
+      "hypothesis": "Logistic-regression stacker over (Chalk, Elo+Poisson, Llama-70B) per-class probabilities beats every individual component on winner accuracy.",
+      "artifact_path": "scripts/wc2026_ensemble_stack.py",
+      "evidence_path": "server/data/wc2026_ensemble_comparison.json",
+      "evidence_summary": {
+        "brier": null,
+        "brier_delta": null,
+        "ci_95": [-0.25, 0.21429],
+        "winner_pct": 50.0,
+        "winner_delta_pp": -2.94,
+        "n": 28
+      },
+      "distilled_insight": "Ensemble underperforms its strongest base learner (Llama-70B at 57.1% vs ensemble 50.0%) — LR stacker is overfitting noise on n=28. Stacking needs ≥100 OOS rows before it can find a stable blend.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T21:29:57Z",
+      "realised_children": ["h-011"],
+      "next_children_seeds": [
+        "Replace LR stacker with simple convex average constrained to weights ≥ 0 and summing to 1",
+        "Drop Chalk from the stack (it is highly correlated with Elo+Poisson and adds no signal)",
+        "Retry stacking after group stage completes when n ≈ 60"
+      ]
+    },
+    {
+      "id": "h-008",
+      "parent_id": "h-001",
+      "hypothesis": "Joint MLE refit of (γ_home, τ, b) on the historical corpus produces better-calibrated Dixon-Coles coefficients than the hand-tuned production defaults.",
+      "artifact_path": "scripts/wc2026_fit_dc_mle.py",
+      "evidence_path": "server/data/wc2026_methods_comparison.json",
+      "evidence_summary": {
+        "brier": 0.6373,
+        "brier_delta": -0.0463,
+        "ci_95": [-0.1116, 0.0188],
+        "winner_pct": 50.44,
+        "winner_delta_pp": -4.42,
+        "n": 226
+      },
+      "distilled_insight": "MLE refit lowers Brier point estimate by 0.046 but loses 4.4pp of winner accuracy — and both CIs cross zero on n=226. The MLE prefers flatter probabilities (better calibration) at the cost of decisiveness. Recommendation in the artifact is reject.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T15:00:28Z",
+      "next_children_seeds": [
+        "Add winner-accuracy term to the MLE loss so it can't trade decisiveness for calibration",
+        "Refit on rolling 4-year window only (current fit spans full corpus and is dominated by old qualifiers)",
+        "Constrain b_coeff to the [1.0, 2.0] band the prior model lives in instead of letting MLE drift to 0.5"
+      ]
+    },
+    {
+      "id": "h-009",
+      "parent_id": "h-001",
+      "hypothesis": "Top-1 parameter point from the 30000-sample random search (k=31.18, home_adv=0.28, poisson_b=0.50, dc_tau=-0.02, decay_half_life=281d) generalises out-of-sample.",
+      "artifact_path": "scripts/wc2026_tune_predictor.py",
+      "evidence_path": "server/data/wc2026_30k_search_results.json",
+      "evidence_summary": {
+        "brier": 0.58062,
+        "brier_delta": -0.08931,
+        "ci_95": null,
+        "winner_pct": 53.96,
+        "winner_delta_pp": -0.21,
+        "n": 480
+      },
+      "distilled_insight": "Search Brier (0.5806) is suspiciously close to the next 19 candidates (0.5806-0.5811), which is a classic signature of the top-K converging on the same noise floor. The search has no bootstrap CI and no held-out split — running the same params through the OOS harness used by h-005/h-008 is required before treating this as a real lift.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "created_at": "2026-06-19T21:49:30Z",
+      "next_children_seeds": [
+        "Re-score top-1 params through the OOS bootstrap pipeline used in wc2026_methods_comparison.json so the CI is comparable",
+        "Bayesian-optimise around the top-20 centroid instead of random sampling — the top-20 cluster around poisson_b≈0.50, dc_tau≈0, home_adv≈0.3",
+        "Hold out WC2026 graded matches entirely and search only on pre-2024 corpus to kill the leakage risk"
+      ]
+    },
+    {
+      "id": "h-010",
+      "parent_id": "h-002",
+      "hypothesis": "Sweeping the Heuer exponential time-decay half-life over {30,45,60,90,120,180,270,365}d on the 29 verified WC2026 graded matches reveals an optimum that beats the h-002 default of 90d under paired bootstrap.",
+      "artifact_path": "scripts/wc2026_htr_h010_heuer_sweep.py",
+      "evidence_path": "server/data/wc2026_htr_h010_heuer_sweep.json",
+      "evidence_summary": {
+        "brier": 0.64826,
+        "brier_delta": -0.003302,
+        "ci_95": [-0.007801, -0.000099],
+        "winner_pct": 62.069,
+        "winner_delta_pp": 0.0,
+        "n": 29,
+        "baseline_node": "h-002",
+        "baseline_brier": 0.651562,
+        "best_half_life_days": 365
+      },
+      "distilled_insight": "Half-life of 365d strictly dominates 90d within the Heuer family — the 95% paired-bootstrap CI [-0.0078, -0.0001] excludes zero on the favourable side, so this is the first child node on the tree with a statistically real Brier lift against its direct parent. BUT: (1) the effect size is tiny (~0.003 Brier points, well below the 0.035 gap between h-002 and production h-001), (2) the lift is measured against h-002, which itself is rejected vs production h-001 (h-002 brier 0.6516 vs h-001 brier 0.6835 raw, but the h-002 CI vs h-001 still straddles 0 on n=29), and (3) winner accuracy is identical across all eight half-lives at 18/29 (62.1%), meaning the lift comes purely from probability shaping, not decisive picks. Adopting h-010's 365d half-life to production would not improve the production metric with CI excluding 0, so the production baseline remains champion this iteration.",
+      "status": "rejected",
+      "real_lift_brier": true,
+      "real_lift_vs_production": false,
+      "created_at": "2026-06-19T21:54:53Z",
+      "next_children_seeds": [
+        "Wait for n_graded to grow past 60 (post group-stage) and re-run the sweep; if the lift survives, promote 365d half-life to h-002 default and re-test h-002 vs h-001",
+        "Try half-lives between 365d and 1095d — the monotonic decrease in Brier from 30d→365d suggests the optimum may be further out than the current grid edge",
+        "Combine the 365d half-life with an explicit competitive-vs-friendly weight split: friendlies decay at 365d, competitive matches at 90d"
+      ]
+    },
+    {
+      "id": "h-011",
+      "parent_id": "h-002",
+      "hypothesis": "Stacking Heuer 90d-decay Elo (h-002) with Llama-70B and Chalk via leave-one-out multinomial logistic regression beats Heuer-alone on winner accuracy on the 29 graded WC2026 matches.",
+      "artifact_path": "scripts/wc2026_htr_h011_heuer_ensemble.py",
+      "evidence_path": "server/data/wc2026_htr_h011_heuer_ensemble.json",
+      "evidence_summary": {
+        "brier": null,
+        "brier_delta": null,
+        "ci_95": [-20.69, 3.448],
+        "winner_pct": 55.17,
+        "winner_delta_pp": -7.023,
+        "n": 29,
+        "baseline_node": "h-002",
+        "heuer_alone_winner_pct": 62.07,
+        "ensemble_winner_pct": 55.17,
+        "secondary_parent_id": "h-007"
+      },
+      "distilled_insight": "Stacked ensemble (Heuer 90d + Llama-70B + Chalk via LOO multinomial LogisticRegression(C=0.5)) lands at 16/29 = 55.2% winners — 7.0pp WORSE than Heuer-alone (18/29 = 62.1%). The 95% paired-bootstrap CI for the per-match winner-hit delta is [-20.7, +3.4]pp, which straddles 0 in the wrong direction. This confirms the lesson from h-007: stacking three correlated forecasters on n=29 overfits noise. Reject — and the next ensemble attempt should wait for n ≥ 60 graded matches.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "real_lift_winner": false,
+      "created_at": "2026-06-19T21:56:09Z",
+      "next_children_seeds": [
+        "Replace LR stacker with a simple constrained convex average (weights ≥ 0, sum=1) — far fewer free parameters than multinomial LR with 9 features on 29 rows",
+        "Drop Chalk from the stack (51.7% alone, highly correlated with Heuer's deterministic part) and retry with Heuer + Llama only",
+        "Re-run after WC2026 group stage (n ≈ 60) when LOO multinomial LR can actually estimate 27 coefficients without saturating"
+      ]
+    },
+    {
+      "id": "h-012",
+      "parent_id": "h-003",
+      "hypothesis": "Per-class isotonic calibration — correctly evaluated with 5-fold cross-validation and the correct sign convention (brier_delta = candidate - baseline; negative = better) — reduces Brier on WC2026 fixtures, fixing the dual error in h-003 (in-sample fit + inverted sign).",
+      "artifact_path": "scripts/wc2026_htr_h012_isotonic_cv.py",
+      "evidence_path": "server/data/wc2026_htr_h012_isotonic_cv.json",
+      "evidence_summary": {
+        "brier": 0.64896,
+        "brier_delta": -0.019094,
+        "ci_95": [-0.197086, 0.170954],
+        "winner_pct": null,
+        "winner_delta_pp": null,
+        "n": 29,
+        "baseline_node": "h-001",
+        "baseline_brier": 0.668054,
+        "n_folds": 5,
+        "bootstrap_reps": 5000
+      },
+      "distilled_insight": "h-012 fixes the two errors flagged on h-003 — the sign convention is now candidate-minus-baseline (negative = better) and isotonic models are fit on 4 folds and scored on the held-out 5th — and the honest answer is the lift disappears. Point estimate is -0.019 Brier (small improvement) but the 5000-rep paired-bootstrap 95% CI is [-0.197, +0.171], which straddles zero by a wide margin. The fold-by-fold diagnostics show isotonic helps on folds 0/1/4 and hurts on fold 2 — exactly the kind of high-variance behaviour you'd expect from non-parametric calibration on 23 training rows. Calibration is the right idea, but it needs ≥ 100 OOS rows before the CI can exclude zero. The production baseline (h-001) keeps the isotonic calibrator that was already adopted off the in-sample h-003 run, but no new lift is claimable from this iteration.",
+      "status": "rejected",
+      "real_lift_brier": false,
+      "fixes_agent_error_in": "h-003",
+      "created_at": "2026-06-19T21:55:58Z",
+      "next_children_seeds": [
+        "Re-evaluate isotonic under 5-fold CV after group stage (n ≈ 60) — the point estimate may stabilise on a larger fold",
+        "Try Platt scaling (logistic) which has only 2 free parameters per class instead of an arbitrary breakpoint set — much less overfit risk on n=29",
+        "Calibrate the Heuer 365d-half-life model from h-010 (instead of h-001) — the raw probabilities are slightly different and calibration may transfer differently"
+      ]
+    }
+  ]
+}
