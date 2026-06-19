@@ -202,13 +202,15 @@ module.exports = {
       autorestart: true,
       max_restarts: 50,
       env: {
-        AUTOPILOT_INTERVAL_S: '900',
+        AUTOPILOT_INTERVAL_S: '180',
         AUTOPILOT_MAX_REPAIRS_PER_RUN: '3',
         AUTOPILOT_MAX_FILES_CHANGED: '5',
         AUTOPILOT_MAX_COMMAND_RUNTIME_S: '120',
         AUTOPILOT_ALLOW_EXTERNAL_READ: 'false',
         AUTOPILOT_ALLOW_EXTERNAL_WRITE: 'false',
         AUTOPILOT_ALLOW_PAID_RESOURCES: 'false',
+        // Owner explicitly approved whip-driven planning ("the whip approved").
+        JARVIS_AUTOMATION_ALLOW_CLAUDE: '1',
       },
     },
   ],
