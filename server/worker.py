@@ -23,12 +23,25 @@ import os
 
 async def _periodic(fn, *, delay: float, interval: float, label: str, **kw) -> None:
     """Run a SYNC function in a thread on an interval (so blocking work never stalls the loop)."""
+    import time as _t
     await asyncio.sleep(delay)
+    n_iter = 0
     while True:
+        n_iter += 1
+        t0 = _t.time()
         try:
-            await asyncio.to_thread(fn, **kw)
+            print(f"[jarvis-worker] {label} #{n_iter} start", flush=True)
+            result = await asyncio.to_thread(fn, **kw)
+            dt = _t.time() - t0
+            if isinstance(result, dict):
+                summary = ", ".join(f"{k}={v}" for k, v in list(result.items())[:6]
+                                     if not isinstance(v, (list, dict)))
+                print(f"[jarvis-worker] {label} #{n_iter} ok ({dt:.1f}s) {summary}", flush=True)
+            else:
+                print(f"[jarvis-worker] {label} #{n_iter} ok ({dt:.1f}s) result={str(result)[:120]}", flush=True)
         except Exception as e:  # noqa: BLE001 - a task failure must never kill the worker
-            print(f"[jarvis-worker] {label} error: {str(e)[:160]}", flush=True)
+            dt = _t.time() - t0
+            print(f"[jarvis-worker] {label} #{n_iter} error ({dt:.1f}s): {str(e)[:160]}", flush=True)
         await asyncio.sleep(interval)
 
 
