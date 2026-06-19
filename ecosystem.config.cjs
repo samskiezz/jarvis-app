@@ -193,6 +193,22 @@ module.exports = {
       },
     },
     {
+      // Feedback improver — drains the feedback_bus event queue.
+      // Llama drafts -> Kimi critiques -> Claude arbitrates. Writes lessons to
+      // feedback.db so future LLM calls auto-prime with prior fixes.
+      // Wired per audit/brain/SHIPPED.md round 2.
+      name: 'feedback-improver',
+      cwd: '/opt/jarvis-app-1',
+      script: '.venv/bin/python',
+      args: '-m server.services.feedback_improver',
+      interpreter: 'none',
+      autorestart: true,
+      max_restarts: 50,
+      env: {
+        FEEDBACK_IMPROVER_INTERVAL_S: '45',
+      },
+    },
+    {
       // Autopilot loop: every 15 min runs perception → planning → action
       // (safe class only) → evaluation → improvement. Writes proposals to
       // autopilot/reports/proposals/ — never auto-edits code outside autopilot/.

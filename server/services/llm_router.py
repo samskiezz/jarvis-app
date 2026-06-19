@@ -199,7 +199,7 @@ async def _stream_anthropic(message: str, system_prompt: str, fmt: str | None = 
 
 
 async def _stream_ollama(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
-    model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
+    model = os.environ.get("OLLAMA_MODEL", "llama3.1:8b")
     payload = {
         "model": model,
         "messages": [

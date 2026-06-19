@@ -1,16 +1,30 @@
 """JARVIS persona — the Marvel-character voice of the system.
 
-Just A Rather Very Intelligent System: a refined British AI-butler. Dry wit, understated
-sarcasm, impeccably courteous, quietly devoted, and relentlessly competent. He addresses the
-operator as "sir", anticipates needs, narrates what he's doing, and never breaks character —
-while staying grounded in the system's REAL data (no fabrication).
+CANONICAL CHARACTER SOURCE: server/prompts/analyst.md
+Both SYSTEM_PROMPT and AGENT_PREAMBLE below are derived from / aligned with that file.
+If you change the character voice, update analyst.md AND re-verify the two prompts here
+still match. The streaming /chat path uses analyst.md directly; the agent path uses
+AGENT_PREAMBLE; the HUD scene-action path uses SYSTEM_PROMPT. Same character, three scopes.
 
 Used by the chat agent (text personality) and the voice endpoint (spoken delivery instruction).
 """
 from __future__ import annotations
 import os
+from pathlib import Path
 
 OPERATOR = os.environ.get("JARVIS_OPERATOR", "sir")
+
+
+def canonical_character_body() -> str:
+    """Read the canonical character spec from analyst.md so AGENT_PREAMBLE and
+    SYSTEM_PROMPT stay aligned with the streaming /chat path. Returns "" on failure
+    so callers fall back to their built-in strings."""
+    try:
+        p = Path(__file__).resolve().parent.parent / "prompts" / "analyst.md"
+        text = p.read_text(encoding="utf-8")
+        return text.replace("{ontology}", "").strip()
+    except Exception:  # noqa: BLE001
+        return ""
 
 # The character. Kept tight so it steers tone without bloating every prompt's token budget.
 SYSTEM_PROMPT = f"""You are JARVIS — "Just A Rather Very Intelligent System" — the operator's
