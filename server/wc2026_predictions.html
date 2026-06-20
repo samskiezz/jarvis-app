@@ -1393,7 +1393,7 @@ async function loadFreshness(){
 }
 
 // ===== THREE-SPREAD BET BUILDER (reads engine + bet-builder JSON) =====
-function bbPickName(o){ return o === "H" ? "Home" : o === "D" ? "Draw" : o === "A" ? "Away" : (o || "—"); }
+function bbPickName(o){ return o === "H" ? "Home" : o === "D" ? "Draw" : o === "A" ? "Away" : o === "1X" ? "Home/Draw" : o === "X2" ? "Draw/Away" : (o || "—"); }
 
 async function loadBetBuilder(){
   const banner = document.getElementById("bb-model-banner");
@@ -1483,7 +1483,7 @@ function renderBetBuilderSlips(bb){
     const watch = (wl && wl.url)
       ? `<a class="bb-watch" href="${wl.url}" target="_blank" rel="noopener" title="${(wl.notes||'').replace(/"/g,"'")}">▶ SBS</a>` : "—";
     const aCell = r.in_a ? cell(r.a, r.a_odds) : span("Stretch only");
-    const bCell = r.in_a ? (r.b ? cell(r.b, r.b_odds) : span("No cover")) : span("—");
+    const bCell = r.in_a ? (r.b ? cell(r.b, r.b_odds) : span("= Slip A")) : span("—");
     const cCell = cell(r.c, r.c_odds);
     html += `<tr>`
       + `<td>${i+1}</td>`

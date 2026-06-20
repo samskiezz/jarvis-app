@@ -446,18 +446,41 @@ def _variation_outcome(c: Candidate, slot: str) -> str:
     return top
 
 
+# Double-chance markets for Slip B draw protection: back 'favourite OR draw'.
+DC_HOME_DRAW = "1X"   # home win or draw
+DC_AWAY_DRAW = "X2"   # away win or draw
+
+
+def _double_chance_odds(blended: dict[str, float], fav: str) -> float:
+    """Decimal odds for 'favourite OR draw' derived from the 1X2 prices.
+    DC = (o_fav * o_draw) / (o_fav + o_draw); 0.0 if either side is unpriced.
+    Always LOWER than the straight favourite price, since it covers two
+    outcomes — that is exactly what makes Slip B genuine draw protection."""
+    of, od = blended.get(fav, 0.0), blended.get(DRAW, 0.0)
+    if of <= 1.0 or od <= 1.0:
+        return 0.0
+    return (of * od) / (of + od)
+
+
 def _leg_for(c: Candidate, outcome: str, market: str) -> BetLeg:
-    odds = c.blended.get(outcome, 0.0)
-    p = c.outcome_prob(outcome)
-    fair = fair_bookmaker_probabilities(c.blended) if c.blended else {}
-    edge = (p - fair.get(outcome, 0.0)) if fair else None
+    fair_all = fair_bookmaker_probabilities(c.blended) if c.blended else {}
+    if outcome in (DC_HOME_DRAW, DC_AWAY_DRAW):
+        fav = HOME if outcome == DC_HOME_DRAW else AWAY
+        odds = _double_chance_odds(c.blended, fav)
+        p = c.outcome_prob(fav) + c.outcome_prob(DRAW)          # wins if fav OR draw
+        fair_p = (fair_all.get(fav, 0.0) + fair_all.get(DRAW, 0.0)) if fair_all else 0.0
+    else:
+        odds = c.blended.get(outcome, 0.0)
+        p = c.outcome_prob(outcome)
+        fair_p = fair_all.get(outcome, 0.0) if fair_all else 0.0
+    edge = (p - fair_p) if fair_all else None
     ev = expected_value(p, odds) if odds > 1.0 else None
     return BetLeg(
         match_id=c.match.match_id, team_a=c.match.team_a, team_b=c.match.team_b,
         market=market, selected_outcome=outcome, model_probability=round(p, 4),
         blended_odds=round(odds, 2),
         implied_probability=round(implied_probability(odds), 4) if odds > 0 else 0.0,
-        fair_bookmaker_probability=round(fair.get(outcome, 0.0), 4),
+        fair_bookmaker_probability=round(fair_p, 4),
         edge=round(edge, 4) if edge is not None else None,
         expected_value=round(ev, 4) if ev is not None else None,
         odds_are_real=c.odds_are_real, odds_source=c.odds_source,
@@ -687,9 +710,8 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
         in_a = mid in a_ids
         if in_a:
             a_picks[mid] = a_out
-            b_picks[mid] = b_out or a_out
-            if b_out and b_out != a_out:
-                b_changed.add(mid)
+            b_picks[mid] = a_out          # B starts identical to A; the double-chance
+                                          # protection pass below hedges the drawish legs.
         c_picks[mid] = c_out or a_out
         if c_out and c_out != a_out:
             c_changed.add(mid)
@@ -698,62 +720,68 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
             "mode": cm["mode"], "mode_label": MODE_LABEL.get(cm["mode"], cm["mode"]),
             "in_a": in_a,
             "a": a_out if in_a else None,                 # None + not in_a => "Stretch only"
-            "b": (b_out if in_a else None),               # None => "No cover" (if in_a)
+            "b": None,                                    # set by the double-chance pass below
             "c": c_out or a_out,                          # C always carries the bet
             "c_is_alt": bool(c_out and c_out != a_out),
             "a_odds": round(c.blended.get(a_out, 0.0), 2) if a_out else None,
-            "b_odds": round(c.blended.get(b_out, 0.0), 2) if b_out else None,
+            "b_odds": None,
             "c_odds": round(c.blended.get(c_out or a_out, 0.0), 2),
             "watch_link": None,
         })
 
-    # Guarantee Slip B is a GENUINE draw-protection slip, distinct from A. The
-    # exploit engine selects favourite-heavy pools, so the strict per-game draw
-    # threshold in coverage_mode_for() often yields ZERO swaps and B silently
-    # collapses onto A (identical legs, odds and payout). Force draw swaps on
-    # the most draw-prone A-legs (ranked by draw_hedge_priority) up to the
-    # per-strategy limit, and patch the coverage rows so the table matches.
+    # Slip B = genuine DRAW PROTECTION via double chance. On its most draw-prone
+    # legs we back 'favourite OR draw' (1X / X2) instead of the straight
+    # favourite. Double-chance odds are LOWER than the straight pick (it covers
+    # two outcomes), so B is genuinely SAFER than A — higher hit-rate, lower
+    # return — never a longshot and never an exact duplicate of A. Protect the
+    # most draw-prone legs (ranked by draw_hedge_priority) up to the per-strategy
+    # limit, preferring genuinely-live draws, and patch the coverage rows.
     draw_limit = CHANGE_LIMITS.get(req.strategy, CHANGE_LIMITS["balanced"])["draw"]
     cm_by_id = {r["match_id"]: r for r in coverage_modes}
     ranked_draw = sorted(a_legs, key=draw_hedge_priority, reverse=True)
 
-    def _swap_to_draw(c: Candidate) -> bool:
+    def _protect_with_dc(c: Candidate) -> bool:
+        """Double-chance protect a Slip-B leg: back 'favourite OR draw'."""
         mid = c.match.match_id
-        if mid in b_changed or a_picks.get(mid) == DRAW:
+        if mid in b_changed:
             return False
-        draw_odds = c.blended.get(DRAW, 0.0)
-        if draw_odds <= 1.0:                          # no usable draw price
+        fav = a_picks.get(mid)
+        if fav not in (HOME, AWAY):                   # only a home/away fav is DC-able
             return False
-        b_picks[mid] = DRAW
+        dc_odds = _double_chance_odds(c.blended, fav)
+        if dc_odds <= 1.0:                            # draw or fav unpriced
+            return False
+        b_picks[mid] = DC_HOME_DRAW if fav == HOME else DC_AWAY_DRAW
         b_changed.add(mid)
         row = cm_by_id.get(mid)
         if row is not None:
-            row["b"] = DRAW
-            row["b_odds"] = round(draw_odds, 2)
+            row["b"] = b_picks[mid]
+            row["b_odds"] = round(dc_odds, 2)
         return True
 
-    # Preferred pass: hedge the most draw-prone legs whose draw is genuinely
+    # Preferred pass: protect the most draw-prone legs whose draw is genuinely
     # live (>= floor), up to the per-strategy limit.
     for c in ranked_draw:
         if len(b_changed) >= draw_limit:
             break
-        if _draw_prob_market(c) < DRAW_HEDGE_FLOOR:   # draw too dead to hedge
+        if _draw_prob_market(c) < DRAW_HEDGE_FLOOR:   # draw too dead to bother
             continue
-        _swap_to_draw(c)
+        _protect_with_dc(c)
 
-    # Fallback: a favourite-heavy pool may have NO live draw (aggressive /
-    # maximum_coverage). Never show Slip B as an exact duplicate of A — hedge
-    # the single most draw-prone leg regardless of the floor so B always differs.
+    # Fallback: an all-strong-favourite pool may have no draw clearing the floor.
+    # Never show Slip B as an exact duplicate of A — double-chance protect the
+    # single most draw-prone leg so B is always a distinct, safer slip.
     if not b_changed:
         for c in ranked_draw:
-            if _swap_to_draw(c):
+            if _protect_with_dc(c):
                 break
 
     va = build_variation("Slip A — Safest Income",
                          f"{len(a_legs)} strongest unique-team mismatch legs",
                          a_picks, a_legs, sa, req.strategy, req.market)
     vb = build_variation("Slip B — Draw Protection",
-                         f"Slip A's {len(a_legs)} legs; {len(b_changed)} flat game(s) switched to draw",
+                         f"Slip A's {len(a_legs)} legs; {len(b_changed)} favourite(s) double-chance "
+                         f"protected (win-or-draw) — safer, lower odds than A",
                          b_picks, a_legs, sb, req.strategy, req.market, b_changed)
     vc = build_variation("Slip C — Long-Leg Stretch",
                          f"{len(c_legs)} legs — {max(0,len(c_legs)-len(a_legs))} extra mismatch game(s) for upside",
