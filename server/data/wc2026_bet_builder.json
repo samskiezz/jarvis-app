@@ -1,0 +1,736 @@
+{
+  "verified": true,
+  "source": "scripts/wc2026_bet_builder.py — three-spread bet builder over worldcup_prediction_engine predictions; odds via provider abstraction (mock/placeholder labelled when books unreachable); official SBS watch links attached per leg.",
+  "generated_at": "2026-06-20T14:31:02+00:00",
+  "output": {
+    "request": {
+      "stake_amount": 90.0,
+      "stake_mode": "total_split",
+      "number_of_legs": 4,
+      "strategy": "balanced",
+      "market": "1x2",
+      "odds_mode": "median",
+      "include_only_positive_ev": false,
+      "minimum_model_probability": 0.0,
+      "minimum_edge": -1.0
+    },
+    "selected_matches": [
+      "72",
+      "52",
+      "45",
+      "67"
+    ],
+    "excluded_matches": [
+      {
+        "match_id": "35",
+        "match": "Ecuador vs Curaçao",
+        "reason": "edge -0.06 < min -0.03"
+      },
+      {
+        "match_id": "37",
+        "match": "Spain vs Saudi Arabia",
+        "reason": "edge -0.04 < min -0.03"
+      },
+      {
+        "match_id": "40",
+        "match": "New Zealand vs Egypt",
+        "reason": "edge -0.08 < min -0.03"
+      },
+      {
+        "match_id": "42",
+        "match": "France vs Iraq",
+        "reason": "edge -0.08 < min -0.03"
+      },
+      {
+        "match_id": "44",
+        "match": "Jordan vs Algeria",
+        "reason": "edge -0.09 < min -0.03"
+      },
+      {
+        "match_id": "46",
+        "match": "England vs Ghana",
+        "reason": "edge -0.12 < min -0.03"
+      },
+      {
+        "match_id": "50",
+        "match": "Bosnia and Herzegovina vs Qatar",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "54",
+        "match": "South Africa vs South Korea",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "56",
+        "match": "Curaçao vs Côte d'Ivoire",
+        "reason": "edge -0.09 < min -0.03"
+      },
+      {
+        "match_id": "60",
+        "match": "Paraguay vs Australia",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "62",
+        "match": "Senegal vs Iraq",
+        "reason": "edge -0.12 < min -0.03"
+      },
+      {
+        "match_id": "64",
+        "match": "Uruguay vs Spain",
+        "reason": "edge -0.10 < min -0.03"
+      },
+      {
+        "match_id": "65",
+        "match": "Egypt vs Iran",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "69",
+        "match": "Colombia vs Portugal",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "70",
+        "match": "DR Congo vs Uzbekistan",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "71",
+        "match": "Algeria vs Austria",
+        "reason": "model flagged too risky (excluded)"
+      },
+      {
+        "match_id": "66",
+        "match": "New Zealand vs Belgium",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "58",
+        "match": "Tunisia vs Netherlands",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "51",
+        "match": "Scotland vs Brazil",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "38",
+        "match": "Belgium vs Iran",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "39",
+        "match": "Uruguay vs Cabo Verde",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "34",
+        "match": "Germany vs Côte d'Ivoire",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "48",
+        "match": "Colombia vs DR Congo",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "36",
+        "match": "Tunisia vs Japan",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "47",
+        "match": "Panama vs Croatia",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "68",
+        "match": "Croatia vs Ghana",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "41",
+        "match": "Argentina vs Austria",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "55",
+        "match": "Ecuador vs Germany",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "33",
+        "match": "Netherlands vs Sweden",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "61",
+        "match": "Norway vs France",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "53",
+        "match": "Czechia vs Mexico",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "59",
+        "match": "Türkiye vs United States",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "57",
+        "match": "Japan vs Sweden",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "43",
+        "match": "Norway vs Senegal",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "63",
+        "match": "Cabo Verde vs Saudi Arabia",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "49",
+        "match": "Switzerland vs Canada",
+        "reason": "outside requested leg count"
+      }
+    ],
+    "variation_a": {
+      "name": "Slip A — Safest Income",
+      "purpose": "3 strongest unique-team mismatch legs",
+      "strategy": "balanced",
+      "stake": 45.0,
+      "legs": [
+        {
+          "match_id": "72",
+          "team_a": "Jordan",
+          "team_b": "Argentina",
+          "market": "1x2",
+          "selected_outcome": "A",
+          "model_probability": 0.8069,
+          "blended_odds": 1.19,
+          "implied_probability": 0.84,
+          "fair_bookmaker_probability": 0.804,
+          "edge": 0.0029,
+          "expected_value": -0.0394,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+            "status": "upcoming",
+            "match_id": "72",
+            "team_a": "Jordan",
+            "team_b": "Argentina",
+            "kickoff_time": "2026-06-28T02:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "52",
+          "team_a": "Morocco",
+          "team_b": "Haiti",
+          "market": "1x2",
+          "selected_outcome": "H",
+          "model_probability": 0.7794,
+          "blended_odds": 1.2,
+          "implied_probability": 0.8333,
+          "fair_bookmaker_probability": 0.8023,
+          "edge": -0.0229,
+          "expected_value": -0.0647,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+            "status": "upcoming",
+            "match_id": "52",
+            "team_a": "Morocco",
+            "team_b": "Haiti",
+            "kickoff_time": "2026-06-24T22:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "45",
+          "team_a": "Portugal",
+          "team_b": "Uzbekistan",
+          "market": "1x2",
+          "selected_outcome": "H",
+          "model_probability": 0.7818,
+          "blended_odds": 1.2,
+          "implied_probability": 0.8333,
+          "fair_bookmaker_probability": 0.7991,
+          "edge": -0.0173,
+          "expected_value": -0.0618,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+            "status": "upcoming",
+            "match_id": "45",
+            "team_a": "Portugal",
+            "team_b": "Uzbekistan",
+            "kickoff_time": "2026-06-23T17:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        }
+      ],
+      "combined_odds": 1.71,
+      "combined_model_probability": 0.491672,
+      "bookmaker_implied_probability": 0.583567,
+      "expected_value": -0.1575,
+      "expected_value_dollars": -7.09,
+      "potential_return": 77.11,
+      "potential_profit": 32.11,
+      "risk_rating": "Low"
+    },
+    "variation_b": {
+      "name": "Slip B — Draw Protection",
+      "purpose": "Slip A's 3 legs; 1 flat game(s) switched to draw",
+      "strategy": "balanced",
+      "stake": 27.0,
+      "legs": [
+        {
+          "match_id": "72",
+          "team_a": "Jordan",
+          "team_b": "Argentina",
+          "market": "1x2",
+          "selected_outcome": "A",
+          "model_probability": 0.8069,
+          "blended_odds": 1.19,
+          "implied_probability": 0.84,
+          "fair_bookmaker_probability": 0.804,
+          "edge": 0.0029,
+          "expected_value": -0.0394,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+            "status": "upcoming",
+            "match_id": "72",
+            "team_a": "Jordan",
+            "team_b": "Argentina",
+            "kickoff_time": "2026-06-28T02:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "52",
+          "team_a": "Morocco",
+          "team_b": "Haiti",
+          "market": "1x2",
+          "selected_outcome": "D",
+          "model_probability": 0.1443,
+          "blended_odds": 7.0,
+          "implied_probability": 0.1429,
+          "fair_bookmaker_probability": 0.1375,
+          "edge": 0.0067,
+          "expected_value": 0.01,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+            "status": "upcoming",
+            "match_id": "52",
+            "team_a": "Morocco",
+            "team_b": "Haiti",
+            "kickoff_time": "2026-06-24T22:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "45",
+          "team_a": "Portugal",
+          "team_b": "Uzbekistan",
+          "market": "1x2",
+          "selected_outcome": "H",
+          "model_probability": 0.7818,
+          "blended_odds": 1.2,
+          "implied_probability": 0.8333,
+          "fair_bookmaker_probability": 0.7991,
+          "edge": -0.0173,
+          "expected_value": -0.0618,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+            "status": "upcoming",
+            "match_id": "45",
+            "team_a": "Portugal",
+            "team_b": "Uzbekistan",
+            "kickoff_time": "2026-06-23T17:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        }
+      ],
+      "combined_odds": 10.0,
+      "combined_model_probability": 0.091029,
+      "bookmaker_implied_probability": 0.10004,
+      "expected_value": -0.0901,
+      "expected_value_dollars": -2.43,
+      "potential_return": 269.89,
+      "potential_profit": 242.89,
+      "risk_rating": "Medium"
+    },
+    "variation_c": {
+      "name": "Slip C — Long-Leg Stretch",
+      "purpose": "4 legs — 1 extra mismatch game(s) for upside",
+      "strategy": "balanced",
+      "stake": 18.0,
+      "legs": [
+        {
+          "match_id": "72",
+          "team_a": "Jordan",
+          "team_b": "Argentina",
+          "market": "1x2",
+          "selected_outcome": "A",
+          "model_probability": 0.8069,
+          "blended_odds": 1.19,
+          "implied_probability": 0.84,
+          "fair_bookmaker_probability": 0.804,
+          "edge": 0.0029,
+          "expected_value": -0.0394,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+            "status": "upcoming",
+            "match_id": "72",
+            "team_a": "Jordan",
+            "team_b": "Argentina",
+            "kickoff_time": "2026-06-28T02:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "52",
+          "team_a": "Morocco",
+          "team_b": "Haiti",
+          "market": "1x2",
+          "selected_outcome": "H",
+          "model_probability": 0.7794,
+          "blended_odds": 1.2,
+          "implied_probability": 0.8333,
+          "fair_bookmaker_probability": 0.8023,
+          "edge": -0.0229,
+          "expected_value": -0.0647,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+            "status": "upcoming",
+            "match_id": "52",
+            "team_a": "Morocco",
+            "team_b": "Haiti",
+            "kickoff_time": "2026-06-24T22:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "45",
+          "team_a": "Portugal",
+          "team_b": "Uzbekistan",
+          "market": "1x2",
+          "selected_outcome": "H",
+          "model_probability": 0.7818,
+          "blended_odds": 1.2,
+          "implied_probability": 0.8333,
+          "fair_bookmaker_probability": 0.7991,
+          "edge": -0.0173,
+          "expected_value": -0.0618,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+            "status": "upcoming",
+            "match_id": "45",
+            "team_a": "Portugal",
+            "team_b": "Uzbekistan",
+            "kickoff_time": "2026-06-23T17:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        },
+        {
+          "match_id": "67",
+          "team_a": "Panama",
+          "team_b": "England",
+          "market": "1x2",
+          "selected_outcome": "A",
+          "model_probability": 0.801,
+          "blended_odds": 1.24,
+          "implied_probability": 0.8095,
+          "fair_bookmaker_probability": 0.7727,
+          "edge": 0.0282,
+          "expected_value": -0.0106,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "HEDGE",
+          "treatment_label": "Cover the likely two",
+          "reason": "HEDGE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Live on SBS",
+            "url": "https://www.sbs.com.au/ondemand/watch/2498445891635",
+            "status": "upcoming",
+            "match_id": "67",
+            "team_a": "Panama",
+            "team_b": "England",
+            "kickoff_time": "2026-06-27T21:00:00Z",
+            "source_type": "upcoming",
+            "confidence": "exact",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          }
+        }
+      ],
+      "combined_odds": 2.12,
+      "combined_model_probability": 0.39383,
+      "bookmaker_implied_probability": 0.470618,
+      "expected_value": -0.1632,
+      "expected_value_dollars": -2.94,
+      "potential_return": 38.25,
+      "potential_profit": 20.25,
+      "risk_rating": "Low"
+    },
+    "total_outlay": 90.0,
+    "best_case_return": 269.89,
+    "best_case_profit": 179.89,
+    "weighted_expected_value": -12.46,
+    "spread_coverage_score": 0.491672,
+    "coverage_cost": 5,
+    "coverage_efficiency": 0.098334,
+    "risk_rating": "Medium",
+    "odds_are_real": true,
+    "explanation": "Balanced strategy, 4-leg slip. Variation A backs the model's top path; B protects against draws (a recurring WC group-stage outcome); C covers the alternate/upset path on the riskiest games. Coverage cost 5 paths; efficiency 0.098334.",
+    "warnings": [
+      "Odds are blended market odds, not guaranteed final bookmaker prices.",
+      "A repeated pick is not protection — Jarvis only shows a second or third leg where the probability gap genuinely justifies it; otherwise it reads 'No cover'.",
+      "Coverage only helps when the alternate outcomes are genuinely live. For a heavy favourite the duplicate is removed and marked 'No cover'.",
+      "Correct score is high variance and is kept separate from the main 1X2 engine."
+    ],
+    "responsible_use": "Bet sizing should be controlled. Use small stakes, avoid chasing losses, and treat model outputs as probabilistic, not guaranteed. This app does not guarantee betting profit.",
+    "coverage_modes": [
+      {
+        "match_id": "72",
+        "n": "72",
+        "team_a": "Jordan",
+        "team_b": "Argentina",
+        "mode": "STRONG_LEAN",
+        "mode_label": "Strong lean — no cover",
+        "in_a": true,
+        "a": "A",
+        "b": null,
+        "c": "A",
+        "c_is_alt": false,
+        "a_odds": 1.19,
+        "b_odds": null,
+        "c_odds": 1.19,
+        "watch_link": {
+          "provider": "SBS On Demand",
+          "label": "Watch Live on SBS",
+          "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+          "status": "upcoming",
+          "match_id": "72",
+          "team_a": "Jordan",
+          "team_b": "Argentina",
+          "kickoff_time": "2026-06-28T02:00:00Z",
+          "source_type": "upcoming",
+          "confidence": "exact",
+          "requires_location": "Australia",
+          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+        }
+      },
+      {
+        "match_id": "52",
+        "n": "52",
+        "team_a": "Morocco",
+        "team_b": "Haiti",
+        "mode": "STRONG_LEAN",
+        "mode_label": "Strong lean — no cover",
+        "in_a": true,
+        "a": "H",
+        "b": "D",
+        "c": "H",
+        "c_is_alt": false,
+        "a_odds": 1.2,
+        "b_odds": 7.0,
+        "c_odds": 1.2,
+        "watch_link": {
+          "provider": "SBS On Demand",
+          "label": "Watch Live on SBS",
+          "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+          "status": "upcoming",
+          "match_id": "52",
+          "team_a": "Morocco",
+          "team_b": "Haiti",
+          "kickoff_time": "2026-06-24T22:00:00Z",
+          "source_type": "upcoming",
+          "confidence": "exact",
+          "requires_location": "Australia",
+          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+        }
+      },
+      {
+        "match_id": "45",
+        "n": "45",
+        "team_a": "Portugal",
+        "team_b": "Uzbekistan",
+        "mode": "STRONG_LEAN",
+        "mode_label": "Strong lean — no cover",
+        "in_a": true,
+        "a": "H",
+        "b": null,
+        "c": "H",
+        "c_is_alt": false,
+        "a_odds": 1.2,
+        "b_odds": null,
+        "c_odds": 1.2,
+        "watch_link": {
+          "provider": "SBS On Demand",
+          "label": "Watch Live on SBS",
+          "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+          "status": "upcoming",
+          "match_id": "45",
+          "team_a": "Portugal",
+          "team_b": "Uzbekistan",
+          "kickoff_time": "2026-06-23T17:00:00Z",
+          "source_type": "upcoming",
+          "confidence": "exact",
+          "requires_location": "Australia",
+          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+        }
+      },
+      {
+        "match_id": "67",
+        "n": "67",
+        "team_a": "Panama",
+        "team_b": "England",
+        "mode": "STRONG_LEAN",
+        "mode_label": "Strong lean — no cover",
+        "in_a": false,
+        "a": null,
+        "b": null,
+        "c": "A",
+        "c_is_alt": false,
+        "a_odds": 1.24,
+        "b_odds": null,
+        "c_odds": 1.24,
+        "watch_link": {
+          "provider": "SBS On Demand",
+          "label": "Watch Live on SBS",
+          "url": "https://www.sbs.com.au/ondemand/watch/2498445891635",
+          "status": "upcoming",
+          "match_id": "67",
+          "team_a": "Panama",
+          "team_b": "England",
+          "kickoff_time": "2026-06-27T21:00:00Z",
+          "source_type": "upcoming",
+          "confidence": "exact",
+          "requires_location": "Australia",
+          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+        }
+      }
+    ],
+    "exploit_window": {
+      "score": 28.5,
+      "level": "HIGH",
+      "reasons": [
+        "40 group-stage fixtures available",
+        "19 strong favourite mismatches found",
+        "5 fixtures carry elevated draw risk",
+        "no knockout volatility yet — long-leg multis still viable"
+      ],
+      "n_group": 40,
+      "n_strong": 19,
+      "n_draw_risk": 5,
+      "n_knockout": 0
+    },
+    "recommendation": {
+      "requested_legs": 4,
+      "strong_unique_legs": 4,
+      "recommended_safe_legs": 3,
+      "stretch_legs": 4,
+      "rejected_duplicate_team": 0,
+      "exploit_window": "HIGH",
+      "text": "4 legs requested. Jarvis found 4 genuinely strong unique-team legs. Slip A uses the 3 safest; Slip C stretches to 4 for upside. "
+    }
+  }
+}

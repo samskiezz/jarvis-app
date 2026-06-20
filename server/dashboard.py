@@ -3373,6 +3373,38 @@ html[data-ui-theme="classic"] #coreSay.talking{{background:rgba(8,22,34,.32);bor
             self._send(self._tmpl("guardian.html").encode(), "text/html; charset=utf-8")
         elif self.path.startswith("/predictions"):
             self._send(self._tmpl("wc2026_predictions.html").encode(), "text/html; charset=utf-8")
+        elif self.path.split("?", 1)[0] == "/data/wc2026_bet_builder_live":
+            # On-demand Exploit-Engine build: the user picks stake + legs + mode,
+            # the engine builds three variable-length slips live (~3-4s).
+            try:
+                import importlib.util as _ilu, sys as _sys
+                _bb = _sys.modules.get("wc2026_bb_module")
+                if _bb is None:
+                    _bb_path = os.path.join(ROOT, "scripts", "wc2026_bet_builder.py")
+                    _spec = _ilu.spec_from_file_location("wc2026_bb_module", _bb_path)
+                    _bb = _ilu.module_from_spec(_spec)
+                    # Register BEFORE exec so frozen-dataclass forward refs resolve.
+                    _sys.modules["wc2026_bb_module"] = _bb
+                    _spec.loader.exec_module(_bb)
+                q = parse_qs(urlparse(self.path).query)
+                try:
+                    stake = max(1.0, min(100000.0, float(q.get("stake", ["100"])[0])))
+                except Exception:  # noqa: BLE001
+                    stake = 100.0
+                try:
+                    legs = max(2, min(20, int(q.get("legs", ["10"])[0])))
+                except Exception:  # noqa: BLE001
+                    legs = 10
+                mode = (q.get("mode", ["balanced"])[0] or "balanced").strip()
+                stake_mode = (q.get("stake_mode", ["total_split"])[0] or "total_split").strip()
+                out = _bb.build_output_dict(stake=stake, legs=legs, strategy=mode,
+                                            stake_mode=stake_mode)
+                self._send(json.dumps({"ok": "error" not in out, "output": out}).encode(),
+                           "application/json")
+            except Exception as e:  # noqa: BLE001
+                self._send(json.dumps({"ok": False, "error": str(e)}).encode(),
+                           "application/json")
+
         elif self.path.split("?", 1)[0] == "/data/wc2026_predictions_audit":
             # Audit trail: last N predictions logged by every WC2026 model run, straight
             # out of server/data/wc2026_predictions.db. Read-only; lets the owner verify

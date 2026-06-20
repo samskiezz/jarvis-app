@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>WC 2026 · Full Tournament · Live</title>
 <style>
   :root {
@@ -391,6 +394,9 @@
     <h1 style="margin:0;">🏆 FIFA World Cup 2026</h1>
     <span class="live-badge"><span class="live-dot"></span> LIVE · <span id="updated-at">refreshing</span></span>
   </div>
+  <div id="freshness-stamp" class="meta" style="margin-top:4px;font-size:12px;color:var(--mute);">
+    Checking predictions freshness…
+  </div>
   <div>
     <button onclick="window.toggleStage('played', this)" class="hdr-btn">📋 Played</button>
     <button onclick="window.toggleStage('all-fixtures', this)" class="hdr-btn">📅 Calendar</button>
@@ -408,7 +414,7 @@
 <div id="players-modal" style="display:none;position:fixed;inset:0;background:rgba(7,9,13,0.55);backdrop-filter:blur(8px);z-index:200;align-items:flex-start;justify-content:center;padding:130px 20px 40px;overflow-y:auto;">
   <div style="background:var(--glass-strong);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;padding:22px;max-width:980px;width:100%;box-shadow:var(--shadow-strong);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-      <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em;">👥 Player Profiles · 572 players · 48 teams</h2>
+      <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em;">👥 Player Intelligence · 572 players · 48 teams</h2>
       <button id="players-close" style="border:none;background:rgba(0,0,0,0.05);color:var(--ink);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
     </div>
     <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
@@ -456,6 +462,71 @@
     <div class="desc" id="upcoming-desc"></div>
     <div id="upcoming-rows"></div>
     <div class="summary" id="upcoming-summary"></div>
+  </div>
+</section>
+
+<!-- ====== THREE-SPREAD BET BUILDER ====== -->
+<section class="stage" id="bet-builder">
+  <style>
+    .bb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:8px;}
+    .bb-card{background:var(--glass);border:1px solid var(--border-strong);border-radius:14px;padding:14px;box-shadow:var(--shadow);}
+    .bb-name{font-weight:700;color:var(--ink);font-size:14px;}
+    .bb-purpose{color:var(--mute);font-size:12px;margin:2px 0 8px;}
+    .bb-meta{color:var(--accent);font-size:12px;font-weight:600;margin-bottom:8px;}
+    .bb-legs{list-style:none;margin:0;padding:0;}
+    .bb-legs li{font-size:12.5px;color:var(--ink);padding:4px 0;border-top:1px solid var(--border-strong);}
+    .bb-treat{color:var(--mute);font-size:11px;margin-left:4px;}
+    .bb-watch{display:inline-block;margin-top:4px;font-size:11.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));padding:3px 9px;border-radius:8px;text-decoration:none;}
+    .bb-watch:hover{filter:brightness(1.08);}
+    .treat-badge{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:600;color:var(--mute);background:var(--glass-soft);border:1px solid var(--border-strong);padding:1px 7px;border-radius:7px;vertical-align:middle;}
+    .bb-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
+    .bb-table th{text-align:left;padding:7px 9px;color:var(--mute);font-size:11.5px;border-bottom:2px solid var(--border-strong);}
+    .bb-table td{padding:7px 9px;border-bottom:1px solid var(--border-strong);color:var(--ink);vertical-align:top;}
+    .bb-table tr:hover{background:var(--glass-soft);}
+    .bb-chg{background:rgba(212,151,20,0.14);font-weight:700;border-radius:6px;}
+    .bb-od{color:var(--mute);font-size:11px;}
+    .bb-banner{background:var(--glass-strong);border:1px solid var(--border-strong);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--ink);}
+    .bb-warn{color:var(--draw);font-size:12px;}
+    .bb-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px;}
+    .bb-controls label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;}
+    .bb-controls input,.bb-controls select{background:var(--glass-soft);border:1px solid var(--border-strong);border-radius:8px;color:var(--ink);padding:7px 9px;font-size:13px;min-width:96px;}
+    .bb-build-btn{background:var(--accent);color:#06121f;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;}
+    .bb-build-btn:hover{filter:brightness(1.08);}
+    .bb-build-btn:disabled{opacity:.5;cursor:wait;}
+  </style>
+  <div class="stage-header">
+    <h2>🎯 Coverage Builder · build your multi</h2>
+    <span class="tag live">LIVE</span>
+    <span class="when">Pick your stake, legs (up to 20) and mode — the engine builds three variable-length slips (Mainline / Draw Protection / Stretch) off one unique-team pool. Probability analysis only — not guaranteed betting outcomes.</span>
+  </div>
+  <div class="stage-body">
+    <div id="bb-model-banner" class="bb-banner" style="margin-bottom:10px;">Loading bet builder…</div>
+    <div class="bb-controls" id="bb-controls">
+      <label>Bet amount ($)
+        <input id="bb-in-stake" type="number" min="1" max="100000" step="10" value="100">
+      </label>
+      <label>Legs (2–20)
+        <input id="bb-in-legs" type="number" min="2" max="20" step="1" value="10">
+      </label>
+      <label>Mode
+        <select id="bb-in-mode">
+          <option value="safe">Safest</option>
+          <option value="balanced" selected>Balanced</option>
+          <option value="value">Value (+EV)</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="maximum_coverage">Max coverage</option>
+        </select>
+      </label>
+      <label>Stake split
+        <select id="bb-in-split">
+          <option value="total_split" selected>Split across A/B/C</option>
+          <option value="per_variation">Full stake per slip</option>
+        </select>
+      </label>
+      <button class="bb-build-btn" id="bb-build-btn" type="button" onclick="buildMyMulti()">Build my multi</button>
+    </div>
+    <div id="bb-slips"></div>
+    <div id="bb-notes" class="bb-warn" style="margin-top:12px;line-height:1.6;"></div>
   </div>
 </section>
 
@@ -527,7 +598,7 @@
   <b>Methodology</b>: Elo via clubelo.com (mid-2025 baseline) · bivariate Poisson (Maher 1982 · Dixon-Coles 1997) · ensemble stacking (Groll TU Dortmund 2018).
   <b>Live results</b> via <code>scripts/wc2026_fetch_results.py</code> writing <code>/jarvis/data/wc2026_results.json</code>; the UI polls every 60s and re-renders.
   <div class="disclaimer">
-    <b>Sports analysis, not betting advice.</b> Football has irreducible noise — red cards, penalty shootouts (literal 50/50), deflections. Best peer-reviewed WC predictors cap at ~58-65% winner-correct out-of-sample. A 99-100% model is overfitting, not prediction. Quantum algorithms add nothing here; sports prediction is a small-data noisy problem — stacked ensembles + good features are the real frontier.
+    <b>Probability model, not betting advice.</b> Football is low-scoring and high-variance — the model estimates probability, it does not guarantee outcomes. Irreducible noise — red cards, penalty shootouts (literal 50/50), deflections. Best peer-reviewed WC predictors cap at ~58-65% winner-correct out-of-sample. A 99-100% model is overfitting, not prediction. Quantum algorithms add nothing here; sports prediction is a small-data noisy problem — stacked ensembles + good features are the real frontier.
   </div>
   <div id="wc2026-manifest-line" class="meta" style="margin-top:10px;font-size:11px;color:var(--mute);">📦 manifest loading…</div>
 </footer>
@@ -666,7 +737,8 @@ function predictionFor(m){
   const byN = PREDICTIONS.matches && PREDICTIONS.matches[String(m.n)];
   if (byN && byN.pick) {
     return { pick: byN.pick, score: byN.score, source: byN.source,
-             p_home: byN.p_home, p_draw: byN.p_draw, p_away: byN.p_away };
+             p_home: byN.p_home, p_draw: byN.p_draw, p_away: byN.p_away,
+             treatment: byN.treatment, three_spread: byN.three_spread, watch_link: byN.watch_link };
   }
   if (PREDICTIONS.byPair){
     const lower = s => (s||"").toLowerCase().trim();
@@ -1000,7 +1072,10 @@ async function loadPredictions(){
           pick: wdl,
           score: p.predicted_score,
           p_home: p.p_home, p_draw: p.p_draw, p_away: p.p_away,
-          source: "elo_all_fixtures",
+          treatment: p.treatment || null,
+          three_spread: p.three_spread || null,
+          watch_link: p.watch_link || null,
+          source: data.prediction_source || "engine",
         };
       });
       PREDICTIONS = { byPair: lookup, matches: byN };
@@ -1037,11 +1112,31 @@ async function refreshLive(){
     const data = await r.json();
     mergeResults(data);
     document.getElementById("updated-at").textContent = "updated " + new Date(data.last_updated || Date.now()).toLocaleTimeString();
+    // Re-render EVERY section so the top-bar buttons (Played / Calendar /
+    // Standings / Knockouts / Upcoming) reflect new results without a reload.
     renderDayContent();
     renderSummary();
+    try { renderPlayed(); } catch(_){}
+    try { renderGroups(); } catch(_){}
+    try { renderBracket(); } catch(_){}
+    try { renderUpcoming(); } catch(_){}
   } catch(e){
     document.getElementById("updated-at").textContent = "offline";
   }
+}
+
+// Periodic full data refresh — re-fetch predictions + badges + bet builder +
+// freshness so new model runs surface live (predictions regenerate every ~2h).
+async function refreshAll(){
+  try {
+    await loadFixtures();   // re-read fixtures (kickoffs, concrete knockout teams)
+    await loadPredictions(); // re-read engine predictions (new generated_at)
+    await loadLocks();
+    await refreshLive();     // merge results + re-render all sections
+    loadModelBacktestBadges();
+    loadBetBuilder();
+    loadFreshness();
+  } catch(e){ /* transient — next tick retries */ }
 }
 
 function pickDefaultDay(){
@@ -1059,14 +1154,14 @@ function pickDefaultDay(){
 // page load by loadModelBacktestBadges() from /jarvis/data/wc2026_predictions_audit?summary=1
 // — single source of truth = the audit DB, NOT the JSON snapshots.
 const UPCOMING_VARIATIONS = [
-  { name: "📐 Elo+Poisson · ...", key: "ensemble", baseName: "📐 Elo+Poisson",
-    model: "elo_bivariate_poisson_dixoncoles",
-    desc: "<b>Real Elo + bivariate Poisson model</b> (Maher 1982 / Dixon-Coles 1997). Trained on 563-match historical corpus. Live audit accuracy badge updates automatically from <code>wc2026_predictions.db</code> as actuals land via <code>actual_for()</code>." },
+  { name: "🎯 Ensemble · 3-spread · ...", key: "ensemble", baseName: "🎯 Ensemble · 3-spread",
+    model: "elo_bivariate_poisson_dixoncoles_isocal",
+    desc: "<b>14-model ensemble</b> (Elo · Bradley-Terry-Davidson · Poisson · Dixon-Coles · gradient-boosting · draw-guard) blended by recency-weighted log-loss, picks draw-calibrated, then split into three risk-spread variations. Each row shows its <b>treatment</b> (Strong pick / Protect draw / Cover all) + an official SBS watch link. Active model + freshness stamp are in the header; full slips in the Bet Builder below." },
   { name: "🤖 LLM · llama3.3:70b · ...", key: "news", baseName: "🤖 LLM · llama3.3:70b",
     model: "llama3.3:70b",
     desc: "<b>LLM predictor (llama3.3:70b)</b> running on the UE5 RTX 4090 (ssh6.vast.ai:11336) through autossh tunnel :11435 → :11434. Predictions write into the audit DB; winner-hit grading lands per-row when <code>actual_for(home,away)</code> finds a verified WC2026 actual." },
   { name: "🎲 Score Forecast · ...", key: "scores", baseName: "🎲 Score Forecast",
-    model: "elo_bivariate_poisson_dixoncoles",
+    model: "elo_bivariate_poisson_dixoncoles_isocal",
     desc: "<b>Ensemble picks expressed as exact scores</b> &mdash; for score-prediction leagues. Exact-hit count comes straight from the audit DB." },
 ];
 let upcomingTabIdx = 0;
@@ -1102,6 +1197,13 @@ function renderUpcoming(){
     const pickCls = ["W","D","L"].includes(pred.pick) ? pred.pick : "dim";
     const pickTxt = pred.pick || "—";
     const scoreTxt = pred.score || "—";
+    // Three-spread treatment badge (visibly the new ensemble system).
+    const TREAT = { LOCK:"🔒 Strong pick", HEDGE:"≈ Cover two", DRAW_HEDGE:"🛡 Protect draw",
+                    ROTATE:"🔀 Cover all", EXCLUDE:"⏭ Leave out" };
+    const treatHtml = pred.treatment ? `<span class="treat-badge">${TREAT[pred.treatment] || pred.treatment}</span>` : "";
+    const wl = pred.watch_link;
+    const watchHtml = (wl && wl.url)
+      ? `<a class="bb-watch" href="${wl.url}" target="_blank" rel="noopener" title="${(wl.notes||'').replace(/"/g,"'")}">▶ ${wl.label || 'Watch on SBS'}</a>` : "";
     s += `<div class="match-row" style="--i:${i}">
       <div class="n">#${i+1}</div>
       <div class="teams">
@@ -1111,7 +1213,7 @@ function renderUpcoming(){
       </div>
       <div class="stage-label">${stageLabel ? stageLabel(m) : (m.stage + (m.group ? ' ' + m.group : ''))}</div>
       <div class="when">${m.kickoff_local || m.date}</div>
-      <div class="pred"><span class="pill ${pickCls}">${pickTxt}</span><span class="pscore">${scoreTxt}</span>${lockIcon(m.n)}</div>
+      <div class="pred"><span class="pill ${pickCls}">${pickTxt}</span><span class="pscore">${scoreTxt}</span>${treatHtml}${lockIcon(m.n)}${watchHtml}</div>
       <div class="actual-cell"><span class="countdown ${cd.cls}" data-iso="${m.kickoff_iso || ''}">${cd.txt}</span></div>
     </div>`;
   });
@@ -1120,7 +1222,7 @@ function renderUpcoming(){
     <div class="stat"><div class="k">Home wins picked</div><div class="v">${nW}</div></div>
     <div class="stat"><div class="k">Draws picked</div><div class="v">${nD}</div></div>
     <div class="stat"><div class="k">Away wins picked</div><div class="v">${nL}</div></div>
-    <div class="stat"><div class="k">Showing</div><div class="v">${fixtures.length} of next 12</div></div>`;
+    <div class="stat"><div class="k">Showing</div><div class="v">${fixtures.length} upcoming</div></div>`;
 }
 
 function renderUpcomingTabs(){
@@ -1206,8 +1308,11 @@ function renderPlayed(){
   wrap.innerHTML = s;
   const tot = hits + miss;
   const acc = tot > 0 ? Math.round(100 * hits / tot) : 0;
+  const lag = played.length - tot;
+  const lagTxt = lag > 0 ? ` · ${lag} most-recent awaiting model grading` : "";
   document.getElementById("played-summary").innerHTML =
-    `<b style="color:var(--ink)">${played.length}</b> matches played · model picks ${hits} correct / ${tot} graded (${acc}%) · table grows as more games finish.`;
+    `<b style="color:var(--ink)">${played.length}</b> verified matches played · `
+    + `model graded ${tot} → ${hits} correct (${acc}%)${lagTxt} · every result is from <code>wc2026_actuals.json</code> and grows as games finish.`;
 }
 
 async function boot(){
@@ -1229,14 +1334,203 @@ async function boot(){
     // — placeholders stay if the endpoint is unreachable, so a transient
     // dashboard hiccup never blanks the page.
     loadModelBacktestBadges();
+    loadBetBuilder();
+    loadFreshness();
   } catch(e){
     document.getElementById("day-content").innerHTML =
       `<div class="meta" style="color:var(--miss);padding:20px">Could not load fixtures JSON (<code>/jarvis/data/wc2026_fixtures_all.json</code>): ${String(e).slice(0,160)}</div>`;
   }
   // Re-poll lock status every 5 min so newly-locked matches surface their 🔒.
-  setInterval(async () => { await loadLocks(); renderDayContent(); renderBracket(); }, 300_000);
-  setInterval(refreshLive, 60_000);
+  setInterval(refreshLive, 60_000);   // results + re-render all sections every 60s
+  setInterval(refreshAll, 300_000);   // full refetch (predictions/badges/bet builder) every 5 min
   setInterval(tickCountdowns, 30_000);
+}
+
+// ===== FRESHNESS STAMP — proves the page is showing current data =====
+async function loadFreshness(){
+  const el = document.getElementById("freshness-stamp");
+  if (!el) return;
+  try {
+    const [pr, ar, rr, lr] = await Promise.all([
+      fetch("/jarvis/data/wc2026_model_predictions.json?t=" + Date.now(), { cache: "no-store" }),
+      fetch("/jarvis/data/wc2026_active_model.json?t=" + Date.now(), { cache: "no-store" }),
+      fetch("/jarvis/data/wc2026_results.json?t=" + Date.now(), { cache: "no-store" }),
+      fetch("/jarvis/data/wc2026_predictions_audit?locked=1&t=" + Date.now(), { cache: "no-store" }),
+    ]);
+    const pd = pr.ok ? await pr.json() : {};
+    const act = ar.ok ? await ar.json() : null;
+    const res = rr.ok ? await rr.json() : {};
+    const locks = lr.ok ? await lr.json() : {};
+    const fmt = (iso) => {
+      if (!iso) return "—";
+      const d = new Date(iso); const m = Math.round((Date.now()-d.getTime())/60000);
+      const ago = m < 90 ? `${m}m ago` : `${Math.round(m/60)}h ago`;
+      return `${d.toLocaleTimeString()} (${ago})`;
+    };
+    const playedIds = new Set([
+      ...Object.keys(res.actuals_results || {}),
+      ...Object.keys(res.next12_results || {}),
+      ...Object.keys(res.first12_results || {}),
+    ]);
+    const playedCount = playedIds.size;
+    const lockedCount = (locks.locked || locks.count || []) ? (locks.count || (locks.locked||[]).length || 0) : 0;
+    const genStale = pd.generated_at ? (Date.now() - new Date(pd.generated_at).getTime() > 3*3600*1000) : true;
+    const dot = genStale ? "🟠" : "🟢";
+    const state = genStale ? "STALE — refresh" : "LIVE";
+    const modelTxt = act && act.model_version
+      ? `model <b>${act.model_version}</b> (${(act.single_pick_accuracy*100).toFixed(0)}% single / ${(act.three_spread_coverage*100).toFixed(0)}% coverage, out-of-sample)`
+      : "model —";
+    el.innerHTML =
+      `${dot} <b>${state}</b> · ${modelTxt}`
+      + ` · predictions ${fmt(pd.generated_at)}`
+      + ` · results synced ${fmt(res.last_updated)}`
+      + ` · ${playedCount} played`
+      + ` · odds: ESPN/DraftKings · team-news: partial`
+      + (genStale ? ` — <span class="bb-warn">your browser may be showing a cached copy; hard-refresh (Ctrl/Cmd+Shift+R)</span>` : "");
+  } catch(e){
+    el.textContent = "Could not load model state: " + String(e).slice(0,80);
+  }
+}
+
+// ===== THREE-SPREAD BET BUILDER (reads engine + bet-builder JSON) =====
+function bbPickName(o){ return o === "H" ? "Home" : o === "D" ? "Draw" : o === "A" ? "Away" : (o || "—"); }
+
+async function loadBetBuilder(){
+  const banner = document.getElementById("bb-model-banner");
+  const wrap = document.getElementById("bb-slips");
+  const notes = document.getElementById("bb-notes");
+  try {
+    const [bbR, btR, actR] = await Promise.all([
+      fetch("/jarvis/data/wc2026_bet_builder.json?t=" + Date.now(), { cache: "no-store" }),
+      fetch("/jarvis/data/wc2026_backtest_results.json?t=" + Date.now(), { cache: "no-store" }),
+      fetch("/jarvis/data/wc2026_active_model.json?t=" + Date.now(), { cache: "no-store" }),
+    ]);
+    const bb = bbR.ok ? ((await bbR.json()).output || null) : null;
+    const bt = btR.ok ? ((await btR.json()).summary || null) : null;
+    // Prefer the continuous-learning ACTIVE model (honest out-of-sample
+    // validation numbers) over the in-sample backtest summary.
+    const act = actR.ok ? await actR.json() : null;
+
+    if (act){
+      const single = (act.single_pick_accuracy * 100).toFixed(1);
+      const cover = (act.three_spread_coverage * 100).toFixed(1);
+      const ece = (act.calibration_error != null) ? ` · ECE ${act.calibration_error.toFixed(3)}` : "";
+      const note = act.in_sample
+        ? ' · <span class="bb-warn">⚠ in-sample</span>'
+        : ' · <span style="color:var(--win)">out-of-sample (honest)</span>';
+      banner.innerHTML = `Active model: <b>${act.model_version || "blend"}</b> · single-pick <b>${single}%</b> · `
+        + `three-spread coverage <b>${cover}%</b>${ece}${note}`;
+    } else if (bt){
+      const single = (bt.single_top_pick_accuracy * 100).toFixed(1);
+      const cover = (bt.three_spread_coverage * 100).toFixed(1);
+      const insample = bt.in_sample ? ' · <span class="bb-warn">⚠ in-sample (live results will be lower)</span>' : "";
+      banner.innerHTML = `single-pick <b>${single}%</b> · three-spread coverage <b>${cover}%</b>${insample}`;
+    } else {
+      banner.textContent = "Bet builder summary unavailable.";
+    }
+
+    renderBetBuilderSlips(bb);
+  } catch(e){
+    banner.textContent = "Bet builder offline: " + String(e).slice(0, 120);
+  }
+}
+
+// Shared renderer: used by the static page-load (loadBetBuilder) AND the live
+// on-demand build (buildMyMulti). Takes a bet-builder output object.
+function renderBetBuilderSlips(bb){
+  const wrap = document.getElementById("bb-slips");
+  const notes = document.getElementById("bb-notes");
+  if (!bb){ wrap.innerHTML = `<div class="meta">Bet builder output not generated yet.</div>`; if(notes) notes.innerHTML=""; return; }
+  const A = bb.variation_a, B = bb.variation_b, C = bb.variation_c;
+
+  // Exploit window banner + Jarvis recommendation
+  const win = bb.exploit_window || {}; const rec = bb.recommendation || {};
+  const winColor = win.level === "HIGH" ? "var(--win)" : (win.level === "LOW" ? "var(--loss)" : "var(--draw)");
+  let head = "";
+  if (win.level){
+    head += `<div class="bb-banner" style="margin-bottom:8px;">`
+      + `Exploit window: <b style="color:${winColor}">${win.level}</b>`
+      + (win.reasons ? ` — ${win.reasons.join(" · ")}` : "") + `</div>`;
+  }
+  if (rec.text){
+    head += `<div class="meta" style="margin-bottom:8px;color:var(--ink)">🧠 <b>Jarvis:</b> ${rec.text}</div>`;
+  }
+  head += `<div class="meta" style="margin-bottom:10px;">Three variable-length slips off one unique-team pool · `
+    + `total stake $${bb.total_outlay} · best-case return $${bb.best_case_return}`;
+  if (bb.odds_are_real === false) head += ' · <span class="bb-warn">⚠ MOCK ODDS (live books unreachable)</span>';
+  head += `</div>`;
+
+  // Per-variation summary cards (Slip A safest / B draw protect / C stretch)
+  let html = head + `<div class="bb-grid">`;
+  for (const v of [A, B, C]){
+    html += `<div class="bb-card"><div class="bb-name">${v.name}</div>`
+      + `<div class="bb-purpose">${v.purpose}</div>`
+      + `<div class="bb-meta">${v.legs.length} legs · stake $${v.stake} · odds ${v.combined_odds} · `
+      + `return $${v.potential_return}</div></div>`;
+  }
+  html += `</div>`;
+
+  // Comparison table from per-game COVERAGE MODES. A shows "Stretch only" for
+  // legs that are in C but not the safe slip; B shows "No cover" where no draw
+  // is live; never a duplicate pick.
+  const modes = bb.coverage_modes || [];
+  const span = (txt, col) => `<span style="color:${col||'var(--dim)'}">${txt}</span>`;
+  const cell = (out, odds) => out ? `${bbPickName(out)} <span class="bb-od">@${odds||"—"}</span>` : "";
+  html += `<table class="bb-table"><thead><tr><th>#</th><th>Game</th><th>Mode</th>`
+    + `<th>A · Safe</th><th>B · Draw protect</th><th>C · Stretch</th><th>Watch</th></tr></thead><tbody>`;
+  modes.forEach((r, i) => {
+    const wl = r.watch_link;
+    const watch = (wl && wl.url)
+      ? `<a class="bb-watch" href="${wl.url}" target="_blank" rel="noopener" title="${(wl.notes||'').replace(/"/g,"'")}">▶ SBS</a>` : "—";
+    const aCell = r.in_a ? cell(r.a, r.a_odds) : span("Stretch only");
+    const bCell = r.in_a ? (r.b ? cell(r.b, r.b_odds) : span("No cover")) : span("—");
+    const cCell = cell(r.c, r.c_odds);
+    html += `<tr>`
+      + `<td>${i+1}</td>`
+      + `<td>${flag(r.team_a)} ${r.team_a} <span class="vs">v</span> ${flag(r.team_b)} ${r.team_b}</td>`
+      + `<td><span class="bb-treat">${r.mode_label||r.mode}</span></td>`
+      + `<td>${aCell}</td>`
+      + `<td class="${(r.in_a && r.b)?'bb-chg':''}">${bCell}</td>`
+      + `<td class="${r.c_is_alt?'bb-chg':''}">${cCell}</td>`
+      + `<td>${watch}</td>`
+      + `</tr>`;
+  });
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+
+  if (notes){
+    const ws = (bb.warnings || []).map(w => `⚠ ${w}`);
+    if (bb.responsible_use) ws.push(`• ${bb.responsible_use}`);
+    notes.innerHTML = ws.join("<br>");
+  }
+}
+
+// Live on-demand build: user picks stake + legs (up to 20) + mode, the engine
+// builds three variable-length slips server-side (~3-4s) and we re-render.
+async function buildMyMulti(){
+  const btn = document.getElementById("bb-build-btn");
+  const wrap = document.getElementById("bb-slips");
+  const stake = Math.max(1, Math.min(100000, parseFloat(document.getElementById("bb-in-stake").value) || 100));
+  const legs = Math.max(2, Math.min(20, parseInt(document.getElementById("bb-in-legs").value, 10) || 10));
+  const mode = document.getElementById("bb-in-mode").value || "balanced";
+  const split = document.getElementById("bb-in-split").value || "total_split";
+  if (btn){ btn.disabled = true; btn.textContent = "Building…"; }
+  wrap.innerHTML = `<div class="meta">⏳ Building your ${legs}-leg ${mode} multi for $${stake}… (~3-4s)</div>`;
+  try {
+    const url = `/jarvis/data/wc2026_bet_builder_live?stake=${encodeURIComponent(stake)}`
+      + `&legs=${legs}&mode=${encodeURIComponent(mode)}&stake_mode=${encodeURIComponent(split)}&t=` + Date.now();
+    const r = await fetch(url, { cache: "no-store" });
+    const j = await r.json();
+    if (!j.ok || !j.output || j.output.error){
+      wrap.innerHTML = `<div class="bb-warn">Could not build: ${(j.output && j.output.error) || j.error || "unknown error"}</div>`;
+    } else {
+      renderBetBuilderSlips(j.output);
+    }
+  } catch(e){
+    wrap.innerHTML = `<div class="bb-warn">Build failed: ${String(e).slice(0, 120)}</div>`;
+  } finally {
+    if (btn){ btn.disabled = false; btn.textContent = "Build my multi"; }
+  }
 }
 
 boot();
