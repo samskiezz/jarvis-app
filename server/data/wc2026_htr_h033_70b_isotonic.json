@@ -1,0 +1,78 @@
+{
+  "baseline_brier": 0.572328,
+  "bootstrap_reps": 300,
+  "brier_delta": 0.049804,
+  "calibrated_brier": 0.622131,
+  "calibrated_brier_5fold": 0.622131,
+  "ci_95": [
+    -0.007573,
+    0.104735
+  ],
+  "fold_diagnostics": [
+    {
+      "fold": 0,
+      "n_test": 25,
+      "n_train": 97,
+      "test_brier_mean_baseline": 0.6754000000000001,
+      "test_brier_mean_calibrated": 0.7427982032040836,
+      "test_winner_acc_baseline": 0.32,
+      "test_winner_acc_calibrated": 0.32
+    },
+    {
+      "fold": 1,
+      "n_test": 25,
+      "n_train": 97,
+      "test_brier_mean_baseline": 0.6737519999999999,
+      "test_brier_mean_calibrated": 0.840830627551033,
+      "test_winner_acc_baseline": 0.32,
+      "test_winner_acc_calibrated": 0.32
+    },
+    {
+      "fold": 2,
+      "n_test": 24,
+      "n_train": 98,
+      "test_brier_mean_baseline": 0.5690666666666666,
+      "test_brier_mean_calibrated": 0.47205979445057017,
+      "test_winner_acc_baseline": 0.5,
+      "test_winner_acc_calibrated": 0.6666666666666666
+    },
+    {
+      "fold": 3,
+      "n_test": 24,
+      "n_train": 98,
+      "test_brier_mean_baseline": 0.49826666666666664,
+      "test_brier_mean_calibrated": 0.6099517298524593,
+      "test_winner_acc_baseline": 0.6666666666666666,
+      "test_winner_acc_calibrated": 0.6666666666666666
+    },
+    {
+      "fold": 4,
+      "n_test": 24,
+      "n_train": 98,
+      "test_brier_mean_baseline": 0.43663333333333326,
+      "test_brier_mean_calibrated": 0.43087670183716775,
+      "test_winner_acc_baseline": 0.6666666666666666,
+      "test_winner_acc_calibrated": 0.8333333333333334
+    }
+  ],
+  "generated_at": "2026-06-20T01:09:59.591544+00:00",
+  "hypothesis": "Isotonic calibration on the llama3.3:70b graded predictions yields a real Brier-score lift over raw 70B probabilities under 5-fold CV with paired-bootstrap CI on the per-match delta.",
+  "hypothesis_id": "h-033",
+  "method": "per-class one-vs-rest isotonic regression, 5-fold CV, paired bootstrap on per-match Brier delta",
+  "n_distinct_fixtures": 30,
+  "n_folds": 5,
+  "n_graded": 122,
+  "note_on_sample_size": "h-033 re-run with the larger now-115+ graded 70B sample. The 70B model has logged multiple prediction snapshots per fixture in wc2026_predictions.db; the script uses every row that wc2026_db.actual_for() resolves to a verified score, without DISTINCT dedupe. Group-aware CV (GroupKFold on (home, away)) keeps duplicate rows for the same fixture in the same fold so fold scores stay independent. No rows are fabricated.",
+  "parent_id": "h-012",
+  "real_lift": false,
+  "real_lift_brier": false,
+  "rng_seed": 20260620,
+  "sign_convention": "brier_delta = calibrated - baseline; negative = better; real_lift_brier = ci_95[1] < 0",
+  "source": "wc2026_predictions.db model='llama3.3:70b' all rows with non-null p_home/p_draw/p_away, joined to verified actuals via scripts.wc2026_db.actual_for; isotonic fit via sklearn.isotonic.IsotonicRegression one-vs-rest per class with post-fit row renormalisation; 5-fold GroupKFold on (home, away) groups, group order shuffled with random_state=20260620; paired bootstrap with 300 reps.",
+  "splitter": "GroupKFold(n=5) on (home, away) groups",
+  "verified": true,
+  "winner_acc_after": 0.557377,
+  "winner_acc_baseline": 0.491803,
+  "winner_acc_before": 0.491803,
+  "winner_acc_calibrated": 0.557377
+}
