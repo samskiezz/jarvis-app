@@ -19,6 +19,8 @@ import JarvisAssistant from "@/components/Jarvis/JarvisAssistant";
 import DomainRail from "@/components/DomainRail";
 import CommandPalette from "@/components/CommandPalette";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import PlatformStatusStrip from "@/components/overnight/PlatformStatusStrip";
+import AnomalyDrawer from "@/components/overnight/AnomalyDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -45,6 +47,8 @@ export function AppLayout({ children }) {
 
       {/* ── PAGE BODY ────────────────────────────────────────────────────── */}
       <main style={{ flex: 1, minWidth: 0, position: "relative" }}>
+        {/* platform status strip — subsystem LEDs + object/job counts */}
+        <PlatformStatusStrip />
         {/* slim top breadcrumb / status strip — the machine voice, in mono */}
         <div style={{ position: "sticky", top: 0, zIndex: 40, height: 26, display: "flex", alignItems: "center",
           gap: 8, padding: "0 16px", background: S.glassRail, backdropFilter: S.blur,
@@ -72,6 +76,9 @@ export function AppLayout({ children }) {
 
       {/* Keyboard-first navigation layer (?, /, [ ], g-chord) */}
       <KeyboardShortcuts />
+
+      {/* F2: Anomaly feed — slide-in drawer listing /v1/jarvis/analytics/anomalies */}
+      <AnomalyDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

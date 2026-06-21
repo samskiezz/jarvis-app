@@ -13,6 +13,15 @@ import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
+import CommandPalette from '@/components/cinematic/CommandPalette';
+import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
+import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
+import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
+import MarketsTicker from '@/components/cinematic/MarketsTicker';
+import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
+import RiskBoard from '@/components/cinematic/RiskBoard';
+import TaskBoard from '@/components/cinematic/TaskBoard';
+import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -34,6 +43,23 @@ function App() {
                 so a fresh deploy initialises before you even pick a destination. */}
             <FirstRunSetup />
             <JarvisBrain />
+            <CommandPalette />
+            {/* F02: "Hey JARVIS" always-listening wake word toggle */}
+            <HeyJarvisListener />
+            {/* F04: keyboard scene-jump (1–0 → scenes; Esc → home) */}
+            <SceneKeyboardNav />
+            {/* F06: live world incident feed — earthquakes from /functions/getLiveIntel */}
+            <WorldIncidentFeed />
+            {/* F07: markets ticker — getLiveIntel crypto+FX scrolling strip; "JARVIS, markets" speaks top movers */}
+            <MarketsTicker />
+            {/* F08: entity quick-search — /v1/graph/subgraph + /entities/IntelProfile; Ctrl+Shift+E or "JARVIS, find X" */}
+            <EntityQuickSearch />
+            {/* F09: risk board — /entities/RiskSignal severity-sorted cards; critical signals pulse red */}
+            <RiskBoard />
+            {/* F10: task board — /entities/Task live mission cards with status; "JARVIS, tasks" or "JARVIS, missions" opens panel */}
+            <TaskBoard />
+            {/* F11: datasets browser — /v1/datasets catalog with row counts; DATA toggle or "JARVIS, datasets" */}
+            <DatasetsBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
