@@ -35,6 +35,7 @@ import ScenarioRunsPanel from "@/components/overnight/ScenarioRunsPanel";
 import RemindersPanel from "@/components/overnight/RemindersPanel";
 import SkillScorecardPanel from "@/components/overnight/SkillScorecardPanel";
 import KnowledgeTimelinePanel from "@/components/overnight/KnowledgeTimelinePanel";
+import SourceConnectorsDrawer from "@/components/overnight/SourceConnectorsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -129,6 +130,9 @@ export function AppLayout({ children }) {
 
       {/* F19: Knowledge Timeline Panel — right-edge slide-in at 20%; brain log+daily entries from GET /v1/brain/timeline */}
       <KnowledgeTimelinePanel />
+
+      {/* F20: Source Connectors Drawer — left-edge slide-in at 20%; registered connectors from GET /v1/sources */}
+      <SourceConnectorsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
