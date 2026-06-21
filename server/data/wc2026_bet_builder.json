@@ -1,7 +1,7 @@
 {
   "verified": true,
   "source": "scripts/wc2026_bet_builder.py — three-spread bet builder over worldcup_prediction_engine predictions; odds via provider abstraction (mock/placeholder labelled when books unreachable); official SBS watch links attached per leg.",
-  "generated_at": "2026-06-20T14:58:25+00:00",
+  "generated_at": "2026-06-21T01:16:22+00:00",
   "output": {
     "request": {
       "stake_amount": 90.0,
@@ -24,7 +24,12 @@
       {
         "match_id": "35",
         "match": "Ecuador vs Curaçao",
-        "reason": "edge -0.06 < min -0.03"
+        "reason": "edge -0.05 < min -0.03"
+      },
+      {
+        "match_id": "36",
+        "match": "Tunisia vs Japan",
+        "reason": "edge -0.03 < min -0.03"
       },
       {
         "match_id": "37",
@@ -127,18 +132,8 @@
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "34",
-        "match": "Germany vs Côte d'Ivoire",
-        "reason": "outside requested leg count"
-      },
-      {
         "match_id": "48",
         "match": "Colombia vs DR Congo",
-        "reason": "outside requested leg count"
-      },
-      {
-        "match_id": "36",
-        "match": "Tunisia vs Japan",
         "reason": "outside requested leg count"
       },
       {
@@ -147,23 +142,18 @@
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "68",
-        "match": "Croatia vs Ghana",
-        "reason": "outside requested leg count"
-      },
-      {
         "match_id": "41",
         "match": "Argentina vs Austria",
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "55",
-        "match": "Ecuador vs Germany",
+        "match_id": "68",
+        "match": "Croatia vs Ghana",
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "33",
-        "match": "Netherlands vs Sweden",
+        "match_id": "55",
+        "match": "Ecuador vs Germany",
         "reason": "outside requested leg count"
       },
       {
@@ -228,16 +218,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "72",
             "team_a": "Jordan",
             "team_b": "Argentina",
             "kickoff_time": "2026-06-28T02:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -247,11 +237,11 @@
           "market": "1x2",
           "selected_outcome": "H",
           "model_probability": 0.7794,
-          "blended_odds": 1.2,
-          "implied_probability": 0.8333,
-          "fair_bookmaker_probability": 0.8023,
-          "edge": -0.0229,
-          "expected_value": -0.0647,
+          "blended_odds": 1.19,
+          "implied_probability": 0.84,
+          "fair_bookmaker_probability": 0.8036,
+          "edge": -0.0241,
+          "expected_value": -0.0721,
           "odds_are_real": true,
           "odds_source": "espn_draftkings",
           "treatment": "HEDGE",
@@ -260,16 +250,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "52",
             "team_a": "Morocco",
             "team_b": "Haiti",
             "kickoff_time": "2026-06-24T22:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -292,26 +282,26 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "45",
             "team_a": "Portugal",
             "team_b": "Uzbekistan",
             "kickoff_time": "2026-06-23T17:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         }
       ],
-      "combined_odds": 1.71,
+      "combined_odds": 1.7,
       "combined_model_probability": 0.491672,
-      "bookmaker_implied_probability": 0.583567,
-      "expected_value": -0.1575,
-      "expected_value_dollars": -7.09,
-      "potential_return": 77.11,
-      "potential_profit": 32.11,
+      "bookmaker_implied_probability": 0.588471,
+      "expected_value": -0.1645,
+      "expected_value_dollars": -7.4,
+      "potential_return": 76.47,
+      "potential_profit": 31.47,
       "risk_rating": "Low"
     },
     "variation_b": {
@@ -340,16 +330,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "72",
             "team_a": "Jordan",
             "team_b": "Argentina",
             "kickoff_time": "2026-06-28T02:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -360,10 +350,10 @@
           "selected_outcome": "1X",
           "model_probability": 0.9237,
           "blended_odds": 1.02,
-          "implied_probability": 0.9762,
-          "fair_bookmaker_probability": 0.9398,
-          "edge": -0.0161,
-          "expected_value": -0.0538,
+          "implied_probability": 0.9829,
+          "fair_bookmaker_probability": 0.9402,
+          "edge": -0.0165,
+          "expected_value": -0.0602,
           "odds_are_real": true,
           "odds_source": "espn_draftkings",
           "treatment": "HEDGE",
@@ -372,16 +362,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "52",
             "team_a": "Morocco",
             "team_b": "Haiti",
             "kickoff_time": "2026-06-24T22:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -404,16 +394,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "45",
             "team_a": "Portugal",
             "team_b": "Uzbekistan",
             "kickoff_time": "2026-06-23T17:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         }
       ],
@@ -452,16 +442,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "72",
             "team_a": "Jordan",
             "team_b": "Argentina",
             "kickoff_time": "2026-06-28T02:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -471,11 +461,11 @@
           "market": "1x2",
           "selected_outcome": "H",
           "model_probability": 0.7794,
-          "blended_odds": 1.2,
-          "implied_probability": 0.8333,
-          "fair_bookmaker_probability": 0.8023,
-          "edge": -0.0229,
-          "expected_value": -0.0647,
+          "blended_odds": 1.19,
+          "implied_probability": 0.84,
+          "fair_bookmaker_probability": 0.8036,
+          "edge": -0.0241,
+          "expected_value": -0.0721,
           "odds_are_real": true,
           "odds_source": "espn_draftkings",
           "treatment": "HEDGE",
@@ -484,16 +474,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "52",
             "team_a": "Morocco",
             "team_b": "Haiti",
             "kickoff_time": "2026-06-24T22:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -516,16 +506,16 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "45",
             "team_a": "Portugal",
             "team_b": "Uzbekistan",
             "kickoff_time": "2026-06-23T17:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         },
         {
@@ -548,32 +538,32 @@
           "watch_link": {
             "provider": "SBS On Demand",
             "label": "Watch Live on SBS",
-            "url": "https://www.sbs.com.au/ondemand/watch/2498445891635",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
             "status": "upcoming",
             "match_id": "67",
             "team_a": "Panama",
             "team_b": "England",
             "kickoff_time": "2026-06-27T21:00:00Z",
-            "source_type": "upcoming",
-            "confidence": "exact",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
             "requires_location": "Australia",
-            "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
         }
       ],
-      "combined_odds": 2.12,
+      "combined_odds": 2.11,
       "combined_model_probability": 0.39383,
-      "bookmaker_implied_probability": 0.470618,
-      "expected_value": -0.1632,
-      "expected_value_dollars": -2.94,
-      "potential_return": 38.25,
-      "potential_profit": 20.25,
+      "bookmaker_implied_probability": 0.474573,
+      "expected_value": -0.1701,
+      "expected_value_dollars": -3.06,
+      "potential_return": 37.93,
+      "potential_profit": 19.93,
       "risk_rating": "Low"
     },
     "total_outlay": 90.0,
-    "best_case_return": 77.11,
-    "best_case_profit": -12.89,
-    "weighted_expected_value": -14.11,
+    "best_case_return": 76.47,
+    "best_case_profit": -13.53,
+    "weighted_expected_value": -14.54,
     "spread_coverage_score": 0.582702,
     "coverage_cost": 5,
     "coverage_efficiency": 0.11654,
@@ -606,16 +596,16 @@
         "watch_link": {
           "provider": "SBS On Demand",
           "label": "Watch Live on SBS",
-          "url": "https://www.sbs.com.au/ondemand/watch/2498448451837",
+          "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
           "status": "upcoming",
           "match_id": "72",
           "team_a": "Jordan",
           "team_b": "Argentina",
           "kickoff_time": "2026-06-28T02:00:00Z",
-          "source_type": "upcoming",
-          "confidence": "exact",
+          "source_type": "live_upcoming_collection",
+          "confidence": "collection",
           "requires_location": "Australia",
-          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
         }
       },
       {
@@ -630,22 +620,22 @@
         "b": "1X",
         "c": "H",
         "c_is_alt": false,
-        "a_odds": 1.2,
+        "a_odds": 1.19,
         "b_odds": 1.02,
-        "c_odds": 1.2,
+        "c_odds": 1.19,
         "watch_link": {
           "provider": "SBS On Demand",
           "label": "Watch Live on SBS",
-          "url": "https://www.sbs.com.au/ondemand/watch/2498372675530",
+          "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
           "status": "upcoming",
           "match_id": "52",
           "team_a": "Morocco",
           "team_b": "Haiti",
           "kickoff_time": "2026-06-24T22:00:00Z",
-          "source_type": "upcoming",
-          "confidence": "exact",
+          "source_type": "live_upcoming_collection",
+          "confidence": "collection",
           "requires_location": "Australia",
-          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
         }
       },
       {
@@ -666,16 +656,16 @@
         "watch_link": {
           "provider": "SBS On Demand",
           "label": "Watch Live on SBS",
-          "url": "https://www.sbs.com.au/ondemand/watch/2498369603519",
+          "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
           "status": "upcoming",
           "match_id": "45",
           "team_a": "Portugal",
           "team_b": "Uzbekistan",
           "kickoff_time": "2026-06-23T17:00:00Z",
-          "source_type": "upcoming",
-          "confidence": "exact",
+          "source_type": "live_upcoming_collection",
+          "confidence": "collection",
           "requires_location": "Australia",
-          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
         }
       },
       {
@@ -696,30 +686,30 @@
         "watch_link": {
           "provider": "SBS On Demand",
           "label": "Watch Live on SBS",
-          "url": "https://www.sbs.com.au/ondemand/watch/2498445891635",
+          "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
           "status": "upcoming",
           "match_id": "67",
           "team_a": "Panama",
           "team_b": "England",
           "kickoff_time": "2026-06-27T21:00:00Z",
-          "source_type": "upcoming",
-          "confidence": "exact",
+          "source_type": "live_upcoming_collection",
+          "confidence": "collection",
           "requires_location": "Australia",
-          "notes": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights."
+          "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
         }
       }
     ],
     "exploit_window": {
-      "score": 28.5,
+      "score": 26.9,
       "level": "HIGH",
       "reasons": [
-        "40 group-stage fixtures available",
-        "19 strong favourite mismatches found",
+        "38 group-stage fixtures available",
+        "18 strong favourite mismatches found",
         "5 fixtures carry elevated draw risk",
         "no knockout volatility yet — long-leg multis still viable"
       ],
-      "n_group": 40,
-      "n_strong": 19,
+      "n_group": 38,
+      "n_strong": 18,
       "n_draw_risk": 5,
       "n_knockout": 0
     },
