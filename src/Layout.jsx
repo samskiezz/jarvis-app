@@ -33,6 +33,7 @@ import GpuTierPill from "@/components/overnight/GpuTierPill";
 import GraphCentralityDrawer from "@/components/overnight/GraphCentralityDrawer";
 import ScenarioRunsPanel from "@/components/overnight/ScenarioRunsPanel";
 import RemindersPanel from "@/components/overnight/RemindersPanel";
+import SkillScorecardPanel from "@/components/overnight/SkillScorecardPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -121,6 +122,9 @@ export function AppLayout({ children }) {
 
       {/* F16: Reminders Panel — left-edge slide-in at 75%; pending reminders from GET /reminders/list */}
       <RemindersPanel />
+
+      {/* F17: Skill Scorecard Panel — left-edge slide-in at 50%; AIP self-improvement metrics from GET /v1/aip/skill */}
+      <SkillScorecardPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
