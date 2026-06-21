@@ -26,6 +26,8 @@ import AgentToolsTooltip from "@/components/overnight/AgentToolsTooltip";
 import AutobuildPill from "@/components/overnight/AutobuildPill";
 import OpsCasesPanel from "@/components/overnight/OpsCasesPanel";
 import VitalsGlance from "@/components/overnight/VitalsGlance";
+import TelemetryTicker from "@/components/cinematic/TelemetryTicker";
+import PipelineRunsDrawer from "@/components/overnight/PipelineRunsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -63,6 +65,8 @@ export function AppLayout({ children }) {
           <span style={{ color: S.text, opacity: 0.5 }}>/</span>
           <span style={{ fontSize: S.fs.xs, color: S.textHi, letterSpacing: 1 }}>{(current?.label || "").toUpperCase()}</span>
           <div style={{ flex: 1 }} />
+          {/* Feature 8: live telemetry ticker — CPU/mem/load + brain nodes/synapses, 15-s poll */}
+          <TelemetryTicker />
           {/* F7: vitals glance — HR / HRV / SpO2 from /v1/vitals/latest, 5-min poll */}
           <VitalsGlance />
           {/* F5: autobuild status pill — /v1/jarvis/system/autobuild/status, 90-s poll */}
@@ -95,6 +99,9 @@ export function AppLayout({ children }) {
 
       {/* F6: Ops Cases Panel — left-edge slide-in; open cases from GET /v1/cases */}
       <OpsCasesPanel />
+
+      {/* F9: Pipeline Runs Drawer — right-edge slide-in; runs from GET /v1/run-builder/runs */}
+      <PipelineRunsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
