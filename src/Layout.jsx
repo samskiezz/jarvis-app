@@ -24,6 +24,7 @@ import AnomalyDrawer from "@/components/overnight/AnomalyDrawer";
 import AlertBadge from "@/components/overnight/AlertBadge";
 import AgentToolsTooltip from "@/components/overnight/AgentToolsTooltip";
 import AutobuildPill from "@/components/overnight/AutobuildPill";
+import OpsCasesPanel from "@/components/overnight/OpsCasesPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -88,6 +89,9 @@ export function AppLayout({ children }) {
 
       {/* F2: Anomaly feed — slide-in drawer listing /v1/jarvis/analytics/anomalies */}
       <AnomalyDrawer />
+
+      {/* F6: Ops Cases Panel — left-edge slide-in; open cases from GET /v1/cases */}
+      <OpsCasesPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
