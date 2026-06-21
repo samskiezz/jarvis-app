@@ -30,6 +30,7 @@ import TelemetryTicker from "@/components/cinematic/TelemetryTicker";
 import PipelineRunsDrawer from "@/components/overnight/PipelineRunsDrawer";
 import DecisionLedgerPanel from "@/components/overnight/DecisionLedgerPanel";
 import GpuTierPill from "@/components/overnight/GpuTierPill";
+import GraphCentralityDrawer from "@/components/overnight/GraphCentralityDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -109,6 +110,9 @@ export function AppLayout({ children }) {
 
       {/* F11: Decision Ledger Panel — right-edge slide-in; decisions from GET /v1/decision/list */}
       <DecisionLedgerPanel />
+
+      {/* F13: Graph Centrality Drawer — right-edge slide-in at 80%; top entities by influence from GET /v1/graph/centrality */}
+      <GraphCentralityDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
