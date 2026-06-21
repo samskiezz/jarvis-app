@@ -23,6 +23,7 @@ import PlatformStatusStrip from "@/components/overnight/PlatformStatusStrip";
 import AnomalyDrawer from "@/components/overnight/AnomalyDrawer";
 import AlertBadge from "@/components/overnight/AlertBadge";
 import AgentToolsTooltip from "@/components/overnight/AgentToolsTooltip";
+import AutobuildPill from "@/components/overnight/AutobuildPill";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -60,6 +61,8 @@ export function AppLayout({ children }) {
           <span style={{ color: S.text, opacity: 0.5 }}>/</span>
           <span style={{ fontSize: S.fs.xs, color: S.textHi, letterSpacing: 1 }}>{(current?.label || "").toUpperCase()}</span>
           <div style={{ flex: 1 }} />
+          {/* F5: autobuild status pill — /v1/jarvis/system/autobuild/status, 90-s poll */}
+          <AutobuildPill />
           {/* F4: agent tools tooltip — hover to see /v1/jarvis/agent/tools, session-cached */}
           <AgentToolsTooltip />
           {/* open alert count — red badge, hides when zero */}
