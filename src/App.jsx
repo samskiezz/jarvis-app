@@ -24,6 +24,7 @@ import TaskBoard from '@/components/cinematic/TaskBoard';
 import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 import InvestigationsList from '@/components/cinematic/InvestigationsList';
 import AlertToasts from '@/components/cinematic/AlertToasts';
+import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -66,6 +67,8 @@ function App() {
             <InvestigationsList />
             {/* F15: alert toasts — /v1/alerts poll every 20 s; toast HIGH/CRITICAL; speak CRITICAL via TTS */}
             <AlertToasts />
+            {/* F18: JARVIS boot sequence — once per session; fetches real system+brain counts; cinematic terminal + "all systems online" TTS on click */}
+            <JarvisBootSequence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

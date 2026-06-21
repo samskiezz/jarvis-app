@@ -34,6 +34,7 @@ import GraphCentralityDrawer from "@/components/overnight/GraphCentralityDrawer"
 import ScenarioRunsPanel from "@/components/overnight/ScenarioRunsPanel";
 import RemindersPanel from "@/components/overnight/RemindersPanel";
 import SkillScorecardPanel from "@/components/overnight/SkillScorecardPanel";
+import KnowledgeTimelinePanel from "@/components/overnight/KnowledgeTimelinePanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -125,6 +126,9 @@ export function AppLayout({ children }) {
 
       {/* F17: Skill Scorecard Panel — left-edge slide-in at 50%; AIP self-improvement metrics from GET /v1/aip/skill */}
       <SkillScorecardPanel />
+
+      {/* F19: Knowledge Timeline Panel — right-edge slide-in at 20%; brain log+daily entries from GET /v1/brain/timeline */}
+      <KnowledgeTimelinePanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
