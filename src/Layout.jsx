@@ -31,6 +31,7 @@ import PipelineRunsDrawer from "@/components/overnight/PipelineRunsDrawer";
 import DecisionLedgerPanel from "@/components/overnight/DecisionLedgerPanel";
 import GpuTierPill from "@/components/overnight/GpuTierPill";
 import GraphCentralityDrawer from "@/components/overnight/GraphCentralityDrawer";
+import ScenarioRunsPanel from "@/components/overnight/ScenarioRunsPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -113,6 +114,9 @@ export function AppLayout({ children }) {
 
       {/* F13: Graph Centrality Drawer — right-edge slide-in at 80%; top entities by influence from GET /v1/graph/centrality */}
       <GraphCentralityDrawer />
+
+      {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
+      <ScenarioRunsPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
