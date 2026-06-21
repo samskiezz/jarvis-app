@@ -29,6 +29,7 @@ import VitalsGlance from "@/components/overnight/VitalsGlance";
 import TelemetryTicker from "@/components/cinematic/TelemetryTicker";
 import PipelineRunsDrawer from "@/components/overnight/PipelineRunsDrawer";
 import DecisionLedgerPanel from "@/components/overnight/DecisionLedgerPanel";
+import GpuTierPill from "@/components/overnight/GpuTierPill";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -72,6 +73,8 @@ export function AppLayout({ children }) {
           <VitalsGlance />
           {/* F5: autobuild status pill — /v1/jarvis/system/autobuild/status, 90-s poll */}
           <AutobuildPill />
+          {/* F12: GPU tier pill — /v1/gpu/status, 2-min poll; SGLang/Ollama health */}
+          <GpuTierPill />
           {/* F4: agent tools tooltip — hover to see /v1/jarvis/agent/tools, session-cached */}
           <AgentToolsTooltip />
           {/* open alert count — red badge, hides when zero */}
