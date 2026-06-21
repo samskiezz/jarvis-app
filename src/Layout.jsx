@@ -21,6 +21,7 @@ import CommandPalette from "@/components/CommandPalette";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import PlatformStatusStrip from "@/components/overnight/PlatformStatusStrip";
 import AnomalyDrawer from "@/components/overnight/AnomalyDrawer";
+import AlertBadge from "@/components/overnight/AlertBadge";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -58,6 +59,8 @@ export function AppLayout({ children }) {
           <span style={{ color: S.text, opacity: 0.5 }}>/</span>
           <span style={{ fontSize: S.fs.xs, color: S.textHi, letterSpacing: 1 }}>{(current?.label || "").toUpperCase()}</span>
           <div style={{ flex: 1 }} />
+          {/* open alert count — red badge, hides when zero */}
+          <AlertBadge />
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("jarvis:open-palette"))}
             title="Command palette (⌘K)"

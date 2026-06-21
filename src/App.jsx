@@ -22,7 +22,6 @@ import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
 import RiskBoard from '@/components/cinematic/RiskBoard';
 import TaskBoard from '@/components/cinematic/TaskBoard';
 import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
-import OvernightPanels from '@/components/overnight/OvernightPanels';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -61,8 +60,6 @@ function App() {
             <TaskBoard />
             {/* F11: datasets browser — /v1/datasets catalog with row counts; DATA toggle or "JARVIS, datasets" */}
             <DatasetsBrowser />
-            {/* Overnight Panels launcher — one ◈ button (bottom-left) opens the 109 loop-built panels on demand */}
-            <OvernightPanels />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
