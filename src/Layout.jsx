@@ -28,6 +28,7 @@ import OpsCasesPanel from "@/components/overnight/OpsCasesPanel";
 import VitalsGlance from "@/components/overnight/VitalsGlance";
 import TelemetryTicker from "@/components/cinematic/TelemetryTicker";
 import PipelineRunsDrawer from "@/components/overnight/PipelineRunsDrawer";
+import DecisionLedgerPanel from "@/components/overnight/DecisionLedgerPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -102,6 +103,9 @@ export function AppLayout({ children }) {
 
       {/* F9: Pipeline Runs Drawer — right-edge slide-in; runs from GET /v1/run-builder/runs */}
       <PipelineRunsDrawer />
+
+      {/* F11: Decision Ledger Panel — right-edge slide-in; decisions from GET /v1/decision/list */}
+      <DecisionLedgerPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
