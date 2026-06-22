@@ -41,6 +41,7 @@ import SwarmJobsDrawer from "@/components/overnight/SwarmJobsDrawer";
 import ContactsDirectoryDrawer from "@/components/overnight/ContactsDirectoryDrawer";
 import InvestmentSnapshotDrawer from "@/components/overnight/InvestmentSnapshotDrawer";
 import ReportsBrowserDrawer from "@/components/overnight/ReportsBrowserDrawer";
+import ThoughtPacksDrawer from "@/components/overnight/ThoughtPacksDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -153,6 +154,9 @@ export function AppLayout({ children }) {
 
       {/* F26: Reports Browser Drawer — left-edge slide-in at 8%; saved reports from GET /v1/reports */}
       <ReportsBrowserDrawer />
+
+      {/* F27: Thought Packs Drawer — right-edge slide-in at 95%; compressed memory packs from GET /v1/compress/list */}
+      <ThoughtPacksDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
