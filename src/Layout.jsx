@@ -39,6 +39,7 @@ import SourceConnectorsDrawer from "@/components/overnight/SourceConnectorsDrawe
 import ActivityFeedPanel from "@/components/overnight/ActivityFeedPanel";
 import SwarmJobsDrawer from "@/components/overnight/SwarmJobsDrawer";
 import ContactsDirectoryDrawer from "@/components/overnight/ContactsDirectoryDrawer";
+import InvestmentSnapshotDrawer from "@/components/overnight/InvestmentSnapshotDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -145,6 +146,9 @@ export function AppLayout({ children }) {
 
       {/* F24: Contacts Directory Drawer — right-edge slide-in at 50%; contacts from GET /entities/Contact */}
       <ContactsDirectoryDrawer />
+
+      {/* F25: Investment Snapshot Drawer — right-edge slide-in at 5%; holdings from GET /entities/Investment */}
+      <InvestmentSnapshotDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
