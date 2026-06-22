@@ -50,6 +50,7 @@ import GraphCommunitiesView from "@/components/overnight/GraphCommunitiesView";
 import AutomationRulesPanel from "@/components/overnight/AutomationRulesPanel";
 import ProofPacksDrawer from "@/components/overnight/ProofPacksDrawer";
 import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
+import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -170,6 +171,9 @@ export function AppLayout({ children }) {
 
       {/* F24: Contacts Directory Drawer — right-edge slide-in at 50%; contacts from GET /entities/Contact */}
       <ContactsDirectoryDrawer />
+
+      {/* F41: Messages Inbox Drawer — right-edge slide-in at 57%; recent messages from GET /v1/messages/recent */}
+      <MessagesInboxDrawer />
 
       {/* F25: Investment Snapshot Drawer — right-edge slide-in at 5%; holdings from GET /entities/Investment */}
       <InvestmentSnapshotDrawer />
