@@ -48,6 +48,7 @@ import RitualDeckPanel from "@/components/overnight/RitualDeckPanel";
 import SecondBrainCatalog from "@/components/overnight/SecondBrainCatalog";
 import GraphCommunitiesView from "@/components/overnight/GraphCommunitiesView";
 import AutomationRulesPanel from "@/components/overnight/AutomationRulesPanel";
+import ProofPacksDrawer from "@/components/overnight/ProofPacksDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -147,6 +148,9 @@ export function AppLayout({ children }) {
 
       {/* F17: Skill Scorecard Panel — left-edge slide-in at 50%; AIP self-improvement metrics from GET /v1/aip/skill */}
       <SkillScorecardPanel />
+
+      {/* F39: Proof Packs Drawer — left-edge slide-in at 60%; evidence packs from GET /v1/proofpack/list */}
+      <ProofPacksDrawer />
 
       {/* F19: Knowledge Timeline Panel — right-edge slide-in at 20%; brain log+daily entries from GET /v1/brain/timeline */}
       <KnowledgeTimelinePanel />
