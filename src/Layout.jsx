@@ -37,6 +37,7 @@ import SkillScorecardPanel from "@/components/overnight/SkillScorecardPanel";
 import KnowledgeTimelinePanel from "@/components/overnight/KnowledgeTimelinePanel";
 import SourceConnectorsDrawer from "@/components/overnight/SourceConnectorsDrawer";
 import ActivityFeedPanel from "@/components/overnight/ActivityFeedPanel";
+import SwarmJobsDrawer from "@/components/overnight/SwarmJobsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -137,6 +138,9 @@ export function AppLayout({ children }) {
 
       {/* F22: Activity Feed Panel — right-edge slide-in at 90%; unified note+audit feed from GET /v1/activity */}
       <ActivityFeedPanel />
+
+      {/* F23: Swarm Jobs Drawer — left-edge slide-in at 88%; running agent jobs from GET /entities/SwarmJob */}
+      <SwarmJobsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
