@@ -42,6 +42,7 @@ import ContactsDirectoryDrawer from "@/components/overnight/ContactsDirectoryDra
 import InvestmentSnapshotDrawer from "@/components/overnight/InvestmentSnapshotDrawer";
 import ReportsBrowserDrawer from "@/components/overnight/ReportsBrowserDrawer";
 import ThoughtPacksDrawer from "@/components/overnight/ThoughtPacksDrawer";
+import SolarEnergyPanel from "@/components/overnight/SolarEnergyPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -157,6 +158,9 @@ export function AppLayout({ children }) {
 
       {/* F27: Thought Packs Drawer — right-edge slide-in at 95%; compressed memory packs from GET /v1/compress/list */}
       <ThoughtPacksDrawer />
+
+      {/* F28: Solar Energy Panel — left-edge slide-in at 93%; live inverter data from GET /v1/solar/now */}
+      <SolarEnergyPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
