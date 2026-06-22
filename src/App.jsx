@@ -25,6 +25,7 @@ import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 import InvestigationsList from '@/components/cinematic/InvestigationsList';
 import AlertToasts from '@/components/cinematic/AlertToasts';
 import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
+import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -69,6 +70,8 @@ function App() {
             <AlertToasts />
             {/* F18: JARVIS boot sequence — once per session; fetches real system+brain counts; cinematic terminal + "all systems online" TTS on click */}
             <JarvisBootSequence />
+            {/* F21: live clock + real process uptime from /v1/jarvis/system/status (30-s poll); bottom-left HUD; "JARVIS, time" speaks it */}
+            <LiveClockUptime />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

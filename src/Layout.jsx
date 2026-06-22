@@ -36,6 +36,7 @@ import RemindersPanel from "@/components/overnight/RemindersPanel";
 import SkillScorecardPanel from "@/components/overnight/SkillScorecardPanel";
 import KnowledgeTimelinePanel from "@/components/overnight/KnowledgeTimelinePanel";
 import SourceConnectorsDrawer from "@/components/overnight/SourceConnectorsDrawer";
+import ActivityFeedPanel from "@/components/overnight/ActivityFeedPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -133,6 +134,9 @@ export function AppLayout({ children }) {
 
       {/* F20: Source Connectors Drawer — left-edge slide-in at 20%; registered connectors from GET /v1/sources */}
       <SourceConnectorsDrawer />
+
+      {/* F22: Activity Feed Panel — right-edge slide-in at 90%; unified note+audit feed from GET /v1/activity */}
+      <ActivityFeedPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
