@@ -38,6 +38,7 @@ import KnowledgeTimelinePanel from "@/components/overnight/KnowledgeTimelinePane
 import SourceConnectorsDrawer from "@/components/overnight/SourceConnectorsDrawer";
 import ActivityFeedPanel from "@/components/overnight/ActivityFeedPanel";
 import SwarmJobsDrawer from "@/components/overnight/SwarmJobsDrawer";
+import ContactsDirectoryDrawer from "@/components/overnight/ContactsDirectoryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -141,6 +142,9 @@ export function AppLayout({ children }) {
 
       {/* F23: Swarm Jobs Drawer — left-edge slide-in at 88%; running agent jobs from GET /entities/SwarmJob */}
       <SwarmJobsDrawer />
+
+      {/* F24: Contacts Directory Drawer — right-edge slide-in at 50%; contacts from GET /entities/Contact */}
+      <ContactsDirectoryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
