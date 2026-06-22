@@ -28,6 +28,7 @@ import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
 import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
 import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
+import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -78,6 +79,8 @@ function App() {
             <BrainGrowthSparkline />
             {/* F30: multi-voice TTS toggle — ◈ VOICE button at bottom; picks ash/fable/onyx; persists to localStorage; feeds voice param on every /v1/voice/tts POST */}
             <MultiVoiceToggle />
+            {/* F35: service diagnostics — ⬡ DIAG button; polls /v1/jarvis/system/status every 30 s; per-service health board + CPU/MEM/LOAD tiles; "JARVIS, service health" voice trigger */}
+            <ServiceDiagnostics />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

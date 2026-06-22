@@ -47,6 +47,7 @@ import HistoryLakeCatalog from "@/components/overnight/HistoryLakeCatalog";
 import RitualDeckPanel from "@/components/overnight/RitualDeckPanel";
 import SecondBrainCatalog from "@/components/overnight/SecondBrainCatalog";
 import GraphCommunitiesView from "@/components/overnight/GraphCommunitiesView";
+import AutomationRulesPanel from "@/components/overnight/AutomationRulesPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -131,6 +132,9 @@ export function AppLayout({ children }) {
 
       {/* F13: Graph Centrality Drawer — right-edge slide-in at 80%; top entities by influence from GET /v1/graph/centrality */}
       <GraphCentralityDrawer />
+
+      {/* F36: Automation Rules Panel — right-edge slide-in at 72%; active rules from GET /v1/rules */}
+      <AutomationRulesPanel />
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
