@@ -46,6 +46,7 @@ import SolarEnergyPanel from "@/components/overnight/SolarEnergyPanel";
 import HistoryLakeCatalog from "@/components/overnight/HistoryLakeCatalog";
 import RitualDeckPanel from "@/components/overnight/RitualDeckPanel";
 import SecondBrainCatalog from "@/components/overnight/SecondBrainCatalog";
+import GraphCommunitiesView from "@/components/overnight/GraphCommunitiesView";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -166,6 +167,9 @@ export function AppLayout({ children }) {
 
       {/* F33: Second Brain Catalog — left-edge slide-in at 13%; vault overview from GET /v1/brain/catalog */}
       <SecondBrainCatalog />
+
+      {/* F34: Graph Communities View — left-edge slide-in at 2%; community partition from GET /v1/graph/communities */}
+      <GraphCommunitiesView />
 
       {/* F27: Thought Packs Drawer — right-edge slide-in at 95%; compressed memory packs from GET /v1/compress/list */}
       <ThoughtPacksDrawer />
