@@ -44,6 +44,7 @@ import ReportsBrowserDrawer from "@/components/overnight/ReportsBrowserDrawer";
 import ThoughtPacksDrawer from "@/components/overnight/ThoughtPacksDrawer";
 import SolarEnergyPanel from "@/components/overnight/SolarEnergyPanel";
 import HistoryLakeCatalog from "@/components/overnight/HistoryLakeCatalog";
+import RitualDeckPanel from "@/components/overnight/RitualDeckPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -131,6 +132,9 @@ export function AppLayout({ children }) {
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
+
+      {/* F32: Ritual Deck Panel — left-edge slide-in at 45%; configured routines from GET /v1/ritual/list */}
+      <RitualDeckPanel />
 
       {/* F16: Reminders Panel — left-edge slide-in at 75%; pending reminders from GET /reminders/list */}
       <RemindersPanel />
