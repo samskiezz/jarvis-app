@@ -43,6 +43,7 @@ import InvestmentSnapshotDrawer from "@/components/overnight/InvestmentSnapshotD
 import ReportsBrowserDrawer from "@/components/overnight/ReportsBrowserDrawer";
 import ThoughtPacksDrawer from "@/components/overnight/ThoughtPacksDrawer";
 import SolarEnergyPanel from "@/components/overnight/SolarEnergyPanel";
+import HistoryLakeCatalog from "@/components/overnight/HistoryLakeCatalog";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -92,6 +93,8 @@ export function AppLayout({ children }) {
           <AgentToolsTooltip />
           {/* open alert count — red badge, hides when zero */}
           <AlertBadge />
+          {/* F31: History Lake catalog — series count pill + floating catalog from GET /v1/history/series */}
+          <HistoryLakeCatalog />
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("jarvis:open-palette"))}
             title="Command palette (⌘K)"

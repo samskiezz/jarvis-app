@@ -26,6 +26,8 @@ import InvestigationsList from '@/components/cinematic/InvestigationsList';
 import AlertToasts from '@/components/cinematic/AlertToasts';
 import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
+import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
+import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -72,6 +74,10 @@ function App() {
             <JarvisBootSequence />
             {/* F21: live clock + real process uptime from /v1/jarvis/system/status (30-s poll); bottom-left HUD; "JARVIS, time" speaks it */}
             <LiveClockUptime />
+            {/* F29: brain-growth sparkline — polls /v1/cinematic/brain every 30 s; area chart of nodes+synapses over time; BRAIN toggle at bottom; "JARVIS, brain growth" speaks trend */}
+            <BrainGrowthSparkline />
+            {/* F30: multi-voice TTS toggle — ◈ VOICE button at bottom; picks ash/fable/onyx; persists to localStorage; feeds voice param on every /v1/voice/tts POST */}
+            <MultiVoiceToggle />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
