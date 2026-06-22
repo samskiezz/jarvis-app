@@ -40,6 +40,7 @@ import ActivityFeedPanel from "@/components/overnight/ActivityFeedPanel";
 import SwarmJobsDrawer from "@/components/overnight/SwarmJobsDrawer";
 import ContactsDirectoryDrawer from "@/components/overnight/ContactsDirectoryDrawer";
 import InvestmentSnapshotDrawer from "@/components/overnight/InvestmentSnapshotDrawer";
+import ReportsBrowserDrawer from "@/components/overnight/ReportsBrowserDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -149,6 +150,9 @@ export function AppLayout({ children }) {
 
       {/* F25: Investment Snapshot Drawer — right-edge slide-in at 5%; holdings from GET /entities/Investment */}
       <InvestmentSnapshotDrawer />
+
+      {/* F26: Reports Browser Drawer — left-edge slide-in at 8%; saved reports from GET /v1/reports */}
+      <ReportsBrowserDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
