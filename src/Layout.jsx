@@ -51,6 +51,7 @@ import AutomationRulesPanel from "@/components/overnight/AutomationRulesPanel";
 import ProofPacksDrawer from "@/components/overnight/ProofPacksDrawer";
 import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
 import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
+import SchedulesPanel from "@/components/overnight/SchedulesPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -138,6 +139,9 @@ export function AppLayout({ children }) {
 
       {/* F36: Automation Rules Panel — right-edge slide-in at 72%; active rules from GET /v1/rules */}
       <AutomationRulesPanel />
+
+      {/* F42: Schedules Panel — right-edge slide-in at 42%; JARVIS job scheduler from GET /v1/schedules */}
+      <SchedulesPanel />
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
