@@ -34,6 +34,7 @@ import GraphCentralityDrawer from "@/components/overnight/GraphCentralityDrawer"
 import ScenarioRunsPanel from "@/components/overnight/ScenarioRunsPanel";
 import RemindersPanel from "@/components/overnight/RemindersPanel";
 import SkillScorecardPanel from "@/components/overnight/SkillScorecardPanel";
+import ForecastModelsPanel from "@/components/overnight/ForecastModelsPanel";
 import KnowledgeTimelinePanel from "@/components/overnight/KnowledgeTimelinePanel";
 import SourceConnectorsDrawer from "@/components/overnight/SourceConnectorsDrawer";
 import ActivityFeedPanel from "@/components/overnight/ActivityFeedPanel";
@@ -178,6 +179,9 @@ export function AppLayout({ children }) {
 
       {/* F17: Skill Scorecard Panel — left-edge slide-in at 50%; AIP self-improvement metrics from GET /v1/aip/skill */}
       <SkillScorecardPanel />
+
+      {/* F56: Forecast Models Panel — left-edge slide-in at 55%; model registry from GET /v1/predict/models + improvement loop from GET /v1/predict/improvement */}
+      <ForecastModelsPanel />
 
       {/* F39: Proof Packs Drawer — left-edge slide-in at 60%; evidence packs from GET /v1/proofpack/list */}
       <ProofPacksDrawer />

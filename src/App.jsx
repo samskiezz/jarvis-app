@@ -34,6 +34,7 @@ import DocumentSearch from '@/components/cinematic/DocumentSearch';
 import OpsEventStream from '@/components/cinematic/OpsEventStream';
 import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
 import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
+import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -96,6 +97,8 @@ function App() {
             <GraphNetworkExplorer />
             {/* F51: scene anchor drill-down — /v1/cinematic/scene/{id}; ⚓ ANCHORS toggle at bottom; clickable anchor rows + recursive detail; Alt+A shortcut; "JARVIS, anchors" voice trigger */}
             <SceneAnchorDrillDown />
+            {/* F55: ambient reactor hum — WebAudio 60 Hz sawtooth + harmonics + LFO; ◇/◈ HUM toggle at bottom left:1012; "JARVIS, ambient" voice trigger dispatches jarvis:ambient-toggle */}
+            <AmbientReactorHum />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
