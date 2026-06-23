@@ -60,6 +60,7 @@ import OntologySearchDrawer from "@/components/overnight/OntologySearchDrawer";
 import IntentInboxDrawer from "@/components/overnight/IntentInboxDrawer";
 import WorkshopAppsDrawer from "@/components/overnight/WorkshopAppsDrawer";
 import ForgeApprovalsPanel from "@/components/overnight/ForgeApprovalsPanel";
+import RevDbHistoryDrawer from "@/components/overnight/RevDbHistoryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -147,6 +148,9 @@ export function AppLayout({ children }) {
 
       {/* F36: Automation Rules Panel — right-edge slide-in at 72%; active rules from GET /v1/rules */}
       <AutomationRulesPanel />
+
+      {/* F54: RevDB History Drawer — right-edge slide-in at 85%; knowledge commit history from GET /v1/revdb/history */}
+      <RevDbHistoryDrawer />
 
       {/* F42: Schedules Panel — right-edge slide-in at 42%; JARVIS job scheduler from GET /v1/schedules */}
       <SchedulesPanel />
