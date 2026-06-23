@@ -63,6 +63,7 @@ import WorkshopAppsDrawer from "@/components/overnight/WorkshopAppsDrawer";
 import ForgeApprovalsPanel from "@/components/overnight/ForgeApprovalsPanel";
 import RevDbHistoryDrawer from "@/components/overnight/RevDbHistoryDrawer";
 import MusicBankPanel from "@/components/overnight/MusicBankPanel";
+import TemporalAnomalyDrawer from "@/components/overnight/TemporalAnomalyDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -240,6 +241,9 @@ export function AppLayout({ children }) {
 
       {/* F57: Music Bank Panel — left-edge slide-in at 96%; ambient loops from GET /v1/music/bank + GET /v1/music/status */}
       <MusicBankPanel />
+
+      {/* F58: Temporal Anomaly Drawer — left-edge slide-in at 15%; series picker from GET /v1/history/series; anomaly scan from GET /v1/temporal/patterns?series_id= */}
+      <TemporalAnomalyDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
