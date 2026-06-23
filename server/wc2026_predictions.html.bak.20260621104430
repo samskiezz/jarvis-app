@@ -1,0 +1,1408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Jarvis Match Centre — World Cup 2026 Prediction Intelligence. Live model predictions, score projections, risk ratings, late news and tournament impact." />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self';" />
+<title>Jarvis Match Centre · World Cup 2026 Prediction Intelligence</title>
+<style>
+  :root {
+    --bg: #070A12;
+    --surface: #101624;
+    --surface-elevated: #151D2E;
+    --surface-highlight: #1B2740;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --text-primary: #F7F9FC;
+    --text-secondary: #AAB4C5;
+    --text-muted: #6F7A8D;
+    --accent: #2F80FF;
+    --accent-glow: #00D5FF;
+    --success: #35D07F;
+    --warning: #F5A524;
+    --risk: #FF4D4F;
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    --shadow-strong: 0 16px 48px rgba(0,0,0,0.55);
+    --radius: 18px;
+    --radius-sm: 12px;
+    --font-primary: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-condensed: "Roboto Condensed", "Saira Condensed", Impact, sans-serif;
+    --dock-height: 64px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes glow { 0%,100% { box-shadow: 0 0 20px rgba(47,128,255,0.15); } 50% { box-shadow: 0 0 40px rgba(47,128,255,0.35); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes scrollBounce { 0%,100% { transform: translateY(0); opacity: .7; } 50% { transform: translateY(8px); opacity: 1; } }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .hidden { display:none !important; }
+
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 100px 24px 120px;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(7,10,18,0.25) 0%, rgba(7,10,18,0.55) 45%, rgba(7,10,18,0.92) 100%),
+      radial-gradient(circle at 20% 0%, rgba(47,128,255,0.25) 0%, transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(0,213,255,0.18) 0%, transparent 35%),
+      url('asset/mc_stadium_command_centre_bg.png');
+    background-size: cover, cover, cover, cover;
+    background-position: center;
+    z-index: 0;
+  }
+  .hero-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.55; pointer-events: none; z-index: 1;
+  }
+  .hero-grid {
+    position: relative; z-index: 2;
+    max-width: 1400px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;
+    align-items: end;
+  }
+  .hero-title {
+    font-family: var(--font-condensed); font-size: clamp(48px, 9vw, 96px);
+    line-height: 0.88; font-weight: 800; letter-spacing: -0.03em;
+    margin: 0 0 14px; text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #8fbfff 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 24px rgba(47,128,255,0.25));
+  }
+  .hero-subtitle {
+    font-size: clamp(16px, 2.2vw, 22px); color: var(--text-secondary);
+    max-width: 620px; line-height: 1.5; margin-bottom: 28px;
+  }
+  .hero-badges { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    background: rgba(16,22,36,0.7); border: 1px solid var(--border-strong);
+    backdrop-filter: blur(10px);
+  }
+  .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+  .hero-stats { display: flex; gap: 32px; }
+  .hero-stat .v { font-family: var(--font-condensed); font-size: 36px; font-weight: 800; color: var(--accent-glow); }
+  .hero-stat .k { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .scroll-indicator {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    animation: scrollBounce 2s infinite; cursor: pointer;
+  }
+  .scroll-indicator svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+  /* ── Featured next-match card ─────────────────────────────────────────── */
+  .featured-card {
+    position: relative;
+    border-radius: var(--radius); overflow: hidden;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-strong);
+    transform: translateY(0); transition: transform .3s, box-shadow .3s;
+  }
+  .featured-card:hover { transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(47,128,255,0.12); }
+  .featured-card .fc-bg {
+    position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat;
+    opacity: 0.45; transition: opacity .35s; z-index: 0;
+  }
+  .featured-card:hover .fc-bg { opacity: 0.25; }
+  .featured-card .fc-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity .4s; z-index: 1;
+  }
+  .featured-card:hover .fc-video { opacity: 0.6; }
+  .featured-card > *:not(.fc-bg):not(.fc-video) { position: relative; z-index: 2; }
+  .fc-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--border); background: rgba(7,10,18,0.35); backdrop-filter: blur(8px); }
+  .fc-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-glow); }
+  .fc-kickoff { font-size: 12px; color: var(--text-secondary); }
+  .fc-body { padding: 22px 20px; text-align: center; }
+  .fc-teams { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 14px; }
+  .fc-team { text-align: center; }
+  .fc-team .flag { font-size: 52px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4)); }
+  .fc-team .name { font-size: 15px; font-weight: 700; margin-top: 6px; }
+  .fc-team .code { font-size: 11px; color: var(--text-muted); }
+  .fc-vs { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+  .fc-score { font-family: var(--font-condensed); font-size: 56px; font-weight: 800; margin: 8px 0; }
+  .fc-pick { font-size: 13px; color: var(--text-secondary); }
+  .fc-pick b { color: var(--text-primary); }
+  .fc-footer { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(7,10,18,0.45); border-top: 1px solid var(--border); gap: 10px; }
+
+  /* ── Dock ─────────────────────────────────────────────────────────────── */
+  .dock {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    z-index: 500;
+    background: rgba(7,10,18,0.92);
+    border-top: 1px solid var(--border-strong);
+    backdrop-filter: blur(20px) saturate(180%);
+    padding: 0 16px;
+  }
+  .dock-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 6px; height: var(--dock-height); }
+  .dock-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 16px; border-radius: 999px;
+    color: var(--text-muted); font-size: 12px; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    transition: all .2s; border: 1px solid transparent;
+    background: transparent; cursor: pointer;
+  }
+  .dock-item:hover { color: var(--text-primary); background: var(--surface-elevated); }
+  .dock-item.active { color: var(--accent-glow); background: rgba(47,128,255,0.12); border-color: rgba(47,128,255,0.25); }
+  .dock-item svg { width: 18px; height: 18px; }
+
+  /* ── Layout & panels ──────────────────────────────────────────────────── */
+  main { padding-bottom: calc(var(--dock-height) + 24px); }
+  .panel {
+    position: relative;
+    padding: 64px 24px;
+    border-top: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .panel:first-of-type { border-top: none; }
+  .panel-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: var(--panel-img) center/cover no-repeat;
+    opacity: 0.35;
+  }
+  .panel-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.45; pointer-events: none; z-index: 1;
+  }
+  .panel::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(7,10,18,0.78) 0%, rgba(7,10,18,0.92) 60%, var(--bg) 100%);
+    z-index: 2;
+  }
+  .panel-inner { position: relative; z-index: 3; max-width: 1400px; margin: 0 auto; }
+  .panel-header { margin-bottom: 28px; }
+  .panel-header h2 {
+    font-family: var(--font-condensed); font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .panel-header p { margin: 0; font-size: 14px; color: var(--text-secondary); max-width: 600px; }
+
+  /* ── Carousels ────────────────────────────────────────────────────────── */
+  .carousel {
+    display: flex; gap: 18px;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 24px;
+    padding: 12px 4px 24px;
+    margin: 0 -24px;
+    padding-left: 24px; padding-right: 24px;
+  }
+  .carousel::-webkit-scrollbar { height: 6px; }
+  .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+  .carousel-card {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: var(--radius); overflow: hidden;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+    cursor: pointer;
+  }
+  .carousel-card:hover { transform: translateY(-8px); border-color: var(--border-strong); box-shadow: 0 20px 50px rgba(0,0,0,0.55), 0 0 30px rgba(47,128,255,0.1); }
+  .carousel-card .card-bg {
+    position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat;
+    opacity: 0.42; transition: opacity .35s; z-index: 0;
+  }
+  .carousel-card:hover .card-bg { opacity: 0.22; }
+  .carousel-card .card-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity .4s; z-index: 1;
+  }
+  .carousel-card:hover .card-video, .carousel-card:focus-within .card-video { opacity: 0.55; }
+  .carousel-card > *:not(.card-bg):not(.card-video) { position: relative; z-index: 2; }
+
+  /* ── Prediction cards ─────────────────────────────────────────────────── */
+  .prediction-card {
+    width: 320px; min-height: 420px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 0;
+  }
+  .prediction-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 30px rgba(47,128,255,0.15); }
+  .pc-top {
+    padding: 18px 18px 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .pc-meta { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .pc-center { padding: 28px 18px; text-align: center; }
+  .pc-teams-row { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 18px; }
+  .pc-team-block { text-align: center; }
+  .pc-team-block .flag { font-size: 56px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.45)); }
+  .pc-team-block .name { font-size: 16px; font-weight: 700; margin-top: 8px; }
+  .pc-team-block .code { font-size: 11px; color: var(--text-muted); }
+  .pc-vs-small { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+  .pc-score-big {
+    font-family: var(--font-condensed); font-size: 64px; font-weight: 800;
+    background: linear-gradient(180deg, #fff, #AAB4C5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1; margin-bottom: 10px;
+  }
+  .pc-bottom { padding: 0 18px 18px; }
+  .pc-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .pc-bar-label { font-size: 11px; color: var(--text-secondary); width: 70px; }
+  .pc-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .pc-bar-fill { height: 100%; border-radius: 3px; }
+  .pc-bar-val { font-family: var(--font-mono); font-size: 12px; font-weight: 700; width: 40px; text-align: right; }
+  .pc-actions-row { display: flex; gap: 10px; }
+
+  /* ── Badges & buttons ─────────────────────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    background: rgba(53,208,127,0.12); color: var(--success); border: 1px solid rgba(53,208,127,0.25);
+  }
+  .risk-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    border: 1px solid;
+  }
+  .risk-low { background: rgba(53,208,127,0.10); color: var(--success); border-color: rgba(53,208,127,0.25); }
+  .risk-medium { background: rgba(245,165,36,0.10); color: var(--warning); border-color: rgba(245,165,36,0.25); }
+  .risk-high { background: rgba(255,77,79,0.10); color: var(--risk); border-color: rgba(255,77,79,0.25); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 16px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700;
+    border: 1px solid var(--border); background: rgba(16,22,36,0.85); color: var(--text-primary);
+    cursor: pointer; transition: all .2s; backdrop-filter: blur(8px);
+    flex: 1;
+  }
+  .btn:hover { background: var(--surface-highlight); border-color: var(--border-strong); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #1a6fd6; box-shadow: 0 0 20px rgba(47,128,255,0.25); }
+  .btn-ghost { background: transparent; color: var(--text-secondary); flex: 0 0 auto; }
+  .btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+  .btn-sm { padding: 7px 12px; font-size: 11px; }
+  .btn-icon { width: 36px; height: 36px; padding: 0; border-radius: 50%; flex: 0 0 auto; }
+  .toggle-pill {
+    display: flex; background: rgba(255,255,255,0.08); border: 1px solid var(--border); border-radius: 999px; padding: 3px;
+  }
+  .toggle-pill button {
+    border: none; background: transparent; color: var(--text-secondary); font-size: 11px; font-weight: 700;
+    padding: 5px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .toggle-pill button.active { background: var(--accent); color: #fff; }
+
+  /* ── Fixtures timeline ────────────────────────────────────────────────── */
+  .timeline { max-width: 900px; }
+  .timeline-stage { margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface-elevated); }
+  .timeline-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; cursor: pointer; background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid transparent; transition: border-color .2s;
+  }
+  .timeline-stage.open .timeline-header { border-bottom-color: var(--border); }
+  .timeline-header h4 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); }
+  .timeline-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .timeline-stage.open .timeline-body { max-height: 2000px; }
+  .fixture-row {
+    display: grid; grid-template-columns: 70px 1fr 110px 90px 90px;
+    align-items: center; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    transition: background .15s; cursor: pointer;
+  }
+  .fixture-row:last-child { border-bottom: none; }
+  .fixture-row:hover { background: rgba(255,255,255,0.03); }
+  .fixture-time { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+  .fixture-match { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .fixture-pick { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+  .fixture-score { font-family: var(--font-condensed); font-size: 18px; font-weight: 800; text-align: right; }
+  .fixture-result { text-align: right; font-size: 11px; font-weight: 700; }
+  .fixture-result.correct { color: var(--success); }
+  .fixture-result.incorrect { color: var(--risk); }
+
+  /* ── Group cards ──────────────────────────────────────────────────────── */
+  .group-card { width: 340px; }
+  .gc-header { padding: 16px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(7,10,18,0.35); }
+  .gc-header h4 { margin: 0; font-size: 18px; font-weight: 800; }
+  .gc-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .gc-table th { text-align: left; padding: 10px 12px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+  .gc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .gc-table tr:last-child td { border-bottom: none; }
+  .gc-table .team { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+  .gc-table .flag { font-size: 20px; }
+  .gc-table .pts { font-weight: 800; font-family: var(--font-mono); }
+  .gc-table .q { color: var(--success); }
+  .gc-table .e { color: var(--text-muted); }
+
+  /* ── Simulator ────────────────────────────────────────────────────────── */
+  .sim-bar {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    padding: 14px 16px; margin-bottom: 24px;
+    background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  }
+  .sim-bar select, .sim-bar input {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text-primary);
+    padding: 9px 12px; border-radius: var(--radius-sm); font-size: 12px;
+  }
+  .sim-bar select { min-width: 220px; }
+
+  /* ── Knockout bracket ─────────────────────────────────────────────────── */
+  .bracket-carousel { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 16px; }
+  .bracket-round { min-width: 260px; }
+  .bracket-round h5 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+  .bracket-match {
+    position: relative; overflow: hidden;
+    background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 14px; margin-bottom: 12px; cursor: pointer;
+    transition: transform .2s, border-color .2s;
+  }
+  .bracket-match:hover { transform: translateY(-4px); border-color: var(--border-strong); }
+  .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+  .bracket-team.winner { color: var(--success); font-weight: 800; }
+  .bracket-prob { font-family: var(--font-mono); color: var(--text-muted); font-size: 11px; }
+  .bracket-pick { margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+
+  /* ── Player cards ─────────────────────────────────────────────────────── */
+  .player-card { width: 280px; padding: 18px; }
+  .player-card .ph { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .player-name { font-size: 18px; font-weight: 800; }
+  .player-team { font-size: 12px; color: var(--text-secondary); }
+  .player-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; border-radius: 999px; border: 1px solid; }
+  .player-status.ok { color: var(--success); border-color: rgba(53,208,127,0.3); background: rgba(53,208,127,0.08); }
+  .player-status.doubt { color: var(--warning); border-color: rgba(245,165,36,0.3); background: rgba(245,165,36,0.08); }
+  .player-status.out { color: var(--risk); border-color: rgba(255,77,79,0.3); background: rgba(255,77,79,0.08); }
+  .player-grid-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .player-metric { background: rgba(7,10,18,0.4); border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+  .player-metric div:first-child { font-size: 10px; color: var(--text-muted); }
+  .player-metric div:last-child { font-size: 15px; font-weight: 800; }
+  .filters { display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+  .filters input, .filters select {
+    background: var(--surface-elevated); border: 1px solid var(--border); color: var(--text-primary);
+    padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12px;
+  }
+  .filters input { flex: 1; min-width: 180px; }
+
+  /* ── News cards ───────────────────────────────────────────────────────── */
+  .news-card { width: 340px; min-height: 260px; display: flex; flex-direction: column; justify-content: flex-end; padding: 0; }
+  .news-card .nc-content { padding: 18px; background: linear-gradient(180deg, transparent 0%, rgba(7,10,18,0.95) 60%); }
+  .news-card .nc-match { font-size: 12px; font-weight: 700; color: var(--accent-glow); margin-bottom: 6px; }
+  .news-card .nc-text { font-size: 14px; font-weight: 700; line-height: 1.4; margin-bottom: 12px; }
+  .news-card .nc-meta { display: flex; justify-content: space-between; align-items: center; }
+  .news-impact { font-size: 11px; }
+  .news-impact .down { color: var(--risk); }
+  .news-impact .up { color: var(--success); }
+
+  /* ── Model Lab ────────────────────────────────────────────────────────── */
+  .lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .lab-card {
+    position: relative; overflow: hidden;
+    min-height: 220px; padding: 22px;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--surface-elevated);
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .lab-card .lab-bg {
+    position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat;
+    opacity: 0.35; z-index: 0; transition: opacity .35s;
+  }
+  .lab-card:hover .lab-bg { opacity: 0.2; }
+  .lab-card .lab-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.45; pointer-events: none; z-index: 1;
+  }
+  .lab-card > *:not(.lab-bg):not(.lab-video) { position: relative; z-index: 2; }
+  .lab-card .lab-big { font-family: var(--font-condensed); font-size: 48px; font-weight: 800; color: var(--accent-glow); line-height: 1; }
+  .lab-card h4 { margin: 8px 0 6px; font-size: 15px; }
+  .lab-card p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .accuracy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
+  .accuracy-stat {
+    position: relative; overflow: hidden;
+    background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 18px; text-align: center;
+  }
+  .accuracy-stat .v { font-size: 28px; font-weight: 800; font-family: var(--font-condensed); }
+  .accuracy-stat .k { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
+
+  /* ── Builder FAB & drawer ─────────────────────────────────────────────── */
+  .fab {
+    position: fixed; right: 24px; bottom: calc(var(--dock-height) + 20px);
+    z-index: 450;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); color: #fff; border: none;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 24px rgba(47,128,255,0.35);
+    cursor: pointer; transition: transform .2s, box-shadow .2s;
+  }
+  .fab:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(47,128,255,0.45); }
+  .fab-count {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 20px; height: 20px; border-radius: 50%;
+    background: var(--risk); color: #fff; font-size: 11px; font-weight: 800;
+    display: grid; place-items: center; padding: 0 5px;
+  }
+  .builder-drawer {
+    position: fixed; top: 0; right: 0; width: 460px; max-width: 100%; height: 100vh;
+    background: linear-gradient(180deg, #0D1320 0%, #070A12 100%);
+    border-left: 1px solid var(--border); box-shadow: var(--shadow-strong);
+    z-index: 460; transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+  }
+  .builder-drawer.show { transform: translateX(0); }
+  .builder-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .builder-header h3 { margin: 0; font-size: 18px; }
+  .builder-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; font-size: 20px; }
+  .builder-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .builder-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+  .builder-selection {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px; margin-bottom: 10px;
+    background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  }
+  .builder-selection .sel-text { flex: 1; }
+  .builder-selection .sel-title { font-size: 14px; font-weight: 700; }
+  .builder-selection .sel-meta { font-size: 11px; color: var(--text-muted); }
+  .builder-selection .sel-remove {
+    width: 28px; height: 28px; border-radius: 50%; border: none; background: rgba(255,77,79,0.15);
+    color: var(--risk); cursor: pointer; font-size: 16px; line-height: 1;
+  }
+  .builder-warning {
+    background: rgba(245,165,36,0.08); border: 1px solid rgba(245,165,36,0.2);
+    border-radius: var(--radius-sm); padding: 12px; font-size: 12px; color: var(--warning); margin-bottom: 14px;
+  }
+
+  /* ── Match detail drawer ──────────────────────────────────────────────── */
+  .drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px); z-index: 300; opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+  }
+  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; width: 560px; max-width: 100%; height: 100vh;
+    background: linear-gradient(180deg, #0D1320 0%, #070A12 100%);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-strong);
+    z-index: 310; transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+  }
+  .drawer.show { transform: translateX(0); }
+  .drawer-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .drawer-header h2 { margin: 0; font-size: 18px; }
+  .drawer-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; font-size: 20px; }
+  .drawer-tabs { display: flex; gap: 4px; padding: 10px 16px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .drawer-tab { padding: 8px 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .drawer-tab.active { background: var(--surface-elevated); color: var(--accent); border-color: var(--border); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .drawer-section { margin-bottom: 24px; }
+  .drawer-section h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .drawer-hero { height: 240px; border-radius: var(--radius); position: relative; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; --card-img:none; }
+  .drawer-hero::after { content: ""; position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat; opacity: 0.35; }
+  .drawer-hero-meta { position: absolute; top: 16px; left: 16px; z-index: 1; font-size: 11px; color: var(--text-secondary); background: rgba(0,0,0,0.45); padding: 5px 12px; border-radius: 999px; }
+  .drawer-hero-score { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: var(--font-condensed); font-size: 72px; font-weight: 800; z-index: 1; text-shadow: 0 0 30px rgba(0,0,0,0.9); }
+  .drawer-hero-pick { position: absolute; bottom: 16px; left: 16px; z-index: 1; font-size: 13px; }
+  .drawer-video { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  .prob-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; }
+  .prob-row span:first-child { width: 90px; color: var(--text-secondary); }
+  .prob-row span:last-child { width: 46px; text-align: right; font-weight: 700; }
+  .bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+  .bar { height: 100%; border-radius: 4px; }
+  .pc-metric { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+  .pc-metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .pc-metric-value { font-size: 20px; font-weight: 700; }
+
+  /* ── Footer ───────────────────────────────────────────────────────────── */
+  .app-footer {
+    position: relative; overflow: hidden;
+    padding: 48px 24px;
+    border-top: 1px solid var(--border);
+    background: rgba(7,10,18,0.9);
+  }
+  .footer-inner { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; margin-bottom: 28px; }
+  .footer-col h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .footer-col a { display: block; color: var(--text-secondary); text-decoration: none; font-size: 12.5px; margin-bottom: 6px; }
+  .footer-col a:hover { color: var(--accent); }
+  .disclaimer {
+    background: rgba(245,165,36,0.06); border: 1px solid rgba(245,165,36,0.2);
+    border-radius: var(--radius); padding: 16px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;
+  }
+
+  /* ── Toast / loading ──────────────────────────────────────────────────── */
+  .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 400; padding: 12px 20px; border-radius: var(--radius-sm); font-weight: 600; box-shadow: var(--shadow-strong); }
+  .toast-risk { background: rgba(255,77,79,0.12); color: var(--risk); border: 1px solid rgba(255,77,79,0.25); }
+  .toast a { color: inherit; text-decoration: underline; }
+  .skeleton {
+    position: relative; overflow: hidden;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s infinite;
+    border-radius: 12px;
+  }
+  .state-box { position: relative; overflow: hidden; text-align: center; padding: 40px 20px; color: var(--text-muted); border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-elevated); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero-video, .panel-video, .card-video, .lab-video, .fc-video { display: none; }
+    .carousel-card:hover, .featured-card:hover, .bracket-match:hover { transform: none; }
+    .scroll-indicator { animation: none; }
+  }
+
+  @media (min-width: 1100px) {
+    .dock { top: 0; bottom: auto; border-top: none; border-bottom: 1px solid var(--border-strong); }
+    .hero { padding-top: 140px; }
+    .fab { bottom: 24px; }
+    main { padding-bottom: 24px; padding-top: var(--dock-height); }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 20px; }
+    .hero-stat .v { font-size: 28px; }
+    .dock-item span { display: none; }
+    .dock-inner { gap: 4px; }
+    .dock-item { padding: 0 12px; }
+    .fixture-row { grid-template-columns: 60px 1fr 80px; }
+    .fixture-pick, .fixture-result { display: none; }
+  }
+
+  @media (max-width: 700px) {
+    .hero { padding: 100px 18px 100px; }
+    .hero-title { font-size: 42px; }
+    .hero-subtitle { font-size: 15px; }
+    .panel { padding: 44px 18px; }
+    .prediction-card { width: 86vw; }
+    .group-card, .news-card { width: 86vw; }
+    .player-card { width: 80vw; }
+    .drawer, .builder-drawer { width: 100%; }
+    .carousel { margin: 0 -18px; padding-left: 18px; padding-right: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="dock" aria-label="Tournament sections">
+  <div class="dock-inner">
+    <a class="dock-item active" href="#hero" data-section="hero">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Next Up</span>
+    </a>
+    <a class="dock-item" href="#predictions" data-section="predictions">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Predictions</span>
+    </a>
+    <a class="dock-item" href="#groups" data-section="groups">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <span>Groups</span>
+    </a>
+    <a class="dock-item" href="#knockouts" data-section="knockouts">
+      <svg viewBox="0 0 24 24"><path d="M3 6h6v4H3zm12 0h6v4h-6zM9 13h6v5H9zm-3 4h2v2H6zm14 0h2v2h-2z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <span>Knockout</span>
+    </a>
+    <a class="dock-item" href="#players" data-section="players">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Players</span>
+    </a>
+    <a class="dock-item" href="#news" data-section="news">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10h8M8 14h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>News</span>
+    </a>
+    <a class="dock-item" href="#model" data-section="model">
+      <svg viewBox="0 0 24 24"><path d="M12 2l10 6v8l-10 6-10-6V8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 12l10-6M12 12v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Model Lab</span>
+    </a>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_stadium_command_centre_bg.png" onerror="this.style.display='none'"><source src="asset/mc_stadium_command_centre_video.mp4" type="video/mp4"></video>
+  <div class="hero-grid">
+    <div>
+      <h1 class="hero-title">Jarvis Match Centre</h1>
+      <p class="hero-subtitle">World Cup 2026 prediction intelligence. Model-supported forecasts, risk-aware confidence ratings, and live tournament impact — all in one command centre.</p>
+      <div class="hero-badges">
+        <span class="hero-badge"><span class="dot"></span> Analysis Only</span>
+        <span class="hero-badge">Updated <span id="header-updated">—</span></span>
+        <div class="toggle-pill" role="group" aria-label="View mode">
+          <button class="active" data-view="simple" aria-pressed="true">Simple</button>
+          <button data-view="pro" aria-pressed="false">Pro</button>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="v" id="hero-match-count">—</div><div class="k">Matches</div></div>
+        <div class="hero-stat"><div class="v" id="hero-group-count">12</div><div class="k">Groups</div></div>
+        <div class="hero-stat"><div class="v" id="hero-model-version">—</div><div class="k">Model</div></div>
+      </div>
+    </div>
+    <div id="featured-next"></div>
+  </div>
+  <div class="scroll-indicator" onclick="document.getElementById('predictions').scrollIntoView({behavior:'smooth'})">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24"><path d="M7 13l5 5 5-5M7 6l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</section>
+
+<main>
+  <section class="panel" id="predictions" style="--panel-img:url('asset/mc_match_arena_hero.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_predictions_header.png" onerror="this.style.display='none'"><source src="asset/mc_predictions_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>Match Predictions</h2>
+        <p>Model-supported predictions with confidence ranges and risk ratings. Tap a card for full analysis.</p>
+      </div>
+      <div class="carousel" id="match-feed" aria-live="polite" aria-busy="false">
+        <div class="skeleton" style="width:320px;height:420px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:320px;height:420px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:320px;height:420px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="groups" style="--panel-img:url('asset/mc_pitch_grid_overlay.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_groups_header.png" onerror="this.style.display='none'"><source src="asset/mc_groups_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>Group Tables</h2>
+        <p>Live standings. Use the simulator to see how a result reshapes the table.</p>
+      </div>
+      <div class="sim-bar">
+        <select id="sim-match"><option value="">Select match…</option></select>
+        <input id="sim-score" type="text" placeholder="e.g. 2-1" style="width:90px;">
+        <button class="btn btn-primary btn-sm" onclick="JARVIS.applyScenario()">Apply Scenario</button>
+        <button class="btn btn-ghost btn-sm" onclick="JARVIS.resetScenario()">Reset</button>
+      </div>
+      <div class="carousel" id="groups-grid">
+        <div class="skeleton group-card" style="width:340px;height:360px;flex:0 0 auto;"></div>
+        <div class="skeleton group-card" style="width:340px;height:360px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="knockouts" style="--panel-img:url('asset/mc_knockout_bracket_wall.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_knockouts_header.png" onerror="this.style.display='none'"><source src="asset/mc_knockouts_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>Knockout Path</h2>
+        <p>Projected bracket and path probabilities from the current model run.</p>
+      </div>
+      <div id="knockout-content"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="players" style="--panel-img:url('asset/mc_player_intelligence_wall.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_players_header.png" onerror="this.style.display='none'"><source src="asset/mc_players_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>Player Intelligence</h2>
+        <p>Availability, caps, age and model impact. Filter by team or position.</p>
+      </div>
+      <div class="filters">
+        <input id="player-search" type="text" placeholder="Search player, team, club…">
+        <select id="player-team-filter"><option value="">All teams</option></select>
+        <select id="player-pos-filter">
+          <option value="">All positions</option><option value="GK">GK</option><option value="DEF">DEF</option><option value="MID">MID</option><option value="FWD">FWD</option>
+        </select>
+      </div>
+      <div class="carousel" id="player-grid">
+        <div class="skeleton player-card" style="width:280px;height:220px;flex:0 0 auto;"></div>
+        <div class="skeleton player-card" style="width:280px;height:220px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="news" style="--panel-img:url('asset/mc_late_news_impact.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_news_header.png" onerror="this.style.display='none'"><source src="asset/mc_news_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>What Changed</h2>
+        <p>Late news, lineup changes and model movement.</p>
+      </div>
+      <div class="carousel" id="news-grid">
+        <div class="skeleton news-card" style="width:340px;height:260px;flex:0 0 auto;"></div>
+        <div class="skeleton news-card" style="width:340px;height:260px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="model" style="--panel-img:url('asset/mc_model_lab_visual.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_model_lab_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>Model Lab</h2>
+        <p>How the predictions are built and how they have performed.</p>
+      </div>
+      <div class="lab-grid" id="lab-grid"></div>
+      <div class="accuracy-grid" id="accuracy-grid"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="fixtures" style="--panel-img:url('asset/mc_match_arena_hero.png')">
+    <div class="panel-bg"></div>
+    <video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_fixtures_header.png" onerror="this.style.display='none'"><source src="asset/mc_fixtures_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <h2>Fixtures</h2>
+        <p>Full tournament calendar with model picks and results.</p>
+      </div>
+      <div class="timeline" id="fixtures-content"></div>
+    </div>
+  </section>
+</main>
+
+<button class="fab" id="builder-fab" aria-label="Open prediction card" onclick="JARVIS.toggleBuilderDrawer()">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+  <span class="fab-count" id="fab-count">0</span>
+</button>
+
+<div class="builder-drawer" id="builder-drawer" role="dialog" aria-modal="true" aria-labelledby="builder-title">
+  <div class="builder-header">
+    <h3 id="builder-title">Prediction Card</h3>
+    <button class="builder-close" aria-label="Close" onclick="JARVIS.toggleBuilderDrawer()">×</button>
+  </div>
+  <div class="builder-body" id="builder-body">
+    <div class="builder-empty">Select 2–6 predictions to compare confidence, risk and overlap.</div>
+  </div>
+</div>
+
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="JARVIS.closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <h2 id="drawer-title">Match Analysis</h2>
+    <button class="drawer-close" aria-label="Close" onclick="JARVIS.closeDrawer()">×</button>
+  </div>
+  <div class="drawer-tabs" id="drawer-tabs" role="tablist"></div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+
+<footer class="app-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#predictions">Predictions</a>
+        <a href="#fixtures">Fixtures</a>
+        <a href="#groups">Groups</a>
+        <a href="#knockouts">Knockouts</a>
+      </div>
+      <div class="footer-col">
+        <h4>Data Sources</h4>
+        <a href="#" onclick="return false;">Opta Analyst</a>
+        <a href="#" onclick="return false;">FIFA</a>
+        <a href="#" onclick="return false;">ESPN / Sky Sports</a>
+        <a href="#" onclick="return false;">Team Federations</a>
+      </div>
+      <div class="footer-col">
+        <h4>Model</h4>
+        <a href="#model">Methodology</a>
+        <a href="#model">Accuracy Tracker</a>
+        <a href="#model">Limitations</a>
+      </div>
+      <div class="footer-col">
+        <h4>Responsible Use</h4>
+        <a href="https://www.responsiblegambling.org/" target="_blank" rel="noopener">Responsible Gambling</a>
+        <a href="#" onclick="return false;">Analysis Only</a>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <b>Analysis only. Not betting advice.</b> Football is low-scoring and high-variance. The model estimates probability — it does not guarantee outcomes. Confidence is not certainty. Please gamble responsibly if you choose to bet.
+    </div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+(function(){
+  const ESCAPE_MAP = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
+  function esc(s){ return s==null?"":String(s).replace(/[&<>"']/g,c=>ESCAPE_MAP[c]); }
+  function pct(n){ return (n==null?0:Math.round(Number(n)*100))+"%"; }
+  function fmtDate(iso){ try{ const d=new Date(iso); return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}); }catch(e){ return esc(iso||""); } }
+  function shortDate(iso){ try{ const d=new Date(iso); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }catch(e){ return ""; } }
+  function timeOnly(iso){ try{ return new Date(iso).toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
+  function teamCode(name){ return esc((name||"").split(" ").map(w=>w[0]).join("").slice(0,3).toUpperCase()); }
+  function slug(name){ return (name||"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,""); }
+  function pickClass(p){ if(p>=0.55) return "high"; if(p>=0.4) return "medium"; return "low"; }
+  function riskLabel(p){ if(p>=0.55) return "Lower risk"; if(p>=0.4) return "Balanced"; return "Higher risk"; }
+  function riskClass(p){ if(p>=0.55) return "risk-low"; if(p>=0.4) return "risk-medium"; return "risk-high"; }
+  function barColor(p){ if(p>=0.55) return "var(--success)"; if(p>=0.4) return "var(--warning)"; return "var(--risk)"; }
+  function probFor(m,p){ if(!p.predicted_wdl) return 0; return p.predicted_wdl==="H"?p.p_home:(p.predicted_wdl==="A"?p.p_away:p.p_draw); }
+
+  const state = {
+    matches: [], predictions: {}, news: [], players: [], injuries: {}, valueBets: [],
+    activeModel: {}, modelSummary: {models:[]}, outright: {}, builder: [], scenario: {},
+    drawerMatch: null, drawerTab: "overview", builderOpen: false
+  };
+  const $ = id => document.getElementById(id);
+
+  async function loadJson(path){ const r=await fetch(path); if(!r.ok) throw new Error(r.status+" "+path); return r.json(); }
+
+  async function init(){
+    try{
+      const [fixtures, preds, news, profiles, values, active, audit] = await Promise.all([
+        loadJson("data/wc2026_fixtures_all.json"),
+        loadJson("data/wc2026_model_predictions.json"),
+        loadJson("data/wc2026_late_news.json"),
+        loadJson("data/wc2026_player_profiles_enriched.json"),
+        loadJson("data/wc2026_value_bets.json"),
+        loadJson("data/wc2026_active_model.json"),
+        loadJson("data/wc2026_predictions_audit?summary=1").catch(()=>({models:[]}))
+      ]);
+      state.matches = (fixtures.matches||[]).map(m=>{ m._iso = m.kickoff_iso; return m; });
+      state.predictions = preds.all_fixture_predictions || {};
+      state.news = news.items||[];
+      state.players = profiles.players||[];
+      state.injuries = profiles.injury_list||{};
+      state.valueBets = values.value_bets||[];
+      state.activeModel = active;
+      state.modelSummary = audit;
+      state.outright = preds.tournament_outright||{};
+      state.generated = preds.generated_at;
+      $("header-updated").textContent = shortDate(state.generated);
+      $("hero-match-count").textContent = state.matches.length || "—";
+      $("hero-model-version").textContent = esc(active.model_version||"v001");
+      populateTeamFilter();
+      renderAll();
+      bindEvents();
+      bindDock();
+      renderFeatured();
+    }catch(err){
+      console.error(err);
+      document.body.insertAdjacentHTML("afterbegin", `<div class="toast toast-risk" role="alert">Could not load match data. <a href="javascript:location.reload()">Retry</a></div>`);
+    }
+  }
+
+  function getPred(n){ return state.predictions[String(n)] || {}; }
+
+  function actualOutcome(m){
+    if(!m.played || !m.result) return null;
+    const parts = String(m.result).replace(/[–—]/g,"-").split("-").map(x=>parseInt(x,10));
+    if(parts.length!==2 || isNaN(parts[0])||isNaN(parts[1])) return null;
+    if(parts[0]>parts[1]) return "H"; if(parts[0]<parts[1]) return "A"; return "D";
+  }
+
+  function resultFromScenario(n){
+    if(state.scenario[n]) return state.scenario[n];
+    const m = state.matches.find(x=>x.n===n);
+    return m && m.played ? m.result : null;
+  }
+
+  function renderAll(){
+    renderFeatured();
+    renderFeed();
+    renderFixtures();
+    renderGroups();
+    renderKnockouts();
+    renderPlayers();
+    renderModelLab();
+    renderNews();
+    renderBuilder();
+  }
+
+  const GLOBAL_VIDEOS = {
+    stadium: "asset/mc_stadium_command_centre_video.mp4",
+    model: "asset/mc_model_lab_video.mp4",
+    bracket: "asset/mc_knockout_bracket_video.mp4"
+  };
+  const AVAILABLE_VIDEOS = new Set(Array.from({length:104},(_,i)=>i+1));
+  function matchAsset(n){ return `asset/mc_match_${String(n).padStart(3,"0")}_hero.png`; }
+  const TEAM_SLUG_ALIASES = { "USA": "united_states" };
+  function teamSlug(t){ return TEAM_SLUG_ALIASES[t] || slug(t); }
+  function teamAsset(t){ return `asset/mc_team_${teamSlug(t)}_hero.png`; }
+  function matchVideo(n){ return AVAILABLE_VIDEOS.has(n) ? `asset/mc_match_${String(n).padStart(3,"0")}_video.mp4` : null; }
+  function groupVideo(g){ return `asset/mc_group_${g.toLowerCase()}_video.mp4`; }
+  function teamVideo(t){ return `asset/mc_team_${teamSlug(t)}_video.mp4`; }
+  function cardVideo(video, poster){
+    if(!video) return "";
+    return `<video class="card-video" muted loop playsinline preload="none" poster="${poster}" onerror="this.style.display='none'"><source src="${video}" type="video/mp4"></video>`;
+  }
+  function panelVideo(video, poster){
+    if(!video) return "";
+    return `<video class="panel-video" autoplay muted loop playsinline preload="metadata" poster="${poster||''}" onerror="this.style.display='none'"><source src="${video}" type="video/mp4"></video>`;
+  }
+
+  function renderFeatured(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso));
+    const c = $("featured-next");
+    if(!upcoming.length){ c.innerHTML = ""; return; }
+    const m = upcoming[0];
+    const p = getPred(m.n);
+    const prob = probFor(m,p);
+    const pickName = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+    c.innerHTML = `<div class="featured-card" style="--card-img:url('${matchAsset(m.n)}')" onclick="JARVIS.openDrawer(${m.n})">
+      <div class="fc-bg"></div>
+      ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+      <div class="fc-header"><span class="fc-label">Next Match</span><span class="fc-kickoff">${esc(fmtDate(m.kickoff_iso))}</span></div>
+      <div class="fc-body">
+        <div class="fc-teams">
+          <div class="fc-team"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.home)}</div><div class="code">${esc(teamCode(m.home))}</div></div>
+          <div class="fc-vs">v</div>
+          <div class="fc-team"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.away)}</div><div class="code">${esc(teamCode(m.away))}</div></div>
+        </div>
+        <div class="fc-score">${esc(p.predicted_score||"-")}</div>
+        <div class="fc-pick">Model pick: <b>${esc(pickName)}</b> · ${pct(prob)} confidence · <span class="risk-badge ${riskClass(prob)}">${esc(riskLabel(prob))}</span></div>
+      </div>
+      <div class="fc-footer">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();JARVIS.addToBuilder(${m.n})">Add to card</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();JARVIS.openDrawer(${m.n})">Analysis</button>
+      </div>
+    </div>`;
+  }
+
+  function predictionCard(m){
+    const p=getPred(m.n);
+    const outcome=actualOutcome(m);
+    const predWdl=p.predicted_wdl;
+    const predProb=probFor(m,p);
+    const correct=outcome && predWdl===outcome;
+    const value=state.valueBets.find(v=>v.match_n===m.n && v.value_bet);
+    const inBuilder=state.builder.includes(m.n);
+    const pickName = predWdl==="H"?m.home:(predWdl==="A"?m.away:"Draw");
+    const statusHtml = m.played
+      ? `<span class="risk-badge ${correct?"risk-low":"risk-high"}">${esc(m.result)} ${correct?"✓":"✗"}</span>`
+      : `<span class="risk-badge risk-medium">${esc(timeOnly(m.kickoff_iso))}</span>`;
+    const homeProb = p.p_home||0, drawProb = p.p_draw||0, awayProb = p.p_away||0;
+    const barsHtml = `<div class="pc-bar"><span class="pc-bar-label">${esc(teamCode(m.home))}</span><div class="pc-bar-track"><div class="pc-bar-fill" style="width:${pct(homeProb)};background:${barColor(homeProb)}"></div></div><span class="pc-bar-val">${pct(homeProb)}</span></div>
+        <div class="pc-bar"><span class="pc-bar-label">Draw</span><div class="pc-bar-track"><div class="pc-bar-fill" style="width:${pct(drawProb)};background:var(--text-muted)"></div></div><span class="pc-bar-val">${pct(drawProb)}</span></div>
+        <div class="pc-bar"><span class="pc-bar-label">${esc(teamCode(m.away))}</span><div class="pc-bar-track"><div class="pc-bar-fill" style="width:${pct(awayProb)};background:${barColor(awayProb)}"></div></div><span class="pc-bar-val">${pct(awayProb)}</span></div>`;
+    return `<article class="carousel-card prediction-card ${m.played?(correct?"correct":"incorrect"):""} ${inBuilder?"selected":""}" style="--card-img:url('${matchAsset(m.n)}')" data-n="${esc(String(m.n))}" onclick="JARVIS.openDrawer(${m.n})">
+      <div class="card-bg"></div>
+      ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+      <div class="pc-top">
+        <div class="pc-meta">${esc(m.stage)} ${esc(m.group||"")}</div>
+        <div style="display:flex;gap:6px;">${statusHtml}<span class="risk-badge ${riskClass(predProb)}">${esc(riskLabel(predProb))}</span></div>
+      </div>
+      <div class="pc-center">
+        <div class="pc-teams-row">
+          <div class="pc-team-block"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.home)}</div><div class="code">${esc(teamCode(m.home))}</div></div>
+          <div class="pc-vs-small">v</div>
+          <div class="pc-team-block"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.away)}</div><div class="code">${esc(teamCode(m.away))}</div></div>
+        </div>
+        <div class="pc-score-big">${esc(p.predicted_score||"-")}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Model pick: <b style="color:var(--text-primary);">${esc(pickName)}</b> ${pct(predProb)}</div>
+      </div>
+      <div class="pc-bottom">
+        ${state.view==="pro"?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div class="pc-metric" style="padding:10px;"><div class="pc-metric-label">${esc(m.home)} win</div><div class="pc-metric-value" style="color:${barColor(p.p_home)};font-size:16px;">${pct(p.p_home)}</div></div>
+          <div class="pc-metric" style="padding:10px;"><div class="pc-metric-label">${esc(m.away)} win</div><div class="pc-metric-value" style="color:${barColor(p.p_away)};font-size:16px;">${pct(p.p_away)}</div></div>
+          <div class="pc-metric" style="padding:10px;"><div class="pc-metric-label">Draw</div><div class="pc-metric-value" style="font-size:16px;">${pct(p.p_draw)}</div></div>
+          <div class="pc-metric" style="padding:10px;"><div class="pc-metric-label">Treatment</div><div class="pc-metric-value" style="font-size:14px;">${esc(p.treatment||"-")}</div></div>
+        </div>`:barsHtml}
+        <div class="pc-actions-row">
+          <button class="btn btn-sm ${inBuilder?"btn-ghost":"btn-primary"}" onclick="event.stopPropagation();JARVIS.${inBuilder?"removeFromBuilder":"addToBuilder"}(${m.n})">${inBuilder?"Remove":"Add to card"}</button>
+          <button class="btn btn-ghost btn-sm btn-icon" aria-label="Analysis" onclick="event.stopPropagation();JARVIS.openDrawer(${m.n})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function renderFeed(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso));
+    const c=$("match-feed");
+    if(!upcoming.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;"><h3>No upcoming matches</h3><p>The current window is empty.</p></div>`; return; }
+    c.innerHTML = upcoming.map(predictionCard).join("");
+  }
+  function showAllFixtures(){ document.getElementById("fixtures").scrollIntoView({behavior:"smooth"}); }
+
+  function renderFixtures(){
+    const byStage = {};
+    state.matches.forEach(m=>{
+      const stage = m.stage==="GROUP" ? `Group ${m.group}` : (m.stage||"TBD");
+      byStage[stage]=byStage[stage]||[]; byStage[stage].push(m);
+    });
+    const c=$("fixtures-content");
+    let html="";
+    Object.keys(byStage).sort((a,b)=>{
+      const ma=byStage[a][0], mb=byStage[b][0];
+      return ma._iso.localeCompare(mb._iso);
+    }).forEach((stage,i)=>{
+      const rows=byStage[stage].sort((a,b)=>a._iso.localeCompare(b._iso));
+      html+=`<div class="timeline-stage ${i===0?'open':''}" data-stage="${esc(stage)}">
+        <div class="timeline-header" onclick="this.parentElement.classList.toggle('open')">
+          <h4>${esc(stage)}</h4>
+          <span style="font-size:11px;color:var(--text-muted);">${rows.length} matches</span>
+        </div>
+        <div class="timeline-body">`;
+      html+=rows.map(m=>{
+        const p=getPred(m.n);
+        const outcome=actualOutcome(m);
+        const cls = m.played ? (outcome===p.predicted_wdl?"correct":"incorrect") : "";
+        const pick = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+        return `<div class="fixture-row ${cls}" onclick="JARVIS.openDrawer(${m.n})">
+          <div class="fixture-time">${esc(timeOnly(m.kickoff_iso))}</div>
+          <div class="fixture-match"><span>${esc(m.home)}</span><span style="color:var(--text-muted);">v</span><span>${esc(m.away)}</span></div>
+          <div class="fixture-pick">${esc(pick)} ${pct(probFor(m,p))}</div>
+          <div class="fixture-score">${esc(m.result||p.predicted_score||"-")}</div>
+          <div class="fixture-result ${cls}">${m.played?(outcome===p.predicted_wdl?"Correct":"Miss"):""}</div>
+        </div>`;
+      }).join("");
+      html+=`</div></div>`;
+    });
+    c.innerHTML=html;
+  }
+
+  function computeStandings(){
+    const groups={};
+    state.matches.filter(m=>m.stage==="GROUP").forEach(m=>{
+      if(!groups[m.group]) groups[m.group]={};
+      [m.home,m.away].forEach(t=>{ if(!groups[m.group][t]) groups[m.group][t]={team:t,P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0}; });
+      const res=resultFromScenario(m.n);
+      if(res){
+        const [hg,ag]=String(res).replace(/[–—]/g,"-").split("-").map(x=>parseInt(x,10));
+        if(!isNaN(hg)&&!isNaN(ag)){
+          const h=groups[m.group][m.home], a=groups[m.group][m.away];
+          h.P++; a.P++; h.GF+=hg; h.GA+=ag; a.GF+=ag; a.GA+=hg;
+          if(hg>ag){h.W++;a.L++;h.Pts+=3;}else if(hg<ag){a.W++;h.L++;a.Pts+=3;}else{h.D++;a.D++;h.Pts++;a.Pts++;}
+        }
+      }
+    });
+    return groups;
+  }
+
+  function renderGroups(){
+    const groups=computeStandings();
+    const c=$("groups-grid");
+    const letters=Object.keys(groups).sort();
+    if(!letters.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;">Group data unavailable.</div>`; return; }
+    c.innerHTML=letters.map(g=>{
+      const rows=Object.values(groups[g]).sort((a,b)=>b.Pts-a.Pts||b.GD-a.GD||b.GF-a.GF);
+      return `<article class="carousel-card group-card" style="--card-img:url('asset/mc_group_${g.toLowerCase()}.png')">
+        <div class="card-bg"></div>
+        ${cardVideo(groupVideo(g)||GLOBAL_VIDEOS.stadium, `asset/mc_group_${g.toLowerCase()}.png`)}
+        <div class="gc-header"><h4>Group ${esc(g)}</h4><span class="risk-badge risk-low">${rows.length} teams</span></div>
+        <table class="gc-table">
+          <thead><tr><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr></thead>
+          <tbody>${rows.map((r,i)=>`<tr class="${i<2?'qualified':''}"><td><div class="team"><span class="flag" aria-hidden="true"></span>${esc(r.team)}</div></td><td>${r.P}</td><td>${r.GD>0?"+":""}${r.GD}</td><td class="pts ${i<2?'q':'e'}">${r.Pts}</td></tr>`).join("")}</tbody>
+        </table>
+      </article>`;
+    }).join("");
+    const sel=$("sim-match");
+    if(sel && !sel.dataset.populated){
+      state.matches.filter(m=>m.stage==="GROUP" && !m.played).sort((a,b)=>a._iso.localeCompare(b._iso)).forEach(m=>{
+        const opt=document.createElement("option"); opt.value=m.n; opt.textContent=`${m.group} · ${m.home} v ${m.away}`; sel.appendChild(opt);
+      });
+      sel.dataset.populated="1";
+    }
+  }
+
+  function renderKnockouts(){
+    const c=$("knockout-content");
+    const rounds = ["R32","R16","QF","SF","FINAL"];
+    const roundNames = {"R32":"Round of 32","R16":"Round of 16","QF":"Quarter-finals","SF":"Semi-finals","FINAL":"Final"};
+    let html=`<div class="bracket-carousel">`;
+    rounds.forEach(r=>{
+      const matches = state.matches.filter(m=>m.stage===r).sort((a,b)=>a._iso.localeCompare(b._iso));
+      html+=`<div class="bracket-round"><h5>${esc(roundNames[r])}</h5>`;
+      matches.forEach(m=>{
+        const p=getPred(m.n);
+        const pick = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+        html+=`<div class="bracket-match" onclick="JARVIS.openDrawer(${m.n})">
+          ${cardVideo(GLOBAL_VIDEOS.bracket, 'asset/mc_knockout_bracket_wall.png')}
+          <div class="bracket-team ${p.predicted_wdl==='H'?'winner':''}"><span>${esc(m.home)}</span><span class="bracket-prob">${pct(p.p_home)}</span></div>
+          <div class="bracket-team ${p.predicted_wdl==='A'?'winner':''}"><span>${esc(m.away)}</span><span class="bracket-prob">${pct(p.p_away)}</span></div>
+          <div class="bracket-pick">Model advance: <b>${esc(pick)}</b></div>
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+    c.innerHTML=html;
+  }
+
+  function populateTeamFilter(){
+    const sel=$("player-team-filter");
+    const teams=Array.from(new Set(state.players.map(p=>p.country))).sort();
+    teams.forEach(t=>{ const opt=document.createElement("option"); opt.value=t; opt.textContent=t; sel.appendChild(opt); });
+  }
+
+  function renderPlayers(){
+    const q=$("player-search").value.toLowerCase();
+    const team=$("player-team-filter").value;
+    const pos=$("player-pos-filter").value;
+    const list=state.players.filter(p=>{
+      const inj=state.injuries[p.name];
+      const text=(p.name+" "+p.country+" "+p.club+" "+p.position).toLowerCase();
+      return (!q||text.includes(q)) && (!team||p.country===team) && (!pos||p.position===pos);
+    }).slice(0,60);
+    const c=$("player-grid");
+    if(!list.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;">No players match.</div>`; return; }
+    c.innerHTML=list.map(p=>{
+      const inj=state.injuries[p.name];
+      const status = inj ? `<span class="player-status ${inj.status==='out'?'out':'doubt'}">${esc(inj.status.toUpperCase())}</span>` : `<span class="player-status ok">Available</span>`;
+      return `<article class="carousel-card player-card ${inj?'high-impact':''}" style="--card-img:url('${teamAsset(p.country)}')">
+        <div class="card-bg"></div>
+        ${cardVideo(teamVideo(p.country)||GLOBAL_VIDEOS.stadium, teamAsset(p.country))}
+        <div class="ph"><div><div class="player-name">${esc(p.name)}</div><div class="player-team">${esc(p.country)} · ${esc(p.position)}</div></div>${status}</div>
+        <div class="player-grid-mini">
+          <div class="player-metric"><div>Age</div><div>${p.age}</div></div>
+          <div class="player-metric"><div>Caps</div><div>${p.caps}</div></div>
+          <div class="player-metric"><div>Club</div><div>${esc(p.club||"-")}</div></div>
+          <div class="player-metric"><div>Impact</div><div>${inj?'<span style="color:var(--warning)">High</span>':'Normal'}</div></div>
+        </div>
+        ${inj?`<div style="margin-top:12px;font-size:11px;color:var(--text-secondary);line-height:1.5;"><b>${esc(inj.reason)}</b> — ${esc(inj.status)}. Check lineups closer to kickoff.</div>`:""}
+      </article>`;
+    }).join("");
+  }
+
+  function renderModelLab(){
+    const c=$("lab-grid");
+    const am=state.activeModel;
+    const ew=am.ensemble_weights||{};
+    const top = Object.entries(ew).filter(([_,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`${esc(k)} ${(v*100).toFixed(1)}%`).join(", ");
+    c.innerHTML=`
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <video class="lab-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_lab_active_model_video.mp4" type="video/mp4"></video>
+        <div class="lab-big">${pct(am.single_pick_accuracy)}</div><h4>Single-pick accuracy</h4><p>${esc(am.model_version||"v001")} promoted ${esc(shortDate(am.created_at))}. Three-spread coverage ${pct(am.three_spread_coverage)}.</p>
+      </div>
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <video class="lab-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_lab_calibration_video.mp4" type="video/mp4"></video>
+        <div class="lab-big">${(am.calibration_error*100).toFixed(2)}pp</div><h4>Calibration error</h4><p>Drift detected: ${am.drift?.drift_detected?"Yes":"No"}. Recent accuracy ${pct(am.drift?.recent_accuracy)}.</p>
+      </div>
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <video class="lab-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_lab_ensemble_video.mp4" type="video/mp4"></video>
+        <div class="lab-big">${Object.keys(ew).length||"—"}</div><h4>Ensemble models</h4><p>${top||"Uniform blend"}. Poisson · Dixon-Coles · Elo · group-table signals blended and draw-calibrated.</p>
+      </div>
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <video class="lab-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_lab_transparency_video.mp4" type="video/mp4"></video>
+        <div class="lab-big">🔒</div><h4>Audit-locked forecasts</h4><p>Every prediction is logged in the audit database. Use the audit endpoint to verify locked T-8h forecasts against results.</p>
+      </div>`;
+    const models=state.modelSummary.models||[];
+    const rows=models.slice(0,8);
+    $("accuracy-grid").innerHTML=rows.map(r=>`
+      <div class="accuracy-stat">
+        <div class="v">${(r.winner_pct*100).toFixed(1)}%</div>
+        <div class="k">${esc(r.model||"Model")}<br>${r.winner_hits||0}/${r.graded||0}</div>
+      </div>`).join("") || `<div class="state-box" style="grid-column:1/-1;">No verified results yet.</div>`;
+  }
+
+  function renderNews(){
+    const c=$("news-grid");
+    if(!state.news.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;">No late news items.</div>`; return; }
+    c.innerHTML=state.news.map((item,i)=>{
+      const high = /out|injury|doubt|ruled|suspension/i.test(item.text);
+      const newsPoster = i<6 ? `asset/mc_news_${String(i).padStart(2,'0')}.png` : "asset/mc_late_news_impact.png";
+      const newsVid = i<6 ? `asset/mc_news_${String(i).padStart(2,'0')}_video.mp4` : GLOBAL_VIDEOS.stadium;
+      return `<article class="carousel-card news-card ${high?'impact-high':''}" ${i<6?`style="--card-img:url('${newsPoster}')"`:``}>
+        <div class="card-bg"></div>
+        ${cardVideo(newsVid, newsPoster)}
+        <div class="nc-content">
+          <div class="nc-match">${esc(item.player)} · ${esc(item.source)}</div>
+          <div class="nc-text">${esc(item.text)}</div>
+          <div class="nc-meta">
+            <span class="news-impact">Impact: <b class="${high?'down':'up'}">${high?"Negative":"Neutral"}</b></span>
+            <a href="${esc(item.url)}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" onclick="event.stopPropagation()">Source</a>
+          </div>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  function renderBuilder(){
+    const body=$("builder-body");
+    const count=$("fab-count");
+    count.textContent=state.builder.length;
+    count.style.display=state.builder.length?"grid":"none";
+    if(!state.builder.length){
+      body.innerHTML=`<div class="builder-empty">Select 2–6 predictions to compare confidence, risk and overlap.</div>`;
+      return;
+    }
+    let sum=0, countLegs=0, html="";
+    state.builder.forEach(n=>{
+      const m=state.matches.find(x=>x.n===n); if(!m) return;
+      const p=getPred(n); const prob=probFor(m,p);
+      const label=p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+      sum+=prob; countLegs++;
+      html+=`<div class="builder-selection">
+        <div class="sel-text"><div class="sel-title">${esc(m.home)} v ${esc(m.away)}</div><div class="sel-meta">${esc(label)} · ${pct(prob)} confidence</div></div>
+        <button class="sel-remove" aria-label="Remove" onclick="JARVIS.removeFromBuilder(${n})">×</button>
+      </div>`;
+    });
+    const avg=countLegs?sum/countLegs:0;
+    const summary=`<div class="builder-warning">Combined average confidence: <b>${pct(avg)}</b> · ${esc(riskLabel(avg))}. More legs = lower hit rate.</div>`;
+    body.innerHTML=summary+html;
+  }
+
+  function toggleBuilderDrawer(){
+    state.builderOpen = !state.builderOpen;
+    $("builder-drawer").classList.toggle("show", state.builderOpen);
+    document.body.style.overflow = state.builderOpen || $("drawer").classList.contains("show") ? "hidden" : "";
+  }
+
+  function addToBuilder(n){
+    if(state.builder.includes(n)){ removeFromBuilder(n); return; }
+    if(state.builder.length>=6){ alert("Card can hold up to 6 picks."); return; }
+    state.builder.push(n); renderBuilder(); renderFeed();
+  }
+  function removeFromBuilder(n){ state.builder=state.builder.filter(x=>x!==n); renderBuilder(); renderFeed(); }
+
+  // ── Drawer ───────────────────────────────────────────────────────────────
+  function openDrawer(n){
+    state.drawerMatch=n; state.drawerTab="overview"; renderDrawer();
+    $("drawer").classList.add("show"); $("drawer-backdrop").classList.add("show"); document.body.style.overflow="hidden";
+  }
+  function closeDrawer(){ $("drawer").classList.remove("show"); $("drawer-backdrop").classList.remove("show"); document.body.style.overflow = state.builderOpen ? "hidden" : ""; }
+  function setDrawerTab(tab){ state.drawerTab=tab; renderDrawer(); }
+
+  function renderDrawer(){
+    const m=state.matches.find(x=>x.n===state.drawerMatch); if(!m) return;
+    const p=getPred(m.n);
+    $("drawer-title").textContent=`${m.home} v ${m.away}`;
+    const tabs=["overview","probabilities","value","lineups","video"];
+    $("drawer-tabs").innerHTML=tabs.map(t=>`<button class="drawer-tab ${state.drawerTab===t?'active':''}" onclick="JARVIS.setDrawerTab('${t}')" aria-pressed="${state.drawerTab===t?'true':'false'}">${esc(t[0].toUpperCase()+t.slice(1))}</button>`).join("");
+    let body="";
+    if(state.drawerTab==="overview"){
+      body=`<div class="drawer-hero" style="--card-img:url('${matchAsset(m.n)}')">
+        <div class="drawer-hero-meta">${esc(m.stage)} ${esc(m.group||"")} · ${esc(m.venue)}</div>
+        <div class="drawer-hero-score">${esc(p.predicted_score||"-")}</div>
+        <div class="drawer-hero-pick">Model pick: <b>${esc(p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw"))}</b> · ${pct(probFor(m,p))}</div>
+      </div>`;
+      const watch = p.watch_link && p.watch_link.url ? `<a class="btn btn-primary btn-sm" href="${esc(p.watch_link.url)}" target="_blank" rel="noopener" style="margin-top:12px;">${esc(p.watch_link.label || "Watch")}</a>` : "";
+      body+=`<div class="drawer-section"><h4>Match notes</h4><p style="color:var(--text-secondary);line-height:1.6;">${esc(m.venue)}. Kickoff ${esc(fmtDate(m.kickoff_iso))}. The ensemble projects a ${esc(p.predicted_score||"close score")} result with the highest probability on ${esc(p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"the draw"))}.</p>${watch}</div>`;
+      body+=`<div class="drawer-section"><h4>Three-spread view</h4><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">`+
+        ["A","B","C"].map(k=>{
+          const pick=p.three_spread?.[k];
+          const name = pick==="H"?m.home:(pick==="A"?m.away:(pick?"Draw":"No pick"));
+          return `<div class="pc-metric"><div class="pc-metric-label">Spread ${k}</div><div class="pc-metric-value">${esc(name)}</div></div>`;
+        }).join("")+`</div></div>`;
+    }else if(state.drawerTab==="probabilities"){
+      body=`<div class="drawer-section"><h4>Outcome probabilities</h4>`+
+        [{k:"Home win",v:p.p_home,t:m.home},{k:"Draw",v:p.p_draw,t:""},{k:"Away win",v:p.p_away,t:m.away}].map(x=>`
+        <div class="prob-row"><span>${esc(x.t||x.k)}</span><div class="bar-wrap"><div class="bar" style="width:${pct(x.v)};background:${barColor(x.v)}"></div></div><span>${pct(x.v)}</span></div>`).join("")+`</div>`;
+      body+=`<div class="drawer-section"><h4>Expected score</h4><div class="accuracy-stat"><div class="v">${esc(p.predicted_score||"-")}</div><div class="k">Projected scoreline</div></div></div>`;
+    }else if(state.drawerTab==="value"){
+      const v=state.valueBets.find(x=>x.match_n===m.n);
+      body=`<div class="drawer-section"><h4>Value assessment</h4>`+(v?`
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <div class="pc-metric"><div class="pc-metric-label">Best side</div><div class="pc-metric-value">${esc(v.best_side)}</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Edge</div><div class="pc-metric-value" style="color:${v.value_bet?'var(--success)':'var(--text-muted)'}">${v.edge_pp.toFixed(2)}pp</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Model prob</div><div class="pc-metric-value">${pct(v.best_side==='home'?v.model_p_home:(v.best_side==='draw'?v.model_p_draw:v.model_p_away))}</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Value bet</div><div class="pc-metric-value">${v.value_bet?"Yes":"No"}</div></div>
+        </div>
+        <p style="color:var(--text-secondary);margin-top:12px;">This compares the model probability to a devigged market sample. Positive edge does not mean the outcome is guaranteed.</p>`
+        :`<p style="color:var(--text-secondary);">No value assessment available for this fixture.</p>`)+`</div>`;
+    }else if(state.drawerTab==="lineups"){
+      const homeInj=Object.entries(state.injuries).filter(([_,i])=>i.team===m.home).map(([name,i])=>`<li><b>${esc(name)}</b> (${esc(i.status)}) — ${esc(i.reason)}</li>`).join("");
+      const awayInj=Object.entries(state.injuries).filter(([_,i])=>i.team===m.away).map(([name,i])=>`<li><b>${esc(name)}</b> (${esc(i.status)}) — ${esc(i.reason)}</li>`).join("");
+      body=`<div class="drawer-section"><h4>${esc(m.home)} availability</h4>${homeInj||'<p style="color:var(--text-secondary);">No reported issues.</p>'}</div>`;
+      body+=`<div class="drawer-section"><h4>${esc(m.away)} availability</h4>${awayInj||'<p style="color:var(--text-secondary);">No reported issues.</p>'}</div>`;
+    }else if(state.drawerTab==="video"){
+      const mv=matchVideo(m.n);
+      body=`<div class="drawer-section"><h4>Match cinematic</h4>`;
+      body+=`<video class="drawer-video" controls preload="metadata" poster="${matchAsset(m.n)}" onerror="this.classList.add('hidden');document.getElementById('vf-${m.n}').classList.remove('hidden')">${mv?`<source src="${mv}" type="video/mp4">`:''}</video>`;
+      body+=`<div id="vf-${m.n}" class="${mv?'hidden':''}"><img src="${matchAsset(m.n)}" style="width:100%;border-radius:var(--radius-sm);border:1px solid var(--border);" alt="" onerror="this.style.display='none'"><p style="color:var(--text-muted);font-size:12px;margin-top:8px;">Custom video not available for this fixture.</p></div>`;
+      body+=`<p style="color:var(--text-muted);font-size:12px;margin-top:8px;">Custom generated video for this fixture. Falls back to the still image if processing.</p></div>`;
+    }
+    $("drawer-body").innerHTML=body;
+  }
+
+  // ── Simulator ─────────────────────────────────────────────────────────────
+  function applyScenario(){
+    const n=parseInt($("sim-match").value,10); const score=$("sim-score").value.trim();
+    if(!n||!/^\d+\s*-\s*\d+$/.test(score)){ alert("Select a match and enter a score like 2-1."); return; }
+    state.scenario[n]=score.replace(/\s/g,""); renderGroups();
+  }
+  function resetScenario(){ state.scenario={}; $("sim-score").value=""; renderGroups(); }
+
+  // ── View / events ─────────────────────────────────────────────────────────
+  function bindEvents(){
+    document.querySelectorAll(".toggle-pill button").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll(".toggle-pill button").forEach(b=>{b.classList.remove("active");b.setAttribute("aria-pressed","false");});
+        btn.classList.add("active"); btn.setAttribute("aria-pressed","true"); state.view=btn.dataset.view; renderFeed(); renderKnockouts();
+      });
+    });
+    $("player-search").addEventListener("input", renderPlayers);
+    $("player-team-filter").addEventListener("change", renderPlayers);
+    $("player-pos-filter").addEventListener("change", renderPlayers);
+    document.addEventListener("keydown", e=>{
+      if(e.key==="Escape"){ closeDrawer(); if(state.builderOpen) toggleBuilderDrawer(); }
+    });
+  }
+
+  function bindDock(){
+    const items = document.querySelectorAll(".dock-item");
+    const sections = ["hero","predictions","groups","knockouts","players","news","model","fixtures"];
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          items.forEach(it=>it.classList.toggle("active", it.dataset.section===en.target.id));
+        }
+      });
+    }, {rootMargin: "-40% 0px -40% 0px", threshold: 0});
+    sections.forEach(id=>{ const el=$(id); if(el) obs.observe(el); });
+    items.forEach(it=>{
+      it.addEventListener("click", e=>{
+        e.preventDefault();
+        const id = it.getAttribute("href").slice(1);
+        const el = $(id);
+        if(el) el.scrollIntoView({behavior:"smooth"});
+      });
+    });
+  }
+
+  // Hover-to-play card videos (lightweight: only preload on hover)
+  new MutationObserver(()=>{
+    document.querySelectorAll(".card-video:not([data-wired])").forEach(v=>{
+      v.dataset.wired="1";
+      const card = v.closest(".carousel-card");
+      if(!card) return;
+      const play=()=>{ if(v.preload==="none"){ v.preload="metadata"; v.load(); } v.play().catch(()=>{}); };
+      const pause=()=>{ v.pause(); };
+      card.addEventListener("mouseenter", play);
+      card.addEventListener("mouseleave", pause);
+      card.addEventListener("focusin", play);
+      card.addEventListener("focusout", pause);
+    });
+  }).observe(document.body, {childList:true, subtree:true});
+
+  window.JARVIS = {
+    init, openDrawer, closeDrawer, setDrawerTab,
+    addToBuilder, removeFromBuilder, toggleBuilderDrawer,
+    applyScenario, resetScenario, showAllFixtures
+  };
+  init();
+})();
+</script>
+</body>
+</html>

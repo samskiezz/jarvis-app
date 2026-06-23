@@ -98,6 +98,40 @@ DC_RHO = -0.08
 K_WORLDCUP = 40.0
 K_FRIENDLY = 20.0
 
+# Draw-rate calibration (Stage 1d, 2026-06-20).
+#
+# WC2026 actuals through MD2 have 12 draws across 30 played matches = 33%
+# base rate. Raw argmax over (p_home, p_draw, p_away) picked D on only
+# 4 of 95 graded predictions = 4% — the textbook Dixon-Coles draw-suppression
+# failure mode (p_draw is the weighted sum of cells along the grid diagonal;
+# (1,1) and (0,0) rarely beat individual off-diagonal cells like (1,0) or
+# (2,1) even when their summed mass on the diagonal is meaningful).
+#
+# Fix: replace strict argmax with a soft rule — pick D when p_draw clears
+# DRAW_FLOOR AND is within DRAW_TOLERANCE of the larger of (p_home, p_away).
+# Tuned so the predicted-D rate over the 553-match warmup matches the
+# empirical international-football draw rate (~26%).
+DRAW_FLOOR = 0.22
+DRAW_TOLERANCE = 0.15
+
+
+def pick_wdl(p_home: float, p_draw: float, p_away: float) -> str:
+    """Pick W/D/L from class probabilities with draw-rate calibration.
+
+    Dixon-Coles models under-predict draws under strict argmax. This helper
+    picks D when p_draw is meaningful (>= DRAW_FLOOR) AND within
+    DRAW_TOLERANCE of max(p_home, p_away). Otherwise it picks the higher
+    of p_home / p_away. The thresholds bring the model's predicted-draw
+    rate from ~4% under strict argmax to ~26% on the 553-match warmup,
+    aligning with the empirical base rate without overpicking.
+    """
+    if not (p_home >= 0.0 and p_draw >= 0.0 and p_away >= 0.0):
+        return "H"
+    max_hp = max(p_home, p_away)
+    if p_draw >= DRAW_FLOOR and p_draw >= max_hp - DRAW_TOLERANCE:
+        return "D"
+    return "H" if p_home >= p_away else "A"
+
 TUNED_COEFFS_PATH = Path("/opt/jarvis-app-1/scripts/wc2026_predictor_tuned.json")
 
 # Isotonic calibrator artifact (per-class breakpoints). Written after every
@@ -587,8 +621,8 @@ def walk_forward_backtest(
             picked = "A"
             actual = "A"
             true_p = pa
-        # Pick argmax outcome class.
-        cls = max(((ph, "H"), (pd_, "D"), (pa, "A")))[1]
+        # Pick W/D/L with draw-rate-calibrated rule (Stage 1d).
+        cls = pick_wdl(ph, pd_, pa)
         if cls == actual:
             winner_correct += 1
         if pred["expected_score"] == (hg, ag):
@@ -1143,12 +1177,10 @@ def predict_all_fixtures(
         # the full tournament matches expectation set by FIFA.
         pred = predict_match(elo, home, away, neutral=True)
         bh, ba = pred["expected_score"]
-        if bh > ba:
-            wdl = "H"
-        elif bh < ba:
-            wdl = "A"
-        else:
-            wdl = "D"
+        # Use draw-rate-calibrated picker (see pick_wdl docstring). Stage 1d
+        # fix — strict argmax on expected score was suppressing draws to ~4%
+        # vs the ~33% empirical WC2026 rate.
+        wdl = pick_wdl(pred["p_home"], pred["p_draw"], pred["p_away"])
         out[str(n)] = {
             "n": n,
             "home": home_raw,
@@ -1275,12 +1307,8 @@ def main() -> dict:
             entry["p_away"] = round(pa_c, 4)
             # Re-derive predicted_wdl from calibrated probabilities so the
             # winner the audit/UI shows matches what was actually scored.
-            if ph_c >= pd_c and ph_c >= pa_c:
-                entry["predicted_wdl"] = "H"
-            elif pd_c >= pa_c:
-                entry["predicted_wdl"] = "D"
-            else:
-                entry["predicted_wdl"] = "A"
+            # Use draw-rate-calibrated picker (Stage 1d).
+            entry["predicted_wdl"] = pick_wdl(ph_c, pd_c, pa_c)
             entry["calibration"] = "isotonic_per_class_renormalised"
         iso_meta["applied"] = True
         iso_meta["n_fit"] = len(iso_rows)

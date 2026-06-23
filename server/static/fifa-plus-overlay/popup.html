@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JARVIS FIFA+ Overlay</title>
+  <style>
+    body {
+      width: 280px;
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px;
+      color: #e8e8e8;
+      background: #0c121c;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: #4a9eff;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      color: #aaa;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(74, 158, 255, 0.4);
+      background: #121c2d;
+      color: #e8e8e8;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background: #4a9eff;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #3689e6;
+    }
+    .status {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #8ab4ff;
+    }
+    .hint {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #888;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚽ JARVIS FIFA+ Overlay</h1>
+  <label for="baseUrl">JARVIS server base URL</label>
+  <input id="baseUrl" type="text" placeholder="https://app.projectsolar.cloud/jarvis" />
+  <button id="save">Save & refresh overlay</button>
+  <div class="status" id="status"></div>
+  <div class="hint">
+    This overlay only draws predictions on top of the FIFA+ page. It does not download or scrape the video stream.
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

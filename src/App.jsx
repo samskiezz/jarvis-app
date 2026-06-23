@@ -107,6 +107,15 @@ function App() {
 
                 {/* The 10 render-locked immersive scenes (the JARVIS experience). */}
                 <Route path="/cinematic" element={<Navigate to="/cinematic/01_command_atrium" replace />} />
+                {/* Command Atrium IS the unified JARVIS · PALANTIR (Osiris) surface on :3000 */}
+                <Route path="/cinematic/01_command_atrium" element={
+                  <iframe
+                    src={`${window.location.protocol}//${window.location.hostname}:3000/`}
+                    title="JARVIS · PALANTIR"
+                    style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', border: 'none', background: '#06060C', zIndex: 9999 }}
+                    allow="fullscreen; geolocation; microphone; camera; clipboard-write"
+                  />
+                } />
                 <Route path="/cinematic/:sceneId" element={<CinematicShell />} />
 
                 {/* APEX HUD — AppLayout + all feature pages live under /apex. */}

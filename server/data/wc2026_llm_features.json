@@ -1,0 +1,338 @@
+{
+  "last_updated": "2026-06-19T11:27:28+00:00",
+  "model": "llama3.1:8b",
+  "matchday": "MD2",
+  "count": 12,
+  "matches": {
+    "1": {
+      "home": "USA",
+      "away": "Australia",
+      "preview_url": "https://www.espn.com/search/results/_/q/USA+vs+Australia",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [],
+        "key_players": [],
+        "tactical": {
+          "formation": null,
+          "press_intensity": null
+        },
+        "manager_change": null,
+        "form_summary": null
+      },
+      "source": "stub",
+      "model": null
+    },
+    "2": {
+      "home": "Mexico",
+      "away": "Korea Republic",
+      "preview_url": "https://www.espn.com/search/results/_/q/Mexico+vs+Korea+Republic",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [
+          "Hirving Lozano",
+          "Andres Guardado",
+          "Edson Alvarez",
+          "Nestor Araujo",
+          "Eduardo Vargas",
+          "Orbelin Pineda",
+          "Rodolfo Pizarro",
+          "Uriel Antuna",
+          "Carlos Rodriguez",
+          "Cesar Montes",
+          "Guillermo Ochoa"
+        ],
+        "key_players": [
+          {
+            "name": "Hirving Lozano",
+            "status": "in-form"
+          },
+          {
+            "name": "Andres Guardado",
+            "status": "doubtful"
+          }
+        ],
+        "tactical": {
+          "formation": "4-3-3",
+          "press_intensity": "high"
+        },
+        "manager_change": null,
+        "form_summary": "Mexico have been in decent form, winning two of their last three matches."
+      },
+      "source": "llm",
+      "model": "llama3.1:8b"
+    },
+    "3": {
+      "home": "Canada",
+      "away": "Scotland",
+      "preview_url": "https://www.espn.com/search/results/_/q/Canada+vs+Scotland",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [],
+        "key_players": [],
+        "tactical": {
+          "formation": null,
+          "press_intensity": null
+        },
+        "manager_change": null,
+        "form_summary": null
+      },
+      "source": "stub",
+      "model": null
+    },
+    "4": {
+      "home": "Brazil",
+      "away": "Switzerland",
+      "preview_url": "https://www.espn.com/search/results/_/q/Brazil+vs+Switzerland",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [
+          "Richarlison",
+          "Vinicius Junior",
+          "Neymar Jr.",
+          "Casemiro",
+          "Fabinho",
+          "Marquinhos",
+          "Alisson Becker",
+          "Alex Sandro",
+          "Eder Militao",
+          "Fred",
+          "Gabriel Jesus"
+        ],
+        "key_players": [
+          {
+            "name": "Neymar Jr.",
+            "status": "in-form"
+          }
+        ],
+        "tactical": {
+          "formation": "4-3-3",
+          "press_intensity": "high"
+        },
+        "manager_change": null,
+        "form_summary": "Brazil have been in excellent form, winning their last five matches."
+      },
+      "source": "llm",
+      "model": "llama3.1:8b"
+    },
+    "5": {
+      "home": "Germany",
+      "away": "Netherlands",
+      "preview_url": "https://www.espn.com/search/results/_/q/Germany+vs+Netherlands",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [
+          "Süle",
+          "Goretzka",
+          "Kimmich",
+          "Hummels",
+          "Gnabry",
+          "Erling Haaland",
+          "Reus",
+          "Lewandowski",
+          "Neuer",
+          "Rüdiger",
+          "Schulz"
+        ],
+        "key_players": [
+          {
+            "name": "Serge Gnabry",
+            "status": "in-form"
+          },
+          {
+            "name": "Joshua Kimmich",
+            "status": "in-form"
+          }
+        ],
+        "tactical": {
+          "formation": "4-2-3-1",
+          "press_intensity": "high"
+        },
+        "manager_change": null,
+        "form_summary": "Germany have been in good form recently, winning their last two matches."
+      },
+      "source": "llm",
+      "model": "llama3.1:8b"
+    },
+    "6": {
+      "home": "Argentina",
+      "away": "Norway",
+      "preview_url": "https://www.espn.com/search/results/_/q/Argentina+vs+Norway",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [
+          "Lautaro Martinez",
+          "Angel Di Maria",
+          "Leandro Paredes",
+          "Nicolás Otamendi",
+          "Gonzalo Montiel",
+          "Rodrigo De Paul",
+          "Enzo Fernández",
+          "Pablo Pérez",
+          "Julian Alvarez",
+          "Alexis Mac Allister",
+          "Nicolas Tagliafico"
+        ],
+        "key_players": [
+          {
+            "name": "Lionel Messi",
+            "status": "in-form"
+          }
+        ],
+        "tactical": {
+          "formation": "4-3-3 or similar",
+          "press_intensity": "high"
+        },
+        "manager_change": null,
+        "form_summary": "Argentina have been in good form recently, winning their last two matches"
+      },
+      "source": "llm",
+      "model": "llama3.1:8b"
+    },
+    "7": {
+      "home": "France",
+      "away": "Senegal",
+      "preview_url": "https://www.espn.com/search/results/_/q/France+vs+Senegal",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [],
+        "key_players": [],
+        "tactical": {
+          "formation": null,
+          "press_intensity": null
+        },
+        "manager_change": null,
+        "form_summary": null
+      },
+      "source": "stub",
+      "model": null
+    },
+    "8": {
+      "home": "Spain",
+      "away": "Iran",
+      "preview_url": "https://www.espn.com/search/results/_/q/Spain+vs+Iran",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [
+          "Pedri",
+          "Frenkie de Jong",
+          "Rodrigo",
+          "Sergio Ramos",
+          "Aymeric Laporte",
+          "Sergio Busquets",
+          "Ansu Fati",
+          "Pablo Sarabia",
+          "Dani Olmo",
+          "Marco Asensio",
+          "Alvaro Morata"
+        ],
+        "key_players": [
+          {
+            "name": "Pedri",
+            "status": "in-form"
+          },
+          {
+            "name": "Frenkie de Jong",
+            "status": "in-form"
+          }
+        ],
+        "tactical": {
+          "formation": "4-3-3",
+          "press_intensity": "high"
+        },
+        "manager_change": null,
+        "form_summary": "Spain have been in good form, winning their last two matches."
+      },
+      "source": "llm",
+      "model": "llama3.1:8b"
+    },
+    "9": {
+      "home": "England",
+      "away": "Ecuador",
+      "preview_url": "https://www.espn.com/search/results/_/q/England+vs+Ecuador",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [],
+        "key_players": [],
+        "tactical": {
+          "formation": null,
+          "press_intensity": null
+        },
+        "manager_change": null,
+        "form_summary": null
+      },
+      "source": "stub",
+      "model": null
+    },
+    "10": {
+      "home": "Portugal",
+      "away": "Cape Verde",
+      "preview_url": "https://www.espn.com/search/results/_/q/Portugal+vs+Cape+Verde",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [
+          "Rui Patrício",
+          "Diogo Dalot",
+          "Pepe",
+          "Rúben Dias",
+          "Nuno Mendes",
+          "Ruben Neves",
+          "João Palhinha",
+          "Bernardo Silva",
+          "Bruno Fernandes",
+          "Cristiano Ronaldo",
+          "João Félix"
+        ],
+        "key_players": [
+          {
+            "name": "Cristiano Ronaldo",
+            "status": "in-form"
+          }
+        ],
+        "tactical": {
+          "formation": "4-3-3",
+          "press_intensity": "high"
+        },
+        "manager_change": null,
+        "form_summary": "Portugal have been in good form, winning their last two matches."
+      },
+      "source": "llm",
+      "model": "llama3.1:8b"
+    },
+    "11": {
+      "home": "Belgium",
+      "away": "Algeria",
+      "preview_url": "https://www.espn.com/search/results/_/q/Belgium+vs+Algeria",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [],
+        "key_players": [],
+        "tactical": {
+          "formation": null,
+          "press_intensity": null
+        },
+        "manager_change": null,
+        "form_summary": null
+      },
+      "source": "stub",
+      "model": null
+    },
+    "12": {
+      "home": "New Zealand",
+      "away": "Egypt",
+      "preview_url": "https://www.espn.com/search/results/_/q/New+Zealand+vs+Egypt",
+      "fetched_at": "2026-06-19T11:27:28+00:00",
+      "features": {
+        "lineup_xi": [],
+        "key_players": [],
+        "tactical": {
+          "formation": null,
+          "press_intensity": null
+        },
+        "manager_change": null,
+        "form_summary": null
+      },
+      "source": "stub",
+      "model": null
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "verified": true,
+  "source": "scripts/worldcup_prediction_engine.py — weights learned by multiclass-logloss minimisation over leakage-free walk-forward predictions",
+  "generated_at": "2026-06-22T10:52:26+00:00",
+  "active_model": "logloss_blend_v1",
+  "weights_learned": true,
+  "weights": {
+    "elo": 0.0,
+    "elo_draw": 0.0,
+    "rank": 0.00544,
+    "rank_draw": 0.0,
+    "poisson": 0.0,
+    "dixon_coles": 0.0,
+    "dixon_coles_heavy": 0.0,
+    "draw_guard": 0.0,
+    "group_table": 0.1726,
+    "underdog_guard": 0.0,
+    "xgboost_proxy": 0.20894,
+    "lightgbm_proxy": 0.31072,
+    "catboost_proxy": 0.30231,
+    "market": 0.0
+  },
+  "backtest_window": "1994-06-17..2026-06-19 (563 matches)",
+  "single_top_pick_accuracy": 0.714,
+  "three_spread_coverage": 0.9604,
+  "betting_value_score": 0.5212,
+  "in_sample": true,
+  "reason_selected": "Blend weights minimise multiclass log loss; draw-protective models retained to address favourite-draw failures."
+}

@@ -127,4 +127,9 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    try:
+        from server.services import nexus_client as _nx
+        _nx.announce("jarvis-worker", role="worker")
+    except Exception:
+        pass
     asyncio.run(main())

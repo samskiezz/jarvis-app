@@ -1,0 +1,1389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Jarvis Match Centre — World Cup 2026 Prediction Intelligence. Live model predictions, score projections, risk ratings, late news and tournament impact." />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self';" />
+<title>Jarvis Match Centre · World Cup 2026 Prediction Intelligence</title>
+<style>
+  :root {
+    --bg: #070A12;
+    --surface: #101624;
+    --surface-elevated: #151D2E;
+    --surface-highlight: #1B2740;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --text-primary: #F7F9FC;
+    --text-secondary: #AAB4C5;
+    --text-muted: #6F7A8D;
+    --accent: #2F80FF;
+    --accent-glow: #00D5FF;
+    --success: #35D07F;
+    --warning: #F5A524;
+    --risk: #FF4D4F;
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    --shadow-strong: 0 16px 48px rgba(0,0,0,0.55);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --font-primary: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-condensed: "Roboto Condensed", "Saira Condensed", Impact, sans-serif;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes glow { 0%,100% { box-shadow: 0 0 20px rgba(47,128,255,0.15); } 50% { box-shadow: 0 0 40px rgba(47,128,255,0.35); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes ringSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body {
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(47,128,255,0.12) 0%, transparent 35%),
+      radial-gradient(circle at 80% 10%, rgba(0,213,255,0.08) 0%, transparent 30%),
+      linear-gradient(180deg, rgba(7,10,18,0.9) 0%, var(--bg) 100%),
+      url('asset/mc_stadium_command_centre_bg.png');
+    background-size: cover, cover, cover, cover;
+    background-position: center top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background: url('asset/mc_pitch_grid_overlay.png') center / cover no-repeat;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-video {
+    position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.04; pointer-events: none; z-index: -1; transition: opacity .5s;
+  }
+  @media (max-width: 700px) { .bg-video { display: none; } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* Utilities */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .hidden { display:none !important; }
+  .flex { display: flex; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .gap-4 { gap: 16px; }
+  .text-secondary { color: var(--text-secondary); }
+  .text-muted { color: var(--text-muted); }
+  .font-mono { font-family: var(--font-mono); }
+  .font-condensed { font-family: var(--font-condensed); }
+
+  /* Header */
+  .app-header {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(7,10,18,0.82);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+    overflow:hidden;
+  }
+  .app-header > *:not(.header-video) { position:relative; z-index:1; }
+  .header-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.12; pointer-events:auto; z-index:0; transition:opacity .3s; }
+  .app-header:hover .header-video { opacity:0.22; }
+  .header-inner {
+    max-width: 1600px; margin: 0 auto;
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-logo {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 18px; color: #fff;
+    box-shadow: 0 0 20px rgba(47,128,255,0.3);
+  }
+  .brand-text h1 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand-text span { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .header-nav { display: flex; gap: 6px; }
+  .header-nav a, .header-nav button {
+    background: transparent; border: 1px solid transparent;
+    color: var(--text-secondary); font-size: 12.5px; font-weight: 600;
+    padding: 7px 12px; border-radius: 999px; cursor: pointer; text-decoration: none;
+    transition: all .2s;
+  }
+  .header-nav a:hover, .header-nav button:hover { background: var(--surface); color: var(--text-primary); }
+  .header-nav a.active { background: var(--surface-elevated); color: var(--accent); border-color: var(--border-strong); }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    background: rgba(53,208,127,0.12); color: var(--success); border: 1px solid rgba(53,208,127,0.25);
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+  .toggle-pill {
+    display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 3px;
+  }
+  .toggle-pill button {
+    border: none; background: transparent; color: var(--text-secondary); font-size: 11px; font-weight: 700;
+    padding: 5px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .toggle-pill button.active { background: var(--accent); color: #fff; }
+
+  /* Live strip */
+  .live-strip {
+    background: rgba(16,22,36,0.92);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    position: sticky; top: 61px; z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .strip-inner { max-width: 1600px; margin: 0 auto; padding: 0 24px; }
+  .strip-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .strip-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .strip-card {
+    flex: 0 0 auto; width: 170px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 10px 12px; cursor: pointer; transition: all .2s; position: relative; overflow:hidden;
+  }
+  .strip-card > *:not(.card-video) { position:relative; z-index:1; }
+  .strip-card:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: var(--shadow); }
+  .strip-card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 20px rgba(47,128,255,0.15); }
+  .strip-card.live { border-color: rgba(53,208,127,0.4); }
+  .strip-card.news::after {
+    content: ""; position: absolute; top: -4px; right: -4px; width: 10px; height: 10px;
+    background: var(--warning); border-radius: 50%; box-shadow: 0 0 10px var(--warning);
+  }
+  .strip-teams { display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 14px; }
+  .strip-teams .flag { font-size: 22px; }
+  .strip-score { font-family: var(--font-condensed); font-size: 20px; color: var(--text-primary); }
+  .strip-meta { margin-top: 6px; display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); }
+  .strip-conf { color: var(--accent); font-weight: 700; }
+
+  /* Layout */
+  .app-shell { max-width: 1600px; margin: 0 auto; padding: 24px; position: relative; z-index: 1; }
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Section headers */
+  .section-header { margin-bottom: 16px; }
+  .section-header h2 { margin: 0; font-size: 18px; font-weight: 700; }
+  .section-header p { margin: 4px 0 0; font-size: 12.5px; color: var(--text-muted); }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: all .25s;
+  }
+  .card:hover { border-color: var(--border-strong); }
+
+  /* Prediction cards */
+  .match-feed { display: flex; flex-direction: column; gap: 16px; }
+  .prediction-card {
+    background: linear-gradient(180deg, rgba(21,29,46,0.95) 0%, rgba(16,22,36,0.95) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all .25s;
+  }
+  .prediction-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(47,128,255,0.4), transparent);
+  }
+  .prediction-card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: var(--shadow-strong); }
+  .prediction-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 30px rgba(47,128,255,0.12); }
+  .prediction-card.high-risk { border-color: rgba(245,165,36,0.35); }
+  .prediction-card.live { border-color: rgba(53,208,127,0.35); }
+  .prediction-card.completed.correct { border-color: rgba(53,208,127,0.35); }
+  .prediction-card.completed.incorrect { border-color: rgba(255,77,79,0.35); }
+
+  .pc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .pc-kickoff { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .pc-status { display: flex; gap: 6px; }
+  .pc-teams { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .pc-team { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .pc-team.away { flex-direction: row-reverse; text-align: right; }
+  .pc-team .flag { font-size: 42px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+  .pc-team .name { font-size: 20px; font-weight: 700; }
+  .pc-team .meta { font-size: 11px; color: var(--text-muted); }
+  .pc-vs { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); padding: 0 12px; }
+  .pc-score {
+    font-family: var(--font-condensed); font-size: 42px; font-weight: 700;
+    background: linear-gradient(180deg, #fff, #AAB4C5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center; min-width: 90px;
+  }
+
+  .pc-body { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 700px) { .pc-body { grid-template-columns: 1fr 1fr; } }
+  .pc-metric { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; }
+  .pc-metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .pc-metric-value { font-size: 20px; font-weight: 700; }
+  .pc-metric-sub { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+  .pc-reason { grid-column: 1 / -1; font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-top: 4px; }
+  .pc-reason b { color: var(--text-primary); }
+  .pc-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 16px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700;
+    border: 1px solid var(--border); background: var(--surface-elevated); color: var(--text-primary);
+    cursor: pointer; transition: all .2s;
+  }
+  .btn:hover { background: var(--surface-highlight); border-color: var(--border-strong); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #1a6fd6; box-shadow: 0 0 20px rgba(47,128,255,0.25); }
+  .btn-ghost { background: transparent; color: var(--text-secondary); }
+  .btn-ghost:hover { color: var(--text-primary); }
+  .btn-sm { padding: 6px 12px; font-size: 11.5px; }
+
+  /* Confidence ring */
+  .confidence-ring {
+    width: 52px; height: 52px; border-radius: 50%; position: relative;
+    display: grid; place-items: center;
+    background: conic-gradient(var(--accent) var(--p, 0%), rgba(255,255,255,0.08) 0);
+  }
+  .confidence-ring::before {
+    content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--surface);
+  }
+  .confidence-ring span { position: relative; font-size: 13px; font-weight: 800; font-family: var(--font-mono); }
+
+  /* Risk badge */
+  .risk-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    border: 1px solid;
+  }
+  .risk-low { background: rgba(53,208,127,0.10); color: var(--success); border-color: rgba(53,208,127,0.25); }
+  .risk-medium { background: rgba(245,165,36,0.10); color: var(--warning); border-color: rgba(245,165,36,0.25); }
+  .risk-high { background: rgba(255,77,79,0.10); color: var(--risk); border-color: rgba(255,77,79,0.25); }
+
+  /* Builder */
+  .builder-sticky { position: sticky; top: 140px; }
+  .builder-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .builder-header { padding: 16px 18px; border-bottom: 1px solid var(--border); }
+  .builder-header h3 { margin: 0; font-size: 15px; }
+  .builder-header p { margin: 4px 0 0; font-size: 11.5px; color: var(--text-muted); }
+  .builder-body { padding: 16px 18px; }
+  .builder-empty { text-align: center; padding: 24px 12px; color: var(--text-muted); font-size: 12px; }
+  .builder-selection {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px; margin-bottom: 8px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  }
+  .builder-selection .sel-flag { font-size: 22px; }
+  .builder-selection .sel-text { flex: 1; }
+  .builder-selection .sel-title { font-size: 12.5px; font-weight: 700; }
+  .builder-selection .sel-meta { font-size: 10.5px; color: var(--text-muted); }
+  .builder-selection .sel-remove {
+    width: 22px; height: 22px; border-radius: 50%; border: none; background: rgba(255,77,79,0.15);
+    color: var(--risk); cursor: pointer; font-size: 14px; line-height: 1;
+  }
+  .builder-metric { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; }
+  .builder-metric span:first-child { color: var(--text-muted); }
+  .builder-metric span:last-child { font-weight: 700; }
+  .builder-warning {
+    background: rgba(245,165,36,0.08); border: 1px solid rgba(245,165,36,0.2);
+    border-radius: var(--radius-sm); padding: 10px; font-size: 11.5px; color: var(--warning); margin-bottom: 10px;
+  }
+  .builder-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .builder-actions .btn { flex: 1; }
+
+  /* Sections */
+  .section { margin-top: 40px; }
+
+  /* News feed */
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .news-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; transition: all .2s;
+  }
+  .news-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .news-card.impact-high { border-color: rgba(245,165,36,0.35); }
+  .news-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .news-match { font-size: 13px; font-weight: 700; }
+  .news-time { font-size: 10.5px; color: var(--text-muted); }
+  .news-body { font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 10px; }
+  .news-impact { display: flex; gap: 16px; font-size: 11px; }
+  .news-impact span { color: var(--text-muted); }
+  .news-impact b { color: var(--text-primary); }
+  .news-impact .down { color: var(--risk); }
+  .news-impact .up { color: var(--success); }
+
+  /* Fixtures */
+  .fixture-date { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 20px 0 10px; }
+  .fixture-row {
+    display: grid; grid-template-columns: 80px 1fr 120px 90px 100px;
+    align-items: center; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .fixture-row:hover { background: rgba(255,255,255,0.02); }
+  .fixture-time { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+  .fixture-match { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .fixture-match .flag { font-size: 20px; }
+  .fixture-pick { font-size: 12px; font-weight: 700; }
+  .fixture-conf { font-size: 11px; color: var(--text-muted); }
+  .fixture-score { font-family: var(--font-condensed); font-size: 16px; font-weight: 700; text-align: right; }
+  .fixture-result { text-align: right; font-size: 11px; }
+  .fixture-result.correct { color: var(--success); }
+  .fixture-result.incorrect { color: var(--risk); }
+
+  /* Groups */
+  .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  .group-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .group-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .group-header h4 { margin: 0; font-size: 14px; }
+  .group-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .group-table th { text-align: left; padding: 8px 10px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+  .group-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
+  .group-table tr:last-child td { border-bottom: none; }
+  .group-table .team { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .group-table .flag { font-size: 18px; }
+  .group-table .prob { color: var(--text-muted); font-family: var(--font-mono); }
+  .group-table .q { color: var(--success); font-weight: 700; }
+  .group-table .e { color: var(--risk); }
+
+  /* Knockout */
+  .bracket-rounds { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; overflow-x: auto; }
+  .bracket-round { min-width: 160px; }
+  .bracket-round h5 { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .bracket-match {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 10px; margin-bottom: 10px; font-size: 11.5px;
+  }
+  .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+  .bracket-team.winner { color: var(--success); font-weight: 700; }
+  .bracket-prob { font-family: var(--font-mono); color: var(--text-muted); font-size: 10px; }
+
+  /* Players */
+  .player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .player-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; transition: all .2s;
+  }
+  .player-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .player-card.high-impact { border-color: rgba(245,165,36,0.3); }
+  .player-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .player-name { font-size: 15px; font-weight: 700; }
+  .player-team { font-size: 11px; color: var(--text-muted); }
+  .player-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .player-meta-item { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 8px; }
+  .player-meta-item div:first-child { font-size: 10px; color: var(--text-muted); }
+  .player-meta-item div:last-child { font-size: 13px; font-weight: 700; }
+  .player-note { font-size: 11.5px; color: var(--text-secondary); margin-top: 10px; line-height: 1.5; }
+
+  /* Model lab */
+  .lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .lab-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .lab-card h4 { margin: 0 0 8px; font-size: 14px; }
+  .lab-card p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+  .lab-card .icon { font-size: 24px; margin-bottom: 10px; }
+  .accuracy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
+  .accuracy-stat { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+  .accuracy-stat .v { font-size: 26px; font-weight: 800; font-family: var(--font-condensed); }
+  .accuracy-stat .k { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
+
+  /* Drawer */
+  .drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px); z-index: 300; opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+  }
+  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; width: 560px; max-width: 100%; height: 100vh;
+    background: linear-gradient(180deg, #0D1320 0%, #070A12 100%);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-strong);
+    z-index: 310; transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+  }
+  .drawer.show { transform: translateX(0); }
+  .drawer-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .drawer-header h2 { margin: 0; font-size: 17px; }
+  .drawer-close { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; font-size: 18px; }
+  .drawer-tabs { display: flex; gap: 4px; padding: 10px 16px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .drawer-tab { padding: 7px 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .drawer-tab.active { background: var(--surface-elevated); color: var(--accent); border-color: var(--border); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .drawer-section { margin-bottom: 24px; }
+  .drawer-section h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+
+  /* Arena 3D */
+  .arena-3d {
+    perspective: 1000px; height: 260px; display: grid; place-items: center; margin-bottom: 20px;
+    background: radial-gradient(circle at center, rgba(47,128,255,0.08) 0%, transparent 70%);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+  .arena-stage {
+    width: 320px; height: 180px;
+    transform-style: preserve-3d;
+    transform: rotateX(20deg) rotateY(0deg);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .arena-pitch {
+    position: absolute; width: 280px; height: 140px;
+    background: linear-gradient(180deg, rgba(34,60,35,0.9) 0%, rgba(26,48,28,0.9) 100%);
+    border: 1px solid rgba(255,255,255,0.15);
+    transform: rotateX(60deg);
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(0,213,255,0.08);
+  }
+  .arena-pitch::before {
+    content: ""; position: absolute; inset: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
+  }
+  .arena-center-line {
+    position: absolute; left: 50%; top: 10px; bottom: 10px; width: 1px; background: rgba(255,255,255,0.2);
+  }
+  .arena-team {
+    position: absolute; width: 70px; height: 70px; border-radius: 50%;
+    background: var(--surface-elevated); border: 2px solid var(--border-strong);
+    display: grid; place-items: center; font-size: 36px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    transform: translateZ(30px);
+  }
+  .arena-team.home { left: -20px; }
+  .arena-team.away { right: -20px; }
+  .arena-score {
+    position: absolute; font-family: var(--font-condensed); font-size: 48px; font-weight: 700;
+    color: #fff; text-shadow: 0 0 20px rgba(47,128,255,0.5);
+    transform: translateZ(60px);
+  }
+  .arena-ring {
+    position: absolute; width: 180px; height: 180px; border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent-glow);
+    transform: translateZ(10px) rotateX(70deg);
+    opacity: 0.7;
+    animation: ringSpin 12s linear infinite;
+  }
+  .arena-info {
+    position: absolute; bottom: 12px; left: 0; right: 0; text-align: center;
+    font-size: 11px; color: var(--text-secondary);
+  }
+
+  /* Simulator */
+  .sim-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .sim-controls select, .sim-controls input {
+    background: var(--surface-elevated); border: 1px solid var(--border); color: var(--text-primary);
+    padding: 8px 12px; border-radius: var(--radius-sm); font-size: 12px;
+  }
+  .sim-controls button { margin-left: auto; }
+
+  /* Mobile tray */
+  .mobile-tray {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(13,19,32,0.96); border-top: 1px solid var(--border);
+    backdrop-filter: blur(16px); z-index: 250;
+    transform: translateY(calc(100% - 56px)); transition: transform .3s;
+  }
+  .mobile-tray.expanded { transform: translateY(0); }
+  .mobile-tray-header {
+    height: 56px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; cursor: pointer; position:relative; z-index:1;
+  }
+  .tray-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.1; pointer-events:none; z-index:0; }
+  .mobile-tray:hover .tray-video { opacity:0.18; }
+  @media (min-width: 1101px) { .mobile-tray { display: none; } }
+
+  /* Loading skeleton */
+  .skeleton {
+    position:relative; overflow:hidden;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+  .skeleton-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.15; pointer-events:none; z-index:0; }
+  .skeleton-card { height: 220px; margin-bottom: 16px; }
+
+  /* Empty/error */
+  .state-box { position:relative; overflow:hidden; text-align: center; padding: 40px 20px; color: var(--text-muted); border-radius:var(--radius); }
+  .state-box-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.1; pointer-events:none; z-index:0; }
+  .state-box-content { position:relative; z-index:1; }
+  .state-box img { max-width: 200px; opacity: 0.7; margin-bottom: 16px; }
+  .state-box h3 { color: var(--text-primary); margin-bottom: 6px; }
+
+  /* Footer */
+  .app-footer {
+    position:relative; overflow:hidden;
+    margin-top: 60px; padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    background: rgba(7,10,18,0.8);
+  }
+  .footer-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.08; pointer-events:none; z-index:0; }
+  .app-footer:hover .footer-video { opacity:0.15; }
+  .footer-inner { position:relative; z-index:1; max-width: 1600px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-bottom: 24px; }
+  .footer-col h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .footer-col a { display: block; color: var(--text-secondary); text-decoration: none; font-size: 12.5px; margin-bottom: 6px; }
+  .footer-col a:hover { color: var(--accent); }
+  .disclaimer {
+    background: rgba(245,165,36,0.06); border: 1px solid rgba(245,165,36,0.2);
+    border-radius: var(--radius); padding: 16px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;
+  }
+  .disclaimer a { color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .header-inner { flex-wrap: wrap; }
+    .header-nav { display: none; }
+    .fixture-row { grid-template-columns: 60px 1fr 80px; }
+    .fixture-conf, .fixture-pick { display: none; }
+    .bracket-rounds { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .pc-teams { flex-direction: column; gap: 10px; }
+    .pc-team.away { flex-direction: row; text-align: left; }
+    .pc-vs { display: none; }
+    .pc-score { font-size: 32px; }
+    .pc-body { grid-template-columns: 1fr; }
+    .groups-grid { grid-template-columns: 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .drawer { width: 100%; }
+  }
+
+  .prediction-card { --card-img: none; }
+  .prediction-card::after { content:""; position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.12; border-radius:inherit; pointer-events:none; z-index:0; }
+  .prediction-card > * { position:relative; z-index:1; }
+  .pc-bg { position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.12; border-radius:inherit; pointer-events:none; z-index:0; }
+  .prob-row { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:12px; }
+  .prob-row span:first-child { width:90px; color:var(--text-secondary); }
+  .prob-row span:last-child { width:46px; text-align:right; font-weight:700; }
+  .bar-wrap { flex:1; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }
+  .bar { height:100%; border-radius:4px; }
+  .qualified { background:rgba(53,208,127,0.06); }
+  .group-card { position:relative; --card-img:none; }
+  .group-card::after { content:""; position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.10; border-radius:inherit; pointer-events:none; z-index:0; }
+  .group-card > * { position:relative; z-index:1; }
+  .group-header { position:relative; z-index:1; }
+  .pts { font-weight:800; }
+  .fixture-stage { margin-bottom:24px; }
+  .fixture-stage h3 { font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; }
+  .knockout-hero { height:220px; border-radius:var(--radius); position:relative; overflow:hidden; border:1px solid var(--border); margin-bottom:20px; --card-img:none; }
+  .knockout-hero::after { content:""; position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.25; }
+  .knockout-hero-inner { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:20px; background:linear-gradient(180deg, transparent 0%, rgba(7,10,18,0.95) 100%); z-index:1; }
+  .news-card { position:relative; --card-img:none; }
+  .news-card::after { content:""; position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.10; border-radius:inherit; pointer-events:none; z-index:0; }
+  .news-card > * { position:relative; z-index:1; }
+  .player-card { position:relative; --card-img:none; }
+  .player-card::after { content:""; position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.08; border-radius:inherit; pointer-events:none; z-index:0; }
+  .player-card > * { position:relative; z-index:1; }
+  .player-status { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:3px 8px; border-radius:999px; border:1px solid; }
+  .player-status.ok { color:var(--success); border-color:rgba(53,208,127,0.3); background:rgba(53,208,127,0.08); }
+  .player-status.doubt { color:var(--warning); border-color:rgba(245,165,36,0.3); background:rgba(245,165,36,0.08); }
+  .player-status.out { color:var(--risk); border-color:rgba(255,77,79,0.3); background:rgba(255,77,79,0.08); }
+  .drawer-hero { height:220px; border-radius:var(--radius); position:relative; overflow:hidden; border:1px solid var(--border); margin-bottom:20px; --card-img:none; }
+  .drawer-hero::after { content:""; position:absolute; inset:0; background:var(--card-img) center/cover no-repeat; opacity:0.25; }
+  .section-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.35; pointer-events:none; }
+  .has-video { position:relative; overflow:hidden; }
+  .has-video::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(7,10,18,0.85), rgba(7,10,18,0.4)); }
+  .lab-hero { background: var(--card-img) center/cover no-repeat; }
+
+  /* Interactive card videos */
+  .card-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .35s; border-radius:inherit; pointer-events:none; z-index:0; }
+  .card-video.active { opacity:0.22; }
+  .prediction-card::after, .group-card::after, .news-card::after, .player-card::after { z-index:-1; }
+  .lab-card, .accuracy-stat, .bracket-match { position:relative; overflow:hidden; }
+  .lab-card > *:not(.card-video), .accuracy-stat > *:not(.card-video), .bracket-match > *:not(.card-video) { position:relative; z-index:1; }
+  .section-header { position:relative; overflow:hidden; }
+  .section-header > *:not(.section-header-video) { position:relative; z-index:1; }
+  .section-header-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.12; pointer-events:none; z-index:0; transition:opacity .35s; }
+  .section-header:hover .section-header-video { opacity:0.22; }
+  .btn-video-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .25s; border-radius:inherit; pointer-events:none; z-index:0 !important; }
+  .btn { position:relative; overflow:hidden; }
+  .btn > *:not(.btn-video-bg) { position:relative; z-index:1; }
+  .btn:hover .btn-video-bg { opacity:0.18; }
+  @media (prefers-reduced-motion: reduce) {
+    .card-video, .section-video, .section-header-video, .btn-video-bg, .bg-video, .skeleton-video, .tray-video, .footer-video, .state-box-video, .header-video { display:none; }
+  }
+
+  .drawer-hero-meta { position:absolute; top:16px; left:16px; z-index:1; font-size:11px; color:var(--text-secondary); background:rgba(0,0,0,0.4); padding:4px 10px; border-radius:999px; }
+  .drawer-hero-score { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:var(--font-condensed); font-size:64px; font-weight:700; z-index:1; text-shadow:0 0 30px rgba(0,0,0,0.8); }
+  .drawer-hero-pick { position:absolute; bottom:16px; left:16px; z-index:1; font-size:13px; }
+  .drawer-video { width:100%; border-radius:var(--radius-sm); border:1px solid var(--border); }
+  .toast { position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:400; padding:12px 20px; border-radius:var(--radius-sm); font-weight:600; box-shadow:var(--shadow-strong); }
+  .toast-risk { background:rgba(255,77,79,0.12); color:var(--risk); border:1px solid rgba(255,77,79,0.25); }
+  .toast a { color:inherit; text-decoration:underline; }
+  @media (max-width: 700px) {
+    .match-feed { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:12px; scroll-snap-type:x mandatory; padding-bottom:12px; }
+    .match-feed .prediction-card { flex:0 0 88vw; max-width:88vw; scroll-snap-align:start; }
+    .main-grid { display:block; }
+    .builder-column { display:none; }
+    .live-strip { top:61px; }
+  }
+
+  </style>
+</head>
+<body>
+<video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_stadium_command_centre_bg.png" onerror="this.style.display='none'"><source src="asset/mc_stadium_command_centre_video.mp4" type="video/mp4"></video>
+
+<header class="app-header">
+  <video class="header-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_stadium_command_centre_video.mp4" type="video/mp4"></video>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">J</div>
+      <div class="brand-text">
+        <h1>Jarvis Match Centre</h1>
+        <span>World Cup 2026 Prediction Intelligence</span>
+      </div>
+    </div>
+    <nav class="header-nav" aria-label="Tournament sections">
+      <a href="#live" class="active">Live</a>
+      <a href="#predictions">Predictions</a>
+      <a href="#fixtures">Fixtures</a>
+      <a href="#groups">Groups</a>
+      <a href="#knockouts">Knockouts</a>
+      <a href="#players">Players</a>
+      <a href="#model">Model Lab</a>
+    </nav>
+    <div class="header-actions">
+      <span class="badge"><span class="badge-dot"></span> Analysis Only</span>
+      <div class="toggle-pill" role="group" aria-label="View mode">
+        <button class="active" data-view="simple" aria-pressed="true">Simple</button>
+        <button data-view="pro" aria-pressed="false">Pro</button>
+      </div>
+      <span id="header-updated" class="text-muted" style="font-size:11px;">Updated —</span>
+    </div>
+  </div>
+</header>
+
+<div class="live-strip" id="live-strip">
+  <div class="strip-inner">
+    <div class="strip-label">Next Up</div>
+    <div class="strip-scroll" id="strip-scroll">
+      <div class="skeleton" style="width:170px;height:80px;"></div>
+      <div class="skeleton" style="width:170px;height:80px;"></div>
+      <div class="skeleton" style="width:170px;height:80px;"></div>
+    </div>
+  </div>
+</div>
+
+<main class="app-shell">
+  <div class="main-grid">
+    <div class="feed-column">
+      <section class="section" id="predictions">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_stadium_command_centre_bg.png" onerror="this.style.display='none'"><source src="asset/mc_predictions_header_video.mp4" type="video/mp4"></video>
+          <h2>Match Prediction Feed</h2>
+          <p>Model-supported predictions, confidence ranges and risk ratings for every fixture.</p>
+        </div>
+        <div class="match-feed" id="match-feed" aria-live="polite" aria-busy="false">
+          <div class="skeleton skeleton-card"><video class="skeleton-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_stadium_command_centre_video.mp4" type="video/mp4"></video></div>
+          <div class="skeleton skeleton-card"><video class="skeleton-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_model_lab_video.mp4" type="video/mp4"></video></div>
+          <div class="skeleton skeleton-card"><video class="skeleton-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_knockout_bracket_video.mp4" type="video/mp4"></video></div>
+        </div>
+      </section>
+
+      <section class="section" id="news">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_late_news_impact.png" onerror="this.style.display='none'"><source src="asset/mc_news_header_video.mp4" type="video/mp4"></video>
+          <h2>What Changed</h2>
+          <p>Late news, lineup changes and model movement.</p>
+        </div>
+        <div class="news-grid" id="news-grid"></div>
+      </section>
+
+      <section class="section" id="fixtures">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_match_arena_hero.png" onerror="this.style.display='none'"><source src="asset/mc_fixtures_header_video.mp4" type="video/mp4"></video>
+          <h2>Fixtures</h2>
+          <p>Full tournament calendar with model picks and results.</p>
+        </div>
+        <div id="fixtures-content"></div>
+      </section>
+
+      <section class="section" id="groups">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_pitch_grid_overlay.png" onerror="this.style.display='none'"><source src="asset/mc_groups_header_video.mp4" type="video/mp4"></video>
+          <h2>Group Tables & Simulator</h2>
+          <p>Live standings. Apply a scenario to see how the table changes.</p>
+        </div>
+        <div class="sim-controls">
+          <select id="sim-match"><option value="">Select match…</option></select>
+          <input id="sim-score" type="text" placeholder="e.g. 2-1" style="width:80px;">
+          <button class="btn btn-primary btn-sm" onclick="applyScenario()">Apply Scenario</button>
+          <button class="btn btn-ghost btn-sm" onclick="resetScenario()">Reset</button>
+        </div>
+        <div class="groups-grid" id="groups-grid"></div>
+      </section>
+
+      <section class="section" id="knockouts">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_knockout_bracket_wall.png" onerror="this.style.display='none'"><source src="asset/mc_knockouts_header_video.mp4" type="video/mp4"></video>
+          <h2>Knockout Path Explorer</h2>
+          <p>Projected bracket and path probabilities.</p>
+        </div>
+        <div id="knockout-content"></div>
+      </section>
+
+      <section class="section" id="players">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_player_intelligence_wall.png" onerror="this.style.display='none'"><source src="asset/mc_players_header_video.mp4" type="video/mp4"></video>
+          <h2>Player Intelligence</h2>
+          <p>Availability, starting probability and model impact.</p>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <input id="player-search" type="text" placeholder="Search player, team, club…" style="flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);color:var(--text-primary);padding:9px 14px;border-radius:var(--radius-sm);">
+          <select id="player-team-filter"><option value="">All teams</option></select>
+          <select id="player-pos-filter">
+            <option value="">All positions</option><option value="GK">GK</option><option value="DEF">DEF</option><option value="MID">MID</option><option value="FWD">FWD</option>
+          </select>
+        </div>
+        <div class="player-grid" id="player-grid"></div>
+      </section>
+
+      <section class="section" id="model">
+        <div class="section-header">
+          <video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_model_header_video.mp4" type="video/mp4"></video>
+          <h2>Model Lab</h2>
+          <p>How the predictions are built and how they have performed.</p>
+        </div>
+        <div class="lab-hero has-video" style="--card-img:url('asset/mc_model_lab_visual.png');height:180px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:16px;display:flex;align-items:flex-end;padding:16px;">
+          <video class="section-video" autoplay muted loop playsinline poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_model_lab_video.mp4" type="video/mp4"></video>
+          <div style="position:relative;z-index:1">
+            <div style="font-family:var(--font-condensed);font-size:24px;font-weight:700;">Ensemble intelligence</div>
+            <div style="color:var(--text-secondary);">Poisson · Dixon-Coles · Elo · Group-table signals · Draw calibration</div>
+          </div>
+        </div>
+        <div class="lab-grid" id="lab-grid"></div>
+        <div class="accuracy-grid" id="accuracy-grid"></div>
+      </section>
+    </div>
+
+    <aside class="builder-column">
+      <div class="builder-sticky">
+        <div class="builder-card" id="builder-card" style="position:relative;">
+          <video class="card-video" muted loop playsinline preload="none" poster="asset/mc_prediction_card_share_bg.png" onerror="this.style.display='none'"><source src="asset/mc_builder_panel_video.mp4" type="video/mp4"></video>
+          <div class="builder-header">
+            <h3>Prediction Card</h3>
+            <p>Build a short analysis card from model-supported selections.</p>
+          </div>
+          <div class="builder-body" id="builder-body">
+            <div class="state-box"><video class="state-box-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_builder_panel_video.mp4" type="video/mp4"></video><div class="state-box-content"><p>Select 2–6 predictions to compare confidence, risk and overlap.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div class="mobile-tray" id="mobile-tray">
+  <video class="tray-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_predictions_header_video.mp4" type="video/mp4"></video>
+  <div class="mobile-tray-header" onclick="toggleMobileTray()">
+    <div><b>Prediction Card</b> <span id="tray-count" class="text-muted">0</span></div>
+    <span id="tray-chevron">▲</span>
+  </div>
+  <div style="padding:16px;max-height:60vh;overflow-y:auto;" id="mobile-tray-body"></div>
+</div>
+
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <h2 id="drawer-title">Match Analysis</h2>
+    <button class="drawer-close" aria-label="Close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-tabs" id="drawer-tabs" role="tablist"></div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+
+<footer class="app-footer">
+  <video class="footer-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_stadium_command_centre_bg.png" onerror="this.style.display='none'"><source src="asset/mc_stadium_command_centre_video.mp4" type="video/mp4"></video>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#predictions">Predictions</a>
+        <a href="#fixtures">Fixtures</a>
+        <a href="#groups">Groups</a>
+        <a href="#knockouts">Knockouts</a>
+      </div>
+      <div class="footer-col">
+        <h4>Data Sources</h4>
+        <a href="#" onclick="return false;">Opta Analyst</a>
+        <a href="#" onclick="return false;">FIFA</a>
+        <a href="#" onclick="return false;">ESPN / Sky Sports</a>
+        <a href="#" onclick="return false;">Team Federations</a>
+      </div>
+      <div class="footer-col">
+        <h4>Model</h4>
+        <a href="#model">Methodology</a>
+        <a href="#model">Accuracy Tracker</a>
+        <a href="#model">Limitations</a>
+      </div>
+      <div class="footer-col">
+        <h4>Responsible Use</h4>
+        <a href="https://www.responsiblegambling.org/" target="_blank" rel="noopener">Responsible Gambling</a>
+        <a href="#" onclick="return false;">Analysis Only</a>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <b>Analysis only. Not betting advice.</b> Football is low-scoring and high-variance. The model estimates probability — it does not guarantee outcomes. Confidence is not certainty. Please gamble responsibly if you choose to bet.
+    </div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+(function(){
+  const ESCAPE_MAP = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
+  function esc(s){ return s==null?"":String(s).replace(/[&<>"']/g,c=>ESCAPE_MAP[c]); }
+  function pct(n){ return (n==null?0:Math.round(Number(n)*100))+"%"; }
+  function fmtDate(iso){ try{ const d=new Date(iso); return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}); }catch(e){ return esc(iso||""); } }
+  function shortDate(iso){ try{ const d=new Date(iso); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }catch(e){ return ""; } }
+  function timeOnly(iso){ try{ return new Date(iso).toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
+  function teamCode(name){ return esc((name||"").split(" ").map(w=>w[0]).join("").slice(0,3).toUpperCase()); }
+  function slug(name){ return (name||"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,""); }
+  function pickClass(p){ if(p>=0.55) return "high"; if(p>=0.4) return "medium"; return "low"; }
+  function riskLabel(p){ if(p>=0.55) return "Lower risk"; if(p>=0.4) return "Balanced"; return "Higher risk"; }
+  function riskClass(p){ if(p>=0.55) return "risk-low"; if(p>=0.4) return "risk-medium"; return "risk-high"; }
+  function barColor(p){ if(p>=0.55) return "var(--success)"; if(p>=0.4) return "var(--warning)"; return "var(--risk)"; }
+  function probFor(m,p){ if(!p.predicted_wdl) return 0; return p.predicted_wdl==="H"?p.p_home:(p.predicted_wdl==="A"?p.p_away:p.p_draw); }
+
+  const state = {
+    matches: [], predictions: {}, news: [], players: [], injuries: {}, valueBets: [],
+    activeModel: {}, modelSummary: {models:[]}, outright: {}, builder: [], view: "simple", scenario: {},
+    drawerMatch: null, drawerTab: "overview"
+  };
+  const $ = id => document.getElementById(id);
+
+  async function loadJson(path){ const r=await fetch(path); if(!r.ok) throw new Error(r.status+" "+path); return r.json(); }
+
+  async function init(){
+    try{
+      const [fixtures, preds, news, profiles, values, active, audit] = await Promise.all([
+        loadJson("data/wc2026_fixtures_all.json"),
+        loadJson("data/wc2026_model_predictions.json"),
+        loadJson("data/wc2026_late_news.json"),
+        loadJson("data/wc2026_player_profiles_enriched.json"),
+        loadJson("data/wc2026_value_bets.json"),
+        loadJson("data/wc2026_active_model.json"),
+        loadJson("data/wc2026_predictions_audit?summary=1").catch(()=>({models:[]}))
+      ]);
+      state.matches = (fixtures.matches||[]).map(m=>{ m._iso = m.kickoff_iso; return m; });
+      state.predictions = preds.all_fixture_predictions || {};
+      state.news = news.items||[];
+      state.players = profiles.players||[];
+      state.injuries = profiles.injury_list||{};
+      state.valueBets = values.value_bets||[];
+      state.activeModel = active;
+      state.modelSummary = audit;
+      state.outright = preds.tournament_outright||{};
+      state.generated = preds.generated_at;
+      $("header-updated").textContent = "Updated " + shortDate(state.generated);
+      populateTeamFilter();
+      renderAll();
+      bindEvents();
+    }catch(err){
+      console.error(err);
+      document.body.insertAdjacentHTML("afterbegin", `<div class="toast toast-risk" role="alert">Could not load match data. <a href="javascript:location.reload()">Retry</a></div>`);
+    }
+  }
+
+  function getPred(n){ return state.predictions[String(n)] || {}; }
+
+  function actualOutcome(m){
+    if(!m.played || !m.result) return null;
+    const parts = String(m.result).replace(/[–—]/g,"-").split("-").map(x=>parseInt(x,10));
+    if(parts.length!==2 || isNaN(parts[0])||isNaN(parts[1])) return null;
+    if(parts[0]>parts[1]) return "H"; if(parts[0]<parts[1]) return "A"; return "D";
+  }
+
+  function resultFromScenario(n){
+    if(state.scenario[n]) return state.scenario[n];
+    const m = state.matches.find(x=>x.n===n);
+    return m && m.played ? m.result : null;
+  }
+
+  function renderAll(){
+    renderStrip();
+    renderFeed();
+    renderFixtures();
+    renderGroups();
+    renderKnockouts();
+    renderPlayers();
+    renderModelLab();
+    renderNews();
+    renderBuilder();
+  }
+
+  const GLOBAL_VIDEOS = {
+    stadium: "asset/mc_stadium_command_centre_video.mp4",
+    model: "asset/mc_model_lab_video.mp4",
+    bracket: "asset/mc_knockout_bracket_video.mp4"
+  };
+  const AVAILABLE_VIDEOS = new Set(Array.from({length:104},(_,i)=>i+1));
+  function matchAsset(n){ return `asset/mc_match_${String(n).padStart(3,"0")}_hero.png`; }
+  const TEAM_SLUG_ALIASES = { "USA": "united_states" };
+  function teamSlug(t){ return TEAM_SLUG_ALIASES[t] || slug(t); }
+  function teamAsset(t){ return `asset/mc_team_${teamSlug(t)}_hero.png`; }
+  function matchVideo(n){ return AVAILABLE_VIDEOS.has(n) ? `asset/mc_match_${String(n).padStart(3,"0")}_video.mp4` : null; }
+  function groupVideo(g){ return `asset/mc_group_${g.toLowerCase()}_video.mp4`; }
+  function teamVideo(t){ return `asset/mc_team_${teamSlug(t)}_video.mp4`; }
+  function cardVideo(video, poster){
+    if(!video) return "";
+    return `<video class="card-video" muted loop playsinline preload="none" poster="${poster}"><source src="${video}" type="video/mp4"></video>`;
+  }
+  function headerVideo(video, poster){
+    if(!video) return "";
+    return `<video class="section-header-video" autoplay muted loop playsinline preload="metadata" poster="${poster||''}" onerror="this.style.display='none'"><source src="${video}" type="video/mp4"></video>`;
+  }
+  function stateBox(inner){
+    return `<div class="state-box"><video class="state-box-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_model_lab_video.mp4" type="video/mp4"></video><div class="state-box-content">${inner}</div></div>`;
+  }
+  function btnVideo(video){
+    if(!video) return "";
+    return `<video class="btn-video-bg" muted loop playsinline preload="none"><source src="${video}" type="video/mp4"></video>`;
+  }
+  function wireCardVideos(){
+    document.querySelectorAll(".btn:not([data-video-wired])").forEach(btn=>{
+      btn.dataset.videoWired="1";
+      const video = btn.classList.contains("btn-primary") ? GLOBAL_VIDEOS.model : GLOBAL_VIDEOS.stadium;
+      btn.insertAdjacentHTML("afterbegin", btnVideo(video));
+    });
+    document.querySelectorAll(".card-video:not([data-wired])").forEach(v=>{
+      v.dataset.wired="1";
+      const card = v.closest(".prediction-card,.group-card,.news-card,.player-card,.lab-card,.accuracy-stat,.bracket-match,.builder-card");
+      if(!card) return;
+      const play=()=>{
+        v.classList.add("active");
+        if(v.preload==="none"){ v.preload="metadata"; v.load(); }
+        v.play().catch(()=>{});
+      };
+      const pause=()=>{ v.classList.remove("active"); v.pause(); };
+      card.addEventListener("mouseenter", play);
+      card.addEventListener("mouseleave", pause);
+      card.addEventListener("focusin", play);
+      card.addEventListener("focusout", pause);
+    });
+    document.querySelectorAll(".btn-video-bg:not([data-wired])").forEach(v=>{
+      v.dataset.wired="1";
+      const btn=v.closest(".btn");
+      if(!btn) return;
+      const play=()=>v.play().catch(()=>{});
+      const pause=()=>v.pause();
+      btn.addEventListener("mouseenter", play);
+      btn.addEventListener("mouseleave", pause);
+      btn.addEventListener("focusin", play);
+      btn.addEventListener("focusout", pause);
+    });
+  }
+  new MutationObserver(wireCardVideos).observe(document.body, {childList:true, subtree:true});
+
+  function renderStrip(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso)).slice(0,8);
+    const c=$("strip-scroll");
+    if(!upcoming.length){ c.innerHTML=`<div class="text-muted" style="padding:18px 8px;">No upcoming fixtures.</div>`; return; }
+    c.innerHTML = upcoming.map(m=>{
+      const p=getPred(m.n), prob=probFor(m,p);
+      return `<div class="strip-card" tabindex="0" role="button" aria-label="Open ${esc(m.home)} v ${esc(m.away)}" onclick="JARVIS.openDrawer(${m.n})">
+        ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+        <div class="strip-teams"><span>${esc(teamCode(m.home))}</span><span class="strip-score">${esc(p.predicted_score||"-")}</span><span>${esc(teamCode(m.away))}</span></div>
+        <div class="strip-meta"><span>${esc(shortDate(m.kickoff_iso))}</span><span class="strip-conf">${pct(prob)}</span></div>
+      </div>`;
+    }).join("");
+  }
+
+  function predictionCard(m){
+    const p=getPred(m.n);
+    const outcome=actualOutcome(m);
+    const predWdl=p.predicted_wdl;
+    const predProb=probFor(m,p);
+    const confClass=pickClass(predProb);
+    const correct=outcome && predWdl===outcome;
+    const value=state.valueBets.find(v=>v.match_n===m.n && v.value_bet);
+    const inBuilder=state.builder.includes(m.n);
+    const pickName = predWdl==="H"?m.home:(predWdl==="A"?m.away:"Draw");
+    const statusHtml = m.played
+      ? `<span class="risk-badge ${correct?"risk-low":"risk-high"}">${esc(m.result)} ${correct?"✓":"✗"}</span>`
+      : `<span class="risk-badge risk-medium">${esc(timeOnly(m.kickoff_iso))}</span>`;
+    const riskHtml = `<span class="risk-badge ${riskClass(predProb)}">${esc(riskLabel(predProb))}</span>`;
+    const metrics = state.view==="pro" ? `
+      <div class="pc-metric"><div class="pc-metric-label">${esc(m.home)} win</div><div class="pc-metric-value" style="color:${barColor(p.p_home)}">${pct(p.p_home)}</div></div>
+      <div class="pc-metric"><div class="pc-metric-label">Draw</div><div class="pc-metric-value">${pct(p.p_draw)}</div></div>
+      <div class="pc-metric"><div class="pc-metric-label">${esc(m.away)} win</div><div class="pc-metric-value" style="color:${barColor(p.p_away)}">${pct(p.p_away)}</div></div>
+      <div class="pc-metric"><div class="pc-metric-label">Treatment</div><div class="pc-metric-value" style="font-size:16px;">${esc(p.treatment||"-")}</div></div>`
+      : `
+      <div class="pc-metric"><div class="pc-metric-label">Model pick</div><div class="pc-metric-value" style="color:${barColor(predProb)}">${esc(pickName)}</div></div>
+      <div class="pc-metric"><div class="pc-metric-label">Confidence</div><div class="pc-metric-value">${pct(predProb)}</div><div class="pc-metric-sub">${esc(riskLabel(predProb))}</div></div>
+      <div class="pc-metric"><div class="pc-metric-label">Projected score</div><div class="pc-metric-value">${esc(p.predicted_score||"-")}</div></div>
+      <div class="pc-metric"><div class="pc-metric-label">Edge</div><div class="pc-metric-value" style="color:${value?"var(--success)":"var(--text-muted)"}">${value?"+"+value.edge_pp.toFixed(1)+"pp":"None"}</div></div>`;
+    const reason = `<div class="pc-reason">${esc(m.venue)} · ${esc(m.stage)} ${esc(m.group||"")}. The three-spread ensemble favours <b>${esc(pickName)}</b> (${pct(predProb)}). ${value?"A value edge was detected on the model side.":"No strong value edge vs the market sample."}</div>`;
+    return `<article class="prediction-card ${m.played?(correct?"correct":"incorrect"):""} ${inBuilder?"selected":""}" style="--card-img:url('${matchAsset(m.n)}')" data-n="${esc(String(m.n))}">
+      <div class="pc-bg" aria-hidden="true"></div>
+      ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+      <div class="pc-header">
+        <div class="pc-kickoff">${esc(fmtDate(m.kickoff_iso))}</div>
+        <div class="pc-status">${statusHtml}${riskHtml}</div>
+      </div>
+      <div class="pc-teams">
+        <div class="pc-team">
+          <div class="flag" aria-hidden="true"></div>
+          <div><div class="name">${esc(m.home)}</div><div class="meta">${esc(teamCode(m.home))}</div></div>
+        </div>
+        <div class="pc-vs">v</div>
+        <div class="pc-team away">
+          <div class="flag" aria-hidden="true"></div>
+          <div><div class="name">${esc(m.away)}</div><div class="meta">${esc(teamCode(m.away))}</div></div>
+        </div>
+        <div class="pc-score">${esc(p.predicted_score||"-")}</div>
+      </div>
+      <div class="pc-body">${metrics}</div>
+      ${reason}
+      <div class="pc-actions">
+        <button class="btn btn-sm ${inBuilder?"btn-ghost":"btn-primary"}" onclick="event.stopPropagation();JARVIS.${inBuilder?"removeFromBuilder":"addToBuilder"}(${m.n})">${inBuilder?"Remove from card":"Add to card"}</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();JARVIS.openDrawer(${m.n})">Analysis</button>
+        ${p.watch_link && p.watch_link.url ? `<a class="btn btn-ghost btn-sm" href="${esc(p.watch_link.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(p.watch_link.label || "Watch")}</a>` : ""}
+      </div>
+    </article>`;
+  }
+
+  function renderFeed(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso));
+    const c=$("match-feed");
+    if(!upcoming.length){ c.innerHTML=stateBox(`<h3>No upcoming matches</h3><p>The current window is empty.</p>`); return; }
+    c.innerHTML = upcoming.slice(0,12).map(predictionCard).join("") +
+      (upcoming.length>12 ? `<div style="text-align:center;margin-top:18px;"><button class="btn btn-ghost" onclick="JARVIS.showAllFixtures()">Show all ${upcoming.length} upcoming fixtures</button></div>` : "");
+  }
+
+  function showAllFixtures(){ document.getElementById("fixtures").scrollIntoView({behavior:"smooth"}); }
+
+  function renderFixtures(){
+    const byDate = {};
+    state.matches.forEach(m=>{
+      const d = shortDate(m.kickoff_iso) || "TBD";
+      byDate[d]=byDate[d]||[]; byDate[d].push(m);
+    });
+    const c=$("fixtures-content");
+    let html="";
+    Object.keys(byDate).sort((a,b)=>{
+      const da=state.matches.find(m=>shortDate(m.kickoff_iso)===a)._iso;
+      const db=state.matches.find(m=>shortDate(m.kickoff_iso)===b)._iso;
+      return da.localeCompare(db);
+    }).forEach(date=>{
+      html+=`<div class="fixture-date">${esc(date)}</div>`;
+      html+=byDate[date].sort((a,b)=>a._iso.localeCompare(b._iso)).map(m=>{
+        const p=getPred(m.n);
+        const outcome=actualOutcome(m);
+        const cls = m.played ? (outcome===p.predicted_wdl?"correct":"wrong") : "";
+        const pick = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+        return `<div class="fixture-row ${cls}" onclick="JARVIS.openDrawer(${m.n})">
+          <div class="fixture-time">${esc(timeOnly(m.kickoff_iso))}</div>
+          <div class="fixture-match"><span>${esc(m.home)}</span><span class="text-muted">v</span><span>${esc(m.away)}</span></div>
+          <div class="fixture-pick">${esc(pick)} ${pct(probFor(m,p))}</div>
+          <div class="fixture-score">${esc(m.result||p.predicted_score||"-")}</div>
+          <div class="fixture-result ${cls}">${m.played?(outcome===p.predicted_wdl?"Correct":"Miss"):""}</div>
+        </div>`;
+      }).join("");
+    });
+    c.innerHTML=html;
+  }
+
+  function computeStandings(){
+    const groups={};
+    state.matches.filter(m=>m.stage==="GROUP").forEach(m=>{
+      if(!groups[m.group]) groups[m.group]={};
+      [m.home,m.away].forEach(t=>{ if(!groups[m.group][t]) groups[m.group][t]={team:t,P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0}; });
+      const res=resultFromScenario(m.n);
+      if(res){
+        const [hg,ag]=String(res).replace(/[–—]/g,"-").split("-").map(x=>parseInt(x,10));
+        if(!isNaN(hg)&&!isNaN(ag)){
+          const h=groups[m.group][m.home], a=groups[m.group][m.away];
+          h.P++; a.P++; h.GF+=hg; h.GA+=ag; a.GF+=ag; a.GA+=hg;
+          if(hg>ag){h.W++;a.L++;h.Pts+=3;}else if(hg<ag){a.W++;h.L++;a.Pts+=3;}else{h.D++;a.D++;h.Pts++;a.Pts++;}
+        }
+      }
+    });
+    return groups;
+  }
+
+  function renderGroups(){
+    const groups=computeStandings();
+    const c=$("groups-grid");
+    const letters=Object.keys(groups).sort();
+    if(!letters.length){ c.innerHTML=stateBox(`Group data unavailable.`); return; }
+    c.innerHTML=letters.map(g=>{
+      const rows=Object.values(groups[g]).sort((a,b)=>b.Pts-a.Pts||b.GD-a.GD||b.GF-a.GF);
+      return `<div class="group-card" style="--card-img:url('asset/mc_group_${g.toLowerCase()}.png')">
+        ${cardVideo(groupVideo(g)||GLOBAL_VIDEOS.stadium, `asset/mc_group_${g.toLowerCase()}.png`)}
+        <div class="group-header"><h4>Group ${esc(g)}</h4><span class="text-muted">${rows.length} teams</span></div>
+        <table class="group-table">
+          <thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead>
+          <tbody>${rows.map((r,i)=>`<tr class="${i<2?"qualified":""}"><td><div class="team"><span class="flag" aria-hidden="true"></span>${esc(r.team)}</div></td><td>${r.P}</td><td>${r.W}</td><td>${r.D}</td><td>${r.L}</td><td>${r.GD>0?"+":""}${r.GD}</td><td class="pts ${i<2?"q":"e"}">${r.Pts}</td></tr>`).join("")}</tbody>
+        </table>
+      </div>`;
+    }).join("");
+    const sel=$("sim-match");
+    if(sel && !sel.dataset.populated){
+      state.matches.filter(m=>m.stage==="GROUP" && !m.played).sort((a,b)=>a._iso.localeCompare(b._iso)).forEach(m=>{
+        const opt=document.createElement("option"); opt.value=m.n; opt.textContent=`${m.group} · ${m.home} v ${m.away}`; sel.appendChild(opt);
+      });
+      sel.dataset.populated="1";
+    }
+  }
+
+  function renderKnockouts(){
+    const c=$("knockout-content");
+    const rounds = ["R32","R16","QF","SF","FINAL"];
+    const roundNames = {"R32":"Round of 32","R16":"Round of 16","QF":"Quarter-finals","SF":"Semi-finals","FINAL":"Final"};
+    const upcoming = state.matches.filter(m=>m.stage!=="GROUP" && !m.played).sort((a,b)=>a._iso.localeCompare(b._iso));
+    let html=`<div class="knockout-hero has-video" style="--card-img:url('asset/mc_knockout_bracket_wall.png')">
+      <video class="section-video" autoplay muted loop playsinline poster="asset/mc_knockout_bracket_wall.png" onerror="this.style.display='none'"><source src="asset/mc_knockout_bracket_video.mp4" type="video/mp4"></video>
+      <div class="knockout-hero-inner" style="position:relative;z-index:1"><h3>Tournament path projection</h3><p>Based on current group standings and model probabilities.</p></div>
+    </div>`;
+    html+=`<div class="bracket-rounds">`;
+    rounds.forEach(r=>{
+      const matches = state.matches.filter(m=>m.stage===r).sort((a,b)=>a._iso.localeCompare(b._iso));
+      html+=`<div class="bracket-round"><h5>${esc(roundNames[r])}</h5>`;
+      matches.slice(0,8).forEach(m=>{
+        const p=getPred(m.n);
+        const pick = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+        html+=`<div class="bracket-match" onclick="JARVIS.openDrawer(${m.n})">
+          ${cardVideo(GLOBAL_VIDEOS.bracket, 'asset/mc_knockout_bracket_wall.png')}
+          <div class="bracket-team ${p.predicted_wdl==='H'?'winner':''}"><span>${esc(m.home)}</span><span class="bracket-prob">${pct(p.p_home)}</span></div>
+          <div class="bracket-team ${p.predicted_wdl==='A'?'winner':''}"><span>${esc(m.away)}</span><span class="bracket-prob">${pct(p.p_away)}</span></div>
+          <div style="margin-top:6px;font-size:10px;color:var(--text-muted);">Model advance: ${esc(pick)}</div>
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+    if(upcoming.length){
+      html+=`<div class="section-header" style="margin-top:24px;"><h3>Next knockout fixtures</h3></div>`;
+      html+=upcoming.slice(0,4).map(m=>predictionCard(m)).join("");
+    }
+    c.innerHTML=html;
+  }
+
+  function populateTeamFilter(){
+    const sel=$("player-team-filter");
+    const teams=Array.from(new Set(state.players.map(p=>p.country))).sort();
+    teams.forEach(t=>{ const opt=document.createElement("option"); opt.value=t; opt.textContent=t; sel.appendChild(opt); });
+  }
+
+  function renderPlayers(){
+    const q=$("player-search").value.toLowerCase();
+    const team=$("player-team-filter").value;
+    const pos=$("player-pos-filter").value;
+    const list=state.players.filter(p=>{
+      const inj=state.injuries[p.name];
+      const text=(p.name+" "+p.country+" "+p.club+" "+p.position).toLowerCase();
+      return (!q||text.includes(q)) && (!team||p.country===team) && (!pos||p.position===pos);
+    }).slice(0,60);
+    const c=$("player-grid");
+    if(!list.length){ c.innerHTML=stateBox(`No players match.`); return; }
+    c.innerHTML=list.map(p=>{
+      const inj=state.injuries[p.name];
+      const status = inj ? `<span class="player-status ${inj.status==='out'?'out':'doubt'}">${esc(inj.status.toUpperCase())}</span>` : `<span class="player-status ok">Available</span>`;
+      return `<div class="player-card ${inj?'high-impact':''}" style="--card-img:url('${teamAsset(p.country)}')">
+        ${cardVideo(teamVideo(p.country)||GLOBAL_VIDEOS.stadium, teamAsset(p.country))}
+        <div class="player-header"><div><div class="player-name">${esc(p.name)}</div><div class="player-team">${esc(p.country)} · ${esc(p.position)} · ${esc(p.club||"-")}</div></div>${status}</div>
+        <div class="player-meta">
+          <div class="player-meta-item"><div>Age</div><div>${p.age}</div></div>
+          <div class="player-meta-item"><div>Caps</div><div>${p.caps}</div></div>
+        </div>
+        ${inj?`<div class="player-note"><b>${esc(inj.reason)}</b> — ${esc(inj.status)}. Check lineups closer to kickoff.</div>`:`<div class="player-note">No reported availability issues.</div>`}
+      </div>`;
+    }).join("");
+  }
+
+  function renderModelLab(){
+    const c=$("lab-grid");
+    const am=state.activeModel;
+    const ew=am.ensemble_weights||{};
+    const top = Object.entries(ew).filter(([_,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`${esc(k)} ${(v*100).toFixed(1)}%`).join(", ");
+    c.innerHTML=`
+      <div class="lab-card">${cardVideo('asset/mc_lab_active_model_video.mp4', 'asset/mc_model_lab_visual.png')}<div class="icon">📊</div><h4>Active model</h4><p>${esc(am.model_version||"v001")} — promoted ${esc(shortDate(am.created_at))}. Single-pick accuracy ${pct(am.single_pick_accuracy)}, three-spread coverage ${pct(am.three_spread_coverage)}.</p></div>
+      <div class="lab-card">${cardVideo('asset/mc_lab_calibration_video.mp4', 'asset/mc_model_lab_visual.png')}<div class="icon">🎯</div><h4>Calibration</h4><p>Calibration error ${(am.calibration_error*100).toFixed(2)}pp. Drift detected: ${am.drift?.drift_detected?"Yes":"No"}. Recent accuracy ${pct(am.drift?.recent_accuracy)}.</p></div>
+      <div class="lab-card">${cardVideo('asset/mc_lab_ensemble_video.mp4', 'asset/mc_model_lab_visual.png')}<div class="icon">⚖️</div><h4>Ensemble weights</h4><p>${top||"Uniform blend"}. Poisson × Dixon-Coles × Elo × group-table signals blended and draw-calibrated.</p></div>
+      <div class="lab-card">${cardVideo('asset/mc_lab_transparency_video.mp4', 'asset/mc_model_lab_visual.png')}<div class="icon">🔒</div><h4>Transparency</h4><p>Every prediction is logged in the audit database. Use the audit endpoint to verify locked T-8h forecasts against results.</p></div>`;
+    const models=state.modelSummary.models||[];
+    const rows=models.slice(0,8);
+    $("accuracy-grid").innerHTML=rows.map(r=>`
+      <div class="accuracy-stat">
+        ${cardVideo('asset/mc_lab_calibration_video.mp4', 'asset/mc_model_lab_visual.png')}
+        <div class="v">${(r.winner_pct*100).toFixed(1)}%</div>
+        <div class="k">${esc(r.model||"Model")}<br>${r.winner_hits||0}/${r.graded||0}</div>
+      </div>`).join("") || stateBox(`No verified results yet.`);
+  }
+
+  function renderNews(){
+    const c=$("news-grid");
+    if(!state.news.length){ c.innerHTML=stateBox(`No late news items.`); return; }
+    c.innerHTML=state.news.map((item,i)=>{
+      const high = /out|injury|doubt|ruled|suspension/i.test(item.text);
+      const newsPoster = i<6 ? `asset/mc_news_${String(i).padStart(2,'0')}.png` : "asset/mc_late_news_impact.png";
+      const newsVid = i<6 ? `asset/mc_news_${String(i).padStart(2,'0')}_video.mp4` : GLOBAL_VIDEOS.stadium;
+      return `<article class="news-card ${high?'impact-high':''}" ${i<6?`style="--card-img:url('${newsPoster}')"`:``}>
+        ${cardVideo(newsVid, newsPoster)}
+        <div class="news-header"><div class="news-match">${esc(item.player)}</div><div class="news-time">${esc(item.source)}</div></div>
+        <div class="news-body">${esc(item.text)}</div>
+        <div class="news-impact"><span>Impact: <b class="${high?'down':'up'}">${high?"Negative":"Neutral"}</b></span><a href="${esc(item.url)}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" onclick="event.stopPropagation()">Source</a></div>
+      </article>`;
+    }).join("");
+  }
+
+  function renderBuilder(){
+    const body=$("builder-body");
+    const tray=$("mobile-tray-body");
+    $("tray-count").textContent=state.builder.length;
+    if(!state.builder.length){
+      const empty=`<div class="state-box"><video class="state-box-video" autoplay muted loop playsinline preload="metadata"><source src="asset/mc_builder_panel_video.mp4" type="video/mp4"></video><div class="state-box-content"><p>Select 2–6 predictions to compare confidence, risk and overlap.</p></div></div>`;
+      body.innerHTML=empty; tray.innerHTML=empty; return;
+    }
+    let sum=0, count=0, html="";
+    state.builder.forEach(n=>{
+      const m=state.matches.find(x=>x.n===n); if(!m) return;
+      const p=getPred(n); const prob=probFor(m,p);
+      const label=p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+      sum+=prob; count++;
+      html+=`<div class="builder-selection">
+        <div class="sel-text"><div class="sel-title">${esc(m.home)} v ${esc(m.away)}</div><div class="sel-meta">${esc(label)} · ${pct(prob)} confidence</div></div>
+        <button class="sel-remove" aria-label="Remove" onclick="JARVIS.removeFromBuilder(${n})">×</button>
+      </div>`;
+    });
+    const avg=count?sum/count:0;
+    const summary=`<div class="builder-warning">Combined average confidence: <b>${pct(avg)}</b> · ${esc(riskLabel(avg))}. More legs = lower hit rate.</div>`;
+    body.innerHTML=summary+html;
+    tray.innerHTML=summary+html;
+  }
+
+  function addToBuilder(n){ if(state.builder.includes(n)){ removeFromBuilder(n); return; } if(state.builder.length>=6){ alert("Card can hold up to 6 picks."); return; } state.builder.push(n); renderBuilder(); renderFeed(); }
+  function removeFromBuilder(n){ state.builder=state.builder.filter(x=>x!==n); renderBuilder(); renderFeed(); }
+
+  // ── Drawer ───────────────────────────────────────────────────────────────
+  function openDrawer(n){
+    state.drawerMatch=n; state.drawerTab="overview"; renderDrawer();
+    $("drawer").classList.add("show"); $("drawer-backdrop").classList.add("show"); document.body.style.overflow="hidden";
+  }
+  function closeDrawer(){ $("drawer").classList.remove("show"); $("drawer-backdrop").classList.remove("show"); document.body.style.overflow=""; }
+  function setDrawerTab(tab){ state.drawerTab=tab; renderDrawer(); }
+
+  function renderDrawer(){
+    const m=state.matches.find(x=>x.n===state.drawerMatch); if(!m) return;
+    const p=getPred(m.n);
+    $("drawer-title").textContent=`${m.home} v ${m.away}`;
+    const tabs=["overview","probabilities","value","lineups","video"];
+    $("drawer-tabs").innerHTML=tabs.map(t=>`<button class="drawer-tab ${state.drawerTab===t?'active':''}" onclick="JARVIS.setDrawerTab('${t}')">${esc(t[0].toUpperCase()+t.slice(1))}</button>`).join("");
+    let body="";
+    if(state.drawerTab==="overview"){
+      body=`<div class="drawer-hero" style="--card-img:url('${matchAsset(m.n)}')">
+        <div class="drawer-hero-meta">${esc(m.stage)} ${esc(m.group||"")} · ${esc(m.venue)}</div>
+        <div class="drawer-hero-score">${esc(p.predicted_score||"-")}</div>
+        <div class="drawer-hero-pick">Model pick: <b>${esc(p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw"))}</b> · ${pct(probFor(m,p))}</div>
+      </div>`;
+      const watch = p.watch_link && p.watch_link.url ? `<a class="btn btn-primary btn-sm" href="${esc(p.watch_link.url)}" target="_blank" rel="noopener" style="margin-top:12px;">${esc(p.watch_link.label || "Watch")}</a>` : "";
+      body+=`<div class="drawer-section"><h4>Match notes</h4><p style="color:var(--text-secondary);line-height:1.6;">${esc(m.venue)}. Kickoff ${esc(fmtDate(m.kickoff_iso))}. The ensemble projects a ${esc(p.predicted_score||"close score")} result with the highest probability on ${esc(p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"the draw"))}.</p>${watch}</div>`;
+      body+=`<div class="drawer-section"><h4>Three-spread view</h4><div class="pc-body">`+
+        ["A","B","C"].map(k=>{
+          const pick=p.three_spread?.[k];
+          const name = pick==="H"?m.home:(pick==="A"?m.away:(pick?"Draw":"No pick"));
+          return `<div class="pc-metric"><div class="pc-metric-label">Spread ${k}</div><div class="pc-metric-value">${esc(name)}</div></div>`;
+        }).join("")+`</div></div>`;
+    }else if(state.drawerTab==="probabilities"){
+      body=`<div class="drawer-section"><h4>Outcome probabilities</h4>`+
+        [{k:"Home win",v:p.p_home,t:m.home},{k:"Draw",v:p.p_draw,t:""},{k:"Away win",v:p.p_away,t:m.away}].map(x=>`
+        <div class="prob-row"><span>${esc(x.t||x.k)}</span><div class="bar-wrap"><div class="bar" style="width:${pct(x.v)};background:${barColor(x.v)}"></div></div><span>${pct(x.v)}</span></div>`).join("")+`</div>`;
+      body+=`<div class="drawer-section"><h4>Expected score</h4><div class="accuracy-stat"><div class="v">${esc(p.predicted_score||"-")}</div><div class="k">Projected scoreline</div></div></div>`;
+    }else if(state.drawerTab==="value"){
+      const v=state.valueBets.find(x=>x.match_n===m.n);
+      body=`<div class="drawer-section"><h4>Value assessment</h4>`+(v?`
+        <div class="pc-body">
+          <div class="pc-metric"><div class="pc-metric-label">Best side</div><div class="pc-metric-value">${esc(v.best_side)}</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Edge</div><div class="pc-metric-value" style="color:${v.value_bet?'var(--success)':'var(--text-muted)'}">${v.edge_pp.toFixed(2)}pp</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Model ${v.best_side} prob</div><div class="pc-metric-value">${pct(v.best_side==='home'?v.model_p_home:(v.best_side==='draw'?v.model_p_draw:v.model_p_away))}</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Value bet</div><div class="pc-metric-value">${v.value_bet?"Yes":"No"}</div></div>
+        </div>
+        <p style="color:var(--text-secondary);margin-top:12px;">This compares the model probability to a devigged market sample. Positive edge does not mean the outcome is guaranteed.</p>`
+        :`<p style="color:var(--text-secondary);">No value assessment available for this fixture.</p>`)+`</div>`;
+    }else if(state.drawerTab==="lineups"){
+      const homeInj=Object.entries(state.injuries).filter(([_,i])=>i.team===m.home).map(([name,i])=>`<li><b>${esc(name)}</b> (${esc(i.status)}) — ${esc(i.reason)}</li>`).join("");
+      const awayInj=Object.entries(state.injuries).filter(([_,i])=>i.team===m.away).map(([name,i])=>`<li><b>${esc(name)}</b> (${esc(i.status)}) — ${esc(i.reason)}</li>`).join("");
+      body=`<div class="drawer-section"><h4>${esc(m.home)} availability</h4>${homeInj||'<p style="color:var(--text-secondary);">No reported issues.</p>'}</div>`;
+      body+=`<div class="drawer-section"><h4>${esc(m.away)} availability</h4>${awayInj||'<p style="color:var(--text-secondary);">No reported issues.</p>'}</div>`;
+    }else if(state.drawerTab==="video"){
+      const mv=matchVideo(m.n);
+      body=`<div class="drawer-section"><h4>Match cinematic</h4>`;
+      body+=`<video class="drawer-video" controls preload="metadata" poster="${matchAsset(m.n)}" onerror="this.classList.add('hidden');document.getElementById('vf-${m.n}').classList.remove('hidden')">${mv?`<source src="${mv}" type="video/mp4">`:''}</video>`;
+      body+=`<div id="vf-${m.n}" class="${mv?'hidden':''}"><img src="${matchAsset(m.n)}" style="width:100%;border-radius:var(--radius-sm);border:1px solid var(--border);" alt=""><p style="color:var(--text-muted);font-size:12px;margin-top:8px;">Custom video not available for this fixture.</p></div>`;
+      body+=`<p style="color:var(--text-muted);font-size:12px;margin-top:8px;">Custom generated video for this fixture. Falls back to the still image if processing.</p></div>`;
+    }
+    $("drawer-body").innerHTML=body;
+  }
+
+  // ── Simulator ─────────────────────────────────────────────────────────────
+  function applyScenario(){
+    const n=parseInt($("sim-match").value,10); const score=$("sim-score").value.trim();
+    if(!n||!/^\d+\s*-\s*\d+$/.test(score)){ alert("Select a match and enter a score like 2-1."); return; }
+    state.scenario[n]=score.replace(/\s/g,""); renderGroups();
+  }
+  function resetScenario(){ state.scenario={}; $("sim-score").value=""; renderGroups(); }
+
+  // ── Mobile tray ───────────────────────────────────────────────────────────
+  function toggleMobileTray(){ $("mobile-tray").classList.toggle("expanded"); }
+
+  // ── View toggle ───────────────────────────────────────────────────────────
+  function bindEvents(){
+    document.querySelectorAll(".toggle-pill button").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll(".toggle-pill button").forEach(b=>{b.classList.remove("active");b.setAttribute("aria-pressed","false");});
+        btn.classList.add("active"); btn.setAttribute("aria-pressed","true"); state.view=btn.dataset.view; renderFeed(); renderKnockouts();
+      });
+    });
+    $("player-search").addEventListener("input", renderPlayers);
+    $("player-team-filter").addEventListener("change", renderPlayers);
+    $("player-pos-filter").addEventListener("change", renderPlayers);
+    document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeDrawer(); });
+  }
+
+  window.JARVIS = {
+    init, openDrawer, closeDrawer, setDrawerTab,
+    addToBuilder, removeFromBuilder,
+    applyScenario, resetScenario,
+    showAllFixtures, toggleMobileTray
+  };
+  init();
+})();
+</script>
+</body>
+</html>

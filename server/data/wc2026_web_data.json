@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-06-23T04:45:06.407138+00:00",
+  "records_fetched": 240,
+  "fixtures_updated": 0,
+  "history_added": 1,
+  "sources": [
+    "openfootball_World Cup 2022",
+    "openfootball_World Cup 2026",
+    "worldcup26_api"
+  ]
+}

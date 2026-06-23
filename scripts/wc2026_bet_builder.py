@@ -492,18 +492,20 @@ def _leg_for(c: Candidate, outcome: str, market: str) -> BetLeg:
 
 # Per-strategy limits on how many of the SAME 12 games get changed in B/C.
 CHANGE_LIMITS = {
-    "safe": {"draw": 1, "alt": 1},
-    "balanced": {"draw": 3, "alt": 3},
+    "safe": {"draw": 2, "alt": 1},
+    "balanced": {"draw": 3, "alt": 2},
     "value": {"draw": 2, "alt": 2},
-    "aggressive": {"draw": 2, "alt": 4},
-    "maximum_coverage": {"draw": 5, "alt": 5},
+    "aggressive": {"draw": 3, "alt": 3},
+    "maximum_coverage": {"draw": 4, "alt": 4},
 }
 
 # Coverage-mode thresholds (honest per-game logic — never duplicate a pick).
 STRONG_LEAN_PROB = 0.62      # a clear favourite: A only, no real B/C cover
 DRAW_COVER_PROB = 0.27       # draw is a live alternate
-DRAW_HEDGE_FLOOR = 0.18      # min market-implied draw prob to FORCE a Slip-B hedge
+DRAW_HEDGE_FLOOR = 0.12      # min market-implied draw prob to FORCE a Slip-B hedge
 VOLATILE_GAP = 0.08          # top two within this -> three-way volatile
+ALT_MIN_P = 0.08             # min prob for a genuine Slip-C alternate outcome
+ALT_FORCE_MIN_P = 0.05       # floor to guarantee at least one C alternate
 
 MODE_LABEL = {
     "STRONG_LEAN": "Strong lean — no cover",
@@ -692,11 +694,26 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
     # = that pool minus its riskiest tail legs, so the safe slip is genuinely
     # shorter/safer than the stretch. Knockout window caps the safe leg count
     # harder. B then layers draw protection onto A's legs where a draw is live.
-    c_legs = chosen
     stretch_margin = 2 if len(chosen) >= 5 else (1 if len(chosen) >= 3 else 0)
     safe_cap = min(5, len(chosen)) if window["level"] == "LOW" else (len(chosen) - stretch_margin)
     a_legs = chosen[:max(3, min(safe_cap, len(chosen)))]
     a_ids = {c.match.match_id for c in a_legs}
+
+    # Slip C starts with A's legs then adds the most alternate-rich remaining
+    # fixtures (highest second-outcome probability). This makes C a genuine
+    # contrarian stretch rather than a longer copy of A.
+    c_legs = list(a_legs)
+    used_teams_c = {t.strip().lower() for c in a_legs for t in (c.match.team_a, c.match.team_b)}
+    for c in sorted((c for c in cands if c.match.match_id not in a_ids),
+                    key=alternate_priority, reverse=True):
+        if len(c_legs) >= req.number_of_legs:
+            break
+        ta, tb = c.match.team_a.strip().lower(), c.match.team_b.strip().lower()
+        if ta in used_teams_c or tb in used_teams_c:
+            continue
+        c_legs.append(c)
+        used_teams_c.add(ta)
+        used_teams_c.add(tb)
 
     a_picks: dict[str, str] = {}
     b_picks: dict[str, str] = {}
@@ -736,7 +753,9 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
     # return — never a longshot and never an exact duplicate of A. Protect the
     # most draw-prone legs (ranked by draw_hedge_priority) up to the per-strategy
     # limit, preferring genuinely-live draws, and patch the coverage rows.
-    draw_limit = CHANGE_LIMITS.get(req.strategy, CHANGE_LIMITS["balanced"])["draw"]
+    change_limits = CHANGE_LIMITS.get(req.strategy, CHANGE_LIMITS["balanced"])
+    draw_limit = change_limits["draw"]
+    alt_limit = change_limits["alt"]
     cm_by_id = {r["match_id"]: r for r in coverage_modes}
     ranked_draw = sorted(a_legs, key=draw_hedge_priority, reverse=True)
 
@@ -776,6 +795,46 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
             if _protect_with_dc(c):
                 break
 
+    # Slip C = genuine ALTERNATE / contrarian path. After any coverage-mode
+    # alternate, flip additional legs to their second-best outcome where it is
+    # still live. This stops C from looking like a longer copy of A.
+    ranked_alt = sorted(c_legs, key=alternate_priority, reverse=True)
+    for c in ranked_alt:
+        if len(c_changed) >= alt_limit:
+            break
+        mid = c.match.match_id
+        if mid in c_changed:
+            continue
+        row = cm_by_id[mid]
+        a_out = a_picks.get(mid) or row["a"] or c.risk.top_outcome
+        alt = c.risk.second_outcome
+        if alt == a_out:
+            continue
+        if c.outcome_prob(alt) < ALT_MIN_P:
+            continue
+        c_picks[mid] = alt
+        c_changed.add(mid)
+        row["c"] = alt
+        row["c_odds"] = round(c.blended.get(alt, 0.0), 2)
+        row["c_is_alt"] = True
+
+    # Guarantee at least one C alternate if any live second outcome exists.
+    if not c_changed:
+        for c in ranked_alt:
+            mid = c.match.match_id
+            if mid in c_changed:
+                continue
+            a_out = a_picks.get(mid) or cm_by_id[mid]["a"] or c.risk.top_outcome
+            alt = c.risk.second_outcome
+            if alt != a_out and c.outcome_prob(alt) >= ALT_FORCE_MIN_P:
+                c_picks[mid] = alt
+                c_changed.add(mid)
+                row = cm_by_id[mid]
+                row["c"] = alt
+                row["c_odds"] = round(c.blended.get(alt, 0.0), 2)
+                row["c_is_alt"] = True
+                break
+
     va = build_variation("Slip A — Safest Income",
                          f"{len(a_legs)} strongest unique-team mismatch legs",
                          a_picks, a_legs, sa, req.strategy, req.market)
@@ -783,8 +842,8 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
                          f"Slip A's {len(a_legs)} legs; {len(b_changed)} favourite(s) double-chance "
                          f"protected (win-or-draw) — safer, lower odds than A",
                          b_picks, a_legs, sb, req.strategy, req.market, b_changed)
-    vc = build_variation("Slip C — Long-Leg Stretch",
-                         f"{len(c_legs)} legs — {max(0,len(c_legs)-len(a_legs))} extra mismatch game(s) for upside",
+    vc = build_variation("Slip C — Alternate Winner",
+                         f"{len(c_legs)}-leg pool; {len(c_changed)} alternate outcome(s) for the upset path",
                          c_picks, c_legs, sc, req.strategy, req.market, c_changed)
     summary = calculate_spread_set_summary(c_legs, va, vb, vc, (a_picks, b_picks, c_picks))
 
@@ -856,7 +915,7 @@ def build_bet_builder(req: BetBuilderRequest, fixtures: list[Match],
     )
 
 
-def save_bet_builder(out: BetBuilderOutput) -> None:
+def save_bet_builder(out: BetBuilderOutput, output_path: Optional[Path] = None) -> None:
     out_dict = asdict(out)
     # Attach official SBS watch links to every selected leg (best-effort;
     # never blocks the save if SBS is unreachable).
@@ -865,7 +924,8 @@ def save_bet_builder(out: BetBuilderOutput) -> None:
         out_dict = attach_watch_links_to_bet_builder_output(out_dict)
     except Exception as exc:  # noqa: BLE001
         LOG.warning("SBS watch links unavailable: %s", exc)
-    BUILDER_OUT.write_text(json.dumps({
+    dest = output_path or BUILDER_OUT
+    dest.write_text(json.dumps({
         "verified": True,
         "source": "scripts/wc2026_bet_builder.py — three-spread bet builder over "
                   "worldcup_prediction_engine predictions; odds via provider "
@@ -873,7 +933,7 @@ def save_bet_builder(out: BetBuilderOutput) -> None:
                   "official SBS watch links attached per leg.",
         "generated_at": _utcnow(), "output": out_dict,
     }, indent=2, ensure_ascii=False))
-    LOG.info("wrote bet builder -> %s", BUILDER_OUT)
+    LOG.info("wrote bet builder -> %s", dest)
 
 
 def print_bet_builder(out: BetBuilderOutput) -> None:
@@ -964,6 +1024,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--odds-mode", choices=["median", "average", "best", "conservative", "manual"], default="median")
     parser.add_argument("--positive-ev-only", action="store_true")
     parser.add_argument("--mode", choices=["sandbox", "fixtures"], default="sandbox")
+    parser.add_argument("--output", type=Path, default=BUILDER_OUT, help="Output JSON path")
     args = parser.parse_args(argv)
 
     out = build_from_params(
@@ -971,7 +1032,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         strategy=args.strategy, market=args.market, odds_mode=args.odds_mode,
         positive_ev_only=args.positive_ev_only, sandbox=(args.mode == "sandbox"),
     )
-    save_bet_builder(out)
+    save_bet_builder(out, output_path=args.output)
     print_bet_builder(out)
     return 0
 

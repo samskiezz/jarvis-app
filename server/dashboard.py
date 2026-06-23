@@ -4367,6 +4367,11 @@ def main():
     http.server.ThreadingHTTPServer.request_queue_size = 64
     srv = http.server.ThreadingHTTPServer(("0.0.0.0", PORT), _H)
     print(f"[dashboard] serving on http://0.0.0.0:{PORT}  (/, /metrics) — refresher every 2.5s", flush=True)
+    try:
+        from server.services import nexus_client as _nx
+        _nx.announce("jarvis-dashboard", port=PORT, role="dashboard-ui", base_url=f"http://127.0.0.1:{PORT}")
+    except Exception:
+        pass
     srv.serve_forever()
 
 

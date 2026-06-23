@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "JARVIS WC2026 FIFA+ Overlay",
+  "version": "1.0.0",
+  "description": "Overlay JARVIS AI predictions and vision metrics on top of the FIFA+ video player.",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.fifa.com/*",
+    "*://*.fifa.plus/*",
+    "*://*.projectsolar.cloud/*",
+    "http://localhost:*/*",
+    "https://localhost:*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.fifa.com/*",
+        "*://*.fifa.plus/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

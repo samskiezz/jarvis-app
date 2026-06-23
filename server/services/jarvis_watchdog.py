@@ -80,6 +80,11 @@ def _write_status(states: dict, beat: int) -> None:
 
 
 def main() -> None:
+    try:
+        from server.services import nexus_client as _nx
+        _nx.announce("jarvis-watchdog", role="watchdog")
+    except Exception:
+        pass
     print("[watchdog] online — guarding the lifeline (dashboard / voiceclone / tasks); "
           "catches HANGS pm2 can't, keeps `pm2 save` fresh", flush=True)
     bad = {name: 0 for name, _ in CRITICAL}

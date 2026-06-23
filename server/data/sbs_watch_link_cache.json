@@ -1,7 +1,7 @@
 {
   "verified": true,
   "source": "scripts/sbs_watch_links.py — official SBS On Demand collection pages by status (full-match replay / live-and-upcoming / Australia), which always load. Per-match deep links are not used: SBS does not publish an upcoming match's watch page until broadcast, so those read 'link not found'.",
-  "generated_at": "2026-06-21T01:15:53+00:00",
+  "generated_at": "2026-06-23T06:00:02+00:00",
   "location_note": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights.",
   "links": {
     "1": {
@@ -17,7 +17,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "2": {
@@ -33,7 +33,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "3": {
@@ -49,7 +49,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "4": {
@@ -65,7 +65,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "5": {
@@ -81,7 +81,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "6": {
@@ -97,7 +97,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "7": {
@@ -113,7 +113,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "8": {
@@ -129,7 +129,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "9": {
@@ -145,7 +145,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "10": {
@@ -161,7 +161,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "11": {
@@ -177,7 +177,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "12": {
@@ -193,7 +193,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "13": {
@@ -209,7 +209,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "14": {
@@ -225,7 +225,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "15": {
@@ -241,7 +241,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "16": {
@@ -257,7 +257,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "17": {
@@ -273,7 +273,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "18": {
@@ -289,7 +289,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "19": {
@@ -305,7 +305,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "20": {
@@ -321,7 +321,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "21": {
@@ -337,7 +337,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "22": {
@@ -353,7 +353,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "23": {
@@ -369,7 +369,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "24": {
@@ -385,7 +385,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "25": {
@@ -401,7 +401,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "26": {
@@ -417,7 +417,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "27": {
@@ -433,7 +433,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "28": {
@@ -449,7 +449,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "29": {
@@ -465,7 +465,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "30": {
@@ -481,7 +481,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "31": {
@@ -497,7 +497,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "32": {
@@ -513,7 +513,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "33": {
@@ -529,7 +529,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "34": {
@@ -545,216 +545,216 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 43200
     },
     "35": {
       "provider": "SBS On Demand",
-      "label": "Watch Now on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "live",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "35",
       "team_a": "Ecuador",
       "team_b": "Curaçao",
       "kickoff_time": "2026-06-21T00:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 300
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "36": {
       "provider": "SBS On Demand",
-      "label": "Watch Soon on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "soon",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "36",
       "team_a": "Tunisia",
       "team_b": "Japan",
       "kickoff_time": "2026-06-21T03:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 1800
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "37": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "37",
       "team_a": "Spain",
       "team_b": "Saudi Arabia",
       "kickoff_time": "2026-06-21T16:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "38": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "38",
       "team_a": "Belgium",
       "team_b": "Iran",
       "kickoff_time": "2026-06-21T19:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "39": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "39",
       "team_a": "Uruguay",
       "team_b": "Cabo Verde",
       "kickoff_time": "2026-06-21T22:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "40": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "40",
       "team_a": "New Zealand",
       "team_b": "Egypt",
       "kickoff_time": "2026-06-22T01:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "41": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "41",
       "team_a": "Argentina",
       "team_b": "Austria",
       "kickoff_time": "2026-06-22T17:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "42": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "42",
       "team_a": "France",
       "team_b": "Iraq",
       "kickoff_time": "2026-06-22T21:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "43": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "43",
       "team_a": "Norway",
       "team_b": "Senegal",
       "kickoff_time": "2026-06-23T00:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "44": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "44",
       "team_a": "Jordan",
       "team_b": "Algeria",
       "kickoff_time": "2026-06-23T03:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "45": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "45",
       "team_a": "Portugal",
       "team_b": "Uzbekistan",
       "kickoff_time": "2026-06-23T17:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "46": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "46",
       "team_a": "England",
       "team_b": "Ghana",
       "kickoff_time": "2026-06-23T20:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "47": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "47",
       "team_a": "Panama",
       "team_b": "Croatia",
       "kickoff_time": "2026-06-23T23:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "48": {
       "provider": "SBS On Demand",
@@ -769,72 +769,72 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "49": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "49",
       "team_a": "Switzerland",
       "team_b": "Canada",
       "kickoff_time": "2026-06-24T19:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "50": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "50",
       "team_a": "Bosnia and Herzegovina",
       "team_b": "Qatar",
       "kickoff_time": "2026-06-24T19:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "51": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "51",
       "team_a": "Scotland",
       "team_b": "Brazil",
       "kickoff_time": "2026-06-24T22:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "52": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "52",
       "team_a": "Morocco",
       "team_b": "Haiti",
       "kickoff_time": "2026-06-24T22:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "53": {
       "provider": "SBS On Demand",
@@ -849,7 +849,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "54": {
@@ -865,72 +865,72 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "55": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "55",
       "team_a": "Ecuador",
       "team_b": "Germany",
       "kickoff_time": "2026-06-25T20:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "56": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "56",
       "team_a": "Curaçao",
       "team_b": "Côte d'Ivoire",
       "kickoff_time": "2026-06-25T20:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "57": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "57",
       "team_a": "Japan",
       "team_b": "Sweden",
       "kickoff_time": "2026-06-25T23:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "58": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "58",
       "team_a": "Tunisia",
       "team_b": "Netherlands",
       "kickoff_time": "2026-06-25T23:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "59": {
       "provider": "SBS On Demand",
@@ -945,7 +945,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "60": {
@@ -961,40 +961,40 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS FIFA World Cup / Socceroos page where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "61": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "61",
       "team_a": "Norway",
       "team_b": "France",
       "kickoff_time": "2026-06-26T19:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "62": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "62",
       "team_a": "Senegal",
       "team_b": "Iraq",
       "kickoff_time": "2026-06-26T19:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "63": {
       "provider": "SBS On Demand",
@@ -1009,7 +1009,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "64": {
@@ -1025,7 +1025,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "65": {
@@ -1041,7 +1041,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "66": {
@@ -1057,72 +1057,72 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "67": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "67",
       "team_a": "Panama",
       "team_b": "England",
       "kickoff_time": "2026-06-27T21:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "68": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "68",
       "team_a": "Croatia",
       "team_b": "Ghana",
       "kickoff_time": "2026-06-27T21:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "69": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "69",
       "team_a": "Colombia",
       "team_b": "Portugal",
       "kickoff_time": "2026-06-27T23:30:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "70": {
       "provider": "SBS On Demand",
-      "label": "Watch Live on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "upcoming",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "70",
       "team_a": "DR Congo",
       "team_b": "Uzbekistan",
       "kickoff_time": "2026-06-27T23:30:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
-      "refresh_after_s": 21600
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-23T06:00:02+00:00",
+      "refresh_after_s": 43200
     },
     "71": {
       "provider": "SBS On Demand",
@@ -1137,7 +1137,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     },
     "72": {
@@ -1153,7 +1153,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-21T01:15:53+00:00",
+      "cached_at": "2026-06-23T06:00:02+00:00",
       "refresh_after_s": 21600
     }
   }

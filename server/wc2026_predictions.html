@@ -3,1714 +3,1782 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Jarvis Match Centre — World Cup 2026 Prediction Intelligence. Live model predictions, score projections, risk ratings, late news and tournament impact." />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<title>WC 2026 · Full Tournament · Live</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self';" />
+<title>Jarvis Match Centre · World Cup 2026 Prediction Intelligence</title>
 <style>
   :root {
-    --bg-1: #eef3fb;
-    --bg-2: #e6ecf6;
-    --glass: rgba(255, 255, 255, 0.62);
-    --glass-strong: rgba(255, 255, 255, 0.82);
-    --glass-soft: rgba(255, 255, 255, 0.38);
-    --border: rgba(255, 255, 255, 0.7);
-    --border-strong: rgba(120, 130, 160, 0.18);
-    --shadow: 0 8px 32px rgba(60, 80, 130, 0.10);
-    --shadow-strong: 0 16px 48px rgba(60, 80, 130, 0.18);
-    --ink: #1a1f2e;
-    --mute: #6b7891;
-    --dim: #9aa3b8;
-    --accent: #4f7cff;
-    --accent2: #9d6cff;
-    --win: #1aa57a;
-    --draw: #d49714;
-    --loss: #d04a4a;
-    --hit: #1aa57a;
-    --miss: #d04a4a;
+    --bg: #070A12;
+    --surface: #101624;
+    --surface-elevated: #151D2E;
+    --surface-highlight: #1B2740;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --text-primary: #F7F9FC;
+    --text-secondary: #AAB4C5;
+    --text-muted: #6F7A8D;
+    --accent: #2F80FF;
+    --accent-glow: #00D5FF;
+    --success: #35D07F;
+    --warning: #F5A524;
+    --risk: #FF4D4F;
+    --shadow: 0 8px 32px rgba(0,0,0,0.45);
+    --shadow-strong: 0 16px 48px rgba(0,0,0,0.55);
+    --radius: 20px;
+    --radius-sm: 12px;
+    --font-primary: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-condensed: "Roboto Condensed", "Saira Condensed", Impact, sans-serif;
+    --dock-height: 64px;
   }
-  @keyframes blob1 { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(60px,-40px) scale(1.1); } 66% { transform: translate(-40px,60px) scale(0.95); } }
-  @keyframes blob2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-80px,50px) scale(1.15); } }
-  @keyframes blob3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-60px) scale(1.08); } }
-  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes glow { 0%,100% { box-shadow: 0 0 20px rgba(47,128,255,0.15); } 50% { box-shadow: 0 0 40px rgba(47,128,255,0.35); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes ringSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  }
 
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   html, body {
-    margin: 0;
-    background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
-    color: var(--ink);
-    font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-size: 14px;
+    line-height: 1.45;
     min-height: 100vh;
     overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .hidden { display:none !important; }
+
+  /* ── Floating Dock ────────────────────────────────────────────────────── */
+  .dock {
+    position: fixed;
+    left: 50%; bottom: 16px;
+    transform: translateX(-50%);
+    z-index: 500;
+    max-width: calc(100% - 32px);
+    background: rgba(7,10,18,0.88);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(47,128,255,0.08);
+    padding: 6px 8px;
+  }
+  .dock-inner { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .dock-inner::-webkit-scrollbar { display: none; }
+  .dock-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 12px; border-radius: 999px;
+    color: var(--text-muted); font-size: 12px; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    transition: all .2s; border: 1px solid transparent;
+    background: transparent; cursor: pointer; flex-shrink: 0;
+  }
+  .dock-item:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
+  .dock-item.active { color: var(--accent-glow); background: rgba(47,128,255,0.14); border-color: rgba(47,128,255,0.3); box-shadow: 0 0 16px rgba(47,128,255,0.18); }
+  .dock-item svg { width: 16px; height: 16px; }
+
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .hero {
     position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 110px 24px 120px;
+    overflow: hidden;
   }
-  body::before, body::after, .blob3 {
-    content: ""; position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+  .hero-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(1.25) saturate(1.1) contrast(1.05);
+    pointer-events: none; z-index: 0;
   }
-  body::before { width: 540px; height: 540px; background: radial-gradient(circle, rgba(79,124,255,0.32) 0%, transparent 70%); top: -160px; left: -120px; animation: blob1 18s ease-in-out infinite; }
-  body::after  { width: 520px; height: 520px; background: radial-gradient(circle, rgba(157,108,255,0.28) 0%, transparent 70%); bottom: -180px; right: -120px; animation: blob2 22s ease-in-out infinite; }
-  .blob3 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(26,165,122,0.18) 0%, transparent 70%); top: 40%; left: 55%; animation: blob3 26s ease-in-out infinite; }
-
-  header {
-    padding: 20px 28px; border-bottom: 1px solid var(--border-strong);
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-    position: sticky; top: 0; z-index: 200;
-    background: var(--glass-strong);
-    backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
-    box-shadow: 0 4px 24px rgba(60,80,130,0.06);
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(7,10,18,0.2) 0%, rgba(7,10,18,0.45) 40%, rgba(7,10,18,0.92) 85%, var(--bg) 100%),
+      radial-gradient(circle at 25% 10%, rgba(47,128,255,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 80% 20%, rgba(0,213,255,0.16) 0%, transparent 40%);
+    z-index: 1;
   }
-  header .title h1 { margin: 0 0 4px; font-size: 19px; letter-spacing: -0.02em; font-weight: 700; }
-  header .title p { margin: 0; color: var(--mute); font-size: 12px; }
-  .live-badge {
-    display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border-radius: 999px;
-    background: linear-gradient(135deg, rgba(26,165,122,0.16), rgba(26,165,122,0.06));
-    color: var(--hit); font-size: 12px; font-weight: 600;
-    border: 1px solid rgba(26,165,122,0.3);
+  .hero-grid {
+    position: relative; z-index: 2;
+    max-width: 1400px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: 44px;
+    align-items: end;
+  }
+  .hero-title {
+    font-family: var(--font-condensed); font-size: clamp(40px, 5vw, 60px);
+    line-height: 0.95; font-weight: 900; letter-spacing: -0.035em;
+    margin: 0 0 14px; text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #8fbfff 60%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 6px 30px rgba(47,128,255,0.3));
+  }
+  .hero-subtitle {
+    font-size: clamp(14px, 2vw, 21px); color: var(--text-secondary);
+    max-width: 620px; line-height: 1.45; margin-bottom: 26px;
+  }
+  .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; align-items: center; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    background: rgba(16,22,36,0.72); border: 1px solid var(--border-strong);
     backdrop-filter: blur(10px);
   }
-  .live-dot { width: 7px; height: 7px; background: var(--hit); border-radius: 50%; animation: pulse 2s ease-in-out infinite; box-shadow: 0 0 10px rgba(26,165,122,0.6); }
-
-  .stagebar {
-    display: flex; gap: 8px; padding: 12px 24px;
-    background: var(--glass);
-    backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%);
-    border-bottom: 1px solid var(--border-strong);
-    overflow-x: auto; position: sticky; top: 66px; z-index: 40;
-    box-shadow: 0 2px 16px rgba(60,80,130,0.04);
+  .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; box-shadow: 0 0 10px var(--success); }
+  .hero-badge.model { color: var(--accent-glow); border-color: rgba(0,213,255,0.25); background: rgba(0,213,255,0.08); }
+  .hero-stats { display: flex; gap: 34px; }
+  .hero-stat .v { font-family: var(--font-condensed); font-size: 38px; font-weight: 800; color: var(--accent-glow); line-height: 1; }
+  .hero-stat .k { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .scroll-indicator {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    animation: float 2.5s infinite ease-in-out; cursor: pointer;
   }
-  .stagebar a {
-    display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px;
-    background: var(--glass-soft); border: 1px solid var(--border);
-    color: var(--ink); text-decoration: none; font-size: 12px; font-weight: 500;
-    white-space: nowrap; transition: all .2s cubic-bezier(.4,0,.2,1);
-    backdrop-filter: blur(10px);
-  }
-  .stagebar a:hover { transform: translateY(-1px); box-shadow: var(--shadow); border-color: rgba(79,124,255,0.4); }
-  .stagebar a.done { color: var(--dim); background: transparent; border-color: transparent; }
-  .stagebar a.live {
-    background: linear-gradient(135deg, rgba(26,165,122,0.16), rgba(26,165,122,0.04));
-    border-color: rgba(26,165,122,0.35); color: var(--hit); font-weight: 600;
-  }
+  .scroll-indicator svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; }
 
-  .wrap { max-width: 1320px; margin: 0 auto; padding: 20px 24px 60px; position: relative; z-index: 1; }
+  /* ── Featured next-match card ─────────────────────────────────────────── */
+  .featured-card {
+    position: relative;
+    border-radius: var(--radius); overflow: hidden;
+    background: rgba(16,22,36,0.55);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: var(--shadow-strong), 0 0 40px rgba(47,128,255,0.12);
+    backdrop-filter: blur(14px);
+    transform: translateY(0); transition: transform .3s, box-shadow .3s;
+  }
+  .featured-card:hover { transform: translateY(-6px); box-shadow: 0 28px 70px rgba(0,0,0,0.65), 0 0 50px rgba(47,128,255,0.18); }
+  .featured-card .fc-bg {
+    position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat;
+    opacity: 0.55; transition: opacity .35s; z-index: 0;
+  }
+  .featured-card:hover .fc-bg { opacity: 0.35; }
+  .featured-card .fc-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity .4s; z-index: 1;
+  }
+  .featured-card:hover .fc-video { opacity: 0.65; }
+  .featured-card > *:not(.fc-bg):not(.fc-video) { position: relative; z-index: 2; }
+  .fc-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(7,10,18,0.25); }
+  .fc-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-glow); }
+  .fc-kickoff { font-size: 12px; color: var(--text-secondary); }
+  .fc-body { padding: 24px 20px; text-align: center; }
+  .fc-teams { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 14px; }
+  .fc-team { text-align: center; }
+  .fc-team .flag { font-size: 56px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5)); }
+  .fc-team .name { font-size: 16px; font-weight: 800; margin-top: 6px; }
+  .fc-team .code { font-size: 11px; color: var(--text-muted); }
+  .fc-vs { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+  .fc-score { font-family: var(--font-condensed); font-size: 64px; font-weight: 800; margin: 6px 0; line-height: 1; }
+  .fc-pick { font-size: 13px; color: var(--text-secondary); }
+  .fc-pick b { color: var(--text-primary); }
+  .fc-footer { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: rgba(7,10,18,0.45); border-top: 1px solid rgba(255,255,255,0.08); gap: 10px; }
 
-  .stage {
-    margin: 26px 0; border-radius: 20px; overflow: hidden;
-    background: var(--glass);
-    backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* ── Layout & panels ──────────────────────────────────────────────────── */
+  main { padding-bottom: calc(var(--dock-height) + 28px); }
+  .panel {
+    position: relative;
+    padding: 52px 24px 64px;
+    border-top: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .panel:first-of-type { border-top: none; }
+  .panel-header-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(1.1) saturate(1.05);
+    pointer-events: none; z-index: 0;
+  }
+  .panel::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(7,10,18,0.78) 0%, rgba(7,10,18,0.88) 45%, var(--bg) 100%);
+    z-index: 1;
+  }
+  .panel::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 0%, rgba(47,128,255,0.10) 0%, transparent 35%);
+    z-index: 2;
+  }
+  .panel-inner { position: relative; z-index: 3; max-width: 1400px; margin: 0 auto; }
+  .panel-header { margin-bottom: 22px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .panel-header h2 {
+    font-family: var(--font-condensed); font-size: clamp(26px, 4vw, 48px);
+    font-weight: 900; letter-spacing: -0.025em; text-transform: uppercase;
+    margin: 0 0 4px; line-height: 0.95;
+    background: linear-gradient(180deg, #fff 0%, #8fbfff 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .panel-header p { margin: 0; font-size: 14px; color: var(--text-secondary); max-width: 520px; }
+  .panel-cta { font-size: 12px; font-weight: 700; color: var(--accent-glow); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ── Carousels ────────────────────────────────────────────────────────── */
+  .carousel {
+    display: flex; gap: 18px;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 24px;
+    padding: 12px 4px 28px;
+    margin: 0 -24px;
+    padding-left: 24px; padding-right: 24px;
+  }
+  .carousel::-webkit-scrollbar { height: 6px; }
+  .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+  .carousel-card {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: var(--radius); overflow: hidden;
+    background: var(--surface-elevated);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
-    animation: fadeUp .6s ease-out both;
-    transition: all .3s ease;
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    cursor: pointer;
   }
-  .stage:hover { box-shadow: var(--shadow-strong); }
+  .carousel-card:hover { transform: translateY(-8px) scale(1.01); border-color: rgba(255,255,255,0.18); box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 36px rgba(47,128,255,0.12); }
+  .carousel-card .card-bg {
+    position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat;
+    opacity: 0.55; transition: opacity .35s; z-index: 0;
+  }
+  .carousel-card:hover .card-bg { opacity: 0.35; }
+  .carousel-card .card-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity .4s; z-index: 1;
+  }
+  .carousel-card:hover .card-video, .carousel-card.in-view .card-video { opacity: 0.65; }
+  .carousel-card > *:not(.card-bg):not(.card-video) { position: relative; z-index: 2; }
 
-  .stage-header {
-    padding: 18px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    border-bottom: 1px solid var(--border-strong);
-    background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
-  }
-  .stage-header h2 { margin: 0; font-size: 17px; letter-spacing: -0.01em; font-weight: 700; }
-  .stage-header .tag {
-    padding: 4px 11px; border-radius: 999px; font-size: 10.5px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .06em;
-  }
-  .tag.done { background: rgba(0,0,0,0.05); color: var(--dim); }
-  .tag.live { background: rgba(26,165,122,0.15); color: var(--hit); border: 1px solid rgba(26,165,122,0.3); }
-  .tag.next { background: rgba(212,151,20,0.12); color: var(--draw); border: 1px solid rgba(212,151,20,0.3); }
-  .tag.future { background: rgba(157,108,255,0.1); color: var(--accent2); border: 1px solid rgba(157,108,255,0.3); }
-  .acc-chip {
-    display: inline-block; margin-left: 8px; padding: 3px 10px;
-    border-radius: 999px; font-size: 11px; font-weight: 700;
-    background: linear-gradient(135deg, rgba(26,165,122,0.18), rgba(157,108,255,0.12));
-    color: var(--hit); border: 1px solid rgba(26,165,122,0.35);
-    letter-spacing: .02em; white-space: nowrap;
-  }
-  .stage-header .when { color: var(--mute); font-size: 12px; margin-left: auto; }
-  .stage-body { padding: 18px 24px; }
+  /* ── Next Up cards ────────────────────────────────────────────────────── */
+  .next-card { width: 360px; min-height: 460px; display: flex; flex-direction: column; justify-content: space-between; padding: 0; }
+  .next-card .nc-top { padding: 18px 18px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .next-card .nc-center { padding: 20px 18px; text-align: center; }
+  .next-card .nc-score { font-family: var(--font-condensed); font-size: 72px; font-weight: 800; line-height: 1; margin: 10px 0; }
+  .next-card .nc-bottom { padding: 0 18px 18px; }
 
-  /* Day tab styles */
-  .day-tab {
-    padding: 8px 12px; border-radius: 10px;
-    background: var(--glass-soft); border: 1px solid var(--border);
-    color: var(--ink); cursor: pointer; font-size: 11.5px; font-weight: 500;
-    transition: all .18s cubic-bezier(.4,0,.2,1);
-    backdrop-filter: blur(10px); line-height: 1.25; text-align: center;
-    display: inline-flex; flex-direction: column; align-items: center; gap: 2px; min-width: 92px;
+  /* ── Prediction cards ─────────────────────────────────────────────────── */
+  .prediction-card { width: 300px; min-height: 420px; display: flex; flex-direction: column; justify-content: space-between; padding: 0; }
+  .prediction-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 30px rgba(47,128,255,0.2); }
+  .pc-top { padding: 18px 18px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .pc-meta { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .pc-center { padding: 24px 18px; text-align: center; }
+  .pc-teams-row { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 14px; }
+  .pc-team-block { text-align: center; }
+  .pc-team-block .flag { font-size: 54px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5)); }
+  .pc-team-block .name { font-size: 15px; font-weight: 800; margin-top: 6px; }
+  .pc-team-block .code { font-size: 11px; color: var(--text-muted); }
+  .pc-vs-small { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+  .pc-score-big { font-family: var(--font-condensed); font-size: 64px; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+  .pc-bottom { padding: 0 18px 18px; }
+  .pc-actions-row { display: flex; gap: 10px; margin-top: 14px; }
+  .scorer-block { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 8px; }
+  .scorer-col { background: rgba(7,10,18,0.45); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 10px; }
+  .scorer-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 6px; }
+  .scorer { display: flex; justify-content: space-between; gap: 6px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .scorer:last-child { border-bottom: none; }
+  .scorer b { color: var(--text-primary); font-weight: 600; }
+  .scorer span { color: var(--text-muted); white-space: nowrap; }
+  .scorer.muted { color: var(--text-muted); font-style: italic; }
+  .accuracy-hero .accuracy-stat { transition: transform .2s; }
+  .accuracy-hero .accuracy-stat:hover { transform: translateY(-4px); }
+  .confidence-ring {
+    width: 44px; height: 44px; border-radius: 50%;
+    position: relative; flex-shrink: 0;
+    display: grid; place-items: center;
+    background: conic-gradient(var(--ring-color) var(--ring-pct), rgba(255,255,255,0.08) 0);
   }
-  .day-tab:hover { transform: translateY(-1px); box-shadow: var(--shadow); border-color: rgba(79,124,255,0.35); }
-  .day-tab .d-date { font-weight: 700; font-size: 12px; letter-spacing: -0.005em; }
-  .day-tab .d-count { color: var(--mute); font-size: 10.5px; }
-  .day-tab.past { opacity: 0.6; color: var(--dim); }
-  .day-tab.past .d-count { color: var(--dim); }
-  .day-tab.today {
-    background: linear-gradient(135deg, rgba(26,165,122,0.18), rgba(26,165,122,0.06));
-    border-color: rgba(26,165,122,0.4); color: var(--hit);
-    box-shadow: 0 0 0 0 rgba(26,165,122,0.4);
-    animation: pulse 2.4s ease-in-out infinite;
+  .confidence-ring::before {
+    content: "";
+    position: absolute; inset: 4px; border-radius: 50%;
+    background: rgba(7,10,18,0.7);
   }
-  .day-tab.today .d-count { color: var(--hit); }
-  .day-tab.active {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; border-color: transparent;
-    box-shadow: 0 6px 20px rgba(79,124,255,0.35);
-    font-weight: 700; opacity: 1;
-    animation: none;
-  }
-  .day-tab.active .d-count { color: rgba(255,255,255,0.9); }
+  .confidence-ring span { position: relative; z-index: 1; font-size: 10px; font-weight: 800; color: var(--text-primary); }
 
-  /* Match rows */
-  .day-block { animation: fadeUp .35s ease-out; }
-  .day-block .day-title {
-    font-size: 13px; font-weight: 700; color: var(--ink); margin: 6px 0 10px;
-    letter-spacing: -0.005em;
-    display: flex; align-items: center; gap: 10px;
+  /* ── Confidence badge ─────────────────────────────────────────────────── */
+  .conf-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    background: rgba(7,10,18,0.55); border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(6px);
   }
-  .day-block .day-title .meta { color: var(--mute); font-weight: 500; font-size: 11.5px; }
 
-  .hdr-btn {
-    margin-right: 8px; padding: 7px 14px; border-radius: 999px;
-    border: 1px solid var(--border); background: var(--glass-soft); color: var(--ink);
-    font-size: 12px; font-weight: 600; cursor: pointer;
-    backdrop-filter: blur(10px); transition: all .2s;
+  /* ── Badges & buttons ─────────────────────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    background: rgba(53,208,127,0.12); color: var(--success); border: 1px solid rgba(53,208,127,0.25);
   }
-  .hdr-btn:hover { background: linear-gradient(135deg, rgba(79,124,255,0.2), rgba(157,108,255,0.15)); }
-  .hdr-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(79,124,255,0.25); }
-  /* Toggle sections become floating modals when shown — no bottom duplicates */
-  .stage.floating {
-    position: fixed !important;
-    top: 120px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: calc(100% - 32px) !important;
-    max-width: 1100px !important;
-    max-height: 75vh !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain !important;
-    touch-action: pan-y !important;
-    z-index: 250 !important;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.45) !important;
-    margin: 0 !important;
-    background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(120,130,160,0.18) !important;
-    pointer-events: auto !important;
+  .risk-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    border: 1px solid; backdrop-filter: blur(4px);
   }
-  .stage.floating * { pointer-events: auto !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-  .stage.floating .group-card { background: rgba(255,255,255,0.85) !important; }
-  .stage.floating .match-row { background: rgba(255,255,255,0.85) !important; }
-  .stage-modal-backdrop {
-    position: fixed; inset: 0;
-    background: transparent;
-    z-index: 140;
-    display: none;
-    pointer-events: none;
+  .risk-low { background: rgba(53,208,127,0.12); color: var(--success); border-color: rgba(53,208,127,0.28); }
+  .risk-medium { background: rgba(245,165,36,0.12); color: var(--warning); border-color: rgba(245,165,36,0.28); }
+  .risk-high { background: rgba(255,77,79,0.12); color: var(--risk); border-color: rgba(255,77,79,0.28); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 16px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700;
+    border: 1px solid var(--border); background: rgba(16,22,36,0.85); color: var(--text-primary);
+    cursor: pointer; transition: all .2s; backdrop-filter: blur(8px);
+    flex: 1;
   }
-  .stage-modal-backdrop.show { display: block; }
-  /* Played + Upcoming — 2-column layout with 2x larger fonts for readability */
-  #played-rows, #upcoming-rows {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-  @media (max-width: 760px) {
-    #played-rows, #upcoming-rows { grid-template-columns: 1fr; }
-  }
-  #played .match-row, #upcoming .match-row {
-    grid-template-columns: auto 1fr auto !important;
-    grid-template-areas:
-      "n teams pred"
-      "stage when actual" !important;
-    grid-row-gap: 8px !important;
-    padding: 16px 18px !important;
-    font-size: 16px !important;
-    background: var(--glass-strong) !important;
-    border-radius: 14px !important;
-    border: 1px solid var(--border) !important;
-    backdrop-filter: blur(15px) !important;
-    box-shadow: 0 6px 22px rgba(60,80,130,0.10) !important;
-    transition: transform .25s, box-shadow .25s !important;
-  }
-  #played .match-row:hover, #upcoming .match-row:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(60,80,130,0.18) !important; }
-  #played .match-row .n, #upcoming .match-row .n { grid-area: n; font-size: 14px !important; padding: 6px 10px; background: linear-gradient(135deg, rgba(79,124,255,0.14), rgba(157,108,255,0.08)); color: var(--accent) !important; border-radius: 999px; font-weight: 700; border: 1px solid rgba(79,124,255,0.20); }
-  #played .match-row .teams, #upcoming .match-row .teams { grid-area: teams; font-size: 18px !important; font-weight: 700 !important; gap: 8px !important; }
-  #played .match-row .teams .flag, #upcoming .match-row .teams .flag { font-size: 28px !important; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)); }
-  #played .match-row .teams .vs, #upcoming .match-row .teams .vs { font-size: 14px !important; color: var(--mute) !important; font-weight: 500; }
-  #played .match-row .stage-label, #upcoming .match-row .stage-label { grid-area: stage; font-size: 14px !important; color: var(--mute) !important; }
-  #played .match-row .when, #upcoming .match-row .when { grid-area: when; font-size: 14px !important; color: var(--mute) !important; }
-  #played .match-row .pred, #upcoming .match-row .pred { grid-area: pred; gap: 10px; }
-  #played .match-row .pred .pill, #upcoming .match-row .pred .pill { padding: 7px 16px !important; font-size: 15px !important; font-weight: 700 !important; min-width: 44px !important; }
-  #played .match-row .pred .pscore, #upcoming .match-row .pred .pscore { font-size: 16px !important; font-weight: 700; color: var(--accent) !important; background: linear-gradient(135deg, rgba(79,124,255,0.10), rgba(157,108,255,0.06)); padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(79,124,255,0.18); }
-  #played .match-row .actual-cell, #upcoming .match-row .actual-cell { grid-area: actual; justify-self: end; }
-  #played .match-row .actual, #upcoming .match-row .actual { font-size: 16px !important; font-weight: 800 !important; padding: 6px 12px; border-radius: 8px; }
-  #played .match-row .actual.hit { color: var(--hit) !important; background: rgba(26,165,122,0.14); border: 1px solid rgba(26,165,122,0.3); }
-  #played .match-row .actual.miss { color: var(--miss) !important; background: rgba(208,74,74,0.14); border: 1px solid rgba(208,74,74,0.3); }
-  #played .match-row .countdown, #upcoming .match-row .countdown { font-size: 15px !important; padding: 6px 12px !important; font-weight: 700; }
-  #upcoming .tabs .tab { font-size: 14px !important; padding: 10px 16px !important; }
-  #upcoming .desc { font-size: 14px !important; }
+  .btn:hover { background: var(--surface-highlight); border-color: var(--border-strong); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #1a6fd6; box-shadow: 0 0 20px rgba(47,128,255,0.3); }
+  .btn-ghost { background: transparent; color: var(--text-secondary); flex: 0 0 auto; }
+  .btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.08); }
+  .btn-sm { padding: 8px 14px; font-size: 11px; }
+  .btn-icon { width: 38px; height: 38px; padding: 0; border-radius: 50%; flex: 0 0 auto; }
 
-  .match-row {
-    display: grid;
-    grid-template-columns: 36px minmax(220px, 1.6fr) minmax(120px, 1fr) minmax(90px, 0.7fr) minmax(110px, 0.9fr) minmax(120px, 0.9fr);
-    align-items: center; gap: 10px;
-    padding: 12px 14px; margin-bottom: 8px;
-    background: var(--glass-strong); border: 1px solid var(--border); border-radius: 12px;
+  /* ── Group cards ──────────────────────────────────────────────────────── */
+  .group-card { width: 340px; }
+  .gc-header { padding: 16px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(7,10,18,0.35); }
+  .gc-header h4 { margin: 0; font-size: 20px; font-weight: 900; }
+  .gc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gc-table th { text-align: left; padding: 11px 14px; color: var(--text-muted); font-weight: 700; border-bottom: 1px solid var(--border); text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+  .gc-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .gc-table tr:last-child td { border-bottom: none; }
+  .gc-table .team { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+  .gc-table .flag { font-size: 20px; }
+  .gc-table .pts { font-weight: 800; font-family: var(--font-mono); }
+  .gc-table .q { color: var(--success); }
+  .gc-table .e { color: var(--text-muted); }
+
+  /* ── Knockout bracket ─────────────────────────────────────────────────── */
+  .bracket-carousel { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .bracket-round { width: 100%; }
+  .bracket-round h5 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 14px; font-weight: 700; }
+  .bracket-match {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(21,29,46,0.95), rgba(16,22,36,0.95)); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 16px; margin-bottom: 14px; cursor: pointer; min-height: 120px;
+    transition: transform .2s, border-color .2s;
+  }
+  .bracket-match:hover { transform: translateY(-4px); border-color: var(--border-strong); }
+  .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+  .bracket-team.winner { color: var(--success); font-weight: 800; }
+  .bracket-prob { font-family: var(--font-mono); color: var(--text-muted); font-size: 11px; }
+  .bracket-pick { margin-top: 10px; font-size: 12px; color: var(--text-secondary); }
+
+  /* ── Player cards ─────────────────────────────────────────────────────── */
+  .player-card { width: 280px; padding: 18px; }
+  .player-card .ph { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .player-name { font-size: 18px; font-weight: 800; }
+  .player-team { font-size: 12px; color: var(--text-secondary); }
+  .player-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 5px 11px; border-radius: 999px; border: 1px solid; }
+  .player-status.ok { color: var(--success); border-color: rgba(53,208,127,0.3); background: rgba(53,208,127,0.08); }
+  .player-status.doubt { color: var(--warning); border-color: rgba(245,165,36,0.3); background: rgba(245,165,36,0.08); }
+  .player-status.out { color: var(--risk); border-color: rgba(255,77,79,0.3); background: rgba(255,77,79,0.08); }
+  .player-grid-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .player-metric { background: rgba(7,10,18,0.45); border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+  .player-metric div:first-child { font-size: 10px; color: var(--text-muted); }
+  .player-metric div:last-child { font-size: 15px; font-weight: 800; }
+
+  /* ── News cards ───────────────────────────────────────────────────────── */
+  .news-card { width: 340px; min-height: 280px; display: flex; flex-direction: column; justify-content: flex-end; padding: 0; }
+  .news-card .nc-content { padding: 18px; background: linear-gradient(180deg, transparent 0%, rgba(7,10,18,0.96) 55%); }
+  .news-card .nc-match { font-size: 12px; font-weight: 700; color: var(--accent-glow); margin-bottom: 6px; }
+  .news-card .nc-text { font-size: 15px; font-weight: 700; line-height: 1.35; margin-bottom: 12px; }
+  .news-card .nc-meta { display: flex; justify-content: space-between; align-items: center; }
+  .news-impact { font-size: 11px; }
+  .news-impact .down { color: var(--risk); }
+  .news-impact .up { color: var(--success); }
+
+  /* ── Bet Builder ──────────────────────────────────────────────────────── */
+  .builder-form {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
+    padding: 18px; margin-bottom: 24px;
+    background: rgba(16,22,36,0.6); border: 1px solid var(--border); border-radius: var(--radius);
     backdrop-filter: blur(10px);
-    transition: transform .15s, box-shadow .15s;
-    animation: fadeUp .4s ease-out both;
   }
-  .match-row:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
-  .match-row.played { opacity: 0.92; }
-  .match-row .n { color: var(--dim); font-size: 11px; font-variant-numeric: tabular-nums; text-align: center; }
-  .match-row .teams { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; font-weight: 600; font-size: 13px; }
-  .match-row .teams .vs { color: var(--mute); font-size: 10.5px; margin: 0 2px; font-weight: 500; }
-  .match-row .teams .flag { font-size: 17px; line-height: 1; }
-  .match-row .stage-label { color: var(--mute); font-size: 11px; }
-  .match-row .stage-label b { color: var(--ink); font-weight: 600; }
-  .match-row .when { color: var(--mute); font-size: 11.5px; white-space: nowrap; }
-  .match-row .pred { display: flex; align-items: center; gap: 6px; font-size: 11.5px; }
-  .match-row .pred .pscore { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
-  .match-row .pred .ptag { color: var(--mute); font-size: 10px; }
-  .match-row .pred .lock {
-    display: inline-block; margin-left: 4px; font-size: 11px;
-    color: var(--accent); opacity: 0.85; cursor: help;
-    vertical-align: middle;
+  .builder-field { display: flex; flex-direction: column; gap: 6px; min-width: 140px; flex: 1; }
+  .builder-field label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .builder-field input, .builder-field select {
+    background: var(--bg); border: 1px solid var(--border-strong); color: var(--text-primary);
+    padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700;
   }
-  .match-row .pred .lock[data-locked="1"] { opacity: 1; }
-  .match-row .actual { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 12.5px; text-align: right; }
-  .match-row .actual.hit { color: var(--hit); }
-  .match-row .actual.miss { color: var(--miss); }
-  .match-row .actual.pending { color: var(--dim); font-weight: normal; font-style: italic; }
-
-  .pill {
-    display: inline-block; padding: 3px 9px; border-radius: 7px; font-weight: 700; font-size: 10.5px;
-    min-width: 26px; text-align: center;
+  .builder-field input[type="number"] { max-width: 140px; }
+  .builder-disclaimer {
+    width: 100%;
+    font-size: 11px; color: var(--text-secondary); line-height: 1.5;
+    padding-top: 8px; border-top: 1px solid var(--border);
   }
-  .pill.W { background: linear-gradient(135deg, rgba(26,165,122,0.2), rgba(26,165,122,0.08)); color: var(--win); border: 1px solid rgba(26,165,122,0.35); }
-  .pill.D { background: linear-gradient(135deg, rgba(212,151,20,0.18), rgba(212,151,20,0.06)); color: var(--draw); border: 1px solid rgba(212,151,20,0.35); }
-  .pill.L { background: linear-gradient(135deg, rgba(208,74,74,0.18), rgba(208,74,74,0.06)); color: var(--loss); border: 1px solid rgba(208,74,74,0.35); }
-  .pill.dim { background: rgba(120,130,160,0.1); color: var(--mute); border: 1px solid rgba(120,130,160,0.18); }
-
-  .countdown {
-    font-variant-numeric: tabular-nums; color: var(--draw); font-weight: 700; font-size: 11.5px;
-    padding: 2px 8px; border-radius: 6px;
-    background: rgba(212,151,20,0.1);
-    display: inline-block;
+  .slip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .slip-card {
+    position: relative; overflow: hidden;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--surface-elevated); padding: 0;
+    display: flex; flex-direction: column;
   }
-  .countdown.live { color: #fff; background: linear-gradient(135deg, var(--win), #14c98a); animation: pulse 1.5s infinite; box-shadow: 0 0 16px rgba(26,165,122,0.5); }
-  .countdown.over { color: var(--dim); background: transparent; font-weight: 500; }
-
-  .legend { display: flex; gap: 16px; margin: 14px 0 0; color: var(--mute); font-size: 11.5px; align-items: center; flex-wrap: wrap; }
-  .legend .pill { font-size: 10px; padding: 2px 7px; min-width: 22px; }
-
-  .late-news { background:rgba(212,151,20,0.08); border:1px solid rgba(212,151,20,0.3); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:12px; line-height:1.6; }
-  .late-news ul { margin: 6px 0 0; padding-left: 20px; }
-
-  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 14px; }
-  .summary .stat {
-    background: var(--glass-strong); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px;
-    backdrop-filter: blur(10px); transition: transform .2s;
+  .slip-card.a { border-color: rgba(47,128,255,0.35); }
+  .slip-card.b { border-color: rgba(0,213,255,0.35); }
+  .slip-card.c { border-color: rgba(53,208,127,0.35); }
+  .slip-header {
+    padding: 16px 18px;
+    background: linear-gradient(90deg, rgba(47,128,255,0.12), transparent);
+    border-bottom: 1px solid var(--border);
   }
-  .summary .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-  .summary .stat .k { color: var(--mute); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
-  .summary .stat .v { color: var(--ink); font-size: 21px; font-weight: 700; margin-top: 3px; letter-spacing: -0.01em; }
-  .summary .stat .v.good { color: var(--hit); }
-  .summary .stat .v.bad { color: var(--miss); }
-
-  .groups-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-  .group-card {
-    background: var(--glass-strong); border: 1px solid var(--border); border-radius: 14px;
-    padding: 13px 15px; backdrop-filter: blur(10px);
-    transition: all .25s; animation: fadeUp .5s both;
+  .slip-card.b .slip-header { background: linear-gradient(90deg, rgba(0,213,255,0.12), transparent); }
+  .slip-card.c .slip-header { background: linear-gradient(90deg, rgba(53,208,127,0.12), transparent); }
+  .slip-title { font-size: 16px; font-weight: 800; margin: 0 0 4px; }
+  .slip-sub { font-size: 12px; color: var(--text-secondary); margin: 0; }
+  .slip-body { padding: 14px 18px; flex: 1; }
+  .slip-leg {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
   }
-  .group-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-strong); }
-  .group-card h4 { margin: 0 0 9px; font-size: 12.5px; letter-spacing: .05em; color: var(--accent); font-weight: 700; text-transform: uppercase; }
-  .group-card .team { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 12.5px; border-bottom: 1px solid rgba(120,130,160,0.08); }
-  .group-card .team:last-child { border-bottom: none; }
-  .group-card .team .name { display: flex; gap: 6px; align-items: center; font-weight: 500; }
-  .group-card .team .pts { color: var(--mute); font-variant-numeric: tabular-nums; font-size: 11.5px; }
-  .group-card .team.q1 .pts { color: var(--win); font-weight: 700; }
-  .group-card .team.q2 .pts { color: var(--draw); font-weight: 700; }
-  .group-card .team.q1 { background: linear-gradient(90deg, rgba(26,165,122,0.06), transparent); margin: 0 -15px; padding-left: 15px; padding-right: 15px; border-radius: 6px; }
-  .group-card .team.q2 { background: linear-gradient(90deg, rgba(212,151,20,0.05), transparent); margin: 0 -15px; padding-left: 15px; padding-right: 15px; border-radius: 6px; }
-  .group-card .meta { color: var(--mute); font-size: 11.5px; }
-
-  .bracket-note { text-align: center; padding: 36px 22px; color: var(--mute); font-size: 13px; }
-  .bracket-note .big { font-size: 19px; color: var(--ink); margin-bottom: 8px; font-weight: 600; }
-
-  footer {
-    margin-top: 24px; padding: 22px 28px; max-width: 1320px; margin-left: auto; margin-right: auto;
-    color: var(--mute); font-size: 11.5px; line-height: 1.7;
-    background: var(--glass);
-    backdrop-filter: blur(15px);
-    border-top: 1px solid var(--border-strong);
-    border-radius: 20px 20px 0 0;
-    position: relative; z-index: 1;
+  .slip-leg:last-child { border-bottom: none; }
+  .slip-leg .teams { font-size: 13px; font-weight: 700; }
+  .slip-leg .teams span { color: var(--text-muted); font-weight: 400; }
+  .slip-leg .pick { font-size: 12px; font-weight: 700; color: var(--accent-glow); }
+  .slip-footer {
+    padding: 14px 18px; background: rgba(7,10,18,0.4);
+    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
   }
-  footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
-  footer a:hover { text-decoration: underline; }
+  .slip-stat { text-align: center; }
+  .slip-stat .v { font-family: var(--font-condensed); font-size: 22px; font-weight: 800; color: var(--text-primary); }
+  .slip-stat .k { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .slip-summary { grid-column: 1 / -1; font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* ── Model Lab ────────────────────────────────────────────────────────── */
+  .lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .lab-card {
+    position: relative; overflow: hidden;
+    min-height: 200px; padding: 22px;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--surface-elevated);
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .lab-card .lab-bg {
+    position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat;
+    opacity: 0.45; z-index: 0; transition: opacity .35s;
+  }
+  .lab-card:hover .lab-bg { opacity: 0.25; }
+  .lab-card > *:not(.lab-bg) { position: relative; z-index: 2; }
+  .lab-card .lab-big { font-family: var(--font-condensed); font-size: 48px; font-weight: 800; color: var(--accent-glow); line-height: 1; }
+  .lab-card h4 { margin: 10px 0 6px; font-size: 15px; }
+  .lab-card p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .progress-list { display: grid; gap: 10px; }
+  .progress-row { display: flex; align-items: center; gap: 10px; }
+  .progress-row span { font-size: 11px; color: var(--text-secondary); width: 90px; flex-shrink: 0; }
+  .progress-track { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; }
+
+  /* ── Fixtures timeline (compact) ──────────────────────────────────────── */
+  .timeline { max-width: 900px; }
+  .timeline-stage { margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface-elevated); }
+  .timeline-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; cursor: pointer; background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid transparent; transition: border-color .2s;
+  }
+  .timeline-stage.open .timeline-header { border-bottom-color: var(--border); }
+  .timeline-header h4 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); }
+  .timeline-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .timeline-stage.open .timeline-body { max-height: 2000px; }
+  .fixture-row {
+    display: grid; grid-template-columns: 70px 1fr 110px 90px 90px;
+    align-items: center; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    transition: background .15s; cursor: pointer;
+  }
+  .fixture-row:last-child { border-bottom: none; }
+  .fixture-row:hover { background: rgba(255,255,255,0.03); }
+  .fixture-time { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+  .fixture-match { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .fixture-pick { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+  .fixture-score { font-family: var(--font-condensed); font-size: 18px; font-weight: 800; text-align: right; }
+  .fixture-result { text-align: right; font-size: 11px; font-weight: 700; }
+  .fixture-result.correct { color: var(--success); }
+  .fixture-result.incorrect { color: var(--risk); }
+
+  /* ── Builder FAB & drawer ─────────────────────────────────────────────── */
+  .fab {
+    position: fixed; right: 24px; bottom: calc(var(--dock-height) + 24px);
+    z-index: 450;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); color: #fff; border: none;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 24px rgba(47,128,255,0.35);
+    cursor: pointer; transition: transform .2s, box-shadow .2s;
+  }
+  .fab:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(47,128,255,0.45); }
+  .fab-count {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 20px; height: 20px; border-radius: 50%;
+    background: var(--risk); color: #fff; font-size: 11px; font-weight: 800;
+    display: grid; place-items: center; padding: 0 5px;
+  }
+  .builder-drawer {
+    position: fixed; top: 0; right: 0; width: 460px; max-width: 100%; height: 100vh;
+    background: linear-gradient(180deg, #0D1320 0%, #070A12 100%);
+    border-left: 1px solid var(--border); box-shadow: var(--shadow-strong);
+    z-index: 460; transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+  }
+  .builder-drawer.show { transform: translateX(0); }
+  .builder-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .builder-header h3 { margin: 0; font-size: 18px; }
+  .builder-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; font-size: 20px; }
+  .builder-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .builder-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+  .builder-selection {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px; margin-bottom: 10px;
+    background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  }
+  .builder-selection .sel-text { flex: 1; }
+  .builder-selection .sel-title { font-size: 14px; font-weight: 700; }
+  .builder-selection .sel-meta { font-size: 11px; color: var(--text-muted); }
+  .builder-selection .sel-remove {
+    width: 28px; height: 28px; border-radius: 50%; border: none; background: rgba(255,77,79,0.15);
+    color: var(--risk); cursor: pointer; font-size: 16px; line-height: 1;
+  }
+  .builder-warning {
+    background: rgba(245,165,36,0.08); border: 1px solid rgba(245,165,36,0.2);
+    border-radius: var(--radius-sm); padding: 12px; font-size: 12px; color: var(--warning); margin-bottom: 14px;
+  }
+
+  /* ── Match detail drawer ──────────────────────────────────────────────── */
+  .drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px); z-index: 300; opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+  }
+  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; width: 560px; max-width: 100%; height: 100vh;
+    background: linear-gradient(180deg, #0D1320 0%, #070A12 100%);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-strong);
+    z-index: 310; transform: translateX(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+  }
+  .drawer.show { transform: translateX(0); }
+  .drawer-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .drawer-header h2 { margin: 0; font-size: 18px; }
+  .drawer-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; font-size: 20px; }
+  .drawer-tabs { display: flex; gap: 4px; padding: 10px 16px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .drawer-tab { padding: 8px 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--text-secondary); font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .drawer-tab.active { background: var(--surface-elevated); color: var(--accent); border-color: var(--border); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .drawer-section { margin-bottom: 24px; }
+  .drawer-section h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .drawer-hero { height: 240px; border-radius: var(--radius); position: relative; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; --card-img:none; }
+  .drawer-hero::after { content: ""; position: absolute; inset: 0; background: var(--card-img) center/cover no-repeat; opacity: 0.45; }
+  .drawer-hero-meta { position: absolute; top: 16px; left: 16px; z-index: 1; font-size: 11px; color: var(--text-secondary); background: rgba(0,0,0,0.45); padding: 5px 12px; border-radius: 999px; }
+  .drawer-hero-score { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: var(--font-condensed); font-size: 72px; font-weight: 800; z-index: 1; text-shadow: 0 0 30px rgba(0,0,0,0.9); }
+  .drawer-hero-pick { position: absolute; bottom: 16px; left: 16px; z-index: 1; font-size: 13px; }
+  .drawer-video { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  .prob-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; }
+  .prob-row span:first-child { width: 90px; color: var(--text-secondary); }
+  .prob-row span:last-child { width: 46px; text-align: right; font-weight: 700; }
+  .bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+  .bar { height: 100%; border-radius: 4px; }
+  .pc-metric { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+  .pc-metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .pc-metric-value { font-size: 20px; font-weight: 700; }
+
+  /* ── Footer ───────────────────────────────────────────────────────────── */
+  .app-footer {
+    position: relative; overflow: hidden;
+    padding: 48px 24px;
+    border-top: 1px solid var(--border);
+    background: rgba(7,10,18,0.9);
+  }
+  .footer-inner { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; margin-bottom: 28px; }
+  .footer-col h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .footer-col a { display: block; color: var(--text-secondary); text-decoration: none; font-size: 12.5px; margin-bottom: 6px; }
+  .footer-col a:hover { color: var(--accent); }
   .disclaimer {
-    margin-top: 14px; padding: 12px 16px;
-    border: 1px solid rgba(212,151,20,0.35); background: rgba(212,151,20,0.08); color: var(--draw);
-    border-radius: 12px; font-size: 11.5px;
+    background: rgba(245,165,36,0.06); border: 1px solid rgba(245,165,36,0.2);
+    border-radius: var(--radius); padding: 16px; font-size: 12px; color: var(--text-secondary); line-height: 1.6;
   }
-  code { background: rgba(79,124,255,0.08); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--accent); }
 
-  @media (max-width: 760px) {
-    .stage-header h2 { font-size: 15px; }
-    header .title h1 { font-size: 16px; }
-    .wrap { padding: 14px 14px 60px; }
-    header { padding: 16px 18px; }
-    .stagebar { padding: 10px 16px; }
-    .match-row {
-      grid-template-columns: 28px 1fr;
-      grid-template-areas:
-        "n teams"
-        ". stage"
-        ". when"
-        ". pred"
-        ". actual";
-      row-gap: 6px;
-    }
-    .match-row .n { grid-area: n; align-self: start; }
-    .match-row .teams { grid-area: teams; }
-    .match-row .stage-label { grid-area: stage; }
-    .match-row .when { grid-area: when; }
-    .match-row .pred { grid-area: pred; }
-    .match-row .actual { grid-area: actual; text-align: left; }
+  /* ── Toast / loading ──────────────────────────────────────────────────── */
+  .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 400; padding: 12px 20px; border-radius: var(--radius-sm); font-weight: 600; box-shadow: var(--shadow-strong); }
+  .toast-risk { background: rgba(255,77,79,0.12); color: var(--risk); border: 1px solid rgba(255,77,79,0.25); }
+  .toast a { color: inherit; text-decoration: underline; }
+  .skeleton {
+    position: relative; overflow: hidden;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s infinite;
+    border-radius: 12px;
+  }
+  .state-box { position: relative; overflow: hidden; text-align: center; padding: 40px 20px; color: var(--text-muted); border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-elevated); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero-video, .panel-header-video, .card-video, .fc-video { display: none; }
+    .carousel-card:hover, .featured-card:hover, .bracket-match:hover { transform: none; }
+    .scroll-indicator { animation: none; }
+  }
+
+  @media (min-width: 1100px) {
+    .dock { top: 18px; bottom: auto; }
+    .hero { padding-top: 140px; }
+    .hero-title { white-space: nowrap; }
+    .fab { bottom: 24px; }
+    main { padding-bottom: 24px; padding-top: calc(var(--dock-height) + 24px); }
+  }
+
+  @media (max-width: 1100px) {
+    .next-card { width: min(420px, 45vw); min-height: 420px; }
+    .prediction-card { width: min(320px, 40vw); min-height: 380px; }
+    .group-card { width: min(360px, 44vw); }
+    .news-card { width: min(380px, 44vw); }
+    .player-card { width: min(280px, 31vw); }
+    .bracket-carousel { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .lab-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  }
+
+  @media (max-width: 900px) {
+    .hero { justify-content: flex-start; padding-top: 120px; padding-bottom: 120px; }
+    .hero-title { font-size: clamp(36px, 6vw, 56px); }
+    .hero-subtitle { font-size: clamp(13px, 1.8vw, 18px); }
+    .hero-grid { grid-template-columns: 1fr; gap: 28px; align-items: start; }
+    .hero-stats { gap: 20px; flex-wrap: wrap; }
+    .hero-stat .v { font-size: 28px; }
+    .featured-card .fc-team .flag { font-size: 48px; }
+    .featured-card .fc-score { font-size: 52px; }
+    .featured-card .fc-body { padding: 20px; }
+    .dock-item span { display: none; }
+    .dock-inner { gap: 2px; }
+    .dock-item { padding: 0 10px; }
+    .fixture-row { grid-template-columns: 60px 1fr 80px; }
+    .fixture-pick, .fixture-result { display: none; }
+    .panel-header { align-items: flex-start; flex-direction: column; }
+    .panel-header h2 { font-size: clamp(28px, 6vw, 44px); }
+  }
+
+  @media (max-width: 700px) {
+    .hero { min-height: auto; padding: 88px 16px 76px; }
+    .hero-title { font-size: 40px; line-height: 0.9; }
+    .hero-subtitle { font-size: 14px; margin-bottom: 18px; }
+    .hero-badges { margin-bottom: 18px; }
+    .hero-badge { padding: 6px 10px; font-size: 11px; }
+    .hero-stats { gap: 16px; }
+    .hero-stat .v { font-size: 26px; }
+    .scroll-indicator { display: none; }
+    .featured-card .fc-header { padding: 12px 14px; }
+    .featured-card .fc-body { padding: 16px; }
+    .featured-card .fc-footer { padding: 12px 14px; }
+    .featured-card .fc-team .flag { font-size: 38px; }
+    .featured-card .fc-score { font-size: 42px; }
+    .panel { padding: 32px 16px 40px; }
+    .panel-header h2 { font-size: clamp(24px, 8.5vw, 34px); }
+    .panel-header p { font-size: 13px; }
+    .next-card, .prediction-card, .group-card, .news-card { width: 86vw; }
+    .next-card { min-height: 380px; }
+    .prediction-card { min-height: 360px; }
+    .player-card { width: 82vw; }
+    .drawer, .builder-drawer { width: 100%; }
+    .carousel { margin: 0 -16px; padding-left: 16px; padding-right: 16px; scroll-padding: 16px; }
+    .builder-form { flex-direction: column; align-items: stretch; }
+    .builder-field { min-width: auto; }
+    .builder-field input[type="number"] { max-width: none; }
+    .slip-grid { grid-template-columns: 1fr; }
+    .lab-grid { grid-template-columns: 1fr; }
+    .bracket-carousel { grid-template-columns: 1fr; }
+    .fixture-row { grid-template-columns: 50px 1fr 60px; gap: 8px; padding: 10px 12px; }
+    .fixture-score { font-size: 16px; }
+    .dock { bottom: 10px; padding: 4px 6px; }
+    .dock-item { padding: 8px 10px; }
+    .fab { right: 14px; bottom: calc(var(--dock-height) + 14px); width: 48px; height: 48px; }
+  }
+
+  @media (max-width: 360px) {
+    .hero-title { font-size: 34px; }
+    .hero-subtitle { font-size: 13px; }
   }
 </style>
 </head>
 <body>
-<div class="blob3"></div>
-<header>
-  <div class="title" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <h1 style="margin:0;">🏆 FIFA World Cup 2026</h1>
-    <span class="live-badge"><span class="live-dot"></span> LIVE · <span id="updated-at">refreshing</span></span>
-  </div>
-  <div id="freshness-stamp" class="meta" style="margin-top:4px;font-size:12px;color:var(--mute);">
-    Checking predictions freshness…
-  </div>
-  <div>
-    <button onclick="window.toggleStage('played', this)" class="hdr-btn">📋 Played</button>
-    <button onclick="window.toggleStage('all-fixtures', this)" class="hdr-btn">📅 Calendar</button>
-    <button onclick="window.toggleStage('standings', this)" class="hdr-btn">📊 Standings</button>
-    <button onclick="window.toggleStage('knockouts', this)" class="hdr-btn">🏆 Knockouts</button>
-    <button id="players-btn" class="hdr-btn">👥 Players</button>
-  </div>
-</header>
-<div id="stage-modal-backdrop" class="stage-modal-backdrop"></div>
 
+<nav class="dock" aria-label="Tournament sections">
+  <div class="dock-inner">
+    <a class="dock-item active" href="#hero" data-section="hero" aria-pressed="true">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Hero</span>
+    </a>
+    <a class="dock-item" href="#nextup" data-section="nextup" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Next Up</span>
+    </a>
+    <a class="dock-item" href="#results" data-section="results" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Results</span>
+    </a>
+    <a class="dock-item" href="#predictions" data-section="predictions" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Predictions</span>
+    </a>
+    <a class="dock-item" href="#builder" data-section="builder" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Bet Builder</span>
+    </a>
+    <a class="dock-item" href="#groups" data-section="groups" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <span>Groups</span>
+    </a>
+    <a class="dock-item" href="#knockouts" data-section="knockouts" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M3 6h6v4H3zm12 0h6v4h-6zM9 13h6v5H9zm-3 4h2v2H6zm14 0h2v2h-2z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <span>Knockout</span>
+    </a>
+    <a class="dock-item" href="#players" data-section="players" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Players</span>
+    </a>
+    <a class="dock-item" href="#news" data-section="news" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10h8M8 14h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>News</span>
+    </a>
+    <a class="dock-item" href="#model" data-section="model" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><path d="M12 2l10 6v8l-10 6-10-6V8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 12l10-6M12 12v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Model Lab</span>
+    </a>
+  </div>
+</nav>
 
-<div class="wrap">
+<section class="hero" id="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_stadium_command_centre_bg.png" onerror="this.style.display='none'"><source src="asset/mc_stadium_command_centre_video.mp4" type="video/mp4"></video>
+  <div class="hero-grid">
+    <div>
+      <h1 class="hero-title">Jarvis Match Centre</h1>
+      <p class="hero-subtitle">World Cup 2026 prediction intelligence. Live ensemble forecasts, risk-aware confidence ratings and visual tournament impact — one interactive command centre.</p>
+      <div class="hero-badges">
+        <span class="hero-badge"><span class="dot"></span> Live Model</span>
+        <span class="hero-badge model" id="hero-model-badge">Model v001</span>
+        <span class="hero-badge">Updated <span id="header-updated">—</span></span>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="v" id="hero-match-count">—</div><div class="k">Matches</div></div>
+        <div class="hero-stat"><div class="v" id="hero-group-count">12</div><div class="k">Groups</div></div>
+        <div class="hero-stat"><div class="v" id="hero-model-version">—</div><div class="k">Accuracy</div></div>
+      </div>
+    </div>
+    <div id="featured-next"></div>
+  </div>
+  <div class="scroll-indicator" onclick="document.getElementById('nextup').scrollIntoView({behavior:'smooth'})">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24"><path d="M7 13l5 5 5-5M7 6l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</section>
 
-<!-- Players modal -->
-<div id="players-modal" style="display:none;position:fixed;inset:0;background:rgba(7,9,13,0.55);backdrop-filter:blur(8px);z-index:200;align-items:flex-start;justify-content:center;padding:130px 20px 40px;overflow-y:auto;">
-  <div style="background:var(--glass-strong);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;padding:22px;max-width:980px;width:100%;box-shadow:var(--shadow-strong);">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-      <h2 style="margin:0;font-size:18px;letter-spacing:-0.01em;">👥 Player Intelligence · 572 players · 48 teams</h2>
-      <button id="players-close" style="border:none;background:rgba(0,0,0,0.05);color:var(--ink);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
+<main>
+  <section class="panel" id="nextup">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_predictions_header.png" onerror="this.style.display='none'"><source src="asset/mc_predictions_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Next Up</h2>
+          <p>Upcoming fixtures with projected scorelines, model picks and confidence.</p>
+        </div>
+        <span class="panel-cta">Swipe →</span>
+      </div>
+      <div class="carousel" id="nextup-feed" aria-live="polite" aria-busy="false">
+        <div class="skeleton" style="width:360px;height:460px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:360px;height:460px;flex:0 0 auto;"></div>
+      </div>
     </div>
-    <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <input id="player-search" type="text" placeholder="🔍 Search player, team, club..." style="flex:1;min-width:220px;padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--glass-soft);color:var(--ink);font-size:13px;" />
-      <select id="player-team-filter" style="padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--glass-soft);color:var(--ink);font-size:12.5px;"><option value="">All teams</option></select>
-      <select id="player-pos-filter" style="padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--glass-soft);color:var(--ink);font-size:12.5px;">
-        <option value="">All positions</option><option value="GK">GK</option><option value="DEF">DEF</option><option value="MID">MID</option><option value="FWD">FWD</option>
-      </select>
+  </section>
+
+  <section class="panel" id="results">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_predictions_header.png" onerror="this.style.display='none'"><source src="asset/mc_predictions_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Results</h2>
+          <p>Played games, verified scores, goal scorers and how the model performed against reality.</p>
+        </div>
+        <span class="panel-cta" id="results-accuracy-cta">Live accuracy</span>
+      </div>
+      <div class="accuracy-hero" id="results-accuracy" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:24px;">
+        <div class="skeleton" style="height:90px;border-radius:var(--radius-sm);"></div>
+        <div class="skeleton" style="height:90px;border-radius:var(--radius-sm);"></div>
+        <div class="skeleton" style="height:90px;border-radius:var(--radius-sm);"></div>
+        <div class="skeleton" style="height:90px;border-radius:var(--radius-sm);"></div>
+      </div>
+      <div class="carousel" id="results-feed" aria-live="polite" aria-busy="false">
+        <div class="skeleton" style="width:300px;height:420px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:300px;height:420px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:300px;height:420px;flex:0 0 auto;"></div>
+      </div>
     </div>
-    <div id="player-summary" class="meta" style="margin-bottom:10px;color:var(--mute);font-size:11.5px;"></div>
-    <div style="max-height:60vh;overflow-y:auto;border:1px solid var(--border);border-radius:12px;background:var(--glass-soft);">
-      <table style="width:100%;border-collapse:collapse;">
-        <thead style="position:sticky;top:0;background:var(--glass-strong);z-index:1;">
-          <tr><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Player</th><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Country</th><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Pos</th><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Club</th><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Age</th><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Caps</th><th style="text-align:left;padding:10px 12px;font-size:10.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;">Status</th></tr>
-        </thead>
-        <tbody id="player-rows"></tbody>
-      </table>
+  </section>
+
+  <section class="panel" id="predictions">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_predictions_header.png" onerror="this.style.display='none'"><source src="asset/mc_predictions_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Predictions</h2>
+          <p>Model-supported forecasts with confidence rings and risk ratings. Tap a card for full analysis.</p>
+        </div>
+        <span class="panel-cta">Add to card</span>
+      </div>
+      <div class="carousel" id="match-feed" aria-live="polite" aria-busy="false">
+        <div class="skeleton" style="width:300px;height:420px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:300px;height:420px;flex:0 0 auto;"></div>
+        <div class="skeleton" style="width:300px;height:420px;flex:0 0 auto;"></div>
+      </div>
     </div>
-    <div class="meta" style="margin-top:10px;font-size:11px;color:var(--mute);">Data feeds the prediction models behind the scenes — search here only when you want to verify a specific player or injury flag. JSON at <code>/jarvis/data/wc2026_player_profiles.json</code>.</div>
+  </section>
+
+  <section class="panel" id="builder">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_prediction_card_share_bg.png" onerror="this.style.display='none'"><source src="asset/mc_builder_panel_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Bet Builder</h2>
+          <p>Build a three-spread card. Jarvis splits your stake across Mainline, Draw Protection and Alternate Winner slips.</p>
+        </div>
+        <span class="panel-cta">Analysis only</span>
+      </div>
+      <div class="builder-form" id="builder-controls">
+        <div class="builder-field">
+          <label for="bb-stake">Stake ($)</label>
+          <input id="bb-stake" type="number" min="5" step="1" value="90">
+        </div>
+        <div class="builder-field">
+          <label for="bb-legs">Legs</label>
+          <input id="bb-legs" type="number" min="2" max="8" step="1" value="4">
+        </div>
+        <div class="builder-field">
+          <label for="bb-strategy">Strategy</label>
+          <select id="bb-strategy">
+            <option value="safe">Safe</option>
+            <option value="balanced" selected>Balanced</option>
+            <option value="value">Value</option>
+            <option value="aggressive">Aggressive</option>
+            <option value="maximum_coverage">Maximum Coverage</option>
+          </select>
+        </div>
+        <div class="builder-disclaimer">
+          <b>Analysis only. Not betting advice.</b> Odds are blended market samples; prices may change. Set limits and gamble responsibly.
+        </div>
+      </div>
+      <div id="builder-slips">
+        <div class="skeleton" style="width:100%;height:220px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="groups">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_groups_header.png" onerror="this.style.display='none'"><source src="asset/mc_groups_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Groups</h2>
+          <p>Live standings and the scenario simulator. Apply a result to see how the table shifts.</p>
+        </div>
+        <span class="panel-cta">12 groups</span>
+      </div>
+      <div class="sim-bar" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 16px;margin-bottom:22px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);">
+        <select id="sim-match"><option value="">Select match…</option></select>
+        <input id="sim-score" type="text" placeholder="e.g. 2-1" style="width:90px;background:var(--bg);border:1px solid var(--border);color:var(--text-primary);padding:9px 12px;border-radius:var(--radius-sm);font-size:12px;">
+        <button class="btn btn-primary btn-sm" onclick="JARVIS.applyScenario()">Apply Scenario</button>
+        <button class="btn btn-ghost btn-sm" onclick="JARVIS.resetScenario()">Reset</button>
+      </div>
+      <div class="carousel" id="groups-grid">
+        <div class="skeleton group-card" style="width:340px;height:360px;flex:0 0 auto;"></div>
+        <div class="skeleton group-card" style="width:340px;height:360px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="knockouts">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_knockouts_header.png" onerror="this.style.display='none'"><source src="asset/mc_knockouts_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Knockout Path</h2>
+          <p>Projected bracket and advance probabilities from the current model run.</p>
+        </div>
+        <span class="panel-cta">Scroll →</span>
+      </div>
+      <div id="knockout-content"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="players">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_players_header.png" onerror="this.style.display='none'"><source src="asset/mc_players_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Players</h2>
+          <p>Availability, caps, age and model impact. Filter by team or position.</p>
+        </div>
+      </div>
+      <div class="filters" style="display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;">
+        <input id="player-search" type="text" placeholder="Search player, team, club…" style="background:var(--surface-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;flex:1;min-width:180px;">
+        <select id="player-team-filter" style="background:var(--surface-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;"><option value="">All teams</option></select>
+        <select id="player-pos-filter" style="background:var(--surface-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;">
+          <option value="">All positions</option><option value="GK">GK</option><option value="DEF">DEF</option><option value="MID">MID</option><option value="FWD">FWD</option>
+        </select>
+      </div>
+      <div class="carousel" id="player-grid">
+        <div class="skeleton player-card" style="width:280px;height:220px;flex:0 0 auto;"></div>
+        <div class="skeleton player-card" style="width:280px;height:220px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="news">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_news_header.png" onerror="this.style.display='none'"><source src="asset/mc_news_header_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Late News</h2>
+          <p>Late news, lineup changes and model movement.</p>
+        </div>
+        <span class="panel-cta">Latest</span>
+      </div>
+      <div class="carousel" id="news-grid">
+        <div class="skeleton news-card" style="width:340px;height:280px;flex:0 0 auto;"></div>
+        <div class="skeleton news-card" style="width:340px;height:280px;flex:0 0 auto;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="model">
+    <video class="panel-header-video" autoplay muted loop playsinline preload="metadata" poster="asset/mc_model_lab_visual.png" onerror="this.style.display='none'"><source src="asset/mc_model_lab_video.mp4" type="video/mp4"></video>
+    <div class="panel-inner">
+      <div class="panel-header">
+        <div>
+          <h2>Model Lab</h2>
+          <p>How the predictions are built and how they have performed.</p>
+        </div>
+        <span class="panel-cta">Verified</span>
+      </div>
+      <div class="lab-grid" id="lab-grid"></div>
+      <div id="accuracy-grid"></div>
+    </div>
+  </section>
+
+</main>
+
+<button class="fab" id="builder-fab" aria-label="Open prediction card" onclick="JARVIS.toggleBuilderDrawer()">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+  <span class="fab-count" id="fab-count">0</span>
+</button>
+
+<div class="builder-drawer" id="builder-drawer" role="dialog" aria-modal="true" aria-labelledby="builder-title">
+  <div class="builder-header">
+    <h3 id="builder-title">Prediction Card</h3>
+    <button class="builder-close" aria-label="Close" onclick="JARVIS.toggleBuilderDrawer()">×</button>
+  </div>
+  <div class="builder-body" id="builder-body">
+    <div class="builder-empty">Select 2–6 predictions to compare confidence, risk and overlap.</div>
   </div>
 </div>
 
-<!-- ====== PLAYED GAMES (TOP — greyed list, grows as matches finish) ====== -->
-<section class="stage" id="played" style="display:none;">
-  <div class="stage-header">
-    <h2>📋 Played Games · Tournament Results</h2>
-    <span class="tag done">Complete</span>
-    <span class="when">All matches with final results · auto-grows as games finish · model accuracy tracked</span>
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="JARVIS.closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <h2 id="drawer-title">Match Analysis</h2>
+    <button class="drawer-close" aria-label="Close" onclick="JARVIS.closeDrawer()">×</button>
   </div>
-  <div class="stage-body">
-    <div id="played-summary" class="meta" style="margin-bottom:10px;"></div>
-    <div id="played-rows"></div>
-  </div>
-</section>
+  <div class="drawer-tabs" id="drawer-tabs" role="tablist"></div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
 
-<!-- ====== UPCOMING PREDICTIONS (next 12 chronological from today) ====== -->
-<section class="stage" id="upcoming">
-  <div class="stage-header">
-    <h2>🔮 Next 12 Matches · Predictions</h2>
-    <span class="tag live">LIVE</span>
-    <span class="when">Updates as each match finishes — the next 12 chronological fixtures from now</span>
-  </div>
-  <div class="stage-body">
-    <div class="tabs" id="upcoming-tabs"></div>
-    <div class="desc" id="upcoming-desc"></div>
-    <div id="upcoming-rows"></div>
-    <div class="summary" id="upcoming-summary"></div>
-  </div>
-</section>
-
-<!-- ====== THREE-SPREAD BET BUILDER ====== -->
-<section class="stage" id="bet-builder">
-  <style>
-    .bb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:8px;}
-    .bb-card{background:var(--glass);border:1px solid var(--border-strong);border-radius:14px;padding:14px;box-shadow:var(--shadow);}
-    .bb-name{font-weight:700;color:var(--ink);font-size:14px;}
-    .bb-purpose{color:var(--mute);font-size:12px;margin:2px 0 8px;}
-    .bb-meta{color:var(--accent);font-size:12px;font-weight:600;margin-bottom:8px;}
-    .bb-legs{list-style:none;margin:0;padding:0;}
-    .bb-legs li{font-size:12.5px;color:var(--ink);padding:4px 0;border-top:1px solid var(--border-strong);}
-    .bb-treat{color:var(--mute);font-size:11px;margin-left:4px;}
-    .bb-watch{display:inline-block;margin-top:4px;font-size:11.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));padding:3px 9px;border-radius:8px;text-decoration:none;}
-    .bb-watch:hover{filter:brightness(1.08);}
-    .treat-badge{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:600;color:var(--mute);background:var(--glass-soft);border:1px solid var(--border-strong);padding:1px 7px;border-radius:7px;vertical-align:middle;}
-    .bb-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
-    .bb-table th{text-align:left;padding:7px 9px;color:var(--mute);font-size:11.5px;border-bottom:2px solid var(--border-strong);}
-    .bb-table td{padding:7px 9px;border-bottom:1px solid var(--border-strong);color:var(--ink);vertical-align:top;}
-    .bb-table tr:hover{background:var(--glass-soft);}
-    .bb-chg{background:rgba(212,151,20,0.14);font-weight:700;border-radius:6px;}
-    .bb-od{color:var(--mute);font-size:11px;}
-    .bb-banner{background:var(--glass-strong);border:1px solid var(--border-strong);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--ink);}
-    .bb-warn{color:var(--draw);font-size:12px;}
-    .bb-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px;}
-    .bb-controls label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;}
-    .bb-controls input,.bb-controls select{background:var(--glass-soft);border:1px solid var(--border-strong);border-radius:8px;color:var(--ink);padding:7px 9px;font-size:13px;min-width:96px;}
-    .bb-build-btn{background:var(--accent);color:#06121f;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;}
-    .bb-build-btn:hover{filter:brightness(1.08);}
-    .bb-build-btn:disabled{opacity:.5;cursor:wait;}
-  </style>
-  <div class="stage-header">
-    <h2>🎯 Coverage Builder · build your multi</h2>
-    <span class="tag live">LIVE</span>
-    <span class="when">Pick your stake, legs (up to 20) and mode — the engine builds three variable-length slips (Mainline / Draw Protection / Stretch) off one unique-team pool. Probability analysis only — not guaranteed betting outcomes.</span>
-  </div>
-  <div class="stage-body">
-    <div id="bb-model-banner" class="bb-banner" style="margin-bottom:10px;">Loading bet builder…</div>
-    <div class="bb-controls" id="bb-controls">
-      <label>Bet amount ($)
-        <input id="bb-in-stake" type="number" min="1" max="100000" step="10" value="100">
-      </label>
-      <label>Legs (2–20)
-        <input id="bb-in-legs" type="number" min="2" max="20" step="1" value="10">
-      </label>
-      <label>Mode
-        <select id="bb-in-mode">
-          <option value="safe">Safest</option>
-          <option value="balanced" selected>Balanced</option>
-          <option value="value">Value (+EV)</option>
-          <option value="aggressive">Aggressive</option>
-          <option value="maximum_coverage">Max coverage</option>
-        </select>
-      </label>
-      <label>Stake split
-        <select id="bb-in-split">
-          <option value="total_split" selected>Split across A/B/C</option>
-          <option value="per_variation">Full stake per slip</option>
-        </select>
-      </label>
-      <button class="bb-build-btn" id="bb-build-btn" type="button" onclick="buildMyMulti()">Build my multi</button>
+<footer class="app-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#predictions">Predictions</a>
+        <a href="#builder">Bet Builder</a>
+        <a href="#groups">Groups</a>
+        <a href="#knockouts">Knockouts</a>
+      </div>
+      <div class="footer-col">
+        <h4>Data Sources</h4>
+        <a href="#" onclick="return false;">Opta Analyst</a>
+        <a href="#" onclick="return false;">FIFA</a>
+        <a href="#" onclick="return false;">ESPN / Sky Sports</a>
+        <a href="#" onclick="return false;">Team Federations</a>
+      </div>
+      <div class="footer-col">
+        <h4>Model</h4>
+        <a href="#model">Methodology</a>
+        <a href="#model">Accuracy Tracker</a>
+        <a href="#model">Limitations</a>
+      </div>
+      <div class="footer-col">
+        <h4>Responsible Use</h4>
+        <a href="https://www.responsiblegambling.org/" target="_blank" rel="noopener">Responsible Gambling</a>
+        <a href="#" onclick="return false;">Analysis Only</a>
+      </div>
     </div>
-    <div id="bb-slips"></div>
-    <div id="bb-notes" class="bb-warn" style="margin-top:12px;line-height:1.6;"></div>
-  </div>
-</section>
-
-<!-- ====== FULL TOURNAMENT · ALL MATCHES BY DAY ====== -->
-<section class="stage" id="all-fixtures" style="display:none;">
-  <div class="stage-header">
-    <h2>📅 Full Tournament · All Matches by Day</h2>
-    <span class="tag live">Live</span>
-    <span class="when">Jun 11 → Jul 19 · 104 matches · auto-refresh 60s</span>
-  </div>
-  <div class="stage-body">
-
-    <div class="late-news" id="late-news">
-      <b style="color:var(--draw)">⚡ Late news (last 24h):</b>
-      <ul>
-        <li><b>Pulisic (USA)</b> — Modified/individual training Thursday with calf sleeve, day-to-day; unlikely to start vs Australia 3pm ET — bench at best. <a style="color:var(--accent)" href="https://www.cbssports.com/soccer/news/usmnt-projected-world-cup-lineup-australia-christian-pulisic-injury-usa-soccer/" target="_blank" rel="noopener">CBS Sports</a></li>
-        <li><b>Yamal (Spain)</b> — Expected to start vs Saudi Arabia Sunday; Yamal + Nico Williams in for Ferran Torres and Gavi. <a style="color:var(--accent)" href="https://www.sportsmole.co.uk/football/spain/world-cup-2026/predicted-lineups/will-yamal-start-how-spain-could-line-up-against-saudi-arabia_599591.html" target="_blank" rel="noopener">Sports Mole</a></li>
-        <li><b>Çalhanoğlu (Türkiye)</b> — No fitness concerns; expected to captain Türkiye from deep-lying playmaker role vs Paraguay tonight at Levi's. <a style="color:var(--accent)" href="https://www.goal.com/en/news/turkiye-paraguay-world-cup-preview/blt3887ddc8c5fa4180" target="_blank" rel="noopener">Goal.com</a></li>
-        <li><b>Neymar (Brazil)</b> — Will NOT play or travel to Philadelphia for Haiti match; medical staff targeting knockout-stage return, not the Scotland group finale. <a style="color:var(--accent)" href="https://www.espn.com/soccer/story/_/id/49107492/neymar-play-brazil-vs-haiti-race-fit-world-cup-knockout-stages" target="_blank" rel="noopener">ESPN</a></li>
-        <li><b>Tunisia XI</b> — Renard switches to 4-3-3: Dahmen; Valery, Bronn, Talbi, Abdi; Skhiri, Mejbri, Ben Slimane; Achouri, Chaouat, Saad. Mejbri given roaming No.10 license. <a style="color:var(--accent)" href="https://www.sportsmole.co.uk/football/tunisia/world-cup-2026/predicted-lineups/new-boss-renard-to-make-changes-predicted-tunisia-lineup-vs-japan_599495.html" target="_blank" rel="noopener">Sports Mole</a></li>
-        <li><b>Japan</b> — Mitoma cut pre-tournament (hamstring); Kubo now also out (knee) for MD2 — Sugawara likely starts right wing-back, Doan pushes forward in 3-man attack with Maeda and Ueda. <a style="color:var(--accent)" href="https://www.sportsmole.co.uk/football/japan/world-cup-2026/predicted-lineups/kubo-injury-blow-sugawara-doan-decisions-predicted-japan-lineup-vs-tunisia_599496.html" target="_blank" rel="noopener">Sports Mole</a></li>
-      </ul>
-    </div>
-
-    <div id="day-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;"></div>
-    <div id="day-content"></div>
-
-    <div class="legend">
-      <span><span class="pill W">W</span> Home win</span>
-      <span><span class="pill D">D</span> Draw</span>
-      <span><span class="pill L">L</span> Away win</span>
-      <span style="margin-left:auto"><span class="actual hit" style="color:var(--hit)">●</span> Correct pick &nbsp; <span class="actual miss" style="color:var(--miss)">●</span> Wrong pick &nbsp; <span class="actual pending" style="color:var(--dim)">●</span> Pending</span>
-    </div>
-    <div class="summary" id="all-summary"></div>
-  </div>
-</section>
-
-<!-- ====== GROUP STANDINGS ====== -->
-<section class="stage" id="standings" style="display:none;">
-  <div class="stage-header">
-    <h2>📊 Group Standings</h2>
-    <span class="tag live">Live</span>
-    <span class="when">Top 2 + 8 best 3rds advance to R32</span>
-  </div>
-  <div class="stage-body">
-    <div class="groups-grid" id="groups-grid"></div>
-  </div>
-</section>
-
-<!-- ====== KNOCKOUTS ====== -->
-<section class="stage" id="knockouts" style="display:none;">
-  <div class="stage-header">
-    <h2>🏆 Knockout Rounds</h2>
-    <span class="tag future">Live bracket — updates as results land</span>
-    <span class="when">Jun 28 – Jul 19, 2026</span>
-  </div>
-  <div class="stage-body">
-    <div id="bracket-live"></div>
-    <div class="bracket-note" style="padding:18px 0 0;">
-      <div class="meta">🔒 next to a row = prediction is locked (frozen at T-8h before kickoff). Bracket placeholders ('Winner G', 'Runner-up A', '3rd A/B/C/D/F') are rewritten by <code>scripts/wc2026_knockout_filler.py</code> as group standings + knockout results land in <code>/jarvis/data/wc2026_results.json</code>.</div>
+    <div class="disclaimer">
+      <b>Analysis only. Not betting advice.</b> Football is low-scoring and high-variance. The model estimates probability — it does not guarantee outcomes. Confidence is not certainty. Please gamble responsibly if you choose to bet.
     </div>
   </div>
-</section>
-
-</div>
-
-<footer>
-  <b>Sources</b> per match: Opta Analyst · FIFA · ESPN · Sky Sports · Sports Mole · RotoWire · FourFourTwo · Al Jazeera · BBC · team federations.
-  <b>Methodology</b>: Elo via clubelo.com (mid-2025 baseline) · bivariate Poisson (Maher 1982 · Dixon-Coles 1997) · ensemble stacking (Groll TU Dortmund 2018).
-  <b>Live results</b> via <code>scripts/wc2026_fetch_results.py</code> writing <code>/jarvis/data/wc2026_results.json</code>; the UI polls every 60s and re-renders.
-  <div class="disclaimer">
-    <b>Probability model, not betting advice.</b> Football is low-scoring and high-variance — the model estimates probability, it does not guarantee outcomes. Irreducible noise — red cards, penalty shootouts (literal 50/50), deflections. Best peer-reviewed WC predictors cap at ~58-65% winner-correct out-of-sample. A 99-100% model is overfitting, not prediction. Quantum algorithms add nothing here; sports prediction is a small-data noisy problem — stacked ensembles + good features are the real frontier.
-  </div>
-  <div id="wc2026-manifest-line" class="meta" style="margin-top:10px;font-size:11px;color:var(--mute);">📦 manifest loading…</div>
 </footer>
 
 <script>
-const FLAGS = {
-  // Group A
-  "Mexico":"🇲🇽","South Africa":"🇿🇦","Korea":"🇰🇷","Korea Republic":"🇰🇷","Czechia":"🇨🇿",
-  // Group B
-  "Switzerland":"🇨🇭","Canada":"🇨🇦","Bosnia":"🇧🇦","Bosnia and Herzegovina":"🇧🇦","Qatar":"🇶🇦",
-  // Group C
-  "Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","Morocco":"🇲🇦","Brazil":"🇧🇷","Haiti":"🇭🇹",
-  // Group D
-  "USA":"🇺🇸","Australia":"🇦🇺","Türkiye":"🇹🇷","Paraguay":"🇵🇾",
-  // Group E
-  "Germany":"🇩🇪","Côte d'Ivoire":"🇨🇮","Ecuador":"🇪🇨","Curaçao":"🇨🇼",
-  // Group F
-  "Sweden":"🇸🇪","Netherlands":"🇳🇱","Japan":"🇯🇵","Tunisia":"🇹🇳",
-  // Group G
-  "Belgium":"🇧🇪","Egypt":"🇪🇬","Iran":"🇮🇷","New Zealand":"🇳🇿",
-  // Group H
-  "Spain":"🇪🇸","Uruguay":"🇺🇾","Cabo Verde":"🇨🇻","Saudi Arabia":"🇸🇦",
-  // Group I — corrected: France, Senegal, Iraq, Norway
-  "France":"🇫🇷","Senegal":"🇸🇳","Iraq":"🇮🇶","Norway":"🇳🇴",
-  // Group J — corrected: Argentina, Algeria, Austria, Jordan
-  "Argentina":"🇦🇷","Algeria":"🇩🇿","Austria":"🇦🇹","Jordan":"🇯🇴",
-  // Group K — corrected: Portugal, Colombia, Uzbekistan, DR Congo
-  "Portugal":"🇵🇹","Colombia":"🇨🇴","Uzbekistan":"🇺🇿","DR Congo":"🇨🇩",
-  // Group L — corrected: England, Croatia, Ghana, Panama
-  "England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Croatia":"🇭🇷","Ghana":"🇬🇭","Panama":"🇵🇦",
-};
+"use strict";
+(function(){
+  const ESCAPE_MAP = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
+  function esc(s){ return s==null?"":String(s).replace(/[&<>"']/g,c=>ESCAPE_MAP[c]); }
+  function pct(n){ return (n==null?0:Math.round(Number(n)*100))+"%"; }
+  function fmtDate(iso){ try{ const d=new Date(iso); return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}); }catch(e){ return esc(iso||""); } }
+  function shortDate(iso){ try{ const d=new Date(iso); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }catch(e){ return ""; } }
+  function timeOnly(iso){ try{ return new Date(iso).toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
+  function teamCode(name){ return esc((name||"").split(" ").map(w=>w[0]).join("").slice(0,3).toUpperCase()); }
+  function slug(name){ return (name||"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,""); }
+  function pickClass(p){ if(p>=0.55) return "high"; if(p>=0.4) return "medium"; return "low"; }
+  function riskLabel(p){ if(p>=0.55) return "Lower risk"; if(p>=0.4) return "Balanced"; return "Higher risk"; }
+  function riskClass(p){ if(p>=0.55) return "risk-low"; if(p>=0.4) return "risk-medium"; return "risk-high"; }
+  function barColor(p){ if(p>=0.55) return "var(--success)"; if(p>=0.4) return "var(--warning)"; return "var(--risk)"; }
+  function probFor(m,p){ if(!p.predicted_wdl) return 0; return p.predicted_wdl==="H"?p.p_home:(p.predicted_wdl==="A"?p.p_away:p.p_draw); }
+  function formatCurrency(n){ return "$" + (n==null?"0.00":Number(n).toFixed(2)); }
 
-const GROUPS = {
-  "A": ["Mexico","Korea","Czechia","South Africa"],
-  "B": ["Switzerland","Canada","Bosnia","Qatar"],
-  "C": ["Scotland","Morocco","Brazil","Haiti"],
-  "D": ["USA","Australia","Türkiye","Paraguay"],
-  "E": ["Germany","Côte d'Ivoire","Ecuador","Curaçao"],
-  "F": ["Sweden","Netherlands","Japan","Tunisia"],
-  "G": ["Belgium","Iran","New Zealand","Egypt"],
-  "H": ["Spain","Uruguay","Cabo Verde","Saudi Arabia"],
-  "I": ["France","Senegal","Iraq","Norway"],
-  "J": ["Argentina","Algeria","Austria","Jordan"],
-  "K": ["Portugal","Colombia","Uzbekistan","DR Congo"],
-  "L": ["England","Croatia","Ghana","Panama"],
-};
+  const state = {
+    matches: [], predictions: {}, played: {matches:[], accuracy:{}}, news: [], players: [], injuries: {}, valueBets: [],
+    activeModel: {}, modelSummary: {models:[]}, outright: {}, builder: [], scenario: {}, betBuilderData: null,
+    drawerMatch: null, drawerTab: "overview", builderOpen: false
+  };
+  const $ = id => document.getElementById(id);
 
-// Snapshot standings — recomputed live from matches[] as results land.
-const STANDINGS_SEED = {
-  "Mexico":{pts:3,gf:2,ga:0},"Korea":{pts:3,gf:2,ga:1},"Czechia":{pts:0,gf:1,ga:2},"South Africa":{pts:0,gf:0,ga:2},
-  "Switzerland":{pts:1,gf:1,ga:1},"Canada":{pts:1,gf:1,ga:1},"Bosnia":{pts:1,gf:1,ga:1},"Qatar":{pts:1,gf:1,ga:1},
-  "Scotland":{pts:3,gf:1,ga:0},"Morocco":{pts:1,gf:1,ga:1},"Brazil":{pts:1,gf:1,ga:1},"Haiti":{pts:0,gf:0,ga:1},
-  "USA":{pts:3,gf:4,ga:1},"Australia":{pts:3,gf:2,ga:0},"Türkiye":{pts:0,gf:0,ga:2},"Paraguay":{pts:0,gf:1,ga:4},
-  "Germany":{pts:3,gf:7,ga:1},"Côte d'Ivoire":{pts:3,gf:1,ga:0},"Ecuador":{pts:0,gf:0,ga:1},"Curaçao":{pts:0,gf:1,ga:7},
-  "Sweden":{pts:3,gf:5,ga:1},"Netherlands":{pts:1,gf:2,ga:2},"Japan":{pts:1,gf:2,ga:2},"Tunisia":{pts:0,gf:1,ga:5},
-  "Belgium":{pts:1,gf:1,ga:1},"Egypt":{pts:1,gf:1,ga:1},"Iran":{pts:1,gf:2,ga:2},"New Zealand":{pts:1,gf:2,ga:2},
-  "Spain":{pts:1,gf:0,ga:0},"Cabo Verde":{pts:1,gf:0,ga:0},"Uruguay":{pts:1,gf:1,ga:1},"Saudi Arabia":{pts:1,gf:1,ga:1},
-};
+  async function loadJson(path){ const r=await fetch(path); if(!r.ok) throw new Error(r.status+" "+path); return r.json(); }
 
-// State
-let MATCHES = [];           // populated from /jarvis/data/wc2026_fixtures_all.json
-let PREDICTIONS = {};       // populated from /jarvis/data/wc2026_model_predictions.json (optional)
-let LOCKED_NS = new Set();  // populated from /jarvis/data/wc2026_predictions_audit?locked=1
-let DAYS = [];              // sorted list of unique dates
-let activeDay = null;
-
-// Team-name aliases — fixtures JSON uses full official names, FLAGS dict uses short names.
-const TEAM_ALIAS = {
-  "United States": "USA", "Korea Republic": "Korea", "South Korea": "Korea",
-  "Bosnia and Herzegovina": "Bosnia", "Cabo Verde": "Cape Verde",
-  "Cape Verde": "Cape Verde", "Côte d'Ivoire": "Côte d'Ivoire", "Ivory Coast": "Côte d'Ivoire",
-  "Czech Republic": "Czechia", "Türkiye": "Türkiye", "Turkey": "Türkiye"
-};
-function flag(team){
-  if (!team) return "🏳️";
-  if (/^(Winner|Runner-?up|3rd|Loser|TBD)\b/i.test(team)) return "🏳️";
-  return FLAGS[team] || FLAGS[TEAM_ALIAS[team]] || "🏳️";
-}
-
-function isPlaceholder(team){
-  return !team || /^(Winner|Runner-?up|3rd|Loser)\b/i.test(team);
-}
-
-function actualOutcome(score){
-  if(!score) return null;
-  const [h,a] = String(score).split("-").map(Number);
-  if(isNaN(h)||isNaN(a)) return null;
-  return h>a ? "W" : (h<a ? "L" : "D");
-}
-
-function formatCountdown(iso){
-  const target = new Date(iso).getTime();
-  const diff = target - Date.now();
-  if (diff < -2.5*60*60*1000) return { txt: "FT", cls: "over" };
-  if (diff < 0) return { txt: "LIVE NOW", cls: "live" };
-  const d = Math.floor(diff/86400000);
-  const h = Math.floor((diff%86400000)/3600000);
-  const m = Math.floor((diff%3600000)/60000);
-  if (d > 0) return { txt: `${d}d ${h}h`, cls: "" };
-  if (h > 0) return { txt: `${h}h ${m}m`, cls: "" };
-  return { txt: `${m}m`, cls: "" };
-}
-
-function todayISODateLocal(){
-  // Local-date YYYY-MM-DD so "today" feels right to the viewer.
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
-  return `${y}-${m}-${day}`;
-}
-
-function dayShortLabel(isoDate){
-  // "2026-06-19" -> "Fri Jun 19"
-  const d = new Date(isoDate + "T12:00:00Z");
-  const opts = { weekday:"short", month:"short", day:"numeric" };
-  // Use UTC formatter to avoid the date drifting by timezone.
-  return d.toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
-}
-
-function stageLabel(m){
-  if (m.stage === "GROUP") return `Group <b>${m.group||"?"}</b> · MD${m.matchday||"?"}`;
-  if (m.stage === "R32")   return `<b>Round of 32</b>`;
-  if (m.stage === "R16")   return `<b>Round of 16</b>`;
-  if (m.stage === "QF")    return `<b>Quarter-final</b>`;
-  if (m.stage === "SF")    return `<b>Semi-final</b>`;
-  if (m.stage === "3RD")   return `<b>3rd Place</b>`;
-  if (m.stage === "FINAL") return `<b>FINAL</b>`;
-  return m.stage || "";
-}
-
-function predictionFor(m){
-  // Prefer by-N (covers every fixture from the new all_fixture_predictions
-  // map: groups + resolved knockouts), then fall back to the pair lookup
-  // (LLM / Elo MD2 rows that don't have a stable N).
-  const byN = PREDICTIONS.matches && PREDICTIONS.matches[String(m.n)];
-  if (byN && byN.pick) {
-    return { pick: byN.pick, score: byN.score, source: byN.source,
-             p_home: byN.p_home, p_draw: byN.p_draw, p_away: byN.p_away,
-             treatment: byN.treatment, three_spread: byN.three_spread, watch_link: byN.watch_link };
-  }
-  if (PREDICTIONS.byPair){
-    const lower = s => (s||"").toLowerCase().trim();
-    const alias = s => (TEAM_ALIAS[s] || s);
-    const tries = [
-      lower(m.home) + "|" + lower(m.away),
-      lower(alias(m.home)) + "|" + lower(alias(m.away)),
-      lower(m.home) + "|" + lower(alias(m.away)),
-      lower(alias(m.home)) + "|" + lower(m.away),
-    ];
-    for (const k of tries){
-      const p = PREDICTIONS.byPair[k];
-      if (p) return { pick: p.pick, score: p.score, source: p.source, p_home: p.p_home, p_draw: p.p_draw, p_away: p.p_away };
+  async function init(){
+    try{
+      const [fixtures, preds, played, news, profiles, values, active, audit, betBuilder] = await Promise.all([
+        loadJson("data/wc2026_fixtures_all.json"),
+        loadJson("data/wc2026_model_predictions.json"),
+        loadJson("data/wc2026_played.json").catch(()=>({matches:[], accuracy:{}})),
+        loadJson("data/wc2026_late_news.json"),
+        loadJson("data/wc2026_player_profiles_enriched.json"),
+        loadJson("data/wc2026_value_bets.json"),
+        loadJson("data/wc2026_active_model.json"),
+        loadJson("data/wc2026_predictions_audit?summary=1").catch(()=>({models:[]})),
+        loadJson("data/wc2026_bet_builder.json").catch(()=>null)
+      ]);
+      state.played = played || {matches:[], accuracy:{}};
+      state.matches = (fixtures.matches||[]).map(m=>{ m._iso = m.kickoff_iso; return m; });
+      state.predictions = preds.all_fixture_predictions || {};
+      state.news = news.items||[];
+      state.players = profiles.players||[];
+      state.injuries = profiles.injury_list||{};
+      state.valueBets = values.value_bets||[];
+      state.activeModel = active;
+      state.modelSummary = audit;
+      state.outright = preds.tournament_outright||{};
+      state.betBuilderData = betBuilder;
+      state.generated = preds.generated_at;
+      $("header-updated").textContent = shortDate(state.generated);
+      $("hero-match-count").textContent = state.matches.length || "—";
+      $("hero-model-version").textContent = pct(active.single_pick_accuracy);
+      $("hero-model-badge").textContent = esc("Model " + (active.model_version||"v001"));
+      populateTeamFilter();
+      renderAll();
+      bindEvents();
+      bindDock();
+      bindVideoObserver();
+      renderFeatured();
+      runBetBuilder();
+    }catch(err){
+      console.error(err);
+      document.body.insertAdjacentHTML("afterbegin", `<div class="toast toast-risk" role="alert">Could not load match data. <a href="javascript:location.reload()">Retry</a></div>`);
     }
   }
-  return null;
-}
 
-function renderDayTabs(){
-  const wrap = document.getElementById("day-tabs");
-  const today = todayISODateLocal();
-  let s = "";
-  DAYS.forEach(d => {
-    const count = MATCHES.filter(m => m.date === d).length;
-    const isPast = d < today;
-    const isToday = d === today;
-    const cls = ["day-tab"];
-    if (isPast) cls.push("past");
-    if (isToday) cls.push("today");
-    if (d === activeDay) cls.push("active");
-    s += `<button class="${cls.join(" ")}" data-day="${d}">
-      <span class="d-date">${dayShortLabel(d)}</span>
-      <span class="d-count">${count} match${count===1?"":"es"}</span>
-    </button>`;
-  });
-  wrap.innerHTML = s;
-  wrap.querySelectorAll(".day-tab").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activeDay = btn.dataset.day;
-      renderDayTabs();
-      renderDayContent();
-    });
-  });
-}
+  function getPred(n){ return state.predictions[String(n)] || {}; }
 
-function renderDayContent(){
-  const wrap = document.getElementById("day-content");
-  if (!activeDay){ wrap.innerHTML = `<div class="meta" style="color:var(--mute);padding:20px">Pick a day above.</div>`; return; }
-  const dayMatches = MATCHES.filter(m => m.date === activeDay);
-  if (dayMatches.length === 0){ wrap.innerHTML = `<div class="meta" style="color:var(--mute);padding:20px">No matches scheduled.</div>`; return; }
+  function actualOutcome(m){
+    if(!m.played || !m.result) return null;
+    const parts = String(m.result).replace(/[–—]/g,"-").split("-").map(x=>parseInt(x,10));
+    if(parts.length!==2 || isNaN(parts[0])||isNaN(parts[1])) return null;
+    if(parts[0]>parts[1]) return "H"; if(parts[0]<parts[1]) return "A"; return "D";
+  }
 
-  // Day header
-  const dh = dayShortLabel(activeDay);
-  const playedCount = dayMatches.filter(m => m.played).length;
-  let s = `<div class="day-block">
-    <div class="day-title">${dh}<span class="meta">${dayMatches.length} match${dayMatches.length===1?"":"es"}${playedCount?` · ${playedCount} played`:""}</span></div>`;
+  function resultFromScenario(n){
+    if(state.scenario[n]) return state.scenario[n];
+    const m = state.matches.find(x=>x.n===n);
+    return m && m.played ? m.result : null;
+  }
 
-  dayMatches.forEach((m, i) => {
-    const score = m.result || null;
-    const wdl = actualOutcome(score);
-    const pred = predictionFor(m);
-    const cd = formatCountdown(m.kickoff_iso);
-    const homePh = isPlaceholder(m.home);
-    const awayPh = isPlaceholder(m.away);
+  function renderAll(){
+    renderFeatured();
+    renderNextUp();
+    renderResults();
+    renderFeed();
+    renderGroups();
+    renderKnockouts();
+    renderPlayers();
+    renderModelLab();
+    renderNews();
+    renderBuilder();
+    renderBetBuilder();
+  }
 
-    // Prediction cell — only meaningful when both teams are concrete (no "Winner X" placeholders).
-    let predCell = `<span class="ptag">—</span>`;
-    if (pred && !homePh && !awayPh) {
-      const pickCls = pred.pick || "dim";
-      const pickTxt = pred.pick || "—";
-      const scoreTxt = pred.score || "—";
-      predCell = `<span class="pill ${pickCls}">${pickTxt}</span><span class="pscore">${scoreTxt}</span>${lockIcon(m.n)}`;
-    } else if (homePh || awayPh) {
-      predCell = `<span class="ptag">After bracket</span>`;
-    } else {
-      predCell = `<span class="ptag">Pick TBD</span>`;
-    }
+  const GLOBAL_VIDEOS = {
+    stadium: "asset/mc_stadium_command_centre_video.mp4",
+    model: "asset/mc_model_lab_video.mp4",
+    bracket: "asset/mc_knockout_bracket_video.mp4"
+  };
+  const AVAILABLE_VIDEOS = new Set(Array.from({length:104},(_,i)=>i+1));
+  function matchAsset(n){ return `asset/mc_match_${String(n).padStart(3,"0")}_hero.png`; }
+  const TEAM_SLUG_ALIASES = { "USA": "united_states" };
+  function teamSlug(t){ return TEAM_SLUG_ALIASES[t] || slug(t); }
+  function teamAsset(t){ return `asset/mc_team_${teamSlug(t)}_hero.png`; }
+  function matchVideo(n){ return AVAILABLE_VIDEOS.has(n) ? `asset/mc_match_${String(n).padStart(3,"0")}_video.mp4` : null; }
+  function groupVideo(g){ return `asset/mc_group_${g.toLowerCase()}_video.mp4`; }
+  function teamVideo(t){ return `asset/mc_team_${teamSlug(t)}_video.mp4`; }
+  function cardVideo(video, poster){
+    if(!video) return "";
+    return `<video class="card-video" muted loop playsinline preload="none" poster="${poster}" onerror="this.style.display='none'"><source src="${video}" type="video/mp4"></video>`;
+  }
 
-    // Actual cell
-    let actualCell = `<span class="actual pending">—</span>`;
-    if (score && wdl){
-      if (pred && pred.pick){
-        const hit = (pred.pick === wdl);
-        actualCell = `<span class="actual ${hit?"hit":"miss"}">${score} ${hit?"✓":"✗"}</span>`;
-      } else {
-        actualCell = `<span class="actual">${score}</span>`;
-      }
-    } else if (!m.played) {
-      // Future match — show countdown instead of em-dash
-      actualCell = `<span class="countdown ${cd.cls}" data-iso="${m.kickoff_iso}">${cd.txt}</span>`;
-    }
+  function confidenceRing(p){
+    const color = barColor(p);
+    return `<div class="confidence-ring" style="--ring-color:${color};--ring-pct:${Math.round((p||0)*360)}deg" aria-label="${pct(p)} confidence"><span>${pct(p)}</span></div>`;
+  }
 
-    s += `<div class="match-row ${m.played?'played':''}" style="--i:${i}">
-      <div class="n">#${m.n}</div>
-      <div class="teams">
-        <span class="flag">${flag(m.home)}</span> <span>${m.home}</span>
-        <span class="vs">vs</span>
-        <span class="flag">${flag(m.away)}</span> <span>${m.away}</span>
+  function matchCard(m, opts={}){
+    const p=getPred(m.n);
+    const outcome=actualOutcome(m);
+    const predWdl=p.predicted_wdl;
+    const predProb=probFor(m,p);
+    const correct=outcome && predWdl===outcome;
+    const inBuilder=state.builder.includes(m.n);
+    const pickName = predWdl==="H"?m.home:(predWdl==="A"?m.away:"Draw");
+    const statusHtml = m.played
+      ? `<span class="risk-badge ${correct?"risk-low":"risk-high"}">${esc(m.result)} ${correct?"✓":"✗"}</span>`
+      : `<span class="risk-badge risk-medium">${esc(timeOnly(m.kickoff_iso))}</span>`;
+    const cls = opts.large ? "next-card" : "prediction-card";
+    const scoreSize = opts.large ? "nc-score" : "pc-score-big";
+    return `<article class="carousel-card ${cls} ${m.played?(correct?"correct":"incorrect"):""} ${inBuilder?"selected":""}" style="--card-img:url('${matchAsset(m.n)}')" data-n="${esc(String(m.n))}" onclick="JARVIS.openDrawer(${m.n})">
+      <div class="card-bg"></div>
+      ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+      <div class="pc-top">
+        <div class="pc-meta">${esc(m.stage)} ${esc(m.group||"")}</div>
+        <div style="display:flex;gap:8px;align-items:center;">${statusHtml}${confidenceRing(predProb)}</div>
       </div>
-      <div class="stage-label">${stageLabel(m)}</div>
-      <div class="when">${m.kickoff_local || ""}</div>
-      <div class="pred">${predCell}</div>
-      <div class="actual-cell">${actualCell}</div>
+      <div class="pc-center">
+        <div class="pc-teams-row">
+          <div class="pc-team-block"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.home)}</div><div class="code">${esc(teamCode(m.home))}</div></div>
+          <div class="pc-vs-small">v</div>
+          <div class="pc-team-block"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.away)}</div><div class="code">${esc(teamCode(m.away))}</div></div>
+        </div>
+        <div class="${scoreSize}">${esc(p.predicted_score||"-")}</div>
+        <div class="conf-badge"><span class="risk-badge ${riskClass(predProb)}">${esc(riskLabel(predProb))}</span> Pick: <b>${esc(pickName)}</b></div>
+      </div>
+      <div class="pc-bottom">
+        <div class="pc-actions-row">
+          <button class="btn btn-sm ${inBuilder?"btn-ghost":"btn-primary"}" onclick="event.stopPropagation();JARVIS.${inBuilder?"removeFromBuilder":"addToBuilder"}(${m.n})">${inBuilder?"Remove":"Add to card"}</button>
+          <button class="btn btn-ghost btn-sm btn-icon" aria-label="Analysis" onclick="event.stopPropagation();JARVIS.openDrawer(${m.n})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function renderFeatured(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso));
+    const c = $("featured-next");
+    if(!upcoming.length){ c.innerHTML = ""; return; }
+    const m = upcoming[0];
+    const p = getPred(m.n);
+    const prob = probFor(m,p);
+    const pickName = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+    c.innerHTML = `<div class="featured-card" style="--card-img:url('${matchAsset(m.n)}')" onclick="JARVIS.openDrawer(${m.n})">
+      <div class="fc-bg"></div>
+      ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+      <div class="fc-header"><span class="fc-label">Next Match</span><span class="fc-kickoff">${esc(fmtDate(m.kickoff_iso))}</span></div>
+      <div class="fc-body">
+        <div class="fc-teams">
+          <div class="fc-team"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.home)}</div><div class="code">${esc(teamCode(m.home))}</div></div>
+          <div class="fc-vs">v</div>
+          <div class="fc-team"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.away)}</div><div class="code">${esc(teamCode(m.away))}</div></div>
+        </div>
+        <div class="fc-score">${esc(p.predicted_score||"-")}</div>
+        <div class="fc-pick">Model pick: <b>${esc(pickName)}</b> · ${confidenceRing(prob)}</div>
+      </div>
+      <div class="fc-footer">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();JARVIS.addToBuilder(${m.n})">Add to card</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();JARVIS.openDrawer(${m.n})">Analysis</button>
+      </div>
     </div>`;
-  });
+  }
 
-  s += `</div>`;
-  wrap.innerHTML = s;
-}
+  function renderNextUp(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso)).slice(0,8);
+    const c = $("nextup-feed");
+    if(!upcoming.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;"><h3>No upcoming matches</h3></div>`; return; }
+    c.innerHTML = upcoming.slice(0,6).map(m=>matchCard(m,{large:true})).join("");
+  }
 
-function renderSummary(){
-  // Tournament-wide rollup
-  const total = MATCHES.length;
-  const played = MATCHES.filter(m => m.played).length;
-  const pending = total - played;
-  let correct = 0;
-  let evaluated = 0;
-  MATCHES.forEach(m => {
-    const pred = predictionFor(m);
-    const wdl = actualOutcome(m.result);
-    if (pred && pred.pick && wdl){
-      evaluated++;
-      if (pred.pick === wdl) correct++;
-    }
-  });
-  const acc = evaluated > 0 ? Math.round(100*correct/evaluated) : null;
-  const accCls = acc===null ? "" : (acc>=60?"good":(acc<45?"bad":""));
-  document.getElementById("all-summary").innerHTML = `
-    <div class="stat"><div class="k">Total fixtures</div><div class="v">${total}</div></div>
-    <div class="stat"><div class="k">Played</div><div class="v">${played}</div></div>
-    <div class="stat"><div class="k">Upcoming</div><div class="v">${pending}</div></div>
-    <div class="stat"><div class="k">Predictions evaluated</div><div class="v">${evaluated}</div></div>
-    <div class="stat"><div class="k">Correct (W/D/L)</div><div class="v ${accCls}">${correct}${acc!==null?` (${acc}%)`:""}</div></div>`;
-}
+  function renderResults(){
+    const acc = state.played.accuracy || {};
+    const matches = state.played.matches || [];
+    const cta = $("results-accuracy-cta");
+    if(cta) cta.textContent = acc.matches_played ? `${acc.correct_count}/${acc.matches_played} winner picks` : "Live accuracy";
 
-function renderGroups(){
-  const grid = document.getElementById("groups-grid");
-  let s = "";
-  let g = 0;
-  for (const [grp, teams] of Object.entries(GROUPS)){
-    const sorted = [...teams].sort((x,y) => {
-      const sx = STANDINGS_SEED[x] || {pts:0,gf:0,ga:0};
-      const sy = STANDINGS_SEED[y] || {pts:0,gf:0,ga:0};
-      if (sy.pts !== sx.pts) return sy.pts - sx.pts;
-      return (sy.gf - sy.ga) - (sx.gf - sx.ga);
+    const accContainer = $("results-accuracy");
+    const cards = [
+      {v: acc.winner_accuracy, k: "Winner picks", fmt: pct},
+      {v: acc.exact_score_rate, k: "Exact scores", fmt: pct},
+      {v: acc.goal_diff_rate, k: "Goal diff", fmt: pct},
+      {v: acc.matches_played, k: "Played", fmt: n=>n==null?"—":String(n)},
+    ];
+    accContainer.innerHTML = cards.map(x=>`
+      <div class="accuracy-stat" style="background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;text-align:center;">
+        <div class="v" style="font-size:32px;font-weight:800;font-family:var(--font-condensed);color:${x.v!=null && typeof x.v==='number' && x.v>=0.5?'var(--success)':'var(--accent-glow)'}">${x.fmt(x.v)}</div>
+        <div class="k" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;">${esc(x.k)}</div>
+      </div>`).join("");
+
+    const feed = $("results-feed");
+    if(!matches.length){ feed.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;"><h3>No verified results yet</h3></div>`; return; }
+    feed.innerHTML = matches.slice().reverse().map(m=>resultCard(m)).join("");
+  }
+
+  function resultCard(m){
+    const pickName = m.predicted_wdl==="H"?m.home:(m.predicted_wdl==="A"?m.away:"Draw");
+    const prob = Math.max(m.p_home||0, m.p_draw||0, m.p_away||0);
+    const homeScorers = (m.scorers?.home||[]).map(s=>`<div class="scorer"><b>${esc(s.name)}</b> <span>${esc(s.minute)}</span>${s.penalty?' (P)':''}${s.own_goal?' (OG)':''}</div>`).join("") || `<div class="scorer muted">No goals</div>`;
+    const awayScorers = (m.scorers?.away||[]).map(s=>`<div class="scorer"><b>${esc(s.name)}</b> <span>${esc(s.minute)}</span>${s.penalty?' (P)':''}${s.own_goal?' (OG)':''}</div>`).join("") || `<div class="scorer muted">No goals</div>`;
+    return `<article class="carousel-card prediction-card ${m.correct?'correct':'incorrect'}" style="--card-img:url('${matchAsset(m.n)}')" onclick="JARVIS.openDrawer(${m.n})">
+      <div class="card-bg"></div>
+      ${cardVideo(matchVideo(m.n)||GLOBAL_VIDEOS.stadium, matchAsset(m.n))}
+      <div class="pc-top">
+        <div class="pc-meta">${esc(m.stage)} ${esc(m.group||"")}</div>
+        <div style="display:flex;gap:8px;align-items:center;"><span class="risk-badge ${m.correct?'risk-low':'risk-high'}">${esc(m.result)} ${m.correct?'✓':'✗'}</span>${confidenceRing(prob)}</div>
+      </div>
+      <div class="pc-center">
+        <div class="pc-teams-row">
+          <div class="pc-team-block"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.home)}</div><div class="code">${esc(teamCode(m.home))}</div></div>
+          <div class="pc-vs-small">v</div>
+          <div class="pc-team-block"><div class="flag" aria-hidden="true"></div><div class="name">${esc(m.away)}</div><div class="code">${esc(teamCode(m.away))}</div></div>
+        </div>
+        <div class="pc-score-big">${esc(m.result)}</div>
+        <div class="conf-badge"><span class="risk-badge ${m.correct?'risk-low':'risk-high'}">${m.correct?'Model correct':'Model miss'}</span> Pick: <b>${esc(pickName)}</b></div>
+      </div>
+      <div class="pc-bottom">
+        <div class="scorer-block">
+          <div class="scorer-col"><div class="scorer-label">${esc(teamCode(m.home))}</div>${homeScorers}</div>
+          <div class="scorer-col"><div class="scorer-label">${esc(teamCode(m.away))}</div>${awayScorers}</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:12px;" onclick="event.stopPropagation();JARVIS.openDrawer(${m.n})">Analysis & explanation</button>
+      </div>
+    </article>`;
+  }
+
+  function renderFeed(){
+    const now = new Date().toISOString();
+    const upcoming = state.matches.filter(m=>!m.played && m._iso>now).sort((a,b)=>a._iso.localeCompare(b._iso));
+    const c=$("match-feed");
+    if(!upcoming.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;"><h3>No upcoming matches</h3></div>`; return; }
+    c.innerHTML = upcoming.map(m=>matchCard(m,{large:false})).join("");
+  }
+  function showAllFixtures(){ document.getElementById("fixtures").scrollIntoView({behavior:"smooth"}); }
+
+  function renderFixtures(){
+    const byStage = {};
+    state.matches.forEach(m=>{
+      const stage = m.stage==="GROUP" ? `Group ${m.group}` : (m.stage||"TBD");
+      byStage[stage]=byStage[stage]||[]; byStage[stage].push(m);
     });
-    s += `<div class="group-card" style="--i:${g}"><h4>Group ${grp}</h4>`;
-    sorted.forEach((t, idx) => {
-      const st = STANDINGS_SEED[t] || {pts:0,gf:0,ga:0};
-      const cls = idx === 0 ? "q1" : (idx === 1 ? "q2" : "");
-      s += `<div class="team ${cls}">
-        <span class="name"><span class="flag">${flag(t)}</span> ${t}</span>
-        <span class="pts">${st.pts} pts · ${st.gf}-${st.ga}</span>
+    const c=$("fixtures-content");
+    let html="";
+    Object.keys(byStage).sort((a,b)=>{
+      const ma=byStage[a][0], mb=byStage[b][0];
+      return ma._iso.localeCompare(mb._iso);
+    }).forEach((stage,i)=>{
+      const rows=byStage[stage].sort((a,b)=>a._iso.localeCompare(b._iso));
+      html+=`<div class="timeline-stage ${i===0?'open':''}" data-stage="${esc(stage)}">
+        <div class="timeline-header" onclick="this.parentElement.classList.toggle('open')">
+          <h4>${esc(stage)}</h4>
+          <span style="font-size:11px;color:var(--text-muted);">${rows.length} matches</span>
+        </div>
+        <div class="timeline-body">`;
+      html+=rows.map(m=>{
+        const p=getPred(m.n);
+        const outcome=actualOutcome(m);
+        const cls = m.played ? (outcome===p.predicted_wdl?"correct":"incorrect") : "";
+        const pick = p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+        return `<div class="fixture-row ${cls}" onclick="JARVIS.openDrawer(${m.n})">
+          <div class="fixture-time">${esc(timeOnly(m.kickoff_iso))}</div>
+          <div class="fixture-match"><span>${esc(m.home)}</span><span style="color:var(--text-muted);">v</span><span>${esc(m.away)}</span></div>
+          <div class="fixture-pick">${esc(pick)} ${pct(probFor(m,p))}</div>
+          <div class="fixture-score">${esc(m.result||p.predicted_score||"-")}</div>
+          <div class="fixture-result ${cls}">${m.played?(outcome===p.predicted_wdl?"Correct":"Miss"):""}</div>
+        </div>`;
+      }).join("");
+      html+=`</div></div>`;
+    });
+    c.innerHTML=html;
+  }
+
+  function computeStandings(){
+    const groups={};
+    state.matches.filter(m=>m.stage==="GROUP").forEach(m=>{
+      if(!groups[m.group]) groups[m.group]={};
+      [m.home,m.away].forEach(t=>{ if(!groups[m.group][t]) groups[m.group][t]={team:t,P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0}; });
+      const res=resultFromScenario(m.n);
+      if(res){
+        const [hg,ag]=String(res).replace(/[–—]/g,"-").split("-").map(x=>parseInt(x,10));
+        if(!isNaN(hg)&&!isNaN(ag)){
+          const h=groups[m.group][m.home], a=groups[m.group][m.away];
+          h.P++; a.P++; h.GF+=hg; h.GA+=ag; a.GF+=ag; a.GA+=hg;
+          if(hg>ag){h.W++;a.L++;h.Pts+=3;}else if(hg<ag){a.W++;h.L++;a.Pts+=3;}else{h.D++;a.D++;h.Pts++;a.Pts++;}
+        }
+      }
+    });
+    return groups;
+  }
+
+  function renderGroups(){
+    const groups=computeStandings();
+    const c=$("groups-grid");
+    const letters=Object.keys(groups).sort();
+    if(!letters.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;">Group data unavailable.</div>`; return; }
+    c.innerHTML=letters.map(g=>{
+      const rows=Object.values(groups[g]).sort((a,b)=>b.Pts-a.Pts||b.GD-a.GD||b.GF-a.GF);
+      return `<article class="carousel-card group-card" style="--card-img:url('asset/mc_group_${g.toLowerCase()}.png')">
+        <div class="card-bg"></div>
+        ${cardVideo(groupVideo(g)||GLOBAL_VIDEOS.stadium, `asset/mc_group_${g.toLowerCase()}.png`)}
+        <div class="gc-header"><h4>Group ${esc(g)}</h4><span class="risk-badge risk-low">${rows.length} teams</span></div>
+        <table class="gc-table">
+          <thead><tr><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr></thead>
+          <tbody>${rows.map((r,i)=>`<tr class="${i<2?'qualified':''}"><td><div class="team"><span class="flag" aria-hidden="true"></span>${esc(r.team)}</div></td><td>${r.P}</td><td>${r.GD>0?"+":""}${r.GD}</td><td class="pts ${i<2?'q':'e'}">${r.Pts}</td></tr>`).join("")}</tbody>
+        </table>
+      </article>`;
+    }).join("");
+    const sel=$("sim-match");
+    if(sel && !sel.dataset.populated){
+      state.matches.filter(m=>m.stage==="GROUP" && !m.played).sort((a,b)=>a._iso.localeCompare(b._iso)).forEach(m=>{
+        const opt=document.createElement("option"); opt.value=m.n; opt.textContent=`${m.group} · ${m.home} v ${m.away}`; sel.appendChild(opt);
+      });
+      sel.dataset.populated="1";
+    }
+  }
+
+  function renderKnockouts(){
+    const c=$("knockout-content");
+    const upcoming = state.matches.filter(m=>m.stage!=="GROUP" && !m.played).sort((a,b)=>a._iso.localeCompare(b._iso));
+    if(!upcoming.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;"><div class="state-box-content">Knockout fixtures will appear once the group stage settles.</div></div>`; return; }
+    const roundOrder = {R32:1,R16:2,QF:3,SF:4,FINAL:5};
+    const roundNames = {R32:"Round of 32",R16:"Round of 16",QF:"Quarter-finals",SF:"Semi-finals",FINAL:"Final"};
+    // Show only the next upcoming round to keep the landing page compact.
+    const nextRound = upcoming.reduce((best,m)=>{
+      const ord=roundOrder[m.stage]||99;
+      return ord < (roundOrder[best]||99) ? m.stage : best;
+    }, upcoming[0].stage);
+    const matches = upcoming.filter(m=>m.stage===nextRound).slice(0,8);
+    let html=`<div class="bracket-carousel">`;
+    html+=`<div class="bracket-round"><h5>${esc(roundNames[nextRound]||nextRound)}</h5>`;
+    matches.forEach(m=>{
+      const p=getPred(m.n);
+      const hasPred = p && p.predicted_wdl;
+      const homePlaceholder = /Winner|Runner-up|3rd|Loser/i.test(m.home);
+      const awayPlaceholder = /Winner|Runner-up|3rd|Loser/i.test(m.away);
+      const pick = !hasPred ? "Awaiting group finish" : (p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw"));
+      const kick = m.kickoff_iso ? `<div style="font-size:11px;color:var(--text-muted);margin-top:6px;">${esc(fmtDate(m.kickoff_iso))}</div>` : '';
+      html+=`<div class="bracket-match" onclick="JARVIS.openDrawer(${m.n})">
+        <div class="bracket-team ${hasPred&&p.predicted_wdl==='H'?'winner':''}"><span>${esc(m.home)}</span>${homePlaceholder?'':`<span class="bracket-prob">${pct(p.p_home)}</span>`}</div>
+        <div class="bracket-team ${hasPred&&p.predicted_wdl==='A'?'winner':''}"><span>${esc(m.away)}</span>${awayPlaceholder?'':`<span class="bracket-prob">${pct(p.p_away)}</span>`}</div>
+        <div class="bracket-pick">${esc(pick)}</div>${kick}
       </div>`;
     });
-    s += `</div>`;
-    g++;
+    html+=`</div></div>`;
+    c.innerHTML=html;
   }
-  grid.innerHTML = s;
-}
 
-function renderBracket(){
-  const wrap = document.getElementById("bracket-live");
-  if (!wrap) return;
-  const stageOrder = ["R32", "R16", "QF", "SF", "3RD", "FINAL"];
-  const stageLabels = {
-    "R32": "Round of 32",
-    "R16": "Round of 16",
-    "QF":  "Quarter-finals",
-    "SF":  "Semi-finals",
-    "3RD": "3rd-place playoff",
-    "FINAL": "Final",
-  };
-  const buckets = {};
-  stageOrder.forEach(s => { buckets[s] = []; });
-  MATCHES.forEach(m => {
-    if (buckets[m.stage]) buckets[m.stage].push(m);
-  });
-  let html = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">`;
-  stageOrder.forEach(stg => {
-    const ms = buckets[stg];
-    if (!ms || !ms.length) return;
-    html += `<div class="group-card"><h4>${stageLabels[stg]}</h4>`;
-    ms.sort((a, b) => (a.kickoff_iso || "").localeCompare(b.kickoff_iso || ""));
-    ms.forEach(m => {
-      const homePh = isPlaceholder(m.home);
-      const awayPh = isPlaceholder(m.away);
-      const pred = predictionFor(m);
-      let predBit = "";
-      if (m.result) {
-        predBit = `<span class="actual">${m.result}</span>`;
-      } else if (pred && pred.pick && !homePh && !awayPh) {
-        predBit = `<span class="pill ${pred.pick}">${pred.pick}</span>` +
-                  `<span class="pscore">${pred.score || "—"}</span>` +
-                  lockIcon(m.n);
-      } else if (homePh || awayPh) {
-        predBit = `<span class="ptag">TBD</span>`;
-      } else {
-        predBit = `<span class="ptag">—</span>`;
-      }
-      const hh = homePh ? `<span style="color:var(--mute)">${m.home}</span>` :
-                          `${flag(m.home)} ${m.home}`;
-      const aa = awayPh ? `<span style="color:var(--mute)">${m.away}</span>` :
-                          `${flag(m.away)} ${m.away}`;
-      html += `<div class="team" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 10px;border-bottom:1px solid rgba(120,130,160,0.10);">` +
-              `<div style="font-size:11px;color:var(--mute);">#${m.n} · ${(m.kickoff_local || m.date || "")}</div>` +
-              `<div style="display:flex;align-items:center;gap:6px;width:100%;justify-content:space-between;">` +
-              `<div>${hh} <span style="color:var(--mute)">vs</span> ${aa}</div>` +
-              `<div style="display:flex;align-items:center;gap:4px;">${predBit}</div>` +
-              `</div></div>`;
-    });
-    html += `</div>`;
-  });
-  html += `</div>`;
-  wrap.innerHTML = html;
-}
-
-function tickCountdowns(){
-  document.querySelectorAll("[data-iso]").forEach(el => {
-    const cd = formatCountdown(el.dataset.iso);
-    el.textContent = cd.txt;
-    el.className = "countdown " + cd.cls;
-  });
-}
-
-function mergeResults(data){
-  // data shape: { last_updated, first12_results: {"1":"2-0",...}, next12_results: {...}, ... }
-  // Merge ALL keyed result maps (forward-compatible: any "<bucket>_results" key) into matches[] by n.
-  if (!data || typeof data !== "object") return;
-  const allBuckets = Object.keys(data).filter(k => k.endsWith("_results") && data[k] && typeof data[k] === "object");
-  const scoreByN = {};
-  for (const bucket of allBuckets){
-    for (const [k,v] of Object.entries(data[bucket])){
-      const n = Number(k);
-      if (Number.isFinite(n) && v) scoreByN[n] = v;
-    }
+  function populateTeamFilter(){
+    const sel=$("player-team-filter");
+    const teams=Array.from(new Set(state.players.map(p=>p.country))).sort();
+    teams.forEach(t=>{ const opt=document.createElement("option"); opt.value=t; opt.textContent=t; sel.appendChild(opt); });
   }
-  MATCHES.forEach(m => {
-    if (scoreByN[m.n] && !m.result){
-      m.result = scoreByN[m.n];
-      m.played = true;
-      const wdl = actualOutcome(m.result);
-      m.result_class = wdl === "W" ? "H" : (wdl === "L" ? "A" : "D");
-    }
-  });
-}
 
-async function loadFixtures(){
-  const r = await fetch("/jarvis/data/wc2026_fixtures_all.json?t=" + Date.now(), { cache: "no-store" });
-  if (!r.ok) throw new Error("fixtures " + r.status);
-  const data = await r.json();
-  MATCHES = (data && Array.isArray(data.matches)) ? data.matches.slice() : [];
-  // Unique sorted day list
-  DAYS = [...new Set(MATCHES.map(m => m.date))].sort();
-}
+  function renderPlayers(){
+    const q=$("player-search").value.toLowerCase();
+    const team=$("player-team-filter").value;
+    const pos=$("player-pos-filter").value;
+    const list=state.players.filter(p=>{
+      const inj=state.injuries[p.name];
+      const text=(p.name+" "+p.country+" "+p.club+" "+p.position).toLowerCase();
+      return (!q||text.includes(q)) && (!team||p.country===team) && (!pos||p.position===pos);
+    }).slice(0,60);
+    const c=$("player-grid");
+    if(!list.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;">No players match.</div>`; return; }
+    c.innerHTML=list.map(p=>{
+      const inj=state.injuries[p.name];
+      const status = inj ? `<span class="player-status ${inj.status==='out'?'out':'doubt'}">${esc(inj.status.toUpperCase())}</span>` : `<span class="player-status ok">Available</span>`;
+      return `<article class="carousel-card player-card ${inj?'high-impact':''}" style="--card-img:url('${teamAsset(p.country)}')">
+        <div class="card-bg"></div>
+        ${cardVideo(teamVideo(p.country)||GLOBAL_VIDEOS.stadium, teamAsset(p.country))}
+        <div class="ph"><div><div class="player-name">${esc(p.name)}</div><div class="player-team">${esc(p.country)} · ${esc(p.position)}</div></div>${status}</div>
+        <div class="player-grid-mini">
+          <div class="player-metric"><div>Age</div><div>${p.age}</div></div>
+          <div class="player-metric"><div>Caps</div><div>${p.caps}</div></div>
+          <div class="player-metric"><div>Club</div><div>${esc(p.club||"-")}</div></div>
+          <div class="player-metric"><div>Impact</div><div>${inj?'<span style="color:var(--warning)">High</span>':'Normal'}</div></div>
+        </div>
+      </article>`;
+    }).join("");
+  }
 
-async function loadPredictions(){
-  // Build a (home_lower|away_lower) -> {pick, score, p_home, p_draw, p_away} lookup
-  // from BOTH the Elo+Poisson model JSON and the LLM predictor JSON.
-  // The fixture file uses n=1..104 chronological but the prediction JSONs use n=1..12
-  // for their own match-list. We key by team-pair instead to bridge the gap.
-  const lookup = {};
-  function key(h, a){ return (h||"").toLowerCase().trim() + "|" + (a||"").toLowerCase().trim(); }
-  function classFromProbs(p){
-    if (p.p_home >= p.p_draw && p.p_home >= p.p_away) return "W";
-    if (p.p_away >= p.p_draw && p.p_away >= p.p_home) return "L";
-    return "D";
+  function renderModelLab(){
+    const c=$("lab-grid");
+    const am=state.activeModel;
+    const ew=am.ensemble_weights||{};
+    const acc=state.played.accuracy||{};
+    const topWeights = Object.entries(ew).filter(([_,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    const top = topWeights.slice(0,4).map(([k,v])=>`${esc(k)} ${(v*100).toFixed(1)}%`).join(", ");
+    const progressBars = topWeights.slice(0,8).map(([k,v])=>{
+      const color = k.includes('draw') ? 'var(--accent-glow)' : (k.includes('group') ? 'var(--success)' : 'var(--accent)');
+      return `<div class="progress-row"><span>${esc(k)}</span><div class="progress-track"><div class="progress-fill" style="width:${pct(v)};background:${color}"></div></div><span style="font-size:11px;color:var(--text-secondary);width:40px;text-align:right;">${pct(v)}</span></div>`;
+    }).join("");
+    const liveAcc = acc.winner_accuracy!=null ? pct(acc.winner_accuracy) : null;
+    c.innerHTML=`
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <div class="lab-big">${liveAcc || pct(am.single_pick_accuracy)}</div><h4>Live winner accuracy</h4><p>${esc(am.model_version||"v001")} promoted ${esc(shortDate(am.created_at))}. ${liveAcc?`Verified against ${acc.matches_played} played games.`:`Three-spread coverage ${pct(am.three_spread_coverage)}.`}</p>
+      </div>
+      <div class="lab-card" style="--card-img:url('asset/mc_model_accuracy_visual.png')">
+        <div class="lab-bg"></div>
+        <div class="lab-big">${acc.exact_score_rate!=null?pct(acc.exact_score_rate):"—"}</div><h4>Exact score rate</h4><p>${acc.exact_count!=null?`${acc.exact_count} exact scorelines from ${acc.matches_played} played games.`:`Backtest exact-score rate.`}</p>
+      </div>
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <div class="lab-big">${Object.keys(ew).length||"—"}</div><h4>Ensemble models</h4><p>${top||"Uniform blend"}. Weights are tuned per match context and draw-calibrated.</p>
+        <div class="progress-list" style="margin-top:12px;">${progressBars}</div>
+      </div>
+      <div class="lab-card" style="--card-img:url('asset/mc_model_lab_visual.png')">
+        <div class="lab-bg"></div>
+        <div class="lab-big">🔒</div><h4>Audit-locked forecasts</h4><p>Every prediction is logged in the audit database. Use the audit endpoint to verify locked T-8h forecasts against results.</p>
+      </div>`;
+
+    const byStage = acc.by_stage || {};
+    const stageRows = Object.entries(byStage).sort((a,b)=>b[1].accuracy-a[1].accuracy);
+    $("accuracy-grid").innerHTML=stageRows.length?`<div class="accuracy-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:20px;">${stageRows.map(([stage,r])=>`
+      <div class="accuracy-stat" style="position:relative;overflow:hidden;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;text-align:center;">
+        <div class="v" style="font-size:28px;font-weight:800;font-family:var(--font-condensed);">${r.accuracy!=null?(r.accuracy*100).toFixed(1)+'%':"—"}</div>
+        <div class="k" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;">${esc(stage)}<br>${r.correct||0}/${r.graded||0}</div>
+      </div>`).join("")}</div>`:
+    (()=>{const models=state.modelSummary.models||[]; const rows=models.slice(0,8); return rows.length?`<div class="accuracy-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:20px;">${rows.map(r=>`
+      <div class="accuracy-stat" style="position:relative;overflow:hidden;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;text-align:center;">
+        <div class="v" style="font-size:28px;font-weight:800;font-family:var(--font-condensed);">${(r.winner_pct*100).toFixed(1)}%</div>
+        <div class="k" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;">${esc(r.model||"Model")}<br>${r.winner_hits||0}/${r.graded||0}</div>
+      </div>`).join("")}</div>`:`<div class="state-box" style="grid-column:1/-1;">No verified results yet.</div>`;})();
   }
-  // PRIMARY classifier — derive W/D/L from the predicted score so the pill never disagrees with the score.
-  // Falls back to probability-based class only if no score is available.
-  function classFromScoreOrProbs(p){
-    const s = p.expected_score || p.predicted_score || p.score;
-    if (s && typeof s === "string"){
-      const m = s.match(/^\s*(\d+)\s*[-–]\s*(\d+)\s*$/);
-      if (m){
-        const h = parseInt(m[1],10), a = parseInt(m[2],10);
-        if (h > a) return "W";
-        if (h < a) return "L";
-        return "D";
-      }
-    }
-    return classFromProbs(p);
+
+  function renderNews(){
+    const c=$("news-grid");
+    if(!state.news.length){ c.innerHTML=`<div class="state-box" style="flex:0 0 auto;width:100%;">No late news items.</div>`; return; }
+    c.innerHTML=state.news.map((item,i)=>{
+      const high = /out|injury|doubt|ruled|suspension/i.test(item.text);
+      const newsPoster = i<6 ? `asset/mc_news_${String(i).padStart(2,'0')}.png` : "asset/mc_late_news_impact.png";
+      const newsVid = i<6 ? `asset/mc_news_${String(i).padStart(2,'0')}_video.mp4` : GLOBAL_VIDEOS.stadium;
+      return `<article class="carousel-card news-card ${high?'impact-high':''}" ${i<6?`style="--card-img:url('${newsPoster}')"`:``}>
+        <div class="card-bg"></div>
+        ${cardVideo(newsVid, newsPoster)}
+        <div class="nc-content">
+          <div class="nc-match">${esc(item.player)} · ${esc(item.source)}</div>
+          <div class="nc-text">${esc(item.text)}</div>
+          <div class="nc-meta">
+            <span class="news-impact">Impact: <b class="${high?'down':'up'}">${high?"Negative":"Neutral"}</b></span>
+            <a href="${esc(item.url)}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" onclick="event.stopPropagation()">Source</a>
+          </div>
+        </div>
+      </article>`;
+    }).join("");
   }
-  try {
-    const r = await fetch("/jarvis/data/wc2026_model_predictions.json?t=" + Date.now(), { cache: "no-store" });
-    if (r.ok){
-      const data = await r.json();
-      (data.md2_predictions || []).forEach(p => {
-        lookup[key(p.home, p.away)] = {
-          pick: classFromScoreOrProbs(p),
-          score: p.expected_score,
-          p_home: p.p_home, p_draw: p.p_draw, p_away: p.p_away,
-          source: "elo_poisson"
-        };
-      });
-    }
-  } catch(e){}
-  try {
-    const r = await fetch("/jarvis/data/wc2026_llm_predictions.json?t=" + Date.now(), { cache: "no-store" });
-    if (r.ok){
-      const data = await r.json();
-      (data.predictions || []).forEach(p => {
-        const wdl = classFromScoreOrProbs(p);
-        const k = key(p.home, p.away);
-        // LLM predictions win the tie if present (live news grounding)
-        lookup[k] = {
-          pick: wdl,
-          score: p.predicted_score,
-          p_home: p.p_home, p_draw: p.p_draw, p_away: p.p_away,
-          rationale: p.rationale,
-          source: "llm_" + (data.model_used || "?")
-        };
-      });
-    }
-  } catch(e){}
-  // Also fold in /jarvis/data/wc2026_model_predictions.json#all_fixture_predictions
-  // so the day view can show a prediction for every concrete fixture
-  // (groups + resolved knockouts), keyed by match n.
-  try {
-    const r = await fetch("/jarvis/data/wc2026_model_predictions.json?t=" + Date.now(), { cache: "no-store" });
-    if (r.ok){
-      const data = await r.json();
-      const allp = data && data.all_fixture_predictions || {};
-      const byN = {};
-      Object.keys(allp).forEach(k => {
-        const p = allp[k];
-        if (!p || p.status !== "predicted") return;
-        const wdl = p.predicted_wdl === "H" ? "W"
-                  : (p.predicted_wdl === "A" ? "L" : "D");
-        byN[String(p.n)] = {
-          pick: wdl,
-          score: p.predicted_score,
-          p_home: p.p_home, p_draw: p.p_draw, p_away: p.p_away,
-          treatment: p.treatment || null,
-          three_spread: p.three_spread || null,
-          watch_link: p.watch_link || null,
-          source: data.prediction_source || "engine",
-        };
-      });
-      PREDICTIONS = { byPair: lookup, matches: byN };
+
+  function renderBuilder(){
+    const body=$("builder-body");
+    const count=$("fab-count");
+    count.textContent=state.builder.length;
+    count.style.display=state.builder.length?"grid":"none";
+    if(!state.builder.length){
+      body.innerHTML=`<div class="builder-empty">Select 2–6 predictions to compare confidence, risk and overlap.</div>`;
       return;
     }
-  } catch(e){}
-  PREDICTIONS = { byPair: lookup, matches: PREDICTIONS && PREDICTIONS.matches || {} };
-}
-
-// Lock status — populated from /jarvis/data/wc2026_predictions_audit?locked=1.
-// Every fixture whose prediction is within T-8h of kickoff gets a 🔒 icon.
-async function loadLocks(){
-  try {
-    const r = await fetch("/jarvis/data/wc2026_predictions_audit?locked=1&t=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) return;
-    const data = await r.json();
-    const set = new Set();
-    (data && data.locked || []).forEach(row => {
-      if (row && row.match_n != null) set.add(Number(row.match_n));
+    let sum=0, countLegs=0, html="";
+    state.builder.forEach(n=>{
+      const m=state.matches.find(x=>x.n===n); if(!m) return;
+      const p=getPred(n); const prob=probFor(m,p);
+      const label=p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw");
+      sum+=prob; countLegs++;
+      html+=`<div class="builder-selection">
+        <div class="sel-text"><div class="sel-title">${esc(m.home)} v ${esc(m.away)}</div><div class="sel-meta">${esc(label)} · ${pct(prob)} confidence</div></div>
+        <button class="sel-remove" aria-label="Remove" onclick="JARVIS.removeFromBuilder(${n})">×</button>
+      </div>`;
     });
-    LOCKED_NS = set;
-  } catch(e){ /* offline — leave LOCKED_NS as-is */ }
-}
-
-function lockIcon(matchN){
-  if (!matchN || !LOCKED_NS.has(Number(matchN))) return "";
-  return `<span class="lock" data-locked="1" title="Prediction locked at T-8h — cannot be retroactively rewritten">🔒</span>`;
-}
-
-async function refreshLive(){
-  try {
-    const r = await fetch("/jarvis/data/wc2026_results.json?t=" + Date.now(), { cache: "no-store" });
-    if (!r.ok){ document.getElementById("updated-at").textContent = "JSON " + r.status; return; }
-    const data = await r.json();
-    mergeResults(data);
-    document.getElementById("updated-at").textContent = "updated " + new Date(data.last_updated || Date.now()).toLocaleTimeString();
-    // Re-render EVERY section so the top-bar buttons (Played / Calendar /
-    // Standings / Knockouts / Upcoming) reflect new results without a reload.
-    renderDayContent();
-    renderSummary();
-    try { renderPlayed(); } catch(_){}
-    try { renderGroups(); } catch(_){}
-    try { renderBracket(); } catch(_){}
-    try { renderUpcoming(); } catch(_){}
-  } catch(e){
-    document.getElementById("updated-at").textContent = "offline";
+    const avg=countLegs?sum/countLegs:0;
+    const summary=`<div class="builder-warning">Combined average confidence: <b>${pct(avg)}</b> · ${esc(riskLabel(avg))}. More legs = lower hit rate.</div>`;
+    body.innerHTML=summary+html;
   }
-}
 
-// Periodic full data refresh — re-fetch predictions + badges + bet builder +
-// freshness so new model runs surface live (predictions regenerate every ~2h).
-async function refreshAll(){
-  try {
-    await loadFixtures();   // re-read fixtures (kickoffs, concrete knockout teams)
-    await loadPredictions(); // re-read engine predictions (new generated_at)
-    await loadLocks();
-    await refreshLive();     // merge results + re-render all sections
-    loadModelBacktestBadges();
-    loadBetBuilder();
-    loadFreshness();
-  } catch(e){ /* transient — next tick retries */ }
-}
-
-function pickDefaultDay(){
-  const today = todayISODateLocal();
-  if (DAYS.includes(today)) return today;
-  // Otherwise: nearest future day, else last day.
-  const future = DAYS.find(d => d >= today);
-  return future || DAYS[DAYS.length-1] || null;
-}
-
-// =================================================================
-// UPCOMING NEXT 12 + PLAYED HISTORY (separate from calendar day-view)
-// =================================================================
-// UPCOMING_VARIATIONS labels are seeded with "..." placeholders and filled at
-// page load by loadModelBacktestBadges() from /jarvis/data/wc2026_predictions_audit?summary=1
-// — single source of truth = the audit DB, NOT the JSON snapshots.
-const UPCOMING_VARIATIONS = [
-  { name: "🎯 Ensemble · 3-spread · ...", key: "ensemble", baseName: "🎯 Ensemble · 3-spread",
-    model: "elo_bivariate_poisson_dixoncoles_isocal",
-    desc: "<b>14-model ensemble</b> (Elo · Bradley-Terry-Davidson · Poisson · Dixon-Coles · gradient-boosting · draw-guard) blended by recency-weighted log-loss, picks draw-calibrated, then split into three risk-spread variations. Each row shows its <b>treatment</b> (Strong pick / Protect draw / Cover all) + an official SBS watch link. Active model + freshness stamp are in the header; full slips in the Bet Builder below." },
-  { name: "🤖 LLM · llama3.3:70b · ...", key: "news", baseName: "🤖 LLM · llama3.3:70b",
-    model: "llama3.3:70b",
-    desc: "<b>LLM predictor (llama3.3:70b)</b> running on the UE5 RTX 4090 (ssh6.vast.ai:11336) through autossh tunnel :11435 → :11434. Predictions write into the audit DB; winner-hit grading lands per-row when <code>actual_for(home,away)</code> finds a verified WC2026 actual." },
-  { name: "🎲 Score Forecast · ...", key: "scores", baseName: "🎲 Score Forecast",
-    model: "elo_bivariate_poisson_dixoncoles_isocal",
-    desc: "<b>Ensemble picks expressed as exact scores</b> &mdash; for score-prediction leagues. Exact-hit count comes straight from the audit DB." },
-];
-let upcomingTabIdx = 0;
-
-function nextNUpcoming(n){
-  // TZ-safe: filter by kickoff_iso > now (UTC instant), not by date string.
-  // Previous behaviour broke for users east of UTC: their "today" was already next day, so today's UTC fixtures fell out.
-  const nowMs = Date.now();
-  return MATCHES
-    .filter(m => {
-      if (m.played) return false;
-      if (!m.kickoff_iso) return m.date >= todayISODateLocal(); // fallback for fixtures missing kickoff_iso
-      return new Date(m.kickoff_iso).getTime() > nowMs;
-    })
-    .sort((a,b) => {
-      const ai = a.kickoff_iso ? new Date(a.kickoff_iso).getTime() : new Date(a.date).getTime();
-      const bi = b.kickoff_iso ? new Date(b.kickoff_iso).getTime() : new Date(b.date).getTime();
-      return ai - bi;
-    })
-    .slice(0, n);
-}
-
-function renderUpcoming(){
-  const v = UPCOMING_VARIATIONS[upcomingTabIdx];
-  document.getElementById("upcoming-desc").innerHTML = v.desc;
-  const wrap = document.getElementById("upcoming-rows");
-  const fixtures = nextNUpcoming(36); // show all upcoming Group Stage matches (44 remaining), capped at 36
-  let s = "", nW=0, nD=0, nL=0;
-  fixtures.forEach((m, i) => {
-    const pred = predictionFor(m) || { pick: "—", score: "—" };
-    if (pred.pick === "W") nW++; else if (pred.pick === "D") nD++; else if (pred.pick === "L") nL++;
-    const cd = m.kickoff_iso ? formatCountdown(m.kickoff_iso) : { txt: "TBD", cls: "" };
-    const pickCls = ["W","D","L"].includes(pred.pick) ? pred.pick : "dim";
-    const pickTxt = pred.pick || "—";
-    const scoreTxt = pred.score || "—";
-    // Three-spread treatment badge (visibly the new ensemble system).
-    const TREAT = { LOCK:"🔒 Strong pick", HEDGE:"≈ Cover two", DRAW_HEDGE:"🛡 Protect draw",
-                    ROTATE:"🔀 Cover all", EXCLUDE:"⏭ Leave out" };
-    const treatHtml = pred.treatment ? `<span class="treat-badge">${TREAT[pred.treatment] || pred.treatment}</span>` : "";
-    const wl = pred.watch_link;
-    const watchHtml = (wl && wl.url)
-      ? `<a class="bb-watch" href="${wl.url}" target="_blank" rel="noopener" title="${(wl.notes||'').replace(/"/g,"'")}">▶ ${wl.label || 'Watch on SBS'}</a>` : "";
-    s += `<div class="match-row" style="--i:${i}">
-      <div class="n">#${i+1}</div>
-      <div class="teams">
-        <span class="flag">${flag(m.home)}</span> <span>${m.home}</span>
-        <span class="vs">vs</span>
-        <span class="flag">${flag(m.away)}</span> <span>${m.away}</span>
-      </div>
-      <div class="stage-label">${stageLabel ? stageLabel(m) : (m.stage + (m.group ? ' ' + m.group : ''))}</div>
-      <div class="when">${m.kickoff_local || m.date}</div>
-      <div class="pred"><span class="pill ${pickCls}">${pickTxt}</span><span class="pscore">${scoreTxt}</span>${treatHtml}${lockIcon(m.n)}${watchHtml}</div>
-      <div class="actual-cell"><span class="countdown ${cd.cls}" data-iso="${m.kickoff_iso || ''}">${cd.txt}</span></div>
-    </div>`;
-  });
-  wrap.innerHTML = s;
-  document.getElementById("upcoming-summary").innerHTML = `
-    <div class="stat"><div class="k">Home wins picked</div><div class="v">${nW}</div></div>
-    <div class="stat"><div class="k">Draws picked</div><div class="v">${nD}</div></div>
-    <div class="stat"><div class="k">Away wins picked</div><div class="v">${nL}</div></div>
-    <div class="stat"><div class="k">Showing</div><div class="v">${fixtures.length} upcoming</div></div>`;
-}
-
-function renderUpcomingTabs(){
-  const tabs = document.getElementById("upcoming-tabs");
-  tabs.innerHTML = "";
-  UPCOMING_VARIATIONS.forEach((v, i) => {
-    const b = document.createElement("button");
-    b.className = "tab" + (i === upcomingTabIdx ? " active" : "");
-    b.textContent = v.name;
-    b.onclick = () => { upcomingTabIdx = i; renderUpcomingTabs(); renderUpcoming(); };
-    tabs.appendChild(b);
-  });
-}
-
-// Pull live per-model winner-hit counts from the audit DB and re-label tabs.
-// Endpoint shape: { ok, mode:"summary", models:[{model,total,graded,winner_hits,exact_hits,winner_pct}] }
-// We label every tab as "<baseName> · X/N verified" where N = graded (rows that
-// hit an actual via actual_for()) and X = winner_hits. If a model has nothing
-// graded yet we show "0/0 verified" so the operator can see grading is pending.
-async function loadModelBacktestBadges(){
-  try {
-    const r = await fetch("/jarvis/data/wc2026_predictions_audit?summary=1", {cache: "no-store"});
-    if (!r.ok) return;
-    const j = await r.json();
-    if (!j || !j.ok || !Array.isArray(j.models)) return;
-    const byModel = {};
-    j.models.forEach(row => { byModel[row.model] = row; });
-    UPCOMING_VARIATIONS.forEach(v => {
-      const row = byModel[v.model];
-      if (!row) { v.name = `${v.baseName} · 0/0 verified`; return; }
-      const graded = Number(row.graded || 0);
-      // For the score-forecast tab we surface exact-hits, since the other two
-      // already report winner-hits and showing the same number 3× would mislead.
-      const isExact = (v.key === "scores");
-      const num = isExact ? Number(row.exact_hits || 0) : Number(row.winner_hits || 0);
-      const tag = isExact ? "exact" : "verified";
-      v.name = `${v.baseName} · ${num}/${graded} ${tag}`;
-    });
-    renderUpcomingTabs();
-  } catch (_e) {
-    // Stay silent — the placeholders ("...") remain visible if the audit
-    // endpoint is unreachable; we don't want to crash the whole page.
+  // ── Bet Builder ───────────────────────────────────────────────────────────
+  function outcomeName(outcome, home, away){
+    if(outcome==="H" || outcome==="1") return esc(home) + " win";
+    if(outcome==="A" || outcome==="2") return esc(away) + " win";
+    if(outcome==="D" || outcome==="X") return "Draw";
+    if(outcome==="X2") return esc(away) + " win/draw";
+    if(outcome==="1X") return esc(home) + " win/draw";
+    if(outcome==="12") return esc(home) + " or " + esc(away) + " win";
+    return esc(outcome||"—");
   }
-}
 
-function renderPlayed(){
-  const wrap = document.getElementById("played-rows");
-  const played = MATCHES
-    .filter(m => m.played && m.result)
-    .sort((a,b) => (b.date || "").localeCompare(a.date || ""));
-  let s = "", hits = 0, miss = 0;
-  played.forEach((m, i) => {
-    const pred = predictionFor(m);
-    const actualWDL = (() => {
-      const [hg, ag] = (m.result || "").split("-").map(Number);
-      if (isNaN(hg) || isNaN(ag)) return null;
-      return hg > ag ? "W" : (hg < ag ? "L" : "D");
-    })();
-    let predCell = `<span class="ptag">—</span>`;
-    let actualCell = `<span class="actual">${m.result}</span>`;
-    if (pred && pred.pick) {
-      const pickCls = pred.pick;
-      predCell = `<span class="pill ${pickCls}">${pred.pick}</span><span class="pscore">${pred.score || "—"}</span>${lockIcon(m.n)}`;
-      if (actualWDL) {
-        const hit = pred.pick === actualWDL;
-        if (hit) hits++; else miss++;
-        actualCell = `<span class="actual ${hit ? "hit" : "miss"}">${m.result} ${hit ? "✓" : "✗"}</span>`;
+  async function runBetBuilder(){
+    const stake = Math.max(5, Math.min(100000, parseFloat($("bb-stake").value)||90));
+    const legs = Math.max(2, Math.min(20, parseInt($("bb-legs").value,10)||4));
+    const strategy = $("bb-strategy").value||"balanced";
+    const c=$("builder-slips");
+    c.innerHTML=`<div class="state-box"><div class="state-box-content"><p>Building your three-spread card...</p></div></div>`;
+    try{
+      const data = await loadJson(`data/wc2026_bet_builder_live?stake=${stake}&legs=${legs}&mode=${encodeURIComponent(strategy)}`);
+      if(data.ok && data.output){
+        state.betBuilderData = {output: data.output};
+        renderBetBuilder();
+      }else{
+        throw new Error(data.error||"builder failed");
       }
+    }catch(e){
+      console.error(e);
+      if(state.betBuilderData && state.betBuilderData.output) renderBetBuilder();
+      else c.innerHTML=`<div class="state-box"><div class="state-box-content"><p>Bet builder live engine unavailable. Showing last saved card when available.</p></div></div>`;
     }
-    s += `<div class="match-row played" style="--i:${Math.min(i, 30)}">
-      <div class="n">#${m.n}</div>
-      <div class="teams">
-        <span class="flag">${flag(m.home)}</span> <span>${m.home}</span>
-        <span class="vs">vs</span>
-        <span class="flag">${flag(m.away)}</span> <span>${m.away}</span>
-      </div>
-      <div class="stage-label">${stageLabel ? stageLabel(m) : (m.stage + (m.group ? ' ' + m.group : ''))}</div>
-      <div class="when">${m.date}</div>
-      <div class="pred">${predCell}</div>
-      <div class="actual-cell">${actualCell}</div>
-    </div>`;
-  });
-  wrap.innerHTML = s;
-  const tot = hits + miss;
-  const acc = tot > 0 ? Math.round(100 * hits / tot) : 0;
-  const lag = played.length - tot;
-  const lagTxt = lag > 0 ? ` · ${lag} most-recent awaiting model grading` : "";
-  document.getElementById("played-summary").innerHTML =
-    `<b style="color:var(--ink)">${played.length}</b> verified matches played · `
-    + `model graded ${tot} → ${hits} correct (${acc}%)${lagTxt} · every result is from <code>wc2026_actuals.json</code> and grows as games finish.`;
-}
-
-async function boot(){
-  try {
-    await loadFixtures();
-    await loadPredictions();
-    await loadLocks();
-    activeDay = pickDefaultDay();
-    renderDayTabs();
-    renderDayContent();
-    renderSummary();
-    renderGroups();
-    renderBracket();
-    renderUpcomingTabs();
-    renderUpcoming();
-    renderPlayed();
-    await refreshLive();
-    // Pull dynamic per-model winner-hit badges from the audit DB. Non-blocking
-    // — placeholders stay if the endpoint is unreachable, so a transient
-    // dashboard hiccup never blanks the page.
-    loadModelBacktestBadges();
-    loadBetBuilder();
-    loadFreshness();
-  } catch(e){
-    document.getElementById("day-content").innerHTML =
-      `<div class="meta" style="color:var(--miss);padding:20px">Could not load fixtures JSON (<code>/jarvis/data/wc2026_fixtures_all.json</code>): ${String(e).slice(0,160)}</div>`;
   }
-  // Re-poll lock status every 5 min so newly-locked matches surface their 🔒.
-  setInterval(refreshLive, 60_000);   // results + re-render all sections every 60s
-  setInterval(refreshAll, 300_000);   // full refetch (predictions/badges/bet builder) every 5 min
-  setInterval(tickCountdowns, 30_000);
-}
 
-// ===== FRESHNESS STAMP — proves the page is showing current data =====
-async function loadFreshness(){
-  const el = document.getElementById("freshness-stamp");
-  if (!el) return;
-  try {
-    const [pr, ar, rr, lr] = await Promise.all([
-      fetch("/jarvis/data/wc2026_model_predictions.json?t=" + Date.now(), { cache: "no-store" }),
-      fetch("/jarvis/data/wc2026_active_model.json?t=" + Date.now(), { cache: "no-store" }),
-      fetch("/jarvis/data/wc2026_results.json?t=" + Date.now(), { cache: "no-store" }),
-      fetch("/jarvis/data/wc2026_predictions_audit?locked=1&t=" + Date.now(), { cache: "no-store" }),
-    ]);
-    const pd = pr.ok ? await pr.json() : {};
-    const act = ar.ok ? await ar.json() : null;
-    const res = rr.ok ? await rr.json() : {};
-    const locks = lr.ok ? await lr.json() : {};
-    const fmt = (iso) => {
-      if (!iso) return "—";
-      const d = new Date(iso); const m = Math.round((Date.now()-d.getTime())/60000);
-      const ago = m < 90 ? `${m}m ago` : `${Math.round(m/60)}h ago`;
-      return `${d.toLocaleTimeString()} (${ago})`;
+  function renderBetBuilder(){
+    const c=$("builder-slips");
+    if(!state.betBuilderData || !state.betBuilderData.output){
+      c.innerHTML=`<div class="state-box"><div class="state-box-content"><p>Bet builder data unavailable.</p></div></div>`;
+      return;
+    }
+    const out=state.betBuilderData.output;
+    const labels={ variation_a: "A — Mainline", variation_b: "B — Draw Protection", variation_c: "C — Alternate Winner" };
+    const explanations={
+      variation_a: "Backs the model's strongest unique-team legs for the highest confidence path.",
+      variation_b: "Protects the favourite with a win-or-draw double chance on the riskiest leg.",
+      variation_c: "Stretches to extra legs for upside, covering the alternate upset path."
     };
-    const playedIds = new Set([
-      ...Object.keys(res.actuals_results || {}),
-      ...Object.keys(res.next12_results || {}),
-      ...Object.keys(res.first12_results || {}),
-    ]);
-    const playedCount = playedIds.size;
-    const lockedCount = (locks.locked || locks.count || []) ? (locks.count || (locks.locked||[]).length || 0) : 0;
-    const genStale = pd.generated_at ? (Date.now() - new Date(pd.generated_at).getTime() > 3*3600*1000) : true;
-    const dot = genStale ? "🟠" : "🟢";
-    const state = genStale ? "STALE — refresh" : "LIVE";
-    const modelTxt = act && act.model_version
-      ? `model <b>${act.model_version}</b> (${(act.single_pick_accuracy*100).toFixed(0)}% single / ${(act.three_spread_coverage*100).toFixed(0)}% coverage, out-of-sample)`
-      : "model —";
-    el.innerHTML =
-      `${dot} <b>${state}</b> · ${modelTxt}`
-      + ` · predictions ${fmt(pd.generated_at)}`
-      + ` · results synced ${fmt(res.last_updated)}`
-      + ` · ${playedCount} played`
-      + ` · odds: ESPN/DraftKings · team-news: partial`
-      + (genStale ? ` — <span class="bb-warn">your browser may be showing a cached copy; hard-refresh (Ctrl/Cmd+Shift+R)</span>` : "");
-  } catch(e){
-    el.textContent = "Could not load model state: " + String(e).slice(0,80);
-  }
-}
-
-// ===== THREE-SPREAD BET BUILDER (reads engine + bet-builder JSON) =====
-function bbPickName(o){ return o === "H" ? "Home" : o === "D" ? "Draw" : o === "A" ? "Away" : o === "1X" ? "Home/Draw" : o === "X2" ? "Draw/Away" : (o || "—"); }
-
-async function loadBetBuilder(){
-  const banner = document.getElementById("bb-model-banner");
-  const wrap = document.getElementById("bb-slips");
-  const notes = document.getElementById("bb-notes");
-  try {
-    const [bbR, btR, actR] = await Promise.all([
-      fetch("/jarvis/data/wc2026_bet_builder.json?t=" + Date.now(), { cache: "no-store" }),
-      fetch("/jarvis/data/wc2026_backtest_results.json?t=" + Date.now(), { cache: "no-store" }),
-      fetch("/jarvis/data/wc2026_active_model.json?t=" + Date.now(), { cache: "no-store" }),
-    ]);
-    const bb = bbR.ok ? ((await bbR.json()).output || null) : null;
-    const bt = btR.ok ? ((await btR.json()).summary || null) : null;
-    // Prefer the continuous-learning ACTIVE model (honest out-of-sample
-    // validation numbers) over the in-sample backtest summary.
-    const act = actR.ok ? await actR.json() : null;
-
-    if (act){
-      const single = (act.single_pick_accuracy * 100).toFixed(1);
-      const cover = (act.three_spread_coverage * 100).toFixed(1);
-      const ece = (act.calibration_error != null) ? ` · ECE ${act.calibration_error.toFixed(3)}` : "";
-      const note = act.in_sample
-        ? ' · <span class="bb-warn">⚠ in-sample</span>'
-        : ' · <span style="color:var(--win)">out-of-sample (honest)</span>';
-      banner.innerHTML = `Active model: <b>${act.model_version || "blend"}</b> · single-pick <b>${single}%</b> · `
-        + `three-spread coverage <b>${cover}%</b>${ece}${note}`;
-    } else if (bt){
-      const single = (bt.single_top_pick_accuracy * 100).toFixed(1);
-      const cover = (bt.three_spread_coverage * 100).toFixed(1);
-      const insample = bt.in_sample ? ' · <span class="bb-warn">⚠ in-sample (live results will be lower)</span>' : "";
-      banner.innerHTML = `single-pick <b>${single}%</b> · three-spread coverage <b>${cover}%</b>${insample}`;
-    } else {
-      banner.textContent = "Bet builder summary unavailable.";
-    }
-
-    renderBetBuilderSlips(bb);
-  } catch(e){
-    banner.textContent = "Bet builder offline: " + String(e).slice(0, 120);
-  }
-}
-
-// Shared renderer: used by the static page-load (loadBetBuilder) AND the live
-// on-demand build (buildMyMulti). Takes a bet-builder output object.
-function renderBetBuilderSlips(bb){
-  const wrap = document.getElementById("bb-slips");
-  const notes = document.getElementById("bb-notes");
-  if (!bb){ wrap.innerHTML = `<div class="meta">Bet builder output not generated yet.</div>`; if(notes) notes.innerHTML=""; return; }
-  const A = bb.variation_a, B = bb.variation_b, C = bb.variation_c;
-
-  // Exploit window banner + Jarvis recommendation
-  const win = bb.exploit_window || {}; const rec = bb.recommendation || {};
-  const winColor = win.level === "HIGH" ? "var(--win)" : (win.level === "LOW" ? "var(--loss)" : "var(--draw)");
-  let head = "";
-  if (win.level){
-    head += `<div class="bb-banner" style="margin-bottom:8px;">`
-      + `Exploit window: <b style="color:${winColor}">${win.level}</b>`
-      + (win.reasons ? ` — ${win.reasons.join(" · ")}` : "") + `</div>`;
-  }
-  if (rec.text){
-    head += `<div class="meta" style="margin-bottom:8px;color:var(--ink)">🧠 <b>Jarvis:</b> ${rec.text}</div>`;
-  }
-  head += `<div class="meta" style="margin-bottom:10px;">Three variable-length slips off one unique-team pool · `
-    + `total stake $${bb.total_outlay} · best-case return $${bb.best_case_return}`;
-  if (bb.odds_are_real === false) head += ' · <span class="bb-warn">⚠ MOCK ODDS (live books unreachable)</span>';
-  head += `</div>`;
-
-  // Per-variation summary cards (Slip A safest / B draw protect / C stretch)
-  let html = head + `<div class="bb-grid">`;
-  for (const v of [A, B, C]){
-    html += `<div class="bb-card"><div class="bb-name">${v.name}</div>`
-      + `<div class="bb-purpose">${v.purpose}</div>`
-      + `<div class="bb-meta">${v.legs.length} legs · stake $${v.stake} · odds ${v.combined_odds} · `
-      + `return $${v.potential_return}</div></div>`;
-  }
-  html += `</div>`;
-
-  // Comparison table from per-game COVERAGE MODES. A shows "Stretch only" for
-  // legs that are in C but not the safe slip; B shows "No cover" where no draw
-  // is live; never a duplicate pick.
-  const modes = bb.coverage_modes || [];
-  const span = (txt, col) => `<span style="color:${col||'var(--dim)'}">${txt}</span>`;
-  const cell = (out, odds) => out ? `${bbPickName(out)} <span class="bb-od">@${odds||"—"}</span>` : "";
-  html += `<table class="bb-table"><thead><tr><th>#</th><th>Game</th><th>Mode</th>`
-    + `<th>A · Safe</th><th>B · Draw protect</th><th>C · Stretch</th><th>Watch</th></tr></thead><tbody>`;
-  modes.forEach((r, i) => {
-    const wl = r.watch_link;
-    const watch = (wl && wl.url)
-      ? `<a class="bb-watch" href="${wl.url}" target="_blank" rel="noopener" title="${(wl.notes||'').replace(/"/g,"'")}">▶ SBS</a>` : "—";
-    const aCell = r.in_a ? cell(r.a, r.a_odds) : span("Stretch only");
-    const bCell = r.in_a ? (r.b ? cell(r.b, r.b_odds) : span("= Slip A")) : span("—");
-    const cCell = cell(r.c, r.c_odds);
-    html += `<tr>`
-      + `<td>${i+1}</td>`
-      + `<td>${flag(r.team_a)} ${r.team_a} <span class="vs">v</span> ${flag(r.team_b)} ${r.team_b}</td>`
-      + `<td><span class="bb-treat">${r.mode_label||r.mode}</span></td>`
-      + `<td>${aCell}</td>`
-      + `<td class="${(r.in_a && r.b)?'bb-chg':''}">${bCell}</td>`
-      + `<td class="${r.c_is_alt?'bb-chg':''}">${cCell}</td>`
-      + `<td>${watch}</td>`
-      + `</tr>`;
-  });
-  html += `</tbody></table>`;
-  wrap.innerHTML = html;
-
-  if (notes){
-    const ws = (bb.warnings || []).map(w => `⚠ ${w}`);
-    if (bb.responsible_use) ws.push(`• ${bb.responsible_use}`);
-    notes.innerHTML = ws.join("<br>");
-  }
-}
-
-// Live on-demand build: user picks stake + legs (up to 20) + mode, the engine
-// builds three variable-length slips server-side (~3-4s) and we re-render.
-async function buildMyMulti(){
-  const btn = document.getElementById("bb-build-btn");
-  const wrap = document.getElementById("bb-slips");
-  const stake = Math.max(1, Math.min(100000, parseFloat(document.getElementById("bb-in-stake").value) || 100));
-  const legs = Math.max(2, Math.min(20, parseInt(document.getElementById("bb-in-legs").value, 10) || 10));
-  const mode = document.getElementById("bb-in-mode").value || "balanced";
-  const split = document.getElementById("bb-in-split").value || "total_split";
-  if (btn){ btn.disabled = true; btn.textContent = "Building…"; }
-  wrap.innerHTML = `<div class="meta">⏳ Building your ${legs}-leg ${mode} multi for $${stake}… (~3-4s)</div>`;
-  try {
-    const url = `/jarvis/data/wc2026_bet_builder_live?stake=${encodeURIComponent(stake)}`
-      + `&legs=${legs}&mode=${encodeURIComponent(mode)}&stake_mode=${encodeURIComponent(split)}&t=` + Date.now();
-    const r = await fetch(url, { cache: "no-store" });
-    const j = await r.json();
-    if (!j.ok || !j.output || j.output.error){
-      wrap.innerHTML = `<div class="bb-warn">Could not build: ${(j.output && j.output.error) || j.error || "unknown error"}</div>`;
-    } else {
-      renderBetBuilderSlips(j.output);
-    }
-  } catch(e){
-    wrap.innerHTML = `<div class="bb-warn">Build failed: ${String(e).slice(0, 120)}</div>`;
-  } finally {
-    if (btn){ btn.disabled = false; btn.textContent = "Build my multi"; }
-  }
-}
-
-boot();
-
-// ===== PLAYER PROFILES (unchanged behaviour, deferred load on modal open) =====
-let PLAYERS_ALL = [];
-let TEAMS_ALL = [];
-
-function statusBadgeFor(p){
-  if (p.injury && p.injury.status){
-    const s = p.injury.status.toLowerCase();
-    if (s.includes("out")) return `<span class="pill L">OUT</span>`;
-    if (s.includes("doubt")) return `<span class="pill D">DOUBT</span>`;
-  }
-  return `<span class="meta" style="color:var(--mute)">Available</span>`;
-}
-
-function renderPlayers(){
-  const q = (document.getElementById("player-search").value || "").toLowerCase();
-  const teamF = document.getElementById("player-team-filter").value;
-  const posF = document.getElementById("player-pos-filter").value;
-  const filtered = PLAYERS_ALL.filter(p => {
-    if (teamF && p.country !== teamF) return false;
-    if (posF && p.position !== posF) return false;
-    if (!q) return true;
-    const hay = `${p.name||""} ${p.country||""} ${p.club||""} ${p.position||""}`.toLowerCase();
-    return hay.includes(q);
-  });
-  const rows = document.getElementById("player-rows");
-  let s = "";
-  filtered.slice(0, 200).forEach((p, i) => {
-    const f = FLAGS[p.country] || "🏳️";
-    s += `<tr style="--i:${Math.min(i,30)}">
-      <td style="padding:9px 12px;font-size:12.5px;"><b>${p.name||"?"}</b></td>
-      <td style="padding:9px 12px;font-size:12.5px;"><span class="flag" style="font-size:15px">${f}</span> <span style="color:var(--mute)">${p.country||""}</span></td>
-      <td style="padding:9px 12px;font-size:12.5px;color:var(--mute)">${p.position||"—"}</td>
-      <td style="padding:9px 12px;font-size:12.5px;color:var(--mute)">${p.club||"—"}</td>
-      <td style="padding:9px 12px;font-size:12.5px;color:var(--mute)">${p.age||"—"}</td>
-      <td style="padding:9px 12px;font-size:12.5px;color:var(--mute)">${p.caps!==undefined?p.caps:"—"}</td>
-      <td style="padding:9px 12px;font-size:12.5px;">${statusBadgeFor(p)}</td>
-    </tr>`;
-  });
-  rows.innerHTML = s;
-  const sum = document.getElementById("player-summary");
-  const inj = filtered.filter(p => p.injury && p.injury.status).length;
-  sum.innerHTML = `Showing <b style="color:var(--ink)">${Math.min(filtered.length,200)}</b> of <b style="color:var(--ink)">${filtered.length}</b> matching players (of ${PLAYERS_ALL.length} total). <b style="color:${inj?'var(--loss)':'var(--mute)'}">${inj}</b> with injury flags.`;
-}
-
-(function(){
-  const modal = document.getElementById("players-modal");
-  const openBtn = document.getElementById("players-btn");
-  const closeBtn = document.getElementById("players-close");
-  if (openBtn) openBtn.addEventListener("click", () => { modal.style.display = "flex"; if (PLAYERS_ALL.length === 0) loadPlayers(); });
-  if (closeBtn) closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
-  if (modal) modal.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.style.display !== "none") modal.style.display = "none"; });
-  // Toggle sections as floating modals — no more bottom duplicates
-  function toggleSection(btnId, sectionId){
-    const btn = document.getElementById(btnId);
-    const sec = document.getElementById(sectionId);
-    const backdrop = document.getElementById("stage-modal-backdrop");
-    if (!btn || !sec) return;
-    function close(){
-      sec.style.display = "none";
-      sec.classList.remove("floating");
-      if (backdrop) backdrop.classList.remove("show");
-      btn.style.background = "var(--glass-soft)"; btn.style.color = "var(--ink)";
-    }
-    function open(){
-      // Close any other open floating sections first
-      document.querySelectorAll(".stage.floating").forEach(s => { if (s !== sec) { s.style.display = "none"; s.classList.remove("floating"); } });
-      sec.style.display = "block";
-      sec.classList.add("floating");
-      if (backdrop) backdrop.classList.add("show");
-      btn.style.background = "linear-gradient(135deg, var(--accent), var(--accent2))"; btn.style.color = "#fff";
-    }
-    btn.addEventListener("click", () => {
-      const isOpen = sec.style.display !== "none";
-      if (isOpen) close(); else open();
+    const letter={ variation_a: "a", variation_b: "b", variation_c: "c" };
+    let html=`<div class="slip-grid">`;
+    ["variation_a","variation_b","variation_c"].forEach(key=>{
+      const slip=out[key]; if(!slip) return;
+      const legsHtml=slip.legs.map(leg=>{
+        return `<div class="slip-leg">
+          <div class="teams">${esc(leg.team_a)} <span>v</span> ${esc(leg.team_b)}</div>
+          <div class="pick">${outcomeName(leg.selected_outcome, leg.team_a, leg.team_b)} @ ${leg.blended_odds.toFixed(2)}</div>
+        </div>`;
+      }).join("");
+      html+=`<article class="slip-card ${letter[key]}">
+        <div class="slip-header">
+          <div class="slip-title">${labels[key]}</div>
+          <div class="slip-sub">${esc(slip.purpose||"")}</div>
+        </div>
+        <div class="slip-body">${legsHtml}</div>
+        <div class="slip-footer">
+          <div class="slip-stat"><div class="v">${formatCurrency(slip.stake)}</div><div class="k">Stake split</div></div>
+          <div class="slip-stat"><div class="v">${slip.combined_odds.toFixed(2)}</div><div class="k">Combined odds</div></div>
+          <div class="slip-stat"><div class="v">${formatCurrency(slip.potential_return)}</div><div class="k">Potential return</div></div>
+          <div class="slip-stat"><div class="v">${pct(slip.combined_model_probability)}</div><div class="k">Hit probability</div></div>
+          <div class="slip-summary">${explanations[key]}</div>
+        </div>
+      </article>`;
     });
-    if (backdrop) backdrop.addEventListener("click", () => { if (sec.classList.contains("floating")) close(); });
-    document.addEventListener("keydown", e => { if (e.key === "Escape" && sec.classList.contains("floating")) close(); });
+    html+=`</div>`;
+    c.innerHTML=html;
   }
-  // Expose a global toggleStage(sectionId, btnEl) that the inline onclick handlers in the header buttons call.
-  // This is the function the buttons reference via onclick="window.toggleStage('played', this)".
-  window.toggleStage = function(sectionId, btnEl){
-    const sec = document.getElementById(sectionId);
-    const backdrop = document.getElementById("stage-modal-backdrop");
-    if (!sec) return;
-    const isOpen = sec.classList.contains("floating");
-    // Lock body scroll while any modal is open
-    function syncBodyLock(){
-      const anyOpen = document.querySelector(".stage.floating");
-      if (anyOpen){ document.body.style.overflow = "hidden"; }
-      else { document.body.style.overflow = ""; }
+
+  function toggleBuilderDrawer(){
+    state.builderOpen = !state.builderOpen;
+    $("builder-drawer").classList.toggle("show", state.builderOpen);
+    document.body.style.overflow = state.builderOpen || $("drawer").classList.contains("show") ? "hidden" : "";
+  }
+
+  function addToBuilder(n){
+    if(state.builder.includes(n)){ removeFromBuilder(n); return; }
+    if(state.builder.length>=6){ alert("Card can hold up to 6 picks."); return; }
+    state.builder.push(n); renderBuilder(); renderFeed(); renderNextUp(); renderFeatured();
+  }
+  function removeFromBuilder(n){ state.builder=state.builder.filter(x=>x!==n); renderBuilder(); renderFeed(); renderNextUp(); renderFeatured(); }
+
+  // ── Drawer ───────────────────────────────────────────────────────────────
+  function openDrawer(n){
+    state.drawerMatch=n; state.drawerTab="overview"; renderDrawer();
+    $("drawer").classList.add("show"); $("drawer-backdrop").classList.add("show"); document.body.style.overflow="hidden";
+  }
+  function closeDrawer(){ $("drawer").classList.remove("show"); $("drawer-backdrop").classList.remove("show"); document.body.style.overflow = state.builderOpen ? "hidden" : ""; }
+  function setDrawerTab(tab){ state.drawerTab=tab; renderDrawer(); }
+
+  function renderDrawer(){
+    const m=state.matches.find(x=>x.n===state.drawerMatch); if(!m) return;
+    const p=getPred(m.n);
+    const played = state.played.matches.find(x=>x.n===m.n);
+    $("drawer-title").textContent=`${m.home} v ${m.away}`;
+    const tabs = played
+      ? ["overview","result","probabilities","value","lineups","video"]
+      : ["overview","probabilities","value","lineups","video"];
+    if(played && state.drawerTab==="result"){ /* ok */ }
+    else if(!tabs.includes(state.drawerTab)){ state.drawerTab="overview"; }
+    $("drawer-tabs").innerHTML=tabs.map(t=>`<button class="drawer-tab ${state.drawerTab===t?'active':''}" onclick="JARVIS.setDrawerTab('${t}')" aria-pressed="${state.drawerTab===t?'true':'false'}">${esc(t[0].toUpperCase()+t.slice(1))}</button>`).join("");
+    let body="";
+    if(state.drawerTab==="overview"){
+      body=`<div class="drawer-hero" style="--card-img:url('${matchAsset(m.n)}')">
+        <div class="drawer-hero-meta">${esc(m.stage)} ${esc(m.group||"")} · ${esc(m.venue)}</div>
+        <div class="drawer-hero-score">${esc(played?played.result:(p.predicted_score||"-"))}</div>
+        <div class="drawer-hero-pick">${played?(played.correct?'<span style="color:var(--success)">Model correct</span>':'<span style="color:var(--risk)">Model miss</span>'):`Model pick: <b>${esc(p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"Draw"))}</b> · ${pct(probFor(m,p))}`}</div>
+      </div>`;
+      const watch = p.watch_link && p.watch_link.url ? `<a class="btn btn-primary btn-sm" href="${esc(p.watch_link.url)}" target="_blank" rel="noopener" style="margin-top:12px;">${esc(p.watch_link.label || "Watch")}</a>` : "";
+      body+=`<div class="drawer-section"><h4>Match notes</h4><p style="color:var(--text-secondary);line-height:1.6;">${esc(m.venue)}. Kickoff ${esc(fmtDate(m.kickoff_iso))}. ${played?'Final result verified.':'The ensemble projects a '+esc(p.predicted_score||'close score')+' result with the highest probability on '+esc(p.predicted_wdl==="H"?m.home:(p.predicted_wdl==="A"?m.away:"the draw"))+'.'}</p>${watch}</div>`;
+      body+=`<div class="drawer-section"><h4>Three-spread view</h4><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">`+
+        ["A","B","C"].map(k=>{
+          const pick=p.three_spread?.[k];
+          const name = pick==="H"?m.home:(pick==="A"?m.away:(pick?"Draw":"No pick"));
+          return `<div class="pc-metric"><div class="pc-metric-label">Spread ${k}</div><div class="pc-metric-value">${esc(name)}</div></div>`;
+        }).join("")+`</div></div>`;
+    }else if(state.drawerTab==="result" && played){
+      const pickName = played.predicted_wdl==="H"?m.home:(played.predicted_wdl==="A"?m.away:"Draw");
+      const homeScorers = (played.scorers?.home||[]).map(s=>`<li><b>${esc(s.name)}</b> <span style="color:var(--text-muted)">${esc(s.minute)}</span>${s.penalty?' (pen)':''}${s.own_goal?' (og)':''}</li>`).join("") || `<li style="color:var(--text-muted)">No goals</li>`;
+      const awayScorers = (played.scorers?.away||[]).map(s=>`<li><b>${esc(s.name)}</b> <span style="color:var(--text-muted)">${esc(s.minute)}</span>${s.penalty?' (pen)':''}${s.own_goal?' (og)':''}</li>`).join("") || `<li style="color:var(--text-muted)">No goals</li>`;
+      body=`<div class="drawer-hero" style="--card-img:url('${matchAsset(m.n)}')">
+        <div class="drawer-hero-meta">Final result · ${esc(m.stage)} ${esc(m.group||"")}</div>
+        <div class="drawer-hero-score">${esc(played.result)}</div>
+        <div class="drawer-hero-pick">${played.correct?'<span style="color:var(--success)">✓ Model picked '+esc(pickName)+'</span>':'<span style="color:var(--risk)">✗ Picked '+esc(pickName)+'</span>'}</div>
+      </div>`;
+      body+=`<div class="drawer-section"><h4>Goal scorers</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><div style="font-weight:800;margin-bottom:8px;">${esc(m.home)}</div><ul style="margin:0;padding-left:18px;color:var(--text-secondary);line-height:1.7;">${homeScorers}</ul></div><div><div style="font-weight:800;margin-bottom:8px;">${esc(m.away)}</div><ul style="margin:0;padding-left:18px;color:var(--text-secondary);line-height:1.7;">${awayScorers}</ul></div></div></div>`;
+      body+=`<div class="drawer-section"><h4>Prediction explanation</h4><p style="color:var(--text-secondary);line-height:1.6;">${esc(played.explanation)}</p></div>`;
+      body+=`<div class="drawer-section"><h4>Projection vs actual</h4><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;"><div class="pc-metric"><div class="pc-metric-label">Predicted score</div><div class="pc-metric-value">${esc(played.predicted_score||"-")}</div></div><div class="pc-metric"><div class="pc-metric-label">Actual score</div><div class="pc-metric-value">${esc(played.result)}</div></div><div class="pc-metric"><div class="pc-metric-label">Exact score</div><div class="pc-metric-value">${played.score_exact?'Yes':'No'}</div></div><div class="pc-metric"><div class="pc-metric-label">Goal diff correct</div><div class="pc-metric-value">${played.score_diff_correct?'Yes':'No'}</div></div></div></div>`;
+    }else if(state.drawerTab==="probabilities"){
+      body=`<div class="drawer-section"><h4>Outcome probabilities</h4>`+
+        [{k:"Home win",v:p.p_home,t:m.home},{k:"Draw",v:p.p_draw,t:""},{k:"Away win",v:p.p_away,t:m.away}].map(x=>`
+        <div class="prob-row"><span>${esc(x.t||x.k)}</span><div class="bar-wrap"><div class="bar" style="width:${pct(x.v)};background:${barColor(x.v)}"></div></div><span>${pct(x.v)}</span></div>`).join("")+`</div>`;
+      body+=`<div class="drawer-section"><h4>Expected score</h4><div class="accuracy-stat" style="position:relative;overflow:hidden;background:var(--surface-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;text-align:center;"><div class="v" style="font-size:28px;font-weight:800;font-family:var(--font-condensed);">${esc(p.predicted_score||"-")}</div><div class="k" style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;">Projected scoreline</div></div></div>`;
+    }else if(state.drawerTab==="value"){
+      const v=state.valueBets.find(x=>x.match_n===m.n);
+      body=`<div class="drawer-section"><h4>Value assessment</h4>`+(v?`
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <div class="pc-metric"><div class="pc-metric-label">Best side</div><div class="pc-metric-value">${esc(v.best_side)}</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Edge</div><div class="pc-metric-value" style="color:${v.value_bet?'var(--success)':'var(--text-muted)'}">${v.edge_pp.toFixed(2)}pp</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Model prob</div><div class="pc-metric-value">${pct(v.best_side==='home'?v.model_p_home:(v.best_side==='draw'?v.model_p_draw:v.model_p_away))}</div></div>
+          <div class="pc-metric"><div class="pc-metric-label">Value bet</div><div class="pc-metric-value">${v.value_bet?"Yes":"No"}</div></div>
+        </div>
+        <p style="color:var(--text-secondary);margin-top:12px;">This compares the model probability to a devigged market sample. Positive edge does not mean the outcome is guaranteed.</p>`
+        :`<p style="color:var(--text-secondary);">No value assessment available for this fixture.</p>`)+`</div>`;
+    }else if(state.drawerTab==="lineups"){
+      const homeInj=Object.entries(state.injuries).filter(([_,i])=>i.team===m.home).map(([name,i])=>`<li><b>${esc(name)}</b> (${esc(i.status)}) — ${esc(i.reason)}</li>`).join("");
+      const awayInj=Object.entries(state.injuries).filter(([_,i])=>i.team===m.away).map(([name,i])=>`<li><b>${esc(name)}</b> (${esc(i.status)}) — ${esc(i.reason)}</li>`).join("");
+      body=`<div class="drawer-section"><h4>${esc(m.home)} availability</h4>${homeInj||'<p style="color:var(--text-secondary);">No reported issues.</p>'}</div>`;
+      body+=`<div class="drawer-section"><h4>${esc(m.away)} availability</h4>${awayInj||'<p style="color:var(--text-secondary);">No reported issues.</p>'}</div>`;
+    }else if(state.drawerTab==="video"){
+      const mv=matchVideo(m.n);
+      body=`<div class="drawer-section"><h4>Match cinematic</h4>`;
+      body+=`<video class="drawer-video" controls preload="metadata" poster="${matchAsset(m.n)}" onerror="this.classList.add('hidden');document.getElementById('vf-${m.n}').classList.remove('hidden')">${mv?`<source src="${mv}" type="video/mp4">`:''}</video>`;
+      body+=`<div id="vf-${m.n}" class="${mv?'hidden':''}"><img src="${matchAsset(m.n)}" style="width:100%;border-radius:var(--radius-sm);border:1px solid var(--border);" alt="" onerror="this.style.display='none'"><p style="color:var(--text-muted);font-size:12px;margin-top:8px;">Custom video not available for this fixture.</p></div>`;
+      body+=`<p style="color:var(--text-muted);font-size:12px;margin-top:8px;">Custom generated video for this fixture. Falls back to the still image if processing.</p></div>`;
     }
-    // Close any other open floating sections first + clear their button highlight
-    document.querySelectorAll(".stage.floating").forEach(s => {
-      if (s !== sec) {
-        s.style.display = "none";
-        s.classList.remove("floating");
-      }
+    $("drawer-body").innerHTML=body;
+  }
+
+  // ── Simulator ─────────────────────────────────────────────────────────────
+  function applyScenario(){
+    const n=parseInt($("sim-match").value,10); const score=$("sim-score").value.trim();
+    if(!n||!/^\d+\s*-\s*\d+$/.test(score)){ alert("Select a match and enter a score like 2-1."); return; }
+    state.scenario[n]=score.replace(/\s/g,""); renderGroups();
+  }
+  function resetScenario(){ state.scenario={}; $("sim-score").value=""; renderGroups(); }
+
+  // ── View / events ─────────────────────────────────────────────────────────
+  function bindEvents(){
+    $("player-search").addEventListener("input", renderPlayers);
+    $("player-team-filter").addEventListener("change", renderPlayers);
+    $("player-pos-filter").addEventListener("change", renderPlayers);
+    document.addEventListener("keydown", e=>{
+      if(e.key==="Escape"){ closeDrawer(); if(state.builderOpen) toggleBuilderDrawer(); }
     });
-    document.querySelectorAll(".hdr-btn.active").forEach(b => { if (b !== btnEl) b.classList.remove("active"); });
-    if (isOpen){
-      sec.style.display = "none";
-      sec.classList.remove("floating");
-      if (backdrop) backdrop.classList.remove("show");
-      if (btnEl) btnEl.classList.remove("active");
-    } else {
-      sec.style.display = "block";
-      sec.classList.add("floating");
-      if (backdrop) backdrop.classList.add("show");
-      if (btnEl) btnEl.classList.add("active");
-    }
-    syncBodyLock();
+    let bbTimer=null;
+    ["bb-stake","bb-legs","bb-strategy"].forEach(id=>{
+      const el=$(id); if(el) el.addEventListener("input", ()=>{
+        clearTimeout(bbTimer); bbTimer=setTimeout(runBetBuilder, 400);
+      });
+    });
+  }
+
+  function bindDock(){
+    const items = document.querySelectorAll(".dock-item");
+    const sections = ["hero","nextup","results","predictions","builder","groups","knockouts","players","news","model"];
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          items.forEach(it=>it.classList.toggle("active", it.dataset.section===en.target.id));
+        }
+      });
+    }, {rootMargin: "-45% 0px -45% 0px", threshold: 0});
+    sections.forEach(id=>{ const el=$(id); if(el) obs.observe(el); });
+    items.forEach(it=>{
+      it.addEventListener("click", e=>{
+        e.preventDefault();
+        const id = it.getAttribute("href").slice(1);
+        const el = $(id);
+        if(el) el.scrollIntoView({behavior:"smooth"});
+      });
+    });
+  }
+
+  // ── IntersectionObserver for card videos ──────────────────────────────────
+  function bindVideoObserver(){
+    const videoObs = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        const card = en.target;
+        const v = card.querySelector(".card-video");
+        if(!v) return;
+        if(en.isIntersecting){
+          card.classList.add("in-view");
+          if(v.preload==="none"){ v.preload="metadata"; v.load(); }
+          v.play().catch(()=>{});
+        }else{
+          card.classList.remove("in-view");
+          v.pause();
+        }
+      });
+    }, {rootMargin: "10% 0px 10% 0px", threshold: 0.2});
+    new MutationObserver(()=>{
+      document.querySelectorAll(".carousel-card:not([data-vobs])").forEach(card=>{
+        card.dataset.vobs="1";
+        videoObs.observe(card);
+      });
+    }).observe(document.body, {childList:true, subtree:true});
+  }
+
+  window.JARVIS = {
+    init, openDrawer, closeDrawer, setDrawerTab,
+    addToBuilder, removeFromBuilder, toggleBuilderDrawer,
+    applyScenario, resetScenario, showAllFixtures
   };
-  // Backdrop is dim-only; click close removed (was closing accidentally).
-  // Close via the button (toggle) or Escape key. Modal also has a width that fills most of mobile so accidental edge taps shouldn't happen.
-  const _bd = document.getElementById("stage-modal-backdrop");
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      const openSec = document.querySelector(".stage.floating");
-      if (openSec){
-        openSec.style.display = "none"; openSec.classList.remove("floating");
-        if (_bd) _bd.classList.remove("show");
-        document.querySelectorAll(".hdr-btn.active").forEach(b => b.classList.remove("active"));
-      }
-    }
-  });
+  init();
 })();
-
-async function loadPlayers(){
-  try {
-    const r = await fetch("/jarvis/data/wc2026_player_profiles.json?t=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) return;
-    const data = await r.json();
-    PLAYERS_ALL = data.players || [];
-    TEAMS_ALL = data.teams || [];
-    const teamSel = document.getElementById("player-team-filter");
-    const countries = [...new Set(PLAYERS_ALL.map(p => p.country))].sort();
-    countries.forEach(c => {
-      const opt = document.createElement("option");
-      opt.value = c;
-      opt.textContent = `${FLAGS[c]||"🏳️"} ${c}`;
-      teamSel.appendChild(opt);
-    });
-    document.getElementById("player-search").addEventListener("input", renderPlayers);
-    teamSel.addEventListener("change", renderPlayers);
-    document.getElementById("player-pos-filter").addEventListener("change", renderPlayers);
-    renderPlayers();
-  } catch(e) {
-    document.getElementById("player-rows").innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--mute)">Player profiles JSON not reachable — run <code>scripts/wc2026_player_profiles.py</code></td></tr>`;
-  }
-}
-
-// Build-manifest footer line: components count + last-sync timestamp.
-async function loadBuildManifest() {
-  const el = document.getElementById("wc2026-manifest-line");
-  if (!el) return;
-  try {
-    const r = await fetch("/jarvis/data/wc2026_BUILD_MANIFEST.json?t=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const m = await r.json();
-    const n = m.component_count || (Array.isArray(m.components) ? m.components.length : 0);
-    let hhmm = "—";
-    if (m.generated_at) {
-      const d = new Date(m.generated_at);
-      if (!isNaN(d)) {
-        const h = String(d.getUTCHours()).padStart(2, "0");
-        const mm = String(d.getUTCMinutes()).padStart(2, "0");
-        hhmm = `${h}:${mm} UTC`;
-      }
-    }
-    el.textContent = `📦 ${n} components · last sync ${hhmm}`;
-  } catch (e) {
-    el.textContent = `📦 manifest unavailable`;
-  }
-}
-loadBuildManifest();
 </script>
 </body>
 </html>

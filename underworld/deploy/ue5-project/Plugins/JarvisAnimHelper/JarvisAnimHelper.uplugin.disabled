@@ -1,0 +1,24 @@
+{
+    "FileVersion": 3,
+    "Version": 1,
+    "VersionName": "1.0",
+    "FriendlyName": "Jarvis Anim Helper",
+    "Description": "Editor subsystem that exposes AnimBP state-machine graph editing to Python via BlueprintCallable UFUNCTIONs. Bridge for animbp_automation.py.",
+    "Category": "Editor",
+    "CreatedBy": "JARVIS",
+    "CreatedByURL": "",
+    "DocsURL": "",
+    "MarketplaceURL": "",
+    "SupportURL": "",
+    "EnabledByDefault": true,
+    "CanContainContent": false,
+    "IsBetaVersion": false,
+    "Installed": false,
+    "Modules": [
+        {
+            "Name": "JarvisAnimHelper",
+            "Type": "Editor",
+            "LoadingPhase": "PostEngineInit"
+        }
+    ]
+}

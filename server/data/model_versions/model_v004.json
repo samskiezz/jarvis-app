@@ -1,0 +1,53 @@
+{
+  "model_version": "v004",
+  "created_at": "2026-06-23T02:00:49+00:00",
+  "training_data_end_date": "2026-06-22",
+  "matches_trained_on": 331,
+  "matches_validated_on": 332,
+  "ensemble_weights": {
+    "elo": 1e-05,
+    "elo_draw": 0.0,
+    "rank": 0.0,
+    "rank_draw": 0.01157,
+    "poisson": 0.04131,
+    "dixon_coles": 0.0,
+    "dixon_coles_heavy": 0.28856,
+    "draw_guard": 0.1597,
+    "group_table": 0.0,
+    "underdog_guard": 0.0,
+    "tournament_elo": 0.44657,
+    "form_momentum": 0.0,
+    "goal_diff": 0.0,
+    "h2h": 0.01455,
+    "roster_strength": 0.01285,
+    "vision_tracking": 0.02488,
+    "xgboost_proxy": 0.0,
+    "lightgbm_proxy": 0.0,
+    "catboost_proxy": 0.0,
+    "market": 0.0
+  },
+  "thresholds": {
+    "extreme_entropy": 0.985,
+    "extreme_margin": 0.08,
+    "rotate_entropy": 0.95
+  },
+  "single_pick_accuracy": 0.5512,
+  "three_spread_coverage": 0.84,
+  "betting_value_score": 0.4147,
+  "calibration_error": 0.0582,
+  "avg_coverage_cost": 2.032,
+  "objective_score": 0.57432,
+  "in_sample": false,
+  "promoted_to_active": false,
+  "reason_promoted": null,
+  "reason_rejected": "Objective 0.5743 does not beat active 0.5815 by margin 0.01.",
+  "drift": {
+    "drift_detected": false,
+    "recent_accuracy": 0.6,
+    "historical_accuracy": 0.5305,
+    "recent_draw_rate": 0.25,
+    "action": "none"
+  },
+  "verified": true,
+  "source": "scripts/update_model_daily.py — walk-forward candidate, out-of-sample objective."
+}

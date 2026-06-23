@@ -443,6 +443,43 @@ def create_app() -> FastAPI:
     app.include_router(run_correlator_routes.router)
     app.include_router(inf_swarm_routes.router)
 
+    # --- JARVIS Nexus (Phase 1): service registry + event bus ---
+    # Fully additive + fail-safe: if anything here errors, the backend still boots.
+    try:
+        from .routes import registry as registry_routes
+        from .routes import bus as bus_routes
+        from .routes import correlation as correlation_routes
+        from .routes import control as control_routes
+        from .routes import acoustic as acoustic_routes
+        from .routes import astro as astro_routes
+        app.include_router(registry_routes.router)
+        app.include_router(bus_routes.router)
+        app.include_router(correlation_routes.router)
+        app.include_router(control_routes.router)
+        app.include_router(acoustic_routes.router)
+        app.include_router(astro_routes.router)
+        from .services import registry_store as _nexus_reg
+        _nexus_reg.upsert({
+            "id": "jarvis-backend", "name": "jarvis-backend", "port": 8001,
+            "role": "core-api", "base_url": "http://127.0.0.1:8001",
+            "health_path": "/health", "routes": ["/v1/*"], "status": "ok",
+        })
+        # self-heartbeat (in-process) so the backend reads alive in its own registry
+        import threading as _nexus_th
+        import time as _nexus_tm
+
+        def _nexus_heartbeat():
+            while True:
+                try:
+                    _nexus_reg.heartbeat("jarvis-backend", "ok")
+                except Exception:  # noqa: BLE001
+                    pass
+                _nexus_tm.sleep(30)
+
+        _nexus_th.Thread(target=_nexus_heartbeat, daemon=True).start()
+    except Exception:  # noqa: BLE001
+        pass
+
     @app.get("/")
     async def root():
         return {"service": "jarvis-backend", "status": "ok"}

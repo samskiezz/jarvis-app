@@ -1,0 +1,56 @@
+{"event": "dry_run_pass", "base": "9af21bed", "n_added": 128, "would_promote": ["src/components/GlobalCommandPalette.jsx", "src/components/Jarvis/WakeWordToggle.jsx", "src/components/cinematic/AdaptiveThreatReport.jsx", "src/components/cinematic/AgentChatTranscript.jsx", "src/components/cinematic/AlertToasts.jsx", "src/components/cinematic/AmbientReactorHum.jsx", "src/components/cinematic/BrainGrowthSparkline.jsx", "src/components/cinematic/CinematicCommandPalette.jsx", "src/components/cinematic/CinematicPalette.jsx", "src/components/cinematic/CommandHistory.jsx", "src/components/cinematic/CommandPalette.jsx", "src/components/cinematic/ContactInvestigationLinker.jsx", "src/components/cinematic/ContactKnowledgeAdvisor.jsx", "src/components/cinematic/ContactOpsLinker.jsx", "src/components/cinematic/ContactScenarioAssignor.jsx", "src/components/cinematic/ContactThreatLinker.jsx", "src/components/cinematic/ContactsDirectory.jsx", "src/components/cinematic/CrisisEarlyWarning.jsx", "src/components/cinematic/DailyObjectivesPlanner.jsx", "src/components/cinematic/DataAcquisitionMonitor.jsx"], "mounts": ["src/App.jsx", "src/Layout.jsx"], "rejected_out_of_scope": 0, "ts": 1782006208}
+{"event": "promote", "base": "9af21bed", "result": {"pushed": true, "commit": "41dd7b9e4d7cee99138d18c28ab3f1f6aaef8309", "n_features": 128}, "n_added": 128, "rejected_out_of_scope": 0, "ts": 1782006283}
+{"event": "promote", "base": "44b01a4e", "result": {"pushed": true, "commit": "02ca7da2f032a29ee317da605ee05784be9d03dc", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782009669}
+{"event": "promote", "base": "02ca7da2", "result": {"pushed": true, "commit": "0583cbb00fb478de158ddd925ec61a2b966f4aec", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782013266}
+{"event": "promote", "base": "0583cbb0", "result": {"pushed": true, "commit": "1fb07e8b8efd74b4eb812c1ec59d93acf32bc771", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782016862}
+{"event": "promote", "base": "1fb07e8b", "result": {"pushed": true, "commit": "62dc1cdc4a1b08a0767b8ba3254506621256a880", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782020467}
+{"event": "promote", "base": "62dc1cdc", "result": {"pushed": true, "commit": "8797b7da158a01adb1061321a3aff4547c8ebdef", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782024064}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "8797b7da", "rejected_out_of_scope": 0, "ts": 1782027602}
+{"event": "promote", "base": "8797b7da", "result": {"pushed": true, "commit": "ede0d58c484d9ec3fa5052af8b4a5572a276f6d6", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782031266}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "ede0d58c", "rejected_out_of_scope": 0, "ts": 1782034802}
+{"event": "promote", "base": "ede0d58c", "result": {"pushed": true, "commit": "ad5ba7b79dff00939ed1e317aaaa5595983d3646", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782038466}
+{"event": "promote", "base": "ad5ba7b7", "result": {"pushed": true, "commit": "4b69f35fa30ce98c006909fb3be1427c43516bca", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782042066}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "4b69f35f", "rejected_out_of_scope": 0, "ts": 1782045602}
+{"event": "promote", "base": "4b69f35f", "result": {"pushed": true, "commit": "4a96e5c7c09320a52beb0d3070b3ed09195d0851", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782049268}
+{"event": "promote", "base": "4a96e5c7", "result": {"pushed": true, "commit": "3a62c50088f5a6785c09a7e5cba13d3562cf1b1d", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782052862}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "3a62c500", "rejected_out_of_scope": 0, "ts": 1782056401}
+{"event": "promote", "base": "3a62c500", "result": {"pushed": true, "commit": "2a646a74ce2bc785889eaa71a6661ab8bbfb3fd9", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782060068}
+{"event": "promote", "base": "2a646a74", "result": {"pushed": true, "commit": "46fc0fedb49e3ed942641c61f5d74483f571411b", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782063663}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "46fc0fed", "rejected_out_of_scope": 0, "ts": 1782067202}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "46fc0fed", "rejected_out_of_scope": 0, "ts": 1782070802}
+{"event": "promote", "base": "46fc0fed", "result": {"pushed": true, "commit": "d69076db46765fb0168ed3192b5d1fb4791b1b46", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782074461}
+{"event": "promote", "base": "d69076db", "result": {"pushed": true, "commit": "413b4fc2939b5a1032622b937d2b8eeefd83c2a8", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782078059}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "413b4fc2", "rejected_out_of_scope": 0, "ts": 1782081602}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "413b4fc2", "rejected_out_of_scope": 0, "ts": 1782085202}
+{"event": "promote", "base": "413b4fc2", "result": {"pushed": true, "commit": "f5ff099cc9b279e308c4fa34be91af8af1582f09", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782088861}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "f5ff099c", "rejected_out_of_scope": 0, "ts": 1782092402}
+{"event": "promote", "base": "f5ff099c", "result": {"pushed": true, "commit": "4039d0f7606b551b137ee3ea23ac6ec19f00d5f7", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782096061}
+{"event": "promote", "base": "4039d0f7", "result": {"pushed": true, "commit": "d8b16b4a4382adb4aebcd363e23af9ecd813e8fd", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782099660}
+{"event": "promote", "base": "d8b16b4a", "result": {"pushed": true, "commit": "1b24dbd75f6ba3199df04c949560868799e4728c", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782103261}
+{"event": "promote", "base": "1b24dbd7", "result": {"pushed": true, "commit": "34218d4367be45d581e5e9f293a489205f99ae95", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782106861}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "34218d43", "rejected_out_of_scope": 0, "ts": 1782110402}
+{"event": "promote", "base": "34218d43", "result": {"pushed": true, "commit": "4da5ea741e33763d966b87c9534f88855b6494f6", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782114064}
+{"event": "promote", "base": "4da5ea74", "result": {"pushed": true, "commit": "11cb7969d04bbca679598fd54adccc009185ed38", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782117666}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "11cb7969", "rejected_out_of_scope": 0, "ts": 1782121202}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "11cb7969", "rejected_out_of_scope": 0, "ts": 1782124802}
+{"event": "promote", "base": "11cb7969", "result": {"pushed": true, "commit": "e383e1d9ac4e99a1ab930f74fba928819ccb3270", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782128468}
+{"event": "promote", "base": "e383e1d9", "result": {"pushed": true, "commit": "a633aa606e983b1189a2dde76a9e9dd0c407e896", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782132069}
+{"event": "promote", "base": "a633aa60", "result": {"pushed": true, "commit": "c89c19d0b7882779b59ed4f6a75c99d926949558", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782135667}
+{"event": "promote", "base": "c89c19d0", "result": {"pushed": true, "commit": "e24d8e25310d191f5914a13b0d0a53303602409c", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782139265}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "e24d8e25", "rejected_out_of_scope": 0, "ts": 1782142802}
+{"event": "promote", "base": "e24d8e25", "result": {"pushed": true, "commit": "1c69455f68d2252d5fc0e6cd8cc445e0e67eb617", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782146466}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "1c69455f", "rejected_out_of_scope": 0, "ts": 1782150002}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "1c69455f", "rejected_out_of_scope": 0, "ts": 1782153602}
+{"event": "promote", "base": "1c69455f", "result": {"pushed": true, "commit": "a89ac89f9210085ce715be3050ef0bf8bb7a0ea4", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782157267}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "a89ac89f", "rejected_out_of_scope": 0, "ts": 1782160802}
+{"event": "promote", "base": "a89ac89f", "result": {"pushed": true, "commit": "2b1706de97b521a4f8c97d0569946184cb3b8383", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782164462}
+{"event": "promote", "base": "2b1706de", "result": {"pushed": true, "commit": "7acd170606766c837ec9ce0363028ff68fb9b139", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782168060}
+{"event": "promote", "base": "7acd1706", "result": {"pushed": true, "commit": "c3b194aeb515920277db742573f4cec10daaf95c", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782171661}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "c3b194ae", "rejected_out_of_scope": 0, "ts": 1782175202}
+{"event": "noop", "reason": "no new additive feature files on source", "base": "c3b194ae", "rejected_out_of_scope": 0, "ts": 1782178802}
+{"event": "promote", "base": "c3b194ae", "result": {"pushed": true, "commit": "133772c8a6c3536e4373cb89716fdf30e2ed0474", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782182470}
+{"event": "promote", "base": "133772c8", "result": {"pushed": true, "commit": "4013806b2dbd6af4c1d66a9645ea53ce16fe46b6", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782186067}
+{"event": "promote", "base": "4013806b", "result": {"pushed": true, "commit": "e37da442dc4c4dd6e84dc1d594bf7129ed7d1b7d", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782189669}
+{"event": "promote", "base": "e37da442", "result": {"pushed": true, "commit": "8192d37d7eed4215e3cbad87388f4c21bc9d3553", "n_features": 2}, "n_added": 2, "rejected_out_of_scope": 0, "ts": 1782193269}
+{"event": "promote", "base": "8192d37d", "result": {"pushed": true, "commit": "e49fcf245a1280594b22794fc4566789dee00be6", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782196874}
+{"event": "promote", "base": "e49fcf24", "result": {"pushed": true, "commit": "71f439ae6192c5171227ffa1678ea343ff6b9c54", "n_features": 1}, "n_added": 1, "rejected_out_of_scope": 0, "ts": 1782200467}

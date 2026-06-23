@@ -894,6 +894,11 @@ def run_forever(interval: float = 2.0) -> None:
 
 if __name__ == "__main__":
     import sys
+    try:
+        from server.services import nexus_client as _nx
+        _nx.announce("jarvis-tasks", role="task-daemon")
+    except Exception:
+        pass
     if len(sys.argv) > 2 and sys.argv[1] == "create":
         print(create(sys.argv[2]))
     elif len(sys.argv) > 1 and sys.argv[1] == "list":

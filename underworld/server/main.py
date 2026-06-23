@@ -222,6 +222,23 @@ async def lifespan(_app: FastAPI):
     _llm.warn_on_misconfig()
     await init_db()
     await seed_knowledge_base()
+    try:  # JARVIS Nexus — inline self-healing announce (avoids underworld's own `server` pkg shadowing)
+        import json as _j, os as _o, threading as _th, time as _tm, urllib.request as _ur
+        def _nexann():
+            b = (_o.environ.get("JARVIS_BACKEND_URL") or "http://127.0.0.1:8001").rstrip("/")
+            d = _j.dumps({"id": "underworld-backend", "name": "underworld-backend", "port": 8091,
+                          "role": "cognition-backend", "base_url": "http://127.0.0.1:8091",
+                          "health_path": "/health", "pid": _o.getpid()}).encode()
+            while True:
+                try:
+                    _ur.urlopen(_ur.Request(b + "/v1/registry/announce", data=d,
+                                headers={"Content-Type": "application/json"}, method="POST"), timeout=2).read()
+                except Exception:
+                    pass
+                _tm.sleep(30)
+        _th.Thread(target=_nexann, daemon=True).start()
+    except Exception:  # noqa: BLE001
+        pass
     try:
         from .services import gpu_orchestrator as _gpu
         if _workers_enabled():

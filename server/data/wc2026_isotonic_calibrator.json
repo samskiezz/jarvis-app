@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-06-20T04:00:05.168349Z",
+  "method": "per-class one-vs-rest sklearn.isotonic.IsotonicRegression, renormalised after predict",
+  "n_fit_matches": 30,
+  "classes": [
+    "H",
+    "D",
+    "A"
+  ],
+  "calibrators": {
+    "H": {
+      "X_thresholds": [
+        0.0037,
+        0.0609,
+        0.0677,
+        0.1367,
+        0.2862,
+        0.3565,
+        0.4012,
+        0.9951,
+        0.9986
+      ],
+      "y_thresholds": [
+        0.0,
+        0.0,
+        0.3333333333333333,
+        0.3333333333333333,
+        0.5,
+        0.5,
+        0.6,
+        0.6,
+        1.0
+      ],
+      "increasing": true,
+      "y_min": 0.0,
+      "y_max": 1.0
+    },
+    "D": {
+      "X_thresholds": [
+        0.0013,
+        0.0044,
+        0.3003,
+        0.3031
+      ],
+      "y_thresholds": [
+        0.0,
+        0.35714285714285715,
+        0.35714285714285715,
+        1.0
+      ],
+      "increasing": true,
+      "y_min": 0.0,
+      "y_max": 1.0
+    },
+    "A": {
+      "X_thresholds": [
+        0.0001,
+        0.4152,
+        0.6258,
+        0.9735
+      ],
+      "y_thresholds": [
+        0.0,
+        0.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "increasing": true,
+      "y_min": 0.0,
+      "y_max": 1.0
+    }
+  },
+  "verified": true,
+  "source": "scripts/wc2026_predictor.py \u2014 refit each run on graded fixtures from wc2026_actuals.json via wc2026_db.actual_for"
+}
