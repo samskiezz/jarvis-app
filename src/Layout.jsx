@@ -56,6 +56,7 @@ import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
 import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
 import TopObjectsDrawer from "@/components/overnight/TopObjectsDrawer";
+import OntologySearchDrawer from "@/components/overnight/OntologySearchDrawer";
 import IntentInboxDrawer from "@/components/overnight/IntentInboxDrawer";
 import WorkshopAppsDrawer from "@/components/overnight/WorkshopAppsDrawer";
 import ForgeApprovalsPanel from "@/components/overnight/ForgeApprovalsPanel";
@@ -158,6 +159,9 @@ export function AppLayout({ children }) {
 
       {/* F48: Top Objects Drawer — left-edge slide-in at 40%; top graph objects by PageRank/centrality from GET /v1/jarvis/analytics/top-objects */}
       <TopObjectsDrawer />
+
+      {/* F53: Ontology Search Drawer — right-edge slide-in at 43%; live search via GET /v1/search; debounced query input; ranked results with type/mark badges */}
+      <OntologySearchDrawer />
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
