@@ -53,6 +53,7 @@ import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
 import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
 import SchedulesPanel from "@/components/overnight/SchedulesPanel";
 import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
+import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -170,6 +171,9 @@ export function AppLayout({ children }) {
 
       {/* F20: Source Connectors Drawer — left-edge slide-in at 20%; registered connectors from GET /v1/sources */}
       <SourceConnectorsDrawer />
+
+      {/* F46: Geo Objects Drawer — left-edge slide-in at 28%; geo-tagged ontology objects from GET /v1/geo/objects */}
+      <GeoObjectsDrawer />
 
       {/* F22: Activity Feed Panel — right-edge slide-in at 90%; unified note+audit feed from GET /v1/activity */}
       <ActivityFeedPanel />
