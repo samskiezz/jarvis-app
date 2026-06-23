@@ -64,6 +64,7 @@ import ForgeApprovalsPanel from "@/components/overnight/ForgeApprovalsPanel";
 import RevDbHistoryDrawer from "@/components/overnight/RevDbHistoryDrawer";
 import MusicBankPanel from "@/components/overnight/MusicBankPanel";
 import TemporalAnomalyDrawer from "@/components/overnight/TemporalAnomalyDrawer";
+import AstroObservatoryDrawer from "@/components/overnight/AstroObservatoryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -244,6 +245,9 @@ export function AppLayout({ children }) {
 
       {/* F58: Temporal Anomaly Drawer — left-edge slide-in at 15%; series picker from GET /v1/history/series; anomaly scan from GET /v1/temporal/patterns?series_id= */}
       <TemporalAnomalyDrawer />
+
+      {/* F61: Astro Observatory Drawer — left-edge slide-in at 80%; planet ephemeris from GET /v1/astro/planets + star catalogue from GET /v1/astro/stars */}
+      <AstroObservatoryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

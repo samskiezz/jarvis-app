@@ -35,6 +35,8 @@ import OpsEventStream from '@/components/cinematic/OpsEventStream';
 import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
 import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
+import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
+import CommandHistory from '@/components/cinematic/CommandHistory';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -99,6 +101,10 @@ function App() {
             <SceneAnchorDrillDown />
             {/* F55: ambient reactor hum — WebAudio 60 Hz sawtooth + harmonics + LFO; ◇/◈ HUM toggle at bottom left:1012; "JARVIS, ambient" voice trigger dispatches jarvis:ambient-toggle */}
             <AmbientReactorHum />
+            {/* F59: scene auto-tour — ⟳ TOUR button (left:1844); cycles all 10 cinematic scenes; fetches /v1/cinematic/scene/{id} for narration; speaks via /v1/voice/tts; ▶/⏸/■ controls; "JARVIS, start tour" voice trigger */}
+            <SceneAutoTour />
+            {/* F60: command history — ◷ HIST button (left:1636); captures every jarvis:ask to localStorage (max 50); filter + replay; Alt+H shortcut; "JARVIS, history" voice trigger (isHistoryQuery already wired in JarvisBrain) */}
+            <CommandHistory />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
