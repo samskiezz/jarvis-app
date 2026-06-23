@@ -54,6 +54,7 @@ import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
 import SchedulesPanel from "@/components/overnight/SchedulesPanel";
 import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
+import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -147,6 +148,9 @@ export function AppLayout({ children }) {
 
       {/* F45: VPN Status Panel — right-edge slide-in at 12%; WireGuard status + peers from GET /v1/vpn/status */}
       <VpnStatusPanel />
+
+      {/* F47: Sensor Activity Panel — right-edge slide-in at 27%; IMU motion activity from GET /v1/sensors/recent */}
+      <SensorActivityPanel />
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
