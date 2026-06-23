@@ -55,6 +55,7 @@ import SchedulesPanel from "@/components/overnight/SchedulesPanel";
 import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
 import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
+import TopObjectsDrawer from "@/components/overnight/TopObjectsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -151,6 +152,9 @@ export function AppLayout({ children }) {
 
       {/* F47: Sensor Activity Panel — right-edge slide-in at 27%; IMU motion activity from GET /v1/sensors/recent */}
       <SensorActivityPanel />
+
+      {/* F48: Top Objects Drawer — left-edge slide-in at 40%; top graph objects by PageRank/centrality from GET /v1/jarvis/analytics/top-objects */}
+      <TopObjectsDrawer />
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
