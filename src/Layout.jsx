@@ -68,6 +68,7 @@ import AstroObservatoryDrawer from "@/components/overnight/AstroObservatoryDrawe
 import IntelProfileDirectory from "@/components/overnight/IntelProfileDirectory";
 import GuardianSensorPanel from "@/components/overnight/GuardianSensorPanel";
 import VaultSecretsDrawer from "@/components/overnight/VaultSecretsDrawer";
+import CodePulseDrawer from "@/components/overnight/CodePulseDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -260,6 +261,9 @@ export function AppLayout({ children }) {
 
       {/* F64: Vault Secrets Registry — right-edge slide-in at 97%; GET /v1/vault/ lists secret names + metadata (NEVER values); name + owner + obfuscation + age; 5-min poll */}
       <VaultSecretsDrawer />
+
+      {/* F65: CodePulse VS Code Bridge — right-edge slide-in at 17%; GET /v1/codepulse/status (connection state + workspace) + GET /v1/codepulse/pending (change proposals); sky-blue accent; 30-s poll */}
+      <CodePulseDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
