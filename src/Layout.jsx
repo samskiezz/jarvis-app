@@ -56,6 +56,7 @@ import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
 import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
 import TopObjectsDrawer from "@/components/overnight/TopObjectsDrawer";
+import IntentInboxDrawer from "@/components/overnight/IntentInboxDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -173,6 +174,9 @@ export function AppLayout({ children }) {
 
       {/* F40: Task Missions Panel — left-edge slide-in at 65%; live mission tasks from GET /entities/Task */}
       <TaskMissionsPanel />
+
+      {/* F49: Intent Inbox Drawer — left-edge slide-in at 70%; captured idea intents from GET /v1/intent/list */}
+      <IntentInboxDrawer />
 
       {/* F19: Knowledge Timeline Panel — right-edge slide-in at 20%; brain log+daily entries from GET /v1/brain/timeline */}
       <KnowledgeTimelinePanel />
