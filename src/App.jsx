@@ -33,6 +33,7 @@ import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
 import DocumentSearch from '@/components/cinematic/DocumentSearch';
 import OpsEventStream from '@/components/cinematic/OpsEventStream';
 import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
+import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -93,6 +94,8 @@ function App() {
             <OpsEventStream />
             {/* F44: graph network explorer — /v1/graph/subgraph + /v1/graph/centrality; searchable node/edge table; click node → AI dossier spoken; "JARVIS, graph network" | "network map" voice trigger */}
             <GraphNetworkExplorer />
+            {/* F51: scene anchor drill-down — /v1/cinematic/scene/{id}; ⚓ ANCHORS toggle at bottom; clickable anchor rows + recursive detail; Alt+A shortcut; "JARVIS, anchors" voice trigger */}
+            <SceneAnchorDrillDown />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
@@ -107,15 +110,6 @@ function App() {
 
                 {/* The 10 render-locked immersive scenes (the JARVIS experience). */}
                 <Route path="/cinematic" element={<Navigate to="/cinematic/01_command_atrium" replace />} />
-                {/* Command Atrium IS the unified JARVIS · PALANTIR (Osiris) surface on :3000 */}
-                <Route path="/cinematic/01_command_atrium" element={
-                  <iframe
-                    src={`${window.location.protocol}//${window.location.hostname}:3000/`}
-                    title="JARVIS · PALANTIR"
-                    style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', border: 'none', background: '#06060C', zIndex: 9999 }}
-                    allow="fullscreen; geolocation; microphone; camera; clipboard-write"
-                  />
-                } />
                 <Route path="/cinematic/:sceneId" element={<CinematicShell />} />
 
                 {/* APEX HUD — AppLayout + all feature pages live under /apex. */}

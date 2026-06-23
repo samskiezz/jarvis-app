@@ -58,6 +58,7 @@ import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
 import TopObjectsDrawer from "@/components/overnight/TopObjectsDrawer";
 import IntentInboxDrawer from "@/components/overnight/IntentInboxDrawer";
 import WorkshopAppsDrawer from "@/components/overnight/WorkshopAppsDrawer";
+import ForgeApprovalsPanel from "@/components/overnight/ForgeApprovalsPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -181,6 +182,9 @@ export function AppLayout({ children }) {
 
       {/* F50: Workshop Apps Drawer — right-edge slide-in at 31%; workshop apps from GET /v1/workshop/apps */}
       <WorkshopAppsDrawer />
+
+      {/* F52: Forge Approvals Panel — left-edge slide-in at 83%; pending code-improvement changes from GET /v1/forge/approvals */}
+      <ForgeApprovalsPanel />
 
       {/* F19: Knowledge Timeline Panel — right-edge slide-in at 20%; brain log+daily entries from GET /v1/brain/timeline */}
       <KnowledgeTimelinePanel />
