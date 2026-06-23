@@ -66,6 +66,7 @@ import MusicBankPanel from "@/components/overnight/MusicBankPanel";
 import TemporalAnomalyDrawer from "@/components/overnight/TemporalAnomalyDrawer";
 import AstroObservatoryDrawer from "@/components/overnight/AstroObservatoryDrawer";
 import IntelProfileDirectory from "@/components/overnight/IntelProfileDirectory";
+import GuardianSensorPanel from "@/components/overnight/GuardianSensorPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -252,6 +253,9 @@ export function AppLayout({ children }) {
 
       {/* F62: Intel Profile Directory — left-edge slide-in at 24%; GET /entities/IntelProfile; name + risk-level badge + type + expandable summary; 3-min poll */}
       <IntelProfileDirectory />
+
+      {/* F63: Guardian Sensor Panel — right-edge slide-in at 67%; GET /v1/guardian/incidents + GET /v1/guardian/status; kind/severity/value per row; ACK via POST /v1/guardian/ack; 30-s poll */}
+      <GuardianSensorPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
