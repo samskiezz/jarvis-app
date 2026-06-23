@@ -65,6 +65,7 @@ import RevDbHistoryDrawer from "@/components/overnight/RevDbHistoryDrawer";
 import MusicBankPanel from "@/components/overnight/MusicBankPanel";
 import TemporalAnomalyDrawer from "@/components/overnight/TemporalAnomalyDrawer";
 import AstroObservatoryDrawer from "@/components/overnight/AstroObservatoryDrawer";
+import IntelProfileDirectory from "@/components/overnight/IntelProfileDirectory";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -248,6 +249,9 @@ export function AppLayout({ children }) {
 
       {/* F61: Astro Observatory Drawer — left-edge slide-in at 80%; planet ephemeris from GET /v1/astro/planets + star catalogue from GET /v1/astro/stars */}
       <AstroObservatoryDrawer />
+
+      {/* F62: Intel Profile Directory — left-edge slide-in at 24%; GET /entities/IntelProfile; name + risk-level badge + type + expandable summary; 3-min poll */}
+      <IntelProfileDirectory />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
