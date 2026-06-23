@@ -62,6 +62,7 @@ import IntentInboxDrawer from "@/components/overnight/IntentInboxDrawer";
 import WorkshopAppsDrawer from "@/components/overnight/WorkshopAppsDrawer";
 import ForgeApprovalsPanel from "@/components/overnight/ForgeApprovalsPanel";
 import RevDbHistoryDrawer from "@/components/overnight/RevDbHistoryDrawer";
+import MusicBankPanel from "@/components/overnight/MusicBankPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -236,6 +237,9 @@ export function AppLayout({ children }) {
 
       {/* F28: Solar Energy Panel — left-edge slide-in at 93%; live inverter data from GET /v1/solar/now */}
       <SolarEnergyPanel />
+
+      {/* F57: Music Bank Panel — left-edge slide-in at 96%; ambient loops from GET /v1/music/bank + GET /v1/music/status */}
+      <MusicBankPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
