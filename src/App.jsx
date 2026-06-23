@@ -31,6 +31,8 @@ import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
 import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
 import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
 import DocumentSearch from '@/components/cinematic/DocumentSearch';
+import OpsEventStream from '@/components/cinematic/OpsEventStream';
+import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -87,6 +89,10 @@ function App() {
             <ScenarioLauncher />
             {/* F38: document search — ◈ DOCS button; /v1/reports + /knowledge/; filter + click speaks JARVIS summary via TTS; "JARVIS, documents" voice trigger */}
             <DocumentSearch />
+            {/* F43: ops event stream — ⬡ OPS button; /v1/ops/events 15-s poll; severity-filtered cards; CRITICAL events spoken via TTS; "JARVIS, ops" voice trigger */}
+            <OpsEventStream />
+            {/* F44: graph network explorer — /v1/graph/subgraph + /v1/graph/centrality; searchable node/edge table; click node → AI dossier spoken; "JARVIS, graph network" | "network map" voice trigger */}
+            <GraphNetworkExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

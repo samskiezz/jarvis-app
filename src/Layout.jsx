@@ -52,6 +52,7 @@ import ProofPacksDrawer from "@/components/overnight/ProofPacksDrawer";
 import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
 import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
 import SchedulesPanel from "@/components/overnight/SchedulesPanel";
+import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -142,6 +143,9 @@ export function AppLayout({ children }) {
 
       {/* F42: Schedules Panel — right-edge slide-in at 42%; JARVIS job scheduler from GET /v1/schedules */}
       <SchedulesPanel />
+
+      {/* F45: VPN Status Panel — right-edge slide-in at 12%; WireGuard status + peers from GET /v1/vpn/status */}
+      <VpnStatusPanel />
 
       {/* F14: Scenario Runs Panel — left-edge slide-in at 35%; recent runs from GET /v1/scenario/list */}
       <ScenarioRunsPanel />
