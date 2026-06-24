@@ -76,6 +76,7 @@ import LabsCapabilityDrawer from "@/components/overnight/LabsCapabilityDrawer";
 import AutopilotDashboard from "@/components/overnight/AutopilotDashboard";
 import ServiceRegistryPanel from "@/components/overnight/ServiceRegistryPanel";
 import ModeMixerPanel from "@/components/overnight/ModeMixerPanel";
+import NexusBusMonitor from "@/components/overnight/NexusBusMonitor";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -208,6 +209,9 @@ export function AppLayout({ children }) {
 
       {/* F50: Workshop Apps Drawer — right-edge slide-in at 31%; workshop apps from GET /v1/workshop/apps */}
       <WorkshopAppsDrawer />
+
+      {/* F76: Nexus Event Bus Monitor — right-edge slide-in at 38%; GET /v1/bus/stats + /v1/bus/poll; rolling event feed; purple (#A855F7) accent */}
+      <NexusBusMonitor />
 
       {/* F52: Forge Approvals Panel — left-edge slide-in at 83%; pending code-improvement changes from GET /v1/forge/approvals */}
       <ForgeApprovalsPanel />

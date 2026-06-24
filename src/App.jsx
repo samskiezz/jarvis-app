@@ -38,6 +38,8 @@ import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
 import CommandHistory from '@/components/cinematic/CommandHistory';
 import SituationRoom from '@/components/cinematic/SituationRoom';
+import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
+import MorningBriefing from '@/components/cinematic/MorningBriefing';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -108,6 +110,10 @@ function App() {
             <CommandHistory />
             {/* F68: situation room — ⊕ SITREP button (left:3092); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/RiskSignal + /entities/SwarmJob + /v1/ops/events; live ops-centre grid; red pulse on critical; "JARVIS, sitrep" voice trigger (isSituationQuery wired in JarvisBrain) */}
             <SituationRoom />
+            {/* F74: graph path explorer — ⤢ PATH button (left:2468); /v1/graph/path?a=&b=; source+target entity inputs; hop chain visualised; JARVIS narrates via /v1/jarvis/agent/chat + TTS; "JARVIS, path from X to Y" voice trigger (isPathQuery+buildPathScript wired in JarvisBrain) */}
+            <GraphPathExplorer />
+            {/* F75: morning briefing — ◈ BRIEF button (left:2156); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /functions/getLiveIntel; structures spoken briefing from real data; speaks via /v1/voice/tts; "JARVIS, brief me" / "morning briefing" voice trigger (isBriefingQuery+buildBriefingScript wired in JarvisBrain) */}
+            <MorningBriefing />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
