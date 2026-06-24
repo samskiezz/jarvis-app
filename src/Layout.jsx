@@ -71,6 +71,7 @@ import VaultSecretsDrawer from "@/components/overnight/VaultSecretsDrawer";
 import CodePulseDrawer from "@/components/overnight/CodePulseDrawer";
 import NexusCorrelationDrawer from "@/components/overnight/NexusCorrelationDrawer";
 import GovernanceDashboard from "@/components/overnight/GovernanceDashboard";
+import ClaudeCodeRunsDrawer from "@/components/overnight/ClaudeCodeRunsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -272,6 +273,9 @@ export function AppLayout({ children }) {
 
       {/* F67: Governance Dashboard — right-edge slide-in at 9%; GET /v1/governance/purposes + GET /v1/governance/retention + GET /v1/governance/requests; purposes/retention/requests sub-tabs; blue (#3B82F6) accent; 5-min poll */}
       <GovernanceDashboard />
+
+      {/* F69: Claude Code Runs Drawer — right-edge slide-in at 77%; GET /v1/claude_code/runs?limit=20&archived=1 + GET /v1/claude_code/stats; active/archived run list with status/outcome badges + elapsed time; stats tiles (total/open/avg); green (#4ADE80) accent; 30-s poll */}
+      <ClaudeCodeRunsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

@@ -37,6 +37,7 @@ import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
 import CommandHistory from '@/components/cinematic/CommandHistory';
+import SituationRoom from '@/components/cinematic/SituationRoom';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -105,6 +106,8 @@ function App() {
             <SceneAutoTour />
             {/* F60: command history — ◷ HIST button (left:1636); captures every jarvis:ask to localStorage (max 50); filter + replay; Alt+H shortcut; "JARVIS, history" voice trigger (isHistoryQuery already wired in JarvisBrain) */}
             <CommandHistory />
+            {/* F68: situation room — ⊕ SITREP button (left:3092); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/RiskSignal + /entities/SwarmJob + /v1/ops/events; live ops-centre grid; red pulse on critical; "JARVIS, sitrep" voice trigger (isSituationQuery wired in JarvisBrain) */}
+            <SituationRoom />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
