@@ -79,6 +79,7 @@ import ModeMixerPanel from "@/components/overnight/ModeMixerPanel";
 import NexusBusMonitor from "@/components/overnight/NexusBusMonitor";
 import CommonOperatingPicture from "@/components/overnight/CommonOperatingPicture";
 import EntityResolutionPanel from "@/components/overnight/EntityResolutionPanel";
+import IncidentCorrelationDrawer from "@/components/overnight/IncidentCorrelationDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -304,6 +305,9 @@ export function AppLayout({ children }) {
 
       {/* F78: Entity Resolution Panel — left-edge slide-in at 73%; GET /v1/jarvis/er/stats + GET /v1/jarvis/er/queue?status=pending; pending/merged/total stat tiles; ID-pair rows with type badge + score bar; rose (#E11D48) accent; 5-min poll */}
       <EntityResolutionPanel />
+
+      {/* F79: Incident Correlation Clusters — right-edge slide-in at 23%; GET /v1/run-correlator/clusters; severity badge + event count + window + summary per cluster; 30-s poll */}
+      <IncidentCorrelationDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
