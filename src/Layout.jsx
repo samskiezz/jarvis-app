@@ -78,6 +78,7 @@ import ServiceRegistryPanel from "@/components/overnight/ServiceRegistryPanel";
 import ModeMixerPanel from "@/components/overnight/ModeMixerPanel";
 import NexusBusMonitor from "@/components/overnight/NexusBusMonitor";
 import CommonOperatingPicture from "@/components/overnight/CommonOperatingPicture";
+import EntityResolutionPanel from "@/components/overnight/EntityResolutionPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -300,6 +301,9 @@ export function AppLayout({ children }) {
 
       {/* F73: Mode Mixer Panel — left-edge slide-in at 48%; GET /v1/mode/active (60s poll) + GET /v1/mode/profiles (once on open); active profile field grid + preset catalog; yellow (#EAB308) accent */}
       <ModeMixerPanel />
+
+      {/* F78: Entity Resolution Panel — left-edge slide-in at 73%; GET /v1/jarvis/er/stats + GET /v1/jarvis/er/queue?status=pending; pending/merged/total stat tiles; ID-pair rows with type badge + score bar; rose (#E11D48) accent; 5-min poll */}
+      <EntityResolutionPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
