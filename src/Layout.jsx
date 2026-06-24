@@ -73,6 +73,7 @@ import NexusCorrelationDrawer from "@/components/overnight/NexusCorrelationDrawe
 import GovernanceDashboard from "@/components/overnight/GovernanceDashboard";
 import ClaudeCodeRunsDrawer from "@/components/overnight/ClaudeCodeRunsDrawer";
 import LabsCapabilityDrawer from "@/components/overnight/LabsCapabilityDrawer";
+import AutopilotDashboard from "@/components/overnight/AutopilotDashboard";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -280,6 +281,9 @@ export function AppLayout({ children }) {
 
       {/* F70: Labs Capability Catalog — left-edge slide-in at 32%; GET /v1/labs/catalog lists underworld scientific modules (drug_discovery/disease_model/quantum_demo/manufacturing_sim/patent_classify/materials_or_standards) with AVAILABLE/UNAVAILABLE status badges; emerald (#10B981) accent; 5-min poll */}
       <LabsCapabilityDrawer />
+
+      {/* F71: Autopilot Dashboard — left-edge slide-in at 37%; GET /assurance/autopilot/status + proposals + roadmap; STATUS/PROPOSALS/ROADMAP tabs; sky-blue (#0EA5E9) accent; 2-min poll */}
+      <AutopilotDashboard />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
