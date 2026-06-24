@@ -69,6 +69,7 @@ import IntelProfileDirectory from "@/components/overnight/IntelProfileDirectory"
 import GuardianSensorPanel from "@/components/overnight/GuardianSensorPanel";
 import VaultSecretsDrawer from "@/components/overnight/VaultSecretsDrawer";
 import CodePulseDrawer from "@/components/overnight/CodePulseDrawer";
+import NexusCorrelationDrawer from "@/components/overnight/NexusCorrelationDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -264,6 +265,9 @@ export function AppLayout({ children }) {
 
       {/* F65: CodePulse VS Code Bridge — right-edge slide-in at 17%; GET /v1/codepulse/status (connection state + workspace) + GET /v1/codepulse/pending (change proposals); sky-blue accent; 30-s poll */}
       <CodePulseDrawer />
+
+      {/* F66: Nexus Correlation Explorer — right-edge slide-in at 3%; GET /v1/correlate/search?q=&k=10; fused vector+FTS+graph hits; score bars + store badges; 400 ms debounced search; violet (#7C3AED) accent */}
+      <NexusCorrelationDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
