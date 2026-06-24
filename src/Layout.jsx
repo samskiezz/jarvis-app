@@ -75,6 +75,7 @@ import ClaudeCodeRunsDrawer from "@/components/overnight/ClaudeCodeRunsDrawer";
 import LabsCapabilityDrawer from "@/components/overnight/LabsCapabilityDrawer";
 import AutopilotDashboard from "@/components/overnight/AutopilotDashboard";
 import ServiceRegistryPanel from "@/components/overnight/ServiceRegistryPanel";
+import ModeMixerPanel from "@/components/overnight/ModeMixerPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -288,6 +289,9 @@ export function AppLayout({ children }) {
 
       {/* F72: Service Registry Panel — right-edge slide-in at 7%; GET /v1/registry/services lists every announced microservice with alive/total count + role badge + port + heartbeat age; fuchsia (#D946EF) accent; 30-s poll */}
       <ServiceRegistryPanel />
+
+      {/* F73: Mode Mixer Panel — left-edge slide-in at 48%; GET /v1/mode/active (60s poll) + GET /v1/mode/profiles (once on open); active profile field grid + preset catalog; yellow (#EAB308) accent */}
+      <ModeMixerPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
