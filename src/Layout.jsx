@@ -74,6 +74,7 @@ import GovernanceDashboard from "@/components/overnight/GovernanceDashboard";
 import ClaudeCodeRunsDrawer from "@/components/overnight/ClaudeCodeRunsDrawer";
 import LabsCapabilityDrawer from "@/components/overnight/LabsCapabilityDrawer";
 import AutopilotDashboard from "@/components/overnight/AutopilotDashboard";
+import ServiceRegistryPanel from "@/components/overnight/ServiceRegistryPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -284,6 +285,9 @@ export function AppLayout({ children }) {
 
       {/* F71: Autopilot Dashboard — left-edge slide-in at 37%; GET /assurance/autopilot/status + proposals + roadmap; STATUS/PROPOSALS/ROADMAP tabs; sky-blue (#0EA5E9) accent; 2-min poll */}
       <AutopilotDashboard />
+
+      {/* F72: Service Registry Panel — right-edge slide-in at 7%; GET /v1/registry/services lists every announced microservice with alive/total count + role badge + port + heartbeat age; fuchsia (#D946EF) accent; 30-s poll */}
+      <ServiceRegistryPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
