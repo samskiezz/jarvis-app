@@ -72,6 +72,7 @@ import CodePulseDrawer from "@/components/overnight/CodePulseDrawer";
 import NexusCorrelationDrawer from "@/components/overnight/NexusCorrelationDrawer";
 import GovernanceDashboard from "@/components/overnight/GovernanceDashboard";
 import ClaudeCodeRunsDrawer from "@/components/overnight/ClaudeCodeRunsDrawer";
+import LabsCapabilityDrawer from "@/components/overnight/LabsCapabilityDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -276,6 +277,9 @@ export function AppLayout({ children }) {
 
       {/* F69: Claude Code Runs Drawer — right-edge slide-in at 77%; GET /v1/claude_code/runs?limit=20&archived=1 + GET /v1/claude_code/stats; active/archived run list with status/outcome badges + elapsed time; stats tiles (total/open/avg); green (#4ADE80) accent; 30-s poll */}
       <ClaudeCodeRunsDrawer />
+
+      {/* F70: Labs Capability Catalog — left-edge slide-in at 32%; GET /v1/labs/catalog lists underworld scientific modules (drug_discovery/disease_model/quantum_demo/manufacturing_sim/patent_classify/materials_or_standards) with AVAILABLE/UNAVAILABLE status badges; emerald (#10B981) accent; 5-min poll */}
+      <LabsCapabilityDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
