@@ -83,6 +83,7 @@ import IncidentCorrelationDrawer from "@/components/overnight/IncidentCorrelatio
 import PanicKeyPanel from "@/components/overnight/PanicKeyPanel";
 import SecurityComplianceScorecard from "@/components/overnight/SecurityComplianceScorecard";
 import SciDomainsDrawer from "@/components/overnight/SciDomainsDrawer";
+import GraphTimeScrubber from "@/components/overnight/GraphTimeScrubber";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -260,6 +261,9 @@ export function AppLayout({ children }) {
 
       {/* F83: Science Domains Drawer — left-edge slide-in at 4%; underworld science domain consoles from GET /v1/sci/domains */}
       <SciDomainsDrawer />
+
+      {/* F84: Graph Time Scrubber — left-edge slide-in at 6%; POST /v1/graph-time/playback (12 frames); scrub knowledge-graph growth over time; sky-blue (#38BDF8) accent */}
+      <GraphTimeScrubber />
 
       {/* F27: Thought Packs Drawer — right-edge slide-in at 95%; compressed memory packs from GET /v1/compress/list */}
       <ThoughtPacksDrawer />
