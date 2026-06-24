@@ -40,6 +40,7 @@ import CommandHistory from '@/components/cinematic/CommandHistory';
 import SituationRoom from '@/components/cinematic/SituationRoom';
 import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
 import MorningBriefing from '@/components/cinematic/MorningBriefing';
+import SystemHealthScorecard from '@/components/cinematic/SystemHealthScorecard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -114,6 +115,8 @@ function App() {
             <GraphPathExplorer />
             {/* F75: morning briefing — ◈ BRIEF button (left:2156); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /functions/getLiveIntel; structures spoken briefing from real data; speaks via /v1/voice/tts; "JARVIS, brief me" / "morning briefing" voice trigger (isBriefingQuery+buildBriefingScript wired in JarvisBrain) */}
             <MorningBriefing />
+            {/* F80: system health scorecard — ⊕ SCORE button (left:4548); composite 0-100 JARVIS health score from /v1/jarvis/system/status (40%) + /v1/cinematic/brain (30%) + /entities/RiskSignal (30%); score ring + sub-score bars + metric tiles + sparkline history; ASK JARVIS for AI anomaly commentary via /v1/jarvis/agent/chat + TTS; "JARVIS, health score" / "system score" voice trigger (isHealthScoreQuery+buildHealthScoreScript wired in JarvisBrain) */}
+            <SystemHealthScorecard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

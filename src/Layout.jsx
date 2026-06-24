@@ -80,6 +80,7 @@ import NexusBusMonitor from "@/components/overnight/NexusBusMonitor";
 import CommonOperatingPicture from "@/components/overnight/CommonOperatingPicture";
 import EntityResolutionPanel from "@/components/overnight/EntityResolutionPanel";
 import IncidentCorrelationDrawer from "@/components/overnight/IncidentCorrelationDrawer";
+import PanicKeyPanel from "@/components/overnight/PanicKeyPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -308,6 +309,9 @@ export function AppLayout({ children }) {
 
       {/* F79: Incident Correlation Clusters — right-edge slide-in at 23%; GET /v1/run-correlator/clusters; severity badge + event count + window + summary per cluster; 30-s poll */}
       <IncidentCorrelationDrawer />
+
+      {/* F81: PanicKey Control Panel — left-edge slide-in at 98%; GET /v1/panickey/active (30-s poll) + GET /v1/panickey/snapshots (on open); mode badge + PM2 services + LLM call stats + jobs; red (#EF4444) accent on safe/emergency */}
+      <PanicKeyPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
