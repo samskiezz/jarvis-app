@@ -82,6 +82,7 @@ import EntityResolutionPanel from "@/components/overnight/EntityResolutionPanel"
 import IncidentCorrelationDrawer from "@/components/overnight/IncidentCorrelationDrawer";
 import PanicKeyPanel from "@/components/overnight/PanicKeyPanel";
 import SecurityComplianceScorecard from "@/components/overnight/SecurityComplianceScorecard";
+import SciDomainsDrawer from "@/components/overnight/SciDomainsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -256,6 +257,9 @@ export function AppLayout({ children }) {
 
       {/* F34: Graph Communities View — left-edge slide-in at 2%; community partition from GET /v1/graph/communities */}
       <GraphCommunitiesView />
+
+      {/* F83: Science Domains Drawer — left-edge slide-in at 4%; underworld science domain consoles from GET /v1/sci/domains */}
+      <SciDomainsDrawer />
 
       {/* F27: Thought Packs Drawer — right-edge slide-in at 95%; compressed memory packs from GET /v1/compress/list */}
       <ThoughtPacksDrawer />
