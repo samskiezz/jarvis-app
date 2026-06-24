@@ -81,6 +81,7 @@ import CommonOperatingPicture from "@/components/overnight/CommonOperatingPictur
 import EntityResolutionPanel from "@/components/overnight/EntityResolutionPanel";
 import IncidentCorrelationDrawer from "@/components/overnight/IncidentCorrelationDrawer";
 import PanicKeyPanel from "@/components/overnight/PanicKeyPanel";
+import SecurityComplianceScorecard from "@/components/overnight/SecurityComplianceScorecard";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -288,6 +289,9 @@ export function AppLayout({ children }) {
 
       {/* F67: Governance Dashboard — right-edge slide-in at 9%; GET /v1/governance/purposes + GET /v1/governance/retention + GET /v1/governance/requests; purposes/retention/requests sub-tabs; blue (#3B82F6) accent; 5-min poll */}
       <GovernanceDashboard />
+
+      {/* F82: Security Compliance Scorecard — right-edge slide-in at 10%; GET /v1/security/compliance/status; five-plane tiles (audit/revdb/tenancy/cross_org/clearance_model) + overall IMPLEMENTED/PARTIAL badge; green (#22C55E) accent; 5-min poll */}
+      <SecurityComplianceScorecard />
 
       {/* F69: Claude Code Runs Drawer — right-edge slide-in at 77%; GET /v1/claude_code/runs?limit=20&archived=1 + GET /v1/claude_code/stats; active/archived run list with status/outcome badges + elapsed time; stats tiles (total/open/avg); green (#4ADE80) accent; 30-s poll */}
       <ClaudeCodeRunsDrawer />
