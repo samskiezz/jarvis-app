@@ -70,6 +70,7 @@ import GuardianSensorPanel from "@/components/overnight/GuardianSensorPanel";
 import VaultSecretsDrawer from "@/components/overnight/VaultSecretsDrawer";
 import CodePulseDrawer from "@/components/overnight/CodePulseDrawer";
 import NexusCorrelationDrawer from "@/components/overnight/NexusCorrelationDrawer";
+import GovernanceDashboard from "@/components/overnight/GovernanceDashboard";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -268,6 +269,9 @@ export function AppLayout({ children }) {
 
       {/* F66: Nexus Correlation Explorer — right-edge slide-in at 3%; GET /v1/correlate/search?q=&k=10; fused vector+FTS+graph hits; score bars + store badges; 400 ms debounced search; violet (#7C3AED) accent */}
       <NexusCorrelationDrawer />
+
+      {/* F67: Governance Dashboard — right-edge slide-in at 9%; GET /v1/governance/purposes + GET /v1/governance/retention + GET /v1/governance/requests; purposes/retention/requests sub-tabs; blue (#3B82F6) accent; 5-min poll */}
+      <GovernanceDashboard />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
