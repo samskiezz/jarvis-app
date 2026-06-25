@@ -95,6 +95,7 @@ import VoiceForgeDrawer from "@/components/overnight/VoiceForgeDrawer";
 import DeadZoneFinderDrawer from "@/components/overnight/DeadZoneFinderDrawer";
 import FrictionMapDrawer from "@/components/overnight/FrictionMapDrawer";
 import VoiceCommandReference from "@/components/overnight/VoiceCommandReference";
+import AcousticContactsDrawer from "@/components/overnight/AcousticContactsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -368,6 +369,9 @@ export function AppLayout({ children }) {
 
       {/* F95: Voice Command Reference — right-edge slide-in at 69%; GET /v1/voice/status (TTS provider + STT availability) + GET /v1/voice/commands (full grouped catalog); searchable by phrase/description; blue (#60A5FA) accent; fetched once on open */}
       <VoiceCommandReference />
+
+      {/* F96: Acoustic Contacts — right-edge slide-in at 45%; GET /v1/acoustic/contacts?limit=100 (3-min poll); operator-tagged acoustic contacts with classification badge + confidence + lat/lon + source + age; lime-green (#65A30D) accent */}
+      <AcousticContactsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
