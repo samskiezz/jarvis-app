@@ -96,6 +96,7 @@ import DeadZoneFinderDrawer from "@/components/overnight/DeadZoneFinderDrawer";
 import FrictionMapDrawer from "@/components/overnight/FrictionMapDrawer";
 import VoiceCommandReference from "@/components/overnight/VoiceCommandReference";
 import AcousticContactsDrawer from "@/components/overnight/AcousticContactsDrawer";
+import TaxonomyBrowserDrawer from "@/components/overnight/TaxonomyBrowserDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -372,6 +373,9 @@ export function AppLayout({ children }) {
 
       {/* F96: Acoustic Contacts — right-edge slide-in at 45%; GET /v1/acoustic/contacts?limit=100 (3-min poll); operator-tagged acoustic contacts with classification badge + confidence + lat/lon + source + age; lime-green (#65A30D) accent */}
       <AcousticContactsDrawer />
+
+      {/* F97: Taxonomy Browser — left-edge slide-in at 1%; GET /v1/jarvis/taxonomy/families + /frontier + /summary (5-min poll); acquisition-family list + frontier-cell browser; violet (#A78BFA) accent */}
+      <TaxonomyBrowserDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
