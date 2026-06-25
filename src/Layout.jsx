@@ -99,6 +99,7 @@ import AcousticContactsDrawer from "@/components/overnight/AcousticContactsDrawe
 import TaxonomyBrowserDrawer from "@/components/overnight/TaxonomyBrowserDrawer";
 import SpecForgeBrowser from "@/components/overnight/SpecForgeBrowser";
 import VisionMonitorDrawer from "@/components/overnight/VisionMonitorDrawer";
+import WorldPackBrowser from "@/components/overnight/WorldPackBrowser";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -384,6 +385,9 @@ export function AppLayout({ children }) {
 
       {/* F99: Vision System Monitor — right-edge slide-in at 14%; GET /v1/vision/status (2-min poll); CAPTURE/DETECT/DESCRIBE layer availability badges + config; Detect Now button POST /v1/vision/detect; sky-blue (#38BDF8) accent */}
       <VisionMonitorDrawer />
+
+      {/* F101: World Pack Browser — right-edge slide-in at 3%; GET /v1/jarvis/world/summary + /subjects?limit=100; family/subject/endpoint counts + searchable subject list with neuron-type badges; emerald (#10B981) accent; fetched once on open */}
+      <WorldPackBrowser />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
