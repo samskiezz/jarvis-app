@@ -87,6 +87,7 @@ import SciDomainsDrawer from "@/components/overnight/SciDomainsDrawer";
 import GraphTimeScrubber from "@/components/overnight/GraphTimeScrubber";
 import DatasetsCatalogDrawer from "@/components/overnight/DatasetsCatalogDrawer";
 import MetricsMonitor from "@/components/overnight/MetricsMonitor";
+import FoundryPipelineCatalog from "@/components/overnight/FoundryPipelineCatalog";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -336,6 +337,9 @@ export function AppLayout({ children }) {
 
       {/* F87: Metrics Monitor — right-edge slide-in at 86%; GET /v1/jarvis/metrics (60-s poll); span count + P50/P95 latency + total cost + error rate tiles + per-layer breakdown; indigo (#6366F1) accent */}
       <MetricsMonitor />
+
+      {/* F88: Foundry Pipeline Catalog — left-edge slide-in at 10%; GET /v1/foundry/pipelines (5-min poll); pipeline name + YAML badge + size + age per row; click expands YAML preview; fuchsia (#E879F9) accent */}
+      <FoundryPipelineCatalog />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
