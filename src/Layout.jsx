@@ -92,6 +92,7 @@ import AssetDnaDrawer from "@/components/overnight/AssetDnaDrawer";
 import AstroTrackerDrawer from "@/components/overnight/AstroTrackerDrawer";
 import VoiceForgeDrawer from "@/components/overnight/VoiceForgeDrawer";
 import DeadZoneFinderDrawer from "@/components/overnight/DeadZoneFinderDrawer";
+import FrictionMapDrawer from "@/components/overnight/FrictionMapDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -356,6 +357,9 @@ export function AppLayout({ children }) {
 
       {/* F92: Dead Zone Finder — left-edge slide-in at 58%; GET /v1/deadzone/scan (5-min poll); kind badge (missing_file red/stale_file amber/untracked_route orange/overlap cyan/duplicate_name indigo) + label + suggestion per finding; rose (#FB7185) accent */}
       <DeadZoneFinderDrawer />
+
+      {/* F93: Friction Map — left-edge slide-in at 85%; GET /v1/friction/scan (5-min poll); friction score gauge + kind badges (repeated_action orange/duplicate_prompt indigo/repeat_error red) + count badge + suggestion per finding; orange (#F97316) accent */}
+      <FrictionMapDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
