@@ -102,6 +102,7 @@ import VisionMonitorDrawer from "@/components/overnight/VisionMonitorDrawer";
 import WorldPackBrowser from "@/components/overnight/WorldPackBrowser";
 import SavedSearchesDrawer from "@/components/overnight/SavedSearchesDrawer";
 import InfSwarmAgentsDrawer from "@/components/overnight/InfSwarmAgentsDrawer";
+import NeoScreenDrawer from "@/components/overnight/NeoScreenDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -396,6 +397,9 @@ export function AppLayout({ children }) {
 
       {/* F106: Inference Swarm Agents — right-edge slide-in at 83%; GET /v1/inf-swarm/agents (30-s poll); agent_id badge + kind badge + status badge + queue depth + spawn/heartbeat age per row; emerald (#34D399) accent */}
       <InfSwarmAgentsDrawer />
+
+      {/* F108: NEO Screen Drawer — right-edge slide-in at 55%; GET /v1/astro/neo?a=&e= (on-demand Keplerian two-body MOID); 4 preset orbits (Aten/Apollo/Amor/Atira); orbit params + MOID + PHA hazard badge; red (#EF4444) accent */}
+      <NeoScreenDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

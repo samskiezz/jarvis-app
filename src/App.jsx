@@ -45,6 +45,7 @@ import EntityChronology from '@/components/cinematic/EntityChronology';
 import SystemTelemetryRecorder from '@/components/cinematic/SystemTelemetryRecorder';
 import ThreatActorNetwork from '@/components/cinematic/ThreatActorNetwork';
 import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEngine';
+import LiveIntelPulse from '@/components/cinematic/LiveIntelPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -129,6 +130,8 @@ function App() {
             <ThreatActorNetwork />
             {/* F105: threat correlation engine — ⚡ CORR button (left:3716); parallel-fetches /entities/RiskSignal + /entities/IntelProfile; correlates by shared keyword tokens; top 20 risk↔profile pairs ranked by shared-token score; AI narrative via /v1/jarvis/agent/chat + TTS; severity filter tabs + text search; "correlate threats / threat correlation / correlate risks" voice trigger (isThreatCorrelationQuery + buildThreatCorrelationScript wired in JarvisBrain line 49) */}
             <ThreatCorrelationEngine />
+            {/* F107: live intel pulse — ⚡ PULSE button (left:4756); polls /functions/getLiveIntel every 2 min; composite 0-100 global-activity score (seismic 45% + crypto 35% + FX 20%); pulse ring + breakdown bars + sparkline history + top-quake tile + AI briefing via /v1/jarvis/agent/chat; red pulse animation when score ≥75; "intel pulse / global pulse / world activity" voice trigger (isIntelPulseQuery + buildIntelPulseScript wired in JarvisBrain) */}
+            <LiveIntelPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
