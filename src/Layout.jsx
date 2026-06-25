@@ -101,6 +101,7 @@ import SpecForgeBrowser from "@/components/overnight/SpecForgeBrowser";
 import VisionMonitorDrawer from "@/components/overnight/VisionMonitorDrawer";
 import WorldPackBrowser from "@/components/overnight/WorldPackBrowser";
 import SavedSearchesDrawer from "@/components/overnight/SavedSearchesDrawer";
+import InfSwarmAgentsDrawer from "@/components/overnight/InfSwarmAgentsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -392,6 +393,9 @@ export function AppLayout({ children }) {
 
       {/* F102: Saved Searches Drawer — right-edge slide-in at 91%; GET /v1/search-plus/saved (5-min poll); saved search list with name + spec summary + updated age; click row runs GET /v1/search-plus/saved/{id}/run and shows result count inline; orange (#FB923C) accent */}
       <SavedSearchesDrawer />
+
+      {/* F106: Inference Swarm Agents — right-edge slide-in at 83%; GET /v1/inf-swarm/agents (30-s poll); agent_id badge + kind badge + status badge + queue depth + spawn/heartbeat age per row; emerald (#34D399) accent */}
+      <InfSwarmAgentsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

@@ -42,6 +42,9 @@ import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
 import MorningBriefing from '@/components/cinematic/MorningBriefing';
 import SystemHealthScorecard from '@/components/cinematic/SystemHealthScorecard';
 import EntityChronology from '@/components/cinematic/EntityChronology';
+import SystemTelemetryRecorder from '@/components/cinematic/SystemTelemetryRecorder';
+import ThreatActorNetwork from '@/components/cinematic/ThreatActorNetwork';
+import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEngine';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -120,6 +123,12 @@ function App() {
             <SystemHealthScorecard />
             {/* F100: entity chronology — ⊕ CHRON button (left:5512); merges /entities/Task+RiskSignal+IntelProfile+SwarmJob+Investment+Contact sorted by timestamp; ALL/TASK/RISK/INTEL/SWARM/INVEST/CONTACT filter tabs + text filter; 60 s auto-refresh; "JARVIS, entity chronology" / "all entities timeline" voice trigger (isEntityChronologyQuery+buildEntityChronologyScript wired in JarvisBrain) */}
             <EntityChronology />
+            {/* F103: system telemetry recorder — ⟁ STELM button (left:8396); polls /v1/jarvis/system/status every 60 s; stores up to 60 readings in localStorage; three SVG sparklines (CPU/MEM/LOAD) with delta indicator; voice trigger "telemetry chart / cpu history / system trend / stelm" */}
+            <SystemTelemetryRecorder />
+            {/* F104: threat actor network — ◈ TAN button (left:7460); cross-references /entities/IntelProfile threat actors with /v1/graph/centrality; composite danger index = threat×0.55 + centrality×0.45; ranked rows with ASSESS → /v1/jarvis/agent/chat + TTS; "threat actor / actor network / who is most dangerous / tan" voice trigger (isThreatActorNetworkQuery + buildThreatActorNetworkScript wired in JarvisBrain) */}
+            <ThreatActorNetwork />
+            {/* F105: threat correlation engine — ⚡ CORR button (left:3716); parallel-fetches /entities/RiskSignal + /entities/IntelProfile; correlates by shared keyword tokens; top 20 risk↔profile pairs ranked by shared-token score; AI narrative via /v1/jarvis/agent/chat + TTS; severity filter tabs + text search; "correlate threats / threat correlation / correlate risks" voice trigger (isThreatCorrelationQuery + buildThreatCorrelationScript wired in JarvisBrain line 49) */}
+            <ThreatCorrelationEngine />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
