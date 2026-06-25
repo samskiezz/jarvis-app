@@ -89,6 +89,7 @@ import DatasetsCatalogDrawer from "@/components/overnight/DatasetsCatalogDrawer"
 import MetricsMonitor from "@/components/overnight/MetricsMonitor";
 import FoundryPipelineCatalog from "@/components/overnight/FoundryPipelineCatalog";
 import AssetDnaDrawer from "@/components/overnight/AssetDnaDrawer";
+import AstroTrackerDrawer from "@/components/overnight/AstroTrackerDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -344,6 +345,9 @@ export function AppLayout({ children }) {
 
       {/* F89: Asset DNA Browser — right-edge slide-in at 53%; GET /v1/asset/list?limit=200 (5-min poll); repo asset cards sorted by risk; HIGH/MEDIUM/LOW risk badges + health dot + kind badge + age; high-risk count badge on tab; red accent on HIGH risk; client-side filter */}
       <AssetDnaDrawer />
+
+      {/* F90: Solar System Tracker — right-edge slide-in at 59%; GET /v1/astro/planets + /v1/astro/stars (10-min poll); planets tab shows RA/Dec/distance per planet; stars tab shows J2000 catalogue positions; sky-blue (#38BDF8) accent; DEGRADED badge when astropy unavailable */}
+      <AstroTrackerDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
