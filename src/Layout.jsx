@@ -88,6 +88,7 @@ import GraphTimeScrubber from "@/components/overnight/GraphTimeScrubber";
 import DatasetsCatalogDrawer from "@/components/overnight/DatasetsCatalogDrawer";
 import MetricsMonitor from "@/components/overnight/MetricsMonitor";
 import FoundryPipelineCatalog from "@/components/overnight/FoundryPipelineCatalog";
+import AssetDnaDrawer from "@/components/overnight/AssetDnaDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -340,6 +341,9 @@ export function AppLayout({ children }) {
 
       {/* F88: Foundry Pipeline Catalog — left-edge slide-in at 10%; GET /v1/foundry/pipelines (5-min poll); pipeline name + YAML badge + size + age per row; click expands YAML preview; fuchsia (#E879F9) accent */}
       <FoundryPipelineCatalog />
+
+      {/* F89: Asset DNA Browser — right-edge slide-in at 53%; GET /v1/asset/list?limit=200 (5-min poll); repo asset cards sorted by risk; HIGH/MEDIUM/LOW risk badges + health dot + kind badge + age; high-risk count badge on tab; red accent on HIGH risk; client-side filter */}
+      <AssetDnaDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
