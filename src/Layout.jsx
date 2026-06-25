@@ -97,6 +97,7 @@ import FrictionMapDrawer from "@/components/overnight/FrictionMapDrawer";
 import VoiceCommandReference from "@/components/overnight/VoiceCommandReference";
 import AcousticContactsDrawer from "@/components/overnight/AcousticContactsDrawer";
 import TaxonomyBrowserDrawer from "@/components/overnight/TaxonomyBrowserDrawer";
+import SpecForgeBrowser from "@/components/overnight/SpecForgeBrowser";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -376,6 +377,9 @@ export function AppLayout({ children }) {
 
       {/* F97: Taxonomy Browser — left-edge slide-in at 1%; GET /v1/jarvis/taxonomy/families + /frontier + /summary (5-min poll); acquisition-family list + frontier-cell browser; violet (#A78BFA) accent */}
       <TaxonomyBrowserDrawer />
+
+      {/* F98: Spec Forge Browser — left-edge slide-in at 16%; GET /v1/spec/list (5-min poll); spec title + APPROVED/DRAFT badge + age per row; click expands full spec body via GET /v1/spec/{id}; teal (#14B8A6) accent */}
+      <SpecForgeBrowser />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
