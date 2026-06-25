@@ -98,6 +98,7 @@ import VoiceCommandReference from "@/components/overnight/VoiceCommandReference"
 import AcousticContactsDrawer from "@/components/overnight/AcousticContactsDrawer";
 import TaxonomyBrowserDrawer from "@/components/overnight/TaxonomyBrowserDrawer";
 import SpecForgeBrowser from "@/components/overnight/SpecForgeBrowser";
+import VisionMonitorDrawer from "@/components/overnight/VisionMonitorDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -380,6 +381,9 @@ export function AppLayout({ children }) {
 
       {/* F98: Spec Forge Browser — left-edge slide-in at 16%; GET /v1/spec/list (5-min poll); spec title + APPROVED/DRAFT badge + age per row; click expands full spec body via GET /v1/spec/{id}; teal (#14B8A6) accent */}
       <SpecForgeBrowser />
+
+      {/* F99: Vision System Monitor — right-edge slide-in at 14%; GET /v1/vision/status (2-min poll); CAPTURE/DETECT/DESCRIBE layer availability badges + config; Detect Now button POST /v1/vision/detect; sky-blue (#38BDF8) accent */}
+      <VisionMonitorDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
