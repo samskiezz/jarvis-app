@@ -90,6 +90,7 @@ import MetricsMonitor from "@/components/overnight/MetricsMonitor";
 import FoundryPipelineCatalog from "@/components/overnight/FoundryPipelineCatalog";
 import AssetDnaDrawer from "@/components/overnight/AssetDnaDrawer";
 import AstroTrackerDrawer from "@/components/overnight/AstroTrackerDrawer";
+import VoiceForgeDrawer from "@/components/overnight/VoiceForgeDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -348,6 +349,9 @@ export function AppLayout({ children }) {
 
       {/* F90: Solar System Tracker — right-edge slide-in at 59%; GET /v1/astro/planets + /v1/astro/stars (10-min poll); planets tab shows RA/Dec/distance per planet; stars tab shows J2000 catalogue positions; sky-blue (#38BDF8) accent; DEGRADED badge when astropy unavailable */}
       <AstroTrackerDrawer />
+
+      {/* F91: VoiceForge Profiles — right-edge slide-in at 62%; GET /v1/voiceforge/profiles (5-min poll); voice-clone profile list with name, description, active indicator, created age; XTTS ONLINE/OFFLINE badge in header; pink (#EC4899) accent */}
+      <VoiceForgeDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
