@@ -86,6 +86,7 @@ import SecurityComplianceScorecard from "@/components/overnight/SecurityComplian
 import SciDomainsDrawer from "@/components/overnight/SciDomainsDrawer";
 import GraphTimeScrubber from "@/components/overnight/GraphTimeScrubber";
 import DatasetsCatalogDrawer from "@/components/overnight/DatasetsCatalogDrawer";
+import MetricsMonitor from "@/components/overnight/MetricsMonitor";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -332,6 +333,9 @@ export function AppLayout({ children }) {
 
       {/* F81: PanicKey Control Panel — left-edge slide-in at 98%; GET /v1/panickey/active (30-s poll) + GET /v1/panickey/snapshots (on open); mode badge + PM2 services + LLM call stats + jobs; red (#EF4444) accent on safe/emergency */}
       <PanicKeyPanel />
+
+      {/* F87: Metrics Monitor — right-edge slide-in at 86%; GET /v1/jarvis/metrics (60-s poll); span count + P50/P95 latency + total cost + error rate tiles + per-layer breakdown; indigo (#6366F1) accent */}
+      <MetricsMonitor />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
