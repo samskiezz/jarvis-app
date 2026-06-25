@@ -91,6 +91,7 @@ import FoundryPipelineCatalog from "@/components/overnight/FoundryPipelineCatalo
 import AssetDnaDrawer from "@/components/overnight/AssetDnaDrawer";
 import AstroTrackerDrawer from "@/components/overnight/AstroTrackerDrawer";
 import VoiceForgeDrawer from "@/components/overnight/VoiceForgeDrawer";
+import DeadZoneFinderDrawer from "@/components/overnight/DeadZoneFinderDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -352,6 +353,9 @@ export function AppLayout({ children }) {
 
       {/* F91: VoiceForge Profiles — right-edge slide-in at 62%; GET /v1/voiceforge/profiles (5-min poll); voice-clone profile list with name, description, active indicator, created age; XTTS ONLINE/OFFLINE badge in header; pink (#EC4899) accent */}
       <VoiceForgeDrawer />
+
+      {/* F92: Dead Zone Finder — left-edge slide-in at 58%; GET /v1/deadzone/scan (5-min poll); kind badge (missing_file red/stale_file amber/untracked_route orange/overlap cyan/duplicate_name indigo) + label + suggestion per finding; rose (#FB7185) accent */}
+      <DeadZoneFinderDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
