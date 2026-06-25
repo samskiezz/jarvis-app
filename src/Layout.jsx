@@ -94,6 +94,7 @@ import AstroTrackerDrawer from "@/components/overnight/AstroTrackerDrawer";
 import VoiceForgeDrawer from "@/components/overnight/VoiceForgeDrawer";
 import DeadZoneFinderDrawer from "@/components/overnight/DeadZoneFinderDrawer";
 import FrictionMapDrawer from "@/components/overnight/FrictionMapDrawer";
+import VoiceCommandReference from "@/components/overnight/VoiceCommandReference";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -364,6 +365,9 @@ export function AppLayout({ children }) {
 
       {/* F93: Friction Map — left-edge slide-in at 85%; GET /v1/friction/scan (5-min poll); friction score gauge + kind badges (repeated_action orange/duplicate_prompt indigo/repeat_error red) + count badge + suggestion per finding; orange (#F97316) accent */}
       <FrictionMapDrawer />
+
+      {/* F95: Voice Command Reference — right-edge slide-in at 69%; GET /v1/voice/status (TTS provider + STT availability) + GET /v1/voice/commands (full grouped catalog); searchable by phrase/description; blue (#60A5FA) accent; fetched once on open */}
+      <VoiceCommandReference />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
