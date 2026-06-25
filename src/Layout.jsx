@@ -100,6 +100,7 @@ import TaxonomyBrowserDrawer from "@/components/overnight/TaxonomyBrowserDrawer"
 import SpecForgeBrowser from "@/components/overnight/SpecForgeBrowser";
 import VisionMonitorDrawer from "@/components/overnight/VisionMonitorDrawer";
 import WorldPackBrowser from "@/components/overnight/WorldPackBrowser";
+import SavedSearchesDrawer from "@/components/overnight/SavedSearchesDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -388,6 +389,9 @@ export function AppLayout({ children }) {
 
       {/* F101: World Pack Browser — right-edge slide-in at 3%; GET /v1/jarvis/world/summary + /subjects?limit=100; family/subject/endpoint counts + searchable subject list with neuron-type badges; emerald (#10B981) accent; fetched once on open */}
       <WorldPackBrowser />
+
+      {/* F102: Saved Searches Drawer — right-edge slide-in at 91%; GET /v1/search-plus/saved (5-min poll); saved search list with name + spec summary + updated age; click row runs GET /v1/search-plus/saved/{id}/run and shows result count inline; orange (#FB923C) accent */}
+      <SavedSearchesDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
