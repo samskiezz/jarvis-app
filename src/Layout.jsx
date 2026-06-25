@@ -81,6 +81,7 @@ import CommonOperatingPicture from "@/components/overnight/CommonOperatingPictur
 import EntityResolutionPanel from "@/components/overnight/EntityResolutionPanel";
 import IncidentCorrelationDrawer from "@/components/overnight/IncidentCorrelationDrawer";
 import PanicKeyPanel from "@/components/overnight/PanicKeyPanel";
+import GothamEventsDrawer from "@/components/overnight/GothamEventsDrawer";
 import SecurityComplianceScorecard from "@/components/overnight/SecurityComplianceScorecard";
 import SciDomainsDrawer from "@/components/overnight/SciDomainsDrawer";
 import GraphTimeScrubber from "@/components/overnight/GraphTimeScrubber";
@@ -220,6 +221,9 @@ export function AppLayout({ children }) {
 
       {/* F76: Nexus Event Bus Monitor — right-edge slide-in at 38%; GET /v1/bus/stats + /v1/bus/poll; rolling event feed; purple (#A855F7) accent */}
       <NexusBusMonitor />
+
+      {/* F86: Gotham Events Drawer — right-edge slide-in at 47%; GET /v1/gotham/events?limit=50 every 30 s; kind badge + event ID + case link + relative age; amber (#F59E0B) accent; critical-count badge pulses red */}
+      <GothamEventsDrawer />
 
       {/* F77: Common Operating Picture — left-edge slide-in at 67%; GET /v1/cop/snapshot (60-s poll) + /v1/cop/layers; GEO/GRAPH/TEMPORAL/METRICS tabs; cyan (#06B6D4) accent */}
       <CommonOperatingPicture />
