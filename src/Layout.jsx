@@ -107,6 +107,7 @@ import BrainCrmPeopleDrawer from "@/components/overnight/BrainCrmPeopleDrawer";
 import MotorPredictorDrawer from "@/components/overnight/MotorPredictorDrawer";
 import SemanticSearchDrawer from "@/components/overnight/SemanticSearchDrawer";
 import AssuranceInvariantsDrawer from "@/components/overnight/AssuranceInvariantsDrawer";
+import ScienceMethodsCatalog from "@/components/overnight/ScienceMethodsCatalog";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -416,6 +417,9 @@ export function AppLayout({ children }) {
 
       {/* F115: Assurance Invariants Drawer — left-edge slide-in at 43%; GET /assurance/invariants (3-min poll); overall_ok badge + pass/fail counts + per-invariant PASS/FAIL rows with evidence; rose (#F43F5E) accent; red pulse when failures present */}
       <AssuranceInvariantsDrawer />
+
+      {/* F116: Science Methods Catalog — left-edge slide-in at 46%; GET /functions/science/methods on mount; methods grouped by domain with ▶ RUN buttons firing POST /functions/science/run; amber (#F59E0B) accent */}
+      <ScienceMethodsCatalog />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
