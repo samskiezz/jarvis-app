@@ -117,6 +117,7 @@ import RiskSignalDrawer from "@/components/overnight/RiskSignalDrawer";
 import ApolloFleetDrawer from "@/components/overnight/ApolloFleetDrawer";
 import EventBackboneMonitor from "@/components/overnight/EventBackboneMonitor";
 import VoiceHistoryDrawer from "@/components/overnight/VoiceHistoryDrawer";
+import DbHealthStatsDrawer from "@/components/overnight/DbHealthStatsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -456,6 +457,9 @@ export function AppLayout({ children }) {
 
       {/* F126: Voice History Drawer — right-edge slide-in at 68%; GET /v1/voice/history?limit=30 (2-min poll); server-side voice command log with source badge (TTS/NLU/STT/API) + command text + relative timestamp; magenta (#D946EF) accent */}
       <VoiceHistoryDrawer />
+
+      {/* F127: DB Health & Stats Drawer — right-edge slide-in at 29%; polls GET /v1/jarvis/db/health + /stats every 60 s; active backend badge (sqlite/postgres); SQLite note count + path; Postgres online status + note count; emerald (#10B981) accent */}
+      <DbHealthStatsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
