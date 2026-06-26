@@ -74,6 +74,7 @@ import GovernanceDashboard from "@/components/overnight/GovernanceDashboard";
 import ClaudeCodeRunsDrawer from "@/components/overnight/ClaudeCodeRunsDrawer";
 import UnderworldBridgeStatus from "@/components/overnight/UnderworldBridgeStatus";
 import LabsCapabilityDrawer from "@/components/overnight/LabsCapabilityDrawer";
+import GovernedActionsPanel from "@/components/overnight/GovernedActionsPanel";
 import AutopilotDashboard from "@/components/overnight/AutopilotDashboard";
 import ServiceRegistryPanel from "@/components/overnight/ServiceRegistryPanel";
 import ModeMixerPanel from "@/components/overnight/ModeMixerPanel";
@@ -344,6 +345,9 @@ export function AppLayout({ children }) {
 
       {/* F70: Labs Capability Catalog — left-edge slide-in at 32%; GET /v1/labs/catalog lists underworld scientific modules (drug_discovery/disease_model/quantum_demo/manufacturing_sim/patent_classify/materials_or_standards) with AVAILABLE/UNAVAILABLE status badges; emerald (#10B981) accent; 5-min poll */}
       <LabsCapabilityDrawer />
+
+      {/* F122: Governed AIP Actions Panel — left-edge slide-in at 33%; GET /v1/jarvis/actions (5-min poll) + GET /v1/jarvis/approvals?status=pending (2-min poll); ACTIONS/GATES tabs; violet (#7C3AED) accent; pending gate count badge */}
+      <GovernedActionsPanel />
 
       {/* F71: Autopilot Dashboard — left-edge slide-in at 37%; GET /assurance/autopilot/status + proposals + roadmap; STATUS/PROPOSALS/ROADMAP tabs; sky-blue (#0EA5E9) accent; 2-min poll */}
       <AutopilotDashboard />
