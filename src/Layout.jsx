@@ -120,6 +120,7 @@ import EventBackboneMonitor from "@/components/overnight/EventBackboneMonitor";
 import VoiceHistoryDrawer from "@/components/overnight/VoiceHistoryDrawer";
 import DbHealthStatsDrawer from "@/components/overnight/DbHealthStatsDrawer";
 import UnderworldApiCatalog from "@/components/overnight/UnderworldApiCatalog";
+import OsObservabilityDrawer from "@/components/overnight/OsObservabilityDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -468,6 +469,9 @@ export function AppLayout({ children }) {
 
       {/* F128: Underworld API Catalog — right-edge slide-in at 35%; GET /v1/underworld/health (60-s poll) + GET /v1/underworld/catalog (once on open); reachability status + latency tile + base URL + endpoint catalog grouped by domain (worlds/physics/science/knowledge) with expandable GET/POST rows; violet (#7C3AED) accent */}
       <UnderworldApiCatalog />
+
+      {/* F130: OS Observability Drawer — right-edge slide-in at 56%; parallel-polls GET /v1/jarvis/metrics + GET /v1/jarvis/traces?limit=20 every 60 s; p50/p95 latency tiles + error rate + total cost + by-layer bar breakdown + recent span list with status badge + duration; orange (#F97316) accent */}
+      <OsObservabilityDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
