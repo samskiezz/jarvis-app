@@ -110,6 +110,7 @@ import AssuranceInvariantsDrawer from "@/components/overnight/AssuranceInvariant
 import ScienceMethodsCatalog from "@/components/overnight/ScienceMethodsCatalog";
 import PageDataLensDrawer from "@/components/overnight/PageDataLensDrawer";
 import AiProposalsDrawer from "@/components/overnight/AiProposalsDrawer";
+import TenantRegistryDrawer from "@/components/overnight/TenantRegistryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -428,6 +429,9 @@ export function AppLayout({ children }) {
 
       {/* F118: AI Proposals Browser — right-edge slide-in at 51%; GET /v1/aip/proposals (5-min poll); PENDING/APPROVED/REJECTED status badge + object_id chip + action + rationale excerpt + age per row; pending count badge on tab; amber (#F59E0B) accent */}
       <AiProposalsDrawer />
+
+      {/* F119: Tenant Registry — right-edge slide-in at 88%; GET /v1/tenants (3-min poll) + GET /v1/tenants/whoami (once on open); all tenants with name + plan badge + id chip + age; active tenant highlighted with green dot; teal (#14B8A6) accent */}
+      <TenantRegistryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
