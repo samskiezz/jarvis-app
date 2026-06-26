@@ -104,6 +104,7 @@ import SavedSearchesDrawer from "@/components/overnight/SavedSearchesDrawer";
 import InfSwarmAgentsDrawer from "@/components/overnight/InfSwarmAgentsDrawer";
 import NeoScreenDrawer from "@/components/overnight/NeoScreenDrawer";
 import BrainCrmPeopleDrawer from "@/components/overnight/BrainCrmPeopleDrawer";
+import MotorPredictorDrawer from "@/components/overnight/MotorPredictorDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -404,6 +405,9 @@ export function AppLayout({ children }) {
 
       {/* F111: Brain CRM People Drawer — left-edge slide-in at 22%; GET /v1/brain/people (5-min poll); person name + tier badge (FULL/MODERATE/BRIEF) + mention count; indigo (#6366F1) accent */}
       <BrainCrmPeopleDrawer />
+
+      {/* F112: Motor Intent Predictor Drawer — left-edge slide-in at 18%; GET /v1/motor/stats (2-min poll) + GET /v1/motor/predict?top_k=5; stats tiles + ranked candidate list with source badge + confidence bar; sky-blue (#0EA5E9) accent */}
+      <MotorPredictorDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
