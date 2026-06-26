@@ -111,6 +111,7 @@ import ScienceMethodsCatalog from "@/components/overnight/ScienceMethodsCatalog"
 import PageDataLensDrawer from "@/components/overnight/PageDataLensDrawer";
 import AiProposalsDrawer from "@/components/overnight/AiProposalsDrawer";
 import TenantRegistryDrawer from "@/components/overnight/TenantRegistryDrawer";
+import OpsHealthSummaryDrawer from "@/components/overnight/OpsHealthSummaryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -432,6 +433,9 @@ export function AppLayout({ children }) {
 
       {/* F119: Tenant Registry — right-edge slide-in at 88%; GET /v1/tenants (3-min poll) + GET /v1/tenants/whoami (once on open); all tenants with name + plan badge + id chip + age; active tenant highlighted with green dot; teal (#14B8A6) accent */}
       <TenantRegistryDrawer />
+
+      {/* F120: Ops Health Summary — right-edge slide-in at 64%; parallel-polls GET /v1/jarvis/system/status (60s) + GET /v1/ops/events (30s); service health tiles + critical event list; rose (#F43F5E) accent */}
+      <OpsHealthSummaryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
