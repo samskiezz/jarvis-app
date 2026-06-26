@@ -114,6 +114,7 @@ import AiProposalsDrawer from "@/components/overnight/AiProposalsDrawer";
 import TenantRegistryDrawer from "@/components/overnight/TenantRegistryDrawer";
 import OpsHealthSummaryDrawer from "@/components/overnight/OpsHealthSummaryDrawer";
 import RiskSignalDrawer from "@/components/overnight/RiskSignalDrawer";
+import ApolloFleetDrawer from "@/components/overnight/ApolloFleetDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -444,6 +445,9 @@ export function AppLayout({ children }) {
 
       {/* F121: Risk Signal Drawer — right-edge slide-in at 26%; polls GET /entities/RiskSignal every 30 s; severity-sorted (CRITICAL/HIGH/MEDIUM/LOW) signals; critical count badge pulses on tab; rose (#F43F5E) accent */}
       <RiskSignalDrawer />
+
+      {/* F124: Apollo Fleet Drawer — right-edge slide-in at 16%; GET /v1/jarvis/apollo/fleet + /releases?limit=20 (5-min poll); FLEET tab shows env tier/version/status; RELEASES tab shows recent deploy history; blue (#3B82F6) accent */}
+      <ApolloFleetDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
