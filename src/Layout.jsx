@@ -116,6 +116,7 @@ import OpsHealthSummaryDrawer from "@/components/overnight/OpsHealthSummaryDrawe
 import RiskSignalDrawer from "@/components/overnight/RiskSignalDrawer";
 import ApolloFleetDrawer from "@/components/overnight/ApolloFleetDrawer";
 import EventBackboneMonitor from "@/components/overnight/EventBackboneMonitor";
+import VoiceHistoryDrawer from "@/components/overnight/VoiceHistoryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -452,6 +453,9 @@ export function AppLayout({ children }) {
 
       {/* F123: Event Backbone Monitor — right-edge slide-in at 11%; GET /v1/jarvis/events/stats (30-s poll) + GET /v1/jarvis/events/project/{stream} on click; total events + consumer count tiles + stream chips; per-stream by_type breakdown + last event preview; indigo (#818CF8) accent */}
       <EventBackboneMonitor />
+
+      {/* F126: Voice History Drawer — right-edge slide-in at 68%; GET /v1/voice/history?limit=30 (2-min poll); server-side voice command log with source badge (TTS/NLU/STT/API) + command text + relative timestamp; magenta (#D946EF) accent */}
+      <VoiceHistoryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
