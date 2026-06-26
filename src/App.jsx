@@ -48,6 +48,7 @@ import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEng
 import LiveIntelPulse from '@/components/cinematic/LiveIntelPulse';
 import SceneHealthHeatmap from '@/components/cinematic/SceneHealthHeatmap';
 import DailyObjectivesPlanner from '@/components/cinematic/DailyObjectivesPlanner';
+import NexusControlPlane from '@/components/overnight/NexusControlPlane';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -138,6 +139,8 @@ function App() {
             <SceneHealthHeatmap />
             {/* F110: daily objectives planner — ◎ DAILY button (left:6628); parallel-fetches /entities/Task + /v1/aip/skill + /entities/RiskSignal; composite urgency+risk+skill score surfaces top-5 objectives; filter tabs ALL/URGENT/RISK-ALIGNED/SKILL-MATCHED; ▶ PLAN → /v1/jarvis/agent/chat action plan + TTS; 5-min auto-refresh; "daily objectives" / "what should I do today" / "daily plan" voice trigger (isDailyObjectivesQuery + buildDailyObjectivesScript wired in JarvisBrain) */}
             <DailyObjectivesPlanner />
+            {/* F113: Nexus Control Plane — ⊕ CTRL button (left:1100); polls GET /v1/control/state every 30 s; services alive/total + recent control bus events (seq badge + topic chip + type + actor + relative ts); latest_snapshot + latest_tasks tiles; slate (#94A3B8) accent */}
+            <NexusControlPlane />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
