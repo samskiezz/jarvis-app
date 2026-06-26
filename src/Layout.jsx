@@ -106,6 +106,7 @@ import NeoScreenDrawer from "@/components/overnight/NeoScreenDrawer";
 import BrainCrmPeopleDrawer from "@/components/overnight/BrainCrmPeopleDrawer";
 import MotorPredictorDrawer from "@/components/overnight/MotorPredictorDrawer";
 import SemanticSearchDrawer from "@/components/overnight/SemanticSearchDrawer";
+import AssuranceInvariantsDrawer from "@/components/overnight/AssuranceInvariantsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -412,6 +413,9 @@ export function AppLayout({ children }) {
 
       {/* F114: Semantic Search Drawer — right-edge slide-in at 33%; GET /v1/semantic/search?q=&k=12; debounced 400 ms; cosine top-k results with kind badge + score bar + text excerpt; lavender (#C084FC) accent */}
       <SemanticSearchDrawer />
+
+      {/* F115: Assurance Invariants Drawer — left-edge slide-in at 43%; GET /assurance/invariants (3-min poll); overall_ok badge + pass/fail counts + per-invariant PASS/FAIL rows with evidence; rose (#F43F5E) accent; red pulse when failures present */}
+      <AssuranceInvariantsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
