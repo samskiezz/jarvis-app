@@ -53,6 +53,7 @@ import ProofPacksDrawer from "@/components/overnight/ProofPacksDrawer";
 import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
 import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
 import SchedulesPanel from "@/components/overnight/SchedulesPanel";
+import LiveIntelPulseDrawer from "@/components/overnight/LiveIntelPulseDrawer";
 import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
 import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
@@ -212,6 +213,9 @@ export function AppLayout({ children }) {
 
       {/* F42: Schedules Panel — right-edge slide-in at 42%; JARVIS job scheduler from GET /v1/schedules */}
       <SchedulesPanel />
+
+      {/* F129: Live Intel Pulse Drawer — right-edge slide-in at 44%; POST /functions/getLiveIntel every 2 min; top 5 earthquakes by magnitude + top 5 market movers by |Δ%|; orange (#F97316) accent */}
+      <LiveIntelPulseDrawer />
 
       {/* F45: VPN Status Panel — right-edge slide-in at 12%; WireGuard status + peers from GET /v1/vpn/status */}
       <VpnStatusPanel />
