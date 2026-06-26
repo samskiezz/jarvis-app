@@ -109,6 +109,7 @@ import SemanticSearchDrawer from "@/components/overnight/SemanticSearchDrawer";
 import AssuranceInvariantsDrawer from "@/components/overnight/AssuranceInvariantsDrawer";
 import ScienceMethodsCatalog from "@/components/overnight/ScienceMethodsCatalog";
 import PageDataLensDrawer from "@/components/overnight/PageDataLensDrawer";
+import AiProposalsDrawer from "@/components/overnight/AiProposalsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -424,6 +425,9 @@ export function AppLayout({ children }) {
 
       {/* F117: Page Data Lens — right-edge slide-in at 93%; GET /v1/jarvis/page-data/summary (5-min poll) + GET /v1/jarvis/page-data/{page} on click; page list with topic count badges; live measurements/events/documents/topics per page; cyan (#22D3EE) accent */}
       <PageDataLensDrawer />
+
+      {/* F118: AI Proposals Browser — right-edge slide-in at 51%; GET /v1/aip/proposals (5-min poll); PENDING/APPROVED/REJECTED status badge + object_id chip + action + rationale excerpt + age per row; pending count badge on tab; amber (#F59E0B) accent */}
+      <AiProposalsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
