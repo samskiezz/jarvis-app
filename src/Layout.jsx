@@ -103,6 +103,7 @@ import WorldPackBrowser from "@/components/overnight/WorldPackBrowser";
 import SavedSearchesDrawer from "@/components/overnight/SavedSearchesDrawer";
 import InfSwarmAgentsDrawer from "@/components/overnight/InfSwarmAgentsDrawer";
 import NeoScreenDrawer from "@/components/overnight/NeoScreenDrawer";
+import BrainCrmPeopleDrawer from "@/components/overnight/BrainCrmPeopleDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -400,6 +401,9 @@ export function AppLayout({ children }) {
 
       {/* F108: NEO Screen Drawer — right-edge slide-in at 55%; GET /v1/astro/neo?a=&e= (on-demand Keplerian two-body MOID); 4 preset orbits (Aten/Apollo/Amor/Atira); orbit params + MOID + PHA hazard badge; red (#EF4444) accent */}
       <NeoScreenDrawer />
+
+      {/* F111: Brain CRM People Drawer — left-edge slide-in at 22%; GET /v1/brain/people (5-min poll); person name + tier badge (FULL/MODERATE/BRIEF) + mention count; indigo (#6366F1) accent */}
+      <BrainCrmPeopleDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

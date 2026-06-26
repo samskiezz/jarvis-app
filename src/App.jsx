@@ -46,6 +46,8 @@ import SystemTelemetryRecorder from '@/components/cinematic/SystemTelemetryRecor
 import ThreatActorNetwork from '@/components/cinematic/ThreatActorNetwork';
 import ThreatCorrelationEngine from '@/components/cinematic/ThreatCorrelationEngine';
 import LiveIntelPulse from '@/components/cinematic/LiveIntelPulse';
+import SceneHealthHeatmap from '@/components/cinematic/SceneHealthHeatmap';
+import DailyObjectivesPlanner from '@/components/cinematic/DailyObjectivesPlanner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -132,6 +134,10 @@ function App() {
             <ThreatCorrelationEngine />
             {/* F107: live intel pulse — ⚡ PULSE button (left:4756); polls /functions/getLiveIntel every 2 min; composite 0-100 global-activity score (seismic 45% + crypto 35% + FX 20%); pulse ring + breakdown bars + sparkline history + top-quake tile + AI briefing via /v1/jarvis/agent/chat; red pulse animation when score ≥75; "intel pulse / global pulse / world activity" voice trigger (isIntelPulseQuery + buildIntelPulseScript wired in JarvisBrain) */}
             <LiveIntelPulse />
+            {/* F109: scene health heatmap — ⬡ HEALTH button (left:2052); parallel-fetches all 10 /v1/cinematic/scene/{id}; colour-coded heatmap grid (scene × anchor); cyan=healthy, amber=degraded, red=critical; red badge when critical scenes present; "scene health / heatmap / anchor health / all scenes" voice trigger (isSceneHealthQuery + buildSceneHealthScript wired in JarvisBrain) */}
+            <SceneHealthHeatmap />
+            {/* F110: daily objectives planner — ◎ DAILY button (left:6628); parallel-fetches /entities/Task + /v1/aip/skill + /entities/RiskSignal; composite urgency+risk+skill score surfaces top-5 objectives; filter tabs ALL/URGENT/RISK-ALIGNED/SKILL-MATCHED; ▶ PLAN → /v1/jarvis/agent/chat action plan + TTS; 5-min auto-refresh; "daily objectives" / "what should I do today" / "daily plan" voice trigger (isDailyObjectivesQuery + buildDailyObjectivesScript wired in JarvisBrain) */}
+            <DailyObjectivesPlanner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
