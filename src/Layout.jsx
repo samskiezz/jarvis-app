@@ -115,6 +115,7 @@ import TenantRegistryDrawer from "@/components/overnight/TenantRegistryDrawer";
 import OpsHealthSummaryDrawer from "@/components/overnight/OpsHealthSummaryDrawer";
 import RiskSignalDrawer from "@/components/overnight/RiskSignalDrawer";
 import ApolloFleetDrawer from "@/components/overnight/ApolloFleetDrawer";
+import EventBackboneMonitor from "@/components/overnight/EventBackboneMonitor";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -448,6 +449,9 @@ export function AppLayout({ children }) {
 
       {/* F124: Apollo Fleet Drawer — right-edge slide-in at 16%; GET /v1/jarvis/apollo/fleet + /releases?limit=20 (5-min poll); FLEET tab shows env tier/version/status; RELEASES tab shows recent deploy history; blue (#3B82F6) accent */}
       <ApolloFleetDrawer />
+
+      {/* F123: Event Backbone Monitor — right-edge slide-in at 11%; GET /v1/jarvis/events/stats (30-s poll) + GET /v1/jarvis/events/project/{stream} on click; total events + consumer count tiles + stream chips; per-stream by_type breakdown + last event preview; indigo (#818CF8) accent */}
+      <EventBackboneMonitor />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
