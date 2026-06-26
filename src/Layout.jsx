@@ -105,6 +105,7 @@ import InfSwarmAgentsDrawer from "@/components/overnight/InfSwarmAgentsDrawer";
 import NeoScreenDrawer from "@/components/overnight/NeoScreenDrawer";
 import BrainCrmPeopleDrawer from "@/components/overnight/BrainCrmPeopleDrawer";
 import MotorPredictorDrawer from "@/components/overnight/MotorPredictorDrawer";
+import SemanticSearchDrawer from "@/components/overnight/SemanticSearchDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -408,6 +409,9 @@ export function AppLayout({ children }) {
 
       {/* F112: Motor Intent Predictor Drawer — left-edge slide-in at 18%; GET /v1/motor/stats (2-min poll) + GET /v1/motor/predict?top_k=5; stats tiles + ranked candidate list with source badge + confidence bar; sky-blue (#0EA5E9) accent */}
       <MotorPredictorDrawer />
+
+      {/* F114: Semantic Search Drawer — right-edge slide-in at 33%; GET /v1/semantic/search?q=&k=12; debounced 400 ms; cosine top-k results with kind badge + score bar + text excerpt; lavender (#C084FC) accent */}
+      <SemanticSearchDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
