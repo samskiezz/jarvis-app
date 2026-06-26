@@ -49,6 +49,8 @@ import LiveIntelPulse from '@/components/cinematic/LiveIntelPulse';
 import SceneHealthHeatmap from '@/components/cinematic/SceneHealthHeatmap';
 import DailyObjectivesPlanner from '@/components/cinematic/DailyObjectivesPlanner';
 import NexusControlPlane from '@/components/overnight/NexusControlPlane';
+import SkillScorecard from '@/components/cinematic/SkillScorecard';
+import LiveTelemetryTicker from '@/components/cinematic/LiveTelemetryTicker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -141,6 +143,10 @@ function App() {
             <DailyObjectivesPlanner />
             {/* F113: Nexus Control Plane — ⊕ CTRL button (left:1100); polls GET /v1/control/state every 30 s; services alive/total + recent control bus events (seq badge + topic chip + type + actor + relative ts); latest_snapshot + latest_tasks tiles; slate (#94A3B8) accent */}
             <NexusControlPlane />
+            {/* F15: skill scorecard — ◈ SKILLS button (left:700); polls /v1/aip/skill every 60 s; skill cards with score bar + level badge + description; "JARVIS, skills" voice trigger (isSkillQuery+buildSkillScript wired in JarvisBrain) */}
+            <SkillScorecard />
+            {/* F03: live telemetry ticker — thin top-bar HUD; polls /v1/jarvis/system/status (cpu/mem/load) + /v1/cinematic/brain (nodes/synapses) every 30 s; colour-coded pills; hides until first data arrives */}
+            <LiveTelemetryTicker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
