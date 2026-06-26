@@ -118,6 +118,7 @@ import ApolloFleetDrawer from "@/components/overnight/ApolloFleetDrawer";
 import EventBackboneMonitor from "@/components/overnight/EventBackboneMonitor";
 import VoiceHistoryDrawer from "@/components/overnight/VoiceHistoryDrawer";
 import DbHealthStatsDrawer from "@/components/overnight/DbHealthStatsDrawer";
+import UnderworldApiCatalog from "@/components/overnight/UnderworldApiCatalog";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -460,6 +461,9 @@ export function AppLayout({ children }) {
 
       {/* F127: DB Health & Stats Drawer — right-edge slide-in at 29%; polls GET /v1/jarvis/db/health + /stats every 60 s; active backend badge (sqlite/postgres); SQLite note count + path; Postgres online status + note count; emerald (#10B981) accent */}
       <DbHealthStatsDrawer />
+
+      {/* F128: Underworld API Catalog — right-edge slide-in at 35%; GET /v1/underworld/health (60-s poll) + GET /v1/underworld/catalog (once on open); reachability status + latency tile + base URL + endpoint catalog grouped by domain (worlds/physics/science/knowledge) with expandable GET/POST rows; violet (#7C3AED) accent */}
+      <UnderworldApiCatalog />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
