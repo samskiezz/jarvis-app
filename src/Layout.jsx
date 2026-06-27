@@ -140,6 +140,7 @@ import SceneAnchorSnapshot from "@/components/overnight/SceneAnchorSnapshot";
 import MetricsRegistryDrawer from "@/components/overnight/MetricsRegistryDrawer";
 import GlobalNotesDrawer from "@/components/overnight/GlobalNotesDrawer";
 import ChatPredictTerminal from "@/components/overnight/ChatPredictTerminal";
+import BrainGoaPlanDrawer from "@/components/overnight/BrainGoaPlanDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -548,6 +549,9 @@ export function AppLayout({ children }) {
 
       {/* F152: Chat Predict Terminal — left-edge slide-in at 25%; POST /v1/chat/route classifies intent then POST /v1/chat/predict runs grounded forecast engine; answer + point/interval/confidence/honesty; session history; sky-blue (#0EA5E9) accent */}
       <ChatPredictTerminal />
+
+      {/* F153: Brain GOAP Plan Drawer — left-edge slide-in at 12%; GET /v1/brain/autopilot/plan dry-run A* plan preview; state tiles (score/gaps/orphans/themes/low_confidence/network); unmet chips; ordered action steps with color-coded badges; emerald (#4ADE80) accent; 5-min poll */}
+      <BrainGoaPlanDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
