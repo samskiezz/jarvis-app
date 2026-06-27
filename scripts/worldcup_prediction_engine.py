@@ -112,32 +112,45 @@ SLIP_PURPOSE = {
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 try:
-    from wc2026_predictor import (  # type: ignore
-        BASELINE_ELO as _REPO_BASELINE_ELO,
-        DEFAULT_ELO as _REPO_DEFAULT_ELO,
-        Elo as _RepoElo,
-        pick_wdl as _repo_pick_wdl,
-        remove_vig as _repo_remove_vig,
-        kelly_size as _repo_kelly_size,
-    )
-    _HAVE_REPO_PREDICTOR = True
-except Exception:  # noqa: BLE001
-    _HAVE_REPO_PREDICTOR = False
-    _REPO_BASELINE_ELO = {}
-    _REPO_DEFAULT_ELO = 1500.0
-
-try:
     from wc2026_db import actual_for as _repo_actual_for  # type: ignore
     _HAVE_REPO_DB = True
 except Exception:  # noqa: BLE001
     _HAVE_REPO_DB = False
 
-DEFAULT_ELO = float(_REPO_DEFAULT_ELO)
+# Lazy import of the legacy predictor; it pulls scipy/sklearn and costs
+# ~2-3 s at module load, which we only pay when its helpers are actually used.
+_REPO_MODULE: Any | None = None
+
+
+def _repo_module() -> Any:
+    global _REPO_MODULE
+    if _REPO_MODULE is None:
+        try:
+            import wc2026_predictor as _m  # type: ignore
+            _REPO_MODULE = _m
+        except Exception:
+            _REPO_MODULE = False
+    return _REPO_MODULE
+
+
+def _repo_attr(name: str, default: Any = None) -> Any:
+    m = _repo_module()
+    if m is False:
+        return default
+    return getattr(m, name, default)
+
+
+def _have_repo_predictor() -> bool:
+    return _repo_module() is not False
+
+
+DEFAULT_ELO = 1500.0
 
 
 def pick_wdl(p_home: float, p_draw: float, p_away: float) -> str:
-    if _HAVE_REPO_PREDICTOR:
-        return _repo_pick_wdl(p_home, p_draw, p_away)
+    fn = _repo_attr("pick_wdl")
+    if fn is not None:
+        return fn(p_home, p_draw, p_away)
     if not (p_home >= 0 and p_draw >= 0 and p_away >= 0):
         return HOME
     max_hp = max(p_home, p_away)
@@ -159,8 +172,9 @@ def majority_top_pick(per_model: dict[str, tuple]) -> str:
 
 
 def remove_vig(book_odds: dict[str, float]) -> dict[str, float]:
-    if _HAVE_REPO_PREDICTOR:
-        return _repo_remove_vig(book_odds)
+    fn = _repo_attr("remove_vig")
+    if fn is not None:
+        return fn(book_odds)
     raw = {k: 1.0 / float(v) for k, v in book_odds.items() if float(v) > 0}
     total = sum(raw.values()) or 1.0
     return {k: v / total for k, v in raw.items()}
@@ -168,8 +182,9 @@ def remove_vig(book_odds: dict[str, float]) -> dict[str, float]:
 
 def kelly_size(model_prob: float, book_odds: float, bankroll: float,
                *, fraction: float = 0.25) -> float:
-    if _HAVE_REPO_PREDICTOR:
-        return _repo_kelly_size(model_prob, book_odds, bankroll, fraction=fraction)
+    fn = _repo_attr("kelly_size")
+    if fn is not None:
+        return fn(model_prob, book_odds, bankroll, fraction=fraction)
     if book_odds <= 1.0 or bankroll <= 0:
         return 0.0
     b = book_odds - 1.0
@@ -463,7 +478,14 @@ _ROSTER_STRENGTH = _load_roster_strength()
 
 
 def _load_tracking_features() -> dict[str, dict[str, Any]]:
-    """Load recent vision-derived team signatures from the tracking DB/JSON."""
+    """Load per-team tracking signatures, preferring a small cached aggregate."""
+    sig_path = DATA_DIR / "wc2026_tracking_signatures.json"
+    if sig_path.exists():
+        try:
+            return json.loads(sig_path.read_text())
+        except (OSError, ValueError, TypeError) as exc:
+            LOG.warning("tracking signatures cache read failed: %s", exc)
+
     path = DATA_DIR / "wc2026_tracking_features.json"
     signatures: dict[str, dict[str, Any]] = {}
     if not path.exists():
@@ -496,12 +518,26 @@ def _load_tracking_features() -> dict[str, dict[str, Any]]:
                 "territory": sum(r["territory"] for r in recs) / n,
                 "transition_rate": sum(r["transition_rate"] for r in recs) / n,
             }
+        # Cache the tiny aggregate so future loads are effectively free.
+        if signatures:
+            try:
+                sig_path.write_text(json.dumps(signatures, indent=2, ensure_ascii=False))
+            except (OSError, TypeError) as exc:
+                LOG.warning("tracking signatures cache write failed: %s", exc)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         LOG.warning("tracking features load failed: %s", exc)
     return signatures
 
 
-_TEAM_TRACKING = _load_tracking_features()
+_TEAM_TRACKING_CACHE: Optional[dict[str, dict[str, Any]]] = None
+
+
+def _team_tracking() -> dict[str, dict[str, Any]]:
+    """Lazy accessor for tracking signatures."""
+    global _TEAM_TRACKING_CACHE
+    if _TEAM_TRACKING_CACHE is None:
+        _TEAM_TRACKING_CACHE = _load_tracking_features()
+    return _TEAM_TRACKING_CACHE
 
 
 def load_fixtures(fixtures_path: Path = FIXTURES_JSON,
@@ -565,8 +601,9 @@ def _parse_date(d: Optional[str]) -> Optional[datetime]:
 
 class TeamState:
     def __init__(self) -> None:
-        if _HAVE_REPO_PREDICTOR:
-            self.elo = _RepoElo(ratings=dict(_REPO_BASELINE_ELO))
+        repo_elo_cls = _repo_attr("Elo")
+        if repo_elo_cls is not None:
+            self.elo = repo_elo_cls(ratings=dict(_repo_attr("BASELINE_ELO", {})))
         else:
             self.elo = None
             self._ratings: dict[str, float] = {}
@@ -1005,10 +1042,11 @@ def vision_tracking_model(state: TeamState, m: Match, **_: Any) -> Optional[tupl
     videos processed by scripts/wc2026_vision). Returns None otherwise so the
     ensemble falls back to other models.
     """
-    if not _TEAM_TRACKING:
+    tracking = _team_tracking()
+    if not tracking:
         return None
-    th = _TEAM_TRACKING.get(m.team_a)
-    ta = _TEAM_TRACKING.get(m.team_b)
+    th = tracking.get(m.team_a)
+    ta = tracking.get(m.team_b)
     if th is None or ta is None:
         return None
     # Composite tracking advantage: possession + territory control - transition chaos.
@@ -1045,6 +1083,10 @@ MODEL_FUNCS: list[tuple[str, Callable]] = [
 ]
 BOOST_LABELS = ["xgboost_proxy", "lightgbm_proxy", "catboost_proxy"]
 ALL_MODEL_NAMES = [n for n, _ in MODEL_FUNCS] + BOOST_LABELS + ["market"]
+
+# Hard floor for models we never want the optimiser to zero out entirely.
+# Vision tracking has real signal for ~287 matches; keep it in the blend.
+MIN_MODEL_FLOOR: dict[str, float] = {"vision_tracking": 0.02}
 
 
 # ---------------------------------------------------------------------------
@@ -1162,10 +1204,122 @@ def optimise_weights_by_accuracy(rows: list[tuple[dict[str, tuple], str]],
     return learned, True
 
 
-def _optimise_weights(rows: list[tuple[dict[str, tuple], str]], l2: float = 0.01) -> tuple[dict[str, float], bool]:
+def _project_to_simplex_with_floor(v: np.ndarray, floor: np.ndarray, total: float) -> np.ndarray:
+    """Project v onto the simplex sum(v)=total with elementwise floor."""
+    v = np.maximum(v, floor)
+    remaining = total - floor.sum()
+    if remaining <= 0:
+        return floor.copy()
+    excess = v - floor
+    s = excess.sum()
+    if s > 0:
+        excess = excess * (remaining / s)
+    else:
+        excess = np.full_like(excess, remaining / len(excess))
+    return floor + excess
+
+
+def optimise_weights_by_logloss_fast(
+    rows: list[tuple[dict[str, tuple], str, float]],
+    l2: float = 0.01,
+    floor: Optional[dict[str, float]] = None,
+    max_iter: int = 300,
+) -> tuple[dict[str, float], bool]:
+    """Vectorised log-loss weight optimizer with analytic gradient and SLSQP.
+
+    Optionally enforces a per-model minimum weight floor (e.g. vision tracking).
+    Rows may be 2-tuples (per_model, actual) or 3-tuples with sample weight.
+    """
+    floor = dict(floor or {})
+    if len(rows) < 40:
+        return dict(SAFE_DEFAULT_WEIGHTS), False
+    names = [n for n in ALL_MODEL_NAMES if any(r[0].get(n) is not None for r in rows)]
+    if not names:
+        return dict(SAFE_DEFAULT_WEIGHTS), False
+    cls_idx = {HOME: 0, DRAW: 1, AWAY: 2}
+    K = len(names)
+    N = len(rows)
+    P = np.zeros((N, K, 3), dtype=float)
+    y = np.zeros(N, dtype=np.int64)
+    sw = np.ones(N, dtype=float)
+    for i, item in enumerate(rows):
+        pm, actual = item[0], item[1]
+        for k, n in enumerate(names):
+            vec = pm.get(n)
+            if vec is not None:
+                P[i, k, 0] = float(vec[0])
+                P[i, k, 1] = float(vec[1])
+                P[i, k, 2] = float(vec[2])
+        y[i] = cls_idx[actual]
+        if len(item) > 2:
+            sw[i] = float(item[2])
+
+    # Normalise per-model probability vectors; zero rows stay zero.
+    s = P.sum(axis=2)
+    nz = s > 0
+    P[nz] /= s[nz][..., None]
+    Py = P[np.arange(N), :, y]
+    wsum_sw = float(sw.sum()) or 1.0
+
+    f = np.array([floor.get(n, 0.0) for n in names], dtype=float)
+    f = np.clip(f, 0.0, 1.0)
+    F = float(f.sum())
+    if F >= 1.0:
+        w = f / F
+        learned = {n: round(float(w[i]), 5) for i, n in enumerate(names)}
+        for n in ALL_MODEL_NAMES:
+            learned.setdefault(n, 0.0)
+        return learned, True
+
+    def obj(q: np.ndarray) -> float:
+        w = q + f
+        py = Py @ w
+        py = np.clip(py, 1e-12, None)
+        ll = -float(np.sum(sw * np.log(py))) / wsum_sw
+        return ll + l2 * float(np.sum(w * w))
+
+    def jac(q: np.ndarray) -> np.ndarray:
+        w = q + f
+        py = Py @ w
+        py = np.clip(py, 1e-12, None)
+        g = -np.einsum("n,nk->k", sw / py, Py) / wsum_sw + 2 * l2 * w
+        return g
+
+    x0 = np.array([SAFE_DEFAULT_WEIGHTS.get(n, 0.05) for n in names], dtype=float)
+    x0 = np.clip(x0, f, 1.0)
+    x0 = _project_to_simplex_with_floor(x0, f, 1.0 - F)
+    bounds = [(0.0, 1.0 - F)] * K
+    cons = {
+        "type": "eq",
+        "fun": lambda q: float(q.sum()) - (1.0 - F),
+        "jac": lambda q: np.ones(K),
+    }
+
+    try:
+        from scipy.optimize import minimize
+        res = minimize(
+            obj, x0, method="SLSQP", jac=jac, bounds=bounds,
+            constraints=cons, options={"maxiter": max_iter, "ftol": 1e-7}
+        )
+        q = np.clip(res.x, 0.0, None)
+        q = _project_to_simplex_with_floor(q, np.zeros(K), 1.0 - F)
+        w = q + f
+        w = w / (w.sum() or 1.0)
+        learned = {n: round(float(w[i]), 5) for i, n in enumerate(names)}
+        for n in ALL_MODEL_NAMES:
+            learned.setdefault(n, 0.0)
+        return learned, True
+    except Exception as exc:  # noqa: BLE001
+        LOG.warning("fast weight optimisation failed: %s — defaults", exc)
+        return dict(SAFE_DEFAULT_WEIGHTS), False
+
+
+def _optimise_weights(rows: list[tuple[dict[str, tuple], str]],
+                      l2: float = 0.01,
+                      floor: Optional[dict[str, float]] = None) -> tuple[dict[str, float], bool]:
     if WEIGHT_OBJECTIVE == "accuracy":
         return optimise_weights_by_accuracy(rows, l2=l2)
-    return optimise_weights_by_logloss(rows, l2=l2)
+    return optimise_weights_by_logloss_fast(rows, l2=l2, floor=floor or MIN_MODEL_FLOOR)
 
 
 def _utcnow() -> str:

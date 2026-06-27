@@ -1,0 +1,110 @@
+{
+  "Demo Home": {
+    "matches": 1,
+    "possession": 0.0,
+    "territory": 0.5,
+    "transition_rate": 0.0
+  },
+  "Demo Away": {
+    "matches": 1,
+    "possession": 0.0,
+    "territory": 0.5,
+    "transition_rate": 0.0
+  },
+  "Argentina": {
+    "matches": 2,
+    "possession": 0.535,
+    "territory": 0.565,
+    "transition_rate": 0.08499999999999999
+  },
+  "France": {
+    "matches": 2,
+    "possession": 0.46499999999999997,
+    "territory": 0.47,
+    "transition_rate": 0.09
+  },
+  "Morocco": {
+    "matches": 1,
+    "possession": 0.52,
+    "territory": 0.48,
+    "transition_rate": 0.1
+  },
+  "Croatia": {
+    "matches": 1,
+    "possession": 0.48,
+    "territory": 0.45,
+    "transition_rate": 0.09
+  },
+  "Brazil": {
+    "matches": 1,
+    "possession": 0.6,
+    "territory": 0.62,
+    "transition_rate": 0.11
+  },
+  "South Korea": {
+    "matches": 1,
+    "possession": 0.4,
+    "territory": 0.38,
+    "transition_rate": 0.11
+  },
+  "England": {
+    "matches": 1,
+    "possession": 0.58,
+    "territory": 0.6,
+    "transition_rate": 0.07
+  },
+  "Senegal": {
+    "matches": 1,
+    "possession": 0.42,
+    "territory": 0.4,
+    "transition_rate": 0.07
+  },
+  "SportsMOT_Home": {
+    "matches": 31,
+    "possession": 0.0967741935483871,
+    "territory": 0.5108387096774194,
+    "transition_rate": 0.0
+  },
+  "SportsMOT_Away": {
+    "matches": 31,
+    "possession": 0.03225806451612903,
+    "territory": 0.5097096774193548,
+    "transition_rate": 0.0
+  },
+  "20150221": {
+    "matches": 2,
+    "possession": 0.7264999999999999,
+    "territory": 0.5529999999999999,
+    "transition_rate": 0.001
+  },
+  "1800_Chelsea_1__1_Burnley": {
+    "matches": 2,
+    "possession": 0.27349999999999997,
+    "territory": 0.7035,
+    "transition_rate": 0.001
+  },
+  "A": {
+    "matches": 2,
+    "possession": 0.0,
+    "territory": 0.5,
+    "transition_rate": 0.0
+  },
+  "B": {
+    "matches": 2,
+    "possession": 0.0,
+    "territory": 0.5,
+    "transition_rate": 0.0
+  },
+  "SoccerNet_Home": {
+    "matches": 246,
+    "possession": 0.43148373983739835,
+    "territory": 0.49573170731707317,
+    "transition_rate": 0.0006333333333333333
+  },
+  "SoccerNet_Away": {
+    "matches": 246,
+    "possession": 0.5677154471544715,
+    "territory": 0.5069105691056911,
+    "transition_rate": 0.0006333333333333333
+  }
+}

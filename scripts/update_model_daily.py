@@ -54,9 +54,9 @@ import worldcup_prediction_engine as eng  # noqa: E402
 eng.USE_MAJORITY_PICK = True  # brute-force tuned default
 from worldcup_prediction_engine import (  # noqa: E402
     HOME, DRAW, AWAY, ALL_MODEL_NAMES, SAFE_DEFAULT_WEIGHTS, STRATEGY_PRESETS,
-    Match, TeamState, blend_probabilities, _predict_one, _universe,
+    MIN_MODEL_FLOOR, Match, TeamState, blend_probabilities, _predict_one, _universe,
     load_historical_matches, sequential_no_lookahead_backtest, compare_single_vs_spread,
-    walk_forward_backtest,
+    walk_forward_backtest, optimise_weights_by_logloss_fast,
 )
 
 LOG = logging.getLogger("wc2026_continuous")
@@ -128,36 +128,11 @@ def _recency_weight(match_date: str, ref_date: datetime, competition: str) -> fl
 
 
 def _weighted_logloss_weights(rows: list[tuple[dict, str, float]]) -> dict[str, float]:
-    if len(rows) < 40:
-        return dict(SAFE_DEFAULT_WEIGHTS)
-    names = [n for n in ALL_MODEL_NAMES if any(r[0].get(n) is not None for r in rows)]
-    cls_idx = {HOME: 0, DRAW: 1, AWAY: 2}
-
-    def neg_ll(w_raw: np.ndarray) -> float:
-        w = np.clip(w_raw, 0, None)
-        w = w / (w.sum() or 1.0)
-        wmap = {n: float(w[i]) for i, n in enumerate(names)}
-        tot = wsum = 0.0
-        for per_model, actual, sw in rows:
-            p = blend_probabilities(per_model, wmap)[cls_idx[actual]]
-            tot += sw * -math.log(max(p, 1e-12))
-            wsum += sw
-        return tot / (wsum or 1.0)
-
-    try:
-        from scipy.optimize import minimize
-        x0 = np.array([SAFE_DEFAULT_WEIGHTS.get(n, 0.05) for n in names])
-        res = minimize(neg_ll, x0, method="Nelder-Mead",
-                       options={"maxiter": 1500, "xatol": 1e-4, "fatol": 1e-5})
-        w = np.clip(res.x, 0, None)
-        w = w / (w.sum() or 1.0)
-        out = {n: round(float(w[i]), 5) for i, n in enumerate(names)}
-        for n in ALL_MODEL_NAMES:
-            out.setdefault(n, 0.0)
-        return out
-    except Exception as exc:  # noqa: BLE001
-        LOG.warning("weighted weight-learning failed: %s — defaults", exc)
-        return dict(SAFE_DEFAULT_WEIGHTS)
+    """Vectorised log-loss weight learning with a vision-tracking floor."""
+    learned, _ = optimise_weights_by_logloss_fast(
+        rows, l2=0.0001, floor=MIN_MODEL_FLOOR, max_iter=300
+    )
+    return learned
 
 
 def build_candidate(history: list[Match], strategy: str) -> dict[str, Any]:
