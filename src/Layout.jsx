@@ -130,6 +130,7 @@ import PolicyControlDrawer from "@/components/overnight/PolicyControlDrawer";
 import SecurityAuditLogDrawer from "@/components/overnight/SecurityAuditLogDrawer";
 import SandboxBranchInspector from "@/components/overnight/SandboxBranchInspector";
 import ArchitectureMapDrawer from "@/components/overnight/ArchitectureMapDrawer";
+import ObjectSetsBrowser from "@/components/overnight/ObjectSetsBrowser";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -508,6 +509,9 @@ export function AppLayout({ children }) {
 
       {/* F142: Architecture Map Drawer — right-edge slide-in at 87%; polls GET /v1/jarvis/architecture every 5 min; 10-layer status map with native/partial/interface/missing badges; click expands module presence; cyan (#06B6D4) accent */}
       <ArchitectureMapDrawer />
+
+      {/* F143: Object Sets Browser — right-edge slide-in at 25%; polls GET /v1/ontology-ext/sets every 5 min; set name + query type badge + relative age per row; click resolves via GET /v1/ontology-ext/sets/{id}/resolve and expands up to 8 member objects inline; blue-300 (#93C5FD) accent */}
+      <ObjectSetsBrowser />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
