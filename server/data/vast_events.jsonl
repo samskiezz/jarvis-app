@@ -11684,3 +11684,18 @@
 {"ts": 1782526732.3667123, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19891, "streak": 7}
 {"ts": 1782526793.372554, "kind": "brain_missing"}
 {"ts": 1782526793.3726726, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19830, "streak": 7}
+{"ts": 1782526854.4424706, "kind": "brain_missing"}
+{"ts": 1782526854.4425988, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19769, "streak": 7}
+{"ts": 1782526915.4297056, "kind": "brain_missing"}
+{"ts": 1782526915.4298067, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19708, "streak": 7}
+{"ts": 1782526976.4838665, "kind": "brain_missing"}
+{"ts": 1782526976.483998, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19647, "streak": 7}
+{"ts": 1782527037.4761157, "kind": "brain_missing"}
+{"ts": 1782527037.4762175, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19586, "streak": 7}
+{"ts": 1782527098.5163522, "kind": "brain_missing"}
+{"ts": 1782527098.5164888, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19525, "streak": 7}
+{"ts": 1782527159.5385265, "kind": "brain_missing"}
+{"ts": 1782527159.5386553, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19464, "streak": 7}
+{"ts": 1782527220.574348, "kind": "brain_missing"}
+{"ts": 1782527220.5744853, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19402, "streak": 7}
+{"ts": 1782527227.6588328, "kind": "health_state_change", "probe": "underworld_backend", "severity": "P1", "ok": false, "detail": "<urlopen error [Errno 111] Connection refused>"}
