@@ -127,6 +127,7 @@ import PhoneCommsDrawer from "@/components/overnight/PhoneCommsDrawer";
 import Sci3dCatalogDrawer from "@/components/overnight/Sci3dCatalogDrawer";
 import ScrapeStatusDrawer from "@/components/overnight/ScrapeStatusDrawer";
 import PolicyControlDrawer from "@/components/overnight/PolicyControlDrawer";
+import SecurityAuditLogDrawer from "@/components/overnight/SecurityAuditLogDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -496,6 +497,9 @@ export function AppLayout({ children }) {
 
       {/* F139: Policy Control Drawer — left-edge slide-in at 64%; polls GET /v1/jarvis/policy/summary every 5 min; ABAC clearance hierarchy (UNCLASSIFIED→OFFICIAL→SECRET→TOPSECRET) with colour-coded level rows + subject count + label count tiles; red (#DC2626) accent */}
       <PolicyControlDrawer />
+
+      {/* F140: Security Audit Log Drawer — right-edge slide-in at 18%; polls GET /v1/security/audit?n=50 every 3 min + GET /v1/security/acl once on open; chain integrity badge (✓ INTACT / ✗ BROKEN) + role badge + clearance pills; CHAIN tab shows audit events (actor/action/resource/hash/age); REVDB tab shows knowledge commits (id/author/message/Δchanges/age); slate/red (#EF4444) accent */}
+      <SecurityAuditLogDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
