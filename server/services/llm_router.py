@@ -12,7 +12,7 @@ When OLLAMA_BASE_URL points to a non-localhost address, Ollama is promoted to
 PRIMARY so the GPU box serves inference first. Local Ollama remains last.
 
 Env overrides:
-  * LLM_PROVIDER      — force a provider (kimi|openai|anthropic|ollama|gpu)
+  * LLM_PROVIDER      — force a provider (qwen32b|gpu|kimi|openai|anthropic|ollama)
   * OPENAI_API_KEY    — OpenAI key
   * ANTHROPIC_API_KEY — Anthropic key
   * OLLAMA_BASE_URL   — Ollama host (default http://127.0.0.1:11434)
@@ -46,6 +46,14 @@ _ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 _GPU_URL = os.environ.get("GPU_BASE_URL", "").strip().rstrip("/")
 _GPU_TOKEN = os.environ.get("GPU_AUTH_TOKEN", "").strip()
 
+# Qwen3-32B via vLLM (OpenAI-compatible) — local-first PRIMARY when configured.
+_QWEN_BASE_URL = os.environ.get("QWEN_BASE_URL", "").strip().rstrip("/")
+_QWEN_API_KEY = os.environ.get("QWEN_API_KEY", "local-no-key").strip()
+_QWEN_MODEL = os.environ.get("QWEN_MODEL", "qwen32b").strip()
+_QWEN_TEMPERATURE = float(os.environ.get("QWEN_TEMPERATURE", "0.2"))
+# Local-only model policy: when true, never silently fall back to a cloud provider.
+_LOCAL_LLM_ONLY = os.environ.get("LOCAL_LLM_ONLY", "").lower() in ("1", "true", "yes")
+
 def _is_remote_ollama() -> bool:
     """True when OLLAMA_BASE_URL points to a remote GPU box (not localhost)."""
     return bool(_OLLAMA_BASE) and "localhost" not in _OLLAMA_BASE and "127.0.0.1" not in _OLLAMA_BASE
@@ -53,7 +61,12 @@ def _is_remote_ollama() -> bool:
 
 # Ordered fallback chain when no specific provider is requested.
 # Priority: SGLang GPU > Remote Ollama GPU > Cloud APIs > Local Ollama
-if _GPU_URL:
+if _LOCAL_LLM_ONLY:
+    # No cloud fallback when local-only mode is active.
+    _DEFAULT_CHAIN = ["qwen32b", "ollama"]
+elif _QWEN_BASE_URL:
+    _DEFAULT_CHAIN = ["qwen32b", "gpu", "kimi", "openai", "anthropic", "ollama"]
+elif _GPU_URL:
     _DEFAULT_CHAIN = ["gpu", "kimi", "openai", "anthropic", "ollama"]
 elif _is_remote_ollama():
     _DEFAULT_CHAIN = ["ollama", "kimi", "openai", "anthropic"]
@@ -69,12 +82,15 @@ def _provider_from_env() -> str | None:
 def _available_providers() -> list[str]:
     """Return which providers have credentials configured."""
     avail: list[str] = []
-    if KIMI_API_KEY:
-        avail.append("kimi")
-    if _OPENAI_KEY:
-        avail.append("openai")
-    if _ANTHROPIC_KEY:
-        avail.append("anthropic")
+    if _QWEN_BASE_URL:
+        avail.append("qwen32b")
+    if not _LOCAL_LLM_ONLY:
+        if KIMI_API_KEY:
+            avail.append("kimi")
+        if _OPENAI_KEY:
+            avail.append("openai")
+        if _ANTHROPIC_KEY:
+            avail.append("anthropic")
     # Ollama is always listed; health-checked at call time.
     avail.append("ollama")
     return avail
@@ -259,7 +275,53 @@ async def _stream_gpu(message: str, system_prompt: str, fmt: str | None = None, 
         yield chunk
 
 
+async def _stream_qwen32b(message: str, system_prompt: str, fmt: str | None = None, max_tokens: int | None = None) -> AsyncIterator[str]:
+    """Stream from a local Qwen3-32B vLLM OpenAI-compatible server (QWEN_BASE_URL)."""
+    if not _QWEN_BASE_URL:
+        yield "// qwen32b not configured. Set QWEN_BASE_URL."
+        return
+    url = f"{_QWEN_BASE_URL}/chat/completions"
+    payload = {
+        "model": _QWEN_MODEL,
+        "stream": True,
+        "temperature": _QWEN_TEMPERATURE,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": message},
+        ],
+    }
+    if max_tokens:
+        payload["max_tokens"] = max_tokens
+    if fmt == "json":
+        payload["response_format"] = {"type": "json_object"}
+    headers = {
+        "Authorization": f"Bearer {_QWEN_API_KEY}",
+        "Content-Type": "application/json",
+        "Accept": "text/event-stream",
+    }
+    async with httpx.AsyncClient(timeout=httpx.Timeout(180.0, connect=10.0)) as client:
+        async with client.stream("POST", url, headers=headers, json=payload) as resp:
+            if resp.status_code != 200:
+                body = (await resp.aread()).decode("utf-8", errors="replace")
+                yield f"// qwen32b {resp.status_code}: {body[:500]}"
+                return
+            async for line in resp.aiter_lines():
+                if not line or not line.startswith("data: "):
+                    continue
+                data = line[6:]
+                if data == "[DONE]":
+                    return
+                try:
+                    chunk = json.loads(data)
+                except json.JSONDecodeError:
+                    continue
+                delta = chunk.get("choices", [{}])[0].get("delta", {}).get("content")
+                if delta:
+                    yield delta
+
+
 _PROVIDER_STREAMERS = {
+    "qwen32b": _stream_qwen32b,
     "kimi": _stream_kimi,
     "openai": _stream_openai,
     "anthropic": _stream_anthropic,
@@ -318,7 +380,11 @@ def list_providers() -> list[dict]:
     out: list[dict] = []
     for p in _DEFAULT_CHAIN:
         meta: dict = {"id": p, "configured": False}
-        if p == "kimi":
+        if p == "qwen32b":
+            meta["model"] = _QWEN_MODEL
+            meta["configured"] = bool(_QWEN_BASE_URL)
+            meta["url"] = _QWEN_BASE_URL
+        elif p == "kimi":
             meta["model"] = KIMI_MODEL
             meta["configured"] = bool(KIMI_API_KEY)
         elif p == "openai":

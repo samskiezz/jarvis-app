@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -23,6 +24,40 @@ sys.path.insert(0, os.path.join(WORK_DIR, "jarvis-app-1", "scripts"))
 # Fix Vast.ai forward-compat libcuda issue on GeForce.
 if os.path.exists("/usr/lib/x86_64-linux-gnu/libcuda.so.1"):
     os.environ["LD_LIBRARY_PATH"] = "/usr/lib/x86_64-linux-gnu"
+
+
+def run(cmd: list[str] | str, **kwargs) -> subprocess.CompletedProcess:
+    LOG.info("$ %s", cmd if isinstance(cmd, str) else " ".join(cmd))
+    return subprocess.run(cmd, shell=isinstance(cmd, str), check=False, text=True, capture_output=True, **kwargs)
+
+
+def ensure_system_packages():
+    LOG.info("Ensuring system packages...")
+    run("apt-get update -qq && apt-get install -y -qq python3-pip python3-venv libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev libgomp1 build-essential", timeout=300)
+
+
+def _has_module(name: str) -> bool:
+    try:
+        __import__(name)
+        return True
+    except ImportError:
+        return False
+
+
+def install_deps():
+    needed = not (Path(PYLIBS).exists() and _has_module("torch") and _has_module("cv2") and _has_module("ultralytics"))
+    if not needed:
+        LOG.info("Python deps already present at %s", PYLIBS)
+        return
+    LOG.info("Installing Python deps into %s", PYLIBS)
+    ensure_system_packages()
+    run(
+        f"{sys.executable} -m pip install --target {PYLIBS} --no-cache-dir "
+        "torch==2.4.0 torchvision==0.19.0 --extra-index-url https://download.pytorch.org/whl/cu124 "
+        "ultralytics==8.2.18 supervision==0.21.0 opencv-python==4.8.0.76 "
+        "numpy==1.26.4 scikit-learn==1.5.0 scipy==1.13.1",
+        timeout=600,
+    )
 
 
 def write_status(status: str):
@@ -44,6 +79,7 @@ def main() -> int:
             write_status("failed: no videos in batch")
             return 1
 
+        install_deps()
         from wc2026_vision import process_video
 
         results = {"processed": [], "failed": []}

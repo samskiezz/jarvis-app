@@ -1,0 +1,34 @@
+# EXAMPLE systemd unit — Qwen32B vLLM OpenAI-compatible server.
+#
+# This is a reference template. It is NOT installed or activated by the repo.
+# Install on the GPU host (per CLAUDE.md §13.1):
+#
+#   sudo cp deploy/systemd/qwen32b-vllm@.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now qwen32b-vllm@sam     # %i = Linux username
+#   sudo journalctl -u qwen32b-vllm@sam -f
+#
+# Verify:  curl http://127.0.0.1:8001/v1/models
+#
+# Assumes a vLLM venv at /home/%i/jarvis-models/qwen32b/.venv (see CLAUDE.md §6.2).
+# For 2× RTX 4090 use --tensor-parallel-size 2 and CUDA_VISIBLE_DEVICES=0,1.
+
+[Unit]
+Description=Qwen32B vLLM OpenAI-Compatible Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/home/%i/jarvis-models/qwen32b
+Environment=CUDA_VISIBLE_DEVICES=0,1
+Environment=HF_HOME=/home/%i/.cache/huggingface
+Environment=VLLM_WORKER_MULTIPROC_METHOD=spawn
+ExecStart=/home/%i/jarvis-models/qwen32b/.venv/bin/vllm serve Qwen/Qwen3-32B --host 0.0.0.0 --port 8001 --served-model-name qwen32b --tensor-parallel-size 2 --dtype auto --max-model-len 32768 --gpu-memory-utilization 0.90 --enable-prefix-caching --trust-remote-code
+Restart=always
+RestartSec=5
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target

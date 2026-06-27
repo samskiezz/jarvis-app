@@ -127,6 +127,7 @@ from .routes import reminders as reminders_routes
 from .routes import motor as motor_routes
 from .routes import sensors as sensors_routes
 from .routes import vision as vision_routes
+from .routes import vision_tracking as vision_tracking_routes
 from .routes import a11y_drivers as a11y_drivers_routes
 from .routes import phone as phone_routes
 from .routes import music as music_routes
@@ -346,6 +347,7 @@ def create_app() -> FastAPI:
     app.include_router(motor_routes.router)
     app.include_router(sensors_routes.router)
     app.include_router(vision_routes.router)
+    app.include_router(vision_tracking_routes.router)
     app.include_router(entities_routes.router)
     app.include_router(streams_routes.router)
     app.include_router(claude_code_routes.router)

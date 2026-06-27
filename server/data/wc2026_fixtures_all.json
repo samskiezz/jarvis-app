@@ -690,10 +690,11 @@
       "home": "Portugal",
       "away": "Uzbekistan",
       "venue": "NRG Stadium, Houston",
-      "result": "0-0",
+      "result": "5-0",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 46,
@@ -722,10 +723,11 @@
       "home": "Panama",
       "away": "Croatia",
       "venue": "BMO Field, Toronto",
-      "result": "0-0",
+      "result": "0-1",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 48,
@@ -738,9 +740,10 @@
       "home": "Colombia",
       "away": "DR Congo",
       "venue": "Estadio Akron, Zapopan",
-      "result": null,
+      "result": "1-0",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 49,
@@ -753,10 +756,11 @@
       "home": "Switzerland",
       "away": "Canada",
       "venue": "BC Place, Vancouver",
-      "result": "0-0",
+      "result": "2-1",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 50,
@@ -769,10 +773,11 @@
       "home": "Bosnia and Herzegovina",
       "away": "Qatar",
       "venue": "Lumen Field, Seattle",
-      "result": "0-0",
+      "result": "3-1",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 51,
@@ -785,10 +790,11 @@
       "home": "Scotland",
       "away": "Brazil",
       "venue": "Hard Rock Stadium, Miami Gardens",
-      "result": "0-0",
+      "result": "0-3",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 52,
@@ -801,10 +807,11 @@
       "home": "Morocco",
       "away": "Haiti",
       "venue": "Mercedes-Benz Stadium, Atlanta",
-      "result": "0-0",
+      "result": "4-2",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 53,
@@ -817,9 +824,10 @@
       "home": "Czechia",
       "away": "Mexico",
       "venue": "Estadio Azteca, Mexico City",
-      "result": null,
+      "result": "0-3",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 54,
@@ -832,9 +840,10 @@
       "home": "South Africa",
       "away": "South Korea",
       "venue": "Estadio BBVA, Guadalupe",
-      "result": null,
+      "result": "1-0",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 55,
@@ -847,10 +856,11 @@
       "home": "Ecuador",
       "away": "Germany",
       "venue": "MetLife Stadium, East Rutherford",
-      "result": "0-0",
+      "result": "2-1",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 56,
@@ -863,10 +873,11 @@
       "home": "Curaçao",
       "away": "Côte d'Ivoire",
       "venue": "Lincoln Financial Field, Philadelphia",
-      "result": "0-0",
+      "result": "0-2",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 57,
@@ -879,10 +890,11 @@
       "home": "Japan",
       "away": "Sweden",
       "venue": "AT&T Stadium, Arlington",
-      "result": "0-0",
+      "result": "1-1",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 58,
@@ -895,10 +907,11 @@
       "home": "Tunisia",
       "away": "Netherlands",
       "venue": "Arrowhead Stadium, Kansas City",
-      "result": "0-0",
+      "result": "1-3",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 59,
@@ -911,9 +924,10 @@
       "home": "Türkiye",
       "away": "United States",
       "venue": "SoFi Stadium, Inglewood",
-      "result": null,
+      "result": "3-2",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 60,
@@ -926,9 +940,10 @@
       "home": "Paraguay",
       "away": "Australia",
       "venue": "Levi's Stadium, Santa Clara",
-      "result": null,
+      "result": "0-0",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 61,
@@ -941,10 +956,11 @@
       "home": "Norway",
       "away": "France",
       "venue": "Gillette Stadium, Foxborough",
-      "result": "0-0",
+      "result": "1-4",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 62,
@@ -957,10 +973,11 @@
       "home": "Senegal",
       "away": "Iraq",
       "venue": "BMO Field, Toronto",
-      "result": "0-0",
+      "result": "5-0",
       "result_class": "D",
       "played": true,
-      "source": "worldcup26_api"
+      "source": "worldcup26_api",
+      "result_verified": true
     },
     {
       "n": 63,
@@ -973,9 +990,10 @@
       "home": "Cabo Verde",
       "away": "Saudi Arabia",
       "venue": "NRG Stadium, Houston",
-      "result": null,
+      "result": "0-0",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 64,
@@ -988,9 +1006,10 @@
       "home": "Uruguay",
       "away": "Spain",
       "venue": "Estadio Akron, Zapopan",
-      "result": null,
+      "result": "0-1",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 65,

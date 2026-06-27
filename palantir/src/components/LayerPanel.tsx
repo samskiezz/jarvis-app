@@ -47,6 +47,7 @@ const getLayerGroups = (theme: 'core' | 'ghost') => {
     color: '#26C6DA',
     layers: [
       { key: 'buoys', label: 'NOAA Buoys', icon: Anchor, color: '#26C6DA', dataKey: 'buoys' },
+      { key: 'vessels', label: 'Vessels (Baltic)', icon: Ship, color: '#69F0AE', dataKey: 'vessels' },
       { key: 'acoustic_contacts', label: 'Acoustic Contacts', icon: Radio, color: '#FF00AA', dataKey: 'acoustic_contacts' },
     ],
   },

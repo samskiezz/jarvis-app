@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Satellite, Loader2, AlertTriangle, Star, Orbit, Radio, Flame, Zap } from 'lucide-react';
+import { X, Satellite, Loader2, AlertTriangle, Star, Orbit, Radio, Flame, Zap, Globe2 } from 'lucide-react';
 
 /**
  * SolarSystemTracker — surfaces the existing JARVIS real-astronomy engine
@@ -47,6 +47,21 @@ interface NeoResult {
     hazardous?: boolean;
     lunar_distances?: number;
   };
+  error?: string;
+}
+
+interface NeoFeedItem {
+  name: string;
+  date: string;
+  miss_distance_km: number;
+  velocity_kms: number;
+  diameter_m: number;
+  hazardous: boolean;
+}
+interface NeoFeedSnapshot {
+  neos?: NeoFeedItem[];
+  total?: number;
+  date?: string;
   error?: string;
 }
 
@@ -118,6 +133,8 @@ export default function SolarSystemTracker({ onClose }: SolarSystemTrackerProps)
   const [fireballError, setFireballError] = useState<string | null>(null);
   const [grb, setGrb] = useState<GrbSnapshot | null>(null);
   const [grbError, setGrbError] = useState<string | null>(null);
+  const [neoFeed, setNeoFeed] = useState<NeoFeedItem[] | null>(null);
+  const [neoFeedError, setNeoFeedError] = useState<string | null>(null);
 
   // ── Live space radiation (NOAA SWPC), refreshing every 60s ──
   useEffect(() => {
@@ -154,6 +171,24 @@ export default function SolarSystemTracker({ onClose }: SolarSystemTrackerProps)
       })
       .catch((e) => {
         if (alive) setFireballError(e instanceof Error ? e.message : 'Failed to load fireball feed');
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // ── Near-Earth objects, today's close approaches (NASA NeoWs) ──
+  useEffect(() => {
+    let alive = true;
+    fetch('/api/jarvis/neo-feed', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((d: NeoFeedSnapshot) => {
+        if (!alive) return;
+        setNeoFeed(Array.isArray(d.neos) ? d.neos : []);
+        setNeoFeedError(d?.error ?? null);
+      })
+      .catch((e) => {
+        if (alive) setNeoFeedError(e instanceof Error ? e.message : 'Failed to load NEO feed');
       });
     return () => {
       alive = false;
@@ -411,6 +446,86 @@ export default function SolarSystemTracker({ onClose }: SolarSystemTrackerProps)
                   </span>
                 </div>
               ))}
+            </div>
+          )}
+        </section>
+
+        {/* ── NEAR-EARTH OBJECTS ── */}
+        <section className="px-4 pt-2 pb-2">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <Globe2 className="w-3.5 h-3.5 text-[var(--gold-primary)]" />
+              <span className="font-mono text-[11px] tracking-widest text-[var(--gold-primary)]">
+                NEAR-EARTH OBJECTS
+              </span>
+              <span className="font-mono text-[9px] text-[var(--text-muted)] tracking-wide">
+                NASA NeoWs · TODAY
+              </span>
+            </div>
+            {neoFeed && (
+              <span className="font-mono text-[9px] text-[var(--text-muted)] tracking-wide">
+                {neoFeed.length} close approaches
+              </span>
+            )}
+          </div>
+
+          {!neoFeed && !neoFeedError && (
+            <div className="flex items-center gap-2 py-3 text-[var(--text-muted)] text-xs font-mono">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Loading close-approach feed…
+            </div>
+          )}
+
+          {neoFeedError && (
+            <div className="flex items-start gap-2 py-2 text-[#FF9500] text-xs font-mono">
+              <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {neoFeedError}
+            </div>
+          )}
+
+          {neoFeed && !neoFeedError && neoFeed.length === 0 && (
+            <div className="py-2 text-[var(--text-muted)] text-[11px] font-mono">
+              No catalogued close approaches today.
+            </div>
+          )}
+
+          {neoFeed && neoFeed.length > 0 && (
+            <div className="overflow-hidden rounded border border-white/5">
+              <table className="w-full text-left font-mono text-[11px]">
+                <thead>
+                  <tr className="text-[var(--cyan-primary)] bg-white/[0.03]">
+                    <th className="px-3 py-1.5 font-normal tracking-wider">OBJECT</th>
+                    <th className="px-3 py-1.5 font-normal tracking-wider text-right">MISS (km)</th>
+                    <th className="px-3 py-1.5 font-normal tracking-wider text-right">VEL (km/s)</th>
+                    <th className="px-3 py-1.5 font-normal tracking-wider text-right">Ø (m)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {neoFeed.map((n) => (
+                    <tr
+                      key={`${n.name}-${n.date}`}
+                      className="border-t border-white/5 hover:bg-white/[0.03]"
+                      style={n.hazardous ? { backgroundColor: '#D32F2F12' } : undefined}
+                    >
+                      <td className="px-3 py-1.5">
+                        <span className={n.hazardous ? 'text-[#FF5252]' : 'text-white/90'}>{n.name}</span>
+                        {n.hazardous && (
+                          <span className="ml-1.5 font-mono text-[8px] tracking-widest text-[#FF5252]">
+                            HAZARD
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-3 py-1.5 text-right text-white/70 tabular-nums">
+                        {Math.round(n.miss_distance_km).toLocaleString()}
+                      </td>
+                      <td className="px-3 py-1.5 text-right text-white/70 tabular-nums">
+                        {n.velocity_kms.toFixed(1)}
+                      </td>
+                      <td className="px-3 py-1.5 text-right text-[var(--gold-primary)] tabular-nums">
+                        {Math.round(n.diameter_m)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </section>

@@ -85,14 +85,16 @@ def _system_prompt(tools: list[dict], page_context: Any = None) -> str:
     if page_context:
         ctx = page_context if isinstance(page_context, str) else json.dumps(page_context, default=str)
         lines += ["", f"[PAGE CONTEXT] {ctx}", "Use this context only if it is relevant to the user's request."]
+    valid_names = ", ".join(t["name"] for t in tools)
     lines += [
         "",
-        "Respond with ONE JSON object and nothing else. Two shapes:",
+        "Respond with ONE JSON object and NOTHING else — no <think> blocks, no prose, no markdown fences. Two shapes:",
         '  {"action":"tool","tool":"<name>","params":{...},"thought":"<why>"}',
         '  {"action":"final","answer":"<concise answer grounded in observations>"}',
-        "Rules: prefer the 'search' tool to ground claims. Never invent data. "
-        "Use at most a few tool calls, then give a final answer. "
-        "If you already have enough, answer immediately with action=final.",
+        f'The "tool" value MUST be copied EXACTLY from this list: {valid_names}.',
+        "Never invent or guess a tool name. If none of those tools fits the request, respond with "
+        "action=final using what you already know. Prefer the 'search' tool to ground factual claims. "
+        "Never invent data. Use at most a few tool calls, then give a final answer.",
     ]
     return "\n".join(lines)
 
@@ -111,6 +113,8 @@ def _scratchpad(message: str, history: list[dict], trace: list[dict], page_conte
         obs = json.dumps(step.get("observation"), default=str)
         parts.append(f"TOOL {step.get('tool')} -> {obs[:700]}")
     parts.append("JARVIS next JSON:")
+    # Qwen3 soft-switch: emit the structured decision directly without slow <think> reasoning.
+    parts.append("/no_think")
     return "\n".join(parts)
 
 
@@ -121,6 +125,10 @@ def _parse_step(text: Optional[str]) -> Optional[dict]:
     """Extract the first JSON object from a model reply, tolerant of chatter."""
     if not text:
         return None
+    # Reasoning models (Qwen3 etc.) emit <think>...</think> before the JSON — drop it,
+    # including a stray/unbalanced tag from streamed or truncated output.
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+    text = re.sub(r"</?think>", "", text).strip()
     try:
         return json.loads(text)
     except Exception:  # noqa: BLE001

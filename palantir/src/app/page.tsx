@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, BarChart3, Newspaper, Search, X, Globe, MapPinned, Radar, Satellite, Moon, ExternalLink, AlertTriangle, Activity, Database, Wifi, Play, Network, Crosshair } from 'lucide-react';
+import { Layers, BarChart3, Newspaper, Search, X, Globe, MapPinned, Radar, Satellite, Moon, ExternalLink, AlertTriangle, Activity, Database, Wifi, Play, Network, Crosshair, Waves } from 'lucide-react';
 import IntelFeed from '@/components/IntelFeed';
 import MarketsPanel from '@/components/MarketsPanel';
 import ScmPanel from '@/components/ScmPanel';
@@ -22,8 +22,8 @@ const CameraViewer = dynamic(() => import('@/components/CameraViewer'));
 const OsintPanel = dynamic(() => import('@/components/OsintPanel'));
 const EntityGraphPanel = dynamic(() => import('@/components/EntityGraphPanel'));
 const SciencePanel = dynamic(() => import('@/components/SciencePanel'));
-const SolarSystemTracker = dynamic(() => import('@/components/SolarSystemTracker'));
 const FrequencyMonitor = dynamic(() => import('@/components/FrequencyMonitor'));
+const FullSpectrumMonitor = dynamic(() => import('@/components/FullSpectrumMonitor'));
 
 // Stable seed for the FOUNDRY ontology view (JARVIS brain). Must be module-scope
 // so its identity is constant across re-renders (the panel reloads on entity change).
@@ -114,8 +114,8 @@ export default function Dashboard() {
   const [showEntityGraph, setShowEntityGraph] = useState(false);
   const [showFoundry, setShowFoundry] = useState(false);
   const [showScience, setShowScience] = useState(false);
-  const [showSolar, setShowSolar] = useState(false);
   const [showFrequency, setShowFrequency] = useState(false);
+  const [showSpectrum, setShowSpectrum] = useState(false);
   const [showDesktopSearch, setShowDesktopSearch] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<'layers'|'markets'|'intel'|'search'|'recon'|null>(null);
@@ -145,6 +145,7 @@ export default function Dashboard() {
     military: false,
     maritime: true,
     buoys: true,
+    vessels: false,
     acoustic_contacts: true,
     fireballs: false,
     satellites: false,
@@ -419,6 +420,11 @@ export default function Dashboard() {
       fetchEndpoint('/api/maritime', d => ({ maritime_ports: d.ports, maritime_chokepoints: d.chokepoints, maritime_ships: d.ships }));
       layerFetchedRef.current.add('maritime');
     }
+    // Vessels (Digitraffic AIS — Baltic / Gulf of Finland)
+    if ((activeLayers as any).vessels && !layerFetchedRef.current.has('vessels')) {
+      fetchEndpoint('/api/jarvis/vessels');
+      layerFetchedRef.current.add('vessels');
+    }
     // Balloons
     if (activeLayers.balloons && !layerFetchedRef.current.has('balloons')) {
       fetchEndpoint('/api/balloons', d => ({ balloons: d.balloons }));
@@ -491,6 +497,9 @@ export default function Dashboard() {
     }
     if (activeLayers.maritime) {
       intervals.push(setInterval(() => fetchEndpoint('/api/maritime', d => ({ maritime_ports: d.ports, maritime_chokepoints: d.chokepoints, maritime_ships: d.ships })), 10000)); // 10s
+    }
+    if ((activeLayers as any).vessels) {
+      intervals.push(setInterval(() => fetchEndpoint('/api/jarvis/vessels'), 60000)); // 60s — Digitraffic AIS refresh
     }
     return () => intervals.forEach(clearInterval);
   }, [activeLayers, fetchEndpoint]);
@@ -960,14 +969,14 @@ JARVIS · PALANTIR-CLASS INTELLIGENCE CORE <span className="hidden md:inline">·
         </div>
 
         <div className="relative group">
-          <button title="SOLAR SYSTEM — live planet ephemeris + NEO screen" onClick={() => { setShowSolar(!showSolar); setShowScience(false); setShowFoundry(false); setShowEntityGraph(false); setShowIntel(false); setShowMarkets(false); setShowAlerts(false); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${showSolar ? 'bg-[var(--gold-primary)]/20' : 'hover:bg-white/10'}`}>
-            <Satellite className={`w-4 h-4 ${showSolar ? 'text-[var(--gold-primary)]' : 'text-white/60'}`} />
+          <button title="FREQUENCY — live NDBC buoy wave-frequency spectra + dark-vessel / hydrophone acoustic anomalies" onClick={() => { setShowFrequency(!showFrequency); setShowScience(false); setShowFoundry(false); setShowEntityGraph(false); setShowIntel(false); setShowMarkets(false); setShowAlerts(false); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${showFrequency ? 'bg-[var(--cyan-primary)]/20' : 'hover:bg-white/10'}`}>
+            <Radar className={`w-4 h-4 ${showFrequency ? 'text-[var(--cyan-primary)]' : 'text-white/60'}`} />
           </button>
         </div>
 
         <div className="relative group">
-          <button title="FREQUENCY — live NDBC buoy wave-frequency spectra + anomaly contacts" onClick={() => { setShowFrequency(!showFrequency); setShowSolar(false); setShowScience(false); setShowFoundry(false); setShowEntityGraph(false); setShowIntel(false); setShowMarkets(false); setShowAlerts(false); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${showFrequency ? 'bg-[var(--cyan-primary)]/20' : 'hover:bg-white/10'}`}>
-            <Radar className={`w-4 h-4 ${showFrequency ? 'text-[var(--cyan-primary)]' : 'text-white/60'}`} />
+          <button title="SPACE & SKY — solar-system ephemeris + cross-band threat fusion (SWPC · DONKI · DSN · JPL) + air/space anomalies" onClick={() => { setShowSpectrum(!showSpectrum); setShowFrequency(false); setShowScience(false); setShowFoundry(false); setShowEntityGraph(false); setShowIntel(false); setShowMarkets(false); setShowAlerts(false); }} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${showSpectrum ? 'bg-[var(--gold-primary)]/20' : 'hover:bg-white/10'}`}>
+            <Satellite className={`w-4 h-4 ${showSpectrum ? 'text-[var(--gold-primary)]' : 'text-white/60'}`} />
           </button>
         </div>
 
@@ -1077,14 +1086,6 @@ JARVIS · PALANTIR-CLASS INTELLIGENCE CORE <span className="hidden md:inline">·
       </AnimatePresence>
 
       {/* ═══ MOBILE UI ═══ */}
-      {isMobile && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} className="absolute top-3 right-3 z-[200] pointer-events-auto flex items-center gap-2">
-          <a href='https://ko-fi.com/M8D41ZYW4Z' target='_blank' rel='noopener noreferrer' className="glass-panel px-2 py-1 flex items-center gap-1.5 text-[7px] font-mono tracking-widest hover:opacity-80 transition-opacity border-[var(--gold-primary)]/40 bg-[var(--gold-primary)]/10">
-            <div className="w-1 h-1 rounded-full bg-[var(--gold-primary)] animate-osiris-pulse" />
-            <span className="text-[var(--gold-primary)] font-bold">SUPPORT PROJECT</span>
-          </a>
-        </motion.div>
-      )}
       {isMobile && (
         <>
           {/* Mobile Bottom Navigation */}
@@ -1246,10 +1247,11 @@ JARVIS · PALANTIR-CLASS INTELLIGENCE CORE <span className="hidden md:inline">·
       {/* ── SCIENCE: JARVIS science engine (14 consoles · 449 methods via /api/jarvis/sci) ── */}
       {showScience && <SciencePanel onClose={() => setShowScience(false)} />}
 
-      {/* ── SOLAR SYSTEM: live planet ephemeris + bright stars + NEO screen (via /api/jarvis/astro) ── */}
-      {showSolar && <SolarSystemTracker onClose={() => setShowSolar(false)} />}
-
+      {/* ── OCEAN ACOUSTIC: NDBC wave spectra + dark-vessel/hydrophone acoustic anomalies (via /api/ocean/anomalies) ── */}
       {showFrequency && <FrequencyMonitor onClose={() => setShowFrequency(false)} />}
+
+      {/* ── SPACE & SKY: solar-system ephemeris + cross-band threat fusion + air/space anomalies (merged panel) ── */}
+      {showSpectrum && <FullSpectrumMonitor onClose={() => setShowSpectrum(false)} />}
 
       {/* ── OVERLAYS ── */}
       <div className="vignette absolute inset-0 pointer-events-none z-[2]" />

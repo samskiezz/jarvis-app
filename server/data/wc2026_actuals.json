@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-06-23T08:30:05+00:00",
+  "last_updated": "2026-06-27T02:15:05+00:00",
   "source": "Verified from session-start WebSearch + 2026-06-19/20 follow-up WebSearch on Yahoo Sports / Olympics / Scotsman / CBS / ESPN / FIFA.com / Sofascore match-result pages",
   "note": "Authoritative source. Format is home-team-goals as h-a where home and away align with the official FIFA fixture list. Some entries in wc2026_fixtures_all.json had HALLUCINATED early scores (Netherlands 7-1 Japan was really 2-2; Germany 1-0 Curacao was really 7-1; CIV 2-2 Ecuador was really 1-0); this file is the corrected reference.",
-  "matches_played_count": 44,
+  "matches_played_count": 64,
   "matches": [
     {
       "date": "2026-06-11",
@@ -1546,6 +1546,689 @@
             "name": "Amine Gouiri",
             "minute": "82'",
             "type": "Goal - Volley",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-23",
+      "stage": "GROUP",
+      "group": "K",
+      "home": "Portugal",
+      "away": "Uzbekistan",
+      "result": "5-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Cristiano Ronaldo",
+            "minute": "6'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Nuno Mendes",
+            "minute": "17'",
+            "type": "Goal - Free-kick",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Cristiano Ronaldo",
+            "minute": "39'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Abduvohid Nematov",
+            "minute": "60'",
+            "type": "Own Goal",
+            "own_goal": true,
+            "penalty": false
+          },
+          {
+            "name": "Rafael Leão",
+            "minute": "87'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-23",
+      "stage": "GROUP",
+      "group": "L",
+      "home": "England",
+      "away": "Ghana",
+      "result": "0-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-23",
+      "stage": "GROUP",
+      "group": "L",
+      "home": "Panama",
+      "away": "Croatia",
+      "result": "0-1",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Ante Budimir",
+            "minute": "54'",
+            "type": "Goal - Volley",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "stage": "GROUP",
+      "group": "K",
+      "home": "Colombia",
+      "away": "DR Congo",
+      "result": "1-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Daniel Muñoz",
+            "minute": "76'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "stage": "GROUP",
+      "group": "B",
+      "home": "Bosnia and Herzegovina",
+      "away": "Qatar",
+      "result": "3-1",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Kerim Alajbegovic",
+            "minute": "29'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Mahmoud Abunada",
+            "minute": "34'",
+            "type": "Own Goal",
+            "own_goal": true,
+            "penalty": false
+          },
+          {
+            "name": "Ermin Mahmic",
+            "minute": "80'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Hassan Al-Haydos",
+            "minute": "42'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "stage": "GROUP",
+      "group": "B",
+      "home": "Switzerland",
+      "away": "Canada",
+      "result": "2-1",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Rubén Vargas",
+            "minute": "46'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Johan Manzambi",
+            "minute": "57'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Promise David",
+            "minute": "76'",
+            "type": "Goal - Volley",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "stage": "GROUP",
+      "group": "C",
+      "home": "Morocco",
+      "away": "Haiti",
+      "result": "4-2",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Achraf Hakimi",
+            "minute": "39'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Ismael Saibari",
+            "minute": "45'+1'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Soufiane Rahimi",
+            "minute": "78'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Gessime Yassine",
+            "minute": "89'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Yassine Bounou",
+            "minute": "10'",
+            "type": "Own Goal",
+            "own_goal": true,
+            "penalty": false
+          },
+          {
+            "name": "Wilson Isidor",
+            "minute": "43'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "stage": "GROUP",
+      "group": "C",
+      "home": "Scotland",
+      "away": "Brazil",
+      "result": "0-3",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Vinícius Júnior",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Vinícius Júnior",
+            "minute": "45'+3'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Matheus Cunha",
+            "minute": "60'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "stage": "GROUP",
+      "group": "A",
+      "home": "Czechia",
+      "away": "Mexico",
+      "result": "0-3",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Mateo Chávez",
+            "minute": "55'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Julián Quiñones",
+            "minute": "61'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Álvaro Fidalgo",
+            "minute": "90'+4'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "stage": "GROUP",
+      "group": "A",
+      "home": "South Africa",
+      "away": "South Korea",
+      "result": "1-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Thapelo Maseko",
+            "minute": "63'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "stage": "GROUP",
+      "group": "E",
+      "home": "Curaçao",
+      "away": "Côte d'Ivoire",
+      "result": "0-2",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Nicolas Pépé",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Nicolas Pépé",
+            "minute": "64'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "stage": "GROUP",
+      "group": "E",
+      "home": "Ecuador",
+      "away": "Germany",
+      "result": "2-1",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Nilson Angulo",
+            "minute": "9'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Gonzalo Plata",
+            "minute": "77'",
+            "type": "Goal - Volley",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Leroy Sané",
+            "minute": "2'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "stage": "GROUP",
+      "group": "F",
+      "home": "Japan",
+      "away": "Sweden",
+      "result": "1-1",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Daizen Maeda",
+            "minute": "56'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Anthony Elanga",
+            "minute": "62'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "stage": "GROUP",
+      "group": "F",
+      "home": "Tunisia",
+      "away": "Netherlands",
+      "result": "1-3",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Hazem Mastouri",
+            "minute": "54'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Ellyes Skhiri",
+            "minute": "3'",
+            "type": "Own Goal",
+            "own_goal": true,
+            "penalty": false
+          },
+          {
+            "name": "Brian Brobbey",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Jan Paul van Hecke",
+            "minute": "62'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-26",
+      "stage": "GROUP",
+      "group": "D",
+      "home": "Paraguay",
+      "away": "Australia",
+      "result": "0-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-26",
+      "stage": "GROUP",
+      "group": "D",
+      "home": "Türkiye",
+      "away": "United States",
+      "result": "3-2",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Arda Güler",
+            "minute": "10'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Baris Alper Yilmaz",
+            "minute": "31'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Kaan Ayhan",
+            "minute": "90'+8'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Auston Trusty",
+            "minute": "3'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Sebastian Berhalter",
+            "minute": "49'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-26",
+      "stage": "GROUP",
+      "group": "I",
+      "home": "Norway",
+      "away": "France",
+      "result": "1-4",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Thelo Aasgaard",
+            "minute": "21'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Ousmane Dembélé",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Ousmane Dembélé",
+            "minute": "20'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Ousmane Dembélé",
+            "minute": "32'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Désiré Doué",
+            "minute": "90'+4'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-06-26",
+      "stage": "GROUP",
+      "group": "I",
+      "home": "Senegal",
+      "away": "Iraq",
+      "result": "5-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Habib Diarra",
+            "minute": "4'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Ismaïla Sarr",
+            "minute": "56'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Pape Gueye",
+            "minute": "59'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Pape Gueye",
+            "minute": "71'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Iliman Ndiaye",
+            "minute": "82'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-27",
+      "stage": "GROUP",
+      "group": "H",
+      "home": "Cabo Verde",
+      "away": "Saudi Arabia",
+      "result": "0-0",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": []
+      }
+    },
+    {
+      "date": "2026-06-27",
+      "stage": "GROUP",
+      "group": "H",
+      "home": "Uruguay",
+      "away": "Spain",
+      "result": "0-1",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Álex Baena",
+            "minute": "42'",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           }

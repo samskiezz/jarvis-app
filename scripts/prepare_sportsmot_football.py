@@ -2,16 +2,21 @@
 """Download SportsMOT from HuggingFace, keep only football sequences, and convert to MP4."""
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import shutil
 import subprocess
 import sys
 import tarfile
-import tempfile
 from pathlib import Path
 
-from huggingface_hub import hf_hub_download
+# Disable Xet downloads: the Xet backend can stall indefinitely on large tar files
+# (observed 3+ hour hang on test.tar). Classic HTTP download is more reliable.
+os.environ.setdefault("HF_HUB_ENABLE_XET_FILE_DOWNLOAD", "0")
+os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", "120")
+
+from huggingface_hub import hf_hub_download, login
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DST = REPO_ROOT / "server" / "data" / "vision_tracking" / "sportsmot_football"
@@ -47,8 +52,6 @@ def convert_to_mp4(seq_dir: Path, out_mp4: Path, fps: int = 25) -> None:
     patterns = ["%06d.jpg", "%08d.jpg", "%05d.jpg"]
     chosen = None
     for pat in patterns:
-        test = img_dir / pat.replace("%d", "1").zfill(len(pat) - 4)
-        # crude check
         if any(img_dir.glob("*.jpg")):
             chosen = pat
             break
@@ -127,24 +130,7 @@ def process_split(split: str, football_seqs: set[str]) -> int:
     return len(seq_dirs)
 
 
-def main() -> int:
-    print("Loading split lists ...")
-    football = load_sequences("football")
-    train = load_sequences("train")
-    val = load_sequences("val")
-    test = load_sequences("test")
-    print(f"football sequences: {len(football)}")
-
-    football_by_split: dict[str, set[str]] = {}
-    for split, seqs in (("train", train), ("val", val), ("test", test)):
-        football_by_split[split] = football & seqs
-        print(f"  {split}: {len(football_by_split[split])}")
-
-    total = 0
-    for split in ("train", "val", "test"):
-        total += process_split(split, football_by_split[split])
-
-    # Write a batch spec for the video runner.
+def write_batch_specs() -> Path:
     specs = []
     for mp4 in sorted(VIDEO_DIR.glob("*.mp4")):
         specs.append({
@@ -156,6 +142,62 @@ def main() -> int:
     specs_path = VIDEO_DIR / "batch_specs.json"
     specs_path.write_text(json.dumps(specs, indent=2), encoding="utf-8")
     print(f"  wrote {specs_path} ({len(specs)} clips)")
+    return specs_path
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Download SportsMOT football sequences and convert to MP4."
+    )
+    parser.add_argument(
+        "--splits",
+        type=str,
+        default="train,val",
+        help="Comma-separated splits to download (default: train,val). Use 'train,val,test' for all.",
+    )
+    parser.add_argument(
+        "--hf-token",
+        type=str,
+        default=None,
+        help="Optional HuggingFace token for higher rate limits.",
+    )
+    parser.add_argument(
+        "--skip-specs",
+        action="store_true",
+        help="Do not regenerate videos/batch_specs.json.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+
+    if args.hf_token:
+        login(token=args.hf_token)
+
+    splits = [s.strip() for s in args.splits.split(",") if s.strip()]
+    if not splits:
+        print("ERROR: no splits specified", file=sys.stderr)
+        return 1
+
+    print("Loading split lists ...")
+    football = load_sequences("football")
+    split_seqs: dict[str, set[str]] = {}
+    for split in splits:
+        split_seqs[split] = load_sequences(split)
+
+    print(f"football sequences: {len(football)}")
+    football_by_split: dict[str, set[str]] = {}
+    for split, seqs in split_seqs.items():
+        football_by_split[split] = football & seqs
+        print(f"  {split}: {len(football_by_split[split])}")
+
+    total = 0
+    for split in splits:
+        total += process_split(split, football_by_split[split])
+
+    if not args.skip_specs:
+        write_batch_specs()
 
     print(f"\nDone. {total} football MP4s in {VIDEO_DIR}")
     return 0

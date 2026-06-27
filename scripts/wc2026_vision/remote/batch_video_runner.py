@@ -147,6 +147,7 @@ def main() -> int:
     parser.add_argument("--max-price", type=float, default=0.15)
     parser.add_argument("--gpu-name", type=str, default=None)
     parser.add_argument("--disk-gb", type=int, default=80)
+    parser.add_argument("--label", type=str, default="jarvis-vision-batch", help="Vast instance label")
     parser.add_argument("--keep", action="store_true", help="Keep instance alive")
     parser.add_argument("--remote-dir", type=str, default="/workspace")
     args = parser.parse_args()
@@ -197,7 +198,7 @@ def main() -> int:
             LOG.error("No GPU offer: %s", off.get("error"))
             return 1
         created = gi.create_instance(off["offer"]["id"], image=os.environ.get("GPU_IMAGE", gi.DEFAULT_IMAGE),
-                                     disk_gb=args.disk_gb, label="jarvis-vision-batch", runtype="ssh_direct")
+                                     disk_gb=args.disk_gb, label=args.label, runtype="ssh_direct")
         if not created.get("ok"):
             LOG.error("Provision failed: %s", created.get("error"))
             return 1

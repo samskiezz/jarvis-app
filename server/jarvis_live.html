@@ -4952,7 +4952,8 @@ const CEL_MOONS={
   {id:'app-climate', label:'🌡 Climate',   I:0.64,gateway:'climate',             sats:[['Zones',()=>flyToBodyByName('climate')]]},
   {id:'app-agent',   label:'🤖 Agent OS',  I:0.60,gateway:'agentos',             sats:[['Tool Palette',()=>openAgentTools()]]},
   {id:'app-upgrades',label:'⚙ Upgrades',  I:0.55,gateway:'selfdev',             sats:[['Proposals',()=>{try{$('sdev').classList.remove('min');}catch(_){}}],['Build Next',()=>openUpgrades()]]},
-  {id:'app-gpu',     label:'🎛 GPU',       I:0.54,fn:()=>openGPU(),              sats:[['Run GPU Task',()=>openGPU()],['Brain Box',()=>openGPU()],['Dispose Instances',()=>openGPU()]]}],
+  {id:'app-gpu',     label:'🎛 GPU',       I:0.54,fn:()=>openGPU(),              sats:[['Run GPU Task',()=>openGPU()],['Brain Box',()=>openGPU()],['Dispose Instances',()=>openGPU()]]},
+  {id:'app-vtracking',label:'⚽ Tracking',   I:0.52,fn:()=>window.open('/v1/vision/tracking','_blank'), sats:[['Open Viewer',()=>window.open('/v1/vision/tracking','_blank')]]}],
  knowledge:[],   // the 16 dom:* galaxies are ADOPTED here at build time — GLBs + recursive systems intact
  automation:[
   {id:'run-builder',   label:'🧠 Knowledge Builder', I:0.90,alias:['pipe:🧠 Knowledge Builder'],  dust:19421,sats:[['Detail','drill:runner:🧠 Knowledge Builder']]},

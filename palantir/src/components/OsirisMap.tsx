@@ -181,7 +181,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       createDot(map, 'dot-fire', isGhost ? phantomPurple : '#E65100', 10);
       createDot(map, 'dot-cctv', cameraColor, 10);
 
-      const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'scan-targets', 'sdk-entities', 'sdk-links', 'malware-nodes', 'network-mesh', 'jarvis-geo', 'buoys', 'acoustic-contacts', 'fireballs'];
+      const sources = ['flights','military','jets','private-fl','satellites','earthquakes','gdelt','gps-jamming','day-night','cctv','fires','weather','infrastructure','maritime','maritime-choke','maritime-ships','live-news','sigint-news','conflict-zones', 'war-alerts-targets', 'war-alerts-lines', 'balloons', 'radiation', 'ip-sweep-devices', 'ip-sweep-pulse', 'ip-sweep-connections', 'scan-targets', 'sdk-entities', 'sdk-links', 'malware-nodes', 'network-mesh', 'jarvis-geo', 'buoys', 'acoustic-contacts', 'fireballs', 'vessels'];
       sources.forEach(s => map.addSource(s, { type: 'geojson', data: EMPTY_FC }));
 
       // Warning icon generator (parameterized — eliminates 3x copy-paste)
@@ -257,6 +257,16 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
         'circle-radius': ['interpolate',['linear'],['zoom'], 1,2.5, 6,5, 12,8],
         'circle-color': ['match',['get','type'], 'dart','#D32F2F', 'tao','#FFD700', '#26C6DA'],
         'circle-opacity': 0.9, 'circle-stroke-width': 1, 'circle-stroke-color': '#001F2A', 'circle-stroke-opacity': 0.6,
+      }});
+
+      // Digitraffic AIS surface vessels (Baltic / Gulf of Finland only — small white/green dots)
+      map.addLayer({ id: 'vessel-glow', type: 'circle', source: 'vessels', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,3, 6,7], 'circle-color': '#69F0AE', 'circle-opacity': 0.1, 'circle-blur': 0.8,
+      }});
+      map.addLayer({ id: 'vessel-dots', type: 'circle', source: 'vessels', paint: {
+        'circle-radius': ['interpolate',['linear'],['zoom'], 1,2, 6,4, 12,6],
+        'circle-color': ['case',['>',['get','sog'],0.5],'#69F0AE','#FFFFFF'],
+        'circle-opacity': 0.9, 'circle-stroke-width': 1, 'circle-stroke-color': '#0A1A12', 'circle-stroke-opacity': 0.6,
       }});
 
       // NASA CNEOS fireball airbursts (bright yellow, radius scaled by radiated energy in kt)
@@ -1062,6 +1072,64 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
       });
     });
 
+    // ── JARVIS / ocean / space layers (click → popup, mirroring the Osiris layers above) ──
+    const jarvisClickables: Array<[string, (p: any, coords: number[]) => string]> = [
+      ['jarvis-geo-dots', (p, coords) => `<div style="${pStyle}border:1px solid rgba(212,175,55,0.3);">
+        <div style="color:#D4AF37;font-size:14px;font-weight:700;margin-bottom:4px;">${htmlEsc(p.label || 'JARVIS NODE')}</div>
+        <div style="font-size:9px;color:#5C5A54;letter-spacing:0.1em;margin-bottom:8px;">JARVIS · PALANTIR${p.type ? ' · ' + htmlEsc(String(p.type).toUpperCase()) : ''}</div>
+        <div style="font-size:9px;"><span style="color:#5C5A54;">COORDS</span><br/><span style="color:#E8E6E0;">${coords[1].toFixed(3)}, ${coords[0].toFixed(3)}</span></div>
+      </div>`],
+      ['buoy-dots', (p, coords) => `<div style="${pStyle}border:1px solid rgba(0,229,255,0.3);">
+        <div style="color:#00E5FF;font-size:14px;font-weight:700;margin-bottom:4px;">${htmlEsc(p.label || p.id || 'BUOY')}</div>
+        <div style="font-size:9px;color:#5C5A54;letter-spacing:0.1em;margin-bottom:8px;">${p.type === 'dart' ? 'DART TSUNAMI BUOY' : 'NOAA NDBC BUOY'}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">
+          <div><span style="color:#5C5A54;">STATION</span><br/><span style="color:#E8E6E0;">${htmlEsc(p.id || '—')}</span></div>
+          <div><span style="color:#5C5A54;">COORDS</span><br/><span style="color:#E8E6E0;">${coords[1].toFixed(3)}, ${coords[0].toFixed(3)}</span></div>
+        </div>
+        <a href="https://www.ndbc.noaa.gov/station_page.php?station=${encodeURIComponent(idSafe(p.id || ''))}" target="_blank" rel="noopener noreferrer" style="${linkStyle}color:#00E5FF;border:1px solid rgba(0,229,255,0.4);background:rgba(0,229,255,0.1);">🌊 NDBC STATION</a>
+      </div>`],
+      ['vessel-dots', (p, coords) => `<div style="${pStyle}border:1px solid rgba(118,255,3,0.3);">
+        <div style="color:#76FF03;font-size:14px;font-weight:700;margin-bottom:4px;">VESSEL ${htmlEsc(p.mmsi || '')}</div>
+        <div style="font-size:9px;color:#5C5A54;letter-spacing:0.1em;margin-bottom:8px;">AIS · BALTIC / GULF OF FINLAND</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">
+          <div><span style="color:#5C5A54;">SPEED</span><br/><span style="color:#E8E6E0;">${p.sog != null ? p.sog + ' kn' : '—'}</span></div>
+          <div><span style="color:#5C5A54;">COURSE</span><br/><span style="color:#E8E6E0;">${p.cog != null ? Math.round(Number(p.cog)) + '°' : '—'}</span></div>
+          <div><span style="color:#5C5A54;">MMSI</span><br/><span style="color:#E8E6E0;">${htmlEsc(p.mmsi || '—')}</span></div>
+          <div><span style="color:#5C5A54;">POS</span><br/><span style="color:#E8E6E0;">${coords[1].toFixed(3)}, ${coords[0].toFixed(3)}</span></div>
+        </div>
+        <a href="https://www.marinetraffic.com/en/ais/details/ships/mmsi:${encodeURIComponent(idSafe(p.mmsi || ''))}" target="_blank" rel="noopener noreferrer" style="${linkStyle}color:#76FF03;border:1px solid rgba(118,255,3,0.4);background:rgba(118,255,3,0.1);">🚢 MARINETRAFFIC</a>
+      </div>`],
+      ['acoustic-dots', (p, coords) => `<div style="${pStyle}border:1px solid rgba(255,61,106,0.35);">
+        <div style="color:#FF3D6A;font-size:14px;font-weight:700;margin-bottom:4px;">${htmlEsc(p.label || 'ACOUSTIC CONTACT')}</div>
+        <div style="font-size:9px;color:#5C5A54;letter-spacing:0.1em;margin-bottom:8px;">UNDERWATER ACOUSTIC ANOMALY</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">
+          <div><span style="color:#5C5A54;">CLASSIFICATION</span><br/><span style="color:#E8E6E0;">${htmlEsc(p.classification || 'unknown')}</span></div>
+          <div><span style="color:#5C5A54;">CONFIDENCE</span><br/><span style="color:#E8E6E0;">${p.confidence != null ? (Number(p.confidence) <= 1 ? (Number(p.confidence) * 100).toFixed(0) : Number(p.confidence).toFixed(0)) + '%' : '—'}</span></div>
+          <div style="grid-column:1/3;"><span style="color:#5C5A54;">COORDS</span><br/><span style="color:#E8E6E0;">${coords[1].toFixed(3)}, ${coords[0].toFixed(3)}</span></div>
+        </div>
+      </div>`],
+      ['fireball-dots', (p, coords) => `<div style="${pStyle}border:1px solid rgba(255,214,0,0.35);">
+        <div style="color:#FFD600;font-size:14px;font-weight:700;margin-bottom:4px;">FIREBALL AIRBURST</div>
+        <div style="font-size:9px;color:#E8E6E0;margin-bottom:8px;">${htmlEsc(p.date || '')}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">
+          <div><span style="color:#5C5A54;">RADIATED ENERGY</span><br/><span style="color:#FFD600;">${p.energy != null ? Number(p.energy).toFixed(1) + ' kt' : '—'}</span></div>
+          <div><span style="color:#5C5A54;">ALTITUDE</span><br/><span style="color:#E8E6E0;">${p.altitude != null ? p.altitude + ' km' : '—'}</span></div>
+          <div style="grid-column:1/3;"><span style="color:#5C5A54;">COORDS</span><br/><span style="color:#E8E6E0;">${coords[1].toFixed(2)}, ${coords[0].toFixed(2)}</span></div>
+        </div>
+        <a href="https://cneos.jpl.nasa.gov/fireballs/" target="_blank" rel="noopener noreferrer" style="${linkStyle}color:#FFD600;border:1px solid rgba(255,214,0,0.4);background:rgba(255,214,0,0.1);">☄ CNEOS FIREBALLS</a>
+      </div>`],
+    ];
+    jarvisClickables.forEach(([layer, render]) => {
+      map.on('click', layer, e => {
+        if (!e.features?.length) return;
+        const p = e.features[0].properties as any;
+        const coords = (e.features[0].geometry as any).coordinates;
+        popup(coords, render(p, coords));
+      });
+      map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
+    });
+
     return () => { map.remove(); mapRef.current = null; };
   }, []);
 
@@ -1178,8 +1246,14 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
   // NOAA ocean buoy network
   useEffect(() => {
     if (!mapReady) return;
-    setGeo('buoys', (activeLayers as any).buoys && (data as any).buoys ? (data as any).buoys.map((b: any) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [b.lng, b.lat] }, properties: { label: b.label, type: b.type } })) : []);
+    setGeo('buoys', (activeLayers as any).buoys && (data as any).buoys ? (data as any).buoys.map((b: any) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [b.lng, b.lat] }, properties: { label: b.label, type: b.type, id: b.id } })) : []);
   }, [mapReady, (data as any).buoys, (activeLayers as any).buoys, setGeo]);
+
+  // Digitraffic AIS surface vessels (Baltic / Gulf of Finland)
+  useEffect(() => {
+    if (!mapReady) return;
+    setGeo('vessels', (activeLayers as any).vessels && (data as any).vessels ? (data as any).vessels.map((v: any) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [v.lng, v.lat] }, properties: { mmsi: v.mmsi, sog: v.sog, cog: v.cog } })) : []);
+  }, [mapReady, (data as any).vessels, (activeLayers as any).vessels, setGeo]);
 
   // Acoustic contacts (general-audio classifier + operator tags; marine model pending)
   useEffect(() => {
@@ -1390,6 +1464,7 @@ function OsirisMap({ data, activeLayers, onEntityClick, onMouseCoords, onRightCl
     setVis(['eq-circles','eq-label'], activeLayers.earthquakes);
     setVis(['jarvis-geo-dots'], (activeLayers as any).jarvis_wildlife || (activeLayers as any).jarvis_sensors || (activeLayers as any).jarvis_measure || (activeLayers as any).jarvis_places || (activeLayers as any).jarvis_assets);
     setVis(['buoy-glow','buoy-dots'], (activeLayers as any).buoys);
+    setVis(['vessel-glow','vessel-dots'], (activeLayers as any).vessels);
     setVis(['acoustic-glow','acoustic-dots'], (activeLayers as any).acoustic_contacts);
     setVis(['fireball-glow','fireball-dots'], (activeLayers as any).fireballs);
     const anySat = activeLayers.satellites || (activeLayers as any).sat_comms || (activeLayers as any).sat_military || (activeLayers as any).sat_navigation || (activeLayers as any).sat_earth || (activeLayers as any).sat_science;

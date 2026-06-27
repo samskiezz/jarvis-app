@@ -36,6 +36,7 @@ def run_batch(items: list[dict], instance_id: int | None, frame_stride: int, max
         "--specs", str(staging),
         "--video-dir", str(VIDEO_DIR),
         "--frame-stride", str(frame_stride),
+        "--label", "jarvis-vision-sportsmot",
         "--keep",
     ]
     if max_frames is not None:

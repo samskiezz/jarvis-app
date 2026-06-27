@@ -150,6 +150,8 @@ module.exports = {
       max_restarts: 50,
       env: {
         VAST_KILL_INTERVAL_S: '30',
+        // Preserve intentional vision-worker boxes (SportsMOT / SoccerNet batches).
+        VAST_KEEP_LABEL_SUBSTRINGS: 'ue5,pixelstream,jarvis-brain,jarvis-vision',
       },
     },
     {

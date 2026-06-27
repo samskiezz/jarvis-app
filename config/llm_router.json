@@ -39,7 +39,7 @@
     "Heavy (Tier 4/5) is cold by default and only runs when priority is high AND resources are healthy."
   ],
   "resource_gates": {
-    "vram_pct_block_heavy": 85,
+    "vram_pct_block_heavy": 0,
     "vram_pct_pause_strong": 92,
     "cpu_pct_reduce_concurrency": 90,
     "disk_pct_pause_ingest": 80,
@@ -54,9 +54,7 @@
     "warm_optional": [
       "llama3.2"
     ],
-    "cold": [
-      "llama3.3:70b-q"
-    ],
+    "cold": [],
     "disabled_on_2x4090": [
       "llama3.3:70b-full"
     ],

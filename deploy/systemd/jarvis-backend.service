@@ -1,0 +1,32 @@
+# EXAMPLE systemd unit — Jarvis FastAPI backend.
+#
+# This is a reference template. It is NOT installed or activated by the repo.
+# Install on the host that runs the backend (per CLAUDE.md §13.2):
+#
+#   sudo cp deploy/systemd/jarvis-backend.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now jarvis-backend
+#   sudo journalctl -u jarvis-backend -f
+#
+# Verify:  curl http://127.0.0.1:8000/health
+#
+# Adjust User=, WorkingDirectory=, EnvironmentFile=, and the venv path to match
+# the deployment. After= references the Qwen unit for the sam instance so the
+# model server is up first; change the instance name if the username differs.
+
+[Unit]
+Description=Jarvis FastAPI Backend
+After=network-online.target qwen32b-vllm@sam.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sam
+WorkingDirectory=/home/sam/jarvis-app
+EnvironmentFile=/home/sam/jarvis-app/.env
+ExecStart=/home/sam/jarvis-app/.venv/bin/python -m uvicorn server.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

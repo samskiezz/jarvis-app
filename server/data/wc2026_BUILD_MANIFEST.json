@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T08:05:03Z",
+  "generated_at": "2026-06-27T02:05:05Z",
   "repo_root": "/opt/jarvis-app-1",
   "component_count": 119,
   "components": [
@@ -475,35 +475,35 @@
       "name": "wc2026_actuals.json",
       "type": "data",
       "path": "server/data/wc2026_actuals.json",
-      "size_bytes": 36918,
-      "mtime": "2026-06-23T08:00:04Z",
-      "lines": 1556,
+      "size_bytes": 53025,
+      "mtime": "2026-06-27T02:00:04Z",
+      "lines": 2217,
       "purpose": ""
     },
     {
       "name": "wc2026_backtest_results.json",
       "type": "data",
       "path": "server/data/wc2026_backtest_results.json",
-      "size_bytes": 248523,
-      "mtime": "2026-06-23T04:24:54Z",
-      "lines": 9553,
+      "size_bytes": 254751,
+      "mtime": "2026-06-26T04:19:20Z",
+      "lines": 9806,
       "purpose": ""
     },
     {
       "name": "wc2026_bet_builder.json",
       "type": "data",
       "path": "server/data/wc2026_bet_builder.json",
-      "size_bytes": 24112,
-      "mtime": "2026-06-23T08:00:11Z",
-      "lines": 676,
+      "size_bytes": 19383,
+      "mtime": "2026-06-27T02:00:16Z",
+      "lines": 525,
       "purpose": ""
     },
     {
       "name": "wc2026_bet_slips.json",
       "type": "data",
       "path": "server/data/wc2026_bet_slips.json",
-      "size_bytes": 60922,
-      "mtime": "2026-06-23T04:25:02Z",
+      "size_bytes": 61599,
+      "mtime": "2026-06-26T04:19:24Z",
       "lines": 2497,
       "purpose": ""
     },
@@ -529,9 +529,9 @@
       "name": "wc2026_fixtures_all.json",
       "type": "data",
       "path": "server/data/wc2026_fixtures_all.json",
-      "size_bytes": 41205,
-      "mtime": "2026-06-23T05:05:06Z",
-      "lines": 1601,
+      "size_bytes": 41763,
+      "mtime": "2026-06-27T02:00:06Z",
+      "lines": 1619,
       "purpose": "All WC2026 fixtures (group + knockout)"
     },
     {
@@ -727,8 +727,8 @@
       "name": "wc2026_model_predictions.json",
       "type": "data",
       "path": "server/data/wc2026_model_predictions.json",
-      "size_bytes": 77031,
-      "mtime": "2026-06-23T06:30:03Z",
+      "size_bytes": 76993,
+      "mtime": "2026-06-27T00:30:10Z",
       "lines": 2537,
       "purpose": "Numeric ensemble predictions"
     },
@@ -736,8 +736,8 @@
       "name": "wc2026_model_registry.json",
       "type": "data",
       "path": "server/data/wc2026_model_registry.json",
-      "size_bytes": 1595,
-      "mtime": "2026-06-23T04:45:18Z",
+      "size_bytes": 1592,
+      "mtime": "2026-06-26T04:45:54Z",
       "lines": 50,
       "purpose": ""
     },
@@ -746,7 +746,7 @@
       "type": "data",
       "path": "server/data/wc2026_odds_cache.json",
       "size_bytes": 56,
-      "mtime": "2026-06-23T06:00:22Z",
+      "mtime": "2026-06-27T00:00:17Z",
       "lines": 4,
       "purpose": ""
     },
@@ -754,9 +754,9 @@
       "name": "wc2026_played.json",
       "type": "data",
       "path": "server/data/wc2026_played.json",
-      "size_bytes": 71257,
-      "mtime": "2026-06-23T08:00:06Z",
-      "lines": 2660,
+      "size_bytes": 100146,
+      "mtime": "2026-06-27T02:00:06Z",
+      "lines": 3701,
       "purpose": ""
     },
     {
@@ -781,9 +781,9 @@
       "name": "wc2026_predictions.csv",
       "type": "data",
       "path": "server/data/wc2026_predictions.csv",
-      "size_bytes": 46699,
-      "mtime": "2026-06-23T04:24:54Z",
-      "lines": 415,
+      "size_bytes": 47821,
+      "mtime": "2026-06-26T04:19:20Z",
+      "lines": 426,
       "purpose": ""
     },
     {
@@ -791,7 +791,7 @@
       "type": "data",
       "path": "server/data/wc2026_predictions.db",
       "size_bytes": 7507968,
-      "mtime": "2026-06-22T19:00:01Z",
+      "mtime": "2026-06-26T19:00:01Z",
       "lines": 0,
       "purpose": "SQLite audit DB (per-prediction history)"
     },
@@ -799,8 +799,8 @@
       "name": "wc2026_predictions_output.json",
       "type": "data",
       "path": "server/data/wc2026_predictions_output.json",
-      "size_bytes": 36340,
-      "mtime": "2026-06-23T04:25:02Z",
+      "size_bytes": 36989,
+      "mtime": "2026-06-26T04:19:24Z",
       "lines": 1304,
       "purpose": ""
     },
@@ -808,17 +808,17 @@
       "name": "wc2026_results.json",
       "type": "data",
       "path": "server/data/wc2026_results.json",
-      "size_bytes": 25448,
-      "mtime": "2026-06-23T08:00:06Z",
-      "lines": 1200,
+      "size_bytes": 35835,
+      "mtime": "2026-06-27T02:00:06Z",
+      "lines": 1690,
       "purpose": "Live match results (polled by UI)"
     },
     {
       "name": "wc2026_tracking.db",
       "type": "data",
       "path": "server/data/wc2026_tracking.db",
-      "size_bytes": 15466496,
-      "mtime": "2026-06-23T08:01:47Z",
+      "size_bytes": 369823744,
+      "mtime": "2026-06-24T10:40:43Z",
       "lines": 0,
       "purpose": ""
     },
@@ -826,18 +826,18 @@
       "name": "wc2026_tracking_features.json",
       "type": "data",
       "path": "server/data/wc2026_tracking_features.json",
-      "size_bytes": 25469544,
-      "mtime": "2026-06-23T08:01:45Z",
-      "lines": 883835,
+      "size_bytes": 666601727,
+      "mtime": "2026-06-26T04:45:43Z",
+      "lines": 23143985,
       "purpose": ""
     },
     {
       "name": "wc2026_training_history.csv",
       "type": "data",
       "path": "server/data/wc2026_training_history.csv",
-      "size_bytes": 19740,
-      "mtime": "2026-06-23T04:45:06Z",
-      "lines": 416,
+      "size_bytes": 20526,
+      "mtime": "2026-06-26T04:45:12Z",
+      "lines": 432,
       "purpose": "Training-history CSV"
     },
     {
@@ -889,8 +889,8 @@
       "name": "wc2026_value_bets.json",
       "type": "data",
       "path": "server/data/wc2026_value_bets.json",
-      "size_bytes": 9876,
-      "mtime": "2026-06-23T06:00:22Z",
+      "size_bytes": 9873,
+      "mtime": "2026-06-27T00:00:17Z",
       "lines": 392,
       "purpose": "Value-bet flags vs bookmaker odds"
     },
@@ -899,7 +899,7 @@
       "type": "data",
       "path": "server/data/wc2026_web_data.json",
       "size_bytes": 240,
-      "mtime": "2026-06-23T04:45:06Z",
+      "mtime": "2026-06-26T04:45:12Z",
       "lines": 11,
       "purpose": ""
     },
@@ -1034,7 +1034,7 @@
     {
       "type": "wasabi",
       "bucket": "jarvis-wc2026",
-      "snapshots": 97,
+      "snapshots": 187,
       "status": "ok"
     }
   ]

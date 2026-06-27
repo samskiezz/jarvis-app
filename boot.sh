@@ -14,7 +14,8 @@
 #                                   used by any non-broken build; otherwise the
 #                                   agent degrades to grounded corpus search.
 #
-# Env knobs (all optional): OLLAMA_HOST, OLLAMA_MODEL, KIMI_API_KEY, BRAIN_DB,
+# Env knobs (all optional): QWEN_BASE_URL, QWEN_MODEL, QWEN_API_KEY,
+#   OLLAMA_BASE_URL, OLLAMA_HOST, OLLAMA_MODEL, KIMI_API_KEY, BRAIN_DB,
 #   API_HOST, API_PORT, UI_PORT, NO_UI=1, NO_LLM=1.
 set -uo pipefail
 cd "$(dirname "$0")"
@@ -23,13 +24,21 @@ ROOT="$PWD"
 # full working setup to every box. Real secrets stay as shell env vars (not here).
 if [ -f "$ROOT/.env" ]; then set -a; . "$ROOT/.env"; set +a; fi
 
+# Normalize legacy Ollama env naming (boot uses OLLAMA_HOST, router uses OLLAMA_BASE_URL).
+if [ -n "${OLLAMA_HOST:-}" ] && [ -z "${OLLAMA_BASE_URL:-}" ]; then
+  case "$OLLAMA_HOST" in
+    http://*|https://*) export OLLAMA_BASE_URL="$OLLAMA_HOST" ;;
+    *) export OLLAMA_BASE_URL="http://$OLLAMA_HOST" ;;
+  esac
+fi
+
 export BRAIN_DB="${BRAIN_DB:-$ROOT/server/data/brain.db}"
 API_HOST="${API_HOST:-127.0.0.1}"; API_PORT="${API_PORT:-8000}"
 # Recon (ffuf/kiterunner/katana) may ONLY target hosts you own. Default to this
 # platform's own infra; add your production host(s), comma-separated, to extend.
 export RECON_ALLOWLIST="${RECON_ALLOWLIST:-127.0.0.1,localhost,$API_HOST}"
 UI_PORT="${UI_PORT:-5173}"
-OLLAMA_MODEL="${OLLAMA_MODEL:-llama3.2:1b}"; export OLLAMA_MODEL
+OLLAMA_MODEL="${OLLAMA_MODEL:-qwen3:32b}"; export OLLAMA_MODEL
 # Continuous LLM research autopilot — keeps the GPU hammered (cycles topics through
 # the LLM forever; idles until a model is reachable). On by default; disable with
 # LLM_AUTOPILOT_ENABLE=0. Tune LLM_AUTOPILOT_CONCURRENCY (default 3).
@@ -51,6 +60,9 @@ export PATH="$HOME/go/bin:$PATH"
 llm_mode="off"
 if [ "${NO_LLM:-0}" = "1" ]; then
   say "1/5 LLM: skipped (NO_LLM=1)"
+elif [ -n "${QWEN_BASE_URL:-}" ]; then
+  llm_mode="qwen32b"; say "1/5 LLM: Qwen32B OpenAI-compatible server $QWEN_BASE_URL"
+  curl -s -m 5 "$QWEN_BASE_URL/models" >/dev/null 2>&1 && say "    Qwen reachable ✓" || warn "    Qwen NOT reachable — check vLLM service"
 elif [ -n "${KIMI_API_KEY:-}" ]; then
   llm_mode="cloud"; say "1/5 LLM: cloud (KIMI_API_KEY set) — backend will use it"
 elif [ -n "${OLLAMA_HOST:-}" ] && ! is_local_host "$OLLAMA_HOST"; then

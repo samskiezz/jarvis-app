@@ -1,0 +1,30 @@
+# EXAMPLE systemd unit — Jarvis frontend (Vite dev server).
+#
+# This is a reference template. It is NOT installed or activated by the repo.
+# Install on the host that serves the frontend (per CLAUDE.md §13.3):
+#
+#   sudo cp deploy/systemd/jarvis-frontend.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now jarvis-frontend
+#   sudo journalctl -u jarvis-frontend -f
+#
+# Then open http://127.0.0.1:3000
+#
+# This runs the Vite dev server. For production, replace ExecStart with a built
+# static frontend served behind Nginx (see CLAUDE.md §13.3).
+
+[Unit]
+Description=Jarvis Frontend
+After=jarvis-backend.service
+
+[Service]
+Type=simple
+User=sam
+WorkingDirectory=/home/sam/jarvis-app
+EnvironmentFile=/home/sam/jarvis-app/.env
+ExecStart=/usr/bin/npm run dev -- --host 0.0.0.0 --port 3000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
