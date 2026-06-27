@@ -92,6 +92,7 @@ import GraphTimeScrubber from "@/components/overnight/GraphTimeScrubber";
 import DatasetsCatalogDrawer from "@/components/overnight/DatasetsCatalogDrawer";
 import MetricsMonitor from "@/components/overnight/MetricsMonitor";
 import FoundryPipelineCatalog from "@/components/overnight/FoundryPipelineCatalog";
+import DatasetLineageInspector from "@/components/overnight/DatasetLineageInspector";
 import AssetDnaDrawer from "@/components/overnight/AssetDnaDrawer";
 import AstroTrackerDrawer from "@/components/overnight/AstroTrackerDrawer";
 import VoiceForgeDrawer from "@/components/overnight/VoiceForgeDrawer";
@@ -399,6 +400,9 @@ export function AppLayout({ children }) {
 
       {/* F88: Foundry Pipeline Catalog — left-edge slide-in at 10%; GET /v1/foundry/pipelines (5-min poll); pipeline name + YAML badge + size + age per row; click expands YAML preview; fuchsia (#E879F9) accent */}
       <FoundryPipelineCatalog />
+
+      {/* F148: Dataset Lineage Inspector — left-edge slide-in at 11%; GET /v1/datasets (5-min poll) + GET /v1/connectors (once); GET /v1/datasets/{name}/health + /lineage on row expand; orange (#FB923C) accent */}
+      <DatasetLineageInspector />
 
       {/* F89: Asset DNA Browser — right-edge slide-in at 53%; GET /v1/asset/list?limit=200 (5-min poll); repo asset cards sorted by risk; HIGH/MEDIUM/LOW risk badges + health dot + kind badge + age; high-risk count badge on tab; red accent on HIGH risk; client-side filter */}
       <AssetDnaDrawer />
