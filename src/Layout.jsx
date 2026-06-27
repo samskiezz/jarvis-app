@@ -129,6 +129,7 @@ import ScrapeStatusDrawer from "@/components/overnight/ScrapeStatusDrawer";
 import PolicyControlDrawer from "@/components/overnight/PolicyControlDrawer";
 import SecurityAuditLogDrawer from "@/components/overnight/SecurityAuditLogDrawer";
 import SandboxBranchInspector from "@/components/overnight/SandboxBranchInspector";
+import ArchitectureMapDrawer from "@/components/overnight/ArchitectureMapDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -504,6 +505,9 @@ export function AppLayout({ children }) {
 
       {/* F141: Sandbox Branch Inspector — left-edge slide-in at 68%; polls GET /v1/jarvis/sandbox/branches every 3 min; click branch fetches GET /v1/jarvis/sandbox/{branch}/diff and shows field-level object diffs inline; cyan (#22D3EE) accent */}
       <SandboxBranchInspector />
+
+      {/* F142: Architecture Map Drawer — right-edge slide-in at 87%; polls GET /v1/jarvis/architecture every 5 min; 10-layer status map with native/partial/interface/missing badges; click expands module presence; cyan (#06B6D4) accent */}
+      <ArchitectureMapDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
