@@ -1,0 +1,17 @@
+{
+  "model": "openai:gpt-4o-mini",
+  "run_id": "llm_diverse_c1e7b27d05e7",
+  "generated_at": "2026-06-20T05:45:58Z",
+  "verified": true,
+  "source": "OpenAI Chat Completions gpt-4o-mini via https://api.openai.com/v1/chat/completions at 2026-06-20T05:45:58Z",
+  "n_fixtures_eligible": 40,
+  "key_present": false,
+  "predictions": [],
+  "api_errors": [
+    "OPENAI_API_KEY missing or placeholder — skipping diverse-LLM predictor cleanly. No fabricated predictions written."
+  ],
+  "db_rows_inserted": 0,
+  "n_predicted": 0,
+  "n_skipped": 0,
+  "skipped_reason": "openai_api_key_missing_or_placeholder"
+}

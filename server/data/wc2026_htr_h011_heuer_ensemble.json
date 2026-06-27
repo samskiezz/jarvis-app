@@ -1,0 +1,71 @@
+{
+  "bootstrap_reps": 300,
+  "ci_95": [
+    -20.69,
+    3.448
+  ],
+  "delta_pp": -7.023,
+  "ensemble_winners": "16/29 (55.2%)",
+  "generated_at": "2026-06-19T21:56:09+00:00",
+  "heuer_alone_winners": "18/29 (62.1%)",
+  "honest_verdict": "HTR h-011 stacked ensemble delta -7.0pp with 95% CI [-20.7, +3.4]pp straddles 0 on n=29 matches \u2014 no real lift; CI is wide because the sample is tiny.",
+  "htr_node": {
+    "hypothesis": "Stacking Heuer 90d-decay Elo (h-002) with Llama-70B and Chalk via LOO multinomial logreg beats Heuer alone on winner accuracy.",
+    "id": "h-011",
+    "parent_ids": [
+      "h-002",
+      "h-007"
+    ]
+  },
+  "method": {
+    "ci": "paired bootstrap on matched per-match winner-hit deltas, 300 reps, percentile 2.5/97.5",
+    "cv": "leave-one-out (each prediction is out-of-sample)",
+    "delta_baseline": "Heuer 90d-decay Elo alone (elo_heuer_decay90d_bivariate_poisson_dixoncoles, h-002)",
+    "features": [
+      "chalk_p_home",
+      "chalk_p_draw",
+      "chalk_p_away",
+      "heuer_p_home",
+      "heuer_p_draw",
+      "heuer_p_away",
+      "llama_p_home",
+      "llama_p_draw",
+      "llama_p_away"
+    ],
+    "stacker": "sklearn.LogisticRegression(solver='lbfgs', C=0.5, max_iter=2000) \u2014 multinomial by default in sklearn 1.9"
+  },
+  "overlap_runs": {
+    "stacked_run_id": "htr-h011-a4bd765b9c"
+  },
+  "per_model_accuracy": {
+    "chalk": {
+      "hits": 15,
+      "label": "15/29 (51.7%)",
+      "pct": 51.72,
+      "total": 29
+    },
+    "ensemble": {
+      "hits": 16,
+      "label": "16/29 (55.2%)",
+      "pct": 55.17,
+      "total": 29
+    },
+    "heuer_decay90d": {
+      "hits": 18,
+      "label": "18/29 (62.1%)",
+      "pct": 62.07,
+      "total": 29
+    },
+    "llama_70b": {
+      "hits": 17,
+      "label": "17/29 (58.6%)",
+      "pct": 58.62,
+      "total": 29
+    }
+  },
+  "real_lift": false,
+  "sample_size": 29,
+  "schema": "wc2026_htr_h011_heuer_ensemble.v1",
+  "source": "scripts/wc2026_htr_h011_heuer_ensemble.py \u2014 Heuer 90d-decay model + Llama3.3:70b + Chalk pulled from audit DB; actual_wdl resolved server-side via actual_for() on wc2026_actuals.json; stacker = sklearn LOO multinomial LogisticRegression(C=0.5); paired bootstrap (300 reps) vs Heuer-alone winner accuracy.",
+  "verified": true
+}

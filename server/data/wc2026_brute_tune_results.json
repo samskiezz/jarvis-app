@@ -1,0 +1,803 @@
+[
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.08|rot=0.95",
+    "matches": 350,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 82.6,
+    "betting_value_score": 40.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 136.16
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.03|rot=0.98",
+    "matches": 387,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 82.4,
+    "betting_value_score": 40.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 135.96
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.08|rot=0.93",
+    "matches": 321,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 82.2,
+    "betting_value_score": 40.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 135.76000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.0|rot=0.98",
+    "matches": 372,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 82.0,
+    "betting_value_score": 40.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 135.56
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.12|rot=0.93",
+    "matches": 340,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.8,
+    "betting_value_score": 40.5,
+    "avg_coverage_cost": 2.02,
+    "objective": 135.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.03|rot=0.95",
+    "matches": 320,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.6,
+    "betting_value_score": 40.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 135.16
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.05|rot=0.95",
+    "matches": 373,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.5,
+    "betting_value_score": 40.5,
+    "avg_coverage_cost": 2.02,
+    "objective": 135.06
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.0|rot=0.98",
+    "matches": 419,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.4,
+    "betting_value_score": 40.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.96
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.08|rot=0.95",
+    "matches": 385,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.3,
+    "betting_value_score": 40.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.86
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.12|rot=0.93",
+    "matches": 347,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.3,
+    "betting_value_score": 40.2,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.86
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.03|rot=0.98",
+    "matches": 345,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.2,
+    "betting_value_score": 40.4,
+    "avg_coverage_cost": 2.01,
+    "objective": 134.78
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.0|rot=0.95",
+    "matches": 344,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.1,
+    "betting_value_score": 40.2,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.08|rot=0.95",
+    "matches": 328,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 81.1,
+    "betting_value_score": 40.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.0|rot=0.9",
+    "matches": 345,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.9,
+    "betting_value_score": 40.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.12|rot=0.93",
+    "matches": 340,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.9,
+    "betting_value_score": 40.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.0|rot=0.9",
+    "matches": 388,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.9,
+    "betting_value_score": 40.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.08|rot=0.98",
+    "matches": 359,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.8,
+    "betting_value_score": 40.4,
+    "avg_coverage_cost": 2.01,
+    "objective": 134.38
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.03|rot=0.9",
+    "matches": 369,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.8,
+    "betting_value_score": 40.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.12|rot=0.9",
+    "matches": 328,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.8,
+    "betting_value_score": 40.0,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.12|rot=0.98",
+    "matches": 322,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.8,
+    "betting_value_score": 40.2,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.12|rot=0.95",
+    "matches": 354,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.8,
+    "betting_value_score": 40.0,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=roster_strength",
+    "matches": 367,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.7,
+    "betting_value_score": 40.1,
+    "avg_coverage_cost": 2.01,
+    "objective": 134.28
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=underdog_guard",
+    "matches": 367,
+    "single_pick_accuracy": 55.9,
+    "three_spread_coverage": 80.4,
+    "betting_value_score": 40.2,
+    "avg_coverage_cost": 2.01,
+    "objective": 134.28
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=rank_draw",
+    "matches": 387,
+    "single_pick_accuracy": 55.9,
+    "three_spread_coverage": 80.4,
+    "betting_value_score": 40.0,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.26000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=h2h",
+    "matches": 366,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.6,
+    "betting_value_score": 39.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 134.16
+  },
+  {
+    "config": "l2=0.001|obj=logloss|maj",
+    "matches": 379,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.5,
+    "betting_value_score": 40.3,
+    "avg_coverage_cost": 2.01,
+    "objective": 134.07999999999998
+  },
+  {
+    "config": "l2=0.0|obj=logloss|maj",
+    "matches": 383,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.4,
+    "betting_value_score": 39.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.96
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.05|rot=0.93",
+    "matches": 402,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.3,
+    "betting_value_score": 39.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.86
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.03|rot=0.93",
+    "matches": 339,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.2,
+    "betting_value_score": 39.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.76000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.05|rot=0.95",
+    "matches": 342,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.1,
+    "betting_value_score": 39.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.05|rot=0.9",
+    "matches": 347,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.1,
+    "betting_value_score": 39.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.08|rot=0.9",
+    "matches": 361,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.1,
+    "betting_value_score": 39.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.03|rot=0.9",
+    "matches": 407,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.1,
+    "betting_value_score": 39.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.05|rot=0.93",
+    "matches": 386,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 80.0,
+    "betting_value_score": 39.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.56
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.08|rot=0.93",
+    "matches": 373,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.9,
+    "betting_value_score": 39.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.0|rot=0.98",
+    "matches": 367,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.8,
+    "betting_value_score": 39.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.05|rot=0.98",
+    "matches": 378,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.6,
+    "betting_value_score": 39.5,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.16
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.08|rot=0.98",
+    "matches": 388,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.6,
+    "betting_value_score": 39.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.16
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.05|rot=0.93",
+    "matches": 357,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.5,
+    "betting_value_score": 39.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.06
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.08|rot=0.9",
+    "matches": 342,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.5,
+    "betting_value_score": 39.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.06
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.0|rot=0.93",
+    "matches": 381,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.5,
+    "betting_value_score": 39.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.06
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.03|rot=0.93",
+    "matches": 386,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.5,
+    "betting_value_score": 39.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 133.06
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj",
+    "matches": 383,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.4,
+    "betting_value_score": 39.5,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.96
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=group_table",
+    "matches": 388,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.4,
+    "betting_value_score": 39.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.96
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.08|rot=0.98",
+    "matches": 344,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.4,
+    "betting_value_score": 39.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.96
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=rank",
+    "matches": 372,
+    "single_pick_accuracy": 55.9,
+    "three_spread_coverage": 79.0,
+    "betting_value_score": 39.2,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.86
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.0|rot=0.93",
+    "matches": 357,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.3,
+    "betting_value_score": 39.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.86
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.03|rot=0.98",
+    "matches": 415,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.3,
+    "betting_value_score": 39.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.86
+  },
+  {
+    "config": "l2=0.01|obj=logloss|maj",
+    "matches": 373,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.1,
+    "betting_value_score": 39.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.03|rot=0.9",
+    "matches": 383,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.1,
+    "betting_value_score": 39.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.05|rot=0.95",
+    "matches": 399,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.0,
+    "betting_value_score": 39.2,
+    "avg_coverage_cost": 2.01,
+    "objective": 132.57999999999998
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.08|rot=0.9",
+    "matches": 377,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.0,
+    "betting_value_score": 39.6,
+    "avg_coverage_cost": 2.01,
+    "objective": 132.57999999999998
+  },
+  {
+    "config": "l2=0.1|obj=logloss|maj",
+    "matches": 390,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.0,
+    "betting_value_score": 39.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.56
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.05|rot=0.9",
+    "matches": 371,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 79.0,
+    "betting_value_score": 39.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.56
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.03|rot=0.93",
+    "matches": 421,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.9,
+    "betting_value_score": 39.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.0|rot=0.95",
+    "matches": 387,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.8,
+    "betting_value_score": 39.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.03|rot=0.95",
+    "matches": 350,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.6,
+    "betting_value_score": 38.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.16
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.08|rot=0.93",
+    "matches": 370,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.6,
+    "betting_value_score": 39.1,
+    "avg_coverage_cost": 2.02,
+    "objective": 132.16
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.0|rot=0.93",
+    "matches": 438,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.3,
+    "betting_value_score": 38.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.86
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.0|rot=0.95",
+    "matches": 426,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.2,
+    "betting_value_score": 38.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.76000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.12|rot=0.98",
+    "matches": 361,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.1,
+    "betting_value_score": 39.2,
+    "avg_coverage_cost": 2.01,
+    "objective": 131.67999999999998
+  },
+  {
+    "config": "l2=0.1|obj=logloss|blend",
+    "matches": 366,
+    "single_pick_accuracy": 53.4,
+    "three_spread_coverage": 80.3,
+    "betting_value_score": 39.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=form_momentum",
+    "matches": 406,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.1,
+    "betting_value_score": 38.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.66
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.12|rot=0.95",
+    "matches": 309,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 78.0,
+    "betting_value_score": 38.6,
+    "avg_coverage_cost": 2.03,
+    "objective": 131.54
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.985|margin=0.12|rot=0.9",
+    "matches": 366,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 77.9,
+    "betting_value_score": 38.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.05|rot=0.98",
+    "matches": 325,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 77.8,
+    "betting_value_score": 38.5,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.36
+  },
+  {
+    "config": "l2=0.001|obj=logloss|blend",
+    "matches": 377,
+    "single_pick_accuracy": 53.2,
+    "three_spread_coverage": 80.1,
+    "betting_value_score": 39.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 131.26000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.05|rot=0.98",
+    "matches": 415,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 77.3,
+    "betting_value_score": 38.5,
+    "avg_coverage_cost": 2.01,
+    "objective": 130.88
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=goal_diff",
+    "matches": 384,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 77.1,
+    "betting_value_score": 38.3,
+    "avg_coverage_cost": 2.01,
+    "objective": 130.67999999999998
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.03|rot=0.95",
+    "matches": 428,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.9,
+    "betting_value_score": 38.4,
+    "avg_coverage_cost": 2.01,
+    "objective": 130.48
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.12|rot=0.98",
+    "matches": 325,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.9,
+    "betting_value_score": 38.2,
+    "avg_coverage_cost": 2.02,
+    "objective": 130.46
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.12|rot=0.9",
+    "matches": 358,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.8,
+    "betting_value_score": 38.4,
+    "avg_coverage_cost": 2.01,
+    "objective": 130.38
+  },
+  {
+    "config": "l2=0.001|obj=accuracy|maj",
+    "matches": 375,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.8,
+    "betting_value_score": 38.0,
+    "avg_coverage_cost": 2.02,
+    "objective": 130.36
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.05|rot=0.9",
+    "matches": 391,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.7,
+    "betting_value_score": 38.4,
+    "avg_coverage_cost": 2.01,
+    "objective": 130.28
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|blend",
+    "matches": 377,
+    "single_pick_accuracy": 54.3,
+    "three_spread_coverage": 78.0,
+    "betting_value_score": 38.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 130.26000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|drop=tournament_elo",
+    "matches": 384,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.6,
+    "betting_value_score": 37.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 130.16
+  },
+  {
+    "config": "l2=0.1|obj=accuracy|maj",
+    "matches": 391,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.2,
+    "betting_value_score": 37.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 129.76000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.995|margin=0.0|rot=0.9",
+    "matches": 437,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 76.2,
+    "betting_value_score": 37.8,
+    "avg_coverage_cost": 2.02,
+    "objective": 129.76000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=accuracy|maj",
+    "matches": 379,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 75.7,
+    "betting_value_score": 37.5,
+    "avg_coverage_cost": 2.02,
+    "objective": 129.26000000000002
+  },
+  {
+    "config": "l2=0.01|obj=accuracy|maj",
+    "matches": 374,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 75.7,
+    "betting_value_score": 37.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 129.26000000000002
+  },
+  {
+    "config": "l2=0.0001|obj=logloss|maj|ent=0.97|margin=0.12|rot=0.95",
+    "matches": 350,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 75.7,
+    "betting_value_score": 37.6,
+    "avg_coverage_cost": 2.02,
+    "objective": 129.26000000000002
+  },
+  {
+    "config": "l2=0.0|obj=accuracy|maj",
+    "matches": 380,
+    "single_pick_accuracy": 55.6,
+    "three_spread_coverage": 74.5,
+    "betting_value_score": 36.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 128.06
+  },
+  {
+    "config": "l2=0.0|obj=logloss|blend",
+    "matches": 386,
+    "single_pick_accuracy": 51.0,
+    "three_spread_coverage": 78.5,
+    "betting_value_score": 39.0,
+    "avg_coverage_cost": 2.02,
+    "objective": 127.46
+  },
+  {
+    "config": "l2=0.01|obj=logloss|blend",
+    "matches": 364,
+    "single_pick_accuracy": 50.1,
+    "three_spread_coverage": 79.1,
+    "betting_value_score": 39.2,
+    "avg_coverage_cost": 2.02,
+    "objective": 127.15999999999998
+  },
+  {
+    "config": "l2=0.001|obj=accuracy|blend",
+    "matches": 376,
+    "single_pick_accuracy": 46.3,
+    "three_spread_coverage": 76.1,
+    "betting_value_score": 37.8,
+    "avg_coverage_cost": 2.01,
+    "objective": 120.38
+  },
+  {
+    "config": "l2=0.0001|obj=accuracy|blend",
+    "matches": 377,
+    "single_pick_accuracy": 47.2,
+    "three_spread_coverage": 75.1,
+    "betting_value_score": 37.3,
+    "avg_coverage_cost": 2.02,
+    "objective": 120.25999999999999
+  },
+  {
+    "config": "l2=0.1|obj=accuracy|blend",
+    "matches": 386,
+    "single_pick_accuracy": 46.6,
+    "three_spread_coverage": 74.1,
+    "betting_value_score": 36.7,
+    "avg_coverage_cost": 2.02,
+    "objective": 118.65999999999998
+  },
+  {
+    "config": "l2=0.01|obj=accuracy|blend",
+    "matches": 377,
+    "single_pick_accuracy": 45.5,
+    "three_spread_coverage": 74.5,
+    "betting_value_score": 36.9,
+    "avg_coverage_cost": 2.02,
+    "objective": 117.96
+  },
+  {
+    "config": "l2=0.0|obj=accuracy|blend",
+    "matches": 391,
+    "single_pick_accuracy": 43.9,
+    "three_spread_coverage": 75.4,
+    "betting_value_score": 37.4,
+    "avg_coverage_cost": 2.02,
+    "objective": 117.26
+  }
+]

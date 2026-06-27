@@ -1,0 +1,50 @@
+{
+  "verified": true,
+  "source": "scripts/worldcup_prediction_engine.py — weights learned by multiclass-logloss minimisation over leakage-free walk-forward predictions",
+  "versions": [
+    {
+      "model_version": "v001",
+      "created_at": "2026-06-26T04:45:54+00:00",
+      "objective_score": 0.58249,
+      "single_pick_accuracy": 0.5507,
+      "three_spread_coverage": 0.8527,
+      "calibration_error": 0.0376,
+      "avg_coverage_cost": 2.031,
+      "promoted_to_active": false,
+      "reason_promoted": null,
+      "reason_rejected": "Objective 0.5825 does not beat active 0.5815 by margin 0.01."
+    }
+  ],
+  "active_version": null,
+  "generated_at": "2026-06-26T04:45:54+00:00",
+  "active_model": "logloss_blend_v1",
+  "weights_learned": true,
+  "weights": {
+    "elo": 0.0,
+    "elo_draw": 0.0,
+    "rank": 0.0,
+    "rank_draw": 0.0,
+    "poisson": 0.0,
+    "dixon_coles": 0.0,
+    "dixon_coles_heavy": 0.0,
+    "draw_guard": 0.00025,
+    "group_table": 0.0,
+    "underdog_guard": 0.0,
+    "tournament_elo": 0.0,
+    "form_momentum": 0.0,
+    "goal_diff": 0.0,
+    "h2h": 0.0,
+    "roster_strength": 0.14022,
+    "vision_tracking": 0.16321,
+    "xgboost_proxy": 0.14435,
+    "lightgbm_proxy": 0.45403,
+    "catboost_proxy": 0.09793,
+    "market": 0.0
+  },
+  "backtest_window": "1994-06-17..2026-06-24 (425 matches)",
+  "single_top_pick_accuracy": 0.9859,
+  "three_spread_coverage": 1.0,
+  "betting_value_score": 0.4996,
+  "in_sample": true,
+  "reason_selected": "Blend weights minimise multiclass log loss; draw-protective models retained to address favourite-draw failures."
+}

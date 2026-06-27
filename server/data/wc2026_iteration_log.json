@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.1",
+  "source": "scripts/wc2026_predictor.py + scripts/wc2026_tune_predictor.py \u2014 one entry per upgrade-adoption decision. Each entry records the upgrade audit it is based on, before/after metrics on the same graded set, the CI method, and an honest verdict. Adopted upgrades flow into the predictor; rejected ones are re-checked after more matches grade.",
+  "verified": true,
+  "iterations": [
+    {
+      "iteration_id": "2026-06-19T21:59:34.208721Z",
+      "timestamp_utc": "2026-06-19T21:59:34.208721Z",
+      "upgrade": "tuned_coefficients_30k_search_plus_1k_finetune",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "source_finetune": "server/data/wc2026_1k_finetune_results.json",
+      "source_30k": "server/data/wc2026_30k_search_results.json",
+      "baseline_brier": 0.669930259619823,
+      "baseline_params": {
+        "k_factor": 40.0,
+        "home_adv": 0.4,
+        "poisson_b": 1.6,
+        "dc_tau": -0.08,
+        "decay_half_life_days": 365.0
+      },
+      "final_brier": 0.5805227461367406,
+      "best_params_searched": {
+        "k_factor": 30.378937043063424,
+        "home_adv": 0.2636458859674178,
+        "poisson_b": 0.5,
+        "dc_tau": 0.005072517072161522,
+        "decay_half_life_days": 136.47817950232587
+      },
+      "params_adopted": false,
+      "ci_95": [
+        -0.0018227955462772247,
+        0.0012103453803339686
+      ],
+      "brier_delta_vs_parent": -0.0003753686689054181,
+      "brier_delta_vs_baseline": -0.0894075134830824,
+      "sample_size": {
+        "wc2026_actuals_rows": 29,
+        "n_scored_per_sample": 480,
+        "n_boot_paired": 300
+      },
+      "honest_verdict": "30K random search + 1K paired-bootstrap fine-tune found a brier_delta of -0.000375 vs the in-search parent with 95% CI [-0.001823, 0.001210] which crosses 0. real_lift=false on n=29 WC2026 actuals + 563 backtest. Baseline coefficients (K_factor=40, HOME_ADV=0.4, POISSON_B=1.6, DC_RHO=-0.08, no Heuer decay) are kept. The large negative vs_baseline_brier_delta (~-0.089) is partly an artefact of the search corpus mixing in calibrated backtest rows; the within-search CI is the honest test of additional lift on top of the existing isotonic calibrator. Re-run after MD2+ graded actuals.",
+      "commit_title_correction": "Published in commit aaa38b2e under HTR-iteration title due to a stale COMMIT_EDITMSG template at commit time. The correct audit title for this iteration is: 'feat(wc2026): 30K hyperparameter search + 1K fine-tune; baseline=0.670 brier, best=0.581 brier, lift=-0.000375 (CI [-0.00182, +0.00121])'. This corrective commit carries the intended message in its body."
+    },
+    {
+      "iteration_id": "iso_cal_adopt_20260619T215142Z",
+      "timestamp_utc": "2026-06-19T21:51:42Z",
+      "upgrade": "isotonic_per_class_renormalised",
+      "upgrade_audit": "server/data/wc2026_upgrade_isotonic.json",
+      "decision": "ADOPTED",
+      "real_lift": true,
+      "ci_method": "paired bootstrap on per-match Brier deltas, 300 reps, percentile 2.5/97.5",
+      "n_graded": 29,
+      "ci_95_brier_delta": [
+        0.063674,
+        0.391212
+      ],
+      "before": {
+        "model": "elo_bivariate_poisson_dixoncoles",
+        "brier_multiclass": 0.668054,
+        "winner_accuracy": 0.586207,
+        "winner_hits": "17/29"
+      },
+      "after": {
+        "model": "elo_bivariate_poisson_dixoncoles_isocal",
+        "brier_multiclass": 0.453864,
+        "winner_accuracy": 0.655172,
+        "winner_hits": "19/29",
+        "brier_delta": 0.21419,
+        "winner_delta_pp": 6.8966
+      },
+      "implementation": {
+        "files_changed": [
+          "scripts/wc2026_predictor.py",
+          "scripts/wc2026_llm_predictor.py"
+        ],
+        "artifact": "server/data/wc2026_isotonic_calibrator.json",
+        "fit_strategy": "per-class one-vs-rest sklearn.isotonic.IsotonicRegression(out_of_bounds='clip', y_min=0, y_max=1), refit each predictor run on every graded WC2026 fixture resolvable via wc2026_db.actual_for, renormalised across H/D/A.",
+        "raw_probs_preserved": "every calibrated prediction also carries p_home_raw / p_draw_raw / p_away_raw so the locker, UI, and audit log can recover the uncalibrated values."
+      },
+      "honest_caveat": "The 95% CI excludes 0 but n=29 is small AND the calibrator is fit IN-SAMPLE on the same fixtures the Brier is measured on, so the +0.214 brier_delta is a near-best-case in-sample fit, not an out-of-sample lift. The decision to adopt rests on (a) isotonic being the only one of the five audited upgrades whose CI strictly excluded 0 in the favourable direction, (b) raw probs being preserved so the change is fully reversible by ignoring the new keys, and (c) the calibrator refitting each predictor run so it self-corrects as new matches grade. Re-evaluate with held-out splits once n_graded >= 60."
+    },
+    {
+      "iteration_id": "heuer_skip_20260619T215142Z",
+      "timestamp_utc": "2026-06-19T21:51:42Z",
+      "upgrade": "heuer_2010_time_decay_elo",
+      "upgrade_audit": "server/data/wc2026_upgrade_heuer.json",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "ci_method": "paired bootstrap on per-match Brier deltas, 300 reps, percentile 2.5/97.5",
+      "n_graded": 29,
+      "ci_95_brier_delta": [
+        -0.111355,
+        0.06479
+      ],
+      "metrics": {
+        "brier_baseline": 0.668054,
+        "brier_heuer": 0.651562,
+        "winner_acc_baseline": 0.586207,
+        "winner_acc_heuer": 0.62069
+      },
+      "honest_verdict": "Brier delta -0.0165 favours heuer (lower is better), but 95% CI [-0.111, +0.065] straddles 0. Winner delta +3.45pp 95% CI [0.0, +10.34] touches the 0 lower bound. No statistically significant lift on n=29 graded matches \u2014 re-check after MD2+ MD3+ add graded actuals."
+    },
+    {
+      "iteration_id": "bookmaker_skip_20260619T215142Z",
+      "timestamp_utc": "2026-06-19T21:51:42Z",
+      "upgrade": "bookmaker_devig_blend",
+      "upgrade_audit": "server/data/wc2026_upgrade_bookmaker.json",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "ci_method": "paired bootstrap, 10000 reps",
+      "n_graded": 29,
+      "ci_95_brier_delta": [
+        -0.048937,
+        0.324192
+      ],
+      "metrics": {
+        "brier_baseline": 0.712851,
+        "brier_blended": 0.579844,
+        "weight_learned": 0.115,
+        "winner_delta_pp": -3.4483
+      },
+      "honest_verdict": "CI straddles 0 AND the odds in wc2026_value_bets.json are placeholder (uniform 1.91/3.70/3.80 every match because the hosting IP is 403-blocked from Pinnacle). The +0.133 brier_delta is upper-bound infrastructure value, NOT a market-edge measurement. Re-evaluate once real Pinnacle odds plumb through."
+    },
+    {
+      "iteration_id": "karlis_skip_20260619T215142Z",
+      "timestamp_utc": "2026-06-19T21:51:42Z",
+      "upgrade": "karlis_ntzoufras_2003_bivariate_poisson",
+      "upgrade_audit": "server/data/wc2026_upgrade_karlis.json",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "ci_method": "paired bootstrap, 300 reps, walk-forward OOS on 226 historical matches",
+      "n_eval": 226,
+      "ci_95_brier_delta": [
+        -0.001493,
+        0.003455
+      ],
+      "metrics": {
+        "brier_baseline": 0.683542,
+        "brier_karlis": 0.684523,
+        "lambda_3_fitted": 1e-05,
+        "winner_delta": 0.0
+      },
+      "honest_verdict": "EM-fit lambda_3 collapsed to ~1e-5 (essentially independent Poisson) on this corpus, so the bivariate Poisson degenerates back to the baseline. Brier delta +0.0010 with CI [-0.0015, +0.0035] straddles 0. Goal-correlation common shock not material for international football where venues, opposition quality, and game-state dominate; can re-test if a different corpus shows materially correlated H/A scoring."
+    },
+    {
+      "iteration_id": "groll_skip_20260619T215142Z",
+      "timestamp_utc": "2026-06-19T21:51:42Z",
+      "upgrade": "groll_2018_rf_poisson_hybrid",
+      "upgrade_audit": "server/data/wc2026_upgrade_groll.json",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "ci_method": "paired bootstrap, 10000 reps",
+      "n_eval": 29,
+      "ci_95_brier_delta": [
+        -0.343169,
+        0.063564
+      ],
+      "metrics": {
+        "brier_baseline": 0.795292,
+        "brier_groll": 0.656959,
+        "brier_delta_point": -0.138333
+      },
+      "honest_verdict": "Brier delta -0.1383 strongly favours the RF+Poisson hybrid, BUT 95% CI [-0.343, +0.064] straddles 0 \u2014 wide because n=29 is small relative to the model's effective DoF (RF with 5 features at depth 10). Cannot adopt without OOS confirmation; re-evaluate after >= 60 graded fixtures."
+    },
+    {
+      "iteration_id": "ensemble_skip_20260619T215142Z",
+      "timestamp_utc": "2026-06-19T21:51:42Z",
+      "upgrade": "stacked_logreg_ensemble_chalk_elo_llama",
+      "upgrade_audit": "server/data/wc2026_ensemble_comparison.json",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "ci_method": "paired bootstrap on per-match hits, 300 reps, leave-one-out CV",
+      "n_eval": 28,
+      "ci_95_winner_delta_pp": [
+        -25.0,
+        21.429
+      ],
+      "metrics": {
+        "ensemble_acc": 0.5,
+        "elo_acc": 0.5357,
+        "llama_acc": 0.5714,
+        "chalk_acc": 0.5357,
+        "ensemble_delta_pp_vs_elo": -2.94
+      },
+      "honest_verdict": "Stacked LR ensemble actually LOSES 2.9pp vs the single-best model (llama 57.1% > ensemble 50.0%) and 95% CI [-25.0pp, +21.4pp] straddles 0. With n=28 the stacker is over-parameterised relative to the data; revisit after >= 60 graded matches with held-out folds."
+    },
+    {
+      "iteration_id": "htr_h013_h034_no_lift_20260620T011222Z",
+      "timestamp_utc": "2026-06-20T01:12:22.845Z",
+      "upgrade": "htr_h013_to_h034_full_sweep",
+      "decision": "REJECTED",
+      "real_lift": false,
+      "ci_method": "paired bootstrap on per-match Brier deltas; reps=2000 (h-013..h-032), 300 (h-033), 5000 (h-034); percentile 2.5/97.5",
+      "n_graded": 30,
+      "scope": "h-013..h-032 = top-20 30k-search hyperparameter points (re-scored on n=30 WC2026 verified actuals); h-033 = per-class isotonic on llama3.3:70b graded predictions (5-fold CV); h-034 = h-010 365d Heuer-decay Elo + h-012-style 5-fold isotonic-CV calibration.",
+      "tree_summary": {
+        "total_nodes_after": 34,
+        "adopted_nodes": 1,
+        "rejected_nodes": 33,
+        "current_best_node_id": "h-001",
+        "current_best_brier_wc2026_only": 0.649906,
+        "current_best_winner_pct_wc2026_only": 56.6667
+      },
+      "evidence_paths": [
+        "server/data/wc2026_htr_h013_to_h032_top20_eval.json",
+        "server/data/wc2026_htr_h033_70b_isotonic.json",
+        "server/data/wc2026_htr_h034_heuer365_isotonic.json"
+      ],
+      "honest_verdict": "No statistically significant improvement on n=30 graded WC2026 matches. Under the corrected sign convention (brier_delta = candidate - baseline; negative = better; real_lift requires ci_95[1] < 0 strictly), every node h-013..h-034 either has a 95% paired-bootstrap CI that straddles zero (h-013..h-032 all have point estimates in the favourable direction [-0.060, -0.052] but upper CI bounds 0.060..0.073 sit above zero) or has a positive point estimate altogether (h-033: +0.087, h-034: +0.030 \u2014 calibration on top of 70B/Heuer365 makes Brier WORSE on this n). Production stays on h-001 (baseline Elo+log-linear-Poisson with Dixon-Coles low-score adjustment and the previously-adopted isotonic calibrator). Re-check after more matches play \u2014 when n_graded passes 60 (post-WC2026 group stage), rerun the top-20 search-point evaluation and h-034 calibration: the point estimates for h-013..h-032 are all in the favourable direction so a tighter CI on a larger sample may well exclude zero.",
+      "params_adopted": false,
+      "calibrator_adopted": false,
+      "production_artifacts_changed": []
+    }
+  ]
+}

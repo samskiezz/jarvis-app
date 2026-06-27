@@ -1,0 +1,78 @@
+{
+  "schema": "wc2026_htr_h034_heuer365_isotonic.v1",
+  "verified": true,
+  "source": "scripts/wc2026_htr_h034_heuer365_isotonic.py — 365d-Heuer-decay Elo (h-010 best half-life) re-warmed on full historical corpus, graded vs verified WC2026 actuals resolved server-side via scripts.wc2026_db.actual_for; one-vs-rest sklearn.isotonic.IsotonicRegression calibration under 5-fold KFold(shuffle=True, random_state=20260619); paired bootstrap (reps=5000, seed=20260619).",
+  "generated_at": "2026-06-20T01:11:12.337826Z",
+  "node_id": "h-034",
+  "parent_nodes": [
+    "h-010",
+    "h-012"
+  ],
+  "method": "365d-Heuer-decay Elo (w=exp(-age_days/365)) + bivariate Poisson + Dixon-Coles → raw 3-way probs → per-class isotonic regression under honest 5-fold cross-validation (every match scored by a calibrator it was never trained on) → row renormalisation",
+  "decay_days": 365,
+  "now_date": "2026-06-19",
+  "corpus_size": 563,
+  "graded_matches": 30,
+  "n_folds": 5,
+  "bootstrap_reps": 5000,
+  "bootstrap_seed": 20260619,
+  "sign_convention": "brier_delta = brier_calibrated - brier_vanilla; negative=better; real_lift iff ci_95[1] < 0 strictly",
+  "heuer365_brier": 0.654914,
+  "heuer365_iso_brier": 0.685085,
+  "brier_delta": 0.030171,
+  "ci_95": [
+    -0.117171,
+    0.173699
+  ],
+  "real_lift": false,
+  "winner_acc_heuer": 0.6,
+  "winner_acc_combined": 0.466667,
+  "fold_diagnostics": [
+    {
+      "fold": 0,
+      "n_train": 24,
+      "n_test": 6,
+      "test_brier_vanilla": 0.574885,
+      "test_brier_calibrated": 0.460926
+    },
+    {
+      "fold": 1,
+      "n_train": 24,
+      "n_test": 6,
+      "test_brier_vanilla": 0.880305,
+      "test_brier_calibrated": 0.709153
+    },
+    {
+      "fold": 2,
+      "n_train": 24,
+      "n_test": 6,
+      "test_brier_vanilla": 0.871215,
+      "test_brier_calibrated": 0.842341
+    },
+    {
+      "fold": 3,
+      "n_train": 24,
+      "n_test": 6,
+      "test_brier_vanilla": 0.604144,
+      "test_brier_calibrated": 0.862844
+    },
+    {
+      "fold": 4,
+      "n_train": 24,
+      "n_test": 6,
+      "test_brier_vanilla": 0.344021,
+      "test_brier_calibrated": 0.550161
+    }
+  ],
+  "audit_runs": {
+    "vanilla": {
+      "run_id": "htr_h034_heuer365_vanilla_20260620T011112Z",
+      "rows_logged": 30
+    },
+    "isotonic_cv": {
+      "run_id": "htr_h034_heuer365_isotonic_cv_20260620T011112Z",
+      "rows_logged": 30
+    }
+  },
+  "notes": "h-034 = h-010 best (365d-Heuer-decay Elo) + h-012-style 5-fold isotonic-CV calibration. Real lift requires the 95% paired-bootstrap CI on the per-match delta to lie strictly below 0 (ci_95[1] < 0). Actuals come exclusively from server-side scripts.wc2026_db.actual_for(home, away); no caller-injected actual_score / actual_wdl."
+}

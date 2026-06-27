@@ -1,0 +1,67 @@
+{
+  "bootstrap_reps": 300,
+  "ci_95": [
+    -25.0,
+    21.429
+  ],
+  "generated_at": "2026-06-19T21:29:57+00:00",
+  "honest_verdict": "Stacked ensemble delta -2.9pp with 95% CI [-25.0, +21.4]pp straddles 0 on n=28 matches \u2014 no real lift; CI is wide because the sample is tiny.",
+  "method": {
+    "ci": "paired bootstrap on matched per-match hits, 300 reps, percentile 2.5/97.5",
+    "cv": "leave-one-out (each prediction is out-of-sample)",
+    "delta_baseline": "Elo+Poisson (best single model per brief)",
+    "features": [
+      "chalk_p_home",
+      "chalk_p_draw",
+      "chalk_p_away",
+      "elo_p_home",
+      "elo_p_draw",
+      "elo_p_away",
+      "llama_p_home",
+      "llama_p_draw",
+      "llama_p_away"
+    ],
+    "stacker": "sklearn.LogisticRegression(solver='lbfgs', C=0.5, max_iter=2000) \u2014 multinomial by default in sklearn 1.9"
+  },
+  "overlap_runs": {
+    "chalk_run_id": "chalk-f460525c56",
+    "stacked_run_id": "stacked-a2a1c82444"
+  },
+  "per_model_accuracy": {
+    "chalk_full_28": {
+      "hits": 15,
+      "label": "15/28 (53.6%)",
+      "pct": 53.57,
+      "total": 28
+    },
+    "chalk_overlap": {
+      "hits": 15,
+      "label": "15/28 (53.6%)",
+      "pct": 53.57,
+      "total": 28
+    },
+    "elo_poisson": {
+      "hits": 15,
+      "label": "15/28 (53.6%)",
+      "pct": 53.57,
+      "total": 28
+    },
+    "ensemble": {
+      "hits": 14,
+      "label": "14/28 (50.0%)",
+      "pct": 50.0,
+      "total": 28
+    },
+    "llama_70b": {
+      "hits": 16,
+      "label": "16/28 (57.1%)",
+      "pct": 57.14,
+      "total": 28
+    }
+  },
+  "real_lift": false,
+  "sample_size": 28,
+  "source": "wc2026_actuals.json + audit DB graded predictions (server-side via actual_for)",
+  "verified": true,
+  "winner_delta_pp": -2.94
+}

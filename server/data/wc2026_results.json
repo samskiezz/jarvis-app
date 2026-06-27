@@ -1,0 +1,1703 @@
+{
+  "last_updated": "2026-06-27T04:05:05+00:00",
+  "first12_results": {},
+  "next12_results": {
+    "2": "0-1",
+    "3": "3-0",
+    "4": "0-1",
+    "5": "5-1",
+    "8": "0-4",
+    "10": "0-0",
+    "12": "1-3"
+  },
+  "next12_status": "7 / 12 games complete",
+  "notes": "Game results populate after kickoff. Auto-fetched by scripts/wc2026_fetch_results.py (cron). Live UI polls every 60s.",
+  "actuals_results": {
+    "1": "2-0",
+    "2": "2-1",
+    "3": "1-1",
+    "4": "4-1",
+    "7": "0-1",
+    "8": "2-0",
+    "6": "1-1",
+    "5": "1-1",
+    "11": "1-0",
+    "9": "7-1",
+    "10": "2-2",
+    "12": "5-1",
+    "13": "0-0",
+    "14": "1-1",
+    "15": "1-1",
+    "16": "2-2",
+    "17": "3-1",
+    "18": "1-4",
+    "19": "3-0",
+    "20": "3-1",
+    "21": "1-1",
+    "22": "4-2",
+    "23": "1-0",
+    "24": "1-3",
+    "25": "1-1",
+    "26": "4-1",
+    "27": "6-0",
+    "28": "1-0",
+    "30": "0-1",
+    "32": "0-0",
+    "29": "2-0",
+    "31": "3-0",
+    "33": "5-1",
+    "34": "2-1",
+    "35": "0-0",
+    "36": "0-4",
+    "37": "4-0",
+    "38": "0-0",
+    "39": "2-2",
+    "40": "1-3",
+    "41": "2-0",
+    "42": "3-0",
+    "43": "3-2",
+    "44": "1-2",
+    "45": "5-0",
+    "46": "0-0",
+    "47": "0-1",
+    "48": "1-0",
+    "50": "3-1",
+    "49": "2-1",
+    "52": "4-2",
+    "51": "0-3",
+    "53": "0-3",
+    "54": "1-0",
+    "56": "0-2",
+    "55": "2-1",
+    "57": "1-1",
+    "58": "1-3",
+    "60": "0-0",
+    "59": "3-2",
+    "61": "1-4",
+    "62": "5-0",
+    "63": "0-0",
+    "64": "0-1"
+  },
+  "actuals_count": 64,
+  "actuals_scorers": {
+    "1": {
+      "home": [
+        {
+          "name": "Julián Quiñones",
+          "minute": "9'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Raúl Jiménez",
+          "minute": "67'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "2": {
+      "home": [
+        {
+          "name": "Hwang In-Beom",
+          "minute": "67'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Oh Hyeon-Gyu",
+          "minute": "80'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ladislav Krejcí",
+          "minute": "59'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "3": {
+      "home": [
+        {
+          "name": "Cyle Larin",
+          "minute": "78'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Jovo Lukic",
+          "minute": "21'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "4": {
+      "home": [
+        {
+          "name": "Damián Bobadilla",
+          "minute": "7'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Folarin Balogun",
+          "minute": "31'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Folarin Balogun",
+          "minute": "45'+5'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Giovanni Reyna",
+          "minute": "90'+8'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Maurício",
+          "minute": "73'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "7": {
+      "home": [],
+      "away": [
+        {
+          "name": "John McGinn",
+          "minute": "28'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "8": {
+      "home": [
+        {
+          "name": "Nestory Irankunda",
+          "minute": "27'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Connor Metcalfe",
+          "minute": "75'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "6": {
+      "home": [
+        {
+          "name": "Vinícius Júnior",
+          "minute": "32'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ismael Saibari",
+          "minute": "21'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "5": {
+      "home": [
+        {
+          "name": "Miro Muheim",
+          "minute": "90'+4'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "11": {
+      "home": [
+        {
+          "name": "Amad Diallo",
+          "minute": "90'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "9": {
+      "home": [
+        {
+          "name": "Felix Nmecha",
+          "minute": "6'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Nico Schlotterbeck",
+          "minute": "38'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Jamal Musiala",
+          "minute": "47'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Nathaniel Brown",
+          "minute": "68'",
+          "type": "Goal - Volley",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Deniz Undav",
+          "minute": "78'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Kai Havertz",
+          "minute": "88'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Livano Comenencia",
+          "minute": "21'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "10": {
+      "home": [
+        {
+          "name": "Virgil van Dijk",
+          "minute": "51'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Crysencio Summerville",
+          "minute": "64'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Keito Nakamura",
+          "minute": "57'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Daichi Kamada",
+          "minute": "89'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "12": {
+      "home": [
+        {
+          "name": "Yasin Ayari",
+          "minute": "7'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Alexander Isak",
+          "minute": "30'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Viktor Gyökeres",
+          "minute": "59'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mattias Svanberg",
+          "minute": "84'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Yasin Ayari",
+          "minute": "90'+6'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Omar Rekik",
+          "minute": "43'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "13": {
+      "home": [],
+      "away": []
+    },
+    "14": {
+      "home": [
+        {
+          "name": "Mohamed Hany",
+          "minute": "66'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Emam Ashour",
+          "minute": "20'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "15": {
+      "home": [
+        {
+          "name": "Abdulelah Al-Amri",
+          "minute": "41'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Maxi Araújo",
+          "minute": "80'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "16": {
+      "home": [
+        {
+          "name": "Ramin Rezaeian",
+          "minute": "32'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mohammad Mohebbi",
+          "minute": "64'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Elijah Just",
+          "minute": "7'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Elijah Just",
+          "minute": "54'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "17": {
+      "home": [
+        {
+          "name": "Kylian Mbappé",
+          "minute": "66'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Bradley Barcola",
+          "minute": "82'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Kylian Mbappé",
+          "minute": "90'+6'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ibrahim Mbaye",
+          "minute": "90'+5'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "18": {
+      "home": [
+        {
+          "name": "Aymen Hussein",
+          "minute": "39'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Erling Haaland",
+          "minute": "29'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Erling Haaland",
+          "minute": "43'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Leo Østigard",
+          "minute": "76'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Aymen Hussein",
+          "minute": "90'+6'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        }
+      ]
+    },
+    "19": {
+      "home": [
+        {
+          "name": "Lionel Messi",
+          "minute": "17'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Lionel Messi",
+          "minute": "60'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Lionel Messi",
+          "minute": "76'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "20": {
+      "home": [
+        {
+          "name": "Romano Schmid",
+          "minute": "21'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Yazan Al-Arab",
+          "minute": "76'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ali Olwan",
+          "minute": "50'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "21": {
+      "home": [
+        {
+          "name": "João Neves",
+          "minute": "6'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Yoane Wissa",
+          "minute": "45'+5'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "22": {
+      "home": [
+        {
+          "name": "Harry Kane",
+          "minute": "42'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Jude Bellingham",
+          "minute": "47'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Marcus Rashford",
+          "minute": "85'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Martin Baturina",
+          "minute": "36'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Petar Musa",
+          "minute": "45'+5'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "23": {
+      "home": [
+        {
+          "name": "Caleb Yirenkyi",
+          "minute": "90'+5'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "24": {
+      "home": [
+        {
+          "name": "Abbosbek Fayzullaev",
+          "minute": "60'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Daniel Muñoz",
+          "minute": "40'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Luis Díaz",
+          "minute": "65'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Jáminton Campaz",
+          "minute": "90'+9'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "25": {
+      "home": [
+        {
+          "name": "Michal Sadílek",
+          "minute": "6'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "26": {
+      "home": [
+        {
+          "name": "Johan Manzambi",
+          "minute": "74'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Rubén Vargas",
+          "minute": "84'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Johan Manzambi",
+          "minute": "90'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ermin Mahmic",
+          "minute": "90'+3'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "27": {
+      "home": [
+        {
+          "name": "Cyle Larin",
+          "minute": "16'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Jonathan David",
+          "minute": "29'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Jonathan David",
+          "minute": "45'+3'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Nathan Saliba",
+          "minute": "64'",
+          "type": "Goal - Free-kick",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mohamed Manai",
+          "minute": "75'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Jonathan David",
+          "minute": "90'+2'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "28": {
+      "home": [
+        {
+          "name": "Luis Romo",
+          "minute": "50'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "30": {
+      "home": [],
+      "away": [
+        {
+          "name": "Ismael Saibari",
+          "minute": "2'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "32": {
+      "home": [],
+      "away": [
+        {
+          "name": "Matías Galarza",
+          "minute": "2'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "29": {
+      "home": [
+        {
+          "name": "Cameron Burgess",
+          "minute": "11'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Alex Freeman",
+          "minute": "43'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "31": {
+      "home": [
+        {
+          "name": "Matheus Cunha",
+          "minute": "23'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Matheus Cunha",
+          "minute": "36'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Vinícius Júnior",
+          "minute": "45'+3'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "33": {
+      "home": [
+        {
+          "name": "Brian Brobbey",
+          "minute": "5'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Brian Brobbey",
+          "minute": "17'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Cody Gakpo",
+          "minute": "47'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Cody Gakpo",
+          "minute": "54'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Crysencio Summerville",
+          "minute": "89'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Anthony Elanga",
+          "minute": "59'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "34": {
+      "home": [
+        {
+          "name": "Deniz Undav",
+          "minute": "68'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Deniz Undav",
+          "minute": "90'+4'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Franck Kessié",
+          "minute": "30'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "35": {
+      "home": [],
+      "away": []
+    },
+    "36": {
+      "home": [],
+      "away": [
+        {
+          "name": "Daichi Kamada",
+          "minute": "4'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ayase Ueda",
+          "minute": "31'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Junya Ito",
+          "minute": "69'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ayase Ueda",
+          "minute": "83'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "37": {
+      "home": [
+        {
+          "name": "Lamine Yamal",
+          "minute": "10'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mikel Oyarzabal",
+          "minute": "21'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mikel Oyarzabal",
+          "minute": "24'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Hassan Al-Tambakti",
+          "minute": "49'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "38": {
+      "home": [],
+      "away": []
+    },
+    "39": {
+      "home": [
+        {
+          "name": "Maxi Araújo",
+          "minute": "44'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Agustín Canobbio",
+          "minute": "45'+6'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Kevin Pina",
+          "minute": "21'",
+          "type": "Goal - Free-kick",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Hélio Varela",
+          "minute": "61'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "40": {
+      "home": [
+        {
+          "name": "Finn Surman",
+          "minute": "15'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Mostafa Zico",
+          "minute": "58'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mohamed Salah",
+          "minute": "67'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Trézéguet",
+          "minute": "82'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "41": {
+      "home": [
+        {
+          "name": "Lionel Messi",
+          "minute": "38'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Lionel Messi",
+          "minute": "90'+5'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "42": {
+      "home": [
+        {
+          "name": "Kylian Mbappé",
+          "minute": "14'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Kylian Mbappé",
+          "minute": "54'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ousmane Dembélé",
+          "minute": "66'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "43": {
+      "home": [
+        {
+          "name": "Marcus Holmgren Pedersen",
+          "minute": "43'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Erling Haaland",
+          "minute": "48'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Erling Haaland",
+          "minute": "58'",
+          "type": "Goal - Volley",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ismaïla Sarr",
+          "minute": "53'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ismaïla Sarr",
+          "minute": "90'+3'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "44": {
+      "home": [
+        {
+          "name": "Nizar Al-Rashdan",
+          "minute": "36'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Nadhir Benbouali",
+          "minute": "69'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Amine Gouiri",
+          "minute": "82'",
+          "type": "Goal - Volley",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "45": {
+      "home": [
+        {
+          "name": "Cristiano Ronaldo",
+          "minute": "6'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Nuno Mendes",
+          "minute": "17'",
+          "type": "Goal - Free-kick",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Cristiano Ronaldo",
+          "minute": "39'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Abduvohid Nematov",
+          "minute": "60'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Rafael Leão",
+          "minute": "87'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "46": {
+      "home": [],
+      "away": []
+    },
+    "47": {
+      "home": [],
+      "away": [
+        {
+          "name": "Ante Budimir",
+          "minute": "54'",
+          "type": "Goal - Volley",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "48": {
+      "home": [
+        {
+          "name": "Daniel Muñoz",
+          "minute": "76'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "50": {
+      "home": [
+        {
+          "name": "Kerim Alajbegovic",
+          "minute": "29'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Mahmoud Abunada",
+          "minute": "34'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Ermin Mahmic",
+          "minute": "80'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Hassan Al-Haydos",
+          "minute": "42'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "49": {
+      "home": [
+        {
+          "name": "Rubén Vargas",
+          "minute": "46'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Johan Manzambi",
+          "minute": "57'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Promise David",
+          "minute": "76'",
+          "type": "Goal - Volley",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "52": {
+      "home": [
+        {
+          "name": "Achraf Hakimi",
+          "minute": "39'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ismael Saibari",
+          "minute": "45'+1'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Soufiane Rahimi",
+          "minute": "78'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Gessime Yassine",
+          "minute": "89'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Yassine Bounou",
+          "minute": "10'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Wilson Isidor",
+          "minute": "43'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "51": {
+      "home": [],
+      "away": [
+        {
+          "name": "Vinícius Júnior",
+          "minute": "7'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Vinícius Júnior",
+          "minute": "45'+3'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Matheus Cunha",
+          "minute": "60'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "53": {
+      "home": [],
+      "away": [
+        {
+          "name": "Mateo Chávez",
+          "minute": "55'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Julián Quiñones",
+          "minute": "61'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Álvaro Fidalgo",
+          "minute": "90'+4'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "54": {
+      "home": [
+        {
+          "name": "Thapelo Maseko",
+          "minute": "63'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "56": {
+      "home": [],
+      "away": [
+        {
+          "name": "Nicolas Pépé",
+          "minute": "7'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Nicolas Pépé",
+          "minute": "64'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "55": {
+      "home": [
+        {
+          "name": "Nilson Angulo",
+          "minute": "9'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Gonzalo Plata",
+          "minute": "77'",
+          "type": "Goal - Volley",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Leroy Sané",
+          "minute": "2'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "57": {
+      "home": [
+        {
+          "name": "Daizen Maeda",
+          "minute": "56'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Anthony Elanga",
+          "minute": "62'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "58": {
+      "home": [
+        {
+          "name": "Hazem Mastouri",
+          "minute": "54'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ellyes Skhiri",
+          "minute": "3'",
+          "type": "Own Goal",
+          "own_goal": true,
+          "penalty": false
+        },
+        {
+          "name": "Brian Brobbey",
+          "minute": "7'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Jan Paul van Hecke",
+          "minute": "62'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "60": {
+      "home": [],
+      "away": []
+    },
+    "59": {
+      "home": [
+        {
+          "name": "Arda Güler",
+          "minute": "10'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Baris Alper Yilmaz",
+          "minute": "31'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Kaan Ayhan",
+          "minute": "90'+8'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Auston Trusty",
+          "minute": "3'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Sebastian Berhalter",
+          "minute": "49'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "61": {
+      "home": [
+        {
+          "name": "Thelo Aasgaard",
+          "minute": "21'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": [
+        {
+          "name": "Ousmane Dembélé",
+          "minute": "7'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ousmane Dembélé",
+          "minute": "20'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ousmane Dembélé",
+          "minute": "32'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Désiré Doué",
+          "minute": "90'+4'",
+          "type": "Goal - Header",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    },
+    "62": {
+      "home": [
+        {
+          "name": "Habib Diarra",
+          "minute": "4'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Ismaïla Sarr",
+          "minute": "56'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Pape Gueye",
+          "minute": "59'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Pape Gueye",
+          "minute": "71'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        },
+        {
+          "name": "Iliman Ndiaye",
+          "minute": "82'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ],
+      "away": []
+    },
+    "63": {
+      "home": [],
+      "away": []
+    },
+    "64": {
+      "home": [],
+      "away": [
+        {
+          "name": "Álex Baena",
+          "minute": "42'",
+          "type": "Goal",
+          "own_goal": false,
+          "penalty": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1041 @@
+{
+  "generated_at": "2026-06-27T04:05:05Z",
+  "repo_root": "/opt/jarvis-app-1",
+  "component_count": 119,
+  "components": [
+    {
+      "name": "wc2026_1k_finetune.py",
+      "type": "script",
+      "path": "scripts/wc2026_1k_finetune.py",
+      "size_bytes": 23532,
+      "mtime": "2026-06-19T21:52:44Z",
+      "lines": 671,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_30k_search.py",
+      "type": "script",
+      "path": "scripts/wc2026_30k_search.py",
+      "size_bytes": 21486,
+      "mtime": "2026-06-19T21:42:45Z",
+      "lines": 611,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_backtest_30k.py",
+      "type": "script",
+      "path": "scripts/wc2026_backtest_30k.py",
+      "size_bytes": 22810,
+      "mtime": "2026-06-19T13:27:49Z",
+      "lines": 593,
+      "purpose": "30K-match backtest harness"
+    },
+    {
+      "name": "wc2026_bet_builder.py",
+      "type": "script",
+      "path": "scripts/wc2026_bet_builder.py",
+      "size_bytes": 46485,
+      "mtime": "2026-06-21T15:59:38Z",
+      "lines": 1041,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_brute_tune.py",
+      "type": "script",
+      "path": "scripts/wc2026_brute_tune.py",
+      "size_bytes": 7176,
+      "mtime": "2026-06-22T18:12:38Z",
+      "lines": 209,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_build_manifest.py",
+      "type": "script",
+      "path": "scripts/wc2026_build_manifest.py",
+      "size_bytes": 7921,
+      "mtime": "2026-06-19T13:29:59Z",
+      "lines": 220,
+      "purpose": "This manifest builder"
+    },
+    {
+      "name": "wc2026_build_played.py",
+      "type": "script",
+      "path": "scripts/wc2026_build_played.py",
+      "size_bytes": 9463,
+      "mtime": "2026-06-23T04:20:58Z",
+      "lines": 250,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_calibrate_isotonic.py",
+      "type": "script",
+      "path": "scripts/wc2026_calibrate_isotonic.py",
+      "size_bytes": 10360,
+      "mtime": "2026-06-19T21:40:09Z",
+      "lines": 318,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_closed_loop.py",
+      "type": "script",
+      "path": "scripts/wc2026_closed_loop.py",
+      "size_bytes": 23890,
+      "mtime": "2026-06-22T11:37:21Z",
+      "lines": 607,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_db.py",
+      "type": "script",
+      "path": "scripts/wc2026_db.py",
+      "size_bytes": 34986,
+      "mtime": "2026-06-19T22:03:16Z",
+      "lines": 903,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_enrich_profiles.py",
+      "type": "script",
+      "path": "scripts/wc2026_enrich_profiles.py",
+      "size_bytes": 58389,
+      "mtime": "2026-06-19T13:32:17Z",
+      "lines": 1531,
+      "purpose": "Player profile enrichment pass"
+    },
+    {
+      "name": "wc2026_fetch_results.py",
+      "type": "script",
+      "path": "scripts/wc2026_fetch_results.py",
+      "size_bytes": 14857,
+      "mtime": "2026-06-23T04:15:25Z",
+      "lines": 352,
+      "purpose": "Live result fetcher (5-min cadence)"
+    },
+    {
+      "name": "wc2026_fit_dc_mle.py",
+      "type": "script",
+      "path": "scripts/wc2026_fit_dc_mle.py",
+      "size_bytes": 20905,
+      "mtime": "2026-06-19T15:00:21Z",
+      "lines": 497,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_fit_karlis.py",
+      "type": "script",
+      "path": "scripts/wc2026_fit_karlis.py",
+      "size_bytes": 25012,
+      "mtime": "2026-06-19T21:40:27Z",
+      "lines": 609,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_historical_data.py",
+      "type": "script",
+      "path": "scripts/wc2026_historical_data.py",
+      "size_bytes": 52639,
+      "mtime": "2026-06-19T11:51:43Z",
+      "lines": 976,
+      "purpose": "Historical training-set refresh"
+    },
+    {
+      "name": "wc2026_htr_batch1.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_batch1.py",
+      "size_bytes": 21279,
+      "mtime": "2026-06-20T01:13:14Z",
+      "lines": 575,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch2_eval.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_batch2_eval.py",
+      "size_bytes": 12278,
+      "mtime": "2026-06-20T01:12:10Z",
+      "lines": 322,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch3.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_batch3.py",
+      "size_bytes": 13694,
+      "mtime": "2026-06-20T01:10:51Z",
+      "lines": 351,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch4.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_batch4.py",
+      "size_bytes": 13620,
+      "mtime": "2026-06-20T01:12:09Z",
+      "lines": 351,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch5_top20_17_to_20.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_batch5_top20_17_to_20.py",
+      "size_bytes": 13615,
+      "mtime": "2026-06-20T01:10:51Z",
+      "lines": 350,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h010_heuer_sweep.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_h010_heuer_sweep.py",
+      "size_bytes": 10040,
+      "mtime": "2026-06-19T21:54:39Z",
+      "lines": 265,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h011_heuer_ensemble.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_h011_heuer_ensemble.py",
+      "size_bytes": 17155,
+      "mtime": "2026-06-19T21:55:52Z",
+      "lines": 471,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h012_isotonic_cv.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_h012_isotonic_cv.py",
+      "size_bytes": 10438,
+      "mtime": "2026-06-19T21:55:52Z",
+      "lines": 270,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h013_to_h032_top20_eval.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_h013_to_h032_top20_eval.py",
+      "size_bytes": 25189,
+      "mtime": "2026-06-20T01:06:22Z",
+      "lines": 634,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h033_70b_isotonic.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_h033_70b_isotonic.py",
+      "size_bytes": 15027,
+      "mtime": "2026-06-20T01:09:41Z",
+      "lines": 384,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h034_heuer365_isotonic.py",
+      "type": "script",
+      "path": "scripts/wc2026_htr_h034_heuer365_isotonic.py",
+      "size_bytes": 15220,
+      "mtime": "2026-06-20T01:05:11Z",
+      "lines": 393,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_knockout_filler.py",
+      "type": "script",
+      "path": "scripts/wc2026_knockout_filler.py",
+      "size_bytes": 13114,
+      "mtime": "2026-06-19T13:41:29Z",
+      "lines": 376,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_lineup_adjuster.py",
+      "type": "script",
+      "path": "scripts/wc2026_lineup_adjuster.py",
+      "size_bytes": 16521,
+      "mtime": "2026-06-22T17:05:18Z",
+      "lines": 450,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_lineup_hook.py",
+      "type": "script",
+      "path": "scripts/wc2026_lineup_hook.py",
+      "size_bytes": 18491,
+      "mtime": "2026-06-19T11:27:33Z",
+      "lines": 487,
+      "purpose": "Confirmed-lineup probe within 90 min of kickoff"
+    },
+    {
+      "name": "wc2026_llm_diverse.py",
+      "type": "script",
+      "path": "scripts/wc2026_llm_diverse.py",
+      "size_bytes": 18137,
+      "mtime": "2026-06-20T05:21:41Z",
+      "lines": 511,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_llm_features.py",
+      "type": "script",
+      "path": "scripts/wc2026_llm_features.py",
+      "size_bytes": 12404,
+      "mtime": "2026-06-19T11:27:13Z",
+      "lines": 340,
+      "purpose": "LLM-derived feature extractor"
+    },
+    {
+      "name": "wc2026_llm_predictor.py",
+      "type": "script",
+      "path": "scripts/wc2026_llm_predictor.py",
+      "size_bytes": 17998,
+      "mtime": "2026-06-19T21:51:22Z",
+      "lines": 474,
+      "purpose": "LLM-side predictor (complement to numeric model)"
+    },
+    {
+      "name": "wc2026_lock_predictions.py",
+      "type": "script",
+      "path": "scripts/wc2026_lock_predictions.py",
+      "size_bytes": 6418,
+      "mtime": "2026-06-19T13:40:24Z",
+      "lines": 189,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_match_details.py",
+      "type": "script",
+      "path": "scripts/wc2026_match_details.py",
+      "size_bytes": 53290,
+      "mtime": "2026-06-19T12:10:01Z",
+      "lines": 1479,
+      "purpose": "Per-match detail expander"
+    },
+    {
+      "name": "wc2026_odds_scraper.py",
+      "type": "script",
+      "path": "scripts/wc2026_odds_scraper.py",
+      "size_bytes": 24710,
+      "mtime": "2026-06-22T17:45:43Z",
+      "lines": 663,
+      "purpose": "Bookmaker odds + value-bet flagger"
+    },
+    {
+      "name": "wc2026_player_profiles.py",
+      "type": "script",
+      "path": "scripts/wc2026_player_profiles.py",
+      "size_bytes": 45975,
+      "mtime": "2026-06-19T11:18:26Z",
+      "lines": 985,
+      "purpose": "Per-player profile builder (LLM-assisted)"
+    },
+    {
+      "name": "wc2026_predictor.py",
+      "type": "script",
+      "path": "scripts/wc2026_predictor.py",
+      "size_bytes": 55816,
+      "mtime": "2026-06-20T03:08:46Z",
+      "lines": 1413,
+      "purpose": "Elo + bivariate Poisson ensemble predictor"
+    },
+    {
+      "name": "wc2026_quantum_state.py",
+      "type": "script",
+      "path": "scripts/wc2026_quantum_state.py",
+      "size_bytes": 30614,
+      "mtime": "2026-06-22T11:37:47Z",
+      "lines": 739,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_stacked_ensemble.py",
+      "type": "script",
+      "path": "scripts/wc2026_stacked_ensemble.py",
+      "size_bytes": 18574,
+      "mtime": "2026-06-19T21:29:50Z",
+      "lines": 480,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_tune_predictor.py",
+      "type": "script",
+      "path": "scripts/wc2026_tune_predictor.py",
+      "size_bytes": 19071,
+      "mtime": "2026-06-19T13:32:25Z",
+      "lines": 493,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_bookmaker.py",
+      "type": "script",
+      "path": "scripts/wc2026_upgrade_bookmaker.py",
+      "size_bytes": 12186,
+      "mtime": "2026-06-19T21:39:53Z",
+      "lines": 340,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_groll.py",
+      "type": "script",
+      "path": "scripts/wc2026_upgrade_groll.py",
+      "size_bytes": 21347,
+      "mtime": "2026-06-19T21:41:10Z",
+      "lines": 570,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_heuer.py",
+      "type": "script",
+      "path": "scripts/wc2026_upgrade_heuer.py",
+      "size_bytes": 20399,
+      "mtime": "2026-06-19T21:41:06Z",
+      "lines": 539,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_verify_sources.py",
+      "type": "script",
+      "path": "scripts/wc2026_verify_sources.py",
+      "size_bytes": 7117,
+      "mtime": "2026-06-19T14:10:03Z",
+      "lines": 213,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_vision_ingest.py",
+      "type": "script",
+      "path": "scripts/wc2026_vision_ingest.py",
+      "size_bytes": 2992,
+      "mtime": "2026-06-23T02:12:10Z",
+      "lines": 77,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_vision_sportsmot_extract.py",
+      "type": "script",
+      "path": "scripts/wc2026_vision_sportsmot_extract.py",
+      "size_bytes": 4118,
+      "mtime": "2026-06-23T01:34:27Z",
+      "lines": 110,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_vision_sportsmot_ingest.py",
+      "type": "script",
+      "path": "scripts/wc2026_vision_sportsmot_ingest.py",
+      "size_bytes": 1299,
+      "mtime": "2026-06-23T01:25:33Z",
+      "lines": 34,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_wasabi_backup.py",
+      "type": "script",
+      "path": "scripts/wc2026_wasabi_backup.py",
+      "size_bytes": 4975,
+      "mtime": "2026-06-19T13:29:26Z",
+      "lines": 156,
+      "purpose": "Hourly Wasabi snapshot uploader"
+    },
+    {
+      "name": "wc2026_web_data.py",
+      "type": "script",
+      "path": "scripts/wc2026_web_data.py",
+      "size_bytes": 11575,
+      "mtime": "2026-06-23T01:56:49Z",
+      "lines": 322,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_1k_finetune_results.json",
+      "type": "data",
+      "path": "server/data/wc2026_1k_finetune_results.json",
+      "size_bytes": 20475,
+      "mtime": "2026-06-19T21:57:23Z",
+      "lines": 719,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_30k_search_results.json",
+      "type": "data",
+      "path": "server/data/wc2026_30k_search_results.json",
+      "size_bytes": 6427,
+      "mtime": "2026-06-19T21:49:30Z",
+      "lines": 286,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_active_model.json",
+      "type": "data",
+      "path": "server/data/wc2026_active_model.json",
+      "size_bytes": 1739,
+      "mtime": "2026-06-23T01:58:06Z",
+      "lines": 53,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_actuals.json",
+      "type": "data",
+      "path": "server/data/wc2026_actuals.json",
+      "size_bytes": 53536,
+      "mtime": "2026-06-27T04:00:03Z",
+      "lines": 2239,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_backtest_results.json",
+      "type": "data",
+      "path": "server/data/wc2026_backtest_results.json",
+      "size_bytes": 254751,
+      "mtime": "2026-06-26T04:19:20Z",
+      "lines": 9806,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_bet_builder.json",
+      "type": "data",
+      "path": "server/data/wc2026_bet_builder.json",
+      "size_bytes": 19235,
+      "mtime": "2026-06-27T04:00:21Z",
+      "lines": 520,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_bet_slips.json",
+      "type": "data",
+      "path": "server/data/wc2026_bet_slips.json",
+      "size_bytes": 61599,
+      "mtime": "2026-06-26T04:19:24Z",
+      "lines": 2497,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_brute_tune_results.json",
+      "type": "data",
+      "path": "server/data/wc2026_brute_tune_results.json",
+      "size_bytes": 22564,
+      "mtime": "2026-06-22T18:23:18Z",
+      "lines": 803,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_ensemble_comparison.json",
+      "type": "data",
+      "path": "server/data/wc2026_ensemble_comparison.json",
+      "size_bytes": 1763,
+      "mtime": "2026-06-19T21:29:57Z",
+      "lines": 67,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_fixtures_all.json",
+      "type": "data",
+      "path": "server/data/wc2026_fixtures_all.json",
+      "size_bytes": 41794,
+      "mtime": "2026-06-27T02:05:06Z",
+      "lines": 1620,
+      "purpose": "All WC2026 fixtures (group + knockout)"
+    },
+    {
+      "name": "wc2026_htr_batch1.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_batch1.json",
+      "size_bytes": 4607,
+      "mtime": "2026-06-20T01:13:29Z",
+      "lines": 156,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch2.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_batch2.json",
+      "size_bytes": 4498,
+      "mtime": "2026-06-20T01:12:25Z",
+      "lines": 151,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch3.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_batch3.json",
+      "size_bytes": 4692,
+      "mtime": "2026-06-20T01:11:09Z",
+      "lines": 157,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch4.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_batch4.json",
+      "size_bytes": 5139,
+      "mtime": "2026-06-20T01:12:23Z",
+      "lines": 170,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_batch5.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_batch5.json",
+      "size_bytes": 5155,
+      "mtime": "2026-06-20T01:11:10Z",
+      "lines": 170,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h010_heuer_sweep.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h010_heuer_sweep.json",
+      "size_bytes": 3499,
+      "mtime": "2026-06-19T21:59:47Z",
+      "lines": 111,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h011_heuer_ensemble.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h011_heuer_ensemble.json",
+      "size_bytes": 2269,
+      "mtime": "2026-06-19T21:56:09Z",
+      "lines": 71,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h012_isotonic_cv.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h012_isotonic_cv.json",
+      "size_bytes": 2477,
+      "mtime": "2026-06-19T21:55:58Z",
+      "lines": 60,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h013_to_h032_top20_eval.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h013_to_h032_top20_eval.json",
+      "size_bytes": 15962,
+      "mtime": "2026-06-20T01:06:46Z",
+      "lines": 608,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h033_70b_isotonic.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h033_70b_isotonic.json",
+      "size_bytes": 3335,
+      "mtime": "2026-06-20T01:09:59Z",
+      "lines": 78,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h034_heuer365_iso.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h034_heuer365_iso.json",
+      "size_bytes": 2830,
+      "mtime": "2026-06-20T01:11:33Z",
+      "lines": 78,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_h034_heuer365_isotonic.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_h034_heuer365_isotonic.json",
+      "size_bytes": 2733,
+      "mtime": "2026-06-20T01:11:12Z",
+      "lines": 78,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_htr_tree.json",
+      "type": "data",
+      "path": "server/data/wc2026_htr_tree.json",
+      "size_bytes": 67282,
+      "mtime": "2026-06-20T01:11:53Z",
+      "lines": 1287,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_isotonic_calibrator.json",
+      "type": "data",
+      "path": "server/data/wc2026_isotonic_calibrator.json",
+      "size_bytes": 1424,
+      "mtime": "2026-06-20T04:00:05Z",
+      "lines": 75,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_iteration_log.json",
+      "type": "data",
+      "path": "server/data/wc2026_iteration_log.json",
+      "size_bytes": 11940,
+      "mtime": "2026-06-20T01:12:22Z",
+      "lines": 216,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_late_news.json",
+      "type": "data",
+      "path": "server/data/wc2026_late_news.json",
+      "size_bytes": 2285,
+      "mtime": "2026-06-21T01:52:36Z",
+      "lines": 41,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_lineup_adjustments.json",
+      "type": "data",
+      "path": "server/data/wc2026_lineup_adjustments.json",
+      "size_bytes": 1080,
+      "mtime": "2026-06-22T17:05:24Z",
+      "lines": 25,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_llm_diverse.json",
+      "type": "data",
+      "path": "server/data/wc2026_llm_diverse.json",
+      "size_bytes": 603,
+      "mtime": "2026-06-20T05:45:58Z",
+      "lines": 17,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_llm_features.json",
+      "type": "data",
+      "path": "server/data/wc2026_llm_features.json",
+      "size_bytes": 9073,
+      "mtime": "2026-06-19T11:28:44Z",
+      "lines": 338,
+      "purpose": "LLM-extracted features"
+    },
+    {
+      "name": "wc2026_llm_predictions.json",
+      "type": "data",
+      "path": "server/data/wc2026_llm_predictions.json",
+      "size_bytes": 34345,
+      "mtime": "2026-06-19T22:04:27Z",
+      "lines": 1086,
+      "purpose": "LLM-side predictions"
+    },
+    {
+      "name": "wc2026_methods_comparison.json",
+      "type": "data",
+      "path": "server/data/wc2026_methods_comparison.json",
+      "size_bytes": 2111,
+      "mtime": "2026-06-19T15:00:29Z",
+      "lines": 57,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_model_predictions.json",
+      "type": "data",
+      "path": "server/data/wc2026_model_predictions.json",
+      "size_bytes": 76981,
+      "mtime": "2026-06-27T02:30:10Z",
+      "lines": 2537,
+      "purpose": "Numeric ensemble predictions"
+    },
+    {
+      "name": "wc2026_model_registry.json",
+      "type": "data",
+      "path": "server/data/wc2026_model_registry.json",
+      "size_bytes": 1592,
+      "mtime": "2026-06-26T04:45:54Z",
+      "lines": 50,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_odds_cache.json",
+      "type": "data",
+      "path": "server/data/wc2026_odds_cache.json",
+      "size_bytes": 56,
+      "mtime": "2026-06-27T00:00:17Z",
+      "lines": 4,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_played.json",
+      "type": "data",
+      "path": "server/data/wc2026_played.json",
+      "size_bytes": 101272,
+      "mtime": "2026-06-27T04:00:04Z",
+      "lines": 3743,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_player_profiles.json",
+      "type": "data",
+      "path": "server/data/wc2026_player_profiles.json",
+      "size_bytes": 9527268,
+      "mtime": "2026-06-21T03:03:38Z",
+      "lines": 446216,
+      "purpose": "Player profile data"
+    },
+    {
+      "name": "wc2026_player_profiles_enriched.json",
+      "type": "data",
+      "path": "server/data/wc2026_player_profiles_enriched.json",
+      "size_bytes": 1433684,
+      "mtime": "2026-06-19T13:32:25Z",
+      "lines": 49856,
+      "purpose": "Enriched player profile artefact"
+    },
+    {
+      "name": "wc2026_predictions.csv",
+      "type": "data",
+      "path": "server/data/wc2026_predictions.csv",
+      "size_bytes": 47821,
+      "mtime": "2026-06-26T04:19:20Z",
+      "lines": 426,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_predictions.db",
+      "type": "data",
+      "path": "server/data/wc2026_predictions.db",
+      "size_bytes": 7507968,
+      "mtime": "2026-06-26T19:00:01Z",
+      "lines": 0,
+      "purpose": "SQLite audit DB (per-prediction history)"
+    },
+    {
+      "name": "wc2026_predictions_output.json",
+      "type": "data",
+      "path": "server/data/wc2026_predictions_output.json",
+      "size_bytes": 36989,
+      "mtime": "2026-06-26T04:19:24Z",
+      "lines": 1304,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_results.json",
+      "type": "data",
+      "path": "server/data/wc2026_results.json",
+      "size_bytes": 36075,
+      "mtime": "2026-06-27T04:00:04Z",
+      "lines": 1703,
+      "purpose": "Live match results (polled by UI)"
+    },
+    {
+      "name": "wc2026_tracking.db",
+      "type": "data",
+      "path": "server/data/wc2026_tracking.db",
+      "size_bytes": 369823744,
+      "mtime": "2026-06-24T10:40:43Z",
+      "lines": 0,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_tracking_features.json",
+      "type": "data",
+      "path": "server/data/wc2026_tracking_features.json",
+      "size_bytes": 666601727,
+      "mtime": "2026-06-26T04:45:43Z",
+      "lines": 23143985,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_training_history.csv",
+      "type": "data",
+      "path": "server/data/wc2026_training_history.csv",
+      "size_bytes": 20526,
+      "mtime": "2026-06-26T04:45:12Z",
+      "lines": 432,
+      "purpose": "Training-history CSV"
+    },
+    {
+      "name": "wc2026_upgrade_bookmaker.json",
+      "type": "data",
+      "path": "server/data/wc2026_upgrade_bookmaker.json",
+      "size_bytes": 1375,
+      "mtime": "2026-06-19T21:39:58Z",
+      "lines": 28,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_groll.json",
+      "type": "data",
+      "path": "server/data/wc2026_upgrade_groll.json",
+      "size_bytes": 1059,
+      "mtime": "2026-06-19T21:41:23Z",
+      "lines": 39,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_heuer.json",
+      "type": "data",
+      "path": "server/data/wc2026_upgrade_heuer.json",
+      "size_bytes": 1101,
+      "mtime": "2026-06-19T21:41:39Z",
+      "lines": 38,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_isotonic.json",
+      "type": "data",
+      "path": "server/data/wc2026_upgrade_isotonic.json",
+      "size_bytes": 2471,
+      "mtime": "2026-06-19T21:40:14Z",
+      "lines": 114,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_upgrade_karlis.json",
+      "type": "data",
+      "path": "server/data/wc2026_upgrade_karlis.json",
+      "size_bytes": 3389,
+      "mtime": "2026-06-19T21:40:45Z",
+      "lines": 94,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_value_bets.json",
+      "type": "data",
+      "path": "server/data/wc2026_value_bets.json",
+      "size_bytes": 9873,
+      "mtime": "2026-06-27T00:00:17Z",
+      "lines": 392,
+      "purpose": "Value-bet flags vs bookmaker odds"
+    },
+    {
+      "name": "wc2026_web_data.json",
+      "type": "data",
+      "path": "server/data/wc2026_web_data.json",
+      "size_bytes": 240,
+      "mtime": "2026-06-26T04:45:12Z",
+      "lines": 11,
+      "purpose": ""
+    },
+    {
+      "name": "wc2026_predictions.html",
+      "type": "html",
+      "path": "server/wc2026_predictions.html",
+      "size_bytes": 111258,
+      "mtime": "2026-06-23T04:20:31Z",
+      "lines": 1784,
+      "purpose": "Public WC2026 predictions dashboard"
+    },
+    {
+      "type": "cron",
+      "schedule": "*/5 * * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_fetch_results.py >> /var/log/wc2026_fetch.log 2>&1",
+      "script": "wc2026_fetch_results.py",
+      "purpose": "Live result fetcher (5-min cadence)"
+    },
+    {
+      "type": "cron",
+      "schedule": "0 * * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_lineup_hook.py >> /var/log/wc2026_lineup.log 2>&1",
+      "script": "wc2026_lineup_hook.py",
+      "purpose": "Confirmed-lineup probe within 90 min of kickoff"
+    },
+    {
+      "type": "cron",
+      "schedule": "*/30 * * * *",
+      "command": "cd /opt/jarvis-app-1 && export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 && /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_lineup_adjuster.py --once >> /var/log/wc2026_lineup_adjuster.log 2>&1",
+      "script": "wc2026_lineup_adjuster.py",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "0 */4 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_vision_ingest.py >> /var/log/wc2026_vision.log 2>&1",
+      "script": "wc2026_vision_ingest.py",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "0 */6 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_web_data.py >> /var/log/wc2026_webdata.log 2>&1",
+      "script": "wc2026_web_data.py",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "0 */6 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_odds_scraper.py >> /var/log/wc2026_odds.log 2>&1",
+      "script": "wc2026_odds_scraper.py",
+      "purpose": "Bookmaker odds + value-bet flagger"
+    },
+    {
+      "type": "cron",
+      "schedule": "0 3 * * 0",
+      "command": "OLLAMA_HOST=http://127.0.0.1:11434 /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_player_profiles.py >> /var/log/wc2026_profiles.log 2>&1",
+      "script": "wc2026_player_profiles.py",
+      "purpose": "Per-player profile builder (LLM-assisted)"
+    },
+    {
+      "type": "cron",
+      "schedule": "0 2 1 * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_historical_data.py >> /var/log/wc2026_history.log 2>&1",
+      "script": "wc2026_historical_data.py",
+      "purpose": "Historical training-set refresh"
+    },
+    {
+      "type": "cron",
+      "schedule": "0 * * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_wasabi_backup.py >> /var/log/wc2026_wasabi.log 2>&1",
+      "script": "wc2026_wasabi_backup.py",
+      "purpose": "Hourly Wasabi snapshot uploader"
+    },
+    {
+      "type": "cron",
+      "schedule": "*/15 * * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_lock_predictions.py >> /var/log/wc2026_lock.log 2>&1",
+      "script": "wc2026_lock_predictions.py",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "0 */4 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_knockout_filler.py >> /var/log/wc2026_filler.log 2>&1",
+      "script": "wc2026_knockout_filler.py",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "15 4 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/worldcup_prediction_engine.py --mode backtest --strategy balanced --runs 10000 >> /var/log/wc2026_engine.log 2>&1",
+      "script": "",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "0 */2 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_bet_builder.py --stake 90 --legs 4 --strategy balanced --mode fixtures >> /var/log/wc2026_betbuilder.log 2>&1",
+      "script": "wc2026_bet_builder.py",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "30 */2 * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/worldcup_prediction_engine.py --mode predict-upcoming --strategy balanced >> /var/log/wc2026_predictupcoming.log 2>&1",
+      "script": "",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "0 * * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/sbs_watch_links.py >> /var/log/wc2026_sbs.log 2>&1",
+      "script": "",
+      "purpose": ""
+    },
+    {
+      "type": "cron",
+      "schedule": "5 * * * *",
+      "command": "/opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_build_manifest.py >> /var/log/wc2026_manifest.log 2>&1",
+      "script": "wc2026_build_manifest.py",
+      "purpose": "This manifest builder"
+    },
+    {
+      "type": "cron",
+      "schedule": "45 4 * * *",
+      "command": "/opt/jarvis-app-1/scripts/wc2026_daily_update.sh >> /var/log/wc2026_learning.log 2>&1",
+      "script": "",
+      "purpose": ""
+    },
+    {
+      "type": "wasabi",
+      "bucket": "jarvis-wc2026",
+      "snapshots": 189,
+      "status": "ok"
+    }
+  ]
+}

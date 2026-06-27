@@ -1,0 +1,94 @@
+{
+  "generated_at": "2026-06-19T21:40:45.209192Z",
+  "model": "Karlis-Ntzoufras 2003 bivariate Poisson",
+  "lambda_3_fitted": 1e-05,
+  "brier": 0.684523,
+  "brier_baseline": 0.683542,
+  "brier_delta": 0.000982,
+  "ci_95": [
+    -0.001493,
+    0.003455
+  ],
+  "real_lift": false,
+  "winner_accuracy": 0.548673,
+  "winner_accuracy_baseline": 0.548673,
+  "winner_delta": 0.0,
+  "winner_ci_95": [
+    0.0,
+    0.0
+  ],
+  "n_matches_evaluated": 226,
+  "n_train_matches_em": 225,
+  "n_bootstrap": 300,
+  "rng_seed": 20260619,
+  "em_diagnostics": {
+    "converged": true,
+    "n_iter": 78,
+    "final_ll": -807.4693,
+    "last_iters_trace": [
+      {
+        "iter": 74,
+        "lambda_3": 1.590205624464597e-05,
+        "lambda_3_new": 1.4537596874936617e-05,
+        "ll": -807.4699593656981,
+        "delta_lambda_3": 1.3644593697093525e-06,
+        "delta_ll": 0.00019355338451987336
+      },
+      {
+        "iter": 75,
+        "lambda_3": 1.4537596874936617e-05,
+        "lambda_3_new": 1.3290198120962503e-05,
+        "ll": -807.4697824188278,
+        "delta_lambda_3": 1.2473987539741134e-06,
+        "delta_ll": 0.00017694687028324552
+      },
+      {
+        "iter": 76,
+        "lambda_3": 1.3290198120962503e-05,
+        "lambda_3_new": 1.2149819569066763e-05,
+        "ll": -807.469620653942,
+        "delta_lambda_3": 1.1403785518957398e-06,
+        "delta_ll": 0.00016176488577457349
+      },
+      {
+        "iter": 77,
+        "lambda_3": 1.2149819569066763e-05,
+        "lambda_3_new": 1.1107281567073487e-05,
+        "ll": -807.469472768662,
+        "delta_lambda_3": 1.0425380019932764e-06,
+        "delta_ll": 0.00014788528005738044
+      },
+      {
+        "iter": 78,
+        "lambda_3": 1.1107281567073487e-05,
+        "lambda_3_new": 1.015419149973679e-05,
+        "ll": -807.4693375722937,
+        "delta_lambda_3": 9.530900673366972e-07,
+        "delta_ll": 0.0001351963682054702
+      }
+    ],
+    "tol": 1e-06,
+    "max_iter": 100
+  },
+  "methodology": "Karlis-Ntzoufras (2003) bivariate Poisson: Y_h = X_1 + X_3, Y_a = X_2 + X_3 with X_1, X_2, X_3 independent Poisson. EM fit of a single global lambda_3 (goal-correlation common shock) on the first half (225) of post-warmup historical matches, holding lam_h, lam_a fixed at the production model's Elo+ log-linear values (marginals unchanged). Walk-forward OOS backtest on the second half (226 matches), with the same Elo book updates applied to both arms so the only thing differing is the joint scoring distribution. Paired bootstrap (n_boot=300) of per-match Brier deltas. real_lift = 95% CI on brier_delta strictly excludes 0 in the favourable direction (delta < 0).",
+  "evaluation_methodology_matches": "Identical OOS split, warmup, bootstrap seed, and n_boot as scripts/wc2026_fit_dc_mle.py so Karlis lift is directly comparable to the Dixon-Coles MLE lift recorded in server/data/wc2026_methods_comparison.json.",
+  "train_eval_split": {
+    "warmup_n": 100,
+    "train_n_post_warmup": 225,
+    "train_n_total_with_warmup": 325,
+    "eval_n": 226,
+    "eval_starts": "2014-06-18"
+  },
+  "baseline_metrics": {
+    "winner_accuracy": 0.5487,
+    "brier": 0.6835,
+    "n": 226
+  },
+  "karlis_metrics": {
+    "winner_accuracy": 0.5487,
+    "brier": 0.6845,
+    "n": 226
+  },
+  "source": "scripts/wc2026_fit_karlis.py:_em_fit_lambda3 + walk-forward paired bootstrap (Karlis-Ntzoufras 2003)",
+  "verified": true
+}
