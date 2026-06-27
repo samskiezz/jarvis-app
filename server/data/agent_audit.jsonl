@@ -1,2 +1,0 @@
-{"ts": 1781539150.665038, "event": "rejected", "run_id": "run-22528353840a", "tool": "storage.restore", "risk": "destructive", "mode": null, "actor": null, "args": {"manifest": "server/agent/__init__.py"}, "result_summary": null, "backup_dir": null}
-{"ts": 1781539150.675633, "event": "rejected", "run_id": "run-bf0a30b248e2", "tool": "storage.restore", "risk": "destructive", "mode": null, "actor": null, "args": {"manifest": "server/agent/__init__.py"}, "result_summary": null, "backup_dir": null}
