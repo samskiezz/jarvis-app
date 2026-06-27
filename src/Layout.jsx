@@ -128,6 +128,7 @@ import Sci3dCatalogDrawer from "@/components/overnight/Sci3dCatalogDrawer";
 import ScrapeStatusDrawer from "@/components/overnight/ScrapeStatusDrawer";
 import PolicyControlDrawer from "@/components/overnight/PolicyControlDrawer";
 import SecurityAuditLogDrawer from "@/components/overnight/SecurityAuditLogDrawer";
+import SandboxBranchInspector from "@/components/overnight/SandboxBranchInspector";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -500,6 +501,9 @@ export function AppLayout({ children }) {
 
       {/* F140: Security Audit Log Drawer — right-edge slide-in at 18%; polls GET /v1/security/audit?n=50 every 3 min + GET /v1/security/acl once on open; chain integrity badge (✓ INTACT / ✗ BROKEN) + role badge + clearance pills; CHAIN tab shows audit events (actor/action/resource/hash/age); REVDB tab shows knowledge commits (id/author/message/Δchanges/age); slate/red (#EF4444) accent */}
       <SecurityAuditLogDrawer />
+
+      {/* F141: Sandbox Branch Inspector — left-edge slide-in at 68%; polls GET /v1/jarvis/sandbox/branches every 3 min; click branch fetches GET /v1/jarvis/sandbox/{branch}/diff and shows field-level object diffs inline; cyan (#22D3EE) accent */}
+      <SandboxBranchInspector />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
