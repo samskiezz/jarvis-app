@@ -133,6 +133,7 @@ import ArchitectureMapDrawer from "@/components/overnight/ArchitectureMapDrawer"
 import ObjectSetsBrowser from "@/components/overnight/ObjectSetsBrowser";
 import DeepHealthInspector from "@/components/overnight/DeepHealthInspector";
 import A11yDriversPanel from "@/components/overnight/A11yDriversPanel";
+import RunCorrelatorClustersDrawer from "@/components/overnight/RunCorrelatorClustersDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -520,6 +521,9 @@ export function AppLayout({ children }) {
 
       {/* F145: Accessibility Drivers Panel — left-edge slide-in at 78%; GET /v1/a11y/drivers every 5 min; driver name + OK/UNAVAIL badge + ACTIVATE button per row (POST /v1/a11y/drivers/{name}/activate); ok count badge in header; violet (#8B5CF6) accent */}
       <A11yDriversPanel />
+
+      {/* F146: Run Correlator Clusters — right-edge slide-in at 34%; polls GET /v1/run-correlator/clusters every 3 min; cluster rows with max_severity badge + event count + summary; click expands via GET /v1/run-correlator/cluster/{id}; orange (#F97316) accent */}
+      <RunCorrelatorClustersDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
