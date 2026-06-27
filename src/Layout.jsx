@@ -123,6 +123,7 @@ import UnderworldApiCatalog from "@/components/overnight/UnderworldApiCatalog";
 import OsObservabilityDrawer from "@/components/overnight/OsObservabilityDrawer";
 import KnowledgeArticleReader from "@/components/overnight/KnowledgeArticleReader";
 import PhoneCommsDrawer from "@/components/overnight/PhoneCommsDrawer";
+import Sci3dCatalogDrawer from "@/components/overnight/Sci3dCatalogDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -429,6 +430,9 @@ export function AppLayout({ children }) {
 
       {/* F111: Brain CRM People Drawer — left-edge slide-in at 22%; GET /v1/brain/people (5-min poll); person name + tier badge (FULL/MODERATE/BRIEF) + mention count; indigo (#6366F1) accent */}
       <BrainCrmPeopleDrawer />
+
+      {/* F135: 3D Science Geometry Catalog — left-edge slide-in at 26%; GET /v1/sci/3d/catalog (once on open); type badge (molecule cyan/orbital sky-blue/trajectory lime) + label + count; violet (#A78BFA) accent */}
+      <Sci3dCatalogDrawer />
 
       {/* F112: Motor Intent Predictor Drawer — left-edge slide-in at 18%; GET /v1/motor/stats (2-min poll) + GET /v1/motor/predict?top_k=5; stats tiles + ranked candidate list with source badge + confidence bar; sky-blue (#0EA5E9) accent */}
       <MotorPredictorDrawer />
