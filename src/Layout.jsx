@@ -131,6 +131,7 @@ import SecurityAuditLogDrawer from "@/components/overnight/SecurityAuditLogDrawe
 import SandboxBranchInspector from "@/components/overnight/SandboxBranchInspector";
 import ArchitectureMapDrawer from "@/components/overnight/ArchitectureMapDrawer";
 import ObjectSetsBrowser from "@/components/overnight/ObjectSetsBrowser";
+import DeepHealthInspector from "@/components/overnight/DeepHealthInspector";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -512,6 +513,9 @@ export function AppLayout({ children }) {
 
       {/* F143: Object Sets Browser — right-edge slide-in at 25%; polls GET /v1/ontology-ext/sets every 5 min; set name + query type badge + relative age per row; click resolves via GET /v1/ontology-ext/sets/{id}/resolve and expands up to 8 member objects inline; blue-300 (#93C5FD) accent */}
       <ObjectSetsBrowser />
+
+      {/* F144: Deep Component Health Inspector — left-edge slide-in at 47%; GET /v1/health/deep every 60 s; per-component PASS/FAIL badges (history_lake/ontology/science_bridge/gpu_configured/gpu_compute); overall ok badge; green #4ADE80 accent when healthy, red when degraded */}
+      <DeepHealthInspector />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
