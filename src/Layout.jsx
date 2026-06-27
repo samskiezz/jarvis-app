@@ -139,6 +139,7 @@ import OntologyTypesBrowser from "@/components/overnight/OntologyTypesBrowser";
 import SceneAnchorSnapshot from "@/components/overnight/SceneAnchorSnapshot";
 import MetricsRegistryDrawer from "@/components/overnight/MetricsRegistryDrawer";
 import GlobalNotesDrawer from "@/components/overnight/GlobalNotesDrawer";
+import ChatPredictTerminal from "@/components/overnight/ChatPredictTerminal";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -544,6 +545,9 @@ export function AppLayout({ children }) {
 
       {/* F151: Global Notes Thread — right-edge slide-in at 9%; GET /v1/notes?resource_type=graph&resource_id=global every 2 min + POST /v1/notes quick-add; author badge + body + relative timestamp + expand; gold (#FBBF24) accent */}
       <GlobalNotesDrawer />
+
+      {/* F152: Chat Predict Terminal — left-edge slide-in at 25%; POST /v1/chat/route classifies intent then POST /v1/chat/predict runs grounded forecast engine; answer + point/interval/confidence/honesty; session history; sky-blue (#0EA5E9) accent */}
+      <ChatPredictTerminal />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
