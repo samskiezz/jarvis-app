@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-27T02:15:05+00:00",
+  "last_updated": "2026-06-27T02:20:03+00:00",
   "source": "Verified from session-start WebSearch + 2026-06-19/20 follow-up WebSearch on Yahoo Sports / Olympics / Scotsman / CBS / ESPN / FIFA.com / Sofascore match-result pages",
   "note": "Authoritative source. Format is home-team-goals as h-a where home and away align with the official FIFA fixture list. Some entries in wc2026_fixtures_all.json had HALLUCINATED early scores (Netherlands 7-1 Japan was really 2-2; Germany 1-0 Curacao was really 7-1; CIV 2-2 Ecuador was really 1-0); this file is the corrected reference.",
   "matches_played_count": 64,
