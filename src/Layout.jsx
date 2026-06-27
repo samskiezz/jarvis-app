@@ -122,6 +122,7 @@ import DbHealthStatsDrawer from "@/components/overnight/DbHealthStatsDrawer";
 import UnderworldApiCatalog from "@/components/overnight/UnderworldApiCatalog";
 import OsObservabilityDrawer from "@/components/overnight/OsObservabilityDrawer";
 import KnowledgeArticleReader from "@/components/overnight/KnowledgeArticleReader";
+import PhoneCommsDrawer from "@/components/overnight/PhoneCommsDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -476,6 +477,9 @@ export function AppLayout({ children }) {
 
       {/* F134: Knowledge Article Reader — right-edge slide-in at 76%; GET /knowledge/ every 5 min; articles listed with kind badge + confidence bar + age; client-side text filter; click row expands full body_md; lime (#84CC16) accent */}
       <KnowledgeArticleReader />
+
+      {/* F133: Phone & Comms Status — right-edge slide-in at 40%; GET /v1/phone/status every 5 min; active backend badge (TWILIO/TELNYX/ASTERISK/NONE) + configured status + candidates table; sky-blue (#0EA5E9) accent */}
+      <PhoneCommsDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
