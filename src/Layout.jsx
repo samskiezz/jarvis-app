@@ -137,6 +137,7 @@ import A11yDriversPanel from "@/components/overnight/A11yDriversPanel";
 import RunCorrelatorClustersDrawer from "@/components/overnight/RunCorrelatorClustersDrawer";
 import OntologyTypesBrowser from "@/components/overnight/OntologyTypesBrowser";
 import SceneAnchorSnapshot from "@/components/overnight/SceneAnchorSnapshot";
+import MetricsRegistryDrawer from "@/components/overnight/MetricsRegistryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -536,6 +537,9 @@ export function AppLayout({ children }) {
 
       {/* F149: Scene Anchor Snapshot — left-edge slide-in at 5%; parallel-fetches all 10 GET /v1/cinematic/scene/{id} on open; 5-min poll; scene rows with bound/total anchor count; click expands all anchors inline (key·value·status dot); sky-blue (#0EA5E9) accent */}
       <SceneAnchorSnapshot />
+
+      {/* F150: Metrics Registry — right-edge slide-in at 36%; polls GET /v1/metrics every 60 s; counter name+value tiles + timer mean/count rows; emerald (#10B981) accent */}
+      <MetricsRegistryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
