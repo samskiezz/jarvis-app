@@ -124,6 +124,7 @@ import OsObservabilityDrawer from "@/components/overnight/OsObservabilityDrawer"
 import KnowledgeArticleReader from "@/components/overnight/KnowledgeArticleReader";
 import PhoneCommsDrawer from "@/components/overnight/PhoneCommsDrawer";
 import Sci3dCatalogDrawer from "@/components/overnight/Sci3dCatalogDrawer";
+import ScrapeStatusDrawer from "@/components/overnight/ScrapeStatusDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -484,6 +485,9 @@ export function AppLayout({ children }) {
 
       {/* F133: Phone & Comms Status — right-edge slide-in at 40%; GET /v1/phone/status every 5 min; active backend badge (TWILIO/TELNYX/ASTERISK/NONE) + configured status + candidates table; sky-blue (#0EA5E9) accent */}
       <PhoneCommsDrawer />
+
+      {/* F137: Scrape Engine Status — right-edge slide-in at 99%; polls GET /v1/jarvis/scrape/status every 2 min + GET /v1/jarvis/scrape/engines once on open; stat tiles (scraped docs/pending/stored notes/db size) + seed progress bar + per-engine AVAILABLE/MISSING rows; sky-blue (#38BDF8) accent */}
+      <ScrapeStatusDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant

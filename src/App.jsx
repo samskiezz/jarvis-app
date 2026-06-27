@@ -53,6 +53,7 @@ import SkillScorecard from '@/components/cinematic/SkillScorecard';
 import LiveTelemetryTicker from '@/components/cinematic/LiveTelemetryTicker';
 import StatusReporter from '@/components/cinematic/StatusReporter';
 import OvernightPanels from '@/components/overnight/OvernightPanels';
+import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -151,6 +152,8 @@ function App() {
             <LiveTelemetryTicker />
             {/* F05: spoken status report — "JARVIS, status" or "status report" → fetches /v1/jarvis/system/status + /v1/cinematic/brain; speaks precise numbers via /v1/voice/tts; HUD card auto-dismisses after 14 s */}
             <StatusReporter />
+            {/* F136: investment/wealth widget — ◆ WEALTH button (bottom strip); sources /entities/Investment + /entities/WealthSnapshot; holdings list with allocation bars, P&L, type-filter tabs; "JARVIS, investments/portfolio/wealth" jarvis:ask voice trigger; 60 s auto-refresh */}
+            <InvestmentWidget />
             {/* F131: overnight panels launcher — ◈ button at left:340 bottom:18; searchable category-grouped grid of all cinematic panels (panelRegistry.generated.js); lazy-mounts one panel at a time behind PanelErrorBoundary; gives on-demand access to the full panel library without 100+ floating buttons */}
             <OvernightPanels />
             <Suspense fallback={<Loading />}>
