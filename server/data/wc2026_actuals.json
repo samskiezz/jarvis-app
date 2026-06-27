@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-06-27T04:48:36+00:00",
+  "last_updated": "2026-06-27T05:00:04+00:00",
   "source": "worldcup26.ir API (GitHub: rezarahiminia/worldcup2026)",
   "note": "Verified played matches synced from the public World Cup 2026 API.",
-  "matches_played_count": 64,
+  "matches_played_count": 65,
   "matches": [
     {
       "date": "2026-06-13",
@@ -2218,6 +2218,64 @@
       "scorers": {
         "home": [],
         "away": []
+      }
+    },
+    {
+      "date": "2026-06-26",
+      "stage": "GROUP",
+      "group": "G",
+      "home": "New Zealand",
+      "away": "Belgium",
+      "result": "1-5",
+      "verified": true,
+      "source": "ESPN scoreboard fifa.world (status=completed, auto-ingested)",
+      "scorers": {
+        "home": [
+          {
+            "name": "Elijah Just",
+            "minute": "84'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Leandro Trossard",
+            "minute": "28'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Leandro Trossard",
+            "minute": "50'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Kevin De Bruyne",
+            "minute": "66'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Romelu Lukaku",
+            "minute": "86'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Alexis Saelemaekers",
+            "minute": "90'+4'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
       }
     }
   ]

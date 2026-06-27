@@ -1455,9 +1455,10 @@
       "home": "New Zealand",
       "away": "Belgium",
       "venue": "BC Place, Vancouver",
-      "result": null,
+      "result": "1-5",
       "result_class": null,
-      "played": false
+      "played": true,
+      "result_verified": true
     },
     {
       "n": 75,

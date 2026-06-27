@@ -179,17 +179,18 @@ class ScraperOddsProvider(OddsProvider):
 
     def fetch_match_odds(self, match: Match) -> Optional[dict[str, list[float]]]:
         try:
-            from wc2026_odds_scraper import Fixture, scrape_espn  # type: ignore
+            from wc2026_odds_scraper import (  # type: ignore
+                Fixture, scrape_espn, scrape_api_football, scrape_manual_odds,
+            )
             fx = Fixture(n=int(match.match_id) if str(match.match_id).isdigit() else 0,
                          home=match.team_a, away=match.team_b,
                          p_home=0.0, p_draw=0.0, p_away=0.0)
-            # Call scrape_espn directly: it is the only reachable live source.
-            # scrape_any would also try the IP-blocked books (8s timeouts each),
-            # stalling the per-fixture loop; on an ESPN miss we yield to mock.
-            bo = scrape_espn(fx)
+            # Fast sources first: ESPN, API-Football (free tier, key-required),
+            # then user-pasted manual odds. Avoid scrape_any's IP-blocked books.
+            bo = scrape_espn(fx) or scrape_api_football(fx) or scrape_manual_odds(fx)
             if bo is None:
                 return None
-            self.last_source = getattr(bo, "source", "espn_draftkings")
+            self.last_source = getattr(bo, "source", "scraper")
             return {HOME: [float(bo.home)], DRAW: [float(bo.draw)], AWAY: [float(bo.away)]}
         except Exception as exc:  # noqa: BLE001
             LOG.warning("scraper failed for %s vs %s: %s", match.team_a, match.team_b, exc)

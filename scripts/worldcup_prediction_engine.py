@@ -504,7 +504,8 @@ def _load_tracking_features() -> dict[str, dict[str, Any]]:
 _TEAM_TRACKING = _load_tracking_features()
 
 
-def load_fixtures(fixtures_path: Path = FIXTURES_JSON) -> list[Match]:
+def load_fixtures(fixtures_path: Path = FIXTURES_JSON,
+                  exclude_played: bool = False) -> list[Match]:
     if not fixtures_path.exists():
         LOG.warning("fixtures JSON not found: %s", fixtures_path)
         return []
@@ -516,6 +517,7 @@ def load_fixtures(fixtures_path: Path = FIXTURES_JSON) -> list[Match]:
     out: list[Match] = []
     placeholders = ("winner ", "runner-up ", "3rd ", "loser ", "tbd")
     fixture_odds = _load_fixture_odds()
+    today = datetime.now(timezone.utc).date()
     for m in doc.get("matches", []):
         home = str(m.get("home") or "").strip()
         away = str(m.get("away") or "").strip()
@@ -523,6 +525,14 @@ def load_fixtures(fixtures_path: Path = FIXTURES_JSON) -> list[Match]:
             continue
         if any(home.lower().startswith(p) or away.lower().startswith(p) for p in placeholders):
             continue
+        if exclude_played:
+            if m.get("played"):
+                continue
+            try:
+                if datetime.fromisoformat(str(m.get("date") or "")).date() < today:
+                    continue
+            except (ValueError, TypeError):
+                pass
         n = str(m.get("n") or m.get("match_id") or home + away)
         out.append(Match(
             match_id=n,
@@ -2106,7 +2116,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     # Next-12 source) without the heavy backtest/weight-learning.
     if args.mode == "predict-upcoming":
         fix_path = Path(args.fixtures) if args.fixtures else FIXTURES_JSON
-        fixtures = load_fixtures(fix_path)
+        fixtures = load_fixtures(fix_path, exclude_played=True)
         if not fixtures:
             LOG.error("predict-upcoming: no fixtures loaded — aborting")
             return 1

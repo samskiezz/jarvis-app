@@ -409,6 +409,115 @@ def scrape_the_odds_api(fixture: Fixture) -> BookOdds | None:
     return None
 
 
+def scrape_api_football(fixture: Fixture) -> BookOdds | None:
+    """API-Football (api-sports) free-tier odds fallback.
+
+    Free plan: 100 requests/day. We cache fixture IDs so the daily refresh
+    costs ~1 request for the fixture list + 1 per upcoming match. Set
+    API_FOOTBALL_KEY env var to activate.
+    """
+    api_key = os.environ.get("API_FOOTBALL_KEY")
+    if not api_key:
+        return None
+
+    base = "https://v3.football.api-sports.io"
+    headers = {"x-apisports-key": api_key}
+    cache = _load_json(CACHE_PATH)
+    fixtures_cache = cache.get("api_football_fixtures", {})
+
+    # Lazy-load fixture IDs once per run.
+    if "by_pair" not in fixtures_cache:
+        try:
+            import urllib.request
+            req = urllib.request.Request(
+                f"{base}/fixtures?league=1&season=2026",
+                headers=headers,
+            )
+            with urllib.request.urlopen(req, timeout=12) as resp:  # noqa: S310
+                doc = json.loads(resp.read().decode("utf-8", errors="replace"))
+        except Exception as exc:  # noqa: BLE001
+            LOG.info("api-football: fixture list fetch failed: %s", exc)
+            return None
+        by_pair: dict[str, int] = {}
+        for row in doc.get("response", []):
+            try:
+                teams = row.get("teams", {})
+                h = _norm_team(teams.get("home", {}).get("name", ""))
+                a = _norm_team(teams.get("away", {}).get("name", ""))
+                fid = row.get("fixture", {}).get("id")
+                if h and a and fid:
+                    by_pair[f"{h}|{a}"] = int(fid)
+            except (TypeError, ValueError):
+                continue
+        fixtures_cache = {"by_pair": by_pair, "fetched_at": _dt.datetime.now(_dt.timezone.utc).isoformat()}
+        cache["api_football_fixtures"] = fixtures_cache
+        _save_json(CACHE_PATH, cache)
+
+    home_norm = _norm_team(fixture.home)
+    away_norm = _norm_team(fixture.away)
+    fixture_id = fixtures_cache.get("by_pair", {}).get(f"{home_norm}|{away_norm}")
+    if not fixture_id:
+        # Try reversed orientation.
+        fixture_id = fixtures_cache.get("by_pair", {}).get(f"{away_norm}|{home_norm}")
+    if not fixture_id:
+        LOG.info("api-football: no fixture id for %s vs %s", fixture.home, fixture.away)
+        return None
+
+    # Check cached odds first.
+    odds_cache = cache.get("api_football_odds", {})
+    cached = odds_cache.get(str(fixture_id))
+    if cached:
+        try:
+            return BookOdds(
+                home=float(cached["home"]), draw=float(cached["draw"]),
+                away=float(cached["away"]), source="api_football_cached")
+        except (KeyError, TypeError, ValueError):
+            pass
+
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            f"{base}/odds?fixture={fixture_id}",
+            headers=headers,
+        )
+        with urllib.request.urlopen(req, timeout=12) as resp:  # noqa: S310
+            doc = json.loads(resp.read().decode("utf-8", errors="replace"))
+    except Exception as exc:  # noqa: BLE001
+        LOG.info("api-football: odds fetch failed for %s vs %s: %s", fixture.home, fixture.away, exc)
+        return None
+
+    # Pick Pinnacle if available, else any book with a 1X2 market.
+    best: tuple[float, float, float] | None = None
+    for row in doc.get("response", []):
+        book = (row.get("bookmaker", {}) or {}).get("name", "").lower()
+        for mkt in row.get("bookmaker", {}).get("bets", []):
+            if str(mkt.get("name", "")).lower() not in ("match winner", "1x2", "winner"):
+                continue
+            values = {v.get("value", "").lower(): v.get("odd") for v in mkt.get("values", [])}
+            hd = values.get("home") or values.get(fixture.home.lower())
+            ad = values.get("away") or values.get(fixture.away.lower())
+            dd = values.get("draw")
+            try:
+                hd_f, ad_f, dd_f = float(hd), float(ad), float(dd)
+            except (TypeError, ValueError):
+                continue
+            if hd_f > 1.0 and ad_f > 1.0 and dd_f > 1.0:
+                if book == "pinnacle" or best is None:
+                    best = (hd_f, dd_f, ad_f)
+                    if book == "pinnacle":
+                        break
+        if best and book == "pinnacle":
+            break
+
+    if not best:
+        return None
+
+    odds_cache[str(fixture_id)] = {"home": best[0], "draw": best[1], "away": best[2]}
+    cache["api_football_odds"] = odds_cache
+    _save_json(CACHE_PATH, cache)
+    return BookOdds(home=best[0], draw=best[1], away=best[2], source="api_football")
+
+
 def scrape_manual_odds(fixture: Fixture) -> BookOdds | None:
     """User-pasted closing odds in server/data/wc2026_manual_odds.json.
 
@@ -450,7 +559,7 @@ def scrape_cached_odds(fixture: Fixture, cache: dict[str, dict[str, Any]]) -> Bo
 
 def scrape_any(fixture: Fixture, cache: dict[str, dict[str, Any]] | None = None) -> BookOdds:
     """Try every scraper in order; return placeholder if all fail."""
-    for fn in (scrape_espn, scrape_the_odds_api, scrape_manual_odds):
+    for fn in (scrape_espn, scrape_the_odds_api, scrape_api_football, scrape_manual_odds):
         result = fn(fixture)
         if result is not None:
             return result

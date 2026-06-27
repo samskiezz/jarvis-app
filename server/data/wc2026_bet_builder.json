@@ -1,7 +1,7 @@
 {
   "verified": true,
   "source": "scripts/wc2026_bet_builder.py — three-spread bet builder over worldcup_prediction_engine predictions; odds via provider abstraction (mock/placeholder labelled when books unreachable); official SBS watch links attached per leg.",
-  "generated_at": "2026-06-27T04:49:46+00:00",
+  "generated_at": "2026-06-27T05:03:00+00:00",
   "output": {
     "request": {
       "stake_amount": 90.0,
@@ -29,13 +29,13 @@
         "reason": "duplicate-team rule: Argentina already used in the slip"
       },
       {
-        "match_id": "72",
-        "match": "Democratic Republic of the Congo vs Uzbekistan",
+        "match_id": "73",
+        "match": "South Africa vs Canada",
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "73",
-        "match": "South Africa vs Canada",
+        "match_id": "72",
+        "match": "Democratic Republic of the Congo vs Uzbekistan",
         "reason": "outside requested leg count"
       },
       {
@@ -583,12 +583,12 @@
           "team_b": "Uzbekistan",
           "market": "1x2",
           "selected_outcome": "H",
-          "model_probability": 0.3117,
-          "blended_odds": 3.03,
-          "implied_probability": 0.33,
-          "fair_bookmaker_probability": 0.3115,
-          "edge": 0.0002,
-          "expected_value": -0.0554,
+          "model_probability": 0.3126,
+          "blended_odds": 3.02,
+          "implied_probability": 0.3311,
+          "fair_bookmaker_probability": 0.3126,
+          "edge": 0.0,
+          "expected_value": -0.0559,
           "odds_are_real": false,
           "odds_source": "mock",
           "treatment": "ROTATE",
@@ -610,19 +610,19 @@
           }
         }
       ],
-      "combined_odds": 373.8,
-      "combined_model_probability": 0.00284,
-      "bookmaker_implied_probability": 0.002675,
-      "expected_value": 0.0615,
-      "expected_value_dollars": 1.83,
-      "potential_return": 11101.82,
-      "potential_profit": 11072.12,
+      "combined_odds": 372.56,
+      "combined_model_probability": 0.002848,
+      "bookmaker_implied_probability": 0.002684,
+      "expected_value": 0.0611,
+      "expected_value_dollars": 1.81,
+      "potential_return": 11065.18,
+      "potential_profit": 11035.48,
       "risk_rating": "High"
     },
     "total_outlay": 90.0,
-    "best_case_return": 11101.82,
-    "best_case_profit": 11011.82,
-    "weighted_expected_value": -31.18,
+    "best_case_return": 11065.18,
+    "best_case_profit": 10975.18,
+    "weighted_expected_value": -31.2,
     "spread_coverage_score": 0.211878,
     "coverage_cost": 12,
     "coverage_efficiency": 0.017657,
@@ -799,9 +799,9 @@
         "b": null,
         "c": "H",
         "c_is_alt": true,
-        "a_odds": 2.28,
+        "a_odds": 2.29,
         "b_odds": null,
-        "c_odds": 3.03,
+        "c_odds": 3.02,
         "watch_link": {
           "provider": "SBS On Demand",
           "label": "Watch Live on SBS",

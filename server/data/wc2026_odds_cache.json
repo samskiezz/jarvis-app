@@ -1,4 +1,75 @@
 {
-  "updated_at": "2026-06-27T04:46:19Z",
-  "odds": {}
+  "updated_at": "2026-06-27T05:03:07Z",
+  "odds": {
+    "67": {
+      "home": 15.0,
+      "draw": 8.0,
+      "away": 1.1739130434782608,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:05Z"
+    },
+    "86": {
+      "home": 1.1538461538461537,
+      "draw": 8.0,
+      "away": 17.0,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "70": {
+      "home": 17.0,
+      "draw": 8.5,
+      "away": 1.1538461538461537,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "76": {
+      "home": 1.7142857142857144,
+      "draw": 3.85,
+      "away": 5.0,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "71": {
+      "home": 3.85,
+      "draw": 3.8,
+      "away": 1.9090909090909092,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "73": {
+      "home": 5.25,
+      "draw": 3.65,
+      "away": 1.7142857142857144,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "68": {
+      "home": 1.8,
+      "draw": 3.3,
+      "away": 5.5,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "69": {
+      "home": 4.2,
+      "draw": 2.15,
+      "away": 2.95,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:06Z"
+    },
+    "75": {
+      "home": 2.15,
+      "draw": 3.3,
+      "away": 3.7,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:07Z"
+    },
+    "78": {
+      "home": 3.7,
+      "draw": 3.6,
+      "away": 2.0,
+      "source": "espn_draftkings",
+      "updated_at": "2026-06-27T05:03:07Z"
+    }
+  }
 }
