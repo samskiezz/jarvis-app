@@ -136,6 +136,7 @@ import DeepHealthInspector from "@/components/overnight/DeepHealthInspector";
 import A11yDriversPanel from "@/components/overnight/A11yDriversPanel";
 import RunCorrelatorClustersDrawer from "@/components/overnight/RunCorrelatorClustersDrawer";
 import OntologyTypesBrowser from "@/components/overnight/OntologyTypesBrowser";
+import SceneAnchorSnapshot from "@/components/overnight/SceneAnchorSnapshot";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -532,6 +533,9 @@ export function AppLayout({ children }) {
 
       {/* F147: Ontology Types Browser — left-edge slide-in at 71%; GET /v1/ontology/types (5-min poll) + GET /v1/ontology/objects?type=X on click; type list with instance count; expand shows label + mark + age; lavender (#A78BFA) accent */}
       <OntologyTypesBrowser />
+
+      {/* F149: Scene Anchor Snapshot — left-edge slide-in at 5%; parallel-fetches all 10 GET /v1/cinematic/scene/{id} on open; 5-min poll; scene rows with bound/total anchor count; click expands all anchors inline (key·value·status dot); sky-blue (#0EA5E9) accent */}
+      <SceneAnchorSnapshot />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
