@@ -132,6 +132,7 @@ import SandboxBranchInspector from "@/components/overnight/SandboxBranchInspecto
 import ArchitectureMapDrawer from "@/components/overnight/ArchitectureMapDrawer";
 import ObjectSetsBrowser from "@/components/overnight/ObjectSetsBrowser";
 import DeepHealthInspector from "@/components/overnight/DeepHealthInspector";
+import A11yDriversPanel from "@/components/overnight/A11yDriversPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -516,6 +517,9 @@ export function AppLayout({ children }) {
 
       {/* F144: Deep Component Health Inspector — left-edge slide-in at 47%; GET /v1/health/deep every 60 s; per-component PASS/FAIL badges (history_lake/ontology/science_bridge/gpu_configured/gpu_compute); overall ok badge; green #4ADE80 accent when healthy, red when degraded */}
       <DeepHealthInspector />
+
+      {/* F145: Accessibility Drivers Panel — left-edge slide-in at 78%; GET /v1/a11y/drivers every 5 min; driver name + OK/UNAVAIL badge + ACTIVATE button per row (POST /v1/a11y/drivers/{name}/activate); ok count badge in header; violet (#8B5CF6) accent */}
+      <A11yDriversPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
