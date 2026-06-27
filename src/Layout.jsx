@@ -56,6 +56,7 @@ import SchedulesPanel from "@/components/overnight/SchedulesPanel";
 import LiveIntelPulseDrawer from "@/components/overnight/LiveIntelPulseDrawer";
 import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
+import BrainScanDrawer from "@/components/overnight/BrainScanDrawer";
 import SensorActivityPanel from "@/components/overnight/SensorActivityPanel";
 import TopObjectsDrawer from "@/components/overnight/TopObjectsDrawer";
 import OntologySearchDrawer from "@/components/overnight/OntologySearchDrawer";
@@ -281,6 +282,9 @@ export function AppLayout({ children }) {
 
       {/* F46: Geo Objects Drawer — left-edge slide-in at 28%; geo-tagged ontology objects from GET /v1/geo/objects */}
       <GeoObjectsDrawer />
+
+      {/* F138: Brain Autopilot Scan — left-edge slide-in at 30%; knowledge gap scan from GET /v1/brain/autopilot/scan; score gauge + 6 gap tiles; teal accent */}
+      <BrainScanDrawer />
 
       {/* F22: Activity Feed Panel — right-edge slide-in at 90%; unified note+audit feed from GET /v1/activity */}
       <ActivityFeedPanel />
