@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T00:30:10+00:00",
+  "generated_at": "2026-06-27T02:30:10+00:00",
   "model": "three_spread_ensemble_v1",
   "calibration": {
     "applied": true,
@@ -2232,17 +2232,17 @@
       },
       "watch_link": {
         "provider": "SBS On Demand",
-        "label": "Watch Now on SBS",
-        "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-        "status": "live",
+        "label": "Watch Replay on SBS",
+        "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+        "status": "completed",
         "match_id": "63",
         "team_a": "Cabo Verde",
         "team_b": "Saudi Arabia",
         "kickoff_time": "2026-06-27T00:00:00Z",
-        "source_type": "live_upcoming_collection",
+        "source_type": "replay_collection",
         "confidence": "collection",
         "requires_location": "Australia",
-        "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
+        "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed."
       }
     },
     "64": {
@@ -2263,17 +2263,17 @@
       },
       "watch_link": {
         "provider": "SBS On Demand",
-        "label": "Watch Now on SBS",
-        "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-        "status": "live",
+        "label": "Watch Replay on SBS",
+        "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+        "status": "completed",
         "match_id": "64",
         "team_a": "Uruguay",
         "team_b": "Spain",
         "kickoff_time": "2026-06-27T00:00:00Z",
-        "source_type": "live_upcoming_collection",
+        "source_type": "replay_collection",
         "confidence": "collection",
         "requires_location": "Australia",
-        "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
+        "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed."
       }
     },
     "65": {
@@ -2294,9 +2294,9 @@
       },
       "watch_link": {
         "provider": "SBS On Demand",
-        "label": "Watch Live on SBS",
+        "label": "Watch Soon on SBS",
         "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-        "status": "upcoming",
+        "status": "soon",
         "match_id": "65",
         "team_a": "Egypt",
         "team_b": "Iran",
@@ -2325,9 +2325,9 @@
       },
       "watch_link": {
         "provider": "SBS On Demand",
-        "label": "Watch Live on SBS",
+        "label": "Watch Soon on SBS",
         "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-        "status": "upcoming",
+        "status": "soon",
         "match_id": "66",
         "team_a": "New Zealand",
         "team_b": "Belgium",

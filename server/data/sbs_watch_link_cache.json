@@ -1,7 +1,7 @@
 {
   "verified": true,
   "source": "scripts/sbs_watch_links.py — official SBS On Demand collection pages by status (full-match replay / live-and-upcoming / Australia), which always load. Per-match deep links are not used: SBS does not publish an upcoming match's watch page until broadcast, so those read 'link not found'.",
-  "generated_at": "2026-06-27T02:00:01+00:00",
+  "generated_at": "2026-06-27T02:30:10+00:00",
   "location_note": "Available in Australia. SBS On Demand content may be unavailable outside Australia due to rights.",
   "links": {
     "1": {
@@ -17,7 +17,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "2": {
@@ -33,7 +33,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "3": {
@@ -49,7 +49,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "4": {
@@ -65,7 +65,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "5": {
@@ -81,7 +81,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "6": {
@@ -97,7 +97,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "7": {
@@ -113,7 +113,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "8": {
@@ -129,7 +129,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "9": {
@@ -145,7 +145,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "10": {
@@ -161,7 +161,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "11": {
@@ -177,7 +177,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "12": {
@@ -193,7 +193,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "13": {
@@ -209,7 +209,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "14": {
@@ -225,7 +225,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "15": {
@@ -241,7 +241,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "16": {
@@ -257,7 +257,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "17": {
@@ -273,7 +273,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "18": {
@@ -289,7 +289,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "19": {
@@ -305,7 +305,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "20": {
@@ -321,7 +321,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "21": {
@@ -337,7 +337,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "22": {
@@ -353,7 +353,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "23": {
@@ -369,7 +369,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "24": {
@@ -385,7 +385,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "25": {
@@ -401,7 +401,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "26": {
@@ -417,7 +417,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "27": {
@@ -433,7 +433,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "28": {
@@ -449,7 +449,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "29": {
@@ -465,7 +465,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "30": {
@@ -481,7 +481,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "31": {
@@ -497,7 +497,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "32": {
@@ -513,7 +513,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "33": {
@@ -529,7 +529,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "34": {
@@ -545,7 +545,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "35": {
@@ -561,7 +561,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "36": {
@@ -577,7 +577,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "37": {
@@ -593,7 +593,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "38": {
@@ -609,7 +609,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "39": {
@@ -625,7 +625,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "40": {
@@ -641,7 +641,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "41": {
@@ -657,7 +657,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "42": {
@@ -673,7 +673,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "43": {
@@ -689,7 +689,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "44": {
@@ -705,7 +705,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "45": {
@@ -721,7 +721,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "46": {
@@ -737,7 +737,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "47": {
@@ -753,7 +753,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "48": {
@@ -769,7 +769,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "49": {
@@ -785,7 +785,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "50": {
@@ -801,7 +801,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "51": {
@@ -817,7 +817,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "52": {
@@ -833,7 +833,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "53": {
@@ -849,7 +849,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "54": {
@@ -865,7 +865,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "55": {
@@ -881,7 +881,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "56": {
@@ -897,7 +897,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "57": {
@@ -913,7 +913,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "58": {
@@ -929,7 +929,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "59": {
@@ -945,7 +945,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "60": {
@@ -961,7 +961,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "61": {
@@ -977,7 +977,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "62": {
@@ -993,40 +993,40 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "63": {
       "provider": "SBS On Demand",
-      "label": "Watch Now on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "live",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "63",
       "team_a": "Cabo Verde",
       "team_b": "Saudi Arabia",
       "kickoff_time": "2026-06-27T00:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
-      "refresh_after_s": 300
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-27T02:30:10+00:00",
+      "refresh_after_s": 43200
     },
     "64": {
       "provider": "SBS On Demand",
-      "label": "Watch Now on SBS",
-      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
-      "status": "live",
+      "label": "Watch Replay on SBS",
+      "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
+      "status": "completed",
       "match_id": "64",
       "team_a": "Uruguay",
       "team_b": "Spain",
       "kickoff_time": "2026-06-27T00:00:00Z",
-      "source_type": "live_upcoming_collection",
+      "source_type": "replay_collection",
       "confidence": "collection",
       "requires_location": "Australia",
-      "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
-      "refresh_after_s": 300
+      "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
+      "cached_at": "2026-06-27T02:30:10+00:00",
+      "refresh_after_s": 43200
     },
     "65": {
       "provider": "SBS On Demand",
@@ -1041,7 +1041,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 1800
     },
     "66": {
@@ -1057,7 +1057,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 1800
     },
     "67": {
@@ -1073,7 +1073,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "68": {
@@ -1089,7 +1089,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "69": {
@@ -1105,7 +1105,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "70": {
@@ -1121,7 +1121,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 43200
     },
     "71": {
@@ -1137,7 +1137,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 21600
     },
     "72": {
@@ -1153,7 +1153,7 @@
       "confidence": "collection",
       "requires_location": "Australia",
       "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed.",
-      "cached_at": "2026-06-27T02:00:01+00:00",
+      "cached_at": "2026-06-27T02:30:10+00:00",
       "refresh_after_s": 21600
     }
   }
