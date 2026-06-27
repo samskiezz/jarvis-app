@@ -353,8 +353,10 @@ def main() -> int:
 
     standings, groups_done = _compute_group_standings(matches)
     rewrites = 0
-    if groups_done:
-        rewrites += _resolve_group_placeholders(matches, standings)
+    # Resolve group placeholders from CURRENT standings even if the group stage
+    # isn't fully complete. This lets the bracket surface provisional matchups
+    # as results land; re-running the filler updates them if standings change.
+    rewrites += _resolve_group_placeholders(matches, standings)
     # Even if groups aren't fully done, knockout 'Winner N' slots from
     # already-played knockouts can be resolved.
     rewrites += _resolve_winner_n_placeholders(matches)

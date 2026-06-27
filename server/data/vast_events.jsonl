@@ -11813,3 +11813,21 @@
 {"ts": 1782533215.7056766, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 20256, "streak": 3}
 {"ts": 1782533276.7277691, "kind": "brain_missing"}
 {"ts": 1782533276.7347753, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 20195, "streak": 3}
+{"ts": 1782533337.748035, "kind": "brain_missing"}
+{"ts": 1782533337.74885, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 20134, "streak": 3}
+{"ts": 1782533398.7605746, "kind": "brain_missing"}
+{"ts": 1782533398.7606657, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 20073, "streak": 3}
+{"ts": 1782533459.767379, "kind": "brain_missing"}
+{"ts": 1782533459.7675426, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 20012, "streak": 3}
+{"ts": 1782533520.783255, "kind": "brain_missing"}
+{"ts": 1782533520.7834392, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19951, "streak": 3}
+{"ts": 1782533582.0190167, "kind": "brain_missing"}
+{"ts": 1782533582.0191882, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19890, "streak": 3}
+{"ts": 1782533643.439177, "kind": "brain_missing"}
+{"ts": 1782533643.439316, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19828, "streak": 3}
+{"ts": 1782533704.4855852, "kind": "brain_missing"}
+{"ts": 1782533704.4857843, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19767, "streak": 3}
+{"ts": 1782533765.5144086, "kind": "brain_missing"}
+{"ts": 1782533765.5145886, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19706, "streak": 3}
+{"ts": 1782533826.501091, "kind": "brain_missing"}
+{"ts": 1782533826.5016103, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19645, "streak": 3}

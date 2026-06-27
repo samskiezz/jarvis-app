@@ -62,7 +62,9 @@
 
 # 11. Bet builder — regenerate three priced slips from live ESPN/DraftKings odds.
 #     Every 2 hours during the tournament. Writes wc2026_bet_builder.json.
-0 */2 * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_bet_builder.py --stake 90 --legs 4 --strategy balanced --mode fixtures >> /var/log/wc2026_betbuilder.log 2>&1
+#     Tuned to maximum_coverage + 6 legs during late group / knockout so the
+#     builder surface more than 1-2 picks when the model is cautious.
+0 */2 * * * /opt/jarvis-app-1/.venv/bin/python /opt/jarvis-app-1/scripts/wc2026_bet_builder.py --stake 90 --legs 6 --strategy maximum_coverage --mode fixtures >> /var/log/wc2026_betbuilder.log 2>&1
 
 # 12. Engine predict-upcoming — owns wc2026_model_predictions.json (the live
 #     Next-12 source). Lighter than the full backtest; refreshes every 2 hours
