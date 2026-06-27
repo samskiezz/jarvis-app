@@ -1,7 +1,7 @@
 {
   "verified": true,
   "source": "scripts/wc2026_bet_builder.py — three-spread bet builder over worldcup_prediction_engine predictions; odds via provider abstraction (mock/placeholder labelled when books unreachable); official SBS watch links attached per leg.",
-  "generated_at": "2026-06-27T04:16:49+00:00",
+  "generated_at": "2026-06-27T04:21:13+00:00",
   "output": {
     "request": {
       "stake_amount": 90.0,
@@ -17,35 +17,25 @@
     "selected_matches": [
       "72",
       "67",
+      "66",
       "74",
       "70",
-      "77",
-      "68"
+      "77"
     ],
     "excluded_matches": [
-      {
-        "match_id": "66",
-        "match": "New Zealand vs Belgium",
-        "reason": "edge -0.23 < min -0.20"
-      },
       {
         "match_id": "86",
         "match": "Argentina vs Cabo Verde",
         "reason": "duplicate-team rule: Argentina already used in the slip"
       },
       {
+        "match_id": "68",
+        "match": "Croatia vs Ghana",
+        "reason": "outside requested leg count"
+      },
+      {
         "match_id": "69",
         "match": "Colombia vs Portugal",
-        "reason": "outside requested leg count"
-      },
-      {
-        "match_id": "83",
-        "match": "Portugal vs Ghana",
-        "reason": "outside requested leg count"
-      },
-      {
-        "match_id": "80",
-        "match": "England vs Senegal",
         "reason": "outside requested leg count"
       },
       {
@@ -54,8 +44,18 @@
         "reason": "outside requested leg count"
       },
       {
+        "match_id": "83",
+        "match": "Portugal vs Ghana",
+        "reason": "outside requested leg count"
+      },
+      {
         "match_id": "76",
         "match": "Brazil vs Japan",
+        "reason": "outside requested leg count"
+      },
+      {
+        "match_id": "80",
+        "match": "England vs Senegal",
         "reason": "outside requested leg count"
       },
       {
@@ -69,13 +69,13 @@
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "71",
-        "match": "Algeria vs Austria",
+        "match_id": "85",
+        "match": "Switzerland vs Sweden",
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "85",
-        "match": "Switzerland vs Sweden",
+        "match_id": "71",
+        "match": "Algeria vs Austria",
         "reason": "outside requested leg count"
       },
       {
@@ -99,13 +99,13 @@
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "88",
-        "match": "Australia vs Iran",
+        "match_id": "75",
+        "match": "Netherlands vs Morocco",
         "reason": "outside requested leg count"
       },
       {
-        "match_id": "75",
-        "match": "Netherlands vs Morocco",
+        "match_id": "88",
+        "match": "Australia vs Iran",
         "reason": "outside requested leg count"
       },
       {
@@ -185,17 +185,49 @@
           }
         },
         {
+          "match_id": "66",
+          "team_a": "New Zealand",
+          "team_b": "Belgium",
+          "market": "1x2",
+          "selected_outcome": "A",
+          "model_probability": 0.623,
+          "blended_odds": 1.18,
+          "implied_probability": 0.8462,
+          "fair_bookmaker_probability": 0.8116,
+          "edge": -0.1886,
+          "expected_value": -0.2638,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "ROTATE",
+          "treatment_label": "Cover all realistic outcomes",
+          "reason": "ROTATE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Now on SBS",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
+            "status": "live",
+            "match_id": "66",
+            "team_a": "New Zealand",
+            "team_b": "Belgium",
+            "kickoff_time": "2026-06-27T03:00:00Z",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
+          }
+        },
+        {
           "match_id": "74",
           "team_a": "Germany",
           "team_b": "South Korea",
           "market": "1x2",
           "selected_outcome": "H",
-          "model_probability": 0.6938,
+          "model_probability": 0.6933,
           "blended_odds": 1.36,
           "implied_probability": 0.7353,
-          "fair_bookmaker_probability": 0.6936,
-          "edge": 0.0002,
-          "expected_value": -0.0565,
+          "fair_bookmaker_probability": 0.6934,
+          "edge": -0.0001,
+          "expected_value": -0.0571,
           "odds_are_real": false,
           "odds_source": "mock",
           "treatment": "HEDGE",
@@ -215,52 +247,20 @@
             "requires_location": "Australia",
             "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
-        },
-        {
-          "match_id": "70",
-          "team_a": "DR Congo",
-          "team_b": "Uzbekistan",
-          "market": "1x2",
-          "selected_outcome": "H",
-          "model_probability": 0.4428,
-          "blended_odds": 1.71,
-          "implied_probability": 0.5833,
-          "fair_bookmaker_probability": 0.5576,
-          "edge": -0.1148,
-          "expected_value": -0.2409,
-          "odds_are_real": true,
-          "odds_source": "espn_draftkings",
-          "treatment": "ROTATE",
-          "treatment_label": "Cover all realistic outcomes",
-          "reason": "ROTATE",
-          "watch_link": {
-            "provider": "SBS On Demand",
-            "label": "Watch Replay on SBS",
-            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
-            "status": "completed",
-            "match_id": "70",
-            "team_a": "DR Congo",
-            "team_b": "Uzbekistan",
-            "kickoff_time": "2026-06-27T23:30:00Z",
-            "source_type": "replay_collection",
-            "confidence": "collection",
-            "requires_location": "Australia",
-            "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed."
-          }
         }
       ],
-      "combined_odds": 3.13,
-      "combined_model_probability": 0.155551,
-      "bookmaker_implied_probability": 0.319581,
-      "expected_value": -0.5133,
-      "expected_value_dollars": -15.71,
-      "potential_return": 95.75,
-      "potential_profit": 65.15,
+      "combined_odds": 2.16,
+      "combined_model_probability": 0.218695,
+      "bookmaker_implied_probability": 0.463122,
+      "expected_value": -0.5278,
+      "expected_value_dollars": -16.15,
+      "potential_return": 66.07,
+      "potential_profit": 35.47,
       "risk_rating": "Low"
     },
     "variation_b": {
       "name": "Slip B — Draw Protection",
-      "purpose": "Slip A's 4 legs; 3 favourite(s) double-chance protected (win-or-draw) — safer, lower odds than A",
+      "purpose": "Slip A's 4 legs; 2 favourite(s) double-chance protected (win-or-draw) — safer, lower odds than A",
       "strategy": "maximum_coverage",
       "stake": 29.7,
       "legs": [
@@ -329,17 +329,49 @@
           }
         },
         {
+          "match_id": "66",
+          "team_a": "New Zealand",
+          "team_b": "Belgium",
+          "market": "1x2",
+          "selected_outcome": "A",
+          "model_probability": 0.623,
+          "blended_odds": 1.18,
+          "implied_probability": 0.8462,
+          "fair_bookmaker_probability": 0.8116,
+          "edge": -0.1886,
+          "expected_value": -0.2638,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "ROTATE",
+          "treatment_label": "Cover all realistic outcomes",
+          "reason": "ROTATE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Now on SBS",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
+            "status": "live",
+            "match_id": "66",
+            "team_a": "New Zealand",
+            "team_b": "Belgium",
+            "kickoff_time": "2026-06-27T03:00:00Z",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
+          }
+        },
+        {
           "match_id": "74",
           "team_a": "Germany",
           "team_b": "South Korea",
           "market": "1x2",
           "selected_outcome": "1X",
-          "model_probability": 0.8931,
+          "model_probability": 0.8928,
           "blended_odds": 1.06,
           "implied_probability": 0.9467,
-          "fair_bookmaker_probability": 0.893,
-          "edge": 0.0,
-          "expected_value": -0.0566,
+          "fair_bookmaker_probability": 0.8928,
+          "edge": -0.0001,
+          "expected_value": -0.057,
           "odds_are_real": false,
           "odds_source": "mock",
           "treatment": "HEDGE",
@@ -359,47 +391,15 @@
             "requires_location": "Australia",
             "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
           }
-        },
-        {
-          "match_id": "70",
-          "team_a": "DR Congo",
-          "team_b": "Uzbekistan",
-          "market": "1x2",
-          "selected_outcome": "1X",
-          "model_probability": 0.7285,
-          "blended_odds": 1.2,
-          "implied_probability": 0.8333,
-          "fair_bookmaker_probability": 0.7966,
-          "edge": -0.0681,
-          "expected_value": -0.1258,
-          "odds_are_real": true,
-          "odds_source": "espn_draftkings",
-          "treatment": "ROTATE",
-          "treatment_label": "Cover all realistic outcomes",
-          "reason": "ROTATE",
-          "watch_link": {
-            "provider": "SBS On Demand",
-            "label": "Watch Replay on SBS",
-            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
-            "status": "completed",
-            "match_id": "70",
-            "team_a": "DR Congo",
-            "team_b": "Uzbekistan",
-            "kickoff_time": "2026-06-27T23:30:00Z",
-            "source_type": "replay_collection",
-            "confidence": "collection",
-            "requires_location": "Australia",
-            "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed."
-          }
         }
       ],
-      "combined_odds": 1.49,
-      "combined_model_probability": 0.420353,
-      "bookmaker_implied_probability": 0.670216,
-      "expected_value": -0.3728,
-      "expected_value_dollars": -11.07,
-      "potential_return": 44.31,
-      "potential_profit": 14.61,
+      "combined_odds": 1.47,
+      "combined_model_probability": 0.359357,
+      "bookmaker_implied_probability": 0.681576,
+      "expected_value": -0.4728,
+      "expected_value_dollars": -14.04,
+      "potential_return": 43.58,
+      "potential_profit": 13.88,
       "risk_rating": "Medium"
     },
     "variation_c": {
@@ -473,17 +473,49 @@
           }
         },
         {
+          "match_id": "66",
+          "team_a": "New Zealand",
+          "team_b": "Belgium",
+          "market": "1x2",
+          "selected_outcome": "D",
+          "model_probability": 0.212,
+          "blended_odds": 8.0,
+          "implied_probability": 0.125,
+          "fair_bookmaker_probability": 0.1199,
+          "edge": 0.0921,
+          "expected_value": 0.6957,
+          "odds_are_real": true,
+          "odds_source": "espn_draftkings",
+          "treatment": "ROTATE",
+          "treatment_label": "Cover all realistic outcomes",
+          "reason": "ROTATE",
+          "watch_link": {
+            "provider": "SBS On Demand",
+            "label": "Watch Now on SBS",
+            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
+            "status": "live",
+            "match_id": "66",
+            "team_a": "New Zealand",
+            "team_b": "Belgium",
+            "kickoff_time": "2026-06-27T03:00:00Z",
+            "source_type": "live_upcoming_collection",
+            "confidence": "collection",
+            "requires_location": "Australia",
+            "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
+          }
+        },
+        {
           "match_id": "74",
           "team_a": "Germany",
           "team_b": "South Korea",
           "market": "1x2",
           "selected_outcome": "D",
-          "model_probability": 0.1993,
+          "model_probability": 0.1994,
           "blended_odds": 4.73,
           "implied_probability": 0.2114,
           "fair_bookmaker_probability": 0.1994,
-          "edge": -0.0001,
-          "expected_value": -0.0572,
+          "edge": 0.0,
+          "expected_value": -0.0567,
           "odds_are_real": false,
           "odds_source": "mock",
           "treatment": "HEDGE",
@@ -505,49 +537,17 @@
           }
         },
         {
-          "match_id": "70",
-          "team_a": "DR Congo",
-          "team_b": "Uzbekistan",
-          "market": "1x2",
-          "selected_outcome": "D",
-          "model_probability": 0.2857,
-          "blended_odds": 4.0,
-          "implied_probability": 0.25,
-          "fair_bookmaker_probability": 0.239,
-          "edge": 0.0468,
-          "expected_value": 0.143,
-          "odds_are_real": true,
-          "odds_source": "espn_draftkings",
-          "treatment": "ROTATE",
-          "treatment_label": "Cover all realistic outcomes",
-          "reason": "ROTATE",
-          "watch_link": {
-            "provider": "SBS On Demand",
-            "label": "Watch Replay on SBS",
-            "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
-            "status": "completed",
-            "match_id": "70",
-            "team_a": "DR Congo",
-            "team_b": "Uzbekistan",
-            "kickoff_time": "2026-06-27T23:30:00Z",
-            "source_type": "replay_collection",
-            "confidence": "collection",
-            "requires_location": "Australia",
-            "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed."
-          }
-        },
-        {
           "match_id": "78",
           "team_a": "Côte d'Ivoire",
           "team_b": "Norway",
           "market": "1x2",
-          "selected_outcome": "H",
-          "model_probability": 0.3267,
-          "blended_odds": 3.7,
-          "implied_probability": 0.2703,
-          "fair_bookmaker_probability": 0.2579,
-          "edge": 0.0688,
-          "expected_value": 0.2088,
+          "selected_outcome": "A",
+          "model_probability": 0.3303,
+          "blended_odds": 2.0,
+          "implied_probability": 0.5,
+          "fair_bookmaker_probability": 0.4771,
+          "edge": -0.1467,
+          "expected_value": -0.3393,
           "odds_are_real": true,
           "odds_source": "espn_draftkings",
           "treatment": "ROTATE",
@@ -574,12 +574,12 @@
           "team_b": "Canada",
           "market": "1x2",
           "selected_outcome": "H",
-          "model_probability": 0.3054,
+          "model_probability": 0.3071,
           "blended_odds": 5.25,
           "implied_probability": 0.1905,
           "fair_bookmaker_probability": 0.1818,
-          "edge": 0.1236,
-          "expected_value": 0.6033,
+          "edge": 0.1253,
+          "expected_value": 0.6121,
           "odds_are_real": true,
           "odds_source": "espn_draftkings",
           "treatment": "ROTATE",
@@ -601,25 +601,25 @@
           }
         }
       ],
-      "combined_odds": 494.5,
-      "combined_model_probability": 0.002877,
-      "bookmaker_implied_probability": 0.002022,
-      "expected_value": 0.4224,
-      "expected_value_dollars": 12.55,
-      "potential_return": 14686.64,
-      "potential_profit": 14656.94,
+      "combined_odds": 534.59,
+      "combined_model_probability": 0.002171,
+      "bookmaker_implied_probability": 0.001871,
+      "expected_value": 0.1607,
+      "expected_value_dollars": 4.77,
+      "potential_return": 15877.44,
+      "potential_profit": 15847.74,
       "risk_rating": "High"
     },
     "total_outlay": 90.0,
-    "best_case_return": 14686.64,
-    "best_case_profit": 14596.64,
-    "weighted_expected_value": -14.23,
-    "spread_coverage_score": 0.420353,
-    "coverage_cost": 11,
-    "coverage_efficiency": 0.038214,
+    "best_case_return": 15877.44,
+    "best_case_profit": 15787.44,
+    "weighted_expected_value": -25.42,
+    "spread_coverage_score": 0.359357,
+    "coverage_cost": 10,
+    "coverage_efficiency": 0.035936,
     "risk_rating": "High",
     "odds_are_real": false,
-    "explanation": "Maximum_Coverage strategy, 6-leg slip. Variation A backs the model's top path; B protects against draws (a recurring WC group-stage outcome); C covers the alternate/upset path on the riskiest games. Coverage cost 11 paths; efficiency 0.038214.",
+    "explanation": "Maximum_Coverage strategy, 6-leg slip. Variation A backs the model's top path; B protects against draws (a recurring WC group-stage outcome); C covers the alternate/upset path on the riskiest games. Coverage cost 10 paths; efficiency 0.035936.",
     "warnings": [
       "ODDS ARE MOCK/PLACEHOLDER — live bookmaker odds are not reachable from this host. Returns shown are illustrative, not real bookmaker prices.",
       "A repeated pick is not protection — Jarvis only shows a second or third leg where the probability gap genuinely justifies it; otherwise it reads 'No cover'.",
@@ -689,6 +689,36 @@
         }
       },
       {
+        "match_id": "66",
+        "n": "66",
+        "team_a": "New Zealand",
+        "team_b": "Belgium",
+        "mode": "STRONG_LEAN",
+        "mode_label": "Strong lean — no cover",
+        "in_a": true,
+        "a": "A",
+        "b": null,
+        "c": "D",
+        "c_is_alt": true,
+        "a_odds": 1.18,
+        "b_odds": null,
+        "c_odds": 8.0,
+        "watch_link": {
+          "provider": "SBS On Demand",
+          "label": "Watch Now on SBS",
+          "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-live-and-upcoming",
+          "status": "live",
+          "match_id": "66",
+          "team_a": "New Zealand",
+          "team_b": "Belgium",
+          "kickoff_time": "2026-06-27T03:00:00Z",
+          "source_type": "live_upcoming_collection",
+          "confidence": "collection",
+          "requires_location": "Australia",
+          "notes": "Available in Australia. Opens the official SBS live & upcoming collection where this match is listed."
+        }
+      },
+      {
         "match_id": "74",
         "n": "74",
         "team_a": "Germany",
@@ -719,36 +749,6 @@
         }
       },
       {
-        "match_id": "70",
-        "n": "70",
-        "team_a": "DR Congo",
-        "team_b": "Uzbekistan",
-        "mode": "MAIN_PLUS_SECOND",
-        "mode_label": "Main + second",
-        "in_a": true,
-        "a": "H",
-        "b": "1X",
-        "c": "D",
-        "c_is_alt": true,
-        "a_odds": 1.71,
-        "b_odds": 1.2,
-        "c_odds": 4.0,
-        "watch_link": {
-          "provider": "SBS On Demand",
-          "label": "Watch Replay on SBS",
-          "url": "https://www.sbs.com.au/ondemand/collection/fifa-world-cup-2026-full-matches",
-          "status": "completed",
-          "match_id": "70",
-          "team_a": "DR Congo",
-          "team_b": "Uzbekistan",
-          "kickoff_time": "2026-06-27T23:30:00Z",
-          "source_type": "replay_collection",
-          "confidence": "collection",
-          "requires_location": "Australia",
-          "notes": "Available in Australia. Opens the official SBS full-match replay collection where this match is listed."
-        }
-      },
-      {
         "match_id": "78",
         "n": "78",
         "team_a": "Côte d'Ivoire",
@@ -758,11 +758,11 @@
         "in_a": false,
         "a": null,
         "b": null,
-        "c": "H",
+        "c": "A",
         "c_is_alt": true,
         "a_odds": 2.0,
         "b_odds": null,
-        "c_odds": 3.7,
+        "c_odds": 2.0,
         "watch_link": {
           "provider": "SBS On Demand",
           "label": "Watch Live on SBS",
@@ -810,27 +810,27 @@
       }
     ],
     "exploit_window": {
-      "score": -8.6,
+      "score": -9.1,
       "level": "MEDIUM",
       "reasons": [
         "8 group-stage fixtures available",
         "6 strong favourite mismatches found",
-        "2 fixtures carry elevated draw risk",
+        "3 fixtures carry elevated draw risk",
         "16 knockout fixtures — extra-time/penalty volatility"
       ],
       "n_group": 8,
       "n_strong": 6,
-      "n_draw_risk": 2,
+      "n_draw_risk": 3,
       "n_knockout": 16
     },
     "recommendation": {
       "requested_legs": 6,
-      "strong_unique_legs": 4,
+      "strong_unique_legs": 5,
       "recommended_safe_legs": 4,
       "stretch_legs": 6,
       "rejected_duplicate_team": 1,
       "exploit_window": "MEDIUM",
-      "text": "6 legs requested. Jarvis found 4 genuinely strong unique-team legs. Slip A uses the 4 safest; Slip C stretches to 6 for upside. 1 fixture(s) rejected by the unique-team rule."
+      "text": "6 legs requested. Jarvis found 5 genuinely strong unique-team legs. Slip A uses the 4 safest; Slip C stretches to 6 for upside. 1 fixture(s) rejected by the unique-team rule."
     }
   }
 }

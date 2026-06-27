@@ -11831,3 +11831,11 @@
 {"ts": 1782533765.5145886, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19706, "streak": 3}
 {"ts": 1782533826.501091, "kind": "brain_missing"}
 {"ts": 1782533826.5016103, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19645, "streak": 3}
+{"ts": 1782533887.4892926, "kind": "brain_missing"}
+{"ts": 1782533887.490345, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19584, "streak": 3}
+{"ts": 1782533949.3719532, "kind": "brain_missing"}
+{"ts": 1782533949.3728921, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19522, "streak": 3}
+{"ts": 1782534010.3861778, "kind": "brain_missing"}
+{"ts": 1782534010.3863106, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19461, "streak": 3}
+{"ts": 1782534071.3798947, "kind": "brain_missing"}
+{"ts": 1782534071.379998, "kind": "brain_provision_circuit_open", "backoff_remaining_s": 19400, "streak": 3}

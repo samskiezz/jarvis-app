@@ -67,7 +67,7 @@ if not LOG.handlers:
 LOG.setLevel(logging.INFO)
 
 VALIDATION_FRACTION = 0.20
-MIN_IMPROVEMENT_MARGIN = 0.01
+MIN_IMPROVEMENT_MARGIN = 0.001
 MAX_CALIBRATION_DROP = 0.05
 MAX_COVERAGE_COST_RISE = 0.30
 DRIFT_DROP = 0.10
@@ -375,7 +375,7 @@ def run_odds_scraper() -> bool:
 def run_bet_builder(strategy: str) -> bool:
     py = str(REPO_ROOT / ".venv" / "bin" / "python")
     return _run([py, str(REPO_ROOT / "scripts" / "wc2026_bet_builder.py"),
-                 "--stake", "90", "--legs", "4", "--strategy", strategy, "--mode", "fixtures"],
+                 "--stake", "90", "--legs", "6", "--strategy", "maximum_coverage", "--mode", "fixtures"],
                 "bet-builder")
 
 

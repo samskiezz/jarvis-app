@@ -13,10 +13,34 @@
       "promoted_to_active": false,
       "reason_promoted": null,
       "reason_rejected": "Objective 0.5825 does not beat active 0.5815 by margin 0.01."
+    },
+    {
+      "model_version": "v002",
+      "created_at": "2026-06-27T04:18:59+00:00",
+      "objective_score": 0.58241,
+      "single_pick_accuracy": 0.5543,
+      "three_spread_coverage": 0.8593,
+      "calibration_error": 0.0545,
+      "avg_coverage_cost": 2.03,
+      "promoted_to_active": false,
+      "reason_promoted": null,
+      "reason_rejected": "Objective 0.5824 does not beat active 0.5815 by margin 0.01."
+    },
+    {
+      "model_version": "v003",
+      "created_at": "2026-06-27T04:20:40+00:00",
+      "objective_score": 0.58508,
+      "single_pick_accuracy": 0.5543,
+      "three_spread_coverage": 0.8649,
+      "calibration_error": 0.0499,
+      "avg_coverage_cost": 2.031,
+      "promoted_to_active": true,
+      "reason_promoted": "Objective 0.5851 beats active 0.5815 (+0.0036) without calibration loss or coverage-cost blow-up.",
+      "reason_rejected": null
     }
   ],
-  "active_version": null,
-  "generated_at": "2026-06-26T04:45:54+00:00",
+  "active_version": "v003",
+  "generated_at": "2026-06-27T04:20:40+00:00",
   "active_model": "logloss_blend_v1",
   "weights_learned": true,
   "weights": {

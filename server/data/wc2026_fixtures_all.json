@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T01:14:04.567184+00:00",
+  "generated_at": "2026-06-27T04:18:09.290807+00:00",
   "tournament": "FIFA World Cup 2026",
   "total_matches": 104,
   "matches": [
@@ -1146,9 +1146,10 @@
       "home": "South Africa",
       "away": "Canada",
       "venue": "SoFi Stadium, Inglewood",
-      "result": null,
-      "result_class": null,
-      "played": false
+      "result": "0-0",
+      "result_class": "D",
+      "played": true,
+      "source": "worldcup26_api"
     },
     {
       "n": 74,
@@ -1191,9 +1192,10 @@
       "home": "Brazil",
       "away": "Japan",
       "venue": "NRG Stadium, Houston",
-      "result": null,
-      "result_class": null,
-      "played": false
+      "result": "0-0",
+      "result_class": "D",
+      "played": true,
+      "source": "worldcup26_api"
     },
     {
       "n": 77,
@@ -1221,9 +1223,10 @@
       "home": "Côte d'Ivoire",
       "away": "Norway",
       "venue": "AT&T Stadium, Arlington",
-      "result": null,
-      "result_class": null,
-      "played": false
+      "result": "0-0",
+      "result_class": "D",
+      "played": true,
+      "source": "worldcup26_api"
     },
     {
       "n": 79,
@@ -1341,9 +1344,10 @@
       "home": "Argentina",
       "away": "Cabo Verde",
       "venue": "Hard Rock Stadium, Miami Gardens",
-      "result": null,
-      "result_class": null,
-      "played": false
+      "result": "0-0",
+      "result_class": "D",
+      "played": true,
+      "source": "worldcup26_api"
     },
     {
       "n": 87,
