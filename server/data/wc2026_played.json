@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-27T04:20:06+00:00",
+  "generated_at": "2026-06-27T04:45:05+00:00",
   "model_version": "v003",
   "accuracy": {
     "matches_played": 64,
-    "winner_accuracy": 0.65625,
-    "exact_score_rate": 0.09375,
-    "goal_diff_rate": 0.1875,
-    "correct_count": 42,
-    "exact_count": 6,
-    "diff_count": 12,
+    "winner_accuracy": 0.640625,
+    "exact_score_rate": 0.078125,
+    "goal_diff_rate": 0.171875,
+    "correct_count": 41,
+    "exact_count": 5,
+    "diff_count": 11,
     "by_stage": {
       "GROUP": {
         "graded": 64,
-        "correct": 42,
-        "accuracy": 0.65625
+        "correct": 41,
+        "accuracy": 0.640625
       }
     },
     "by_team": {
@@ -203,7 +203,7 @@
     {
       "n": 1,
       "date": "2026-06-11",
-      "kickoff_iso": "2026-06-11T19:00:00Z",
+      "kickoff_iso": "2026-06-11T13:00:00Z",
       "stage": "GROUP",
       "group": "A",
       "matchday": 1,
@@ -213,9 +213,9 @@
       "result": "2-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.5852,
-      "p_draw": 0.2271,
-      "p_away": 0.1877,
+      "p_home": 0.5755,
+      "p_draw": 0.2314,
+      "p_away": 0.1931,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -247,24 +247,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 2-0. The model correctly picked Mexico. The ensemble projected a 3-0 scoreline with 59% confidence on the pick. Three-spread view: spread A: Mexico, spread B: Draw, spread C: Mexico."
+      "explanation": "The match finished 2-0. The model correctly picked Mexico. The ensemble projected a 3-0 scoreline with 58% confidence on the pick. Three-spread view: spread A: Mexico, spread B: Draw, spread C: Mexico."
     },
     {
       "n": 2,
       "date": "2026-06-11",
-      "kickoff_iso": "2026-06-12T01:00:00Z",
+      "kickoff_iso": "2026-06-11T20:00:00Z",
       "stage": "GROUP",
       "group": "A",
       "matchday": 1,
       "home": "South Korea",
       "away": "Czechia",
-      "venue": "Estadio Akron, Zapopan",
+      "venue": "Estadio Akron, Guadalajara (Zapopan)",
       "result": "2-1",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.3523,
-      "p_draw": 0.3147,
-      "p_away": 0.333,
+      "p_home": 0.37,
+      "p_draw": 0.3135,
+      "p_away": 0.3165,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -304,12 +304,12 @@
           }
         ]
       },
-      "explanation": "The match finished 2-1. The model correctly picked South Korea. The ensemble projected a 1-0 scoreline with 35% confidence on the pick."
+      "explanation": "The match finished 2-1. The model correctly picked South Korea. The ensemble projected a 1-0 scoreline with 37% confidence on the pick."
     },
     {
       "n": 3,
       "date": "2026-06-12",
-      "kickoff_iso": "2026-06-12T19:00:00Z",
+      "kickoff_iso": "2026-06-12T15:00:00Z",
       "stage": "GROUP",
       "group": "B",
       "matchday": 1,
@@ -319,9 +319,9 @@
       "result": "1-1",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.3697,
-      "p_draw": 0.3179,
-      "p_away": 0.3124,
+      "p_home": 0.3613,
+      "p_draw": 0.3202,
+      "p_away": 0.3186,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -354,24 +354,24 @@
           }
         ]
       },
-      "explanation": "The match finished 1-1. The model picked Canada; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 37% confidence on the pick."
+      "explanation": "The match finished 1-1. The model picked Canada; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 36% confidence on the pick."
     },
     {
       "n": 4,
       "date": "2026-06-12",
-      "kickoff_iso": "2026-06-13T01:00:00Z",
+      "kickoff_iso": "2026-06-12T18:00:00Z",
       "stage": "GROUP",
       "group": "D",
       "matchday": 1,
       "home": "United States",
       "away": "Paraguay",
-      "venue": "SoFi Stadium, Inglewood",
+      "venue": "SoFi Stadium, Los Angeles (Inglewood)",
       "result": "4-1",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.2841,
-      "p_draw": 0.2376,
-      "p_away": 0.4784,
+      "p_home": 0.2918,
+      "p_draw": 0.245,
+      "p_away": 0.4632,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -425,24 +425,24 @@
           }
         ]
       },
-      "explanation": "The match finished 4-1. The model picked Paraguay; the actual result went to United States. The ensemble projected a 0-2 scoreline with 48% confidence on the pick. Three-spread view: spread A: Paraguay, spread B: United States, spread C: Paraguay."
+      "explanation": "The match finished 4-1. The model picked Paraguay; the actual result went to United States. The ensemble projected a 0-2 scoreline with 46% confidence on the pick. Three-spread view: spread A: Paraguay, spread B: United States, spread C: Paraguay."
     },
     {
-      "n": 5,
+      "n": 8,
       "date": "2026-06-13",
-      "kickoff_iso": "2026-06-13T19:00:00Z",
+      "kickoff_iso": "2026-06-13T12:00:00Z",
       "stage": "GROUP",
       "group": "B",
       "matchday": 1,
       "home": "Qatar",
       "away": "Switzerland",
-      "venue": "Levi's Stadium, Santa Clara",
+      "venue": "Levi's Stadium, San Francisco Bay Area (Santa Clara)",
       "result": "1-1",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.22,
-      "p_draw": 0.2086,
-      "p_away": 0.5714,
+      "p_home": 0.2312,
+      "p_draw": 0.2122,
+      "p_away": 0.5565,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -467,24 +467,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 1-1. The model picked Switzerland; the actual result went to the draw. The ensemble projected a 0-3 scoreline with 57% confidence on the pick. Three-spread view: spread A: Switzerland, spread B: Qatar, spread C: Switzerland."
+      "explanation": "The match finished 1-1. The model picked Switzerland; the actual result went to the draw. The ensemble projected a 0-3 scoreline with 56% confidence on the pick. Three-spread view: spread A: Switzerland, spread B: Qatar, spread C: Switzerland."
     },
     {
-      "n": 6,
+      "n": 7,
       "date": "2026-06-13",
-      "kickoff_iso": "2026-06-13T22:00:00Z",
+      "kickoff_iso": "2026-06-13T18:00:00Z",
       "stage": "GROUP",
       "group": "C",
       "matchday": 1,
       "home": "Brazil",
       "away": "Morocco",
-      "venue": "MetLife Stadium, East Rutherford",
+      "venue": "MetLife Stadium, New York/New Jersey (East Rutherford)",
       "result": "1-1",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.5175,
-      "p_draw": 0.2769,
-      "p_away": 0.2056,
+      "p_home": 0.5243,
+      "p_draw": 0.2726,
+      "p_away": 0.2031,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -520,51 +520,9 @@
       "explanation": "The match finished 1-1. The model picked Brazil; the actual result went to the draw. The ensemble projected a 2-0 scoreline with 52% confidence on the pick. Three-spread view: spread A: Brazil, spread B: Draw, spread C: Brazil."
     },
     {
-      "n": 7,
+      "n": 6,
       "date": "2026-06-13",
-      "kickoff_iso": "2026-06-14T01:00:00Z",
-      "stage": "GROUP",
-      "group": "C",
-      "matchday": 1,
-      "home": "Haiti",
-      "away": "Scotland",
-      "venue": "Gillette Stadium, Foxborough",
-      "result": "0-1",
-      "predicted_score": "0-2",
-      "predicted_wdl": "A",
-      "p_home": 0.2891,
-      "p_draw": 0.2539,
-      "p_away": 0.457,
-      "treatment": "HEDGE",
-      "three_spread": {
-        "A": "A",
-        "B": "H",
-        "C": "A"
-      },
-      "actual_outcome": "A",
-      "correct": true,
-      "score_exact": false,
-      "score_diff_correct": false,
-      "over_under_2_5": "under",
-      "pred_total": 2,
-      "scorers": {
-        "home": [],
-        "away": [
-          {
-            "name": "John McGinn",
-            "minute": "28'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
-      },
-      "explanation": "The match finished 0-1. The model correctly picked Scotland. The ensemble projected a 0-2 scoreline with 46% confidence on the pick. Three-spread view: spread A: Scotland, spread B: Haiti, spread C: Scotland."
-    },
-    {
-      "n": 8,
-      "date": "2026-06-14",
-      "kickoff_iso": "2026-06-14T01:00:00Z",
+      "kickoff_iso": "2026-06-13T21:00:00Z",
       "stage": "GROUP",
       "group": "D",
       "matchday": 1,
@@ -574,9 +532,9 @@
       "result": "2-0",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.3694,
-      "p_draw": 0.3196,
-      "p_away": 0.311,
+      "p_home": 0.3671,
+      "p_draw": 0.3172,
+      "p_away": 0.3157,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -611,9 +569,51 @@
       "explanation": "The match finished 2-0. The model correctly picked Australia. The ensemble projected a 1-0 scoreline with 37% confidence on the pick."
     },
     {
-      "n": 9,
+      "n": 5,
+      "date": "2026-06-13",
+      "kickoff_iso": "2026-06-13T21:00:00Z",
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 1,
+      "home": "Haiti",
+      "away": "Scotland",
+      "venue": "Gillette Stadium, Boston (Foxborough)",
+      "result": "0-1",
+      "predicted_score": "0-2",
+      "predicted_wdl": "A",
+      "p_home": 0.2987,
+      "p_draw": 0.2629,
+      "p_away": 0.4384,
+      "treatment": "HEDGE",
+      "three_spread": {
+        "A": "A",
+        "B": "H",
+        "C": "A"
+      },
+      "actual_outcome": "A",
+      "correct": true,
+      "score_exact": false,
+      "score_diff_correct": false,
+      "over_under_2_5": "under",
+      "pred_total": 2,
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "John McGinn",
+            "minute": "28'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      },
+      "explanation": "The match finished 0-1. The model correctly picked Scotland. The ensemble projected a 0-2 scoreline with 44% confidence on the pick. Three-spread view: spread A: Scotland, spread B: Haiti, spread C: Scotland."
+    },
+    {
+      "n": 10,
       "date": "2026-06-14",
-      "kickoff_iso": "2026-06-14T17:00:00Z",
+      "kickoff_iso": "2026-06-14T12:00:00Z",
       "stage": "GROUP",
       "group": "E",
       "matchday": 1,
@@ -623,9 +623,9 @@
       "result": "7-1",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6533,
-      "p_draw": 0.1943,
-      "p_away": 0.1524,
+      "p_home": 0.6517,
+      "p_draw": 0.1976,
+      "p_away": 0.1507,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -696,21 +696,21 @@
       "explanation": "The match finished 7-1. The model correctly picked Germany. The ensemble projected a 3-0 scoreline with 65% confidence on the pick. Three-spread view: spread A: Germany, spread B: Draw, spread C: Germany."
     },
     {
-      "n": 10,
+      "n": 11,
       "date": "2026-06-14",
-      "kickoff_iso": "2026-06-14T20:00:00Z",
+      "kickoff_iso": "2026-06-14T15:00:00Z",
       "stage": "GROUP",
       "group": "F",
       "matchday": 1,
       "home": "Netherlands",
       "away": "Japan",
-      "venue": "AT&T Stadium, Arlington",
+      "venue": "AT&T Stadium, Dallas (Arlington, Texas)",
       "result": "2-2",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.5131,
-      "p_draw": 0.2676,
-      "p_away": 0.2193,
+      "p_home": 0.5254,
+      "p_draw": 0.2661,
+      "p_away": 0.2085,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -757,12 +757,12 @@
           }
         ]
       },
-      "explanation": "The match finished 2-2. The model picked Netherlands; the actual result went to the draw. The ensemble projected a 2-0 scoreline with 51% confidence on the pick. Three-spread view: spread A: Netherlands, spread B: Draw, spread C: Netherlands."
+      "explanation": "The match finished 2-2. The model picked Netherlands; the actual result went to the draw. The ensemble projected a 2-0 scoreline with 53% confidence on the pick. Three-spread view: spread A: Netherlands, spread B: Draw, spread C: Netherlands."
     },
     {
-      "n": 11,
+      "n": 9,
       "date": "2026-06-14",
-      "kickoff_iso": "2026-06-14T23:00:00Z",
+      "kickoff_iso": "2026-06-14T19:00:00Z",
       "stage": "GROUP",
       "group": "E",
       "matchday": 1,
@@ -772,9 +772,9 @@
       "result": "1-0",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.378,
-      "p_draw": 0.3173,
-      "p_away": 0.3046,
+      "p_home": 0.3777,
+      "p_draw": 0.3156,
+      "p_away": 0.3067,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -803,20 +803,20 @@
     },
     {
       "n": 12,
-      "date": "2026-06-15",
-      "kickoff_iso": "2026-06-15T01:00:00Z",
+      "date": "2026-06-14",
+      "kickoff_iso": "2026-06-14T20:00:00Z",
       "stage": "GROUP",
       "group": "F",
       "matchday": 1,
       "home": "Sweden",
       "away": "Tunisia",
-      "venue": "Estadio BBVA, Guadalupe",
+      "venue": "Estadio BBVA, Monterrey (Guadalupe)",
       "result": "5-1",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.5757,
-      "p_draw": 0.2383,
-      "p_away": 0.186,
+      "p_home": 0.571,
+      "p_draw": 0.2423,
+      "p_away": 0.1868,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -877,12 +877,12 @@
           }
         ]
       },
-      "explanation": "The match finished 5-1. The model correctly picked Sweden. The ensemble projected a 2-0 scoreline with 58% confidence on the pick. Three-spread view: spread A: Sweden, spread B: Draw, spread C: Sweden."
+      "explanation": "The match finished 5-1. The model correctly picked Sweden. The ensemble projected a 2-0 scoreline with 57% confidence on the pick. Three-spread view: spread A: Sweden, spread B: Draw, spread C: Sweden."
     },
     {
-      "n": 13,
+      "n": 14,
       "date": "2026-06-15",
-      "kickoff_iso": "2026-06-15T16:00:00Z",
+      "kickoff_iso": "2026-06-15T12:00:00Z",
       "stage": "GROUP",
       "group": "H",
       "matchday": 1,
@@ -892,9 +892,9 @@
       "result": "0-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6505,
-      "p_draw": 0.1939,
-      "p_away": 0.1556,
+      "p_home": 0.6512,
+      "p_draw": 0.197,
+      "p_away": 0.1518,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -914,9 +914,9 @@
       "explanation": "The match finished 0-0. The model picked Spain; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 65% confidence on the pick. Three-spread view: spread A: Spain, spread B: Draw, spread C: Spain."
     },
     {
-      "n": 14,
+      "n": 15,
       "date": "2026-06-15",
-      "kickoff_iso": "2026-06-15T19:00:00Z",
+      "kickoff_iso": "2026-06-15T12:00:00Z",
       "stage": "GROUP",
       "group": "G",
       "matchday": 1,
@@ -926,9 +926,9 @@
       "result": "1-1",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.4021,
-      "p_draw": 0.306,
-      "p_away": 0.2919,
+      "p_home": 0.3993,
+      "p_draw": 0.3097,
+      "p_away": 0.291,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -964,21 +964,21 @@
       "explanation": "The match finished 1-1. The model picked Belgium; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 40% confidence on the pick."
     },
     {
-      "n": 15,
+      "n": 16,
       "date": "2026-06-15",
-      "kickoff_iso": "2026-06-15T22:00:00Z",
+      "kickoff_iso": "2026-06-15T18:00:00Z",
       "stage": "GROUP",
       "group": "H",
       "matchday": 1,
       "home": "Saudi Arabia",
       "away": "Uruguay",
-      "venue": "Hard Rock Stadium, Miami Gardens",
+      "venue": "Hard Rock Stadium, Miami (Miami Gardens)",
       "result": "1-1",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.2423,
-      "p_draw": 0.2144,
-      "p_away": 0.5433,
+      "p_home": 0.2515,
+      "p_draw": 0.2191,
+      "p_away": 0.5294,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -1011,24 +1011,24 @@
           }
         ]
       },
-      "explanation": "The match finished 1-1. The model picked Uruguay; the actual result went to the draw. The ensemble projected a 0-3 scoreline with 54% confidence on the pick. Three-spread view: spread A: Uruguay, spread B: Saudi Arabia, spread C: Uruguay."
+      "explanation": "The match finished 1-1. The model picked Uruguay; the actual result went to the draw. The ensemble projected a 0-3 scoreline with 53% confidence on the pick. Three-spread view: spread A: Uruguay, spread B: Saudi Arabia, spread C: Uruguay."
     },
     {
-      "n": 16,
-      "date": "2026-06-16",
-      "kickoff_iso": "2026-06-16T01:00:00Z",
+      "n": 13,
+      "date": "2026-06-15",
+      "kickoff_iso": "2026-06-15T18:00:00Z",
       "stage": "GROUP",
       "group": "G",
       "matchday": 1,
       "home": "Iran",
       "away": "New Zealand",
-      "venue": "SoFi Stadium, Inglewood",
+      "venue": "SoFi Stadium, Los Angeles (Inglewood)",
       "result": "2-2",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.51,
-      "p_draw": 0.2599,
-      "p_away": 0.2302,
+      "p_home": 0.4884,
+      "p_draw": 0.2681,
+      "p_away": 0.2435,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1075,24 +1075,24 @@
           }
         ]
       },
-      "explanation": "The match finished 2-2. The model picked Iran; the actual result went to the draw. The ensemble projected a 2-0 scoreline with 51% confidence on the pick. Three-spread view: spread A: Iran, spread B: Draw, spread C: Iran."
+      "explanation": "The match finished 2-2. The model picked Iran; the actual result went to the draw. The ensemble projected a 2-0 scoreline with 49% confidence on the pick. Three-spread view: spread A: Iran, spread B: Draw, spread C: Iran."
     },
     {
       "n": 17,
       "date": "2026-06-16",
-      "kickoff_iso": "2026-06-16T19:00:00Z",
+      "kickoff_iso": "2026-06-16T15:00:00Z",
       "stage": "GROUP",
       "group": "I",
       "matchday": 1,
       "home": "France",
       "away": "Senegal",
-      "venue": "MetLife Stadium, East Rutherford",
+      "venue": "MetLife Stadium, New York/New Jersey (East Rutherford)",
       "result": "3-1",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6351,
-      "p_draw": 0.2189,
-      "p_away": 0.1461,
+      "p_home": 0.6251,
+      "p_draw": 0.2177,
+      "p_away": 0.1573,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1139,24 +1139,24 @@
           }
         ]
       },
-      "explanation": "The match finished 3-1. The model correctly picked France. The ensemble projected a 3-0 scoreline with 64% confidence on the pick. Three-spread view: spread A: France, spread B: Draw, spread C: France."
+      "explanation": "The match finished 3-1. The model correctly picked France. The ensemble projected a 3-0 scoreline with 63% confidence on the pick. Three-spread view: spread A: France, spread B: Draw, spread C: France."
     },
     {
       "n": 18,
       "date": "2026-06-16",
-      "kickoff_iso": "2026-06-16T22:00:00Z",
+      "kickoff_iso": "2026-06-16T18:00:00Z",
       "stage": "GROUP",
       "group": "I",
       "matchday": 1,
       "home": "Iraq",
       "away": "Norway",
-      "venue": "Gillette Stadium, Foxborough",
+      "venue": "Gillette Stadium, Boston (Foxborough)",
       "result": "1-4",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.194,
-      "p_draw": 0.2448,
-      "p_away": 0.5611,
+      "p_home": 0.1979,
+      "p_draw": 0.2507,
+      "p_away": 0.5514,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -1210,24 +1210,24 @@
           }
         ]
       },
-      "explanation": "The match finished 1-4. The model correctly picked Norway. The ensemble projected a 0-2 scoreline with 56% confidence on the pick. Three-spread view: spread A: Norway, spread B: Draw, spread C: Norway."
+      "explanation": "The match finished 1-4. The model correctly picked Norway. The ensemble projected a 0-2 scoreline with 55% confidence on the pick. Three-spread view: spread A: Norway, spread B: Draw, spread C: Norway."
     },
     {
       "n": 19,
-      "date": "2026-06-17",
-      "kickoff_iso": "2026-06-17T01:00:00Z",
+      "date": "2026-06-16",
+      "kickoff_iso": "2026-06-16T20:00:00Z",
       "stage": "GROUP",
       "group": "J",
       "matchday": 1,
       "home": "Argentina",
       "away": "Algeria",
-      "venue": "Arrowhead Stadium, Kansas City",
+      "venue": "GEHA Field at Arrowhead Stadium, Kansas City",
       "result": "3-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6618,
-      "p_draw": 0.1987,
-      "p_away": 0.1395,
+      "p_home": 0.6529,
+      "p_draw": 0.2007,
+      "p_away": 0.1463,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1266,24 +1266,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 3-0. The model correctly picked Argentina. The ensemble projected a 3-0 scoreline with 66% confidence on the pick. Three-spread view: spread A: Argentina, spread B: Draw, spread C: Argentina."
+      "explanation": "The match finished 3-0. The model correctly picked Argentina. The ensemble projected a 3-0 scoreline with 65% confidence on the pick. Three-spread view: spread A: Argentina, spread B: Draw, spread C: Argentina."
     },
     {
       "n": 20,
-      "date": "2026-06-17",
-      "kickoff_iso": "2026-06-17T04:00:00Z",
+      "date": "2026-06-16",
+      "kickoff_iso": "2026-06-16T21:00:00Z",
       "stage": "GROUP",
       "group": "J",
       "matchday": 1,
       "home": "Austria",
       "away": "Jordan",
-      "venue": "Levi's Stadium, Santa Clara",
+      "venue": "Levi's Stadium, San Francisco Bay Area (Santa Clara)",
       "result": "3-1",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.5108,
-      "p_draw": 0.266,
-      "p_away": 0.2232,
+      "p_home": 0.4966,
+      "p_draw": 0.2728,
+      "p_away": 0.2307,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1299,23 +1299,23 @@
       "scorers": {
         "home": [
           {
-            "name": "Romano Schmid",
+            "name": "Rvmanv Ashmid",
             "minute": "21'",
             "type": "Goal",
             "own_goal": false,
             "penalty": false
           },
           {
-            "name": "Yazan Al-Arab",
+            "name": "Izn Alarb",
             "minute": "76'",
-            "type": "Own Goal",
-            "own_goal": true,
+            "type": "Goal",
+            "own_goal": false,
             "penalty": false
           }
         ],
         "away": [
           {
-            "name": "Ali Olwan",
+            "name": "Ali Avlvan",
             "minute": "50'",
             "type": "Goal",
             "own_goal": false,
@@ -1323,24 +1323,24 @@
           }
         ]
       },
-      "explanation": "The match finished 3-1. The model correctly picked Austria. The ensemble projected a 2-0 scoreline with 51% confidence on the pick. Three-spread view: spread A: Austria, spread B: Draw, spread C: Austria."
+      "explanation": "The match finished 3-1. The model correctly picked Austria. The ensemble projected a 2-0 scoreline with 50% confidence on the pick. Three-spread view: spread A: Austria, spread B: Draw, spread C: Austria."
     },
     {
       "n": 21,
       "date": "2026-06-17",
-      "kickoff_iso": "2026-06-17T17:00:00Z",
+      "kickoff_iso": "2026-06-17T12:00:00Z",
       "stage": "GROUP",
       "group": "K",
       "matchday": 1,
       "home": "Portugal",
-      "away": "DR Congo",
+      "away": "Democratic Republic of the Congo",
       "venue": "NRG Stadium, Houston",
       "result": "1-1",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6461,
-      "p_draw": 0.199,
-      "p_away": 0.1549,
+      "p_home": 0.6737,
+      "p_draw": 0.1757,
+      "p_away": 0.1506,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1356,41 +1356,33 @@
       "scorers": {
         "home": [
           {
-            "name": "João Neves",
+            "name": "J. Neves",
             "minute": "6'",
-            "type": "Goal - Header",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           }
         ],
-        "away": [
-          {
-            "name": "Yoane Wissa",
-            "minute": "45'+5'",
-            "type": "Goal - Header",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
+        "away": []
       },
-      "explanation": "The match finished 1-1. The model picked Portugal; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 65% confidence on the pick. Three-spread view: spread A: Portugal, spread B: Draw, spread C: Portugal."
+      "explanation": "The match finished 1-1. The model picked Portugal; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 67% confidence on the pick. Three-spread view: spread A: Portugal, spread B: Draw, spread C: Portugal."
     },
     {
       "n": 22,
       "date": "2026-06-17",
-      "kickoff_iso": "2026-06-17T20:00:00Z",
+      "kickoff_iso": "2026-06-17T15:00:00Z",
       "stage": "GROUP",
       "group": "L",
       "matchday": 1,
       "home": "England",
       "away": "Croatia",
-      "venue": "AT&T Stadium, Arlington",
+      "venue": "AT&T Stadium, Dallas (Arlington, Texas)",
       "result": "4-2",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.4945,
-      "p_draw": 0.2912,
-      "p_away": 0.2143,
+      "p_home": 0.4984,
+      "p_draw": 0.2879,
+      "p_away": 0.2137,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1444,12 +1436,12 @@
           }
         ]
       },
-      "explanation": "The match finished 4-2. The model correctly picked England. The ensemble projected a 2-0 scoreline with 49% confidence on the pick. Three-spread view: spread A: England, spread B: Draw, spread C: England."
+      "explanation": "The match finished 4-2. The model correctly picked England. The ensemble projected a 2-0 scoreline with 50% confidence on the pick. Three-spread view: spread A: England, spread B: Draw, spread C: England."
     },
     {
-      "n": 23,
+      "n": 24,
       "date": "2026-06-17",
-      "kickoff_iso": "2026-06-17T23:00:00Z",
+      "kickoff_iso": "2026-06-17T19:00:00Z",
       "stage": "GROUP",
       "group": "L",
       "matchday": 1,
@@ -1459,9 +1451,9 @@
       "result": "1-0",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.4987,
-      "p_draw": 0.2767,
-      "p_away": 0.2246,
+      "p_home": 0.4806,
+      "p_draw": 0.2874,
+      "p_away": 0.232,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1486,12 +1478,12 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 1-0. The model correctly picked Ghana. The ensemble projected a 2-0 scoreline with 50% confidence on the pick. Three-spread view: spread A: Ghana, spread B: Draw, spread C: Ghana."
+      "explanation": "The match finished 1-0. The model correctly picked Ghana. The ensemble projected a 2-0 scoreline with 48% confidence on the pick. Three-spread view: spread A: Ghana, spread B: Draw, spread C: Ghana."
     },
     {
-      "n": 24,
-      "date": "2026-06-18",
-      "kickoff_iso": "2026-06-18T01:00:00Z",
+      "n": 23,
+      "date": "2026-06-17",
+      "kickoff_iso": "2026-06-17T20:00:00Z",
       "stage": "GROUP",
       "group": "K",
       "matchday": 1,
@@ -1501,9 +1493,9 @@
       "result": "1-3",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.171,
-      "p_draw": 0.1996,
-      "p_away": 0.6294,
+      "p_home": 0.1834,
+      "p_draw": 0.2054,
+      "p_away": 0.6112,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -1519,97 +1511,48 @@
       "scorers": {
         "home": [
           {
-            "name": "Abbosbek Fayzullaev",
+            "name": "Abas Bk Fiz Allh Af",
             "minute": "60'",
-            "type": "Goal - Header",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           }
         ],
         "away": [
           {
-            "name": "Daniel Muñoz",
+            "name": "Dnil Mvnvz",
             "minute": "40'",
             "type": "Goal",
             "own_goal": false,
             "penalty": false
           },
           {
-            "name": "Luis Díaz",
+            "name": "Lviiz Diaz",
             "minute": "65'",
             "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Jáminton Campaz",
-            "minute": "90'+9'",
-            "type": "Goal - Header",
             "own_goal": false,
             "penalty": false
           }
         ]
       },
-      "explanation": "The match finished 1-3. The model correctly picked Colombia. The ensemble projected a 0-3 scoreline with 63% confidence on the pick. Three-spread view: spread A: Colombia, spread B: Draw, spread C: Colombia."
-    },
-    {
-      "n": 25,
-      "date": "2026-06-18",
-      "kickoff_iso": "2026-06-18T16:00:00Z",
-      "stage": "GROUP",
-      "group": "A",
-      "matchday": 2,
-      "home": "Czechia",
-      "away": "South Africa",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "result": "1-1",
-      "predicted_score": "1-0",
-      "predicted_wdl": "H",
-      "p_home": 0.3426,
-      "p_draw": 0.3306,
-      "p_away": 0.3268,
-      "treatment": "EXCLUDE",
-      "three_spread": {
-        "A": null,
-        "B": null,
-        "C": null
-      },
-      "actual_outcome": "D",
-      "correct": false,
-      "score_exact": false,
-      "score_diff_correct": false,
-      "over_under_2_5": "under",
-      "pred_total": 1,
-      "scorers": {
-        "home": [
-          {
-            "name": "Michal Sadílek",
-            "minute": "6'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          }
-        ],
-        "away": []
-      },
-      "explanation": "The match finished 1-1. The model picked Czechia; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 34% confidence on the pick."
+      "explanation": "The match finished 1-3. The model correctly picked Colombia. The ensemble projected a 0-3 scoreline with 61% confidence on the pick. Three-spread view: spread A: Colombia, spread B: Draw, spread C: Colombia."
     },
     {
       "n": 26,
       "date": "2026-06-18",
-      "kickoff_iso": "2026-06-18T19:00:00Z",
+      "kickoff_iso": "2026-06-18T12:00:00Z",
       "stage": "GROUP",
       "group": "B",
       "matchday": 2,
       "home": "Switzerland",
       "away": "Bosnia and Herzegovina",
-      "venue": "SoFi Stadium, Inglewood",
+      "venue": "SoFi Stadium, Los Angeles (Inglewood)",
       "result": "4-1",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6096,
-      "p_draw": 0.2222,
-      "p_away": 0.1681,
+      "p_home": 0.5973,
+      "p_draw": 0.2254,
+      "p_away": 0.1773,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1656,12 +1599,54 @@
           }
         ]
       },
-      "explanation": "The match finished 4-1. The model correctly picked Switzerland. The ensemble projected a 3-0 scoreline with 61% confidence on the pick. Three-spread view: spread A: Switzerland, spread B: Draw, spread C: Switzerland."
+      "explanation": "The match finished 4-1. The model correctly picked Switzerland. The ensemble projected a 3-0 scoreline with 60% confidence on the pick. Three-spread view: spread A: Switzerland, spread B: Draw, spread C: Switzerland."
+    },
+    {
+      "n": 28,
+      "date": "2026-06-18",
+      "kickoff_iso": "2026-06-18T12:00:00Z",
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 2,
+      "home": "Czechia",
+      "away": "South Africa",
+      "venue": "Mercedes-Benz Stadium, Atlanta",
+      "result": "1-1",
+      "predicted_score": "1-0",
+      "predicted_wdl": "H",
+      "p_home": 0.3464,
+      "p_draw": 0.3322,
+      "p_away": 0.3214,
+      "treatment": "EXCLUDE",
+      "three_spread": {
+        "A": null,
+        "B": null,
+        "C": null
+      },
+      "actual_outcome": "D",
+      "correct": false,
+      "score_exact": false,
+      "score_diff_correct": false,
+      "over_under_2_5": "under",
+      "pred_total": 1,
+      "scorers": {
+        "home": [
+          {
+            "name": "Michal Sadílek",
+            "minute": "6'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": []
+      },
+      "explanation": "The match finished 1-1. The model picked Czechia; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 35% confidence on the pick."
     },
     {
       "n": 27,
       "date": "2026-06-18",
-      "kickoff_iso": "2026-06-18T22:00:00Z",
+      "kickoff_iso": "2026-06-18T15:00:00Z",
       "stage": "GROUP",
       "group": "B",
       "matchday": 2,
@@ -1671,9 +1656,9 @@
       "result": "6-0",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.4532,
-      "p_draw": 0.2973,
-      "p_away": 0.2496,
+      "p_home": 0.4276,
+      "p_draw": 0.3048,
+      "p_away": 0.2676,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1733,24 +1718,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 6-0. The model correctly picked Canada. The ensemble projected a 1-0 scoreline with 45% confidence on the pick. Three-spread view: spread A: Canada, spread B: Draw, spread C: Canada."
+      "explanation": "The match finished 6-0. The model correctly picked Canada. The ensemble projected a 1-0 scoreline with 43% confidence on the pick. Three-spread view: spread A: Canada, spread B: Draw, spread C: Canada."
     },
     {
-      "n": 28,
-      "date": "2026-06-19",
-      "kickoff_iso": "2026-06-19T01:00:00Z",
+      "n": 25,
+      "date": "2026-06-18",
+      "kickoff_iso": "2026-06-18T19:00:00Z",
       "stage": "GROUP",
       "group": "A",
       "matchday": 2,
       "home": "Mexico",
       "away": "South Korea",
-      "venue": "Estadio Akron, Zapopan",
+      "venue": "Estadio Akron, Guadalajara (Zapopan)",
       "result": "1-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.627,
-      "p_draw": 0.2189,
-      "p_away": 0.1542,
+      "p_home": 0.5997,
+      "p_draw": 0.2239,
+      "p_away": 0.1764,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1775,12 +1760,12 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 1-0. The model correctly picked Mexico. The ensemble projected a 3-0 scoreline with 63% confidence on the pick. Three-spread view: spread A: Mexico, spread B: Draw, spread C: Mexico."
+      "explanation": "The match finished 1-0. The model correctly picked Mexico. The ensemble projected a 3-0 scoreline with 60% confidence on the pick. Three-spread view: spread A: Mexico, spread B: Draw, spread C: Mexico."
     },
     {
-      "n": 29,
+      "n": 31,
       "date": "2026-06-19",
-      "kickoff_iso": "2026-06-19T19:00:00Z",
+      "kickoff_iso": "2026-06-19T12:00:00Z",
       "stage": "GROUP",
       "group": "D",
       "matchday": 2,
@@ -1790,9 +1775,9 @@
       "result": "2-0",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.1877,
-      "p_draw": 0.1997,
-      "p_away": 0.6127,
+      "p_home": 0.1973,
+      "p_draw": 0.2042,
+      "p_away": 0.5986,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -1824,24 +1809,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 2-0. The model picked Australia; the actual result went to United States. The ensemble projected a 0-3 scoreline with 61% confidence on the pick. Three-spread view: spread A: Australia, spread B: Draw, spread C: Australia."
+      "explanation": "The match finished 2-0. The model picked Australia; the actual result went to United States. The ensemble projected a 0-3 scoreline with 60% confidence on the pick. Three-spread view: spread A: Australia, spread B: Draw, spread C: Australia."
     },
     {
       "n": 30,
       "date": "2026-06-19",
-      "kickoff_iso": "2026-06-19T22:00:00Z",
+      "kickoff_iso": "2026-06-19T18:00:00Z",
       "stage": "GROUP",
       "group": "C",
       "matchday": 2,
       "home": "Scotland",
       "away": "Morocco",
-      "venue": "Gillette Stadium, Foxborough",
+      "venue": "Gillette Stadium, Boston (Foxborough)",
       "result": "0-1",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.1786,
-      "p_draw": 0.2256,
-      "p_away": 0.5958,
+      "p_home": 0.1835,
+      "p_draw": 0.2296,
+      "p_away": 0.5869,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -1866,12 +1851,54 @@
           }
         ]
       },
-      "explanation": "The match finished 0-1. The model correctly picked Morocco. The ensemble projected a 0-2 scoreline with 60% confidence on the pick. Three-spread view: spread A: Morocco, spread B: Draw, spread C: Morocco."
+      "explanation": "The match finished 0-1. The model correctly picked Morocco. The ensemble projected a 0-2 scoreline with 59% confidence on the pick. Three-spread view: spread A: Morocco, spread B: Draw, spread C: Morocco."
     },
     {
-      "n": 31,
-      "date": "2026-06-20",
-      "kickoff_iso": "2026-06-20T00:30:00Z",
+      "n": 32,
+      "date": "2026-06-19",
+      "kickoff_iso": "2026-06-19T20:00:00Z",
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 2,
+      "home": "Türkiye",
+      "away": "Paraguay",
+      "venue": "Levi's Stadium, San Francisco Bay Area (Santa Clara)",
+      "result": "0-1",
+      "predicted_score": "1-0",
+      "predicted_wdl": "H",
+      "p_home": 0.4345,
+      "p_draw": 0.3061,
+      "p_away": 0.2594,
+      "treatment": "HEDGE",
+      "three_spread": {
+        "A": "H",
+        "B": "D",
+        "C": "H"
+      },
+      "actual_outcome": "A",
+      "correct": false,
+      "score_exact": false,
+      "score_diff_correct": false,
+      "over_under_2_5": "under",
+      "pred_total": 1,
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Matías Galarza",
+            "minute": "2'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      },
+      "explanation": "The match finished 0-1. The model picked Türkiye; the actual result went to Paraguay. The ensemble projected a 1-0 scoreline with 43% confidence on the pick. Three-spread view: spread A: Türkiye, spread B: Draw, spread C: Türkiye."
+    },
+    {
+      "n": 29,
+      "date": "2026-06-19",
+      "kickoff_iso": "2026-06-19T21:00:00Z",
       "stage": "GROUP",
       "group": "C",
       "matchday": 2,
@@ -1881,9 +1908,9 @@
       "result": "3-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.7325,
-      "p_draw": 0.1708,
-      "p_away": 0.0968,
+      "p_home": 0.7313,
+      "p_draw": 0.175,
+      "p_away": 0.0937,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -1911,13 +1938,6 @@
             "type": "Goal",
             "own_goal": false,
             "penalty": false
-          },
-          {
-            "name": "Vinícius Júnior",
-            "minute": "45'+3'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
           }
         ],
         "away": []
@@ -1925,51 +1945,9 @@
       "explanation": "The match finished 3-0. The model correctly picked Brazil. The ensemble projected a 3-0 scoreline with 73% confidence on the pick. Three-spread view: spread A: Brazil, spread B: Draw, spread C: Brazil."
     },
     {
-      "n": 32,
+      "n": 35,
       "date": "2026-06-20",
-      "kickoff_iso": "2026-06-20T04:00:00Z",
-      "stage": "GROUP",
-      "group": "D",
-      "matchday": 2,
-      "home": "Türkiye",
-      "away": "Paraguay",
-      "venue": "Levi's Stadium, Santa Clara",
-      "result": "0-0",
-      "predicted_score": "1-0",
-      "predicted_wdl": "H",
-      "p_home": 0.43,
-      "p_draw": 0.3062,
-      "p_away": 0.2638,
-      "treatment": "HEDGE",
-      "three_spread": {
-        "A": "H",
-        "B": "D",
-        "C": "H"
-      },
-      "actual_outcome": "D",
-      "correct": false,
-      "score_exact": false,
-      "score_diff_correct": false,
-      "over_under_2_5": "under",
-      "pred_total": 1,
-      "scorers": {
-        "home": [],
-        "away": [
-          {
-            "name": "Matías Galarza",
-            "minute": "2'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
-      },
-      "explanation": "The match finished 0-0. The model picked Türkiye; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 43% confidence on the pick. Three-spread view: spread A: Türkiye, spread B: Draw, spread C: Türkiye."
-    },
-    {
-      "n": 33,
-      "date": "2026-06-20",
-      "kickoff_iso": "2026-06-20T17:00:00Z",
+      "kickoff_iso": "2026-06-20T12:00:00Z",
       "stage": "GROUP",
       "group": "F",
       "matchday": 2,
@@ -1979,9 +1957,9 @@
       "result": "5-1",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.5669,
-      "p_draw": 0.2516,
-      "p_away": 0.1815,
+      "p_home": 0.5621,
+      "p_draw": 0.2519,
+      "p_away": 0.1859,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2042,12 +2020,12 @@
           }
         ]
       },
-      "explanation": "The match finished 5-1. The model correctly picked Netherlands. The ensemble projected a 2-0 scoreline with 57% confidence on the pick. Three-spread view: spread A: Netherlands, spread B: Draw, spread C: Netherlands."
+      "explanation": "The match finished 5-1. The model correctly picked Netherlands. The ensemble projected a 2-0 scoreline with 56% confidence on the pick. Three-spread view: spread A: Netherlands, spread B: Draw, spread C: Netherlands."
     },
     {
-      "n": 34,
+      "n": 33,
       "date": "2026-06-20",
-      "kickoff_iso": "2026-06-20T20:00:00Z",
+      "kickoff_iso": "2026-06-20T16:00:00Z",
       "stage": "GROUP",
       "group": "E",
       "matchday": 2,
@@ -2057,9 +2035,9 @@
       "result": "2-1",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.522,
-      "p_draw": 0.2763,
-      "p_away": 0.2017,
+      "p_home": 0.5234,
+      "p_draw": 0.2767,
+      "p_away": 0.1999,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2102,21 +2080,21 @@
       "explanation": "The match finished 2-1. The model correctly picked Germany. The ensemble projected a 2-0 scoreline with 52% confidence on the pick. Three-spread view: spread A: Germany, spread B: Draw, spread C: Germany."
     },
     {
-      "n": 35,
-      "date": "2026-06-21",
-      "kickoff_iso": "2026-06-21T00:00:00Z",
+      "n": 34,
+      "date": "2026-06-20",
+      "kickoff_iso": "2026-06-20T19:00:00Z",
       "stage": "GROUP",
       "group": "E",
       "matchday": 2,
       "home": "Ecuador",
       "away": "Curaçao",
-      "venue": "Arrowhead Stadium, Kansas City",
+      "venue": "GEHA Field at Arrowhead Stadium, Kansas City",
       "result": "0-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6373,
-      "p_draw": 0.1952,
-      "p_away": 0.1675,
+      "p_home": 0.6243,
+      "p_draw": 0.2019,
+      "p_away": 0.1738,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2133,24 +2111,24 @@
         "home": [],
         "away": []
       },
-      "explanation": "The match finished 0-0. The model picked Ecuador; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 64% confidence on the pick. Three-spread view: spread A: Ecuador, spread B: Draw, spread C: Ecuador."
+      "explanation": "The match finished 0-0. The model picked Ecuador; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 62% confidence on the pick. Three-spread view: spread A: Ecuador, spread B: Draw, spread C: Ecuador."
     },
     {
       "n": 36,
-      "date": "2026-06-21",
-      "kickoff_iso": "2026-06-21T03:00:00Z",
+      "date": "2026-06-20",
+      "kickoff_iso": "2026-06-20T22:00:00Z",
       "stage": "GROUP",
       "group": "F",
       "matchday": 2,
       "home": "Tunisia",
       "away": "Japan",
-      "venue": "Estadio BBVA, Guadalupe",
+      "venue": "Estadio BBVA, Monterrey (Guadalupe)",
       "result": "0-4",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.1472,
-      "p_draw": 0.2142,
-      "p_away": 0.6386,
+      "p_home": 0.1681,
+      "p_draw": 0.2203,
+      "p_away": 0.6116,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -2174,34 +2152,34 @@
             "penalty": false
           },
           {
-            "name": "Ayase Ueda",
+            "name": "Aiash Ivida",
             "minute": "31'",
             "type": "Goal",
             "own_goal": false,
             "penalty": false
           },
           {
-            "name": "Junya Ito",
+            "name": "Junya Itō",
             "minute": "69'",
             "type": "Goal",
             "own_goal": false,
             "penalty": false
           },
           {
-            "name": "Ayase Ueda",
+            "name": "Aiash Ivida",
             "minute": "83'",
-            "type": "Goal - Header",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           }
         ]
       },
-      "explanation": "The match finished 0-4. The model correctly picked Japan. The ensemble projected a 0-3 scoreline with 64% confidence on the pick. Three-spread view: spread A: Japan, spread B: Draw, spread C: Japan."
+      "explanation": "The match finished 0-4. The model correctly picked Japan. The ensemble projected a 0-3 scoreline with 61% confidence on the pick. Three-spread view: spread A: Japan, spread B: Draw, spread C: Japan."
     },
     {
-      "n": 37,
+      "n": 39,
       "date": "2026-06-21",
-      "kickoff_iso": "2026-06-21T16:00:00Z",
+      "kickoff_iso": "2026-06-21T12:00:00Z",
       "stage": "GROUP",
       "group": "H",
       "matchday": 2,
@@ -2211,9 +2189,9 @@
       "result": "4-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.727,
-      "p_draw": 0.175,
-      "p_away": 0.0981,
+      "p_home": 0.7193,
+      "p_draw": 0.1791,
+      "p_away": 0.1016,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2259,24 +2237,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 4-0. The model correctly picked Spain. The ensemble projected a 3-0 scoreline with 73% confidence on the pick. Three-spread view: spread A: Spain, spread B: Draw, spread C: Spain."
+      "explanation": "The match finished 4-0. The model correctly picked Spain. The ensemble projected a 3-0 scoreline with 72% confidence on the pick. Three-spread view: spread A: Spain, spread B: Draw, spread C: Spain."
     },
     {
-      "n": 38,
+      "n": 37,
       "date": "2026-06-21",
-      "kickoff_iso": "2026-06-21T19:00:00Z",
+      "kickoff_iso": "2026-06-21T12:00:00Z",
       "stage": "GROUP",
       "group": "G",
       "matchday": 2,
       "home": "Belgium",
       "away": "Iran",
-      "venue": "SoFi Stadium, Inglewood",
+      "venue": "SoFi Stadium, Los Angeles (Inglewood)",
       "result": "0-0",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.466,
-      "p_draw": 0.288,
-      "p_away": 0.246,
+      "p_home": 0.4666,
+      "p_draw": 0.292,
+      "p_away": 0.2414,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2296,21 +2274,85 @@
       "explanation": "The match finished 0-0. The model picked Belgium; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 47% confidence on the pick. Three-spread view: spread A: Belgium, spread B: Draw, spread C: Belgium."
     },
     {
-      "n": 39,
+      "n": 38,
       "date": "2026-06-21",
-      "kickoff_iso": "2026-06-21T22:00:00Z",
+      "kickoff_iso": "2026-06-21T18:00:00Z",
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 2,
+      "home": "New Zealand",
+      "away": "Egypt",
+      "venue": "BC Place, Vancouver",
+      "result": "1-3",
+      "predicted_score": "0-2",
+      "predicted_wdl": "A",
+      "p_home": 0.1968,
+      "p_draw": 0.2313,
+      "p_away": 0.5719,
+      "treatment": "HEDGE",
+      "three_spread": {
+        "A": "A",
+        "B": "D",
+        "C": "A"
+      },
+      "actual_outcome": "A",
+      "correct": true,
+      "score_exact": false,
+      "score_diff_correct": true,
+      "over_under_2_5": "over",
+      "pred_total": 2,
+      "scorers": {
+        "home": [
+          {
+            "name": "Fin Svrman",
+            "minute": "15'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Mostafa Ziko",
+            "minute": "58'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Mohamed Salah",
+            "minute": "67'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Mahmoud Hassan Trezeguet",
+            "minute": "82'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      },
+      "explanation": "The match finished 1-3. The model correctly picked Egypt. The ensemble projected a 0-2 scoreline with 57% confidence on the pick. Three-spread view: spread A: Egypt, spread B: Draw, spread C: Egypt."
+    },
+    {
+      "n": 40,
+      "date": "2026-06-21",
+      "kickoff_iso": "2026-06-21T18:00:00Z",
       "stage": "GROUP",
       "group": "H",
       "matchday": 2,
       "home": "Uruguay",
       "away": "Cabo Verde",
-      "venue": "Hard Rock Stadium, Miami Gardens",
+      "venue": "Hard Rock Stadium, Miami (Miami Gardens)",
       "result": "2-2",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.618,
-      "p_draw": 0.1933,
-      "p_away": 0.1887,
+      "p_home": 0.607,
+      "p_draw": 0.1992,
+      "p_away": 0.1938,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2357,88 +2399,24 @@
           }
         ]
       },
-      "explanation": "The match finished 2-2. The model picked Uruguay; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 62% confidence on the pick. Three-spread view: spread A: Uruguay, spread B: Draw, spread C: Uruguay."
+      "explanation": "The match finished 2-2. The model picked Uruguay; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 61% confidence on the pick. Three-spread view: spread A: Uruguay, spread B: Draw, spread C: Uruguay."
     },
     {
-      "n": 40,
+      "n": 43,
       "date": "2026-06-22",
-      "kickoff_iso": "2026-06-22T01:00:00Z",
-      "stage": "GROUP",
-      "group": "G",
-      "matchday": 2,
-      "home": "New Zealand",
-      "away": "Egypt",
-      "venue": "BC Place, Vancouver",
-      "result": "1-3",
-      "predicted_score": "0-2",
-      "predicted_wdl": "A",
-      "p_home": 0.1866,
-      "p_draw": 0.224,
-      "p_away": 0.5895,
-      "treatment": "HEDGE",
-      "three_spread": {
-        "A": "A",
-        "B": "D",
-        "C": "A"
-      },
-      "actual_outcome": "A",
-      "correct": true,
-      "score_exact": false,
-      "score_diff_correct": true,
-      "over_under_2_5": "over",
-      "pred_total": 2,
-      "scorers": {
-        "home": [
-          {
-            "name": "Finn Surman",
-            "minute": "15'",
-            "type": "Goal - Header",
-            "own_goal": false,
-            "penalty": false
-          }
-        ],
-        "away": [
-          {
-            "name": "Mostafa Zico",
-            "minute": "58'",
-            "type": "Goal - Header",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Mohamed Salah",
-            "minute": "67'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Trézéguet",
-            "minute": "82'",
-            "type": "Goal - Header",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
-      },
-      "explanation": "The match finished 1-3. The model correctly picked Egypt. The ensemble projected a 0-2 scoreline with 59% confidence on the pick. Three-spread view: spread A: Egypt, spread B: Draw, spread C: Egypt."
-    },
-    {
-      "n": 41,
-      "date": "2026-06-22",
-      "kickoff_iso": "2026-06-22T17:00:00Z",
+      "kickoff_iso": "2026-06-22T12:00:00Z",
       "stage": "GROUP",
       "group": "J",
       "matchday": 2,
       "home": "Argentina",
       "away": "Austria",
-      "venue": "AT&T Stadium, Arlington",
+      "venue": "AT&T Stadium, Dallas (Arlington, Texas)",
       "result": "2-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6413,
-      "p_draw": 0.2072,
-      "p_away": 0.1515,
+      "p_home": 0.6352,
+      "p_draw": 0.2092,
+      "p_away": 0.1556,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2473,9 +2451,9 @@
       "explanation": "The match finished 2-0. The model correctly picked Argentina. The ensemble projected a 3-0 scoreline with 64% confidence on the pick. Three-spread view: spread A: Argentina, spread B: Draw, spread C: Argentina."
     },
     {
-      "n": 42,
+      "n": 41,
       "date": "2026-06-22",
-      "kickoff_iso": "2026-06-22T21:00:00Z",
+      "kickoff_iso": "2026-06-22T17:00:00Z",
       "stage": "GROUP",
       "group": "I",
       "matchday": 2,
@@ -2485,9 +2463,9 @@
       "result": "3-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.7304,
-      "p_draw": 0.1746,
-      "p_away": 0.0951,
+      "p_home": 0.7265,
+      "p_draw": 0.1741,
+      "p_away": 0.0995,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2529,21 +2507,21 @@
       "explanation": "The match finished 3-0. The model correctly picked France. The ensemble projected a 3-0 scoreline with 73% confidence on the pick. Three-spread view: spread A: France, spread B: Draw, spread C: France."
     },
     {
-      "n": 43,
-      "date": "2026-06-23",
-      "kickoff_iso": "2026-06-23T00:00:00Z",
+      "n": 42,
+      "date": "2026-06-22",
+      "kickoff_iso": "2026-06-22T20:00:00Z",
       "stage": "GROUP",
       "group": "I",
       "matchday": 2,
       "home": "Norway",
       "away": "Senegal",
-      "venue": "MetLife Stadium, East Rutherford",
+      "venue": "MetLife Stadium, New York/New Jersey (East Rutherford)",
       "result": "3-2",
       "predicted_score": "0-1",
       "predicted_wdl": "A",
-      "p_home": 0.32,
-      "p_draw": 0.3327,
-      "p_away": 0.3473,
+      "p_home": 0.3144,
+      "p_draw": 0.3329,
+      "p_away": 0.3527,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -2559,7 +2537,7 @@
       "scorers": {
         "home": [
           {
-            "name": "Marcus Holmgren Pedersen",
+            "name": "Markvs Hlmgrn Pdrsn",
             "minute": "43'",
             "type": "Goal",
             "own_goal": false,
@@ -2575,7 +2553,7 @@
           {
             "name": "Erling Haaland",
             "minute": "58'",
-            "type": "Goal - Volley",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           }
@@ -2587,13 +2565,6 @@
             "type": "Goal",
             "own_goal": false,
             "penalty": false
-          },
-          {
-            "name": "Ismaïla Sarr",
-            "minute": "90'+3'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
           }
         ]
       },
@@ -2601,20 +2572,20 @@
     },
     {
       "n": 44,
-      "date": "2026-06-23",
-      "kickoff_iso": "2026-06-23T03:00:00Z",
+      "date": "2026-06-22",
+      "kickoff_iso": "2026-06-22T20:00:00Z",
       "stage": "GROUP",
       "group": "J",
       "matchday": 2,
       "home": "Jordan",
       "away": "Algeria",
-      "venue": "Levi's Stadium, Santa Clara",
+      "venue": "Levi's Stadium, San Francisco Bay Area (Santa Clara)",
       "result": "1-2",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.2433,
-      "p_draw": 0.2804,
-      "p_away": 0.4763,
+      "p_home": 0.2479,
+      "p_draw": 0.2878,
+      "p_away": 0.4643,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -2630,7 +2601,7 @@
       "scorers": {
         "home": [
           {
-            "name": "Nizar Al-Rashdan",
+            "name": "Al Rashdan",
             "minute": "36'",
             "type": "Goal",
             "own_goal": false,
@@ -2639,27 +2610,27 @@
         ],
         "away": [
           {
-            "name": "Nadhir Benbouali",
+            "name": "Nzir Bnbvali",
             "minute": "69'",
-            "type": "Goal - Header",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           },
           {
             "name": "Amine Gouiri",
             "minute": "82'",
-            "type": "Goal - Volley",
+            "type": "Goal",
             "own_goal": false,
             "penalty": false
           }
         ]
       },
-      "explanation": "The match finished 1-2. The model correctly picked Algeria. The ensemble projected a 0-2 scoreline with 48% confidence on the pick. Three-spread view: spread A: Algeria, spread B: Draw, spread C: Algeria."
+      "explanation": "The match finished 1-2. The model correctly picked Algeria. The ensemble projected a 0-2 scoreline with 46% confidence on the pick. Three-spread view: spread A: Algeria, spread B: Draw, spread C: Algeria."
     },
     {
       "n": 45,
       "date": "2026-06-23",
-      "kickoff_iso": "2026-06-23T17:00:00Z",
+      "kickoff_iso": "2026-06-23T12:00:00Z",
       "stage": "GROUP",
       "group": "K",
       "matchday": 2,
@@ -2669,9 +2640,9 @@
       "result": "5-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6746,
-      "p_draw": 0.1847,
-      "p_away": 0.1407,
+      "p_home": 0.665,
+      "p_draw": 0.1893,
+      "p_away": 0.1457,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2724,24 +2695,24 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 5-0. The model correctly picked Portugal. The ensemble projected a 3-0 scoreline with 67% confidence on the pick. Three-spread view: spread A: Portugal, spread B: Draw, spread C: Portugal."
+      "explanation": "The match finished 5-0. The model correctly picked Portugal. The ensemble projected a 3-0 scoreline with 66% confidence on the pick. Three-spread view: spread A: Portugal, spread B: Draw, spread C: Portugal."
     },
     {
-      "n": 46,
+      "n": 48,
       "date": "2026-06-23",
-      "kickoff_iso": "2026-06-23T20:00:00Z",
+      "kickoff_iso": "2026-06-23T16:00:00Z",
       "stage": "GROUP",
       "group": "L",
       "matchday": 2,
       "home": "England",
       "away": "Ghana",
-      "venue": "Gillette Stadium, Foxborough",
+      "venue": "Gillette Stadium, Boston (Foxborough)",
       "result": "0-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6158,
-      "p_draw": 0.2172,
-      "p_away": 0.167,
+      "p_home": 0.6199,
+      "p_draw": 0.2192,
+      "p_away": 0.1609,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2761,9 +2732,9 @@
       "explanation": "The match finished 0-0. The model picked England; the actual result went to the draw. The ensemble projected a 3-0 scoreline with 62% confidence on the pick. Three-spread view: spread A: England, spread B: Draw, spread C: England."
     },
     {
-      "n": 47,
+      "n": 46,
       "date": "2026-06-23",
-      "kickoff_iso": "2026-06-23T23:00:00Z",
+      "kickoff_iso": "2026-06-23T19:00:00Z",
       "stage": "GROUP",
       "group": "L",
       "matchday": 2,
@@ -2773,9 +2744,9 @@
       "result": "0-1",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.1848,
-      "p_draw": 0.2111,
-      "p_away": 0.6041,
+      "p_home": 0.1852,
+      "p_draw": 0.2155,
+      "p_away": 0.5992,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -2803,21 +2774,21 @@
       "explanation": "The match finished 0-1. The model correctly picked Croatia. The ensemble projected a 0-3 scoreline with 60% confidence on the pick. Three-spread view: spread A: Croatia, spread B: Draw, spread C: Croatia."
     },
     {
-      "n": 48,
-      "date": "2026-06-24",
-      "kickoff_iso": "2026-06-24T01:00:00Z",
+      "n": 47,
+      "date": "2026-06-23",
+      "kickoff_iso": "2026-06-23T20:00:00Z",
       "stage": "GROUP",
       "group": "K",
       "matchday": 2,
       "home": "Colombia",
-      "away": "DR Congo",
-      "venue": "Estadio Akron, Zapopan",
+      "away": "Democratic Republic of the Congo",
+      "venue": "Estadio Akron, Guadalajara (Zapopan)",
       "result": "1-0",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.5868,
-      "p_draw": 0.2229,
-      "p_away": 0.1903,
+      "p_home": 0.6372,
+      "p_draw": 0.1834,
+      "p_away": 0.1793,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2833,7 +2804,7 @@
       "scorers": {
         "home": [
           {
-            "name": "Daniel Muñoz",
+            "name": "Dnil Mvnvz",
             "minute": "76'",
             "type": "Goal",
             "own_goal": false,
@@ -2842,69 +2813,12 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 1-0. The model correctly picked Colombia. The ensemble projected a 3-0 scoreline with 59% confidence on the pick. Three-spread view: spread A: Colombia, spread B: Draw, spread C: Colombia."
+      "explanation": "The match finished 1-0. The model correctly picked Colombia. The ensemble projected a 3-0 scoreline with 64% confidence on the pick. Three-spread view: spread A: Colombia, spread B: Draw, spread C: Colombia."
     },
     {
-      "n": 49,
+      "n": 53,
       "date": "2026-06-24",
-      "kickoff_iso": "2026-06-24T19:00:00Z",
-      "stage": "GROUP",
-      "group": "B",
-      "matchday": 3,
-      "home": "Switzerland",
-      "away": "Canada",
-      "venue": "BC Place, Vancouver",
-      "result": "2-1",
-      "predicted_score": "3-0",
-      "predicted_wdl": "H",
-      "p_home": 0.6143,
-      "p_draw": 0.2266,
-      "p_away": 0.1592,
-      "treatment": "HEDGE",
-      "three_spread": {
-        "A": "H",
-        "B": "D",
-        "C": "H"
-      },
-      "actual_outcome": "H",
-      "correct": true,
-      "score_exact": false,
-      "score_diff_correct": false,
-      "over_under_2_5": "over",
-      "pred_total": 3,
-      "scorers": {
-        "home": [
-          {
-            "name": "Rubén Vargas",
-            "minute": "46'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Johan Manzambi",
-            "minute": "57'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          }
-        ],
-        "away": [
-          {
-            "name": "Promise David",
-            "minute": "76'",
-            "type": "Goal - Volley",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
-      },
-      "explanation": "The match finished 2-1. The model correctly picked Switzerland. The ensemble projected a 3-0 scoreline with 61% confidence on the pick. Three-spread view: spread A: Switzerland, spread B: Draw, spread C: Switzerland."
-    },
-    {
-      "n": 50,
-      "date": "2026-06-24",
-      "kickoff_iso": "2026-06-24T19:00:00Z",
+      "kickoff_iso": "2026-06-24T12:00:00Z",
       "stage": "GROUP",
       "group": "B",
       "matchday": 3,
@@ -2914,9 +2828,9 @@
       "result": "3-1",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.4535,
-      "p_draw": 0.3028,
-      "p_away": 0.2437,
+      "p_home": 0.4412,
+      "p_draw": 0.312,
+      "p_away": 0.2468,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -2963,68 +2877,69 @@
           }
         ]
       },
-      "explanation": "The match finished 3-1. The model correctly picked Bosnia and Herzegovina. The ensemble projected a 1-0 scoreline with 45% confidence on the pick. Three-spread view: spread A: Bosnia and Herzegovina, spread B: Draw, spread C: Bosnia and Herzegovina."
+      "explanation": "The match finished 3-1. The model correctly picked Bosnia and Herzegovina. The ensemble projected a 1-0 scoreline with 44% confidence on the pick. Three-spread view: spread A: Bosnia and Herzegovina, spread B: Draw, spread C: Bosnia and Herzegovina."
     },
     {
-      "n": 51,
+      "n": 54,
       "date": "2026-06-24",
-      "kickoff_iso": "2026-06-24T22:00:00Z",
+      "kickoff_iso": "2026-06-24T12:00:00Z",
       "stage": "GROUP",
-      "group": "C",
+      "group": "B",
       "matchday": 3,
-      "home": "Scotland",
-      "away": "Brazil",
-      "venue": "Hard Rock Stadium, Miami Gardens",
-      "result": "0-3",
-      "predicted_score": "0-3",
-      "predicted_wdl": "A",
-      "p_home": 0.1104,
-      "p_draw": 0.1855,
-      "p_away": 0.7042,
+      "home": "Switzerland",
+      "away": "Canada",
+      "venue": "BC Place, Vancouver",
+      "result": "2-1",
+      "predicted_score": "3-0",
+      "predicted_wdl": "H",
+      "p_home": 0.6039,
+      "p_draw": 0.2305,
+      "p_away": 0.1656,
       "treatment": "HEDGE",
       "three_spread": {
-        "A": "A",
+        "A": "H",
         "B": "D",
-        "C": "A"
+        "C": "H"
       },
-      "actual_outcome": "A",
+      "actual_outcome": "H",
       "correct": true,
-      "score_exact": true,
-      "score_diff_correct": true,
+      "score_exact": false,
+      "score_diff_correct": false,
       "over_under_2_5": "over",
       "pred_total": 3,
       "scorers": {
-        "home": [],
+        "home": [
+          {
+            "name": "Rubén Vargas",
+            "minute": "46'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Johan Manzambi",
+            "minute": "57'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
         "away": [
           {
-            "name": "Vinícius Júnior",
-            "minute": "7'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Vinícius Júnior",
-            "minute": "45'+3'",
-            "type": "Goal - Header",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Matheus Cunha",
-            "minute": "60'",
-            "type": "Goal",
+            "name": "Promise David",
+            "minute": "76'",
+            "type": "Goal - Volley",
             "own_goal": false,
             "penalty": false
           }
         ]
       },
-      "explanation": "The match finished 0-3. The model correctly picked Brazil. The ensemble projected a 0-3 scoreline with 70% confidence on the pick. Three-spread view: spread A: Brazil, spread B: Draw, spread C: Brazil."
+      "explanation": "The match finished 2-1. The model correctly picked Switzerland. The ensemble projected a 3-0 scoreline with 60% confidence on the pick. Three-spread view: spread A: Switzerland, spread B: Draw, spread C: Switzerland."
     },
     {
-      "n": 52,
+      "n": 50,
       "date": "2026-06-24",
-      "kickoff_iso": "2026-06-24T22:00:00Z",
+      "kickoff_iso": "2026-06-24T18:00:00Z",
       "stage": "GROUP",
       "group": "C",
       "matchday": 3,
@@ -3034,9 +2949,9 @@
       "result": "4-2",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6679,
-      "p_draw": 0.1802,
-      "p_away": 0.1519,
+      "p_home": 0.6596,
+      "p_draw": 0.185,
+      "p_away": 0.1554,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -3097,12 +3012,68 @@
           }
         ]
       },
-      "explanation": "The match finished 4-2. The model correctly picked Morocco. The ensemble projected a 3-0 scoreline with 67% confidence on the pick. Three-spread view: spread A: Morocco, spread B: Draw, spread C: Morocco."
+      "explanation": "The match finished 4-2. The model correctly picked Morocco. The ensemble projected a 3-0 scoreline with 66% confidence on the pick. Three-spread view: spread A: Morocco, spread B: Draw, spread C: Morocco."
     },
     {
-      "n": 53,
-      "date": "2026-06-25",
-      "kickoff_iso": "2026-06-25T00:00:00Z",
+      "n": 49,
+      "date": "2026-06-24",
+      "kickoff_iso": "2026-06-24T18:00:00Z",
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 3,
+      "home": "Scotland",
+      "away": "Brazil",
+      "venue": "Hard Rock Stadium, Miami (Miami Gardens)",
+      "result": "0-3",
+      "predicted_score": "0-3",
+      "predicted_wdl": "A",
+      "p_home": 0.1112,
+      "p_draw": 0.1876,
+      "p_away": 0.7012,
+      "treatment": "HEDGE",
+      "three_spread": {
+        "A": "A",
+        "B": "D",
+        "C": "A"
+      },
+      "actual_outcome": "A",
+      "correct": true,
+      "score_exact": true,
+      "score_diff_correct": true,
+      "over_under_2_5": "over",
+      "pred_total": 3,
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Vinícius Júnior",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Vinícius Júnior",
+            "minute": "45'+3'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Matheus Cunha",
+            "minute": "60'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      },
+      "explanation": "The match finished 0-3. The model correctly picked Brazil. The ensemble projected a 0-3 scoreline with 70% confidence on the pick. Three-spread view: spread A: Brazil, spread B: Draw, spread C: Brazil."
+    },
+    {
+      "n": 52,
+      "date": "2026-06-24",
+      "kickoff_iso": "2026-06-24T19:00:00Z",
       "stage": "GROUP",
       "group": "A",
       "matchday": 3,
@@ -3112,9 +3083,9 @@
       "result": "0-3",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.1595,
-      "p_draw": 0.2294,
-      "p_away": 0.6111,
+      "p_home": 0.1694,
+      "p_draw": 0.2343,
+      "p_away": 0.5963,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -3138,39 +3109,32 @@
             "penalty": false
           },
           {
-            "name": "Julián Quiñones",
+            "name": "Jvlian Kviinvnz",
             "minute": "61'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Álvaro Fidalgo",
-            "minute": "90'+4'",
             "type": "Goal",
             "own_goal": false,
             "penalty": false
           }
         ]
       },
-      "explanation": "The match finished 0-3. The model correctly picked Mexico. The ensemble projected a 0-2 scoreline with 61% confidence on the pick. Three-spread view: spread A: Mexico, spread B: Draw, spread C: Mexico."
+      "explanation": "The match finished 0-3. The model correctly picked Mexico. The ensemble projected a 0-2 scoreline with 60% confidence on the pick. Three-spread view: spread A: Mexico, spread B: Draw, spread C: Mexico."
     },
     {
-      "n": 54,
-      "date": "2026-06-25",
-      "kickoff_iso": "2026-06-25T00:00:00Z",
+      "n": 51,
+      "date": "2026-06-24",
+      "kickoff_iso": "2026-06-24T19:00:00Z",
       "stage": "GROUP",
       "group": "A",
       "matchday": 3,
       "home": "South Africa",
       "away": "South Korea",
-      "venue": "Estadio BBVA, Guadalupe",
+      "venue": "Estadio BBVA, Monterrey (Guadalupe)",
       "result": "1-0",
-      "predicted_score": "1-0",
-      "predicted_wdl": "H",
-      "p_home": 0.3488,
-      "p_draw": 0.3397,
-      "p_away": 0.3115,
+      "predicted_score": "1-1",
+      "predicted_wdl": "D",
+      "p_home": 0.3277,
+      "p_draw": 0.3384,
+      "p_away": 0.3339,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -3178,15 +3142,15 @@
         "C": null
       },
       "actual_outcome": "H",
-      "correct": true,
-      "score_exact": true,
-      "score_diff_correct": true,
+      "correct": false,
+      "score_exact": false,
+      "score_diff_correct": false,
       "over_under_2_5": "under",
-      "pred_total": 1,
+      "pred_total": 2,
       "scorers": {
         "home": [
           {
-            "name": "Thapelo Maseko",
+            "name": "Taplv Maskv",
             "minute": "63'",
             "type": "Goal",
             "own_goal": false,
@@ -3195,24 +3159,73 @@
         ],
         "away": []
       },
-      "explanation": "The match finished 1-0. The model correctly picked South Africa. The ensemble projected a 1-0 scoreline with 35% confidence on the pick."
+      "explanation": "The match finished 1-0. The model picked Draw; the actual result went to South Africa. The ensemble projected a 1-1 scoreline with 34% confidence on the pick."
     },
     {
       "n": 55,
       "date": "2026-06-25",
-      "kickoff_iso": "2026-06-25T20:00:00Z",
+      "kickoff_iso": "2026-06-25T16:00:00Z",
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 3,
+      "home": "Curaçao",
+      "away": "Côte d'Ivoire",
+      "venue": "Lincoln Financial Field, Philadelphia",
+      "result": "0-2",
+      "predicted_score": "0-3",
+      "predicted_wdl": "A",
+      "p_home": 0.176,
+      "p_draw": 0.1983,
+      "p_away": 0.6257,
+      "treatment": "HEDGE",
+      "three_spread": {
+        "A": "A",
+        "B": "D",
+        "C": "A"
+      },
+      "actual_outcome": "A",
+      "correct": true,
+      "score_exact": false,
+      "score_diff_correct": false,
+      "over_under_2_5": "under",
+      "pred_total": 3,
+      "scorers": {
+        "home": [],
+        "away": [
+          {
+            "name": "Nicolas Pépé",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Nicolas Pépé",
+            "minute": "64'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
+      },
+      "explanation": "The match finished 0-2. The model correctly picked Côte d'Ivoire. The ensemble projected a 0-3 scoreline with 63% confidence on the pick. Three-spread view: spread A: Côte d'Ivoire, spread B: Draw, spread C: Côte d'Ivoire."
+    },
+    {
+      "n": 56,
+      "date": "2026-06-25",
+      "kickoff_iso": "2026-06-25T16:00:00Z",
       "stage": "GROUP",
       "group": "E",
       "matchday": 3,
       "home": "Ecuador",
       "away": "Germany",
-      "venue": "MetLife Stadium, East Rutherford",
+      "venue": "MetLife Stadium, New York/New Jersey (East Rutherford)",
       "result": "2-1",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.2038,
-      "p_draw": 0.2637,
-      "p_away": 0.5325,
+      "p_home": 0.2028,
+      "p_draw": 0.2657,
+      "p_away": 0.5315,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -3255,70 +3268,21 @@
       "explanation": "The match finished 2-1. The model picked Germany; the actual result went to Ecuador. The ensemble projected a 0-2 scoreline with 53% confidence on the pick. Three-spread view: spread A: Germany, spread B: Draw, spread C: Germany."
     },
     {
-      "n": 56,
+      "n": 59,
       "date": "2026-06-25",
-      "kickoff_iso": "2026-06-25T20:00:00Z",
-      "stage": "GROUP",
-      "group": "E",
-      "matchday": 3,
-      "home": "Curaçao",
-      "away": "Côte d'Ivoire",
-      "venue": "Lincoln Financial Field, Philadelphia",
-      "result": "0-2",
-      "predicted_score": "0-3",
-      "predicted_wdl": "A",
-      "p_home": 0.1704,
-      "p_draw": 0.192,
-      "p_away": 0.6376,
-      "treatment": "HEDGE",
-      "three_spread": {
-        "A": "A",
-        "B": "D",
-        "C": "A"
-      },
-      "actual_outcome": "A",
-      "correct": true,
-      "score_exact": false,
-      "score_diff_correct": false,
-      "over_under_2_5": "under",
-      "pred_total": 3,
-      "scorers": {
-        "home": [],
-        "away": [
-          {
-            "name": "Nicolas Pépé",
-            "minute": "7'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Nicolas Pépé",
-            "minute": "64'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
-      },
-      "explanation": "The match finished 0-2. The model correctly picked Côte d'Ivoire. The ensemble projected a 0-3 scoreline with 64% confidence on the pick. Three-spread view: spread A: Côte d'Ivoire, spread B: Draw, spread C: Côte d'Ivoire."
-    },
-    {
-      "n": 57,
-      "date": "2026-06-25",
-      "kickoff_iso": "2026-06-25T23:00:00Z",
+      "kickoff_iso": "2026-06-25T18:00:00Z",
       "stage": "GROUP",
       "group": "F",
       "matchday": 3,
       "home": "Japan",
       "away": "Sweden",
-      "venue": "AT&T Stadium, Arlington",
+      "venue": "AT&T Stadium, Dallas (Arlington, Texas)",
       "result": "1-1",
       "predicted_score": "1-0",
       "predicted_wdl": "H",
-      "p_home": 0.37,
-      "p_draw": 0.3304,
-      "p_away": 0.2995,
+      "p_home": 0.3554,
+      "p_draw": 0.334,
+      "p_away": 0.3106,
       "treatment": "EXCLUDE",
       "three_spread": {
         "A": null,
@@ -3351,24 +3315,24 @@
           }
         ]
       },
-      "explanation": "The match finished 1-1. The model picked Japan; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 37% confidence on the pick."
+      "explanation": "The match finished 1-1. The model picked Japan; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 36% confidence on the pick."
     },
     {
-      "n": 58,
+      "n": 60,
       "date": "2026-06-25",
-      "kickoff_iso": "2026-06-25T23:00:00Z",
+      "kickoff_iso": "2026-06-25T18:00:00Z",
       "stage": "GROUP",
       "group": "F",
       "matchday": 3,
       "home": "Tunisia",
       "away": "Netherlands",
-      "venue": "Arrowhead Stadium, Kansas City",
+      "venue": "GEHA Field at Arrowhead Stadium, Kansas City",
       "result": "1-3",
       "predicted_score": "0-3",
       "predicted_wdl": "A",
-      "p_home": 0.0968,
-      "p_draw": 0.1797,
-      "p_away": 0.7235,
+      "p_home": 0.1067,
+      "p_draw": 0.1834,
+      "p_away": 0.7099,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -3415,24 +3379,24 @@
           }
         ]
       },
-      "explanation": "The match finished 1-3. The model correctly picked Netherlands. The ensemble projected a 0-3 scoreline with 72% confidence on the pick. Three-spread view: spread A: Netherlands, spread B: Draw, spread C: Netherlands."
+      "explanation": "The match finished 1-3. The model correctly picked Netherlands. The ensemble projected a 0-3 scoreline with 71% confidence on the pick. Three-spread view: spread A: Netherlands, spread B: Draw, spread C: Netherlands."
     },
     {
-      "n": 59,
-      "date": "2026-06-26",
-      "kickoff_iso": "2026-06-26T02:00:00Z",
+      "n": 58,
+      "date": "2026-06-25",
+      "kickoff_iso": "2026-06-25T19:00:00Z",
       "stage": "GROUP",
       "group": "D",
       "matchday": 3,
       "home": "Türkiye",
       "away": "United States",
-      "venue": "SoFi Stadium, Inglewood",
+      "venue": "SoFi Stadium, Los Angeles (Inglewood)",
       "result": "3-2",
       "predicted_score": "3-0",
       "predicted_wdl": "H",
-      "p_home": 0.6118,
-      "p_draw": 0.1983,
-      "p_away": 0.1899,
+      "p_home": 0.6026,
+      "p_draw": 0.2026,
+      "p_away": 0.1947,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -3455,15 +3419,8 @@
             "penalty": false
           },
           {
-            "name": "Baris Alper Yilmaz",
+            "name": "Baris Alpr Ailmaz",
             "minute": "31'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Kaan Ayhan",
-            "minute": "90'+8'",
             "type": "Goal",
             "own_goal": false,
             "penalty": false
@@ -3486,24 +3443,24 @@
           }
         ]
       },
-      "explanation": "The match finished 3-2. The model correctly picked Türkiye. The ensemble projected a 3-0 scoreline with 61% confidence on the pick. Three-spread view: spread A: Türkiye, spread B: Draw, spread C: Türkiye."
+      "explanation": "The match finished 3-2. The model correctly picked Türkiye. The ensemble projected a 3-0 scoreline with 60% confidence on the pick. Three-spread view: spread A: Türkiye, spread B: Draw, spread C: Türkiye."
     },
     {
-      "n": 60,
-      "date": "2026-06-26",
-      "kickoff_iso": "2026-06-26T02:00:00Z",
+      "n": 57,
+      "date": "2026-06-25",
+      "kickoff_iso": "2026-06-25T19:00:00Z",
       "stage": "GROUP",
       "group": "D",
       "matchday": 3,
       "home": "Paraguay",
       "away": "Australia",
-      "venue": "Levi's Stadium, Santa Clara",
+      "venue": "Levi's Stadium, San Francisco Bay Area (Santa Clara)",
       "result": "0-0",
       "predicted_score": "0-1",
       "predicted_wdl": "A",
-      "p_home": 0.2644,
-      "p_draw": 0.3094,
-      "p_away": 0.4262,
+      "p_home": 0.2647,
+      "p_draw": 0.3083,
+      "p_away": 0.4269,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -3525,78 +3482,7 @@
     {
       "n": 61,
       "date": "2026-06-26",
-      "kickoff_iso": "2026-06-26T19:00:00Z",
-      "stage": "GROUP",
-      "group": "I",
-      "matchday": 3,
-      "home": "Norway",
-      "away": "France",
-      "venue": "Gillette Stadium, Foxborough",
-      "result": "1-4",
-      "predicted_score": "0-3",
-      "predicted_wdl": "A",
-      "p_home": 0.1391,
-      "p_draw": 0.2116,
-      "p_away": 0.6493,
-      "treatment": "HEDGE",
-      "three_spread": {
-        "A": "A",
-        "B": "D",
-        "C": "A"
-      },
-      "actual_outcome": "A",
-      "correct": true,
-      "score_exact": false,
-      "score_diff_correct": true,
-      "over_under_2_5": "over",
-      "pred_total": 3,
-      "scorers": {
-        "home": [
-          {
-            "name": "Thelo Aasgaard",
-            "minute": "21'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          }
-        ],
-        "away": [
-          {
-            "name": "Ousmane Dembélé",
-            "minute": "7'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Ousmane Dembélé",
-            "minute": "20'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Ousmane Dembélé",
-            "minute": "32'",
-            "type": "Goal",
-            "own_goal": false,
-            "penalty": false
-          },
-          {
-            "name": "Désiré Doué",
-            "minute": "90'+4'",
-            "type": "Goal - Header",
-            "own_goal": false,
-            "penalty": false
-          }
-        ]
-      },
-      "explanation": "The match finished 1-4. The model correctly picked France. The ensemble projected a 0-3 scoreline with 65% confidence on the pick. Three-spread view: spread A: France, spread B: Draw, spread C: France."
-    },
-    {
-      "n": 62,
-      "date": "2026-06-26",
-      "kickoff_iso": "2026-06-26T19:00:00Z",
+      "kickoff_iso": "2026-06-26T15:00:00Z",
       "stage": "GROUP",
       "group": "I",
       "matchday": 3,
@@ -3606,9 +3492,9 @@
       "result": "5-0",
       "predicted_score": "2-0",
       "predicted_wdl": "H",
-      "p_home": 0.5725,
-      "p_draw": 0.2327,
-      "p_away": 0.1947,
+      "p_home": 0.5654,
+      "p_draw": 0.2386,
+      "p_away": 0.196,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "H",
@@ -3664,55 +3550,92 @@
       "explanation": "The match finished 5-0. The model correctly picked Senegal. The ensemble projected a 2-0 scoreline with 57% confidence on the pick. Three-spread view: spread A: Senegal, spread B: Draw, spread C: Senegal."
     },
     {
-      "n": 63,
-      "date": "2026-06-27",
-      "kickoff_iso": "2026-06-27T00:00:00Z",
+      "n": 62,
+      "date": "2026-06-26",
+      "kickoff_iso": "2026-06-26T15:00:00Z",
       "stage": "GROUP",
-      "group": "H",
+      "group": "I",
       "matchday": 3,
-      "home": "Cabo Verde",
-      "away": "Saudi Arabia",
-      "venue": "NRG Stadium, Houston",
-      "result": "0-0",
-      "predicted_score": "1-0",
-      "predicted_wdl": "H",
-      "p_home": 0.3427,
-      "p_draw": 0.3318,
-      "p_away": 0.3255,
-      "treatment": "EXCLUDE",
+      "home": "Norway",
+      "away": "France",
+      "venue": "Gillette Stadium, Boston (Foxborough)",
+      "result": "1-4",
+      "predicted_score": "0-3",
+      "predicted_wdl": "A",
+      "p_home": 0.1465,
+      "p_draw": 0.2121,
+      "p_away": 0.6414,
+      "treatment": "HEDGE",
       "three_spread": {
-        "A": null,
-        "B": null,
-        "C": null
+        "A": "A",
+        "B": "D",
+        "C": "A"
       },
-      "actual_outcome": "D",
-      "correct": false,
+      "actual_outcome": "A",
+      "correct": true,
       "score_exact": false,
-      "score_diff_correct": false,
-      "over_under_2_5": "under",
-      "pred_total": 1,
+      "score_diff_correct": true,
+      "over_under_2_5": "over",
+      "pred_total": 3,
       "scorers": {
-        "home": [],
-        "away": []
+        "home": [
+          {
+            "name": "Thelo Aasgaard",
+            "minute": "21'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          }
+        ],
+        "away": [
+          {
+            "name": "Ousmane Dembélé",
+            "minute": "7'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Ousmane Dembélé",
+            "minute": "20'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Ousmane Dembélé",
+            "minute": "32'",
+            "type": "Goal",
+            "own_goal": false,
+            "penalty": false
+          },
+          {
+            "name": "Désiré Doué",
+            "minute": "90'+4'",
+            "type": "Goal - Header",
+            "own_goal": false,
+            "penalty": false
+          }
+        ]
       },
-      "explanation": "The match finished 0-0. The model picked Cabo Verde; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 34% confidence on the pick."
+      "explanation": "The match finished 1-4. The model correctly picked France. The ensemble projected a 0-3 scoreline with 64% confidence on the pick. Three-spread view: spread A: France, spread B: Draw, spread C: France."
     },
     {
-      "n": 64,
-      "date": "2026-06-27",
-      "kickoff_iso": "2026-06-27T00:00:00Z",
+      "n": 66,
+      "date": "2026-06-26",
+      "kickoff_iso": "2026-06-26T18:00:00Z",
       "stage": "GROUP",
       "group": "H",
       "matchday": 3,
       "home": "Uruguay",
       "away": "Spain",
-      "venue": "Estadio Akron, Zapopan",
+      "venue": "Estadio Akron, Guadalajara (Zapopan)",
       "result": "0-1",
       "predicted_score": "0-2",
       "predicted_wdl": "A",
-      "p_home": 0.1853,
-      "p_draw": 0.2692,
-      "p_away": 0.5455,
+      "p_home": 0.1831,
+      "p_draw": 0.2668,
+      "p_away": 0.55,
       "treatment": "HEDGE",
       "three_spread": {
         "A": "A",
@@ -3738,6 +3661,40 @@
         ]
       },
       "explanation": "The match finished 0-1. The model correctly picked Spain. The ensemble projected a 0-2 scoreline with 55% confidence on the pick. Three-spread view: spread A: Spain, spread B: Draw, spread C: Spain."
+    },
+    {
+      "n": 65,
+      "date": "2026-06-26",
+      "kickoff_iso": "2026-06-26T19:00:00Z",
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 3,
+      "home": "Cabo Verde",
+      "away": "Saudi Arabia",
+      "venue": "NRG Stadium, Houston",
+      "result": "0-0",
+      "predicted_score": "1-0",
+      "predicted_wdl": "H",
+      "p_home": 0.3374,
+      "p_draw": 0.3315,
+      "p_away": 0.331,
+      "treatment": "EXCLUDE",
+      "three_spread": {
+        "A": null,
+        "B": null,
+        "C": null
+      },
+      "actual_outcome": "D",
+      "correct": false,
+      "score_exact": false,
+      "score_diff_correct": false,
+      "over_under_2_5": "under",
+      "pred_total": 1,
+      "scorers": {
+        "home": [],
+        "away": []
+      },
+      "explanation": "The match finished 0-0. The model picked Cabo Verde; the actual result went to the draw. The ensemble projected a 1-0 scoreline with 34% confidence on the pick."
     }
   ]
 }
