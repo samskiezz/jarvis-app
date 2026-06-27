@@ -51,6 +51,8 @@ import DailyObjectivesPlanner from '@/components/cinematic/DailyObjectivesPlanne
 import NexusControlPlane from '@/components/overnight/NexusControlPlane';
 import SkillScorecard from '@/components/cinematic/SkillScorecard';
 import LiveTelemetryTicker from '@/components/cinematic/LiveTelemetryTicker';
+import StatusReporter from '@/components/cinematic/StatusReporter';
+import OvernightPanels from '@/components/overnight/OvernightPanels';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -147,6 +149,10 @@ function App() {
             <SkillScorecard />
             {/* F03: live telemetry ticker — thin top-bar HUD; polls /v1/jarvis/system/status (cpu/mem/load) + /v1/cinematic/brain (nodes/synapses) every 30 s; colour-coded pills; hides until first data arrives */}
             <LiveTelemetryTicker />
+            {/* F05: spoken status report — "JARVIS, status" or "status report" → fetches /v1/jarvis/system/status + /v1/cinematic/brain; speaks precise numbers via /v1/voice/tts; HUD card auto-dismisses after 14 s */}
+            <StatusReporter />
+            {/* F131: overnight panels launcher — ◈ button at left:340 bottom:18; searchable category-grouped grid of all cinematic panels (panelRegistry.generated.js); lazy-mounts one panel at a time behind PanelErrorBoundary; gives on-demand access to the full panel library without 100+ floating buttons */}
+            <OvernightPanels />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
