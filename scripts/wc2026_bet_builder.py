@@ -20,6 +20,7 @@ CLI:
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 import json
 import logging
 import statistics
@@ -340,11 +341,20 @@ class Candidate:
 
 
 def _is_already_played(m: Match) -> bool:
-    """True if the fixture already has a verified actual result (server-side)."""
+    """True if the fixture is in the past or already has a verified result."""
     try:
         from wc2026_db import actual_for as _af  # type: ignore
-        return bool(_af(m.team_a, m.team_b))
+        if _af(m.team_a, m.team_b):
+            return True
     except Exception:  # noqa: BLE001
+        pass
+    # Also exclude fixtures whose date has passed but aren't in actuals yet
+    # (e.g. live matches the API hasn't marked finished).
+    try:
+        match_day = _dt.date.fromisoformat(str(m.date))
+        today = _dt.datetime.now(_dt.timezone.utc).date()
+        return match_day < today
+    except (ValueError, TypeError):
         return False
 
 

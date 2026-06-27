@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T04:45:11.293517+00:00",
+  "generated_at": "2026-06-27T04:48:22+00:00",
   "tournament": "2026 FIFA World Cup",
   "total_matches": 104,
   "source": "Synced from worldcup26.ir API (GitHub: rezarahiminia/worldcup2026)",
@@ -315,10 +315,9 @@
       "home": "Panama",
       "away": "England",
       "venue": "MetLife Stadium, New York/New Jersey (East Rutherford)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 72,
@@ -331,10 +330,9 @@
       "home": "Democratic Republic of the Congo",
       "away": "Uzbekistan",
       "venue": "Mercedes-Benz Stadium, Atlanta",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 86,
@@ -347,10 +345,9 @@
       "home": "Argentina",
       "away": "Cabo Verde",
       "venue": "Hard Rock Stadium, Miami (Miami Gardens)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 88,
@@ -723,10 +720,9 @@
       "home": "Egypt",
       "away": "Iran",
       "venue": "Lumen Field, Seattle",
-      "result": "1-1",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 65,
@@ -769,10 +765,9 @@
       "home": "Jordan",
       "away": "Argentina",
       "venue": "AT&T Stadium, Dallas (Arlington, Texas)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 76,
@@ -785,10 +780,9 @@
       "home": "Brazil",
       "away": "Japan",
       "venue": "NRG Stadium, Houston",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 83,
@@ -996,10 +990,9 @@
       "home": "Colombia",
       "away": "Portugal",
       "venue": "Hard Rock Stadium, Miami (Miami Gardens)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 73,
@@ -1012,10 +1005,9 @@
       "home": "South Africa",
       "away": "Canada",
       "venue": "SoFi Stadium, Los Angeles (Inglewood)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 77,
@@ -1328,10 +1320,9 @@
       "home": "Croatia",
       "away": "Ghana",
       "venue": "Lincoln Financial Field, Philadelphia",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 69,
@@ -1344,10 +1335,9 @@
       "home": "Algeria",
       "away": "Austria",
       "venue": "GEHA Field at Arrowhead Stadium, Kansas City",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 74,
@@ -1360,10 +1350,9 @@
       "home": "Germany",
       "away": "Paraguay",
       "venue": "Gillette Stadium, Boston (Foxborough)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 81,
@@ -1376,10 +1365,9 @@
       "home": "United States",
       "away": "Bosnia and Herzegovina",
       "venue": "Levi's Stadium, San Francisco Bay Area (Santa Clara)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 103,
@@ -1467,10 +1455,9 @@
       "home": "New Zealand",
       "away": "Belgium",
       "venue": "BC Place, Vancouver",
-      "result": "0-3",
-      "result_class": "A",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 75,
@@ -1483,10 +1470,9 @@
       "home": "Netherlands",
       "away": "Morocco",
       "venue": "Estadio BBVA, Monterrey (Guadalupe)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 78,
@@ -1499,10 +1485,9 @@
       "home": "Côte d'Ivoire",
       "away": "Norway",
       "venue": "AT&T Stadium, Dallas (Arlington, Texas)",
-      "result": "0-0",
-      "result_class": "D",
-      "played": true,
-      "source": "worldcup26_api"
+      "result": null,
+      "result_class": null,
+      "played": false
     },
     {
       "n": 79,
@@ -1579,6 +1564,5 @@
       "result_class": null,
       "played": false
     }
-  ],
-  "web_data_updated": true
+  ]
 }
