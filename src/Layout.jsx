@@ -134,6 +134,7 @@ import ObjectSetsBrowser from "@/components/overnight/ObjectSetsBrowser";
 import DeepHealthInspector from "@/components/overnight/DeepHealthInspector";
 import A11yDriversPanel from "@/components/overnight/A11yDriversPanel";
 import RunCorrelatorClustersDrawer from "@/components/overnight/RunCorrelatorClustersDrawer";
+import OntologyTypesBrowser from "@/components/overnight/OntologyTypesBrowser";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -524,6 +525,9 @@ export function AppLayout({ children }) {
 
       {/* F146: Run Correlator Clusters — right-edge slide-in at 34%; polls GET /v1/run-correlator/clusters every 3 min; cluster rows with max_severity badge + event count + summary; click expands via GET /v1/run-correlator/cluster/{id}; orange (#F97316) accent */}
       <RunCorrelatorClustersDrawer />
+
+      {/* F147: Ontology Types Browser — left-edge slide-in at 71%; GET /v1/ontology/types (5-min poll) + GET /v1/ontology/objects?type=X on click; type list with instance count; expand shows label + mark + age; lavender (#A78BFA) accent */}
+      <OntologyTypesBrowser />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
