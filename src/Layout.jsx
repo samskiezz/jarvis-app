@@ -126,6 +126,7 @@ import KnowledgeArticleReader from "@/components/overnight/KnowledgeArticleReade
 import PhoneCommsDrawer from "@/components/overnight/PhoneCommsDrawer";
 import Sci3dCatalogDrawer from "@/components/overnight/Sci3dCatalogDrawer";
 import ScrapeStatusDrawer from "@/components/overnight/ScrapeStatusDrawer";
+import PolicyControlDrawer from "@/components/overnight/PolicyControlDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -492,6 +493,9 @@ export function AppLayout({ children }) {
 
       {/* F137: Scrape Engine Status — right-edge slide-in at 99%; polls GET /v1/jarvis/scrape/status every 2 min + GET /v1/jarvis/scrape/engines once on open; stat tiles (scraped docs/pending/stored notes/db size) + seed progress bar + per-engine AVAILABLE/MISSING rows; sky-blue (#38BDF8) accent */}
       <ScrapeStatusDrawer />
+
+      {/* F139: Policy Control Drawer — left-edge slide-in at 64%; polls GET /v1/jarvis/policy/summary every 5 min; ABAC clearance hierarchy (UNCLASSIFIED→OFFICIAL→SECRET→TOPSECRET) with colour-coded level rows + subject count + label count tiles; red (#DC2626) accent */}
+      <PolicyControlDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
