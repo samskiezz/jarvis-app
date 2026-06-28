@@ -156,6 +156,7 @@ import PalantirFeatureAuditDrawer from "@/components/overnight/PalantirFeatureAu
 import ConnectorSchemaBrowser from "@/components/overnight/ConnectorSchemaBrowser";
 import MemoryVaultDrawer from "@/components/overnight/MemoryVaultDrawer";
 import AiModelGatewayDrawer from "@/components/overnight/AiModelGatewayDrawer";
+import DailyNotePanel from "@/components/overnight/DailyNotePanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -612,6 +613,9 @@ export function AppLayout({ children }) {
 
       {/* F168: AI Model Gateway Drawer — right-edge at 13%; GET /v1/jarvis/ai/models (once/session, session-cached); model name + risk badge + cost bar + capability chips + context window per row; sky-blue (#38BDF8) accent */}
       <AiModelGatewayDrawer />
+
+      {/* F169: Daily Note Panel — left-edge slide-in at 76%; GET /v1/brain/daily (fetch on open) + POST /v1/brain/daily (append timestamped entry); note title + kind badge + word count + body_md + outgoing links + quick-append form; lime-300 (#BEF264) accent */}
+      <DailyNotePanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
