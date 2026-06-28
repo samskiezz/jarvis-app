@@ -158,6 +158,7 @@ import MemoryVaultDrawer from "@/components/overnight/MemoryVaultDrawer";
 import AiModelGatewayDrawer from "@/components/overnight/AiModelGatewayDrawer";
 import DailyNotePanel from "@/components/overnight/DailyNotePanel";
 import ProvenanceLineageDrawer from "@/components/overnight/ProvenanceLineageDrawer";
+import VitalsTrendDrawer from "@/components/overnight/VitalsTrendDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -620,6 +621,9 @@ export function AppLayout({ children }) {
 
       {/* F170: Provenance Lineage Drawer — right-edge slide-in at 4.5%; GET /v1/jarvis/lineage?limit=50 every 5 min; target chip + action badge (colour-coded by type) + source chip + actor + relative age per row; emerald (#10B981) accent */}
       <ProvenanceLineageDrawer />
+
+      {/* F171: Vitals Trend Drawer — right-edge slide-in at 5.5%; GET /v1/vitals/trend per metric (hr/hrv/spo2) every 5 min; SVG sparkline + latest value + 24 h delta per metric; rose (#F43F5E) accent */}
+      <VitalsTrendDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
