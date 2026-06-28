@@ -144,6 +144,7 @@ import ChatPredictTerminal from "@/components/overnight/ChatPredictTerminal";
 import BrainGoaPlanDrawer from "@/components/overnight/BrainGoaPlanDrawer";
 import TemporalEventsStream from "@/components/overnight/TemporalEventsStream";
 import BrainNotesDrawer from "@/components/overnight/BrainNotesDrawer";
+import NotificationsInboxDrawer from "@/components/overnight/NotificationsInboxDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -564,6 +565,9 @@ export function AppLayout({ children }) {
 
       {/* F156: Brain Notes Browser — right-edge slide-in at 55%; GET /v1/brain/notes?limit=60 (5-min poll); kind badge (color-coded) + title + body excerpt + confidence dot + relative age; click row expands full body_md; text filter in header; indigo (#818CF8) accent */}
       <BrainNotesDrawer />
+
+      {/* F157: Notifications Inbox — left-edge slide-in at 79%; GET /v1/jarvis/notifications?user_id=anonymous&acked=false&limit=50 every 3 min; ACK via POST /v1/jarvis/notifications/ack; kind badge + priority badge (colour-coded) + message + relative age; tab pulses when unread > 0; purple (#C084FC) accent */}
+      <NotificationsInboxDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
