@@ -153,6 +153,7 @@ import PlatformAdminSummary from "@/components/overnight/PlatformAdminSummary";
 import AssetLibraryDrawer from "@/components/overnight/AssetLibraryDrawer";
 import BrainThinkingToolsPanel from "@/components/overnight/BrainThinkingToolsPanel";
 import PalantirFeatureAuditDrawer from "@/components/overnight/PalantirFeatureAuditDrawer";
+import ConnectorSchemaBrowser from "@/components/overnight/ConnectorSchemaBrowser";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -600,6 +601,9 @@ export function AppLayout({ children }) {
 
       {/* F165: Palantir Feature Audit Drawer — right-edge slide-in at 22%; GET /v1/jarvis/ui/features (5-min poll); feature parity audit (implemented/partial/missing) with plane badge (foundry/gotham/aip/apollo/jarvis) + status badge + evidence count; missing count on tab; violet (#7C3AED) accent */}
       <PalantirFeatureAuditDrawer />
+
+      {/* F166: Connector Schema Browser — right-edge slide-in at 8%; GET /v1/connectors (once per session, cached); connector kind registry + pipeline transforms; two tabs: CONNECTORS/TRANSFORMS; cyan (#22D3EE) accent */}
+      <ConnectorSchemaBrowser />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
