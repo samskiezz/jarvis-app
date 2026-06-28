@@ -146,6 +146,7 @@ import BrainGoaPlanDrawer from "@/components/overnight/BrainGoaPlanDrawer";
 import TemporalEventsStream from "@/components/overnight/TemporalEventsStream";
 import BrainNotesDrawer from "@/components/overnight/BrainNotesDrawer";
 import NotificationsInboxDrawer from "@/components/overnight/NotificationsInboxDrawer";
+import ResearchStatusDrawer from "@/components/overnight/ResearchStatusDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -572,6 +573,9 @@ export function AppLayout({ children }) {
 
       {/* F157: Notifications Inbox — left-edge slide-in at 79%; GET /v1/jarvis/notifications?user_id=anonymous&acked=false&limit=50 every 3 min; ACK via POST /v1/jarvis/notifications/ack; kind badge + priority badge (colour-coded) + message + relative age; tab pulses when unread > 0; purple (#C084FC) accent */}
       <NotificationsInboxDrawer />
+
+      {/* F159: Research Status Monitor — right-edge slide-in at 19%; polls GET /v1/jarvis/research/status every 2 min; backend type badge (OLLAMA/OPENAI COMPAT/OFFLINE) + available LED + connection section (host/source/model) + autopilot section (running/enabled/cycle/phase/error) + hint card when offline; amber (#F59E0B) accent */}
+      <ResearchStatusDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
