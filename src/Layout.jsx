@@ -147,6 +147,7 @@ import TemporalEventsStream from "@/components/overnight/TemporalEventsStream";
 import BrainNotesDrawer from "@/components/overnight/BrainNotesDrawer";
 import NotificationsInboxDrawer from "@/components/overnight/NotificationsInboxDrawer";
 import ResearchStatusDrawer from "@/components/overnight/ResearchStatusDrawer";
+import DashboardsBrowserDrawer from "@/components/overnight/DashboardsBrowserDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -576,6 +577,9 @@ export function AppLayout({ children }) {
 
       {/* F159: Research Status Monitor — right-edge slide-in at 19%; polls GET /v1/jarvis/research/status every 2 min; backend type badge (OLLAMA/OPENAI COMPAT/OFFLINE) + available LED + connection section (host/source/model) + autopilot section (running/enabled/cycle/phase/error) + hint card when offline; amber (#F59E0B) accent */}
       <ResearchStatusDrawer />
+
+      {/* F160: Dashboards Browser — right-edge slide-in at 43%; polls GET /v1/dashboards every 5 min; name + widget count + age per row; click expands GET /v1/dashboards/{id} widget list inline; teal (#2DD4BF) accent */}
+      <DashboardsBrowserDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
