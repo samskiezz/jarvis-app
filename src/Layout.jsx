@@ -150,6 +150,7 @@ import NotificationsInboxDrawer from "@/components/overnight/NotificationsInboxD
 import ResearchStatusDrawer from "@/components/overnight/ResearchStatusDrawer";
 import DashboardsBrowserDrawer from "@/components/overnight/DashboardsBrowserDrawer";
 import PlatformAdminSummary from "@/components/overnight/PlatformAdminSummary";
+import AssetLibraryDrawer from "@/components/overnight/AssetLibraryDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -588,6 +589,9 @@ export function AppLayout({ children }) {
 
       {/* F162: Platform Admin Summary — right-edge slide-in at 96.5%; polls GET /v1/admin/summary every 5 min; 6-tile platform object counts (ontology/datasets/alerts/cases/reports/audit) + process metrics (PID/RSS/uptime/Python/platform); fuchsia (#C026D3) accent */}
       <PlatformAdminSummary />
+
+      {/* F163: Render Asset Library Drawer — right-edge slide-in at 6%; GET /v1/jarvis/assets/status (on open) + GET /v1/jarvis/assets/library?q= (debounced search, 350 ms) + GET /v1/jarvis/assets/gaps (on open); status tiles (library_models/wired_models/gaps/tripo_generation) + searchable 3D model list + manifest render gaps; sky-blue (#38BDF8) accent */}
+      <AssetLibraryDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
