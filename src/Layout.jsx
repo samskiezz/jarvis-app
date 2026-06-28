@@ -54,6 +54,7 @@ import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
 import MessagesInboxDrawer from "@/components/overnight/MessagesInboxDrawer";
 import SchedulesPanel from "@/components/overnight/SchedulesPanel";
 import LiveIntelPulseDrawer from "@/components/overnight/LiveIntelPulseDrawer";
+import GeoRegionBriefing from "@/components/overnight/GeoRegionBriefing";
 import VpnStatusPanel from "@/components/overnight/VpnStatusPanel";
 import GeoObjectsDrawer from "@/components/overnight/GeoObjectsDrawer";
 import BrainScanDrawer from "@/components/overnight/BrainScanDrawer";
@@ -237,6 +238,9 @@ export function AppLayout({ children }) {
 
       {/* F129: Live Intel Pulse Drawer — right-edge slide-in at 44%; POST /functions/getLiveIntel every 2 min; top 5 earthquakes by magnitude + top 5 market movers by |Δ%|; orange (#F97316) accent */}
       <LiveIntelPulseDrawer />
+
+      {/* F154: Geo-Region Intel Briefing — right-edge slide-in at 48%; POST /functions/getLiveIntel every 3 min; groups earthquakes by geographic region; region | max-mag badge | count | most-recent loc; click expands quake list; rose (#FB7185) accent */}
+      <GeoRegionBriefing />
 
       {/* F45: VPN Status Panel — right-edge slide-in at 12%; WireGuard status + peers from GET /v1/vpn/status */}
       <VpnStatusPanel />
