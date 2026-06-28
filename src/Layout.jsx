@@ -48,6 +48,7 @@ import HistoryLakeCatalog from "@/components/overnight/HistoryLakeCatalog";
 import RitualDeckPanel from "@/components/overnight/RitualDeckPanel";
 import SecondBrainCatalog from "@/components/overnight/SecondBrainCatalog";
 import GraphCommunitiesView from "@/components/overnight/GraphCommunitiesView";
+import BrainEnrichSourcesDrawer from "@/components/overnight/BrainEnrichSourcesDrawer";
 import AutomationRulesPanel from "@/components/overnight/AutomationRulesPanel";
 import ProofPacksDrawer from "@/components/overnight/ProofPacksDrawer";
 import TaskMissionsPanel from "@/components/overnight/TaskMissionsPanel";
@@ -331,6 +332,9 @@ export function AppLayout({ children }) {
 
       {/* F34: Graph Communities View — left-edge slide-in at 2%; community partition from GET /v1/graph/communities */}
       <GraphCommunitiesView />
+
+      {/* F158: Brain Enrichment Source Catalog — left-edge slide-in at 3%; GET /v1/brain/sources poll + on-demand GET /v1/brain/sources/probe; sky-blue accent */}
+      <BrainEnrichSourcesDrawer />
 
       {/* F83: Science Domains Drawer — left-edge slide-in at 4%; underworld science domain consoles from GET /v1/sci/domains */}
       <SciDomainsDrawer />
