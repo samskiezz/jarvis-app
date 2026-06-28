@@ -154,6 +154,7 @@ import AssetLibraryDrawer from "@/components/overnight/AssetLibraryDrawer";
 import BrainThinkingToolsPanel from "@/components/overnight/BrainThinkingToolsPanel";
 import PalantirFeatureAuditDrawer from "@/components/overnight/PalantirFeatureAuditDrawer";
 import ConnectorSchemaBrowser from "@/components/overnight/ConnectorSchemaBrowser";
+import MemoryVaultDrawer from "@/components/overnight/MemoryVaultDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -604,6 +605,9 @@ export function AppLayout({ children }) {
 
       {/* F166: Connector Schema Browser — right-edge slide-in at 8%; GET /v1/connectors (once per session, cached); connector kind registry + pipeline transforms; two tabs: CONNECTORS/TRANSFORMS; cyan (#22D3EE) accent */}
       <ConnectorSchemaBrowser />
+
+      {/* F167: Memory Vault Drawer — right-edge at 4%; GET /v1/jarvis/memory?limit=30 (5-min poll) + POST /v1/jarvis/memory quick-save + GET /v1/jarvis/persona (once/session); violet (#8B5CF6) accent */}
+      <MemoryVaultDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
