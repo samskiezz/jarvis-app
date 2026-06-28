@@ -152,6 +152,7 @@ import DashboardsBrowserDrawer from "@/components/overnight/DashboardsBrowserDra
 import PlatformAdminSummary from "@/components/overnight/PlatformAdminSummary";
 import AssetLibraryDrawer from "@/components/overnight/AssetLibraryDrawer";
 import BrainThinkingToolsPanel from "@/components/overnight/BrainThinkingToolsPanel";
+import PalantirFeatureAuditDrawer from "@/components/overnight/PalantirFeatureAuditDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -596,6 +597,9 @@ export function AppLayout({ children }) {
 
       {/* F164: Brain Thinking Tools Panel — left-edge slide-in at 9%; POST /v1/brain/think/{challenge|panel|connect|emerge}; four tabs: red-team/panel/connect/emerge; on-demand vault-grounded; sky-blue (#0EA5E9) accent */}
       <BrainThinkingToolsPanel />
+
+      {/* F165: Palantir Feature Audit Drawer — right-edge slide-in at 22%; GET /v1/jarvis/ui/features (5-min poll); feature parity audit (implemented/partial/missing) with plane badge (foundry/gotham/aip/apollo/jarvis) + status badge + evidence count; missing count on tab; violet (#7C3AED) accent */}
+      <PalantirFeatureAuditDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
