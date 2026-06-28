@@ -113,6 +113,7 @@ import BrainCrmPeopleDrawer from "@/components/overnight/BrainCrmPeopleDrawer";
 import MotorPredictorDrawer from "@/components/overnight/MotorPredictorDrawer";
 import SemanticSearchDrawer from "@/components/overnight/SemanticSearchDrawer";
 import AssuranceInvariantsDrawer from "@/components/overnight/AssuranceInvariantsDrawer";
+import AssuranceBusDrawer from "@/components/overnight/AssuranceBusDrawer";
 import ScienceMethodsCatalog from "@/components/overnight/ScienceMethodsCatalog";
 import PageDataLensDrawer from "@/components/overnight/PageDataLensDrawer";
 import AiProposalsDrawer from "@/components/overnight/AiProposalsDrawer";
@@ -478,6 +479,9 @@ export function AppLayout({ children }) {
 
       {/* F115: Assurance Invariants Drawer — left-edge slide-in at 43%; GET /assurance/invariants (3-min poll); overall_ok badge + pass/fail counts + per-invariant PASS/FAIL rows with evidence; rose (#F43F5E) accent; red pulse when failures present */}
       <AssuranceInvariantsDrawer />
+
+      {/* F161: Assurance Bus Drawer — left-edge slide-in at 39%; GET /assurance/commands + GET /assurance/events (90-s poll); dual-tab CMDS/EVTS; command rows show name+actor+OK/ERR badge+age; event rows show name-chip+actor+source+corr-id+age; indigo (#6366F1) accent */}
+      <AssuranceBusDrawer />
 
       {/* F116: Science Methods Catalog — left-edge slide-in at 46%; GET /functions/science/methods on mount; methods grouped by domain with ▶ RUN buttons firing POST /functions/science/run; amber (#F59E0B) accent */}
       <ScienceMethodsCatalog />
