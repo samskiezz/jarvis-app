@@ -143,6 +143,7 @@ import GlobalNotesDrawer from "@/components/overnight/GlobalNotesDrawer";
 import ChatPredictTerminal from "@/components/overnight/ChatPredictTerminal";
 import BrainGoaPlanDrawer from "@/components/overnight/BrainGoaPlanDrawer";
 import TemporalEventsStream from "@/components/overnight/TemporalEventsStream";
+import BrainNotesDrawer from "@/components/overnight/BrainNotesDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -560,6 +561,9 @@ export function AppLayout({ children }) {
 
       {/* F155: Temporal Threshold Events Stream — right-edge slide-in at 75%; POST /v1/temporal/timeline (all-series threshold crossings, 3-min poll) + GET /v1/history/series (series name lookup, once on open); ▲ CROSS UP sky-blue / ▼ CROSS DN orange kind badges; value + relative timestamp per row; lime (#A3E635) accent */}
       <TemporalEventsStream />
+
+      {/* F156: Brain Notes Browser — right-edge slide-in at 55%; GET /v1/brain/notes?limit=60 (5-min poll); kind badge (color-coded) + title + body excerpt + confidence dot + relative age; click row expands full body_md; text filter in header; indigo (#818CF8) accent */}
+      <BrainNotesDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
