@@ -151,6 +151,7 @@ import ResearchStatusDrawer from "@/components/overnight/ResearchStatusDrawer";
 import DashboardsBrowserDrawer from "@/components/overnight/DashboardsBrowserDrawer";
 import PlatformAdminSummary from "@/components/overnight/PlatformAdminSummary";
 import AssetLibraryDrawer from "@/components/overnight/AssetLibraryDrawer";
+import BrainThinkingToolsPanel from "@/components/overnight/BrainThinkingToolsPanel";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -592,6 +593,9 @@ export function AppLayout({ children }) {
 
       {/* F163: Render Asset Library Drawer — right-edge slide-in at 6%; GET /v1/jarvis/assets/status (on open) + GET /v1/jarvis/assets/library?q= (debounced search, 350 ms) + GET /v1/jarvis/assets/gaps (on open); status tiles (library_models/wired_models/gaps/tripo_generation) + searchable 3D model list + manifest render gaps; sky-blue (#38BDF8) accent */}
       <AssetLibraryDrawer />
+
+      {/* F164: Brain Thinking Tools Panel — left-edge slide-in at 9%; POST /v1/brain/think/{challenge|panel|connect|emerge}; four tabs: red-team/panel/connect/emerge; on-demand vault-grounded; sky-blue (#0EA5E9) accent */}
+      <BrainThinkingToolsPanel />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
