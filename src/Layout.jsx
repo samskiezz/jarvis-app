@@ -157,6 +157,7 @@ import ConnectorSchemaBrowser from "@/components/overnight/ConnectorSchemaBrowse
 import MemoryVaultDrawer from "@/components/overnight/MemoryVaultDrawer";
 import AiModelGatewayDrawer from "@/components/overnight/AiModelGatewayDrawer";
 import DailyNotePanel from "@/components/overnight/DailyNotePanel";
+import ProvenanceLineageDrawer from "@/components/overnight/ProvenanceLineageDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -616,6 +617,9 @@ export function AppLayout({ children }) {
 
       {/* F169: Daily Note Panel — left-edge slide-in at 76%; GET /v1/brain/daily (fetch on open) + POST /v1/brain/daily (append timestamped entry); note title + kind badge + word count + body_md + outgoing links + quick-append form; lime-300 (#BEF264) accent */}
       <DailyNotePanel />
+
+      {/* F170: Provenance Lineage Drawer — right-edge slide-in at 4.5%; GET /v1/jarvis/lineage?limit=50 every 5 min; target chip + action badge (colour-coded by type) + source chip + actor + relative age per row; emerald (#10B981) accent */}
+      <ProvenanceLineageDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
