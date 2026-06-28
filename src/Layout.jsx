@@ -142,6 +142,7 @@ import MetricsRegistryDrawer from "@/components/overnight/MetricsRegistryDrawer"
 import GlobalNotesDrawer from "@/components/overnight/GlobalNotesDrawer";
 import ChatPredictTerminal from "@/components/overnight/ChatPredictTerminal";
 import BrainGoaPlanDrawer from "@/components/overnight/BrainGoaPlanDrawer";
+import TemporalEventsStream from "@/components/overnight/TemporalEventsStream";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -556,6 +557,9 @@ export function AppLayout({ children }) {
 
       {/* F153: Brain GOAP Plan Drawer — left-edge slide-in at 12%; GET /v1/brain/autopilot/plan dry-run A* plan preview; state tiles (score/gaps/orphans/themes/low_confidence/network); unmet chips; ordered action steps with color-coded badges; emerald (#4ADE80) accent; 5-min poll */}
       <BrainGoaPlanDrawer />
+
+      {/* F155: Temporal Threshold Events Stream — right-edge slide-in at 75%; POST /v1/temporal/timeline (all-series threshold crossings, 3-min poll) + GET /v1/history/series (series name lookup, once on open); ▲ CROSS UP sky-blue / ▼ CROSS DN orange kind badges; value + relative timestamp per row; lime (#A3E635) accent */}
+      <TemporalEventsStream />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
