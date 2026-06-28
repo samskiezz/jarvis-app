@@ -155,6 +155,7 @@ import BrainThinkingToolsPanel from "@/components/overnight/BrainThinkingToolsPa
 import PalantirFeatureAuditDrawer from "@/components/overnight/PalantirFeatureAuditDrawer";
 import ConnectorSchemaBrowser from "@/components/overnight/ConnectorSchemaBrowser";
 import MemoryVaultDrawer from "@/components/overnight/MemoryVaultDrawer";
+import AiModelGatewayDrawer from "@/components/overnight/AiModelGatewayDrawer";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -608,6 +609,9 @@ export function AppLayout({ children }) {
 
       {/* F167: Memory Vault Drawer — right-edge at 4%; GET /v1/jarvis/memory?limit=30 (5-min poll) + POST /v1/jarvis/memory quick-save + GET /v1/jarvis/persona (once/session); violet (#8B5CF6) accent */}
       <MemoryVaultDrawer />
+
+      {/* F168: AI Model Gateway Drawer — right-edge at 13%; GET /v1/jarvis/ai/models (once/session, session-cached); model name + risk badge + cost bar + capability chips + context window per row; sky-blue (#38BDF8) accent */}
+      <AiModelGatewayDrawer />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
