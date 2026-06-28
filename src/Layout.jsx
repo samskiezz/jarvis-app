@@ -149,6 +149,7 @@ import BrainNotesDrawer from "@/components/overnight/BrainNotesDrawer";
 import NotificationsInboxDrawer from "@/components/overnight/NotificationsInboxDrawer";
 import ResearchStatusDrawer from "@/components/overnight/ResearchStatusDrawer";
 import DashboardsBrowserDrawer from "@/components/overnight/DashboardsBrowserDrawer";
+import PlatformAdminSummary from "@/components/overnight/PlatformAdminSummary";
 
 export default function Layout() {
   return null; // replaced by AppLayout wrapper; kept for compatibility
@@ -584,6 +585,9 @@ export function AppLayout({ children }) {
 
       {/* F160: Dashboards Browser — right-edge slide-in at 43%; polls GET /v1/dashboards every 5 min; name + widget count + age per row; click expands GET /v1/dashboards/{id} widget list inline; teal (#2DD4BF) accent */}
       <DashboardsBrowserDrawer />
+
+      {/* F162: Platform Admin Summary — right-edge slide-in at 96.5%; polls GET /v1/admin/summary every 5 min; 6-tile platform object counts (ontology/datasets/alerts/cases/reports/audit) + process metrics (PID/RSS/uptime/Python/platform); fuchsia (#C026D3) accent */}
+      <PlatformAdminSummary />
 
       {/* JARVIS rides on every page */}
       <JarvisAssistant
