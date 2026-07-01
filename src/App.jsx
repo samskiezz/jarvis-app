@@ -113,6 +113,8 @@ import TaskDecisionTracer from '@/components/cinematic/TaskDecisionTracer';
 import ScenarioStatusBar from '@/components/overnight/ScenarioStatusBar';
 import DatasetFreshnessMonitor from '@/components/cinematic/DatasetFreshnessMonitor';
 import ContactTaskLinker from '@/components/cinematic/ContactTaskLinker';
+import ContactScenarioAssignor from '@/components/cinematic/ContactScenarioAssignor';
+import InvestmentKnowledgeAdvisor from '@/components/cinematic/InvestmentKnowledgeAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -333,6 +335,10 @@ function App() {
             <DatasetFreshnessMonitor />
             {/* F86: contact × task linker — ◈ CTTASK button (left:22240); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact against tasks to surface TASKED (match found) vs IDLE; stat tiles (contacts/tasks/tasked/idle); ALL/TASKED/IDLE filter tabs + text search; expand contact → matched tasks with priority+status+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-task brief + TTS via jarvis:speak-dossier; isCttaskQuery+buildCttaskScript wired in JarvisBrain; "contact task"/"who has tasks"/"task contact"/"active contacts"/"cttask" voice trigger; 90-s auto-refresh */}
             <ContactTaskLinker />
+            {/* F87: contact–scenario assignor — ⊕ CTSCEN button (left:8708); parallel-fetches /entities/Contact + /v1/scenario/list; keyword-correlates contacts against scenario titles/descriptions to surface ASSIGNED vs SOLO; stat tiles (contacts/scenarios/assigned/solo); ALL/ASSIGNED/SOLO filter tabs + text search; expand contact → matched scenarios with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence team-readiness brief + TTS via jarvis:speak-dossier; "contact scenario"/"who's in which scenario"/"scenario contacts"/"ctscen" voice trigger; 90-s auto-refresh */}
+            <ContactScenarioAssignor />
+            {/* F88: investment-knowledge advisor — ◈ INVKNOW button (left:22800); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates each holding (name/type/sector/description) against knowledge articles to surface RESEARCHED (backed) vs DARK (no docs); stat tiles (investments/articles/researched/dark); ALL/RESEARCHED/DARK filter tabs + text search; expand holding → matched articles with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-knowledge brief + TTS via jarvis:speak-dossier; isInvknowQuery+buildInvknowScript wired in JarvisBrain; "investment knowledge"/"portfolio research"/"which investments have docs"/"dark holdings"/"invknow" voice trigger; 120-s auto-refresh */}
+            <InvestmentKnowledgeAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
