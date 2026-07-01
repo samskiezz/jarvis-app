@@ -111,6 +111,8 @@ import SwarmJobKnowledgeCoverage from '@/components/cinematic/SwarmJobKnowledgeC
 import IntelProfileInvestigationLinker from '@/components/cinematic/IntelProfileInvestigationLinker';
 import TaskDecisionTracer from '@/components/cinematic/TaskDecisionTracer';
 import ScenarioStatusBar from '@/components/overnight/ScenarioStatusBar';
+import DatasetFreshnessMonitor from '@/components/cinematic/DatasetFreshnessMonitor';
+import ContactTaskLinker from '@/components/cinematic/ContactTaskLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -327,6 +329,10 @@ function App() {
             <TaskDecisionTracer />
             {/* F84: active scenario status bar — slim HUD strip top-right (top:26px) below LiveTelemetryTicker; polls /v1/scenario/list every 60 s; RUNNING/PENDING/FAILED/COMPLETED count pills; hides until first data; pointerEvents:none */}
             <ScenarioStatusBar />
+            {/* F85: dataset freshness monitor — ◈ FRESH button (left:5408); polls /v1/datasets every 60 s; freshness tiers FRESH(<1h)/RECENT(1-6h)/AGING(6-24h)/STALE(>24h)/UNKNOWN; announces tier degradation via jarvis:speak-dossier; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-freshness brief + TTS; isDatasetFreshnessQuery+buildDatasetFreshnessScript wired in JarvisBrain; "dataset freshness"/"stale data"/"data age"/"dsfresh" voice trigger */}
+            <DatasetFreshnessMonitor />
+            {/* F86: contact × task linker — ◈ CTTASK button (left:22240); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact against tasks to surface TASKED (match found) vs IDLE; stat tiles (contacts/tasks/tasked/idle); ALL/TASKED/IDLE filter tabs + text search; expand contact → matched tasks with priority+status+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-task brief + TTS via jarvis:speak-dossier; isCttaskQuery+buildCttaskScript wired in JarvisBrain; "contact task"/"who has tasks"/"task contact"/"active contacts"/"cttask" voice trigger; 90-s auto-refresh */}
+            <ContactTaskLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
