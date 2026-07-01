@@ -102,6 +102,9 @@ import IntelFusionBoard from '@/components/cinematic/IntelFusionBoard';
 import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
 import ReportInvestigationTracer from '@/components/cinematic/ReportInvestigationTracer';
 import DatasetScenarioCoverage from '@/components/cinematic/DatasetScenarioCoverage';
+import KnowledgeScenarioCoverage from '@/components/cinematic/KnowledgeScenarioCoverage';
+import ContactKnowledgeAdvisor from '@/components/cinematic/ContactKnowledgeAdvisor';
+import OpsEventTaskCorrelator from '@/components/cinematic/OpsEventTaskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -300,6 +303,12 @@ function App() {
             <ReportInvestigationTracer />
             {/* F75: dataset-scenario coverage analyst — ◈ DSCEN button (left:18300); parallel-fetches /v1/datasets + /v1/scenario/list; keyword-correlates each scenario (name/objective/type) against the dataset catalog to surface DATA-BACKED vs DATA-DARK scenarios; stat tiles (scenarios/datasets/backed/data-dark); ALL/BACKED/DATA-DARK filter tabs + text search; expand scenario → matched datasets with relevance score + type badge; amber badge on data-dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-readiness brief + TTS via jarvis:speak-dossier; isDscenQuery+buildDscenScript wired in JarvisBrain; "dataset scenario"/"scenario data coverage"/"data-backed scenarios"/"dscen" voice trigger; 120-s auto-refresh */}
             <DatasetScenarioCoverage />
+            {/* F76: knowledge-scenario coverage — ◈ KSCOV button (left:8188); parallel-fetches /knowledge/ + /v1/scenario/list; keyword-correlates each scenario against knowledge articles to surface BACKED scenarios (learning material available) vs DARK (no knowledge backing); stat tiles (scenarios/articles/backed/dark); ALL/BACKED/DARK filter tabs + search; expand scenario → matched articles with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-readiness brief + TTS via jarvis:speak-dossier; isKscovQuery+buildKscovScript wired in JarvisBrain; "knowledge scenario"/"know scenario"/"kscov" voice trigger; 120-s auto-refresh */}
+            <KnowledgeScenarioCoverage />
+            {/* F77: contact × knowledge advisor — ◈ CTKNOW button (left:9852); parallel-fetches /entities/Contact + /knowledge/; keyword-correlates each contact (name/role/dept) against knowledge articles to surface LINKED vs DARK contacts; stat tiles (contacts/articles/linked/dark); ALL/LINKED/DARK filter tabs + search; expand contact → matched articles with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-coverage brief + TTS via jarvis:speak-dossier; isCtknowQuery+buildCtknowScript wired in JarvisBrain; "contact knowledge"/"ctknow" voice trigger; 120-s auto-refresh */}
+            <ContactKnowledgeAdvisor />
+            {/* F78: ops-event-to-task correlator — ◈ OETASK button (left:19420); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates each event against tasks to surface LINKED events (task-backed) vs UNLINKED (gap); stat tiles (events/tasks/linked/unlinked); ALL/LINKED/UNLINKED filter tabs; expand event → matched tasks with priority+status+score; red badge on critical unlinked; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence incident-coverage brief + TTS; isOetaskQuery+buildOetaskScript wired in JarvisBrain; "ops event task"/"oetask" voice trigger; 60-s auto-refresh */}
+            <OpsEventTaskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
