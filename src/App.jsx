@@ -110,6 +110,7 @@ import RiskSignalKnowledgeCoverage from '@/components/cinematic/RiskSignalKnowle
 import SwarmJobKnowledgeCoverage from '@/components/cinematic/SwarmJobKnowledgeCoverage';
 import IntelProfileInvestigationLinker from '@/components/cinematic/IntelProfileInvestigationLinker';
 import TaskDecisionTracer from '@/components/cinematic/TaskDecisionTracer';
+import ScenarioStatusBar from '@/components/overnight/ScenarioStatusBar';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -324,6 +325,8 @@ function App() {
             <IntelProfileInvestigationLinker />
             {/* F83: task × decision ledger tracer — ◈ TDECIS button (left:21680); parallel-fetches /entities/Task + /v1/decision/list; keyword-correlates each task against strategic decisions to surface DECISION-BACKED (rationale documented) vs UNDECIDED (no decision record) tasks; stat tiles (tasks/decisions/backed/undecided); ALL/BACKED/UNDECIDED filter tabs + text search; expand task → matched decisions with rationale + expected-outcome + relevance score; amber badge on undecided count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic-alignment brief + TTS via jarvis:speak-dossier; isTaskDecisQuery+buildTaskDecisScript wired in JarvisBrain; "task decision"/"strategic tasks"/"decided tasks"/"which tasks have decisions"/"tdecis" voice trigger; 90-s auto-refresh */}
             <TaskDecisionTracer />
+            {/* F84: active scenario status bar — slim HUD strip top-right (top:26px) below LiveTelemetryTicker; polls /v1/scenario/list every 60 s; RUNNING/PENDING/FAILED/COMPLETED count pills; hides until first data; pointerEvents:none */}
+            <ScenarioStatusBar />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
