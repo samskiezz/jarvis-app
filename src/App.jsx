@@ -105,6 +105,8 @@ import DatasetScenarioCoverage from '@/components/cinematic/DatasetScenarioCover
 import KnowledgeScenarioCoverage from '@/components/cinematic/KnowledgeScenarioCoverage';
 import ContactKnowledgeAdvisor from '@/components/cinematic/ContactKnowledgeAdvisor';
 import OpsEventTaskCorrelator from '@/components/cinematic/OpsEventTaskCorrelator';
+import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvestigationLinker';
+import RiskSignalKnowledgeCoverage from '@/components/cinematic/RiskSignalKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -309,6 +311,10 @@ function App() {
             <ContactKnowledgeAdvisor />
             {/* F78: ops-event-to-task correlator — ◈ OETASK button (left:19420); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates each event against tasks to surface LINKED events (task-backed) vs UNLINKED (gap); stat tiles (events/tasks/linked/unlinked); ALL/LINKED/UNLINKED filter tabs; expand event → matched tasks with priority+status+score; red badge on critical unlinked; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence incident-coverage brief + TTS; isOetaskQuery+buildOetaskScript wired in JarvisBrain; "ops event task"/"oetask" voice trigger; 60-s auto-refresh */}
             <OpsEventTaskCorrelator />
+            {/* F79: knowledge-investigation linker — ◉ KINV button (left:5172); parallel-fetches /knowledge/ + /v1/investigations; keyword-correlates each open case against knowledge articles; split pane (cases left, articles right); linked/unlinked stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence article-relevance brief + TTS via jarvis:speak-dossier; isKnowledgeInvQuery+buildKnowledgeInvScript wired in JarvisBrain; "knowledge linker"/"link knowledge"/"case knowledge"/"kinv" voice trigger; 5-min auto-refresh */}
+            <KnowledgeInvestigationLinker />
+            {/* F80: risk-signal-knowledge coverage — ◈ RSKNOW button (left:20000); parallel-fetches /entities/RiskSignal + /knowledge/; keyword-correlates each signal against articles to surface COVERED vs DARK signals; stat tiles (signals/articles/covered/dark); ALL/COVERED/DARK filter tabs + text search; expand signal → matched articles with relevance score; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-gap brief + TTS via jarvis:speak-dossier; isRsknowQuery+buildRsknowScript wired in JarvisBrain; "risk signal knowledge"/"risk knowledge coverage"/"knowledge risk"/"rsknow" voice trigger; 120-s auto-refresh */}
+            <RiskSignalKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
