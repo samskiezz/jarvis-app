@@ -115,6 +115,7 @@ import DatasetFreshnessMonitor from '@/components/cinematic/DatasetFreshnessMoni
 import ContactTaskLinker from '@/components/cinematic/ContactTaskLinker';
 import ContactScenarioAssignor from '@/components/cinematic/ContactScenarioAssignor';
 import InvestmentKnowledgeAdvisor from '@/components/cinematic/InvestmentKnowledgeAdvisor';
+import ReportRiskCorrelator from '@/components/cinematic/ReportRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -339,6 +340,8 @@ function App() {
             <ContactScenarioAssignor />
             {/* F88: investment-knowledge advisor — ◈ INVKNOW button (left:22800); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates each holding (name/type/sector/description) against knowledge articles to surface RESEARCHED (backed) vs DARK (no docs); stat tiles (investments/articles/researched/dark); ALL/RESEARCHED/DARK filter tabs + text search; expand holding → matched articles with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-knowledge brief + TTS via jarvis:speak-dossier; isInvknowQuery+buildInvknowScript wired in JarvisBrain; "investment knowledge"/"portfolio research"/"which investments have docs"/"dark holdings"/"invknow" voice trigger; 120-s auto-refresh */}
             <InvestmentKnowledgeAdvisor />
+            {/* F89: report–risk correlator — ◈ RPRSK button (left:23360); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates each risk signal against reports to surface DOCUMENTED (report-backed) vs UNDOCUMENTED (no coverage — intelligence gap); stat tiles (reports/signals/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand signal → matched reports with type badge + relevance score; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-documentation brief + TTS via jarvis:speak-dossier; isRprskQuery+buildRprskScript wired in JarvisBrain; "report risk"/"risk reporting gap"/"which risks have reports"/"rprsk" voice trigger; 90-s auto-refresh */}
+            <ReportRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
