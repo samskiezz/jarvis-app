@@ -116,6 +116,7 @@ import ContactTaskLinker from '@/components/cinematic/ContactTaskLinker';
 import ContactScenarioAssignor from '@/components/cinematic/ContactScenarioAssignor';
 import InvestmentKnowledgeAdvisor from '@/components/cinematic/InvestmentKnowledgeAdvisor';
 import ReportRiskCorrelator from '@/components/cinematic/ReportRiskCorrelator';
+import DecisionRiskAligner from '@/components/cinematic/DecisionRiskAligner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -342,6 +343,8 @@ function App() {
             <InvestmentKnowledgeAdvisor />
             {/* F89: report–risk correlator — ◈ RPRSK button (left:23360); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates each risk signal against reports to surface DOCUMENTED (report-backed) vs UNDOCUMENTED (no coverage — intelligence gap); stat tiles (reports/signals/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand signal → matched reports with type badge + relevance score; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-documentation brief + TTS via jarvis:speak-dossier; isRprskQuery+buildRprskScript wired in JarvisBrain; "report risk"/"risk reporting gap"/"which risks have reports"/"rprsk" voice trigger; 90-s auto-refresh */}
             <ReportRiskCorrelator />
+            {/* F90: decision–risk aligner — ◈ DECRSK button (left:23920); parallel-fetches /v1/decision/list + /entities/RiskSignal; keyword-correlates each strategic decision against active risk signals to surface RISK-AWARE (corroborated) vs BLIND (no risk evidence); stat tiles (decisions/signals/risk-aware/blind); ALL/RISK-AWARE/BLIND filter tabs + text search; expand decision → matched signals with severity badge + relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic risk-alignment brief + TTS via jarvis:speak-dossier; "decision risk"/"risky decisions"/"blind decisions"/"decrsk" voice trigger; 90-s auto-refresh */}
+            <DecisionRiskAligner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
