@@ -108,6 +108,7 @@ import OpsEventTaskCorrelator from '@/components/cinematic/OpsEventTaskCorrelato
 import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvestigationLinker';
 import RiskSignalKnowledgeCoverage from '@/components/cinematic/RiskSignalKnowledgeCoverage';
 import SwarmJobKnowledgeCoverage from '@/components/cinematic/SwarmJobKnowledgeCoverage';
+import IntelProfileInvestigationLinker from '@/components/cinematic/IntelProfileInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -318,6 +319,8 @@ function App() {
             <RiskSignalKnowledgeCoverage />
             {/* F81: swarm-job knowledge coverage — ◈ SWJKN button (left:20560); parallel-fetches /entities/SwarmJob + /knowledge/; keyword-correlates each job against articles to surface BACKED vs DARK jobs; stat tiles (jobs/articles/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand job → matched articles with relevance score; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-gap brief + TTS via jarvis:speak-dossier; isSwjknQuery+buildSwjknScript wired in JarvisBrain; "swarm knowledge"/"job knowledge"/"swarm job knowledge"/"swjkn" voice trigger; 120-s auto-refresh */}
             <SwarmJobKnowledgeCoverage />
+            {/* F82: intel profile × investigation linker — ◈ IPINV button (left:21120); parallel-fetches /entities/IntelProfile + /v1/investigations; keyword-correlates each threat actor against open cases to surface INVESTIGATED vs UNTRACKED profiles; stat tiles (profiles/investigations/investigated/untracked); ALL/INVESTIGATED/UNTRACKED filter tabs + text search; expand profile → matched cases with status+type+score; amber badge on untracked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-investigation brief + TTS via jarvis:speak-dossier; isIpinvQuery+buildIpinvScript wired in JarvisBrain; "intel investigation"/"profile investigation"/"threat investigation"/"which intel profiles have cases"/"ipinv" voice trigger; 5-min auto-refresh */}
+            <IntelProfileInvestigationLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
