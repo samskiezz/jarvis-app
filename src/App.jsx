@@ -109,6 +109,7 @@ import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvest
 import RiskSignalKnowledgeCoverage from '@/components/cinematic/RiskSignalKnowledgeCoverage';
 import SwarmJobKnowledgeCoverage from '@/components/cinematic/SwarmJobKnowledgeCoverage';
 import IntelProfileInvestigationLinker from '@/components/cinematic/IntelProfileInvestigationLinker';
+import TaskDecisionTracer from '@/components/cinematic/TaskDecisionTracer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -321,6 +322,8 @@ function App() {
             <SwarmJobKnowledgeCoverage />
             {/* F82: intel profile × investigation linker — ◈ IPINV button (left:21120); parallel-fetches /entities/IntelProfile + /v1/investigations; keyword-correlates each threat actor against open cases to surface INVESTIGATED vs UNTRACKED profiles; stat tiles (profiles/investigations/investigated/untracked); ALL/INVESTIGATED/UNTRACKED filter tabs + text search; expand profile → matched cases with status+type+score; amber badge on untracked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-investigation brief + TTS via jarvis:speak-dossier; isIpinvQuery+buildIpinvScript wired in JarvisBrain; "intel investigation"/"profile investigation"/"threat investigation"/"which intel profiles have cases"/"ipinv" voice trigger; 5-min auto-refresh */}
             <IntelProfileInvestigationLinker />
+            {/* F83: task × decision ledger tracer — ◈ TDECIS button (left:21680); parallel-fetches /entities/Task + /v1/decision/list; keyword-correlates each task against strategic decisions to surface DECISION-BACKED (rationale documented) vs UNDECIDED (no decision record) tasks; stat tiles (tasks/decisions/backed/undecided); ALL/BACKED/UNDECIDED filter tabs + text search; expand task → matched decisions with rationale + expected-outcome + relevance score; amber badge on undecided count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic-alignment brief + TTS via jarvis:speak-dossier; isTaskDecisQuery+buildTaskDecisScript wired in JarvisBrain; "task decision"/"strategic tasks"/"decided tasks"/"which tasks have decisions"/"tdecis" voice trigger; 90-s auto-refresh */}
+            <TaskDecisionTracer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
