@@ -107,6 +107,7 @@ import ContactKnowledgeAdvisor from '@/components/cinematic/ContactKnowledgeAdvi
 import OpsEventTaskCorrelator from '@/components/cinematic/OpsEventTaskCorrelator';
 import KnowledgeInvestigationLinker from '@/components/cinematic/KnowledgeInvestigationLinker';
 import RiskSignalKnowledgeCoverage from '@/components/cinematic/RiskSignalKnowledgeCoverage';
+import SwarmJobKnowledgeCoverage from '@/components/cinematic/SwarmJobKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -315,6 +316,8 @@ function App() {
             <KnowledgeInvestigationLinker />
             {/* F80: risk-signal-knowledge coverage — ◈ RSKNOW button (left:20000); parallel-fetches /entities/RiskSignal + /knowledge/; keyword-correlates each signal against articles to surface COVERED vs DARK signals; stat tiles (signals/articles/covered/dark); ALL/COVERED/DARK filter tabs + text search; expand signal → matched articles with relevance score; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-gap brief + TTS via jarvis:speak-dossier; isRsknowQuery+buildRsknowScript wired in JarvisBrain; "risk signal knowledge"/"risk knowledge coverage"/"knowledge risk"/"rsknow" voice trigger; 120-s auto-refresh */}
             <RiskSignalKnowledgeCoverage />
+            {/* F81: swarm-job knowledge coverage — ◈ SWJKN button (left:20560); parallel-fetches /entities/SwarmJob + /knowledge/; keyword-correlates each job against articles to surface BACKED vs DARK jobs; stat tiles (jobs/articles/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand job → matched articles with relevance score; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-gap brief + TTS via jarvis:speak-dossier; isSwjknQuery+buildSwjknScript wired in JarvisBrain; "swarm knowledge"/"job knowledge"/"swarm job knowledge"/"swjkn" voice trigger; 120-s auto-refresh */}
+            <SwarmJobKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
