@@ -101,6 +101,7 @@ import SkillDatasetCoverageAdvisor from '@/components/cinematic/SkillDatasetCove
 import IntelFusionBoard from '@/components/cinematic/IntelFusionBoard';
 import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
 import ReportInvestigationTracer from '@/components/cinematic/ReportInvestigationTracer';
+import DatasetScenarioCoverage from '@/components/cinematic/DatasetScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -297,6 +298,8 @@ function App() {
             <ContactInvestigationLinker />
             {/* F74: report-investigation tracer — ◈ RINVT button (left:17740); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each investigation against the report catalog to surface TRACED (report-backed) vs UNDOCUMENTED (no report coverage) investigations; stat tiles (investigations/reports/traced/undocumented); ALL/TRACED/UNDOCUMENTED filter tabs + text search; expand investigation → matched reports with relevance score + type badge; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence documentation-gap brief + TTS via jarvis:speak-dossier; isRinvtQuery+buildRinvtScript wired in JarvisBrain; "report investigation"/"undocumented cases"/"which investigations have reports"/"report traceability"/"rinvt" voice trigger; 5-min auto-refresh */}
             <ReportInvestigationTracer />
+            {/* F75: dataset-scenario coverage analyst — ◈ DSCEN button (left:18300); parallel-fetches /v1/datasets + /v1/scenario/list; keyword-correlates each scenario (name/objective/type) against the dataset catalog to surface DATA-BACKED vs DATA-DARK scenarios; stat tiles (scenarios/datasets/backed/data-dark); ALL/BACKED/DATA-DARK filter tabs + text search; expand scenario → matched datasets with relevance score + type badge; amber badge on data-dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-readiness brief + TTS via jarvis:speak-dossier; isDscenQuery+buildDscenScript wired in JarvisBrain; "dataset scenario"/"scenario data coverage"/"data-backed scenarios"/"dscen" voice trigger; 120-s auto-refresh */}
+            <DatasetScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
