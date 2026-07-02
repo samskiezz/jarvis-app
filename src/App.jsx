@@ -132,6 +132,7 @@ import TaskKnowledgeCoverage from '@/components/cinematic/TaskKnowledgeCoverage'
 import KnowledgeAcquisitionAdvisor from '@/components/cinematic/KnowledgeAcquisitionAdvisor';
 import ReportScenarioMapper from '@/components/cinematic/ReportScenarioMapper';
 import InvestmentDecisionAligner from '@/components/cinematic/InvestmentDecisionAligner';
+import ContactThreatLinker from '@/components/cinematic/ContactThreatLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -390,6 +391,8 @@ function App() {
             <ReportScenarioMapper />
             {/* F105: investment × decision aligner — ◈ INVDEC button (left:29560, bottom:8, zIndex:60); parallel-fetches /entities/Investment + /v1/decision/list; keyword-correlates each holding against strategic decisions to surface BACKED (decision on record) vs SPECULATIVE (no rationale found); stat tiles (holdings/decisions/backed/spec); ALL/BACKED/SPECULATIVE filter tabs + text search; expand holding → matched decisions with rationale snippet + relevance score; amber badge on speculative count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-strategy brief + TTS via jarvis:speak-dossier; "investment decision"/"portfolio decision"/"invdec" voice trigger; 90-s auto-refresh */}
             <InvestmentDecisionAligner />
+            {/* F106: contact × intel profile threat linker — ◈ CTL button (left:4340); parallel-fetches /entities/Contact + /entities/IntelProfile; keyword-correlates each contact (name/org/tags) against threat profiles to surface LINKED (match found) vs CLEAR; stat tiles (contacts/profiles/linked/high-threat); ALL/LINKED/HIGH filter tabs + text search; red badge on high-threat count; expand contact → best-matched threat profile + all linked profiles; click pair → /v1/jarvis/agent/chat 2-sentence threat-link assessment + TTS via jarvis:speak-dossier; isContactThreatQuery+buildContactThreatScript wired in JarvisBrain; "contact threats"/"threat contacts"/"linked contacts"/"dangerous contacts"/"ctl" voice trigger; 60-s auto-refresh */}
+            <ContactThreatLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
