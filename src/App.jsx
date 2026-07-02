@@ -118,6 +118,7 @@ import InvestmentKnowledgeAdvisor from '@/components/cinematic/InvestmentKnowled
 import ReportRiskCorrelator from '@/components/cinematic/ReportRiskCorrelator';
 import DecisionRiskAligner from '@/components/cinematic/DecisionRiskAligner';
 import IntelProfileKnowledgeAdvisor from '@/components/cinematic/IntelProfileKnowledgeAdvisor';
+import DecisionKnowledgeCoverage from '@/components/cinematic/DecisionKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -348,6 +349,8 @@ function App() {
             <DecisionRiskAligner />
             {/* F91: intel profile × knowledge advisor — ◈ IPKNOW button (left:24480); parallel-fetches /entities/IntelProfile + /knowledge/; keyword-correlates each threat actor (name/description/org/type/aliases) against knowledge articles to surface RESEARCHED (docs found) vs DARK (no intelligence backing); stat tiles (profiles/articles/researched/dark); ALL/RESEARCHED/DARK filter tabs + text search; expand profile → matched articles with relevance score + threat-level colour coding; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-knowledge brief + TTS via jarvis:speak-dossier; isIpknowQuery+buildIpknowScript wired in JarvisBrain; "intel knowledge"/"profile knowledge"/"actor docs"/"know the threats"/"ipknow" voice trigger; 120-s auto-refresh */}
             <IntelProfileKnowledgeAdvisor />
+            {/* F92: decision × knowledge coverage — ◈ DKNOW button (left:25040); parallel-fetches /v1/decision/list + /knowledge/; keyword-correlates each recorded strategic decision (title/reason/alternatives/expected_outcome) against knowledge articles to surface KNOWLEDGE-BACKED (at least one article) vs BLIND (no documentation found); stat tiles (decisions/articles/backed/blind); ALL/BACKED/BLIND filter tabs + text search; expand decision → matched articles with relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic knowledge-gap brief + TTS via jarvis:speak-dossier; isDknowQuery+buildDknowScript wired in JarvisBrain; "decision knowledge"/"knowledge decision"/"backed decisions"/"dknow" voice trigger; 120-s auto-refresh */}
+            <DecisionKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
