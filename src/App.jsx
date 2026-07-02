@@ -122,6 +122,7 @@ import DecisionKnowledgeCoverage from '@/components/cinematic/DecisionKnowledgeC
 import SwarmRiskCoverage from '@/components/cinematic/SwarmRiskCoverage';
 import ContactOpsLinker from '@/components/cinematic/ContactOpsLinker';
 import DatasetRiskAnalyzer from '@/components/cinematic/DatasetRiskAnalyzer';
+import OpsEventRiskCorrelator from '@/components/cinematic/OpsEventRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -360,6 +361,8 @@ function App() {
             <ContactOpsLinker />
             {/* F95: dataset × risk signal intelligence gap analyzer — ◈ DSRSK button (left:26160); parallel-fetches /v1/datasets + /entities/RiskSignal; keyword-correlates each risk signal against the dataset catalog to surface DATA-BACKED (empirical evidence found) vs DATA-DARK (no dataset coverage — speculative gap); stat tiles (signals/datasets/backed/dark); ALL/DATA-BACKED/DATA-DARK filter tabs; expand signal → matched datasets with relevance score + type badge; amber badge on data-dark CRITICAL/HIGH count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence-gap brief + TTS via jarvis:speak-dossier; isDsrskQuery+buildDsrskScript; "dataset risk"/"data-backed risks"/"risk evidence"/"which risks have data"/"risk data gap"/"dsrsk" voice trigger; 90-s auto-refresh */}
             <DatasetRiskAnalyzer />
+            {/* F96: ops event × risk signal correlator — ◈ OEVRSK button (left:26720); parallel-fetches /v1/ops/events + /entities/RiskSignal; keyword-correlates each ops event (type/message/service/actor) against active risk signals to surface FLAGGED (event-linked risk) vs ISOLATED (no match); stat tiles (events/signals/flagged/isolated); ALL/FLAGGED/ISOLATED filter tabs + text search; expand event → matched signals with severity badge + relevance score; red badge on CRITICAL-FLAGGED count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-risk brief + TTS via jarvis:speak-dossier; isOevrskQuery+buildOevrskScript wired in JarvisBrain; "ops event risk"/"event risk signal"/"which ops events have risks"/"flagged events"/"oevrsk" voice trigger; 60-s auto-refresh */}
+            <OpsEventRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
