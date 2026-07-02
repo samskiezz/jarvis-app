@@ -130,6 +130,8 @@ import DatasetInvestigationCorrelator from '@/components/cinematic/DatasetInvest
 import OpsInvCorrelator from '@/components/cinematic/OpsInvCorrelator';
 import TaskKnowledgeCoverage from '@/components/cinematic/TaskKnowledgeCoverage';
 import KnowledgeAcquisitionAdvisor from '@/components/cinematic/KnowledgeAcquisitionAdvisor';
+import ReportScenarioMapper from '@/components/cinematic/ReportScenarioMapper';
+import InvestmentDecisionAligner from '@/components/cinematic/InvestmentDecisionAligner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -384,6 +386,10 @@ function App() {
             <TaskKnowledgeCoverage />
             {/* F103: knowledge acquisition advisor — /knowledge/ × /entities/RiskSignal × /v1/investigations; gap-scores topics by risk+case pressure vs coverage; KACQ toggle left:29000 */}
             <KnowledgeAcquisitionAdvisor />
+            {/* F104: report-scenario mapper — ◈ RSCMAP button (left:9020, bottom:8, zIndex:68); parallel-fetches /v1/reports + /v1/scenario/list; keyword-correlates each scenario against report catalog to surface BACKED (research available) vs DARK (no report coverage); ALL/BACKED/DARK filter tabs; expand scenario → matched reports with relevance score + year; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence research-readiness brief + TTS via jarvis:speak-dossier; isRscmapQuery+buildRscmapScript already wired in JarvisBrain; "report scenario"/"scenario reports"/"rscmap" voice trigger; 120-s auto-refresh */}
+            <ReportScenarioMapper />
+            {/* F105: investment × decision aligner — ◈ INVDEC button (left:29560, bottom:8, zIndex:60); parallel-fetches /entities/Investment + /v1/decision/list; keyword-correlates each holding against strategic decisions to surface BACKED (decision on record) vs SPECULATIVE (no rationale found); stat tiles (holdings/decisions/backed/spec); ALL/BACKED/SPECULATIVE filter tabs + text search; expand holding → matched decisions with rationale snippet + relevance score; amber badge on speculative count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-strategy brief + TTS via jarvis:speak-dossier; "investment decision"/"portfolio decision"/"invdec" voice trigger; 90-s auto-refresh */}
+            <InvestmentDecisionAligner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
