@@ -125,6 +125,10 @@ import DatasetRiskAnalyzer from '@/components/cinematic/DatasetRiskAnalyzer';
 import OpsEventRiskCorrelator from '@/components/cinematic/OpsEventRiskCorrelator';
 import ContactRiskExposure from '@/components/cinematic/ContactRiskExposure';
 import IntelProfileRiskLinker from '@/components/cinematic/IntelProfileRiskLinker';
+import MarketPortfolioCrossfire from '@/components/cinematic/MarketPortfolioCrossfire';
+import DatasetInvestigationCorrelator from '@/components/cinematic/DatasetInvestigationCorrelator';
+import OpsInvCorrelator from '@/components/cinematic/OpsInvCorrelator';
+import TaskKnowledgeCoverage from '@/components/cinematic/TaskKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -369,6 +373,14 @@ function App() {
             <ContactRiskExposure />
             {/* F98: intel profile × risk signal linker — ◈ IPRSK button (left:27840); parallel-fetches /entities/IntelProfile + /entities/RiskSignal; keyword-correlates each threat actor (name/description/org/type/aliases) against active risk signals to surface CONFIRMED (signal corroboration found) vs UNCONFIRMED (no match); stat tiles (profiles/signals/confirmed/unconfirmed); ALL/CONFIRMED/UNCONFIRMED filter tabs + text search; expand profile → matched signals with severity badge + relevance score; amber badge on confirmed count (red if CRITICAL match); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-activation brief + TTS via jarvis:speak-dossier; isIprskQuery+buildIprskScript wired in JarvisBrain; "intel profile risk"/"actor risk signal"/"threat actor signal"/"confirmed threats"/"iprsk" voice trigger; 90-s auto-refresh */}
             <IntelProfileRiskLinker />
+            {/* F99: market × portfolio crossfire — ⊗ CROSS strip button (bottom-center); parallel-fetches /functions/getLiveIntel (crypto+FX) + /entities/Investment; cross-references holdings against live market tickers; shows current price + 24-h pct-change GREEN/RED per holding; matched vs unmatched count; isMarketCrossQuery+buildMarketCrossScript wired in JarvisBrain; "crossfire"/"market crossfire"/"portfolio cross" voice trigger; jarvis:crossfire-toggle event; 60-s auto-refresh */}
+            <MarketPortfolioCrossfire />
+            {/* F100: dataset × investigation correlator — ◈ DSINV button (left:7980, bottom:8, zIndex 65); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates each investigation against datasets to surface COVERED vs UNCOVERED; stat tiles (datasets/investigations/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs; expand investigation → matched datasets with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dataset-coverage assessment + TTS via jarvis:speak-dossier; isDsInvCorrQuery+buildDsInvCorrScript wired in JarvisBrain; "dsinv"/"dataset investigation"/"datasets driving cases"/"data case gap"/"which datasets support"/"data dark"/"dataset case" voice trigger; 90-s auto-refresh */}
+            <DatasetInvestigationCorrelator />
+            {/* F101: ops event × investigation correlator — ⚡ OICORR button (left:7044, zIndex 65); parallel-fetches /v1/ops/events + /v1/investigations; keyword-correlates critical/high severity ops events against open investigation titles+descriptions; CORRELATED/UNCORRELATED/ALL filter tabs; expand event → matched investigations; red badge on correlated-event count; ▶ ANALYZE → /v1/jarvis/agent/chat 2-sentence operational-intelligence linkage assessment + TTS via jarvis:speak-dossier; isOpsInvCorrQuery+buildOpsInvCorrScript wired in JarvisBrain; "ops investigation"/"event case"/"ops case"/"operational case"/"oicorr" voice trigger; 30-s auto-refresh */}
+            <OpsInvCorrelator />
+            {/* F102: task knowledge coverage — /entities/Task × /knowledge/; keyword-correlates tasks to articles; TKNOW toggle */}
+            <TaskKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
