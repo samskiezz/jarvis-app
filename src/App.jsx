@@ -129,6 +129,7 @@ import MarketPortfolioCrossfire from '@/components/cinematic/MarketPortfolioCros
 import DatasetInvestigationCorrelator from '@/components/cinematic/DatasetInvestigationCorrelator';
 import OpsInvCorrelator from '@/components/cinematic/OpsInvCorrelator';
 import TaskKnowledgeCoverage from '@/components/cinematic/TaskKnowledgeCoverage';
+import KnowledgeAcquisitionAdvisor from '@/components/cinematic/KnowledgeAcquisitionAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -381,6 +382,8 @@ function App() {
             <OpsInvCorrelator />
             {/* F102: task knowledge coverage — /entities/Task × /knowledge/; keyword-correlates tasks to articles; TKNOW toggle */}
             <TaskKnowledgeCoverage />
+            {/* F103: knowledge acquisition advisor — /knowledge/ × /entities/RiskSignal × /v1/investigations; gap-scores topics by risk+case pressure vs coverage; KACQ toggle left:29000 */}
+            <KnowledgeAcquisitionAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
