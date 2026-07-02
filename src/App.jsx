@@ -120,6 +120,8 @@ import DecisionRiskAligner from '@/components/cinematic/DecisionRiskAligner';
 import IntelProfileKnowledgeAdvisor from '@/components/cinematic/IntelProfileKnowledgeAdvisor';
 import DecisionKnowledgeCoverage from '@/components/cinematic/DecisionKnowledgeCoverage';
 import SwarmRiskCoverage from '@/components/cinematic/SwarmRiskCoverage';
+import ContactOpsLinker from '@/components/cinematic/ContactOpsLinker';
+import DatasetRiskAnalyzer from '@/components/cinematic/DatasetRiskAnalyzer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -354,6 +356,10 @@ function App() {
             <DecisionKnowledgeCoverage />
             {/* F93: swarm job × risk signal coverage — ◈ SWRSK button (left:25600); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates each risk signal against swarm jobs to surface MITIGATING (job-backed) vs UNADDRESSED (no coverage) signals; stat tiles (jobs/signals/mitigating/unaddressed); ALL/MITIGATING/UNADDRESSED filter tabs; red badge on unaddressed CRITICAL/HIGH count; expand signal → matched jobs with status+progress+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-mitigation brief + TTS via jarvis:speak-dossier; isSwrskQuery+buildSwrskScript; "swarm risk"/"job risk coverage"/"risk mitigation jobs"/"swrsk" voice trigger; 60-s auto-refresh */}
             <SwarmRiskCoverage />
+            {/* F94: contact × ops event linker — ◈ CTOPS button (left:9956 zIndex:69); parallel-fetches /entities/Contact + /v1/ops/events; keyword-correlates contacts against live ops events to surface INVOLVED vs CLEAR; stat tiles (contacts/events/involved/clear); ALL/INVOLVED/CLEAR filter tabs; expand contact → matched events with severity badge + timestamp; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-ops brief + TTS via jarvis:speak-dossier; isCtopsQuery+buildCtopsScript wired in JarvisBrain; "contact ops"/"who's involved"/"ctops" voice trigger; 60-s auto-refresh */}
+            <ContactOpsLinker />
+            {/* F95: dataset × risk signal intelligence gap analyzer — ◈ DSRSK button (left:26160); parallel-fetches /v1/datasets + /entities/RiskSignal; keyword-correlates each risk signal against the dataset catalog to surface DATA-BACKED (empirical evidence found) vs DATA-DARK (no dataset coverage — speculative gap); stat tiles (signals/datasets/backed/dark); ALL/DATA-BACKED/DATA-DARK filter tabs; expand signal → matched datasets with relevance score + type badge; amber badge on data-dark CRITICAL/HIGH count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence-gap brief + TTS via jarvis:speak-dossier; isDsrskQuery+buildDsrskScript; "dataset risk"/"data-backed risks"/"risk evidence"/"which risks have data"/"risk data gap"/"dsrsk" voice trigger; 90-s auto-refresh */}
+            <DatasetRiskAnalyzer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
