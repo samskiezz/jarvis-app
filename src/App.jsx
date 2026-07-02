@@ -119,6 +119,7 @@ import ReportRiskCorrelator from '@/components/cinematic/ReportRiskCorrelator';
 import DecisionRiskAligner from '@/components/cinematic/DecisionRiskAligner';
 import IntelProfileKnowledgeAdvisor from '@/components/cinematic/IntelProfileKnowledgeAdvisor';
 import DecisionKnowledgeCoverage from '@/components/cinematic/DecisionKnowledgeCoverage';
+import SwarmRiskCoverage from '@/components/cinematic/SwarmRiskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -351,6 +352,8 @@ function App() {
             <IntelProfileKnowledgeAdvisor />
             {/* F92: decision × knowledge coverage — ◈ DKNOW button (left:25040); parallel-fetches /v1/decision/list + /knowledge/; keyword-correlates each recorded strategic decision (title/reason/alternatives/expected_outcome) against knowledge articles to surface KNOWLEDGE-BACKED (at least one article) vs BLIND (no documentation found); stat tiles (decisions/articles/backed/blind); ALL/BACKED/BLIND filter tabs + text search; expand decision → matched articles with relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic knowledge-gap brief + TTS via jarvis:speak-dossier; isDknowQuery+buildDknowScript wired in JarvisBrain; "decision knowledge"/"knowledge decision"/"backed decisions"/"dknow" voice trigger; 120-s auto-refresh */}
             <DecisionKnowledgeCoverage />
+            {/* F93: swarm job × risk signal coverage — ◈ SWRSK button (left:25600); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates each risk signal against swarm jobs to surface MITIGATING (job-backed) vs UNADDRESSED (no coverage) signals; stat tiles (jobs/signals/mitigating/unaddressed); ALL/MITIGATING/UNADDRESSED filter tabs; red badge on unaddressed CRITICAL/HIGH count; expand signal → matched jobs with status+progress+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-mitigation brief + TTS via jarvis:speak-dossier; isSwrskQuery+buildSwrskScript; "swarm risk"/"job risk coverage"/"risk mitigation jobs"/"swrsk" voice trigger; 60-s auto-refresh */}
+            <SwarmRiskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
