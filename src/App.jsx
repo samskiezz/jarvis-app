@@ -124,6 +124,7 @@ import ContactOpsLinker from '@/components/cinematic/ContactOpsLinker';
 import DatasetRiskAnalyzer from '@/components/cinematic/DatasetRiskAnalyzer';
 import OpsEventRiskCorrelator from '@/components/cinematic/OpsEventRiskCorrelator';
 import ContactRiskExposure from '@/components/cinematic/ContactRiskExposure';
+import IntelProfileRiskLinker from '@/components/cinematic/IntelProfileRiskLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -366,6 +367,8 @@ function App() {
             <OpsEventRiskCorrelator />
             {/* F97: contact × risk signal exposure linker — ◈ CTRSK button (left:27280); parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates each contact (name/role/department/notes/tags) against active risk signals to surface AT-RISK (at least one match) vs CLEAR; stat tiles (contacts/signals/at-risk/clear); ALL/AT-RISK/CLEAR filter tabs + text search; expand contact → matched signals with severity badge + relevance score; red badge on AT-RISK count when any matched signal is CRITICAL; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-risk brief + TTS via jarvis:speak-dossier; isCtrskQuery+buildCtrskScript; "contact risk"/"at-risk contacts"/"contact exposure"/"which contacts are at risk"/"ctrsk" voice trigger; 90-s auto-refresh */}
             <ContactRiskExposure />
+            {/* F98: intel profile × risk signal linker — ◈ IPRSK button (left:27840); parallel-fetches /entities/IntelProfile + /entities/RiskSignal; keyword-correlates each threat actor (name/description/org/type/aliases) against active risk signals to surface CONFIRMED (signal corroboration found) vs UNCONFIRMED (no match); stat tiles (profiles/signals/confirmed/unconfirmed); ALL/CONFIRMED/UNCONFIRMED filter tabs + text search; expand profile → matched signals with severity badge + relevance score; amber badge on confirmed count (red if CRITICAL match); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-activation brief + TTS via jarvis:speak-dossier; isIprskQuery+buildIprskScript wired in JarvisBrain; "intel profile risk"/"actor risk signal"/"threat actor signal"/"confirmed threats"/"iprsk" voice trigger; 90-s auto-refresh */}
+            <IntelProfileRiskLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
