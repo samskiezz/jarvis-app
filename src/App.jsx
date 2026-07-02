@@ -135,6 +135,7 @@ import InvestmentDecisionAligner from '@/components/cinematic/InvestmentDecision
 import ContactThreatLinker from '@/components/cinematic/ContactThreatLinker';
 import SwarmScenarioCoverage from '@/components/cinematic/SwarmScenarioCoverage';
 import SwarmDecisionAlignment from '@/components/cinematic/SwarmDecisionAlignment';
+import SkillRiskCoverage from '@/components/cinematic/SkillRiskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -399,6 +400,8 @@ function App() {
             <SwarmScenarioCoverage />
             {/* F109: swarm job × decision alignment — ◈ SWDEC button (left:30680, bottom:8, zIndex:69); parallel-fetches /entities/SwarmJob + /v1/decision/list; keyword-correlates each swarm job against strategic decisions to surface MANDATED (decision-backed) vs AUTONOMOUS (no governance record); stat tiles (jobs/decisions/mandated/autonomous); ALL/MANDATED/AUTONOMOUS filter tabs; expand job → matched decisions with rationale snippet + relevance score; amber badge on autonomous count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence governance-gap brief + TTS via jarvis:speak-dossier; isSwdecQuery+buildSwdecScript wired in JarvisBrain; "swarm decision"/"mandated swarms"/"autonomous swarm"/"swarm governance"/"swdec" voice trigger; 90-s auto-refresh */}
             <SwarmDecisionAlignment />
+            {/* F110: skill × risk signal coverage advisor — ◈ SKLRSK button (left:31240, bottom:8, zIndex:69); parallel-fetches /v1/aip/skill + /entities/RiskSignal; keyword-correlates each risk signal against the skill catalog to surface COVERED (skill-backed) vs DARK (no skill coverage — capability gap); stat tiles (signals/skills/covered/dark); ALL/COVERED/DARK filter tabs + text search; expand signal → matched skills with category + relevance score; red badge on CRITICAL/HIGH dark signals; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability-gap brief + TTS via jarvis:speak-dossier; isSklrskQuery+buildSklrskScript wired in JarvisBrain; "skill risk"/"risk skills"/"capability gap"/"which risks have skills"/"sklrsk" voice trigger; 90-s auto-refresh */}
+            <SkillRiskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
