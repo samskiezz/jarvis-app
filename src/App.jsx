@@ -136,6 +136,8 @@ import ContactThreatLinker from '@/components/cinematic/ContactThreatLinker';
 import SwarmScenarioCoverage from '@/components/cinematic/SwarmScenarioCoverage';
 import SwarmDecisionAlignment from '@/components/cinematic/SwarmDecisionAlignment';
 import SkillRiskCoverage from '@/components/cinematic/SkillRiskCoverage';
+import ReportTaskCoverage from '@/components/cinematic/ReportTaskCoverage';
+import SitrepCommander from '@/components/cinematic/SitrepCommander';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -402,6 +404,10 @@ function App() {
             <SwarmDecisionAlignment />
             {/* F110: skill × risk signal coverage advisor — ◈ SKLRSK button (left:31240, bottom:8, zIndex:69); parallel-fetches /v1/aip/skill + /entities/RiskSignal; keyword-correlates each risk signal against the skill catalog to surface COVERED (skill-backed) vs DARK (no skill coverage — capability gap); stat tiles (signals/skills/covered/dark); ALL/COVERED/DARK filter tabs + text search; expand signal → matched skills with category + relevance score; red badge on CRITICAL/HIGH dark signals; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability-gap brief + TTS via jarvis:speak-dossier; isSklrskQuery+buildSklrskScript wired in JarvisBrain; "skill risk"/"risk skills"/"capability gap"/"which risks have skills"/"sklrsk" voice trigger; 90-s auto-refresh */}
             <SkillRiskCoverage />
+            {/* F111: report × task coverage mapper — ◈ RPTASK button (left:9540, bottom:8, zIndex:69); parallel-fetches /v1/reports + /entities/Task; keyword-correlates each task against the report catalog to surface BACKED (research/evidence found) vs DARK (running on assumptions alone); stat tiles (tasks/reports/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand task → matched reports with relevance score + year; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational-evidence brief + TTS via jarvis:speak-dossier; isRptaskQuery+buildRptaskScript wired in JarvisBrain; "report task"/"task report"/"evidence task"/"rptask"/"tasks backed by research" voice trigger; jarvis:rptask-toggle event; 90-s auto-refresh */}
+            <ReportTaskCoverage />
+            {/* F112: SITREP Commander — ◎ SITREP button (left:31800, bottom:8, zIndex:69); on-demand situation report; parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/RiskSignal + /entities/SwarmJob + /v1/investigations; feeds combined snapshot to /v1/jarvis/agent/chat for 5-bullet SITREP (System/Knowledge/Threats/Operations/Cases); first bullet spoken via jarvis:speak-dossier; clipboard copy; no auto-poll; isSitrepQuery+buildSitrepScript wired in JarvisBrain; "sitrep"/"situation report"/"tactical brief"/"full brief"/"what's the situation" voice trigger */}
+            <SitrepCommander />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
