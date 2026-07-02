@@ -117,6 +117,7 @@ import ContactScenarioAssignor from '@/components/cinematic/ContactScenarioAssig
 import InvestmentKnowledgeAdvisor from '@/components/cinematic/InvestmentKnowledgeAdvisor';
 import ReportRiskCorrelator from '@/components/cinematic/ReportRiskCorrelator';
 import DecisionRiskAligner from '@/components/cinematic/DecisionRiskAligner';
+import IntelProfileKnowledgeAdvisor from '@/components/cinematic/IntelProfileKnowledgeAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -345,6 +346,8 @@ function App() {
             <ReportRiskCorrelator />
             {/* F90: decision–risk aligner — ◈ DECRSK button (left:23920); parallel-fetches /v1/decision/list + /entities/RiskSignal; keyword-correlates each strategic decision against active risk signals to surface RISK-AWARE (corroborated) vs BLIND (no risk evidence); stat tiles (decisions/signals/risk-aware/blind); ALL/RISK-AWARE/BLIND filter tabs + text search; expand decision → matched signals with severity badge + relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic risk-alignment brief + TTS via jarvis:speak-dossier; "decision risk"/"risky decisions"/"blind decisions"/"decrsk" voice trigger; 90-s auto-refresh */}
             <DecisionRiskAligner />
+            {/* F91: intel profile × knowledge advisor — ◈ IPKNOW button (left:24480); parallel-fetches /entities/IntelProfile + /knowledge/; keyword-correlates each threat actor (name/description/org/type/aliases) against knowledge articles to surface RESEARCHED (docs found) vs DARK (no intelligence backing); stat tiles (profiles/articles/researched/dark); ALL/RESEARCHED/DARK filter tabs + text search; expand profile → matched articles with relevance score + threat-level colour coding; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-knowledge brief + TTS via jarvis:speak-dossier; isIpknowQuery+buildIpknowScript wired in JarvisBrain; "intel knowledge"/"profile knowledge"/"actor docs"/"know the threats"/"ipknow" voice trigger; 120-s auto-refresh */}
+            <IntelProfileKnowledgeAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
