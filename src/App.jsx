@@ -138,6 +138,7 @@ import SwarmDecisionAlignment from '@/components/cinematic/SwarmDecisionAlignmen
 import SkillRiskCoverage from '@/components/cinematic/SkillRiskCoverage';
 import ReportTaskCoverage from '@/components/cinematic/ReportTaskCoverage';
 import SitrepCommander from '@/components/cinematic/SitrepCommander';
+import OpsEventKnowledgeCoverage from '@/components/cinematic/OpsEventKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -408,6 +409,8 @@ function App() {
             <ReportTaskCoverage />
             {/* F112: SITREP Commander — ◎ SITREP button (left:31800, bottom:8, zIndex:69); on-demand situation report; parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/RiskSignal + /entities/SwarmJob + /v1/investigations; feeds combined snapshot to /v1/jarvis/agent/chat for 5-bullet SITREP (System/Knowledge/Threats/Operations/Cases); first bullet spoken via jarvis:speak-dossier; clipboard copy; no auto-poll; isSitrepQuery+buildSitrepScript wired in JarvisBrain; "sitrep"/"situation report"/"tactical brief"/"full brief"/"what's the situation" voice trigger */}
             <SitrepCommander />
+            {/* F113: ops event × knowledge coverage advisor — ◈ OEKNOW button (left:32360, bottom:8, zIndex:69); parallel-fetches /v1/ops/events + /knowledge/; keyword-correlates each event against knowledge articles to surface DOCUMENTED (runbook exists) vs DARK (response gap); stat tiles (events/articles/documented/dark); ALL/DOCUMENTED/DARK filter tabs + text search; expand event → matched articles with relevance score + type badge; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-knowledge brief + TTS via jarvis:speak-dossier; "ops event knowledge"/"event docs"/"runbook coverage"/"dark events"/"oeknow" voice trigger; 90-s auto-refresh */}
+            <OpsEventKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
