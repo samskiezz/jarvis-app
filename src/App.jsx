@@ -123,6 +123,7 @@ import SwarmRiskCoverage from '@/components/cinematic/SwarmRiskCoverage';
 import ContactOpsLinker from '@/components/cinematic/ContactOpsLinker';
 import DatasetRiskAnalyzer from '@/components/cinematic/DatasetRiskAnalyzer';
 import OpsEventRiskCorrelator from '@/components/cinematic/OpsEventRiskCorrelator';
+import ContactRiskExposure from '@/components/cinematic/ContactRiskExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -363,6 +364,8 @@ function App() {
             <DatasetRiskAnalyzer />
             {/* F96: ops event × risk signal correlator — ◈ OEVRSK button (left:26720); parallel-fetches /v1/ops/events + /entities/RiskSignal; keyword-correlates each ops event (type/message/service/actor) against active risk signals to surface FLAGGED (event-linked risk) vs ISOLATED (no match); stat tiles (events/signals/flagged/isolated); ALL/FLAGGED/ISOLATED filter tabs + text search; expand event → matched signals with severity badge + relevance score; red badge on CRITICAL-FLAGGED count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-risk brief + TTS via jarvis:speak-dossier; isOevrskQuery+buildOevrskScript wired in JarvisBrain; "ops event risk"/"event risk signal"/"which ops events have risks"/"flagged events"/"oevrsk" voice trigger; 60-s auto-refresh */}
             <OpsEventRiskCorrelator />
+            {/* F97: contact × risk signal exposure linker — ◈ CTRSK button (left:27280); parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates each contact (name/role/department/notes/tags) against active risk signals to surface AT-RISK (at least one match) vs CLEAR; stat tiles (contacts/signals/at-risk/clear); ALL/AT-RISK/CLEAR filter tabs + text search; expand contact → matched signals with severity badge + relevance score; red badge on AT-RISK count when any matched signal is CRITICAL; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-risk brief + TTS via jarvis:speak-dossier; isCtrskQuery+buildCtrskScript; "contact risk"/"at-risk contacts"/"contact exposure"/"which contacts are at risk"/"ctrsk" voice trigger; 90-s auto-refresh */}
+            <ContactRiskExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
