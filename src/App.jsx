@@ -133,6 +133,8 @@ import KnowledgeAcquisitionAdvisor from '@/components/cinematic/KnowledgeAcquisi
 import ReportScenarioMapper from '@/components/cinematic/ReportScenarioMapper';
 import InvestmentDecisionAligner from '@/components/cinematic/InvestmentDecisionAligner';
 import ContactThreatLinker from '@/components/cinematic/ContactThreatLinker';
+import SwarmScenarioCoverage from '@/components/cinematic/SwarmScenarioCoverage';
+import SwarmDecisionAlignment from '@/components/cinematic/SwarmDecisionAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -393,6 +395,10 @@ function App() {
             <InvestmentDecisionAligner />
             {/* F106: contact × intel profile threat linker — ◈ CTL button (left:4340); parallel-fetches /entities/Contact + /entities/IntelProfile; keyword-correlates each contact (name/org/tags) against threat profiles to surface LINKED (match found) vs CLEAR; stat tiles (contacts/profiles/linked/high-threat); ALL/LINKED/HIGH filter tabs + text search; red badge on high-threat count; expand contact → best-matched threat profile + all linked profiles; click pair → /v1/jarvis/agent/chat 2-sentence threat-link assessment + TTS via jarvis:speak-dossier; isContactThreatQuery+buildContactThreatScript wired in JarvisBrain; "contact threats"/"threat contacts"/"linked contacts"/"dangerous contacts"/"ctl" voice trigger; 60-s auto-refresh */}
             <ContactThreatLinker />
+            {/* F108: swarm job × scenario coverage — ◈ SWSCEN button (left:9644, bottom:8, zIndex:69); parallel-fetches /entities/SwarmJob + /v1/scenario/list; keyword-correlates each scenario against active swarm catalog to surface BACKED (swarm-supported) vs SOLO (no agent coverage); stat tiles (scenarios/jobs/backed/solo); ALL/BACKED/SOLO filter tabs; expand scenario → matched swarm jobs with status + progress bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence automation-coverage brief + TTS via jarvis:speak-dossier; isSwscenQuery+buildSwscenScript already wired in JarvisBrain; "swarm scenario"/"scenario swarm"/"automated scenarios"/"swscen" voice trigger; 60-s auto-refresh */}
+            <SwarmScenarioCoverage />
+            {/* F109: swarm job × decision alignment — ◈ SWDEC button (left:30680, bottom:8, zIndex:69); parallel-fetches /entities/SwarmJob + /v1/decision/list; keyword-correlates each swarm job against strategic decisions to surface MANDATED (decision-backed) vs AUTONOMOUS (no governance record); stat tiles (jobs/decisions/mandated/autonomous); ALL/MANDATED/AUTONOMOUS filter tabs; expand job → matched decisions with rationale snippet + relevance score; amber badge on autonomous count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence governance-gap brief + TTS via jarvis:speak-dossier; isSwdecQuery+buildSwdecScript wired in JarvisBrain; "swarm decision"/"mandated swarms"/"autonomous swarm"/"swarm governance"/"swdec" voice trigger; 90-s auto-refresh */}
+            <SwarmDecisionAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
