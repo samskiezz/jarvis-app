@@ -143,6 +143,7 @@ import VitalsTrendAnalyzer from '@/components/cinematic/VitalsTrendAnalyzer';
 import IntelProfileTaskLinker from '@/components/cinematic/IntelProfileTaskLinker';
 import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
 import ScenarioInvestmentExposure from '@/components/cinematic/ScenarioInvestmentExposure';
+import TaskScenarioCoverage from '@/components/cinematic/TaskScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -423,6 +424,7 @@ function App() {
             <InvestmentContactMapper />
             {/* F117: scenario × investment exposure matrix — ◈ SCNINV button (left:34040, bottom:8, zIndex:72); parallel-fetches /v1/scenario/list + /entities/Investment; keyword-correlates each scenario (name/objective/type) against every holding (name/type/sector/description/ticker) to surface EXPOSED investments (at least one scenario match) vs SAFE; stat tiles (scenarios/investments/exposed/safe); ALL/EXPOSED/SAFE filter tabs + text search; expand scenario → matched investments with sector badge + relevance score; amber badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-scenario risk brief + TTS via jarvis:speak-dossier; isScninvQuery+buildScninvScript wired in JarvisBrain; "scenario investment"/"investment scenario"/"portfolio scenario"/"scninv"/"which investments are in scenarios" voice trigger; 120-s auto-refresh */}
             <ScenarioInvestmentExposure />
+            <TaskScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
