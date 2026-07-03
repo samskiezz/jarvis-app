@@ -144,6 +144,9 @@ import IntelProfileTaskLinker from '@/components/cinematic/IntelProfileTaskLinke
 import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
 import ScenarioInvestmentExposure from '@/components/cinematic/ScenarioInvestmentExposure';
 import TaskScenarioCoverage from '@/components/cinematic/TaskScenarioCoverage';
+import SwarmContactLinker from '@/components/cinematic/SwarmContactLinker';
+import SwarmInvestigationCoverage from '@/components/cinematic/SwarmInvestigationCoverage';
+import InvestmentSwarmCoverage from '@/components/cinematic/InvestmentSwarmCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -425,6 +428,12 @@ function App() {
             {/* F117: scenario × investment exposure matrix — ◈ SCNINV button (left:34040, bottom:8, zIndex:72); parallel-fetches /v1/scenario/list + /entities/Investment; keyword-correlates each scenario (name/objective/type) against every holding (name/type/sector/description/ticker) to surface EXPOSED investments (at least one scenario match) vs SAFE; stat tiles (scenarios/investments/exposed/safe); ALL/EXPOSED/SAFE filter tabs + text search; expand scenario → matched investments with sector badge + relevance score; amber badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-scenario risk brief + TTS via jarvis:speak-dossier; isScninvQuery+buildScninvScript wired in JarvisBrain; "scenario investment"/"investment scenario"/"portfolio scenario"/"scninv"/"which investments are in scenarios" voice trigger; 120-s auto-refresh */}
             <ScenarioInvestmentExposure />
             <TaskScenarioCoverage />
+            {/* F119: swarm job × contact accountability linker — ◈ SWCON button (left:35160, bottom:8, zIndex:74); parallel-fetches /entities/SwarmJob + /entities/Contact; keyword-correlates each job (name/objective/type) against contacts to surface ASSIGNED vs UNASSIGNED (governance gap); stat tiles + filter tabs + expand; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "swarm contact"/"swarm accountability"/"who owns swarm"/"swcon" voice trigger; 90-s auto-refresh */}
+            <SwarmContactLinker />
+            {/* F120: swarm-investigation coverage — ⬡ ICOV button (left:5620, bottom:8, zIndex:65); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates active swarm jobs against open cases to surface COVERED vs UNCOVERED; stat tiles (active jobs/open cases/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs; split pane (case list left + matched jobs right); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isSwarmInvCoverageQuery+buildSwarmInvCoverageScript wired in JarvisBrain; "investigation coverage"/"case coverage"/"swarm investigation"/"swinv"/"which cases have coverage" voice trigger; 60-s auto-refresh */}
+            <SwarmInvestigationCoverage />
+            {/* F121: investment × swarm coverage — ◈ INVSWM button (left:35720, bottom:8, zIndex:75); parallel-fetches /entities/Investment + /entities/SwarmJob; keyword-correlates each holding against the active swarm job catalog to surface MONITORED (automation coverage found) vs UNMONITORED (no swarm attention — surveillance gap); stat tiles (holdings/active jobs/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand holding → matched swarm jobs with status badge + progress bar; amber badge on unmonitored count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-automation brief + TTS via jarvis:speak-dossier; isInvSwmQuery+buildInvSwmScript wired in JarvisBrain; "investment swarm"/"portfolio monitoring"/"which investments are monitored"/"invswm"/"portfolio swarm coverage" voice trigger; 90-s auto-refresh */}
+            <InvestmentSwarmCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
