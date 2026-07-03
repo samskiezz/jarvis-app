@@ -140,6 +140,9 @@ import ReportTaskCoverage from '@/components/cinematic/ReportTaskCoverage';
 import SitrepCommander from '@/components/cinematic/SitrepCommander';
 import OpsEventKnowledgeCoverage from '@/components/cinematic/OpsEventKnowledgeCoverage';
 import VitalsTrendAnalyzer from '@/components/cinematic/VitalsTrendAnalyzer';
+import IntelProfileTaskLinker from '@/components/cinematic/IntelProfileTaskLinker';
+import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
+import ScenarioInvestmentExposure from '@/components/cinematic/ScenarioInvestmentExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -412,8 +415,14 @@ function App() {
             <SitrepCommander />
             {/* F113: ops event × knowledge coverage advisor — ◈ OEKNOW button (left:32360, bottom:8, zIndex:69); parallel-fetches /v1/ops/events + /knowledge/; keyword-correlates each event against knowledge articles to surface DOCUMENTED (runbook exists) vs DARK (response gap); stat tiles (events/articles/documented/dark); ALL/DOCUMENTED/DARK filter tabs + text search; expand event → matched articles with relevance score + type badge; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-knowledge brief + TTS via jarvis:speak-dossier; "ops event knowledge"/"event docs"/"runbook coverage"/"dark events"/"oeknow" voice trigger; 90-s auto-refresh */}
             <OpsEventKnowledgeCoverage />
+            {/* F115: intel profile × task linker — ◈ IPTASK button (left:9332, bottom:8, zIndex:69); parallel-fetches /entities/IntelProfile + /entities/Task; keyword-correlates each threat profile against tasks to surface TASKED vs UNTASKED; stat tiles + filter tabs + expand; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIptaskQuery+buildIptaskScript wired in JarvisBrain; "intel task"/"threat task"/"iptask" voice trigger; 90-s auto-refresh */}
+            <IntelProfileTaskLinker />
             {/* F114: vitals trend analyzer — ◈ VITTREND button (left:33480, bottom:8, zIndex:71); parallel-polls /v1/vitals/trend?metric=X&hours=24 for heart_rate/hrv/spo2/steps/sleep_score/weight; SVG sparklines + trend direction + anomaly detection (>1.5 SD); ALL/TRENDING UP/TRENDING DOWN/ANOMALOUS filter tabs; red badge on anomalous count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence health-trend brief + TTS via jarvis:speak-dossier; isVitTrendQuery+buildVitTrendScript wired in JarvisBrain; "vitals trend"/"health trend"/"biometric trend"/"body trend"/"vital signs trend"/"vittrend" voice trigger; 300-s auto-refresh */}
             <VitalsTrendAnalyzer />
+            {/* F116: investment-contact mapper — ◈ INVCON button (left:7148, bottom:6, zIndex:65); parallel-fetches /entities/Investment + /entities/Contact; keyword-correlates each holding (name/type/sector/ticker/tags) against contacts (role/dept/tags) to surface which contacts in the network are relevant to each investment; LINKED/UNLINKED/ALL filter tabs; expand holding → matched contacts with role+dept; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence relationship assessment + TTS via jarvis:speak-dossier; isInvContactQuery+buildInvContactScript already wired in JarvisBrain; "investment contact"/"contact investor"/"investment network"/"wealth contact"/"portfolio contact"/"invcon"/"who manages" voice trigger; 60-s auto-refresh */}
+            <InvestmentContactMapper />
+            {/* F117: scenario × investment exposure matrix — ◈ SCNINV button (left:34040, bottom:8, zIndex:72); parallel-fetches /v1/scenario/list + /entities/Investment; keyword-correlates each scenario (name/objective/type) against every holding (name/type/sector/description/ticker) to surface EXPOSED investments (at least one scenario match) vs SAFE; stat tiles (scenarios/investments/exposed/safe); ALL/EXPOSED/SAFE filter tabs + text search; expand scenario → matched investments with sector badge + relevance score; amber badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-scenario risk brief + TTS via jarvis:speak-dossier; isScninvQuery+buildScninvScript wired in JarvisBrain; "scenario investment"/"investment scenario"/"portfolio scenario"/"scninv"/"which investments are in scenarios" voice trigger; 120-s auto-refresh */}
+            <ScenarioInvestmentExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
