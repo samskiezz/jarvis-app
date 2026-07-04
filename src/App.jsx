@@ -179,6 +179,9 @@ import InvestmentInvestigationLinker from '@/components/cinematic/InvestmentInve
 import InvestmentOpsMonitor from '@/components/cinematic/InvestmentOpsMonitor';
 import OpsScenarioGap from '@/components/cinematic/OpsScenarioGap';
 import IntelProfileOpsLinker from '@/components/cinematic/IntelProfileOpsLinker';
+import SceneDataDiff from '@/components/cinematic/SceneDataDiff';
+import InvestmentRiskOverlay from '@/components/cinematic/InvestmentRiskOverlay';
+import SkillInvestigationCoverage from '@/components/cinematic/SkillInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -530,6 +533,12 @@ function App() {
             <OpsScenarioGap />
             {/* F153: intel profile × ops event activity linker — ◈ IPACT button (left:50840, bottom:8, zIndex:101); parallel-fetches /entities/IntelProfile + /v1/ops/events; keyword-correlates each threat actor against live ops events to surface ACTIVE (corroboration found) vs DORMANT (no operational footprint); stat tiles (profiles/ops events/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand profile → matched events with severity badge + service + timestamp + relevance score; red badge on active count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence actor-activity brief + TTS via jarvis:speak-dossier; isIpactQuery+buildIpactScript wired in JarvisBrain; "intel activity"/"actor activity"/"active threats"/"threat ops events"/"ipact" voice trigger; jarvis:ipact-toggle event; 60-s auto-refresh */}
             <IntelProfileOpsLinker />
+            {/* F154: scene data diff — polls all 10 /v1/cinematic/scene/{id} every 90 s; diffs anchor values against prior snapshot; △ DIFF toggle (left:5200); unread badge; announces ≥3 changes via jarvis:speak-dossier; "scene diff"/"scene changes"/"anchor changes"/"what changed" voice trigger */}
+            <SceneDataDiff />
+            {/* F155 (overnight 2026-07-04): investment × risk overlay — ◈ IRO button (left:4236, bottom:8, zIndex:55); parallel-fetches /entities/Investment + /entities/RiskSignal; keyword-correlates each holding against active risk signals; exposure grid (investment rows × risk heat columns); red badge on critical exposure count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-risk brief + TTS via jarvis:speak-dossier; "investment risk"/"portfolio exposure"/"risk overlay"/"iro"/"asset risk"/"exposure map" voice trigger; jarvis:iro-toggle event; 90-s auto-refresh */}
+            <InvestmentRiskOverlay />
+            {/* F156: skill × investigation coverage — ◈ SKLINV button (left:51400, bottom:8, zIndex:102); parallel-fetches /v1/aip/skill + /v1/investigations; keyword-correlates each open investigation against skill catalog to surface SKILLED vs UNSUPPORTED; amber badge on unsupported count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability brief + TTS via jarvis:speak-dossier; "skill investigation"/"case skill gap"/"sklinv" voice trigger; jarvis:sklinv-toggle event; 90-s auto-refresh */}
+            <SkillInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
