@@ -188,6 +188,8 @@ import GraphNodeKnowledgeCoverage from '@/components/cinematic/GraphNodeKnowledg
 import InvestigationCaseWorkspace from '@/components/cinematic/InvestigationCaseWorkspace';
 import ReportRiskTracker from '@/components/cinematic/ReportRiskTracker';
 import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence';
+import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
+import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -557,6 +559,10 @@ function App() {
             <ReportRiskTracker />
             {/* F162 (overnight 2026-07-05): swarm job × graph centrality convergence — ◈ SWGRPH button (left:52840, bottom:8, zIndex:105); parallel-fetches /entities/SwarmJob + /v1/graph/centrality; keyword-correlates each swarm job against top-influence graph nodes to surface TARGETING (automation focused on high-influence nodes) vs PERIPHERAL (no graph alignment); violet badge on targeting count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-graph brief + TTS; "swarm graph"/"swarm centrality"/"swgrph" voice trigger; jarvis:swgrph-toggle event; 90-s auto-refresh */}
             <SwarmGraphConvergence />
+            {/* F163 (overnight 2026-07-05): system snapshot tracker — ◈ SNAP button (left:53400); polls /v1/jarvis/system/status + /v1/cinematic/brain every 60 s; manual TAKE SNAP stores timestamped reading to localStorage (max 20); per-metric Δ delta vs previous snapshot (green=improvement, red=degradation); ▶ TREND → last-5-snapshot context to /v1/jarvis/agent/chat 2-sentence health-trend brief + jarvis:speak-dossier TTS; "snapshot"/"system snapshot"/"take snapshot"/"snap"/"metric history" voice trigger */}
+            <SnapshotTracker />
+            {/* F164 (overnight 2026-07-05): investigation close-rate tracker — ◎ CRATE button (left:53960, bottom:8, zIndex:80); polls /v1/investigations every 5 min; tracks closed/open case ratio in localStorage (24-reading rolling window); close-rate gauge + sparkline + trend badge; warns via jarvis:speak-dossier if rate declines for 2+ consecutive readings; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence closure-trend brief; "investigation close rate"/"case closure rate"/"cases resolved"/"close rate"/"crate"/"closure metric" voice trigger; jarvis:crate-toggle event */}
+            <InvestigationCloseRate />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
