@@ -185,6 +185,8 @@ import SkillInvestigationCoverage from '@/components/cinematic/SkillInvestigatio
 import EntityRegistryOverview from '@/components/cinematic/EntityRegistryOverview';
 import DatasetQueryAssistant from '@/components/cinematic/DatasetQueryAssistant';
 import GraphNodeKnowledgeCoverage from '@/components/cinematic/GraphNodeKnowledgeCoverage';
+import InvestigationCaseWorkspace from '@/components/cinematic/InvestigationCaseWorkspace';
+import ReportRiskTracker from '@/components/cinematic/ReportRiskTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -548,6 +550,10 @@ function App() {
             <DatasetQueryAssistant />
             {/* F159 (overnight 2026-07-05): graph node × knowledge coverage — ◈ GKNOW button (left:51960, bottom:8, zIndex:103); parallel-fetches /v1/graph/centrality + /knowledge/; keyword-correlates top-influence nodes against articles to surface DOCUMENTED vs DARK; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-knowledge brief + TTS; "graph knowledge"/"node docs"/"gknow" voice trigger; jarvis:gknow-toggle event; 120-s auto-refresh */}
             <GraphNodeKnowledgeCoverage />
+            {/* F160 (overnight 2026-07-05): investigation case workspace — ◈ ICWS button (left:4132, bottom:18, zIndex:68); lists /v1/investigations; select case → cross-references /entities/RiskSignal by keyword overlap; AI Q&A per case via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS; in-panel history up to 10 pairs; open-count badge; "case workspace"/"investigation workspace"/"case deep dive"/"icws" voice trigger; jarvis:icws-toggle event */}
+            <InvestigationCaseWorkspace />
+            {/* F161 (overnight 2026-07-05): report × risk signal coverage — ◈ RRISK button (left:52280, bottom:8, zIndex:104); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates each report against active risk signals to surface EXPOSED vs CLEAR; red badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "report risk"/"risk reports"/"rrisk" voice trigger; jarvis:rrisk-toggle event; 90-s auto-refresh */}
+            <ReportRiskTracker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
