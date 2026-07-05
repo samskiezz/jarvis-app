@@ -182,6 +182,9 @@ import IntelProfileOpsLinker from '@/components/cinematic/IntelProfileOpsLinker'
 import SceneDataDiff from '@/components/cinematic/SceneDataDiff';
 import InvestmentRiskOverlay from '@/components/cinematic/InvestmentRiskOverlay';
 import SkillInvestigationCoverage from '@/components/cinematic/SkillInvestigationCoverage';
+import EntityRegistryOverview from '@/components/cinematic/EntityRegistryOverview';
+import DatasetQueryAssistant from '@/components/cinematic/DatasetQueryAssistant';
+import GraphNodeKnowledgeCoverage from '@/components/cinematic/GraphNodeKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -539,6 +542,12 @@ function App() {
             <InvestmentRiskOverlay />
             {/* F156: skill × investigation coverage — ◈ SKLINV button (left:51400, bottom:8, zIndex:102); parallel-fetches /v1/aip/skill + /v1/investigations; keyword-correlates each open investigation against skill catalog to surface SKILLED vs UNSUPPORTED; amber badge on unsupported count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability brief + TTS via jarvis:speak-dossier; "skill investigation"/"case skill gap"/"sklinv" voice trigger; jarvis:sklinv-toggle event; 90-s auto-refresh */}
             <SkillInvestigationCoverage />
+            {/* F31 (overnight 2026-07-04): entity registry overview — ◫ REGISTRY button; parallel-fetches all 6 /entities/ types (Task/RiskSignal/IntelProfile/SwarmJob/Investment/Contact); unified 6-tile count dashboard; 60-s auto-refresh; "registry"/"entity counts"/"all entities" voice trigger; jarvis:registry-toggle event */}
+            <EntityRegistryOverview />
+            {/* F158 (overnight 2026-07-04): dataset query assistant — lists /v1/datasets; user selects a dataset + types a natural-language question; question + dataset metadata sent to /v1/jarvis/agent/chat for AI answer; answer shown in-panel + spoken via jarvis:speak-dossier; session Q&A history (up to 20 pairs); ◈ DQRY button left:4028 bottom strip; "query dataset"/"ask dataset"/"dataset question"/"dqry" voice trigger */}
+            <DatasetQueryAssistant />
+            {/* F159 (overnight 2026-07-05): graph node × knowledge coverage — ◈ GKNOW button (left:51960, bottom:8, zIndex:103); parallel-fetches /v1/graph/centrality + /knowledge/; keyword-correlates top-influence nodes against articles to surface DOCUMENTED vs DARK; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-knowledge brief + TTS; "graph knowledge"/"node docs"/"gknow" voice trigger; jarvis:gknow-toggle event; 120-s auto-refresh */}
+            <GraphNodeKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
