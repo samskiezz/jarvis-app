@@ -187,6 +187,7 @@ import DatasetQueryAssistant from '@/components/cinematic/DatasetQueryAssistant'
 import GraphNodeKnowledgeCoverage from '@/components/cinematic/GraphNodeKnowledgeCoverage';
 import InvestigationCaseWorkspace from '@/components/cinematic/InvestigationCaseWorkspace';
 import ReportRiskTracker from '@/components/cinematic/ReportRiskTracker';
+import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -554,6 +555,8 @@ function App() {
             <InvestigationCaseWorkspace />
             {/* F161 (overnight 2026-07-05): report × risk signal coverage — ◈ RRISK button (left:52280, bottom:8, zIndex:104); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates each report against active risk signals to surface EXPOSED vs CLEAR; red badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "report risk"/"risk reports"/"rrisk" voice trigger; jarvis:rrisk-toggle event; 90-s auto-refresh */}
             <ReportRiskTracker />
+            {/* F162 (overnight 2026-07-05): swarm job × graph centrality convergence — ◈ SWGRPH button (left:52840, bottom:8, zIndex:105); parallel-fetches /entities/SwarmJob + /v1/graph/centrality; keyword-correlates each swarm job against top-influence graph nodes to surface TARGETING (automation focused on high-influence nodes) vs PERIPHERAL (no graph alignment); violet badge on targeting count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-graph brief + TTS; "swarm graph"/"swarm centrality"/"swgrph" voice trigger; jarvis:swgrph-toggle event; 90-s auto-refresh */}
+            <SwarmGraphConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
