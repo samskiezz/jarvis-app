@@ -3,3 +3,4 @@
 [2026-07-06] F02 Hey JARVIS wake word: HeyJarvisListener.jsx arms browser SpeechRecognition on WAKE pill click, detects 'JARVIS' wake word, dispatches jarvis:ask to open assistant; WakeWordToggle + jarvisVoice.js + jarvisSound.js; build OK, mounted in App.jsx
 [2026-07-06] F03 Live Telemetry Ticker: LiveTelemetryTicker.jsx polls /v1/jarvis/system/status + /v1/cinematic/brain every 30s; CPU/MEM/LOAD/NODES/SYNAPSES pills in fixed 22px top strip; mounted App.jsx:294; build OK (exit 0)
 [2026-07-06] F04 SceneKeyboardNav: keys 1-9 → scenes 01-09, 0 → scene 10, Esc → home; 1600ms HUD badge on jump; SceneKeyboardNav.jsx + cinematicSceneRegistry; build OK (exit 0), mounted in App.jsx
+[2026-07-06] F05 SpokenStatusReport: "JARVIS, status" intercepts in JarvisBrain.jsx via isStatusQuery(); calls buildStatusScript() which fetches /v1/jarvis/system/status + /v1/cinematic/brain and assembles spoken sentence; speaks via /v1/voice/tts; build OK (exit 0)

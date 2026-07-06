@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -82,17 +83,25 @@ export default function JarvisBrain() {
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
     let answer = "";
-    try {
-      const pageContext = { route: window.location.pathname, scene };
-      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: q, page_context: pageContext }),
-      });
-      const d = await r.json();
-      answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
-    } catch {
-      answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
+    if (isStatusQuery(q)) {
+      try {
+        answer = await buildStatusScript();
+      } catch {
+        answer = "I'm unable to retrieve system telemetry at this moment, sir.";
+      }
+    } else {
+      try {
+        const pageContext = { route: window.location.pathname, scene };
+        const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+          body: JSON.stringify({ message: q, page_context: pageContext }),
+        });
+        const d = await r.json();
+        answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      } catch {
+        answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
+      }
     }
     if (scene && !answer) answer = `Summoning the ${SCENE_LABEL[scene]}, sir.`;
     if (!answer) answer = "At your service, sir.";
