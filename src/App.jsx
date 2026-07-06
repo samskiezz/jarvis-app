@@ -16,6 +16,7 @@ import JarvisBrain from '@/components/cinematic/JarvisBrain';
 import CommandPalette from '@/components/cinematic/CommandPalette';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
+import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
 import MarketsTicker from '@/components/cinematic/MarketsTicker';
 import EntityQuickSearch from '@/components/cinematic/EntityQuickSearch';
@@ -213,6 +214,10 @@ function App() {
             <FirstRunSetup />
             <JarvisBrain />
             <CommandPalette />
+            {/* F20: "show me X" / "open X" voice navigation — intercepts jarvis:ask in
+                capture phase and re-dispatches the normalized panel query so the correct
+                panel opens without hitting /v1/jarvis/agent/chat unnecessarily */}
+            <ShowMeRouter />
             {/* F02: "Hey JARVIS" always-listening wake word toggle */}
             <HeyJarvisListener />
             {/* F04: keyboard scene-jump (1–0 → scenes; Esc → home) */}

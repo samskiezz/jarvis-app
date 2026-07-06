@@ -37,7 +37,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
 - [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
 - [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
-- [ ] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks").
+- [x] F20 "Show me" navigation — ShowMeRouter.jsx wires capture-phase jarvis:ask intercept; re-dispatches normalized panel queries from ShowMeNavigation map; mounted in App.jsx (2026-07-06).
 - [ ] F21 Live clock + uptime (real process uptime from system status).
 - [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
 - [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
