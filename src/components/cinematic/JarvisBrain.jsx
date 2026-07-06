@@ -11,6 +11,7 @@ import {
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
+import { isOpsCasesQuery, buildOpsCasesScript } from "./OpsCasesMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -133,6 +134,13 @@ export default function JarvisBrain() {
         answer = await buildMBriefScript();
       } catch {
         answer = "I'm compiling your mission brief now, sir. Opening the briefing panel.";
+      }
+    } else if (isOpsCasesQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opcases-toggle"));
+      try {
+        answer = await buildOpsCasesScript();
+      } catch {
+        answer = "Opening the ops cases board, sir. Retrieving active case files now.";
       }
     } else {
       try {

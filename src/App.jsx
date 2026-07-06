@@ -194,6 +194,7 @@ import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
 import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
+import OpsCasesMonitor from '@/components/cinematic/OpsCasesMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -579,6 +580,8 @@ function App() {
             <GraphNodeTaskCoverage />
             {/* F166 (overnight 2026-07-06): morning mission brief — ◎ MBRIEF button (left:55080, bottom:8, zIndex:108); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/ops/events + /v1/investigations; compiles real op data into a context packet; AI narrative via /v1/jarvis/agent/chat (4–6 sentences); speaks via jarvis:speak-dossier; stores last 5 briefs in localStorage; auto-generates on open when stale >4 h; stat tiles (open tasks/critical risks/ops events/open cases); brief history panel (HIST button); "morning brief"/"mission brief"/"daily brief"/"mbrief"/"sitrep brief" voice trigger; jarvis:mbrief-toggle event */}
             <MorningMissionBrief />
+            {/* F167 (overnight 2026-07-06): ops cases monitor — ◎ OPCASES button (left:55640, bottom:8, zIndex:109); polls /v1/cases (within /v1/ops/*) every 30 s; status-filtered case cards (ALL/OPEN/INVESTIGATING/RESOLVED) with note + entity counts; red badge on open count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-case brief + TTS via jarvis:speak-dossier; "ops cases"/"case files"/"case board"/"opcases"/"active cases" voice trigger; jarvis:opcases-toggle event */}
+            <OpsCasesMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
