@@ -39,6 +39,7 @@ import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
 import CommandHistory from '@/components/cinematic/CommandHistory';
 import SituationRoom from '@/components/cinematic/SituationRoom';
+import ShowMeNavigation from '@/components/cinematic/ShowMeNavigation';
 import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
 import MorningBriefing from '@/components/cinematic/MorningBriefing';
 import SystemHealthScorecard from '@/components/cinematic/SystemHealthScorecard';
@@ -213,6 +214,10 @@ function App() {
                 so a fresh deploy initialises before you even pick a destination. */}
             <FirstRunSetup />
             <JarvisBrain />
+            {/* F20: "show me X" voice navigation — null component; logic wired into JarvisBrain.ask().
+                Normalises "show me risks / intel / scene compare / …" → panel intent keywords so the
+                correct panel opens without also firing the generic agent-chat overlay. */}
+            <ShowMeNavigation />
             <CommandPalette />
             {/* F20: "show me X" / "open X" voice navigation — intercepts jarvis:ask in
                 capture phase and re-dispatches the normalized panel query so the correct

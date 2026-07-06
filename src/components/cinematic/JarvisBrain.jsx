@@ -9,6 +9,7 @@ import {
   buildEntityDossierScript,
 } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
+import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -85,6 +86,15 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
+    // F20: "show me X" pre-router — normalise to panel intent keyword, re-dispatch,
+    // then return so the agent chat doesn't fire on top of the panel's own voice.
+    if (isShowMeQuery(q)) {
+      const normalized = resolveShowMeQuery(q);
+      window.dispatchEvent(
+        new CustomEvent("jarvis:ask", { detail: { text: normalized, _sm: true } })
+      );
+      return;
+    }
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
@@ -138,6 +148,8 @@ export default function JarvisBrain() {
 
   useEffect(() => {
     const onAsk = (e) => {
+      // Skip events that ShowMeNavigation already normalized — panels handle them.
+      if (e?.detail?._sm) return;
       // JarvisAssistant owns chat on /apex routes; avoid duplicate handling there.
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/apex")) return;
       const q = e?.detail?.text || e?.detail?.query;
