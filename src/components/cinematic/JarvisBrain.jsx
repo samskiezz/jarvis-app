@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
+import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -88,6 +89,12 @@ export default function JarvisBrain() {
         answer = await buildStatusScript();
       } catch {
         answer = "I'm unable to retrieve system telemetry at this moment, sir.";
+      }
+    } else if (isMarketsQuery(q)) {
+      try {
+        answer = await buildMarketsScript();
+      } catch {
+        answer = "Market data is unavailable at this moment, sir.";
       }
     } else {
       try {

@@ -24,7 +24,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. SceneKeyboardNav.jsx maps digit keys to CINEMATIC_SCENES via cinematicSceneRegistry; shows 1600ms HUD badge on jump; mounted in App.jsx (2026-07-06).
 - [x] F05 Spoken status report — isStatusQuery() intercept in JarvisBrain wires to buildStatusScript() → /v1/jarvis/system/status + /v1/cinematic/brain → spoken sentence via /v1/voice/tts (2026-07-06).
 - [x] F06 Live World incident feed — WorldIncidentFeed.jsx: Three.js mini globe with earthquake magnitude pins + severity-sorted scrolling list from /functions/getLiveIntel; pulsing M5+/M6+ halos; 60s auto-refresh; INCIDENTS button bottom-left; mounted in App.jsx (2026-07-06).
-- [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
+- [x] F07 Markets ticker — getLiveIntel crypto + FX → scrolling bottom ticker (MarketsTicker.jsx, already mounted in App.jsx); wired isMarketsQuery/buildMarketsScript into JarvisBrain.jsx so "JARVIS, markets" speaks top movers via /v1/voice/tts (2026-07-06).
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
 - [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
 - [ ] F10 Task board — /entities/Task → live mission cards with status.
