@@ -1,2 +1,3 @@
 [2026-07-06] F20 ShowMeRouter: capture-phase jarvis:ask intercept wires show-me/open/view navigation to correct panels via ShowMeNavigation map; build OK, mounted in App.jsx
 [2026-07-06] F01 ⌘K CommandPalette: CommandPalette.jsx lists all PAGES+10 scenes, ⌘K open/↑↓/Enter; mounted in App.jsx; build OK
+[2026-07-06] F02 Hey JARVIS wake word: HeyJarvisListener.jsx arms browser SpeechRecognition on WAKE pill click, detects 'JARVIS' wake word, dispatches jarvis:ask to open assistant; WakeWordToggle + jarvisVoice.js + jarvisSound.js; build OK, mounted in App.jsx
