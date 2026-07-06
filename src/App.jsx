@@ -193,6 +193,7 @@ import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence'
 import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
+import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -576,6 +577,8 @@ function App() {
             <InvestigationCloseRate />
             {/* F165 (overnight 2026-07-05): graph node × task coverage — ◈ GNTASK button (left:54520, bottom:8, zIndex:107); parallel-fetches /v1/graph/centrality + /entities/Task; keyword-correlates each top-influence node against the task catalog to surface TASKED (active task coverage) vs UNMANAGED (no operational task — priority gap); violet badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence influence-coverage brief + TTS; "graph node task"/"node task coverage"/"high influence task"/"gntask" voice trigger; jarvis:gntask-toggle event; 90-s auto-refresh */}
             <GraphNodeTaskCoverage />
+            {/* F166 (overnight 2026-07-06): morning mission brief — ◎ MBRIEF button (left:55080, bottom:8, zIndex:108); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/ops/events + /v1/investigations; compiles real op data into a context packet; AI narrative via /v1/jarvis/agent/chat (4–6 sentences); speaks via jarvis:speak-dossier; stores last 5 briefs in localStorage; auto-generates on open when stale >4 h; stat tiles (open tasks/critical risks/ops events/open cases); brief history panel (HIST button); "morning brief"/"mission brief"/"daily brief"/"mbrief"/"sitrep brief" voice trigger; jarvis:mbrief-toggle event */}
+            <MorningMissionBrief />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -48,4 +48,5 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F28 Command history — store + replay recent JARVIS commands (localStorage). (2026-07-06: CommandHistory.jsx, mounted; captures jarvis:ask events, max 50)
 - [x] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live. (2026-07-06: MultiVoiceToggle.jsx, mounted; persists to localStorage)
 - [x] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each. (2026-07-06: SceneAutoTour.jsx, mounted; /v1/cinematic/scene/{id} + /v1/voice/tts)
+- [x] F166 Morning mission brief (MBRIEF) — parallel-fetches /entities/Task + /entities/RiskSignal + /v1/ops/events + /v1/investigations; AI narrative via /v1/jarvis/agent/chat; speaks via jarvis:speak-dossier; stores last 5 briefs in localStorage; auto-generates on open when stale >4h; "morning brief"/"mission brief"/"mbrief" voice trigger wired in JarvisBrain; build exit 0 (2026-07-06).
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)

@@ -10,6 +10,7 @@ import {
 } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -125,6 +126,13 @@ export default function JarvisBrain() {
         answer = await buildRiskScript();
       } catch {
         answer = "I'm unable to retrieve the risk board at this moment, sir.";
+      }
+    } else if (isMBriefQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mbrief-toggle"));
+      try {
+        answer = await buildMBriefScript();
+      } catch {
+        answer = "I'm compiling your mission brief now, sir. Opening the briefing panel.";
       }
     } else {
       try {
