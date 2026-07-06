@@ -195,6 +195,7 @@ import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRat
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
 import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 import OpsCasesMonitor from '@/components/cinematic/OpsCasesMonitor';
+import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -582,6 +583,8 @@ function App() {
             <MorningMissionBrief />
             {/* F167 (overnight 2026-07-06): ops cases monitor — ◎ OPCASES button (left:55640, bottom:8, zIndex:109); polls /v1/cases (within /v1/ops/*) every 30 s; status-filtered case cards (ALL/OPEN/INVESTIGATING/RESOLVED) with note + entity counts; red badge on open count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-case brief + TTS via jarvis:speak-dossier; "ops cases"/"case files"/"case board"/"opcases"/"active cases" voice trigger; jarvis:opcases-toggle event */}
             <OpsCasesMonitor />
+            {/* F168 (overnight 2026-07-06): swarm–risk coverage map — ⬡ COVER button (left:5276, zIndex:65); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates active/running jobs against open risk signals to surface COVERED vs UNCOVERED; stat tiles (active jobs/open risks/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs; expand risk → matched jobs with status badge + progress bar; red badge on uncovered count; ▶ ASSESS per risk → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isSwarmCoverageQuery+buildSwarmCoverageScript wired in JarvisBrain; "swarm coverage"/"risk coverage"/"swarm risk map"/"uncovered risk"/"swarm cover" voice trigger; jarvis:swarmcoverage-toggle event; 60-s auto-refresh */}
+            <SwarmRiskCoverageMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

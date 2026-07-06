@@ -12,6 +12,7 @@ import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 import { isOpsCasesQuery, buildOpsCasesScript } from "./OpsCasesMonitor";
+import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -141,6 +142,12 @@ export default function JarvisBrain() {
         answer = await buildOpsCasesScript();
       } catch {
         answer = "Opening the ops cases board, sir. Retrieving active case files now.";
+      }
+    } else if (isSwarmCoverageQuery(q)) {
+      try {
+        answer = await buildSwarmCoverageScript();
+      } catch {
+        answer = "Opening the swarm–risk coverage map, sir.";
       }
     } else {
       try {
