@@ -196,6 +196,7 @@ import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage'
 import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 import OpsCasesMonitor from '@/components/cinematic/OpsCasesMonitor';
 import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
+import DecisionIntelCompleteness from '@/components/cinematic/DecisionIntelCompleteness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -585,6 +586,8 @@ function App() {
             <OpsCasesMonitor />
             {/* F168 (overnight 2026-07-06): swarm–risk coverage map — ⬡ COVER button (left:5276, zIndex:65); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates active/running jobs against open risk signals to surface COVERED vs UNCOVERED; stat tiles (active jobs/open risks/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs; expand risk → matched jobs with status badge + progress bar; red badge on uncovered count; ▶ ASSESS per risk → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isSwarmCoverageQuery+buildSwarmCoverageScript wired in JarvisBrain; "swarm coverage"/"risk coverage"/"swarm risk map"/"uncovered risk"/"swarm cover" voice trigger; jarvis:swarmcoverage-toggle event; 60-s auto-refresh */}
             <SwarmRiskCoverageMap />
+            {/* F169 (overnight 2026-07-06): decision intelligence completeness monitor — ◈ DICOM button (left:56200, bottom:8, zIndex:110); parallel-fetches /v1/decision/list + /v1/reports + /knowledge/; keyword-correlates each decision against BOTH report catalogue (evidence) AND knowledge-article library (know-how); tiers: COMPLETE (both)/EVIDENCE-ONLY/KNOW-ONLY/BLIND (neither); stat tiles (decisions/reports/articles/complete/blind); ALL/COMPLETE/EVIDENCE-ONLY/KNOW-ONLY/BLIND filter tabs + text search; expand decision → matched reports + matched articles each with relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic-intelligence completeness brief + TTS via jarvis:speak-dossier; isDicomQuery+buildDicomScript wired in JarvisBrain; "decision intelligence"/"dicom"/"decision completeness"/"decision audit"/"decision intel" voice trigger; jarvis:dicom-toggle event; 120-s auto-refresh */}
+            <DecisionIntelCompleteness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -13,6 +13,7 @@ import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 import { isOpsCasesQuery, buildOpsCasesScript } from "./OpsCasesMonitor";
 import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
+import { isDicomQuery, buildDicomScript } from "./DecisionIntelCompleteness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -148,6 +149,13 @@ export default function JarvisBrain() {
         answer = await buildSwarmCoverageScript();
       } catch {
         answer = "Opening the swarm–risk coverage map, sir.";
+      }
+    } else if (isDicomQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dicom-toggle"));
+      try {
+        answer = await buildDicomScript();
+      } catch {
+        answer = "Opening the decision intelligence completeness monitor, sir.";
       }
     } else {
       try {
