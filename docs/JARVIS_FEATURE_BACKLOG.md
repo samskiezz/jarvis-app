@@ -21,7 +21,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F01 ⌘K command palette — CommandPalette.jsx lists all PAGES (pageRegistry) + 10 cinematic scenes; ⌘K opens, ↑↓ navigate, Enter runs; mounted in App.jsx (2026-07-06).
 - [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. HeyJarvisListener.jsx + jarvisVoice.js + WakeWordToggle.jsx; Web Speech API; armed via WAKE pill button; dispatches jarvis:ask; mounted in App.jsx (2026-07-06).
 - [x] F03 Live telemetry ticker (top bar) — LiveTelemetryTicker.jsx polls /v1/jarvis/system/status + /v1/cinematic/brain every 30 s; CPU/MEM/LOAD/NODES/SYNAPSES pills fixed top bar; mounted in App.jsx (2026-07-06).
-- [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
+- [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. SceneKeyboardNav.jsx maps digit keys to CINEMATIC_SCENES via cinematicSceneRegistry; shows 1600ms HUD badge on jump; mounted in App.jsx (2026-07-06).
 - [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
 - [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
