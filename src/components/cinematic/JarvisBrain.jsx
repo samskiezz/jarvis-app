@@ -8,6 +8,7 @@ import {
   extractEntitySearchTerm,
   buildEntityDossierScript,
 } from "./EntityQuickSearch";
+import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -108,6 +109,12 @@ export default function JarvisBrain() {
         answer = await buildEntityDossierScript(term);
       } catch {
         answer = "I was unable to retrieve the entity dossier at this moment, sir.";
+      }
+    } else if (isRiskQuery(q)) {
+      try {
+        answer = await buildRiskScript();
+      } catch {
+        answer = "I'm unable to retrieve the risk board at this moment, sir.";
       }
     } else {
       try {
