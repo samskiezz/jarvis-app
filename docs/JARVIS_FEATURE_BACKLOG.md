@@ -25,7 +25,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F05 Spoken status report — isStatusQuery() intercept in JarvisBrain wires to buildStatusScript() → /v1/jarvis/system/status + /v1/cinematic/brain → spoken sentence via /v1/voice/tts (2026-07-06).
 - [x] F06 Live World incident feed — WorldIncidentFeed.jsx: Three.js mini globe with earthquake magnitude pins + severity-sorted scrolling list from /functions/getLiveIntel; pulsing M5+/M6+ halos; 60s auto-refresh; INCIDENTS button bottom-left; mounted in App.jsx (2026-07-06).
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → scrolling bottom ticker (MarketsTicker.jsx, already mounted in App.jsx); wired isMarketsQuery/buildMarketsScript into JarvisBrain.jsx so "JARVIS, markets" speaks top movers via /v1/voice/tts (2026-07-06).
-- [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
+- [x] F08 Entity quick-search — EntityQuickSearch.jsx (already existed+mounted in App.jsx) fully wired: imported isEntitySearchQuery/extractEntitySearchTerm/buildEntityDossierScript into JarvisBrain.jsx; added entity-search branch in ask() that dispatches jarvis:entity-search + speaks dossier via /v1/graph/subgraph + /entities/IntelProfile; added jarvis:speak-dossier listener so clicking results speaks via /v1/voice/tts; Ctrl/Cmd+Shift+E opens panel; "who is / find / search for" voice triggers work (2026-07-06).
 - [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
 - [ ] F10 Task board — /entities/Task → live mission cards with status.
 - [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.

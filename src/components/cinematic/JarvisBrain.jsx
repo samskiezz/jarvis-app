@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import {
+  isEntitySearchQuery,
+  extractEntitySearchTerm,
+  buildEntityDossierScript,
+} from "./EntityQuickSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -96,6 +101,14 @@ export default function JarvisBrain() {
       } catch {
         answer = "Market data is unavailable at this moment, sir.";
       }
+    } else if (isEntitySearchQuery(q)) {
+      const term = extractEntitySearchTerm(q);
+      window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
+      try {
+        answer = await buildEntityDossierScript(term);
+      } catch {
+        answer = "I was unable to retrieve the entity dossier at this moment, sir.";
+      }
     } else {
       try {
         const pageContext = { route: window.location.pathname, scene };
@@ -125,6 +138,19 @@ export default function JarvisBrain() {
     };
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
+  }, []);
+
+  // F08: speak entity dossiers dispatched by EntityQuickSearch result clicks
+  useEffect(() => {
+    const onDossier = (e) => {
+      const t = e?.detail?.text;
+      if (!t) return;
+      clearTimeout(hideT.current);
+      setOpen(true); setThinking(false); typeOut(t); speak(t);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, t.length * 70));
+    };
+    window.addEventListener("jarvis:speak-dossier", onDossier);
+    return () => window.removeEventListener("jarvis:speak-dossier", onDossier);
   }, []);
 
   function mic() {
