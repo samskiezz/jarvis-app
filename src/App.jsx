@@ -198,6 +198,7 @@ import OpsCasesMonitor from '@/components/cinematic/OpsCasesMonitor';
 import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import DecisionIntelCompleteness from '@/components/cinematic/DecisionIntelCompleteness';
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
+import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -591,6 +592,8 @@ function App() {
             <DecisionIntelCompleteness />
             {/* F170 (overnight 2026-07-09): graph node × investigation coverage — ◈ GNINV button (left:56760, bottom:8, zIndex:111); parallel-fetches /v1/graph/centrality + /v1/investigations; keyword-correlates each top-influence node against open investigation cases to surface INVESTIGATED (case coverage found) vs UNMONITORED (no investigation — intelligence gap); stat tiles (nodes/investigations/investigated/unmonitored); ALL/INVESTIGATED/UNMONITORED filter tabs + text search; expand node → matched investigations with status badge + relevance score; violet badge on investigated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-investigation coverage brief + TTS via jarvis:speak-dossier; isGninvQuery+buildGninvScript wired in JarvisBrain; "graph node investigation"/"node case coverage"/"uninvestigated nodes"/"gninv" voice trigger; jarvis:gninv-toggle event; 90-s auto-refresh */}
             <GraphNodeInvestigationCoverage />
+            {/* F171 (overnight 2026-07-09): intel profile × risk signal threat attribution — ◈ TATTR button (left:57320, bottom:8, zIndex:112); parallel-fetches /entities/IntelProfile + /entities/RiskSignal; keyword-correlates each active risk signal against known threat actor profiles to surface ATTRIBUTED (actor overlap found) vs UNATTRIBUTED (no threat actor context — intelligence gap); stat tiles (actors/risks/attributed/unattributed); ALL/ATTRIBUTED/UNATTRIBUTED filter tabs + text search; expand risk → matched actors with actor-type badge + relevance score; red badge on unattributed count (amber if no critical unattributed risks); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-attribution coverage brief + TTS via jarvis:speak-dossier; isTattrQuery+buildTattrScript wired in JarvisBrain; "threat attribution"/"actor risk"/"who drives risk"/"intel attribution"/"tattr"/"risk actor" voice trigger; jarvis:tattr-toggle event; 60-s auto-refresh */}
+            <ThreatAttributionMapper />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

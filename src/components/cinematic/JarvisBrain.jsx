@@ -15,6 +15,7 @@ import { isOpsCasesQuery, buildOpsCasesScript } from "./OpsCasesMonitor";
 import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
 import { isDicomQuery, buildDicomScript } from "./DecisionIntelCompleteness";
 import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage";
+import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -164,6 +165,13 @@ export default function JarvisBrain() {
         answer = await buildGninvScript();
       } catch {
         answer = "Opening the graph node investigation coverage panel, sir.";
+      }
+    } else if (isTattrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tattr-toggle"));
+      try {
+        answer = await buildTattrScript();
+      } catch {
+        answer = "Opening the threat attribution mapper, sir.";
       }
     } else {
       try {
