@@ -202,6 +202,7 @@ import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMap
 import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
 import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
 import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
+import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -603,6 +604,8 @@ function App() {
             <KnowledgeSkillCoverageGap />
             {/* F174 (overnight 2026-07-09): ops alert × investigation coverage tracker — ◈ OALINV button (left:59000, bottom:8, zIndex:115); parallel-fetches /v1/ops/alerts + /v1/investigations; keyword-correlates each active alert against open investigation cases to surface INVESTIGATED (case coverage found) vs UNINVESTIGATED (no open case — operational blind spot); stat tiles (alerts/cases/investigated/blind); ALL/INVESTIGATED/UNINVESTIGATED filter tabs + text search; expand alert → matched cases with status badge + relevance score; orange badge on uninvestigated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-alert investigation coverage brief + TTS via jarvis:speak-dossier; isOalinvQuery+buildOalinvScript wired in JarvisBrain; "alert investigation"/"uninvestigated alerts"/"ops alert case"/"oalinv"/"untracked alerts"/"alert case coverage" voice trigger; jarvis:oalinv-toggle event; 60-s auto-refresh */}
             <OpsAlertInvestigationCoverage />
+            {/* F175 (overnight 2026-07-09): graph node × intel profile coverage — ◈ GNINTEL button (left:59560, bottom:8, zIndex:116); parallel-fetches /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each top-influence graph node against known threat actor profiles to surface ATTRIBUTED (intel profile covers this node) vs UNTRACKED (no threat actor linked — intelligence blind spot); stat tiles (nodes/profiles/attributed/untracked); ALL/ATTRIBUTED/UNTRACKED filter tabs + text search; expand node → matched intel profiles with actor-type badge + centrality bar + relevance score; red badge on untracked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-intel attribution brief + TTS via jarvis:speak-dossier; isGnintelQuery+buildGnintelScript wired in JarvisBrain; "graph intel"/"node threat actor"/"graph profile"/"high node intel"/"gnintel"/"node actor"/"network actor"/"untracked nodes"/"graph actor coverage" voice trigger; jarvis:gnintel-toggle event; 90-s auto-refresh */}
+            <GraphNodeIntelCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
