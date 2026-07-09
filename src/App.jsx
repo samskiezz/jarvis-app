@@ -197,6 +197,7 @@ import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 import OpsCasesMonitor from '@/components/cinematic/OpsCasesMonitor';
 import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import DecisionIntelCompleteness from '@/components/cinematic/DecisionIntelCompleteness';
+import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -588,6 +589,8 @@ function App() {
             <SwarmRiskCoverageMap />
             {/* F169 (overnight 2026-07-06): decision intelligence completeness monitor — ◈ DICOM button (left:56200, bottom:8, zIndex:110); parallel-fetches /v1/decision/list + /v1/reports + /knowledge/; keyword-correlates each decision against BOTH report catalogue (evidence) AND knowledge-article library (know-how); tiers: COMPLETE (both)/EVIDENCE-ONLY/KNOW-ONLY/BLIND (neither); stat tiles (decisions/reports/articles/complete/blind); ALL/COMPLETE/EVIDENCE-ONLY/KNOW-ONLY/BLIND filter tabs + text search; expand decision → matched reports + matched articles each with relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence strategic-intelligence completeness brief + TTS via jarvis:speak-dossier; isDicomQuery+buildDicomScript wired in JarvisBrain; "decision intelligence"/"dicom"/"decision completeness"/"decision audit"/"decision intel" voice trigger; jarvis:dicom-toggle event; 120-s auto-refresh */}
             <DecisionIntelCompleteness />
+            {/* F170 (overnight 2026-07-09): graph node × investigation coverage — ◈ GNINV button (left:56760, bottom:8, zIndex:111); parallel-fetches /v1/graph/centrality + /v1/investigations; keyword-correlates each top-influence node against open investigation cases to surface INVESTIGATED (case coverage found) vs UNMONITORED (no investigation — intelligence gap); stat tiles (nodes/investigations/investigated/unmonitored); ALL/INVESTIGATED/UNMONITORED filter tabs + text search; expand node → matched investigations with status badge + relevance score; violet badge on investigated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-investigation coverage brief + TTS via jarvis:speak-dossier; isGninvQuery+buildGninvScript wired in JarvisBrain; "graph node investigation"/"node case coverage"/"uninvestigated nodes"/"gninv" voice trigger; jarvis:gninv-toggle event; 90-s auto-refresh */}
+            <GraphNodeInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

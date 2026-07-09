@@ -14,6 +14,7 @@ import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 import { isOpsCasesQuery, buildOpsCasesScript } from "./OpsCasesMonitor";
 import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
 import { isDicomQuery, buildDicomScript } from "./DecisionIntelCompleteness";
+import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -156,6 +157,13 @@ export default function JarvisBrain() {
         answer = await buildDicomScript();
       } catch {
         answer = "Opening the decision intelligence completeness monitor, sir.";
+      }
+    } else if (isGninvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gninv-toggle"));
+      try {
+        answer = await buildGninvScript();
+      } catch {
+        answer = "Opening the graph node investigation coverage panel, sir.";
       }
     } else {
       try {
