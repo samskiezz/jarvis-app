@@ -200,6 +200,7 @@ import DecisionIntelCompleteness from '@/components/cinematic/DecisionIntelCompl
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
 import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
+import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -597,6 +598,8 @@ function App() {
             <ThreatAttributionMapper />
             {/* F172 (overnight 2026-07-09): graph community × scenario coverage — ◈ GCSCEN button (left:57880, bottom:8, zIndex:113); parallel-fetches /v1/graph/communities + /v1/scenario/list; keyword-correlates each network cluster against active operational scenarios to surface SCENARIO (coverage found) vs GAP (no planning coverage — operational blind spot); stat tiles (clusters/scenarios/covered/gaps); ALL/SCENARIO/GAP filter tabs + text search; expand cluster → matched scenarios with status badge + relevance score; red badge on gap count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cluster-scenario brief + TTS via jarvis:speak-dossier; isGcscenQuery+buildGcscenScript wired in JarvisBrain; "community scenario"/"graph community scenario"/"scenario community"/"scenario gap"/"cluster scenario"/"gcscen" voice trigger; jarvis:gcscen-toggle event; 90-s auto-refresh */}
             <GraphCommunityScenarioCoverage />
+            {/* F173 (overnight 2026-07-09): knowledge × skill coverage gap — ◈ KSCOV button (left:58440, bottom:8, zIndex:114); parallel-fetches /v1/aip/skill + /knowledge/; keyword-correlates each skill dimension against the knowledge-article library to surface COVERED (≥1 article has overlap) vs GAP (no knowledge backing — learning blind spot); stat tiles (skills/articles/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand skill → matched articles with relevance score; blue badge on gap count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-skill coverage brief + TTS via jarvis:speak-dossier; isKscovQuery+buildKscovScript wired in JarvisBrain; "knowledge skills"/"skill knowledge"/"kscov"/"skill knowledge gap"/"knowledge coverage skills"/"skill coverage"/"knowledge skill audit" voice trigger; jarvis:kscov-toggle event; 90-s auto-refresh */}
+            <KnowledgeSkillCoverageGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

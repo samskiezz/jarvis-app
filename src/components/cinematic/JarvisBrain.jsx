@@ -17,6 +17,7 @@ import { isDicomQuery, buildDicomScript } from "./DecisionIntelCompleteness";
 import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage";
 import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
+import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -180,6 +181,13 @@ export default function JarvisBrain() {
         answer = await buildGcscenScript();
       } catch {
         answer = "Opening the graph community scenario coverage panel, sir.";
+      }
+    } else if (isKscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kscov-toggle"));
+      try {
+        answer = await buildKscovScript();
+      } catch {
+        answer = "Opening the knowledge-skill coverage gap panel, sir.";
       }
     } else {
       try {
