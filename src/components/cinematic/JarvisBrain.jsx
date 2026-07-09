@@ -18,6 +18,7 @@ import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage
 import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
 import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
+import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -188,6 +189,13 @@ export default function JarvisBrain() {
         answer = await buildKscovScript();
       } catch {
         answer = "Opening the knowledge-skill coverage gap panel, sir.";
+      }
+    } else if (isOalinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oalinv-toggle"));
+      try {
+        answer = await buildOalinvScript();
+      } catch {
+        answer = "Opening the ops-alert investigation coverage panel, sir.";
       }
     } else {
       try {

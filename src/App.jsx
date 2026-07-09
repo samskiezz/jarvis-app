@@ -201,6 +201,7 @@ import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInve
 import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
 import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
 import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
+import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -600,6 +601,8 @@ function App() {
             <GraphCommunityScenarioCoverage />
             {/* F173 (overnight 2026-07-09): knowledge × skill coverage gap — ◈ KSCOV button (left:58440, bottom:8, zIndex:114); parallel-fetches /v1/aip/skill + /knowledge/; keyword-correlates each skill dimension against the knowledge-article library to surface COVERED (≥1 article has overlap) vs GAP (no knowledge backing — learning blind spot); stat tiles (skills/articles/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand skill → matched articles with relevance score; blue badge on gap count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-skill coverage brief + TTS via jarvis:speak-dossier; isKscovQuery+buildKscovScript wired in JarvisBrain; "knowledge skills"/"skill knowledge"/"kscov"/"skill knowledge gap"/"knowledge coverage skills"/"skill coverage"/"knowledge skill audit" voice trigger; jarvis:kscov-toggle event; 90-s auto-refresh */}
             <KnowledgeSkillCoverageGap />
+            {/* F174 (overnight 2026-07-09): ops alert × investigation coverage tracker — ◈ OALINV button (left:59000, bottom:8, zIndex:115); parallel-fetches /v1/ops/alerts + /v1/investigations; keyword-correlates each active alert against open investigation cases to surface INVESTIGATED (case coverage found) vs UNINVESTIGATED (no open case — operational blind spot); stat tiles (alerts/cases/investigated/blind); ALL/INVESTIGATED/UNINVESTIGATED filter tabs + text search; expand alert → matched cases with status badge + relevance score; orange badge on uninvestigated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-alert investigation coverage brief + TTS via jarvis:speak-dossier; isOalinvQuery+buildOalinvScript wired in JarvisBrain; "alert investigation"/"uninvestigated alerts"/"ops alert case"/"oalinv"/"untracked alerts"/"alert case coverage" voice trigger; jarvis:oalinv-toggle event; 60-s auto-refresh */}
+            <OpsAlertInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
