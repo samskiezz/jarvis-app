@@ -199,6 +199,7 @@ import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import DecisionIntelCompleteness from '@/components/cinematic/DecisionIntelCompleteness';
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
+import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -594,6 +595,8 @@ function App() {
             <GraphNodeInvestigationCoverage />
             {/* F171 (overnight 2026-07-09): intel profile × risk signal threat attribution — ◈ TATTR button (left:57320, bottom:8, zIndex:112); parallel-fetches /entities/IntelProfile + /entities/RiskSignal; keyword-correlates each active risk signal against known threat actor profiles to surface ATTRIBUTED (actor overlap found) vs UNATTRIBUTED (no threat actor context — intelligence gap); stat tiles (actors/risks/attributed/unattributed); ALL/ATTRIBUTED/UNATTRIBUTED filter tabs + text search; expand risk → matched actors with actor-type badge + relevance score; red badge on unattributed count (amber if no critical unattributed risks); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-attribution coverage brief + TTS via jarvis:speak-dossier; isTattrQuery+buildTattrScript wired in JarvisBrain; "threat attribution"/"actor risk"/"who drives risk"/"intel attribution"/"tattr"/"risk actor" voice trigger; jarvis:tattr-toggle event; 60-s auto-refresh */}
             <ThreatAttributionMapper />
+            {/* F172 (overnight 2026-07-09): graph community × scenario coverage — ◈ GCSCEN button (left:57880, bottom:8, zIndex:113); parallel-fetches /v1/graph/communities + /v1/scenario/list; keyword-correlates each network cluster against active operational scenarios to surface SCENARIO (coverage found) vs GAP (no planning coverage — operational blind spot); stat tiles (clusters/scenarios/covered/gaps); ALL/SCENARIO/GAP filter tabs + text search; expand cluster → matched scenarios with status badge + relevance score; red badge on gap count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cluster-scenario brief + TTS via jarvis:speak-dossier; isGcscenQuery+buildGcscenScript wired in JarvisBrain; "community scenario"/"graph community scenario"/"scenario community"/"scenario gap"/"cluster scenario"/"gcscen" voice trigger; jarvis:gcscen-toggle event; 90-s auto-refresh */}
+            <GraphCommunityScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
