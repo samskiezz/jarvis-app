@@ -204,6 +204,7 @@ import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCove
 import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
+import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -609,6 +610,8 @@ function App() {
             <GraphNodeIntelCoverage />
             {/* F176 (overnight 2026-07-10): dataset × risk signal coverage — ◈ DSRISK button (left:60120, bottom:8, zIndex:117); parallel-fetches /v1/datasets + /entities/RiskSignal; keyword-correlates each dataset against active risk signals to surface IMPLICATED (risk signal references this dataset) vs CLEAR (no risk signal coverage — unmonitored data source); stat tiles (datasets/signals/implicated/clear); ALL/IMPLICATED/CLEAR filter tabs + text search; expand dataset → matched risk signals with severity badge + relevance score; amber badge on implicated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-risk exposure brief + TTS via jarvis:speak-dossier; isDsriskQuery+buildDsriskScript wired in JarvisBrain; "dataset risk"/"risk dataset"/"data risk coverage"/"dsrisk"/"dataset signal"/"data exposure"/"dataset threat"/"risky datasets" voice trigger; jarvis:dsrisk-toggle event; 90-s auto-refresh */}
             <DatasetRiskCoverage />
+            {/* F177 (overnight 2026-07-10): contact × investment coverage — ◈ CONVIN button (left:60680, bottom:8, zIndex:118); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates each contact against investment positions to surface MANAGED (investment linkage found) vs UNMANAGED (no investment coverage — relationship-to-asset mapping gap); stat tiles (contacts/investments/managed/unmanaged); ALL/MANAGED/UNMANAGED filter tabs + text search; expand contact → matched investments with asset-class badge + relevance score; teal badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-investment exposure brief + TTS via jarvis:speak-dossier; isConvinQuery+buildConvinScript wired in JarvisBrain; "contact investment"/"investor contact"/"convin"/"unmanaged contacts"/"contact portfolio" voice trigger; jarvis:convin-toggle event; 90-s auto-refresh */}
+            <ContactInvestmentCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

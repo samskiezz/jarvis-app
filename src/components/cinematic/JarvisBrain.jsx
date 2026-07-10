@@ -21,6 +21,7 @@ import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
 import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverage";
 import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
 import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
+import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -212,6 +213,13 @@ export default function JarvisBrain() {
         answer = await buildDsriskScript();
       } catch {
         answer = "Opening the dataset risk coverage panel, sir.";
+      }
+    } else if (isConvinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:convin-toggle"));
+      try {
+        answer = await buildConvinScript();
+      } catch {
+        answer = "Opening the contact investment coverage panel, sir.";
       }
     } else {
       try {
