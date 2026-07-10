@@ -26,6 +26,7 @@ import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
 import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
 import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
 import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCoverage";
+import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -252,6 +253,13 @@ export default function JarvisBrain() {
         answer = await buildInvknowScript();
       } catch {
         answer = "Opening the investigation knowledge coverage panel, sir.";
+      }
+    } else if (isLiscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liscen-toggle"));
+      try {
+        answer = await buildLiscenScript();
+      } catch {
+        answer = "Opening the live intel scenario alignment panel, sir.";
       }
     } else {
       try {

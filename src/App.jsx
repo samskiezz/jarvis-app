@@ -209,6 +209,7 @@ import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigatio
 import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
 import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
+import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -624,6 +625,8 @@ function App() {
             <GraphCommunityTaskCoverage />
             {/* F181 (overnight 2026-07-10): investigation × knowledge coverage — ◈ INVKNOW button (left:62920, bottom:8, zIndex:122); parallel-fetches /v1/investigations + /knowledge/; keyword-correlates each case against the knowledge-article vault to surface SUPPORTED (knowledge backing found) vs BLIND (no documentation — research gap); stat tiles (cases/articles/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched articles with type badge + relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-knowledge brief + TTS via jarvis:speak-dossier; isInvknowQuery+buildInvknowScript wired in JarvisBrain; "investigation knowledge"/"knowledge for investigations"/"invknow"/"research gap"/"blind investigations"/"unsupported investigations" voice trigger; jarvis:invknow-toggle event; 90-s auto-refresh */}
             <InvestigationKnowledgeCoverage />
+            {/* F182 (overnight 2026-07-10): live intel × scenario alignment — ◈ LISCEN button (left:63480, bottom:8, zIndex:123); parallel-fetches /functions/getLiveIntel (earthquakes + markets) + /v1/scenario/list; keyword-correlates each active scenario against real-world live events to surface TRIGGERED (live world-event aligns with scenario context — possible activation signal) vs DORMANT (no live correlation); stat tiles (scenarios/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand scenario → matched live events with event-type badge (SEISMIC/MARKET/EXTREME) + relevance score; cyan badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-intel alignment brief + TTS via jarvis:speak-dossier; isLiscenQuery+buildLiscenScript wired in JarvisBrain; "live scenario"/"world scenario"/"liscen"/"intel scenario"/"scenario trigger"/"triggered scenarios"/"live world scenario" voice trigger; jarvis:liscen-toggle event; 60-s auto-refresh */}
+            <LiveIntelScenarioAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
