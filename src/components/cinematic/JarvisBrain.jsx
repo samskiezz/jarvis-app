@@ -32,6 +32,7 @@ import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergen
 import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
 import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
 import { isDscontQuery, buildDscontScript } from "./DatasetContactBridge";
+import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -300,6 +301,13 @@ export default function JarvisBrain() {
         answer = await buildDscontScript();
       } catch {
         answer = "Opening the dataset contact intelligence bridge, sir.";
+      }
+    } else if (isGcontQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcont-toggle"));
+      try {
+        answer = await buildGcontScript();
+      } catch {
+        answer = "Opening the graph community contact coverage monitor, sir.";
       }
     } else {
       try {

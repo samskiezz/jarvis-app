@@ -215,6 +215,7 @@ import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConver
 import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
 import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
 import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
+import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -642,6 +643,8 @@ function App() {
             <LiveTaskUrgencySignal />
             {/* F187 (overnight 2026-07-10): dataset × contact intelligence bridge — ◈ DSCONT button (left:66280, bottom:8, zIndex:128); parallel-fetches /v1/datasets + /entities/Contact; keyword-correlates each dataset (name/description/owner/tags/category) against contact records (name/org/role/email/tags) to surface REFERENCED (contact matches dataset — potential data owner/stakeholder) vs UNREFERENCED (ownership gap); stat tiles (datasets/contacts/referenced/unreferenced); ALL/REFERENCED/UNREFERENCED filter tabs + text search; expand dataset → matched contacts with role badge + relevance score; teal badge on referenced count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-ownership brief + TTS via jarvis:speak-dossier; isDscontQuery+buildDscontScript wired in JarvisBrain; "dataset contact"/"dscont"/"contact dataset"/"data owner"/"dataset ownership"/"data steward" voice triggers; jarvis:dscont-toggle event; 90-s auto-refresh */}
             <DatasetContactBridge />
+            {/* F188 (overnight 2026-07-10): graph community × contact coverage — ◈ GCONT button (left:66840, bottom:8, zIndex:129); parallel-fetches /v1/graph/communities + /entities/Contact; keyword-correlates each community (label/members/type/tags) against contact records (name/org/role/email/tags) to surface REPRESENTED (at least one contact aligns with this community) vs UNREPRESENTED (no contact alignment — coverage gap); stat tiles (communities/contacts/represented/unrepresented); ALL/REPRESENTED/UNREPRESENTED filter tabs + text search; expand community → matched contacts with role badge + relevance score; teal badge on represented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-contact brief + TTS via jarvis:speak-dossier; isGcontQuery+buildGcontScript wired in JarvisBrain; "community contact"/"graph contact"/"gcont"/"contact community"/"which communities have contacts"/"unrepresented communities"/"community representation" voice triggers; jarvis:gcont-toggle event; 90-s auto-refresh */}
+            <GraphCommunityContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
