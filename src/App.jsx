@@ -218,6 +218,7 @@ import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
 import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
 import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
+import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -651,6 +652,8 @@ function App() {
             <SwarmIntelProfileCoverage />
             {/* F190 (overnight 2026-07-10): graph node × scenario coverage — ◈ GNSCEN button (left:67960, bottom:8, zIndex:131); parallel-fetches /v1/graph/centrality + /v1/scenario/list; keyword-correlates each top-influence node against operational scenarios to surface PLANNED (scenario coverage found) vs UNPLANNED (no scenario — strategic planning gap); stat tiles (nodes/scenarios/planned/unplanned); ALL/PLANNED/UNPLANNED filter tabs + text search; expand node → matched scenarios with status badge + relevance score; red badge on unplanned count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence node-scenario strategic brief + TTS via jarvis:speak-dossier; isGnscenQuery+buildGnscenScript wired in JarvisBrain; "graph node scenario"/"node scenario coverage"/"gnscen"/"high influence scenario"/"unplanned nodes"/"which nodes have scenarios"/"strategic node gap"/"node planning" voice triggers; jarvis:gnscen-toggle event; 90-s auto-refresh */}
             <GraphNodeScenarioCoverage />
+            {/* F191 (overnight 2026-07-10): report × skill domain coverage — ◈ RSKILL button (left:68520, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/aip/skill; keyword-correlates each operator skill domain against the report catalog to surface INFORMED (report documentation found) vs UNINFORMED (no report coverage — knowledge-production gap); stat tiles (skills/reports/informed/uninformed); ALL/INFORMED/UNINFORMED filter tabs + text search; expand skill → matched reports with topic badge + relevance score; orange badge on uninformed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-report coverage brief + TTS via jarvis:speak-dossier; isRskillQuery+buildRskillScript wired in JarvisBrain; "report skill"/"skill report"/"rskill"/"skill coverage reports"/"which skills have reports"/"skill knowledge production"/"uninformed skills" voice triggers; jarvis:rskill-toggle event; 90-s auto-refresh */}
+            <ReportSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

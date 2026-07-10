@@ -35,6 +35,7 @@ import { isDscontQuery, buildDscontScript } from "./DatasetContactBridge";
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 import { isSjintelQuery, buildSjintelScript } from "./SwarmIntelProfileCoverage";
 import { isGnscenQuery, buildGnscenScript } from "./GraphNodeScenarioCoverage";
+import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -324,6 +325,13 @@ export default function JarvisBrain() {
         answer = await buildGnscenScript();
       } catch {
         answer = "Opening the graph node scenario coverage monitor, sir.";
+      }
+    } else if (isRskillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rskill-toggle"));
+      try {
+        answer = await buildRskillScript();
+      } catch {
+        answer = "Opening the report skill domain coverage monitor, sir.";
       }
     } else {
       try {
