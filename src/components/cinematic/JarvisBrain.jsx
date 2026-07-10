@@ -22,6 +22,7 @@ import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverag
 import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
 import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
+import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -220,6 +221,13 @@ export default function JarvisBrain() {
         answer = await buildConvinScript();
       } catch {
         answer = "Opening the contact investment coverage panel, sir.";
+      }
+    } else if (isRiibQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:riib-toggle"));
+      try {
+        answer = await buildRiibScript();
+      } catch {
+        answer = "Opening the report-investigation intelligence bridge, sir.";
       }
     } else {
       try {

@@ -205,6 +205,7 @@ import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvest
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
+import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -612,6 +613,8 @@ function App() {
             <DatasetRiskCoverage />
             {/* F177 (overnight 2026-07-10): contact × investment coverage — ◈ CONVIN button (left:60680, bottom:8, zIndex:118); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates each contact against investment positions to surface MANAGED (investment linkage found) vs UNMANAGED (no investment coverage — relationship-to-asset mapping gap); stat tiles (contacts/investments/managed/unmanaged); ALL/MANAGED/UNMANAGED filter tabs + text search; expand contact → matched investments with asset-class badge + relevance score; teal badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-investment exposure brief + TTS via jarvis:speak-dossier; isConvinQuery+buildConvinScript wired in JarvisBrain; "contact investment"/"investor contact"/"convin"/"unmanaged contacts"/"contact portfolio" voice trigger; jarvis:convin-toggle event; 90-s auto-refresh */}
             <ContactInvestmentCoverage />
+            {/* F178 (overnight 2026-07-10): report × investigation intelligence bridge — ◈ RIIB button (left:61240, bottom:8, zIndex:119); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each investigation against the report catalog to surface SUPPORTED (documentary evidence found) vs BLIND (no matching reports — evidence gap); stat tiles (investigations/reports/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched reports with topic badge + relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-evidence gap brief + TTS via jarvis:speak-dossier; isRiibQuery+buildRiibScript wired in JarvisBrain; "report investigation"/"investigation evidence"/"riib"/"unsupported investigations"/"evidence gap"/"blind investigations" voice trigger; jarvis:riib-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
