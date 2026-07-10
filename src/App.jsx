@@ -216,6 +216,7 @@ import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkill
 import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
 import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
+import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -645,6 +646,8 @@ function App() {
             <DatasetContactBridge />
             {/* F188 (overnight 2026-07-10): graph community × contact coverage — ◈ GCONT button (left:66840, bottom:8, zIndex:129); parallel-fetches /v1/graph/communities + /entities/Contact; keyword-correlates each community (label/members/type/tags) against contact records (name/org/role/email/tags) to surface REPRESENTED (at least one contact aligns with this community) vs UNREPRESENTED (no contact alignment — coverage gap); stat tiles (communities/contacts/represented/unrepresented); ALL/REPRESENTED/UNREPRESENTED filter tabs + text search; expand community → matched contacts with role badge + relevance score; teal badge on represented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-contact brief + TTS via jarvis:speak-dossier; isGcontQuery+buildGcontScript wired in JarvisBrain; "community contact"/"graph contact"/"gcont"/"contact community"/"which communities have contacts"/"unrepresented communities"/"community representation" voice triggers; jarvis:gcont-toggle event; 90-s auto-refresh */}
             <GraphCommunityContactCoverage />
+            {/* F189 (overnight 2026-07-10): swarm job × intel profile operation coverage — ◈ SJINTEL button (left:67400, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each intel profile (name/category/tags/description/aliases) against active swarm jobs (title/objective/target/tags) to surface HUNTING (at least one swarm job aligns — active operational hunt in progress) vs UNHUNTED (no swarm job coverage — threat actor not being actively tracked, operational gap); stat tiles (profiles/jobs/hunting/unhunted); ALL/HUNTING/UNHUNTED filter tabs + text search; expand profile → matched swarm jobs with status badge + relevance score; purple badge on hunting count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat hunting coverage brief + TTS via jarvis:speak-dossier; isSjintelQuery+buildSjintelScript wired in JarvisBrain; "swarm intel"/"intel hunt"/"sjintel"/"swarm hunter"/"active threat hunt"/"which threats are being hunted"/"hunting status"/"threat hunting coverage" voice triggers; jarvis:sjintel-toggle event; 60-s auto-refresh */}
+            <SwarmIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
