@@ -211,6 +211,7 @@ import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTas
 import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
 import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
 import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
+import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -630,6 +631,8 @@ function App() {
             <LiveIntelScenarioAlignment />
             {/* F183 (overnight 2026-07-10): investment × risk signal exposure tracker — ◈ INVRISEX button (left:64040, bottom:8, zIndex:124); parallel-fetches /entities/Investment + /entities/RiskSignal; keyword-correlates each investment (name/sector/tags/notes) against active risk signals (title/category/tags/summary) to surface EXPOSED (at least one active risk signal aligns) vs CLEAR (no risk alignment); stat tiles (investments/risk signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched risk signals with severity badge (CRIT/HIGH/MED/LOW) + relevance score; red badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk exposure brief + TTS via jarvis:speak-dossier; isInvrisexQuery+buildInvrisexScript wired in JarvisBrain; "investment risk"/"portfolio exposure"/"invrisex"/"portfolio risk"/"risk exposure"/"risky investments"/"exposed investments" voice trigger; jarvis:invrisex-toggle event; 60-s auto-refresh */}
             <InvestmentRiskExposureTracker />
+            {/* F184 (overnight 2026-07-10): live intel × risk signal convergence monitor — ◈ LIRISCONV button (left:64600, bottom:8, zIndex:125); parallel-fetches /functions/getLiveIntel (earthquakes+crypto+FX) + /entities/RiskSignal; keyword-correlates each active risk signal (title/category/tags/summary) against live world events to surface TRIGGERED (live event keyword-matches the risk signal) vs DORMANT (no live-world convergence); stat tiles (risk signals/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand risk signal → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score; amber badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence convergence brief + TTS via jarvis:speak-dossier; isLirisconvQuery+buildLirisconvScript wired in JarvisBrain; "live risk"/"world risk"/"intel risk"/"lirisconv"/"real-time risk"/"live risk signal"/"live signal convergence"/"risk world events" voice trigger; jarvis:lirisconv-toggle event; 60-s auto-refresh */}
+            <LiveIntelRiskConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -28,6 +28,7 @@ import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
 import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCoverage";
 import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
 import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTracker";
+import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -268,6 +269,13 @@ export default function JarvisBrain() {
         answer = await buildInvrisexScript();
       } catch {
         answer = "Opening the investment risk exposure tracker, sir.";
+      }
+    } else if (isLirisconvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lirisconv-toggle"));
+      try {
+        answer = await buildLirisconvScript();
+      } catch {
+        answer = "Opening the live intel risk convergence monitor, sir.";
       }
     } else {
       try {
