@@ -220,6 +220,7 @@ import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileC
 import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
 import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
+import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -657,6 +658,8 @@ function App() {
             <ReportSkillCoverage />
             {/* F192 (overnight 2026-07-10): ops alert × task response tracker — ◈ OPSTASK button (left:69080, bottom:8, zIndex:133); parallel-fetches /v1/ops/alerts + /entities/Task; keyword-correlates each active ops alert (name/severity/service/description/tags) against the task backlog to surface TASKED (response task exists) vs UNTASKED (no task coverage — response gap); stat tiles (alerts/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand alert → matched tasks with status chip + relevance score; red badge on untasked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-alert task coverage brief + TTS via jarvis:speak-dossier; isOpstaskQuery+buildOpstaskScript wired in JarvisBrain; "ops alert task"/"alert task"/"opstask"/"alert response task"/"unresponded alerts"/"tasked alerts"/"alert coverage"/"which alerts have tasks"/"ops task response" voice triggers; jarvis:opstask-toggle event; 60-s auto-refresh */}
             <OpsAlertTaskCoverage />
+            {/* F193 (overnight 2026-07-10): swarm job × skill domain alignment — ◈ SWARMSKILL button (left:69640, bottom:8, zIndex:134); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each operator skill domain (name/category/description/tags) against active swarm jobs (title/objective/target/tags) to surface DEPLOYED (at least one swarm job exercises this skill — capability in-play) vs DORMANT (no swarm job coverage — skill capability not actively deployed); stat tiles (skills/jobs/deployed/dormant); ALL/DEPLOYED/DORMANT filter tabs + text search; expand skill → matched swarm jobs with status badge + relevance score; lime badge on deployed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill deployment coverage brief + TTS via jarvis:speak-dossier; isSwarmskillQuery+buildSwarmskillScript wired in JarvisBrain; "swarm skill"/"swarmskill"/"skill deployment"/"deployed skills"/"which skills have swarm jobs"/"dormant skills"/"skill swarm"/"active skill deployment"/"swarm capability" voice triggers; jarvis:swarmskill-toggle event; 90-s auto-refresh */}
+            <SwarmJobSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
