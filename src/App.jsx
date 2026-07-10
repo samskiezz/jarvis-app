@@ -210,6 +210,7 @@ import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
 import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
 import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
+import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -627,6 +628,8 @@ function App() {
             <InvestigationKnowledgeCoverage />
             {/* F182 (overnight 2026-07-10): live intel × scenario alignment — ◈ LISCEN button (left:63480, bottom:8, zIndex:123); parallel-fetches /functions/getLiveIntel (earthquakes + markets) + /v1/scenario/list; keyword-correlates each active scenario against real-world live events to surface TRIGGERED (live world-event aligns with scenario context — possible activation signal) vs DORMANT (no live correlation); stat tiles (scenarios/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand scenario → matched live events with event-type badge (SEISMIC/MARKET/EXTREME) + relevance score; cyan badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-intel alignment brief + TTS via jarvis:speak-dossier; isLiscenQuery+buildLiscenScript wired in JarvisBrain; "live scenario"/"world scenario"/"liscen"/"intel scenario"/"scenario trigger"/"triggered scenarios"/"live world scenario" voice trigger; jarvis:liscen-toggle event; 60-s auto-refresh */}
             <LiveIntelScenarioAlignment />
+            {/* F183 (overnight 2026-07-10): investment × risk signal exposure tracker — ◈ INVRISEX button (left:64040, bottom:8, zIndex:124); parallel-fetches /entities/Investment + /entities/RiskSignal; keyword-correlates each investment (name/sector/tags/notes) against active risk signals (title/category/tags/summary) to surface EXPOSED (at least one active risk signal aligns) vs CLEAR (no risk alignment); stat tiles (investments/risk signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched risk signals with severity badge (CRIT/HIGH/MED/LOW) + relevance score; red badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk exposure brief + TTS via jarvis:speak-dossier; isInvrisexQuery+buildInvrisexScript wired in JarvisBrain; "investment risk"/"portfolio exposure"/"invrisex"/"portfolio risk"/"risk exposure"/"risky investments"/"exposed investments" voice trigger; jarvis:invrisex-toggle event; 60-s auto-refresh */}
+            <InvestmentRiskExposureTracker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -27,6 +27,7 @@ import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
 import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
 import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCoverage";
 import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
+import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -260,6 +261,13 @@ export default function JarvisBrain() {
         answer = await buildLiscenScript();
       } catch {
         answer = "Opening the live intel scenario alignment panel, sir.";
+      }
+    } else if (isInvrisexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invrisex-toggle"));
+      try {
+        answer = await buildInvrisexScript();
+      } catch {
+        answer = "Opening the investment risk exposure tracker, sir.";
       }
     } else {
       try {
