@@ -217,6 +217,7 @@ import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal'
 import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
 import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
+import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -648,6 +649,8 @@ function App() {
             <GraphCommunityContactCoverage />
             {/* F189 (overnight 2026-07-10): swarm job × intel profile operation coverage — ◈ SJINTEL button (left:67400, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each intel profile (name/category/tags/description/aliases) against active swarm jobs (title/objective/target/tags) to surface HUNTING (at least one swarm job aligns — active operational hunt in progress) vs UNHUNTED (no swarm job coverage — threat actor not being actively tracked, operational gap); stat tiles (profiles/jobs/hunting/unhunted); ALL/HUNTING/UNHUNTED filter tabs + text search; expand profile → matched swarm jobs with status badge + relevance score; purple badge on hunting count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat hunting coverage brief + TTS via jarvis:speak-dossier; isSjintelQuery+buildSjintelScript wired in JarvisBrain; "swarm intel"/"intel hunt"/"sjintel"/"swarm hunter"/"active threat hunt"/"which threats are being hunted"/"hunting status"/"threat hunting coverage" voice triggers; jarvis:sjintel-toggle event; 60-s auto-refresh */}
             <SwarmIntelProfileCoverage />
+            {/* F190 (overnight 2026-07-10): graph node × scenario coverage — ◈ GNSCEN button (left:67960, bottom:8, zIndex:131); parallel-fetches /v1/graph/centrality + /v1/scenario/list; keyword-correlates each top-influence node against operational scenarios to surface PLANNED (scenario coverage found) vs UNPLANNED (no scenario — strategic planning gap); stat tiles (nodes/scenarios/planned/unplanned); ALL/PLANNED/UNPLANNED filter tabs + text search; expand node → matched scenarios with status badge + relevance score; red badge on unplanned count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence node-scenario strategic brief + TTS via jarvis:speak-dossier; isGnscenQuery+buildGnscenScript wired in JarvisBrain; "graph node scenario"/"node scenario coverage"/"gnscen"/"high influence scenario"/"unplanned nodes"/"which nodes have scenarios"/"strategic node gap"/"node planning" voice triggers; jarvis:gnscen-toggle event; 90-s auto-refresh */}
+            <GraphNodeScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
