@@ -24,6 +24,7 @@ import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
 import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
+import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -236,6 +237,13 @@ export default function JarvisBrain() {
         answer = await buildScntaskScript();
       } catch {
         answer = "Opening the scenario task coverage panel, sir.";
+      }
+    } else if (isGctaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gctask-toggle"));
+      try {
+        answer = await buildGctaskScript();
+      } catch {
+        answer = "Opening the community task coverage panel, sir.";
       }
     } else {
       try {

@@ -207,6 +207,7 @@ import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
 import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
+import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -618,6 +619,8 @@ function App() {
             <ReportInvestigationBridge />
             {/* F179 (overnight 2026-07-10): scenario × task coverage — ◈ SCNTASK button (left:61800, bottom:8, zIndex:120); parallel-fetches /v1/scenario/list + /entities/Task; keyword-correlates each scenario against the task backlog to surface TASKED (supporting tasks exist) vs UNTASKED (no execution plan on record); stat tiles (scenarios/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand scenario → matched tasks with status chip + relevance score; red badge on untasked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-execution coverage brief + TTS via jarvis:speak-dossier; isScntaskQuery+buildScntaskScript wired in JarvisBrain; "scenario task"/"scntask"/"scenario execution"/"which scenarios have tasks"/"task coverage"/"unplanned scenarios" voice trigger; jarvis:scntask-toggle event; 90-s auto-refresh */}
             <ScenarioTaskCoverage />
+            {/* F180 (overnight 2026-07-10): graph community × task coverage — ◈ GCTASK button (left:62360, bottom:8, zIndex:121); parallel-fetches /v1/graph/communities + /entities/Task; keyword-correlates each network cluster against the task backlog to surface COVERED (supporting task exists) vs GAP (no task coverage — planning blind spot); stat tiles (communities/tasks/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand community → matched tasks with status chip + relevance score; red badge on gap count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-task alignment brief + TTS via jarvis:speak-dossier; isGctaskQuery+buildGctaskScript wired in JarvisBrain; "community task"/"gctask"/"graph community task"/"untasked communities"/"which communities have tasks" voice trigger; jarvis:gctask-toggle event; 90-s auto-refresh */}
+            <GraphCommunityTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
