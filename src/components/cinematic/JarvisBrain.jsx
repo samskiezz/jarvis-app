@@ -29,6 +29,7 @@ import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCove
 import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
 import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTracker";
 import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
+import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -276,6 +277,13 @@ export default function JarvisBrain() {
         answer = await buildLirisconvScript();
       } catch {
         answer = "Opening the live intel risk convergence monitor, sir.";
+      }
+    } else if (isIntelskillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:intelskill-toggle"));
+      try {
+        answer = await buildIntelskillScript();
+      } catch {
+        answer = "Opening the intel profile skill alignment monitor, sir.";
       }
     } else {
       try {

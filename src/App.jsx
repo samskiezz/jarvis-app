@@ -212,6 +212,7 @@ import InvestigationKnowledgeCoverage from '@/components/cinematic/Investigation
 import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
 import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
 import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
+import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -633,6 +634,8 @@ function App() {
             <InvestmentRiskExposureTracker />
             {/* F184 (overnight 2026-07-10): live intel × risk signal convergence monitor — ◈ LIRISCONV button (left:64600, bottom:8, zIndex:125); parallel-fetches /functions/getLiveIntel (earthquakes+crypto+FX) + /entities/RiskSignal; keyword-correlates each active risk signal (title/category/tags/summary) against live world events to surface TRIGGERED (live event keyword-matches the risk signal) vs DORMANT (no live-world convergence); stat tiles (risk signals/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand risk signal → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score; amber badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence convergence brief + TTS via jarvis:speak-dossier; isLirisconvQuery+buildLirisconvScript wired in JarvisBrain; "live risk"/"world risk"/"intel risk"/"lirisconv"/"real-time risk"/"live risk signal"/"live signal convergence"/"risk world events" voice trigger; jarvis:lirisconv-toggle event; 60-s auto-refresh */}
             <LiveIntelRiskConvergence />
+            {/* F185 (overnight 2026-07-10): intel profile × skill domain alignment — ◈ INTELSKILL button (left:65160, bottom:8, zIndex:126); parallel-fetches /entities/IntelProfile + /v1/aip/skill; keyword-correlates each intel profile (name/category/tags/description) against operator skill domains to surface COVERED (skill domain aligns — operator expertise exists) vs BLIND (no skill domain alignment — capability gap); stat tiles (profiles/skill domains/covered/blind); ALL/COVERED/BLIND filter tabs + text search; expand profile → matched skill domains with relevance score; orange badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-coverage brief + TTS via jarvis:speak-dossier; isIntelskillQuery+buildIntelskillScript wired in JarvisBrain; "intel skill"/"threat skill"/"intelskill"/"actor skill gap"/"operator skill coverage"/"which profiles lack skill" voice trigger; jarvis:intelskill-toggle event; 90-s auto-refresh */}
+            <IntelProfileSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
