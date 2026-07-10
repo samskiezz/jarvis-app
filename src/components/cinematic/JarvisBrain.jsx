@@ -30,6 +30,7 @@ import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
 import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTracker";
 import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
 import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
+import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -284,6 +285,13 @@ export default function JarvisBrain() {
         answer = await buildIntelskillScript();
       } catch {
         answer = "Opening the intel profile skill alignment monitor, sir.";
+      }
+    } else if (isLitaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:litask-toggle"));
+      try {
+        answer = await buildLitaskScript();
+      } catch {
+        answer = "Opening the live task urgency signal monitor, sir.";
       }
     } else {
       try {

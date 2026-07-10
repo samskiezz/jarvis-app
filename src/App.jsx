@@ -213,6 +213,7 @@ import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenario
 import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
 import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
 import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
+import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -636,6 +637,8 @@ function App() {
             <LiveIntelRiskConvergence />
             {/* F185 (overnight 2026-07-10): intel profile × skill domain alignment — ◈ INTELSKILL button (left:65160, bottom:8, zIndex:126); parallel-fetches /entities/IntelProfile + /v1/aip/skill; keyword-correlates each intel profile (name/category/tags/description) against operator skill domains to surface COVERED (skill domain aligns — operator expertise exists) vs BLIND (no skill domain alignment — capability gap); stat tiles (profiles/skill domains/covered/blind); ALL/COVERED/BLIND filter tabs + text search; expand profile → matched skill domains with relevance score; orange badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-coverage brief + TTS via jarvis:speak-dossier; isIntelskillQuery+buildIntelskillScript wired in JarvisBrain; "intel skill"/"threat skill"/"intelskill"/"actor skill gap"/"operator skill coverage"/"which profiles lack skill" voice trigger; jarvis:intelskill-toggle event; 90-s auto-refresh */}
             <IntelProfileSkillAlignment />
+            {/* F186 (overnight 2026-07-10): live intel × task urgency signal — ◈ LITASK button (left:65720, bottom:8, zIndex:127); parallel-fetches /functions/getLiveIntel (earthquakes+crypto+FX) + /entities/Task; keyword-correlates each task (title/notes/tags/status) against live world events to surface SIGNALLED (live event aligns with task context — urgency flag) vs UNSIGNALLED (no live-world correlation); stat tiles (tasks/live events/signalled/unsignalled); ALL/SIGNALLED/UNSIGNALLED filter tabs + text search; expand task → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score; lime badge on signalled count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-urgency brief + TTS via jarvis:speak-dossier; isLitaskQuery+buildLitaskScript wired in JarvisBrain; "live task"/"world task"/"litask"/"task signal"/"urgent tasks"/"live task trigger"/"task urgency"/"world event task" voice trigger; jarvis:litask-toggle event; 60-s auto-refresh */}
+            <LiveTaskUrgencySignal />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
