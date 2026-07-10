@@ -25,6 +25,7 @@ import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
 import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
 import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
+import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -244,6 +245,13 @@ export default function JarvisBrain() {
         answer = await buildGctaskScript();
       } catch {
         answer = "Opening the community task coverage panel, sir.";
+      }
+    } else if (isInvknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invknow-toggle"));
+      try {
+        answer = await buildInvknowScript();
+      } catch {
+        answer = "Opening the investigation knowledge coverage panel, sir.";
       }
     } else {
       try {

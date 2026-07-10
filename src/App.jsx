@@ -208,6 +208,7 @@ import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentC
 import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
 import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
+import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -621,6 +622,8 @@ function App() {
             <ScenarioTaskCoverage />
             {/* F180 (overnight 2026-07-10): graph community × task coverage — ◈ GCTASK button (left:62360, bottom:8, zIndex:121); parallel-fetches /v1/graph/communities + /entities/Task; keyword-correlates each network cluster against the task backlog to surface COVERED (supporting task exists) vs GAP (no task coverage — planning blind spot); stat tiles (communities/tasks/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand community → matched tasks with status chip + relevance score; red badge on gap count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-task alignment brief + TTS via jarvis:speak-dossier; isGctaskQuery+buildGctaskScript wired in JarvisBrain; "community task"/"gctask"/"graph community task"/"untasked communities"/"which communities have tasks" voice trigger; jarvis:gctask-toggle event; 90-s auto-refresh */}
             <GraphCommunityTaskCoverage />
+            {/* F181 (overnight 2026-07-10): investigation × knowledge coverage — ◈ INVKNOW button (left:62920, bottom:8, zIndex:122); parallel-fetches /v1/investigations + /knowledge/; keyword-correlates each case against the knowledge-article vault to surface SUPPORTED (knowledge backing found) vs BLIND (no documentation — research gap); stat tiles (cases/articles/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched articles with type badge + relevance score; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-knowledge brief + TTS via jarvis:speak-dossier; isInvknowQuery+buildInvknowScript wired in JarvisBrain; "investigation knowledge"/"knowledge for investigations"/"invknow"/"research gap"/"blind investigations"/"unsupported investigations" voice trigger; jarvis:invknow-toggle event; 90-s auto-refresh */}
+            <InvestigationKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
