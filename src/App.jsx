@@ -219,6 +219,7 @@ import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunity
 import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
 import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
 import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
+import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -654,6 +655,8 @@ function App() {
             <GraphNodeScenarioCoverage />
             {/* F191 (overnight 2026-07-10): report × skill domain coverage — ◈ RSKILL button (left:68520, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/aip/skill; keyword-correlates each operator skill domain against the report catalog to surface INFORMED (report documentation found) vs UNINFORMED (no report coverage — knowledge-production gap); stat tiles (skills/reports/informed/uninformed); ALL/INFORMED/UNINFORMED filter tabs + text search; expand skill → matched reports with topic badge + relevance score; orange badge on uninformed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-report coverage brief + TTS via jarvis:speak-dossier; isRskillQuery+buildRskillScript wired in JarvisBrain; "report skill"/"skill report"/"rskill"/"skill coverage reports"/"which skills have reports"/"skill knowledge production"/"uninformed skills" voice triggers; jarvis:rskill-toggle event; 90-s auto-refresh */}
             <ReportSkillCoverage />
+            {/* F192 (overnight 2026-07-10): ops alert × task response tracker — ◈ OPSTASK button (left:69080, bottom:8, zIndex:133); parallel-fetches /v1/ops/alerts + /entities/Task; keyword-correlates each active ops alert (name/severity/service/description/tags) against the task backlog to surface TASKED (response task exists) vs UNTASKED (no task coverage — response gap); stat tiles (alerts/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand alert → matched tasks with status chip + relevance score; red badge on untasked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-alert task coverage brief + TTS via jarvis:speak-dossier; isOpstaskQuery+buildOpstaskScript wired in JarvisBrain; "ops alert task"/"alert task"/"opstask"/"alert response task"/"unresponded alerts"/"tasked alerts"/"alert coverage"/"which alerts have tasks"/"ops task response" voice triggers; jarvis:opstask-toggle event; 60-s auto-refresh */}
+            <OpsAlertTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

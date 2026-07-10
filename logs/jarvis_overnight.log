@@ -34,3 +34,4 @@
 [2026-07-10] F189 SwarmIntelProfileCoverage.jsx — /entities/SwarmJob × /entities/IntelProfile → HUNTING/UNHUNTED split; purple badge; voice: sjintel; build exit 0
 [2026-07-10] F190 GraphNodeScenarioCoverage.jsx — /v1/graph/centrality × /v1/scenario/list → PLANNED/UNPLANNED split; red badge on unplanned; voice: gnscen; isGnscenQuery+buildGnscenScript wired in JarvisBrain; ◈ GNSCEN left:67960 zIndex:131; build exit 0
 [2026-07-10] F191 ReportSkillCoverage.jsx — /v1/reports × /v1/aip/skill → INFORMED/UNINFORMED split; orange badge on uninformed count; isRskillQuery+buildRskillScript wired in JarvisBrain; ◈ RSKILL left:68520 zIndex:132; build exit 0
+[2026-07-10] F192 OpsAlertTaskCoverage.jsx — /v1/ops/alerts × /entities/Task TASKED/UNTASKED; ◈ OPSTASK left:69080 zIndex:133; isOpstaskQuery+buildOpstaskScript wired in JarvisBrain; build exit 0
