@@ -20,6 +20,7 @@ import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCovera
 import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
 import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverage";
 import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
+import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -204,6 +205,13 @@ export default function JarvisBrain() {
         answer = await buildGnintelScript();
       } catch {
         answer = "Opening the graph node intel profile coverage panel, sir.";
+      }
+    } else if (isDsriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsrisk-toggle"));
+      try {
+        answer = await buildDsriskScript();
+      } catch {
+        answer = "Opening the dataset risk coverage panel, sir.";
       }
     } else {
       try {

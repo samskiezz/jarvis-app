@@ -203,6 +203,7 @@ import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunit
 import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
 import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
+import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -606,6 +607,8 @@ function App() {
             <OpsAlertInvestigationCoverage />
             {/* F175 (overnight 2026-07-09): graph node × intel profile coverage — ◈ GNINTEL button (left:59560, bottom:8, zIndex:116); parallel-fetches /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each top-influence graph node against known threat actor profiles to surface ATTRIBUTED (intel profile covers this node) vs UNTRACKED (no threat actor linked — intelligence blind spot); stat tiles (nodes/profiles/attributed/untracked); ALL/ATTRIBUTED/UNTRACKED filter tabs + text search; expand node → matched intel profiles with actor-type badge + centrality bar + relevance score; red badge on untracked count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-intel attribution brief + TTS via jarvis:speak-dossier; isGnintelQuery+buildGnintelScript wired in JarvisBrain; "graph intel"/"node threat actor"/"graph profile"/"high node intel"/"gnintel"/"node actor"/"network actor"/"untracked nodes"/"graph actor coverage" voice trigger; jarvis:gnintel-toggle event; 90-s auto-refresh */}
             <GraphNodeIntelCoverage />
+            {/* F176 (overnight 2026-07-10): dataset × risk signal coverage — ◈ DSRISK button (left:60120, bottom:8, zIndex:117); parallel-fetches /v1/datasets + /entities/RiskSignal; keyword-correlates each dataset against active risk signals to surface IMPLICATED (risk signal references this dataset) vs CLEAR (no risk signal coverage — unmonitored data source); stat tiles (datasets/signals/implicated/clear); ALL/IMPLICATED/CLEAR filter tabs + text search; expand dataset → matched risk signals with severity badge + relevance score; amber badge on implicated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-risk exposure brief + TTS via jarvis:speak-dossier; isDsriskQuery+buildDsriskScript wired in JarvisBrain; "dataset risk"/"risk dataset"/"data risk coverage"/"dsrisk"/"dataset signal"/"data exposure"/"dataset threat"/"risky datasets" voice trigger; jarvis:dsrisk-toggle event; 90-s auto-refresh */}
+            <DatasetRiskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
