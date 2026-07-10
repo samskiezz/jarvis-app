@@ -214,6 +214,7 @@ import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRisk
 import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
 import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
 import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
+import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -639,6 +640,8 @@ function App() {
             <IntelProfileSkillAlignment />
             {/* F186 (overnight 2026-07-10): live intel × task urgency signal — ◈ LITASK button (left:65720, bottom:8, zIndex:127); parallel-fetches /functions/getLiveIntel (earthquakes+crypto+FX) + /entities/Task; keyword-correlates each task (title/notes/tags/status) against live world events to surface SIGNALLED (live event aligns with task context — urgency flag) vs UNSIGNALLED (no live-world correlation); stat tiles (tasks/live events/signalled/unsignalled); ALL/SIGNALLED/UNSIGNALLED filter tabs + text search; expand task → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score; lime badge on signalled count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-urgency brief + TTS via jarvis:speak-dossier; isLitaskQuery+buildLitaskScript wired in JarvisBrain; "live task"/"world task"/"litask"/"task signal"/"urgent tasks"/"live task trigger"/"task urgency"/"world event task" voice trigger; jarvis:litask-toggle event; 60-s auto-refresh */}
             <LiveTaskUrgencySignal />
+            {/* F187 (overnight 2026-07-10): dataset × contact intelligence bridge — ◈ DSCONT button (left:66280, bottom:8, zIndex:128); parallel-fetches /v1/datasets + /entities/Contact; keyword-correlates each dataset (name/description/owner/tags/category) against contact records (name/org/role/email/tags) to surface REFERENCED (contact matches dataset — potential data owner/stakeholder) vs UNREFERENCED (ownership gap); stat tiles (datasets/contacts/referenced/unreferenced); ALL/REFERENCED/UNREFERENCED filter tabs + text search; expand dataset → matched contacts with role badge + relevance score; teal badge on referenced count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-ownership brief + TTS via jarvis:speak-dossier; isDscontQuery+buildDscontScript wired in JarvisBrain; "dataset contact"/"dscont"/"contact dataset"/"data owner"/"dataset ownership"/"data steward" voice triggers; jarvis:dscont-toggle event; 90-s auto-refresh */}
+            <DatasetContactBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

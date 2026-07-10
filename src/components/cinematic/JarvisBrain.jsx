@@ -31,6 +31,7 @@ import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTr
 import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
 import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
 import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
+import { isDscontQuery, buildDscontScript } from "./DatasetContactBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -292,6 +293,13 @@ export default function JarvisBrain() {
         answer = await buildLitaskScript();
       } catch {
         answer = "Opening the live task urgency signal monitor, sir.";
+      }
+    } else if (isDscontQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dscont-toggle"));
+      try {
+        answer = await buildDscontScript();
+      } catch {
+        answer = "Opening the dataset contact intelligence bridge, sir.";
       }
     } else {
       try {
