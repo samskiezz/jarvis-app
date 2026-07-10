@@ -1,44 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
-import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
-import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
-import {
-  isEntitySearchQuery,
-  extractEntitySearchTerm,
-  buildEntityDossierScript,
-} from "./EntityQuickSearch";
-import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
-import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
-import { isOpsCasesQuery, buildOpsCasesScript } from "./OpsCasesMonitor";
-import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
-import { isDicomQuery, buildDicomScript } from "./DecisionIntelCompleteness";
-import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage";
-import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
-import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
-import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
-import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverage";
-import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
-import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
-import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
-import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
-import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
-import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
-import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCoverage";
-import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
-import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTracker";
-import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
-import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
-import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
-import { isDscontQuery, buildDscontScript } from "./DatasetContactBridge";
-import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
-import { isSjintelQuery, buildSjintelScript } from "./SwarmIntelProfileCoverage";
-import { isGnscenQuery, buildGnscenScript } from "./GraphNodeScenarioCoverage";
-import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
-import { isOpstaskQuery, buildOpstaskScript } from "./OpsAlertTaskCoverage";
-import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignment";
-import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -115,12 +78,12 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
-    // F20: "show me X" pre-router — normalise to panel intent keyword, re-dispatch,
-    // then return so the agent chat doesn't fire on top of the panel's own voice.
+    // F20: "show me X / open X / view X" → normalize and re-dispatch so the
+    // correct panel opens itself. isShowMeQuery never matches normalized strings
+    // (they have no SHOW_PREFIX), so there is no recursive loop.
     if (isShowMeQuery(q)) {
-      const normalized = resolveShowMeQuery(q);
       window.dispatchEvent(
-        new CustomEvent("jarvis:ask", { detail: { text: normalized, _sm: true } })
+        new CustomEvent("jarvis:ask", { detail: { text: resolveShowMeQuery(q) } })
       );
       return;
     }
@@ -129,247 +92,17 @@ export default function JarvisBrain() {
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
     let answer = "";
-    if (isStatusQuery(q)) {
-      try {
-        answer = await buildStatusScript();
-      } catch {
-        answer = "I'm unable to retrieve system telemetry at this moment, sir.";
-      }
-    } else if (isMarketsQuery(q)) {
-      try {
-        answer = await buildMarketsScript();
-      } catch {
-        answer = "Market data is unavailable at this moment, sir.";
-      }
-    } else if (isEntitySearchQuery(q)) {
-      const term = extractEntitySearchTerm(q);
-      window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
-      try {
-        answer = await buildEntityDossierScript(term);
-      } catch {
-        answer = "I was unable to retrieve the entity dossier at this moment, sir.";
-      }
-    } else if (isRiskQuery(q)) {
-      try {
-        answer = await buildRiskScript();
-      } catch {
-        answer = "I'm unable to retrieve the risk board at this moment, sir.";
-      }
-    } else if (isMBriefQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:mbrief-toggle"));
-      try {
-        answer = await buildMBriefScript();
-      } catch {
-        answer = "I'm compiling your mission brief now, sir. Opening the briefing panel.";
-      }
-    } else if (isOpsCasesQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:opcases-toggle"));
-      try {
-        answer = await buildOpsCasesScript();
-      } catch {
-        answer = "Opening the ops cases board, sir. Retrieving active case files now.";
-      }
-    } else if (isSwarmCoverageQuery(q)) {
-      try {
-        answer = await buildSwarmCoverageScript();
-      } catch {
-        answer = "Opening the swarm–risk coverage map, sir.";
-      }
-    } else if (isDicomQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:dicom-toggle"));
-      try {
-        answer = await buildDicomScript();
-      } catch {
-        answer = "Opening the decision intelligence completeness monitor, sir.";
-      }
-    } else if (isGninvQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:gninv-toggle"));
-      try {
-        answer = await buildGninvScript();
-      } catch {
-        answer = "Opening the graph node investigation coverage panel, sir.";
-      }
-    } else if (isTattrQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:tattr-toggle"));
-      try {
-        answer = await buildTattrScript();
-      } catch {
-        answer = "Opening the threat attribution mapper, sir.";
-      }
-    } else if (isGcscenQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:gcscen-toggle"));
-      try {
-        answer = await buildGcscenScript();
-      } catch {
-        answer = "Opening the graph community scenario coverage panel, sir.";
-      }
-    } else if (isKscovQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:kscov-toggle"));
-      try {
-        answer = await buildKscovScript();
-      } catch {
-        answer = "Opening the knowledge-skill coverage gap panel, sir.";
-      }
-    } else if (isOalinvQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:oalinv-toggle"));
-      try {
-        answer = await buildOalinvScript();
-      } catch {
-        answer = "Opening the ops-alert investigation coverage panel, sir.";
-      }
-    } else if (isGnintelQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:gnintel-toggle"));
-      try {
-        answer = await buildGnintelScript();
-      } catch {
-        answer = "Opening the graph node intel profile coverage panel, sir.";
-      }
-    } else if (isDsriskQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:dsrisk-toggle"));
-      try {
-        answer = await buildDsriskScript();
-      } catch {
-        answer = "Opening the dataset risk coverage panel, sir.";
-      }
-    } else if (isConvinQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:convin-toggle"));
-      try {
-        answer = await buildConvinScript();
-      } catch {
-        answer = "Opening the contact investment coverage panel, sir.";
-      }
-    } else if (isRiibQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:riib-toggle"));
-      try {
-        answer = await buildRiibScript();
-      } catch {
-        answer = "Opening the report-investigation intelligence bridge, sir.";
-      }
-    } else if (isScntaskQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:scntask-toggle"));
-      try {
-        answer = await buildScntaskScript();
-      } catch {
-        answer = "Opening the scenario task coverage panel, sir.";
-      }
-    } else if (isGctaskQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:gctask-toggle"));
-      try {
-        answer = await buildGctaskScript();
-      } catch {
-        answer = "Opening the community task coverage panel, sir.";
-      }
-    } else if (isInvknowQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:invknow-toggle"));
-      try {
-        answer = await buildInvknowScript();
-      } catch {
-        answer = "Opening the investigation knowledge coverage panel, sir.";
-      }
-    } else if (isLiscenQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:liscen-toggle"));
-      try {
-        answer = await buildLiscenScript();
-      } catch {
-        answer = "Opening the live intel scenario alignment panel, sir.";
-      }
-    } else if (isInvrisexQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:invrisex-toggle"));
-      try {
-        answer = await buildInvrisexScript();
-      } catch {
-        answer = "Opening the investment risk exposure tracker, sir.";
-      }
-    } else if (isLirisconvQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:lirisconv-toggle"));
-      try {
-        answer = await buildLirisconvScript();
-      } catch {
-        answer = "Opening the live intel risk convergence monitor, sir.";
-      }
-    } else if (isIntelskillQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:intelskill-toggle"));
-      try {
-        answer = await buildIntelskillScript();
-      } catch {
-        answer = "Opening the intel profile skill alignment monitor, sir.";
-      }
-    } else if (isLitaskQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:litask-toggle"));
-      try {
-        answer = await buildLitaskScript();
-      } catch {
-        answer = "Opening the live task urgency signal monitor, sir.";
-      }
-    } else if (isDscontQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:dscont-toggle"));
-      try {
-        answer = await buildDscontScript();
-      } catch {
-        answer = "Opening the dataset contact intelligence bridge, sir.";
-      }
-    } else if (isGcontQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:gcont-toggle"));
-      try {
-        answer = await buildGcontScript();
-      } catch {
-        answer = "Opening the graph community contact coverage monitor, sir.";
-      }
-    } else if (isSjintelQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:sjintel-toggle"));
-      try {
-        answer = await buildSjintelScript();
-      } catch {
-        answer = "Opening the swarm intel profile coverage monitor, sir.";
-      }
-    } else if (isGnscenQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:gnscen-toggle"));
-      try {
-        answer = await buildGnscenScript();
-      } catch {
-        answer = "Opening the graph node scenario coverage monitor, sir.";
-      }
-    } else if (isRskillQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:rskill-toggle"));
-      try {
-        answer = await buildRskillScript();
-      } catch {
-        answer = "Opening the report skill domain coverage monitor, sir.";
-      }
-    } else if (isOpstaskQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:opstask-toggle"));
-      try {
-        answer = await buildOpstaskScript();
-      } catch {
-        answer = "Opening the ops alert task response tracker, sir.";
-      }
-    } else if (isSwarmskillQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:swarmskill-toggle"));
-      try {
-        answer = await buildSwarmskillScript();
-      } catch {
-        answer = "Opening the swarm job skill domain alignment monitor, sir.";
-      }
-    } else if (isInvintelQuery(q)) {
-      window.dispatchEvent(new CustomEvent("jarvis:invintel-toggle"));
-      try {
-        answer = await buildInvintelScript();
-      } catch {
-        answer = "Opening the investment intel profile exposure monitor, sir.";
-      }
-    } else {
-      try {
-        const pageContext = { route: window.location.pathname, scene };
-        const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-          body: JSON.stringify({ message: q, page_context: pageContext }),
-        });
-        const d = await r.json();
-        answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
-      } catch {
-        answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
-      }
+    try {
+      const pageContext = { route: window.location.pathname, scene };
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body: JSON.stringify({ message: q, page_context: pageContext }),
+      });
+      const d = await r.json();
+      answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+    } catch {
+      answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
     }
     if (scene && !answer) answer = `Summoning the ${SCENE_LABEL[scene]}, sir.`;
     if (!answer) answer = "At your service, sir.";
@@ -379,8 +112,6 @@ export default function JarvisBrain() {
 
   useEffect(() => {
     const onAsk = (e) => {
-      // Skip events that ShowMeNavigation already normalized — panels handle them.
-      if (e?.detail?._sm) return;
       // JarvisAssistant owns chat on /apex routes; avoid duplicate handling there.
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/apex")) return;
       const q = e?.detail?.text || e?.detail?.query;
@@ -388,19 +119,6 @@ export default function JarvisBrain() {
     };
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
-  }, []);
-
-  // F08: speak entity dossiers dispatched by EntityQuickSearch result clicks
-  useEffect(() => {
-    const onDossier = (e) => {
-      const t = e?.detail?.text;
-      if (!t) return;
-      clearTimeout(hideT.current);
-      setOpen(true); setThinking(false); typeOut(t); speak(t);
-      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, t.length * 70));
-    };
-    window.addEventListener("jarvis:speak-dossier", onDossier);
-    return () => window.removeEventListener("jarvis:speak-dossier", onDossier);
   }, []);
 
   function mic() {
