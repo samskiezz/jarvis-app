@@ -38,6 +38,7 @@ import { isGnscenQuery, buildGnscenScript } from "./GraphNodeScenarioCoverage";
 import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
 import { isOpstaskQuery, buildOpstaskScript } from "./OpsAlertTaskCoverage";
 import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignment";
+import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -348,6 +349,13 @@ export default function JarvisBrain() {
         answer = await buildSwarmskillScript();
       } catch {
         answer = "Opening the swarm job skill domain alignment monitor, sir.";
+      }
+    } else if (isInvintelQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invintel-toggle"));
+      try {
+        answer = await buildInvintelScript();
+      } catch {
+        answer = "Opening the investment intel profile exposure monitor, sir.";
       }
     } else {
       try {

@@ -221,6 +221,7 @@ import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioC
 import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
+import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -660,6 +661,8 @@ function App() {
             <OpsAlertTaskCoverage />
             {/* F193 (overnight 2026-07-10): swarm job × skill domain alignment — ◈ SWARMSKILL button (left:69640, bottom:8, zIndex:134); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each operator skill domain (name/category/description/tags) against active swarm jobs (title/objective/target/tags) to surface DEPLOYED (at least one swarm job exercises this skill — capability in-play) vs DORMANT (no swarm job coverage — skill capability not actively deployed); stat tiles (skills/jobs/deployed/dormant); ALL/DEPLOYED/DORMANT filter tabs + text search; expand skill → matched swarm jobs with status badge + relevance score; lime badge on deployed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill deployment coverage brief + TTS via jarvis:speak-dossier; isSwarmskillQuery+buildSwarmskillScript wired in JarvisBrain; "swarm skill"/"swarmskill"/"skill deployment"/"deployed skills"/"which skills have swarm jobs"/"dormant skills"/"skill swarm"/"active skill deployment"/"swarm capability" voice triggers; jarvis:swarmskill-toggle event; 90-s auto-refresh */}
             <SwarmJobSkillAlignment />
+            {/* F194 (overnight 2026-07-10): investment × intel profile exposure — ◈ INVINTEL button (left:70200, bottom:8, zIndex:135); parallel-fetches /entities/Investment + /entities/IntelProfile; keyword-correlates each investment (name/sector/notes/tags) against tracked threat actor profiles (name/category/description/aliases/tags) to surface EXPOSED (intel profile keyword-aligns — potential threat actor/sector association) vs CLEAR (no detected alignment); stat tiles (investments/profiles/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched intel profiles with category badge + relevance score; red badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment threat exposure brief + TTS via jarvis:speak-dossier; isInvintelQuery+buildInvintelScript wired in JarvisBrain; "investment intel"/"intel investment"/"invintel"/"investment threat actor"/"portfolio threat exposure"/"exposed investments"/"threat actor investment" voice triggers; jarvis:invintel-toggle event; 90-s auto-refresh */}
+            <InvestmentIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
