@@ -23,6 +23,7 @@ import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
 import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
+import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -228,6 +229,13 @@ export default function JarvisBrain() {
         answer = await buildRiibScript();
       } catch {
         answer = "Opening the report-investigation intelligence bridge, sir.";
+      }
+    } else if (isScntaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scntask-toggle"));
+      try {
+        answer = await buildScntaskScript();
+      } catch {
+        answer = "Opening the scenario task coverage panel, sir.";
       }
     } else {
       try {
