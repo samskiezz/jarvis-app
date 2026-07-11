@@ -4,6 +4,11 @@ import { apiBase } from "@/api/cinematicDataAdapters";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isStatusQuery } from "./SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import {
+  isEntitySearchQuery,
+  extractEntitySearchTerm,
+  buildEntityDossierScript,
+} from "./EntityQuickSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -102,6 +107,16 @@ export default function JarvisBrain() {
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
+    // F08: route entity search queries to EntityQuickSearch panel + spoken dossier
+    if (isEntitySearchQuery(q)) {
+      const term = extractEntitySearchTerm(q);
+      window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term: term || "" } }));
+      setOpen(true); setThinking(true); setText("");
+      const dossier = await buildEntityDossierScript(term || "");
+      setThinking(false); typeOut(dossier); speak(dossier);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, dossier.length * 70));
+      return;
+    }
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
@@ -134,6 +149,18 @@ export default function JarvisBrain() {
     };
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
+  }, []);
+
+  // F08: speak dossier when user clicks a result card in EntityQuickSearch
+  useEffect(() => {
+    const onDossier = (e) => {
+      const text = e?.detail?.text;
+      if (!text) return;
+      setOpen(true); typeOut(text); speak(text);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, text.length * 70));
+    };
+    window.addEventListener("jarvis:speak-dossier", onDossier);
+    return () => window.removeEventListener("jarvis:speak-dossier", onDossier);
   }, []);
 
   function mic() {
