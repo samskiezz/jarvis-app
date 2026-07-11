@@ -10,6 +10,7 @@ import {
   buildEntityDossierScript,
 } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
+import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -113,6 +114,15 @@ export default function JarvisBrain() {
     if (isRiskQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildRiskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F10: route task/mission queries to TaskBoard panel + spoken task summary.
+    // TaskBoard already opens itself on jarvis:ask (its own listener); we just speak the summary.
+    if (isTaskQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
