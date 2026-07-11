@@ -14,6 +14,7 @@ import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
+import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -153,6 +154,15 @@ export default function JarvisBrain() {
     if (isScenarioQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildScenarioScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F14: route document/report/knowledge queries to DocumentSearch panel + spoken vault brief.
+    // DocumentSearch already opens itself on jarvis:ask (its own listener); we speak the summary.
+    if (isDocumentQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDocumentScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
