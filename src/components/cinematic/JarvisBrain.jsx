@@ -15,6 +15,7 @@ import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
+import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -163,6 +164,15 @@ export default function JarvisBrain() {
     if (isDocumentQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildDocumentScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F15: route skill/scorecard/AIP queries to SkillScorecard panel + spoken metrics brief.
+    // SkillScorecard already opens itself on jarvis:ask (its own listener); we speak the summary.
+    if (isSkillQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkillScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
