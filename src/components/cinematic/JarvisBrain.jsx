@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isStatusQuery } from "./SpokenStatusReport";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -85,6 +86,11 @@ export default function JarvisBrain() {
       window.dispatchEvent(
         new CustomEvent("jarvis:ask", { detail: { text: resolveShowMeQuery(q) } })
       );
+      return;
+    }
+    // F05: route status queries to StatusReporter which fetches real telemetry + speaks via TTS
+    if (isStatusQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:status"));
       return;
     }
     clearTimeout(hideT.current);
