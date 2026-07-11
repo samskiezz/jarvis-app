@@ -17,6 +17,7 @@ import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
+import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -183,6 +184,15 @@ export default function JarvisBrain() {
     if (isBrainQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildBrainScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F17: route anchor drill-down queries to SceneAnchorDrillDown panel + spoken anchor report.
+    // SceneAnchorDrillDown already opens itself on jarvis:ask (its own listener); we speak the summary.
+    if (isAnchorQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAnchorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
