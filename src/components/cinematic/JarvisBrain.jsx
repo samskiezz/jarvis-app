@@ -11,6 +11,7 @@ import {
 } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
+import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -123,6 +124,15 @@ export default function JarvisBrain() {
     if (isTaskQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildTaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F11: route datasets queries to DatasetsBrowser panel + spoken catalog summary.
+    // DatasetsBrowser already opens itself on jarvis:ask (its own listener); we just speak the summary.
+    if (isDatasetsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDatasetsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
