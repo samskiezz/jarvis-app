@@ -12,6 +12,7 @@ import {
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
+import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -133,6 +134,15 @@ export default function JarvisBrain() {
     if (isDatasetsQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildDatasetsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F12: route investigations queries to InvestigationsList panel + spoken brief.
+    // InvestigationsList already opens itself on jarvis:ask; we speak the summary.
+    if (isInvestigationsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvestigationsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -29,7 +29,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. (2026-07-11: RiskBoard.jsx already existed + mounted in App.jsx; wired isRiskQuery/buildRiskScript into JarvisBrain.jsx ask() so "risk/signal/critical/threat" voice queries open the panel and speak a severity summary via TTS; build EXIT:0)
 - [x] F10 Task board — /entities/Task → live mission cards with status. (2026-07-11: TaskBoard.jsx already existed + mounted in App.jsx; wired isTaskQuery/buildTaskScript into JarvisBrain.jsx ask() so "task/mission/todo/objective" voice queries open the panel and speak a task summary via TTS; build EXIT:0)
 - [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. (2026-07-11: wired isDatasetsQuery/buildDatasetsScript from DatasetsBrowser.jsx into JarvisBrain.jsx ask() so "dataset/catalog/ingest/pipeline" voice queries open the panel and speak a catalog summary via TTS; build EXIT:0)
-- [ ] F12 Investigations list — /v1/investigations → open cases panel.
+- [x] F12 Investigations list — /v1/investigations → open cases panel. (2026-07-11: wired isInvestigationsQuery/buildInvestigationsScript from InvestigationsList.jsx into JarvisBrain.jsx ask(); "investig/case/open.case/operation/inquiry" voice queries open the INTEL panel and speak a case brief via TTS; InvestigationsList already mounted in App.jsx polling /v1/investigations every 120 s; build EXIT:0)
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
 - [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
