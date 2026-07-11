@@ -9,6 +9,7 @@ import {
   extractEntitySearchTerm,
   buildEntityDossierScript,
 } from "./EntityQuickSearch";
+import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -103,6 +104,15 @@ export default function JarvisBrain() {
     if (isMarketsQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildMarketsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F09: route risk queries to RiskBoard panel + spoken risk summary.
+    // RiskBoard already opens itself on jarvis:ask (its own listener); we just speak the summary.
+    if (isRiskQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRiskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
