@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isStatusQuery } from "./SpokenStatusReport";
+import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -91,6 +92,14 @@ export default function JarvisBrain() {
     // F05: route status queries to StatusReporter which fetches real telemetry + speaks via TTS
     if (isStatusQuery(q)) {
       window.dispatchEvent(new CustomEvent("jarvis:status"));
+      return;
+    }
+    // F07: route markets queries to MarketsTicker's spoken report (real getLiveIntel data)
+    if (isMarketsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMarketsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
     clearTimeout(hideT.current);
