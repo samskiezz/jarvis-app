@@ -25,6 +25,7 @@ import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
+import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -262,6 +263,15 @@ export default function JarvisBrain() {
     if (isCentralityQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildCentralityScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F27: diagnostics — open ServiceDiagnostics panel + speak per-service health from /v1/jarvis/system/status.
+    // ServiceDiagnostics opens itself via its own jarvis:ask listener; we add the TTS summary.
+    if (isDiagnosticsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDiagnosticsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
