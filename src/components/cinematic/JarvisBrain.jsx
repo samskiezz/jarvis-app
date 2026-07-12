@@ -30,6 +30,7 @@ import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
+import { isPriorityQueueQuery, buildPriorityQueueScript } from "./PriorityActionQueue";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -323,6 +324,16 @@ export default function JarvisBrain() {
       const script = buildTourScript();
       setOpen(true); typeOut(script);
       hideT.current = setTimeout(() => setOpen(false), 5000);
+      return;
+    }
+    // F32: priority action queue — parallel-fetches Task + RiskSignal + /v1/investigations,
+    // ranks by urgency, opens PriorityActionQueue panel + speaks ranked summary via TTS.
+    if (isPriorityQueueQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: "priority queue urgent items" } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildPriorityQueueScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
     clearTimeout(hideT.current);
