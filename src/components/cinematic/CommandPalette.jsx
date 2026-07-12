@@ -1,6 +1,7 @@
 /**
  * CommandPalette — ⌘K / Ctrl+K global command search.
- * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes.
+ * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes +
+ * JARVIS agent action commands wired to /v1/jarvis/agent/chat via jarvis:ask.
  * Additive-only; mounted in App.jsx next to JarvisBrain.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -9,6 +10,31 @@ import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
 const CY = "#29E7FF";
+const AM = "#F59E0B"; // amber for actions group
+
+// JARVIS agent action commands — dispatch jarvis:ask → JarvisBrain → /v1/jarvis/agent/chat
+const JARVIS_ACTIONS = [
+  { label: "Status Report",        phrase: "What is the current system status and brain health?",         icon: "◎", keywords: "status system health cpu memory brain" },
+  { label: "Markets Brief",        phrase: "JARVIS, markets",                                             icon: "◈", keywords: "markets crypto fx currency bitcoin finance" },
+  { label: "Risk Overview",        phrase: "JARVIS, show current risks",                                  icon: "⚠", keywords: "risks risk signals threats threat danger critical" },
+  { label: "Mission Tasks",        phrase: "JARVIS, what are the current mission tasks?",                 icon: "◆", keywords: "tasks missions tasks board goals objectives" },
+  { label: "Morning Briefing",     phrase: "JARVIS, brief me",                                            icon: "◎", keywords: "brief briefing morning summary overview today" },
+  { label: "Intelligence Digest",  phrase: "JARVIS, intel digest",                                        icon: "◈", keywords: "intel intelligence digest news quake seismic" },
+  { label: "Brain Growth Trend",   phrase: "JARVIS, brain growth trend",                                  icon: "⟁", keywords: "brain growth nodes synapses knowledge trend" },
+  { label: "System Health Score",  phrase: "JARVIS, system health score",                                 icon: "⊕", keywords: "health score composite scorecard performance" },
+  { label: "Investigations Status",phrase: "JARVIS, what are the open investigations?",                   icon: "◉", keywords: "investigations cases open intel files" },
+  { label: "Crisis Level",         phrase: "JARVIS, what is the current crisis level?",                   icon: "⚡", keywords: "crisis defcon threat level emergency alert" },
+  { label: "Swarm Status",         phrase: "JARVIS, swarm status",                                        icon: "⬡", keywords: "swarm jobs agents automation running" },
+  { label: "Graph Centrality",     phrase: "JARVIS, who has the most influence in the network?",          icon: "✶", keywords: "graph centrality network influence nodes entities" },
+  { label: "Priority Actions",     phrase: "JARVIS, what needs immediate attention right now?",            icon: "⚡", keywords: "priority urgent attention actions queue" },
+  { label: "Scenario Monitor",     phrase: "JARVIS, what scenarios are currently running?",               icon: "▶", keywords: "scenario simulation running monitor" },
+  { label: "Ops Event Stream",     phrase: "JARVIS, what are the latest operational events?",             icon: "⬡", keywords: "ops events operations events log stream" },
+  { label: "Dataset Overview",     phrase: "JARVIS, show me the dataset catalog",                         icon: "⟁", keywords: "datasets catalog data sources catalog" },
+  { label: "Knowledge Search",     phrase: "JARVIS, show knowledge articles",                             icon: "◈", keywords: "knowledge articles docs documents reports" },
+  { label: "Contacts Directory",   phrase: "JARVIS, show contacts",                                       icon: "◈", keywords: "contacts people directory personnel" },
+  { label: "Skills Scorecard",     phrase: "JARVIS, show skill scorecard",                                icon: "◈", keywords: "skills aip scorecard capability improvement" },
+  { label: "Situation Report",     phrase: "JARVIS, give me a full situation report",                     icon: "◎", keywords: "sitrep situation operational picture brief full" },
+];
 
 const CINEMATIC_SCENES = [
   { id: "01_command_atrium",          label: "Command Atrium",         icon: "◈" },
@@ -24,6 +50,15 @@ const CINEMATIC_SCENES = [
 ];
 
 function buildCommands() {
+  const actionCommands = JARVIS_ACTIONS.map((a) => ({
+    id: `action:${a.label}`,
+    label: a.label,
+    icon: a.icon,
+    group: "ACTIONS",
+    action: a.phrase,
+    keywords: a.keywords,
+  }));
+
   const sceneCommands = CINEMATIC_SCENES.map((s) => ({
     id: `scene:${s.id}`,
     label: s.label,
@@ -44,7 +79,7 @@ function buildCommands() {
       keywords: [p.label, p.name, ...(p.aliases || [])].join(" ").toLowerCase(),
     }));
 
-  return [...sceneCommands, ...pageCommands];
+  return [...actionCommands, ...sceneCommands, ...pageCommands];
 }
 
 const ALL_COMMANDS = buildCommands();
@@ -73,8 +108,12 @@ export default function CommandPalette() {
 
   const run = useCallback(
     (cmd) => {
-      navigate(cmd.path);
       close();
+      if (cmd.action) {
+        window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: cmd.action } }));
+      } else if (cmd.path) {
+        navigate(cmd.path);
+      }
     },
     [navigate, close]
   );
@@ -228,7 +267,9 @@ export default function CommandPalette() {
               </span>
               <span
                 style={{
-                  color: i === selected ? `${CY}AA` : "#2E4050",
+                  color: i === selected
+                    ? (cmd.group === "ACTIONS" ? AM : `${CY}AA`)
+                    : (cmd.group === "ACTIONS" ? `${AM}66` : "#2E4050"),
                   fontSize: 10, letterSpacing: 2, flexShrink: 0,
                 }}
               >
