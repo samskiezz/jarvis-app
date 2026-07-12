@@ -20,6 +20,7 @@ import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isAmbientQuery } from "./AmbientReactorHum";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
+import { isAlertQuery, buildAlertScript } from "./AlertToasts";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -217,6 +218,14 @@ export default function JarvisBrain() {
       const script = await buildClockScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(6000, script.length * 70));
+      return;
+    }
+    // F22: alert toasts — speak a summary of open alerts from /v1/alerts (real endpoint).
+    if (isAlertQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAlertScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
     // F08: route entity search queries to EntityQuickSearch panel + spoken dossier
