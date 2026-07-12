@@ -18,6 +18,7 @@ import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
+import { isAmbientQuery } from "./AmbientReactorHum";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -195,6 +196,18 @@ export default function JarvisBrain() {
       const script = await buildAnchorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F19: ambient reactor hum toggle — dispatch jarvis:ambient-toggle; speak confirmation
+    if (isAmbientQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
+      const onScript = /\bon\b|enable|start|activ/i.test(q)
+        ? "Reactor ambient hum engaged, sir."
+        : /\boff\b|disable|stop|mute/i.test(q)
+        ? "Ambient hum silenced, sir."
+        : "Ambient reactor hum toggled, sir.";
+      setOpen(true); typeOut(onScript); speak(onScript);
+      hideT.current = setTimeout(() => setOpen(false), 5000);
       return;
     }
     // F08: route entity search queries to EntityQuickSearch panel + spoken dossier
