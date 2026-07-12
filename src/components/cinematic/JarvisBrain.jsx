@@ -24,6 +24,7 @@ import { isAlertQuery, buildAlertScript } from "./AlertToasts";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
+import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -252,6 +253,15 @@ export default function JarvisBrain() {
     if (isSwarmQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwarmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F26: graph centrality — open panel + speak top-entity influence brief from /v1/graph/centrality.
+    // GraphCentralityView opens itself via its own jarvis:ask listener; we add the TTS summary.
+    if (isCentralityQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCentralityScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
