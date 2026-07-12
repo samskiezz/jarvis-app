@@ -23,6 +23,7 @@ import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isAlertQuery, buildAlertScript } from "./AlertToasts";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
+import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -242,6 +243,15 @@ export default function JarvisBrain() {
     if (isContactsQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildContactsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F25: swarm jobs monitor — open the panel + speak running/queued/failed brief from /entities/SwarmJob.
+    // SwarmJobsMonitor opens itself via its own jarvis:ask listener (SWARM_RE); we add the spoken TTS summary.
+    if (isSwarmQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwarmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
