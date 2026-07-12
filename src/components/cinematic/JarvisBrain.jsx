@@ -21,6 +21,7 @@ import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isAmbientQuery } from "./AmbientReactorHum";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isAlertQuery, buildAlertScript } from "./AlertToasts";
+import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -224,6 +225,14 @@ export default function JarvisBrain() {
     if (isAlertQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildAlertScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F23: investment/wealth widget — speak portfolio summary from /entities/Investment + WealthSnapshot.
+    if (isInvestmentQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvestmentScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
