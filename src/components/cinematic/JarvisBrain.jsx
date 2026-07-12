@@ -29,6 +29,7 @@ import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
+import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -303,6 +304,16 @@ export default function JarvisBrain() {
       const dossier = await buildEntityDossierScript(term || "");
       setThinking(false); typeOut(dossier); speak(dossier);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, dossier.length * 70));
+      return;
+    }
+    // F31: scenario impact matrix — "impact matrix / risk matrix / scenario matrix" opens the
+    // 3×3 probability-vs-impact grid from /v1/scenario/list and speaks a critical-count brief.
+    if (isImpactMatrixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:matrix-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildImpactMatrixScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
     // F30: scene auto-tour — "start tour / give me a tour / walkthrough" starts SceneAutoTour.

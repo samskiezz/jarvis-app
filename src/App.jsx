@@ -222,6 +222,7 @@ import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
 import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
+import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -663,6 +664,8 @@ function App() {
             <SwarmJobSkillAlignment />
             {/* F194 (overnight 2026-07-10): investment × intel profile exposure — ◈ INVINTEL button (left:70200, bottom:8, zIndex:135); parallel-fetches /entities/Investment + /entities/IntelProfile; keyword-correlates each investment (name/sector/notes/tags) against tracked threat actor profiles (name/category/description/aliases/tags) to surface EXPOSED (intel profile keyword-aligns — potential threat actor/sector association) vs CLEAR (no detected alignment); stat tiles (investments/profiles/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched intel profiles with category badge + relevance score; red badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment threat exposure brief + TTS via jarvis:speak-dossier; isInvintelQuery+buildInvintelScript wired in JarvisBrain; "investment intel"/"intel investment"/"invintel"/"investment threat actor"/"portfolio threat exposure"/"exposed investments"/"threat actor investment" voice triggers; jarvis:invintel-toggle event; 90-s auto-refresh */}
             <InvestmentIntelExposure />
+            {/* F31: scenario impact matrix — ◫ MATRIX button; fetches /v1/scenario/list; plots scenarios on 3×3 impact×probability grid; hover shows name; click → /v1/jarvis/agent/chat AI risk assessment + TTS; critical badge; "JARVIS, impact matrix / risk matrix / scenario matrix" voice trigger */}
+            <ScenarioImpactMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
