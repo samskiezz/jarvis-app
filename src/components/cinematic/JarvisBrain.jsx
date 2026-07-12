@@ -27,6 +27,7 @@ import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
+import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -81,7 +82,7 @@ export default function JarvisBrain() {
     try {
       const r = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: answer }),
+        body: JSON.stringify({ text: answer, voice: getActiveVoice() }),
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
@@ -275,6 +276,14 @@ export default function JarvisBrain() {
       const script = await buildDiagnosticsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F29: multi-voice toggle — "switch voice to fable/onyx/ash" / "change voice" cycles or sets voice.
+    if (isVoiceQuery(q)) {
+      const newVoice = applyVoiceFromQuery(q);
+      const script = `Voice profile switched to ${newVoice}, sir. All subsequent speech will use the ${newVoice} voice engine.`;
+      setOpen(true); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), 5000);
       return;
     }
     // F28: command history — CommandHistory opens itself; we add the TTS summary from localStorage.
