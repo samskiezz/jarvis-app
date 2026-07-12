@@ -26,6 +26,7 @@ import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
+import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -273,6 +274,14 @@ export default function JarvisBrain() {
       setOpen(true); setThinking(true); setText("");
       const script = await buildDiagnosticsScript();
       setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F28: command history — CommandHistory opens itself; we add the TTS summary from localStorage.
+    if (isHistoryQuery(q)) {
+      setOpen(true); setThinking(false);
+      const script = buildHistoryScript();
+      typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
