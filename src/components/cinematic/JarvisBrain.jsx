@@ -19,6 +19,7 @@ import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isAmbientQuery } from "./AmbientReactorHum";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -208,6 +209,14 @@ export default function JarvisBrain() {
         : "Ambient reactor hum toggled, sir.";
       setOpen(true); typeOut(onScript); speak(onScript);
       hideT.current = setTimeout(() => setOpen(false), 5000);
+      return;
+    }
+    // F21: live clock + uptime — speak current time and real process uptime from system/status.
+    if (isClockQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildClockScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(6000, script.length * 70));
       return;
     }
     // F08: route entity search queries to EntityQuickSearch panel + spoken dossier
