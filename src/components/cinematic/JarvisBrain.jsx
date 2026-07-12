@@ -28,6 +28,7 @@ import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView"
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
+import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -302,6 +303,15 @@ export default function JarvisBrain() {
       const dossier = await buildEntityDossierScript(term || "");
       setThinking(false); typeOut(dossier); speak(dossier);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, dossier.length * 70));
+      return;
+    }
+    // F30: scene auto-tour — "start tour / give me a tour / walkthrough" starts SceneAutoTour.
+    // SceneAutoTour opens itself via its own jarvis:ask listener; we speak the intro confirmation.
+    if (isTourQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tour-start"));
+      const script = buildTourScript();
+      setOpen(true); typeOut(script);
+      hideT.current = setTimeout(() => setOpen(false), 5000);
       return;
     }
     clearTimeout(hideT.current);
