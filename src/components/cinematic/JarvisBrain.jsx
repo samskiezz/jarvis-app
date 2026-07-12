@@ -22,6 +22,7 @@ import { isAmbientQuery } from "./AmbientReactorHum";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isAlertQuery, buildAlertScript } from "./AlertToasts";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
+import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -233,6 +234,14 @@ export default function JarvisBrain() {
     if (isInvestmentQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvestmentScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F24: contacts directory — open the panel + speak directory brief from /entities/Contact.
+    if (isContactsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildContactsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
