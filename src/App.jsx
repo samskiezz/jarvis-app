@@ -230,6 +230,7 @@ import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecke
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
 import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
+import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -691,6 +692,8 @@ function App() {
             <GraphTimelineScrubber />
             {/* F50: Intel Profile Roster — ◈ IPRO button (left:11180, zIndex:70); sources /entities/IntelProfile threat-sorted; red pulse on CRITICAL; filter input; ▶ ASSESS per subject → /v1/jarvis/agent/chat 2-sentence dossier + TTS via jarvis:speak-dossier; isIntelProfileRosterQuery+buildIntelProfileRosterScript wired in JarvisBrain; jarvis:intel-roster-toggle event; 60-s auto-refresh; "intel profiles/intel roster/who are we tracking/tracked entities/ipro" voice trigger */}
             <IntelProfileRoster />
+            {/* F51: Mission Control Console — 4-KPI operational cockpit (Tasks/Swarms/Risks/Investigations); ⬛ MCTL button (left:71320); Ctrl+Shift+L; jarvis:mission-control-toggle; parallel-fetches /entities/Task + /entities/SwarmJob + /entities/RiskSignal + /v1/investigations; ▶ ASSESS → /v1/jarvis/agent/chat brief + TTS; isMissionControlQuery+buildMissionControlScript wired in JarvisBrain; "mission control/mctl/ops console/operational overview" voice trigger */}
+            <MissionControlConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

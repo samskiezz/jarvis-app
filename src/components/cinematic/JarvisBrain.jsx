@@ -48,6 +48,7 @@ import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesVi
 import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "./GraphAnomalyDetector";
 import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
 import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
+import { isMissionControlQuery, buildMissionControlScript } from "./MissionControlConsole";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -565,6 +566,18 @@ export default function JarvisBrain() {
       const script = await buildWatchlistScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F51: mission control console — "mission control / mission console / mctl /
+    // control console / ops console / ops overview / operational overview / ops cockpit"
+    // Opens MissionControlConsole panel (jarvis:mission-control-toggle) and speaks a
+    // 4-KPI operational brief (tasks/swarms/risks/cases) from real entity endpoints.
+    if (isMissionControlQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMissionControlScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
     }
 
