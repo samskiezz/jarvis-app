@@ -34,6 +34,7 @@ import { isPriorityQueueQuery, buildPriorityQueueScript } from "./PriorityAction
 import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelRegistry";
+import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -371,6 +372,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:model-registry-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildModelRegistryScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F38: scenario risk advisor — "mitigation / scenario advisor / which scenarios /
+    // risk advisor / srmadv" — correlates /entities/RiskSignal against /v1/scenario/list,
+    // opens ScenarioRiskAdvisor panel and speaks top mitigation recommendation.
+    if (isScenarioRiskAdvisorQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScenarioRiskAdvisorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;

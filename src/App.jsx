@@ -225,6 +225,7 @@ import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExpos
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
 import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
+import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -672,6 +673,8 @@ function App() {
             <QuickIntelCard />
             {/* F37: Scenario Model Registry — ⬢ MODELS button (left:70760, bottom:18); polls /v1/scenario/models every 60 s; trained/missing pills; kind badges; file size; drift engine strip; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence model brief + TTS via jarvis:speak-dossier; Ctrl+Shift+M; isModelRegistryQuery+buildModelRegistryScript wired in JarvisBrain; "model registry"/"scenario models"/"available models"/"prediction models"/"what models"/"drift status"/"trained models" voice triggers; jarvis:model-registry-toggle event; 60-s auto-refresh */}
             <ScenarioModelRegistry />
+            {/* F38: Scenario Risk Advisor — ◈ SRMADV button (left:5068, zIndex:65); parallel-fetches /entities/RiskSignal + /v1/scenario/list; keyword-correlates active risk signals to the best mitigation scenario; click scenario → POST /v1/scenario/{id}/run + shows outcome; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence advisory + TTS via jarvis:speak-dossier; isScenarioRiskAdvisorQuery+buildScenarioRiskAdvisorScript wired in JarvisBrain; "mitigation/scenario advisor/which scenarios/risk advisor/srmadv" voice trigger; jarvis:srmadvisor-toggle event */}
+            <ScenarioRiskAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
