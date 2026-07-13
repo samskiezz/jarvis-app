@@ -55,6 +55,7 @@ import { isSituationQuery, buildSituationScript } from "./SituationRoom";
 import { isIfuseQuery, buildIfuseScript } from "./IntelFusionBoard";
 import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
 import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnalyzer";
+import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -664,6 +665,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:opsclu-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOpsClusterScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F56: swarm-task assignment advisor — "swarm task / task automation / automate tasks /
+    // task advisor / swtask / assign tasks / which tasks / task assignment"
+    // Opens SwarmTaskAdvisor panel (jarvis:swarmtask-toggle) and speaks a 2-sentence
+    // brief on how many active tasks have swarm automation candidates vs. require human
+    // attention, derived from /entities/Task + /entities/SwarmJob.
+    if (isSwarmTaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swarmtask-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwarmTaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

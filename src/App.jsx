@@ -233,6 +233,7 @@ import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber'
 import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
 import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
+import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -706,6 +707,15 @@ function App() {
                 "ops cluster/service cluster/event cluster/cluster analysis/service load/opsclu" voice trigger;
                 jarvis:opsclu-toggle event; Ctrl+Shift+U shortcut; orange badge on hot-cluster count */}
             <OpsEventClusterAnalyzer />
+            {/* F56: Swarm Task Advisor — ◈ SWTASK button (left:6316, zIndex:65); parallel-fetches
+                /entities/Task + /entities/SwarmJob; keyword-correlates active tasks to running/queued
+                swarm jobs to surface automatable vs manual tasks; stat tiles (tasks/jobs/automatable/manual);
+                filter tabs ALL/AUTOMATABLE/MANUAL; expand task → matched job list with progress bars;
+                ▶ ADVISE per task → /v1/jarvis/agent/chat 2-sentence assignment recommendation + TTS;
+                isSwarmTaskQuery+buildSwarmTaskScript wired in JarvisBrain;
+                "swarm task/task automation/automate tasks/task advisor/swtask/assign tasks" voice trigger;
+                jarvis:swarmtask-toggle event; 60-s auto-refresh; amber badge on automatable count */}
+            <SwarmTaskAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
