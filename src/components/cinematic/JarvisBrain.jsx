@@ -32,6 +32,7 @@ import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
 import { isPriorityQueueQuery, buildPriorityQueueScript } from "./PriorityActionQueue";
 import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
+import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -349,6 +350,19 @@ export default function JarvisBrain() {
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
+
+    // F36: graph path finder — "path from X to Y / how is X connected to Y /
+    // find link between X and Y / connection between X and Y / traverse from X to Y"
+    // buildPathScript extracts entity names from the query, fetches /v1/graph/path,
+    // dispatches jarvis:path-query to open GraphPathExplorer, narrates via /v1/jarvis/agent/chat.
+    if (isPathQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildPathScript(q);
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
