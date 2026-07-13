@@ -229,6 +229,7 @@ import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
+import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -688,6 +689,8 @@ function App() {
             <SkillGapAdvisor />
             {/* F49: Graph Timeline Scrubber — ◈ GTIME button (left:10060, zIndex:70); POSTs to /v1/graph-time/playback (24 frames) to animate knowledge-graph growth over time; SVG bar chart + range scrubber + per-frame node/link readout; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth narrative + TTS via jarvis:speak-dossier; isGraphTimelineQuery+buildGraphTimelineScript wired in JarvisBrain; "graph timeline/graph history/graph over time/how did the graph grow/graph evolution/temporal graph/gtime" voice trigger; jarvis:graph-timeline-toggle event; 5-min auto-refresh */}
             <GraphTimelineScrubber />
+            {/* F50: Intel Profile Roster — ◈ IPRO button (left:11180, zIndex:70); sources /entities/IntelProfile threat-sorted; red pulse on CRITICAL; filter input; ▶ ASSESS per subject → /v1/jarvis/agent/chat 2-sentence dossier + TTS via jarvis:speak-dossier; isIntelProfileRosterQuery+buildIntelProfileRosterScript wired in JarvisBrain; jarvis:intel-roster-toggle event; 60-s auto-refresh; "intel profiles/intel roster/who are we tracking/tracked entities/ipro" voice trigger */}
+            <IntelProfileRoster />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

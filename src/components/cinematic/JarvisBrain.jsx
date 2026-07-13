@@ -47,6 +47,7 @@ import { isGeoSeismicQuery, buildGeoSeismicScript } from "./GeoSeismicAnalyst";
 import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
 import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "./GraphAnomalyDetector";
 import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
+import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -523,6 +524,19 @@ export default function JarvisBrain() {
     if (isGraphTimelineQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildGraphTimelineScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F50: intel profile roster — "intel profiles / intel roster / profile list / all profiles /
+    // who are we tracking / tracked entities / intelligence profiles / target roster / ipro"
+    // Opens IntelProfileRoster panel (jarvis:intel-roster-toggle) and speaks a threat-sorted brief
+    // (total count, CRITICAL count, top subject names) from /entities/IntelProfile.
+    if (isIntelProfileRosterQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:intel-roster-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIntelProfileRosterScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
