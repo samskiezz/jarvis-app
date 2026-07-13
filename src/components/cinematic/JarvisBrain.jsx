@@ -37,6 +37,8 @@ import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelR
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
 import { isSnapQuery, buildSnapScript } from "./SnapshotTracker";
 import { isScenarioMonitorQuery, buildScenarioMonitorScript } from "./LiveScenarioMonitor";
+import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
+import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -414,6 +416,31 @@ export default function JarvisBrain() {
       const script = await buildScenarioMonitorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F41a: adaptive threat report — "threat report / generate threat report / threat intelligence /
+    // intel report / full threat brief / athrep"
+    // Opens AdaptiveThreatReport panel (jarvis:athrep-toggle) and speaks a count brief from
+    // /entities/RiskSignal + /entities/IntelProfile + /v1/ops/events via buildAthrepScript().
+    if (isAthrepQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAthrepScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F41b: crisis early warning — "crisis level / crisis status / early warning / defcon /
+    // global threat / crisis"
+    // Opens CrisisEarlyWarning panel (jarvis:crisis-toggle) and speaks a DEFCON-level brief from
+    // /entities/RiskSignal + /functions/getLiveIntel + /v1/ops/events via buildCrisisWarningScript().
+    if (isCrisisWarningQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crisis-warning-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCrisisWarningScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
 
