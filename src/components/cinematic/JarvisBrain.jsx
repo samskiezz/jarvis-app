@@ -43,6 +43,7 @@ import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChe
 import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
 import { isBriefingQuery, buildBriefingScript } from "./MorningBriefing";
 import { isSkillGapQuery, buildSkillGapScript } from "./SkillGapAdvisor";
+import { isGeoSeismicQuery, buildGeoSeismicScript } from "./GeoSeismicAnalyst";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -469,6 +470,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skillgap-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkillGapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F46: geo-seismic analyst — "geo seismic / seismic regions / earthquake regions /
+    // regional seismic / quake regions / seismic analysis / geos"
+    // Opens GeoSeismicAnalyst panel (jarvis:geo-seismic-toggle) and speaks a region-clustered
+    // seismic brief from /functions/getLiveIntel via buildGeoSeismicScript().
+    if (isGeoSeismicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:geo-seismic-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGeoSeismicScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
