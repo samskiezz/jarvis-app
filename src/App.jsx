@@ -226,6 +226,7 @@ import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
 import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
+import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -675,6 +676,8 @@ function App() {
             <ScenarioModelRegistry />
             {/* F38: Scenario Risk Advisor — ◈ SRMADV button (left:5068, zIndex:65); parallel-fetches /entities/RiskSignal + /v1/scenario/list; keyword-correlates active risk signals to the best mitigation scenario; click scenario → POST /v1/scenario/{id}/run + shows outcome; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence advisory + TTS via jarvis:speak-dossier; isScenarioRiskAdvisorQuery+buildScenarioRiskAdvisorScript wired in JarvisBrain; "mitigation/scenario advisor/which scenarios/risk advisor/srmadv" voice trigger; jarvis:srmadvisor-toggle event */}
             <ScenarioRiskAdvisor />
+            {/* F42: Ops Task Coverage Checker — ◎ OPSCOV button (left:6732, zIndex:65); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates critical ops events against the task backlog (COVERED / UNCOVERED); red badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat remediation recommendation + TTS; isOpsCoverageQuery+buildOpsCoverageScript wired in JarvisBrain; "ops coverage / ops task coverage / uncovered events / task coverage / opscov / ops gaps" voice trigger; jarvis:ops-coverage-toggle event; 30-s auto-refresh */}
+            <OpsTaskCoverageChecker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

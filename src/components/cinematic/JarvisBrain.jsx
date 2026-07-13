@@ -39,6 +39,7 @@ import { isSnapQuery, buildSnapScript } from "./SnapshotTracker";
 import { isScenarioMonitorQuery, buildScenarioMonitorScript } from "./LiveScenarioMonitor";
 import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
+import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -439,6 +440,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crisis-warning-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCrisisWarningScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F42: ops task coverage — "ops coverage / ops task coverage / uncovered events /
+    // task coverage / opscov / ops gaps"
+    // Opens OpsTaskCoverageChecker panel (jarvis:ops-coverage-toggle) and speaks a coverage brief
+    // from /v1/ops/events + /entities/Task via buildOpsCoverageScript().
+    if (isOpsCoverageQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-coverage-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOpsCoverageScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
