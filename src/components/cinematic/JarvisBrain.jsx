@@ -35,6 +35,7 @@ import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelRegistry";
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
+import { isSnapQuery, buildSnapScript } from "./SnapshotTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -384,6 +385,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScenarioRiskAdvisorScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F39: system snapshot tracker — "snapshot / system snapshot / take snapshot /
+    // capture system / snap / metric history / system trend"
+    // Opens SnapshotTracker panel (jarvis:snap-toggle) and speaks a 2-sentence
+    // system-health trend brief from localStorage history + /v1/jarvis/agent/chat.
+    if (isSnapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:snap-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSnapScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
