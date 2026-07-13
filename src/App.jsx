@@ -60,6 +60,7 @@ import ContactsDirectory from '@/components/cinematic/ContactsDirectory';
 import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
 import GraphCentralityView from '@/components/cinematic/GraphCentralityView';
 import KnowledgeBrowser from '@/components/cinematic/KnowledgeBrowser';
+import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
 import IntelProfileDirectory from '@/components/cinematic/IntelProfileDirectory';
 import GraphCommunitiesView from '@/components/cinematic/GraphCommunitiesView';
 import IntelDigest from '@/components/cinematic/IntelDigest';
@@ -349,6 +350,8 @@ function App() {
             <OvernightPanels />
             {/* F31: knowledge browser — ◈ KNOW button (left:2260); fetches /knowledge/ → article list with search; click → /v1/jarvis/agent/chat AI summary + /v1/voice/tts spoken; "JARVIS, knowledge" voice trigger (isKnowledgeQuery+buildKnowledgeScript already wired in JarvisBrain) */}
             <KnowledgeBrowser />
+            {/* F52: knowledge report auditor — ◎ KRGAP button (left:7252); parallel-fetches /knowledge/ + /v1/reports; surfaces undocumented articles / orphaned reports; ▶ AUDIT → /v1/jarvis/agent/chat gap brief + TTS; voice "knowledge report/doc gap/krgap" opens panel */}
+            <KnowledgeReportAuditor />
             {/* F32: intel profile directory — ◈ INTEL button (left:1948); sources /entities/IntelProfile; threat-ranked profiles with type tabs; Alt+I shortcut; "JARVIS, intel profiles" voice trigger (isIntelProfileQuery+buildIntelProfileScript already wired in JarvisBrain) */}
             <IntelProfileDirectory />
             {/* F33: graph communities view — ◍ CLUSTERS button (left:2364); /v1/graph/communities label-propagation clustering; colour-coded cluster cards with member counts + search; 90-s auto-refresh; "JARVIS, communities"/"show clusters" voice trigger (isCommunitiesQuery+buildCommunitiesScript wired in JarvisBrain) */}

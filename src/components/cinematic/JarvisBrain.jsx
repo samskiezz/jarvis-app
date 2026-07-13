@@ -49,6 +49,7 @@ import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "./GraphAnomalyDete
 import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
 import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
 import { isMissionControlQuery, buildMissionControlScript } from "./MissionControlConsole";
+import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -578,6 +579,20 @@ export default function JarvisBrain() {
       const script = await buildMissionControlScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+
+    // F52: knowledge report auditor — "knowledge report / report knowledge / doc gap /
+    // documentation gap / knowledge coverage / krgap / report coverage"
+    // Opens KnowledgeReportAuditor panel (jarvis:krgap-toggle) and speaks a live
+    // documentation-gap brief (articles vs. reports matched/unmatched) from
+    // real /knowledge/ + /v1/reports endpoints.
+    if (isKrgapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:krgap-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKrgapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
 
