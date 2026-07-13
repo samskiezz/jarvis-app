@@ -40,6 +40,7 @@ import { isScenarioMonitorQuery, buildScenarioMonitorScript } from "./LiveScenar
 import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
+import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -455,6 +456,19 @@ export default function JarvisBrain() {
       const script = await buildOpsCoverageScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F43: entity watchlist — "watchlist / my watchlist / watched items / pinned items"
+    // Opens EntityWatchlist panel (jarvis:watchlist-toggle) and speaks a summary of
+    // pinned entities (from localStorage) fetching live data from
+    // /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact}.
+    if (isWatchlistQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:watchlist-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildWatchlistScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
 
