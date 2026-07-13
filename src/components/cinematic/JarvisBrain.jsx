@@ -44,6 +44,7 @@ import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
 import { isBriefingQuery, buildBriefingScript } from "./MorningBriefing";
 import { isSkillGapQuery, buildSkillGapScript } from "./SkillGapAdvisor";
 import { isGeoSeismicQuery, buildGeoSeismicScript } from "./GeoSeismicAnalyst";
+import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -485,6 +486,19 @@ export default function JarvisBrain() {
       const script = await buildGeoSeismicScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F47: graph communities — "communities / clusters / partition / network groups /
+    // group entities / entity clusters / who belongs / graph partition"
+    // Opens GraphCommunitiesView panel (jarvis:communities-toggle) and speaks a cluster
+    // brief (entity count, cluster count, largest cluster size) from /v1/graph/communities.
+    if (isCommunitiesQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:communities-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCommunitiesScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
 
