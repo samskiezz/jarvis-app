@@ -31,6 +31,7 @@ import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } f
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
 import { isPriorityQueueQuery, buildPriorityQueueScript } from "./PriorityActionQueue";
+import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -332,6 +333,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: "priority queue urgent items" } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildPriorityQueueScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F34: intel digest — "intel digest / live digest / news digest / daily digest" fetches
+    // /functions/getLiveIntel (quakes/crypto/fx) then /v1/jarvis/agent/chat synthesises a
+    // 3-sentence spoken brief. Opens IntelDigest panel via jarvis:intel-digest-toggle event.
+    if (isIntelDigestQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:intel-digest-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIntelDigestScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
