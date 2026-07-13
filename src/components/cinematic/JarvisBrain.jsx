@@ -42,6 +42,7 @@ import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWar
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
 import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
 import { isBriefingQuery, buildBriefingScript } from "./MorningBriefing";
+import { isSkillGapQuery, buildSkillGapScript } from "./SkillGapAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -455,6 +456,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ops-coverage-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOpsCoverageScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F45: skill gap advisor — "skill gap / training plan / learning plan / how to improve /
+    // weakest skill / upskill / capability gap / development plan"
+    // Opens SkillGapAdvisor panel (jarvis:skillgap-toggle) and speaks a gap brief from
+    // /v1/aip/skill via buildSkillGapScript(); AI recs fetched per weak skill via /v1/jarvis/agent/chat.
+    if (isSkillGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skillgap-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkillGapScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -227,6 +227,7 @@ import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
 import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
+import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -678,6 +679,12 @@ function App() {
             <ScenarioRiskAdvisor />
             {/* F42: Ops Task Coverage Checker — ◎ OPSCOV button (left:6732, zIndex:65); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates critical ops events against the task backlog (COVERED / UNCOVERED); red badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat remediation recommendation + TTS; isOpsCoverageQuery+buildOpsCoverageScript wired in JarvisBrain; "ops coverage / ops task coverage / uncovered events / task coverage / opscov / ops gaps" voice trigger; jarvis:ops-coverage-toggle event; 30-s auto-refresh */}
             <OpsTaskCoverageChecker />
+            {/* F45: Skill Gap Advisor — ◈ GAPS button (left:3508, zIndex:60); fetches /v1/aip/skill;
+                identifies bottom-3 skills; fetches AI training plans per gap via /v1/jarvis/agent/chat;
+                red badge on skill count below 70; isSkillGapQuery+buildSkillGapScript wired in JarvisBrain;
+                "skill gap / training plan / learning plan / upskill / capability gap" voice trigger;
+                jarvis:skillgap-toggle event; 5-min auto-refresh */}
+            <SkillGapAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
