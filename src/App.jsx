@@ -232,6 +232,7 @@ import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
 import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
+import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -697,6 +698,14 @@ function App() {
             <IntelProfileRoster />
             {/* F51: Mission Control Console — 4-KPI operational cockpit (Tasks/Swarms/Risks/Investigations); ⬛ MCTL button (left:71320); Ctrl+Shift+L; jarvis:mission-control-toggle; parallel-fetches /entities/Task + /entities/SwarmJob + /entities/RiskSignal + /v1/investigations; ▶ ASSESS → /v1/jarvis/agent/chat brief + TTS; isMissionControlQuery+buildMissionControlScript wired in JarvisBrain; "mission control/mctl/ops console/operational overview" voice trigger */}
             <MissionControlConsole />
+            {/* F55: ops event cluster analyzer — ◈ OPSCLU button (left:72448, bottom:8, zIndex:110);
+                polls /v1/ops/events every 45 s; groups events by service into severity-scored clusters
+                (HOT/ELEVATED/QUIET); stat tiles; filter tabs; expand per cluster; ▶ ASSESS →
+                /v1/jarvis/agent/chat 2-sentence cluster brief + TTS via jarvis:speak-dossier;
+                isOpsClusterQuery+buildOpsClusterScript wired in JarvisBrain.jsx;
+                "ops cluster/service cluster/event cluster/cluster analysis/service load/opsclu" voice trigger;
+                jarvis:opsclu-toggle event; Ctrl+Shift+U shortcut; orange badge on hot-cluster count */}
+            <OpsEventClusterAnalyzer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

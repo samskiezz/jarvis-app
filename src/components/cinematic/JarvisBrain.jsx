@@ -54,6 +54,7 @@ import { isRespresQuery, buildRespresScript } from "./ResourcePressureMonitor";
 import { isSituationQuery, buildSituationScript } from "./SituationRoom";
 import { isIfuseQuery, buildIfuseScript } from "./IntelFusionBoard";
 import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
+import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnalyzer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -649,6 +650,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sacm-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSceneAnchorMonitorScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F55: ops event cluster analyzer — "ops cluster / service cluster / event cluster /
+    // cluster analysis / service load / opsclu"
+    // Opens OpsEventClusterAnalyzer panel (jarvis:opsclu-toggle) and speaks a
+    // 2-sentence cluster intelligence brief (service count, hot clusters, top services)
+    // derived from /v1/ops/events grouped by service via buildOpsClusterScript().
+    if (isOpsClusterQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opsclu-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOpsClusterScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
