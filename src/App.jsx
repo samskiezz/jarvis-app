@@ -223,6 +223,7 @@ import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
 import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
+import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -666,6 +667,8 @@ function App() {
             <InvestmentIntelExposure />
             {/* F31: scenario impact matrix — ◫ MATRIX button; fetches /v1/scenario/list; plots scenarios on 3×3 impact×probability grid; hover shows name; click → /v1/jarvis/agent/chat AI risk assessment + TTS; critical badge; "JARVIS, impact matrix / risk matrix / scenario matrix" voice trigger */}
             <ScenarioImpactMatrix />
+            {/* F35: Quick Intel Card — ⊕ QIC button (left:480); compact card with top earthquake + top 2 market movers from /functions/getLiveIntel; 5-min auto-refresh; Ctrl+Shift+I shortcut; "quick intel"/"intel card"/"world snapshot"/"qic" voice trigger */}
+            <QuickIntelCard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
