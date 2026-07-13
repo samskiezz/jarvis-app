@@ -46,6 +46,7 @@ import { isSkillGapQuery, buildSkillGapScript } from "./SkillGapAdvisor";
 import { isGeoSeismicQuery, buildGeoSeismicScript } from "./GeoSeismicAnalyst";
 import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
 import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "./GraphAnomalyDetector";
+import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -510,6 +511,18 @@ export default function JarvisBrain() {
     if (isGraphAnomalyQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildGraphAnomalyScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F49: graph timeline scrubber — "graph timeline / graph history / graph over time /
+    // how did the graph grow / graph evolution / temporal graph / time series graph / gtime"
+    // Opens GraphTimelineScrubber panel (jarvis:graph-timeline-toggle) and speaks a growth brief
+    // (frame count, node delta, trend direction) from /v1/graph-time/playback via buildGraphTimelineScript().
+    if (isGraphTimelineQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGraphTimelineScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

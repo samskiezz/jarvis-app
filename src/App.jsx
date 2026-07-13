@@ -228,6 +228,7 @@ import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry'
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
+import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -685,6 +686,8 @@ function App() {
                 "skill gap / training plan / learning plan / upskill / capability gap" voice trigger;
                 jarvis:skillgap-toggle event; 5-min auto-refresh */}
             <SkillGapAdvisor />
+            {/* F49: Graph Timeline Scrubber — ◈ GTIME button (left:10060, zIndex:70); POSTs to /v1/graph-time/playback (24 frames) to animate knowledge-graph growth over time; SVG bar chart + range scrubber + per-frame node/link readout; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth narrative + TTS via jarvis:speak-dossier; isGraphTimelineQuery+buildGraphTimelineScript wired in JarvisBrain; "graph timeline/graph history/graph over time/how did the graph grow/graph evolution/temporal graph/gtime" voice trigger; jarvis:graph-timeline-toggle event; 5-min auto-refresh */}
+            <GraphTimelineScrubber />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
