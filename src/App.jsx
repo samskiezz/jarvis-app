@@ -224,6 +224,7 @@ import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignmen
 import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
+import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -669,6 +670,8 @@ function App() {
             <ScenarioImpactMatrix />
             {/* F35: Quick Intel Card — ⊕ QIC button (left:480); compact card with top earthquake + top 2 market movers from /functions/getLiveIntel; 5-min auto-refresh; Ctrl+Shift+I shortcut; "quick intel"/"intel card"/"world snapshot"/"qic" voice trigger */}
             <QuickIntelCard />
+            {/* F37: Scenario Model Registry — ⬢ MODELS button (left:70760, bottom:18); polls /v1/scenario/models every 60 s; trained/missing pills; kind badges; file size; drift engine strip; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence model brief + TTS via jarvis:speak-dossier; Ctrl+Shift+M; isModelRegistryQuery+buildModelRegistryScript wired in JarvisBrain; "model registry"/"scenario models"/"available models"/"prediction models"/"what models"/"drift status"/"trained models" voice triggers; jarvis:model-registry-toggle event; 60-s auto-refresh */}
+            <ScenarioModelRegistry />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

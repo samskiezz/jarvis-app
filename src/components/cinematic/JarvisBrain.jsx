@@ -33,6 +33,7 @@ import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMa
 import { isPriorityQueueQuery, buildPriorityQueueScript } from "./PriorityActionQueue";
 import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
+import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelRegistry";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -360,6 +361,18 @@ export default function JarvisBrain() {
       const script = await buildPathScript(q);
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F37: scenario model registry — "model registry / scenario models / available models /
+    // prediction models / what models / drift status / trained models"
+    // opens ScenarioModelRegistry panel and speaks model-count + drift brief from /v1/scenario/models.
+    if (isModelRegistryQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:model-registry-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildModelRegistryScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
 
