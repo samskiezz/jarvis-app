@@ -45,6 +45,7 @@ import { isBriefingQuery, buildBriefingScript } from "./MorningBriefing";
 import { isSkillGapQuery, buildSkillGapScript } from "./SkillGapAdvisor";
 import { isGeoSeismicQuery, buildGeoSeismicScript } from "./GeoSeismicAnalyst";
 import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
+import { isGraphAnomalyQuery, buildGraphAnomalyScript } from "./GraphAnomalyDetector";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -499,6 +500,18 @@ export default function JarvisBrain() {
       const script = await buildCommunitiesScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F48: graph anomaly detector — "graph anomaly / node anomaly / outlier / unusual node /
+    // anomalous / centrality outlier / anomaly detect / graph outlier / network outlier"
+    // Opens GraphAnomalyDetector panel (jarvis:graph-anomaly-toggle) and speaks a statistical-outlier
+    // brief (anomaly count, top anomaly node, z-score) from /v1/graph/centrality via buildGraphAnomalyScript().
+    if (isGraphAnomalyQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGraphAnomalyScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
 
