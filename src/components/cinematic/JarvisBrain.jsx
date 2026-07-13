@@ -41,6 +41,7 @@ import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
 import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
+import { isBriefingQuery, buildBriefingScript } from "./MorningBriefing";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -456,6 +457,19 @@ export default function JarvisBrain() {
       const script = await buildOpsCoverageScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F44: morning briefing — "brief me / morning briefing / daily brief / debrief / report in /
+    // run briefing / give me a brief / status report / daily report"
+    // Opens MorningBriefing panel (jarvis:briefing-open) and speaks a real multi-source briefing
+    // from /v1/jarvis/system/status + /v1/cinematic/brain + /functions/getLiveIntel via buildBriefingScript().
+    if (isBriefingQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:briefing-open"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildBriefingScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(12000, script.length * 70));
       return;
     }
 
