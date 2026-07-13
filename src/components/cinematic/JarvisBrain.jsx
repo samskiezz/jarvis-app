@@ -51,6 +51,9 @@ import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./Inte
 import { isMissionControlQuery, buildMissionControlScript } from "./MissionControlConsole";
 import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
 import { isRespresQuery, buildRespresScript } from "./ResourcePressureMonitor";
+import { isSituationQuery, buildSituationScript } from "./SituationRoom";
+import { isIfuseQuery, buildIfuseScript } from "./IntelFusionBoard";
+import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -607,6 +610,45 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:respres-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRespresScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F54a: situation room — "situation room / sitrep / ops centre / command overview / mission status /
+    // overall status / full status / sit rep"
+    // Opens SituationRoom panel (jarvis:situation-toggle) and speaks a live ops brief from
+    // /v1/jarvis/system/status + /v1/cinematic/brain + /entities/RiskSignal + /entities/SwarmJob + /v1/ops/events.
+    if (isSituationQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:situation-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSituationScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F54b: intel fusion board — "intelligence fusion / fuse intel / intel board / all signals / ifuse /
+    // signal aggregation / fusion board"
+    // Opens IntelFusionBoard panel (jarvis:ifuse-toggle) and speaks a live multi-source fusion brief from
+    // /entities/RiskSignal + /entities/IntelProfile + /v1/investigations + /v1/ops/events.
+    if (isIfuseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ifuse-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIfuseScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F54c: scene anchor monitor — "scene anchor / anchor monitor / all scene data / sacm /
+    // scene anchor feed / all scenes"
+    // Opens AllScenesAnchorMonitor panel (jarvis:sacm-toggle) and speaks a live scene-health brief
+    // (total anchors across all 10 cinematic scenes) from /v1/cinematic/scene/{id} via buildSceneAnchorMonitorScript().
+    if (isSceneAnchorMonitorQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sacm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSceneAnchorMonitorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
