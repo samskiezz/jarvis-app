@@ -50,6 +50,7 @@ import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineS
 import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
 import { isMissionControlQuery, buildMissionControlScript } from "./MissionControlConsole";
 import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
+import { isRespresQuery, buildRespresScript } from "./ResourcePressureMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -591,6 +592,21 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:krgap-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKrgapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F53: resource pressure monitor — "resource pressure / system load analysis /
+    // what's using resources / respres / load analysis / resource monitor / swarm load"
+    // Opens ResourcePressureMonitor panel (jarvis:respres-toggle) and speaks a real
+    // pressure-score brief (CPU/MEM/load + running swarm jobs) from
+    // /v1/jarvis/system/status + /entities/SwarmJob + /v1/ops/events via
+    // /v1/jarvis/agent/chat + TTS.
+    if (isRespresQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:respres-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRespresScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
