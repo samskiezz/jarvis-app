@@ -36,6 +36,7 @@ import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelRegistry";
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
 import { isSnapQuery, buildSnapScript } from "./SnapshotTracker";
+import { isScenarioMonitorQuery, buildScenarioMonitorScript } from "./LiveScenarioMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -398,6 +399,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:snap-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSnapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F40: live scenario monitor — "scenario monitor / running scenarios / simulation status /
+    // scenario status / playbook status / smon"
+    // Opens LiveScenarioMonitor panel (jarvis:scenario-monitor-toggle) and speaks a live
+    // status brief: total, running, pending, completed, failed counts from /v1/scenario/list.
+    if (isScenarioMonitorQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scenario-monitor-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScenarioMonitorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
