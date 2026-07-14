@@ -234,6 +234,7 @@ import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
 import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
+import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -716,6 +717,16 @@ function App() {
                 "swarm task/task automation/automate tasks/task advisor/swtask/assign tasks" voice trigger;
                 jarvis:swarmtask-toggle event; 60-s auto-refresh; amber badge on automatable count */}
             <SwarmTaskAdvisor />
+            {/* F195: dataset × knowledge coverage — ◈ DSKNOW button (left:30120, bottom:8, zIndex:60);
+                parallel-fetches /v1/datasets + /knowledge/; keyword-correlates each dataset against
+                knowledge articles to surface DOCUMENTED vs DARK (no docs); stat tiles (datasets/
+                articles/documented/dark); ALL/DOCUMENTED/DARK filter tabs + search; expand dataset →
+                matched articles with relevance score; amber badge on dark count; ▶ ASSESS per dataset →
+                /v1/jarvis/agent/chat 2-sentence data-documentation advisory + TTS via jarvis:speak-dossier;
+                isDsknowQuery+buildDsknowScript wired in JarvisBrain; "dataset knowledge"/"dataset docs"/
+                "undocumented datasets"/"data documentation gap"/"dsknow" voice triggers;
+                jarvis:dsknow-toggle event; 120-s auto-refresh */}
+            <DatasetKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

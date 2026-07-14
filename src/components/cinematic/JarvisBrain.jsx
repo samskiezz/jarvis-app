@@ -56,6 +56,7 @@ import { isIfuseQuery, buildIfuseScript } from "./IntelFusionBoard";
 import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
 import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnalyzer";
 import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
+import { isDsknowQuery, buildDsknowScript } from "./DatasetKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -678,6 +679,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swarmtask-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwarmTaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F195: dataset × knowledge coverage — "dataset knowledge / dataset docs /
+    // undocumented datasets / data documentation gap / dsknow"
+    // Opens DatasetKnowledgeCoverage panel (jarvis:dsknow-toggle) and speaks a
+    // 2-sentence brief on documented vs dark datasets from /v1/datasets + /knowledge/.
+    if (isDsknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsknow-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDsknowScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
