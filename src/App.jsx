@@ -243,6 +243,7 @@ import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillReco
 import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
 import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
+import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -785,6 +786,14 @@ function App() {
                 wired in JarvisBrain; "risk report/risk evidence/report coverage/naked risk/
                 uncovered risk/riskrep/evidence gap/risk documentation" voice triggers */}
             <RiskReportMapper />
+            {/* F68 Investigation × Scenario Recommender — parallel-fetches /v1/investigations +
+                /v1/scenario/list; keyword-correlates each open case against available scenarios
+                to surface matched remediation plans; split panel (cases left, scenarios right);
+                ▶ RUN → POST /v1/scenario/{id}/run + inline outcome; ▶ JARVIS ADVISE →
+                /v1/jarvis/agent/chat 2-sentence advisory + TTS via jarvis:speak-dossier;
+                isInvScenarioQuery + buildInvScenarioScript wired in JarvisBrain;
+                jarvis:invscen-toggle; ◈ INVSC button left:5796; 60-s auto-refresh */}
+            <InvestigationScenarioRecommender />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

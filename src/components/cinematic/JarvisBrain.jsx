@@ -61,6 +61,7 @@ import { isInvOpsFreqQuery, buildInvOpsFreqScript } from "./InvestigationOpsFreq
 import { isTaskAlignQuery, buildTaskAlignScript } from "./TaskSkillAlignment";
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
+import { isInvScenarioQuery, buildInvScenarioScript } from "./InvestigationScenarioRecommender";
 import { isCtrskQuery, buildCtrskScript } from "./ContactRiskExposure";
 import { isForecastQuery, buildForecastScript } from "./ThreatForecastEngine";
 import { isThreatVelocityQuery, buildThreatVelocityScript } from "./ThreatVelocityMonitor";
@@ -758,6 +759,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:inv-scen-link-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvScenLinkerScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isInvScenarioQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvScenarioScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
