@@ -237,6 +237,7 @@ import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
 import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
+import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -738,6 +739,12 @@ function App() {
                 surfaces COVERED (skill exists) vs GAP (no matching skill) tasks; isTaskAlignQuery +
                 buildTaskAlignScript wired in JarvisBrain; jarvis:taskalign-toggle; 60-s auto-refresh */}
             <TaskSkillAlignment />
+            {/* F59 Investigation × Scenario Linker — parallel-fetches /v1/investigations + /v1/scenario/list;
+                keyword-correlates each open case against available scenarios (COVERED vs UNCOVERED);
+                stat tiles + filter tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence recommendation + TTS;
+                isInvScenLinkerQuery + buildInvScenLinkerScript wired in JarvisBrain;
+                jarvis:inv-scen-link-toggle; ◈ INVSL button left:7876; 90-s auto-refresh */}
+            <InvestigationScenarioLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

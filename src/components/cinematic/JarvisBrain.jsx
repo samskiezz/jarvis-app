@@ -60,6 +60,7 @@ import { isDsknowQuery, buildDsknowScript } from "./DatasetKnowledgeCoverage";
 import { isInvOpsFreqQuery, buildInvOpsFreqScript } from "./InvestigationOpsFrequency";
 import { isTaskAlignQuery, buildTaskAlignScript } from "./TaskSkillAlignment";
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
+import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -731,6 +732,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:timeline-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTimelineScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F59: investigation × scenario linker — "investigation scenario link / case scenario gap /
+    // inv scen link / invscenlink / which scenarios cover / case scenario match"
+    // Opens InvestigationScenarioLinker panel (jarvis:inv-scen-link-toggle) and speaks a 2-sentence
+    // brief on case/scenario coverage from /v1/investigations + /v1/scenario/list.
+    if (isInvScenLinkerQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:inv-scen-link-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvScenLinkerScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
