@@ -18,7 +18,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. (2026-07-10: verified implemented in src/components/cinematic/CommandPalette.jsx, mounted in App.jsx; build passes)
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. (2026-07-10: verified; 2026-07-16: upgraded to JarvisCommandPalette — 10 scenes + 30 live panels + ask-JARVIS fallback; fixed off-screen button bug left:2988; build ✓)
 - [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. (2026-07-10: HeyJarvisListener.jsx uses real SpeechRecognition API + Web Audio sounds; WakeWordToggle pill button fixed-positioned; dispatches jarvis:ask custom event; mounted in App.jsx; build EXIT:0)
 - [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. (2026-07-10: LiveTelemetryTicker.jsx 30 s dual-poll, colour-coded pills cpu/mem/load/nodes/synapses, fixed top-bar strip z-index 19000, mounted in App.jsx; build EXIT:0)
 - [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. (2026-07-11: SceneKeyboardNav.jsx uses keydown listener mapped via CINEMATIC_SCENES; ignores input/textarea focus; shows brief centre-screen HUD badge on jump; mounted in App.jsx; build EXIT:0)

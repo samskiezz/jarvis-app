@@ -13,7 +13,7 @@ import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
-import CommandPalette from '@/components/cinematic/CommandPalette';
+import JarvisCommandPalette from '@/components/cinematic/JarvisCommandPalette';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
 import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
@@ -269,7 +269,8 @@ function App() {
                 Normalises "show me risks / intel / scene compare / …" → panel intent keywords so the
                 correct panel opens without also firing the generic agent-chat overlay. */}
             <ShowMeNavigation />
-            <CommandPalette />
+            {/* F01 upgrade: JarvisCommandPalette covers 10 scenes + 30 live panels + ask JARVIS (vs scenes+pages only in CommandPalette) */}
+            <JarvisCommandPalette />
             {/* F20: "show me X" / "open X" voice navigation — intercepts jarvis:ask in
                 capture phase and re-dispatches the normalized panel query so the correct
                 panel opens without hitting /v1/jarvis/agent/chat unnecessarily */}
