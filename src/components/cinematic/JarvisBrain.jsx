@@ -71,6 +71,7 @@ import { isDailyObjectivesQuery, buildDailyObjectivesScript } from "./DailyObjec
 import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorecard";
 import { isVitTrendQuery, buildVitTrendScript } from "./VitalsTrendAnalyzer";
 import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
+import { isInvScenPlanQuery, buildInvScenPlanScript } from "./InvestmentScenarioPlanner";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -888,6 +889,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ksrec-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKsrecScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F204: investment scenario planner — "investment scenario / scenario plan / hedge scenario /
+    // portfolio scenario / inscenp / investment risk scenario"
+    // Opens InvestmentScenarioPlanner panel (jarvis:invscplan-toggle) and speaks a real brief
+    // (investment count, matched/unmatched scenario coverage) from /entities/Investment +
+    // /v1/scenario/list via buildInvScenPlanScript().
+    if (isInvScenPlanQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invscplan-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvScenPlanScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -240,6 +240,7 @@ import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
+import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -759,6 +760,13 @@ function App() {
                 + TTS via jarvis:speak-dossier; isKsrecQuery + buildKsrecScript wired in JarvisBrain;
                 jarvis:ksrec-toggle; ◈ KSREC button left:6108; 5-min auto-refresh */}
             <KnowledgeSkillRecommender />
+            {/* F204 Investment Scenario Planner — parallel-fetches /entities/Investment + /v1/scenario/list;
+                keyword-correlates each holding against available scenarios (MATCHED / UNMATCHED);
+                ▶ RUN matched scenario → POST /v1/scenario/{id}/run + inline outcome;
+                ▶ PLAN → /v1/jarvis/agent/chat 2-sentence advisory + TTS via jarvis:speak-dossier;
+                isInvScenPlanQuery + buildInvScenPlanScript wired in JarvisBrain;
+                jarvis:invscplan-toggle; ◈ INSCENP button left:6524; 60-s auto-refresh */}
+            <InvestmentScenarioPlanner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
