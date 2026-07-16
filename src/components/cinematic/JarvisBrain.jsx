@@ -76,6 +76,9 @@ import { isInvScenPlanQuery, buildInvScenPlanScript } from "./InvestmentScenario
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
 import { isDatasetReportQuery, buildDatasetReportScript } from "./DatasetReportCrossRef";
+import { isSceneHealthQuery, buildSceneHealthScript } from "./SceneHealthHeatmap";
+import { isSceneCompareQuery, buildSceneCompareScript } from "./SceneCompareView";
+import { isSceneDataDiffQuery, buildSceneDataDiffScript } from "./SceneDataDiff";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -953,6 +956,44 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsrep-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDatasetReportScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F206a: scene health heatmap — "scene health / heatmap / anchor health / health map /
+    // scene status / all scene"
+    // SceneHealthHeatmap opens itself via its own jarvis:ask listener; JarvisBrain
+    // builds and speaks the health summary from /v1/cinematic/scene/{id} (all 10 scenes).
+    if (isSceneHealthQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSceneHealthScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F206b: scene compare view — "compare scene / scene comp / diff scene / scene diff /
+    // compare anchor / anchor comp"
+    // Opens SceneCompareView panel (jarvis:compare-toggle) and speaks an anchor-count
+    // brief from /v1/cinematic/scene/{id} for the default two scenes.
+    if (isSceneCompareQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:compare-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSceneCompareScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F206c: scene data diff — "scene diff / scene change / anchor change / what changed /
+    // scene update / scene delta / data drift"
+    // Opens SceneDataDiff panel (jarvis:scene-diff-toggle) and speaks a snapshot brief
+    // (live scenes, total anchor data points) from /v1/cinematic/scene/{id} (all 10 scenes).
+    if (isSceneDataDiffQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scene-diff-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSceneDataDiffScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
