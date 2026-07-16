@@ -80,6 +80,11 @@ import { isSceneHealthQuery, buildSceneHealthScript } from "./SceneHealthHeatmap
 import { isSceneCompareQuery, buildSceneCompareScript } from "./SceneCompareView";
 import { isSceneDataDiffQuery, buildSceneDataDiffScript } from "./SceneDataDiff";
 import { isRunbookQuery, buildRunbookScript } from "./OpsRunbookGenerator";
+import { isThreatActorNetworkQuery, buildThreatActorNetworkScript } from "./ThreatActorNetwork";
+import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
+import { isThreatCorrelationQuery, buildThreatCorrelationScript } from "./ThreatCorrelationEngine";
+import { isDatasetFreshnessQuery, buildDatasetFreshnessScript } from "./DatasetFreshnessMonitor";
+import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1009,6 +1014,50 @@ export default function JarvisBrain() {
     if (isRunbookQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildRunbookScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isThreatActorNetworkQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildThreatActorNetworkScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTattrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tattr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTattrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isThreatCorrelationQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:correlation-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildThreatCorrelationScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDatasetFreshnessQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dataset-freshness-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDatasetFreshnessScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSitrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sitrep-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSitrepScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
