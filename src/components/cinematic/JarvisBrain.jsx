@@ -63,6 +63,9 @@ import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isCtrskQuery, buildCtrskScript } from "./ContactRiskExposure";
 import { isForecastQuery, buildForecastScript } from "./ThreatForecastEngine";
+import { isThreatVelocityQuery, buildThreatVelocityScript } from "./ThreatVelocityMonitor";
+import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
+import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -770,6 +773,48 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:forecast-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildForecastScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F201a: threat velocity monitor — "threat velocity / velocity / threat rate / thr/min /
+    // threat speed / threat surge / new threats"
+    // Opens ThreatVelocityMonitor panel (jarvis:velocity-toggle) and speaks a real
+    // velocity-rate brief (current signal count + SURGE/ELEVATED/NOMINAL status)
+    // from /entities/RiskSignal via buildThreatVelocityScript().
+    if (isThreatVelocityQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:velocity-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildThreatVelocityScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F201b: world × risk correlator — "world risk / quake risk / geo risk / wrlrsk /
+    // geophysical risk / live world risk"
+    // Opens WorldRiskCorrelator panel (jarvis:wrlrsk-toggle) and speaks a real
+    // geophysical-risk brief correlating /functions/getLiveIntel quakes against
+    // /entities/RiskSignal via buildWrlrskScript().
+    if (isWrlrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wrlrsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildWrlrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F201c: entity activity heatmap — "entity activity / activity heatmap / domain activity /
+    // entity density / entity load / eactv"
+    // Opens EntityActivityHeatmap panel (jarvis:eactv-toggle) and speaks a real
+    // domain-wide activity brief (most/least active type, avg score) from all
+    // 6 /entities/* endpoints via buildEntityActivityScript().
+    if (isEntityActivityQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:eactv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildEntityActivityScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
