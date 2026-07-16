@@ -70,6 +70,7 @@ import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
 import { isDailyObjectivesQuery, buildDailyObjectivesScript } from "./DailyObjectivesPlanner";
 import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorecard";
 import { isVitTrendQuery, buildVitTrendScript } from "./VitalsTrendAnalyzer";
+import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -873,6 +874,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:vittrend-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildVitTrendScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F203: knowledge-skill recommender — "knowledge skill / learning recommendation /
+    // article recommend / ksrec / knowledge gap / learn skill"
+    // Opens KnowledgeSkillRecommender panel (jarvis:ksrec-toggle) and speaks a real brief
+    // (skill count, gap count, article count, gaps with matched articles) from
+    // /v1/aip/skill + /knowledge/ via buildKsrecScript().
+    if (isKsrecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ksrec-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKsrecScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

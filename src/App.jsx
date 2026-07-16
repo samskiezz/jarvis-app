@@ -239,6 +239,7 @@ import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFr
 import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
+import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -751,6 +752,13 @@ function App() {
                 /v1/jarvis/agent/chat for a forward-looking AI forecast; ▶ REFRESH regenerates; Ctrl+Shift+F;
                 "forecast / threat forecast / 24h risk / predict threats / risk prediction" voice trigger */}
             <ThreatForecastEngine />
+            {/* F203 Knowledge-Skill Recommender — parallel-fetches /v1/aip/skill + /knowledge/;
+                identifies skill gaps (score < 70) and keyword-correlates against knowledge articles;
+                stat tiles (skills/gaps/articles/matched); ALL/GAPS/MATCHED filter tabs; expand gap →
+                matched article list; ▶ LEARN → /v1/jarvis/agent/chat 2-sentence reading recommendation
+                + TTS via jarvis:speak-dossier; isKsrecQuery + buildKsrecScript wired in JarvisBrain;
+                jarvis:ksrec-toggle; ◈ KSREC button left:6108; 5-min auto-refresh */}
+            <KnowledgeSkillRecommender />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
