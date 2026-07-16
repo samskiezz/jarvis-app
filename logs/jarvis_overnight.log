@@ -70,3 +70,4 @@
 2026-07-16 F205 SkillOpsGapDetector — /v1/aip/skill x /v1/ops/events keyword-correlate; SKILLED vs SKILL-GAP; amber badge; ASSESS→agent chat+TTS; ◈ SKOPSGAP left:55640; 90-s refresh; build EXIT:0
 2026-07-16 | F70 | Dataset × Report Cross-Reference | DatasetReportCrossRef.jsx mounted App.jsx; isDatasetReportQuery+buildDatasetReportScript wired JarvisBrain.jsx; /v1/datasets+/v1/reports; DSREP button left:6004; build EXIT:0
 2026-07-16 | F206 | Scene Health+Compare+Diff voice wiring | isSceneHealthQuery+isSceneCompareQuery+isSceneDataDiffQuery wired JarvisBrain.jsx; all three panels already mounted App.jsx; /v1/cinematic/scene/{id}; build EXIT:0
+[2026-07-16] F207 OpsRunbookGenerator voice wiring — isRunbookQuery+buildRunbookScript imported and wired into JarvisBrain.jsx ask(); panel already mounted App.jsx; fetches /v1/ops/events, dispatches jarvis:runbook-toggle, speaks event count brief; click event → /v1/jarvis/agent/chat 3-step runbook + TTS; build EXIT:0.

@@ -79,6 +79,7 @@ import { isDatasetReportQuery, buildDatasetReportScript } from "./DatasetReportC
 import { isSceneHealthQuery, buildSceneHealthScript } from "./SceneHealthHeatmap";
 import { isSceneCompareQuery, buildSceneCompareScript } from "./SceneCompareView";
 import { isSceneDataDiffQuery, buildSceneDataDiffScript } from "./SceneDataDiff";
+import { isRunbookQuery, buildRunbookScript } from "./OpsRunbookGenerator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -994,6 +995,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scene-diff-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSceneDataDiffScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F207: ops runbook generator — "runbook / remediation / playbook / mitigation /
+    // fix steps / resolve steps / ops run / incident response"
+    // buildRunbookScript() fetches /v1/ops/events, dispatches jarvis:runbook-toggle
+    // (opens panel), then returns a TTS brief with event count + critical count.
+    // User can then click any event to generate a 3-step remediation plan via
+    // /v1/jarvis/agent/chat.
+    if (isRunbookQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRunbookScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
