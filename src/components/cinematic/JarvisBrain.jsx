@@ -66,6 +66,10 @@ import { isForecastQuery, buildForecastScript } from "./ThreatForecastEngine";
 import { isThreatVelocityQuery, buildThreatVelocityScript } from "./ThreatVelocityMonitor";
 import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
 import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
+import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
+import { isDailyObjectivesQuery, buildDailyObjectivesScript } from "./DailyObjectivesPlanner";
+import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorecard";
+import { isVitTrendQuery, buildVitTrendScript } from "./VitalsTrendAnalyzer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -815,6 +819,60 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:eactv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildEntityActivityScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F202a: agent chat transcript — "open chat / chat panel / chat transcript / agent chat /
+    // multi-turn / direct chat"
+    // Opens AgentChatTranscript panel (jarvis:chat-toggle) and speaks a brief confirming
+    // how many messages are stored in localStorage. AgentChatTranscript is mounted App.jsx
+    // and provides persistent multi-turn /v1/jarvis/agent/chat with 60-msg localStorage history.
+    if (isChatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:chat-toggle"));
+      const script = buildChatScript([]);
+      setOpen(true); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+
+    // F202b: daily objectives planner — "daily objectives / what should i do today / daily plan /
+    // today's priorities / daily planner / objectives / doplan"
+    // Opens DailyObjectivesPlanner panel (jarvis:daily-objectives-toggle) and speaks a real
+    // prioritised-objectives brief built from /entities/Task + /v1/aip/skill + /entities/RiskSignal.
+    if (isDailyObjectivesQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:daily-objectives-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDailyObjectivesScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F202c: system health scorecard — "health score / system score / overall health /
+    // jarvis score / composite score / healthscore"
+    // Opens SystemHealthScorecard panel (jarvis:healthscore-toggle) and speaks a real
+    // 0–100 composite JARVIS health score from /v1/jarvis/system/status + /v1/cinematic/brain
+    // + /entities/RiskSignal.
+    if (isHealthScoreQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:healthscore-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildHealthScoreScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F202d: vitals trend analyzer — "vitals trend / health trend / biometric trend /
+    // body trend / vital signs trend / vittrend"
+    // Opens VitalsTrendAnalyzer panel (jarvis:vittrend-toggle) and speaks a real
+    // 24h biometric-trend brief (metrics polled / anomaly count / trend direction)
+    // from /v1/vitals/trend via buildVitTrendScript().
+    if (isVitTrendQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:vittrend-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildVitTrendScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
