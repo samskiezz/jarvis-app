@@ -73,6 +73,7 @@ import { isVitTrendQuery, buildVitTrendScript } from "./VitalsTrendAnalyzer";
 import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
 import { isInvScenPlanQuery, buildInvScenPlanScript } from "./InvestmentScenarioPlanner";
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
+import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -919,6 +920,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sdtrk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwarmDatasetScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRiskRepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:riskrep-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRiskRepScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

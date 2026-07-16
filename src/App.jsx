@@ -242,6 +242,7 @@ import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
 import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
 import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
+import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -777,6 +778,13 @@ function App() {
                 "swarm dataset/dataset ingestion/data automation/pipeline coverage/sdtrk" voice trigger;
                 jarvis:sdtrk-toggle event; ⬡ SDTRK button left:7564; 60-s auto-refresh */}
             <SwarmDatasetTracker />
+            {/* F74: Risk-Report Evidence Mapper — ◎ RISKREP button (left:6420, zIndex:65);
+                parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates to
+                surface evidenced vs naked risks; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence
+                evidence-gap brief + TTS; 5-min auto-refresh; isRiskRepQuery+buildRiskRepScript
+                wired in JarvisBrain; "risk report/risk evidence/report coverage/naked risk/
+                uncovered risk/riskrep/evidence gap/risk documentation" voice triggers */}
+            <RiskReportMapper />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
