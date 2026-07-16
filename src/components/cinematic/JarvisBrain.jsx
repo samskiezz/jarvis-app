@@ -57,6 +57,7 @@ import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllS
 import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnalyzer";
 import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 import { isDsknowQuery, buildDsknowScript } from "./DatasetKnowledgeCoverage";
+import { isInvOpsFreqQuery, buildInvOpsFreqScript } from "./InvestigationOpsFrequency";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -691,6 +692,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsknow-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDsknowScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // Opens InvestigationOpsFrequency panel (jarvis:invopsfreq-toggle) and speaks a
+    // 2-sentence brief on which investigations have correlated ops event chatter.
+    if (isInvOpsFreqQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invopsfreq-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvOpsFreqScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

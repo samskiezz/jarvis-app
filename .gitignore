@@ -3,8 +3,10 @@
 venv/
 
 # Logs
-/logs
+/logs/*
+!logs/jarvis_overnight.log
 *.log
+!logs/jarvis_overnight.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -235,6 +235,7 @@ import MissionControlConsole from '@/components/cinematic/MissionControlConsole'
 import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
+import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -727,6 +728,11 @@ function App() {
                 "undocumented datasets"/"data documentation gap"/"dsknow" voice triggers;
                 jarvis:dsknow-toggle event; 120-s auto-refresh */}
             <DatasetKnowledgeCoverage />
+            {/* F196 Investigation × Ops Event Frequency Matrix — cross-references /v1/investigations
+                with /v1/ops/events; keyword-correlates each case to ops events; ACTIVE/QUIET tiers;
+                frequency bar per case; isInvOpsFreqQuery+buildInvOpsFreqScript wired in JarvisBrain;
+                jarvis:invopsfreq-toggle; 90-s auto-refresh */}
+            <InvestigationOpsFrequency />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
