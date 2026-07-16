@@ -58,6 +58,7 @@ import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnaly
 import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 import { isDsknowQuery, buildDsknowScript } from "./DatasetKnowledgeCoverage";
 import { isInvOpsFreqQuery, buildInvOpsFreqScript } from "./InvestigationOpsFrequency";
+import { isTaskAlignQuery, buildTaskAlignScript } from "./TaskSkillAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -703,6 +704,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invopsfreq-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvOpsFreqScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F197: task × skill alignment — "task skill / skill alignment / task coverage / skill gap
+    // per task / taskalign / which skills / task readiness / team readiness"
+    // Opens TaskSkillAlignment panel (jarvis:taskalign-toggle) and speaks a 2-sentence brief
+    // on how many active tasks are covered by team skills vs. have uncovered skill gaps,
+    // derived from /entities/Task + /v1/aip/skill.
+    if (isTaskAlignQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:taskalign-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskAlignScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

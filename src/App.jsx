@@ -236,6 +236,7 @@ import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnaly
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
+import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -733,6 +734,10 @@ function App() {
                 frequency bar per case; isInvOpsFreqQuery+buildInvOpsFreqScript wired in JarvisBrain;
                 jarvis:invopsfreq-toggle; 90-s auto-refresh */}
             <InvestigationOpsFrequency />
+            {/* F197 Task × Skill Alignment — cross-references /entities/Task against /v1/aip/skill;
+                surfaces COVERED (skill exists) vs GAP (no matching skill) tasks; isTaskAlignQuery +
+                buildTaskAlignScript wired in JarvisBrain; jarvis:taskalign-toggle; 60-s auto-refresh */}
+            <TaskSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
