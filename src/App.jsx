@@ -245,6 +245,7 @@ import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
 import SkillOpsGapDetector from '@/components/cinematic/SkillOpsGapDetector';
+import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -805,6 +806,17 @@ function App() {
                 via jarvis:speak-dossier; voice trigger "skill ops gap"/"ops skill gap"/
                 "capability gap"/"skopsgap"/"can jarvis handle"; jarvis:skopsgap-toggle; 90-s refresh */}
             <SkillOpsGapDetector />
+            {/* F70: Dataset × Report Cross-Reference — ◈ DSREP button (left:6004, zIndex:65);
+                parallel-fetches /v1/datasets + /v1/reports; keyword-correlates each dataset
+                against report titles to surface data lineage (MATCHED vs ORPHANED);
+                stat tiles (datasets/reports/matched/orphaned); ALL/MATCHED/ORPHANED filter tabs;
+                expand dataset → matched report list with type+date; ▶ ASSESS →
+                /v1/jarvis/agent/chat 2-sentence lineage advisory + TTS via jarvis:speak-dossier;
+                isDatasetReportQuery+buildDatasetReportScript wired in JarvisBrain;
+                "dataset report/data report/data lineage/report dataset/report coverage/dsrep"
+                voice triggers; jarvis:dsrep-toggle event; amber badge on orphaned count;
+                5-min auto-refresh */}
+            <DatasetReportCrossRef />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

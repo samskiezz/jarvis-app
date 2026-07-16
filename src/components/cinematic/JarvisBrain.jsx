@@ -75,6 +75,7 @@ import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
 import { isInvScenPlanQuery, buildInvScenPlanScript } from "./InvestmentScenarioPlanner";
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
+import { isDatasetReportQuery, buildDatasetReportScript } from "./DatasetReportCrossRef";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -939,6 +940,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:riskrep-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRiskRepScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F70: dataset × report cross-reference — "dataset report / data report / data lineage /
+    // report dataset / report coverage / dsrep / lineage"
+    // Opens DatasetReportCrossRef panel (jarvis:dsrep-toggle) and speaks a 2-sentence brief
+    // on matched vs orphaned datasets from /v1/datasets + /v1/reports.
+    if (isDatasetReportQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsrep-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDatasetReportScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
