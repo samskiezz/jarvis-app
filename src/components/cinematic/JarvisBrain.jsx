@@ -59,6 +59,7 @@ import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 import { isDsknowQuery, buildDsknowScript } from "./DatasetKnowledgeCoverage";
 import { isInvOpsFreqQuery, buildInvOpsFreqScript } from "./InvestigationOpsFrequency";
 import { isTaskAlignQuery, buildTaskAlignScript } from "./TaskSkillAlignment";
+import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -717,6 +718,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:taskalign-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTaskAlignScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F198: unified threat timeline — "timeline / threat timeline / intel timeline /
+    // unified feed / combined feed / all threats / all events"
+    // Opens ThreatTimeline panel (jarvis:timeline-toggle) and speaks a reverse-chronological
+    // combined brief (total items, critical count, top-3 titles) merged from
+    // /entities/RiskSignal + /v1/ops/events + /v1/investigations via buildTimelineScript().
+    if (isTimelineQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:timeline-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTimelineScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
