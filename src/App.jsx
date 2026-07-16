@@ -241,6 +241,7 @@ import InvestigationScenarioLinker from '@/components/cinematic/InvestigationSce
 import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
 import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
+import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -767,6 +768,15 @@ function App() {
                 isInvScenPlanQuery + buildInvScenPlanScript wired in JarvisBrain;
                 jarvis:invscplan-toggle; ◈ INSCENP button left:6524; 60-s auto-refresh */}
             <InvestmentScenarioPlanner />
+            {/* F85: Swarm-Dataset Ingestion Tracker — cross-references /entities/SwarmJob against
+                /v1/datasets; classifies each dataset as AUTOMATED (≥1 active swarm matched by
+                keyword) or MANUAL (no running/queued swarm); stat tiles (datasets/automated/manual/
+                coverage%); filter tabs ALL/AUTOMATED/MANUAL; ▶ ASSESS per dataset →
+                /v1/jarvis/agent/chat 2-sentence pipeline assessment + TTS via jarvis:speak-dossier;
+                isSwarmDatasetQuery+buildSwarmDatasetScript wired in JarvisBrain;
+                "swarm dataset/dataset ingestion/data automation/pipeline coverage/sdtrk" voice trigger;
+                jarvis:sdtrk-toggle event; ⬡ SDTRK button left:7564; 60-s auto-refresh */}
+            <SwarmDatasetTracker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

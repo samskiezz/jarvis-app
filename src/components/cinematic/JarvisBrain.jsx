@@ -72,6 +72,7 @@ import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorec
 import { isVitTrendQuery, buildVitTrendScript } from "./VitalsTrendAnalyzer";
 import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
 import { isInvScenPlanQuery, buildInvScenPlanScript } from "./InvestmentScenarioPlanner";
+import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -903,6 +904,21 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invscplan-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvScenPlanScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F85: swarm-dataset ingestion tracker — "swarm dataset / dataset ingestion /
+    // data automation / pipeline coverage / ingestion tracker / sdtrk /
+    // which datasets automated / swarm pipeline"
+    // Opens SwarmDatasetTracker panel (jarvis:sdtrk-toggle) and speaks a 2-sentence
+    // brief on how many datasets have active swarm coverage vs manual ingestion,
+    // derived from /entities/SwarmJob + /v1/datasets.
+    if (isSwarmDatasetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sdtrk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwarmDatasetScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
