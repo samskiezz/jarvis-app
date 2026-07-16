@@ -244,6 +244,7 @@ import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenario
 import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
+import SkillOpsGapDetector from '@/components/cinematic/SkillOpsGapDetector';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -795,6 +796,15 @@ function App() {
                 isInvScenarioQuery + buildInvScenarioScript wired in JarvisBrain;
                 jarvis:invscen-toggle; ◈ INVSC button left:5796; 60-s auto-refresh */}
             <InvestigationScenarioRecommender />
+            {/* F205 (overnight 2026-07-16): skill × ops event gap detector — ◈ SKOPSGAP button
+                (left:55640, bottom:8, zIndex:109); parallel-fetches /v1/aip/skill + /v1/ops/events;
+                keyword-correlates each ops event against skill catalog to surface SKILLED
+                (capability match found) vs SKILL-GAP (no skill covers this event type — capability
+                gap exposed by live ops); amber badge on skill-gap count; filter tabs ALL/SKILLED/
+                SKILL-GAP; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability-gap brief + TTS
+                via jarvis:speak-dossier; voice trigger "skill ops gap"/"ops skill gap"/
+                "capability gap"/"skopsgap"/"can jarvis handle"; jarvis:skopsgap-toggle; 90-s refresh */}
+            <SkillOpsGapDetector />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
