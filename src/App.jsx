@@ -238,6 +238,7 @@ import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCov
 import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
 import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
+import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -745,6 +746,11 @@ function App() {
                 isInvScenLinkerQuery + buildInvScenLinkerScript wired in JarvisBrain;
                 jarvis:inv-scen-link-toggle; ◈ INVSL button left:7876; 90-s auto-refresh */}
             <InvestigationScenarioLinker />
+            {/* F200: threat forecast engine — ⬡ FCAST button (left:73008); parallel-fetches /entities/RiskSignal +
+                /functions/getLiveIntel; computes 24h risk horizon (LOW/ELEVATED/HIGH/CRITICAL); sends context to
+                /v1/jarvis/agent/chat for a forward-looking AI forecast; ▶ REFRESH regenerates; Ctrl+Shift+F;
+                "forecast / threat forecast / 24h risk / predict threats / risk prediction" voice trigger */}
+            <ThreatForecastEngine />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

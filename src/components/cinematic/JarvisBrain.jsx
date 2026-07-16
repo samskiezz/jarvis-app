@@ -62,6 +62,7 @@ import { isTaskAlignQuery, buildTaskAlignScript } from "./TaskSkillAlignment";
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isCtrskQuery, buildCtrskScript } from "./ContactRiskExposure";
+import { isForecastQuery, buildForecastScript } from "./ThreatForecastEngine";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -755,6 +756,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctrsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F200: threat forecast engine — "forecast / threat forecast / 24h risk / predict threats /
+    // risk prediction / risk outlook / what's coming / fcast"
+    // Opens ThreatForecastEngine panel (jarvis:forecast-toggle) and speaks a real forward-looking
+    // threat forecast generated from /entities/RiskSignal + /functions/getLiveIntel →
+    // /v1/jarvis/agent/chat (2-sentence 24h risk brief) via TTS.
+    if (isForecastQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:forecast-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildForecastScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
