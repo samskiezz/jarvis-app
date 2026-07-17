@@ -91,6 +91,7 @@ import { isCryptorskQuery, buildCryptorskScript } from "./CryptoRiskCorrelator";
 import { isLiscQuery, buildLiscScript } from "./LiveIntelScenarioMapper";
 import { isCtintlQuery, buildCtintlScript } from "./ContactIntelLinker";
 import { isRpInvgQuery, buildRpInvgScript } from "./ReportInvestigationGap";
+import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1123,6 +1124,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rpinvg-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRpInvgScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F215: skill × investigation coverage advisor — /v1/aip/skill + /v1/investigations; NEEDED vs IDLE
+    if (isSkiinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skiinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkiinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

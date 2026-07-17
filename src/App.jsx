@@ -251,6 +251,7 @@ import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvest
 import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
 import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMapper';
 import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
+import SkillInvestigationAdvisor from '@/components/cinematic/SkillInvestigationAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -849,6 +850,8 @@ function App() {
             <LiveIntelScenarioMapper />
             {/* F214: Report-Investigation Gap Analyzer — ◈ RPINVG button (left:8604, bottom:8, zIndex:66); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each case against report catalog (BACKED vs DARK); dark-case badge; isRpInvgQuery+buildRpInvgScript wired in JarvisBrain; "report investigation gap/research coverage/case reports/rpinvg" voice triggers; jarvis:rpinvg-toggle event; 90-s auto-refresh */}
             <ReportInvestigationGap />
+            {/* F215: skill × investigation coverage advisor — ◈ SKIINV button (left:9436, bottom:8, zIndex:69); parallel-fetches /v1/aip/skill + /v1/investigations; correlates skills vs open cases (NEEDED vs IDLE); capability-gap brief via /v1/jarvis/agent/chat; isSkiinvQuery+buildSkiinvScript wired in JarvisBrain; "skill investigation/investigation skill/case skill gap/skiinv/skills for cases/skill coverage for investigations" voice triggers; jarvis:skiinv-toggle event; 90-s auto-refresh; build EXIT:0 */}
+            <SkillInvestigationAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
