@@ -88,6 +88,7 @@ import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
 import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
 import { isLiilinkQuery, buildLiilinkScript } from "./LiveIntelInvestigationLinker";
 import { isCryptorskQuery, buildCryptorskScript } from "./CryptoRiskCorrelator";
+import { isLiscQuery, buildLiscScript } from "./LiveIntelScenarioMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1093,6 +1094,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cryptorsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCryptorskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F212: live intel × scenario readiness mapper (LISC)
+    if (isLiscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lisc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLiscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -249,6 +249,7 @@ import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef'
 import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
 import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvestigationLinker';
 import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
+import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -843,6 +844,8 @@ function App() {
                 "live intel investigation/intel case link/which investigations match live events/
                 liilink/live event case/case intel match" voice triggers */}
             <LiveIntelInvestigationLinker />
+            {/* F212: Live Intel × Scenario Readiness Mapper — ◈ LISC button (left:31640, bottom:8, zIndex:62); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/scenario/list; derives discrete live events and keyword-correlates each against scenario catalog (name/objective/type/tags) to surface COVERED (scenario found) vs UNPLANNED (no coverage); stat tiles (events/scenarios/covered/unplanned); ALL/COVERED/UNPLANNED filter tabs + text search; expand event → matched scenarios with type badge + status badge + relevance score bar; amber badge on unplanned count; ▶ ASSESS per event → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS via jarvis:speak-dossier; isLiscQuery+buildLiscScript wired in JarvisBrain; "intel scenario"/"live event coverage"/"are we prepared"/"scenario readiness"/"lisc"/"intel readiness"/"scenario coverage for live events" voice triggers; jarvis:lisc-toggle event; 5-min auto-refresh */}
+            <LiveIntelScenarioMapper />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
