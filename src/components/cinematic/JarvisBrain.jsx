@@ -86,6 +86,7 @@ import { isThreatCorrelationQuery, buildThreatCorrelationScript } from "./Threat
 import { isDatasetFreshnessQuery, buildDatasetFreshnessScript } from "./DatasetFreshnessMonitor";
 import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
 import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
+import { isLiilinkQuery, buildLiilinkScript } from "./LiveIntelInvestigationLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1073,6 +1074,15 @@ export default function JarvisBrain() {
     if (isSkillContactQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkillContactScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F210: live intel × investigation linker (LIILINK)
+    if (isLiilinkQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liilink-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLiilinkScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

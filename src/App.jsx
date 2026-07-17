@@ -247,6 +247,7 @@ import InvestigationScenarioRecommender from '@/components/cinematic/Investigati
 import SkillOpsGapDetector from '@/components/cinematic/SkillOpsGapDetector';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
+import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -829,6 +830,16 @@ function App() {
                 reach out skill" voice triggers; jarvis:skillcontact-toggle event;
                 amber badge on gap count; 5-min auto-refresh */}
             <SkillContactGapAdvisor />
+            {/* F210: Live Intel × Investigation Linker — ◈ LIILINK button (left:30360, zIndex:60);
+                parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/investigations;
+                keyword-correlates live events against open case titles/descriptions to surface
+                LINKED vs UNLINKED events; stat tiles (events/cases/linked/unlinked); ALL/LINKED/
+                UNLINKED filter tabs + search; expand event → matched investigations with score;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unlinked
+                count; isLiilinkQuery+buildLiilinkScript wired in JarvisBrain; 5-min auto-refresh;
+                "live intel investigation/intel case link/which investigations match live events/
+                liilink/live event case/case intel match" voice triggers */}
+            <LiveIntelInvestigationLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
