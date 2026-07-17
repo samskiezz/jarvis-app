@@ -100,6 +100,7 @@ import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
 import { isSwjknQuery, buildSwjknScript } from "./SwarmJobKnowledgeCoverage";
 import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
+import { isSwconQuery, buildSwconScript } from "./SwarmContactLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1223,6 +1224,18 @@ export default function JarvisBrain() {
     if (isCttaskQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildCttaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F220: swarm job × contact accountability linker — /entities/SwarmJob + /entities/Contact;
+    // ASSIGNED (human accountability found) vs UNASSIGNED (governance gap); 2-sentence AI brief;
+    // dispatches jarvis:swcon-toggle; ◈ SWCON left:35160 zIndex:74; 90-s auto-refresh;
+    // "swarm contact / swarm accountability / who owns swarm / swcon / unassigned swarm jobs"
+    if (isSwconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swcon-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwconScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
