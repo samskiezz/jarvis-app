@@ -95,6 +95,8 @@ import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
 import { isIkgapQuery, buildIkgapScript } from "./LiveIntelKnowledgeGap";
 import { isInvrskQuery, buildInvrskScript } from "./InvestmentRiskExposure";
 import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatrix";
+import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
+import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1167,6 +1169,28 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:task-risk-matrix-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTaskRiskMatrixScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F218a: dataset × risk signal intelligence gap analyzer — /v1/datasets + /entities/RiskSignal;
+    // DATA-BACKED vs DATA-DARK; "dataset risk / data-backed risks / risk evidence /
+    // which risks have data / risk data gap / evidence gap / dsrsk"
+    if (isDsrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsrsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDsrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F218b: dataset × risk signal coverage — /v1/datasets + /entities/RiskSignal;
+    // IMPLICATED vs CLEAR; "dataset risk / risk dataset / data risk coverage / dsrisk /
+    // dataset signal / data exposure / dataset threat / risky datasets"
+    if (isDsriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsrisk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDsriskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
