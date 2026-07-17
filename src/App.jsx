@@ -252,6 +252,7 @@ import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
 import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMapper';
 import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
 import SkillInvestigationAdvisor from '@/components/cinematic/SkillInvestigationAdvisor';
+import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -852,6 +853,8 @@ function App() {
             <ReportInvestigationGap />
             {/* F215: skill × investigation coverage advisor — ◈ SKIINV button (left:9436, bottom:8, zIndex:69); parallel-fetches /v1/aip/skill + /v1/investigations; correlates skills vs open cases (NEEDED vs IDLE); capability-gap brief via /v1/jarvis/agent/chat; isSkiinvQuery+buildSkiinvScript wired in JarvisBrain; "skill investigation/investigation skill/case skill gap/skiinv/skills for cases/skill coverage for investigations" voice triggers; jarvis:skiinv-toggle event; 90-s auto-refresh; build EXIT:0 */}
             <SkillInvestigationAdvisor />
+            {/* F216: live intel × knowledge gap detector — ◈ IKGAP button (left:9720, bottom:8, zIndex:70); parallel-fetches /functions/getLiveIntel + /knowledge/; keyword-correlates each live event against knowledge base (KNOWN vs BLIND SPOT); amber badge on blind-spot count; isIkgapQuery+buildIkgapScript wired in JarvisBrain; "intel knowledge/knowledge gap/knowledge blind spot/live knowledge gap/ikgap/what don't we know" voice triggers; jarvis:ikgap-toggle event; 5-min auto-refresh */}
+            <LiveIntelKnowledgeGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

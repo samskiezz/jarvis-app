@@ -92,6 +92,7 @@ import { isLiscQuery, buildLiscScript } from "./LiveIntelScenarioMapper";
 import { isCtintlQuery, buildCtintlScript } from "./ContactIntelLinker";
 import { isRpInvgQuery, buildRpInvgScript } from "./ReportInvestigationGap";
 import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
+import { isIkgapQuery, buildIkgapScript } from "./LiveIntelKnowledgeGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1133,6 +1134,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skiinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkiinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F216: live intel × knowledge gap detector — /functions/getLiveIntel + /knowledge/; KNOWN vs BLIND SPOT
+    if (isIkgapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ikgap-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIkgapScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
