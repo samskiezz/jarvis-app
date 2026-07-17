@@ -89,6 +89,7 @@ import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapA
 import { isLiilinkQuery, buildLiilinkScript } from "./LiveIntelInvestigationLinker";
 import { isCryptorskQuery, buildCryptorskScript } from "./CryptoRiskCorrelator";
 import { isLiscQuery, buildLiscScript } from "./LiveIntelScenarioMapper";
+import { isCtintlQuery, buildCtintlScript } from "./ContactIntelLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1103,6 +1104,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lisc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLiscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F213: contact × intel linker — cross-references /entities/Contact + /entities/IntelProfile
+    if (isCtintlQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cintl-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCtintlScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
