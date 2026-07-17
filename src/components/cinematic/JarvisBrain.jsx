@@ -99,6 +99,7 @@ import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
 import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
 import { isSwjknQuery, buildSwjknScript } from "./SwarmJobKnowledgeCoverage";
+import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1212,6 +1213,16 @@ export default function JarvisBrain() {
     if (isSwjknQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwjknScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F86: contact × task linker — /entities/Contact + /entities/Task; TASKED vs IDLE contacts;
+    // dispatches jarvis:cttask-toggle; speaks TASKED/IDLE contact-task brief;
+    // "contact task / task contact / who has tasks / active contacts / cttask"
+    if (isCttaskQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCttaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
