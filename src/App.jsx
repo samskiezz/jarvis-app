@@ -246,6 +246,7 @@ import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
 import SkillOpsGapDetector from '@/components/cinematic/SkillOpsGapDetector';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
+import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -817,6 +818,17 @@ function App() {
                 voice triggers; jarvis:dsrep-toggle event; amber badge on orphaned count;
                 5-min auto-refresh */}
             <DatasetReportCrossRef />
+            {/* F209: Skill-Contact Gap Advisor — ◈ SKILLC button (left:5484, zIndex:65);
+                parallel-fetches /v1/aip/skill + /entities/Contact; identifies gaps (score < 70)
+                and keyword-correlates against contacts by role/dept/tags to surface who in
+                your network can help bridge each capability gap; stat tiles
+                (skills/gaps/contacts/linked); ALL/GAPS/LINKED filter tabs; expand gap → matched
+                contact with ▶ ADVISE → /v1/jarvis/agent/chat 2-sentence outreach rec + TTS;
+                isSkillContactQuery+buildSkillContactScript wired in JarvisBrain;
+                "skill contact/contact gaps/who can help with/who knows/skillc/network skill/
+                reach out skill" voice triggers; jarvis:skillcontact-toggle event;
+                amber badge on gap count; 5-min auto-refresh */}
+            <SkillContactGapAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

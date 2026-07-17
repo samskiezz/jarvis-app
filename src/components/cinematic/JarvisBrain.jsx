@@ -85,6 +85,7 @@ import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
 import { isThreatCorrelationQuery, buildThreatCorrelationScript } from "./ThreatCorrelationEngine";
 import { isDatasetFreshnessQuery, buildDatasetFreshnessScript } from "./DatasetFreshnessMonitor";
 import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
+import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1058,6 +1059,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sitrep-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSitrepScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F209: Skill-Contact Gap Advisor — "skill contact / contact gaps / who can help with /
+    // who knows X / skillc / network skill / reach out skill / outreach skill"
+    // Opens SkillContactGapAdvisor panel (jarvis:skillcontact-toggle) and speaks a brief
+    // identifying skill gaps and matched contacts from /v1/aip/skill + /entities/Contact.
+    // Users can then click any gap-contact pair for an AI outreach recommendation via
+    // /v1/jarvis/agent/chat + TTS.
+    if (isSkillContactQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkillContactScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
