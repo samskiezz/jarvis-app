@@ -94,6 +94,7 @@ import { isRpInvgQuery, buildRpInvgScript } from "./ReportInvestigationGap";
 import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
 import { isIkgapQuery, buildIkgapScript } from "./LiveIntelKnowledgeGap";
 import { isInvrskQuery, buildInvrskScript } from "./InvestmentRiskExposure";
+import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1153,6 +1154,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invrsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F61: task-risk matrix — "task risk / risky tasks / task exposure / tasks with risks /
+    // task risk matrix / triskmat"
+    // Opens TaskRiskMatrix panel (jarvis:task-risk-matrix-toggle) and speaks a 2-sentence brief
+    // on how many tasks carry risk exposure vs are risk-clean, including critical severity count,
+    // derived from /entities/Task + /entities/RiskSignal via buildTaskRiskMatrixScript().
+    if (isTaskRiskMatrixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:task-risk-matrix-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskRiskMatrixScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
