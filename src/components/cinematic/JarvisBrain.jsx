@@ -98,6 +98,7 @@ import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatr
 import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
 import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
+import { isSwjknQuery, buildSwjknScript } from "./SwarmJobKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1203,6 +1204,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctknow-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtknowScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F81: swarm job × knowledge coverage — dispatch toggle, speak BACKED vs DARK brief.
+    if (isSwjknQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwjknScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
