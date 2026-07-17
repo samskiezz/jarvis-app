@@ -248,6 +248,7 @@ import SkillOpsGapDetector from '@/components/cinematic/SkillOpsGapDetector';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 import SkillContactGapAdvisor from '@/components/cinematic/SkillContactGapAdvisor';
 import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvestigationLinker';
+import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -830,6 +831,8 @@ function App() {
                 reach out skill" voice triggers; jarvis:skillcontact-toggle event;
                 amber badge on gap count; 5-min auto-refresh */}
             <SkillContactGapAdvisor />
+            {/* F211: Crypto × Risk Signal Correlator — ◈ CRYPTORSK button (left:31000, zIndex:61); parallel-fetches /functions/getLiveIntel (crypto+FX) + /entities/RiskSignal; keyword-correlates each risk signal against live market asset names/tickers to surface EXPOSED (financial keyword overlap) vs ISOLATED (no market correlation); stat tiles (assets/signals/exposed/isolated); ALL/EXPOSED/ISOLATED filter tabs + text search; expand signal → matched assets with change_pct + relevance score; amber badge on exposed count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence crypto-risk brief + TTS via jarvis:speak-dossier; isCryptorskQuery+buildCryptorskScript wired in JarvisBrain; "crypto risk"/"bitcoin risk"/"financial risk signal"/"market risk signal"/"crypto correlation"/"cryptorsk" voice triggers; jarvis:cryptorsk-toggle event; 5-min auto-refresh */}
+            <CryptoRiskCorrelator />
             {/* F210: Live Intel × Investigation Linker — ◈ LIILINK button (left:30360, zIndex:60);
                 parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/investigations;
                 keyword-correlates live events against open case titles/descriptions to surface
