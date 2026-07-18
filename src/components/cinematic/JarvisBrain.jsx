@@ -118,6 +118,7 @@ import { isRscmapQuery, buildRscmapScript } from "./ReportScenarioMapper";
 import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
 import { isDatasetGrowthQuery, buildDatasetGrowthScript } from "./DatasetGrowthTracker";
 import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
+import { isGrdnQuery, buildGrdnScript } from "./GuardianIncidentMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1446,6 +1447,19 @@ export default function JarvisBrain() {
     if (isTgprQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildTgprScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F228: GuardianIncidentMonitor — /v1/guardian/status + /v1/guardian/incidents;
+    // shows sensor/security incidents, severity badges, ACK control;
+    // dispatches jarvis:grdn-toggle + speaks unacked/high-severity brief;
+    // "guardian / security incidents / sensor alerts / unacked incidents /
+    //  home security / grdn / physical security / incident monitor"
+    if (isGrdnQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGrdnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

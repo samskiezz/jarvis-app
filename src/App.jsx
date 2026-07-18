@@ -256,6 +256,7 @@ import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap'
 import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
 import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
+import GuardianIncidentMonitor from '@/components/cinematic/GuardianIncidentMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -876,6 +877,14 @@ function App() {
                 "task graph/graph task rank/tgpr/high centrality tasks/network task priority" voice triggers;
                 jarvis:tgpr-toggle event; 90-s auto-refresh */}
             <TaskGraphPriorityRanker />
+            {/* F228: Guardian Incident Monitor — ◈ GRDN button (left:78000, bottom:8, zIndex:111);
+                polls /v1/guardian/status every 60 s (badge = red if high_open > 0, amber if unacked > 0);
+                panel fetches /v1/guardian/incidents on open; ACK via POST /v1/guardian/ack;
+                stat tiles (total/unacked/high-crit/cleared); ALL/HIGH-CRITICAL/UNACKED filter tabs + search;
+                isGrdnQuery+buildGrdnScript wired in JarvisBrain;
+                "guardian/security incidents/sensor alerts/unacked incidents/home security/grdn/incident monitor" voice triggers;
+                jarvis:grdn-toggle event; 60-s status auto-refresh */}
+            <GuardianIncidentMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
