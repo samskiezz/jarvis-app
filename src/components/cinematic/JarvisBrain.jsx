@@ -115,6 +115,7 @@ import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage
 import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
 import { isOevrskQuery, buildOevrskScript } from "./OpsEventRiskCorrelator";
 import { isRscmapQuery, buildRscmapScript } from "./ReportScenarioMapper";
+import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1409,6 +1410,17 @@ export default function JarvisBrain() {
     if (isRscmapQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildRscmapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F225: LiveMarketTicker — fixed bottom strip; real /functions/getLiveIntel data;
+    // speaks top movers + latest seismic event brief;
+    // "live ticker / market strip / price ticker / lticker / show ticker / live prices"
+    if (isLiveTickerQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLiveTickerScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

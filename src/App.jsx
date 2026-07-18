@@ -254,6 +254,7 @@ import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGa
 import SkillInvestigationAdvisor from '@/components/cinematic/SkillInvestigationAdvisor';
 import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
 import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
+import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -858,6 +859,12 @@ function App() {
             <LiveIntelKnowledgeGap />
             {/* F221: live intel × contact expertise alerter — ◈ LICTX button (left:35820, bottom:8, zIndex:75); parallel-fetches /functions/getLiveIntel + /entities/Contact; keyword-correlates each live event (quakes/crypto/FX) against contact expertise (role/dept/tags/notes/org) to surface RELEVANT (match ≥1 keyword) vs GENERAL; stat tiles (events/contacts/relevant/general); ALL/RELEVANT/GENERAL filter tabs + text search; expand event → matched contacts with role badge + relevance score; amber badge on relevant count; ▶ ALERT BRIEF → /v1/jarvis/agent/chat 2-sentence outreach recommendation + TTS via jarvis:speak-dossier; isLictxQuery+buildLictxScript wired in JarvisBrain; "live intel contact/contact alert/who to contact/alert contacts/lictx/contact expertise/who knows about/relevant contacts/intel contact match" voice trigger; jarvis:lictx-toggle event; 5-min auto-refresh */}
             <LiveIntelContactAlerter />
+            {/* F225: LiveMarketTicker — fixed bottom strip (bottom:0, zIndex:9000) with live
+                crypto/FX prices + latest seismic event from /functions/getLiveIntel; polls
+                every 60 s; renders nothing on error; isLiveTickerQuery+buildLiveTickerScript
+                wired in JarvisBrain; "live ticker / market strip / price ticker / lticker /
+                show ticker / live prices / market prices" voice triggers */}
+            <LiveMarketTicker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
