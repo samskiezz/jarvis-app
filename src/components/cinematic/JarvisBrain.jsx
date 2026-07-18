@@ -107,6 +107,7 @@ import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignme
 import { isOpsQuery, buildOpsScript } from "./OpsEventStream";
 import { isEntityRegistryQuery, buildEntityRegistryScript } from "./EntityRegistryOverview";
 import { isSwrptQuery, buildSwrptScript } from "./SwarmReportCoverage";
+import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTaskLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1313,6 +1314,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swrpt-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwrptScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F115: Intel Profile × Task Linker voice wiring — parallel-fetches /entities/IntelProfile +
+    // /entities/Task; keyword-correlates threat profiles to tasks (TASKED vs UNTASKED); dispatches
+    // jarvis:iptask-toggle (opens panel); speaks 2-sentence AI threat-coverage brief + TTS;
+    // ◈ IPTASK button left:9332 zIndex:69; 90-s auto-refresh;
+    // "intel task / threat task / profile task / iptask / who's handling this threat"
+    if (isIptaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iptask-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIptaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
