@@ -110,6 +110,11 @@ import { isSwrptQuery, buildSwrptScript } from "./SwarmReportCoverage";
 import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTaskLinker";
 import { isGtopoQuery, buildGtopoScript } from "./GraphTopologyHealth";
 import { isMissionReadyQuery, buildMissionReadyScript } from "./MissionReadinessIndex";
+import { isInvgrphQuery, buildInvgrphScript } from "./InvestmentGraphInfluence";
+import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage";
+import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
+import { isOevrskQuery, buildOevrskScript } from "./OpsEventRiskCorrelator";
+import { isRscmapQuery, buildRscmapScript } from "./ReportScenarioMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1353,6 +1358,57 @@ export default function JarvisBrain() {
     if (isMissionReadyQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildMissionReadyScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F224 — 5 scenario/graph panels voice-wired
+    // InvestmentGraphInfluence: /entities/Investment × /v1/graph/centrality
+    // "investment graph / portfolio influence / network investments / invgrph"
+    if (isInvgrphQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvgrphScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // IntelProfileScenarioCoverage: /entities/IntelProfile × /v1/scenario/list
+    // "intel scenario / threat scenario / ipscen / unplanned threats"
+    if (isIpscenQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // RiskScenarioCoverage: /entities/RiskSignal × /v1/scenario/list
+    // "risk scenario / scenario risk / rskscen / unplanned risks"
+    if (isRskscenQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRskscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // OpsEventRiskCorrelator: /v1/ops/events × /entities/RiskSignal
+    // "ops event risk / event risk signal / oevrsk / flagged events"
+    if (isOevrskQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOevrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // ReportScenarioMapper: /v1/reports × /v1/scenario/list
+    // "report scenario / scenario report / rscmap / playbook report"
+    if (isRscmapQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRscmapScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
