@@ -258,6 +258,7 @@ import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
 import GuardianIncidentMonitor from '@/components/cinematic/GuardianIncidentMonitor';
 import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
+import RunCorrelatorDashboard from '@/components/cinematic/RunCorrelatorDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -896,6 +897,15 @@ function App() {
                 "ops case/case manager/alerts board/active alerts/open cases/opcm/ops board" voice triggers;
                 jarvis:opcm-toggle event; 60-s badge auto-refresh */}
             <OpsCaseManager />
+            {/* F230: Run Correlator Dashboard — ⚡ RCOR button (left:86800, bottom:8, zIndex:112);
+                polls /v1/run-correlator/clusters?limit=50 every 90 s (badge: red=critical, amber=any);
+                panel: stat tiles (total/critical/high/avg events); ALL/CRITICAL/HIGH/LOW filter tabs + search;
+                expand cluster → GET /v1/run-correlator/cluster/{id} for per-event detail;
+                isRcorQuery+buildRcorScript wired in JarvisBrain;
+                "run correlator/correlated events/event clusters/rcor/incident clusters/
+                 correlation engine/event correlation/correlated incidents/sensor correlation" voice triggers;
+                jarvis:rcor-toggle event; 90-s badge auto-refresh */}
+            <RunCorrelatorDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

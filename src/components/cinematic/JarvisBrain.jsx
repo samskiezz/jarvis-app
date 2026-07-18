@@ -120,6 +120,7 @@ import { isDatasetGrowthQuery, buildDatasetGrowthScript } from "./DatasetGrowthT
 import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
 import { isGrdnQuery, buildGrdnScript } from "./GuardianIncidentMonitor";
 import { isOpcmQuery, buildOpcmScript } from "./OpsCaseManager";
+import { isRcorQuery, buildRcorScript } from "./RunCorrelatorDashboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1474,6 +1475,19 @@ export default function JarvisBrain() {
     if (isOpcmQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildOpcmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // Run Correlator Dashboard — correlated event clusters from the correlation engine;
+    // fetches /v1/run-correlator/clusters (90-s poll), expands per-cluster detail;
+    // dispatches jarvis:rcor-toggle + speaks cluster count / critical brief;
+    // "run correlator / correlated events / event clusters / rcor /
+    //  incident clusters / correlation engine / sensor correlation"
+    if (isRcorQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRcorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
