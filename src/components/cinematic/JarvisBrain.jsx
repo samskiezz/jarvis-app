@@ -106,6 +106,7 @@ import { isCtopsQuery, buildCtopsScript } from "./ContactOpsLinker";
 import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignment";
 import { isOpsQuery, buildOpsScript } from "./OpsEventStream";
 import { isEntityRegistryQuery, buildEntityRegistryScript } from "./EntityRegistryOverview";
+import { isSwrptQuery, buildSwrptScript } from "./SwarmReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1300,6 +1301,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:registry-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildEntityRegistryScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F138: Swarm Job × Report Coverage voice wiring — "swarm report / job report /
+    // swarm documentation / which swarm jobs have reports / swrpt"
+    // Opens SwarmReportCoverage panel (jarvis:swrpt-toggle) and speaks a brief on
+    // DOCUMENTED vs UNDOCUMENTED swarm jobs from /entities/SwarmJob + /v1/reports.
+    if (isSwrptQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swrpt-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwrptScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
