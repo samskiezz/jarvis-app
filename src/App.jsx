@@ -253,6 +253,7 @@ import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMap
 import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
 import SkillInvestigationAdvisor from '@/components/cinematic/SkillInvestigationAdvisor';
 import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
+import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -855,6 +856,8 @@ function App() {
             <SkillInvestigationAdvisor />
             {/* F216: live intel × knowledge gap detector — ◈ IKGAP button (left:9720, bottom:8, zIndex:70); parallel-fetches /functions/getLiveIntel + /knowledge/; keyword-correlates each live event against knowledge base (KNOWN vs BLIND SPOT); amber badge on blind-spot count; isIkgapQuery+buildIkgapScript wired in JarvisBrain; "intel knowledge/knowledge gap/knowledge blind spot/live knowledge gap/ikgap/what don't we know" voice triggers; jarvis:ikgap-toggle event; 5-min auto-refresh */}
             <LiveIntelKnowledgeGap />
+            {/* F221: live intel × contact expertise alerter — ◈ LICTX button (left:35820, bottom:8, zIndex:75); parallel-fetches /functions/getLiveIntel + /entities/Contact; keyword-correlates each live event (quakes/crypto/FX) against contact expertise (role/dept/tags/notes/org) to surface RELEVANT (match ≥1 keyword) vs GENERAL; stat tiles (events/contacts/relevant/general); ALL/RELEVANT/GENERAL filter tabs + text search; expand event → matched contacts with role badge + relevance score; amber badge on relevant count; ▶ ALERT BRIEF → /v1/jarvis/agent/chat 2-sentence outreach recommendation + TTS via jarvis:speak-dossier; isLictxQuery+buildLictxScript wired in JarvisBrain; "live intel contact/contact alert/who to contact/alert contacts/lictx/contact expertise/who knows about/relevant contacts/intel contact match" voice trigger; jarvis:lictx-toggle event; 5-min auto-refresh */}
+            <LiveIntelContactAlerter />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

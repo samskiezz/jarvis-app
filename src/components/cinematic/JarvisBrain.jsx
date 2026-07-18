@@ -101,6 +101,7 @@ import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
 import { isSwjknQuery, buildSwjknScript } from "./SwarmJobKnowledgeCoverage";
 import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
 import { isSwconQuery, buildSwconScript } from "./SwarmContactLinker";
+import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1236,6 +1237,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swcon-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwconScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F221: live intel × contact expertise alerter — /functions/getLiveIntel + /entities/Contact;
+    // RELEVANT (expertise match ≥1 keyword) vs GENERAL (no overlap); 2-sentence AI outreach brief;
+    // dispatches jarvis:lictx-toggle; ◈ LICTX left:35820 zIndex:75; 5-min auto-refresh;
+    // "live intel contact / contact alert / who to contact / alert contacts / lictx / contact expertise"
+    if (isLictxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lictx-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLictxScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
