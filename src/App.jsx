@@ -257,6 +257,7 @@ import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAler
 import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
 import GuardianIncidentMonitor from '@/components/cinematic/GuardianIncidentMonitor';
+import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -885,6 +886,16 @@ function App() {
                 "guardian/security incidents/sensor alerts/unacked incidents/home security/grdn/incident monitor" voice triggers;
                 jarvis:grdn-toggle event; 60-s status auto-refresh */}
             <GuardianIncidentMonitor />
+            {/* F229: OpsCaseManager — ⊡ OPCM button (left:82400, bottom:8, zIndex:111);
+                badge polls /v1/alerts?status=open every 60 s (red = open alerts > 0);
+                panel ALERTS tab: GET /v1/alerts, ACK via POST /v1/alerts/{id}/ack;
+                panel CASES tab: GET /v1/cases, status via POST /v1/cases/{id}/status;
+                stat tiles (open alerts / total alerts / open cases / closed cases);
+                ALERTS: ALL/OPEN/ACKED filter + search; CASES: ALL/OPEN/CLOSED filter + search;
+                isOpcmQuery+buildOpcmScript wired in JarvisBrain;
+                "ops case/case manager/alerts board/active alerts/open cases/opcm/ops board" voice triggers;
+                jarvis:opcm-toggle event; 60-s badge auto-refresh */}
+            <OpsCaseManager />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

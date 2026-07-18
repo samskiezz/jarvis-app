@@ -119,6 +119,7 @@ import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
 import { isDatasetGrowthQuery, buildDatasetGrowthScript } from "./DatasetGrowthTracker";
 import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
 import { isGrdnQuery, buildGrdnScript } from "./GuardianIncidentMonitor";
+import { isOpcmQuery, buildOpcmScript } from "./OpsCaseManager";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1460,6 +1461,19 @@ export default function JarvisBrain() {
     if (isGrdnQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildGrdnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F229: OpsCaseManager — /v1/alerts + /v1/cases;
+    // shows open alerts with ACK, investigation cases with status transitions;
+    // dispatches jarvis:opcm-toggle + speaks open alert / open case brief;
+    // "ops case / case manager / alerts board / active alerts /
+    //  open cases / opcm / ops board / case board / alert queue / incident cases"
+    if (isOpcmQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOpcmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
