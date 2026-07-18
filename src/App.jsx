@@ -259,6 +259,7 @@ import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRan
 import GuardianIncidentMonitor from '@/components/cinematic/GuardianIncidentMonitor';
 import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 import RunCorrelatorDashboard from '@/components/cinematic/RunCorrelatorDashboard';
+import SynapticCapacityExplorer, { isSynapticCapacityQuery, buildSynapticCapacityScript } from '@/components/cinematic/SynapticCapacityExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -906,6 +907,15 @@ function App() {
                  correlation engine/event correlation/correlated incidents/sensor correlation" voice triggers;
                 jarvis:rcor-toggle event; 90-s badge auto-refresh */}
             <RunCorrelatorDashboard />
+            {/* F231: Synaptic Capacity Explorer — ⬡ SYNAP button (left:87360, bottom:8, zIndex:112);
+                parallel-fetches /v1/jarvis/system/capacity + /v1/jarvis/system/expansion;
+                stat tiles (neurons/total_nodes/neural_synapses/full_mesh); cluster hierarchy tier table;
+                capacity breakdown bars (input/mesh/neural); ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
+                isSynapticCapacityQuery+buildSynapticCapacityScript wired in JarvisBrain;
+                "synaptic capacity/brain capacity/neural capacity/capacity explorer/synap/
+                 synaptic scale/how big is the brain" voice triggers;
+                jarvis:synap-toggle event; 90-s auto-refresh */}
+            <SynapticCapacityExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

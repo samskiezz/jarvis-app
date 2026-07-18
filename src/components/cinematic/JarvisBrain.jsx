@@ -121,6 +121,7 @@ import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
 import { isGrdnQuery, buildGrdnScript } from "./GuardianIncidentMonitor";
 import { isOpcmQuery, buildOpcmScript } from "./OpsCaseManager";
 import { isRcorQuery, buildRcorScript } from "./RunCorrelatorDashboard";
+import { isSynapticCapacityQuery, buildSynapticCapacityScript } from "./SynapticCapacityExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1488,6 +1489,17 @@ export default function JarvisBrain() {
     if (isRcorQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildRcorScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // dispatches jarvis:synap-toggle + speaks neuron/synapse capacity brief;
+    // "synaptic capacity / brain capacity / neural capacity / capacity explorer /
+    //  synap / synaptic scale / how big is the brain"
+    if (isSynapticCapacityQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSynapticCapacityScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
