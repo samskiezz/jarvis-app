@@ -102,6 +102,7 @@ import { isSwjknQuery, buildSwjknScript } from "./SwarmJobKnowledgeCoverage";
 import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
 import { isSwconQuery, buildSwconScript } from "./SwarmContactLinker";
 import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
+import { isCtopsQuery, buildCtopsScript } from "./ContactOpsLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1249,6 +1250,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lictx-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLictxScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F94: Contact × Ops Event Linker — /entities/Contact + /v1/ops/events;
+    // INVOLVED (keyword overlap with live ops events) vs CLEAR; 2-sentence brief;
+    // dispatches jarvis:ctops-toggle; ◈ CTOPS left:9956 zIndex:69; 60-s auto-refresh;
+    // "contact ops / ops contacts / who's involved / incident contacts / ctops"
+    if (isCtopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCtopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
