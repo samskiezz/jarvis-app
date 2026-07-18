@@ -109,6 +109,7 @@ import { isEntityRegistryQuery, buildEntityRegistryScript } from "./EntityRegist
 import { isSwrptQuery, buildSwrptScript } from "./SwarmReportCoverage";
 import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTaskLinker";
 import { isGtopoQuery, buildGtopoScript } from "./GraphTopologyHealth";
+import { isMissionReadyQuery, buildMissionReadyScript } from "./MissionReadinessIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1341,6 +1342,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gtopo-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGtopoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F67: Mission Readiness Index voice wiring — parallel-fetches /entities/Task + /v1/aip/skill +
+    // /entities/SwarmJob + /v1/jarvis/system/status; computes 0-100 composite readiness score;
+    // buildMissionReadyScript() dispatches jarvis:mission-ready-toggle (opens panel) internally;
+    // "mission ready / readiness / ready index / operational ready / MRI / ready status"
+    if (isMissionReadyQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMissionReadyScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
