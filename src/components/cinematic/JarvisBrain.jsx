@@ -116,6 +116,7 @@ import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
 import { isOevrskQuery, buildOevrskScript } from "./OpsEventRiskCorrelator";
 import { isRscmapQuery, buildRscmapScript } from "./ReportScenarioMapper";
 import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
+import { isDatasetGrowthQuery, buildDatasetGrowthScript } from "./DatasetGrowthTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1421,6 +1422,17 @@ export default function JarvisBrain() {
     if (isLiveTickerQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildLiveTickerScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F226: DatasetGrowthTracker — tracks per-dataset row-count deltas from /v1/datasets;
+    // opens DSGR panel + speaks fastest-growing dataset brief;
+    // "dataset growth / data growth / which dataset is growing / dataset trends / row count / dsgr"
+    if (isDatasetGrowthQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDatasetGrowthScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
