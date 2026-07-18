@@ -105,6 +105,7 @@ import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
 import { isCtopsQuery, buildCtopsScript } from "./ContactOpsLinker";
 import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignment";
 import { isOpsQuery, buildOpsScript } from "./OpsEventStream";
+import { isEntityRegistryQuery, buildEntityRegistryScript } from "./EntityRegistryOverview";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1287,6 +1288,18 @@ export default function JarvisBrain() {
     if (isOpsQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildOpsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F223: Entity Registry Overview — parallel-fetches all 6 entity types (Task, RiskSignal,
+    // IntelProfile, SwarmJob, Investment, Contact); speaks total object count across the JARVIS
+    // ontology; dispatches jarvis:registry-toggle; ◫ REGISTRY left:2780 zIndex:60;
+    // "entity / entities / registry / object count / entity count / all entities / entity overview"
+    if (isEntityRegistryQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:registry-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildEntityRegistryScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
