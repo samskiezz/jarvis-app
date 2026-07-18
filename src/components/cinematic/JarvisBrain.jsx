@@ -103,6 +103,7 @@ import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
 import { isSwconQuery, buildSwconScript } from "./SwarmContactLinker";
 import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
 import { isCtopsQuery, buildCtopsScript } from "./ContactOpsLinker";
+import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1262,6 +1263,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctops-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtopsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F193: Swarm Job × Skill Domain Alignment — /entities/SwarmJob + /v1/aip/skill;
+    // DEPLOYED (swarm job exercises skill) vs DORMANT (no swarm coverage); 2-sentence AI brief;
+    // dispatches jarvis:swarmskill-toggle; ◈ SWARMSKILL left:69640 zIndex:134; 90-s auto-refresh;
+    // "swarm skill / swarmskill / skill deployment / deployed skills / dormant skills / swarm capability"
+    if (isSwarmskillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swarmskill-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwarmskillScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
