@@ -104,6 +104,7 @@ import { isSwconQuery, buildSwconScript } from "./SwarmContactLinker";
 import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
 import { isCtopsQuery, buildCtopsScript } from "./ContactOpsLinker";
 import { isSwarmskillQuery, buildSwarmskillScript } from "./SwarmJobSkillAlignment";
+import { isOpsQuery, buildOpsScript } from "./OpsEventStream";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1275,6 +1276,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swarmskill-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwarmskillScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F222: Ops Event Stream voice wiring — /v1/ops/events; real event count + critical flag;
+    // OpsEventStream panel opens itself via its own jarvis:ask listener (OPS_RE);
+    // JarvisBrain adds TTS spoken brief (total events + critical count) from real /v1/ops/events;
+    // "ops log / ops events / ops stream / operations log / operations events"
+    if (isOpsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOpsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
