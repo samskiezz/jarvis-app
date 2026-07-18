@@ -108,6 +108,7 @@ import { isOpsQuery, buildOpsScript } from "./OpsEventStream";
 import { isEntityRegistryQuery, buildEntityRegistryScript } from "./EntityRegistryOverview";
 import { isSwrptQuery, buildSwrptScript } from "./SwarmReportCoverage";
 import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTaskLinker";
+import { isGtopoQuery, buildGtopoScript } from "./GraphTopologyHealth";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1327,6 +1328,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iptask-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIptaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F_GTOPO: Graph Topology Health voice wiring — parallel-fetches /v1/graph/centrality +
+    // /v1/graph/communities; computes 0-100 health score; dispatches jarvis:gtopo-toggle (opens
+    // panel); speaks health score + node count + community count + concentration advisory + TTS;
+    // ⬡ GTOPO button left:9340; 90-s auto-refresh;
+    // "graph topology / network topology / topology health / graph health / gtopo"
+    if (isGtopoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gtopo-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGtopoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
