@@ -255,6 +255,7 @@ import SkillInvestigationAdvisor from '@/components/cinematic/SkillInvestigation
 import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
 import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
 import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
+import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -865,6 +866,16 @@ function App() {
                 wired in JarvisBrain; "live ticker / market strip / price ticker / lticker /
                 show ticker / live prices / market prices" voice triggers */}
             <LiveMarketTicker />
+            {/* F227: Task × Graph Priority Ranker — ◆ TGPR button (left:73600, bottom:8, zIndex:111);
+                parallel-fetches /entities/Task + /v1/graph/centrality; keyword-correlates each task
+                against centrality entity names to surface HIGH-PRIORITY (graph-linked) vs ROUTINE tasks;
+                stat tiles (tasks/centrality nodes/high-priority/routine); ALL/HIGH-PRIORITY/ROUTINE filter
+                tabs + search; expand task → matched nodes with degree + centrality score bar;
+                ▶ ASSESS per task → /v1/jarvis/agent/chat 2-sentence priority brief + TTS;
+                isTgprQuery+buildTgprScript wired in JarvisBrain;
+                "task graph/graph task rank/tgpr/high centrality tasks/network task priority" voice triggers;
+                jarvis:tgpr-toggle event; 90-s auto-refresh */}
+            <TaskGraphPriorityRanker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

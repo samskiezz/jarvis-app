@@ -117,6 +117,7 @@ import { isOevrskQuery, buildOevrskScript } from "./OpsEventRiskCorrelator";
 import { isRscmapQuery, buildRscmapScript } from "./ReportScenarioMapper";
 import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
 import { isDatasetGrowthQuery, buildDatasetGrowthScript } from "./DatasetGrowthTracker";
+import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1433,6 +1434,18 @@ export default function JarvisBrain() {
     if (isDatasetGrowthQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildDatasetGrowthScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F227: TaskGraphPriorityRanker — /entities/Task × /v1/graph/centrality;
+    // ranks tasks by centrality overlap; dispatches jarvis:tgpr-toggle + speaks priority brief;
+    // "task graph / graph task rank / tgpr / high centrality tasks / network task priority /
+    //  which tasks matter most / network priority / tasks by network importance"
+    if (isTgprQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTgprScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
