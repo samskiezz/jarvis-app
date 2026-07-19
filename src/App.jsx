@@ -277,6 +277,7 @@ import CodePulseMonitor from '@/components/cinematic/CodePulseMonitor';
 import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 import IntentInbox from '@/components/cinematic/IntentInbox';
 import FrictionMapMonitor from '@/components/cinematic/FrictionMapMonitor';
+import ReportsLibrary, { isRlibQuery, buildRlibScript } from '@/components/cinematic/ReportsLibrary';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1052,6 +1053,8 @@ function App() {
             <IntentInbox />
             {/* F248 FrictionMapMonitor — workflow friction intelligence from /v1/friction/scan */}
             <FrictionMapMonitor />
+            {/* F249 ReportsLibrary — intelligence briefs from /v1/reports + /v1/reports/{id} */}
+            <ReportsLibrary />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -120,3 +120,4 @@
 [2026-07-19] F246 VitalsDashboard — polls /v1/vitals/latest + /v1/vitals/trend, 6 metric tiles, sparklines, ASSESS→agent; ⊕ VTLS button left:151200; mounted App.jsx; wired JarvisBrain.jsx; build EXIT:0.
 [2026-07-19] F247 IntentInbox — polls /v1/intent/list; capture/triage/convert panel; ⊕ INBX button; wired JarvisBrain + App.jsx; build EXIT:0
 [2026-07-19] F248 FrictionMapMonitor.jsx — GET /v1/friction/scan; score/findings/action-summary; ALL/REPEATED_ACTION/DUPLICATE_PROMPT/REPEAT_ERROR tabs; ⚡ FRIC left:160320 zIndex:128; isFricQuery+buildFricScript wired JarvisBrain.jsx; build EXIT:0.
+[2026-07-19] F249 ReportsLibrary.jsx — polls GET /v1/reports + lazy GET /v1/reports/{id}; ⊞ RLIB left:164880; isRlibQuery+buildRlibScript wired JarvisBrain; build EXIT:0.

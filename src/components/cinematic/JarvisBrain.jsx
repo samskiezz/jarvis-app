@@ -139,6 +139,7 @@ import { isCplsQuery, buildCplsScript } from "./CodePulseMonitor";
 import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
 import { isInbxQuery, buildInbxScript } from "./IntentInbox";
 import { isFricQuery, buildFricScript } from "./FrictionMapMonitor";
+import { isRlibQuery, buildRlibScript } from "./ReportsLibrary";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1684,6 +1685,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fric-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildFricScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRlibQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rlib-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRlibScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
