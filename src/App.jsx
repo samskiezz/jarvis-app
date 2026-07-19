@@ -260,6 +260,7 @@ import GuardianIncidentMonitor from '@/components/cinematic/GuardianIncidentMoni
 import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 import RunCorrelatorDashboard from '@/components/cinematic/RunCorrelatorDashboard';
 import SynapticCapacityExplorer, { isSynapticCapacityQuery, buildSynapticCapacityScript } from '@/components/cinematic/SynapticCapacityExplorer';
+import MetricForecastEngine, { isMfceQuery, buildMfceScript } from '@/components/cinematic/MetricForecastEngine';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -916,6 +917,16 @@ function App() {
                  synaptic scale/how big is the brain" voice triggers;
                 jarvis:synap-toggle event; 90-s auto-refresh */}
             <SynapticCapacityExplorer />
+            {/* F232: Metric Forecast Engine — ◉ MFCE button (left:91920, bottom:8, zIndex:113);
+                fetches /v1/jarvis/analytics/anomalies?limit=30 (badge: red=high, amber=any);
+                stat tiles (total/high/medium/trending-up); ALL/HIGH/MEDIUM filter tabs + search;
+                expand metric row → lazy-fetch /v1/jarvis/analytics/forecast/{metric} → trend/slope/RMSE/10-step sparkline;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence anomaly brief + TTS;
+                isMfceQuery+buildMfceScript wired in JarvisBrain;
+                "metric forecast/forecast engine/mfce/metric anomaly/measurement forecast/
+                 predict metric/anomaly forecast/zscore forecast/forecast metrics/metric predictor" voice triggers;
+                jarvis:mfce-toggle event; 90-s auto-refresh */}
+            <MetricForecastEngine />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -122,6 +122,7 @@ import { isGrdnQuery, buildGrdnScript } from "./GuardianIncidentMonitor";
 import { isOpcmQuery, buildOpcmScript } from "./OpsCaseManager";
 import { isRcorQuery, buildRcorScript } from "./RunCorrelatorDashboard";
 import { isSynapticCapacityQuery, buildSynapticCapacityScript } from "./SynapticCapacityExplorer";
+import { isMfceQuery, buildMfceScript } from "./MetricForecastEngine";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1500,6 +1501,18 @@ export default function JarvisBrain() {
     if (isSynapticCapacityQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildSynapticCapacityScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // dispatches jarvis:mfce-toggle + speaks worst anomaly + forecast brief;
+    // "metric forecast / forecast engine / mfce / metric anomaly /
+    //  measurement forecast / predict metric / anomaly forecast /
+    //  zscore forecast / forecast metrics / metric predictor"
+    if (isMfceQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMfceScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
