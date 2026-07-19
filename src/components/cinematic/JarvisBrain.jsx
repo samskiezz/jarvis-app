@@ -132,6 +132,7 @@ import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
 import { isSolarQuery, buildSolarScript } from "./SolarEnergyMonitor";
 import { isInvstQuery, buildInvstScript } from "./InvestigationsBoard";
+import { isIswmQuery, buildIswmScript } from "./InferenceSwarmMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1614,6 +1615,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invst-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvstScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIswmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iswm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIswmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

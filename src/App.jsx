@@ -270,6 +270,7 @@ import DataGovernanceMonitor, { isGovQuery as _isGovQuery, buildGovScript as _bu
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 import SolarEnergyMonitor from '@/components/cinematic/SolarEnergyMonitor';
 import InvestigationsBoard from '@/components/cinematic/InvestigationsBoard';
+import InferenceSwarmMonitor from '@/components/cinematic/InferenceSwarmMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1007,6 +1008,15 @@ function App() {
                 "investigations/saved cases/investigation board/case files/invst/graph cases/
                  active investigations/case list/saved investigations/open cases/case workspace" voice triggers */}
             <InvestigationsBoard />
+            {/* F242 Inference Swarm Monitor — polls GET /v1/inf-swarm/agents (60s);
+                badge green=agent count, red=any errored; stat tiles (total/running/declared/errored);
+                ALL + kind filter tabs; text search; expand row → kind/status/queue/spawned/heartbeat/error;
+                ✕ KILL per agent → POST /v1/inf-swarm/kill; + SPAWN → POST /v1/inf-swarm/spawn;
+                ▶ ASSESS → agent chat + TTS; isIswmQuery+buildIswmScript wired JarvisBrain;
+                ⊛ ISWM left:132960 zIndex:122;
+                "inference swarm/swarm agents/iswm/agent swarm/spawn agent/running agents/
+                 worker agents/swarm status/agent workers/inference agents/swarm monitor" voice triggers */}
+            <InferenceSwarmMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
