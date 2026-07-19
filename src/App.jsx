@@ -275,6 +275,7 @@ import RitualDeckMonitor from '@/components/cinematic/RitualDeckMonitor';
 import GothamCaseBoard from '@/components/cinematic/GothamCaseBoard';
 import CodePulseMonitor from '@/components/cinematic/CodePulseMonitor';
 import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
+import IntentInbox from '@/components/cinematic/IntentInbox';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1046,6 +1047,8 @@ function App() {
             <CodePulseMonitor />
             {/* F246 VitalsDashboard — biometric health metrics from /v1/vitals/latest + /v1/vitals/trend */}
             <VitalsDashboard />
+            {/* F247 IntentInbox — raw idea capture + triage from /v1/intent/list + /v1/intent/capture */}
+            <IntentInbox />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
