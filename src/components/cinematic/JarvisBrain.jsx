@@ -127,6 +127,7 @@ import { isLbsgQuery, buildLbsgScript } from "./LlmBudgetSentinel";
 import { isTopObjectsQuery, buildTopObjectsScript } from "./TopObjectsExplorer";
 import { isRbldQuery, buildRbldScript } from "./RunBuilderMonitor";
 import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
+import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1565,6 +1566,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:atr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildToolRegistryScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F237: dispatches jarvis:dlgr-toggle + speaks decision state brief;
+    // "decision ledger / dlgr / decisions / decision log / decision record /
+    //  which decisions / decision review / decision audit / decision history"
+    if (isDlgrQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDlgrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -265,6 +265,7 @@ import LlmBudgetSentinel, { isLbsgQuery, buildLbsgScript } from '@/components/ci
 import TopObjectsExplorer, { isTopObjectsQuery, buildTopObjectsScript } from '@/components/cinematic/TopObjectsExplorer';
 import RunBuilderMonitor from '@/components/cinematic/RunBuilderMonitor';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
+import DecisionLedgerMonitor from '@/components/cinematic/DecisionLedgerMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -959,6 +960,12 @@ function App() {
                 isToolRegistryQuery+buildToolRegistryScript wired JarvisBrain; ◈ ATR left:105600 zIndex:116;
                 "tool registry/agent tools/what tools/jarvis capabilities/available tools/atr" voice triggers */}
             <AgentToolRegistry />
+            {/* F237: Decision Ledger Monitor — GET /v1/decision/list?limit=50 (90-s poll);
+                stat tiles (total/final/reviewed/draft); ALL/DRAFT/FINAL/REVIEWED tabs + search;
+                expand row → body preview + score bar; ▶ ASSESS → agent chat + TTS;
+                isDlgrQuery+buildDlgrScript wired JarvisBrain; ⊟ DLGR left:110160 zIndex:117;
+                "decision ledger/dlgr/decisions/decision log/decision record/decision audit" voice triggers */}
+            <DecisionLedgerMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
