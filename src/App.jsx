@@ -272,6 +272,7 @@ import SolarEnergyMonitor from '@/components/cinematic/SolarEnergyMonitor';
 import InvestigationsBoard from '@/components/cinematic/InvestigationsBoard';
 import InferenceSwarmMonitor from '@/components/cinematic/InferenceSwarmMonitor';
 import RitualDeckMonitor from '@/components/cinematic/RitualDeckMonitor';
+import GothamCaseBoard from '@/components/cinematic/GothamCaseBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1027,6 +1028,13 @@ function App() {
                 "ritual deck/routines/morning startup/run routine/rdck/my routines/
                  startup routine/daily routine/focus mode/shutdown prep/jarvis routines" voice triggers */}
             <RitualDeckMonitor />
+            {/* F244 Gotham Case Board — polls /v1/gotham/cases every 90 s;
+                red badge=high-priority open, amber=total count;
+                ▶ ASSESS → agent chat + TTS; isGcbdQuery+buildGcbdScript wired JarvisBrain;
+                ◈ GCBD left:142080 zIndex:124;
+                "gotham cases/case board/open cases/gcbd/case management/case list/
+                 high priority cases/case tracker/gotham tracker/case engine" voice triggers */}
+            <GothamCaseBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

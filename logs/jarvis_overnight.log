@@ -115,3 +115,4 @@
 [2026-07-19] F241 InvestigationsBoard.jsx — polls GET /v1/investigations every 90s; stat tiles, filter tabs, expand→detail, ASSESS; ⊗ INVST left:128400; wired JarvisBrain.jsx + App.jsx; build EXIT:0
 [2026-07-19] F242 InferenceSwarmMonitor.jsx — GET /v1/inf-swarm/agents poll 60s + POST /v1/inf-swarm/spawn + POST /v1/inf-swarm/kill; ⊛ ISWM left:132960 zIndex:122; isIswmQuery+buildIswmScript → JarvisBrain; App.jsx mounted; build EXIT:0.
 [2026-07-19] F243 RitualDeckMonitor.jsx — polls /v1/ritual/list; routine list with step details + RUN/NEXT/SKIP/STOP controls; ▶ ASSESS → agent chat + TTS; ⬡ RDCK left:137520 zIndex:123; JarvisBrain wired isRdckQuery+buildRdckScript; build EXIT:0
+[2026-07-19] F244 GothamCaseBoard.jsx — polls /v1/gotham/cases every 90s; stat tiles total/open/closed/high-priority; ALL/OPEN/CLOSED filter + search; expand row → case_id/priority/age; ASSESS→agent+TTS; ◈ GCBD left:142080; wired JarvisBrain isGcbdQuery+buildGcbdScript; build EXIT:0.
