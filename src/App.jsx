@@ -276,6 +276,7 @@ import GothamCaseBoard from '@/components/cinematic/GothamCaseBoard';
 import CodePulseMonitor from '@/components/cinematic/CodePulseMonitor';
 import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 import IntentInbox from '@/components/cinematic/IntentInbox';
+import FrictionMapMonitor from '@/components/cinematic/FrictionMapMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1049,6 +1050,8 @@ function App() {
             <VitalsDashboard />
             {/* F247 IntentInbox — raw idea capture + triage from /v1/intent/list + /v1/intent/capture */}
             <IntentInbox />
+            {/* F248 FrictionMapMonitor — workflow friction intelligence from /v1/friction/scan */}
+            <FrictionMapMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -138,6 +138,7 @@ import { isGcbdQuery, buildGcbdScript } from "./GothamCaseBoard";
 import { isCplsQuery, buildCplsScript } from "./CodePulseMonitor";
 import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
 import { isInbxQuery, buildInbxScript } from "./IntentInbox";
+import { isFricQuery, buildFricScript } from "./FrictionMapMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1674,6 +1675,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:inbx-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInbxScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isFricQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fric-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildFricScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
