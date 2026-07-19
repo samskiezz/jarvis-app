@@ -269,6 +269,7 @@ import DecisionLedgerMonitor from '@/components/cinematic/DecisionLedgerMonitor'
 import DataGovernanceMonitor, { isGovQuery as _isGovQuery, buildGovScript as _buildGovScript } from '@/components/cinematic/DataGovernanceMonitor';
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 import SolarEnergyMonitor from '@/components/cinematic/SolarEnergyMonitor';
+import InvestigationsBoard from '@/components/cinematic/InvestigationsBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -998,6 +999,14 @@ function App() {
                 "solar/solar energy/solar power/inverter/energy monitor/grid export/grid import/
                  solar panel/battery soc/kw now/solar status/solar monitor/energy status/photovoltaic/pv power" voice triggers */}
             <SolarEnergyMonitor />
+            {/* F241 Investigations Board — polls GET /v1/investigations (90s, amber badge=total count);
+                stat tiles (total/annotated/seeded/recent-7d); ALL/ANNOTATED/SEEDED filter tabs + search;
+                expand row → lazy GET /v1/investigations/{id}: seeds, annotations, subgraph;
+                ▶ ASSESS → agent chat + TTS; isInvstQuery+buildInvstScript wired JarvisBrain;
+                ⊗ INVST left:128400 zIndex:121;
+                "investigations/saved cases/investigation board/case files/invst/graph cases/
+                 active investigations/case list/saved investigations/open cases/case workspace" voice triggers */}
+            <InvestigationsBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
