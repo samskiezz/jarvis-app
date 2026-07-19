@@ -140,6 +140,7 @@ import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
 import { isInbxQuery, buildInbxScript } from "./IntentInbox";
 import { isFricQuery, buildFricScript } from "./FrictionMapMonitor";
 import { isRlibQuery, buildRlibScript } from "./ReportsLibrary";
+import { isSpecForgeQuery, buildSpecForgeScript } from "./SpecForgeMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1694,6 +1695,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rlib-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRlibScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSpecForgeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sfm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSpecForgeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
