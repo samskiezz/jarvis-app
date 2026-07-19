@@ -125,6 +125,7 @@ import { isSynapticCapacityQuery, buildSynapticCapacityScript } from "./Synaptic
 import { isMfceQuery, buildMfceScript } from "./MetricForecastEngine";
 import { isLbsgQuery, buildLbsgScript } from "./LlmBudgetSentinel";
 import { isTopObjectsQuery, buildTopObjectsScript } from "./TopObjectsExplorer";
+import { isRbldQuery, buildRbldScript } from "./RunBuilderMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1539,6 +1540,18 @@ export default function JarvisBrain() {
       setOpen(true); setThinking(true); setText("");
       const script = await buildTopObjectsScript();
       window.dispatchEvent(new CustomEvent("jarvis:top-objects-toggle"));
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F235: dispatches jarvis:rbld-toggle + speaks workflow run health brief;
+    // "run builder / workflow runs / compiled runs / rbld / graph run /
+    //  run monitor / workflow builder / build history / which runs /
+    //  run status / build runs / run log / workflow log"
+    if (isRbldQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRbldScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

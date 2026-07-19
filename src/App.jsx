@@ -263,6 +263,7 @@ import SynapticCapacityExplorer, { isSynapticCapacityQuery, buildSynapticCapacit
 import MetricForecastEngine, { isMfceQuery, buildMfceScript } from '@/components/cinematic/MetricForecastEngine';
 import LlmBudgetSentinel, { isLbsgQuery, buildLbsgScript } from '@/components/cinematic/LlmBudgetSentinel';
 import TopObjectsExplorer, { isTopObjectsQuery, buildTopObjectsScript } from '@/components/cinematic/TopObjectsExplorer';
+import RunBuilderMonitor from '@/components/cinematic/RunBuilderMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -945,6 +946,12 @@ function App() {
                 "top objects/most influential/top nodes/pagerank/influential entities" voice triggers;
                 jarvis:top-objects-toggle event; ⊕ NODES strip button; 2-min auto-refresh */}
             <TopObjectsExplorer />
+            {/* F235: Run Builder Monitor — /v1/run-builder/runs (2-min poll badge: red=failed/amber=running);
+                expand row → /v1/run-builder/run/{id} graph node detail; stat tiles total/compiled/failed/avg-nodes;
+                ALL/COMPILED/RUNNING/FAILED filter tabs + search; ▶ ASSESS → agent/chat + TTS;
+                isRbldQuery+buildRbldScript wired JarvisBrain; ⊞ RBLD left:101040 zIndex:115;
+                "run builder/workflow runs/compiled runs/rbld/run monitor/workflow log" voice triggers */}
+            <RunBuilderMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
