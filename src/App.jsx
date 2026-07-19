@@ -271,6 +271,7 @@ import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 import SolarEnergyMonitor from '@/components/cinematic/SolarEnergyMonitor';
 import InvestigationsBoard from '@/components/cinematic/InvestigationsBoard';
 import InferenceSwarmMonitor from '@/components/cinematic/InferenceSwarmMonitor';
+import RitualDeckMonitor from '@/components/cinematic/RitualDeckMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1017,6 +1018,15 @@ function App() {
                 "inference swarm/swarm agents/iswm/agent swarm/spawn agent/running agents/
                  worker agents/swarm status/agent workers/inference agents/swarm monitor" voice triggers */}
             <InferenceSwarmMonitor />
+            {/* F243 (overnight 2026-07-19): ritual deck monitor — ⬡ RDCK button (left:137520, bottom:8, zIndex:123);
+                polls GET /v1/ritual/list every 90 s; stat tiles (routines/avg-steps/active/done);
+                expand routine → step list with action chip + ⚠ destructive badge; ▶ RUN → POST /v1/ritual/{id}/start;
+                active runs section with NEXT/SKIP/STOP controls via POST /v1/ritual/run/{id}/advance;
+                ▶ ASSESS → agent chat + TTS; isRdckQuery+buildRdckScript wired JarvisBrain;
+                ⬡ RDCK left:137520 zIndex:123;
+                "ritual deck/routines/morning startup/run routine/rdck/my routines/
+                 startup routine/daily routine/focus mode/shutdown prep/jarvis routines" voice triggers */}
+            <RitualDeckMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
