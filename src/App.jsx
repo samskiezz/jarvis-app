@@ -267,6 +267,7 @@ import RunBuilderMonitor from '@/components/cinematic/RunBuilderMonitor';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import DecisionLedgerMonitor from '@/components/cinematic/DecisionLedgerMonitor';
 import DataGovernanceMonitor, { isGovQuery as _isGovQuery, buildGovScript as _buildGovScript } from '@/components/cinematic/DataGovernanceMonitor';
+import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -977,6 +978,17 @@ function App() {
                 "data governance/governance monitor/retention policy/due for deletion/subject rights/
                  dsgov/compliance monitor/overdue objects/data retention/gdpr/subject access/erase request" voice triggers */}
             <DataGovernanceMonitor />
+            {/* F239: Second Brain Browser — GET /v1/brain/catalog (90-s poll, total/kinds/recent/orphans) +
+                lazy GET /v1/brain/notes?limit=50&q=<search> + GET /v1/brain/timeline?limit=25 on tab open +
+                GET /v1/brain/notes/{id} on row expand; stat tiles (total/kinds/recent/orphans);
+                CATALOG|NOTES|TIMELINE tabs; CATALOG: kind count bars + orphan list;
+                NOTES: kind chip + title + confidence bar + body excerpt on expand;
+                TIMELINE: log/daily notes with age; ▶ ASSESS → agent chat + TTS;
+                isSbbQuery+buildSbbScript wired JarvisBrain; ⬡ SBB left:119280 zIndex:119;
+                badge: amber=orphans, green=note count;
+                "second brain/brain notes/knowledge vault/brain catalog/my notes/brain timeline/
+                 note browser/knowledge base/brain browser/sbb/orphan notes/note vault/wikilinks" voice triggers */}
+            <SecondBrainBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -129,6 +129,7 @@ import { isRbldQuery, buildRbldScript } from "./RunBuilderMonitor";
 import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
+import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1586,6 +1587,14 @@ export default function JarvisBrain() {
     if (isGovQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildGovScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSbbQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSbbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
