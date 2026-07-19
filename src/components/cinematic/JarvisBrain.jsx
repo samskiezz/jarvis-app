@@ -130,6 +130,7 @@ import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistr
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
+import { isSolarQuery, buildSolarScript } from "./SolarEnergyMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1595,6 +1596,14 @@ export default function JarvisBrain() {
     if (isSbbQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildSbbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSolarQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSolarScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

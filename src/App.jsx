@@ -268,6 +268,7 @@ import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import DecisionLedgerMonitor from '@/components/cinematic/DecisionLedgerMonitor';
 import DataGovernanceMonitor, { isGovQuery as _isGovQuery, buildGovScript as _buildGovScript } from '@/components/cinematic/DataGovernanceMonitor';
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
+import SolarEnergyMonitor from '@/components/cinematic/SolarEnergyMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -989,6 +990,14 @@ function App() {
                 "second brain/brain notes/knowledge vault/brain catalog/my notes/brain timeline/
                  note browser/knowledge base/brain browser/sbb/orphan notes/note vault/wikilinks" voice triggers */}
             <SecondBrainBrowser />
+            {/* F240 Solar Energy Monitor — polls /v1/solar/now (60s, badge green=generating/amber=importing) +
+                /v1/solar/config; stat tiles (kW/today/lifetime/batteries); live power gauge bar;
+                grid export/import bars; battery SOC bars; AC voltage/freq/temp;
+                ▶ ASSESS → agent chat + TTS; isSolarQuery+buildSolarScript wired JarvisBrain;
+                ☀ SOLAR left:123840 zIndex:120;
+                "solar/solar energy/solar power/inverter/energy monitor/grid export/grid import/
+                 solar panel/battery soc/kw now/solar status/solar monitor/energy status/photovoltaic/pv power" voice triggers */}
+            <SolarEnergyMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
