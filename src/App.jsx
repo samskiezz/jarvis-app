@@ -262,6 +262,7 @@ import RunCorrelatorDashboard from '@/components/cinematic/RunCorrelatorDashboar
 import SynapticCapacityExplorer, { isSynapticCapacityQuery, buildSynapticCapacityScript } from '@/components/cinematic/SynapticCapacityExplorer';
 import MetricForecastEngine, { isMfceQuery, buildMfceScript } from '@/components/cinematic/MetricForecastEngine';
 import LlmBudgetSentinel, { isLbsgQuery, buildLbsgScript } from '@/components/cinematic/LlmBudgetSentinel';
+import TopObjectsExplorer, { isTopObjectsQuery, buildTopObjectsScript } from '@/components/cinematic/TopObjectsExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -939,6 +940,11 @@ function App() {
                  provider health/archon budget/lbsg" voice triggers;
                 jarvis:lbsg-toggle event; 60-s auto-refresh */}
             <LlmBudgetSentinel />
+            {/* F234: Top Objects Explorer — /v1/jarvis/analytics/top-objects; PageRank/centrality/connectivity tabs;
+                isTopObjectsQuery+buildTopObjectsScript wired in JarvisBrain;
+                "top objects/most influential/top nodes/pagerank/influential entities" voice triggers;
+                jarvis:top-objects-toggle event; ⊕ NODES strip button; 2-min auto-refresh */}
+            <TopObjectsExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

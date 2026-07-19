@@ -124,6 +124,7 @@ import { isRcorQuery, buildRcorScript } from "./RunCorrelatorDashboard";
 import { isSynapticCapacityQuery, buildSynapticCapacityScript } from "./SynapticCapacityExplorer";
 import { isMfceQuery, buildMfceScript } from "./MetricForecastEngine";
 import { isLbsgQuery, buildLbsgScript } from "./LlmBudgetSentinel";
+import { isTopObjectsQuery, buildTopObjectsScript } from "./TopObjectsExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1526,6 +1527,18 @@ export default function JarvisBrain() {
     if (isLbsgQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildLbsgScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F234: dispatches jarvis:top-objects-toggle + speaks top-ranked PageRank/centrality nodes brief;
+    // "top objects / top nodes / most influential / influential entities /
+    //  pagerank / graph rank / top ranked / who are the top / highest rank"
+    if (isTopObjectsQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTopObjectsScript();
+      window.dispatchEvent(new CustomEvent("jarvis:top-objects-toggle"));
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
