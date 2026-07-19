@@ -264,6 +264,7 @@ import MetricForecastEngine, { isMfceQuery, buildMfceScript } from '@/components
 import LlmBudgetSentinel, { isLbsgQuery, buildLbsgScript } from '@/components/cinematic/LlmBudgetSentinel';
 import TopObjectsExplorer, { isTopObjectsQuery, buildTopObjectsScript } from '@/components/cinematic/TopObjectsExplorer';
 import RunBuilderMonitor from '@/components/cinematic/RunBuilderMonitor';
+import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -952,6 +953,12 @@ function App() {
                 isRbldQuery+buildRbldScript wired JarvisBrain; ⊞ RBLD left:101040 zIndex:115;
                 "run builder/workflow runs/compiled runs/rbld/run monitor/workflow log" voice triggers */}
             <RunBuilderMonitor />
+            {/* F236: Agent Tool Registry — GET /v1/jarvis/agent/tools (60-s poll); full panel listing
+                every tool JARVIS can invoke with name/description/category; search + category filter tabs;
+                ▶ QUERY per tool → /v1/jarvis/agent/chat 2-sentence usage brief + TTS via jarvis:speak-dossier;
+                isToolRegistryQuery+buildToolRegistryScript wired JarvisBrain; ◈ ATR left:105600 zIndex:116;
+                "tool registry/agent tools/what tools/jarvis capabilities/available tools/atr" voice triggers */}
+            <AgentToolRegistry />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
