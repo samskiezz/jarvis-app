@@ -274,6 +274,7 @@ import InferenceSwarmMonitor from '@/components/cinematic/InferenceSwarmMonitor'
 import RitualDeckMonitor from '@/components/cinematic/RitualDeckMonitor';
 import GothamCaseBoard from '@/components/cinematic/GothamCaseBoard';
 import CodePulseMonitor from '@/components/cinematic/CodePulseMonitor';
+import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1043,6 +1044,8 @@ function App() {
                 "code pulse/approval queue/pending code/cpls/vs code bridge/
                  code approvals/code changes/approve code/pending approvals/code queue/editor bridge" */}
             <CodePulseMonitor />
+            {/* F246 VitalsDashboard — biometric health metrics from /v1/vitals/latest + /v1/vitals/trend */}
+            <VitalsDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -136,6 +136,7 @@ import { isIswmQuery, buildIswmScript } from "./InferenceSwarmMonitor";
 import { isRdckQuery, buildRdckScript } from "./RitualDeckMonitor";
 import { isGcbdQuery, buildGcbdScript } from "./GothamCaseBoard";
 import { isCplsQuery, buildCplsScript } from "./CodePulseMonitor";
+import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1654,6 +1655,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cpls-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCplsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isVtlsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:vtls-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildVtlsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
