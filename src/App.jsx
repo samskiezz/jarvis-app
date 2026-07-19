@@ -273,6 +273,7 @@ import InvestigationsBoard from '@/components/cinematic/InvestigationsBoard';
 import InferenceSwarmMonitor from '@/components/cinematic/InferenceSwarmMonitor';
 import RitualDeckMonitor from '@/components/cinematic/RitualDeckMonitor';
 import GothamCaseBoard from '@/components/cinematic/GothamCaseBoard';
+import CodePulseMonitor from '@/components/cinematic/CodePulseMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1035,6 +1036,13 @@ function App() {
                 "gotham cases/case board/open cases/gcbd/case management/case list/
                  high priority cases/case tracker/gotham tracker/case engine" voice triggers */}
             <GothamCaseBoard />
+            {/* F245 Code Pulse Monitor — polls /v1/codepulse/status (60s badge, red=pending, green=quiet)
+                + GET /v1/codepulse/pending; APPROVE/REJECT/EXPLAIN per item;
+                ▶ ASSESS → agent chat + TTS; isCplsQuery+buildCplsScript wired JarvisBrain;
+                ⚙ CPLS left:146640 zIndex:125;
+                "code pulse/approval queue/pending code/cpls/vs code bridge/
+                 code approvals/code changes/approve code/pending approvals/code queue/editor bridge" */}
+            <CodePulseMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
