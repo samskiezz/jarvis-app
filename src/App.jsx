@@ -266,6 +266,7 @@ import TopObjectsExplorer, { isTopObjectsQuery, buildTopObjectsScript } from '@/
 import RunBuilderMonitor from '@/components/cinematic/RunBuilderMonitor';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import DecisionLedgerMonitor from '@/components/cinematic/DecisionLedgerMonitor';
+import DataGovernanceMonitor, { isGovQuery as _isGovQuery, buildGovScript as _buildGovScript } from '@/components/cinematic/DataGovernanceMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -966,6 +967,16 @@ function App() {
                 isDlgrQuery+buildDlgrScript wired JarvisBrain; ⊟ DLGR left:110160 zIndex:117;
                 "decision ledger/dlgr/decisions/decision log/decision record/decision audit" voice triggers */}
             <DecisionLedgerMonitor />
+            {/* F238: Data Governance Monitor — parallel-fetches /v1/governance/purposes +
+                /v1/governance/retention + /v1/governance/due-for-deletion + /v1/governance/requests (90-s poll);
+                stat tiles (purposes/retention/overdue/pending); PURPOSES|RETENTION|OVERDUE|REQUESTS tab switcher + search;
+                PURPOSES: name/description/allowed-marks chips; RETENTION: type+TTL bar; OVERDUE: objects past TTL;
+                REQUESTS: subject-rights kind/status; ▶ ASSESS → agent chat + TTS;
+                isGovQuery+buildGovScript wired JarvisBrain; ◈ DSGOV left:114720 zIndex:118;
+                badge: red=overdue/pendingErase, amber=pendingRequests;
+                "data governance/governance monitor/retention policy/due for deletion/subject rights/
+                 dsgov/compliance monitor/overdue objects/data retention/gdpr/subject access/erase request" voice triggers */}
+            <DataGovernanceMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
