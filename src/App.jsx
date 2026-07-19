@@ -261,6 +261,7 @@ import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 import RunCorrelatorDashboard from '@/components/cinematic/RunCorrelatorDashboard';
 import SynapticCapacityExplorer, { isSynapticCapacityQuery, buildSynapticCapacityScript } from '@/components/cinematic/SynapticCapacityExplorer';
 import MetricForecastEngine, { isMfceQuery, buildMfceScript } from '@/components/cinematic/MetricForecastEngine';
+import LlmBudgetSentinel, { isLbsgQuery, buildLbsgScript } from '@/components/cinematic/LlmBudgetSentinel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -927,6 +928,17 @@ function App() {
                  predict metric/anomaly forecast/zscore forecast/forecast metrics/metric predictor" voice triggers;
                 jarvis:mfce-toggle event; 90-s auto-refresh */}
             <MetricForecastEngine />
+            {/* F233: LLM Budget Sentinel — ◉ LBSG button (left:96480, bottom:8, zIndex:114);
+                polls /v1/token-governor/spend_status (badge: red=ceiling_hit, amber=pct>=75) +
+                /v1/aip/providers; stat tiles (spent/cap/pct/providers); daily budget + archon
+                gauge bars; provider rows (id, model, configured status);
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS;
+                isLbsgQuery+buildLbsgScript wired in JarvisBrain;
+                "provider status/llm providers/token budget/daily budget/spend status/
+                 budget ceiling/llm spend/budget sentinel/which providers/model providers/
+                 provider health/archon budget/lbsg" voice triggers;
+                jarvis:lbsg-toggle event; 60-s auto-refresh */}
+            <LlmBudgetSentinel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

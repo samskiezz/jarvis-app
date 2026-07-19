@@ -123,6 +123,7 @@ import { isOpcmQuery, buildOpcmScript } from "./OpsCaseManager";
 import { isRcorQuery, buildRcorScript } from "./RunCorrelatorDashboard";
 import { isSynapticCapacityQuery, buildSynapticCapacityScript } from "./SynapticCapacityExplorer";
 import { isMfceQuery, buildMfceScript } from "./MetricForecastEngine";
+import { isLbsgQuery, buildLbsgScript } from "./LlmBudgetSentinel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1513,6 +1514,18 @@ export default function JarvisBrain() {
     if (isMfceQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildMfceScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // dispatches jarvis:lbsg-toggle + speaks daily budget + provider brief;
+    // "provider status / llm providers / token budget / daily budget /
+    //  spend status / budget ceiling / llm spend / budget sentinel /
+    //  which providers / model providers / provider health / archon budget / lbsg"
+    if (isLbsgQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLbsgScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
