@@ -283,6 +283,7 @@ import VpnControlPanel, { isVpnQuery, buildVpnScript } from '@/components/cinema
 import RemindersPanel, { isReminderQuery, buildReminderScript } from '@/components/cinematic/RemindersPanel';
 import ThoughtCompressorPanel, { isThoughtCompressorQuery, buildThoughtCompressorScript } from '@/components/cinematic/ThoughtCompressorPanel';
 import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
+import ProofPackLibrary, { isProofPackQuery, buildProofPackScript } from '@/components/cinematic/ProofPackLibrary';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1085,6 +1086,14 @@ function App() {
                 svcUp/svcTotal badge; crit-count badge; rose (#F43F5E) accent; zIndex:8995;
                 toggle: jarvis:ohsd-toggle; "ops health/ohsd/critical events/service health summary" */}
             <OpsHealthSummaryDrawer />
+            {/* F255 ProofPackLibrary — evidence packs via /v1/proofpack/list (90s poll);
+                expand → GET /v1/proofpack/{id}; EXPORT → POST /v1/proofpack/{id}/export;
+                stat tiles (total/w-spec/w-decisions/last-7d); ALL/RECENT tabs + search;
+                commit chip + body excerpt + meta chips (friction/dead_zone/risks/spec/decs);
+                ASSESS via agent chat + TTS; ◈ PPAK left:187680 zIndex:134;
+                isProofPackQuery+buildProofPackScript wired JarvisBrain;
+                "proof pack/evidence pack/ppak/pack list/evidence library/proof library/change evidence" */}
+            <ProofPackLibrary />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

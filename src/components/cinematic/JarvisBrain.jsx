@@ -145,6 +145,7 @@ import { isVpnQuery, buildVpnScript } from "./VpnControlPanel";
 import { isReminderQuery, buildReminderScript } from "./RemindersPanel";
 import { isThoughtCompressorQuery, buildThoughtCompressorScript } from "./ThoughtCompressorPanel";
 import { isOhsdQuery, buildOhsdScript } from "../overnight/OpsHealthSummaryDrawer";
+import { isProofPackQuery, buildProofPackScript } from "./ProofPackLibrary";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1744,6 +1745,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ohsd-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOhsdScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isProofPackQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ppak-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildProofPackScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
