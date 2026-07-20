@@ -288,6 +288,7 @@ import TemporalSeriesMonitor, { isTemporalSeriesQuery, buildTemporalSeriesScript
 import RevDbBrowser, { isRevdbQuery, buildRevdbScript } from '@/components/cinematic/RevDbBrowser';
 import SensorActivityMonitor, { isSnsrQuery, buildSnsrScript } from '@/components/cinematic/SensorActivityMonitor';
 import BrainResearchStudio, { isBrrsQuery, buildBrrsScript } from '@/components/cinematic/BrainResearchStudio';
+import MessagesCommsPanel, { isMsgsQuery, buildMsgsScript } from '@/components/cinematic/MessagesCommsPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1133,6 +1134,17 @@ function App() {
                 "brain research/research topic/research dossier/brrs/research studio/
                  what do we know about/find information about/research brief/knowledge research" */}
             <BrainResearchStudio />
+            {/* F260 MessagesCommsPanel — polls GET /v1/messages/recent?limit=50 (60s);
+                inline compose → POST /v1/messages/send {to, text, channel};
+                stat tiles (total/inbound/outbound/sent); ALL/IN/OUT filter tabs + text search;
+                per-message: direction chip + peer + text + age + status chip;
+                ASSESS via /v1/jarvis/agent/chat 2-sentence comms brief + TTS via jarvis:speak-dossier;
+                ✉ MSGS left:210480 bottom:8 zIndex:139; jarvis:msgs-toggle event;
+                isMsgsQuery+buildMsgsScript wired JarvisBrain;
+                amber badge=inbound count, green=clear; 60 s poll;
+                "messages/recent messages/msgs/comms/outbox/inbound messages/signal/
+                 chat log/message log/send message/msg inbox" */}
+            <MessagesCommsPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

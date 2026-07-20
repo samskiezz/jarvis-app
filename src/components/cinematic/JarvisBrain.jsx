@@ -150,6 +150,7 @@ import { isTemporalSeriesQuery, buildTemporalSeriesScript } from "./TemporalSeri
 import { isRevdbQuery, buildRevdbScript } from "./RevDbBrowser";
 import { isSnsrQuery, buildSnsrScript } from "./SensorActivityMonitor";
 import { isBrrsQuery, buildBrrsScript } from "./BrainResearchStudio";
+import { isMsgsQuery, buildMsgsScript } from "./MessagesCommsPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1794,6 +1795,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:brrs-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildBrrsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isMsgsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:msgs-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMsgsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
