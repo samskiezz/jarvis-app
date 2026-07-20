@@ -293,6 +293,7 @@ import LiveIntelInvestigationCorrelator, { isLiicQuery, buildLiicScript } from '
 import AnomalyDecisionCorrelator, { isAdcrQuery, buildAdcrScript } from '@/components/cinematic/AnomalyDecisionCorrelator';
 import AstroObservatoryPanel, { isAobsQuery, buildAobsScript } from '@/components/cinematic/AstroObservatoryPanel';
 import ScheduleActivityMonitor from '@/components/cinematic/ScheduleActivityMonitor';
+import VisionTrackingMonitor from '@/components/cinematic/VisionTrackingMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1201,6 +1202,19 @@ function App() {
                  activity feed/ops activity/audit feed/what's running/running jobs/enabled jobs"
                 voice triggers; mounted App.jsx; build EXIT:0. [2026-07-20] */}
             <ScheduleActivityMonitor />
+            {/* F265 VisionTrackingMonitor — polls GET /v1/vision/tracking/matches?limit=50 every
+                90 s (green badge=total match count, amber=db not found); stat tiles (total/home-poss%/
+                total-passes/loaded); match list with home vs away + possession split bar + pass count;
+                expand row → lazy GET /v1/vision/tracking/matches/{id} (summary: frames/tracks/players/
+                home+away players/avg ball speed) + GET /v1/vision/tracking/matches/{id}/frames?limit=200
+                (frame grid: frame_idx/home tracks/away tracks); ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence tactical tracking brief + TTS via jarvis:speak-dossier; ⊛ VTRK
+                left:233280 bottom:8 zIndex:144; jarvis:vtrk-toggle event;
+                isVtrkQuery+buildVtrkScript wired JarvisBrain;
+                "vision tracking/match tracks/player tracking/vtrk/tracking data/match analysis/
+                 frame tracks/tracking database/vision match/possession data/track players"
+                voice triggers; mounted App.jsx; build EXIT:0. [2026-07-20] */}
+            <VisionTrackingMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
