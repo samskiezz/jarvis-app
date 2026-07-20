@@ -292,6 +292,7 @@ import MessagesCommsPanel, { isMsgsQuery, buildMsgsScript } from '@/components/c
 import LiveIntelInvestigationCorrelator, { isLiicQuery, buildLiicScript } from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 import AnomalyDecisionCorrelator, { isAdcrQuery, buildAdcrScript } from '@/components/cinematic/AnomalyDecisionCorrelator';
 import AstroObservatoryPanel, { isAobsQuery, buildAobsScript } from '@/components/cinematic/AstroObservatoryPanel';
+import ScheduleActivityMonitor from '@/components/cinematic/ScheduleActivityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1187,6 +1188,19 @@ function App() {
                  where are the planets/aobs/space/orbit/astronomy/planet tracker" voice triggers;
                 mounted App.jsx; build EXIT:0. [2026-07-20] */}
             <AstroObservatoryPanel />
+            {/* F264 ScheduleActivityMonitor — polls GET /v1/schedules every 60 s (pipeline job registry:
+                job_name/fn_key/interval_s/enabled/last_run_ts) + GET /v1/activity every 90 s
+                (unified notes+audit feed); SCHEDULES|ACTIVITY tab switcher + text search;
+                SCHEDULES: per-job enable/disable toggle via POST /v1/schedules/{name}/toggle;
+                registered job keys chip list; ACTIVITY: resource_type chip + author + age + body;
+                stat tiles (schedules/enabled/disabled/activity); badge green=enabled count,
+                amber=any disabled; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops brief + TTS
+                via jarvis:speak-dossier; ⏱ SCHED left:228720 bottom:8 zIndex:143;
+                jarvis:sched-toggle event; isSchedQuery+buildSchedScript wired JarvisBrain;
+                "schedule/job schedule/sched/pipeline schedule/scheduled job/job registry/
+                 activity feed/ops activity/audit feed/what's running/running jobs/enabled jobs"
+                voice triggers; mounted App.jsx; build EXIT:0. [2026-07-20] */}
+            <ScheduleActivityMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
