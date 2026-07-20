@@ -284,6 +284,7 @@ import RemindersPanel, { isReminderQuery, buildReminderScript } from '@/componen
 import ThoughtCompressorPanel, { isThoughtCompressorQuery, buildThoughtCompressorScript } from '@/components/cinematic/ThoughtCompressorPanel';
 import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
 import ProofPackLibrary, { isProofPackQuery, buildProofPackScript } from '@/components/cinematic/ProofPackLibrary';
+import TemporalSeriesMonitor, { isTemporalSeriesQuery, buildTemporalSeriesScript } from '@/components/cinematic/TemporalSeriesMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1094,6 +1095,13 @@ function App() {
                 isProofPackQuery+buildProofPackScript wired JarvisBrain;
                 "proof pack/evidence pack/ppak/pack list/evidence library/proof library/change evidence" */}
             <ProofPackLibrary />
+            {/* F256 TemporalSeriesMonitor — POSTs /v1/temporal/timeline (90s poll) for merged threshold-event feed;
+                expand series → GET /v1/temporal/patterns for z-score anomalies + volatility windows;
+                stat tiles (events/series/spikes/max-z); ALL/SPIKE/CROSSING filter tabs + series search;
+                ASSESS via agent chat + TTS; ◷ TMPRL left:192240 zIndex:135;
+                isTemporalSeriesQuery+buildTemporalSeriesScript wired JarvisBrain;
+                "temporal series/series monitor/timeline events/z score/threshold crossing/tmprl/series anomaly" */}
+            <TemporalSeriesMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
