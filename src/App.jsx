@@ -286,6 +286,7 @@ import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawe
 import ProofPackLibrary, { isProofPackQuery, buildProofPackScript } from '@/components/cinematic/ProofPackLibrary';
 import TemporalSeriesMonitor, { isTemporalSeriesQuery, buildTemporalSeriesScript } from '@/components/cinematic/TemporalSeriesMonitor';
 import RevDbBrowser, { isRevdbQuery, buildRevdbScript } from '@/components/cinematic/RevDbBrowser';
+import SensorActivityMonitor, { isSnsrQuery, buildSnsrScript } from '@/components/cinematic/SensorActivityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1110,6 +1111,15 @@ function App() {
                 isRevdbQuery+buildRevdbScript wired JarvisBrain;
                 "revision history/knowledge commits/revdb/rvdb/commit history/knowledge branches" */}
             <RevDbBrowser />
+            {/* F258 SensorActivityMonitor — parallel-polls GET /v1/sensors/status (60s poll)
+                + GET /v1/sensors/recent?window_s=60; stat tiles (buffered/activity/peak-accel/audio);
+                activity badge colour-coded (still/walking/running/vehicle/high_motion/no_data);
+                RMS+peak accel bars + peak rotation bar + buffer fill bar;
+                IMU source chip + last-seen age; audio classifier availability chip;
+                ASSESS via agent chat + TTS; ⊙ SNSR left:201360 zIndex:137;
+                isSnsrQuery+buildSnsrScript wired JarvisBrain;
+                "sensors/imu/motion sensor/sensor activity/sensor monitor/snsr/device motion" */}
+            <SensorActivityMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
