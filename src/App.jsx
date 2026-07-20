@@ -287,6 +287,7 @@ import ProofPackLibrary, { isProofPackQuery, buildProofPackScript } from '@/comp
 import TemporalSeriesMonitor, { isTemporalSeriesQuery, buildTemporalSeriesScript } from '@/components/cinematic/TemporalSeriesMonitor';
 import RevDbBrowser, { isRevdbQuery, buildRevdbScript } from '@/components/cinematic/RevDbBrowser';
 import SensorActivityMonitor, { isSnsrQuery, buildSnsrScript } from '@/components/cinematic/SensorActivityMonitor';
+import BrainResearchStudio, { isBrrsQuery, buildBrrsScript } from '@/components/cinematic/BrainResearchStudio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1120,6 +1121,18 @@ function App() {
                 isSnsrQuery+buildSnsrScript wired JarvisBrain;
                 "sensors/imu/motion sensor/sensor activity/sensor monitor/snsr/device motion" */}
             <SensorActivityMonitor />
+            {/* F259 BrainResearchStudio — polls GET /v1/brain/catalog (90s, stat tiles: total/kinds/recent/orphans);
+                inline topic input → POST /v1/brain/research {topic} → findings list (source chip + snippet + url);
+                related notes via GET /v1/brain/notes?q=<topic>; CATALOG|RESEARCH tab switcher;
+                CATALOG: per-kind count bars + recent notes + orphan list;
+                RESEARCH: findings per source (wikipedia/hackernews/arxiv/crossref/duckduckgo) + related brain notes;
+                ASSESS via /v1/jarvis/agent/chat 2-sentence knowledge brief + TTS via jarvis:speak-dossier;
+                ⬡ BRRS left:205920 bottom:8 zIndex:138; jarvis:brrs-toggle event;
+                isBrrsQuery+buildBrrsScript wired JarvisBrain;
+                amber badge=orphan count, green badge=total note count; 90 s poll;
+                "brain research/research topic/research dossier/brrs/research studio/
+                 what do we know about/find information about/research brief/knowledge research" */}
+            <BrainResearchStudio />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
