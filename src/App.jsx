@@ -294,6 +294,7 @@ import AnomalyDecisionCorrelator, { isAdcrQuery, buildAdcrScript } from '@/compo
 import AstroObservatoryPanel, { isAobsQuery, buildAobsScript } from '@/components/cinematic/AstroObservatoryPanel';
 import ScheduleActivityMonitor from '@/components/cinematic/ScheduleActivityMonitor';
 import VisionTrackingMonitor from '@/components/cinematic/VisionTrackingMonitor';
+import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1215,6 +1216,8 @@ function App() {
                  frame tracks/tracking database/vision match/possession data/track players"
                 voice triggers; mounted App.jsx; build EXIT:0. [2026-07-20] */}
             <VisionTrackingMonitor />
+            {/* F31 EntityCountPulse — ◈ PULSE button (left:540, bottom:18); parallel-polls all 6 /entities/* endpoints every 60 s; live count per type with mini proportional bar and delta badge (↑/↓); total entity count footer; "entity pulse"/"entity counts"/"how many entities" voice trigger */}
+            <EntityCountPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
