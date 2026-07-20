@@ -301,6 +301,7 @@ import ModeMixerControl, { isMxrpQuery, buildMxrpScript } from '@/components/cin
 import ServiceFleetMonitor, { isFleetQuery, buildFleetScript } from '@/components/cinematic/ServiceFleetMonitor';
 import GeoIntelPanel, { isGeoQuery, buildGeoScript } from '@/components/cinematic/GeoIntelPanel';
 import MusicStudio, { isMgenQuery, buildMgenScript } from '@/components/cinematic/MusicStudio';
+import PanicKeyControlPanel, { isPkctlQuery, buildPkctlScript } from '@/components/cinematic/PanicKeyControlPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1266,6 +1267,14 @@ function App() {
                 jarvis:mgen-toggle; isMgenQuery+buildMgenScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <MusicStudio />
+            {/* F273 PanicKeyControlPanel — polls GET /v1/panickey/active (60 s poll) + GET /v1/panickey/snapshots on open;
+                POST /v1/panickey/snapshot (create), POST /v1/panickey/snapshot/{id}/restore, POST /v1/panickey/safemode;
+                stat tiles (mode/services/calls-1h/active-jobs); ACTIVE|SNAPSHOTS tabs + search;
+                ACTIVE: mode chip + per-service status + events + jobs; SNAPSHOTS: label/mode/age + RESTORE;
+                ASSESS brief + TTS; ◈ PKCTL left:265200 bottom:8 zIndex:151;
+                jarvis:pkctl-toggle; isPkctlQuery+buildPkctlScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <PanicKeyControlPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -162,6 +162,7 @@ import { isMxrpQuery, buildMxrpScript } from "./ModeMixerControl";
 import { isFleetQuery, buildFleetScript } from "./ServiceFleetMonitor";
 import { isGeoQuery, buildGeoScript } from "./GeoIntelPanel";
 import { isMgenQuery, buildMgenScript } from "./MusicStudio";
+import { isPkctlQuery, buildPkctlScript } from "./PanicKeyControlPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1909,6 +1910,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new Event("jarvis:mgen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildMgenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isPkctlQuery(q)) {
+      window.dispatchEvent(new Event("jarvis:pkctl-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildPkctlScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
