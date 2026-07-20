@@ -279,6 +279,7 @@ import IntentInbox from '@/components/cinematic/IntentInbox';
 import FrictionMapMonitor from '@/components/cinematic/FrictionMapMonitor';
 import ReportsLibrary, { isRlibQuery, buildRlibScript } from '@/components/cinematic/ReportsLibrary';
 import SpecForgeMonitor, { isSpecForgeQuery, buildSpecForgeScript } from '@/components/cinematic/SpecForgeMonitor';
+import VpnControlPanel, { isVpnQuery, buildVpnScript } from '@/components/cinematic/VpnControlPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1058,6 +1059,12 @@ function App() {
             <ReportsLibrary />
             {/* F250 SpecForgeMonitor — implementation specs from /v1/spec/list + /v1/spec/{id} + /v1/spec/{id}/approve */}
             <SpecForgeMonitor />
+            {/* F251 VpnControlPanel — WireGuard status + toggle from /v1/vpn/status + POST /v1/vpn/toggle;
+                installed/active/ifaces/peers tiles; per-interface ▲ UP / ▼ DOWN controls;
+                ▶ ASSESS → agent chat + TTS; isVpnQuery+buildVpnScript wired JarvisBrain;
+                ◈ VPN left:174000 zIndex:131;
+                "vpn/wireguard/vpn status/tunnel/vpn control/wg tunnel/vpn peers/vpn panel" */}
+            <VpnControlPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
