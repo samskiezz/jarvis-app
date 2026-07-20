@@ -300,6 +300,7 @@ import SourceConnectorRegistry, { isSregQuery, buildSregScript } from '@/compone
 import ModeMixerControl, { isMxrpQuery, buildMxrpScript } from '@/components/cinematic/ModeMixerControl';
 import ServiceFleetMonitor, { isFleetQuery, buildFleetScript } from '@/components/cinematic/ServiceFleetMonitor';
 import GeoIntelPanel, { isGeoQuery, buildGeoScript } from '@/components/cinematic/GeoIntelPanel';
+import MusicStudio, { isMgenQuery, buildMgenScript } from '@/components/cinematic/MusicStudio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1258,6 +1259,13 @@ function App() {
                 jarvis:geo-toggle; isGeoQuery+buildGeoScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <GeoIntelPanel />
+            {/* F272 MusicStudio — GET /v1/music/status (60s poll) + GET /v1/music/bank;
+                POST /v1/music/generate {prompt, duration_s}; stat tiles (status/backend/bank/generated);
+                BANK tab: loop list with size + open-link; GENERATE tab: prompt + duration slider;
+                ASSESS brief + TTS; ♪ MGEN left:260640 bottom:8 zIndex:150;
+                jarvis:mgen-toggle; isMgenQuery+buildMgenScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <MusicStudio />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
