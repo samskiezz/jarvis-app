@@ -296,6 +296,7 @@ import ScheduleActivityMonitor from '@/components/cinematic/ScheduleActivityMoni
 import VisionTrackingMonitor from '@/components/cinematic/VisionTrackingMonitor';
 import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import AssuranceAutopilotPanel, { isApltQuery, buildApltScript } from '@/components/cinematic/AssuranceAutopilotPanel';
+import SourceConnectorRegistry, { isSregQuery, buildSregScript } from '@/components/cinematic/SourceConnectorRegistry';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1225,6 +1226,13 @@ function App() {
                 jarvis:aplt-toggle; isApltQuery+buildApltScript wired into JarvisBrain.jsx;
                 "assurance/autopilot/mission control/proposal queue/system roadmap/aplt" triggers */}
             <AssuranceAutopilotPanel />
+            {/* F268 SourceConnectorRegistry — polls GET /v1/sources every 60 s (green badge=count,
+                amber=failed runs); stat tiles (total/kinds/run-ok/run-fail); ALL + kind filter tabs
+                + text search; expand row → lazy GET /v1/sources/{id}/runs for run history;
+                ▶ RUN → POST /v1/sources/{id}/run; ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
+                ◈ SREG left:242400 bottom:8 zIndex:146; jarvis:sreg-toggle;
+                isSregQuery+buildSregScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <SourceConnectorRegistry />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

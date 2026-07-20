@@ -157,6 +157,7 @@ import { isAobsQuery, buildAobsScript } from "./AstroObservatoryPanel";
 import { isSchedQuery, buildSchedScript } from "./ScheduleActivityMonitor";
 import { isVtrkQuery, buildVtrkScript } from "./VisionTrackingMonitor";
 import { isApltQuery, buildApltScript } from "./AssuranceAutopilotPanel";
+import { isSregQuery, buildSregScript } from "./SourceConnectorRegistry";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1863,6 +1864,14 @@ export default function JarvisBrain() {
     if (isApltQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildApltScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSregQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSregScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
