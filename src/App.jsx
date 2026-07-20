@@ -280,6 +280,7 @@ import FrictionMapMonitor from '@/components/cinematic/FrictionMapMonitor';
 import ReportsLibrary, { isRlibQuery, buildRlibScript } from '@/components/cinematic/ReportsLibrary';
 import SpecForgeMonitor, { isSpecForgeQuery, buildSpecForgeScript } from '@/components/cinematic/SpecForgeMonitor';
 import VpnControlPanel, { isVpnQuery, buildVpnScript } from '@/components/cinematic/VpnControlPanel';
+import RemindersPanel, { isReminderQuery, buildReminderScript } from '@/components/cinematic/RemindersPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1065,6 +1066,12 @@ function App() {
                 ◈ VPN left:174000 zIndex:131;
                 "vpn/wireguard/vpn status/tunnel/vpn control/wg tunnel/vpn peers/vpn panel" */}
             <VpnControlPanel />
+            {/* F252 RemindersPanel — durable reminders via /reminders/list + /reminders/save + /reminders/done/{id} + DELETE /reminders/{id};
+                active/total/notes/tasks tiles; inline capture form; ALL/NOTES/TASKS filter tabs;
+                ✓ DONE + ✕ DELETE per row; ▶ ASSESS → agent chat + TTS;
+                ◎ RMNDR left:178560 zIndex:132; isReminderQuery+buildReminderScript wired JarvisBrain;
+                "reminders/my reminders/reminder list/active reminders/rmndr/add reminder/note to self" */}
+            <RemindersPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
