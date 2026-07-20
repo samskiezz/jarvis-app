@@ -299,6 +299,7 @@ import AssuranceAutopilotPanel, { isApltQuery, buildApltScript } from '@/compone
 import SourceConnectorRegistry, { isSregQuery, buildSregScript } from '@/components/cinematic/SourceConnectorRegistry';
 import ModeMixerControl, { isMxrpQuery, buildMxrpScript } from '@/components/cinematic/ModeMixerControl';
 import ServiceFleetMonitor, { isFleetQuery, buildFleetScript } from '@/components/cinematic/ServiceFleetMonitor';
+import GeoIntelPanel, { isGeoQuery, buildGeoScript } from '@/components/cinematic/GeoIntelPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1250,6 +1251,13 @@ function App() {
                 jarvis:fleet-toggle; isFleetQuery+buildFleetScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <ServiceFleetMonitor />
+            {/* F271 GeoIntelPanel — parallel-fetches /v1/geo/objects (poll 90 s) +
+                /v1/geo/layers + /v1/geo/geofences on open; lazy /v1/geo/layers/{id}/features;
+                stat tiles (objects/located/layers/geofences); OBJECTS|LAYERS|FENCES tabs + search;
+                ASSESS brief + TTS; ◈ GEO left:256080 bottom:8 zIndex:149;
+                jarvis:geo-toggle; isGeoQuery+buildGeoScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <GeoIntelPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
