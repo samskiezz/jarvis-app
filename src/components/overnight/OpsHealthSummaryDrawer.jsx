@@ -9,6 +9,51 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { SHELL as S } from "@/domain/colors";
 import { kimiClient } from "@/api/kimiClient";
+import { apiBase } from "@/api/cinematicDataAdapters";
+
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+
+const OHSD_RE =
+  /\b(ops health|ops health summary|service health summary|ohsd|ops status|critical events|service status summary|health summary|system services)\b/i;
+
+export function isOhsdQuery(t) {
+  return OHSD_RE.test(t || "");
+}
+
+export async function buildOhsdScript() {
+  try {
+    const [statusRes, eventsRes] = await Promise.all([
+      fetch(`${apiBase()}/v1/jarvis/system/status`, {
+        headers: { Authorization: `Bearer ${API_KEY}` },
+      }),
+      fetch(`${apiBase()}/v1/ops/events`, {
+        headers: { Authorization: `Bearer ${API_KEY}` },
+      }),
+    ]);
+    const status = await statusRes.json();
+    const evData = await eventsRes.json();
+    const services = status?.services ?? [];
+    const events = Array.isArray(evData)
+      ? evData
+      : (evData?.items ?? evData?.events ?? evData?.results ?? []);
+    const svcUp = services.filter((s) => {
+      const st = (s.status || s.state || "").toLowerCase();
+      return st === "ok" || st === "online" || st === "healthy";
+    }).length;
+    const critCount = events.filter(
+      (e) => (e.severity ?? e.payload?.severity ?? e.level ?? 0) >= 70
+    ).length;
+    const allUp = svcUp === services.length && services.length > 0;
+    return (
+      `Ops health summary: ${svcUp} of ${services.length} service${services.length !== 1 ? "s" : ""} are up. ` +
+      `${critCount} critical event${critCount !== 1 ? "s" : ""} detected in the ops stream. ` +
+      (critCount > 0 ? "Immediate attention recommended." : allUp ? "All services operational." : "Check service status for details.")
+    );
+  } catch {
+    return "Unable to reach the ops health endpoints at this time.";
+  }
+}
 
 const POLL_STATUS_MS = 60_000;
 const POLL_EVENTS_MS = 30_000;
@@ -85,6 +130,12 @@ export default function OpsHealthSummaryDrawer() {
       clearTimeout(eventsTimer.current);
     };
   }, [open, eventsTick]);
+
+  useEffect(() => {
+    const onToggle = () => setOpen((v) => !v);
+    window.addEventListener("jarvis:ohsd-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:ohsd-toggle", onToggle);
+  }, []);
 
   const services = statusData?.services ?? [];
   const rawEvents = Array.isArray(eventsData)

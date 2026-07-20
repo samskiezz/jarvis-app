@@ -282,6 +282,7 @@ import SpecForgeMonitor, { isSpecForgeQuery, buildSpecForgeScript } from '@/comp
 import VpnControlPanel, { isVpnQuery, buildVpnScript } from '@/components/cinematic/VpnControlPanel';
 import RemindersPanel, { isReminderQuery, buildReminderScript } from '@/components/cinematic/RemindersPanel';
 import ThoughtCompressorPanel, { isThoughtCompressorQuery, buildThoughtCompressorScript } from '@/components/cinematic/ThoughtCompressorPanel';
+import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1079,6 +1080,11 @@ function App() {
                 ⬢ TCMPR left:183120 zIndex:133; isThoughtCompressorQuery+buildThoughtCompressorScript wired JarvisBrain;
                 "thought compressor/memory packs/compress/pack list/knowledge packs/tcmpr/compress text/compress idea" */}
             <ThoughtCompressorPanel />
+            {/* F254 OpsHealthSummaryDrawer — right-edge slide-in drawer; polls /v1/jarvis/system/status (60s)
+                + /v1/ops/events (30s); 2-col service tiles (green/amber/rose); critical events list (sev≥70);
+                svcUp/svcTotal badge; crit-count badge; rose (#F43F5E) accent; zIndex:8995;
+                toggle: jarvis:ohsd-toggle; "ops health/ohsd/critical events/service health summary" */}
+            <OpsHealthSummaryDrawer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
