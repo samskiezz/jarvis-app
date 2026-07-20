@@ -298,6 +298,7 @@ import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import AssuranceAutopilotPanel, { isApltQuery, buildApltScript } from '@/components/cinematic/AssuranceAutopilotPanel';
 import SourceConnectorRegistry, { isSregQuery, buildSregScript } from '@/components/cinematic/SourceConnectorRegistry';
 import ModeMixerControl, { isMxrpQuery, buildMxrpScript } from '@/components/cinematic/ModeMixerControl';
+import ServiceFleetMonitor, { isFleetQuery, buildFleetScript } from '@/components/cinematic/ServiceFleetMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1241,6 +1242,14 @@ function App() {
                 ◈ MXRP left:246960 bottom:8 zIndex:147; jarvis:mxrp-toggle;
                 isMxrpQuery+buildMxrpScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <ModeMixerControl />
+            {/* F270 ServiceFleetMonitor — parallel-polls GET /v1/registry/services +
+                GET /v1/pm2 every 60 s; stat tiles (registered/alive/pm2-procs/restarts);
+                REGISTRY|FLEET tabs + search; REGISTRY: service id/name/role/status/port;
+                FLEET: process cpu/mem/restarts/uptime + RESTART via POST /v1/pm2/{name}/restart;
+                ASSESS brief + TTS; ◈ FLEET left:251520 bottom:8 zIndex:148;
+                jarvis:fleet-toggle; isFleetQuery+buildFleetScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <ServiceFleetMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -159,6 +159,7 @@ import { isVtrkQuery, buildVtrkScript } from "./VisionTrackingMonitor";
 import { isApltQuery, buildApltScript } from "./AssuranceAutopilotPanel";
 import { isSregQuery, buildSregScript } from "./SourceConnectorRegistry";
 import { isMxrpQuery, buildMxrpScript } from "./ModeMixerControl";
+import { isFleetQuery, buildFleetScript } from "./ServiceFleetMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1881,6 +1882,14 @@ export default function JarvisBrain() {
     if (isMxrpQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildMxrpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isFleetQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildFleetScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
