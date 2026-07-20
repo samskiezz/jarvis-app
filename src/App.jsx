@@ -297,6 +297,7 @@ import VisionTrackingMonitor from '@/components/cinematic/VisionTrackingMonitor'
 import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import AssuranceAutopilotPanel, { isApltQuery, buildApltScript } from '@/components/cinematic/AssuranceAutopilotPanel';
 import SourceConnectorRegistry, { isSregQuery, buildSregScript } from '@/components/cinematic/SourceConnectorRegistry';
+import ModeMixerControl, { isMxrpQuery, buildMxrpScript } from '@/components/cinematic/ModeMixerControl';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1233,6 +1234,13 @@ function App() {
                 ◈ SREG left:242400 bottom:8 zIndex:146; jarvis:sreg-toggle;
                 isSregQuery+buildSregScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <SourceConnectorRegistry />
+            {/* F269 ModeMixerControl — polls GET /v1/mode/active every 60 s;
+                GET /v1/mode/profiles on open; POST /v1/mode/apply/{id} to switch;
+                stat tiles (presets/custom/autonomy/active); PRESETS|CUSTOM tabs + search;
+                per-profile strictness+autonomy bars + APPLY button; ASSESS brief + TTS;
+                ◈ MXRP left:246960 bottom:8 zIndex:147; jarvis:mxrp-toggle;
+                isMxrpQuery+buildMxrpScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <ModeMixerControl />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
