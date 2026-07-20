@@ -285,6 +285,7 @@ import ThoughtCompressorPanel, { isThoughtCompressorQuery, buildThoughtCompresso
 import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
 import ProofPackLibrary, { isProofPackQuery, buildProofPackScript } from '@/components/cinematic/ProofPackLibrary';
 import TemporalSeriesMonitor, { isTemporalSeriesQuery, buildTemporalSeriesScript } from '@/components/cinematic/TemporalSeriesMonitor';
+import RevDbBrowser, { isRevdbQuery, buildRevdbScript } from '@/components/cinematic/RevDbBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1102,6 +1103,13 @@ function App() {
                 isTemporalSeriesQuery+buildTemporalSeriesScript wired JarvisBrain;
                 "temporal series/series monitor/timeline events/z score/threshold crossing/tmprl/series anomaly" */}
             <TemporalSeriesMonitor />
+            {/* F257 RevDbBrowser — GET /v1/revdb/history (90s poll) + GET /v1/revdb/branches;
+                stat tiles (commits/branches/actors/latest-actor); HISTORY|BRANCHES tabs + search;
+                expand commit → change list (op/kind/object_id); branch rows → name + tip commit chip;
+                ASSESS via agent chat + TTS; ◬ RVDB left:196800 zIndex:136;
+                isRevdbQuery+buildRevdbScript wired JarvisBrain;
+                "revision history/knowledge commits/revdb/rvdb/commit history/knowledge branches" */}
+            <RevDbBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
