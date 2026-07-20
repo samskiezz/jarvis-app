@@ -153,6 +153,7 @@ import { isBrrsQuery, buildBrrsScript } from "./BrainResearchStudio";
 import { isMsgsQuery, buildMsgsScript } from "./MessagesCommsPanel";
 import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
 import { isAdcrQuery, buildAdcrScript } from "./AnomalyDecisionCorrelator";
+import { isAobsQuery, buildAobsScript } from "./AstroObservatoryPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1824,6 +1825,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:adcr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAdcrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isAobsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aobs-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAobsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

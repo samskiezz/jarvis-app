@@ -291,6 +291,7 @@ import BrainResearchStudio, { isBrrsQuery, buildBrrsScript } from '@/components/
 import MessagesCommsPanel, { isMsgsQuery, buildMsgsScript } from '@/components/cinematic/MessagesCommsPanel';
 import LiveIntelInvestigationCorrelator, { isLiicQuery, buildLiicScript } from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 import AnomalyDecisionCorrelator, { isAdcrQuery, buildAdcrScript } from '@/components/cinematic/AnomalyDecisionCorrelator';
+import AstroObservatoryPanel, { isAobsQuery, buildAobsScript } from '@/components/cinematic/AstroObservatoryPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1173,6 +1174,19 @@ function App() {
                  orphan anomaly/linked anomaly/anomaly governance/correlated anomaly/
                  anomaly coverage" */}
             <AnomalyDecisionCorrelator />
+            {/* F263 AstroObservatoryPanel — polls /v1/astro/planets every 300 s (live RA/Dec/AU);
+                fetches /v1/astro/stars on mount (J2000 catalogue); lazy-fetches /v1/astro/neo
+                (Keplerian NEO close-approach MOID + risk) on NEO tab switch; stat tiles
+                (planets/stars/NEO-MOID/engine); PLANETS|STARS|NEO tab switcher; PLANETS: ranked
+                by AU with distance bar; STARS: magnitude-sorted J2000 catalogue; NEO: orbit params
+                + MOID + risk chip; degraded-mode banner when astropy unavailable; badge
+                green=live/amber=degraded; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence astro brief
+                + TTS via jarvis:speak-dossier; ◉ AOBS left:224160 bottom:8 zIndex:142;
+                jarvis:aobs-toggle event; isAobsQuery+buildAobsScript wired JarvisBrain;
+                "astro/planets/solar system/star catalog/neo/meteoroid/planet positions/
+                 where are the planets/aobs/space/orbit/astronomy/planet tracker" voice triggers;
+                mounted App.jsx; build EXIT:0. [2026-07-20] */}
+            <AstroObservatoryPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
