@@ -281,6 +281,7 @@ import ReportsLibrary, { isRlibQuery, buildRlibScript } from '@/components/cinem
 import SpecForgeMonitor, { isSpecForgeQuery, buildSpecForgeScript } from '@/components/cinematic/SpecForgeMonitor';
 import VpnControlPanel, { isVpnQuery, buildVpnScript } from '@/components/cinematic/VpnControlPanel';
 import RemindersPanel, { isReminderQuery, buildReminderScript } from '@/components/cinematic/RemindersPanel';
+import ThoughtCompressorPanel, { isThoughtCompressorQuery, buildThoughtCompressorScript } from '@/components/cinematic/ThoughtCompressorPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1072,6 +1073,12 @@ function App() {
                 ◎ RMNDR left:178560 zIndex:132; isReminderQuery+buildReminderScript wired JarvisBrain;
                 "reminders/my reminders/reminder list/active reminders/rmndr/add reminder/note to self" */}
             <RemindersPanel />
+            {/* F253 ThoughtCompressorPanel — memory packs via /v1/compress/list + /v1/compress/create + /v1/compress/{id} + /v1/compress/{id}/refresh;
+                total/text/note/url tiles; inline compress form (text+source_type); ALL/TEXT/NOTE/URL filter tabs;
+                expand row → short_summary + key_facts + next_actions + ↺ REFRESH; ▶ ASSESS → agent chat + TTS;
+                ⬢ TCMPR left:183120 zIndex:133; isThoughtCompressorQuery+buildThoughtCompressorScript wired JarvisBrain;
+                "thought compressor/memory packs/compress/pack list/knowledge packs/tcmpr/compress text/compress idea" */}
+            <ThoughtCompressorPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -143,6 +143,7 @@ import { isRlibQuery, buildRlibScript } from "./ReportsLibrary";
 import { isSpecForgeQuery, buildSpecForgeScript } from "./SpecForgeMonitor";
 import { isVpnQuery, buildVpnScript } from "./VpnControlPanel";
 import { isReminderQuery, buildReminderScript } from "./RemindersPanel";
+import { isThoughtCompressorQuery, buildThoughtCompressorScript } from "./ThoughtCompressorPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1724,6 +1725,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rmndr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildReminderScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isThoughtCompressorQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tcmpr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildThoughtCompressorScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
