@@ -289,6 +289,7 @@ import RevDbBrowser, { isRevdbQuery, buildRevdbScript } from '@/components/cinem
 import SensorActivityMonitor, { isSnsrQuery, buildSnsrScript } from '@/components/cinematic/SensorActivityMonitor';
 import BrainResearchStudio, { isBrrsQuery, buildBrrsScript } from '@/components/cinematic/BrainResearchStudio';
 import MessagesCommsPanel, { isMsgsQuery, buildMsgsScript } from '@/components/cinematic/MessagesCommsPanel';
+import LiveIntelInvestigationCorrelator, { isLiicQuery, buildLiicScript } from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1145,6 +1146,19 @@ function App() {
                 "messages/recent messages/msgs/comms/outbox/inbound messages/signal/
                  chat log/message log/send message/msg inbox" */}
             <MessagesCommsPanel />
+            {/* F261 LiveIntelInvestigationCorrelator — parallel-fetches /functions/getLiveIntel
+                (quakes/crypto/FX) + /v1/investigations every 5 min; keyword-correlates seismic
+                place names, crypto tickers, FX pairs against investigation titles/descriptions;
+                FLAGGED vs CLEAR stat tiles (events/cases/flagged/clear); ALL/FLAGGED/CLEAR filter
+                tabs + text search; expand investigation → matched event chips per kind
+                (QUAKE=red/CRYPTO=purple/FX=green); amber badge on flagged count;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence correlation brief + TTS via jarvis:speak-dossier;
+                ⊕ LIIC left:215040 bottom:8 zIndex:140; jarvis:liic-toggle event;
+                isLiicQuery+buildLiicScript wired JarvisBrain;
+                "live intel correlator/liic/investigation alert/world events investigations/
+                 quake cases/intel case match/flagged investigations/world alert cases/
+                 correlate investigations" */}
+            <LiveIntelInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
