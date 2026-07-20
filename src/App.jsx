@@ -290,6 +290,7 @@ import SensorActivityMonitor, { isSnsrQuery, buildSnsrScript } from '@/component
 import BrainResearchStudio, { isBrrsQuery, buildBrrsScript } from '@/components/cinematic/BrainResearchStudio';
 import MessagesCommsPanel, { isMsgsQuery, buildMsgsScript } from '@/components/cinematic/MessagesCommsPanel';
 import LiveIntelInvestigationCorrelator, { isLiicQuery, buildLiicScript } from '@/components/cinematic/LiveIntelInvestigationCorrelator';
+import AnomalyDecisionCorrelator, { isAdcrQuery, buildAdcrScript } from '@/components/cinematic/AnomalyDecisionCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1159,6 +1160,19 @@ function App() {
                  quake cases/intel case match/flagged investigations/world alert cases/
                  correlate investigations" */}
             <LiveIntelInvestigationCorrelator />
+            {/* F262 AnomalyDecisionCorrelator — parallel-fetches /v1/jarvis/analytics/anomalies?limit=30
+                + /v1/decision/list?limit=50 every 90 s; keyword-correlates each anomaly's metric
+                name against decision titles/body_md to surface LINKED vs ORPHAN anomalies;
+                stat tiles (anomalies/decisions/linked/orphan); ALL/LINKED/ORPHAN filter tabs +
+                metric-name search; expand anomaly → matched decision chips with quality score bars;
+                badge red=high-severity orphans, amber=any orphans;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier;
+                ⊠ ADCR left:219600 bottom:8 zIndex:141; jarvis:adcr-toggle event;
+                isAdcrQuery+buildAdcrScript wired JarvisBrain;
+                "anomaly decision/decision correlator/adcr/metric anomaly decision/
+                 orphan anomaly/linked anomaly/anomaly governance/correlated anomaly/
+                 anomaly coverage" */}
+            <AnomalyDecisionCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

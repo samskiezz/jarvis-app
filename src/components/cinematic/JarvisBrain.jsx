@@ -152,6 +152,7 @@ import { isSnsrQuery, buildSnsrScript } from "./SensorActivityMonitor";
 import { isBrrsQuery, buildBrrsScript } from "./BrainResearchStudio";
 import { isMsgsQuery, buildMsgsScript } from "./MessagesCommsPanel";
 import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
+import { isAdcrQuery, buildAdcrScript } from "./AnomalyDecisionCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1814,6 +1815,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:liic-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLiicScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isAdcrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:adcr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAdcrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
