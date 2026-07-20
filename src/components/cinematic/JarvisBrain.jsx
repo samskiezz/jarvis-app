@@ -156,6 +156,7 @@ import { isAdcrQuery, buildAdcrScript } from "./AnomalyDecisionCorrelator";
 import { isAobsQuery, buildAobsScript } from "./AstroObservatoryPanel";
 import { isSchedQuery, buildSchedScript } from "./ScheduleActivityMonitor";
 import { isVtrkQuery, buildVtrkScript } from "./VisionTrackingMonitor";
+import { isApltQuery, buildApltScript } from "./AssuranceAutopilotPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1854,6 +1855,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:vtrk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = buildVtrkScript([]);
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isApltQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildApltScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

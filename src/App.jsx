@@ -295,6 +295,7 @@ import AstroObservatoryPanel, { isAobsQuery, buildAobsScript } from '@/component
 import ScheduleActivityMonitor from '@/components/cinematic/ScheduleActivityMonitor';
 import VisionTrackingMonitor from '@/components/cinematic/VisionTrackingMonitor';
 import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
+import AssuranceAutopilotPanel, { isApltQuery, buildApltScript } from '@/components/cinematic/AssuranceAutopilotPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1218,6 +1219,12 @@ function App() {
             <VisionTrackingMonitor />
             {/* F31 EntityCountPulse — ◈ PULSE button (left:540, bottom:18); parallel-polls all 6 /entities/* endpoints every 60 s; live count per type with mini proportional bar and delta badge (↑/↓); total entity count footer; "entity pulse"/"entity counts"/"how many entities" voice trigger */}
             <EntityCountPulse />
+            {/* F267 AssuranceAutopilotPanel — polls /assurance/autopilot/status every 90 s;
+                tabs: STATUS|ROADMAP|PROPOSALS|SUBSYSTEMS|UNKNOWNS; APPROVE/REJECT per proposal via
+                POST /assurance/autopilot/approve; ◎ APLT button left:237840 bottom:8 zIndex:145;
+                jarvis:aplt-toggle; isApltQuery+buildApltScript wired into JarvisBrain.jsx;
+                "assurance/autopilot/mission control/proposal queue/system roadmap/aplt" triggers */}
+            <AssuranceAutopilotPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
