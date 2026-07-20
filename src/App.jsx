@@ -302,6 +302,7 @@ import ServiceFleetMonitor, { isFleetQuery, buildFleetScript } from '@/component
 import GeoIntelPanel, { isGeoQuery, buildGeoScript } from '@/components/cinematic/GeoIntelPanel';
 import MusicStudio, { isMgenQuery, buildMgenScript } from '@/components/cinematic/MusicStudio';
 import PanicKeyControlPanel, { isPkctlQuery, buildPkctlScript } from '@/components/cinematic/PanicKeyControlPanel';
+import AcousticContactMonitor, { isAcsnQuery, buildAcsnScript } from '@/components/cinematic/AcousticContactMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1275,6 +1276,13 @@ function App() {
                 jarvis:pkctl-toggle; isPkctlQuery+buildPkctlScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <PanicKeyControlPanel />
+            {/* F274 AcousticContactMonitor — polls GET /v1/acoustic/contacts?limit=200 (60 s);
+                POST /v1/acoustic/contact to log new contacts; stat tiles (total/labels/operator/classified);
+                ALL/OPERATOR/CLASSIFIED tabs + search; expand contact → lat/lon + confidence bar;
+                inline LOG CONTACT form; ASSESS brief + TTS; ⊙ ACSN left:269760 bottom:8 zIndex:152;
+                jarvis:acsn-toggle; isAcsnQuery+buildAcsnScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <AcousticContactMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

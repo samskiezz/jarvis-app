@@ -163,6 +163,7 @@ import { isFleetQuery, buildFleetScript } from "./ServiceFleetMonitor";
 import { isGeoQuery, buildGeoScript } from "./GeoIntelPanel";
 import { isMgenQuery, buildMgenScript } from "./MusicStudio";
 import { isPkctlQuery, buildPkctlScript } from "./PanicKeyControlPanel";
+import { isAcsnQuery, buildAcsnScript } from "./AcousticContactMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1919,6 +1920,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new Event("jarvis:pkctl-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildPkctlScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isAcsnQuery(q)) {
+      window.dispatchEvent(new Event("jarvis:acsn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAcsnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
