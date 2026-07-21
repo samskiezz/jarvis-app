@@ -303,6 +303,7 @@ import GeoIntelPanel, { isGeoQuery, buildGeoScript } from '@/components/cinemati
 import MusicStudio, { isMgenQuery, buildMgenScript } from '@/components/cinematic/MusicStudio';
 import PanicKeyControlPanel, { isPkctlQuery, buildPkctlScript } from '@/components/cinematic/PanicKeyControlPanel';
 import AcousticContactMonitor, { isAcsnQuery, buildAcsnScript } from '@/components/cinematic/AcousticContactMonitor';
+import NexusEventBusMonitor, { isNxbtQuery, buildNxbtScript } from '@/components/cinematic/NexusEventBusMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1283,6 +1284,12 @@ function App() {
                 jarvis:acsn-toggle; isAcsnQuery+buildAcsnScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <AcousticContactMonitor />
+            {/* F275 NexusEventBusMonitor — parallel-polls GET /v1/bus/stats (60 s) + GET /v1/control/state (60 s);
+                stat tiles (events/streams/consumers/alive-svc); STREAMS|SERVICES|EVENTS tab switcher + search;
+                expand event → payload excerpt; ASSESS brief + TTS; ⊞ NXBT left:274320 bottom:8 zIndex:153;
+                jarvis:nxbt-toggle; isNxbtQuery+buildNxbtScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <NexusEventBusMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

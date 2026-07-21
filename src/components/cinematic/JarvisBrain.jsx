@@ -164,6 +164,7 @@ import { isGeoQuery, buildGeoScript } from "./GeoIntelPanel";
 import { isMgenQuery, buildMgenScript } from "./MusicStudio";
 import { isPkctlQuery, buildPkctlScript } from "./PanicKeyControlPanel";
 import { isAcsnQuery, buildAcsnScript } from "./AcousticContactMonitor";
+import { isNxbtQuery, buildNxbtScript } from "./NexusEventBusMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1929,6 +1930,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new Event("jarvis:acsn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAcsnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isNxbtQuery(q)) {
+      window.dispatchEvent(new Event("jarvis:nxbt-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildNxbtScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
