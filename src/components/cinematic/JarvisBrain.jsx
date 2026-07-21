@@ -171,6 +171,7 @@ import { isJosmQuery, buildJosmScript } from "./JarvisOsMonitor";
 import { isClcdQuery, buildClcdScript } from "./ClaudeCodeRunMonitor";
 import { isFrgmQuery, buildFrgmScript } from "./ForgeAgentMonitor";
 import { isScenQuery, buildScenScript } from "./ScenarioEnginePanel";
+import { isApldQuery, buildApldScript } from "./ApolloDeployMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1999,6 +2000,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new Event("jarvis:scen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isApldQuery(q)) {
+      window.dispatchEvent(new Event("jarvis:apld-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildApldScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

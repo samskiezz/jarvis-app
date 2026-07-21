@@ -310,6 +310,7 @@ import JarvisOsMonitor, { isJosmQuery, buildJosmScript } from '@/components/cine
 import ClaudeCodeRunMonitor, { isClcdQuery, buildClcdScript } from '@/components/cinematic/ClaudeCodeRunMonitor';
 import ForgeAgentMonitor, { isFrgmQuery, buildFrgmScript } from '@/components/cinematic/ForgeAgentMonitor';
 import ScenarioEnginePanel, { isScenQuery, buildScenScript } from '@/components/cinematic/ScenarioEnginePanel';
+import ApolloDeployMonitor from '@/components/cinematic/ApolloDeployMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1339,6 +1340,15 @@ function App() {
                 ⊡ SCEN left:301680 bottom:8 zIndex:159; jarvis:scen-toggle;
                 isScenQuery+buildScenScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <ScenarioEnginePanel />
+            {/* F282 ApolloDeployMonitor — deployment fleet dashboard;
+                polls GET /v1/apollo/fleet every 60 s (environments+artifacts+releases);
+                GET /v1/apollo/releases?limit=50 on open;
+                FLEET|RELEASES tabs; per-env tier chip + current_version + last_good;
+                per-release status + artifact@version + env + strategy + age;
+                ASSESS brief + TTS; ◈ APLD left:306240 bottom:8 zIndex:160;
+                jarvis:apld-toggle; isApldQuery+buildApldScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <ApolloDeployMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
