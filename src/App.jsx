@@ -314,6 +314,7 @@ import ApolloDeployMonitor from '@/components/cinematic/ApolloDeployMonitor';
 import OntologyObjectBrowser from '@/components/cinematic/OntologyObjectBrowser';
 import PhoneDialerPanel, { isPhonQuery, buildPhonScript } from '@/components/cinematic/PhoneDialerPanel';
 import DeadZoneFinderPanel, { isDeadQuery, buildDeadScript } from '@/components/cinematic/DeadZoneFinderPanel';
+import LabCapabilityWorkbench, { isLabsQuery, buildLabsScript } from '@/components/cinematic/LabCapabilityWorkbench';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1371,6 +1372,10 @@ function App() {
                 polls GET /v1/deadzone/scan every 120 s; expand → GET /v1/deadzone/{id};
                 kind filter tabs + search; ▶ ASSESS; ◈ DEAD left:319920 bottom:8 zIndex:163 */}
             <DeadZoneFinderPanel />
+            {/* F286 LabCapabilityWorkbench — scientific lab capabilities;
+                polls GET /v1/labs/catalog every 120 s; POST /v1/labs/run on action;
+                cap filter tabs + search; ▶ RUN + ▶ ASSESS; ⚗ LABS left:324480 bottom:8 zIndex:164 */}
+            <LabCapabilityWorkbench />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
